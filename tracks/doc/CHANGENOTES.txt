@@ -19,6 +19,7 @@ Project wiki: <http://www.rousette.org.uk/projects/wiki/>
 10. Added a new path:, base: setting in settings.yml. This is used in constructing URLs in standard.rhtml and other places for the javascripts and stylesheets. You need to specify it in the format,
   http://my.domain.tld/subdir/tracks
 or whatever the full URL is. This should help people who put Tracks in a subdirectory.
+11. Added some rudimentary sorting of completed items. They are now sorted in to done today, done in the last 7 days and done in the last 31 days. At the bottom of completed.rhtml, there's a link to completed_archive.rhtml, which shows archived items older than 31 days.
 
 ## Version 1.01
 
