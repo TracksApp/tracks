@@ -3,7 +3,7 @@
 ## $HeadURL$
 # Homepage::  http://www.rousette.org.uk/projects/
 # Author::    bsag (http://www.rousette.org.uk/)
-# Contributors:: Andrew Williams, Jim Ray, Nicholas Lee
+# Contributors:: Lolindrath, Jim Ray, Nicholas Lee
 # Version::   1.02
 # Copyright:: (cc) 2004-2005 rousette.org.uk
 # License::   GNU GPL
@@ -18,7 +18,7 @@ Project wiki: <http://www.rousette.org.uk/projects/wiki/>
 3. Fixed SQLite dump format in db/tracks_1.0.2_sqlite.sql (thanks, Jim)
 4. Added a mini-calendar to the todo/list page. Needs some tidying up, but it provides a quick way to look up a date a few months ahead. Note that it doesn't insert the date: it's just for viewing. I modified the calendar a little bit from here: <http://www.pxl8.com/basic_calendar.html>
 5. Added some XMLHTTPRequest calls to speed up checking off an item as done. It grabs the checked item and appends it immediately to a 'holding' section (where you can uncheck it again if it was a mistake, or add a closing note). When you next refresh the page, it will be added to the 'Last 5 completed items' section.
-6. [Contributed by Andrew Williams] Toggling of contexts in /todo/list to collapse or expand their display via a small '+' or '-' graphic. This is independent of the shown/hidden setting for contexts, and is ideal for just hiding things on the fly to focus your view.
+6. [Contributed by Lolindrath] Toggling of contexts in /todo/list to collapse or expand their display via a small '+' or '-' graphic. This is independent of the shown/hidden setting for contexts, and is ideal for just hiding things on the fly to focus your view.
 7. [Contributed by Jim Ray] Jim added a host of fixes and bits of cleaning up, including a position column for contexts and projects to allow custom sorting, and changes to the links for pages to make them more human-readable.
 8. I added a pop-up calendar to set the due date. This is entirely lifted from Michele's excellent tutorial on pxl8.com <http://www.pxl8.com/calendar_date_picker.html>. It works well, but I need to make sure it doesn't break in postgresql or sqlite.
 9. [Contributed by Nicholas Lee] Changes to the way that URLs are specified which should improve the situation for people using Tracks in a subdirectory.
