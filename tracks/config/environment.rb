@@ -24,11 +24,13 @@ ADDITIONAL_LOAD_PATHS.reverse.each { |dir| $:.unshift(dir) if File.directory?(di
 
 
 # Require Rails gems.
+# Restricted the usuable versions of Rails gems to guard against the new routing
+# features in Rails
   require 'rubygems'
-  require_gem 'activerecord'
-  require_gem 'actionpack'
-  require_gem 'actionmailer'
-  require_gem 'rails'
+  require_gem 'activerecord', '<= 1.6.0'
+  require_gem 'actionpack', '<= 1.4.0'
+  require_gem 'actionmailer', '<= 0.6.1'
+  require_gem 'rails', '<= 0.9.5'
 
 
 # Environment-specific configuration.
