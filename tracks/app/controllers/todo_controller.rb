@@ -1,0 +1,111 @@
+class TodoController < ApplicationController
+  
+  helper :todo
+  model :context
+  model :project
+  
+	scaffold :todo
+	before_filter :login_required
+  layout "standard"
+  
+	# Main method for listing tasks
+	# Set page title, and fill variables with contexts and done and not-done tasks
+	#
+	def list
+		@page_title = "List tasks"
+		@places = Context.find_all
+		@projects = Project.find_all
+		@not_done = Todo.find_all( "done=0", "completed DESC" )
+		@done = Todo.find_all( "done=1", "completed DESC", 5 )
+	end
+
+
+	# List the completed tasks, sorted by completion date
+	#
+  def completed
+    @page_title = "Completed tasks"
+    @done = Todo.find_all( "done=1", "completed DESC" )
+  end
+  
+	
+	# Called by a form button
+	# Parameters from form fields should be passed to create new item
+	#
+	def add_item
+    item = Todo.new
+		item.attributes = @params["new_item"]
+		
+		# Convert the date format entered (as set in config/settings.yml)
+		# to the mysql format YYYY-MM-DD
+		if @params["new_item"]["due"] != ""
+		  date_fmt = app_configurations["formats"]["date"]
+  		formatted_date = DateTime.strptime(@params["new_item"]["due"], "#{date_fmt}")
+  		item.due = formatted_date.strftime("%Y-%m-%d")
+  	else
+  	  item.due = "0000-00-00"
+		end
+		
+    if item.save
+		  flash["confirmation"] = "Next action was successfully added"
+			redirect_to( :action => "list" )
+		else
+		  flash["warning"] = "Couldn't add the action"
+		  redirect_to( :action => "list" )
+		end
+	end
+	
+	
+	def edit
+    @item = Todo.find(@params['id'])
+    @belongs = @item.project_id
+    @page_title = "Edit task: #{@item.description}"
+    @places = Context.find_all
+    @projects = Project.find_all
+  end
+
+
+  def update
+    @item = Todo.find(@params['item']['id'])
+    @item.attributes = @params['item']
+    if @item.save
+      flash["confirmation"] = 'Next action was successfully updated'
+      redirect_to :action => 'list'
+    else
+      flash["warning"] = 'Next action could not be updated'
+      redirect_to :action => 'list'
+    end
+  end
+	
+
+	def destroy
+	  item = Todo.find(@params['id'])
+		if item.destroy
+			flash["confirmation"] = "Next action was successfully deleted"
+			redirect_to :action => "list"
+		else
+			flash["warning"] = "Couldn't delete next action"
+			redirect_to :action => "list"
+		end
+	end
+	
+	# Toggles the 'done' status of the action
+	#
+	def toggle_check
+	  item = Todo.find(@params['id'])
+		
+	 	case item.done
+ 		  when 0: item.done = 1; item.completed = Time.now()
+ 			when 1: item.done = 0; item.completed = nil
+ 		end
+		
+		if item.save
+		  flash["confirmation"] = "Next action marked as completed"
+			redirect_to( :action => "list" )
+		else
+		  flash["warning"] = "Couldn't mark action as completed"
+			redirect_to( :action => "list" )
+		end	
+	end
+	
+	
+end

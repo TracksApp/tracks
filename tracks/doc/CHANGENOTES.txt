@@ -1,0 +1,34 @@
+## Tracks :: GTD web application
+## $LastChangedDate$
+## $HeadURL$
+
+Main project site: <http://www.rousette.org.uk/projects/>
+Project wiki: <http://www.rousette.org.uk/projects/wiki/>
+
+## Version 1.01
+
+A small increment to fix a few bugs and typographical errors in the README:
+
+1. README.txt now lists the correct location for the dump file
+2. Fixed the redirection from the login page. Once you have signed up or logged in, you should be taken automatically to the main todo/list page. This also works once you have logged out and clicked the "<< login" page to get back to login/login. (Thanks, Max Prophet!)
+3. Properly updated for Rails 0.9.3: this probably means that it won't work for a lower version of Rails. If you have the gems version of Rails installed, you can update it with:
+  sudo gem update rails
+4. Made some minor changes to the appearance of the listed items, so that the description wraps properly, and the tool buttons (edit, delete and notes) are always in the same place relative to the checkbox.
+
+## Version 1.0
+
+1. Updated to run on Rails 0.9.1. This should work with any 0.9.x branch.
+2. Added a proper edit page for todos. This also allows you to add a todo to a project, or re-assign it to a new project.
+3. Improved the efficiency of the Projects page: it now only finds the Project you've selected, rather than all of them (thanks, Johan <http://theexciter.com/>!)
+4. You now get a warning if you try to delete a project or context with undone items. If you choose to continue, the dependent items will be deleted, so that the list page should no longer break.
+5. Using Redcloth for markup now that it allows you to use either Textile or Markdown format transparently. This is now included in the distribution, so that you don't need to install it.
+6. Added links to context/list page so that you can go directly to todo/show/blah if you click the link for context 'blah'.
+7. You can now set the date format you want to use in the file config/settings.yml. Use the strftime formats, with whatever separator you like. e.g. If you want 2004-12-31, the correct format is %Y-%m-%d. 31/12/2004 would be %d/%m/%Y. The same format is used for entry of the date in the due date box, and for display of the date in the list.
+8. You can now add a new item to a particular project when you are viewing it at /project/show/[id]. This makes it easy to add a block of next actions to a project. Edit and delete buttons work on this page, but redirect you to /todo/list. I need to fix this.
+9. Added a login system by using the login_generator:
+  <http://wiki.rubyonrails.com/rails/show/LoginGenerator>
+The first time you access the system, you need to visit <http://[tracks_url]/login/signup> to enter a username and password. Then when you visit, you will be greeted with a login page. This stores a temporary cookie for your session. The whole app is protected by the login.
+10. You can now add a new item to a particular context when you are viewing it at /context/show/[id]. This makes it easy to add a block of next actions to a project. Edit and delete buttons work on this page, but redirect you to /todo/list. I need to fix this.
+11. Feeds! There's an RSS feed available at <http://[tracks_url]/feed/na_feed> which shows the last 15 next actions, and a text feed at <http://[tracks_url]/feed/na_text> which gives you a plain text list of all your next actions, sorted by context. You can use the latter to display your next actions on the desktop with GeekTool. Simply set up a shell command containing the following:
+  curl http://[tracks_url]/feed/na_text
+Obviously, you need to replace [tracks_url] with the actual URL to the Tracks application.

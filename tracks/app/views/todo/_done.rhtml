@@ -1,0 +1,29 @@
+<% @item = done %>
+<li>
+<% if @item.completed %>
+  <div class="box">
+    <%= $done_img %>
+  </div>
+  
+  <div class="description">
+  <span class="grey"><%= format_date( @item.completed ) %></span>
+  <%= " " + @item.description + " "%>
+  
+  <% if @item.project_id %>
+    <%= "(" + @item.context['name'].capitalize + ", " + @item.project['name'] + ")" %>
+  <% else %>
+    <%= "(" + @item.context['name'].capitalize + ")" %>
+  <% end %>
+  
+  <% if @item.due %>
+    <%= " - was due on " + format_date( @item.due ) %>
+  <% end %>
+  
+  <% if @item.notes? %>
+  	<%= "<a href=\"javascript:toggle('" + @item.id.to_s + "')\" title=\"Show notes\">" + $notes_img + "</a>" %>
+  	<% 	m_notes = markdown( @item.notes ) %>
+  	<%= "<div class=\"notes\" id=\"" + @item.id.to_s + "\">" + m_notes + "</div>" %>
+  <% end %>
+  </div>
+<% end %>
+</li>

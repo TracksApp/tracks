@@ -1,0 +1,29 @@
+== Installation
+
+Done generating the login system. but there are still a few things you have to do 
+manually. First open your application.rb and add 
+
+  require_dependency "login_system"
+
+to the top of the file and include the login system with 
+
+  include LoginSystem 
+
+The beginning of your ApplicationController.
+It should look something like this : 
+
+  require_dependency "login_system"
+
+  class ApplicationController < ActionController::Base
+    include LoginSystem
+
+
+After you have done the modifications the the AbstractController you can 
+import the user model into the database. This model is meant as an example 
+and you should extend it. If you just want to get things up and running you
+can find some create table syntax in db/user_model.sql. 
+
+== Useage 
+
+Now you can go around and happily add "before_filter :login_required" to the controllers which you would like to protect. 
+If the user hits a controller with the login_required filter he will be redirected to the login page and redirected back after a successful login. You can find the login_system.rb in the lib/ directory. It comes with some comments which should help explain the general useage. 

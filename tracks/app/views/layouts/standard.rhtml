@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<style type="text/css" media="screen">
+		@import url(/stylesheets/standard.css);
+	</style>
+	
+	<script type="text/javascript" src="/javascripts/toggle_notes.js"></script>
+		
+<title><%= @page_title %></title>
+</head>
+<body onload="javascript:toggleAll('notes','none')">
+<div>
+	<h1>
+	<% if @not_done %>
+	  <span class="badge"><%= @not_done.length %></span>
+	<% end %>
+	<%= today = Time.now; datestamp = today.strftime("%A, %e %B %Y") %></h1>
+</div>
+<div id="navcontainer">
+<ul id="navlist">
+  <li><%= link_to( "Home", :controller => "todo", :action => "list" ) %></li>  
+	<li><%= link_to( "Contexts", :controller => "context", :action => "list" ) %></li>
+	<li><%= link_to( "Projects", :controller => "project", :action => "list" ) %></li>
+	<li><%= link_to( "Completed", :controller => "todo", :action => "completed" ) %></li>
+	<li><a href="javascript:toggleAll('notes','block')" title="Show all notes">Show</a></li>
+	<li><a href="javascript:toggleAll('notes','none')" title="Show all notes">Hide</a></li>
+	<li><%= link_to "<span style=\"font-family: verdana, sans-serif; font-size: 10px; font-weight:bold; text-decoration:none; color: white; background-color: #F60; border:1px solid;
+border-color: #FC9 #630 #330 #F96; padding:0px 3px 0px 3px; margin:0px;\">RSS</span>", { :controller => "feed", :action => "na_feed" }, :title => "Subscribe to RSS feed of next actions" %></li>
+  <li><%= link_to "<span style=\"font-family: verdana, sans-serif; font-size: 10px; font-weight:bold; text-decoration:none; color: white; background-color: #F60; border:1px solid;
+border-color: #FC9 #630 #330 #F96; padding:0px 3px 0px 3px; margin:0px;\">TXT</span>", { :controller => "feed", :action => "na_text" }, :title => "View a plain text list of next actions" %></li>
+	<li><%= link_to "Logout &#187;", :controller => "login", :action=>"logout"%></li>
+</ul>
+</div>
+<%= @content_for_layout %>
+<div id="footer">made with <a href="http://rubyonrails.org">Ruby on Rails</a></div>
+</body>
+</html>
