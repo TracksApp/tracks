@@ -3,9 +3,9 @@
 <head>
   <% tracks_path = app_configurations["path"]["base"] %>
 	<style type="text/css" media="screen">
-		<%= "@import url(#{tracks_path}/stylesheets/standard.css);" %>
+		<%= "@import url(/stylesheets/standard.css);" %>
 	</style>
-	<%= "<script type=\"text/javascript\" src=\"#{tracks_path}/javascripts/toggle_notes.js\"></script>" %>
+	<script type="text/javascript" src="/javascripts/toggle_notes.js"></script>
 	<link rel="shortcut icon" href="/favicon.ico" />
 		
 <title><%= @page_title %></title>

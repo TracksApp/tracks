@@ -7,7 +7,7 @@ Options +FollowSymLinks +ExecCGI
 RewriteEngine On
 
 # Change extension from .cgi to .fcgi to switch to FCGI and to .rb to switch to mod_ruby
-RewriteBase /dispatch.cgi
+RewriteBase /dispatch.fcgi
 
 # Enable this rewrite rule to point to the controller/action that should serve root.
 RewriteRule ^$ /todo/list [R]
@@ -16,9 +16,9 @@ RewriteRule ^$ /todo/list [R]
 RewriteRule ^([-_a-zA-Z0-9]+)$                                            /$1/ [R]
 
 # Default rewriting rules. 
-RewriteRule ^([-_a-zA-Z0-9]+)/([-_a-zA-Z0-9]+)/([0-9]+)$                  ?controller=$1&action=$2&id=$3 [QSA,L]
-RewriteRule ^([-_a-zA-Z0-9]+)/([-_a-zA-Z0-9]+)$                           ?controller=$1&action=$2 [QSA,L]
-RewriteRule ^([-_a-zA-Z0-9]+)/$                                           ?controller=$1&action=index [QSA,L]
+RewriteRule ^([-_a-zA-Z0-9]+)/([-_a-zA-Z0-9]+)/([0-9]+)$ ?controller=$1&action=$2&id=$3 [QSA,L]
+RewriteRule ^([-_a-zA-Z0-9]+)/([-_a-zA-Z0-9]+)$ ?controller=$1&action=$2 [QSA,L]
+RewriteRule ^([-_a-zA-Z0-9]+)/$ ?controller=$1&action=index [QSA,L]
 
 RewriteRule ^([-_a-zA-Z0-9]+)/([-_a-zA-Z0-9]+)/([-_a-zA-Z0-9]+)/([0-9]+)$ ?module=$1&controller=$2&action=$3&id=$4 [QSA,L]
 RewriteRule ^([-_a-zA-Z0-9]+)/([-_a-zA-Z0-9]+)/([-_a-zA-Z0-9]+)$          ?module=$1&controller=$2&action=$3 [QSA,L]
