@@ -93,7 +93,7 @@ class ContextController < ApplicationController
     expire_action(:controller => "context", :action => "list")
 		item = Todo.new
 		item.attributes = @params["new_item"]
-		where = Context.find_by_id(item.context_id)
+		# where = Context.find_by_id(item.context_id)
 		
 		back_to = urlize(where.name)
    
@@ -112,7 +112,7 @@ class ContextController < ApplicationController
 	# If you choose to go ahead, any actions in the context will also be deleted.
 	def destroy
 	  expire_action(:controller => "context", :action => "list")
-	  context = Context.find(@params['id'])
+	  context = Context.find( @params['id'] )
 		if context.destroy
 			flash["confirmation"] = "Succesfully deleted context \"#{context.name}\""
 			redirect_to( :action => "list" )

@@ -1,7 +1,7 @@
 <% @done_item = done %>
 <tr>
 <% if @done_item.completed %>
-  <td valign="top"><%= $done_img %></td>
+  <td valign="top"><%= image_tag( "done", :width=>"16", :height=>"16", :border=>"0") %></td>
   <td valign="top"><span class="grey"><%= format_date( @done_item.completed ) %></span></td>
   <td valign="top"><%= " " + @done_item.description + " "%>
   
@@ -16,7 +16,7 @@
   <% end %>
   
   <% if @done_item.notes? %>
-  	<%= "<a href=\"javascript:toggle('" + @done_item.id.to_s + "')\" title=\"Show notes\">" + $notes_img + "</a>" %>
+  	<%= "<a href=\"javascript:toggle('" + @done_item.id.to_s + "')\" title=\"Show notes\">" + image_tag( "notes", :width=>"10", :height=>"10", :border=>"0") + "</a>" %>
   	<% 	m_notes = markdown( @done_item.notes ) %>
   	<%= "<div class=\"notes\" id=\"" + @done_item.id.to_s + "\">" + m_notes + "</div>" %>
   <% end %>

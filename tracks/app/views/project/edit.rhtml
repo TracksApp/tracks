@@ -1,6 +1,6 @@
 <div id="display_box">
 	<h2>Edit project</h2>
-  <form action="/project/update" method="post">
+  <form action="<%= url_for(:controller => 'project', :action => 'update')  %>" method="post">
   <%= render_partial "edit_project", "@project" %>
   <input type="submit" value="Update" />
   </form>

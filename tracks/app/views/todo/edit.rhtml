@@ -1,6 +1,6 @@
 <div id="display_box">
 	<h2>Edit task</h2>
-  <form action="/todo/update" method="post">
+  <form action="<%= url_for(:controller => 'todo', :action => 'update') %>" method="post">
   <%= render_partial "todo/item", "@item" %>
   <input type="submit" value="Update" />
   </form>

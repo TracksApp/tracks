@@ -8,7 +8,7 @@ ActionController::Routing::Routes.draw do |map|
 
   # Allow downloading Web Service WSDL as a file with an extension
   # instead of a file named 'wsdl'
-  map.connect ':controller/service.wsdl', :action => 'wsdl'
+  #map.connect ':controller/service.wsdl', :action => 'wsdl'
 
   # Index Route
   map.connect '', :controller => 'todo', :action => 'list'
@@ -35,10 +35,14 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'project/:name', :controller => 'project', :action => 'show'
   map.connect 'project/:id', :controller => 'project', :action => 'show'
   map.connect 'delete/project/:id', :controller => 'project', :action => 'destroy'
+  
+  # Feed Routes
+  map.connect 'feed/:action/:name/:user', :controller => 'feed' 
 
 
   map.connect 'add_item', :controller => 'todo', :action => 'add_item'
   
   # Install the default route as the lowest priority.
+  map.connect ':controller/:action'
   map.connect ':controller/:action/:id'
 end

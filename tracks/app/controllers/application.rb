@@ -4,9 +4,6 @@
 require_dependency "login_system"
 require 'date'
 
-$notes_img = "<img src=\"/images/notes.png\" width=\"10\" height=\"10\" border=\"0\" />"
-$done_img = "<img src=\"/images/done.png\" width=\"16\" height=\"16\" border=\"0\" />"
-
 class ApplicationController < ActionController::Base
     
   helper :application

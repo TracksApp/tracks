@@ -276,6 +276,19 @@ input {
     margin-bottom: 5px;
     }
     
+.feed {
+    font-family: verdana, sans-serif; 
+    font-size: 10px; 
+    font-weight:bold; 
+    text-decoration:none; 
+    color: white; 
+    background-color: #F60; 
+    border:1px solid; 
+    border-color: #FC9 #630 #330 #F96; 
+    padding:0px 3px 0px 3px; 
+    margin:0px;
+    }
+    
 /* Popup calendar styles */
 
 #calNavPY, #calNavPM {border:1px #999 solid}

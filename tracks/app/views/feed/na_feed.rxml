@@ -6,7 +6,8 @@ xml.rss("version" => "2.0", "xmlns:dc" => "http://purl.org/dc/elements/1.1/") do
     @not_done.each { |i|
       xml.item do 
         xml.title(i.description)
-        xml.link("http://#{@request.host}:#{@request.port}/context/show/#{i.context_id}")
+        @link = url_for(:controller => 'context', :action => 'show', :id => "#{i.context_id}")
+        xml.link("http://#{@request.host}:#{@request.port}#{@link}")
         xml.description(i.context['name'].capitalize)
       end
     }

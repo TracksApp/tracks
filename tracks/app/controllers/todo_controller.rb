@@ -121,8 +121,8 @@ class TodoController < ApplicationController
 		item.toggle!('done')
 		
 		if item.save
-			#flash["confirmation"] = "Next action \"#{item.description}\" marked as completed"
-			#redirect_to( :action => "list" )
+			flash["confirmation"] = "Next action \"#{item.description}\" marked as completed"
+			redirect_to( :action => "list" )
 		else
 			flash["warning"] = "Couldn't mark action \"#{item.description}\" as completed"
 			redirect_to( :action => "list" )

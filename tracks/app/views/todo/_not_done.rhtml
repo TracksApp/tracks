@@ -1,14 +1,19 @@
 <% @notdone_item = not_done %>
 <tr id="action-<%= @notdone_item.id.to_s %>">
 	<td valign="top"><%= check_box( "item", "done", "onclick" => "markItemDone('action-#{@notdone_item.id}', '/todo/toggle_check/#{@notdone_item.id}', '#{@notdone_item.id}')" ) %></td>
-	<td valign="top" width="30"><%= link_image_to( "edit", { :action => "edit", :id => @notdone_item.id }, :title => "Edit item", :size => "10x10", :border => "0" ) + " " + link_image_to( "delete", { :controller => "todo", :action => "destroy", :id => @notdone_item.id }, :title => "Delete item", :size => "10x10", :border => "0", :confirm => "Are you sure you want to delete this entry: #{@notdone_item.description}" ) + " " %></td>
+  <td valign="top" width="30">
+  <%= link_to(image_tag( "edit", :title => "Edit item", :width=>"10", :height=>"10", :border=>"0"), { :action => "edit", :id => @notdone_item.id } ) + " " + 
+  link_to(image_tag( "delete", :title => "Delete item", :width=>"10", :height=>"10", :border=>"0"), { :action => "destroy", :id => @notdone_item.id }, :confirm => "Are you sure you want to delete this entry: #{@notdone_item.description}" ) + " " %>
+  </td>
 	<td valign="top"><%= due_date( @notdone_item.due ) %> 
 	<%= @notdone_item.description %>
 	<% if @notdone_item.project_id %>
 	  <%= link_to( "[P]", { :controller => "project", :action => "show", :name => urlize(@notdone_item.project.name) }, :title => "View project: #{@notdone_item.project.name}" ) %>
 	<% end %>
 	<% if @notdone_item.notes? %>
-	  <%= "<a href=\"javascript:toggle('" + @notdone_item.id.to_s + "')\" title=\"Show notes\">" + $notes_img + "</a>" %>
+    <%= "<a href=\"javascript:toggle('" + @notdone_item.id.to_s + "')\" title=\"Show notes\">" + 
+    image_tag( "notes", :width=>"10", :height=>"10", :border=>"0") + "</a>"
+    %>
 	  <% 	m_notes = markdown( @notdone_item.notes ) %>
 		<%= "<div class=\"notes\" id=\"" + @notdone_item.id.to_s + "\">" + m_notes + "</div>" %>
 	<% end %>
