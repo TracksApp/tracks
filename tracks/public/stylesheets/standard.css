@@ -142,14 +142,12 @@ h2 a:hover {
       }
             
 #footer {
-      width: 820px;
-			clear: both;
-			font-size: 0.8em;
+      clear: both;
+		  font-size: 0.6em;
 			text-align: center;
-			background: #CCC;
-			border: 1px solid #999;
-			margin: 0px 10px;
-			padding: 5px;
+			color: #999;
+			margin: 20px 20px 5px 20px;
+			padding: 0px;
 			}
 			
 /* The notes which may be attached to an item */			
