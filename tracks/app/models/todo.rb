@@ -22,15 +22,5 @@ class Todo < ActiveRecord::Base
 		  self.completed = Time.now()
 		end
 	end
-	
-	# Piggy-back technique to avoid superfluous calls to the DB
-	#
-  def self.find_all_with_project_name(filter,sort)
-    find_by_sql(
-      "SELECT todos.*, projects.name as project_name " +
-      "FROM todos, projects " +
-      "WHERE #{filter} AND todos.project_id = projects.id " +
-      "ORDER BY #{sort}"
-    )
-  end
+
 end
