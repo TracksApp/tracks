@@ -19,12 +19,7 @@ class TodoController < ApplicationController
 		@done = Todo.find_all_by_done( 1, "completed DESC", 5 )
 		
 		# Set count badge to number of not-done, not hidden context items
-		count = 0
-	  sub = 0
-	  @hidden_places.each do |h|
-	    sub = Todo.find_all("done=0 AND context_id=#{h.id}").length + sub
-	  end
-	  @count = Todo.find_all("done=0").length - sub
+		@count = count_shown_items(@hidden_places)
 	end
 
 

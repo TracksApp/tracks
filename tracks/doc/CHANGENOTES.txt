@@ -29,6 +29,7 @@ or whatever the full URL is. This should help people who put Tracks in a subdire
 
 but ONLY if you're using the development environment; with production it's fine, and with the gem version of Redcloth it's fine in both environments.
 13. Modified the 'count' badge on todo/list: now shows the number of uncompleted items in contexts that *aren't* hidden (i.e. the actions actually listed on todo/list). Number of items in hidden contexts are shown in parentheses after the link to that context. So you don't forget about that stuff ;-)
+14. Protected RSS and text feeds at last! The appropriate URLs can be copied from the RSS and TXT links in the navigation bar. The URL includes the login name of the current user, and an MD5 encoded string of the 'word' field of the users table. This is checked against users to make sure it's valid; if it is, the feed is displayed, if not, you get an error message.
 
 ## Version 1.01
 
