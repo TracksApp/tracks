@@ -3,7 +3,6 @@ class TodoController < ApplicationController
   helper :todo
   model :context, :project
   
-	scaffold :todo
 	before_filter :login_required
 	caches_action :list, :completed
   layout "standard"
@@ -16,6 +15,7 @@ class TodoController < ApplicationController
 		@places = Context.find_all
 		@projects = Project.find_all
 		@done = Todo.find_all( "done=1", "completed DESC", 5 )
+		@count = Todo.count( "done=0" )
 	end
 
 
@@ -102,7 +102,7 @@ class TodoController < ApplicationController
 	def toggle_check
 	  item = Todo.find(@params['id'])
 		
-		item.toggle('done')
+		item.toggle!('done')
 		
 		if item.save
 		  flash["confirmation"] = "Next action marked as completed"

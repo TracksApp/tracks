@@ -10,6 +10,7 @@ Project wiki: <http://www.rousette.org.uk/projects/wiki/>
 1. Uses Rails 0.9.4.1
 2. Added validation for the entry fields. If you enter a bit of text that's too long or you omit the description (not much point in a blank next action!) you'll get an error message and the action won't be saved.
 3. Added action caching.
+4. Did a bit of refactoring to try to make page loading a bit more efficient.
 
 ## Version 1.01
 

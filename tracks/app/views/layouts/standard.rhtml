@@ -12,8 +12,8 @@
 <body onload="javascript:toggleAll('notes','none')">
 <div>
 	<h1>
-	<% if @not_done %>
-	  <span class="badge"><%= @not_done.length %></span>
+	<% if @count %>
+	  <span class="badge"><%= @count %></span>
 	<% end %>
 	<%= today = Time.now; datestamp = today.strftime("%A, %e %B %Y") %></h1>
 </div>

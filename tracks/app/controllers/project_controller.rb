@@ -26,6 +26,7 @@ class ProjectController < ApplicationController
     @places = Context.find_all
     @page_title = "Project: #{@project.name}"
     @not_done = Todo.find_all( "project_id=#{@project.id} AND done=0", "created DESC" )
+    @count = Todo.count( "project_id=#{@project.id} AND done=0" )
 	end
 	
 	
