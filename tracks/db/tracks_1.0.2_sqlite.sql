@@ -53,15 +53,15 @@ CREATE TABLE 'users' (
 # Dump of table contexts
 # ------------------------------------------------------------
 
-INSERT INTO 'contexts' ('id','name') VALUES ("1","agenda","0");
-INSERT INTO 'contexts' ('id','name') VALUES ("2","call","0");
-INSERT INTO 'contexts' ('id','name') VALUES ("3","email","0");
-INSERT INTO 'contexts' ('id','name') VALUES ("4","errand","0");
-INSERT INTO 'contexts' ('id','name') VALUES ("5","lab","0");
-INSERT INTO 'contexts' ('id','name') VALUES ("6","library","0");
-INSERT INTO 'contexts' ('id','name') VALUES ("7","freetime","0");
-INSERT INTO 'contexts' ('id','name') VALUES ("8","office","0");
-INSERT INTO 'contexts' ('id','name') VALUES ("11","waiting-for","0");
+INSERT INTO 'contexts' ('id','name','hide') VALUES ("1","agenda","0");
+INSERT INTO 'contexts' ('id','name','hide') VALUES ("2","call","0");
+INSERT INTO 'contexts' ('id','name','hide') VALUES ("3","email","0");
+INSERT INTO 'contexts' ('id','name','hide') VALUES ("4","errand","0");
+INSERT INTO 'contexts' ('id','name','hide') VALUES ("5","lab","0");
+INSERT INTO 'contexts' ('id','name','hide') VALUES ("6","library","0");
+INSERT INTO 'contexts' ('id','name','hide') VALUES ("7","freetime","0");
+INSERT INTO 'contexts' ('id','name','hide') VALUES ("8","office","0");
+INSERT INTO 'contexts' ('id','name','hide') VALUES ("11","waiting-for","0");
 
 
 # Dump of table projects
