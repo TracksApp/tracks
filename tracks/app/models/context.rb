@@ -1,4 +1,6 @@
 class Context < ActiveRecord::Base
+
+    acts_as_list
     has_many :todo, :dependent => true
     
     # Context name must not be empty

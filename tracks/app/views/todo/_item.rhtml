@@ -35,8 +35,19 @@
 	  <% end %>
 </select>
 <br />
+
 <label for="item_due" tab>Due</label><br />
-<% now = Date.today %>
-<%= date_select( "item", "due", :include_blank => true, :start_year => now.year, "tabindex" => 5 ) %>
+<%= text_field( "item", "due", "tabindex" => 5, "cols" => 10 ) %>
+<img src="/images/calendar.gif" onclick="showCal('','',document.forms[0].item_due,2,true,9)" style="cursor:pointer;cursor:hand" />
+<div id="calDiv" style="display:none">
+<div id="calTopBar">CLOSE <span onclick="document.getElementById('calDiv').style.display='none';" id="calClose">X</span></div>
+<table width="100%" id="calNav">
+<tr><td id="calNavPY"></td><td id="calNavPM"></td><td id="calNavMY" width="100"></td><td id="calNavNM"></td><td id="calNavNY"></td></tr>
+</table>
+<table  id="calTbl" width="100%" cellspacing="0">
+<thead><tr style="background-color:#eaeaea"><td>Sun</td><td>Mon</td><td>Tue</td><td>Wed</td><td>Thu</td><td>Fri</td><td>Sat</td></tr></thead>
+<tbody></tbody>
+</table>
+</div>
 <br />
 <br />

@@ -23,6 +23,10 @@ module ApplicationHelper
 	def tag_object(object, tag)
 		tagged = "<#{tag}>#{object}</#{tag}>"
 	end
+
+    def urlize(name)
+        name.to_s.gsub(/ /, "_").downcase
+    end
 	
 	
 	# Check due date in comparison to today's date

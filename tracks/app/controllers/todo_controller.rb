@@ -10,12 +10,18 @@ class TodoController < ApplicationController
 	# Main method for listing tasks
 	# Set page title, and fill variables with contexts and done and not-done tasks
 	#
+
+    def index
+       list
+       render_action "list"
+    end
+
 	def list
 		@page_title = "List tasks"
 		@projects = Project.find_all
 		@places = Context.find_all
-	  @shown_places = Context.find_all_by_hide( 0, "name DESC")
-    @hidden_places = Context.find_all_by_hide( 1 )
+	  @shown_places = Context.find_all_by_hide( 0, "position ASC")
+    @hidden_places = Context.find_all_by_hide( 1, "position ASC" )
 		@done = Todo.find_all_by_done( 1, "completed DESC", 5 )
 		
 		# Set count badge to number of not-done, not hidden context items

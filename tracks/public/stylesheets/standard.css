@@ -277,3 +277,59 @@ label {
 input {
     margin-bottom: 5px;
     }
+    
+/* Popup calendar styles */
+
+#calNavPY, #calNavPM {border:1px #999 solid}
+#calNavNM, #calNavNY { border:1px #999 solid}
+
+#calNav td, #calNav td a {
+  text-align:center;
+  font-family:"Lucida Grande", Verdana, Geneva, Arial, sans-serif;
+  font-size:12px;
+  font-weight:bold;
+  background-color:#eaeaea;
+  text-decoration:none
+  }
+  
+#calNav td a,#calNav td a:visited,#calTbl td a,#calTbl td a:visited {color:#cc3334 }
+#calNav td a:hover,#calTbl td a:hover { color:#fff; background:#cc3334; }
+#calNav {margin-bottom:5px;width:100%}
+#calTbl {width:100%}
+#calTbl td {text-align:center;font-family:"Lucida Grande", Verdana, Geneva, Arial, sans-serif;font-size:11px;border:1px #ccc solid}
+
+#calTbl thead td {
+	font-weight:bold;
+	background-color:#eaeaea;
+	padding: 2px;
+	border:1px #ccc solid
+	height: auto;
+	}
+	 
+#calDiv {
+	border:1px solid #ccc;
+	padding:2px;
+	width:200px;
+	position:absolute;
+	z-index:276;
+	top:300px;
+	left:300px;
+	background-color:#fff
+  }
+
+#calTopBar {
+	background-color:#ccc;
+	color:#fff;
+	padding:2px;
+	text-align:right;
+	font-family:"Lucida Grande", Verdana, Geneva, Arial, sans-serif;
+	font-size:11px;
+	font-weight:bold;
+	width:100%
+  }
+  
+#calClose {
+  padding:0px 2px;border:1px #fff solid;cursor:pointer;cursor:hand
+  }
+  
+#calPic {cursor:hand}

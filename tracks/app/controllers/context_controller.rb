@@ -11,9 +11,15 @@ class ContextController < ApplicationController
   # Main method for listing contexts
 	# Set page title, and collect existing contexts in @contexts
 	#
+
+  def index
+    list
+    render_action "list"
+  end
+
   def list
 		@page_title = "List Contexts"
-		@contexts = Context.find_all
+		@contexts = Context.find_all( conditions = nil, "position ASC", limit = nil )
 	end
 	
 	
@@ -33,7 +39,20 @@ class ContextController < ApplicationController
 				redirect_to( :action => "list" )
 			end
 	end
-	
+
+	def new
+	  expire_action(:controller => "context", :action => "list")
+		context = Context.new
+		context.attributes = @params["new_context"]
+
+			if context.save
+				flash["confirmation"] = "Succesfully created context \"#{context.name}\""
+				redirect_to( :action => "list" )
+			else
+				flash["warning"] = "Couldn't add new context \"#{context.name}\""
+				redirect_to( :action => "list" )
+			end
+	end
 	
 	def edit
 	  expire_action(:controller => "context", :action => "list")
@@ -56,10 +75,10 @@ class ContextController < ApplicationController
   
 
 	# Filter the contexts to show just the one passed in the URL
-  # e.g. <home>/context/show/<context_id> shows just <context_id>.
+  # e.g. <home>/context/show/<context_name> shows just <context_name>.
   #
 	def show
-	  @context = Context.find(@params["id"])
+	  @context = Context.find_by_name(@params["id"].humanize)
 	  @projects = Project.find_all
 	  @page_title = "Context: #{@context.name.capitalize}"
 	  @not_done = Todo.find_all( "context_id=#{@context.id} AND done=0", "created ASC" )
@@ -74,15 +93,16 @@ class ContextController < ApplicationController
     expire_action(:controller => "context", :action => "list")
 		item = Todo.new
 		item.attributes = @params["new_item"]
+		where = Context.find_by_id(item.context_id)
 		
-		back_to = item.context_id
+		back_to = urlize(where.name)
    
      if item.save
        flash["confirmation"] = "Succesfully added action \"#{item.description}\" to context"
-       redirect_to( :controller => "context", :action => "show", :id => "#{back_to}" )
+       redirect_to( :controller => "context", :action => "show", :name => "#{back_to}")
      else
        flash["warning"] = "Could not add action \"#{item.description}\" to context"
-       redirect_to( :controller => "context", :action => "show", :id => "#{back_to}" )
+       redirect_to( :controller => "context", :action => "show", :name => "#{back_to}" )
      end
 	end
 	

@@ -8,17 +8,15 @@
 		
 <title><%= @page_title %></title>
 
-<style>
-#pyNav, #pmNav {border:1px #999 solid}
-#myNav {}
-#nmNav, #nyNav { border:1px #999 solid}
-#calNav td, #calNav td a { text-align:center;font-family:"Lucida Grande", Verdana, Geneva, Arial, sans-serif;font-size:12px;font-weight:bold;background-color:#eee;text-decoration:none }
-#calNav {margin-bottom:5px}
-#calNav tr td a {color:#cc3334}
-#calTbl {}
-#calTbl td {text-align:center;font-family:"Lucida Grande", Verdana, Geneva, Arial, sans-serif;font-size:11px;border:1px #ccc solid}
-#calTbl thead td {font-weight:bold}
-</style>
+<script>
+var date = new Date();
+var curr_dy = date.getDate(); 
+var curr_mn = date.getMonth();
+var curr_yr = date.getFullYear();
+var DOMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+var lDOMonth = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+var moty = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+</script>
 
 </head>
 <body onload="javascript:toggleAll('notes','none')">
@@ -31,12 +29,12 @@
 </div>
 <div id="navcontainer">
 <ul id="navlist">
-  <li><%= link_to( "Home", :controller => "todo", :action => "list" ) %></li>  
-	<li><%= link_to( "Contexts", :controller => "context", :action => "list" ) %></li>
-	<li><%= link_to( "Projects", :controller => "project", :action => "list" ) %></li>
-	<li><%= link_to( "Completed", :controller => "todo", :action => "completed" ) %></li>
-	<li><a href="javascript:toggleAll('notes','block')" title="Show all notes">Show</a></li>
-	<li><a href="javascript:toggleAll('notes','none')" title="Show all notes">Hide</a></li>
+  <li><%= link_to( "Home", {:controller => "todo", :action => "list"}, {:accesskey=>"t", :title=>"Home AccessKey: Alt+T"} ) %></li>  
+	<li><%= link_to( "Contexts", {:controller => "context", :action => "list"}, {:accesskey=>"c", :title=>"Contexts AccessKey: Alt+C"} ) %></li>
+	<li><%= link_to( "Projects", {:controller => "project", :action => "list"}, {:accesskey=>"p", :title=>"Projects AccessKey: Alt+P"} ) %></li>
+	<li><%= link_to( "Completed", {:controller => "todo", :action => "completed"}, {:accesskey=>"d", :title=>"Completed AccessKey: Alt+D"} ) %></li>
+	<li><a href="javascript:toggleAll('notes','block')" accesskey="S" title="Show all notes AccessKey: Alt+S">Show</a></li>
+	<li><a href="javascript:toggleAll('notes','none')" accesskey="H" title="Show all notes AccessKey: Alt+H">Hide</a></li>
 	<li><%= link_to("<span style=\"font-family: verdana, sans-serif; font-size: 10px; font-weight:bold; text-decoration:none; color: white; background-color: #F60; border:1px solid;
 border-color: #FC9 #630 #330 #F96; padding:0px 3px 0px 3px; margin:0px;\">RSS</span>", {:controller => "feed", :action => "na_feed", :params => {"name", "#{@session['user']['login']}", "token", "#{@session['user']['word']}"}}, :title => "Subscribe to an RSS feed of your next actions" ) %></li>
   <li><%= link_to("<span style=\"font-family: verdana, sans-serif; font-size: 10px; font-weight:bold; text-decoration:none; color: white; background-color: #F60; border:1px solid;

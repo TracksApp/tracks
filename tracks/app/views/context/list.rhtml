@@ -8,8 +8,9 @@
   <% else %>
     <tr class="odd_row">
   <% end %>
-    <td align="right" width="20"><%= @context.id.to_s %></td>
-		<td width="390"><%= link_to( "#{@context.name.capitalize}", :action => "show", :id => @context.id ) %></td>
+    <td align="right" width="20"><%= @context.position.to_s %></td>
+		<!-- <td width="390"><%= link_to( "#{@context.name.capitalize}", :action => "show", :id => @context.id ) %></td> -->
+		<td width="390"><%= link_to( "#{@context.name.capitalize}", :action => "show", :name => urlize(@context.name)  ) %></td>
 		<td>
 		  <% if @context.hide == 1 %>
 		    hidden
@@ -26,7 +27,7 @@
 </div><!- End of display_box -->
 
 <div id="input_box">
-	<form method="post" action="add_context">
+    <%= start_form_tag :controller=>'context', :action=>'new' %>
 	  <label for="new_context_name">New context</label><br />                                               
 	  <%= text_field("new_context", "name") %>
 		<br />
@@ -35,7 +36,7 @@
 		<br />
 		<br />
 	  <input type="submit" value="Add context">
-	</form>
+      <%= end_form_tag %>
 </div>
 
 <% if @flash["confirmation"] %><div class="confirmation"><%= @flash["confirmation"] %></div><% end %>

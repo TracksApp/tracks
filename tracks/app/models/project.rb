@@ -1,5 +1,7 @@
 class Project < ActiveRecord::Base
+   
     has_many :todo, :dependent => true
+    acts_as_list
     
     # Project name must not be empty
     # and must be less than 255 bytes

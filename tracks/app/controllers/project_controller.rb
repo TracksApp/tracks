@@ -8,6 +8,11 @@ class ProjectController < ApplicationController
   caches_action :list
   layout "standard"
   
+  def index 
+    list
+    render_action "list"
+  end
+
   # Main method for listing projects
 	# Set page title, and collect existing projects in @projects
 	#
@@ -21,7 +26,7 @@ class ProjectController < ApplicationController
   # e.g. <home>/project/show/<project_id> shows just <project_id>.
   #
 	def show
-    @project = Project.find(@params["id"])
+    @project = Project.find_by_name(@params["name"].humanize)
     @places = Context.find_all
     @page_title = "Project: #{@project.name}"
     @not_done = Todo.find_all( "project_id=#{@project.id} AND done=0", "created DESC" )
@@ -53,6 +58,20 @@ class ProjectController < ApplicationController
 	# Parameters from form fields should be passed to create new project
 	#
 	def add_project
+	  expire_action(:controller => "project", :action => "list")
+		project = Project.new
+		project.name = @params["new_project"]["name"]
+
+			if project.save
+				flash["confirmation"] = "Succesfully added project \"#{project.name}\""
+				redirect_to( :action => "list" )
+			else
+				flash["warning"] = "Couldn't add project \"#{project.name}\""
+				redirect_to( :action => "list" )
+			end
+	end
+
+	def new
 	  expire_action(:controller => "project", :action => "list")
 		project = Project.new
 		project.name = @params["new_project"]["name"]

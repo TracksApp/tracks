@@ -5,7 +5,7 @@
 	<td valign="top"><%= due_date( @notdone_item.due ) %> 
 	<%= @notdone_item.description %>
 	<% if @notdone_item.project_id %>
-	  <%= link_to( "[P]", { :controller => "project", :action => "show", :id => @notdone_item.project_id }, :title => "View project: #{@notdone_item.project.name}" ) %>
+	  <%= link_to( "[P]", { :controller => "project", :action => "show", :name => urlize(@notdone_item.project.name) }, :title => "View project: #{@notdone_item.project.name}" ) %>
 	<% end %>
 	<% if @notdone_item.notes? %>
 	  <%= "<a href=\"javascript:toggle('" + @notdone_item.id.to_s + "')\" title=\"Show notes\">" + $notes_img + "</a>" %>

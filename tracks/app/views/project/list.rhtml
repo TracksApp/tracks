@@ -9,7 +9,7 @@
     <tr class="odd_row">
   <% end %>
     <td align="right" width="20"><%= @project.id.to_s %></td>
-		<td width="390"><%= link_to ( "#{@project.name}", :action => "show", :id => @project.id ) %></td>
+		<td width="390"><%= link_to ( "#{@project.name}", :action => "show", :name => urlize(@project.name) ) %></td>
 		<td width="40"><%= link_image_to( "edit", { :action => "edit", :id => @project.id }, :title => "Edit item", :size => "10x10", :border => "0" ) + " " + link_image_to( "delete", { :action => "destroy", :id => @project.id }, :title => "Delete item", :size => "10x10", :border => "0", :confirm => "Are you sure you want to delete the project \"#{@project.name}?\" Any todos in this project will be deleted." ) + " " %></td>
 </tr>
 <% row += 1 %>
@@ -19,13 +19,14 @@
 </div><!- End of display_box -->
 
 <div id="input_box">
+    <%= start_form_tag :controller => 'project', :action => 'new' %>
 	<form method="post" action="add_project">
 	  <label for="new_project_name">New Project</label><br />                                               
 	  <%= text_field( "new_project", "name" ) %>
 		<br />
 		<br />
 	  <input type="submit" value="Add project">
-	</form>
+    <%= end_form_tag %>
 </div>
 
 <% if @flash["confirmation"] %><div class="confirmation"><%= @flash["confirmation"] %></div><% end %>

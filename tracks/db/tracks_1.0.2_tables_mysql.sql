@@ -14,6 +14,7 @@ CREATE TABLE `contexts` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(255) NOT NULL default '',
   `hide` tinyint(4) NOT NULL default '0',
+  `position` int(11) NOT  NULL,
   PRIMARY KEY  (`id`)
 ) TYPE=MyISAM;
 
@@ -25,6 +26,7 @@ CREATE TABLE `contexts` (
 CREATE TABLE `projects` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(255) NOT NULL default '',
+  `position` int(11) NOT NULL,
   PRIMARY KEY  (`id`)
 ) TYPE=MyISAM;
 
