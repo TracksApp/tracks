@@ -12,8 +12,16 @@
 <% end %>
 
 <div class="contexts">
+  <h2>Just done</h2>
+  <table class="next_actions" id="holding" cellspacing="5" cellpadding="0" border="0">
+  <tr></tr>  
+  </table>
+</div>
+
+<div class="contexts">
 <h2>Last 5 completed actions</h2>
 <table class="next_actions" id="complete" cellspacing="5" cellpadding="0" border="0">
+  
     <%= render_collection_of_partials "done", @done %>
 </table>
 </div>
@@ -28,11 +36,44 @@
 </div><!- End of display_box -->
 
 <div id="input_box">
+  
+  <div style="padding:0px;width:200px;background-color:#eee;margin-bottom:10px; margin-left: 60px;" id="calDiv">
+  <table width="100%" id="calNav">
+  <tr>
+  <td id="pyNav"></td><td id="pmNav"></td><td id="myNav" width="100"></td><td id="nmNav"></td><td id="nyNav"></td>
+  </tr>
+  </table>
+  <table  id="calTbl" width="100%" cellspacing="0">
+  <thead>
+  <tr style="background-color:#eaeaea">
+  	<td>Sun</td>
+  	<td>Mon</td>
+  	<td>Tue</td>
+  	<td>Wed</td>
+  	<td>Thu</td>
+  	<td>Fri</td>
+  	<td>Sat</td>
+  </tr>
+  </thead>
+  <tbody></tbody>
+  </table>
+  </div>
+
+<script language="Javascript" type="text/javascript">
+var date = new Date();
+var curr_dy = date.getDate(); 
+var curr_mn = date.getMonth();
+var curr_yr = date.getFullYear();
+buildCalendar(curr_mn,curr_yr);
+</script>
 <form method="post" action="add_item">
 	<%= render_partial "todo/item", @item %>
 <input type="submit" value="Add item">
 </form>
+
 </div>
+
+
 
 <% if @flash["confirmation"] %><div class="confirmation"><%= @flash["confirmation"] %></div><% end %>
 <% if @flash["warning"] %><div class="warning"><%= @flash["warning"] %></div><% end %>

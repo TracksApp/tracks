@@ -3,9 +3,23 @@
 <head>
 	<%= stylesheet_link_tag "standard" %>
 	<%= javascript_include_tag "toggle_notes" %>
+	<%= javascript_include_tag "calendar" %>
 	<link rel="shortcut icon" href="/favicon.ico" />
 		
 <title><%= @page_title %></title>
+
+<style>
+#pyNav, #pmNav {border:1px #999 solid}
+#myNav {}
+#nmNav, #nyNav { border:1px #999 solid}
+#calNav td, #calNav td a { text-align:center;font-family:"Lucida Grande", Verdana, Geneva, Arial, sans-serif;font-size:12px;font-weight:bold;background-color:#eee;text-decoration:none }
+#calNav {margin-bottom:5px}
+#calNav tr td a {color:#cc3334}
+#calTbl {}
+#calTbl td {text-align:center;font-family:"Lucida Grande", Verdana, Geneva, Arial, sans-serif;font-size:11px;border:1px #ccc solid}
+#calTbl thead td {font-weight:bold}
+</style>
+
 </head>
 <body onload="javascript:toggleAll('notes','none')">
 <div>

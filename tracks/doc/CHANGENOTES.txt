@@ -15,6 +15,8 @@ Project wiki: <http://www.rousette.org.uk/projects/wiki/>
 1. Added back border="0" to images which I had mistakenly taken out (thanks, Adam Hughes)
 2. Removed the section in config/environment.rb which requires Redcloth. This was causing errors because Rails now requires Redcloth itself. This means that you now need to have Redcloth installed as a gem (gem install redcloth) (thanks, Jim).
 3. Fixed SQLite dump format in db/tracks_1.0.2_sqlite.sql (thanks, Jim)
+4. Added a mini-calendar to the todo/list page. Needs some tidying up, but it provides a quick way to look up a date a few months ahead. Note that it doesn't insert the date: it's just for viewing. I modified the calendar a little bit from here: <http://www.pxl8.com/basic_calendar.html>
+5. Added some XMLHTTPRequest calls to speed up checking off an item as done. It grabs the checked item and appends it immediately to a 'holding' section (where you can uncheck it again if it was a mistake, or add a closing note). When you next refresh the page, it will be added to the 'Last 5 completed items' section.
 
 ## Version 1.02
 
