@@ -16,6 +16,9 @@ Project wiki: <http://www.rousette.org.uk/projects/wiki/>
 7. Changed the method of adding due dates to drop-down option lists. It's more obvious and less error prone than typing in the date. Your preferences for date formatting are still honoured when displaying due dates.
 8. Added a favicon, kindly produced by Jim Ray.
 9. Added border="0" to the button images to stop Firefox putting a red border around them.
+10. Added a new path:, base: setting in settings.yml. This is used in constructing URLs in standard.rhtml and other places for the javascripts and stylesheets. You need to specify it in the format,
+  http://my.domain.tld/subdir/tracks
+or whatever the full URL is. This should help people who put Tracks in a subdirectory.
 
 ## Version 1.01
 

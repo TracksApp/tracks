@@ -25,9 +25,27 @@ class TodoController < ApplicationController
 	#
   def completed
     @page_title = "Completed tasks"
-    @done = Todo.find_all( "done=1", "completed DESC" )
+    today_query = "DATE_SUB(CURDATE(),INTERVAL 1 DAY) <= completed"
+    week_query = "DATE_SUB(CURDATE(),INTERVAL 2 DAY) >= completed 
+                  AND DATE_SUB(CURDATE(),INTERVAL 7 DAY) <= completed"
+    month_query = "DATE_SUB(CURDATE(),INTERVAL 8 DAY) >= completed 
+                  AND DATE_SUB(CURDATE(),INTERVAL 31 DAY) <= completed"
+    @done_today = Todo.find_by_sql( "SELECT * FROM todos WHERE done = 1 AND #{today_query} 
+                  ORDER BY completed DESC;" )
+    @done_this_week = Todo.find_by_sql( "SELECT * FROM todos WHERE done = 1 AND #{week_query} 
+                  ORDER BY completed DESC;" )
+    @done_this_month = Todo.find_by_sql( "SELECT * FROM todos WHERE done = 1 AND #{month_query}     
+                  ORDER BY completed DESC;" )
   end
   
+  # Archived completed items, older than 31 days
+	#
+  def completed_archive
+    @page_title = "Archived completed tasks"
+    archive_query = "DATE_SUB(CURDATE(),INTERVAL 32 DAY) >= completed"
+    @done_archive = Todo.find_by_sql( "SELECT * FROM todos WHERE done = 1 AND #{archive_query} 
+                  ORDER BY completed DESC;" )
+  end
 	
 	# Called by a form button
 	# Parameters from form fields should be passed to create new item
