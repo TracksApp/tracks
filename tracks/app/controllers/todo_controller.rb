@@ -4,7 +4,7 @@ class TodoController < ApplicationController
   model :context, :project
   
 	before_filter :login_required
-	caches_action :list, :completed
+	# caches_action :list, :completed
   layout "standard"
     
 	# Main method for listing tasks
@@ -13,7 +13,8 @@ class TodoController < ApplicationController
 	def list
 		@page_title = "List tasks"
 		@projects = Project.find_all
-    @places = Context.find_all( "hide=0", "id ASC")
+		@places = Context.find_all
+	  @shown_places = Context.find_all( "hide=0", "id ASC")
     @hidden_places = Context.find_all( "hide=1")
 		@done = Todo.find_all( "done=1", "completed DESC", 5 )
 		@count = Todo.count( "done=0" )
@@ -58,9 +59,9 @@ class TodoController < ApplicationController
 	def edit
     @item = Todo.find(@params['id'])
     @belongs = @item.project_id
+		@projects = Project.find_all
+		@places = Context.find_all
     @page_title = "Edit task: #{@item.description}"
-    @places = Context.find_all
-    @projects = Project.find_all
   end
 
 

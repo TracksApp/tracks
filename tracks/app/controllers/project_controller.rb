@@ -6,7 +6,7 @@ class ProjectController < ApplicationController
   scaffold :project
   
   before_filter :login_required
-  caches_action :list, :show
+  # caches_action :list, :show
   layout "standard"
   
   # Main method for listing projects
