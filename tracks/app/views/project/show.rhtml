@@ -16,10 +16,9 @@
 </div><!-- End of display box -->
 
 <div id="input_box">
-	<h2>Add next action to this project</h2>
 	  <%= form_tag( :controller => "project", :action => "add_item") %>
 		  <%= hidden_field( "new_item", "project_id", "value" => "#{@project.id}") %>
-  	  <label for="new_item_description">Next action</label><br />                                               
+  	  <label for="new_item_description">Next action in this project</label><br />                                               
   	  <%= text_field( "new_item", "description" ) %>
   		<br />
   		<label for="new_item_notes">Notes</label><br />

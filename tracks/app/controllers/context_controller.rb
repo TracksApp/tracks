@@ -4,8 +4,7 @@ class ContextController < ApplicationController
   helper :context
   model :project
   before_filter :login_required
-  # caches_action :list, :show
-  
+  caches_action :list
   layout "standard"
   
   
@@ -22,6 +21,7 @@ class ContextController < ApplicationController
 	# Parameters from form fields should be passed to create new context
 	#
 	def add_context
+	  expire_action(:controller => "context", :action => "list")
 		context = Context.new
 		context.attributes = @params["new_context"]
 
@@ -36,6 +36,7 @@ class ContextController < ApplicationController
 	
 	
 	def edit
+	  expire_action(:controller => "context", :action => "list")
 	  @context = Context.find(@params['id'])
     @page_title = "Edit context: #{@context.name.capitalize}"  
 	end
@@ -70,6 +71,7 @@ class ContextController < ApplicationController
 	# Parameters from form fields are passed to create new action
 	# in the selected context.
   def add_item
+    expire_action(:controller => "context", :action => "list")
 		item = Todo.new
 		item.attributes = @params["new_item"]
 		
@@ -89,6 +91,7 @@ class ContextController < ApplicationController
 	# If the context contains actions, you'll get a warning dialogue.
 	# If you choose to go ahead, any actions in the context will also be deleted.
 	def destroy
+	  expire_action(:controller => "context", :action => "list")
 	  context = Context.find(@params['id'])
 		if context.destroy
 			flash["confirmation"] = "Succesfully deleted context"

@@ -4,7 +4,7 @@ class TodoController < ApplicationController
   model :context, :project
   
 	before_filter :login_required
-	# caches_action :list, :completed
+	caches_action :list, :completed, :completed_archive
   layout "standard"
     
 	# Main method for listing tasks
@@ -54,6 +54,7 @@ class TodoController < ApplicationController
 	# Parameters from form fields should be passed to create new item
 	#
 	def add_item
+	  expire_action(:controller => "todo", :action => "list")
     @item = Todo.new
 		@item.attributes = @params["item"]
 		
@@ -68,6 +69,7 @@ class TodoController < ApplicationController
 	
 	
 	def edit
+	  expire_action(:controller => "todo", :action => "list")
     @item = Todo.find(@params['id'])
     @belongs = @item.project_id
 		@projects = Project.find_all
@@ -77,6 +79,7 @@ class TodoController < ApplicationController
 
 
   def update
+    expire_action(:controller => "todo", :action => "list")    
     @item = Todo.find(@params['item']['id'])
     @item.attributes = @params['item']
     if @item.save
@@ -90,6 +93,7 @@ class TodoController < ApplicationController
 	
 
 	def destroy
+	  expire_action(:controller => "todo", :action => "list")	  
 	  item = Todo.find(@params['id'])
 		if item.destroy
 			flash["confirmation"] = "Next action was successfully deleted"
@@ -103,6 +107,9 @@ class TodoController < ApplicationController
 	# Toggles the 'done' status of the action
 	#
 	def toggle_check
+	  expire_action(:controller => "todo", :action => "list")
+	  expire_action(:controller => "todo", :action => "completed")
+	  expire_action(:controller => "todo", :action => "completed_archive")	  
 	  item = Todo.find(@params['id'])
 		
 		item.toggle!('done')

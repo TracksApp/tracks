@@ -5,7 +5,7 @@ class ProjectController < ApplicationController
   model :todo
   
   before_filter :login_required
-  # caches_action :list, :show
+  caches_action :list
   layout "standard"
   
   # Main method for listing projects
@@ -30,6 +30,7 @@ class ProjectController < ApplicationController
 	
 	
 	def edit
+	  expire_action(:controller => "project", :action => "list")
 	  @project = Project.find(@params['id'])
     @page_title = "Edit project: #{@project.name.capitalize}"  
 	end
@@ -52,6 +53,7 @@ class ProjectController < ApplicationController
 	# Parameters from form fields should be passed to create new project
 	#
 	def add_project
+	  expire_action(:controller => "project", :action => "list")
 		project = Project.new
 		project.name = @params["new_project"]["name"]
 
@@ -69,6 +71,7 @@ class ProjectController < ApplicationController
   # Parameters from form fields should be passed to create new item
 	#
 	def add_item
+	  expire_action(:controller => "project", :action => "list")
 		item = Todo.new
 		item.attributes = @params["new_item"]
 		
@@ -85,6 +88,7 @@ class ProjectController < ApplicationController
 	
 	
 	def destroy
+	  expire_action(:controller => "project", :action => "list")
 	  project = Project.find( @params['id'] )
 		if project.destroy
 			flash["confirmation"] = "Succesfully deleted project"
