@@ -17,5 +17,5 @@ class ApplicationController < ActionController::Base
 	  end
 	  total = Todo.find_all("done=0").length - sub
   end
-
+    
 end

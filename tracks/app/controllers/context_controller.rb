@@ -93,7 +93,7 @@ class ContextController < ApplicationController
     expire_action(:controller => "context", :action => "list")
 		item = Todo.new
 		item.attributes = @params["new_item"]
-		# where = Context.find_by_id(item.context_id)
+		where = Context.find_by_id(item.context_id)
 		
 		back_to = urlize(where.name)
    

@@ -1,6 +1,12 @@
 <div id="display_box">
 
 <table class="list" cellspacing="0" cellpadding="5" width="450" border="0">
+  <tr>
+  <th align="left">ID</th>
+  <th align="left">Name</th>
+  <th align="left">Next actions</th>
+  <th></th>
+  </tr>
 <% row = 1 %>
 <% for @project in @projects %>
   <% if row % 2 == 0 %>
@@ -9,7 +15,8 @@
     <tr class="odd_row">
   <% end %>
     <td align="right" width="20"><%= @project.id.to_s %></td>
-		<td width="390"><%= link_to ( "#{@project.name}", :action => "show", :name => urlize(@project.name) ) %></td>
+		<td width="300"><%= link_to( "#{@project.name}", :action => "show", :name => urlize(@project.name) ) %></td>
+		<td width="70"><%= Todo.count( "project_id=#{@project.id} AND done=0" ).to_s %></td>
 		<td width="40">
     <%= link_to(image_tag( "edit", :title => "Edit item", :width=>"10", :height=>"10", :border=>"0"), { :action => "edit", :id => @project.id } ) + " " +
         link_to(image_tag( "delete", :title => "Delete item", :width=>"10", :height=>"10", :border=>"0"), { :action => "destroy", :id => @project.id}, :confirm => "Are you sure you want to delete this entry: #{@project.name}" ) + " "
