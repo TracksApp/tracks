@@ -16,4 +16,13 @@ class ApplicationController < ActionController::Base
   helper :application
   include LoginSystem
   
+  
+  # Convert a date entered in the format in settings.yml
+  # to database-compatible YYYY-MM-DD format
+  def date_to_YMD(date)
+    date_fmt = app_configurations["formats"]["date"]
+    formatted_date = DateTime.strptime(date, "#{date_fmt}")
+    formatted_date.strftime("%Y-%m-%d")
+  end
+  
 end

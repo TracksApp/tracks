@@ -24,7 +24,7 @@
 		  <%= options_from_collection_for_select(@projects, "id", "name" ) %>
 		  </select><br />
   		<label for="new_item_due">Due</label><br />
-  		<%= text_field( "new_item", "due", {"size" => 10, "maxlength" => 10} ) %>
+  		<%= date_select( "new_item", "due", :include_blank => true ) %>
   		<br />
   	  <input type="submit" value="Add item">
 	  </form>

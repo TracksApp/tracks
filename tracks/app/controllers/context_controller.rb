@@ -55,16 +55,6 @@ class ContextController < ApplicationController
 		item = Todo.new
 		item.attributes = @params["new_item"]
 		
-		# Convert the date format entered (as set in config/settings.yml)
-		# to the mysql format YYYY-MM-DD
-		if @params["new_item"]["due"] != ""
-		  date_fmt = app_configurations["formats"]["date"]
-  		formatted_date = DateTime.strptime(@params["new_item"]["due"], "#{date_fmt}")
-  		item.due = formatted_date.strftime("%Y-%m-%d")
-  	else
-  	  item.due = "0000-00-00"
-		end
-		
 		back_to = item.context_id
    
      if item.save

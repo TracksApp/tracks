@@ -36,16 +36,6 @@ class TodoController < ApplicationController
     @item = Todo.new
 		@item.attributes = @params["item"]
 		
-		# Convert the date format entered (as set in config/settings.yml)
-		# to the mysql format YYYY-MM-DD
-		if @params["item"]["due"] != ""
-		  date_fmt = app_configurations["formats"]["date"]
-  		formatted_date = DateTime.strptime(@params["item"]["due"], "#{date_fmt}")
-  		@item.due = formatted_date.strftime("%Y-%m-%d")
-  	else
-  	  @item.due = "0000-00-00"
-		end
-		
 	  if @item.save
 		  flash["confirmation"] = "Next action was successfully added"
 			redirect_to( :action => "list" )

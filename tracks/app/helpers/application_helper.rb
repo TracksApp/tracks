@@ -1,14 +1,13 @@
 # The methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
   
+  # Convert a date object to the format specified
+	# in config/settings.yml
+	#
   def format_date(date)
-	  # Convert a date object to the format specified
-	  # in config/settings.yml
-		#
 		date_fmt = app_configurations["formats"]["date"]
 		formatted_date = date.strftime("#{date_fmt}")
 	end
-
 
 	# Uses RedCloth to transform text using either Textile or Markdown
 	# Need to require redcloth above

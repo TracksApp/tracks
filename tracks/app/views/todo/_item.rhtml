@@ -36,5 +36,5 @@
 		</select>
 <br />
 <label for="item_due">Due</label><br />
-<%= text_field( "item", "due", {"size" => 10, "maxlength" => 10} ) %>
+<%= date_select( "item", "due", :include_blank => true ) %>
 <br />
