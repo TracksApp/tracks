@@ -59,10 +59,10 @@ class TodoController < ApplicationController
 		@item.attributes = @params["item"]
 		
 	  if @item.save
-		  flash["confirmation"] = "Next action was successfully added"
+			flash["confirmation"] = "Next action \"#{@item.description}\" was successfully added"
 			redirect_to( :action => "list" )
 		else
-		  flash["warning"] = "Couldn't add the action because of an error"
+		  flash["warning"] = "Couldn't add the action \"#{@item.description}\""
 		  redirect_to( :action => "list" )
 		end
 	end
@@ -83,10 +83,10 @@ class TodoController < ApplicationController
     @item = Todo.find(@params['item']['id'])
     @item.attributes = @params['item']
     if @item.save
-      flash["confirmation"] = 'Next action was successfully updated'
+      flash["confirmation"] = "Next action \"#{@item.description}\" was successfully updated"
       redirect_to :action => 'list'
     else
-      flash["warning"] = 'Next action could not be updated'
+      flash["warning"] = "Next action \"#{@item.description}\" could not be updated"
       redirect_to :action => 'list'
     end
   end
@@ -96,10 +96,10 @@ class TodoController < ApplicationController
 	  expire_action(:controller => "todo", :action => "list")	  
 	  item = Todo.find(@params['id'])
 		if item.destroy
-			flash["confirmation"] = "Next action was successfully deleted"
+			flash["confirmation"] = "Next action \"#{item.description}\" was successfully deleted"
 			redirect_to :action => "list"
 		else
-			flash["warning"] = "Couldn't delete next action"
+			flash["warning"] = "Couldn't delete next action \"#{item.description}\""
 			redirect_to :action => "list"
 		end
 	end
@@ -115,10 +115,10 @@ class TodoController < ApplicationController
 		item.toggle!('done')
 		
 		if item.save
-		  flash["confirmation"] = "Next action marked as completed"
+			flash["confirmation"] = "Next action \"#{item.description}\" marked as completed"
 			redirect_to( :action => "list" )
 		else
-		  flash["warning"] = "Couldn't mark action as completed"
+			flash["warning"] = "Couldn't mark action \"#{item.description}\" as completed"
 			redirect_to( :action => "list" )
 		end	
 	end

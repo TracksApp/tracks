@@ -3,7 +3,7 @@
 <!-- <%= '<tr id="' + @notdone_item.id.to_s + '">' %> -->
 	<td valign="top">
 	  <%= check_box( "item", "done", "onclick" => "document.location.href='/todo/toggle_check/#{@notdone_item.id}'" ) %></td>
-	<td valign="top" width="30"><%= link_to( $edit_img, { :action => "edit", :id => @notdone_item.id }, :title => "Edit item" ) + " " + link_to($delete_img, { :action => "destroy", :id => @notdone_item.id }, :title => "Delete item", :confirm => "Are you sure you want to delete this entry: #{@notdone_item.description}" ) + " " %></td>
+	<td valign="top" width="30"><%= link_to( $edit_img, { :action => "edit", :id => @notdone_item.id }, :title => "Edit item" ) + " " + link_to($delete_img, { :action => "destroy", :id => @notdone_item.id }, :title => "Delete item", :confirm => "Are you sure you want to delete the action \"#{@notdone_item.description}?\"" ) + " " %></td>
 	<td valign="top"><%= due_date( @notdone_item.due ) %> 
 	<%= @notdone_item.description %>
 	<% if @notdone_item.project_id %>

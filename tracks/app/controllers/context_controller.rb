@@ -26,10 +26,10 @@ class ContextController < ApplicationController
 		context.attributes = @params["new_context"]
 
 			if context.save
-			  flash["confirmation"] = "Succesfully created context"
+				flash["confirmation"] = "Succesfully created context \"#{context.name}\""
 				redirect_to( :action => "list" )
 			else
-				flash["warning"] = "Couldn't add new context"
+				flash["warning"] = "Couldn't add new context \"#{context.name}\""
 				redirect_to( :action => "list" )
 			end
 	end
@@ -46,10 +46,10 @@ class ContextController < ApplicationController
     @context = Context.find(@params['context']['id'])
     @context.attributes = @params['context']
     if @context.save
-      flash["confirmation"] = 'Context was successfully updated'
+      flash["confirmation"] = "Context \"#{@context.name}\" was successfully updated"
       redirect_to :action => 'list'
     else
-      flash["warning"] = 'Context could not be updated'
+      flash["warning"] = "Context \"#{@context.name}\" could not be updated"
       redirect_to :action => 'list'
     end
   end
@@ -78,10 +78,10 @@ class ContextController < ApplicationController
 		back_to = item.context_id
    
      if item.save
-       flash["confirmation"] = "Succesfully added action to context"
+       flash["confirmation"] = "Succesfully added action \"#{item.description}\" to context"
        redirect_to( :controller => "context", :action => "show", :id => "#{back_to}" )
      else
-       flash["warning"] = "Could not add action to context"
+       flash["warning"] = "Could not add action \"#{item.description}\" to context"
        redirect_to( :controller => "context", :action => "show", :id => "#{back_to}" )
      end
 	end
@@ -94,10 +94,10 @@ class ContextController < ApplicationController
 	  expire_action(:controller => "context", :action => "list")
 	  context = Context.find(@params['id'])
 		if context.destroy
-			flash["confirmation"] = "Succesfully deleted context"
+			flash["confirmation"] = "Succesfully deleted context \"#{context.name}\""
 			redirect_to( :action => "list" )
 		else
-			flash["warning"] = "Couldn't delete context"
+			flash["warning"] = "Couldn't delete context \"#{context.name}\""
 			redirect_to( :action => "list" )
 		end
 	end

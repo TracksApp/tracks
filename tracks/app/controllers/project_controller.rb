@@ -40,10 +40,10 @@ class ProjectController < ApplicationController
     @project = Project.find(@params['project']['id'])
     @project.attributes = @params['project']
     if @project.save
-      flash["confirmation"] = 'Project was successfully updated'
+      flash["confirmation"] = "Project \"#{@project.name}\" was successfully updated"
       redirect_to :action => 'list'
     else
-      flash["warning"] = 'Project could not be updated'
+      flash["warning"] = "Project \"#{@project.name}\" could not be updated"
       redirect_to :action => 'list'
     end
   end
@@ -58,10 +58,10 @@ class ProjectController < ApplicationController
 		project.name = @params["new_project"]["name"]
 
 			if project.save
-			  flash["confirmation"] = "Succesfully added project"
+				flash["confirmation"] = "Succesfully added project \"#{project.name}\""
 				redirect_to( :action => "list" )
 			else
-			  flash["warning"] = "Couldn't add project"
+				flash["warning"] = "Couldn't add project \"#{project.name}\""
 				redirect_to( :action => "list" )
 			end
 	end
@@ -78,10 +78,10 @@ class ProjectController < ApplicationController
 		back_to = item.project_id
    
      if item.save
-       flash["confirmation"] = "Successfully added next action to project"
+       flash["confirmation"] = "Successfully added next action \"#{item.description}\" to project"
        redirect_to( :controller => "project", :action => "show", :id => "#{back_to}" )
      else
-       flash["warning"] = "Couldn't add next action to project"
+       flash["warning"] = "Couldn't add next action  \"#{item.description}\" to project"
        redirect_to( :controller => "project", :action => "show", :id => "#{back_to}" )
      end
 	end
@@ -91,10 +91,10 @@ class ProjectController < ApplicationController
 	  expire_action(:controller => "project", :action => "list")
 	  project = Project.find( @params['id'] )
 		if project.destroy
-			flash["confirmation"] = "Succesfully deleted project"
+			flash["confirmation"] = "Succesfully deleted project \"#{project.name}\""
 			redirect_to( :action => "list" )
 		else
-			flash["warning"] = "Couldn't delete project"
+			flash["warning"] = "Couldn't delete project \"#{project.name}\""
 			redirect_to( :action => "list" )
 		end
 	end
