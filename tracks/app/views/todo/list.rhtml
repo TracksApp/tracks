@@ -33,7 +33,7 @@
 <p>Hidden contexts:
 <% for @hidden_place in @hidden_places %>
   <% num = count_items(@hidden_place) %>
-  <%= link_to @hidden_place.name.capitalize, :controller=>"context", :action=> "show", :name=> urlize(@hidden_place.name) %>
+  <%= link_to @hidden_place.name.capitalize, :controller=>"context", :action=> "show", :name=> urlize(@hidden_place.name) %><%= ' ('+ num.to_s + ') ' + '|' %>
 <% end %>
 </p>
   
