@@ -14,7 +14,7 @@ class TodoController < ApplicationController
 		@page_title = "List tasks"
 		@projects = Project.find_all
 		@places = Context.find_all
-	  @shown_places = Context.find_all_by_hide( 0, "id ASC" )
+	  @shown_places = Context.find_all_by_hide( 0, "name DESC")
     @hidden_places = Context.find_all_by_hide( 1 )
 		@done = Todo.find_all_by_done( 1, "completed DESC", 5 )
 		

@@ -21,7 +21,7 @@
 		</select>
 <br />
 <label for="new_item_project_id">Project</label><br />
-		<select name="item[project_id]" id="item_project_id" tabindex="4">
+<select name="item[project_id]" id="item_project_id" tabindex="4">
 		<% if @belongs == nil %>
       <option value="" selected="selected">None</option>
     <% end %>
@@ -33,7 +33,7 @@
     	<option value="<%= @project.id %>"><%= @project.name %></option>
     	<% end %>
 	  <% end %>
-		</select>
+</select>
 <br />
 <label for="item_due" tab>Due</label><br />
 <%= date_select( "item", "due", :include_blank => true, :start_year => 2005, "tabindex" => 5 ) %>

@@ -1,6 +1,6 @@
 class Todo < ActiveRecord::Base
     	
-  belongs_to :context
+  belongs_to :context, :order => 'name'
 	belongs_to :project
 	
 	# Description field can't be empty, and must be < 100 bytes

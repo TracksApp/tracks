@@ -1,5 +1,6 @@
 <div id="display_box">
 	<h2>Edit context</h2>
+	<%= error_messages_for 'context' %> 
   <form action="/context/update" method="post">
   <%= render_partial "edit_context", "@context" %>
   <input type="submit" value="Update" />
