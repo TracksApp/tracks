@@ -17,6 +17,7 @@ Project wiki: <http://www.rousette.org.uk/projects/wiki/>
 3. Fixed SQLite dump format in db/tracks_1.0.2_sqlite.sql (thanks, Jim)
 4. Added a mini-calendar to the todo/list page. Needs some tidying up, but it provides a quick way to look up a date a few months ahead. Note that it doesn't insert the date: it's just for viewing. I modified the calendar a little bit from here: <http://www.pxl8.com/basic_calendar.html>
 5. Added some XMLHTTPRequest calls to speed up checking off an item as done. It grabs the checked item and appends it immediately to a 'holding' section (where you can uncheck it again if it was a mistake, or add a closing note). When you next refresh the page, it will be added to the 'Last 5 completed items' section.
+6. [Contributed by Andrew Williams] Toggling of contexts in /todo/list to collapse or expand their display via a small '+' or '-' graphic. This is independent of the shown/hidden setting for contexts, and is ideal for just hiding things on the fly to focus your view.
 
 ## Version 1.02
 

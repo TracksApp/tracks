@@ -9,6 +9,76 @@ function toggle(idname) {
   document.getElementById(idname).style.display = (document.getElementById(idname).style.display == 'none') ? 'block' : 'none';
 }
 
+// Contributed by Andrew Williams
+function toggleAllImages()
+{
+	var cookies = document.cookie.split(';');
+
+	for(var i = 0; i < cookies.length; i++)
+	{
+		var str = cookies[i].split('=')[0];
+
+		if(str.indexOf('toggle_context_') != -1)
+		{
+			var id = str.split('_')[2];
+			if(getCookie(str) == 'collapsed')
+			{
+				toggle('c'+id);
+				toggleImage('toggle_context_'+id);
+			}
+		}
+	}
+}
+
+function toggle(idname) 
+{
+document.getElementById(idname).style.display = (document.getElementById(idname).style.display == 'none') ? 'block' : 'none';
+}
+
+function toggleImage(idname)
+{
+	if(document.images)
+	{
+		if(document[idname].src.indexOf('collapse.png') != -1)
+		{
+			document[idname].src = '/images/expand.png';
+			SetCookie(idname, "collapsed");
+		}
+		else
+		{
+			document[idname].src = '/images/collapse.png';
+			SetCookie(idname, "expanded");
+		}
+	}
+}
+
+function SetCookie (name, value) {
+	var argv = SetCookie.arguments;
+	var argc = SetCookie.arguments.length;
+	var expires = (argc > 2) ? argv[2] : null;
+	var path = (argc > 3) ? argv[3] : null;
+	var domain = (argc > 4) ? argv[4] : null;
+	var secure = (argc > 5) ? argv[5] : false;
+	document.cookie = name + "=" + escape (value) +
+	((expires == null) ? "" : ("; expires=" +
+	expires.toGMTString())) +
+	((path == null) ? "" : ("; path=" + path)) +
+	((domain == null) ? "" : ("; domain=" + domain)) +
+	((secure == true) ? "; secure" : "");
+}
+
+var bikky = document.cookie;
+
+  function getCookie(name) { // use: getCookie("name");
+    var index = bikky.indexOf(name + "=");
+    if (index == -1) return null;
+    index = bikky.indexOf("=", index) + 1; // first character
+    var endstr = bikky.indexOf(";", index);
+    if (endstr == -1) endstr = bikky.length; // last character
+    return unescape(bikky.substring(index, endstr));
+  }
+  
+
 //
 // XMLHTTPRequest code from David Goodlad <http://hieraki.goodlad.ca/read/book/1>
 //
