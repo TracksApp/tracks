@@ -254,6 +254,5 @@ table.list {
     
 .next_actions td {
     border: none;
-    padding-top: 3px;
-    padding-bottom: 3px;
+    padding-bottom: 5px;
 }

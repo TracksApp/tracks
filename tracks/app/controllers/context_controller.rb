@@ -24,7 +24,7 @@ class ContextController < ApplicationController
 	#
 	def add_context
 		context = Context.new
-		context.name = @params["new_context"]["name"]
+		context.attributes = @params["new_context"]
 
 			if context.save
 			  flash["confirmation"] = "Succesfully created context"

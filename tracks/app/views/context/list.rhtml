@@ -10,6 +10,13 @@
   <% end %>
     <td align="right" width="20"><%= @context.id.to_s %></td>
 		<td width="390"><%= link_to( "#{@context.name.capitalize}", :action => "show", :id => @context.id ) %></td>
+		<td>
+		  <% if @context.hide == 1 %>
+		    hidden
+		  <% else %>
+		    shown
+		  <% end %>
+		  </td>
 		<td width="40"><%= link_to($edit_img, { :action => "edit", :id => @context.id }, :title => "Edit item" ) + " " + link_to($delete_img, { :action => "destroy", :id => @context.id }, :title => "Delete item", :confirm => "Are you sure you want to delete this context: #{@context.name}. Any todos in this context will be deleted.") + " " %></td>
 </tr>
 <% row += 1 %>
@@ -23,6 +30,9 @@
 	<form method="post" action="add_context">
 	  <label for="new_context_name">New context</label><br />                                               
 	  <%= text_field("new_context", "name") %>
+		<br />
+		<label for="new_context_one_front">Hide from front page?</label><br />
+		<%= check_box( "new_context", "hide" ) %>
 		<br />
 	  <input type="submit" value="Add context">
 	</form>

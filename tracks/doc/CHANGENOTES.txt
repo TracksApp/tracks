@@ -11,6 +11,7 @@ Project wiki: <http://www.rousette.org.uk/projects/wiki/>
 2. Added validation for the entry fields. If you enter a bit of text that's too long or you omit the description (not much point in a blank next action!) you'll get an error message and the action won't be saved.
 3. Added action caching.
 4. Did a bit of refactoring to try to make page loading a bit more efficient.
+5. Added a new row to the context table: 'hide'. This determines whether a particular context gets hidden on the main page. If the checkbox on the add new context form is checked, the context is hidden, and isn't listed on the front (todo/list) page. This is useful for contexts like 'wish list' or 'someday/maybe' that you don't want taking up your attention all the time.
 
 ## Version 1.01
 
