@@ -21,10 +21,12 @@ class User < ActiveRecord::Base
   
   def crypt_password
     write_attribute("password", self.class.sha1(password)) if password == @password_confirmation
+    write_attribute("word", self.class.sha1(word))
   end
 
   validates_length_of :password, :login, :within => 5..40
-  validates_presence_of :password, :login
+  validates_presence_of :password, :login, :word
   validates_uniqueness_of :login, :on => :create
+  validates_uniqueness_of :word, :on => :create
   validates_confirmation_of :password, :on => :create     
 end

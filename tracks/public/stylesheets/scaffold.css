@@ -1,15 +1,19 @@
 body { background-color: #fff; color: #333; }
 
-body, p, ol, ul, td {
+body, ol, ul, td {
   font-family: verdana, arial, helvetica, sans-serif;
   font-size:   12px;
   line-height: 18px;
   background: #eee;
 }
 
-a { color: #000; } 
-a:visited { color: #666; }
-a:hover { color: #fff; background-color: #000; }
+p {
+  background: #ff9;
+}
+
+a { color: #f00; padding: 3px;  } 
+a:visited { color: #f00; }
+a:hover { color: #000; background-color: #f00; }
 
 h1, h2, h3 { color: #333; font-family: verdana, arial, helvetica, sans-serif; text-align: center; }
 h1 { font-size: 28px }
@@ -31,7 +35,7 @@ pre {
 }
 
 div.form {
-  width: 40%;
+  width: 25%;
   margin: 100px auto;
   padding: 10px;
   border: 1px solid #999;
