@@ -17,7 +17,7 @@
 		    shown
 		  <% end %>
 		  </td>
-		<td width="40"><%= link_image_to("edit", { :action => "edit", :id => @context.id }, :title => "Edit item", :size => "10x10") + " " + link_image_to("delete", { :action => "destroy", :id => @context.id }, :title => "Delete item", :size => "10x10", :confirm => "Are you sure you want to delete the context \"#{@context.name}?\" Any todos in this context will be deleted.") + " " %></td>
+		<td width="40"><%= link_image_to("edit", { :action => "edit", :id => @context.id }, :title => "Edit item", :size => "10x10", :border => "0" ) + " " + link_image_to("delete", { :action => "destroy", :id => @context.id }, :title => "Delete item", :size => "10x10", :border => "0", :confirm => "Are you sure you want to delete the context \"#{@context.name}?\" Any todos in this context will be deleted.") + " " %></td>
 </tr>
 <% row += 1 %>
 <% end %>

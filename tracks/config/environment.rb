@@ -35,14 +35,6 @@ require_gem 'actionmailer'
 require_gem 'actionwebservice'
 require_gem 'rails'
 
-# Try loading gem Redcloth first, but if that fails
-# fall back on lib version
-begin
-  require_gem 'redcloth', '>= 3.0.3'
-rescue LoadError
-  require_or_load( "redcloth" )
-end
-
 # Environment-specific configuration.
 require_dependency "environments/#{RAILS_ENV}"
 ActiveRecord::Base.configurations = YAML::load(File.open("#{RAILS_ROOT}/config/database.yml"))
