@@ -36,6 +36,7 @@
 </select>
 <br />
 <label for="item_due" tab>Due</label><br />
-<%= date_select( "item", "due", :include_blank => true, :start_year => 2005, "tabindex" => 5 ) %>
+<% now = Date.today %>
+<%= date_select( "item", "due", :include_blank => true, :start_year => now.year, "tabindex" => 5 ) %>
 <br />
 <br />
