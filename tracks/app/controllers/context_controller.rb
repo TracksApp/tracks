@@ -3,7 +3,6 @@ class ContextController < ApplicationController
     
   helper :context
   model :project
-  scaffold :context
   before_filter :login_required
   # caches_action :list, :show
   
@@ -36,6 +35,25 @@ class ContextController < ApplicationController
 	end
 	
 	
+	def edit
+	  @context = Context.find(@params['id'])
+    @page_title = "Edit context: #{@context.name.capitalize}"  
+	end
+	
+	
+	def update
+    @context = Context.find(@params['context']['id'])
+    @context.attributes = @params['context']
+    if @context.save
+      flash["confirmation"] = 'Context was successfully updated'
+      redirect_to :action => 'list'
+    else
+      flash["warning"] = 'Context could not be updated'
+      redirect_to :action => 'list'
+    end
+  end
+  
+
 	# Filter the contexts to show just the one passed in the URL
   # e.g. <home>/context/show/<context_id> shows just <context_id>.
   #

@@ -3,7 +3,6 @@ class ProjectController < ApplicationController
   helper :project
   model :context
   model :todo
-  scaffold :project
   
   before_filter :login_required
   # caches_action :list, :show
@@ -30,6 +29,25 @@ class ProjectController < ApplicationController
 	end
 	
 	
+	def edit
+	  @project = Project.find(@params['id'])
+    @page_title = "Edit project: #{@project.name.capitalize}"  
+	end
+	
+	
+	def update
+    @project = Project.find(@params['project']['id'])
+    @project.attributes = @params['project']
+    if @project.save
+      flash["confirmation"] = 'Project was successfully updated'
+      redirect_to :action => 'list'
+    else
+      flash["warning"] = 'Project could not be updated'
+      redirect_to :action => 'list'
+    end
+  end
+  
+  
 	# Called by a form button
 	# Parameters from form fields should be passed to create new project
 	#

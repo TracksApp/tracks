@@ -1,12 +1,12 @@
 <%= hidden_field( "item", "id" ) %>
 <label for="item_description">Next action</label><br />                                               
-<%= text_field( "item", "description" ) %>
+<%= text_field( "item", "description", "tabindex" => 1 ) %>
 <br />
 <label for="item_notes">Notes</label><br />
-<%= text_area( "item", "notes", "cols" => 35, "rows" => 15 ) %>
+<%= text_area( "item", "notes", "tabindex" => 2, "cols" => 35, "rows" => 15 ) %>
 <br />
 <label for="item_context_id">Context</label><br />
-    <select name="item[context_id]" id="item_context_id">
+    <select name="item[context_id]" id="item_context_id" tabindex="3">
 			<% for @place in @places %>
 			  <% if @item %>
 			    <% if @place.id == @item.context_id %>
@@ -21,7 +21,7 @@
 		</select>
 <br />
 <label for="new_item_project_id">Project</label><br />
-		<select name="item[project_id]" id="item_project_id">
+		<select name="item[project_id]" id="item_project_id" tabindex="4">
 		<% if @belongs == nil %>
       <option value="" selected="selected">None</option>
     <% end %>
@@ -35,6 +35,7 @@
 	  <% end %>
 		</select>
 <br />
-<label for="item_due">Due</label><br />
-<%= date_select( "item", "due", :include_blank => true ) %>
+<label for="item_due" tab>Due</label><br />
+<%= date_select( "item", "due", :include_blank => true, "tabindex" => 5 ) %>
+<br />
 <br />

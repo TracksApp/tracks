@@ -44,7 +44,7 @@ a:hover {
 
 #navcontainer {
       margin: 15px;
-      width: 820px;
+      width: 822px;
       }
       			
 #navlist {
@@ -107,19 +107,22 @@ h2 a:hover {
       }
 			
 #input_box {
-      margin: 20px 50px 20px 490px;
+      margin-left: 490px;
+      margin-top: 20px;
+      width: 313px;
 			padding: 0px 15px 0px 15px;
-			border: 1px solid #999;
+			/* border: 1px solid #999; */
 			}
 			
 #input_box h2 {
-			background: #CCC;
+			/* background: #CCC;
 			padding: 5px;
-			margin-top: 0px;
+			margin: 0px;
 			margin-left: -15px;
-			margin-right: -15px;
-			color: #fff;
-			text-shadow: rgba(0,0,0,.4) 0px 2px 5px;
+			margin-right: -15px; 
+			text-shadow: rgba(0,0,0,.4) 0px 2px 5px; */
+			color: #999;
+			
 			}
 
 .box {
@@ -257,4 +260,20 @@ table.list {
 .next_actions td {
     border: none;
     padding-bottom: 5px;
-}
+    }
+
+/* Form elements */
+form {
+    border: 1px solid #CCC;
+    padding: 10px;
+    margin: 0px;
+    width: 313px;
+    }
+    
+label {
+    font-weight: bold;
+    }
+    
+input {
+    margin-bottom: 5px;
+    }

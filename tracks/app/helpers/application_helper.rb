@@ -48,15 +48,4 @@ module ApplicationHelper
 		end
 	end
 	
-	def get_projects()
-	  @projects = Project.find_all
-	  return @@projects
-	end
-	
-	def get_contexts()
-	  @places = Context.find_all
-	  return @@places
-	end
-	
-	
 end

@@ -10,7 +10,7 @@ RewriteEngine On
 RewriteBase /dispatch.fcgi
 
 # Enable this rewrite rule to point to the controller/action that should serve root.
-# RewriteRule ^$ /controller/action [R]
+RewriteRule ^$ /todo/list [R]
 
 # Add missing slash
 RewriteRule ^([-_a-zA-Z0-9]+)$                                            /$1/ [R]

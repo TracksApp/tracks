@@ -26,13 +26,13 @@
 </div><!- End of display_box -->
 
 <div id="input_box">
-	<h2>Add context</h2>	                                              
 	<form method="post" action="add_context">
 	  <label for="new_context_name">New context</label><br />                                               
 	  <%= text_field("new_context", "name") %>
 		<br />
-		<label for="new_context_one_front">Hide from front page?</label><br />
+		<label for="new_context_one_front">Hide from front page?</label>
 		<%= check_box( "new_context", "hide" ) %>
+		<br />
 		<br />
 	  <input type="submit" value="Add context">
 	</form>

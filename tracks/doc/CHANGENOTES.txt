@@ -13,6 +13,9 @@ Project wiki: <http://www.rousette.org.uk/projects/wiki/>
 4. Did a bit of refactoring to try to make page loading a bit more efficient.
 5. Added a new row to the context table: 'hide'. This determines whether a particular context gets hidden on the main page. If the checkbox on the add new context form is checked, the context is hidden, and isn't listed on the front (todo/list) page. This is useful for contexts like 'wish list' or 'someday/maybe' that you don't want taking up your attention all the time.
 6. Added a list of links to the hidden contexts at the bottom of the page.
+7. Changed the method of adding due dates to drop-down option lists. It's more obvious and less error prone than typing in the date. Your preferences for date formatting are still honoured when displaying due dates.
+8. Added a favicon, kindly produced by Jim Ray.
+9. Added border="0" to the button images to stop Firefox putting a red border around them.
 
 ## Version 1.01
 
