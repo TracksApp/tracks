@@ -14,10 +14,17 @@ class TodoController < ApplicationController
 		@page_title = "List tasks"
 		@projects = Project.find_all
 		@places = Context.find_all
-	  @shown_places = Context.find_all( "hide=0", "id ASC")
-    @hidden_places = Context.find_all( "hide=1")
-		@done = Todo.find_all( "done=1", "completed DESC", 5 )
-		@count = Todo.count( "done=0" )
+	  @shown_places = Context.find_all_by_hide( 0, "id ASC" )
+    @hidden_places = Context.find_all_by_hide( 1 )
+		@done = Todo.find_all_by_done( 1, "completed DESC", 5 )
+		
+		# Set count badge to number of not-done, not hidden context items
+		count = 0
+	  sub = 0
+	  @hidden_places.each do |h|
+	    sub = Todo.find_all("done=0 AND context_id=#{h.id}").length + sub
+	  end
+	  @count = Todo.find_all("done=0").length - sub
 	end
 
 

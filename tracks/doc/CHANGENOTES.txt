@@ -21,6 +21,14 @@ Project wiki: <http://www.rousette.org.uk/projects/wiki/>
 or whatever the full URL is. This should help people who put Tracks in a subdirectory.
 11. Added some rudimentary sorting of completed items. They are now sorted in to done today, done in the last 7 days and done in the last 31 days. At the bottom of completed.rhtml, there's a link to completed_archive.rhtml, which shows archived items older than 31 days.
 12. Changed the method of generating links to stylesheet and javascripts. Together with the new Routes, this should sort out any problems with putting Tracks in a sub-directory.
+13. config/environment.rb now checks to see if a gem version of Redcloth is installed that is greater than version 3.0.3. If that fails, it falls back on the packaged lib version. Note that there's an odd bug I can't seem to pin down that means that if you are using the packaged lib version, you'll get some errors like:
+
+    `./script/../config/..//lib/redcloth.rb:169: warning: already initialized constant VERSION`
+    
+    `./script/../config/..//lib/redcloth.rb:170: warning: already initialized constant DEFAULT_RULES`
+
+but ONLY if you're using the development environment; with production it's fine, and with the gem version of Redcloth it's fine in both environments.
+13. Modified the 'count' badge on todo/list: now shows the number of uncompleted items in contexts that *aren't* hidden (i.e. the actions actually listed on todo/list). Number of items in hidden contexts are shown in parentheses after the link to that context. So you don't forget about that stuff ;-)
 
 ## Version 1.01
 

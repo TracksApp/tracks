@@ -20,7 +20,8 @@
 
 <p>Hidden contexts:
 <% for @hidden_place in @hidden_places %>
-  <a href="<%= url_for( :controller => "context", :action => "show", :id => "#{@hidden_place.id}" ) %>"><%= @hidden_place.name.capitalize %></a> |
+  <% num = count_items(@hidden_place) %>
+  <a href="<%= url_for( :controller => "context", :action => "show", :id => "#{@hidden_place.id}" ) %>"><%= @hidden_place.name.capitalize %> (<%= num %>)</a> |
 <% end %>
 </p>
   

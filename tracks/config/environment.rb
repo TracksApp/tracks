@@ -37,11 +37,10 @@ require_gem 'rails'
 
 # Try loading gem Redcloth first, but if that fails
 # fall back on lib version
-# FIXME
 begin
   require_gem 'redcloth', '>= 3.0.3'
-rescue StandardError
-  require_dependency "redcloth"
+rescue LoadError
+  require_or_load( "redcloth" )
 end
 
 # Environment-specific configuration.

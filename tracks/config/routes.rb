@@ -12,6 +12,8 @@ ActionController::Routing::Routes.draw do |map|
   
   map.connect '', :controller => 'todo', :action => 'list'
   
+  map.connect 'add_item', :controller => 'todo', :action => 'add_item'
+  
   # Install the default route as the lowest priority.
   map.connect ':controller/:action/:id'
 end
