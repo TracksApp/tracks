@@ -1,5 +1,5 @@
 RAILS_ROOT = File.dirname(__FILE__) + "/../"
-RAILS_ENV  = ENV['RAILS_ENV'] || 'development'
+RAILS_ENV  = ENV['RAILS_ENV'] || 'production'
 
 
 # Mocks first.

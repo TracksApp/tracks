@@ -6,6 +6,7 @@ class TodoController < ApplicationController
   
 	scaffold :todo
 	before_filter :login_required
+	caches_action :list, :completed
   layout "standard"
   
 	# Main method for listing tasks

@@ -5,6 +5,7 @@ class ContextController < ApplicationController
   model :project
   scaffold :context
   before_filter :login_required
+  caches_action :list, :show
   
   layout "standard"
   

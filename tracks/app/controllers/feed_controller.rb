@@ -4,6 +4,7 @@ class FeedController < ApplicationController
   
   helper :feed
   model :todo, :context, :project
+  before_filter :login_required
   
   def index
   end
