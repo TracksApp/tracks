@@ -1,7 +1,7 @@
 <% @item = not_done %>
 <tr>
 	<td valign="top"><%= check_box( "item", "done", "onclick" => "document.location.href='/todo/toggle_check/#{@item.id}'" ) %></td>
-	<td valign="top" width="30"><%= link_image_to( "edit", { :action => "edit", :id => @item.id }, :title => "Edit item", :size => "10x10" ) + " " + link_image_to( "delete", { :controller => "todo", :action => "destroy", :id => @item.id }, :title => "Delete item", :size => "10x10", :confirm => "Are you sure you want to delete this entry: #{@item.description}" ) + " " %></td>
+	<td valign="top" width="30"><%= link_image_to( "edit", { :controller => "todo", :action => "edit", :id => @item.id }, :title => "Edit item", :size => "10x10" ) + " " + link_image_to( "delete", { :controller => "todo", :action => "destroy", :id => @item.id }, :title => "Delete item", :size => "10x10", :confirm => "Are you sure you want to delete this entry: #{@item.description}" ) + " " %></td>
 	<td valign="top"><%= due_date( @item.due ) %> 
 	<%= @item.description %>
 	<% if @item.project_id %>

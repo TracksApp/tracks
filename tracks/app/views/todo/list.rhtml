@@ -1,6 +1,6 @@
 <div id="display_box">
 <% for @shown_place in @shown_places %>
-  <% @not_done = Todo.find_all( "done=0 AND context_id=#{@shown_place.id}", "created ASC" ) %>
+  <% @not_done = Todo.find_all("done=0 AND context_id=#{@shown_place.id}", "created ASC") %>
 	<% if !@not_done.empty? %>
 	<div class="contexts">
     <h2><%= link_to( "#{@shown_place.name.capitalize}", :controller => "context", :action => "show", :id => @shown_place.id )  %></h2>
