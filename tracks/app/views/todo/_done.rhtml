@@ -1,13 +1,9 @@
 <% @item = done %>
-<li>
+<tr>
 <% if @item.completed %>
-  <div class="box">
-    <%= $done_img %>
-  </div>
-  
-  <div class="description">
-  <span class="grey"><%= format_date( @item.completed ) %></span>
-  <%= " " + @item.description + " "%>
+  <td valign="top"><%= $done_img %></td>
+  <td valign="top"><span class="grey"><%= format_date( @item.completed ) %></span></td>
+  <td valign="top"><%= " " + @item.description + " "%>
   
   <% if @item.project_id %>
     <%= "(" + @item.context['name'].capitalize + ", " + @item.project['name'] + ")" %>
@@ -24,6 +20,6 @@
   	<% 	m_notes = markdown( @item.notes ) %>
   	<%= "<div class=\"notes\" id=\"" + @item.id.to_s + "\">" + m_notes + "</div>" %>
   <% end %>
-  </div>
+  </td>
 <% end %>
-</li>
+</tr>

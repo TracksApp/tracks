@@ -2,20 +2,20 @@
 <% for @place in @places %>
   <% @not_done = Todo.find_all( "done=0 AND context_id=#{@place.id}", "created ASC" ) %>
 	<% if !@not_done.empty? %>
-	  <div class="contexts">
-  <h2><%= link_to( "#{@place.name.capitalize}", :controller => "context", :action => "show", :id => @place.id )  %></h2>
-	<ul>
+	<div class="contexts">
+    <h2><%= link_to( "#{@place.name.capitalize}", :controller => "context", :action => "show", :id => @place.id )  %></h2>
+	  <table class="next_actions" cellspacing="2" cellpadding="0" border="0">
 	    <%= render_collection_of_partials "not_done", @not_done %>
-	  </ul>
+	  </table>
 	</div><!-- End contexts -->
 	<% end %>
 <% end %>
 
 <div class="contexts">
 <h2>Last 5 completed actions</h2>
-<ul>
-  <%= render_collection_of_partials "done", @done %>
-  </ul>
+<table class="next_actions" cellspacing="5" cellpadding="0" border="0">
+    <%= render_collection_of_partials "done", @done %>
+</table>
 </div>
 </div><!- End of display_box -->
 

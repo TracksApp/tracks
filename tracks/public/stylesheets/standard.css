@@ -20,7 +20,8 @@ a, a:link, a:active, a:visited {
 			}
 			
 a:hover {
-			text-decoration: underline;
+			color: #fff;
+			background-color: #cc3334;
 			}
 			
 /* Structural divs */
@@ -99,6 +100,7 @@ h2 a, h2 a:link, h2 a:active, h2 a:visited {
 			
 h2 a:hover {
       color: #cc3334;
+      background-color: transparent;
       text-decoration: none;
       }
 			
@@ -249,3 +251,9 @@ td    {
 .odd_row {
       background: #EDF3FE;
       }
+      
+.next_actions td {
+    border: none;
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
