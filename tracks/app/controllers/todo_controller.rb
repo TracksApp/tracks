@@ -32,24 +32,34 @@ class TodoController < ApplicationController
 	# Parameters from form fields should be passed to create new item
 	#
 	def add_item
-    item = Todo.new
-		item.attributes = @params["new_item"]
+    @item = Todo.new
+		@item.attributes = @params["new_item"]
 		
 		# Convert the date format entered (as set in config/settings.yml)
 		# to the mysql format YYYY-MM-DD
 		if @params["new_item"]["due"] != ""
 		  date_fmt = app_configurations["formats"]["date"]
   		formatted_date = DateTime.strptime(@params["new_item"]["due"], "#{date_fmt}")
-  		item.due = formatted_date.strftime("%Y-%m-%d")
+  		@item.due = formatted_date.strftime("%Y-%m-%d")
   	else
-  	  item.due = "0000-00-00"
+  	  @item.due = "0000-00-00"
 		end
 		
-    if item.save
+		# This doesn't seem to be working. No error, but the error 
+		# message isn't printed either.
+		unless @item.errors.empty?
+		  error_msg = ''
+        @item.errors.each_full do |message|
+          error_msg << message
+        end
+      return error_msg
+    end
+    
+    if @item.save
 		  flash["confirmation"] = "Next action was successfully added"
 			redirect_to( :action => "list" )
 		else
-		  flash["warning"] = "Couldn't add the action"
+		  flash["warning"] = "Couldn't add the action because of an error: #{error_msg}"
 		  redirect_to( :action => "list" )
 		end
 	end
