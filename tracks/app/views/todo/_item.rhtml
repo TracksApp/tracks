@@ -1,0 +1,40 @@
+<%= hidden_field( "item", "id" ) %>
+<label for="item_description">Next action</label><br />                                               
+<%= text_field( "item", "description" ) %>
+<br />
+<label for="item_notes">Notes</label><br />
+<%= text_area( "item", "notes", "cols" => 35, "rows" => 15 ) %>
+<br />
+<label for="item_context_id">Context</label><br />
+    <select name="item[context_id]" id="item_context_id">
+			<% for @place in @places %>
+			  <% if @item %>
+			    <% if @place.id == @item.context_id %>
+  			    <option value="<%= @place.id %>" selected="selected"><%= @place.name.capitalize %></option>
+  			  <% else %>
+			      <option value="<%= @place.id %>"><%= @place.name.capitalize %></option>
+			    <% end %>
+			  <% else %>
+			      <option value="<%= @place.id %>"><%= @place.name.capitalize %></option>
+			  <% end %>
+			<% end %>
+		</select>
+<br />
+<label for="new_item_project_id">Project</label><br />
+		<select name="item[project_id]" id="item_project_id">
+		<% if @belongs == nil %>
+      <option value="" selected="selected">None</option>
+    <% end %>
+    
+  	<% for @project in @projects %>
+  	  <% if @project.id == @belongs %>
+    	  <option value="<%= @project.id %>" selected="selected"><%= @project.name %></option>
+    	<% else %>
+    	<option value="<%= @project.id %>"><%= @project.name %></option>
+    	<% end %>
+	  <% end %>
+		</select>
+<br />
+<label for="item_due">Due</label><br />
+<%= text_field( "item", "due", {"size" => 10, "maxlength" => 10} ) %>
+<br />

@@ -14,6 +14,7 @@ class TodoController < ApplicationController
 		@page_title = "List tasks"
 		@projects = Project.find_all
     @places = Context.find_all( "hide=0", "id ASC")
+    @hidden_places = Context.find_all( "hide=1")
 		@done = Todo.find_all( "done=1", "completed DESC", 5 )
 		@count = Todo.count( "done=0" )
 	end
@@ -32,33 +33,23 @@ class TodoController < ApplicationController
 	#
 	def add_item
     @item = Todo.new
-		@item.attributes = @params["new_item"]
+		@item.attributes = @params["item"]
 		
 		# Convert the date format entered (as set in config/settings.yml)
 		# to the mysql format YYYY-MM-DD
-		if @params["new_item"]["due"] != ""
+		if @params["item"]["due"] != ""
 		  date_fmt = app_configurations["formats"]["date"]
-  		formatted_date = DateTime.strptime(@params["new_item"]["due"], "#{date_fmt}")
+  		formatted_date = DateTime.strptime(@params["item"]["due"], "#{date_fmt}")
   		@item.due = formatted_date.strftime("%Y-%m-%d")
   	else
   	  @item.due = "0000-00-00"
 		end
 		
-		# This doesn't seem to be working. No error, but the error 
-		# message isn't printed either.
-		unless @item.errors.empty?
-		  error_msg = ''
-        @item.errors.each_full do |message|
-          error_msg << message
-        end
-      return error_msg
-    end
-    
-    if @item.save
+	  if @item.save
 		  flash["confirmation"] = "Next action was successfully added"
 			redirect_to( :action => "list" )
 		else
-		  flash["warning"] = "Couldn't add the action because of an error: #{error_msg}"
+		  flash["warning"] = "Couldn't add the action because of an error"
 		  redirect_to( :action => "list" )
 		end
 	end

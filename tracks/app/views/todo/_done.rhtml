@@ -1,24 +1,24 @@
-<% @item = done %>
+<% @done_item = done %>
 <tr>
-<% if @item.completed %>
+<% if @done_item.completed %>
   <td valign="top"><%= $done_img %></td>
-  <td valign="top"><span class="grey"><%= format_date( @item.completed ) %></span></td>
-  <td valign="top"><%= " " + @item.description + " "%>
+  <td valign="top"><span class="grey"><%= format_date( @done_item.completed ) %></span></td>
+  <td valign="top"><%= " " + @done_item.description + " "%>
   
-  <% if @item.project_id %>
-    <%= "(" + @item.context['name'].capitalize + ", " + @item.project['name'] + ")" %>
+  <% if @done_item.project_id %>
+    <%= "(" + @done_item.context['name'].capitalize + ", " + @done_item.project['name'] + ")" %>
   <% else %>
-    <%= "(" + @item.context['name'].capitalize + ")" %>
+    <%= "(" + @done_item.context['name'].capitalize + ")" %>
   <% end %>
   
-  <% if @item.due %>
-    <%= " - was due on " + format_date( @item.due ) %>
+  <% if @done_item.due %>
+    <%= " - was due on " + format_date( @done_item.due ) %>
   <% end %>
   
-  <% if @item.notes? %>
-  	<%= "<a href=\"javascript:toggle('" + @item.id.to_s + "')\" title=\"Show notes\">" + $notes_img + "</a>" %>
-  	<% 	m_notes = markdown( @item.notes ) %>
-  	<%= "<div class=\"notes\" id=\"" + @item.id.to_s + "\">" + m_notes + "</div>" %>
+  <% if @done_item.notes? %>
+  	<%= "<a href=\"javascript:toggle('" + @done_item.id.to_s + "')\" title=\"Show notes\">" + $notes_img + "</a>" %>
+  	<% 	m_notes = markdown( @done_item.notes ) %>
+  	<%= "<div class=\"notes\" id=\"" + @done_item.id.to_s + "\">" + m_notes + "</div>" %>
   <% end %>
   </td>
 <% end %>

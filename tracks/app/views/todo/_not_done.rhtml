@@ -1,16 +1,18 @@
-<% @item = not_done %>
+<% @notdone_item = not_done %>
 <tr>
-	<td valign="top"><%= check_box( "item", "done", "onclick" => "document.location.href='/todo/toggle_check/#{@item.id}'" ) %></td>
-	<td valign="top" width="30"><%= link_to( $edit_img, { :action => "edit", :id => @item.id }, :title => "Edit item" ) + " " + link_to($delete_img, { :action => "destroy", :id => @item.id }, :title => "Delete item", :confirm => "Are you sure you want to delete this entry: #{@item.description}" ) + " " %></td>
-	<td valign="top"><%= due_date( @item.due ) %> 
-	<%= @item.description %>
-	<% if @item.project_id %>
-	  <%= link_to( "[P]", { :controller => "project", :action => "show", :id => @item.project_id }, :title => "View project: #{@item.project['name']}" ) %>
+<!-- <%= '<tr id="' + @notdone_item.id.to_s + '">' %> -->
+	<td valign="top">
+	  <%= check_box( "item", "done", "onclick" => "document.location.href='/todo/toggle_check/#{@notdone_item.id}'" ) %></td>
+	<td valign="top" width="30"><%= link_to( $edit_img, { :action => "edit", :id => @notdone_item.id }, :title => "Edit item" ) + " " + link_to($delete_img, { :action => "destroy", :id => @notdone_item.id }, :title => "Delete item", :confirm => "Are you sure you want to delete this entry: #{@notdone_item.description}" ) + " " %></td>
+	<td valign="top"><%= due_date( @notdone_item.due ) %> 
+	<%= @notdone_item.description %>
+	<% if @notdone_item.project_id %>
+	  <%= link_to( "[P]", { :controller => "project", :action => "show", :id => @notdone_item.project_id }, :title => "View project: #{@notdone_item.project['name']}" ) %>
 	<% end %>
-	<% if @item.notes? %>
-	  <%= "<a href=\"javascript:toggle('" + @item.id.to_s + "')\" title=\"Show notes\">" + $notes_img + "</a>" %>
-	  <% 	m_notes = markdown( @item.notes ) %>
-		<%= "<div class=\"notes\" id=\"" + @item.id.to_s + "\">" + m_notes + "</div>" %>
+	<% if @notdone_item.notes? %>
+	  <%= "<a href=\"javascript:toggle('" + @notdone_item.id.to_s + "')\" title=\"Show notes\">" + $notes_img + "</a>" %>
+	  <% 	m_notes = markdown( @notdone_item.notes ) %>
+		<%= "<div class=\"notes\" id=\"" + @notdone_item.id.to_s + "\">" + m_notes + "</div>" %>
 	<% end %>
 	</td>
 </tr>

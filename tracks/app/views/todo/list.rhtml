@@ -4,7 +4,7 @@
 	<% if !@not_done.empty? %>
 	<div class="contexts">
     <h2><%= link_to( "#{@place.name.capitalize}", :controller => "context", :action => "show", :id => @place.id )  %></h2>
-	  <table class="next_actions" cellspacing="2" cellpadding="0" border="0">
+	  <table class="next_actions" id="incomplete" cellspacing="2" cellpadding="0" border="0">
 	    <%= render_collection_of_partials "not_done", @not_done %>
 	  </table>
 	</div><!-- End contexts -->
@@ -13,46 +13,25 @@
 
 <div class="contexts">
 <h2>Last 5 completed actions</h2>
-<table class="next_actions" cellspacing="5" cellpadding="0" border="0">
+<table class="next_actions" id="complete" cellspacing="5" cellpadding="0" border="0">
     <%= render_collection_of_partials "done", @done %>
 </table>
 </div>
+
+<p>Hidden contexts:
+<% for @hidden_place in @hidden_places %>
+  <a href="<%= url_for( :controller => "context", :action => "show", :id => "#{@hidden_place.id}" ) %>"><%= @hidden_place.name.capitalize %></a> |
+<% end %>
+</p>
+  
 </div><!- End of display_box -->
 
- <div id="input_box">
-<!--  <h2>Today's events are: </h2>
-  <ul>
-<% ical = ICal::ICalReader.new("Personal") %>
-<% ical.todaysEvents do |event| %>
-    <%= puts "<li>#{event.startTime} - #{event.summary}</li>" %>
-<% end %>
-  </ul> -->
-  
-	<h2>Add next action</h2>	                                              
-	<form method="post" action="add_item">
-	  <label for="new_item_description">Next action</label><br />                                               
-	  <%= text_field( "new_item", "description" ) %>
-		<br />
-		<label for="new_item_notes">Notes</label><br />
-		<%= text_area( "new_item", "notes", "cols" => 35, "rows" => 15 ) %>
-		<br />
-		<label for="new_item_context_id">Context</label><br />
-		<select name="new_item[context_id]" id="new_item_context_id">
-		  <%= options_from_collection_for_select(@places, "id", "name" ) %>
-		</select>
-		<br />
-		<label for="new_item_project_id">Project</label><br />
-		<select name="new_item[project_id]" id="new_item_project_id">
-		  <option value="" selected>None</option>
-		  <%= options_from_collection_for_select(@projects, "id", "name" ) %>
-		</select>
-		<br />
-		<label for="new_item_due">Due</label><br />
-		<%= text_field( "new_item", "due", {"size" => 10, "maxlength" => 10} ) %>
-		<br />
-	  <input type="submit" value="Add item">
-	</form>
-	
+<div id="input_box">
+<h2>Add next action</h2>
+<form method="post" action="add_item">
+	<%= render_partial "todo/item", @item %>
+<input type="submit" value="Add item">
+</form>
 </div>
 
 <% if @flash["confirmation"] %><div class="confirmation"><%= @flash["confirmation"] %></div><% end %>
