@@ -12,7 +12,9 @@
 </table>
 <% end %>
 </div>
-
+<% for other_project in Project.find_all %>
+  <%= link_to( other_project.name.capitalize, { :controller => "project", :action => "show", :id => other_project.id } ) + " | " %>
+<% end %>
 </div><!-- End of display box -->
 
 <div id="input_box">
