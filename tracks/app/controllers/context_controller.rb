@@ -41,7 +41,6 @@ class ContextController < ApplicationController
   #
 	def show
 	  @context = Context.find(@params["id"])
-	  @places = Context.find_all
 	  @projects = Project.find_all
 	  @page_title = "Context: #{@context.name.capitalize}"
 	  @not_done = Todo.find_all( "context_id=#{@context.id} AND done=0", "created ASC" )

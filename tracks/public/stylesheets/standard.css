@@ -239,10 +239,6 @@ li    {
 			font-size: 1.1em;
 			padding: 3px 0px;
 			}
-
-td    {
-      border: 1px solid #999;
-      }
 			
 .even_row {
       background: #fff;
@@ -251,7 +247,11 @@ td    {
 .odd_row {
       background: #EDF3FE;
       }
-      
+
+table.list {
+    border: 1px solid #999;
+    }
+    
 .next_actions td {
     border: none;
     padding-top: 3px;

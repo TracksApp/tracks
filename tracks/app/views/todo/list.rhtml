@@ -38,17 +38,13 @@
 		<br />
 		<label for="new_item_context_id">Context</label><br />
 		<select name="new_item[context_id]" id="new_item_context_id">
-			<% for @place in @places %>
-			<option value="<%= @place.id %>"><%= @place.name.capitalize %></option>
-			<% end %>
+		  <%= options_from_collection_for_select(@places, "id", "name" ) %>
 		</select>
 		<br />
 		<label for="new_item_project_id">Project</label><br />
 		<select name="new_item[project_id]" id="new_item_project_id">
 		  <option value="" selected>None</option>
-			<% for @project in @projects %>
-			<option value="<%= @project.id %>"><%= @project.name %></option>
-			<% end %>
+		  <%= options_from_collection_for_select(@projects, "id", "name" ) %>
 		</select>
 		<br />
 		<label for="new_item_due">Due</label><br />

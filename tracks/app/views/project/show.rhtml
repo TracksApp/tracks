@@ -6,32 +6,10 @@
 <% if @not_done == [] %>
   <p>There are no next actions yet in this project</p>
 <% else %>
-<ul>
-<% for @item in @not_done %>
-	<li>
-	<div class="box">
-	<%= check_box( "item", "done", "onclick" => "document.location.href='/todo/toggle_check/#{@item.id}'" ) %>
-	</div>
-	
-	<div class="description">
-	<%= due_date( @item.due ) %> 
-	<%= @item.description %>
-	<%= link_to( "[C]", { :controller => "context", :action => "show", :id => @item.context_id }, :title => "View context: #{@item.context['name'].capitalize}" ) %>
-	</div>
-		
-	<div class="tools">	
-	<%= link_to( $edit_img, { :controller => "todo", :action => "edit", :id => @item.id }, :title => "Edit item" ) + " " + link_to($delete_img, { :controller => "todo", :action => "destroy", :id => @item.id }, :title => "Delete item", :confirm => "Are you sure you want to delete this entry: #{@item.description}" ) + " " %>
 
-	<% if @item.notes? %>
-		<%= "<a href=\"javascript:toggle('" + @item.id.to_s + "')\" title=\"Show notes\">" + $notes_img + "</a>" %></div>
-		<% 	m_notes = markdown(@item.notes) %>
-		<%= "<div class=\"notes\" id=\"" + @item.id.to_s + "\">" + m_notes + "</div>" %>
-	<% else %>
-	</div>
-	<% end %>
-	</li>
-<% end %>
-</ul>
+<table class="next_actions" cellspacing="2" cellpadding="0" border="0">
+  <%= render_collection_of_partials "not_done", @not_done %>
+</table>
 <% end %>
 </div>
 
@@ -49,9 +27,7 @@
   		<br />
   		<label for="new_item_context_id">Context</label><br />
   		<select name="new_item[context_id]" id="new_item_context_id">
-  			<% for @place in @places %>
-  			<option value="<%= @place.id %>"><%= @place.name.capitalize %></option>
-  			<% end %>
+  		  <%= options_from_collection_for_select(@places, "id", "name" ) %>
   		</select>
   		<br />
   		<label for="new_item_due">Due</label><br />

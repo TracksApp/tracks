@@ -12,8 +12,8 @@ class TodoController < ApplicationController
 	#
 	def list
 		@page_title = "List tasks"
-		@places = Context.find_all
 		@projects = Project.find_all
+    @places = Context.find_all
 		@done = Todo.find_all( "done=1", "completed DESC", 5 )
 		@count = Todo.count( "done=0" )
 	end

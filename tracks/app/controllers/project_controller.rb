@@ -87,23 +87,5 @@ class ProjectController < ApplicationController
 		end
 	end
 	
-	
-	# Toggles the 'done' status of the action
-	def toggle_check
-	  item = Todo.find( @params['id'] )
-		
-	 	case item.done
- 		  when 0: item.done = 1; item.completed = Time.now()
- 			when 1: item.done = 0; item.completed = nil
- 		end
-		
-		if item.save
-		  flash["confirmation"] = "Marked next action as completed"
-			redirect_to( :action => "list" )
-		else
-		  flash["warning"] = "Couldn't mark next action as completed"
-			redirect_to( :action => "list" )
-		end	
-	end
 
 end
