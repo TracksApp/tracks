@@ -6,10 +6,11 @@
   <%= render_collection_of_partials "not_done", @not_done %>
 </table>
 </div>
-
+<p>Other Contexts:
 <% for other_context in Context.find_all %>
   <%= link_to( other_context.name.capitalize, { :controller => "context", :action => "show", :id => other_context.id } ) + " | " %>
 <% end %>
+</p>
 </div><!- End of display_box -->
 
 <div id="input_box">

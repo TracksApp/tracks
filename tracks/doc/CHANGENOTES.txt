@@ -1,6 +1,11 @@
 ## Tracks :: GTD web application
 ## $LastChangedDate$
 ## $HeadURL$
+# Homepage::  http://www.rousette.org.uk/projects/
+# Author::    bsag (http://www.rousette.org.uk/)
+# Version::   1.02
+# Copyright:: (cc) 2004-2005 rousette.org.uk
+# License::   GNU GPL
 
 Main project site: <http://www.rousette.org.uk/projects/>
 Project wiki: <http://www.rousette.org.uk/projects/wiki/>
