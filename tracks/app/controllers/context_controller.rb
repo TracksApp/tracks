@@ -81,8 +81,8 @@ class ContextController < ApplicationController
 	  @context = Context.find_by_name(@params["id"].humanize)
 	  @projects = Project.find_all
 	  @page_title = "TRACKS::Context: #{@context.name.capitalize}"
-	  @not_done = Todo.find_all( "context_id=#{@context.id} AND done=0", "created ASC" )
-	  @count = Todo.count( "context_id=#{@context.id} AND done=0" )
+    @not_done = Todo.find_all( "context_id=#{@context.id} AND done=0", "due DESC, created ASC" )	
+    @count = Todo.count( "context_id=#{@context.id} AND done=0" )
   end
   
   

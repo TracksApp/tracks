@@ -9,6 +9,7 @@ class TodoController < ApplicationController
     
 	# Main method for listing tasks
 	# Set page title, and fill variables with contexts and done and not-done tasks
+	# Number of completed actions to show is determined by a setting in settings.yml
 	#
 
     def index
@@ -18,11 +19,12 @@ class TodoController < ApplicationController
 
 	def list
 		@page_title = "TRACKS::List tasks"
+		@no_of_actions = app_configurations["formats"]["hp_completed"]
 		@projects = Project.find_all
 		@places = Context.find_all
 	  @shown_places = Context.find_all_by_hide( "0", "position ASC")
     @hidden_places = Context.find_all_by_hide( "1", "position ASC" )
-		@done = Todo.find_all_by_done( 1, "completed DESC", 5 )
+		@done = Todo.find_all_by_done( 1, "completed DESC", @no_of_actions )
 		
 		# Set count badge to number of not-done, not hidden context items
 		@count = count_shown_items(@hidden_places)

@@ -3,7 +3,7 @@
 ## $HeadURL$
 # Homepage::  http://www.rousette.org.uk/projects/
 # Author::    bsag (http://www.rousette.org.uk/)
-# Contributors:: Lolindrath, Jim Ray, Nicholas Lee
+# Contributors:: Lolindrath, Jim Ray, Nicholas Lee, Arnaud Limbourg
 # Version::   1.02
 # Copyright:: (cc) 2004-2005 rousette.org.uk
 # License::   GNU GPL
@@ -22,6 +22,7 @@ Project wiki: <http://www.rousette.org.uk/projects/wiki/>
 7. [Contributed by Jim Ray] Jim added a host of fixes and bits of cleaning up, including a position column for contexts and projects to allow custom sorting, and changes to the links for pages to make them more human-readable.
 8. I added a pop-up calendar to set the due date. This is entirely lifted from Michele's excellent tutorial on pxl8.com <http://www.pxl8.com/calendar_date_picker.html>. It works well, but I need to make sure it doesn't break in postgresql or sqlite.
 9. [Contributed by Nicholas Lee] Changes to the way that URLs are specified which should improve the situation for people using Tracks in a subdirectory.
+10. [Contributed by Arnaud Limbourg, ticket:18] A new entry in settings.yml allows you to choose the number of completed actions you want to see on the /todo/list home page. Also sorts by due date (ascending) first, then creation date (descending) on /todo/list, /context/show/[name], and /project/show/[name]
 
 ## Version 1.02
 

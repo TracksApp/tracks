@@ -15,7 +15,7 @@
 	<td valign="top"><%= due_date( @item.due ) %> 
 	<%= @item.description %>
 	<% if @item.project_id %>
-	  <%= link_to( "[C]", { :controller => "context", :action => "show", :id => @item.context_id }, :title => "View context: #{@item.context['name'].capitalize}" ) %>
+	  <%= link_to( "[C]", { :controller => "context", :action => "show", :name => urlize(@item.context.name) }, :title => "View context: #{@item.context.name.capitalize}" ) %>
 	<% end %>
 	<% if @item.notes? %>
 	  <%= "<a href=\"javascript:toggle('" + @item.id.to_s + "')\" title=\"Show notes\">" + image_tag( "notes", :width=>"10", :height=>"10", :border=>"0") + "</a>" %>

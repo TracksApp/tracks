@@ -29,7 +29,7 @@ class ProjectController < ApplicationController
     @project = Project.find_by_name(@params["name"].humanize)
     @places = Context.find_all
     @page_title = "TRACKS::Project: #{@project.name}"
-    @not_done = Todo.find_all( "project_id=#{@project.id} AND done=0", "created DESC" )
+    @not_done = Todo.find_all( "project_id=#{@project.id} AND done=0", "due DESC, created ASC" )
     @count = Todo.count( "project_id=#{@project.id} AND done=0" )
 	end
 	
