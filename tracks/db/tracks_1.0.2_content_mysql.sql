@@ -4,37 +4,25 @@
 #
 # Host: localhost (MySQL 4.0.20-max)
 # Database: todo
-# Generation Time: 2005-01-03 14:14:18 +0000
+# Generation Time: 2005-03-02 15:40:19 +0000
 # ************************************************************
 
 # Dump of table contexts
 # ------------------------------------------------------------
 
-CREATE TABLE `contexts` (
-  `id` int(11) NOT NULL auto_increment,
-  `name` varchar(255) NOT NULL default '',
-  PRIMARY KEY  (`id`)
-) TYPE=MyISAM;
-
-INSERT INTO `contexts` (`id`,`name`) VALUES ("1","agenda");
-INSERT INTO `contexts` (`id`,`name`) VALUES ("2","call");
-INSERT INTO `contexts` (`id`,`name`) VALUES ("3","email");
-INSERT INTO `contexts` (`id`,`name`) VALUES ("4","errand");
-INSERT INTO `contexts` (`id`,`name`) VALUES ("5","lab");
-INSERT INTO `contexts` (`id`,`name`) VALUES ("6","library");
-INSERT INTO `contexts` (`id`,`name`) VALUES ("7","freetime");
-INSERT INTO `contexts` (`id`,`name`) VALUES ("8","office");
-INSERT INTO `contexts` (`id`,`name`) VALUES ("11","waiting-for");
+INSERT INTO `contexts` (`id`,`name`) VALUES ("1","agenda","0");
+INSERT INTO `contexts` (`id`,`name`) VALUES ("2","call","0");
+INSERT INTO `contexts` (`id`,`name`) VALUES ("3","email","0");
+INSERT INTO `contexts` (`id`,`name`) VALUES ("4","errand","0");
+INSERT INTO `contexts` (`id`,`name`) VALUES ("5","lab","0");
+INSERT INTO `contexts` (`id`,`name`) VALUES ("6","library","0");
+INSERT INTO `contexts` (`id`,`name`) VALUES ("7","freetime","0");
+INSERT INTO `contexts` (`id`,`name`) VALUES ("8","office","0");
+INSERT INTO `contexts` (`id`,`name`) VALUES ("11","waiting-for","0");
 
 
 # Dump of table projects
 # ------------------------------------------------------------
-
-CREATE TABLE `projects` (
-  `id` int(11) NOT NULL auto_increment,
-  `name` varchar(255) NOT NULL default '',
-  PRIMARY KEY  (`id`)
-) TYPE=MyISAM;
 
 INSERT INTO `projects` (`id`,`name`) VALUES ("1","Build a working time machine");
 INSERT INTO `projects` (`id`,`name`) VALUES ("2","Make more money than Billy Gates");
@@ -43,19 +31,6 @@ INSERT INTO `projects` (`id`,`name`) VALUES ("3","Evict dinosaurs from the garde
 
 # Dump of table todos
 # ------------------------------------------------------------
-
-CREATE TABLE `todos` (
-  `id` int(11) NOT NULL auto_increment,
-  `context_id` int(11) NOT NULL default '0',
-  `description` varchar(100) NOT NULL default '',
-  `notes` text,
-  `done` tinyint(4) NOT NULL default '0',
-  `created` datetime NOT NULL default '0000-00-00 00:00:00',
-  `due` date default NULL,
-  `completed` datetime default NULL,
-  `project_id` int(11) default NULL,
-  PRIMARY KEY  (`id`)
-) TYPE=MyISAM;
 
 INSERT INTO `todos` (`id`,`context_id`,`description`,`notes`,`done`,`created`,`due`,`completed`,`project_id`) VALUES ("1","1","Call Bill Gates to find out how much he makes per day","","0","2004-11-28 16:01:00","2004-10-30",NULL,"2");
 INSERT INTO `todos` (`id`,`context_id`,`description`,`notes`,`done`,`created`,`due`,`completed`,`project_id`) VALUES ("52","2","Call dinosaur exterminator","Ask him if I need to hire a skip for the corpses.","0","2004-11-28 16:06:08","2004-11-30",NULL,"3");
@@ -72,17 +47,5 @@ INSERT INTO `todos` (`id`,`context_id`,`description`,`notes`,`done`,`created`,`d
 INSERT INTO `todos` (`id`,`context_id`,`description`,`notes`,`done`,`created`,`due`,`completed`,`project_id`) VALUES ("92","1","New action in context","Some notes","1","2005-01-02 14:52:49","2005-03-01","2005-01-02 15:44:19","3");
 INSERT INTO `todos` (`id`,`context_id`,`description`,`notes`,`done`,`created`,`due`,`completed`,`project_id`) VALUES ("97","2","Call stock broker","tel: 12345","0","2005-01-03 11:38:25","0000-00-00",NULL,"2");
 
-
-# Dump of table users
-# ------------------------------------------------------------
-
-CREATE TABLE `users` (
-  `id` int(11) NOT NULL auto_increment,
-  `login` varchar(80) default NULL,
-  `password` varchar(40) default NULL,
-  PRIMARY KEY  (`id`)
-) TYPE=MyISAM;
-
-INSERT INTO `users` (`id`,`login`,`password`) VALUES ("1","test","9a91e1d8d95b6315991a88121bb0aa9f03ba0dfc");
 
 
