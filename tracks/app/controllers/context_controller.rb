@@ -18,7 +18,7 @@ class ContextController < ApplicationController
   end
 
   def list
-		@page_title = "List Contexts"
+		@page_title = "TRACKS::List Contexts"
 		@contexts = Context.find_all( conditions = nil, "position ASC", limit = nil )
 	end
 	
@@ -57,7 +57,7 @@ class ContextController < ApplicationController
 	def edit
 	  expire_action(:controller => "context", :action => "list")
 	  @context = Context.find(@params['id'])
-    @page_title = "Edit context: #{@context.name.capitalize}"  
+    @page_title = "TRACKS::Edit context: #{@context.name.capitalize}"  
 	end
 	
 	
@@ -80,7 +80,7 @@ class ContextController < ApplicationController
 	def show
 	  @context = Context.find_by_name(@params["id"].humanize)
 	  @projects = Project.find_all
-	  @page_title = "Context: #{@context.name.capitalize}"
+	  @page_title = "TRACKS::Context: #{@context.name.capitalize}"
 	  @not_done = Todo.find_all( "context_id=#{@context.id} AND done=0", "created ASC" )
 	  @count = Todo.count( "context_id=#{@context.id} AND done=0" )
   end

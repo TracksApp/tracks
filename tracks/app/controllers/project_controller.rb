@@ -17,7 +17,7 @@ class ProjectController < ApplicationController
 	# Set page title, and collect existing projects in @projects
 	#
   def list
-		@page_title = "List Projects"
+		@page_title = "TRACKS::List Projects"
 		@projects = Project.find_all
 	end
 	
@@ -28,7 +28,7 @@ class ProjectController < ApplicationController
 	def show
     @project = Project.find_by_name(@params["name"].humanize)
     @places = Context.find_all
-    @page_title = "Project: #{@project.name}"
+    @page_title = "TRACKS::Project: #{@project.name}"
     @not_done = Todo.find_all( "project_id=#{@project.id} AND done=0", "created DESC" )
     @count = Todo.count( "project_id=#{@project.id} AND done=0" )
 	end
@@ -37,7 +37,7 @@ class ProjectController < ApplicationController
 	def edit
 	  expire_action(:controller => "project", :action => "list")
 	  @project = Project.find(@params['id'])
-    @page_title = "Edit project: #{@project.name.capitalize}"  
+    @page_title = "TRACKS::Edit project: #{@project.name.capitalize}"  
 	end
 	
 	

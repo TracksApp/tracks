@@ -17,7 +17,7 @@ class TodoController < ApplicationController
     end
 
 	def list
-		@page_title = "List tasks"
+		@page_title = "TRACKS::List tasks"
 		@projects = Project.find_all
 		@places = Context.find_all
 	  @shown_places = Context.find_all_by_hide( 0, "position ASC")
@@ -33,7 +33,7 @@ class TodoController < ApplicationController
 	#
 	# Use days declaration? 1.day.ago?
   def completed
-    @page_title = "Completed tasks"
+    @page_title = "TRACKS::Completed tasks"
     today_query = "DATE_SUB(CURDATE(),INTERVAL 1 DAY) <= completed"
     week_query = "DATE_SUB(CURDATE(),INTERVAL 2 DAY) >= completed 
                   AND DATE_SUB(CURDATE(),INTERVAL 7 DAY) <= completed"
@@ -50,7 +50,7 @@ class TodoController < ApplicationController
   # Archived completed items, older than 31 days
 	#
   def completed_archive
-    @page_title = "Archived completed tasks"
+    @page_title = "TRACKS::Archived completed tasks"
     archive_query = "DATE_SUB(CURDATE(),INTERVAL 32 DAY) >= completed"
     @done_archive = Todo.find_by_sql( "SELECT * FROM todos WHERE done = 1 AND #{archive_query} 
                   ORDER BY completed DESC;" )
@@ -80,7 +80,7 @@ class TodoController < ApplicationController
     @belongs = @item.project_id
 		@projects = Project.find_all
 		@places = Context.find_all
-    @page_title = "Edit task: #{@item.description}"
+    @page_title = "TRACKS::Edit task: #{@item.description}"
   end
 
 
