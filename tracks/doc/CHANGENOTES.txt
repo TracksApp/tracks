@@ -7,7 +7,7 @@ Project wiki: <http://www.rousette.org.uk/projects/wiki/>
 
 ## Version 1.02
 
-1. Uses Rails 0.9.4.1
+1. Uses Rails 0.10.0
 2. Added validation for the entry fields. If you enter a bit of text that's too long or you omit the description (not much point in a blank next action!) you'll get an error message and the action won't be saved.
 3. Added action caching.
 4. Did a bit of refactoring to try to make page loading a bit more efficient.
@@ -20,6 +20,7 @@ Project wiki: <http://www.rousette.org.uk/projects/wiki/>
   http://my.domain.tld/subdir/tracks
 or whatever the full URL is. This should help people who put Tracks in a subdirectory.
 11. Added some rudimentary sorting of completed items. They are now sorted in to done today, done in the last 7 days and done in the last 31 days. At the bottom of completed.rhtml, there's a link to completed_archive.rhtml, which shows archived items older than 31 days.
+12. Changed the method of generating links to stylesheet and javascripts. Together with the new Routes, this should sort out any problems with putting Tracks in a sub-directory.
 
 ## Version 1.01
 

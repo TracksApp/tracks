@@ -1,11 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-  <% tracks_path = app_configurations["path"]["base"] %>
-	<style type="text/css" media="screen">
-		<%= "@import url(/stylesheets/standard.css);" %>
-	</style>
-	<script type="text/javascript" src="/javascripts/toggle_notes.js"></script>
+	<%= stylesheet_link_tag "standard" %>
+	<%= javascript_include_tag "toggle_notes" %>
 	<link rel="shortcut icon" href="/favicon.ico" />
 		
 <title><%= @page_title %></title>

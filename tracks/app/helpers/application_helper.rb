@@ -28,6 +28,7 @@ module ApplicationHelper
 	# Check due date in comparison to today's date
 	# Flag up date appropriately with a 'traffic light' colour code
 	#
+	# Use 2.days.until?
 	def due_date(due)
 		if due == nil
 			return ""

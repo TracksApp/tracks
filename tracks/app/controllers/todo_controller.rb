@@ -23,6 +23,7 @@ class TodoController < ApplicationController
 
 	# List the completed tasks, sorted by completion date
 	#
+	# Use days declaration? 1.day.ago?
   def completed
     @page_title = "Completed tasks"
     today_query = "DATE_SUB(CURDATE(),INTERVAL 1 DAY) <= completed"
