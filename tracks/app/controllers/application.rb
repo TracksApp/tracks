@@ -3,7 +3,7 @@
 
 require_dependency "login_system"
 require_dependency "redcloth"
-require_dependency "iCal"
+# require_dependency "iCal"
 require 'date'
 
 $delete_img = "<img src=\"/images/delete.png\" width=\"10\" height=\"10\" border=\"0\" />"
