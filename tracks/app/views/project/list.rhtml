@@ -10,7 +10,7 @@
   <% end %>
     <td align="right" width="20"><%= @project.id.to_s %></td>
 		<td width="390"><%= link_to ( "#{@project.name}", :action => "show", :id => @project.id ) %></td>
-		<td width="40"><%= link_to( $edit_img, { :action => "edit", :id => @project.id }, :title => "Edit item" ) + " " + link_to($delete_img, { :action => "destroy", :id => @project.id }, :title => "Delete item", :confirm => "Are you sure you want to delete this context: #{@project.name}. Any todos in this context will be deleted." ) + " " %></td>
+		<td width="40"><%= link_to( $edit_img, { :action => "edit", :id => @project.id }, :title => "Edit item" ) + " " + link_to($delete_img, { :action => "destroy", :id => @project.id }, :title => "Delete item", :confirm => "Are you sure you want to delete the project: #{@project.name}. Any todos in this project will be deleted." ) + " " %></td>
 </tr>
 <% row += 1 %>
 <% end %>

@@ -19,6 +19,10 @@ class Todo < ActiveRecord::Base
 		if self.created == nil
 			self.created = Time.now()
 		end
+		
+		if self.done == 1
+		  self.completed = Time.now()
+		end
 	end
 	
 

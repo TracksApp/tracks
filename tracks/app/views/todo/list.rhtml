@@ -1,48 +1,14 @@
 <div id="display_box">
 <% for @place in @places %>
-	<% heading = false %>
-		
-	<% for @item in @not_done %>
-		<% if @place.name == @item.context['name'] %>
-		
-		<% if ( Todo.find_all( "context_id=#{@item.context['id']}" ) && heading == false ) %>
-			<div class="contexts">
-			<h2><%= link_to( "#{@item.context['name'].capitalize}", :controller => "context", :action => "show", :id => @item.context_id )  %></h2>
-			<ul>
-			<% heading = true %>
-		<% end %>
-		
-		<li>
-		<div class="box">
-		<%= check_box( "item", "done", "onclick" => "document.location.href='/todo/toggle_check/#{@item.id}'" ) %>
-		</div>
-		
-		<div class="description">
-		<%= due_date( @item.due ) %> 
-		<%= @item.description %>
-		<% if @item.project_id %>
-		  <%= link_to( "[P]", { :controller => "project", :action => "show", :id => @item.project_id }, :title => "View project: #{@item.project['name']}" ) %>
-		<% end %>
-		</div>
-			
-		<div class="tools">
-			<%= link_to( $edit_img, { :action => "edit", :id => @item.id }, :title => "Edit item" ) + " " + link_to($delete_img, { :action => "destroy", :id => @item.id }, :title => "Delete item", :confirm => "Are you sure you want to delete this entry: #{@item.description}" ) + " " %>
-				
-		<% if @item.notes? %>
-			<%= "<a href=\"javascript:toggle('" + @item.id.to_s + "')\" title=\"Show notes\">" + $notes_img + "</a>" %></div>
-			<% 	m_notes = markdown( @item.notes ) %>
-			<%= "<div class=\"notes\" id=\"" + @item.id.to_s + "\">" + m_notes + "</div>" %>
-		<% else %>
-		  </div>
-		<% end %>
-		</li>
-		<% end %>
+  <% @not_done = Todo.find_all( "done=0 AND context_id=#{@place.id}", "created ASC" ) %>
+	<% if !@not_done.empty? %>
+	  <div class="contexts">
+  <h2><%= link_to( "#{@place.name.capitalize}", :controller => "context", :action => "show", :id => @place.id )  %></h2>
+	<ul>
+	    <%= render_collection_of_partials "not_done", @not_done %>
+	  </ul>
+	</div><!-- End contexts -->
 	<% end %>
-	
-		<% if heading == true %>
-			</ul>
-			</div>
-		<% end %>
 <% end %>
 		
 <div class="contexts">
@@ -53,14 +19,14 @@
 </div>
 </div><!- End of display_box -->
 
-<div id="input_box">
-  <h2>Today's events are: </h2>
+ <div id="input_box">
+<!--  <h2>Today's events are: </h2>
   <ul>
 <% ical = ICal::ICalReader.new("Personal") %>
 <% ical.todaysEvents do |event| %>
     <%= puts "<li>#{event.startTime} - #{event.summary}</li>" %>
 <% end %>
-  </ul>
+  </ul> -->
   
 	<h2>Add next action</h2>	                                              
 	<form method="post" action="add_item">
@@ -68,7 +34,7 @@
 	  <%= text_field( "new_item", "description" ) %>
 		<br />
 		<label for="new_item_notes">Notes</label><br />
-		<%= text_area( "new_item", "notes", "cols" => 40, "rows" => 15 ) %>
+		<%= text_area( "new_item", "notes", "cols" => 35, "rows" => 15 ) %>
 		<br />
 		<label for="new_item_context_id">Context</label><br />
 		<select name="new_item[context_id]" id="new_item_context_id">

@@ -1,6 +1,5 @@
 # The methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
-  #require_dependency 'date'
   
   def format_date(date)
 	  # Convert a date object to the format specified
@@ -10,24 +9,27 @@ module ApplicationHelper
 		formatted_date = date.strftime("#{date_fmt}")
 	end
 
+
+	# Uses RedCloth to transform text using either Textile or Markdown
+	# Need to require redcloth above
+	# RedCloth 3.0 or greater is needed to use Markdown, otherwise it only handles Textile
+	#
 	def markdown(text)
-		# Uses RedCloth to transform text using either Textile or Markdown
-		# Need to require redcloth above
-		# RedCloth 3.0 or greater is needed to use Markdown, otherwise it only handles Textile
-		#
 	  RedCloth.new(text).to_html
 	end
 	
+	
+	# Wraps object in HTML tags, tag
+	#
 	def tag_object(object, tag)
-	  # Wraps object in HTML tags, tag
-	  #
 		tagged = "<#{tag}>#{object}</#{tag}>"
 	end
 	
+	
+	# Check due date in comparison to today's date
+	# Flag up date appropriately with a 'traffic light' colour code
+	#
 	def due_date(due)
-		# Check due date in comparison to today's date
-		# Flag up date appropriately with a 'traffic light' colour code
-		#
 		if due == nil
 			return ""
 		end

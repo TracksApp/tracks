@@ -1,14 +1,13 @@
 class TodoController < ApplicationController
   
   helper :todo
-  model :context
-  model :project
+  model :context, :project
   
 	scaffold :todo
 	before_filter :login_required
 	caches_action :list, :completed
   layout "standard"
-  
+    
 	# Main method for listing tasks
 	# Set page title, and fill variables with contexts and done and not-done tasks
 	#
@@ -16,7 +15,6 @@ class TodoController < ApplicationController
 		@page_title = "List tasks"
 		@places = Context.find_all
 		@projects = Project.find_all
-		@not_done = Todo.find_all( "done=0", "completed DESC" )
 		@done = Todo.find_all( "done=1", "completed DESC", 5 )
 	end
 
@@ -104,10 +102,7 @@ class TodoController < ApplicationController
 	def toggle_check
 	  item = Todo.find(@params['id'])
 		
-	 	case item.done
- 		  when 0: item.done = 1; item.completed = Time.now()
- 			when 1: item.done = 0; item.completed = nil
- 		end
+		item.toggle('done')
 		
 		if item.save
 		  flash["confirmation"] = "Next action marked as completed"
