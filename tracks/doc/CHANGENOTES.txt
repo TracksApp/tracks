@@ -24,6 +24,7 @@ Project wiki: <http://www.rousette.org.uk/projects/wiki/>
 9. [Contributed by Nicholas Lee] Changes to the way that URLs are specified which should improve the situation for people using Tracks in a subdirectory.
 10. [Contributed by Arnaud Limbourg, ticket:18] A new entry in settings.yml allows you to choose the number of completed actions you want to see on the /todo/list home page. Also sorts by due date (ascending) first, then creation date (descending) on /todo/list, /context/show/[name], and /project/show/[name]
 11. Added a count of next actions to the /projects page, showing how many uncompleted next actions remain for each project.
+12. [Patch by lolindrath] Sorting by date is now much smarter on /todo/list: Actions are sorted by ascending due date then ascending creation date, but non-due dated items sort to the bottom. This means that the most urgent items float to the top of each context list.
 
 ## Version 1.02
 
