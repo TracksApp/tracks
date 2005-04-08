@@ -1,14 +1,14 @@
-# CocoaMySQL dump
-# Version 0.5
-# http://cocoamysql.sourceforge.net
-#
-# Host: localhost (MySQL 4.0.20-max)
-# Database: todo
-# Generation Time: 2005-03-02 15:39:14 +0000
-# ************************************************************
+-- CocoaMySQL dump
+-- Version 0.5
+-- http://cocoamysql.sourceforge.net
+--
+-- Host: localhost (MySQL 4.0.20-max)
+-- Database: todo
+-- Generation Time: 2005-03-02 15:39:14 +0000
+-- ************************************************************
 
-# Dump of table contexts
-# ------------------------------------------------------------
+-- Dump of table contexts
+-- ------------------------------------------------------------
 
 CREATE TABLE `contexts` (
   `id` int(11) NOT NULL auto_increment,
@@ -20,8 +20,8 @@ CREATE TABLE `contexts` (
 
 
 
-# Dump of table projects
-# ------------------------------------------------------------
+-- Dump of table projects
+-- ------------------------------------------------------------
 
 CREATE TABLE `projects` (
   `id` int(11) NOT NULL auto_increment,
@@ -32,8 +32,8 @@ CREATE TABLE `projects` (
 
 
 
-# Dump of table todos
-# ------------------------------------------------------------
+-- Dump of table todos
+-- ------------------------------------------------------------
 
 CREATE TABLE `todos` (
   `id` int(11) NOT NULL auto_increment,
@@ -50,8 +50,8 @@ CREATE TABLE `todos` (
 
 
 
-# Dump of table users
-# ------------------------------------------------------------
+-- Dump of table users
+-- ------------------------------------------------------------
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL auto_increment,
