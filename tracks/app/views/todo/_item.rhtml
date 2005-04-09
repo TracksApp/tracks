@@ -24,6 +24,8 @@
 <select name="item[project_id]" id="item_project_id" tabindex="4">
 		<% if @belongs == nil %>
       <option value="" selected="selected">None</option>
+    <% else %>
+      <option value="">None</option>
     <% end %>
     
   	<% for @project in @projects %>
