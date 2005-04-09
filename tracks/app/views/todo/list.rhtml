@@ -1,6 +1,6 @@
 <div id="display_box">
   <% for @shown_place in @shown_places %>
-    <% @not_done = Todo.find_all("done=0 AND context_id=#{@shown_place.id}", "ISNULL(due), due ASC, created ASC") %>
+    <% @not_done = Todo.find_all("done=0 AND context_id=#{@shown_place.id}", "due IS NULL, due ASC, created ASC") %>
   	<% if !@not_done.empty? %>
   	<div class="contexts">
       <h2>
