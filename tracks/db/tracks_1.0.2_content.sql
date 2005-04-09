@@ -10,23 +10,23 @@
 -- Dump of table contexts
 -- ------------------------------------------------------------
 
-INSERT INTO contexts (id,name,hide) VALUES (1,'agenda',0);
-INSERT INTo contexts (id,name,hide) VALUES (2,'call',0);
-INSERT INTO contexts (id,name,hide) VALUES (3,'email',0);
-INSERT INTO contexts (id,name,hide) VALUES (4,'errand',0);
-INSERT INTO contexts (id,name,hide) VALUES (5,'lab',0);
-INSERT INTO contexts (id,name,hide) VALUES (6,'library',0);
-INSERT INTO contexts (id,name,hide) VALUES (7,'freetime',0);
-INSERT INTO contexts (id,name,hide) VALUES (8,'office',0);
-INSERT INTO contexts (id,name,hide) VALUES (11,'waiting-for',0);
+INSERT INTO contexts (id,name,hide, position) VALUES (1,'agenda',0, 0);
+INSERT INTo contexts (id,name,hide, position) VALUES (2,'call',0, 1);
+INSERT INTO contexts (id,name,hide, position) VALUES (3,'email',0, 2);
+INSERT INTO contexts (id,name,hide, position) VALUES (4,'errand',0, 3);
+INSERT INTO contexts (id,name,hide, position) VALUES (5,'lab',0, 4);
+INSERT INTO contexts (id,name,hide, position) VALUES (6,'library',0, 5);
+INSERT INTO contexts (id,name,hide, position) VALUES (7,'freetime',0, 6);
+INSERT INTO contexts (id,name,hide, position) VALUES (8,'office',0, 7);
+INSERT INTO contexts (id,name,hide, position) VALUES (11,'waiting-for',0, 8);
 
 
 -- Dump of table projects
 -- ------------------------------------------------------------
 
-INSERT INTO projects (id,name) VALUES (1,'Build a working time machine');
-INSERT INTO projects (id,name) VALUES (2,'Make more money than Billy Gates');
-INSERT INTO projects (id,name) VALUES (3,'Evict dinosaurs from the garden');
+INSERT INTO projects (id,name, position) VALUES (1,'Build a working time machine', 0);
+INSERT INTO projects (id,name, position) VALUES (2,'Make more money than Billy Gates', 1);
+INSERT INTO projects (id,name, position) VALUES (3,'Evict dinosaurs from the garden', 2);
 
 
 -- Dump of table todos

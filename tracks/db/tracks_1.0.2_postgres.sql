@@ -5,6 +5,7 @@ create table contexts (
   id serial not null,
   name varchar(255) not null default '',
   hide int not null default 0,
+  position int NOT  NULL,
   primary key (id)
 );
 
@@ -16,6 +17,7 @@ drop table projects;
 create table projects (
   id serial not null,
   name varchar(255) not null default '',
+  position int NOT  NULL,
   primary key (id)
 );
 
