@@ -44,13 +44,15 @@
 	</tr>
 	<tr>
 		<td class="label"><label for="item_due">Due</td>
-		<td><input name="item[due]" id="item_due" value="<%= format_date(@item.due) %>" size="10" tabindex="5" /></td>
+		<td><input name="item[due]" id="due_<%= @item.id %>" type="text" value="<%= format_date(@item.due) %>" tabindex="5" size="10" onFocus="Calendar.setup" /></td>
 	</tr>
 	<tr>
 		<td><input type="submit" value="Update" tabindex="6" />
 		  	<a href="javascript:void(0);" onclick="Element.toggle('item-<%= @item.id %>','action-<%= @item.id %>-edit-form');Form.reset('form-action-<%= @item.id %>');">Cancel</a></td>
 	</tr>
 </table>
-
+<script type="text/javascript">
+Calendar.setup({ ifFormat:"<%= ApplicationController::DATE_FORMAT %>",firstDay:<%= ApplicationController::WEEK_STARTS_ON %>,showOthers:true,range:[2004, 2010],step:1,inputField:"due_<%= @item.id %>",cache:true,align:"TR" })
+</script>
 
 <% @item = nil %>
