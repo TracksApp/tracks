@@ -12,7 +12,8 @@ body {
 p {
 			padding: 2px;
 			}
-			
+
+img {border: 0px;}	
 
 a, a:link, a:active, a:visited {
 			color: #cc3334;
@@ -25,12 +26,18 @@ a:hover {
 			color: #fff;
 			background-color: #cc3334;
 			}
-			
+
 /* Structural divs */
 
 #display_box {
 			float: left;
 			width: 450px;
+			margin: 0px 15px 50px 15px;
+			}
+			
+#full_width_display {
+			float: left;
+			width: 800px;
 			margin: 0px 15px 50px 15px;
 			}
 
@@ -94,7 +101,20 @@ a:hover {
 			color: #fff;
 			text-shadow: rgba(0,0,0,.4) 0px 2px 5px;
 			}
+
+.new_actions {
+			padding: 0px 5px 2px 5px;			
+			background: #E7FDDE;
+			border: 1px solid #57A620;
+			padding: 5px;
+			margin-bottom: 15px;
+			}
 			
+.new_actions h2 {
+			padding: 0 px 5px 0px 5px;
+			color: #57A620;
+			}			
+
 h2 a, h2 a:link, h2 a:active, h2 a:visited {
 			color: #fff;
 			text-decoration: none;
@@ -125,13 +145,21 @@ h2 a:hover {
 			
 			}
 
+#input_box ul {list-style-type: circle; font-size: 0.9em;}
+
 .box {
       float: left;
       width: 20px;
       }
+
+.big-box {
+			float: left;
+			width: 55px;
+			vertical-align: middle;
+			}
       
 .description {
-      margin-left: 25px;
+      margin-left: 60px;
       margin-right: 10px;
       }
       
@@ -245,13 +273,45 @@ li    {
 			
 .even_row {
       background: #fff;
+      padding: 5px 5px 5px 10px;
       }
 
 .odd_row {
       background: #EDF3FE;
+      padding: 5px 5px 5px 10px;
       }
 
+.edit-form {
+      background: #ccc;
+      padding: 5px;
+      border-top: 1px solid #999;
+      border-bottom: 1px solid #999;
+      }
+
+/* Right align labels in forms */
+
+.label {
+			text-align: right;
+			}
+      
+input {
+      vertical-align: middle;
+}
+
+/* Positioning the 'cells' in the list */
+.position {text-align: left; width: 5%; float: left;}
+.data {text-align: left; width: 65%; float: left;}
+.buttons {text-align: right; width: 25%; margin-left: 75%;}
+
 table.list {
+    margin-top: 0px;
+    border-top: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    background: #fff;
+    }
+
+div#list-projects, div#list-contexts {
     border: 1px solid #999;
     }
     
@@ -267,12 +327,19 @@ form {
     margin: 0px;
     width: 313px;
     }
-    
+
+.inline-form {
+    border: none;
+    padding: 3px;
+    width: 100%;
+    }    
+
 label {
     font-weight: bold;
+    padding: 0px 0px;
     }
     
-input {
+input, select {
     margin-bottom: 5px;
     }
     
@@ -288,59 +355,3 @@ input {
     padding:0px 3px 0px 3px; 
     margin:0px;
     }
-    
-/* Popup calendar styles */
-
-#calNavPY, #calNavPM {border:1px #999 solid}
-#calNavNM, #calNavNY { border:1px #999 solid}
-
-#calNav td, #calNav td a {
-  text-align:center;
-  font-family:"Lucida Grande", Verdana, Geneva, Arial, sans-serif;
-  font-size:12px;
-  font-weight:bold;
-  background-color:#eaeaea;
-  text-decoration:none
-  }
-  
-#calNav td a,#calNav td a:visited,#calTbl td a,#calTbl td a:visited {color:#cc3334 }
-#calNav td a:hover,#calTbl td a:hover { color:#fff; background:#cc3334; }
-#calNav {margin-bottom:5px;width:100%}
-#calTbl {width:100%}
-#calTbl td {text-align:center;font-family:"Lucida Grande", Verdana, Geneva, Arial, sans-serif;font-size:11px;border:1px #ccc solid}
-
-#calTbl thead td {
-	font-weight:bold;
-	background-color:#eaeaea;
-	padding: 2px;
-	border:1px #ccc solid
-	height: auto;
-	}
-	 
-#calDiv {
-	border:1px solid #ccc;
-	padding:2px;
-	width:200px;
-	position:absolute;
-	z-index:276;
-	top:300px;
-	left:300px;
-	background-color:#fff
-  }
-
-#calTopBar {
-	background-color:#ccc;
-	color:#fff;
-	padding:2px;
-	text-align:right;
-	font-family:"Lucida Grande", Verdana, Geneva, Arial, sans-serif;
-	font-size:11px;
-	font-weight:bold;
-	width:100%
-  }
-  
-#calClose {
-  padding:0px 2px;border:1px #fff solid;cursor:pointer;cursor:hand
-  }
-  
-#calPic {cursor:hand}

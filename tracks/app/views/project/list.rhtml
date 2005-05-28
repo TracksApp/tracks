@@ -1,44 +1,33 @@
-<div id="display_box">
+<div id="full_width_display">
 
-<table class="list" cellspacing="0" cellpadding="5" width="450" border="0">
-  <tr>
-  <th align="left">ID</th>
-  <th align="left">Name</th>
-  <th align="left">Next actions</th>
-  <th></th>
-  </tr>
-<% row = 1 %>
-<% for @project in @projects %>
-  <% if row % 2 == 0 %>
-    <tr class="even_row">
-  <% else %>
-    <tr class="odd_row">
-  <% end %>
-    <td align="right" width="20"><%= @project.id.to_s %></td>
-		<td width="300"><%= link_to( "#{@project.name}", :action => "show", :name => urlize(@project.name) ) %></td>
-		<td width="70"><%= Todo.count( "project_id=#{@project.id} AND done=0" ).to_s %></td>
-		<td width="40">
-    <%= link_to(image_tag( "edit", :title => "Edit item", :width=>"10", :height=>"10", :border=>"0"), { :action => "edit", :id => @project.id } ) + " " +
-        link_to(image_tag( "delete", :title => "Delete item", :width=>"10", :height=>"10", :border=>"0"), { :action => "destroy", :id => @project.id}, :confirm => "Are you sure you want to delete this entry: #{@project.name}" ) + " "
-    %>
-    </td>
-</tr>
-<% row += 1 %>
+<div id="list-projects">
+<% for project in @projects %>
+  <%= render_partial( 'project_listing', project ) %>
 <% end %>
-</table>
-
-</div><!- End of display_box -->
-
-<div id="input_box">
-    <%= start_form_tag :controller => 'project', :action => 'new' %>
-	<form method="post" action="add_project">
-	  <label for="new_project_name">New Project</label><br />                                               
-	  <%= text_field( "new_project", "name" ) %>
-		<br />
-		<br />
-	  <input type="submit" value="Add project">
-    <%= end_form_tag %>
 </div>
 
-<% if @flash["confirmation"] %><div class="confirmation"><%= @flash["confirmation"] %></div><% end %>
-<% if @flash["warning"] %><div class="warning"><%= @flash["warning"] %></div><% end %>
+<br />
+<a href="javascript:void(0)" onClick="Element.toggle('project_new'); Form.focus_first('project-form');" accesskey="n" title="Create a new project [Alt+n]">Create new project &#187;</a>
+<div id="project_new" class="project_new" style="display:none">
+<!--[form:project]-->
+<%= form_remote_tag :url => { :action => "new_project" },
+  :update=> "list-projects",
+  :position=> "bottom",
+  :loading => "project.reset()",
+  :complete => "Form.focus_first('project-form');",
+  :html=> { :id=>'project-form', :name=>'project', :class => 'inline-form' } %>
+<label for="project_name">Name</label>
+  <%= text_field 'project', 'name'  %>
+  <input type="submit" value="Add" />
+<%= end_form_tag %>
+<!--[eoform:project]-->
+</div>
+
+<% if @flash["confirmation"] %>
+  <div class="confirmation"><%= @flash["confirmation"] %></div>
+<% end %>
+<% if @flash["warning"] %>
+  <div class="warning"><%= @flash["warning"] %></div>
+<% end %>
+
+</div><!- End of display_box -->

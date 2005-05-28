@@ -1,53 +1,94 @@
 <div id="display_box">
-  <% for @shown_place in @shown_places %>
-    <% @not_done = Todo.find_all("done=0 AND context_id=#{@shown_place.id}", "due IS NULL, due ASC, created ASC") %>
-  	<% if !@not_done.empty? %>
-  	<div class="contexts">
-      <h2>
-  	<a href="javascript:toggle('c<%=@shown_place.id%>');javascript:toggleImage('toggle_context_<%=@shown_place.id%>')">
-  	<img src="/images/collapse.png" name="toggle_context_<%= @shown_place.id %>"/></a><%= link_to( "#{@shown_place.name.capitalize}", :controller => "context", :action => "show", :name => urlize(@shown_place.name) )  %></h2>
-    <div id="c<%= @shown_place.id %>">
-	  <table class="next_actions" id="incomplete" cellspacing="2" cellpadding="0" border="0">
-	    <%= render_collection_of_partials "not_done", @not_done %>
-	  </table>
+	
+	<!-- begin div.new_actions -->
+	<div id="new_actions" class="new_actions" style="display:none">
+		<h2>Fresh actions (hit refresh to sort)</h2>
+	</div>
+	<!-- end div.new_actions -->
+	
+	<% for @shown_place in @shown_places -%>
+	<% @not_done = Todo.find_all("done=0 AND context_id=#{@shown_place.id}", "due IS NULL, due ASC, created ASC") -%>
+		<% if !@not_done.empty? -%>
+			<div class="contexts">
+			<h2><a href="javascript:toggleSingle('c<%=@shown_place.id%>');javascript:toggleImage('toggle_context_<%=@shown_place.id%>')">
+			  	<img src="/images/collapse.png" name="toggle_context_<%= @shown_place.id %>"/></a><%= link_to( "#{@shown_place.name}", :controller => "context", :action => "show", :name => urlize(@shown_place.name) )  %></h2>
+
+	  <div id="c<%= @shown_place.id %>" class="next_actions">
+	    <% if @not_done.empty? -%>
+	      <p>There are no next actions yet in this context</p>
+	    <% else -%>
+	      <% for item in @not_done -%>
+	        <%= render_partial "show_items", item %>
+	      <% end -%>
+	    <% end -%>
+	  </div><!-- [end:next_actions] -->
+	</div><!-- [end:contexts] -->
+		<% end -%>
+	<% end -%>
+
+	<div class="contexts">
+	  <h2>Completed actions in this context</h2>
+
+	  <div id="completed">
+	    <% if @done.empty? -%>
+	      <p>There are no completed next actions yet in this context</p>
+	    <% else -%>
+	      <% for done_item in @done -%>
+	        <%= render_partial "show_items", done_item %>
+	      <% end -%>
+	    <% end -%>
 	  </div>
-	</div><!-- End contexts -->
-	<% end %>
-<% end %>
-
-<div class="contexts">
-  <h2>Just done</h2>
-  <table class="next_actions" id="holding" cellspacing="5" cellpadding="0" border="0">
-  <tr></tr>  
-  </table>
-</div>
-
-<div class="contexts">
-<h2>Last <%= @no_of_actions %> completed actions</h2>
-<table class="next_actions" id="complete" cellspacing="5" cellpadding="0" border="0">
-  
-    <%= render_collection_of_partials "done", @done %>
-</table>
-</div>
-
-<p>Hidden contexts:
-<% for @hidden_place in @hidden_places %>
-  <% num = count_items(@hidden_place) %>
-  <%= link_to @hidden_place.name.capitalize, :controller=>"context", :action=> "show", :name=> urlize(@hidden_place.name) %><%= ' ('+ num.to_s + ') ' + '|' %>
-<% end %>
-</p>
-  
-</div><!- End of display_box -->
+	</div><!-- [end:contexts] -->
+</div><!-- End of display_box -->
 
 <div id="input_box">
 
-<form method="post" action="add_item">
-	<%= render_partial "todo/item", @item %>
-<input type="submit" value="Add item">
-</form>
+<%= link_to_function( "Add the next action in this context &#187;", "Element.toggle('todo_new_action');Element.toggle('new_actions');Form.focusFirstElement('todo-form-new-action');", {:title => "Add the next action [Alt+n]", :accesskey => "n"}) %>
 
-</div>
+  <div id="todo_new_action" class="context_new" style="display:none">
+  <!--[form:todo]-->
+  <%= form_remote_tag :url => { :action => "add_item" },
+											:update => "new_actions",
+                      :position=> "bottom",
+                      :loading => "context.reset()",
+											:complete => "Form.focusFirstElement('todo-form-new-action');",
+                      :html=> { :id=>'todo-form-new-action', :name=>'todo', :class => 'inline-form' } %>
+	<label for="new_item_description">Description</label><br />                                          
+	<%= text_field( "new_item", "description", "size" => 25, "tabindex" => 1 ) %><br />
+	<label for="new_item_notes">Notes</label><br />
+	<%= text_area( "new_item", "notes", "cols" => 25, "rows" => 10, "tabindex" => 2 ) %><br />
+	<label for="new_item_context_id">Context</label><br />
+	<%= collection_select( "new_item", "context_id", @places, "id", "name", {}, {"tabindex" => 3}) %><br />
+	<label for="new_item_project_id">Project</label><br />
+		<select name="new_item[project_id]" id="new_item_project_id" tabindex="4">
+			<option selected="selected"></option>
+			<%= options_from_collection_for_select(@projects, "id", "name") %>
+		</select><br />
+	<label for="item_due">Due</label><br />
+	<%= text_field("new_item", "due", "size" => 10, "class" => "Date", "onFocus" => "Calendar.setup", "tabindex" => 5) %>
+	<br /><br />
+	<input type="submit" value="Add item" tabindex="6">
+	<%= end_form_tag %><!--[eoform:todo]-->
+	<script type="text/javascript">
+	Calendar.setup({ ifFormat:"<%= ApplicationController::DATE_FORMAT %>",firstDay:<%= ApplicationController::WEEK_STARTS_ON %>,showOthers:true,range:[2004, 2010],step:1,inputField:"new_item_due",cache:true,align:"TR" })
+	</script>
 
+	</div><!-- [end:todo-new-action] -->
+
+	<h3>Active Projects:</h3>
+	<ul>
+	<% for project in @projects -%>
+	  <li><%= link_to( project.name, { :controller => "project", :action => "show", :name => urlize(project.name) } ) + " (" + Todo.count( "project_id=#{project.id} AND done=0" ).to_s + " actions)" %></li>
+	<% end -%>
+	</ul>
+	
+	<h3>Hidden Contexts:</h3>
+		<ul>
+		<% for other_context in Context.find(:all, :conditions => "hide=1", :order => "position ASC") %>
+		  <li><%= link_to( other_context.name, { :controller => "context", :action => "show", :name => urlize(other_context.name) } ) + " (" + Todo.count( "context_id=#{other_context.id} AND done=0" ).to_s + " actions)" -%></li>
+		<% end -%>
+		</ul>
+</div><!-- End of input box -->
 
 
 <% if @flash["confirmation"] %><div class="confirmation"><%= @flash["confirmation"] %></div><% end %>

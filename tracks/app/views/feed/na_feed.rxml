@@ -8,7 +8,7 @@ xml.rss("version" => "2.0", "xmlns:dc" => "http://purl.org/dc/elements/1.1/") do
         xml.title(i.description)
         @link = url_for(:controller => 'context', :action => 'show', :id => "#{i.context_id}")
         xml.link("http://#{@request.host}:#{@request.port}#{@link}")
-        xml.description(i.context['name'].capitalize)
+        xml.description(i.context['name'])
       end
     }
   end

@@ -3,29 +3,23 @@
 <head>
 	<%= stylesheet_link_tag "standard" %>
 	<%= javascript_include_tag "toggle_notes" %>
-	<%= javascript_include_tag "calendar" %>
-	<link rel="shortcut icon" href="<%= url_for(:controller => 'favicon.ico')  %>" />
+	<%= javascript_include_tag "prototype" %>
+	<%= javascript_include_tag "prototype-ex" %>
+	<%= stylesheet_link_tag 'calendar-system.css' %>
+	<%= javascript_include_tag 'calendar', 'calendar-en', 'calendar-setup' %>
+	
+	<link rel="shortcut icon" href="<%= url_for(:controller => 'favicon.ico') %>" />
 		
 <title><%= @page_title %></title>
 
-<script>
-var date = new Date();
-var curr_dy = date.getDate(); 
-var curr_mn = date.getMonth();
-var curr_yr = date.getFullYear();
-var DOMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-var lDOMonth = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-var moty = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-</script>
-
 </head>
-<body onload="javascript:toggleAll('notes','none'); toggleAllImages();">
+<body>
 <div>
 	<h1>
 	<% if @count %>
 	  <span class="badge"><%= @count %></span>
 	<% end %>
-	<%= today = Time.now; datestamp = today.strftime("%A, %d %B %Y") %></h1>
+	<%= Time.now.strftime("%A, %d %B %Y") %></h1>
 </div>
 <div id="navcontainer">
 <ul id="navlist">

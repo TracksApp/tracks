@@ -1,0 +1,12 @@
+<%
+    @project = project_form
+%>
+<!-- %= error_messages_for 'project' % -->
+<div class="position">
+  <%= @project.position %>
+</div>
+<div class="data">
+<label for="project_name">Name</label>
+<%= text_field 'project', 'name', :class => 'project-name'  %>
+</div>
+<% @project = nil %>

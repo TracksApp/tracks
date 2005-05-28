@@ -5,7 +5,6 @@ class ProjectController < ApplicationController
   model :todo
   
   before_filter :login_required
-  caches_action :list
   layout "standard"
   
   def index 
@@ -18,105 +17,129 @@ class ProjectController < ApplicationController
 	#
   def list
 		@page_title = "TRACKS::List Projects"
-		@projects = Project.find_all
+		@projects = Project.find(:all, :conditions => nil, :order => "position ASC")
 	end
 	
-	
 	# Filter the projects to show just the one passed in the URL
-  # e.g. <home>/project/show/<project_id> shows just <project_id>.
+  # e.g. <home>/project/show/<project_name> shows just <project_name>.
   #
 	def show
     @project = Project.find_by_name(@params["name"].humanize)
-    @places = Context.find_all
+    @places = Context.find(:all)
+    @projects = Project.find(:all)    
     @page_title = "TRACKS::Project: #{@project.name}"
-    @not_done = Todo.find_all( "project_id=#{@project.id} AND done=0", "due DESC, created ASC" )
-    @count = Todo.count( "project_id=#{@project.id} AND done=0" )
+    @not_done = Todo.find(:all, :conditions => "done=0 AND project_id=#{@project.id}", 
+                          :order => "due IS NULL, due ASC, created ASC")
+    @done = Todo.find(:all, :conditions => "done=1 AND project_id=#{@project.id}", 
+                          :order => "completed DESC")
+    @count = @not_done.length
 	end
 	
-	
-	def edit
-	  expire_action(:controller => "project", :action => "list")
-	  @project = Project.find(@params['id'])
-    @page_title = "TRACKS::Edit project: #{@project.name.capitalize}"  
+	def new_project
+	   @project = Project.new(@params['project'])
+	   if @project.save
+	     render_partial( 'project_listing', @project )
+	   else
+	     flash["warning"] = "Couldn't update new project"
+	    render_text ""
+	   end
 	end
 	
-	
+	# Edit the details of the project
+	#	
 	def update
-    @project = Project.find(@params['project']['id'])
-    @project.attributes = @params['project']
-    if @project.save
-      flash["confirmation"] = "Project \"#{@project.name}\" was successfully updated"
-      redirect_to :action => 'list'
-    else
-      flash["warning"] = "Project \"#{@project.name}\" could not be updated"
-      redirect_to :action => 'list'
-    end
-  end
-  
-  
-	# Called by a form button
-	# Parameters from form fields should be passed to create new project
+		project = Project.find(params[:id])
+	  project.attributes = @params["project"]
+	  if project.save
+	    render_partial 'project_listing', project
+	  else
+	    flash["warning"] = "Couldn't update new project"
+	    render_text ""
+	  end
+	end
+	
+	# Edit the details of the action in this project
 	#
-	def add_project
-	  expire_action(:controller => "project", :action => "list")
-		project = Project.new
-		project.name = @params["new_project"]["name"]
-
-			if project.save
-				flash["confirmation"] = "Succesfully added project \"#{project.name}\""
-				redirect_to( :action => "list" )
-			else
-				flash["warning"] = "Couldn't add project \"#{project.name}\""
-				redirect_to( :action => "list" )
-			end
+	def update_action
+		@places = Context.find(:all)
+		@projects = Project.find(:all)
+		action = Todo.find(params[:id])
+	  action.attributes = @params["item"]
+	  
+	  if action.due?
+	  	action.due = Date.strptime(@params["item"]["due"], DATE_FORMAT)
+	  else
+	  	action.due = ""
+	  end
+	  	  
+	  if action.save
+	    render_partial 'show_items', action
+	  else
+	    flash["warning"] = "Couldn't update the action"
+	    render_text ""
+	  end
 	end
-
-	def new
-	  expire_action(:controller => "project", :action => "list")
-		project = Project.new
-		project.name = @params["new_project"]["name"]
-
-			if project.save
-				flash["confirmation"] = "Succesfully added project \"#{project.name}\""
-				redirect_to( :action => "list" )
-			else
-				flash["warning"] = "Couldn't add project \"#{project.name}\""
-				redirect_to( :action => "list" )
-			end
-	end
-	
 	
 	# Called by a form button
-  # Parameters from form fields should be passed to create new item
+	# Parameters from form fields are passed to create new action
 	#
 	def add_item
-	  expire_action(:controller => "project", :action => "list")
+	  @projects = Project.find( :all )
+		@places = Context.find( :all )
+
 		item = Todo.new
 		item.attributes = @params["new_item"]
-		
-		back_to = item.project_id
-   
-     if item.save
-       flash["confirmation"] = "Successfully added next action \"#{item.description}\" to project"
-       redirect_to( :controller => "project", :action => "show", :id => "#{back_to}" )
-     else
-       flash["warning"] = "Couldn't add next action  \"#{item.description}\" to project"
-       redirect_to( :controller => "project", :action => "show", :id => "#{back_to}" )
-     end
+
+		if item.due?
+			item.due = Date.strptime(@params["new_item"]["due"], DATE_FORMAT)
+		else
+			item.due = ""
+		end
+
+	   if item.save
+	     render_partial 'show_items', item
+	   else
+	     flash["warning"] = "Couldn't add next action  \"#{item.description}\""
+	     render_text ""
+	   end
 	end
 	
-	
+	# Delete a project
+	#
 	def destroy
-	  expire_action(:controller => "project", :action => "list")
-	  project = Project.find( @params['id'] )
-		if project.destroy
-			flash["confirmation"] = "Succesfully deleted project \"#{project.name}\""
-			redirect_to( :action => "list" )
+	  this_project = Project.find( @params['id'] )
+		if this_project.destroy
+			render_text ""
 		else
 			flash["warning"] = "Couldn't delete project \"#{project.name}\""
-			redirect_to( :action => "list" )
+      redirect_to( :controller => "project", :action => "list" )
 		end
 	end
 	
+	
+	# Delete a next action in a project
+	#
+	def destroy_action
+    item = Todo.find(@params['id'])
+  	if item.destroy
+  		#flash["confirmation"] = "Next action \"#{item.description}\" was successfully deleted"
+  		render_text ""
+  	else
+  		flash["warning"] = "Couldn't delete next action \"#{item.description}\""
+  		redirect_to :action => "list"
+  	end
+	end
 
+	# Toggles the 'done' status of the action
+	#
+	def toggle_check
+	  @places = Context.find(:all)	
+	  @projects = Project.find(:all)
+	  item = Todo.find(@params['id'])
+
+	  item.toggle!('done')
+	  render_partial 'show_items', item
+	end
+	
+		
 end

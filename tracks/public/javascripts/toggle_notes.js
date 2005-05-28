@@ -5,11 +5,12 @@ function toggleAll(itemname,state) {
   }
 }
 
-function toggle(idname) {
-  document.getElementById(idname).style.display = (document.getElementById(idname).style.display == 'none') ? 'block' : 'none';
+// Contributed by Andrew Williams
+function toggleSingle(idname) 
+{
+document.getElementById(idname).style.display = (document.getElementById(idname).style.display == 'none') ? 'block' : 'none';
 }
 
-// Contributed by Andrew Williams
 function toggleAllImages()
 {
 	var cookies = document.cookie.split(';');
@@ -23,16 +24,11 @@ function toggleAllImages()
 			var id = str.split('_')[2];
 			if(getCookie(str) == 'collapsed')
 			{
-				toggle('c'+id);
+				toggleSingle('c'+id);
 				toggleImage('toggle_context_'+id);
 			}
 		}
 	}
-}
-
-function toggle(idname) 
-{
-document.getElementById(idname).style.display = (document.getElementById(idname).style.display == 'none') ? 'block' : 'none';
 }
 
 function toggleImage(idname)
@@ -125,3 +121,4 @@ function markItemDone(rowId, uri, id) {
   }
   req.send(encodeURIComponent("id") + '=' + encodeURIComponent(id));
 };
+

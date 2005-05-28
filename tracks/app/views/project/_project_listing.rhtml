@@ -1,0 +1,43 @@
+<%  project = project_listing %>
+<div id="project-<%= project.id %>-container">
+<!-- %= error_messages_for 'project' % -->
+<div id="project-<%= project.id %>-display" class="list">
+<% if project.position % 2 == 0 %>
+<div id="project-<%= project.id %>" class="even_row" style="display:'';">
+<% else %>
+<div id="project-<%= project.id %>" class="odd_row" style="display:'';">
+<% end %>
+<div class="position">
+  <%= project.position.to_s %>
+</div>  
+<div class="data">
+  <%= link_to( "#{project.name}", :action => "show", :name => urlize(project.name) ) %><%= " (" + Todo.count( "project_id=#{project.id} AND done=0" ).to_s + " actions)" %>
+</div>
+<div class="buttons">
+    <%= link_to_function(image_tag( "edit", :title => "Edit item", :width=>"10", :height=>"10", :border=>"0"), "Element.toggle('project-#{project.id}','project-#{project.id}-edit-form'); new Effect.Appear('project-#{project.id}-edit-form'); Form.focus_first('form-project-#{project.id}');" ) + " " +
+     link_to_remote( image_tag("delete", :title =>"Delete this project"), 
+                  :update => "project-#{project.id}-container",
+                  :loading => "new Effect.Squish('project-#{project.id}-container')",
+                  :url => { :controller => "project", :action => "destroy", :id => project.id }, :confirm => "Are you sure that you want to delete the project \'#{project.name}\'?" ) %>
+</div>
+</div><!-- [end:project-project.id] -->
+
+</div><!-- [end:project-project.id-display] -->
+<div id="project-<%= project.id %>-edit-form" class="edit-form" style="display:none;">
+<%= form_remote_tag  :url => { :controller => 'project', :action => 'update', :id => project.id },
+               :html => { :id => "form-project-#{project.id}", :class => "inline-form" },
+               :update => "project-#{project.id}-container",
+               :complete => "new Effect.Appear('project-#{project.id}-container');" %>
+  <%= render_partial 'project_form', project %>
+  <div class="buttons">  
+  <input type="submit" value="Update" />
+  <a href="javascript:void(0);" onclick="Element.toggle('project-<%= project.id %>','project-<%= project.id %>-edit-form');Form.reset('form-project-<%= project.id %>');">Cancel</a>
+  </div>
+<%= end_form_tag %>
+</div><!-- [end:project-project.id-edit-form] -->
+</div><!-- [end:project-project.id-container] -->
+<% if controller.action_name == 'new_project' %>
+<script>
+   new Effect.Appear('project-<%= project.id %>');
+</script>
+<% end %>

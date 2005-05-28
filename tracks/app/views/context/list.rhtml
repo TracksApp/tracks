@@ -1,45 +1,36 @@
-<div id="display_box">
+<div id="full_width_display">
 
-<table class="list" cellspacing="0" cellpadding="5" width="450" border="0">
-<% row = 1 %>
-<% for @context in @contexts %>
-  <% if row % 2 == 0 %>
-    <tr class="even_row">
-  <% else %>
-    <tr class="odd_row">
-  <% end %>
-    <td align="right" width="20"><%= @context.position.to_s %></td>
-		<!-- <td width="390"><%= link_to( "#{@context.name.capitalize}", :action => "show", :id => @context.id ) %></td> -->
-		<td width="390"><%= link_to( "#{@context.name.capitalize}", :action => "show", :name => urlize(@context.name)  ) %></td>
-		<td>
-		  <% if @context.hide == 1 %>
-		    hidden
-		  <% else %>
-		    shown
-		  <% end %>
-		  </td>
-		  <td width="40">
-		    <%= link_to(image_tag( "edit", :title => "Edit item", :width=>"10", :height=>"10", :border=>"0"), { :action => "edit", :id => @context.id } ) + " " + link_to(image_tag( "delete", :title => "Delete item", :width=>10, :height=>10, :border=>0 ), { :action => "destroy", :id => @context.id}, :confirm => "Are you sure you want to delete the context \"#{@context.name}?\" Any todos in this context will be deleted." ) %>
-      </td>
-</tr>
-<% row += 1 %>
+<div id="list-contexts">
+<% for context in @contexts %>
+  <%= render_partial( 'context_listing', context ) %>
 <% end %>
-</table>
-
-</div><!- End of display_box -->
-
-<div id="input_box">
-    <%= start_form_tag :controller=>'context', :action=>'new' %>
-	  <label for="new_context_name">New context</label><br />                                               
-	  <%= text_field("new_context", "name") %>
-		<br />
-		<label for="new_context_one_front">Hide from front page?</label>
-		<%= check_box( "new_context", "hide" ) %>
-		<br />
-		<br />
-	  <input type="submit" value="Add context">
-      <%= end_form_tag %>
 </div>
 
-<% if @flash["confirmation"] %><div class="confirmation"><%= @flash["confirmation"] %></div><% end %>
-<% if @flash["warning"] %><div class="warning"><%= @flash["warning"] %></div><% end %>
+<br />
+<a href="javascript:void(0)" onClick="Element.toggle('context_new'); Form.focus_first('context-form');" accesskey="n" title="Create a new context [Alt+n]">Create new context &#187;</a>
+<div id="context_new" class="context_new" style="display:none">
+<!--[form:context]-->
+<%= form_remote_tag :url => { :action => "new_context" },
+  :update=> "list-contexts",
+  :position=> "bottom",
+  :loading => "context.reset()",
+  :complete => "Form.focus_first('context-form');",
+  :html=> { :id=>'context-form', :name=>'context', :class => 'inline-form' } %>
+<%= hidden_field( "context", "id" ) %>
+<label for="context_name">Context name</label>                                  
+<%= text_field( "context", "name" ) %>
+<label for="new_context_on_front">Hide from front page?</label>
+<%= check_box( "context", "hide" ) %>
+<input type="submit" value="Add" />
+<%= end_form_tag %>
+<!--[eoform:context]-->
+</div>
+
+<% if @flash["confirmation"] %>
+  <div class="confirmation"><%= @flash["confirmation"] %></div>
+<% end %>
+<% if @flash["warning"] %>
+  <div class="warning"><%= @flash["warning"] %></div>
+<% end %>
+
+</div><!- End of display_box -->

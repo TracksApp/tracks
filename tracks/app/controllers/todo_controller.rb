@@ -4,30 +4,28 @@ class TodoController < ApplicationController
   model :context, :project
   
 	before_filter :login_required
-	caches_action :list, :completed, :completed_archive
   layout "standard"
     
-	# Main method for listing tasks
-	# Set page title, and fill variables with contexts and done and not-done tasks
-	# Number of completed actions to show is determined by a setting in settings.yml
-	#
+  def index
+    list
+    render_action "list"
+  end
 
-    def index
-       list
-       render_action "list"
-    end
-
+  # Main method for listing tasks
+  # Set page title, and fill variables with contexts and done and not-done tasks
+  # Number of completed actions to show is determined by a setting in settings.yml
+  #
 	def list
 		@page_title = "TRACKS::List tasks"
-		@no_of_actions = app_configurations["formats"]["hp_completed"]
-		@projects = Project.find_all
-		@places = Context.find_all
-	  @shown_places = Context.find_all_by_hide( "0", "position ASC")
-    @hidden_places = Context.find_all_by_hide( "1", "position ASC" )
-		@done = Todo.find_all_by_done( 1, "completed DESC", @no_of_actions )
+		@projects = Project.find( :all )
+		@places = Context.find( :all )
+	  @shown_places = Context.find( :all, :conditions => "hide=0", :order => "position ASC" )
+    @hidden_places = Context.find( :all, :conditions => "hide=1", :order => "position ASC" )
+		@done = Todo.find( :all, :conditions => "done=1", :order => "completed DESC",
+		                  :limit => NO_OF_ACTIONS )
 		
 		# Set count badge to number of not-done, not hidden context items
-		@count = count_shown_items(@hidden_places)
+		@count = count_shown_items( @hidden_places )
 	end
 
 
@@ -58,78 +56,73 @@ class TodoController < ApplicationController
                   ORDER BY completed DESC;" )
   end
 	
-	# Called by a form button
-	# Parameters from form fields should be passed to create new item
-	#
-	def add_item
-	  expire_action(:controller => "todo", :action => "list")
-    @item = Todo.new
-		@item.attributes = @params["item"]
-		
-	  if @item.save
-			flash["confirmation"] = "Next action \"#{@item.description}\" was successfully added"
-			redirect_to( :action => "list" )
+  # Called by a form button
+  # Parameters from form fields are passed to create new action
+  # in the selected context.
+  def add_item
+    @projects = Project.find( :all )
+		@places = Context.find( :all )
+
+  	item = Todo.new
+  	item.attributes = @params["new_item"]
+  	
+		if item.due?
+			item.due = Date.strptime(@params["new_item"]["due"], DATE_FORMAT)
 		else
-		  flash["warning"] = "Couldn't add the action \"#{@item.description}\""
-		  redirect_to( :action => "list" )
+			item.due = ""
 		end
-	end
-	
-	
-	def edit
-	  expire_action(:controller => "todo", :action => "list")
-    @item = Todo.find(@params['id'])
-    @belongs = @item.project_id
-		@projects = Project.find_all
-		@places = Context.find_all
-    @page_title = "TRACKS::Edit task: #{@item.description}"
+
+     if item.save
+       render_partial 'show_items', item
+     else
+       flash["warning"] = "Couldn't add next action  \"#{item.description}\""
+       render_text ""
+     end
   end
-
-
-  def update
-    expire_action(:controller => "todo", :action => "list")    
-    @item = Todo.find(@params['item']['id'])
-    @item.attributes = @params['item']
-    if @item.save
-      flash["confirmation"] = "Next action \"#{@item.description}\" was successfully updated"
-      redirect_to :action => 'list'
+	
+  # Edit the details of an action
+  #	
+  def update_action
+		@places = Context.find(:all)
+  	@projects = Project.find(:all)
+  	action = Todo.find(params[:id])
+    action.attributes = @params["item"]
+    if action.due?
+    	action.due = Date.strptime(@params["item"]["due"], DATE_FORMAT)
     else
-      flash["warning"] = "Next action \"#{@item.description}\" could not be updated"
-      redirect_to :action => 'list'
+    	action.due = ""
+    end
+		
+    if action.save
+      render_partial 'show_items', action
+    else
+      flash["warning"] = "Couldn't update the action"
+      render_text ""
     end
   end
 	
-
-	def destroy
-	  expire_action(:controller => "todo", :action => "list")	  
-	  item = Todo.find(@params['id'])
-		if item.destroy
-			flash["confirmation"] = "Next action \"#{item.description}\" was successfully deleted"
-			redirect_to :action => "list"
-		else
-			flash["warning"] = "Couldn't delete next action \"#{item.description}\""
-			redirect_to :action => "list"
-		end
-	end
+  # Delete a next action in a context
+  #
+  def destroy_action
+    item = Todo.find(@params['id'])
+  	if item.destroy
+  		render_text ""
+  	else
+  		flash["warning"] = "Couldn't delete next action \"#{item.description}\""
+  		redirect_to :action => "list"
+  	end
+  end
 	
 	# Toggles the 'done' status of the action
 	#
 	def toggle_check
-	  expire_action(:controller => "todo", :action => "list")
-	  expire_action(:controller => "todo", :action => "completed")
-	  expire_action(:controller => "todo", :action => "completed_archive")	  
+	  @projects = Project.find(:all)
+		@places = Context.find(:all)
+
 	  item = Todo.find(@params['id'])
-		
-		item.toggle!('done')
-		
-		if item.save
-			flash["confirmation"] = "Next action \"#{item.description}\" marked as completed"
-			redirect_to( :action => "list" )
-		else
-			flash["warning"] = "Couldn't mark action \"#{item.description}\" as completed"
-			redirect_to( :action => "list" )
-		end	
-	end
-	
+
+	  item.toggle!('done')
+	  render_partial 'show_items', item
+	end	
 	
 end

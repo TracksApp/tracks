@@ -5,8 +5,11 @@ module ApplicationHelper
 	# in config/settings.yml
 	#
   def format_date(date)
-		date_fmt = app_configurations["formats"]["date"]
-		formatted_date = date.strftime("#{date_fmt}")
+		if date
+			formatted_date = date.strftime("#{ApplicationController::DATE_FORMAT}")
+		else
+			formatted_date = ''
+		end
 	end
 
 	# Uses RedCloth to transform text using either Textile or Markdown
@@ -24,9 +27,9 @@ module ApplicationHelper
 		tagged = "<#{tag}>#{object}</#{tag}>"
 	end
 
-    def urlize(name)
-        name.to_s.gsub(/ /, "_").downcase
-    end
+  def urlize(name)
+      name.to_s.gsub(/ /, "_").downcase
+  end
 	
 	
 	# Check due date in comparison to today's date
@@ -52,4 +55,5 @@ module ApplicationHelper
   			"<span class=\"green\">" + format_date(due) + "</span> "
 		end
 	end
+
 end

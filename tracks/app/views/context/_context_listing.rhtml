@@ -1,0 +1,50 @@
+<%  context = context_listing %>
+<div id="context-<%= context.id %>-container" class="container">
+<!-- %= error_messages_for 'context' % -->
+<div id="context-<%= context.id %>-display" class="list">
+<% if context.position % 2 == 0 %>
+<div id="context-<%= context.id %>" class="even_row" style="display:'';">
+<% else %>
+<div id="context-<%= context.id %>" class="odd_row" style="display:'';">
+<% end %>
+<div class="position">
+  <%= context.position.to_s %>
+</div>  
+<div class="data">
+  <%= link_to( "#{context.name}", :action => "show", :name => urlize(context.name) ) %><%= " (" + Todo.count( "context_id=#{context.id} AND done=0" ).to_s + " actions)" %>
+</div>
+
+<div class="buttons">
+<% if context.hide == 1 %>
+  <input type="checkbox" value="1" checked="checked" disabled="true" />
+<% else %>
+  <input type="checkbox" value="0" disabled="true" />
+<% end %>
+
+<%= link_to_function(image_tag( "edit", :title => "Edit item", :width=>"10", :height=>"10", :border=>"0"), "Element.toggle('context-#{context.id}','context-#{context.id}-edit-form'); new Effect.Appear('context-#{context.id}-edit-form'); Form.focus_first('form-context-#{context.id}');" ) + " " +
+     link_to_remote( image_tag("delete", :title =>"Delete this context"), 
+                  :update => "context-#{context.id}-container",
+                  :loading => "new Effect.Squish('context-#{context.id}-container')",
+                  :url => { :controller => "context", :action => "destroy", :id => context.id }, :confirm => "Are you sure that you want to delete the context \'#{context.name}\'?" ) %>
+</div>
+</div><!-- [end:context-context.id] -->
+
+</div><!-- [end:context-context.id-display] -->
+<div id="context-<%= context.id %>-edit-form" class="edit-form" style="display:none;">
+<%= form_remote_tag  :url => { :controller => 'context', :action => 'update', :id => context.id },
+               :html => { :id => "form-context-#{context.id}", :class => "inline-form" },
+               :update => "context-#{context.id}-container",
+               :complete => "new Effect.Appear('context-#{context.id}-container');" %>
+  <%= render_partial 'context_form', context %>
+  <div class="buttons">  
+  <input type="submit" value="Update" />
+  <a href="javascript:void(0);" onclick="Element.toggle('context-<%= context.id %>','context-<%= context.id %>-edit-form');Form.reset('form-context-<%= context.id %>');">Cancel</a>
+  </div>
+<%= end_form_tag %>
+</div><!-- [end:context-context.id-edit-form] -->
+</div><!-- [end:context-context.id-container] -->
+<% if controller.action_name == 'new_context' %>
+<script>
+   new Effect.Appear('context-<%= context.id %>');
+</script>
+<% end %>

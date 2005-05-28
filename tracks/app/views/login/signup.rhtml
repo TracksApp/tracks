@@ -6,26 +6,26 @@
     <h3>Sign up as the admin user</h3>
     <%= render_errors @user %><br/>
     <label for="user_login">Desired login:</label><br/>
-    <%= text_field "user", "login", :size => 30 %><br/>
+    <%= text_field "user", "login", :size => 20 %><br/>
     <label for="user_password">Choose password:</label><br/>
-    <%= password_field "user", "password", :size => 30 %><br/>
+    <%= password_field "user", "password", :size => 20 %><br/>
     <label for="user_password_confirmation">Confirm password:</label><br/>
-    <%= password_field "user", "password_confirmation", :size => 30 %><br/>
+    <%= password_field "user", "password_confirmation", :size => 20 %><br/>
     <label for="user_word">Secret word (different to password):</label><br />
-    <%= password_field "user", "word", :size => 30 %><br />
+    <%= password_field "user", "word", :size => 20 %><br />
     <input type="submit" value="Signup &#187;" class="primary" />
   <% elsif (@session['user'] && @session['user']['is_admin'] == 1) %>
     <%= hidden_field "user", "is_admin", "value" => 0 %>
     <h3>Sign up a new user</h3>
     <%= render_errors @user %><br/>
     <label for="user_login">Desired login:</label><br/>
-    <%= text_field "user", "login", :size => 30 %><br/>
+    <%= text_field "user", "login", :size => 20 %><br/>
     <label for="user_password">Choose password:</label><br/>
-    <%= password_field "user", "password", :size => 30 %><br/>
+    <%= password_field "user", "password", :size => 20 %><br/>
     <label for="user_password_confirmation">Confirm password:</label><br/>
-    <%= password_field "user", "password_confirmation", :size => 30 %><br/>
+    <%= password_field "user", "password_confirmation", :size => 20 %><br/>
     <label for="user_word">Secret word (different to password):</label><br />
-    <%= password_field "user", "word", :size => 30 %><br />
+    <%= password_field "user", "word", :size => 20 %><br />
     <input type="submit" value="Signup &#187;" class="primary" />
   <% else %>
     <h3>Signup</h3>

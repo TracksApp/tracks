@@ -1,126 +1,144 @@
 class ContextController < ApplicationController
-  
-    
+      
   helper :context
   model :project
+	model :todo
+	
   before_filter :login_required
-  caches_action :list
   layout "standard"
-  
-  
-  # Main method for listing contexts
-	# Set page title, and collect existing contexts in @contexts
-	#
 
   def index
     list
     render_action "list"
   end
 
+  # Main method for listing contexts
+  # Set page title, and collect existing contexts in @contexts
+  #
   def list
 		@page_title = "TRACKS::List Contexts"
-		@contexts = Context.find_all( conditions = nil, "position ASC", limit = nil )
+		@contexts = Context.find(:all, :conditions => nil, :order => "position ASC", :limit => nil )
+	end
+
+	# Filter the projects to show just the one passed in the URL
+	# e.g. <home>/project/show/<project_name> shows just <project_name>.
+	#
+	def show
+	  @context = Context.find_by_name(@params["name"].humanize)
+	  @places = Context.find(:all)
+	  @projects = Project.find(:all)
+	  @page_title = "TRACKS::Context: #{@context.name}"
+	  @not_done = Todo.find(:all, :conditions => "done=0 AND context_id=#{@context.id}", 
+	                        :order => "due IS NULL, due ASC, created ASC")
+	  @done = Todo.find(:all, :conditions => "done=1 AND context_id=#{@context.id}", 
+	                        :order => "completed DESC")	
+	  @count = Todo.count( "context_id=#{@context.id} AND done=0" )
+	end	
+	
+	# Creates a new context via Ajax helpers
+	#
+	def new_context
+	  @context = Context.new(@params['context'])
+	  if @context.save
+	    render_partial( 'context_listing', @context )
+	  else
+	    flash["warning"] = "Couldn't add new context"
+			render_text "#{flash["warning"]}"
+	  end
 	end
 	
+	# Edit the details of the context
+	#		
+	def update
+		context = Context.find(params[:id])
+	  context.attributes = @params["context"]
+	  if context.save
+	    render_partial 'context_listing', context
+	  else
+	    flash["warning"] = "Couldn't update new context"
+	    render_text ""
+	  end
+	end
+	
+	# Edit the details of the action in this context
+	#	
+	def update_action
+		@places = Context.find(:all)
+		@projects = Project.find(:all)
+		action = Todo.find(params[:id])
+	  action.attributes = @params["item"]
+	  if action.due?
+	  	action.due = Date.strptime(@params["item"]["due"], DATE_FORMAT)
+	  else
+	  	action.due = ""
+	  end	  
+	  
+	  if action.save
+	    render_partial 'show_items', action
+	  else
+	    flash["warning"] = "Couldn't update the action"
+	    render_text ""
+	  end
+	end
 	
 	# Called by a form button
-	# Parameters from form fields should be passed to create new context
-	#
-	def add_context
-	  expire_action(:controller => "context", :action => "list")
-		context = Context.new
-		context.attributes = @params["new_context"]
-
-			if context.save
-				flash["confirmation"] = "Succesfully created context \"#{context.name}\""
-				redirect_to( :action => "list" )
-			else
-				flash["warning"] = "Couldn't add new context \"#{context.name}\""
-				redirect_to( :action => "list" )
-			end
-	end
-
-	def new
-	  expire_action(:controller => "context", :action => "list")
-		context = Context.new
-		context.attributes = @params["new_context"]
-
-			if context.save
-				flash["confirmation"] = "Succesfully created context \"#{context.name}\""
-				redirect_to( :action => "list" )
-			else
-				flash["warning"] = "Couldn't add new context \"#{context.name}\""
-				redirect_to( :action => "list" )
-			end
-	end
-	
-	def edit
-	  expire_action(:controller => "context", :action => "list")
-	  @context = Context.find(@params['id'])
-    @page_title = "TRACKS::Edit context: #{@context.name.capitalize}"  
-	end
-	
-	
-	def update
-    @context = Context.find(@params['context']['id'])
-    @context.attributes = @params['context']
-    if @context.save
-      flash["confirmation"] = "Context \"#{@context.name}\" was successfully updated"
-      redirect_to :action => 'list'
-    else
-      flash["warning"] = "Context \"#{@context.name}\" could not be updated"
-      redirect_to :action => 'list'
-    end
-  end
-  
-
-	# Filter the contexts to show just the one passed in the URL
-  # e.g. <home>/context/show/<context_name> shows just <context_name>.
-  #
-	def show
-	  @context = Context.find_by_name(@params["id"].humanize)
-	  @projects = Project.find_all
-	  @page_title = "TRACKS::Context: #{@context.name.capitalize}"
-    @not_done = Todo.find_all( "context_id=#{@context.id} AND done=0", "due DESC, created ASC" )	
-    @count = Todo.count( "context_id=#{@context.id} AND done=0" )
-  end
-  
-  
-  # Called by a form button
 	# Parameters from form fields are passed to create new action
-	# in the selected context.
-  def add_item
-    expire_action(:controller => "context", :action => "list")
+	#
+	def add_item
+	  @projects = Project.find( :all )
+		@places = Context.find( :all )
+
 		item = Todo.new
 		item.attributes = @params["new_item"]
-		where = Context.find_by_id(item.context_id)
-		
-		back_to = urlize(where.name)
-   
-     if item.save
-       flash["confirmation"] = "Succesfully added action \"#{item.description}\" to context"
-       redirect_to( :controller => "context", :action => "show", :name => "#{back_to}")
-     else
-       flash["warning"] = "Could not add action \"#{item.description}\" to context"
-       redirect_to( :controller => "context", :action => "show", :name => "#{back_to}" )
-     end
+
+		if item.due?
+			item.due = Date.strptime(@params["new_item"]["due"], DATE_FORMAT)
+		else
+			item.due = ""
+		end
+
+	   if item.save
+	     render_partial 'show_items', item
+	   else
+	     flash["warning"] = "Couldn't add next action  \"#{item.description}\""
+	     render_text ""
+	   end
 	end
-	
 	
 	# Fairly self-explanatory; deletes the context
 	# If the context contains actions, you'll get a warning dialogue.
 	# If you choose to go ahead, any actions in the context will also be deleted.
-	def destroy
-	  expire_action(:controller => "context", :action => "list")
-	  context = Context.find( @params['id'] )
-		if context.destroy
-			flash["confirmation"] = "Succesfully deleted context \"#{context.name}\""
-			redirect_to( :action => "list" )
+	def destroy  
+	  this_context = Context.find(params[:id])
+	  if this_context.destroy
+		  render_text ""
+	  else
+		  flash["warning"] = "Couldn't delete context \"#{context.name}\""
+      redirect_to( :controller => "context", :action => "list" )
+	  end
+	end
+
+	# Delete a next action in a context
+	#
+	def destroy_action
+	  item = Todo.find(params[:id])
+		if item.destroy
+			render_text ""
 		else
-			flash["warning"] = "Couldn't delete context \"#{context.name}\""
-			redirect_to( :action => "list" )
+			flash["warning"] = "Couldn't delete next action \"#{item.description}\""
+			redirect_to :action => "list"
 		end
 	end
-	
-	
+
+	# Toggles the 'done' status of the action
+	#
+	def toggle_check
+	  @places = Context.find(:all)
+	  @projects = Project.find(:all)
+		
+	  item = Todo.find(params[:id])
+
+	  item.toggle!('done')
+	  render_partial 'show_items', item
+	end	
 end

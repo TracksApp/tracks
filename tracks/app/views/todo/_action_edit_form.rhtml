@@ -1,0 +1,56 @@
+<%
+    @item = action_edit_form
+%>
+<!-- %= error_messages_for 'item' % -->
+<%= hidden_field( "item", "id" ) %>
+<table>
+	<tr>
+		<td class="label"><label for="item_description">Next action</label></td>
+		<td><%= text_field( "item", "description", "tabindex" => 1 ) %></td>
+	</tr>
+	<tr>
+		<td class="label"><label for="item_notes">Notes</label></td>
+		<td><%= text_area( "item", "notes", "cols" => 20, "rows" => 5, "tabindex" => 2 ) %></td>
+	</tr>
+	<tr>
+		<td class="label"><label for="item_context_id">Context</label></td>
+		    <td><select name="item[context_id]" id="item_context_id" tabindex="3">
+					<% for @place in @places %>
+					  <% if @item %>
+					    <% if @place.id == @item.context_id %>
+		  			    <option value="<%= @place.id %>" selected="selected"><%= @place.name %></option>
+		  			  <% else %>
+					      <option value="<%= @place.id %>"><%= @place.name %></option>
+					    <% end %>
+					  <% else %>
+					      <option value="<%= @place.id %>"><%= @place.name %></option>
+					  <% end %>
+					<% end %>
+				</select></td>
+	</tr>
+	<tr>
+		<td class="label"><label for="item_project_id">Project</label></td>
+    <td>
+    	<select name="item[project_id]" id="item_project_id" tabindex="4">
+			<% if !@item.project_id? %>
+				<option selected="selected"></option>
+				<%= options_from_collection_for_select(@projects, "id", "name") %>
+			<% else %>
+				<option></option>
+				<%= options_from_collection_for_select(@projects, "id", "name", @item.project_id) %>
+			<% end %>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td class="label"><label for="item_due">Due</td>
+		<td><input name="item[due]" id="item_due" value="<%= format_date(@item.due) %>" size="10" tabindex="5" /></td>
+	</tr>
+	<tr>
+		<td><input type="submit" value="Update" tabindex="6" />
+		  	<a href="javascript:void(0);" onclick="Element.toggle('item-<%= @item.id %>','action-<%= @item.id %>-edit-form');Form.reset('form-action-<%= @item.id %>');">Cancel</a></td>
+	</tr>
+</table>
+
+
+<% @item = nil %>
