@@ -135,12 +135,6 @@ h2 a:hover {
 			}
 			
 #input_box h2 {
-			/* background: #CCC;
-			padding: 5px;
-			margin: 0px;
-			margin-left: -15px;
-			margin-right: -15px; 
-			text-shadow: rgba(0,0,0,.4) 0px 2px 5px; */
 			color: #999;
 			
 			}
@@ -252,6 +246,28 @@ h2 a:hover {
 			font-size: 10px;
 			}
 
+/*  Backgrounds marking out 'staleness' of a task based on age of creation date
+    The colour of the background gets progressively yellower with age */
+    
+.stale_l1 {
+      margin-left: 60px;
+      margin-right: 10px;
+      background: #ffffCC;
+      }
+      
+.stale_l2 {
+      margin-left: 60px;
+      margin-right: 10px;
+      background: #ffff66;
+      }
+
+.stale_l3 {
+      margin-left: 60px;
+      margin-right: 10px;
+      background: #ffff00;
+      }
+
+      
 /* Shows the number of undone next action */
 .badge {
       color: #fff;

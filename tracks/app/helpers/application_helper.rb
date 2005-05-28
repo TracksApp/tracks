@@ -55,5 +55,24 @@ module ApplicationHelper
   			"<span class=\"green\">" + format_date(due) + "</span> "
 		end
 	end
+	
+	# Uses the 'staleness_starts' value from settings.yml (in days) to colour
+	# the background of the action appropriately according to the age
+	# of the creation date:
+	# * l1: created more than 1 x staleness_starts, but < 2 x staleness_starts
+	# * l2: created more than 2 x staleness_starts, but < 3 x staleness_starts
+	# * l3: created more than 3 x staleness_starts
+	#
+	def staleness(created)
+	  if created < (ApplicationController::STALENESS_STARTS*3).days.ago
+	    return "<div class=\"stale_l3\">"
+	  elsif created < (ApplicationController::STALENESS_STARTS*2).days.ago
+	    return "<div class=\"stale_l2\">"
+	  elsif created < (ApplicationController::STALENESS_STARTS).days.ago
+	    return "<div class=\"stale_l1\">"
+	  else
+	    return "<div class=\"description\">"
+	  end
+	end
 
 end

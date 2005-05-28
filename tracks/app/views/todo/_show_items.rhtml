@@ -20,7 +20,8 @@
                   :url => { :controller => "todo", :action => "destroy_action", :id => item.id }, :confirm => "Are you sure that you want to delete the action \'#{item.description}\'?" ) + " "
   %>
   </div>
-	<div class="description">
+  <!-- start of div which has a class 'description' or 'stale_7d', 'stale_14d' etc -->
+	<%= staleness(item.created) %>
 	<%= due_date( item.due ) %> 
 	<%= item.description %>
 	<% if item.project_id %>
