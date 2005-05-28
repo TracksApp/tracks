@@ -34,11 +34,21 @@ class TodoController < ApplicationController
 	# Use days declaration? 1.day.ago?
   def completed
     @page_title = "TRACKS::Completed tasks"
-    today_query = "DATE_SUB(CURDATE(),INTERVAL 1 DAY) <= completed"
-    week_query = "DATE_SUB(CURDATE(),INTERVAL 2 DAY) >= completed 
-                  AND DATE_SUB(CURDATE(),INTERVAL 7 DAY) <= completed"
-    month_query = "DATE_SUB(CURDATE(),INTERVAL 8 DAY) >= completed 
-                  AND DATE_SUB(CURDATE(),INTERVAL 31 DAY) <= completed"
+	  today_date = Date::today() - 1
+    today_query = today_date.strftime("'%Y-%m-%d'") + " <= completed"
+
+	  week_begin = Date::today() - 2
+	  week_end = Date::today() - 7
+
+    week_query = week_begin.strftime("'%Y-%m-%d'") + " >= completed 
+                  AND " + week_end.strftime("'%Y-%m-%d'") + " <= completed"
+
+	  month_begin = Date::today() - 8
+	  month_end = Date::today() - 31
+
+    month_query = month_begin.strftime("'%Y-%m-%d'") + " >= completed 
+                  AND " + month_end.strftime("'%Y-%m-%d'") + " <= completed"
+
     @done_today = Todo.find_by_sql( "SELECT * FROM todos WHERE done = 1 AND #{today_query} 
                   ORDER BY completed DESC;" )
     @done_this_week = Todo.find_by_sql( "SELECT * FROM todos WHERE done = 1 AND #{week_query} 
@@ -51,7 +61,8 @@ class TodoController < ApplicationController
 	#
   def completed_archive
     @page_title = "TRACKS::Archived completed tasks"
-    archive_query = "DATE_SUB(CURDATE(),INTERVAL 32 DAY) >= completed"
+	  archive_date = Date::today() - 32
+    archive_query = archive_date.strftime("'%Y-%m-%d'") + " >= completed"
     @done_archive = Todo.find_by_sql( "SELECT * FROM todos WHERE done = 1 AND #{archive_query} 
                   ORDER BY completed DESC;" )
   end

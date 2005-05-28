@@ -1,0 +1,25 @@
+<% @done_item = done %>
+<tr>
+<% if @done_item.completed %>
+  <td valign="top"><%= image_tag( "done", :width=>"16", :height=>"16", :border=>"0") %></td>
+  <td valign="top"><span class="grey"><%= format_date( @done_item.completed ) %></span></td>
+  <td valign="top"><%= " " + @done_item.description + " "%>
+
+  <% if @done_item.project_id %>
+    <%= "(" + @done_item.context['name'] + ", " + @done_item.project['name'] + ")" %>
+  <% else %>
+    <%= "(" + @done_item.context['name'] + ")" %>
+  <% end %>
+
+  <% if @done_item.due %>
+    <%= " - was due on " + format_date( @done_item.due ) %>
+  <% end %>
+
+  <% if @done_item.notes? %>
+        <%= "<a href=\"javascript:Element.toggle('" + @done_item.id.to_s + "')\" title=\"Show notes\">" + image_tag( "notes", :width=>"10", :height=>"10", :border=>"0") + "</a>" %>
+        <%      m_notes = markdown( @done_item.notes ) %>
+        <%= "<div class=\"notes\" id=\"" + @done_item.id.to_s + "\" style=\"display:none\">" + m_notes + "</div>" %>
+  <% end %>
+  </td>
+<% end %>
+</tr>
