@@ -140,5 +140,36 @@ class ContextController < ApplicationController
 
 	  item.toggle!('done')
 	  render_partial 'show_items', item
-	end	
+	end
+	
+	# Methods for changing the sort order of the contexts in the list
+	#
+	def move_up
+	  line = Context.find(params[:id])
+	  line.move_higher
+	  line.save
+	  redirect_to(:controller => "context", :action => "list")
+	end
+	
+	def move_down
+	  line = Context.find(params[:id])
+	  line.move_lower
+	  line.save
+	  redirect_to(:controller => "context", :action => "list")
+	end
+	
+	def move_top
+	  line = Context.find(params[:id])
+	  line.move_to_top
+	  line.save
+	  redirect_to(:controller => "context", :action => "list")
+	end
+	
+	def move_bottom
+	  line = Context.find(params[:id])
+	  line.move_to_bottom
+	  line.save
+	  redirect_to(:controller => "context", :action => "list" )
+	end
+	
 end

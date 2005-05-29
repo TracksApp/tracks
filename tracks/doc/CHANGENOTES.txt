@@ -28,6 +28,10 @@ Project wiki: <http://www.rousette.org.uk/projects/wiki/>
 13. Can now uncheck actions from the completed actions list, so that they dynamically appear back in the uncompleted actions area.
 14. A tiny improvement: the toggling of the individual notes now uses Element.toggle from prototype.js, so it doesn't have to be an onLoad property of the body tag. This means that you don't get the notes flashing before they are hidden when you load or reload a page.
 15. All the adding, updating, deleting and marking actions done is performed using Ajax, so happens without needing to refresh the page.
+16. There's a new setting in settings.yml (staleness_starts) which defines the number of days before which actions get marked as stale. Let's say you set it to 7 days. Actions created between 7 and 14 days ago get marked pale yellow, those created between 14 and 28 days ago (staleness_starts * 2) get
+marked darker yellow, and those created more than 28 days ago (staleness_starts * 3) are fluorescent
+yellow!
+17. Contexts and projects can now be sorted in any order you like. Arrow buttons on the /contexts and /projects pages let you move an item to the top, up, down or to the bottom. For contexts, this affects the order in which they sort on the home page.
 
 ## Version 1.02
 

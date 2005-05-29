@@ -8,7 +8,10 @@
 <div id="context-<%= context.id %>" class="odd_row" style="display:'';">
 <% end %>
 <div class="position">
-  <%= context.position.to_s %>
+  <%= link_to( "&#8670;", {:action => "move_top", :id => context.id}, :title => "Move to top" ) %>
+  <%= link_to( "&#8593;", {:action => "move_up", :id => context.id}, :title => "Move up" ) %>
+  <%= link_to( "&#8595;", {:action => "move_down", :id => context.id}, :title => "Move down" ) %>
+  <%= link_to( "&#8671;", {:action => "move_bottom", :id => context.id}, :title => "Move to bottom" ) %>
 </div>  
 <div class="data">
   <%= link_to( "#{context.name}", :action => "show", :name => urlize(context.name) ) %><%= " (" + Todo.count( "context_id=#{context.id} AND done=0" ).to_s + " actions)" %>

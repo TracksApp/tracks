@@ -8,7 +8,10 @@
 <div id="project-<%= project.id %>" class="odd_row" style="display:'';">
 <% end %>
 <div class="position">
-  <%= project.position.to_s %>
+  <%= link_to( "&#8670;", {:action => "move_top", :id => project.id}, :title => "Move to top" ) %>
+  <%= link_to( "&#8593;", {:action => "move_up", :id => project.id}, :title => "Move up" ) %>
+  <%= link_to( "&#8595;", {:action => "move_down", :id => project.id}, :title => "Move down" ) %>
+  <%= link_to( "&#8671;", {:action => "move_bottom", :id => project.id}, :title => "Move to bottom" ) %>
 </div>  
 <div class="data">
   <%= link_to( "#{project.name}", :action => "show", :name => urlize(project.name) ) %><%= " (" + Todo.count( "project_id=#{project.id} AND done=0" ).to_s + " actions)" %>

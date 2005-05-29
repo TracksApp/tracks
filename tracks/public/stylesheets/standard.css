@@ -315,8 +315,8 @@ input {
 }
 
 /* Positioning the 'cells' in the list */
-.position {text-align: left; width: 5%; float: left;}
-.data {text-align: left; width: 65%; float: left;}
+.position {text-align: left; width: 10%; float: left; font-size: 1.1em;}
+.data {text-align: left; width: 60%; float: left;}
 .buttons {text-align: right; width: 25%; margin-left: 75%;}
 
 table.list {

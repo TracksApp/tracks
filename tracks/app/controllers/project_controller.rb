@@ -140,6 +140,36 @@ class ProjectController < ApplicationController
 	  item.toggle!('done')
 	  render_partial 'show_items', item
 	end
+
+	# Methods for changing the sort order of the projects in the list
+	#
+	def move_up
+	  line = Project.find(params[:id])
+	  line.move_higher
+	  line.save
+	  redirect_to(:controller => "project", :action => "list")
+	end
+
+	def move_down
+	  line = Project.find(params[:id])
+	  line.move_lower
+	  line.save
+	  redirect_to(:controller => "project", :action => "list")
+	end
+
+	def move_top
+	  line = Project.find(params[:id])
+	  line.move_to_top
+	  line.save
+	  redirect_to(:controller => "project", :action => "list")
+	end
+
+	def move_bottom
+	  line = Project.find(params[:id])
+	  line.move_to_bottom
+	  line.save
+	  redirect_to(:controller => "project", :action => "list" )
+	end
 	
 		
 end
