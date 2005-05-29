@@ -245,6 +245,14 @@ h2 a:hover {
 			padding: 1px;
 			font-size: 10px;
 			}
+			
+.info {
+      color: #fff;
+      background: #CCC;
+      border: 1px solid #999;
+      padding: 5px;
+      text-align: center;
+      }
 
 /*  Backgrounds marking out 'staleness' of a task based on age of creation date
     The colour of the background gets progressively yellower with age */

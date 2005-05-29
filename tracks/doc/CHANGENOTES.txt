@@ -17,7 +17,6 @@ Project wiki: <http://www.rousette.org.uk/projects/wiki/>
 2. Removed the section in config/environment.rb which requires Redcloth. This was causing errors because Rails now requires Redcloth itself. This means that you now need to have Redcloth installed as a gem (gem install redcloth) (thanks, Jim).
 3. Fixed SQLite dump format in db/tracks_1.0.2_sqlite.sql (thanks, Jim)
 4. The new item forms on all pages now use a mini calendar which pops up when you click the due date field. Calendar is the GPL one from dynarch.com <http://www.dynarch.com/projects/calendar/>
-5. Added some XMLHTTPRequest calls to speed up checking off an item as done. It grabs the checked item and appends it immediately to a 'holding' section (where you can uncheck it again if it was a mistake, or add a closing note). When you next refresh the page, it will be added to the 'Last 5 completed items' section.
 6. [Contributed by Lolindrath] Toggling of contexts in /todo/list to collapse or expand their display via a small '+' or '-' graphic. This is independent of the shown/hidden setting for contexts, and is ideal for just hiding things on the fly to focus your view.
 7. [Contributed by Jim Ray] Jim added a host of fixes and bits of cleaning up, including a position column for contexts and projects to allow custom sorting, and changes to the links for pages to make them more human-readable.
 8. I added a pop-up calendar to set the due date. This is entirely lifted from Michele's excellent tutorial on pxl8.com <http://www.pxl8.com/calendar_date_picker.html>. It works well, but I need to make sure it doesn't break in postgresql or sqlite.
@@ -32,6 +31,7 @@ Project wiki: <http://www.rousette.org.uk/projects/wiki/>
 marked darker yellow, and those created more than 28 days ago (staleness_starts * 3) are fluorescent
 yellow!
 17. Contexts and projects can now be sorted in any order you like. Arrow buttons on the /contexts and /projects pages let you move an item to the top, up, down or to the bottom. For contexts, this affects the order in which they sort on the home page.
+18. You can mark projects as completed (by editing the project on /projects). In the 'sidebar' active and completed projects are shown separately, but you can still view the completed project.
 
 ## Version 1.02
 

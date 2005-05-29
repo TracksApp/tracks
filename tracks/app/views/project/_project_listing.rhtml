@@ -17,7 +17,13 @@
   <%= link_to( "#{project.name}", :action => "show", :name => urlize(project.name) ) %><%= " (" + Todo.count( "project_id=#{project.id} AND done=0" ).to_s + " actions)" %>
 </div>
 <div class="buttons">
-    <%= link_to_function(image_tag( "edit", :title => "Edit item", :width=>"10", :height=>"10", :border=>"0"), "Element.toggle('project-#{project.id}','project-#{project.id}-edit-form'); new Effect.Appear('project-#{project.id}-edit-form'); Form.focus_first('form-project-#{project.id}');" ) + " " +
+  <% if project.done == 1 -%>
+    <input type="checkbox" value="1" checked="checked" disabled="true" />
+  <% else -%>
+    <input type="checkbox" value="0" disabled="true" />
+  <% end -%>
+  
+  <%= link_to_function(image_tag( "edit", :title => "Edit item", :width=>"10", :height=>"10", :border=>"0"), "Element.toggle('project-#{project.id}','project-#{project.id}-edit-form'); new Effect.Appear('project-#{project.id}-edit-form'); Form.focus_first('form-project-#{project.id}');" ) + " " +
      link_to_remote( image_tag("delete", :title =>"Delete this project"), 
                   :update => "project-#{project.id}-container",
                   :loading => "new Effect.Squish('project-#{project.id}-container')",

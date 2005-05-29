@@ -76,6 +76,20 @@
 	  <li><%= link_to( other_context.name, { :controller => "context", :action => "show", :name => urlize(other_context.name) } ) + " (" + Todo.count( "project_id=#{other_context.id} AND done=0" ).to_s + " actions)" %></li>
 	<% end %>
 	</ul>
+	
+	<h3>Active Projects:</h3>
+	<ul>
+	<% for active_project in Project.find(:all, :conditions => "done=0", :order => "position") %>
+	  <li><%= link_to( active_project.name, { :controller => "project", :action => "show", :name => urlize(active_project.name) } ) + " (" + Todo.count( "project_id=#{active_project.id} AND done=0" ).to_s + " actions)" %></li>
+	<% end %>
+	</ul>
+
+	<h3>Completed Projects:</h3>
+	<ul>
+	<% for done_project in Project.find(:all, :conditions => "done=1", :order => "position") %>
+	  <li><%= link_to( done_project.name, { :controller => "project", :action => "show", :name => urlize(done_project.name) } ) + " (" + Todo.count( "project_id=#{active_project.id} AND done=0" ).to_s + " actions)" %></li>
+	<% end %>
+	</ul>
 </div><!-- End of input box -->
 
 <% if @flash["confirmation"] %><div class="confirmation"><%= @flash["confirmation"] %></div><% end %>

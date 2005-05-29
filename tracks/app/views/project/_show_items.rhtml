@@ -6,7 +6,7 @@
                      :update => "completed",
                      :position => "top",
                      :loading => "Form.disable('checkbox-notdone-#{item.id}');",
-                     :complete => "new Effect.Squish('project-item-#{item.id}-container', true);"
+                     :complete => "new Effect.Squish('item-#{item.id}-container', true);"
                      ) %>
 
 <div id="item-<%= item.id %>">
