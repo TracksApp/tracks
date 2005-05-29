@@ -25,7 +25,7 @@
 <% end %>
 
 <%= link_to_function(image_tag( "edit", :title => "Edit item", :width=>"10", :height=>"10", :border=>"0"), "Element.toggle('context-#{context.id}','context-#{context.id}-edit-form'); new Effect.Appear('context-#{context.id}-edit-form'); Form.focus_first('form-context-#{context.id}');" ) + " " +
-     link_to_remote( image_tag("delete", :title =>"Delete this context"), 
+     link_to_remote( image_tag("delete", :title =>"Delete this context", :height=>"10", :width=>"10", :border=>"0"), 
                   :update => "context-#{context.id}-container",
                   :loading => "new Effect.Squish('context-#{context.id}-container')",
                   :url => { :controller => "context", :action => "destroy", :id => context.id }, :confirm => "Are you sure that you want to delete the context \'#{context.name}\'?" ) %>

@@ -24,7 +24,7 @@
   <% end -%>
   
   <%= link_to_function(image_tag( "edit", :title => "Edit item", :width=>"10", :height=>"10", :border=>"0"), "Element.toggle('project-#{project.id}','project-#{project.id}-edit-form'); new Effect.Appear('project-#{project.id}-edit-form'); Form.focus_first('form-project-#{project.id}');" ) + " " +
-     link_to_remote( image_tag("delete", :title =>"Delete this project"), 
+     link_to_remote( image_tag("delete", :title =>"Delete this project",:width=>"10", :height=>"10", :border=>"0"), 
                   :update => "project-#{project.id}-container",
                   :loading => "new Effect.Squish('project-#{project.id}-container')",
                   :url => { :controller => "project", :action => "destroy", :id => project.id }, :confirm => "Are you sure that you want to delete the project \'#{project.name}\'?" ) %>

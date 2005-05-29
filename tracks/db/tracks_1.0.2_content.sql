@@ -24,9 +24,9 @@ INSERT INTO contexts (id,name,hide, position) VALUES (11,'waiting-for',0, 8);
 -- Dump of table projects
 -- ------------------------------------------------------------
 
-INSERT INTO projects (id,name, position) VALUES (1,'Build a working time machine', 0);
-INSERT INTO projects (id,name, position) VALUES (2,'Make more money than Billy Gates', 1);
-INSERT INTO projects (id,name, position) VALUES (3,'Evict dinosaurs from the garden', 2);
+INSERT INTO projects (id,name,position,done) VALUES (1,'Build a working time machine',1,0);
+INSERT INTO projects (id,name,position,done) VALUES (2,'Make more money than Billy Gates',2,0);
+INSERT INTO projects (id,name,position,done) VALUES (3,'Evict dinosaurs from the garden',3,0);
 
 
 -- Dump of table todos

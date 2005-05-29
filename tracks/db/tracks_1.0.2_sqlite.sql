@@ -8,7 +8,7 @@ CREATE TABLE 'contexts' (
   'id' INTEGER PRIMARY KEY,
   'name' varchar(255) NOT NULL default '',
   'hide' tinyint(4) NOT NULL default '0',
-  position int NOT NULL
+  'position' int NOT NULL
 ) ;
 
 
@@ -19,7 +19,8 @@ CREATE TABLE 'contexts' (
 CREATE TABLE 'projects' (
   'id' INTEGER PRIMARY KEY,
   'name' varchar(255) NOT NULL default '',
-  position int NOT NULL
+  'position' int NOT NULL,
+  'done' tinyint(4) NOT NULL default '0'
 ) ;
 
 

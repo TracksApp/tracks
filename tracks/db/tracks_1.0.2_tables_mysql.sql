@@ -27,6 +27,7 @@ CREATE TABLE `projects` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(255) NOT NULL default '',
   `position` int(11) NOT NULL,
+  `done` tinyint(4) NOT NULL default '0',
   PRIMARY KEY  (`id`)
 ) TYPE=MyISAM;
 

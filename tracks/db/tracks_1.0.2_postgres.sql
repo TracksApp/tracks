@@ -18,6 +18,7 @@ create table projects (
   id serial not null,
   name varchar(255) not null default '',
   position int NOT  NULL,
+  done int not null default 0,
   primary key (id)
 );
 
