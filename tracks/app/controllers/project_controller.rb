@@ -25,8 +25,8 @@ class ProjectController < ApplicationController
   #
 	def show
     @project = Project.find_by_name(@params["name"].humanize)
-    @places = Context.find(:all)
-    @projects = Project.find(:all)    
+    @places = Context.find(:all, :order => "position ASC")
+    @projects = Project.find(:all, :order => "position ASC")    
     @page_title = "TRACKS::Project: #{@project.name}"
     @not_done = Todo.find(:all, :conditions => "done=0 AND project_id=#{@project.id}", 
                           :order => "due IS NULL, due ASC, created ASC")
@@ -61,8 +61,8 @@ class ProjectController < ApplicationController
 	# Edit the details of the action in this project
 	#
 	def update_action
-		@places = Context.find(:all)
-		@projects = Project.find(:all)
+		@places = Context.find(:all, :order => "position ASC")
+		@projects = Project.find(:all, :order => "position ASC")
 		action = Todo.find(params[:id])
 	  action.attributes = @params["item"]
 	  
@@ -84,8 +84,8 @@ class ProjectController < ApplicationController
 	# Parameters from form fields are passed to create new action
 	#
 	def add_item
-	  @projects = Project.find( :all )
-		@places = Context.find( :all )
+	  @projects = Project.find( :all, :order => "position ASC" )
+		@places = Context.find( :all, :order => "position ASC" )
 
 		item = Todo.new
 		item.attributes = @params["new_item"]
@@ -133,8 +133,8 @@ class ProjectController < ApplicationController
 	# Toggles the 'done' status of the action
 	#
 	def toggle_check
-	  @places = Context.find(:all)	
-	  @projects = Project.find(:all)
+	  @places = Context.find(:all, :order => "position ASC")	
+	  @projects = Project.find(:all, :order => "position ASC")
 	  item = Todo.find(@params['id'])
 
 	  item.toggle!('done')

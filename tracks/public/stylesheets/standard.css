@@ -148,6 +148,8 @@ h2 a:hover {
       background-color: transparent;
       text-decoration: none;
       }
+      
+a.refresh, a.refresh:link, a.refresh:active {color: #57A620;}
 			
 #input_box {
       margin-left: 490px;

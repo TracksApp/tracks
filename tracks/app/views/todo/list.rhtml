@@ -10,7 +10,7 @@
 	<% @not_done = Todo.find_all("done=0 AND context_id=#{@shown_place.id}", "due IS NULL, due ASC, created ASC") -%>
 		<% if !@not_done.empty? -%>
 			<div class="contexts">
-			<h2><a href="javascript:toggleSingle('c<%=@shown_place.id%>');javascript:toggleImage('toggle_context_<%=@shown_place.id%>')"><%= image_tag("collapse.png", :name=>"toggle_context_#{@shown_place.id}", :border=>"0") %></a>
+			<h2><a href="javascript:toggleSingle('c<%=@shown_place.id%>');javascript:toggleImage('toggle_context_<%=@shown_place.id%>')" class="refresh"><%= image_tag("collapse.png", :name=>"toggle_context_#{@shown_place.id}", :border=>"0") %></a>
 			<%= link_to( "#{@shown_place.name}", :controller => "context", :action => "show", :name => urlize(@shown_place.name) )  %></h2>
 
 	  <div id="c<%= @shown_place.id %>" class="next_actions">
