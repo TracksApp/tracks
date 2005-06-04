@@ -1,17 +1,21 @@
 <%  context = context_listing %>
-<div id="context-<%= context.id %>-container" class="container">
+<div id="context-<%= context.id %>-container">
 <!-- %= error_messages_for 'context' % -->
-<div id="context-<%= context.id %>-display" class="list">
+<div id="context-<%= context.id %>-display">
 <% if context.position % 2 == 0 %>
 <div id="context-<%= context.id %>" class="even_row" style="display:'';">
 <% else %>
 <div id="context-<%= context.id %>" class="odd_row" style="display:'';">
 <% end %>
 <div class="position">
-  <%= link_to( "&#8670;", {:action => "move_top", :id => context.id}, :title => "Move to top" ) %>
-  <%= link_to( "&#8593;", {:action => "move_up", :id => context.id}, :title => "Move up" ) %>
-  <%= link_to( "&#8595;", {:action => "move_down", :id => context.id}, :title => "Move down" ) %>
-  <%= link_to( "&#8671;", {:action => "move_bottom", :id => context.id}, :title => "Move to bottom" ) %>
+  <%= link_to(image_tag("blank", :title=>"Move to top", :border=>"0", :width=>"16", :height=>"16"),
+              {:action => "move_top", :id => context.id}, :title => "Move to top", :class=>"to_top") %>
+  <%= link_to(image_tag("blank", :title=>"Move up", :border=>"0", :width=>"16", :height=>"16"), 
+              {:action => "move_up", :id => context.id}, :title => "Move up", :class=>"up" ) %>
+  <%= link_to(image_tag("blank", :title=>"Move down", :border=>"0", :width=>"16", :height=>"16"),
+              {:action => "move_down", :id => context.id}, :title => "Move down", :class=>"down") %>
+  <%= link_to(image_tag("blank", :title=>"Move to bottom", :border=>"0", :width=>"16", :height=>"16"),
+              {:action => "move_bottom", :id => context.id}, :title => "Move to bottom", :class=>"to_bottom") %>
 </div>  
 <div class="data">
   <%= link_to( "#{context.name}", :action => "show", :name => urlize(context.name) ) %><%= " (" + Todo.count( "context_id=#{context.id} AND done=0" ).to_s + " actions)" %>
@@ -24,11 +28,11 @@
   <input type="checkbox" value="0" disabled="true" />
 <% end %>
 
-<%= link_to_function(image_tag( "edit", :title => "Edit item", :width=>"10", :height=>"10", :border=>"0"), "Element.toggle('context-#{context.id}','context-#{context.id}-edit-form'); new Effect.Appear('context-#{context.id}-edit-form'); Form.focus_first('form-context-#{context.id}');" ) + " " +
-     link_to_remote( image_tag("delete", :title =>"Delete this context", :height=>"10", :width=>"10", :border=>"0"), 
+<%= link_to_remote( image_tag("blank", :title =>"Delete context", :class=>"delete_item"), 
                   :update => "context-#{context.id}-container",
                   :loading => "new Effect.Squish('context-#{context.id}-container')",
-                  :url => { :controller => "context", :action => "destroy", :id => context.id }, :confirm => "Are you sure that you want to delete the context \'#{context.name}\'?" ) %>
+                  :url => { :controller => "context", :action => "destroy", :id => context.id }, :confirm => "Are you sure that you want to delete the context \'#{context.name}\'?" ) + " " +
+    link_to_function( image_tag( "blank", :title => "Edit context", :class=>"edit_item"), "Element.toggle('context-#{context.id}','context-#{context.id}-edit-form'); new Effect.Appear('context-#{context.id}-edit-form'); Form.focus_first('form-context-#{context.id}');" ) %>
 </div>
 </div><!-- [end:context-context.id] -->
 

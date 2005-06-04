@@ -11,14 +11,18 @@
 
 <div id="item-<%= item.id %>">
   <div class="big-box">
-  <input type="checkbox" name="item_id" value="<%= item.id %>" onclick="document.forms['checkbox-notdone-<%= item.id %>'].onsubmit();" />
   <%=
-	link_to_function(image_tag( "edit", :title => "Edit item", :width=>"10", :height=>"10", :border=>"0"), "Element.toggle('item-#{item.id}','action-#{item.id}-edit-form'); new Effect.Appear('action-#{item.id}-edit-form'); Form.focusFirstElement('form-action-#{item.id}')" ) + " " +
-  link_to_remote( image_tag("delete", :title =>"Delete this action"), 
-                  :update => "item-#{item.id}-container",
-                  :loading => "new Effect.Squish('item-#{item.id}-container')",
-                  :url => { :controller => "todo", :action => "destroy_action", :id => item.id }, :confirm => "Are you sure that you want to delete the action \'#{item.description}\'?" ) + " "
+  link_to_remote( image_tag("blank", :title =>"Delete action", :class=>"delete_item"),
+                    :update => "item-#{item.id}-container",
+                    :loading => "new Effect.Squish('item-#{item.id}-container')",
+                    :url => { :controller => "todo", :action => "destroy_action", :id => item.id },
+                    :confirm => "Are you sure that you want to delete the action, \'#{item.description}\'?") + " " +
+	link_to_function(image_tag( "blank", :title => "Edit action", :class => "edit_item"),
+	"Element.toggle('item-#{item.id}','action-#{item.id}-edit-form'); new Effect.Appear('action-#{item.id}-edit-form'); Form.focusFirstElement('form-action-#{item.id}')" ) + " "
   %>
+  </div>
+  <div class="checkbox">
+  <input type="checkbox" name="item_id" value="<%= item.id %>" onclick="document.forms['checkbox-notdone-<%= item.id %>'].onsubmit();" />
   </div>
   <!-- start of div which has a class 'description' or 'stale_7d', 'stale_14d' etc -->
 	<%= staleness(item.created) %>
@@ -28,7 +32,7 @@
 	  <%= link_to( "[P]", { :controller => "project", :action => "show", :name => urlize(item.project.name) }, :title => "View project: #{item.project.name}" ) %>
 	<% end %>
 	<% if item.notes? %>
-	  <%= "<a href=\"javascript:Element.toggle('" + item.id.to_s + "')\" title=\"Show notes\">" + image_tag( "notes", :width=>"10", :height=>"10", :border=>"0") + "</a>" %>
+	<%= "<a href=\"javascript:Element.toggle('" + item.id.to_s + "')\" class=\"show_notes\" title=\"Show notes\">" + image_tag( "blank", :width=>"16", :height=>"16", :border=>"0" ) + "</a>" %>
 	  <% 	m_notes = markdown( item.notes ) %>
 		<%= "<div class=\"notes\" id=\"" + item.id.to_s + "\" style=\"display:none\">" + m_notes + "</div>" %>
 	<% end %>
@@ -58,14 +62,19 @@
 
 <div id="done-item-<%= item.id %>">
 	<div class="big-box">
-  <input type="checkbox" name="item_id" value="<%= item.id %>" checked="checked" onclick="document.forms['checkbox-done-<%= item.id %>'].onsubmit();" />
   <%=
-  link_to_remote( image_tag("delete", :title =>"Delete this action"), 
+  link_to_remote( image_tag("blank", :title =>"Delete action", :class=>"delete_item"), 
                   :update => "done-item-#{item.id}-container",
                   :loading => "new Effect.Squish('done-item-#{item.id}-container')",
                   :url => { :controller => "todo", :action => "destroy_action", :id => item.id }, :confirm => "Are you sure that you want to delete the action \'#{item.description}\'?" ) + " "
   %>
+  <%= image_tag("blank") %>
   </div><!-- [end:big-box] -->
+  <!-- begin div.checkbox -->
+  <div class="checkbox">
+    <input type="checkbox" name="item_id" value="<%= item.id %>" checked="checked" onclick="document.forms['checkbox-done-<%= item.id %>'].onsubmit();" />
+  </div>
+  <!-- end div.checkbox -->
 	<div class="description">
 	<span class="grey"><%= format_date( item.completed ) %></span>
 	<%= item.description %>
@@ -73,7 +82,7 @@
 	  <%= link_to( "[P]", { :controller => "project", :action => "show", :name => urlize(item.project.name) }, :title => "View project: #{item.project.name}" ) %>
 	<% end %>
 	<% if item.notes? %>
-	  <%= "<a href=\"javascript:Element.toggle('" + item.id.to_s + "')\" title=\"Show notes\">" + image_tag( "notes", :width=>"10", :height=>"10", :border=>"0") + "</a>" %>
+	<%= "<a href=\"javascript:Element.toggle('" + item.id.to_s + "')\" class=\"show_notes\" title=\"Show notes\">" + image_tag( "blank", :width=>"16", :height=>"16", :border=>"0" ) + "</a>" %>
 	  <% 	m_notes = markdown( item.notes ) %>
 		<%= "<div class=\"notes\" id=\"" + item.id.to_s + "\" style=\"display:none\">" + m_notes + "</div>" %>
 	<% end %>

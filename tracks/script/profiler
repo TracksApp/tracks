@@ -1,4 +1,4 @@
-#!/usr/local/bin/ruby
+#!/usr/bin/ruby
 
 if ARGV.empty?
   puts "Usage: profiler 'Person.expensive_method(10)' [times]"

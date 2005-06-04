@@ -1,4 +1,4 @@
-#!/usr/local/bin/ruby
+#!/usr/bin/ruby
 ActiveRecord::Base.lock_mutex
 ActiveRecord::Base.connection.begin_db_transaction
 at_exit do

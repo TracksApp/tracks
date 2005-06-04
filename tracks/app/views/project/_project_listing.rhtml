@@ -8,10 +8,14 @@
 <div id="project-<%= project.id %>" class="odd_row" style="display:'';">
 <% end %>
 <div class="position">
-  <%= link_to( "&#8670;", {:action => "move_top", :id => project.id}, :title => "Move to top" ) %>
-  <%= link_to( "&#8593;", {:action => "move_up", :id => project.id}, :title => "Move up" ) %>
-  <%= link_to( "&#8595;", {:action => "move_down", :id => project.id}, :title => "Move down" ) %>
-  <%= link_to( "&#8671;", {:action => "move_bottom", :id => project.id}, :title => "Move to bottom" ) %>
+  <%= link_to(image_tag("blank", :title=>"Move to top", :border=>"0", :width=>"16", :height=>"16"),
+              {:action => "move_top", :id => project.id}, :title => "Move to top", :class=>"to_top") %>
+  <%= link_to(image_tag("blank", :title=>"Move up", :border=>"0", :width=>"16", :height=>"16"), 
+              {:action => "move_up", :id => project.id}, :title => "Move up", :class=>"up" ) %>
+  <%= link_to(image_tag("blank", :title=>"Move down", :border=>"0", :width=>"16", :height=>"16"),
+              {:action => "move_down", :id => project.id}, :title => "Move down", :class=>"down") %>
+  <%= link_to(image_tag("blank", :title=>"Move to bottom", :border=>"0", :width=>"16", :height=>"16"),
+              {:action => "move_bottom", :id => project.id}, :title => "Move to bottom", :class=>"to_bottom") %>
 </div>  
 <div class="data">
   <%= link_to( "#{project.name}", :action => "show", :name => urlize(project.name) ) %><%= " (" + Todo.count( "project_id=#{project.id} AND done=0" ).to_s + " actions)" %>
@@ -23,11 +27,11 @@
     <input type="checkbox" value="0" disabled="true" />
   <% end -%>
   
-  <%= link_to_function(image_tag( "edit", :title => "Edit item", :width=>"10", :height=>"10", :border=>"0"), "Element.toggle('project-#{project.id}','project-#{project.id}-edit-form'); new Effect.Appear('project-#{project.id}-edit-form'); Form.focus_first('form-project-#{project.id}');" ) + " " +
-     link_to_remote( image_tag("delete", :title =>"Delete this project",:width=>"10", :height=>"10", :border=>"0"), 
+  <%= link_to_remote( image_tag("blank", :title =>"Delete project", :class=>"delete_item"), 
                   :update => "project-#{project.id}-container",
                   :loading => "new Effect.Squish('project-#{project.id}-container')",
-                  :url => { :controller => "project", :action => "destroy", :id => project.id }, :confirm => "Are you sure that you want to delete the project \'#{project.name}\'?" ) %>
+                  :url => { :controller => "project", :action => "destroy", :id => project.id }, :confirm => "Are you sure that you want to delete the project \'#{project.name}\'?" ) + " " +
+      link_to_function(image_tag( "blank", :title => "Edit item", :class=>"edit_item"), "Element.toggle('project-#{project.id}','project-#{project.id}-edit-form'); new Effect.Appear('project-#{project.id}-edit-form'); Form.focus_first('form-project-#{project.id}');" ) %>
 </div>
 </div><!-- [end:project-project.id] -->
 

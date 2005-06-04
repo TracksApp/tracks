@@ -2,7 +2,7 @@
 	
 	<!-- begin div.new_actions -->
 	<div id="new_actions" class="new_actions" style="display:none">
-		<h2>Fresh actions (hit refresh to sort)</h2>
+	  <h2>Fresh actions (hit <a href="javascript:window.location.reload()">refresh</a> to sort)</h2>
 	</div>
 	<!-- end div.new_actions -->
 	
@@ -10,8 +10,8 @@
 	<% @not_done = Todo.find_all("done=0 AND context_id=#{@shown_place.id}", "due IS NULL, due ASC, created ASC") -%>
 		<% if !@not_done.empty? -%>
 			<div class="contexts">
-			<h2><a href="javascript:toggleSingle('c<%=@shown_place.id%>');javascript:toggleImage('toggle_context_<%=@shown_place.id%>')">
-			  	<img src="/images/collapse.png" name="toggle_context_<%= @shown_place.id %>"/></a><%= link_to( "#{@shown_place.name}", :controller => "context", :action => "show", :name => urlize(@shown_place.name) )  %></h2>
+			<h2><a href="javascript:toggleSingle('c<%=@shown_place.id%>');javascript:toggleImage('toggle_context_<%=@shown_place.id%>')"><%= image_tag("collapse.png", :name=>"toggle_context_#{@shown_place.id}", :border=>"0") %></a>
+			<%= link_to( "#{@shown_place.name}", :controller => "context", :action => "show", :name => urlize(@shown_place.name) )  %></h2>
 
 	  <div id="c<%= @shown_place.id %>" class="next_actions">
 	    <% if @not_done.empty? -%>
@@ -42,7 +42,7 @@
 </div><!-- End of display_box -->
 
 <div id="input_box">
-
+  
 <%= link_to_function( "Add the next action in this context &#187;", "Element.toggle('todo_new_action');Element.toggle('new_actions');Form.focusFirstElement('todo-form-new-action');", {:title => "Add the next action [Alt+n]", :accesskey => "n"}) %>
 
   <div id="todo_new_action" class="context_new" style="display:none">
@@ -92,14 +92,14 @@
 	<h3>Active Contexts:</h3>
 	<ul>
 	<% for other_context in Context.find(:all, :conditions => "hide=0", :order => "position ASC") %>
-	  <li><%= link_to( other_context.name, { :controller => "context", :action => "show", :name => urlize(other_context.name) } ) + " (" + Todo.count( "project_id=#{other_context.id} AND done=0" ).to_s + " actions)" %></li>
+	  <li><%= link_to( other_context.name, { :controller => "context", :action => "show", :name => urlize(other_context.name) } ) + " (" + Todo.count( "context_id=#{other_context.id} AND done=0" ).to_s + " actions)" %></li>
 	<% end %>
 	</ul>
 
 	<h3>Hidden Contexts:</h3>
 	<ul>
 	<% for other_context in Context.find(:all, :conditions => "hide=1", :order => "position ASC") %>
-	  <li><%= link_to( other_context.name, { :controller => "context", :action => "show", :name => urlize(other_context.name) } ) + " (" + Todo.count( "project_id=#{other_context.id} AND done=0" ).to_s + " actions)" %></li>
+	  <li><%= link_to( other_context.name, { :controller => "context", :action => "show", :name => urlize(other_context.name) } ) + " (" + Todo.count( "context_id=#{other_context.id} AND done=0" ).to_s + " actions)" %></li>
 	<% end %>
 	</ul>
 </div><!-- End of input box -->

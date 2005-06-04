@@ -2,6 +2,7 @@
 # Likewise will all the methods added be available for all controllers.
 
 require_dependency "login_system"
+require_dependency "math/statistics"
 
 require 'date'
 
@@ -29,5 +30,18 @@ class ApplicationController < ActionController::Base
   def errors_for( obj )
     error_messages_for( obj ) unless instance_eval("@#{obj}").nil?
   end
+  
+  def av_completed
+    completed = Todo.find(:all, :conditions => "done=1")
+    days = []
+    completed.each do |i|
+      days << (i.completed - i.created).to_f
+    end
+    return days.average, days.max
+  end
       
+end
+
+class Array
+  include Math::Statistics
 end

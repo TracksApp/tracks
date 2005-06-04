@@ -1,7 +1,8 @@
 <%
     @item = action_edit_form
 %>
-<!-- %= error_messages_for 'item' % -->
+<%= error_messages_for("item") %>
+
 <%= hidden_field( "item", "id" ) %>
 <table>
 	<tr>

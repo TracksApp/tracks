@@ -32,6 +32,7 @@ marked darker yellow, and those created more than 28 days ago (staleness_starts 
 yellow!
 17. Contexts and projects can now be sorted in any order you like. Arrow buttons on the /contexts and /projects pages let you move an item to the top, up, down or to the bottom. For contexts, this affects the order in which they sort on the home page.
 18. You can mark projects as completed (by editing the project on /projects). In the 'sidebar' active and completed projects are shown separately, but you can still view the completed project.
+19. New images (from eclipse.org) for the edit, delete, notes and up, down, top and bottom buttons. I've made a greyscale version for the default, then the coloured version gets loaded when the mouse is hovering over the button.
 
 ## Version 1.02
 

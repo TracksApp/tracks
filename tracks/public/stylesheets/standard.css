@@ -13,8 +13,6 @@ p {
 			padding: 2px;
 			}
 
-img {border: 0px;}	
-
 a, a:link, a:active, a:visited {
 			color: #cc3334;
 			text-decoration: none;
@@ -26,6 +24,31 @@ a:hover {
 			color: #fff;
 			background-color: #cc3334;
 			}
+			
+			
+/* Rules for the icon links */
+
+img.edit_item {background-image: url(../images/edit_off.png); background-repeat: no-repeat; border: none;}
+a:hover img.edit_item {background-image: url(../images/edit_on.png); background-color: transparent; background-repeat: no-repeat; border: none;}
+
+img.delete_item {background-image: url(../images/delete_off.png); background-repeat: no-repeat; border: none;}
+a:hover img.delete_item {background-image: url(../images/delete_on.png);background-color: transparent;background-repeat: no-repeat; border: none;}
+
+a.to_top {background: transparent url(../images/top_off.png) no-repeat;}
+a.to_top:hover {background: transparent url(../images/top_on.png) no-repeat;}
+
+a.up {background: transparent url(../images/up_off.png) no-repeat;}
+a.up:hover {background: transparent url(../images/up_on.png) no-repeat;}
+
+a.down {background: transparent url(../images/down_off.png) no-repeat;}
+a.down:hover {background: transparent url(../images/down_on.png) no-repeat;}
+
+a.to_bottom {background: transparent url(../images/bottom_off.png) no-repeat;}
+a.to_bottom:hover {background: transparent url(../images/bottom_on.png) no-repeat;}
+
+a.show_notes {background-image: url(../images/notes_off.png); background-repeat: no-repeat; padding: 1px; background-color: transparent;}
+a.show_notes:hover {background-image: url(../images/notes_on.png); background-repeat: no-repeat; padding: 1px; background-color: transparent;}
+
 
 /* Structural divs */
 
@@ -146,14 +169,20 @@ h2 a:hover {
       width: 20px;
       }
 
-.big-box {
-			float: left;
-			width: 55px;
+div.big-box, div.big-box a, div.big-box a:hover {
+      float: left;
 			vertical-align: middle;
+			background-color: transparent;
 			}
-      
+			
+.checkbox {
+      float: left;
+      margin-left: 10px;
+      vertical-align: middle;
+      }
+			
 .description {
-      margin-left: 60px;
+      margin-left: 70px;
       margin-right: 10px;
       }
       
@@ -258,19 +287,19 @@ h2 a:hover {
     The colour of the background gets progressively yellower with age */
     
 .stale_l1 {
-      margin-left: 60px;
+      margin-left: 70px;
       margin-right: 10px;
       background: #ffffCC;
       }
       
 .stale_l2 {
-      margin-left: 60px;
+      margin-left: 70px;
       margin-right: 10px;
       background: #ffff66;
       }
 
 .stale_l3 {
-      margin-left: 60px;
+      margin-left: 70px;
       margin-right: 10px;
       background: #ffff00;
       }
@@ -323,16 +352,35 @@ input {
 }
 
 /* Positioning the 'cells' in the list */
-.position {text-align: left; width: 10%; float: left; font-size: 1.1em;}
-.data {text-align: left; width: 60%; float: left;}
-.buttons {text-align: right; width: 25%; margin-left: 75%;}
-
 table.list {
     margin-top: 0px;
     border-top: 1px solid #ccc;
     border-left: 1px solid #ccc;
     border-right: 1px solid #ccc;
     background: #fff;
+    }
+    
+.position {
+    float: left;
+    }
+
+img.position, a:hover img.position {
+    text-align: left;
+    vertical-align: middle;
+    background-color: transparent;
+    }
+    
+.data {
+    text-align: left;
+    margin-left: 40px;
+    float: left;
+    }
+    
+div.buttons, div.buttons a, div.buttons a:hover {
+    text-align: right;
+    margin-right: 0px;
+    vertical-align: middle;
+    background-color: transparent;
     }
 
 div#list-projects, div#list-contexts {
