@@ -25,7 +25,11 @@
   <!-- end div.checkbox -->
   </div>
   <!-- start of div which has a class 'description' or 'stale_7d', 'stale_14d' etc -->
-  <%= staleness(item.created) %>
+  <% if item.due %>
+    <div class="description">
+  <% else %>
+    <%= staleness(item.created) %>
+  <% end %>
 	<%= due_date( item.due ) %> 
 	<%= item.description %>
 	<% if item.project_id %>
