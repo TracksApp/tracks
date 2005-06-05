@@ -63,34 +63,42 @@
 	</script>
 	
 	</div><!-- [end:project-new-action] -->
-	
-	<h3>Active Projects:</h3>
-	<ul>
-	<% for active_project in Project.find(:all, :conditions => "done=0", :order => "position") %>
-	  <li><%= link_to( active_project.name, { :controller => "project", :action => "show", :name => urlize(active_project.name) } ) + " (" + Todo.count( "project_id=#{active_project.id} AND done=0" ).to_s + " actions)" %></li>
-	<% end %>
-	</ul>
-	
-	<h3>Completed Projects:</h3>
-	<ul>
-	<% for done_project in Project.find(:all, :conditions => "done=1", :order => "position") %>
-	  <li><%= link_to( done_project.name, { :controller => "project", :action => "show", :name => urlize(done_project.name) } ) + " (" + Todo.count( "project_id=#{active_project.id} AND done=0" ).to_s + " actions)" %></li>
-	<% end %>
-	</ul>
-	
-	<h3>Active Contexts:</h3>
-	<ul>
-	<% for other_context in Context.find(:all, :conditions => "hide=0", :order => "position ASC") %>
-	  <li><%= link_to( other_context.name, { :controller => "context", :action => "show", :name => urlize(other_context.name) } ) + " (" + Todo.count( "project_id=#{other_context.id} AND done=0" ).to_s + " actions)" %></li>
-	<% end %>
-	</ul>
 
-	<h3>Hidden Contexts:</h3>
-	<ul>
-	<% for other_context in Context.find(:all, :conditions => "hide=1", :order => "position ASC") %>
-	  <li><%= link_to( other_context.name, { :controller => "context", :action => "show", :name => urlize(other_context.name) } ) + " (" + Todo.count( "project_id=#{other_context.id} AND done=0" ).to_s + " actions)" %></li>
-	<% end %>
-	</ul>
+<h3>Active Projects:</h3>
+<ul>
+  <% for project in Project.list_of -%>
+    <% count = project.count_undone_todos  -%>
+    <li><%= link_to( project.name, { :controller => "project", :action => "show", 
+            :name => urlize(project.name) } ) + " (" + count.to_s + " actions)" %></li>
+  <% end -%>
+</ul>
+
+<h3>Completed Projects:</h3>
+<ul>
+  <% for project in Project.list_of( isdone=1 ) -%>
+    <% count = project.count_undone_todos  -%>
+    <li><%= link_to( project.name, { :controller => "project", :action => "show",
+            :name => urlize(project.name) } ) + " (" + count.to_s + " actions)" %></li>
+  <% end -%>
+</ul>
+
+<h3>Active Contexts:</h3>
+<ul>
+  <% for context in Context.list_of -%>
+    <% count = context.count_undone_todos  -%>
+  <li><%= link_to( context.name, { :controller => "context", :action => "show",
+          :name => urlize(context.name) } ) + " (" + count.to_s + " actions)" %></li>
+  <% end -%>
+</ul>
+
+<h3>Hidden Contexts:</h3>
+<ul>
+  <% for context in Context.list_of( hidden=1 ) -%>
+    <% count = context.count_undone_todos  -%>
+  <li><%= link_to( context.name, { :controller => "context", :action => "show",
+          :name => urlize(context.name) } ) + " (" + count.to_s + " actions)" %></li>
+  <% end -%>
+</ul>
 </div><!-- End of input box -->
 
 <% if @flash["confirmation"] %><div class="confirmation"><%= @flash["confirmation"] %></div><% end %>

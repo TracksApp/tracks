@@ -8,4 +8,13 @@ class Context < ActiveRecord::Base
     validates_presence_of :name, :message => "context must have a name"
     validates_length_of :name, :maximum => 255, :message => "context name must be less than %d"
     validates_uniqueness_of :name, :message => "already exists"
+    
+    def self.list_of(hidden=0)
+     find(:all, :conditions => [ "hide = ?" , hidden ], :order => "position ASC")
+    end
+    
+    def count_undone_todos
+     Todo.count( "context_id=#{self.id} AND done=0" )
+    end
+      
 end

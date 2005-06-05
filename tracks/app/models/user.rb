@@ -24,7 +24,8 @@ class User < ActiveRecord::Base
     write_attribute("word", self.class.sha1(word))
   end
 
-  validates_length_of :password, :login, :within => 5..40
+  validates_length_of :password, :within => 5..40
+  validates_length_of :login, :within => 3..80
   validates_presence_of :password, :login, :word
   validates_uniqueness_of :login, :on => :create
   validates_uniqueness_of :word, :on => :create
