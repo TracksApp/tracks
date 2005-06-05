@@ -23,7 +23,6 @@ class TodoController < ApplicationController
     @hidden_places = Context.find( :all, :conditions => "hide=1", :order => "position ASC" )
 		@done = Todo.find( :all, :conditions => "done=1", :order => "completed DESC",
 		                  :limit => NO_OF_ACTIONS )
-		@av_days_to_completion, @max_days_to_completion = av_completed()
 		
 		# Set count badge to number of not-done, not hidden context items
 		@count = count_shown_items( @hidden_places )
@@ -127,7 +126,7 @@ class TodoController < ApplicationController
 	
 	# Toggles the 'done' status of the action
 	#
-	def toggle_check
+	def toggle_check 
 	  @projects = Project.find(:all, :order => "position ASC")
 		@places = Context.find(:all, :order => "position ASC")
 
