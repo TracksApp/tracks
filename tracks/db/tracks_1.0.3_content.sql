@@ -11,7 +11,7 @@
 -- ------------------------------------------------------------
 
 INSERT INTO contexts (id,name,hide, position) VALUES (1,'agenda',0, 1);
-INSERT INTo contexts (id,name,hide, position) VALUES (2,'call',0, 2);
+INSERT INTO contexts (id,name,hide, position) VALUES (2,'call',0, 2);
 INSERT INTO contexts (id,name,hide, position) VALUES (3,'email',0, 3);
 INSERT INTO contexts (id,name,hide, position) VALUES (4,'errand',0, 4);
 INSERT INTO contexts (id,name,hide, position) VALUES (5,'lab',0, 5);

@@ -30,4 +30,8 @@ class ApplicationController < ActionController::Base
     error_messages_for( obj ) unless instance_eval("@#{obj}").nil?
   end
   
+  def deurlize(name)
+    name.to_s.gsub(/_/, " ")
+  end
+  
 end

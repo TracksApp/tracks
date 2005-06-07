@@ -28,7 +28,7 @@ module ApplicationHelper
 	end
 
   def urlize(name)
-      name.to_s.gsub(/ /, "_").downcase
+      name.to_s.gsub(/ /, "_")
   end
 	
 	

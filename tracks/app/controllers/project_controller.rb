@@ -24,7 +24,7 @@ class ProjectController < ApplicationController
   # e.g. <home>/project/show/<project_name> shows just <project_name>.
   #
 	def show
-    @project = Project.find_by_name(@params["name"].humanize)
+    @project = Project.find_by_name(deurlize(@params["name"]))
     @places = Context.find(:all, :order => "position ASC")
     @projects = Project.find(:all, :order => "position ASC")    
     @page_title = "TRACKS::Project: #{@project.name}"

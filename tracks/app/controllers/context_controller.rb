@@ -24,7 +24,7 @@ class ContextController < ApplicationController
 	# e.g. <home>/project/show/<project_name> shows just <project_name>.
 	#
 	def show
-	  @context = Context.find_by_name(@params["name"].humanize)
+	  @context = Context.find_by_name(deurlize(@params["name"]))
 	  @places = Context.find(:all, :order => "position ASC")
 	  @projects = Project.find(:all, :order => "position ASC")
 	  @page_title = "TRACKS::Context: #{@context.name}"
