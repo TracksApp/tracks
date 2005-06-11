@@ -19,7 +19,7 @@ class FeedController < ApplicationController
     @user_name = @params['name']
     @current_user = User.find_by_login(@user_name)
     if (@token == @current_user.word && @user_name == @current_user.login)
-  		@not_done = Todo.find_all( "done=0", "created DESC" )
+      @not_done = Todo.find_all( "done=0", "created DESC" )
       @headers["Content-Type"] = "text/xml; charset=utf-8"
     else
       render_text "Sorry, you don't have permission to view this page."

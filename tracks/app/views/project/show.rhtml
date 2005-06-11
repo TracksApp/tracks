@@ -44,25 +44,25 @@
                       :loading => "project.reset()",
                       :complete => "Form.focusFirstElement('project-form-new-action');",
                       :html=> { :id=>'project-form-new-action', :name=>'project', :class => 'inline-form' } %>
-	<%= hidden_field( "new_item", "project_id", "value" => "#{@project.id}") %>
-	<label for="new_item_description">Description</label><br />                                          
-	<%= text_field( "new_item", "description", "size" => 25, "tabindex" => 1 ) %><br />
-	<label for="new_item_notes">Notes</label><br />
-	<%= text_area( "new_item", "notes", "cols" => 25, "rows" => 10, "tabindex" => 2 ) %><br />
-	<label for="new_item_context_id">Context</label><br />
-	<select name="new_item[context_id]" id="new_item_context_id" tabindex="3">
-	  <%= options_from_collection_for_select(@places, "id", "name" ) %>
-	</select><br />
-	<label for="item_due">Due</label><br />
-	<%= text_field("new_item", "due", "size" => 10, "class" => "Date", "onFocus" => "Calendar.setup", "tabindex" => 4) %>
-	<br /><br />
-		<input type="submit" value="Add item" tabindex="5">
-	<%= end_form_tag %><!--[eoform:project]-->
-	<script type="text/javascript">
-	Calendar.setup({ ifFormat:"<%= ApplicationController::DATE_FORMAT %>",firstDay:<%= ApplicationController::WEEK_STARTS_ON %>,showOthers:true,range:[2004, 2010],step:1,inputField:"new_item_due",cache:true,align:"TR" })
-	</script>
-	
-	</div><!-- [end:project-new-action] -->
+  <%= hidden_field( "new_item", "project_id", "value" => "#{@project.id}") %>
+  <label for="new_item_description">Description</label><br />                                          
+  <%= text_field( "new_item", "description", "size" => 25, "tabindex" => 1 ) %><br />
+  <label for="new_item_notes">Notes</label><br />
+  <%= text_area( "new_item", "notes", "cols" => 25, "rows" => 10, "tabindex" => 2 ) %><br />
+  <label for="new_item_context_id">Context</label><br />
+  <select name="new_item[context_id]" id="new_item_context_id" tabindex="3">
+    <%= options_from_collection_for_select(@places, "id", "name" ) %>
+  </select><br />
+  <label for="item_due">Due</label><br />
+  <%= text_field("new_item", "due", "size" => 10, "class" => "Date", "onFocus" => "Calendar.setup", "tabindex" => 4) %>
+  <br /><br />
+    <input type="submit" value="Add item" tabindex="5">
+  <%= end_form_tag %><!--[eoform:project]-->
+  <script type="text/javascript">
+  Calendar.setup({ ifFormat:"<%= ApplicationController::DATE_FORMAT %>",firstDay:<%= ApplicationController::WEEK_STARTS_ON %>,showOthers:true,range:[2004, 2010],step:1,inputField:"new_item_due",cache:true,align:"TR" })
+  </script>
+  
+  </div><!-- [end:project-new-action] -->
 
 <h3>Active Projects:</h3>
 <ul>

@@ -1,0 +1,77 @@
+= Tracks: a GTD web application, built with Ruby on Rails
+
+* Homepage: http://www.rousette.org.uk/projects/
+* Author: bsag (http://www.rousette.org.uk/)
+* Contributors: Nicholas Lee, Lolindrath, Jim Ray, Arnaud Limbourg
+* Version: 1.03
+* Copyright: (cc) 2004-2005 rousette.org.uk
+* License: GNU GPL
+
+Main project site: http://www.rousette.org.uk/projects/
+
+Trac (for bug reports and feature requests): http://dev.rousette.org.uk/report/6
+
+Wiki (deprecated - please use Trac): http://www.rousette.org.uk/projects/wiki/
+
+== Version 1.03
+
+13. All the adding, updating, deleting and marking actions done is performed using Ajax, so happens without needing to refresh the page.
+14. There's a new setting in settings.yml ('staleness_starts') which defines the number of days before which actions get marked as stale. Let's say you set it to 7 days. Actions created between 7 and 14 days ago get marked pale yellow, those created between 14 and 28 days ago (staleness_starts x 2) get marked darker yellow, and those created more than 28 days ago (staleness_starts x 3) are fluorescent yellow! This is only applied to items without a due date, so you can add items to be done some time in the future without getting yellow splashed all over the place (thanks to Nicholas for the patch to restrict to items with no due date).
+15. Contexts and projects can now be sorted in any order you like. Arrow buttons on the <tt>/contexts</tt> and <tt>/projects</tt> pages let you move an item to the top, up, down or to the bottom. For contexts, this affects the order in which they sort on the home page. Position is also used to sort the listings of active/completed/hidden contexts and projects in the 'sidebar', and in the dropdown lists on forms.
+16. You can mark projects as completed (by editing the project on <tt>/projects</tt>). In the 'sidebar' active and completed projects are shown separately, but you can still view the completed project.
+17. New images (from eclipse.org) for the edit, delete, notes and up, down, top and bottom buttons. I've made a greyscale version for the default, then the coloured version gets loaded when the mouse is hovering over the button.
+1. Added back border="0" to images which I had mistakenly taken out. This should fix the ugly red border around images that appears in Firefox (thanks, Adam Hughes).
+2. Removed the section in <tt>config/environment.rb</tt> which requires Redcloth. This was causing errors because Rails now requires Redcloth itself. This means that you now need to have Redcloth installed as a gem (gem install redcloth) (thanks, Jim).
+3. SQL dumps are now available for each of the available database formats (MySQL, PostgreSQL and SQLite), as well as a separate file containing some example contents, which should work for all of the formats. These are in the <tt>tracks/db</tt> directory (thanks, Jim)
+4. The new item forms on all pages now use a mini calendar which pops up when you click in the due date field. The calendar is the GPL one from dynarch.com http://www.dynarch.com/projects/calendar/
+5. <b>Contributed by Lolindrath</b>: Toggling of contexts in on the home page to collapse or expand their display via a small '+' or '-' graphic. This is independent of the shown/hidden setting for contexts, and is ideal for just hiding things on the fly to focus your view.
+6. <b>Contributed by Jim Ray</b>: Jim added a host of fixes and bits of cleaning up, including a position column for contexts and projects to allow custom sorting, and changes to the links for pages to make them more human-readable.
+7. <b>Contributed by Nicholas Lee</b>: URLs are now generated using the <tt>url_for</tt> or <tt>link_to</tt> methods, which should mean that people using Tracks in a subdirectory won't have to manually tinker with the URLs to get them to work.
+8. <b>Contributed by Arnaud Limbourg, ticket 18</b>: A new entry in settings.yml allows you to choose the number of completed actions you want to see on the home page. Also sorts by due date (ascending) first, then creation date (descending) on the home page, <tt>/context/show/[name]</tt>, and <tt>/project/show/[name]</tt>.
+9. Counts of next actions are now shown on the <tt>/context/show/[name]</tt> and <tt>/project/show/[name]</tt> pages. These just show how many uncompleted actions you have in the selected context or project.
+10. <b>Patch by lolindrath</b>: Sorting by date is now much smarter on the home page. Actions are sorted by ascending due date then ascending creation date, but non-due dated items sort to the bottom. This means that the most urgent items float to the top of each context list.
+11. You can now uncheck actions from the completed actions list, so that they dynamically appear back in the uncompleted actions area.
+12. A tiny improvement: the toggling of the individual notes now uses Element.toggle from prototype.js, so it doesn't have to be an onLoad property of the body tag. This means that you don't get the notes flashing before they are hidden when you load or reload a page.
+
+== Version 1.02
+
+1. Uses Rails 0.10.0
+2. Added validation for the entry fields. If you enter a bit of text that's too long or you omit the description (not much point in a blank next action!) you'll get an error message and the action won't be saved.
+3. Added action caching.
+4. Did a bit of refactoring to try to make page loading a bit more efficient.
+5. Added a new row to the context table: 'hide'. This determines whether a particular context gets hidden on the main page. If the checkbox on the add new context form is checked, the context is hidden, and isn't listed on the front (todo/list) page. This is useful for contexts like 'wish list' or 'someday/maybe' that you don't want taking up your attention all the time.
+6. Added a list of links to the hidden contexts at the bottom of the page.
+7. Changed the method of adding due dates to drop-down option lists. It's more obvious and less error prone than typing in the date. Your preferences for date formatting are still honoured when displaying due dates.
+8. Added a favicon, kindly produced by Jim Ray.
+9. Added border="0" to the button images to stop Firefox putting a red border around them.
+10. Added a new path:, base: setting in settings.yml. This is used in constructing URLs in standard.rhtml and other places for the javascripts and stylesheets. You need to specify it in the format <tt>http://my.domain.tld/subdir/tracks</tt>, or whatever the full URL is. This should help people who put Tracks in a subdirectory.
+11. Added some rudimentary sorting of completed items. They are now sorted in to done today, done in the last 7 days and done in the last 31 days. At the bottom of completed.rhtml, there's a link to completed_archive.rhtml, which shows archived items older than 31 days.
+12. Changed the method of generating links to stylesheet and javascripts. Together with the new Routes, this should sort out any problems with putting Tracks in a sub-directory.
+13. config/environment.rb now checks to see if a gem version of Redcloth is installed that is greater than version 3.0.3. If that fails, it falls back on the packaged lib version. Note that there's an odd bug I can't seem to pin down that means that if you are using the packaged lib version, you'll get some errors like: <tt>./script/../config/..//lib/redcloth.rb:169: warning: already initialized constant VERSION</tt> or <tt>./script/../config/..//lib/redcloth.rb:170: warning: already initialized constant DEFAULT_RULES</tt> but ONLY if you're using the development environment; with production it's fine, and with the gem version of Redcloth it's fine in both environments.
+13. Modified the 'count' badge on todo/list: now shows the number of uncompleted items in contexts that <b>aren't</b> hidden (i.e. the actions actually listed on todo/list). Number of items in hidden contexts are shown in parentheses after the link to that context. So you don't forget about that stuff ;-)
+14. Protected RSS and text feeds at last! The appropriate URLs can be copied from the RSS and TXT links in the navigation bar. The URL includes the login name of the current user, and an MD5 encoded string of the 'word' field of the users table. This is checked against users to make sure it's valid; if it is, the feed is displayed, if not, you get an error message.
+15. Better signup system implemented. The users table has another new column, 'is_admin'. If no users have been created, the first user to sign in is made the admin user. If the admin user (while logged in), visits the signup page, the form indicates that this user can create a new user (who won't have admin rights). If anyone who is not not logged in and not an admin user visits signup, they are greeted with a message that they don't have permission to create an account, and should contact the admin. I've made a new field in settings.yml to hold your admin email address for this purpose. This should mean that you can safely leave signup.rhtml intact on a public server.
+16. Added a list of other contexts and projects to the context/show/[id] and project/show/[id] pages, so that you can easily navigate between the filtered views of contexts and projects, without having to go back to context/list or project/list.
+
+== Version 1.01
+
+A small increment to fix a few bugs and typographical errors in the README:
+
+1. README.txt now lists the correct location for the dump file
+2. Fixed the redirection from the login page. Once you have signed up or logged in, you should be taken automatically to the main todo/list page. This also works once you have logged out and clicked the "<< login" page to get back to <tt>login/login</tt>. (Thanks, Max Prophet!)
+3. Properly updated for Rails 0.9.3: this probably means that it won't work for a lower version of Rails. If you have the gems version of Rails installed, you can update it with: <tt>sudo gem update rails</tt>
+4. Made some minor changes to the appearance of the listed items, so that the description wraps properly, and the tool buttons (edit, delete and notes) are always in the same place relative to the checkbox.
+
+== Version 1.0
+
+1. Updated to run on Rails 0.9.1. This should work with any 0.9.x branch.
+2. Added a proper edit page for todos. This also allows you to add a todo to a project, or re-assign it to a new project.
+3. Improved the efficiency of the Projects page: it now only finds the Project you've selected, rather than all of them (thanks, Johan http://theexciter.com/!)
+4. You now get a warning if you try to delete a project or context with undone items. If you choose to continue, the dependent items will be deleted, so that the list page should no longer break.
+5. Using Redcloth for markup now that it allows you to use either Textile or Markdown format transparently. This is now included in the distribution, so that you don't need to install it.
+6. Added links to context/list page so that you can go directly to <tt>todo/show/blah</tt> if you click the link for context 'blah'.
+7. You can now set the date format you want to use in the file config/settings.yml. Use the strftime formats, with whatever separator you like. e.g. If you want 2004-12-31, the correct format is <tt>%Y-%m-%d</tt>. 31/12/2004 would be <tt>%d/%m/%Y</tt>. The same format is used for entry of the date in the due date box, and for display of the date in the list.
+8. You can now add a new item to a particular project when you are viewing it at <tt>/project/show/[id]</tt>. This makes it easy to add a block of next actions to a project. Edit and delete buttons work on this page, but redirect you to <tt>/todo/list</tt>. I need to fix this.
+9. Added a login system by using the login_generator: http://wiki.rubyonrails.com/rails/show/LoginGenerator. The first time you access the system, you need to visit <tt>[tracks_url]/login/signup</tt> to enter a username and password. Then when you visit, you will be greeted with a login page. This stores a temporary cookie for your session. The whole app is protected by the login.
+10. You can now add a new item to a particular context when you are viewing it at <tt>/context/show/[id]</tt>. This makes it easy to add a block of next actions to a project. Edit and delete buttons work on this page, but redirect you to <tt>/todo/list</tt>. I need to fix this.
+11. Feeds! There's an RSS feed available at <tt>[tracks_url]/feed/na_feed</tt> which shows the last 15 next actions, and a text feed at <tt>[tracks_url]/feed/na_text</tt> which gives you a plain text list of all your next actions, sorted by context. You can use the latter to display your next actions on the desktop with GeekTool. Simply set up a shell command containing the following: <tt>curl http://[tracks_url]/feed/na_text</tt>. Obviously, you need to replace [tracks_url] with the actual URL to the Tracks application.

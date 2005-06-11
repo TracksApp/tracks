@@ -10,25 +10,25 @@ module FeedHelper
     for @place in @places
       result_string << "\n" + @place.name.upcase + ":\n"
 
-  	  list.each do |@item|
-  	  if @item.context_id == @place.id
-  	  
-    	  if @item.due
-    	    result_string << "    [" + format_date(@item.due) + "] "
-    	    result_string << @item.description + " "
-    	  else
-    	    result_string << "    " + @item.description + " "
-    	  end
-  	  
-      	if @item.project_id
-      	  result_string << "(" + @item.project['name'] + ")"
-      	end
-    	result_string << "\n"
-    	end
-    	
-  	  end
-  	end
-  	return result_string
+      list.each do |@item|
+      if @item.context_id == @place.id
+      
+        if @item.due
+          result_string << "    [" + format_date(@item.due) + "] "
+          result_string << @item.description + " "
+        else
+          result_string << "    " + @item.description + " "
+        end
+      
+        if @item.project_id
+          result_string << "(" + @item.project['name'] + ")"
+        end
+      result_string << "\n"
+      end
+      
+      end
+    end
+    return result_string
   end
   
 end

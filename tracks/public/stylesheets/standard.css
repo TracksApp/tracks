@@ -1,31 +1,31 @@
 /* Stylesheet for the main listing page */
 
 body {
-			font-family: "Lucida Grande", Verdana, Geneva, Arial, sans-serif;
+      font-family: "Lucida Grande", Verdana, Geneva, Arial, sans-serif;
       font-size: 12px;
       line-height: 19px;
-			padding: 0px 10px;
-			margin: 0px;
-			background: #eee;
-			}
+      padding: 0px 10px;
+      margin: 0px;
+      background: #eee;
+      }
 
 p {
-			padding: 2px;
-			}
+      padding: 2px;
+      }
 
 a, a:link, a:active, a:visited {
-			color: #cc3334;
-			text-decoration: none;
-			padding-left: 1px;
-			padding-right: 1px;
-			}
-			
+      color: #cc3334;
+      text-decoration: none;
+      padding-left: 1px;
+      padding-right: 1px;
+      }
+      
 a:hover {
-			color: #fff;
-			background-color: #cc3334;
-			}
-			
-			
+      color: #fff;
+      background-color: #cc3334;
+      }
+      
+      
 /* Rules for the icon links */
 
 img.edit_item {background-image: url(../images/edit_off.png); background-repeat: no-repeat; border: none;}
@@ -53,22 +53,22 @@ a.show_notes:hover {background-image: url(../images/notes_on.png); background-re
 /* Structural divs */
 
 #display_box {
-			float: left;
-			width: 450px;
-			margin: 0px 15px 50px 15px;
-			}
-			
+      float: left;
+      width: 450px;
+      margin: 0px 15px 50px 15px;
+      }
+      
 #full_width_display {
-			float: left;
-			width: 800px;
-			margin: 0px 15px 50px 15px;
-			}
+      float: left;
+      width: 800px;
+      margin: 0px 15px 50px 15px;
+      }
 
 #display_box_projects {
-			float: left;
-			width: 820px;
-			margin: 0px 15px 50px 15px;
-			}
+      float: left;
+      width: 820px;
+      margin: 0px 15px 50px 15px;
+      }
 
 /* Navigation links at the top */
 
@@ -76,73 +76,73 @@ a.show_notes:hover {background-image: url(../images/notes_on.png); background-re
       margin: 15px;
       width: 822px;
       }
-      			
+            
 #navlist {
-			margin: 0;
-			padding: 0 0 20px 10px;
-			border-bottom: 1px solid #000;
-			}
+      margin: 0;
+      padding: 0 0 20px 10px;
+      border-bottom: 1px solid #000;
+      }
 
 #navlist ul, #navlist li {
-			margin: 0;
-			padding: 0;
-			display: inline;
-			list-style-type: none;
-			}
+      margin: 0;
+      padding: 0;
+      display: inline;
+      list-style-type: none;
+      }
 
 #navlist a:link, #navlist a:visited {
-			float: left;
-			line-height: 14px;
-			font-weight: bold;
-			margin: 0 10px 4px 10px;
-			text-decoration: none;
-			color: #999;
-			}
+      float: left;
+      line-height: 14px;
+      font-weight: bold;
+      margin: 0 10px 4px 10px;
+      text-decoration: none;
+      color: #999;
+      }
 
 #navlist a:link#current, #navlist a:visited#current, #navlist a:hover {
-			border-bottom: 4px solid #000;
-			padding-bottom: 2px;
-			background: transparent;
-			color: #000;
-			}
+      border-bottom: 4px solid #000;
+      padding-bottom: 2px;
+      background: transparent;
+      color: #000;
+      }
 
 #navlist a:hover { color: #000; }
-		
+    
 .contexts {
-			padding: 0px 5px 2px 5px;
-			border: 1px solid #999;
-			margin: 0px 0px 15px 0px;
-			background: #fff;
-			}
-			
+      padding: 0px 5px 2px 5px;
+      border: 1px solid #999;
+      margin: 0px 0px 15px 0px;
+      background: #fff;
+      }
+      
 .contexts h2 {
-			background: #CCC;
-			padding: 5px;
-			margin-top: 0px;
-			margin-left: -5px;
-			margin-right: -5px;
-			color: #fff;
-			text-shadow: rgba(0,0,0,.4) 0px 2px 5px;
-			}
+      background: #CCC;
+      padding: 5px;
+      margin-top: 0px;
+      margin-left: -5px;
+      margin-right: -5px;
+      color: #fff;
+      text-shadow: rgba(0,0,0,.4) 0px 2px 5px;
+      }
 
 .new_actions {
-			padding: 0px 5px 2px 5px;			
-			background: #E7FDDE;
-			border: 1px solid #57A620;
-			padding: 5px;
-			margin-bottom: 15px;
-			}
-			
+      padding: 0px 5px 2px 5px;      
+      background: #E7FDDE;
+      border: 1px solid #57A620;
+      padding: 5px;
+      margin-bottom: 15px;
+      }
+      
 .new_actions h2 {
-			padding: 0 px 5px 0px 5px;
-			color: #57A620;
-			}			
+      padding: 0 px 5px 0px 5px;
+      color: #57A620;
+      }      
 
 h2 a, h2 a:link, h2 a:active, h2 a:visited {
-			color: #fff;
-			text-decoration: none;
-			}
-			
+      color: #fff;
+      text-decoration: none;
+      }
+      
 h2 a:hover {
       color: #cc3334;
       background-color: transparent;
@@ -150,19 +150,19 @@ h2 a:hover {
       }
       
 a.refresh, a.refresh:link, a.refresh:active {color: #57A620;}
-			
+      
 #input_box {
       margin-left: 490px;
       margin-top: 20px;
       width: 313px;
-			padding: 0px 15px 0px 15px;
-			/* border: 1px solid #999; */
-			}
-			
+      padding: 0px 15px 0px 15px;
+      /* border: 1px solid #999; */
+      }
+      
 #input_box h2 {
-			color: #999;
-			
-			}
+      color: #999;
+      
+      }
 
 #input_box ul {list-style-type: circle; font-size: 0.9em;}
 
@@ -173,16 +173,16 @@ a.refresh, a.refresh:link, a.refresh:active {color: #57A620;}
 
 div.big-box, div.big-box a, div.big-box a:hover {
       float: left;
-			vertical-align: middle;
-			background-color: transparent;
-			}
-			
+      vertical-align: middle;
+      background-color: transparent;
+      }
+      
 .checkbox {
       float: left;
       margin-left: 10px;
       vertical-align: middle;
       }
-			
+      
 .description {
       margin-left: 70px;
       margin-right: 10px;
@@ -196,87 +196,87 @@ div.big-box, div.big-box a, div.big-box a:hover {
             
 #footer {
       clear: both;
-		  font-size: 0.8em;
-			text-align: center;
-			color: #999;
-			margin: 20px 20px 5px 20px;
-			padding: 0px;
-			}
-			
-/* The notes which may be attached to an item */			
+      font-size: 0.8em;
+      text-align: center;
+      color: #999;
+      margin: 20px 20px 5px 20px;
+      padding: 0px;
+      }
+      
+/* The notes which may be attached to an item */      
 .notes {
       margin: 5px 20px;
-			padding: 3px;
-			border: 1px solid #F5ED59;
-			background: #FAF6AE;
-			color: #666666;
-			}
-			
+      padding: 3px;
+      border: 1px solid #F5ED59;
+      background: #FAF6AE;
+      color: #666666;
+      }
+      
 .notes p, .notes li {
-			padding: 1px 5px;
-			margin: 0px;
-			font-size: 12px;
-			}
-			
+      padding: 1px 5px;
+      margin: 0px;
+      font-size: 12px;
+      }
+      
 .notes ul {
-			list-style-type: disc;
-			margin-left: 5px;
+      list-style-type: disc;
+      margin-left: 5px;
 }
 
 .notes ol {
-			list-style-type: decimal;
-			margin-left: 5px;
+      list-style-type: decimal;
+      margin-left: 5px;
 }
-			
+      
 /* The alert box notifications */
 .confirmation {
       margin: 20px 50px 20px 490px;
-			border: 1px solid #007E00; 
-			background-color: #c2ffc2;
-			padding: 5px;
-			color: #007E00;
-			text-align: center;
-			}
-		
+      border: 1px solid #007E00; 
+      background-color: #c2ffc2;
+      padding: 5px;
+      color: #007E00;
+      text-align: center;
+      }
+    
 .warning {
       margin: 20px 50px 20px 490px;
-			border: 1px solid #ED2E38; 
-			background-color: #F6979C;
-			padding: 5px;
-			color: #ED2E38;
-			text-align: center;
-			}
-							
-/* 	Draw attention to some text 
-		Same format as traffic lights */
+      border: 1px solid #ED2E38; 
+      background-color: #F6979C;
+      padding: 5px;
+      color: #ED2E38;
+      text-align: center;
+      }
+              
+/*   Draw attention to some text 
+    Same format as traffic lights */
 .red {
-			color: #fff;
-			background: #f00;
-			padding: 1px;
-			font-size: 10px;
-			}
-			
+      color: #fff;
+      background: #f00;
+      padding: 1px;
+      font-size: 10px;
+      }
+      
 .amber {
-			color: #fff;
-			background: #ff6600;
-			padding: 1px;
-			font-size: 10px;
-			}
+      color: #fff;
+      background: #ff6600;
+      padding: 1px;
+      font-size: 10px;
+      }
 
 .green {
-			color: #fff;
-			background: #33cc00;
-			padding: 1px;
-			font-size: 10px;
-			}
-			
+      color: #fff;
+      background: #33cc00;
+      padding: 1px;
+      font-size: 10px;
+      }
+      
 .grey {
-			color: #fff;
-			background: #999;
-			padding: 1px;
-			font-size: 10px;
-			}
-			
+      color: #fff;
+      background: #999;
+      padding: 1px;
+      font-size: 10px;
+      }
+      
 .info {
       color: #fff;
       background: #CCC;
@@ -310,22 +310,22 @@ div.big-box, div.big-box a, div.big-box a:hover {
 /* Shows the number of undone next action */
 .badge {
       color: #fff;
-			background: #f00;
-			padding: 5px;
-			font-size: 16px;
-			margin: 10px 10px 0px 0px;
+      background: #f00;
+      padding: 5px;
+      font-size: 16px;
+      margin: 10px 10px 0px 0px;
 }
-				
+        
 ul    {
-			list-style-type: none;
-			margin-left: -25px;
-			}
-			
+      list-style-type: none;
+      margin-left: -25px;
+      }
+      
 li    {
-			font-size: 1.1em;
-			padding: 3px 0px;
-			}
-			
+      font-size: 1.1em;
+      padding: 3px 0px;
+      }
+      
 .even_row {
       background: #fff;
       padding: 5px 5px 5px 10px;
@@ -346,8 +346,8 @@ li    {
 /* Right align labels in forms */
 
 .label {
-			text-align: right;
-			}
+      text-align: right;
+      }
       
 input {
       vertical-align: middle;
