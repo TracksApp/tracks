@@ -1,6 +1,9 @@
-The main README.txt file is in tracks/doc/README.txt, and the change log in tracks/doc/CHANGENOTES.txt.
+The main README file is in tracks/doc/README_FOR_APP, and the change log in tracks/doc/CHANGELOG. If you downloaded this application as a *.zip file, then there is documentation for the app in tracks/doc/app. If you open the index.html file in a browser, you can view the documentation for the methods, as well as viewing README_FOR_APP and CHANGELOG in more attractive format. If you checked out the application with Subversion, you need to generate the documentation. Navigate inside the tracks directory in a terminal, then issue the following command:
+  rake appdoc
+  
+This will generate the documentation as above in tracks/doc/app.
 
-The database structure dump file (with some test contents) is in tracks/db/tracks_dump 03.01.2005.sql, which you can import into your database.
+Database schemas for MySQL, PostgreSQL and SQLite are available in tracks/db, along with some example contents in tracks_1.0.3_content.sql.
 
 ** IMPORTANT **
 
