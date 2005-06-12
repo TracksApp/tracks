@@ -17,7 +17,7 @@ class ProjectController < ApplicationController
   #
   def list
     @page_title = "TRACKS::List Projects"
-    @projects = Project.find( :all, :conditions => "done=0", :order => "position ASC" )
+    @projects = Project.find( :all, :order => "position ASC" )
   end
   
   # Filter the projects to show just the one passed in the URL
