@@ -13,8 +13,19 @@ class Context < ActiveRecord::Base
      find(:all, :conditions => [ "hide = ?" , hidden ], :order => "position ASC")
     end
     
-    def count_undone_todos
-     Todo.count( "context_id=#{self.id} AND done=0" )
+    # Returns a count of next actions in the given context
+    # The result is count and a string descriptor, correctly pluralised if there are no
+    # actions or multiple actions
+    #
+    def count_undone_todos(string="actions")
+      count = Todo.count( "context_id=#{self.id} AND done=0" )
+      
+      if count == 1
+        word = string.singularize
+      else
+        word = string.pluralize
+      end
+        return count.to_s + " " + word
     end
       
 end

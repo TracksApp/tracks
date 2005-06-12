@@ -66,36 +66,32 @@
 <h3>Active Projects:</h3>
 <ul>
   <% for project in Project.list_of -%>
-    <% count = project.count_undone_todos  -%>
     <li><%= link_to( project.name, { :controller => "project", :action => "show", 
-            :name => urlize(project.name) } ) + " (" + count.to_s + " actions)" %></li>
+            :name => urlize(project.name) } ) + " (" + project.count_undone_todos("actions") + ")" %></li>
   <% end -%>
 </ul>
 
 <h3>Completed Projects:</h3>
 <ul>
   <% for project in Project.list_of( isdone=1 ) -%>
-    <% count = project.count_undone_todos  -%>
     <li><%= link_to( project.name, { :controller => "project", :action => "show",
-            :name => urlize(project.name) } ) + " (" + count.to_s + " actions)" %></li>
+            :name => urlize(project.name) } ) + " (" + project.count_undone_todos("actions") + ")" %></li>
   <% end -%>
 </ul>
 
 <h3>Active Contexts:</h3>
 <ul>
   <% for context in Context.list_of -%>
-    <% count = context.count_undone_todos  -%>
   <li><%= link_to( context.name, { :controller => "context", :action => "show",
-          :name => urlize(context.name) } ) + " (" + count.to_s + " actions)" %></li>
+          :name => urlize(context.name) } ) + " (" + context.count_undone_todos("actions") + ")" %></li>
   <% end -%>
 </ul>
 
 <h3>Hidden Contexts:</h3>
 <ul>
   <% for context in Context.list_of( hidden=1 ) -%>
-    <% count = context.count_undone_todos  -%>
   <li><%= link_to( context.name, { :controller => "context", :action => "show",
-          :name => urlize(context.name) } ) + " (" + count.to_s + " actions)" %></li>
+          :name => urlize(context.name) } ) + " (" + context.count_undone_todos("actions") + ")" %></li>
   <% end -%>
 </ul>
 
