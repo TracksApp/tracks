@@ -26,7 +26,7 @@ class ContextController < ApplicationController
   def show
     @context = Context.find_by_name(deurlize(@params["name"]))
     @places = Context.find(:all, :order => "position ASC")
-    @projects = Project.find(:all, :order => "position ASC")
+    @projects = Project.find( :all, :conditions => "done=0", :order => "position ASC" )
     @page_title = "TRACKS::Context: #{@context.name}"
     @not_done = Todo.find(:all, :conditions => "done=0 AND context_id=#{@context.id}", 
                           :order => "due IS NULL, due ASC, created ASC")
@@ -64,7 +64,7 @@ class ContextController < ApplicationController
   #  
   def update_action
     @places = Context.find(:all, :order => "position ASC")
-    @projects = Project.find(:all, :order => "position ASC")
+    @projects = Project.find( :all, :conditions => "done=0", :order => "position ASC" )
     action = Todo.find(params[:id])
     action.attributes = @params["item"]
     if action.due?
@@ -85,7 +85,7 @@ class ContextController < ApplicationController
   # Parameters from form fields are passed to create new action
   #
   def add_item
-    @projects = Project.find( :all, :order => "position ASC" )
+    @projects = Project.find( :all, :conditions => "done=0", :order => "position ASC" )
     @places = Context.find( :all, :order => "position ASC" )
 
     item = Todo.new
@@ -134,7 +134,7 @@ class ContextController < ApplicationController
   #
   def toggle_check
     @places = Context.find(:all, :order => "position ASC")
-    @projects = Project.find(:all, :order => "position ASC")
+    @projects = Project.find( :all, :conditions => "done=0", :order => "position ASC" )
     
     item = Todo.find(params[:id])
 

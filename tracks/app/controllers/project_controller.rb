@@ -17,7 +17,7 @@ class ProjectController < ApplicationController
   #
   def list
     @page_title = "TRACKS::List Projects"
-    @projects = Project.find(:all, :conditions => nil, :order => "position ASC")
+    @projects = Project.find( :all, :conditions => "done=0", :order => "position ASC" )
   end
   
   # Filter the projects to show just the one passed in the URL
@@ -26,7 +26,7 @@ class ProjectController < ApplicationController
   def show
     @project = Project.find_by_name(deurlize(@params["name"]))
     @places = Context.find(:all, :order => "position ASC")
-    @projects = Project.find(:all, :order => "position ASC")    
+    @projects = Project.find( :all, :conditions => "done=0", :order => "position ASC" )
     @page_title = "TRACKS::Project: #{@project.name}"
     @not_done = Todo.find(:all, :conditions => "done=0 AND project_id=#{@project.id}", 
                           :order => "due IS NULL, due ASC, created ASC")
@@ -62,7 +62,7 @@ class ProjectController < ApplicationController
   #
   def update_action
     @places = Context.find(:all, :order => "position ASC")
-    @projects = Project.find(:all, :order => "position ASC")
+    @projects = Project.find( :all, :conditions => "done=0", :order => "position ASC" )
     action = Todo.find(params[:id])
     action.attributes = @params["item"]
     
@@ -84,7 +84,7 @@ class ProjectController < ApplicationController
   # Parameters from form fields are passed to create new action
   #
   def add_item
-    @projects = Project.find( :all, :order => "position ASC" )
+    @projects = Project.find( :all, :conditions => "done=0", :order => "position ASC" )
     @places = Context.find( :all, :order => "position ASC" )
 
     item = Todo.new
@@ -134,7 +134,7 @@ class ProjectController < ApplicationController
   #
   def toggle_check
     @places = Context.find(:all, :order => "position ASC")  
-    @projects = Project.find(:all, :order => "position ASC")
+    @projects = Project.find( :all, :conditions => "done=0", :order => "position ASC" )
     item = Todo.find(@params['id'])
 
     item.toggle!('done')
