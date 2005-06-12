@@ -22,9 +22,9 @@
 </div>
 <div class="buttons">
   <% if project.done == 1 -%>
-    <input type="checkbox" value="1" checked="checked" disabled="true" />
+    <span class="grey">COMPLETED</span>
   <% else -%>
-    <input type="checkbox" value="0" disabled="true" />
+    <span class="grey">ACTIVE</span>
   <% end -%>
   
   <%= link_to_remote( image_tag("blank", :title =>"Delete project", :class=>"delete_item"), 

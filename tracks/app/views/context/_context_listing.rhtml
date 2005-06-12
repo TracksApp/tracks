@@ -23,9 +23,9 @@
 
 <div class="buttons">
 <% if context.hide == 1 %>
-  <input type="checkbox" value="1" checked="checked" disabled="true" />
+  <span class="grey">HIDDEN</span>
 <% else %>
-  <input type="checkbox" value="0" disabled="true" />
+  <span class="grey">VISIBLE</span>
 <% end %>
 
 <%= link_to_remote( image_tag("blank", :title =>"Delete context", :class=>"delete_item"), 
