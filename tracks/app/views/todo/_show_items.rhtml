@@ -6,7 +6,7 @@
                      :update => "completed",
                      :position => "top",
                      :loading => "Form.disable('checkbox-notdone-#{item.id}');",
-                     :complete => "new Effect.Squish('item-#{item.id}-container', true);"
+                     :complete => "new Effect2.Fade('item-#{item.id}-container', true);"
                      ) %>
 
 <div id="item-<%= item.id %>">
@@ -14,7 +14,7 @@
   <%=
   link_to_remote( image_tag("blank", :title =>"Delete action", :class=>"delete_item"),
                     :update => "item-#{item.id}-container",
-                    :loading => "new Effect.Squish('item-#{item.id}-container')",
+                    :loading => "new Effect2.Fade('item-#{item.id}-container', true)",
                     :url => { :controller => "todo", :action => "destroy_action", :id => item.id },
                     :confirm => "Are you sure that you want to delete the action, \'#{item.description}\'?") + " " +
   link_to_function(image_tag( "blank", :title => "Edit action", :class => "edit_item"),
@@ -61,7 +61,7 @@
                      :update => "new_actions",
                      :position => "bottom",
                      :loading => "Form.disable('checkbox-done-#{item.id}');",
-                     :complete => "Element.toggle('new_actions');new Effect.Squish('done-item-#{item.id}-container', true);"
+                     :complete => "Element.toggle('new_actions');new Effect2.Fade('done-item-#{item.id}-container', true);"
                      ) %>
 
 <div id="done-item-<%= item.id %>">
@@ -69,7 +69,7 @@
   <%=
   link_to_remote( image_tag("blank", :title =>"Delete action", :class=>"delete_item"), 
                   :update => "done-item-#{item.id}-container",
-                  :loading => "new Effect.Squish('done-item-#{item.id}-container')",
+                  :loading => "new Effect2.Fade('done-item-#{item.id}-container', true)",
                   :url => { :controller => "todo", :action => "destroy_action", :id => item.id }, :confirm => "Are you sure that you want to delete the action \'#{item.description}\'?" ) + " "
   %>
   <%= image_tag("blank") %>

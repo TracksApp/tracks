@@ -6,7 +6,7 @@
                      :update => "completed",
                      :position => "top",
                      :loading => "Form.disable('checkbox-notdone-#{item.id}');",
-                     :complete => "new Effect.Squish('item-#{item.id}-container', true);"
+                     :complete => "new Effect2.Fade('item-#{item.id}-container', true);"
                      ) %>
 
 <div id="item-<%= item.id %>">
@@ -14,7 +14,7 @@
   <%=
   link_to_remote( image_tag("blank", :title =>"Delete action", :class=>"delete_item"), 
                   :update => "item-#{item.id}-container",
-                  :loading => "new Effect.Squish('item-#{item.id}-container')",
+                  :loading => "new Effect2.Fade('item-#{item.id}-container', true)",
                   :url => { :controller => "project", :action => "destroy_action", :id => item.id }, :confirm => "Are you sure that you want to delete the action \'#{item.description}\'?" ) + " " +
   link_to_function(image_tag( "blank", :title => "Edit action", :class=>"edit_item"), "Element.toggle('item-#{item.id}','action-#{item.id}-edit-form'); new Effect.Appear('action-#{item.id}-edit-form'); Form.focusFirstElement('form-action-#{item.id}');" ) + " "
   %>
@@ -49,7 +49,7 @@
 <%= form_remote_tag  :url => { :controller => 'project', :action => 'update_action', :id => item.id },
                :html => { :id => "form-action-#{item.id}", :class => "inline-form" },
                :update => "item-#{item.id}-container",
-               :complete => "new Effect.Appear('item-#{item.id}-container');" %>
+               :complete => "new Effect.Appear('item-#{item.id}-container', true);" %>
   <%= render_partial 'todo/action_edit_form', item %>
 <%= end_form_tag %>
 </div><!-- [end:action-item.id-edit-form] -->
@@ -62,7 +62,7 @@
                      :update => "next_actions",
                      :position => "bottom",
                      :loading => "Form.disable('checkbox-done-#{item.id}');",
-                     :complete => "new Effect.Squish('done-item-#{item.id}-container', true);"
+                     :complete => "new Effect2.Fade('done-item-#{item.id}-container', true);"
                      ) %>
 
 <div id="done-item-<%= item.id %>">
@@ -70,7 +70,7 @@
   <%=
   link_to_remote( image_tag("blank", :title =>"Delete action", :class=>"delete_item"), 
                   :update => "done-item-#{item.id}-container",
-                  :loading => "new Effect.Squish('done-item-#{item.id}-container')",
+                  :loading => "new Effect2.Fade('done-item-#{item.id}-container', true)",
                   :url => { :controller => "project", :action => "destroy_action", :id => item.id }, :confirm => "Are you sure that you want to delete the action \'#{item.description}\'?" ) + " "
   %>
   </div><!-- [end:big-box] -->

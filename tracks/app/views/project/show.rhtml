@@ -45,7 +45,7 @@
                       :update=> "next_actions",
                       :position=> "bottom",
                       :loading => "project.reset()",
-                      :complete => "Form.focusFirstElement('project-form-new-action');",
+                      :complete => "Form.focusFirstElement('project-form-new-action'); new Effect.Highlight('next_actions');",
                       :html=> { :id=>'project-form-new-action', :name=>'project', :class => 'inline-form' } %>
   <%= hidden_field( "new_item", "project_id", "value" => "#{@project.id}") %>
   <label for="new_item_description">Description</label><br />                                          

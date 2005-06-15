@@ -31,7 +31,7 @@
 
 <%= link_to_remote( image_tag("blank", :title =>"Delete context", :class=>"delete_item"), 
                   :update => "context-#{context.id}-container",
-                  :loading => "new Effect.Squish('context-#{context.id}-container')",
+                  :loading => "new Effect2.Fade('context-#{context.id}-container', true)",
                   :url => { :controller => "context", :action => "destroy", :id => context.id }, :confirm => "Are you sure that you want to delete the context \'#{context.name}\'?" ) + " " +
     link_to_function( image_tag( "blank", :title => "Edit context", :class=>"edit_item"), "Element.toggle('context-#{context.id}','context-#{context.id}-edit-form'); new Effect.Appear('context-#{context.id}-edit-form'); Form.focus_first('form-context-#{context.id}');" ) %>
 </div>

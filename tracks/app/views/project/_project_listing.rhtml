@@ -29,7 +29,7 @@
   
   <%= link_to_remote( image_tag("blank", :title =>"Delete project", :class=>"delete_item"), 
                   :update => "project-#{project.id}-container",
-                  :loading => "new Effect.Squish('project-#{project.id}-container')",
+                  :loading => "new Effect2.Fade('project-#{project.id}-container', true)",
                   :url => { :controller => "project", :action => "destroy", :id => project.id }, :confirm => "Are you sure that you want to delete the project \'#{project.name}\'?" ) + " " +
       link_to_function(image_tag( "blank", :title => "Edit item", :class=>"edit_item"), "Element.toggle('project-#{project.id}','project-#{project.id}-edit-form'); new Effect.Appear('project-#{project.id}-edit-form'); Form.focus_first('form-project-#{project.id}');" ) %>
 </div>
