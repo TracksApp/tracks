@@ -33,6 +33,35 @@
   </div>
 </div><!-- [end:contexts] -->
 
+<!-- begin div.contexts -->
+<% @notes = Note.list_of(@project.id) -%>
+<div class="contexts">
+
+<div id="notes">
+  <h2>Notes</h2>
+  <% for note in @notes -%>
+    <%= render_partial "note/notes_summary", note %>
+  <% end -%>
+</div>
+</div>
+<!-- end div.contexts -->
+
+<%= link_to_function( "Add a note",
+                      "Element.toggle('new-note'); Form.focusFirstElement('form-new-note');") %>
+                      
+<div id="new-note" style="display:none;">
+<%= form_remote_tag :url => { :controller => "note", :action => "add_note" },
+                    :update => "notes",
+                    :position => "bottom",
+                    :complete => "new Effect.Highlight('notes');",
+                    :html => {:id=>'form-new-note', :class => 'inline-form'} %>
+<%= hidden_field( "new_note", "project_id", "value" => "#{@project.id}" ) %>
+<%= text_area( "new_note", "body", "cols" => 50, "rows" => 3, "tabindex" => 1 ) %>
+<br /><br />
+<input type="submit" value="Add note" tabindex="2" />
+<%= end_form_tag %>
+</div>
+
 </div><!-- [end:display_box] -->
 
 <div id="input_box">

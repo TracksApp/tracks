@@ -13,6 +13,12 @@ Trac (for bug reports and feature requests): http://dev.rousette.org.uk/report/6
 
 Wiki (deprecated - please use Trac): http://www.rousette.org.uk/projects/wiki/
 
+== Version 1.04
+
+1. Tidied up the interface a bit, fixing mistakes in the wording.
+2. The number of actions reported is now correctly pluralized depending on the number of actions (e.g. 1 action, 2 actions).
+3. Added a Note model and notes database table. Notes have their own interface (/notes lists them all, and /note/1 shows note id 1), but they are displayed on the /project/show/[name] page. For now, notes belong to a particular project, and are added from the /project/show/[name] pages. You can delete and edit notes either from the /notes page or from the /note/[id] page. Notes use Textile/Markdown formatting.
+
 == Version 1.03
 
 13. All the adding, updating, deleting and marking actions done is performed using Ajax, so happens without needing to refresh the page.

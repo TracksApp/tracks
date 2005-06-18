@@ -64,4 +64,17 @@ CREATE TABLE `users` (
 ) TYPE=MyISAM;
 
 
+-- Dump of table notes
+-- ------------------------------------------------------------
+
+CREATE TABLE `notes` (
+  `id` int(11) NOT NULL auto_increment,
+  `project_id` int(11) NOT NULL default '0',
+  `body` text,
+  `created_at` datetime NOT NULL default '0000-00-00 00:00:00',
+  `updated_at` datetime default '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`)
+) TYPE=MyISAM;
+
+
 

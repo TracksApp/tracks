@@ -156,7 +156,6 @@ a.refresh, a.refresh:link, a.refresh:active {color: #57A620;}
       margin-top: 20px;
       width: 313px;
       padding: 0px 15px 0px 15px;
-      /* border: 1px solid #999; */
       }
       
 #input_box h2 {
@@ -227,6 +226,35 @@ div.big-box, div.big-box a, div.big-box a:hover {
       list-style-type: decimal;
       margin-left: 5px;
 }
+
+/* The notes for the project */
+
+div.note_wrapper {
+      margin: 3px;
+      padding: 2px;
+      }
+
+div.note_wrapper p {
+      display: inline;
+      }
+      
+div.note_footer {
+      border-top: 1px solid #999;
+      padding-top: 3px;
+      font-style: italic;
+      font-size: 0.9em;
+      color: #666;
+      }
+
+div.note_footer a, div.note_footer a:hover {
+      border-top: none;
+      padding-top: 0px;
+      vertical-align: middle;
+      background-color: transparent;
+      }
+
+a.footer_link {color: #cc3334; font-style: normal;}
+a.footer_link:hover {color: #fff; background-color: #cc3334 !important;}
       
 /* The alert box notifications */
 .confirmation {

@@ -141,6 +141,7 @@ class ProjectController < ApplicationController
     render_partial 'show_items', item
   end
   
+  
   # Methods for changing the sort order of the projects in the list
   #
   def move_up

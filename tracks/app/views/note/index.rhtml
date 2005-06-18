@@ -1,0 +1,7 @@
+<div id="display_box_projects">
+  <% for notes in @all_notes -%>
+    <div class="contexts" id="note-<%= notes.id %>-wrapper">
+      <%= render_partial "notes", notes %>
+    </div>
+  <% end -%>
+</div>

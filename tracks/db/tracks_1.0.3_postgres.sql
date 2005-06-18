@@ -54,3 +54,15 @@ create table users (
 
 -- Set the sequence to the proper value
 select setval('users_id_seq', (select max(id) from users));
+
+create table notes (
+  id serial not null,
+  project_id int not null default 0,
+  body text,
+  created_at timestamp default null,
+  updated_at timestamp default null,
+  primary key (id)
+);
+
+-- Set the sequence to the proper value
+select setval('notes_id_seq', (select max(id) from notes));

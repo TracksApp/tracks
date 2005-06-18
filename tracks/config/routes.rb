@@ -37,6 +37,12 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'project/:name', :controller => 'project', :action => 'show'
   map.connect 'project/:id', :controller => 'project', :action => 'show'
   
+  # Notes Routes
+  map.connect 'note/add_note', :controller => 'note', :action => 'add_note'
+  map.connect 'note/update_note/:id', :controller => 'note', :action => 'update_note', :id => 'id'
+  map.connect 'note/:id', :controller => 'note', :action => 'show', :id => 'id'
+  map.connect 'notes', :controller => 'note', :action => 'index'
+  
   # Feed Routes
   map.connect 'feed/:action/:name/:user', :controller => 'feed' 
 

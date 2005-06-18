@@ -28,6 +28,7 @@
   <li><%= link_to( "Contexts", {:controller => "context", :action => "list"}, {:accesskey=>"c", :title=>"Contexts AccessKey: Alt+C"} ) %></li>
   <li><%= link_to( "Projects", {:controller => "project", :action => "list"}, {:accesskey=>"p", :title=>"Projects AccessKey: Alt+P"} ) %></li>
   <li><%= link_to( "Completed", {:controller => "todo", :action => "completed"}, {:accesskey=>"d", :title=>"Completed AccessKey: Alt+D"} ) %></li>
+  <li><%= link_to( "Notes", {:controller => "note", :action => "index"}, :title => "Show all notes" ) %></li>
   <li><a href="javascript:toggleAll('notes','block')" accesskey="S" title="Show all notes AccessKey: Alt+S">Show</a></li>
   <li><a href="javascript:toggleAll('notes','none')" accesskey="H" title="Show all notes AccessKey: Alt+H">Hide</a></li>
   <li><%= link_to("<span class=\"feed\">RSS</span>", {:controller => "feed", :action => "na_feed", :name => "#{@session['user']['login']}", :token => "#{@session['user']['word']}"}, :title => "Subscribe to an RSS feed of your next actions" ) %></li>

@@ -1,6 +1,7 @@
 class Project < ActiveRecord::Base
    
     has_many :todo, :dependent => true
+    has_many :note
     acts_as_list
     
     # Project name must not be empty
