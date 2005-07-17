@@ -36,6 +36,9 @@
 <!-- begin div.contexts -->
 <% @notes = Note.list_of(@project.id) -%>
 <div class="contexts">
+<% if @notes.empty? -%>
+  <p>There are no notes yet for this project.</p>
+<% end -%>
 
 <div id="notes">
   <h2>Notes</h2>
