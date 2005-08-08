@@ -11,7 +11,8 @@
   <%= javascript_include_tag 'calendar', 'calendar-en', 'calendar-setup' %>
   
   <link rel="shortcut icon" href="<%= url_for(:controller => 'favicon.ico') %>" />
-    
+  <%= auto_discovery_link_tag(:rss,{:controller => "feed", :action => "na_feed", :name => "#{@session['user']['login']}", :token => "#{@session['user']['word']}"}, {:title => "RSS feed of next actions"})  %>
+
 <title><%= @page_title %></title>
 
 </head>

@@ -4,11 +4,11 @@ class NotesTest < Test::Unit::TestCase
   fixtures :notes
 
   def setup
-    @notes = Notes.find(1)
+    @notes = Note.find(1)
   end
 
   # Replace this with your real tests.
   def test_truth
-    assert_kind_of Notes,  @notes
+    assert_kind_of Note,  @notes
   end
 end

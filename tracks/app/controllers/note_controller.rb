@@ -1,22 +1,26 @@
 class NoteController < ApplicationController
-  
+
+  model :user
+  before_filter :login_required
+
   layout "standard"
-  
+
   def index
-    @all_notes = Note.list_all
+    @user = @session['user']
+    @all_notes = @user.notes
     @page_title = "TRACKS::All notes"
   end
-  
+
   def show
-    @note = Note.find(@params[:id])
+    @note = check_user_return_note
     @page_title = "TRACKS::Note " + @note.id.to_s
   end
-  
+
   # Add a new note to this project
   #
-  def add_note
-    
-    note = Note.new
+  def add
+    @user = @session['user']
+    note = @user.notes.build
     note.attributes = @params["new_note"]
 
     if note.save
@@ -25,9 +29,9 @@ class NoteController < ApplicationController
       render_text ""
     end
   end
-  
-  def destroy_note
-    note = Note.find_by_id(@params[:id])
+
+  def delete
+    note = check_user_return_note
     if note.destroy
       render_text ""
     else
@@ -35,9 +39,9 @@ class NoteController < ApplicationController
       render_text ""
     end
   end
-  
-  def update_note
-    note = Note.find_by_id(@params[:id])
+
+  def update
+    note = check_user_return_note
     note.attributes = @params["note"]
       if note.save
         render_partial 'notes', note
@@ -46,5 +50,15 @@ class NoteController < ApplicationController
         render_text ""
       end
   end
-  
+
+  protected
+
+    def check_user_return_note
+      note = Note.find_by_id( @params['id'] )
+      if @session['user'] == note.user
+        return note
+      else
+        render_text ""
+      end
+    end
 end

@@ -16,7 +16,7 @@
   <tr>
     <td class="label"><label for="item_context_id">Context</label></td>
         <td><select name="item[context_id]" id="item_context_id" tabindex="3">
-          <% for @place in @places %>
+          <% for @place in @contexts %>
             <% if @item %>
               <% if @place.id == @item.context_id %>
                 <option value="<%= @place.id %>" selected="selected"><%= @place.name %></option>
@@ -52,8 +52,5 @@
         <a href="javascript:void(0);" onclick="Element.toggle('item-<%= @item.id %>','action-<%= @item.id %>-edit-form');Form.reset('form-action-<%= @item.id %>');">Cancel</a></td>
   </tr>
 </table>
-<script type="text/javascript">
-Calendar.setup({ ifFormat:"<%= ApplicationController::DATE_FORMAT %>",firstDay:<%= ApplicationController::WEEK_STARTS_ON %>,showOthers:true,range:[2004, 2010],step:1,inputField:"due_<%= @item.id %>",cache:true,align:"TR" })
-</script>
-
+<%= calendar_setup( "due_#{@item.id}" ) %>
 <% @item = nil %>

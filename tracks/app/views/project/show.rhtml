@@ -12,48 +12,40 @@
     <% elsif @not_done.empty? -%>
       <p>There are no next actions yet in this project</p>
     <% else -%>
-      <% for item in @not_done -%>
-        <%= render_partial "show_items", item %>
-      <% end -%>
+      <%= render :partial => "show_items", :collection => @not_done %>
     <% end -%>
   </div><!-- [end:next_actions] -->
 </div><!-- [end:contexts] -->
-  
+
 <div class="contexts">
   <h2>Completed actions in this project</h2>
-  
+
   <div id="completed">
     <% if @done.empty? %>
       <p>There are no completed next actions yet in this project</p>
     <% else %>
-      <% for done_item in @done %>
-        <%= render_partial "show_items", done_item %>
-      <% end %>
+      <%= render :partial => "show_items", :collection => @done %>
     <% end %>
   </div>
 </div><!-- [end:contexts] -->
 
 <!-- begin div.contexts -->
-<% @notes = Note.list_of(@project.id) -%>
 <div class="contexts">
-<% if @notes.empty? -%>
-  <p>There are no notes yet for this project.</p>
-<% end -%>
-
-<div id="notes">
-  <h2>Notes</h2>
-  <% for note in @notes -%>
-    <%= render_partial "note/notes_summary", note %>
+ <div id="notes">
+ <h2>Notes</h2>
+  <% if @notes.empty? -%>
+    <p>There are no notes yet for this project.</p>
+  <% else -%>
+    <%= render :partial => "note/notes_summary", :collection => @notes %>
   <% end -%>
-</div>
+  </div>
 </div>
 <!-- end div.contexts -->
 
-<%= link_to_function( "Add a note",
-                      "Element.toggle('new-note'); Form.focusFirstElement('form-new-note');") %>
-                      
+<%= link_to_function( "Add a note", "Element.toggle('new-note'); Form.focusFirstElement('form-new-note');") %>
+
 <div id="new-note" style="display:none;">
-<%= form_remote_tag :url => { :controller => "note", :action => "add_note" },
+<%= form_remote_tag :url => { :controller => "note", :action => "add" },
                     :update => "notes",
                     :position => "bottom",
                     :complete => "new Effect.Highlight('notes');",
@@ -73,7 +65,7 @@
 
   <div id="project_new_action" class="project_new" style="display:none">
   <!--[form:project]-->
-  <%= form_remote_tag :url => { :action => "add_item" },
+  <%= form_remote_tag :url => { :controller => "todo", :action => "add_item" },
                       :update=> "next_actions",
                       :position=> "bottom",
                       :loading => "project.reset()",
@@ -86,50 +78,18 @@
   <%= text_area( "new_item", "notes", "cols" => 25, "rows" => 10, "tabindex" => 2 ) %><br />
   <label for="new_item_context_id">Context</label><br />
   <select name="new_item[context_id]" id="new_item_context_id" tabindex="3">
-    <%= options_from_collection_for_select(@places, "id", "name" ) %>
+    <%= options_from_collection_for_select(@contexts, "id", "name" ) %>
   </select><br />
   <label for="item_due">Due</label><br />
   <%= text_field("new_item", "due", "size" => 10, "class" => "Date", "onFocus" => "Calendar.setup", "tabindex" => 4) %>
   <br /><br />
     <input type="submit" value="Add item" tabindex="5">
   <%= end_form_tag %><!--[eoform:project]-->
-  <script type="text/javascript">
-  Calendar.setup({ ifFormat:"<%= ApplicationController::DATE_FORMAT %>",firstDay:<%= ApplicationController::WEEK_STARTS_ON %>,showOthers:true,range:[2004, 2010],step:1,inputField:"new_item_due",cache:true,align:"TR" })
-  </script>
-  
+  <%= calendar_setup(  "new_item_due" ) %>
+
   </div><!-- [end:project-new-action] -->
 
-<h3>Active Projects:</h3>
-<ul>
-  <% for project in Project.list_of -%>
-    <li><%= link_to( project.name, { :controller => "project", :action => "show", 
-            :name => urlize(project.name) } ) + " (" + project.count_undone_todos("actions") + ")" %></li>
-  <% end -%>
-</ul>
-
-<h3>Completed Projects:</h3>
-<ul>
-  <% for project in Project.list_of( isdone=1 ) -%>
-    <li><%= link_to( project.name, { :controller => "project", :action => "show",
-            :name => urlize(project.name) } ) + " (" + project.count_undone_todos("actions") + ")" %></li>
-  <% end -%>
-</ul>
-
-<h3>Active Contexts:</h3>
-<ul>
-  <% for context in Context.list_of -%>
-  <li><%= link_to( context.name, { :controller => "context", :action => "show",
-          :name => urlize(context.name) } ) + " (" + context.count_undone_todos("actions") + ")" %></li>
-  <% end -%>
-</ul>
-
-<h3>Hidden Contexts:</h3>
-<ul>
-  <% for context in Context.list_of( hidden=1 ) -%>
-  <li><%= link_to( context.name, { :controller => "context", :action => "show",
-          :name => urlize(context.name) } ) + " (" + context.count_undone_todos("actions") + ")" %></li>
-  <% end -%>
-</ul>
+<%= render "shared/sidebar" %>
 </div><!-- End of input box -->
 
 <% if @flash["confirmation"] %><div class="confirmation"><%= @flash["confirmation"] %></div><% end %>

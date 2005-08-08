@@ -1,11 +1,12 @@
 class TodoController < ApplicationController
-  
+
   helper :todo
-  model :context, :project
-  
+  model :context, :project, :user
+
   before_filter :login_required
   layout "standard"
-    
+
+
   def index
     list
     render_action "list"
@@ -16,106 +17,93 @@ class TodoController < ApplicationController
   # Number of completed actions to show is determined by a setting in settings.yml
   #
   def list
+    self.init
     @page_title = "TRACKS::List tasks"
-    @projects = Project.find( :all, :conditions => "done=0", :order => "position ASC" )
-    @places = Context.find( :all, :order => "position ASC" )
-    @shown_places = Context.find( :all, :conditions => "hide=0", :order => "position ASC" )
-    @hidden_places = Context.find( :all, :conditions => "hide=1", :order => "position ASC" )
-    @done = Todo.find( :all, :conditions => "done=1", :order => "completed DESC",
-                      :limit => NO_OF_ACTIONS )
-    
-    # Set count badge to number of not-done, not hidden context items
-    @count = count_shown_items( @hidden_places )
-  end
+    @done = @done[0..(NO_OF_ACTIONS-1)]
 
+    # Set count badge to number of not-done, not hidden context items
+    @count = @todos.collect { |x| ( !x.done? and !x.context.hidden? ) ? x:nil }.compact.size
+  end
 
   # List the completed tasks, sorted by completion date
   #
   # Use days declaration? 1.day.ago?
   def completed
+    self.init
     @page_title = "TRACKS::Completed tasks"
-    today_date = Date::today() - 1
-    today_query = today_date.strftime("'%Y-%m-%d'") + " <= completed"
 
-    week_begin = Date::today() - 2
-    week_end = Date::today() - 7
+    day = (60 * 60 * 24)
+    today = Time.now
 
-    week_query = week_begin.strftime("'%Y-%m-%d'") + " >= completed 
-                  AND " + week_end.strftime("'%Y-%m-%d'") + " <= completed"
+    today_date = today - 1 * day
+    week_begin = today - 2 * day
+    week_end = today - 7* day
+    month_begin = today - 8 * day
+    month_end = today - 31 * day
 
-    month_begin = Date::today() - 8
-    month_end = Date::today() - 31
+    @done_today = @done.collect { |x| today_date <= x.completed ? x:nil }.compact
+    @done_this_week = @done.collect { |x| week_begin >= x.completed && week_end <= x.completed ? x:nil }.compact
+    @done_this_month = @done.collect { |x| month_begin >= x.completed && month_end <= x.completed ? x:nil }.compact
 
-    month_query = month_begin.strftime("'%Y-%m-%d'") + " >= completed 
-                  AND " + month_end.strftime("'%Y-%m-%d'") + " <= completed"
-
-    @done_today = Todo.find_by_sql( "SELECT * FROM todos WHERE done = 1 AND #{today_query} 
-                  ORDER BY completed DESC;" )
-    @done_this_week = Todo.find_by_sql( "SELECT * FROM todos WHERE done = 1 AND #{week_query} 
-                  ORDER BY completed DESC;" )
-    @done_this_month = Todo.find_by_sql( "SELECT * FROM todos WHERE done = 1 AND #{month_query}     
-                  ORDER BY completed DESC;" )
   end
-  
+
   # Archived completed items, older than 31 days
   #
   def completed_archive
+    self.init
     @page_title = "TRACKS::Archived completed tasks"
-    archive_date = Date::today() - 32
-    archive_query = archive_date.strftime("'%Y-%m-%d'") + " >= completed"
-    @done_archive = Todo.find_by_sql( "SELECT * FROM todos WHERE done = 1 AND #{archive_query} 
-                  ORDER BY completed DESC;" )
+    archive_date = Time.now - 32 * (60 * 60 * 24)
+    @done_archive = @done.collect { |x| archive_date >= x.completed ? x:nil }.compact
   end
-  
+
   # Called by a form button
   # Parameters from form fields are passed to create new action
   # in the selected context.
   def add_item
-    @projects = Project.find( :all, :conditions => "done=0", :order => "position ASC" )
-    @places = Context.find( :all, :order => "position ASC" )
-
-    item = Todo.new
+    self.init
+    item = @user.todos.build
     item.attributes = @params["new_item"]
-    
+
     if item.due?
       item.due = Date.strptime(@params["new_item"]["due"], DATE_FORMAT)
     else
       item.due = ""
     end
 
-     if item.save
-       render_partial 'show_items', item
-     else
-       flash["warning"] = "Couldn't add next action  \"#{item.description}\""
-       render_text ""
-     end
-  end
-  
-  # Edit the details of an action
-  #  
-  def update_action
-    @places = Context.find(:all, :order => "position ASC")
-    @projects = Project.find( :all, :conditions => "done=0", :order => "position ASC" )
-    action = Todo.find(params[:id])
-    action.attributes = @params["item"]
-    if action.due?
-      action.due = Date.strptime(@params["item"]["due"], DATE_FORMAT)
+    if item.save
+      render :partial => 'item', :object => item
     else
-      action.due = ""
+      flash["warning"] = "Couldn't add next action  \"#{item.description}\""
+      render_text ""
     end
-    
-    if action.save
-      render_partial 'show_items', action
+  end
+
+  # Edit the details of an action
+  #
+  def update_action
+    self.init
+
+    item = check_user_return_item
+    item.attributes = @params["item"]
+
+    if item.due?
+      item.due = Date.strptime(@params["item"]["due"], DATE_FORMAT)
+    else
+      item.due = ""
+    end
+
+    if item.save
+      render :partial => 'item', :object => item
     else
       flash["warning"] = "Couldn't update the action"
       render_text ""
     end
   end
-  
+
   # Delete a next action in a context
   #
   def destroy_action
-    item = Todo.find(@params['id'])
+    item = check_user_return_item
     if item.destroy
       render_text ""
     else
@@ -123,17 +111,34 @@ class TodoController < ApplicationController
       render_text ""
     end
   end
-  
+
   # Toggles the 'done' status of the action
   #
-  def toggle_check 
-    @projects = Project.find( :all, :conditions => "done=0", :order => "position ASC" )
-    @places = Context.find(:all, :order => "position ASC")
+  def toggle_check
+    self.init
 
-    item = Todo.find(@params['id'])
-
+    item = check_user_return_item
     item.toggle!('done')
-    render_partial 'show_items', item
-  end  
-  
+    render :partial => 'item', :object => item
+  end
+
+  protected
+
+    def check_user_return_item
+      item = Todo.find( @params['id'] )
+      if @session['user'] == item.user
+        return item
+      else
+        flash["warning"] = "Item and session user mis-match: #{item.user.name} and #{@session['user'].name}!"
+        render_text ""
+      end
+    end
+
+    def init
+      @user = @session['user']
+      @projects = @user.projects
+      @contexts = @user.contexts
+      @todos = @user.todos
+      @done = @todos.collect { |x|  x.done? ? x:nil }.compact.sort! {|x,y| y.completed <=> x.completed }
+    end
 end

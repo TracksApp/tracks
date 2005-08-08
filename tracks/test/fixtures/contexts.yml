@@ -1,1 +1,46 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+agenda:
+  id: 1
+  name: agenda
+  user_id: 1
+
+call:
+  id: 2
+  name: call
+  user_id: 1
+
+email:
+  id: 3
+  name: email
+  user_id: 1
+
+errand:
+  id: 4
+  name: errand
+  user_id: 1
+
+lab:
+  id: 5
+  name: lab
+  user_id: 1
+
+library:
+  id: 6
+  name: library
+  user_id: 1
+
+freetime:
+  id: 7
+  name: freetime
+  user_id: 1
+
+office:
+  id: 8
+  name: office
+  user_id: 1
+
+waitingfor:
+  id: 9
+  name: waiting for
+  user_id: 1

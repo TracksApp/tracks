@@ -1,0 +1,31 @@
+<h3>Active Projects:</h3>
+<ul>
+  <% for project in @projects.collect { |x| x.done? ? nil:x }.compact -%>
+    <li><%= link_to( project.name, { :controller => "project", :action => "show", 
+            :name => urlize(project.name) } ) + " (" + project.count_undone_todos("actions") + ")" %></li>
+  <% end -%>
+</ul>
+
+<h3>Completed Projects:</h3>
+<ul>
+  <% for project in @projects.collect { |x| x.done? ? x:nil }.compact -%>
+    <li><%= link_to( project.name, { :controller => "project", :action => "show",
+            :name => urlize(project.name) } ) + " (" + project.count_undone_todos("actions") + ")" %></li>
+  <% end -%>
+</ul>
+
+<h3>Active Contexts:</h3>
+<ul>
+  <% for context in @contexts.collect { |x| x.hidden? ? nil:x }.compact -%>
+  <li><%= link_to( context.name, { :controller => "context", :action => "show",
+          :name => urlize(context.name) } ) + " (" + context.count_undone_todos("actions") + ")" %></li>
+  <% end -%>
+</ul>
+
+<h3>Hidden Contexts:</h3>
+<ul>
+  <% for context in @contexts.collect { |x| x.hidden? ? x:nil }.compact -%>
+  <li><%= link_to( context.name, { :controller => "context", :action => "show",
+          :name => urlize(context.name) } ) + " (" + context.count_undone_todos("actions") + ")" %></li>
+  <% end -%>
+</ul>

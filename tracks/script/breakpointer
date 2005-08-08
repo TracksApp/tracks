@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/ruby1.8
 require 'rubygems'
 require_gem 'rails'
 require 'breakpoint_client'

@@ -1,6 +1,6 @@
 # The methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
-  
+
   # Convert a date object to the format specified
   # in config/settings.yml
   #
@@ -19,8 +19,7 @@ module ApplicationHelper
   def markdown(text)
     RedCloth.new(text).to_html
   end
-  
-  
+
   # Wraps object in HTML tags, tag
   #
   def tag_object(object, tag)
@@ -32,8 +31,8 @@ module ApplicationHelper
   def urlize(name)
       name.to_s.gsub(/ /, "_")
   end
-  
-  
+
+
   # Check due date in comparison to today's date
   # Flag up date appropriately with a 'traffic light' colour code
   #
@@ -41,7 +40,7 @@ module ApplicationHelper
     if due == nil
       return ""
     end
-    
+
     @now = Date.today
     @days = due-@now
     case @days
@@ -56,7 +55,7 @@ module ApplicationHelper
         "<span class=\"green\">" + format_date(due) + "</span> "
     end
   end
-  
+
   # Uses the 'staleness_starts' value from settings.yml (in days) to colour
   # the background of the action appropriately according to the age
   # of the creation date:
@@ -64,16 +63,22 @@ module ApplicationHelper
   # * l2: created more than 2 x staleness_starts, but < 3 x staleness_starts
   # * l3: created more than 3 x staleness_starts
   #
-  def staleness(created)
-    if created < (ApplicationController::STALENESS_STARTS*3).days.ago
+  def staleness(item)
+    if item.created_at < (ApplicationController::STALENESS_STARTS*3).days.ago
       return "<div class=\"stale_l3\">"
-    elsif created < (ApplicationController::STALENESS_STARTS*2).days.ago
+    elsif item.created_at < (ApplicationController::STALENESS_STARTS*2).days.ago
       return "<div class=\"stale_l2\">"
-    elsif created < (ApplicationController::STALENESS_STARTS).days.ago
+    elsif item.created_at < (ApplicationController::STALENESS_STARTS).days.ago
       return "<div class=\"stale_l1\">"
     else
       return "<div class=\"description\">"
     end
   end
 
+  def calendar_setup( input_field )
+    str = "Calendar.setup({ ifFormat:\"#{ApplicationController::DATE_FORMAT}\""
+    str << ",firstDay:#{ApplicationController::WEEK_STARTS_ON},showOthers:true,range:[2004, 2010]"
+    str << ",step:1,inputField:\"" + input_field + "\",cache:true,align:\"TR\" })"
+    javascript_tag str
+  end
 end

@@ -4,7 +4,7 @@
 <div class="contexts">
   <h2>Completed more than 31 days ago</h2>
   <table class="next_actions" cellspacing="5" cellpadding="0" border="0">
-    <%= render_collection_of_partials "done", @done_archive %>
+    <%= render :partial => "done", :collection => @done_archive %>
   </table>
 </div>
 

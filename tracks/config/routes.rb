@@ -36,19 +36,19 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'projects', :controller => 'project', :action => 'list'
   map.connect 'project/:name', :controller => 'project', :action => 'show'
   map.connect 'project/:id', :controller => 'project', :action => 'show'
-  
+
   # Notes Routes
-  map.connect 'note/add_note', :controller => 'note', :action => 'add_note'
-  map.connect 'note/update_note/:id', :controller => 'note', :action => 'update_note', :id => 'id'
+  map.connect 'note/add', :controller => 'note', :action => 'add'
+  map.connect 'note/update/:id', :controller => 'note', :action => 'update', :id => 'id'
   map.connect 'note/:id', :controller => 'note', :action => 'show', :id => 'id'
   map.connect 'notes', :controller => 'note', :action => 'index'
-  
+
   # Feed Routes
   map.connect 'feed/:action/:name/:user', :controller => 'feed' 
 
 
   map.connect 'add_item', :controller => 'todo', :action => 'add_item'
-  
+
   # Install the default route as the lowest priority.
   map.connect ':controller/:action'
   map.connect ':controller/:action/:id'

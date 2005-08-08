@@ -1,37 +1,25 @@
-<%= start_form_tag :action=> "signup" %>
-
 <div title="Account signup" id="signupform" class="form">
-  <% if User.find_all.empty? %>
-    <%= hidden_field "user", "is_admin", "value" => 1 %>
-    <h3>Sign up as the admin user</h3>
-    <%= render_errors @user %><br/>
-    <label for="user_login">Desired login:</label><br/>
-    <%= text_field "user", "login", :size => 20 %><br/>
-    <label for="user_password">Choose password:</label><br/>
-    <%= password_field "user", "password", :size => 20 %><br/>
-    <label for="user_password_confirmation">Confirm password:</label><br/>
-    <%= password_field "user", "password_confirmation", :size => 20 %><br/>
-    <label for="user_word">Secret word (different to password):</label><br />
-    <%= password_field "user", "word", :size => 20 %><br />
-    <input type="submit" value="Signup &#187;" class="primary" />
-  <% elsif (@session['user'] && @session['user']['is_admin'] == 1) %>
-    <%= hidden_field "user", "is_admin", "value" => 0 %>
-    <h3>Sign up a new user</h3>
-    <%= render_errors @user %><br/>
-    <label for="user_login">Desired login:</label><br/>
-    <%= text_field "user", "login", :size => 20 %><br/>
-    <label for="user_password">Choose password:</label><br/>
-    <%= password_field "user", "password", :size => 20 %><br/>
-    <label for="user_password_confirmation">Confirm password:</label><br/>
-    <%= password_field "user", "password_confirmation", :size => 20 %><br/>
-    <label for="user_word">Secret word (different to password):</label><br />
-    <%= password_field "user", "word", :size => 20 %><br />
-    <input type="submit" value="Signup &#187;" class="primary" />
-  <% else %>
-    <h3>Signup</h3>
-    <p>You don't have permission to sign up for a new account.</p> 
-    <p>Please contact the site administrator <%= mail_to "#{app_configurations["admin"]["email"]}", "by email", :encode => "hex" %> to get permission.</p>
-  <% end %>
+<%= start_form_tag :action=> "create" %>
+
+  <%= error_messages_for 'user' %><br/>
+
+  <h3><%= @page_title -%></h3>
+
+  <label for="user_login">Desired login:</label><br/>
+  <%= text_field "user", "login", :size => 20 %><br/>
+
+  <label for="user_password">Choose password:</label><br/>
+  <%= password_field "user", "password", :size => 20 %><br/>
+
+  <label for="user_password_confirmation">Confirm password:</label><br/>
+  <%= password_field "user", "password_confirmation", :size => 20 %><br/>
+
+  <label for="user_word">Secret word (different to password):</label><br />
+  <%= password_field "user", "word", :size => 20 %><br />
+
+  <input type="submit" value="Signup &#187;" class="primary" />
 
 <%= end_form_tag %>
+</div>
+
 

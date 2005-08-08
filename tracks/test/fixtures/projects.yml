@@ -1,1 +1,16 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+timemachine:
+  id: 1
+  name: Build a working time machine
+  user_id: 1
+
+moremoney:
+  id: 2
+  name: Make more money than Billy Gates
+  user_id: 1
+
+gardenclean:
+  id: 3
+  name: Evict dinosaurs from the garden
+  user_id: 1

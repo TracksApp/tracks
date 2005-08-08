@@ -1,0 +1,22 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <%= stylesheet_link_tag "scaffold" %>
+<title><%= @page_title -%></title>
+
+</head>
+<body>
+<div id="navcontainer">
+<ul id="navlist">
+  <li><%= link_to "Home", :controller => "todo", :action=>"list"%></li>
+</ul>
+</div>
+
+<%= @content_for_layout %>
+
+<div id="footer">
+  <p>Send feedback: <a href="http://dev.rousette.org.uk/report/6">Trac</a> | <a href="http://www.rousette.org.uk/projects/wiki/">Wiki</a> | <a href="mailto:butshesagirl@rousette.org.uk?subject=Tracks feedback">Email</a> | <a href="http://www.rousette.org.uk/projects/">Website</a></p>
+</div>
+</body>
+</html>

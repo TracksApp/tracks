@@ -2,7 +2,7 @@
 
 * Homepage: http://www.rousette.org.uk/projects/
 * Author: bsag (http://www.rousette.org.uk/)
-* Contributors: Nicholas Lee, Lolindrath, Jim Ray, Arnaud Limbourg
+* Contributors: Nicholas Lee, Lolindrath, Jim Ray, Arnaud Limbourg, Timothy Martens
 * Version: 1.03
 * Copyright: (cc) 2004-2005 rousette.org.uk
 * License: GNU GPL
@@ -18,6 +18,11 @@ Wiki (deprecated - please use Trac): http://www.rousette.org.uk/projects/wiki/
 1. Tidied up the interface a bit, fixing mistakes in the wording.
 2. The number of actions reported is now correctly pluralized depending on the number of actions (e.g. 1 action, 2 actions).
 3. Added a Note model and notes database table. Notes have their own interface (/notes lists them all, and /note/1 shows note id 1), but they are displayed on the /project/show/[name] page. For now, notes belong to a particular project, and are added from the /project/show/[name] pages. You can delete and edit notes either from the /notes page or from the /note/[id] page. Notes use Textile/Markdown formatting.
+4. Can now host multiple users on a single tracks install. User creation only possible by admin user.
+5. Major improves to the render-flow, code reuse and MVC rationalisation.
+6. Rails based db creation and migration via rake.
+7. Added loginhash to settings.yml.
+8. Modify signup to prevent is_admin being set by malicious user. Begin work on standardising layout for login controller.
 
 == Version 1.03
 

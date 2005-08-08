@@ -36,7 +36,7 @@
 
   <div id="context_new_action" class="context_new" style="display:none">
   <!--[form:context]-->
-  <%= form_remote_tag :url => { :action => "add_item" },
+  <%= form_remote_tag :url => { :controller => "todo", :action => "add_item" },
                       :update=> "next_actions",
                       :position=> "bottom",
                       :loading => "context.reset()",
@@ -57,44 +57,11 @@
     <br /><br />
   <input type="submit" value="Add item" tabindex="5">
   <%= end_form_tag %><!--[eoform:context]-->
-  <script type="text/javascript">
-  Calendar.setup({ ifFormat:"<%= ApplicationController::DATE_FORMAT %>",firstDay:<%= ApplicationController::WEEK_STARTS_ON %>,showOthers:true,range:[2004, 2010],step:1,inputField:"new_item_due",cache:true,align:"TR" })
-  </script>
-  
+  <%= calendar_setup( "new_item_due" ) %>
+
   </div><!-- [end:context-new-action] -->
-  
-<h3>Active Projects:</h3>
-<ul>
-  <% for project in Project.list_of -%>
-    <li><%= link_to( project.name, { :controller => "project", :action => "show", 
-            :name => urlize(project.name) } ) + " (" + project.count_undone_todos("actions") + ")" %></li>
-  <% end -%>
-</ul>
 
-<h3>Completed Projects:</h3>
-<ul>
-  <% for project in Project.list_of( isdone=1 ) -%>
-    <li><%= link_to( project.name, { :controller => "project", :action => "show",
-            :name => urlize(project.name) } ) + " (" + project.count_undone_todos("actions") + ")" %></li>
-  <% end -%>
-</ul>
-
-<h3>Active Contexts:</h3>
-<ul>
-  <% for context in Context.list_of -%>
-  <li><%= link_to( context.name, { :controller => "context", :action => "show",
-          :name => urlize(context.name) } ) + " (" + context.count_undone_todos("actions") + ")" %></li>
-  <% end -%>
-</ul>
-
-<h3>Hidden Contexts:</h3>
-<ul>
-  <% for context in Context.list_of( hidden=1 ) -%>
-  <li><%= link_to( context.name, { :controller => "context", :action => "show",
-          :name => urlize(context.name) } ) + " (" + context.count_undone_todos("actions") + ")" %></li>
-  <% end -%>
-</ul>
-
+<%= render "shared/sidebar" %>
 </div><!-- End of input box -->
 
 <% if @flash["confirmation"] %><div class="confirmation"><%= @flash["confirmation"] %></div><% end %>

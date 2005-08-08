@@ -1,1 +1,14 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+admin_user:
+  id: 1
+  login: admin
+  password: <%= Digest::SHA1.hexdigest("change-me--abracadabra--") %>
+  word: <%= Digest::SHA1.hexdigest("change-me--badger--") %>
+  is_admin: 1
+
+other_user:
+  id: 2
+  login: jane
+  password: <%= Digest::SHA1.hexdigest("change-me--sesame--") %>
+  word: <%= Digest::SHA1.hexdigest("change-me--mouse--") %>
+  is_admin: 0
