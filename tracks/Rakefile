@@ -1,6 +1,8 @@
 require 'rake'
 require 'rake/testtask'
 require 'rake/rdoctask'
+require 'fileutils' 
+include FileUtils::Verbose
 
 $VERBOSE = nil
 TEST_CHANGES_SINCE = Time.now - 600
@@ -199,4 +201,34 @@ end
 desc "Migrate the database according to the migrate scripts in db/migrate (only supported on PG/MySQL). A specific version can be targetted with VERSION=x"
 task :migrate => :environment do
   ActiveRecord::Migrator.migrate(File.dirname(__FILE__) + '/db/migrate/', ENV["VERSION"] ? ENV["VERSION"].to_i : nil)
+end
+
+desc "Initialises the installation, copy the *.tmpl files and directories to versions named without the .tmpl extension. It won't overwrite the files and directories if you've already copied them. You need to manually copy database.yml.tmpl -> database.yml and fill in the details before you run this task."
+task :setup_tracks => :environment do
+  # Check the root directory for template files
+  FileList["*.tmpl"].each do |template_file|
+    f = File.basename(template_file) # with suffix
+    f_only = File.basename(template_file,".tmpl") # without suffix
+    if File.exists?(f_only)
+      puts f_only + " already exists"
+    else
+      cp_r(f, f_only)
+      puts f_only + " created"
+    end
+  end
+  # Check the config dir for template files
+  # We can't convert the database.yml.tmpl file, because database.yml needs
+  # to exist for rake to run tasks!
+  cd("config") do
+    FileList["settings.yml.tmpl"].each do |template_file|
+      f = File.basename(template_file) # with suffix
+      f_only = File.basename(template_file,".tmpl") # without suffix
+      if File.exists?(f_only)
+        puts f_only + " already exists"
+      else
+        cp(f, f_only)
+        puts f_only + " created"
+      end
+    end
+  end
 end
