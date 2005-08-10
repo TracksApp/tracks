@@ -13,7 +13,7 @@ Trac (for bug reports and feature requests): http://dev.rousette.org.uk/report/6
 
 Wiki (deprecated - please use Trac): http://www.rousette.org.uk/projects/wiki/
 
-== Version 1.04
+== Version 1.031
 
 1. Tidied up the interface a bit, fixing mistakes in the wording.
 2. The number of actions reported is now correctly pluralized depending on the number of actions (e.g. 1 action, 2 actions).
@@ -23,6 +23,7 @@ Wiki (deprecated - please use Trac): http://www.rousette.org.uk/projects/wiki/
 6. Rails based db creation and migration via rake.
 7. Added loginhash to settings.yml.
 8. Modify signup to prevent is_admin being set by malicious user. Begin work on standardising layout for login controller.
+9. BIGGEST NEW FEATURE: Tracks is now properly multi-user, thanks to the work of Nicholas Lee. Any new users that you sign up can't view any of your next actions, contexts, projects or notes, and they get a clean slate to add their own. Great Things are planned in this direction...
 
 == Version 1.03
 
