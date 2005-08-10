@@ -1,3 +1,10 @@
+-- NB: This schema should be redundant, and is just included for reference. If you are
+-- using Postgresql, you can just issue the following commands at your command prompt to create
+-- the tables in the database you've specified in db/database.yml:
+--
+-- cd /PATH/TO/TRACKS
+-- rake migrate
+
 \connect tracks;
 
 drop table contexts;
@@ -5,7 +12,8 @@ create table contexts (
   id serial not null,
   name varchar(255) not null default '',
   hide int not null default 0,
-  position int NOT  NULL,
+  position int not null,
+  user_id int not null default 0,
   primary key (id)
 );
 
@@ -17,13 +25,18 @@ drop table projects;
 create table projects (
   id serial not null,
   name varchar(255) not null default '',
-  position int NOT  NULL,
+  position int not null,
   done int not null default 0,
+  user_id int not null default 0,
   primary key (id)
 );
 
 -- Set the sequence to the proper value
 select setval('projects_id_seq', (select max(id) from projects));
+
+create table schema_info (
+    version int default null
+);
 
 drop table todos;
 create table todos (
@@ -32,10 +45,11 @@ create table todos (
   description varchar(100) not null default '',
   notes text,
   done int not null default 0,
-  created timestamp not null default now(),
+  created_at timestamp not null default now(),
   due date default null,
   completed timestamp default null,
   project_id int default null,
+  user_id int not null default 0,  
   primary key (id)
 );
 
@@ -61,6 +75,7 @@ create table notes (
   body text,
   created_at timestamp default null,
   updated_at timestamp default null,
+  user_id int not null default 0,
   primary key (id)
 );
 
