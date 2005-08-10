@@ -13,7 +13,7 @@ create table contexts (
   name varchar(255) not null default '',
   hide int not null default 0,
   position int not null,
-  user_id int not null default 0,
+  user_id int not null default 1,
   primary key (id)
 );
 
@@ -27,7 +27,7 @@ create table projects (
   name varchar(255) not null default '',
   position int not null,
   done int not null default 0,
-  user_id int not null default 0,
+  user_id int not null default 1,
   primary key (id)
 );
 
@@ -49,7 +49,7 @@ create table todos (
   due date default null,
   completed timestamp default null,
   project_id int default null,
-  user_id int not null default 0,  
+  user_id int not null default 1,  
   primary key (id)
 );
 
@@ -75,7 +75,7 @@ create table notes (
   body text,
   created_at timestamp default null,
   updated_at timestamp default null,
-  user_id int not null default 0,
+  user_id int not null default 1,
   primary key (id)
 );
 

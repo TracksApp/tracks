@@ -13,7 +13,7 @@ CREATE TABLE `contexts` (
   `name` varchar(255) NOT NULL default '',
   `position` int(11) NOT NULL default '0',
   `hide` tinyint(1) default '0',
-  `user_id` int(11) NOT NULL default '0',
+  `user_id` int(11) NOT NULL default '1',
   PRIMARY KEY  (`id`)
 ) TYPE=InnoDB;
 
@@ -25,7 +25,7 @@ CREATE TABLE `projects` (
   `name` varchar(255) NOT NULL default '',
   `position` int(11) NOT NULL default '0',
   `done` tinyint(1) default '0',
-  `user_id` int(11) NOT NULL default '0',
+  `user_id` int(11) NOT NULL default '1',
   PRIMARY KEY  (`id`)
 ) TYPE=InnoDB;
 
@@ -50,7 +50,7 @@ CREATE TABLE `todos` (
   `created_at` datetime default NULL,
   `due` date default NULL,
   `completed` datetime default NULL,
-  `user_id` int(11) NOT NULL default '0',
+  `user_id` int(11) NOT NULL default '1',
   PRIMARY KEY  (`id`)
 ) TYPE=InnoDB;
 
@@ -71,7 +71,7 @@ CREATE TABLE `users` (
 
 CREATE TABLE `notes` (
   `id` int(11) NOT NULL auto_increment,
-  `user_id` int(11) NOT NULL default '0',
+  `user_id` int(11) NOT NULL default '1',
   `project_id` int(11) NOT NULL default '0',
   `body` text,
   `created_at` datetime default '0000-00-00 00:00:00',
