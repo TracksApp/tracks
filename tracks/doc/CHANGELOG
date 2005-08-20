@@ -24,6 +24,7 @@ Wiki (deprecated - please use Trac): http://www.rousette.org.uk/projects/wiki/
 7. Added loginhash to settings.yml.
 8. Modify signup to prevent is_admin being set by malicious user. Begin work on standardising layout for login controller.
 9. BIGGEST NEW FEATURE: Tracks is now properly multi-user, thanks to the work of Nicholas Lee. Any new users that you sign up can't view any of your next actions, contexts, projects or notes, and they get a clean slate to add their own. Great Things are planned in this direction...
+10. Projects now have a description field which you can edit in the form on [tracks_url]/projects. It's optional, but you can use it to remind you of the aims or purpose of the project. If you have a description, it's displayed in italics just under the project name.
 
 == Version 1.03
 

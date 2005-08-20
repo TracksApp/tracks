@@ -26,6 +26,7 @@ CREATE TABLE `projects` (
   `position` int(11) NOT NULL default '0',
   `done` tinyint(1) default '0',
   `user_id` int(11) NOT NULL default '1',
+  `description` varchar(255) default '',
   PRIMARY KEY  (`id`)
 ) TYPE=InnoDB;
 

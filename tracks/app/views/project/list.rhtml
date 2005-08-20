@@ -16,9 +16,10 @@
   :loading => "project.reset()",
   :complete => "Form.focus_first('project-form');",
   :html=> { :id=>'project-form', :name=>'project', :class => 'inline-form' } %>
-<label for="project_name">Name</label>
-  <%= text_field 'project', 'name'  %>
-  <input type="submit" value="Add" />
+  <label for="project_name">Name:</label><br />
+  <%= text_field 'project', 'name'  %><br />
+  <label for="project_description">Description (optional):</label><br />
+  <%= text_area 'project', 'description', "cols" => 30, "rows" => 4  %>  <input type="submit" value="Add" />
 <%= end_form_tag %>
 <!--[eoform:project]-->
 </div>
@@ -30,4 +31,4 @@
   <div class="warning"><%= @flash["warning"] %></div>
 <% end %>
 
-</div><!- End of display_box -->
+</div><!-- End of display_box -->

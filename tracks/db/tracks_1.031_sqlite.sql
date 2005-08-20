@@ -22,6 +22,7 @@ CREATE TABLE 'projects' (
   'name' varchar(255) NOT NULL default '',
   'position' int NOT NULL,
   'done' tinyint(4) NOT NULL default '0',
+  'description' varchar(255) default '',
   'user_id' int NOT NULL default '1'
 ) ;
 

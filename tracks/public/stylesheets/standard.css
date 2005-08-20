@@ -121,6 +121,7 @@ a.show_notes:hover {background-image: url(../images/notes_on.png); background-re
       margin-top: 0px;
       margin-left: -5px;
       margin-right: -5px;
+      margin-bottom: 0px; /* CHECK */      
       color: #fff;
       text-shadow: rgba(0,0,0,.4) 0px 2px 5px;
       }
@@ -422,6 +423,21 @@ div#list-projects, div#list-contexts {
     padding-bottom: 5px;
     }
 
+div.project_description {
+    background: #eee;
+    padding: 5px;
+    margin-top: 0px;
+    margin-left: -5px;
+    margin-right: -5px;
+    color: #666;
+    font-style: italic;
+    font-size: 12px;
+    font-weight: normal;
+    /* Uncomment line below if you want the description to have
+       shadowed text */
+    /* text-shadow: rgba(0,0,0,.4) 0px 2px 5px; */
+    }
+    
 /* Form elements */
 form {
     border: 1px solid #CCC;

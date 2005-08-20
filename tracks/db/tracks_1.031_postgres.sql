@@ -28,6 +28,7 @@ create table projects (
   position int not null,
   done int not null default 0,
   user_id int not null default 1,
+  description varchar(255) default '',
   primary key (id)
 );
 

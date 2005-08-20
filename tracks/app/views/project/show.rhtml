@@ -2,6 +2,9 @@
 
 <div class="contexts">
 <h2><%= @project.name %></h2>
+<% if @project.description -%>
+  <div class="project_description"><%= @project.description %></div>
+<% end -%>
 
   <div id="next_actions">
     <% if @project.done == 1 -%>

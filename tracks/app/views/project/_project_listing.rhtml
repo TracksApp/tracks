@@ -38,7 +38,7 @@
 </div><!-- [end:project-project.id-display] -->
 <div id="project-<%= project.id %>-edit-form" class="edit-form" style="display:none;">
 <%= form_remote_tag  :url => { :controller => 'project', :action => 'update', :id => project.id },
-               :html => { :id => "form-project-#{project.id}", :class => "inline-form" },
+               :html => { :id => "form-project-#{project.id}", :class => "form" },
                :update => "project-#{project.id}-container",
                :complete => "new Effect.Appear('project-#{project.id}-container');" %>
   <%= render_partial 'project_form', project %>

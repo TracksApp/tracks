@@ -6,9 +6,17 @@
   <%= @project.position %>
 </div>
 <div class="data">
-<label for="project_name">Name</label>
-<%= text_field 'project', 'name', :class => 'project-name'  %>
+<p>
 <label for="project_done">Project done?</label>
 <%= check_box 'project', 'done', :class => 'project-done' %>
+</p>
+<p>
+<label for="project_name">Name:</label><br>
+<%= text_field 'project', 'name', :class => 'project-name'  %>
+</p>
+<p>
+<label for="project_description">Description (optional):</label><br>
+<%= text_area 'project', 'description', "cols" => 30, "rows" => 4, :class => 'project-description'  %>
+</p>
 </div>
 <% @project = nil %>
