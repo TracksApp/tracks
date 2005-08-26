@@ -25,9 +25,9 @@ INSERT INTO notes (id,user_id,project_id,body,created_at,updated_at) VALUES (1,1
 -- Dump of table projects
 -- ------------------------------------------------------------
 
-INSERT INTO projects (id,name,position,done,user_id) VALUES (1,'Build a working time machine',1,0,1);
-INSERT INTO projects (id,name,position,done,user_id) VALUES (2,'Make more money than Billy Gates',2,0,1);
-INSERT INTO projects (id,name,position,done,user_id) VALUES (3,'Evict dinosaurs from the garden',3,0,1);
+INSERT INTO projects (id,name,position,description,done,user_id) VALUES (1,'Build a working time machine',1,'',0,1);
+INSERT INTO projects (id,name,position,description,done,user_id) VALUES (2,'Make more money than Billy Gates',2,'',0,1);
+INSERT INTO projects (id,name,position,description,done,user_id) VALUES (3,'Evict dinosaurs from the garden',3,'',0,1);
 
 
 -- Dump of table schema_info

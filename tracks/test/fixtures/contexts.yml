@@ -3,44 +3,62 @@
 agenda:
   id: 1
   name: agenda
+  position: 1
+  hide: 0
   user_id: 1
 
 call:
   id: 2
   name: call
+  position: 2
+  hide: 0
   user_id: 1
 
 email:
   id: 3
   name: email
+  position: 3
+  hide: 0
   user_id: 1
 
 errand:
   id: 4
   name: errand
+  position: 4
+  hide: 0
   user_id: 1
 
 lab:
   id: 5
   name: lab
+  position: 5
+  hide: 0
   user_id: 1
 
 library:
   id: 6
   name: library
+  position: 6
+  hide: 0
   user_id: 1
 
 freetime:
   id: 7
   name: freetime
+  position: 7
+  hide: 0
   user_id: 1
 
 office:
   id: 8
   name: office
+  position: 8
+  hide: 0
   user_id: 1
 
 waitingfor:
   id: 9
   name: waiting for
+  position: 9
+  hide: 0
   user_id: 1

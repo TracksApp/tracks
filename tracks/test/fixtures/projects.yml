@@ -4,6 +4,7 @@ timemachine:
   id: 1
   name: Build a working time machine
   description: ''
+  position: 1
   done: 0
   user_id: 1
 
@@ -11,6 +12,7 @@ moremoney:
   id: 2
   name: Make more money than Billy Gates
   description: ''
+  position: 2
   done: 0  
   user_id: 1
 
@@ -18,5 +20,6 @@ gardenclean:
   id: 3
   name: Evict dinosaurs from the garden
   description: ''
+  position: 3
   done: 0  
   user_id: 1
