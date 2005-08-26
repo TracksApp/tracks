@@ -35,11 +35,11 @@ class TodoController < ApplicationController
     day = (60 * 60 * 24)
     today = Time.now
 
-    today_date = today - 1 * day
-    week_begin = today - 2 * day
-    week_end = today - 7* day
-    month_begin = today - 8 * day
-    month_end = today - 31 * day
+    today_date = today - (1 * day)
+    week_begin = today - (1 * day)
+    week_end = today - (7 * day)
+    month_begin = today - (8 * day)
+    month_end = today - (31 * day)
 
     @done_today = @done.collect { |x| today_date <= x.completed ? x:nil }.compact
     @done_this_week = @done.collect { |x| week_begin >= x.completed && week_end <= x.completed ? x:nil }.compact
