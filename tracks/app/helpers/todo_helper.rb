@@ -53,7 +53,7 @@ module TodoHelper
                     :loading => "new Effect2.Fade('done-item-#{item.id}-container', true)",
                     :url => { :controller => "todo", :action => "destroy_action", :id => item.id },
                     :confirm => "Are you sure that you want to delete the action \'#{item.description}\'?" ) +
-                    image_tag("blank") + " "
+                    "<a>" + image_tag("blank") + "</a> "
   end
 
   def toggle_show_notes( item )
