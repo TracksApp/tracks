@@ -2,7 +2,7 @@
 <% if done.completed %>
   <td valign="top"><%= image_tag( "done", :width=>"16", :height=>"16", :border=>"0") %></td>
   <td valign="top"><span class="grey"><%= format_date( done.completed ) %></span></td>
-  <td valign="top"><%= " " + done.description + " "%>
+  <td valign="top"><%= " " + sanitize(done.description) + " "%>
 
   <% if done.project_id %>
     <%= "(" + done.context['name'] + ", " + done.project['name'] + ")" %>
@@ -17,7 +17,7 @@
   <% if done.notes? %>
     <%= "<a href=\"javascript:Element.toggle('" + done.id.to_s + "')\" title=\"Show notes\">" + 
     image_tag( "notes", :width=>"10", :height=>"10", :border=>"0") + "</a>" %>
-    <%      m_notes = markdown( done.notes ) %>
+    <%      m_notes = sanitize(markdown( done.notes )) %>
     <%= "<div class=\"notes\" id=\"" + done.id.to_s + "\" style=\"display:none\">" + m_notes + "</div>" %>
   <% end %>
   </td>

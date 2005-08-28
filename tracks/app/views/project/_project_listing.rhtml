@@ -18,7 +18,7 @@
               {:action => "move_bottom", :id => project.id}, :title => "Move to bottom", :class=>"to_bottom") %>
 </div>  
 <div class="data">
-  <%= link_to( "#{project.name}", :action => "show", :name => urlize(project.name) ) %><%= " (" + project.count_undone_todos("actions") + ")" %>
+  <%= link_to( sanitize("#{project.name}"), :action => "show", :name => urlize(project.name) ) %><%= " (" + project.count_undone_todos("actions") + ")" %>
 </div>
 <div class="buttons">
   <% if project.done == 1 -%>

@@ -24,10 +24,10 @@
       :html=> { :id=>'todo-form-new-action', :name=>'todo', :class => 'inline-form' }) %>
 
   <label for="new_item_description">Description</label><br />
-  <%= text_field( "new_item", "description", "size" => 25, "tabindex" => 1 ) %><br />
+  <%= text_field( "new_item", "description", "size" => 25, "tabindex" => 1) %><br />
 
   <label for="new_item_notes">Notes</label><br />
-  <%= text_area( "new_item", "notes", "cols" => 25, "rows" => 10, "tabindex" => 2 ) %><br />
+  <%= text_area( "new_item", "notes", "cols" => 25, "rows" => 10, "tabindex" => 2) %><br />
 
   <label for="new_item_context_id">Context</label><br />
   <%= collection_select( "new_item", "context_id", @contexts, "id", "name", 

@@ -3,7 +3,7 @@
 <h2><%= link_to("Note #{note.id.to_s}", {:action => "show", :id => note.id}, :title => "Show note #{note.id.to_s}" ) %></h2>
 
 <div id="note-<%= note.id.to_s %>">
-    <%= textilize(note.body) %>
+    <%= sanitize(textilize(note.body)) %>
 
   <div class="note_footer">
     <%= link_to_remote( image_tag("blank", :title =>"Delete this note", :class=>"delete_item"), 

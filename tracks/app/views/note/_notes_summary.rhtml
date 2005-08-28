@@ -2,6 +2,6 @@
 <div class="note_wrapper">
 <%= link_to( image_tag("blank"), { :controller => "note", :action => "show", 
                                    :id => note.id}, :title => "Show note", :class => "show_notes" ) %>&nbsp;
-<%= textilize(truncate(note.body, 50, "...")) %>
+<%= sanitize(textilize(truncate(note.body, 50, "..."))) %>
 </div>
 <% note = nil -%>

@@ -12,7 +12,7 @@
   -%>
       <div class="contexts">
       <h2><a href="javascript:toggleSingle('c<%=@context.id%>');javascript:toggleImage('toggle_context_<%=@context.id%>')" class="refresh"><%= image_tag("collapse.png", :name=>"toggle_context_#{@context.id}", :border=>"0") %></a>
-        <%= link_to( "#{@context.name}", :controller => "context", :action => "show", :name => urlize(@context.name) )  %></h2>
+        <%= link_to( sanitize("#{@context.name}"), :controller => "context", :action => "show", :name => urlize(@context.name) )  %></h2>
 
     <div id="c<%= @context.id %>" class="next_actions">
         <%= render :partial => "item", :collection => @not_done %>

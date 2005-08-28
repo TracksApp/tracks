@@ -18,7 +18,7 @@
               {:action => "move_bottom", :id => context.id}, :title => "Move to bottom", :class=>"to_bottom") %>
 </div>  
 <div class="data">
-  <%= link_to( "#{context.name}", :action => "show", :name => urlize(context.name) ) %>
+  <%= link_to( sanitize("#{context.name}"), :action => "show", :name => urlize(context.name) ) %>
   <%= " (" + context.count_undone_todos("actions") + ")" %>
 </div>
 
