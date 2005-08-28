@@ -1,4 +1,4 @@
-#!/usr/bin/ruby1.8
+#!/usr/bin/env ruby
 irb = RUBY_PLATFORM =~ /mswin32/ ? 'irb.bat' : 'irb'
 
 require 'optparse'

@@ -46,7 +46,8 @@ In the following, I'm assuming that you're using MySQL and the built-in WEBrick 
   
 * Check over the file <tt>config/settings.yml</tt>, and make sure that the settings are to your liking.
 * If you'd also like some example data to play with, you can import it from tracks_1.031_content.sql (in <tt>tracks/db</tt>). You don't have to use the example data, but if you don't, you'll need to visit <tt>http://YOURURL/contexts</tt> first to add a few contexts before you add any next actions. Note that no users are provided in the content file, so you'll need to visit the signup page (http://YOURURL/signup) to create some users.
-* Check that the path to Ruby is correct in the <tt>tracks/public/dispatch.*</tt> files, and also <tt>/script/server</tt>. The default (<tt>#!/usr/bin/ruby</tt>) is fine for Mac OS X Tiger, but if you've installed Ruby yourself in <tt>/usr/local/bin</tt>, you'll need to change it.
+* Check the shebang lines of the public/dispatch.* files and all the files in the script directory. They are set to <tt>#!/usr/bin/env ruby</tt> by default. This should work for all *nix based setups (Linux or Mac OS X), but Windows users will probably have to change it. Try this command at the command line, run inside the Tracks directory:
+  <tt>ruby -i.bak -pe 'gsub!("#!/usr/bin/env ruby", "#!c:/ruby/bin/ruby")' public/dispatch.*  script/*</tt>
 * Run the following command at your command line (<b>Important:</b> If you already have an application running on WEBrick (Tracks or anything else), make sure that you stop the server, or run Tracks on a different port using the <tt>--port</tt> option):
   <tt>cd /PATHTO/TRACKS</tt>
   <tt>ruby script/server -e production</tt>
@@ -73,7 +74,8 @@ In the following, I'm assuming that you're using MySQL and the built-in WEBrick 
 
 * If this process reports errors that you can't fix, you'll need to adapt the instructions for manually loading the schema, given below for SQLite (schemas are also provided for MySQL and Postgresql).
 * Import your old contents, and check that it looks sensible. In particular, check that the 'user_id' field in the todos, contexts and projects tables have the value of '1' (i.e. they are owned by your admin user, who should have an id of 1).
-* Check that the path to Ruby is correct in the <tt>tracks/public/dispatch.*</tt> files, and also <tt>/script/server</tt>. The default (<tt>#!/usr/bin/ruby</tt>) is fine for Mac OS X Tiger, but if you've installed Ruby yourself in <tt>/usr/local/bin</tt>, you'll need to change it.
+* Check the shebang lines of the public/dispatch.* files and all the files in the script directory. They are set to <tt>#!/usr/bin/env ruby</tt> by default. This should work for all *nix based setups (Linux or Mac OS X), but Windows users will probably have to change it. Try this command at the command line, run inside the Tracks directory:
+  <tt>ruby -i.bak -pe 'gsub!("#!/usr/bin/env ruby", "#!c:/ruby/bin/ruby")' public/dispatch.*  script/*</tt>
 * From here, follow the remaining steps for new users above to start the server. Don't forget that if you've deleted your users table, you'll need to re-create your users via <tt>/signup</tt>. Signup is now at <tt>http://0.0.0.0:3000/signup</tt>, and login at <tt>http://0.0.0.0:3000/login</tt>.
 
 ==== SQLite or SQLite3
