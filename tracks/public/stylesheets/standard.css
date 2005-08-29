@@ -109,10 +109,10 @@ a.show_notes:hover {background-image: url(../images/notes_on.png); background-re
 #navlist a:hover { color: #000; }
     
 .contexts {
-      padding: 0px 5px 2px 5px;
+      padding: 0px 5px 0px 5px; 
       border: 1px solid #999;
       margin: 0px 0px 15px 0px;
-      background: #fff;
+      background: #fff; 
       }
       
 .contexts h2 {
