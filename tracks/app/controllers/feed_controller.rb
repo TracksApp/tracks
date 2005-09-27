@@ -20,13 +20,15 @@ class FeedController < ApplicationController
   end
 
   # Builds a plain text page listing all the next actions,
-  # sorted by context. Showing notes doesn't make much sense here
-  # so they are omitted. You can use this with GeekTool to get your next actions
+  # sorted by context (contexts are sorted by position, as on the home page). 
+  # Showing notes doesn't make much sense here so they are omitted.
+  # Hidden contexts are also hidden in the text view
+  # You can use this with GeekTool to get your next actions
   # on the desktop:
   # curl [url from "TXT" link on todo/list]
   #
   def na_text
-    @contexts = @user.contexts
+    @contexts = @user.contexts.collect { |x| x.hide? ? nil:x }.compact.sort! { |x,y| x.position <=> y.position }
     @not_done = @user.todos.collect { |x|  x.done? ? nil:x }.compact.sort! {|x,y| x.context_id <=> y.context_id }
     @headers["Content-Type"] = "text/plain; charset=utf-8"
   end
