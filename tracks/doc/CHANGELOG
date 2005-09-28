@@ -29,6 +29,7 @@ Wiki (deprecated - please use Trac): http://www.rousette.org.uk/projects/wiki/
 12. Changed the shebang lines to <tt>#!/usr/bin/env ruby</tt>. This should work for all *nix based setups (Linux or Mac OS X), but Windows users will probably have to change it. Try this command at the command line, run inside the Tracks directory:
   ruby -i.bak -pe 'gsub!("#!/usr/bin/env ruby", "#!c:/ruby/bin/ruby")' public/dispatch.* script/*
 13. The TXT view is now sorted by position, just as the home page is.
+14. <b>Contributed by lolindrath</b>: Items that are overdue are coloured red, and have the text 'Overdue by X days' in the badge. Other due dates are given as days from now (up to a week away in orange, more than a week away in green), and the tool tip shows the actual date.
 
 == Version 1.03
 

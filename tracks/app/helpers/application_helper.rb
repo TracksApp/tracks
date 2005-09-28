@@ -43,16 +43,21 @@ module ApplicationHelper
 
     @now = Date.today
     @days = due-@now
+       
     case @days
       # overdue or due very soon! sound the alarm!
-      when -365..1
-        "<span class=\"red\">" + format_date(due) + "</span> "
+      when -365..-1
+        "<a title='" + format_date(due) + "'><span class=\"red\">Overdue by " + (@days * -1).to_s + " days</span></a> "
+      when 0
+           "<a title='" + format_date(due) + "'><span class=\"amber\">Due Today</span></a> "
+      when 1
+           "<a title='" + format_date(due) + "'><span class=\"amber\">Due Tommorrow</span></a> "
       # due 2-7 days away
       when 2..7
-        "<span class=\"amber\">" + format_date(due) + "</span> "
+           "<a title='" + format_date(due) + "'><span class=\"orange\">Due in " + @days.to_s + " days</span></a> "
       # more than a week away - relax
       else
-        "<span class=\"green\">" + format_date(due) + "</span> "
+        "<a title='" + format_date(due) + "'><span class=\"green\">Due in " + @days.to_s + " days</span></a> "
     end
   end
 
