@@ -86,6 +86,7 @@
   <label for="item_due">Due</label><br />
   <%= text_field("new_item", "due", "size" => 10, "class" => "Date", "onFocus" => "Calendar.setup", "tabindex" => 4) %>
   <br /><br />
+    <input type="hidden" name="project" value="true" />
     <input type="submit" value="Add item" tabindex="5">
   <%= end_form_tag %><!--[eoform:project]-->
   <%= calendar_setup(  "new_item_due" ) %>

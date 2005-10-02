@@ -48,7 +48,7 @@
   <label for="new_item_notes">Notes</label><br />
   <%= text_area( "new_item", "notes", "cols" => 25, "rows" => 10, "tabindex" => 2) %><br />
   <label for="new_item_project_id">Project</label><br />
-    <select name="item[project_id]" id="item_project_id" tabindex="3">
+    <select name="new_item[project_id]" id="item_project_id" tabindex="3">
       <option selected="selected"></option>
       <%= options_from_collection_for_select(@projects, "id", "name") %>
     </select><br />

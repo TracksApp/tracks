@@ -29,7 +29,6 @@ class FeedController < ApplicationController
   #
   def na_text
     @contexts = @user.contexts.collect { |x| x.hide? ? nil:x }.compact.sort! { |x,y| x.position <=> y.position }
-    @not_done = @user.todos.collect { |x|  x.done? ? nil:x }.compact.sort! {|x,y| x.created_at <=> y.created_at }
     @headers["Content-Type"] = "text/plain; charset=utf-8"
   end
 

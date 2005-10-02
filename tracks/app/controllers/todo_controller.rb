@@ -71,7 +71,7 @@ class TodoController < ApplicationController
     end
 
     if item.save
-      render :partial => 'item', :object => item
+      render :partial => 'item', :object => item, :project => @params["project"]
     else
       flash["warning"] = "Couldn't add next action  \"#{item.description}\""
       render_text ""
@@ -93,7 +93,7 @@ class TodoController < ApplicationController
     end
 
     if item.save
-      render :partial => 'item', :object => item
+	    render :partial => 'item', :object => item, :project => @params["project"]
     else
       flash["warning"] = "Couldn't update the action"
       render_text ""

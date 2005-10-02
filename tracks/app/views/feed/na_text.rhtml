@@ -1,1 +1,6 @@
-<%= build_text_page( @not_done, @contexts ) %>
+<%
+for @context in @contexts
+  @not_done = @context.find_not_done_todos
+-%>
+  <%= build_text_page( @not_done, @context ) %>
+<% end -%>

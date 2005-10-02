@@ -5,9 +5,8 @@ module FeedHelper
   # indented underneath. If there is a due date
   # and the item is in a project, these are also displayed
   #
-  def build_text_page(list,contexts)
+  def build_text_page(list,context)
     result_string = ""
-    for context in contexts
       result_string << "\n" + context.name.upcase + ":\n"
 
       list.each do |item|
@@ -27,7 +26,6 @@ module FeedHelper
       end
 
       end
-    end
     return result_string
   end
   
