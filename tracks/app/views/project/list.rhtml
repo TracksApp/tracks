@@ -6,6 +6,12 @@
 <% end %>
 </div>
 
+<%= sortable_element 'list-projects',
+                     :tag => 'div',
+                     :handle => 'handle',
+                     :complete => visual_effect(:highlight, 'list-projects'),
+                     :url => {:controller => 'project', :action => 'order'}
+                     %> 
 <br />
 <a href="javascript:void(0)" onClick="Element.toggle('project_new'); Form.focus_first('project-form');" accesskey="n" title="Create a new project [Alt+n]">Create new project &#187;</a>
 <div id="project_new" class="project_new" style="display:none">

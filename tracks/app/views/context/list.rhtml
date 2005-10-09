@@ -6,6 +6,12 @@
 <% end %>
 </div>
 
+<%= sortable_element 'list-contexts',
+                     :tag => 'div',
+                     :handle => 'handle',
+                     :complete => visual_effect(:highlight, 'list-contexts'),
+                     :url => {:controller => 'context', :action => 'order'}
+                     %> 
 <br />
 <a href="javascript:void(0)" onClick="Element.toggle('context_new'); Form.focus_first('context-form');" accesskey="n" title="Create a new context [Alt+n]">Create new context &#187;</a>
 <div id="context_new" class="context_new" style="display:none">

@@ -12,7 +12,7 @@ module TodoHelper
                       :update => "completed",
                       :position => "top",
                       :loading => "Form.disable('checkbox-notdone-#{item.id}');",
-                      :complete => "new Effect2.Fade('item-#{item.id}-container', true);"
+                      :complete => visual_effect(:fade, "item-#{item.id}-container")
                    )
   end
 
@@ -22,7 +22,7 @@ module TodoHelper
                      :update => "new_actions",
                      :position => "bottom",
                      :loading => "Form.disable('checkbox-done-#{item.id}');",
-                     :complete => "Element.toggle('new_actions');new Effect2.Fade('done-item-#{item.id}-container', true);"
+                     :complete => "Element.toggle('new_actions');new Effect.Fade('done-item-#{item.id}-container');"
                    )
   end
 
@@ -30,7 +30,7 @@ module TodoHelper
     form_remote_tag( :url => { :controller => 'todo', :action => 'update_action', :id => item.id },
                     :html => { :id => "form-action-#{item.id}", :class => "inline-form" },
                     :update => "item-#{item.id}-container",
-                    :complete => "new Effect.Appear('item-#{item.id}-container');"
+                    :complete => visual_effect(:appear, "item-#{item.id}-container")
                    )
   end
 
@@ -40,7 +40,7 @@ module TodoHelper
     str << " Form.focusFirstElement('form-action-#{item.id}')"
     link_to_remote( image_tag("blank", :title =>"Delete action", :class=>"delete_item"),
                     :update => "item-#{item.id}-container",
-                    :loading => "new Effect2.Fade('item-#{item.id}-container', true)",
+                    :loading => visual_effect(:fade, "item-#{item.id}-container"),
                     :url => { :controller => "todo", :action => "destroy_action", :id => item.id },
                     :confirm => "Are you sure that you want to delete the action, \'#{item.description}\'?") + " " +
                     link_to_function(image_tag( "blank", :title => "Edit action", :class => "edit_item"),
@@ -50,7 +50,7 @@ module TodoHelper
   def link_to_remote_todo_done( item )
     link_to_remote( image_tag("blank", :title =>"Delete action", :class=>"delete_item"),
                     :update => "done-item-#{item.id}-container",
-                    :loading => "new Effect2.Fade('done-item-#{item.id}-container', true)",
+                    :loading => visual_effect(:fade, "done-item-#{item.id}-container"),
                     :url => { :controller => "todo", :action => "destroy_action", :id => item.id },
                     :confirm => "Are you sure that you want to delete the action \'#{item.description}\'?" ) +
                     "<a>" + image_tag("blank") + "</a> "

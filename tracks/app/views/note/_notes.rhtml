@@ -8,7 +8,7 @@
   <div class="note_footer">
     <%= link_to_remote( image_tag("blank", :title =>"Delete this note", :class=>"delete_item"), 
                         :update => "note-#{note.id}",
-                        :loading => "new Effect2.Fade('note-#{note.id}-container', true)",
+                        :loading => "new Effect.Fade('note-#{note.id}-container', true)",
                         :complete => "Element.remove('note-#{note.id}-wrapper');",
                         :url => { :controller => "note", :action => "delete", :id => note.id }, 
                         :confirm => "Are you sure that you want to delete the note \'#{note.id.to_s}\'?" ) + "&nbsp;"%><%= link_to_function(image_tag( "blank", :title => "Edit item", :class=>"edit_item"),

@@ -1,21 +1,10 @@
 <%  project = project_listing %>
-<div id="project-<%= project.id %>-container">
+<div id="container_<%= project.id %>">
 <!-- %= error_messages_for 'project' % -->
 <div id="project-<%= project.id %>-display" class="list">
-<% if project.position % 2 == 0 %>
 <div id="project-<%= project.id %>" class="even_row" style="display:'';">
-<% else %>
-<div id="project-<%= project.id %>" class="odd_row" style="display:'';">
-<% end %>
 <div class="position">
-  <%= link_to(image_tag("blank", :title=>"Move to top", :border=>"0", :width=>"16", :height=>"16"),
-              {:action => "move_top", :id => project.id}, :title => "Move to top", :class=>"to_top") %>
-  <%= link_to(image_tag("blank", :title=>"Move up", :border=>"0", :width=>"16", :height=>"16"), 
-              {:action => "move_up", :id => project.id}, :title => "Move up", :class=>"up" ) %>
-  <%= link_to(image_tag("blank", :title=>"Move down", :border=>"0", :width=>"16", :height=>"16"),
-              {:action => "move_down", :id => project.id}, :title => "Move down", :class=>"down") %>
-  <%= link_to(image_tag("blank", :title=>"Move to bottom", :border=>"0", :width=>"16", :height=>"16"),
-              {:action => "move_bottom", :id => project.id}, :title => "Move to bottom", :class=>"to_bottom") %>
+  <span class="handle">DRAG</span>
 </div>  
 <div class="data">
   <%= link_to( sanitize("#{project.name}"), :action => "show", :name => urlize(project.name) ) %><%= " (" + project.count_undone_todos("actions") + ")" %>
@@ -28,9 +17,10 @@
   <% end -%>
   
   <%= link_to_remote( image_tag("blank", :title =>"Delete project", :class=>"delete_item"), 
-                  :update => "project-#{project.id}-container",
-                  :loading => "new Effect2.Fade('project-#{project.id}-container', true)",
-                  :url => { :controller => "project", :action => "destroy", :id => project.id }, :confirm => "Are you sure that you want to delete the project \'#{project.name}\'?" ) + " " +
+                  :update => "container_#{project.id}",
+                  :loading => visual_effect(:fade, 'container_#{project.id}'),
+                  :url => { :controller => "project", :action => "destroy", :id => project.id },
+                  :confirm => "Are you sure that you want to delete the project \'#{project.name}\'?" ) + " " +
       link_to_function(image_tag( "blank", :title => "Edit item", :class=>"edit_item"), "Element.toggle('project-#{project.id}','project-#{project.id}-edit-form'); new Effect.Appear('project-#{project.id}-edit-form'); Form.focus_first('form-project-#{project.id}');" ) %>
 </div>
 </div><!-- [end:project-project.id] -->
@@ -39,8 +29,8 @@
 <div id="project-<%= project.id %>-edit-form" class="edit-form" style="display:none;">
 <%= form_remote_tag  :url => { :controller => 'project', :action => 'update', :id => project.id },
                :html => { :id => "form-project-#{project.id}", :class => "form" },
-               :update => "project-#{project.id}-container",
-               :complete => "new Effect.Appear('project-#{project.id}-container');" %>
+               :update => "container_#{project.id}",
+               :complete => visual_effect(:appear, 'container_#{project.id}') %>
   <%= render_partial 'project_form', project %>
   <div class="buttons">  
   <input type="submit" value="Update" />
@@ -48,7 +38,7 @@
   </div>
 <%= end_form_tag %>
 </div><!-- [end:project-project.id-edit-form] -->
-</div><!-- [end:project-project.id-container] -->
+</div><!-- [end:container_project.id] -->
 <% if controller.action_name == 'new_project' %>
 <script>
    new Effect.Appear('project-<%= project.id %>');

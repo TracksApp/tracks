@@ -1,21 +1,10 @@
 <%  context = context_listing %>
-<div id="context-<%= context.id %>-container">
+<div id="container_<%= context.id %>">
 <!-- %= error_messages_for 'context' % -->
-<div id="context-<%= context.id %>-display">
-<% if context.position % 2 == 0 %>
+<div id="context-<%= context.id %>-display" class="list">
 <div id="context-<%= context.id %>" class="even_row" style="display:'';">
-<% else %>
-<div id="context-<%= context.id %>" class="odd_row" style="display:'';">
-<% end %>
 <div class="position">
-  <%= link_to(image_tag("blank", :title=>"Move to top", :border=>"0", :width=>"16", :height=>"16"),
-              {:action => "move_top", :id => context.id}, :title => "Move to top", :class=>"to_top") %>
-  <%= link_to(image_tag("blank", :title=>"Move up", :border=>"0", :width=>"16", :height=>"16"), 
-              {:action => "move_up", :id => context.id}, :title => "Move up", :class=>"up" ) %>
-  <%= link_to(image_tag("blank", :title=>"Move down", :border=>"0", :width=>"16", :height=>"16"),
-              {:action => "move_down", :id => context.id}, :title => "Move down", :class=>"down") %>
-  <%= link_to(image_tag("blank", :title=>"Move to bottom", :border=>"0", :width=>"16", :height=>"16"),
-              {:action => "move_bottom", :id => context.id}, :title => "Move to bottom", :class=>"to_bottom") %>
+  <span class="handle">DRAG</span>
 </div>  
 <div class="data">
   <%= link_to( sanitize("#{context.name}"), :action => "show", :name => urlize(context.name) ) %>
@@ -30,9 +19,10 @@
 <% end %>
 
 <%= link_to_remote( image_tag("blank", :title =>"Delete context", :class=>"delete_item"), 
-                  :update => "context-#{context.id}-container",
-                  :loading => "new Effect2.Fade('context-#{context.id}-container', true)",
-                  :url => { :controller => "context", :action => "destroy", :id => context.id }, :confirm => "Are you sure that you want to delete the context \'#{context.name}\'?" ) + " " +
+                  :update => "container_#{context.id}",
+                  :loading => visual_effect(:fade, 'container_#{context.id}'),
+                  :url => { :controller => "context", :action => "destroy", :id => context.id },
+                  :confirm => "Are you sure that you want to delete the context \'#{context.name}\'?" ) + " " +
     link_to_function( image_tag( "blank", :title => "Edit context", :class=>"edit_item"), "Element.toggle('context-#{context.id}','context-#{context.id}-edit-form'); new Effect.Appear('context-#{context.id}-edit-form'); Form.focus_first('form-context-#{context.id}');" ) %>
 </div>
 </div><!-- [end:context-context.id] -->
@@ -41,8 +31,8 @@
 <div id="context-<%= context.id %>-edit-form" class="edit-form" style="display:none;">
 <%= form_remote_tag  :url => { :controller => 'context', :action => 'update', :id => context.id },
                :html => { :id => "form-context-#{context.id}", :class => "inline-form" },
-               :update => "context-#{context.id}-container",
-               :complete => "new Effect.Appear('context-#{context.id}-container');" %>
+               :update => "container_#{context.id}",
+               :complete => visual_effect(:appear, 'container_#{context.id}') %>
   <%= render_partial 'context_form', context %>
   <div class="buttons">  
   <input type="submit" value="Update" />

@@ -51,7 +51,7 @@ module ApplicationHelper
       when 0
            "<a title='" + format_date(due) + "'><span class=\"amber\">Due Today</span></a> "
       when 1
-           "<a title='" + format_date(due) + "'><span class=\"amber\">Due Tommorrow</span></a> "
+           "<a title='" + format_date(due) + "'><span class=\"amber\">Due Tomorrow</span></a> "
       # due 2-7 days away
       when 2..7
            "<a title='" + format_date(due) + "'><span class=\"orange\">Due in " + @days.to_s + " days</span></a> "

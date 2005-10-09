@@ -71,34 +71,13 @@ class ProjectController < ApplicationController
 
   # Methods for changing the sort order of the projects in the list
   #
-  def move_up
-    check_user_set_project
-    @project.move_higher
-    @project.save
-    redirect_to(:controller => "project", :action => "list")
+  def order
+    @params["list-projects"].each_with_index do |id, position|
+      Project.update(id, :position => position + 1)
+    end
+    render_text ""
   end
-
-  def move_down
-    check_user_set_project
-    @project.move_lower
-    @project.save
-    redirect_to(:controller => "project", :action => "list")
-  end
-
-  def move_top
-    check_user_set_project
-    @project.move_to_top
-    @project.save
-    redirect_to(:controller => "project", :action => "list")
-  end
-
-  def move_bottom
-    check_user_set_project
-    @project.move_to_bottom
-    @project.save
-    redirect_to(:controller => "project", :action => "list" )
-  end
-
+  
   protected
 
     def check_user_set_project
@@ -118,8 +97,7 @@ class ProjectController < ApplicationController
         render_text ""
       end
     end
-
-
+    
     def init
       @user = @session['user']
       @projects = @user.projects

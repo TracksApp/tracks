@@ -72,36 +72,15 @@ class ContextController < ApplicationController
     end
   end
 
-  # Methods for changing the sort order of the contexts in the list
+  # Methods for changing the sort order of the projects in the list
   #
-  def move_up
-    check_user_set_context
-    @context.move_higher
-    @context.save
-    redirect_to(:controller => "context", :action => "list")
+  def order
+    @params["list-contexts"].each_with_index do |id, position|
+      Context.update(id, :position => position + 1)
+    end
+    render_text ""
   end
-
-  def move_down
-    check_user_set_context
-    @context.move_lower
-    @context.save
-    redirect_to(:controller => "context", :action => "list")
-  end
-
-  def move_top
-    check_user_set_context
-    @context.move_to_top
-    @context.save
-    redirect_to(:controller => "context", :action => "list")
-  end
-
-  def move_bottom
-    check_user_set_context
-    @context.move_to_bottom
-    @context.save
-    redirect_to(:controller => "context", :action => "list" )
-  end
-
+  
   protected
 
     def check_user_set_context

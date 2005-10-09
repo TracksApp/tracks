@@ -365,6 +365,8 @@ li    {
 .even_row {
       background: #fff;
       padding: 5px 5px 5px 10px;
+      margin: 2px 2px;
+      border: 1px solid #ccc;
       }
 
 .odd_row {
@@ -390,13 +392,13 @@ input {
 }
 
 /* Positioning the 'cells' in the list */
-table.list {
+/* table.list {
     margin-top: 0px;
     border-top: 1px solid #ccc;
     border-left: 1px solid #ccc;
     border-right: 1px solid #ccc;
     background: #fff;
-    }
+    } */
     
 .position {
     float: left;
@@ -480,3 +482,12 @@ input, select {
     padding:0px 3px 0px 3px; 
     margin:0px;
     }
+    
+/* Classes for Drag and Drop */
+.handle {
+    color: #fff;
+    background: #000;
+    padding: 1px;
+    font-size: 10px;
+    cursor: move;    
+}
