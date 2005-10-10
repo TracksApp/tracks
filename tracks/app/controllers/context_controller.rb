@@ -76,9 +76,10 @@ class ContextController < ApplicationController
   #
   def order
     @params["list-contexts"].each_with_index do |id, position|
-      Context.update(id, :position => position + 1)
+      if check_user_matches_context_user(id)
+        Context.update(id, :position => position + 1)
+      end
     end
-    render_text ""
   end
   
   protected
@@ -101,7 +102,18 @@ class ContextController < ApplicationController
       end
     end
 
-
+    def check_user_matches_context_user(id)
+       @user = @session['user']
+       @context = Context.find_by_id_and_user_id(id, @user.id)
+       if @user == @context.user
+         return @context
+       else
+         @context = nil
+         flash["warning"] = "Project and session user mis-match: #{@context.user_id} and #{@session['user'].id}!"
+         render_text ""
+       end
+    end
+     
     def init
       @user = @session['user']
       @projects = @user.projects.collect { |x| x.done? ? nil:x }.compact

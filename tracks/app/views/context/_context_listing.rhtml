@@ -1,7 +1,6 @@
 <%  context = context_listing %>
-<div id="container_<%= context.id %>">
+<div id="container_<%= context.id %>" class="list">
 <!-- %= error_messages_for 'context' % -->
-<div id="context-<%= context.id %>-display" class="list">
 <div id="context-<%= context.id %>" class="even_row" style="display:'';">
 <div class="position">
   <span class="handle">DRAG</span>
@@ -27,7 +26,6 @@
 </div>
 </div><!-- [end:context-context.id] -->
 
-</div><!-- [end:context-context.id-display] -->
 <div id="context-<%= context.id %>-edit-form" class="edit-form" style="display:none;">
 <%= form_remote_tag  :url => { :controller => 'context', :action => 'update', :id => context.id },
                :html => { :id => "form-context-#{context.id}", :class => "inline-form" },

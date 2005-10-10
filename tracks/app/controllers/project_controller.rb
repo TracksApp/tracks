@@ -73,9 +73,10 @@ class ProjectController < ApplicationController
   #
   def order
     @params["list-projects"].each_with_index do |id, position|
-      Project.update(id, :position => position + 1)
+      if check_user_matches_project_user(id)
+        Project.update(id, :position => position + 1)
+      end
     end
-    render_text ""
   end
   
   protected
@@ -93,6 +94,18 @@ class ProjectController < ApplicationController
         return @project
       else
         @project = nil # Should be nil anyway
+        flash["warning"] = "Project and session user mis-match: #{@project.user_id} and #{@session['user'].id}!"
+        render_text ""
+      end
+    end
+    
+    def check_user_matches_project_user(id)
+      @user = @session['user']
+      @project = Project.find_by_id_and_user_id(id, @user.id)
+      if @user == @project.user
+        return @project
+      else
+        @project = nil
         flash["warning"] = "Project and session user mis-match: #{@project.user_id} and #{@session['user'].id}!"
         render_text ""
       end

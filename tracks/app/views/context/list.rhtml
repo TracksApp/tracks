@@ -13,14 +13,14 @@
                      :url => {:controller => 'context', :action => 'order'}
                      %> 
 <br />
-<a href="javascript:void(0)" onClick="Element.toggle('context_new'); Form.focus_first('context-form');" accesskey="n" title="Create a new context [Alt+n]">Create new context &#187;</a>
+<a href="javascript:void(0)" onClick="Element.toggle('context_new'); Form.focusFirstElement('context-form');" accesskey="n" title="Create a new context [Alt+n]">Create new context &#187;</a>
 <div id="context_new" class="context_new" style="display:none">
 <!--[form:context]-->
 <%= form_remote_tag :url => { :action => "new_context" },
   :update=> "list-contexts",
   :position=> "bottom",
   :loading => "context.reset()",
-  :complete => "Form.focus_first('context-form');",
+  :complete => "Form.focusFirstElement('context-form');",
   :html=> { :id=>'context-form', :name=>'context', :class => 'inline-form' } %>
 <%= hidden_field( "context", "id" ) %>
 <label for="context_name">Context name</label>                                  

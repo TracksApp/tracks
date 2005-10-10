@@ -392,14 +392,7 @@ input {
 }
 
 /* Positioning the 'cells' in the list */
-/* table.list {
-    margin-top: 0px;
-    border-top: 1px solid #ccc;
-    border-left: 1px solid #ccc;
-    border-right: 1px solid #ccc;
-    background: #fff;
-    } */
-    
+
 .position {
     float: left;
     }
@@ -412,7 +405,7 @@ img.position, a:hover img.position {
     
 .data {
     text-align: left;
-    margin-left: 40px;
+    margin-left: 20px;
     float: left;
     }
     
