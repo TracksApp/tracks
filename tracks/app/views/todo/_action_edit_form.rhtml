@@ -15,19 +15,19 @@
   </tr>
   <tr>
     <td class="label"><label for="item_context_id">Context</label></td>
-        <td><select name="item[context_id]" id="item_context_id" tabindex="3">
-          <% for @place in @contexts %>
-            <% if @item %>
-              <% if @place.id == @item.context_id %>
-                <option value="<%= @place.id %>" selected="selected"><%= @place.name %></option>
-              <% else %>
-                <option value="<%= @place.id %>"><%= @place.name %></option>
-              <% end %>
-            <% else %>
-                <option value="<%= @place.id %>"><%= @place.name %></option>
-            <% end %>
-          <% end %>
-        </select></td>
+    <td><select name="item[context_id]" id="item_context_id" tabindex="3">
+             <% for @place in @contexts %>
+               <% if @item %>
+                 <% if @place.id == @item.context_id %>
+                   <option value="<%= @place.id %>" selected="selected"><%= @place.name %></option>
+                 <% else %>
+                   <option value="<%= @place.id %>"><%= @place.name %></option>
+                 <% end %>
+               <% else %>
+                   <option value="<%= @place.id %>"><%= @place.name %></option>
+               <% end %>
+             <% end %>
+           </select></td>
   </tr>
   <tr>
     <td class="label"><label for="item_project_id">Project</label></td>

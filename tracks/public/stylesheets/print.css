@@ -1,0 +1,74 @@
+/* LAYOUT ELEMENTS ========================================================== */
+*
+{
+  	margin: 0;
+  	padding: 0;
+}
+
+body {
+    background: #fff;
+  	color: #000;
+  	width: 2.5in;
+  	height: 4.7in;
+    font-size: 8.2pt;
+  	font-family: "Lucida Grande", "Bitstream Vera Sans", Helvetica, Verdana, Arial, sans-serif;
+    }
+
+img {
+  	max-width: 2.2in;
+  	max-height: 4.3in;
+    }
+
+/* Josh added */
+#navcontainer, #input_box, #footer, .big-box, .refresh, .badge, h1 { 
+    display:none; 
+    }
+
+.contexts {
+  	margin: 0 0 2em 0;
+  	border-top: 1px solid #000;
+  	page-break-before: always;
+    }
+
+.contexts:first-child {
+	  page-break-before: avoid;
+    }
+
+h2 {
+    font-size: 1.4em;
+    font-weight: bold;
+  	margin-bottom: .3em;
+  	padding: .2em 0;
+  	border-bottom: 1px dotted #000;
+    }
+
+a, p, blockquote, ul, li, ol, dt, dd, dl, table {
+	  margin: 0 0 .3em 0;
+    }
+
+.notes {
+    margin: .12em 1.2em;
+    padding: .3em;
+    }
+
+.description {
+  	margin-top: 0;
+  	margin-left 0;
+  	margin-bottom .3em;
+  	padding: .2em;
+    }
+
+ul {
+	  list-style-type: circle;
+    }
+
+li {
+  	margin: .1em 0 .1em 2em;
+  	line-height: 1.4em;	
+    }
+
+.checkbox {
+    float: left;
+	  size: 25px;
+    }
+
