@@ -2,21 +2,16 @@
     @project = project_form
 %>
 <%= error_messages_for 'project' %>
-<div class="position">
-  <%= @project.position %>
-</div>
-<div class="data">
-<p>
-<label for="project_done">Project done?</label>
-<%= check_box 'project', 'done', :class => 'project-done' %>
-</p>
-<p>
-<label for="project_name">Name:</label><br>
-<%= text_field 'project', 'name', :class => 'project-name'  %>
-</p>
-<p>
-<label for="project_description">Description (optional):</label><br>
-<%= text_area 'project', 'description', "cols" => 30, "rows" => 4, :class => 'project-description'  %>
-</p>
-</div>
+<tr>
+  <td width="150"><label for="project_name">Name:</label></td>
+  <td width="300"><%= text_field 'project', 'name', :class => 'project-name'  %></td>
+</tr>
+<tr>
+  <td width="150"><label for="project_description">Description (optional):</label></td>
+  <td width="300"><%= text_area 'project', 'description', "cols" => 30, "rows" => 4, :class => 'project-description'  %></td>
+</tr>
+<tr>
+  <td width="150"><label for="project_done">Project done?</label></td>
+  <td width="300"><%= check_box 'project', 'done', :class => 'project-done' %></td>
+</tr>
 <% @project = nil %>

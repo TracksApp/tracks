@@ -19,10 +19,10 @@
 
 <%= link_to_remote( image_tag("blank", :title =>"Delete context", :class=>"delete_item"), 
                   :update => "container_#{context.id}",
-                  :loading => visual_effect(:fade, 'container_#{context.id}'),
+                  :loading => visual_effect(:fade, "container_#{context.id}"),
                   :url => { :controller => "context", :action => "destroy", :id => context.id },
                   :confirm => "Are you sure that you want to delete the context \'#{context.name}\'?" ) + " " +
-    link_to_function( image_tag( "blank", :title => "Edit context", :class=>"edit_item"), "Element.toggle('context-#{context.id}','context-#{context.id}-edit-form'); new Effect.Appear('context-#{context.id}-edit-form'); Form.focus_first('form-context-#{context.id}');" ) %>
+    link_to_function( image_tag( "blank", :title => "Edit context", :class=>"edit_item"), "Element.toggle('context-#{context.id}','context-#{context.id}-edit-form'); new Effect.Appear('context-#{context.id}-edit-form'); Form.focusFirstElement('form-context-#{context.id}');" ) %>
 </div>
 </div><!-- [end:context-context.id] -->
 
@@ -31,14 +31,16 @@
                :html => { :id => "form-context-#{context.id}", :class => "inline-form" },
                :update => "container_#{context.id}",
                :complete => visual_effect(:appear, 'container_#{context.id}') %>
+  <table style="table-layout: fixed;" width="450">
   <%= render_partial 'context_form', context %>
-  <div class="buttons">  
-  <input type="submit" value="Update" />
-  <a href="javascript:void(0);" onclick="Element.toggle('context-<%= context.id %>','context-<%= context.id %>-edit-form');Form.reset('form-context-<%= context.id %>');">Cancel</a>
-  </div>
+  <tr>
+    <td width="150">&nbsp;</td>
+    <td width="300"><input type="submit" value="Update" />&nbsp;<a href="javascript:void(0);" onclick="Element.toggle('context-<%= context.id %>','context-<%= context.id %>-edit-form');Form.reset('form-context-<%= context.id %>');">Cancel</a></td>
+  </tr>
+  </table>
 <%= end_form_tag %>
 </div><!-- [end:context-context.id-edit-form] -->
-</div><!-- [end:context-context.id-container] -->
+</div><!-- [end:context_context.id] -->
 <% if controller.action_name == 'new_context' %>
 <script>
    new Effect.Appear('context-<%= context.id %>');

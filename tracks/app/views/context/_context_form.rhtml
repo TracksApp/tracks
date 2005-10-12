@@ -2,13 +2,12 @@
     @context = context_form
 %>
 <%= error_messages_for 'context' %>
-<div class="position">
-  <%= @context.position %>
-</div>
-<div class="data">
-<label for="context_name">Name</label>
-<%= text_field 'context', 'name', :class => 'context-name'  %>
-<label for="context_hide">Hidden?</label>
-<%= check_box 'context', 'hide', :class => 'context-hide' %>
-</div>
+<tr>
+  <td width="150"><label for="context_name">Name</label></td>
+  <td width="300"><%= text_field 'context', 'name', :class => 'context-name'  %></td>
+</tr>
+<tr>  
+  <td width="150"><label for="context_hide">Hidden?</label></td>
+  <td width="300"><%= check_box 'context', 'hide', :class => 'context-hide' %></td>
+</tr>
 <% @context = nil %>

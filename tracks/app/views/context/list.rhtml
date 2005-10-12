@@ -19,7 +19,7 @@
 <%= form_remote_tag :url => { :action => "new_context" },
   :update=> "list-contexts",
   :position=> "bottom",
-  :loading => "context.reset()",
+  :loading => "Form.reset('context-form')",
   :complete => "Form.focusFirstElement('context-form');",
   :html=> { :id=>'context-form', :name=>'context', :class => 'inline-form' } %>
 <%= hidden_field( "context", "id" ) %>

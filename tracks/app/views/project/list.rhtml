@@ -19,7 +19,7 @@
 <%= form_remote_tag :url => { :action => "new_project" },
   :update=> "list-projects",
   :position=> "bottom",
-  :loading => "project.reset()",
+  :loading => "Form.reset('project-form')",
   :complete => "Form.focusFirstElement('project-form');",
   :html=> { :id=>'project-form', :name=>'project', :class => 'inline-form' } %>
   <label for="project_name">Name:</label><br />

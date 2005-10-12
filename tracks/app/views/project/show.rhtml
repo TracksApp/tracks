@@ -71,7 +71,7 @@
   <%= form_remote_tag :url => { :controller => "todo", :action => "add_item" },
                       :update=> "next_actions",
                       :position=> "bottom",
-                      :loading => "project.reset()",
+                      :loading => "Form.reset('project-form-new-action')",
                       :complete => "Form.focusFirstElement('project-form-new-action'); new Effect.Highlight('next_actions');",
                       :html=> { :id=>'project-form-new-action', :name=>'project', :class => 'inline-form' } %>
   <%= hidden_field( "new_item", "project_id", "value" => "#{@project.id}") %>

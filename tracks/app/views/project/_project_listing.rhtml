@@ -17,10 +17,10 @@
   
   <%= link_to_remote( image_tag("blank", :title =>"Delete project", :class=>"delete_item"), 
                   :update => "container_#{project.id}",
-                  :loading => visual_effect(:fade, 'container_#{project.id}'),
+                  :loading => visual_effect(:fade, "container_#{project.id}"),
                   :url => { :controller => "project", :action => "destroy", :id => project.id },
                   :confirm => "Are you sure that you want to delete the project \'#{project.name}\'?" ) + " " +
-      link_to_function(image_tag( "blank", :title => "Edit item", :class=>"edit_item"), "Element.toggle('project-#{project.id}','project-#{project.id}-edit-form'); new Effect.Appear('project-#{project.id}-edit-form'); Form.focus_first('form-project-#{project.id}');" ) %>
+      link_to_function(image_tag( "blank", :title => "Edit item", :class=>"edit_item"), "Element.toggle('project-#{project.id}','project-#{project.id}-edit-form'); new Effect.Appear('project-#{project.id}-edit-form'); Form.focusFirstElement('form-project-#{project.id}');" ) %>
 </div>
 </div><!-- [end:project-project.id] -->
 
@@ -29,11 +29,13 @@
                :html => { :id => "form-project-#{project.id}", :class => "form" },
                :update => "container_#{project.id}",
                :complete => visual_effect(:appear, 'container_#{project.id}') %>
+  <table style="table-layout: fixed;" width="450">
   <%= render_partial 'project_form', project %>
-  <div class="buttons">  
-  <input type="submit" value="Update" />
-  <a href="javascript:void(0);" onclick="Element.toggle('project-<%= project.id %>','project-<%= project.id %>-edit-form');Form.reset('form-project-<%= project.id %>');">Cancel</a>
-  </div>
+  <tr>
+    <td width="150">&nbsp;</td>
+    <td width="300"><input type="submit" value="Update" />&nbsp;<a href="javascript:void(0);" onclick="Element.toggle('project-<%= project.id %>','project-<%= project.id %>-edit-form');Form.reset('form-project-<%= project.id %>');">Cancel</a></td>
+  </tr>
+  </table>
 <%= end_form_tag %>
 </div><!-- [end:project-project.id-edit-form] -->
 </div><!-- [end:container_project.id] -->

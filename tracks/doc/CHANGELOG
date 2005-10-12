@@ -30,6 +30,7 @@ Wiki (deprecated - please use Trac): http://www.rousette.org.uk/projects/wiki/
   ruby -i.bak -pe 'gsub!("#!/usr/bin/env ruby", "#!c:/ruby/bin/ruby")' public/dispatch.* script/*
 13. The TXT view is now sorted by position, just as the home page is.
 14. <b>Contributed by lolindrath</b>: Items that are overdue are coloured red, and have the text 'Overdue by X days' in the badge. Other due dates are given as days from now (up to a week away in orange, more than a week away in green), and the tool tip shows the actual date.
+15. Projects and Contexts in [tracks_url]/projects and [tracks_url]/contexts can now be rearranged in order by dragging and dropping. Just pick the item up by the 'DRAG' label and drop it where you want.
 
 == Version 1.03
 
