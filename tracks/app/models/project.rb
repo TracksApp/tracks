@@ -1,7 +1,7 @@
 class Project < ActiveRecord::Base
 
   has_many :todos, :dependent => true
-  has_many :notes, :order => "created_at DESC"
+  has_many :notes, :dependent => true, :order => "created_at DESC"
   belongs_to :user
   acts_as_list :scope => :user
 
