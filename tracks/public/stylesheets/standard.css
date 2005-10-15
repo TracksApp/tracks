@@ -126,7 +126,8 @@ a.show_notes:hover {background-image: url(../images/notes_on.png); background-re
       text-shadow: rgba(0,0,0,.4) 0px 2px 5px;
       }
 
-.new_actions {
+/* Styling the 'Fresh Actions' box on the home page */
+#new_actions {
       padding: 0px 5px 2px 5px;      
       background: #E7FDDE;
       border: 1px solid #57A620;
@@ -134,10 +135,13 @@ a.show_notes:hover {background-image: url(../images/notes_on.png); background-re
       margin-bottom: 15px;
       }
       
-.new_actions h2 {
-      padding: 0 px 5px 0px 5px;
+#new_actions h2 {
+      /* padding: 0 px 5px 0px 5px; */
       color: #57A620;
-      }      
+      text-align: center;
+      }     
+
+#new_actions a {color: #cc3334; text-decoration: underline;}       
 
 h2 a, h2 a:link, h2 a:active, h2 a:visited {
       color: #fff;
@@ -149,8 +153,6 @@ h2 a:hover {
       background-color: transparent;
       text-decoration: none;
       }
-      
-a.refresh, a.refresh:link, a.refresh:active {color: #57A620;}
       
 #input_box {
       margin-left: 490px;
