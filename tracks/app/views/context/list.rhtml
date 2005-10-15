@@ -5,13 +5,13 @@
   <%= render_partial( 'context_listing', context ) %>
 <% end %>
 </div>
-
-<%= sortable_element 'list-contexts',
-                     :tag => 'div',
-                     :handle => 'handle',
-                     :complete => visual_effect(:highlight, 'list-contexts'),
-                     :url => {:controller => 'context', :action => 'order'}
-                     %> 
+<% sortable_options = {
+                        :tag => 'div',
+                        :handle => 'handle',
+                        :complete => visual_effect(:highlight, 'list-contexts'),
+                        :url => {:controller => 'context', :action => 'order'}
+                       }%>
+<%= sortable_element 'list-contexts', sortable_options %>
 <br />
 <a href="javascript:void(0)" onClick="Element.toggle('context_new'); Form.focusFirstElement('context-form');" accesskey="n" title="Create a new context">Create new context &#187;</a>
 <div id="context_new" class="context_new" style="display:none">
@@ -20,7 +20,7 @@
   :update=> "list-contexts",
   :position=> "bottom",
   :loading => "Form.reset('context-form')",
-  :complete => "Form.focusFirstElement('context-form');",
+  :complete => "Sortable.create('list-contexts', #{options_for_javascript(sortable_options)});Form.focusFirstElement('context-form');",
   :html=> { :id=>'context-form', :name=>'context', :class => 'inline-form' } %>
 <%= hidden_field( "context", "id" ) %>
 <label for="context_name">Context name</label>                                  
