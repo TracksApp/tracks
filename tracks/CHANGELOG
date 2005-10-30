@@ -1,4 +1,109 @@
+*0.14.1* (October 19th, 2005)
+
+* Don't clean RAILS_ROOT on windows
+
+* Remove trailing '/' from RAILS_ROOT [Nicholas Seckar]
+
+* Upgraded to Active Record 1.12.1 and Action Pack 1.10.1
+
+
+*0.14.0* (October 16th, 2005)
+
+* Moved generator folder from RAILS_ROOT/generators to RAILS_ROOT/lib/generators [Tobias Luetke]
+
+* Fix rake dev and related commands [Nicholas Seckar]
+
+* The rails command tries to deduce your MySQL socket by running `mysql_config
+--socket`.  If it fails, default to /path/to/your/mysql.sock
+
+* Made the rails command use the application name for database names in the tailored database.yml file. Example: "rails ~/projects/blog" will use "blog_development" instead of "rails_development". [Florian Weber]
+
+* Added Rails framework freezing tasks: freeze_gems (freeze to current gems), freeze_edge (freeze to Rails SVN trunk), unfreeze_rails (float with newest gems on system)
+
+* Added update_javascripts task which will fetch all the latest js files from your current rails install. Use after updating rails. [Tobias Luetke]
+
+* Added cleaning of RAILS_ROOT to useless elements such as '../non-dot-dot/'. Provides cleaner backtraces and error messages. [Nicholas Seckar]
+
+* Made the instantiated/transactional fixtures settings be controlled through Rails::Initializer. Transactional and non-instantiated fixtures are default from now on. [Florian Weber]
+
+* Support using different database adapters for development and test with ActiveRecord::Base.schema_format = :ruby [Sam Stephenson]
+
+* Make webrick work with session(:off)
+
+* Add --version, -v option to the Rails command. Closes #1840. [stancell]
+
+* Update Prototype to V1.4.0_pre11, script.aculo.us to V1.5_rc3 [2504] and fix the rails generator to include the new .js files [Thomas Fuchs]
+
+* Make the generator skip a file if it already exists and is identical to the new file.
+
+* Add experimental plugin support #2335
+
+* Made Rakefile aware of new .js files in script.aculo.us [Thomas Fuchs]
+
+* Make table_name and controller_name in generators honor AR::Base.pluralize_table_names. #1216 #2213 [kazuhiko@fdiary.net]
+
+* Clearly label functional and unit tests in rake stats output.  #2297 [lasse.koskela@gmail.com]
+
+* Make the migration generator only check files ending in *.rb when calculating the next file name #2317 [Chad Fowler]
+
+* Added prevention of duplicate migrations from the generator #2240 [fbeausoleil@ftml.net]
+
+* Add db_schema_dump and db_schema_import rake tasks to work with the new ActiveRecord::SchemaDumper (for dumping a schema to and reading a schema from a ruby file).
+
+* Reformed all the config/environments/* files to conform to the new Rails::Configuration approach. Fully backwards compatible.
+
+* Added create_sessions_table, drop_sessions_table, and purge_sessions_table as rake tasks for databases that supports migrations (MySQL, PostgreSQL, SQLite) to get a table for use with CGI::Session::ActiveRecordStore
+
+* Added dump of schema version to the db_structure_dump task for databases that support migrations #1835 [Rick Olson]
+
+* Fixed script/profiler for Ruby 1.8.2 #1863 [Rick Olson]
+
+* Fixed clone_structure_to_test task for SQLite #1864 [jon@burningbush.us]
+
+* Added -m/--mime-types option to the WEBrick server, so you can specify a Apache-style mime.types file to load #2059 [ask@develooper.com]
+
+* Added -c/--svn option to the generator that'll add new files and remove destroyed files using svn add/revert/remove as appropriate #2064 [kevin.clark@gmail.com]
+
+* Added -c/--charset option to WEBrick server, so you can specify a default charset (which without changes is UTF-8) #2084 [wejn@box.cz]
+
+* Make the default stats task extendable by modifying the STATS_DIRECTORIES constant
+
+* Allow the selected environment to define RAILS_DEFAULT_LOGGER, and have Rails::Initializer use it if it exists.
+
+* Moved all the shared tasks from Rakefile into Rails, so that the Rakefile is empty and doesn't require updating.
+
+* Added Rails::Initializer and Rails::Configuration to abstract all of the common setup out of config/environment.rb (uses config/boot.rb to bootstrap the initializer and paths)
+
+* Fixed the scaffold generator to fail right away if the database isn't accessible instead of in mid-air #1169 [Chad Fowler]
+
+* Corrected project-local generator location in scripts.rb #2010 [Michael Schuerig]
+
+* Don't require the environment just to clear the logs #2093 [Scott Barron]
+
+* Make the default rakefile read *.rake files from config/tasks (for easy extension of the rakefile by e.g. generators)
+
+* Only load breakpoint in development mode and when BREAKPOINT_SERVER_PORT is defined.
+
+* Allow the --toggle-spin switch on process/reaper to be negated
+
+* Replace render_partial with render :partial in scaffold generator [Nicholas Seckar]
+
+* Added -w flag to ps in process/reaper #1934 [Scott Barron]
+
+* Allow ERb in the database.yml file (just like with fixtures), so you can pull out the database configuration in environment variables #1822 [Duane Johnson]
+
+* Added convenience controls for FCGI processes (especially when managed remotely): spinner, spawner, and reaper. They reside in script/process. More details can be had by calling them with -h/--help.
+
+* Added load_fixtures task to the Rakefile, which will load all the fixtures into the database for the current environment #1791 [Marcel Molina]
+
+* Added an empty robots.txt to public/, so that web servers asking for it won't trigger a dynamic call, like favicon.ico #1738 [michael@schubert]
+
+* Dropped the 'immediate close-down' of FCGI processes since it didn't work consistently and produced bad responses when it didn't. So now a TERM ensures exit after the next request (just as if the process is handling a request when it receives the signal). This means that you'll have to 'nudge' all FCGI processes with a request in order to ensure that they have all reloaded. This can be done by something like ./script/process/repear --nudge 'http://www.myapp.com' --instances 10, which will load the myapp site 10 times (and thus hit all of the 10 FCGI processes once, enough to shut down).
+
+
 *0.13.1* (11 July, 2005)
+
+* Look for app-specific generators in RAILS_ROOT/generators rather than the clunky old RAILS_ROOT/script/generators.  Nobody really uses this feature except for the unit tests, so it's a negligible-impact change.  If you want to work with third-party generators, drop them in ~/.rails/generators or simply install gems.
 
 * Fixed that each request with the WEBrick adapter would open a new database connection #1685 [Sam Stephenson]
 

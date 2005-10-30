@@ -1,68 +1,54 @@
-RAILS_ROOT = File.dirname(__FILE__) + "/../"
-RAILS_ENV  = ENV['RAILS_ENV'] || 'production'
+# Be sure to restart your webserver when you modify this file.
 
+# Uncomment below to force Rails into production mode
+# (Use only when you can't set environment variables through your web/app server)
+# ENV['RAILS_ENV'] = 'production'
 
-# Mocks first.
-ADDITIONAL_LOAD_PATHS = ["#{RAILS_ROOT}/test/mocks/#{RAILS_ENV}"]
+# Bootstrap the Rails environment, frameworks, and default configuration
+require File.join(File.dirname(__FILE__), 'boot')
 
-# Then model subdirectories.
-ADDITIONAL_LOAD_PATHS.concat(Dir["#{RAILS_ROOT}/app/models/[_a-z]*"])
-ADDITIONAL_LOAD_PATHS.concat(Dir["#{RAILS_ROOT}/components/[_a-z]*"])
+Rails::Initializer.run do |config|
+  # Skip frameworks you're not going to use
+  # config.frameworks -= [ :action_web_service, :action_mailer ]
 
-# Followed by the standard includes.
-ADDITIONAL_LOAD_PATHS.concat %w(
-  app
-  app/models
-  app/controllers
-  app/helpers
-  app/apis
-  config
-  components
-  lib
-  vendor
-).map { |dir| "#{RAILS_ROOT}/#{dir}" }
+  # Add additional load paths for your own custom dirs
+  # config.load_paths += %W( #{RAILS_ROOT}/app/services )
 
-# Prepend to $LOAD_PATH
-ADDITIONAL_LOAD_PATHS.reverse.each { |dir| $:.unshift(dir) if File.directory?(dir) }
+  # Force all environments to use the same logger level 
+  # (by default production uses :info, the others :debug)
+  # config.log_level = :debug
 
+  # Use the database for sessions instead of the file system
+  # (create the session table with 'rake create_sessions_table')
+  # config.action_controller.session_store = :active_record_store
 
-# Require Rails gems.
-require 'rubygems'
-require_gem 'activesupport'
-require_gem 'activerecord'
-require_gem 'actionpack'
-require_gem 'actionmailer'
-require_gem 'actionwebservice'
-require_gem 'rails'
+  # Enable page/fragment caching by setting a file-based store
+  # (remember to create the caching directory and make it readable to the application)
+  # config.action_controller.fragment_cache_store = :file_store, "#{RAILS_ROOT}/cache"
 
-# Environment-specific configuration.
-require_dependency "environments/#{RAILS_ENV}"
-ActiveRecord::Base.configurations = YAML::load(File.open("#{RAILS_ROOT}/config/database.yml"))
-ActiveRecord::Base.establish_connection
+  # Activate observers that should always be running
+  # config.active_record.observers = :cacher, :garbage_collector
 
+  # Make Active Record use UTC-base instead of local time
+  # config.active_record.default_timezone = :utc
+  
+  # Use Active Record's schema dumper instead of SQL when creating the test database
+  # (enables use of different database adapters for development and test environments)
+  # config.active_record.schema_format = :ruby
 
-# Configure defaults if the included environment did not.
-begin
-  RAILS_DEFAULT_LOGGER = Logger.new("#{RAILS_ROOT}/log/#{RAILS_ENV}.log")
-rescue StandardError
-  RAILS_DEFAULT_LOGGER = Logger.new(STDERR)
-  RAILS_DEFAULT_LOGGER.level = Logger::WARN
-  RAILS_DEFAULT_LOGGER.warn(
-    "Rails Error: Unable to access log file. Please ensure that log/#{RAILS_ENV}.log exists and is chmod 0666. " +
-    "The log level has been raised to WARN and the output directed to STDERR until the problem is fixed."
-  )
+  # See Rails::Configuration for more options
 end
 
-[ActiveRecord, ActionController, ActionMailer].each { |mod| mod::Base.logger ||= RAILS_DEFAULT_LOGGER }
-[ActionController, ActionMailer].each { |mod| mod::Base.template_root ||= "#{RAILS_ROOT}/app/views/" }
-ActionController::Routing::Routes.reload
+# Add new inflection rules using the following format 
+# (all these examples are active by default):
+# Inflector.inflections do |inflect|
+#   inflect.plural /^(ox)$/i, '\1en'
+#   inflect.singular /^(ox)en/i, '\1'
+#   inflect.irregular 'person', 'people'
+#   inflect.uncountable %w( fish sheep )
+# end
 
-Controllers = Dependencies::LoadingModule.root(
-  File.expand_path(File.join(RAILS_ROOT, 'app', 'controllers')),
-  File.expand_path(File.join(RAILS_ROOT, 'components'))
-)
-
-# Include your app's configuration here:
+# Include your application configuration below
 def app_configurations
   YAML::load(File.open("#{RAILS_ROOT}/config/settings.yml"))
 end
