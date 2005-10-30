@@ -17,7 +17,7 @@
   <%= due_date( item.due ) %> 
   <%= sanitize(item.description) %>
   
-  <% if @params["project"] == true %>
+  <% if @params["project"] == "true" %>
   	<%= link_to( "[C]", { :controller => "context", :action => "show", :name => urlize(item.context.name) }, :title => "View context: #{item.context.name}" ) %>
   <% else %>
 	  <% if item.project_id %>

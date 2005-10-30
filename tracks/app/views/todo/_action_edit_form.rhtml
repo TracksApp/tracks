@@ -48,6 +48,9 @@
     <td><input name="item[due]" id="due_<%= @item.id %>" type="text" value="<%= format_date(@item.due) %>" tabindex="5" size="10" onFocus="Calendar.setup" /></td>
   </tr>
   <tr>
+  <% if controller.controller_name == "project" %>
+      <input type="hidden" name="project" value="true" />
+  <% end -%>
     <td><input type="submit" value="Update" tabindex="6" />
         <a href="javascript:void(0);" onclick="Element.toggle('item-<%= @item.id %>','action-<%= @item.id %>-edit-form');Form.reset('form-action-<%= @item.id %>');">Cancel</a></td>
   </tr>

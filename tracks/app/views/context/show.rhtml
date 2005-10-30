@@ -32,35 +32,7 @@
 
 <div id="input_box">
 
-<%= link_to_function( "Add the next action in this context &#187;", "Element.toggle('context_new_action'); Form.focusFirstElement('context-form-new-action');", {:title => "Add the next action", :accesskey => "n"}) %>
-
-  <div id="context_new_action" class="context_new" style="display:none">
-  <!--[form:context]-->
-  <%= form_remote_tag :url => { :controller => "todo", :action => "add_item" },
-                      :update=> "next_actions",
-                      :position=> "bottom",
-                      :loading => "Form.reset('context-form-new-action')",
-                      :complete => "Form.focusFirstElement('context-form-new-action'); new Effect.Highlight('next_actions');",
-                      :html=> { :id=>'context-form-new-action', :name=>'context', :class => 'inline-form' } %>
-  <%= hidden_field( "new_item", "context_id", "value" => "#{@context.id}") %>
-  <label for="new_item_description">Description</label><br />                                          
-  <%= text_field( "new_item", "description", "size" => 25, "tabindex" => 1) %><br />
-  <label for="new_item_notes">Notes</label><br />
-  <%= text_area( "new_item", "notes", "cols" => 25, "rows" => 10, "tabindex" => 2) %><br />
-  <label for="new_item_project_id">Project</label><br />
-    <select name="new_item[project_id]" id="item_project_id" tabindex="3">
-      <option selected="selected"></option>
-      <%= options_from_collection_for_select(@projects, "id", "name") %>
-    </select><br />
-    <label for="item_due">Due</label><br />
-    <%= text_field("new_item", "due", "size" => 10, "class" => "Date", "onFocus" => "Calendar.setup", "tabindex" => 4) %>
-    <br /><br />
-  <input type="submit" value="Add item" tabindex="5">
-  <%= end_form_tag %><!--[eoform:context]-->
-  <%= calendar_setup( "new_item_due" ) %>
-
-  </div><!-- [end:context-new-action] -->
-
+<%= render "shared/add_new_item_form" %>
 <%= render "shared/sidebar" %>
 </div><!-- End of input box -->
 
