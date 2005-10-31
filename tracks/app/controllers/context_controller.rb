@@ -80,6 +80,7 @@ class ContextController < ApplicationController
         Context.update(id, :position => position + 1)
       end
     end
+    render :nothing => true
   end
   
   protected

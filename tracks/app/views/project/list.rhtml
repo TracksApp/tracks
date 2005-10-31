@@ -8,8 +8,8 @@
 <% sortable_options = {
                         :tag => 'div',
                         :handle => 'handle',
-                        :complete => visual_effect(:highlight, 'list-contexts'),
-                        :url => {:controller => 'context', :action => 'order'}
+                        :complete => visual_effect(:highlight, 'list-projects'),
+                        :url => {:controller => 'project', :action => 'order'}
                        }%>
 <%= sortable_element 'list-projects', sortable_options %>
 <br />
