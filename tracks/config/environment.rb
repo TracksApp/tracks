@@ -1,6 +1,6 @@
 # Be sure to restart your webserver when you modify this file.
-
 # Uncomment below to force Rails into production mode
+
 # (Use only when you can't set environment variables through your web/app server)
 # ENV['RAILS_ENV'] = 'production'
 
