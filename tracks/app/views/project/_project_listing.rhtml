@@ -9,7 +9,7 @@
   <%= link_to( sanitize("#{project.name}"), :action => "show", :name => urlize(project.name) ) %><%= " (" + project.count_undone_todos("actions") + ")" %>
 </div>
 <div class="buttons">
-  <% if project.done == 1 -%>
+  <% if project.done? -%>
     <span class="grey">COMPLETED</span>
   <% else -%>
     <span class="grey">ACTIVE</span>

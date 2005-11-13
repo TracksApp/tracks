@@ -7,14 +7,21 @@
 <% end -%>
 
   <div id="next_actions">
-    <% if @project.done == 1 -%>
-      <p class="info">This project has been completed</p>
-      <%= render :partial => "show_items", :collection => @not_done %>
-    <% elsif @not_done.empty? -%>
-      <p>There are no next actions yet in this project</p>
-    <% else -%>
-      <%= render :partial => "show_items", :collection => @not_done %>
+    <% if @project.done? -%>
+      <p class="completed">Project has been marked as completed</p>
     <% end -%>
+    <% if !@project.done? and @not_done.empty? -%>
+        <div id="empty-nd" style="display:block;">
+          <%= render :partial => "empty", 
+              :locals => { :message => "There are currently no uncompleted actions in this project"} %>
+        </div>
+    <% else -%>
+        <div id="empty-nd" style="display:none;">
+          <%= render :partial => "empty", 
+              :locals => { :message => "There are currently no uncompleted actions in this project"} %>
+        </div>
+    <% end -%>
+        <%= render :partial => "show_items", :collection => @not_done %>
   </div><!-- [end:next_actions] -->
 </div><!-- [end:contexts] -->
 
@@ -23,10 +30,17 @@
 
   <div id="completed">
     <% if @done.empty? %>
-      <p>There are no completed next actions yet in this project</p>
-    <% else %>
-      <%= render :partial => "show_items", :collection => @done %>
-    <% end %>
+    <div id="empty-d">
+        <%= render :partial => "empty",
+        :locals => {:message => "There are currently no completed next actions in this project"} %>
+    </div>
+    <% else -%>
+        <div id="empty-nd" style="display:none;">
+          <%= render :partial => "empty", 
+              :locals => { :message => "There are currently no uncompleted actions in this project"} %>
+        </div>
+    <% end -%>
+        <%= render :partial => "show_items", :collection => @done %>
   </div>
 </div><!-- [end:contexts] -->
 
@@ -42,6 +56,12 @@
   </div>
 </div>
 <!-- end div.contexts -->
+
+<% if @project.done? -%>
+  <%= button_to "Mark project as uncompleted", {:action => "toggle_project_done", :id => @project.id} %><br />
+<% else -%>
+  <%= button_to "Mark project as completed", {:action => "toggle_project_done", :id => @project.id} %><br />
+<% end -%>
 
 <%= link_to_function( "Add a note", "Element.toggle('new-note'); Form.focusFirstElement('form-new-note');") %>
 

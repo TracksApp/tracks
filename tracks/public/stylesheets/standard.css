@@ -277,6 +277,14 @@ a.footer_link:hover {color: #fff; background-color: #cc3334 !important;}
       color: #ED2E38;
       text-align: center;
       }
+
+.completed {
+      border: 1px solid #007E00; 
+      background-color: #c2ffc2;
+      padding: 5px;
+      color: #007E00;
+      text-align: center;
+}
               
 /*   Draw attention to some text 
     Same format as traffic lights */
@@ -454,7 +462,13 @@ form {
     border: none;
     padding: 3px;
     width: 100%;
-    }    
+    }
+
+form.button-to {
+	border: none;
+	padding: 0px;
+	margin: 0px;
+}
 
 label {
     font-weight: bold;

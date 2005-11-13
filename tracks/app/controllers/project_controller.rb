@@ -61,12 +61,23 @@ class ProjectController < ApplicationController
   #
   def toggle_check
     self.init
-
+    
     item = check_user_return_item
     item.toggle!('done')
     item.completed = Time.now () # For some reason, the before_save in todo.rb stopped working
-    if item.save
+    if item.save        
       render :partial => 'project/show_items', :object => item
+    end
+  end
+  
+  # Toggles the 'done' status of a project
+  #
+  def toggle_project_done
+    check_user_set_project
+    
+    @project.toggle!('done')
+    if @project.save
+      redirect_to(:action => "list")
     end
   end
 
