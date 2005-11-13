@@ -9,9 +9,7 @@
   <div id="next_actions">
     <% if @project.done == 1 -%>
       <p class="info">This project has been completed</p>
-      <% for item in @not_done -%>
-        <%= render_partial "show_items", item %>
-      <% end -%>
+      <%= render :partial => "show_items", :collection => @not_done %>
     <% elsif @not_done.empty? -%>
       <p>There are no next actions yet in this project</p>
     <% else -%>

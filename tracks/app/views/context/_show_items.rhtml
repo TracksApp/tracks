@@ -1,12 +1,13 @@
 <%   item = show_items %>
+
 <% if !item.done? %>
 <div id="item-<%= item.id %>-container">
-<%= form_remote_tag( :url => url_for( :controller => "todo", :action => "toggle_check", :id => item.id ),
+<%= form_remote_tag( :url => url_for( :controller => "context", :action => "toggle_check", :id => item.id ),
                      :html => { :id=> "checkbox-notdone-#{item.id}", :class => "inline-form" },
                      :update => "completed",
                      :position => "top",
                      :loading => "Form.disable('checkbox-notdone-#{item.id}');",
-                     :complete => "new Effect.Fade('item-#{item.id}-container', true);"
+                     :complete => visual_effect(:fade, "item-#{item.id}-container") 
                      ) %>
 
 <div id="item-<%= item.id %>">
@@ -14,7 +15,7 @@
   <%=
   link_to_remote( image_tag("blank", :title =>"Delete this action", :class=>"delete_item"), 
                     :update => "item-#{item.id}-container",
-                    :loading => "new Effect.Fade('item-#{item.id}-container', true)",
+                    :loading => visual_effect(:fade, "item-#{item.id}-container"),
                     :url => { :controller => "todo", :action => "destroy_action", :id => item.id }, :confirm => "Are you sure that you want to delete the action \'#{item.description}\'?" ) + " " +
   link_to_function(image_tag( "blank", :title => "Edit item", :class=>"edit_item"), "Element.toggle('item-#{item.id}','action-#{item.id}-edit-form'); new Effect.Appear('action-#{item.id}-edit-form'); Form.focusFirstElement('form-action-#{item.id}');" ) + " "
   %>
@@ -48,20 +49,21 @@
 <%= form_remote_tag  :url => { :controller => 'todo', :action => 'update_action', :id => item.id },
                :html => { :id => "form-action-#{item.id}", :class => "inline-form" },
                :update => "item-#{item.id}-container",
-               :complete => "new Effect.Appear('item-#{item.id}-container');" %>
-  <%= render_partial 'todo/action_edit_form', item %>
+               :complete => visual_effect(:appear, "item-#{item.id}-container") %>
+              
+  <%= render :partial => 'todo/action_edit_form', :object => item %>
 <%= end_form_tag %>
 </div><!-- [end:action-item.id-edit-form] -->
 
 </div><!-- [end:item-item.id-container] -->
 <% else %>
 <div id="done-item-<%= item.id %>-container">
-<%= form_remote_tag( :url => url_for( :controller => "todo", :action => "toggle_check", :id => item.id ),
+<%= form_remote_tag( :url => url_for( :controller => "context", :action => "toggle_check", :id => item.id ),
                      :html => { :id=> "checkbox-done-#{item.id}", :class => "inline-form" },
                      :update => "next_actions",
                      :position => "bottom",
                      :loading => "Form.disable('checkbox-done-#{item.id}');",
-                     :complete => "new Effect.Fade('done-item-#{item.id}-container', true);"
+                     :complete => visual_effect(:fade, "done-item-#{item.id}-container")
                      ) %>
 
 <div id="done-item-<%= item.id %>">
@@ -69,7 +71,7 @@
   <%=
   link_to_remote( image_tag("blank", :title =>"Delete this action", :class=>"delete_item"), 
                   :update => "done-item-#{item.id}-container",
-                  :loading => "new Effect.Fade('done-item-#{item.id}-container', true)",
+                  :loading => visual_effect(:fade, "done-item-#{item.id}-container"),
                   :url => { :controller => "todo", :action => "destroy_action", :id => item.id }, :confirm => "Are you sure that you want to delete the action \'#{item.description}\'?" ) + " "
   %>
   <%= image_tag("blank") %>

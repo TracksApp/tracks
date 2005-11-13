@@ -34,7 +34,7 @@
 
 <div id="action-<%= item.id %>-edit-form" class="edit-form" style="display:none;">
   <%= form_remote_tag_edit_todo( item ) %>
-  <%= render :partial => 'action_edit_form', :object => item %>
+  <%= render :partial => 'todo/action_edit_form', :object => item %>
   <%= end_form_tag %>
 </div><!-- [end:action-item.id-edit-form] -->
 

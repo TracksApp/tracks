@@ -86,4 +86,5 @@ module ApplicationHelper
     str << ",step:1,inputField:\"" + input_field + "\",cache:true,align:\"TR\" })"
     javascript_tag str
   end
+
 end

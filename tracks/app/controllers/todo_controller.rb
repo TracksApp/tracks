@@ -69,7 +69,7 @@ class TodoController < ApplicationController
     else
       item.due = ""
     end
-
+      
     if item.save
       render :partial => 'item', :object => item, :project => @params["project"]
     else
@@ -119,7 +119,10 @@ class TodoController < ApplicationController
 
     item = check_user_return_item
     item.toggle!('done')
-    render :partial => 'item', :object => item
+    item.completed = Time.now () # For some reason, the before_save in todo.rb stopped working
+    if item.save
+      render :partial => 'item', :object => item
+    end
   end
 
   protected

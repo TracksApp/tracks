@@ -24,12 +24,11 @@ class ContextController < ApplicationController
   # e.g. <home>/project/show/<project_name> shows just <project_name>.
   #
   def show
-    self.init
-    self.init_todos
-    self.check_user_set_context
+    init
+    init_todos
     @page_title = "TRACKS::Context: #{@context.name}"
   end
-
+  
   # Creates a new context via Ajax helpers
   #
   def new_context
@@ -58,6 +57,19 @@ class ContextController < ApplicationController
       render :text => ""
     end
   end
+  
+  # Toggles the 'done' status of the action
+  #
+  def toggle_check
+    self.init
+
+    item = check_user_return_item
+    item.toggle!('done')
+    item.completed = Time.now () # For some reason, the before_save in todo.rb stopped working
+    if item.save
+      render :partial => 'context/show_items', :object => item
+    end
+  end
 
   # Fairly self-explanatory; deletes the context
   # If the context contains actions, you'll get a warning dialogue.
@@ -84,6 +96,16 @@ class ContextController < ApplicationController
   end
   
   protected
+    def check_user_return_item
+      item = Todo.find( @params['id'] )
+      if @session['user'] == item.user
+        return item
+      else
+        flash["warning"] = "Item and session user mis-match: #{item.user.name} and #{@session['user'].name}!"
+        render_text ""
+      end
+    end
+    
 
     def check_user_set_context
       @user = @session['user']
