@@ -28,6 +28,24 @@ class ProjectController < ApplicationController
     init_todos
     @notes = @project.notes
     @page_title = "TRACKS::Project: #{@project.name}"
+    
+    if @not_done.empty?
+      @msg_nd = "Currently there are no uncompleted actions in this project"
+    else
+      @msg_nd = nil
+    end
+    
+    if @done.empty?
+      @msg_d = "Currently there are no completed actions in this project"
+    else
+      @msg_d = nil
+    end
+    
+    if @notes.empty?
+      @msg_n = "Currently there are no notes attached to this project"
+    else
+      @msg_n = nil
+    end
   end
 
   def new_project
@@ -64,7 +82,7 @@ class ProjectController < ApplicationController
     
     item = check_user_return_item
     item.toggle!('done')
-    item.completed = Time.now () # For some reason, the before_save in todo.rb stopped working
+    item.completed = Time.now() # For some reason, the before_save in todo.rb stopped working
     if item.save        
       render :partial => 'project/show_items', :object => item
     end

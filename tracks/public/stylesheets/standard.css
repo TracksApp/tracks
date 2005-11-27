@@ -500,3 +500,18 @@ input, select {
     font-size: 10px;
     cursor: move;    
 }
+
+
+div.message {
+  margin: 5px 0px; 
+	background: #FAF4B5;
+	padding: 2px;
+}
+
+.message p {
+  margin: 0px;
+  padding: 0px;
+	text-align: center;
+	font-size: 1em;
+	color: #666;
+}

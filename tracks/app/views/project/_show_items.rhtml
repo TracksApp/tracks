@@ -5,7 +5,8 @@
                      :html => { :id=> "checkbox-notdone-#{item.id}", :class => "inline-form" },
                      :update => "completed",
                      :position => "top",
-                     :loading => "Form.disable('checkbox-notdone-#{item.id}');",
+                     :loading => "Form.disable('checkbox-notdone-#{item.id}');
+                                  Element.hide('message-done');",
                      :complete => visual_effect(:fade, "item-#{item.id}-container")
                      ) %>
 
@@ -61,7 +62,8 @@
                      :html => { :id=> "checkbox-done-#{item.id}", :class => "inline-form" },
                      :update => "next_actions",
                      :position => "bottom",
-                     :loading => "Form.disable('checkbox-done-#{item.id}');",
+                     :loading => "Form.disable('checkbox-done-#{item.id}');
+                                  Element.hide('message-notdone');",
                      :complete => visual_effect(:fade, "done-item-#{item.id}-container")
                      ) %>
 

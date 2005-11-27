@@ -65,7 +65,7 @@ class ContextController < ApplicationController
 
     item = check_user_return_item
     item.toggle!('done')
-    item.completed = Time.now () # For some reason, the before_save in todo.rb stopped working
+    item.completed = Time.now() # For some reason, the before_save in todo.rb stopped working
     if item.save
       render :partial => 'context/show_items', :object => item
     end

@@ -6,22 +6,17 @@
   <div class="project_description"><%= sanitize(@project.description) %></div>
 <% end -%>
 
+  <% if @msg_nd -%>
+   <div id="message-notdone" class="message" style="display: block;">
+     <p><%= @msg_nd %></p>
+   </div>
+  <% end -%>
+
   <div id="next_actions">
     <% if @project.done? -%>
       <p class="completed">Project has been marked as completed</p>
     <% end -%>
-    <% if !@project.done? and @not_done.empty? -%>
-        <div id="empty-nd" style="display:block;">
-          <%= render :partial => "empty", 
-              :locals => { :message => "There are currently no uncompleted actions in this project"} %>
-        </div>
-    <% else -%>
-        <div id="empty-nd" style="display:none;">
-          <%= render :partial => "empty", 
-              :locals => { :message => "There are currently no uncompleted actions in this project"} %>
-        </div>
-    <% end -%>
-        <%= render :partial => "show_items", :collection => @not_done %>
+    <%= render :partial => "show_items", :collection => @not_done %>
   </div><!-- [end:next_actions] -->
 </div><!-- [end:contexts] -->
 
@@ -29,18 +24,12 @@
   <h2>Completed actions in this project</h2>
 
   <div id="completed">
-    <% if @done.empty? %>
-    <div id="empty-d">
-        <%= render :partial => "empty",
-        :locals => {:message => "There are currently no completed next actions in this project"} %>
-    </div>
-    <% else -%>
-        <div id="empty-nd" style="display:none;">
-          <%= render :partial => "empty", 
-              :locals => { :message => "There are currently no uncompleted actions in this project"} %>
-        </div>
+    <% if @msg_d -%>
+      <div id="message-done" class="message" style="display: block;">
+        <p><%= @msg_d %></p>
+      </div>
     <% end -%>
-        <%= render :partial => "show_items", :collection => @done %>
+    <%= render :partial => "show_items", :collection => @done %>
   </div>
 </div><!-- [end:contexts] -->
 
@@ -48,11 +37,12 @@
 <div class="contexts">
  <div id="notes">
  <h2>Notes</h2>
-  <% if @notes.empty? -%>
-    <p>There are no notes yet for this project.</p>
-  <% else -%>
+ <% if @msg_n -%>
+   <div id="message-notes" class="message" style="display: block;">
+     <p><%= @msg_n %></p>
+   </div>
+ <% end -%>
     <%= render :partial => "note/notes_summary", :collection => @notes %>
-  <% end -%>
   </div>
 </div>
 <!-- end div.contexts -->
@@ -69,7 +59,8 @@
 <%= form_remote_tag :url => { :controller => "note", :action => "add" },
                     :update => "notes",
                     :position => "bottom",
-                    :complete => "new Effect.Highlight('notes');",
+                    :complete => "new Effect.Highlight('notes');
+                                  Element.hide('message-notes');",
                     :html => {:id=>'form-new-note', :class => 'inline-form'} %>
 <%= hidden_field( "new_note", "project_id", "value" => "#{@project.id}" ) %>
 <%= text_area( "new_note", "body", "cols" => 50, "rows" => 3, "tabindex" => 1 ) %>

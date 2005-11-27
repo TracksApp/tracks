@@ -1,4 +1,5 @@
 <% if !item.done? %>
+
 <div id="item-<%= item.id %>-container">
   <%= form_remote_tag_todo_notdone( item ) %>
 <div id="item-<%= item.id %>">
