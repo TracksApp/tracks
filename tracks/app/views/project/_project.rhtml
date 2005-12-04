@@ -1,0 +1,24 @@
+<% @not_done = project.find_not_done_todos -%>
+<div id="p<%= project.id %>" class="container project">
+  <h2>
+    <% if collapsible %>
+    <a href="#" class="container_toggle"><%= image_tag("collapse.png") %></a>
+    <% end %>
+    <%= sanitize("#{project.name}") %>
+  </h2>
+  <% if @project.description -%>
+    <div class="project_description"><%= sanitize(@project.description) %></div>
+  <% end -%>
+  
+  <% if @project.done? -%>
+    <p class="project_completed">Project has been marked as completed</p>
+  <% end -%>
+  <div class="items toggle_target">
+    <div id="empty-nd" style="display:<%= @not_done.empty? ? 'block' : 'none'%>;">
+      <%= render :partial => "shared/empty", 
+                 :locals => { :message => "Currently there are no uncompleted actions in this project"} %>
+    </div>
+    
+    <%= render :partial => "todo/item", :collection => @not_done, :locals => { :project => true } %>
+  </div><!-- [end:items] -->
+</div><!-- [end:p<%= project.id %>] -->

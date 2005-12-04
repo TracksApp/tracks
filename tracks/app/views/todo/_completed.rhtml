@@ -1,0 +1,18 @@
+<% suffix =  append_descriptor ? append_descriptor : '' %>
+<div class="container completed">
+  <h2>
+      <% if collapsible %>
+      <a href="#" class="container_toggle"><%= image_tag("collapse.png") %></a>
+      <% end %>
+      Completed actions <%= append_descriptor ? append_descriptor : '' %>
+  </h2>
+  <div id="completed" class="items toggle_target">
+
+    <div id="empty-d" style="display:<%= @done.empty? ? 'block' : 'none' %>">
+      <%= render :partial => "shared/empty",
+                :locals => { :message => "Currently there are no completed actions " + suffix } %> 
+    </div>
+
+      <%= render :partial => "todo/item", :collection => done %>
+  </div>
+</div><!-- [end:next_actions] -->

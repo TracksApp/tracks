@@ -1,0 +1,16 @@
+<% @not_done = context.find_not_done_todos %>
+<div id="c<%= context.id %>" class="context container">
+  <h2>
+<% if collapsible -%>
+    <a href="#" class="container_toggle"><%= image_tag("collapse.png") %></a>
+<% end -%>
+    <%= link_to( sanitize("#{context.name}"), { :controller => "context", :action => "show", :name => urlize(context.name) }, { :title => "Go to the #{context.name} context page" } )  %>
+  </h2>
+  <div class="items toggle_target">
+    <div class="empty-nd" style="display:<%= @not_done.empty? ? 'block' : 'none'%>;">
+      <%= render :partial => "shared/empty", 
+        :locals => { :message => "Currently there are no uncompleted actions in this context"} %>
+    </div>
+<%= render :partial => "todo/item", :collection => @not_done, :locals => { :project => false } %>
+  </div><!-- [end:items] -->
+</div><!-- [end:c<%= context.id %>] -->
