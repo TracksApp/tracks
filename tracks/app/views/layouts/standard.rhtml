@@ -9,6 +9,7 @@
   <%= stylesheet_link_tag 'calendar-system.css' %>
   <%= javascript_include_tag 'calendar', 'calendar-en', 'calendar-setup' %>
   <%= javascript_include_tag "accesskey-hints" %>
+  <%= javascript_include_tag "todo-items" %>
   
   <link rel="shortcut icon" href="<%= url_for(:controller => 'favicon.ico') %>" />
   <%= auto_discovery_link_tag(:rss,{:controller => "feed", :action => "na_feed", :name => "#{@session['user']['login']}", :token => "#{@session['user']['word']}"}, {:title => "RSS feed of next actions"})  %>

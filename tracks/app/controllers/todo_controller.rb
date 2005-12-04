@@ -1,7 +1,10 @@
 class TodoController < ApplicationController
 
+  model :user
+  model :project
+  model :context
+
   helper :todo
-  model :context, :project, :user
 
   before_filter :login_required
   layout "standard"
@@ -21,39 +24,11 @@ class TodoController < ApplicationController
     @page_title = "TRACKS::List tasks"
     @done = @done[0..(NO_OF_ACTIONS-1)]
 
+    @contexts_to_show = @contexts.clone
+    @contexts_to_show = @contexts_to_show.collect {|x| (!x.hidden? and !x.find_not_done_todos.empty?) ? x:nil }.compact
+
     # Set count badge to number of not-done, not hidden context items
     @count = @todos.collect { |x| ( !x.done? and !x.context.hidden? ) ? x:nil }.compact.size
-  end
-
-  # List the completed tasks, sorted by completion date
-  #
-  # Use days declaration? 1.day.ago?
-  def completed
-    self.init
-    @page_title = "TRACKS::Completed tasks"
-
-    day = (60 * 60 * 24)
-    today = Time.now
-
-    today_date = today - (1 * day)
-    week_begin = today - (1 * day)
-    week_end = today - (7 * day)
-    month_begin = today - (8 * day)
-    month_end = today - (31 * day)
-
-    @done_today = @done.collect { |x| today_date <= x.completed ? x:nil }.compact
-    @done_this_week = @done.collect { |x| week_begin >= x.completed && week_end <= x.completed ? x:nil }.compact
-    @done_this_month = @done.collect { |x| month_begin >= x.completed && month_end <= x.completed ? x:nil }.compact
-
-  end
-
-  # Archived completed items, older than 31 days
-  #
-  def completed_archive
-    self.init
-    @page_title = "TRACKS::Archived completed tasks"
-    archive_date = Time.now - 32 * (60 * 60 * 24)
-    @done_archive = @done.collect { |x| archive_date >= x.completed ? x:nil }.compact
   end
 
   # Called by a form button
@@ -75,6 +50,26 @@ class TodoController < ApplicationController
     else
       flash["warning"] = "Couldn't add next action  \"#{item.description}\""
       render_text ""
+    end
+  end
+
+  def edit_action
+    self.init
+
+    item = check_user_return_item
+    render :partial => 'action_edit_form', :object => item
+  end
+
+  # Toggles the 'done' status of the action
+  #
+  def toggle_check
+    self.init
+
+    item = check_user_return_item
+    item.toggle!('done')
+    item.completed = Time.now() # For some reason, the before_save in todo.rb stopped working
+    if item.save
+      render :partial => 'item', :object => item
     end
   end
 
@@ -112,18 +107,37 @@ class TodoController < ApplicationController
     end
   end
 
-  # Toggles the 'done' status of the action
+  # List the completed tasks, sorted by completion date
   #
-  def toggle_check
+  # Use days declaration? 1.day.ago?
+  def completed
     self.init
+    @page_title = "TRACKS::Completed tasks"
 
-    item = check_user_return_item
-    item.toggle!('done')
-    item.completed = Time.now() # For some reason, the before_save in todo.rb stopped working
-    if item.save
-      render :partial => 'item', :object => item
-    end
+    day = (60 * 60 * 24)
+    today = Time.now
+
+    today_date = today - (1 * day)
+    week_begin = today - (1 * day)
+    week_end = today - (7 * day)
+    month_begin = today - (8 * day)
+    month_end = today - (31 * day)
+
+    @done_today = @done.collect { |x| today_date <= x.completed ? x:nil }.compact
+    @done_this_week = @done.collect { |x| week_begin >= x.completed && week_end <= x.completed ? x:nil }.compact
+    @done_this_month = @done.collect { |x| month_begin >= x.completed && month_end <= x.completed ? x:nil }.compact
+
   end
+
+  # Archived completed items, older than 31 days
+  #
+  def completed_archive
+    self.init
+    @page_title = "TRACKS::Archived completed tasks"
+    archive_date = Time.now - 32 * (60 * 60 * 24)
+    @done_archive = @done.collect { |x| archive_date >= x.completed ? x:nil }.compact
+  end
+
 
   protected
 
@@ -145,6 +159,6 @@ class TodoController < ApplicationController
       @done = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = 1", @user.id], :include => [:project], :order => "completed DESC")
       # for some reason, this generates an error about anil object under 0.14.2
       #@done = @todos.collect { |x|  x.done? ? x:nil }.compact.sort! {|x,y| y.completed <=> x.completed }
-      
     end
+    
 end

@@ -57,7 +57,7 @@ a.show_notes:hover {background-image: url(../images/notes_on.png); background-re
       width: 450px;
       margin: 0px 15px 50px 15px;
       }
-      
+
 #full_width_display {
       float: left;
       width: 800px;
@@ -108,14 +108,14 @@ a.show_notes:hover {background-image: url(../images/notes_on.png); background-re
 
 #navlist a:hover { color: #000; }
     
-.contexts {
+.container {
       padding: 0px 5px 0px 5px; 
       border: 1px solid #999;
       margin: 0px 0px 15px 0px;
       background: #fff; 
       }
       
-.contexts h2 {
+.container h2 {
       background: #CCC;
       padding: 5px;
       margin-top: 0px;
@@ -125,6 +125,12 @@ a.show_notes:hover {background-image: url(../images/notes_on.png); background-re
       color: #fff;
       text-shadow: rgba(0,0,0,.4) 0px 2px 5px;
       }
+
+.container_toggle img {
+		height:20px;
+		width:20px;
+		border:0px;
+		}
 
 /* Styling the 'Fresh Actions' box on the home page */
 #new_actions {
@@ -138,6 +144,7 @@ a.show_notes:hover {background-image: url(../images/notes_on.png); background-re
 #new_actions h2 {
       /* padding: 0 px 5px 0px 5px; */
       color: #57A620;
+      background: transparent;
       text-align: center;
       }     
 
@@ -173,19 +180,24 @@ h2 a:hover {
       width: 20px;
       }
 
-div.big-box, div.big-box a, div.big-box a:hover {
-      float: left;
+.container a.icon {
+		float: left;
       vertical-align: middle;
       background-color: transparent;
       }
       
-.checkbox {
-      float: left;
+input.item-checkbox {
+   	float: left;
       margin-left: 10px;
       vertical-align: middle;
       }
+
+.checkbox form {
+		display: inline;
+		margin: 0;
+		}
       
-.description {
+.description, .stale_l1, .stale_l2, .stale_l3 {
       margin-left: 70px;
       margin-right: 10px;
       }
@@ -278,7 +290,7 @@ a.footer_link:hover {color: #fff; background-color: #cc3334 !important;}
       text-align: center;
       }
 
-.completed {
+.project_completed {
       border: 1px solid #007E00; 
       background-color: #c2ffc2;
       padding: 5px;
@@ -335,21 +347,15 @@ a.footer_link:hover {color: #fff; background-color: #cc3334 !important;}
     The colour of the background gets progressively yellower with age */
     
 .stale_l1 {
-      margin-left: 70px;
-      margin-right: 10px;
-      background: #ffffCC;
+      background: #ffC;
       }
       
 .stale_l2 {
-      margin-left: 70px;
-      margin-right: 10px;
-      background: #ffff66;
+      background: #ff6;
       }
 
 .stale_l3 {
-      margin-left: 70px;
-      margin-right: 10px;
-      background: #ffff00;
+      background: #ff0;
       }
 
       
@@ -430,7 +436,7 @@ div#list-projects, div#list-contexts {
     border: 1px solid #999;
     }
     
-.next_actions td {
+.container td {
     border: none;
     padding-bottom: 5px;
     }
@@ -458,7 +464,7 @@ form {
     width: 313px;
     }
 
-.inline-form {
+.inline-form, .item-checkmark-form {
     border: none;
     padding: 3px;
     width: 100%;
@@ -500,7 +506,6 @@ input, select {
     font-size: 10px;
     cursor: move;    
 }
-
 
 div.message {
   margin: 5px 0px; 

@@ -56,8 +56,7 @@ class ApplicationController < ActionController::Base
         # Okay, you get another hour
         @session['expiry_time'] = Time.now + (60*60)
       end
-     end
-   end
-
-
+    end
+  end
+  
 end

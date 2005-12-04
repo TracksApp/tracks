@@ -1,42 +1,7 @@
 <div id="display_box">
 
-<div class="contexts">
-<h2><%= sanitize(@context.name) %></h2>
-
-  <div id="next_actions">
-    <% if @not_done.empty? -%>
-        <div id="empty-nd" style="display:block;">
-          <%= render :partial => "empty", 
-              :locals => { :message => "There are currently no uncompleted actions in this context"} %>
-        </div>
-    <% else -%>
-        <div id="empty-nd" style="display:none;">
-          <%= render :partial => "empty", 
-              :locals => { :message => "There are currently no uncompleted actions in this context"} %>
-        </div>
-    <% end -%>
-        <%= render :partial => "show_items", :collection => @not_done %>
-  </div><!-- [end:next_actions] -->
-</div><!-- [end:contexts] -->
-
-<div class="contexts">
-  <h2>Completed actions in this context</h2>
-
-  <div id="completed">
-    <% if @done.empty? %>
-    <div id="empty-d">
-        <%= render :partial => "empty",
-        :locals => {:message => "There are currently no completed next actions in this context"} %>
-    </div>
-    <% else -%>
-        <div id="empty-nd" style="display:none;">
-          <%= render :partial => "empty", 
-              :locals => { :message => "There are currently no uncompleted actions in this context"} %>
-        </div>
-    <% end -%>
-        <%= render :partial => "show_items", :collection => @done %>
-  </div>
-</div><!-- [end:contexts] -->
+<%= render :partial => "context/context", :locals => { :context => @context, :collapsible => false } %>
+<%= render :partial => "todo/completed", :locals => { :done => @done, :collapsible => false, :append_descriptor => "in this context" } %>
 
 </div><!-- [end:display_box] -->
 

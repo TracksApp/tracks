@@ -1,8 +1,6 @@
 class ContextController < ApplicationController
 
-  helper :context
-  model :project
-  model :todo
+  helper :todo
 
   before_filter :login_required
   layout "standard"
@@ -57,19 +55,6 @@ class ContextController < ApplicationController
       render :text => ""
     end
   end
-  
-  # Toggles the 'done' status of the action
-  #
-  def toggle_check
-    self.init
-
-    item = check_user_return_item
-    item.toggle!('done')
-    item.completed = Time.now() # For some reason, the before_save in todo.rb stopped working
-    if item.save
-      render :partial => 'context/show_items', :object => item
-    end
-  end
 
   # Fairly self-explanatory; deletes the context
   # If the context contains actions, you'll get a warning dialogue.
@@ -84,7 +69,7 @@ class ContextController < ApplicationController
     end
   end
 
-  # Methods for changing the sort order of the projects in the list
+  # Methods for changing the sort order of the contexts in the list
   #
   def order
     @params["list-contexts"].each_with_index do |id, position|
@@ -96,16 +81,6 @@ class ContextController < ApplicationController
   end
   
   protected
-    def check_user_return_item
-      item = Todo.find( @params['id'] )
-      if @session['user'] == item.user
-        return item
-      else
-        flash["warning"] = "Item and session user mis-match: #{item.user.name} and #{@session['user'].name}!"
-        render_text ""
-      end
-    end
-    
 
     def check_user_set_context
       @user = @session['user']

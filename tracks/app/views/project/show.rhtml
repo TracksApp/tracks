@@ -1,51 +1,18 @@
 <div id="display_box">
 
-<div class="contexts">
-<h2><%= sanitize(@project.name) %></h2>
-<% if @project.description -%>
-  <div class="project_description"><%= sanitize(@project.description) %></div>
-<% end -%>
+<%= render :partial => "project/project", :locals => { :project => @project, :collapsible => false } %>
+<%= render :partial => "todo/completed", :locals => { :done => @done, :collapsible => false, :append_descriptor => "in this project" } %>
 
-  <% if @msg_nd -%>
-   <div id="message-notdone" class="message" style="display: block;">
-     <p><%= @msg_nd %></p>
-   </div>
-  <% end -%>
-
-  <div id="next_actions">
-    <% if @project.done? -%>
-      <p class="completed">Project has been marked as completed</p>
-    <% end -%>
-    <%= render :partial => "show_items", :collection => @not_done %>
-  </div><!-- [end:next_actions] -->
-</div><!-- [end:contexts] -->
-
-<div class="contexts">
-  <h2>Completed actions in this project</h2>
-
-  <div id="completed">
-    <% if @msg_d -%>
-      <div id="message-done" class="message" style="display: block;">
-        <p><%= @msg_d %></p>
-      </div>
-    <% end -%>
-    <%= render :partial => "show_items", :collection => @done %>
-  </div>
-</div><!-- [end:contexts] -->
-
-<!-- begin div.contexts -->
-<div class="contexts">
+<div class="container">
  <div id="notes">
  <h2>Notes</h2>
- <% if @msg_n -%>
-   <div id="message-notes" class="message" style="display: block;">
-     <p><%= @msg_n %></p>
-   </div>
- <% end -%>
+ <div id="empty-n" style="display:<%= @notes.empty? ? 'block' : 'none'%>;">
+   <%= render :partial => "shared/empty", 
+              :locals => { :message => "Currently there are no notes attached to this project"} %>
+ </div>
     <%= render :partial => "note/notes_summary", :collection => @notes %>
   </div>
 </div>
-<!-- end div.contexts -->
 
 <% if @project.done? -%>
   <%= button_to "Mark project as uncompleted", {:action => "toggle_project_done", :id => @project.id} %><br />
@@ -59,8 +26,7 @@
 <%= form_remote_tag :url => { :controller => "note", :action => "add" },
                     :update => "notes",
                     :position => "bottom",
-                    :complete => "new Effect.Highlight('notes');
-                                  Element.hide('message-notes');",
+                    :complete => "new Effect.Highlight('notes');",
                     :html => {:id=>'form-new-note', :class => 'inline-form'} %>
 <%= hidden_field( "new_note", "project_id", "value" => "#{@project.id}" ) %>
 <%= text_area( "new_note", "body", "cols" => 50, "rows" => 3, "tabindex" => 1 ) %>

@@ -1,41 +1,16 @@
 <div id="display_box">
-  <!-- begin div.new_actions -->
-  <div id="new_actions" class="new_actions" style="display:none">
+  <div id="new_actions" class="next_actions container" style="display:none">
     <h2>Fresh actions (hit <a href="javascript:window.location.reload()">refresh</a> to sort)</h2>
-    </div>
-  <!-- end div.new_actions -->
-  <%
-  for @context in @contexts
-    next if @context.hidden?
-    @not_done = @context.find_not_done_todos
-    next if @not_done.empty?
-  -%>
-      <div class="contexts">
-      <h2><a href="javascript:toggleSingle('c<%=@context.id%>');javascript:toggleImage('toggle_context_<%=@context.id%>')" class="refresh"><%= image_tag("collapse.png", :name=>"toggle_context_#{@context.id}", :border=>"0") %></a>
-        <%= link_to( sanitize("#{@context.name}"), :controller => "context", :action => "show", :name => urlize(@context.name) )  %></h2>
-
-    <div id="c<%= @context.id %>" class="next_actions">
-        <%= render :partial => "item", :collection => @not_done %>
-    </div><!-- [end:next_actions] -->
-  </div><!-- [end:contexts] -->
-  <% end -%>
-
-  <div class="contexts">
-    <h2>Completed actions</h2>
-
-    <div id="completed">
-      <% if @done.empty? -%>
-        <p>There are no completed next actions</p>
-      <% else -%>
-        <%= render :partial => "item", :collection => @done %>
-      <% end -%>
-    </div>
-  </div><!-- [end:contexts] -->
+  </div>
+  <%= render :partial => "context/context", :collection => @contexts_to_show, 
+            :locals => { :collapsible => true } %>
+  <%= render :partial => "todo/completed", 
+            :locals => { :done => @done, :collapsible => true, :append_descriptor => nil } %>
 </div><!-- End of display_box -->
 
 <div id="input_box">
-<%= render "shared/add_new_item_form" %>
-<%= render "shared/sidebar" %>
+  <%= render "shared/add_new_item_form" %>
+  <%= render "shared/sidebar" %>
 </div><!-- End of input box -->
 
 <% if @flash["confirmation"] -%>

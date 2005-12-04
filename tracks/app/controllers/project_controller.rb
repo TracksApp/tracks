@@ -1,10 +1,10 @@
 class ProjectController < ApplicationController
 
-  helper :project
-  model :context
   model :todo
 
+  helper :todo
   before_filter :login_required
+
   layout "standard"
 
   def index
@@ -75,19 +75,6 @@ class ProjectController < ApplicationController
     end
   end
   
-  # Toggles the 'done' status of the action
-  #
-  def toggle_check
-    self.init
-    
-    item = check_user_return_item
-    item.toggle!('done')
-    item.completed = Time.now() # For some reason, the before_save in todo.rb stopped working
-    if item.save        
-      render :partial => 'project/show_items', :object => item
-    end
-  end
-  
   # Toggles the 'done' status of a project
   #
   def toggle_project_done
@@ -124,16 +111,6 @@ class ProjectController < ApplicationController
   
   protected
     
-    def check_user_return_item
-      item = Todo.find( @params['id'] )
-      if @session['user'] == item.user
-        return item
-      else
-        flash["warning"] = "Item and session user mis-match: #{item.user.name} and #{@session['user'].name}!"
-        render_text ""
-      end
-    end
-
     def check_user_set_project
       @user = @session['user']
       if @params["name"]

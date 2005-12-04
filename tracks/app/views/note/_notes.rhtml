@@ -8,11 +8,11 @@
   <div class="note_footer">
     <%= link_to_remote( image_tag("blank", :title =>"Delete this note", :class=>"delete_item"), 
                         :update => "note-#{note.id}",
-                        :loading => "new Effect.Fade('note-#{note.id}-container', true)",
+                        :loading => visual_effect(:fade, "note-#{note.id}-container"),
                         :complete => "Element.remove('note-#{note.id}-wrapper');",
                         :url => { :controller => "note", :action => "delete", :id => note.id }, 
                         :confirm => "Are you sure that you want to delete the note \'#{note.id.to_s}\'?" ) + "&nbsp;"%><%= link_to_function(image_tag( "blank", :title => "Edit item", :class=>"edit_item"),
-              "Element.toggle('note-#{note.id}','note-#{note.id}-edit-form'); new Effect.Appear('note-#{note.id}-edit-form'); Form.focusFirstElement('form-note-#{note.id}');" ) + " | " %>
+              "Element.toggle('note-#{note.id}','note-#{note.id}-edit-form'); Effect.Appear('note-#{note.id}-edit-form'); Form.focusFirstElement('form-note-#{note.id}');" ) + " | " %>
     <%= link_to("In: " + note.project.name, {:controller => "project", :action => "show", :name => urlize(note.project.name)}, :class=>"footer_link" ) %>&nbsp;|&nbsp;
     Created: <%= format_date(note.created_at) %>
     <% if note.updated_at? -%>
@@ -25,7 +25,7 @@
   <%= form_remote_tag  :url => { :action => 'update', :id => note.id },
                  :html => { :id => "form-note-#{note.id}", :class => "inline-form" },
                  :update => "note-#{note.id}-container",
-                 :complete => "new Effect.appear('note-#{note.id}-container');" %>
+                 :complete => visual_effect(:appear, "note-#{note.id}-container") %>
   <%= render_partial "note_edit_form", note %>
   <%= end_form_tag %>
   </div><!-- [end:action-item.id-edit-form] -->
