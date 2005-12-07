@@ -77,7 +77,7 @@ module TodoHelper
   # * l3: created more than 3 x staleness_starts
   #
   def staleness_class(item)
-    if item.due || item.done
+    if item.due || item.done?
       return ""
     elsif item.created_at < (ApplicationController::STALENESS_STARTS*3).days.ago
       return " stale_l3"
