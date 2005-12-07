@@ -21,6 +21,7 @@ class TodoController < ApplicationController
   #
   def list
     self.init
+    @on_page = "home"
     @page_title = "TRACKS::List tasks"
     @done = @done[0..(NO_OF_ACTIONS-1)]
 
@@ -36,6 +37,9 @@ class TodoController < ApplicationController
   # in the selected context.
   def add_item
     self.init
+    if @params["on_project_page"]
+      @on_page = "project"
+    end
     item = @user.todos.build
     item.attributes = @params["new_item"]
 
@@ -46,7 +50,7 @@ class TodoController < ApplicationController
     end
       
     if item.save
-      render :partial => 'item', :object => item, :project => @params["project"]
+      render :partial => 'item', :object => item
     else
       flash["warning"] = "Couldn't add next action  \"#{item.description}\""
       render_text ""
@@ -77,7 +81,9 @@ class TodoController < ApplicationController
   #
   def update_action
     self.init
-
+    if @params["on_project_page"] == true
+      @on_page = "project"
+    end
     item = check_user_return_item
     item.attributes = @params["item"]
 
@@ -88,7 +94,7 @@ class TodoController < ApplicationController
     end
 
     if item.save
-	    render :partial => 'item', :object => item, :project => @params["project"]
+	    render :partial => 'item', :object => item
     else
       flash["warning"] = "Couldn't update the action"
       render_text ""

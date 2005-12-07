@@ -27,6 +27,7 @@ class ProjectController < ApplicationController
     init
     init_todos
     @notes = @project.notes
+    @on_page = "project"
     @page_title = "TRACKS::Project: #{@project.name}"
     
     if @not_done.empty?

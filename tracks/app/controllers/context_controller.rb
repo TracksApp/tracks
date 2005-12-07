@@ -24,6 +24,7 @@ class ContextController < ApplicationController
   def show
     init
     init_todos
+    @on_page = "context"
     @page_title = "TRACKS::Context: #{@context.name}"
   end
   

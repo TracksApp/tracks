@@ -14,11 +14,11 @@
     <p class="project_completed">Project has been marked as completed</p>
   <% end -%>
   <div class="items toggle_target">
+    
     <div id="empty-nd" style="display:<%= @not_done.empty? ? 'block' : 'none'%>;">
       <%= render :partial => "shared/empty", 
                  :locals => { :message => "Currently there are no uncompleted actions in this project"} %>
     </div>
-    
-    <%= render :partial => "todo/item", :collection => @not_done, :locals => { :project => true } %>
+    <%= render :partial => "todo/item", :collection => @not_done %>
   </div><!-- [end:items] -->
 </div><!-- [end:p<%= project.id %>] -->

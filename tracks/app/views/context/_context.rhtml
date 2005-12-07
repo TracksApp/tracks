@@ -11,6 +11,6 @@
       <%= render :partial => "shared/empty", 
         :locals => { :message => "Currently there are no uncompleted actions in this context"} %>
     </div>
-<%= render :partial => "todo/item", :collection => @not_done, :locals => { :project => false } %>
+<%= render :partial => "todo/item", :collection => @not_done %>
   </div><!-- [end:items] -->
 </div><!-- [end:c<%= context.id %>] -->

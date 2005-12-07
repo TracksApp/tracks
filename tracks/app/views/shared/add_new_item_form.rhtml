@@ -50,7 +50,7 @@
 
   <% if controller.controller_name == "project" -%>
       <%= hidden_field( "new_item", "project_id", "value" => "#{@project.id}") %>
-      <input type="hidden" name="project" value="true" />
+      <input type="hidden" name="on_project_page" value="true" />
   <% elsif controller.controller_name == "context" -%>
       <%= hidden_field( "new_item", "context_id", "value" => "#{@context.id}") %>
   <% end -%>

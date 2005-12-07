@@ -2,7 +2,7 @@
 
 * Homepage: http://www.rousette.org.uk/projects/
 * Author: bsag (http://www.rousette.org.uk/)
-* Contributors: Nicholas Lee, Lolindrath, Jim Ray, Arnaud Limbourg, Timothy Martens, Luke, John Leonard (for great installation tutorials on Windows XP)
+* Contributors: Nicholas Lee, Lolindrath, Jim Ray, Arnaud Limbourg, Timothy Martens, Luke Melia, John Leonard (for great installation tutorials on Windows XP)
 * Version: 1.031
 * Copyright: (cc) 2004-2005 rousette.org.uk
 * License:  GNU GPL
@@ -15,9 +15,9 @@ While fully usable for everyday use, Tracks is still a work in progress. Make su
 
 <b>IF THIS CRASHES YOUR MACHINE AND LOSES YOUR DATA, IT'S NOT MY FAULT!</b>
 
-== Installation
+== Installation (for trunk version <b>only</b>)
 
-Before you start, you need to make sure that you have Ruby 1.8.2, Rails 0.13.1 (it <i>may</i> work with versions down to 0.12.0, but it's much better to get the latest version), and Redcloth 3.0.3. By far the easiest way to get these installed is using gems (see instructions on getting gems here http://wiki.rubyonrails.com/rails/show/GemRails). You also need some kind of database. MySQL is probably the most popular, but it's also easy to use PostgreSQL or SQLite. If you have Mac OS X Tiger, you already have Ruby 1.8.2 and SQLite3 installed, so all you need to do after installing Rails and Redcloth is to install the sqlite3-ruby gem (1.1.0). See http://dev.rousette.org.uk/wiki/Tracks/Install for more details on installing all the necessary components on all the supported platforms.
+Before you start, you need to make sure that you have Ruby 1.8.2, Rails 0.14.3, and Redcloth 3.0.3. By far the easiest way to get these installed is using gems (see instructions on getting gems here http://wiki.rubyonrails.com/rails/show/GemRails). You also need some kind of database. MySQL is probably the most popular, but it's also easy to use PostgreSQL or SQLite. If you have Mac OS X Tiger, you already have Ruby 1.8.2 and SQLite3 installed, so all you need to do after installing Rails and Redcloth is to install the sqlite3-ruby gem (1.1.0). See http://dev.rousette.org.uk/wiki/Tracks/Install for more details on installing all the necessary components on all the supported platforms.
 
 === New users
 
