@@ -53,8 +53,8 @@ a, p, blockquote, ul, li, ol, dt, dd, dl, table {
 
 .description {
   	margin-top: 0;
-  	margin-left 0;
-  	margin-bottom .3em;
+    margin-left: 0;
+    margin-bottom: .3em;
   	padding: .2em;
     }
 

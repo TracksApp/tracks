@@ -121,9 +121,9 @@ a.show_notes:hover {background-image: url(../images/notes_on.png); background-re
       margin-top: 0px;
       margin-left: -5px;
       margin-right: -5px;
-      margin-bottom: 0px; /* CHECK */      
-      color: #fff;
-      text-shadow: rgba(0,0,0,.4) 0px 2px 5px;
+      margin-bottom: 0px;      
+      color: #666;
+      /* text-shadow: rgba(0,0,0,.4) 0px 2px 5px; */
       }
 
 .container_toggle img {
@@ -151,7 +151,7 @@ a.show_notes:hover {background-image: url(../images/notes_on.png); background-re
 #new_actions a {color: #cc3334; text-decoration: underline;}       
 
 h2 a, h2 a:link, h2 a:active, h2 a:visited {
-      color: #fff;
+      color: #666;
       text-decoration: none;
       }
       
