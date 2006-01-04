@@ -21,7 +21,7 @@
 <div>
   <h1>
   <% if @count %>
-    <span class="badge"><%= @count %></span>
+    <span id="badge_count" class="badge"><%= @count %></span>
   <% end %>
   <%= Time.now.strftime("%A, %d %B %Y") %></h1>
 </div>

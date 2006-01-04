@@ -1,0 +1,15 @@
+JavaScriptGeneratorTemplates
+============================
+
+This plugin allows the usage of the new RJS templates without having to run
+edge rails.  For more information about RJS templates please check out these
+resources on the web:
+
+http://rails.techno-weenie.net/tip/2005/11/29/ajaxed_forms_with_rjs_templates
+http://www.codyfauser.com/articles/2005/11/20/rails-rjs-templates
+http://dev.rubyonrails.org/changeset/3078
+
+The RJS templates need at least version 1.4.0_rc4 of the prototype library to
+function correctly.  Run rake update_prototype from this source directory to 
+update your project's version of prototype to 1.4.0.
+

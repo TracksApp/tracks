@@ -7,9 +7,8 @@
     <%= link_to( sanitize("#{context.name}"), { :controller => "context", :action => "show", :name => urlize(context.name) }, { :title => "Go to the #{context.name} context page" } )  %>
   </h2>
   <div class="items toggle_target">
-    <div class="empty-nd" style="display:<%= @not_done.empty? ? 'block' : 'none'%>;">
-      <%= render :partial => "shared/empty", 
-        :locals => { :message => "Currently there are no uncompleted actions in this context"} %>
+    <div id="empty-nd" style="display:<%= @not_done.empty? ? 'block' : 'none'%>;">
+      <div class="message"><p>Currently there are no uncompleted actions in this context</p></div>
     </div>
 <%= render :partial => "todo/item", :collection => @not_done %>
   </div><!-- [end:items] -->

@@ -42,6 +42,71 @@ class ContextController < ApplicationController
       render :text => "#{flash["warning"]}"
     end
   end
+  
+  # Called by a form button
+  # Parameters from form fields are passed to create new action
+  # in the selected context.
+  def add_item
+    self.init
+    @item = @user.todos.build
+    @item.attributes = @params["todo"]
+
+    if @item.due?
+      @item.due = Date.strptime(@params["todo"]["due"], DATE_FORMAT)
+    else
+      @item.due = ""
+    end
+
+    @saved = @item.save
+    @on_page = "context"
+    @up_count = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = 0 and todos.context_id IN (?)", @user.id, @item.context_id]).size.to_s
+     
+    return if request.xhr?
+    
+    # fallback for standard requests
+    if @saved
+      flash["warning"] = 'Added new next action'
+      redirect_to :action => 'show', :id => @item
+    else
+      #render :action => 'new'
+    end
+    
+    rescue
+      if request.xhr? # be sure to include an error.rjs
+        render :action => 'error'
+      else
+        flash["warning"] = 'An error occurred on the server.'
+        #render :action => 'new'
+      end
+  end
+  
+  # Delete a next action
+  #
+  def destroy_action
+    self.init
+    @item = check_user_return_item
+    
+    @saved = @item.destroy
+    @down_count = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = 0 and todos.context_id IN (?)", @user.id, @item.context_id]).size.to_s
+    
+    return if request.xhr?
+    
+    # fallback for standard requests
+    if @saved
+      flash["warning"] = 'Successfully deleted next action'
+      redirect_to :controller => 'todo', :action => 'list'
+    else
+      render :controller => 'todo', :action => 'list'
+    end
+    
+    rescue
+      if request.xhr? # be sure to include an error.rjs
+        render :action => 'error'
+      else
+        flash["warning"] = 'An error occurred on the server.'
+        render :controller => 'todo', :action => 'list'
+      end
+  end
 
   # Edit the details of the context
   #
@@ -112,11 +177,23 @@ class ContextController < ApplicationController
          render_text ""
        end
     end
+    
+    def check_user_return_item
+      item = Todo.find( @params['id'] )
+      if @session['user'] == item.user
+        return item
+      else
+        flash["warning"] = "Item and session user mis-match: #{item.user.name} and #{@session['user'].name}!"
+        render_text ""
+      end
+    end
      
     def init
       @user = @session['user']
       @projects = @user.projects.collect { |x| x.done? ? nil:x }.compact
       @contexts = @user.contexts
+      @todos = @user.todos
+      @done = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = 1", @user.id], :include => [:project], :order => "completed DESC")
     end
 
     def init_todos

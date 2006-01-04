@@ -1,0 +1,57 @@
+<%
+  case controller.controller_name
+    when "context"
+      add_string = "Add a next action in this context &#187;"
+    when "project"
+      add_string = "Add a next action in this project &#187;"
+    else
+      add_string = "Add a next action &#187;"
+  end
+%>
+
+<% unless hide_link -%>
+<%= link_to_function(
+      add_string,
+"Element.toggle('todo_new_action');Form.focusFirstElement('todo-form-new-action');",
+      {:title => "Add the next action", :accesskey => "n"}) %>
+<% end -%>
+
+<div id="todo_new_action" class="context_new" style="display:<%= hide_link ? 'block' : 'none'%>">
+<div id="status">
+</div>
+<!--[form:todo]-->
+<%= form_remote_tag(
+    :url => { :controller => controller.controller_name, :action => "add_item" },
+    :html=> { :id=>'todo-form-new-action', :name=>'todo', :class => 'inline-form' }) %>
+
+<label for="todo_description">Description</label><br />
+<%= text_field( "todo", "description", "size" => 25, "tabindex" => 1) %><br />
+
+<label for="todo_notes">Notes</label><br />
+<%= text_area( "todo", "notes", "cols" => 25, "rows" => 10, "tabindex" => 2) %><br />
+
+<% unless controller.controller_name == "context" -%>
+  <label for="todo_context_id">Context</label><br />
+  <%= collection_select( "todo", "context_id", @contexts, "id", "name", 
+        {}, {"tabindex" => 3}) %><br />
+<% end -%>
+
+<% unless controller.controller_name == "project" -%>
+  <label for="todo_project_id">Project</label><br />
+  <%= collection_select( "todo", "project_id", @projects, "id", "name",
+        { :include_blank => true }, {"tabindex" => 4}) %><br />
+<% end -%>
+
+<label for="item_due">Due</label><br />
+<%= text_field("todo", "due", "size" => 10, "class" => "Date", "onFocus" => "Calendar.setup", "tabindex" => 5) %>
+
+<% if controller.controller_name == "project" -%>
+    <%= hidden_field( "todo", "project_id", "value" => "#{@project.id}") %>
+<% elsif controller.controller_name == "context" -%>
+    <%= hidden_field( "todo", "context_id", "value" => "#{@context.id}") %>
+<% end -%>
+<br /><br />
+<input type="submit" value="Add item" tabindex="6">
+<%= end_form_tag %><!--[eoform:todo]-->
+<%= calendar_setup( "todo_due"  ) %>
+</div><!-- [end:todo-new-action] -->

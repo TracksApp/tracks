@@ -41,17 +41,10 @@ module TodoHelper
                    )
   end
   
-  def link_to_remote_todo( item )
+  def link_to_remote_todo( item, handled_by)
     str = link_to_remote( image_tag("blank", :title =>"Delete action", :class=>"delete_item"),
-                      {
-                        :update => "item-#{item.id}-container",
-                        :loading => visual_effect(:fade, "item-#{item.id}-container"),
-                        :url => { :controller => "todo", :action => "destroy_action", :id => item.id },
-                        :confirm => "Are you sure that you want to delete the action, \'#{item.description}\'?"
-                        },
-                        {
-                          :class => "icon"
-                        }) + "\n"
+                      {:url => { :controller => handled_by, :action => "destroy_action", :id => item.id }},
+                        {:class => "icon"}) + "\n"
     if !item.done?
       str << link_to_remote( image_tag("blank", :title =>"Edit action", :class=>"edit_item", :id=>"action-#{item.id}-edit-icon"),
                       {

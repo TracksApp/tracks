@@ -30,12 +30,6 @@ class ApplicationController < ActionController::Base
    total = Todo.find_all("done=0").length - sub
   end
 
-  # Returns all the errors on the page for an object...
-  #
-  def errors_for( obj )
-    error_messages_for( obj ) unless instance_eval("@#{obj}").nil?
-  end
-
   # Reverses the urlize() method by substituting underscores for spaces
   #
   def deurlize(name)
@@ -57,6 +51,23 @@ class ApplicationController < ActionController::Base
         @session['expiry_time'] = Time.now + (60*60)
       end
     end
+  end
+  
+  # Renders the given hash as xml. Primarily used to send multiple 
+  # partials back to an ajax request
+  # 
+  # * +renders+ is a Hash where the keys are string identifiers, 
+  #   and the values are partials rendered as a strings (see 
+  #   <tt>render_to_string</tt>).
+  def renders_to_xml(renders)
+    xml = '<?xml version="1.0" encoding="ISO-8859-1"?><renders>'
+    renders.each_key do |key|
+      xml += "<" + key.to_s + 
+      "><![CDATA[#{renders[key]}]]></" + 
+      key.to_s + ">"
+    end
+    xml += '</renders>'
+    render(:text => xml)
   end
   
 end

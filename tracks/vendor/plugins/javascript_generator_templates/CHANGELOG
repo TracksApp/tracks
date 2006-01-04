@@ -1,0 +1,15 @@
+December 25, 2005
+* Added changeset 3316: http://dev.rubyonrails.org/changeset/3316
+* Added tests for javascript_generator_templates up to changeset 3116
+* Added changeset 3319: http://dev.rubyonrails.org/changeset/3319
+  * Adds support for alert, redirect_to, call, assign, <<
+* Added changeset 3329 and 3335
+  * Adds support for toggle, delay
+
+December 15, 2005
+* Updated prototype.js to 1.4.0
+* Enabled the test test_render_file_with_locals
+* Add CHANGELOG file
+* Update README to reflect version 1.0 of Rails
+* Added MIT-LICENSE
+

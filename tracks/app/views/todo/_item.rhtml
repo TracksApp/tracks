@@ -4,7 +4,7 @@
     <%= form_remote_tag_toggle_todo( item ) %>
     <%= form_tag( { :controller => "todo", :action => "toggle_check", :id => item.id },
                   { :class => "inline-form" }) %>
-      <%= link_to_remote_todo( item ) %>
+      <%= link_to_remote_todo( item, controller.controller_name ) %>
       <input type="checkbox" class="item-checkbox" name="item_id" value="<%= item.id %>"<% if item.done? %> checked="checked" <% end %> />
       <div class="description<%= staleness_class( item ) %>"><% # start of div which has a class 'description', and possibly 'stale_11', 'stale_12', 'stale_13' etc %>
 <% if item.done? -%>

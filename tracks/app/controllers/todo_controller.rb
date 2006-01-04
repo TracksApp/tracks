@@ -32,29 +32,44 @@ class TodoController < ApplicationController
     @count = @todos.collect { |x| ( !x.done? and !x.context.hidden? ) ? x:nil }.compact.size
   end
 
+  def update_element
+  end
+  
   # Called by a form button
   # Parameters from form fields are passed to create new action
   # in the selected context.
   def add_item
     self.init
-    if @params["on_project_page"]
-      @on_page = "project"
-    end
-    item = @user.todos.build
-    item.attributes = @params["new_item"]
+    @item = @user.todos.build
+    @item.attributes = @params["todo"]
 
-    if item.due?
-      item.due = Date.strptime(@params["new_item"]["due"], DATE_FORMAT)
+    if @item.due?
+      @item.due = Date.strptime(@params["todo"]["due"], DATE_FORMAT)
     else
-      item.due = ""
+      @item.due = ""
     end
-      
-    if item.save
-      render :partial => 'item', :object => item
+
+    @saved = @item.save
+    @on_page = "home"
+    @up_count = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = 0", @user.id]).size.to_s
+    
+    return if request.xhr?
+    
+    # fallback for standard requests
+    if @saved
+      flash["warning"] = 'Added new next action'
+      redirect_to :action => 'list'
     else
-      flash["warning"] = "Couldn't add next action  \"#{item.description}\""
-      render_text ""
+      render :action => 'list'
     end
+    
+    rescue
+      if request.xhr? # be sure to include an error.rjs
+        render :action => 'error'
+      else
+        flash["warning"] = 'An error occurred on the server.'
+        render :action => 'list'
+      end
   end
 
   def edit_action
@@ -101,16 +116,32 @@ class TodoController < ApplicationController
     end
   end
 
-  # Delete a next action in a context
+  # Delete a next action
   #
   def destroy_action
-    item = check_user_return_item
-    if item.destroy
-      render_text ""
+    self.init
+    @item = check_user_return_item
+    
+    @saved = @item.destroy
+    @down_count = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = 0", @user.id]).size.to_s
+    
+    return if request.xhr?
+    
+    # fallback for standard requests
+    if @saved
+      flash["warning"] = 'Successfully deleted next action'
+      redirect_to :action => 'list'
     else
-      flash["warning"] = "Couldn't delete next action \"#{item.description}\""
-      render_text ""
+      render :action => 'list'
     end
+    
+    rescue
+      if request.xhr? # be sure to include an error.rjs
+        render :action => 'error'
+      else
+        flash["warning"] = 'An error occurred on the server.'
+        render :action => 'list'
+      end
   end
 
   # List the completed tasks, sorted by completion date

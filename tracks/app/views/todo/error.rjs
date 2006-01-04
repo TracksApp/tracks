@@ -1,0 +1,1 @@
+page.replace_html "status", "An error occurred on the server."

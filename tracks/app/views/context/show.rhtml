@@ -7,9 +7,10 @@
 
 <div id="input_box">
 
-<%= render "shared/add_new_item_form" %>
+<%= render :partial => "shared/add_new_item_form", :locals => {:hide_link => false, :msg => ""} %>
 <%= render "shared/sidebar" %>
 </div><!-- End of input box -->
 
-<% if @flash["confirmation"] %><div class="confirmation"><%= @flash["confirmation"] %></div><% end %>
-<% if @flash["warning"] %><div class="warning"><%= @flash["warning"] %></div><% end %>
+<% if @flash["warning"] %>
+  <div id="warning_box" class="warning"><%= @flash["warning"] %></div>
+<% end %>
