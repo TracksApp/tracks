@@ -1,7 +1,5 @@
 if @saved
-  page.alert "Are you sure that you want to delete the next action: \'#{@item.description}\'?"
-  page.visual_effect :fade, "item-#{@item.id}-container", :duration => 2.0
-  page.remove "item-#{@item.id}-container"
+  page.visual_effect :fade, "item-#{@item.id}-container", :duration => 0.4
   page.replace_html "badge_count", @down_count
 else
   page.replace_html "status", content_tag("div", content_tag("h2", "#{pluralize(@item.errors.count, "error")} prohibited this record from being saved") + content_tag("p", "There were problems with the following fields:") + content_tag("ul", @item.errors.each_full { |msg| content_tag("li", msg) }), "id" => "ErrorExplanation", "class" => "ErrorExplanation")

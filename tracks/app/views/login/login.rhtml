@@ -1,21 +1,29 @@
 <%= start_form_tag :action=> "login" %>
 
 <div title="Account login" id="loginform" class="form">
+
+	<% if @flash["notice"] %><div id="notice"><%= @flash["notice"] %></div><% end %>
+
     <h3>Please log in to use Tracks:</h3>
     
     <% if @message %>
       <div id="message"><%= @message %></div>
     <% end %>
 
-    <label for="user_login">Login:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-    <input type="text" name="user_login" id="user_login" size="20" value=""/><br/>
-
-    <label for="user_password">Password:</label>
-    <input type="password" name="user_password" id="user_password" size="20"/>
-
-    <br/>
-    <input type="submit" name="login" value="Login &#187;" class="primary" />
-
+    <table>
+      <tr>
+        <td><label for="user_login">Login:</label></td>
+        <td><input type="text" name="user_login" id="user_login" size="20" value=""/></td>
+      </tr>
+      <tr>
+        <td><label for="user_password">Password:</label></td>
+        <td><input type="password" name="user_password" id="user_password" size="20"/></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td><input type="submit" name="login" value="Login &#187;" class="primary" /></td>
+      </tr>
+    </table>
 </div>
 
 <%= end_form_tag %>

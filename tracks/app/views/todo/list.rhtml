@@ -1,4 +1,10 @@
 <div id="display_box">
+  <% if @flash["notice"] %>
+  <div id="notice" class="confirmation"><%= @flash["notice"] %></div>
+  <% end %>
+  <% if @flash["warning"] -%>
+    <div id="warning" class="warning"><%= @flash["warning"] %></div>
+  <% end -%>
   <%= render :partial => "context/context", :collection => @contexts_to_show, 
             :locals => { :collapsible => true } %>
   <%= render :partial => "todo/completed", 
@@ -9,8 +15,3 @@
   <%= render :partial => "shared/add_new_item_form", :locals => {:hide_link => false, :msg => ""} %>
   <%= render "shared/sidebar" %>
 </div><!-- End of input box -->
-
-<div class="status-box" id="confirmation-box"></div>
-<% if @flash["warning"] -%>
-  <div class="warning"><%= @flash["warning"] %></div>
-<% end -%>

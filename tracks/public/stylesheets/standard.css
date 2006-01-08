@@ -23,8 +23,7 @@ a, a:link, a:active, a:visited {
 a:hover {
       color: #fff;
       background-color: #cc3334;
-      }
-      
+      } 
       
 /* Rules for the icon links */
 
@@ -131,24 +130,6 @@ a.show_notes:hover {background-image: url(../images/notes_on.png); background-re
 		width:20px;
 		border:0px;
 		}
-
-/* Styling the 'Fresh Actions' box on the home page */
-#new_actions {
-      padding: 0px 5px 2px 5px;      
-      background: #E7FDDE;
-      border: 1px solid #57A620;
-      padding: 5px;
-      margin-bottom: 15px;
-      }
-      
-#new_actions h2 {
-      /* padding: 0 px 5px 0px 5px; */
-      color: #57A620;
-      background: transparent;
-      text-align: center;
-      }     
-
-#new_actions a {color: #cc3334; text-decoration: underline;}       
 
 h2 a, h2 a:link, h2 a:active, h2 a:visited {
       color: #666;
@@ -272,6 +253,15 @@ a.footer_link {color: #cc3334; font-style: normal;}
 a.footer_link:hover {color: #fff; background-color: #cc3334 !important;}
       
 /* The alert box notifications */
+#notice {
+  padding: 2px;
+  border: 1px solid #007E00; 
+  background-color: #c2ffc2;
+  color: #007E00;
+  margin-bottom: 15px;
+  text-align: center;
+  }
+      
 .confirmation {
       border: 1px solid #007E00; 
       background-color: #c2ffc2;
@@ -279,11 +269,13 @@ a.footer_link:hover {color: #fff; background-color: #cc3334 !important;}
       text-align: center;
       }
     
-.warning {
+#warning {
+      padding: 2px;
       border: 1px solid #ED2E38; 
       background-color: #F6979C;
       color: #ED2E38;
-      text-align: left;
+      margin-bottom: 15px;
+      text-align: center;
       }
 
 .project_completed {

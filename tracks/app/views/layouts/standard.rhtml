@@ -34,7 +34,7 @@
   <li><%= link_to( "Notes", {:controller => "note", :action => "index"}, :title => "Show all notes" ) %></li>
   <li><a href="javascript:toggleAll('notes','block')" accesskey="S" title="Show all notes">Show</a></li>
   <li><a href="javascript:toggleAll('notes','none')" accesskey="H" title="Hide all notes">Hide</a></li>
-  <li><%= link_to("<span class=\"feed\">RSS</span>", {:controller => "feed", :action => "na_feed", :name => "#{@session['user']['login']}", :token => "#{@session['user']['word']}"}, :title => "Subscribe to an RSS feed of your next actions" ) %></li>
+  <li><%= link_to(image_tag("feed-icon", :size => "16X16", :border => 0), {:controller => "feed", :action => "na_feed", :name => "#{@session['user']['login']}", :token => "#{@session['user']['word']}"}, :title => "Subscribe to an RSS feed of your next actions" ) %></li>
   <li><%= link_to("<span class=\"feed\">TXT</span>", {:controller => "feed", :action => "na_text", :name => "#{@session['user']['login']}", :token => "#{@session['user']['word']}"}, :title => "View a plain text feed of your next actions" ) %></li>
   <li><%= link_to "Logout (#{@session['user']['login']}) &#187;", :controller => "login", :action=>"logout"%></li>
 </ul>

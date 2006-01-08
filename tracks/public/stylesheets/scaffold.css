@@ -8,12 +8,20 @@ body, ol, ul, td {
 }
 
 p {
-  background: #ff9;
+  background: #eee;
 }
 
-a { color: #f00; padding: 3px;  } 
-a:visited { color: #f00; }
-a:hover { color: #000; background-color: #f00; }
+a, a:link, a:active, a:visited {
+      color: #cc3334;
+      text-decoration: none;
+      padding-left: 1px;
+      padding-right: 1px;
+      }
+      
+a:hover {
+      color: #fff;
+      background-color: #cc3334;
+      }
 
 h1, h2, h3 { color: #333; font-family: verdana, arial, helvetica, sans-serif; text-align: center; }
 h1 { font-size: 28px }
@@ -28,6 +36,8 @@ pre {
   font-size: 11px;
 }
 
+td {background-color: #ff9;}
+
 #scaffold-main {
   width: 80%;
   margin: 10px auto;
@@ -35,7 +45,7 @@ pre {
 }
 
 div.form {
-  width: 25%;
+  width: 30%;
   margin: 100px auto;
   padding: 10px;
   border: 1px solid #999;
@@ -50,6 +60,21 @@ div.memo {
   background: #ff9;
 }
 
-.memo p {
-  background: #ff9;
-}
+#notice {
+  padding: 2px;
+  border: 1px solid #007E00; 
+  background-color: #c2ffc2;
+  color: #007E00;
+  margin-bottom: 15px;
+  text-align: center;
+  }
+
+#footer {
+  clear: both;
+  background-color: #eee;
+  font-size: 0.8em;
+  text-align: center;
+  color: #999;
+  margin: 20px auto;
+  padding: 0px;
+  }

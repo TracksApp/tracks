@@ -1,5 +1,10 @@
 <div id="display_box">
-
+  <% if @flash["notice"] %>
+  <div id="notice" class="confirmation"><%= @flash["notice"] %></div>
+  <% end %>
+  <% if @flash["warning"] -%>
+    <div id="warning" class="warning"><%= @flash["warning"] %></div>
+  <% end -%>
 <%= render :partial => "project/project", :locals => { :project => @project, :collapsible => false } %>
 <%= render :partial => "todo/completed", :locals => { :done => @done, :collapsible => false, :append_descriptor => "in this project" } %>
 
@@ -42,6 +47,3 @@
 <%= render "shared/_add_new_item_form" %>
 <%= render "shared/sidebar" %>
 </div><!-- End of input box -->
-
-<% if @flash["confirmation"] %><div class="confirmation"><%= @flash["confirmation"] %></div><% end %>
-<% if @flash["warning"] %><div class="warning"><%= @flash["warning"] %></div><% end %>

@@ -7,15 +7,12 @@ module TodoHelper
   end
 
   def form_remote_tag_toggle_todo( item )
-    target_div = item.done? ? "new_actions" : "completed"
+    target_div = item.done? ? "c#{item.context_id}" : "completed"
     target_position = item.done? ? "bottom" : "top"
     form_id = "checkbox-#{item.id}-form"
     item_container_id = "item-#{item.id}-container"
 
     loading_javascript = "Form.disable('#{form_id}');"
-    if item.done?
-      loading_javascript << visual_effect(:appear, "new_actions", :duration => 0.4)
-    end
 
     success_javascript = " $('#{item_container_id}').setAttribute('id','#{item_container_id}-fading');"
     success_javascript << visual_effect(  :fade, "#{item_container_id}-fading",
@@ -43,7 +40,8 @@ module TodoHelper
   
   def link_to_remote_todo( item, handled_by)
     str = link_to_remote( image_tag("blank", :title =>"Delete action", :class=>"delete_item"),
-                      {:url => { :controller => handled_by, :action => "destroy_action", :id => item.id }},
+                      {:url => { :controller => handled_by, :action => "destroy_action", :id => item.id },
+                      :confirm => "Are you sure that you want to delete the action, \'#{item.description}\'?"},
                         {:class => "icon"}) + "\n"
     if !item.done?
       str << link_to_remote( image_tag("blank", :title =>"Edit action", :class=>"edit_item", :id=>"action-#{item.id}-edit-icon"),

@@ -57,10 +57,11 @@ class TodoController < ApplicationController
     
     # fallback for standard requests
     if @saved
-      flash["warning"] = 'Added new next action'
+      flash["notice"] = 'Added new next action.'
       redirect_to :action => 'list'
     else
-      render :action => 'list'
+      flash["warning"] = 'The next action was not added. Please try again.'
+      redirect_to :action => 'list'
     end
     
     rescue
@@ -88,7 +89,12 @@ class TodoController < ApplicationController
     item.toggle!('done')
     item.completed = Time.now() # For some reason, the before_save in todo.rb stopped working
     if item.save
-      render :partial => 'item', :object => item
+      if request.xhr?
+        render :partial => 'item', :object => item
+      else
+        flash['notice']  = "The item <strong>'#{item.description}'</strong> was marked as <strong>#{item.done? ? 'complete' : 'incomplete' }</strong>"
+        redirect_to :action => "list"
+      end
     end
   end
 
@@ -129,7 +135,7 @@ class TodoController < ApplicationController
     
     # fallback for standard requests
     if @saved
-      flash["warning"] = 'Successfully deleted next action'
+      flash["notice"] = 'Successfully deleted next action'
       redirect_to :action => 'list'
     else
       render :action => 'list'

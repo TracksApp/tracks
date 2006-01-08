@@ -1,6 +1,6 @@
 class LoginController < ApplicationController
   model   :user
-  layout  'scaffold'
+  layout  'login'
 
   def login
     @page_title = "Login"
@@ -61,6 +61,8 @@ class LoginController < ApplicationController
   def logout
     @session['user'] = nil
     reset_session
+    flash['notice']  = "You have been logged out of Tracks."
+    redirect_to :controller => "login", :action => "login"
   end
 
   def welcome

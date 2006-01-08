@@ -33,15 +33,6 @@ function addOneAjaxToDoItemCheckmarkHandling(elem)
     addEvent(document.getElementsByClassName('item-checkbox',elem)[0], "click", toggleTodoItemChecked);
 }
 
-function hideContainerIfEmpty(containerElemId)
-{
-	if (document.getElementsByClassName('item-container',$(containerElemId)).length == 0)
-	{
-		new Effect.Fade(containerElemId)
-	}
-	
-}
-
 function getMarkUndoneTargetElem()
 {
 	return document.getElementsByClassName('container')[0];
@@ -69,9 +60,9 @@ function toggleTodoItemChecked()
 			asynchronous:true,
 			evalScripts:true,
 			insertion:markingAsDone ? Insertion.Top : Insertion.Bottom,
-			onLoading:function(request){ Form.disable(checkboxForm); ensureVisibleWithEffectAppear(targetElemId); },
+			onLoading:function(request){ Form.disable(checkboxForm); removeFlashNotice(); ensureVisibleWithEffectAppear(targetElemId); },
 			onSuccess:function(request){ fadeAndRemoveItem(itemContainerElemId); },
-			onComplete:function(request){ new Effect.Highlight(itemContainerElemId,{}); addOneAjaxToDoItemCheckmarkHandling($(itemContainerElemId)); hideContainerIfEmpty('new_actions'); },
+			onComplete:function(request){ new Effect.Highlight(itemContainerElemId,{}); addOneAjaxToDoItemCheckmarkHandling($(itemContainerElemId)); },
 			parameters:Form.serialize(checkboxForm)
 		});
 	return false;
@@ -83,6 +74,15 @@ function fadeAndRemoveItem(itemContainerElemId)
 	$(itemContainerElemId).setAttribute('id',fadingElemId);
 	Element.removeClassName($(fadingElemId),'item-container');
 	new Effect.Fade(fadingElemId,{afterFinish:function(effect) { Element.remove(fadingElemId); }, duration:0.4});
+}
+
+function removeFlashNotice()
+{
+	var flashNotice = document.getElementById("notice");
+	if (flashNotice)
+	{
+		new Effect.Fade("notice",{afterFinish:function(effect) { Element.remove("notice"); }, duration:0.4});
+	}
 }
 
 function toggleNextActionListing()

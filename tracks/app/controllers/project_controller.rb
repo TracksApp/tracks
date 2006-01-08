@@ -84,10 +84,11 @@ class ProjectController < ApplicationController
     
     # fallback for standard requests
     if @saved
-      flash["warning"] = 'Added new next action'
-      redirect_to :action => 'show', :name => urlize(@item.project.name)
+      flash["notice"] = 'Added new next action.'
+      redirect_to :controller => 'todo', :action => 'list'
     else
-      #render :action => 'new'
+      flash["warning"] = 'The next action was not added. Please try again.'
+      redirect_to :controller => 'todo', :action => 'list'
     end
     
     rescue
@@ -95,7 +96,7 @@ class ProjectController < ApplicationController
         render :action => 'error'
       else
         flash["warning"] = 'An error occurred on the server.'
-        #render :action => 'new'
+        redirect_to :controller => 'todo', :action => 'list'
       end
   end
   
@@ -112,7 +113,7 @@ class ProjectController < ApplicationController
     
     # fallback for standard requests
     if @saved
-      flash["warning"] = 'Successfully deleted next action'
+      flash["notice"] = 'Successfully deleted next action'
       redirect_to :controller => 'todo', :action => 'list'
     else
       render :controller => 'todo', :action => 'list'
