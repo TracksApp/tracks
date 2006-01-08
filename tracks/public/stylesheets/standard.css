@@ -178,9 +178,18 @@ input.item-checkbox {
 		margin: 0;
 		}
       
-.description, .stale_l1, .stale_l2, .stale_l3 {
+.description {
       margin-left: 70px;
       margin-right: 10px;
+      }
+
+.stale_l1, .stale_l2, .stale_l3 {
+   	margin-left: 67px;
+		padding-left: 3px;
+      }
+
+.stale_l1 {
+      background: #ffC;
       }
       
 .tools {
