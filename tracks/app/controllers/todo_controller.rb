@@ -26,10 +26,10 @@ class TodoController < ApplicationController
     @done = @done[0..(NO_OF_ACTIONS-1)]
 
     @contexts_to_show = @contexts.clone
-    @contexts_to_show = @contexts_to_show.collect {|x| (!x.hidden? and !x.find_not_done_todos.empty?) ? x:nil }.compact
+    @contexts_to_show = @contexts_to_show.collect {|x| (!x.hide? and !x.find_not_done_todos.empty?) ? x:nil }.compact
 
     # Set count badge to number of not-done, not hidden context items
-    @count = @todos.collect { |x| ( !x.done? and !x.context.hidden? ) ? x:nil }.compact.size
+    @count = @todos.collect { |x| ( !x.done? and !x.context.hide? ) ? x:nil }.compact.size
   end
 
   def update_element
@@ -51,8 +51,9 @@ class TodoController < ApplicationController
 
     @saved = @item.save
     @on_page = "home"
-    @up_count = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = 0", @user.id]).size.to_s
-    
+    if @saved
+      @up_count = @todos.collect { |x| ( !x.done? and !x.context.hide? ) ? x:nil }.compact.size.to_s
+    end
     return if request.xhr?
     
     # fallback for standard requests
@@ -75,8 +76,8 @@ class TodoController < ApplicationController
 
   def edit_action
     self.init
-
     item = check_user_return_item
+
     render :partial => 'action_edit_form', :object => item
   end
 
@@ -85,17 +86,22 @@ class TodoController < ApplicationController
   def toggle_check
     self.init
 
-    item = check_user_return_item
-    item.toggle!('done')
-    item.completed = Time.now() # For some reason, the before_save in todo.rb stopped working
-    if item.save
-      if request.xhr?
-        render :partial => 'item', :object => item
-      else
-        flash['notice']  = "The item <strong>'#{item.description}'</strong> was marked as <strong>#{item.done? ? 'complete' : 'incomplete' }</strong>"
-        redirect_to :action => "list"
-      end
+    @item = check_user_return_item
+    @item.toggle!('done')
+    @item.completed = Time.now() # For some reason, the before_save in todo.rb stopped working
+    @saved = @item.save
+    @on_page = "home"
+    if @saved
+      @down_count = @todos.collect { |x| ( !x.done? and !x.context.hide? ) ? x:nil }.compact.size.to_s
     end
+    return if request.xhr?
+
+    if @saved
+      flash['notice']  = "The action <strong>'#{@item.description}'</strong> was marked as <strong>#{@item.done? ? 'complete' : 'incomplete' }</strong>"
+    else
+      flash['notice']  = "The action <strong>'#{@item.description}'</strong> was NOT marked as <strong>#{@item.done? ? 'complete' : 'incomplete' } due to an error on the server.</strong>"
+    end
+    redirect_to :action => "list"
   end
 
   # Edit the details of an action
@@ -129,7 +135,10 @@ class TodoController < ApplicationController
     @item = check_user_return_item
     
     @saved = @item.destroy
-    @down_count = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = 0", @user.id]).size.to_s
+    @on_page = "home"
+    if @saved
+      @down_count = @todos.collect { |x| ( !x.done? and !x.context.hide? ) ? x:nil }.compact.size.to_s
+    end
     
     return if request.xhr?
     

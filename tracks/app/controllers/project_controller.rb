@@ -78,7 +78,9 @@ class ProjectController < ApplicationController
 
     @saved = @item.save
     @on_page = "project"
-    @up_count = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = 0 and todos.project_id IN (?)", @user.id, @item.project_id]).size.to_s
+    if @saved
+      @up_count = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = 0 and todos.project_id IN (?)", @user.id, @item.project_id]).size.to_s
+    end
     
     return if request.xhr?
     
@@ -107,7 +109,10 @@ class ProjectController < ApplicationController
     @item = check_user_return_item
     
     @saved = @item.destroy
-    @down_count = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = 0 and todos.project_id IN (?)", @user.id, @item.project_id]).size.to_s
+    @on_page = "project"
+    if @saved
+      @down_count = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = 0 and todos.project_id IN (?)", @user.id, @item.project_id]).size.to_s
+    end
     
     return if request.xhr?
     
@@ -128,6 +133,30 @@ class ProjectController < ApplicationController
       end
   end
 
+  # Toggles the 'done' status of the action
+  #
+  def toggle_check
+    self.init
+
+    @item = check_user_return_item
+    @item.toggle!('done')
+    @item.completed = Time.now() # For some reason, the before_save in todo.rb stopped working
+    @saved = @item.save
+    @on_page = "project"
+    if @saved
+      @down_count = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = 0 and todos.project_id IN (?)", @user.id, @item.project_id]).size.to_s
+      @done_count = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = 1 and todos.project_id IN (?)", @user.id, @item.project_id]).size.to_s
+    end
+    return if request.xhr?
+
+    if @saved
+      flash['notice']  = "The action <strong>'#{@item.description}'</strong> was marked as <strong>#{@item.done? ? 'complete' : 'incomplete' }</strong>"
+    else
+      flash['notice']  = "The action <strong>'#{@item.description}'</strong> was NOT marked as <strong>#{@item.done? ? 'complete' : 'incomplete' } due to an error on the server.</strong>"
+    end
+    redirect_to :action => "list"
+  end
+  
   # Edit the details of the project
   #
   def update

@@ -161,8 +161,12 @@ h2 a:hover {
       width: 20px;
       }
 
+.item-container {
+      padding:2px;
+      }
+
 .container a.icon {
-		float: left;
+      float: left;
       vertical-align: middle;
       background-color: transparent;
       }
@@ -173,11 +177,6 @@ input.item-checkbox {
       vertical-align: middle;
       }
 
-.checkbox form {
-		display: inline;
-		margin: 0;
-		}
-      
 .description {
       margin-left: 70px;
       margin-right: 10px;
@@ -461,7 +460,7 @@ form {
     width: 313px;
     }
 
-.inline-form, .item-checkmark-form {
+.inline-form {
     border: none;
     padding: 3px;
     width: 100%;
@@ -527,7 +526,7 @@ div.message {
 
 #ErrorExplanation {
   width: 400px;
-  border: 2px solid #red;
+  border: 2px solid red;
   padding: 7px;
   padding-bottom: 12px;
   margin-bottom: 20px;

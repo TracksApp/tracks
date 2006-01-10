@@ -59,7 +59,9 @@ class ContextController < ApplicationController
 
     @saved = @item.save
     @on_page = "context"
-    @up_count = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = 0 and todos.context_id IN (?)", @user.id, @item.context_id]).size.to_s
+    if @saved
+      @up_count = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = 0 and todos.context_id IN (?)", @user.id, @item.context_id]).size.to_s
+    end
      
     return if request.xhr?
     
@@ -88,7 +90,9 @@ class ContextController < ApplicationController
     @item = check_user_return_item
     
     @saved = @item.destroy
-    @down_count = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = 0 and todos.context_id IN (?)", @user.id, @item.context_id]).size.to_s
+    if @saved
+      @down_count = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = 0 and todos.context_id IN (?)", @user.id, @item.context_id]).size.to_s
+    end
     
     return if request.xhr?
     
@@ -107,6 +111,29 @@ class ContextController < ApplicationController
         flash["warning"] = 'An error occurred on the server.'
         render :controller => 'todo', :action => 'list'
       end
+  end
+  
+  # Toggles the 'done' status of the action
+  #
+  def toggle_check
+    self.init
+
+    @item = check_user_return_item
+    @item.toggle!('done')
+    @item.completed = Time.now() # For some reason, the before_save in todo.rb stopped working
+    @saved = @item.save
+    if @saved
+      @down_count = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = 0 and todos.context_id IN (?)", @user.id, @item.context_id]).size.to_s
+      @done_count = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = 1 and todos.context_id IN (?)", @user.id, @item.context_id]).size.to_s
+    end
+    return if request.xhr?
+
+    if @saved
+      flash['notice']  = "The action <strong>'#{@item.description}'</strong> was marked as <strong>#{@item.done? ? 'complete' : 'incomplete' }</strong>"
+    else
+      flash['notice']  = "The action <strong>'#{@item.description}'</strong> was NOT marked as <strong>#{@item.done? ? 'complete' : 'incomplete' } due to an error on the server.</strong>"
+    end
+    redirect_to :action => "list"
   end
 
   # Edit the details of the context

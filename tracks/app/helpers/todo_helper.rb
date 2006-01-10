@@ -6,30 +6,6 @@ module TodoHelper
     count = Todo.find_all("done=0 AND context_id=#{context.id}").length
   end
 
-  def form_remote_tag_toggle_todo( item )
-    target_div = item.done? ? "c#{item.context_id}" : "completed"
-    target_position = item.done? ? "bottom" : "top"
-    form_id = "checkbox-#{item.id}-form"
-    item_container_id = "item-#{item.id}-container"
-
-    loading_javascript = "Form.disable('#{form_id}');"
-
-    success_javascript = " $('#{item_container_id}').setAttribute('id','#{item_container_id}-fading');"
-    success_javascript << visual_effect(  :fade, "#{item_container_id}-fading",
-                                          {
-                                            :duration => 0.4,
-                                            :afterFinish => "function(effect) { Element.remove('#{item_container_id}-fading'); }"
-                                          })
-
-    form_remote_tag( :url => url_for( :controller => "todo", :action => "toggle_check", :id => item.id ),
-                     :html => { :id=> "#{form_id}", :class => "inline-form item-checkmark-form" },
-                     :update => target_div,
-                     :position => target_position,
-                     :loading => loading_javascript,
-                     :success => success_javascript,
-                     :complete => visual_effect( :highlight, item_container_id))
-  end
-
   def form_remote_tag_edit_todo( item )
     form_remote_tag( :url => { :controller => 'todo', :action => 'update_action', :id => item.id },
                     :html => { :id => "form-action-#{item.id}", :class => "inline-form" },

@@ -8,7 +8,6 @@
  */
 
 addEvent(window, "load", addNextActionListingToggles);
-addEvent(window, "load", addAjaxToDoItemCheckmarkHandling);
 
 function addNextActionListingToggles()
 {
@@ -19,25 +18,6 @@ function addNextActionListingToggles()
   }
 }
 
-function addAjaxToDoItemCheckmarkHandling()
-{
-  var itemCheckboxes = document.getElementsByClassName('item-checkbox');
-  for(var i = 0; i < itemCheckboxes.length; i++)
-  {
-    addEvent(itemCheckboxes[i], "click", toggleTodoItemChecked);
-  }
-}
-
-function addOneAjaxToDoItemCheckmarkHandling(elem)
-{
-    addEvent(document.getElementsByClassName('item-checkbox',elem)[0], "click", toggleTodoItemChecked);
-}
-
-function getMarkUndoneTargetElem()
-{
-	return document.getElementsByClassName('container')[0];
-}
-
 function ensureVisibleWithEffectAppear(elemId)
 {
 	if ($(elemId).style.display == 'none')
@@ -46,43 +26,12 @@ function ensureVisibleWithEffectAppear(elemId)
 	}
 }	
 
-function toggleTodoItemChecked()
-{
-	var itemContainerElem = findNearestParentByClassName(this, 'item-container');
-	var itemContainerElemId = itemContainerElem.getAttribute('id');
-	var checkboxForm = this.form;
-	var markingAsDone = this.checked;
-	var targetElemId = markingAsDone ? 'completed' : getMarkUndoneTargetElem().getAttribute('id');
-	new Ajax.Updater(
-		targetElemId,
-		checkboxForm.action,
-		{
-			asynchronous:true,
-			evalScripts:true,
-			insertion:markingAsDone ? Insertion.Top : Insertion.Bottom,
-			onLoading:function(request){ Form.disable(checkboxForm); removeFlashNotice(); ensureVisibleWithEffectAppear(targetElemId); },
-			onSuccess:function(request){ fadeAndRemoveItem(itemContainerElemId); },
-			onComplete:function(request){ new Effect.Highlight(itemContainerElemId,{}); addOneAjaxToDoItemCheckmarkHandling($(itemContainerElemId)); },
-			parameters:Form.serialize(checkboxForm)
-		});
-	return false;
-}
-
 function fadeAndRemoveItem(itemContainerElemId)
 {
 	var fadingElemId = itemContainerElemId + '-fading';
 	$(itemContainerElemId).setAttribute('id',fadingElemId);
 	Element.removeClassName($(fadingElemId),'item-container');
 	new Effect.Fade(fadingElemId,{afterFinish:function(effect) { Element.remove(fadingElemId); }, duration:0.4});
-}
-
-function removeFlashNotice()
-{
-	var flashNotice = document.getElementById("notice");
-	if (flashNotice)
-	{
-		new Effect.Fade("notice",{afterFinish:function(effect) { Element.remove("notice"); }, duration:0.4});
-	}
 }
 
 function toggleNextActionListing()

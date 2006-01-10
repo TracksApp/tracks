@@ -1,0 +1,15 @@
+if @saved
+  page.call "fadeAndRemoveItem", "item-#{@item.id}-container"
+  if @item.done?
+    page.insert_html :top, "completed", :partial => 'todo/item'
+    page.visual_effect :highlight, "item-#{@item.id}", {'startcolor' => "'#99ff99'"}
+  else
+    page.call "ensureVisibleWithEffectAppear", "c#{@item.context_id}"
+    page.insert_html :bottom, "c#{@item.context_id}", :partial => 'todo/item'
+    page.visual_effect :highlight, "item-#{@item.id}", {'startcolor' => "'#99ff99'"}
+  end
+  page.hide "status"
+	page.replace_html "badge_count", @down_count
+else
+  page.replace_html "status", content_tag("div", content_tag("h2", "#{pluralize(@item.errors.count, "error")} prohibited this record from being saved") + content_tag("p", "There were problems with the following fields:") + content_tag("ul", @item.errors.each_full { |msg| content_tag("li", msg) }), "id" => "ErrorExplanation", "class" => "ErrorExplanation")  
+end

@@ -1,11 +1,10 @@
 <div id="item-<%= item.id %>-container" class="item-container">
     
   <div id="item-<%= item.id %>">
-    <%= form_remote_tag_toggle_todo( item ) %>
-    <%= form_tag( { :controller => "todo", :action => "toggle_check", :id => item.id },
-                  { :class => "inline-form" }) %>
-      <%= link_to_remote_todo( item, controller.controller_name ) %>
-      <input type="checkbox" class="item-checkbox" name="item_id" value="<%= item.id %>"<% if item.done? %> checked="checked" <% end %> />
+    <%= link_to_remote_todo( item, controller.controller_name ) %>
+    <input type="checkbox" class="item-checkbox"
+           onclick="new Ajax.Request('/<%= controller.controller_name %>/toggle_check/<%= item.id %>', {asynchronous:true, evalScripts:true});"
+           name="item_id" value="<%= item.id %>"<% if item.done? %> checked="checked" <% end %> />
       <div class="description<%= staleness_class( item ) %>"><% # start of div which has a class 'description', and possibly 'stale_11', 'stale_12', 'stale_13' etc %>
 <% if item.done? -%>
         <span class="grey"><%= format_date( item.completed ) %></span>
@@ -22,7 +21,6 @@
        <%= toggle_show_notes( item ) %>
 <% end -%>
       </div>
-    <%= end_form_tag %>
   </div><!-- [end:item-item.id] -->
   <div id="action-<%= item.id %>-edit-form" class="edit-form" style="display:none;">
     <%= form_remote_tag_edit_todo( item ) -%>
@@ -30,4 +28,3 @@
     <%= end_form_tag -%>
   </div><!-- [end:action-item.id-edit-form] -->
  </div><!-- [end:item-item.id-container] -->
- 

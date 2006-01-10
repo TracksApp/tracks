@@ -16,7 +16,7 @@
 
 <h3>Active Contexts:</h3>
 <ul>
-  <% for context in @contexts.collect { |x| x.hidden? ? nil:x }.compact -%>
+  <% for context in @contexts.collect { |x| x.hide? ? nil:x }.compact -%>
   <li><%= link_to( sanitize(context.name), { :controller => "context", :action => "show",
           :name => urlize(context.name) } ) + " (" + context.count_undone_todos("actions") + ")" %></li>
   <% end -%>
@@ -24,7 +24,7 @@
 
 <h3>Hidden Contexts:</h3>
 <ul>
-  <% for context in @contexts.collect { |x| x.hidden? ? x:nil }.compact -%>
+  <% for context in @contexts.collect { |x| x.hide? ? x:nil }.compact -%>
   <li><%= link_to( sanitize(context.name), { :controller => "context", :action => "show",
           :name => urlize(context.name) } ) + " (" + context.count_undone_todos("actions") + ")" %></li>
   <% end -%>
