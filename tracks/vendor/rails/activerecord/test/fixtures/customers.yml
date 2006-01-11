@@ -1,0 +1,8 @@
+david:
+  id: 1
+  name: David
+  balance: 50
+  address_street: Funny Street
+  address_city: Scary Town
+  address_country: Loony Land
+  gps_location: 35.544623640962634x-105.9309951055148

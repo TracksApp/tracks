@@ -525,8 +525,8 @@ div.message {
 }
 
 #ErrorExplanation {
-  width: 400px;
-  border: 2px solid red;
+  width: 335px;
+  border: 2px solid #ff0000;
   padding: 7px;
   padding-bottom: 12px;
   margin-bottom: 20px;
@@ -550,8 +550,8 @@ div.message {
 }
 
 #ErrorExplanation ul li {
-  font-size: 12px;
-  list-style: square;
+  font-size: 1em;
+  list-style: disc;
 }
 
 ul.warning { list-style-type: circle; font-size: 1em; }

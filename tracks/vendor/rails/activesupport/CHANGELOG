@@ -1,0 +1,288 @@
+*1.2.5* (December 13th, 2005)
+
+* Become part of Rails 1.0
+
+
+*1.2.4* (December 7th, 2005)
+
+* Rename Version constant to VERSION. #2802 [Marcel Molina Jr.]
+
+
+*1.2.3* (November 7th, 2005)
+
+* Change Inflector#constantize to use eval instead of const_get. [Nicholas Seckar]
+
+* Fix const_missing handler to ignore the trailing '.rb' on files when comparing paths. [Nicholas Seckar]
+
+* Define kernel.rb methods in "class Object" instead of "module Kernel" to work around a Windows peculiarity [Sam Stephenson]
+
+* Fix broken tests caused by incomplete loading of active support. [Nicholas Seckar]
+
+* Fix status pluralization bug so status_codes doesn't get pluralized as statuses_code.  #2758 [keithm@infused.org]
+
+* Added Kernel#silence_stderr to silence stderr for the duration of the given block [Sam Stephenson]
+
+* Changed Kernel#` to print a message to stderr (like Unix) instead of raising Errno::ENOENT on Win32 [Sam Stephenson]
+
+* Changed 0.blank? to false rather than true since it violates everyone's expectation of blankness.  #2518, #2705 [rails@jeffcole.net]
+
+* When loading classes using const_missing, raise a NameError if and only if the file we tried to load was not present. [Nicholas Seckar]
+
+* Added petabytes and exebytes to numeric extensions #2397 [timct@mac.com]
+
+* Added Time#end_of_month to accompany Time#beginning_of_month #2514 [Jens-Christian Fischer]
+
+
+*1.2.2* (October 26th, 2005)
+
+* Set Logger.silencer = false to disable Logger#silence.  Useful for debugging fixtures.
+
+* Add title case method to String to do, e.g., 'action_web_service'.titlecase #  => 'Action Web Service'. [Marcel Molina Jr.]
+
+
+*1.2.1* (October 19th, 2005)
+
+* Classify generated routing code as framework code to avoid appearing in application traces. [Nicholas Seckar]
+
+* Show all framework frames in the framework trace. [Nicholas Seckar]
+
+
+*1.2.0* (October 16th, 2005)
+
+* Update Exception extension to show the first few framework frames in an application trace. [Nicholas Seckar] 
+
+* Added Exception extension to provide support for clean backtraces. [Nicholas Seckar]
+
+* Updated whiny nil to be more concise and useful. [Nicholas Seckar]
+
+* Added Enumerable#first_match [Nicholas Seckar]
+
+* Fixed that Time#change should also reset usec when also resetting minutes #2459 [ikeda@dream.big.or.jp]
+
+* Fix Logger compatibility for distributions that don't keep Ruby and its standard library in sync.
+
+* Replace '%e' from long and short time formats as Windows does not support it. #2344. [Tom Ward <tom@popdog.net>]
+
+* Added to_s(:db) to Range, so you can get "BETWEEN '2005-12-10' AND '2005-12-12'" from Date.new(2005, 12, 10)..Date.new(2005, 12, 12) (and likewise with Times)
+
+* Moved require_library_or_gem into Kernel. #1992 [Michael Schuerig <michael@schuerig.de>]
+
+* Add :rfc822 as an option for Time#to_s (to get rfc822-formatted times)
+
+* Chain the const_missing hook to any previously existing hook so rails can play nicely with rake
+
+* Clean logger is compatible with both 1.8.2 and 1.8.3 Logger.  #2263 [Michael Schuerig <michael@schuerig.de>]
+
+* Added native, faster implementations of .blank? for the core types #2286 [skae]
+
+* Fixed clean logger to work with Ruby 1.8.3 Logger class #2245
+
+* Fixed memory leak with Active Record classes when Dependencies.mechanism = :load #1704 [c.r.mcgrath@gmail.com]
+
+* Fixed Inflector.underscore for use with acronyms, so HTML becomes html instead of htm_l #2173 [k@v2studio.com]
+
+* Fixed dependencies related infinite recursion bug when a controller file does not contain a controller class. Closes #1760. [rcolli2@tampabay.rr.com]
+
+* Fixed inflections for status, quiz, move #2056 [deirdre@deirdre.net]
+
+* Added Hash#reverse_merge, Hash#reverse_merge!, and Hash#reverse_update to ease the use of default options
+
+* Added Array#to_sentence that'll turn ['one', 'two', 'three'] into "one, two, and three" #2157 [m.stienstra@fngtps.com]
+
+* Added Kernel#silence_warnings to turn off warnings temporarily for the passed block
+
+* Added String#starts_with? and String#ends_with? #2118 [thijs@vandervossen.net]
+
+* Added easy extendability to the inflector through Inflector.inflections (using the Inflector::Inflections singleton class). Examples:
+
+    Inflector.inflections do |inflect|
+      inflect.plural /^(ox)$/i, '\1\2en'
+      inflect.singular /^(ox)en/i, '\1'
+    
+      inflect.irregular 'octopus', 'octopi'
+    
+      inflect.uncountable "equipment"
+    end
+
+* Added String#at, String#from, String#to, String#first, String#last in ActiveSupport::CoreExtensions::String::Access to ease access to individual characters and substrings in a string serving basically as human names for range access.
+
+* Make Time#last_month work when invoked on the 31st of a month.
+
+* Add Time.days_in_month, and make Time#next_month work when invoked on the 31st of a month
+
+* Fixed that Time#midnight would have a non-zero usec on some platforms #1836
+
+* Fixed inflections of "index/indices" #1766 [damn_pepe@gmail.com]
+
+* Added stripping of _id to String#humanize, so "employee_id" becomes "Employee" #1574 [Justin French]
+
+* Factor Fixnum and Bignum extensions into Integer extensions [Nicholas Seckar]
+
+* Hooked #ordinalize into Fixnum and Bignum classes. [Nicholas Seckar, danp]
+
+* Added Fixnum#ordinalize to turn 1.ordinalize to "1st", 3.ordinalize to "3rd", and 10.ordinalize to "10th" and so on #1724 [paul@cnt.org]
+
+
+*1.1.1* (11 July, 2005)
+
+* Added more efficient implementation of the development mode reset of classes #1638 [Chris McGrath]
+
+
+*1.1.0* (6 July, 2005)
+
+* Fixed conflict with Glue gem #1606 [Rick Olson]
+
+* Added new rules to the Inflector to deal with more unusual plurals mouse/louse => mice/lice, information => information, ox => oxen, virus => viri, archive => archives #1571, #1583, #1490, #1599, #1608 [foamdino@gmail.com/others]
+
+* Fixed memory leak with Object#remove_subclasses_of, which inflicted a Rails application running in development mode with a ~20KB leak per request #1289 [c.r.mcgrath@gmail.com]
+
+* Made 1.year == 365.25.days to account for leap years.  This allows you to do User.find(:all, :conditions => ['birthday > ?', 50.years.ago]) without losing a lot of days.  #1488 [tuxie@dekadance.se]
+
+* Added an exception if calling id on nil to WhinyNil #584 [kevin-temp@writesoon.com]
+
+* Added Fix/Bignum#multiple_of? which returns true on 14.multiple_of?(7) and false on 16.multiple_of?(7) #1464 [Thomas Fuchs]
+
+* Added even? and odd? to work with Bignums in addition to Fixnums #1464 [Thomas Fuchs]
+
+* Fixed Time#at_beginning_of_week returned the next Monday instead of the previous one when called on a Sunday #1403 [jean.helou@gmail.com]
+
+* Increased the speed of indifferent hash access by using Hash#default.  #1436 [Nicholas Seckar]
+
+* Added that "   " is now also blank? (using strip if available)
+
+* Fixed Dependencies so all modules are able to load missing constants #1173 [Nicholas Seckar]
+
+* Fixed the Inflector to underscore strings containing numbers, so Area51Controller becomes area51_controller #1176 [Nicholas Seckar]
+
+* Fixed that HashWithIndifferentAccess stringified all keys including symbols, ints, objects, and arrays #1162 [Nicholas Seckar]
+
+* Fixed Time#last_year to go back in time, not forward #1278 [fabien@odilat.com]
+
+* Fixed the pluralization of analysis to analyses #1295 [seattle@rootimage.msu.edu]
+
+* Fixed that Time.local(2005,12).months_since(1) would raise "ArgumentError: argument out of range" #1311 [jhahn@niveon.com]
+
+* Added silencing to the default Logger class
+
+
+*1.0.4* (19th April, 2005)
+
+* Fixed that in some circumstances controllers outside of modules may have hidden ones inside modules. For example, admin/content might have been hidden by /content. #1075 [Nicholas Seckar]
+
+* Fixed inflection of perspectives and similar words #1045 [thijs@vandervossen.net]
+
+* Added Fixnum#even? and Fixnum#odd?
+
+* Fixed problem with classes being required twice. Object#const_missing now uses require_dependency to load files. It used to use require_or_load which would cause models to be loaded twice, which was not good for validations and other class methods #971 [Nicholas Seckar]
+
+
+*1.0.3* (27th March, 2005)
+
+* Fixed Inflector.pluralize to handle capitalized words #932 [Jeremy Kemper]
+
+* Added Object#suppress which allows you to make a saner choice around with exceptions to swallow #980. Example:
+
+    suppress(ZeroDivisionError) { 1/0 }
+  
+  ...instead of:
+  
+    1/0 rescue nil # BAD, EVIL, DIRTY.
+
+
+*1.0.2* (22th March, 2005)
+
+* Added Kernel#returning -- a Ruby-ized realization of the K combinator, courtesy of Mikael Brockman.
+
+    def foo
+      returning values = [] do
+        values << 'bar'
+        values << 'baz'
+      end
+    end
+    
+    foo # => ['bar', 'baz']
+
+
+*1.0.1* (7th March, 2005)
+
+* Fixed Hash#indifferent_access to also deal with include? and fetch and nested hashes #726 [Nicholas Seckar]
+
+* Added Object#blank? -- see http://redhanded.hobix.com/inspect/objectBlank.html #783 [_why the lucky stiff]
+
+* Added inflection rules for "sh" words, like "wish" and "fish" #755 [phillip@pjbsoftware.com]
+
+* Fixed an exception when using Ajax based requests from Safari because Safari appends a \000 to the post body. Symbols can't have \000 in them so indifferent access would throw an exception in the constructor. Indifferent hashes now use strings internally instead. #746 [Tobias Luetke]
+
+* Added String#to_time and String#to_date for wrapping ParseDate
+
+
+*1.0.0* (24th February, 2005)
+
+* Added TimeZone as the first of a number of value objects that among others Active Record can use rich value objects using composed_of #688 [Jamis Buck]
+
+* Added Date::Conversions for getting dates in different convenient string representations and other objects
+
+* Added Time::Conversions for getting times in different convenient string representations and other objects
+
+* Added Time::Calculations to ask for things like Time.now.tomorrow, Time.now.yesterday, Time.now.months_ago(4) #580 [DP|Flurin]. Examples:
+
+    "Later today"         => now.in(3.hours),
+    "Tomorrow morning"    => now.tomorrow.change(:hour => 9),
+    "Tomorrow afternoon"  => now.tomorrow.change(:hour => 14),
+    "In a couple of days" => now.tomorrow.tomorrow.change(:hour => 9),
+    "Next monday"         => now.next_week.change(:hour => 9),
+    "In a month"          => now.next_month.change(:hour => 9),
+    "In 6 months"         => now.months_since(6).change(:hour => 9),
+    "In a year"           => now.in(1.year).change(:hour => 9)
+
+* Upgraded to breakpoint 92 which fixes:
+
+    * overload IRB.parse_opts(), fixes #443
+      => breakpoints in tests work even when running them via rake
+    * untaint handlers, might fix an issue discussed on the Rails ML
+    * added verbose mode to breakpoint_client
+    * less noise caused by breakpoint_client by default
+    * ignored TerminateLineInput exception in signal handler
+      => quiet exit on Ctrl-C
+
+* Fixed Inflector for words like "news" and "series" that are the same in plural and singular #603 [echion], #615 [marcenuc]
+
+* Added Hash#stringify_keys and Hash#stringify_keys!
+
+* Added IndifferentAccess as a way to wrap a hash by a symbol-based store that also can be accessed by string keys
+
+* Added Inflector.constantize to turn "Admin::User" into a reference for the constant Admin::User
+
+* Added that Inflector.camelize and Inflector.underscore can deal with modules like turning "Admin::User" into "admin/user" and back
+
+* Added Inflector.humanize to turn attribute names like employee_salary into "Employee salary". Used by automated error reporting in AR.
+
+* Added availability of class inheritable attributes to the masses #477 [Jeremy Kemper]
+
+    class Foo
+      class_inheritable_reader :read_me
+      class_inheritable_writer :write_me
+      class_inheritable_accessor :read_and_write_me
+      class_inheritable_array :read_and_concat_me
+      class_inheritable_hash :read_and_update_me
+    end
+
+    # Bar gets a clone of (not a reference to) Foo's attributes.
+    class Bar < Foo
+    end
+
+    Bar.read_and_write_me == Foo.read_and_write_me
+    Bar.read_and_write_me = 'bar'
+    Bar.read_and_write_me != Foo.read_and_write_me
+
+* Added Inflections as an extension on String, so Inflector.pluralize(Inflector.classify(name)) becomes name.classify.pluralize #476 [Jeremy Kemper]
+
+* Added Byte operations to Numeric, so 5.5.megabytes + 200.kilobytes #461 [Marcel Molina]
+
+* Fixed that Dependencies.reload can't load the same file twice #420 [Kent Sibilev]
+
+* Added Fixnum#ago/until, Fixnum#since/from_now #450 [Jeremy Kemper]
+
+* Added that Inflector now accepts Symbols and Classes by calling .to_s on the word supplied
+
+* Added time unit extensions to Fixnum that'll return the period in seconds, like 2.days + 4.hours.

@@ -1,0 +1,285 @@
+require 'rubygems'
+require 'rake'
+require 'rake/testtask'
+require 'rake/rdoctask'
+require 'rake/packagetask'
+require 'rake/gempackagetask'
+require 'rake/contrib/rubyforgepublisher'
+require File.join(File.dirname(__FILE__), 'lib', 'active_record', 'version')
+
+PKG_BUILD     = ENV['PKG_BUILD'] ? '.' + ENV['PKG_BUILD'] : ''
+PKG_NAME      = 'activerecord'
+PKG_VERSION   = ActiveRecord::VERSION::STRING + PKG_BUILD
+PKG_FILE_NAME = "#{PKG_NAME}-#{PKG_VERSION}"
+
+RELEASE_NAME  = "REL #{PKG_VERSION}"
+
+RUBY_FORGE_PROJECT = "activerecord"
+RUBY_FORGE_USER    = "webster132"
+
+PKG_FILES = FileList[
+    "lib/**/*", "test/**/*", "examples/**/*", "doc/**/*", "[A-Z]*", "install.rb", "rakefile"
+].exclude(/\bCVS\b|~$/)
+
+
+desc "Default Task"
+task :default => [ :test_mysql, :test_sqlite, :test_postgresql ]
+
+# Run the unit tests
+
+for adapter in %w( mysql postgresql sqlite sqlite3 firebird sqlserver sqlserver_odbc db2 oci )
+  Rake::TestTask.new("test_#{adapter}") { |t|
+    t.libs << "test" << "test/connections/native_#{adapter}"
+    t.pattern = "test/*_test{,_#{adapter}}.rb"
+    t.verbose = true
+  }
+end
+
+SCHEMA_PATH = File.join(File.dirname(__FILE__), *%w(test fixtures db_definitions))
+
+desc 'Build the MySQL test databases'
+task :build_mysql_databases do 
+  %x( mysqladmin  create activerecord_unittest )
+  %x( mysqladmin  create activerecord_unittest2 )
+  %x( mysql  activerecord_unittest < #{File.join(SCHEMA_PATH, 'mysql.sql')} )
+  %x( mysql  activerecord_unittest < #{File.join(SCHEMA_PATH, 'mysql2.sql')} )
+end
+
+desc 'Drop the MySQL test databases'
+task :drop_mysql_databases do 
+  %x( mysqladmin -f drop activerecord_unittest )
+  %x( mysqladmin -f drop activerecord_unittest2 )
+end
+
+desc 'Rebuild the MySQL test databases'
+task :rebuild_mysql_databases => [:drop_mysql_databases, :build_mysql_databases]
+
+desc 'Build the PostgreSQL test databases'
+task :build_postgresql_databases do 
+  %x( createdb activerecord_unittest )
+  %x( createdb activerecord_unittest2 )
+  %x( psql activerecord_unittest -f #{File.join(SCHEMA_PATH, 'postgresql.sql')} )
+  %x( psql activerecord_unittest -f #{File.join(SCHEMA_PATH, 'postgresql2.sql')} )
+end
+
+desc 'Drop the PostgreSQL test databases'
+task :drop_postgresql_databases do 
+  %x( dropdb   activerecord_unittest )
+  %x( dropdb   activerecord_unittest2 )
+end
+
+desc 'Rebuild the PostgreSQL test databases'
+task :rebuild_postgresql_databases => [:drop_postgresql_databases, :build_postgresql_databases]
+
+# Generate the RDoc documentation
+
+Rake::RDocTask.new { |rdoc|
+  rdoc.rdoc_dir = 'doc'
+  rdoc.title    = "Active Record -- Object-relation mapping put on rails"
+  rdoc.options << '--line-numbers --inline-source --accessor cattr_accessor=object'
+  rdoc.template = "#{ENV['template']}.rb" if ENV['template']
+  rdoc.rdoc_files.include('README', 'RUNNING_UNIT_TESTS', 'CHANGELOG')
+  rdoc.rdoc_files.include('lib/**/*.rb')
+  rdoc.rdoc_files.exclude('lib/active_record/vendor/*')
+  rdoc.rdoc_files.include('dev-utils/*.rb')
+}
+
+# Enhance rdoc task to copy referenced images also
+task :rdoc do
+  FileUtils.mkdir_p "doc/files/examples/"
+  FileUtils.copy "examples/associations.png", "doc/files/examples/associations.png"
+end
+
+
+# Create compressed packages
+
+dist_dirs = [ "lib", "test", "examples", "dev-utils" ]
+
+spec = Gem::Specification.new do |s|
+  s.name = PKG_NAME
+  s.version = PKG_VERSION
+  s.summary = "Implements the ActiveRecord pattern for ORM."
+  s.description = %q{Implements the ActiveRecord pattern (Fowler, PoEAA) for ORM. It ties database tables and classes together for business objects, like Customer or Subscription, that can find, save, and destroy themselves without resorting to manual SQL.}
+
+  s.files = [ "rakefile", "install.rb", "README", "RUNNING_UNIT_TESTS", "CHANGELOG" ]
+  dist_dirs.each do |dir|
+    s.files = s.files + Dir.glob( "#{dir}/**/*" ).delete_if { |item| item.include?( "\.svn" ) }
+  end
+  
+  s.add_dependency('activesupport', '= 1.2.5' + PKG_BUILD)
+
+  s.files.delete "test/fixtures/fixture_database.sqlite"
+  s.files.delete "test/fixtures/fixture_database_2.sqlite"
+  s.files.delete "test/fixtures/fixture_database.sqlite3"
+  s.files.delete "test/fixtures/fixture_database_2.sqlite3"
+  s.require_path = 'lib'
+  s.autorequire = 'active_record'
+
+  s.has_rdoc = true
+  s.extra_rdoc_files = %w( README )
+  s.rdoc_options.concat ['--main',  'README']
+  
+  s.author = "David Heinemeier Hansson"
+  s.email = "david@loudthinking.com"
+  s.homepage = "http://www.rubyonrails.org"
+  s.rubyforge_project = "activerecord"
+end
+  
+Rake::GemPackageTask.new(spec) do |p|
+  p.gem_spec = spec
+  p.need_tar = true
+  p.need_zip = true
+end
+
+task :lines do
+  lines, codelines, total_lines, total_codelines = 0, 0, 0, 0
+
+  for file_name in FileList["lib/active_record/**/*.rb"]
+    next if file_name =~ /vendor/
+    f = File.open(file_name)
+
+    while line = f.gets
+      lines += 1
+      next if line =~ /^\s*$/
+      next if line =~ /^\s*#/
+      codelines += 1
+    end
+    puts "L: #{sprintf("%4d", lines)}, LOC #{sprintf("%4d", codelines)} | #{file_name}"
+    
+    total_lines     += lines
+    total_codelines += codelines
+    
+    lines, codelines = 0, 0
+  end
+
+  puts "Total: Lines #{total_lines}, LOC #{total_codelines}"
+end
+
+
+# Publishing ------------------------------------------------------
+
+desc "Publish the beta gem"
+task :pgem => [:package] do 
+  Rake::SshFilePublisher.new("davidhh@wrath.rubyonrails.org", "public_html/gems/gems", "pkg", "#{PKG_FILE_NAME}.gem").upload
+  `ssh davidhh@wrath.rubyonrails.org './gemupdate.sh'`
+end
+
+desc "Publish the API documentation"
+task :pdoc => [:rdoc] do 
+  Rake::SshDirPublisher.new("davidhh@wrath.rubyonrails.org", "public_html/ar", "doc").upload
+end
+
+desc "Publish the release files to RubyForge."
+task :release => [:package] do
+  files = ["gem", "tgz", "zip"].map { |ext| "pkg/#{PKG_FILE_NAME}.#{ext}" }
+
+  if RUBY_FORGE_PROJECT then
+    require 'net/http'
+    require 'open-uri'
+
+    project_uri = "http://rubyforge.org/projects/#{RUBY_FORGE_PROJECT}/"
+    project_data = open(project_uri) { |data| data.read }
+    group_id = project_data[/[?&]group_id=(\d+)/, 1]
+    raise "Couldn't get group id" unless group_id
+
+    # This echos password to shell which is a bit sucky
+    if ENV["RUBY_FORGE_PASSWORD"]
+      password = ENV["RUBY_FORGE_PASSWORD"]
+    else
+      print "#{RUBY_FORGE_USER}@rubyforge.org's password: "
+      password = STDIN.gets.chomp
+    end
+
+    login_response = Net::HTTP.start("rubyforge.org", 80) do |http|
+      data = [
+        "login=1",
+        "form_loginname=#{RUBY_FORGE_USER}",
+        "form_pw=#{password}"
+      ].join("&")
+      http.post("/account/login.php", data)
+    end
+
+    cookie = login_response["set-cookie"]
+    raise "Login failed" unless cookie
+    headers = { "Cookie" => cookie }
+
+    release_uri = "http://rubyforge.org/frs/admin/?group_id=#{group_id}"
+    release_data = open(release_uri, headers) { |data| data.read }
+    package_id = release_data[/[?&]package_id=(\d+)/, 1]
+    raise "Couldn't get package id" unless package_id
+
+    first_file = true
+    release_id = ""
+
+    files.each do |filename|
+      basename  = File.basename(filename)
+      file_ext  = File.extname(filename)
+      file_data = File.open(filename, "rb") { |file| file.read }
+
+      puts "Releasing #{basename}..."
+
+      release_response = Net::HTTP.start("rubyforge.org", 80) do |http|
+        release_date = Time.now.strftime("%Y-%m-%d %H:%M")
+        type_map = {
+          ".zip"    => "3000",
+          ".tgz"    => "3110",
+          ".gz"     => "3110",
+          ".gem"    => "1400"
+        }; type_map.default = "9999"
+        type = type_map[file_ext]
+        boundary = "rubyqMY6QN9bp6e4kS21H4y0zxcvoor"
+
+        query_hash = if first_file then
+          {
+            "group_id" => group_id,
+            "package_id" => package_id,
+            "release_name" => RELEASE_NAME,
+            "release_date" => release_date,
+            "type_id" => type,
+            "processor_id" => "8000", # Any
+            "release_notes" => "",
+            "release_changes" => "",
+            "preformatted" => "1",
+            "submit" => "1"
+          }
+        else
+          {
+            "group_id" => group_id,
+            "release_id" => release_id,
+            "package_id" => package_id,
+            "step2" => "1",
+            "type_id" => type,
+            "processor_id" => "8000", # Any
+            "submit" => "Add This File"
+          }
+        end
+
+        query = "?" + query_hash.map do |(name, value)|
+          [name, URI.encode(value)].join("=")
+        end.join("&")
+
+        data = [
+          "--" + boundary,
+          "Content-Disposition: form-data; name=\"userfile\"; filename=\"#{basename}\"",
+          "Content-Type: application/octet-stream",
+          "Content-Transfer-Encoding: binary",
+          "", file_data, ""
+          ].join("\x0D\x0A")
+
+        release_headers = headers.merge(
+          "Content-Type" => "multipart/form-data; boundary=#{boundary}"
+        )
+
+        target = first_file ? "/frs/admin/qrs.php" : "/frs/admin/editrelease.php"
+        http.post(target + query, data, release_headers)
+      end
+
+      if first_file then
+        release_id = release_response.body[/release_id=(\d+)/, 1]
+        raise("Couldn't get release id") unless release_id
+      end
+
+      first_file = false
+    end
+  end
+end

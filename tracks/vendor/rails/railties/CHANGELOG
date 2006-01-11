@@ -1,0 +1,865 @@
+*1.0.0* (December 13th, 2005)
+
+* Update to script.aculo.us 1.5.0 final (equals 1.5.0_rc6) [Thomas Fuchs]
+
+* Update to Prototype 1.4.0 final [Sam Stephenson]
+
+* Update instructions on how to find and install generators. #3172. [Chad Fowler]
+
+* Generator looks in vendor/generators also.  [Chad Fowler]
+
+* Generator copies files in binary mode.  #3156 [minimudboy@gmail.com]
+
+
+*0.14.4 (RC5)* (December 7th, 2005)
+
+* Add builtin/ to the gemspec. Closes #3047. [Nicholas Seckar, Sam Stephenson]
+
+* Run initialize_logger in script/lighttpd to ensure the log file exists before tailing it. [Sam Stephenson]
+
+* Make load_fixtures include csv fixtures. #3053. [me@mdaines.com]
+
+* Fix freeze_gems so that the latest rails version is dumped by default. [Nicholas Seckar]
+
+* Model generator: correct relative path to test_helper in unit test.  [Jeremy Kemper]
+
+* Make the db_schema_dump task honor the SCHEMA environment variable if present the way db_schema_import does. #2931. [Blair Zajac]
+
+* Make help for the console command more explicit about how to specify the desired environment in which to run the console. #2911. [anonymous]
+
+* PostgreSQL: the purge_test_database Rake task shouldn't explicitly specify the template0 template when creating a fresh test database.  #2964 [dreamer3@gmail.com]
+
+* Introducing the session_migration generator.  Creates an add_session_table migration.  Allows generator to specify migrations directory.  #2958, #2960 [Rick Olson]
+
+* Update to Prototype 1.4.0_rc4. Closes #2943 (old Array.prototype.reverse behavior can be obtained by passing false as an argument). [Sam Stephenson]
+
+* Eliminate nil from newly generated logfiles.  #2927 [Blair Zajac <blair@orcaware.com>]
+
+* Update to Prototype 1.4.0_rc3. Closes #1893, #2505, #2550, #2748, #2783. [Sam Stephenson]
+
+* Rename Version constant to VERSION. #2802 [Marcel Molina Jr.]
+
+* Update to latest script.aculo.us version (as of [3031])
+
+* SQLite: the clone_structure_to_test and purge_test_database Rake tasks should always use the test environment.  #2846 [Rick Olson]
+
+* Make sure that legacy db tasks also reference :database for SQLite #2830 [kazuhiko@fdiary.net]
+
+* Pass __FILE__ when evaluating plugins' init.rb.  #2817 [james.adam@gmail.com]
+
+* Better svn status matching for generators.  #2814 [François Beausoleil <francois.beausoleil@gmail.com>, Blair Zajac <blair@orcaware.com>]
+
+* Don't reload routes until plugins have been loaded so they have a chance to extend the routing capabilities [DHH]
+
+* Don't detach or fork for script/server tailing [Nicholas Seckar]
+
+* Changed all script/* to use #!/usr/bin/env ruby instead of hard-coded Ruby path. public/dispatcher.* still uses the hard-coded path  for compatibility with web servers that don't have Ruby in path [DHH]
+
+* Force RAILS_ENV to be "test" when running tests, so that ENV["RAILS_ENV"] = "production" in config/environment.rb doesn't wreck havok [DHH] #2660
+
+* Correct versioning in :freeze_gems Rake task.  #2778 [jakob@mentalized.net, Jeremy Kemper]
+
+* Added an omnipresent RailsInfoController with a properties action that delivers an HTML rendering of Rails::Info (but only when local_request? is true). Added a new default index.html which fetches this with Ajax. [Sam Stephenson]
+
+
+*0.14.3 (RC4)* (November 7th, 2005)
+
+* Add 'add_new_scripts' rake task for adding new rails scripts to script/* [Jamis Buck]
+
+* Remove bogus hyphen from script/process/reaper calls to 'ps'.  #2767 [anonymous]
+
+* Copy lighttpd.conf when it is first needed, instead of on app creation [Jamis Buck]
+
+* Use require_library_or_gem 'fcgi' in script/server [Sam Stephenson]
+
+* Added default lighttpd config in config/lighttpd.conf and added a default runner for lighttpd in script/server (works like script/server, but using lighttpd and FastCGI). It will use lighttpd if available, otherwise WEBrick. You can force either or using 'script/server lighttpd' or 'script/server webrick' [DHH]
+
+* New configuration option config.plugin_paths which may be a single path like the default 'vendor/plugins' or an array of paths: ['vendor/plugins', 'lib/plugins'].  [Jeremy Kemper]
+
+* Plugins are discovered in nested paths, so you can organize your plugins directory as you like.  [Jeremy Kemper]
+
+* Refactor load_plugin from load_plugins.  #2757 [alex.r.moon@gmail.com]
+
+* Make use of silence_stderr in script/lighttpd, script/plugin, and Rails::Info [Sam Stephenson]
+
+* Enable HTTP installation of plugins when svn isn't avaialable. Closes #2661. [Chad Fowler]
+
+* Added script/about to display formatted Rails::Info output [Sam Stephenson]
+
+* Added Rails::Info to catalog assorted information about a Rails application's environment [Sam Stephenson]
+
+* Tail the logfile when running script/server lighttpd in the foreground [Sam Stephenson]
+
+* Try to guess the port number from config/lighttpd.conf in script/server lighttpd [Sam Stephenson]
+
+* Don't reap spawn-fcgi.  #2727 [matthew@walker.wattle.id.au]
+
+* Reaper knows how to find processes even if the dispatch path is very long.  #2711 [matthew@walker.wattle.id.au]
+
+* Make fcgi handler respond to TERM signals with an explicit exit [Jamis Buck]
+
+* Added demonstration of fixture use to the test case generated by the model generator [DHH]
+
+* If specified, pass PostgreSQL client character encoding to createdb.  #2703 [Kazuhiko <kazuhiko@fdiary.net>]
+
+* Catch CGI multipart parse errors.  Wrap dispatcher internals in a failsafe response handler.  [Jeremy Kemper]
+
+* The freeze_gems Rake task accepts the VERSION environment variable to decide which version of Rails to pull into vendor/rails.  [Chad Fowler, Jeremy Kemper]
+
+* Removed script.aculo.us.js, builder.js and slider.js (preperation for move of scriptaculous extensions to plugins, core scriptaculous will remain in Railties) [Thomas Fuchs]
+
+* The freeze_edge Rake task does smarter svn detection and can export a specific revision by passing the REVISION environment variable.  For example: rake freeze_edge REVISION=1234.  #2663 [Rick Olson]
+
+* Comment database.yml and include PostgreSQL and SQLite examples.  [Jeremy Kemper]
+
+* Improve script/plugin on Windows.  #2646 [Chad Fowler]
+
+* The *_plugindoc Rake tasks look deeper into the plugins' lib directories.  #2652 [bellis@deepthought.org]
+
+* The PostgreSQL :db_structure_dump Rake task limits its dump to the schema search path in database.yml.  [Anatol Pomozov <anatol.pomozov@gmail.com>]
+
+* Add task to generate rdoc for all installed plugins. [Marcel Molina]
+
+* Update script.aculo.us to V1.5_rc4 [Thomas Fuchs]
+
+* Add default Mac + DarwinPorts MySQL socket locations to the app generator.  [Jeremy Kemper]
+
+* Migrations may be destroyed: script/destroy migration foo.  #2635 [Charles M. Gerungan <charles.gerungan@gmail.com>, Jamis Buck, Jeremy Kemper]
+
+* Added that plugins can carry generators and that generator stub files can be created along with new plugins using script/generate plugin <name> --with-generator [DHH]
+
+* Removed app/apis as a default empty dir since its automatically created when using script/generate web_service [DHH]
+
+* Added script/plugin to manage plugins (install, remove, list, etc) [Ryan Tomayko]
+
+* Added test_plugins task: Run the plugin tests in vendor/plugins/**/test (or specify with PLUGIN=name) [DHH]
+
+* Added plugin generator to create a stub structure for a new plugin in vendor/plugins (see "script/generate plugin" for help) [DHH]
+
+* Fixed scaffold generator when started with only 1 parameter #2609 [self@mattmower.com]
+
+* rake should run functional tests even if the unit tests have failures [Jim Weirich]
+
+* Back off cleanpath to be symlink friendly. Closes #2533 [Nicholas Seckar]
+
+* Load rake task files in alphabetical order so you can build dependencies and count on them #2554 [Blair Zajac]
+
+
+*0.14.2 (RC3)* (October 26th, 2005)
+
+* Constants set in the development/test/production environment file are set in Object
+
+* Scaffold generator pays attention to the controller name.  #2562 [self@mattmower.com]
+
+* Include tasks from vendor/plugins/*/tasks in the Rakefile #2545 [Rick Olson]
+
+
+*0.14.1 (RC2)* (October 19th, 2005)
+
+* Don't clean RAILS_ROOT on windows
+
+* Remove trailing '/' from RAILS_ROOT [Nicholas Seckar]
+
+* Upgraded to Active Record 1.12.1 and Action Pack 1.10.1
+
+
+*0.14.0 (RC1)* (October 16th, 2005)
+
+* Moved generator folder from RAILS_ROOT/generators to RAILS_ROOT/lib/generators [Tobias Luetke]
+
+* Fix rake dev and related commands [Nicholas Seckar]
+
+* The rails command tries to deduce your MySQL socket by running `mysql_config
+--socket`.  If it fails, default to /path/to/your/mysql.sock
+
+* Made the rails command use the application name for database names in the tailored database.yml file. Example: "rails ~/projects/blog" will use "blog_development" instead of "rails_development". [Florian Weber]
+
+* Added Rails framework freezing tasks: freeze_gems (freeze to current gems), freeze_edge (freeze to Rails SVN trunk), unfreeze_rails (float with newest gems on system)
+
+* Added update_javascripts task which will fetch all the latest js files from your current rails install. Use after updating rails. [Tobias Luetke]
+
+* Added cleaning of RAILS_ROOT to useless elements such as '../non-dot-dot/'. Provides cleaner backtraces and error messages. [Nicholas Seckar]
+
+* Made the instantiated/transactional fixtures settings be controlled through Rails::Initializer. Transactional and non-instantiated fixtures are default from now on. [Florian Weber]
+
+* Support using different database adapters for development and test with ActiveRecord::Base.schema_format = :ruby [Sam Stephenson]
+
+* Make webrick work with session(:off)
+
+* Add --version, -v option to the Rails command. Closes #1840. [stancell]
+
+* Update Prototype to V1.4.0_pre11, script.aculo.us to V1.5_rc3 [2504] and fix the rails generator to include the new .js files [Thomas Fuchs]
+
+* Make the generator skip a file if it already exists and is identical to the new file.
+
+* Add experimental plugin support #2335
+
+* Made Rakefile aware of new .js files in script.aculo.us [Thomas Fuchs]
+
+* Make table_name and controller_name in generators honor AR::Base.pluralize_table_names. #1216 #2213 [kazuhiko@fdiary.net]
+
+* Clearly label functional and unit tests in rake stats output.  #2297 [lasse.koskela@gmail.com]
+
+* Make the migration generator only check files ending in *.rb when calculating the next file name #2317 [Chad Fowler]
+
+* Added prevention of duplicate migrations from the generator #2240 [fbeausoleil@ftml.net]
+
+* Add db_schema_dump and db_schema_import rake tasks to work with the new ActiveRecord::SchemaDumper (for dumping a schema to and reading a schema from a ruby file).
+
+* Reformed all the config/environments/* files to conform to the new Rails::Configuration approach. Fully backwards compatible.
+
+* Added create_sessions_table, drop_sessions_table, and purge_sessions_table as rake tasks for databases that supports migrations (MySQL, PostgreSQL, SQLite) to get a table for use with CGI::Session::ActiveRecordStore
+
+* Added dump of schema version to the db_structure_dump task for databases that support migrations #1835 [Rick Olson]
+
+* Fixed script/profiler for Ruby 1.8.2 #1863 [Rick Olson]
+
+* Fixed clone_structure_to_test task for SQLite #1864 [jon@burningbush.us]
+
+* Added -m/--mime-types option to the WEBrick server, so you can specify a Apache-style mime.types file to load #2059 [ask@develooper.com]
+
+* Added -c/--svn option to the generator that'll add new files and remove destroyed files using svn add/revert/remove as appropriate #2064 [kevin.clark@gmail.com]
+
+* Added -c/--charset option to WEBrick server, so you can specify a default charset (which without changes is UTF-8) #2084 [wejn@box.cz]
+
+* Make the default stats task extendable by modifying the STATS_DIRECTORIES constant
+
+* Allow the selected environment to define RAILS_DEFAULT_LOGGER, and have Rails::Initializer use it if it exists.
+
+* Moved all the shared tasks from Rakefile into Rails, so that the Rakefile is empty and doesn't require updating.
+
+* Added Rails::Initializer and Rails::Configuration to abstract all of the common setup out of config/environment.rb (uses config/boot.rb to bootstrap the initializer and paths)
+
+* Fixed the scaffold generator to fail right away if the database isn't accessible instead of in mid-air #1169 [Chad Fowler]
+
+* Corrected project-local generator location in scripts.rb #2010 [Michael Schuerig]
+
+* Don't require the environment just to clear the logs #2093 [Scott Barron]
+
+* Make the default rakefile read *.rake files from config/tasks (for easy extension of the rakefile by e.g. generators)
+
+* Only load breakpoint in development mode and when BREAKPOINT_SERVER_PORT is defined.
+
+* Allow the --toggle-spin switch on process/reaper to be negated
+
+* Replace render_partial with render :partial in scaffold generator [Nicholas Seckar]
+
+* Added -w flag to ps in process/reaper #1934 [Scott Barron]
+
+* Allow ERb in the database.yml file (just like with fixtures), so you can pull out the database configuration in environment variables #1822 [Duane Johnson]
+
+* Added convenience controls for FCGI processes (especially when managed remotely): spinner, spawner, and reaper. They reside in script/process. More details can be had by calling them with -h/--help.
+
+* Added load_fixtures task to the Rakefile, which will load all the fixtures into the database for the current environment #1791 [Marcel Molina]
+
+* Added an empty robots.txt to public/, so that web servers asking for it won't trigger a dynamic call, like favicon.ico #1738 [michael@schubert]
+
+* Dropped the 'immediate close-down' of FCGI processes since it didn't work consistently and produced bad responses when it didn't. So now a TERM ensures exit after the next request (just as if the process is handling a request when it receives the signal). This means that you'll have to 'nudge' all FCGI processes with a request in order to ensure that they have all reloaded. This can be done by something like ./script/process/repear --nudge 'http://www.myapp.com' --instances 10, which will load the myapp site 10 times (and thus hit all of the 10 FCGI processes once, enough to shut down).
+
+
+*0.13.1* (11 July, 2005)
+
+* Look for app-specific generators in RAILS_ROOT/generators rather than the clunky old RAILS_ROOT/script/generators.  Nobody really uses this feature except for the unit tests, so it's a negligible-impact change.  If you want to work with third-party generators, drop them in ~/.rails/generators or simply install gems.
+
+* Fixed that each request with the WEBrick adapter would open a new database connection #1685 [Sam Stephenson]
+
+* Added support for SQL Server in the database rake tasks #1652 [ken.barker@gmail.com] Note: osql and scptxfr may need to be installed on your development environment. This involves getting the .exes and a .rll (scptxfr) from a production SQL Server (not developer level SQL Server). Add their location to your Environment PATH and you are all set.
+
+* Added a VERSION parameter to the migrate task that allows you to do "rake migrate VERSION=34" to migrate to the 34th version traveling up or down depending on the current version
+
+* Extend Ruby version check to include RUBY_RELEASE_DATE >= '2005-12-25', the final Ruby 1.8.2 release #1674 [court3nay@gmail.com]
+
+* Improved documentation for environment config files #1625 [court3nay@gmail.com]
+
+
+*0.13.0* (6 July, 2005)
+
+* Changed the default logging level in config/environment.rb to INFO for production (so SQL statements won't be logged)
+
+* Added migration generator: ./script/generate migration add_system_settings
+
+* Added "migrate" as rake task to execute all the pending migrations from db/migrate
+
+* Fixed that model generator would make fixtures plural, even if ActiveRecord::Base.pluralize_table_names was false #1185 [Marcel Molina]
+
+* Added a DOCTYPE of HTML transitional to the HTML files generated by Rails #1124 [Michael Koziarski]
+
+* SIGTERM also gracefully exits dispatch.fcgi.  Ignore SIGUSR1 on Windows.
+
+* Add the option to manually manage garbage collection in the FastCGI dispatcher.  Set the number of requests between GC runs in your public/dispatch.fcgi [skaes@web.de]
+
+* Allow dynamic application reloading for dispatch.fcgi processes by sending a SIGHUP. If the process is currently handling a request, the request will be allowed to complete first. This allows production fcgi's to be reloaded without having to restart them.
+
+* RailsFCGIHandler (dispatch.fcgi) no longer tries to explicitly flush $stdout (CgiProcess#out always calls flush)
+
+* Fixed rakefile actions against PostgreSQL when the password is all numeric #1462 [michael@schubert.cx]
+
+* ActionMailer::Base subclasses are reloaded with the other rails components #1262
+
+* Made the WEBrick adapter not use a mutex around action performance if ActionController::Base.allow_concurrency is true (default is false)
+
+* Fixed that mailer generator generated fixtures/plural while units expected fixtures/singular #1457 [Scott Barron]
+
+* Added a 'whiny nil' that's aim to ensure that when users pass nil to methods where that isn't appropriate, instead of NoMethodError? and the name of some method used by the framework users will see a message explaining what type of object was expected. Only active in test and development environments by default #1209 [Michael Koziarski]
+
+* Fixed the test_helper.rb to be safe for requiring controllers from multiple spots, like app/controllers/article_controller.rb and app/controllers/admin/article_controller.rb, without reloading the environment twice #1390 [Nicholas Seckar]
+
+* Fixed Webrick to escape + characters in URL's the same way that lighttpd and apache do #1397 [Nicholas Seckar]
+
+* Added -e/--environment option to script/runner #1408 [fbeausoleil@ftml.net]
+
+* Modernize the scaffold generator to use the simplified render and test methods and to change style from @params["id"] to params[:id].  #1367
+
+* Added graceful exit from pressing CTRL-C during the run of the rails command #1150 [Caleb Tennis]
+
+* Allow graceful exits for dispatch.fcgi processes by sending a SIGUSR1. If the process is currently handling a request, the request will be allowed to complete and then will terminate itself. If a request is not being handled, the process is terminated immediately (via #exit). This basically works like restart graceful on Apache. [Jamis Buck]
+
+* Made dispatch.fcgi more robust by catching fluke errors and retrying unless its a permanent condition. [Jamis Buck]
+
+* Added console --profile for profiling an IRB session #1154 [Jeremy Kemper]
+
+* Changed console_sandbox into console --sandbox #1154 [Jeremy Kemper]
+
+
+*0.12.1* (20th April, 2005)
+
+* Upgraded to Active Record 1.10.1, Action Pack 1.8.1, Action Mailer 0.9.1, Action Web Service 0.7.1
+
+
+*0.12.0* (19th April, 2005)
+
+* Fixed that purge_test_database would use database settings from the development environment when recreating the test database #1122 [rails@cogentdude.com]
+
+* Added script/benchmarker to easily benchmark one or more statement a number of times from within the environment. Examples:
+
+    # runs the one statement 10 times
+    script/benchmarker 10 'Person.expensive_method(10)'
+    
+    # pits the two statements against each other with 50 runs each
+    script/benchmarker 50 'Person.expensive_method(10)' 'Person.cheap_method(10)'
+
+* Added script/profiler to easily profile a single statement from within the environment. Examples:
+
+    script/profiler 'Person.expensive_method(10)'
+    script/profiler 'Person.expensive_method(10)' 10 # runs the statement 10 times
+
+* Added Rake target clear_logs that'll truncate all the *.log files in log/ to zero #1079 [Lucas Carlson]
+
+* Added lazy typing for generate, such that ./script/generate cn == ./script/generate controller and the likes #1051 [k@v2studio.com]
+
+* Fixed that ownership is brought over in pg_dump during tests for PostgreSQL #1060 [pburleson@gmail.com]
+
+* Upgraded to Active Record 1.10.0, Action Pack 1.8.0, Action Mailer 0.9.0, Action Web Service 0.7.0, Active Support 1.0.4
+
+
+*0.11.1* (27th March, 2005)
+
+* Fixed the dispatch.fcgi use of a logger
+
+* Upgraded to Active Record 1.9.1, Action Pack 1.7.0, Action Mailer 0.8.1, Action Web Service 0.6.2, Active Support 1.0.3
+
+
+*0.11.0* (22th March, 2005)
+
+* Removed SCRIPT_NAME from the WEBrick environment to prevent conflicts with PATH_INFO #896 [Nicholas Seckar]
+
+* Removed ?$1 from the dispatch.f/cgi redirect line to get rid of 'complete/path/from/request.html' => nil being in the @params now that the ENV["REQUEST_URI"] is used to determine the path #895 [dblack/Nicholas Seckar]
+
+* Added additional error handling to the FastCGI dispatcher to catch even errors taking down the entire process
+
+* Improved the generated scaffold code a lot to take advantage of recent Rails developments #882 [Tobias Luetke]
+
+* Combined the script/environment.rb used for gems and regular files version. If vendor/rails/* has all the frameworks, then files version is used, otherwise gems #878 [Nicholas Seckar]
+
+* Changed .htaccess to allow dispatch.* to be called from a sub-directory as part of the push with Action Pack to make Rails work on non-vhost setups #826 [Nicholas Seckar/Tobias Luetke]
+
+* Added script/runner which can be used to run code inside the environment by eval'ing the first parameter. Examples:
+    
+    ./script/runner 'ReminderService.deliver'
+    ./script/runner 'Mailer.receive(STDIN.read)'
+  
+  This makes it easier to do CRON and postfix scripts without actually making a script just to trigger 1 line of code.
+
+* Fixed webrick_server cookie handling to allow multiple cookes to be set at once #800, #813 [dave@cherryville.org]
+
+* Fixed the Rakefile's interaction with postgresql to:
+
+    1. Use PGPASSWORD and PGHOST in the environment to fix prompting for 
+       passwords when connecting to a remote db and local socket connections. 
+    2. Add a '-x' flag to pg_dump which stops it dumping privileges #807 [rasputnik]
+    3. Quote the user name and use template0 when dumping so the functions doesn't get dumped too #855 [pburleson]
+    4. Use the port if available #875 [madrobby]
+
+* Upgraded to Active Record 1.9.0, Action Pack 1.6.0, Action Mailer 0.8.0, Action Web Service 0.6.1, Active Support 1.0.2
+
+
+*0.10.1* (7th March, 2005)
+
+* Fixed rake stats to ignore editor backup files like model.rb~ #791 [skanthak]
+
+* Added exception shallowing if the DRb server can't be started (not worth making a fuss about to distract new users) #779 [Tobias Luetke]
+
+* Added an empty favicon.ico file to the public directory of new applications (so the logs are not spammed by its absence)
+
+* Fixed that scaffold generator new template should use local variable instead of instance variable #778 [Dan Peterson]
+
+* Allow unit tests to run on a remote server for PostgreSQL #781 [adamm@galacticasoftware.com]
+
+* Added web_service generator (run ./script/generate web_service for help) #776 [Leon Bredt]
+
+* Added app/apis and components to code statistics report #729 [Scott Barron]
+
+* Fixed WEBrick server to use ABSOLUTE_RAILS_ROOT instead of working_directory #687 [Nicholas Seckar]
+
+* Fixed rails_generator to be usable without RubyGems #686 [Cristi BALAN]
+
+* Fixed -h/--help for generate and destroy generators #331
+
+* Added begin/rescue around the FCGI dispatcher so no uncaught exceptions can bubble up to kill the process (logs to log/fastcgi.crash.log)
+
+* Fixed that association#count would produce invalid sql when called sequentialy #659 [kanis@comcard.de]
+
+* Fixed test/mocks/testing to the correct test/mocks/test #740
+
+* Added early failure if the Ruby version isn't 1.8.2 or above #735
+
+* Removed the obsolete -i/--index option from the WEBrick servlet #743
+
+* Upgraded to Active Record 1.8.0, Action Pack 1.5.1, Action Mailer 0.7.1, Action Web Service 0.6.0, Active Support 1.0.1
+
+
+*0.10.0* (24th February, 2005)
+
+* Changed default IP binding for WEBrick from 127.0.0.1 to 0.0.0.0 so that the server is accessible both locally and remotely #696 [Marcel]
+
+* Fixed that script/server -d was broken so daemon mode couldn't be used #687 [Nicholas Seckar]
+
+* Upgraded to breakpoint 92 which fixes:
+
+    * overload IRB.parse_opts(), fixes #443
+      => breakpoints in tests work even when running them via rake
+    * untaint handlers, might fix an issue discussed on the Rails ML
+    * added verbose mode to breakpoint_client
+    * less noise caused by breakpoint_client by default
+    * ignored TerminateLineInput exception in signal handler
+      => quiet exit on Ctrl-C
+
+* Added support for independent components residing in /components. Example:
+
+    Controller: components/list/items_controller.rb
+    (holds a List::ItemsController class with uses_component_template_root called)
+    
+    Model     : components/list/item.rb
+    (namespace is still shared, so an Item model in app/models will take precedence)
+    
+    Views     : components/list/items/show.rhtml
+
+
+* Added --sandbox option to script/console that'll roll back all changes made to the database when you quit #672 [Jeremy Kemper]
+
+* Added 'recent' as a rake target that'll run tests for files that changed in the last 10 minutes #612 [Jeremy Kemper]
+
+* Changed script/console to default to development environment and drop --no-inspect #650 [Jeremy Kemper]
+
+* Added that the 'fixture :posts' syntax can be used for has_and_belongs_to_many fixtures where a model doesn't exist #572 [Jeremy Kemper]
+
+* Added that running test_units and test_functional now performs the clone_structure_to_test as well #566 [rasputnik]
+
+* Added new generator framework that informs about its doings on generation and enables updating and destruction of generated artifacts. See the new script/destroy and script/update for more details #487 [Jeremy Kemper]
+
+* Added Action Web Service as a new add-on framework for Action Pack [Leon Bredt]
+
+* Added Active Support as an independent utility and standard library extension bundle
+
+* Upgraded to Active Record 1.7.0, Action Pack 1.5.0, Action Mailer 0.7.0
+
+
+*0.9.5* (January 25th, 2005)
+
+* Fixed dependency reloading by switching to a remove_const approach where all Active Records, Active Record Observers, and Action Controllers are reloading by undefining their classes. This enables you to remove methods in all three types and see the change reflected immediately and it fixes #539. This also means that only those three types of classes will benefit from the const_missing and reloading approach. If you want other classes (like some in lib/) to reload, you must use require_dependency to do it.
+
+* Added Florian Gross' latest version of Breakpointer and friends that fixes a variaty of bugs #441 [Florian Gross]
+
+* Fixed skeleton Rakefile to work with sqlite3 out of the box #521 [rasputnik]
+
+* Fixed that script/breakpointer didn't get the Ruby path rewritten as the other scripts #523 [brandt@kurowski.net]
+
+* Fixed handling of syntax errors in models that had already been succesfully required once in the current interpreter
+
+* Fixed that models that weren't referenced in associations weren't being reloaded in the development mode by reinstating the reload
+
+* Fixed that generate scaffold would produce bad functional tests
+
+* Fixed that FCGI can also display SyntaxErrors
+
+* Upgraded to Active Record 1.6.0, Action Pack 1.4.0
+
+
+*0.9.4.1* (January 18th, 2005)
+
+* Added 5-second timeout to WordNet alternatives on creating reserved-word models #501 [Marcel Molina]
+
+* Fixed binding of caller #496 [Alexey]
+
+* Upgraded to Active Record 1.5.1, Action Pack 1.3.1, Action Mailer 0.6.1
+
+
+*0.9.4* (January 17th, 2005)
+
+* Added that ApplicationController will catch a ControllerNotFound exception if someone attempts to access a url pointing to an unexisting controller [Tobias Luetke]
+
+* Flipped code-to-test ratio around to be more readable #468 [Scott Baron]
+
+* Fixed log file permissions to be 666 instead of 777 (so they're not executable) #471 [Lucas Carlson]
+
+* Fixed that auto reloading would some times not work or would reload the models twice #475 [Tobias Luetke]
+
+* Added rewrite rules to deal with caching to public/.htaccess
+
+* Added the option to specify a controller name to "generate scaffold" and made the default controller name the plural form of the model.
+
+* Added that rake clone_structure_to_test, db_structure_dump, and purge_test_database tasks now pick up the source database to use from
+  RAILS_ENV instead of just forcing development #424 [Tobias Luetke]
+
+* Fixed script/console to work with Windows (that requires the use of irb.bat) #418 [octopod]
+
+* Fixed WEBrick servlet slowdown over time by restricting the load path reloading to mod_ruby
+
+* Removed Fancy Indexing as a default option on the WEBrick servlet as it made it harder to use various caching schemes
+
+* Upgraded to Active Record 1.5, Action Pack 1.3, Action Mailer 0.6
+
+
+*0.9.3* (January 4th, 2005)
+
+* Added support for SQLite in the auto-dumping/importing of schemas for development -> test #416
+
+* Added automated rewriting of the shebang lines on installs through the gem rails command #379 [Manfred Stienstra]
+
+* Added ActionMailer::Base.deliver_method = :test to the test environment so that mail objects are available in ActionMailer::Base.deliveries
+  for functional testing.
+
+* Added protection for creating a model through the generators with a name of an existing class, like Thread or Date.
+  It'll even offer you a synonym using wordnet.princeton.edu as a look-up. No, I'm not kidding :) [Florian Gross]
+
+* Fixed dependency management to happen in a unified fashion for Active Record and Action Pack using the new Dependencies module. This means that
+  the environment options needs to change from:
+  
+    Before in development.rb:
+      ActionController::Base.reload_dependencies = true  
+      ActiveRecord::Base.reload_associations     = true
+    
+    Now in development.rb:
+      Dependencies.mechanism = :load
+
+    Before in production.rb and test.rb:
+      ActionController::Base.reload_dependencies = false
+      ActiveRecord::Base.reload_associations     = false
+
+    Now in production.rb and test.rb:
+      Dependencies.mechanism = :require
+
+* Fixed problems with dependency caching and controller hierarchies on Ruby 1.8.2 in development mode #351
+
+* Fixed that generated action_mailers doesnt need to require the action_mailer since thats already done in the environment #382 [Lucas Carlson]
+
+* Upgraded to Action Pack 1.2.0 and Active Record 1.4.0
+
+
+*0.9.2*
+
+* Fixed CTRL-C exists from the Breakpointer to be a clean affair without error dumping [Kent Sibilev]
+
+* Fixed "rake stats" to work with sub-directories in models and controllers and to report the code to test ration [Scott Baron]
+
+* Added that Active Record associations are now reloaded instead of cleared to work with the new const_missing hook in Active Record.
+
+* Added graceful handling of an inaccessible log file by redirecting output to STDERR with a warning #330 [rainmkr]
+
+* Added support for a -h/--help parameter in the generator #331 [Ulysses]
+
+* Fixed that File.expand_path in config/environment.rb would fail when dealing with symlinked public directories [mjobin]
+
+* Upgraded to Action Pack 1.1.0 and Active Record 1.3.0
+
+
+*0.9.1*
+
+* Upgraded to Action Pack 1.0.1 for important bug fix
+
+* Updated gem dependencies
+
+
+*0.9.0*
+
+* Renamed public/dispatch.servlet to script/server -- it wasn't really dispatching anyway as its delegating calls to public/dispatch.rb
+
+* Renamed AbstractApplicationController and abstract_application.rb to ApplicationController and application.rb, so that it will be possible
+  for the framework to automatically pick up on app/views/layouts/application.rhtml and app/helpers/application.rb
+
+* Added script/console that makes it even easier to start an IRB session for interacting with the domain model. Run with no-args to
+  see help.
+
+* Added breakpoint support through the script/breakpointer client. This means that you can break out of execution at any point in
+  the code, investigate and change the model, AND then resume execution! Example:
+  
+    class WeblogController < ActionController::Base
+      def index
+        @posts = Post.find_all
+        breakpoint "Breaking out from the list"
+      end
+    end
+    
+  So the controller will accept the action, run the first line, then present you with a IRB prompt in the breakpointer window. 
+  Here you can do things like:
+  
+  Executing breakpoint "Breaking out from the list" at .../webrick_server.rb:16 in 'breakpoint'
+
+    >> @posts.inspect
+    => "[#<Post:0x14a6be8 @attributes={\"title\"=>nil, \"body\"=>nil, \"id\"=>\"1\"}>, 
+         #<Post:0x14a6620 @attributes={\"title\"=>\"Rails you know!\", \"body\"=>\"Only ten..\", \"id\"=>\"2\"}>]"
+    >> @posts.first.title = "hello from a breakpoint"
+    => "hello from a breakpoint"
+
+  ...and even better is that you can examine how your runtime objects actually work:
+
+    >> f = @posts.first 
+    => #<Post:0x13630c4 @attributes={"title"=>nil, "body"=>nil, "id"=>"1"}>
+    >> f.
+    Display all 152 possibilities? (y or n)
+  
+  Finally, when you're ready to resume execution, you press CTRL-D
+
+* Changed environments to be configurable through an environment variable. By default, the environment is "development", but you
+  can change that and set your own by configuring the Apache vhost with a string like (mod_env must be available on the server):
+  
+    SetEnv RAILS_ENV production
+  
+  ...if you're using WEBrick, you can pick the environment to use with the command-line parameters -e/--environment, like this:
+  
+    ruby public/dispatcher.servlet -e production
+
+* Added a new default environment called "development", which leaves the production environment to be tuned exclusively for that.
+
+* Added a start_server in the root of the Rails application to make it even easier to get started
+
+* Fixed public/.htaccess to use RewriteBase and share the same rewrite rules for all the dispatch methods
+
+* Fixed webrick_server to handle requests in a serialized manner (the Rails reloading infrastructure is not thread-safe)
+
+* Added support for controllers in directories. So you can have:
+
+    app/controllers/account_controller.rb        # URL: /account/
+    app/controllers/admin/account_controller.rb  # URL: /admin/account/
+  
+  NOTE: You need to update your public/.htaccess with the new rules to pick it up
+
+* Added reloading for associations and dependencies under cached environments like FastCGI and mod_ruby. This makes it possible to use 
+  those environments for development. This is turned on by default, but can be turned off with 
+  ActiveRecord::Base.reload_associations = false and ActionController::Base.reload_dependencies = false in production environments.
+
+* Added support for sub-directories in app/models. So now you can have something like Basecamp with:
+
+    app/models/accounting
+    app/models/project
+    app/models/participants
+    app/models/settings
+  
+  It's poor man's namespacing, but only for file-system organization. You still require files just like before.
+  Nothing changes inside the files themselves.
+
+
+* Fixed a few references in the tests generated by new_mailer [Jeremy Kemper]
+
+* Added support for mocks in testing with test/mocks
+
+* Cleaned up the environments a bit and added global constant RAILS_ROOT
+
+
+*0.8.5* (9)
+
+* Made dev-util available to all tests, so you can insert breakpoints in any test case to get an IRB prompt at that point [Jeremy Kemper]:
+
+    def test_complex_stuff
+      @david.projects << @new_project
+      breakpoint "Let's have a closer look at @david"
+    end
+  
+  You need to install dev-utils yourself for this to work ("gem install dev-util").
+
+* Added shared generator behavior so future upgrades should be possible without manually copying over files [Jeremy Kemper]
+
+* Added the new helper style to both controller and helper templates [Jeremy Kemper]
+
+* Added new_crud generator for creating a model and controller at the same time with explicit scaffolding [Jeremy Kemper]
+
+* Added configuration of Test::Unit::TestCase.fixture_path to test_helper to concide with the new AR fixtures style
+
+* Fixed that new_model was generating singular table/fixture names
+
+* Upgraded to Action Mailer 0.4.0
+
+* Upgraded to Action Pack 0.9.5
+
+* Upgraded to Active Record 1.1.0
+
+
+*0.8.0 (15)*
+
+* Removed custom_table_name option for new_model now that the Inflector is as powerful as it is
+
+* Changed the default rake action to just do testing and separate API generation and coding statistics into a "doc" task.
+
+* Fixed WEBrick dispatcher to handle missing slashes in the URLs gracefully [alexey]
+
+* Added user option for all postgresql tool calls in the rakefile [elvstone]
+
+* Fixed problem with running "ruby public/dispatch.servlet" instead of "cd public; ruby dispatch.servlet" [alexey]
+
+* Fixed WEBrick server so that it no longer hardcodes the ruby interpreter used to "ruby" but will get the one used based
+  on the Ruby runtime configuration. [Marcel Molina Jr.]
+
+* Fixed Dispatcher so it'll route requests to magic_beans to MagicBeansController/magic_beans_controller.rb [Caio Chassot]
+
+* "new_controller MagicBeans" and "new_model SubscriptionPayments" will now both behave properly as they use the new Inflector.
+
+* Fixed problem with MySQL foreign key constraint checks in Rake :clone_production_structure_to_test target [Andreas Schwarz]
+
+* Changed WEBrick server to by default be auto-reloading, which is slower but makes source changes instant.
+  Class compilation cache can be turned on with "-c" or "--cache-classes".
+
+* Added "-b/--binding" option to WEBrick dispatcher to bind the server to a specific IP address (default: 127.0.0.1) [Kevin Temp]
+
+* dispatch.fcgi now DOESN'T set FCGI_PURE_RUBY as it was slowing things down for now reason [Andreas Schwarz]
+
+* Added new_mailer generator to work with Action Mailer
+
+* Included new framework: Action Mailer 0.3
+
+* Upgraded to Action Pack 0.9.0
+
+* Upgraded to Active Record 1.0.0
+
+
+*0.7.0*
+
+* Added an optional second argument to the new_model script that allows the programmer to specify the table name, 
+  which will used to generate a custom table_name method in the model and will also be used in the creation of fixtures.
+  [Kevin Radloff]
+
+* script/new_model now turns AccountHolder into account_holder instead of accountholder [Kevin Radloff]
+
+* Fixed the faulty handleing of static files with WEBrick [Andreas Schwarz]
+
+* Unified function_test_helper and unit_test_helper into test_helper
+
+* Fixed bug with the automated production => test database dropping on PostgreSQL [dhawkins]
+
+* create_fixtures in both the functional and unit test helper now turns off the log during fixture generation
+  and can generate more than one fixture at a time. Which makes it possible for assignments like:
+  
+    @people, @projects, @project_access, @companies, @accounts = 
+      create_fixtures "people", "projects", "project_access", "companies", "accounts"
+
+* Upgraded to Action Pack 0.8.5 (locally-scoped variables, partials, advanced send_file)
+
+* Upgraded to Active Record 0.9.5 (better table_name guessing, cloning, find_all_in_collection)
+
+
+*0.6.5*
+
+* No longer specifies a template for rdoc, so it'll use whatever is default (you can change it in the rakefile)
+
+* The new_model generator will now use the same rules for plural wordings as Active Record 
+  (so Category will give categories, not categorys) [Kevin Radloff]
+
+* dispatch.fcgi now sets FCGI_PURE_RUBY to true to ensure that it's the Ruby version that's loaded [danp]
+
+* Made the GEM work with Windows
+
+* Fixed bug where mod_ruby would "forget" the load paths added when switching between controllers
+
+* PostgreSQL are now supported for the automated production => test database dropping [Kevin Radloff]
+
+* Errors thrown by the dispatcher are now properly handled in FCGI.
+
+* Upgraded to Action Pack 0.8.0 (lots and lots and lots of fixes)
+
+* Upgraded to Active Record 0.9.4 (a bunch of fixes)
+
+
+*0.6.0*
+
+* Added AbstractionApplicationController as a superclass for all controllers generated. This class can be used
+  to carry filters and methods that are to be shared by all. It has an accompanying ApplicationHelper that all
+  controllers will also automatically have available.
+
+* Added environments that can be included from any script to get the full Active Record and Action Controller
+  context running. This can be used by maintenance scripts or to interact with the model through IRB. Example:
+  
+    require 'config/environments/production'
+    
+    for account in Account.find_all
+      account.recalculate_interests
+    end
+  
+  A short migration script for an account model that had it's interest calculation strategy changed.
+
+* Accessing the index of a controller with "/weblog" will now redirect to "/weblog/" (only on Apache, not WEBrick)
+
+* Simplified the default Apache config so even remote requests are served off CGI as a default.
+  You'll now have to do something specific to activate mod_ruby and FCGI (like using the force urls).
+  This should make it easier for new comers that start on an external server.
+
+* Added more of the necessary Apache options to .htaccess to make it easier to setup
+
+* Upgraded to Action Pack 0.7.9 (lots of fixes)
+
+* Upgraded to Active Record 0.9.3 (lots of fixes)
+
+
+*0.5.7*
+
+* Fixed bug in the WEBrick dispatcher that prevented it from getting parameters from the URL
+  (through GET requests or otherwise)
+
+* Added lib in root as a place to store app specific libraries
+
+* Added lib and vendor to load_path, so anything store within can be loaded directly. 
+  Hence lib/redcloth.rb can be loaded with require "redcloth"
+
+* Upgraded to Action Pack 0.7.8 (lots of fixes)
+
+* Upgraded to Active Record 0.9.2 (minor upgrade)
+
+
+*0.5.6*
+
+* Upgraded to Action Pack 0.7.7 (multipart form fix)
+
+* Updated the generated template stubs to valid XHTML files
+
+* Ensure that controllers generated are capitalized, so "new_controller TodoLists" 
+  gives the same as "new_controller Todolists" and "new_controller todolists".
+
+
+*0.5.5*
+
+* Works on Windows out of the box! (Dropped symlinks)
+
+* Added webrick dispatcher: Try "ruby public/dispatch.servlet --help" [Florian Gross]
+
+* Report errors about initialization to browser (instead of attempting to use uninitialized logger)
+
+* Upgraded to Action Pack 0.7.6
+
+* Upgraded to Active Record 0.9.1
+
+* Added distinct 500.html instead of reusing 404.html
+
+* Added MIT license
+
+
+*0.5.0*
+
+* First public release
