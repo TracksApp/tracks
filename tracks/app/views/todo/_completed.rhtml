@@ -9,7 +9,7 @@
   <div id="completed" class="items toggle_target">
 
     <div id="empty-d" style="display:<%= @done.empty? ? 'block' : 'none' %>">
-      <div class="message"><p>Currently there are no completed actions in this context</p></div>
+      <div class="message"><p>Currently there are no completed actions <%= append_descriptor %></p></div>
     </div>
 
       <%= render :partial => "todo/item", :collection => done %>
