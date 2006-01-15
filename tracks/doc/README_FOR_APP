@@ -99,7 +99,7 @@ Rick Bradley kindly converted the MySQL schema for Tracks to Postgresql format, 
   
 or for SQLite3:
   adapter: sqlite3
-  dbfile: /fullpathto/db/yoursqlite.db
+  database: /fullpathto/db/yoursqlite.db
   
 If you're using SQLite 2.x, substitute 'sqlite' for 'sqlite3' above. Also note that those are the <b>only</b> lines you need for SQLite; the username, password, database and host lines are not necessary.
 
