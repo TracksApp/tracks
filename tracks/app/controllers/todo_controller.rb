@@ -208,7 +208,7 @@ class TodoController < ApplicationController
       @projects = @user.projects
       @contexts = @user.contexts
       @todos = @user.todos
-      @done = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = 1", @user.id], :include => [:project], :order => "completed DESC")
+      @done = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = ?", @user.id, true], :include => [:project], :order => "completed DESC")
       # for some reason, this generates an error about anil object under 0.14.2
       #@done = @todos.collect { |x|  x.done? ? x:nil }.compact.sort! {|x,y| y.completed <=> x.completed }
     end

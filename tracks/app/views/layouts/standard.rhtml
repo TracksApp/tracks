@@ -39,6 +39,11 @@
   <li><%= link_to "Logout (#{@session['user']['login']}) &#187;", :controller => "login", :action=>"logout"%></li>
 </ul>
 </div>
+<div id="info"></div>
+<% unless @controller_name == 'feed' or @session['noexpiry'] == "on" -%>
+<%= periodically_call_remote( :url => {:controller => "login", :action => "check_expiry"},
+                              :frequency => (5*60)) %>
+<% end -%>                              
 <%= @content_for_layout %>
 
 <div id="footer">

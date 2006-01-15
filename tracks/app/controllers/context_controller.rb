@@ -60,7 +60,7 @@ class ContextController < ApplicationController
     @saved = @item.save
     @on_page = "context"
     if @saved
-      @up_count = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = 0 and todos.context_id IN (?)", @user.id, @item.context_id]).size.to_s
+      @up_count = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = ? and todos.context_id IN (?)", @user.id, false, @item.context_id]).size.to_s
     end
      
     return if request.xhr?
@@ -91,7 +91,7 @@ class ContextController < ApplicationController
     
     @saved = @item.destroy
     if @saved
-      @down_count = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = 0 and todos.context_id IN (?)", @user.id, @item.context_id]).size.to_s
+      @down_count = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = ? and todos.context_id IN (?)", @user.id, false, @item.context_id]).size.to_s
     end
     
     return if request.xhr?
@@ -123,8 +123,8 @@ class ContextController < ApplicationController
     @item.completed = Time.now() # For some reason, the before_save in todo.rb stopped working
     @saved = @item.save
     if @saved
-      @down_count = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = 0 and todos.context_id IN (?)", @user.id, @item.context_id]).size.to_s
-      @done_count = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = 1 and todos.context_id IN (?)", @user.id, @item.context_id]).size.to_s
+      @down_count = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = ? and todos.context_id IN (?)", @user.id, false, @item.context_id]).size.to_s
+      @done_count = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = ? and todos.context_id IN (?)", @user.id, true, @item.context_id]).size.to_s
     end
     return if request.xhr?
 
@@ -221,7 +221,7 @@ class ContextController < ApplicationController
       @projects = @user.projects.collect { |x| x.done? ? nil:x }.compact
       @contexts = @user.contexts
       @todos = @user.todos
-      @done = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = 1", @user.id], :include => [:project], :order => "completed DESC")
+      @done = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = ?", @user.id, true], :include => [:project], :order => "completed DESC")
     end
 
     def init_todos

@@ -79,7 +79,7 @@ class ProjectController < ApplicationController
     @saved = @item.save
     @on_page = "project"
     if @saved
-      @up_count = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = 0 and todos.project_id IN (?)", @user.id, @item.project_id]).size.to_s
+      @up_count = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = ? and todos.project_id IN (?)", @user.id, false, @item.project_id]).size.to_s
     end
     
     return if request.xhr?
@@ -111,7 +111,7 @@ class ProjectController < ApplicationController
     @saved = @item.destroy
     @on_page = "project"
     if @saved
-      @down_count = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = 0 and todos.project_id IN (?)", @user.id, @item.project_id]).size.to_s
+      @down_count = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = ? and todos.project_id IN (?)", @user.id, false, @item.project_id]).size.to_s
     end
     
     return if request.xhr?
@@ -144,8 +144,8 @@ class ProjectController < ApplicationController
     @saved = @item.save
     @on_page = "project"
     if @saved
-      @down_count = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = 0 and todos.project_id IN (?)", @user.id, @item.project_id]).size.to_s
-      @done_count = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = 1 and todos.project_id IN (?)", @user.id, @item.project_id]).size.to_s
+      @down_count = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = ? and todos.project_id IN (?)", @user.id, false, @item.project_id]).size.to_s
+      @done_count = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = ? and todos.project_id IN (?)", @user.id, true, @item.project_id]).size.to_s
     end
     return if request.xhr?
 
@@ -249,10 +249,10 @@ class ProjectController < ApplicationController
      
     def init
       @user = @session['user']
-      @projects = @user.projects.collect { |x| x.done? ? nil:x }.compact
+      @projects = @user.projects
       @contexts = @user.contexts
       @todos = @user.todos
-      @done = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = 1", @user.id], :include => [:project], :order => "completed DESC")
+      @done = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = ?", @user.id, true], :include => [:project], :order => "completed DESC")
     end
 
     def init_todos

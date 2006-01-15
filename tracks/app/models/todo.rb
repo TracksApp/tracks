@@ -13,8 +13,7 @@ class Todo < ActiveRecord::Base
   validates_length_of :notes, :maximum => 60000
 
   def self.not_done( id=id )
-    self.find(:all, :conditions =>[ "done = 0 AND context_id = ?", id], \
-      :order =>"due IS NULL, due ASC, created_at ASC")
+    self.find(:all, :conditions =>[ "done = ? AND context_id = ?", false, id], :order =>"due IS NULL, due ASC, created_at ASC")
   end
 
 end

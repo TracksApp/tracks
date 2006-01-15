@@ -76,5 +76,27 @@ class LoginController < ApplicationController
 
   def welcome
   end
+  
+  def check_expiry
+    # Gets called by periodically_call_remote to check whether 
+    # the session has timed out yet
+    unless @session == nil
+      return if @controller_name == 'feed' or @session['noexpiry'] == "on"
+      # If the method is called by the feed controller 
+      # (which we don't have under session control)
+      # or if we checked the box to keep logged in on login
+      # then the session is not going to get called
+      if @session
+        # Get expiry time (allow ten seconds window for the case where we have none)
+        expiry_time = @session['expiry_time'] || Time.now + 10
+        @time_left = expiry_time - Time.now
+        if @time_left < (10*60) # Session will time out before the next check
+          @msg = "Session has timed out. Please "
+        else
+          @msg = ""
+        end
+      end
+    end
+  end
 
 end

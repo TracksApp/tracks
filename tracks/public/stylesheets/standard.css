@@ -277,14 +277,16 @@ a.footer_link:hover {color: #fff; background-color: #cc3334 !important;}
       text-align: center;
       }
     
-#warning {
+#warning, .warning {
       padding: 2px;
       border: 1px solid #ED2E38; 
       background-color: #F6979C;
-      color: #ED2E38;
+      color: #FFFFFF;
       margin-bottom: 15px;
       text-align: center;
       }
+
+.warning p {color: #FFFFFF;}
 
 .project_completed {
       border: 1px solid #007E00; 

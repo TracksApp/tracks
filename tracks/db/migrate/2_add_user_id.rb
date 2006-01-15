@@ -3,9 +3,9 @@ class AddUserId < ActiveRecord::Migration
     add_column :contexts,   :user_id, :integer, :null => false
     add_column :projects,   :user_id, :integer, :null => false
     add_column :todos,      :user_id, :integer, :null => false
-    execute "UPDATE `contexts` SET `user_id` = 1;"
-    execute "UPDATE `projects` SET `user_id` = 1;"
-    execute "UPDATE `todos` SET `user_id` = 1;"
+    execute "UPDATE 'contexts' SET 'user_id' = 1;"
+    execute "UPDATE 'projects' SET 'user_id' = 1;"
+    execute "UPDATE 'todos' SET 'user_id' = 1;"
   end
 
   def self.down

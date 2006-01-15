@@ -12,18 +12,18 @@ class Context < ActiveRecord::Base
   validates_length_of :name, :maximum => 255, :message => "context name must be less than %d"
   validates_uniqueness_of :name, :message => "already exists", :scope => "user_id"
 
-  def self.list_of(hidden=0)
+  def self.list_of(hidden=false)
     find(:all, :conditions => [ "hide = ?" , hidden ], :order => "position ASC")
   end
 
   def find_not_done_todos
-    todos = Todo.find :all, :conditions => "todos.context_id = #{id} AND todos.done = 0",
+    todos = Todo.find :all, :conditions => ["todos.context_id = #{id} AND todos.done = ?", false],
                       :include => [:context, :project],
                       :order => "due IS NULL, due ASC, created_at ASC"
   end
 
   def find_done_todos
-    todos = Todo.find :all, :conditions => "todos.context_id = #{id} AND todos.done = 1",
+    todos = Todo.find :all, :conditions => ["todos.context_id = #{id} AND todos.done = ?", true],
                       :include => [:context, :project],
                       :order => "due IS NULL, due ASC, created_at ASC"
   end
@@ -43,7 +43,7 @@ class Context < ActiveRecord::Base
   end
 
   def hidden?
-    self.hide == 1
+    self.hide == true
   end
 
 end

@@ -14,16 +14,16 @@ class Project < ActiveRecord::Base
   validates_uniqueness_of :name, :message => "already exists", :scope =>"user_id"
 
   def self.list_of(isdone=0)
-    find(:all, :conditions => [ "done = ?" , isdone ], :order => "position ASC")
+    find(:all, :conditions => [ "done = ?" , true ], :order => "position ASC")
   end
 
   def find_not_done_todos
-    todos = Todo.find :all, :conditions => "project_id = #{id} AND done = 0",
+    todos = Todo.find :all, :conditions => ["project_id = #{id} AND done = ?", false],
                       :order => "due IS NULL, due ASC, created_at ASC"
   end
 
   def find_done_todos
-    todos = Todo.find :all, :conditions => "project_id = #{id} AND done = 1",
+    todos = Todo.find :all, :conditions => ["project_id = #{id} AND done = ?", true],
                       :order => "due IS NULL, due ASC, created_at ASC"
   end
 
