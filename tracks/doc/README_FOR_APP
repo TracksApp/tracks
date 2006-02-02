@@ -4,7 +4,7 @@
 * Author: bsag (http://www.rousette.org.uk/)
 * Contributors: Nicholas Lee, Lolindrath, Jim Ray, Arnaud Limbourg, Timothy Martens, Luke Melia, John Leonard (for great installation tutorials on Windows XP)
 * Version: 1.031
-* Copyright: (cc) 2004-2005 rousette.org.uk
+* Copyright: (cc) 2004-2006 rousette.org.uk
 * License:  GNU GPL
 
 Trac (for bug reports and feature requests): http://dev.rousette.org.uk/report/6
@@ -17,13 +17,15 @@ While fully usable for everyday use, Tracks is still a work in progress. Make su
 
 == Installation (for trunk version <b>only</b>)
 
-Before you start, you need to make sure that you have Ruby 1.8.2, Rails 0.14.3, and Redcloth 3.0.3. By far the easiest way to get these installed is using gems (see instructions on getting gems here http://wiki.rubyonrails.com/rails/show/GemRails). You also need some kind of database. MySQL is probably the most popular, but it's also easy to use PostgreSQL or SQLite. If you have Mac OS X Tiger, you already have Ruby 1.8.2 and SQLite3 installed, so all you need to do after installing Rails and Redcloth is to install the sqlite3-ruby gem (1.1.0). See http://dev.rousette.org.uk/wiki/Tracks/Install for more details on installing all the necessary components on all the supported platforms.
+Before you start, you need to make sure that you have Ruby 1.8.2 installed. Rails 1.0 and RedCloth are now included in the vendor directory of the distribution, so you don't need to install them yourself. You also need some kind of database. MySQL is probably the most popular, but it's also easy to use PostgreSQL or SQLite. If you have Mac OS X Tiger, you already have Ruby 1.8.2 and SQLite3 installed, so all you need to do after installing Rails and Redcloth is to install the sqlite3-ruby gem (1.1.0). See http://dev.rousette.org.uk/wiki/Tracks/Install for more details on installing all the necessary components on all the supported platforms.
 
 === New users
 
+==== MySQL
+
 In the following, I'm assuming that you're using MySQL and the built-in WEBrick server. See the sections below for addtional instructions on using other databases and servers.
 
-* Unzip tracks_1_031.zip somewhere in your home folder ( e.g. /Users/yourusername/Sites).
+* Unzip tracks_1_04.zip somewhere in your home folder ( e.g. /Users/yourusername/Sites).
 * Make a database for which you have full access rights. e.g. assuming that you are using MySQL, and that you want to call your database tracks, at the command line:
 
   <tt>mysql -uroot -p</tt>
@@ -39,13 +41,13 @@ In the following, I'm assuming that you're using MySQL and the built-in WEBrick 
   <tt>cd /PATHTO/TRACKS</tt>
   <tt>rake setup_tracks</tt>
 
-* The next task you need to run is 'migrate': this will populate the database you've made with the correct table schemas. It also adds a table 'schema_info', which keeps track of which version you are using. This means that you can potentially also revert back to an earlier schema. Use it as follows at the command line:
+* Run 'rake setup_tracks', which will copy all the files and directories with *.tmpl extensions and removes the extension. It ignores any files or directories that you've already converted, so it's safe to run it when you're upgrading:
 
   <tt>cd /PATHTO/TRACKS</tt>
   <tt>rake migrate</tt>
   
 * Check over the file <tt>config/settings.yml</tt>, and make sure that the settings are to your liking.
-* If you'd also like some example data to play with, you can import it from tracks_1.031_content.sql (in <tt>tracks/db</tt>). You don't have to use the example data, but if you don't, you'll need to visit <tt>http://YOURURL/contexts</tt> first to add a few contexts before you add any next actions. Note that no users are provided in the content file, so you'll need to visit the signup page (http://YOURURL/signup) to create some users.
+* If you'd also like some example data to play with, you can import it from tracks_1.04_content.sql (in <tt>tracks/db</tt>). You don't have to use the example data, but if you don't, you'll need to visit <tt>http://YOURURL/contexts</tt> first to add a few contexts before you add any next actions. Note that no users are provided in the content file, so you'll need to visit the signup page (http://YOURURL/signup) to create some users.
 * Check the shebang lines of the public/dispatch.* files and all the files in the script directory. They are set to <tt>#!/usr/bin/env ruby</tt> by default. This should work for all *nix based setups (Linux or Mac OS X), but Windows users will probably have to change it. Try this command at the command line, run inside the Tracks directory:
   <tt>ruby -i.bak -pe 'gsub!("#!/usr/bin/env ruby", "#!c:/ruby/bin/ruby")' public/dispatch.*  script/*</tt>
 * Run the following command at your command line (<b>Important:</b> If you already have an application running on WEBrick (Tracks or anything else), make sure that you stop the server, or run Tracks on a different port using the <tt>--port</tt> option):
@@ -55,57 +57,58 @@ In the following, I'm assuming that you're using MySQL and the built-in WEBrick 
 * In a browser, go to <tt>http://0.0.0.0:3000/signup</tt>. This will allow you to choose a username and password for the admin user. Thereafter, anyone else trying to access <tt>/signup</tt> will get a message that they are not allowed to sign up, and are given your email address to contact for permission. When you are logged in as the admin user, you can visit <tt>/signup</tt> to sign up additional users (who will not be able to view any of your next actions, contexts, projects or notes, but can set up their own separate tasks), and visit <tt>/login</tt> to login yourself.
 * Have fun!
 
+==== SQLite/SQLite3
+
+The instructions are the same as those for MySQL above, except that you don't need to create the database first before running 'rake migrate'. All you need to do is to give the file name of the database you'd like to create in database.yml. e.g.
+	<tt>adapter: sqlite3</tt>
+	<tt>database: /Users/YOURUSERNAME/Sites/tracks/db/tracks_104.db</tt>
+Then cd into the db directory and run rake migrate. This should create the database for you, and populate it with the correct tables.
+
 === Upgrading from Tracks 1.03
 
 ==== MySQL or Postgresql
 
-* For safety, rename your current Tracks directory to 'tracks-old' or something similar, and if you are able, create a new database for the new version. If you can't create a new database, delete the contents and tables in your old one MAKING SURE THAT YOU HAVE BACKED UP YOUR DATABASE FIRST.
+* For safety, rename your current Tracks directory to 'tracks-old' or something similar.
+* The 'rake migrate' script should be able to update your database tables with the contents in place, but it's very important to make a MySQL dump of both the contents and tables before you go any further. KEEP THIS BACKUP IN A SAFE PLACE IN CASE YOU HAVE TO REVERT TO IT.
 * <b>Make sure that you check <tt>settings.yml.tmpl</tt> for new info</b>, and add any new fields to your <tt>settings.yml</tt> file. Some new settings have been added in the past couple of versions, and not having the correct settings is a common cause of errors.
 * Before you do anything else, <b>BACK UP YOUR DATABASE</b> (tables and content). Then make a separate export of the contents only (assuming that you want to move your data to the new version.)
-* The file tracks/Rakefile contains various useful tasks you can run. The first one you need to run copies all the files and directories with *.tmpl extensions and removes the extension. It ignores any files or directories that you've already converted, so it's safe to run it when you're upgrading:
+* Run 'rake setup_tracks', which will copy all the files and directories with *.tmpl extensions and removes the extension. It ignores any files or directories that you've already converted, so it's safe to run it when you're upgrading:
 
   <tt>cd /PATHTO/TRACKS</tt>
   <tt>rake setup_tracks</tt>
 
-* If you are using MySQL or Postgresql, you can use the new Rakefile rake migrate task to update your tables. At your command line:
+* If you are using MySQL or Postgresql, you can use the rake migrate task to update your tables. At your command line:
 
   <tt>cd /PATHTO/TRACKS</tt>
   <tt>rake migrate</tt>
 
 * If this process reports errors that you can't fix, you'll need to adapt the instructions for manually loading the schema, given below for SQLite (schemas are also provided for MySQL and Postgresql).
-* Import your old contents, and check that it looks sensible. In particular, check that the 'user_id' field in the todos, contexts and projects tables have the value of '1' (i.e. they are owned by your admin user, who should have an id of 1).
+* Check that the contents of your database look sensible. In particular, check that the 'user_id' field in the todos, contexts and projects tables have the value of '1' (i.e. they are owned by your admin user, who should have an id of 1).
 * Check the shebang lines of the public/dispatch.* files and all the files in the script directory. They are set to <tt>#!/usr/bin/env ruby</tt> by default. This should work for all *nix based setups (Linux or Mac OS X), but Windows users will probably have to change it. Try this command at the command line, run inside the Tracks directory:
   <tt>ruby -i.bak -pe 'gsub!("#!/usr/bin/env ruby", "#!c:/ruby/bin/ruby")' public/dispatch.*  script/*</tt>
-* From here, follow the remaining steps for new users above to start the server. Don't forget that if you've deleted your users table, you'll need to re-create your users via <tt>/signup</tt>. Signup is now at <tt>http://0.0.0.0:3000/signup</tt>, and login at <tt>http://0.0.0.0:3000/login</tt>.
+* From here, follow the remaining steps for new users above to start the server. You might find that your previous username and password doesn't work, in which case you'll have to go into your database, delete all the users, and then re-create your users via <tt>/signup</tt>. Signup is now at <tt>http://0.0.0.0:3000/signup</tt>, and login at <tt>http://0.0.0.0:3000/login</tt>.
 
 ==== SQLite or SQLite3
 
-* For safety, rename your current Tracks directory to 'tracks-old' or something similar, and if you are able, create a new database for the new version. If you can't create a new database, delete the contents and tables in your old one MAKING SURE THAT YOU HAVE BACKED UP YOUR DATABASE FIRST.
+* For safety, rename your current Tracks directory to 'tracks-old' or something similar (making sure that you keep your old database safe), create a new directory for the new version.
+* Copy (NOT MOVE!) your old database into the new tracks/db directory.
 * <b>Make sure that you check <tt>settings.yml.tmpl</tt> for new info</b>, and add any new fields to your <tt>settings.yml</tt> file. Some new settings have been added in the past couple of versions, and not having the correct settings is a common cause of errors.
-* The file tracks/Rakefile contains various useful tasks you can run. The task 'setup_tracks' copies all the files and directories with *.tmpl extensions and removes the extension. It ignores any files or directories that you've already converted, so it's safe to run it when you're upgrading:
+* Run 'rake setup_tracks', which will copy all the files and directories with *.tmpl extensions and removes the extension. It ignores any files or directories that you've already converted, so it's safe to run it when you're upgrading:
 
   <tt>cd /PATHTO/TRACKS</tt>
   <tt>rake setup_tracks</tt>
 
-* If you're using SQLite/SQLite3, you'll need to create a new database and import the new schema (<tt>db/tracks_1.031_sqlite.sql</tt>), and then import your old contents. You need to check that the new fields have sensible contents.  In particular, check that the 'user_id' field in the todos, contexts and projects tables have the value of '1' (i.e. they are owned by your admin user, who should have an id of 1). Use <tt>db/tracks_1.0.3_content.sql</tt> as a guide for the correct syntax.
-sure that you get a fresh copy, or you'll get errors.
+* The rake task <tt>upgrade_sqlite_db.rake</tt> (in <tt>tracks/lib/tasks</tt>) will help you to upgrade your database before running 'rake migrate' to make the appropriate changes to the tables. In lines 4-6 of that file, you'll find some variables (old_db, new_db and cmd) that you'll need to change appropriately for your setup. old_db is the filename of your old version 1.03 database, new_db is the filename you'd like to give to the new database, and cmd is sqlite or sqlite3 depending on which verison you're using.
+* Save the file after making the changes, then - in the root of your tracks directory - issue the command <tt>rake upgrade_sqlite_db</tt>. You should get a message that your new db has been created, and some temporary files created.
+You need to check the new database to make sure that it has sensible contents.  In particular, check that the 'user_id' field in the todos, contexts and projects tables have the value of '1' (i.e. they are owned by your admin user, who should have an id of 1).
+* Edit <tt>config/database.yml</tt> with the name of your new database file.
+* Run 'rake migrate'. This should update the tables to the new format.
 * Check that the path to Ruby is correct in the <tt>tracks/public/dispatch.*</tt> files, and also <tt>/script/server</tt>. The default (<tt>#!/usr/bin/ruby</tt>) is fine for Mac OS X Tiger, but if you've installed Ruby yourself in <tt>/usr/local/bin</tt>, you'll need to change it.
 * From here, follow the remaining steps for new users above to start the server. Don't forget that if you've deleted your users table, you'll need to re-create your users via <tt>/signup</tt>. Signup is now at <tt>http://0.0.0.0:3000/signup</tt>, and login at <tt>http://0.0.0.0:3000/login</tt>.
 
-== Using databases other than MySQL
-
-Rick Bradley kindly converted the MySQL schema for Tracks to Postgresql format, so I was able to use that as a model for the new version - see <tt>tracks/db/tracks_1.031_postgres.sql</tt>. There's also a schema for SQLite/SQLite3 (<tt>tracks/db/tracks_1.031_sqlite.sql</tt>). Remember that you'll also need to change the adapter line in <tt>database.yml</tt>:
-  adapter: postgresql
-  
-or for SQLite3:
-  adapter: sqlite3
-  database: /fullpathto/db/yoursqlite.db
-  
-If you're using SQLite 2.x, substitute 'sqlite' for 'sqlite3' above. Also note that those are the <b>only</b> lines you need for SQLite; the username, password, database and host lines are not necessary.
-
 == Other servers
 
-WEBrick is the easiest server to get working to test out Tracks, and will be fine if you have Tracks installed on your own machine. One nice feature in Rails 0.13.1 is that WEBrick runs by default on the IP address 0.0.0.0, which means that you can access it via 127.0.0.1 when you are on the same machine, or via the external IP address of the machine running Tracks, so long as you can access the network of that machine from your current location. However, it is possible to use other servers, and the new re-writing rules of Rails 0.13.1 ('Routes' in <tt>environment/routes.rb</tt>) mean that very little configuration is needed.
+WEBrick is the easiest server to get working to test out Tracks, and will be fine if you have Tracks installed on your own machine. One nice feature in Rails 0.13.1 is that WEBrick runs by default on the IP address 0.0.0.0, which means that you can access it via 127.0.0.1 when you are on the same machine, or via the external IP address of the machine running Tracks, so long as you can access the network of that machine from your current location. However, it is possible to use other servers, and the new re-writing rules of Rails 0.13.1 ('Routes' in <tt>environment/routes.rb</tt>) mean that very little configuration is needed. With Rails 1.0, if you have lighttpd installed, running <tt>script/server</tt> starts lighttpd instead of WEBrick, creating the appropriate lighttpd.conf file automatically.
 
 === Apache
 

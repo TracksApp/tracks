@@ -5,10 +5,10 @@
 ActiveRecord::Schema.define(:version => 5) do
 
   create_table "contexts", :force => true do |t|
-    t.column "name", :string, :null => false
-    t.column "position", :integer, :null => false
+    t.column "name", :string, :default => "", :null => false
     t.column "hide", :boolean, :default => false
-    t.column "user_id", :integer, :null => false
+    t.column "position", :integer, :null => false
+    t.column "user_id", :integer, :default => 1
   end
 
   create_table "notes", :force => true do |t|
@@ -20,30 +20,30 @@ ActiveRecord::Schema.define(:version => 5) do
   end
 
   create_table "projects", :force => true do |t|
-    t.column "name", :string, :null => false
+    t.column "name", :string, :default => "", :null => false
     t.column "position", :integer, :null => false
     t.column "done", :boolean, :default => false
-    t.column "user_id", :integer, :null => false
+    t.column "user_id", :integer, :default => 1
     t.column "description", :text, :default => ""
   end
 
   create_table "todos", :force => true do |t|
-    t.column "context_id", :integer, :null => false
-    t.column "project_id", :integer
-    t.column "description", :string, :null => false
+    t.column "context_id", :integer, :limit => 11, :default => 0, :null => false
+    t.column "description", :string, :limit => 100, :default => "", :null => false
     t.column "notes", :text
-    t.column "done", :boolean, :default => false, :null => false
-    t.column "created_at", :datetime
+    t.column "done", :boolean, :default => false
+    t.column "created_at", :datetime, :null => false
     t.column "due", :date
     t.column "completed", :datetime
-    t.column "user_id", :integer, :null => false
+    t.column "project_id", :integer, :limit => 11
+    t.column "user_id", :integer, :default => 1
   end
 
   create_table "users", :force => true do |t|
-    t.column "login", :string, :limit => 80, :null => false
-    t.column "password", :string, :limit => 40, :null => false
+    t.column "login", :string, :limit => 80
+    t.column "password", :string, :limit => 40
     t.column "word", :string
-    t.column "is_admin", :boolean, :default => false, :null => false
+    t.column "is_admin", :boolean, :default => false
   end
 
 end

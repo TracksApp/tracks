@@ -4,7 +4,7 @@
 * Author: bsag (http://www.rousette.org.uk/)
 * Contributors: Nicholas Lee, Lolindrath, Jim Ray, Arnaud Limbourg, Timothy Martens, Luke Melia, John Leonard (for great installation tutorials on Windows XP)
 * Version: 1.03
-* Copyright: (cc) 2004-2005 rousette.org.uk
+* Copyright: (cc) 2004-2006 rousette.org.uk
 * License: GNU GPL
 
 Main project site: http://www.rousette.org.uk/projects/
@@ -34,6 +34,7 @@ Wiki (deprecated - please use Trac): http://www.rousette.org.uk/projects/wiki/
 16. Got rid of the 'fresh actions' box on the home page. When you create a new action, it is now automatically inserted (via the magic of Ajax and RJS templates) at the bottom of the correct context box.
 17. The next action count badge is now dynamically updated whenever you add or delete a next action, so that you don't have to refresh to see the count updated.
 18. Validation errors are now reported in a status box (just above the new next action form).
+19. There's a rake task (upgrade_sqlite_db) which allows you to safely upgrade databases created with version 1.03, afterwhich you can run rake migrate to complete the process. From there, rake migrate should work OK.
 
 == Version 1.03
 
