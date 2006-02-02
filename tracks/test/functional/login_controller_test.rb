@@ -9,6 +9,9 @@ class LoginControllerTest < Test::Unit::TestCase
   fixtures :users
   
   def setup
+    assert_equal "test", ENV['RAILS_ENV']
+    app_configurations["admin"]["loginhash"] = "change-me"
+    assert_equal "change-me", app_configurations["admin"]["loginhash"]
     @controller = LoginController.new
     @request = ActionController::TestRequest.new
     @response = ActionController::TestResponse.new
@@ -22,8 +25,9 @@ class LoginControllerTest < Test::Unit::TestCase
   end
 
   def test_login_with_valid_admin_user
+    assert_equal "change-me", app_configurations["admin"]["loginhash"]
     user = login('admin','abracadabra')
-    assert_equal "Login successful", flash['notice']
+    assert_equal "Login successful: session will expire after 1 hour of inactivity.", flash['notice']
     assert_redirected_to :controller => 'todo', :action => 'list'
     assert_equal 'admin', user.login
     assert_equal 1, user.is_admin
@@ -32,7 +36,7 @@ class LoginControllerTest < Test::Unit::TestCase
 
   def test_login_with_valid_standard_user
     user = login('jane','sesame')
-    assert_equal "Login successful", flash['notice']
+    assert_equal "Login successful: session will expire after 1 hour of inactivity.", flash['notice']
     assert_redirected_to :controller => 'todo', :action => 'list'
     assert_equal 'jane', user.login
     assert_equal 0, user.is_admin
@@ -43,7 +47,7 @@ class LoginControllerTest < Test::Unit::TestCase
     user = login('admin','abracadabra')
     get :logout
     assert_nil(session['user'])
-    assert_template 'logout'
+    assert_redirected_to :controller => 'login', :action => 'login'
   end
 
   # TODO: Not sure how to test whether the user is blocked if the admin user is
