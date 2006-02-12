@@ -340,6 +340,11 @@ a.footer_link:hover {color: #fff; background-color: #cc3334 !important;}
       padding: 5px;
       text-align: center;
       }
+      
+.highlight {
+      background: #ffC;
+      padding: 2px;
+} 
 
 /*  Backgrounds marking out 'staleness' of a task based on age of creation date
     The colour of the background gets progressively yellower with age */
@@ -437,6 +442,10 @@ div#list-projects, div#list-contexts {
 .container td {
     border: none;
     padding-bottom: 5px;
+    }
+
+.container form {
+    border: none;
     }
 
 div.project_description {
@@ -557,3 +566,4 @@ div.message {
 }
 
 ul.warning { list-style-type: circle; font-size: 1em; }
+ul#prefs {list-style-type: disc; margin-left: 5px;}

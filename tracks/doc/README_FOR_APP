@@ -3,7 +3,7 @@
 * Homepage: http://www.rousette.org.uk/projects/
 * Author: bsag (http://www.rousette.org.uk/)
 * Contributors: Nicholas Lee, Lolindrath, Jim Ray, Arnaud Limbourg, Timothy Martens, Luke Melia, John Leonard (for great installation tutorials on Windows XP)
-* Version: 1.031
+* Version: 1.04
 * Copyright: (cc) 2004-2006 rousette.org.uk
 * License:  GNU GPL
 
@@ -17,7 +17,7 @@ While fully usable for everyday use, Tracks is still a work in progress. Make su
 
 == Installation (for trunk version <b>only</b>)
 
-Before you start, you need to make sure that you have Ruby 1.8.2 installed. Rails 1.0 and RedCloth are now included in the vendor directory of the distribution, so you don't need to install them yourself. You also need some kind of database. MySQL is probably the most popular, but it's also easy to use PostgreSQL or SQLite. If you have Mac OS X Tiger, you already have Ruby 1.8.2 and SQLite3 installed, so all you need to do after installing Rails and Redcloth is to install the sqlite3-ruby gem (1.1.0). See http://dev.rousette.org.uk/wiki/Tracks/Install for more details on installing all the necessary components on all the supported platforms.
+Before you start, you need to make sure that you have Ruby 1.8.2 installed. Rails 1.0 and RedCloth are now included in the vendor directory of the distribution, so you don't need to install them yourself. You also need some kind of database. MySQL is probably the most popular, but it's also easy to use PostgreSQL or SQLite/SQLite3. If you have Mac OS X Tiger, you already have Ruby 1.8.2 and SQLite3 installed, so all you need to do after installing Rails and Redcloth is to install the sqlite3-ruby gem (1.1.0). See http://dev.rousette.org.uk/wiki/Tracks/Install for more details on installing all the necessary components on all the supported platforms.
 
 === New users
 
@@ -36,18 +36,16 @@ In the following, I'm assuming that you're using MySQL and the built-in WEBrick 
 
 * Copy the file <tt>config/database.yml.tmpl</tt> to <tt>config/database.yml</tt>.
 * Open the <tt>tracks/config/database.yml</tt> file, and enter your username and password details for the database you just set up. If you're running in production mode, you only really need to set up the entry under 'production'. <b>NB</b>: If you do set up the entry for 'test', make sure that you specify a different database, or when you run tests, they will overwrite your data. <b>NB:</b> It's very important that you don't use TABS in any of the .yml files. Just use spaces to indent.
-* The file tracks/Rakefile contains various useful tasks you can run. The first one you need to run copies all the other files and directories with *.tmpl extensions and removes the extension:
+* Run 'rake setup_tracks', which will copy all the files and directories with *.tmpl extensions and removes the extension. It ignores any files or directories that you've already converted, so it's safe to run it when you're upgrading:
 
   <tt>cd /PATHTO/TRACKS</tt>
   <tt>rake setup_tracks</tt>
 
-* Run 'rake setup_tracks', which will copy all the files and directories with *.tmpl extensions and removes the extension. It ignores any files or directories that you've already converted, so it's safe to run it when you're upgrading:
+* Run 'rake migrate', which will create the necessary tables in your database, including some required contents:
 
   <tt>cd /PATHTO/TRACKS</tt>
   <tt>rake migrate</tt>
   
-* Check over the file <tt>config/settings.yml</tt>, and make sure that the settings are to your liking.
-* If you'd also like some example data to play with, you can import it from tracks_1.04_content.sql (in <tt>tracks/db</tt>). You don't have to use the example data, but if you don't, you'll need to visit <tt>http://YOURURL/contexts</tt> first to add a few contexts before you add any next actions. Note that no users are provided in the content file, so you'll need to visit the signup page (http://YOURURL/signup) to create some users.
 * Check the shebang lines of the public/dispatch.* files and all the files in the script directory. They are set to <tt>#!/usr/bin/env ruby</tt> by default. This should work for all *nix based setups (Linux or Mac OS X), but Windows users will probably have to change it. Try this command at the command line, run inside the Tracks directory:
   <tt>ruby -i.bak -pe 'gsub!("#!/usr/bin/env ruby", "#!c:/ruby/bin/ruby")' public/dispatch.*  script/*</tt>
 * Run the following command at your command line (<b>Important:</b> If you already have an application running on WEBrick (Tracks or anything else), make sure that you stop the server, or run Tracks on a different port using the <tt>--port</tt> option):
@@ -55,6 +53,8 @@ In the following, I'm assuming that you're using MySQL and the built-in WEBrick 
   <tt>ruby script/server -e production</tt>
   
 * In a browser, go to <tt>http://0.0.0.0:3000/signup</tt>. This will allow you to choose a username and password for the admin user. Thereafter, anyone else trying to access <tt>/signup</tt> will get a message that they are not allowed to sign up, and are given your email address to contact for permission. When you are logged in as the admin user, you can visit <tt>/signup</tt> to sign up additional users (who will not be able to view any of your next actions, contexts, projects or notes, but can set up their own separate tasks), and visit <tt>/login</tt> to login yourself.
+* Add some contexts at <tt>http://0.0.0.0:3000/contexts</tt> and projects at <tt>http://0.0.0.0:3000/projects</tt> and then you're ready to add all your next actions.
+* You can set various preferences by visiting <tt>http://0.0.0.0:3000/user/preferences</tt>. These are stored on a per-user basis in the database.
 * Have fun!
 
 ==== SQLite/SQLite3
@@ -70,7 +70,6 @@ Then cd into the db directory and run rake migrate. This should create the datab
 
 * For safety, rename your current Tracks directory to 'tracks-old' or something similar.
 * The 'rake migrate' script should be able to update your database tables with the contents in place, but it's very important to make a MySQL dump of both the contents and tables before you go any further. KEEP THIS BACKUP IN A SAFE PLACE IN CASE YOU HAVE TO REVERT TO IT.
-* <b>Make sure that you check <tt>settings.yml.tmpl</tt> for new info</b>, and add any new fields to your <tt>settings.yml</tt> file. Some new settings have been added in the past couple of versions, and not having the correct settings is a common cause of errors.
 * Before you do anything else, <b>BACK UP YOUR DATABASE</b> (tables and content). Then make a separate export of the contents only (assuming that you want to move your data to the new version.)
 * Run 'rake setup_tracks', which will copy all the files and directories with *.tmpl extensions and removes the extension. It ignores any files or directories that you've already converted, so it's safe to run it when you're upgrading:
 

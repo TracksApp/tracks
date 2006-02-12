@@ -11,15 +11,10 @@ class ApplicationController < ActionController::Base
   include LoginSystem
 
   before_filter :set_session_expiration
+  before_filter :get_current_user
 
-  # Contstants from settings.yml
-  #
-  DATE_FORMAT = app_configurations["formats"]["date"]
-  WEEK_STARTS_ON = app_configurations["formats"]["week_starts"]
-  NO_OF_ACTIONS = app_configurations["formats"]["hp_completed"]
-  STALENESS_STARTS = app_configurations["formats"]["staleness_starts"]
-
-  # Count the number of uncompleted actions, excluding those in hidden contexts
+  # Count the number of uncompleted actions, excluding those 
+  # in hidden contexts
   #
   def count_shown_items(hidden)
    count = 0
@@ -55,6 +50,12 @@ class ApplicationController < ActionController::Base
         end
       end
     end
+  end
+  
+  private
+  
+  def get_current_user
+    @user = @session['user']
   end
   
 end

@@ -6,6 +6,8 @@ class User < ActiveRecord::Base
   has_many :projects, :order => "position ASC"
   has_many :todos, :order => "completed DESC"
   has_many :notes, :order => "created_at DESC"
+  
+  serialize :preferences
 
   attr_protected :is_admin
 
@@ -20,7 +22,7 @@ class User < ActiveRecord::Base
 protected
 
   def self.sha1(pass)
-    Digest::SHA1.hexdigest("#{app_configurations["admin"]["loginhash"]}--#{pass}--")
+    Digest::SHA1.hexdigest("change-me--#{pass}--")
   end
 
   before_create :crypt_password
@@ -35,4 +37,5 @@ protected
   validates_presence_of :password, :login, :word
   validates_uniqueness_of :login, :on => :create
   validates_confirmation_of :password, :on => :create
+  
 end

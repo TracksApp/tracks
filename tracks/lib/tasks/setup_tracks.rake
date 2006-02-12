@@ -11,19 +11,5 @@ task :setup_tracks => :environment do
       puts f_only + " created"
     end
   end
-  # Check the config dir for template files
-  # We can't convert the database.yml.tmpl file, because database.yml needs
-  # to exist for rake to run tasks!
-  cd("config") do
-    FileList["settings.yml.tmpl"].each do |template_file|
-      f = File.basename(template_file) # with suffix
-      f_only = File.basename(template_file,".tmpl") # without suffix
-      if File.exists?(f_only)
-        puts f_only + " already exists"
-      else
-        cp(f, f_only)
-        puts f_only + " created"
-      end
-    end
-  end
+
 end

@@ -49,7 +49,3 @@ end
 # end
 
 # Include your application configuration below
-def app_configurations
-  @app_cfg = nil if ENV['RAILS_ENV'] == 'development'
-  @app_cfg ||= YAML::load(File.open("#{RAILS_ROOT}/config/settings.yml"))
-end

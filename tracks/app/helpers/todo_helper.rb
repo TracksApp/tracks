@@ -1,5 +1,6 @@
 module TodoHelper
 
+  require 'user_controller'
   # Counts the number of uncompleted items in the specified context
   #
   def count_items(context)
@@ -46,11 +47,11 @@ module TodoHelper
   def staleness_class(item)
     if item.due || item.done?
       return ""
-    elsif item.created_at < (ApplicationController::STALENESS_STARTS*3).days.ago
+    elsif item.created_at < (@user.preferences["staleness_starts"].to_i*3).days.ago
       return " stale_l3"
-    elsif item.created_at < (ApplicationController::STALENESS_STARTS*2).days.ago
+    elsif item.created_at < (@user.preferences["staleness_starts"].to_i*2).days.ago
       return " stale_l2"
-    elsif item.created_at < (ApplicationController::STALENESS_STARTS).days.ago
+    elsif item.created_at < (@user.preferences["staleness_starts"].to_i).days.ago
       return " stale_l1"
     else
       return ""
@@ -78,7 +79,7 @@ module TodoHelper
            "<a title='" + format_date(due) + "'><span class=\"amber\">Due Tomorrow</span></a> "
       # due 2-7 days away
       when 2..7
-      if app_configurations["formats"]["due_style"] == 1
+      if @user.preferences["due_style"] == "1"
         "<a title='" + format_date(due) + "'><span class=\"orange\">Due on " + due.strftime("%A") + "</span></a> "
       else
         "<a title='" + format_date(due) + "'><span class=\"orange\">Due in " + @days.to_s + " days</span></a> "
@@ -101,8 +102,10 @@ module TodoHelper
   end
   
   def calendar_setup( input_field )
-    str = "Calendar.setup({ ifFormat:\"#{ApplicationController::DATE_FORMAT}\""
-    str << ",firstDay:#{ApplicationController::WEEK_STARTS_ON},showOthers:true,range:[2004, 2010]"
+    date_format = @user.preferences["date_format"]
+    week_starts = @user.preferences["week_starts"]
+    str = "Calendar.setup({ ifFormat:\"#{date_format}\""
+    str << ",firstDay:#{week_starts},showOthers:true,range:[2004, 2010]"
     str << ",step:1,inputField:\"" + input_field + "\",cache:true,align:\"TR\" })"
     javascript_tag str
   end

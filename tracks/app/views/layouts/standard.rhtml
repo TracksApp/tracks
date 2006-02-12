@@ -30,8 +30,9 @@
   <li><%= link_to( "Home", {:controller => "todo", :action => "list"}, {:accesskey=>"t", :title=>"Home"} ) %></li>  
   <li><%= link_to( "Contexts", {:controller => "context", :action => "list"}, {:accesskey=>"c", :title=>"Contexts"} ) %></li>
   <li><%= link_to( "Projects", {:controller => "project", :action => "list"}, {:accesskey=>"p", :title=>"Projects"} ) %></li>
-  <li><%= link_to( "Completed", {:controller => "todo", :action => "completed"}, {:accesskey=>"d", :title=>"Completed"} ) %></li>
+  <li><%= link_to( "Done", {:controller => "todo", :action => "completed"}, {:accesskey=>"d", :title=>"Completed"} ) %></li>
   <li><%= link_to( "Notes", {:controller => "note", :action => "index"}, :title => "Show all notes" ) %></li>
+  <li><%= link_to( "Preferences", {:controller => "user", :action => "preferences"}, :title => "Show my preferences" ) %></li>
   <li><a href="javascript:toggleAll('notes','block')" accesskey="S" title="Show all notes">Show</a></li>
   <li><a href="javascript:toggleAll('notes','none')" accesskey="H" title="Hide all notes">Hide</a></li>
   <li><%= link_to(image_tag("feed-icon", :size => "16X16", :border => 0), {:controller => "feed", :action => "na_feed", :name => "#{@session['user']['login']}", :token => "#{@session['user']['word']}"}, :title => "Subscribe to an RSS feed of your next actions" ) %></li>

@@ -52,7 +52,7 @@ class ContextController < ApplicationController
     @item.attributes = @params["todo"]
 
     if @item.due?
-      @item.due = Date.strptime(@params["todo"]["due"], DATE_FORMAT)
+      @item.due = Date.strptime(@params["todo"]["due"], @user.preferences["date_format"])
     else
       @item.due = ""
     end

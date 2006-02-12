@@ -6,7 +6,8 @@ module ApplicationHelper
   #
   def format_date(date)
     if date
-      formatted_date = date.strftime("#{ApplicationController::DATE_FORMAT}")
+      date_format = @user.preferences["date_format"]
+      formatted_date = date.strftime("#{date_format}")
     else
       formatted_date = ''
     end

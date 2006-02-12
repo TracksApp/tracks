@@ -23,7 +23,7 @@ class TodoController < ApplicationController
     self.init
     @on_page = "home"
     @page_title = "TRACKS::List tasks"
-    @done = @done[0..(NO_OF_ACTIONS-1)]
+    @done = @done[0..(@user.preferences["no_completed"].to_i-1)]
 
     @contexts_to_show = @contexts.clone
     @contexts_to_show = @contexts_to_show.collect {|x| (!x.hide? and !x.find_not_done_todos.empty?) ? x:nil }.compact
@@ -44,7 +44,7 @@ class TodoController < ApplicationController
     @item.attributes = @params["todo"]
 
     if @item.due?
-      @item.due = Date.strptime(@params["todo"]["due"], DATE_FORMAT)
+      @item.due = Date.strptime(@params["todo"]["due"], @user.preferences["date_format"])
     else
       @item.due = ""
     end
@@ -115,7 +115,7 @@ class TodoController < ApplicationController
     item.attributes = @params["item"]
 
     if item.due?
-      item.due = Date.strptime(@params["item"]["due"], DATE_FORMAT)
+      item.due = Date.strptime(@params["item"]["due"], @user.preferences["date_format"])
     else
       item.due = ""
     end
