@@ -36,6 +36,7 @@ Wiki (deprecated - please use Trac): http://www.rousette.org.uk/projects/wiki/
 18. Validation errors are now reported in a status box (just above the new next action form).
 19. There's a rake task (upgrade_sqlite_db) which allows you to safely upgrade databases created with version 1.03, afterwhich you can run rake migrate to complete the process. From there, rake migrate should work OK.
 20. Moved settings for Tracks from the file settings.yml to the database. Running 'rake migrate' will update your database appropriately, and add the default settings into it. Then you should be able to visit <tt>http://0.0.0.0:3000/user/preferences</tt> to view and edit your settings. The advantage is that you don't need to mess about with the settings.yml file, and each of the users can have their own settings.
+21. Session data is now stored in the database rather than a file in tracks/tmp. This should prevent the tmp directory cluttering up the file system, and give better performance. You need to run rake migrate to add the session table to your database.
 
 == Version 1.03
 
