@@ -28,6 +28,7 @@ class LoginController < ApplicationController
   def signup
     unless (User.find_all.empty? || ( @session['user'] && @session['user']['is_admin'] ) )
       @page_title = "No signups"
+      @admin_email = User.find(1).preferences["admin_email"]
       render :action => "nosignup"
       return
     end
