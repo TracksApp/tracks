@@ -22,6 +22,9 @@ class User < ActiveRecord::Base
 protected
 
   def self.sha1(pass)
+    # TODO find somewhere else to set the loginhash salt
+    # This is hard-coded for now, but the user needs to be
+    # able to set their own somewhere
     Digest::SHA1.hexdigest("change-me--#{pass}--")
   end
 

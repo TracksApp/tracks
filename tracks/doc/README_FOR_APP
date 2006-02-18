@@ -45,6 +45,8 @@ In the following, I'm assuming that you're using MySQL and the built-in WEBrick 
 
   <tt>cd /PATHTO/TRACKS</tt>
   <tt>rake migrate</tt>
+
+If you find that 'rake migrate' doesn't work for you, you can use the command <tt>rake db_schema_import</tt> which will do the same thing.
   
 * Check the shebang lines of the public/dispatch.* files and all the files in the script directory. They are set to <tt>#!/usr/bin/env ruby</tt> by default. This should work for all *nix based setups (Linux or Mac OS X), but Windows users will probably have to change it. Try this command at the command line, run inside the Tracks directory:
   <tt>ruby -i.bak -pe 'gsub!("#!/usr/bin/env ruby", "#!c:/ruby/bin/ruby")' public/dispatch.*  script/*</tt>
@@ -62,7 +64,7 @@ In the following, I'm assuming that you're using MySQL and the built-in WEBrick 
 The instructions are the same as those for MySQL above, except that you don't need to create the database first before running 'rake migrate'. All you need to do is to give the file name of the database you'd like to create in database.yml. e.g.
 	<tt>adapter: sqlite3</tt>
 	<tt>database: /Users/YOURUSERNAME/Sites/tracks/db/tracks_104.db</tt>
-Then cd into the db directory and run rake migrate. This should create the database for you, and populate it with the correct tables.
+Then cd into the db directory and run rake migrate. This should create the database for you, and populate it with the correct tables. If you find that 'rake migrate' doesn't work for you, you can use the command <tt>rake db_schema_import</tt> which will do the same thing.
 
 === Upgrading from Tracks 1.03
 
