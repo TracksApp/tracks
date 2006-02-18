@@ -5,7 +5,9 @@
       <li><strong>staleness_starts:</strong> the number of days before items with no due date get marked as stale (with a yellow highlight)</li>
       <li><strong>date_format:</strong> the format in which you'd like dates to be shown. For example, for the date 31st January 2006, %d/%m/%Y will show 31/01/2006, %b-%e-%y will show Jan-31-06. See the <a href="http://uk2.php.net/strftime" title="PHP strftime manual">strftime manual</a> for more formatting options for the date.</li>
       <li><strong>no_completed:</strong> number of completed actions to show on the home page</li>
-      <li><strong>admin_email:</strong> email address for the admin user of Tracks (displayed on the signup page for users to contact to obtain an account)</li>
+      <% if @user.is_admin? %>
+        <li><strong>admin_email:</strong> email address for the admin user of Tracks (displayed on the signup page for users to contact to obtain an account)</li>
+      <% end %>
       <li><strong>week_starts:</strong> day of the week shown as the start of the week on the popup calendar. 0 = Sunday, 1 = Monday etc.</li>
       <li><strong>due_style:</strong> style in which due dates for the range 2-7 days away is shown. 0 = "Due in 3 days", 1 = "Due on Wednesday"</li>
     </ul>
@@ -15,6 +17,7 @@
   <%= start_form_tag :action => 'update_preferences' %>
   <table>
   <% @prefs.each do |k,v| %>
+    <% next if !@user.is_admin? and k == "admin_email" %>
     <tr>
       <td><label><%= k %>:</label></td>
       <td><input name="prefs[<%= k %>]" type="text" value="<%= v %>" /></td>
