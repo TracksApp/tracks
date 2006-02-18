@@ -26,16 +26,16 @@ protected
     Digest::SHA1.hexdigest("#{SALT}--#{pass}--")
   end
 
-  before_create :crypt_password
+  before_create :crypt_password_and_word
 
-  def crypt_password
+  def crypt_password_and_word
     write_attribute("password", self.class.sha1(password)) if password == @password_confirmation
-    write_attribute("word", self.class.sha1(login + word))
+    write_attribute("word", self.class.sha1(login + Time.now.to_i.to_s + rand.to_s))
   end
-
+  
   validates_length_of :password, :within => 5..40
   validates_length_of :login, :within => 3..80
-  validates_presence_of :password, :login, :word
+  validates_presence_of :password, :login
   validates_uniqueness_of :login, :on => :create
   validates_confirmation_of :password, :on => :create
   
