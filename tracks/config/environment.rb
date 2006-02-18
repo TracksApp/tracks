@@ -49,3 +49,6 @@ end
 # end
 
 # Include your application configuration below
+# This is the 'salt' to add to the password before it is encrypted
+# You need to change this to something unique for yourself
+SALT = "change-me"

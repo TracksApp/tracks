@@ -9,7 +9,6 @@
   <li>Staleness starts after <span class="highlight"><%= @prefs["staleness_starts"] %></span> days</li>
   <li>Due style: <span class="highlight"><%= @prefs["due_style"] %></span></li>
   <li>Admin email: <span class="highlight"><%= @prefs["admin_email"] %></span></li>
-  <li>Loginhash: <span class="highlight"><%= @prefs["loginhash"] %></span></li>
 </ul>
 <%= link_to "Edit preferences", :controller => 'user', :action => 'edit_preferences' %>
 </div>

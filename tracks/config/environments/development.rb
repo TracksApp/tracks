@@ -18,4 +18,3 @@ config.action_mailer.raise_delivery_errors = false
 
 # Unique cookies
 ActionController::CgiRequest::DEFAULT_SESSION_OPTIONS[:session_key] = "TrackDev"
-# ActionController::CgiRequest::DEFAULT_SESSION_OPTIONS[:tmpdir] = "#{RAILS_ROOT}/tmp"

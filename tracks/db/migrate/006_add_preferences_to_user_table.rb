@@ -3,7 +3,7 @@ class AddPreferencesToUserTable < ActiveRecord::Migration
     add_column "users", "preferences", :text
     @users = User.find(:all)
     @users.each do |u|
-      u.preferences = { "date_format" => "%d/%m/%Y", "week_starts" => "1", "no_completed" => "5", "staleness_starts" => "7", "due_style" => "1", "admin_email" => "butshesagirl@rousette.org.uk", "loginhash" => "change-me"}
+      u.preferences = { "date_format" => "%d/%m/%Y", "week_starts" => "1", "no_completed" => "5", "staleness_starts" => "7", "due_style" => "1", "admin_email" => "butshesagirl@rousette.org.uk"}
       u.save
     end
   end

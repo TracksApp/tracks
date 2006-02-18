@@ -55,7 +55,7 @@ class LoginController < ApplicationController
     if user.save
       @session['user'] = User.authenticate(user.login, @params['user']['password'])
       @user = @session['user']
-      @user.preferences = { "date_format" => "%d/%m/%Y", "week_starts" => "1", "no_completed" => "5", "staleness_starts" => "7", "due_style" => "1", "admin_email" => "butshesagirl@rousette.org.uk", "loginhash" => "change-me"}
+      @user.preferences = { "date_format" => "%d/%m/%Y", "week_starts" => "1", "no_completed" => "5", "staleness_starts" => "7", "due_style" => "1", "admin_email" => "butshesagirl@rousette.org.uk"}
       @user.save
       flash['notice']  = "Signup successful"
       redirect_back_or_default :controller => "todo", :action => "list"
