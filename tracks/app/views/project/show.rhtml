@@ -1,10 +1,11 @@
 <div id="display_box">
-  <% if @flash["notice"] %>
-  <div id="notice" class="confirmation"><%= @flash["notice"] %></div>
+
+	<% for name in ["notice", "warning", "message"] %>
+    <% if flash[name] %>
+      <%= "<div id=\"#{name}\">#{flash[name]}</div>" %>
+    <% end %>
   <% end %>
-  <% if @flash["warning"] -%>
-    <div id="warning" class="warning"><%= @flash["warning"] %></div>
-  <% end -%>
+  
 <%= render :partial => "project/project", :locals => { :project => @project, :collapsible => false } %>
 <%= render :partial => "todo/completed", :locals => { :done => @done, :collapsible => false, :append_descriptor => "in this project" } %>
 

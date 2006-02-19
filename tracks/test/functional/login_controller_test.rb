@@ -10,8 +10,6 @@ class LoginControllerTest < Test::Unit::TestCase
   
   def setup
     assert_equal "test", ENV['RAILS_ENV']
-    app_configurations["admin"]["loginhash"] = "change-me"
-    assert_equal "change-me", app_configurations["admin"]["loginhash"]
     @controller = LoginController.new
     @request = ActionController::TestRequest.new
     @response = ActionController::TestResponse.new
@@ -25,13 +23,11 @@ class LoginControllerTest < Test::Unit::TestCase
   end
 
   def test_login_with_valid_admin_user
-    assert_equal "change-me", app_configurations["admin"]["loginhash"]
     user = login('admin','abracadabra')
     assert_equal "Login successful: session will expire after 1 hour of inactivity.", flash['notice']
     assert_redirected_to :controller => 'todo', :action => 'list'
     assert_equal 'admin', user.login
     assert_equal 1, user.is_admin
-    assert_equal "#{Digest::SHA1.hexdigest("change-me--badger--")}", user.word
   end
 
   def test_login_with_valid_standard_user
@@ -40,7 +36,6 @@ class LoginControllerTest < Test::Unit::TestCase
     assert_redirected_to :controller => 'todo', :action => 'list'
     assert_equal 'jane', user.login
     assert_equal 0, user.is_admin
-    assert_equal "#{Digest::SHA1.hexdigest("change-me--mouse--")}", user.word
   end
 
   def test_logout
@@ -55,10 +50,9 @@ class LoginControllerTest < Test::Unit::TestCase
   # but that generated an error.
   #
   def test_create
-    post :create, :user => {:login => 'newbie', 
+    post :signup, :user => {:login => 'newbie', 
                             :password => 'newbiepass',
-                            :password_confirmation => 'newbiepass',
-                            :word => 'turkey'}
+                            :password_confirmation => 'newbiepass'}
     assert_equal "Signup successful", flash['notice']
     assert_redirected_to :controller => 'todo', :action => 'list'
     assert_not_nil(session['user'])

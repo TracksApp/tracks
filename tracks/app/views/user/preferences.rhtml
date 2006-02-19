@@ -1,7 +1,13 @@
-<div id="display_box" class="container context">
+<div id="single_box" class="container context">
 
 <h2>Your preferences</h2>
-    
+
+<% for name in ["notice", "warning", "message"] %>
+  <% if flash[name] %>
+    <%= "<div id=\"#{name}\">#{flash[name]}</div>" %>
+  <% end %>
+<% end %>
+ 
 <ul id="prefs">
   <li>Date format: <span class="highlight"><%= @prefs["date_format"] %></span></li>
   <li>Week starts on: <span class="highlight"><%= @prefs["week_starts"] %></span></li>
@@ -12,5 +18,6 @@
     <li>Admin email: <span class="highlight"><%= @prefs["admin_email"] %></span></li>
   <% end %>
 </ul>
-<%= link_to "Edit preferences", :controller => 'user', :action => 'edit_preferences' %>
+<%= link_to "Edit preferences", :controller => 'user', :action => 'edit_preferences' %> | 
+<%= link_to 'Change password', :controller => 'user', :action => 'change_password' %>
 </div>

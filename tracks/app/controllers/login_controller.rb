@@ -77,9 +77,6 @@ class LoginController < ApplicationController
     flash['notice']  = "You have been logged out of Tracks."
     redirect_to :controller => "login", :action => "login"
   end
-
-  def welcome
-  end
   
   def check_expiry
     # Gets called by periodically_call_remote to check whether 
@@ -102,5 +99,5 @@ class LoginController < ApplicationController
       end
     end
   end
-
+  
 end

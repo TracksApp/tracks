@@ -57,6 +57,11 @@ a.show_notes:hover {background-image: url(../images/notes_on.png); background-re
       margin: 0px 15px 50px 15px;
       }
 
+#single_box {
+      width: 450px;
+      margin: 50px auto;
+      }
+
 #full_width_display {
       float: left;
       width: 800px;
@@ -266,7 +271,7 @@ a.footer_link:hover {color: #fff; background-color: #cc3334 !important;}
   border: 1px solid #007E00; 
   background-color: #c2ffc2;
   color: #007E00;
-  margin-bottom: 15px;
+  margin: 15px 5px;
   text-align: center;
   }
       
@@ -282,7 +287,16 @@ a.footer_link:hover {color: #fff; background-color: #cc3334 !important;}
       border: 1px solid #ED2E38; 
       background-color: #F6979C;
       color: #FFFFFF;
-      margin-bottom: 15px;
+      margin: 15px 5px;
+      text-align: center;
+      }
+      
+#message {
+      padding: 2px;
+      border: 1px solid #CCC; 
+      background-color: #D2D3D6;
+      color: #666;
+      margin: 15px 5px;
       text-align: center;
       }
 
@@ -535,16 +549,16 @@ div.message {
   display: table;
 }
 
-#ErrorExplanation {
+#errorExplanation {
   width: 335px;
   border: 2px solid #ff0000;
   padding: 7px;
   padding-bottom: 12px;
-  margin-bottom: 20px;
+  margin: 10px auto 20px auto;
   background-color: #f0f0f0;
 }
 
-#ErrorExplanation h2 {
+#errorExplanation h2 {
   text-align: left;
   font-weight: bold;
   padding: 5px 5px 5px 15px;
@@ -554,16 +568,15 @@ div.message {
   color: #fff;
 }
 
-#ErrorExplanation p {
+#errorExplanation p {
   color: #333;
   margin-bottom: 0;
   padding: 5px;
 }
 
-#ErrorExplanation ul li {
+#errorExplanation ul li {
   font-size: 1em;
   list-style: disc;
 }
 
-ul.warning { list-style-type: circle; font-size: 1em; }
 ul#prefs {list-style-type: disc; margin-left: 5px;}

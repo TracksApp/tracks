@@ -1,5 +1,11 @@
 <div id="full_width_display">
 
+	<% for name in ["notice", "warning", "message"] %>
+    <% if flash[name] %>
+      <%= "<div id=\"#{name}\">#{flash[name]}</div>" %>
+    <% end %>
+  <% end %>
+
 <div id="list-projects">
 <% for project in @projects %>
   <%= render_partial( 'project_listing', project ) %>

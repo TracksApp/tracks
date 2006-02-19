@@ -2,13 +2,15 @@
 admin_user:
   id: 1
   login: admin
-  password: <%= Digest::SHA1.hexdigest("change-me--abracadabra--") %>
-  word: <%= Digest::SHA1.hexdigest("change-me--badger--") %>
+  password: <%= Digest::SHA1.hexdigest("test-salt--abracadabra--") %>
+  word: <%= Digest::SHA1.hexdigest("adminSun Feb 19 14:42:45 GMT 20060.408173979260027") %>
   is_admin: 1
+  preferences: "---\nstaleness_starts: \"7\"\ndate_format: \"%d/%m/%Y\"\nno_completed: \"5\"\nadmin_email: butshesagirl@rousette.org.uk\nweek_starts: \"1\"\ndue_style: \"0\""
 
 other_user:
   id: 2
   login: jane
-  password: <%= Digest::SHA1.hexdigest("change-me--sesame--") %>
-  word: <%= Digest::SHA1.hexdigest("change-me--mouse--") %>
+  password: <%= Digest::SHA1.hexdigest("test-salt--sesame--") %>
+  word: <%= Digest::SHA1.hexdigest("other_userSun Feb 19 14:42:45 GMT 20060.408173979260027") %>
   is_admin: 0
+  preferences: "---\nstaleness_starts: \"7\"\ndate_format: \"%d/%m/%Y\"\nno_completed: \"5\"\nadmin_email: butshesagirl@rousette.org.uk\nweek_starts: \"1\"\ndue_style: \"0\""

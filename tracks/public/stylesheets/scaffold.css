@@ -45,7 +45,7 @@ td {background-color: #ff9;}
 }
 
 div.form {
-  width: 30%;
+  width: 350px;
   margin: 100px auto;
   padding: 10px;
   border: 1px solid #999;
@@ -78,3 +78,40 @@ div.memo {
   margin: 20px auto;
   padding: 0px;
   }
+  
+/* Error message styles */
+.fieldWithErrors {
+  padding: 2px;
+  background-color: red;
+  display: table;
+}
+
+#errorExplanation {
+  width: 335px;
+  border: 2px solid #ff0000;
+  padding: 7px;
+  padding-bottom: 12px;
+  margin: 10px auto 10px auto;
+  background-color: #f0f0f0;
+}
+
+#errorExplanation h2 {
+  text-align: left;
+  font-weight: bold;
+  padding: 5px 5px 5px 15px;
+  font-size: 12px;
+  margin: -7px;
+  background-color: #c00;
+  color: #fff;
+}
+
+#errorExplanation p {
+  color: #333;
+  margin-bottom: 0;
+  padding: 5px;
+}
+
+#errorExplanation ul li {
+  font-size: 1em;
+  list-style: disc;
+}

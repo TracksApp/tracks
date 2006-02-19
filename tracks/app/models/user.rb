@@ -15,8 +15,11 @@ class User < ActiveRecord::Base
     find_first(["login = ? AND password = ?", login, sha1(pass)])
   end
 
-  def change_password(pass)
-    update_attribute "password", self.class.sha1(pass)
+  def change_password(pass,pass_confirm)
+    self.password = pass
+    self.password_confirmation = pass_confirm
+#     update_attribute("password", self.class.sha1(pass)) if pass == pass_confirm
+#     update_attribute("word", self.class.sha1(login + Time.now.to_i.to_s + rand.to_s))
   end
 
 protected
@@ -26,17 +29,17 @@ protected
     Digest::SHA1.hexdigest("#{SALT}--#{pass}--")
   end
 
-  before_create :crypt_password_and_word
+  after_validation :crypt_password_and_word
 
   def crypt_password_and_word
     write_attribute("password", self.class.sha1(password)) if password == @password_confirmation
     write_attribute("word", self.class.sha1(login + Time.now.to_i.to_s + rand.to_s))
   end
   
-  validates_length_of :password, :within => 5..40
-  validates_length_of :login, :within => 3..80
   validates_presence_of :password, :login
+  validates_length_of :password, :within => 5..40
+  validates_confirmation_of :password  
+  validates_length_of :login, :within => 3..80
   validates_uniqueness_of :login, :on => :create
-  validates_confirmation_of :password, :on => :create
   
 end

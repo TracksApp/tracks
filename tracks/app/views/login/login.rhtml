@@ -2,7 +2,11 @@
 
 <div title="Account login" id="loginform" class="form">
 
-	<% if @flash["notice"] %><div id="notice"><%= @flash["notice"] %></div><% end %>
+	<% for name in ["notice", "warning", "message"] %>
+    <% if flash[name] %>
+      <%= "<div id=\"#{name}\">#{flash[name]}</div>" %>
+    <% end %>
+  <% end %>
 
     <h3>Please log in to use Tracks:</h3>
     
@@ -28,6 +32,7 @@
         <td><input type="submit" name="login" value="Login &#187;" class="primary" /></td>
       </tr>
     </table>
+    
 </div>
 
 <%= end_form_tag %>

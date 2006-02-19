@@ -36,4 +36,30 @@ class UserController < ApplicationController
     end
   end
   
+  def change_password
+    @page_title = "Change password"
+    @user = @session['user']
+  end
+  
+  def update_password
+    if do_change_password_for(@user)
+      redirect_to :controller => 'user', :action => 'preferences'
+    else
+      redirect_to :controller => 'user', :action => 'change_password'
+    end
+  end
+  
+  protected
+  
+  def do_change_password_for(user)
+    user.change_password(params[:updateuser][:password], params[:updateuser][:password_confirmation])
+    if user.save
+      flash["notice"] = "Password updated."
+      return true
+    else
+      flash["warning"] = 'There was a problem saving the password. Please retry.'
+      return false
+    end
+  end
+  
 end
