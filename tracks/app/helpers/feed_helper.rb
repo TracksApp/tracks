@@ -7,11 +7,10 @@ module FeedHelper
   #
   def build_text_page(list,context)
     result_string = ""
-      result_string << "\n" + context.name.upcase + ":\n"
-
-      list.each do |item|
+    list.each do |item|
       if item.context_id == context.id
-
+        result_string << "\n" + context.name.upcase + ":\n" if result_string.empty?
+      
         if item.due
           result_string << "    [" + format_date(item.due) + "] "
           result_string << item.description + " "
@@ -22,10 +21,9 @@ module FeedHelper
         if item.project_id
           result_string << "(" + item.project.name + ")"
         end
-      result_string << "\n"
+        result_string << "\n"
       end
-
-      end
+    end
     return result_string
   end
   

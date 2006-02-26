@@ -189,6 +189,11 @@ class TodoController < ApplicationController
     archive_date = Time.now - 32 * (60 * 60 * 24)
     @done_archive = @done.collect { |x| archive_date >= x.completed ? x:nil }.compact
   end
+  
+  def feeds
+    self.init
+    @page_title = "TRACKS::Feeds"
+  end
 
 
   protected

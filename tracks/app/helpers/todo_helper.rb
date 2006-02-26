@@ -110,4 +110,17 @@ module TodoHelper
     javascript_tag str
   end
   
+  def rss_feed_link(options = {})
+    image_tag = image_tag("feed-icon", :size => "16X16", :border => 0, :class => "rss-icon")
+    linkoptions = {:controller => 'feed', :action => 'rss', :name => "#{@session['user']['login']}", :token => "#{@session['user']['word']}"}
+    linkoptions.merge!(options)
+		link_to(image_tag, linkoptions, :title => "RSS feed")
+  end
+  
+  def text_feed_link(options = {})
+    linkoptions = {:controller => 'feed', :action => 'text', :name => "#{@session['user']['login']}", :token => "#{@session['user']['word']}"}
+    linkoptions.merge!(options)
+    link_to('<span class="feed">TXT</span>', linkoptions, :title => "Plain text feed" )
+  end
+  
 end

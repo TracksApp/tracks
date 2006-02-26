@@ -580,3 +580,37 @@ div.message {
 }
 
 ul#prefs {list-style-type: disc; margin-left: 5px;}
+
+#feedlegend {
+  padding: 2px;
+  border: 1px solid #CCC; 
+  background-color: #D2D3D6;
+  color: #666;
+  padding: 5px 20px;
+  text-align: left;
+}
+#feedlegend h3, #feedlegend dl, #feedlegend dt, #feedlegend dd {
+	display: inline;
+}
+#feedlegend dt {
+	margin-left: 15px;
+}
+#feedlegend dd {
+	margin-left: 3px;
+}
+#feedlegend p {
+	margin-bottom: 0px;
+}
+#feeds img.rss-icon {
+	margin-bottom: -4px;
+}
+#feeds li {
+	font-size:13px;
+    font-family: "Lucida Grande", Verdana, Geneva, Arial, sans-serif;
+}
+#feeds li h4 {
+	margin-top: 12px;
+	margin-bottom: 4px;
+	font-weight: normal;
+	font-style:oblique;
+}

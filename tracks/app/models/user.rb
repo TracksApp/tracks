@@ -4,7 +4,7 @@ require 'digest/sha1'
 class User < ActiveRecord::Base
   has_many :contexts, :order => "position ASC"
   has_many :projects, :order => "position ASC"
-  has_many :todos, :order => "completed DESC"
+  has_many :todos, :order => "completed DESC, created_at DESC"
   has_many :notes, :order => "created_at DESC"
   
   serialize :preferences

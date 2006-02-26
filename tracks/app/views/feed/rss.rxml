@@ -1,20 +1,21 @@
 xml.rss("version" => "2.0", "xmlns:dc" => "http://purl.org/dc/elements/1.1/") do
   xml.channel do 
-    xml.title("Tracks - Next Actions")
+    xml.title(@title)
     xml.link("http://#{@request.host}:#{@request.port}/todo/list")
-    xml.description("Lists the last 15 uncompleted next actions")
-    @not_done.each { |i|
+    xml.description(@description)
+    @todos.each { |i|
       xml.item do 
         xml.title(i.description)
 			 	xml.link(url_for(:only_path => false, :controller => 'context', :action => 'show', :name => urlize(i.context.name)))
 			 	item_notes = sanitize(markdown( i.notes )) if i.notes?
+			 	due = "<div>Due: #{format_date(i.due)}</div>\n" if i.due?
 			 	context_link = link_to( i.context.name, { :only_path => false, :controller => "context", :action => "show", :name => urlize(i.context.name) } )
 			 	project_link = if i.project_id?
 			 				link_to (i.project.name, { :only_path => false, :controller => "project", :action => "show", :name => urlize(i.project.name)} )
 			 			else
 			 				"<em>none</em>"
 			 			end
-			 		xml.description("#{item_notes||''}\n<div>Project:  #{project_link}</div>\n<div>Context:  #{context_link}</div>")
+			 		xml.description("#{due||''}#{item_notes||''}\n<div>Project:  #{project_link}</div>\n<div>Context:  #{context_link}</div>")
 			 	end
     }
   end

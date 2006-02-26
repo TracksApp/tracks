@@ -1,0 +1,67 @@
+<div id="display_box">
+  
+	<% for name in ["notice", "warning", "message"] %>
+    <% if flash[name] %>
+      <%= "<div id=\"#{name}\">#{flash[name]}</div>" %>
+    <% end %>
+  <% end %>
+
+	<div id="feeds">
+	<div id="feedlegend">
+		<h3>Legend:</h3>
+	<dl>
+		<dt><%= image_tag("feed-icon", :size => "16X16", :border => 0)%></dt><dd>RSS Feed</dd>
+		<dt><span class="feed">TXT</span></dt><dd>Plain Text Feed</dd>
+	</dl>
+	<p>Note: All feeds show only actions that have not been marked as done.</p>
+	</div>
+	<ul>
+		<li>
+			<%= rss_feed_link({ :limit => 15 }) %>
+			<%= text_feed_link({ :limit => 15 }) %>
+			Last 15 actions
+		</li>
+		<li>
+			<%= rss_feed_link %>
+			<%= text_feed_link %>
+			All actions
+		</li>
+		<li>
+			<%= rss_feed_link({ :due => 0 }) %>
+			<%= text_feed_link({ :due => 0 }) %>
+			Actions due today or earlier
+		</li>
+		<li>
+			<%= rss_feed_link({ :due => 6 }) %>
+			<%= text_feed_link({ :due => 6 }) %>
+			Actions due in 7 days or earlier
+		</li>
+		<li><h4>Feeds for uncompleted actions in a specific context:</h4>
+			<ul>
+				<% for context in @contexts %>
+				  	<li>
+					<%= rss_feed_link({ :context => context }) %>
+					<%= text_feed_link({ :context => context }) %>
+					Next actions in <strong><%=h context.name %></strong>
+					</li>
+				<% end %>
+			</ul>
+		</li>
+		<li><h4>Feeds for uncompleted actions in a specific project:</h4>
+			<ul>
+				<% for project in @projects %>
+					<li>
+					<%= rss_feed_link({ :project => project }) %>
+					<%= text_feed_link({ :project => project }) %>
+				  	Next actions for <strong><%=h project.name %></strong>
+					</li>
+				<% end %>
+			</ul>
+		</li>
+	</ul>
+	</div>
+</div><!-- End of display_box -->
+
+<div id="input_box">
+  <%= render "shared/sidebar" %>
+</div><!-- End of input box -->
