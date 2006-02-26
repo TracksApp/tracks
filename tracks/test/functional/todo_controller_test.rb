@@ -10,8 +10,11 @@ class TodoControllerTest < Test::Unit::TestCase
     @request, @response = ActionController::TestRequest.new, ActionController::TestResponse.new
   end
 
-  # Replace this with your real tests.
-  def test_truth
-    assert true
+  # Test whether unlogged in users are redirected to login
+  # 
+  def test_get_index
+    get :index
+    assert_redirected_to :controller => 'login', :action => 'login'
   end
+
 end
