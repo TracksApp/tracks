@@ -21,3 +21,4 @@ config.action_mailer.delivery_method = :test
 # config.transactional_fixtures = true
 # config.instantiated_fixtures = false
 # config.pre_loaded_fixtures = false
+SALT = "change-me" unless defined?( SALT ).nil?

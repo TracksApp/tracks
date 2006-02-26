@@ -78,7 +78,25 @@ div.memo {
   margin: 20px auto;
   padding: 0px;
   }
-  
+
+#warning {
+      padding: 2px;
+      border: 1px solid #ED2E38; 
+      background-color: #F6979C;
+      color: #000000;
+      margin: 15px 5px;
+      text-align: center;
+      }
+
+#message {
+      padding: 2px;
+      border: 1px solid #CCC; 
+      background-color: #D2D3D6;
+      color: #666;
+      margin: 15px 5px;
+      text-align: center;
+      }
+
 /* Error message styles */
 .fieldWithErrors {
   padding: 2px;

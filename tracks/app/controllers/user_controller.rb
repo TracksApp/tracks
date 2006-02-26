@@ -1,5 +1,6 @@
 class UserController < ApplicationController
   layout 'standard'
+  before_filter :login_required
   
   def index
     render_text "This will be our jumping-off point for managing user functions!"
@@ -37,7 +38,7 @@ class UserController < ApplicationController
   end
   
   def change_password
-    @page_title = "Change password"
+    @page_title = "TRACKS::Change password"
     @user = @session['user']
   end
   
