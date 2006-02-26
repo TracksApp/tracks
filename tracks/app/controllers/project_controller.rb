@@ -30,6 +30,10 @@ class ProjectController < ApplicationController
     @on_page = "project"
     @page_title = "TRACKS::Project: #{@project.name}"
     
+    if @contexts.empty?
+      flash['warning'] = 'You must add at least one context before adding next actions.'
+    end
+    
     if @not_done.empty?
       @msg_nd = "Currently there are no uncompleted actions in this project"
     else

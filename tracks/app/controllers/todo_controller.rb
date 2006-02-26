@@ -27,6 +27,10 @@ class TodoController < ApplicationController
 
     @contexts_to_show = @contexts.clone
     @contexts_to_show = @contexts_to_show.collect {|x| (!x.hide? and !x.find_not_done_todos.empty?) ? x:nil }.compact
+    
+    if @contexts.empty?
+      flash['warning'] = 'You must add at least one context before adding next actions.'
+    end
 
     # Set count badge to number of not-done, not hidden context items
     @count = @todos.collect { |x| ( !x.done? and !x.context.hide? ) ? x:nil }.compact.size
@@ -48,8 +52,9 @@ class TodoController < ApplicationController
     else
       @item.due = ""
     end
-
+    
     @saved = @item.save
+
     @on_page = "home"
     if @saved
       @up_count = @todos.collect { |x| ( !x.done? and !x.context.hide? ) ? x:nil }.compact.size.to_s
