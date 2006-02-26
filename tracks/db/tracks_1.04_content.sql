@@ -33,7 +33,7 @@ INSERT INTO projects (id,name,position,description,done,user_id) VALUES (3,'Evic
 -- Dump of table schema_info
 -- ------------------------------------------------------------
 
-INSERT INTO schema_info (version) VALUES (4);
+INSERT INTO schema_info (version) VALUES (7);
 
 
 -- Dump of table todos
