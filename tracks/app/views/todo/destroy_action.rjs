@@ -1,5 +1,8 @@
 if @saved
-  page.visual_effect :fade, "item-#{@item.id}-container", :duration => 0.4
+    page.remove "item-#{@item.id}-container"
+# For some reason, the code below works on the project and context pages, but 
+#  not on the todo/list page when the item being deleted has just been added    
+#  page.visual_effect :fade, "item-#{@item.id}-container", :duration => 0.4
   page.replace_html "badge_count", @down_count
 else
   page.replace_html "status", content_tag("div", content_tag("h2", "#{pluralize(@item.errors.count, "error")} prohibited this record from being saved") + content_tag("p", "There were problems with the following fields:") + content_tag("ul", @item.errors.each_full { |msg| content_tag("li", msg) }), "id" => "ErrorExplanation", "class" => "ErrorExplanation")

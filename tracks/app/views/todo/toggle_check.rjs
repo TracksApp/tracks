@@ -1,5 +1,8 @@
 if @saved
-  page.call "fadeAndRemoveItem", "item-#{@item.id}-container"
+  page.remove "item-#{@item.id}-container"
+  # For some reason, the code below works on the project and context pages, but 
+  #  not on the todo/list page when the item being deleted has just been added
+  # page.call "fadeAndRemoveItem", "item-#{@item.id}-container"
   if @item.done?
     page.insert_html :top, "completed", :partial => 'todo/item'
     page.visual_effect :highlight, "item-#{@item.id}", {'startcolor' => "'#99ff99'"}

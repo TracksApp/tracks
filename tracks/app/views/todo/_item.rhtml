@@ -3,7 +3,7 @@
   <div id="item-<%= item.id %>">
     <%= link_to_remote_todo( item, controller.controller_name ) %>
     <input type="checkbox" class="item-checkbox"
-           onclick="new Ajax.Request('/<%= controller.controller_name %>/toggle_check/<%= item.id %>', {asynchronous:true, evalScripts:true});"
+           onclick="new Ajax.Request('<%= url_for :controller => controller.controller_name, :action => 'toggle_check', :id => item.id  %>', {asynchronous:true, evalScripts:true});"
            name="item_id" value="<%= item.id %>"<% if item.done? %> checked="checked" <% end %> />
       <div class="description<%= staleness_class( item ) %>"><% # start of div which has a class 'description', and possibly 'stale_11', 'stale_12', 'stale_13' etc %>
 <% if item.done? -%>
