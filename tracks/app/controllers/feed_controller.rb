@@ -13,40 +13,7 @@ class FeedController < ApplicationController
 
   # Build an RSS feed
   def rss
-    conditions = '(done = 0)'
-    options = {:conditions => conditions}
-
-    limit = @params['limit']
-    options[:limit] = limit if limit
-    @description = limit ? "Lists the last #{limit} uncompleted next actions" : "Lists uncompleted next actions"
-    @title = "Tracks - Next Actions"
-
-    if @params['due']
-      due_within = @params['due'].to_i
-      due_within_date_s = due_within.days.from_now.strftime("%Y-%m-%d")
-      conditions << " AND (due <= '#{due_within_date_s}')"
-      @title << " due today" if (due_within == 0)
-      @title << " due within a week" if (due_within == 6)
-      @description << " with a due date #{due_within_date_s} or earlier"
-    end
-
-    context_id = @params['context']
-    if context_id
-      conditions << " AND (context_id = #{context_id})"
-      context = @user.contexts.find(context_id)
-      @title << " in #{context.name}"
-      @description << " in context '#{context.name}'"
-    end
-
-    project_id = @params['project']
-    if project_id
-      conditions << " AND (project_id = #{project_id})"
-      project = @user.projects.find(project_id)
-      @title << " for #{project.name}"
-      @description << " for project '#{project.name}'"
-    end
-    
-    @todos = @user.todos.find_all_by_done(false, options )
+    prepare_for_feed
     @headers["Content-Type"] = "text/xml; charset=utf-8"
   end
 
@@ -59,34 +26,10 @@ class FeedController < ApplicationController
   # curl [url from "TXT" link on todo/list]
   #
   def text
-    conditions = '(done = 0)'
-    options = {:conditions => conditions}
-
-    limit = @params['limit']
-    options[:limit] = limit if limit
-
-    if @params['due']
-      due_within = @params['due'].to_i
-      due_within_date_s = due_within.days.from_now.strftime("%Y-%m-%d")
-      conditions << " AND (due <= '#{due_within_date_s}')"
-    end
-
-    context_id = @params['context']
-    if context_id
-      conditions << " AND (context_id = #{context_id})"
-      context = @user.contexts.find(context_id)
-      @contexts = [context]
-    end
-
-    project_id = @params['project']
-    if project_id
-      conditions << " AND (project_id = #{project_id})"
-      project = @user.projects.find(project_id)
-    end
-    
-    @todos = @user.todos.find_all_by_done(false, options )
-    
-    if (!@contexts)
+    prepare_for_feed
+    if @params.key?('context')
+      @contexts = [ @user.contexts.find(@params['context']) ]
+    else    
       @contexts = @user.contexts.find_all_by_hide(false)
     end
     @headers["Content-Type"] = "text/plain; charset=utf-8"
@@ -103,4 +46,64 @@ protected
     end
   end
 
+  def prepare_for_feed
+    condition_builder = FindConditionBuilder.new
+    options = Hash.new
+  
+    condition_builder.add 'done = ?', false
+  
+    if @params.key?('limit')
+      options[:limit] = limit = @params['limit']
+      @description = limit ? "Lists the last #{limit} uncompleted next actions" : "Lists uncompleted next actions"
+    end
+    @title = "Tracks - Next Actions"
+    @description = "Filter: "
+  
+    if @params.key?('due')
+      due_within = @params['due'].to_i
+      condition_builder.add('due <= ?', due_within.days.from_now)
+      due_within_date_s = due_within.days.from_now.strftime("%Y-%m-%d")
+      @title << " due today" if (due_within == 0)
+      @title << " due within a week" if (due_within == 6)
+      @description << " with a due date #{due_within_date_s} or earlier"
+    end
+    
+    if @params.key?('context')
+      context = context = @user.contexts.find(@params['context'])
+      condition_builder.add('context_id = ?', context.id)
+      @title << " in #{context.name}"
+      @description << " in context '#{context.name}'"
+    end
+    
+    if @params.key?('project')
+      project = @user.projects.find(@params['project'])
+      condition_builder.add('project_id = ?', project.id)
+      @title << " for #{project.name}"
+      @description << " for project '#{project.name}'"
+    end
+  
+    options[:conditions] = condition_builder.to_conditions
+    
+    @todos = @user.todos.find(:all, options )
+    
+  end
+  
+  class FindConditionBuilder
+    
+    def initialize
+      @queries = Array.new
+      @params = Array.new
+    end
+    
+    def add(query, param)
+       @queries << query
+       @params << param
+    end
+    
+    def to_conditions
+      [@queries.join(' AND ')] + @params
+    end
+  end
+  
+  
 end
