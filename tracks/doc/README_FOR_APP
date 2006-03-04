@@ -117,7 +117,7 @@ WEBrick is the easiest server to get working to test out Tracks, and will be fin
 
 ### Apache
 
-See the file `tracks/README_RAILS` for an example of an Apache conf. The file `tracks/public/.htaccess` contains the necessary re-write rules to call `dispatch.cgi` or `dispatch.fcgi`. All other rules are handled by `routes.rb`
+See the file `tracks/README_RAILS` for an example of an Apache conf. The file `tracks/public/.htaccess` contains the necessary re-write rules to call `dispatch.cgi` or `dispatch.fcgi`. If you're running Debian, replace the `fastcgi-script` handler line in .htaccess with `fcgid-script`, which works much better with Debian, and avoids an extra installation. All other rules are handled by `routes.rb`
 
 ### Lighttpd
 

@@ -1,4 +1,6 @@
 # General Apache options
+# If you're on Debian try the following instead of the fastcgi-script line:
+# AddHandler fcgid-script .fcgi
 AddHandler fastcgi-script .fcgi
 AddHandler cgi-script .cgi
 Options +FollowSymLinks +ExecCGI
