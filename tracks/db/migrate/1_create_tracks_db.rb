@@ -4,13 +4,13 @@ class CreateTracksDb < ActiveRecord::Migration
     create_table :contexts do |t|
       t.column :name,           :string,      :null => false
       t.column :position,       :integer,    :null => false
-      t.column :hide,           :boolean,     :default => 0
+      t.column :hide,           :boolean,     :default => false
     end
 
     create_table :projects do |t|
       t.column :name,           :string,      :null => false
       t.column :position,       :integer,    :null => false
-      t.column :done,           :boolean,     :default => 0
+      t.column :done,           :boolean,     :default => false
     end
 
     create_table :todos do |t|
@@ -18,8 +18,8 @@ class CreateTracksDb < ActiveRecord::Migration
       t.column :project_id,     :integer
       t.column :description,    :string,      :null => false
       t.column :notes,          :text
-      t.column :done,           :boolean,     :default => 0, :null => false
-      t.column :created,        :datetime,    :default => '0000-00-00 00:00:00'
+      t.column :done,           :boolean,     :default => false, :null => false
+      t.column :created,        :datetime,    :default => '0000-01-01 00:00:00'
       t.column :due,            :date
       t.column :completed,      :datetime
     end
@@ -28,7 +28,7 @@ class CreateTracksDb < ActiveRecord::Migration
       t.column :login,           :string,      :limit => 80, :null => false
       t.column :password,        :string,      :limit => 40, :null => false
       t.column :word,            :string
-      t.column :is_admin,        :boolean,     :default => 0, :null => false
+      t.column :is_admin,        :boolean,     :default => false, :null => false
     end
   end
 
