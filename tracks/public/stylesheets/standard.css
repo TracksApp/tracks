@@ -150,7 +150,6 @@ h2 a:hover {
 #input_box {
       margin-left: 490px;
       margin-top: 20px;
-      width: 313px;
       padding: 0px 15px 0px 15px;
       }
       
@@ -213,7 +212,7 @@ input.item-checkbox {
       
 /* The notes which may be attached to an item */      
 .notes {
-      margin: 5px 20px;
+      margin: 5px;
       padding: 3px;
       border: 1px solid #F5ED59;
       background: #FAF6AE;
@@ -221,19 +220,17 @@ input.item-checkbox {
       }
       
 .notes p, .notes li {
-      padding: 1px 5px;
+      padding: 1px;
       margin: 0px;
       font-size: 12px;
       }
       
 .notes ul {
       list-style-type: disc;
-      margin-left: 5px;
 }
 
 .notes ol {
       list-style-type: decimal;
-      margin-left: 5px;
 }
 
 /* The notes for the project */
