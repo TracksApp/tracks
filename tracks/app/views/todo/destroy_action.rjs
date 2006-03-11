@@ -1,5 +1,5 @@
 if @saved
-    page.remove "item-#{@item.id}-container"
+  page.remove "item-#{@item.id}-container"
 # For some reason, the code below works on the project and context pages, but 
 #  not on the todo/list page when the item being deleted has just been added    
 #  page.visual_effect :fade, "item-#{@item.id}-container", :duration => 0.4
