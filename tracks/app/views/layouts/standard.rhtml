@@ -23,7 +23,8 @@
   <% if @count %>
     <span id="badge_count" class="badge"><%= @count %></span>
   <% end %>
-  <%= Time.now.strftime("%A, %d %B %Y") %></h1>
+  <%= Time.now.strftime("%A, %d %B %Y") %> <%= image_tag("spinner.gif", :size => "16X16", :border => 0, :id => 'busy', :style => 'display:none' ) %>
+  </h1>
 </div>
 <div id="navcontainer">
 <ul id="navlist">
