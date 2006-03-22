@@ -30,7 +30,7 @@ class FeedController < ApplicationController
     if @params.key?('context')
       @contexts = [ @user.contexts.find(@params['context']) ]
     else    
-      @contexts = @user.contexts.find_all_by_hide(false)
+      @contexts = @user.contexts.find_all_by_hide(false, "position ASC")
     end
     @headers["Content-Type"] = "text/plain; charset=utf-8"
   end
@@ -50,7 +50,7 @@ protected
     condition_builder = FindConditionBuilder.new
     options = Hash.new
   
-    condition_builder.add 'done = ?', false
+    condition_builder.add 'todos.done = ?', false
   
     if @params.key?('limit')
       options[:limit] = limit = @params['limit']
@@ -61,7 +61,7 @@ protected
   
     if @params.key?('due')
       due_within = @params['due'].to_i
-      condition_builder.add('due <= ?', due_within.days.from_now)
+      condition_builder.add('todos.due <= ?', due_within.days.from_now)
       due_within_date_s = due_within.days.from_now.strftime("%Y-%m-%d")
       @title << " due today" if (due_within == 0)
       @title << " due within a week" if (due_within == 6)
@@ -69,20 +69,21 @@ protected
     end
     
     if @params.key?('context')
-      context = context = @user.contexts.find(@params['context'])
-      condition_builder.add('context_id = ?', context.id)
+      context = @user.contexts.find(@params['context'])
+      condition_builder.add('todos.context_id = ?', context.id)
       @title << " in #{context.name}"
       @description << " in context '#{context.name}'"
     end
     
     if @params.key?('project')
       project = @user.projects.find(@params['project'])
-      condition_builder.add('project_id = ?', project.id)
+      condition_builder.add('todos.project_id = ?', project.id)
       @title << " for #{project.name}"
       @description << " for project '#{project.name}'"
     end
   
     options[:conditions] = condition_builder.to_conditions
+    options[:include] = :project
     
     @todos = @user.todos.find(:all, options )
     
