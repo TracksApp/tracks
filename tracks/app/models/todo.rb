@@ -10,7 +10,7 @@ class Todo < ActiveRecord::Base
   # Notes must be < 60,000 bytes (65,000 actually, but I'm being cautious)
   validates_presence_of :description
   validates_length_of :description, :maximum => 100
-  validates_length_of :notes, :maximum => 60000
+  validates_length_of :notes, :maximum => 60000, :allow_nil => true 
 
   def self.not_done( id=id )
     self.find(:all, :conditions =>[ "done = ? AND context_id = ?", false, id], :order =>"due IS NULL, due ASC, created_at ASC")
