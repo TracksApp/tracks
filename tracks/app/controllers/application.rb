@@ -2,6 +2,7 @@
 # Likewise will all the methods added be available for all controllers.
 
 require_dependency "login_system"
+require_dependency "redcloth"
 
 require 'date'
 
