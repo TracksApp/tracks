@@ -5,6 +5,7 @@ require_dependency "login_system"
 require_dependency "redcloth"
 
 require 'date'
+require 'Time'
 
 class ApplicationController < ActionController::Base
 

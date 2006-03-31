@@ -165,34 +165,26 @@ class TodoController < ApplicationController
   end
 
   # List the completed tasks, sorted by completion date
-  #
-  # Use days declaration? 1.day.ago?
+  # @done_today: in the last 24 hours
+  # @done_this_week: in the last week
+  # @done_this_month: in the last 4 weeks (<=28 days)
   def completed
     self.init
     @page_title = "TRACKS::Completed tasks"
 
-    day = (60 * 60 * 24)
-    today = Time.now
-
-    today_date = today - (1 * day)
-    week_begin = today - (1 * day)
-    week_end = today - (7 * day)
-    month_begin = today - (8 * day)
-    month_end = today - (31 * day)
-
-    @done_today = @done.collect { |x| today_date <= x.completed ? x:nil }.compact
-    @done_this_week = @done.collect { |x| week_begin >= x.completed && week_end <= x.completed ? x:nil }.compact
-    @done_this_month = @done.collect { |x| month_begin >= x.completed && month_end <= x.completed ? x:nil }.compact
-
+    unless @done.nil?
+      @done_today = @done.collect { |x| x.completed >= 1.day.ago ? x:nil }.compact
+      @done_this_week = @done.collect { |x| 1.week.ago <= x.completed ? x:nil }.compact
+      @done_this_month = @done.collect { |x| 4.week.ago <= x.completed ? x:nil }.compact
+    end
   end
 
-  # Archived completed items, older than 31 days
+  # Archived completed items, older than 28 days
   #
   def completed_archive
     self.init
     @page_title = "TRACKS::Archived completed tasks"
-    archive_date = Time.now - 32 * (60 * 60 * 24)
-    @done_archive = @done.collect { |x| archive_date >= x.completed ? x:nil }.compact
+    @done_archive = @done.collect { |x| 28.day.ago > x.completed ? x:nil }.compact
   end
   
   def feeds
@@ -218,7 +210,7 @@ class TodoController < ApplicationController
       @projects = @user.projects
       @contexts = @user.contexts
       @todos = @user.todos
-      @done = @todos.find_all { |x| x.done }
+      @done = @todos.find(:all, :conditions => ["done = ?", true])
     end
     
 end
