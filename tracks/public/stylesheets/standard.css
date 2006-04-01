@@ -279,6 +279,9 @@ a.footer_link:hover {color: #fff; background-color: #cc3334 !important;}
       text-align: center;
       }
     
+#status .confirmation {
+	width: 220px;
+}
 #warning, .warning {
       padding: 2px;
       border: 1px solid #ED2E38; 

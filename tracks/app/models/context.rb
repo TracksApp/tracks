@@ -25,7 +25,8 @@ class Context < ActiveRecord::Base
   def find_done_todos
     todos = Todo.find :all, :conditions => ["todos.context_id = #{id} AND todos.done = ?", true],
                       :include => [:context, :project],
-                      :order => "due IS NULL, due ASC, created_at ASC"
+                      :order => "due IS NULL, due ASC, created_at ASC",
+                      :limit => @user.preferences["no_completed"]
   end
 
   # Returns a count of next actions in the given context
