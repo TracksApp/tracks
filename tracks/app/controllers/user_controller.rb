@@ -39,7 +39,6 @@ class UserController < ApplicationController
   
   def change_password
     @page_title = "TRACKS::Change password"
-    @user = @session['user']
   end
   
   def update_password

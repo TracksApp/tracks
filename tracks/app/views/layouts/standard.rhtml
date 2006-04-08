@@ -12,7 +12,7 @@
   <%= javascript_include_tag "todo-items" %>
   
   <link rel="shortcut icon" href="<%= url_for(:controller => 'favicon.ico') %>" />
-  <%= auto_discovery_link_tag(:rss,{:controller => "feed", :action => "na_feed", :name => "#{@session['user']['login']}", :token => "#{@session['user']['word']}"}, {:title => "RSS feed of next actions"})  %>
+  <%= auto_discovery_link_tag(:rss,{:controller => "feed", :action => "na_feed", :name => "#{@user.login}", :token => "#{@user.word}"}, {:title => "RSS feed of next actions"})  %>
 
 <title><%= @page_title %></title>
 
@@ -37,11 +37,11 @@
   <li><a href="javascript:toggleAll('notes','block')" accesskey="S" title="Show all notes">Show</a></li>
   <li><a href="javascript:toggleAll('notes','none')" accesskey="H" title="Hide all notes">Hide</a></li>
   <li><%= link_to(image_tag("feed-icon", :size => "16X16", :border => 0), {:controller => "todo", :action => "feeds"}, :title => "See a list of available feeds" ) %></li>
-  <li><%= link_to "Logout (#{@session['user']['login']}) &#187;", :controller => "login", :action=>"logout"%></li>
+  <li><%= link_to "Logout (#{@user.login}) &#187;", :controller => "login", :action=>"logout"%></li>
 </ul>
 </div>
 <div id="info"></div>
-<% unless @controller_name == 'feed' or @session['noexpiry'] == "on" -%>
+<% unless @controller_name == 'feed' or session['noexpiry'] == "on" -%>
 <%= periodically_call_remote( :url => {:controller => "login", :action => "check_expiry"},
                               :frequency => (5*60)) %>
 <% end -%>                              

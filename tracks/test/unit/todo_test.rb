@@ -18,7 +18,7 @@ class TodoTest < Test::Unit::TestCase
     assert_equal 2, @not_completed1.project_id
     assert_equal "Call Bill Gates to find out how much he makes per day", @not_completed1.description
     assert_nil @not_completed1.notes
-    assert_equal false, @not_completed1.done
+    assert_equal 0, @not_completed1.done
     assert_equal "2004-11-28 16:01:00", @not_completed1.created_at.strftime("%Y-%m-%d %H:%M:%S")
     assert_equal "2004-10-30", @not_completed1.due.strftime("%Y-%m-%d")
     assert_nil @not_completed1.completed
@@ -27,7 +27,7 @@ class TodoTest < Test::Unit::TestCase
   
   def test_completed
     assert_kind_of Todo, @completed
-    assert_equal true, @completed.done
+    assert_equal 1, @completed.done
     assert_not_nil @completed.completed
   end
   
@@ -46,7 +46,7 @@ class TodoTest < Test::Unit::TestCase
     @not_completed2.description = generate_random_string(101)
     assert !@not_completed2.save
     assert_equal 1, @not_completed2.errors.count
-    assert_equal "is too long (max is 100 characters)", @not_completed2.errors.on(:description)
+    assert_equal "is too long (maximum is 100 characters)", @not_completed2.errors.on(:description)
   end
   
   def test_validate_length_of_notes
@@ -54,6 +54,6 @@ class TodoTest < Test::Unit::TestCase
     @not_completed2.notes = generate_random_string(60001)
     assert !@not_completed2.save
     assert_equal 1, @not_completed2.errors.count
-    assert_equal "is too long (max is 60000 characters)", @not_completed2.errors.on(:notes)
+    assert_equal "is too long (maximum is 60000 characters)", @not_completed2.errors.on(:notes)
   end
 end

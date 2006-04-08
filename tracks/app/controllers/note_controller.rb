@@ -6,7 +6,6 @@ class NoteController < ApplicationController
   layout "standard"
 
   def index
-    @user = @session['user']
     @all_notes = @user.notes
     @page_title = "TRACKS::All notes"
   end
@@ -19,7 +18,6 @@ class NoteController < ApplicationController
   # Add a new note to this project
   #
   def add
-    @user = @session['user']
     note = @user.notes.build
     note.attributes = @params["new_note"]
 
@@ -55,7 +53,7 @@ class NoteController < ApplicationController
 
     def check_user_return_note
       note = Note.find_by_id( @params['id'] )
-      if @session['user'] == note.user
+      if @user == note.user
         return note
       else
         render_text ""

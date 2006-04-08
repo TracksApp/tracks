@@ -2,10 +2,10 @@
 # Likewise will all the methods added be available for all controllers.
 
 require_dependency "login_system"
-require_dependency "redcloth"
+require "redcloth"
 
 require 'date'
-require 'Time'
+require 'time'
 
 class ApplicationController < ActionController::Base
 
@@ -35,20 +35,20 @@ class ApplicationController < ActionController::Base
 
   def set_session_expiration
     # http://wiki.rubyonrails.com/rails/show/HowtoChangeSessionOptions
-    unless @session == nil
-      return if @controller_name == 'feed' or @session['noexpiry'] == "on"
+    unless session == nil
+      return if @controller_name == 'feed' or session['noexpiry'] == "on"
       # If the method is called by the feed controller (which we don't have under session control)
       # or if we checked the box to keep logged in on login
       # don't set the session expiry time.
-      if @session
+      if session
         # Get expiry time (allow ten seconds window for the case where we have none)
-        expiry_time = @session['expiry_time'] || Time.now + 10
+        expiry_time = session['expiry_time'] || Time.now + 10
         if expiry_time < Time.now
           # Too late, matey...  bang goes your session!
           reset_session
         else
           # Okay, you get another hour
-          @session['expiry_time'] = Time.now + (60*60)
+          session['expiry_time'] = Time.now + (60*60)
         end
       end
     end
@@ -57,7 +57,7 @@ class ApplicationController < ActionController::Base
   private
   
   def get_current_user
-    @user = @session['user']
+    @user = User.find(session['user_id']) if session['user_id'] 
   end
   
 end

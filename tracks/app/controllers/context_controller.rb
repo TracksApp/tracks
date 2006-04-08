@@ -31,7 +31,7 @@ class ContextController < ApplicationController
   # Creates a new context via Ajax helpers
   #
   def new_context
-    context = @session['user'].contexts.build
+    context = @user.contexts.build
     context.attributes = @params['context']
     context.name = deurlize(context.name)
 
@@ -177,7 +177,6 @@ class ContextController < ApplicationController
   protected
 
     def check_user_set_context
-      @user = @session['user']
       if @params["name"]
         @context = Context.find_by_name_and_user_id(deurlize(@params["name"]), @user.id)
       elsif @params['id']
@@ -189,35 +188,33 @@ class ContextController < ApplicationController
         return @context
       else
         @context = nil # Should be nil anyway.
-        flash["warning"] = "Item and session user mis-match: #{@context.user_id} and #{@session['user'].id}!"
+        flash["warning"] = "Item and session user mis-match: #{@context.user_id} and #{@user.id}!"
         render_text ""
       end
     end
 
     def check_user_matches_context_user(id)
-       @user = @session['user']
        @context = Context.find_by_id_and_user_id(id, @user.id)
        if @user == @context.user
          return @context
        else
          @context = nil
-         flash["warning"] = "Project and session user mis-match: #{@context.user_id} and #{@session['user'].id}!"
+         flash["warning"] = "Project and session user mis-match: #{@context.user_id} and #{@user.id}!"
          render_text ""
        end
     end
     
     def check_user_return_item
       item = Todo.find( @params['id'] )
-      if @session['user'] == item.user
+      if @user == item.user
         return item
       else
-        flash["warning"] = "Item and session user mis-match: #{item.user.name} and #{@session['user'].name}!"
+        flash["warning"] = "Item and session user mis-match: #{item.user.name} and #{@user.name}!"
         render_text ""
       end
     end
      
     def init
-      @user = @session['user']
       @projects = @user.projects.collect { |x| x.done? ? nil:x }.compact
       @contexts = @user.contexts
       @todos = @user.todos

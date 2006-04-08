@@ -18,7 +18,7 @@ class UserTest < Test::Unit::TestCase
     assert_equal "admin", @admin_user.login
     assert_equal "#{Digest::SHA1.hexdigest("#{SALT}--abracadabra--")}", @admin_user.password
     assert_not_nil @admin_user.word
-    assert_equal true, @admin_user.is_admin
+    assert_equal 1, @admin_user.is_admin
   end
 
   # Test a non-admin user model
@@ -28,7 +28,7 @@ class UserTest < Test::Unit::TestCase
     assert_equal "jane", @other_user.login
     assert_equal "#{Digest::SHA1.hexdigest("#{SALT}--sesame--")}", @other_user.password
     assert_not_nil @other_user.word
-    assert_equal false, @other_user.is_admin
+    assert_equal 0, @other_user.is_admin
   end
 
   # ============================================
@@ -42,7 +42,7 @@ class UserTest < Test::Unit::TestCase
     @other_user.password = "four"
     assert !@other_user.save
     assert_equal 1, @other_user.errors.count
-    assert_equal "is too short (min is 5 characters)", @other_user.errors.on(:password)
+    assert_equal "is too short (minimum is 5 characters)", @other_user.errors.on(:password)
   end
 
   # Test a password longer than 40 characters
@@ -52,7 +52,7 @@ class UserTest < Test::Unit::TestCase
     @other_user.password = generate_random_string(41)
     assert !@other_user.save
     assert_equal 1, @other_user.errors.count
-    assert_equal "is too long (max is 40 characters)", @other_user.errors.on(:password)
+    assert_equal "is too long (maximum is 40 characters)", @other_user.errors.on(:password)
   end  
   
   # Test that correct length password is valid
@@ -70,7 +70,7 @@ class UserTest < Test::Unit::TestCase
     @other_user.password = ""
     assert !@other_user.save
     assert_equal 2, @other_user.errors.count
-    assert_equal ["is too short (min is 5 characters)", "can't be blank"], @other_user.errors.on(:password)
+    assert_equal ["is too short (minimum is 5 characters)", "can't be blank"], @other_user.errors.on(:password)
   end
   
   # Test a login shorter than 3 characters
@@ -80,7 +80,7 @@ class UserTest < Test::Unit::TestCase
     @other_user.login = "ba"
     assert !@other_user.save
     assert_equal 1, @other_user.errors.count
-    assert_equal "is too short (min is 3 characters)", @other_user.errors.on(:login)
+    assert_equal "is too short (minimum is 3 characters)", @other_user.errors.on(:login)
   end
   
   # Test a login longer than 80 characters
@@ -90,7 +90,7 @@ class UserTest < Test::Unit::TestCase
     @other_user.login = generate_random_string(81)
     assert !@other_user.save
     assert_equal 1, @other_user.errors.count
-    assert_equal "is too long (max is 80 characters)", @other_user.errors.on(:login)
+    assert_equal "is too long (maximum is 80 characters)", @other_user.errors.on(:login)
   end  
   
   # Test that correct length login is valid
@@ -108,7 +108,7 @@ class UserTest < Test::Unit::TestCase
     @other_user.login = ""
     assert !@other_user.save
     assert_equal 2, @other_user.errors.count
-    assert_equal ["is too short (min is 3 characters)", "can't be blank"], @other_user.errors.on(:login)
+    assert_equal ["is too short (minimum is 3 characters)", "can't be blank"], @other_user.errors.on(:login)
   end
 
 end

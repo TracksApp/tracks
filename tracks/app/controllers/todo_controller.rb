@@ -197,16 +197,15 @@ class TodoController < ApplicationController
 
     def check_user_return_item
       item = Todo.find( @params['id'] )
-      if @session['user'] == item.user
+      if @user == item.user
         return item
       else
-        flash["warning"] = "Item and session user mis-match: #{item.user.name} and #{@session['user'].name}!"
+        flash["warning"] = "Item and session user mis-match: #{item.user.name} and #{@user.name}!"
         render_text ""
       end
     end
 
     def init
-      @user = @session['user']
       @projects = @user.projects
       @contexts = @user.contexts
       @todos = @user.todos

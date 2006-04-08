@@ -4,18 +4,18 @@ require 'test_help'
 
 class Test::Unit::TestCase
   # Turn off transactional fixtures if you're working with MyISAM tables in MySQL
-  self.use_transactional_fixtures = false
+  self.use_transactional_fixtures = true
   
   # Instantiated fixtures are slow, but give you @david where you otherwise would need people(:david)
-  self.use_instantiated_fixtures  = true
+  self.use_instantiated_fixtures  = false
 
   # Add more helper methods to be used by all tests here...
   # Logs in a user and returns the user object found in the session object
   #
   def login(login,password,expiry)
     post :login, {:user_login => login, :user_password => password, :user_noexpiry => expiry}
-    assert_not_nil(session['user'])
-    return User.find(session['user'].id)
+    assert_not_nil(session['user_id'])
+    return User.find(session['user_id'])
   end
   
   # Creates a new users with the login and password given

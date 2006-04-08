@@ -54,7 +54,7 @@ class ProjectController < ApplicationController
   end
 
   def new_project
-    project = @session['user'].projects.build
+    project = @user.projects.build
     project.attributes = @params['project']
     project.name = deurlize(project.name)
 
@@ -212,7 +212,6 @@ class ProjectController < ApplicationController
   protected
     
     def check_user_set_project
-      @user = @session['user']
       if @params["name"]
         @project = Project.find_by_name_and_user_id(deurlize(@params["name"]), @user.id)
       elsif @params['id']
@@ -224,35 +223,33 @@ class ProjectController < ApplicationController
         return @project
       else
         @project = nil # Should be nil anyway
-        flash["warning"] = "Project and session user mis-match: #{@project.user_id} and #{@session['user'].id}!"
+        flash["warning"] = "Project and session user mis-match: #{@project.user_id} and #{@user.id}!"
         render_text ""
       end
     end
     
     def check_user_matches_project_user(id)
-      @user = @session['user']
       @project = Project.find_by_id_and_user_id(id, @user.id)
       if @user == @project.user
         return @project
       else
         @project = nil
-        flash["warning"] = "Project and session user mis-match: #{@project.user_id} and #{@session['user'].id}!"
+        flash["warning"] = "Project and session user mis-match: #{@project.user_id} and #{@user.id}!"
         render_text ""
       end
     end
     
     def check_user_return_item
       item = Todo.find( @params['id'] )
-      if @session['user'] == item.user
+      if @user == item.user
         return item
       else
-        flash["warning"] = "Item and session user mis-match: #{item.user.name} and #{@session['user'].name}!"
+        flash["warning"] = "Item and session user mis-match: #{item.user.name} and #{@user.name}!"
         render_text ""
       end
     end
      
     def init
-      @user = @session['user']
       @projects = @user.projects
       @contexts = @user.contexts
       @todos = @user.todos

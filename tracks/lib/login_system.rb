@@ -46,7 +46,7 @@ module LoginSystem
       return true  
     end
 
-    if @session['user'] and authorize?(@session['user'])
+    if @session['user_id'] and authorize?(User.find(@session['user_id']))
       return true
     end
 
