@@ -2,6 +2,14 @@
 first_notes:
   id: 1
   user_id: 1
+  project_id: 1
+  body: Need to collect a catalogue from Time Machines R Us
+  created_at: 2006-04-09 12:09:00
+  updated_at: 2006-04-09 12:09:00
 another_notes:
   id: 2
   user_id: 1
+  project_id: 1
+  body: Should I go for a swirly effect or a whooshy one?
+  created_at: 2006-04-08 11:01:05
+  updated_at: 2006-04-08 11:01:05
