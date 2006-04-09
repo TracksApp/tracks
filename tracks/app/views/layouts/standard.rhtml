@@ -37,6 +37,9 @@
   <li><a href="javascript:toggleAll('notes','block')" accesskey="S" title="Show all notes">Show</a></li>
   <li><a href="javascript:toggleAll('notes','none')" accesskey="H" title="Hide all notes">Hide</a></li>
   <li><%= link_to(image_tag("feed-icon", :size => "16X16", :border => 0), {:controller => "todo", :action => "feeds"}, :title => "See a list of available feeds" ) %></li>
+  <% if @user.is_admin? -%>
+    <li><%= link_to "Add users", :controller => "login", :action => "signup" %>
+  <% end -%>
   <li><%= link_to "Logout (#{@user.login}) &#187;", :controller => "login", :action=>"logout"%></li>
 </ul>
 </div>

@@ -78,7 +78,6 @@ a.show_notes:hover {background-image: url(../images/notes_on.png); background-re
 
 #navcontainer {
       margin: 15px;
-      width: 822px;
       }
             
 #navlist {
@@ -148,8 +147,7 @@ h2 a:hover {
       }
       
 #input_box {
-      margin-left: 490px;
-      margin-top: 20px;
+      margin: 20px 15px 0px 490px;
       padding: 0px 15px 0px 15px;
       }
       
