@@ -24,7 +24,10 @@ class TodoController < ApplicationController
     @on_page = "home"
     @page_title = "TRACKS::List tasks"
     
-    @done = @done[0..(@user.preferences["no_completed"].to_i-1)]
+    # If you've set no_completed to zero, the completed items box
+    # isn't shown on the home page
+    max_completed = @user.preferences["no_completed"].to_i-1
+    @done = (max_completed > 0) ? @done[0..max_completed] : nil
 
     @contexts_to_show = @contexts.clone
     @contexts_to_show = @contexts_to_show.collect {|x| (!x.hide? and !x.find_not_done_todos.empty?) ? x:nil }.compact

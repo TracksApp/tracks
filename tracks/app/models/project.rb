@@ -24,7 +24,8 @@ class Project < ActiveRecord::Base
 
   def find_done_todos
     todos = Todo.find :all, :conditions => ["project_id = #{id} AND done = ?", true],
-                      :order => "due IS NULL, due ASC, created_at ASC"
+                      :order => "due IS NULL, due ASC, created_at ASC",
+                      :limit => @user.preferences["no_completed"].to_i
   end
 
   # Returns a count of next actions in the given project

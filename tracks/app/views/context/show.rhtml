@@ -7,7 +7,9 @@
   <% end %>
 
 <%= render :partial => "context/context", :locals => { :context => @context, :collapsible => false } %>
-<%= render :partial => "todo/completed", :locals => { :done => @done, :collapsible => false, :append_descriptor => "in this context (last #{@user.preferences["no_completed"]})" } %>
+<% unless @done.empty? -%>
+  <%= render :partial => "todo/completed", :locals => { :done => @done, :collapsible => false, :append_descriptor => "in this context (last #{@user.preferences["no_completed"]})" } %>
+<% end -%>
 
 </div><!-- [end:display_box] -->
 

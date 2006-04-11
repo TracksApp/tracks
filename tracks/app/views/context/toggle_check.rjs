@@ -1,12 +1,15 @@
 if @saved
-  page.call "fadeAndRemoveItem", "item-#{@item.id}-container"
+  page.remove "item-#{@item.id}-container"
   if @item.done?
-    page.insert_html :top, "completed", :partial => 'todo/item'
-    page.visual_effect :highlight, "item-#{@item.id}", {'startcolor' => "'#99ff99'"}
-    if @down_count == '0'
-      page.show "empty-nd"
+    # Don't try to insert contents into a non-existent container!
+    unless @user.preferences["no_completed"].to_i == 0
+      page.insert_html :top, "completed", :partial => 'todo/item'
+      page.visual_effect :highlight, "item-#{@item.id}", {'startcolor' => "'#99ff99'"}
+      if @down_count == '0'
+        page.show "empty-nd"
+      end
+      page.hide "empty-d" # If we've checked something as done, completed items can't be empty
     end
-    page.hide "empty-d" # If we've checked something as done, completed items can't be empty
   else
     page.call "ensureVisibleWithEffectAppear", "c#{@item.context_id}"
     page.insert_html :bottom, "c#{@item.context_id}", :partial => 'todo/item'

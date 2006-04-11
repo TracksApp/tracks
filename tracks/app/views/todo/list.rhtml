@@ -8,8 +8,10 @@
   
   <%= render :partial => "context/context", :collection => @contexts_to_show, 
             :locals => { :collapsible => true } %>
-  <%= render :partial => "todo/completed", 
+  <% unless @done.nil? -%>
+    <%= render :partial => "todo/completed", 
             :locals => { :done => @done, :collapsible => true, :append_descriptor => nil } %>
+  <% end -%>
 </div><!-- End of display_box -->
 
 <div id="input_box">
