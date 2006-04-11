@@ -23,6 +23,7 @@ class TodoController < ApplicationController
     self.init
     @on_page = "home"
     @page_title = "TRACKS::List tasks"
+    
     @done = @done[0..(@user.preferences["no_completed"].to_i-1)]
 
     @contexts_to_show = @contexts.clone
@@ -116,21 +117,17 @@ class TodoController < ApplicationController
     if @params["on_project_page"] == true
       @on_page = "project"
     end
-    item = check_user_return_item
-    item.attributes = @params["item"]
+    @item = check_user_return_item
+    @original_item_context_id = @item.context_id
+    @item.attributes = @params["item"]
 
-    if item.due?
-      item.due = Date.strptime(@params["item"]["due"], @user.preferences["date_format"])
+    if @item.due?
+      @item.due = Date.strptime(@params["item"]["due"], @user.preferences["date_format"])
     else
-      item.due = ""
+      @item.due = ""
     end
 
-    if item.save
-	    render :partial => 'item', :object => item
-    else
-      flash["warning"] = "Couldn't update the action"
-      render_text ""
-    end
+    @saved = @item.save
   end
 
   # Delete a next action

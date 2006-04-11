@@ -1,0 +1,14 @@
+if @saved
+  if @item.context_id == @original_item_context_id
+    page.replace_html "item-#{@item.id}-container", :partial => 'todo/item'
+    page.visual_effect :highlight, "item-#{@item.id}-container", :duration => 3
+  else
+    page["item-#{@item.id}-container"].remove
+    page.insert_html :bottom, "c#{@item.context_id}items", :partial => 'todo/item'
+    page.visual_effect :highlight, "item-#{@item.id}-container", :duration => 3
+  end
+else
+  page.hide "info"
+  page.replace_html "info", content_tag("div", content_tag("div", "#{pluralize(@item.errors.count, "error")} prohibited this record from being saved",  "id" => "warning", "class" => "warning") + content_tag("p", "There were problems with the following fields:") + content_tag("ul", @item.errors.each_full { |msg| content_tag("li", msg) }))
+  page.visual_effect :appear, 'info', :duration => 0.5
+end

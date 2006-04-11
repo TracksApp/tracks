@@ -9,9 +9,7 @@ module TodoHelper
 
   def form_remote_tag_edit_todo( item )
     form_remote_tag( :url => { :controller => 'todo', :action => 'update_action', :id => item.id },
-                    :html => { :id => "form-action-#{item.id}", :class => "inline-form" },
-                    :update => "item-#{item.id}-container",
-                    :complete => visual_effect(:appear, "item-#{item.id}-container")
+                    :html => { :id => "form-action-#{item.id}", :class => "inline-form" }
                    )
   end
   
