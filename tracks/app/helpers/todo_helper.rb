@@ -121,4 +121,10 @@ module TodoHelper
     link_to('<span class="feed">TXT</span>', linkoptions, :title => "Plain text feed" )
   end
   
+  def ical_feed_link(options = {})
+    linkoptions = {:controller => 'feed', :action => 'ical', :name => "#{@user.login}", :token => "#{@user.word}"}
+    linkoptions.merge!(options)
+    link_to('<span class="feed">iCal</span>', linkoptions, :title => "iCal feed")
+  end
+  
 end

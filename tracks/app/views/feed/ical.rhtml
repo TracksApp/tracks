@@ -1,0 +1,35 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//rousette.org.uk//Tracks 1.04//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VTIMEZONE
+TZID:Europe/London
+LAST-MODIFIED:<%= Time.now.strftime("%Y%m%dT%H%M%SZ") %>
+BEGIN:DAYLIGHT
+DTSTART:20060326T020000
+TZOFFSETTO:+0100
+TZOFFSETFROM:+0000
+TZNAME:BST
+END:DAYLIGHT
+BEGIN:STANDARD
+DTSTART:20061029T020000
+TZOFFSETTO:+0000
+TZOFFSETFROM:+0100
+TZNAME:GMT
+END:STANDARD
+END:VTIMEZONE
+<% for @todo in @todos -%>
+BEGIN:VTODO
+DTSTAMP:<%= @todo.created_at.strftime("%Y%m%dT%H%M%SZ") %>
+DTSTART;VALUE=DATE:<%= @todo.created_at.strftime("%Y%m%d") %>
+SUMMARY:<%= @todo.description %>
+<% if @todo.notes? -%>
+DESCRIPTION:<%= @todo.notes %>
+<% end -%>
+<% if @todo.due -%>
+DUE;VALUE=DATE:<%= @todo.due.strftime("%Y%m%d") %>
+<% end -%>
+END:VTODO
+<% end -%>
+END:VCALENDAR

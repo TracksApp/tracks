@@ -34,6 +34,20 @@ class FeedController < ApplicationController
     end
     @headers["Content-Type"] = "text/plain; charset=utf-8"
   end
+  
+  # Builds an iCal compatible export of uncompleted todos
+  # so that each action forms a VTODO in your iCal calendar.
+  # Due dates are supported, and notes are included.
+  #
+  def ical
+    prepare_for_feed
+    if @params.key?('context')
+      @contexts = [ @user.contexts.find(@params['context']) ]
+    else    
+      @contexts = @user.contexts.find_all_by_hide(false, "position ASC")
+    end
+    @headers["Content-Type"] = "text/plain; charset=utf-8"
+  end
 
 protected
 

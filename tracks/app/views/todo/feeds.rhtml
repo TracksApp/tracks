@@ -12,6 +12,7 @@
 	<dl>
 		<dt><%= image_tag("feed-icon", :size => "16X16", :border => 0)%></dt><dd>RSS Feed</dd>
 		<dt><span class="feed">TXT</span></dt><dd>Plain Text Feed</dd>
+		<dt><span class="feed">iCal</span></dt><dd>iCal feed</dd>
 	</dl>
 	<p>Note: All feeds show only actions that have not been marked as done.</p>
 	</div>
@@ -19,21 +20,25 @@
 		<li>
 			<%= rss_feed_link({ :limit => 15 }) %>
 			<%= text_feed_link({ :limit => 15 }) %>
+			<%= ical_feed_link({ :limit => 15 }) %>
 			Last 15 actions
 		</li>
 		<li>
 			<%= rss_feed_link %>
 			<%= text_feed_link %>
+			<%= ical_feed_link %>
 			All actions
 		</li>
 		<li>
 			<%= rss_feed_link({ :due => 0 }) %>
 			<%= text_feed_link({ :due => 0 }) %>
+			<%= ical_feed_link({ :due => 0 }) %>
 			Actions due today or earlier
 		</li>
 		<li>
 			<%= rss_feed_link({ :due => 6 }) %>
 			<%= text_feed_link({ :due => 6 }) %>
+			<%= ical_feed_link({ :due => 6 }) %>
 			Actions due in 7 days or earlier
 		</li>
 		<li><h4>Feeds for uncompleted actions in a specific context:</h4>
@@ -42,6 +47,7 @@
 				  	<li>
 					<%= rss_feed_link({ :context => context }) %>
 					<%= text_feed_link({ :context => context }) %>
+					<%= ical_feed_link({ :context => context }) %>
 					Next actions in <strong><%=h context.name %></strong>
 					</li>
 				<% end %>
@@ -53,6 +59,7 @@
 					<li>
 					<%= rss_feed_link({ :project => project }) %>
 					<%= text_feed_link({ :project => project }) %>
+					<%= ical_feed_link({ :project => project }) %>
 				  	Next actions for <strong><%=h project.name %></strong>
 					</li>
 				<% end %>

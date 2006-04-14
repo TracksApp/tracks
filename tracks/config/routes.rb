@@ -50,8 +50,7 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'notes', :controller => 'note', :action => 'index'
 
   # Feed Routes
-  map.connect 'feed/:action/:name/:token', :controller => 'feed' 
-
+  map.connect 'feed/:action/:name/:token', :controller => 'feed'
 
   #map.connect 'add_item', :controller => 'todo', :action => 'add_item'
 
