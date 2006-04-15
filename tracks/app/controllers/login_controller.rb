@@ -27,17 +27,26 @@ class LoginController < ApplicationController
   end
 
   def signup
-    admin_logged_in = User.find(:all, 
-                                :conditions => [ "id = ? and is_admin = ?", @user.id, true ])
-    unless (User.find_all.empty? || !admin_logged_in.empty? )
+    if User.find_all.empty? # signup the first user as admin
+      @page_title = "Sign up as the admin user"
+    elsif session['user_id'] # we have someone logged in
+      get_admin_user
+      if session['user_id'] == @admin.id # logged in user is admin, so allow signup
+        @page_title = "Sign up a new user"
+      else
+        @page_title = "No signups"
+        @admin_email = @admin.preferences["admin_email"]
+        render :action => "nosignup"
+        return
+      end
+    else # no-one logged in, but we have some Users
+      get_admin_user
       @page_title = "No signups"
-      @admin_email = User.find(1).preferences["admin_email"]
+      @admin_email = @admin.preferences["admin_email"]
       render :action => "nosignup"
       return
     end
-    @signupname = User.find_all.empty? ? "as the admin":"a new"
-    @page_title = "Sign up #{@signupname} user"
-
+    
     if session['new_user']
       @user = session['new_user']
       session['new_user'] = nil

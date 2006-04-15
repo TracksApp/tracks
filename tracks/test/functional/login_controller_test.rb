@@ -23,7 +23,7 @@ class LoginControllerTest < Test::Unit::TestCase
   def test_invalid_login
     post :login, {:user_login => 'cracker', :user_password => 'secret', :user_noexpiry => 'on'}
     assert_response :success
-    assert_session_has_no :user
+    assert_session_has_no :user_id
     assert_template "login"
   end
 

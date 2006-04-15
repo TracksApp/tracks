@@ -60,4 +60,8 @@ class ApplicationController < ActionController::Base
     @user = User.find(session['user_id']) if session['user_id'] 
   end
   
+  def get_admin_user
+    @admin = User.find(:first, :conditions => [ "is_admin = ?", true ])
+  end
+  
 end
