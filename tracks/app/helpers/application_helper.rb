@@ -34,19 +34,10 @@ module ApplicationHelper
   end
   
   # Replicates the link_to method but also checks request.request_uri to find
-  # current page. If that matches the name parameter, the link is marked
+  # current page. If that matches the url, the link is marked
   # id = "current"
   #
   def navigation_link(name, options = {}, html_options = nil, *parameters_for_method_reference)
-    curr_path = request.request_uri.to_s
-    if curr_path =~ /([a-z]+)$/
-      curr_page = $&
-    elsif curr_path == "/"
-      curr_page = "home"
-    end
-    
-    id_tag = (curr_page == name.downcase) ? " id=\"current\"" : ""
-    
     if html_options
       html_options = html_options.stringify_keys
       convert_options_to_javascript!(html_options)
@@ -54,7 +45,9 @@ module ApplicationHelper
     else
       tag_options = nil
     end
-    url = options.is_a?(String) ? options : self.url_for(options, *parameters_for_method_reference)
+    url = options.is_a?(String) ? options : self.url_for(options, *parameters_for_method_reference)    
+    id_tag = (request.request_uri == url) ? " id=\"current\"" : ""
+    
     "<a href=\"#{url}\"#{tag_options}#{id_tag}>#{name || url}</a>"
   end
 end
