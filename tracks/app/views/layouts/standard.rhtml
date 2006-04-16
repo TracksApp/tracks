@@ -28,15 +28,15 @@
 </div>
 <div id="navcontainer">
 <ul id="navlist">
-  <li><%= link_to( "Home", {:controller => "todo", :action => "list"}, {:accesskey=>"t", :title=>"Home"} ) %></li>  
-  <li><%= link_to( "Contexts", {:controller => "context", :action => "list"}, {:accesskey=>"c", :title=>"Contexts"} ) %></li>
-  <li><%= link_to( "Projects", {:controller => "project", :action => "list"}, {:accesskey=>"p", :title=>"Projects"} ) %></li>
-  <li><%= link_to( "Done", {:controller => "todo", :action => "completed"}, {:accesskey=>"d", :title=>"Completed"} ) %></li>
-  <li><%= link_to( "Notes", {:controller => "note", :action => "index"}, :title => "Show all notes" ) %></li>
-  <li><%= link_to( "Preferences", {:controller => "user", :action => "preferences"}, :title => "Show my preferences" ) %></li>
+  <li><%= navigation_link("Home", {:controller => "todo", :action => "list"}, {:accesskey => "t", :title => "Home"} ) %></li>
+  <li><%= navigation_link( "Contexts", {:controller => "context", :action => "list"}, {:accesskey=>"c", :title=>"Contexts"} ) %></li>
+  <li><%= navigation_link( "Projects", {:controller => "project", :action => "list"}, {:accesskey=>"p", :title=>"Projects"} ) %></li>
+  <li><%= navigation_link( "Done", {:controller => "todo", :action => "completed"}, {:accesskey=>"d", :title=>"Completed"} ) %></li>
+  <li><%= navigation_link( "Notes", {:controller => "note", :action => "index"}, {:accesskey => "n", :title => "Show all notes"} ) %></li>
+  <li><%= navigation_link( "Preferences", {:controller => "user", :action => "preferences"}, {:accesskey => "u", :title => "Show my preferences"} ) %></li>
   <li><a href="javascript:toggleAll('notes','block')" accesskey="S" title="Show all notes">Show</a></li>
   <li><a href="javascript:toggleAll('notes','none')" accesskey="H" title="Hide all notes">Hide</a></li>
-  <li><%= link_to(image_tag("feed-icon", :size => "16X16", :border => 0), {:controller => "todo", :action => "feeds"}, :title => "See a list of available feeds" ) %></li>
+  <li><%= navigation_link(image_tag("feed-icon", :size => "16X16", :border => 0), {:controller => "todo", :action => "feeds"}, :title => "See a list of available feeds" ) %></li>
   <% if @user.is_admin? -%>
     <li><%= link_to "Add users", :controller => "login", :action => "signup" %>
   <% end -%>

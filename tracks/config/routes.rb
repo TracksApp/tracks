@@ -23,7 +23,7 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'signup', :controller => 'login', :action => 'signup'
 
   # ToDo Routes
-  map.connect 'completed', :controller => 'todo', :action => 'completed'
+  map.connect 'done', :controller => 'todo', :action => 'completed'
   map.connect 'delete/todo/:id', :controller =>'todo', :action => 'destroy'
 
   # Context Routes
