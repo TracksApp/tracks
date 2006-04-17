@@ -13,6 +13,33 @@ Trac (for bug reports and feature requests): http://dev.rousette.org.uk/report/6
 
 Wiki (deprecated - please use Trac): http://www.rousette.org.uk/projects/wiki/
 
+== Version 1.041
+
+=== New features
+
+1. Tracks now has an API, written by Luke Melia, which allows you to create new actions in a particular context remotely, using scripts. See http://www.rousette.org.uk/projects/downloads/comments/adding-next-actions-via-scripts-the-tracks-api/ for some example scripts and instructions. If anyone creates scripts for other platforms (Windows or Linux), or more fancy ones for Mac OS X, do share them!
+2. The feeds page now lists iCal links alongside each RSS and TXT feed link. Copying your chosen link and pasting it in to the text box that appears in iCal when you choose Calendar > Subscribe.. Name your calendar as you wish, but make sure that you get it to refresh periodically and that the 'Remove Todo items' checkbox is UNCHECKED (obviously ;-) ). Then your Tracks next actions should appear as todo items in iCal, with proper due dates assigned, and notes in the notes field. The todos should update periodically in iCal as you add, delete or complete items in Tracks, but the subscription is read-only from iCal's end. However, it does allow you read access on the move if you sync iCal with your Palm or mobile phone.
+3. Setting no_completed in the user preferences to zero now removes the completed items box completely from the home page and from the individual context and project pages, if you don't like completed items cluttering those pages up.
+4. You can set a local time zone in environment.rb if your local time zone is different from the time zone setting on the server running Tracks.
+5. 'Add users' link added to the navigation bar for the admin user, which is a convenient way to get to the signup page.
+6. Luke fixed the edit actions method so that changing an action's context immediately moves it in an Ajaxy way to the new context.
+7. Updated vendor directory to Rails 1.1
+
+=== Minor additions and bug fixes
+
+1. Deleting a context now correctly deletes any actions in it as it should. Again.
+2. The user's context ordering is now honoured in the feeds (Luke Melia).
+3. A 'spinner' next to the date at the top of the page informs you that an Ajax action is in progress (Luke Melia).
+4. Text feeds now don't have superfluous blank lines.
+5. Fixed errors on 'done' page.
+6. Expansion and collapsing of the context boxes now works without a refresh after an Ajax action. (Luke Melia).
+7. User id only is now stored in the session object, reducing the size of the object and improving security (Luke Melia).
+8. Notes page now doesn't raise an error if you don't have any notes created yet.
+9. notes.yml fixture fixed so that it contains all the correct fields, so using the test contents should work properly again.
+10. The Completed Items box on the home, context and project pages now shows the same format for the actions as the Done page.
+11. The navigation bar now shows which page you are on by underlining the appropriate link and colouring the text black.
+12. There are new accesskeys for the notes page (alt/ctrl o) and user preferences (alt/ctrl u).
+ 
 == Version 1.04
 
 1. Tidied up the interface a bit, fixing mistakes in the wording.
