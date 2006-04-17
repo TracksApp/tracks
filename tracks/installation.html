@@ -50,9 +50,9 @@
 </pre>
 
 <ul>
-<li>Copy the file <code>config/database.yml.tmpl</code> to <code>config/database.yml</code>, and <code>log.tmpl</code> to <code>log</code>.</li>
+<li>Copy the file <code>config/database.yml.tmpl</code> to <code>config/database.yml</code>, <code>config/environment.rb.tmpl</code> to <code>config/environment.rb</code> and <code>log.tmpl</code> to <code>log</code>.</li>
 <li>Open the <code>tracks/config/database.yml</code> file, and enter your username and password details for the database you just set up under the 'production' and 'development' sections. <strong>NB</strong>: If you do set up the entry for 'test', make sure that you specify a different database, or when you run tests, they will overwrite your data. It's very important that you don't use TABS in any of the <code>*.yml</code> files. Just use spaces to indent.</li>
-<li>Open the file <code>config/environment.rb</code> and look at the last line which should read: <code>SALT = "change-me"</code>. Change the word change-me to something else of your choosing. This string will be used as a 'salt' to encrypt your password and make it a bit more secure.</li>
+<li>Open the file <code>config/environment.rb</code> and look at the last line which should read: <code>SALT = "change-me"</code>. Change the word change-me to something else of your choosing. This string will be used as a 'salt' to encrypt your password and make it a bit more secure. Also look at the timezone setting at the bottom. You can leave it commented out if your server is in the same time zone as you, but you may need to adjust it if your server is in a different time zone.</li>
 <li>Run 'rake migrate', which will create the necessary tables in your database, including some required contents:</li>
 </ul>
 
@@ -99,8 +99,8 @@ database: /PATH/TO/TRACKS/db/tracks-104.db
 <ul>
 <li>For safety, rename your current Tracks directory to 'tracks-old' or something similar.</li>
 <li>Before you do anything else, <strong>BACK UP YOUR DATABASE</strong> (tables and content) and keep the SQL dumps somewhere safe so that you can recreate the old database if necesary.</li>
-<li>Copy the file <code>config/database.yml.tmpl</code> to <code>config/database.yml</code>, and copy <code>log.tmpl</code> to <code>log</code></li>
-<li>Open the file <code>config/environment.rb</code> and look at the last line which should read: <code>SALT = "change-me"</code>. Change the word change-me to something else of your choosing. This string will be used as a 'salt' to encrypt your password and make it a bit more secure.</li>
+<li>Copy the file <code>config/database.yml.tmpl</code> to <code>config/database.yml</code>, <code>config/environment.rb.tmpl</code> to <code>config/environment.rb</code> and <code>log.tmpl</code> to <code>log</code>.</li>
+<li>Open the file <code>config/environment.rb</code> and look at the last line which should read: <code>SALT = "change-me"</code>. Change the word change-me to something else of your choosing. This string will be used as a 'salt' to encrypt your password and make it a bit more secure. Also look at the timezone setting at the bottom. You can leave it commented out if your server is in the same time zone as you, but you may need to adjust it if your server is in a different time zone.</li>
 <li>In <code>database.yml</code> insert your old database name, user and password under the 'development' section.</li>
 <li>Run the command <code>rake extract_fixtures</code> inside the Tracks directory. This will populate the <code>db/exported_fixtures</code> directory with <code>*.yml</code> files corresponding to the contexts, projects and todos table from the contents of your old database.</li>
 <li>Open <code>db/exported_fixtures/todos.yml</code> and search for the lines starting <code>created:</code> and replace with <code>created_at:</code>.</li>
@@ -117,8 +117,8 @@ database: /PATH/TO/TRACKS/db/tracks-104.db
 <ul>
 <li>For safety, rename your current Tracks directory to 'tracks-old' or something similar (making sure that you keep your old database safe), create a new directory for the new version.</li>
 <li>Copy (NOT MOVE!) your old database into the new tracks/db directory.</li>
-<li>Copy the file <code>config/database.yml.tmpl</code> to <code>config/database.yml</code>, and copy <code>log.tmpl</code> to <code>log</code></li>
-<li>Open the file <code>config/environment.rb</code> and look at the last line which should read: <code>SALT = "change-me"</code>. Change the word change-me to something else of your choosing. This string will be used as a 'salt' to encrypt your password and make it a bit more secure.</li>
+<li>Copy the file <code>config/database.yml.tmpl</code> to <code>config/database.yml</code>, <code>config/environment.rb.tmpl</code> to <code>config/environment.rb</code> and <code>log.tmpl</code> to <code>log</code>.</li>
+<li>Open the file <code>config/environment.rb</code> and look at the last line which should read: <code>SALT = "change-me"</code>. Change the word change-me to something else of your choosing. This string will be used as a 'salt' to encrypt your password and make it a bit more secure. Also look at the timezone setting at the bottom. You can leave it commented out if your server is in the same time zone as you, but you may need to adjust it if your server is in a different time zone.</li>
 <li>In <code>database.yml</code> insert your old database name, user and password under the 'development' section.</li>
 <li>Run the command <code>rake extract_fixtures</code> inside the Tracks directory. This will populate the <code>db/exported_fixtures</code> directory with <code>*.yml</code> files corresponding to the contexts, projects and todos table from the contents of your old database.</li>
 <li>Open <code>db/exported_fixtures/todos.yml</code> and search for the lines starting <code>created:</code> and replace with <code>created_at:</code>, and <code>done: "0"</code> with <code>done: "f"</code> and <code>done: "1"</code> with <code>done: "t"</code>. You need to replace the similar 'done' lines in <code>projects.yml</code>, and in <code>contexts.yml</code> replace <code>hide: "0"</code> with <code>hide: "f"</code> and <code>hide: "1"</code> with <code>hide: "t"</code>.</li>
