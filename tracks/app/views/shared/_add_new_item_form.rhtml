@@ -44,7 +44,7 @@
 <% end -%>
 
 <label for="item_due">Due</label><br />
-<%= text_field("todo", "due", "size" => 10, "class" => "Date", "onFocus" => "Calendar.setup", "tabindex" => 5) %>
+<%= text_field("todo", "due", "size" => 10, "class" => "Date", "onFocus" => "Calendar.setup", "tabindex" => 5, "autocomplete" => "off") %>
 
 <% if controller.controller_name == "project" -%>
     <%= hidden_field( "todo", "project_id", "value" => "#{@project.id}") %>

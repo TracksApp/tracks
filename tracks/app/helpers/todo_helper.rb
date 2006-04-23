@@ -104,7 +104,7 @@ module TodoHelper
     week_starts = @user.preferences["week_starts"]
     str = "Calendar.setup({ ifFormat:\"#{date_format}\""
     str << ",firstDay:#{week_starts},showOthers:true,range:[2004, 2010]"
-    str << ",step:1,inputField:\"" + input_field + "\",cache:true,align:\"TR\" })"
+    str << ",step:1,inputField:\"" + input_field + "\",cache:true,align:\"TR\" })\n"
     javascript_tag str
   end
   

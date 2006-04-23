@@ -196,5 +196,99 @@ Calendar.setup = function (params) {
     return false;
   };
 
+	if (params.inputField) {
+  	new DateDueKeyboardShortcutSupport(params.inputField, params.ifFormat, cal);
+  }
+
   return cal;
+};
+
+/* Adds keyboard shortcuts to the passed in date field:
+ *
+ *   't'         input today's date
+ *   '+' or '='  increment the date in the field by one day
+ *   '-'         decrement the date in the field by one day
+ *
+ * If the calendar is visible, the shortcuts play nicely with it. If not,
+ * they still work properly. Pressing '+' when no date is entered in the
+ * field will set the date to tomorrow, and likewise '-' with no date
+ * entered will set the date to yesterday.
+ */
+DateDueKeyboardShortcutSupport = Class.create();
+DateDueKeyboardShortcutSupport.prototype = {
+  initialize: function(element, dateFormat) {
+    this.element   = $(element);
+    this.dateFormat = dateFormat || "%Y/%m/%d";
+    Event.observe(this.element,'keypress',this.onkeypress.bindAsEventListener(this));
+    title = this.element.getAttributeNode("title");
+		tooltip = 'Shortcuts: [t] today; [-] previous day; [+] next day; Click to show calendar';
+    if (title && title.value)
+    {
+      this.element.setAttribute("title", title.value + ' (' + tooltip + ')');
+    }
+    else
+    {
+        this.element.setAttribute("title", tooltip);
+    }
+  },
+  onkeypress: function(event) {
+    handled = true;
+    switch (this.getCharFromKeyPressEvent(event)) {
+      case "t":
+        this.setTextBoxToTodaysDate();
+        break;
+      case "+": 
+      case "=": 
+        this.setTextBoxToNextDay();
+        break;
+      case "-": 
+        this.setTextBoxToPreviousDay();
+        break;
+      default:
+        handled = false;
+        break;
+    }
+    if (handled) {
+      this.cancel(event);
+    }
+  },
+  setTextBoxToTodaysDate : function() {
+    today = new Date();
+		this.setDate(today);
+  },
+  
+  setTextBoxToNextDay : function() {
+    this.addDaysToTextBoxDate(1);
+  },
+  
+  setTextBoxToPreviousDay : function() {
+    this.addDaysToTextBoxDate(-1);
+  },
+
+  addDaysToTextBoxDate : function(numDays) {
+    date = Date.parseDate(this.element.value, this.dateFormat);
+    date.setDate(date.getDate() + numDays);
+    this.setDate(date);
+  },
+
+  setDate : function(date) {
+    this.element.value = date.print(this.dateFormat);
+		if (window.calendar) {
+			window.calendar.setDate(date);
+		}
+  },
+  
+  cancel : function(event) {
+    if (event.preventDefault) {
+      event.preventDefault();
+    }
+    event.returnValue = false;
+  },
+  
+  getCharFromKeyPressEvent : function(event) {
+      var charCode = (event.charCode) ? event.charCode :
+                     ((event.keyCode) ? event.keyCode :
+                     ((event.which) ? event.which : 0));
+    return String.fromCharCode(charCode);
+  }
 };
