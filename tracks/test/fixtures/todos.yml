@@ -1,4 +1,36 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+<% 
+def today 
+  Time.now.to_s(:db) 
+end
+
+def next_week 
+  1.week.from_now.to_s(:db) 
+end 
+
+def last_week 
+  1.week.ago.to_s(:db) 
+end
+
+def two_weeks_hence
+  2.week.from_now.to_s(:db)
+end
+
+# This writes the fixture boolean columns appropriately
+# depending on the database adapter
+#
+abcs = ActiveRecord::Base.configurations
+case abcs[RAILS_ENV]["adapter"]
+  when "mysql", "oci"
+    b_true = 1
+    b_false = 0
+  when "postgresql", "sqlite", "sqlite3"
+    b_true = 't'
+    b_false = 'f'
+  else
+    raise "Task not supported by '#{abcs["test"]["adapter"]}'"
+end
+%>
 
 1:
   id: 1
@@ -6,9 +38,9 @@
   project_id: 2
   description: Call Bill Gates to find out how much he makes per day
   notes: ~
-  done: 0
-  created_at: 2004-11-28 16:01:00
-  due: 2004-10-30
+  done: <%= b_false %>
+  created_at: <%= last_week %>
+  due: <%= two_weeks_hence %>
   completed: ~
   user_id: 1
 
@@ -18,9 +50,9 @@
   project_id: 3
   description: Call dinosaur exterminator
   notes: Ask him if I need to hire a skip for the corpses.
-  done: 0
-  created_at: 2004-11-28 16:06:08
-  due: 2004-11-30
+  done: <%= b_false %>
+  created_at: <%= today %>
+  due: <%= two_weeks_hence %>
   completed: ~
   user_id: 1
 
@@ -31,9 +63,9 @@
   description: Buy milk
   notes: ~
   done: 1
-  created_at: 2004-11-28 16:06:31
+  created_at: <%= today %>
   due: ~
-  completed: 2004-11-28
+  completed: <%= today %>
   user_id: 1
 
 4:
@@ -43,9 +75,9 @@
   description: Buy bread
   notes: ~
   done: 1
-  created_at: 2004-11-28 16:06:58
+  created_at: <%= today %>
   due: ~
-  completed: 2004-11-28
+  completed: <%= today %>
   user_id: 1
 
 5:
@@ -54,8 +86,8 @@
   project_id: 1
   description: Construct time dilation device
   notes: ~
-  done: 0
-  created_at: 2004-11-28 16:07:33
+  done: <%= b_false %>
+  created_at: <%= today %>
   due: ~
   completed: ~
   user_id: 1
@@ -66,9 +98,9 @@
   project_id: 1
   description: Phone Grandfather to ask about the paradox
   notes: Added some _notes_.
-  done: 0
-  created_at: 2004-11-28 16:08:33
-  due: 2004-12-30
+  done: <%= b_false %>
+  created_at: <%= today %>
+  due: <%= last_week %>
   completed: ~
   user_id: 1
 
@@ -78,8 +110,8 @@
   project_id: 3
   description: Get a book out of the library
   notes: 'Dinosaurs''R'
-  done: 0
-  created_at: 2004-12-22 14:07:06
+  done: <%= b_false %>
+  created_at: <%= today %>
   due: ~
   completed: ~
   user_id: 1
@@ -90,10 +122,10 @@
   project_id: ~
   description: Upgrade to Rails 0.9.1
   notes: ~
-  done: 1
-  created_at: 2004-12-20 17:02:52
-  due: 2004-12-21
-  completed: 2004-12-20
+  done: <%= b_false %>
+  created_at: <%= today %>
+  due: <%= today %>
+  completed: ~
   user_id: 1
 
 9:
@@ -102,9 +134,9 @@
   project_id: ~
   description: This should be due today
   notes: ~
-  done: 0
-  created_at: 2004-12-31 17:23:06
-  due: 2004-12-31
+  done: <%= b_false %>
+  created_at: <%= today %>
+  due: <%= today %>
   completed: ~
   user_id: 1
 
@@ -115,9 +147,9 @@
   description: foo
   notes: ~
   done: 1
-  created_at: 2004-12-31 18:38:34
+  created_at: <%= today %>
   due: 2005-01-05
-  completed: 2005-01-02 12:27:10
+  completed: <%= today %>
   user_id: 1
 
 11:
@@ -126,8 +158,8 @@
   project_id: 2
   description: Buy shares
   notes: ~
-  done: 0
-  created_at: 2005-01-01 12:40:26
+  done: <%= b_false %>
+  created_at: <%= today %>
   due: 2005-02-01
   completed: ~
   user_id: 1
@@ -138,10 +170,10 @@
   project_id: 3
   description: Buy stegosaurus bait
   notes: ~
-  done: 1
-  created_at: 2005-01-01 12:53:12
-  due: 2005-01-02
-  completed: 2005-01-01 15:44:19
+  done: <%= b_false %>
+  created_at: <%= today %>
+  due: <%= next_week %>
+  completed: ~
   user_id: 1
 
 13:
@@ -150,10 +182,10 @@
   project_id: 3
   description: New action in context
   notes: Some notes
-  done: 1
-  created_at: 2005-01-02 14:52:49
-  due: 2005-03-01
-  completed: 2005-01-02 15:44:19
+  done: <%= b_false %>
+  created_at: <%= today %>
+  due: <%= next_week %>
+  completed: ~
   user_id: 1
 
 14:
@@ -162,8 +194,8 @@
   project_id: 2
   description: Call stock broker
   notes: 'tel: 12345'
-  done: 0
-  created_at: 2005-01-03 11:38:25
+  done: <%= b_false %>
+  created_at: <%= last_week %>
   due: ~
   completed: ~
   user_id: 1

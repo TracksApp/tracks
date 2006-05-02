@@ -1,64 +1,80 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
+<%
+  # This writes the fixture boolean columns appropriately
+  # depending on the database adapter
+  #
+  abcs = ActiveRecord::Base.configurations
+  case abcs[RAILS_ENV]["adapter"]
+    when "mysql", "oci"
+      b_true = 1
+      b_false = 0
+    when "postgresql", "sqlite", "sqlite3"
+      b_true = 't'
+      b_false = 'f'
+    else
+      raise "Task not supported by '#{abcs["test"]["adapter"]}'"
+  end
+%>
 agenda:
   id: 1
   name: agenda
   position: 1
-  hide: 0
+  hide: <%= b_false %>
   user_id: 1
 
 call:
   id: 2
   name: call
   position: 2
-  hide: 0
+  hide: <%= b_false %>
   user_id: 1
 
 email:
   id: 3
   name: email
   position: 3
-  hide: 0
+  hide: <%= b_false %>
   user_id: 1
 
 errand:
   id: 4
   name: errand
   position: 4
-  hide: 0
+  hide: <%= b_false %>
   user_id: 1
 
 lab:
   id: 5
   name: lab
   position: 5
-  hide: 0
+  hide: <%= b_false %>
   user_id: 1
 
 library:
   id: 6
   name: library
   position: 6
-  hide: 0
+  hide: <%= b_false %>
   user_id: 1
 
 freetime:
   id: 7
   name: freetime
   position: 7
-  hide: 0
+  hide: <%= b_false %>
   user_id: 1
 
 office:
   id: 8
   name: office
   position: 8
-  hide: 0
+  hide: <%= b_false %>
   user_id: 1
 
 waitingfor:
   id: 9
   name: waiting for
   position: 9
-  hide: 0
+  hide: <%= b_false %>
   user_id: 1
