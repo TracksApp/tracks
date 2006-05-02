@@ -1,0 +1,2 @@
+class Deferred < Todo
+end

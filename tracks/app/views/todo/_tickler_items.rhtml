@@ -1,0 +1,12 @@
+<div id="tickler" class="container project">
+  <h2>Deferred actions</h2>
+ 
+  <div class="items toggle_target">
+    <div id="empty-nd" style="display:<%= @tickles.empty? ? 'block' : 'none'%>;">
+      <div class="message"><p>Currently there are no deferred actions</p></div>
+    </div>
+    
+    <%= render :partial => "tickle", :collection => @tickles %>
+    
+  </div><!-- [end:items] -->
+</div><!-- [end:tickler] -->

@@ -1,0 +1,46 @@
+<%
+  add_string = "Add a deferred action &#187;"
+
+%>
+
+<% hide_link ||= false %>
+<% unless hide_link -%>
+<%= link_to_function(
+      add_string,
+"Element.toggle('todo_new_action');Form.focusFirstElement('todo-form-new-action');",
+      {:title => "Add the next action", :accesskey => "n"}) %>
+<% end -%>
+
+<div id="todo_new_action" class="context_new" style="display:<%= hide_link ? 'block' : 'none'%>">
+<div id="status">
+</div>
+<!--[form:todo]-->
+<%= form_remote_tag(
+    :url => { :controller => "todo", :action => "add_deferred_item" },
+    :html=> { :id=>'todo-form-new-action', :name=>'todo', :class => 'inline-form' }) %>
+
+<label for="todo_description">Description</label><br />
+<%= text_field( "todo", "description", "size" => 25, "tabindex" => 1) %><br />
+
+<label for="todo_notes">Notes</label><br />
+<%= text_area( "todo", "notes", "cols" => 25, "rows" => 10, "tabindex" => 2) %><br />
+
+  <label for="todo_context_id">Context</label><br />
+  <%= collection_select( "todo", "context_id", @contexts, "id", "name", 
+        {}, {"tabindex" => 3}) %><br />
+
+  <label for="todo_project_id">Project</label><br />
+  <%= collection_select( "todo", "project_id", @projects, "id", "name",
+        { :include_blank => true }, {"tabindex" => 4}) %><br />
+
+<label for="todo_due">Due</label><br />
+<%= text_field("todo", "due", "size" => 10, "class" => "Date", "onFocus" => "Calendar.setup", "tabindex" => 5, "autocomplete" => "off") %><br />
+
+<label for="todo_show_from">Show from</label><br />
+<%= date_select( "todo", "show_from", :start_year => Date.today.year, :order => [:year, :month, :day] ) %>
+
+<br /><br />
+<input type="submit" value="Add item" tabindex="6">
+<%= end_form_tag %><!--[eoform:todo]-->
+<%= calendar_setup( "todo_due"  ) %>
+</div><!-- [end:todo-new-action] -->

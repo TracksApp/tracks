@@ -289,7 +289,7 @@ a.footer_link:hover {color: #fff; background-color: #cc3334 !important;}
       text-align: center;
       }
       
-#message {
+#message, .message {
       padding: 2px;
       border: 1px solid #CCC; 
       background-color: #D2D3D6;

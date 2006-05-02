@@ -1,0 +1,16 @@
+<div id="display_box">
+  
+	<% for name in ["notice", "warning", "message"] %>
+    <% if flash[name] %>
+      <%= "<div id=\"#{name}\">#{flash[name]}</div>" %>
+    <% end %>
+  <% end %>
+  
+  <%= render :partial => "tickler_items" %>
+
+</div><!-- End of display_box -->
+
+<div id="input_box">
+  <%= render :partial => "shared/add_new_item_form", :locals => {:hide_link => false, :msg => ""} %>
+  <%= render "shared/sidebar" %>
+</div><!-- End of input box -->

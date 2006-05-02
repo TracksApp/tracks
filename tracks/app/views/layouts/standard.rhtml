@@ -31,6 +31,7 @@
   <li><%= navigation_link("Home", {:controller => "todo", :action => "list"}, {:accesskey => "t", :title => "Home"} ) %></li>
   <li><%= navigation_link( "Contexts", {:controller => "context", :action => "list"}, {:accesskey=>"c", :title=>"Contexts"} ) %></li>
   <li><%= navigation_link( "Projects", {:controller => "project", :action => "list"}, {:accesskey=>"p", :title=>"Projects"} ) %></li>
+  <li><%= navigation_link( "Tickler", {:controller => "todo", :action => "tickler"}, :title => "Ticker" ) %></li>
   <li><%= navigation_link( "Done", {:controller => "todo", :action => "completed"}, {:accesskey=>"d", :title=>"Completed"} ) %></li>
   <li><%= navigation_link( "Notes", {:controller => "note", :action => "index"}, {:accesskey => "o", :title => "Show all notes"} ) %></li>
   <li><%= navigation_link( "Preferences", {:controller => "user", :action => "preferences"}, {:accesskey => "u", :title => "Show my preferences"} ) %></li>
@@ -47,7 +48,9 @@
 <% unless @controller_name == 'feed' or session['noexpiry'] == "on" -%>
 <%= periodically_call_remote( :url => {:controller => "login", :action => "check_expiry"},
                               :frequency => (5*60)) %>
-<% end -%>                              
+<% end -%>
+<%= periodically_call_remote( :url => {:controller => "todo", :action => "check_tickler"},
+                              :frequency => (10*60)) %>  
 <%= @content_for_layout %>
 
 <div id="footer">

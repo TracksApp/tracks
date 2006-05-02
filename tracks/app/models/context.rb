@@ -17,13 +17,13 @@ class Context < ActiveRecord::Base
   end
 
   def find_not_done_todos
-    todos = Todo.find :all, :conditions => ["todos.context_id = #{id} AND todos.done = ?", false],
+    todos = Todo.find :all, :conditions => ["todos.context_id = #{id} AND todos.done = ? AND type = ?", false, "Immediate"],
                       :include => [:context, :project],
                       :order => "due IS NULL, due ASC, created_at ASC"
   end
 
   def find_done_todos
-    todos = Todo.find :all, :conditions => ["todos.context_id = #{id} AND todos.done = ?", true],
+    todos = Todo.find :all, :conditions => ["todos.context_id = #{id} AND todos.done = ? AND type = ?", true, "Immediate"],
                       :include => [:context, :project],
                       :order => "due IS NULL, due ASC, created_at ASC",
                       :limit => @user.preferences["no_completed"].to_i

@@ -1,0 +1,3 @@
+unless @due_tickles.empty?
+  page.replace_html "info", content_tag("div", "#{@due_tickles.length.to_s} tickler items are now due - refresh the page to see them.", "class" => "warning")
+end

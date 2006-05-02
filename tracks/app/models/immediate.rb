@@ -1,0 +1,2 @@
+class Immediate < Todo
+end

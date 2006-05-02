@@ -56,7 +56,7 @@ class TodoController < ApplicationController
     else
       @item.due = ""
     end
-    
+  
     @saved = @item.save
 
     @on_page = "home"
@@ -82,6 +82,44 @@ class TodoController < ApplicationController
         render :action => 'list'
       end
   end
+  
+  # Adding deferred actions from form on todo/tickler
+  #
+  def add_deferred_item
+    self.init
+    @tickle = Deferred.create(@params["todo"])
+    
+    if @tickle.due?
+      @tickle.due = Date.strptime(@params["todo"]["due"], @user.preferences["date_format"])
+    else
+      @tickle.due = ""
+    end
+    
+    @saved = @tickle.save
+
+     @on_page = "home"
+     if @saved
+       @up_count = @todos.collect { |x| ( !x.done? and !x.context.hide? ) ? x:nil }.compact.size.to_s
+     end
+     return if request.xhr?
+
+     # fallback for standard requests
+     if @saved
+       flash["notice"] = 'Added new next action.'
+       redirect_to :action => 'tickler'
+     else
+       flash["warning"] = 'The next action was not added. Please try again.'
+       redirect_to :action => 'tickler'
+     end
+
+     rescue
+       if request.xhr? # be sure to include an error.rjs
+         render :action => 'error'
+       else
+         flash["warning"] = 'An error occurred on the server.'
+         render :action => 'tickler'
+       end
+  end
 
   def edit_action
     self.init
@@ -90,6 +128,13 @@ class TodoController < ApplicationController
     render :partial => 'action_edit_form', :object => item
   end
 
+  def edit_deferred_action
+    self.init
+    item = check_user_return_item
+
+    render :partial => 'action_edit_deferred_form', :object => item
+  end
+  
   # Toggles the 'done' status of the action
   #
   def toggle_check
@@ -133,6 +178,21 @@ class TodoController < ApplicationController
     @saved = @item.save
   end
 
+  def deferred_update_action
+    #self.init
+    @tickle = check_user_return_item
+    @original_item_context_id = @tickle.context_id
+    @tickle.attributes = @params["item"]
+
+    if @tickle.due?
+      @tickle.due = Date.strptime(@params["item"]["due"], @user.preferences["date_format"])
+    else
+      @tickle.due = ""
+    end
+
+    @saved = @tickle.save
+  end
+  
   # Delete a next action
   #
   def destroy_action
@@ -191,7 +251,31 @@ class TodoController < ApplicationController
     self.init
     @page_title = "TRACKS::Feeds"
   end
+  
+  def tickler
+    self.init
+    @page_title = "TRACKS::Tickler"
+    @tickles = @user.todos.find(:all, :conditions => ['type = ?', "Deferred"], :order => "show_from ASC")
+    @count = @tickles.size
+  end
 
+  # Called by periodically_call_remote
+  # Check for any due tickler items, change them to type Immediate and show
+  # on the page
+  #
+  def check_tickler
+    self.init
+    now = Date.today()
+    @due_tickles = @user.todos.find(:all, :conditions => ['type = ? AND (show_from < ? OR show_from = ?)', "Deferred", now, now ], :order => "show_from ASC")
+    unless @due_tickles.empty?
+      # Change the due tickles to type "Immediate"
+      @due_tickles.each do |t|
+        t[:type] = "Immediate"
+        t.show_from = nil
+        t.save
+      end
+    end
+  end
 
   protected
 
@@ -208,8 +292,9 @@ class TodoController < ApplicationController
     def init
       @projects = @user.projects
       @contexts = @user.contexts
-      @todos = @user.todos
-      @done = @todos.find(:all, :conditions => ["done = ?", true])
+      @todos = Todo.find(:all, :conditions => ['user_id = ? and type = ?', @user.id, "Immediate"])
+      @done = Todo.find(:all, :conditions => ['user_id = ? and done = ?', @user.id, true])
+     # @todos = @todos.collect { |x| (x.class == Immediate) ? x : nil }.compact
     end
     
 end

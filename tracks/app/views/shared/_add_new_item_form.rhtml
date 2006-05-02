@@ -7,6 +7,10 @@
     else
       add_string = "Add a next action &#187;"
   end
+  
+  if request.request_uri == "/todo/tickler"
+    add_string = "Add a deferred action &#187;"
+  end
 %>
 
 <% hide_link ||= false %>
@@ -21,6 +25,12 @@
 <div id="status">
 </div>
 <!--[form:todo]-->
+<% if request.request_uri == "/todo/tickler" -%>
+  <%= form_remote_tag(
+      :url => { :controller => controller.controller_name, :action => "add_deferred_item" },
+      :html=> { :id=>'todo-form-new-action', :name=>'todo', :class => 'inline-form' }) %>
+<% end -%>
+
 <%= form_remote_tag(
     :url => { :controller => controller.controller_name, :action => "add_item" },
     :html=> { :id=>'todo-form-new-action', :name=>'todo', :class => 'inline-form' }) %>
@@ -43,7 +53,7 @@
         { :include_blank => true }, {"tabindex" => 4}) %><br />
 <% end -%>
 
-<label for="item_due">Due</label><br />
+<label for="todo_due">Due</label><br />
 <%= text_field("todo", "due", "size" => 10, "class" => "Date", "onFocus" => "Calendar.setup", "tabindex" => 5, "autocomplete" => "off") %>
 
 <% if controller.controller_name == "project" -%>
@@ -51,6 +61,12 @@
 <% elsif controller.controller_name == "context" -%>
     <%= hidden_field( "todo", "context_id", "value" => "#{@context.id}") %>
 <% end -%>
+
+<% if request.request_uri == "/todo/tickler" -%>
+<br />  <label for="todo_show_from">Show from</label><br />
+  <%= date_select( "todo", "show_from", :start_year => Date.today.year, :order => [:year, :month, :day] ) %>
+<% end -%>
+
 <br /><br />
 <input type="submit" value="Add item" tabindex="6">
 <%= end_form_tag %><!--[eoform:todo]-->

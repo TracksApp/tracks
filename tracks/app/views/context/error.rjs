@@ -1,1 +1,1 @@
-page.replace_html "status", "A server error has occurred"
+page.replace_html "status", content_tag("div", "A server error has occurred", "class" => "warning")

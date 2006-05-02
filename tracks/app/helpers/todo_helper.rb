@@ -7,13 +7,20 @@ module TodoHelper
     count = Todo.find_all("done=0 AND context_id=#{context.id}").length
   end
 
-  def form_remote_tag_edit_todo( item )
-    form_remote_tag( :url => { :controller => 'todo', :action => 'update_action', :id => item.id },
+  def form_remote_tag_edit_todo( item, type )
+    (type == "deferred") ? act = 'deferred_update_action' : act = 'update_action'
+    form_remote_tag( :url => { :controller => 'todo', :action => act, :id => item.id },
                     :html => { :id => "form-action-#{item.id}", :class => "inline-form" }
                    )
   end
   
-  def link_to_remote_todo( item, handled_by)
+  def link_to_remote_todo( item, handled_by, type)
+    if type == "deferred"
+      act = "edit_deferred_action"
+    else
+      act = "edit_action"
+    end
+    
     str = link_to_remote( image_tag("blank", :title =>"Delete action", :class=>"delete_item"),
                       {:url => { :controller => handled_by, :action => "destroy_action", :id => item.id },
                       :confirm => "Are you sure that you want to delete the action, \'#{item.description}\'?"},
@@ -23,7 +30,7 @@ module TodoHelper
                       {
                         :update => "form-action-#{item.id}",
                         :loading => visual_effect(:pulsate, "action-#{item.id}-edit-icon"),
-                        :url => { :controller => "todo", :action => "edit_action", :id => item.id },
+                        :url => { :controller => "todo", :action => act, :id => item.id },
                         :success => "Element.toggle('item-#{item.id}','action-#{item.id}-edit-form'); new Effect.Appear('action-#{item.id}-edit-form', { duration: .2 });  Form.focusFirstElement('form-action-#{item.id}')"
                       },
                       {
@@ -85,6 +92,38 @@ module TodoHelper
       # more than a week away - relax
       else
         "<a title='" + format_date(due) + "'><span class=\"green\">Due in " + @days.to_s + " days</span></a> "
+    end
+  end
+
+  # Check show_from date in comparison to today's date
+  # Flag up date appropriately with a 'traffic light' colour code
+  #
+  def show_date(due)
+    if due == nil
+      return ""
+    end
+
+    @now = Date.today
+    @days = due-@now
+       
+    case @days
+      # overdue or due very soon! sound the alarm!
+      when -1000..-1
+        "<a title='" + format_date(due) + "'><span class=\"red\">Shown on " + (@days * -1).to_s + " days</span></a> "
+      when 0
+           "<a title='" + format_date(due) + "'><span class=\"amber\">Show Today</span></a> "
+      when 1
+           "<a title='" + format_date(due) + "'><span class=\"amber\">Show Tomorrow</span></a> "
+      # due 2-7 days away
+      when 2..7
+      if @user.preferences["due_style"] == "1"
+        "<a title='" + format_date(due) + "'><span class=\"orange\">Show on " + due.strftime("%A") + "</span></a> "
+      else
+        "<a title='" + format_date(due) + "'><span class=\"orange\">Show in " + @days.to_s + " days</span></a> "
+      end
+      # more than a week away - relax
+      else
+        "<a title='" + format_date(due) + "'><span class=\"green\">Show in " + @days.to_s + " days</span></a> "
     end
   end
 
