@@ -16,6 +16,22 @@ class BackendController < ApplicationController
     item.id
   end
   
+  def list_contexts(username, token)
+    if !check_token_against_user_word(username, token)
+      raise "invalid token"
+    end
+    
+    @user.contexts
+  end
+  
+  def list_projects(username, token)
+    if !check_token_against_user_word(username, token)
+      raise "invalid token"
+    end
+    
+    @user.projects
+  end
+  
   protected
 
     # Check whether the token in the URL matches the word in the User's table
