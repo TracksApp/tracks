@@ -29,19 +29,19 @@ ActionController::Routing::Routes.draw do |map|
   # Context Routes
   map.connect 'context/new_context', :controller => 'context', :action => 'new_context'
   map.connect 'context/add_item', :controller => 'context', :action => 'add_item'
-  map.connect 'contexts', :controller => 'context', :action => 'list'
   map.connect 'context/order', :controller => 'context', :action => 'order'
+  map.connect 'context/:id', :controller=> 'context', :action => 'show', :requirements => {:id => /\d+/}
   map.connect 'context/:name', :controller => 'context', :action => 'show'
-  map.connect 'context/:id', :controller=> 'context', :action => 'show'
+  map.connect 'contexts', :controller => 'context', :action => 'list'
 
   # Projects Routes
   map.connect 'project/new_project', :controller => 'project', :action => 'new_project'
   map.connect 'project/add_item/:id', :controller => 'project', :action => 'add_item'
   map.connect 'project/toggle_check/:id', :controller => 'project', :action => 'toggle_check'
-  map.connect 'projects', :controller => 'project', :action => 'list'
   map.connect 'project/order', :controller => 'project', :action => 'order'
+  map.connect 'project/:id', :controller => 'project', :action => 'show', :requirements => {:id => /\d+/}
   map.connect 'project/:name', :controller => 'project', :action => 'show'
-  map.connect 'project/:id', :controller => 'project', :action => 'show'
+  map.connect 'projects', :controller => 'project', :action => 'list'
 
   # Notes Routes
   map.connect 'note/add', :controller => 'note', :action => 'add'
@@ -50,6 +50,7 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'notes', :controller => 'note', :action => 'index'
 
   # Feed Routes
+  map.connect 'feeds', :controller => 'todo', :action => 'feeds'
   map.connect 'feed/:action/:name/:token', :controller => 'feed'
 
   #map.connect 'add_item', :controller => 'todo', :action => 'add_item'
