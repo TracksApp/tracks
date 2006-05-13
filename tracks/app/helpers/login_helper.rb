@@ -3,7 +3,7 @@ module LoginHelper
   
   def render_errors(obj)
     return "" unless obj
-    return "" unless @request.post?
+    return "" unless request.post?
     tag = String.new
 
     unless obj.valid?

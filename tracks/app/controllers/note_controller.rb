@@ -19,7 +19,7 @@ class NoteController < ApplicationController
   #
   def add
     note = @user.notes.build
-    note.attributes = @params["new_note"]
+    note.attributes = params["new_note"]
 
     if note.save
       render_partial 'notes_summary', note
@@ -40,7 +40,7 @@ class NoteController < ApplicationController
 
   def update
     note = check_user_return_note
-    note.attributes = @params["note"]
+    note.attributes = params["note"]
       if note.save
         render_partial 'notes', note
       else
@@ -52,7 +52,7 @@ class NoteController < ApplicationController
   protected
 
     def check_user_return_note
-      note = Note.find_by_id( @params['id'] )
+      note = Note.find_by_id( params['id'] )
       if @user == note.user
         return note
       else

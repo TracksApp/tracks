@@ -5,13 +5,13 @@ class LoginController < ApplicationController
 
   def login
     @page_title = "TRACKS::Login"
-    case @request.method
+    case request.method
       when :post
-        if @user = User.authenticate(@params['user_login'], @params['user_password'])
+        if @user = User.authenticate(params['user_login'], params['user_password'])
           session['user_id'] = @user.id
           # If checkbox on login page checked, we don't expire the session after 1 hour
           # of inactivity
-          session['noexpiry']= @params['user_noexpiry']
+          session['noexpiry']= params['user_noexpiry']
           if session['noexpiry'] == "on"
             msg = "will not expire."
           else
@@ -20,7 +20,7 @@ class LoginController < ApplicationController
           flash['notice']  = "Login successful: session #{msg}"
           redirect_back_or_default :controller => "todo", :action => "list"
         else
-          @login = @params['user_login']
+          @login = params['user_login']
           flash['warning'] = "Login unsuccessful"
       end
     end
@@ -56,7 +56,7 @@ class LoginController < ApplicationController
   end
 
   def create
-    user = User.new(@params['user'])
+    user = User.new(params['user'])
     unless user.valid?
       session['new_user'] = user
       redirect_to :controller => 'login', :action => 'signup'
@@ -65,7 +65,7 @@ class LoginController < ApplicationController
 
     user.is_admin = true if User.find_all.empty?
     if user.save
-      @user = User.authenticate(user.login, @params['user']['password'])
+      @user = User.authenticate(user.login, params['user']['password'])
       @user.preferences = { "date_format" => "%d/%m/%Y", "week_starts" => "1", "no_completed" => "5", "staleness_starts" => "7", "due_style" => "1", "admin_email" => "butshesagirl@rousette.org.uk"}
       @user.save
       flash['notice']  = "Signup successful for user #{@user.login}."
@@ -74,8 +74,8 @@ class LoginController < ApplicationController
   end
 
   def delete
-    if @params['id'] and ( @params['id'] = @user.id or @user.is_admin )
-      @user = User.find(@params['id'])
+    if params['id'] and ( params['id'] = @user.id or @user.is_admin )
+      @user = User.find(params['id'])
       # TODO: Maybe it would be better to mark deleted. That way user deletes can be reversed.
       @user.destroy
     end

@@ -122,10 +122,10 @@ end
   project_id: ~
   description: Upgrade to Rails 0.9.1
   notes: ~
-  done: <%= b_false %>
+  done: <%= b_true %>
   created_at: <%= today %>
   due: <%= today %>
-  completed: ~
+  completed: <%= today %>
   user_id: 1
 
 9:

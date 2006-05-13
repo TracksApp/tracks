@@ -49,10 +49,10 @@ class TodoController < ApplicationController
   def add_item
     self.init
     @item = @user.todos.build
-    @item.attributes = @params["todo"]
+    @item.attributes = params["todo"]
 
     if @item.due?
-      @item.due = Date.strptime(@params["todo"]["due"], @user.preferences["date_format"])
+      @item.due = Date.strptime(params["todo"]["due"], @user.preferences["date_format"])
     else
       @item.due = ""
     end
@@ -87,10 +87,10 @@ class TodoController < ApplicationController
   #
   def add_deferred_item
     self.init
-    @tickle = Deferred.create(@params["todo"])
+    @tickle = Deferred.create(params["todo"])
     
     if @tickle.due?
-      @tickle.due = Date.strptime(@params["todo"]["due"], @user.preferences["date_format"])
+      @tickle.due = Date.strptime(params["todo"]["due"], @user.preferences["date_format"])
     else
       @tickle.due = ""
     end
@@ -162,15 +162,15 @@ class TodoController < ApplicationController
   #
   def update_action
     self.init
-    if @params["on_project_page"] == true
+    if params["on_project_page"] == true
       @on_page = "project"
     end
     @item = check_user_return_item
     @original_item_context_id = @item.context_id
-    @item.attributes = @params["item"]
+    @item.attributes = params["item"]
 
     if @item.due?
-      @item.due = Date.strptime(@params["item"]["due"], @user.preferences["date_format"])
+      @item.due = Date.strptime(params["item"]["due"], @user.preferences["date_format"])
     else
       @item.due = ""
     end
@@ -182,10 +182,10 @@ class TodoController < ApplicationController
     #self.init
     @tickle = check_user_return_item
     @original_item_context_id = @tickle.context_id
-    @tickle.attributes = @params["item"]
+    @tickle.attributes = params["item"]
 
     if @tickle.due?
-      @tickle.due = Date.strptime(@params["item"]["due"], @user.preferences["date_format"])
+      @tickle.due = Date.strptime(params["item"]["due"], @user.preferences["date_format"])
     else
       @tickle.due = ""
     end
@@ -280,7 +280,7 @@ class TodoController < ApplicationController
   protected
 
     def check_user_return_item
-      item = Todo.find( @params['id'] )
+      item = Todo.find( params['id'] )
       if @user == item.user
         return item
       else

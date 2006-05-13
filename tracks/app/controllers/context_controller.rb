@@ -32,7 +32,7 @@ class ContextController < ApplicationController
   #
   def new_context
     context = @user.contexts.build
-    context.attributes = @params['context']
+    context.attributes = params['context']
     context.name = deurlize(context.name)
 
     if context.save
@@ -49,10 +49,10 @@ class ContextController < ApplicationController
   def add_item
     self.init
     @item = @user.todos.build
-    @item.attributes = @params["todo"]
+    @item.attributes = params["todo"]
 
     if @item.due?
-      @item.due = Date.strptime(@params["todo"]["due"], @user.preferences["date_format"])
+      @item.due = Date.strptime(params["todo"]["due"], @user.preferences["date_format"])
     else
       @item.due = ""
     end
@@ -140,7 +140,7 @@ class ContextController < ApplicationController
   #
   def update
     check_user_set_context
-    @context.attributes = @params["context"]
+    @context.attributes = params["context"]
     @context.name = deurlize(@context.name)
     if @context.save
       render_partial 'context_listing', @context
@@ -166,7 +166,7 @@ class ContextController < ApplicationController
   # Methods for changing the sort order of the contexts in the list
   #
   def order
-    @params["list-contexts"].each_with_index do |id, position|
+    params["list-contexts"].each_with_index do |id, position|
       if check_user_matches_context_user(id)
         Context.update(id, :position => position + 1)
       end
@@ -177,10 +177,10 @@ class ContextController < ApplicationController
   protected
 
     def check_user_set_context
-      if @params["name"]
-        @context = Context.find_by_name_and_user_id(deurlize(@params["name"]), @user.id)
-      elsif @params['id']
-        @context = Context.find_by_id_and_user_id(@params["id"], @user.id)
+      if params["name"]
+        @context = Context.find_by_name_and_user_id(deurlize(params["name"]), @user.id)
+      elsif params['id']
+        @context = Context.find_by_id_and_user_id(params["id"], @user.id)
       else
         redirect_to(:controller => "context", :action => "list" )
       end
@@ -205,7 +205,7 @@ class ContextController < ApplicationController
     end
     
     def check_user_return_item
-      item = Todo.find( @params['id'] )
+      item = Todo.find( params['id'] )
       if @user == item.user
         return item
       else

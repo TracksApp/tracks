@@ -5,26 +5,26 @@
 ActiveRecord::Schema.define(:version => 8) do
 
   create_table "contexts", :force => true do |t|
-    t.column "name", :string, :null => false
-    t.column "position", :integer, :null => false
-    t.column "hide", :boolean, :default => false
+    t.column "name", :string, :default => "", :null => false
+    t.column "hide", :integer, :limit => 4, :default => 0, :null => false
+    t.column "position", :integer, :default => 0, :null => false
     t.column "user_id", :integer, :default => 1
   end
 
   create_table "notes", :force => true do |t|
-    t.column "user_id", :integer, :null => false
-    t.column "project_id", :integer, :null => false
+    t.column "user_id", :integer, :default => 0, :null => false
+    t.column "project_id", :integer, :default => 0, :null => false
     t.column "body", :text
-    t.column "created_at", :datetime, :default => Sat Jan 01 00:00:00 GMT 2000
-    t.column "updated_at", :datetime, :default => Sat Jan 01 00:00:00 GMT 2000
+    t.column "created_at", :datetime
+    t.column "updated_at", :datetime
   end
 
   create_table "projects", :force => true do |t|
-    t.column "name", :string, :null => false
-    t.column "position", :integer, :null => false
-    t.column "done", :boolean, :default => false
+    t.column "name", :string, :default => "", :null => false
+    t.column "position", :integer, :default => 0, :null => false
+    t.column "done", :integer, :limit => 4, :default => 0, :null => false
     t.column "user_id", :integer, :default => 1
-    t.column "description", :text, :default => ""
+    t.column "description", :text
   end
 
   create_table "sessions", :force => true do |t|
@@ -36,24 +36,24 @@ ActiveRecord::Schema.define(:version => 8) do
   add_index "sessions", ["session_id"], :name => "sessions_session_id_index"
 
   create_table "todos", :force => true do |t|
-    t.column "context_id", :integer, :null => false
-    t.column "project_id", :integer
-    t.column "description", :string, :null => false
+    t.column "context_id", :integer, :default => 0, :null => false
+    t.column "description", :string, :limit => 100, :default => "", :null => false
     t.column "notes", :text
-    t.column "done", :boolean, :default => false, :null => false
-    t.column "created_at", :datetime, :default => Sat Jan 01 00:00:00 GMT 2000
+    t.column "done", :integer, :limit => 4, :default => 0, :null => false
+    t.column "created_at", :datetime
     t.column "due", :date
     t.column "completed", :datetime
+    t.column "project_id", :integer
     t.column "user_id", :integer, :default => 1
     t.column "type", :string, :default => "Immediate", :null => false
     t.column "show_from", :date
   end
 
   create_table "users", :force => true do |t|
-    t.column "login", :string, :limit => 80, :null => false
-    t.column "password", :string, :limit => 40, :null => false
+    t.column "login", :string, :limit => 80
+    t.column "password", :string, :limit => 40
     t.column "word", :string
-    t.column "is_admin", :boolean, :default => false, :null => false
+    t.column "is_admin", :integer, :limit => 4, :default => 0, :null => false
     t.column "preferences", :text
   end
 

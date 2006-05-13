@@ -46,7 +46,7 @@ module LoginSystem
       return true  
     end
 
-    if @session['user_id'] and authorize?(User.find(@session['user_id']))
+    if session['user_id'] and authorize?(User.find(session['user_id']))
       return true
     end
 
@@ -75,16 +75,16 @@ module LoginSystem
   # store current uri in  the session.
   # we can return to this location by calling return_location
   def store_location
-    @session['return-to'] = @request.request_uri
+    session['return-to'] = request.request_uri
   end
 
   # move to the last store_location call or to the passed default one
   def redirect_back_or_default(default)
-    if @session['return-to'].nil?
+    if session['return-to'].nil?
       redirect_to default
     else
-      redirect_to_url @session['return-to']
-      @session['return-to'] = nil
+      redirect_to_url session['return-to']
+      session['return-to'] = nil
     end
   end
 

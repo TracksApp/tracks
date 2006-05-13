@@ -7,8 +7,8 @@ class NoteController; def rescue_action(e) raise e end; end
 class NoteControllerTest < Test::Unit::TestCase
   def setup
     @controller = NoteController.new
-    @request    = ActionController::TestRequest.new
-    @response   = ActionController::TestResponse.new
+    request    = ActionController::TestRequest.new
+    response   = ActionController::TestResponse.new
   end
 
   # Replace this with your real tests.

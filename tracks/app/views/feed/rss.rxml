@@ -1,7 +1,7 @@
 xml.rss("version" => "2.0", "xmlns:dc" => "http://purl.org/dc/elements/1.1/") do
   xml.channel do 
     xml.title(@title)
-    xml.link("http://#{@request.host}:#{@request.port}/todo/list")
+    xml.link("http://#{request.host}:#{request.port}/todo/list")
     xml.description(@description)
     @todos.each { |i|
       xml.item do 

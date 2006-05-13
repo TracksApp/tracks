@@ -55,7 +55,7 @@ class ProjectController < ApplicationController
 
   def new_project
     project = @user.projects.build
-    project.attributes = @params['project']
+    project.attributes = params['project']
     project.name = deurlize(project.name)
 
     if project.save
@@ -72,10 +72,10 @@ class ProjectController < ApplicationController
   def add_item
     self.init
     @item = @user.todos.build
-    @item.attributes = @params["todo"]
+    @item.attributes = params["todo"]
 
     if @item.due?
-      @item.due = Date.strptime(@params["todo"]["due"], @user.preferences["date_format"])
+      @item.due = Date.strptime(params["todo"]["due"], @user.preferences["date_format"])
     else
       @item.due = ""
     end
@@ -165,7 +165,7 @@ class ProjectController < ApplicationController
   #
   def update
     check_user_set_project
-    @project.attributes = @params["project"]
+    @project.attributes = params["project"]
     @project.name = deurlize(@project.name)
     if @project.save
       render_partial 'project_listing', @project
@@ -201,7 +201,7 @@ class ProjectController < ApplicationController
   # Methods for changing the sort order of the projects in the list
   #
   def order
-    @params["list-projects"].each_with_index do |id, position|
+    params["list-projects"].each_with_index do |id, position|
       if check_user_matches_project_user(id)
         Project.update(id, :position => position + 1)
       end
@@ -212,10 +212,10 @@ class ProjectController < ApplicationController
   protected
     
     def check_user_set_project
-      if @params["name"]
-        @project = Project.find_by_name_and_user_id(deurlize(@params["name"]), @user.id)
-      elsif @params['id']
-        @project = Project.find_by_id_and_user_id(@params["id"], @user.id)
+      if params["name"]
+        @project = Project.find_by_name_and_user_id(deurlize(params["name"]), @user.id)
+      elsif params['id']
+        @project = Project.find_by_id_and_user_id(params["id"], @user.id)
       else
         redirect_to(:controller => "project", :action => "list" )
       end
@@ -240,7 +240,7 @@ class ProjectController < ApplicationController
     end
     
     def check_user_return_item
-      item = Todo.find( @params['id'] )
+      item = Todo.find( params['id'] )
       if @user == item.user
         return item
       else
