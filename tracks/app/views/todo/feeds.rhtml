@@ -41,6 +41,16 @@
 			<%= ical_feed_link({ :due => 6 }) %>
 			Actions due in 7 days or earlier
 		</li>
+		<li>
+			<%= rss_feed_link({ :action => 'list_contexts_only', :feedtype => 'rss' }) %>
+			<%= text_feed_link({ :action => 'list_contexts_only', :feedtype => 'text' }) %>
+			All Contexts
+		</li>
+		<li>
+			<%= rss_feed_link({ :action => 'list_projects_only', :feedtype => 'rss' }) %>
+			<%= text_feed_link({ :action => 'list_projects_only', :feedtype => 'text' }) %>
+			All Projects
+		</li>
 		<li><h4>Feeds for uncompleted actions in a specific context:</h4>
 			<ul>
 				<% for context in @contexts %>

@@ -17,6 +17,14 @@ class Project < ActiveRecord::Base
     find(:all, :conditions => [ "done = ?" , true ], :order => "position ASC")
   end
 
+  def description_present?
+    attribute_present?("description")
+  end
+  
+  def linkurl_present?
+    attribute_present?("linkurl")
+  end
+  
   def find_not_done_todos
     todos = Todo.find :all, :conditions => ["project_id = #{id} AND done = ?", false],
                       :order => "due IS NULL, due ASC, created_at ASC"
@@ -27,7 +35,7 @@ class Project < ActiveRecord::Base
                       :order => "due IS NULL, due ASC, created_at ASC",
                       :limit => @user.preferences["no_completed"].to_i
   end
-
+  
   # Returns a count of next actions in the given project
   # The result is count and a string descriptor, correctly pluralised if there are no
   # actions or multiple actions

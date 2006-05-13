@@ -49,6 +49,18 @@ class FeedController < ApplicationController
     @headers["Content-Type"] = "text/plain; charset=utf-8"
   end
 
+  def list_projects_only
+    @projects = @user.projects
+    @description = "Lists all the projects for #{@user.login}."
+    render :action => 'projects_' + @params['feedtype']
+  end
+  
+  def list_contexts_only
+    @contexts = @user.contexts
+    @description = "Lists all the contexts for #{@user.login}."
+    render :action => 'contexts_' + @params['feedtype']
+  end
+  
 protected
 
   # Check whether the token in the URL matches the word in the User's table

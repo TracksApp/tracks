@@ -27,4 +27,30 @@ module FeedHelper
     return result_string
   end
   
+  def build_projects_text_page(projects)
+    result_string = ""
+    projects.each do |p|
+      result_string << "\n" + p.name.upcase + "\n"
+    
+		 	result_string << p.description + "\n" if p.description_present?
+		 	result_string << "#{p.count_undone_todos}. Project is #{p.done ? 'Done' : 'Active'}.\n"
+		 	result_string << "#{p.linkurl}\n" if p.linkurl_present?
+		 	result_string << "\n"
+	 	end
+		
+    return result_string
+  end
+  
+  def build_contexts_text_page(contexts)
+    result_string = ""
+    contexts.each do |c|
+      result_string << "\n" + c.name.upcase + "\n"
+    
+		 	result_string << "#{c.count_undone_todos}. Context is #{c.hidden? ? 'Hidden' : 'Active'}.\n"
+		 	result_string << "\n"
+	 	end
+		
+    return result_string
+  end
+  
 end
