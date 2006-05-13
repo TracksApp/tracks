@@ -33,7 +33,7 @@ module FeedHelper
       result_string << "\n" + p.name.upcase + "\n"
     
 		 	result_string << p.description + "\n" if p.description_present?
-		 	result_string << "#{p.count_undone_todos}. Project is #{p.done ? 'Done' : 'Active'}.\n"
+		 	result_string << "#{p.count_undone_todos}. Project is #{p.done? ? 'Done' : 'Active'}.\n"
 		 	result_string << "#{p.linkurl}\n" if p.linkurl_present?
 		 	result_string << "\n"
 	 	end
