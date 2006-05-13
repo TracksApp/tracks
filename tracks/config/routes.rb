@@ -53,8 +53,6 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'feeds', :controller => 'todo', :action => 'feeds'
   map.connect 'feed/:action/:name/:token', :controller => 'feed'
 
-  #map.connect 'add_item', :controller => 'todo', :action => 'add_item'
-
   # Install the default route as the lowest priority.
   map.connect ':controller/:action/:id'
 
