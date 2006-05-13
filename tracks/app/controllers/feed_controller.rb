@@ -46,7 +46,7 @@ class FeedController < ApplicationController
     else    
       @contexts = @user.contexts.find_all_by_hide(false, "position ASC")
     end
-    headers["Content-Type"] = "text/plain; charset=utf-8"
+    headers["Content-Type"] = "text/calendar"
   end
 
   def list_projects_only
@@ -119,16 +119,16 @@ protected
     
     def initialize
       @queries = Array.new
-      params = Array.new
+      @params = Array.new
     end
     
     def add(query, param)
        @queries << query
-       params << param
+       @params << param
     end
     
     def to_conditions
-      [@queries.join(' AND ')] + params
+      [@queries.join(' AND ')] + @params
     end
   end
   
