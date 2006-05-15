@@ -53,37 +53,38 @@ a.show_notes:hover {background-image: url(../images/notes_on.png); background-re
 
 #display_box {
       float: left;
-      width: 450px;
+      width: 60%;
       margin: 0px 15px 50px 15px;
       }
 
 #single_box {
-      width: 450px;
-      margin: 50px auto;
+      width: 60%;
+      margin: 80px auto;
       }
 
 #full_width_display {
       float: left;
-      width: 800px;
-      margin: 0px 15px 50px 15px;
+      width: 95%;
+      margin: 90px 15px 90px 15px;
       }
 
 #display_box_projects {
       float: left;
-      width: 820px;
-      margin: 0px 15px 50px 15px;
+      width: 95%;
+      margin: 90px 15px 90px 15px;
       }
 
 /* Navigation links at the top */
 
 #navcontainer {
-      margin: 15px;
+      position: fixed;
+      top: 48px;
       }
             
 #navlist {
       margin: 0;
-      padding: 0 0 20px 10px;
-      border-bottom: 1px solid #000;
+      padding: 0 0 20px 5px;
+/*      border-bottom: 1px solid #000;*/
       }
 
 #navlist ul, #navlist li {
@@ -99,18 +100,45 @@ a.show_notes:hover {background-image: url(../images/notes_on.png); background-re
       font-weight: bold;
       margin: 0 10px 4px 10px;
       text-decoration: none;
-      color: #999;
+      color: #eee;
       }
 
 #navlist a:link#current, #navlist a:visited#current, #navlist a:hover {
-      border-bottom: 4px solid #000;
+      border-bottom: 4px solid #CCC;
       padding-bottom: 2px;
       background: transparent;
-      color: #000;
+      color: #CCC;
       }
 
-#navlist a:hover { color: #000; }
-    
+#navlist a:hover { color: #CCC; }
+
+#topbar {
+      position: fixed;
+      top: 0px;
+      left: 0px;
+      height: 68px;
+      clear: both;
+      background-color: #000;
+      filter: alpha(opacity=75);
+      -moz-opacity: .75;
+      opacity: .75;
+      color: #eee;
+      }
+      
+#date {
+      float: left;
+      width: 45%;
+      padding-left: 15px;
+      }
+      
+#minilinks {
+      text-align: right;
+      position: fixed;
+      right: 15px;
+      top: 20px;
+      font-size: 0.9em;
+      }
+      
 .container {
       padding: 0px 5px 0px 5px; 
       border: 1px solid #999;
@@ -147,7 +175,7 @@ h2 a:hover {
       }
       
 #input_box {
-      margin: 20px 15px 0px 490px;
+      margin: 100px 5% 0% 65%;
       padding: 0px 15px 0px 15px;
       }
       

@@ -18,7 +18,8 @@
 
 </head>
 <body>
-<div>
+<div id="topbar">
+<div id="date">
   <h1>
   <% if @count %>
     <span id="badge_count" class="badge"><%= @count %></span>
@@ -26,6 +27,14 @@
   <%= Time.now.strftime("%A, %d %B %Y") %> <%= image_tag("spinner.gif", :size => "16X16", :border => 0, :id => 'busy', :style => 'display:none' ) %>
   </h1>
 </div>
+<div id="minilinks">
+    <a href="javascript:toggleAll('notes')" accesskey="S" title="Toggle all notes">Toggle notes</a>&nbsp;|&nbsp;
+    <% if @user.is_admin? -%>
+      <%= link_to "Add users", :controller => "login", :action => "signup" %>&nbsp;|&nbsp;
+    <% end -%>
+    <%= link_to "Logout (#{@user.login}) »", :controller => "login", :action=>"logout"%>
+</div>
+
 <div id="navcontainer">
 <ul id="navlist">
   <li><%= navigation_link("Home", {:controller => "todo", :action => "list"}, {:accesskey => "t", :title => "Home"} ) %></li>
@@ -35,14 +44,9 @@
   <li><%= navigation_link( "Done", {:controller => "todo", :action => "completed"}, {:accesskey=>"d", :title=>"Completed"} ) %></li>
   <li><%= navigation_link( "Notes", {:controller => "note", :action => "index"}, {:accesskey => "o", :title => "Show all notes"} ) %></li>
   <li><%= navigation_link( "Preferences", {:controller => "user", :action => "preferences"}, {:accesskey => "u", :title => "Show my preferences"} ) %></li>
-  <li><a href="javascript:toggleAll('notes','block')" accesskey="S" title="Show all notes">Show</a></li>
-  <li><a href="javascript:toggleAll('notes','none')" accesskey="H" title="Hide all notes">Hide</a></li>
   <li><%= navigation_link(image_tag("feed-icon", :size => "16X16", :border => 0), {:controller => "todo", :action => "feeds"}, :title => "See a list of available feeds" ) %></li>
-  <% if @user.is_admin? -%>
-    <li><%= link_to "Add users", :controller => "login", :action => "signup" %>
-  <% end -%>
-  <li><%= link_to "Logout (#{@user.login}) &#187;", :controller => "login", :action=>"logout"%></li>
 </ul>
+</div>
 </div>
 <div id="info"></div>
 <% unless @controller_name == 'feed' or session['noexpiry'] == "on" -%>

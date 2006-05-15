@@ -1,7 +1,14 @@
-function toggleAll(className,state) {
+function toggleAll(className) {
   var elems = document.getElementsByClassName(className);
   for (var i = 0; i < elems.length; i++) {
-    elems[i].style.display = state;
+    if (elems[i].style.display == 'block') 
+    {
+      elems[i].style.display = 'none';
+    } 
+    else
+    {
+      elems[i].style.display = 'block';
+    }
   }
 }
 
