@@ -123,6 +123,7 @@ a.show_notes:hover {background-image: url(../images/notes_on.png); background-re
       -moz-opacity: .75;
       opacity: .75;
       color: #eee;
+      width: 100%;
       }
       
 #date {
