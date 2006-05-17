@@ -130,6 +130,7 @@ a.show_notes:hover {background-image: url(../images/notes_on.png); background-re
       float: left;
       width: 45%;
       padding-left: 15px;
+      white-space: nowrap; /* added 2006-05-17 for safari display, timfm */ 
       }
       
 #minilinks {
