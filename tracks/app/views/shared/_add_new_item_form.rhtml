@@ -49,7 +49,7 @@
 
 <% unless controller.controller_name == "project" -%>
   <label for="todo_project_id">Project</label><br />
-  <%= collection_select( "todo", "project_id", @projects, "id", "name",
+  <%= collection_select( "todo", "project_id", @projects.reject{|p| p.done}, "id", "name",
         { :include_blank => true }, {"tabindex" => 4}) %><br />
 <% end -%>
 
