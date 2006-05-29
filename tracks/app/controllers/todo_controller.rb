@@ -61,7 +61,8 @@ class TodoController < ApplicationController
 
     @on_page = "home"
     if @saved
-      @up_count = @todos.collect { |x| ( !x.done? and !x.context.hide? ) ? x:nil }.compact.size.to_s
+      self.init # we have to do this again to update @todos
+      @up_count = @todos.reject { |x| x.done? or x.context.hide? }.size.to_s
     end
     return if request.xhr?
     
@@ -202,7 +203,8 @@ class TodoController < ApplicationController
     @saved = @item.destroy
     @on_page = "home"
     if @saved
-      @down_count = @todos.collect { |x| ( !x.done? and !x.context.hide? ) ? x:nil }.compact.size.to_s
+      self.init
+      @down_count = @todos.reject { |x| x.done? or x.context.hide? }.size.to_s
     end
     
     return if request.xhr?

@@ -1,8 +1,8 @@
 if @saved
-  page.hide "status"
+  page.show "status"
   page.replace_html "status", content_tag("div", "Added new next action", "class" => "confirmation")
-  page.visual_effect :appear, 'status', :duration => 0.5
-  page.replace_html "badge_count", @up_count
+  page.visual_effect :fade, 'status', :duration => 2
+  page['badge_count'].replace_html @up_count
   page.send :record, "Form.reset('todo-form-new-action');Form.focusFirstElement('todo-form-new-action')"
   page.insert_html :bottom, "c#{@item.context_id}items", :partial => 'todo/item'
   page.visual_effect :highlight, "item-#{@item.id}-container", :duration => 3
