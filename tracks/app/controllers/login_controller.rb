@@ -12,7 +12,7 @@ class LoginController < ApplicationController
           # If checkbox on login page checked, we don't expire the session after 1 hour
           # of inactivity
           session['noexpiry'] = params['user_noexpiry']
-          msg = (should_expire_sessions?) ? "will not expire." : "will expire after 1 hour of inactivity."
+          msg = (should_expire_sessions?) ? "will expire after 1 hour of inactivity." : "will not expire." 
           flash['notice']  = "Login successful: session #{msg}"
           redirect_back_or_default :controller => "todo", :action => "list"
         else

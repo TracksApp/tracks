@@ -1,2 +1,0 @@
-class ModuleFolder::NestedClass
-end
