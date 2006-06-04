@@ -1,13 +1,17 @@
 class NoteController < ApplicationController
 
   model :user
-  before_filter :login_required
+  prepend_before_filter :login_required
 
   layout "standard"
 
   def index
     @all_notes = @user.notes
     @page_title = "TRACKS::All notes"
+    respond_to do |wants|
+      wants.html
+      wants.xml { render :xml => @all_notes.to_xml }
+    end
   end
 
   def show

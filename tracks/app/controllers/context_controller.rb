@@ -2,7 +2,7 @@ class ContextController < ApplicationController
 
   helper :todo
 
-  before_filter :login_required
+  prepend_before_filter :login_required
   layout "standard"
 
   def index
@@ -16,6 +16,10 @@ class ContextController < ApplicationController
   def list
     self.init
     @page_title = "TRACKS::List Contexts"
+    respond_to do |wants|
+      wants.html
+      wants.xml { render :xml => @contexts.to_xml }
+    end
   end
 
   # Filter the projects to show just the one passed in the URL

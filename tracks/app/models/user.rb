@@ -14,6 +14,10 @@ class User < ActiveRecord::Base
   def self.authenticate(login, pass)
     find_first(["login = ? AND password = ?", login, sha1(pass)])
   end
+  
+  def self.find_admin
+    find_first([ "is_admin = ?", true ])    
+  end
 
   def change_password(pass,pass_confirm)
     self.password = pass

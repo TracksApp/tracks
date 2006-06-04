@@ -3,7 +3,7 @@ class ProjectController < ApplicationController
   model :todo
 
   helper :todo
-  before_filter :login_required
+  prepend_before_filter :login_required
 
   layout "standard"
 
@@ -18,6 +18,10 @@ class ProjectController < ApplicationController
   def list
     init
     @page_title = "TRACKS::List Projects"
+    respond_to do |wants|
+      wants.html
+      wants.xml { render :xml => @projects.to_xml }
+    end
   end
 
   # Filter the projects to show just the one passed in the URL

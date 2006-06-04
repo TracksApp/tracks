@@ -11,12 +11,8 @@ class LoginController < ApplicationController
           session['user_id'] = @user.id
           # If checkbox on login page checked, we don't expire the session after 1 hour
           # of inactivity
-          session['noexpiry']= params['user_noexpiry']
-          if session['noexpiry'] == "on"
-            msg = "will not expire."
-          else
-            msg = "will expire after 1 hour of inactivity."
-          end
+          session['noexpiry'] = params['user_noexpiry']
+          msg = (should_expire_sessions?) ? "will not expire." : "will expire after 1 hour of inactivity."
           flash['notice']  = "Login successful: session #{msg}"
           redirect_back_or_default :controller => "todo", :action => "list"
         else
@@ -27,32 +23,20 @@ class LoginController < ApplicationController
   end
 
   def signup
-    if User.find_all.empty? # signup the first user as admin
+    if User.find_all.empty? # the first user of the system
       @page_title = "Sign up as the admin user"
-    elsif session['user_id'] # we have someone logged in
-      get_admin_user
-      if session['user_id'] == @admin.id # logged in user is admin, so allow signup
-        @page_title = "Sign up a new user"
-      else
-        @page_title = "No signups"
-        @admin_email = @admin.preferences["admin_email"]
-        render :action => "nosignup"
-        return
-      end
-    else # no-one logged in, but we have some Users
-      get_admin_user
-      @page_title = "No signups"
-      @admin_email = @admin.preferences["admin_email"]
-      render :action => "nosignup"
-      return
-    end
-    
-    if session['new_user']
-      @user = session['new_user']
-      session['new_user'] = nil
+      @user = get_new_user
     else
-      @user = User.new
-    end
+      admin = User.find_admin
+      if current_user_is admin
+          @page_title = "Sign up a new user"
+          @user = get_new_user
+      else # all other situations (i.e. a non-admin is logged in, or no one is logged in, but we have some users)
+        @page_title = "No signups"
+        @admin_email = admin.preferences["admin_email"]
+        render :action => "nosignup"
+      end
+    end        
   end
 
   def create
@@ -74,7 +58,7 @@ class LoginController < ApplicationController
   end
 
   def delete
-    if params['id'] and ( params['id'] = @user.id or @user.is_admin )
+    if params['id'] and ( params['id'] == @user.id or @user.is_admin )
       @user = User.find(params['id'])
       # TODO: Maybe it would be better to mark deleted. That way user deletes can be reversed.
       @user.destroy
@@ -93,12 +77,8 @@ class LoginController < ApplicationController
     # Gets called by periodically_call_remote to check whether 
     # the session has timed out yet
     unless session == nil
-      return if @controller_name == 'feed' or session['noexpiry'] == "on"
-      # If the method is called by the feed controller 
-      # (which we don't have under session control)
-      # or if we checked the box to keep logged in on login
-      # then the session is not going to get called
       if session
+        return unless should_expire_sessions?
         # Get expiry time (allow ten seconds window for the case where we have none)
         expiry_time = session['expiry_time'] || Time.now + 10
         @time_left = expiry_time - Time.now
@@ -109,6 +89,26 @@ class LoginController < ApplicationController
         end
       end
     end
+  end
+  
+  private
+  
+  def get_new_user
+    if session['new_user']
+      user = session['new_user']
+      session['new_user'] = nil
+    else
+      user = User.new
+    end
+    user
+  end
+  
+  def current_user_is(user)
+    session['user_id'] && session['user_id'] == user.id
+  end
+  
+  def should_expire_sessions?
+    session['noexpiry'] != "on"
   end
   
 end

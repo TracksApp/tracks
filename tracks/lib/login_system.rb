@@ -49,6 +49,12 @@ module LoginSystem
     if session['user_id'] and authorize?(User.find(session['user_id']))
       return true
     end
+    
+    http_user, http_pass = get_basic_auth_data
+    if user = User.authenticate(http_user, http_pass)
+      session['user_id'] = user.id
+      return true
+    end
 
     # store current location so that we can 
     # come back after the user logged in
@@ -65,10 +71,10 @@ module LoginSystem
   # example use :
   # a popup window might just close itself for instance
   def access_denied
-    if request.xhr?
-      render :partial => 'login/redirect_to_login'
-    else
-      redirect_to :controller=>"login", :action =>"login"
+    respond_to do |wants|
+      wants.html { redirect_to :controller=>"login", :action =>"login" }
+      wants.js { render :partial => 'login/redirect_to_login' }
+      wants.xml { basic_auth_denied }
     end
   end  
   
@@ -87,5 +93,33 @@ module LoginSystem
       session['return-to'] = nil
     end
   end
+  
+  # HTTP Basic auth code adapted from Coda Hale's simple_http_auth plugin. Thanks, Coda!
+  def get_basic_auth_data
+    
+    auth_locations = ['REDIRECT_REDIRECT_X_HTTP_AUTHORIZATION',
+                      'REDIRECT_X_HTTP_AUTHORIZATION',
+                      'X-HTTP_AUTHORIZATION', 'HTTP_AUTHORIZATION']
+    
+    authdata = nil
+    for location in auth_locations
+      if request.env.has_key?(location)
+        authdata = request.env[location].to_s.split
+      end
+    end
+    if authdata and authdata[0] == 'Basic' 
+      user, pass = Base64.decode64(authdata[1]).split(':')[0..1] 
+    else
+      user, pass = ['', '']
+    end
+    return user, pass
+  end
+  
+  def basic_auth_denied
+      response.headers["Status"] = "Unauthorized"
+      response.headers["WWW-Authenticate"] = "Basic realm=\"'Tracks Login Required'\""
+      render :text => "401 Unauthorized: You are not authorized to interact with Tracks.", :status => 401
+  end
+  
 
 end
