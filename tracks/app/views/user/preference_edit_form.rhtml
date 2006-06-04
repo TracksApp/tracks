@@ -8,8 +8,8 @@
       <% if @user.is_admin? %>
         <li><strong>admin_email:</strong> email address for the admin user of Tracks (displayed on the signup page for users to contact to obtain an account)</li>
       <% end %>
-      <li><strong>week_starts:</strong> day of the week shown as the start of the week on the popup calendar. 0 = Sunday, 1 = Monday etc.</li>
-      <li><strong>due_style:</strong> style in which due dates for the range 2-7 days away is shown. 0 = "Due in 3 days", 1 = "Due on Wednesday"</li>
+      <li><strong>week_starts:</strong> day of the week shown as the start of the week on the popup calendar.</li>
+      <li><strong>due_style:</strong> style in which due dates are shown, e.g.  "Due in 3 days",  "Due on Wednesday"</li>
     </ul>
 </div>
 
@@ -20,7 +20,44 @@
     <% next if !@user.is_admin? and k == "admin_email" %>
     <tr>
       <td><label><%= k %>:</label></td>
-      <td><input name="prefs[<%= k %>]" type="text" value="<%= v %>" /></td>
+      <td>	
+      <% case k
+         when "week_starts"  %>
+		<select name="prefs[<%= k %>]" >
+		<% day_num_to_name = { "0" => "Sunday",
+				       "1" => "Monday",
+				       "2" => "Tuesday",
+				       "3" => "Wednesday",
+				       "4" => "Thursday",
+				       "5" => "Friday",
+				       "6" => "Saturday"}
+		day_num_to_name.sort.each do |number, day| %>
+		  <option value="<%= number%>"
+		  <% if number == v %>
+	              selected="true" 
+		  <% end %>
+                       ><%= day %></option>
+		  <% end %>
+        	</select>
+	<% when "due_style" %>	
+		<select name="prefs[<%= k %>]" >
+		<option value="0"
+		<% if v == "0" %>
+			  selected="true" 
+		<% end %>	
+			>Due in ___ days</option>
+
+		<option value="1"
+		<% if v == "1" %>
+			  selected="true" 
+		<% end %>	
+			>Due on _______</option>
+		</select>
+
+ 	<% else %>
+   		<input name="prefs[<%= k %>]" type="text" value="<%= v%>" >
+        <% end %>
+      </td>
     </tr>
   <% end %>
     <tr><td><%= submit_tag "Update" %></td>

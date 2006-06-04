@@ -10,10 +10,34 @@
  
 <ul id="prefs">
   <li>Date format: <span class="highlight"><%= @prefs["date_format"] %></span></li>
-  <li>Week starts on: <span class="highlight"><%= @prefs["week_starts"] %></span></li>
+  <li>Week starts on: <span class="highlight">
+	  <%  case @prefs["week_starts"]
+		when "0" 
+		%> Sunday <%
+		when "1" 
+		 %> Monday <%
+		when "2" 
+		 %> Tuesday <%
+		when "3" 
+		 %> Wednesday <%
+		when "4" 
+		 %> Thursday <%
+		when "5" 
+		 %> Friday <%
+		when "6" 
+		 %> Saturday <%
+	      end
+	 %>	
+	</span></li>
   <li>Show the last <span class="highlight"><%= @prefs["no_completed"] %></span> completed items on the home page</li>
   <li>Staleness starts after <span class="highlight"><%= @prefs["staleness_starts"] %></span> days</li>
-  <li>Due style: <span class="highlight"><%= @prefs["due_style"] %></span></li>
+  <li>Due style: <span class="highlight">
+	<% if @prefs["due_style"] == "0" %>
+		Due in ___ days
+	<% else %>
+		Due on ________
+	<% end %>
+		 </span></li>
   <% if @user.is_admin? %>
     <li>Admin email: <span class="highlight"><%= @prefs["admin_email"] %></span></li>
   <% end %>
