@@ -4,6 +4,7 @@ if @saved
   page.visual_effect :fade, 'status', :duration => 2
   page['badge_count'].replace_html @up_count
   page.send :record, "Form.reset('todo-form-new-action');Form.focusFirstElement('todo-form-new-action')"
+  page.send :record, "Form.reset('todo-form-new-action-lightbox');Form.focusFirstElement('todo-form-new-action-lightbox')"
   page.insert_html :bottom, "c#{@item.context_id}items", :partial => 'todo/item'
   page.visual_effect :highlight, "item-#{@item.id}-container", :duration => 3
 else

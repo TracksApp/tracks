@@ -64,6 +64,8 @@ class ContextController < ApplicationController
     @saved = @item.save
     @on_page = "context"
     if @saved
+      # This reports real count +1 for some reason that I don't understand
+      # Almost identical code for add_item in projects reports correct num
       @up_count = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = ? and todos.context_id IN (?)", @user.id, false, @item.context_id]).size.to_s
     end
      

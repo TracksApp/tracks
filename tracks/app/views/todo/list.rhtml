@@ -15,7 +15,8 @@
 </div><!-- End of display_box -->
 
 <div id="input_box">
-  <a href="#" onclick="new Lightbox.base('mybox', { closeOnOverlayClick : true });Form.focusFirstElement('todo-form-new-action'); return false" accesskey="n">Add new action &raquo;</a>
+  <%= render :partial => "shared/add_new_item_form", :locals => {:hide_link => false, :msg => ""} %>
+  <%= render :partial => "shared/new_action_form", :locals => {:hide_link => false, :msg => ""} %>
   <%= render :partial => "shared/new_action_form" %>
   <%= render "shared/sidebar" %>
 </div><!-- End of input box -->
