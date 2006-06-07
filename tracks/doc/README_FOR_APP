@@ -6,7 +6,7 @@
 * Author: bsag (http://www.rousette.org.uk/)
 * Contributors: Nicholas Lee, Lolindrath, Jim Ray, Arnaud Limbourg, Timothy Martens, Luke Melia, John Leonard (for great installation tutorials on Windows XP), Jim Strupp, Eric Lesh, Damien Cirotteau, Janet Riley
 * Version: 1.041
-* Copyright: (cc) 2004-2006 rousette.org.uk
+* Copyright: (cc) 2004-2006 rousette.org.uk. Some portions (c) 2006 Coda Hale.
 * License:  GNU GPL
 
 While fully usable for everyday use, Tracks is still a work in progress. Make sure that you take sensible precautions and back up all your data frequently. Full changenotes can be found in `doc/CHANGENOTES.txt`. Full API documentation can be found at `doc/app/index.html`, once you have run `rake appdoc`
