@@ -131,6 +131,14 @@ class TodoController < ApplicationController
 
     render :partial => 'action_edit_form', :object => item
   end
+  
+  def show
+    self.init
+    item = check_user_return_item
+    respond_to do |wants|
+       wants.xml { render :xml => item.to_xml( :root => 'todo', :except => :user_id ) }
+     end
+  end
 
   def edit_deferred_action
     self.init
