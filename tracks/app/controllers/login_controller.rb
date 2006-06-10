@@ -14,6 +14,7 @@ class LoginController < ApplicationController
           session['noexpiry'] = params['user_noexpiry']
           msg = (should_expire_sessions?) ? "will expire after 1 hour of inactivity." : "will not expire." 
           flash['notice']  = "Login successful: session #{msg}"
+          cookies[:tracks_login] = { :value => @user.login, :expires => Time.now + 1.year }
           redirect_back_or_default :controller => "todo", :action => "list"
         else
           @login = params['user_login']
