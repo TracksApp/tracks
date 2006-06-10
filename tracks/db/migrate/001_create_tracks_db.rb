@@ -19,7 +19,7 @@ class CreateTracksDb < ActiveRecord::Migration
       t.column :description,    :string,      :null => false
       t.column :notes,          :text
       t.column :done,           :boolean,     :default => false, :null => false
-      t.column :created,        :datetime,    :default => Time.now.to_s(:db)
+      t.column :created,        :datetime
       t.column :due,            :date
       t.column :completed,      :datetime
     end

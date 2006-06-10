@@ -4,8 +4,8 @@ class Notes < ActiveRecord::Migration
       t.column :user_id,        :integer,     :null => false
       t.column :project_id,     :integer,     :null => false
       t.column :body,           :text
-      t.column :created_at,     :datetime,    :default => Time.now.to_s(:db)
-      t.column :updated_at,     :datetime,    :default => Time.now.to_s(:db)
+      t.column :created_at,     :datetime
+      t.column :updated_at,     :datetime
     end
   end
 

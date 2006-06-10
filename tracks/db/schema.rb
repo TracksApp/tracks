@@ -15,8 +15,8 @@ ActiveRecord::Schema.define(:version => 8) do
     t.column "user_id", :integer, :null => false
     t.column "project_id", :integer, :null => false
     t.column "body", :text
-    t.column "created_at", :datetime, :default => Sat May 27 11:22:19 BST 2006
-    t.column "updated_at", :datetime, :default => Sat May 27 11:22:19 BST 2006
+    t.column "created_at", :datetime
+    t.column "updated_at", :datetime
   end
 
   create_table "projects", :force => true do |t|
@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(:version => 8) do
     t.column "position", :integer, :null => false
     t.column "done", :boolean, :default => false
     t.column "user_id", :integer, :default => 1
-    t.column "description", :text, :default => ""
+    t.column "description", :text
   end
 
   create_table "sessions", :force => true do |t|
@@ -41,7 +41,7 @@ ActiveRecord::Schema.define(:version => 8) do
     t.column "description", :string, :null => false
     t.column "notes", :text
     t.column "done", :boolean, :default => false, :null => false
-    t.column "created_at", :datetime, :default => Sat May 27 11:22:16 BST 2006
+    t.column "created_at", :datetime
     t.column "due", :date
     t.column "completed", :datetime
     t.column "user_id", :integer, :default => 1
