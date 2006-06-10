@@ -6,9 +6,8 @@ class TodoController < ApplicationController
 
   helper :todo
 
-  before_filter :login_required
+  prepend_before_filter :login_required
   layout "standard"
-
 
   def index
     list
@@ -29,15 +28,19 @@ class TodoController < ApplicationController
     max_completed = @user.preferences["no_completed"].to_i-1
     @done = (max_completed > 0) ? @done[0..max_completed] : nil
 
-    @contexts_to_show = @contexts.clone
-    @contexts_to_show = @contexts_to_show.collect {|x| (!x.hide? and !x.find_not_done_todos.empty?) ? x:nil }.compact
+    @contexts_to_show = @contexts.reject {|x| x.hide? || x.find_not_done_todos.empty? }
     
     if @contexts.empty?
       flash['warning'] = 'You must add at least one context before adding next actions.'
     end
 
     # Set count badge to number of not-done, not hidden context items
-    @count = @todos.collect { |x| ( !x.done? and !x.context.hide? ) ? x:nil }.compact.size
+    @count = @todos.reject { |x| x.done? || x.context.hide? }.size
+    
+    respond_to do |wants|
+      wants.html
+      wants.xml { render :action => 'list.rxml', :layout => false }
+    end
   end
 
   def update_element
