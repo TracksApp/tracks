@@ -18,7 +18,7 @@ class ContextController < ApplicationController
     @page_title = "TRACKS::List Contexts"
     respond_to do |wants|
       wants.html
-      wants.xml { render :xml => @contexts.to_xml }
+      wants.xml { render :xml => @contexts.to_xml( :except => :user_id ) }
     end
   end
 

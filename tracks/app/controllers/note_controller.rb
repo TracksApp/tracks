@@ -10,7 +10,7 @@ class NoteController < ApplicationController
     @page_title = "TRACKS::All notes"
     respond_to do |wants|
       wants.html
-      wants.xml { render :xml => @all_notes.to_xml }
+      wants.xml { render :xml => @all_notes.to_xml( :except => :user_id )  }
     end
   end
 

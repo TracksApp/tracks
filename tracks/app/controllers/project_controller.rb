@@ -20,7 +20,7 @@ class ProjectController < ApplicationController
     @page_title = "TRACKS::List Projects"
     respond_to do |wants|
       wants.html
-      wants.xml { render :xml => @projects.to_xml }
+      wants.xml { render :xml => @projects.to_xml( :except => :user_id )  }
     end
   end
 
