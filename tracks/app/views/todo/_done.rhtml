@@ -14,12 +14,9 @@
     <%= " - was due on " + format_date( done.due ) %>
   <% end %>
 
-  <% if done.notes? %>
-    <%= "<a href=\"javascript:Element.toggle('" + done.id.to_s + "')\" title=\"Show notes\">" + 
-    image_tag( "notes", :width=>"10", :height=>"10", :border=>"0") + "</a>" %>
-    <%      m_notes = sanitize(markdown( done.notes )) %>
-    <%= "<div class=\"notes\" id=\"" + done.id.to_s + "\" style=\"display:none\">" + m_notes + "</div>" %>
-  <% end %>
+  <% if done.notes? -%>
+         <%= toggle_show_notes( done ) %>
+  <% end -%>
   </td>
 <% end %>
 </tr>
