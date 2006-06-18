@@ -50,4 +50,65 @@ module ApplicationHelper
     
     "<a href=\"#{url}\"#{tag_options}#{id_tag}>#{name || url}</a>"
   end
+  
+  # Check due date in comparison to today's date
+  # Flag up date appropriately with a 'traffic light' colour code
+  #
+  def due_date(due)
+    if due == nil
+      return ""
+    end
+
+    @now = Date.today
+    @days = due-@now
+       
+    case @days
+      # overdue or due very soon! sound the alarm!
+      when -1000..-1
+        "<a title='" + format_date(due) + "'><span class=\"red\">Overdue by " + (@days * -1).to_s + " days</span></a> "
+      when 0
+           "<a title='" + format_date(due) + "'><span class=\"amber\">Due Today</span></a> "
+      when 1
+           "<a title='" + format_date(due) + "'><span class=\"amber\">Due Tomorrow</span></a> "
+      # due 2-7 days away
+      when 2..7
+      if @user.preferences["due_style"] == "1"
+        "<a title='" + format_date(due) + "'><span class=\"orange\">Due on " + due.strftime("%A") + "</span></a> "
+      else
+        "<a title='" + format_date(due) + "'><span class=\"orange\">Due in " + @days.to_s + " days</span></a> "
+      end
+      # more than a week away - relax
+      else
+        "<a title='" + format_date(due) + "'><span class=\"green\">Due in " + @days.to_s + " days</span></a> "
+    end
+  end
+
+  # Check due date in comparison to today's date
+  # Flag up date appropriately with a 'traffic light' colour code
+  # Modified method for mobile screen
+  #
+  def due_date_mobile(due)
+    if due == nil
+      return ""
+    end
+
+    @now = Date.today
+    @days = due-@now
+       
+    case @days
+      # overdue or due very soon! sound the alarm!
+      when -1000..-1
+        "<span class=\"red\">" + format_date(due) +"</span>"
+      when 0
+           "<span class=\"amber\">"+ format_date(due) + "</span>"
+      when 1
+           "<span class=\"amber\">" + format_date(due) + "</span>"
+      # due 2-7 days away
+      when 2..7
+          "<span class=\"orange\">" + format_date(due) + "</span>"
+     # more than a week away - relax
+      else
+        "<span class=\"green\">" + format_date(due) + "</span>"
+    end
+  end
 end

@@ -1,0 +1,5 @@
+<h1><%= @desc %>
+<%= link_to "+", :controller => 'mobile', :action => 'add_action' %></h1>
+<hr />
+<%= render :partial => 'mobile_actions' %>
+<%= link_to "View All", :controller => 'mobile', :action => 'list' %>

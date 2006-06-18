@@ -1,0 +1,4 @@
+<%= form_tag :action => 'update_action', :id => @item.id %>
+  <%= render :partial => 'mobile_edit', :locals => {:type => "updated"} %>
+<%= end_form_tag %>
+<%= button_to "Back", :controller => 'mobile', :action => 'list' %>

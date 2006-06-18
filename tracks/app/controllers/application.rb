@@ -11,7 +11,7 @@ class ApplicationController < ActionController::Base
 
   helper :application
   include LoginSystem
-
+  
   before_filter :set_session_expiration
   before_filter :get_current_user
   

@@ -1,0 +1,27 @@
+<ul>
+<% for todo in @todos -%>
+<li>
+  <%= link_to "&raquo;", :controller => 'mobile', :action => 'detail', :id => todo.id %>
+  <% if todo.due? -%>
+    <%= due_date_mobile(todo.due) %>
+  <% end -%>
+  <%= todo.description %>
+  (<em><%= todo.context.name %></em>)
+<% end -%>
+</li>
+<ul>
+  
+<hr />
+Pages: <%= pagination_links( @todos_pages, :always_show_anchors => true ) %>
+<hr />
+<%= form_tag( { :action => "filter", :type => "context" } ) %>
+<%= collection_select( "context", "id", @contexts, "id", "name", 
+                        { :include_blank => true } ) %>
+<%= submit_tag( value = "Go" ) %>
+<%= end_form_tag %>
+
+<%= form_tag( {:action => "filter", :type => "project" }) %>                    
+<%= collection_select( "project", "id", @projects, "id", "name",
+                        { :include_blank => true } ) %>
+<%= submit_tag( value = "Go" ) %>
+<%= end_form_tag %>

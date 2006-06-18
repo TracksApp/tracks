@@ -1,0 +1,42 @@
+a {text-decoration: none;}
+
+h1 {color: #f00;}
+
+ul {list-style-type: none;}
+
+/*   Draw attention to some text 
+    Same format as traffic lights */
+.red {
+      color: #fff;
+      background: #f00;
+      padding: 1px;
+      font-size: 10px;
+      }
+      
+.amber {
+      color: #fff;
+      background: #ff6600;
+      padding: 1px;
+      font-size: 10px;
+      }
+         
+.orange {
+      color: #fff;
+      background: #FFA500;
+      padding: 1px;
+      font-size: 10px;
+      }
+
+.green {
+      color: #fff;
+      background: #33cc00;
+      padding: 1px;
+      font-size: 10px;
+      }
+      
+.grey {
+      color: #fff;
+      background: #999;
+      padding: 1px;
+      font-size: 10px;
+      }
