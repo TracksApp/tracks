@@ -32,7 +32,7 @@ class LoginControllerTest < Test::Unit::TestCase
     user = login('admin', 'abracadabra', 'on')
     assert_equal user.id, @response.session['user_id']
     assert_equal user.login, "admin"
-    assert_equal user.is_admin, 1
+    assert user.is_admin
     assert_equal "Login successful: session will not expire.", flash['notice']
     assert_redirect_url "http://#{@request.host}/bogus/location"
   end
@@ -42,7 +42,7 @@ class LoginControllerTest < Test::Unit::TestCase
     user = login('jane','sesame', 'off')
     assert_equal user.id, @response.session['user_id']
     assert_equal user.login, "jane"
-    assert_equal user.is_admin, 0    
+    assert !user.is_admin
     assert_equal "Login successful: session will expire after 1 hour of inactivity.", flash['notice']
     assert_redirected_to :controller => 'todo', :action => 'list'
   end
@@ -79,19 +79,19 @@ class LoginControllerTest < Test::Unit::TestCase
   #
   def test_create
     admin = login('admin', 'abracadabra', 'on')
-    assert_equal admin.is_admin, 1
+    assert admin.is_admin
     newbie = create('newbie', 'newbiepass')
     assert_equal "Signup successful for user newbie.", flash['notice']
     assert_redirected_to :controller => 'todo', :action => 'list'
     assert_valid newbie
     get :logout # logout the admin user
     assert_equal newbie.login, "newbie"
-    assert_equal newbie.is_admin, 0
+    assert !newbie.is_admin
     assert_not_nil newbie.preferences # have user preferences been created?
     user = login('newbie', 'newbiepass', 'on') # log in the new user
     assert_redirected_to :controller => 'todo', :action => 'list'
     assert_equal 'newbie', user.login
-    assert_equal user.is_admin, 0
+    assert !user.is_admin
     num_users = User.find(:all)
     assert_equal num_users.length, 3
   end
@@ -100,7 +100,7 @@ class LoginControllerTest < Test::Unit::TestCase
   # 
   def test_create_by_non_admin
     non_admin = login('jane', 'sesame', 'on')
-    assert_equal non_admin.is_admin, 0
+    assert !non_admin.is_admin
     post :signup, :user => {:login => 'newbie2', :password => 'newbiepass2', :password_confirmation => 'newbiepass2'}
     assert_template 'login/nosignup'
 
@@ -114,7 +114,7 @@ class LoginControllerTest < Test::Unit::TestCase
   
   def test_create_with_invalid_password
     admin = login('admin', 'abracadabra', 'on')
-    assert_equal admin.is_admin, 1
+    assert admin.is_admin
     assert_equal admin.id, @response.session['user_id']
     post :create, :user => {:login => 'newbie', :password => '', :password_confirmation => ''}
     num_users = User.find(:all)
@@ -124,7 +124,7 @@ class LoginControllerTest < Test::Unit::TestCase
   
   def test_create_with_invalid_user
     admin = login('admin', 'abracadabra', 'on')
-    assert_equal admin.is_admin, 1
+    assert admin.is_admin
     assert_equal admin.id, @response.session['user_id']
     post :create, :user => {:login => 'n', :password => 'newbiepass', :password_confirmation => 'newbiepass'}
     num_users = User.find(:all)
@@ -136,7 +136,7 @@ class LoginControllerTest < Test::Unit::TestCase
   #
   def test_validate_uniqueness_of_login
     admin = login('admin', 'abracadabra', 'on')
-    assert_equal admin.is_admin, 1
+    assert admin.is_admin
     assert_equal admin.id, @response.session['user_id']
     post :create, :user => {:login => 'jane', :password => 'newbiepass', :password_confirmation => 'newbiepass'}
     num_users = User.find(:all)

@@ -67,23 +67,23 @@ class TodoController < ApplicationController
       self.init # we have to do this again to update @todos
       @up_count = @todos.reject { |x| x.done? or x.context.hide? }.size.to_s
     end
-    return if request.xhr?
     
-    # fallback for standard requests
-    if @saved
-      flash["notice"] = 'Added new next action.'
-      redirect_to :action => 'list'
-    else
-      flash["warning"] = 'The next action was not added. Please try again.'
-      redirect_to :action => 'list'
+    respond_to do |wants|
+      #        if @saved
+      #          flash["notice"] = 'Added new next action.'
+      #        else
+      #          flash["warning"] = 'The next action was not added. Please try again.'
+      #        end
+      wants.html { redirect_to :action => 'list' }
+      wants.js
+      wants.xml { render :xml => @item.to_xml( :root => 'todo', :except => :user_id ) }
     end
     
     rescue
-      if request.xhr? # be sure to include an error.rjs
-        render :action => 'error'
-      else
-        flash["warning"] = 'An error occurred on the server.'
-        render :action => 'list'
+      respond_to do |wants|
+        wants.html { render :action => 'list'  } #          flash["warning"] = 'An error occurred on the server.' render :action => 'list'  }#          flash["warning"] = 'An error occurred on the server.' # render :action => 'list'
+        wants.js { render :action => 'error' }
+        wants.xml { render :text => 'An error occurred on the server.' + $! }
       end
   end
   

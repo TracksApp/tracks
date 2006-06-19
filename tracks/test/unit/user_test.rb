@@ -18,7 +18,7 @@ class UserTest < Test::Unit::TestCase
     assert_equal "admin", @admin_user.login
     assert_equal "#{Digest::SHA1.hexdigest("#{SALT}--abracadabra--")}", @admin_user.password
     assert_not_nil @admin_user.word
-    assert_equal 1, @admin_user.is_admin
+    assert @admin_user.is_admin
   end
 
   # Test a non-admin user model
@@ -28,7 +28,7 @@ class UserTest < Test::Unit::TestCase
     assert_equal "jane", @other_user.login
     assert_equal "#{Digest::SHA1.hexdigest("#{SALT}--sesame--")}", @other_user.password
     assert_not_nil @other_user.word
-    assert_equal 0, @other_user.is_admin
+    assert !@other_user.is_admin
   end
 
   # ============================================
