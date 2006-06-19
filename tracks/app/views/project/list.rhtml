@@ -1,9 +1,6 @@
-<div id="full_width_display">
-
-	<% for name in ["notice", "warning", "message"] %>
-    <% if flash[name] %>
-      <%= "<div id=\"#{name}\">#{flash[name]}</div>" %>
-    <% end %>
+<div id="display_box">
+  <% for name in ["notice", "warning", "message"] %>
+    <div id="<%= name %>"<%= flash[name] ? "" : " style=\"display:none\""%>><%= flash[name] %></div>
   <% end %>
 
 <div id="list-projects">
@@ -11,22 +8,14 @@
   <%= render_partial( 'project_listing', project ) %>
 <% end %>
 </div>
-<% sortable_options = {
-                        :tag => 'div',
-                        :handle => 'handle',
-                        :complete => visual_effect(:highlight, 'list-projects'),
-                        :url => {:controller => 'project', :action => 'order'}
-                       }%>
-<%= sortable_element 'list-projects', sortable_options %>
-<br />
-<a href="javascript:void(0)" onClick="Element.toggle('project_new'); Form.focusFirstElement('project-form');" accesskey="n" title="Create a new project">Create new project &#187;</a>
+<%= sortable_element 'list-projects', get_listing_sortable_options %>
+</div>
+
+<div id="input_box">
+<a href="#" onClick="Element.toggle('project_new'); Form.focusFirstElement('project-form');return false" accesskey="n" title="Create a new project">Create new project &#187;</a>
 <div id="project_new" class="project_new" style="display:none">
 <!--[form:project]-->
 <%= form_remote_tag :url => { :action => "new_project" },
-  :update=> "list-projects",
-  :position=> "bottom",
-  :loading => "Form.reset('project-form')",
-  :complete => "Sortable.create('list-projects', #{options_for_javascript(sortable_options)});;Form.focusFirstElement('project-form');",
   :html=> { :id=>'project-form', :name=>'project', :class => 'inline-form' } %>
   <label for="project_name">Name:</label><br />
   <%= text_field 'project', 'name'  %><br />
@@ -35,12 +24,4 @@
 <%= end_form_tag %>
 <!--[eoform:project]-->
 </div>
-
-<% if flash["confirmation"] %>
-  <div class="confirmation"><%= flash["confirmation"] %></div>
-<% end %>
-<% if flash["warning"] %>
-  <div class="warning"><%= flash["warning"] %></div>
-<% end %>
-
-</div><!-- End of display_box -->
+</div>

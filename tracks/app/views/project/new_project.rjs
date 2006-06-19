@@ -1,0 +1,11 @@
+if @saved
+  page.hide "warning"
+  page.insert_html :bottom, "list-projects", :partial => 'project_listing', :locals => { :project_listing => @project }
+  page.sortable "list-projects", get_listing_sortable_options
+  page.call "Form.reset", "project-form"
+  page.call "Form.focusFirstElement", "project-form"
+else
+  page.hide "warning"
+  page.replace_html "warning", content_tag("div", content_tag("h2", "#{pluralize(@project.errors.count, "error")} prohibited this record from being saved") + content_tag("p", "There were problems with the following fields:") + content_tag("ul", @project.errors.each_full { |msg| content_tag("li", msg) }), "id" => "ErrorExplanation", "class" => "ErrorExplanation")
+  page.visual_effect :appear, 'warning', :duration => 0.5
+end

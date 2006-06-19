@@ -58,16 +58,10 @@ class ProjectController < ApplicationController
   end
 
   def new_project
-    project = @user.projects.build
-    project.attributes = params['project']
-    project.name = deurlize(project.name)
-
-    if project.save
-      render :partial => 'project_listing', :locals => { :project_listing => project }
-    else
-      flash["warning"] = "Couldn't update new project"
-      render :text => ""
-    end
+    @project = @user.projects.build
+    @project.attributes = params['project']
+    @project.name = deurlize(@project.name)
+    @saved = @project.save
   end
 
   # Called by a form button

@@ -1,7 +1,6 @@
 <%
     @project = project_form
 %>
-<%= error_messages_for 'project' %>
 <tr>
   <td width="150"><label for="project_name">Name:</label></td>
   <td width="300"><%= text_field 'project', 'name', :class => 'project-name'  %></td>

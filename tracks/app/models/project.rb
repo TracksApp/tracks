@@ -12,7 +12,8 @@ class Project < ActiveRecord::Base
   validates_presence_of :name, :message => "project must have a name"
   validates_length_of :name, :maximum => 255, :message => "project name must be less than 256 characters"
   validates_uniqueness_of :name, :message => "already exists", :scope =>"user_id"
-
+  validates_format_of :name, :with => /^[^\/]*$/i, :message => "cannot contain the slash ('/') character"
+    
   def self.list_of(isdone=0)
     find(:all, :conditions => [ "done = ?" , true ], :order => "position ASC")
   end
