@@ -35,16 +35,10 @@ class ContextController < ApplicationController
   # Creates a new context via Ajax helpers
   #
   def new_context
-    context = @user.contexts.build
-    context.attributes = params['context']
-    context.name = deurlize(context.name)
-
-    if context.save
-      render :partial => 'context_listing', :locals => { :context_listing => context }
-    else
-      flash["warning"] = "Couldn't add new context"
-      render :text => "#{flash["warning"]}"
-    end
+    @context = @user.contexts.build
+    @context.attributes = params['context']
+    @context.name = deurlize(@context.name)
+    @saved = @context.save
   end
   
   # Called by a form button

@@ -1,0 +1,11 @@
+if @saved
+  page.hide "warning"
+  page.insert_html :bottom, "list-contexts", :partial => 'context_listing', :locals => { :context_listing => @context }
+  page.sortable "list-contexts", get_listing_sortable_options
+  page.call "Form.reset", "context-form"
+  page.call "Form.focusFirstElement", "context-form"
+else
+  page.hide "warning"
+  page.replace_html "warning", content_tag("div", content_tag("h2", "#{pluralize(@context.errors.count, "error")} prohibited this record from being saved") + content_tag("p", "There were problems with the following fields:") + content_tag("ul", @context.errors.each_full { |msg| content_tag("li", msg) }), "id" => "ErrorExplanation", "class" => "ErrorExplanation")
+  page.visual_effect :appear, 'warning', :duration => 0.5
+end

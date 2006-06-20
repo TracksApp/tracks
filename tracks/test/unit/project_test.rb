@@ -4,8 +4,8 @@ class ProjectTest < Test::Unit::TestCase
   fixtures :projects
 
   def setup
-    @timemachine = Project.find(1)
-    @moremoney = Project.find(2)
+    @timemachine = projects(:timemachine)
+    @moremoney = projects(:moremoney)
   end
 
   def test_validate_presence_of_name
