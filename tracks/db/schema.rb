@@ -8,11 +8,11 @@ ActiveRecord::Schema.define(:version => 8) do
     t.column "name", :string, :default => "", :null => false
     t.column "position", :integer, :default => 0, :null => false
     t.column "hide", :boolean, :default => false
-    t.column "user_id", :integer, :default => 1, :null => false
+    t.column "user_id", :integer, :default => 1
   end
 
   create_table "notes", :force => true do |t|
-    t.column "user_id", :integer, :default => 1, :null => false
+    t.column "user_id", :integer, :default => 0, :null => false
     t.column "project_id", :integer, :default => 0, :null => false
     t.column "body", :text
     t.column "created_at", :datetime
@@ -23,9 +23,8 @@ ActiveRecord::Schema.define(:version => 8) do
     t.column "name", :string, :default => "", :null => false
     t.column "position", :integer, :default => 0, :null => false
     t.column "done", :boolean, :default => false
-    t.column "user_id", :integer, :default => 1, :null => false
-    t.column "description", :string, :default => ""
-    t.column "linkurl", :string, :default => ""
+    t.column "user_id", :integer, :default => 1
+    t.column "description", :text
   end
 
   create_table "sessions", :force => true do |t|
@@ -45,7 +44,7 @@ ActiveRecord::Schema.define(:version => 8) do
     t.column "created_at", :datetime
     t.column "due", :date
     t.column "completed", :datetime
-    t.column "user_id", :integer, :default => 1, :null => false
+    t.column "user_id", :integer, :default => 1
     t.column "type", :string, :default => "Immediate", :null => false
     t.column "show_from", :date
   end

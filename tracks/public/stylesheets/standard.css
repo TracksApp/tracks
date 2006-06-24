@@ -51,6 +51,10 @@ a.show_notes:hover {background-image: url(../images/notes_on.png); background-re
 
 /* Structural divs */
 
+#content {
+      margin-top: 90px;
+      }
+      
 #display_box {
       float: left;
       width: 55%;
@@ -65,13 +69,13 @@ a.show_notes:hover {background-image: url(../images/notes_on.png); background-re
 #full_width_display {
       float: left;
       width: 95%;
-      margin: 90px 15px 90px 15px;
+      margin: 0px 15px 90px 15px;
       }
 
 #display_box_projects {
       float: left;
       width: 95%;
-      margin: 90px 15px 90px 15px;
+      margin: 0px 15px 90px 15px;
       }
 
 /* Navigation links at the top */
@@ -117,6 +121,7 @@ a.show_notes:hover {background-image: url(../images/notes_on.png); background-re
       top: 0px;
       left: 0px;
       height: 68px;
+      margin-bottom: 20px;
       clear: both;
       background-color: #000;
       filter: alpha(opacity=75);
@@ -177,7 +182,7 @@ h2 a:hover {
       }
       
 #input_box {
-      margin: 100px 5% 0% 60%;
+      margin: 0% 5% 0% 60%;
       padding: 0px 15px 0px 15px;
       }
       

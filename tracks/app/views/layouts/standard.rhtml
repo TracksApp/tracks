@@ -50,6 +50,8 @@
 </ul>
 </div>
 </div>
+
+<div id="content">
 <div id="info"></div>
 <% unless @controller_name == 'feed' or session['noexpiry'] == "on" -%>
 <%= periodically_call_remote( :url => {:controller => "login", :action => "check_expiry"},
@@ -58,6 +60,7 @@
 <%= periodically_call_remote( :url => {:controller => "todo", :action => "check_tickler"},
                               :frequency => (10*60)) %>  
 <%= @content_for_layout %>
+</div>
 
 <div id="footer">
   <p>Send feedback: <a href="http://dev.rousette.org.uk/report/6">Trac</a> | <a href="http://www.rousette.org.uk/projects/wiki/">Wiki</a> | <a href="mailto:butshesagirl@rousette.org.uk?subject=Tracks feedback">Email</a> | <a href="http://www.rousette.org.uk/projects/">Website</a></p>
