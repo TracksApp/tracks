@@ -1,3 +1,6 @@
+<% if @todos.length == 0 -%>
+<p>There are no uncompleted actions in this <%= @type %></p>
+<% else -%>
 <ul>
 <% for todo in @todos -%>
 <li>
@@ -10,9 +13,11 @@
 <% end -%>
 </li>
 <ul>
-  
-<hr />
-Pages: <%= pagination_links( @todos_pages, :always_show_anchors => true ) %>
+<% if @todos_pages.length > 1 -%>
+  <hr />
+  Pages: <%= pagination_links( @todos_pages, :always_show_anchors => true ) %>
+<% end -%>
+<% end -%>
 <hr />
 <%= form_tag( { :action => "filter", :type => "context" } ) %>
 <%= collection_select( "context", "id", @contexts, "id", "name", 

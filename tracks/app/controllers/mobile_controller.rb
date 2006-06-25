@@ -18,6 +18,7 @@ class MobileController < ApplicationController
     @todos_pages, @todos = paginate( :todos, :order =>  'due IS NULL, due ASC, created_at ASC',
             :conditions => ['user_id = ? and type = ? and done = ?', @user.id, "Immediate", false],
             :per_page => 6 )
+    @count = @all_todos.reject { |x| x.done? || x.context.hide? }.size
   end
 
   def detail
@@ -30,16 +31,24 @@ class MobileController < ApplicationController
     if params[:id]
       @item = check_user_return_item 
     else
-      @item = @user.todos.build           
+      if params[:item][:"show_from(1i)"] == ""
+        @item = Immediate.create(params[:item]) if params[:item]
+      else
+        @item = Deferred.create(params[:item]) if params[:item]
+      end      
     end
     
-    @item.attributes = params[:item]
+    @item.user_id = @user.id
     
     if @item.save
       redirect_to :action => 'list'
     else
-      flash["warning"] = "Action could not be saved"
-      redirect_to :action => 'list'
+      self.init
+      if params[:id]
+        render :partial => 'mobile_edit'
+      else
+        render :action => 'show_add_form'
+      end
     end
   end
 
@@ -49,17 +58,20 @@ class MobileController < ApplicationController
   
   def filter
     self.init
+    @type = params[:type]
     case params[:type]
       when 'context'
         @context = Context.find( params[:context][:id] )
         @page_title = @desc = "#{@context.name}"
         @todos_pages, @todos = paginate( :todos, :order =>  'due IS NULL, due ASC, created_at ASC',
           :conditions => ['user_id = ? and type = ? and done = ? and context_id = ?', @user.id, "Immediate", false, @context.id], :per_page => 6 )
+        @count = @all_todos.reject { |x| x.done? || x.context_id != @context.id }.size
       when 'project'
         @project = Project.find( params[:project][:id] )
         @page_title = @desc = "#{@project.name}"
         @todos_pages, @todos = paginate( :todos, :order =>  'due IS NULL, due ASC, created_at ASC',
           :conditions => ['user_id = ? and type = ? and done = ? and project_id = ?', @user.id, "Immediate", false, @project.id], :per_page => 6 )
+        @count = @all_todos.reject { |x| x.done? || x.project_id != @project.id }.size
     end
   end
   
@@ -80,6 +92,7 @@ class MobileController < ApplicationController
                              :conditions => ['user_id = ?', @user.id]
     @projects = Project.find :all, :order => 'position ASC', 
                              :conditions => ['user_id = ? and done = ?', @user.id, false]
+    @all_todos = Todo.find(:all, :conditions => ['user_id = ? and type = ?', @user.id, "Immediate"])
   end
   
 end

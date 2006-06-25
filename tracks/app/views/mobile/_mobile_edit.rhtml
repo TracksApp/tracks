@@ -1,4 +1,7 @@
+<span class="errors">
 <%= error_messages_for("item") %>
+</span>
+<% this_year = Date.today.strftime("%Y").to_i -%>
 <p><label for="item_done">Done?</label></p>
 <p><%= check_box("item", "done", "tabindex" => 1) %></p>
 <p><label for="item_description">Next action</label></p>
@@ -10,5 +13,9 @@
 <p><%= collection_select( "item", "project_id", @projects, "id", "name",
                           {:include_blank => true}, {"tabindex" => 5} ) %></p>
 <p><label for="item_due">Due</label></p>
-<p><%= date_select("item", "due", :order => [:day, :month, :year], :include_blank => true) %></p>
+<p><%= date_select("item", "due", :order => [:day, :month, :year],
+                    :start_year => this_year, :include_blank => true) %></p>
+<p><label for="item_show_from">Show from</label></p>
+<p><%= date_select("item", "show_from", :order => [:day, :month, :year], 
+                    :start_year => this_year, :include_blank => true) %></p>
 <p><input type="submit" value="Update" tabindex="6" /></p>

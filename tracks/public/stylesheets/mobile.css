@@ -11,32 +11,41 @@ ul {list-style-type: none;}
       background: #f00;
       padding: 1px;
       font-size: 10px;
-      }
+}
       
 .amber {
       color: #fff;
       background: #ff6600;
       padding: 1px;
       font-size: 10px;
-      }
+}
          
 .orange {
       color: #fff;
       background: #FFA500;
       padding: 1px;
       font-size: 10px;
-      }
+}
 
 .green {
       color: #fff;
       background: #33cc00;
       padding: 1px;
       font-size: 10px;
-      }
+}
       
 .grey {
       color: #fff;
       background: #999;
       padding: 1px;
       font-size: 10px;
-      }
+}
+      
+.count {
+      color: #fff;
+      background: #000;
+}
+
+.errors {
+      background: #FFC2C2;
+}
