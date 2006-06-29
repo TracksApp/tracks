@@ -33,7 +33,7 @@ class Project < ActiveRecord::Base
 
   def find_done_todos
     todos = Todo.find :all, :conditions => ["project_id = #{id} AND done = ?", true],
-                      :order => "due IS NULL, due ASC, created_at ASC",
+                      :order => "completed DESC",
                       :limit => @user.preferences["no_completed"].to_i
   end
   

@@ -306,7 +306,7 @@ class TodoController < ApplicationController
       @projects = @user.projects
       @contexts = @user.contexts
       @todos = Todo.find(:all, :conditions => ['user_id = ? and type = ?', @user.id, "Immediate"])
-      @done = Todo.find(:all, :conditions => ['user_id = ? and done = ?', @user.id, true])
+      @done = Todo.find(:all, :conditions => ['user_id = ? and done = ?', @user.id, true], :order => 'completed DESC')
      # @todos = @todos.collect { |x| (x.class == Immediate) ? x : nil }.compact
     end
     

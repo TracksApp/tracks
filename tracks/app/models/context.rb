@@ -26,7 +26,7 @@ class Context < ActiveRecord::Base
   def find_done_todos
     todos = Todo.find :all, :conditions => ["todos.context_id = #{id} AND todos.done = ? AND type = ?", true, "Immediate"],
                       :include => [:context, :project],
-                      :order => "due IS NULL, due ASC, created_at ASC",
+                      :order => "completed DESC",
                       :limit => @user.preferences["no_completed"].to_i
   end
 
