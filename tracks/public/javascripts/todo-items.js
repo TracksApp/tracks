@@ -15,6 +15,7 @@ var todoItems = {
     var toggleElems = document.getElementsByClassName('container_toggle');
     toggleElems.each(function(toggleElem){
       Event.observe(toggleElem, 'click', todoItems.toggleNextActionListing);
+      toggleElem.onclick = function() {return false;}; //workaround for Event.stop problem with Safari 2.0.3. See http://particletree.com/notebook/eventstop/
       containerElem = todoItems.findNearestParentByClassName(toggleElem, "container");
       collapsedCookie = contextCollapseCookieManager.getCookie(todoItems.buildCookieName(containerElem));
       if (collapsedCookie)
@@ -41,8 +42,9 @@ var todoItems = {
   	new Effect.Fade(fadingElemId,{afterFinish:function(effect) { Element.remove(fadingElemId); }, duration:0.4});
   },
 
-  toggleNextActionListing: function()
+  toggleNextActionListing: function(event)
   {
+    Event.stop(event);
     itemsElem = todoItems.findItemsElem(this);
    	containerElem = todoItems.findNearestParentByClassName(this, "container");
     if (Element.visible(itemsElem))
@@ -55,7 +57,6 @@ var todoItems = {
       todoItems.expandNextActionListing(this, itemsElem);
 	   	contextCollapseCookieManager.clearCookie(todoItems.buildCookieName(containerElem))
     }
-    return false;
   },
   
   expandNextActionListing: function(toggleElem, itemsElem)
