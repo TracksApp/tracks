@@ -27,12 +27,12 @@ class Project < ActiveRecord::Base
   end
   
   def find_not_done_todos
-    todos = Todo.find :all, :conditions => ["project_id = #{id} AND done = ?", false],
+    todos = Todo.find :all, :conditions => ["project_id = ? AND done = ?", id, false],
                       :order => "due IS NULL, due ASC, created_at ASC"
   end
 
   def find_done_todos
-    todos = Todo.find :all, :conditions => ["project_id = #{id} AND done = ?", true],
+    todos = Todo.find :all, :conditions => ["project_id = ? AND done = ?", id, true],
                       :order => "completed DESC",
                       :limit => @user.preferences["no_completed"].to_i
   end
