@@ -219,6 +219,7 @@ input.item-checkbox {
       }
 
 .description {
+      cursor:move;
       margin-left: 70px;
       margin-right: 10px;
       _margin-left: 0px; 
