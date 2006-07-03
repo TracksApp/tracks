@@ -206,6 +206,23 @@ class TodoController < ApplicationController
       end
     end
   end
+  
+  def update_project
+    self.init
+    @item = check_user_return_item
+    project = Project.find(params['project_id']);
+    if @user == project.user
+      @original_item_context_id = @item.context_id
+      @item.project_id = project.id
+      @item.project = project
+      @saved = @item.save
+      render :action => 'update_action'
+    else
+      render :update do |page| 
+        page.replace_html "info", content_tag("div", "Error updating the project of the dragged item. Item and project user mis-match: #{@item.user.name} and #{@project.user.name}! - refresh the page to see them.", "class" => "warning")
+      end
+    end
+  end
 
   def deferred_update_action
     #self.init

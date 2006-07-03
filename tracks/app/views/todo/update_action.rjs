@@ -1,9 +1,8 @@
 if @saved
   item_container_id = "item-#{@item.id}-container"
-  logger.info("@item.context_id = #{@item.context_id}")
-  logger.info("@original_item_context.id = #{@original_item_context_id}")
   if @item.context_id == @original_item_context_id
     page.replace_html item_container_id, :partial => 'todo/item'
+    page.call "todoItems.makeItemDraggable", item_container_id
     page.visual_effect :highlight, item_container_id, :duration => 3
   else
     page["item-#{@item.id}-container"].remove

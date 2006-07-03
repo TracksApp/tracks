@@ -162,6 +162,12 @@ var todoItems = {
     $$('.context').each(function(contextElem){
       todoItems.makeContextDroppable(contextElem);
     });
+    $$('.sidebar-project').each(function(projectElem){
+      todoItems.makeProjectDroppable(projectElem);
+    });
+    $$('.sidebar-context').each(function(contextElem){
+      todoItems.makeContextDroppable(contextElem);
+    });
   },
   makeItemDraggable: function(itemContainerElem)
   {
@@ -179,8 +185,16 @@ var todoItems = {
 	  {
 		  accept:'item-container',
 		  hoverclass:'item-container-drop-target',
-		  onDrop: todoItems.itemDrop,
-		  zindex: 1000
+		  onDrop: todoItems.itemContextDrop
+    });
+  },
+  makeProjectDroppable: function(projectElem)
+  {
+	  Droppables.add($(projectElem).id,
+	  {
+		  accept:'item-container',
+		  hoverclass:'item-container-drop-target',
+		  onDrop: todoItems.itemProjectDrop
     });
   },
   startDraggingItem:function(draggable)
@@ -195,7 +209,7 @@ var todoItems = {
     todoItems.setNextActionListingTogglesToCookiedState();
   },
   
-  itemDrop:function(draggableElement, droppableElement) {
+  itemContextDrop:function(draggableElement, droppableElement) {
     if (draggableElement.parentContainer == droppableElement) {
       return; //same destination as original, nothing to be done
     } 
@@ -211,6 +225,24 @@ var todoItems = {
       asynchronous:true,
       evalScripts:true,
       parameters:"id=" + todoId + "&context_id=" + contextId
+    })
+  },
+  itemProjectDrop:function(draggableElement, droppableElement) {
+    if (draggableElement.parentContainer == droppableElement) {
+      return; //same destination as original, nothing to be done
+    } 
+    itemElementId = draggableElement.id
+    todoId = draggableElement.id.match(/\d+/)[0];
+    projectId = droppableElement.id.match(/\d+/)[0];
+    Draggables.drags.each(function(drag) {
+      if (drag.element == draggableElement) {
+        drag.destroy();
+      }
+    })
+    new Ajax.Request('/todo/update_project', {
+      asynchronous:true,
+      evalScripts:true,
+      parameters:"id=" + todoId + "&project_id=" + projectId
     })
   }
 }
