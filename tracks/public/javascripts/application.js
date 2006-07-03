@@ -6,7 +6,11 @@ Ajax.Responders.register({
   onComplete: function() {
     if($('busy') && Ajax.activeRequestCount==0)
       Element.hide('busy');
-  }
+  },
+// uncomment the next three lines for easier debugging with FireBug
+//  onException: function(source, exception) {
+//    console.error(exception);
+//  }
 });
 
 /**

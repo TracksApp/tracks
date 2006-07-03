@@ -129,6 +129,7 @@ a.show_notes:hover {background-image: url(../images/notes_on.png); background-re
       opacity: .75;
       color: #eee;
       width: 100%;
+      z-index:1100;
       }
       
 #date {
@@ -202,7 +203,9 @@ h2 a:hover {
       padding:2px;
       clear: left;
       }
-
+.item-container-drop-target {
+      border:2px inset black;
+}
 .container a.icon {
       float: left;
       vertical-align: middle;

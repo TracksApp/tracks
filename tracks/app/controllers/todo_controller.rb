@@ -189,6 +189,23 @@ class TodoController < ApplicationController
 
     @saved = @item.save
   end
+  
+  def update_context
+    self.init
+    @item = check_user_return_item
+    context = Context.find(params['context_id']);
+    if @user == context.user
+      @original_item_context_id = @item.context_id
+      @item.context_id = context.id
+      @item.context = context
+      @saved = @item.save
+      render :action => 'update_action'
+    else
+      render :update do |page| 
+        page.replace_html "info", content_tag("div", "Error updating the context of the dragged item. Item and context user mis-match: #{@item.user.name} and #{@context.user.name}! - refresh the page to see them.", "class" => "warning")
+      end
+    end
+  end
 
   def deferred_update_action
     #self.init
@@ -289,7 +306,7 @@ class TodoController < ApplicationController
       end
     end
   end
-
+  
   protected
 
     def check_user_return_item

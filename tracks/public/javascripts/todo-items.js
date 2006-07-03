@@ -11,19 +11,41 @@ var todoItems = {
 
   addNextActionListingToggles: function()
   {
-    this.contextCollapseCookieManager = new CookieManager();
-    var toggleElems = document.getElementsByClassName('container_toggle');
-    toggleElems.each(function(toggleElem){
+    $$('.container_toggle').each(function(toggleElem){
       Event.observe(toggleElem, 'click', todoItems.toggleNextActionListing);
       toggleElem.onclick = function() {return false;}; //workaround for Event.stop problem with Safari 2.0.3. See http://particletree.com/notebook/eventstop/
+		});
+	  todoItems.setNextActionListingTogglesToCookiedState();
+  },
+  setNextActionListingTogglesToCookiedState: function()
+  {
+    contextCollapseCookieManager = new CookieManager();
+    $$('.container_toggle').each(function(toggleElem){
       containerElem = todoItems.findNearestParentByClassName(toggleElem, "container");
       collapsedCookie = contextCollapseCookieManager.getCookie(todoItems.buildCookieName(containerElem));
-      if (collapsedCookie)
+      itemsElem = todoItems.findItemsElem(toggleElem);
+      isExpanded = Element.visible(itemsElem);
+      if (collapsedCookie && isExpanded)
       {
-        itemsElem = todoItems.findItemsElem(toggleElem);
         todoItems.collapseNextActionListing(toggleElem, itemsElem);
       }
+      else if (!collapsedCookie && !isExpanded)
+      {
+        todoItems.expandNextActionListing(toggleElem, itemsElem);
+      }
 		});
+  },
+  collapseAllNextActionListing: function(except)
+  {
+    $$('.container_toggle').each(function(toggleElem){
+      if (toggleElem != except)
+      itemsElem = todoItems.findItemsElem(toggleElem);
+      isExpanded = Element.visible(itemsElem);
+      if (isExpanded)
+      {
+        todoItems.collapseNextActionListing(toggleElem, itemsElem);
+      }
+    });
   },
 
   ensureVisibleWithEffectAppear: function(elemId)
@@ -58,31 +80,51 @@ var todoItems = {
 	   	contextCollapseCookieManager.clearCookie(todoItems.buildCookieName(containerElem))
     }
   },
-  
-  expandNextActionListing: function(toggleElem, itemsElem)
+  findToggleElemForContext : function(contextElem)
   {
-    Effect.BlindDown(itemsElem, { duration: 0.4 });
+    childElems = $A($(contextElem).getElementsByTagName('a'));
+    return childElems.detect(function(childElem) { return childElem.className == 'container_toggle' });
+  },
+  expandNextActionListing: function(toggleElem, itemsElem, skipAnimation)
+  {
+    itemsElem = $(itemsElem)
+    if (skipAnimation == true) {
+      itemsElem.style.display = 'block';
+    }
+    else
+    {
+      Effect.BlindDown(itemsElem, { duration: 0.4 });
+    }
     toggleElem.setAttribute('title', 'Collapse');
-    imgElem = todoItems.findFirstImgElementWithSrcContaining(toggleElem, 'expand.png');
+    imgElem = todoItems.findToggleImgElem(toggleElem);
   	imgElem.src = imgElem.src.replace('expand','collapse');
     imgElem.setAttribute('title','Collapse');
   },
-  
+  ensureContainerHeight: function(itemsElem)
+  {
+    itemsElem = $(itemsElem);
+    Element.setStyle(itemsElem, {height : ''});
+    Element.setStyle(itemsElem, {overflow : ''});
+  },
+  expandNextActionListingByContext: function(itemsElem, skipAnimation)
+  {
+    contextElem = todoItems.findNearestParentByClassName($(itemsElem), "context");
+    toggleElem = todoItems.findToggleElemForContext(contextElem);
+    todoItems.expandNextActionListing(toggleElem, itemsElem, skipAnimation);
+  },
   collapseNextActionListing: function(toggleElem, itemsElem)
   {
     Effect.BlindUp(itemsElem, { duration: 0.4});
     toggleElem.setAttribute('title', 'Expand');
-    imgElem = todoItems.findFirstImgElementWithSrcContaining(toggleElem, 'collapse.png');
+    imgElem = todoItems.findToggleImgElem(toggleElem);
    	imgElem.src = imgElem.src.replace('collapse','expand');
    	imgElem.setAttribute('title','Expand');
   },
-  
-  findFirstImgElementWithSrcContaining: function(searchRootElem, srcString)
+  findToggleImgElem: function(toggleElem)
   {
-    childImgElems = $A(searchRootElem.getElementsByTagName('img'));
-    return childImgElems.detect(function(childImgElem) { return childImgElem.src.indexOf(srcString) != -1 });
+    childImgElems = $A(toggleElem.getElementsByTagName('img'));
+    return childImgElems[0];
   },
-  
   buildCookieName: function(containerElem)
   {
    	tracks_login = contextCollapseCookieManager.getCookie('tracks_login');
@@ -110,6 +152,67 @@ var todoItems = {
   		return document.getElementsByClassName('toggle_target',containerElem)[0];
   	else
   		return null;
+  },
+  
+  addItemDragDrop: function()
+  {    
+    $$('.item-container').each(function(containerElem){
+      todoItems.makeItemDraggable(containerElem);
+    });
+    $$('.context').each(function(contextElem){
+      todoItems.makeContextDroppable(contextElem);
+    });
+  },
+  makeItemDraggable: function(itemContainerElem)
+  {
+    new Draggable($(itemContainerElem).id,
+    {
+	    handle:'description',
+		  starteffect:todoItems.startDraggingItem,
+		  endeffect:todoItems.stopDraggingItem,
+	    revert:true
+    });
+  },
+  makeContextDroppable: function(contextElem)
+  {
+	  Droppables.add($(contextElem).id,
+	  {
+		  accept:'item-container',
+		  hoverclass:'item-container-drop-target',
+		  onDrop: todoItems.itemDrop,
+		  zindex: 1000
+    });
+  },
+  startDraggingItem:function(draggable)
+  {
+    parentContainer = todoItems.findNearestParentByClassName(draggable, 'container');
+    draggable.parentContainer = parentContainer;
+    toggleElem = document.getElementsByClassName('container_toggle',parentContainer)[0];
+    todoItems.collapseAllNextActionListing(toggleElem);
+  },
+  stopDraggingItem:function(draggable)
+  {
+    todoItems.setNextActionListingTogglesToCookiedState();
+  },
+  
+  itemDrop:function(draggableElement, droppableElement) {
+    if (draggableElement.parentContainer == droppableElement) {
+      return; //same destination as original, nothing to be done
+    } 
+    itemElementId = draggableElement.id
+    todoId = draggableElement.id.match(/\d+/)[0];
+    contextId = droppableElement.id.match(/\d+/)[0];
+    Draggables.drags.each(function(drag) {
+      if (drag.element == draggableElement) {
+        drag.destroy();
+      }
+    })
+    new Ajax.Request('/todo/update_context', {
+      asynchronous:true,
+      evalScripts:true,
+      parameters:"id=" + todoId + "&context_id=" + contextId
+    })
   }
 }
 Event.observe(window, "load", todoItems.addNextActionListingToggles);
+Event.observe(window, "load", todoItems.addItemDragDrop);
