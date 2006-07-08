@@ -155,9 +155,9 @@ var todoItems = {
   },
   
   addItemDragDrop: function()
-  {    
+  {
     $$('.item-container').each(function(containerElem){
-      todoItems.makeItemDraggable(containerElem);
+      todoItems.prepareForLazyLoadingDraggable(containerElem.id);
     });
     $$('.context').each(function(contextElem){
       todoItems.makeContextDroppable(contextElem);
@@ -169,9 +169,20 @@ var todoItems = {
       todoItems.makeContextDroppable(contextElem);
     });
   },
+  prepareForLazyLoadingDraggable : function(itemContainerElemId)
+  {
+    Event.observe($(itemContainerElemId), "mouseover", todoItems.createDraggableListener.bindAsEventListener($(itemContainerElemId)));
+  },
+  createDraggableListener : function()
+  {
+    todoItems.makeItemDraggable(this);
+    //remove this listener once the draggable has been created (no longer needed)
+    Event.stopObserving(this, "mouseover", this.createDraggableListener);
+    this.createDraggableListener = null;
+  },
   makeItemDraggable: function(itemContainerElem)
   {
-    new Draggable($(itemContainerElem).id,
+    new Draggable(itemContainerElem.id,
     {
 	    handle:'description',
 		  starteffect:todoItems.startDraggingItem,
@@ -244,7 +255,6 @@ var todoItems = {
       evalScripts:true,
       parameters:"id=" + todoId + "&project_id=" + projectId
     })
-  }
-}
+  }}
 Event.observe(window, "load", todoItems.addNextActionListingToggles);
 Event.observe(window, "load", todoItems.addItemDragDrop);
