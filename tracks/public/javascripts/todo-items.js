@@ -7,47 +7,57 @@
  *  <script type="text/javascript" src="todo-items.js"></script>
  */
 
-var todoItems = {
+ToDoItems = Class.create();
 
+ToDoItems.prototype = {
+  initialize: function()
+  {
+    this.initialized = true;
+  },
   addNextActionListingToggles: function()
   {
-    $$('.container_toggle').each(function(toggleElem){
-      Event.observe(toggleElem, 'click', todoItems.toggleNextActionListing);
-      toggleElem.onclick = function() {return false;}; //workaround for Event.stop problem with Safari 2.0.3. See http://particletree.com/notebook/eventstop/
-		});
-	  todoItems.setNextActionListingTogglesToCookiedState();
+    this.containerToggles = $$('.container_toggle');
+    for(i=0; i < this.containerToggles.length; i++)
+    {
+      Event.observe(this.containerToggles[i], 'click', this.toggleNextActionListing.bindAsEventListener(this));
+      this.containerToggles[i].onclick = function() {return false;}; //workaround for Event.stop problem with Safari 2.0.3. See http://particletree.com/notebook/eventstop/
+    }
+	  this.setNextActionListingTogglesToCookiedState();
   },
   setNextActionListingTogglesToCookiedState: function()
   {
     contextCollapseCookieManager = new CookieManager();
-    $$('.container_toggle').each(function(toggleElem){
-      containerElem = todoItems.findNearestParentByClassName(toggleElem, "container");
-      collapsedCookie = contextCollapseCookieManager.getCookie(todoItems.buildCookieName(containerElem));
-      itemsElem = todoItems.findItemsElem(toggleElem);
+    for(i=0; i < this.containerToggles.length; i++)
+    {
+      toggleElem = this.containerToggles[i];
+      containerElem = this.findNearestParentByClassName(toggleElem, "container");
+      collapsedCookie = contextCollapseCookieManager.getCookie(this.buildCookieName(containerElem));
+      itemsElem = this.findItemsElem(toggleElem);
       isExpanded = Element.visible(itemsElem);
       if (collapsedCookie && isExpanded)
       {
-        todoItems.collapseNextActionListing(toggleElem, itemsElem);
+        this.collapseNextActionListing(toggleElem, itemsElem);
       }
       else if (!collapsedCookie && !isExpanded)
       {
-        todoItems.expandNextActionListing(toggleElem, itemsElem);
+        this.expandNextActionListing(toggleElem, itemsElem);
       }
-		});
+		}
   },
   collapseAllNextActionListing: function(except)
   {
-    $$('.container_toggle').each(function(toggleElem){
+    for(i=0; i < this.containerToggles.length; i++)
+    {
+      toggleElem = this.containerToggles[i];
       if (toggleElem != except)
-      itemsElem = todoItems.findItemsElem(toggleElem);
+      itemsElem = this.findItemsElem(toggleElem);
       isExpanded = Element.visible(itemsElem);
       if (isExpanded)
       {
-        todoItems.collapseNextActionListing(toggleElem, itemsElem);
+        this.collapseNextActionListing(toggleElem, itemsElem);
       }
-    });
+    }
   },
-
   ensureVisibleWithEffectAppear: function(elemId)
   {
   	if ($(elemId).style.display == 'none')
@@ -55,7 +65,6 @@ var todoItems = {
   		new Effect.Appear(elemId,{duration:0.4});
   	}
   },
-
   fadeAndRemoveItem: function(itemContainerElemId)
   {
   	var fadingElemId = itemContainerElemId + '-fading';
@@ -63,21 +72,21 @@ var todoItems = {
   	Element.removeClassName($(fadingElemId),'item-container');
   	new Effect.Fade(fadingElemId,{afterFinish:function(effect) { Element.remove(fadingElemId); }, duration:0.4});
   },
-
   toggleNextActionListing: function(event)
   {
     Event.stop(event);
-    itemsElem = todoItems.findItemsElem(this);
-   	containerElem = todoItems.findNearestParentByClassName(this, "container");
+    toggleElem = Event.element(event).parentNode;
+    itemsElem = this.findItemsElem(toggleElem);
+   	containerElem = this.findNearestParentByClassName(toggleElem, "container");
     if (Element.visible(itemsElem))
     {
-      todoItems.collapseNextActionListing(this, itemsElem);
-	   	contextCollapseCookieManager.setCookie(todoItems.buildCookieName(containerElem), true)
+      this.collapseNextActionListing(toggleElem, itemsElem);
+	   	contextCollapseCookieManager.setCookie(this.buildCookieName(containerElem), true)
     }
     else
     {
-      todoItems.expandNextActionListing(this, itemsElem);
-	   	contextCollapseCookieManager.clearCookie(todoItems.buildCookieName(containerElem))
+      this.expandNextActionListing(toggleElem, itemsElem);
+	   	contextCollapseCookieManager.clearCookie(this.buildCookieName(containerElem))
     }
   },
   findToggleElemForContext : function(contextElem)
@@ -96,7 +105,7 @@ var todoItems = {
       Effect.BlindDown(itemsElem, { duration: 0.4 });
     }
     toggleElem.setAttribute('title', 'Collapse');
-    imgElem = todoItems.findToggleImgElem(toggleElem);
+    imgElem = this.findToggleImgElem(toggleElem);
   	imgElem.src = imgElem.src.replace('expand','collapse');
     imgElem.setAttribute('title','Collapse');
   },
@@ -108,15 +117,15 @@ var todoItems = {
   },
   expandNextActionListingByContext: function(itemsElem, skipAnimation)
   {
-    contextElem = todoItems.findNearestParentByClassName($(itemsElem), "context");
-    toggleElem = todoItems.findToggleElemForContext(contextElem);
-    todoItems.expandNextActionListing(toggleElem, itemsElem, skipAnimation);
+    contextElem = this.findNearestParentByClassName($(itemsElem), "context");
+    toggleElem = this.findToggleElemForContext(contextElem);
+    this.expandNextActionListing(toggleElem, itemsElem, skipAnimation);
   },
   collapseNextActionListing: function(toggleElem, itemsElem)
   {
     Effect.BlindUp(itemsElem, { duration: 0.4});
     toggleElem.setAttribute('title', 'Expand');
-    imgElem = todoItems.findToggleImgElem(toggleElem);
+    imgElem = this.findToggleImgElem(toggleElem);
    	imgElem.src = imgElem.src.replace('collapse','expand');
    	imgElem.setAttribute('title','Expand');
   },
@@ -144,59 +153,78 @@ var todoItems = {
   	}
   	return null;
   },
-
-  findItemsElem : function(toggleElem)
+  
+  findItemElem: function(elem)
   {
-  	var containerElem = todoItems.findNearestParentByClassName(toggleElem, "container");
+    if (elem.hasClassName("item-container"))
+      return elem;
+    else
+      return this.findNearestParentByClassName(elem, "item-container");
+  },
+  findItemsElem : function(elem)
+  {
+  	var containerElem = this.findNearestParentByClassName(elem, "container");
   	if (containerElem)
   		return document.getElementsByClassName('toggle_target',containerElem)[0];
   	else
   		return null;
   },
-  
   addItemDragDrop: function()
   {
-    $$('.item-container').each(function(containerElem){
-      todoItems.prepareForLazyLoadingDraggable(containerElem.id);
-    });
-    $$('.context').each(function(contextElem){
-      todoItems.makeContextDroppable(contextElem);
-    });
-    $$('.sidebar-project').each(function(projectElem){
-      todoItems.makeProjectDroppable(projectElem);
-    });
-    $$('.sidebar-context').each(function(contextElem){
-      todoItems.makeContextDroppable(contextElem);
-    });
+    this.itemContainers = $$('.item-container');
+    for(i=0; i < this.itemContainers.length; i++)
+    {
+      itemContainer = this.itemContainers[i];
+      this.prepareForLazyLoadingDraggable(itemContainer.id);
+    }
+    contextElems = $$('.context');
+    for(i=0; i < contextElems.length; i++)
+    {
+      this.makeContextDroppable(contextElems[i]);
+    }
+    /*
+    sidebarProjectElems = $$('.sidebar-project');
+    for(i=0; i < sidebarProjectElems.length; i++)
+    {
+      this.makeProjectDroppable(sidebarProjectElems[i]);
+    }
+    sidebarContextElems = $$('.sidebar-context');
+    for(i=0; i < sidebarContextElems.length; i++)
+    {
+      this.makeContextDroppable(sidebarContextElems[i]);
+    }
+    */
   },
   prepareForLazyLoadingDraggable : function(itemContainerElemId)
   {
-    Event.observe($(itemContainerElemId), "mouseover", todoItems.createDraggableListener.bindAsEventListener($(itemContainerElemId)));
+    Event.observe($(itemContainerElemId), "mouseover", this.createDraggableListener.bindAsEventListener(this));
   },
-  createDraggableListener : function()
+  createDraggableListener : function(event)
   {
-    todoItems.makeItemDraggable(this);
+    itemToMakeDraggable = this.findItemElem(Event.element(event));
+    this.makeItemDraggable(itemToMakeDraggable);
     //remove this listener once the draggable has been created (no longer needed)
-    Event.stopObserving(this, "mouseover", this.createDraggableListener);
-    this.createDraggableListener = null;
+    Event.stopObserving(itemToMakeDraggable, "mouseover", itemToMakeDraggable.createDraggableListener);
+    itemToMakeDraggable.createDraggableListener = null;
   },
   makeItemDraggable: function(itemContainerElem)
   {
     new Draggable(itemContainerElem.id,
     {
 	    handle:'description',
-		  starteffect:todoItems.startDraggingItem,
-		  endeffect:todoItems.stopDraggingItem,
+		  starteffect:this.startDraggingItem.bindAsEventListener(this),
+		  endeffect:this.stopDraggingItem.bindAsEventListener(this),
 	    revert:true
     });
   },
+  
   makeContextDroppable: function(contextElem)
   {
 	  Droppables.add($(contextElem).id,
 	  {
 		  accept:'item-container',
 		  hoverclass:'item-container-drop-target',
-		  onDrop: todoItems.itemContextDrop
+		  onDrop: this.itemContextDrop
     });
   },
   makeProjectDroppable: function(projectElem)
@@ -205,19 +233,19 @@ var todoItems = {
 	  {
 		  accept:'item-container',
 		  hoverclass:'item-container-drop-target',
-		  onDrop: todoItems.itemProjectDrop
+		  onDrop: this.itemProjectDrop
     });
   },
   startDraggingItem:function(draggable)
   {
-    parentContainer = todoItems.findNearestParentByClassName(draggable, 'container');
+    parentContainer = this.findNearestParentByClassName(draggable, 'container');
     draggable.parentContainer = parentContainer;
     toggleElem = document.getElementsByClassName('container_toggle',parentContainer)[0];
-    todoItems.collapseAllNextActionListing(toggleElem);
+    this.collapseAllNextActionListing(toggleElem);
   },
   stopDraggingItem:function(draggable)
   {
-    todoItems.setNextActionListingTogglesToCookiedState();
+    this.setNextActionListingTogglesToCookiedState();
   },
   
   itemContextDrop:function(draggableElement, droppableElement) {
@@ -256,5 +284,7 @@ var todoItems = {
       parameters:"id=" + todoId + "&project_id=" + projectId
     })
   }}
-Event.observe(window, "load", todoItems.addNextActionListingToggles);
-Event.observe(window, "load", todoItems.addItemDragDrop);
+
+todoItems = new ToDoItems();
+Event.observe(window, "load", todoItems.addNextActionListingToggles.bindAsEventListener(todoItems));
+Event.observe(window, "load", todoItems.addItemDragDrop.bindAsEventListener(todoItems));
