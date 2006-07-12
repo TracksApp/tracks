@@ -154,13 +154,6 @@ ToDoItems.prototype = {
   	return null;
   },
   
-  findItemElem: function(elem)
-  {
-    if (elem.hasClassName("item-container"))
-      return elem;
-    else
-      return this.findNearestParentByClassName(elem, "item-container");
-  },
   findItemsElem : function(elem)
   {
   	var containerElem = this.findNearestParentByClassName(elem, "container");
@@ -168,123 +161,8 @@ ToDoItems.prototype = {
   		return document.getElementsByClassName('toggle_target',containerElem)[0];
   	else
   		return null;
-  },
-  addItemDragDrop: function()
-  {
-    this.itemContainers = $$('.item-container');
-    for(i=0; i < this.itemContainers.length; i++)
-    {
-      itemContainer = this.itemContainers[i];
-      this.prepareForLazyLoadingDraggable(itemContainer.id);
-    }
-    contextElems = $$('.context');
-    for(i=0; i < contextElems.length; i++)
-    {
-      this.makeContextDroppable(contextElems[i]);
-    }
-    /*
-    sidebarProjectElems = $$('.sidebar-project');
-    for(i=0; i < sidebarProjectElems.length; i++)
-    {
-      this.makeProjectDroppable(sidebarProjectElems[i]);
-    }
-    sidebarContextElems = $$('.sidebar-context');
-    for(i=0; i < sidebarContextElems.length; i++)
-    {
-      this.makeContextDroppable(sidebarContextElems[i]);
-    }
-    */
-  },
-  prepareForLazyLoadingDraggable : function(itemContainerElemId)
-  {
-    Event.observe($(itemContainerElemId), "mouseover", this.createDraggableListener.bindAsEventListener(this));
-  },
-  createDraggableListener : function(event)
-  {
-    itemToMakeDraggable = this.findItemElem(Event.element(event));
-    this.makeItemDraggable(itemToMakeDraggable);
-    //remove this listener once the draggable has been created (no longer needed)
-    Event.stopObserving(itemToMakeDraggable, "mouseover", itemToMakeDraggable.createDraggableListener);
-    itemToMakeDraggable.createDraggableListener = null;
-  },
-  makeItemDraggable: function(itemContainerElem)
-  {
-    new Draggable(itemContainerElem.id,
-    {
-	    handle:'description',
-		  starteffect:this.startDraggingItem.bindAsEventListener(this),
-		  endeffect:this.stopDraggingItem.bindAsEventListener(this),
-	    revert:true
-    });
-  },
-  
-  makeContextDroppable: function(contextElem)
-  {
-	  Droppables.add($(contextElem).id,
-	  {
-		  accept:'item-container',
-		  hoverclass:'item-container-drop-target',
-		  onDrop: this.itemContextDrop
-    });
-  },
-  makeProjectDroppable: function(projectElem)
-  {
-	  Droppables.add($(projectElem).id,
-	  {
-		  accept:'item-container',
-		  hoverclass:'item-container-drop-target',
-		  onDrop: this.itemProjectDrop
-    });
-  },
-  startDraggingItem:function(draggable)
-  {
-    parentContainer = this.findNearestParentByClassName(draggable, 'container');
-    draggable.parentContainer = parentContainer;
-    toggleElem = document.getElementsByClassName('container_toggle',parentContainer)[0];
-    this.collapseAllNextActionListing(toggleElem);
-  },
-  stopDraggingItem:function(draggable)
-  {
-    this.setNextActionListingTogglesToCookiedState();
-  },
-  
-  itemContextDrop:function(draggableElement, droppableElement) {
-    if (draggableElement.parentContainer == droppableElement) {
-      return; //same destination as original, nothing to be done
-    } 
-    itemElementId = draggableElement.id
-    todoId = draggableElement.id.match(/\d+/)[0];
-    contextId = droppableElement.id.match(/\d+/)[0];
-    Draggables.drags.each(function(drag) {
-      if (drag.element == draggableElement) {
-        drag.destroy();
-      }
-    })
-    new Ajax.Request('/todo/update_context', {
-      asynchronous:true,
-      evalScripts:true,
-      parameters:"id=" + todoId + "&context_id=" + contextId
-    })
-  },
-  itemProjectDrop:function(draggableElement, droppableElement) {
-    if (draggableElement.parentContainer == droppableElement) {
-      return; //same destination as original, nothing to be done
-    } 
-    itemElementId = draggableElement.id
-    todoId = draggableElement.id.match(/\d+/)[0];
-    projectId = droppableElement.id.match(/\d+/)[0];
-    Draggables.drags.each(function(drag) {
-      if (drag.element == draggableElement) {
-        drag.destroy();
-      }
-    })
-    new Ajax.Request('/todo/update_project', {
-      asynchronous:true,
-      evalScripts:true,
-      parameters:"id=" + todoId + "&project_id=" + projectId
-    })
-  }}
+  }
+}
 
 todoItems = new ToDoItems();
 Event.observe(window, "load", todoItems.addNextActionListingToggles.bindAsEventListener(todoItems));
-Event.observe(window, "load", todoItems.addItemDragDrop.bindAsEventListener(todoItems));

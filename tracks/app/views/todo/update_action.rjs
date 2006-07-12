@@ -2,7 +2,6 @@ if @saved
   item_container_id = "item-#{@item.id}-container"
   if @item.context_id == @original_item_context_id
     page.replace_html item_container_id, :partial => 'todo/item'
-    page.call "todoItems.prepareForLazyLoadingDraggable", item_container_id
     page.visual_effect :highlight, item_container_id, :duration => 3
   else
     page[item_container_id].remove
@@ -11,7 +10,6 @@ if @saved
     page.delay(0.5) do
       page.call "todoItems.ensureContainerHeight", "c#{@original_item_context_id}items"
       page.call "todoItems.ensureContainerHeight", "c#{@item.context_id}items"
-      page.call "todoItems.prepareForLazyLoadingDraggable", item_container_id
       page.visual_effect :highlight, item_container_id, :duration => 3
     end
   end
