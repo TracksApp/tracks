@@ -3,7 +3,7 @@
 <div id="p<%= project.id %>" class="container project">
   <h2>
     <% if collapsible %>
-    <a href="#" class="container_toggle"><%= image_tag("collapse.png") %></a>
+    <a href="#" class="container_toggle" id="toggle_p<%= project.id %>"><%= image_tag("collapse.png") %></a>
     <% end %>
     <%= sanitize("#{project.name}") %>
   </h2>

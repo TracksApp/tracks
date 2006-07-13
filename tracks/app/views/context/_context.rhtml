@@ -2,7 +2,7 @@
 <div id="c<%= context.id %>" class="container context">
   <h2>
 <% if collapsible -%>
-    <a href="#" class="container_toggle"><%= image_tag("collapse.png") %></a>
+    <a href="#" class="container_toggle" id="toggle_c<%= context.id %>"><%= image_tag("collapse.png") %></a>
 <% end -%>
     <%= link_to( sanitize("#{context.name}"), { :controller => "context", :action => "show", :name => urlize(context.name) }, { :title => "Go to the #{context.name} context page" } )  %>
   </h2>

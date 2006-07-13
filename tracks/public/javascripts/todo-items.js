@@ -13,26 +13,36 @@ ToDoItems.prototype = {
   initialize: function()
   {
     this.initialized = true;
+    this.contextCollapseCookieManager = new CookieManager();
+    this.toggleItemsMap = {};
+    this.toggleContainerMap = {};
+    this.containerItemsMap = {};
   },
   addNextActionListingToggles: function()
   {
     this.containerToggles = $$('.container_toggle');
+    containerTogglesClick = this.toggleNextActionListing.bindAsEventListener(this);
     for(i=0; i < this.containerToggles.length; i++)
     {
-      Event.observe(this.containerToggles[i], 'click', this.toggleNextActionListing.bindAsEventListener(this));
+      toggleElem = this.containerToggles[i];
+      containerElem = toggleElem.parentNode.parentNode
+      itemsElem = document.getElementsByClassName('toggle_target',containerElem)[0];
+      this.toggleContainerMap[toggleElem.id] = containerElem;
+      this.toggleItemsMap[toggleElem.id] = itemsElem;
+      this.containerItemsMap[containerElem.id] = itemsElem;
+      Event.observe(this.containerToggles[i], 'click', containerTogglesClick);
       this.containerToggles[i].onclick = function() {return false;}; //workaround for Event.stop problem with Safari 2.0.3. See http://particletree.com/notebook/eventstop/
     }
 	  this.setNextActionListingTogglesToCookiedState();
   },
   setNextActionListingTogglesToCookiedState: function()
   {
-    contextCollapseCookieManager = new CookieManager();
     for(i=0; i < this.containerToggles.length; i++)
     {
       toggleElem = this.containerToggles[i];
-      containerElem = this.findNearestParentByClassName(toggleElem, "container");
-      collapsedCookie = contextCollapseCookieManager.getCookie(this.buildCookieName(containerElem));
-      itemsElem = this.findItemsElem(toggleElem);
+      containerElem = this.toggleContainerMap[toggleElem.id];
+      collapsedCookie = this.contextCollapseCookieManager.getCookie(this.buildCookieName(containerElem));
+      itemsElem = this.toggleItemsMap[toggleElem.id];
       isExpanded = Element.visible(itemsElem);
       if (collapsedCookie && isExpanded)
       {
@@ -50,11 +60,13 @@ ToDoItems.prototype = {
     {
       toggleElem = this.containerToggles[i];
       if (toggleElem != except)
-      itemsElem = this.findItemsElem(toggleElem);
-      isExpanded = Element.visible(itemsElem);
-      if (isExpanded)
       {
-        this.collapseNextActionListing(toggleElem, itemsElem);
+        itemsElem = this.toggleItemsMap[toggleElem.id];
+        isExpanded = Element.visible(itemsElem);
+        if (isExpanded)
+        {
+          this.collapseNextActionListing(toggleElem, itemsElem);
+        }
       }
     }
   },
@@ -76,17 +88,17 @@ ToDoItems.prototype = {
   {
     Event.stop(event);
     toggleElem = Event.element(event).parentNode;
-    itemsElem = this.findItemsElem(toggleElem);
-   	containerElem = this.findNearestParentByClassName(toggleElem, "container");
+    itemsElem = this.toggleItemsMap[toggleElem.id];
+   	containerElem = this.toggleContainerMap[toggleElem.id];
     if (Element.visible(itemsElem))
     {
       this.collapseNextActionListing(toggleElem, itemsElem);
-	   	contextCollapseCookieManager.setCookie(this.buildCookieName(containerElem), true)
+	   	this.contextCollapseCookieManager.setCookie(this.buildCookieName(containerElem), true)
     }
     else
     {
       this.expandNextActionListing(toggleElem, itemsElem);
-	   	contextCollapseCookieManager.clearCookie(this.buildCookieName(containerElem))
+	   	this.contextCollapseCookieManager.clearCookie(this.buildCookieName(containerElem))
     }
   },
   findToggleElemForContext : function(contextElem)
@@ -136,7 +148,7 @@ ToDoItems.prototype = {
   },
   buildCookieName: function(containerElem)
   {
-   	tracks_login = contextCollapseCookieManager.getCookie('tracks_login');
+   	tracks_login = this.contextCollapseCookieManager.getCookie('tracks_login');
     return 'tracks_'+tracks_login+'_context_' + containerElem.id + '_collapsed';
   },
 
@@ -152,15 +164,6 @@ ToDoItems.prototype = {
   		parentElem = parentElem.parentNode;
   	}
   	return null;
-  },
-  
-  findItemsElem : function(elem)
-  {
-  	var containerElem = this.findNearestParentByClassName(elem, "container");
-  	if (containerElem)
-  		return document.getElementsByClassName('toggle_target',containerElem)[0];
-  	else
-  		return null;
   }
 }
 

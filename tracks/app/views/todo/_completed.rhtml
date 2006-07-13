@@ -1,8 +1,8 @@
 <% suffix =  append_descriptor ? append_descriptor : '' -%>
-<div class="container completed">
+<div class="container completed" id="completed_container">
   <h2>
       <% if collapsible %>
-      <a href="#" class="container_toggle"><%= image_tag("collapse.png") %></a>
+      <a href="#" class="container_toggle" id="toggle_completed"><%= image_tag("collapse.png") %></a>
       <% end %>
       Completed actions <%= append_descriptor ? append_descriptor : '' %>
   </h2>
