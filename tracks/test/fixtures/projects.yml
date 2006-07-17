@@ -1,26 +1,11 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-<%
-  # This writes the fixture boolean columns appropriately
-  # depending on the database adapter
-  #
-  abcs = ActiveRecord::Base.configurations
-  case abcs[RAILS_ENV]["adapter"]
-    when "mysql", "oci"
-      b_true = 1
-      b_false = 0
-    when "postgresql", "sqlite", "sqlite3"
-      b_true = 't'
-      b_false = 'f'
-    else
-      raise "Task not supported by '#{abcs["test"]["adapter"]}'"
-  end
-%>
+
 timemachine:
   id: 1
   name: Build a working time machine
   description: ''
   position: 1
-  done: <%= b_false %>
+  done: false
   user_id: 1
 
 moremoney:
@@ -28,7 +13,7 @@ moremoney:
   name: Make more money than Billy Gates
   description: ''
   position: 2
-  done: <%= b_false %>  
+  done: false  
   user_id: 1
 
 gardenclean:
@@ -36,5 +21,5 @@ gardenclean:
   name: Evict dinosaurs from the garden
   description: ''
   position: 3
-  done: <%= b_false %>  
+  done: false  
   user_id: 1

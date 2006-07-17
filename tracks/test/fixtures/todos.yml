@@ -19,17 +19,7 @@ end
 # This writes the fixture boolean columns appropriately
 # depending on the database adapter
 #
-abcs = ActiveRecord::Base.configurations
-case abcs[RAILS_ENV]["adapter"]
-  when "mysql", "oci"
-    b_true = 1
-    b_false = 0
-  when "postgresql", "sqlite", "sqlite3"
-    b_true = 't'
-    b_false = 'f'
-  else
-    raise "Task not supported by '#{abcs["test"]["adapter"]}'"
-end
+
 %>
 
 1:
@@ -38,7 +28,7 @@ end
   project_id: 2
   description: Call Bill Gates to find out how much he makes per day
   notes: ~
-  done: <%= b_false %>
+  done: false
   created_at: <%= last_week %>
   due: <%= two_weeks_hence %>
   completed: ~
@@ -50,7 +40,7 @@ end
   project_id: 3
   description: Call dinosaur exterminator
   notes: Ask him if I need to hire a skip for the corpses.
-  done: <%= b_false %>
+  done: false
   created_at: <%= today %>
   due: <%= two_weeks_hence %>
   completed: ~
@@ -86,7 +76,7 @@ end
   project_id: 1
   description: Construct time dilation device
   notes: ~
-  done: <%= b_false %>
+  done: false
   created_at: <%= today %>
   due: ~
   completed: ~
@@ -98,7 +88,7 @@ end
   project_id: 1
   description: Phone Grandfather to ask about the paradox
   notes: Added some _notes_.
-  done: <%= b_false %>
+  done: false
   created_at: <%= today %>
   due: <%= last_week %>
   completed: ~
@@ -110,7 +100,7 @@ end
   project_id: 3
   description: Get a book out of the library
   notes: 'Dinosaurs''R'
-  done: <%= b_false %>
+  done: false
   created_at: <%= today %>
   due: ~
   completed: ~
@@ -122,7 +112,7 @@ end
   project_id: ~
   description: Upgrade to Rails 0.9.1
   notes: ~
-  done: <%= b_true %>
+  done: true
   created_at: <%= today %>
   due: <%= today %>
   completed: <%= today %>
@@ -134,7 +124,7 @@ end
   project_id: ~
   description: This should be due today
   notes: ~
-  done: <%= b_false %>
+  done: false
   created_at: <%= today %>
   due: <%= today %>
   completed: ~
@@ -158,7 +148,7 @@ end
   project_id: 2
   description: Buy shares
   notes: ~
-  done: <%= b_false %>
+  done: false
   created_at: <%= today %>
   due: 2005-02-01
   completed: ~
@@ -170,7 +160,7 @@ end
   project_id: 3
   description: Buy stegosaurus bait
   notes: ~
-  done: <%= b_false %>
+  done: false
   created_at: <%= today %>
   due: <%= next_week %>
   completed: ~
@@ -182,7 +172,7 @@ end
   project_id: 3
   description: New action in context
   notes: Some notes
-  done: <%= b_false %>
+  done: false
   created_at: <%= today %>
   due: <%= next_week %>
   completed: ~
@@ -194,7 +184,7 @@ end
   project_id: 2
   description: Call stock broker
   notes: 'tel: 12345'
-  done: <%= b_false %>
+  done: false
   created_at: <%= last_week %>
   due: ~
   completed: ~
