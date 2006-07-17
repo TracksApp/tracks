@@ -9,13 +9,14 @@ xml.rss("version" => "2.0", "xmlns:dc" => "http://purl.org/dc/elements/1.1/") do
 			 	xml.link(url_for(:only_path => false, :controller => 'context', :action => 'show', :name => urlize(i.context.name)))
 			 	item_notes = sanitize(markdown( i.notes )) if i.notes?
 			 	due = "<div>Due: #{format_date(i.due)}</div>\n" if i.due?
+			 	done = "<div>Completed: #{format_date(i.completed)}</div>\n" if i.completed?
 			 	context_link = link_to( i.context.name, { :only_path => false, :controller => "context", :action => "show", :name => urlize(i.context.name) } )
 			 	project_link = if i.project_id?
 			 				link_to (i.project.name, { :only_path => false, :controller => "project", :action => "show", :name => urlize(i.project.name)} )
 			 			else
 			 				"<em>none</em>"
 			 			end
-			 		xml.description("#{due||''}#{item_notes||''}\n<div>Project:  #{project_link}</div>\n<div>Context:  #{context_link}</div>")
+			 		xml.description("#{done||''}#{due||''}#{item_notes||''}\n<div>Project:  #{project_link}</div>\n<div>Context:  #{context_link}</div>")
 			 	end
     }
   end

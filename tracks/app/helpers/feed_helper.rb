@@ -11,8 +11,12 @@ module FeedHelper
       if item.context_id == context.id
         result_string << "\n" + context.name.upcase + ":\n" if result_string.empty?
       
+        if item.completed
+          result_string << "    [Completed: " + format_date(item.completed) + "] "
+        end
+        
         if item.due
-          result_string << "    [" + format_date(item.due) + "] "
+          result_string << "    [Due: " + format_date(item.due) + "] "
           result_string << item.description + " "
         else
           result_string << "    " + item.description + " "

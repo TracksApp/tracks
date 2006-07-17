@@ -76,7 +76,11 @@ protected
     condition_builder = FindConditionBuilder.new
     options = Hash.new
   
-    condition_builder.add 'todos.done = ?', false
+    if params.key?('done')
+      condition_builder.add 'todos.done = ?', true
+    else
+      condition_builder.add 'todos.done = ?', false
+    end
   
     if params.key?('limit')
       options[:limit] = limit = params['limit']
@@ -92,6 +96,13 @@ protected
       @title << " due today" if (due_within == 0)
       @title << " due within a week" if (due_within == 6)
       @description << " with a due date #{due_within_date_s} or earlier"
+    end
+    
+    if params.key?('done')
+      done_in_last = params['done'].to_i
+      condition_builder.add('todos.completed >= ?', done_in_last.days.ago)
+      @title << " actions completed"
+      @description << " in the last #{done_in_last.to_s} days"
     end
     
     if params.key?('context')

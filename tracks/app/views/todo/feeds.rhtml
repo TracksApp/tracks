@@ -42,6 +42,11 @@
 			Actions due in 7 days or earlier
 		</li>
 		<li>
+		  <%= rss_feed_link({ :done => 7 }) %>
+		  <%= text_feed_link({ :done => 7 }) %>
+		  Actions completed in the last 7 days
+		</li>
+		<li>
 			<%= rss_feed_link({ :action => 'list_contexts_only', :feedtype => 'rss' }) %>
 			<%= text_feed_link({ :action => 'list_contexts_only', :feedtype => 'text' }) %>
 			All Contexts
