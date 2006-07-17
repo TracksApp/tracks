@@ -14,10 +14,6 @@ class Project < ActiveRecord::Base
   validates_uniqueness_of :name, :message => "already exists", :scope =>"user_id"
   validates_format_of :name, :with => /^[^\/]*$/i, :message => "cannot contain the slash ('/') character"
     
-  def self.list_of(isdone=0)
-    find(:all, :conditions => [ "done = ?" , true ], :order => "position ASC")
-  end
-
   def description_present?
     attribute_present?("description")
   end
@@ -26,15 +22,25 @@ class Project < ActiveRecord::Base
     attribute_present?("linkurl")
   end
   
+  def not_done_todos
+    @not_done_todos = self.find_not_done_todos if @not_done_todos == nil
+    @not_done_todos
+  end
+
+  def done_todos
+    @done_todos = self.find_done_todos if @done_todos == nil
+    @done_todos
+  end
+  
   def find_not_done_todos
-    todos = Todo.find :all, :conditions => ["project_id = ? AND done = ?", id, false],
-                      :order => "due IS NULL, due ASC, created_at ASC"
+    Todo.find :all, :conditions => ["project_id = ? AND done = ?", id, false],
+                    :order => "due IS NULL, due ASC, created_at ASC"
   end
 
   def find_done_todos
-    todos = Todo.find :all, :conditions => ["project_id = ? AND done = ?", id, true],
-                      :order => "completed DESC",
-                      :limit => @user.preferences["no_completed"].to_i
+    Todo.find :all, :conditions => ["project_id = ? AND done = ?", id, true],
+                    :order => "completed DESC",
+                    :limit => @user.preferences["no_completed"].to_i
   end
   
   # Returns a count of next actions in the given project
@@ -42,7 +48,7 @@ class Project < ActiveRecord::Base
   # actions or multiple actions
   #
   def count_undone_todos(string="actions")
-    count = find_not_done_todos.size
+    count = not_done_todos.size
     if count == 1
       word = string.singularize
     else

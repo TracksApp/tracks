@@ -28,7 +28,7 @@ class TodoController < ApplicationController
     max_completed = @user.preferences["no_completed"].to_i-1
     @done = (max_completed > 0) ? @done[0..max_completed] : nil
 
-    @contexts_to_show = @contexts.reject {|x| x.hide? || x.find_not_done_todos.empty? }
+    @contexts_to_show = @contexts.reject {|x| x.hide? }
     
     if @contexts.empty?
       flash['warning'] = 'You must add at least one context before adding next actions.'
@@ -43,6 +43,7 @@ class TodoController < ApplicationController
     end
   end
 
+  # Is this used? Seems like it should be deleted. -lukemelia, 2006-07-16
   def update_element
   end
   
@@ -53,83 +54,26 @@ class TodoController < ApplicationController
     self.init
     @item = @user.todos.build
     @item.attributes = params["todo"]
-
-    if @item.due?
-      @item.due = Date.strptime(params["todo"]["due"], @user.preferences["date_format"])
-    else
-      @item.due = ""
-    end
-  
-    @saved = @item.save
-
     @on_page = "home"
-    if @saved
-      self.init # we have to do this again to update @todos
-      @up_count = @todos.reject { |x| x.done? or x.context.hide? }.size.to_s
-    end
-    
-    respond_to do |wants|
-      #        if @saved
-      #          flash["notice"] = 'Added new next action.'
-      #        else
-      #          flash["warning"] = 'The next action was not added. Please try again.'
-      #        end
-      wants.html { redirect_to :action => 'list' }
-      wants.js
-      wants.xml { render :xml => @item.to_xml( :root => 'todo', :except => :user_id ) }
-    end
-    
-    rescue
-      respond_to do |wants|
-        wants.html { render :action => 'list'  } #          flash["warning"] = 'An error occurred on the server.' render :action => 'list'  }#          flash["warning"] = 'An error occurred on the server.' # render :action => 'list'
-        wants.js { render :action => 'error' }
-        wants.xml { render :text => 'An error occurred on the server.' + $! }
-      end
+
+    perform_add_item('list')
   end
   
   # Adding deferred actions from form on todo/tickler
   #
   def add_deferred_item
     self.init
-    @tickle = Deferred.create(params["todo"])
-    
-    if @tickle.due?
-      @tickle.due = Date.strptime(params["todo"]["due"], @user.preferences["date_format"])
-    else
-      @tickle.due = ""
-    end
-    
-    @saved = @tickle.save
+    @item = Deferred.create(params["todo"])
+    @item.user_id = @user.id
+    @on_page = "tickler"
 
-     @on_page = "home"
-     if @saved
-       @up_count = @todos.collect { |x| ( !x.done? and !x.context.hide? ) ? x:nil }.compact.size.to_s
-     end
-     return if request.xhr?
-
-     # fallback for standard requests
-     if @saved
-       flash["notice"] = 'Added new next action.'
-       redirect_to :action => 'tickler'
-     else
-       flash["warning"] = 'The next action was not added. Please try again.'
-       redirect_to :action => 'tickler'
-     end
-
-     rescue
-       if request.xhr? # be sure to include an error.rjs
-         render :action => 'error'
-       else
-         flash["warning"] = 'An error occurred on the server.'
-         render :action => 'tickler'
-       end
+    perform_add_item('tickler')
   end
-
+  
   def edit_action
     self.init
-    item = check_user_return_item
-
-    render :partial => 'action_edit_form', :object => item
+    @item = check_user_return_item
+    render :layout => false
   end
   
   def show
@@ -140,13 +84,6 @@ class TodoController < ApplicationController
      end
   end
 
-  def edit_deferred_action
-    self.init
-    item = check_user_return_item
-
-    render :partial => 'action_edit_deferred_form', :object => item
-  end
-  
   # Toggles the 'done' status of the action
   #
   def toggle_check
@@ -190,6 +127,21 @@ class TodoController < ApplicationController
     @saved = @item.save
   end
   
+  def deferred_update_action
+    #self.init
+    @tickle = check_user_return_item
+    @original_item_context_id = @tickle.context_id
+    @tickle.attributes = params["item"]
+
+    if @tickle.due?
+      @tickle.due = Date.strptime(params["item"]["due"], @user.preferences["date_format"])
+    else
+      @tickle.due = ""
+    end
+
+    @saved = @tickle.save
+  end
+  
   def update_context
     self.init
     @item = check_user_return_item
@@ -222,21 +174,6 @@ class TodoController < ApplicationController
         page.replace_html "info", content_tag("div", "Error updating the project of the dragged item. Item and project user mis-match: #{@item.user.name} and #{@project.user.name}! - refresh the page to see them.", "class" => "warning")
       end
     end
-  end
-
-  def deferred_update_action
-    #self.init
-    @tickle = check_user_return_item
-    @original_item_context_id = @tickle.context_id
-    @tickle.attributes = params["item"]
-
-    if @tickle.due?
-      @tickle.due = Date.strptime(params["item"]["due"], @user.preferences["date_format"])
-    else
-      @tickle.due = ""
-    end
-
-    @saved = @tickle.save
   end
   
   # Delete a next action
@@ -304,6 +241,7 @@ class TodoController < ApplicationController
     @page_title = "TRACKS::Tickler"
     @tickles = @user.todos.find(:all, :conditions => ['type = ?', "Deferred"], :order => "show_from ASC")
     @count = @tickles.size
+    @on_page = "tickler"
   end
 
   # Called by periodically_call_remote
@@ -339,9 +277,43 @@ class TodoController < ApplicationController
     def init
       @projects = @user.projects
       @contexts = @user.contexts
-      @todos = Todo.find(:all, :conditions => ['user_id = ? and type = ?', @user.id, "Immediate"])
-      @done = Todo.find(:all, :conditions => ['user_id = ? and done = ?', @user.id, true], :order => 'completed DESC')
-     # @todos = @todos.collect { |x| (x.class == Immediate) ? x : nil }.compact
+      init_todos
     end
     
+    def init_todos
+      @todos = Todo.find(:all, :conditions => ['user_id = ? and type = ?', @user.id, "Immediate"])
+      @done = Todo.find(:all, :conditions => ['user_id = ? and done = ?', @user.id, true], :order => 'completed DESC')
+    end
+    
+    def perform_add_item(redirect_action)
+
+      if @item.due?
+        @item.due = Date.strptime(params["todo"]["due"], @user.preferences["date_format"])
+      else
+        @item.due = ""
+      end
+
+      @saved = @item.save
+
+       if @saved
+         init_todos
+         @up_count = @todos.reject { |x| x.done? or x.context.hide? }.size.to_s
+       end
+
+       respond_to do |wants|
+         wants.html { redirect_to :action => redirect_action }
+         wants.js
+         wants.xml { render :xml => @item.to_xml( :root => 'todo', :except => :user_id ) }
+       end
+
+       # if you're seeing the message 'An error occurred on the server.' and you want to debug, comment out the rescue section and check the Ajax response for an exception message
+       rescue
+         respond_to do |wants|
+           wants.html { render :action => redirect_action } # TODO: would prefer something like: flash["warning"] = 'An error occurred on the server.' render :action => 'list'
+           wants.js { render :action => 'error' }
+           wants.xml { render :text => 'An error occurred on the server.' + $! }
+         end
+    end
+    
+        
 end

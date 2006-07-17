@@ -223,8 +223,8 @@ class ContextController < ApplicationController
 
     def init_todos
       check_user_set_context
-      @done = @context.find_done_todos
-      @not_done = @context.find_not_done_todos
+      @done = @context.done_todos
+      @not_done = @context.not_done_todos
       @count = @not_done.size
     end
 

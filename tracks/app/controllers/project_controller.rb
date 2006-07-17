@@ -256,8 +256,8 @@ class ProjectController < ApplicationController
 
     def init_todos
       check_user_set_project
-      @done = @project.find_done_todos
-      @not_done = @project.find_not_done_todos
+      @done = @project.done_todos
+      @not_done = @project.not_done_todos
       @count = @not_done.size
     end
 

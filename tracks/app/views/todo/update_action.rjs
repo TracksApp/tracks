@@ -1,7 +1,8 @@
+page.hide "info"
 if @saved
   item_container_id = "item-#{@item.id}-container"
   if @item.context_id == @original_item_context_id
-    page.replace_html item_container_id, :partial => 'todo/item'
+    page.replace item_container_id, :partial => 'todo/item'
     page.visual_effect :highlight, item_container_id, :duration => 3
   else
     page[item_container_id].remove
@@ -14,7 +15,6 @@ if @saved
     end
   end
 else
-  page.hide "info"
   page.replace_html "info", content_tag("div", content_tag("div", "#{pluralize(@item.errors.count, "error")} prohibited this record from being saved",  "id" => "warning", "class" => "warning") + content_tag("p", "There were problems with the following fields:") + content_tag("ul", @item.errors.each_full { |msg| content_tag("li", msg) }))
   page.visual_effect :appear, 'info', :duration => 0.5
 end

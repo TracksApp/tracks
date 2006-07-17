@@ -1,13 +1,12 @@
+page.hide "status"
 if @saved
-  page.hide "status"
   page.replace_html "status", content_tag("div", "Added new next action", "class" => "confirmation")
   page.visual_effect :appear, 'status', :duration => 0.5
   page.replace_html "badge_count", @up_count
   page.send :record, "Form.reset('todo-form-new-action');Form.focusFirstElement('todo-form-new-action')"
-  page.insert_html :bottom, "tickler", :partial => 'todo/tickle'
-  page.visual_effect :highlight, "item-#{@tickle.id}-container", :duration => 3
+  page.insert_html :bottom, "tickler", :partial => 'todo/tickle', :object => @item
+  page.visual_effect :highlight, "item-#{@item.id}-container", :duration => 3
 else
-  page.hide "status"
-  page.replace_html "status", content_tag("div", content_tag("h2", "#{pluralize(@tickle.errors.count, "error")} prohibited this record from being saved") + content_tag("p", "There were problems with the following fields:") + content_tag("ul", @tickle.errors.each_full { |msg| content_tag("li", msg) }), "id" => "ErrorExplanation", "class" => "ErrorExplanation")
+  page.replace_html "status", content_tag("div", content_tag("h2", "#{pluralize(@item.errors.count, "error")} prohibited this record from being saved") + content_tag("p", "There were problems with the following fields:") + content_tag("ul", @item.errors.each_full { |msg| content_tag("li", msg) }), "id" => "ErrorExplanation", "class" => "ErrorExplanation")
   page.visual_effect :appear, 'status', :duration => 0.5
 end

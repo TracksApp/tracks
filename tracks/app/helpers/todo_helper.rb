@@ -15,11 +15,6 @@ module TodoHelper
   end
   
   def link_to_remote_todo( item, handled_by, type)
-    if type == "deferred"
-      act = "edit_deferred_action"
-    else
-      act = "edit_action"
-    end
     
     str = link_to_remote( image_tag("blank", :title =>"Delete action", :class=>"delete_item"),
                       {:url => { :controller => handled_by, :action => "destroy_action", :id => item.id },
@@ -30,7 +25,7 @@ module TodoHelper
                       {
                         :update => "form-action-#{item.id}",
                         :loading => visual_effect(:pulsate, "action-#{item.id}-edit-icon"),
-                        :url => { :controller => "todo", :action => act, :id => item.id },
+                        :url => { :controller => "todo", :action => "edit_action", :id => item.id },
                         :success => "Element.toggle('item-#{item.id}','action-#{item.id}-edit-form'); new Effect.Appear('action-#{item.id}-edit-form', { duration: .2 });  Form.focusFirstElement('form-action-#{item.id}')"
                       },
                       {

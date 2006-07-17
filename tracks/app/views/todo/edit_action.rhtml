@@ -1,6 +1,3 @@
-<%
-    @item = action_edit_form
-%>
 <%= error_messages_for("item") %>
 
 <%= hidden_field( "item", "id" ) %>
@@ -47,13 +44,21 @@
     <td class="label"><label for="item_due">Due</td>
     <td><input name="item[due]" id="due_<%= @item.id %>" type="text" value="<%= format_date(@item.due) %>" tabindex="5" size="10" onFocus="Calendar.setup" /></td>
   </tr>
+    <% if @item.class == Deferred -%>
   <tr>
-    <% if controller.controller_name == "project" -%>
+    <td class="label"><label for="item_show_from">Show from</td>
+    <td><input name="item[show_from]" id="show_from_<%= @item.id %>" type="text" value="<%= format_date(@item.show_from) %>" tabindex="5" size="10" onFocus="Calendar.setup" /></td>
+  </tr>
+    <% end -%>
+    <% if controller.controller_name == "project" || @item.class == 'Deferred' -%>
       <input type="hidden" name="on_project_page" value="true" />
     <% end -%>
+  <tr>
     <td><input type="submit" value="Update" tabindex="6" />
         <a href="javascript:void(0);" onclick="Element.toggle('item-<%= @item.id %>','action-<%= @item.id %>-edit-form');Form.reset('form-action-<%= @item.id %>');">Cancel</a></td>
   </tr>
 </table>
 <%= calendar_setup( "due_#{@item.id}" ) %>
-<% @item = nil %>
+<% if @item.class == Deferred -%>
+  <%= calendar_setup( "show_from_#{@item.id}" ) %>
+<% end -%>

@@ -6,7 +6,7 @@ xml.todos_by_context do
         xml.hide c.hide, :type => :boolean
         xml.id c.id, :type => :integer
         xml.position c.position, :type => :integer
-        c.find_not_done_todos.each { |t|
+        c.not_done_todos.each { |t|
           xml << t.to_xml( :skip_instruct => true, :root => 'todo', :except => [:user_id, :context_id] )
         }
 	 		end

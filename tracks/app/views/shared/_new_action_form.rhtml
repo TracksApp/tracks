@@ -49,7 +49,7 @@
     <%= hidden_field( "todo", "context_id", "value" => "#{@context.id}") %>
 <% end -%>
 
-<% if request.request_uri == "/todo/tickler" -%>
+<% if @on_page == "tickler" -%>
 <tr>
   <td><label for="todo_show_from">Show from</label></td>
   <td><%= date_select( "todo", "show_from", :start_year => Date.today.year, :order => [:year, :month, :day] ) %></td>
