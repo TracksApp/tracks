@@ -9,8 +9,11 @@ if @saved
       page.insert_html :top, "completed", :partial => 'todo/item'
       page.visual_effect :highlight, "item-#{@item.id}", {'startcolor' => "'#99ff99'"}
     end
+    if @remaining_undone_in_context == 0
+      page.visual_effect :fade, "c#{@item.context_id}", :duration => 0.4
+    end
   else
-    page.call "ensureVisibleWithEffectAppear", "c#{@item.context_id}"
+    page.call "todoItems.ensureVisibleWithEffectAppear", "c#{@item.context_id}"
     page.insert_html :bottom, "c#{@item.context_id}", :partial => 'todo/item'
     page.visual_effect :highlight, "item-#{@item.id}", {'startcolor' => "'#99ff99'"}
   end

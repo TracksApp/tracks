@@ -6,18 +6,18 @@ if @saved
       page.insert_html :top, "completed", :partial => 'todo/item'
       page.visual_effect :highlight, "item-#{@item.id}", {'startcolor' => "'#99ff99'"}
       if @down_count == '0'
-        page.show "empty-nd"
+        page["p#{@item.project_id}empty-nd"].show
       end
       page.hide "empty-d" # If we've checked something as done, completed items can't be empty
     end
   else
-    page.call "ensureVisibleWithEffectAppear", "p#{@item.project_id}"
+    page.call "todoItems.ensureVisibleWithEffectAppear", "p#{@item.project_id}"
     page.insert_html :bottom, "p#{@item.project_id}", :partial => 'todo/item'
     page.visual_effect :highlight, "item-#{@item.id}", {'startcolor' => "'#99ff99'"}
     if @done_count == '0'
       page.show "empty-d"
     end
-    page.hide "empty-nd" # If we've checked something as undone, uncompleted items can't be empty
+    page["p#{@item.project_id}empty-nd"].hide # If we've checked something as undone, uncompleted items can't be empty
   end
   page.hide "status"
 	page.replace_html "badge_count", @down_count

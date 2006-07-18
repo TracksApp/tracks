@@ -5,8 +5,10 @@ if @saved
   page['badge_count'].replace_html @up_count
   page.send :record, "Form.reset('todo-form-new-action');Form.focusFirstElement('todo-form-new-action')"
   page.send :record, "Form.reset('todo-form-new-action-lightbox');Form.focusFirstElement('todo-form-new-action-lightbox')"
+  page.call "todoItems.ensureVisibleWithEffectAppear", "c#{@item.context_id}"
   page.insert_html :bottom, "c#{@item.context_id}items", :partial => 'todo/item'
   page.visual_effect :highlight, "item-#{@item.id}-container", :duration => 3
+  page["c#{@item.context_id}empty-nd"].hide
 else
   page.hide "status"
   page.replace_html "status", content_tag("div", content_tag("h2", "#{pluralize(@item.errors.count, "error")} prohibited this record from being saved") + content_tag("p", "There were problems with the following fields:") + content_tag("ul", @item.errors.each_full { |msg| content_tag("li", msg) }), "id" => "ErrorExplanation", "class" => "ErrorExplanation")

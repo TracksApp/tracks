@@ -7,7 +7,7 @@ if @saved
   page.send :record, "Form.reset('todo-form-new-action-lightbox');Form.focusFirstElement('todo-form-new-action-lightbox')"
   page.insert_html :bottom, "p#{@item.project_id}", :partial => 'todo/item'
   page.visual_effect :highlight, "item-#{@item.id}-container", :duration => 3
-  page.hide "empty-nd" # If we are adding an new action, the uncompleted actions must be > 0
+  page.hide "p#{@item.project_id}empty-nd" # If we are adding an new action, the uncompleted actions must be > 0
 else
   page.hide "status"
   page.replace_html "status", content_tag("div", content_tag("h2", "#{pluralize(@item.errors.count, "error")} prohibited this record from being saved") + content_tag("p", "There were problems with the following fields:") + content_tag("ul", @item.errors.each_full { |msg| content_tag("li", msg) }), "id" => "ErrorExplanation", "class" => "ErrorExplanation")

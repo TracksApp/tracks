@@ -94,6 +94,7 @@ class TodoController < ApplicationController
     @item.completed = Time.now() # For some reason, the before_save in todo.rb stopped working
     @saved = @item.save
     @on_page = "home"
+    @remaining_undone_in_context = Todo.count(:conditions => ['user_id = ? and context_id = ? and type = ? and done = ?', @user.id, @item.context_id, "Immediate", false])
     if @saved
       @down_count = @todos.collect { |x| ( !x.done? and !x.context.hide? ) ? x:nil }.compact.size.to_s
     end
@@ -181,9 +182,11 @@ class TodoController < ApplicationController
   def destroy_action
     self.init
     @item = check_user_return_item
+    context_id = @item.context_id
     
     @saved = @item.destroy
     @on_page = "home"
+    @remaining_undone_in_context = Todo.count(:conditions => ['user_id = ? and context_id = ? and type = ? and done = ?', @user.id, context_id, "Immediate", false])
     if @saved
       self.init
       @down_count = @todos.reject { |x| x.done? or x.context.hide? }.size.to_s
