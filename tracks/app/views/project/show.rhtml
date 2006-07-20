@@ -34,7 +34,7 @@
 <%= form_remote_tag :url => { :controller => "note", :action => "add" },
                     :update => "notes",
                     :position => "bottom",
-                    :complete => "new Effect.Highlight('notes');",
+                    :complete => "new Effect.Highlight('notes');$('empty-n').hide();",
                     :html => {:id=>'form-new-note', :class => 'inline-form'} %>
 <%= hidden_field( "new_note", "project_id", "value" => "#{@project.id}" ) %>
 <%= text_area( "new_note", "body", "cols" => 50, "rows" => 3, "tabindex" => 1 ) %>
