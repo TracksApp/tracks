@@ -255,13 +255,11 @@ class TodoController < ApplicationController
     self.init
     now = Date.today()
     @due_tickles = @user.todos.find(:all, :conditions => ['type = ? AND (show_from < ? OR show_from = ?)', "Deferred", now, now ], :order => "show_from ASC")
-    unless @due_tickles.empty?
-      # Change the due tickles to type "Immediate"
-      @due_tickles.each do |t|
-        t[:type] = "Immediate"
-        t.show_from = nil
-        t.save
-      end
+    # Change the due tickles to type "Immediate"
+    @due_tickles.each do |t|
+      t[:type] = "Immediate"
+      t.show_from = nil
+      t.save_with_validation(false)
     end
   end
   
