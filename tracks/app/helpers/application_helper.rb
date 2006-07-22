@@ -111,4 +111,5 @@ module ApplicationHelper
         "<span class=\"green\">" + format_date(due) + "</span>"
     end
   end
+  
 end
