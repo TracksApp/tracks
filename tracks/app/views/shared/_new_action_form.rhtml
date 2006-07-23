@@ -1,3 +1,23 @@
+<%
+  case controller.controller_name
+    when "context"
+      add_string = "Add a next action in this context &#187;"
+      @selected_context = @context.id
+      @selected_project = nil
+    when "project"
+      add_string = "Add a next action in this project &#187;"
+      @selected_context = @contexts[0].id
+      @selected_project = @project.id
+    else
+      add_string = "Add a next action &#187;"
+      @selected_context = @contexts[0].id
+      @selected_project = nil
+  end
+  
+  if @on_page == "tickler"
+    add_string = "Add a deferred action &#187;"
+  end
+%>
 <% hide_link ||= false %>
 <% unless hide_link -%>
 <%= link_to_function(
@@ -24,30 +44,18 @@
   <td><label for="todo_notes">Notes</label></td>
   <td><%= text_area( "todo", "notes", "cols" => 25, "rows" => 10, "tabindex" => 2) %></td>
 </tr>
-<% unless controller.controller_name == "context" -%>
 <tr>
   <td><label for="todo_context_id">Context</label></td>
-  <td><%= collection_select( "todo", "context_id", @contexts, "id", "name", 
-        {}, {"tabindex" => 3}) %></td>
+  <td><%= select("todo", "context_id", @contexts.collect {|c| [c.name, c.id] }, { :selected => @selected_context }, {"tabindex" => 3}) %></td>
 </tr>
-<% end -%>
-<% unless controller.controller_name == "project" -%>
 <tr>
   <td><label for="todo_project_id">Project</label></td>
-  <td><%= collection_select( "todo", "project_id", @projects.reject{|p| p.done?}, "id", "name",
-        { :include_blank => true }, {"tabindex" => 4}) %></td>
+  <td><%= select( "todo", "project_id", @projects.reject{|x| x.done? }.collect {|p| [p.name, p.id] }, { :selected => @selected_project, :include_blank => true }, {"tabindex" => 4}) %></td>
 </tr>
-<% end -%>
 <tr>
   <td><label for="todo_due">Due</label></td>
   <td><%= text_field("todo", "due", "size" => 10, "class" => "Date", "onFocus" => "Calendar.setup", "tabindex" => 5, "autocomplete" => "off") %></td>
 </tr>
-
-<% if controller.controller_name == "project" -%>
-    <%= hidden_field( "todo", "project_id", "value" => "#{@project.id}") %>
-<% elsif controller.controller_name == "context" -%>
-    <%= hidden_field( "todo", "context_id", "value" => "#{@context.id}") %>
-<% end -%>
 
 <% if @on_page == "tickler" -%>
 <tr>
