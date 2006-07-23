@@ -1,13 +1,15 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 <% 
 def today 
-Time.now.to_s(:db) 
-end 
+  Time.now.to_s(:db) 
+end
+ 
 def next_week 
-1.week.from_now.to_s(:db) 
-end 
+  1.week.from_now.to_s(:db) 
+end
+ 
 def last_week 
-1.week.ago.to_s(:db) 
+  1.week.ago.to_s(:db) 
 end 
 %>
 

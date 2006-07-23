@@ -64,7 +64,8 @@ class ApplicationController < ActionController::Base
   private
   
   def get_current_user
-    @user = User.find(session['user_id']) if session['user_id'] 
+    @user = User.find(session['user_id']) if session['user_id']
+    @prefs = @user.preferences unless @user.nil?
   end
   
   def get_admin_user

@@ -44,7 +44,7 @@ class UserControllerTest < Test::Unit::TestCase
     assert_success
     assert_equal assigns['page_title'], "TRACKS::Preferences"
     assert_not_nil assigns['prefs']
-    assert_equal assigns['prefs'].length, 6
+    assert_equal assigns['prefs'].length, 7
   end
   
   def test_edit_preferences
@@ -55,7 +55,7 @@ class UserControllerTest < Test::Unit::TestCase
     assert_success
     assert_equal assigns['page_title'], "TRACKS::Edit Preferences"
     assert_not_nil assigns['prefs']
-    assert_equal assigns['prefs'].length, 6    
+    assert_equal assigns['prefs'].length, 7    
     assert_template 'user/preference_edit_form'
   end
   

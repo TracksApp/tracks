@@ -41,6 +41,7 @@
   <% if @user.is_admin? %>
     <li>Admin email: <span class="highlight"><%= @prefs["admin_email"] %></span></li>
   <% end %>
+  <li>Refresh interval (in minutes): <span class="highlight"><%= @prefs["refresh"] %></span></li>
 </ul>
 <%= link_to "Edit preferences", :controller => 'user', :action => 'edit_preferences' %> | 
 <%= link_to 'Change password', :controller => 'user', :action => 'change_password' %>

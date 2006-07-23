@@ -5,7 +5,14 @@ admin_user:
   password: <%= Digest::SHA1.hexdigest("#{SALT}--abracadabra--") %>
   word: <%= Digest::SHA1.hexdigest("adminSat Feb 25 17:14:00 GMT 20060.236961325863376") %>
   is_admin: true
-  preferences: "---\nstaleness_starts: \"7\"\ndate_format: \"%d/%m/%Y\"\nno_completed: \"5\"\nadmin_email: butshesagirl@rousette.org.uk\nweek_starts: \"1\"\ndue_style: \"0\""
+  preferences:
+    staleness_starts: "7"
+    date_format: "%d/%m/%Y"
+    no_completed: "5"
+    admin_email: butshesagirl@rousette.org.uk
+    weeks_starts: "1"
+    due_style: "0"
+    refresh: "0"
 
 other_user:
   id: 2
@@ -13,4 +20,11 @@ other_user:
   password: <%= Digest::SHA1.hexdigest("#{SALT}--sesame--") %>
   word: <%= Digest::SHA1.hexdigest("janeSun Feb 19 14:42:45 GMT 20060.408173979260027") %>
   is_admin: false
-  preferences: "---\nstaleness_starts: \"7\"\ndate_format: \"%d/%m/%Y\"\nno_completed: \"5\"\nadmin_email: butshesagirl@rousette.org.uk\nweek_starts: \"1\"\ndue_style: \"0\""
+  preferences:
+    staleness_starts: "7"
+    date_format: "%d/%m/%Y"
+    no_completed: "5"
+    admin_email: butshesagirl@rousette.org.uk
+    weeks_starts: "1"
+    due_style: "0"
+    refresh: "0"

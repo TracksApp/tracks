@@ -1,5 +1,6 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 <% 
+
 def today 
   Time.now.to_s(:db) 
 end
@@ -15,10 +16,6 @@ end
 def two_weeks_hence
   2.week.from_now.to_s(:db)
 end
-
-# This writes the fixture boolean columns appropriately
-# depending on the database adapter
-#
 
 %>
 
@@ -138,7 +135,7 @@ end
   notes: ~
   done: 1
   created_at: <%= today %>
-  due: 2005-01-05
+  due: <%= two_weeks_hence %>
   completed: <%= today %>
   user_id: 1
 
@@ -150,7 +147,7 @@ end
   notes: ~
   done: false
   created_at: <%= today %>
-  due: 2005-02-01
+  due: <%= next_week %>
   completed: ~
   user_id: 1
 

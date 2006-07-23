@@ -28,7 +28,8 @@ class UserController < ApplicationController
                           "no_completed" => "#{params['prefs']['no_completed']}",
                           "staleness_starts" => "#{params['prefs']['staleness_starts']}",
                           "due_style" => "#{params['prefs']['due_style']}",
-                          "admin_email" => "#{params['prefs']['admin_email']}"
+                          "admin_email" => "#{params['prefs']['admin_email']}",
+                          "refresh" => "#{params['prefs']['refresh']}"
                           }
     if @user.save
       redirect_to :action => 'preferences'
