@@ -57,4 +57,9 @@ module FeedHelper
     return result_string
   end
   
+  def format_ical_notes(notes)
+    split_notes = notes.split(/\n/)
+    joined_notes = split_notes.join("\\n")
+  end
+  
 end

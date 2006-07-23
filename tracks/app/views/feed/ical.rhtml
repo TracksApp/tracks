@@ -14,7 +14,7 @@ DTSTAMP:<%= @todo.created_at.strftime("%Y%m%dT%H%M%SZ") %>
 DTSTART;VALUE=DATE:<%= @todo.created_at.strftime("%Y%m%d") %>
 SUMMARY:<%= @todo.description %>
 <% if @todo.notes? -%>
-DESCRIPTION:<%= @todo.notes %>
+DESCRIPTION:<%= format_ical_notes(@todo.notes) %>
 <% end -%>
 <% if @todo.due -%>
 DUE;VALUE=DATE:<%= @todo.due.strftime("%Y%m%d") %>
