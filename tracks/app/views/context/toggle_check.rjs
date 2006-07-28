@@ -3,7 +3,7 @@ if @saved
   if @item.done?
     # Don't try to insert contents into a non-existent container!
     unless @user.preferences["no_completed"].to_i == 0
-      page.insert_html :top, "completed", :partial => 'todo/item'
+      page.insert_html :top, "completed", :partial => 'todo/item', :locals => { :parent_container_type => "completed" }
       page.visual_effect :highlight, "item-#{@item.id}", {'startcolor' => "'#99ff99'"}
       if @down_count == '0'
         page["c#{@item.context_id}empty-nd"].show
@@ -12,7 +12,7 @@ if @saved
     end
   else
     page.call "todoItems.ensureVisibleWithEffectAppear", "c#{@item.context_id}"
-    page.insert_html :bottom, "c#{@item.context_id}", :partial => 'todo/item'
+    page.insert_html :bottom, "c#{@item.context_id}", :partial => 'todo/item', :locals => { :parent_container_type => "context" }
     page.visual_effect :highlight, "item-#{@item.id}", {'startcolor' => "'#99ff99'"}
     if @done_count == '0'
       page.show "empty-d"

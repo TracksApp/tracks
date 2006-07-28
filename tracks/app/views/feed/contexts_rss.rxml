@@ -9,7 +9,7 @@ xml.rss("version" => "2.0", "xmlns:dc" => "http://purl.org/dc/elements/1.1/") do
         xml.title(c.name)
 			 	xml.link(url_for(:only_path => false, :controller => 'context', :action => 'show', :name => urlize(c.name)))
 			 	context_description = ''
-			 	context_description += "<p>#{c.count_undone_todos}. "
+			 	context_description += "<p>#{count_undone_todos(c)}. "
 			 	context_description += "Context is #{c.hidden? ? 'Hidden' : 'Active'}. "
 			 	context_description += "</p>"
 		 		xml.description(context_description)

@@ -112,4 +112,21 @@ module ApplicationHelper
     end
   end
   
+  # Returns a count of next actions in the given context or project
+  # The result is count and a string descriptor, correctly pluralised if there are no
+  # actions or multiple actions
+  #
+  def count_undone_todos(todos_parent, string="actions")
+    count = eval "@#{todos_parent.class.to_s.downcase}_not_done_counts[#{todos_parent.id}]"
+    count = 0 if count == nil
+    #count = todos_parent.todos.select{|t| !t.done }.size
+    if count == 1
+      word = string.singularize
+    else
+      word = string.pluralize
+    end
+    return count.to_s + " " + word
+  end
+  
+  
 end

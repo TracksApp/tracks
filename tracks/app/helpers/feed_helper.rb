@@ -37,7 +37,7 @@ module FeedHelper
       result_string << "\n" + p.name.upcase + "\n"
     
 		 	result_string << p.description + "\n" if p.description_present?
-		 	result_string << "#{p.count_undone_todos}. Project is #{p.done? ? 'Done' : 'Active'}.\n"
+		 	result_string << "#{count_undone_todos(p)}. Project is #{p.done? ? 'Done' : 'Active'}.\n"
 		 	result_string << "#{p.linkurl}\n" if p.linkurl_present?
 		 	result_string << "\n"
 	 	end
@@ -50,7 +50,7 @@ module FeedHelper
     contexts.each do |c|
       result_string << "\n" + c.name.upcase + "\n"
     
-		 	result_string << "#{c.count_undone_todos}. Context is #{c.hidden? ? 'Hidden' : 'Active'}.\n"
+		 	result_string << "#{count_undone_todos(c)}. Context is #{c.hidden? ? 'Hidden' : 'Active'}.\n"
 		 	result_string << "\n"
 	 	end
 		
@@ -61,5 +61,25 @@ module FeedHelper
     split_notes = notes.split(/\n/)
     joined_notes = split_notes.join("\\n")
   end
+  
+  def rss_feed_link(options = {})
+    image_tag = image_tag("feed-icon", :size => "16X16", :border => 0, :class => "rss-icon")
+    linkoptions = {:controller => 'feed', :action => 'rss', :name => "#{@user.login}", :token => "#{@user.word}"}
+    linkoptions.merge!(options)
+		link_to(image_tag, linkoptions, :title => "RSS feed")
+  end
+  
+  def text_feed_link(options = {})
+    linkoptions = {:controller => 'feed', :action => 'text', :name => "#{@user.login}", :token => "#{@user.word}"}
+    linkoptions.merge!(options)
+    link_to('<span class="feed">TXT</span>', linkoptions, :title => "Plain text feed" )
+  end
+  
+  def ical_feed_link(options = {})
+    linkoptions = {:controller => 'feed', :action => 'ical', :name => "#{@user.login}", :token => "#{@user.word}"}
+    linkoptions.merge!(options)
+    link_to('<span class="feed">iCal</span>', linkoptions, :title => "iCal feed")
+  end
+  
   
 end

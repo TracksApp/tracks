@@ -4,11 +4,16 @@ class FeedController < ApplicationController
 
   helper :feed
   model :todo, :context, :project
-  session :disabled => true # Prevents session control from interfering with feed
+  session :disabled => true, :except => 'index' # Prevents session control from interfering with feed
 
-  before_filter :check_token_against_user_word
+  before_filter :check_token_against_user_word, :except => 'index'
+  prepend_before_filter :login_required, :only => 'index'
+  
 
   def index
+    @page_title = 'TRACKS::Feeds'
+    init_data_for_sidebar
+    render :layout => 'standard'
   end
 
   # Build an RSS feed

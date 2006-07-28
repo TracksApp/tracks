@@ -252,6 +252,7 @@ class ProjectController < ApplicationController
       @contexts = @user.contexts
       @todos = @user.todos
       @done = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = ?", @user.id, true], :include => [:project], :order => "completed DESC")
+      init_not_done_counts
     end
 
     def init_todos

@@ -10,7 +10,7 @@ xml.rss("version" => "2.0", "xmlns:dc" => "http://purl.org/dc/elements/1.1/") do
 			 	xml.link(url_for(:only_path => false, :controller => 'project', :action => 'show', :name => urlize(p.name)))
 			 	project_description = ''
 			 	project_description += sanitize(markdown( p.description )) if p.description_present?
-			 	project_description += "<p>#{p.count_undone_todos}. "
+			 	project_description += "<p>#{count_undone_todos(p)}. "
 			 	project_description += "Project is #{p.done? ? 'Done' : 'Active'}. "
 			 	project_description += "<a href=\"#{p.linkurl}\">#{p.linkurl}</a>" if p.linkurl_present?
 			 	project_description += "</p>"

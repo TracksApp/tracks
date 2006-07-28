@@ -12,6 +12,7 @@ class DeferredController < ApplicationController
   
   def index
     init_projects_and_contexts
+    init_not_done_counts
     @page_title = "TRACKS::Tickler"
     @tickles = @user.todos.find(:all, :conditions => ['type = ?', "Deferred"], :order => "show_from ASC")
     @count = @tickles.size

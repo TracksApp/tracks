@@ -7,7 +7,7 @@
 </div>  
 <div class="data">
   <%= link_to( sanitize("#{context.name}"), :action => "show", :name => urlize(context.name) ) %>
-  <%= " (" + context.count_undone_todos("actions") + ")" %>
+  <%= " (" + count_undone_todos(context,"actions") + ")" %>
 </div>
 
 <div class="buttons">

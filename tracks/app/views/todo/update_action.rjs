@@ -2,12 +2,12 @@ page.hide "info"
 if @saved
   item_container_id = "item-#{@item.id}-container"
   if @item.context_id == @original_item_context_id
-    page.replace item_container_id, :partial => 'todo/item'
+    page.replace item_container_id, :partial => 'todo/item', :locals => { :parent_container_type => "context" }
     page.visual_effect :highlight, item_container_id, :duration => 3
   else
     page[item_container_id].remove
     page.call "todoItems.expandNextActionListingByContext", "c#{@item.context_id}items", true
-    page.insert_html :bottom, "c#{@item.context_id}items", :partial => 'todo/item'
+    page.insert_html :bottom, "c#{@item.context_id}items", :partial => 'todo/item', :locals => { :parent_container_type => "context" }
     page.delay(0.5) do
       page.call "todoItems.ensureContainerHeight", "c#{@original_item_context_id}items"
       page.call "todoItems.ensureContainerHeight", "c#{@item.context_id}items"

@@ -72,4 +72,19 @@ class ApplicationController < ActionController::Base
     @admin = User.find(:first, :conditions => [ "is_admin = ?", true ])
   end
   
+  def init_data_for_sidebar
+    @projects = @user.projects
+    @contexts = @user.contexts
+    init_not_done_counts
+  end
+  
+  def init_not_done_counts
+    @project_not_done_counts = Todo.count(:todo,
+                                          :conditions => ['todos.user_id = ? and todos.type = ? and todos.done = ?', @user.id, "Immediate", false],
+                                          :group => :project_id)
+    @context_not_done_counts = Todo.count(:todo,
+                                          :conditions => ['todos.user_id = ? and todos.type = ? and todos.done = ?', @user.id, "Immediate", false],
+                                          :group => :context_id)    
+  end  
+  
 end

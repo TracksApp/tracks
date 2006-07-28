@@ -33,28 +33,19 @@ class Project < ActiveRecord::Base
   end
   
   def find_not_done_todos
-    Todo.find :all, :conditions => ["project_id = ? AND done = ?", id, false],
-                    :order => "due IS NULL, due ASC, created_at ASC"
+    todos = Todo.find(:all,
+                      :conditions => ['todos.project_id = ? and todos.type = ? and todos.done = ?', id, "Immediate", false],
+                      :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC",
+                      :include => [ :project, :context ])
+                      
   end
 
   def find_done_todos
-    Todo.find :all, :conditions => ["project_id = ? AND done = ?", id, true],
-                    :order => "completed DESC",
-                    :limit => @user.preferences["no_completed"].to_i
+    todos = Todo.find :all, :conditions => ["todos.project_id = ? AND todos.type = ? AND todos.done = ?", id, "Immediate", true],
+                      :order => "completed DESC",
+                      :include => [:context, :project],
+                      :limit => @user.preferences["no_completed"].to_i
   end
   
-  # Returns a count of next actions in the given project
-  # The result is count and a string descriptor, correctly pluralised if there are no
-  # actions or multiple actions
-  #
-  def count_undone_todos(string="actions")
-    count = not_done_todos.size
-    if count == 1
-      word = string.singularize
-    else
-      word = string.pluralize
-    end
-    return count.to_s + " " + word
-  end
-
+  
 end

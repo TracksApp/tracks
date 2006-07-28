@@ -14,14 +14,24 @@ class TodoController < ApplicationController
   # Number of completed actions to show is determined by a setting in settings.yml
   def index
     self.init
+    @projects = @user.projects.find(:all, :include => [ :todos ])
+    @contexts = @user.contexts.find(:all, :include => [ :todos ])
+    
     @on_page = "home"
     @page_title = "TRACKS::List tasks"
     
     # If you've set no_completed to zero, the completed items box
     # isn't shown on the home page
     max_completed = @user.preferences["no_completed"].to_i-1
-    @done = (max_completed > 0) ? @done[0..max_completed] : nil
-
+    @done = nil
+    if max_completed > 0
+      @done = Todo.find(:all,
+                        :conditions => ['todos.user_id = ? and todos.done = ?', @user.id, true],
+                        :order => 'todos.completed DESC',
+                        :limit => max_completed,
+                        :include => [ :project, :context ])
+    end
+    
     @contexts_to_show = @contexts.reject {|x| x.hide? }
     
     if @contexts.empty?
@@ -37,10 +47,6 @@ class TodoController < ApplicationController
     end
   end
 
-  # Is this used? Seems like it should be deleted. -lukemelia, 2006-07-16
-  def update_element
-  end
-  
   # Called by a form button
   # Parameters from form fields are passed to create new action
   # in the selected context.
@@ -58,14 +64,15 @@ class TodoController < ApplicationController
 
     @saved = @item.save
 
-     if @saved
-       init_todos
-       @up_count = @todos.reject { |x| x.done? or x.context.hide? }.size.to_s
-     end
-
      respond_to do |wants|
        wants.html { redirect_to :action => "index" }
-       wants.js
+       wants.js do
+         if @saved
+           init_todos
+           @up_count = @todos.reject { |x| x.done? or x.context.hide? }.size.to_s
+         end
+         render
+       end
        wants.xml { render :xml => @item.to_xml( :root => 'todo', :except => :user_id ) }
      end
 
@@ -215,11 +222,13 @@ class TodoController < ApplicationController
     self.init
     @page_title = "TRACKS::Completed tasks"
 
-    unless @done.nil?
-      @done_today = @done.collect { |x| x.completed >= 1.day.ago ? x:nil }.compact
-      @done_this_week = @done.collect { |x| 1.week.ago <= x.completed ? x:nil }.compact
-      @done_this_month = @done.collect { |x| 4.week.ago <= x.completed ? x:nil }.compact
-    end
+    @done = Todo.find(:all,
+                      :conditions => ['todos.user_id = ? and todos.done = ? and todos.completed is not null', @user.id, true],
+                      :order => 'todos.completed DESC',
+                      :include => [ :project, :context ])
+    @done_today = @done.collect { |x| x.completed >= 1.day.ago ? x:nil }.compact
+    @done_this_week = @done.collect { |x| 1.week.ago <= x.completed ? x:nil }.compact
+    @done_this_month = @done.collect { |x| 4.week.ago <= x.completed ? x:nil }.compact
   end
 
   # Archived completed items, older than 28 days
@@ -227,12 +236,11 @@ class TodoController < ApplicationController
   def completed_archive
     self.init
     @page_title = "TRACKS::Archived completed tasks"
+    @done = Todo.find(:all,
+                      :conditions => ['todos.user_id = ? and todos.done = ? and todos.completed is not null', @user.id, true],
+                      :order => 'todos.completed DESC',
+                      :include => [ :project, :context ])
     @done_archive = @done.collect { |x| 28.day.ago > x.completed ? x:nil }.compact
-  end
-  
-  def feeds
-    self.init
-    @page_title = "TRACKS::Feeds"
   end
   
   protected
@@ -251,11 +259,18 @@ class TodoController < ApplicationController
       @projects = @user.projects
       @contexts = @user.contexts
       init_todos
+      init_not_done_counts
     end
     
     def init_todos
-      @todos = Todo.find(:all, :conditions => ['user_id = ? and type = ?', @user.id, "Immediate"])
-      @done = Todo.find(:all, :conditions => ['user_id = ? and done = ?', @user.id, true], :order => 'completed DESC')
+      @todos = Todo.find(:all,
+                         :conditions => ['todos.user_id = ? and todos.type = ?', @user.id, "Immediate"],
+                         :include => [ :project, :context ])
+
+      @not_done_todos = Todo.find(:all,
+                            :conditions => ['todos.user_id = ? and todos.type = ? and todos.done = ?', @user.id, "Immediate", false],
+                            :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC",
+                            :include => [ :project, :context ])
     end    
-        
+      
 end

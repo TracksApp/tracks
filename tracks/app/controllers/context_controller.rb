@@ -27,6 +27,7 @@ class ContextController < ApplicationController
   #
   def show
     init
+    check_user_set_context
     init_todos
     @on_page = "context"
     @page_title = "TRACKS::Context: #{@context.name}"
@@ -219,13 +220,14 @@ class ContextController < ApplicationController
       @contexts = @user.contexts
       @todos = @user.todos
       @done = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = ?", @user.id, true], :include => [:project], :order => "completed DESC")
+      init_not_done_counts
     end
 
     def init_todos
       check_user_set_context
       @done = @context.done_todos
-      @not_done = @context.not_done_todos
-      @count = @not_done.size
+      @not_done_todos = @context.not_done_todos
+      @count = @not_done_todos.size
     end
 
 end

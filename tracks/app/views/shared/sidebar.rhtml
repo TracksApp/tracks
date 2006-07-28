@@ -2,7 +2,7 @@
 <ul>
   <% for project in @projects.reject{|p| p.done? } -%>
     <li id="sidebar-project-<%= project.id %>" class="sidebar-project"><%= link_to( sanitize(project.name), { :controller => "project", :action => "show", 
-            :name => urlize(project.name) } ) + " (" + project.count_undone_todos("actions") + ")" %></li>
+            :name => urlize(project.name) } ) + " (" + count_undone_todos(project,"actions") + ")" %></li>
   <% end -%>
 </ul>
 
@@ -10,7 +10,7 @@
 <ul>
   <% for project in @projects.reject{|p| !p.done? } -%>
     <li id="sidebar-project-<%= project.id %>" class="sidebar-project"><%= link_to( sanitize(project.name), { :controller => "project", :action => "show",
-            :name => urlize(project.name) } ) + " (" + project.count_undone_todos("actions") + ")" %></li>
+            :name => urlize(project.name) } ) + " (" + count_undone_todos(project,"actions") + ")" %></li>
   <% end -%>
 </ul>
 
@@ -18,7 +18,7 @@
 <ul>
   <% for context in @contexts.reject{|c| c.hide? } -%>
   <li id="sidebar-context-<%= context.id %>" class="sidebar-context"><%= link_to( sanitize(context.name), { :controller => "context", :action => "show",
-          :name => urlize(context.name) } ) + " (" + context.count_undone_todos("actions") + ")" %></li>
+          :name => urlize(context.name) } ) + " (" + count_undone_todos(context,"actions") + ")" %></li>
   <% end -%>
 </ul>
 
@@ -26,6 +26,6 @@
 <ul>
   <% for context in @contexts.reject{|c| !c.hide? } -%>
   <li id="sidebar-context-<%= context.id %>" class="sidebar-context"><%= link_to( sanitize(context.name), { :controller => "context", :action => "show",
-          :name => urlize(context.name) } ) + " (" + context.count_undone_todos("actions") + ")" %></li>
+          :name => urlize(context.name) } ) + " (" + count_undone_todos(context,"actions") + ")" %></li>
   <% end -%>
 </ul>
