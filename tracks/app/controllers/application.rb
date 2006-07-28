@@ -71,7 +71,11 @@ class ApplicationController < ActionController::Base
   def get_admin_user
     @admin = User.find(:first, :conditions => [ "is_admin = ?", true ])
   end
-  
+    
+  def parse_date_per_user_prefs( s )
+    Date.strptime(s, @user.preferences["date_format"]) 
+  end
+    
   def init_data_for_sidebar
     @projects = @user.projects
     @contexts = @user.contexts

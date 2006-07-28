@@ -19,11 +19,16 @@ class DeferredController < ApplicationController
   end
   
   def create
+    @item = Deferred.new
+    @item.attributes = params["todo"]
+    if params["todo"]["show_from"] 
+      @item.show_from = parse_date_per_user_prefs(params["todo"]["show_from"])
+    end
     @item = Deferred.create(params["todo"])
     @item.user_id = @user.id
 
     if @item.due?
-      @item.due = Date.strptime(params["todo"]["due"], @user.preferences["date_format"])
+      @item.due = parse_date_per_user_prefs(params["todo"]["due"])
     else
       @item.due = ""
     end
@@ -52,8 +57,12 @@ class DeferredController < ApplicationController
     @original_item_context_id = @item.context_id
     @item.attributes = params["item"]
 
+    if params["item"]["show_from"] 
+      @item.show_from = parse_date_per_user_prefs(params["item"]["show_from"])
+    end
+
     if @item.due?
-      @item.due = Date.strptime(params["item"]["due"], @user.preferences["date_format"])
+      @item.due = parse_date_per_user_prefs(params["item"]["due"])
     else
       @item.due = ""
     end

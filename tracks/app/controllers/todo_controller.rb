@@ -57,7 +57,7 @@ class TodoController < ApplicationController
     @on_page = "home"
 
     if @item.due?
-      @item.due = Date.strptime(params["todo"]["due"], @user.preferences["date_format"])
+      @item.due = parse_date_per_user_prefs(params["todo"]["due"])
     else
       @item.due = ""
     end
@@ -138,7 +138,7 @@ class TodoController < ApplicationController
     @item.attributes = params["item"]
 
     if @item.due?
-      @item.due = Date.strptime(params["item"]["due"], @user.preferences["date_format"])
+      @item.due = parse_date_per_user_prefs(params["item"]["due"])
     else
       @item.due = ""
     end

@@ -73,7 +73,7 @@ class ProjectController < ApplicationController
     @item.attributes = params["todo"]
 
     if @item.due?
-      @item.due = Date.strptime(params["todo"]["due"], @user.preferences["date_format"])
+      @item.due = parse_date_per_user_prefs(params["todo"]["due"])
     else
       @item.due = ""
     end
