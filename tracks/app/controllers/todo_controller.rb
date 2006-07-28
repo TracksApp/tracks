@@ -9,16 +9,10 @@ class TodoController < ApplicationController
   prepend_before_filter :login_required
   layout "standard"
 
-  def index
-    list
-    render_action "list"
-  end
-
   # Main method for listing tasks
   # Set page title, and fill variables with contexts and done and not-done tasks
   # Number of completed actions to show is determined by a setting in settings.yml
-  #
-  def list
+  def index
     self.init
     @on_page = "home"
     @page_title = "TRACKS::List tasks"
@@ -56,18 +50,35 @@ class TodoController < ApplicationController
     @item.attributes = params["todo"]
     @on_page = "home"
 
-    perform_add_item('list')
-  end
-  
-  # Adding deferred actions from form on todo/tickler
-  #
-  def add_deferred_item
-    self.init
-    @item = Deferred.create(params["todo"])
-    @item.user_id = @user.id
-    @on_page = "tickler"
+    if @item.due?
+      @item.due = Date.strptime(params["todo"]["due"], @user.preferences["date_format"])
+    else
+      @item.due = ""
+    end
 
-    perform_add_item('tickler')
+    @saved = @item.save
+
+     if @saved
+       init_todos
+       @up_count = @todos.reject { |x| x.done? or x.context.hide? }.size.to_s
+     end
+
+     respond_to do |wants|
+       wants.html { redirect_to :action => "index" }
+       wants.js
+       wants.xml { render :xml => @item.to_xml( :root => 'todo', :except => :user_id ) }
+     end
+
+     # if you're seeing the message 'An error occurred on the server.' and you want to debug, comment out the rescue section and check the Ajax response for an exception message
+     rescue
+       respond_to do |wants|
+         wants.html do
+           flash["warning"] = 'An error occurred on the server.'
+           render :action => "index"
+        end
+         wants.js { render :action => 'error' }
+         wants.xml { render :text => 'An error occurred on the server.' + $! }
+       end
   end
   
   def edit_action
@@ -105,7 +116,7 @@ class TodoController < ApplicationController
     else
       flash['notice']  = "The action <strong>'#{@item.description}'</strong> was NOT marked as <strong>#{@item.done? ? 'complete' : 'incomplete' } due to an error on the server.</strong>"
     end
-    redirect_to :action => "list"
+    redirect_to :action => "index"
   end
 
   # Edit the details of an action
@@ -126,21 +137,6 @@ class TodoController < ApplicationController
     end
 
     @saved = @item.save
-  end
-  
-  def deferred_update_action
-    #self.init
-    @tickle = check_user_return_item
-    @original_item_context_id = @tickle.context_id
-    @tickle.attributes = params["item"]
-
-    if @tickle.due?
-      @tickle.due = Date.strptime(params["item"]["due"], @user.preferences["date_format"])
-    else
-      @tickle.due = ""
-    end
-
-    @saved = @tickle.save
   end
   
   def update_context
@@ -197,9 +193,9 @@ class TodoController < ApplicationController
     # fallback for standard requests
     if @saved
       flash["notice"] = 'Successfully deleted next action'
-      redirect_to :action => 'list'
+      redirect_to :action => 'index'
     else
-      render :action => 'list'
+      render :action => 'index'
     end
     
     rescue
@@ -207,7 +203,7 @@ class TodoController < ApplicationController
         render :action => 'error'
       else
         flash["warning"] = 'An error occurred on the server.'
-        render :action => 'list'
+        render :action => 'index'
       end
   end
 
@@ -239,30 +235,6 @@ class TodoController < ApplicationController
     @page_title = "TRACKS::Feeds"
   end
   
-  def tickler
-    self.init
-    @page_title = "TRACKS::Tickler"
-    @tickles = @user.todos.find(:all, :conditions => ['type = ?', "Deferred"], :order => "show_from ASC")
-    @count = @tickles.size
-    @on_page = "tickler"
-  end
-
-  # Called by periodically_call_remote
-  # Check for any due tickler items, change them to type Immediate and show
-  # on the page
-  #
-  def check_tickler
-    self.init
-    now = Date.today()
-    @due_tickles = @user.todos.find(:all, :conditions => ['type = ? AND (show_from < ? OR show_from = ?)', "Deferred", now, now ], :order => "show_from ASC")
-    # Change the due tickles to type "Immediate"
-    @due_tickles.each do |t|
-      t[:type] = "Immediate"
-      t.show_from = nil
-      t.save_with_validation(false)
-    end
-  end
-  
   protected
 
     def check_user_return_item
@@ -284,37 +256,6 @@ class TodoController < ApplicationController
     def init_todos
       @todos = Todo.find(:all, :conditions => ['user_id = ? and type = ?', @user.id, "Immediate"])
       @done = Todo.find(:all, :conditions => ['user_id = ? and done = ?', @user.id, true], :order => 'completed DESC')
-    end
-    
-    def perform_add_item(redirect_action)
-
-      if @item.due?
-        @item.due = Date.strptime(params["todo"]["due"], @user.preferences["date_format"])
-      else
-        @item.due = ""
-      end
-
-      @saved = @item.save
-
-       if @saved
-         init_todos
-         @up_count = @todos.reject { |x| x.done? or x.context.hide? }.size.to_s
-       end
-
-       respond_to do |wants|
-         wants.html { redirect_to :action => redirect_action }
-         wants.js
-         wants.xml { render :xml => @item.to_xml( :root => 'todo', :except => :user_id ) }
-       end
-
-       # if you're seeing the message 'An error occurred on the server.' and you want to debug, comment out the rescue section and check the Ajax response for an exception message
-       rescue
-         respond_to do |wants|
-           wants.html { render :action => redirect_action } # TODO: would prefer something like: flash["warning"] = 'An error occurred on the server.' render :action => 'list'
-           wants.js { render :action => 'error' }
-           wants.xml { render :text => 'An error occurred on the server.' + $! }
-         end
-    end
-    
+    end    
         
 end

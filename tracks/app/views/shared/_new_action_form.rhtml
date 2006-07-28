@@ -1,21 +1,17 @@
 <%
+  @selected_context = @contexts[0].id
+  @selected_project = nil
   case controller.controller_name
     when "context"
       add_string = "Add a next action in this context &#187;"
       @selected_context = @context.id
-      @selected_project = nil
     when "project"
       add_string = "Add a next action in this project &#187;"
-      @selected_context = @contexts[0].id
       @selected_project = @project.id
-    else
+    when "deferred"
       add_string = "Add a next action &#187;"
-      @selected_context = @contexts[0].id
-      @selected_project = nil
-  end
-  
-  if @on_page == "tickler"
-    add_string = "Add a deferred action &#187;"
+    else
+      add_string = "Add a deferred action &#187;"
   end
 %>
 <% hide_link ||= false %>
@@ -57,7 +53,7 @@
   <td><%= text_field("todo", "due", "size" => 10, "class" => "Date", "onFocus" => "Calendar.setup", "tabindex" => 5, "autocomplete" => "off") %></td>
 </tr>
 
-<% if @on_page == "tickler" -%>
+<% if controller.controller_name == "tickler" -%>
 <tr>
   <td><label for="todo_show_from">Show from</label></td>
   <td><%= date_select( "todo", "show_from", :start_year => Date.today.year, :order => [:year, :month, :day] ) %></td>

@@ -15,7 +15,7 @@ class LoginController < ApplicationController
           msg = (should_expire_sessions?) ? "will expire after 1 hour of inactivity." : "will not expire." 
           flash['notice']  = "Login successful: session #{msg}"
           cookies[:tracks_login] = { :value => @user.login, :expires => Time.now + 1.year }
-          redirect_back_or_default :controller => "todo", :action => "list"
+          redirect_back_or_default :controller => "todo", :action => "index"
         else
           @login = params['user_login']
           flash['warning'] = "Login unsuccessful"
@@ -54,7 +54,7 @@ class LoginController < ApplicationController
       @user.preferences = { "date_format" => "%d/%m/%Y", "week_starts" => "1", "no_completed" => "5", "staleness_starts" => "7", "due_style" => "1", "admin_email" => "butshesagirl@rousette.org.uk"}
       @user.save
       flash['notice']  = "Signup successful for user #{@user.login}."
-      redirect_back_or_default :controller => "todo", :action => "list"
+      redirect_back_or_default :controller => "todo", :action => "index"
     end
   end
 
@@ -64,7 +64,7 @@ class LoginController < ApplicationController
       # TODO: Maybe it would be better to mark deleted. That way user deletes can be reversed.
       @user.destroy
     end
-    redirect_back_or_default :controller => "todo", :action => "list"
+    redirect_back_or_default :controller => "todo", :action => "index"
   end
 
   def logout

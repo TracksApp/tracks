@@ -8,24 +8,26 @@ module TodoHelper
   end
 
   def form_remote_tag_edit_todo( item, type )
-    (type == "deferred") ? act = 'deferred_update_action' : act = 'update_action'
-    form_remote_tag( :url => { :controller => 'todo', :action => act, :id => item.id },
+    (type == "deferred") ? act = 'update' : act = 'update_action'
+    (type == "deferred") ? controller_name = 'deferred' : controller_name = 'todo'
+    form_remote_tag( :url => { :controller => controller_name, :action => act, :id => item.id },
                     :html => { :id => "form-action-#{item.id}", :class => "inline-form" }
                    )
   end
   
   def link_to_remote_todo( item, handled_by, type)
-    
+    (type == "deferred") ? destroy_act = 'destroy' : destroy_act = 'destroy_action'
     str = link_to_remote( image_tag("blank", :title =>"Delete action", :class=>"delete_item"),
-                      {:url => { :controller => handled_by, :action => "destroy_action", :id => item.id },
+                      {:url => { :controller => handled_by, :action => destroy_act, :id => item.id },
                       :confirm => "Are you sure that you want to delete the action, \'#{item.description}\'?"},
                         {:class => "icon"}) + "\n"
     if !item.done?
+      (type == "deferred") ? edit_act = 'edit' : edit_act = 'edit_action'
       str << link_to_remote( image_tag("blank", :title =>"Edit action", :class=>"edit_item", :id=>"action-#{item.id}-edit-icon"),
                       {
                         :update => "form-action-#{item.id}",
                         :loading => visual_effect(:pulsate, "action-#{item.id}-edit-icon"),
-                        :url => { :controller => "todo", :action => "edit_action", :id => item.id },
+                        :url => { :controller => handled_by, :action => edit_act, :id => item.id },
                         :success => "Element.toggle('item-#{item.id}','action-#{item.id}-edit-form'); new Effect.Appear('action-#{item.id}-edit-form', { duration: .2 });  Form.focusFirstElement('form-action-#{item.id}')"
                       },
                       {

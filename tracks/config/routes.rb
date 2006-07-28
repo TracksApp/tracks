@@ -15,7 +15,7 @@ ActionController::Routing::Routes.draw do |map|
   #map.connect ':controller/service.wsdl', :action => 'wsdl'
   
   # Index Route
-  map.connect '', :controller => 'todo', :action => 'list'
+  map.connect '', :controller => 'todo', :action => 'index'
 
   # Mobile/lite version
   map.connect 'mobile', :controller => 'mobile', :action => 'list'
@@ -29,6 +29,10 @@ ActionController::Routing::Routes.draw do |map|
   # ToDo Routes
   map.connect 'done', :controller => 'todo', :action => 'completed'
   map.connect 'delete/todo/:id', :controller =>'todo', :action => 'destroy'
+
+  # Deferred (Tickler) Routes
+  map.connect 'tickler', :controller => 'deferred', :action => 'index'
+  map.connect 'tickler/:action/:id', :controller => 'deferred'
 
   # Context Routes
   map.connect 'context/new_context', :controller => 'context', :action => 'new_context'

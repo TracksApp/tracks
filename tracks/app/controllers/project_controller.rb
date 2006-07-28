@@ -89,10 +89,10 @@ class ProjectController < ApplicationController
     # fallback for standard requests
     if @saved
       flash["notice"] = 'Added new next action.'
-      redirect_to :controller => 'todo', :action => 'list'
+      redirect_to :controller => 'todo', :action => 'index'
     else
       flash["warning"] = 'The next action was not added. Please try again.'
-      redirect_to :controller => 'todo', :action => 'list'
+      redirect_to :controller => 'todo', :action => 'index'
     end
     
     rescue
@@ -100,7 +100,7 @@ class ProjectController < ApplicationController
         render :action => 'error'
       else
         flash["warning"] = 'An error occurred on the server.'
-        redirect_to :controller => 'todo', :action => 'list'
+        redirect_to :controller => 'todo', :action => 'index'
       end
   end
   
@@ -121,9 +121,9 @@ class ProjectController < ApplicationController
     # fallback for standard requests
     if @saved
       flash["notice"] = 'Successfully deleted next action'
-      redirect_to :controller => 'todo', :action => 'list'
+      redirect_to :controller => 'todo', :action => 'index'
     else
-      render :controller => 'todo', :action => 'list'
+      render :controller => 'todo', :action => 'index'
     end
     
     rescue
@@ -131,7 +131,7 @@ class ProjectController < ApplicationController
         render :action => 'error'
       else
         flash["warning"] = 'An error occurred on the server.'
-        render :controller => 'todo', :action => 'list'
+        render :controller => 'todo', :action => 'index'
       end
   end
 
