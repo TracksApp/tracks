@@ -532,6 +532,22 @@ form {
     _width: 40%;
     }
 
+.inline-form table {
+    padding-right: 3px;
+    }
+
+/* expand form contents to fill the whole form */
+.inline-form table,
+.inline-form textarea#item_notes, 
+.inline-form input#item_description {
+    width: 100%;
+    }
+
+/* shrink the label/left column as small as necessary */
+.inline-form table td.label {
+    width: 13ex;
+    }
+
 form.button-to {
 	border: none;
 	padding: 0px;
