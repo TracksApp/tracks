@@ -62,6 +62,7 @@ class ProjectController < ApplicationController
     @project.attributes = params['project']
     @project.name = deurlize(@project.name)
     @saved = @project.save
+    @project_not_done_counts = { @project.id => 0 }
   end
 
   # Called by a form button

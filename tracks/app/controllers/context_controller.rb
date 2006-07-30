@@ -40,6 +40,7 @@ class ContextController < ApplicationController
     @context.attributes = params['context']
     @context.name = deurlize(@context.name)
     @saved = @context.save
+    @context_not_done_counts = { @context.id => 0 }
   end
   
   # Called by a form button
