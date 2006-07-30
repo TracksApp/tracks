@@ -24,7 +24,6 @@ class DeferredController < ApplicationController
     if params["todo"]["show_from"] 
       @item.show_from = parse_date_per_user_prefs(params["todo"]["show_from"])
     end
-    @item = Deferred.create(params["todo"])
     @item.user_id = @user.id
 
     if @item.due?
