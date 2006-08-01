@@ -1,7 +1,7 @@
 <div id="item-<%= item.id %>-container" class="item-container">
     
   <div id="item-<%= item.id %>">
-    <%= link_to_remote_todo( item, controller.controller_name, "immediate" ) %>
+    <%= link_to_remote_todo item %>
     <input type="checkbox" class="item-checkbox"
            onclick="new Ajax.Request('<%= url_for :controller => controller.controller_name, :action => 'toggle_check', :id => item.id  %>', {asynchronous:true, evalScripts:true});"
            name="item_id" value="<%= item.id %>"<% if item.done? %> checked="checked" <% end %> />

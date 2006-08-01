@@ -16,7 +16,7 @@
   link_to_remote( image_tag("blank", :title =>"Delete this action", :class=>"delete_item"), 
                     :update => "item-#{item.id}-container",
                     :loading => visual_effect(:fade, "item-#{item.id}-container"),
-                    :url => { :controller => "todo", :action => "destroy_action", :id => item.id }, :confirm => "Are you sure that you want to delete the action \'#{item.description}\'?" ) + " " +
+                    :url => { :controller => "todo", :action => "destroy", :id => item.id }, :confirm => "Are you sure that you want to delete the action \'#{item.description}\'?" ) + " " +
   link_to_function(image_tag( "blank", :title => "Edit item", :class=>"edit_item"), "Element.toggle('item-#{item.id}','action-#{item.id}-edit-form'); new Effect.Appear('action-#{item.id}-edit-form'); Form.focusFirstElement('form-action-#{item.id}');" ) + " "
   %>
   <!-- begin div.checkbox -->
@@ -58,7 +58,7 @@
 </div><!-- [end:item-item.id-container] -->
 <% else %>
 <div id="done-item-<%= item.id %>-container">
-<%= form_remote_tag( :url => url_for( :controller => "context", :action => "toggle_check", :id => item.id ),
+<%= form_remote_tag( :url => url_for( :controller => "context", :action => "toggle_check", :id => item.id, :_source_view => source_view),
                      :html => { :id=> "checkbox-done-#{item.id}", :class => "inline-form" },
                      :update => "next_actions",
                      :position => "bottom",
@@ -72,7 +72,7 @@
   link_to_remote( image_tag("blank", :title =>"Delete this action", :class=>"delete_item"), 
                   :update => "done-item-#{item.id}-container",
                   :loading => visual_effect(:fade, "done-item-#{item.id}-container"),
-                  :url => { :controller => "todo", :action => "destroy_action", :id => item.id }, :confirm => "Are you sure that you want to delete the action \'#{item.description}\'?" ) + " "
+                  :url => { :controller => "todo", :action => "destroy", :id => item.id, :_source_view => source_view }, :confirm => "Are you sure that you want to delete the action \'#{item.description}\'?" ) + " "
   %>
   <%= image_tag("blank") %>
   </div><!-- [end:big-box] -->

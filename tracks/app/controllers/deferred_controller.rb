@@ -11,6 +11,7 @@ class DeferredController < ApplicationController
 
   
   def index
+    @source_view = 'deferred'
     init_projects_and_contexts
     init_not_done_counts
     @page_title = "TRACKS::Tickler"
@@ -19,6 +20,7 @@ class DeferredController < ApplicationController
   end
   
   def create
+    @source_view = 'deferred'
     @item = Deferred.new
     @item.attributes = params["todo"]
     if params["todo"]["show_from"] 
@@ -46,12 +48,14 @@ class DeferredController < ApplicationController
   end
   
   def edit
+    @source_view = 'deferred'
     init_projects_and_contexts
     @item = check_user_return_item
     render :layout => false
   end
   
   def update
+    @source_view = 'deferred'
     @item = check_user_return_item
     @original_item_context_id = @item.context_id
     @item.attributes = params["item"]

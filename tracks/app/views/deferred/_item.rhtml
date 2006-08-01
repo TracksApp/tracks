@@ -1,6 +1,6 @@
 <div id="item-<%= item.id %>-container" class="item-container">
   <div id="item-<%= item.id %>">
-    <%= link_to_remote_todo( item, controller.controller_name, "deferred" ) %>
+    <%= link_to_remote_todo item, { :type => 'deferred' } %>
       <div class="description">
         <%= show_date( item.show_from ) -%>
 

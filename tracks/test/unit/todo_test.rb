@@ -18,7 +18,7 @@ class TodoTest < Test::Unit::TestCase
     assert_equal 2, @not_completed1.project_id
     assert_equal "Call Bill Gates to find out how much he makes per day", @not_completed1.description
     assert_nil @not_completed1.notes
-    assert !@not_completed1.done
+    assert @not_completed1.done == false || @not_completed1.done == 0
     assert_equal 1.week.ago.strftime("%Y-%m-%d %H:%M"), @not_completed1.created_at.strftime("%Y-%m-%d %H:%M")
     assert_equal 2.week.from_now.strftime("%Y-%m-%d"), @not_completed1.due.strftime("%Y-%m-%d")
     assert_nil @not_completed1.completed

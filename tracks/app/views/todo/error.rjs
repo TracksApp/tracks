@@ -1,1 +1,1 @@
-page["status"].replace_html "An error occurred on the server."
+page["status"].replace_html @error_message || "An error occurred on the server."

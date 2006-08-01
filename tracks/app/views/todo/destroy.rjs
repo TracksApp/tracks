@@ -1,9 +1,11 @@
 if @saved
   page["item-#{@item.id}-container"].remove
   page['badge_count'].replace_html @down_count
-  if @remaining_undone_in_context == 0
-    page.visual_effect :fade, "c#{@item.context_id}", :duration => 0.4
-  end
+  source_view do |from|
+     from.todo { page.visual_effect :fade, "c#{@item.context_id}", :duration => 0.4 if @remaining_undone_in_context == 0 }
+     from.context { page["c#{@item.context_id}empty-nd"].show if @down_count == 0 }
+     from.project { page["p#{@item.project_id}empty-nd"].show if @down_count == 0 }
+   end
 else
   page["status"].replace_html content_tag("div", content_tag("h2", "#{pluralize(@item.errors.count, "error")} prohibited this record from being saved") + content_tag("p", "There were problems with the following fields:") + content_tag("ul", @item.errors.each_full { |msg| content_tag("li", msg) }), "id" => "ErrorExplanation", "class" => "ErrorExplanation")
 end

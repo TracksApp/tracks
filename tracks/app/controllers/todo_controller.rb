@@ -17,7 +17,6 @@ class TodoController < ApplicationController
     @projects = @user.projects.find(:all, :include => [ :todos ])
     @contexts = @user.contexts.find(:all, :include => [ :todos ])
     
-    @on_page = "home"
     @page_title = "TRACKS::List tasks"
     
     # If you've set no_completed to zero, the completed items box
@@ -54,7 +53,6 @@ class TodoController < ApplicationController
     self.init
     @item = @user.todos.build
     @item.attributes = params["todo"]
-    @on_page = "home"
 
     if @item.due?
       @item.due = parse_date_per_user_prefs(params["todo"]["due"])
@@ -82,13 +80,13 @@ class TodoController < ApplicationController
          wants.html do
            flash["warning"] = 'An error occurred on the server.'
            render :action => "index"
-        end
+         end
          wants.js { render :action => 'error' }
          wants.xml { render :text => 'An error occurred on the server.' + $! }
        end
   end
   
-  def edit_action
+  def edit
     self.init
     @item = check_user_return_item
     render :layout => false
@@ -111,7 +109,6 @@ class TodoController < ApplicationController
     @item.toggle!('done')
     @item.completed = Time.now() # For some reason, the before_save in todo.rb stopped working
     @saved = @item.save
-    @on_page = "home"
     @remaining_undone_in_context = Todo.count(:conditions => ['user_id = ? and context_id = ? and type = ? and done = ?', @user.id, @item.context_id, "Immediate", false])
     if @saved
       @down_count = @todos.collect { |x| ( !x.done? and !x.context.hide? ) ? x:nil }.compact.size.to_s
@@ -130,9 +127,6 @@ class TodoController < ApplicationController
   #
   def update_action
     self.init
-    if params["on_project_page"] == true
-      @on_page = "project"
-    end
     @item = check_user_return_item
     @original_item_context_id = @item.context_id
     @item.attributes = params["item"]
@@ -180,38 +174,61 @@ class TodoController < ApplicationController
     end
   end
   
-  # Delete a next action
-  #
-  def destroy_action
-    self.init
+  def destroy
     @item = check_user_return_item
     context_id = @item.context_id
-    
+    project_id = @item.project_id
     @saved = @item.destroy
-    @on_page = "home"
-    @remaining_undone_in_context = Todo.count(:conditions => ['user_id = ? and context_id = ? and type = ? and done = ?', @user.id, context_id, "Immediate", false])
-    if @saved
-      self.init
-      @down_count = @todos.reject { |x| x.done? or x.context.hide? }.size.to_s
-    end
     
-    return if request.xhr?
+    respond_to do |wants|
+      
+      wants.html do
+        if @saved
+          flash["notice"] = 'Successfully deleted next action'
+          redirect_to :action => 'index'
+        else
+          flash["warning"] = 'Failed to delete the action.'
+          redirect_to :action => 'index'
+        end
+      end
+      
+      wants.js do
+        if @saved
+          @down_count = 0
+          source_view do |from|
+             from.todo do
+               @down_count = Todo.count(:conditions => ['todos.user_id = ? and todos.type = ? and todos.done = ? and contexts.hide = ?',
+                                                         @user.id, "Immediate", false, false],
+                                        :include => [ :context ])
+               @remaining_undone_in_context = Todo.count(:conditions => ['user_id = ? and context_id = ? and type = ? and done = ?',
+                                                                          @user.id, context_id, "Immediate", false])
+             end
+             from.context do
+               @down_count = Todo.count(:conditions => ['todos.user_id = ? and todos.type = ? and todos.done = ? and todos.context_id = ?',
+                                                         @user.id, "Immediate", false, context_id])
+             end
+             from.project do
+               @down_count = Todo.count(:conditions => ['todos.user_id = ? and todos.type = ? and todos.done = ? and todos.project_id = ?',
+                                                         @user.id, "Immediate", false, project_id]) unless project_id == nil
+             end
+           end
+        end
+        render
+      end
+      
+      wants.xml { render :text => '200 OK. Action deleted.', :status => 200 }
     
-    # fallback for standard requests
-    if @saved
-      flash["notice"] = 'Successfully deleted next action'
-      redirect_to :action => 'index'
-    else
-      render :action => 'index'
     end
     
     rescue
-      if request.xhr? # be sure to include an error.rjs
-        render :action => 'error'
-      else
-        flash["warning"] = 'An error occurred on the server.'
-        render :action => 'index'
-      end
+      respond_to do |wants|
+        wants.html do
+          flash["warning"] = 'An error occurred on the server.'
+          redirect_to :action => 'index'
+        end
+        wants.js { render :action => 'error' }
+        wants.xml { render :text => 'An error occurred on the server.' + $! }
+      end    
   end
 
   # List the completed tasks, sorted by completion date
@@ -250,12 +267,20 @@ class TodoController < ApplicationController
       if @user == item.user
         return item
       else
-        flash["warning"] = "Item and session user mis-match: #{item.user.name} and #{@user.name}!"
-        render_text ""
+        @error_message = 'Item and session user mis-match: #{item.user.name} and #{@user.name}!'
+        respond_to do |wants|
+          wants.html do
+            flash["warning"] = @error_message
+            render :action => "index"
+          end
+          wants.js { render :action => 'error' }
+          wants.xml { render :text => @error_message, :status => 403 }
+        end
       end
     end
 
     def init
+      @source_view = params['_source_view'] || 'todo'
       @projects = @user.projects
       @contexts = @user.contexts
       init_todos

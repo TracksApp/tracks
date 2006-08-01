@@ -15,19 +15,19 @@ module TodoHelper
                    )
   end
   
-  def link_to_remote_todo( item, handled_by, type)
-    (type == "deferred") ? destroy_act = 'destroy' : destroy_act = 'destroy_action'
+  def link_to_remote_todo( item, options = {})
+    (options[:type] == "deferred") ? controller_name = 'deferred' : controller_name = 'todo'
+    url_options = { :controller => controller_name, :action => 'destroy', :id => item.id, :_source_view => @source_view }
     str = link_to_remote( image_tag("blank", :title =>"Delete action", :class=>"delete_item"),
-                      {:url => { :controller => handled_by, :action => destroy_act, :id => item.id },
-                      :confirm => "Are you sure that you want to delete the action, \'#{item.description}\'?"},
-                        {:class => "icon"}) + "\n"
+                          { :url => url_options, :confirm => "Are you sure that you want to delete the action, \'#{item.description}\'?" },
+                          { :class => "icon" }
+                        ) + "\n"
     if !item.done?
-      (type == "deferred") ? edit_act = 'edit' : edit_act = 'edit_action'
       str << link_to_remote( image_tag("blank", :title =>"Edit action", :class=>"edit_item", :id=>"action-#{item.id}-edit-icon"),
                       {
                         :update => "form-action-#{item.id}",
                         :loading => visual_effect(:pulsate, "action-#{item.id}-edit-icon"),
-                        :url => { :controller => handled_by, :action => edit_act, :id => item.id },
+                        :url => { :controller => 'todo', :action => 'edit', :id => item.id, :_source_view => @source_view },
                         :success => "Element.toggle('item-#{item.id}','action-#{item.id}-edit-form'); new Effect.Appear('action-#{item.id}-edit-form', { duration: .2 });  Form.focusFirstElement('form-action-#{item.id}')"
                       },
                       {

@@ -1,6 +1,8 @@
 <%= error_messages_for("item") %>
 
 <%= hidden_field( "item", "id" ) %>
+<%= source_view_tag( @source_view ) %>
+
 <table>
   <tr>
     <td class="label"><label for="item_description">Next action</label></td>

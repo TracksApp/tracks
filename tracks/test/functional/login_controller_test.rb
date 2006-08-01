@@ -42,9 +42,9 @@ class LoginControllerTest < Test::Unit::TestCase
     user = login('jane','sesame', 'off')
     assert_equal user.id, @response.session['user_id']
     assert_equal user.login, "jane"
-    assert !user.is_admin
+    assert user.is_admin == false || user.is_admin == 0
     assert_equal "Login successful: session will expire after 1 hour of inactivity.", flash['notice']
-    assert_redirected_to :controller => 'todo', :action => 'list'
+    assert_redirected_to :controller => 'todo', :action => 'index'
   end
 
   def test_logout
@@ -82,16 +82,16 @@ class LoginControllerTest < Test::Unit::TestCase
     assert admin.is_admin
     newbie = create('newbie', 'newbiepass')
     assert_equal "Signup successful for user newbie.", flash['notice']
-    assert_redirected_to :controller => 'todo', :action => 'list'
+    assert_redirected_to :controller => 'todo', :action => 'index'
     assert_valid newbie
     get :logout # logout the admin user
     assert_equal newbie.login, "newbie"
-    assert !newbie.is_admin
+    assert newbie.is_admin == false || newbie.is_admin == 0
     assert_not_nil newbie.preferences # have user preferences been created?
     user = login('newbie', 'newbiepass', 'on') # log in the new user
-    assert_redirected_to :controller => 'todo', :action => 'list'
+    assert_redirected_to :controller => 'todo', :action => 'index'
     assert_equal 'newbie', user.login
-    assert !user.is_admin
+    assert user.is_admin == false || user.is_admin == 0
     num_users = User.find(:all)
     assert_equal num_users.length, 3
   end
@@ -100,7 +100,7 @@ class LoginControllerTest < Test::Unit::TestCase
   # 
   def test_create_by_non_admin
     non_admin = login('jane', 'sesame', 'on')
-    assert !non_admin.is_admin
+    assert non_admin.is_admin == false || non_admin.is_admin == 0
     post :signup, :user => {:login => 'newbie2', :password => 'newbiepass2', :password_confirmation => 'newbiepass2'}
     assert_template 'login/nosignup'
 

@@ -2,6 +2,7 @@
 # Likewise will all the methods added be available for all controllers.
 
 require_dependency "login_system"
+require_dependency "source_view"
 require "redcloth"
 
 require 'date'
@@ -73,6 +74,7 @@ class ApplicationController < ActionController::Base
   end
     
   def parse_date_per_user_prefs( s )
+    return nil if s == ''
     Date.strptime(s, @user.preferences["date_format"]) 
   end
     

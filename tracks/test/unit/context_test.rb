@@ -25,6 +25,7 @@ class ContextTest < Test::Unit::TestCase
   def test_validate_name_is_unique
      newcontext = Context.new
      newcontext.name = contexts(:agenda).name
+     newcontext.user_id = contexts(:agenda).user_id
      assert !newcontext.save
      assert_equal 1, newcontext.errors.count
      assert_equal "already exists", newcontext.errors.on(:name)

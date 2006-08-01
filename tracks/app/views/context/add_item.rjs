@@ -5,7 +5,7 @@ if @saved
   page['badge_count'].replace_html @up_count
   page.send :record, "Form.reset('todo-form-new-action');Form.focusFirstElement('todo-form-new-action')"
   page.send :record, "Form.reset('todo-form-new-action-lightbox');Form.focusFirstElement('todo-form-new-action-lightbox')"
-  page.insert_html :bottom, "c#{@item.context_id}", :partial => 'todo/item', :locals => { :parent_container_type => "context" }
+  page.insert_html :bottom, "c#{@item.context_id}", :partial => 'todo/item', :locals => { :parent_container_type => "context", :source_view => 'context' }
   page.visual_effect :highlight, "item-#{@item.id}-container", :duration => 3
   page["c#{@item.context_id}empty-nd"].hide # If we are adding an new action, the uncompleted actions must be > 0
 else

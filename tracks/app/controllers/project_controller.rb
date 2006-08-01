@@ -31,7 +31,6 @@ class ProjectController < ApplicationController
     init
     init_todos
     @notes = @project.notes
-    @on_page = "project"
     @page_title = "TRACKS::Project: #{@project.name}"
     
     if @contexts.empty?
@@ -80,7 +79,6 @@ class ProjectController < ApplicationController
     end
 
     @saved = @item.save
-    @on_page = "project"
     if @saved
       @up_count = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = ? and todos.project_id IN (?)", @user.id, false, @item.project_id]).size.to_s
     end
@@ -104,37 +102,6 @@ class ProjectController < ApplicationController
         redirect_to :controller => 'todo', :action => 'index'
       end
   end
-  
-  # Delete a next action
-  #
-  def destroy_action
-    self.init
-    @item = check_user_return_item
-    
-    @saved = @item.destroy
-    @on_page = "project"
-    if @saved
-      @down_count = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = ? and todos.project_id IN (?)", @user.id, false, @item.project_id]).size.to_s
-    end
-    
-    return if request.xhr?
-    
-    # fallback for standard requests
-    if @saved
-      flash["notice"] = 'Successfully deleted next action'
-      redirect_to :controller => 'todo', :action => 'index'
-    else
-      render :controller => 'todo', :action => 'index'
-    end
-    
-    rescue
-      if request.xhr? # be sure to include an error.rjs
-        render :action => 'error'
-      else
-        flash["warning"] = 'An error occurred on the server.'
-        render :controller => 'todo', :action => 'index'
-      end
-  end
 
   # Toggles the 'done' status of the action
   #
@@ -145,7 +112,6 @@ class ProjectController < ApplicationController
     @item.toggle!('done')
     @item.completed = Time.now() # For some reason, the before_save in todo.rb stopped working
     @saved = @item.save
-    @on_page = "project"
     if @saved
       @down_count = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = ? and todos.project_id IN (?)", @user.id, false, @item.project_id]).size.to_s
       @done_count = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = ? and todos.project_id IN (?)", @user.id, true, @item.project_id]).size.to_s
@@ -249,6 +215,7 @@ class ProjectController < ApplicationController
     end
      
     def init
+      @source_view = params['_source_view'] || 'project'
       @projects = @user.projects
       @contexts = @user.contexts
       @todos = @user.todos

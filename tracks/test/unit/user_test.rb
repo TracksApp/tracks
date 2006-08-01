@@ -28,7 +28,7 @@ class UserTest < Test::Unit::TestCase
     assert_equal "jane", @other_user.login
     assert_equal "#{Digest::SHA1.hexdigest("#{SALT}--sesame--")}", @other_user.password
     assert_not_nil @other_user.word
-    assert !@other_user.is_admin
+    assert @other_user.is_admin == false || @other_user.is_admin == 0 
   end
 
   # ============================================

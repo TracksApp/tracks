@@ -29,7 +29,6 @@ class ContextController < ApplicationController
     init
     check_user_set_context
     init_todos
-    @on_page = "context"
     @page_title = "TRACKS::Context: #{@context.name}"
   end
   
@@ -58,7 +57,6 @@ class ContextController < ApplicationController
     end
 
     @saved = @item.save
-    @on_page = "context"
     if @saved
       # This reports real count +1 for some reason that I don't understand
       # Almost identical code for add_item in projects reports correct num
@@ -82,36 +80,6 @@ class ContextController < ApplicationController
       else
         flash["warning"] = 'An error occurred on the server.'
         redirect_to :controller => 'todo', :action => 'list'
-      end
-  end
-  
-  # Delete a next action
-  #
-  def destroy_action
-    self.init
-    @item = check_user_return_item
-    
-    @saved = @item.destroy
-    if @saved
-      @down_count = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = ? and todos.context_id IN (?)", @user.id, false, @item.context_id]).size.to_s
-    end
-    
-    return if request.xhr?
-    
-    # fallback for standard requests
-    if @saved
-      flash["notice"] = 'Successfully deleted next action'
-      redirect_to :controller => 'todo', :action => 'list'
-    else
-      render :controller => 'todo', :action => 'list'
-    end
-    
-    rescue
-      if request.xhr? # be sure to include an error.rjs
-        render :action => 'error'
-      else
-        flash["warning"] = 'An error occurred on the server.'
-        render :controller => 'todo', :action => 'list'
       end
   end
   
@@ -217,6 +185,7 @@ class ContextController < ApplicationController
     end
      
     def init
+      @source_view = params['_source_view'] || 'context'
       @projects = @user.projects.collect { |x| x.done? ? nil:x }.compact
       @contexts = @user.contexts
       @todos = @user.todos

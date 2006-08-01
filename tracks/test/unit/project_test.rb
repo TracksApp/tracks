@@ -24,7 +24,8 @@ class ProjectTest < Test::Unit::TestCase
   
   def test_validate_name_is_unique
     newproj = Project.new
-    newproj.name = "Build a working time machine"
+    newproj.name = projects(:timemachine).name
+    newproj.user_id = projects(:timemachine).user_id
     assert !newproj.save
     assert_equal 1, newproj.errors.count
     assert_equal "already exists", newproj.errors.on(:name)
