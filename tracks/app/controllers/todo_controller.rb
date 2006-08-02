@@ -89,7 +89,6 @@ class TodoController < ApplicationController
   def edit
     self.init
     @item = check_user_return_item
-    render :layout => false
   end
   
   def show
@@ -125,7 +124,7 @@ class TodoController < ApplicationController
 
   # Edit the details of an action
   #
-  def update_action
+  def update
     self.init
     @item = check_user_return_item
     @original_item_context_id = @item.context_id
@@ -149,7 +148,7 @@ class TodoController < ApplicationController
       @item.context_id = context.id
       @item.context = context
       @saved = @item.save
-      render :action => 'update_action'
+      render :action => 'update'
     else
       render :update do |page| 
         page.replace_html "info", content_tag("div", "Error updating the context of the dragged item. Item and context user mis-match: #{@item.user.name} and #{@context.user.name}! - refresh the page to see them.", "class" => "warning")
@@ -166,7 +165,7 @@ class TodoController < ApplicationController
       @item.project_id = project.id
       @item.project = project
       @saved = @item.save
-      render :action => 'update_action'
+      render :action => 'update'
     else
       render :update do |page| 
         page.replace_html "info", content_tag("div", "Error updating the project of the dragged item. Item and project user mis-match: #{@item.user.name} and #{@project.user.name}! - refresh the page to see them.", "class" => "warning")

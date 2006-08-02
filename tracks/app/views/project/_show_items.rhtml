@@ -47,7 +47,7 @@
 <%= end_form_tag %>
 
 <div id="action-<%= item.id %>-edit-form" class="edit-form" style="display:none;">
-<%= form_remote_tag  :url => { :controller => 'todo', :action => 'update_action', :id => item.id },
+<%= form_remote_tag  :url => { :controller => 'todo', :action => 'update', :id => item.id },
                :html => { :id => "form-action-#{item.id}", :class => "inline-form" },
                :update => "item-#{item.id}-container",
                :complete => visual_effect(:appear, "item-#{item.id}-container") %>

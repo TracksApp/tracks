@@ -51,7 +51,7 @@ class DeferredController < ApplicationController
     @source_view = 'deferred'
     init_projects_and_contexts
     @item = check_user_return_item
-    render :layout => false
+    render :template => 'todo/edit.rjs'
   end
   
   def update

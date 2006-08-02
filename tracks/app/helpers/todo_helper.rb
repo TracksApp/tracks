@@ -8,9 +8,8 @@ module TodoHelper
   end
 
   def form_remote_tag_edit_todo( item, type )
-    (type == "deferred") ? act = 'update' : act = 'update_action'
     (type == "deferred") ? controller_name = 'deferred' : controller_name = 'todo'
-    form_remote_tag( :url => { :controller => controller_name, :action => act, :id => item.id },
+    form_remote_tag( :url => { :controller => controller_name, :action => 'update', :id => item.id },
                     :html => { :id => "form-action-#{item.id}", :class => "inline-form" }
                    )
   end
@@ -18,21 +17,17 @@ module TodoHelper
   def link_to_remote_todo( item, options = {})
     (options[:type] == "deferred") ? controller_name = 'deferred' : controller_name = 'todo'
     url_options = { :controller => controller_name, :action => 'destroy', :id => item.id, :_source_view => @source_view }
-    str = link_to_remote( image_tag("blank", :title =>"Delete action", :class=>"delete_item"),
+    
+    str = link_to_remote( image_tag_for_delete,
                           { :url => url_options, :confirm => "Are you sure that you want to delete the action, \'#{item.description}\'?" },
                           { :class => "icon" }
                         ) + "\n"
     if !item.done?
-      str << link_to_remote( image_tag("blank", :title =>"Edit action", :class=>"edit_item", :id=>"action-#{item.id}-edit-icon"),
-                      {
-                        :update => "form-action-#{item.id}",
-                        :loading => visual_effect(:pulsate, "action-#{item.id}-edit-icon"),
-                        :url => { :controller => 'todo', :action => 'edit', :id => item.id, :_source_view => @source_view },
-                        :success => "Element.toggle('item-#{item.id}','action-#{item.id}-edit-form'); new Effect.Appear('action-#{item.id}-edit-form', { duration: .2 });  Form.focusFirstElement('form-action-#{item.id}')"
-                      },
-                      {
-                        :class => "icon"
-                      })
+      url_options[:action] = 'edit'
+      str << link_to_remote( image_tag_for_edit(item),
+                             { :url => url_options, :loading => visual_effect(:pulsate, "action-#{item.id}-edit-icon") },
+                             { :class => "icon" }
+                           )
     else
       str << '<a class="icon">' + image_tag("blank") + "</a> "
     end
@@ -111,5 +106,15 @@ module TodoHelper
     str << ",step:1,inputField:\"" + input_field + "\",cache:true,align:\"TR\" })\n"
     javascript_tag str
   end
-    
+  
+  private
+  
+  def image_tag_for_delete
+    image_tag("blank", :title =>"Delete action", :class=>"delete_item")
+  end
+  
+  def image_tag_for_edit(item)
+    image_tag("blank", :title =>"Edit action", :class=>"edit_item", :id=>"action-#{item.id}-edit-icon")
+  end
+  
 end
