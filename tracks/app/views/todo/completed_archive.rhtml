@@ -1,6 +1,6 @@
 <div id="display_box_projects">
 
-<p>There are <%= @done_archive.length %> completed actions in the archive.</p>
+<p>There <%= @done_archive.length == 1 ? 'is' : 'are' %> <%= pluralize @done_archive.length, 'completed action' %> in the archive.</p>
 <div class="container">
   <h2>Completed more than 31 days ago</h2>
   <table class="next_actions" cellspacing="5" cellpadding="0" border="0">

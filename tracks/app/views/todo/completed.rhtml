@@ -1,5 +1,5 @@
 <div id="display_box_projects">
-<p>You have completed <%= @done_today.length %> actions so far today.</p>
+<p>You have completed <%= pluralize @done_today.length, 'action' %> so far today.</p>
 <div class="container">
   <h2>Completed in the last 24 hours</h2>
   <table class="next_actions" cellspacing="5" cellpadding="0" border="0">

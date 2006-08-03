@@ -15,5 +15,25 @@ class Todo < ActiveRecord::Base
   def self.not_done( id=id )
     self.find(:all, :conditions =>[ "done = ? AND context_id = ?", false, id], :order =>"due IS NULL, due ASC, created_at ASC")
   end
+  
+  def self.find_completed(user_id)
+    done = self.find(:all,
+                     :conditions => ['todos.user_id = ? and todos.done = ? and todos.completed is not null', user_id, true],
+                     :order => 'todos.completed DESC',
+                     :include => [ :project, :context ])
+    done.extend(CompletedToDosByDate)
+  end
+  
+end
+
+module CompletedToDosByDate
+
+  def completed_within( date )
+    self.reject { |x| x.completed < date }
+  end
+
+  def completed_more_than( date )
+    self.reject { |x| x.completed > date }
+  end
 
 end

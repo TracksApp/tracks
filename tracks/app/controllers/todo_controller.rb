@@ -230,33 +230,18 @@ class TodoController < ApplicationController
       end    
   end
 
-  # List the completed tasks, sorted by completion date
-  # @done_today: in the last 24 hours
-  # @done_this_week: in the last week
-  # @done_this_month: in the last 4 weeks (<=28 days)
   def completed
-    self.init
     @page_title = "TRACKS::Completed tasks"
-
-    @done = Todo.find(:all,
-                      :conditions => ['todos.user_id = ? and todos.done = ? and todos.completed is not null', @user.id, true],
-                      :order => 'todos.completed DESC',
-                      :include => [ :project, :context ])
-    @done_today = @done.collect { |x| x.completed >= 1.day.ago ? x:nil }.compact
-    @done_this_week = @done.collect { |x| 1.week.ago <= x.completed ? x:nil }.compact
-    @done_this_month = @done.collect { |x| 4.week.ago <= x.completed ? x:nil }.compact
+    @done = Todo.find_completed(@user.id)
+    @done_today = @done.completed_within 1.day.ago
+    @done_this_week = @done.completed_within 1.week.ago
+    @done_this_month = @done.completed_within 4.week.ago
   end
 
-  # Archived completed items, older than 28 days
-  #
   def completed_archive
-    self.init
     @page_title = "TRACKS::Archived completed tasks"
-    @done = Todo.find(:all,
-                      :conditions => ['todos.user_id = ? and todos.done = ? and todos.completed is not null', @user.id, true],
-                      :order => 'todos.completed DESC',
-                      :include => [ :project, :context ])
-    @done_archive = @done.collect { |x| 28.day.ago > x.completed ? x:nil }.compact
+    @done = Todo.find_completed(@user.id)
+    @done_archive = @done.completed_more_than 28.day.ago
   end
   
   protected
