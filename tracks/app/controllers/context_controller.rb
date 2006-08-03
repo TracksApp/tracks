@@ -109,6 +109,7 @@ class ContextController < ApplicationController
   # Edit the details of the context
   #
   def update
+    self.init
     check_user_set_context
     @context.attributes = params["context"]
     @context.name = deurlize(@context.name)

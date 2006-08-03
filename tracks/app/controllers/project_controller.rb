@@ -129,6 +129,7 @@ class ProjectController < ApplicationController
   # Edit the details of the project
   #
   def update
+    self.init
     check_user_set_project
     @project.attributes = params["project"]
     @project.name = deurlize(@project.name)
