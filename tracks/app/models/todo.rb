@@ -21,19 +21,17 @@ class Todo < ActiveRecord::Base
                      :conditions => ['todos.user_id = ? and todos.done = ? and todos.completed is not null', user_id, true],
                      :order => 'todos.completed DESC',
                      :include => [ :project, :context ])
-    done.extend(CompletedToDosByDate)
+                     
+    def done.completed_within( date )
+      reject { |x| x.completed < date }
+    end
+
+    def done.completed_more_than( date )
+      reject { |x| x.completed > date }
+    end
+    
+    done
+
   end
   
-end
-
-module CompletedToDosByDate
-
-  def completed_within( date )
-    self.reject { |x| x.completed < date }
-  end
-
-  def completed_more_than( date )
-    self.reject { |x| x.completed > date }
-  end
-
 end
