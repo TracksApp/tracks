@@ -7,13 +7,14 @@ class TodoController < ApplicationController
   helper :todo
 
   prepend_before_filter :login_required
+  append_before_filter :init, :except => [ :destroy, :completed, :completed_archive ]
   layout "standard"
 
   # Main method for listing tasks
   # Set page title, and fill variables with contexts and done and not-done tasks
   # Number of completed actions to show is determined by a setting in settings.yml
   def index
-    self.init
+    init
     @projects = @user.projects.find(:all, :include => [ :todos ])
     @contexts = @user.contexts.find(:all, :include => [ :todos ])
     
@@ -50,7 +51,7 @@ class TodoController < ApplicationController
   # Parameters from form fields are passed to create new action
   # in the selected context.
   def add_item
-    self.init
+    init
     @item = @user.todos.build
     @item.attributes = params["todo"]
 
@@ -87,12 +88,12 @@ class TodoController < ApplicationController
   end
   
   def edit
-    self.init
+    init
     @item = check_user_return_item
   end
   
   def show
-    self.init
+    init
     item = check_user_return_item
     respond_to do |wants|
        wants.xml { render :xml => item.to_xml( :root => 'todo', :except => :user_id ) }
@@ -102,7 +103,7 @@ class TodoController < ApplicationController
   # Toggles the 'done' status of the action
   #
   def toggle_check
-    self.init
+    init
 
     @item = check_user_return_item
     @item.toggle!('done')
@@ -115,32 +116,27 @@ class TodoController < ApplicationController
     return if request.xhr?
 
     if @saved
-      flash['notice']  = "The action <strong>'#{@item.description}'</strong> was marked as <strong>#{@item.done? ? 'complete' : 'incomplete' }</strong>"
+      redirect_with_notice "The action <strong>'#{@item.description}'</strong> was marked as <strong>#{@item.done? ? 'complete' : 'incomplete' }</strong>", :action => "index"
     else
-      flash['notice']  = "The action <strong>'#{@item.description}'</strong> was NOT marked as <strong>#{@item.done? ? 'complete' : 'incomplete' } due to an error on the server.</strong>"
+      redirect_with_notice "The action <strong>'#{@item.description}'</strong> was NOT marked as <strong>#{@item.done? ? 'complete' : 'incomplete' } due to an error on the server.</strong>", :action => "index"
     end
-    redirect_to :action => "index"
   end
 
-  # Edit the details of an action
-  #
   def update
-    self.init
+    init
     @item = check_user_return_item
     @original_item_context_id = @item.context_id
     @item.attributes = params["item"]
-
-    if @item.due?
-      @item.due = parse_date_per_user_prefs(params["item"]["due"])
+    if params["item"].has_key?("due")
+      params["item"]["due"] = parse_date_per_user_prefs(params["item"]["due"])
     else
-      @item.due = ""
+      params["item"]["due"] = ""
     end
-
-    @saved = @item.save
+    @saved = @item.update_attributes params["item"]
   end
   
   def update_context
-    self.init
+    init
     @item = check_user_return_item
     context = Context.find(params['context_id']);
     if @user == context.user
@@ -157,7 +153,7 @@ class TodoController < ApplicationController
   end
   
   def update_project
-    self.init
+    init
     @item = check_user_return_item
     project = Project.find(params['project_id']);
     if @user == project.user
@@ -183,32 +179,19 @@ class TodoController < ApplicationController
       
       wants.html do
         if @saved
-          flash["notice"] = 'Successfully deleted next action'
-          redirect_to :action => 'index'
+          redirect_with_notice 'Successfully deleted next action', :action => 'index'
         else
-          flash["warning"] = 'Failed to delete the action.'
-          redirect_to :action => 'index'
+          redirect_with_warning 'Failed to delete the action.', :action => 'index'
         end
       end
       
       wants.js do
         if @saved
-          @down_count = 0
+          @down_count = determine_down_count
           source_view do |from|
              from.todo do
-               @down_count = Todo.count(:conditions => ['todos.user_id = ? and todos.type = ? and todos.done = ? and contexts.hide = ?',
-                                                         @user.id, "Immediate", false, false],
-                                        :include => [ :context ])
                @remaining_undone_in_context = Todo.count(:conditions => ['user_id = ? and context_id = ? and type = ? and done = ?',
                                                                           @user.id, context_id, "Immediate", false])
-             end
-             from.context do
-               @down_count = Todo.count(:conditions => ['todos.user_id = ? and todos.type = ? and todos.done = ? and todos.context_id = ?',
-                                                         @user.id, "Immediate", false, context_id])
-             end
-             from.project do
-               @down_count = Todo.count(:conditions => ['todos.user_id = ? and todos.type = ? and todos.done = ? and todos.project_id = ?',
-                                                         @user.id, "Immediate", false, project_id]) unless project_id == nil
              end
            end
         end
@@ -244,7 +227,7 @@ class TodoController < ApplicationController
     @done_archive = @done.completed_more_than 28.day.ago
   end
   
-  protected
+  private
 
     def check_user_return_item
       item = Todo.find( params['id'] )
@@ -280,6 +263,24 @@ class TodoController < ApplicationController
                             :conditions => ['todos.user_id = ? and todos.type = ? and todos.done = ?', @user.id, "Immediate", false],
                             :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC",
                             :include => [ :project, :context ])
-    end    
+    end
+    
+    def determine_down_count
+      source_view do |from|
+         from.todo do
+           @down_count = Todo.count(:conditions => ['todos.user_id = ? and todos.type = ? and todos.done = ? and contexts.hide = ?',
+                                                     @user.id, "Immediate", false, false],
+                                    :include => [ :context ])
+         end
+         from.context do
+           @down_count = Todo.count(:conditions => ['todos.user_id = ? and todos.type = ? and todos.done = ? and todos.context_id = ?',
+                                                     @user.id, "Immediate", false, context_id])
+         end
+         from.project do
+           @down_count = Todo.count(:conditions => ['todos.user_id = ? and todos.type = ? and todos.done = ? and todos.project_id = ?',
+                                                     @user.id, "Immediate", false, project_id]) unless project_id == nil
+         end
+      end
+    end 
       
 end

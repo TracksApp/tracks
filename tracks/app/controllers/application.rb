@@ -23,18 +23,6 @@ class ApplicationController < ActionController::Base
     @headers["Content-Type"] ||= "text/html; charset=UTF-8" 
   end
 
-  # Count the number of uncompleted actions, excluding those 
-  # in hidden contexts
-  #
-  def count_shown_items(hidden)
-   count = 0
-   sub = 0
-   hidden.each do |h|
-     sub = Todo.find_all(["done = ? AND context_id= ?", false, h.id]).length + sub
-   end
-   total = Todo.find_all(["done = ?",false]).length - sub
-  end
-  
   # Reverses the urlize() method by substituting underscores for spaces
   #
   def deurlize(name)
@@ -60,6 +48,22 @@ class ApplicationController < ActionController::Base
         end
       end
     end
+  end
+  
+  def redirect_with_notice( message,  options = {})
+    options['flash_target'] = 'notice'
+    redirect_with_flash message, options      
+  end
+  
+  def redirect_with_flash( message, options )
+    flash[options['flash_target']] = message
+    options.delete 'flash_target'
+    redirect_to options
+  end
+  
+  def redirect_with_warning( message,  options = {})
+    options['flash_target'] = 'warning'
+    redirect_with_flash message, options      
   end
   
   private
