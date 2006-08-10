@@ -11,7 +11,7 @@ module ActionView #:nodoc:
   # 
   # = ERb
   # 
-  # You trigger ERb by using embeddings such as <% %> and <%= %>. The difference is whether you want output or not. Consider the 
+  # You trigger ERb by using embeddings such as <% %>, <% -%>, and <%= %>. The <%= %> tag set is used when you want output. Consider the 
   # following loop for names:
   #
   #   <b>Names of all the people</b>
@@ -19,12 +19,14 @@ module ActionView #:nodoc:
   #     Name: <%= person.name %><br/>
   #   <% end %>
   #
-  # The loop is setup in regular embedding tags (<% %>) and the name is written using the output embedding tag (<%= %>). Note that this
+  # The loop is setup in regular embedding tags <% %> and the name is written using the output embedding tag <%= %>. Note that this
   # is not just a usage suggestion. Regular output functions like print or puts won't work with ERb templates. So this would be wrong:
   #
   #   Hi, Mr. <% puts "Frodo" %>
   #
-  # (If you absolutely must write from within a function, you can use the TextHelper#concat)
+  # If you absolutely must write from within a function, you can use the TextHelper#concat
+  #
+  # <%- and -%> suppress leading and trailing whitespace, including the trailing newline, and can be used interchangeably with <% and %>.
   #
   # == Using sub templates
   #
@@ -425,7 +427,8 @@ module ActionView #:nodoc:
 
         if @@compile_time[render_symbol] && supports_local_assigns?(render_symbol, local_assigns)
           if file_name && !@@cache_template_loading 
-            @@compile_time[render_symbol] < File.mtime(file_name)
+            @@compile_time[render_symbol] < File.mtime(file_name) || (File.symlink?(file_name) ? 
+              @@compile_time[render_symbol] < File.lstat(file_name).mtime : false)
           end
         else
           true

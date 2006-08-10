@@ -310,7 +310,7 @@ module ActionView
           "select", add_options(options_from_collection_for_select(collection, value_method, text_method, value), options, value), html_options
         )
       end
-       
+
       def to_country_select_tag(priority_countries, options, html_options)
         html_options = html_options.stringify_keys
         add_default_name_and_id(html_options)

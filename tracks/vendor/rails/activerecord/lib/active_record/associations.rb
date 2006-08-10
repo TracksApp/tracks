@@ -1163,18 +1163,19 @@ module ActiveRecord
         end
  
         def select_limited_ids_list(options, join_dependency)
-          connection.select_values(
+          connection.select_all(
             construct_finder_sql_for_association_limiting(options, join_dependency),
             "#{name} Load IDs For Limited Eager Loading"
-          ).collect { |id| connection.quote(id) }.join(", ")
+          ).collect { |row| connection.quote(row[primary_key]) }.join(", ")
         end
  
         def construct_finder_sql_for_association_limiting(options, join_dependency)
           scope = scope(:find)
-          #sql = "SELECT DISTINCT #{table_name}.#{primary_key} FROM #{table_name} "
           sql = "SELECT "
           sql << "DISTINCT #{table_name}." if include_eager_conditions?(options) || include_eager_order?(options)
-          sql << "#{primary_key} FROM #{table_name} "
+          sql << primary_key
+          sql << ", #{options[:order].split(',').collect { |s| s.split.first } * ', '}" if options[:order] && (include_eager_conditions?(options) || include_eager_order?(options))
+          sql << " FROM #{table_name} "
           
           if include_eager_conditions?(options) || include_eager_order?(options)
             sql << join_dependency.join_associations.collect{|join| join.association_join }.join
@@ -1186,16 +1187,24 @@ module ActiveRecord
           add_limit!(sql, options, scope)
           return sanitize_sql(sql)
         end
-
+        
+        # Checks if the conditions reference a table other than the current model table
         def include_eager_conditions?(options)
-          conditions = scope(:find, :conditions) || options[:conditions]
-          return false unless conditions
-          conditions = conditions.first if conditions.is_a?(Array)
-          conditions.scan(/(\w+)\.\w+/).flatten.any? do |condition_table_name|
+          # look in both sets of conditions
+          conditions = [scope(:find, :conditions), options[:conditions]].inject([]) do |all, cond|
+            case cond
+              when nil   then all
+              when Array then all << cond.first
+              else            all << cond
+            end
+          end
+          return false unless conditions.any?
+          conditions.join(' ').scan(/(\w+)\.\w+/).flatten.any? do |condition_table_name|
             condition_table_name != table_name
           end
         end
         
+        # Checks if the query order references a table other than the current model's table.
         def include_eager_order?(options)
           order = options[:order]
           return false unless order

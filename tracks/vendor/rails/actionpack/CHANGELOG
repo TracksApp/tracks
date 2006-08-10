@@ -1,4 +1,55 @@
-*1.12.1* (April 6th, 2005)
+*1.12.4* (August 8th, 2006)
+
+* Documentation fix: integration test scripts don't require integration_test.  #4914 [Frederick Ros <sl33p3r@free.fr>]
+
+* ActionController::Base Summary documentation rewrite.  #4900 [kevin.clark@gmail.com]
+
+* Fix text_helper.rb documentation rendering.  #4725 [Frederick Ros]
+
+* Fixes bad rendering of JavaScriptMacrosHelper rdoc.  #4910 [Frederick Ros]
+
+* Enhance documentation for setting headers in integration tests. Skip auto HTTP prepending when its already there.  #4079 [Rick Olson]
+
+* Documentation for AbstractRequest.  #4895 [kevin.clark@gmail.com] 
+
+* Remove all remaining references to @params in the documentation. [Marcel Molina Jr.]
+
+* Add documentation for redirect_to :back's RedirectBackError exception.  [Marcel Molina Jr.]
+
+* Update layout and content_for documentation to use yield rather than magic @content_for instance variables. [Marcel Molina Jr.]
+
+* Cache CgiRequest#request_parameters so that multiple calls don't re-parse multipart data. [Rick]
+
+* Fixed that remote_form_for can leave out the object parameter and default to the instance variable of the object_name, just like form_for [DHH]
+
+* Added ActionController.filter_parameter_logging that makes it easy to remove passwords, credit card numbers, and other sensitive information from being logged when a request is handled.  #1897 [jeremye@bsa.ca.gov]
+
+* Fixed that real files and symlinks should be treated the same when compiling templates.  #5438 [zachary@panandscan.com]
+
+* Add :status option to send_data and send_file. Defaults to '200 OK'.  #5243 [Manfred Stienstra <m.stienstra@fngtps.com>]
+
+* Update documentation for erb trim syntax. #5651 [matt@mattmargolis.net]
+
+* Short documentation to mention use of Mime::Type.register. #5710 [choonkeat@gmail.com]
+
+
+*1.12.3* (June 28th, 2006)
+
+* Fix broken traverse_to_controller. We now:
+  Look for a _controller.rb file under RAILS_ROOT to load.
+  If we find it, we require_dependency it and return the controller it defined. (If none was defined we stop looking.)
+  If we don't find it, we look for a .rb file under RAILS_ROOT to load. If we find it, and it loads a constant we keep looking.
+  Otherwise we check to see if a directory of the same name exists, and if it does we create a module for it.
+
+
+*1.12.2* (June 27th, 2006)
+
+* Refinement to avoid exceptions in traverse_to_controller.
+
+* (Hackish) Fix loading of arbitrary files in Ruby's load path by traverse_to_controller. [Nicholas Seckar]
+
+
+*1.12.1* (April 6th, 2006)
 
 * Fixed that template extensions would be cached development mode #4624 [Stefan Kaes]
 
@@ -30,7 +81,7 @@
   This can be used by deployment managers to set the asset id by application revision
 
 
-*1.12.0* (March 27th, 2005)
+*1.12.0* (March 27th, 2006)
 
 * Add documentation for respond_to. [Jamis Buck]
 

@@ -90,8 +90,8 @@ class ApplicationController < ActionController::Base
   
   def init_not_done_counts(parents = ['project','context'])
     parents.each {|parent|
-      eval("@#{parent}_not_done_counts = Todo.count(:todo,
-                                            :conditions => ['todos.user_id = ? and todos.type = ? and todos.done = ?', @user.id, \"Immediate\", false],
+      eval("@#{parent}_not_done_counts = Todo.count(:all,
+                                            :conditions => ['user_id = ? and type = ? and done = ?', @user.id, \"Immediate\", false],
                                             :group => :#{parent}_id)")
     }
   end  

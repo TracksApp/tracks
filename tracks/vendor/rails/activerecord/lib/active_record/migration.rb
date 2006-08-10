@@ -70,8 +70,8 @@ module ActiveRecord
   # * <tt>change_column(table_name, column_name, type, options)</tt>:  Changes the column to a different type using the same
   #   parameters as add_column.
   # * <tt>remove_column(table_name, column_name)</tt>: Removes the column named +column_name+ from the table called +table_name+.
-  # * <tt>add_index(table_name, column_name, index_type)</tt>: Add a new index with the name of the column on the column. Specify an optional index_type (e.g. UNIQUE).
-  # * <tt>remove_index(table_name, column_name)</tt>: Remove the index called the same as the column.
+  # * <tt>add_index(table_name, column_names, index_type, index_name)</tt>: Add a new index with the name of the column, or +index_name+ (if specified) on the column(s). Specify an optional +index_type+ (e.g. UNIQUE).
+  # * <tt>remove_index(table_name, index_name)</tt>: Remove the index specified by +index_name+.
   #
   # == Irreversible transformations
   #
@@ -243,7 +243,8 @@ module ActiveRecord
 
       def announce(message)
         text = "#{name}: #{message}"
-        write "== %s %s" % [ text, "=" * (75 - text.length) ]
+        length = [0, 75 - text.length].max
+        write "== %s %s" % [text, "=" * length]
       end
 
       def say(message, subitem=false)
