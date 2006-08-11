@@ -6,15 +6,15 @@
       @selected_project = nil
     when "project"
       add_string = "Add a next action in this project &#187;"
-      @selected_context = @contexts[0].id
+      @selected_context = @contexts[0].id unless @contexts.empty?
       @selected_project = @project.id
     when "deferred"
       add_string = "Add a deferred action &#187;"
-      @selected_context = @contexts[0].id
+      @selected_context = @contexts[0].id unless @contexts.empty?
       @selected_project = nil
     else
       add_string = "Add a next action &#187;"
-      @selected_context = @contexts[0].id
+      @selected_context = @contexts[0].id unless @contexts.empty?
       @selected_project = nil
   end  
 %>

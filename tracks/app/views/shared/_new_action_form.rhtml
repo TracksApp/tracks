@@ -1,5 +1,5 @@
 <%
-  @selected_context = @contexts[0].id
+  @selected_context = @contexts[0].id unless @contexts.empty?
   @selected_project = nil
   case controller.controller_name
     when "context"
