@@ -30,13 +30,21 @@ module Tracks
         responder = Tracks::SourceViewSwitching::Responder.new(params[:_source_view])
         block_given? ? yield(responder) : responder
       end
-    
+          
     end
   
     module Helper
       
       def source_view_tag(name)
         hidden_field_tag :_source_view, name.underscore.gsub(/\s+/,'_')
+      end
+      
+      def source_view_is( s )
+        s == params[:_source_view].to_sym
+      end
+    
+      def source_view_is_one_of( s=[] )
+        s.include?(params[:_source_view].to_sym)
       end
 
     end
