@@ -1,48 +1,58 @@
 <div id="single_box" class="container context">
 
-<h2>Your preferences</h2>
+  <h2>Your preferences</h2>
 
-<% for name in ["notice", "warning", "message"] %>
-  <% if flash[name] %>
-    <%= "<div id=\"#{name}\">#{flash[name]}</div>" %>
+  <% for name in ["notice", "warning", "message"] %>
+    <% if flash[name] %>
+      <%= "<div id=\"#{name}\">#{flash[name]}</div>" %>
+    <% end %>
   <% end %>
-<% end %>
  
-<ul id="prefs">
-  <li>Date format: <span class="highlight"><%= @prefs["date_format"] %></span></li>
-  <li>Week starts on: <span class="highlight">
-	  <%  case @prefs["week_starts"]
-		when "0" 
-		%> Sunday <%
-		when "1" 
-		 %> Monday <%
-		when "2" 
-		 %> Tuesday <%
-		when "3" 
-		 %> Wednesday <%
-		when "4" 
-		 %> Thursday <%
-		when "5" 
-		 %> Friday <%
-		when "6" 
-		 %> Saturday <%
-	      end
-	 %>	
-	</span></li>
-  <li>Show the last <span class="highlight"><%= @prefs["no_completed"] %></span> completed items on the home page</li>
-  <li>Staleness starts after <span class="highlight"><%= @prefs["staleness_starts"] %></span> days</li>
-  <li>Due style: <span class="highlight">
-	<% if @prefs["due_style"] == "0" %>
-		Due in ___ days
-	<% else %>
-		Due on ________
-	<% end %>
-		 </span></li>
-  <% if @user.is_admin? %>
-    <li>Admin email: <span class="highlight"><%= @prefs["admin_email"] %></span></li>
-  <% end %>
-  <li>Refresh interval (in minutes): <span class="highlight"><%= @prefs["refresh"] %></span></li>
-</ul>
-<%= link_to "Edit preferences", :controller => 'user', :action => 'edit_preferences' %> | 
-<%= link_to 'Change password', :controller => 'user', :action => 'change_password' %>
+  <ul id="prefs">
+    <li>Date format: <span class="highlight"><%= @prefs["date_format"] %></span></li>
+    <li>Week starts on: <span class="highlight">
+  	  <%  case @prefs["week_starts"]
+  		when "0" 
+  		%> Sunday <%
+  		when "1" 
+  		 %> Monday <%
+  		when "2" 
+  		 %> Tuesday <%
+  		when "3" 
+  		 %> Wednesday <%
+  		when "4" 
+  		 %> Thursday <%
+  		when "5" 
+  		 %> Friday <%
+  		when "6" 
+  		 %> Saturday <%
+  	      end
+  	 %>	
+  	</span></li>
+    <li>Show the last <span class="highlight"><%= @prefs["no_completed"] %></span> completed items on the home page</li>
+    <li>Staleness starts after <span class="highlight"><%= @prefs["staleness_starts"] %></span> days</li>
+    <li>Due style: <span class="highlight">
+  	<% if @prefs["due_style"] == "0" %>
+  		Due in ___ days
+  	<% else %>
+  		Due on ________
+  	<% end %>
+  		 </span></li>
+    <% if @user.is_admin? %>
+      <li>Admin email: <span class="highlight"><%= @prefs["admin_email"] %></span></li>
+    <% end %>
+    <li>Refresh interval (in minutes): <span class="highlight"><%= @prefs["refresh"] %></span></li>
+  </ul>
+  <%= link_to "Edit preferences", :controller => 'user', :action => 'edit_preferences' %> | 
+  <%= link_to 'Change password', :controller => 'user', :action => 'change_password' %>
+  <div id="token_area">
+      <div class="description">Token (for feeds and API use):</div>
+        <div id="token><span class="highlight"><%= @user.word %></span></div>
+        <div class="token_regenerate">
+            <%= button_to "Generate a new token", { :controller => 'user', :action => 'refresh_token'},
+                :confirm => "Are you sure? Generating a new token will replace the existing one and break any external usages of this token." %>
+        </div>
+        </li>
+      </div>
+  </div>
 </div>

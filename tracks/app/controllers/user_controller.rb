@@ -50,6 +50,12 @@ class UserController < ApplicationController
     end
   end
   
+  def refresh_token
+    @user.crypt_word
+    @user.save
+    redirect_to :controller => 'user', :action => 'preferences'
+  end
+  
   protected
   
   def do_change_password_for(user)

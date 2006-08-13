@@ -637,6 +637,17 @@ div.message {
 }
 
 ul#prefs {list-style-type: disc; margin-left: 5px;}
+#token_area {
+  text-align:center;
+  margin-top:20px;
+}
+#token_area .description{ 
+  font-weight:bold;
+}
+#token_area form {
+  width:100%;
+  text-align:center;
+}
 
 #feedlegend {
   padding: 2px;
