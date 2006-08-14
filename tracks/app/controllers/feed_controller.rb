@@ -127,6 +127,7 @@ protected
     end
   
     options[:conditions] = condition_builder.to_conditions
+    options[:order] = "todos.due IS NULL, todos.due ASC, todos.created_at ASC"
     options[:include] = :project
     
     @todos = @user.todos.find(:all, options )
