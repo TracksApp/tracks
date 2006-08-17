@@ -112,6 +112,10 @@ class DeferredController < ApplicationController
       t.show_from = nil
       t.save_with_validation(false)
     end
+    respond_to do |wants|
+      wants.html { redirect_to :controller => 'todo', :action => 'index' }
+      wants.js
+    end
   end
   
   protected
