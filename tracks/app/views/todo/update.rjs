@@ -7,6 +7,13 @@ if @saved
       page.visual_effect :highlight, item_container_id, :duration => 3
     else
       page[item_container_id].remove
+      if (@remaining_undone_in_original_context == 0)
+        source_view do |from|
+           from.todo { page.visual_effect :fade, "c#{@original_item_context_id}", :duration => 0.4 }
+           from.context { page.show "c#{@original_item_context_id}empty-nd" }
+         end
+      end
+      page.call "todoItems.ensureVisibleWithEffectAppear", "c#{@item.context_id}"
       page.call "todoItems.expandNextActionListingByContext", "c#{@item.context_id}items", true
       page.insert_html :bottom, "c#{@item.context_id}items", :partial => 'todo/item', :locals => { :parent_container_type => "context" }
       page.delay(0.5) do

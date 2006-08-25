@@ -133,6 +133,7 @@ class TodoController < ApplicationController
       params["item"]["due"] = ""
     end
     @saved = @item.update_attributes params["item"]
+    @remaining_undone_in_original_context = Todo.count(:conditions => ['user_id = ? and context_id = ? and type = ? and done = ?', @user.id, @original_item_context_id, "Immediate", false])
   end
   
   def update_context
