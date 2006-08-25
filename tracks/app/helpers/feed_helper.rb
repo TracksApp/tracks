@@ -62,6 +62,10 @@ module FeedHelper
     joined_notes = split_notes.join("\\n")
   end
   
+  def format_ical_uid(todo)
+    sprintf("%s%s%s%s", @request.protocol, @request.host, @request.port_string, url_for(:controller => 'todo', :action => 'show', :id => todo.id))
+  end
+  
   def rss_feed_link(options = {})
     image_tag = image_tag("feed-icon", :size => "16X16", :border => 0, :class => "rss-icon")
     linkoptions = {:controller => 'feed', :action => 'rss', :name => "#{@user.login}", :token => "#{@user.word}"}
