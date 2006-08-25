@@ -172,8 +172,8 @@ class TodoController < ApplicationController
   
   def destroy
     @item = check_user_return_item
-    context_id = @item.context_id
-    project_id = @item.project_id
+    @context_id = @item.context_id
+    @project_id = @item.project_id
     @saved = @item.destroy
     
     respond_to do |wants|
@@ -192,7 +192,7 @@ class TodoController < ApplicationController
           source_view do |from|
              from.todo do
                @remaining_undone_in_context = Todo.count(:conditions => ['user_id = ? and context_id = ? and type = ? and done = ?',
-                                                                          @user.id, context_id, "Immediate", false])
+                                                                          @user.id, @context_id, "Immediate", false])
              end
            end
         end
@@ -275,11 +275,11 @@ class TodoController < ApplicationController
          end
          from.context do
            @down_count = Todo.count(:conditions => ['todos.user_id = ? and todos.type = ? and todos.done = ? and todos.context_id = ?',
-                                                     @user.id, "Immediate", false, context_id])
+                                                     @user.id, "Immediate", false, @context_id])
          end
          from.project do
            @down_count = Todo.count(:conditions => ['todos.user_id = ? and todos.type = ? and todos.done = ? and todos.project_id = ?',
-                                                     @user.id, "Immediate", false, project_id]) unless project_id == nil
+                                                     @user.id, "Immediate", false, @project_id]) unless @project_id == nil
          end
       end
     end 

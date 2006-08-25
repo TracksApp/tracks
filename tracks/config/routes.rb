@@ -28,7 +28,6 @@ ActionController::Routing::Routes.draw do |map|
 
   # ToDo Routes
   map.connect 'done', :controller => 'todo', :action => 'completed'
-  map.connect 'delete/todo/:id', :controller =>'todo', :action => 'destroy'
 
   # Deferred (Tickler) Routes
   map.connect 'tickler', :controller => 'deferred', :action => 'index'
