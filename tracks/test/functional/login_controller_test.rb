@@ -10,15 +10,15 @@ class LoginControllerTest < Test::Unit::TestCase
   
   def setup
     assert_equal "test", ENV['RAILS_ENV']
-    assert_equal "change-me", SALT
+    assert_equal "change-me", User.get_salt()
     @controller = LoginController.new
     @request = ActionController::TestRequest.new
     @response = ActionController::TestResponse.new
   end
 
-  # ============================================
-  # Login and logout
-  # ============================================
+  #============================================
+  #Login and logout
+  #============================================
     
   def test_invalid_login
     post :login, {:user_login => 'cracker', :user_password => 'secret', :user_noexpiry => 'on'}
@@ -26,7 +26,7 @@ class LoginControllerTest < Test::Unit::TestCase
     assert_session_has_no :user_id
     assert_template "login"
   end
-
+  
   def test_login_with_valid_admin_user
     @request.session['return-to'] = "/bogus/location"
     user = login('admin', 'abracadabra', 'on')
@@ -36,8 +36,8 @@ class LoginControllerTest < Test::Unit::TestCase
     assert_equal "Login successful: session will not expire.", flash['notice']
     assert_redirect_url "http://#{@request.host}/bogus/location"
   end
-
-
+  
+  
   def test_login_with_valid_standard_user
     user = login('jane','sesame', 'off')
     assert_equal user.id, @response.session['user_id']
@@ -46,28 +46,28 @@ class LoginControllerTest < Test::Unit::TestCase
     assert_equal "Login successful: session will expire after 1 hour of inactivity.", flash['notice']
     assert_redirected_to :controller => 'todo', :action => 'index'
   end
-
+  
   def test_logout
     user = login('admin','abracadabra', 'on')
     get :logout
     assert_nil(session['user_id'])
     assert_redirected_to :controller => 'login', :action => 'login'
   end
-
+  
   # Test login with a bad password for existing user
   # 
   def test_login_bad_password
     post :login, {:user_login => 'jane', :user_password => 'wrong', :user_noexpiry => 'on'}
     assert_session_has_no :user
     assert_equal "Login unsuccessful", flash['warning']
-    assert_success
+    assert_response :success
   end
   
   def test_login_bad_login
     post :login, {:user_login => 'blah', :user_password => 'sesame', :user_noexpiry => 'on'}
     assert_session_has_no :user
     assert_equal "Login unsuccessful", flash['warning']
-    assert_success
+    assert_response :success
   end
     
   # ============================================
@@ -103,7 +103,7 @@ class LoginControllerTest < Test::Unit::TestCase
     assert non_admin.is_admin == false || non_admin.is_admin == 0
     post :signup, :user => {:login => 'newbie2', :password => 'newbiepass2', :password_confirmation => 'newbiepass2'}
     assert_template 'login/nosignup'
-
+  
     num_users = User.find(:all)
     assert_equal num_users.length, 2
   end

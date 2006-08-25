@@ -1,6 +1,6 @@
 class UserController < ApplicationController
   layout 'standard'
-  before_filter :login_required
+  prepend_before_filter :login_required
   
   def index
     render_text "This will be our jumping-off point for managing user functions!"
@@ -10,6 +10,44 @@ class UserController < ApplicationController
     render_text "You'll only be allowed to go here if you're an administrator."
   end
   
+  verify  :method => :post,
+          :only => %w( create_user ),
+          :render => { :text => '403 Forbidden: Only POST requests on this resource are allowed.',
+                      :status => 403 }
+  
+  # Example usage: curl -H 'Accept: application/xml' -H 'Content-Type: application/xml'
+  #               -u admin:up2n0g00d
+  #               -d '<request><login>username</login><password>abc123</password></request>'
+  #               http://our.tracks.host/cpa/create_user
+  #
+  def create
+     admin = User.find_admin
+     #render_text "user is " + session["user_id"].to_s + " and admin is " + a.id.to_s
+      unless session["user_id"].to_i == admin.id.to_i
+        access_denied
+        return
+      end
+      unless request.content_type == "application/xml"
+        render_failure "Content Type must be application/xml."
+        return
+      end
+      unless check_create_user_params
+        render_failure "Expected post format is xml like so: <request><login>username</login><password>abc123</password></request>."
+        return
+      end
+      user = User.new(params[:request])
+      user.password_confirmation = params[:request][:password]
+      unless user.valid?
+        render_failure user.errors.full_messages.join(', ')
+        return
+      end
+      if user.save
+        render :text => "User created.", :status => 200
+      else
+        render_failure "Failed to create user."
+      end
+  end
+    
   def preferences
     @page_title = "TRACKS::Preferences"
     @prefs = @user.preferences
@@ -68,5 +106,21 @@ class UserController < ApplicationController
       return false
     end
   end
+
+  private
+  
+  def render_failure message, status = 404
+    render :text => message, :status => status
+  end
+  
+  def check_create_user_params
+    return false unless params.has_key?(:request)
+    return false unless params[:request].has_key?(:login)
+    return false if params[:request][:login].empty?
+    return false unless params[:request].has_key?(:password)
+    return false if params[:request][:password].empty?
+    return true
+  end
+  
   
 end

@@ -10,7 +10,7 @@ class UserControllerTest < Test::Unit::TestCase
   
   def setup
     assert_equal "test", ENV['RAILS_ENV']
-    assert_equal "change-me", SALT
+    assert_equal "change-me", User.get_salt()
     @controller = UserController.new
     @request    = ActionController::TestRequest.new
     @response   = ActionController::TestResponse.new
@@ -23,7 +23,7 @@ class UserControllerTest < Test::Unit::TestCase
     assert_redirected_to :controller => 'login', :action => 'login'
     @request.session['user_id'] = users(:admin_user).id # log in the admin user
     get :index
-    assert_success
+    assert_response :success
   end
   
   # Test admin with and without login
@@ -33,7 +33,7 @@ class UserControllerTest < Test::Unit::TestCase
     assert_redirected_to :controller => 'login', :action => 'login'
     @request.session['user_id'] = users(:admin_user).id # log in the admin user
     get :admin
-    assert_success
+    assert_response :success
   end
   
   def test_preferences
@@ -41,7 +41,7 @@ class UserControllerTest < Test::Unit::TestCase
     assert_redirected_to :controller => 'login', :action => 'login'
     @request.session['user_id'] = users(:admin_user).id # log in the admin user
     get :preferences
-    assert_success
+    assert_response :success
     assert_equal assigns['page_title'], "TRACKS::Preferences"
     assert_not_nil assigns['prefs']
     assert_equal assigns['prefs'].length, 7
@@ -52,7 +52,7 @@ class UserControllerTest < Test::Unit::TestCase
     assert_redirected_to :controller => 'login', :action => 'login'
     @request.session['user_id'] = users(:admin_user).id # log in the admin user
     get :edit_preferences
-    assert_success
+    assert_response :success
     assert_equal assigns['page_title'], "TRACKS::Edit Preferences"
     assert_not_nil assigns['prefs']
     assert_equal assigns['prefs'].length, 7    
@@ -76,12 +76,12 @@ class UserControllerTest < Test::Unit::TestCase
     @request.session['user_id'] = users(:admin_user).id # log in the admin user
     @user = @request.session['user_id']
     get :change_password # should now pass because we're logged in
-    assert_success
+    assert_response :success
     assert_equal assigns['page_title'], "TRACKS::Change password"    
     post :update_password, :updateuser => {:password => 'newpassword', :password_confirmation => 'newpassword'}
     assert_redirected_to :controller => 'user', :action => 'preferences'
     @updated_user = User.find(users(:admin_user).id)
-    assert_equal @updated_user.password, Digest::SHA1.hexdigest("#{SALT}--newpassword--")
+    assert_equal @updated_user.password, Digest::SHA1.hexdigest("#{User.get_salt()}--newpassword--")
     assert_equal flash['notice'], "Password updated."
   end
   

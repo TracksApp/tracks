@@ -4,9 +4,8 @@ class BackendController < ApplicationController
   web_service_scaffold :invoke
   
   def new_todo(username, token, context_id, description)
-    if !check_token_against_user_word(username, token)
-      raise "invalid token"
-    end
+    check_token_against_user_word(username, token)
+    check_context_belongs_to_user(context_id)
 
     item = @user.todos.build
     item.description = description
@@ -17,31 +16,34 @@ class BackendController < ApplicationController
   end
   
   def list_contexts(username, token)
-    if !check_token_against_user_word(username, token)
-      raise "invalid token"
-    end
+    check_token_against_user_word(username, token)
     
     @user.contexts
   end
   
   def list_projects(username, token)
-    if !check_token_against_user_word(username, token)
-      raise "invalid token"
-    end
+    check_token_against_user_word(username, token)
     
     @user.projects
   end
   
-  protected
+  private
 
     # Check whether the token in the URL matches the word in the User's table
     def check_token_against_user_word(username, token)
       @user = User.find_by_login( username )
       unless ( token == @user.word)
-        render :text => "Sorry, you don't have permission to perform this action."
-        return false
+        raise (InvalidToken, "Sorry, you don't have permission to perform this action.")
       end
-      true
+    end
+    
+    def check_context_belongs_to_user(context_id)
+      unless @user.contexts.exists? context_id
+        raise (CannotAccessContext, "Cannot access a context that does not belong to this user.")
+      end
     end
   
 end
+
+class InvalidToken < RuntimeError; end
+class CannotAccessContext < RuntimeError; end

@@ -4,7 +4,7 @@ class StoriesTest < ActionController::IntegrationTest
   fixtures :users, :projects, :contexts, :todos, :notes
   
   def setup
-    assert_equal "change-me", SALT
+    assert_equal "change-me", User.get_salt
   end
   
   # ####################################################

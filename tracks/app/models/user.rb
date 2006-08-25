@@ -27,12 +27,15 @@ class User < ActiveRecord::Base
   def crypt_word
     write_attribute("word", self.class.sha1(login + Time.now.to_i.to_s + rand.to_s))
   end
+  
+  def self.get_salt
+    SALT
+  end
 
 protected
 
   def self.sha1(pass)
-    # SALT is set in RAILS_ROOT/config/environment.rb
-    Digest::SHA1.hexdigest("#{SALT}--#{pass}--")
+    Digest::SHA1.hexdigest("#{get_salt}--#{pass}--")
   end
 
   before_create :crypt_password, :crypt_word

@@ -2,6 +2,12 @@ ENV["RAILS_ENV"] = "test"
 require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
 require 'test_help'
 
+class User < ActiveRecord::Base
+  def self.get_salt
+    "change-me"
+  end
+end
+
 class Test::Unit::TestCase
   # Turn off transactional fixtures if you're working with MyISAM tables in MySQL
   self.use_transactional_fixtures = true
