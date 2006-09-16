@@ -110,5 +110,29 @@ class UserTest < Test::Unit::TestCase
     assert_equal 2, @other_user.errors.count
     assert_equal ["is too short (minimum is 3 characters)", "can't be blank"], @other_user.errors.on(:login)
   end
+  
+  def test_display_name_with_first_and_last_name_set
+    @other_user.first_name = "Jane"
+    @other_user.last_name = "Doe"
+    assert_equal "Jane Doe", @other_user.display_name
+  end
+  
+  def test_display_name_with_first_name_set
+    @other_user.first_name = "Jane"
+    @other_user.last_name = nil
+    assert_equal "Jane", @other_user.display_name
+  end
+  
+  def test_display_name_with_last_name_set
+    @other_user.first_name = nil
+    @other_user.last_name = "Doe"
+    assert_equal "Doe", @other_user.display_name
+  end
+  
+  def test_display_name_with_neither_first_nor_last_name_set
+    @other_user.first_name = nil
+    @other_user.last_name = nil
+    assert_equal @other_user.login, @other_user.display_name
+  end
 
 end

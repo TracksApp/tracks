@@ -2,6 +2,7 @@
     <h2>Help on preferences</h2>
     <p>The preference settings should mostly be self-explanatory, but some hints are included below: </p>
     <ul>
+      <li><strong>first name and last name:</strong> Used for display purposes if set</li>
       <li><strong>staleness_starts:</strong> the number of days before items with no due date get marked as stale (with a yellow highlight)</li>
       <li><strong>date_format:</strong> the format in which you'd like dates to be shown. For example, for the date 31st January 2006, %d/%m/%Y will show 31/01/2006, %b-%e-%y will show Jan-31-06. See the <a href="http://uk2.php.net/strftime" title="PHP strftime manual">strftime manual</a> for more formatting options for the date.</li>
       <li><strong>no_completed:</strong> number of completed actions to show on the home page. If you set this to zero, the completed actions box will not be shown on the home page or on the individual context or project pages. You can still see all your completed items by clicking the 'Done' link in the navigation bar at the top of each page.</li>
@@ -17,6 +18,14 @@
 <div id="input_box" class="container context">
   <%= start_form_tag :action => 'update_preferences' %>
   <table>
+    <tr>
+      <td><label>first name:</label></td>
+      <td><%= text_field 'user', 'first_name' %></td>
+    </tr>
+    <tr>
+      <td><label>last name:</label></td>
+      <td><%= text_field 'user', 'last_name' %></td>
+    </tr>
   <% @prefs.each do |k,v| %>
     <% next if !@user.is_admin? and k == "admin_email" %>
     <tr>

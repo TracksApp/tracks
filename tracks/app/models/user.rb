@@ -18,7 +18,22 @@ class User < ActiveRecord::Base
   def self.find_admin
     find_first([ "is_admin = ?", true ])    
   end
+  
+  def self.get_salt
+    SALT
+  end
 
+  def display_name
+    if first_name.blank? && last_name.blank?
+      return login
+    elsif first_name.blank?
+      return last_name
+    elsif last_name.blank?
+      return first_name
+    end
+    "#{first_name} #{last_name}"
+  end
+  
   def change_password(pass,pass_confirm)
     self.password = pass
     self.password_confirmation = pass_confirm
@@ -26,10 +41,6 @@ class User < ActiveRecord::Base
 
   def crypt_word
     write_attribute("word", self.class.sha1(login + Time.now.to_i.to_s + rand.to_s))
-  end
-  
-  def self.get_salt
-    SALT
   end
 
 protected

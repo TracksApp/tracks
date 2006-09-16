@@ -69,6 +69,8 @@ class UserController < ApplicationController
                           "admin_email" => "#{params['prefs']['admin_email']}",
                           "refresh" => "#{params['prefs']['refresh']}"
                           }
+    @user.first_name = params['user']['first_name']
+    @user.last_name = params['user']['last_name']
     if @user.save
       redirect_to :action => 'preferences'
     else

@@ -38,7 +38,7 @@
     <% if @user.is_admin? -%>
       <%= link_to "Add users", :controller => "login", :action => "signup" %>&nbsp;|&nbsp;
     <% end -%>
-    <%= link_to "Logout (#{@user.login}) »", :controller => "login", :action=>"logout"%>
+    <%= link_to "Logout (#{@user.display_name}) »", :controller => "login", :action=>"logout"%>
 </div>
 
 <div id="navcontainer">

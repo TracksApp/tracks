@@ -64,9 +64,11 @@ class UserControllerTest < Test::Unit::TestCase
   #
   def test_update_preferences
     @request.session['user_id'] = users(:admin_user).id # log in the admin user
-    users(:admin_user).preferences = post :update_preferences, :prefs => { :date_format => "%m-%d-%Y", :week_starts => "0", :no_completed => "10", :staleness_starts => "14", :due_style => "1", :admin_email => "my.email@domain.com" }
-    @prefs = users(:admin_user).preferences
-    assert_not_nil @prefs
+    post :update_preferences, {:user => { :first_name => 'Jane', :last_name => 'Doe'}, :prefs => { :date_format => "%m-%d-%Y", :week_starts => "0", :no_completed => "10", :staleness_starts => "14", :due_style => "1", :admin_email => "my.email@domain.com" }}
+    updated_admin_user = User.find(users(:admin_user).id)
+    assert_not_nil updated_admin_user.preferences
+    assert_equal 'Jane', updated_admin_user.first_name
+    assert_equal 'Doe', updated_admin_user.last_name
     assert_redirected_to :action => 'preferences'
   end
   

@@ -9,6 +9,8 @@
   <% end %>
  
   <ul id="prefs">
+    <li>First name: <span class="highlight"><%= @user.first_name %></span></li>
+    <li>Last name: <span class="highlight"><%= @user.last_name %></span></li>
     <li>Date format: <span class="highlight"><%= @prefs["date_format"] %></span></li>
     <li>Week starts on: <span class="highlight">
   	  <%  case @prefs["week_starts"]
