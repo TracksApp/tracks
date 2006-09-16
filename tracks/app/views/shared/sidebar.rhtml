@@ -6,6 +6,7 @@
   <% end -%>
 </ul>
 
+<% if @user.preferences['show_completed_projects_on_home_page'].downcase == 'true' %>
 <h3>Completed Projects:</h3>
 <ul>
   <% for project in @projects.reject{|p| !p.done? } -%>
@@ -13,6 +14,7 @@
             :name => urlize(project.name) } ) + " (" + count_undone_todos(project,"actions") + ")" %></li>
   <% end -%>
 </ul>
+<% end %>
 
 <h3>Active Contexts:</h3>
 <ul>

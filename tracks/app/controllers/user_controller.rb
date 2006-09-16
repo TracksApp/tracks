@@ -65,6 +65,7 @@ class UserController < ApplicationController
                           "week_starts" => "#{params['prefs']['week_starts']}",
                           "no_completed" => "#{params['prefs']['no_completed']}",
                           "staleness_starts" => "#{params['prefs']['staleness_starts']}",
+                          "show_completed_projects_on_home_page" => "#{params['prefs']['show_completed_projects_on_home_page']}",
                           "due_style" => "#{params['prefs']['due_style']}",
                           "admin_email" => "#{params['prefs']['admin_email']}",
                           "refresh" => "#{params['prefs']['refresh']}"
