@@ -15,7 +15,7 @@
 <a href="#" onClick="Element.toggle('project_new'); Form.focusFirstElement('project-form');return false" accesskey="n" title="Create a new project">Create new project &#187;</a>
 <div id="project_new" class="project_new" style="display:none">
 <!--[form:project]-->
-<%= form_remote_tag :url => { :action => "new_project" },
+<%= form_remote_tag :url => { :action => "create" },
   :html=> { :id=>'project-form', :name=>'project', :class => 'inline-form' } %>
   <label for="project_name">Name:</label>
   <br />

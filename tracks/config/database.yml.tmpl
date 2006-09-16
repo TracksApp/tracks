@@ -6,11 +6,8 @@ development:
   password: 
 
 test:
-  adapter: mysql
-  database: tracks_test
-  host: localhost
-  username: root
-  password:
+    adapter: sqlite3
+    database: ":memory:"
 
 production:
   adapter: mysql

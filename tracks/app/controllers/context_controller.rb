@@ -32,14 +32,33 @@ class ContextController < ApplicationController
     @page_title = "TRACKS::Context: #{@context.name}"
   end
   
-  # Creates a new context via Ajax helpers
+  # Example XML usage: curl -H 'Accept: application/xml' -H 'Content-Type: application/xml'
+  #                    -u username:password
+  #                    -d '<request><context><name>new context_name</name></context></request>'
+  #                    http://our.tracks.host/context/create
   #
-  def new_context
+  def create
     @context = @user.contexts.build
-    @context.attributes = params['context']
+    params_are_invalid = true
+    if (params['context'] || (params['request'] && params['request']['context']))
+      @context.attributes = params['context'] || params['request']['context']
+      params_are_invalid = false
+    end
     @context.name = deurlize(@context.name)
     @saved = @context.save
     @context_not_done_counts = { @context.id => 0 }
+    respond_to do |wants|
+      wants.js
+      wants.xml do
+        if @context.new_record? && params_are_invalid
+          render_failure "Expected post format is xml like so: <request><context><name>context name</name></context></request>."
+        elsif @context.new_record?
+          render_failure @context.errors.full_messages.join(', ')
+        else
+          render :xml => @context.to_xml( :except => :user_id )
+        end
+       end
+    end
   end
   
   # Called by a form button

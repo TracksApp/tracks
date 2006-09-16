@@ -47,16 +47,14 @@ class TodoController < ApplicationController
     end
   end
 
-  # Called by a form button
-  # Parameters from form fields are passed to create new action
-  # in the selected context.
-  def add_item
+  def create
     init
     @item = @user.todos.build
-    @item.attributes = params["todo"]
+    p = params['todo'] || params['request']['todo']
+    @item.attributes = p
 
     if @item.due?
-      @item.due = parse_date_per_user_prefs(params["todo"]["due"])
+      @item.due = parse_date_per_user_prefs(p["due"])
     else
       @item.due = ""
     end
@@ -70,7 +68,7 @@ class TodoController < ApplicationController
            init_todos
            @up_count = @todos.reject { |x| x.done? or x.context.hide? }.size.to_s
          end
-         render
+         render :action => 'create'
        end
        wants.xml { render :xml => @item.to_xml( :root => 'todo', :except => :user_id ) }
      end
@@ -85,6 +83,10 @@ class TodoController < ApplicationController
          wants.js { render :action => 'error' }
          wants.xml { render :text => 'An error occurred on the server.' + $! }
        end
+  end
+
+  def add_item
+    create
   end
   
   def edit

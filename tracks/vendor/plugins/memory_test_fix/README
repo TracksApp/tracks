@@ -1,0 +1,20 @@
+MemoryTestFix
+=============
+
+A simple fix to run tests with sqlite. From example at
+
+http://blog.seagul.co.uk/articles/2006/02/08/in-memory-sqlite-database-for-rails-testing
+
+In your database.yml, use
+
+  test:
+    adapter: sqlite3
+    database: ":memory:"
+
+It runs much faster!
+
+== Authors
+
+Chris Roos
+
+adapted by Geoffrey Grosenbach, http://nubyonrails.com

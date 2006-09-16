@@ -18,7 +18,7 @@ class UserController < ApplicationController
   # Example usage: curl -H 'Accept: application/xml' -H 'Content-Type: application/xml'
   #               -u admin:up2n0g00d
   #               -d '<request><login>username</login><password>abc123</password></request>'
-  #               http://our.tracks.host/cpa/create_user
+  #               http://our.tracks.host/user/create
   #
   def create
      admin = User.find_admin
@@ -108,11 +108,7 @@ class UserController < ApplicationController
   end
 
   private
-  
-  def render_failure message, status = 404
-    render :text => message, :status => status
-  end
-  
+    
   def check_create_user_params
     return false unless params.has_key?(:request)
     return false unless params[:request].has_key?(:login)

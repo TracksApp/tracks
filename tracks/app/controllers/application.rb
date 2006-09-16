@@ -66,6 +66,10 @@ class ApplicationController < ActionController::Base
     redirect_with_flash message, options      
   end
   
+  def render_failure message, status = 404
+    render :text => message, :status => status
+  end
+  
   private
   
   def get_current_user

@@ -32,14 +32,14 @@ class BackendController < ApplicationController
     # Check whether the token in the URL matches the word in the User's table
     def check_token_against_user_word(username, token)
       @user = User.find_by_login( username )
-      unless ( token == @user.word)
-        raise (InvalidToken, "Sorry, you don't have permission to perform this action.")
+      unless (token == @user.word)
+        raise(InvalidToken, "Sorry, you don't have permission to perform this action.")
       end
     end
     
     def check_context_belongs_to_user(context_id)
       unless @user.contexts.exists? context_id
-        raise (CannotAccessContext, "Cannot access a context that does not belong to this user.")
+        raise(CannotAccessContext, "Cannot access a context that does not belong to this user.")
       end
     end
   

@@ -34,7 +34,7 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'tickler/:action/:id', :controller => 'deferred'
 
   # Context Routes
-  map.connect 'context/new_context', :controller => 'context', :action => 'new_context'
+  map.connect 'context/create', :controller => 'context', :action => 'create'
   map.connect 'context/add_item', :controller => 'context', :action => 'add_item'
   map.connect 'context/order', :controller => 'context', :action => 'order'
   map.connect 'context/:id', :controller=> 'context', :action => 'show', :requirements => {:id => /\d+/}
@@ -45,7 +45,7 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'contexts/feed/:feedtype/:name/:token', :controller => 'feed', :action => 'list_contexts_only'
 
   # Projects Routes
-  map.connect 'project/new_project', :controller => 'project', :action => 'new_project'
+  map.connect 'project/create', :controller => 'project', :action => 'create'
   map.connect 'project/add_item/:id', :controller => 'project', :action => 'add_item'
   map.connect 'project/toggle_check/:id', :controller => 'project', :action => 'toggle_check'
   map.connect 'project/order', :controller => 'project', :action => 'order'

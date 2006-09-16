@@ -45,3 +45,40 @@ class Test::Unit::TestCase
     return string
   end
 end
+
+class ActionController::IntegrationTest
+  
+  def assert_test_environment_ok
+    assert_equal "test", ENV['RAILS_ENV']
+    assert_equal "change-me", User.get_salt()
+  end
+  
+  def authenticated_post_xml(url, username, password, parameters, headers = {})
+    post url,
+        parameters,
+        {'AUTHORIZATION' => "Basic " + Base64.encode64("#{username}:#{password}"),
+          'ACCEPT' => 'application/xml',
+          'CONTENT_TYPE' => 'application/xml'
+          }.merge(headers)
+  end
+  
+  def authenticated_get_xml(url, username, password, parameters, headers = {})
+    get url,
+        parameters,
+        {'AUTHORIZATION' => "Basic " + Base64.encode64("#{username}:#{password}"),
+          'ACCEPT' => 'application/xml',
+          'CONTENT_TYPE' => 'application/xml'
+          }.merge(headers)
+  end
+    
+  def assert_response_and_body (type, body, message = nil)
+    #puts @response.body
+    assert_response type, message
+    assert_equal body, @response.body, message
+  end   
+    
+  def assert_401_unauthorized
+    assert_response_and_body 401, "401 Unauthorized: You are not authorized to interact with Tracks."
+  end
+
+end

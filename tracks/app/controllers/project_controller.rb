@@ -56,12 +56,33 @@ class ProjectController < ApplicationController
     end
   end
 
-  def new_project
+  # Example XML usage: curl -H 'Accept: application/xml' -H 'Content-Type: application/xml'
+  #                    -u username:password
+  #                    -d '<request><project><name>new project_name</name></project></request>'
+  #                    http://our.tracks.host/project/create
+  #
+  def create
     @project = @user.projects.build
-    @project.attributes = params['project']
+    params_are_invalid = true
+    if (params['project'] || (params['request'] && params['request']['project']))
+      @project.attributes = params['project'] || params['request']['project']
+      params_are_invalid = false
+    end
     @project.name = deurlize(@project.name)
     @saved = @project.save
     @project_not_done_counts = { @project.id => 0 }
+    respond_to do |wants|
+      wants.js
+      wants.xml do
+        if @project.new_record? && params_are_invalid
+          render_failure "Expected post format is xml like so: <request><project><name>project name</name></project></request>."
+        elsif @project.new_record?
+          render_failure @project.errors.full_messages.join(', ')
+        else
+          render :xml => @project.to_xml( :except => :user_id )
+       end
+      end
+    end
   end
 
   # Called by a form button
