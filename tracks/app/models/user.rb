@@ -1,14 +1,12 @@
 require 'digest/sha1'
 
-# this model expects a certain database layout and its based on the name/login pattern. 
 class User < ActiveRecord::Base
   has_many :contexts, :order => "position ASC"
   has_many :projects, :order => "position ASC"
   has_many :todos, :order => "completed DESC, created_at DESC"
   has_many :notes, :order => "created_at DESC"
+  has_one :preference
   
-  serialize :preferences
-
   attr_protected :is_admin
 
   def self.authenticate(login, pass)

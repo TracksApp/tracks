@@ -6,7 +6,7 @@
   <% end -%>
 </ul>
 
-<% if @user.preferences['show_completed_projects_on_home_page'].downcase == 'true' %>
+<% if @user.preference.show_completed_projects_in_sidebar %>
 <h3>Completed Projects:</h3>
 <ul>
   <% for project in @projects.reject{|p| !p.done? } -%>
@@ -24,6 +24,7 @@
   <% end -%>
 </ul>
 
+<% if @user.preference.show_hidden_contexts_in_sidebar %>
 <h3>Hidden Contexts:</h3>
 <ul>
   <% for context in @contexts.reject{|c| !c.hide? } -%>
@@ -31,3 +32,4 @@
           :name => urlize(context.name) } ) + " (" + count_undone_todos(context,"actions") + ")" %></li>
   <% end -%>
 </ul>
+<% end %>

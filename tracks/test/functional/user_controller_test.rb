@@ -44,7 +44,6 @@ class UserControllerTest < Test::Unit::TestCase
     assert_response :success
     assert_equal assigns['page_title'], "TRACKS::Preferences"
     assert_not_nil assigns['prefs']
-    assert_equal assigns['prefs'].length, 7
   end
   
   def test_edit_preferences
@@ -55,7 +54,6 @@ class UserControllerTest < Test::Unit::TestCase
     assert_response :success
     assert_equal assigns['page_title'], "TRACKS::Edit Preferences"
     assert_not_nil assigns['prefs']
-    assert_equal assigns['prefs'].length, 7    
     assert_template 'user/preference_edit_form'
   end
   
@@ -64,9 +62,9 @@ class UserControllerTest < Test::Unit::TestCase
   #
   def test_update_preferences
     @request.session['user_id'] = users(:admin_user).id # log in the admin user
-    post :update_preferences, {:user => { :first_name => 'Jane', :last_name => 'Doe'}, :prefs => { :date_format => "%m-%d-%Y", :week_starts => "0", :no_completed => "10", :staleness_starts => "14", :due_style => "1", :admin_email => "my.email@domain.com" }}
+    post :update_preferences, {:user => { :first_name => 'Jane', :last_name => 'Doe'}, :prefs => { :date_format => "%m-%d-%Y", :week_starts => "0", :show_number_completed => "10", :show_completed_projects_in_sidebar => "false", :show_hidden_contexts_in_sidebar => "false", :staleness_starts => "14", :due_style => "1", :admin_email => "my.email@domain.com" }}
     updated_admin_user = User.find(users(:admin_user).id)
-    assert_not_nil updated_admin_user.preferences
+    assert_not_nil updated_admin_user.preference
     assert_equal 'Jane', updated_admin_user.first_name
     assert_equal 'Doe', updated_admin_user.last_name
     assert_redirected_to :action => 'preferences'

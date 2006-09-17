@@ -44,7 +44,7 @@ class Project < ActiveRecord::Base
     todos = Todo.find :all, :conditions => ["todos.project_id = ? AND todos.type = ? AND todos.done = ?", id, "Immediate", true],
                       :order => "completed DESC",
                       :include => [:context, :project],
-                      :limit => @user.preferences["no_completed"].to_i
+                      :limit => @user.preference.show_number_completed
   end
   
   

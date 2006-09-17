@@ -6,7 +6,7 @@ require_dependency "login_system"
 class LoginController; def rescue_action(e) raise e end; end
 
 class LoginControllerTest < Test::Unit::TestCase
-  fixtures :users
+  fixtures :preferences, :users
   
   def setup
     assert_equal "test", ENV['RAILS_ENV']
@@ -87,7 +87,7 @@ class LoginControllerTest < Test::Unit::TestCase
     get :logout # logout the admin user
     assert_equal newbie.login, "newbie"
     assert newbie.is_admin == false || newbie.is_admin == 0
-    assert_not_nil newbie.preferences # have user preferences been created?
+    assert_not_nil newbie.preference # have user preferences been created?
     user = login('newbie', 'newbiepass', 'on') # log in the new user
     assert_redirected_to :controller => 'todo', :action => 'index'
     assert_equal 'newbie', user.login

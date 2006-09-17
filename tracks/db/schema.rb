@@ -2,7 +2,7 @@
 # migrations feature of ActiveRecord to incrementally modify your database, and
 # then regenerate this schema definition.
 
-ActiveRecord::Schema.define(:version => 11) do
+ActiveRecord::Schema.define(:version => 13) do
 
   create_table "contexts", :force => true do |t|
     t.column "name", :string, :default => "", :null => false
@@ -17,6 +17,19 @@ ActiveRecord::Schema.define(:version => 11) do
     t.column "body", :text
     t.column "created_at", :datetime
     t.column "updated_at", :datetime
+  end
+
+  create_table "preferences", :force => true do |t|
+    t.column "user_id", :integer, :default => 0, :null => false
+    t.column "date_format", :string, :limit => 40, :default => "%d/%m/%Y", :null => false
+    t.column "week_starts", :integer, :default => 0, :null => false
+    t.column "show_number_completed", :integer, :default => 5, :null => false
+    t.column "staleness_starts", :integer, :default => 14, :null => false
+    t.column "show_completed_projects_in_sidebar", :boolean, :default => true, :null => false
+    t.column "show_hidden_contexts_in_sidebar", :boolean, :default => true, :null => false
+    t.column "due_style", :integer, :default => 0, :null => false
+    t.column "admin_email", :string, :default => "", :null => false
+    t.column "refresh", :integer, :default => 0, :null => false
   end
 
   create_table "projects", :force => true do |t|
@@ -54,7 +67,6 @@ ActiveRecord::Schema.define(:version => 11) do
     t.column "password", :string, :limit => 40
     t.column "word", :string
     t.column "is_admin", :integer, :limit => 4, :default => 0, :null => false
-    t.column "preferences", :text
     t.column "first_name", :string
     t.column "last_name", :string
   end

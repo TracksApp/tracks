@@ -50,29 +50,20 @@ class UserController < ApplicationController
     
   def preferences
     @page_title = "TRACKS::Preferences"
-    @prefs = @user.preferences
+    @prefs = @user.preference
   end
 
   def edit_preferences
     @page_title = "TRACKS::Edit Preferences"
-    @prefs = @user.preferences
+    @prefs = @user.preference
     
     render :action => "preference_edit_form", :object => @prefs
   end
   
   def update_preferences
-    @user.preferences = { "date_format" => "#{params['prefs']['date_format']}",
-                          "week_starts" => "#{params['prefs']['week_starts']}",
-                          "no_completed" => "#{params['prefs']['no_completed']}",
-                          "staleness_starts" => "#{params['prefs']['staleness_starts']}",
-                          "show_completed_projects_on_home_page" => "#{params['prefs']['show_completed_projects_on_home_page']}",
-                          "due_style" => "#{params['prefs']['due_style']}",
-                          "admin_email" => "#{params['prefs']['admin_email']}",
-                          "refresh" => "#{params['prefs']['refresh']}"
-                          }
-    @user.first_name = params['user']['first_name']
-    @user.last_name = params['user']['last_name']
-    if @user.save
+    user_success = @user.update_attributes(params['user'])
+    prefs_success = @user.preference.update_attributes(params['prefs'])
+    if user_success && prefs_success
       redirect_to :action => 'preferences'
     else
       render :action => 'edit_preferences'

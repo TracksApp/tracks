@@ -1,5 +1,5 @@
 class LoginController < ApplicationController
-  model   :user
+  model   :user, :preference
   layout  'login'
   skip_before_filter :set_session_expiration
 
@@ -34,7 +34,7 @@ class LoginController < ApplicationController
           @user = get_new_user
       else # all other situations (i.e. a non-admin is logged in, or no one is logged in, but we have some users)
         @page_title = "No signups"
-        @admin_email = admin.preferences["admin_email"]
+        @admin_email = admin.preference.admin_email
         render :action => "nosignup"
       end
     end        
@@ -51,7 +51,7 @@ class LoginController < ApplicationController
     user.is_admin = true if User.find_all.empty?
     if user.save
       @user = User.authenticate(user.login, params['user']['password'])
-      @user.preferences = { "date_format" => "%d/%m/%Y", "week_starts" => "1", "no_completed" => "5", "staleness_starts" => "7", "due_style" => "1", "admin_email" => "butshesagirl@rousette.org.uk"}
+      @user.create_preference
       @user.save
       flash['notice']  = "Signup successful for user #{@user.login}."
       redirect_back_or_default :controller => "todo", :action => "index"

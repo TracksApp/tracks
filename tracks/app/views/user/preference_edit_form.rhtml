@@ -3,15 +3,16 @@
     <p>The preference settings should mostly be self-explanatory, but some hints are included below: </p>
     <ul>
       <li><strong>first name and last name:</strong> Used for display purposes if set</li>
-      <li><strong>staleness starts:</strong> the number of days before items with no due date get marked as stale (with a yellow highlight)</li>
-      <li><strong>date format:</strong> the format in which you'd like dates to be shown. For example, for the date 31st January 2006, %d/%m/%Y will show 31/01/2006, %b-%e-%y will show Jan-31-06. See the <a href="http://uk2.php.net/strftime" title="PHP strftime manual">strftime manual</a> for more formatting options for the date.</li>
-      <li><strong>no completed:</strong> number of completed actions to show on the home page. If you set this to zero, the completed actions box will not be shown on the home page or on the individual context or project pages. You can still see all your completed items by clicking the 'Done' link in the navigation bar at the top of each page.</li>
+      <li><strong>week starts:</strong> day of the week shown as the start of the week on the popup calendar.</li>
+      <li><strong>due style:</strong> style in which due dates are shown, e.g.  "Due in 3 days",  "Due on Wednesday"</li>
+      <li><strong>show completed projects in sidebar:</strong> whether or not projects marked as complete are shown in the sidebar on the home page and elsewhere</li>
+      <li><strong>show hidden contexts in sidebar:</strong> whether or not contexts marked as hidden are shown in the sidebar on the home page and elsewhere</li>
       <% if @user.is_admin? %>
         <li><strong>admin email:</strong> email address for the admin user of Tracks (displayed on the signup page for users to contact to obtain an account)</li>
       <% end %>
-      <li><strong>week starts:</strong> day of the week shown as the start of the week on the popup calendar.</li>
-      <li><strong>show completed projects on home page:</strong> whether or not projects marked as complete are shown on the home page sidebar</li>
-      <li><strong>due style:</strong> style in which due dates are shown, e.g.  "Due in 3 days",  "Due on Wednesday"</li>
+      <li><strong>staleness starts:</strong> the number of days before items with no due date get marked as stale (with a yellow highlight)</li>
+      <li><strong>date format:</strong> the format in which you'd like dates to be shown. For example, for the date 31st January 2006, %d/%m/%Y will show 31/01/2006, %b-%e-%y will show Jan-31-06. See the <a href="http://uk2.php.net/strftime" title="PHP strftime manual">strftime manual</a> for more formatting options for the date.</li>
+      <li><strong>show number completed:</strong> number of completed actions to show on the home page. If you set this to zero, the completed actions box will not be shown on the home page or on the individual context or project pages. You can still see all your completed items by clicking the 'Done' link in the navigation bar at the top of each page.</li>
       <li><strong>refresh:</strong> automatic refresh interval for each of the pages (in minutes)</li>
     </ul>
 </div>
@@ -27,94 +28,36 @@
       <td><label>last name:</label></td>
       <td><%= text_field 'user', 'last_name' %></td>
     </tr>
-    <tr>
-      <td><label>week starts:</label></td>
-      <td>	
-        <select name="prefs[week_starts]" >
-    		<% day_num_to_name = { "0" => "Sunday",
-    				       "1" => "Monday",
-    				       "2" => "Tuesday",
-    				       "3" => "Wednesday",
-    				       "4" => "Thursday",
-    				       "5" => "Friday",
-    				       "6" => "Saturday"}
-    		day_num_to_name.sort.each do |number, day| %>
-    		  <option value="<%= number%>"
-    		  <% if number == @prefs['week_starts'] %>
-    	              selected="true" 
-    		  <% end %>
-                           ><%= day %></option>
-    		  <% end %>
-      	</select>
-    	</td>
-    </tr>
-    <tr>
-      <td><label>due style:</label></td>
-      <td>	
-        <select name="prefs[due_style]" >
-      		<option value="0"
-      		<% if @prefs['due_style'] == "0" %>
-      			  selected="true" 
-      		<% end %>	
-      			>Due in ___ days</option>
+  <%
+    def table_row(pref_name, nowrap_label = false, &block)
+      nowrap_attribute = nowrap_label ? ' nowrap="nowrap"' : '' 
+      s = %Q|<tr>\n<td#{nowrap_attribute}><label>#{pref_name.gsub(/_/,' ')}:</label></td>\n<td>\n|
+      s << yield
+      s << "\n</td></tr>"
+      s
+    end
+    
+    def row_with_select_field(pref_name, collection = [true,false], nowrap_label = false)
+      table_row(pref_name, nowrap_label) { select('prefs', pref_name, collection) }
+    end
 
-      		<option value="1"
-      		<% if @prefs['due_style'] == "1" %>
-      			  selected="true" 
-      		<% end %>	
-      			>Due on _______</option>
-    		</select>
-    	</td>
-    </tr>
-    <tr>
-      <td><label>show completed projects on home page:</label></td>
-      <td>	
-    		<select name="prefs[show_completed_projects_on_home_page]" >
-      		<option value="true"
-      		<% if @prefs['show_completed_projects_on_home_page'] == "true" %>
-      			  selected="true" 
-      		<% end %>	
-      			>True</option>
-      		<option value="false"
-      		<% if @prefs['show_completed_projects_on_home_page'] == "false" %>
-      			  selected="true" 
-      		<% end %>	
-      			>False</option>
-      	</select>
-    	</td>
-    </tr>
-  <% if @user.is_admin? %>
-  <tr>
-    <td><label>admin email:</label></td>
-    <td>	
-	  <input name="prefs[admin_email]" type="text" value="<%= @prefs['admin_email'] %>" >
-  	</td>
-  </tr>
- 	<% end %>
-  <tr>
-    <td nowrap="true"><label>staleness starts:</label></td>
-    <td>	
-	  <input name="prefs[staleness_starts]" type="text" value="<%= @prefs['staleness_starts'] %>" >
-  	</td>
-  </tr>
-  <tr>
-    <td><label>date format:</label></td>
-    <td>	
-	  <input name="prefs[date_format]" type="text" value="<%= @prefs['date_format'] %>" >
-  	</td>
-  </tr>
-  <tr>
-    <td><label>no completed:</label></td>
-    <td>	
-	  <input name="prefs[no_completed]" type="text" value="<%= @prefs['no_completed'] %>" >
-  	</td>
-  </tr>
-  <tr>
-    <td><label>refresh:</label></td>
-    <td>	
-	  <input name="prefs[refresh]" type="text" value="<%= @prefs['refresh'] %>" >
-  	</td>
-  </tr>
+    def row_with_text_field(pref_name, nowrap_label = false)
+      table_row(pref_name, nowrap_label) { text_field('prefs', pref_name) }
+    end
+  %>
+
+  <%= row_with_select_field("week_starts", Preference.day_number_to_name_map.invert.sort{|a,b| a[1]<=>b[1]})%>
+  <%= row_with_select_field("due_style", [['Due in ___ days',0],['Due on _______',1]]) %>
+  <%= row_with_select_field("show_completed_projects_in_sidebar") %>
+  <%= row_with_select_field("show_hidden_contexts_in_sidebar") %>
+
+
+  <% if @user.is_admin? %> <%= row_with_text_field('admin_email') %> <% end %>
+  <%= row_with_text_field('staleness_starts', true) %>
+  <%= row_with_text_field('date_format') %>
+  <%= row_with_text_field('show_number_completed') %>
+  <%= row_with_text_field('refresh') %>
+
     <tr><td><%= submit_tag "Update" %></td>
         <td><%= link_to "Cancel", :controller => 'user', :action => 'preferences' %></td>
     </tr>

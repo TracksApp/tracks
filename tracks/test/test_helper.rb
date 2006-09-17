@@ -71,11 +71,16 @@ class ActionController::IntegrationTest
           }.merge(headers)
   end
     
-  def assert_response_and_body (type, body, message = nil)
+  def assert_response_and_body(type, body, message = nil)
     #puts @response.body
     assert_response type, message
     assert_equal body, @response.body, message
-  end   
+  end
+
+  def assert_response_and_body_matches(type, body_regex, message = nil)
+    assert_response type, message
+    assert_match body_regex, @response.body, message
+  end
     
   def assert_401_unauthorized
     assert_response_and_body 401, "401 Unauthorized: You are not authorized to interact with Tracks."

@@ -6,7 +6,7 @@ module ApplicationHelper
   #
   def format_date(date)
     if date
-      date_format = @user.preferences["date_format"]
+      date_format = @user.preference.date_format
       formatted_date = date.strftime("#{date_format}")
     else
       formatted_date = ''
@@ -72,7 +72,7 @@ module ApplicationHelper
            "<a title='" + format_date(due) + "'><span class=\"amber\">Due Tomorrow</span></a> "
       # due 2-7 days away
       when 2..7
-      if @user.preferences["due_style"] == "1"
+      if @user.preference.due_style == "1"
         "<a title='" + format_date(due) + "'><span class=\"orange\">Due on " + due.strftime("%A") + "</span></a> "
       else
         "<a title='" + format_date(due) + "'><span class=\"orange\">Due in " + @days.to_s + " days</span></a> "

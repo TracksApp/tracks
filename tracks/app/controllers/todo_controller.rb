@@ -22,7 +22,7 @@ class TodoController < ApplicationController
     
     # If you've set no_completed to zero, the completed items box
     # isn't shown on the home page
-    max_completed = @user.preferences["no_completed"].to_i-1
+    max_completed = @user.preference.show_number_completed - 1
     @done = nil
     if max_completed > 0
       @done = Todo.find(:all,

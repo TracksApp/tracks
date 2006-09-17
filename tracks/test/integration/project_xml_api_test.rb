@@ -53,7 +53,7 @@ class ProjectControllerXmlApiTest < ActionController::IntegrationTest
   def test_creates_new_project
     initial_count = Project.count
     authenticated_post_xml_to_project_create
-    assert_response_and_body 200, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project>\n  <name>#{@@project_name}</name>\n  <done type=\"integer\">0</done>\n  <id type=\"integer\">0</id>\n  <description></description>\n  <position type=\"integer\">1</position>\n</project>\n"
+    assert_response_and_body_matches 200, %r|^<\?xml version="1\.0" encoding="UTF-8"\?>\n<project>\n  <name>#{@@project_name}</name>\n  <done type=\"integer\">0</done>\n  <id type=\"integer\">[0-9]+</id>\n  <description></description>\n  <position type=\"integer\">1</position>\n</project>\n$|
     assert_equal initial_count + 1, Project.count
     project1 = Project.find_by_name(@@project_name)
     assert_not_nil project1, "expected project '#{@@project_name}' to be created"

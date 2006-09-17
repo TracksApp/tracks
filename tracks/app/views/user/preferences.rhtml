@@ -11,40 +11,23 @@
   <ul id="prefs">
     <li>First name: <span class="highlight"><%= @user.first_name %></span></li>
     <li>Last name: <span class="highlight"><%= @user.last_name %></span></li>
-    <li>Date format: <span class="highlight"><%= @prefs["date_format"] %></span></li>
-    <li>Week starts on: <span class="highlight">
-  	  <%  case @prefs["week_starts"]
-  		when "0" 
-  		%> Sunday <%
-  		when "1" 
-  		 %> Monday <%
-  		when "2" 
-  		 %> Tuesday <%
-  		when "3" 
-  		 %> Wednesday <%
-  		when "4" 
-  		 %> Thursday <%
-  		when "5" 
-  		 %> Friday <%
-  		when "6" 
-  		 %> Saturday <%
-  	      end
-  	 %>	
-  	</span></li>
-    <li>Show the last <span class="highlight"><%= @prefs["no_completed"] %></span> completed items on the home page</li>
-    <li>Show completed projects on the home page: <span class="highlight"><%= @prefs["show_completed_projects_on_home_page"] %></span></li>
-    <li>Staleness starts after <span class="highlight"><%= @prefs["staleness_starts"] %></span> days</li>
+    <li>Date format: <span class="highlight"><%= @prefs.date_format %></span></li>
+    <li>Week starts on: <span class="highlight"><%= Preference.day_number_to_name_map[@prefs.week_starts] %></span></li>
+    <li>Show the last <span class="highlight"><%= @prefs.show_number_completed %></span> completed items on the home page</li>
+    <li>Show completed projects in sidebar: <span class="highlight"><%= @prefs.show_completed_projects_in_sidebar %></span></li>
+    <li>Show hidden contexts in sidebar: <span class="highlight"><%= @prefs.show_hidden_contexts_in_sidebar %></span></li>
+    <li>Staleness starts after <span class="highlight"><%= @prefs.staleness_starts %></span> days</li>
     <li>Due style: <span class="highlight">
-  	<% if @prefs["due_style"] == "0" %>
+  	<% if @prefs.due_style == "0" %>
   		Due in ___ days
   	<% else %>
   		Due on ________
   	<% end %>
   		 </span></li>
     <% if @user.is_admin? %>
-      <li>Admin email: <span class="highlight"><%= @prefs["admin_email"] %></span></li>
+      <li>Admin email: <span class="highlight"><%= @prefs.admin_email %></span></li>
     <% end %>
-    <li>Refresh interval (in minutes): <span class="highlight"><%= @prefs["refresh"] %></span></li>
+    <li>Refresh interval (in minutes): <span class="highlight"><%= @prefs.refresh %></span></li>
   </ul>
   <%= link_to "Edit preferences", :controller => 'user', :action => 'edit_preferences' %> | 
   <%= link_to 'Change password', :controller => 'user', :action => 'change_password' %>

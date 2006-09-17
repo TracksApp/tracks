@@ -50,10 +50,10 @@ class ContextControllerXmlApiTest < ActionController::IntegrationTest
     assert_response_and_body 404, "Name cannot contain the slash ('/') character"
   end
     
-  def test_creates_new_project
+  def test_creates_new_context
     initial_count = Context.count
     authenticated_post_xml_to_context_create
-    assert_response_and_body 200, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<context>\n  <name>#{@@context_name}</name>\n  <hide type=\"integer\">0</hide>\n  <id type=\"integer\">0</id>\n  <position type=\"integer\">1</position>\n</context>\n"
+    assert_response_and_body_matches 200, %r|^<\?xml version="1.0" encoding="UTF-8"\?>\n<context>\n  <name>#{@@context_name}</name>\n  <hide type="integer">0</hide>\n  <id type="integer">\d+</id>\n  <position type="integer">1</position>\n</context>\n$|
     assert_equal initial_count + 1, Context.count
     context1 = Context.find_by_name(@@context_name)
     assert_not_nil context1, "expected context '#{@@context_name}' to be created"

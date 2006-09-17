@@ -44,11 +44,11 @@ module TodoHelper
   def staleness_class(item)
     if item.due || item.done?
       return ""
-    elsif item.created_at < (@user.preferences["staleness_starts"].to_i*3).days.ago
+    elsif item.created_at < (@user.preference.staleness_starts * 3).days.ago
       return " stale_l3"
-    elsif item.created_at < (@user.preferences["staleness_starts"].to_i*2).days.ago
+    elsif item.created_at < (@user.preference.staleness_starts * 2).days.ago
       return " stale_l2"
-    elsif item.created_at < (@user.preferences["staleness_starts"].to_i).days.ago
+    elsif item.created_at < (@user.preference.staleness_starts).days.ago
       return " stale_l1"
     else
       return ""
@@ -76,7 +76,7 @@ module TodoHelper
            "<a title='" + format_date(due) + "'><span class=\"amber\">Show Tomorrow</span></a> "
       # due 2-7 days away
       when 2..7
-      if @user.preferences["due_style"] == "1"
+      if @user.preference.due_style == 1
         "<a title='" + format_date(due) + "'><span class=\"orange\">Show on " + due.strftime("%A") + "</span></a> "
       else
         "<a title='" + format_date(due) + "'><span class=\"orange\">Show in " + @days.to_s + " days</span></a> "
@@ -99,8 +99,8 @@ module TodoHelper
   end
   
   def calendar_setup( input_field )
-    date_format = @user.preferences["date_format"]
-    week_starts = @user.preferences["week_starts"]
+    date_format = @user.preference.date_format
+    week_starts = @user.preference.week_starts
     str = "Calendar.setup({ ifFormat:\"#{date_format}\""
     str << ",firstDay:#{week_starts},showOthers:true,range:[2004, 2010]"
     str << ",step:1,inputField:\"" + input_field + "\",cache:true,align:\"TR\" })\n"
