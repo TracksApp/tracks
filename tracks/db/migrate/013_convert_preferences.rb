@@ -16,6 +16,11 @@ class ConvertPreferences < ActiveRecord::Migration
         user.preference.due_style = user.preferences['due_style']
         user.preference.admin_email = user.preferences['admin_email']
         user.preference.refresh = user.preferences['refresh']
+        
+        if user.preference.refresh.blank?
+          user.preference.refresh = 0
+        end
+        
         user.preference.save!
       end
       remove_column :users, :preferences
