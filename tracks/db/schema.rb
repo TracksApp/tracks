@@ -2,7 +2,7 @@
 # migrations feature of ActiveRecord to incrementally modify your database, and
 # then regenerate this schema definition.
 
-ActiveRecord::Schema.define(:version => 13) do
+ActiveRecord::Schema.define(:version => 14) do
 
   create_table "contexts", :force => true do |t|
     t.column "name", :string, :default => "", :null => false
@@ -24,20 +24,20 @@ ActiveRecord::Schema.define(:version => 13) do
     t.column "date_format", :string, :limit => 40, :default => "%d/%m/%Y", :null => false
     t.column "week_starts", :integer, :default => 0, :null => false
     t.column "show_number_completed", :integer, :default => 5, :null => false
-    t.column "staleness_starts", :integer, :default => 14, :null => false
+    t.column "staleness_starts", :integer, :default => 7, :null => false
     t.column "show_completed_projects_in_sidebar", :boolean, :default => true, :null => false
     t.column "show_hidden_contexts_in_sidebar", :boolean, :default => true, :null => false
     t.column "due_style", :integer, :default => 0, :null => false
-    t.column "admin_email", :string, :default => "", :null => false
+    t.column "admin_email", :string, :default => "butshesagirl@rousette.org.uk", :null => false
     t.column "refresh", :integer, :default => 0, :null => false
   end
 
   create_table "projects", :force => true do |t|
     t.column "name", :string, :default => "", :null => false
     t.column "position", :integer, :default => 0, :null => false
-    t.column "done", :integer, :limit => 4, :default => 0, :null => false
     t.column "user_id", :integer, :default => 0, :null => false
     t.column "description", :text
+    t.column "state", :string, :limit => 20, :default => "active", :null => false
   end
 
   create_table "sessions", :force => true do |t|

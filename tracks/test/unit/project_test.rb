@@ -38,5 +38,28 @@ class ProjectTest < Test::Unit::TestCase
     assert_equal 1, newproj.errors.count
     assert_equal "cannot contain the slash ('/') character", newproj.errors.on(:name)
   end
+  
+  def test_project_initial_state_is_active
+    assert_equal :active, @timemachine.current_state
+    assert @timemachine.active?
+  end
+  
+  def test_hide_project
+    @timemachine.hide!
+    assert_equal :hidden, @timemachine.current_state
+    assert @timemachine.hidden?
+  end
+  
+  def test_activate_project
+    @timemachine.activate!
+    assert_equal :active, @timemachine.current_state
+    assert @timemachine.active?
+  end
+  
+  def test_complete_project
+    @timemachine.complete!
+    assert_equal :completed, @timemachine.current_state
+    assert @timemachine.completed?
+  end
 
 end

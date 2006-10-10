@@ -3,14 +3,18 @@
 %>
 <tr>
   <td width="150"><label for="project_name">Name:</label></td>
-  <td width="300"><%= text_field 'project', 'name', :class => 'project-name'  %></td>
+  <td width="300"><%= text_field :project, 'name', :class => 'project-name'  %></td>
 </tr>
 <tr>
   <td width="150"><label for="project_description">Description (optional):</label></td>
-  <td width="300"><%= text_area 'project', 'description', "cols" => 30, "rows" => 4, :class => 'project-description'  %></td>
+  <td width="300"><%= text_area :project, 'description', "cols" => 30, "rows" => 4, :class => 'project-description'  %></td>
 </tr>
 <tr>
-  <td width="150"><label for="project_done">Project done?</label></td>
-  <td width="300"><%= check_box 'project', 'done', :class => 'project-done' %></td>
+  <td width="150"><label for="project_done">Project status:</label></td>
+  <td width="300">
+   <% ['active', 'hidden', 'completed'].each do | state | %>
+    <%= radio_button(:project, 'state', state, {:class => 'project-done'}) %> <%= state.titlecase %> 
+   <% end %>
+  </td>
 </tr>
 <% @project = nil %>

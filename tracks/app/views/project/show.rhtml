@@ -13,36 +13,42 @@
 
 <div class="container">
  <div id="notes">
- <h2>Notes</h2>
- <div id="empty-n" style="display:<%= @notes.empty? ? 'block' : 'none'%>;">
-   <%= render :partial => "shared/empty", 
+  <div class="add_note_link"><%= link_to_function( "Add a note", "Element.toggle('new-note'); Form.focusFirstElement('form-new-note');") %></div>
+   <h2>Notes</h2>
+   <div id="empty-n" style="display:<%= @notes.empty? ? 'block' : 'none'%>;">
+    <%= render :partial => "shared/empty", 
               :locals => { :message => "Currently there are no notes attached to this project"} %>
- </div>
-    <%= render :partial => "note/notes_summary", :collection => @notes %>
+   </div>
+   <%= render :partial => "note/notes_summary", :collection => @notes %>
   </div>
 </div>
+<div>
 
-<% if @project.done? -%>
-  <%= button_to "Mark project as uncompleted", {:action => "toggle_project_done", :id => @project.id} %><br />
-<% else -%>
-  <%= button_to "Mark project as completed", {:action => "toggle_project_done", :id => @project.id} %><br />
-<% end -%>
+	<div id="new-note" style="display:none;">
+	<%= form_remote_tag :url => { :controller => "note", :action => "add" },
+	                    :update => "notes",
+	                    :position => "bottom",
+	                    :complete => "new Effect.Highlight('notes');$('empty-n').hide();",
+	                    :html => {:id=>'form-new-note', :class => 'inline-form'} %>
+	<%= hidden_field( "new_note", "project_id", "value" => "#{@project.id}" ) %>
+	<%= text_area( "new_note", "body", "cols" => 50, "rows" => 3, "tabindex" => 1 ) %>
+	<br /><br />
+	<input type="submit" value="Add note" tabindex="2" />
+	<%= end_form_tag %>
+	</div>
 
-<%= link_to_function( "Add a note", "Element.toggle('new-note'); Form.focusFirstElement('form-new-note');") %>
-
-<div id="new-note" style="display:none;">
-<%= form_remote_tag :url => { :controller => "note", :action => "add" },
-                    :update => "notes",
-                    :position => "bottom",
-                    :complete => "new Effect.Highlight('notes');$('empty-n').hide();",
-                    :html => {:id=>'form-new-note', :class => 'inline-form'} %>
-<%= hidden_field( "new_note", "project_id", "value" => "#{@project.id}" ) %>
-<%= text_area( "new_note", "body", "cols" => 50, "rows" => 3, "tabindex" => 1 ) %>
-<br /><br />
-<input type="submit" value="Add note" tabindex="2" />
-<%= end_form_tag %>
+<div class="container">
+ <div id="status">
+  <h2>Status</h2>
+  <div>
+   <% ['active', 'hidden', 'completed'].each do | state | %>
+    <% js = "new Ajax.Request('#{ url_for :controller => 'project', :action => 'update', :id => @project.id, 'project[state]' => state }', {asynchronous:true, evalScripts:true});" %>
+    <%= radio_button(:project, 'state', state, {:class => 'project-done', :onclick => js}) %> <%= state.titlecase %> 
+   <% end %>
+  </div>
+ </div>
 </div>
-
+</div>
 </div><!-- [end:display_box] -->
 
 <div id="input_box">

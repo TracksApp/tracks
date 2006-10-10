@@ -46,7 +46,7 @@
 </tr>
 <tr>
   <td><label for="todo_project_id">Project</label></td>
-  <td><%= select( "todo", "project_id", @projects.reject{|x| x.done? }.collect {|p| [p.name, p.id] }, { :selected => @selected_project, :include_blank => true }, {"tabindex" => 4}) %></td>
+  <td><%= select( "todo", "project_id", @projects.select{|x| x.active? }.collect {|p| [p.name, p.id] }, { :selected => @selected_project, :include_blank => true }, {"tabindex" => 4}) %></td>
 </tr>
 <tr>
   <td><label for="todo_due">Due</label></td>

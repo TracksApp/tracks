@@ -11,8 +11,10 @@
     <div class="project_description"><%= sanitize(@project.description) %></div>
   <% end -%>
   
-  <% if @project.done? -%>
+  <% if @project.completed? -%>
     <p class="project_completed">Project has been marked as completed</p>
+  <% elsif @project.completed? -%>
+    <p class="project_completed">Project has been marked as hidden</p>
   <% end -%>
   <div class="items toggle_target">
     <div id="p<%= project.id %>empty-nd" style="display:<%= @not_done.empty? ? 'block' : 'none'%>;">

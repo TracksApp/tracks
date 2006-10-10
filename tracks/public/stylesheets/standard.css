@@ -298,6 +298,12 @@ div.note_footer a, div.note_footer a:hover {
       background-color: transparent;
       }
 
+div.add_note_link {
+	float: right;
+	}
+div#status > div {
+	padding: 10px;
+	}
 a.footer_link {color: #cc3334; font-style: normal;}
 a.footer_link:hover {color: #fff; background-color: #cc3334 !important;}
       

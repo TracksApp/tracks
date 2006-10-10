@@ -1,11 +1,7 @@
 class Project < ActiveRecord::Base
-
   has_many :todos, :dependent => true
   has_many :notes, :dependent => true, :order => "created_at DESC"
   belongs_to :user
-  acts_as_list :scope => :user
-
-  attr_protected :user
 
   # Project name must not be empty
   # and must be less than 255 bytes
@@ -13,7 +9,28 @@ class Project < ActiveRecord::Base
   validates_length_of :name, :maximum => 255, :message => "project name must be less than 256 characters"
   validates_uniqueness_of :name, :message => "already exists", :scope =>"user_id"
   validates_format_of :name, :with => /^[^\/]*$/i, :message => "cannot contain the slash ('/') character"
-    
+
+  acts_as_list :scope => :user
+  acts_as_state_machine :initial => :active, :column => 'state'
+  
+  state :active
+  state :hidden
+  state :completed
+
+  event :activate do
+    transitions :to => :active,   :from => [:hidden, :complete]
+  end
+  
+  event :hide do
+    transitions :to => :hidden,   :from => [:active, :complete]
+  end
+  
+  event :complete do
+    transitions :to => :completed, :from => [:active, :hidden]
+  end
+  
+  attr_protected :user
+
   def description_present?
     attribute_present?("description")
   end
