@@ -206,7 +206,7 @@ class ContextController < ApplicationController
      
     def init
       @source_view = params['_source_view'] || 'context'
-      @projects = @user.projects.collect { |x| x.done? ? nil:x }.compact
+      @projects = @user.projects.reject { |x| x.completed? }
       @contexts = @user.contexts
       @todos = @user.todos
       @done = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = ?", @user.id, true], :include => [:project], :order => "completed DESC")

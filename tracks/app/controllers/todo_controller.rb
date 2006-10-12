@@ -111,7 +111,7 @@ class TodoController < ApplicationController
     @item.toggle!('done')
     @item.completed = Time.now() # For some reason, the before_save in todo.rb stopped working
     @saved = @item.save
-    @remaining_undone_in_context = Todo.count(:conditions => ['user_id = ? and context_id = ? and type = ? and done = ?', @user.id, @item.context_id, "Immediate", false])
+    @remaining_undone_in_context = @user.contexts.find(@item.context_id).not_done_todos.length
     if @saved
       @down_count = @todos.reject { |x| x.done? || x.context.hide? }.size.to_s
     end
@@ -136,8 +136,10 @@ class TodoController < ApplicationController
       params["item"]["due"] = ""
     end
     @saved = @item.update_attributes params["item"]
-    @remaining_undone_in_original_context = Todo.count(:conditions => ['user_id = ? and context_id = ? and type = ? and done = ?', @user.id, @original_item_context_id, "Immediate", false])
-    @remaining_undone_in_original_project = Todo.count(:conditions => ['user_id = ? and project_id = ? and type = ? and done = ?', @user.id, @original_item_project_id, "Immediate", false])
+    @context_changed = @original_item_context_id != @item.context_id
+    if @context_changed then @remaining_undone_in_context = @user.contexts.find(@original_item_context_id).not_done_todos.length; end
+    @project_changed = @original_item_project_id != @item.project_id
+    if @project_changed then @remaining_undone_in_project = @user.projects.find(@original_item_project_id).not_done_todos.length; end
   end
   
   def update_context
@@ -195,8 +197,7 @@ class TodoController < ApplicationController
           @down_count = determine_down_count
           source_view do |from|
              from.todo do
-               @remaining_undone_in_context = Todo.count(:conditions => ['user_id = ? and context_id = ? and type = ? and done = ?',
-                                                                          @user.id, @context_id, "Immediate", false])
+               @remaining_undone_in_context = @user.contexts.find(@context_id).not_done_todos.length
              end
            end
         end

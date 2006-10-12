@@ -11,7 +11,7 @@ xml.rss("version" => "2.0", "xmlns:dc" => "http://purl.org/dc/elements/1.1/") do
 			 	project_description = ''
 			 	project_description += sanitize(markdown( p.description )) if p.description_present?
 			 	project_description += "<p>#{count_undone_todos(p)}. "
-			 	project_description += "Project is #{p.done? ? 'Done' : 'Active'}. "
+			 	project_description += "Project is #{p.state}. "
 			 	project_description += "<a href=\"#{p.linkurl}\">#{p.linkurl}</a>" if p.linkurl_present?
 			 	project_description += "</p>"
 		 		xml.description(project_description)

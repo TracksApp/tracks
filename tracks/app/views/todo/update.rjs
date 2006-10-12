@@ -2,10 +2,7 @@ page.hide "info"
 if @saved
   item_container_id = "item-#{@item.id}-container"
   if source_view_is_one_of [:todo, :context]
-    if @item.context_id == @original_item_context_id
-      page.replace item_container_id, :partial => 'todo/item', :locals => { :parent_container_type => "context" }
-      page.visual_effect :highlight, item_container_id, :duration => 3
-    else
+    if @context_changed
       page[item_container_id].remove
       if (@remaining_undone_in_original_context == 0)
         source_view do |from|
@@ -13,24 +10,31 @@ if @saved
            from.context { page.show "c#{@original_item_context_id}empty-nd" }
          end
       end
-      page.call "todoItems.ensureVisibleWithEffectAppear", "c#{@item.context_id}"
-      page.call "todoItems.expandNextActionListingByContext", "c#{@item.context_id}items", true
-      page.insert_html :bottom, "c#{@item.context_id}items", :partial => 'todo/item', :locals => { :parent_container_type => "context" }
+      if source_view_is :todo
+        page.call "todoItems.ensureVisibleWithEffectAppear", "c#{@item.context_id}"
+        page.call "todoItems.expandNextActionListingByContext", "c#{@item.context_id}items", true
+        page.insert_html :bottom, "c#{@item.context_id}items", :partial => 'todo/item', :locals => { :parent_container_type => "context" }
+      end
+      page.replace_html("badge_count", @remaining_undone_in_context) if source_view_is :context
       page.delay(0.5) do
         page.call "todoItems.ensureContainerHeight", "c#{@original_item_context_id}items"
-        page.call "todoItems.ensureContainerHeight", "c#{@item.context_id}items"
-        page.visual_effect :highlight, item_container_id, :duration => 3
+        if source_view_is :todo
+          page.call "todoItems.ensureContainerHeight", "c#{@item.context_id}items"
+          page.visual_effect :highlight, item_container_id, :duration => 3
+        end
       end
-    end
+    else
+      page.replace item_container_id, :partial => 'todo/item', :locals => { :parent_container_type => "context" }
+      page.visual_effect :highlight, item_container_id, :duration => 3
+    end    
   elsif source_view_is :project
-    if @item.project_id == @original_item_project_id
+    if @project_changed
+      page[item_container_id].remove
+      page.show("p#{@original_item_project_id}empty-nd") if (@remaining_undone_in_project == 0)
+      page.replace_html "badge_count", @remaining_undone_in_project
+    else
       page.replace item_container_id, :partial => 'todo/item', :locals => { :parent_container_type => "project" }
       page.visual_effect :highlight, item_container_id, :duration => 3
-    else
-      page[item_container_id].remove
-      if (@remaining_undone_in_original_project == 0)
-        page.show "p#{@original_item_project_id}empty-nd"
-      end
     end
   else
     logger.error "unexpected source_view '#{params[:_source_view]}'"
