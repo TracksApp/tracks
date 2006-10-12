@@ -113,7 +113,7 @@ class TodoController < ApplicationController
     @saved = @item.save
     @remaining_undone_in_context = Todo.count(:conditions => ['user_id = ? and context_id = ? and type = ? and done = ?', @user.id, @item.context_id, "Immediate", false])
     if @saved
-      @down_count = @todos.collect { |x| ( !x.done? and !x.context.hide? ) ? x:nil }.compact.size.to_s
+      @down_count = @todos.reject { |x| x.done? || x.context.hide? }.size.to_s
     end
     return if request.xhr?
 
@@ -128,6 +128,7 @@ class TodoController < ApplicationController
     init
     @item = check_user_return_item
     @original_item_context_id = @item.context_id
+    @original_item_project_id = @item.project_id
     @item.attributes = params["item"]
     if params["item"].has_key?("due")
       params["item"]["due"] = parse_date_per_user_prefs(params["item"]["due"])
@@ -136,6 +137,7 @@ class TodoController < ApplicationController
     end
     @saved = @item.update_attributes params["item"]
     @remaining_undone_in_original_context = Todo.count(:conditions => ['user_id = ? and context_id = ? and type = ? and done = ?', @user.id, @original_item_context_id, "Immediate", false])
+    @remaining_undone_in_original_project = Todo.count(:conditions => ['user_id = ? and project_id = ? and type = ? and done = ?', @user.id, @original_item_project_id, "Immediate", false])
   end
   
   def update_context

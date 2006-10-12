@@ -23,8 +23,15 @@ if @saved
       end
     end
   elsif source_view_is :project
-    page.replace item_container_id, :partial => 'todo/item', :locals => { :parent_container_type => "project" }
-    page.visual_effect :highlight, item_container_id, :duration => 3
+    if @item.project_id == @original_item_project_id
+      page.replace item_container_id, :partial => 'todo/item', :locals => { :parent_container_type => "project" }
+      page.visual_effect :highlight, item_container_id, :duration => 3
+    else
+      page[item_container_id].remove
+      if (@remaining_undone_in_original_project == 0)
+        page.show "p#{@original_item_project_id}empty-nd"
+      end
+    end
   else
     logger.error "unexpected source_view '#{params[:_source_view]}'"
   end
