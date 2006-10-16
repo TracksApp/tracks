@@ -301,7 +301,7 @@ div.note_footer a, div.note_footer a:hover {
 div.add_note_link {
 	float: right;
 	}
-div#status > div {
+div#project_status > div {
 	padding: 10px;
 	}
 a.footer_link {color: #cc3334; font-style: normal;}
