@@ -128,5 +128,16 @@ module ApplicationHelper
     return count.to_s + " " + word
   end
   
+  def item_link_to_context(item)
+    descriptor = "[C]"
+    descriptor = "[#{item.context.name}]" if (@user.preference.verbose_action_descriptors)
+    link_to( descriptor, { :controller => "context", :action => "show", :name => urlize(item.context.name) }, :title => "View context: #{item.context.name}" )
+  end
+  
+  def item_link_to_project(item)
+    descriptor = "[P]"
+    descriptor = "[#{item.project.name}]" if (@user.preference.verbose_action_descriptors)
+    link_to( descriptor, { :controller => "project", :action => "show", :name => urlize(item.project.name) }, :title => "View project: #{item.project.name}" )
+  end
   
 end

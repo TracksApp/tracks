@@ -14,6 +14,7 @@
       <li><strong>date format:</strong> the format in which you'd like dates to be shown. For example, for the date 31st January 2006, %d/%m/%Y will show 31/01/2006, %b-%e-%y will show Jan-31-06. See the <a href="http://uk2.php.net/strftime" title="PHP strftime manual">strftime manual</a> for more formatting options for the date.</li>
       <li><strong>show number completed:</strong> number of completed actions to show on the home page. If you set this to zero, the completed actions box will not be shown on the home page or on the individual context or project pages. You can still see all your completed items by clicking the 'Done' link in the navigation bar at the top of each page.</li>
       <li><strong>refresh:</strong> automatic refresh interval for each of the pages (in minutes)</li>
+      <li><strong>verbose action descriptor:</strong> when true, show project/context name in action listing; when false show [P]/[C] with tool tips</li>
     </ul>
 </div>
 
@@ -57,6 +58,7 @@
   <%= row_with_text_field('date_format') %>
   <%= row_with_text_field('show_number_completed') %>
   <%= row_with_text_field('refresh') %>
+  <%= row_with_select_field("verbose_action_descriptors") %>
 
     <tr><td><%= submit_tag "Update" %></td>
         <td><%= link_to "Cancel", :controller => 'user', :action => 'preferences' %></td>

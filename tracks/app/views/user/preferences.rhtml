@@ -28,6 +28,7 @@
       <li>Admin email: <span class="highlight"><%= @prefs.admin_email %></span></li>
     <% end %>
     <li>Refresh interval (in minutes): <span class="highlight"><%= @prefs.refresh %></span></li>
+    <li>Verbose action descriptors: <span class="highlight"><%= @prefs.verbose_action_descriptors %></span></li>
   </ul>
   <%= link_to "Edit preferences", :controller => 'user', :action => 'edit_preferences' %> | 
   <%= link_to 'Change password', :controller => 'user', :action => 'change_password' %>

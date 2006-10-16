@@ -17,9 +17,9 @@
   (<%= item.context.name %><%= ", " + item.project.name if item.project_id %>)
 <% else -%>
   <% if parent_container_type == "project" -%>
-          <%= link_to( "[C]", { :controller => "context", :action => "show", :name => urlize(item.context.name) }, :title => "View context: #{item.context.name}" ) %>
+          <%= item_link_to_context( item ) %>
   <% elsif item.project_id -%>
-          <%= link_to( "[P]", { :controller => "project", :action => "show", :name => urlize(item.project.name) }, :title => "View project: #{item.project.name}" ) %>
+          <%= item_link_to_project( item ) %>
   <% end -%>
 <% end -%>
 <% if item.notes? -%>

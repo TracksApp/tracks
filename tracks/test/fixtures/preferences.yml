@@ -11,6 +11,7 @@ admin_user_prefs:
   week_starts: 1
   due_style: 0
   refresh: 0
+  verbose_action_descriptors: true
 
 other_user_prefs:
   id: 2
@@ -24,3 +25,4 @@ other_user_prefs:
   week_starts: 1
   due_style: 0
   refresh: 0
+  verbose_action_descriptors: false
