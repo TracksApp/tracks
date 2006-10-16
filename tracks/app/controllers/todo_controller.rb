@@ -139,7 +139,7 @@ class TodoController < ApplicationController
     @context_changed = @original_item_context_id != @item.context_id
     if @context_changed then @remaining_undone_in_context = @user.contexts.find(@original_item_context_id).not_done_todos.length; end
     @project_changed = @original_item_project_id != @item.project_id
-    if @project_changed then @remaining_undone_in_project = @user.projects.find(@original_item_project_id).not_done_todos.length; end
+    if (@project_changed && !@original_item_project_id.nil?) then @remaining_undone_in_project = @user.projects.find(@original_item_project_id).not_done_todos.length; end
   end
   
   def update_context
