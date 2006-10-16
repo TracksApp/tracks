@@ -7,7 +7,7 @@ class ConvertProjectToStateMachine < ActiveRecord::Migration
       add_column :projects, :state, :string, :limit => 20, :default => "active", :null => false
       @projects = Project.find(:all)
       @projects.each do |project|
-        project.state = project.done ? 'completed' : 'active'
+        project.state = project.done? ? 'completed' : 'active'
         project.save
       end
       remove_column :projects, :done
