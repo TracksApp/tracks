@@ -91,7 +91,7 @@ class MobileController < ApplicationController
     @contexts = Context.find :all, :order => 'position ASC', 
                              :conditions => ['user_id = ?', @user.id]
     @projects = Project.find :all, :order => 'position ASC', 
-                             :conditions => ['user_id = ? and done = ?', @user.id, false]
+                             :conditions => ['user_id = ? and state = ?', @user.id, "active"]
     @all_todos = Todo.find(:all, :conditions => ['user_id = ? and type = ?', @user.id, "Immediate"])
   end
   

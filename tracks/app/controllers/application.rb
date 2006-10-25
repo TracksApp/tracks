@@ -83,7 +83,7 @@ class ApplicationController < ActionController::Base
     
   def parse_date_per_user_prefs( s )
     return nil if s == ''
-    Date.strptime(s, @user.preference.date_format) 
+    Chronic.parse(s)
   end
     
   def init_data_for_sidebar

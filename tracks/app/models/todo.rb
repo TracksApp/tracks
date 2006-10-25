@@ -1,4 +1,5 @@
 class Todo < ActiveRecord::Base
+  require 'validations'
 
   belongs_to :context, :order => 'name'
   belongs_to :project
@@ -11,6 +12,7 @@ class Todo < ActiveRecord::Base
   validates_presence_of :description
   validates_length_of :description, :maximum => 100
   validates_length_of :notes, :maximum => 60000, :allow_nil => true 
+  # validates_chronic_date :due, :allow_nil => true
 
   def self.not_done( id=id )
     self.find(:all, :conditions =>[ "done = ? AND context_id = ?", false, id], :order =>"due IS NULL, due ASC, created_at ASC")

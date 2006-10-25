@@ -47,6 +47,18 @@ class TodoController < ApplicationController
     end
   end
 
+  def date_preview
+    return if params["todo_due"].blank?
+    @date = parse_date_per_user_prefs(params["todo_due"])
+    
+    if @date.nil?
+      @form_date = "Invalid date"
+    else
+      @form_date = @date.strftime("%a %b %d %Y")
+    end
+    render :partial => "shared/date_preview", :layout => false
+  end
+  
   def create
     init
     @item = @user.todos.build
@@ -54,7 +66,8 @@ class TodoController < ApplicationController
     @item.attributes = p
 
     if @item.due?
-      @item.due = parse_date_per_user_prefs(p["due"])
+      @date = parse_date_per_user_prefs(p["due"])
+      @item.due = @date.to_s(:db)
     else
       @item.due = ""
     end

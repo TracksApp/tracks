@@ -60,6 +60,7 @@
         <a href="javascript:void(0);" onclick="Element.toggle('item-<%= @item.id %>','action-<%= @item.id %>-edit-form');Form.reset('form-action-<%= @item.id %>');">Cancel</a></td>
   </tr>
 </table>
+
 <%= calendar_setup( "due_#{@item.id}" ) %>
 <% if @item.class == Deferred -%>
   <%= calendar_setup( "show_from_#{@item.id}" ) %>

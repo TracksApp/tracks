@@ -63,10 +63,19 @@
 <br />  <label for="todo_show_from">Show from</label><br />
   <%= text_field("todo", "show_from", "size" => 10, "class" => "Date", "onFocus" => "Calendar.setup", "tabindex" => 5, "autocomplete" => "off") %><br />
 <% end -%>
+<div id="date-preview" style="display: none;"></div>
 
 <br /><br />
 <input type="submit" value="Add item" tabindex="6">
 <%= end_form_tag %><!--[eoform:todo]-->
+
+<%= observe_field "todo_due", 
+                  :frequency => 1, 
+                  :update => "date-preview", 
+                  :with => "todo_due",
+                  :complete => "Element.show('date-preview')", 
+                  :url => { :action => "date_preview" } %>
+                  
 <%= calendar_setup( "todo_due"  ) %>
 <% if controller.controller_name == "deferred" -%>
 <%= calendar_setup( "todo_show_from"  ) %>
