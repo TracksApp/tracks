@@ -57,3 +57,12 @@ SALT = "change-me"
 # You should be able to find a list of time zones in /usr/share/zoneinfo
 # e.g. if you are in the Eastern time zone of the US, set the value below.
 # ENV['TZ'] = 'US/Eastern'
+
+require 'acts_as_namepart_finder'
+require 'acts_as_todo_container'
+
+ActiveRecord::Base.class_eval do
+	include Tracks::Acts::NamepartFinder
+	include Tracks::Acts::TodoContainer
+end
+
