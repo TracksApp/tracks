@@ -2,9 +2,11 @@ ENV["RAILS_ENV"] = "test"
 require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
 require 'test_help'
 
-class User < ActiveRecord::Base
-  def self.get_salt
-    "change-me"
+module Tracks
+  class Config
+    def self.salt
+      "change-me"
+    end
   end
 end
 
@@ -50,7 +52,7 @@ class ActionController::IntegrationTest
   
   def assert_test_environment_ok
     assert_equal "test", ENV['RAILS_ENV']
-    assert_equal "change-me", User.get_salt()
+    assert_equal "change-me", Tracks::Config.salt
   end
   
   def authenticated_post_xml(url, username, password, parameters, headers = {})

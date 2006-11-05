@@ -2,7 +2,7 @@
 # migrations feature of ActiveRecord to incrementally modify your database, and
 # then regenerate this schema definition.
 
-ActiveRecord::Schema.define(:version => 15) do
+ActiveRecord::Schema.define(:version => 18) do
 
   create_table "contexts", :force => true do |t|
     t.column "name", :string, :default => "", :null => false
@@ -17,6 +17,25 @@ ActiveRecord::Schema.define(:version => 15) do
     t.column "body", :text
     t.column "created_at", :datetime
     t.column "updated_at", :datetime
+  end
+
+  create_table "open_id_associations", :force => true do |t|
+    t.column "server_url", :binary
+    t.column "handle", :string
+    t.column "secret", :binary
+    t.column "issued", :integer
+    t.column "lifetime", :integer
+    t.column "assoc_type", :string
+  end
+
+  create_table "open_id_nonces", :force => true do |t|
+    t.column "nonce", :string
+    t.column "created", :integer
+  end
+
+  create_table "open_id_settings", :force => true do |t|
+    t.column "setting", :string
+    t.column "value", :binary
   end
 
   create_table "preferences", :force => true do |t|
@@ -70,6 +89,8 @@ ActiveRecord::Schema.define(:version => 15) do
     t.column "is_admin", :integer, :limit => 4, :default => 0, :null => false
     t.column "first_name", :string
     t.column "last_name", :string
+    t.column "auth_type", :string, :default => "database", :null => false
+    t.column "open_id_url", :string
   end
 
 end

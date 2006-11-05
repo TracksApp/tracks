@@ -26,19 +26,19 @@ class NoteController < ApplicationController
     note.attributes = params["new_note"]
 
     if note.save
-      render_partial 'notes_summary', note
+      render :partial => 'notes_summary', :object => note
     else
-      render_text ""
+      render :text => ''
     end
   end
 
   def delete
     note = check_user_return_note
     if note.destroy
-      render_text ""
+      render :text => ''
     else
-      flash["warning"] = "Couldn't delete note \"#{note.id.to_s}\""
-      render_text ""
+      flash[:warning] = "Couldn't delete note \"#{note.id.to_s}\""
+      render :text => ''
     end
   end
 
@@ -46,10 +46,10 @@ class NoteController < ApplicationController
     note = check_user_return_note
     note.attributes = params["note"]
       if note.save
-        render_partial 'notes', note
+        render :partial => 'notes', :object => note
       else
         flash["warning"] = "Couldn't update note \"#{note.id.to_s}\""
-        render_text ""
+        render :text => ''
       end
   end
 
@@ -60,7 +60,7 @@ class NoteController < ApplicationController
       if @user == note.user
         return note
       else
-        render_text ""
+        render :text => ''
       end
     end
 end

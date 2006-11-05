@@ -3,11 +3,7 @@
 
   <%= error_messages_for 'user' %><br/>
 
-  <% for name in ["notice", "warning", "message"] %>
-    <% if flash[name] %>
-      <%= "<div id=\"#{name}\">#{flash[name]}</div>" %>
-    <% end %>
-  <% end %>
+  <%= render_flash %>
 	
   <h3><%= @page_title -%></h3>
 

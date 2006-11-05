@@ -34,7 +34,7 @@ class ProjectController < ApplicationController
     @page_title = "TRACKS::Project: #{@project.name}"
     
     if @contexts.empty?
-      flash['warning'] = 'You must add at least one context before adding next actions.'
+      flash[:warning] = 'You must add at least one context before adding next actions.'
     end
     
     if @not_done.empty?
@@ -108,10 +108,10 @@ class ProjectController < ApplicationController
     
     # fallback for standard requests
     if @saved
-      flash["notice"] = 'Added new next action.'
+      flash[:notice] = 'Added new next action.'
       redirect_to :controller => 'todo', :action => 'index'
     else
-      flash["warning"] = 'The next action was not added. Please try again.'
+      flash[:warning] = 'The next action was not added. Please try again.'
       redirect_to :controller => 'todo', :action => 'index'
     end
     
@@ -119,7 +119,7 @@ class ProjectController < ApplicationController
       if request.xhr? # be sure to include an error.rjs
         render :action => 'error'
       else
-        flash["warning"] = 'An error occurred on the server.'
+        flash[:warning] = 'An error occurred on the server.'
         redirect_to :controller => 'todo', :action => 'index'
       end
   end
@@ -140,9 +140,9 @@ class ProjectController < ApplicationController
     return if request.xhr?
 
     if @saved
-      flash['notice']  = "The action <strong>'#{@item.description}'</strong> was marked as <strong>#{@item.done? ? 'complete' : 'incomplete' }</strong>"
+      flash[:notice]  = "The action <strong>'#{@item.description}'</strong> was marked as <strong>#{@item.done? ? 'complete' : 'incomplete' }</strong>"
     else
-      flash['notice']  = "The action <strong>'#{@item.description}'</strong> was NOT marked as <strong>#{@item.done? ? 'complete' : 'incomplete' } due to an error on the server.</strong>"
+      flash[:notice]  = "The action <strong>'#{@item.description}'</strong> was NOT marked as <strong>#{@item.done? ? 'complete' : 'incomplete' } due to an error on the server.</strong>"
     end
     redirect_to :action => "list"
   end
@@ -152,13 +152,13 @@ class ProjectController < ApplicationController
   def update
     self.init
     check_user_set_project
-    @project.attributes = params["project"]
+    @project.attributes = params['project']
     @project.name = deurlize(@project.name)
     if @project.save
-      render_partial 'project_listing', @project
+      render :partial => 'project_listing', :object => @project
     else
-      flash["warning"] = "Couldn't update project"
-      render_text ""
+      flash[:warning] = "Couldn't update project"
+      render :text => ''
     end
   end
   
@@ -178,9 +178,9 @@ class ProjectController < ApplicationController
   def destroy
     check_user_set_project
     if @project.destroy
-      render_text ""
+      render :text => ''
     else
-      flash["warning"] = "Couldn't delete project \"#{@project.name}\""
+      flash[:warning] = "Couldn't delete project \"#{@project.name}\""
       redirect_to( :controller => "project", :action => "list" )
     end
   end
@@ -210,8 +210,8 @@ class ProjectController < ApplicationController
         return @project
       else
         @project = nil # Should be nil anyway
-        flash["warning"] = "Project and session user mis-match: #{@project.user_id} and #{@user.id}!"
-        render_text ""
+        flash[:warning] = "Project and session user mis-match: #{@project.user_id} and #{@user.id}!"
+        render :text => ''
       end
     end
     
@@ -221,8 +221,8 @@ class ProjectController < ApplicationController
         return @project
       else
         @project = nil
-        flash["warning"] = "Project and session user mis-match: #{@project.user_id} and #{@user.id}!"
-        render_text ""
+        flash[:warning] = "Project and session user mis-match: #{@project.user_id} and #{@user.id}!"
+        render :text => ''
       end
     end
     
@@ -231,8 +231,8 @@ class ProjectController < ApplicationController
       if @user == item.user
         return item
       else
-        flash["warning"] = "Item and session user mis-match: #{item.user.name} and #{@user.name}!"
-        render_text ""
+        flash[:warning] = "Item and session user mis-match: #{item.user.name} and #{@user.name}!"
+        render :text => ''
       end
     end
      

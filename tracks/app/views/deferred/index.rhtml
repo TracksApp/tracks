@@ -1,10 +1,6 @@
 <div id="display_box">
   
-	<% for name in ["notice", "warning", "message"] %>
-    <% if flash[name] %>
-      <%= "<div id=\"#{name}\">#{flash[name]}</div>" %>
-    <% end %>
-  <% end %>
+  <%= render_flash %>
   
   <%= render :partial => "items" %>
 

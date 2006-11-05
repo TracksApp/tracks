@@ -1,13 +1,9 @@
 class UserController < ApplicationController
   layout 'standard'
   prepend_before_filter :login_required
-  
-  def index
-    render_text "This will be our jumping-off point for managing user functions!"
-  end
-  
-  def admin
-    render_text "You'll only be allowed to go here if you're an administrator."
+  if Tracks::Config.auth_schemes.include?('open_id')
+     open_id_consumer
+     before_filter  :begin_open_id_auth,    :only => :update_auth_type
   end
   
   verify  :method => :post,
@@ -22,7 +18,7 @@ class UserController < ApplicationController
   #
   def create
      admin = User.find_admin
-     #render_text "user is " + session["user_id"].to_s + " and admin is " + a.id.to_s
+     #logger.debug "user is " + session["user_id"].to_s + " and admin is " + a.id.to_s
       unless session["user_id"].to_i == admin.id.to_i
         access_denied
         return
@@ -81,6 +77,71 @@ class UserController < ApplicationController
       redirect_to :controller => 'user', :action => 'change_password'
     end
   end
+
+  def change_auth_type
+    @page_title = "TRACKS::Change authentication type"
+  end
+  
+  def update_auth_type
+    if (params[:user][:auth_type] == 'open_id')
+      case open_id_response.status
+        when OpenID::SUCCESS
+          # The URL was a valid identity URL. Now we just need to send a redirect
+          # to the server using the redirect_url the library created for us.
+
+          # redirect to the server
+          redirect_to open_id_response.redirect_url((request.protocol + request.host_with_port + "/"), url_for(:action => 'complete'))
+        else
+          flash[:warning] = "Unable to find openid server for <q>#{params[:openid_url]}</q>"
+          redirect_to :action => 'change_auth_type'
+      end
+      return
+    end
+    @user.auth_type = params[:user][:auth_type]
+    if @user.save
+      flash[:notice] = "Authentication type updated."
+      redirect_to :controller => 'user', :action => 'preferences'
+    else
+      flash[:warning] = "There was a problem updating your authentication type: #{ @user.errors.full_messages.join(', ')}"
+      redirect_to :controller => 'user', :action => 'change_auth_type'
+    end
+  end
+  
+  def complete
+    case open_id_response.status
+      when OpenID::FAILURE
+        # In the case of failure, if info is non-nil, it is the
+        # URL that we were verifying. We include it in the error
+        # message to help the user figure out what happened.
+        if open_id_response.identity_url
+          flash[:message] = "Verification of #{open_id_response.identity_url} failed. "
+        else
+          flash[:message] = "Verification failed. "
+        end
+        flash[:message] += open_id_response.msg.to_s
+
+      when OpenID::SUCCESS
+        # Success means that the transaction completed without
+        # error. If info is nil, it means that the user cancelled
+        # the verification.
+        @user.auth_type = 'open_id'
+        @user.open_id_url = open_id_response.identity_url
+        if @user.save
+          flash[:message] = "You have successfully verified #{open_id_response.identity_url} as your identity and set your authentication type to Open ID."
+        else
+          flash[:warning] = "You have successfully verified #{open_id_response.identity_url} as your identity but there was a problem saving your authentication preferences."
+        end
+        redirect_to :action => 'preferences'
+
+      when OpenID::CANCEL
+        flash[:message] = "Verification cancelled."
+
+      else
+        flash[:warning] = "Unknown response status: #{open_id_response.status}"
+    end
+    redirect_to :action => 'change_auth_type' unless performed?
+  end
+  
   
   def refresh_token
     @user.crypt_word
@@ -93,10 +154,10 @@ class UserController < ApplicationController
   def do_change_password_for(user)
     user.change_password(params[:updateuser][:password], params[:updateuser][:password_confirmation])
     if user.save
-      flash["notice"] = "Password updated."
+      flash[:notice] = "Password updated."
       return true
     else
-      flash["warning"] = 'There was a problem saving the password. Please retry.'
+      flash[:warning] = 'There was a problem saving the password. Please retry.'
       return false
     end
   end

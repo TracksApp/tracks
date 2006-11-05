@@ -4,7 +4,7 @@
   <% else -%>
     <% for notes in @all_notes -%>
       <div class="container" id="note-<%= notes.id %>-wrapper">
-        <%= render_partial "notes", notes %>
+        <%= render :partial => 'notes', :object => notes %>
       </div>
     <% end -%>
   <% end -%>

@@ -1,0 +1,5 @@
+SimpleLdapAuthenticator
+=======================
+
+Allows for simple authentication to an LDAP server with a minimum of
+configuration. See the RDoc for details.

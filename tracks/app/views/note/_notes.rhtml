@@ -26,7 +26,7 @@
                  :html => { :id => "form-note-#{note.id}", :class => "inline-form" },
                  :update => "note-#{note.id}-container",
                  :complete => visual_effect(:appear, "note-#{note.id}-container") %>
-  <%= render_partial "note_edit_form", note %>
+  <%= render :partial => "note_edit_form", :object => note %>
   <%= end_form_tag %>
   </div><!-- [end:action-item.id-edit-form] -->
   

@@ -1,0 +1,7 @@
+<% for flash_key in [:notice, :warning, :message] %>
+  <% if flash.has_key?(flash_key) %>
+    <div id="<%= flash_key %>"><%= flash[flash_key] %></div>
+  <% else%>
+  <div id="<%= flash_key %>" style="display:none"><%= flash[flash_key] %></div>
+  <% end %>
+<% end %>

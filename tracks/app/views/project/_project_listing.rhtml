@@ -32,7 +32,7 @@
                :update => "container_#{project.id}",
                :complete => visual_effect(:appear, 'container_#{project.id}') %>
   <table style="table-layout: fixed;" width="450">
-  <%= render_partial 'project_form', project %>
+  <%= render :partial => 'project_form', :object => project %>
   <tr>
     <td width="150">&nbsp;</td>
     <td width="300"><input type="submit" value="Update" />&nbsp;<a href="javascript:void(0);" onclick="Element.toggle('project-<%= project.id %>','project-<%= project.id %>-edit-form');Form.reset('form-project-<%= project.id %>');">Cancel</a></td>

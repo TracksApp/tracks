@@ -86,10 +86,10 @@ class ContextController < ApplicationController
     
     # fallback for standard requests
     if @saved
-      flash["notice"] = 'Added new next action.'
+      flash[:notice] = 'Added new next action.'
       redirect_to :controller => 'todo', :action => 'list'
     else
-      flash["warning"] = 'The next action was not added. Please try again.'
+      flash[:warning] = 'The next action was not added. Please try again.'
       redirect_to :controller => 'todo', :action => 'list'
     end
     
@@ -97,7 +97,7 @@ class ContextController < ApplicationController
       if request.xhr? # be sure to include an error.rjs
         render :action => 'error'
       else
-        flash["warning"] = 'An error occurred on the server.'
+        flash[:warning] = 'An error occurred on the server.'
         redirect_to :controller => 'todo', :action => 'list'
       end
   end
@@ -118,9 +118,9 @@ class ContextController < ApplicationController
     return if request.xhr?
 
     if @saved
-      flash['notice']  = "The action <strong>'#{@item.description}'</strong> was marked as <strong>#{@item.done? ? 'complete' : 'incomplete' }</strong>"
+      flash[:notice]  = "The action <strong>'#{@item.description}'</strong> was marked as <strong>#{@item.done? ? 'complete' : 'incomplete' }</strong>"
     else
-      flash['notice']  = "The action <strong>'#{@item.description}'</strong> was NOT marked as <strong>#{@item.done? ? 'complete' : 'incomplete' } due to an error on the server.</strong>"
+      flash[:notice]  = "The action <strong>'#{@item.description}'</strong> was NOT marked as <strong>#{@item.done? ? 'complete' : 'incomplete' } due to an error on the server.</strong>"
     end
     redirect_to :action => "list"
   end
@@ -133,9 +133,9 @@ class ContextController < ApplicationController
     @context.attributes = params["context"]
     @context.name = deurlize(@context.name)
     if @context.save
-      render_partial 'context_listing', @context
+      render :partial => 'context_listing', :object => @context
     else
-      flash["warning"] = "Couldn't update new context"
+      flash[:warning] = "Couldn't update new context"
       render :text => ""
     end
   end
@@ -148,7 +148,7 @@ class ContextController < ApplicationController
     if @context.destroy
       render_text ""
     else
-      flash["warning"] = "Couldn't delete context \"#{@context.name}\""
+      flash[:warning] = "Couldn't delete context \"#{@context.name}\""
       redirect_to( :controller => "context", :action => "list" )
     end
   end
@@ -178,7 +178,7 @@ class ContextController < ApplicationController
         return @context
       else
         @context = nil # Should be nil anyway.
-        flash["warning"] = "Item and session user mis-match: #{@context.user_id} and #{@user.id}!"
+        flash[:warning] = "Item and session user mis-match: #{@context.user_id} and #{@user.id}!"
         render_text ""
       end
     end
@@ -189,7 +189,7 @@ class ContextController < ApplicationController
          return @context
        else
          @context = nil
-         flash["warning"] = "Project and session user mis-match: #{@context.user_id} and #{@user.id}!"
+         flash[:warning] = "Project and session user mis-match: #{@context.user_id} and #{@user.id}!"
          render_text ""
        end
     end
@@ -199,7 +199,7 @@ class ContextController < ApplicationController
       if @user == item.user
         return item
       else
-        flash["warning"] = "Item and session user mis-match: #{item.user.name} and #{@user.name}!"
+        flash[:warning] = "Item and session user mis-match: #{item.user.name} and #{@user.name}!"
         render_text ""
       end
     end

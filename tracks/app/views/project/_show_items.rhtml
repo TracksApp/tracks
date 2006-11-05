@@ -51,7 +51,7 @@
                :html => { :id => "form-action-#{item.id}", :class => "inline-form" },
                :update => "item-#{item.id}-container",
                :complete => visual_effect(:appear, "item-#{item.id}-container") %>
-  <%= render_partial 'todo/action_edit_form', item %>
+  <%= render :partial => 'todo/action_edit_form', :object => item %>
 <%= end_form_tag %>
 </div><!-- [end:action-item.id-edit-form] -->
 

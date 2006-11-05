@@ -140,4 +140,8 @@ module ApplicationHelper
     link_to( descriptor, { :controller => "project", :action => "show", :name => urlize(item.project.name) }, :title => "View project: #{item.project.name}" )
   end
   
+  def render_flash
+    render :partial => 'shared/flash'    
+  end
+  
 end

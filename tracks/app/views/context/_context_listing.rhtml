@@ -32,7 +32,7 @@
                :update => "container_#{context.id}",
                :complete => visual_effect(:appear, 'container_#{context.id}') %>
   <table style="table-layout: fixed;" width="450">
-  <%= render_partial 'context_form', context %>
+  <%= render :partial => 'context_form', :object => context %>
   <tr>
     <td width="150">&nbsp;</td>
     <td width="300"><input type="submit" value="Update" />&nbsp;<a href="javascript:void(0);" onclick="Element.toggle('context-<%= context.id %>','context-<%= context.id %>-edit-form');Form.reset('form-context-<%= context.id %>');">Cancel</a></td>

@@ -133,3 +133,14 @@ div.memo {
   font-size: 1em;
   list-style: disc;
 }
+input.login_text {
+	width:200px;
+}
+input.open_id {
+   background: url(../images/open-id-login-bg.gif) no-repeat; 
+   background-color: #fff; 
+   background-position: 0 50%;
+   color: #000;
+   padding-left: 18px;
+   width:182px;
+}

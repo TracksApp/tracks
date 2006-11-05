@@ -10,10 +10,11 @@ class LoginControllerTest < Test::Unit::TestCase
   
   def setup
     assert_equal "test", ENV['RAILS_ENV']
-    assert_equal "change-me", User.get_salt()
+    assert_equal "change-me", Tracks::Config.salt
     @controller = LoginController.new
     @request = ActionController::TestRequest.new
     @response = ActionController::TestResponse.new
+    @num_users_in_fixture = User.count
   end
 
   #============================================
@@ -33,7 +34,7 @@ class LoginControllerTest < Test::Unit::TestCase
     assert_equal user.id, @response.session['user_id']
     assert_equal user.login, "admin"
     assert user.is_admin
-    assert_equal "Login successful: session will not expire.", flash['notice']
+    assert_equal "Login successful: session will not expire.", flash[:notice]
     assert_redirect_url "http://#{@request.host}/bogus/location"
   end
   
@@ -43,7 +44,7 @@ class LoginControllerTest < Test::Unit::TestCase
     assert_equal user.id, @response.session['user_id']
     assert_equal user.login, "jane"
     assert user.is_admin == false || user.is_admin == 0
-    assert_equal "Login successful: session will expire after 1 hour of inactivity.", flash['notice']
+    assert_equal "Login successful: session will expire after 1 hour of inactivity.", flash[:notice]
     assert_redirected_to :controller => 'todo', :action => 'index'
   end
   
@@ -59,14 +60,14 @@ class LoginControllerTest < Test::Unit::TestCase
   def test_login_bad_password
     post :login, {:user_login => 'jane', :user_password => 'wrong', :user_noexpiry => 'on'}
     assert_session_has_no :user
-    assert_equal "Login unsuccessful", flash['warning']
+    assert_equal "Login unsuccessful", flash[:warning]
     assert_response :success
   end
   
   def test_login_bad_login
     post :login, {:user_login => 'blah', :user_password => 'sesame', :user_noexpiry => 'on'}
     assert_session_has_no :user
-    assert_equal "Login unsuccessful", flash['warning']
+    assert_equal "Login unsuccessful", flash[:warning]
     assert_response :success
   end
     
@@ -81,7 +82,7 @@ class LoginControllerTest < Test::Unit::TestCase
     admin = login('admin', 'abracadabra', 'on')
     assert admin.is_admin
     newbie = create('newbie', 'newbiepass')
-    assert_equal "Signup successful for user newbie.", flash['notice']
+    assert_equal "Signup successful for user newbie.", flash[:notice]
     assert_redirected_to :controller => 'todo', :action => 'index'
     assert_valid newbie
     get :logout # logout the admin user
@@ -92,8 +93,7 @@ class LoginControllerTest < Test::Unit::TestCase
     assert_redirected_to :controller => 'todo', :action => 'index'
     assert_equal 'newbie', user.login
     assert user.is_admin == false || user.is_admin == 0
-    num_users = User.find(:all)
-    assert_equal num_users.length, 3
+    assert_equal User.count, @num_users_in_fixture + 1
   end
   
   # Test whether signup of new users is denied to a non-admin user
@@ -103,9 +103,7 @@ class LoginControllerTest < Test::Unit::TestCase
     assert non_admin.is_admin == false || non_admin.is_admin == 0
     post :signup, :user => {:login => 'newbie2', :password => 'newbiepass2', :password_confirmation => 'newbiepass2'}
     assert_template 'login/nosignup'
-  
-    num_users = User.find(:all)
-    assert_equal num_users.length, 2
+    assert_number_of_users_is_unchanged
   end
   
   # ============================================
@@ -117,8 +115,7 @@ class LoginControllerTest < Test::Unit::TestCase
     assert admin.is_admin
     assert_equal admin.id, @response.session['user_id']
     post :create, :user => {:login => 'newbie', :password => '', :password_confirmation => ''}
-    num_users = User.find(:all)
-    assert_equal num_users.length, 2
+    assert_number_of_users_is_unchanged
     assert_redirected_to :controller => 'login', :action => 'signup'    
   end
   
@@ -127,8 +124,7 @@ class LoginControllerTest < Test::Unit::TestCase
     assert admin.is_admin
     assert_equal admin.id, @response.session['user_id']
     post :create, :user => {:login => 'n', :password => 'newbiepass', :password_confirmation => 'newbiepass'}
-    num_users = User.find(:all)
-    assert_equal num_users.length, 2
+    assert_number_of_users_is_unchanged
     assert_redirected_to :controller => 'login', :action => 'signup'    
   end
   
@@ -140,8 +136,13 @@ class LoginControllerTest < Test::Unit::TestCase
     assert_equal admin.id, @response.session['user_id']
     post :create, :user => {:login => 'jane', :password => 'newbiepass', :password_confirmation => 'newbiepass'}
     num_users = User.find(:all)
-    assert_equal num_users.length, 2
+    assert_number_of_users_is_unchanged
     assert_redirected_to :controller => 'login', :action => 'signup'
   end
   
+  private
+  
+  def assert_number_of_users_is_unchanged
+    assert_equal User.count, @num_users_in_fixture    
+  end
 end

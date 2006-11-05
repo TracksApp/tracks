@@ -2,7 +2,8 @@ class LoginController < ApplicationController
   model   :user, :preference
   layout  'login'
   skip_before_filter :set_session_expiration
-
+  open_id_consumer if Tracks::Config.auth_schemes.include?('open_id')
+  
   def login
     @page_title = "TRACKS::Login"
     case request.method
@@ -13,14 +14,67 @@ class LoginController < ApplicationController
           # of inactivity
           session['noexpiry'] = params['user_noexpiry']
           msg = (should_expire_sessions?) ? "will expire after 1 hour of inactivity." : "will not expire." 
-          flash['notice']  = "Login successful: session #{msg}"
+          flash[:notice]  = "Login successful: session #{msg}"
           cookies[:tracks_login] = { :value => @user.login, :expires => Time.now + 1.year }
           redirect_back_or_default :controller => "todo", :action => "index"
         else
           @login = params['user_login']
-          flash['warning'] = "Login unsuccessful"
+          flash[:warning] = "Login unsuccessful"
       end
     end
+  end
+  
+  def begin
+    # If the URL was unusable (either because of network conditions,
+    # a server error, or that the response returned was not an OpenID
+    # identity page), the library will return HTTP_FAILURE or PARSE_ERROR.
+    # Let the user know that the URL is unusable.
+    case open_id_response.status
+      when OpenID::SUCCESS
+        # The URL was a valid identity URL. Now we just need to send a redirect
+        # to the server using the redirect_url the library created for us.
+
+        # redirect to the server
+        redirect_to open_id_response.redirect_url((request.protocol + request.host_with_port + "/"), url_for(:action => 'complete'))
+      else
+        flash[:warning] = "Unable to find openid server for <q>#{params[:openid_url]}</q>"
+        redirect_to :action => 'login'
+    end
+  end
+
+  def complete
+    case open_id_response.status
+      when OpenID::FAILURE
+        # In the case of failure, if info is non-nil, it is the
+        # URL that we were verifying. We include it in the error
+        # message to help the user figure out what happened.
+        if open_id_response.identity_url
+          flash[:message] = "Verification of #{open_id_response.identity_url} failed. "
+        else
+          flash[:message] = "Verification failed. "
+        end
+        flash[:message] += open_id_response.msg.to_s
+
+      when OpenID::SUCCESS
+        # Success means that the transaction completed without
+        # error. If info is nil, it means that the user cancelled
+        # the verification.
+        @user = User.find_by_open_id_url(open_id_response.identity_url)
+        unless (@user.nil?)
+          flash[:message] = "You have successfully verified #{open_id_response.identity_url} as your identity."
+          session['user_id'] = @user.id
+          redirect_back_or_default :controller => 'todo', :action => 'index'
+        else
+          flash[:warning] = "You have successfully verified #{open_id_response.identity_url} as your identity, but you do not have a Tracks account. Please ask your administrator to sign you up."
+        end
+
+      when OpenID::CANCEL
+        flash[:message] = "Verification cancelled."
+
+      else
+        flash[:warning] = "Unknown response status: #{open_id_response.status}"
+    end
+    redirect_to :action => 'login' unless performed?
   end
 
   def signup
@@ -53,7 +107,7 @@ class LoginController < ApplicationController
       @user = User.authenticate(user.login, params['user']['password'])
       @user.create_preference
       @user.save
-      flash['notice']  = "Signup successful for user #{@user.login}."
+      flash[:notice]  = "Signup successful for user #{@user.login}."
       redirect_back_or_default :controller => "todo", :action => "index"
     end
   end
@@ -70,8 +124,8 @@ class LoginController < ApplicationController
   def logout
     session['user_id'] = nil
     reset_session
-    flash['notice']  = "You have been logged out of Tracks."
-    redirect_to :controller => "login", :action => "login"
+    flash[:notice]  = "You have been logged out of Tracks."
+    redirect_to :action => "login"
   end
   
   def check_expiry

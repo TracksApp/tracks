@@ -10,7 +10,7 @@ class CreateUserControllerTest < ActionController::IntegrationTest
   fixtures :users
   
   @@foobar_postdata = "<request><login>foo</login><password>bar</password></request>"
-  @@john_postdata = "<request><login>john</login><password>barracuda</password></request>"
+  @@johnny_postdata = "<request><login>johnny</login><password>barracuda</password></request>"
   
   def setup
     assert_test_environment_ok
@@ -63,13 +63,13 @@ class CreateUserControllerTest < ActionController::IntegrationTest
   
   def test_creates_new_user
     initial_count = User.count
-    authenticated_post_xml_to_user_create @@john_postdata
+    authenticated_post_xml_to_user_create @@johnny_postdata
     assert_response_and_body 200, "User created."
     assert_equal initial_count + 1, User.count
-    john1 = User.find_by_login('john')
-    assert_not_nil john1, "expected user john to be created"
-    john2 = User.authenticate('john','barracuda')
-    assert_not_nil john2, "expected user john to be created"
+    johnny1 = User.find_by_login('johnny')
+    assert_not_nil johnny1, "expected user johnny to be created"
+    johnny2 = User.authenticate('johnny','barracuda')
+    assert_not_nil johnny2, "expected user johnny to be created"
   end
   
   def test_fails_with_get_verb

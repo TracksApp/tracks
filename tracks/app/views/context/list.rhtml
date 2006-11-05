@@ -1,12 +1,8 @@
 <div id="display_box">
-  <% for name in ["notice", "warning", "message"] %>
-    <div id="<%= name %>"<%= flash[name] ? "" : " style=\"display:none\""%>><%= flash[name] %></div>
-  <% end %>
+  <%= render_flash %>
 
   <div id="list-contexts">
-  <% for context in @contexts %>
-    <%= render_partial( 'context_listing', context ) %>
-  <% end %>
+    <%= render :partial => 'context_listing', :collection => @contexts %>
   </div>
 
   <%= sortable_element 'list-contexts', get_listing_sortable_options %>

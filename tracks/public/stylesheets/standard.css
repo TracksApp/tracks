@@ -643,9 +643,10 @@ div.message {
 }
 
 ul#prefs {list-style-type: disc; margin-left: 5px;}
-#token_area {
+#token_area, #authentication_area {
   text-align:center;
   margin-top:20px;
+  margin-bottom:10px;
 }
 #token_area .description{ 
   font-weight:bold;
@@ -654,7 +655,14 @@ ul#prefs {list-style-type: disc; margin-left: 5px;}
   width:100%;
   text-align:center;
 }
-
+.prefscontainer .actions {
+  text-align:center;
+  margin-bottom:20px;
+}
+.authtype_container .actions {
+  margin-top:20px;
+  margin-bottom:20px;	
+}
 #feedlegend {
   padding: 2px;
   border: 1px solid #CCC; 
@@ -687,4 +695,12 @@ ul#prefs {list-style-type: disc; margin-left: 5px;}
 	margin-bottom: 4px;
 	font-weight: normal;
 	font-style:oblique;
+}
+input.open_id {
+   background: url(../images/open-id-login-bg.gif) no-repeat; 
+   background-color: #fff; 
+   background-position: 0 50%;
+   color: #000;
+   padding-left: 18px;
+   width:182px;
 }

@@ -10,17 +10,20 @@ class User < ActiveRecord::Base
   attr_protected :is_admin
 
   def self.authenticate(login, pass)
-    find_first(["login = ? AND password = ?", login, sha1(pass)])
+    candidate = find(:first, :conditions => ["login = ?", login])
+    return nil if candidate.nil?
+    if candidate.auth_type == 'database'
+      return candidate if candidate.password == sha1(pass)
+    elsif candidate.auth_type == 'ldap' && Tracks::Config.auth_schemes.include?('ldap')
+      return candidate if SimpleLdapAuthenticator.valid?(login, pass)
+    end
+    nil
   end
   
   def self.find_admin
     find_first([ "is_admin = ?", true ])    
   end
   
-  def self.get_salt
-    SALT
-  end
-
   def display_name
     if first_name.blank? && last_name.blank?
       return login
@@ -44,7 +47,7 @@ class User < ActiveRecord::Base
 protected
 
   def self.sha1(pass)
-    Digest::SHA1.hexdigest("#{get_salt}--#{pass}--")
+    Digest::SHA1.hexdigest("#{Tracks::Config.salt}--#{pass}--")
   end
 
   before_create :crypt_password, :crypt_word
@@ -54,10 +57,12 @@ protected
     write_attribute("password", self.class.sha1(password)) if password == @password_confirmation
   end
     
-  validates_presence_of :password, :login
+  validates_presence_of :login
+  validates_presence_of :password, :if => Proc.new{|user| user.auth_type == 'database'}
   validates_length_of :password, :within => 5..40
   validates_confirmation_of :password  
   validates_length_of :login, :within => 3..80
   validates_uniqueness_of :login, :on => :create
-  
+  validates_inclusion_of :auth_type, :in => Tracks::Config.auth_schemes, :message=>"not a valid authentication type"
+  validates_presence_of :open_id_url, :if => Proc.new{|user| user.auth_type == 'open_id'}
 end

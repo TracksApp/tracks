@@ -10,32 +10,12 @@ class UserControllerTest < Test::Unit::TestCase
   
   def setup
     assert_equal "test", ENV['RAILS_ENV']
-    assert_equal "change-me", User.get_salt()
+    assert_equal "change-me", Tracks::Config.salt
     @controller = UserController.new
     @request    = ActionController::TestRequest.new
     @response   = ActionController::TestResponse.new
   end
 
-  # Test index with and without login
-  # 
-  def test_index
-    get :index # should fail because no login
-    assert_redirected_to :controller => 'login', :action => 'login'
-    @request.session['user_id'] = users(:admin_user).id # log in the admin user
-    get :index
-    assert_response :success
-  end
-  
-  # Test admin with and without login
-  # 
-  def test_admin
-    get :admin # should fail because no login
-    assert_redirected_to :controller => 'login', :action => 'login'
-    @request.session['user_id'] = users(:admin_user).id # log in the admin user
-    get :admin
-    assert_response :success
-  end
-  
   def test_preferences
     get :preferences # should fail because no login
     assert_redirected_to :controller => 'login', :action => 'login'
@@ -81,8 +61,8 @@ class UserControllerTest < Test::Unit::TestCase
     post :update_password, :updateuser => {:password => 'newpassword', :password_confirmation => 'newpassword'}
     assert_redirected_to :controller => 'user', :action => 'preferences'
     @updated_user = User.find(users(:admin_user).id)
-    assert_equal @updated_user.password, Digest::SHA1.hexdigest("#{User.get_salt()}--newpassword--")
-    assert_equal flash['notice'], "Password updated."
+    assert_equal @updated_user.password, Digest::SHA1.hexdigest("#{Tracks::Config.salt}--newpassword--")
+    assert_equal flash[:notice], "Password updated."
   end
   
   def test_update_password_no_confirmation
@@ -92,7 +72,7 @@ class UserControllerTest < Test::Unit::TestCase
     post :update_password, :updateuser => {:password => 'newpassword', :password_confirmation => 'wrong'}
     assert_redirected_to :controller => 'user', :action => 'change_password'
     assert users(:admin_user).save, false
-    assert_equal flash['warning'], 'There was a problem saving the password. Please retry.'
+    assert_equal flash[:warning], 'There was a problem saving the password. Please retry.'
   end
   
   def test_update_password_validation_errors
@@ -105,7 +85,7 @@ class UserControllerTest < Test::Unit::TestCase
     # For some reason, no errors are being raised now.
     #assert_equal 1, users(:admin_user).errors.count
     #assert_equal users(:admin_user).errors.on(:password), "is too short (min is 5 characters)"
-    assert_equal flash['warning'], 'There was a problem saving the password. Please retry.'
+    assert_equal flash[:warning], 'There was a problem saving the password. Please retry.'
   end
   
 end

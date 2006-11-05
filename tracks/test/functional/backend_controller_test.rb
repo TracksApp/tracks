@@ -10,7 +10,7 @@ class BackendControllerTest < Test::Unit::TestCase
   def setup
     @controller = BackendController.new
     request, response = ActionController::TestRequest.new, ActionController::TestResponse.new
-    assert_equal "change-me", User.get_salt()
+    assert_equal "change-me", Tracks::Config.salt
   end
 
   def test_new_todo_fails_with_incorrect_token

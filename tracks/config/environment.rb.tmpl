@@ -60,9 +60,23 @@ SALT = "change-me"
 
 require 'acts_as_namepart_finder'
 require 'acts_as_todo_container'
+require 'config'
 
 ActiveRecord::Base.class_eval do
 	include Tracks::Acts::NamepartFinder
 	include Tracks::Acts::TodoContainer
+end
+
+AUTHENTICATION_SCHEMES = ['database'] #one or more of ['database', 'ldap', 'open_id']
+if (AUTHENTICATION_SCHEMES.include? 'ldap')
+  require 'net/ldap' #requires ruby-net-ldap gem be installed
+  require 'simple_ldap_authenticator'
+  SimpleLdapAuthenticator.ldap_library = 'net/ldap'
+  SimpleLdapAuthenticator.servers = %w'localhost'
+  SimpleLdapAuthenticator.use_ssl = false
+  SimpleLdapAuthenticator.login_format = 'cn=%s,dc=example,dc=com'
+end
+if (AUTHENTICATION_SCHEMES.include? 'open_id')
+  #requires ruby-openid gem to be installed
 end
 
