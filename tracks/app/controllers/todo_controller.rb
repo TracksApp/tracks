@@ -35,7 +35,7 @@ class TodoController < ApplicationController
     @contexts_to_show = @contexts.reject {|x| x.hide? }
     
     if @contexts.empty?
-      flash['warning'] = 'You must add at least one context before adding next actions.'
+      flash[:warning] = 'You must add at least one context before adding next actions.'
     end
 
     # Set count badge to number of not-done, not hidden context items
@@ -90,7 +90,7 @@ class TodoController < ApplicationController
      rescue
        respond_to do |wants|
          wants.html do
-           flash["warning"] = 'An error occurred on the server.'
+           flash[:warning] = 'An error occurred on the server.'
            render :action => "index"
          end
          wants.js { render :action => 'error' }
@@ -224,7 +224,7 @@ class TodoController < ApplicationController
     rescue
       respond_to do |wants|
         wants.html do
-          flash["warning"] = 'An error occurred on the server.'
+          flash[:warning] = 'An error occurred on the server.'
           redirect_to :action => 'index'
         end
         wants.js { render :action => 'error' }
@@ -256,7 +256,7 @@ class TodoController < ApplicationController
         @error_message = 'Item and session user mis-match: #{item.user.name} and #{@user.name}!'
         respond_to do |wants|
           wants.html do
-            flash["warning"] = @error_message
+            flash[:warning] = @error_message
             render :action => "index"
           end
           wants.js { render :action => 'error' }

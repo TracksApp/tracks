@@ -48,7 +48,7 @@ class NoteController < ApplicationController
       if note.save
         render :partial => 'notes', :object => note
       else
-        flash["warning"] = "Couldn't update note \"#{note.id.to_s}\""
+        flash[:warning] = "Couldn't update note \"#{note.id.to_s}\""
         render :text => ''
       end
   end

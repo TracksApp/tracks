@@ -80,7 +80,7 @@ class DeferredController < ApplicationController
     
     respond_to do |wants|
       wants.html do
-        flash["notice"] = 'Successfully deleted next action' if @saved
+        flash[:notice] = 'Successfully deleted next action' if @saved
         redirect_to :action => "index"
       end
       wants.js do
@@ -93,7 +93,7 @@ class DeferredController < ApplicationController
     rescue
       respond_to do |wants|
         wants.html do
-          flash["warning"] = 'An error occurred on the server.'
+          flash[:warning] = 'An error occurred on the server.'
           redirect_to :action => "index"
         end
         wants.js  { render :action => 'error' }
@@ -132,7 +132,7 @@ class DeferredController < ApplicationController
     if @user == item.user
       return item
     else
-      flash["warning"] = "Item and session user mis-match: #{item.user.name} and #{@user.name}!"
+      flash[:warning] = "Item and session user mis-match: #{item.user.name} and #{@user.name}!"
       render_text ""
     end
   end
