@@ -2,6 +2,17 @@ require "#{File.dirname(__FILE__)}/../test_helper"
 require 'tempfile'
 require 'user'
 
+module Tracks
+  class Config
+    def self.salt
+      "change-me"
+    end
+    def self.auth_schemes
+      ['database','ldap']
+    end
+  end
+end
+
 class LdapAuthTest < Test::Unit::TestCase
 
   fixtures :users
@@ -10,6 +21,15 @@ class LdapAuthTest < Test::Unit::TestCase
   SLAPD_SCHEMA_DIR = "/etc/openldap/schema/" #You may need to adjust this
   SLAPD_TEST_PORT = 10389
   OUTPUT_DEBUG_INFO = false
+
+  require 'net/ldap' #requires ruby-net-ldap gem be installed
+  require 'simple_ldap_authenticator'
+  SimpleLdapAuthenticator.ldap_library = 'net/ldap'
+  SimpleLdapAuthenticator.servers = %w'localhost'
+  SimpleLdapAuthenticator.use_ssl = false
+  SimpleLdapAuthenticator.login_format = 'cn=%s,dc=lukemelia,dc=com'
+  SimpleLdapAuthenticator.port = 10389
+  SimpleLdapAuthenticator.logger = RAILS_DEFAULT_LOGGER
   
   def setup
     assert_equal "test", ENV['RAILS_ENV']
@@ -25,6 +45,7 @@ class LdapAuthTest < Test::Unit::TestCase
   
   def test_authenticate_against_ldap
    add_ldap_user_to_ldap_repository
+   assert SimpleLdapAuthenticator.valid?('john', 'deere')
    user = User.authenticate('john', 'deere')
    assert_not_nil(user)
    assert_equal user.login, 'john'
@@ -41,7 +62,7 @@ class LdapAuthTest < Test::Unit::TestCase
   def start_ldap_server
     t = Thread.new(@slapd_conf.path) { |slapd_conf_path|
       puts "starting slapd..." if OUTPUT_DEBUG_INFO
-      run_cmd %Q{/usr/libexec/slapd -f #{slapd_conf_path} -h "ldap://127.0.0.1:10389/"}
+      run_cmd %Q{/usr/libexec/slapd -f #{slapd_conf_path} -h "ldap://127.0.0.1:10389/" -d0}
       }
     sleep(2)
     run_cmd %Q{ldapsearch -H "ldap://127.0.0.1:10389/" -x -b '' -s base '(objectclass=*)' namingContexts}

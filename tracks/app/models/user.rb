@@ -56,10 +56,14 @@ protected
   def crypt_password
     write_attribute("password", self.class.sha1(password)) if password == @password_confirmation
   end
+  
+  def password_required?
+    auth_type == 'database'
+  end
     
   validates_presence_of :login
-  validates_presence_of :password, :if => Proc.new{|user| user.auth_type == 'database'}
-  validates_length_of :password, :within => 5..40
+  validates_presence_of :password, :if => :password_required?
+  validates_length_of :password, :within => 5..40, :if => :password_required?
   validates_confirmation_of :password  
   validates_length_of :login, :within => 3..80
   validates_uniqueness_of :login, :on => :create
