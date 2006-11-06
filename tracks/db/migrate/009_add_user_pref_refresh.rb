@@ -1,4 +1,7 @@
 class AddUserPrefRefresh < ActiveRecord::Migration
+  
+  class User < ActiveRecord::Base; serialize :preferences; end
+  
   def self.up
     @users = User.find(:all)
     @users.each do |user|
