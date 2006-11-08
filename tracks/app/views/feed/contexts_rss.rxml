@@ -4,7 +4,7 @@ xml.rss("version" => "2.0", "xmlns:dc" => "http://purl.org/dc/elements/1.1/") do
     xml.title(@title)
     xml.link("http://#{@request.host}:#{@request.port}/contexts")
     xml.description(@description)
-    @contexts.each { |c|
+    @contexts.each do |c|
       xml.item do 
         xml.title(c.name)
 			 	xml.link(url_for(:only_path => false, :controller => 'context', :action => 'show', :name => urlize(c.name)))
@@ -14,6 +14,6 @@ xml.rss("version" => "2.0", "xmlns:dc" => "http://purl.org/dc/elements/1.1/") do
 			 	context_description += "</p>"
 		 		xml.description(context_description)
 	 		end
-    }
+    end
   end
 end

@@ -4,7 +4,7 @@ xml.rss("version" => "2.0", "xmlns:dc" => "http://purl.org/dc/elements/1.1/") do
     xml.title(@title)
     xml.link("http://#{@request.host}:#{@request.port}/projects")
     xml.description(@description)
-    @projects.each { |p|
+    @projects.each do |p|
       xml.item do 
         xml.title(p.name)
 			 	xml.link(url_for(:only_path => false, :controller => 'project', :action => 'show', :name => urlize(p.name)))
@@ -16,6 +16,6 @@ xml.rss("version" => "2.0", "xmlns:dc" => "http://purl.org/dc/elements/1.1/") do
 			 	project_description += "</p>"
 		 		xml.description(project_description)
 	 		end
-    }
+    end
   end
 end

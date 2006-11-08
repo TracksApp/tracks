@@ -60,10 +60,10 @@ class LdapAuthTest < Test::Unit::TestCase
   end
 
   def start_ldap_server
-    t = Thread.new(@slapd_conf.path) { |slapd_conf_path|
+    t = Thread.new(@slapd_conf.path) do |slapd_conf_path|
       puts "starting slapd..." if OUTPUT_DEBUG_INFO
       run_cmd %Q{/usr/libexec/slapd -f #{slapd_conf_path} -h "ldap://127.0.0.1:10389/" -d0}
-      }
+    end
     sleep(2)
     run_cmd %Q{ldapsearch -H "ldap://127.0.0.1:10389/" -x -b '' -s base '(objectclass=*)' namingContexts}
   end
