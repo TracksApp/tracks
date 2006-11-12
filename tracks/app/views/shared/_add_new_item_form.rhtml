@@ -70,11 +70,11 @@
 <%= end_form_tag %><!--[eoform:todo]-->
 
 <%= observe_field "todo_due", 
-                  :frequency => 1, 
+                  :frequency => 2, 
                   :update => "date-preview", 
                   :with => "todo_due",
                   :complete => "Element.show('date-preview')", 
-                  :url => { :action => "date_preview" } %>
+                  :url => { :controller => "todo", :action => "date_preview" } %>
                   
 <%= calendar_setup( "todo_due"  ) %>
 <% if controller.controller_name == "deferred" -%>

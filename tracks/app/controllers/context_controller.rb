@@ -23,7 +23,7 @@ class ContextController < ApplicationController
   end
 
   # Filter the projects to show just the one passed in the URL
-  # e.g. <home>/project/show/<project_name> shows just <project_name>.
+  # e.g. <home>/context/<context_name> shows just <context_name>.
   #
   def show
     init
@@ -206,7 +206,10 @@ class ContextController < ApplicationController
      
     def init
       @source_view = params['_source_view'] || 'context'
-      @projects = @user.projects.reject { |x| x.completed? }
+      # If we exclude completed projects, then we can't display them in the sidebar
+      # if the user sets the preference for them to be shown
+      # @projects = @user.projects.reject { |x| x.completed? }
+      @projects = @user.projects
       @contexts = @user.contexts
       @todos = @user.todos
       @done = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = ?", @user.id, true], :include => [:project], :order => "completed DESC")
@@ -216,7 +219,14 @@ class ContextController < ApplicationController
     def init_todos
       check_user_set_context
       @done = @context.done_todos
-      @not_done_todos = @context.not_done_todos
+      # @not_done_todos = @context.not_done_todos
+      # TODO: Temporarily doing this search manually until I can work out a way
+      # to do the same thing using not_done_todos acts_as_todo_container method
+      # Hides actions in hidden projects from context.
+      @not_done_todos = Todo.find(:all, 
+            :conditions => ["todos.context_id = ? and todos.done = ? and todos.type = ? and (projects.state != ? or todos.project_id is ?)", @context.id, false, "Immediate", "hidden", nil],
+            :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC",
+            :include => [:project])
       @count = @not_done_todos.size
     end
 

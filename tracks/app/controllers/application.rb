@@ -92,6 +92,7 @@ class ApplicationController < ActionController::Base
     init_not_done_counts
   end
   
+  # TODO: Need to exclude hidden projects from this count
   def init_not_done_counts(parents = ['project','context'])
     parents.each do |parent|
       eval("@#{parent}_not_done_counts = Todo.count(:all,

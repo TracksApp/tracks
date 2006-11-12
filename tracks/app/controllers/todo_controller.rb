@@ -8,7 +8,7 @@ class TodoController < ApplicationController
 
   prepend_before_filter :login_required
   append_before_filter :init, :except => [ :destroy, :completed, :completed_archive ]
-  layout "standard"
+  layout "standard", :except => :date_preview
 
   # Main method for listing tasks
   # Set page title, and fill variables with contexts and done and not-done tasks
@@ -274,12 +274,14 @@ class TodoController < ApplicationController
     end
     
     def init_todos
+      # Exclude hidden projects from count on home page
       @todos = Todo.find(:all,
-                         :conditions => ['todos.user_id = ? and todos.type = ?', @user.id, "Immediate"],
+                         :conditions => ['todos.user_id = ? and todos.type = ? and (projects.state != ? or todos.project_id is ?)', @user.id, "Immediate", "hidden", nil],
                          :include => [ :project, :context ])
 
+      # Exclude hidden projects from the home page
       @not_done_todos = Todo.find(:all,
-                            :conditions => ['todos.user_id = ? and todos.type = ? and todos.done = ?', @user.id, "Immediate", false],
+                            :conditions => ['todos.user_id = ? and todos.type = ? and todos.done = ? and (projects.state != ? or todos.project_id is ?)', @user.id, "Immediate", false, "hidden", nil],
                             :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC",
                             :include => [ :project, :context ])
     end
