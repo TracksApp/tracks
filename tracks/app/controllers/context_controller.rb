@@ -70,7 +70,8 @@ class ContextController < ApplicationController
     @item.attributes = params["todo"]
 
     if @item.due?
-      @item.due = parse_date_per_user_prefs(params["todo"]["due"])
+      @date = parse_date_per_user_prefs(params["todo"]["due"])
+      @item.due = @date.to_s(:db)
     else
       @item.due = ""
     end
