@@ -92,11 +92,12 @@ class ApplicationController < ActionController::Base
     init_not_done_counts
   end
   
-  # TODO: Need to exclude hidden projects from this count
   def init_not_done_counts(parents = ['project','context'])
     parents.each do |parent|
       eval("@#{parent}_not_done_counts = Todo.count(:all,
-                                            :conditions => ['user_id = ? and type = ? and done = ?', @user.id, \"Immediate\", false],
+                                            :conditions => ['todos.user_id = ? and todos.type = ? and todos.done = ? and (projects.state != ? or todos.project_id is ?)',
+                                                            @user.id, \"Immediate\", false, \"hidden\", nil],
+                                            :joins => 'LEFT JOIN projects on projects.id = todos.project_id',
                                             :group => :#{parent}_id)")
     end
   end  
