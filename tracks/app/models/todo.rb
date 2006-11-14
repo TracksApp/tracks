@@ -14,6 +14,12 @@ class Todo < ActiveRecord::Base
   validates_length_of :notes, :maximum => 60000, :allow_nil => true 
   # validates_chronic_date :due, :allow_nil => true
 
+  alias_method :original_project, :project
+
+  def project
+    original_project.nil? ? Project.null_object : original_project
+  end
+  
   def self.not_done( id=id )
     self.find(:all, :conditions =>[ "done = ? AND context_id = ?", false, id], :order =>"due IS NULL, due ASC, created_at ASC")
   end

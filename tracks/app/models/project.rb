@@ -33,6 +33,10 @@ class Project < ActiveRecord::Base
   
   attr_protected :user
 
+  def self.null_object
+    NullProject.new
+  end
+  
   def description_present?
     attribute_present?("description")
   end
@@ -41,4 +45,16 @@ class Project < ActiveRecord::Base
     attribute_present?("linkurl")
   end
       
+end
+
+class NullProject
+  
+  def hidden?
+    false
+  end
+  
+  def nil?
+    true
+  end
+  
 end
