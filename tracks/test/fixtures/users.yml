@@ -22,7 +22,7 @@ other_user:
 ldap_user:
   id: 3
   login: john
-  password: 
+  password: test
   word: <%= Digest::SHA1.hexdigest("johnSun Feb 19 14:42:45 GMT 20060.408173979260027") %>
   is_admin: false
   first_name: John

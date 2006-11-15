@@ -17,6 +17,7 @@ class LdapAuthTest < Test::Unit::TestCase
 
   fixtures :users
   
+  RUN_LDAP_TESTS = ENV['RUN_TRACKS_LDAP_TESTS'] || false
   SLAPD_BIN = "/usr/libexec/slapd" #You may need to adjust this
   SLAPD_SCHEMA_DIR = "/etc/openldap/schema/" #You may need to adjust this
   SLAPD_TEST_PORT = 10389
@@ -35,12 +36,18 @@ class LdapAuthTest < Test::Unit::TestCase
     assert_equal "test", ENV['RAILS_ENV']
     assert_equal "change-me", Tracks::Config.salt
 
-    setup_ldap_server_conf
-    start_ldap_server
+    if RUN_LDAP_TESTS
+      setup_ldap_server_conf
+      start_ldap_server
+    end
   end
   
   def teardown
-    stop_ldap_server
+    stop_ldap_server if RUN_LDAP_TESTS
+  end
+  
+  def test_truth
+    assert true
   end
   
   def test_authenticate_against_ldap
@@ -50,6 +57,8 @@ class LdapAuthTest < Test::Unit::TestCase
    assert_not_nil(user)
    assert_equal user.login, 'john'
   end
+
+  private :test_authenticate_against_ldap unless RUN_LDAP_TESTS 
   
   def setup_ldap_server_conf
     @slapd_conf = create_slapd_conf()
