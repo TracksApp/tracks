@@ -85,7 +85,30 @@ module Arts
     end
   end
   
+  # To deal with [] syntax. I hate JavaScriptProxy so.. SO very much
+  def assert_rjs_page(*args)
+    content = build_method_chain!(args)
+    assert_match Regexp.new(Regexp.escape(content)), @response.body, 
+                 "Content did not include:\n #{content.to_s}"
+  end
+  
   protected
+  
+  def build_method_chain!(args)
+    content = create_generator.send(:[], args.shift) # start $('some_id')....
+    
+    while !args.empty?
+      if (method = args.shift.to_s) =~ /(.*)=$/
+        content = content.__send__(method, args.shift)
+        break
+      else
+        content = content.__send__(method)
+        content = content.__send__(:function_chain).first if args.empty?
+      end
+    end
+    
+    content
+  end
   
   def lined_response
     @response.body.split("\n")

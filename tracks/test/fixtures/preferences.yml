@@ -7,6 +7,7 @@ admin_user_prefs:
   show_number_completed: 5
   show_completed_projects_in_sidebar: true
   show_hidden_contexts_in_sidebar: true
+  show_hidden_projects_in_sidebar: true
   admin_email: butshesagirl@rousette.org.uk
   week_starts: 1
   due_style: 0
@@ -21,6 +22,7 @@ other_user_prefs:
   show_number_completed: 5
   show_completed_projects_in_sidebar: true
   show_hidden_contexts_in_sidebar: true
+  show_hidden_projects_in_sidebar: true
   admin_email: butshesagirl@rousette.org.uk
   week_starts: 1
   due_style: 0

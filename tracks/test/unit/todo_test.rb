@@ -18,17 +18,17 @@ class TodoTest < Test::Unit::TestCase
     assert_equal 2, @not_completed1.project_id
     assert_equal "Call Bill Gates to find out how much he makes per day", @not_completed1.description
     assert_nil @not_completed1.notes
-    assert @not_completed1.done == false || @not_completed1.done == 0
+    assert @not_completed1.completed? == false
     assert_equal 1.week.ago.strftime("%Y-%m-%d %H:%M"), @not_completed1.created_at.strftime("%Y-%m-%d %H:%M")
     assert_equal 2.week.from_now.strftime("%Y-%m-%d"), @not_completed1.due.strftime("%Y-%m-%d")
-    assert_nil @not_completed1.completed
+    assert_nil @not_completed1.completed_at
     assert_equal 1, @not_completed1.user_id
   end
   
   def test_completed
     assert_kind_of Todo, @completed
-    assert @completed.done
-    assert_not_nil @completed.completed
+    assert @completed.completed?
+    assert_not_nil @completed.completed_at
   end
   
   # Validation tests

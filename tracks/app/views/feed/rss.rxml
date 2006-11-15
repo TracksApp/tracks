@@ -11,7 +11,7 @@ xml.rss("version" => "2.0", "xmlns:dc" => "http://purl.org/dc/elements/1.1/") do
         due = "<div>Due: #{format_date(i.due)}</div>\n" if i.due?
         toggle_link = link_to( "mark as done", {:only_path => false, :controller => "todo", :action => "toggle_check", :id => i.id}) 
         done = "<div>#{toggle_link}</div>" unless i.completed? 
-        done = "<div>Completed: #{format_date(i.completed)}</div>\n" if i.completed?
+        done = "<div>Completed: #{format_date(i.completed_at)}</div>\n" if i.completed?
         context_link = link_to( i.context.name, { :only_path => false, :controller => "context", :action => "show", :name => urlize(i.context.name) } )
         if i.project_id?
           project_link = link_to (i.project.name, { :only_path => false, :controller => "project", :action => "show", :name => urlize(i.project.name)} )

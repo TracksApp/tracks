@@ -37,9 +37,6 @@ class UserControllerTest < Test::Unit::TestCase
     assert_template 'user/preference_edit_form'
   end
   
-  # Test updating of preferences
-  # FIXME seems to be difficult to test serialization of preferences using YAML
-  #
   def test_update_preferences
     @request.session['user_id'] = users(:admin_user).id # log in the admin user
     post :update_preferences, {:user => { :first_name => 'Jane', :last_name => 'Doe'}, :prefs => { :date_format => "%m-%d-%Y", :week_starts => "0", :show_number_completed => "10", :show_completed_projects_in_sidebar => "false", :show_hidden_contexts_in_sidebar => "false", :staleness_starts => "14", :due_style => "1", :admin_email => "my.email@domain.com" }}

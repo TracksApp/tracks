@@ -102,6 +102,18 @@ class ArtsController < ActionController::Base
     end
   end
   
+  def page_with_one_chained_method
+    render :update do |page|
+      page['some_id'].toggle
+    end
+  end
+  
+  def page_with_assignment
+    render :update do |page|
+      page['some_id'].style.color = 'red'
+    end
+  end
+  
   def rescue_errors(e) raise e end
 
 end
@@ -356,6 +368,35 @@ class ArtsTest < Test::Unit::TestCase
     
     assert_raises(Test::Unit::AssertionFailedError) do
       assert_no_rjs :visual_effect, :highlight, "posts", :duration => '1.0'
+    end
+  end
+  
+  # [] support
+  
+  def test_page_with_one_chained_method
+    get :page_with_one_chained_method
+    assert_nothing_raised do
+      assert_rjs :page, 'some_id', :toggle
+      assert_no_rjs :page, 'some_other_id', :toggle
+    end
+    
+    assert_raises(Test::Unit::AssertionFailedError) do
+      assert_rjs :page, 'some_other_id', :toggle
+      assert_no_rjs :page, 'some_id', :toggle
+    end
+  end
+  
+  def test_page_with_assignment
+    get :page_with_assignment
+    
+    assert_nothing_raised do
+      assert_rjs :page, 'some_id', :style, :color=, 'red'
+      assert_no_rjs :page, 'some_id', :color=, 'red'
+    end
+    
+    assert_raises(Test::Unit::AssertionFailedError) do
+      assert_no_rjs :page, 'some_id', :style, :color=, 'red'
+      assert_rjs :page, 'some_other_id', :style, :color=, 'red'
     end
   end
 end

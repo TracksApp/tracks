@@ -83,23 +83,28 @@ class ApplicationController < ActionController::Base
     
   def parse_date_per_user_prefs( s )
     return nil if s == ''
-    Chronic.parse(s)
+    Chronic.parse(s).to_date
   end
     
   def init_data_for_sidebar
     @projects = @user.projects
     @contexts = @user.contexts
     init_not_done_counts
+    if @prefs.show_hidden_projects_in_sidebar
+      init_project_hidden_todo_counts(['project'])
+    end
   end
   
   def init_not_done_counts(parents = ['project','context'])
     parents.each do |parent|
-      eval("@#{parent}_not_done_counts = Todo.count(:all,
-                                            :conditions => ['todos.user_id = ? and todos.type = ? and todos.done = ? and (projects.state != ? or todos.project_id is ?)',
-                                                            @user.id, \"Immediate\", false, \"hidden\", nil],
-                                            :joins => 'LEFT JOIN projects on projects.id = todos.project_id',
-                                            :group => :#{parent}_id)")
+      eval("@#{parent}_not_done_counts = Todo.count(:conditions => ['user_id = ? and state = ?', @user.id, 'active'], :group => :#{parent}_id)")
     end
-  end  
+  end
+  
+  def init_project_hidden_todo_counts(parents = ['project','context'])
+    parents.each do |parent|
+      eval("@#{parent}_project_hidden_todo_counts = Todo.count(:conditions => ['user_id = ? and state = ?', @user.id, 'project_hidden'], :group => :#{parent}_id)")
+    end
+  end
   
 end

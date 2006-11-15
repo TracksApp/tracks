@@ -12,16 +12,16 @@ class DeferredController < ApplicationController
   
   def index
     @source_view = 'deferred'
-    init_projects_and_contexts
-    init_not_done_counts
+    init_data_for_sidebar
     @page_title = "TRACKS::Tickler"
-    @tickles = @user.todos.find(:all, :conditions => ['type = ?', "Deferred"], :order => "show_from ASC")
+    @tickles = @user.todos.find_in_state(:all, :deferred, :order => "show_from ASC")
     @count = @tickles.size
   end
   
   def create
     @source_view = 'deferred'
-    @item = Deferred.new
+    @item = Todo.new
+    @item.defer!
     @item.attributes = params["todo"]
     if params["todo"]["show_from"] 
       @item.show_from = parse_date_per_user_prefs(params["todo"]["show_from"])
@@ -37,7 +37,7 @@ class DeferredController < ApplicationController
     @saved = @item.save
 
      if @saved
-       @up_count = @user.todos.count(['type = ?', "Deferred"])
+       @up_count = @user.todos.count_in_state(:deferred)
      end
 
      respond_to do |wants|
@@ -84,7 +84,7 @@ class DeferredController < ApplicationController
         redirect_to :action => "index"
       end
       wants.js do
-        @down_count = @user.todos.count(['type = ?', "Deferred"]) if @saved
+        @down_count = @user.todos.count_in_state(:deferred) if @saved
         render
       end
       wants.xml { render :xml => @item.to_xml( :root => 'todo', :except => :user_id ) }
@@ -101,30 +101,22 @@ class DeferredController < ApplicationController
       end
   end
   
-  # Check for any due tickler items, change them to type Immediate.
+  # Check for any due tickler items, activate them
   # Called by periodically_call_remote
   def check_tickler
     now = Date.today()
-    @due_tickles = @user.todos.find(:all, :conditions => ['type = ? AND (show_from < ? OR show_from = ?)', "Deferred", now, now ], :order => "show_from ASC")
-    # Change the due tickles to type "Immediate"
+    @due_tickles = @user.todos.find_in_state(:all, :deferred, :conditions => ['show_from < ? OR show_from = ?', now, now ], :order => "show_from ASC")
+    # Change the due tickles to active
     @due_tickles.each do |t|
-      t[:type] = "Immediate"
-      t.show_from = nil
-      t.save_with_validation(false)
+      t.activate!
+      t.save
     end
     respond_to do |wants|
       wants.html { redirect_to :controller => 'todo', :action => 'index' }
       wants.js
     end
   end
-  
-  protected
-  
-  def init_projects_and_contexts
-    @projects = @user.projects
-    @contexts = @user.contexts
-  end
-  
+    
   private
   
   def check_user_return_item

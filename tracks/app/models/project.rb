@@ -16,7 +16,7 @@ class Project < ActiveRecord::Base
   acts_as_todo_container :find_todos_include => :context
   
   state :active
-  state :hidden
+  state :hidden, :enter => :hide_todos, :exit => :unhide_todos
   state :completed
 
   event :activate do
@@ -43,6 +43,33 @@ class Project < ActiveRecord::Base
   
   def linkurl_present?
     attribute_present?("linkurl")
+  end
+  
+  def hide_todos
+    todos.each do |t|
+      t.hide! unless t.completed?
+      t.save
+    end
+  end
+      
+  def unhide_todos
+    todos.each do |t|
+      t.unhide! if t.project_hidden?
+      t.save
+    end
+  end
+  
+  def transition_to(candidate_state)
+    case candidate_state.to_sym
+      when current_state
+        return
+      when :hidden
+        hide!
+      when :active
+        activate!
+      when :completed
+        complete!
+    end
   end
       
 end

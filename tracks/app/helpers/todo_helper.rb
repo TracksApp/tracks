@@ -22,7 +22,7 @@ module TodoHelper
                           { :url => url_options, :confirm => "Are you sure that you want to delete the action, \'#{item.description}\'?" },
                           { :class => "icon" }
                         ) + "\n"
-    if !item.done?
+    if !item.completed?
       url_options[:action] = 'edit'
       str << link_to_remote( image_tag_for_edit(item),
                              { :url => url_options, :loading => visual_effect(:pulsate, "action-#{item.id}-edit-icon") },
@@ -42,7 +42,7 @@ module TodoHelper
   # * l3: created more than 3 x staleness_starts
   #
   def staleness_class(item)
-    if item.due || item.done?
+    if item.due || item.completed?
       return ""
     elsif item.created_at < (@user.preference.staleness_starts * 3).days.ago
       return " stale_l3"

@@ -38,7 +38,7 @@
   <h2>Status</h2>
   <div>
    <% ['active', 'hidden', 'completed'].each do | state | %>
-    <% js = "new Ajax.Request('#{ url_for :controller => 'project', :action => 'update', :id => @project.id, 'project[state]' => state }', {asynchronous:true, evalScripts:true});" %>
+    <% js = "new Ajax.Request('#{ url_for :controller => 'project', :action => 'update', :id => @project.id, :wants_render => false, 'project[state]' => state }', {asynchronous:true, evalScripts:true});" %>
     <%= radio_button(:project, 'state', state, {:class => 'project-done', :onclick => js}) %> <%= state.titlecase %> 
    <% end %>
   </div>

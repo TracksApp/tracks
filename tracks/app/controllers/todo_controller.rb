@@ -26,8 +26,8 @@ class TodoController < ApplicationController
     @done = nil
     if max_completed > 0
       @done = Todo.find(:all,
-                        :conditions => ['todos.user_id = ? and todos.done = ?', @user.id, true],
-                        :order => 'todos.completed DESC',
+                        :conditions => ['todos.user_id = ? and todos.state = ?', @user.id, 'completed'],
+                        :order => 'todos.completed_at DESC',
                         :limit => max_completed,
                         :include => [ :project, :context ])
     end
@@ -39,7 +39,7 @@ class TodoController < ApplicationController
     end
 
     # Set count badge to number of not-done, not hidden context items
-    @count = @todos.reject { |x| x.done? || x.context.hide? }.size
+    @count = @todos.reject { |x| !x.active? || x.context.hide? }.size
     
     respond_to do |wants|
       wants.html
@@ -79,7 +79,7 @@ class TodoController < ApplicationController
        wants.js do
          if @saved
            init_todos
-           @up_count = @todos.reject { |x| x.done? or x.context.hide? }.size.to_s
+           @up_count = @todos.reject { |x| !x.active? or x.context.hide? }.size.to_s
          end
          render :action => 'create'
        end
@@ -119,21 +119,20 @@ class TodoController < ApplicationController
   #
   def toggle_check
     init
-
+    logger.info "source view is " + @source_view
     @item = check_user_return_item
-    @item.toggle!('done')
-    @item.completed = Time.now() # For some reason, the before_save in todo.rb stopped working
+    @item.toggle_completion()
     @saved = @item.save
-    @remaining_undone_in_context = @user.contexts.find(@item.context_id).not_done_todos.length
     if @saved
-      @down_count = @todos.reject { |x| x.done? || x.context.hide? }.size.to_s
+      @remaining_undone_in_context = @user.contexts.find(@item.context_id).not_done_todo_count
+      determine_down_count
     end
     return if request.xhr?
 
     if @saved
-      redirect_with_notice "The action <strong>'#{@item.description}'</strong> was marked as <strong>#{@item.done? ? 'complete' : 'incomplete' }</strong>", :action => "index"
+      redirect_with_notice "The action <strong>'#{@item.description}'</strong> was marked as <strong>#{@item.completed? ? 'complete' : 'incomplete' }</strong>", :action => "index"
     else
-      redirect_with_notice "The action <strong>'#{@item.description}'</strong> was NOT marked as <strong>#{@item.done? ? 'complete' : 'incomplete' } due to an error on the server.</strong>", :action => "index"
+      redirect_with_notice "The action <strong>'#{@item.description}'</strong> was NOT marked as <strong>#{@item.completed? ? 'complete' : 'incomplete' } due to an error on the server.</strong>", :action => "index"
     end
   end
 
@@ -207,7 +206,7 @@ class TodoController < ApplicationController
       
       wants.js do
         if @saved
-          @down_count = determine_down_count
+          determine_down_count
           source_view do |from|
              from.todo do
                @remaining_undone_in_context = @user.contexts.find(@context_id).not_done_todos.length
@@ -249,7 +248,7 @@ class TodoController < ApplicationController
   private
 
     def check_user_return_item
-      item = Todo.find( params['id'] )
+      item = Todo.find( params['id'].to_i )
       if @user == item.user
         return item
       else
@@ -267,39 +266,30 @@ class TodoController < ApplicationController
 
     def init
       @source_view = params['_source_view'] || 'todo'
-      @projects = @user.projects
-      @contexts = @user.contexts
-      init_todos
-      init_not_done_counts
+      init_data_for_sidebar
+      init_todos      
     end
     
     def init_todos
       # Exclude hidden projects from count on home page
-      @todos = Todo.find(:all,
-                         :conditions => ['todos.user_id = ? and todos.type = ? and (projects.state != ? or todos.project_id is ?)', @user.id, "Immediate", "hidden", nil],
-                         :include => [ :project, :context ])
+      @todos = @user.todos.find(:all, :conditions => ['todos.state = ? or todos.state = ?', 'active', 'complete'], :include => [ :project, :context ])
 
       # Exclude hidden projects from the home page
-      @not_done_todos = Todo.find(:all,
-                            :conditions => ['todos.user_id = ? and todos.type = ? and todos.done = ? and (projects.state != ? or todos.project_id is ?)', @user.id, "Immediate", false, "hidden", nil],
-                            :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC",
-                            :include => [ :project, :context ])
+      @not_done_todos = @user.todos.find(:all, :conditions => ['todos.state = ?', 'active'], :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC", :include => [ :project, :context ])
     end
     
     def determine_down_count
       source_view do |from|
          from.todo do
-           @down_count = Todo.count(:conditions => ['todos.user_id = ? and todos.type = ? and todos.done = ? and contexts.hide = ?',
-                                                     @user.id, "Immediate", false, false],
-                                    :include => [ :context ])
+           @down_count = Todo.count_by_sql(['SELECT COUNT(*) FROM todos, contexts WHERE todos.context_id = contexts.id and todos.user_id = ? and todos.state = ? and contexts.hide = ?', @user.id, 'active', false])
          end
          from.context do
-           @down_count = Todo.count(:conditions => ['todos.user_id = ? and todos.type = ? and todos.done = ? and todos.context_id = ?',
-                                                     @user.id, "Immediate", false, @context_id])
+           @down_count = @user.contexts.find(@item.context_id).todos.count_in_state(:active)
          end
          from.project do
-           @down_count = Todo.count(:conditions => ['todos.user_id = ? and todos.type = ? and todos.done = ? and todos.project_id = ?',
-                                                     @user.id, "Immediate", false, @project_id]) unless @project_id == nil
+           unless @item.project_id == nil
+             @down_count = @user.projects.find(@item.project_id).todos.count_in_state(:active)
+           end
          end
       end
     end 

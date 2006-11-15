@@ -19,4 +19,10 @@ Usage:
   assert_rjs :show, "post_1", "post_2", "post_3"
   assert_rjs :sortable, 'sortable_item'
   assert_rjs :toggle, "post_1", "post_2", "post_3"
-  assert_rjs :visual_effect, :highlight, "posts", :duration => '1.0'    
+  assert_rjs :visual_effect, :highlight, "posts", :duration => '1.0'
+
+For the square bracket syntax (page['some_id'].toggle) use :page followed by the id and then subsequent method calls. Assignment requires a '=' at the end of the method name followed by the value.
+
+  assert_rjs :page, 'some_id', :toggle
+  assert_rjs :page, 'some_id', :style, :color=, 'red'
+

@@ -6,13 +6,14 @@
   <% end -%>
 </ul>
 
+<% if @user.preference.show_hidden_projects_in_sidebar %>
 <h3>Hidden Projects:</h3>
 <ul>
   <% for project in @projects.select{|p| p.hidden? } -%>
   <li id="sidebar-project-<%= project.id %>" class="sidebar-project"><%= link_to( sanitize(project.name), { :controller => "project", :action => "show", :name => urlize(project.name) } ) + " (" + count_undone_todos(project,"actions") + ")" %></li>
   <% end -%>
 </ul>
-
+<% end %>
 
 <% if @user.preference.show_completed_projects_in_sidebar %>
 <h3>Completed Projects:</h3>

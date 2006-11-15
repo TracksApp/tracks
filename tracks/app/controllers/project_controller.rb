@@ -17,6 +17,7 @@ class ProjectController < ApplicationController
   #
   def list
     init
+    init_project_hidden_todo_counts
     @page_title = "TRACKS::List Projects"
     respond_to do |wants|
       wants.html
@@ -125,38 +126,27 @@ class ProjectController < ApplicationController
       end
   end
 
-  # Toggles the 'done' status of the action
-  #
-  def toggle_check
-    self.init
-
-    @item = check_user_return_item
-    @item.toggle!('done')
-    @item.completed = Time.now() # For some reason, the before_save in todo.rb stopped working
-    @saved = @item.save
-    if @saved
-      @down_count = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = ? and todos.project_id IN (?)", @user.id, false, @item.project_id]).size.to_s
-      @done_count = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = ? and todos.project_id IN (?)", @user.id, true, @item.project_id]).size.to_s
-    end
-    return if request.xhr?
-
-    if @saved
-      flash[:notice]  = "The action <strong>'#{@item.description}'</strong> was marked as <strong>#{@item.done? ? 'complete' : 'incomplete' }</strong>"
-    else
-      flash[:notice]  = "The action <strong>'#{@item.description}'</strong> was NOT marked as <strong>#{@item.done? ? 'complete' : 'incomplete' } due to an error on the server.</strong>"
-    end
-    redirect_to :action => "list"
-  end
-  
   # Edit the details of the project
   #
   def update
     self.init
     check_user_set_project
+    @project.transition_to(params['project']['state'])
+    params['project'].delete('state')
     @project.attributes = params['project']
     @project.name = deurlize(@project.name)
     if @project.save
-      render :partial => 'project_listing', :object => @project
+      if params['wants_render']
+        if (@project.hidden?)
+          @project_project_hidden_todo_counts = Hash.new
+          @project_project_hidden_todo_counts[@project.id] = @project.reload().not_done_todo_count(:include_project_hidden_todos => true)
+        else
+          @project_not_done_counts[@project.id] = @project.reload().not_done_todo_count(:include_project_hidden_todos => true)
+        end
+        render :partial => 'project_listing', :object => @project
+      else
+        render :text => 'Success'
+      end
     else
       flash[:warning] = "Couldn't update project"
       render :text => ''
@@ -242,14 +232,14 @@ class ProjectController < ApplicationController
       @projects = @user.projects
       @contexts = @user.contexts
       @todos = @user.todos
-      @done = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = ?", @user.id, true], :include => [:project], :order => "completed DESC")
-      init_not_done_counts
+      @done = @user.todos.find_in_state(:all, :completed, :order => "completed_at DESC")
+      init_data_for_sidebar
     end
 
     def init_todos
       check_user_set_project
       @done = @project.done_todos
-      @not_done = @project.not_done_todos
+      @not_done = @project.not_done_todos(:include_project_hidden_todos => true)
       @count = @not_done.size
     end
 

@@ -84,9 +84,9 @@ protected
     options = Hash.new
   
     if params.key?('done')
-      condition_builder.add 'todos.done = ?', true
+      condition_builder.add 'todos.state = ?', 'completed'
     else
-      condition_builder.add 'todos.done = ?', false
+      condition_builder.add 'todos.state = ?', 'active'
     end
   
     if params.key?('limit')
@@ -107,7 +107,7 @@ protected
     
     if params.key?('done')
       done_in_last = params['done'].to_i
-      condition_builder.add('todos.completed >= ?', done_in_last.days.ago)
+      condition_builder.add('todos.completed_at >= ?', done_in_last.days.ago)
       @title << " actions completed"
       @description << " in the last #{done_in_last.to_s} days"
     end

@@ -25,10 +25,10 @@ end
   project_id: 2
   description: Call Bill Gates to find out how much he makes per day
   notes: ~
-  done: false
+  state: active
   created_at: <%= last_week %>
   due: <%= two_weeks_hence %>
-  completed: ~
+  completed_at: ~
   user_id: 1
 
 2:
@@ -37,10 +37,10 @@ end
   project_id: 3
   description: Call dinosaur exterminator
   notes: Ask him if I need to hire a skip for the corpses.
-  done: false
+  state: active
   created_at: <%= today %>
   due: <%= two_weeks_hence %>
-  completed: ~
+  completed_at: ~
   user_id: 1
 
 3:
@@ -49,10 +49,10 @@ end
   project_id: ~
   description: Buy milk
   notes: ~
-  done: 1
+  state: completed
   created_at: <%= today %>
   due: ~
-  completed: <%= today %>
+  completed_at: <%= today %>
   user_id: 1
 
 4:
@@ -61,10 +61,10 @@ end
   project_id: ~
   description: Buy bread
   notes: ~
-  done: 1
+  state: completed
   created_at: <%= today %>
   due: ~
-  completed: <%= today %>
+  completed_at: <%= today %>
   user_id: 1
 
 5:
@@ -73,10 +73,10 @@ end
   project_id: 1
   description: Construct time dilation device
   notes: ~
-  done: false
+  state: active
   created_at: <%= today %>
   due: ~
-  completed: ~
+  completed_at: ~
   user_id: 1
 
 6:
@@ -85,10 +85,10 @@ end
   project_id: 1
   description: Phone Grandfather to ask about the paradox
   notes: Added some _notes_.
-  done: false
+  state: active
   created_at: <%= today %>
   due: <%= last_week %>
-  completed: ~
+  completed_at: ~
   user_id: 1
 
 7:
@@ -97,10 +97,10 @@ end
   project_id: 3
   description: Get a book out of the library
   notes: 'Dinosaurs''R'
-  done: false
+  state: active
   created_at: <%= today %>
   due: ~
-  completed: ~
+  completed_at: ~
   user_id: 1
 
 8:
@@ -109,10 +109,10 @@ end
   project_id: ~
   description: Upgrade to Rails 0.9.1
   notes: ~
-  done: true
+  state: completed
   created_at: <%= today %>
   due: <%= today %>
-  completed: <%= today %>
+  completed_at: <%= today %>
   user_id: 1
 
 9:
@@ -121,10 +121,10 @@ end
   project_id: ~
   description: This should be due today
   notes: ~
-  done: false
+  state: active
   created_at: <%= today %>
   due: <%= today %>
-  completed: ~
+  completed_at: ~
   user_id: 1
 
 10:
@@ -133,10 +133,10 @@ end
   project_id: ~
   description: foo
   notes: ~
-  done: 1
+  state: completed
   created_at: <%= today %>
   due: <%= two_weeks_hence %>
-  completed: <%= today %>
+  completed_at: <%= today %>
   user_id: 1
 
 11:
@@ -145,10 +145,10 @@ end
   project_id: 2
   description: Buy shares
   notes: ~
-  done: false
+  state: active
   created_at: <%= today %>
   due: <%= next_week %>
-  completed: ~
+  completed_at: ~
   user_id: 1
 
 12:
@@ -157,10 +157,10 @@ end
   project_id: 3
   description: Buy stegosaurus bait
   notes: ~
-  done: false
+  state: active
   created_at: <%= today %>
   due: <%= next_week %>
-  completed: ~
+  completed_at: ~
   user_id: 1
 
 13:
@@ -169,10 +169,10 @@ end
   project_id: 3
   description: New action in context
   notes: Some notes
-  done: false
+  state: active
   created_at: <%= today %>
   due: <%= next_week %>
-  completed: ~
+  completed_at: ~
   user_id: 1
 
 14:
@@ -181,8 +181,8 @@ end
   project_id: 2
   description: Call stock broker
   notes: 'tel: 12345'
-  done: false
+  state: active
   created_at: <%= last_week %>
   due: ~
-  completed: ~
+  completed_at: ~
   user_id: 1

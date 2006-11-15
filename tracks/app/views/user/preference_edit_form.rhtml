@@ -50,6 +50,7 @@
   <%= row_with_select_field("week_starts", Preference.day_number_to_name_map.invert.sort{|a,b| a[1]<=>b[1]})%>
   <%= row_with_select_field("due_style", [['Due in ___ days',0],['Due on _______',1]]) %>
   <%= row_with_select_field("show_completed_projects_in_sidebar") %>
+  <%= row_with_select_field("show_hidden_projects_in_sidebar") %>
   <%= row_with_select_field("show_hidden_contexts_in_sidebar") %>
 
 

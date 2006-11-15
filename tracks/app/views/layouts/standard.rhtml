@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <% if @prefs["refresh"].to_i != 0 -%>
+  <% if @prefs.refresh != 0 -%>
     <meta http-equiv="Refresh" content="<%= @prefs["refresh"].to_i*60 %>;url=<%= request.request_uri %>">
   <% end -%>
   <%= stylesheet_link_tag "standard" %>

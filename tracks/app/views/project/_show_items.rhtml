@@ -1,5 +1,5 @@
 <%   item = show_items %>
-<% if !item.done? %>
+<% if !item.completed? %>
 <div id="item-<%= item.id %>-container">
 <%= form_remote_tag( :url => url_for( :controller => "project", :action => "toggle_check", :id => item.id ),
                      :html => { :id=> "checkbox-notdone-#{item.id}", :class => "inline-form" },
@@ -82,7 +82,7 @@
   </div>
   <!-- end div.checkbox -->
   <div class="description">
-  <span class="grey"><%= format_date( item.completed ) %></span>
+  <span class="grey"><%= format_date( item.completed_at ) %></span>
   <%= sanitize(item.description) %>
   <% if item.project_id %>
     <%= link_to( "[C]", { :controller => "context", :action => "show", :name => urlize(item.context.name) }, :title => "View context: #{item.context.name}" ) %>

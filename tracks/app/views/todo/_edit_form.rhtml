@@ -46,13 +46,13 @@
     <td class="label"><label for="item_due">Due</td>
     <td><input name="item[due]" id="due_<%= @item.id %>" type="text" value="<%= format_date(@item.due) %>" tabindex="5" size="10" onFocus="Calendar.setup" /></td>
   </tr>
-    <% if @item.class == Deferred -%>
+    <% if @item.current_state == :deferred -%>
   <tr>
     <td class="label"><label for="item_show_from">Show from</td>
     <td><input name="item[show_from]" id="show_from_<%= @item.id %>" type="text" value="<%= format_date(@item.show_from) %>" tabindex="5" size="10" onFocus="Calendar.setup" /></td>
   </tr>
     <% end -%>
-    <% if controller.controller_name == "project" || @item.class == 'Deferred' -%>
+    <% if controller.controller_name == "project" || @item.current_state == :deferred -%>
       <input type="hidden" name="on_project_page" value="true" />
     <% end -%>
   <tr>
@@ -62,6 +62,6 @@
 </table>
 
 <%= calendar_setup( "due_#{@item.id}" ) %>
-<% if @item.class == Deferred -%>
+<% if @item.current_state == :deferred -%>
   <%= calendar_setup( "show_from_#{@item.id}" ) %>
 <% end -%>

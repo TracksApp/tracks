@@ -11,8 +11,8 @@ module FeedHelper
       if item.context_id == context.id
         result_string << "\n" + context.name.upcase + ":\n" if result_string.empty?
       
-        if (item.done == 1 || item.done == true) && item.completed
-          result_string << "    [Completed: " + format_date(item.completed) + "] "
+        if (item.completed?) && item.completed_at
+          result_string << "    [Completed: " + format_date(item.completed_at) + "] "
         end
         
         if item.due

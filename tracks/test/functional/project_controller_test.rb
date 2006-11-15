@@ -6,10 +6,15 @@ require 'project_controller'
 class ProjectController; def rescue_action(e) raise e end; end
 
 class ProjectControllerTest < TodoContainerControllerTestBase
-  fixtures :users, :projects
+  fixtures :users, :todos, :preferences, :projects
   
   def setup
     perform_setup(Project, ProjectController)
+  end
+  
+  def test_projects_list
+    @request.session['user_id'] = users(:admin_user).id
+    get :list
   end
 
   def test_create_project_via_ajax_increments_number_of_projects
@@ -36,5 +41,29 @@ class ProjectControllerTest < TodoContainerControllerTestBase
     assert_rjs :replace_html, 'warning', "<div class=\"ErrorExplanation\" id=\"ErrorExplanation\"><h2>1 error prohibited this record from being saved</h2><p>There were problems with the following fields:</p><ul>Name cannot contain the slash ('/') character</ul></div>"
     assert_rjs :visual_effect, :appear, "warning", :duration => '0.5'    
   end
+  
+  def test_todo_state_is_project_hidden_after_hiding_project
+    p = projects(:timemachine)
+    todos = p.todos.find_in_state(:all, :active)
+    @request.session['user_id'] = users(:admin_user).id
+    xhr :post, :update, :id => 1, "project"=>{"name"=>p.name, "description"=>p.description, "state"=>"hidden"}
+    todos.each do |t|
+      assert_equal :project_hidden, t.reload().current_state
+    end
+    assert p.reload().hidden?
+  end
+  
+  def test_not_done_counts_after_hiding_and_unhiding_project
+    p = projects(:timemachine)
+    todos = p.todos.find_in_state(:all, :active)
+    @request.session['user_id'] = users(:admin_user).id
+    xhr :post, :update, :id => 1, "project"=>{"name"=>p.name, "description"=>p.description, "state"=>"hidden"}
+    xhr :post, :update, :id => 1, "project"=>{"name"=>p.name, "description"=>p.description, "state"=>"active"}
+    todos.each do |t|
+      assert_equal :active, t.reload().current_state
+    end
+    assert p.reload().active?
+  end
+  
   
 end

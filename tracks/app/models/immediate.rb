@@ -1,2 +1,0 @@
-class Immediate < Todo
-end
