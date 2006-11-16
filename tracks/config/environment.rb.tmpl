@@ -62,12 +62,11 @@ SALT = "change-me"
 # If you choose ldap, see the additional configuration options further down.
 AUTHENTICATION_SCHEMES = ['database']
 
-require 'acts_as_namepart_finder'
+require 'name_part_finder'
 require 'acts_as_todo_container'
 require 'config'
 
 ActiveRecord::Base.class_eval do
-	include Tracks::Acts::NamepartFinder
 	include Tracks::Acts::TodoContainer
 end
 

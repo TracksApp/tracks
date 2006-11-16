@@ -38,4 +38,17 @@ class ContextTest < Test::Unit::TestCase
      assert_equal 1, newcontext.errors.count
      assert_equal "cannot contain the slash ('/') character", newcontext.errors.on(:name)
   end
+  
+  def test_find_by_namepart_with_exact_match
+    c = Context.find_by_namepart('agenda')
+    assert_not_nil c
+    assert_equal @agenda.id, c.id
+  end
+
+  def test_find_by_namepart_with_starts_with
+    c = Context.find_by_namepart('agen')
+    assert_not_nil c
+    assert_equal @agenda.id, c.id
+  end
+  
 end

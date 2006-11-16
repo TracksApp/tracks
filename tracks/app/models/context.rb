@@ -4,7 +4,7 @@ class Context < ActiveRecord::Base
   belongs_to :user
   
   acts_as_list :scope => :user
-  acts_as_namepart_finder
+  extend NamePartFinder
   acts_as_todo_container :find_todos_include => :project
 
   attr_protected :user

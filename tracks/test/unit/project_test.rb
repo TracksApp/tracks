@@ -61,5 +61,17 @@ class ProjectTest < Test::Unit::TestCase
     assert_equal :completed, @timemachine.current_state
     assert @timemachine.completed?
   end
+  
+  def test_find_project_by_namepart_with_exact_match
+    p = Project.find_by_namepart('Build a working time machine')
+    assert_not_nil p
+    assert_equal @timemachine.id, p.id
+  end
+
+  def test_find_project_by_namepart_with_starts_with
+    p = Project.find_by_namepart('Build a')
+    assert_not_nil p
+    assert_equal @timemachine.id, p.id
+  end
 
 end

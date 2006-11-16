@@ -12,7 +12,7 @@ class Project < ActiveRecord::Base
 
   acts_as_list :scope => :user
   acts_as_state_machine :initial => :active, :column => 'state'
-  acts_as_namepart_finder
+  extend NamePartFinder
   acts_as_todo_container :find_todos_include => :context
   
   state :active
