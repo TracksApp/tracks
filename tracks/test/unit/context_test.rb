@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class ContextTest < Test::Unit::TestCase
-  fixtures :contexts
+  fixtures :contexts, :todos, :users, :preferences
 
   def setup
     @agenda = contexts(:agenda)
@@ -49,6 +49,31 @@ class ContextTest < Test::Unit::TestCase
     c = Context.find_by_namepart('agen')
     assert_not_nil c
     assert_equal @agenda.id, c.id
+  end
+  
+  def test_delete_context_deletes_todos_within_it
+    assert_equal 6, @agenda.todos.count
+    agenda_todo_ids = @agenda.todos.collect{|t| t.id }
+    @agenda.destroy
+    agenda_todo_ids.each do |todo_id|
+      assert !Todo.exists?(todo_id)
+    end
+  end
+  
+  def test_not_done_todos
+    assert_equal 5, @agenda.not_done_todos.size
+    t = @agenda.not_done_todos[0]
+    t.complete!
+    t.save!
+    assert_equal 4, Context.find(@agenda.id).not_done_todos.size
+  end
+    
+  def test_done_todos
+    assert_equal 1, @agenda.done_todos.size
+    t = @agenda.not_done_todos[0]
+    t.complete!
+    t.save!
+    assert_equal 2, Context.find(@agenda.id).done_todos.size
   end
   
 end

@@ -1,6 +1,6 @@
 class Context < ActiveRecord::Base
 
-  has_many :todos, :dependent => true, :order => "completed_at DESC"
+  has_many :todos, :dependent => :delete_all, :order => "completed_at DESC"
   belongs_to :user
   
   acts_as_list :scope => :user

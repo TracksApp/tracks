@@ -24,13 +24,11 @@ module Tracks
       module InstanceMethods
         
         def not_done_todos(opts={})
-          @not_done_todos = self.find_not_done_todos(opts) if @not_done_todos == nil
-          @not_done_todos
+          @not_done_todos ||= self.find_not_done_todos(opts)
         end
 
         def done_todos
-          @done_todos = self.find_done_todos if @done_todos == nil
-          @done_todos
+          @done_todos ||= self.find_done_todos
         end
 
         def find_not_done_todos(opts={})
@@ -49,7 +47,7 @@ module Tracks
           todos = Todo.find(:all, :conditions => ["todos.#{self.class.base_class.name.singularize.downcase}_id = ? AND todos.state = ?", id, "completed"],
                             :order => "completed_at DESC",
                             :include => find_todos_include,
-                            :limit => @user.preference.show_number_completed)
+                            :limit => self.user.preference.show_number_completed)
         end
         
         def not_done_todo_count(opts={})
@@ -67,7 +65,7 @@ module Tracks
           Todo.count(:conditions => ["todos.#{self.class.base_class.name.singularize.downcase}_id = ? AND todos.state = ?", id, "completed"],
                       :order => "completed_at DESC",
                       :include => find_todos_include,
-                      :limit => @user.preference.show_number_completed)
+                      :limit => self.user.preference.show_number_completed)
         end
         
       end

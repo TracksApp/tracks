@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class ProjectTest < Test::Unit::TestCase
-  fixtures :projects
+  fixtures :projects, :todos, :users, :preferences
 
   def setup
     @timemachine = projects(:timemachine)
@@ -73,5 +73,31 @@ class ProjectTest < Test::Unit::TestCase
     assert_not_nil p
     assert_equal @timemachine.id, p.id
   end
-
+  
+  def test_delete_project_deletes_todos_within_it
+    assert_equal 2, @timemachine.todos.count
+    timemachine_todo_1_id = @timemachine.todos[0].id
+    timemachine_todo_2_id = @timemachine.todos[1].id
+    @timemachine.destroy
+    assert !Todo.exists?(timemachine_todo_1_id)
+    assert !Todo.exists?(timemachine_todo_2_id)
+  end
+  
+  def test_not_done_todos
+    assert_equal 2, @timemachine.not_done_todos.size
+    t = @timemachine.not_done_todos[0]
+    t.complete!
+    t.save!
+    assert_equal 1, Project.find(@timemachine.id).not_done_todos.size
+  end
+    
+  def test_done_todos
+    assert_equal 0, @timemachine.done_todos.size
+    t = @timemachine.not_done_todos[0]
+    t.complete!
+    t.save!
+    assert_equal 1, Project.find(@timemachine.id).done_todos.size
+  end
+  
+    
 end
