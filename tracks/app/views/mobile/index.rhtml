@@ -1,6 +1,5 @@
 <h1><span class="count"><%= @count.to_s %></span> <%= @desc %>
-  <%= puts params[:item].to_s %>
-<%= link_to "+", :controller => 'mobile', :action => 'show_add_form' %></h1>
+<%= link_to "+", :controller => 'mobile', :action => 'add_action' %></h1>
 <hr />
 <%= render :partial => 'mobile_actions' %>
 <%= link_to "Logout", :controller => 'login', :action => 'logout' %>

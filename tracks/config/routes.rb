@@ -18,7 +18,7 @@ ActionController::Routing::Routes.draw do |map|
   map.connect '', :controller => 'todo', :action => 'index'
 
   # Mobile/lite version
-  map.connect 'mobile', :controller => 'mobile', :action => 'list'
+  map.connect 'mobile', :controller => 'mobile', :action => 'index'
   map.connect 'mobile/add_action', :controller => 'mobile', :action => 'show_add_form'
 
   # Login Routes
