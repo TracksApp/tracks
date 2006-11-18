@@ -63,6 +63,14 @@ class Todo < ActiveRecord::Base
     original_project.nil? ? Project.null_object : original_project
   end
   
+  def self.new_deferred
+    todo = self.new
+    def todo.set_initial_state
+      self.state = 'deferred'
+    end
+    todo
+  end
+  
   def self.not_done( id=id )
     self.find(:all, :conditions =>[ "done = ? AND context_id = ?", false, id], :order =>"due IS NULL, due ASC, created_at ASC")
   end

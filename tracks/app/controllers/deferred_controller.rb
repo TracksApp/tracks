@@ -20,8 +20,7 @@ class DeferredController < ApplicationController
   
   def create
     @source_view = 'deferred'
-    @item = Todo.new
-    @item.defer!
+    @item = Todo.new_deferred
     @item.attributes = params["todo"]
     if params["todo"]["show_from"] 
       @item.show_from = parse_date_per_user_prefs(params["todo"]["show_from"])
