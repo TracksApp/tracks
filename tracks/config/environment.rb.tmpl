@@ -63,12 +63,8 @@ SALT = "change-me"
 AUTHENTICATION_SCHEMES = ['database']
 
 require 'name_part_finder'
-require 'acts_as_todo_container'
+require 'todo_list'
 require 'config'
-
-ActiveRecord::Base.class_eval do
-	include Tracks::Acts::TodoContainer
-end
 
 if (AUTHENTICATION_SCHEMES.include? 'ldap')
   require 'net/ldap' #requires ruby-net-ldap gem be installed

@@ -1,5 +1,5 @@
 class Project < ActiveRecord::Base
-  has_many :todos, :dependent => :delete_all
+  has_many :todos, :dependent => :delete_all, :include => :context
   has_many :notes, :dependent => true, :order => "created_at DESC"
   belongs_to :user
   
@@ -13,7 +13,7 @@ class Project < ActiveRecord::Base
   acts_as_list :scope => :user
   acts_as_state_machine :initial => :active, :column => 'state'
   extend NamePartFinder
-  acts_as_todo_container :find_todos_include => :context
+  include Tracks::TodoList
   
   state :active
   state :hidden, :enter => :hide_todos, :exit => :unhide_todos

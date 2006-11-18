@@ -1,11 +1,11 @@
 class Context < ActiveRecord::Base
 
-  has_many :todos, :dependent => :delete_all, :order => "completed_at DESC"
+  has_many :todos, :dependent => :delete_all, :include => :project, :order => "completed_at DESC"
   belongs_to :user
   
   acts_as_list :scope => :user
   extend NamePartFinder
-  acts_as_todo_container :find_todos_include => :project
+  include Tracks::TodoList
 
   attr_protected :user
 
