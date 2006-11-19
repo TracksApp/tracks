@@ -3,7 +3,7 @@ class ContextController < ApplicationController
   helper :todo
 
   prepend_before_filter :login_required
-  layout "standard"
+  layout "standard", :except => :date_preview
 
   def index
     list
@@ -78,19 +78,17 @@ class ContextController < ApplicationController
 
     @saved = @item.save
     if @saved
-      # This reports real count +1 for some reason that I don't understand
-      # Almost identical code for add_item in projects reports correct num
-      @up_count = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = ? and todos.context_id IN (?)", @user.id, false, @item.context_id]).size.to_s
+      @up_count = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.state = ? and todos.context_id = ?", @user.id, 'active', @item.context_id]).size.to_s
     end
      
     return if request.xhr?
     
     # fallback for standard requests
     if @saved
-      flash[:notice] = 'Added new next action.'
+      notify :notice, 'Added new next action.'
       redirect_to :controller => 'todo', :action => 'list'
     else
-      flash[:warning] = 'The next action was not added. Please try again.'
+      notify :warning, 'The next action was not added. Please try again.'
       redirect_to :controller => 'todo', :action => 'list'
     end
     
@@ -98,7 +96,7 @@ class ContextController < ApplicationController
       if request.xhr? # be sure to include an error.rjs
         render :action => 'error'
       else
-        flash[:warning] = 'An error occurred on the server.'
+        notify :warning, 'An error occurred on the server.'
         redirect_to :controller => 'todo', :action => 'list'
       end
   end
@@ -113,7 +111,7 @@ class ContextController < ApplicationController
     if @context.save
       render :partial => 'context_listing', :object => @context
     else
-      flash[:warning] = "Couldn't update new context"
+      notify :warning, "Couldn't update new context"
       render :text => ""
     end
   end
@@ -126,7 +124,7 @@ class ContextController < ApplicationController
     if @context.destroy
       render_text ""
     else
-      flash[:warning] = "Couldn't delete context \"#{@context.name}\""
+      notify :warning, "Couldn't delete context \"#{@context.name}\""
       redirect_to( :controller => "context", :action => "list" )
     end
   end
@@ -156,7 +154,7 @@ class ContextController < ApplicationController
         return @context
       else
         @context = nil # Should be nil anyway.
-        flash[:warning] = "Item and session user mis-match: #{@context.user_id} and #{@user.id}!"
+        notify :warning, "Item and session user mis-match: #{@context.user_id} and #{@user.id}!"
         render_text ""
       end
     end
@@ -167,7 +165,7 @@ class ContextController < ApplicationController
          return @context
        else
          @context = nil
-         flash[:warning] = "Project and session user mis-match: #{@context.user_id} and #{@user.id}!"
+         notify :warning, "Project and session user mis-match: #{@context.user_id} and #{@user.id}!"
          render_text ""
        end
     end
@@ -177,7 +175,7 @@ class ContextController < ApplicationController
       if @user == item.user
         return item
       else
-        flash[:warning] = "Item and session user mis-match: #{item.user.name} and #{@user.name}!"
+        notify :warning, "Item and session user mis-match: #{item.user.name} and #{@user.name}!"
         render_text ""
       end
     end

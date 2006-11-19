@@ -53,17 +53,19 @@
   <li><%= navigation_link(image_tag("feed-icon", :size => "16X16", :border => 0), {:controller => "feed", :action => "index"}, :title => "See a list of available feeds" ) %></li>
 </ul>
 </div>
+
+<%= render_flash %>
 </div>
 
 <div id="content">
-<div id="info"></div>
+
 <% unless @controller_name == 'feed' or session['noexpiry'] == "on" -%>
 <%= periodically_call_remote( :url => {:controller => "login", :action => "check_expiry"},
                               :frequency => (5*60)) %>
 <% end -%>
 <%= periodically_call_remote( :url => {:controller => "deferred", :action => "check_tickler"},
                               :frequency => (10*60)) %>  
-<%= @content_for_layout %>
+<%= yield %>
 </div>
 
 <div id="footer">

@@ -1,7 +1,5 @@
 if @saved
-  page.show "status"
-  page.replace_html "status", content_tag("div", "Added new next action", "class" => "confirmation")
-  page.visual_effect :fade, 'status', :duration => 2
+  page.notify :notice, "Added new next action", 5.0
   page['badge_count'].replace_html @up_count
   page.send :record, "Form.reset('todo-form-new-action');Form.focusFirstElement('todo-form-new-action')"
   page.send :record, "Form.reset('todo-form-new-action-lightbox');Form.focusFirstElement('todo-form-new-action-lightbox')"
@@ -10,7 +8,6 @@ if @saved
   page.visual_effect :highlight, "item-#{@item.id}-container", :duration => 3
   page["c#{@item.context_id}empty-nd"].hide
 else
-  page.hide "status"
-  page.replace_html "status", content_tag("div", content_tag("h2", "#{pluralize(@item.errors.count, "error")} prohibited this record from being saved") + content_tag("p", "There were problems with the following fields:") + content_tag("ul", @item.errors.each_full { |msg| content_tag("li", msg) }), "id" => "ErrorExplanation", "class" => "ErrorExplanation")
-  page.visual_effect :appear, 'status', :duration => 0.5
+  page.show 'status'
+  page.replace_html 'status', "#{error_messages_for('item')}"
 end

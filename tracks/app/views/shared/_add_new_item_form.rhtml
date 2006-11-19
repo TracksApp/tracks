@@ -28,8 +28,7 @@
 <% end -%>
 
 <div id="todo_new_action" class="context_new" style="display:<%= hide_link ? 'block' : 'none'%>">
-<div id="status">
-</div>
+
 <!--[form:todo]-->
 <% if controller.controller_name == "deferred" -%>
   <%= form_remote_tag(
@@ -40,6 +39,8 @@
     :url => { :controller => controller.controller_name, :action => "add_item" },
     :html=> { :id=>'todo-form-new-action', :name=>'todo', :class => 'inline-form' }) %>
 <% end -%>
+
+<div id="status"><%= error_messages_for("item") %></div>
 
 <label for="todo_description">Description</label><br />
 <%= text_field( "todo", "description", "size" => 25, "tabindex" => 1) %><br />

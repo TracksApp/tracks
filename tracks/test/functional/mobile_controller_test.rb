@@ -21,10 +21,10 @@ class MobileControllerTest < Test::Unit::TestCase
   def test_create_item
     @count = Todo.find(:all)
     @request.session['user_id'] = users(:admin_user).id
-    xhr :post, :update, :_source_view => 'todo', "item"=>{"context_id"=>"1", "project_id"=>"2", "notes"=>"", "description"=>"Invest in spam stock offer", "due"=>"01/01/2007"}
+    xhr :post, :update, "item"=>{"context_id"=>"1", "project_id"=>"2", "notes"=>"", "description"=>"Invest in spam stock offer", "due"=>"01/01/2007", "show_from"=>"", "state"=>"0"}
     @todos = Todo.find(:all)
     assert_equal @count.size+1, @todos.size
-    t = Todo.find(15)
+    t = Todo.find(:first, :conditions => ['description = ?', "Invest in spam stock offer"])
     assert_equal "Invest in spam stock offer", t.description
     assert_equal Date.parse("01/01/2007"), t.due
     assert_equal users(:admin_user).id, t.user_id

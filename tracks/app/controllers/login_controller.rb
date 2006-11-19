@@ -14,12 +14,12 @@ class LoginController < ApplicationController
           # of inactivity
           session['noexpiry'] = params['user_noexpiry']
           msg = (should_expire_sessions?) ? "will expire after 1 hour of inactivity." : "will not expire." 
-          flash[:notice]  = "Login successful: session #{msg}"
+          notify :notice, "Login successful: session #{msg}"
           cookies[:tracks_login] = { :value => @user.login, :expires => Time.now + 1.year }
           redirect_back_or_default :controller => "todo", :action => "index"
         else
           @login = params['user_login']
-          flash[:warning] = "Login unsuccessful"
+          notify :warning, "Login unsuccessful"
       end
     end
   end
@@ -37,7 +37,7 @@ class LoginController < ApplicationController
         # redirect to the server
         redirect_to open_id_response.redirect_url((request.protocol + request.host_with_port + "/"), url_for(:action => 'complete'))
       else
-        flash[:warning] = "Unable to find openid server for <q>#{params[:openid_url]}</q>"
+        notify :warning, "Unable to find openid server for <q>#{params[:openid_url]}</q>"
         redirect_to :action => 'login'
     end
   end
@@ -49,11 +49,11 @@ class LoginController < ApplicationController
         # URL that we were verifying. We include it in the error
         # message to help the user figure out what happened.
         if open_id_response.identity_url
-          flash[:message] = "Verification of #{open_id_response.identity_url} failed. "
+          msg = "Verification of #{open_id_response.identity_url} failed. "
         else
-          flash[:message] = "Verification failed. "
+          msg = "Verification failed. "
         end
-        flash[:message] += open_id_response.msg.to_s
+        notify :error, open_id_response.msg.to_s + msg
 
       when OpenID::SUCCESS
         # Success means that the transaction completed without
@@ -61,18 +61,18 @@ class LoginController < ApplicationController
         # the verification.
         @user = User.find_by_open_id_url(open_id_response.identity_url)
         unless (@user.nil?)
-          flash[:message] = "You have successfully verified #{open_id_response.identity_url} as your identity."
+          notify :notice, "You have successfully verified #{open_id_response.identity_url} as your identity."
           session['user_id'] = @user.id
           redirect_back_or_default :controller => 'todo', :action => 'index'
         else
-          flash[:warning] = "You have successfully verified #{open_id_response.identity_url} as your identity, but you do not have a Tracks account. Please ask your administrator to sign you up."
+          notify :warning, "You have successfully verified #{open_id_response.identity_url} as your identity, but you do not have a Tracks account. Please ask your administrator to sign you up."
         end
 
       when OpenID::CANCEL
-        flash[:message] = "Verification cancelled."
+        notify :warning, "Verification cancelled."
 
       else
-        flash[:warning] = "Unknown response status: #{open_id_response.status}"
+        notify :warning, "Unknown response status: #{open_id_response.status}"
     end
     redirect_to :action => 'login' unless performed?
   end
@@ -107,7 +107,7 @@ class LoginController < ApplicationController
       @user = User.authenticate(user.login, params['user']['password'])
       @user.create_preference
       @user.save
-      flash[:notice]  = "Signup successful for user #{@user.login}."
+      notify :notice, "Signup successful for user #{@user.login}."
       redirect_back_or_default :controller => "todo", :action => "index"
     end
   end
@@ -124,7 +124,7 @@ class LoginController < ApplicationController
   def logout
     session['user_id'] = nil
     reset_session
-    flash[:notice]  = "You have been logged out of Tracks."
+    notify :notice, "You have been logged out of Tracks."
     redirect_to :action => "login"
   end
   

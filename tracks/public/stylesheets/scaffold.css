@@ -60,7 +60,32 @@ div.memo {
   background: #ff9;
 }
 
-#notice {
+/* Flash box styling */
+
+h4.alert  {
+   font-size: 0.8em;
+   font-weight:bold;
+   margin:0;
+   padding:5px;
+   text-align: center;
+}
+
+h4.warning  {
+  border: 1px solid #ED2E38; 
+  background-color: #F6979C;
+  color: #000000;
+}
+h4.error  {
+   color:#fff; 
+   background:#c00;
+}
+h4.notice {
+  border: 1px solid #007E00; 
+  background-color: #c2ffc2;
+  color: #007E00;
+}
+
+/*#notice {
   padding: 2px;
   border: 1px solid #007E00; 
   background-color: #c2ffc2;
@@ -68,6 +93,7 @@ div.memo {
   margin-bottom: 15px;
   text-align: center;
   }
+*/
 
 #footer {
   clear: both;
@@ -79,23 +105,6 @@ div.memo {
   padding: 0px;
   }
 
-#warning {
-      padding: 2px;
-      border: 1px solid #ED2E38; 
-      background-color: #F6979C;
-      color: #000000;
-      margin: 15px 5px;
-      text-align: center;
-      }
-
-#message {
-      padding: 2px;
-      border: 1px solid #CCC; 
-      background-color: #D2D3D6;
-      color: #666;
-      margin: 15px 5px;
-      text-align: center;
-      }
 
 /* Error message styles */
 .fieldWithErrors {
@@ -105,7 +114,6 @@ div.memo {
 }
 
 #errorExplanation {
-  width: 335px;
   border: 2px solid #ff0000;
   padding: 7px;
   padding-bottom: 12px;
@@ -131,8 +139,10 @@ div.memo {
 
 #errorExplanation ul li {
   font-size: 1em;
-  list-style: disc;
+  list-style-type: disc;
+	list-style-position: outside;
 }
+
 input.login_text {
 	width:200px;
 }

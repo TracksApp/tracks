@@ -1,1 +1,1 @@
-page.replace_html "status", content_tag("div", "A server error has occurred", "class" => "warning")
+page.notify :error, @error_message || "An error occurred on the server.", 8.0

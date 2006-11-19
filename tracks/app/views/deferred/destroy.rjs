@@ -5,5 +5,5 @@ if @saved
     page.visual_effect :appear, "tickler-empty-nd", :duration => 0.4
   end
 else
-  page["status"].replace_html content_tag("div", content_tag("h2", "#{pluralize(@item.errors.count, "error")} prohibited this record from being saved") + content_tag("p", "There were problems with the following fields:") + content_tag("ul", @item.errors.each_full { |msg| content_tag("li", msg) }), "id" => "ErrorExplanation", "class" => "ErrorExplanation")
+  page.notify :error, "There was an error deleting the item #{@item.description}", 8.0
 end

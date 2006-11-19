@@ -1,6 +1,4 @@
 <div id="display_box">
-
-<%= render_flash %>
   
 <%= render :partial => "project/project", :locals => { :project => @project, :collapsible => false } %>
 <% unless @done.empty? -%>

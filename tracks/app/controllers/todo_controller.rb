@@ -35,7 +35,7 @@ class TodoController < ApplicationController
     @contexts_to_show = @contexts.reject {|x| x.hide? }
     
     if @contexts.empty?
-      flash[:warning] = 'You must add at least one context before adding next actions.'
+      notify :warning, "You must add at least one context before adding next actions."
     end
 
     # Set count badge to number of not-done, not hidden context items
@@ -90,7 +90,7 @@ class TodoController < ApplicationController
      rescue
        respond_to do |wants|
          wants.html do
-           flash[:warning] = 'An error occurred on the server.'
+           notify :warning, "An error occurred on the server."
            render :action => "index"
          end
          wants.js { render :action => 'error' }
@@ -130,9 +130,12 @@ class TodoController < ApplicationController
     return if request.xhr?
 
     if @saved
-      redirect_with_notice "The action <strong>'#{@item.description}'</strong> was marked as <strong>#{@item.completed? ? 'complete' : 'incomplete' }</strong>", :action => "index"
+      # TODO: I think this will work, but can't figure out how to test it
+      notify :notice, "The action <strong>'#{@item.description}'</strong> was marked as <strong>#{@item.completed? ? 'complete' : 'incomplete' }</strong>"
+      redirect_to :action => "index"
     else
-      redirect_with_notice "The action <strong>'#{@item.description}'</strong> was NOT marked as <strong>#{@item.completed? ? 'complete' : 'incomplete' } due to an error on the server.</strong>", :action => "index"
+      notify :notice, "The action <strong>'#{@item.description}'</strong> was NOT marked as <strong>#{@item.completed? ? 'complete' : 'incomplete' } due to an error on the server.</strong>", "index"
+      redirect_to :action =>  "index"
     end
   end
 
@@ -166,7 +169,7 @@ class TodoController < ApplicationController
       render :action => 'update'
     else
       render :update do |page| 
-        page.replace_html "info", content_tag("div", "Error updating the context of the dragged item. Item and context user mis-match: #{@item.user.name} and #{@context.user.name}! - refresh the page to see them.", "class" => "warning")
+        page.notify :warning, content_tag("div", "Error updating the context of the dragged item. Item and context user mis-match: #{@item.user.name} and #{@context.user.name}! - refresh the page to see them."), 8.0
       end
     end
   end
@@ -183,7 +186,7 @@ class TodoController < ApplicationController
       render :action => 'update'
     else
       render :update do |page| 
-        page.replace_html "info", content_tag("div", "Error updating the project of the dragged item. Item and project user mis-match: #{@item.user.name} and #{@project.user.name}! - refresh the page to see them.", "class" => "warning")
+        page.notify :warning, content_tag("div", "Error updating the project of the dragged item. Item and project user mis-match: #{@item.user.name} and #{@project.user.name}! - refresh the page to see them."), 8.0
       end
     end
   end
@@ -198,9 +201,11 @@ class TodoController < ApplicationController
       
       wants.html do
         if @saved
-          redirect_with_notice 'Successfully deleted next action', :action => 'index'
+          notify :notice, "Successfully deleted next action", 2.0
+          redirect_to :action => 'index'
         else
-          redirect_with_warning 'Failed to delete the action.', :action => 'index'
+          notify :error, "Failed to delete the action", 2.0
+          redirect_to :action => 'index'
         end
       end
       
@@ -223,7 +228,7 @@ class TodoController < ApplicationController
     rescue
       respond_to do |wants|
         wants.html do
-          flash[:warning] = 'An error occurred on the server.'
+          notify :error, 'An error occurred on the server.', 8.0
           redirect_to :action => 'index'
         end
         wants.js { render :action => 'error' }
@@ -255,7 +260,7 @@ class TodoController < ApplicationController
         @error_message = 'Item and session user mis-match: #{item.user.name} and #{@user.name}!'
         respond_to do |wants|
           wants.html do
-            flash[:warning] = @error_message
+            notify :error, @error_message, 8.0
             render :action => "index"
           end
           wants.js { render :action => 'error' }

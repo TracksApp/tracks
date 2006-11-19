@@ -37,7 +37,7 @@ class NoteController < ApplicationController
     if note.destroy
       render :text => ''
     else
-      flash[:warning] = "Couldn't delete note \"#{note.id.to_s}\""
+      notify :warning, "Couldn't delete note \"#{note.id.to_s}\""
       render :text => ''
     end
   end
@@ -48,7 +48,7 @@ class NoteController < ApplicationController
       if note.save
         render :partial => 'notes', :object => note
       else
-        flash[:warning] = "Couldn't update note \"#{note.id.to_s}\""
+        notify :warning, "Couldn't update note \"#{note.id.to_s}\""
         render :text => ''
       end
   end

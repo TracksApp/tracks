@@ -23,7 +23,6 @@ class ProjectControllerTest < TodoContainerControllerTestBase
 
   def test_create_project_with_ajax_success_rjs
     ajax_create 'My New Project'
-    assert_rjs :hide, "warning"
     assert_rjs :insert_html, :bottom, "list-projects"
     assert_rjs :sortable, 'list-projects', { :tag => 'div', :handle => 'handle', :complete => visual_effect(:highlight, 'list-projects'), :url => {:controller => 'project', :action => 'order'} }
     # not yet sure how to write the following properly...
@@ -37,9 +36,8 @@ class ProjectControllerTest < TodoContainerControllerTestBase
   
   def test_create_with_slash_in_name_fails_with_rjs
     ajax_create 'foo/bar'
-    assert_rjs :hide, "warning"
-    assert_rjs :replace_html, 'warning', "<div class=\"ErrorExplanation\" id=\"ErrorExplanation\"><h2>1 error prohibited this record from being saved</h2><p>There were problems with the following fields:</p><ul>Name cannot contain the slash ('/') character</ul></div>"
-    assert_rjs :visual_effect, :appear, "warning", :duration => '0.5'    
+    assert_rjs :show, 'status'
+    assert_rjs :update, 'status', "<div class=\"ErrorExplanation\" id=\"ErrorExplanation\"><h2>1 error prohibited this record from being saved</h2><p>There were problems with the following fields:</p><ul>Name cannot contain the slash ('/') character</ul></div>"
   end
   
   def test_todo_state_is_project_hidden_after_hiding_project

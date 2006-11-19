@@ -50,22 +50,6 @@ class ApplicationController < ActionController::Base
     end
   end
   
-  def redirect_with_notice( message,  options = {})
-    options['flash_target'] = 'notice'
-    redirect_with_flash message, options      
-  end
-  
-  def redirect_with_flash( message, options )
-    flash[options['flash_target']] = message
-    options.delete 'flash_target'
-    redirect_to options
-  end
-  
-  def redirect_with_warning( message,  options = {})
-    options['flash_target'] = 'warning'
-    redirect_with_flash message, options      
-  end
-  
   def render_failure message, status = 404
     render :text => message, :status => status
   end
@@ -105,6 +89,14 @@ class ApplicationController < ActionController::Base
     parents.each do |parent|
       eval("@#{parent}_project_hidden_todo_counts = Todo.count(:conditions => ['user_id = ? and state = ?', @user.id, 'project_hidden'], :group => :#{parent}_id)")
     end
+  end
+  
+  # Set the contents of the flash message from a controller
+  # Usage: notify :warning, "This is the message"
+  # Sets the flash of type 'warning' to "This is the message"
+  def notify(type, message)
+    flash[type] = message
+    logger.error("ERROR: #{message}") if type == :error
   end
   
 end

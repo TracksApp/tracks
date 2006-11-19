@@ -1,7 +1,5 @@
 <div id="display_box">
   
-  <%= render_flash %>
-  
   <%= render :partial => "context/context", :collection => @contexts_to_show, 
             :locals => { :collapsible => true } %>
   <% unless @done.nil? -%>

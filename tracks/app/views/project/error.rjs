@@ -1,1 +1,1 @@
-page.replace_html "status", "A server error has occurred"
+page.notify :error, @error_message || "An error occurred on the server.", 8.0

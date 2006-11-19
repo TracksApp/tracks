@@ -75,6 +75,7 @@ class UserController < ApplicationController
       redirect_to :controller => 'user', :action => 'preferences'
     else
       redirect_to :controller => 'user', :action => 'change_password'
+      notify :warning, "There was a problem saving the password. Please retry."
     end
   end
 
@@ -92,17 +93,17 @@ class UserController < ApplicationController
           # redirect to the server
           redirect_to open_id_response.redirect_url((request.protocol + request.host_with_port + "/"), url_for(:action => 'complete'))
         else
-          flash[:warning] = "Unable to find openid server for <q>#{params[:openid_url]}</q>"
+          notify :warning, "Unable to find openid server for <q>#{params[:openid_url]}</q>"
           redirect_to :action => 'change_auth_type'
       end
       return
     end
     @user.auth_type = params[:user][:auth_type]
     if @user.save
-      flash[:notice] = "Authentication type updated."
+      notify :notice, "Authentication type updated."
       redirect_to :controller => 'user', :action => 'preferences'
     else
-      flash[:warning] = "There was a problem updating your authentication type: #{ @user.errors.full_messages.join(', ')}"
+      notify :warning, "There was a problem updating your authentication type: #{ @user.errors.full_messages.join(', ')}"
       redirect_to :controller => 'user', :action => 'change_auth_type'
     end
   end
@@ -114,11 +115,11 @@ class UserController < ApplicationController
         # URL that we were verifying. We include it in the error
         # message to help the user figure out what happened.
         if open_id_response.identity_url
-          flash[:message] = "Verification of #{open_id_response.identity_url} failed. "
+          msg = "Verification of #{open_id_response.identity_url} failed. "
         else
-          flash[:message] = "Verification failed. "
+          msg = "Verification failed. "
         end
-        flash[:message] += open_id_response.msg.to_s
+        notify :error, open_id_response.msg.to_s + msg
 
       when OpenID::SUCCESS
         # Success means that the transaction completed without
@@ -127,17 +128,17 @@ class UserController < ApplicationController
         @user.auth_type = 'open_id'
         @user.open_id_url = open_id_response.identity_url
         if @user.save
-          flash[:message] = "You have successfully verified #{open_id_response.identity_url} as your identity and set your authentication type to Open ID."
+          notify :notice, "You have successfully verified #{open_id_response.identity_url} as your identity and set your authentication type to Open ID."
         else
-          flash[:warning] = "You have successfully verified #{open_id_response.identity_url} as your identity but there was a problem saving your authentication preferences."
+          notify :warning, "You have successfully verified #{open_id_response.identity_url} as your identity but there was a problem saving your authentication preferences."
         end
         redirect_to :action => 'preferences'
 
       when OpenID::CANCEL
-        flash[:message] = "Verification cancelled."
+        notify :warning, "Verification cancelled."
 
       else
-        flash[:warning] = "Unknown response status: #{open_id_response.status}"
+        notify :warning, "Unknown response status: #{open_id_response.status}"
     end
     redirect_to :action => 'change_auth_type' unless performed?
   end
@@ -146,6 +147,7 @@ class UserController < ApplicationController
   def refresh_token
     @user.crypt_word
     @user.save
+    notify :notice, "New token successfully generated"
     redirect_to :controller => 'user', :action => 'preferences'
   end
   
@@ -154,10 +156,10 @@ class UserController < ApplicationController
   def do_change_password_for(user)
     user.change_password(params[:updateuser][:password], params[:updateuser][:password_confirmation])
     if user.save
-      flash[:notice] = "Password updated."
+      notify :notice, "Password updated."
       return true
     else
-      flash[:warning] = 'There was a problem saving the password. Please retry.'
+      notify :error, 'There was a problem saving the password. Please retry.'
       return false
     end
   end

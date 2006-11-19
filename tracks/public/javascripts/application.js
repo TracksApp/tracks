@@ -14,6 +14,14 @@ Ajax.Responders.register({
 //  }
 });
 
+/* fade flashes automatically */
+Event.observe(window, 'load', function() { 
+  $A(document.getElementsByClassName('alert')).each(function(o) {
+    o.opacity = 100.0
+    Effect.Fade(o, {duration: 8.0})
+  });
+});
+
 /**
  * Provides a simple interface for creating, retrieving and clearing cookies.
  * Adapted from Jonathan Buchanan's code at http://insin.woaf.net/code/javascript/cookiemanager.html 

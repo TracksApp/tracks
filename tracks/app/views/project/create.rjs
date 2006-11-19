@@ -5,7 +5,6 @@ if @saved
   page.call "Form.reset", "project-form"
   page.call "Form.focusFirstElement", "project-form"
 else
-  page.hide "warning"
-  page.replace_html "warning", content_tag("div", content_tag("h2", "#{pluralize(@project.errors.count, "error")} prohibited this record from being saved") + content_tag("p", "There were problems with the following fields:") + content_tag("ul", @project.errors.each_full { |msg| content_tag("li", msg) }), "id" => "ErrorExplanation", "class" => "ErrorExplanation")
-  page.visual_effect :appear, 'warning', :duration => 0.5
+  page.show 'status'
+  page.replace_html 'status', "#{error_messages_for('project')}"
 end

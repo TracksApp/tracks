@@ -5,7 +5,7 @@ class ProjectController < ApplicationController
   helper :todo
   prepend_before_filter :login_required
 
-  layout "standard"
+  layout "standard", :except => :date_preview
 
   def index
     list
@@ -35,7 +35,7 @@ class ProjectController < ApplicationController
     @page_title = "TRACKS::Project: #{@project.name}"
     
     if @contexts.empty?
-      flash[:warning] = 'You must add at least one context before adding next actions.'
+      notify :warning, 'You must add at least one context before adding next actions.'
     end
     
     if @not_done.empty?
@@ -103,17 +103,17 @@ class ProjectController < ApplicationController
 
     @saved = @item.save
     if @saved
-      @up_count = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.done = ? and todos.project_id IN (?)", @user.id, false, @item.project_id]).size.to_s
+      @up_count = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.state = ? and todos.project_id = ?", @user.id, 'active', @item.project_id]).size.to_s
     end
     
     return if request.xhr?
     
     # fallback for standard requests
     if @saved
-      flash[:notice] = 'Added new next action.'
+      notify :notice, 'Added new next action.'
       redirect_to :controller => 'todo', :action => 'index'
     else
-      flash[:warning] = 'The next action was not added. Please try again.'
+      notify :warning, 'The next action was not added. Please try again.'
       redirect_to :controller => 'todo', :action => 'index'
     end
     
@@ -121,7 +121,7 @@ class ProjectController < ApplicationController
       if request.xhr? # be sure to include an error.rjs
         render :action => 'error'
       else
-        flash[:warning] = 'An error occurred on the server.'
+        notify :warning, 'An error occurred on the server.'
         redirect_to :controller => 'todo', :action => 'index'
       end
   end
@@ -148,7 +148,7 @@ class ProjectController < ApplicationController
         render :text => 'Success'
       end
     else
-      flash[:warning] = "Couldn't update project"
+      notify :warning, "Couldn't update project"
       render :text => ''
     end
   end
@@ -171,7 +171,7 @@ class ProjectController < ApplicationController
     if @project.destroy
       render :text => ''
     else
-      flash[:warning] = "Couldn't delete project \"#{@project.name}\""
+      notify :warning, "Couldn't delete project \"#{@project.name}\""
       redirect_to( :controller => "project", :action => "list" )
     end
   end
@@ -201,7 +201,7 @@ class ProjectController < ApplicationController
         return @project
       else
         @project = nil # Should be nil anyway
-        flash[:warning] = "Project and session user mis-match: #{@project.user_id} and #{@user.id}!"
+        notify :warning, "Project and session user mis-match: #{@project.user_id} and #{@user.id}!"
         render :text => ''
       end
     end
@@ -212,7 +212,7 @@ class ProjectController < ApplicationController
         return @project
       else
         @project = nil
-        flash[:warning] = "Project and session user mis-match: #{@project.user_id} and #{@user.id}!"
+        notify :warning, "Project and session user mis-match: #{@project.user_id} and #{@user.id}!"
         render :text => ''
       end
     end
@@ -222,7 +222,7 @@ class ProjectController < ApplicationController
       if @user == item.user
         return item
       else
-        flash[:warning] = "Item and session user mis-match: #{item.user.name} and #{@user.name}!"
+        notify :warning, "Item and session user mis-match: #{item.user.name} and #{@user.name}!"
         render :text => ''
       end
     end

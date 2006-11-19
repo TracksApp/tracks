@@ -87,7 +87,7 @@ class MobileController < ApplicationController
     if @user == item.user
       return item
     else
-      flash[:warning] = "Item and session user mis-match: #{item.user.name} and #{@user.name}!"
+      notify :warning, "Item and session user mis-match: #{item.user.name} and #{@user.name}!"
       render_text ""
     end
   end

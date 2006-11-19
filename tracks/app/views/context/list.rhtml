@@ -1,6 +1,4 @@
 <div id="display_box">
-  <%= render_flash %>
-
   <div id="list-contexts">
     <%= render :partial => 'context_listing', :collection => @contexts %>
   </div>
@@ -13,6 +11,9 @@
   <div id="context_new" class="context_new" style="display:none">
     <!--[form:context]-->
     <%= form_remote_tag :url => { :action => "create" }, :html=> { :id=>'context-form', :name=>'context', :class => 'inline-form' } %>
+    
+      <div id="status"><%= error_messages_for('context') %></div>
+      
       <%= hidden_field( "context", "id" ) %>
       <label for="context_name">Context name</label>   
       <br />                               

@@ -143,7 +143,7 @@ a.show_notes:hover {background-image: url(../images/notes_on.png); background-re
       text-align: right;
       position: fixed;
       right: 15px;
-      top: 20px;
+      top: 10px;
       font-size: 0.9em;
       }
       
@@ -306,46 +306,41 @@ div#project_status > div {
 	}
 a.footer_link {color: #cc3334; font-style: normal;}
 a.footer_link:hover {color: #fff; background-color: #cc3334 !important;}
-      
-/* The alert box notifications */
-#notice {
-  padding: 2px;
+
+/* Flash box styling */
+
+div#message_holder {
+  position: absolute;
+  z-index: 100;
+  left: 60%;
+  top: 30px;
+  right: 0px;
+  margin: 0px;
+}
+
+h4.alert  {
+   font-size: 1em;
+   margin: 0px;
+   padding: 5px;
+   text-align: center;
+}
+
+h4.warning  {
+  border: 1px solid #ED2E38; 
+  background-color: #F6979C;
+  color: #000;
+}
+h4.error  {
+   color:#fff; 
+   background:#c00;
+}
+h4.notice {
   border: 1px solid #007E00; 
   background-color: #c2ffc2;
   color: #007E00;
-  margin: 15px 5px;
-  text-align: center;
-  }
-      
-.confirmation {
-      border: 1px solid #007E00; 
-      background-color: #c2ffc2;
-      color: #007E00;
-      text-align: center;
-      }
-    
-#status .confirmation {
-	    margin: 2px 5px;
 }
-#warning, .warning {
-      padding: 2px;
-      border: 1px solid #ED2E38; 
-      background-color: #F6979C;
-      color: #000000;
-      margin: 15px 5px;
-      text-align: center;
-      }
-      
-#message, .message {
-      padding: 2px;
-      border: 1px solid #CCC; 
-      background-color: #D2D3D6;
-      color: #666;
-      margin: 15px 5px;
-      text-align: center;
-      }
 
-.warning p {color: #FFFFFF;}
+/* *****/
 
 .project_completed {
       border: 1px solid #007E00; 
@@ -613,7 +608,6 @@ div.message {
 }
 
 #errorExplanation {
-  width: 335px;
   border: 2px solid #ff0000;
   padding: 7px;
   padding-bottom: 12px;
@@ -639,7 +633,8 @@ div.message {
 
 #errorExplanation ul li {
   font-size: 1em;
-  list-style: disc;
+  list-style-type: disc;
+  list-style-position: inside;
 }
 
 ul#prefs {list-style-type: disc; margin-left: 5px;}
@@ -688,7 +683,7 @@ ul#prefs {list-style-type: disc; margin-left: 5px;}
 }
 #feeds li {
 	font-size:13px;
-    font-family: "Lucida Grande", Verdana, Geneva, Arial, sans-serif;
+  font-family: "Lucida Grande", Verdana, Geneva, Arial, sans-serif;
 }
 #feeds li h4 {
 	margin-top: 12px;
