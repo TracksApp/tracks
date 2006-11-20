@@ -1,5 +1,4 @@
 if @saved
-  page.hide "warning"
   page.insert_html :bottom, "list-projects", :partial => 'project_listing', :locals => { :project_listing => @project }
   page.sortable "list-projects", get_listing_sortable_options
   page.call "Form.reset", "project-form"
