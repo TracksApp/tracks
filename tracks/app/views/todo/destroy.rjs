@@ -1,11 +1,8 @@
 if @saved
   page["item-#{@item.id}-container"].remove
   page['badge_count'].replace_html @down_count
-  source_view do |from|
-     from.todo { page.visual_effect :fade, "c#{@item.context_id}", :duration => 0.4 if @remaining_undone_in_context == 0 }
-     from.context { page["c#{@item.context_id}empty-nd"].show if @down_count == 0 }
-     from.project { page["p#{@item.project_id}empty-nd"].show if @down_count == 0 }
-   end
+  page.visual_effect :fade, "c#{@item.context_id}", :duration => 0.4 if source_view_is :todo && @remaining_undone_in_context == 0
+  page[empty_container_msg_div_id].show if !empty_container_msg_div_id.nil? && @down_count == 0
 else
   page.notify :error, "There was an error deleting the item #{@item.description}", 8.0
 end

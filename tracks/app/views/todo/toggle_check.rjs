@@ -1,15 +1,4 @@
-if @saved
-  
-  item_container_id = "c#{@item.context_id}"
-  parent_container_type = "context"
-  if source_view_is :context
-      empty_container_msg_div_id = "c#{@item.context_id}empty-nd"
-  elsif source_view_is :project
-    item_container_id = "p#{@item.project_id}"
-    empty_container_msg_div_id = "p#{@item.project_id}empty-nd"
-    parent_container_type = "project"
-  end
-  
+if @saved  
   page.remove "item-#{@item.id}-container"
   if @item.completed?
     # Don't try to insert contents into a non-existent container!

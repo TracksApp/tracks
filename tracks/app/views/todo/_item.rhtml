@@ -1,35 +1,47 @@
 <div id="item-<%= item.id %>-container" class="item-container">
-    
   <div id="item-<%= item.id %>">
     <%= link_to_remote_todo item %>
+
+    <% unless source_view_is :deferred -%>
     <input type="checkbox" class="item-checkbox"
            onclick="new Ajax.Request('<%= url_for :controller => 'todo', :action => 'toggle_check', :id => item.id, :_source_view => @source_view %>', {asynchronous:true, evalScripts:true});"
            name="item_id" value="<%= item.id %>"<% if item.completed? %> checked="checked" <% end %> />
-      <div class="description<%= staleness_class( item ) %>"><% # start of div which has a class 'description', and possibly 'stale_11', 'stale_12', 'stale_13' etc %>
-<% if item.completed? -%>
-        <span class="grey"><%= format_date( item.completed_at ) %></span>
-<% else -%>
-        <%= due_date( item.due ) -%> 
-<% end -%>
+    <% end -%>
 
-<%= sanitize(item.description) %>
-<% if item.completed? -%>
-  (<%= item.context.name %><%= ", " + item.project.name if item.project_id %>)
-<% else -%>
-  <% if parent_container_type == "project" -%>
+    <div class="description<%= staleness_class( item ) %>"><% # start of div which has a class 'description', and possibly 'stale_11', 'stale_12', 'stale_13' etc %>
+      <% if item.completed? -%>
+        <span class="grey"><%= format_date( item.completed_at ) %></span>
+      <% elsif item.deferred? -%>
+        <%= show_date( item.show_from ) -%>
+      <% else -%>
+        <%= due_date( item.due ) -%> 
+      <% end -%>
+
+      <%= sanitize(item.description) %>
+
+      <% if item.deferred? && item.due -%>
+        (action due on <%= item.due.to_s %>)
+      <% end -%>
+
+      <% if item.completed? -%>
+        (<%= item.context.name %><%= ", " + item.project.name if item.project_id %>)
+      <% else -%>
+        <% if (parent_container_type == "project" || parent_container_type == "tickler") -%>
           <%= item_link_to_context( item ) %>
-  <% elsif item.project_id -%>
+        <% end -%>
+        <% if (parent_container_type == "context" || parent_container_type == "tickler") && item.project_id -%>
           <%= item_link_to_project( item ) %>
-  <% end -%>
-<% end -%>
-<% if item.notes? -%>
-       <%= toggle_show_notes( item ) %>
-<% end -%>
-      </div>
+        <% end -%>
+      <% end -%>
+
+      <% if item.notes? -%>
+        <%= toggle_show_notes( item ) %>
+      <% end -%>
+    </div>
   </div><!-- [end:item-item.id] -->
   <div id="action-<%= item.id %>-edit-form" class="edit-form" style="display:none;">
-    <%= form_remote_tag_edit_todo( item, "immediate" ) -%>
+    <%= form_remote_tag_edit_todo( item ) -%>
     <% #note: edit form will load here remotely -%>
     <%= end_form_tag -%>
   </div><!-- [end:action-item.id-edit-form] -->
- </div><!-- [end:item-item.id-container] -->
+</div><!-- [end:item-item.id-container] -->

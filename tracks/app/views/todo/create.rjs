@@ -1,12 +1,17 @@
 if @saved
-  page.notify :notice, "Added new next action", 5.0
-  page['badge_count'].replace_html @up_count
+  status_message = 'Added new next action'
+  status_message += ' to tickler' if @item.deferred?
+  status_message = 'Added new project / ' + status_message if @new_project_created
+  status_message = 'Added new context / ' + status_message if @new_context_created
+  page.notify :notice, status_message, 5.0
+  page['badge_count'].replace_html @down_count
   page.send :record, "Form.reset('todo-form-new-action');Form.focusFirstElement('todo-form-new-action')"
-  page.send :record, "Form.reset('todo-form-new-action-lightbox');Form.focusFirstElement('todo-form-new-action-lightbox')"
-  page.call "todoItems.ensureVisibleWithEffectAppear", "c#{@item.context_id}"
-  page.insert_html :bottom, "c#{@item.context_id}items", :partial => 'todo/item', :locals => { :parent_container_type => "context" }
+  page.call "todoItems.ensureVisibleWithEffectAppear", "c#{@item.context_id}" if source_view_is(:todo)
+  page << "contextAutoCompleter.options.array = #{context_names_for_autocomplete}" if @new_context_created
+  page << "projectAutoCompleter.options.array = #{project_names_for_autocomplete}" if @new_project_created
+  page.insert_html :bottom, item_container_id, :partial => 'todo/item', :locals => { :parent_container_type => parent_container_type, :source_view => @source_view }
   page.visual_effect :highlight, "item-#{@item.id}-container", :duration => 3
-  page["c#{@item.context_id}empty-nd"].hide
+  page[empty_container_msg_div_id].hide unless empty_container_msg_div_id.nil? 
 else
   page.show 'status'
   page.replace_html 'status', "#{error_messages_for('item')}"

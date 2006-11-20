@@ -42,6 +42,7 @@ class Todo < ActiveRecord::Base
   validates_length_of :notes, :maximum => 60000, :allow_nil => true 
   # validates_chronic_date :due, :allow_nil => true
   validates_presence_of :show_from, :if => :deferred?
+  validates_presence_of :context
   
   def validate
     if deferred? && show_from != nil && show_from < Date.today()
@@ -63,12 +64,14 @@ class Todo < ActiveRecord::Base
     original_project.nil? ? Project.null_object : original_project
   end
   
-  def self.new_deferred
-    todo = self.new
-    def todo.set_initial_state
-      self.state = 'deferred'
+  alias_method :original_set_initial_state, :set_initial_state
+  
+  def set_initial_state
+    if show_from && (show_from > Date.today())
+      write_attribute self.class.state_column, 'deferred'
+    else
+      original_set_initial_state
     end
-    todo
   end
   
   def self.not_done( id=id )

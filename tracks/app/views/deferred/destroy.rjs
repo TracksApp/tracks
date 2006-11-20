@@ -1,9 +1,0 @@
-if @saved
-  page["item-#{@item.id}-container"].remove
-  page['badge_count'].replace_html @down_count
-  if @down_count == 0
-    page.visual_effect :appear, "tickler-empty-nd", :duration => 0.4
-  end
-else
-  page.notify :error, "There was an error deleting the item #{@item.description}", 8.0
-end

@@ -54,6 +54,18 @@ class ApplicationController < ActionController::Base
     render :text => message, :status => status
   end
   
+  def rescue_action(exception)
+    log_error(exception) if logger
+    respond_to do |wants|
+      wants.html do
+        notify :warning, "An error occurred on the server."
+        render :action => "index"
+      end
+      wants.js { render :action => 'error' }
+      wants.xml { render :text => 'An error occurred on the server.' + $! }
+    end
+  end
+
   private
   
   def get_current_user

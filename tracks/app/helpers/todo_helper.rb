@@ -7,16 +7,14 @@ module TodoHelper
     count = Todo.find_all("done=0 AND context_id=#{context.id}").length
   end
 
-  def form_remote_tag_edit_todo( item, type )
-    (type == "deferred") ? controller_name = 'deferred' : controller_name = 'todo'
-    form_remote_tag( :url => { :controller => controller_name, :action => 'update', :id => item.id },
+  def form_remote_tag_edit_todo( item )
+    form_remote_tag( :url => { :controller => 'todo', :action => 'update', :id => item.id },
                     :html => { :id => "form-action-#{item.id}", :class => "inline-form" }
                    )
   end
   
-  def link_to_remote_todo( item, options = {})
-    (options[:type] == "deferred") ? controller_name = 'deferred' : controller_name = 'todo'
-    url_options = { :controller => controller_name, :action => 'destroy', :id => item.id, :_source_view => @source_view }
+  def link_to_remote_todo(item)
+    url_options = { :controller => 'todo', :action => 'destroy', :id => item.id, :_source_view => @source_view }
     
     str = link_to_remote( image_tag_for_delete,
                           { :url => url_options, :confirm => "Are you sure that you want to delete the action, \'#{item.description}\'?" },
@@ -105,6 +103,33 @@ module TodoHelper
     str << ",firstDay:#{week_starts},showOthers:true,range:[2004, 2010]"
     str << ",step:1,inputField:\"" + input_field + "\",cache:true,align:\"TR\" })\n"
     javascript_tag str
+  end
+  
+  def item_container_id
+    return "tickler-items" if source_view_is :deferred
+    return "p#{@item.project_id}" if source_view_is :project
+    return "c#{@item.context_id}"
+  end
+  
+  def parent_container_type
+    return 'tickler' if source_view_is :deferred
+    return 'project' if source_view_is :project
+    return 'context'
+  end
+  
+  def empty_container_msg_div_id
+    return "p#{@item.project_id}empty-nd" if source_view_is :project
+    return "c#{@item.context_id}empty-nd" if source_view_is :context
+    return "tickler-empty-nd" if source_view_is :deferred
+    nil
+  end
+  
+  def project_names_for_autocomplete
+     array_or_string_for_javascript( ['None'] + @projects.collect{|p| p.name } )
+  end
+  
+  def context_names_for_autocomplete
+     array_or_string_for_javascript( @contexts.collect{|c| c.name } )
   end
   
   private

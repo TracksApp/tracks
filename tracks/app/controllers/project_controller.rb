@@ -86,46 +86,6 @@ class ProjectController < ApplicationController
     end
   end
 
-  # Called by a form button
-  # Parameters from form fields are passed to create new action
-  # in the selected context.
-  def add_item
-    self.init
-    @item = @user.todos.build
-    @item.attributes = params["todo"]
-
-    if @item.due?
-      @date = parse_date_per_user_prefs(params["todo"]["due"])
-      @item.due = @date.to_s(:db)
-    else
-      @item.due = ""
-    end
-
-    @saved = @item.save
-    if @saved
-      @up_count = Todo.find(:all, :conditions => ["todos.user_id = ? and todos.state = ? and todos.project_id = ?", @user.id, 'active', @item.project_id]).size.to_s
-    end
-    
-    return if request.xhr?
-    
-    # fallback for standard requests
-    if @saved
-      notify :notice, 'Added new next action.'
-      redirect_to :controller => 'todo', :action => 'index'
-    else
-      notify :warning, 'The next action was not added. Please try again.'
-      redirect_to :controller => 'todo', :action => 'index'
-    end
-    
-    rescue
-      if request.xhr? # be sure to include an error.rjs
-        render :action => 'error'
-      else
-        notify :warning, 'An error occurred on the server.'
-        redirect_to :controller => 'todo', :action => 'index'
-      end
-  end
-
   # Edit the details of the project
   #
   def update

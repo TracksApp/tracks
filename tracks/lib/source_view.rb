@@ -40,7 +40,7 @@ module Tracks
       end
       
       def source_view_is( s )
-        s == params[:_source_view].to_sym
+        s == (params[:_source_view] || @source_view).to_sym
       end
     
       def source_view_is_one_of( s=[] )

@@ -13,34 +13,26 @@
     <td><%= text_area( "item", "notes", "cols" => 20, "rows" => 5, "tabindex" => 2) %></td>
   </tr>
   <tr>
-    <td class="label"><label for="item_context_id">Context</label></td>
-    <td><select name="item[context_id]" id="item_context_id" tabindex="3">
-             <% for @place in @contexts %>
-               <% if @item %>
-                 <% if @place.id == @item.context_id %>
-                   <option value="<%= @place.id %>" selected="selected"><%= @place.name %></option>
-                 <% else %>
-                   <option value="<%= @place.id %>"><%= @place.name %></option>
-                 <% end %>
-               <% else %>
-                   <option value="<%= @place.id %>"><%= @place.name %></option>
-               <% end %>
-             <% end %>
-           </select></td>
+    <td class="label"><label for="item_context_name">Context</label></td>
+    <td><input id="item_context_name" name="context_name" autocomplete="off" tabindex="3" size="25" type="text" value="<%= @item.context.name %>" />
+    <div class="page_name_auto_complete" id="edit_form_context_list" style="display:none"></div></td>
+    <script type="text/javascript">
+    editFormContextAutoCompleter = new Autocompleter.Local('item_context_name', 'edit_form_context_list', <%= context_names_for_autocomplete %>, {choices:100,autoSelect:true});
+    Event.observe($('item_context_name'), "focus", editFormContextAutoCompleter.activate.bind(editFormContextAutoCompleter));
+    Event.observe($('item_context_name'), "click", editFormContextAutoCompleter.activate.bind(editFormContextAutoCompleter));
+    </script>
   </tr>
   <tr>
-    <td class="label"><label for="item_project_id">Project</label></td>
+    <td class="label"><label for="item_project_name">Project</label></td>
     <td>
-      <select name="item[project_id]" id="item_project_id" tabindex="4">
-      <% if !@item.project_id? %>
-        <option selected="selected"></option>
-        <%= options_from_collection_for_select(@projects, "id", "name") %>
-      <% else %>
-        <option></option>
-        <%= options_from_collection_for_select(@projects, "id", "name", @item.project_id) %>
-      <% end %>
-      </select>
+      <input id="item_project_name" name="project_name" autocomplete="off" tabindex="4" size="25" type="text" value="<%= @item.project.nil? ? 'None' : @item.project.name %>" />
+      <div class="page_name_auto_complete" id="edit_form_project_list" style="display:none"></div>
     </td>
+   <script type="text/javascript">
+    editFormProjectAutoCompleter = new Autocompleter.Local('item_project_name', 'edit_form_project_list', <%= project_names_for_autocomplete %>, {choices:100,autoSelect:true});
+    Event.observe($('item_project_name'), "focus", editFormProjectAutoCompleter.activate.bind(editFormProjectAutoCompleter));
+    Event.observe($('item_project_name'), "click", editFormProjectAutoCompleter.activate.bind(editFormProjectAutoCompleter));
+    </script>
   </tr>
   <tr>
     <td class="label"><label for="item_due">Due</td>
@@ -52,7 +44,7 @@
     <td><input name="item[show_from]" id="show_from_<%= @item.id %>" type="text" value="<%= format_date(@item.show_from) %>" tabindex="5" size="10" onFocus="Calendar.setup" /></td>
   </tr>
     <% end -%>
-    <% if controller.controller_name == "project" || @item.current_state == :deferred -%>
+    <% if controller.controller_name == "project" || @item.deferred? -%>
       <input type="hidden" name="on_project_page" value="true" />
     <% end -%>
   <tr>
@@ -62,6 +54,6 @@
 </table>
 
 <%= calendar_setup( "due_#{@item.id}" ) %>
-<% if @item.current_state == :deferred -%>
+<% if @item.deferred? -%>
   <%= calendar_setup( "show_from_#{@item.id}" ) %>
 <% end -%>

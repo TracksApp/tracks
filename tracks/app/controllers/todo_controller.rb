@@ -62,14 +62,40 @@ class TodoController < ApplicationController
   def create
     init
     @item = @user.todos.build
-    p = params['todo'] || params['request']['todo']
-    @item.attributes = p
+    p = params['request'] || params
+    @item.attributes = p['todo']
+    
+    if p['todo']['project_id'].blank? && !p['project_name'].blank? && p['project_name'] != 'None'
+      project = @user.projects.find_by_name(p['project_name'].strip)
+      unless project
+          project = @user.projects.build
+          project.name = p['project_name'].strip
+          project.save
+          @new_project_created = true
+      end
+      @item.project_id = project.id
+    end
+    
+    if p['todo']['context_id'].blank? && !p['context_name'].blank?
+      context = @user.contexts.find_by_name(p['context_name'].strip)
+      unless context
+          context = @user.contexts.build
+          context.name = p['context_name'].strip
+          context.save
+          @new_context_created = true
+      end
+      @item.context_id = context.id
+    end
 
     if @item.due?
-      @date = parse_date_per_user_prefs(p["due"])
+      @date = parse_date_per_user_prefs(p['todo']['due'])
       @item.due = @date.to_s(:db)
     else
       @item.due = ""
+    end
+    
+    if p['todo']['show_from']
+      @item.show_from = parse_date_per_user_prefs(p['todo']['show_from'])
     end
 
     @saved = @item.save
@@ -78,28 +104,12 @@ class TodoController < ApplicationController
        wants.html { redirect_to :action => "index" }
        wants.js do
          if @saved
-           init_todos
-           @up_count = @todos.reject { |x| !x.active? or x.context.hide? }.size.to_s
+           determine_down_count
          end
          render :action => 'create'
        end
        wants.xml { render :xml => @item.to_xml( :root => 'todo', :except => :user_id ) }
      end
-
-     # if you're seeing the message 'An error occurred on the server.' and you want to debug, comment out the rescue section and check the Ajax response for an exception message
-     rescue
-       respond_to do |wants|
-         wants.html do
-           notify :warning, "An error occurred on the server."
-           render :action => "index"
-         end
-         wants.js { render :action => 'error' }
-         wants.xml { render :text => 'An error occurred on the server.' + $! }
-       end
-  end
-
-  def add_item
-    create
   end
   
   def edit
@@ -119,7 +129,6 @@ class TodoController < ApplicationController
   #
   def toggle_check
     init
-    logger.info "source view is " + @source_view
     @item = check_user_return_item
     @item.toggle_completion()
     @saved = @item.save
@@ -144,7 +153,28 @@ class TodoController < ApplicationController
     @item = check_user_return_item
     @original_item_context_id = @item.context_id
     @original_item_project_id = @item.project_id
-    @item.attributes = params["item"]
+    
+    if params['item']['project_id'].blank? && !params['project_name'].blank? && params['project_name'] != 'None'
+      project = @user.projects.find_by_name(params['project_name'].strip)
+      unless project
+          project = @user.projects.build
+          project.name = params['project_name'].strip
+          project.save
+          @new_project_created = true
+      end
+      params["item"]["project_id"] = project.id
+    end
+    
+    if params['item']['context_id'].blank? && !params['context_name'].blank?
+      context = @user.contexts.find_by_name(params['context_name'].strip)
+      unless context
+          context = @user.contexts.build
+          context.name = params['context_name'].strip
+          context.save
+          @new_context_created = true
+      end
+      params["item"]["context_id"] = context.id
+    end
     if params["item"].has_key?("due")
       params["item"]["due"] = parse_date_per_user_prefs(params["item"]["due"])
     else
@@ -155,42 +185,9 @@ class TodoController < ApplicationController
     if @context_changed then @remaining_undone_in_context = @user.contexts.find(@original_item_context_id).not_done_todos.length; end
     @project_changed = @original_item_project_id != @item.project_id
     if (@project_changed && !@original_item_project_id.nil?) then @remaining_undone_in_project = @user.projects.find(@original_item_project_id).not_done_todos.length; end
+    determine_down_count
   end
-  
-  def update_context
-    init
-    @item = check_user_return_item
-    context = Context.find(params['context_id']);
-    if @user == context.user
-      @original_item_context_id = @item.context_id
-      @item.context_id = context.id
-      @item.context = context
-      @saved = @item.save
-      render :action => 'update'
-    else
-      render :update do |page| 
-        page.notify :warning, content_tag("div", "Error updating the context of the dragged item. Item and context user mis-match: #{@item.user.name} and #{@context.user.name}! - refresh the page to see them."), 8.0
-      end
-    end
-  end
-  
-  def update_project
-    init
-    @item = check_user_return_item
-    project = Project.find(params['project_id']);
-    if @user == project.user
-      @original_item_context_id = @item.context_id
-      @item.project_id = project.id
-      @item.project = project
-      @saved = @item.save
-      render :action => 'update'
-    else
-      render :update do |page| 
-        page.notify :warning, content_tag("div", "Error updating the project of the dragged item. Item and project user mis-match: #{@item.user.name} and #{@project.user.name}! - refresh the page to see them."), 8.0
-      end
-    end
-  end
-  
+    
   def destroy
     @item = check_user_return_item
     @context_id = @item.context_id
@@ -224,16 +221,6 @@ class TodoController < ApplicationController
       wants.xml { render :text => '200 OK. Action deleted.', :status => 200 }
     
     end
-    
-    rescue
-      respond_to do |wants|
-        wants.html do
-          notify :error, 'An error occurred on the server.', 8.0
-          redirect_to :action => 'index'
-        end
-        wants.js { render :action => 'error' }
-        wants.xml { render :text => 'An error occurred on the server.' + $! }
-      end    
   end
 
   def completed
@@ -249,6 +236,31 @@ class TodoController < ApplicationController
     @done = Todo.find_completed(@user.id)
     @done_archive = @done.completed_more_than 28.day.ago
   end
+  
+  def tickler
+    init
+    @source_view = 'deferred'
+    @page_title = "TRACKS::Tickler"
+    @tickles = @user.todos.find_in_state(:all, :deferred, :order => "show_from ASC")
+    @count = @tickles.size
+  end
+  
+  # Check for any due tickler items, activate them
+  # Called by periodically_call_remote
+  def check_tickler
+    now = Date.today()
+    @due_tickles = @user.todos.find_in_state(:all, :deferred, :conditions => ['show_from < ? OR show_from = ?', now, now ], :order => "show_from ASC")
+    # Change the due tickles to active
+    @due_tickles.each do |t|
+      t.activate!
+      t.save
+    end
+    respond_to do |wants|
+      wants.html { redirect_to :controller => 'todo', :action => 'index' }
+      wants.js
+    end
+  end
+  
   
   private
 
@@ -295,6 +307,9 @@ class TodoController < ApplicationController
            unless @item.project_id == nil
              @down_count = @user.projects.find(@item.project_id).todos.count_in_state(:active)
            end
+         end
+         from.deferred do
+           @down_count = @user.todos.count_in_state(:deferred)
          end
       end
     end 

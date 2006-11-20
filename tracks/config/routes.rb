@@ -28,14 +28,10 @@ ActionController::Routing::Routes.draw do |map|
 
   # ToDo Routes
   map.connect 'done', :controller => 'todo', :action => 'completed'
-
-  # Deferred (Tickler) Routes
-  map.connect 'tickler', :controller => 'deferred', :action => 'index'
-  map.connect 'tickler/:action/:id', :controller => 'deferred'
+  map.connect 'tickler', :controller => 'todo', :action => 'tickler'
 
   # Context Routes
   map.connect 'context/create', :controller => 'context', :action => 'create'
-  map.connect 'context/add_item', :controller => 'context', :action => 'add_item'
   map.connect 'context/order', :controller => 'context', :action => 'order'
   map.connect 'context/:id', :controller=> 'context', :action => 'show', :requirements => {:id => /\d+/}
   map.connect 'context/:context/feed/:action/:name/:token', :controller => 'feed'
@@ -46,7 +42,6 @@ ActionController::Routing::Routes.draw do |map|
 
   # Projects Routes
   map.connect 'project/create', :controller => 'project', :action => 'create'
-  map.connect 'project/add_item/:id', :controller => 'project', :action => 'add_item'
   map.connect 'project/toggle_check/:id', :controller => 'project', :action => 'toggle_check'
   map.connect 'project/order', :controller => 'project', :action => 'order'
   map.connect 'project/:project/feed/:action/:name/:token', :controller => 'feed'
