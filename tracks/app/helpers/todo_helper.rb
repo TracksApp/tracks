@@ -125,11 +125,11 @@ module TodoHelper
   end
   
   def project_names_for_autocomplete
-     array_or_string_for_javascript( ['None'] + @projects.collect{|p| p.name } )
+     array_or_string_for_javascript( ['None'] + @projects.collect{|p| escape_javascript(p.name) } )
   end
   
   def context_names_for_autocomplete
-     array_or_string_for_javascript( @contexts.collect{|c| c.name } )
+     array_or_string_for_javascript( @contexts.collect{|c| escape_javascript(c.name) } )
   end
   
   private
