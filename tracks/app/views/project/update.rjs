@@ -1,0 +1,2 @@
+page.replace_html "container_#{@project.id}", :partial => 'project_listing', :object => @project
+page.sortable "list-projects", get_listing_sortable_options

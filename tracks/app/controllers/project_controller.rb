@@ -91,8 +91,15 @@ class ProjectController < ApplicationController
   def update
     self.init
     check_user_set_project
-    @project.transition_to(params['project']['state'])
-    params['project'].delete('state')
+    params['project'] ||= {}
+    if params['project']['state']
+      @project.transition_to(params['project']['state'])
+      params['project'].delete('state')
+    end
+    success_text = if params['field'] == 'name' && params['value']
+      params['project']['id'] = params['id'] 
+      params['project']['name'] = params['value'] 
+    end
     @project.attributes = params['project']
     @project.name = deurlize(@project.name)
     if @project.save
@@ -103,9 +110,9 @@ class ProjectController < ApplicationController
         else
           @project_not_done_counts[@project.id] = @project.reload().not_done_todo_count(:include_project_hidden_todos => true)
         end
-        render :partial => 'project_listing', :object => @project
+        render
       else
-        render :text => 'Success'
+        render :text => success_text || 'Success'
       end
     else
       notify :warning, "Couldn't update project"

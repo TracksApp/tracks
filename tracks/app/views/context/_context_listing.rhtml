@@ -18,7 +18,6 @@
 <% end %>
 
 <%= link_to_remote( image_tag("blank", :title =>"Delete context", :class=>"delete_item"), 
-                  :update => "container_#{context.id}",
                   :loading => visual_effect(:fade, "container_#{context.id}"),
                   :url => { :controller => "context", :action => "destroy", :id => context.id },
                   :confirm => "Are you sure that you want to delete the context \'#{context.name}\'?" ) + " " +
@@ -29,12 +28,11 @@
 <div id="context-<%= context.id %>-edit-form" class="edit-form" style="display:none;">
 <%= form_remote_tag  :url => { :controller => 'context', :action => 'update', :id => context.id },
                :html => { :id => "form-context-#{context.id}", :class => "inline-form" },
-               :update => "container_#{context.id}",
                :complete => visual_effect(:appear, 'container_#{context.id}') %>
   <table style="table-layout: fixed;" width="450">
   <%= render :partial => 'context_form', :object => context %>
   <tr>
-    <td width="150">&nbsp;</td>
+    <td width="150">&nbsp; <input type="hidden" name="wants_render" value="false" /></td>
     <td width="300"><input type="submit" value="Update" />&nbsp;<a href="javascript:void(0);" onclick="Element.toggle('context-<%= context.id %>','context-<%= context.id %>-edit-form');Form.reset('form-context-<%= context.id %>');">Cancel</a></td>
   </tr>
   </table>

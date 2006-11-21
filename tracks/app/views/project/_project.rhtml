@@ -5,7 +5,7 @@
     <% if collapsible %>
     <a href="#" class="container_toggle" id="toggle_p<%= project.id %>"><%= image_tag("collapse.png") %></a>
     <% end %>
-    <%= sanitize("#{project.name}") %>
+    <%= in_place_editor_field :project, :name, {}, { :url => url_for(:controller => 'project', :action => 'update', :id => project.id, :field => 'name', :wants_render => false) } %>
   </h2>
   <% if @project.description -%>
     <div class="project_description"><%= sanitize(@project.description) %></div>

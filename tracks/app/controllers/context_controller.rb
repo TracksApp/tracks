@@ -66,10 +66,19 @@ class ContextController < ApplicationController
   def update
     self.init
     check_user_set_context
+    params['context'] ||= {}
+    success_text = if params['field'] == 'name' && params['value']
+      params['context']['id'] = params['id'] 
+      params['context']['name'] = params['value'] 
+    end
     @context.attributes = params["context"]
     @context.name = deurlize(@context.name)
     if @context.save
-      render :partial => 'context_listing', :object => @context
+      if params['wants_render']
+        render
+      else
+        render :text => success_text || 'Success'
+      end
     else
       notify :warning, "Couldn't update new context"
       render :text => ""

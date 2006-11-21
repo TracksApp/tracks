@@ -4,7 +4,11 @@
 <% if collapsible -%>
     <a href="#" class="container_toggle" id="toggle_c<%= context.id %>"><%= image_tag("collapse.png") %></a>
 <% end -%>
-    <%= link_to( sanitize("#{context.name}"), { :controller => "context", :action => "show", :name => urlize(context.name) }, { :title => "Go to the #{context.name} context page" } )  %>
+<% if source_view_is :context %>
+	<%= in_place_editor_field :context, :name, {}, { :url => url_for(:controller => 'context', :action => 'update', :id => context.id, :field => 'name', :wants_render => false) } %>
+<% else %>
+    <%= link_to( sanitize("#{context.name}"), { :controller => "context", :action => "show", :name => urlize(context.name) }, { :title => "Go to the #{context.name} context page" }     )  %>
+<% end %>
   </h2>
   <div id="c<%= context.id %>items" class="items toggle_target">
     <div id="c<%= context.id %>empty-nd" style="display:<%= @not_done.empty? ? 'block' : 'none'%>;">
