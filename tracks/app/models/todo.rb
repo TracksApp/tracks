@@ -7,7 +7,7 @@ class Todo < ActiveRecord::Base
   
   acts_as_state_machine :initial => :active, :column => 'state'
   
-  state :active, :enter => Proc.new { |t| t.show_from = nil }
+  state :active, :enter => Proc.new { |t| t[:show_from] = nil }
   state :project_hidden
   state :completed, :enter => Proc.new { |t| t.completed_at = Time.now() }, :exit => Proc.new { |t| t.completed_at = nil }
   state :deferred
@@ -29,7 +29,7 @@ class Todo < ActiveRecord::Base
   end
   
   event :unhide do
-    transitions :to => :deferred, :from => [:project_hidden], :guard => Proc.new{|t| t.show_from != nil}
+    transitions :to => :deferred, :from => [:project_hidden], :guard => Proc.new{|t| !t.show_from.blank? }
     transitions :to => :active, :from => [:project_hidden]
   end
   
@@ -56,6 +56,12 @@ class Todo < ActiveRecord::Base
     else
       complete!
     end
+  end
+
+  def show_from=(date)
+    activate! if deferred? && date.blank?
+    defer! if active? && !date.blank? && date > Date.today()
+    self[:show_from] = date 
   end
 
   alias_method :original_project, :project
