@@ -36,12 +36,12 @@
   </tr>
   <tr>
     <td class="label"><label for="item_due">Due</td>
-    <td><input name="item[due]" id="due_<%= @item.id %>" type="text" value="<%= format_date(@item.due) %>" tabindex="5" size="10" onFocus="Calendar.setup" /></td>
+    <td><input name="item[due]" id="due_<%= @item.id %>" type="text" value="<%= format_date(@item.due) %>" tabindex="5" size="10" onFocus="Calendar.setup" autocomplete="off"  class="Date" /></td>
   </tr>
     <% if @item.current_state == :deferred -%>
   <tr>
     <td class="label"><label for="item_show_from">Show from</td>
-    <td><input name="item[show_from]" id="show_from_<%= @item.id %>" type="text" value="<%= format_date(@item.show_from) %>" tabindex="5" size="10" onFocus="Calendar.setup" /></td>
+    <td><input name="item[show_from]" id="show_from_<%= @item.id %>" type="text" value="<%= format_date(@item.show_from) %>" tabindex="5" size="10" onFocus="Calendar.setup" autocomplete="off" class="Date" /></td>
   </tr>
     <% end -%>
     <% if controller.controller_name == "project" || @item.deferred? -%>
@@ -54,6 +54,4 @@
 </table>
 
 <%= calendar_setup( "due_#{@item.id}" ) %>
-<% if @item.deferred? -%>
-  <%= calendar_setup( "show_from_#{@item.id}" ) %>
-<% end -%>
+<%= calendar_setup( "show_from_#{@item.id}" ) %>

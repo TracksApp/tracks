@@ -196,10 +196,10 @@ Calendar.setup = function (params) {
     return false;
   };
 
-	if (params.inputField) {
-  	new DateDueKeyboardShortcutSupport(params.inputField, params.ifFormat, cal);
+/*  if (params.inputField) {
+    new DateDueKeyboardShortcutSupport(params.inputField, params.ifFormat, cal);
   }
-
+*/
   return cal;
 };
 
