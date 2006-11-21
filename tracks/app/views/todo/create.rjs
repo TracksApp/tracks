@@ -8,7 +8,7 @@ if @saved
   page.send :record, "Form.reset('todo-form-new-action');Form.focusFirstElement('todo-form-new-action')"
   page << "contextAutoCompleter.options.array = #{context_names_for_autocomplete}" if @new_context_created
   page << "projectAutoCompleter.options.array = #{project_names_for_autocomplete}" if @new_project_created
-  unless (source_view_is(:deferred) && !@item.deferred?) || (source_view_is(:project) && @item.project.hidden? && @item.project_hidden?) || (!source_view_is(:deferred) && @item.active)
+  unless (source_view_is(:deferred) && !@item.deferred?) || (source_view_is(:project) && @item.project.hidden? && @item.project_hidden?) || (!source_view_is(:deferred) && @item.active?)
     page.call "todoItems.ensureVisibleWithEffectAppear", "c#{@item.context_id}" if source_view_is(:todo)
     page.insert_html :bottom, item_container_id, :partial => 'todo/item', :locals => { :parent_container_type => parent_container_type, :source_view => @source_view }
     page.visual_effect :highlight, "item-#{@item.id}-container", :duration => 3
