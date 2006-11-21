@@ -175,11 +175,17 @@ class TodoController < ApplicationController
       end
       params["item"]["context_id"] = context.id
     end
+    
     if params["item"].has_key?("due")
       params["item"]["due"] = parse_date_per_user_prefs(params["item"]["due"])
     else
       params["item"]["due"] = ""
     end
+    
+    if params['item']['show_from']
+      params['item']['show_from'] = parse_date_per_user_prefs(params['item']['show_from'])
+    end
+    
     @saved = @item.update_attributes params["item"]
     @context_changed = @original_item_context_id != @item.context_id
     if @context_changed then @remaining_undone_in_context = @user.contexts.find(@original_item_context_id).not_done_todos.length; end

@@ -45,7 +45,7 @@ class Todo < ActiveRecord::Base
   validates_presence_of :context
   
   def validate
-    if deferred? && show_from != nil && show_from < Date.today()
+    if deferred? && !show_from.blank? && show_from < Date.today()
       errors.add("Show From", "must be a date in the future.")
     end
   end

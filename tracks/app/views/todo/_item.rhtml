@@ -20,7 +20,7 @@
       <%= sanitize(item.description) %>
 
       <% if item.deferred? && item.due -%>
-        (action due on <%= item.due.to_s %>)
+        (action due on <%= format_date(item.due) %>)
       <% end -%>
 
       <% if item.completed? -%>
