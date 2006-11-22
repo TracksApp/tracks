@@ -1,4 +1,5 @@
 if @saved
+  page.hide 'status'
   status_message = 'Added new next action'
   status_message += ' to tickler' if @item.deferred?
   status_message = 'Added new project / ' + status_message if @new_project_created
