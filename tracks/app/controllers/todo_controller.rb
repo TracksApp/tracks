@@ -3,18 +3,17 @@ class TodoController < ApplicationController
   model :user
   model :project
   model :context
-
+  
   helper :todo
 
   prepend_before_filter :login_required
-  append_before_filter :init, :except => [ :destroy, :completed, :completed_archive ]
+  append_before_filter :init, :except => [ :destroy, :completed, :completed_archive, :check_tickler ]
   layout "standard", :except => :date_preview
 
   # Main method for listing tasks
   # Set page title, and fill variables with contexts and done and not-done tasks
   # Number of completed actions to show is determined by a setting in settings.yml
   def index
-    init
     @projects = @user.projects.find(:all, :include => [ :todos ])
     @contexts = @user.contexts.find(:all, :include => [ :todos ])
     
@@ -60,7 +59,6 @@ class TodoController < ApplicationController
   end
   
   def create
-    init
     @item = @user.todos.build
     p = params['request'] || params
     @item.attributes = p['todo']
@@ -113,12 +111,10 @@ class TodoController < ApplicationController
   end
   
   def edit
-    init
     @item = check_user_return_item
   end
   
   def show
-    init
     item = check_user_return_item
     respond_to do |wants|
        wants.xml { render :xml => item.to_xml( :root => 'todo', :except => :user_id ) }
@@ -128,7 +124,6 @@ class TodoController < ApplicationController
   # Toggles the 'done' status of the action
   #
   def toggle_check
-    init
     @item = check_user_return_item
     @item.toggle_completion()
     @saved = @item.save
@@ -149,7 +144,6 @@ class TodoController < ApplicationController
   end
 
   def update
-    init
     @item = check_user_return_item
     @original_item_context_id = @item.context_id
     @original_item_project_id = @item.project_id
@@ -244,7 +238,6 @@ class TodoController < ApplicationController
   end
   
   def tickler
-    init
     @source_view = 'deferred'
     @page_title = "TRACKS::Tickler"
     @tickles = @user.todos.find_in_state(:all, :deferred, :order => "show_from ASC")

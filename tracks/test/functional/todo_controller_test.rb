@@ -59,11 +59,11 @@ class TodoControllerTest < Test::Unit::TestCase
   def test_update_item
     t = Todo.find(1)
     @request.session['user_id'] = users(:admin_user).id
-    xhr :post, :update, :id => 1, :_source_view => 'todo', "item"=>{"context_id"=>"1", "project_id"=>"2", "id"=>"1", "notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"11/30/2006"}
+    xhr :post, :update, :id => 1, :_source_view => 'todo', "item"=>{"context_id"=>"1", "project_id"=>"2", "id"=>"1", "notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"2006-11-30"}
     #assert_rjs :page, "item-1-container", :visual_effect, :highlight, :duration => '1'
     t = Todo.find(1)
     assert_equal "Call Warren Buffet to find out how much he makes per day", t.description
-    assert_equal Date.parse("11/30/2006"), t.due
+    assert_equal "2006-11-30", t.due
   end
   
 

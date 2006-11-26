@@ -3,6 +3,8 @@ class ContextController < ApplicationController
   helper :todo
 
   prepend_before_filter :login_required
+  before_filter :init, :except => [:create, :destroy, :order]
+  before_filter :init_todos, :only => :show
   layout "standard", :except => :date_preview
 
   def index
@@ -14,7 +16,6 @@ class ContextController < ApplicationController
   # Set page title, and collect existing contexts in @contexts
   #
   def list
-    self.init
     @page_title = "TRACKS::List Contexts"
     respond_to do |wants|
       wants.html
@@ -26,9 +27,6 @@ class ContextController < ApplicationController
   # e.g. <home>/context/<context_name> shows just <context_name>.
   #
   def show
-    init
-    check_user_set_context
-    init_todos
     @page_title = "TRACKS::Context: #{@context.name}"
   end
   
@@ -64,7 +62,6 @@ class ContextController < ApplicationController
   # Edit the details of the context
   #
   def update
-    self.init
     check_user_set_context
     params['context'] ||= {}
     success_text = if params['field'] == 'name' && params['value']

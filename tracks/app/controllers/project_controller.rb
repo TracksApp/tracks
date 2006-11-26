@@ -4,6 +4,8 @@ class ProjectController < ApplicationController
 
   helper :todo
   prepend_before_filter :login_required
+  before_filter :init, :except => [:create, :destroy, :order, :toggle_project_done]
+  before_filter :init_todos, :only => :show
 
   layout "standard", :except => :date_preview
 
@@ -16,7 +18,6 @@ class ProjectController < ApplicationController
   # Set page title, and collect existing projects in @projects
   #
   def list
-    init
     init_project_hidden_todo_counts
     @page_title = "TRACKS::List Projects"
     respond_to do |wants|
@@ -29,8 +30,6 @@ class ProjectController < ApplicationController
   # e.g. <home>/project/show/<project_name> shows just <project_name>.
   #
   def show
-    init
-    init_todos
     @notes = @project.notes
     @page_title = "TRACKS::Project: #{@project.name}"
     
@@ -89,7 +88,6 @@ class ProjectController < ApplicationController
   # Edit the details of the project
   #
   def update
-    self.init
     check_user_set_project
     params['project'] ||= {}
     if params['project']['state']

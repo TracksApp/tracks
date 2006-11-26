@@ -8,6 +8,7 @@ class FeedController < ApplicationController
 
   before_filter :check_token_against_user_word, :except => 'index'
   prepend_before_filter :login_required, :only => 'index'
+  before_filter :prepare_for_feed, :only => [:rss, :text, :ical]
   
 
   def index
@@ -18,7 +19,6 @@ class FeedController < ApplicationController
 
   # Build an RSS feed
   def rss
-    prepare_for_feed
     headers["Content-Type"] = "text/xml; charset=utf-8"
   end
 
@@ -31,7 +31,6 @@ class FeedController < ApplicationController
   # curl [url from "TXT" link on todo/list]
   #
   def text
-    prepare_for_feed
     if params.key?('context')
       @contexts = [ @user.contexts.find(params['context']) ]
     else    
@@ -45,7 +44,6 @@ class FeedController < ApplicationController
   # Due dates are supported, and notes are included.
   #
   def ical
-    prepare_for_feed
     if params.key?('context')
       @contexts = [ @user.contexts.find(params['context']) ]
     else    
