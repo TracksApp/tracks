@@ -14,44 +14,44 @@ class CreateUserControllerTest < ActionController::IntegrationTest
     assert_test_environment_ok
   end
   
- #  def test_fails_with_401_if_not_authorized_user
- #    authenticated_post_xml_to_user_create @@foobar_postdata, 'nobody', 'nohow'
- #    assert_401_unauthorized
- #  end
- #  
- # def test_fails_with_401_if_not_admin_user
- #   authenticated_post_xml_to_user_create @@foobar_postdata, users(:other_user).login, 'sesame'
- #   assert_401_unauthorized
- # end
- # 
- # def test_content_type_must_be_xml
- #   authenticated_post_xml_to_user_create @@foobar_postdata, users(:admin_user).login, 'abracadabra', {'CONTENT_TYPE' => "application/x-www-form-urlencoded"}
- #   assert_404_invalid_xml
- # end
- #  
- # def test_fails_with_invalid_xml_format
- #   authenticated_post_xml_to_user_create "<foo></bar>"
- #   assert_404_invalid_xml
- # end
- #    
- #  def test_fails_with_invalid_xml_format2
- #    authenticated_post_xml_to_user_create "<request><username>foo</username></request>"
- #    assert_404_invalid_xml
- #  end
- #  
- #  def test_xml_simple_param_parsing
- #    authenticated_post_xml_to_user_create
- #    assert @controller.params.has_key?(:request)
- #    assert @controller.params[:request].has_key?(:login)
- #    assert @controller.params[:request].has_key?(:password)
- #    assert_equal 'foo', @controller.params[:request][:login]
- #    assert_equal 'bar', @controller.params[:request][:password]
- #  end
- #  
- #  def test_fails_with_too_short_password
- #    authenticated_post_xml_to_user_create
- #    assert_response_and_body 404, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<errors>\n  <error>Password is too short (minimum is 5 characters)</error>\n</errors>\n"
- #  end
+  def test_fails_with_401_if_not_authorized_user
+    authenticated_post_xml_to_user_create @@foobar_postdata, 'nobody', 'nohow'
+    assert_401_unauthorized
+  end
+  
+ def test_fails_with_401_if_not_admin_user
+   authenticated_post_xml_to_user_create @@foobar_postdata, users(:other_user).login, 'sesame'
+   assert_401_unauthorized
+ end
+ 
+ def test_content_type_must_be_xml
+   authenticated_post_xml_to_user_create @@foobar_postdata, users(:admin_user).login, 'abracadabra', {'CONTENT_TYPE' => "application/x-www-form-urlencoded"}
+   assert_404_invalid_xml
+ end
+  
+ def test_fails_with_invalid_xml_format
+   authenticated_post_xml_to_user_create "<foo></bar>"
+   assert_404_invalid_xml
+ end
+    
+  def test_fails_with_invalid_xml_format2
+    authenticated_post_xml_to_user_create "<request><username>foo</username></request>"
+    assert_404_invalid_xml
+  end
+  
+  def test_xml_simple_param_parsing
+    authenticated_post_xml_to_user_create
+    assert @controller.params.has_key?(:request)
+    assert @controller.params[:request].has_key?(:login)
+    assert @controller.params[:request].has_key?(:password)
+    assert_equal 'foo', @controller.params[:request][:login]
+    assert_equal 'bar', @controller.params[:request][:password]
+  end
+  
+  def test_fails_with_too_short_password
+    authenticated_post_xml_to_user_create
+    assert_response_and_body 404, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<errors>\n  <error>Password is too short (minimum is 5 characters)</error>\n</errors>\n"
+  end
   
   def test_fails_with_nonunique_login
     existing_login = users(:other_user).login
@@ -59,20 +59,20 @@ class CreateUserControllerTest < ActionController::IntegrationTest
     assert_response_and_body 404, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<errors>\n  <error>Login has already been taken</error>\n</errors>\n"
   end
   
-  # def test_creates_new_user
-  #   initial_count = User.count
-  #   authenticated_post_xml_to_user_create @@johnny_postdata
-  #   assert_response_and_body 200, "User created."
-  #   assert_equal initial_count + 1, User.count
-  #   johnny1 = User.find_by_login('johnny')
-  #   assert_not_nil johnny1, "expected user johnny to be created"
-  #   johnny2 = User.authenticate('johnny','barracuda')
-  #   assert_not_nil johnny2, "expected user johnny to be created"
-  # end
-  # 
-  # def test_fails_with_get_verb
-  #   authenticated_get_xml "/user/create", users(:admin_user).login, 'abracadabra', {}
-  # end
+  def test_creates_new_user
+    initial_count = User.count
+    authenticated_post_xml_to_user_create @@johnny_postdata
+    assert_response_and_body 200, "User created."
+    assert_equal initial_count + 1, User.count
+    johnny1 = User.find_by_login('johnny')
+    assert_not_nil johnny1, "expected user johnny to be created"
+    johnny2 = User.authenticate('johnny','barracuda')
+    assert_not_nil johnny2, "expected user johnny to be created"
+  end
+  
+  def test_fails_with_get_verb
+    authenticated_get_xml "/user/create", users(:admin_user).login, 'abracadabra', {}
+  end
     
   private
 
