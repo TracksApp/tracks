@@ -24,7 +24,7 @@ class LoginControllerTest < Test::Unit::TestCase
   def test_invalid_login
     post :login, {:user_login => 'cracker', :user_password => 'secret', :user_noexpiry => 'on'}
     assert_response :success
-    assert_session_has_no :user_id
+    assert(!@response.has_session_object?(:user_id))
     assert_template "login"
   end
   
@@ -35,7 +35,7 @@ class LoginControllerTest < Test::Unit::TestCase
     assert_equal user.login, "admin"
     assert user.is_admin
     assert_equal "Login successful: session will not expire.", flash[:notice]
-    assert_redirect_url "http://#{@request.host}/bogus/location"
+    assert_equal("http://#{@request.host}/bogus/location", @response.redirect_url)
   end
   
   
@@ -59,14 +59,14 @@ class LoginControllerTest < Test::Unit::TestCase
   # 
   def test_login_bad_password
     post :login, {:user_login => 'jane', :user_password => 'wrong', :user_noexpiry => 'on'}
-    assert_session_has_no :user
+    assert(!@response.has_session_object?(:user))
     assert_equal "Login unsuccessful", flash[:warning]
     assert_response :success
   end
   
   def test_login_bad_login
     post :login, {:user_login => 'blah', :user_password => 'sesame', :user_noexpiry => 'on'}
-    assert_session_has_no :user
+    assert(!@response.has_session_object?(:user))
     assert_equal "Login unsuccessful", flash[:warning]
     assert_response :success
   end

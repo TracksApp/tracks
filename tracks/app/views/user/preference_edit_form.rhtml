@@ -19,51 +19,51 @@
 </div>
 
 <div id="input_box" class="container context">
-  <%= start_form_tag :action => 'update_preferences' %>
-  <table>
-    <tr>
-      <td><label>first name:</label></td>
-      <td><%= text_field 'user', 'first_name' %></td>
-    </tr>
-    <tr>
-      <td><label>last name:</label></td>
-      <td><%= text_field 'user', 'last_name' %></td>
-    </tr>
-  <%
-    def table_row(pref_name, nowrap_label = false, &block)
-      nowrap_attribute = nowrap_label ? ' nowrap="nowrap"' : '' 
-      s = %Q|<tr>\n<td#{nowrap_attribute}><label>#{pref_name.gsub(/_/,' ')}:</label></td>\n<td>\n|
-      s << yield
-      s << "\n</td></tr>"
-      s
-    end
+  <% form_tag :action => 'update_preferences' do %>
+	  <table>
+	    <tr>
+	      <td><label>first name:</label></td>
+	      <td><%= text_field 'user', 'first_name' %></td>
+	    </tr>
+	    <tr>
+	      <td><label>last name:</label></td>
+	      <td><%= text_field 'user', 'last_name' %></td>
+	    </tr>
+	  <%
+	    def table_row(pref_name, nowrap_label = false, &block)
+	      nowrap_attribute = nowrap_label ? ' nowrap="nowrap"' : '' 
+	      s = %Q|<tr>\n<td#{nowrap_attribute}><label>#{pref_name.gsub(/_/,' ')}:</label></td>\n<td>\n|
+	      s << yield
+	      s << "\n</td></tr>"
+	      s
+	    end
     
-    def row_with_select_field(pref_name, collection = [true,false], nowrap_label = false)
-      table_row(pref_name, nowrap_label) { select('prefs', pref_name, collection) }
-    end
+	    def row_with_select_field(pref_name, collection = [true,false], nowrap_label = false)
+	      table_row(pref_name, nowrap_label) { select('prefs', pref_name, collection) }
+	    end
 
-    def row_with_text_field(pref_name, nowrap_label = false)
-      table_row(pref_name, nowrap_label) { text_field('prefs', pref_name) }
-    end
-  %>
+	    def row_with_text_field(pref_name, nowrap_label = false)
+	      table_row(pref_name, nowrap_label) { text_field('prefs', pref_name) }
+	    end
+	  %>
 
-  <%= row_with_select_field("week_starts", Preference.day_number_to_name_map.invert.sort{|a,b| a[1]<=>b[1]})%>
-  <%= row_with_select_field("due_style", [['Due in ___ days',0],['Due on _______',1]]) %>
-  <%= row_with_select_field("show_completed_projects_in_sidebar") %>
-  <%= row_with_select_field("show_hidden_projects_in_sidebar") %>
-  <%= row_with_select_field("show_hidden_contexts_in_sidebar") %>
+	  <%= row_with_select_field("week_starts", Preference.day_number_to_name_map.invert.sort{|a,b| a[1]<=>b[1]})%>
+	  <%= row_with_select_field("due_style", [['Due in ___ days',0],['Due on _______',1]]) %>
+	  <%= row_with_select_field("show_completed_projects_in_sidebar") %>
+	  <%= row_with_select_field("show_hidden_projects_in_sidebar") %>
+	  <%= row_with_select_field("show_hidden_contexts_in_sidebar") %>
 
 
-  <% if @user.is_admin? %> <%= row_with_text_field('admin_email') %> <% end %>
-  <%= row_with_text_field('staleness_starts', true) %>
-  <%= row_with_text_field('date_format') %>
-  <%= row_with_text_field('show_number_completed') %>
-  <%= row_with_text_field('refresh') %>
-  <%= row_with_select_field("verbose_action_descriptors") %>
+	  <% if @user.is_admin? %> <%= row_with_text_field('admin_email') %> <% end %>
+	  <%= row_with_text_field('staleness_starts', true) %>
+	  <%= row_with_text_field('date_format') %>
+	  <%= row_with_text_field('show_number_completed') %>
+	  <%= row_with_text_field('refresh') %>
+	  <%= row_with_select_field("verbose_action_descriptors") %>
 
-    <tr><td><%= submit_tag "Update" %></td>
-        <td><%= link_to "Cancel", :controller => 'user', :action => 'preferences' %></td>
-    </tr>
-  </table>
-  <%= end_form_tag %>
-</div>   
+	    <tr><td><%= submit_tag "Update" %></td>
+	        <td><%= link_to "Cancel", :controller => 'user', :action => 'preferences' %></td>
+	    </tr>
+	  </table>
+  <% end %>
+</div>

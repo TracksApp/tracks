@@ -1,5 +1,4 @@
 class LoginController < ApplicationController
-  model   :user, :preference
   layout  'login'
   skip_before_filter :set_session_expiration
   open_id_consumer if Tracks::Config.auth_schemes.include?('open_id')
@@ -78,7 +77,7 @@ class LoginController < ApplicationController
   end
 
   def signup
-    if User.find_all.empty? # the first user of the system
+    if User.no_users_yet?
       @page_title = "Sign up as the admin user"
       @user = get_new_user
     else
@@ -102,7 +101,7 @@ class LoginController < ApplicationController
       return
     end
 
-    user.is_admin = true if User.find_all.empty?
+    user.is_admin = true if User.no_users_yet?
     if user.save
       @user = User.authenticate(user.login, params['user']['password'])
       @user.create_preference

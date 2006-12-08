@@ -10,7 +10,7 @@
   <a href="javascript:void(0)" onClick="Element.toggle('context_new'); Form.focusFirstElement('context-form');" accesskey="n" title="Create a new context">Create new context &#187;</a>
   <div id="context_new" class="context_new" style="display:none">
     <!--[form:context]-->
-    <%= form_remote_tag :url => { :action => "create" }, :html=> { :id=>'context-form', :name=>'context', :class => 'inline-form' } %>
+    <% form_remote_tag :url => { :action => "create" }, :html=> { :id=>'context-form', :name=>'context', :class => 'inline-form' } do -%>
     
       <div id="status"><%= error_messages_for('context') %></div>
       
@@ -23,7 +23,7 @@
       <%= check_box( "context", "hide" ) %>
       <br />
       <input type="submit" value="Add" />
-    <%= end_form_tag %>
+    <% end -%>
     <!--[eoform:context]-->
   </div>
 </div>

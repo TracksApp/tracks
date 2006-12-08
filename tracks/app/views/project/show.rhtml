@@ -1,9 +1,7 @@
 <div id="display_box">
   
 <%= render :partial => "project/project", :locals => { :project => @project, :collapsible => false } %>
-<% unless @done.empty? -%>
-  <%= render :partial => "todo/completed", :locals => { :done => @done, :collapsible => false, :append_descriptor => "in this project" } %>
-<% end -%>
+<%= render :partial => "todo/completed", :locals => { :done => @done, :collapsible => false, :append_descriptor => "in this project" } %>
 
 <div class="container">
  <div id="notes">
@@ -19,16 +17,16 @@
 <div>
 
 	<div id="new-note" style="display:none;">
-	<%= form_remote_tag :url => { :controller => "note", :action => "add" },
+	<% form_remote_tag :url => { :controller => "note", :action => "add" },
 	                    :update => "notes",
 	                    :position => "bottom",
 	                    :complete => "new Effect.Highlight('notes');$('empty-n').hide();",
-	                    :html => {:id=>'form-new-note', :class => 'inline-form'} %>
+	                    :html => {:id=>'form-new-note', :class => 'inline-form'} do %>
 	<%= hidden_field( "new_note", "project_id", "value" => "#{@project.id}" ) %>
 	<%= text_area( "new_note", "body", "cols" => 50, "rows" => 3, "tabindex" => 1 ) %>
 	<br /><br />
 	<input type="submit" value="Add note" tabindex="2" />
-	<%= end_form_tag %>
+	<% end -%>
 	</div>
 
 <div class="container">

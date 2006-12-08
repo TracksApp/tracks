@@ -11,9 +11,9 @@
 <div id="todo_new_action" class="context_new" style="display:block">
 
 <!--[form:todo]-->
-<%= form_remote_tag(
+<% form_remote_tag(
     :url => { :controller => "todo", :action => "create" },
-    :html=> { :id=>'todo-form-new-action', :name=>'todo', :class => 'inline-form' }) %>
+    :html=> { :id=>'todo-form-new-action', :name=>'todo', :class => 'inline-form' }) do -%>
 
 <div id="status"><%= error_messages_for("item") %></div>
 
@@ -55,7 +55,7 @@ Event.observe($('todo_project_name'), "click", projectAutoCompleter.activate.bin
 
 <%= source_view_tag( @source_view ) %>
 <input type="submit" value="Add item" tabindex="7">
-<%= end_form_tag %><!--[eoform:todo]-->
+<% end -%><!--[eoform:todo]-->
 
 <%= observe_field "todo_due", 
                   :frequency => 2, 

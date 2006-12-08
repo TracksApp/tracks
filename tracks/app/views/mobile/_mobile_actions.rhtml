@@ -22,14 +22,14 @@
   <% end -%>
 <% end -%>
 <hr />
-<%= form_tag( { :action => "filter", :type => "context" } ) %>
+<% form_tag( { :action => "filter", :type => "context" } ) do -%>
 <%= collection_select( "context", "id", @contexts, "id", "name", 
                         { :include_blank => true } ) %>
 <%= submit_tag( value = "Go" ) %>
-<%= end_form_tag %>
+<% end -%>
 
-<%= form_tag( {:action => "filter", :type => "project" }) %>                    
+<% form_tag( {:action => "filter", :type => "project" }) do -%>                    
 <%= collection_select( "project", "id", @projects, "id", "name",
                         { :include_blank => true } ) %>
 <%= submit_tag( value = "Go" ) %>
-<%= end_form_tag %>
+<% end -%>

@@ -1,7 +1,5 @@
 class ProjectController < ApplicationController
 
-  model :todo
-
   helper :todo
   prepend_before_filter :login_required
   before_filter :init, :except => [:create, :destroy, :order, :toggle_project_done]
@@ -62,6 +60,10 @@ class ProjectController < ApplicationController
   #                    http://our.tracks.host/project/create
   #
   def create
+    if params[:format] == 'application/xml' && params['exception']
+      render_failure "Expected post format is valid xml like so: <request><project><name>project name</name></project></request>."
+      return
+    end
     @project = @user.projects.build
     params_are_invalid = true
     if (params['project'] || (params['request'] && params['request']['project']))
@@ -75,7 +77,7 @@ class ProjectController < ApplicationController
       wants.js
       wants.xml do
         if @project.new_record? && params_are_invalid
-          render_failure "Expected post format is xml like so: <request><project><name>project name</name></project></request>."
+          render_failure "Expected post format is valid xml like so: <request><project><name>project name</name></project></request>."
         elsif @project.new_record?
           render_failure @project.errors.full_messages.join(', ')
         else

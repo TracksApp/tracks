@@ -67,7 +67,7 @@ module FeedHelper
   end
   
   def rss_feed_link(options = {})
-    image_tag = image_tag("feed-icon", :size => "16X16", :border => 0, :class => "rss-icon")
+    image_tag = image_tag("feed-icon.png", :size => "16X16", :border => 0, :class => "rss-icon")
     linkoptions = {:controller => 'feed', :action => 'rss', :name => "#{@user.login}", :token => "#{@user.word}"}
     linkoptions.merge!(options)
 		link_to(image_tag, linkoptions, :title => "RSS feed")

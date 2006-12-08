@@ -20,7 +20,7 @@ class ApplicationController < ActionController::Base
 
   # By default, sets the charset to UTF-8 if it isn't already set
   def set_charset
-    @headers["Content-Type"] ||= "text/html; charset=UTF-8" 
+    headers["Content-Type"] ||= "text/html; charset=UTF-8" 
   end
 
   # Reverses the urlize() method by substituting underscores for spaces

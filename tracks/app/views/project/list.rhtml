@@ -9,8 +9,8 @@
 <a href="#" onClick="Element.toggle('project_new'); Form.focusFirstElement('project-form');return false" accesskey="n" title="Create a new project">Create new project &#187;</a>
 <div id="project_new" class="project_new" style="display:none">
 <!--[form:project]-->
-<%= form_remote_tag :url => { :action => "create" },
-  :html=> { :id=>'project-form', :name=>'project', :class => 'inline-form' } %>
+<% form_remote_tag :url => { :action => "create" },
+  :html=> { :id=>'project-form', :name=>'project', :class => 'inline-form' } do -%>
   
   <div id="status"><%= error_messages_for('project') %></div>
         
@@ -23,7 +23,7 @@
   <%= text_area 'project', 'description', "cols" => 30, "rows" => 4  %>
   <br />
   <input type="submit" value="Add" />
-<%= end_form_tag %>
+<% end -%>
 <!--[eoform:project]-->
 </div>
 </div>

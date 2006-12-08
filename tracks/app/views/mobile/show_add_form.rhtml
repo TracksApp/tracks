@@ -1,4 +1,4 @@
-<%= form_tag :action => 'update' %>
+<% form_tag :action => 'update' do %>
   <%= render :partial => 'mobile_edit' %>
-<%= end_form_tag %>
+<% end -%>
 <%= button_to "Back", :controller => 'mobile', :action => 'index' %>

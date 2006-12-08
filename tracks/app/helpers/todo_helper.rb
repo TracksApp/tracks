@@ -7,9 +7,9 @@ module TodoHelper
     count = Todo.find_all("done=0 AND context_id=#{context.id}").length
   end
 
-  def form_remote_tag_edit_todo( item )
+  def form_remote_tag_edit_todo( item, &block )
     form_remote_tag( :url => { :controller => 'todo', :action => 'update', :id => item.id },
-                    :html => { :id => "form-action-#{item.id}", :class => "inline-form" }
+                    :html => { :id => "form-action-#{item.id}", :class => "inline-form" }, &block
                    )
   end
   
@@ -27,7 +27,7 @@ module TodoHelper
                              { :class => "icon" }
                            )
     else
-      str << '<a class="icon">' + image_tag("blank") + "</a> "
+      str << '<a class="icon">' + image_tag("blank.png") + "</a> "
     end
     str
   end
@@ -89,7 +89,7 @@ module TodoHelper
     str = "<a href=\"javascript:Element.toggle('"
     str << item.id.to_s
     str << "')\" class=\"show_notes\" title=\"Show notes\">"
-    str << image_tag( "blank", :width=>"16", :height=>"16", :border=>"0" ) + "</a>"
+    str << image_tag( "blank.png", :width=>"16", :height=>"16", :border=>"0" ) + "</a>"
     m_notes = markdown( item.notes )
     str << "\n<div class=\"notes\" id=\"" + item.id.to_s + "\" style=\"display:none\">"
     str << m_notes + "</div>"
@@ -135,11 +135,11 @@ module TodoHelper
   private
   
   def image_tag_for_delete
-    image_tag("blank", :title =>"Delete action", :class=>"delete_item")
+    image_tag("blank.png", :title =>"Delete action", :class=>"delete_item")
   end
   
   def image_tag_for_edit(item)
-    image_tag("blank", :title =>"Edit action", :class=>"edit_item", :id=>"action-#{item.id}-edit-icon")
+    image_tag("blank.png", :title =>"Edit action", :class=>"edit_item", :id=>"action-#{item.id}-edit-icon")
   end
   
 end

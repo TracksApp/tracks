@@ -9,6 +9,15 @@ class User < ActiveRecord::Base
   
   attr_protected :is_admin
 
+  validates_presence_of :login
+  validates_presence_of :password, :if => :password_required?
+  validates_length_of :password, :within => 5..40, :if => :password_required?
+  validates_confirmation_of :password  
+  validates_length_of :login, :within => 3..80
+  validates_uniqueness_of :login, :on => :create
+  validates_inclusion_of :auth_type, :in => Tracks::Config.auth_schemes, :message=>"not a valid authentication type"
+  validates_presence_of :open_id_url, :if => Proc.new{|user| user.auth_type == 'open_id'}
+
   def self.authenticate(login, pass)
     candidate = find(:first, :conditions => ["login = ?", login])
     return nil if candidate.nil?
@@ -20,8 +29,12 @@ class User < ActiveRecord::Base
     nil
   end
   
+  def self.no_users_yet?
+    count == 0
+  end
+  
   def self.find_admin
-    find_first([ "is_admin = ?", true ])    
+    find(:first, :conditions => [ "is_admin = ?", true ])    
   end
   
   def display_name
@@ -61,12 +74,4 @@ protected
     auth_type == 'database'
   end
     
-  validates_presence_of :login
-  validates_presence_of :password, :if => :password_required?
-  validates_length_of :password, :within => 5..40, :if => :password_required?
-  validates_confirmation_of :password  
-  validates_length_of :login, :within => 3..80
-  validates_uniqueness_of :login, :on => :create
-  validates_inclusion_of :auth_type, :in => Tracks::Config.auth_schemes, :message=>"not a valid authentication type"
-  validates_presence_of :open_id_url, :if => Proc.new{|user| user.auth_type == 'open_id'}
 end

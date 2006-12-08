@@ -7,7 +7,7 @@ class UserController < ApplicationController
   end
   
   verify  :method => :post,
-          :only => %w( create_user ),
+          :only => %w( create ),
           :render => { :text => '403 Forbidden: Only POST requests on this resource are allowed.',
                       :status => 403 }
   
@@ -17,30 +17,26 @@ class UserController < ApplicationController
   #               http://our.tracks.host/user/create
   #
   def create
+     if params['exception']
+       render_failure "Expected post format is valid xml like so: <request><login>username</login><password>abc123</password></request>."
+       return
+     end
+
      admin = User.find_admin
-     #logger.debug "user is " + session["user_id"].to_s + " and admin is " + a.id.to_s
       unless session["user_id"].to_i == admin.id.to_i
         access_denied
         return
       end
-      unless request.content_type == "application/xml"
-        render_failure "Content Type must be application/xml."
-        return
-      end
       unless check_create_user_params
-        render_failure "Expected post format is xml like so: <request><login>username</login><password>abc123</password></request>."
+        render_failure "Expected post format is valid xml like so: <request><login>username</login><password>abc123</password></request>."
         return
       end
       user = User.new(params[:request])
       user.password_confirmation = params[:request][:password]
-      unless user.valid?
-        render_failure user.errors.full_messages.join(', ')
-        return
-      end
       if user.save
         render :text => "User created.", :status => 200
       else
-        render_failure "Failed to create user."
+        render_failure user.errors.to_xml
       end
   end
     

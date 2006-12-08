@@ -1,6 +1,5 @@
 class NoteController < ApplicationController
 
-  model :user
   prepend_before_filter :login_required
 
   layout "standard"

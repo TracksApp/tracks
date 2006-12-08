@@ -1,10 +1,5 @@
 class MobileController < ApplicationController
-  
-  model :user
-  model :project
-  model :context
-  model :todo
-  
+
   layout 'mobile'
   
   prepend_before_filter :login_required
@@ -36,16 +31,10 @@ class MobileController < ApplicationController
         @item.state = "active"
       end
     else
-      if params[:item][:"show_from(1i)"] == ""
-        @item = Todo.create(params[:item]) if params[:item]
-      else
-        @item = Todo.create(params[:item]) if params[:item]
-        @item.defer!
-      end
+      params[:item][:user_id] = @user.id
+      @item = Todo.new(params[:item]) if params[:item]
     end
-    
-    @item.user_id = @user.id
-    
+        
     if @item.save
       redirect_to :action => 'index'
     else

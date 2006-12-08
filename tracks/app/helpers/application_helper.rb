@@ -145,7 +145,7 @@ module ApplicationHelper
   end
   
   def render_flash
-    render :partial => 'shared/flash'    
+    render :partial => 'shared/flash', :locals => { :flash => flash }
   end
   
   # Display a flash message in RJS templates

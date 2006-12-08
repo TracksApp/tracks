@@ -1,6 +1,6 @@
 <tr>
 <% if done.completed_at %>
-  <td valign="top"><%= image_tag( "done", :width=>"16", :height=>"16", :border=>"0") %></td>
+  <td valign="top"><%= image_tag( "done.png", :width=>"16", :height=>"16", :border=>"0") %></td>
   <td valign="top"><span class="grey"><%= format_date( done.completed_at ) %></span></td>
   <td valign="top"><%= " " + sanitize(done.description) + " "%>
 

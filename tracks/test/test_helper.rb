@@ -74,9 +74,8 @@ class ActionController::IntegrationTest
   end
     
   def assert_response_and_body(type, body, message = nil)
-    #puts @response.body
-    assert_response type, message
     assert_equal body, @response.body, message
+    assert_response type, message
   end
 
   def assert_response_and_body_matches(type, body_regex, message = nil)

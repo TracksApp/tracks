@@ -1,6 +1,6 @@
 <% note = notes_summary -%>
 <div class="note_wrapper">
-<%= link_to( image_tag("blank", :border => 0), { :controller => "note", :action => "show", 
+<%= link_to( image_tag("blank.png", :border => 0), { :controller => "note", :action => "show", 
                                    :id => note.id}, :title => "Show note", :class => "show_notes icon") %>&nbsp;
 <%= sanitize(textilize(truncate(note.body, 50, "..."))) %>
 </div>

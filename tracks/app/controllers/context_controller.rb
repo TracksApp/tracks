@@ -36,6 +36,10 @@ class ContextController < ApplicationController
   #                    http://our.tracks.host/context/create
   #
   def create
+    if params[:format] == 'application/xml' && params['exception']
+      render_failure "Expected post format is valid xml like so: <request><context><name>context name</name></context></request>."
+      return
+    end
     @context = @user.contexts.build
     params_are_invalid = true
     if (params['context'] || (params['request'] && params['request']['context']))
@@ -49,9 +53,9 @@ class ContextController < ApplicationController
       wants.js
       wants.xml do
         if @context.new_record? && params_are_invalid
-          render_failure "Expected post format is xml like so: <request><context><name>context name</name></context></request>."
+          render_failure "Expected post format is valid xml like so: <request><context><name>context name</name></context></request>."
         elsif @context.new_record?
-          render_failure @context.errors.full_messages.join(', ')
+          render_failure @context.errors.to_xml
         else
           render :xml => @context.to_xml( :except => :user_id )
         end

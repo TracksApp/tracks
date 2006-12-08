@@ -1,6 +1,5 @@
 require "#{File.dirname(__FILE__)}/../test_helper"
 require 'tempfile'
-require 'user'
 
 module Tracks
   class Config
@@ -13,7 +12,7 @@ module Tracks
   end
 end
 
-class LdapAuthTest < Test::Unit::TestCase
+class LdapAuthTest < ActionController::IntegrationTest
 
   fixtures :users
   
@@ -45,11 +44,7 @@ class LdapAuthTest < Test::Unit::TestCase
   def teardown
     stop_ldap_server if RUN_LDAP_TESTS
   end
-  
-  def test_truth
-    assert true
-  end
-  
+    
   def test_authenticate_against_ldap
    add_ldap_user_to_ldap_repository
    assert SimpleLdapAuthenticator.valid?('john', 'deere')

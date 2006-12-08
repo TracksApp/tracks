@@ -1,6 +1,6 @@
 class Project < ActiveRecord::Base
   has_many :todos, :dependent => :delete_all, :include => :context
-  has_many :notes, :dependent => true, :order => "created_at DESC"
+  has_many :notes, :dependent => :delete_all, :order => "created_at DESC"
   belongs_to :user
   
   # Project name must not be empty

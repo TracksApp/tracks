@@ -1,7 +1,7 @@
 <div id="message_holder">
 <% if flash.empty? %>
   <h4 id="flash" class="alert" style="display:none"></h4>
-<% else %>  
+<% else %>
   <% flash.each do |key,value| -%>
     <h4 id="flash" class='alert <%= key %>'>
       <%= value %>

@@ -1,9 +1,5 @@
 class TodoController < ApplicationController
 
-  model :user
-  model :project
-  model :context
-  
   helper :todo
 
   prepend_before_filter :login_required
@@ -130,6 +126,7 @@ class TodoController < ApplicationController
     if @saved
       @remaining_undone_in_context = @user.contexts.find(@item.context_id).not_done_todo_count
       determine_down_count
+      determine_completed_count
     end
     return if request.xhr?
 
@@ -312,5 +309,21 @@ class TodoController < ApplicationController
          end
       end
     end 
-      
+    
+    def determine_completed_count
+      source_view do |from|
+         from.todo do
+           @completed_count = Todo.count_by_sql(['SELECT COUNT(*) FROM todos, contexts WHERE todos.context_id = contexts.id and todos.user_id = ? and todos.state = ? and contexts.hide = ?', @user.id, 'completed', false])
+         end
+         from.context do
+           @completed_count = @user.contexts.find(@item.context_id).todos.count_in_state(:completed)
+         end
+         from.project do
+           unless @item.project_id == nil
+             @completed_count = @user.projects.find(@item.project_id).todos.count_in_state(:completed)
+           end
+         end
+      end
+    end
+          
 end

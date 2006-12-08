@@ -47,7 +47,7 @@
     <% end -%>
   <tr>
     <td colspan="2"><input type="submit" value="Update" tabindex="6" />
-        <a href="javascript:void(0);" onclick="Element.toggle('item-<%= @item.id %>','action-<%= @item.id %>-edit-form');Form.reset('form-action-<%= @item.id %>');">Cancel</a></td>
+        <a href="javascript:void(0);" onclick="Element.toggle('item-<%= @item.id %>');Element.toggle('action-<%= @item.id %>-edit-form');">Cancel</a></td>
   </tr>
 </table>
 

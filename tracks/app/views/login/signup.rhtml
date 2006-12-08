@@ -1,5 +1,5 @@
 <div title="Account signup" id="signupform" class="form">
-<%= start_form_tag :action=> "create" %>
+<% form_tag :action=> "create" do %>
 
   <%= error_messages_for 'user' %><br/>
 
@@ -26,7 +26,7 @@
     </tr>
   </table>
   
-<%= end_form_tag %>
+<% end %>
 </div>
 
 

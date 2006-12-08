@@ -40,8 +40,8 @@
     </div>
   </div><!-- [end:item-item.id] -->
   <div id="action-<%= item.id %>-edit-form" class="edit-form" style="display:none;">
-    <%= form_remote_tag_edit_todo( item ) -%>
+    <% form_remote_tag_edit_todo( item ) do -%>
     <% #note: edit form will load here remotely -%>
-    <%= end_form_tag -%>
+    <% end -%>
   </div><!-- [end:action-item.id-edit-form] -->
 </div><!-- [end:item-item.id-container] -->

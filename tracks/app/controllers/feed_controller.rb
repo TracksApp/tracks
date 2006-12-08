@@ -3,7 +3,6 @@
 class FeedController < ApplicationController
 
   helper :feed
-  model :todo, :context, :project
   session :disabled => true, :except => 'index' # Prevents session control from interfering with feed
 
   before_filter :check_token_against_user_word, :except => 'index'
