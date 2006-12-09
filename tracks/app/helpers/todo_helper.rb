@@ -84,17 +84,6 @@ module TodoHelper
         "<a title='" + format_date(due) + "'><span class=\"green\">Show in " + @days.to_s + " days</span></a> "
     end
   end
-
-  def toggle_show_notes( item )
-    str = "<a href=\"javascript:Element.toggle('"
-    str << item.id.to_s
-    str << "')\" class=\"show_notes\" title=\"Show notes\">"
-    str << image_tag( "blank.png", :width=>"16", :height=>"16", :border=>"0" ) + "</a>"
-    m_notes = markdown( item.notes )
-    str << "\n<div class=\"notes\" id=\"" + item.id.to_s + "\" style=\"display:none\">"
-    str << m_notes + "</div>"
-    str
-  end
   
   def calendar_setup( input_field )
     date_format = @user.preference.date_format

@@ -1,0 +1,1 @@
+<li><%= link_to( sanitize(project.name), { :controller => "project", :action => "show", :name => urlize(project.name) } ) + " (" + count_undone_todos(project,"actions") + ")" %></li>

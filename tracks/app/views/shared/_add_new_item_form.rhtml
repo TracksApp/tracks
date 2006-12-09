@@ -46,15 +46,15 @@ Event.observe($('todo_project_name'), "click", projectAutoCompleter.activate.bin
 <br />
 
 <label for="todo_due">Due</label><br />
-<%= text_field("todo", "due", "size" => 10, "class" => "Date", "onFocus" => "Calendar.setup", "tabindex" => 5, "autocomplete" => "off") %>
+<%= text_field("todo", "due", "size" => 10, "class" => "Date", "onfocus" => "Calendar.setup", "tabindex" => 5, "autocomplete" => "off") %>
 
 <br />  <label for="todo_show_from">Show from</label><br />
-  <%= text_field("todo", "show_from", "size" => 10, "class" => "Date", "onFocus" => "Calendar.setup", "tabindex" => 6, "autocomplete" => "off") %><br />
+  <%= text_field("todo", "show_from", "size" => 10, "class" => "Date", "onfocus" => "Calendar.setup", "tabindex" => 6, "autocomplete" => "off") %><br />
 
 <div id="date-preview" style="display: none;"></div>
 
 <%= source_view_tag( @source_view ) %>
-<input type="submit" value="Add item" tabindex="7">
+<input type="submit" value="Add item" tabindex="7" />
 <% end -%><!--[eoform:todo]-->
 
 <%= observe_field "todo_due", 

@@ -15,7 +15,7 @@
   <% end %>
 
   <% if done.notes? -%>
-         <%= toggle_show_notes( done ) %>
+    <%= render :partial => "todo/toggle_notes", :locals => { :item => done } %>
   <% end -%>
   </td>
 <% end %>
