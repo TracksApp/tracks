@@ -1,0 +1,7 @@
+<%= link_to_function(image_tag( 'blank.png', :width=>'16', :height=>'16', :border=>'0' ), nil, {:class => 'show_notes', :title => 'Show notes'}) do |page|
+      page[dom_id(item, 'notes')].toggle
+    end
+-%>
+<div class="notes" id="<%= dom_id(item, 'notes') %>" style="display:none">
+	<%= markdown( item.notes ) %>
+</div>
