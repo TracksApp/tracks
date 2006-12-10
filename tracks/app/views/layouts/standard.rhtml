@@ -35,9 +35,6 @@
 		  page.select('.notes').each { |e| e.toggle }
 		end
 	-%>&nbsp;|&nbsp;
-    <% if @user.is_admin? -%>
-      <%= link_to "Add users", :controller => "login", :action => "signup" %>&nbsp;|&nbsp;
-    <% end -%>
     <%= link_to "Logout (#{@user.display_name}) »", :controller => "login", :action=>"logout"%>
 </div>
 
@@ -50,6 +47,9 @@
   <li><%= navigation_link( "Done", {:controller => "todo", :action => "completed"}, {:accesskey=>"d", :title=>"Completed"} ) %></li>
   <li><%= navigation_link( "Notes", {:controller => "note", :action => "index"}, {:accesskey => "o", :title => "Show all notes"} ) %></li>
   <li><%= navigation_link( "Preferences", {:controller => "user", :action => "preferences"}, {:accesskey => "u", :title => "Show my preferences"} ) %></li>
+  <% if @user.is_admin? -%>
+    <li><%= navigation_link("Admin", {:controller => "admin", :action => "index"}, {:accesskey => "a", :title => "Add or delete users"} ) %></li>
+  <% end -%>
   <li><%= navigation_link(image_tag("feed-icon.png", :size => "16X16", :border => 0), {:controller => "feed", :action => "index"}, :title => "See a list of available feeds" ) %></li>
 </ul>
 </div>

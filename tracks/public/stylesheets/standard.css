@@ -206,7 +206,7 @@ h2 a:hover {
 .item-container-drop-target {
       border:2px inset black;
 }
-.container a.icon {
+a.icon {
       float: left;
       vertical-align: middle;
       background-color: transparent;
@@ -729,3 +729,14 @@ div.page_name_auto_complete ul strong.highlight {
 	margin: 0;
 	padding: 0;
 }
+
+table.users_table {
+  width: 100%;
+  text-align: center;
+  border: 1px solid #666;
+  background-color: #fff;
+  border-spacing: 0px;
+}
+
+.users_table th {color: #fff; background-color: #000;}
+.users_table td {border: none;}

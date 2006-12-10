@@ -16,6 +16,11 @@ ActionController::Routing::Routes.draw do |map|
   
   # Index Route
   map.connect '', :controller => 'todo', :action => 'index'
+  
+  # Admin Routes
+  map.connect 'admin', :controller => 'admin', :action => 'index'
+  # map.connect 'admin/signup', :controller => 'admin', :action => 'create'
+  map.connect 'admin/destroy/:id', :controller => 'admin', :action => 'destroy', :requirements => {:id => /\d+/}
 
   # Mobile/lite version
   map.connect 'mobile', :controller => 'mobile', :action => 'index'
