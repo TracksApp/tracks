@@ -69,7 +69,7 @@ protected
 
   # Check whether the token in the URL matches the word in the User's table
   def check_token_against_user_word
-    @user = User.find_by_login( params['name'] )
+    @user = User.find_by_login( params['login'] )
     unless ( params['token'] == @user.word)
       render :text => "Sorry, you don't have permission to view this page."
       return false
