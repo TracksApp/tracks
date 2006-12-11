@@ -7,7 +7,7 @@
 <% if source_view_is :context %>
 	<%= in_place_editor_field :context, :name, {}, { :url => url_for(:controller => 'context', :action => 'update', :id => context.id, :field => 'name', :wants_render => false) } %>
 <% else %>
-    <%= link_to( sanitize("#{context.name}"), { :controller => "context", :action => "show", :name => urlize(context.name) }, { :title => "Go to the #{context.name} context page" }     )  %>
+    <%= link_to_context( context )  %>
 <% end %>
   </h2>
   <div id="c<%= context.id %>items" class="items toggle_target">

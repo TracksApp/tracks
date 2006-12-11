@@ -39,22 +39,22 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'context/create', :controller => 'context', :action => 'create'
   map.connect 'context/order', :controller => 'context', :action => 'order'
   map.connect 'context/:id', :controller=> 'context', :action => 'show', :requirements => {:id => /\d+/}
-  map.connect 'context/:context/feed/:action/:name/:token', :controller => 'feed'
-  map.connect 'context/:name', :controller => 'context', :action => 'show'
+  map.connect 'context/:context/feed/:action/:url_friendly_name/:token', :controller => 'feed'
+  map.connect 'context/:url_friendly_name', :controller => 'context', :action => 'show'
   
   map.connect 'contexts', :controller => 'context', :action => 'list'
-  map.connect 'contexts/feed/:feedtype/:name/:token', :controller => 'feed', :action => 'list_contexts_only'
+  map.connect 'contexts/feed/:feedtype/:url_friendly_name/:token', :controller => 'feed', :action => 'list_contexts_only'
 
   # Projects Routes
   map.connect 'project/create', :controller => 'project', :action => 'create'
   map.connect 'project/toggle_check/:id', :controller => 'project', :action => 'toggle_check'
   map.connect 'project/order', :controller => 'project', :action => 'order'
-  map.connect 'project/:project/feed/:action/:name/:token', :controller => 'feed'
+  map.connect 'project/:project/feed/:action/:url_friendly_name/:token', :controller => 'feed'
   map.connect 'project/:id', :controller => 'project', :action => 'show', :requirements => {:id => /\d+/}
-  map.connect 'project/:name', :controller => 'project', :action => 'show'
+  map.connect 'project/:url_friendly_name', :controller => 'project', :action => 'show'
 
   map.connect 'projects', :controller => 'project', :action => 'list'
-  map.connect 'projects/feed/:feedtype/:name/:token', :controller => 'feed', :action => 'list_projects_only'
+  map.connect 'projects/feed/:feedtype/:url_friendly_name/:token', :controller => 'feed', :action => 'list_projects_only'
 
   # Notes Routes
   map.connect 'note/add', :controller => 'note', :action => 'add'
@@ -64,7 +64,7 @@ ActionController::Routing::Routes.draw do |map|
 
   # Feed Routes
   map.connect 'feeds', :controller => 'feed', :action => 'index'
-  map.connect 'feed/:action/:name/:token', :controller => 'feed'
+  map.connect 'feed/:action/:url_friendly_name/:token', :controller => 'feed'
 
   # Install the default route as the lowest priority.
   map.connect ':controller/:action/:id'

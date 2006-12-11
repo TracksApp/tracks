@@ -6,7 +6,7 @@
   <span class="handle">DRAG</span>
 </div>  
 <div class="data">
-  <%= link_to( sanitize("#{context.name}"), :action => "show", :name => urlize(context.name) ) %>
+  <%= link_to_context( context ) %>
   <%= " (" + count_undone_todos(context,"actions") + ")" %>
 </div>
 
@@ -21,7 +21,7 @@
                   :loading => visual_effect(:fade, "container_#{context.id}"),
                   :url => { :controller => "context", :action => "destroy", :id => context.id },
                   :confirm => "Are you sure that you want to delete the context \'#{context.name}\'?" ) + " " +
-    link_to_function( image_tag( "blank.png", :title => "Edit context", :class=>"edit_item"), "Element.toggle('context-#{context.id}');,Element.toggle('context-#{context.id}-edit-form'); new Effect.Appear('context-#{context.id}-edit-form'); Form.focusFirstElement('form-context-#{context.id}');" ) %>
+    link_to_function( image_tag( "blank.png", :title => "Edit context", :class=>"edit_item"), "Element.toggle('context-#{context.id}');Element.toggle('context-#{context.id}-edit-form'); new Effect.Appear('context-#{context.id}-edit-form'); Form.focusFirstElement('form-context-#{context.id}');" ) %>
 </div>
 </div><!-- [end:context-context.id] -->
 

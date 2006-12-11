@@ -6,6 +6,7 @@ class Context < ActiveRecord::Base
   acts_as_list :scope => :user
   extend NamePartFinder
   include Tracks::TodoList
+  include UrlFriendlyName
 
   attr_protected :user
 
@@ -19,5 +20,5 @@ class Context < ActiveRecord::Base
   def hidden?
     self.hide == true
   end
-  
+    
 end

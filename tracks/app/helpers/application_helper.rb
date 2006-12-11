@@ -20,18 +20,6 @@ module ApplicationHelper
   def markdown(text)
     RedCloth.new(text).to_html
   end
-
-  # Wraps object in HTML tags, tag
-  #
-  def tag_object(object, tag)
-    tagged = "<#{tag}>#{object}</#{tag}>"
-  end
-
-  # Converts names to URL-friendly format by substituting underscores for spaces
-  #
-  def urlize(name)
-      name.to_s.gsub(/ /, "_")
-  end
   
   # Replicates the link_to method but also checks request.request_uri to find
   # current page. If that matches the url, the link is marked
@@ -132,16 +120,24 @@ module ApplicationHelper
     return count.to_s + " " + word
   end
   
+  def link_to_context(context, descriptor = sanitize(context.name))
+    link_to( descriptor, { :controller => "context", :action => "show", :url_friendly_name => context.url_friendly_name }, :title => "View context: #{context.name}" )
+  end
+  
+  def link_to_project(project, descriptor = sanitize(project.name))
+    link_to( descriptor, { :controller => "project", :action => "show", :url_friendly_name => project.url_friendly_name }, :title => "View project: #{project.name}" )
+  end
+  
   def item_link_to_context(item)
     descriptor = "[C]"
     descriptor = "[#{item.context.name}]" if (@user.preference.verbose_action_descriptors)
-    link_to( descriptor, { :controller => "context", :action => "show", :name => urlize(item.context.name) }, :title => "View context: #{item.context.name}" )
+    link_to_context( item.context, descriptor )
   end
   
   def item_link_to_project(item)
     descriptor = "[P]"
     descriptor = "[#{item.project.name}]" if (@user.preference.verbose_action_descriptors)
-    link_to( descriptor, { :controller => "project", :action => "show", :name => urlize(item.project.name) }, :title => "View project: #{item.project.name}" )
+    link_to_project( item.project, descriptor )
   end
   
   def render_flash

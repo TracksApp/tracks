@@ -46,7 +46,6 @@ class ContextController < ApplicationController
       @context.attributes = params['context'] || params['request']['context']
       params_are_invalid = false
     end
-    @context.name = deurlize(@context.name)
     @saved = @context.save
     @context_not_done_counts = { @context.id => 0 }
     respond_to do |wants|
@@ -73,7 +72,6 @@ class ContextController < ApplicationController
       params['context']['name'] = params['value'] 
     end
     @context.attributes = params["context"]
-    @context.name = deurlize(@context.name)
     if @context.save
       if params['wants_render']
         render
@@ -113,10 +111,10 @@ class ContextController < ApplicationController
   protected
 
     def check_user_set_context
-      if params["name"]
-        @context = Context.find_by_name_and_user_id(deurlize(params["name"]), @user.id)
+      if params["url_friendly_name"]
+        @context = @user.contexts.find_by_url_friendly_name(params["url_friendly_name"])
       elsif params['id']
-        @context = Context.find_by_id_and_user_id(params["id"], @user.id)
+        @context = @user.contexts.find(params["id"])
       else
         redirect_to(:controller => "context", :action => "list" )
       end

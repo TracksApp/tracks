@@ -99,5 +99,28 @@ class ProjectTest < Test::Unit::TestCase
     assert_equal 1, Project.find(@timemachine.id).done_todos.size
   end
   
-    
+  def test_url_friendly_name_for_name_with_spaces
+    assert_url_friendly_name_converts_properly 'Build a playhouse', 'Build_a_playhouse'
+  end
+  
+  def test_url_friendly_name_for_name_without_spaces
+    assert_url_friendly_name_converts_properly 'NoSpacesHere', 'NoSpacesHere'
+  end
+  
+  def test_url_friendly_name_for_name_with_an_underscore
+    assert_url_friendly_name_converts_properly 'there is an_underscore', 'there_is_an__underscore'
+  end
+  
+  def test_url_friendly_name_for_name_with_a_dot
+    assert_url_friendly_name_converts_properly 'hello.com', 'hello__dot__com'
+  end
+  
+  def assert_url_friendly_name_converts_properly(name, url_friendly_name)
+    project = Project.create(:name => name)
+    assert_equal url_friendly_name, project.url_friendly_name
+    found_project = Project.find_by_url_friendly_name(url_friendly_name)
+    assert_not_nil project
+    assert_equal project.id, found_project.id
+  end
+  
 end

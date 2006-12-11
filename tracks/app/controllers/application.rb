@@ -23,12 +23,6 @@ class ApplicationController < ActionController::Base
     headers["Content-Type"] ||= "text/html; charset=UTF-8" 
   end
 
-  # Reverses the urlize() method by substituting underscores for spaces
-  #
-  def deurlize(name)
-    name.to_s.gsub(/_/, " ")
-  end
-
   def set_session_expiration
     # http://wiki.rubyonrails.com/rails/show/HowtoChangeSessionOptions
     unless session == nil

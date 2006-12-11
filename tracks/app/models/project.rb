@@ -14,6 +14,7 @@ class Project < ActiveRecord::Base
   acts_as_state_machine :initial => :active, :column => 'state'
   extend NamePartFinder
   include Tracks::TodoList
+  include UrlFriendlyName
   
   state :active
   state :hidden, :enter => :hide_todos, :exit => :unhide_todos
@@ -44,7 +45,7 @@ class Project < ActiveRecord::Base
   def linkurl_present?
     attribute_present?("linkurl")
   end
-  
+    
   def hide_todos
     todos.each do |t|
       t.hide! unless t.completed?

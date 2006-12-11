@@ -6,7 +6,7 @@
   <span class="handle">DRAG</span>
 </div>  
 <div class="data">
-  <%= link_to( sanitize("#{project.name}"), :action => "show", :name => urlize(project.name) ) %><%= " (" + count_undone_todos(project,"actions") + ")" %>
+  <%= link_to_project( project ) %><%= " (" + count_undone_todos(project,"actions") + ")" %>
 </div>
 <div class="buttons">
   <% if project.completed? -%>

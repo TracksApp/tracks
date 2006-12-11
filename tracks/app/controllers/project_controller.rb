@@ -70,7 +70,6 @@ class ProjectController < ApplicationController
       @project.attributes = params['project'] || params['request']['project']
       params_are_invalid = false
     end
-    @project.name = deurlize(@project.name)
     @saved = @project.save
     @project_not_done_counts = { @project.id => 0 }
     respond_to do |wants|
@@ -101,7 +100,6 @@ class ProjectController < ApplicationController
       params['project']['name'] = params['value'] 
     end
     @project.attributes = params['project']
-    @project.name = deurlize(@project.name)
     if @project.save
       if params['wants_render']
         if (@project.hidden?)
@@ -157,10 +155,10 @@ class ProjectController < ApplicationController
   protected
     
     def check_user_set_project
-      if params["name"]
-        @project = Project.find_by_name_and_user_id(deurlize(params["name"]), @user.id)
+      if params["url_friendly_name"]
+        @project = @user.projects.find_by_url_friendly_name(params["url_friendly_name"])
       elsif params['id']
-        @project = Project.find_by_id_and_user_id(params["id"], @user.id)
+        @project = @user.projects.find(params["id"])
       else
         redirect_to(:controller => "project", :action => "list" )
       end

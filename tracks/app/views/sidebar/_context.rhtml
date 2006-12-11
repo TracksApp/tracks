@@ -1,1 +1,1 @@
-<li><%= link_to( sanitize(context.name), { :controller => "context", :action => "show", :name => urlize(context.name) } ) + " (" + count_undone_todos(context,"actions") + ")"%></li>
+<li><%= link_to_context( context ) + " (" + count_undone_todos(context,"actions") + ")"%></li>
