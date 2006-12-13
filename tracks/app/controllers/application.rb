@@ -13,8 +13,11 @@ class ApplicationController < ActionController::Base
   helper :application
   include LoginSystem
   
+  layout 'standard'
+  
   before_filter :set_session_expiration
   before_filter :get_current_user
+  prepend_before_filter :login_required
   
   after_filter :set_charset
 

@@ -1,6 +1,5 @@
 class UserController < ApplicationController
-  layout 'standard'
-  prepend_before_filter :login_required
+
   if Tracks::Config.auth_schemes.include?('open_id')
      open_id_consumer
      before_filter  :begin_open_id_auth,    :only => :update_auth_type
@@ -68,7 +67,7 @@ class UserController < ApplicationController
   
   def update_password
     if do_change_password_for(@user)
-      redirect_to :controller => 'user', :action => 'preferences'
+      redirect_to :controller => 'preferences'
     else
       redirect_to :controller => 'user', :action => 'change_password'
       notify :warning, "There was a problem saving the password. Please retry."
@@ -97,7 +96,7 @@ class UserController < ApplicationController
     @user.auth_type = params[:user][:auth_type]
     if @user.save
       notify :notice, "Authentication type updated."
-      redirect_to :controller => 'user', :action => 'preferences'
+      redirect_to :controller => 'preferences'
     else
       notify :warning, "There was a problem updating your authentication type: #{ @user.errors.full_messages.join(', ')}"
       redirect_to :controller => 'user', :action => 'change_auth_type'

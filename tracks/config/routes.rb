@@ -63,7 +63,7 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'notes', :controller => 'note', :action => 'index'
 
   # Feed Routes
-  map.connect 'feeds', :controller => 'feed', :action => 'index'
+  map.connect 'feeds', :controller => 'feedlist', :action => 'index'
   map.connect 'feed/:action/:login/:token', :controller => 'feed'
 
   # Install the default route as the lowest priority.

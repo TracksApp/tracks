@@ -1,9 +1,5 @@
 class NoteController < ApplicationController
 
-  prepend_before_filter :login_required
-
-  layout "standard"
-
   def index
     @all_notes = @user.notes
     @page_title = "TRACKS::All notes"

@@ -1,8 +1,6 @@
 class AdminController < ApplicationController
 
-  before_filter :login_required
   before_filter :admin_login_required
-  layout 'standard'
   
   def index
     @user_pages, @users = paginate :users, :order => 'login ASC', :per_page => 10

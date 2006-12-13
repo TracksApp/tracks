@@ -2,7 +2,6 @@ class MobileController < ApplicationController
 
   layout 'mobile'
   
-  prepend_before_filter :login_required
   before_filter :init, :except => :update
   
   # Plain list of all next actions, paginated 6 per page

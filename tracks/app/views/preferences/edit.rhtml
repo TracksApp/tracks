@@ -19,7 +19,7 @@
 </div>
 
 <div id="input_box" class="container context">
-  <% form_tag :action => 'update_preferences' do %>
+  <% form_tag :action => 'update' do %>
 	  <table>
 	    <tr>
 	      <td><label>first name:</label></td>
@@ -62,7 +62,7 @@
 	  <%= row_with_select_field("verbose_action_descriptors") %>
 
 	    <tr><td><%= submit_tag "Update" %></td>
-	        <td><%= link_to "Cancel", :controller => 'user', :action => 'preferences' %></td>
+	        <td><%= link_to "Cancel", :action => 'index' %></td>
 	    </tr>
 	  </table>
   <% end %>

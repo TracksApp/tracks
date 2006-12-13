@@ -1,11 +1,8 @@
 class ProjectController < ApplicationController
 
   helper :todo
-  prepend_before_filter :login_required
   before_filter :init, :except => [:create, :destroy, :order, :toggle_project_done]
   before_filter :init_todos, :only => :show
-
-  layout "standard", :except => :date_preview
 
   def index
     list

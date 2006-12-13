@@ -2,6 +2,8 @@ class BackendController < ApplicationController
   wsdl_service_name 'Backend'
   web_service_api TodoApi
   web_service_scaffold :invoke
+  skip_before_filter :login_required
+  
   
   def new_todo(username, token, context_id, description)
     check_token_against_user_word(username, token)

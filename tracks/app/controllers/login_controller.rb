@@ -1,6 +1,8 @@
 class LoginController < ApplicationController
+  
   layout  'login'
   skip_before_filter :set_session_expiration
+  skip_before_filter :login_required
   open_id_consumer if Tracks::Config.auth_schemes.include?('open_id')
   
   def login

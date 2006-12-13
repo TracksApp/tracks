@@ -2,9 +2,8 @@ class TodoController < ApplicationController
 
   helper :todo
 
-  prepend_before_filter :login_required
   append_before_filter :init, :except => [ :destroy, :completed, :completed_archive, :check_tickler ]
-  layout "standard", :except => :date_preview
+  layout 'standard', :except => :date_preview
 
   # Main method for listing tasks
   # Set page title, and fill variables with contexts and done and not-done tasks
