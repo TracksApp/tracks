@@ -69,11 +69,7 @@ class ApplicationController < ActionController::Base
     @user = User.find(session['user_id']) if session['user_id']
     @prefs = @user.preference unless @user.nil?
   end
-  
-  def get_admin_user
-    @admin = User.find(:first, :conditions => [ "is_admin = ?", true ])
-  end
-    
+      
   def parse_date_per_user_prefs( s )
     return nil if s.blank?
     Date.strptime(s, @user.preference.date_format)  

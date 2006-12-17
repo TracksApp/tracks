@@ -82,16 +82,13 @@ class LoginController < ApplicationController
     if User.no_users_yet?
       @page_title = "Sign up as the admin user"
       @user = get_new_user
-    else
-      admin = User.find_admin
-      if current_user_is admin
-          @page_title = "Sign up a new user"
-          @user = get_new_user
-      else # all other situations (i.e. a non-admin is logged in, or no one is logged in, but we have some users)
-        @page_title = "No signups"
-        @admin_email = admin.preference.admin_email
-        render :action => "nosignup"
-      end
+    elsif @user && @user.is_admin?
+      @page_title = "Sign up a new user"
+      @user = get_new_user
+    else # all other situations (i.e. a non-admin is logged in, or no one is logged in, but we have some users)
+      @page_title = "No signups"
+      @admin_email = User.find_admin.preference.admin_email
+      render :action => "nosignup"
     end        
   end
 
@@ -158,11 +155,7 @@ class LoginController < ApplicationController
     end
     user
   end
-  
-  def current_user_is(user)
-    session['user_id'] && session['user_id'] == user.id
-  end
-  
+    
   def should_expire_sessions?
     session['noexpiry'] != "on"
   end
