@@ -16,15 +16,8 @@ class TodoController < ApplicationController
     
     # If you've set no_completed to zero, the completed items box
     # isn't shown on the home page
-    max_completed = @user.preference.show_number_completed - 1
-    @done = nil
-    if max_completed > 0
-      @done = Todo.find(:all,
-                        :conditions => ['todos.user_id = ? and todos.state = ?', @user.id, 'completed'],
-                        :order => 'todos.completed_at DESC',
-                        :limit => max_completed,
-                        :include => [ :project, :context ])
-    end
+    max_completed = @user.preference.show_number_completed
+    @done = @user.completed_todos.find(:all, :limit => max_completed) unless max_completed == 0
     
     @contexts_to_show = @contexts.reject {|x| x.hide? }
     
@@ -221,7 +214,7 @@ class TodoController < ApplicationController
 
   def completed
     @page_title = "TRACKS::Completed tasks"
-    @done = Todo.find_completed(@user.id)
+    @done = @user.completed_todos
     @done_today = @done.completed_within 1.day.ago
     @done_this_week = @done.completed_within 1.week.ago
     @done_this_month = @done.completed_within 4.week.ago
@@ -229,33 +222,26 @@ class TodoController < ApplicationController
 
   def completed_archive
     @page_title = "TRACKS::Archived completed tasks"
-    @done = Todo.find_completed(@user.id)
+    @done = @user.completed_todos
     @done_archive = @done.completed_more_than 28.day.ago
   end
   
   def tickler
     @source_view = 'deferred'
     @page_title = "TRACKS::Tickler"
-    @tickles = @user.todos.find_in_state(:all, :deferred, :order => "show_from ASC")
+    @tickles = @user.deferred_todos
     @count = @tickles.size
   end
   
   # Check for any due tickler items, activate them
   # Called by periodically_call_remote
   def check_tickler
-    now = Date.today()
-    @due_tickles = @user.todos.find_in_state(:all, :deferred, :conditions => ['show_from < ? OR show_from = ?', now, now ], :order => "show_from ASC")
-    # Change the due tickles to active
-    @due_tickles.each do |t|
-      t.activate!
-      t.save
-    end
-    respond_to do |wants|
-      wants.html { redirect_to :controller => 'todo', :action => 'index' }
-      wants.js
+    @due_tickles = @user.deferred_todos.find_and_activate_ready
+    respond_to do |format|
+      format.html { redirect_to :controller => 'todo', :action => 'index' }
+      format.js
     end
   end
-  
   
   private
 

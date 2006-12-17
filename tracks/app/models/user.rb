@@ -1,9 +1,36 @@
 require 'digest/sha1'
 
 class User < ActiveRecord::Base
-  has_many :contexts, :order => "position ASC", :dependent => :delete_all
-  has_many :projects, :order => "position ASC", :dependent => :delete_all
-  has_many :todos, :order => "completed_at DESC, created_at DESC", :dependent => :delete_all
+  has_many :contexts,
+           :order => 'position ASC',
+           :dependent => :delete_all
+  has_many :projects,
+           :order => 'position ASC',
+           :dependent => :delete_all
+  has_many :todos,
+           :order => 'completed_at DESC, created_at DESC',
+           :dependent => :delete_all
+  has_many :deferred_todos,
+           :class_name => 'Todo',
+           :conditions => [ 'state = ?', 'deferred' ],
+           :order => 'show_from ASC, created_at DESC' do
+              def find_and_activate_ready
+                find(:all, :conditions => ['show_from <= ?', Date.today ]).collect { |t| t.activate_and_save! }
+              end
+           end
+  has_many :completed_todos,
+           :class_name => 'Todo',
+           :conditions => ['todos.state = ? and todos.completed_at is not null', 'completed'],
+           :order => 'todos.completed_at DESC',
+           :include => [ :project, :context ] do
+             def completed_within( date )
+               reject { |x| x.completed_at < date }
+             end
+
+             def completed_more_than( date )
+               reject { |x| x.completed_at > date }
+             end
+           end
   has_many :notes, :order => "created_at DESC", :dependent => :delete_all
   has_one :preference
   

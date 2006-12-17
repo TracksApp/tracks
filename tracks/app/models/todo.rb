@@ -57,6 +57,11 @@ class Todo < ActiveRecord::Base
       complete!
     end
   end
+  
+  def activate_and_save!
+    activate!
+    save!
+  end
 
   def show_from=(date)
     activate! if deferred? && date.blank?
@@ -73,33 +78,11 @@ class Todo < ActiveRecord::Base
   alias_method :original_set_initial_state, :set_initial_state
   
   def set_initial_state
-    if show_from && (show_from > Date.today())
+    if show_from && (show_from > Date.today)
       write_attribute self.class.state_column, 'deferred'
     else
       original_set_initial_state
     end
   end
-  
-  def self.not_done( id=id )
-    self.find(:all, :conditions =>[ "done = ? AND context_id = ?", false, id], :order =>"due IS NULL, due ASC, created_at ASC")
-  end
-  
-  def self.find_completed(user_id)
-    done = self.find(:all,
-                     :conditions => ['todos.user_id = ? and todos.state = ? and todos.completed_at is not null', user_id, 'completed'],
-                     :order => 'todos.completed_at DESC',
-                     :include => [ :project, :context ])
-                     
-    def done.completed_within( date )
-      reject { |x| x.completed_at < date }
-    end
-
-    def done.completed_more_than( date )
-      reject { |x| x.completed_at > date }
-    end
-    
-    done
-
-  end
-  
+      
 end
