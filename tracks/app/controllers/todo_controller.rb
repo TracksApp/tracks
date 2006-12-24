@@ -3,7 +3,7 @@ class TodoController < ApplicationController
   helper :todo
 
   append_before_filter :init, :except => [ :destroy, :completed, :completed_archive, :check_tickler ]
-  layout 'standard', :except => :date_preview
+  layout 'standard'
 
   # Main method for listing tasks
   # Set page title, and fill variables with contexts and done and not-done tasks
@@ -32,18 +32,6 @@ class TodoController < ApplicationController
       wants.html
       wants.xml { render :action => 'list.rxml', :layout => false }
     end
-  end
-
-  def date_preview
-    return if params["todo_due"].blank?
-    @date = parse_date_per_user_prefs(params["todo_due"])
-    
-    if @date.nil?
-      @form_date = "Invalid date"
-    else
-      @form_date = @date.strftime("%a %b %d %Y")
-    end
-    render :partial => "shared/date_preview", :layout => false
   end
   
   def create
