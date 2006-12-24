@@ -21,11 +21,11 @@ class Project < ActiveRecord::Base
   state :completed
 
   event :activate do
-    transitions :to => :active,   :from => [:hidden, :complete]
+    transitions :to => :active,   :from => [:hidden, :completed]
   end
   
   event :hide do
-    transitions :to => :hidden,   :from => [:active, :complete]
+    transitions :to => :hidden,   :from => [:active, :completed]
   end
   
   event :complete do

@@ -19,7 +19,6 @@ ActionController::Routing::Routes.draw do |map|
   
   # Admin Routes
   map.connect 'admin', :controller => 'admin', :action => 'index'
-  # map.connect 'admin/signup', :controller => 'admin', :action => 'create'
   map.connect 'admin/destroy/:id', :controller => 'admin', :action => 'destroy', :requirements => {:id => /\d+/}
 
   # Mobile/lite version
