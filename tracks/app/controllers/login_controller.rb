@@ -21,7 +21,11 @@ class LoginController < ApplicationController
         else
           @login = params['user_login']
           notify :warning, "Login unsuccessful"
-      end
+        end
+      when :get
+        if User.no_users_yet?
+          redirect_to :action => 'signup'
+        end
     end
   end
   

@@ -38,7 +38,6 @@ class LoginControllerTest < Test::Unit::TestCase
     assert_equal("http://#{@request.host}/bogus/location", @response.redirect_url)
   end
   
-  
   def test_login_with_valid_standard_user
     user = login('jane','sesame', 'off')
     assert_equal user.id, @response.session['user_id']
@@ -46,6 +45,12 @@ class LoginControllerTest < Test::Unit::TestCase
     assert user.is_admin == false || user.is_admin == 0
     assert_equal "Login successful: session will expire after 1 hour of inactivity.", flash[:notice]
     assert_redirected_to :controller => 'todo', :action => 'index'
+  end
+  
+  def test_login_with_no_users_redirects_to_signup
+    User.delete_all
+    get :login
+    assert_redirected_to :controller => 'login', :action => 'signup'
   end
   
   def test_logout
