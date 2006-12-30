@@ -9,7 +9,7 @@ module TodoHelper
 
   def form_remote_tag_edit_todo( item, &block )
     form_remote_tag( :url => { :controller => 'todo', :action => 'update', :id => item.id },
-                    :html => { :id => "form-action-#{item.id}", :class => "inline-form" }, &block
+                    :html => { :id => dom_id(item, 'form'), :class => "inline-form" }, &block
                    )
   end
   
@@ -23,7 +23,7 @@ module TodoHelper
     if !item.completed?
       url_options[:action] = 'edit'
       str << link_to_remote( image_tag_for_edit(item),
-                             { :url => url_options, :loading => visual_effect(:pulsate, "action-#{item.id}-edit-icon") },
+                             { :url => url_options, :loading => visual_effect(:pulsate, dom_id(item, 'edit_icon')) },
                              { :class => "icon" }
                            )
     else
@@ -118,6 +118,7 @@ module TodoHelper
   end
   
   def context_names_for_autocomplete
+     return array_or_string_for_javascript(['Create a new context']) if @contexts.empty?
      array_or_string_for_javascript( @contexts.collect{|c| escape_javascript(c.name) } )
   end
   
@@ -128,7 +129,7 @@ module TodoHelper
   end
   
   def image_tag_for_edit(item)
-    image_tag("blank.png", :title =>"Edit action", :class=>"edit_item", :id=>"action-#{item.id}-edit-icon")
+    image_tag("blank.png", :title =>"Edit action", :class=>"edit_item", :id=> dom_id(item, 'edit_icon'))
   end
   
 end

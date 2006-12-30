@@ -1,5 +1,5 @@
 if @saved
-  page["item-#{@item.id}-container"].remove
+  page[@item].remove
   page['badge_count'].replace_html @down_count
   page.visual_effect :fade, item_container_id, :duration => 0.4 if source_view_is(:todo) && @remaining_undone_in_context == 0
   page[empty_container_msg_div_id].show if !empty_container_msg_div_id.nil? && @down_count == 0

@@ -52,7 +52,7 @@ class TodoControllerTest < Test::Unit::TestCase
   def test_destroy_item
     @request.session['user_id'] = users(:admin_user).id
     xhr :post, :destroy, :id => 1, :_source_view => 'todo'
-    assert_rjs :page, "item-1-container", :remove
+    assert_rjs :page, "todo_1", :remove
     #assert_rjs :replace_html, "badge-count", '9' 
   end
   
@@ -60,7 +60,7 @@ class TodoControllerTest < Test::Unit::TestCase
     t = Todo.find(1)
     @request.session['user_id'] = users(:admin_user).id
     xhr :post, :update, :id => 1, :_source_view => 'todo', "item"=>{"context_id"=>"1", "project_id"=>"2", "id"=>"1", "notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}
-    #assert_rjs :page, "item-1-container", :visual_effect, :highlight, :duration => '1'
+    #assert_rjs :page, "todo_1", :visual_effect, :highlight, :duration => '1'
     t = Todo.find(1)
     assert_equal "Call Warren Buffet to find out how much he makes per day", t.description
     assert_equal Date.new(2006,11,30), t.due

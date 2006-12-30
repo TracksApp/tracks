@@ -14,10 +14,14 @@ if @saved
   show_new_item = true if source_view_is(:project) && @item.project.hidden? && @item.project_hidden?
   show_new_item = true if !source_view_is(:deferred) && @item.active?
   if show_new_item
-    page.call "todoItems.ensureVisibleWithEffectAppear", "c#{@item.context_id}" if source_view_is(:todo)
-    page.insert_html :bottom, item_container_id, :partial => 'todo/item', :locals => { :parent_container_type => parent_container_type, :source_view => @source_view }
-    page.visual_effect :highlight, "item-#{@item.id}-container", :duration => 3
-    page[empty_container_msg_div_id].hide unless empty_container_msg_div_id.nil?
+    if @new_context_created
+      page.insert_html :top, 'display_box', :partial => 'context/context', :locals => { :context => @item.context, :collapsible => true }
+    else
+      page.call "todoItems.ensureVisibleWithEffectAppear", "c#{@item.context_id}" if source_view_is(:todo)
+      page.insert_html :bottom, item_container_id, :partial => 'todo/item', :locals => { :parent_container_type => parent_container_type, :source_view => @source_view }
+      page.visual_effect :highlight, dom_id(@item), :duration => 3
+      page[empty_container_msg_div_id].hide unless empty_container_msg_div_id.nil?
+    end
   end
 else
   page.show 'status'

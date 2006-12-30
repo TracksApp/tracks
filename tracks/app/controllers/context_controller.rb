@@ -6,14 +6,6 @@ class ContextController < ApplicationController
   before_filter :init_todos, :only => :show
 
   def index
-    list
-    render_action "list"
-  end
-
-  # Main method for listing contexts
-  # Set page title, and collect existing contexts in @contexts
-  #
-  def list
     @page_title = "TRACKS::List Contexts"
     respond_to do |wants|
       wants.html
@@ -91,7 +83,7 @@ class ContextController < ApplicationController
       render_text ""
     else
       notify :warning, "Couldn't delete context \"#{@context.name}\""
-      redirect_to( :controller => "context", :action => "list" )
+      redirect_to :action => 'index'
     end
   end
 
@@ -114,7 +106,7 @@ class ContextController < ApplicationController
       elsif params['id']
         @context = @user.contexts.find(params["id"])
       else
-        redirect_to(:controller => "context", :action => "list" )
+        redirect_to :action => 'index'
       end
       if @user == @context.user
         return @context

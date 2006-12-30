@@ -5,14 +5,6 @@ class ProjectController < ApplicationController
   before_filter :init_todos, :only => :show
 
   def index
-    list
-    render_action "list"
-  end
-
-  # Main method for listing projects
-  # Set page title, and collect existing projects in @projects
-  #
-  def list
     init_project_hidden_todo_counts
     @page_title = "TRACKS::List Projects"
     respond_to do |wants|
@@ -25,30 +17,7 @@ class ProjectController < ApplicationController
   # e.g. <home>/project/show/<project_name> shows just <project_name>.
   #
   def show
-    @notes = @project.notes
     @page_title = "TRACKS::Project: #{@project.name}"
-    
-    if @contexts.empty?
-      notify :warning, 'You must add at least one context before adding next actions.'
-    end
-    
-    if @not_done.empty?
-      @msg_nd = "Currently there are no uncompleted actions in this project"
-    else
-      @msg_nd = nil
-    end
-    
-    if @done.empty?
-      @msg_d = "Currently there are no completed actions in this project"
-    else
-      @msg_d = nil
-    end
-    
-    if @notes.empty?
-      @msg_n = "Currently there are no notes attached to this project"
-    else
-      @msg_n = nil
-    end
   end
 
   # Example XML usage: curl -H 'Accept: application/xml' -H 'Content-Type: application/xml'
@@ -122,7 +91,7 @@ class ProjectController < ApplicationController
     
     @project.toggle!('done')
     if @project.save
-      redirect_to(:action => "list")
+      redirect_to :action => 'index'
     end
   end
 
@@ -134,7 +103,7 @@ class ProjectController < ApplicationController
       render :text => ''
     else
       notify :warning, "Couldn't delete project \"#{@project.name}\""
-      redirect_to( :controller => "project", :action => "list" )
+      redirect_to :action => 'index'
     end
   end
 
@@ -157,7 +126,7 @@ class ProjectController < ApplicationController
       elsif params['id']
         @project = @user.projects.find(params["id"])
       else
-        redirect_to(:controller => "project", :action => "list" )
+        redirect_to :action => 'index'
       end
       if @user == @project.user
         return @project

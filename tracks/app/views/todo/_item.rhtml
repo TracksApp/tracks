@@ -1,5 +1,5 @@
-<div id="item-<%= item.id %>-container" class="item-container">
-  <div id="item-<%= item.id %>">
+<div id="<%= dom_id(item) %>" class="item-container">
+  <div id="<%= dom_id(item, 'line') %>">
     <%= link_to_remote_todo item %>
 
     <% unless source_view_is :deferred -%>
@@ -38,10 +38,10 @@
         <%= render :partial => "todo/toggle_notes", :locals => { :item => item } %>
       <% end -%>
     </div>
-  </div><!-- [end:item-item.id] -->
-  <div id="action-<%= item.id %>-edit-form" class="edit-form" style="display:none;">
+  </div><!-- [end:<%= dom_id(item, 'line') %>] -->
+  <div id="<%= dom_id(item, 'edit') %>" class="edit-form" style="display:none">
     <% form_remote_tag_edit_todo( item ) do -%>
     <% #note: edit form will load here remotely -%>
     <% end -%>
-  </div><!-- [end:action-item.id-edit-form] -->
-</div><!-- [end:item-item.id-container] -->
+  </div><!-- [end:<%= dom_id(item, 'edit') %>] -->
+</div><!-- [end:<%= dom_id(item) %>] -->

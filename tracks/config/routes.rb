@@ -41,7 +41,7 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'context/:context/feed/:action/:login/:token', :controller => 'feed'
   map.connect 'context/:url_friendly_name', :controller => 'context', :action => 'show'
   
-  map.connect 'contexts', :controller => 'context', :action => 'list'
+  map.connect 'contexts', :controller => 'context', :action => 'index'
   map.connect 'contexts/feed/:feedtype/:login/:token', :controller => 'feed', :action => 'list_contexts_only'
 
   # Projects Routes
@@ -52,7 +52,7 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'project/:id', :controller => 'project', :action => 'show', :requirements => {:id => /\d+/}
   map.connect 'project/:url_friendly_name', :controller => 'project', :action => 'show'
 
-  map.connect 'projects', :controller => 'project', :action => 'list'
+  map.connect 'projects', :controller => 'project', :action => 'index'
   map.connect 'projects/feed/:feedtype/:login/:token', :controller => 'feed', :action => 'list_projects_only'
 
   # Notes Routes

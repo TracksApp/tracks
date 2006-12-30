@@ -14,7 +14,7 @@ class ProjectControllerTest < TodoContainerControllerTestBase
   
   def test_projects_list
     @request.session['user_id'] = users(:admin_user).id
-    get :list
+    get :index
   end
 
   def test_create_project_via_ajax_increments_number_of_projects

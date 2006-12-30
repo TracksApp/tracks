@@ -1,10 +1,10 @@
 if @saved  
-  page.remove "item-#{@item.id}-container"
+  page[@item].remove
   if @item.completed?
     # Don't try to insert contents into a non-existent container!
     unless @user.preference.hide_completed_actions?
       page.insert_html :top, "completed", :partial => 'todo/item', :locals => { :parent_container_type => "completed" }
-      page.visual_effect :highlight, "item-#{@item.id}", {'startcolor' => "'#99ff99'"}
+      page.visual_effect :highlight, dom_id(@item, 'line'), {'startcolor' => "'#99ff99'"}
       page[empty_container_msg_div_id].show if @down_count == 0 && !empty_container_msg_div_id.nil?
       page.hide "empty-d" # If we've checked something as done, completed items can't be empty
     end
@@ -14,7 +14,7 @@ if @saved
   else
     page.call "todoItems.ensureVisibleWithEffectAppear", item_container_id
     page.insert_html :bottom, item_container_id, :partial => 'todo/item', :locals => { :parent_container_type => parent_container_type }
-    page.visual_effect :highlight, "item-#{@item.id}", {'startcolor' => "'#99ff99'"}
+    page.visual_effect :highlight, dom_id(@item, 'line'), {'startcolor' => "'#99ff99'"}
     page.show "empty-d" if @completed_count == 0
     page[empty_container_msg_div_id].hide unless empty_container_msg_div_id.nil? # If we've checked something as undone, uncompleted items can't be empty
   end

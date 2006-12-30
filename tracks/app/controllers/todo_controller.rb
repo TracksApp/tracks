@@ -20,10 +20,6 @@ class TodoController < ApplicationController
     @done = @user.completed_todos.find(:all, :limit => max_completed) unless max_completed == 0
     
     @contexts_to_show = @contexts.reject {|x| x.hide? }
-    
-    if @contexts.empty?
-      notify :warning, "You must add at least one context before adding next actions."
-    end
 
     # Set count badge to number of not-done, not hidden context items
     @count = @todos.reject { |x| !x.active? || x.context.hide? }.size
@@ -57,6 +53,7 @@ class TodoController < ApplicationController
           context.name = p['context_name'].strip
           context.save
           @new_context_created = true
+          @not_done_todos = [@item]
       end
       @item.context_id = context.id
     end
@@ -261,7 +258,7 @@ class TodoController < ApplicationController
       @todos = @user.todos.find(:all, :conditions => ['todos.state = ? or todos.state = ?', 'active', 'complete'], :include => [ :project, :context ])
 
       # Exclude hidden projects from the home page
-      @not_done_todos = @user.todos.find(:all, :conditions => ['todos.state = ?', 'active'], :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC", :include => [ :project, :context ])
+      @not_done_todos = @user.todos.find(:all, :conditions => ['todos.state = ?', 'active'], :order => "todos.due ASC", :include => [ :project, :context ])
     end
     
     def determine_down_count

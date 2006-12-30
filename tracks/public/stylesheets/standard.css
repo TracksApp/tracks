@@ -3,7 +3,7 @@
 body {
       font-family: "Lucida Grande", Verdana, Geneva, Arial, sans-serif;
       font-size: 12px;
-      line-height: 19px;
+      line-height: 140%;
       padding: 0px 10px;
       margin: 0px;
       background: #eee;
@@ -83,6 +83,7 @@ a.show_notes:hover {background-image: url(../images/notes_on.png); background-re
 #navcontainer {
       position: fixed;
       top: 48px;
+      left: 0px;
       }
             
 #navlist {
@@ -138,6 +139,9 @@ a.show_notes:hover {background-image: url(../images/notes_on.png); background-re
       padding-left: 15px;
       white-space: nowrap; /* added 2006-05-17 for safari display, timfm */ 
       }
+#date h1 {
+      line-height:120%
+      }
       
 #minilinks {
       text-align: right;
@@ -184,7 +188,7 @@ h2 a:hover {
       
 #input_box {
       margin: 0% 5% 0% 60%;
-      padding: 0px 15px 0px 15px;
+      padding: 0px 15px 0px 0px;
       }
       
 #input_box h2 {
@@ -203,9 +207,6 @@ h2 a:hover {
       padding:2px;
       clear: left;
       }
-.item-container-drop-target {
-      border:2px inset black;
-}
 a.icon {
       float: left;
       vertical-align: middle;
@@ -415,26 +416,34 @@ h4.notice {
       background: #ff0;
       }
 
-      
 /* Shows the number of undone next action */
 .badge {
       color: #fff;
       background: #f00;
-      padding: 5px;
+      padding: 3px 5px;
       font-size: 16px;
+      line-height:26px;
       margin: 10px 10px 0px 0px;
+      display:inline-block;
+      height:26px;
 }
         
-ul    {
+ul {
       list-style-type: none;
       margin-left: -25px;
       }
+#sidebar ul {
+      margin-left: auto;
+      list-style-position: inside;
+      }
       
-li    {
+li {
       font-size: 1.1em;
       padding: 3px 0px;
       }
-      
+#sidebar li {
+      padding: auto;
+      }
 .even_row {
       background: #fff;
       _background: transparent;
@@ -456,7 +465,6 @@ li    {
       }
 
 /* Right align labels in forms */
-
 .label {
       text-align: right;
       }
@@ -525,12 +533,9 @@ form {
     margin: 0px;
     width: 313px;
     }
-
 .inline-form {
     border: none;
     padding: 3px;
-    width: 100%;
-    _width: 40%;
     }
 
 .inline-form table {
@@ -548,6 +553,9 @@ form {
 .inline-form table td.label {
     width: 13ex;
     }
+#todo-form-new-action label {
+    display:block;
+}
 
 form.button-to {
 	border: none;
@@ -561,7 +569,7 @@ label {
     }
     
 input, select {
-    margin-bottom: 5px;
+    margin: 0px 0px 5px 0px;
     }
     
 .feed {

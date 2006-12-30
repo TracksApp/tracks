@@ -17,13 +17,13 @@
 
 <div id="status"><%= error_messages_for("item") %></div>
 
-<label for="todo_description">Description</label><br />
-<%= text_field( "todo", "description", "size" => 25, "tabindex" => 1) %><br />
+<label for="todo_description">Description</label>
+<%= text_field( "todo", "description", "size" => 25, "tabindex" => 1) %>
 
-<label for="todo_notes">Notes</label><br />
-<%= text_area( "todo", "notes", "cols" => 25, "rows" => 6, "tabindex" => 2) %><br />
+<label for="todo_notes">Notes</label>
+<%= text_area( "todo", "notes", "cols" => 25, "rows" => 6, "tabindex" => 2) %>
 
-<label for="todo_context_name">Context</label><br />
+<label for="todo_context_name">Context</label>
 <input id="todo_context_name" name="context_name" autocomplete="off" tabindex="3" size="25" type="text" value="<%= @initial_context_name %>" />
 <div class="page_name_auto_complete" id="context_list" style="display:none"></div>
 
@@ -32,9 +32,8 @@ contextAutoCompleter = new Autocompleter.Local('todo_context_name', 'context_lis
 Event.observe($('todo_context_name'), "focus", contextAutoCompleter.activate.bind(contextAutoCompleter));
 Event.observe($('todo_context_name'), "click", contextAutoCompleter.activate.bind(contextAutoCompleter));
 </script>
-<br />
 
-<label for="todo_project_name">Project</label><br />
+<label for="todo_project_name">Project</label>
 <input id="todo_project_name" name="project_name" autocomplete="off" tabindex="4" size="25" type="text" value="<%= @initial_project_name %>" />
 <div class="page_name_auto_complete" id="project_list" style="display:none"></div>
 
@@ -43,16 +42,15 @@ projectAutoCompleter = new Autocompleter.Local('todo_project_name', 'project_lis
 Event.observe($('todo_project_name'), "focus", projectAutoCompleter.activate.bind(projectAutoCompleter));
 Event.observe($('todo_project_name'), "click", projectAutoCompleter.activate.bind(projectAutoCompleter));
 </script>
-<br />
 
-<label for="todo_due">Due</label><br />
+<label for="todo_due">Due</label>
 <%= text_field("todo", "due", "size" => 10, "class" => "Date", "onfocus" => "Calendar.setup", "tabindex" => 5, "autocomplete" => "off") %>
 
-<br />  <label for="todo_show_from">Show from</label><br />
-  <%= text_field("todo", "show_from", "size" => 10, "class" => "Date", "onfocus" => "Calendar.setup", "tabindex" => 6, "autocomplete" => "off") %><br />
+<label for="todo_show_from">Show from</label>
+  <%= text_field("todo", "show_from", "size" => 10, "class" => "Date", "onfocus" => "Calendar.setup", "tabindex" => 6, "autocomplete" => "off") %>
 
 <%= source_view_tag( @source_view ) %>
-<input type="submit" value="Add item" tabindex="7" />
+<div class="submit_box"><input type="submit" value="Add item" tabindex="7" /></div>
 <% end -%><!--[eoform:todo]-->
 
                   

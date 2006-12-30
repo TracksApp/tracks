@@ -1,4 +1,4 @@
-page["form-action-#{@item.id}"].replace_html :partial => 'todo/edit_form'
-page["item-#{@item.id}"].hide
-page["action-#{@item.id}-edit-form"].show
-page.call "Form.focusFirstElement", "form-action-#{@item.id}"
+page[dom_id(@item, 'form')].replace_html :partial => 'todo/edit_form'
+page[dom_id(@item, 'line')].hide
+page[dom_id(@item, 'edit')].show
+page.call "Form.focusFirstElement", dom_id(@item, 'form')

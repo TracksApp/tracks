@@ -1,5 +1,4 @@
 if @saved
-  item_container_id = "item-#{@item.id}-container"
   status_message = 'Action saved'
   status_message += ' to tickler' if @item.deferred?
   status_message = 'Added new project / ' + status_message if @new_project_created
@@ -9,7 +8,7 @@ if @saved
   page << "projectAutoCompleter.options.array = #{project_names_for_autocomplete}; projectAutoCompleter.changed = true" if @new_project_created
   if source_view_is_one_of [:todo, :context]
     if @context_changed || @item.deferred?
-      page[item_container_id].remove
+      page[@item].remove
       if (@remaining_undone_in_context == 0)
         source_view do |from|
            from.todo { page.visual_effect :fade, "c#{@original_item_context_id}", :duration => 0.4 }
@@ -26,28 +25,28 @@ if @saved
         page.call "todoItems.ensureContainerHeight", "c#{@original_item_context_id}items"
         if source_view_is(:todo) && @item.active?
           page.call "todoItems.ensureContainerHeight", "c#{@item.context_id}items"
-          page.visual_effect :highlight, item_container_id, :duration => 3
+          page.visual_effect :highlight, dom_id(@item), :duration => 3
         end
       end
     else
-      page.replace item_container_id, :partial => 'todo/item', :locals => { :parent_container_type => parent_container_type }
-      page.visual_effect :highlight, item_container_id, :duration => 3
+      page.replace dom_id(@item), :partial => 'todo/item', :locals => { :parent_container_type => parent_container_type }
+      page.visual_effect :highlight, dom_id(@item), :duration => 3
     end    
   elsif source_view_is :project
     if @project_changed || @item.deferred?
-      page[item_container_id].remove
+      page[@item].remove
       page.show("p#{@original_item_project_id}empty-nd") if (@remaining_undone_in_project == 0)
       page.replace_html "badge_count", @remaining_undone_in_project
     else
-      page.replace item_container_id, :partial => 'todo/item', :locals => { :parent_container_type => parent_container_type }
-      page.visual_effect :highlight, item_container_id, :duration => 3
+      page.replace dom_id(@item), :partial => 'todo/item', :locals => { :parent_container_type => parent_container_type }
+      page.visual_effect :highlight, dom_id(@item), :duration => 3
     end
   elsif source_view_is :deferred
     if @item.deferred?
-      page.replace item_container_id, :partial => 'todo/item', :locals => { :parent_container_type => parent_container_type }
-      page.visual_effect :highlight, item_container_id, :duration => 3
+      page.replace dom_id(@item), :partial => 'todo/item', :locals => { :parent_container_type => parent_container_type }
+      page.visual_effect :highlight, dom_id(@item), :duration => 3
     else
-      page[item_container_id].remove
+      page[@item].remove
       page.show(empty_container_msg_div_id) if (@down_count == 0)
       page.replace_html "badge_count", @down_count
     end

@@ -7,11 +7,11 @@
  <div id="notes">
   <div class="add_note_link"><%= link_to_function( "Add a note", "Element.toggle('new-note'); Form.focusFirstElement('form-new-note');") %></div>
    <h2>Notes</h2>
-   <div id="empty-n" style="display:<%= @notes.empty? ? 'block' : 'none'%>;">
+   <div id="empty-n" style="display:<%= @project.notes.empty? ? 'block' : 'none'%>;">
     <%= render :partial => "shared/empty", 
               :locals => { :message => "Currently there are no notes attached to this project"} %>
    </div>
-   <%= render :partial => "note/notes_summary", :collection => @notes %>
+   <%= render :partial => "note/notes_summary", :collection => @project.notes %>
   </div>
 </div>
 <div>
