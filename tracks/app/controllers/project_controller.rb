@@ -2,7 +2,6 @@ class ProjectController < ApplicationController
 
   helper :todo
   before_filter :init, :except => [:create, :destroy, :order, :toggle_project_done]
-  before_filter :init_todos, :only => :show
 
   def index
     init_project_hidden_todo_counts
@@ -17,7 +16,12 @@ class ProjectController < ApplicationController
   # e.g. <home>/project/show/<project_name> shows just <project_name>.
   #
   def show
+    check_user_set_project
     @page_title = "TRACKS::Project: #{@project.name}"
+    @not_done = @project.not_done_todos(:include_project_hidden_todos => true)
+    @deferred = @project.deferred_todos
+    @done = @project.done_todos
+    @count = @not_done.size
   end
 
   # Example XML usage: curl -H 'Accept: application/xml' -H 'Content-Type: application/xml'
@@ -165,13 +169,6 @@ class ProjectController < ApplicationController
       @todos = @user.todos
       @done = @user.todos.find_in_state(:all, :completed, :order => "completed_at DESC")
       init_data_for_sidebar
-    end
-
-    def init_todos
-      check_user_set_project
-      @done = @project.done_todos
-      @not_done = @project.not_done_todos(:include_project_hidden_todos => true)
-      @count = @not_done.size
     end
 
 end

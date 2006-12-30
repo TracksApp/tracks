@@ -16,6 +16,21 @@ class ProjectControllerTest < TodoContainerControllerTestBase
     @request.session['user_id'] = users(:admin_user).id
     get :index
   end
+  
+  def test_show_exposes_deferred_todos
+    @request.session['user_id'] = users(:admin_user).id
+    p = projects(:timemachine)
+    get :show, :url_friendly_name => p.url_friendly_name
+    assert_not_nil assigns['deferred']
+    assert_equal 0, assigns['deferred'].size
+
+    t = p.not_done_todos[0]
+    t.show_from = 1.days.from_now.to_date
+    t.save!
+    
+    get :show, :url_friendly_name => p.url_friendly_name
+    assert_equal 1, assigns['deferred'].size
+  end
 
   def test_create_project_via_ajax_increments_number_of_projects
     assert_ajax_create_increments_count 'My New Project'

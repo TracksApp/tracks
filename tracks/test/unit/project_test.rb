@@ -2,12 +2,12 @@ require File.dirname(__FILE__) + '/../test_helper'
 
 class ProjectTest < Test::Unit::TestCase
   fixtures :projects, :todos, :users, :preferences
-
+  
   def setup
     @timemachine = projects(:timemachine)
     @moremoney = projects(:moremoney)
   end
-
+  
   def test_validate_presence_of_name
     @timemachine.name = ""
     assert !@timemachine.save
@@ -30,7 +30,7 @@ class ProjectTest < Test::Unit::TestCase
     assert_equal 1, newproj.errors.count
     assert_equal "already exists", newproj.errors.on(:name)
   end
-
+  
   def test_validate_name_does_not_contain_slash
     newproj = Project.new
     newproj.name = "Save Earth/Mankind from Evil"
@@ -67,7 +67,7 @@ class ProjectTest < Test::Unit::TestCase
     assert_not_nil p
     assert_equal @timemachine.id, p.id
   end
-
+  
   def test_find_project_by_namepart_with_starts_with
     p = Project.find_by_namepart('Build a')
     assert_not_nil p
@@ -90,13 +90,21 @@ class ProjectTest < Test::Unit::TestCase
     t.save!
     assert_equal 1, Project.find(@timemachine.id).not_done_todos.size
   end
-    
+  
   def test_done_todos
     assert_equal 0, @timemachine.done_todos.size
     t = @timemachine.not_done_todos[0]
     t.complete!
     t.save!
     assert_equal 1, Project.find(@timemachine.id).done_todos.size
+  end
+  
+  def test_deferred_todos
+    assert_equal 0, @timemachine.deferred_todos.size
+    t = @timemachine.not_done_todos[0]
+    t.show_from = 1.days.from_now.to_date
+    t.save!
+    assert_equal 1, Project.find(@timemachine.id).deferred_todos.size
   end
   
   def test_url_friendly_name_for_name_with_spaces

@@ -8,9 +8,18 @@ module Tracks
     def done_todos
       @done_todos ||= self.find_done_todos
     end
+    
+    def deferred_todos
+      @deferred_todos ||= self.find_deferred_todos
+    end
 
     def find_not_done_todos(opts={})
       self.todos.find(:all, :conditions => not_done_conditions(opts),
+                      :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC")
+    end
+    
+    def find_deferred_todos(opts={})
+      self.todos.find(:all, :conditions => ["todos.state = ?", "deferred"],
                       :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC")
     end
 

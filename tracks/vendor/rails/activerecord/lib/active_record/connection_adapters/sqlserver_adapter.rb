@@ -41,7 +41,7 @@ module ActiveRecord
         raise ArgumentError, "Missing Database. Argument ':database' must be set in order for this adapter to work." unless config.has_key?(:database)
         database  = config[:database]
         host      = config[:host] ? config[:host].to_s : 'localhost'
-        driver_url = "DBI:ADO:Provider=SQLOLEDB;Data Source=#{host};Initial Catalog=#{database};User Id=#{username};Password=#{password};"
+        driver_url = "DBI:ADO:Provider=SQLNCLI;Data Source=#{host};Initial Catalog=#{database};User Id=#{username};Password=#{password};"
       end
       conn      = DBI.connect(driver_url, username, password)
       conn["AutoCommit"] = autocommit
