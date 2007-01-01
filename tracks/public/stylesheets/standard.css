@@ -137,10 +137,12 @@ a.show_notes:hover {background-image: url(../images/notes_on.png); background-re
       float: left;
       width: 45%;
       padding-left: 15px;
+      margin-bottom: 5px;
       white-space: nowrap; /* added 2006-05-17 for safari display, timfm */ 
       }
 #date h1 {
-      line-height:120%
+      font-family: "Lucida Grande", Verdana, Geneva, Arial, sans-serif;
+      font-size: 14pt;
       }
       
 #minilinks {
@@ -186,7 +188,7 @@ h2 a:hover {
       text-decoration: none;
       }
       
-#input_box {
+div#input_box {
       margin: 0% 5% 0% 60%;
       padding: 0px 15px 0px 0px;
       }
@@ -203,10 +205,11 @@ h2 a:hover {
       width: 20px;
       }
 
-.item-container {
-      padding:2px;
-      clear: left;
+div.item-container {
+      padding: 2px;
+      clear: both;
       }
+      
 a.icon {
       float: left;
       vertical-align: middle;
@@ -421,17 +424,15 @@ h4.notice {
       color: #fff;
       background: #f00;
       padding: 3px 5px;
-      font-size: 16px;
-      line-height:26px;
+      font-size: 12pt;
       margin: 10px 10px 0px 0px;
-      display:inline-block;
       height:26px;
-}
+      }
         
 ul {
       list-style-type: none;
-      margin-left: -25px;
       }
+      
 #sidebar ul {
       margin-left: auto;
       list-style-position: inside;
