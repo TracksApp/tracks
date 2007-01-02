@@ -96,8 +96,19 @@ module TodoHelper
   
   def item_container_id
     return "tickler-items" if source_view_is :deferred
-    return "p#{@item.project_id}" if source_view_is :project
+    if source_view_is :project
+      return "p#{@item.project_id}" if @item.active?
+      return "tickler" if @item.deferred?
+    end
     return "c#{@item.context_id}"
+  end
+
+  def should_show_new_item
+    return true if source_view_is(:deferred) && @item.deferred?
+    return true if source_view_is(:project) && @item.project.hidden? && @item.project_hidden?
+    return true if source_view_is(:project) && @item.deferred?
+    return true if !source_view_is(:deferred) && @item.active?
+    return false
   end
   
   def parent_container_type
@@ -107,10 +118,10 @@ module TodoHelper
   end
   
   def empty_container_msg_div_id
+    return "tickler-empty-nd" if source_view_is(:project) && @item.deferred?
     return "p#{@item.project_id}empty-nd" if source_view_is :project
-    return "c#{@item.context_id}empty-nd" if source_view_is :context
     return "tickler-empty-nd" if source_view_is :deferred
-    nil
+    return "c#{@item.context_id}empty-nd"
   end
   
   def project_names_for_autocomplete

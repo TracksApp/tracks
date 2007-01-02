@@ -1,0 +1,4 @@
+setup :fixtures => :all
+include_partial 'login', :username => 'admin', :password => 'abracadabra'
+click "xpath=//div[@id='c1'] //div[@id='todo_9'] //input[@class='item-checkbox']"
+wait_for_element_present "xpath=//div[@id='completed'] //div[@id='todo_9']"

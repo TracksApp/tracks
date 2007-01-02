@@ -1,0 +1,27 @@
+# Rename this file to config.yml in order to configure the plugin
+
+#
+# General settings
+#
+
+environments:
+  - test
+#  - development # Uncomment this line to enable in development environment. N.B. your development database will likely be altered/destroyed/abducted
+
+#selenium_path: 'c:\selenium' #path to selenium installation. only needed when selenium isn't installed in /vendor/selenium or as a gem
+
+#
+# rake test:acceptance settings
+#
+
+browsers:
+  firefox: 'c:\Program Files\Mozilla Firefox\firefox.exe'
+  ie: 'c:\Program Files\Internet Explorer\iexplore.exe'
+
+#host: 'localhost'
+#port_start: 3000
+#port_end: 3005
+#max_browser_duration: 120
+#multi_window: false
+  
+#result_dir: 'c:\result' # the directory where the results will be stored after a test:acceptance run

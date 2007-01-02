@@ -1,0 +1,8 @@
+setup :fixtures => :all
+include_partial 'login', :username => 'admin', :password => 'abracadabra'
+open "/project/Build_a_working_time_machine"
+type "todo_description", "choose era"
+type "todo_show_from", "1/1/2030"
+click "//input[@value='Add item']"
+wait_for_element_present "xpath=//div[@id='tickler'] //div[@class='item-container']"
+assert_not_visible "tickler-empty-nd"

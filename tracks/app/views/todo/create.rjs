@@ -9,11 +9,7 @@ if @saved
   page.send :record, "Form.reset('todo-form-new-action');Form.focusFirstElement('todo-form-new-action')"
   page << "contextAutoCompleter.options.array = #{context_names_for_autocomplete}" if @new_context_created
   page << "projectAutoCompleter.options.array = #{project_names_for_autocomplete}" if @new_project_created
-  show_new_item = false
-  show_new_item = true if source_view_is(:deferred) && @item.deferred?
-  show_new_item = true if source_view_is(:project) && @item.project.hidden? && @item.project_hidden?
-  show_new_item = true if !source_view_is(:deferred) && @item.active?
-  if show_new_item
+  if should_show_new_item()
     if @new_context_created
       page.insert_html :top, 'display_box', :partial => 'context/context', :locals => { :context => @item.context, :collapsible => true }
     else

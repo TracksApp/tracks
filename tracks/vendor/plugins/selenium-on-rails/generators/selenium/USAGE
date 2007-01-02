@@ -1,0 +1,19 @@
+Description:
+    Generates a stub Selenium test case.
+
+Examples:
+    ./script/generate selenium login
+    will create:
+        /test/selenium/login.sel
+    
+    ./script/generate selenium user/create
+    will create:
+        /test/selenium/user/create.sel
+
+    ./script/generate selenium login.rsel
+    will create:
+        /test/selenium/login.rsel
+        
+    ./script/generate selenium logout.rhtml
+    will create:
+        /test/selenium/logout.rhtml

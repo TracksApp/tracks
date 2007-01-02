@@ -33,9 +33,15 @@ if @saved
       page.visual_effect :highlight, dom_id(@item), :duration => 3
     end    
   elsif source_view_is :project
-    if @project_changed || @item.deferred?
+    if @project_changed
       page[@item].remove
       page.show("p#{@original_item_project_id}empty-nd") if (@remaining_undone_in_project == 0)
+      page.replace_html "badge_count", @remaining_undone_in_project
+    elsif @item.deferred? 
+      page[@item].remove
+      page.show("p#{@original_item_project_id}empty-nd") if (@remaining_undone_in_project == 0)
+      page.insert_html :bottom, "tickler", :partial => 'todo/item', :locals => { :parent_container_type => parent_container_type }
+      page['tickler-empty-nd'].hide
       page.replace_html "badge_count", @remaining_undone_in_project
     else
       page.replace dom_id(@item), :partial => 'todo/item', :locals => { :parent_container_type => parent_container_type }

@@ -1,0 +1,8 @@
+setup
+setup :keep_session
+test.setup :fixtures => :all
+setup :fixtures => [:foo, 'bar']
+setup :clear_tables => [:foo, :bar], :fixtures => :all
+assert_absolute_location :controller => 'selenium', :action => 'setup' #urls must be tested with a controller
+assert_title view.controller.controller_name #make sure we can access the view easily
+include_partial 'partial', :source => 'RSelenese'

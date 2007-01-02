@@ -100,20 +100,25 @@ class TodoController < ApplicationController
     @item = check_user_return_item
     @item.toggle_completion()
     @saved = @item.save
-    if @saved
-      @remaining_undone_in_context = @user.contexts.find(@item.context_id).not_done_todo_count
-      determine_down_count
-      determine_completed_count
-    end
-    return if request.xhr?
-
-    if @saved
-      # TODO: I think this will work, but can't figure out how to test it
-      notify :notice, "The action <strong>'#{@item.description}'</strong> was marked as <strong>#{@item.completed? ? 'complete' : 'incomplete' }</strong>"
-      redirect_to :action => "index"
-    else
-      notify :notice, "The action <strong>'#{@item.description}'</strong> was NOT marked as <strong>#{@item.completed? ? 'complete' : 'incomplete' } due to an error on the server.</strong>", "index"
-      redirect_to :action =>  "index"
+    respond_to do |format|
+      format.js do
+        if @saved
+          @remaining_undone_in_context = @user.contexts.find(@item.context_id).not_done_todo_count
+          determine_down_count
+          determine_completed_count
+        end
+        render
+      end
+      format.html do
+        if @saved
+          # TODO: I think this will work, but can't figure out how to test it
+          notify :notice, "The action <strong>'#{@item.description}'</strong> was marked as <strong>#{@item.completed? ? 'complete' : 'incomplete' }</strong>"
+          redirect_to :action => "index"
+        else
+          notify :notice, "The action <strong>'#{@item.description}'</strong> was NOT marked as <strong>#{@item.completed? ? 'complete' : 'incomplete' } due to an error on the server.</strong>", "index"
+          redirect_to :action =>  "index"
+        end
+      end
     end
   end
 
