@@ -126,7 +126,7 @@ class TodoController < ApplicationController
     @item = check_user_return_item
     @original_item_context_id = @item.context_id
     @original_item_project_id = @item.project_id
-    
+    @original_item_was_deferred = @item.deferred?
     if params['item']['project_id'].blank? && !params['project_name'].blank? && params['project_name'] != 'None'
       project = @user.projects.find_by_name(params['project_name'].strip)
       unless project
@@ -161,6 +161,7 @@ class TodoController < ApplicationController
     
     @saved = @item.update_attributes params["item"]
     @context_changed = @original_item_context_id != @item.context_id
+    @item_was_activated_from_deferred_state = @original_item_was_deferred && @item.active?
     if @context_changed then @remaining_undone_in_context = @user.contexts.find(@original_item_context_id).not_done_todos.length; end
     @project_changed = @original_item_project_id != @item.project_id
     if (@project_changed && !@original_item_project_id.nil?) then @remaining_undone_in_project = @user.projects.find(@original_item_project_id).not_done_todos.length; end
@@ -272,11 +273,12 @@ class TodoController < ApplicationController
            @down_count = Todo.count_by_sql(['SELECT COUNT(*) FROM todos, contexts WHERE todos.context_id = contexts.id and todos.user_id = ? and todos.state = ? and contexts.hide = ?', @user.id, 'active', false])
          end
          from.context do
-           @down_count = @user.contexts.find(@item.context_id).todos.count_in_state(:active)
+           @down_count = @user.contexts.find(@item.context_id).not_done_todo_count
          end
          from.project do
            unless @item.project_id == nil
-             @down_count = @user.projects.find(@item.project_id).todos.count_in_state(:active)
+             @down_count = @user.projects.find(@item.project_id).not_done_todo_count
+             @deferred_count = @user.projects.find(@item.project_id).deferred_todo_count
            end
          end
          from.deferred do
@@ -291,11 +293,11 @@ class TodoController < ApplicationController
            @completed_count = Todo.count_by_sql(['SELECT COUNT(*) FROM todos, contexts WHERE todos.context_id = contexts.id and todos.user_id = ? and todos.state = ? and contexts.hide = ?', @user.id, 'completed', false])
          end
          from.context do
-           @completed_count = @user.contexts.find(@item.context_id).todos.count_in_state(:completed)
+           @completed_count = @user.contexts.find(@item.context_id).done_todo_count
          end
          from.project do
            unless @item.project_id == nil
-             @completed_count = @user.projects.find(@item.project_id).todos.count_in_state(:completed)
+             @completed_count = @user.projects.find(@item.project_id).done_todo_count
            end
          end
       end

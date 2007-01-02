@@ -44,5 +44,9 @@ module Tracks
       self.todos.count_in_state(:completed)
     end
   
+    def deferred_todo_count
+      self.todos.count_in_state(:deferred)
+    end
+  
   end
 end

@@ -186,3 +186,17 @@ end
   due: ~
   completed_at: ~
   user_id: 1
+  
+15:
+  id: 15
+  context_id: 6
+  project_id: 1
+  description: Select Delorean model
+  notes: ~
+  state: deferred
+  created_at: <%= today %>
+  due: ~
+  completed_at: ~
+  show_from: <%= next_week %>
+  user_id: 1
+

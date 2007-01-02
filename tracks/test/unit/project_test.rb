@@ -75,12 +75,12 @@ class ProjectTest < Test::Unit::TestCase
   end
   
   def test_delete_project_deletes_todos_within_it
-    assert_equal 2, @timemachine.todos.count
-    timemachine_todo_1_id = @timemachine.todos[0].id
-    timemachine_todo_2_id = @timemachine.todos[1].id
+    assert_equal 3, @timemachine.todos.count
+    timemachine_todo_ids = @timemachine.todos.map{ |t| t.id }
     @timemachine.destroy
-    assert !Todo.exists?(timemachine_todo_1_id)
-    assert !Todo.exists?(timemachine_todo_2_id)
+    timemachine_todo_ids.each do |t_id|
+      assert !Todo.exists?(t_id)      
+    end
   end
   
   def test_not_done_todos
@@ -100,11 +100,11 @@ class ProjectTest < Test::Unit::TestCase
   end
   
   def test_deferred_todos
-    assert_equal 0, @timemachine.deferred_todos.size
+    assert_equal 1, @timemachine.deferred_todos.size
     t = @timemachine.not_done_todos[0]
     t.show_from = 1.days.from_now.to_date
     t.save!
-    assert_equal 1, Project.find(@timemachine.id).deferred_todos.size
+    assert_equal 2, Project.find(@timemachine.id).deferred_todos.size
   end
   
   def test_url_friendly_name_for_name_with_spaces

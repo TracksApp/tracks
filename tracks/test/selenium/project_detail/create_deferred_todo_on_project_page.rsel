@@ -1,0 +1,5 @@
+setup :fixtures => :all
+include_partial 'login/login', :username => 'admin', :password => 'abracadabra'
+open "/project/Build_a_working_time_machine"
+include_partial 'project_detail/add_deferred_todo'
+assert_not_visible "tickler-empty-nd"

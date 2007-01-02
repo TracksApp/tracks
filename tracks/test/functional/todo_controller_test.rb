@@ -49,6 +49,14 @@ class TodoControllerTest < Test::Unit::TestCase
     assert_equal 1, assigns['context_not_done_counts'][contexts(:lab).id]
   end
   
+  def test_deferred_count_for_project_source_view
+    @request.session['user_id'] = users(:admin_user).id
+    xhr :post, :toggle_check, :id => 5, :_source_view => 'project' 
+    assert_equal 1, assigns['deferred_count']
+    xhr :post, :toggle_check, :id => 15, :_source_view => 'project' 
+    assert_equal 0, assigns['deferred_count']
+  end
+  
   def test_destroy_item
     @request.session['user_id'] = users(:admin_user).id
     xhr :post, :destroy, :id => 1, :_source_view => 'todo'

@@ -22,14 +22,14 @@ class ProjectControllerTest < TodoContainerControllerTestBase
     p = projects(:timemachine)
     get :show, :url_friendly_name => p.url_friendly_name
     assert_not_nil assigns['deferred']
-    assert_equal 0, assigns['deferred'].size
+    assert_equal 1, assigns['deferred'].size
 
     t = p.not_done_todos[0]
     t.show_from = 1.days.from_now.to_date
     t.save!
     
     get :show, :url_friendly_name => p.url_friendly_name
-    assert_equal 1, assigns['deferred'].size
+    assert_equal 2, assigns['deferred'].size
   end
 
   def test_create_project_via_ajax_increments_number_of_projects
