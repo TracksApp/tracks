@@ -39,28 +39,6 @@ class UserController < ApplicationController
       end
   end
     
-  def preferences
-    @page_title = "TRACKS::Preferences"
-    @prefs = @user.preference
-  end
-
-  def edit_preferences
-    @page_title = "TRACKS::Edit Preferences"
-    @prefs = @user.preference
-    
-    render :action => "preference_edit_form", :object => @prefs
-  end
-  
-  def update_preferences
-    user_success = @user.update_attributes(params['user'])
-    prefs_success = @user.preference.update_attributes(params['prefs'])
-    if user_success && prefs_success
-      redirect_to :action => 'preferences'
-    else
-      render :action => 'edit_preferences'
-    end
-  end
-  
   def change_password
     @page_title = "TRACKS::Change password"
   end

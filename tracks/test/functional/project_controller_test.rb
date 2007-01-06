@@ -25,7 +25,7 @@ class ProjectControllerTest < TodoContainerControllerTestBase
     assert_equal 1, assigns['deferred'].size
 
     t = p.not_done_todos[0]
-    t.show_from = 1.days.from_now.to_date
+    t.show_from = 1.days.from_now.utc.to_date
     t.save!
     
     get :show, :url_friendly_name => p.url_friendly_name

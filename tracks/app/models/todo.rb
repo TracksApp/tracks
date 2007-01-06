@@ -9,7 +9,7 @@ class Todo < ActiveRecord::Base
   
   state :active, :enter => Proc.new { |t| t[:show_from] = nil }
   state :project_hidden
-  state :completed, :enter => Proc.new { |t| t.completed_at = Time.now() }, :exit => Proc.new { |t| t.completed_at = nil }
+  state :completed, :enter => Proc.new { |t| t.completed_at = Time.now.utc }, :exit => Proc.new { |t| t.completed_at = nil }
   state :deferred
 
   event :defer do
@@ -45,7 +45,7 @@ class Todo < ActiveRecord::Base
   validates_presence_of :context
   
   def validate
-    if deferred? && !show_from.blank? && show_from < Date.today()
+    if deferred? && !show_from.blank? && show_from < Time.now.utc.to_date
       errors.add("Show From", "must be a date in the future.")
     end
   end
@@ -65,7 +65,7 @@ class Todo < ActiveRecord::Base
 
   def show_from=(date)
     activate! if deferred? && date.blank?
-    defer! if active? && !date.blank? && date > Date.today()
+    defer! if active? && !date.blank? && date > Time.now.utc.to_date
     self[:show_from] = date 
   end
 
@@ -78,7 +78,7 @@ class Todo < ActiveRecord::Base
   alias_method :original_set_initial_state, :set_initial_state
   
   def set_initial_state
-    if show_from && (show_from > Date.today)
+    if show_from && (show_from > Time.now.utc.to_date)
       write_attribute self.class.state_column, 'deferred'
     else
       original_set_initial_state

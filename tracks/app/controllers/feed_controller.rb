@@ -90,8 +90,8 @@ protected
   
     if params.key?('due')
       due_within = params['due'].to_i
-      condition_builder.add('todos.due <= ?', due_within.days.from_now)
-      due_within_date_s = due_within.days.from_now.strftime("%Y-%m-%d")
+      condition_builder.add('todos.due <= ?', due_within.days.from_now.utc)
+      due_within_date_s = @user.prefs.tz.adjust(due_within.days.from_now.utc).strftime("%Y-%m-%d")
       @title << " due today" if (due_within == 0)
       @title << " due within a week" if (due_within == 6)
       @description << " with a due date #{due_within_date_s} or earlier"
@@ -99,7 +99,7 @@ protected
     
     if params.key?('done')
       done_in_last = params['done'].to_i
-      condition_builder.add('todos.completed_at >= ?', done_in_last.days.ago)
+      condition_builder.add('todos.completed_at >= ?', done_in_last.days.ago.utc)
       @title << " actions completed"
       @description << " in the last #{done_in_last.to_s} days"
     end

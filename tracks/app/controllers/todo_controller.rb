@@ -16,7 +16,7 @@ class TodoController < ApplicationController
     
     # If you've set no_completed to zero, the completed items box
     # isn't shown on the home page
-    max_completed = @user.preference.show_number_completed
+    max_completed = @user.prefs.show_number_completed
     @done = @user.completed_todos.find(:all, :limit => max_completed) unless max_completed == 0
     
     @contexts_to_show = @contexts.reject {|x| x.hide? }
@@ -60,7 +60,7 @@ class TodoController < ApplicationController
 
     if @item.due?
       @date = parse_date_per_user_prefs(p['todo']['due'])
-      @item.due = @date.to_s(:db)
+      @item.due = @date
     else
       @item.due = ""
     end
@@ -206,15 +206,15 @@ class TodoController < ApplicationController
   def completed
     @page_title = "TRACKS::Completed tasks"
     @done = @user.completed_todos
-    @done_today = @done.completed_within 1.day.ago
-    @done_this_week = @done.completed_within 1.week.ago
-    @done_this_month = @done.completed_within 4.week.ago
+    @done_today = @done.completed_within 1.day.ago.utc
+    @done_this_week = @done.completed_within 1.week.ago.utc
+    @done_this_month = @done.completed_within 4.week.ago.utc
   end
 
   def completed_archive
     @page_title = "TRACKS::Archived completed tasks"
     @done = @user.completed_todos
-    @done_archive = @done.completed_more_than 28.day.ago
+    @done_archive = @done.completed_more_than 28.day.ago.utc
   end
   
   def tickler

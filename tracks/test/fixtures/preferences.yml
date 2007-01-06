@@ -12,6 +12,7 @@ admin_user_prefs:
   week_starts: 1
   due_style: 0
   refresh: 0
+  time_zone: "London"
   verbose_action_descriptors: true
 
 other_user_prefs:
@@ -27,4 +28,5 @@ other_user_prefs:
   week_starts: 1
   due_style: 0
   refresh: 0
+  time_zone: "London"
   verbose_action_descriptors: false

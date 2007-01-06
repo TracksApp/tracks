@@ -2,7 +2,7 @@ if @saved
   page[@item].remove
   if @item.completed?
     # Don't try to insert contents into a non-existent container!
-    unless @user.preference.hide_completed_actions?
+    unless @user.prefs.hide_completed_actions?
       page.insert_html :top, "completed", :partial => 'todo/item', :locals => { :parent_container_type => "completed" }
       page.visual_effect :highlight, dom_id(@item, 'line'), {'startcolor' => "'#99ff99'"}
       page[empty_container_msg_div_id].show if @down_count == 0 && !empty_container_msg_div_id.nil?

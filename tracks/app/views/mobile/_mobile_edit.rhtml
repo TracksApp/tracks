@@ -1,7 +1,7 @@
 <span class="errors">
 <%= error_messages_for("item") %>
 </span>
-<% this_year = Date.today.strftime("%Y").to_i -%>
+<% this_year = user_time.to_date.strftime("%Y").to_i -%>
 <p><label for="item_state">Done?</label></p>
 <p><%= check_box( "item", "state", "tabindex" => 1) %></p>
 <p><label for="item_description">Next action</label></p>

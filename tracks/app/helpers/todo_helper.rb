@@ -42,11 +42,11 @@ module TodoHelper
   def staleness_class(item)
     if item.due || item.completed?
       return ""
-    elsif item.created_at < (@user.preference.staleness_starts * 3).days.ago
+    elsif item.created_at < (@user.prefs.staleness_starts * 3).days.ago.utc
       return " stale_l3"
-    elsif item.created_at < (@user.preference.staleness_starts * 2).days.ago
+    elsif item.created_at < (@user.prefs.staleness_starts * 2).days.ago.utc
       return " stale_l2"
-    elsif item.created_at < (@user.preference.staleness_starts).days.ago
+    elsif item.created_at < (@user.prefs.staleness_starts).days.ago.utc
       return " stale_l1"
     else
       return ""
@@ -61,33 +61,32 @@ module TodoHelper
       return ""
     end
 
-    @now = Date.today
-    @days = due-@now
+    days = days_from_today(due)
        
-    case @days
+    case days
       # overdue or due very soon! sound the alarm!
       when -1000..-1
-        "<a title='" + format_date(due) + "'><span class=\"red\">Shown on " + (@days * -1).to_s + " days</span></a> "
+        "<a title='" + format_date(due) + "'><span class=\"red\">Shown on " + (days * -1).to_s + " days</span></a> "
       when 0
            "<a title='" + format_date(due) + "'><span class=\"amber\">Show Today</span></a> "
       when 1
            "<a title='" + format_date(due) + "'><span class=\"amber\">Show Tomorrow</span></a> "
       # due 2-7 days away
       when 2..7
-      if @user.preference.due_style == 1
+      if @user.prefs.due_style == 1
         "<a title='" + format_date(due) + "'><span class=\"orange\">Show on " + due.strftime("%A") + "</span></a> "
       else
-        "<a title='" + format_date(due) + "'><span class=\"orange\">Show in " + @days.to_s + " days</span></a> "
+        "<a title='" + format_date(due) + "'><span class=\"orange\">Show in " + days.to_s + " days</span></a> "
       end
       # more than a week away - relax
       else
-        "<a title='" + format_date(due) + "'><span class=\"green\">Show in " + @days.to_s + " days</span></a> "
+        "<a title='" + format_date(due) + "'><span class=\"green\">Show in " + days.to_s + " days</span></a> "
     end
   end
   
   def calendar_setup( input_field )
-    date_format = @user.preference.date_format
-    week_starts = @user.preference.week_starts
+    date_format = @user.prefs.date_format
+    week_starts = @user.prefs.week_starts
     str = "Calendar.setup({ ifFormat:\"#{date_format}\""
     str << ",firstDay:#{week_starts},showOthers:true,range:[2004, 2010]"
     str << ",step:1,inputField:\"" + input_field + "\",cache:true,align:\"TR\" })\n"

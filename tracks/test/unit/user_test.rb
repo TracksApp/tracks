@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class UserTest < Test::Unit::TestCase
-  fixtures :users
+  fixtures :users, :preferences
 
   def setup
     assert_equal "test", ENV['RAILS_ENV']
@@ -133,6 +133,10 @@ class UserTest < Test::Unit::TestCase
     @other_user.first_name = nil
     @other_user.last_name = nil
     assert_equal @other_user.login, @other_user.display_name
+  end
+  
+  def test_prefs_is_short_for_preference
+    assert_equal @admin_user.preference, @admin_user.prefs
   end
 
 end

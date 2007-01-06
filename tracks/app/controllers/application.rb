@@ -62,18 +62,17 @@ class ApplicationController < ActionController::Base
       wants.xml { render :text => 'An error occurred on the server.' + $! }
     end
   end
-
+  
   private
   
   def get_current_user
     @user = User.find(session['user_id']) if session['user_id']
-    @prefs = @user.preference unless @user.nil?
+    @prefs = @user.prefs unless @user.nil?
   end
       
   def parse_date_per_user_prefs( s )
     return nil if s.blank?
-    Date.strptime(s, @user.preference.date_format)  
-    #Chronic.parse(s).to_date
+    @user.prefs.tz.unadjust(Date.strptime(s, @user.prefs.date_format)).utc.to_date
   end
     
   def init_data_for_sidebar

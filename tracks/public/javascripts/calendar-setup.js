@@ -213,9 +213,8 @@ Calendar.setup = function (params) {
  * they still work properly. Pressing '+' when no date is entered in the
  * field will set the date to tomorrow, and likewise '-' with no date
  * entered will set the date to yesterday.
- * 2006-10-24: Commented out while trying to use Chronic library for the field
  */
-/*DateDueKeyboardShortcutSupport = Class.create();
+DateDueKeyboardShortcutSupport = Class.create();
 DateDueKeyboardShortcutSupport.prototype = {
   initialize: function(element, dateFormat) {
     this.element   = $(element);
@@ -298,4 +297,4 @@ DateDueKeyboardShortcutSupport.prototype = {
                      ((event.which) ? event.which : 0));
     return String.fromCharCode(charCode);
   }
-};*/
+};

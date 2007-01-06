@@ -4,13 +4,13 @@
 	           :locals => { :list_name => 'Active Projects',
 	           				:projects => @projects.select{|p| p.active? } } -%>
 	
-	<% if @user.preference.show_hidden_projects_in_sidebar -%>
+	<% if @user.prefs.show_hidden_projects_in_sidebar -%>
   <%= render :partial => "sidebar/project_list",
 			 :locals => { :list_name => 'Hidden Projects',
 			 			  :projects => @projects.select{|p| p.hidden? } } -%>
 	<% end -%>
 
-	<% if @user.preference.show_completed_projects_in_sidebar -%>
+	<% if @user.prefs.show_completed_projects_in_sidebar -%>
   <%= render :partial => "sidebar/project_list",
              :locals => { :list_name => 'Completed Projects',
              			  :projects => @projects.select{|p| p.completed? } } -%>
@@ -20,7 +20,7 @@
 	           :locals => { :list_name => 'Active Contexts',
 	           				:contexts => @contexts.reject{|c| c.hide? } } -%>
 
-	<% if @user.preference.show_hidden_contexts_in_sidebar -%>
+	<% if @user.prefs.show_hidden_contexts_in_sidebar -%>
 	<%= render :partial => "sidebar/context_list",
 	           :locals => { :list_name => 'Hidden Contexts',
 	           				:contexts => @contexts.select{|c| c.hide? } } -%>

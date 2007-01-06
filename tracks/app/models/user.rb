@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
            :conditions => [ 'state = ?', 'deferred' ],
            :order => 'show_from ASC, created_at DESC' do
               def find_and_activate_ready
-                find(:all, :conditions => ['show_from <= ?', Date.today ]).collect { |t| t.activate_and_save! }
+                find(:all, :conditions => ['show_from <= ?', Time.now.utc.to_date ]).collect { |t| t.activate_and_save! }
               end
            end
   has_many :completed_todos,
@@ -44,6 +44,8 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :login, :on => :create
   validates_inclusion_of :auth_type, :in => Tracks::Config.auth_schemes, :message=>"not a valid authentication type"
   validates_presence_of :open_id_url, :if => Proc.new{|user| user.auth_type == 'open_id'}
+
+  alias_method :prefs, :preference
 
   def self.authenticate(login, pass)
     candidate = find(:first, :conditions => ["login = ?", login])

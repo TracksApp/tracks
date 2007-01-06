@@ -1,6 +1,9 @@
 class Preference < ActiveRecord::Base
   belongs_to :user
-  
+  composed_of :tz,
+              :class_name => 'TimeZone',
+              :mapping => %w(time_zone name)
+              
   def self.day_number_to_name_map
     { 0 => "Sunday",
 		  1 => "Monday",

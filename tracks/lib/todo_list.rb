@@ -33,7 +33,7 @@ module Tracks
 
     def find_done_todos
       self.todos.find(:all, :conditions => ["todos.state = ?", "completed"],
-                      :order => "todos.completed_at DESC", :limit => self.user.preference.show_number_completed)                        
+                      :order => "todos.completed_at DESC", :limit => self.user.prefs.show_number_completed)                        
     end
   
     def not_done_todo_count(opts={})
