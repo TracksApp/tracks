@@ -2,9 +2,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <% if @prefs.refresh != 0 -%>
-    <meta http-equiv="Refresh" content="<%= @prefs["refresh"].to_i*60 %>;url=<%= request.request_uri %>">
-  <% end -%>
+    <% if @prefs.refresh != 0 -%>
+      <meta http-equiv="Refresh" content="<%= @prefs["refresh"].to_i*60 %>;url=<%= request.request_uri %>">
+    <% end -%>
   <%= stylesheet_link_tag "standard" %>
   <%= stylesheet_link_tag "print", :media => "print" %>
   <%= javascript_include_tag :defaults %>
@@ -47,6 +47,7 @@
   <li><%= navigation_link( "Done", {:controller => "todo", :action => "completed"}, {:accesskey=>"d", :title=>"Completed"} ) %></li>
   <li><%= navigation_link( "Notes", {:controller => "note", :action => "index"}, {:accesskey => "o", :title => "Show all notes"} ) %></li>
   <li><%= navigation_link( "Preferences", {:controller => "preferences", :action => "index"}, {:accesskey => "u", :title => "Show my preferences"} ) %></li>
+  <li><%= navigation_link( "Import/Export", {:controller => "data", :action => "index"}, {:accesskey => "i", :title => "Import and export data"} ) %></li>
   <% if @user.is_admin? -%>
     <li><%= navigation_link("Admin", {:controller => "admin", :action => "index"}, {:accesskey => "a", :title => "Add or delete users"} ) %></li>
   <% end -%>
