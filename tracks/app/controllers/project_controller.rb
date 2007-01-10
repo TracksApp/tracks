@@ -79,6 +79,8 @@ class ProjectController < ApplicationController
           @project_not_done_counts[@project.id] = @project.reload().not_done_todo_count(:include_project_hidden_todos => true)
         end
         render
+      elsif params['update_status']
+        render :action => 'update_status'
       else
         render :text => success_text || 'Success'
       end

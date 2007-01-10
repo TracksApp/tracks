@@ -1,0 +1,10 @@
+page.select('#project_status .active span').each do |element|
+  element.className = @project.current_state == :active ? 'active_state' : 'inactive_state'
+end
+page.select('#project_status .hidden span').each do |element|
+  element.className = @project.current_state == :hidden ? 'active_state' : 'inactive_state'
+end
+page.select('#project_status .completed span').each do |element|
+  element.className = @project.current_state == :completed ? 'active_state' : 'inactive_state'
+end
+page.notify :notice, "Set project status to #{@project.current_state}", 5.0

@@ -13,7 +13,7 @@
   <td width="150"><label for="project_done">Project status:</label></td>
   <td width="300">
    <% ['active', 'hidden', 'completed'].each do | state | %>
-    <%= radio_button(:project, 'state', state, {:class => 'project-done'}) %> <%= state.titlecase %> 
+    <%= radio_button(:project, 'state', state) %> <%= state.titlecase %> 
    <% end %>
   </td>
 </tr>

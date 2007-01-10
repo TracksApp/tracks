@@ -308,6 +308,12 @@ div.add_note_link {
 div#project_status > div {
 	padding: 10px;
 	}
+#project_status span {
+	margin-right:5px;
+}
+#project_status .active_state {
+	font-weight:bold;
+}
 a.footer_link {color: #cc3334; font-style: normal;}
 a.footer_link:hover {color: #fff; background-color: #cc3334 !important;}
 

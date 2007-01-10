@@ -47,7 +47,7 @@ class Project < ActiveRecord::Base
     
   def hide_todos
     todos.each do |t|
-      t.hide! unless t.completed?
+      t.hide! unless t.completed? || t.deferred?
       t.save
     end
   end
