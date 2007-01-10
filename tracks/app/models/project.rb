@@ -3,12 +3,11 @@ class Project < ActiveRecord::Base
   has_many :notes, :dependent => :delete_all, :order => "created_at DESC"
   belongs_to :user
   
-  # Project name must not be empty
-  # and must be less than 255 bytes
   validates_presence_of :name, :message => "project must have a name"
   validates_length_of :name, :maximum => 255, :message => "project name must be less than 256 characters"
   validates_uniqueness_of :name, :message => "already exists", :scope =>"user_id"
-  validates_format_of :name, :with => /^[^\/]*$/i, :message => "cannot contain the slash ('/') character"
+  validates_does_not_contain :name, :string => '/', :message => "cannot contain the slash ('/') character"
+  validates_does_not_contain :name, :string => ',', :message => "cannot contain the comma (',') character"
 
   acts_as_list :scope => :user
   acts_as_state_machine :initial => :active, :column => 'state'

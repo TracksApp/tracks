@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class ProjectTest < Test::Unit::TestCase
-  fixtures :projects, :todos, :users, :preferences
+  fixtures :projects, :contexts, :todos, :users, :preferences
   
   def setup
     @timemachine = projects(:timemachine)
@@ -37,6 +37,14 @@ class ProjectTest < Test::Unit::TestCase
     assert !newproj.save
     assert_equal 1, newproj.errors.count
     assert_equal "cannot contain the slash ('/') character", newproj.errors.on(:name)
+  end
+  
+  def test_validate_name_does_not_contain_comma
+    newproj = Project.new
+    newproj.name = "Buy iPhones for Luke,bsag,David Allen"
+    assert !newproj.save
+    assert_equal 1, newproj.errors.count
+    assert_equal "cannot contain the comma (',') character", newproj.errors.on(:name)
   end
   
   def test_project_initial_state_is_active

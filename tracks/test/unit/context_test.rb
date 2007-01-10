@@ -38,6 +38,14 @@ class ContextTest < Test::Unit::TestCase
      assert_equal 1, newcontext.errors.count
      assert_equal "cannot contain the slash ('/') character", newcontext.errors.on(:name)
   end
+
+  def test_validate_name_does_not_contain_comma
+     newcontext = Context.new
+     newcontext.name = "phone,telegraph"
+     assert !newcontext.save
+     assert_equal 1, newcontext.errors.count
+     assert_equal "cannot contain the comma (',') character", newcontext.errors.on(:name)
+  end
   
   def test_find_by_namepart_with_exact_match
     c = Context.find_by_namepart('agenda')
