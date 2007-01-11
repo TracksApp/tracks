@@ -155,7 +155,7 @@ class ContextController < ApplicationController
       # TODO: Temporarily doing this search manually until I can work out a way
       # to do the same thing using not_done_todos acts_as_todo_container method
       # Hides actions in hidden projects from context.
-      @not_done_todos = @context.todos.find_in_state(:all, :active, :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC")
+      @not_done_todos = @context.todos.find(:all, :conditions => ['todos.state = ?', 'active'], :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC", :include => :project)
       @count = @not_done_todos.size
     end
 

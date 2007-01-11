@@ -46,7 +46,7 @@ module LoginSystem
       return true  
     end
 
-    if session['user_id'] and authorize?(User.find(session['user_id']))
+    if session['user_id'] and authorize?(get_current_user)
       return true
     end
     
@@ -63,6 +63,14 @@ module LoginSystem
     # call overwriteable reaction to unauthorized access
     access_denied
     return false 
+  end
+  
+  def get_current_user
+    if @user.nil? && session['user_id']
+      @user = User.find session['user_id'], :include => :preference
+    end
+    @prefs = @user.prefs unless @user.nil?
+    @user
   end
 
   # overwrite if you want to have special behavior in case the user is not authorized

@@ -2,7 +2,7 @@
 # migrations feature of ActiveRecord to incrementally modify your database, and
 # then regenerate this schema definition.
 
-ActiveRecord::Schema.define(:version => 21) do
+ActiveRecord::Schema.define(:version => 22) do
 
   create_table "contexts", :force => true do |t|
     t.column "name",     :string,               :default => "", :null => false
@@ -10,6 +10,8 @@ ActiveRecord::Schema.define(:version => 21) do
     t.column "position", :integer,              :default => 0,  :null => false
     t.column "user_id",  :integer,              :default => 0,  :null => false
   end
+
+  add_index "contexts", ["user_id"], :name => "index_contexts_on_user_id"
 
   create_table "notes", :force => true do |t|
     t.column "user_id",    :integer,  :default => 0, :null => false
@@ -54,6 +56,8 @@ ActiveRecord::Schema.define(:version => 21) do
     t.column "time_zone",                          :string,                :default => "London",                       :null => false
   end
 
+  add_index "preferences", ["user_id"], :name => "index_preferences_on_user_id"
+
   create_table "projects", :force => true do |t|
     t.column "name",        :string,                :default => "",       :null => false
     t.column "position",    :integer,               :default => 0,        :null => false
@@ -61,6 +65,8 @@ ActiveRecord::Schema.define(:version => 21) do
     t.column "description", :text
     t.column "state",       :string,  :limit => 20, :default => "active", :null => false
   end
+
+  add_index "projects", ["user_id"], :name => "index_projects_on_user_id"
 
   create_table "sessions", :force => true do |t|
     t.column "session_id", :string
@@ -82,6 +88,12 @@ ActiveRecord::Schema.define(:version => 21) do
     t.column "show_from",    :date
     t.column "state",        :string,   :limit => 20,  :default => "immediate", :null => false
   end
+
+  add_index "todos", ["user_id", "state"], :name => "index_todos_on_user_id_and_state"
+  add_index "todos", ["user_id", "project_id"], :name => "index_todos_on_user_id_and_project_id"
+  add_index "todos", ["project_id"], :name => "index_todos_on_project_id"
+  add_index "todos", ["context_id"], :name => "index_todos_on_context_id"
+  add_index "todos", ["user_id", "context_id"], :name => "index_todos_on_user_id_and_context_id"
 
   create_table "users", :force => true do |t|
     t.column "login",       :string,  :limit => 80

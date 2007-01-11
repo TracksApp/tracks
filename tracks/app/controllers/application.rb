@@ -16,7 +16,6 @@ class ApplicationController < ActionController::Base
   layout 'standard'
   
   before_filter :set_session_expiration
-  before_filter :get_current_user
   prepend_before_filter :login_required
   
   after_filter :set_charset
@@ -64,12 +63,7 @@ class ApplicationController < ActionController::Base
   end
   
   private
-  
-  def get_current_user
-    @user = User.find(session['user_id']) if session['user_id']
-    @prefs = @user.prefs unless @user.nil?
-  end
-      
+        
   def parse_date_per_user_prefs( s )
     return nil if s.blank?
     @user.prefs.tz.unadjust(Date.strptime(s, @user.prefs.date_format)).utc.to_date

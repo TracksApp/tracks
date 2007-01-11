@@ -32,7 +32,7 @@ class User < ActiveRecord::Base
              end
            end
   has_many :notes, :order => "created_at DESC", :dependent => :delete_all
-  has_one :preference
+  has_one :preference, :dependent => :destroy
   
   attr_protected :is_admin
 
