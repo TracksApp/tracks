@@ -2,7 +2,7 @@
 # migrations feature of ActiveRecord to incrementally modify your database, and
 # then regenerate this schema definition.
 
-ActiveRecord::Schema.define(:version => 22) do
+ActiveRecord::Schema.define(:version => 23) do
 
   create_table "contexts", :force => true do |t|
     t.column "name",     :string,               :default => "", :null => false
@@ -105,5 +105,7 @@ ActiveRecord::Schema.define(:version => 22) do
     t.column "auth_type",   :string,                :default => "database", :null => false
     t.column "open_id_url", :string
   end
+
+  add_index "users", ["login"], :name => "index_users_on_login"
 
 end

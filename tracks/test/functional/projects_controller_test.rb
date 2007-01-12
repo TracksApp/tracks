@@ -1,15 +1,15 @@
 require File.dirname(__FILE__) + '/../test_helper'
 require File.dirname(__FILE__) + '/todo_container_controller_test_base'
-require 'project_controller'
+require 'projects_controller'
 
 # Re-raise errors caught by the controller.
-class ProjectController; def rescue_action(e) raise e end; end
+class ProjectsController; def rescue_action(e) raise e end; end
 
-class ProjectControllerTest < TodoContainerControllerTestBase
+class ProjectsControllerTest < TodoContainerControllerTestBase
   fixtures :users, :todos, :preferences, :projects
   
   def setup
-    perform_setup(Project, ProjectController)
+    perform_setup(Project, ProjectsController)
   end
   
   def test_projects_list

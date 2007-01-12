@@ -42,7 +42,7 @@
 <ul id="navlist">
   <li><%= navigation_link("Home", {:controller => "todo", :action => "index"}, {:accesskey => "t", :title => "Home"} ) %></li>
   <li><%= navigation_link( "Contexts", {:controller => "context", :action => "index"}, {:accesskey=>"c", :title=>"Contexts"} ) %></li>
-  <li><%= navigation_link( "Projects", {:controller => "project", :action => "index"}, {:accesskey=>"p", :title=>"Projects"} ) %></li>
+  <li><%= navigation_link( "Projects", projects_path, {:accesskey=>"p", :title=>"Projects"} ) %></li>
   <li><%= navigation_link( "Tickler", {:controller => "todo", :action => "tickler"}, :title => "Tickler" ) %></li>
   <li><%= navigation_link( "Done", {:controller => "todo", :action => "completed"}, {:accesskey=>"d", :title=>"Completed"} ) %></li>
   <li><%= navigation_link( "Notes", {:controller => "note", :action => "index"}, {:accesskey => "o", :title => "Show all notes"} ) %></li>

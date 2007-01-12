@@ -1,10 +1,10 @@
 require File.dirname(__FILE__) + '/../test_helper'
-require 'project_controller'
+require 'projects_controller'
 
 # Re-raise errors caught by the controller.
-class ProjectController; def rescue_action(e) raise e end; end
+class ProjectsController; def rescue_action(e) raise e end; end
 
-class ProjectControllerXmlApiTest < ActionController::IntegrationTest
+class ProjectsControllerXmlApiTest < ActionController::IntegrationTest
   fixtures :users, :projects
 
   @@project_name = "My New Project"
@@ -56,15 +56,11 @@ class ProjectControllerXmlApiTest < ActionController::IntegrationTest
     project1 = Project.find_by_name(@@project_name)
     assert_not_nil project1, "expected project '#{@@project_name}' to be created"
   end
-  
-  def test_fails_with_get_verb
-    authenticated_get_xml "/project/create", users(:other_user).login, 'sesame', {}
-  end
-    
+      
   private
     
   def authenticated_post_xml_to_project_create(postdata = @@valid_postdata, user = users(:other_user).login, password = 'sesame')
-    authenticated_post_xml "/project/create", user, password, postdata
+    authenticated_post_xml "/projects", user, password, postdata
   end
 
   def assert_404_invalid_xml

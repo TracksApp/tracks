@@ -1,0 +1,42 @@
+<%  project = project_listing %>
+<div id="<%= dom_id(project, "container") %>" class="list">
+  <div id="<%= dom_id(project) %>" class="even_row" style="display:'';">
+    <div class="position">
+      <span class="handle">DRAG</span>
+    </div>  
+    <div class="data">
+      <%= link_to_project( project ) %><%= " (" + count_undone_todos(project,"actions") + ")" %>
+    </div>
+    <div class="buttons">
+      <span class="grey"><%= project.current_state.to_s.upcase %></span>
+      <%= link_to_remote( image_tag("blank.png", :title =>"Delete project", :class=>"delete_item"), 
+                  :update => dom_id(project, "container"),
+                  :loading => visual_effect(:fade, dom_id(project, "container")),
+                  :url => project_path(project),
+                  :method => :delete,
+                  :confirm => "Are you sure that you want to delete the project \'#{project.name}\'?" ) %>
+      <%= link_to_function( image_tag("blank.png", :title => "Edit item", :class=>"edit_item"),
+                  "Element.toggle('#{dom_id(project)}'); Element.toggle('#{dom_id(project, 'edit')}'); new Effect.Appear('#{dom_id(project, 'edit')}'); Form.focusFirstElement('#{dom_id(project, "edit_form")}');" ) %>
+    </div>
+  </div>
+
+  <div id="<%= dom_id(project, 'edit') %>" class="edit-form" style="display:none;">
+  <% form_remote_tag  :url => project_path(project),
+                      :method => :put,
+                      :html => { :id => dom_id(project, 'edit_form'), :class => "form" },
+                      :complete => visual_effect(:appear, dom_id(project, 'container')) do -%>
+    <table style="table-layout: fixed;" width="450">
+      <%= render :partial => 'project_form', :object => project %>
+      <tr>
+        <td width="150">&nbsp; <input type="hidden" name="wants_render" value="false" /></td>
+        <td width="300"><input type="submit" value="Update" />&nbsp;<a href="javascript:void(0);" onclick="Element.toggle('<%= dom_id(project) %>'); Element.toggle('<%= dom_id(project, 'edit') %>');Form.reset('<%= dom_id(project, 'edit_form') %>');">Cancel</a></td>
+      </tr>
+    </table>
+  <% end -%>
+  </div>
+</div>
+<% if controller.action_name == 'create' %>
+<script>
+   new Effect.Appear('<%= dom_id(project) %>');
+</script>
+<% end %>

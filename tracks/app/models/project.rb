@@ -37,6 +37,10 @@ class Project < ActiveRecord::Base
     NullProject.new
   end
   
+  def to_param
+    url_friendly_name
+  end
+  
   def description_present?
     attribute_present?("description")
   end

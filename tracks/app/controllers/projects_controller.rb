@@ -1,7 +1,7 @@
-class ProjectController < ApplicationController
+class ProjectsController < ApplicationController
 
   helper :todo
-  before_filter :init, :except => [:create, :destroy, :order, :toggle_project_done]
+  before_filter :init, :except => [:create, :destroy, :order]
 
   def index
     init_project_hidden_todo_counts
@@ -12,9 +12,6 @@ class ProjectController < ApplicationController
     end
   end
 
-  # Filter the projects to show just the one passed in the URL
-  # e.g. <home>/project/show/<project_name> shows just <project_name>.
-  #
   def show
     check_user_set_project
     @page_title = "TRACKS::Project: #{@project.name}"
@@ -27,7 +24,7 @@ class ProjectController < ApplicationController
   # Example XML usage: curl -H 'Accept: application/xml' -H 'Content-Type: application/xml'
   #                    -u username:password
   #                    -d '<request><project><name>new project_name</name></project></request>'
-  #                    http://our.tracks.host/project/create
+  #                    http://our.tracks.host/projects
   #
   def create
     if params[:format] == 'application/xml' && params['exception']
@@ -90,17 +87,6 @@ class ProjectController < ApplicationController
     end
   end
   
-  # Toggles the 'done' status of a project
-  #
-  def toggle_project_done
-    check_user_set_project
-    
-    @project.toggle!('done')
-    if @project.save
-      redirect_to :action => 'index'
-    end
-  end
-
   # Delete a project
   #
   def destroy
@@ -129,8 +115,10 @@ class ProjectController < ApplicationController
     def check_user_set_project
       if params["url_friendly_name"]
         @project = @user.projects.find_by_url_friendly_name(params["url_friendly_name"])
-      elsif params['id']
+      elsif params['id'] && params['id'] =~ /\d+/
         @project = @user.projects.find(params["id"])
+      elsif params['id']
+        @project = @user.projects.find_by_url_friendly_name(params["id"])
       else
         redirect_to :action => 'index'
       end

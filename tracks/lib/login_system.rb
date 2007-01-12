@@ -53,6 +53,7 @@ module LoginSystem
     http_user, http_pass = get_basic_auth_data
     if user = User.authenticate(http_user, http_pass)
       session['user_id'] = user.id
+      get_current_user
       return true
     end
 

@@ -1,8 +1,8 @@
 setup :fixtures => :all
 include_partial 'login/login', :username => 'admin', :password => 'abracadabra'
-open "/project/Build_a_working_time_machine"
+open "/projects/Build_a_working_time_machine"
 include_partial 'project_detail/add_deferred_todo'
-open "/project/Build_a_working_time_machine"
+open "/projects/Build_a_working_time_machine"
 click "edit_icon_todo_15"
 wait_for_element_present "show_from_todo_15"
 type "show_from_todo_15", ""

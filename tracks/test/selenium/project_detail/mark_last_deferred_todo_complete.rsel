@@ -1,5 +1,5 @@
 setup :fixtures => :all
 include_partial 'login/login', :username => 'admin', :password => 'abracadabra'
-open "/project/Build_a_working_time_machine"
+open "/projects/Build_a_working_time_machine"
 click "xpath=//div[@id='tickler'] //div[@id='todo_15'] //input[@class='item-checkbox']"
 wait_for_visible "tickler-empty-nd"

@@ -139,4 +139,8 @@ class ProjectTest < Test::Unit::TestCase
     assert_equal project.id, found_project.id
   end
   
+  def test_to_param_returns_url_friendly_name
+    assert_equal 'Build_a_working_time_machine', @timemachine.to_param
+  end
+  
 end
