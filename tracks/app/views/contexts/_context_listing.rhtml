@@ -1,0 +1,46 @@
+<%  context = context_listing %>
+<div id="<%= dom_id(context, "container") %>" class="list">
+  <div id="<%= dom_id(context) %>" class="even_row" style="display:'';">
+    <div class="position">
+      <span class="handle">DRAG</span>
+    </div>
+    <div class="data">
+      <%= link_to_context( context ) %> <%= " (" + count_undone_todos(context,"actions") + ")" %>
+    </div>
+
+    <div class="buttons">
+      <% if context.hide? %>
+        <span class="grey">HIDDEN</span>
+      <% else %>
+        <span class="grey">VISIBLE</span>
+      <% end %>
+      <%= link_to_remote( image_tag("blank.png", :title =>"Delete context", :class=>"delete_item"), 
+                  :update => dom_id(context, "container"),
+                  :loading => visual_effect(:fade, dom_id(context, 'container')),
+                  :url => context_path(context),
+                  :method => :delete,
+                  :confirm => "Are you sure that you want to delete the context \'#{context.name}\'?" ) %>
+      <%= link_to_function( image_tag( "blank.png", :title => "Edit context", :class=>"edit_item"), "Element.toggle('#{dom_id(context)}');Element.toggle('#{dom_id(context, 'edit')}'); new Effect.Appear('#{dom_id(context, 'edit')}'); Form.focusFirstElement('#{dom_id(context, 'edit_form')}');" ) %>
+    </div>
+  </div>
+  <div id="<%= dom_id(context, 'edit') %>" class="edit-form" style="display:none;">
+    <% form_remote_tag_options = { :url => context_path(context),
+                                   :method => :put,
+                                   :html => { :id => dom_id(context, 'edit_form'), :class => "inline-form" },
+                                   :complete => visual_effect(:appear, dom_id(context, "container")) }
+       form_remote_tag form_remote_tag_options do -%>
+    <table style="table-layout: fixed;" width="450">
+      <%= render :partial => 'context_form', :object => context %>
+      <tr>
+        <td width="150">&nbsp; <input type="hidden" name="wants_render" value="false" /></td>
+        <td width="300"><input type="submit" value="Update" />&nbsp;<a href="javascript:void(0);" onclick="Element.toggle('<%= dom_id(context) %>');Element.toggle('<%= dom_id(context, 'edit') %>');Form.reset('<%= dom_id(context, 'edit_form') %>');">Cancel</a></td>
+      </tr>
+    </table>
+    <% end -%>
+  </div>
+</div>
+<% if controller.action_name == 'create' %>
+<script>
+   new Effect.Appear('<%= dom_id(context) %>');
+</script>
+<% end %>

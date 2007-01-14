@@ -104,5 +104,9 @@ class ContextTest < Test::Unit::TestCase
     assert_equal context.id, found_context.id
   end
   
+  def test_to_param_returns_url_friendly_name
+    assert_equal 'agenda', @agenda.to_param
+  end
+  
   
 end

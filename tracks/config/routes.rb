@@ -35,13 +35,8 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'tickler', :controller => 'todo', :action => 'tickler'
 
   # Context Routes
-  map.connect 'context/create', :controller => 'context', :action => 'create'
-  map.connect 'context/order', :controller => 'context', :action => 'order'
-  map.connect 'context/:id', :controller=> 'context', :action => 'show', :requirements => {:id => /\d+/}
+  map.resources :contexts, :collection => {:order => :post} 
   map.connect 'context/:context/feed/:action/:login/:token', :controller => 'feed'
-  map.connect 'context/:url_friendly_name', :controller => 'context', :action => 'show'
-  
-  map.connect 'contexts', :controller => 'context', :action => 'index'
   map.connect 'contexts/feed/:feedtype/:login/:token', :controller => 'feed', :action => 'list_contexts_only'
 
   # Projects Routes

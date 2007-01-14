@@ -19,5 +19,9 @@ class Context < ActiveRecord::Base
   def hidden?
     self.hide == true
   end
+  
+  def to_param
+    url_friendly_name
+  end
     
 end

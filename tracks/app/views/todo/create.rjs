@@ -11,7 +11,7 @@ if @saved
   page << "projectAutoCompleter.options.array = #{project_names_for_autocomplete}" if @new_project_created
   if should_show_new_item()
     if @new_context_created
-      page.insert_html :top, 'display_box', :partial => 'context/context', :locals => { :context => @item.context, :collapsible => true }
+      page.insert_html :top, 'display_box', :partial => 'contexts/context', :locals => { :context => @item.context, :collapsible => true }
     else
       page.call "todoItems.ensureVisibleWithEffectAppear", "c#{@item.context_id}" if source_view_is(:todo)
       page.insert_html :bottom, item_container_id, :partial => 'todo/item', :locals => { :parent_container_type => parent_container_type, :source_view => @source_view }

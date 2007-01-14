@@ -1,6 +1,6 @@
 <div id="display_box">
   
-  <%= render :partial => "context/context", :collection => @contexts_to_show, 
+  <%= render :partial => "contexts/context", :collection => @contexts_to_show, 
             :locals => { :collapsible => true } %>
   <% unless @done.nil? -%>
     <%= render :partial => "todo/completed", 

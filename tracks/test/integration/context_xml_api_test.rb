@@ -1,10 +1,10 @@
 require File.dirname(__FILE__) + '/../test_helper'
-require 'context_controller'
+require 'contexts_controller'
 
 # Re-raise errors caught by the controller.
-class ContextController; def rescue_action(e) raise e end; end
+class ContextsController; def rescue_action(e) raise e end; end
 
-class ContextControllerXmlApiTest < ActionController::IntegrationTest
+class ContextsControllerXmlApiTest < ActionController::IntegrationTest
   fixtures :users, :contexts
 
   @@context_name = "@newcontext"
@@ -57,14 +57,10 @@ class ContextControllerXmlApiTest < ActionController::IntegrationTest
     assert_not_nil context1, "expected context '#{@@context_name}' to be created"
   end
   
-  def test_fails_with_get_verb
-    authenticated_get_xml "/context/create", users(:other_user).login, 'sesame', {}
-  end
-    
   private
     
   def authenticated_post_xml_to_context_create(postdata = @@valid_postdata, user = users(:other_user).login, password = 'sesame')
-    authenticated_post_xml "/context/create", user, password, postdata
+    authenticated_post_xml "/contexts", user, password, postdata
   end
 
   def assert_404_invalid_xml

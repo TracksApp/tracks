@@ -129,11 +129,11 @@ module ApplicationHelper
   end
   
   def link_to_context(context, descriptor = sanitize(context.name))
-    link_to( descriptor, { :controller => "context", :action => "show", :url_friendly_name => context.url_friendly_name }, :title => "View context: #{context.name}" )
+    link_to( descriptor, context_path(context), :title => "View context: #{context.name}" )
   end
   
   def link_to_project(project, descriptor = sanitize(project.name))
-    link_to( descriptor, project_url(project), :title => "View project: #{project.name}" )
+    link_to( descriptor, project_path(project), :title => "View project: #{project.name}" )
   end
   
   def item_link_to_context(item)

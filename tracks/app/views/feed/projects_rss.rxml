@@ -2,12 +2,12 @@
 xml.rss("version" => "2.0", "xmlns:dc" => "http://purl.org/dc/elements/1.1/") do
   xml.channel do 
     xml.title(@title)
-    xml.link("http://#{@request.host}:#{@request.port}/projects")
+    xml.link(projects_url)
     xml.description(@description)
     @projects.each do |p|
       xml.item do 
         xml.title(p.name)
-			 	xml.link(url_for(:only_path => false, :controller => 'project', :action => 'show', :url_friendly_name => p.url_friendly_name))
+			 	xml.link(project_url(p))
 			 	project_description = ''
 			 	project_description += sanitize(markdown( p.description )) if p.description_present?
 			 	project_description += "<p>#{count_undone_todos(p)}. "

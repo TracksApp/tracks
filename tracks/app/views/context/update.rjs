@@ -1,2 +1,0 @@
-page.replace_html "container_#{@context.id}", :partial => 'context_listing', :object => @context
-page.sortable "list-contexts", get_listing_sortable_options

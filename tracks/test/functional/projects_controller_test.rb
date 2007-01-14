@@ -20,7 +20,7 @@ class ProjectsControllerTest < TodoContainerControllerTestBase
   def test_show_exposes_deferred_todos
     @request.session['user_id'] = users(:admin_user).id
     p = projects(:timemachine)
-    get :show, :url_friendly_name => p.url_friendly_name
+    get :show, :id => p.to_param
     assert_not_nil assigns['deferred']
     assert_equal 1, assigns['deferred'].size
 
@@ -28,7 +28,7 @@ class ProjectsControllerTest < TodoContainerControllerTestBase
     t.show_from = 1.days.from_now.utc.to_date
     t.save!
     
-    get :show, :url_friendly_name => p.url_friendly_name
+    get :show, :id => p.to_param
     assert_equal 2, assigns['deferred'].size
   end
 
@@ -39,7 +39,7 @@ class ProjectsControllerTest < TodoContainerControllerTestBase
   def test_create_project_with_ajax_success_rjs
     ajax_create 'My New Project'
     assert_rjs :insert_html, :bottom, "list-projects"
-    assert_rjs :sortable, 'list-projects', { :tag => 'div', :handle => 'handle', :complete => visual_effect(:highlight, 'list-projects'), :url => {:controller => 'project', :action => 'order'} }
+    assert_rjs :sortable, 'list-projects', { :tag => 'div', :handle => 'handle', :complete => visual_effect(:highlight, 'list-projects'), :url => order_projects_path }
     # not yet sure how to write the following properly...
     assert_rjs :call, "Form.reset", "project-form"
     assert_rjs :call, "Form.focusFirstElement", "project-form"

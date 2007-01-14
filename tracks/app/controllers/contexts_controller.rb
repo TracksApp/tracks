@@ -1,4 +1,4 @@
-class ContextController < ApplicationController
+class ContextsController < ApplicationController
 
   helper :todo
 
@@ -13,9 +13,6 @@ class ContextController < ApplicationController
     end
   end
 
-  # Filter the projects to show just the one passed in the URL
-  # e.g. <home>/context/<context_name> shows just <context_name>.
-  #
   def show
     @page_title = "TRACKS::Context: #{@context.name}"
   end
@@ -23,7 +20,7 @@ class ContextController < ApplicationController
   # Example XML usage: curl -H 'Accept: application/xml' -H 'Content-Type: application/xml'
   #                    -u username:password
   #                    -d '<request><context><name>new context_name</name></context></request>'
-  #                    http://our.tracks.host/context/create
+  #                    http://our.tracks.host/contexts
   #
   def create
     if params[:format] == 'application/xml' && params['exception']
@@ -101,19 +98,21 @@ class ContextController < ApplicationController
   protected
 
     def check_user_set_context
-      if params["url_friendly_name"]
-        @context = @user.contexts.find_by_url_friendly_name(params["url_friendly_name"])
+      if params['url_friendly_name']
+        @context = @user.contexts.find_by_url_friendly_name(params['url_friendly_name'])
+      elsif params['id'] && params['id'] =~ /\d+/
+        @context = @user.contexts.find(params['id'])
       elsif params['id']
-        @context = @user.contexts.find(params["id"])
+        @context = @user.contexts.find_by_url_friendly_name(params['id'])
       else
         redirect_to :action => 'index'
       end
-      if @user == @context.user
+      if @context && @user == @context.user
         return @context
       else
         @context = nil # Should be nil anyway.
         notify :warning, "Item and session user mis-match: #{@context.user_id} and #{@user.id}!"
-        render_text ""
+        render :text => ''
       end
     end
 
@@ -124,7 +123,7 @@ class ContextController < ApplicationController
        else
          @context = nil
          notify :warning, "Project and session user mis-match: #{@context.user_id} and #{@user.id}!"
-         render_text ""
+         render :text => ''
        end
     end
     
@@ -134,7 +133,7 @@ class ContextController < ApplicationController
         return item
       else
         notify :warning, "Item and session user mis-match: #{item.user.name} and #{@user.name}!"
-        render_text ""
+        render :text => ''
       end
     end
      
