@@ -35,6 +35,10 @@
     </script>
   </tr>
   <tr>
+    <td class="label"><label for="<%= dom_id(@item, 'tag_list') %>">Tags</label></td>
+    <td><%= text_field_tag "tag_list", @item.tags.collect{|t| t.name}.join(" "), :size => 40 %></td>
+  </tr>
+  <tr>
     <td class="label"><label for="<%= dom_id(@item, 'due') %>">Due</td>
     <td><input name="item[due]" id="<%= dom_id(@item, 'due') %>" type="text" value="<%= format_date(@item.due) %>" tabindex="12" size="10" onfocus="Calendar.setup" autocomplete="off"  class="Date" /></td>
   </tr>

@@ -1,0 +1,22 @@
+# Todo 1 should be tagged with foo and bar
+foo_bar1:
+  id: 1
+  tag_id: 1
+  taggable_id: 1 # Call Bill Gates
+  taggable_type: Todo
+  user_id: 1
+
+foo_bar2:
+  id: 2
+  tag_id: 2
+  taggable_id: 1 # Call Bill Gates
+  taggable_type: Todo
+  user_id: 1
+
+# Todo 2 should be tagged with foo
+foo:
+  id: 3
+  tag_id: 1
+  taggable_id: 2 # Call dinosaur exterminator
+  taggable_type: Todo
+  user_id: 1

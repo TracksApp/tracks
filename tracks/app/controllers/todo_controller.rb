@@ -33,6 +33,7 @@ class TodoController < ApplicationController
   def create
     @item = @user.todos.build
     p = params['request'] || params
+    # @item.tag_with(params[:tag_list])
     @item.attributes = p['todo']
     
     if p['todo']['project_id'].blank? && !p['project_name'].blank? && p['project_name'] != 'None'
@@ -69,6 +70,7 @@ class TodoController < ApplicationController
       @item.show_from = parse_date_per_user_prefs(p['todo']['show_from'])
     end
 
+    @item.tag_with(params[:tag_list], @user)
     @saved = @item.save
 
      respond_to do |wants|
@@ -124,6 +126,7 @@ class TodoController < ApplicationController
 
   def update
     @item = check_user_return_item
+    @item.tag_with(params[:tag_list], @user)
     @original_item_context_id = @item.context_id
     @original_item_project_id = @item.project_id
     @original_item_was_deferred = @item.deferred?
@@ -158,6 +161,8 @@ class TodoController < ApplicationController
     if params['item']['show_from']
       params['item']['show_from'] = parse_date_per_user_prefs(params['item']['show_from'])
     end
+    
+    
     
     @saved = @item.update_attributes params["item"]
     @context_changed = @original_item_context_id != @item.context_id
@@ -232,6 +237,19 @@ class TodoController < ApplicationController
       format.html { redirect_to :controller => 'todo', :action => 'index' }
       format.js
     end
+  end
+  
+  # /todo/tag/[tag_name] shows all the actions tagged with tag_name
+  #
+  def tag
+    @tag = tag_name = params[:id]
+    if Tag.find_by_name(tag_name)
+      @todos = Todo.find_tagged_with(tag_name, @user)
+    else 
+      @todos = []
+    end
+    
+    @count = @todos.size unless @todos.empty?
   end
   
   private

@@ -43,14 +43,17 @@ Event.observe($('todo_project_name'), "focus", projectAutoCompleter.activate.bin
 Event.observe($('todo_project_name'), "click", projectAutoCompleter.activate.bind(projectAutoCompleter));
 </script>
 
+<label for="tag_list">Tags</label>
+<%= text_field_tag "tag_list", nil, :size => 40, :tabindex => 5 %>
+
 <label for="todo_due">Due</label>
-<%= text_field("todo", "due", "size" => 10, "class" => "Date", "onfocus" => "Calendar.setup", "tabindex" => 5, "autocomplete" => "off") %>
+<%= text_field("todo", "due", "size" => 10, "class" => "Date", "onfocus" => "Calendar.setup", "tabindex" => 6, "autocomplete" => "off") %>
 
 <label for="todo_show_from">Show from</label>
-  <%= text_field("todo", "show_from", "size" => 10, "class" => "Date", "onfocus" => "Calendar.setup", "tabindex" => 6, "autocomplete" => "off") %>
+  <%= text_field("todo", "show_from", "size" => 10, "class" => "Date", "onfocus" => "Calendar.setup", "tabindex" => 7, "autocomplete" => "off") %>
 
 <%= source_view_tag( @source_view ) %>
-<div class="submit_box"><input type="submit" value="Add item" tabindex="7" /></div>
+<div class="submit_box"><input type="submit" value="Add item" tabindex="8" /></div>
 <% end -%><!--[eoform:todo]-->
 
                   

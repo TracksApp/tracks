@@ -33,6 +33,8 @@ class User < ActiveRecord::Base
            end
   has_many :notes, :order => "created_at DESC", :dependent => :delete_all
   has_one :preference, :dependent => :destroy
+  has_many :taggings
+  has_many :tags, :through => :taggings, :select => "DISTINCT tags.*"
   
   attr_protected :is_admin
 

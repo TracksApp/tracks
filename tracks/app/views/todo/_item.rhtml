@@ -18,6 +18,17 @@
       <% end -%>
 
       <%= sanitize(item.description) %>
+      
+      <%= if item.tags.blank?
+            ""
+          else
+            tag_string = ""
+            item.tags.each do |t|
+              tag_string << "<span class=\"tag\">" + link_to(t.name, :action => "tag", :id => t.name) + "</span>"
+            end
+            tag_string
+          end
+      %>
 
       <% if item.deferred? && item.due -%>
         (action due on <%= format_date(item.due) %>)
@@ -31,6 +42,10 @@
         <% end -%>
         <% if (parent_container_type == "context" || parent_container_type == "tickler") && item.project_id -%>
           <%= item_link_to_project( item ) %>
+        <% end -%>
+        <% if (parent_container_type == "tag") -%>
+          <%= item_link_to_context( item ) %>
+          <%= item_link_to_project( item ) if item.project_id %>
         <% end -%>
       <% end -%>
 

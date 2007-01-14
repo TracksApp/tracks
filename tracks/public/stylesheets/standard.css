@@ -206,7 +206,7 @@ div#input_box {
       }
 
 div.item-container {
-      padding: 2px;
+      padding: 3px;
       clear: both;
       }
       
@@ -316,6 +316,28 @@ div#project_status > div {
 }
 a.footer_link {color: #cc3334; font-style: normal;}
 a.footer_link:hover {color: #fff; background-color: #cc3334 !important;}
+
+/* Tag formatting */
+
+span.tag {
+  font-size: 0.8em;
+  background-color: #CCE7FF;
+  color: #000;
+  padding: 1px;
+  margin-right: 2px;
+}
+
+span.tag a, 
+span.tag a:link, 
+span.tag a:active, 
+span.tag a:visited {
+  color: #000;
+}
+
+span.tag a:hover {
+  background-color: #99CCFF;
+  color: #333;
+}
 
 /* Flash box styling */
 

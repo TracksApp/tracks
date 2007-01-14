@@ -2,13 +2,13 @@
 # migrations feature of ActiveRecord to incrementally modify your database, and
 # then regenerate this schema definition.
 
-ActiveRecord::Schema.define(:version => 23) do
+ActiveRecord::Schema.define(:version => 24) do
 
   create_table "contexts", :force => true do |t|
-    t.column "name",     :string,               :default => "", :null => false
-    t.column "hide",     :integer, :limit => 4, :default => 0,  :null => false
-    t.column "position", :integer,              :default => 0,  :null => false
-    t.column "user_id",  :integer,              :default => 0,  :null => false
+    t.column "name",     :string,  :default => "",    :null => false
+    t.column "position", :integer, :default => 0,     :null => false
+    t.column "hide",     :boolean, :default => false
+    t.column "user_id",  :integer, :default => 1
   end
 
   add_index "contexts", ["user_id"], :name => "index_contexts_on_user_id"
@@ -61,7 +61,7 @@ ActiveRecord::Schema.define(:version => 23) do
   create_table "projects", :force => true do |t|
     t.column "name",        :string,                :default => "",       :null => false
     t.column "position",    :integer,               :default => 0,        :null => false
-    t.column "user_id",     :integer,               :default => 0,        :null => false
+    t.column "user_id",     :integer,               :default => 1
     t.column "description", :text
     t.column "state",       :string,  :limit => 20, :default => "active", :null => false
   end
@@ -76,17 +76,34 @@ ActiveRecord::Schema.define(:version => 23) do
 
   add_index "sessions", ["session_id"], :name => "sessions_session_id_index"
 
+  create_table "taggings", :force => true do |t|
+    t.column "taggable_id",   :integer
+    t.column "tag_id",        :integer
+    t.column "taggable_type", :string
+    t.column "user_id",       :integer
+  end
+
+  add_index "taggings", ["tag_id", "taggable_id", "taggable_type"], :name => "index_taggings_on_tag_id_and_taggable_id_and_taggable_type"
+
+  create_table "tags", :force => true do |t|
+    t.column "name",       :string
+    t.column "created_at", :datetime
+    t.column "updated_at", :datetime
+  end
+
+  add_index "tags", ["name"], :name => "index_tags_on_name"
+
   create_table "todos", :force => true do |t|
-    t.column "context_id",   :integer,                 :default => 0,           :null => false
-    t.column "description",  :string,   :limit => 100, :default => "",          :null => false
+    t.column "context_id",   :integer,                :default => 0,           :null => false
+    t.column "project_id",   :integer
+    t.column "description",  :string,                 :default => "",          :null => false
     t.column "notes",        :text
     t.column "created_at",   :datetime
     t.column "due",          :date
     t.column "completed_at", :datetime
-    t.column "project_id",   :integer
-    t.column "user_id",      :integer,                 :default => 0,           :null => false
+    t.column "user_id",      :integer,                :default => 1
     t.column "show_from",    :date
-    t.column "state",        :string,   :limit => 20,  :default => "immediate", :null => false
+    t.column "state",        :string,   :limit => 20, :default => "immediate", :null => false
   end
 
   add_index "todos", ["user_id", "state"], :name => "index_todos_on_user_id_and_state"
@@ -96,10 +113,10 @@ ActiveRecord::Schema.define(:version => 23) do
   add_index "todos", ["user_id", "context_id"], :name => "index_todos_on_user_id_and_context_id"
 
   create_table "users", :force => true do |t|
-    t.column "login",       :string,  :limit => 80
-    t.column "password",    :string,  :limit => 40
+    t.column "login",       :string,  :limit => 80, :default => "",         :null => false
+    t.column "password",    :string,  :limit => 40, :default => "",         :null => false
     t.column "word",        :string
-    t.column "is_admin",    :integer, :limit => 4,  :default => 0,          :null => false
+    t.column "is_admin",    :boolean,               :default => false,      :null => false
     t.column "first_name",  :string
     t.column "last_name",   :string
     t.column "auth_type",   :string,                :default => "database", :null => false
