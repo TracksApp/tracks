@@ -18,7 +18,7 @@
 <div>
 
 	<div id="new-note" style="display:none;">
-	<% form_remote_tag :url => { :controller => "note", :action => "add" },
+	<% form_remote_tag :url => { :controller => "note", :action => "create" },
 	                    :update => "notes",
 	                    :position => "bottom",
 	                    :complete => "new Effect.Highlight('notes');$('empty-n').hide();",

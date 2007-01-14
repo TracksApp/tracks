@@ -45,7 +45,7 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'projects/feed/:feedtype/:login/:token', :controller => 'feed', :action => 'list_projects_only'
 
   # Notes Routes
-  map.connect 'note/add', :controller => 'note', :action => 'add'
+  map.connect 'note/create', :controller => 'note', :action => 'create'
   map.connect 'note/update/:id', :controller => 'note', :action => 'update', :id => 'id'
   map.connect 'note/:id', :controller => 'note', :action => 'show', :id => 'id'
   map.connect 'notes', :controller => 'note', :action => 'index'

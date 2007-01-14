@@ -100,7 +100,7 @@ class ContextsController < ApplicationController
     def check_user_set_context
       if params['url_friendly_name']
         @context = @user.contexts.find_by_url_friendly_name(params['url_friendly_name'])
-      elsif params['id'] && params['id'] =~ /\d+/
+      elsif params['id'] && params['id'] =~ /^\d+$/
         @context = @user.contexts.find(params['id'])
       elsif params['id']
         @context = @user.contexts.find_by_url_friendly_name(params['id'])

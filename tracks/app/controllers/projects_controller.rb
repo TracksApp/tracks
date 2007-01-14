@@ -115,7 +115,7 @@ class ProjectsController < ApplicationController
     def check_user_set_project
       if params["url_friendly_name"]
         @project = @user.projects.find_by_url_friendly_name(params["url_friendly_name"])
-      elsif params['id'] && params['id'] =~ /\d+/
+      elsif params['id'] && params['id'] =~ /^\d+$/
         @project = @user.projects.find(params["id"])
       elsif params['id']
         @project = @user.projects.find_by_url_friendly_name(params["id"])

@@ -16,7 +16,7 @@ class NoteController < ApplicationController
 
   # Add a new note to this project
   #
-  def add
+  def create
     note = @user.notes.build
     note.attributes = params["new_note"]
 
