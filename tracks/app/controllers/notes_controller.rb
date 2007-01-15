@@ -1,4 +1,4 @@
-class NoteController < ApplicationController
+class NotesController < ApplicationController
 
   def index
     @all_notes = @user.notes
@@ -27,7 +27,7 @@ class NoteController < ApplicationController
     end
   end
 
-  def delete
+  def destroy
     note = check_user_return_note
     if note.destroy
       render :text => ''

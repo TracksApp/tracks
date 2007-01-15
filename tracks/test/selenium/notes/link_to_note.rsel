@@ -1,0 +1,5 @@
+setup :fixtures => :all
+include_partial 'login/login', :username => 'admin', :password => 'abracadabra'
+open "/projects/Build_a_working_time_machine"
+click_and_wait "css=#note_1 .show_notes"
+assert_element_present "note_1"

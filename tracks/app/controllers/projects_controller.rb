@@ -1,6 +1,6 @@
 class ProjectsController < ApplicationController
 
-  helper :todo
+  helper :todo, :notes
   before_filter :init, :except => [:create, :destroy, :order]
 
   def index
