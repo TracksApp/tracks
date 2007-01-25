@@ -64,7 +64,8 @@
 <%= periodically_call_remote( :url => {:controller => "login", :action => "check_expiry"},
                               :frequency => (5*60)) %>
 <% end -%>
-<%= periodically_call_remote( :url => check_tickler_path,
+<%= periodically_call_remote( :url => formatted_check_deferred_todos_path(:js),
+                              :method => :post,
                               :frequency => (10*60)) %>  
 <%= yield %>
 </div>

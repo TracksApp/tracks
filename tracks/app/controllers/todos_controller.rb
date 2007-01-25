@@ -2,7 +2,7 @@ class TodosController < ApplicationController
 
   helper :todos
 
-  append_before_filter :init, :except => [ :destroy, :completed, :completed_archive, :check_tickler ]
+  append_before_filter :init, :except => [ :destroy, :completed, :completed_archive, :check_deferred ]
   layout 'standard'
 
   # Main method for listing tasks
@@ -231,7 +231,7 @@ class TodosController < ApplicationController
   
   # Check for any due tickler items, activate them
   # Called by periodically_call_remote
-  def check_tickler
+  def check_deferred
     @due_tickles = @user.deferred_todos.find_and_activate_ready
     respond_to do |format|
       format.html { redirect_to home_path }
