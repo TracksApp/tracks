@@ -1,4 +1,4 @@
-module TodoHelper
+module TodosHelper
 
   require 'user_controller'
   # Counts the number of uncompleted items in the specified context
@@ -8,22 +8,25 @@ module TodoHelper
   end
 
   def form_remote_tag_edit_todo( item, &block )
-    form_remote_tag( :url => { :controller => 'todo', :action => 'update', :id => item.id },
+    form_remote_tag( :url => todo_path(item), :method => :put,
                     :html => { :id => dom_id(item, 'form'), :class => "inline-form" }, &block
                    )
   end
   
   def link_to_remote_todo(item)
-    url_options = { :controller => 'todo', :action => 'destroy', :id => item.id, :_source_view => @source_view }
+    itemurl = todo_path(:id => item.id, :_source_view => @source_view)
     
     str = link_to_remote( image_tag_for_delete,
-                          { :url => url_options, :confirm => "Are you sure that you want to delete the action, \'#{item.description}\'?" },
+                          { :url => todo_path(:id => item.id, :_source_view => @source_view),
+                            :method => :delete,
+                            :confirm => "Are you sure that you want to delete the action, \'#{item.description}\'?" },
                           { :class => "icon" }
                         ) + "\n"
     if !item.completed?
-      url_options[:action] = 'edit'
       str << link_to_remote( image_tag_for_edit(item),
-                             { :url => url_options, :loading => visual_effect(:pulsate, dom_id(item, 'edit_icon')) },
+                             { :url => edit_todo_path(:id => item.id, :_source_view => @source_view),
+                               :method => 'get',
+                               :loading => visual_effect(:pulsate, dom_id(item, 'edit_icon')) },
                              { :class => "icon" }
                            )
     else

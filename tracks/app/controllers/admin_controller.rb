@@ -41,7 +41,7 @@ class AdminController < ApplicationController
   def admin_login_required
     unless User.find_by_id_and_is_admin(session['user_id'], true)
       notify :error, "Only admin users are allowed access to this function"
-      redirect_to :controller => 'todo', :action => 'index'
+      redirect_to home_path
       return false
     end
   end

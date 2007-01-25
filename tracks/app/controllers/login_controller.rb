@@ -18,7 +18,7 @@ class LoginController < ApplicationController
           msg = (should_expire_sessions?) ? "will expire after 1 hour of inactivity." : "will not expire." 
           notify :notice, "Login successful: session #{msg}"
           cookies[:tracks_login] = { :value => @user.login, :expires => Time.now + 1.year }
-          redirect_back_or_default :controller => "todo", :action => "index"
+          redirect_back_or_default home_url
         else
           @login = params['user_login']
           notify :warning, "Login unsuccessful"
@@ -69,7 +69,7 @@ class LoginController < ApplicationController
         unless (@user.nil?)
           notify :notice, "You have successfully verified #{open_id_response.identity_url} as your identity."
           session['user_id'] = @user.id
-          redirect_back_or_default :controller => 'todo', :action => 'index'
+          redirect_back_or_default home_path
         else
           notify :warning, "You have successfully verified #{open_id_response.identity_url} as your identity, but you do not have a Tracks account. Please ask your administrator to sign you up."
         end
@@ -111,7 +111,7 @@ class LoginController < ApplicationController
       @user.create_preference
       @user.save
       notify :notice, "Signup successful for user #{@user.login}."
-      redirect_back_or_default :controller => "todo", :action => "index"
+      redirect_back_or_default home_url
     end
   end
 
@@ -121,7 +121,7 @@ class LoginController < ApplicationController
       # TODO: Maybe it would be better to mark deleted. That way user deletes can be reversed.
       @user.destroy
     end
-    redirect_back_or_default :controller => "todo", :action => "index"
+    redirect_back_or_default home_url
   end
 
   def logout

@@ -1,0 +1,21 @@
+<div id="display_box">
+  
+	<div id="tickler" class="container project">
+	  <h2>Deferred actions</h2>
+
+	  <div id="tickler-items" class="items toggle_target">
+	    <div id="tickler-empty-nd" style="display:<%= @tickles.empty? ? 'block' : 'none'%>;">
+	      <div class="message"><p>Currently there are no deferred actions</p></div>
+	    </div>
+
+	    <%= render :partial => "todos/item", :collection => @tickles, :locals => { :parent_container_type => 'tickler' } %>
+
+	  </div><!-- [end:items] -->
+	</div><!-- [end:tickler] -->
+	
+</div><!-- End of display_box -->
+
+<div id="input_box">
+  <%= render :partial => "shared/add_new_item_form" %>
+  <%= render "sidebar/sidebar" %>
+</div><!-- End of input box -->

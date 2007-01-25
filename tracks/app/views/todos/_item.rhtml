@@ -4,7 +4,7 @@
 
     <% unless source_view_is :deferred -%>
     <input type="checkbox" class="item-checkbox"
-           onclick="new Ajax.Request('<%= url_for :controller => 'todo', :action => 'toggle_check', :id => item.id, :_source_view => @source_view %>', {asynchronous:true, evalScripts:true});"
+           onclick="new Ajax.Request('<%= toggle_check_todo_path(:id => item.id, :_source_view => @source_view) %>', {asynchronous:true, evalScripts:true});"
            name="item_id" value="<%= item.id %>"<% if item.completed? %> checked="checked" <% end %> />
     <% end -%>
 
@@ -50,7 +50,7 @@
       <% end -%>
 
       <% if item.notes? -%>
-        <%= render :partial => "todo/toggle_notes", :locals => { :item => item } %>
+        <%= render :partial => "todos/toggle_notes", :locals => { :item => item } %>
       <% end -%>
     </div>
   </div><!-- [end:<%= dom_id(item, 'line') %>] -->

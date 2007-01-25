@@ -37,7 +37,7 @@ class StoriesTest < ActionController::IntegrationTest
         assert_response :redirect
         follow_redirect!
         assert_response :success
-        assert_template "todo/index"
+        assert_template "todos/index"
       end
 
       def goes_to_login
@@ -63,7 +63,7 @@ class StoriesTest < ActionController::IntegrationTest
         assert_response :redirect
         follow_redirect!
         assert_response :success
-        assert_template "todo/index"
+        assert_template "todos/index"
       end
       
     end

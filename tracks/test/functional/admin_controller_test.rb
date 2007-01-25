@@ -21,7 +21,7 @@ class AdminControllerTest < Test::Unit::TestCase
   def test_get_index_by_nonadmin
     @request.session['user_id'] = users(:other_user).id
     get :index
-    assert_redirected_to :controller => 'todo', :action => 'index'
+    assert_redirected_to home_path
   end
   
   def test_get_index_by_admin

@@ -14,9 +14,7 @@ ActionController::Routing::Routes.draw do |map|
   # instead of a file named 'wsdl'
   #map.connect ':controller/service.wsdl', :action => 'wsdl'
   
-  # Index Route
-  map.connect '', :controller => 'todo', :action => 'index'
-  
+
   # Admin Routes
   map.connect 'admin', :controller => 'admin', :action => 'index'
   map.connect 'admin/destroy/:id', :controller => 'admin', :action => 'destroy', :requirements => {:id => /\d+/}
@@ -31,8 +29,15 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'signup', :controller => 'login', :action => 'signup'
 
   # ToDo Routes
-  map.connect 'done', :controller => 'todo', :action => 'completed'
-  map.connect 'tickler', :controller => 'todo', :action => 'tickler'
+  map.resources :todos, :member => {:toggle_check => :post} 
+  map.with_options :controller => "todos" do |todos|
+    todos.home '', :action => "index"
+    todos.tickler 'tickler', :action => "list_deferred"
+    todos.check_tickler 'check_tickler', :action => "check_tickler"
+    todos.done 'done', :action => "completed"
+    todos.done_archive 'done/archive', :action => "completed_archive"
+    todos.tag '/todos/tag/:name', :action => "tag"
+  end
 
   # Context Routes
   map.resources :contexts, :collection => {:order => :post} 

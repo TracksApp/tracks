@@ -1,7 +1,7 @@
 xml.rss("version" => "2.0", "xmlns:dc" => "http://purl.org/dc/elements/1.1/") do
   xml.channel do 
     xml.title(@title)
-    xml.link("http://#{request.host}:#{request.port}/todo/list")
+    xml.link("http://#{request.host}:#{request.port}/todos/list")
     xml.description(@description)
     @todos.each do |i|
       xml.item do 
@@ -9,7 +9,7 @@ xml.rss("version" => "2.0", "xmlns:dc" => "http://purl.org/dc/elements/1.1/") do
         xml.link(context_url(i.context))
         item_notes = sanitize(markdown( i.notes )) if i.notes?
         due = "<div>Due: #{format_date(i.due)}</div>\n" if i.due?
-        toggle_link = link_to( "mark as done", {:only_path => false, :controller => "todo", :action => "toggle_check", :id => i.id}) 
+        toggle_link = link_to( "mark as done", {:only_path => false, :controller => "todos", :action => "toggle_check", :id => i.id}) 
         done = "<div>#{toggle_link}</div>" unless i.completed? 
         done = "<div>Completed: #{format_date(i.completed_at)}</div>\n" if i.completed?
         context_link = link_to( i.context.name, context_url(i.context) )

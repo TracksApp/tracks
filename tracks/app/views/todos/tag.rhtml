@@ -8,7 +8,7 @@
       <div id="t_empty-nd" style="display:<%= @todos.empty? ? 'block' : 'none'%>;">
         <div class="message"><p>Currently there are no actions tagged with <%= @tag %></p></div>
       </div>
-  <%= render :partial => "todo/item", :collection => @todos, :locals => { :parent_container_type => "tag" } %>
+  <%= render :partial => "todos/item", :collection => @todos, :locals => { :parent_container_type => "tag" } %>
     </div><!-- [end:items] -->
   </div><!-- [end:t-->
 

@@ -20,6 +20,6 @@
     <div id="p<%= project.id %>empty-nd" style="display:<%= @not_done.empty? ? 'block' : 'none'%>;">
       <div class="message"><p>Currently there are no uncompleted actions in this project</p></div>
     </div>
-    <%= render :partial => "todo/item", :collection => @not_done, :locals => { :parent_container_type => "project" } %>
+    <%= render :partial => "todos/item", :collection => @not_done, :locals => { :parent_container_type => "project" } %>
   </div><!-- [end:items] -->
 </div><!-- [end:p<%= project.id %>] -->

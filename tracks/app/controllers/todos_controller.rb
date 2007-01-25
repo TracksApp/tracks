@@ -1,6 +1,6 @@
-class TodoController < ApplicationController
+class TodosController < ApplicationController
 
-  helper :todo
+  helper :todos
 
   append_before_filter :init, :except => [ :destroy, :completed, :completed_archive, :check_tickler ]
   layout 'standard'
@@ -222,7 +222,7 @@ class TodoController < ApplicationController
     @done_archive = @done.completed_more_than 28.day.ago.utc
   end
   
-  def tickler
+  def list_deferred
     @source_view = 'deferred'
     @page_title = "TRACKS::Tickler"
     @tickles = @user.deferred_todos
@@ -234,15 +234,15 @@ class TodoController < ApplicationController
   def check_tickler
     @due_tickles = @user.deferred_todos.find_and_activate_ready
     respond_to do |format|
-      format.html { redirect_to :controller => 'todo', :action => 'index' }
+      format.html { redirect_to home_path }
       format.js
     end
   end
   
-  # /todo/tag/[tag_name] shows all the actions tagged with tag_name
+  # /todos/tag/[tag_name] shows all the actions tagged with tag_name
   #
   def tag
-    @tag = tag_name = params[:id]
+    @tag = tag_name = params[:name]
     if Tag.find_by_name(tag_name)
       @todos = Todo.find_tagged_with(tag_name, @user)
     else 

@@ -44,7 +44,7 @@ class LoginControllerTest < Test::Unit::TestCase
     assert_equal user.login, "jane"
     assert user.is_admin == false || user.is_admin == 0
     assert_equal "Login successful: session will expire after 1 hour of inactivity.", flash[:notice]
-    assert_redirected_to :controller => 'todo', :action => 'index'
+    assert_redirected_to home_url
   end
   
   def test_login_with_no_users_redirects_to_signup
@@ -88,14 +88,14 @@ class LoginControllerTest < Test::Unit::TestCase
     assert admin.is_admin
     newbie = create('newbie', 'newbiepass')
     assert_equal "Signup successful for user newbie.", flash[:notice]
-    assert_redirected_to :controller => 'todo', :action => 'index'
+    assert_redirected_to home_url
     assert_valid newbie
     get :logout # logout the admin user
     assert_equal newbie.login, "newbie"
     assert newbie.is_admin == false || newbie.is_admin == 0
     assert_not_nil newbie.preference # have user preferences been created?
     user = login('newbie', 'newbiepass', 'on') # log in the new user
-    assert_redirected_to :controller => 'todo', :action => 'index'
+    assert_redirected_to home_url
     assert_equal 'newbie', user.login
     assert user.is_admin == false || user.is_admin == 0
     assert_equal User.count, @num_users_in_fixture + 1

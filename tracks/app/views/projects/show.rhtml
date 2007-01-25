@@ -1,8 +1,8 @@
 <div id="display_box">
 
 <%= render :partial => "projects/project", :locals => { :project => @project, :collapsible => false } %>
-<%= render :partial => "todo/deferred", :locals => { :deferred => @deferred, :collapsible => false, :append_descriptor => "in this project" } %>
-<%= render :partial => "todo/completed", :locals => { :done => @done, :collapsible => false, :append_descriptor => "in this project" } %>
+<%= render :partial => "todos/deferred", :locals => { :deferred => @deferred, :collapsible => false, :append_descriptor => "in this project" } %>
+<%= render :partial => "todos/completed", :locals => { :done => @done, :collapsible => false, :append_descriptor => "in this project" } %>
 
 <div class="container">
  <div id="notes">

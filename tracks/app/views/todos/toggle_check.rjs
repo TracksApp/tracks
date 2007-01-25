@@ -3,7 +3,7 @@ if @saved
   if @item.completed?
     # Don't try to insert contents into a non-existent container!
     unless @user.prefs.hide_completed_actions?
-      page.insert_html :top, "completed", :partial => 'todo/item', :locals => { :parent_container_type => "completed" }
+      page.insert_html :top, "completed", :partial => 'todos/item', :locals => { :parent_container_type => "completed" }
       page.visual_effect :highlight, dom_id(@item, 'line'), {'startcolor' => "'#99ff99'"}
       page[empty_container_msg_div_id].show if @down_count == 0 && !empty_container_msg_div_id.nil?
       page.show 'tickler-empty-nd' if source_view_is(:project) && @deferred_count == 0
@@ -14,7 +14,7 @@ if @saved
     end
   else
     page.call "todoItems.ensureVisibleWithEffectAppear", item_container_id
-    page.insert_html :bottom, item_container_id, :partial => 'todo/item', :locals => { :parent_container_type => parent_container_type }
+    page.insert_html :bottom, item_container_id, :partial => 'todos/item', :locals => { :parent_container_type => parent_container_type }
     page.visual_effect :highlight, dom_id(@item, 'line'), {'startcolor' => "'#99ff99'"}
     page.show "empty-d" if @completed_count == 0
     page[empty_container_msg_div_id].hide unless empty_container_msg_div_id.nil? # If we've checked something as undone, uncompleted items can't be empty

@@ -40,11 +40,11 @@
 
 <div id="navcontainer">
 <ul id="navlist">
-  <li><%= navigation_link("Home", {:controller => "todo", :action => "index"}, {:accesskey => "t", :title => "Home"} ) %></li>
+  <li><%= navigation_link("Home", home_path, {:accesskey => "t", :title => "Home"} ) %></li>
   <li><%= navigation_link( "Contexts", contexts_path, {:accesskey=>"c", :title=>"Contexts"} ) %></li>
   <li><%= navigation_link( "Projects", projects_path, {:accesskey=>"p", :title=>"Projects"} ) %></li>
-  <li><%= navigation_link( "Tickler", {:controller => "todo", :action => "tickler"}, :title => "Tickler" ) %></li>
-  <li><%= navigation_link( "Done", {:controller => "todo", :action => "completed"}, {:accesskey=>"d", :title=>"Completed"} ) %></li>
+  <li><%= navigation_link( "Tickler", tickler_path, :title => "Tickler" ) %></li>
+  <li><%= navigation_link( "Done", done_path, {:accesskey=>"d", :title=>"Completed"} ) %></li>
   <li><%= navigation_link( "Notes", notes_path, {:accesskey => "o", :title => "Show all notes"} ) %></li>
   <li><%= navigation_link( "Preferences", {:controller => "preferences", :action => "index"}, {:accesskey => "u", :title => "Show my preferences"} ) %></li>
   <li><%= navigation_link( "Import/Export", {:controller => "data", :action => "index"}, {:accesskey => "i", :title => "Import and export data"} ) %></li>
@@ -64,7 +64,7 @@
 <%= periodically_call_remote( :url => {:controller => "login", :action => "check_expiry"},
                               :frequency => (5*60)) %>
 <% end -%>
-<%= periodically_call_remote( :url => {:controller => "todo", :action => "check_tickler"},
+<%= periodically_call_remote( :url => check_tickler_path,
                               :frequency => (10*60)) %>  
 <%= yield %>
 </div>

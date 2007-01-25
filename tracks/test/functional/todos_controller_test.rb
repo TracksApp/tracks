@@ -1,14 +1,14 @@
 require File.dirname(__FILE__) + '/../test_helper'
-require 'todo_controller'
+require 'todos_controller'
 
 # Re-raise errors caught by the controller.
-class TodoController; def rescue_action(e) raise e end; end
+class TodosController; def rescue_action(e) raise e end; end
 
-class TodoControllerTest < Test::Unit::TestCase
+class TodosControllerTest < Test::Unit::TestCase
   fixtures :users, :preferences, :projects, :contexts, :todos, :tags, :taggings
   
   def setup
-    @controller = TodoController.new
+    @controller = TodosController.new
     @request, @response = ActionController::TestRequest.new, ActionController::TestResponse.new
   end
 

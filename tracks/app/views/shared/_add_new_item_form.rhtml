@@ -12,7 +12,7 @@
 
 <!--[form:todo]-->
 <% form_remote_tag(
-    :url => { :controller => "todo", :action => "create" },
+    :url => todos_path, :method => :post,
     :html=> { :id=>'todo-form-new-action', :name=>'todo', :class => 'inline-form' }) do -%>
 
 <div id="status"><%= error_messages_for("item") %></div>
