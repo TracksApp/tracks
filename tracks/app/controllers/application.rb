@@ -62,6 +62,15 @@ class ApplicationController < ActionController::Base
     end
   end
   
+  protected
+  
+  def admin_login_required
+    unless User.find_by_id_and_is_admin(session['user_id'], true)
+      render :text => "401 Unauthorized: Only admin users are allowed access to this function.", :status => 401
+      return false
+    end
+  end
+  
   private
         
   def parse_date_per_user_prefs( s )

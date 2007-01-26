@@ -35,7 +35,7 @@
     <div class="description">Token (for feeds and API use):</div>
     <div id="token><span class="highlight"><%= @user.word %></span></div>
     <div class="token_regenerate">
-      <%= button_to "Generate a new token", { :controller => 'user', :action => 'refresh_token'},
+      <%= button_to "Generate a new token", refresh_token_user_path(@user),
           :confirm => "Are you sure? Generating a new token will replace the existing one and break any external usages of this token." %>
     </div>
   </div>
@@ -44,18 +44,18 @@
 	<% if Tracks::Config.auth_schemes.length > 1 %>
 	<p>Your authentication type is <span class="highlight"><%= @user.auth_type %></span>.
 	<div class="actions">
-    	<%= link_to "Change your authentication type &raquo;", { :controller => 'user', :action => 'change_auth_type'}, :class => 'edit_link' %>
+    	<%= link_to "Change your authentication type &raquo;", change_auth_type_user_path(@user), :class => 'edit_link' %>
   	</div>
 	<% end %>
 	<% if @user.auth_type == 'database' %>
 	<div class="actions">
-    	<%= link_to 'Change your password &raquo;', :controller => 'user', :action => 'change_password' %>
+    	<%= link_to 'Change your password &raquo;', change_password_user_path(@user) %>
   	</div>
 	<% end %>
 	<% if @user.auth_type == 'open_id' %>
 	<p>Your Open ID URL is <span class="highlight"><%= @user.open_id_url %></span>.
 	<div class="actions">
-      <%= link_to 'Change Your Identity URL &raquo;', :controller => 'user', :action => 'change_auth_type' %></p>
+      <%= link_to 'Change Your Identity URL &raquo;', change_auth_type_user_path(@user) %></p>
 	</div>
   	<% end %>
   </div>

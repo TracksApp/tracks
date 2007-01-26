@@ -1,8 +1,8 @@
 require File.dirname(__FILE__) + '/../test_helper'
-require 'user_controller'
+require 'users_controller'
 
 # Re-raise errors caught by the controller.
-class UserController; def rescue_action(e) raise e end; end
+class UsersController; def rescue_action(e) raise e end; end
 
 class CreateUserControllerTest < ActionController::IntegrationTest
   fixtures :users
@@ -21,7 +21,7 @@ class CreateUserControllerTest < ActionController::IntegrationTest
   
  def test_fails_with_401_if_not_admin_user
    authenticated_post_xml_to_user_create @@foobar_postdata, users(:other_user).login, 'sesame'
-   assert_401_unauthorized
+   assert_401_unauthorized_admin
  end
  
  def test_content_type_must_be_xml
@@ -71,13 +71,13 @@ class CreateUserControllerTest < ActionController::IntegrationTest
   end
   
   def test_fails_with_get_verb
-    authenticated_get_xml "/user/create", users(:admin_user).login, 'abracadabra', {}
+    authenticated_get_xml "/users", users(:admin_user).login, 'abracadabra', {}
   end
     
   private
 
   def authenticated_post_xml_to_user_create(postdata = @@foobar_postdata, user = users(:admin_user).login, password = 'abracadabra', headers = {})
-    authenticated_post_xml "/user/create", user, password, postdata, headers
+    authenticated_post_xml "/users", user, password, postdata, headers
   end
 
   def assert_404_invalid_xml

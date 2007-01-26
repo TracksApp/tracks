@@ -24,7 +24,7 @@
     <td><%= h user.contexts.size %></td>
     <td><%= h user.projects.size %></td>
     <td><%= h user.notes.size %></td>
-    <td><%= !user.is_admin? ? link_to_remote(  image_tag("blank.png", :title =>"Destroy user", :class=>"delete_item"), {:url => { :controller => 'admin', :action => 'destroy', :id => user.id }, :confirm => "Warning: this will delete user \'#{user.login}\', all their actions, contexts, project and notes. Are you sure that you want to continue?" }, { :class => "icon" } ) : "&nbsp;" %></td> 
+    <td><%= !user.is_admin? ? link_to_remote(  image_tag("blank.png", :title =>"Destroy user", :class=>"delete_item"), {:url => user_path(user), :method => :delete, :confirm => "Warning: this will delete user \'#{user.login}\', all their actions, contexts, project and notes. Are you sure that you want to continue?" }, { :class => "icon" } ) : "&nbsp;" %></td> 
     </tr> 
   <% end %> 
   </table>

@@ -49,7 +49,7 @@
   <li><%= navigation_link( "Preferences", {:controller => "preferences", :action => "index"}, {:accesskey => "u", :title => "Show my preferences"} ) %></li>
   <li><%= navigation_link( "Import/Export", {:controller => "data", :action => "index"}, {:accesskey => "i", :title => "Import and export data"} ) %></li>
   <% if @user.is_admin? -%>
-    <li><%= navigation_link("Admin", {:controller => "admin", :action => "index"}, {:accesskey => "a", :title => "Add or delete users"} ) %></li>
+    <li><%= navigation_link("Admin", users_path, {:accesskey => "a", :title => "Add or delete users"} ) %></li>
   <% end -%>
   <li><%= navigation_link(image_tag("feed-icon.png", :size => "16X16", :border => 0), {:controller => "feedlist", :action => "index"}, :title => "See a list of available feeds" ) %></li>
 </ul>

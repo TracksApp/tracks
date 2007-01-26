@@ -14,11 +14,6 @@ ActionController::Routing::Routes.draw do |map|
   # instead of a file named 'wsdl'
   #map.connect ':controller/service.wsdl', :action => 'wsdl'
   
-
-  # Admin Routes
-  map.connect 'admin', :controller => 'admin', :action => 'index'
-  map.connect 'admin/destroy/:id', :controller => 'admin', :action => 'destroy', :requirements => {:id => /\d+/}
-
   # Mobile/lite version
   map.connect 'mobile', :controller => 'mobile', :action => 'index'
   map.connect 'mobile/add_action', :controller => 'mobile', :action => 'show_add_form'
@@ -27,6 +22,11 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'login', :controller => 'login', :action => 'login' 
   map.connect 'logout', :controller => 'login', :action => 'logout'
   map.connect 'signup', :controller => 'login', :action => 'signup'
+
+  map.resources :users,
+                :member => {:change_password => :get, :update_password => :post,
+                             :change_auth_type => :get, :update_auth_type => :post,
+                             :refresh_token => :post }
 
   # ToDo Routes
   map.resources :todos,

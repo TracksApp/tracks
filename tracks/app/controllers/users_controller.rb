@@ -1,19 +1,29 @@
-class UserController < ApplicationController
+class UsersController < ApplicationController
 
   if Tracks::Config.auth_schemes.include?('open_id')
      open_id_consumer
      before_filter  :begin_open_id_auth,    :only => :update_auth_type
   end
+
+  before_filter :admin_login_required, :only => [ :index, :create, :destroy ]
   
-  verify  :method => :post,
-          :only => %w( create ),
-          :render => { :text => '403 Forbidden: Only POST requests on this resource are allowed.',
-                      :status => 403 }
+  def index
+    @user_pages, @users = paginate :users, :order => 'login ASC', :per_page => 10
+    @total_users = User.find(:all).size
+    # When we call login/signup from the admin page
+    # we store the URL so that we get returned here when signup is successful
+    store_location
+  end
+  
+  # verify  :method => :post,
+  #         :only => %w( create ),
+  #         :render => { :text => '403 Forbidden: Only POST requests on this resource are allowed.',
+  #                     :status => 403 }
   
   # Example usage: curl -H 'Accept: application/xml' -H 'Content-Type: application/xml'
   #               -u admin:up2n0g00d
   #               -d '<request><login>username</login><password>abc123</password></request>'
-  #               http://our.tracks.host/user/create
+  #               http://our.tracks.host/users
   #
   def create
      if params['exception']
@@ -38,6 +48,33 @@ class UserController < ApplicationController
         render_failure user.errors.to_xml
       end
   end
+  
+  def destroy
+    @deleted_user = User.find_by_id(params[:id])
+    @saved = @deleted_user.destroy
+    @total_users = User.find(:all).size
+    
+    respond_to do |wants|
+      
+      wants.html do
+        if @saved
+          notify :notice, "Successfully deleted user #{@deleted_user.login}", 2.0
+          redirect_to :action => 'index'
+        else
+          notify :error, "Failed to delete user #{@deleted_user.login}", 2.0
+          redirect_to :action => 'index'
+        end
+      end
+      
+      wants.js do
+        render
+      end
+      
+      wants.xml { render :text => '200 OK. User deleted.', :status => 200 }
+    
+    end
+  end
+  
     
   def change_password
     @page_title = "TRACKS::Change password"
@@ -47,7 +84,7 @@ class UserController < ApplicationController
     if do_change_password_for(@user)
       redirect_to :controller => 'preferences'
     else
-      redirect_to :controller => 'user', :action => 'change_password'
+      redirect_to :action => 'change_password'
       notify :warning, "There was a problem saving the password. Please retry."
     end
   end
@@ -77,7 +114,7 @@ class UserController < ApplicationController
       redirect_to :controller => 'preferences'
     else
       notify :warning, "There was a problem updating your authentication type: #{ @user.errors.full_messages.join(', ')}"
-      redirect_to :controller => 'user', :action => 'change_auth_type'
+      redirect_to :action => 'change_auth_type'
     end
   end
   
@@ -121,7 +158,7 @@ class UserController < ApplicationController
     @user.crypt_word
     @user.save
     notify :notice, "New token successfully generated"
-    redirect_to :controller => 'user', :action => 'preferences'
+    redirect_to :controller => 'preferences', :action => 'index'
   end
   
   protected
