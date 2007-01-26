@@ -63,7 +63,7 @@ module FeedHelper
   end
   
   def format_ical_uid(todo)
-    sprintf("%s%s%s%s", @request.protocol, @request.host, @request.port_string, todo_url(todo))
+    sprintf("%s%s%s%s", request.protocol, request.host, request.port_string, todo_url(todo))
   end
   
 end

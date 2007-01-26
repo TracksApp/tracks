@@ -48,6 +48,7 @@ class FeedController < ApplicationController
 
   def list_projects_only
     init_not_done_counts('project')
+    init_project_hidden_todo_counts
     @projects = @user.projects
     @description = "Lists all the projects for #{@user.login}."
     render :action => 'projects_' + params['feedtype']

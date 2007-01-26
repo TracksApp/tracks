@@ -14,7 +14,7 @@ xml.rss("version" => "2.0", "xmlns:dc" => "http://purl.org/dc/elements/1.1/") do
         done = "<div>Completed: #{format_date(i.completed_at)}</div>\n" if i.completed?
         context_link = link_to( i.context.name, context_url(i.context) )
         if i.project_id?
-          project_link = link_to (i.project.name, project_url(i.project) )
+          project_link = link_to(i.project.name, project_url(i.project) )
         else
           project_link = "<em>none</em>"
         end
