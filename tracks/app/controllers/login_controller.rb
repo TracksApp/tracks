@@ -18,7 +18,7 @@ class LoginController < ApplicationController
           msg = (should_expire_sessions?) ? "will expire after 1 hour of inactivity." : "will not expire." 
           notify :notice, "Login successful: session #{msg}"
           cookies[:tracks_login] = { :value => @user.login, :expires => Time.now + 1.year }
-          redirect_back_or_default home_url
+          redirect_back_or_home
         else
           @login = params['user_login']
           notify :warning, "Login unsuccessful"
@@ -69,7 +69,7 @@ class LoginController < ApplicationController
         unless (@user.nil?)
           notify :notice, "You have successfully verified #{open_id_response.identity_url} as your identity."
           session['user_id'] = @user.id
-          redirect_back_or_default home_path
+          redirect_back_or_home
         else
           notify :warning, "You have successfully verified #{open_id_response.identity_url} as your identity, but you do not have a Tracks account. Please ask your administrator to sign you up."
         end
@@ -81,47 +81,6 @@ class LoginController < ApplicationController
         notify :warning, "Unknown response status: #{open_id_response.status}"
     end
     redirect_to :action => 'login' unless performed?
-  end
-
-  def signup
-    if User.no_users_yet?
-      @page_title = "Sign up as the admin user"
-      @user = get_new_user
-    elsif @user && @user.is_admin?
-      @page_title = "Sign up a new user"
-      @user = get_new_user
-    else # all other situations (i.e. a non-admin is logged in, or no one is logged in, but we have some users)
-      @page_title = "No signups"
-      @admin_email = User.find_admin.preference.admin_email
-      render :action => "nosignup"
-    end        
-  end
-
-  def create
-    user = User.new(params['user'])
-    unless user.valid?
-      session['new_user'] = user
-      redirect_to :controller => 'login', :action => 'signup'
-      return
-    end
-
-    user.is_admin = true if User.no_users_yet?
-    if user.save
-      @user = User.authenticate(user.login, params['user']['password'])
-      @user.create_preference
-      @user.save
-      notify :notice, "Signup successful for user #{@user.login}."
-      redirect_back_or_default home_url
-    end
-  end
-
-  def delete
-    if params['id'] and ( params['id'] == @user.id or @user.is_admin )
-      @user = User.find(params['id'])
-      # TODO: Maybe it would be better to mark deleted. That way user deletes can be reversed.
-      @user.destroy
-    end
-    redirect_back_or_default home_url
   end
 
   def logout
@@ -150,17 +109,7 @@ class LoginController < ApplicationController
   end
   
   private
-  
-  def get_new_user
-    if session['new_user']
-      user = session['new_user']
-      session['new_user'] = nil
-    else
-      user = User.new
-    end
-    user
-  end
-    
+      
   def should_expire_sessions?
     session['noexpiry'] != "on"
   end

@@ -75,79 +75,15 @@ class LoginControllerTest < Test::Unit::TestCase
     assert_equal "Login unsuccessful", flash[:warning]
     assert_response :success
   end
-    
-  # ============================================
-  # Signup and creation of new users
-  # ============================================
-  
-  # Test signup of a new user by admin
-  # Check that newly created user can log in
-  #
-  def test_create
-    admin = login('admin', 'abracadabra', 'on')
-    assert admin.is_admin
-    newbie = create('newbie', 'newbiepass')
-    assert_equal "Signup successful for user newbie.", flash[:notice]
-    assert_redirected_to home_url
-    assert_valid newbie
-    get :logout # logout the admin user
-    assert_equal newbie.login, "newbie"
-    assert newbie.is_admin == false || newbie.is_admin == 0
-    assert_not_nil newbie.preference # have user preferences been created?
-    user = login('newbie', 'newbiepass', 'on') # log in the new user
-    assert_redirected_to home_url
-    assert_equal 'newbie', user.login
-    assert user.is_admin == false || user.is_admin == 0
-    assert_equal User.count, @num_users_in_fixture + 1
-  end
-  
-  # Test whether signup of new users is denied to a non-admin user
-  # 
-  def test_create_by_non_admin
-    non_admin = login('jane', 'sesame', 'on')
-    assert non_admin.is_admin == false || non_admin.is_admin == 0
-    post :signup, :user => {:login => 'newbie2', :password => 'newbiepass2', :password_confirmation => 'newbiepass2'}
-    assert_template 'login/nosignup'
-    assert_number_of_users_is_unchanged
-  end
-  
-  # ============================================
-  # Test validations
-  # ============================================
-  
-  def test_create_with_invalid_password
-    admin = login('admin', 'abracadabra', 'on')
-    assert admin.is_admin
-    assert_equal admin.id, @response.session['user_id']
-    post :create, :user => {:login => 'newbie', :password => '', :password_confirmation => ''}
-    assert_number_of_users_is_unchanged
-    assert_redirected_to :controller => 'login', :action => 'signup'    
-  end
-  
-  def test_create_with_invalid_user
-    admin = login('admin', 'abracadabra', 'on')
-    assert admin.is_admin
-    assert_equal admin.id, @response.session['user_id']
-    post :create, :user => {:login => 'n', :password => 'newbiepass', :password_confirmation => 'newbiepass'}
-    assert_number_of_users_is_unchanged
-    assert_redirected_to :controller => 'login', :action => 'signup'    
-  end
-  
-  # Test uniqueness of login
-  #
-  def test_validate_uniqueness_of_login
-    admin = login('admin', 'abracadabra', 'on')
-    assert admin.is_admin
-    assert_equal admin.id, @response.session['user_id']
-    post :create, :user => {:login => 'jane', :password => 'newbiepass', :password_confirmation => 'newbiepass'}
-    num_users = User.find(:all)
-    assert_number_of_users_is_unchanged
-    assert_redirected_to :controller => 'login', :action => 'signup'
-  end
   
   private
   
-  def assert_number_of_users_is_unchanged
-    assert_equal User.count, @num_users_in_fixture    
+  # Logs in a user and returns the user object found in the session object
+  def login(login,password,expiry)
+    post :login, {:user_login => login, :user_password => password, :user_noexpiry => expiry}
+    assert_not_nil(session['user_id'])
+    return User.find(session['user_id'])
   end
+  
+    
 end

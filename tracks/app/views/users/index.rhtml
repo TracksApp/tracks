@@ -33,4 +33,4 @@
     <%= link_to "Next page &raquo;", { :page => @user_pages.current.next } if @user_pages.current.next %>
   </p>
  
-  <p><%= link_to 'Signup new user', :controller => 'login', :action => 'signup' %></p>
+  <p><%= link_to 'Signup new user', signup_path %></p>

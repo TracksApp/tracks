@@ -71,6 +71,10 @@ class ApplicationController < ActionController::Base
     end
   end
   
+  def redirect_back_or_home
+    redirect_back_or_default home_url
+  end
+  
   private
         
   def parse_date_per_user_prefs( s )

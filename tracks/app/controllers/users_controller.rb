@@ -5,20 +5,33 @@ class UsersController < ApplicationController
      before_filter  :begin_open_id_auth,    :only => :update_auth_type
   end
 
-  before_filter :admin_login_required, :only => [ :index, :create, :destroy ]
+  before_filter :admin_login_required, :only => [ :index, :destroy ]
   
   def index
+    @page_title = "TRACKS::Manage Users"
     @user_pages, @users = paginate :users, :order => 'login ASC', :per_page => 10
     @total_users = User.find(:all).size
-    # When we call login/signup from the admin page
+    # When we call users/signup from the admin page
     # we store the URL so that we get returned here when signup is successful
+    expires_now
     store_location
   end
-  
-  # verify  :method => :post,
-  #         :only => %w( create ),
-  #         :render => { :text => '403 Forbidden: Only POST requests on this resource are allowed.',
-  #                     :status => 403 }
+
+  def new
+    if User.no_users_yet?
+      @page_title = "Sign up as the admin user"
+      @user = get_new_user
+    elsif @user && @user.is_admin?
+      @page_title = "Sign up a new user"
+      @user = get_new_user
+    else # all other situations (i.e. a non-admin is logged in, or no one is logged in, but we have some users)
+      @page_title = "No signups"
+      @admin_email = User.find_admin.preference.admin_email
+      render :action => "nosignup", :layout => "login"
+      return
+    end
+    render :layout => "login"
+  end
   
   # Example usage: curl -H 'Accept: application/xml' -H 'Content-Type: application/xml'
   #               -u admin:up2n0g00d
@@ -26,28 +39,56 @@ class UsersController < ApplicationController
   #               http://our.tracks.host/users
   #
   def create
-     if params['exception']
-       render_failure "Expected post format is valid xml like so: <request><login>username</login><password>abc123</password></request>."
-       return
-     end
+    if params['exception']
+      render_failure "Expected post format is valid xml like so: <request><login>username</login><password>abc123</password></request>."
+      return
+    end
+    respond_to do |format|
+      format.html do
+        unless User.no_users_yet? || (@user && @user.is_admin?)
+          @page_title = "No signups"
+          @admin_email = User.find_admin.preference.admin_email
+          render :action => "nosignup", :layout => "login"
+          return
+        end
+        
+        user = User.new(params['user'])
+        unless user.valid?
+          session['new_user'] = user
+          redirect_to :action => 'new'
+          return
+        end
 
-     admin = User.find_admin
-      unless session["user_id"].to_i == admin.id.to_i
-        access_denied
+        user.is_admin = true if User.no_users_yet?
+        if user.save
+          @user = User.authenticate(user.login, params['user']['password'])
+          @user.create_preference
+          @user.save
+          notify :notice, "Signup successful for user #{@user.login}."
+          redirect_back_or_home
+        end
         return
       end
-      unless check_create_user_params
-        render_failure "Expected post format is valid xml like so: <request><login>username</login><password>abc123</password></request>."
+      format.xml do
+        unless User.find_by_id_and_is_admin(session['user_id'], true)
+          render :text => "401 Unauthorized: Only admin users are allowed access to this function.", :status => 401
+          return
+        end
+        unless check_create_user_params
+          render_failure "Expected post format is valid xml like so: <request><login>username</login><password>abc123</password></request>."
+          return
+        end
+        user = User.new(params[:request])
+        user.password_confirmation = params[:request][:password]
+        if user.save
+          render :text => "User created.", :status => 200
+        else
+          render_failure user.errors.to_xml
+        end
         return
       end
-      user = User.new(params[:request])
-      user.password_confirmation = params[:request][:password]
-      if user.save
-        render :text => "User created.", :status => 200
-      else
-        render_failure user.errors.to_xml
-      end
-  end
+    end
+  end  
   
   def destroy
     @deleted_user = User.find_by_id(params[:id])
@@ -175,6 +216,16 @@ class UsersController < ApplicationController
   end
 
   private
+    
+  def get_new_user
+    if session['new_user']
+      user = session['new_user']
+      session['new_user'] = nil
+    else
+      user = User.new
+    end
+    user
+  end
     
   def check_create_user_params
     return false unless params.has_key?(:request)

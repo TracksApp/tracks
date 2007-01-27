@@ -21,12 +21,14 @@ ActionController::Routing::Routes.draw do |map|
   # Login Routes
   map.connect 'login', :controller => 'login', :action => 'login' 
   map.connect 'logout', :controller => 'login', :action => 'logout'
-  map.connect 'signup', :controller => 'login', :action => 'signup'
 
   map.resources :users,
                 :member => {:change_password => :get, :update_password => :post,
                              :change_auth_type => :get, :update_auth_type => :post,
                              :refresh_token => :post }
+ map.with_options :controller => "users" do |users|
+   users.signup 'signup', :action => "new"
+ end
 
   # ToDo Routes
   map.resources :todos,
@@ -37,7 +39,7 @@ ActionController::Routing::Routes.draw do |map|
     todos.tickler 'tickler', :action => "list_deferred"
     todos.done 'done', :action => "completed"
     todos.done_archive 'done/archive', :action => "completed_archive"
-    todos.tag '/todos/tag/:name', :action => "tag"
+    todos.tag 'todos/tag/:name', :action => "tag"
   end
 
   # Context Routes

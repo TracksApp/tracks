@@ -49,17 +49,17 @@ class StoriesTest < ActionController::IntegrationTest
       def goes_to_signup
         get "/signup"
         assert_response :success
-        assert_template "login/signup"
+        assert_template "users/new"
       end
       
       def goes_to_signup_as_nonadmin
         get "/signup"
         assert_response :success
-        assert_template "login/nosignup"
+        assert_template "users/nosignup"
       end
 
       def signs_up_with(options)
-        post "/login/create", options
+        post "/users", options
         assert_response :redirect
         follow_redirect!
         assert_response :success
