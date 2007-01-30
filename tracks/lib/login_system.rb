@@ -66,6 +66,22 @@ module LoginSystem
     return false 
   end
   
+  def login_optional
+
+    if session['user_id'] and authorize?(get_current_user)
+      return true
+    end
+    
+    http_user, http_pass = get_basic_auth_data
+    if user = User.authenticate(http_user, http_pass)
+      session['user_id'] = user.id
+      get_current_user
+      return true
+    end
+
+    return true 
+  end
+  
   def get_current_user
     if @user.nil? && session['user_id']
       @user = User.find session['user_id'], :include => :preference

@@ -16,7 +16,7 @@ class CreateUserControllerTest < ActionController::IntegrationTest
   
   def test_fails_with_401_if_not_authorized_user
     authenticated_post_xml_to_user_create @@foobar_postdata, 'nobody', 'nohow'
-    assert_401_unauthorized
+    assert_401_unauthorized_admin
   end
   
  def test_fails_with_401_if_not_admin_user

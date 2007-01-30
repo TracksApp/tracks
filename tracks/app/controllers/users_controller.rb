@@ -6,6 +6,8 @@ class UsersController < ApplicationController
   end
 
   before_filter :admin_login_required, :only => [ :index, :destroy ]
+  skip_before_filter :login_required, :only => [ :new, :create ]
+  prepend_before_filter :login_optional, :only => [ :new, :create ]
   
   def index
     @page_title = "TRACKS::Manage Users"
@@ -19,13 +21,15 @@ class UsersController < ApplicationController
 
   def new
     if User.no_users_yet?
-      @page_title = "Sign up as the admin user"
+      @page_title = "TRACKS::Sign up as the admin user"
+      @heading = "Welcome to TRACKS. To get started, please create an admin account:"
       @user = get_new_user
     elsif @user && @user.is_admin?
-      @page_title = "Sign up a new user"
+      @page_title = "TRACKS::Sign up a new user"
+      @heading = "Sign up a new user:"
       @user = get_new_user
     else # all other situations (i.e. a non-admin is logged in, or no one is logged in, but we have some users)
-      @page_title = "No signups"
+      @page_title = "TRACKS::No signups"
       @admin_email = User.find_admin.preference.admin_email
       render :action => "nosignup", :layout => "login"
       return

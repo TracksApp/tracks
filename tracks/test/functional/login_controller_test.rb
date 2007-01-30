@@ -50,7 +50,7 @@ class LoginControllerTest < Test::Unit::TestCase
   def test_login_with_no_users_redirects_to_signup
     User.delete_all
     get :login
-    assert_redirected_to :controller => 'login', :action => 'signup'
+    assert_redirected_to :controller => 'users', :action => 'new'
   end
   
   def test_logout
