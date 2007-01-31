@@ -4,7 +4,7 @@ require 'users_controller'
 # Re-raise errors caught by the controller.
 class UsersController; def rescue_action(e) raise e end; end
 
-class CreateUserControllerTest < ActionController::IntegrationTest
+class UsersXmlApiTest < ActionController::IntegrationTest
   fixtures :users
   
   @@foobar_postdata = "<request><login>foo</login><password>bar</password></request>"
@@ -73,8 +73,29 @@ class CreateUserControllerTest < ActionController::IntegrationTest
   def test_fails_with_get_verb
     authenticated_get_xml "/users", users(:admin_user).login, 'abracadabra', {}
   end
+  
+  def test_get_users_as_xml
+    get '/users.xml', {}, basic_auth_headers()
+    #puts @response.body
+    assert_response :success
+    assert_tag :tag => "users",
+               :children => { :count => 3, :only => { :tag => "user" } } 
+    assert_no_tag :tag => "password"
+  end
+
+  def test_get_user_as_xml
+    get "/users/#{users(:other_user).login}.xml", {}, basic_auth_headers()
+    puts @response.body
+    assert_response :success
+    assert_tag :tag => "user"
+    assert_no_tag :tag => "password"
+  end
     
   private
+
+  def basic_auth_headers(username = users(:admin_user).login, password = 'abracadabra')
+    {'AUTHORIZATION' => "Basic " + Base64.encode64("#{username}:#{password}") }
+  end
 
   def authenticated_post_xml_to_user_create(postdata = @@foobar_postdata, user = users(:admin_user).login, password = 'abracadabra', headers = {})
     authenticated_post_xml "/users", user, password, postdata, headers

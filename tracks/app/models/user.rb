@@ -68,6 +68,10 @@ class User < ActiveRecord::Base
     find(:first, :conditions => [ "is_admin = ?", true ])    
   end
   
+  def to_param
+    login
+  end
+  
   def display_name
     if first_name.blank? && last_name.blank?
       return login

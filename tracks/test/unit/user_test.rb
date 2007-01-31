@@ -138,5 +138,10 @@ class UserTest < Test::Unit::TestCase
   def test_prefs_is_short_for_preference
     assert_equal @admin_user.preference, @admin_user.prefs
   end
+  
+  def test_to_param_returns_login
+    assert_equal @admin_user.login, @admin_user.to_param
+  end
+  
 
 end

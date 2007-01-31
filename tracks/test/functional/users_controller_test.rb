@@ -1,6 +1,5 @@
 require File.dirname(__FILE__) + '/../test_helper'
 require 'users_controller'
-require 'user'
 
 # Re-raise errors caught by the controller.
 class UsersController; def rescue_action(e) raise e end; end
@@ -34,6 +33,9 @@ class UsersControllerTest < Test::Unit::TestCase
     login_as @admin_user
     get :index
     assert_response :success
+    assert_equal "TRACKS::Manage Users", assigns['page_title']  
+    assert_equal 3, assigns['total_users']
+    assert_equal "/users", session['return-to']
   end
   
   def test_destroy_user
@@ -154,7 +156,6 @@ class UsersControllerTest < Test::Unit::TestCase
   
   def assert_number_of_users_is_unchanged
     assert_equal User.count, @num_users_in_fixture    
-  end
-  
+  end    
   
 end

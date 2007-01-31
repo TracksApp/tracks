@@ -5,20 +5,37 @@ class UsersController < ApplicationController
      before_filter  :begin_open_id_auth,    :only => :update_auth_type
   end
 
-  before_filter :admin_login_required, :only => [ :index, :destroy ]
+  before_filter :admin_login_required, :only => [ :index, :show, :destroy ]
   skip_before_filter :login_required, :only => [ :new, :create ]
   prepend_before_filter :login_optional, :only => [ :new, :create ]
   
+  # GET /users
+  # GET /users.xml
   def index
-    @page_title = "TRACKS::Manage Users"
-    @user_pages, @users = paginate :users, :order => 'login ASC', :per_page => 10
-    @total_users = User.find(:all).size
-    # When we call users/signup from the admin page
-    # we store the URL so that we get returned here when signup is successful
-    expires_now
-    store_location
+    respond_to do |format|
+      format.html do
+        @page_title = "TRACKS::Manage Users"
+        @user_pages, @users = paginate :users, :order => 'login ASC', :per_page => 10
+        @total_users = User.count
+        # When we call users/signup from the admin page
+        # we store the URL so that we get returned here when signup is successful
+        store_location
+      end
+      format.xml do
+        @users  = User.find(:all)
+        render :xml => @users.to_xml(:except => [ :password ])
+      end
+    end
+  end
+  
+  # GET /users/somelogin
+  # GET /users/somelogin.xml
+  def show
+    @user = User.find_by_login(params[:id])
+    render :xml => @user.to_xml(:except => [ :password ])
   end
 
+  # GET /users/new
   def new
     if User.no_users_yet?
       @page_title = "TRACKS::Sign up as the admin user"
@@ -42,6 +59,8 @@ class UsersController < ApplicationController
   #               -d '<request><login>username</login><password>abc123</password></request>'
   #               http://our.tracks.host/users
   #
+  # POST /users
+  # POST /users.xml
   def create
     if params['exception']
       render_failure "Expected post format is valid xml like so: <request><login>username</login><password>abc123</password></request>."
@@ -94,29 +113,24 @@ class UsersController < ApplicationController
     end
   end  
   
+  # DELETE /users/somelogin
+  # DELETE /users/somelogin.xml
   def destroy
     @deleted_user = User.find_by_id(params[:id])
     @saved = @deleted_user.destroy
     @total_users = User.find(:all).size
     
-    respond_to do |wants|
-      
-      wants.html do
+    respond_to do |format|
+      format.html do
         if @saved
           notify :notice, "Successfully deleted user #{@deleted_user.login}", 2.0
-          redirect_to :action => 'index'
         else
           notify :error, "Failed to delete user #{@deleted_user.login}", 2.0
-          redirect_to :action => 'index'
         end
+        redirect_to users_url
       end
-      
-      wants.js do
-        render
-      end
-      
-      wants.xml { render :text => '200 OK. User deleted.', :status => 200 }
-    
+      format.js
+      format.xml { head :ok }
     end
   end
   
