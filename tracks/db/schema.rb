@@ -2,7 +2,7 @@
 # migrations feature of ActiveRecord to incrementally modify your database, and
 # then regenerate this schema definition.
 
-ActiveRecord::Schema.define(:version => 25) do
+ActiveRecord::Schema.define(:version => 26) do
 
   create_table "contexts", :force => true do |t|
     t.column "name",     :string,               :default => "", :null => false
@@ -60,11 +60,13 @@ ActiveRecord::Schema.define(:version => 25) do
   add_index "preferences", ["user_id"], :name => "index_preferences_on_user_id"
 
   create_table "projects", :force => true do |t|
-    t.column "name",        :string,                :default => "",       :null => false
-    t.column "position",    :integer,               :default => 0,        :null => false
-    t.column "user_id",     :integer,               :default => 0,        :null => false
+    t.column "name",        :string,                 :default => "",       :null => false
+    t.column "position",    :integer,                :default => 0,        :null => false
+    t.column "user_id",     :integer,                :default => 0,        :null => false
     t.column "description", :text
-    t.column "state",       :string,  :limit => 20, :default => "active", :null => false
+    t.column "state",       :string,   :limit => 20, :default => "active", :null => false
+    t.column "created_at",  :datetime
+    t.column "updated_at",  :datetime
   end
 
   add_index "projects", ["user_id"], :name => "index_projects_on_user_id"

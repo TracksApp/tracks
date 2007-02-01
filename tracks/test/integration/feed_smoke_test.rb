@@ -80,17 +80,17 @@ class FeedSmokeTest < ActionController::IntegrationTest
   end
 
   def test_all_projects_rss
-    assert_success "/projects/feed/rss/admin/#{ users(:admin_user).word }"
+    assert_success "/projects.rss?token=#{ users(:admin_user).word }"
   end
 
   def test_all_projects_txt
-    assert_success "/projects/feed/text/admin/#{ users(:admin_user).word }"
+    assert_success "/projects.txt?token=#{ users(:admin_user).word }"
   end
 
   def test_all_projects_txt_with_hidden_project
     p = projects(:timemachine)
     p.hide!
-    assert_success "/projects/feed/text/admin/#{ users(:admin_user).word }"
+    assert_success "/projects.txt?token=#{ users(:admin_user).word }"
   end
   
   private

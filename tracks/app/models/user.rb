@@ -8,12 +8,12 @@ class User < ActiveRecord::Base
            :order => 'position ASC',
            :dependent => :delete_all
   has_many :todos,
-           :order => 'completed_at DESC, created_at DESC',
+           :order => 'completed_at DESC, todos.created_at DESC',
            :dependent => :delete_all
   has_many :deferred_todos,
            :class_name => 'Todo',
            :conditions => [ 'state = ?', 'deferred' ],
-           :order => 'show_from ASC, created_at DESC' do
+           :order => 'show_from ASC, todos.created_at DESC' do
               def find_and_activate_ready
                 find(:all, :conditions => ['show_from <= ?', Time.now.utc.to_date ]).collect { |t| t.activate_and_save! }
               end

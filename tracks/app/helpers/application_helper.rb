@@ -113,19 +113,7 @@ module ApplicationHelper
   # actions or multiple actions
   #
   def count_undone_todos(todos_parent, string="actions")
-    if (todos_parent.is_a?(Project) && todos_parent.hidden?)
-      count = eval "@project_project_hidden_todo_counts[#{todos_parent.id}]"
-    else
-      count = eval "@#{todos_parent.class.to_s.downcase}_not_done_counts[#{todos_parent.id}]"
-    end
-    count = 0 if count == nil
-    #count = todos_parent.todos.select{|t| !t.done }.size
-    if count == 1
-      word = string.singularize
-    else
-      word = string.pluralize
-    end
-    return count.to_s + " " + word
+    @controller.count_undone_todos(todos_parent, string)
   end
   
   def link_to_context(context, descriptor = sanitize(context.name))

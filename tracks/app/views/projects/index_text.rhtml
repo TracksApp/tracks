@@ -1,0 +1,7 @@
+<% @projects.each do |p| -%>
+
+<%= p.name.upcase %>
+<%= p.description + "\n" if p.description_present? -%>
+<%= count_undone_todos(p)%>. Project is <%= p.state %>.
+<%= p.linkurl + "\n" if p.linkurl_present? -%>
+<% end -%>

@@ -1,14 +1,31 @@
 class ProjectsController < ApplicationController
 
-  helper :todos, :notes
+  helper :application, :todos, :notes
   before_filter :init, :except => [:create, :destroy, :order]
+  skip_before_filter :login_required, :only => [:index]
+  prepend_before_filter :login_or_feed_token_required, :only => [:index]
+  session :off, :only => :index, :if => Proc.new { |req| ['rss','atom','txt'].include?(req.parameters[:format]) }
 
   def index
-    init_project_hidden_todo_counts
-    @page_title = "TRACKS::List Projects"
-    respond_to do |wants|
-      wants.html
-      wants.xml { render :xml => @projects.to_xml( :except => :user_id )  }
+    respond_to do |format|
+      format.html do
+        init_project_hidden_todo_counts
+        @page_title = "TRACKS::List Projects"
+        render
+      end
+      format.xml { render :xml => @projects.to_xml( :except => :user_id )  }
+      format.rss do
+        render_rss_feed_for @projects, :feed => Project.feed_options(@user),
+                                       :item => { :description => lambda { |p| p.summary(count_undone_todos(p)) } }
+      end
+      format.atom do
+        render_atom_feed_for @projects, :feed => Project.feed_options(@user),
+                                        :item => { :description => lambda { |p| p.summary(count_undone_todos(p)) },
+                                                   :author => lambda { |p| nil } }
+      end
+      format.text do
+        render :action => 'index_text', :layout => false, :content_type => Mime::TEXT
+      end
     end
   end
 

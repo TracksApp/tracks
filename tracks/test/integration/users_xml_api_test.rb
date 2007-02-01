@@ -76,7 +76,6 @@ class UsersXmlApiTest < ActionController::IntegrationTest
   
   def test_get_users_as_xml
     get '/users.xml', {}, basic_auth_headers()
-    #puts @response.body
     assert_response :success
     assert_tag :tag => "users",
                :children => { :count => 3, :only => { :tag => "user" } } 
@@ -85,7 +84,6 @@ class UsersXmlApiTest < ActionController::IntegrationTest
 
   def test_get_user_as_xml
     get "/users/#{users(:other_user).login}.xml", {}, basic_auth_headers()
-    puts @response.body
     assert_response :success
     assert_tag :tag => "user"
     assert_no_tag :tag => "password"

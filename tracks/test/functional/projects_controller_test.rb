@@ -6,7 +6,7 @@ require 'projects_controller'
 class ProjectsController; def rescue_action(e) raise e end; end
 
 class ProjectsControllerTest < TodoContainerControllerTestBase
-  fixtures :users, :todos, :preferences, :projects
+  fixtures :users, :todos, :preferences, :projects, :contexts
   
   def setup
     perform_setup(Project, ProjectsController)
@@ -78,5 +78,106 @@ class ProjectsControllerTest < TodoContainerControllerTestBase
     assert p.reload().active?
   end
   
+  def test_rss_feed_content
+    @request.session['user_id'] = users(:admin_user).id
+    get :index, { :format => "rss" }
+    assert_equal 'application/rss+xml; charset=utf-8', @response.headers["Content-Type"]
+    #puts @response.body
+
+    assert_xml_select 'rss[version="2.0"]' do
+      assert_xml_select 'channel' do
+        assert_xml_select '>title', 'Tracks Projects'
+        assert_xml_select '>description', "Lists all the projects for #{users(:admin_user).display_name}."
+        assert_xml_select 'language', 'en-us'
+        assert_xml_select 'ttl', '40'
+      end
+      assert_xml_select 'item', 3 do
+        assert_xml_select 'title', /.+/
+        assert_xml_select 'description', /&lt;p&gt;\d+ actions. Project is (active|hidden|completed). &lt;\/p&gt;/
+        %w(guid link).each do |node|
+          assert_xml_select node, /http:\/\/test.host\/projects\/.+/
+        end
+        assert_xml_select 'pubDate', projects(:timemachine).created_at.to_s(:rfc822)
+      end
+    end
+  end
+  
+  def test_rss_feed_not_accessible_to_anonymous_user_without_token
+    @request.session['user_id'] = nil
+    get :index, { :format => "rss" }
+    assert_response 401
+  end
+  
+  def test_rss_feed_not_accessible_to_anonymous_user_with_invalid_token
+    @request.session['user_id'] = nil
+    get :index, { :format => "rss", :token => 'foo'  }
+    assert_response 401
+  end
+  
+  def test_rss_feed_accessible_to_anonymous_user_with_valid_token
+    @request.session['user_id'] = nil
+    get :index, { :format => "rss", :token => users(:admin_user).word }
+    assert_response :ok
+  end
+  
+  def test_atom_feed_content
+    @request.session['user_id'] = users(:admin_user).id
+    get :index, { :format => "atom" }
+    assert_equal 'application/atom+xml; charset=utf-8', @response.headers["Content-Type"]
+    #puts @response.body
+    
+    assert_xml_select 'feed[xmlns="http://www.w3.org/2005/Atom"]' do
+      assert_xml_select '>title', 'Tracks Projects'
+      assert_xml_select '>subtitle', "Lists all the projects for #{users(:admin_user).display_name}."
+      assert_xml_select 'entry', 3 do
+        assert_xml_select 'title', /.+/
+        assert_xml_select 'content[type="html"]', /&lt;p&gt;\d+ actions. Project is (active|hidden|completed). &lt;\/p&gt;/
+        assert_xml_select 'published', projects(:timemachine).created_at.to_s(:rfc822)
+      end
+    end
+  end
+
+  def test_atom_feed_not_accessible_to_anonymous_user_without_token
+    @request.session['user_id'] = nil
+    get :index, { :format => "atom" }
+    assert_response 401
+  end
+  
+  def test_atom_feed_not_accessible_to_anonymous_user_with_invalid_token
+    @request.session['user_id'] = nil
+    get :index, { :format => "atom", :token => 'foo'  }
+    assert_response 401
+  end
+  
+  def test_atom_feed_accessible_to_anonymous_user_with_valid_token
+    @request.session['user_id'] = nil
+    get :index, { :format => "atom", :token => users(:admin_user).word }
+    assert_response :ok
+  end
+
+  def test_text_feed_content
+    @request.session['user_id'] = users(:admin_user).id
+    get :index, { :format => "txt" }
+    assert_equal 'text/plain; charset=utf-8', @response.headers["Content-Type"]
+    #puts @response.body
+  end
+  
+  def test_text_feed_not_accessible_to_anonymous_user_without_token
+    @request.session['user_id'] = nil
+    get :index, { :format => "txt" }
+    assert_response 401
+  end
+  
+  def test_text_feed_not_accessible_to_anonymous_user_with_invalid_token
+    @request.session['user_id'] = nil
+    get :index, { :format => "txt", :token => 'foo'  }
+    assert_response 401
+  end
+  
+  def test_text_feed_accessible_to_anonymous_user_with_valid_token
+    @request.session['user_id'] = nil
+    get :index, { :format => "txt", :token => users(:admin_user).word }
+    assert_response :ok
+  end
   
 end

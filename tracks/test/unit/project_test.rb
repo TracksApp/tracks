@@ -143,4 +143,8 @@ class ProjectTest < Test::Unit::TestCase
     assert_equal 'Build_a_working_time_machine', @timemachine.to_param
   end
   
+  def test_title_reader_returns_name
+    assert_equal @timemachine.name, @timemachine.title
+  end
+  
 end

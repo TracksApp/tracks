@@ -37,6 +37,13 @@ class Project < ActiveRecord::Base
     NullProject.new
   end
   
+  def self.feed_options(user)
+    {
+      :title => 'Tracks Projects',
+      :description => "Lists all the projects for #{user.display_name}."
+    }
+  end
+  
   def to_param
     url_friendly_name
   end
@@ -47,6 +54,20 @@ class Project < ActiveRecord::Base
   
   def linkurl_present?
     attribute_present?("linkurl")
+  end
+  
+  def title
+    name
+  end
+  
+  def summary(undone_todo_count)
+    project_description = ''
+    project_description += sanitize(markdown( description )) if description_present?
+	 	project_description += "<p>#{undone_todo_count}. "
+	 	project_description += "Project is #{state}. "
+	 	project_description += "<a href=\"#{linkurl}\">#{linkurl}</a>" if linkurl_present?
+	 	project_description += "</p>"
+	 	project_description
   end
     
   def hide_todos

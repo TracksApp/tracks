@@ -45,14 +45,6 @@ class FeedController < ApplicationController
     end
     headers["Content-Type"] = "text/calendar"
   end
-
-  def list_projects_only
-    init_not_done_counts('project')
-    init_project_hidden_todo_counts
-    @projects = @user.projects
-    @description = "Lists all the projects for #{@user.login}."
-    render :action => 'projects_' + params['feedtype']
-  end
   
   def list_contexts_only
     init_not_done_counts('context')

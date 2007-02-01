@@ -30,6 +30,16 @@ module LoginSystem
   def protect?(action)
     true
   end
+  
+  def login_or_feed_token_required
+    if ['rss', 'atom', 'txt'].include?(params[:format])
+      if user = User.find_by_word(params[:token])
+        set_current_user(user)
+        return true
+      end
+    end
+    login_required
+  end
    
   # login_required filter. add 
   #
@@ -53,7 +63,7 @@ module LoginSystem
     http_user, http_pass = get_basic_auth_data
     if user = User.authenticate(http_user, http_pass)
       session['user_id'] = user.id
-      get_current_user
+      set_current_user(user)
       return true
     end
 
@@ -75,7 +85,7 @@ module LoginSystem
     http_user, http_pass = get_basic_auth_data
     if user = User.authenticate(http_user, http_pass)
       session['user_id'] = user.id
-      get_current_user
+      set_current_user(user)
       return true
     end
 
@@ -89,6 +99,12 @@ module LoginSystem
     @prefs = @user.prefs unless @user.nil?
     @user
   end
+  
+  def set_current_user(user)
+    @user = user
+    @prefs = @user.prefs unless @user.nil?
+    @user
+  end
 
   # overwrite if you want to have special behavior in case the user is not authorized
   # to access the current operation. 
@@ -96,10 +112,13 @@ module LoginSystem
   # example use :
   # a popup window might just close itself for instance
   def access_denied
-    respond_to do |wants|
-      wants.html { redirect_to :controller=>"login", :action =>"login" }
-      wants.js { render :partial => 'login/redirect_to_login' }
-      wants.xml { basic_auth_denied }
+    respond_to do |format|
+      format.html { redirect_to :controller=>"login", :action =>"login" }
+      format.js { render :partial => 'login/redirect_to_login' }
+      format.xml { basic_auth_denied }
+      format.rss { basic_auth_denied }
+      format.atom { basic_auth_denied }
+      format.text { basic_auth_denied }
     end
   end  
   

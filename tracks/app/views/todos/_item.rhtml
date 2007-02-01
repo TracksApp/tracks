@@ -35,7 +35,7 @@
       <% end -%>
 
       <% if item.completed? -%>
-        (<%= item.context.name %><%= ", " + item.project.name if item.project_id %>)
+        (<%= item.context.name %><%= ", " + item.project.name unless item.project.nil? %>)
       <% else -%>
         <% if (parent_container_type == "project" || parent_container_type == "tickler") -%>
           <%= item_link_to_context( item ) %>

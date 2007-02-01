@@ -30,6 +30,16 @@ class Test::Unit::TestCase
     end
     return string
   end
+  
+  def xml_document
+    @xml_document ||= HTML::Document.new(@response.body, false, true)
+  end
+  
+  def assert_xml_select(*args)
+    @html_document = xml_document
+    assert_select(*args)
+  end
+  
 end
 
 class ActionController::IntegrationTest

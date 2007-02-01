@@ -62,6 +62,26 @@ class ApplicationController < ActionController::Base
     end
   end
   
+  # Returns a count of next actions in the given context or project
+  # The result is count and a string descriptor, correctly pluralised if there are no
+  # actions or multiple actions
+  #
+  def count_undone_todos(todos_parent, string="actions")
+    if (todos_parent.is_a?(Project) && todos_parent.hidden?)
+      count = eval "@project_project_hidden_todo_counts[#{todos_parent.id}]"
+    else
+      count = eval "@#{todos_parent.class.to_s.downcase}_not_done_counts[#{todos_parent.id}]"
+    end
+    count = 0 if count == nil
+    #count = todos_parent.todos.select{|t| !t.done }.size
+    if count == 1
+      word = string.singularize
+    else
+      word = string.pluralize
+    end
+    return count.to_s + " " + word
+  end
+   
   protected
   
   def admin_login_required
@@ -101,7 +121,7 @@ class ApplicationController < ActionController::Base
     parents.each do |parent|
       eval("@#{parent}_project_hidden_todo_counts = Todo.count(:conditions => ['user_id = ? and state = ?', @user.id, 'project_hidden'], :group => :#{parent}_id)")
     end
-  end
+  end  
   
   # Set the contents of the flash message from a controller
   # Usage: notify :warning, "This is the message"

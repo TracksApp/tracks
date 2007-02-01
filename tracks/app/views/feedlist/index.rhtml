@@ -45,8 +45,8 @@
 			All Contexts
 		</li>
 		<li>
-			<%= rss_feed_link({ :action => 'list_projects_only', :feedtype => 'rss' }) %>
-			<%= text_feed_link({ :action => 'list_projects_only', :feedtype => 'text' }) %>
+			<%= rss_formatted_link({:controller => 'projects', :action => 'index'}) %>
+			<%= text_formatted_link({:controller => 'projects', :action => 'index'}) %>
 			All Projects
 		</li>
 		<li><h4>Feeds for uncompleted actions in a specific context:</h4>

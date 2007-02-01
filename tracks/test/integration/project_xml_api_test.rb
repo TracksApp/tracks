@@ -4,7 +4,7 @@ require 'projects_controller'
 # Re-raise errors caught by the controller.
 class ProjectsController; def rescue_action(e) raise e end; end
 
-class ProjectsControllerXmlApiTest < ActionController::IntegrationTest
+class ProjectXmlApiTest < ActionController::IntegrationTest
   fixtures :users, :projects
 
   @@project_name = "My New Project"
@@ -51,7 +51,15 @@ class ProjectsControllerXmlApiTest < ActionController::IntegrationTest
   def test_creates_new_project
     initial_count = Project.count
     authenticated_post_xml_to_project_create
-    assert_response_and_body_matches 200, %r|^<\?xml version="1\.0" encoding="UTF-8"\?>\n<project>\n  <description></description>\n  <id type=\"integer\">[0-9]+</id>\n  <name>#{@@project_name}</name>\n  <position type=\"integer\">1</position>\n  <state>active</state>\n</project>$|
+    assert_response :success
+    assert_xml_select 'project' do
+      assert_xml_select "description"
+      assert_xml_select 'id[type="integer"]', /[0-9]+/
+      assert_xml_select 'name', @@project_name
+      assert_xml_select 'position[type="integer"]', 1
+      assert_xml_select 'state', 'active'
+    end
+    #assert_response_and_body_matches 200, %r|^<\?xml version="1\.0" encoding="UTF-8"\?>\n<project>\n  <description></description>\n  <id type=\"integer\">[0-9]+</id>\n  <name>#{@@project_name}</name>\n  <position type=\"integer\">1</position>\n  <state>active</state>\n</project>$|
     assert_equal initial_count + 1, Project.count
     project1 = Project.find_by_name(@@project_name)
     assert_not_nil project1, "expected project '#{@@project_name}' to be created"

@@ -36,7 +36,6 @@ ActionController::Routing::Routes.draw do |map|
   # Projects Routes
   map.resources :projects, :collection => {:order => :post} 
   map.connect 'project/:project/feed/:action/:login/:token', :controller => 'feed'
-  map.connect 'projects/feed/:feedtype/:login/:token', :controller => 'feed', :action => 'list_projects_only'
 
   # Notes Routes
   map.resources :notes

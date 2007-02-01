@@ -31,20 +31,6 @@ module FeedHelper
     return result_string
   end
   
-  def build_projects_text_page(projects)
-    result_string = ""
-    projects.each do |p|
-      result_string << "\n" + p.name.upcase + "\n"
-    
-		 	result_string << p.description + "\n" if p.description_present?
-		 	result_string << "#{count_undone_todos(p)}. Project is #{p.state}.\n"
-		 	result_string << "#{p.linkurl}\n" if p.linkurl_present?
-		 	result_string << "\n"
-	 	end
-		
-    return result_string
-  end
-  
   def build_contexts_text_page(contexts)
     result_string = ""
     contexts.each do |c|

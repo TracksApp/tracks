@@ -1,4 +1,11 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+<% 
+
+def today 
+  Time.now.utc.to_s(:db) 
+end
+
+%>
 
 timemachine:
   id: 1
@@ -7,6 +14,8 @@ timemachine:
   position: 1
   state: 'active'
   user_id: 1
+  created_at: <%= today %>
+  updated_at: <%= today %>
 
 moremoney:
   id: 2
@@ -15,6 +24,8 @@ moremoney:
   position: 2
   state: 'active'
   user_id: 1
+  created_at: <%= today %>
+  updated_at: <%= today %>
 
 gardenclean:
   id: 3
@@ -23,3 +34,5 @@ gardenclean:
   position: 3
   state: 'active'
   user_id: 1
+  created_at: <%= today %>
+  updated_at: <%= today %>
