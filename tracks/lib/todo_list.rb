@@ -14,30 +14,33 @@ module Tracks
     end
 
     def find_not_done_todos(opts={})
-      self.todos.find(:all, :conditions => not_done_conditions(opts),
-                      :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC")
+      with_not_done_scope(opts) do
+        self.todos.find(:all, :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC")
+      end
     end
     
     def find_deferred_todos(opts={})
-      self.todos.find(:all, :conditions => ["todos.state = ?", "deferred"],
-                      :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC")
+      self.todos.find_in_state(:all, :deferred, :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC")
     end
 
-    def not_done_conditions(opts)
+    def find_done_todos
+      self.todos.find_in_state(:all, :completed, :order => "todos.completed_at DESC", :limit => self.user.prefs.show_number_completed)
+    end
+  
+    def not_done_todo_count(opts={})
+      with_not_done_scope(opts) do
+        self.todos.count
+      end
+    end
+    
+    def with_not_done_scope(opts={})
       conditions = ["todos.state = ?", 'active']
       if opts.has_key?(:include_project_hidden_todos) && (opts[:include_project_hidden_todos] == true)
         conditions = ["(todos.state = ? or todos.state = ?)", 'active', 'project_hidden']
       end
-      conditions
-    end
-
-    def find_done_todos
-      self.todos.find(:all, :conditions => ["todos.state = ?", "completed"],
-                      :order => "todos.completed_at DESC", :limit => self.user.prefs.show_number_completed)                        
-    end
-  
-    def not_done_todo_count(opts={})
-      self.todos.count(not_done_conditions(opts))
+      self.todos.with_scope :find => {:conditions => conditions} do
+        yield
+      end
     end
 
     def done_todo_count

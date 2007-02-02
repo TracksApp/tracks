@@ -42,13 +42,13 @@ if @saved
       page.show("p#{@original_item_project_id}empty-nd") if (@remaining_undone_in_project == 0)
       page.insert_html :bottom, "tickler", :partial => 'todos/item', :locals => { :parent_container_type => parent_container_type }
       page['tickler-empty-nd'].hide
-      page.replace_html "badge_count", @remaining_undone_in_project
+      page.replace_html "badge_count", @down_count
     elsif @item_was_activated_from_deferred_state
       page[@item].remove
       page['tickler-empty-nd'].show if (@deferred_count == 0)
       page.insert_html :bottom, "p#{@item.project_id}", :partial => 'todos/item', :locals => { :parent_container_type => parent_container_type }
       page["p#{@item.project_id}empty-nd"].hide
-      page.replace_html "badge_count", @remaining_undone_in_project
+      page.replace_html "badge_count", @down_count
     else
       page.replace dom_id(@item), :partial => 'todos/item', :locals => { :parent_container_type => parent_container_type }
       page.visual_effect :highlight, dom_id(@item), :duration => 3

@@ -7,3 +7,4 @@ type "show_from_todo_5", "1/1/2030"
 click "//input[@value='Update']"
 wait_for_element_present "xpath=//div[@id='tickler'] //div[@id='todo_5']"
 assert_not_visible "tickler-empty-nd"
+assert_text 'badge_count', '1'

@@ -162,14 +162,12 @@ class TodosController < ApplicationController
       params['item']['show_from'] = parse_date_per_user_prefs(params['item']['show_from'])
     end
     
-    
-    
     @saved = @item.update_attributes params["item"]
     @context_changed = @original_item_context_id != @item.context_id
     @item_was_activated_from_deferred_state = @original_item_was_deferred && @item.active?
-    if @context_changed then @remaining_undone_in_context = @user.contexts.find(@original_item_context_id).not_done_todos.length; end
+    if @context_changed then @remaining_undone_in_context = @user.contexts.find(@original_item_context_id).not_done_todo_count; end
     @project_changed = @original_item_project_id != @item.project_id
-    if (@project_changed && !@original_item_project_id.nil?) then @remaining_undone_in_project = @user.projects.find(@original_item_project_id).not_done_todos.length; end
+    if (@project_changed && !@original_item_project_id.nil?) then @remaining_undone_in_project = @user.projects.find(@original_item_project_id).not_done_todo_count; end
     determine_down_count
   end
     
@@ -196,7 +194,7 @@ class TodosController < ApplicationController
           determine_down_count
           source_view do |from|
              from.todo do
-               @remaining_undone_in_context = @user.contexts.find(@context_id).not_done_todos.length
+               @remaining_undone_in_context = @user.contexts.find(@context_id).not_done_todo_count
              end
            end
         end
