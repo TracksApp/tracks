@@ -81,7 +81,7 @@ class TodosControllerTest < Test::Unit::TestCase
     @user = User.find(@request.session['user_id'])
     @tagged = Todo.find_tagged_with('foo', @user).size
     get :tag, :id => 'foo'
-    assert_success
+    assert_response :success
     assert_equal 2, @tagged
   end
   
