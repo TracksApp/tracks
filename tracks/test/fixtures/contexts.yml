@@ -1,11 +1,19 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+<% 
 
+def today 
+  Time.now.utc.to_s(:db) 
+end
+
+%>
 agenda:
   id: 1
   name: agenda
   position: 1
   hide: false
   user_id: 1
+  created_at: <%= today %>
+  updated_at: <%= today %>
 
 call:
   id: 2
@@ -13,6 +21,8 @@ call:
   position: 2
   hide: false
   user_id: 1
+  created_at: <%= today %>
+  updated_at: <%= today %>
 
 email:
   id: 3
@@ -20,6 +30,8 @@ email:
   position: 3
   hide: false
   user_id: 1
+  created_at: <%= today %>
+  updated_at: <%= today %>
 
 errand:
   id: 4
@@ -27,6 +39,8 @@ errand:
   position: 4
   hide: false
   user_id: 1
+  created_at: <%= today %>
+  updated_at: <%= today %>
 
 lab:
   id: 5
@@ -34,6 +48,8 @@ lab:
   position: 5
   hide: false
   user_id: 1
+  created_at: <%= today %>
+  updated_at: <%= today %>
 
 library:
   id: 6
@@ -41,6 +57,8 @@ library:
   position: 6
   hide: false
   user_id: 1
+  created_at: <%= today %>
+  updated_at: <%= today %>
 
 freetime:
   id: 7
@@ -48,6 +66,8 @@ freetime:
   position: 7
   hide: false
   user_id: 1
+  created_at: <%= today %>
+  updated_at: <%= today %>
 
 office:
   id: 8
@@ -55,6 +75,8 @@ office:
   position: 8
   hide: false
   user_id: 1
+  created_at: <%= today %>
+  updated_at: <%= today %>
 
 waitingfor:
   id: 9
@@ -62,3 +84,5 @@ waitingfor:
   position: 9
   hide: false
   user_id: 1
+  created_at: <%= today %>
+  updated_at: <%= today %>

@@ -31,7 +31,6 @@ ActionController::Routing::Routes.draw do |map|
   # Context Routes
   map.resources :contexts, :collection => {:order => :post} 
   map.connect 'context/:context/feed/:action/:login/:token', :controller => 'feed'
-  map.connect 'contexts/feed/:feedtype/:login/:token', :controller => 'feed', :action => 'list_contexts_only'
 
   # Projects Routes
   map.resources :projects, :collection => {:order => :post} 

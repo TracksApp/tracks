@@ -16,6 +16,13 @@ class Context < ActiveRecord::Base
   validates_does_not_contain :name, :string => '/', :message => "cannot contain the slash ('/') character"
   validates_does_not_contain :name, :string => ',', :message => "cannot contain the comma (',') character"
 
+  def self.feed_options(user)
+    {
+      :title => 'Tracks Contexts',
+      :description => "Lists all the contexts for #{user.display_name}."
+    }
+  end
+
   def hidden?
     self.hide == true
   end
@@ -23,5 +30,16 @@ class Context < ActiveRecord::Base
   def to_param
     url_friendly_name
   end
-    
+  
+  def title
+    name
+  end
+  
+  def summary(undone_todo_count)
+    s = "<p>#{undone_todo_count}. "
+    s += "Context is #{hidden? ? 'Hidden' : 'Active'}. "
+    s += "</p>"
+    s
+  end
+
 end

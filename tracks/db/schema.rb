@@ -2,13 +2,15 @@
 # migrations feature of ActiveRecord to incrementally modify your database, and
 # then regenerate this schema definition.
 
-ActiveRecord::Schema.define(:version => 26) do
+ActiveRecord::Schema.define(:version => 27) do
 
   create_table "contexts", :force => true do |t|
-    t.column "name",     :string,               :default => "", :null => false
-    t.column "hide",     :integer, :limit => 4, :default => 0,  :null => false
-    t.column "position", :integer,              :default => 0,  :null => false
-    t.column "user_id",  :integer,              :default => 0,  :null => false
+    t.column "name",       :string,                :default => "", :null => false
+    t.column "hide",       :integer,  :limit => 4, :default => 0,  :null => false
+    t.column "position",   :integer,               :default => 0,  :null => false
+    t.column "user_id",    :integer,               :default => 0,  :null => false
+    t.column "created_at", :datetime
+    t.column "updated_at", :datetime
   end
 
   add_index "contexts", ["user_id"], :name => "index_contexts_on_user_id"

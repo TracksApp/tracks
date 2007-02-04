@@ -4,12 +4,29 @@ class ContextsController < ApplicationController
 
   before_filter :init, :except => [:create, :destroy, :order]
   before_filter :init_todos, :only => :show
+  skip_before_filter :login_required, :only => [:index]
+  prepend_before_filter :login_or_feed_token_required, :only => [:index]
+  session :off, :only => :index, :if => Proc.new { |req| ['rss','atom','txt'].include?(req.parameters[:format]) }
 
   def index
-    @page_title = "TRACKS::List Contexts"
-    respond_to do |wants|
-      wants.html
-      wants.xml { render :xml => @contexts.to_xml( :except => :user_id ) }
+    respond_to do |format|
+      format.html do
+        @page_title = "TRACKS::List Contexts"
+        render
+      end
+      format.xml { render :xml => @contexts.to_xml( :except => :user_id ) }
+      format.rss do
+        render_rss_feed_for @contexts, :feed => Context.feed_options(@user),
+                                       :item => { :description => lambda { |c| c.summary(count_undone_todos(c)) } }
+      end
+      format.atom do
+        render_atom_feed_for @contexts, :feed => Context.feed_options(@user),
+                                        :item => { :description => lambda { |c| c.summary(count_undone_todos(c)) },
+                                                   :author => lambda { |c| nil } }
+      end
+      format.text do
+        render :action => 'index_text', :layout => false, :content_type => Mime::TEXT
+      end
     end
   end
 

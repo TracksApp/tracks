@@ -40,8 +40,8 @@
 		  Actions completed in the last 7 days
 		</li>
 		<li>
-			<%= rss_feed_link({ :action => 'list_contexts_only', :feedtype => 'rss' }) %>
-			<%= text_feed_link({ :action => 'list_contexts_only', :feedtype => 'text' }) %>
+			<%= rss_formatted_link({:controller => 'contexts', :action => 'index'}) %>
+			<%= text_formatted_link({:controller => 'contexts', :action => 'index'}) %>
 			All Contexts
 		</li>
 		<li>

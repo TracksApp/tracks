@@ -45,14 +45,7 @@ class FeedController < ApplicationController
     end
     headers["Content-Type"] = "text/calendar"
   end
-  
-  def list_contexts_only
-    init_not_done_counts('context')
-    @contexts = @user.contexts
-    @description = "Lists all the contexts for #{@user.login}."
-    render :action => 'contexts_' + params['feedtype']
-  end
-  
+    
 protected
 
   # Check whether the token in the URL matches the word in the User's table

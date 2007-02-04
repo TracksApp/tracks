@@ -72,11 +72,11 @@ class FeedSmokeTest < ActionController::IntegrationTest
   end
 
   def test_all_contexts_rss
-    assert_success "/contexts/feed/rss/admin/#{ users(:admin_user).word }"
+    assert_success "/contexts.rss?token=#{ users(:admin_user).word }"
   end
 
   def test_all_contexts_txt
-    assert_success "/contexts/feed/text/admin/#{ users(:admin_user).word }"
+    assert_success "/contexts.txt?token=#{ users(:admin_user).word }"
   end
 
   def test_all_projects_rss

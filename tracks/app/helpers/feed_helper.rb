@@ -30,19 +30,7 @@ module FeedHelper
     end
     return result_string
   end
-  
-  def build_contexts_text_page(contexts)
-    result_string = ""
-    contexts.each do |c|
-      result_string << "\n" + c.name.upcase + "\n"
     
-		 	result_string << "#{count_undone_todos(c)}. Context is #{c.hidden? ? 'Hidden' : 'Active'}.\n"
-		 	result_string << "\n"
-	 	end
-		
-    return result_string
-  end
-  
   def format_ical_notes(notes)
     split_notes = notes.split(/\n/)
     joined_notes = split_notes.join("\\n")

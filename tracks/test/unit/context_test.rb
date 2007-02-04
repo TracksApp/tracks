@@ -107,6 +107,9 @@ class ContextTest < Test::Unit::TestCase
   def test_to_param_returns_url_friendly_name
     assert_equal 'agenda', @agenda.to_param
   end
-  
+    
+  def test_title_reader_returns_name
+    assert_equal @agenda.name, @agenda.title
+  end
   
 end
