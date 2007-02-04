@@ -109,4 +109,8 @@ class NullProject
     true
   end
   
+  def id
+    nil
+  end
+  
 end

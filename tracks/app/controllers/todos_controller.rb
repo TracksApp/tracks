@@ -130,13 +130,17 @@ class TodosController < ApplicationController
     @original_item_context_id = @item.context_id
     @original_item_project_id = @item.project_id
     @original_item_was_deferred = @item.deferred?
-    if params['item']['project_id'].blank? && !params['project_name'].blank? && params['project_name'] != 'None'
-      project = @user.projects.find_by_name(params['project_name'].strip)
-      unless project
+    if params['item']['project_id'].blank? && !params['project_name'].blank?
+      if params['project_name'] == 'None'
+        project = Project.null_object
+      else
+        project = @user.projects.find_by_name(params['project_name'].strip)
+        unless project
           project = @user.projects.build
           project.name = params['project_name'].strip
           project.save
           @new_project_created = true
+        end
       end
       params["item"]["project_id"] = project.id
     end

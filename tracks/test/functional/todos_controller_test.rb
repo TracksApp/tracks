@@ -64,6 +64,22 @@ class TodosControllerTest < Test::Unit::TestCase
     #assert_rjs :replace_html, "badge-count", '9' 
   end
   
+  def test_update_item_project
+    t = Todo.find(1)
+    @request.session['user_id'] = users(:admin_user).id
+    xhr :post, :update, :id => 1, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "item"=>{"id"=>"1", "notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>"foo bar"
+    t = Todo.find(1)
+    assert_equal 1, t.project_id
+  end
+  
+  def test_update_item_project_to_none
+    t = Todo.find(1)
+    @request.session['user_id'] = users(:admin_user).id
+    xhr :post, :update, :id => 1, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"None", "item"=>{"id"=>"1", "notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>"foo bar"
+    t = Todo.find(1)
+    assert_nil t.project_id
+  end
+  
   def test_update_item
     t = Todo.find(1)
     @request.session['user_id'] = users(:admin_user).id
