@@ -286,7 +286,7 @@ class TodosController < ApplicationController
       @todos = @user.todos.find(:all, :conditions => ['todos.state = ? or todos.state = ?', 'active', 'complete'], :include => [ :project, :context ])
 
       # Exclude hidden projects from the home page
-      @not_done_todos = @user.todos.find(:all, :conditions => ['todos.state = ?', 'active'], :order => "todos.due ASC", :include => [ :project, :context ])
+      @not_done_todos = @user.todos.find(:all, :conditions => ['todos.state = ?', 'active'], :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC", :include => [ :project, :context ])
     end
     
     def determine_down_count
