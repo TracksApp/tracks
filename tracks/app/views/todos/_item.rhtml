@@ -1,3 +1,4 @@
+<% Tag %>
 <div id="<%= dom_id(item) %>" class="item-container">
   <div id="<%= dom_id(item, 'line') %>">
     <%= link_to_remote_todo item %>
@@ -19,7 +20,7 @@
 
       <%= sanitize(item.description) %>
       
-      <%= if item.tags.blank?
+      <%= if item.tag_list.blank?
             ""
           else
             tag_string = ""

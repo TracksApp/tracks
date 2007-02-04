@@ -1,11 +1,10 @@
 class Todo < ActiveRecord::Base
-  require 'validations'
+  require 'validations'  
 
   belongs_to :context, :order => 'name'
   belongs_to :project
   belongs_to :user
   
-  acts_as_taggable
   acts_as_state_machine :initial => :active, :column => 'state'
   
   state :active, :enter => Proc.new { |t| t[:show_from] = nil }
@@ -85,5 +84,5 @@ class Todo < ActiveRecord::Base
       original_set_initial_state
     end
   end
-      
+
 end

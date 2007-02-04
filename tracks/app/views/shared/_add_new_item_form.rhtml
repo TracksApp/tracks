@@ -43,8 +43,8 @@ Event.observe($('todo_project_name'), "focus", projectAutoCompleter.activate.bin
 Event.observe($('todo_project_name'), "click", projectAutoCompleter.activate.bind(projectAutoCompleter));
 </script>
 
-<label for="tag_list">Tags</label>
-<%= text_field_tag "tag_list", nil, :size => 40, :tabindex => 5 %>
+<label for="tag_list">Tags (separate with commas)</label>
+<%= text_field_tag "tag_list", nil, :size => 40, :tabindex => 5 %> 
 
 <label for="todo_due">Due</label>
 <%= text_field("todo", "due", "size" => 10, "class" => "Date", "onfocus" => "Calendar.setup", "tabindex" => 6, "autocomplete" => "off") %>

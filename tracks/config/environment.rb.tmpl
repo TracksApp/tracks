@@ -66,6 +66,7 @@ require 'name_part_finder'
 require 'todo_list'
 require 'url_friendly_name'
 require 'config'
+require 'activerecord_base_tag_extensions' # Needed for tagging-specific extensions
 
 if (AUTHENTICATION_SCHEMES.include? 'ldap')
   require 'net/ldap' #requires ruby-net-ldap gem be installed

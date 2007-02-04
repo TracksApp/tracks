@@ -35,8 +35,8 @@
     </script>
   </tr>
   <tr>
-    <td class="label"><label for="<%= dom_id(@item, 'tag_list') %>">Tags</label></td>
-    <td><%= text_field_tag "tag_list", @item.tags.collect{|t| t.name}.join(" "), :size => 40 %></td>
+    <td class="label"><label for="<%= dom_id(@item, 'tag_list') %>">Tags (separate with commas)</label></td>
+    <td><%= text_field_tag "tag_list", @item.tags.collect{|t| t.name}.join(", "), :size => 40 %></td>
   </tr>
   <tr>
     <td class="label"><label for="<%= dom_id(@item, 'due') %>">Due</td>

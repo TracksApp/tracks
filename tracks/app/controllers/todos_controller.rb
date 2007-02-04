@@ -33,7 +33,6 @@ class TodosController < ApplicationController
   def create
     @item = @user.todos.build
     p = params['request'] || params
-    # @item.tag_with(params[:tag_list])
     @item.attributes = p['todo']
     
     if p['todo']['project_id'].blank? && !p['project_name'].blank? && p['project_name'] != 'None'
@@ -70,8 +69,10 @@ class TodosController < ApplicationController
       @item.show_from = parse_date_per_user_prefs(p['todo']['show_from'])
     end
 
-    @item.tag_with(params[:tag_list], @user)
+    @item.save
+    @item.tag_with(params[:tag_list],@user)
     @saved = @item.save
+
 
      respond_to do |wants|
        wants.html { redirect_to :action => "index" }
@@ -126,7 +127,7 @@ class TodosController < ApplicationController
 
   def update
     @item = check_user_return_item
-    @item.tag_with(params[:tag_list], @user)
+    @item.tag_with(params[:tag_list],@user)
     @original_item_context_id = @item.context_id
     @original_item_project_id = @item.project_id
     @original_item_was_deferred = @item.deferred?
@@ -245,10 +246,11 @@ class TodosController < ApplicationController
   #
   def tag
     @tag = tag_name = params[:name]
-    if Tag.find_by_name(tag_name)
-      @todos = Todo.find_tagged_with(tag_name, @user)
-    else 
+    tag_collection = Tag.find_by_name(tag_name).todos
+    if tag_collection.empty?
       @todos = []
+    else 
+      @todos = tag_collection.find(:all, :conditions => ['taggings.user_id = ?', @user.id])
     end
     
     @count = @todos.size unless @todos.empty?
