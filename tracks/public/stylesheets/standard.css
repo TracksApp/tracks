@@ -268,7 +268,7 @@ input.item-checkbox {
       font-size: 12px;
       }
       
-.notes ul {
+.notes ul, .note_wrapper ul {
       list-style-type: disc;
 }
 
