@@ -36,15 +36,15 @@
   </tr>
   <tr>
     <td class="label"><label for="<%= dom_id(@item, 'tag_list') %>">Tags (separate with commas)</label></td>
-    <td><%= text_field_tag "tag_list", @item.tags.collect{|t| t.name}.join(", "), :size => 40 %></td>
+    <td><%= text_field_tag "tag_list", @item.tags.collect{|t| t.name}.join(", "), :size => 40, :tabindex => 12 %></td>
   </tr>
   <tr>
     <td class="label"><label for="<%= dom_id(@item, 'due') %>">Due</td>
-    <td><input name="item[due]" id="<%= dom_id(@item, 'due') %>" type="text" value="<%= format_date(@item.due) %>" tabindex="12" size="10" onfocus="Calendar.setup" autocomplete="off"  class="Date" /></td>
+    <td><input name="item[due]" id="<%= dom_id(@item, 'due') %>" type="text" value="<%= format_date(@item.due) %>" tabindex="13" size="10" onfocus="Calendar.setup" autocomplete="off"  class="Date" /></td>
   </tr>
   <tr>
     <td class="label"><label for="<%= dom_id(@item, 'show_from') %>">Show from</td>
-    <td><input name="item[show_from]" id="<%= dom_id(@item, 'show_from') %>" type="text" value="<%= format_date(@item.show_from) %>" tabindex="13" size="10" onfocus="Calendar.setup" autocomplete="off" class="Date" /></td>
+    <td><input name="item[show_from]" id="<%= dom_id(@item, 'show_from') %>" type="text" value="<%= format_date(@item.show_from) %>" tabindex="14" size="10" onfocus="Calendar.setup" autocomplete="off" class="Date" /></td>
   </tr>
     <% if controller.controller_name == "project" || @item.deferred? -%>
       <input type="hidden" name="on_project_page" value="true" />
