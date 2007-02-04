@@ -80,7 +80,7 @@ class ApplicationController < ActionController::Base
     else
       word = string.pluralize
     end
-    return count.to_s + " " + word
+    return count.to_s + "&nbsp;" + word
   end
    
   protected
