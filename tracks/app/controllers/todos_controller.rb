@@ -17,7 +17,7 @@ class TodosController < ApplicationController
     # If you've set no_completed to zero, the completed items box
     # isn't shown on the home page
     max_completed = @user.prefs.show_number_completed
-    @done = @user.completed_todos.find(:all, :limit => max_completed) unless max_completed == 0
+    @done = @user.completed_todos.find(:all, :limit => max_completed, :include => [ :context, :project, :tags ]) unless max_completed == 0
     
     @contexts_to_show = @contexts.reject {|x| x.hide? }
 
@@ -283,10 +283,10 @@ class TodosController < ApplicationController
     
     def init_todos
       # Exclude hidden projects from count on home page
-      @todos = @user.todos.find(:all, :conditions => ['todos.state = ? or todos.state = ?', 'active', 'complete'], :include => [ :project, :context ])
+      @todos = @user.todos.find(:all, :conditions => ['todos.state = ? or todos.state = ?', 'active', 'complete'], :include => [ :project, :context, :tags ])
 
       # Exclude hidden projects from the home page
-      @not_done_todos = @user.todos.find(:all, :conditions => ['todos.state = ?', 'active'], :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC", :include => [ :project, :context ])
+      @not_done_todos = @user.todos.find(:all, :conditions => ['todos.state = ?', 'active'], :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC", :include => [ :project, :context, :tags ])
     end
     
     def determine_down_count
