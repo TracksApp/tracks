@@ -1,6 +1,6 @@
 <%  context = context_listing %>
 <div id="<%= dom_id(context, "container") %>" class="list">
-  <div id="<%= dom_id(context) %>" class="even_row" style="display:'';">
+  <div id="<%= dom_id(context) %>" class="context even_row" style="display:'';">
     <div class="position">
       <span class="handle">DRAG</span>
     </div>
@@ -14,29 +14,39 @@
       <% else %>
         <span class="grey">VISIBLE</span>
       <% end %>
-      <%= link_to_remote( image_tag("blank.png", :title =>"Delete context", :class=>"delete_item"), 
-                  :update => dom_id(context, "container"),
-                  :loading => visual_effect(:fade, dom_id(context, 'container')),
-                  :url => context_path(context),
-                  :method => :delete,
-                  :confirm => "Are you sure that you want to delete the context \'#{context.name}\'?" ) %>
-      <%= link_to_function( image_tag( "blank.png", :title => "Edit context", :class=>"edit_item"), "Element.toggle('#{dom_id(context)}');Element.toggle('#{dom_id(context, 'edit')}'); new Effect.Appear('#{dom_id(context, 'edit')}'); Form.focusFirstElement('#{dom_id(context, 'edit_form')}');" ) %>
+      <a class="delete_context_button" href="<%= formatted_context_path(context, :js) %>" title="delete the context '<%= context.name %>'"><%= image_tag( "blank.png", :title => "Delete context", :class=>"delete_item") %></a>
+      <% apply_behavior "a.delete_context_button:click", :prevent_default => true do |page|
+           page << "if (confirm('Are you sure that you want to ' + this.title + '?')) {"
+           page << "new Ajax.Updater(this.up('.list'), this.href, {asynchronous:true, evalScripts:true, method:'delete', onLoading:function(request){Effect.Fade(this.up('.list'));}}); };"
+         end -%>
+      <a class="edit_context_button" href="#"><%= image_tag( "blank.png", :title => "Edit context", :class=>"edit_item") %></a>
+      <% apply_behavior 'a.edit_context_button:click', {:prevent_default => true } do |page, element|
+           element.up('.context').toggle 
+           editform = element.up('.list').down('.edit-form')
+           editform.toggle 
+           editform.visual_effect(:appear) 
+           editform.down('input').focus
+         end
+      -%>
     </div>
   </div>
   <div id="<%= dom_id(context, 'edit') %>" class="edit-form" style="display:none;">
-    <% form_remote_tag_options = { :url => context_path(context),
-                                   :method => :put,
-                                   :html => { :id => dom_id(context, 'edit_form'), :class => "inline-form" },
-                                   :complete => visual_effect(:appear, dom_id(context, "container")) }
-       form_remote_tag form_remote_tag_options do -%>
+    <% form_tag context_path(context), { :id => dom_id(context, 'edit_form'), :class => "inline-form", :method => :put } do -%>
     <table style="table-layout: fixed;" width="450">
       <%= render :partial => 'context_form', :object => context %>
       <tr>
-        <td width="150">&nbsp; <input type="hidden" name="wants_render" value="false" /></td>
-        <td width="300"><input type="submit" value="Update" />&nbsp;<a href="javascript:void(0);" onclick="Element.toggle('<%= dom_id(context) %>');Element.toggle('<%= dom_id(context, 'edit') %>');Form.reset('<%= dom_id(context, 'edit_form') %>');">Cancel</a></td>
+        <td width="150">&nbsp; <input type="hidden" name="wants_render" value="true" /></td>
+        <td width="300"><input type="submit" value="Update" />&nbsp;<a href="#" class="form_reset">Cancel</a></td>
       </tr>
     </table>
     <% end -%>
+    <% apply_behavior ".context form.inline-form'", make_remote_form(
+        :complete => "Effect.Appear(this.up('.list'));" ) %>
+    <% apply_behavior "a.form_reset:click", :prevent_default => true do |page, element|
+         element.up('.list').down('.context').toggle
+         element.up('.edit-form').toggle
+         element.up('form').reset
+       end %>
   </div>
 </div>
 <% if controller.action_name == 'create' %>

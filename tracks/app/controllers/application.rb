@@ -96,6 +96,14 @@ class ApplicationController < ActionController::Base
     redirect_back_or_default home_url
   end
   
+  def boolean_param(param_name)
+    return false if param_name.blank?
+    s = params[param_name]
+    return false if s.blank? || s == false || s =~ /^false$/i
+    return true if s == true || s =~ /^true$/i
+    raise ArgumentError.new("invalid value for Boolean: \"#{s}\"")
+  end
+  
   private
         
   def parse_date_per_user_prefs( s )

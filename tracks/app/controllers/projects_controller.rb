@@ -85,7 +85,7 @@ class ProjectsController < ApplicationController
     end
     @project.attributes = params['project']
     if @project.save
-      if params['wants_render']
+      if boolean_param('wants_render')
         if (@project.hidden?)
           @project_project_hidden_todo_counts = Hash.new
           @project_project_hidden_todo_counts[@project.id] = @project.reload().not_done_todo_count(:include_project_hidden_todos => true)
@@ -93,7 +93,7 @@ class ProjectsController < ApplicationController
           @project_not_done_counts[@project.id] = @project.reload().not_done_todo_count(:include_project_hidden_todos => true)
         end
         render
-      elsif params['update_status']
+      elsif boolean_param('update_status')
         render :action => 'update_status'
       else
         render :text => success_text || 'Success'

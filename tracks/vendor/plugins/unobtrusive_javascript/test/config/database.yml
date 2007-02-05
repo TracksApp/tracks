@@ -1,0 +1,19 @@
+test:
+  adapter: sqlite3
+  dbfile: test.sqlite3.db
+
+#  adapter: sqlite
+#  dbfile: test.sqlite.db
+
+#  adapter: mysql
+#  host: localhost
+#  username:
+#  password:
+#  database: test
+
+#  adapter: postgresql
+#  host: localhost
+#  username:
+#  password:
+#  database: test
+

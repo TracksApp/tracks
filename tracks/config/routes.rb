@@ -1,4 +1,5 @@
 ActionController::Routing::Routes.draw do |map|
+  UJS::routes
   
   # Mobile/lite version
   map.connect 'mobile', :controller => 'mobile', :action => 'index'

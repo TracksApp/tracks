@@ -2,14 +2,12 @@
   <div id="list-contexts">
     <%= render :partial => 'context_listing', :collection => @contexts %>
   </div>
-
-  <%= sortable_element 'list-contexts', get_listing_sortable_options %>
 </div>
 
 <div id="input_box">
-  <a href="javascript:void(0)" onClick="Element.toggle('context_new'); Form.focusFirstElement('context-form');" accesskey="n" title="Create a new context">Create new context &#187;</a>
+  <a id="toggle-new-context-form" href="#" accesskey="n" title="Create a new context">Create new context &#187;</a>
   <div id="context_new" class="context_new" style="display:none">
-    <% form_remote_tag :url => { :action => "create" }, :html=> { :id => 'context-form', :name => 'context', :class => 'inline-form' } do -%>
+    <% form_remote_tag :url => contexts_path, :method => :post, :html=> { :id => 'context-form', :name => 'context', :class => 'inline-form' } do -%>
 
       <div id="status"><%= error_messages_for('context') %></div>
 
@@ -23,3 +21,12 @@
     <% end -%>
   </div>
 </div>
+<%
+sortable_element 'list-contexts', get_listing_sortable_options
+
+apply_behavior '#toggle-new-context-form:click', :prevent_default => true do |page|
+  page['context_new'].toggle
+  page['context-form'].down('input').focus
+  #page << "Form.focusFirstElement('context-form');"
+end
+-%>

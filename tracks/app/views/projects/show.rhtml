@@ -36,11 +36,13 @@
   <h2>Status</h2>
   <div>
    <% ['active', 'hidden', 'completed'].each do | state | %>
-    <% js = "new Ajax.Request('#{ url_for :controller => 'projects', :action => 'update', :id => @project.url_friendly_name, :wants_render => false, :update_status => true, 'project[state]' => state }', {method: 'put', asynchronous:true, evalScripts:true});"
-		   span_class = @project.current_state.to_s == state ? 'active_state' : 'inactive_state'
-		%>
-    <span class="<%= state %>"><%= radio_button(:project, 'state', state, {:onclick => js}) %> <span class="<%= span_class %>"><%= state.titlecase %></span></span> 
+    <% span_class = @project.current_state.to_s == state ? 'active_state' : 'inactive_state' %>
+    <span class="<%= state %>"><%= radio_button(:project, 'state', state) %> <span class="<%= span_class %>"><%= state.titlecase %></span></span>
    <% end %>
+   <% apply_behavior "#project_status input:click",
+                     remote_function(:url => project_path(@project), :method => :put,
+                                     :with => "{wants_render: false, update_status: true, 'project[state]' : this.value}" )
+   %>
   </div>
  </div>
 </div>

@@ -1,0 +1,1 @@
+`rake remove_scripts`

@@ -1,0 +1,6 @@
+author: Luke Redpath & Dan Webb
+summary: Makes adding javascript behaviour easy and enhances existing Rails javascript/ajax helpers.
+homepage: http://www.ujs4rails.com
+plugin: http://source.ujs4rails.com
+license: MIT
+version: 0.3
