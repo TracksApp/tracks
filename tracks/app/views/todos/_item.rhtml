@@ -4,9 +4,10 @@
     <%= link_to_remote_todo item %>
 
     <% unless source_view_is :deferred -%>
-    <input type="checkbox" class="item-checkbox"
-           onclick="new Ajax.Request('<%= toggle_check_todo_path(:id => item.id, :_source_view => @source_view) %>', {asynchronous:true, evalScripts:true});"
-           name="item_id" value="<%= item.id %>"<% if item.completed? %> checked="checked" <% end %> />
+      <input type="checkbox" class="item-checkbox" name="item_id" url="<%= toggle_check_todo_path(item) %>"
+             value="<%= item.id %>"<% if item.completed? %> checked="checked" <% end %> />
+      <% apply_behavior '.item-container input.item-checkbox:click',
+           remote_function(:url => javascript_variable('this.attributes.url.value'), :with => "{ method : 'post', _source_view : '#{@source_view}' }") %>           
     <% end -%>
 
     <div class="description<%= staleness_class( item ) %>"><% # start of div which has a class 'description', and possibly 'stale_11', 'stale_12', 'stale_13' etc %>
@@ -58,6 +59,7 @@
   <div id="<%= dom_id(item, 'edit') %>" class="edit-form" style="display:none">
     <% form_remote_tag_edit_todo( item ) do -%>
     <% #note: edit form will load here remotely -%>
+      <div class="placeholder"> </div>
     <% end -%>
   </div><!-- [end:<%= dom_id(item, 'edit') %>] -->
 </div><!-- [end:<%= dom_id(item) %>] -->

@@ -17,7 +17,10 @@
       <a class="delete_context_button" href="<%= formatted_context_path(context, :js) %>" title="delete the context '<%= context.name %>'"><%= image_tag( "blank.png", :title => "Delete context", :class=>"delete_item") %></a>
       <% apply_behavior "a.delete_context_button:click", :prevent_default => true do |page|
            page << "if (confirm('Are you sure that you want to ' + this.title + '?')) {"
-           page << "new Ajax.Updater(this.up('.list'), this.href, {asynchronous:true, evalScripts:true, method:'delete', onLoading:function(request){Effect.Fade(this.up('.list'));}}); };"
+           page << "  new Ajax.Updater($(this).up('.list'),"
+           page << "                   this.href, {asynchronous:true,"
+           page << "                               evalScripts:true, method:'delete',"
+           page << "                               onLoading:function(request){ Effect.Fade($(this).up('.list'));}}); };"
          end -%>
       <a class="edit_context_button" href="#"><%= image_tag( "blank.png", :title => "Edit context", :class=>"edit_item") %></a>
       <% apply_behavior 'a.edit_context_button:click', {:prevent_default => true } do |page, element|
@@ -41,7 +44,7 @@
     </table>
     <% end -%>
     <% apply_behavior ".context form.inline-form'", make_remote_form(
-        :complete => "Effect.Appear(this.up('.list'));" ) %>
+        :complete => "Effect.Appear($(this).up('.list'));" ) %>
     <% apply_behavior "a.form_reset:click", :prevent_default => true do |page, element|
          element.up('.list').down('.context').toggle
          element.up('.edit-form').toggle

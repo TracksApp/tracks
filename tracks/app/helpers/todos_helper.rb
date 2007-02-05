@@ -8,9 +8,10 @@ module TodosHelper
   end
 
   def form_remote_tag_edit_todo( item, &block )
-    form_remote_tag( :url => todo_path(item), :method => :put,
-                    :html => { :id => dom_id(item, 'form'), :class => "inline-form" }, &block
-                   )
+    form_tag( todo_path(item), {:method => :put, :id => dom_id(item, 'form'), :class => "edit_todo_form inline-form" }, &block )
+    apply_behavior 'form.edit_todo_form:submit',
+                   remote_function(:url => javascript_variable('this.action'), :method => :put, :form => true),
+                   :prevent_default => true
   end
   
   def link_to_remote_todo(item)
@@ -134,7 +135,7 @@ module TodosHelper
      return array_or_string_for_javascript(['Create a new context']) if @contexts.empty?
      array_or_string_for_javascript( @contexts.collect{|c| escape_javascript(c.name) } )
   end
-  
+    
   private
   
   def image_tag_for_delete
