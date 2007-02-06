@@ -1,7 +1,8 @@
-<%= link_to_function(image_tag( 'blank.png', :width=>'16', :height=>'16', :border=>'0' ), nil, {:class => 'show_notes', :title => 'Show notes'}) do |page|
-      page[dom_id(item, 'notes')].toggle
-    end
+<%= link_to(image_tag( 'blank.png', :width=>'16', :height=>'16', :border=>'0' ), nil, {:class => 'show_notes', :title => 'Show notes'}) %>
+<% apply_behavior 'a.show_notes:click', :prevent_default => true do |page, element|
+     element.next('.notes').toggle
+   end
 -%>
-<div class="notes" id="<%= dom_id(item, 'notes') %>" style="display:none">
-	<%= markdown( item.notes ) %>
-</div>
+      <div class="notes" id="<%= dom_id(item, 'notes') %>" style="display:none">
+        <%= markdown( item.notes ) %>
+      </div>

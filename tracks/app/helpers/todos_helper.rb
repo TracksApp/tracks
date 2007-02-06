@@ -9,33 +9,78 @@ module TodosHelper
 
   def form_remote_tag_edit_todo( item, &block )
     form_tag( todo_path(item), {:method => :put, :id => dom_id(item, 'form'), :class => "edit_todo_form inline-form" }, &block )
-    apply_behavior 'form.edit_todo_form:submit',
-                   remote_function(:url => javascript_variable('this.action'), :method => :put, :form => true),
-                   :prevent_default => true
+    apply_behavior 'form.edit_todo_form', make_remote_form(:method => :put), :prevent_default => true
   end
   
-  def link_to_remote_todo(item)
-    itemurl = todo_path(:id => item.id, :_source_view => @source_view)
-    
-    str = link_to_remote( image_tag_for_delete,
-                          { :url => todo_path(:id => item.id, :_source_view => @source_view),
-                            :method => :delete,
-                            :confirm => "Are you sure that you want to delete the action, \'#{item.description}\'?" },
-                          { :class => "icon" }
-                        ) + "\n"
-    if !item.completed?
-      str << link_to_remote( image_tag_for_edit(item),
-                             { :url => edit_todo_path(:id => item.id, :_source_view => @source_view),
-                               :method => 'get',
-                               :loading => visual_effect(:pulsate, dom_id(item, 'edit_icon')) },
-                             { :class => "icon" }
-                           )
-    else
-      str << '<a class="icon">' + image_tag("blank.png") + "</a> "
+  def remote_delete_icon(item)
+    str = link_to( image_tag("blank.png", :title =>"Delete action", :class=>"delete_item"),
+                   todo_path(item),
+                   :class => "icon delete_icon", :title => "delete the action '#{item.description}'")
+    apply_behavior '.item-container a.delete_icon:click', :prevent_default => true do |page|
+       page << "if (confirm('Are you sure that you want to ' + this.title + '?')) {"
+       page << "  new Ajax.Request(this.href, { asynchronous : true, evalScripts : true, method : 'delete', parameters : { '_source_view' : '#{@source_view}' }})"
+       page << "}"
     end
     str
   end
   
+  def remote_edit_icon(item)
+    if !item.completed?
+      str = link_to( image_tag_for_edit(item),
+                      edit_todo_path(item),
+                      :class => "icon edit_icon")
+      apply_behavior '.item-container a.edit_icon:click', :prevent_default => true do |page|
+        page << "new Ajax.Request(this.href, { asynchronous : true, evalScripts : true, method : 'get', parameters : { '_source_view' : '#{@source_view}' }, onLoading: function(request){ Effect.Pulsate(this)}});"
+      end
+    else
+      str = '<a class="icon">' + image_tag("blank.png") + "</a> "
+    end
+    str
+  end
+  
+  def remote_toggle_checkbox(item)
+    str = check_box_tag('item_id', item.id, item.completed?, :class => 'item-checkbox', :url => toggle_check_todo_path(item))
+    apply_behavior '.item-container input.item-checkbox:click',
+                   remote_function(:url => javascript_variable('this.attributes.url.value'),
+                                   :with => "{ method : 'post', _source_view : '#{@source_view}' }")
+    str
+  end
+  
+  def date_span(item)
+    if item.completed?
+      "<span class=\"grey\">#{format_date( item.completed_at )}</span>"
+    elsif item.deferred?
+      show_date( item.show_from )
+    else
+      due_date( item.due ) 
+    end    
+  end
+  
+  def tag_list(item)
+    item.tags.collect{|t| "<span class=\"tag\">" + link_to(t.name, :action => "tag", :id => t.name) + "</span>"}.join('')
+  end
+  
+  def deferred_due_date(item)
+    if item.deferred? && item.due
+      "(action due on #{format_date(item.due)})"
+    end
+  end
+  
+  def project_and_context_links(item, parent_container_type)
+    if item.completed?
+       "(#{item.context.name}#{", " + item.project.name unless item.project.nil?})"
+    else
+      str = ''
+      if (['project', 'tickler', 'tag'].include?(parent_container_type))
+        str << item_link_to_context( item )
+      end
+      if (['context', 'tickler', 'tag'].include?(parent_container_type)) && item.project_id
+        str << item_link_to_project( item )
+      end
+      str
+    end
+  end
+    
   # Uses the 'staleness_starts' value from settings.yml (in days) to colour
   # the background of the action appropriately according to the age
   # of the creation date:

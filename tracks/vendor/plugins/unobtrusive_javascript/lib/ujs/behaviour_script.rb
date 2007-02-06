@@ -8,7 +8,7 @@ class UJS::BehaviourScript
   
   def add_rule(selector, javascript, cancel_default=false)
     javascript = javascript << cancel_default_js if cancel_default
-    @rules << [selector, javascript]
+    @rules << [selector, javascript] unless rule_exists(selector, javascript)
   end
   
   def cache?
@@ -50,5 +50,9 @@ class UJS::BehaviourScript
     
     def cancel_default_js
       " return false;"
+    end
+    
+    def rule_exists(selector, javascript)
+      @rules.detect{|r| r[0] == selector && r[1] == javascript} != nil
     end
 end
