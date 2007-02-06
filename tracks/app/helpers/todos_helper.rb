@@ -39,9 +39,9 @@ module TodosHelper
   end
   
   def remote_toggle_checkbox(item)
-    str = check_box_tag('item_id', item.id, item.completed?, :class => 'item-checkbox', :url => toggle_check_todo_path(item))
+    str = check_box_tag('item_id', toggle_check_todo_path(item), item.completed?, :class => 'item-checkbox')
     apply_behavior '.item-container input.item-checkbox:click',
-                   remote_function(:url => javascript_variable('this.attributes.url.value'),
+                   remote_function(:url => javascript_variable('this.value'),
                                    :with => "{ method : 'post', _source_view : '#{@source_view}' }")
     str
   end
