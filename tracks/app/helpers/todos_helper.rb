@@ -7,15 +7,15 @@ module TodosHelper
     count = Todo.find_all("done=0 AND context_id=#{context.id}").length
   end
 
-  def form_remote_tag_edit_todo( item, &block )
-    form_tag( todo_path(item), {:method => :put, :id => dom_id(item, 'form'), :class => "edit_todo_form inline-form" }, &block )
+  def form_remote_tag_edit_todo( &block )
+    form_tag( todo_path(@todo), {:method => :put, :id => dom_id(@todo, 'form'), :class => "edit_todo_form inline-form" }, &block )
     apply_behavior 'form.edit_todo_form', make_remote_form(:method => :put), :prevent_default => true
   end
   
-  def remote_delete_icon(item)
-    str = link_to( image_tag("blank.png", :title =>"Delete action", :class=>"delete_item"),
-                   todo_path(item),
-                   :class => "icon delete_icon", :title => "delete the action '#{item.description}'")
+  def remote_delete_icon
+    str = link_to( image_tag_for_delete,
+                   todo_path(@todo),
+                   :class => "icon delete_icon", :title => "delete the action '#{@todo.description}'")
     apply_behavior '.item-container a.delete_icon:click', :prevent_default => true do |page|
        page << "if (confirm('Are you sure that you want to ' + this.title + '?')) {"
        page << "  new Ajax.Request(this.href, { asynchronous : true, evalScripts : true, method : 'delete', parameters : { '_source_view' : '#{@source_view}' }})"
@@ -24,10 +24,10 @@ module TodosHelper
     str
   end
   
-  def remote_edit_icon(item)
-    if !item.completed?
-      str = link_to( image_tag_for_edit(item),
-                      edit_todo_path(item),
+  def remote_edit_icon
+    if !@todo.completed?
+      str = link_to( image_tag_for_edit,
+                      edit_todo_path(@todo),
                       :class => "icon edit_icon")
       apply_behavior '.item-container a.edit_icon:click', :prevent_default => true do |page|
         page << "new Ajax.Request(this.href, { asynchronous : true, evalScripts : true, method : 'get', parameters : { '_source_view' : '#{@source_view}' }, onLoading: function(request){ Effect.Pulsate(this)}});"
@@ -38,44 +38,44 @@ module TodosHelper
     str
   end
   
-  def remote_toggle_checkbox(item)
-    str = check_box_tag('item_id', toggle_check_todo_path(item), item.completed?, :class => 'item-checkbox')
+  def remote_toggle_checkbox
+    str = check_box_tag('item_id', toggle_check_todo_path(@todo), @todo.completed?, :class => 'item-checkbox')
     apply_behavior '.item-container input.item-checkbox:click',
                    remote_function(:url => javascript_variable('this.value'),
                                    :with => "{ method : 'post', _source_view : '#{@source_view}' }")
     str
   end
   
-  def date_span(item)
-    if item.completed?
-      "<span class=\"grey\">#{format_date( item.completed_at )}</span>"
-    elsif item.deferred?
-      show_date( item.show_from )
+  def date_span
+    if @todo.completed?
+      "<span class=\"grey\">#{format_date( @todo.completed_at )}</span>"
+    elsif @todo.deferred?
+      show_date( @todo.show_from )
     else
-      due_date( item.due ) 
+      due_date( @todo.due ) 
     end    
   end
   
-  def tag_list(item)
-    item.tags.collect{|t| "<span class=\"tag\">" + link_to(t.name, :action => "tag", :id => t.name) + "</span>"}.join('')
+  def tag_list
+    @todo.tags.collect{|t| "<span class=\"tag\">" + link_to(t.name, :action => "tag", :id => t.name) + "</span>"}.join('')
   end
   
-  def deferred_due_date(item)
-    if item.deferred? && item.due
-      "(action due on #{format_date(item.due)})"
+  def deferred_due_date
+    if @todo.deferred? && @todo.due
+      "(action due on #{format_date(@todo.due)})"
     end
   end
   
-  def project_and_context_links(item, parent_container_type)
-    if item.completed?
-       "(#{item.context.name}#{", " + item.project.name unless item.project.nil?})"
+  def project_and_context_links(parent_container_type)
+    if @todo.completed?
+       "(#{@todo.context.name}#{", " + @todo.project.name unless @todo.project.nil?})"
     else
       str = ''
       if (['project', 'tickler', 'tag'].include?(parent_container_type))
-        str << item_link_to_context( item )
+        str << item_link_to_context( @todo )
       end
-      if (['context', 'tickler', 'tag'].include?(parent_container_type)) && item.project_id
-        str << item_link_to_project( item )
+      if (['context', 'tickler', 'tag'].include?(parent_container_type)) && @todo.project_id
+        str << item_link_to_project( @todo )
       end
       str
     end
@@ -145,17 +145,17 @@ module TodosHelper
   def item_container_id
     return "tickler-items" if source_view_is :deferred
     if source_view_is :project
-      return "p#{@item.project_id}" if @item.active?
-      return "tickler" if @item.deferred?
+      return "p#{@todo.project_id}" if @todo.active?
+      return "tickler" if @todo.deferred?
     end
-    return "c#{@item.context_id}"
+    return "c#{@todo.context_id}"
   end
 
   def should_show_new_item
-    return true if source_view_is(:deferred) && @item.deferred?
-    return true if source_view_is(:project) && @item.project.hidden? && @item.project_hidden?
-    return true if source_view_is(:project) && @item.deferred?
-    return true if !source_view_is(:deferred) && @item.active?
+    return true if source_view_is(:deferred) && @todo.deferred?
+    return true if source_view_is(:project) && @todo.project.hidden? && @todo.project_hidden?
+    return true if source_view_is(:project) && @todo.deferred?
+    return true if !source_view_is(:deferred) && @todo.active?
     return false
   end
   
@@ -166,10 +166,10 @@ module TodosHelper
   end
   
   def empty_container_msg_div_id
-    return "tickler-empty-nd" if source_view_is(:project) && @item.deferred?
-    return "p#{@item.project_id}empty-nd" if source_view_is :project
+    return "tickler-empty-nd" if source_view_is(:project) && @todo.deferred?
+    return "p#{@todo.project_id}empty-nd" if source_view_is :project
     return "tickler-empty-nd" if source_view_is :deferred
-    return "c#{@item.context_id}empty-nd"
+    return "c#{@todo.context_id}empty-nd"
   end
   
   def project_names_for_autocomplete
@@ -187,8 +187,8 @@ module TodosHelper
     image_tag("blank.png", :title =>"Delete action", :class=>"delete_item")
   end
   
-  def image_tag_for_edit(item)
-    image_tag("blank.png", :title =>"Edit action", :class=>"edit_item", :id=> dom_id(item, 'edit_icon'))
+  def image_tag_for_edit
+    image_tag("blank.png", :title =>"Edit action", :class=>"edit_item", :id=> dom_id(@todo, 'edit_icon'))
   end
   
 end

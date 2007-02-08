@@ -1,4 +1,4 @@
-page[dom_id(@item, 'form')].down('.placeholder').replace_html :partial => 'todos/edit_form'
-page[dom_id(@item, 'line')].hide
-page[dom_id(@item, 'edit')].show
-page[dom_id(@item, 'form')].down('table').down('input').focus
+page[dom_id(@todo, 'form')].down('.placeholder').replace_html :partial => 'todos/edit_form'
+page[dom_id(@todo, 'line')].hide
+page[dom_id(@todo, 'edit')].show
+page[dom_id(@todo, 'form')].down('table').down('input').focus

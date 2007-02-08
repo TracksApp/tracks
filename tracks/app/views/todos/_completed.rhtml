@@ -12,6 +12,6 @@
       <div class="message"><p>Currently there are no completed actions.</p></div>
     </div>
 
-      <%= render :partial => "todos/item", :collection => done, :locals => { :parent_container_type => "completed" } %>
+      <%= render :partial => "todos/todo", :collection => done, :locals => { :parent_container_type => "completed" } %>
   </div>
 </div><!-- [end:next_actions] -->

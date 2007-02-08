@@ -31,9 +31,14 @@ class TodosController < ApplicationController
   end
   
   def create
-    @item = @user.todos.build
+    @todo = @user.todos.build
     p = params['request'] || params
-    @item.attributes = p['todo']
+    
+    if p['todo']['show_from']
+      p['todo']['show_from'] = parse_date_per_user_prefs(p['todo']['show_from'])
+    end
+    
+    @todo.attributes = p['todo']
     
     if p['todo']['project_id'].blank? && !p['project_name'].blank? && p['project_name'] != 'None'
       project = @user.projects.find_by_name(p['project_name'].strip)
@@ -43,7 +48,7 @@ class TodosController < ApplicationController
           project.save
           @new_project_created = true
       end
-      @item.project_id = project.id
+      @todo.project_id = project.id
     end
     
     if p['todo']['context_id'].blank? && !p['context_name'].blank?
@@ -53,45 +58,39 @@ class TodosController < ApplicationController
           context.name = p['context_name'].strip
           context.save
           @new_context_created = true
-          @not_done_todos = [@item]
+          @not_done_todos = [@todo]
       end
-      @item.context_id = context.id
+      @todo.context_id = context.id
     end
 
-    if @item.due?
-      @date = parse_date_per_user_prefs(p['todo']['due'])
-      @item.due = @date
+    if @todo.due?
+      @todo.due = parse_date_per_user_prefs(p['todo']['due'])
     else
-      @item.due = ""
+      @todo.due = ""
     end
     
-    if p['todo']['show_from']
-      @item.show_from = parse_date_per_user_prefs(p['todo']['show_from'])
+    @saved = @todo.save
+    @todo.tag_with(params[:tag_list],@user)
+    @todo.reload
+    
+    respond_to do |wants|
+      wants.html { redirect_to :action => "index" }
+      wants.js do
+        if @saved
+          determine_down_count
+        end
+        render :action => 'create'
+      end
+      wants.xml { render :xml => @todo.to_xml( :root => 'todo', :except => :user_id ) }
     end
-
-    @item.save
-    @item.tag_with(params[:tag_list],@user)
-    @saved = @item.save
-
-
-     respond_to do |wants|
-       wants.html { redirect_to :action => "index" }
-       wants.js do
-         if @saved
-           determine_down_count
-         end
-         render :action => 'create'
-       end
-       wants.xml { render :xml => @item.to_xml( :root => 'todo', :except => :user_id ) }
-     end
   end
   
   def edit
-    @item = check_user_return_item
+    @todo = check_user_return_todo
   end
   
   def show
-    item = check_user_return_item
+    item = check_user_return_todo
     respond_to do |wants|
        wants.xml { render :xml => item.to_xml( :root => 'todo', :except => :user_id ) }
      end
@@ -100,13 +99,13 @@ class TodosController < ApplicationController
   # Toggles the 'done' status of the action
   #
   def toggle_check
-    @item = check_user_return_item
-    @item.toggle_completion()
-    @saved = @item.save
+    @todo = check_user_return_todo
+    @todo.toggle_completion()
+    @saved = @todo.save
     respond_to do |format|
       format.js do
         if @saved
-          @remaining_undone_in_context = @user.contexts.find(@item.context_id).not_done_todo_count
+          @remaining_undone_in_context = @user.contexts.find(@todo.context_id).not_done_todo_count
           determine_down_count
           determine_completed_count
         end
@@ -115,10 +114,10 @@ class TodosController < ApplicationController
       format.html do
         if @saved
           # TODO: I think this will work, but can't figure out how to test it
-          notify :notice, "The action <strong>'#{@item.description}'</strong> was marked as <strong>#{@item.completed? ? 'complete' : 'incomplete' }</strong>"
+          notify :notice, "The action <strong>'#{@todo.description}'</strong> was marked as <strong>#{@todo.completed? ? 'complete' : 'incomplete' }</strong>"
           redirect_to :action => "index"
         else
-          notify :notice, "The action <strong>'#{@item.description}'</strong> was NOT marked as <strong>#{@item.completed? ? 'complete' : 'incomplete' } due to an error on the server.</strong>", "index"
+          notify :notice, "The action <strong>'#{@todo.description}'</strong> was NOT marked as <strong>#{@todo.completed? ? 'complete' : 'incomplete' } due to an error on the server.</strong>", "index"
           redirect_to :action =>  "index"
         end
       end
@@ -126,12 +125,12 @@ class TodosController < ApplicationController
   end
 
   def update
-    @item = check_user_return_item
-    @item.tag_with(params[:tag_list],@user)
-    @original_item_context_id = @item.context_id
-    @original_item_project_id = @item.project_id
-    @original_item_was_deferred = @item.deferred?
-    if params['item']['project_id'].blank? && !params['project_name'].blank?
+    @todo = check_user_return_todo
+    @todo.tag_with(params[:tag_list],@user)
+    @original_item_context_id = @todo.context_id
+    @original_item_project_id = @todo.project_id
+    @original_item_was_deferred = @todo.deferred?
+    if params['todo']['project_id'].blank? && !params['project_name'].blank?
       if params['project_name'] == 'None'
         project = Project.null_object
       else
@@ -143,10 +142,10 @@ class TodosController < ApplicationController
           @new_project_created = true
         end
       end
-      params["item"]["project_id"] = project.id
+      params["todo"]["project_id"] = project.id
     end
     
-    if params['item']['context_id'].blank? && !params['context_name'].blank?
+    if params['todo']['context_id'].blank? && !params['context_name'].blank?
       context = @user.contexts.find_by_name(params['context_name'].strip)
       unless context
           context = @user.contexts.build
@@ -154,33 +153,33 @@ class TodosController < ApplicationController
           context.save
           @new_context_created = true
       end
-      params["item"]["context_id"] = context.id
+      params["todo"]["context_id"] = context.id
     end
     
-    if params["item"].has_key?("due")
-      params["item"]["due"] = parse_date_per_user_prefs(params["item"]["due"])
+    if params["todo"].has_key?("due")
+      params["todo"]["due"] = parse_date_per_user_prefs(params["todo"]["due"])
     else
-      params["item"]["due"] = ""
+      params["todo"]["due"] = ""
     end
     
-    if params['item']['show_from']
-      params['item']['show_from'] = parse_date_per_user_prefs(params['item']['show_from'])
+    if params['todo']['show_from']
+      params['todo']['show_from'] = parse_date_per_user_prefs(params['todo']['show_from'])
     end
     
-    @saved = @item.update_attributes params["item"]
-    @context_changed = @original_item_context_id != @item.context_id
-    @item_was_activated_from_deferred_state = @original_item_was_deferred && @item.active?
+    @saved = @todo.update_attributes params["todo"]
+    @context_changed = @original_item_context_id != @todo.context_id
+    @todo_was_activated_from_deferred_state = @original_item_was_deferred && @todo.active?
     if @context_changed then @remaining_undone_in_context = @user.contexts.find(@original_item_context_id).not_done_todo_count; end
-    @project_changed = @original_item_project_id != @item.project_id
+    @project_changed = @original_item_project_id != @todo.project_id
     if (@project_changed && !@original_item_project_id.nil?) then @remaining_undone_in_project = @user.projects.find(@original_item_project_id).not_done_todo_count; end
     determine_down_count
   end
     
   def destroy
-    @item = check_user_return_item
-    @context_id = @item.context_id
-    @project_id = @item.project_id
-    @saved = @item.destroy
+    @todo = check_user_return_todo
+    @context_id = @todo.context_id
+    @project_id = @todo.project_id
+    @saved = @todo.destroy
     
     respond_to do |wants|
       
@@ -258,12 +257,12 @@ class TodosController < ApplicationController
   
   private
 
-    def check_user_return_item
-      item = Todo.find( params['id'].to_i )
-      if @user == item.user
-        return item
+    def check_user_return_todo
+      todo = Todo.find( params['id'].to_i )
+      if @user == todo.user
+        return todo
       else
-        @error_message = 'Item and session user mis-match: #{item.user.name} and #{@user.name}!'
+        @error_message = 'Item and session user mis-match: #{todo.user.name} and #{@todo.name}!'
         respond_to do |wants|
           wants.html do
             notify :error, @error_message, 8.0
@@ -295,12 +294,12 @@ class TodosController < ApplicationController
            @down_count = Todo.count_by_sql(['SELECT COUNT(*) FROM todos, contexts WHERE todos.context_id = contexts.id and todos.user_id = ? and todos.state = ? and contexts.hide = ?', @user.id, 'active', false])
          end
          from.context do
-           @down_count = @user.contexts.find(@item.context_id).not_done_todo_count
+           @down_count = @user.contexts.find(@todo.context_id).not_done_todo_count
          end
          from.project do
-           unless @item.project_id == nil
-             @down_count = @user.projects.find(@item.project_id).not_done_todo_count
-             @deferred_count = @user.projects.find(@item.project_id).deferred_todo_count
+           unless @todo.project_id == nil
+             @down_count = @user.projects.find(@todo.project_id).not_done_todo_count
+             @deferred_count = @user.projects.find(@todo.project_id).deferred_todo_count
            end
          end
          from.deferred do
@@ -315,11 +314,11 @@ class TodosController < ApplicationController
            @completed_count = Todo.count_by_sql(['SELECT COUNT(*) FROM todos, contexts WHERE todos.context_id = contexts.id and todos.user_id = ? and todos.state = ? and contexts.hide = ?', @user.id, 'completed', false])
          end
          from.context do
-           @completed_count = @user.contexts.find(@item.context_id).done_todo_count
+           @completed_count = @user.contexts.find(@todo.context_id).done_todo_count
          end
          from.project do
-           unless @item.project_id == nil
-             @completed_count = @user.projects.find(@item.project_id).done_todo_count
+           unless @todo.project_id == nil
+             @completed_count = @user.projects.find(@todo.project_id).done_todo_count
            end
          end
       end

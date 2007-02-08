@@ -40,6 +40,10 @@ class Test::Unit::TestCase
     assert_select(*args)
   end
   
+  def next_week
+    1.week.from_now.utc.to_date
+  end
+  
 end
 
 class ActionController::IntegrationTest

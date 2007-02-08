@@ -11,6 +11,7 @@ module ApplicationHelper
     else
       formatted_date = ''
     end
+    formatted_date
   end
   
   def user_time

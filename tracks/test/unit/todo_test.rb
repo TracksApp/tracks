@@ -2,12 +2,12 @@ require File.dirname(__FILE__) + '/../test_helper'
 require 'date'
 
 class TodoTest < Test::Unit::TestCase
-  fixtures :todos
+  fixtures :todos, :users, :contexts
 
   def setup
-    @not_completed1 = Todo.find(1)
-    @not_completed2 = Todo.find(2)
-    @completed = Todo.find(8)
+    @not_completed1 = Todo.find(1).reload
+    @not_completed2 = Todo.find(2).reload
+    @completed = Todo.find(8).reload
   end
   
   # Test loading a todo item
@@ -55,5 +55,23 @@ class TodoTest < Test::Unit::TestCase
     assert !@not_completed2.save
     assert_equal 1, @not_completed2.errors.count
     assert_equal "is too long (maximum is 60000 characters)", @not_completed2.errors.on(:notes)
+  end
+  
+  def test_defer_an_existing_todo
+    @not_completed2
+    assert_equal :active, @not_completed2.current_state
+    @not_completed2.show_from = next_week
+    assert @not_completed2.save, "should have saved successfully" + @not_completed2.errors.to_xml
+    assert_equal :deferred, @not_completed2.current_state
+  end
+  
+  def test_create_a_new_deferred_todo
+    user = users(:other_user)
+    item = user.todos.build
+    item.show_from = next_week
+    item.context_id = 1
+    item.description = 'foo'
+    assert item.save, "should have saved successfully" + item.errors.to_xml
+    assert_equal :deferred, item.current_state
   end
 end

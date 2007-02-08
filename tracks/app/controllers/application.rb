@@ -108,7 +108,13 @@ class ApplicationController < ActionController::Base
         
   def parse_date_per_user_prefs( s )
     return nil if s.blank?
-    @user.prefs.tz.unadjust(Date.strptime(s, @user.prefs.date_format)).utc.to_date
+    #logger.info "Unadjusting user date #{s} from #{@user.prefs.tz} parsing with #{@user.prefs.date_format}"
+    time = Date.strptime(s, @user.prefs.date_format)
+    #logger.info "parsed = #{time}"
+    unadjusted = @user.prefs.tz.unadjust(time).utc
+    #logger.info "unadjusted = #{unadjusted}"
+    #logger.info "returning #{unadjusted.to_date}"
+    unadjusted.to_date
   end
     
   def init_data_for_sidebar

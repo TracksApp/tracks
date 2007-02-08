@@ -57,34 +57,47 @@ class TodosControllerTest < Test::Unit::TestCase
     assert_equal 0, assigns['deferred_count']
   end
   
-  def test_destroy_item
+  def test_destroy_todo
     @request.session['user_id'] = users(:admin_user).id
     xhr :post, :destroy, :id => 1, :_source_view => 'todo'
     assert_rjs :page, "todo_1", :remove
     #assert_rjs :replace_html, "badge-count", '9' 
   end
   
-  def test_update_item_project
+  def test_create_todo
+    original_todo_count = Todo.count
+    @request.session['user_id'] = users(:admin_user).id
+    put :create, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{"notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>"foo bar"
+    assert_equal original_todo_count + 1, Todo.count
+  end
+  
+  def test_create_deferred_todo
+    original_todo_count = Todo.count
+    @request.session['user_id'] = users(:admin_user).id
+    put :create, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{"notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2026", 'show_from' => '30/10/2026'}, "tag_list"=>"foo bar"
+    assert_equal original_todo_count + 1, Todo.count
+  end
+  
+  def test_update_todo_project
     t = Todo.find(1)
     @request.session['user_id'] = users(:admin_user).id
-    xhr :post, :update, :id => 1, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "item"=>{"id"=>"1", "notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>"foo bar"
+    xhr :post, :update, :id => 1, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{"id"=>"1", "notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>"foo bar"
     t = Todo.find(1)
     assert_equal 1, t.project_id
   end
   
-  def test_update_item_project_to_none
+  def test_update_todo_project_to_none
     t = Todo.find(1)
     @request.session['user_id'] = users(:admin_user).id
-    xhr :post, :update, :id => 1, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"None", "item"=>{"id"=>"1", "notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>"foo bar"
+    xhr :post, :update, :id => 1, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"None", "todo"=>{"id"=>"1", "notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>"foo bar"
     t = Todo.find(1)
     assert_nil t.project_id
   end
   
-  def test_update_item
+  def test_update_todo
     t = Todo.find(1)
     @request.session['user_id'] = users(:admin_user).id
-    xhr :post, :update, :id => 1, :_source_view => 'todo', "item"=>{"context_id"=>"1", "project_id"=>"2", "id"=>"1", "notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>"foo bar"
-    #assert_rjs :page, "todo_1", :visual_effect, :highlight, :duration => '1'
+    xhr :post, :update, :id => 1, :_source_view => 'todo', "todo"=>{"context_id"=>"1", "project_id"=>"2", "id"=>"1", "notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>"foo bar"
     t = Todo.find(1)
     assert_equal "Call Warren Buffet to find out how much he makes per day", t.description
     expected = Date.new(2006,11,30).to_time.utc.to_date
@@ -92,14 +105,14 @@ class TodosControllerTest < Test::Unit::TestCase
     assert_equal expected, actual, "Expected #{expected.to_s(:db)}, was #{actual.to_s(:db)}"
   end
   
-  def test_tag
-    @request.session['user_id'] = users(:admin_user).id
-    @user = User.find(@request.session['user_id'])
-    @tagged = Todo.find_tagged_with('foo', @user).size
-    get :tag, :id => 'foo'
-    assert_response :success
-    assert_equal 2, @tagged
-  end
+  # def test_tag
+  #   @request.session['user_id'] = users(:admin_user).id
+  #   @user = User.find(@request.session['user_id'])
+  #   @tagged = Todo.find_tagged_with('foo', @user).size
+  #   get :tag, :id => 'foo'
+  #   assert_response :success
+  #   assert_equal 2, @tagged
+  # end
   
 
 end

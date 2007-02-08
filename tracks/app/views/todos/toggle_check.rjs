@@ -1,10 +1,10 @@
 if @saved  
-  page[@item].remove
-  if @item.completed?
+  page[@todo].remove
+  if @todo.completed?
     # Don't try to insert contents into a non-existent container!
     unless @user.prefs.hide_completed_actions?
-      page.insert_html :top, "completed", :partial => 'todos/item', :locals => { :parent_container_type => "completed" }
-      page.visual_effect :highlight, dom_id(@item, 'line'), {'startcolor' => "'#99ff99'"}
+      page.insert_html :top, "completed", :partial => 'todos/todo', :locals => { :parent_container_type => "completed" }
+      page.visual_effect :highlight, dom_id(@todo, 'line'), {'startcolor' => "'#99ff99'"}
       page[empty_container_msg_div_id].show if @down_count == 0 && !empty_container_msg_div_id.nil?
       page.show 'tickler-empty-nd' if source_view_is(:project) && @deferred_count == 0
       page.hide 'empty-d' # If we've checked something as done, completed items can't be empty
@@ -14,13 +14,13 @@ if @saved
     end
   else
     page.call "todoItems.ensureVisibleWithEffectAppear", item_container_id
-    page.insert_html :bottom, item_container_id, :partial => 'todos/item', :locals => { :parent_container_type => parent_container_type }
-    page.visual_effect :highlight, dom_id(@item, 'line'), {'startcolor' => "'#99ff99'"}
+    page.insert_html :bottom, item_container_id, :partial => 'todos/todo', :locals => { :parent_container_type => parent_container_type }
+    page.visual_effect :highlight, dom_id(@todo, 'line'), {'startcolor' => "'#99ff99'"}
     page.show "empty-d" if @completed_count == 0
     page[empty_container_msg_div_id].hide unless empty_container_msg_div_id.nil? # If we've checked something as undone, uncompleted items can't be empty
   end
   page.hide "status"
   page.replace_html "badge_count", @down_count
 else
-  page.replace_html "status", content_tag("div", content_tag("h2", "#{pluralize(@item.errors.count, "error")} prohibited this record from being saved") + content_tag("p", "There were problems with the following fields:") + content_tag("ul", @item.errors.each_full { |msg| content_tag("li", msg) }), "id" => "errorExplanation", "class" => "errorExplanation")  
+  page.replace_html "status", content_tag("div", content_tag("h2", "#{pluralize(@todo.errors.count, "error")} prohibited this record from being saved") + content_tag("p", "There were problems with the following fields:") + content_tag("ul", @todo.errors.each_full { |msg| content_tag("li", msg) }), "id" => "errorExplanation", "class" => "errorExplanation")  
 end

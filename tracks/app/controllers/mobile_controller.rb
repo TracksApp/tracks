@@ -23,15 +23,15 @@ class MobileController < ApplicationController
   def update
     if params[:id]
       @item = check_user_return_item
-      @item.update_attributes params[:item]
-      if params[:item][:state] == "1"
+      @item.update_attributes params[:todo]
+      if params[:todo][:state] == "1"
         @item.state = "completed"
       else
         @item.state = "active"
       end
     else
-      params[:item][:user_id] = @user.id
-      @item = Todo.new(params[:item]) if params[:item]
+      params[:todo][:user_id] = @user.id
+      @item = Todo.new(params[:todo]) if params[:todo]
     end
         
     if @item.save

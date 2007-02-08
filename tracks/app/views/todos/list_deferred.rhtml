@@ -8,7 +8,7 @@
 	      <div class="message"><p>Currently there are no deferred actions</p></div>
 	    </div>
 
-	    <%= render :partial => "todos/item", :collection => @tickles, :locals => { :parent_container_type => 'tickler' } %>
+	    <%= render :partial => "todos/todo", :collection => @tickles, :locals => { :parent_container_type => 'tickler' } %>
 
 	  </div><!-- [end:items] -->
 	</div><!-- [end:tickler] -->
