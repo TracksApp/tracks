@@ -7,7 +7,7 @@ class ActiveRecord::Base
   # If you submit an empty tags text field, all the tags are removed.
   def tag_with(tags, user)
     Tag.transaction do
-      Tagging.delete_all(" taggable_id = #{self.id} and taggable_type = '#{self.class}' and user_id = #{user.id}")
+      Tagging.delete_all("taggable_id = #{self.id} and taggable_type = '#{self.class}' and user_id = #{user.id}")
       tags.downcase.split(", ").each do |tag|
         Tag.find_or_create_by_name(tag).on(self, user)
       end
@@ -19,7 +19,7 @@ class ActiveRecord::Base
   end
   
   def delete_tags tag_string
-     split = tag_string.downcase.split(" ")
+     split = tag_string.downcase.split(", ")
      tags.delete tags.select{|t| split.include? t.name}
   end
 

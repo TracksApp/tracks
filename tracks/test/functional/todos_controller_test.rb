@@ -97,22 +97,32 @@ class TodosControllerTest < Test::Unit::TestCase
   def test_update_todo
     t = Todo.find(1)
     @request.session['user_id'] = users(:admin_user).id
-    xhr :post, :update, :id => 1, :_source_view => 'todo', "todo"=>{"context_id"=>"1", "project_id"=>"2", "id"=>"1", "notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>"foo bar"
+    xhr :post, :update, :id => 1, :_source_view => 'todo', "todo"=>{"context_id"=>"1", "project_id"=>"2", "id"=>"1", "notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>"foo, bar"
     t = Todo.find(1)
     assert_equal "Call Warren Buffet to find out how much he makes per day", t.description
+    assert_equal "foo, bar", t.tag_list
     expected = Date.new(2006,11,30).to_time.utc.to_date
     actual = t.due
     assert_equal expected, actual, "Expected #{expected.to_s(:db)}, was #{actual.to_s(:db)}"
   end
   
-  # def test_tag
-  #   @request.session['user_id'] = users(:admin_user).id
-  #   @user = User.find(@request.session['user_id'])
-  #   @tagged = Todo.find_tagged_with('foo', @user).size
-  #   get :tag, :id => 'foo'
-  #   assert_response :success
-  #   assert_equal 2, @tagged
-  # end
+  def test_update_todo_tags_to_none
+    t = Todo.find(1)
+    @request.session['user_id'] = users(:admin_user).id
+    xhr :post, :update, :id => 1, :_source_view => 'todo', "todo"=>{"context_id"=>"1", "project_id"=>"2", "id"=>"1", "notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>""
+    t = Todo.find(1)
+    assert_equal true, t.tag_list.empty?
+  end
+  
+  def test_find_tagged_with
+    @request.session['user_id'] = users(:admin_user).id
+    @user = User.find(@request.session['user_id'])
+    tag = Tag.find_by_name('foo').todos
+    @tagged = tag.find(:all, :conditions => ['taggings.user_id = ?', @user.id]).size
+    get :tag, :name => 'foo'
+    assert_response :success
+    assert_equal 2, @tagged
+  end
   
 
 end

@@ -7,5 +7,5 @@ class Tag < ActiveRecord::Base
   def on(taggable, user)
     tagging = taggings.create :taggable => taggable, :user => user
   end
- 
+
 end
