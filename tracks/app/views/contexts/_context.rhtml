@@ -3,6 +3,22 @@
   <h2>
 <% if collapsible -%>
     <a href="#" class="container_toggle" id="toggle_c<%= context.id %>"><%= image_tag("collapse.png") %></a>
+    <% apply_behavior '.container_toggle:click', :prevent_default => true do |page|
+         page << "containerElem = this.up('.container')
+         toggleTarget = containerElem.down('.toggle_target')
+         if (Element.visible(toggleTarget))
+         {
+           todoItems.collapseNextActionListing(this, toggleTarget);
+           todoItems.contextCollapseCookieManager.setCookie(todoItems.buildCookieName(containerElem), true)
+         }
+         else
+         {
+           todoItems.expandNextActionListing(this, toggleTarget);
+           todoItems.contextCollapseCookieManager.clearCookie(todoItems.buildCookieName(containerElem))
+         }
+        "
+       end
+    %>
 <% end -%>
 <% if source_view_is :context %>
 	<%= in_place_editor_field :context, :name, {}, { :url => url_for(:controller => 'context', :action => 'update', :id => context.id, :field => 'name', :wants_render => false) } %>

@@ -30,10 +30,8 @@ ToDoItems.prototype = {
       this.toggleContainerMap[toggleElem.id] = containerElem;
       this.toggleItemsMap[toggleElem.id] = itemsElem;
       this.containerItemsMap[containerElem.id] = itemsElem;
-      Event.observe(this.containerToggles[i], 'click', containerTogglesClick);
-      this.containerToggles[i].onclick = function() {return false;}; //workaround for Event.stop problem with Safari 2.0.3. See http://particletree.com/notebook/eventstop/
     }
-	  this.setNextActionListingTogglesToCookiedState();
+	this.setNextActionListingTogglesToCookiedState();
   },
   setNextActionListingTogglesToCookiedState: function()
   {
