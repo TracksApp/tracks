@@ -11,7 +11,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :users,
                 :member => {:change_password => :get, :update_password => :post,
-                             :change_auth_type => :get, :update_auth_type => :post,
+                             :change_auth_type => :get, :update_auth_type => :post, :complete => :get,
                              :refresh_token => :post }
  map.with_options :controller => "users" do |users|
    users.signup 'signup', :action => "new"

@@ -156,11 +156,12 @@ class UsersController < ApplicationController
         when OpenID::SUCCESS
           # The URL was a valid identity URL. Now we just need to send a redirect
           # to the server using the redirect_url the library created for us.
+          openid_url = params[:openid_url]
 
           # redirect to the server
-          redirect_to open_id_response.redirect_url((request.protocol + request.host_with_port + "/"), url_for(:action => 'complete'))
+          redirect_to open_id_response.redirect_url((request.protocol + request.host_with_port + "/"), url_for(:action => 'complete', :openid_url => openid_url))
         else
-          notify :warning, "Unable to find openid server for <q>#{params[:openid_url]}</q>"
+          notify :warning, "Unable to find openid server for <q>#{openid_url}</q>"
           redirect_to :action => 'change_auth_type'
       end
       return
@@ -176,13 +177,14 @@ class UsersController < ApplicationController
   end
   
   def complete
+    openid_url = params[:openid_url]
     case open_id_response.status
       when OpenID::FAILURE
         # In the case of failure, if info is non-nil, it is the
         # URL that we were verifying. We include it in the error
         # message to help the user figure out what happened.
         if open_id_response.identity_url
-          msg = "Verification of #{open_id_response.identity_url} failed. "
+          msg = "Verification of #{openid_url}(#{open_id_response.identity_url}) failed. "
         else
           msg = "Verification failed. "
         end
@@ -193,13 +195,13 @@ class UsersController < ApplicationController
         # error. If info is nil, it means that the user cancelled
         # the verification.
         @user.auth_type = 'open_id'
-        @user.open_id_url = open_id_response.identity_url
+        @user.open_id_url = openid_url
         if @user.save
-          notify :notice, "You have successfully verified #{open_id_response.identity_url} as your identity and set your authentication type to Open ID."
+          notify :notice, "You have successfully verified #{openid_url} as your identity and set your authentication type to Open ID."
         else
-          notify :warning, "You have successfully verified #{open_id_response.identity_url} as your identity but there was a problem saving your authentication preferences."
+          notify :warning, "You have successfully verified #{openid_url} as your identity but there was a problem saving your authentication preferences."
         end
-        redirect_to :action => 'preferences'
+        redirect_to :controller => 'preferences', :action => 'index'
 
       when OpenID::CANCEL
         notify :warning, "Verification cancelled."

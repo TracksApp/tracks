@@ -37,25 +37,31 @@ class LoginController < ApplicationController
     # Let the user know that the URL is unusable.
     case open_id_response.status
       when OpenID::SUCCESS
+        openid_url = params[:openid_url]
         # The URL was a valid identity URL. Now we just need to send a redirect
         # to the server using the redirect_url the library created for us.
 
         # redirect to the server
-        redirect_to open_id_response.redirect_url((request.protocol + request.host_with_port + "/"), url_for(:action => 'complete'))
+        redirect_to open_id_response.redirect_url((request.protocol + request.host_with_port + "/"), url_for(:action => 'complete', :openid_url => openid_url))
       else
-        notify :warning, "Unable to find openid server for <q>#{params[:openid_url]}</q>"
+        notify :warning, "Unable to find openid server for <q>#{openid_url}</q>"
         redirect_to :action => 'login'
     end
   end
 
   def complete
+    openid_url = params[:openid_url]
+    if openid_url.blank?
+      notify :error, "expected an openid_url"
+    end
+      
     case open_id_response.status
       when OpenID::FAILURE
         # In the case of failure, if info is non-nil, it is the
         # URL that we were verifying. We include it in the error
         # message to help the user figure out what happened.
         if open_id_response.identity_url
-          msg = "Verification of #{open_id_response.identity_url} failed. "
+          msg = "Verification of #{openid_url}(#{open_id_response.identity_url}) failed. "
         else
           msg = "Verification failed. "
         end
@@ -65,13 +71,13 @@ class LoginController < ApplicationController
         # Success means that the transaction completed without
         # error. If info is nil, it means that the user cancelled
         # the verification.
-        @user = User.find_by_open_id_url(open_id_response.identity_url)
+        @user = User.find_by_open_id_url(openid_url)
         unless (@user.nil?)
-          notify :notice, "You have successfully verified #{open_id_response.identity_url} as your identity."
+          notify :notice, "You have successfully verified #{openid_url} as your identity."
           session['user_id'] = @user.id
           redirect_back_or_home
         else
-          notify :warning, "You have successfully verified #{open_id_response.identity_url} as your identity, but you do not have a Tracks account. Please ask your administrator to sign you up."
+          notify :warning, "You have successfully verified #{openid_url} as your identity, but you do not have a Tracks account. Please ask your administrator to sign you up."
         end
 
       when OpenID::CANCEL
