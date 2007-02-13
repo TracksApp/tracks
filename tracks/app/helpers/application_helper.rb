@@ -63,21 +63,21 @@ module ApplicationHelper
     case days
       # overdue or due very soon! sound the alarm!
       when -1000..-1
-        "<a title='" + format_date(due) + "'><span class=\"red\">Overdue by " + (days * -1).to_s + " days</span></a> "
+        "<a title='#{format_date(due)}'><span class=\"red\">Overdue by #{pluralize(days * -1, 'day')}</span></a> "
       when 0
-           "<a title='" + format_date(due) + "'><span class=\"amber\">Due Today</span></a> "
+           "<a title='#{format_date(due)}'><span class=\"amber\">Due Today</span></a> "
       when 1
-           "<a title='" + format_date(due) + "'><span class=\"amber\">Due Tomorrow</span></a> "
+           "<a title='#{format_date(due)}'><span class=\"amber\">Due Tomorrow</span></a> "
       # due 2-7 days away
       when 2..7
       if @user.prefs.due_style == "1"
-        "<a title='" + format_date(due) + "'><span class=\"orange\">Due on " + due.strftime("%A") + "</span></a> "
+        "<a title='#{format_date(due)}'><span class=\"orange\">Due on #{due.strftime("%A")}</span></a> "
       else
-        "<a title='" + format_date(due) + "'><span class=\"orange\">Due in " + days.to_s + " days</span></a> "
+        "<a title='#{format_date(due)}'><span class=\"orange\">Due in #{pluralize(days, 'day')}</span></a> "
       end
       # more than a week away - relax
       else
-        "<a title='" + format_date(due) + "'><span class=\"green\">Due in " + days.to_s + " days</span></a> "
+        "<a title='#{format_date(due)}'><span class=\"green\">Due in #{pluralize(days, 'day')}</span></a> "
     end
   end
 
