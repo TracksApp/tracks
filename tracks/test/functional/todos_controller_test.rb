@@ -101,7 +101,7 @@ class TodosControllerTest < Test::Unit::TestCase
     t = Todo.find(1)
     assert_equal "Call Warren Buffet to find out how much he makes per day", t.description
     assert_equal "foo, bar", t.tag_list
-    expected = Date.new(2006,11,30).to_time.utc.to_date
+    expected = Date.new(2006,11,30)
     actual = t.due
     assert_equal expected, actual, "Expected #{expected.to_s(:db)}, was #{actual.to_s(:db)}"
   end
