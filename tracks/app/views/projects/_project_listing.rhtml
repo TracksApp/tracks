@@ -28,7 +28,7 @@
     <table style="table-layout: fixed;" width="450">
       <%= render :partial => 'project_form', :object => project %>
       <tr>
-        <td width="150">&nbsp; <input type="hidden" name="wants_render" value="false" /></td>
+        <td width="150">&nbsp; <input type="hidden" name="wants_render" value="true" /></td>
         <td width="300"><input type="submit" value="Update" />&nbsp;<a href="javascript:void(0);" onclick="Element.toggle('<%= dom_id(project) %>'); Element.toggle('<%= dom_id(project, 'edit') %>');Form.reset('<%= dom_id(project, 'edit_form') %>');">Cancel</a></td>
       </tr>
     </table>
