@@ -34,7 +34,7 @@
     </div>
   </div>
   <div id="<%= dom_id(context, 'edit') %>" class="edit-form" style="display:none;">
-    <% form_tag context_path(context), { :id => dom_id(context, 'edit_form'), :class => "inline-form", :method => :put } do -%>
+    <% form_tag context_path(context), { :id => dom_id(context, 'edit_form'), :class => "inline-form edit-context-form", :method => :put } do -%>
     <table style="table-layout: fixed;" width="450">
       <%= render :partial => 'context_form', :object => context %>
       <tr>
@@ -43,8 +43,7 @@
       </tr>
     </table>
     <% end -%>
-    <% apply_behavior ".context form.inline-form'", make_remote_form(
-        :complete => "Effect.Appear($(this).up('.list'));" ) %>
+    <% apply_behavior ".edit-context-form", make_remote_form(:complete => "Effect.Appear($(this).up('.list'));" ) %>
     <% apply_behavior "a.form_reset:click", :prevent_default => true do |page, element|
          element.up('.list').down('.context').toggle
          element.up('.edit-form').toggle
