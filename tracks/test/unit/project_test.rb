@@ -147,4 +147,12 @@ class ProjectTest < Test::Unit::TestCase
     assert_equal @timemachine.name, @timemachine.title
   end
   
+  def test_created_at_returns_now_when_field_null
+    assert_equal Time.now.to_s, @moremoney.created_at.to_s
+  end
+  
+  def test_updated_at_returns_now_when_field_null
+    assert_equal Time.now.to_s, @moremoney.updated_at.to_s
+  end
+  
 end

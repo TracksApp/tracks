@@ -24,8 +24,8 @@ moremoney:
   position: 2
   state: 'active'
   user_id: 1
-  created_at: <%= today %>
-  updated_at: <%= today %>
+  created_at: nil
+  updated_at: nil
 
 gardenclean:
   id: 3

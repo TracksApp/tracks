@@ -59,7 +59,7 @@ class ContextsControllerTest < TodoContainerControllerTestBase
         %w(guid link).each do |node|
           assert_xml_select node, /http:\/\/test.host\/contexts\/.+/
         end
-        assert_xml_select 'pubDate', contexts(:agenda).created_at.to_s(:rfc822)
+        assert_xml_select 'pubDate', /(#{contexts(:agenda).created_at.to_s(:rfc822)}|#{contexts(:library).created_at.to_s(:rfc822)})/
       end
     end
   end
@@ -94,7 +94,7 @@ class ContextsControllerTest < TodoContainerControllerTestBase
       assert_xml_select 'entry', 3 do
         assert_xml_select 'title', /.+/
         assert_xml_select 'content[type="html"]', /&lt;p&gt;\d+ actions. Context is (active|hidden). &lt;\/p&gt;/
-        assert_xml_select 'published', contexts(:agenda).created_at.to_s(:rfc822)
+        assert_xml_select 'published', /(#{contexts(:agenda).created_at.to_s(:rfc822)}|#{contexts(:library).created_at.to_s(:rfc822)})/
       end
     end
   end

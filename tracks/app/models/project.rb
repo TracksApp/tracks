@@ -60,6 +60,14 @@ class Project < ActiveRecord::Base
     name
   end
   
+  def created_at
+     read_attribute(:created_at) || Time.now
+  end
+  
+  def updated_at
+     read_attribute(:updated_at) || Time.now
+  end
+  
   def summary(undone_todo_count)
     project_description = ''
     project_description += sanitize(markdown( description )) if description_present?

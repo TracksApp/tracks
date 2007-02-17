@@ -97,11 +97,11 @@ class ProjectsControllerTest < TodoContainerControllerTestBase
         %w(guid link).each do |node|
           assert_xml_select node, /http:\/\/test.host\/projects\/.+/
         end
-        assert_xml_select 'pubDate', projects(:timemachine).created_at.to_s(:rfc822)
+        assert_xml_select 'pubDate', /(#{projects(:timemachine).updated_at.to_s(:rfc822)}|#{projects(:moremoney).updated_at.to_s(:rfc822)}})/
       end
     end
   end
-  
+    
   def test_rss_feed_not_accessible_to_anonymous_user_without_token
     @request.session['user_id'] = nil
     get :index, { :format => "rss" }
@@ -132,11 +132,11 @@ class ProjectsControllerTest < TodoContainerControllerTestBase
       assert_xml_select 'entry', 3 do
         assert_xml_select 'title', /.+/
         assert_xml_select 'content[type="html"]', /&lt;p&gt;\d+ actions. Project is (active|hidden|completed). &lt;\/p&gt;/
-        assert_xml_select 'published', projects(:timemachine).created_at.to_s(:rfc822)
+        assert_xml_select 'published', /(#{projects(:timemachine).updated_at.to_s(:rfc822)}|#{projects(:moremoney).updated_at.to_s(:rfc822)}})/
       end
     end
   end
-
+  
   def test_atom_feed_not_accessible_to_anonymous_user_without_token
     @request.session['user_id'] = nil
     get :index, { :format => "atom" }

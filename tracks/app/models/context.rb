@@ -41,5 +41,14 @@ class Context < ActiveRecord::Base
     s += "</p>"
     s
   end
+  
+  def created_at
+     read_attribute(:created_at) || Time.now.utc
+  end
+  
+  def updated_at
+     read_attribute(:updated_at) || Time.now.utc
+  end
+  
 
 end

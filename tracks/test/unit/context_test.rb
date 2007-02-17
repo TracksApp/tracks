@@ -6,6 +6,7 @@ class ContextTest < Test::Unit::TestCase
   def setup
     @agenda = contexts(:agenda)
     @email = contexts(:email)
+    @library = contexts(:library)
   end
 
   def test_validate_presence_of_name
@@ -110,6 +111,14 @@ class ContextTest < Test::Unit::TestCase
     
   def test_title_reader_returns_name
     assert_equal @agenda.name, @agenda.title
+  end
+  
+  def test_created_at_returns_now_when_field_null
+    assert_equal Time.now.utc.to_s, @library.created_at.to_s
+  end
+  
+  def test_updated_at_returns_now_when_field_null
+    assert_equal Time.now.utc.to_s, @library.updated_at.to_s
   end
   
 end
