@@ -121,7 +121,7 @@ class ContextsControllerTest < TodoContainerControllerTestBase
     @request.session['user_id'] = users(:admin_user).id
     get :index, { :format => "txt" }
     assert_equal 'text/plain; charset=utf-8', @response.headers["Content-Type"]
-    #puts @response.body
+    assert !(/&nbsp;/.match(@response.body)) 
   end
   
   def test_text_feed_not_accessible_to_anonymous_user_without_token

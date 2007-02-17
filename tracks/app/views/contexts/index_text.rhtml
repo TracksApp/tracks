@@ -1,5 +1,5 @@
 <% @contexts.each do |c| -%>
 
 <%= c.name.upcase %>
-<%= count_undone_todos(c)%>. Context is <%= c.hidden? ? "Hidden" : "Active" %>.
+<%= count_undone_todos_text(c)%>. Context is <%= c.hidden? ? "Hidden" : "Active" %>.
 <% end -%>

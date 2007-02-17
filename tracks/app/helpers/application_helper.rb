@@ -116,6 +116,10 @@ module ApplicationHelper
   def count_undone_todos(todos_parent, string="actions")
     @controller.count_undone_todos(todos_parent, string)
   end
+
+  def count_undone_todos_text(todos_parent, string="actions")
+    count_undone_todos(todos_parent, string).gsub("&nbsp;"," ")
+  end
   
   def link_to_context(context, descriptor = sanitize(context.name))
     link_to( descriptor, context_path(context), :title => "View context: #{context.name}" )

@@ -159,6 +159,7 @@ class ProjectsControllerTest < TodoContainerControllerTestBase
     @request.session['user_id'] = users(:admin_user).id
     get :index, { :format => "txt" }
     assert_equal 'text/plain; charset=utf-8', @response.headers["Content-Type"]
+    assert !(/&nbsp;/.match(@response.body)) 
     #puts @response.body
   end
   
