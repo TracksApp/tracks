@@ -2,7 +2,7 @@
 # migrations feature of ActiveRecord to incrementally modify your database, and
 # then regenerate this schema definition.
 
-ActiveRecord::Schema.define(:version => 27) do
+ActiveRecord::Schema.define(:version => 28) do
 
   create_table "contexts", :force => true do |t|
     t.column "name",       :string,                :default => "", :null => false
@@ -57,6 +57,7 @@ ActiveRecord::Schema.define(:version => 27) do
     t.column "verbose_action_descriptors",         :boolean,               :default => false,                          :null => false
     t.column "show_hidden_projects_in_sidebar",    :boolean,               :default => true,                           :null => false
     t.column "time_zone",                          :string,                :default => "London",                       :null => false
+    t.column "show_project_on_todo_done",          :boolean,               :default => false,                          :null => false
   end
 
   add_index "preferences", ["user_id"], :name => "index_preferences_on_user_id"

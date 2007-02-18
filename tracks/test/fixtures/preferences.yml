@@ -14,6 +14,7 @@ admin_user_prefs:
   refresh: 0
   time_zone: "London"
   verbose_action_descriptors: true
+  show_project_on_todo_done: false
 
 other_user_prefs:
   id: 2
@@ -30,3 +31,4 @@ other_user_prefs:
   refresh: 0
   time_zone: "London"
   verbose_action_descriptors: false
+  show_project_on_todo_done: true

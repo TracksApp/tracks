@@ -86,3 +86,21 @@ waitingfor:
   user_id: 1
   created_at: <%= today %>
   updated_at: <%= today %>
+
+office_otheruser:
+  id: 10
+  name: office
+  position: 1
+  hide: false
+  user_id: 2
+  created_at: <%= today %>
+  updated_at: <%= today %>
+
+waitingfor_otheruser:
+  id: 11
+  name: waiting for
+  position: 2
+  hide: false
+  user_id: 2
+  created_at: <%= today %>
+  updated_at: <%= today %>

@@ -3,12 +3,13 @@
     <p>The preference settings should mostly be self-explanatory, but some hints are included below: </p>
     <ul>
       <li><strong>first name and last name:</strong> Used for display purposes if set</li>
-      <li><strong>time zone:</strong> your local time zone</li>
       <li><strong>date format:</strong> the format in which you'd like dates to be shown. For example, for the date 31st January 2006, %d/%m/%Y will show 31/01/2006, %b-%e-%y will show Jan-31-06. See the <a href="http://uk2.php.net/strftime" title="PHP strftime manual">strftime manual</a> for more formatting options for the date.</li>
+      <li><strong>time zone:</strong> your local time zone</li>
       <li><strong>week starts:</strong> day of the week shown as the start of the week on the popup calendar.</li>
       <li><strong>due style:</strong> style in which due dates are shown, e.g.  "Due in 3 days",  "Due on Wednesday"</li>
       <li><strong>show completed projects in sidebar:</strong> whether or not projects marked as complete are shown in the sidebar on the home page and elsewhere</li>
       <li><strong>show hidden contexts in sidebar:</strong> whether or not contexts marked as hidden are shown in the sidebar on the home page and elsewhere</li>
+      <li><strong>show project on todo done:</strong> whether or not to redirect to the project page when an action associated with a project is marked complete</li>
       <% if @user.is_admin? %>
         <li><strong>admin email:</strong> email address for the admin user of Tracks (displayed on the signup page for users to contact to obtain an account)</li>
       <% end %>
@@ -47,15 +48,15 @@
 	      table_row(pref_name, nowrap_label) { text_field('prefs', pref_name) }
 	    end
 	  %>
+	  <%= row_with_text_field('date_format') %>
     <%= table_row('time_zone', false) { time_zone_select('prefs','time_zone') } %>
 
-	  <%= row_with_text_field('date_format') %>
 	  <%= row_with_select_field("week_starts", Preference.day_number_to_name_map.invert.sort{|a,b| a[1]<=>b[1]})%>
 	  <%= row_with_select_field("due_style", [['Due in ___ days',0],['Due on _______',1]]) %>
 	  <%= row_with_select_field("show_completed_projects_in_sidebar") %>
 	  <%= row_with_select_field("show_hidden_projects_in_sidebar") %>
 	  <%= row_with_select_field("show_hidden_contexts_in_sidebar") %>
-
+	  <%= row_with_select_field("show_project_on_todo_done") %>
 
 	  <% if @user.is_admin? %> <%= row_with_text_field('admin_email') %> <% end %>
 	  <%= row_with_text_field('staleness_starts', true) %>

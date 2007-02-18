@@ -1,12 +1,13 @@
 setup :fixtures => :all
+next_available_todo_id = 18
 include_partial 'login/login', :username => 'admin', :password => 'abracadabra'
 open "/projects/Build_a_working_time_machine"
 include_partial 'project_detail/add_deferred_todo'
 open "/projects/Build_a_working_time_machine"
-click "edit_icon_todo_15"
-wait_for_element_present "show_from_todo_15"
-type "show_from_todo_15", ""
+click "edit_icon_todo_#{next_available_todo_id}"
+wait_for_element_present "show_from_todo_#{next_available_todo_id}"
+type "show_from_todo_#{next_available_todo_id}", ""
 click "//input[@value='Update']"
-wait_for_element_present "xpath=//div[@id='p1'] //div[@id='todo_15']"
+wait_for_element_present "xpath=//div[@id='p1'] //div[@id='todo_#{next_available_todo_id}']"
 assert_not_visible "tickler-empty-nd"
 assert_text 'badge_count', '3'

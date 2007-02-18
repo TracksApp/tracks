@@ -36,3 +36,13 @@ gardenclean:
   user_id: 1
   created_at: <%= today %>
   updated_at: <%= today %>
+
+attendrailsconf:
+  id: 4
+  name: Attend RailsConf
+  description: ''
+  position: 1
+  state: 'active'
+  user_id: 2
+  created_at: <%= today %>
+  updated_at: <%= today %>

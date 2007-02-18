@@ -5,13 +5,14 @@
   <ul id="prefs">
     <li>First name: <span class="highlight"><%= @user.first_name %></span></li>
     <li>Last name: <span class="highlight"><%= @user.last_name %></span></li>
-    <li>Time zone: <span class="highlight"><%= @prefs.tz %></span></li>
-    <li>Date format: <span class="highlight"><%= @prefs.date_format %></span></li>
+    <li>Date format: <span class="highlight"><%= @prefs.date_format %></span> Your current date: <%= format_date Time.now.utc %></li>
+    <li>Time zone: <span class="highlight"><%= @prefs.tz %></span> Your current time: <%= user_time.strftime('%I:%M %p') %></li>
     <li>Week starts on: <span class="highlight"><%= Preference.day_number_to_name_map[@prefs.week_starts] %></span></li>
     <li>Show the last <span class="highlight"><%= @prefs.show_number_completed %></span> completed items on the home page</li>
     <li>Show completed projects in sidebar: <span class="highlight"><%= @prefs.show_completed_projects_in_sidebar %></span></li>
     <li>Show hidden projects in sidebar: <span class="highlight"><%= @prefs.show_hidden_projects_in_sidebar %></span></li>
     <li>Show hidden contexts in sidebar: <span class="highlight"><%= @prefs.show_hidden_contexts_in_sidebar %></span></li>
+    <li>Go to project page on todo complete: <span class="highlight"><%= @prefs.show_project_on_todo_done %></span></li>
     <li>Staleness starts after <span class="highlight"><%= @prefs.staleness_starts %></span> days</li>
     <li>Due style: <span class="highlight">
   	<% if @prefs.due_style == "0" %>

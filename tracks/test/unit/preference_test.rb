@@ -14,5 +14,10 @@ class PreferenceTest < Test::Unit::TestCase
     assert_equal 'London', @admin_user.preference.time_zone
     assert_equal @admin_user.preference.tz, TimeZone['London']
   end
+  
+  def test_show_project_on_todo_done
+    assert @other_user.preference.show_project_on_todo_done
+    assert !@admin_user.preference.show_project_on_todo_done
+  end
 
 end

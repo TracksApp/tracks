@@ -1,0 +1,4 @@
+setup :fixtures => :all
+include_partial 'login/login', :username => 'jane', :password => 'sesame'
+click_and_wait "xpath=//div[@id='c10'] //div[@id='todo_16'] //input[@class='item-checkbox']"
+assert_title "TRACKS::Project: Attend RailsConf"
