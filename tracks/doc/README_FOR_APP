@@ -15,7 +15,7 @@ While fully usable for everyday use, Tracks is still a work in progress. Make su
 
 ## Installation
 
-Before you start, you need to make sure that you have Ruby 1.8.2 or 1.8.4 installed (1.8.3 is not supported, and 1.8.4 is recommended). Rails 1.1 and RedCloth are now included in the vendor directory of the distribution, so you don't need to install them yourself. You also need some kind of database. MySQL is probably the most popular, but it's also easy to use PostgreSQL or SQLite/SQLite3. Note that upgrading via the `rake migrate` command is quite a bit more tricky currently with SQLite and SQLite3. If you have Mac OS X Tiger, you already have Ruby 1.8.2 and SQLite3 installed, so all you need to do after installing Rails and Redcloth is to install the sqlite3-ruby gem (1.1.0). If you're using MySQL, you might want to install the native MySQL bindings to improve performance:
+Before you start, you need to make sure that you have Ruby 1.8.2 or 1.8.4 installed (1.8.3 is not supported, and 1.8.4 is recommended). Rails 1.1 and RedCloth are now included in the vendor directory of the distribution, so you don't need to install them yourself. You also need some kind of database. MySQL is probably the most popular, but it's also easy to use PostgreSQL or SQLite/SQLite3. Note that upgrading via the `rake db:migrate` command is quite a bit more tricky currently with SQLite and SQLite3. If you have Mac OS X Tiger, you already have Ruby 1.8.2 and SQLite3 installed, so all you need to do after installing Rails and Redcloth is to install the sqlite3-ruby gem (1.1.0). If you're using MySQL, you might want to install the native MySQL bindings to improve performance:
 
     sudo gem install mysql
     

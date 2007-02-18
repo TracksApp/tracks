@@ -1,4 +1,4 @@
-desc "Updates sqlite/sqlite3 databases created under Tracks 1.03 to the format required for Tracks 1.04. After this is done, you should be able to keep up to date with changes in the schema by running rake migrate."
+desc "Updates sqlite/sqlite3 databases created under Tracks 1.03 to the format required for Tracks 1.04. After this is done, you should be able to keep up to date with changes in the schema by running rake db:migrate."
 task :upgrade_sqlite_db => :environment do
   # Change the three lines below appropriately for your setup
   old_db = "tracks_103.db"
@@ -35,6 +35,6 @@ task :upgrade_sqlite_db => :environment do
     puts "Temporary files cleaned up."
   end
   
-  # rake migrate
-  puts "Now check the database and run 'rake migrate' in the root of your Tracks installation."
+  # rake db:migrate
+  puts "Now check the database and run 'rake db:migrate' in the root of your Tracks installation."
 end

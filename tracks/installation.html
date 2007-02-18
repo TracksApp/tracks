@@ -17,7 +17,7 @@
 
 <h2 id="installation">Installation</h2>
 
-<p>Before you start, you need to make sure that you have Ruby 1.8.2 installed. Rails 1.0 and RedCloth are now included in the vendor directory of the distribution, so you don't need to install them yourself. You also need some kind of database. MySQL is probably the most popular, but it's also easy to use PostgreSQL or SQLite/SQLite3. Note that upgrading via the <code>rake migrate</code> command is quite a bit more tricky currently with SQLite and SQLite3. If you have Mac OS X Tiger, you already have Ruby 1.8.2 and SQLite3 installed, so all you need to do after installing Rails and Redcloth is to install the sqlite3-ruby gem (1.1.0). If you're using MySQL, you might want to install the native MySQL bindings to improve performance:</p>
+<p>Before you start, you need to make sure that you have Ruby 1.8.2 installed. Rails 1.0 and RedCloth are now included in the vendor directory of the distribution, so you don't need to install them yourself. You also need some kind of database. MySQL is probably the most popular, but it's also easy to use PostgreSQL or SQLite/SQLite3. Note that upgrading via the <code>rake db:migrate</code> command is quite a bit more tricky currently with SQLite and SQLite3. If you have Mac OS X Tiger, you already have Ruby 1.8.2 and SQLite3 installed, so all you need to do after installing Rails and Redcloth is to install the sqlite3-ruby gem (1.1.0). If you're using MySQL, you might want to install the native MySQL bindings to improve performance:</p>
 
 <pre><code>sudo gem install mysql
 </code></pre>
@@ -53,18 +53,18 @@
 <li>Copy the file <code>config/database.yml.tmpl</code> to <code>config/database.yml</code>, <code>config/environment.rb.tmpl</code> to <code>config/environment.rb</code> and <code>log.tmpl</code> to <code>log</code>.</li>
 <li>Open the <code>tracks/config/database.yml</code> file, and enter your username and password details for the database you just set up under the 'production' and 'development' sections. <strong>NB</strong>: If you do set up the entry for 'test', make sure that you specify a different database, or when you run tests, they will overwrite your data. It's very important that you don't use TABS in any of the <code>*.yml</code> files. Just use spaces to indent.</li>
 <li>Open the file <code>config/environment.rb</code> and look at the last line which should read: <code>SALT = "change-me"</code>. Change the word change-me to something else of your choosing. This string will be used as a 'salt' to encrypt your password and make it a bit more secure. Also look at the timezone setting at the bottom. You can leave it commented out if your server is in the same time zone as you, but you may need to adjust it if your server is in a different time zone.</li>
-<li>Run 'rake migrate', which will create the necessary tables in your database, including some required contents:</li>
+<li>Run 'rake db:migrate', which will create the necessary tables in your database, including some required contents:</li>
 </ul>
 
 <pre>
   <code>
     cd /PATHTO/TRACKS
-    rake migrate
+    rake db:migrate
   </code>
 </pre>
 
 <ul>
-<li>If you find that 'rake migrate' doesn't work for you (there have been reports of it not working well with the MySQL distributed with InstantRails on Windows), you can use the command <code>rake db_schema_import</code> which will do the same thing.</li>
+<li>If you find that 'rake db:migrate' doesn't work for you (there have been reports of it not working well with the MySQL distributed with InstantRails on Windows), you can use the command <code>rake db_schema_import</code> which will do the same thing.</li>
 <li>(Optional step) If you want to import some example next actions, projects and contexts, use the command <code>rake load_fixtures</code>. This will import data into your database, including two users: an admin user with the login 'admin' and password 'abracadabra', and a normal user 'jane' with password 'sesame'.</li>
 <li>Check the shebang lines of the <code>public/dispatch.*</code> files and all the files in the script directory. They are set to <code>#!/usr/bin/env ruby</code> by default. This should work for all *nix based setups (Linux or Mac OS X), but Windows users will probably have to change it to something like <code>#c:/ruby/bin/ruby</code>.</li>
 <li>Run the following command at your command line (<strong>Important:</strong> If you already have an application running on WEBrick (Tracks or anything else), make sure that you stop the server (Ctrl-C in the terminal running the server), or run Tracks on a different port using the <code>--port</code> option):</li>
