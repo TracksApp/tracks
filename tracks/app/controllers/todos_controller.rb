@@ -249,7 +249,7 @@ class TodosController < ApplicationController
     if tag_collection.empty?
       @todos = []
     else 
-      @todos = tag_collection.find(:all, :conditions => ['taggings.user_id = ?', @user.id])
+      @todos = tag_collection.find(:all, :conditions => ['taggings.user_id = ? and state = ?', @user.id, 'active'])
     end
     
     @count = @todos.size unless @todos.empty?

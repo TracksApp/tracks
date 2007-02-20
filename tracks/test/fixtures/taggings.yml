@@ -20,3 +20,10 @@ foo:
   taggable_id: 2 # Call dinosaur exterminator
   taggable_type: Todo
   user_id: 1
+
+foo:
+  id: 4
+  tag_id: 1
+  taggable_id: 3 # Buy milk - completed
+  taggable_type: Todo
+  user_id: 1
