@@ -15,7 +15,7 @@
         <span class="grey">VISIBLE</span>
       <% end %>
       <a class="delete_context_button" href="<%= formatted_context_path(context, :js) %>" title="delete the context '<%= context.name %>'"><%= image_tag( "blank.png", :title => "Delete context", :class=>"delete_item") %></a>
-      <% apply_behavior "a.delete_context_button:click", :prevent_default => true do |page|
+      <%= apply_behavior "a.delete_context_button:click", :prevent_default => true do |page|
            page << "if (confirm('Are you sure that you want to ' + this.title + '?')) {"
            page << "  new Ajax.Updater(this.up('.list'),"
            page << "                   this.href, {asynchronous:true,"
@@ -23,7 +23,7 @@
            page << "                               onLoading:function(request){ Effect.Fade(this.up('.list'));}}); };"
          end -%>
       <a class="edit_context_button" href="#"><%= image_tag( "blank.png", :title => "Edit context", :class=>"edit_item") %></a>
-      <% apply_behavior 'a.edit_context_button:click', {:prevent_default => true } do |page, element|
+      <%= apply_behavior 'a.edit_context_button:click', :prevent_default => true do |page, element|
            element.up('.context').toggle 
            editform = element.up('.list').down('.edit-form')
            editform.toggle 
@@ -38,13 +38,13 @@
     <table style="table-layout: fixed;" width="450">
       <%= render :partial => 'context_form', :object => context %>
       <tr>
-        <td width="150">&nbsp; <input type="hidden" name="wants_render" value="true" /></td>
+        <td width="150">&nbsp; <input type="hidden" name="wants_render" value="true" /> </td>
         <td width="300"><input type="submit" value="Update" />&nbsp;<a href="#" class="form_reset">Cancel</a></td>
       </tr>
     </table>
     <% end -%>
-    <% apply_behavior ".edit-context-form", make_remote_form(:complete => "Effect.Appear($(this).up('.list'));" ) %>
-    <% apply_behavior "a.form_reset:click", :prevent_default => true do |page, element|
+    <%= apply_behavior ".edit-context-form", make_remote_form(:complete => "Effect.Appear($(this).up('.list'));" ), :external => true %>
+    <%= apply_behavior "a.form_reset:click", :prevent_default => true do |page, element|
          element.up('.list').down('.context').toggle
          element.up('.edit-form').toggle
          element.up('form').reset
