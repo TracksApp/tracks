@@ -15,12 +15,10 @@
         <span class="grey">VISIBLE</span>
       <% end %>
       <a class="delete_context_button" href="<%= formatted_context_path(context, :js) %>" title="delete the context '<%= context.name %>'"><%= image_tag( "blank.png", :title => "Delete context", :class=>"delete_item") %></a>
-      <%= apply_behavior "a.delete_context_button:click", :prevent_default => true do |page|
+      <%= apply_behavior "a.delete_context_button:click", { :prevent_default => true, :external => true} do |page|
            page << "if (confirm('Are you sure that you want to ' + this.title + '?')) {"
-           page << "  new Ajax.Updater(this.up('.list'),"
-           page << "                   this.href, {asynchronous:true,"
-           page << "                               evalScripts:true, method:'delete',"
-           page << "                               onLoading:function(request){ Effect.Fade(this.up('.list'));}}); };"
+           page << "  new Ajax.Request(this.href, {asynchronous:true,"
+           page << "                               evalScripts:true, method:'delete'}); };"
          end -%>
       <a class="edit_context_button" href="#"><%= image_tag( "blank.png", :title => "Edit context", :class=>"edit_item") %></a>
       <%= apply_behavior 'a.edit_context_button:click', :prevent_default => true do |page, element|

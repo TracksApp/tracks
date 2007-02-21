@@ -1,0 +1,5 @@
+page.visual_effect :fade, dom_id(@project, "container"), :duration => 0.5
+page.delay(0.5) do
+ page[dom_id(@project, "container")].remove
+end
+page.notify :notice, "Deleted project '#{@project.name}'", 5.0

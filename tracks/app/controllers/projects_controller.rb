@@ -2,6 +2,7 @@ class ProjectsController < ApplicationController
 
   helper :application, :todos, :notes
   before_filter :init, :except => [:create, :destroy, :order]
+  before_filter :check_user_set_project, :only => [:update, :destroy, :show]
   skip_before_filter :login_required, :only => [:index]
   prepend_before_filter :login_or_feed_token_required, :only => [:index]
   session :off, :only => :index, :if => Proc.new { |req| ['rss','atom','txt'].include?(req.parameters[:format]) }
@@ -30,7 +31,6 @@ class ProjectsController < ApplicationController
   end
 
   def show
-    check_user_set_project
     @page_title = "TRACKS::Project: #{@project.name}"
     @not_done = @project.not_done_todos(:include_project_hidden_todos => true)
     @deferred = @project.deferred_todos
@@ -73,7 +73,6 @@ class ProjectsController < ApplicationController
   # Edit the details of the project
   #
   def update
-    check_user_set_project
     params['project'] ||= {}
     if params['project']['state']
       @project.transition_to(params['project']['state'])
@@ -104,18 +103,14 @@ class ProjectsController < ApplicationController
     end
   end
   
-  # Delete a project
-  #
   def destroy
-    check_user_set_project
-    if @project.destroy
-      render :text => ''
-    else
-      notify :warning, "Couldn't delete project \"#{@project.name}\""
-      redirect_to :action => 'index'
+    @project.destroy
+    respond_to do |format|
+      format.js
+      format.xml { render :text => "Deleted project #{@project.name}" }
     end
   end
-
+  
   # Methods for changing the sort order of the projects in the list
   #
   def order

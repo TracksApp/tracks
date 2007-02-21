@@ -4,6 +4,7 @@ class ContextsController < ApplicationController
 
   before_filter :init, :except => [:create, :destroy, :order]
   before_filter :init_todos, :only => :show
+  before_filter :check_user_set_context, :only => [:update, :destroy]
   skip_before_filter :login_required, :only => [:index]
   prepend_before_filter :login_or_feed_token_required, :only => [:index]
   session :off, :only => :index, :if => Proc.new { |req| ['rss','atom','txt'].include?(req.parameters[:format]) }
@@ -69,7 +70,6 @@ class ContextsController < ApplicationController
   # Edit the details of the context
   #
   def update
-    check_user_set_context
     params['context'] ||= {}
     success_text = if params['field'] == 'name' && params['value']
       params['context']['id'] = params['id'] 
@@ -92,12 +92,10 @@ class ContextsController < ApplicationController
   # If the context contains actions, you'll get a warning dialogue.
   # If you choose to go ahead, any actions in the context will also be deleted.
   def destroy
-    check_user_set_context
-    if @context.destroy
-      render_text ""
-    else
-      notify :warning, "Couldn't delete context \"#{@context.name}\""
-      redirect_to :action => 'index'
+    @context.destroy
+    respond_to do |format|
+      format.js
+      format.xml { render :text => "Deleted context #{@context.name}" }
     end
   end
 
