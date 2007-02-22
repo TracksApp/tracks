@@ -7,7 +7,7 @@ module ApplicationHelper
   def format_date(date)
     if date
       date_format = @user.prefs.date_format
-      formatted_date = @user.prefs.tz.adjust(date).strftime("#{date_format}")
+      formatted_date = date.strftime("#{date_format}")
     else
       formatted_date = ''
     end
@@ -46,8 +46,7 @@ module ApplicationHelper
   end
   
   def days_from_today(date)
-    today = Time.now.utc.to_date
-    @user.prefs.tz.adjust(date).to_date - @user.prefs.tz.adjust(today).to_date
+    date.to_date - user_time.to_date
   end
   
   # Check due date in comparison to today's date
