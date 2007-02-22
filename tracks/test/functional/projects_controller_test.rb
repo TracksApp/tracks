@@ -163,6 +163,16 @@ class ProjectsControllerTest < TodoContainerControllerTestBase
     #puts @response.body
   end
   
+  def test_text_feed_content_for_projects_with_no_actions
+    @request.session['user_id'] = users(:admin_user).id
+    p = projects(:timemachine)
+    p.todos.each { |t| t.destroy }
+    
+    get :index, { :format => "txt", :only_active_with_no_next_actions => true }
+    assert (/^\s*BUILD A WORKING TIME MACHINE\s+0 actions. Project is active.\s*$/.match(@response.body)) 
+    assert !(/[1-9] actions/.match(@response.body)) 
+  end
+  
   def test_text_feed_not_accessible_to_anonymous_user_without_token
     @request.session['user_id'] = nil
     get :index, { :format => "txt" }

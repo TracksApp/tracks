@@ -8,25 +8,15 @@ class ProjectsController < ApplicationController
   session :off, :only => :index, :if => Proc.new { |req| ['rss','atom','txt'].include?(req.parameters[:format]) }
 
   def index
+    if params[:only_active_with_no_next_actions]
+      @projects = @projects.select { |p| p.active? && count_undone_todos(p) == 0 }
+    end
     respond_to do |format|
-      format.html do
-        init_project_hidden_todo_counts
-        @page_title = "TRACKS::List Projects"
-        render
-      end
-      format.xml { render :xml => @projects.to_xml( :except => :user_id )  }
-      format.rss do
-        render_rss_feed_for @projects, :feed => Project.feed_options(@user),
-                                       :item => { :description => lambda { |p| p.summary(count_undone_todos(p)) } }
-      end
-      format.atom do
-        render_atom_feed_for @projects, :feed => Project.feed_options(@user),
-                                        :item => { :description => lambda { |p| p.summary(count_undone_todos(p)) },
-                                                   :author => lambda { |p| nil } }
-      end
-      format.text do
-        render :action => 'index_text', :layout => false, :content_type => Mime::TEXT
-      end
+      format.html  &render_projects_html
+      format.xml   { render :xml => @projects.to_xml( :except => :user_id )  }
+      format.rss   &render_projects_rss_feed
+      format.atom  &render_projects_atom_feed
+      format.text  { render :action => 'index_text', :layout => false, :content_type => Mime::TEXT }
     end
   end
 
@@ -123,6 +113,29 @@ class ProjectsController < ApplicationController
   end
   
   protected
+    
+    def render_projects_html
+      lambda do
+        init_project_hidden_todo_counts
+        @page_title = "TRACKS::List Projects"
+        render
+      end
+    end
+
+    def render_projects_rss_feed
+      lambda do
+        render_rss_feed_for @projects, :feed => Project.feed_options(@user),
+                                       :item => { :description => lambda { |p| p.summary(count_undone_todos_phrase(p)) } }
+      end
+    end
+
+    def render_projects_atom_feed
+      lambda do
+        render_atom_feed_for @projects, :feed => Project.feed_options(@user),
+                                        :item => { :description => lambda { |p| p.summary(count_undone_todos_phrase(p)) },
+                                                   :author => lambda { |p| nil } }
+      end
+    end
     
     def check_user_set_project
       if params["url_friendly_name"]

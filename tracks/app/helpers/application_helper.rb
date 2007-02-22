@@ -112,12 +112,12 @@ module ApplicationHelper
   # The result is count and a string descriptor, correctly pluralised if there are no
   # actions or multiple actions
   #
-  def count_undone_todos(todos_parent, string="actions")
-    @controller.count_undone_todos(todos_parent, string)
+  def count_undone_todos_phrase(todos_parent, string="actions")
+    @controller.count_undone_todos_phrase(todos_parent, string)
   end
 
-  def count_undone_todos_text(todos_parent, string="actions")
-    count_undone_todos(todos_parent, string).gsub("&nbsp;"," ")
+  def count_undone_todos_phrase_text(todos_parent, string="actions")
+    count_undone_todos_phrase(todos_parent, string).gsub("&nbsp;"," ")
   end
   
   def link_to_context(context, descriptor = sanitize(context.name))

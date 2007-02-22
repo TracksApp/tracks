@@ -121,7 +121,7 @@ class TodosControllerTest < Test::Unit::TestCase
     @tagged = tag.find(:all, :conditions => ['taggings.user_id = ?', @user.id]).size
     get :tag, :name => 'foo'
     assert_response :success
-    assert_equal 2, @tagged
+    assert_equal 3, @tagged
   end
   
 

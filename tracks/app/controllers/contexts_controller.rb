@@ -11,26 +11,14 @@ class ContextsController < ApplicationController
 
   def index
     respond_to do |format|
-      format.html do
-        @page_title = "TRACKS::List Contexts"
-        render
-      end
-      format.xml { render :xml => @contexts.to_xml( :except => :user_id ) }
-      format.rss do
-        render_rss_feed_for @contexts, :feed => Context.feed_options(@user),
-                                       :item => { :description => lambda { |c| c.summary(count_undone_todos(c)) } }
-      end
-      format.atom do
-        render_atom_feed_for @contexts, :feed => Context.feed_options(@user),
-                                        :item => { :description => lambda { |c| c.summary(count_undone_todos(c)) },
-                                                   :author => lambda { |c| nil } }
-      end
-      format.text do
-        render :action => 'index_text', :layout => false, :content_type => Mime::TEXT
-      end
+      format.html { @page_title = "TRACKS::List Contexts"; render }
+      format.xml  { render :xml => @contexts.to_xml( :except => :user_id ) }
+      format.rss  &render_contexts_rss_feed
+      format.atom &render_contexts_atom_feed
+      format.text { render :action => 'index_text', :layout => false, :content_type => Mime::TEXT }
     end
   end
-
+  
   def show
     @page_title = "TRACKS::Context: #{@context.name}"
   end
@@ -111,6 +99,21 @@ class ContextsController < ApplicationController
   end
   
   protected
+
+    def render_contexts_rss_feed
+      lambda do
+        render_rss_feed_for @contexts, :feed => Context.feed_options(@user),
+                                       :item => { :description => lambda { |c| c.summary(count_undone_todos_phrase(c)) } }
+      end
+    end
+
+    def render_contexts_atom_feed
+      lambda do
+        render_atom_feed_for @contexts, :feed => Context.feed_options(@user),
+                                        :item => { :description => lambda { |c| c.summary(count_undone_todos_phrase(c)) },
+                                                   :author => lambda { |c| nil } }
+      end
+    end
 
     def check_user_set_context
       if params['url_friendly_name']
