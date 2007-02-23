@@ -1,7 +1,7 @@
 module TodosHelper
 
   require 'users_controller'
-  # Counts the number of uncompleted items in the specified context
+  # Counts the number of incomplete items in the specified context
   #
   def count_items(context)
     count = Todo.find_all("done=0 AND context_id=#{context.id}").length
@@ -91,11 +91,11 @@ module TodosHelper
   def staleness_class(item)
     if item.due || item.completed?
       return ""
-    elsif item.created_at < (@user.prefs.staleness_starts * 3).days.ago.utc
+    elsif item.created_at < user_time - (@user.prefs.staleness_starts * 3).days
       return " stale_l3"
-    elsif item.created_at < (@user.prefs.staleness_starts * 2).days.ago.utc
+    elsif item.created_at < user_time - (@user.prefs.staleness_starts * 2).days
       return " stale_l2"
-    elsif item.created_at < (@user.prefs.staleness_starts).days.ago.utc
+    elsif item.created_at < user_time - (@user.prefs.staleness_starts).days
       return " stale_l1"
     else
       return ""

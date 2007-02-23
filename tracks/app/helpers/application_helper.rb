@@ -15,7 +15,7 @@ module ApplicationHelper
   end
   
   def user_time
-    @user.prefs.tz.adjust(Time.now.utc)
+    @user.time
   end
   
 

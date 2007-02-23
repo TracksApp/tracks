@@ -3,10 +3,34 @@ require 'digest/sha1'
 class User < ActiveRecord::Base
   has_many :contexts,
            :order => 'position ASC',
-           :dependent => :delete_all
+           :dependent => :delete_all do
+             def find_by_params(params)
+               if params['url_friendly_name']
+                 find_by_url_friendly_name(params['url_friendly_name'])
+               elsif params['id'] && params['id'] =~ /^\d+$/
+                 find(params['id'])
+               elsif params['id']
+                 find_by_url_friendly_name(params['id'])
+               elsif params['context']
+                 find_by_url_friendly_name(params['context'])
+               end
+             end
+           end
   has_many :projects,
            :order => 'position ASC',
-           :dependent => :delete_all
+           :dependent => :delete_all do
+              def find_by_params(params)
+                if params['url_friendly_name']
+                  find_by_url_friendly_name(params['url_friendly_name'])
+                elsif params['id'] && params['id'] =~ /^\d+$/
+                  find(params['id'])
+                elsif params['id']
+                  find_by_url_friendly_name(params['id'])
+                elsif params['project']
+                  find_by_url_friendly_name(params['project'])
+                end
+              end
+            end
   has_many :todos,
            :order => 'completed_at DESC, todos.created_at DESC',
            :dependent => :delete_all
@@ -90,6 +114,14 @@ class User < ActiveRecord::Base
 
   def crypt_word
     write_attribute("word", self.class.sha1(login + Time.now.to_i.to_s + rand.to_s))
+  end
+  
+  def time
+    prefs.tz.adjust(Time.now.utc)
+  end
+
+  def date
+    time.to_date
   end
 
 protected

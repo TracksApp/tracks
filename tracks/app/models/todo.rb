@@ -45,7 +45,7 @@ class Todo < ActiveRecord::Base
   validates_presence_of :context
   
   def validate
-    if deferred? && !show_from.blank? && show_from < Time.now.utc.to_date
+    if deferred? && !show_from.blank? && show_from < user.date
       errors.add("Show From", "must be a date in the future.")
     end
   end
@@ -65,7 +65,7 @@ class Todo < ActiveRecord::Base
 
   def show_from=(date)
     activate! if deferred? && date.blank?
-    defer! if active? && !date.blank? && date > Time.now.utc.to_date
+    defer! if active? && !date.blank? && date > user.date
     self[:show_from] = date 
   end
 

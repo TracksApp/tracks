@@ -213,15 +213,15 @@ class TodosController < ApplicationController
   def completed
     @page_title = "TRACKS::Completed tasks"
     @done = @user.completed_todos
-    @done_today = @done.completed_within 1.day.ago.utc
-    @done_this_week = @done.completed_within 1.week.ago.utc
-    @done_this_month = @done.completed_within 4.week.ago.utc
+    @done_today = @done.completed_within user_time - 1.day
+    @done_this_week = @done.completed_within user_time - 1.week
+    @done_this_month = @done.completed_within user_time - 4.week
   end
 
   def completed_archive
     @page_title = "TRACKS::Archived completed tasks"
     @done = @user.completed_todos
-    @done_archive = @done.completed_more_than 28.day.ago.utc
+    @done_archive = @done.completed_more_than user_time - 28.days
   end
   
   def list_deferred

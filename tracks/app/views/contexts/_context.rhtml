@@ -28,7 +28,7 @@
   </h2>
   <div id="c<%= context.id %>items" class="items toggle_target">
     <div id="c<%= context.id %>empty-nd" style="display:<%= @not_done.empty? ? 'block' : 'none'%>;">
-      <div class="message"><p>Currently there are no uncompleted actions in this context</p></div>
+      <div class="message"><p>Currently there are no incomplete actions in this context</p></div>
     </div>
 <%= render :partial => "todos/todo", :collection => @not_done, :locals => { :parent_container_type => "context" } %>
   </div><!-- [end:items] -->

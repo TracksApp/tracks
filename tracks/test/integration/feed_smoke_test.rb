@@ -98,6 +98,7 @@ class FeedSmokeTest < ActionController::IntegrationTest
   def assert_success(url)
     get url
     assert_response :success
+    #puts @response.body
   end
   
 end

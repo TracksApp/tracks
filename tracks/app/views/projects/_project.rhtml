@@ -18,7 +18,7 @@
   <% end -%>
   <div class="items toggle_target">
     <div id="p<%= project.id %>empty-nd" style="display:<%= @not_done.empty? ? 'block' : 'none'%>;">
-      <div class="message"><p>Currently there are no uncompleted actions in this project</p></div>
+      <div class="message"><p>Currently there are no incomplete actions in this project</p></div>
     </div>
     <%= render :partial => "todos/todo", :collection => @not_done, :locals => { :parent_container_type => "project" } %>
   </div><!-- [end:items] -->

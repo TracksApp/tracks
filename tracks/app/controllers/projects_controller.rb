@@ -138,22 +138,8 @@ class ProjectsController < ApplicationController
     end
     
     def check_user_set_project
-      if params["url_friendly_name"]
-        @project = @user.projects.find_by_url_friendly_name(params["url_friendly_name"])
-      elsif params['id'] && params['id'] =~ /^\d+$/
-        @project = @user.projects.find(params["id"])
-      elsif params['id']
-        @project = @user.projects.find_by_url_friendly_name(params["id"])
-      else
-        redirect_to :action => 'index'
-      end
-      if @user == @project.user
-        return @project
-      else
-        @project = nil # Should be nil anyway
-        notify :warning, "Project and session user mis-match: #{@project.user_id} and #{@user.id}!"
-        render :text => ''
-      end
+      @project = @user.projects.find_by_params(params)
+      render :text => 'Project not found', :status => 404 if @project.nil?
     end
     
     def check_user_matches_project_user(id)

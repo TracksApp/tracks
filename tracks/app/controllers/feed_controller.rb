@@ -16,7 +16,7 @@ class FeedController < ApplicationController
     headers["Content-Type"] = "text/xml; charset=utf-8"
   end
 
-  # Builds a plain text page listing uncompleted next actions,
+  # Builds a plain text page listing incomplete next actions,
   # grouped by context (contexts are sorted by position, as on the home page). 
   # Showing notes doesn't make much sense here so they are omitted.
   # Hidden contexts are also hidden in the text view
@@ -26,20 +26,20 @@ class FeedController < ApplicationController
   #
   def text
     if params.key?('context')
-      @contexts = [ @user.contexts.find(params['context']) ]
+      @contexts = [ @user.contexts.find_by_params(params) ]
     else    
       @contexts = @user.contexts.find_all_by_hide(false, "position ASC")
     end
     headers["Content-Type"] = "text/plain; charset=utf-8"
   end
   
-  # Builds an iCal compatible export of uncompleted todos
+  # Builds an iCal compatible export of incomplete todos
   # so that each action forms a VTODO in your iCal calendar.
   # Due dates are supported, and notes are included.
   #
   def ical
     if params.key?('context')
-      @contexts = [ @user.contexts.find(params['context']) ]
+      @contexts = [ @user.contexts.find_by_params(params) ]
     else    
       @contexts = @user.contexts.find_all_by_hide(false, "position ASC")
     end
@@ -69,15 +69,16 @@ protected
   
     if params.key?('limit')
       options[:limit] = limit = params['limit']
-      @description = limit ? "Lists the last #{limit} uncompleted next actions" : "Lists uncompleted next actions"
+      @description = limit ? "Lists the last #{limit} incomplete next actions" : "Lists incomplete next actions"
     end
     @title = "Tracks - Next Actions"
     @description = "Filter: "
   
     if params.key?('due')
       due_within = params['due'].to_i
-      condition_builder.add('todos.due <= ?', due_within.days.from_now.utc)
-      due_within_date_s = @user.prefs.tz.adjust(due_within.days.from_now.utc).strftime("%Y-%m-%d")
+      due_within_when = @user.time + due_within.days
+      condition_builder.add('todos.due <= ?', due_within_when)
+      due_within_date_s = due_within_when.strftime("%Y-%m-%d")
       @title << " due today" if (due_within == 0)
       @title << " due within a week" if (due_within == 6)
       @description << " with a due date #{due_within_date_s} or earlier"
@@ -85,20 +86,20 @@ protected
     
     if params.key?('done')
       done_in_last = params['done'].to_i
-      condition_builder.add('todos.completed_at >= ?', done_in_last.days.ago.utc)
+      condition_builder.add('todos.completed_at >= ?', @user.time - done_in_last.days)
       @title << " actions completed"
       @description << " in the last #{done_in_last.to_s} days"
     end
     
     if params.key?('context')
-      context = @user.contexts.find(params['context'])
+      context = @user.contexts.find_by_params(params)
       condition_builder.add('todos.context_id = ?', context.id)
       @title << " in #{context.name}"
       @description << " in context '#{context.name}'"
     end
     
     if params.key?('project')
-      project = @user.projects.find(params['project'])
+      project = @user.projects.find_by_params(params)
       condition_builder.add('todos.project_id = ?', project.id)
       @title << " for #{project.name}"
       @description << " for project '#{project.name}'"

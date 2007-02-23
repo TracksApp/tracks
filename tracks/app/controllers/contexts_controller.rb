@@ -116,21 +116,9 @@ class ContextsController < ApplicationController
     end
 
     def check_user_set_context
-      if params['url_friendly_name']
-        @context = @user.contexts.find_by_url_friendly_name(params['url_friendly_name'])
-      elsif params['id'] && params['id'] =~ /^\d+$/
-        @context = @user.contexts.find(params['id'])
-      elsif params['id']
-        @context = @user.contexts.find_by_url_friendly_name(params['id'])
-      else
-        redirect_to :action => 'index'
-      end
-      if @context && @user == @context.user
-        return @context
-      else
-        @context = nil # Should be nil anyway.
-        notify :warning, "Item and session user mis-match: #{@context.user_id} and #{@user.id}!"
-        render :text => ''
+      @context = @user.contexts.find_by_params(params)
+      if @context.nil?
+        render :text => "Context not found.", :status => 404
       end
     end
 
