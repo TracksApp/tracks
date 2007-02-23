@@ -10,6 +10,7 @@ class FeedController < ApplicationController
   skip_before_filter :login_required
   before_filter :check_token_against_user_word
   before_filter :prepare_for_feed, :only => [:rss, :text, :ical]
+  before_filter :identify_contexts, :only => [:text, :ical]
   
   # Build an RSS feed
   def rss
@@ -25,11 +26,6 @@ class FeedController < ApplicationController
   # curl [url from "TXT" link on todo/list]
   #
   def text
-    if params.key?('context')
-      @contexts = [ @user.contexts.find_by_params(params) ]
-    else    
-      @contexts = @user.contexts.find_all_by_hide(false, "position ASC")
-    end
     headers["Content-Type"] = "text/plain; charset=utf-8"
   end
   
@@ -38,11 +34,6 @@ class FeedController < ApplicationController
   # Due dates are supported, and notes are included.
   #
   def ical
-    if params.key?('context')
-      @contexts = [ @user.contexts.find_by_params(params) ]
-    else    
-      @contexts = @user.contexts.find_all_by_hide(false, "position ASC")
-    end
     headers["Content-Type"] = "text/calendar"
   end
     
@@ -54,6 +45,14 @@ protected
     unless ( params['token'] == @user.word)
       render :text => "Sorry, you don't have permission to view this page."
       return false
+    end
+  end
+  
+  def identify_contexts
+    if params.key?('context')
+      @contexts = [ @user.contexts.find_by_params(params) ]
+    else    
+      @contexts = @user.contexts.find_all_by_hide(false, "position ASC")
     end
   end
 
