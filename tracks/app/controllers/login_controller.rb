@@ -4,10 +4,11 @@ class LoginController < ApplicationController
   skip_before_filter :set_session_expiration
   skip_before_filter :login_required
   before_filter :get_current_user
-  open_id_consumer if Tracks::Config.auth_schemes.include?('open_id')
+  open_id_consumer if Tracks::Config.openid_enabled?
   
   def login
     @page_title = "TRACKS::Login"
+    @openid_url = cookies[:openid_url] if Tracks::Config.openid_enabled?
     case request.method
       when :post
         if @user = User.authenticate(params['user_login'], params['user_password'])
@@ -37,12 +38,13 @@ class LoginController < ApplicationController
     # Let the user know that the URL is unusable.
     case open_id_response.status
       when OpenID::SUCCESS
-        openid_url = params[:openid_url]
+        session['openid_url'] = params[:openid_url]
+        session['user_noexpiry'] = params[:user_noexpiry]
         # The URL was a valid identity URL. Now we just need to send a redirect
         # to the server using the redirect_url the library created for us.
 
         # redirect to the server
-        redirect_to open_id_response.redirect_url((request.protocol + request.host_with_port + "/"), url_for(:action => 'complete', :openid_url => openid_url))
+        redirect_to open_id_response.redirect_url((request.protocol + request.host_with_port + "/"), url_for(:action => 'complete'))
       else
         notify :warning, "Unable to find openid server for <q>#{openid_url}</q>"
         redirect_to :action => 'login'
@@ -50,7 +52,7 @@ class LoginController < ApplicationController
   end
 
   def complete
-    openid_url = params[:openid_url]
+    openid_url = session['openid_url']
     if openid_url.blank?
       notify :error, "expected an openid_url"
     end
@@ -73,8 +75,12 @@ class LoginController < ApplicationController
         # the verification.
         @user = User.find_by_open_id_url(openid_url)
         unless (@user.nil?)
-          notify :notice, "You have successfully verified #{openid_url} as your identity."
           session['user_id'] = @user.id
+          session['noexpiry'] = session['user_noexpiry']
+          msg = (should_expire_sessions?) ? "will expire after 1 hour of inactivity." : "will not expire." 
+          notify :notice, "You have successfully verified #{openid_url} as your identity. Login successful: session #{msg}"
+          cookies[:tracks_login] = { :value => @user.login, :expires => Time.now + 1.year }
+          cookies[:openid_url] = { :value => openid_url, :expires => Time.now + 1.year }
           redirect_back_or_home
         else
           notify :warning, "You have successfully verified #{openid_url} as your identity, but you do not have a Tracks account. Please ask your administrator to sign you up."
@@ -119,5 +125,5 @@ class LoginController < ApplicationController
   def should_expire_sessions?
     session['noexpiry'] != "on"
   end
-  
+    
 end

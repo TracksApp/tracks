@@ -10,6 +10,11 @@ module Tracks
       AUTHENTICATION_SCHEMES
     end
     
+    def self.openid_enabled?
+      auth_schemes.include?('open_id')
+    end
+    
+    
   end
   
 end

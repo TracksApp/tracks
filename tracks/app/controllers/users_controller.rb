@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
 
-  if Tracks::Config.auth_schemes.include?('open_id')
+  if Tracks::Config.openid_enabled?
      open_id_consumer
      before_filter  :begin_open_id_auth,    :only => :update_auth_type
   end
@@ -151,15 +151,15 @@ class UsersController < ApplicationController
   end
   
   def update_auth_type
-    if (params[:user][:auth_type] == 'open_id')
+    if (params[:user][:auth_type] == 'open_id') && Tracks::Config.openid_enabled?
       case open_id_response.status
         when OpenID::SUCCESS
           # The URL was a valid identity URL. Now we just need to send a redirect
           # to the server using the redirect_url the library created for us.
-          openid_url = params[:openid_url]
+          session['openid_url'] = params[:openid_url]
 
           # redirect to the server
-          redirect_to open_id_response.redirect_url((request.protocol + request.host_with_port + "/"), url_for(:action => 'complete', :openid_url => openid_url))
+          redirect_to open_id_response.redirect_url((request.protocol + request.host_with_port + "/"), url_for(:action => 'complete'))
         else
           notify :warning, "Unable to find openid server for <q>#{openid_url}</q>"
           redirect_to :action => 'change_auth_type'
@@ -177,7 +177,11 @@ class UsersController < ApplicationController
   end
   
   def complete
-    openid_url = params[:openid_url]
+    return unless Tracks::Config.openid_enabled?
+    openid_url = session['openid_url']
+    if openid_url.blank?
+      notify :error, "expected an openid_url"
+    end
     case open_id_response.status
       when OpenID::FAILURE
         # In the case of failure, if info is non-nil, it is the

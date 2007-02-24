@@ -69,8 +69,8 @@ module LoginSystem
 
     # store current location so that we can 
     # come back after the user logged in
-    store_location
-  
+    store_location unless params[:format] == 'js'
+    
     # call overwriteable reaction to unauthorized access
     access_denied
     return false 
@@ -163,7 +163,6 @@ module LoginSystem
       response.headers["Status"] = "Unauthorized"
       response.headers["WWW-Authenticate"] = "Basic realm=\"'Tracks Login Required'\""
       render :text => "401 Unauthorized: You are not authorized to interact with Tracks.", :status => 401
-  end
-  
+  end  
 
 end
