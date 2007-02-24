@@ -14,9 +14,9 @@ class ProjectsController < ApplicationController
     respond_to do |format|
       format.html  &render_projects_html
       format.xml   { render :xml => @projects.to_xml( :except => :user_id )  }
-      format.rss   &render_projects_rss_feed
-      format.atom  &render_projects_atom_feed
-      format.text  { render :action => 'index_text', :layout => false, :content_type => Mime::TEXT }
+      format.rss   &render_rss_feed
+      format.atom  &render_atom_feed
+      format.text  &render_text_feed
     end
   end
 
@@ -122,21 +122,28 @@ class ProjectsController < ApplicationController
       end
     end
 
-    def render_projects_rss_feed
+    def render_rss_feed
       lambda do
         render_rss_feed_for @projects, :feed => Project.feed_options(@user),
                                        :item => { :description => lambda { |p| p.summary(count_undone_todos_phrase(p)) } }
       end
     end
 
-    def render_projects_atom_feed
+    def render_atom_feed
       lambda do
         render_atom_feed_for @projects, :feed => Project.feed_options(@user),
                                         :item => { :description => lambda { |p| p.summary(count_undone_todos_phrase(p)) },
                                                    :author => lambda { |p| nil } }
       end
     end
-    
+
+    def render_text_feed
+      lambda do
+        init_project_hidden_todo_counts(['project'])
+        render :action => 'index_text', :layout => false, :content_type => Mime::TEXT
+      end
+    end
+        
     def check_user_set_project
       @project = @user.projects.find_by_params(params)
       render :text => 'Project not found', :status => 404 if @project.nil?
