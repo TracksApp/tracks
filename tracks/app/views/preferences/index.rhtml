@@ -5,7 +5,8 @@
   <ul id="prefs">
     <li>First name: <span class="highlight"><%= @user.first_name %></span></li>
     <li>Last name: <span class="highlight"><%= @user.last_name %></span></li>
-    <li>Date format: <span class="highlight"><%= @prefs.date_format %></span> Your current date: <%= format_date Time.now.utc %></li>
+    <li>Date format: <span class="highlight"><%= @prefs.date_format %></span> Your current date: <%= format_date(user_time) %></li>
+    <li>Title date format: <span class="highlight"><%= @prefs.title_date_format %></span> Your current title date: <%= user_time.strftime(@prefs.title_date_format) %></li>
     <li>Time zone: <span class="highlight"><%= @prefs.tz %></span> Your current time: <%= user_time.strftime('%I:%M %p') %></li>
     <li>Week starts on: <span class="highlight"><%= Preference.day_number_to_name_map[@prefs.week_starts] %></span></li>
     <li>Show the last <span class="highlight"><%= @prefs.show_number_completed %></span> completed items on the home page</li>

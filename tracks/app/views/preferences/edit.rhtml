@@ -4,6 +4,7 @@
     <ul>
       <li><strong>first name and last name:</strong> Used for display purposes if set</li>
       <li><strong>date format:</strong> the format in which you'd like dates to be shown. For example, for the date 31st January 2006, %d/%m/%Y will show 31/01/2006, %b-%e-%y will show Jan-31-06. See the <a href="http://uk2.php.net/strftime" title="PHP strftime manual">strftime manual</a> for more formatting options for the date.</li>
+      <li><strong>title date format:</strong> same as above, but for the big date at the top of each page.</li>
       <li><strong>time zone:</strong> your local time zone</li>
       <li><strong>week starts:</strong> day of the week shown as the start of the week on the popup calendar.</li>
       <li><strong>due style:</strong> style in which due dates are shown, e.g.  "Due in 3 days",  "Due on Wednesday"</li>
@@ -49,6 +50,7 @@
 	    end
 	  %>
 	  <%= row_with_text_field('date_format') %>
+	  <%= row_with_text_field('title_date_format') %>
     <%= table_row('time_zone', false) { time_zone_select('prefs','time_zone') } %>
 
 	  <%= row_with_select_field("week_starts", Preference.day_number_to_name_map.invert.sort{|a,b| a[1]<=>b[1]})%>
