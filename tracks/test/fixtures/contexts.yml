@@ -57,8 +57,8 @@ library:
   position: 6
   hide: false
   user_id: 1
-  created_at: nil
-  updated_at: nil
+  created_at: <%= today %>
+  updated_at: <%= today %>
 
 freetime:
   id: 7
