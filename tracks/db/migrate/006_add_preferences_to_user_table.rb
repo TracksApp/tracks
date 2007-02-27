@@ -1,4 +1,7 @@
 class AddPreferencesToUserTable < ActiveRecord::Migration
+  
+  class USer < ActiveRecord::Base; end
+  
   def self.up
     add_column :users, :preferences, :text
     @users = User.find(:all)

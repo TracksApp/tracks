@@ -1,4 +1,9 @@
 class AddUserId < ActiveRecord::Migration
+  
+  class Project < ActiveRecord::Base; end
+  class Context < ActiveRecord::Base; end
+  class Todo < ActiveRecord::Base; end
+  
   def self.up
     add_column :contexts, :user_id, :integer, :default => 1
     add_column :projects, :user_id, :integer, :default => 1 
