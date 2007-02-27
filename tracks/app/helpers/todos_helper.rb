@@ -173,7 +173,7 @@ module TodosHelper
   end
   
   def project_names_for_autocomplete
-     array_or_string_for_javascript( ['None'] + @projects.collect{|p| escape_javascript(p.name) } )
+     array_or_string_for_javascript( ['None'] + @projects.select{ |p| p.active? }.collect{|p| escape_javascript(p.name) } )
   end
   
   def context_names_for_autocomplete
