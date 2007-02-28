@@ -30,6 +30,13 @@ class User < ActiveRecord::Base
                   find_by_url_friendly_name(params['project'])
                 end
               end
+              def update_positions(project_ids)
+                project_ids.each_with_index do |id, position|
+                  project = self.detect { |p| p.id == id.to_i }
+                  raise "Project id #{id} not associated with user id #{@user.id}." if project.nil?
+                  project.update_attribute(:position, position + 1)
+                end
+              end
             end
   has_many :todos,
            :order => 'completed_at DESC, todos.created_at DESC',
@@ -110,6 +117,7 @@ class User < ActiveRecord::Base
   def change_password(pass,pass_confirm)
     self.password = pass
     self.password_confirmation = pass_confirm
+    save!
   end
 
   def crypt_word

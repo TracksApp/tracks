@@ -65,6 +65,8 @@ class ProjectsController < ApplicationController
   def update
     params['project'] ||= {}
     if params['project']['state']
+      @state_changed = @project.state != params['project']['state']
+      logger.info "@state_changed: #{@project.state} == #{params['project']['state']} != #{@state_changed}"
       @project.transition_to(params['project']['state'])
       params['project'].delete('state')
     end
@@ -81,6 +83,9 @@ class ProjectsController < ApplicationController
         else
           @project_not_done_counts[@project.id] = @project.reload().not_done_todo_count(:include_project_hidden_todos => true)
         end
+        @active_projects_count = @user.projects.count(:conditions => "state = 'active'")
+        @hidden_projects_count = @user.projects.count(:conditions => "state = 'hidden'")
+        @completed_projects_count = @user.projects.count(:conditions => "state = 'completed'")
         render
       elsif boolean_param('update_status')
         render :action => 'update_status'
@@ -101,15 +106,13 @@ class ProjectsController < ApplicationController
     end
   end
   
-  # Methods for changing the sort order of the projects in the list
-  #
   def order
-    params["list-projects"].each_with_index do |id, position|
-      if check_user_matches_project_user(id)
-        Project.update(id, :position => position + 1)
-      end
-    end
+    project_ids = params["list-active-projects"] || params["list-hidden-projects"] || params["list-completed-projects"]    
+    projects = @user.projects.update_positions( project_ids )
     render :nothing => true
+  rescue
+    notify :error, $!
+    redirect_to :action => 'index'
   end
   
   protected
@@ -118,6 +121,9 @@ class ProjectsController < ApplicationController
       lambda do
         init_project_hidden_todo_counts
         @page_title = "TRACKS::List Projects"
+        @active_projects = @projects.select{ |p| p.active? }
+        @hidden_projects = @projects.select{ |p| p.hidden? }
+        @completed_projects = @projects.select{ |p| p.completed? }
         render
       end
     end
@@ -148,18 +154,7 @@ class ProjectsController < ApplicationController
       @project = @user.projects.find_by_params(params)
       render :text => 'Project not found', :status => 404 if @project.nil?
     end
-    
-    def check_user_matches_project_user(id)
-      @project = Project.find_by_id_and_user_id(id, @user.id)
-      if @user == @project.user
-        return @project
-      else
-        @project = nil
-        notify :warning, "Project and session user mis-match: #{@project.user_id} and #{@user.id}!"
-        render :text => ''
-      end
-    end
-    
+        
     def check_user_return_item
       item = Todo.find( params['id'] )
       if @user == item.user

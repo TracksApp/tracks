@@ -138,12 +138,12 @@ class UsersController < ApplicationController
   end
   
   def update_password
-    if do_change_password_for(@user)
-      redirect_to :controller => 'preferences'
-    else
-      redirect_to :action => 'change_password'
-      notify :warning, "There was a problem saving the password. Please retry."
-    end
+    @user.change_password(params[:updateuser][:password], params[:updateuser][:password_confirmation])
+    notify :notice, "Password updated."
+    redirect_to :controller => 'preferences'
+  rescue Exception => error
+    notify :error, error.message
+    redirect_to :action => 'change_password'
   end
 
   def change_auth_type
@@ -224,19 +224,6 @@ class UsersController < ApplicationController
     redirect_to :controller => 'preferences', :action => 'index'
   end
   
-  protected
-  
-  def do_change_password_for(user)
-    user.change_password(params[:updateuser][:password], params[:updateuser][:password_confirmation])
-    if user.save
-      notify :notice, "Password updated."
-      return true
-    else
-      notify :error, 'There was a problem saving the password. Please retry.'
-      return false
-    end
-  end
-
   private
     
   def get_new_user

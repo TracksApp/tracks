@@ -58,7 +58,7 @@ class UsersControllerTest < Test::Unit::TestCase
     assert_redirected_to :controller => 'preferences'
     @updated_user = User.find(users(:admin_user).id)
     assert_equal @updated_user.password, Digest::SHA1.hexdigest("#{Tracks::Config.salt}--newpassword--")
-    assert_equal flash[:notice], "Password updated."
+    assert_equal "Password updated.", flash[:notice]
   end
   
   def test_update_password_no_confirmation
@@ -68,7 +68,7 @@ class UsersControllerTest < Test::Unit::TestCase
     post :update_password, :updateuser => {:password => 'newpassword', :password_confirmation => 'wrong'}
     assert_redirected_to :controller => 'users', :action => 'change_password'
     assert users(:admin_user).save, false
-    assert_equal flash[:warning], 'There was a problem saving the password. Please retry.'
+    assert_equal 'Validation failed: Password doesn\'t match confirmation', flash[:error]
   end
   
   def test_update_password_validation_errors
@@ -81,7 +81,7 @@ class UsersControllerTest < Test::Unit::TestCase
     # For some reason, no errors are being raised now.
     #assert_equal 1, users(:admin_user).errors.count
     #assert_equal users(:admin_user).errors.on(:password), "is too short (min is 5 characters)"
-    assert_equal flash[:warning], 'There was a problem saving the password. Please retry.'
+    assert_equal 'Validation failed: Password is too short (minimum is 5 characters)', flash[:error]
   end
   
   # ============================================

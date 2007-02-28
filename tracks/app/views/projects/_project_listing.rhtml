@@ -1,6 +1,6 @@
 <%  project = project_listing %>
 <div id="<%= dom_id(project, "container") %>" class="list">
-  <div id="<%= dom_id(project) %>" class="project even_row" style="display:'';">
+  <div id="<%= dom_id(project) %>" class="project sortable_row" style="display:'';">
     <div class="position">
       <span class="handle">DRAG</span>
     </div>  
@@ -16,7 +16,7 @@
            page << "                               evalScripts:true, method:'delete'}); };"
          end -%>
          <a class="edit_project_button" href="#"><%= image_tag( "blank.png", :title => "Edit project", :class=>"edit_item") %></a>
-         <%= apply_behavior 'a.edit_project_button:click', :prevent_default => true do |page, element|
+         <%= apply_behavior 'a.edit_project_button:click', {:prevent_default => true, :external => true} do |page, element|
               element.up('.project').toggle 
               editform = element.up('.list').down('.edit-form')
               editform.toggle 

@@ -9,7 +9,7 @@ class Project < ActiveRecord::Base
   validates_does_not_contain :name, :string => '/', :message => "cannot contain the slash ('/') character"
   validates_does_not_contain :name, :string => ',', :message => "cannot contain the comma (',') character"
 
-  acts_as_list :scope => :user
+  acts_as_list :scope => 'user_id = #{user_id} AND state = \'#{state}\''
   acts_as_state_machine :initial => :active, :column => 'state'
   extend NamePartFinder
   include Tracks::TodoList

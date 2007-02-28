@@ -191,7 +191,7 @@ div#input_box {
       margin: 0% 5% 0% 60%;
       padding: 0px 15px 0px 0px;
       }
-      
+
 #input_box h2 {
       color: #999;
       
@@ -472,17 +472,12 @@ li {
 #sidebar li {
       padding: auto;
       }
-.even_row {
+.sortable_row {
       background: #fff;
       _background: transparent;
-      padding: 5px 5px 5px 10px;
+      padding: 4px 4px 4px 8px;
       margin: 2px 2px;
       border: 1px solid #ccc;
-      }
-
-.odd_row {
-      background: #EDF3FE;
-      padding: 5px 5px 5px 10px;
       }
 
 .edit-form {
@@ -526,7 +521,7 @@ div.buttons, div.buttons a, div.buttons a:hover {
     background-color: transparent;
     }
 
-div#list-projects, div#list-contexts {
+div#list-active-projects, div#list-hidden-projects, div#list-completed-projects, div#list-contexts {
     border: 1px solid #999;
     }
     

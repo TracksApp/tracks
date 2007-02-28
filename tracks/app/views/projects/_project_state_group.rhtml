@@ -1,0 +1,7 @@
+<div class="project-state-group">
+  <h2 <%= " style=\"display:none\"" if project_state_group.empty? %>><span id="<%= state %>-projects-count" class="badge"><%= project_state_group.length %></span><%= state.titlecase %> Projects</h2>
+  <div id="list-<%= state %>-projects">
+    <%= render :partial => 'project_listing', :collection => project_state_group %>
+  </div>
+  <%= sortable_element "list-#{state}-projects", get_listing_sortable_options("list-#{state}-projects") %>
+</div>

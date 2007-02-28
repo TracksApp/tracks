@@ -1,2 +1,12 @@
-page.replace_html dom_id(@project, 'container'), :partial => 'project_listing', :object => @project
-page.sortable "list-projects", get_listing_sortable_options
+status_message = 'Project saved'
+page.notify :notice, status_message, 5.0
+if @state_changed
+  page[dom_id(@project, 'container')].remove
+  page.insert_html :bottom, "list-#{@project.state}-projects", :partial => 'project_listing', :object => @project
+else
+  page.replace_html dom_id(@project, 'container'), :partial => 'project_listing', :object => @project
+end
+page.sortable "list-#{@project.state}-projects", get_listing_sortable_options("list-#{@project.state}-projects")
+page.replace_html "active-projects-count", @active_projects_count
+page.replace_html "hidden-projects-count", @hidden_projects_count
+page.replace_html "completed-projects-count", @completed_projects_count

@@ -143,5 +143,13 @@ class UserTest < Test::Unit::TestCase
     assert_equal @admin_user.login, @admin_user.to_param
   end
   
+  def test_change_password
+    assert_not_nil User.authenticate(@admin_user.login, "abracadabra")
+    @admin_user.change_password("foobar", "foobar")
+    @admin_user.reload
+    assert_nil User.authenticate(@admin_user.login, "abracadabra")
+    assert_not_nil User.authenticate(@admin_user.login, "foobar")
+  end
+  
 
 end

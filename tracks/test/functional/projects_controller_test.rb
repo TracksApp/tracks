@@ -38,8 +38,8 @@ class ProjectsControllerTest < TodoContainerControllerTestBase
 
   def test_create_project_with_ajax_success_rjs
     ajax_create 'My New Project'
-    assert_rjs :insert_html, :bottom, "list-projects"
-    assert_rjs :sortable, 'list-projects', { :tag => 'div', :handle => 'handle', :complete => visual_effect(:highlight, 'list-projects'), :url => order_projects_path }
+    assert_rjs :insert_html, :bottom, "list-active-projects"
+    assert_rjs :sortable, 'list-active-projects', { :tag => 'div', :handle => 'handle', :complete => visual_effect(:highlight, 'list-active-projects'), :url => order_projects_path }
     # not yet sure how to write the following properly...
     assert_rjs :call, "Form.reset", "project-form"
     assert_rjs :call, "Form.focusFirstElement", "project-form"

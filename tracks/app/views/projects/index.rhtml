@@ -1,17 +1,18 @@
 <div id="display_box">
-  <div id="list-projects">
-    <%= render :partial => 'project_listing', :collection => @projects %>
-  </div>
-  <%= sortable_element 'list-projects', get_listing_sortable_options %>
+  <%= render :partial => 'project_state_group', :object => @active_projects, :locals => { :state => 'active'} %>
+  <%= render :partial => 'project_state_group', :object => @hidden_projects, :locals => { :state => 'hidden'} %>
+  <%= render :partial => 'project_state_group', :object => @completed_projects, :locals => { :state => 'completed'} %>
 </div>
 
 <div id="input_box">
-  <a href="#" onClick="Element.toggle('project_new'); Form.focusFirstElement('project-form');return false" accesskey="n" title="Create a new project">Create new project &#187;</a>
+  <%= link_to_function("Create a new project &#187;",
+                       "Element.toggle('project_new');Form.focusFirstElement('project-form');",
+                       {:title => "Add a next action", :accesskey => "n"}) %>
 
   <div id="project_new" class="project_new" style="display:none">
     <% form_remote_tag :url => projects_path, :method => :post,
                        :html=> { :id=>'project-form', :name=>'project', :class => 'inline-form' } do -%>
-  
+
       <div id="status"><%= error_messages_for('project') %></div>
 
       <label for="project_name">Name:</label><br />
