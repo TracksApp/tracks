@@ -1,0 +1,6 @@
+kibbles:
+  the_petfood_primary_key: 1
+  name: Kibbles
+bits:
+  the_petfood_primary_key: 2
+  name: Bits
