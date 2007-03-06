@@ -18,9 +18,8 @@ class ProjectsControllerTest < TodoContainerControllerTestBase
   end
   
   def test_show_exposes_deferred_todos
-    @request.session['user_id'] = users(:admin_user).id
     p = projects(:timemachine)
-    get :show, :id => p.to_param
+    show p
     assert_not_nil assigns['deferred']
     assert_equal 1, assigns['deferred'].size
 
@@ -30,6 +29,16 @@ class ProjectsControllerTest < TodoContainerControllerTestBase
     
     get :show, :id => p.to_param
     assert_equal 2, assigns['deferred'].size
+  end
+
+  def test_show_exposes_next_project_in_same_state
+    show projects(:timemachine)
+    assert_equal(projects(:moremoney), assigns['next_project'])
+  end
+
+  def test_show_exposes_previous_project_in_same_state
+    show projects(:moremoney)
+    assert_equal(projects(:timemachine), assigns['previous_project'])
   end
 
   def test_create_project_via_ajax_increments_number_of_projects
@@ -189,6 +198,12 @@ class ProjectsControllerTest < TodoContainerControllerTestBase
     @request.session['user_id'] = nil
     get :index, { :format => "txt", :token => users(:admin_user).word }
     assert_response :ok
+  end
+
+  private
+  def show(project)
+    @request.session['user_id'] = project.user_id
+    get :show, :id => project.to_param
   end
   
 end

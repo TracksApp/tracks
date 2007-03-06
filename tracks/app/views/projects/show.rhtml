@@ -1,4 +1,7 @@
 <div id="display_box">
+  <div id="project-next-prev">
+    <%= project_next_prev %>
+  </div>
 
 <%= render :partial => "projects/project", :locals => { :project => @project, :collapsible => false } %>
 <%= render :partial => "todos/deferred", :locals => { :deferred => @deferred, :collapsible => false, :append_descriptor => "in this project" } %>

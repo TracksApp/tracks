@@ -548,6 +548,9 @@ div.project_description {
        shadowed text */
     /* text-shadow: rgba(0,0,0,.4) 0px 2px 5px; */
     }
+#project-next-prev {
+  text-align:right;
+}
     
 /* Form elements */
 form {

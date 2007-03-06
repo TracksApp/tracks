@@ -26,6 +26,8 @@ class ProjectsController < ApplicationController
     @deferred = @project.deferred_todos
     @done = @project.done_todos
     @count = @not_done.size
+    @next_project = @user.projects.next_from(@project)
+    @previous_project = @user.projects.previous_from(@project)
   end
 
   # Example XML usage: curl -H 'Accept: application/xml' -H 'Content-Type: application/xml'

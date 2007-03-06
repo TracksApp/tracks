@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class UserTest < Test::Unit::TestCase
-  fixtures :users, :preferences
+  fixtures :users, :preferences, :projects, :todos
 
   def setup
     assert_equal "test", ENV['RAILS_ENV']
@@ -149,6 +149,30 @@ class UserTest < Test::Unit::TestCase
     @admin_user.reload
     assert_nil User.authenticate(@admin_user.login, "abracadabra")
     assert_not_nil User.authenticate(@admin_user.login, "foobar")
+  end
+
+  def test_projects_next_project
+      moremoney = projects(:moremoney)
+      next_project = @admin_user.projects.next_from(moremoney)
+      assert_equal projects(:gardenclean), next_project
+  end
+
+  def test_projects_previous_project
+      moremoney = projects(:moremoney)
+      previous_project = @admin_user.projects.previous_from(moremoney)
+      assert_equal projects(:timemachine), previous_project
+  end
+
+  def test_projects_next_project_nil
+      gardenclean = projects(:gardenclean)
+      next_project = @admin_user.projects.next_from(gardenclean)
+      assert_nil next_project
+  end
+
+  def test_projects_previous_project_nil
+      timemachine = projects(:timemachine)
+      previous_project = @admin_user.projects.previous_from(timemachine)
+      assert_nil previous_project
   end
   
 

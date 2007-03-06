@@ -37,6 +37,21 @@ class User < ActiveRecord::Base
                   project.update_attribute(:position, position + 1)
                 end
               end
+              def projects_in_state_by_position(state)
+                  self.sort{ |a,b| a.position <=> b.position }.select{ |p| p.state == state }
+              end
+              def next_from(project)
+                self.offset_from(project, 1)
+              end
+              def previous_from(project)
+                self.offset_from(project, -1)
+              end
+              def offset_from(project, offset)
+                projects = self.projects_in_state_by_position(project.state)
+                position = projects.index(project)
+                return nil if position == 0 && offset < 0
+                projects.at( position + offset)
+              end
             end
   has_many :todos,
            :order => 'completed_at DESC, todos.created_at DESC',
