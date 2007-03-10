@@ -48,6 +48,7 @@ class ProjectsController < ApplicationController
     end
     @saved = @project.save
     @project_not_done_counts = { @project.id => 0 }
+    @active_projects_count = @user.projects.count(:conditions => "state = 'active'")
     respond_to do |wants|
       wants.js
       wants.xml do
@@ -102,6 +103,9 @@ class ProjectsController < ApplicationController
   
   def destroy
     @project.destroy
+    @active_projects_count = @user.projects.count(:conditions => "state = 'active'")
+    @hidden_projects_count = @user.projects.count(:conditions => "state = 'hidden'")
+    @completed_projects_count = @user.projects.count(:conditions => "state = 'completed'")
     respond_to do |format|
       format.js
       format.xml { render :text => "Deleted project #{@project.name}" }

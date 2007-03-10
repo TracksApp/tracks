@@ -8,6 +8,14 @@ module ProjectsHelper
       :url => order_projects_path
     }
   end
+  
+  def set_element_visible(id,test)
+    if (test)
+        page.show id
+     else
+        page.hide id
+     end
+  end
 
   def project_next_prev
     html = ''
