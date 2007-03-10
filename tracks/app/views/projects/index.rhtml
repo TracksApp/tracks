@@ -25,6 +25,8 @@
 
       <label for="project_description">Description (optional):</label><br />
       <%= text_area 'project', 'description', "cols" => 30, "rows" => 4  %><br />
+      
+      <%= check_box_tag 'go_to_project' %><label for="go_to_project">Go to the project page</label><br /> 
 
       <input type="submit" value="Add" />
 

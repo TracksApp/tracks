@@ -53,6 +53,13 @@ class ProjectsControllerTest < TodoContainerControllerTestBase
     assert_rjs :call, "Form.reset", "project-form"
     assert_rjs :call, "Form.focusFirstElement", "project-form"
   end
+  
+  def test_create_project_and_go_to_project_page
+    num_projects = Project.count
+    xhr :post, :create, { :project => {:name => 'Immediate Project Planning Required'}, :go_to_project => 1}
+    assert_js_redirected_to '/projects/Immediate_Project_Planning_Required'
+    assert_equal num_projects + 1, Project.count
+  end
 
   def test_create_with_slash_in_name_does_not_increment_number_of_projects
     assert_ajax_create_does_not_increment_count 'foo/bar'

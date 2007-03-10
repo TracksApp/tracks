@@ -44,6 +44,28 @@ class Test::Unit::TestCase
     1.week.from_now.utc.to_date
   end
   
+  # Courtesy of http://habtm.com/articles/2006/02/20/assert-yourself-man-redirecting-with-rjs
+  def assert_js_redirected_to(options={}, message=nil)
+   clean_backtrace do
+     assert_response(:success, message)
+     assert_equal 'text/javascript; charset=utf-8', @response.headers['Content-Type'], 'Response should be Javascript content-type';
+     js_regexp = %r{(\w+://)?.*?(/|$|\\\?)(.*)}
+     url_regexp = %r{^window\.location\.href [=] ['"]#{js_regexp}['"][;]$}
+     redirected_to = @response.body.match(url_regexp)
+     assert_not_nil(redirected_to, message)
+     redirected_to = redirected_to[3]
+     msg = build_message(message, "expected a JS redirect to <?>, found one to <?>", options, redirected_to)
+
+     if options.is_a?(String)
+       assert_equal(options.gsub(/^\//, ''), redirected_to, message)
+     else
+       msg = build_message(message, "response is not a redirection to all of the options supplied (redirection is <?>)", redirected_to)
+       assert_equal(@controller.url_for(options).match(js_regexp)[3], redirected_to, msg)
+     end
+   end
+  end
+  
+  
 end
 
 class ActionController::IntegrationTest
