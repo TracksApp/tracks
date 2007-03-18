@@ -6,7 +6,7 @@ require 'todos_controller'
 # Re-raise errors caught by the controller.
 class ProjectsController; def rescue_action(e) raise e end; end
 class ContextsController; def rescue_action(e) raise e end; end
-class FeedController; def rescue_action(e) raise e end; end
+class TodosController; def rescue_action(e) raise e end; end
 
 class FeedSmokeTest < ActionController::IntegrationTest
   fixtures :users, :preferences, :projects, :contexts, :todos, :notes
