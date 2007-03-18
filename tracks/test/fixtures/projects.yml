@@ -2,7 +2,7 @@
 <% 
 
 def today 
-  Time.now.utc.to_s(:db) 
+  Time.now.utc.to_date.to_time.to_s(:db) 
 end
 
 %>

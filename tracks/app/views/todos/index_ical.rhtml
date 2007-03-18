@@ -1,0 +1,25 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//rousette.org.uk//Tracks 1.04//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VTIMEZONE
+TZID:<%= ENV['TZ'] || 'GMT' %>
+LAST-MODIFIED:<%= Time.now.strftime("%Y%m%dT%H%M%SZ") %>
+TZNAME:<%= ENV['TZ'] %>
+END:VTIMEZONE
+<% for @todo in @todos -%>
+BEGIN:VTODO
+DTSTAMP:<%= @todo.created_at.strftime("%Y%m%dT%H%M%SZ") %>
+DTSTART;VALUE=DATE:<%= @todo.created_at.strftime("%Y%m%d") %>
+SUMMARY:<%= @todo.description %>
+UID:<%= todo_url(@todo) %>
+<% if @todo.notes? -%>
+DESCRIPTION:<%= format_ical_notes(@todo.notes) %>
+<% end -%>
+<% if @todo.due -%>
+DUE;VALUE=DATE:<%= @todo.due.strftime("%Y%m%d") %>
+<% end -%>
+END:VTODO
+<% end -%>
+END:VCALENDAR

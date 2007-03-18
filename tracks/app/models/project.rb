@@ -40,50 +40,34 @@ class Project < ActiveRecord::Base
   def self.feed_options(user)
     {
       :title => 'Tracks Projects',
-      :description => "Lists all the projects for #{user.display_name}."
+      :description => "Lists all the projects for #{user.display_name}"
     }
   end
   
   def to_param
     url_friendly_name
   end
-  
-  def description_present?
-    attribute_present?("description")
-  end
-  
-  def linkurl_present?
-    attribute_present?("linkurl")
-  end
-  
-  def title
-    name
-  end
-    
-  def summary(undone_todo_count)
-    project_description = ''
-    project_description += sanitize(markdown( description )) if description_present?
-	 	project_description += "<p>#{undone_todo_count}. "
-	 	project_description += "Project is #{state}. "
-	 	project_description += "<a href=\"#{linkurl}\">#{linkurl}</a>" if linkurl_present?
-	 	project_description += "</p>"
-	 	project_description
-  end
     
   def hide_todos
     todos.each do |t|
-      t.hide! unless t.completed? || t.deferred?
-      t.save
+      unless t.completed? || t.deferred?
+        t.hide!
+        t.save
+      end
     end
   end
       
   def unhide_todos
     todos.each do |t|
-      t.unhide! if t.project_hidden?
-      t.save
+      if t.project_hidden?
+        t.unhide!
+        t.save
+      end
     end
   end
-  
+
+  # would prefer to call this method state=(), but that causes an endless loop
+  # as a result of acts_as_state_machine calling state=() to update the attribute
   def transition_to(candidate_state)
     case candidate_state.to_sym
       when current_state

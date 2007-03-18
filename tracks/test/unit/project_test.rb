@@ -142,9 +142,55 @@ class ProjectTest < Test::Unit::TestCase
   def test_to_param_returns_url_friendly_name
     assert_equal 'Build_a_working_time_machine', @timemachine.to_param
   end
-  
-  def test_title_reader_returns_name
-    assert_equal @timemachine.name, @timemachine.title
+
+  def test_null_object
+    p = Project.null_object
+    assert !p.hidden?
+    assert p.nil?
+    assert_nil p.id
   end
-    
+
+  def test_feed_options
+    opts = Project.feed_options(users(:admin_user))
+    assert_equal 'Tracks Projects', opts[:title], 'Unexpected value for :title key of feed_options'
+    assert_equal 'Lists all the projects for Admin Schmadmin', opts[:description], 'Unexpected value for :description key of feed_options'
+  end
+
+  def test_transition_to_another_state
+    assert_equal :active, @timemachine.current_state
+    @timemachine.transition_to(:hidden)
+    assert_equal :hidden, @timemachine.current_state
+    @timemachine.transition_to(:completed)
+    assert_equal :completed, @timemachine.current_state
+    @timemachine.transition_to(:active)
+    assert_equal :active, @timemachine.current_state
+  end
+
+  def test_transition_to_same_state
+    assert_equal :active, @timemachine.current_state
+    @timemachine.transition_to(:active)
+    assert_equal :active, @timemachine.current_state
+  end
+
+  def test_deferred_todo_count
+    assert_equal 1, @timemachine.deferred_todo_count
+    assert_equal 0, @moremoney.deferred_todo_count
+    @moremoney.todos[0].show_from = next_week
+    assert_equal 1, @moremoney.deferred_todo_count
+  end
+
+  def test_done_todo_count
+    assert_equal 0, @timemachine.done_todo_count
+    assert_equal 0, @moremoney.done_todo_count
+    @moremoney.todos[0].complete!
+    assert_equal 1, @moremoney.done_todo_count
+  end
+
+  def test_not_done_todo_count
+    assert_equal 2, @timemachine.not_done_todo_count
+    assert_equal 3, @moremoney.not_done_todo_count
+    @moremoney.todos[0].complete!
+    assert_equal 2, @moremoney.not_done_todo_count
+  end
+
 end

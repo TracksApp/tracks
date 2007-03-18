@@ -180,6 +180,11 @@ module TodosHelper
      return array_or_string_for_javascript(['Create a new context']) if @contexts.empty?
      array_or_string_for_javascript( @contexts.collect{|c| escape_javascript(c.name) } )
   end
+
+  def format_ical_notes(notes)
+    split_notes = notes.split(/\n/)
+    joined_notes = split_notes.join("\\n")
+  end
     
   private
   

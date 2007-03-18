@@ -112,5 +112,24 @@ class ContextTest < Test::Unit::TestCase
   def test_title_reader_returns_name
     assert_equal @agenda.name, @agenda.title
   end
-    
+
+  def test_feed_options
+    opts = Context.feed_options(users(:admin_user))
+    assert_equal 'Tracks Contexts', opts[:title], 'Unexpected value for :title key of feed_options'
+    assert_equal 'Lists all the contexts for Admin Schmadmin', opts[:description], 'Unexpected value for :description key of feed_options'
+  end
+
+  def test_hidden_attr_reader
+    assert !@agenda.hidden?
+    @agenda.hide = true
+    assert @agenda.hidden?
+  end
+
+  def test_summary
+    undone_todo_count = '5 actions'
+    assert_equal "<p>#{undone_todo_count}. Context is Active.</p>", @agenda.summary(undone_todo_count)
+    @agenda.hide = true
+    assert_equal "<p>#{undone_todo_count}. Context is Hidden.</p>", @agenda.summary(undone_todo_count)
+  end
+
 end

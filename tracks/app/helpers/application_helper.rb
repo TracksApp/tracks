@@ -1,30 +1,8 @@
 # The methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
-
-  # Convert a date object to the format specified
-  # in config/settings.yml
-  #
-  def format_date(date)
-    if date
-      date_format = @user.prefs.date_format
-      formatted_date = date.strftime("#{date_format}")
-    else
-      formatted_date = ''
-    end
-    formatted_date
-  end
   
   def user_time
     @user.time
-  end
-  
-
-  # Uses RedCloth to transform text using either Textile or Markdown
-  # Need to require redcloth above
-  # RedCloth 3.0 or greater is needed to use Markdown, otherwise it only handles Textile
-  #
-  def markdown(text)
-    RedCloth.new(text).to_html
   end
   
   # Replicates the link_to method but also checks request.request_uri to find

@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../test_helper'
 require 'date'
 
 class TodoTest < Test::Unit::TestCase
-  fixtures :todos, :users, :contexts
+  fixtures :todos, :users, :contexts, :preferences
 
   def setup
     @not_completed1 = Todo.find(1).reload
@@ -19,8 +19,8 @@ class TodoTest < Test::Unit::TestCase
     assert_equal "Call Bill Gates to find out how much he makes per day", @not_completed1.description
     assert_nil @not_completed1.notes
     assert @not_completed1.completed? == false
-    assert_equal 1.week.ago.utc.strftime("%Y-%m-%d %H:%M"), @not_completed1.created_at.strftime("%Y-%m-%d %H:%M")
-    assert_equal 2.week.from_now.utc.strftime("%Y-%m-%d"), @not_completed1.due.strftime("%Y-%m-%d")
+    assert_equal 1.week.ago.utc.to_date.to_time.strftime("%Y-%m-%d %H:%M"), @not_completed1.created_at.strftime("%Y-%m-%d %H:%M")
+    assert_equal 2.week.from_now.utc.to_date.to_time.strftime("%Y-%m-%d"), @not_completed1.due.strftime("%Y-%m-%d")
     assert_nil @not_completed1.completed_at
     assert_equal 1, @not_completed1.user_id
   end
@@ -56,6 +56,16 @@ class TodoTest < Test::Unit::TestCase
     assert_equal 1, @not_completed2.errors.count
     assert_equal "is too long (maximum is 60000 characters)", @not_completed2.errors.on(:notes)
   end
+
+  def test_validate_show_from_must_be_a_date_in_the_future
+    t = @not_completed2
+    t[:show_from] = 1.week.ago.to_date # we have to set this via the indexer because show_from=() updates the state
+                                       # and actual show_from value appropriately based on the date
+    assert_equal 1.week.ago.to_date, t.show_from
+    assert !t.save
+    assert_equal 1, t.errors.count
+    assert_equal "must be a date in the future", t.errors.on(:show_from)
+  end
   
   def test_defer_an_existing_todo
     @not_completed2
@@ -74,4 +84,58 @@ class TodoTest < Test::Unit::TestCase
     assert item.save, "should have saved successfully" + item.errors.to_xml
     assert_equal :deferred, item.current_state
   end
+
+  def test_feed_options
+    opts = Todo.feed_options(users(:admin_user))
+    assert_equal 'Tracks Actions', opts[:title], 'Unexpected value for :title key of feed_options'
+    assert_equal 'Actions for Admin Schmadmin', opts[:description], 'Unexpected value for :description key of feed_options'
+  end
+
+  def test_toggle_completion
+    t = @not_completed1
+    assert_equal :active, t.current_state
+    t.toggle_completion!
+    assert_equal :completed, t.current_state
+    t.toggle_completion!
+    assert_equal :active, t.current_state
+  end
+
+  def test_activate_and_save
+    t = @not_completed1
+    t.show_from = 1.week.from_now.to_date
+    t.save!
+    assert t.deferred?
+    t.reload
+    t.activate_and_save!
+    assert t.active?
+    t.reload
+    assert t.active?
+  end
+
+  def test_project_returns_null_object_when_nil
+    t = @not_completed1
+    assert !t.project.is_a?(NullProject)
+    t.project = nil
+    assert t.project.is_a?(NullProject)
+  end
+
+  def test_initial_state_defaults_to_active
+    t = Todo.new
+    t.description = 'foo'
+    t.context_id = 1
+    t.save!
+    t.reload
+    assert_equal :active, t.current_state
+  end
+
+  def test_initial_state_is_deferred_when_show_from_in_future
+    t = Todo.new
+    t.description = 'foo'
+    t.context_id = 1
+    t.show_from = 1.week.from_now.to_date
+    t.save!
+    t.reload
+    assert_equal :deferred, t.current_state
+  end
+  
 end

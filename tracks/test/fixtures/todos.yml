@@ -2,19 +2,19 @@
 <% 
 
 def today 
-  Time.now.utc.to_s(:db) 
+  Time.now.utc.to_date.to_time.to_s(:db)
 end
 
 def next_week 
-  1.week.from_now.utc.to_s(:db) 
+  1.week.from_now.to_date.to_time.utc.to_s(:db)
 end 
 
 def last_week 
-  1.week.ago.utc.to_s(:db) 
+  1.week.ago.utc.to_date.to_time.to_s(:db)
 end
 
 def two_weeks_hence
-  2.week.from_now.utc.to_s(:db)
+  2.weeks.from_now.utc.to_date.to_time.to_s(:db)
 end
 
 %>
@@ -136,7 +136,7 @@ end
   state: completed
   created_at: <%= today %>
   due: <%= two_weeks_hence %>
-  completed_at: <%= today %>
+  completed_at: <%= last_week %>
   user_id: 1
 
 11:
@@ -197,7 +197,7 @@ end
   created_at: <%= today %>
   due: ~
   completed_at: ~
-  show_from: <%= next_week %>
+  show_from: <%= today %>
   user_id: 1
 
 16:

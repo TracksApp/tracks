@@ -101,19 +101,23 @@ class ProjectsControllerTest < TodoContainerControllerTestBase
     #puts @response.body
 
     assert_xml_select 'rss[version="2.0"]' do
-      assert_xml_select 'channel' do
-        assert_xml_select '>title', 'Tracks Projects'
-        assert_xml_select '>description', "Lists all the projects for #{users(:admin_user).display_name}."
-        assert_xml_select 'language', 'en-us'
-        assert_xml_select 'ttl', '40'
+      assert_select 'channel' do
+        assert_select '>title', 'Tracks Projects'
+        assert_select '>description', "Lists all the projects for #{users(:admin_user).display_name}"
+        assert_select 'language', 'en-us'
+        assert_select 'ttl', '40'
       end
-      assert_xml_select 'item', 3 do
-        assert_xml_select 'title', /.+/
-        assert_xml_select 'description', /&lt;p&gt;\d+ actions. Project is (active|hidden|completed). &lt;\/p&gt;/
-        %w(guid link).each do |node|
-          assert_xml_select node, /http:\/\/test.host\/projects\/.+/
+      assert_select 'item', 3 do
+        assert_select 'title', /.+/
+        assert_select 'description' do
+          assert_select_encoded do
+            assert_select 'p', /^\d+&nbsp;actions\. Project is (active|hidden|completed)\.$/
+          end
         end
-        assert_xml_select 'pubDate', /(#{projects(:timemachine).updated_at.to_s(:rfc822)}|#{projects(:moremoney).updated_at.to_s(:rfc822)}})/
+        %w(guid link).each do |node|
+          assert_select node, /http:\/\/test.host\/projects\/.+/
+        end
+        assert_select 'pubDate', /(#{projects(:timemachine).updated_at.to_s(:rfc822)}|#{projects(:moremoney).updated_at.to_s(:rfc822)})/
       end
     end
   end
@@ -143,12 +147,16 @@ class ProjectsControllerTest < TodoContainerControllerTestBase
     #puts @response.body
     
     assert_xml_select 'feed[xmlns="http://www.w3.org/2005/Atom"]' do
-      assert_xml_select '>title', 'Tracks Projects'
-      assert_xml_select '>subtitle', "Lists all the projects for #{users(:admin_user).display_name}."
-      assert_xml_select 'entry', 3 do
-        assert_xml_select 'title', /.+/
-        assert_xml_select 'content[type="html"]', /&lt;p&gt;\d+ actions. Project is (active|hidden|completed). &lt;\/p&gt;/
-        assert_xml_select 'published', /(#{projects(:timemachine).updated_at.to_s(:rfc822)}|#{projects(:moremoney).updated_at.to_s(:rfc822)}})/
+      assert_select '>title', 'Tracks Projects'
+      assert_select '>subtitle', "Lists all the projects for #{users(:admin_user).display_name}"
+      assert_select 'entry', 3 do
+        assert_select 'title', /.+/
+        assert_select 'content[type="html"]' do
+          assert_select_encoded do
+            assert_select 'p', /\d+&nbsp;actions. Project is (active|hidden|completed)./
+          end
+        end
+        assert_select 'published', /(#{projects(:timemachine).updated_at.xmlschema}|#{projects(:moremoney).updated_at.xmlschema})/
       end
     end
   end

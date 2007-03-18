@@ -138,14 +138,15 @@ class ProjectsController < ApplicationController
     def render_rss_feed
       lambda do
         render_rss_feed_for @projects, :feed => Project.feed_options(@user),
-                                       :item => { :description => lambda { |p| p.summary(count_undone_todos_phrase(p)) } }
+                                       :item => { :title => :name, :description => lambda { |p| summary(p) } }
       end
     end
 
     def render_atom_feed
       lambda do
         render_atom_feed_for @projects, :feed => Project.feed_options(@user),
-                                        :item => { :description => lambda { |p| p.summary(count_undone_todos_phrase(p)) },
+                                        :item => { :description => lambda { |p| summary(p) },
+                                                   :title => :name,
                                                    :author => lambda { |p| nil } }
       end
     end
@@ -179,6 +180,15 @@ class ProjectsController < ApplicationController
       @todos = @user.todos
       @done = @user.todos.find_in_state(:all, :completed, :order => "completed_at DESC")
       init_data_for_sidebar
+    end
+
+    def summary(project)
+      project_description = ''
+      project_description += sanitize(markdown( project.description )) unless project.description.blank?
+      project_description += "<p>#{count_undone_todos_phrase(p)}. "
+      project_description += "Project is #{project.state}."
+      project_description += "</p>"
+      project_description
     end
 
 end

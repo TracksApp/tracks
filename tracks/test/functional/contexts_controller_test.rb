@@ -47,19 +47,23 @@ class ContextsControllerTest < TodoContainerControllerTestBase
     #puts @response.body
 
     assert_xml_select 'rss[version="2.0"]' do
-      assert_xml_select 'channel' do
-        assert_xml_select '>title', 'Tracks Contexts'
-        assert_xml_select '>description', "Lists all the contexts for #{users(:admin_user).display_name}."
-        assert_xml_select 'language', 'en-us'
-        assert_xml_select 'ttl', '40'
+      assert_select 'channel' do
+        assert_select '>title', 'Tracks Contexts'
+        assert_select '>description', "Lists all the contexts for #{users(:admin_user).display_name}"
+        assert_select 'language', 'en-us'
+        assert_select 'ttl', '40'
       end
-      assert_xml_select 'item', 9 do
-        assert_xml_select 'title', /.+/
-        assert_xml_select 'description', /&lt;p&gt;\d+ actions. Context is (active|hidden). &lt;\/p&gt;/
-        %w(guid link).each do |node|
-          assert_xml_select node, /http:\/\/test.host\/contexts\/.+/
+      assert_select 'item', 9 do
+        assert_select 'title', /.+/
+        assert_select 'description' do
+          assert_select_encoded do
+            assert_select 'p', /\d+&nbsp;actions. Context is (Active|Hidden)./
+          end
         end
-        assert_xml_select 'pubDate', /(#{contexts(:agenda).created_at.to_s(:rfc822)}|#{contexts(:library).created_at.to_s(:rfc822)})/
+        %w(guid link).each do |node|
+          assert_select node, /http:\/\/test.host\/contexts\/.+/
+        end
+        assert_select 'pubDate', /(#{contexts(:agenda).created_at.to_s(:rfc822)}|#{contexts(:library).created_at.to_s(:rfc822)})/
       end
     end
   end
@@ -89,12 +93,16 @@ class ContextsControllerTest < TodoContainerControllerTestBase
     #puts @response.body
     
     assert_xml_select 'feed[xmlns="http://www.w3.org/2005/Atom"]' do
-      assert_xml_select '>title', 'Tracks Contexts'
-      assert_xml_select '>subtitle', "Lists all the contexts for #{users(:admin_user).display_name}."
-      assert_xml_select 'entry', 3 do
-        assert_xml_select 'title', /.+/
-        assert_xml_select 'content[type="html"]', /&lt;p&gt;\d+ actions. Context is (active|hidden). &lt;\/p&gt;/
-        assert_xml_select 'published', /(#{contexts(:agenda).created_at.to_s(:rfc822)}|#{contexts(:library).created_at.to_s(:rfc822)})/
+      assert_select '>title', 'Tracks Contexts'
+      assert_select '>subtitle', "Lists all the contexts for #{users(:admin_user).display_name}"
+      assert_select 'entry', 9 do
+        assert_select 'title', /.+/
+        assert_select 'content[type="html"]' do
+          assert_select_encoded do
+            assert_select 'p', /\d+&nbsp;actions. Context is (Active|Hidden)./
+          end
+        end
+        assert_select 'published', /(#{contexts(:agenda).created_at.xmlschema}|#{contexts(:library).created_at.xmlschema})/
       end
     end
   end

@@ -11,32 +11,32 @@
 	</div>
 	<ul>
 		<li>
-			<%= rss_feed_link({ :limit => 15 }) %>
-			<%= text_feed_link({ :limit => 15 }) %>
-			<%= ical_feed_link({ :limit => 15 }) %>
+      <%= rss_formatted_link({ :controller => 'todos', :action => 'index', :limit => 15 }) %>
+      <%= text_formatted_link({ :controller => 'todos', :action => 'index', :limit => 15 }) %>
+      <%= ical_formatted_link({ :controller => 'todos', :action => 'index', :limit => 15 }) %>
 			Last 15 actions
 		</li>
 		<li>
-			<%= rss_feed_link %>
-			<%= text_feed_link %>
-			<%= ical_feed_link %>
+      <%= rss_formatted_link( { :controller => 'todos', :action => 'index' } ) %>
+      <%= text_formatted_link( { :controller => 'todos', :action => 'index' } ) %>
+			<%= ical_formatted_link( { :controller => 'todos', :action => 'index' } ) %>
 			All actions
 		</li>
 		<li>
-			<%= rss_feed_link({ :due => 0 }) %>
-			<%= text_feed_link({ :due => 0 }) %>
-			<%= ical_feed_link({ :due => 0 }) %>
+			<%= rss_formatted_link({ :controller => 'todos', :action => 'index', :due => 0 }) %>
+			<%= text_formatted_link({ :controller => 'todos', :action => 'index', :due => 0 }) %>
+			<%= ical_formatted_link({ :controller => 'todos', :action => 'index', :due => 0 }) %>
 			Actions due today or earlier
 		</li>
 		<li>
-			<%= rss_feed_link({ :due => 6 }) %>
-			<%= text_feed_link({ :due => 6 }) %>
-			<%= ical_feed_link({ :due => 6 }) %>
+      <%= rss_formatted_link({ :controller => 'todos', :action => 'index', :due => 6 }) %>
+      <%= text_formatted_link({ :controller => 'todos', :action => 'index', :due => 6 }) %>
+      <%= ical_formatted_link({ :controller => 'todos', :action => 'index', :due => 6 }) %>
 			Actions due in 7 days or earlier
 		</li>
 		<li>
-		  <%= rss_feed_link({ :done => 7 }) %>
-		  <%= text_feed_link({ :done => 7 }) %>
+      <%= rss_formatted_link({ :controller => 'todos', :action => 'index', :done => 7 }) %>
+      <%= text_formatted_link({ :controller => 'todos', :action => 'index', :done => 7 }) %>
 		  Actions completed in the last 7 days
 		</li>
 		<li>
@@ -58,9 +58,9 @@
 			<ul>
 				<% for context in @contexts %>
 				  	<li>
-					<%= rss_feed_link({ :context => context }) %>
-					<%= text_feed_link({ :context => context }) %>
-					<%= ical_feed_link({ :context => context }) %>
+					<%= rss_formatted_link({ :controller=> 'todos', :action => 'index', :context_id => context.to_param }) %>
+					<%= text_formatted_link({ :controller=> 'todos', :action => 'index', :context_id => context.to_param }) %>
+					<%= ical_formatted_link({ :controller=> 'todos', :action => 'index', :context_id => context.to_param }) %>
 					Next actions in <strong><%=h context.name %></strong>
 					</li>
 				<% end %>
@@ -70,9 +70,9 @@
 			<ul>
 				<% for project in @projects %>
 					<li>
-					<%= rss_feed_link({ :project => project }) %>
-					<%= text_feed_link({ :project => project }) %>
-					<%= ical_feed_link({ :project => project }) %>
+            <%= rss_formatted_link({ :controller=> 'todos', :action => 'index', :project_id => project.to_param }) %>
+            <%= text_formatted_link({ :controller=> 'todos', :action => 'index', :project_id => project.to_param }) %>
+            <%= ical_formatted_link({ :controller=> 'todos', :action => 'index', :project_id => project.to_param }) %>
 				  	Next actions for <strong><%=h project.name %></strong>
 					</li>
 				<% end %>

@@ -123,6 +123,116 @@ class TodosControllerTest < Test::Unit::TestCase
     assert_response :success
     assert_equal 3, @tagged
   end
-  
+
+  def test_rss_feed_content
+    @request.session['user_id'] = users(:admin_user).id
+    get :index, { :format => "rss" }
+    assert_equal 'application/rss+xml; charset=utf-8', @response.headers["Content-Type"]
+    #puts @response.body
+
+    assert_xml_select 'rss[version="2.0"]' do
+      assert_select 'channel' do
+        assert_select '>title', 'Tracks Actions'
+        assert_select '>description', "Actions for #{users(:admin_user).display_name}"
+        assert_select 'language', 'en-us'
+        assert_select 'ttl', '40'
+        assert_select 'item', 10 do
+          assert_select 'title', /.+/
+          assert_select 'description', /.*/
+          %w(guid link).each do |node|
+            assert_select node, /http:\/\/test.host\/contexts\/.+/
+          end
+          assert_select 'pubDate', /(#{projects(:timemachine).updated_at.to_s(:rfc822)}|#{projects(:moremoney).updated_at.to_s(:rfc822)})/
+        end
+      end
+    end
+  end
+
+  def test_rss_feed_not_accessible_to_anonymous_user_without_token
+    @request.session['user_id'] = nil
+    get :index, { :format => "rss" }
+    assert_response 401
+  end
+
+  def test_rss_feed_not_accessible_to_anonymous_user_with_invalid_token
+    @request.session['user_id'] = nil
+    get :index, { :format => "rss", :token => 'foo'  }
+    assert_response 401
+  end
+
+  def test_rss_feed_accessible_to_anonymous_user_with_valid_token
+    @request.session['user_id'] = nil
+    get :index, { :format => "rss", :token => users(:admin_user).word }
+    assert_response :ok
+  end
+
+  def test_atom_feed_content
+    @request.session['user_id'] = users(:admin_user).id
+    get :index, { :format => "atom" }
+    assert_equal 'application/atom+xml; charset=utf-8', @response.headers["Content-Type"]
+    #puts @response.body
+
+    assert_xml_select 'feed[xmlns="http://www.w3.org/2005/Atom"]' do
+      assert_xml_select '>title', 'Tracks Actions'
+      assert_xml_select '>subtitle', "Actions for #{users(:admin_user).display_name}"
+      assert_xml_select 'entry', 10 do
+        assert_xml_select 'title', /.+/
+        assert_xml_select 'content[type="html"]', /.*/
+        assert_xml_select 'published', /(#{projects(:timemachine).updated_at.xmlschema}|#{projects(:moremoney).updated_at.xmlschema})/
+      end
+    end
+  end
+
+  def test_atom_feed_not_accessible_to_anonymous_user_without_token
+    @request.session['user_id'] = nil
+    get :index, { :format => "atom" }
+    assert_response 401
+  end
+
+  def test_atom_feed_not_accessible_to_anonymous_user_with_invalid_token
+    @request.session['user_id'] = nil
+    get :index, { :format => "atom", :token => 'foo'  }
+    assert_response 401
+  end
+
+  def test_atom_feed_accessible_to_anonymous_user_with_valid_token
+    @request.session['user_id'] = nil
+    get :index, { :format => "atom", :token => users(:admin_user).word }
+    assert_response :ok
+  end
+
+  def test_text_feed_content
+    @request.session['user_id'] = users(:admin_user).id
+    get :index, { :format => "txt" }
+    assert_equal 'text/plain; charset=utf-8', @response.headers["Content-Type"]
+    assert !(/&nbsp;/.match(@response.body))
+    #puts @response.body
+  end
+
+  def test_text_feed_not_accessible_to_anonymous_user_without_token
+    @request.session['user_id'] = nil
+    get :index, { :format => "txt" }
+    assert_response 401
+  end
+
+  def test_text_feed_not_accessible_to_anonymous_user_with_invalid_token
+    @request.session['user_id'] = nil
+    get :index, { :format => "txt", :token => 'foo'  }
+    assert_response 401
+  end
+
+  def test_text_feed_accessible_to_anonymous_user_with_valid_token
+    @request.session['user_id'] = nil
+    get :index, { :format => "txt", :token => users(:admin_user).word }
+    assert_response :ok
+  end
+
+  def test_ical_feed_content
+    @request.session['user_id'] = users(:admin_user).id
+    get :index, { :format => "ics" }
+    assert_equal 'text/calendar; charset=utf-8', @response.headers["Content-Type"]
+    assert !(/&nbsp;/.match(@response.body))
+    #puts @response.body
+  end
 
 end

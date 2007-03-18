@@ -32,7 +32,7 @@ module LoginSystem
   end
   
   def login_or_feed_token_required
-    if ['rss', 'atom', 'txt'].include?(params[:format])
+    if ['rss', 'atom', 'txt', 'ics'].include?(params[:format])
       if user = User.find_by_word(params[:token])
         set_current_user(user)
         return true

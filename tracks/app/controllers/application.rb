@@ -13,13 +13,16 @@ class ApplicationController < ActionController::Base
 
   helper :application
   include LoginSystem
-  
+
   layout 'standard'
   
   before_filter :set_session_expiration
   prepend_before_filter :login_required
   
   after_filter :set_charset
+
+  include ActionView::Helpers::TextHelper
+  helper_method :format_date, :markdown
 
   # By default, sets the charset to UTF-8 if it isn't already set
   def set_charset
@@ -78,13 +81,35 @@ class ApplicationController < ActionController::Base
   end
   
   def count_undone_todos(todos_parent)
-    if (todos_parent.is_a?(Project) && todos_parent.hidden?)
+    if todos_parent.nil?
+      count = 0
+    elsif (todos_parent.is_a?(Project) && todos_parent.hidden?)
       count = eval "@project_project_hidden_todo_counts[#{todos_parent.id}]"
     else
       count = eval "@#{todos_parent.class.to_s.downcase}_not_done_counts[#{todos_parent.id}]"
     end
-    count = 0 if count == nil
-    count
+    count || 0
+  end
+
+  # Convert a date object to the format specified
+  # in config/settings.yml
+  #  
+  def format_date(date)
+    if date
+      date_format = @user.prefs.date_format
+      formatted_date = date.strftime("#{date_format}")
+    else
+      formatted_date = ''
+    end
+    formatted_date
+  end
+
+  # Uses RedCloth to transform text using either Textile or Markdown
+  # Need to require redcloth above
+  # RedCloth 3.0 or greater is needed to use Markdown, otherwise it only handles Textile
+  #
+  def markdown(text)
+    RedCloth.new(text).to_html
   end
    
   protected

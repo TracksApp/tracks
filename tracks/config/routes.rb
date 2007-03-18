@@ -17,7 +17,17 @@ ActionController::Routing::Routes.draw do |map|
    users.signup 'signup', :action => "new"
  end
 
-  # ToDo Routes
+  # Context Routes
+  map.resources :contexts, :collection => {:order => :post} do |contexts|
+    contexts.resources :todos
+  end
+
+  # Projects Routes
+  map.resources :projects, :collection => {:order => :post} do |projects|
+    projects.resources :todos
+  end
+
+    # ToDo Routes
   map.resources :todos,
                 :member => {:toggle_check => :post},
                 :collection => {:check_deferred => :post}
@@ -28,21 +38,12 @@ ActionController::Routing::Routes.draw do |map|
     todos.done_archive 'done/archive', :action => "completed_archive"
     todos.tag 'todos/tag/:name', :action => "tag"
   end
-
-  # Context Routes
-  map.resources :contexts, :collection => {:order => :post} 
-  map.connect 'context/:context/feed/:action/:login/:token', :controller => 'feed'
-
-  # Projects Routes
-  map.resources :projects, :collection => {:order => :post} 
-  map.connect 'project/:project/feed/:action/:login/:token', :controller => 'feed'
-
+  
   # Notes Routes
   map.resources :notes
 
   # Feed Routes
   map.connect 'feeds', :controller => 'feedlist', :action => 'index'
-  map.connect 'feed/:action/:login/:token', :controller => 'feed'
 
   # Install the default route as the lowest priority.
   map.connect ':controller/:action/:id'

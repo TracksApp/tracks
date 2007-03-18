@@ -1,5 +1,4 @@
 class Todo < ActiveRecord::Base
-  require 'validations'  
 
   belongs_to :context, :order => 'name'
   belongs_to :project
@@ -45,12 +44,12 @@ class Todo < ActiveRecord::Base
   validates_presence_of :context
   
   def validate
-    if deferred? && !show_from.blank? && show_from < user.date
-      errors.add("Show From", "must be a date in the future.")
+    if !show_from.blank? && show_from < user.date
+      errors.add("show_from", "must be a date in the future")
     end
   end
   
-  def toggle_completion
+  def toggle_completion!
     if completed?
       activate!
     else
@@ -78,11 +77,18 @@ class Todo < ActiveRecord::Base
   alias_method :original_set_initial_state, :set_initial_state
   
   def set_initial_state
-    if show_from && (show_from > Time.now.utc.to_date)
+    if show_from && (show_from > user.date)
       write_attribute self.class.state_column, 'deferred'
     else
       original_set_initial_state
     end
+  end
+
+  def self.feed_options(user)
+    {
+      :title => 'Tracks Actions',
+      :description => "Actions for #{user.display_name}"
+    }
   end
 
 end

@@ -13,6 +13,8 @@ class User < ActiveRecord::Base
                  find_by_url_friendly_name(params['id'])
                elsif params['context']
                  find_by_url_friendly_name(params['context'])
+               elsif params['context_id']
+                 find_by_url_friendly_name(params['context_id'])
                end
              end
            end
@@ -28,6 +30,8 @@ class User < ActiveRecord::Base
                   find_by_url_friendly_name(params['id'])
                 elsif params['project']
                   find_by_url_friendly_name(params['project'])
+                elsif params['project_id']
+                  find_by_url_friendly_name(params['project_id'])
                 end
               end
               def update_positions(project_ids)
@@ -61,7 +65,7 @@ class User < ActiveRecord::Base
            :conditions => [ 'state = ?', 'deferred' ],
            :order => 'show_from ASC, todos.created_at DESC' do
               def find_and_activate_ready
-                find(:all, :conditions => ['show_from <= ?', Time.now.utc.to_date ]).collect { |t| t.activate_and_save! }
+                find(:all, :conditions => ['show_from <= ?', Time.now.utc.to_date.to_time ]).collect { |t| t.activate_and_save! }
               end
            end
   has_many :completed_todos,
@@ -90,8 +94,13 @@ class User < ActiveRecord::Base
   validates_confirmation_of :password  
   validates_length_of :login, :within => 3..80
   validates_uniqueness_of :login, :on => :create
-  validates_inclusion_of :auth_type, :in => Tracks::Config.auth_schemes, :message=>"not a valid authentication type"
   validates_presence_of :open_id_url, :if => Proc.new{|user| user.auth_type == 'open_id'}
+
+  def validate
+    unless Tracks::Config.auth_schemes.include?(auth_type)
+      errors.add("auth_type", "not a valid authentication type")
+    end
+  end
 
   alias_method :prefs, :preference
 

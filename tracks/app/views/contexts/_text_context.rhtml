@@ -1,0 +1,8 @@
+<%
+context = text_context
+todos_in_context = todos.select { |t| t.context_id == context.id }
+if todos_in_context.length > 0
+  %>
+<%= context.name.upcase %>:
+<% end -%>
+<%= render :partial => "todos/text_todo", :collection => todos_in_context -%>

@@ -19,7 +19,7 @@ class Context < ActiveRecord::Base
   def self.feed_options(user)
     {
       :title => 'Tracks Contexts',
-      :description => "Lists all the contexts for #{user.display_name}."
+      :description => "Lists all the contexts for #{user.display_name}"
     }
   end
 
@@ -37,7 +37,7 @@ class Context < ActiveRecord::Base
   
   def summary(undone_todo_count)
     s = "<p>#{undone_todo_count}. "
-    s += "Context is #{hidden? ? 'Hidden' : 'Active'}. "
+    s += "Context is #{hidden? ? 'Hidden' : 'Active'}."
     s += "</p>"
     s
   end  

@@ -3,33 +3,28 @@ class TodosController < ApplicationController
   helper :todos
 
   append_before_filter :init, :except => [ :destroy, :completed, :completed_archive, :check_deferred ]
+  skip_before_filter :login_required, :only => [:index]
+  prepend_before_filter :login_or_feed_token_required, :only => [:index]
+  session :off, :only => :index, :if => Proc.new { |req| is_feed_request(req) }
+
   layout 'standard'
 
-  # Main method for listing tasks
-  # Set page title, and fill variables with contexts and done and not-done tasks
-  # Number of completed actions to show is determined by a setting in settings.yml
   def index
     @projects = @user.projects.find(:all, :include => [ :todos ])
     @contexts = @user.contexts.find(:all, :include => [ :todos ])
-    
-    @page_title = "TRACKS::List tasks"
-    
-    # If you've set no_completed to zero, the completed items box
-    # isn't shown on the home page
-    max_completed = @user.prefs.show_number_completed
-    @done = @user.completed_todos.find(:all, :limit => max_completed, :include => [ :context, :project, :tags ]) unless max_completed == 0
-    
+
     @contexts_to_show = @contexts.reject {|x| x.hide? }
 
-    # Set count badge to number of not-done, not hidden context items
-    @count = @todos.reject { |x| !x.active? || x.context.hide? }.size
-    
-    respond_to do |wants|
-      wants.html
-      wants.xml { render :action => 'list.rxml', :layout => false }
+    respond_to do |format|
+      format.html &render_todos_html
+      format.xml { render :action => 'list.rxml', :layout => false }
+      format.rss   &render_rss_feed
+      format.atom  &render_atom_feed
+      format.text  &render_text_feed
+      format.ics   &render_ical_feed
     end
   end
-  
+
   def create
     @todo = @user.todos.build
     p = params['request'] || params
@@ -100,7 +95,7 @@ class TodosController < ApplicationController
   #
   def toggle_check
     @todo = check_user_return_todo
-    @todo.toggle_completion()
+    @todo.toggle_completion!
     @saved = @todo.save
     respond_to do |format|
       format.js do
@@ -279,13 +274,89 @@ class TodosController < ApplicationController
       init_data_for_sidebar
       init_todos      
     end
-    
-    def init_todos
-      # Exclude hidden projects from count on home page
-      @todos = @user.todos.find(:all, :conditions => ['todos.state = ? or todos.state = ?', 'active', 'complete'], :include => [ :project, :context, :tags ])
 
-      # Exclude hidden projects from the home page
-      @not_done_todos = @user.todos.find(:all, :conditions => ['todos.state = ?', 'active'], :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC", :include => [ :project, :context, :tags ])
+    def with_feed_query_scope(&block)
+      unless TodosController.is_feed_request(request)
+        yield
+        return
+      end
+
+      condition_builder = FindConditionBuilder.new
+      options = Hash.new
+
+      if params.key?('done')
+        condition_builder.add 'todos.state = ?', 'completed'
+      else
+        condition_builder.add 'todos.state = ?', 'active'
+      end
+
+      @title = "Tracks - Next Actions"
+      @description = "Filter: "
+
+      if params.key?('due')
+        due_within = params['due'].to_i
+        due_within_when = @user.time + due_within.days
+        condition_builder.add('todos.due <= ?', due_within_when)
+        due_within_date_s = due_within_when.strftime("%Y-%m-%d")
+        @title << " due today" if (due_within == 0)
+        @title << " due within a week" if (due_within == 6)
+        @description << " with a due date #{due_within_date_s} or earlier"
+      end
+
+      if params.key?('done')
+        done_in_last = params['done'].to_i
+        condition_builder.add('todos.completed_at >= ?', @user.time - done_in_last.days)
+        @title << " actions completed"
+        @description << " in the last #{done_in_last.to_s} days"
+      end
+
+      Todo.with_scope :find => {:conditions => condition_builder.to_conditions} do
+        yield
+      end
+      
+    end
+
+    def with_parent_resource_scope(&block)
+      if (params[:context_id])
+        context = @user.contexts.find_by_params(params)
+        Todo.with_scope :find => {:conditions => ['todos.context_id = ?', context.id]} do
+          yield
+        end
+      elsif (params[:project_id])
+        project = @user.projects.find_by_params(params)
+        Todo.with_scope :find => {:conditions => ['todos.project_id = ?', project.id]} do
+          yield
+        end
+      else
+        yield
+      end      
+    end
+
+    def with_limit_scope(&block)
+      if params.key?('limit')
+        Todo.with_scope :find => {:limit => params['limit']} do
+          yield
+        end
+        #@description = limit ? "Lists the last #{limit} incomplete next actions" : "Lists incomplete next actions"
+      else
+        yield
+      end
+    end
+
+    def init_todos
+      with_feed_query_scope do
+        with_parent_resource_scope do
+          with_limit_scope do
+
+            # Exclude hidden projects from count on home page
+            @todos = @user.todos.find(:all, :conditions => ['todos.state = ? or todos.state = ?', 'active', 'complete'], :include => [ :project, :context, :tags ])
+
+            # Exclude hidden projects from the home page
+            @not_done_todos = @user.todos.find(:all, :conditions => ['todos.state = ?', 'active'], :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC", :include => [ :project, :context, :tags ])
+
+          end
+        end
+      end
     end
     
     def determine_down_count
@@ -323,5 +394,92 @@ class TodosController < ApplicationController
          end
       end
     end
-          
+
+    def render_todos_html
+     lambda do
+       @page_title = "TRACKS::List tasks"
+
+       # If you've set no_completed to zero, the completed items box
+       # isn't shown on the home page
+       max_completed = @user.prefs.show_number_completed
+       @done = @user.completed_todos.find(:all, :limit => max_completed, :include => [ :context, :project, :tags ]) unless max_completed == 0
+
+       # Set count badge to number of not-done, not hidden context items
+       @count = @todos.reject { |x| !x.active? || x.context.hide? }.size
+
+       render
+      end
+    end
+
+    def render_rss_feed
+      lambda do
+        render_rss_feed_for @todos, :feed => Todo.feed_options(@user),
+                                    :item => {
+                                                :title => :description,
+                                                :link => lambda { |t| context_url(t.context) },
+                                                :description => todo_feed_content
+                                             }
+      end
+    end
+
+    def todo_feed_content
+      lambda do |i|
+        item_notes = sanitize(markdown( i.notes )) if i.notes?
+        due = "<div>Due: #{format_date(i.due)}</div>\n" if i.due?
+        done = "<div>Completed: #{format_date(i.completed_at)}</div>\n" if i.completed?
+        context_link = "<a href=\"#{ context_url(i.context) }\">#{ i.context.name }</a>"
+        if i.project_id?
+          project_link = "<a href=\"#{ project_url(i.project) }\">#{ i.project.name }</a>"
+        else
+          project_link = "<em>none</em>"
+        end
+        "#{done||''}#{due||''}#{item_notes||''}\n<div>Project:  #{project_link}</div>\n<div>Context:  #{context_link}</div>"
+      end
+    end
+
+    def render_atom_feed
+      lambda do
+        render_atom_feed_for @todos, :feed => Todo.feed_options(@user),
+                                    :item => {
+                                                :title => :description,
+                                                :link => lambda { |t| context_url(t.context) },
+                                                :description => todo_feed_content,
+                                                :author => lambda { |p| nil }
+                                             }
+      end
+    end
+
+    def render_text_feed
+      lambda do
+        render :action => 'index_text', :layout => false, :content_type => Mime::TEXT
+      end
+    end
+
+    def render_ical_feed
+      lambda do
+        render :action => 'index_ical', :layout => false, :content_type => Mime::ICS
+      end
+    end
+
+    def self.is_feed_request(req)
+        ['rss','atom','txt','ics'].include?(req.parameters[:format])
+    end
+
+    class FindConditionBuilder
+
+      def initialize
+        @queries = Array.new
+        @params = Array.new
+      end
+
+      def add(query, param)
+         @queries << query
+         @params << param
+      end
+
+      def to_conditions
+        [@queries.join(' AND ')] + @params
+      end
+    end
+
 end
