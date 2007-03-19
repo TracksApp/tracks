@@ -6,19 +6,18 @@ ActiveRecord::Schema.define(:version => 30) do
 
   create_table "contexts", :force => true do |t|
     t.column "name",       :string,   :default => "",    :null => false
-    t.column "position",   :integer,                     :null => false
+    t.column "position",   :integer,  :default => 0,     :null => false
     t.column "hide",       :boolean,  :default => false
     t.column "user_id",    :integer,  :default => 1
     t.column "created_at", :datetime
     t.column "updated_at", :datetime
   end
 
-  add_index "contexts", ["user_id"], :name => "index_contexts_on_user_id"
   add_index "contexts", ["user_id", "name"], :name => "index_contexts_on_user_id_and_name"
 
   create_table "notes", :force => true do |t|
-    t.column "user_id",    :integer,  :null => false
-    t.column "project_id", :integer,  :null => false
+    t.column "user_id",    :integer,  :default => 0, :null => false
+    t.column "project_id", :integer,  :default => 0, :null => false
     t.column "body",       :text
     t.column "created_at", :datetime
     t.column "updated_at", :datetime
@@ -44,7 +43,7 @@ ActiveRecord::Schema.define(:version => 30) do
   end
 
   create_table "preferences", :force => true do |t|
-    t.column "user_id",                            :integer,                                                           :null => false
+    t.column "user_id",                            :integer,               :default => 0,                              :null => false
     t.column "date_format",                        :string,  :limit => 40, :default => "%d/%m/%Y",                     :null => false
     t.column "week_starts",                        :integer,               :default => 0,                              :null => false
     t.column "show_number_completed",              :integer,               :default => 5,                              :null => false
@@ -65,7 +64,7 @@ ActiveRecord::Schema.define(:version => 30) do
 
   create_table "projects", :force => true do |t|
     t.column "name",        :string,                 :default => "",       :null => false
-    t.column "position",    :integer,                                      :null => false
+    t.column "position",    :integer,                :default => 0,        :null => false
     t.column "user_id",     :integer,                :default => 1
     t.column "description", :text
     t.column "state",       :string,   :limit => 20, :default => "active", :null => false
@@ -73,7 +72,6 @@ ActiveRecord::Schema.define(:version => 30) do
     t.column "updated_at",  :datetime
   end
 
-  add_index "projects", ["user_id"], :name => "index_projects_on_user_id"
   add_index "projects", ["user_id", "name"], :name => "index_projects_on_user_id_and_name"
 
   create_table "sessions", :force => true do |t|
@@ -82,7 +80,7 @@ ActiveRecord::Schema.define(:version => 30) do
     t.column "updated_at", :datetime
   end
 
-  add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
+  add_index "sessions", ["session_id"], :name => "sessions_session_id_index"
 
   create_table "taggings", :force => true do |t|
     t.column "taggable_id",   :integer
@@ -102,7 +100,7 @@ ActiveRecord::Schema.define(:version => 30) do
   add_index "tags", ["name"], :name => "index_tags_on_name"
 
   create_table "todos", :force => true do |t|
-    t.column "context_id",   :integer,                                         :null => false
+    t.column "context_id",   :integer,                :default => 0,           :null => false
     t.column "project_id",   :integer
     t.column "description",  :string,                 :default => "",          :null => false
     t.column "notes",        :text

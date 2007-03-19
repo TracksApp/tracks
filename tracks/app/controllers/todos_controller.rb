@@ -239,15 +239,30 @@ class TodosController < ApplicationController
   # /todos/tag/[tag_name] shows all the actions tagged with tag_name
   #
   def tag
+    
     @tag = tag_name = params[:name]
-    tag_collection = Tag.find_by_name(tag_name).todos
-    if tag_collection.empty?
-      @todos = []
+    
+    if Tag.find_by_name(tag_name).nil?
+      # TODO: This doesn't work - you get kicked back to the index
+      # with a generic "Error occured on the server error"
+      notify :error, "Tag \'#{@tag}\' does not exist", 2.0
+      @not_done_todos = []
     else 
-      @todos = tag_collection.find(:all, :conditions => ['taggings.user_id = ? and state = ?', @user.id, 'active'])
+      tag_collection = Tag.find_by_name(tag_name).todos
+      @not_done_todos = tag_collection.find(:all, :conditions => ['taggings.user_id = ? and state = ?', @user.id, 'active'])
     end
     
-    @count = @todos.size unless @todos.empty?
+    @contexts = @user.contexts.find(:all, :include => [ :todos ])
+    @contexts_to_show = @contexts.reject {|x| x.hide? }
+
+    @page_title = "TRACKS::Tagged with \'#{@tag}\'"
+    # If you've set no_completed to zero, the completed items box
+    # isn't shown on the home page
+    max_completed = @user.prefs.show_number_completed
+    @done = @user.completed_todos.find(:all, :limit => max_completed, :include => [ :context, :project, :tags ]) unless max_completed == 0
+    # Set count badge to number of items with this tag
+    @not_done_todos.empty? ? @count = 0 : @count = @not_done_todos.size
+
   end
   
   private
@@ -410,7 +425,7 @@ class TodosController < ApplicationController
        render
       end
     end
-
+    
     def render_rss_feed
       lambda do
         render_rss_feed_for @todos, :feed => Todo.feed_options(@user),
