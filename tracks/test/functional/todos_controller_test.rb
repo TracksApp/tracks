@@ -124,7 +124,7 @@ class TodosControllerTest < Test::Unit::TestCase
     assert_equal 3, @tagged
   end
 
-  def test_rss_feed_content
+  def test_find_tagged_withd_content
     @request.session['user_id'] = users(:admin_user).id
     get :index, { :format => "rss" }
     assert_equal 'application/rss+xml; charset=utf-8', @response.headers["Content-Type"]
@@ -142,7 +142,7 @@ class TodosControllerTest < Test::Unit::TestCase
           %w(guid link).each do |node|
             assert_select node, /http:\/\/test.host\/contexts\/.+/
           end
-          assert_select 'pubDate', /(#{projects(:timemachine).updated_at.to_s(:rfc822)}|#{projects(:moremoney).updated_at.to_s(:rfc822)})/
+          assert_select 'pubDate', projects(:timemachine).updated_at.to_s(:rfc822)
         end
       end
     end

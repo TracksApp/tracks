@@ -24,7 +24,7 @@ class Context < ActiveRecord::Base
   end
 
   def hidden?
-    self.hide == true
+    self.hide == true || self.hide == 1
   end
   
   def to_param

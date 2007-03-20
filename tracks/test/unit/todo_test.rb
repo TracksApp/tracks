@@ -130,6 +130,7 @@ class TodoTest < Test::Unit::TestCase
 
   def test_initial_state_is_deferred_when_show_from_in_future
     t = Todo.new
+    t.user = users(:admin_user)
     t.description = 'foo'
     t.context_id = 1
     t.show_from = 1.week.from_now.to_date

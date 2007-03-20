@@ -117,7 +117,7 @@ class ProjectsControllerTest < TodoContainerControllerTestBase
         %w(guid link).each do |node|
           assert_select node, /http:\/\/test.host\/projects\/.+/
         end
-        assert_select 'pubDate', /(#{projects(:timemachine).updated_at.to_s(:rfc822)}|#{projects(:moremoney).updated_at.to_s(:rfc822)})/
+        assert_select 'pubDate', projects(:timemachine).updated_at.to_s(:rfc822)
       end
     end
   end

@@ -63,7 +63,7 @@ class ContextsControllerTest < TodoContainerControllerTestBase
         %w(guid link).each do |node|
           assert_select node, /http:\/\/test.host\/contexts\/.+/
         end
-        assert_select 'pubDate', /(#{contexts(:agenda).created_at.to_s(:rfc822)}|#{contexts(:library).created_at.to_s(:rfc822)})/
+        assert_select 'pubDate', contexts(:agenda).created_at.to_s(:rfc822)
       end
     end
   end
