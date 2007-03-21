@@ -111,6 +111,10 @@ class ApplicationController < ActionController::Base
   def markdown(text)
     RedCloth.new(text).to_html
   end
+  
+  def build_default_project_context_name_map(projects)
+    Hash[*projects.reject{ |p| p.default_context.nil? }.map{ |p| [p.name, p.default_context.name] }.flatten].to_json 
+  end
    
   protected
   

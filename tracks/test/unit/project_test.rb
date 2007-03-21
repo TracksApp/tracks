@@ -192,5 +192,12 @@ class ProjectTest < Test::Unit::TestCase
     @moremoney.todos[0].complete!
     assert_equal 2, @moremoney.not_done_todo_count
   end
+  
+  def test_default_context_name
+    p = Project.new
+    assert_equal '', p.default_context.name
+    p.default_context = contexts(:agenda)
+    assert_equal 'agenda', p.default_context.name    
+  end
 
 end

@@ -18,21 +18,21 @@
    <%= render :partial => "notes/notes_summary", :collection => @project.notes %>
   </div>
 </div>
-<div>
 
-	<div id="new-note" style="display:none;">
-	<% form_remote_tag :url => notes_path,
-	                   :method => :post,
+
+    <div id="new-note" style="display:none;">
+    <% form_remote_tag :url => notes_path,
+                       :method => :post,
                      :update => "notes",
                      :position => "bottom",
                      :complete => "new Effect.Highlight('notes');$('empty-n').hide();",
                      :html => {:id=>'form-new-note', :class => 'inline-form'} do %>
-	<%= hidden_field( "new_note", "project_id", "value" => "#{@project.id}" ) %>
-	<%= text_area( "new_note", "body", "cols" => 50, "rows" => 3, "tabindex" => 1 ) %>
-	<br /><br />
-	<input type="submit" value="Add note" tabindex="2" />
-	<% end -%>
-	</div>
+    <%= hidden_field( "new_note", "project_id", "value" => "#{@project.id}" ) %>
+    <%= text_area( "new_note", "body", "cols" => 50, "rows" => 3, "tabindex" => 1 ) %>
+    <br /><br />
+    <input type="submit" value="Add note" tabindex="2" />
+    <% end -%>
+    </div>
 
 <div class="container">
  <div id="project_status">
@@ -49,6 +49,24 @@
   </div>
  </div>
 </div>
+
+<div class="container">
+    <div id="default_context">
+        <h2>Default Context</h2>
+        <div>
+            <% form_remote_tag( :url => project_path(@project), :method => :put, 
+                                :html=> { :id => 'set-default-context-action',
+                                          :name => 'default_context',
+                                          :class => 'inline-form' }) do -%>
+              <%= hidden_field_tag("update_default_context", true) %>
+              <%= text_field_tag("project[default_context_name]",
+                                 @project.default_context.name,
+                                 { :tabindex => 9,:size => 25 }) %>
+              <%= submit_tag "Set Default Context for this Project", { :tabindex => 10 } %>
+              <%= render :partial => 'default_context_autocomplete' %>
+            <% end -%>
+        </div>
+    </div>
 </div>
 </div><!-- [end:display_box] -->
 

@@ -1,6 +1,7 @@
 class Project < ActiveRecord::Base
   has_many :todos, :dependent => :delete_all, :include => :context
   has_many :notes, :dependent => :delete_all, :order => "created_at DESC"
+  belongs_to :default_context, :dependent => :nullify, :class_name => "Context", :foreign_key => "default_context_id"
   belongs_to :user
   
   validates_presence_of :name, :message => "project must have a name"
@@ -65,7 +66,13 @@ class Project < ActiveRecord::Base
       end
     end
   end
+  
+  alias_method :original_default_context, :default_context
 
+  def default_context
+    original_default_context.nil? ? Context.null_object : original_default_context
+  end
+  
   # would prefer to call this method state=(), but that causes an endless loop
   # as a result of acts_as_state_machine calling state=() to update the attribute
   def transition_to(candidate_state)
@@ -96,5 +103,5 @@ class NullProject
   def id
     nil
   end
-  
+    
 end

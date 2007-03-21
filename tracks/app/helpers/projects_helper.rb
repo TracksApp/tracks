@@ -23,7 +23,7 @@ module ProjectsHelper
       project_name = truncate(@previous_project.name, 40, "...")
       html << link_to_project(@previous_project, "&laquo; #{project_name}")
     end
-    html << '|' if @previous_project && @next_project
+    html << ' | ' if @previous_project && @next_project
     unless @next_project.nil?
       project_name = truncate(@next_project.name, 40, "...")
       html << link_to_project(@next_project, "#{project_name} &raquo;")

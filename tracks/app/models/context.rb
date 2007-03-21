@@ -22,6 +22,10 @@ class Context < ActiveRecord::Base
       :description => "Lists all the contexts for #{user.display_name}"
     }
   end
+  
+  def self.null_object
+    NullContext.new
+  end
 
   def hidden?
     self.hide == true || self.hide == 1
@@ -42,4 +46,20 @@ class Context < ActiveRecord::Base
     s
   end  
 
+end
+
+class NullContext
+    
+  def nil?
+    true
+  end
+  
+  def id
+    nil
+  end
+  
+  def name
+    ''
+  end
+    
 end

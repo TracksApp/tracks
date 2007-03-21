@@ -3,6 +3,7 @@ class ProjectsController < ApplicationController
   helper :application, :todos, :notes
   before_filter :init, :except => [:create, :destroy, :order]
   before_filter :check_user_set_project, :only => [:update, :destroy, :show]
+  before_filter :default_context_filter, :only => [:create,:update]
   skip_before_filter :login_required, :only => [:index]
   prepend_before_filter :login_or_feed_token_required, :only => [:index]
   session :off, :only => :index, :if => Proc.new { |req| ['rss','atom','txt'].include?(req.parameters[:format]) }
@@ -28,6 +29,7 @@ class ProjectsController < ApplicationController
     @count = @not_done.size
     @next_project = @user.projects.next_from(@project)
     @previous_project = @user.projects.previous_from(@project)
+    @default_project_context_name_map = build_default_project_context_name_map(@projects).to_json
   end
 
   # Example XML usage: curl -H 'Accept: application/xml' -H 'Content-Type: application/xml'
@@ -50,6 +52,7 @@ class ProjectsController < ApplicationController
     @saved = @project.save
     @project_not_done_counts = { @project.id => 0 }
     @active_projects_count = @user.projects.count(:conditions => "state = 'active'")
+    @contexts = @user.contexts
     respond_to do |wants|
       wants.js
       wants.xml do
@@ -93,6 +96,8 @@ class ProjectsController < ApplicationController
         render
       elsif boolean_param('update_status')
         render :action => 'update_status'
+      elsif boolean_param('update_default_context')
+        render :action => 'update_default_context'
       else
         render :text => success_text || 'Success'
       end
@@ -181,6 +186,19 @@ class ProjectsController < ApplicationController
       @done = @user.todos.find_in_state(:all, :completed, :order => "completed_at DESC")
       init_data_for_sidebar
     end
+    
+     def default_context_filter
+        p = params['project']
+        p = params['request']['project'] if p.nil? && params['request']
+        p = {} if p.nil?
+        default_context_name = p['default_context_name']
+        p.delete('default_context_name')
+
+        unless default_context_name.blank?
+          default_context = Context.find_or_create_by_name(default_context_name)
+          p['default_context_id'] = default_context.id
+        end
+      end
 
     def summary(project)
       project_description = ''

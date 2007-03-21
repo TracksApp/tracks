@@ -313,6 +313,10 @@ div#project_status > div {
 #project_status .active_state {
 	font-weight:bold;
 }
+
+div#default_context > div{
+	padding:10px;
+}
 a.footer_link {color: #cc3334; font-style: normal;}
 a.footer_link:hover {color: #fff; background-color: #cc3334 !important;}
 
@@ -557,7 +561,6 @@ form {
     border: 1px solid #CCC;
     padding: 10px;
     margin: 0px;
-    width: 313px;
     }
 .inline-form {
     border: none;

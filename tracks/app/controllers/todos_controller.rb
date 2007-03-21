@@ -224,6 +224,7 @@ class TodosController < ApplicationController
     @page_title = "TRACKS::Tickler"
     @tickles = @user.deferred_todos
     @count = @tickles.size
+    @default_project_context_name_map = build_default_project_context_name_map(@projects).to_json
   end
   
   # Check for any due tickler items, activate them
@@ -262,6 +263,7 @@ class TodosController < ApplicationController
     @done = @user.completed_todos.find(:all, :limit => max_completed, :include => [ :context, :project, :tags ]) unless max_completed == 0
     # Set count badge to number of items with this tag
     @not_done_todos.empty? ? @count = 0 : @count = @not_done_todos.size
+    @default_project_context_name_map = build_default_project_context_name_map(@projects).to_json
 
   end
   
@@ -421,7 +423,9 @@ class TodosController < ApplicationController
 
        # Set count badge to number of not-done, not hidden context items
        @count = @todos.reject { |x| !x.active? || x.context.hide? }.size
-
+       
+       @default_project_context_name_map = build_default_project_context_name_map(@projects).to_json
+       
        render
       end
     end

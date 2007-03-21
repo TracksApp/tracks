@@ -17,3 +17,10 @@
    <% end %>
   </td>
 </tr>
+<tr>
+    <td width="150"><label for="project[default_context_name]">Default Context</label></td>
+    <td width="300">
+        <%= text_field_tag("project[default_context_name]", @project.default_context.name, {:tabindex=>1,:size=> 25}) %>
+        <%= render :partial => 'default_context_autocomplete' %>
+    </td>
+</tr>

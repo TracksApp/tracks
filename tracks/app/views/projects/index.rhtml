@@ -21,14 +21,19 @@
       <div id="status"><%= error_messages_for('project') %></div>
 
       <label for="project_name">Name:</label><br />
-      <%= text_field 'project', 'name'  %><br />
+      <%= text_field 'project', 'name', "tabindex" => 1  %><br />
 
       <label for="project_description">Description (optional):</label><br />
-      <%= text_area 'project', 'description', "cols" => 30, "rows" => 4  %><br />
-      
-      <%= check_box_tag 'go_to_project' %><label for="go_to_project">Go to the project page</label><br /> 
+      <%= text_area 'project', 'description', "cols" => 30, "rows" => 4, "tabindex" => 2  %><br />
 
-      <input type="submit" value="Add" />
+    <label for="default_context_name">Default Context (optional):</label><br />
+    <%= text_field_tag("project[default_context_name]", @project.default_context.name, :tabindex => 3) %>
+    <%= render :partial => 'default_context_autocomplete' %>
+        <br />
+
+      <input type="submit" value="Add Project" tabindex="4" /><br />
+      
+      <input id="go_to_project" type="checkbox" tabindex="5" name="go_to_project"/><label for="go_to_project"> Take me to the new project page</label><br /> 
 
     <% end -%>
   </div>

@@ -1,6 +1,8 @@
-<%  project = project_listing %>
-<div id="<%= dom_id(project, "container") %>" class="list">
-  <div id="<%= dom_id(project) %>" class="project sortable_row" style="display:'';">
+<%  project = project_listing
+    @project_listing_zindex = @project_listing_zindex.nil? ? 200 : @project_listing_zindex - 1
+-%>
+<div id="<%= dom_id(project, "container") %>" class="list" style="z-index:<%= @project_listing_zindex %>">
+  <div id="<%= dom_id(project) %>" class="project sortable_row" style="display:''">
     <div class="position">
       <span class="handle">DRAG</span>
     </div>  
