@@ -8,6 +8,8 @@ type "//div[@id='edit_project_2'] //input[@name='project[name]']", "become a bil
 click "//div[@id='edit_project_2'] //input[@value='Update']"
 wait_for_not_visible "edit_project_2"
 wait_for_visible "project_2"
+wait_for_visible "flash"
+wait_for_not_visible "flash"
 click "css=#project_2 .buttons img.delete_item"
 assert_confirmation "Are you sure that you want to delete the project 'become a billionaire'?"
 wait_for_visible "flash"

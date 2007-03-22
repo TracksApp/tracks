@@ -80,11 +80,13 @@ class UsersController < ApplicationController
           return
         end
 
-        user.is_admin = true if User.no_users_yet?
+        first_user_signing_up = User.no_users_yet?
+        user.is_admin = true if first_user_signing_up
         if user.save
           @user = User.authenticate(user.login, params['user']['password'])
           @user.create_preference
           @user.save
+          session['user_id'] = @user.id if first_user_signing_up
           notify :notice, "Signup successful for user #{@user.login}."
           redirect_back_or_home
         end

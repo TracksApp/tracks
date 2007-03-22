@@ -9,6 +9,7 @@
   <%= render :partial => 'project_state_group', :object => @completed_projects, :locals => { :state => 'completed'} %>
 </div>
 
+<% @project = @new_project -%>
 <div id="input_box">
   <%= link_to_function("Create a new project &#187;",
                        "Element.toggle('project_new');Form.focusFirstElement('project-form');",

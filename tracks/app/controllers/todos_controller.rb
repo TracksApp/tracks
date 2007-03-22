@@ -65,8 +65,10 @@ class TodosController < ApplicationController
     end
     
     @saved = @todo.save
-    @todo.tag_with(params[:tag_list],@user)
-    @todo.reload
+    if @saved
+      @todo.tag_with(params[:tag_list],@user)
+      @todo.reload
+    end
     
     respond_to do |wants|
       wants.html { redirect_to :action => "index" }

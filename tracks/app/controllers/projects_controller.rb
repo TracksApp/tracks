@@ -136,6 +136,7 @@ class ProjectsController < ApplicationController
         @active_projects = @projects.select{ |p| p.active? }
         @hidden_projects = @projects.select{ |p| p.hidden? }
         @completed_projects = @projects.select{ |p| p.completed? }
+        @new_project = @user.projects.build
         render
       end
     end
