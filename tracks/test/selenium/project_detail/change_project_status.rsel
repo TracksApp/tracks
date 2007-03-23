@@ -1,5 +1,5 @@
 setup :fixtures => :all
-include_partial 'login/login', :username => 'admin', :password => 'abracadabra'
+login :as => 'admin'
 open '/projects/Build_a_working_time_machine'
 assert_checked 'project_state_active', 'ignored'
 assert_attribute 'css=#project_status .active span', 'class', 'active_state'

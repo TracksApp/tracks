@@ -22,3 +22,7 @@ config.action_mailer.delivery_method = :test
 # config.instantiated_fixtures = false
 # config.pre_loaded_fixtures = false
 SALT = "change-me" unless defined?( SALT ).nil?
+
+config.after_initialize do
+  require 'test/selenium_helper'    
+end

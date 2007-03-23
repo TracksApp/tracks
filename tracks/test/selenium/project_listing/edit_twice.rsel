@@ -1,5 +1,5 @@
 setup :fixtures => :all
-include_partial 'login/login', :username => 'admin', :password => 'abracadabra'
+login :as => 'admin'
 open "/projects"
 click "css=#project_2 .buttons img.edit_item"
 wait_for_visible "edit_project_2"

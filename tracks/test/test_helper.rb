@@ -111,6 +111,4 @@ class ActionController::IntegrationTest
     assert_response_and_body 401, "401 Unauthorized: Only admin users are allowed access to this function."
   end
   
-  
-
 end

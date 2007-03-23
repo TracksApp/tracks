@@ -1,8 +1,7 @@
-
-    open :controller => 'login', :action => 'logout'
-    open :controller => 'login'
-    assert_title 'exact:TRACKS::Login'
-    type "user_login", "admin"
-    type "user_password", "abracadabra"
-    click_and_wait "login"
-    assert_title 'exact:TRACKS::List tasks' 
+open :controller => 'login', :action => 'logout'
+open :controller => 'login'
+assert_title 'exact:TRACKS::Login'
+type "user_login", "admin"
+type "user_password", "abracadabra"
+click_and_wait "login"
+assert_title 'exact:TRACKS::List tasks' 

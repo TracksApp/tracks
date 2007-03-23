@@ -1,5 +1,6 @@
 setup :fixtures => :all
-include_partial 'login/login', :username => 'admin', :password => 'abracadabra'
+login :as => 'admin'
+open '/'
 click "xpath=//div[@id='completed'] //div[@id='todo_3'] //input[@class='item-checkbox']"
 wait_for_element_present "xpath=//div[@id='c4'] //div[@id='todo_3']"
 assert_not_visible "c4empty-nd"

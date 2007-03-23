@@ -1,8 +1,8 @@
-    open :controller => 'login', :action => 'logout'
-    open :controller => 'login'
-    assert_title 'exact:TRACKS::Login'
-    type "user_login", "admin"
-    type "user_password", "incorrect_password"
-    click_and_wait "login"
-    assert_title 'exact:TRACKS::Login'
-    verify_text_present 'Login unsuccessful'
+open :controller => 'login', :action => 'logout'
+open :controller => 'login'
+assert_title 'exact:TRACKS::Login'
+type "user_login", "admin"
+type "user_password", "incorrect_password"
+click_and_wait "login"
+assert_title 'exact:TRACKS::Login'
+verify_text_present 'Login unsuccessful'

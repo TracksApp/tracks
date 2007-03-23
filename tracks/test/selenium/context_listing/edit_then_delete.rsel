@@ -1,5 +1,5 @@
 setup :fixtures => :all
-include_partial 'login/login', :username => 'admin', :password => 'abracadabra'
+login :as => 'admin'
 open "/contexts"
 click "css=#context_3 .buttons img.edit_item"
 wait_for_visible "edit_context_3"
