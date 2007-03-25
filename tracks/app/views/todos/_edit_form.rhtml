@@ -17,7 +17,7 @@
     <td><input id="<%= dom_id(@todo, 'context_name') %>" name="context_name" autocomplete="off" tabindex="10" size="25" type="text" value="<%= @todo.context.name %>" />
     <div class="page_name_auto_complete" id="<%= dom_id(@todo, 'context_list') %>" style="display:none"></div></td>
     <script type="text/javascript">
-    editFormContextAutoCompleter = new Autocompleter.Local('<%= dom_id(@todo, 'context_name') %>', '<%= dom_id(@todo, 'context_list') %>', <%= context_names_for_autocomplete %>, {choices:100,autoSelect:true});
+    editFormContextAutoCompleter = new Autocompleter.Local('<%= dom_id(@todo, 'context_name') %>', '<%= dom_id(@todo, 'context_list') %>', <%= context_names_for_autocomplete %>, {choices:100,autoSelect:false});
     Event.observe($('<%= dom_id(@todo, 'context_name') %>'), "focus", editFormContextAutoCompleter.activate.bind(editFormContextAutoCompleter));
     Event.observe($('<%= dom_id(@todo, 'context_name') %>'), "click", editFormContextAutoCompleter.activate.bind(editFormContextAutoCompleter));
     </script>
@@ -29,7 +29,7 @@
       <div class="page_name_auto_complete" id="<%= dom_id(@todo, 'project_list') %>" style="display:none"></div>
     </td>
    <script type="text/javascript">
-    editFormProjectAutoCompleter = new Autocompleter.Local('<%= dom_id(@todo, 'project_name') %>', '<%= dom_id(@todo, 'project_list') %>', <%= project_names_for_autocomplete %>, {choices:100,autoSelect:true});
+    editFormProjectAutoCompleter = new Autocompleter.Local('<%= dom_id(@todo, 'project_name') %>', '<%= dom_id(@todo, 'project_list') %>', <%= project_names_for_autocomplete %>, {choices:100,autoSelect:false});
     Event.observe($('<%= dom_id(@todo, 'project_name') %>'), "focus", editFormProjectAutoCompleter.activate.bind(editFormProjectAutoCompleter));
     Event.observe($('<%= dom_id(@todo, 'project_name') %>'), "click", editFormProjectAutoCompleter.activate.bind(editFormProjectAutoCompleter));
     </script>
