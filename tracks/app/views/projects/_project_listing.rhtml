@@ -7,7 +7,7 @@
       <span class="handle">DRAG</span>
     </div>  
     <div class="data">
-      <%= link_to_project( project ) %><%= " (" + count_undone_todos_phrase(project,"actions") + ")" %>
+      <%= link_to_project( project ) %><%= " (" + count_undone_todos_and_notes_phrase(project,"actions") + ")" %>
     </div>
     <div class="buttons">
       <span class="grey"><%= project.current_state.to_s.upcase %></span>

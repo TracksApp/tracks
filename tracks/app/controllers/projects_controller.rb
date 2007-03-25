@@ -136,6 +136,13 @@ class ProjectsController < ApplicationController
         @active_projects = @projects.select{ |p| p.active? }
         @hidden_projects = @projects.select{ |p| p.hidden? }
         @completed_projects = @projects.select{ |p| p.completed? }
+        project_note_counts = Note.count(:group => 'project_id')
+        @projects.each do |project|
+          #define a singlton method "notes_count" on each project object
+          class << project; self end.send(:define_method, :notes_count) do
+            project_note_counts[project.id] || 0
+          end
+        end
         @new_project = @user.projects.build
         render
       end

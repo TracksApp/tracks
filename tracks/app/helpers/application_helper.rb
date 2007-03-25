@@ -97,6 +97,12 @@ module ApplicationHelper
   def count_undone_todos_phrase_text(todos_parent, string="actions")
     count_undone_todos_phrase(todos_parent, string).gsub("&nbsp;"," ")
   end
+
+  def count_undone_todos_and_notes_phrase(project, string="actions")
+    s = count_undone_todos_phrase(project, string)
+    s += ", #{pluralize(project.notes_count, 'note')}" unless project.notes_count == 0
+    s
+  end
   
   def link_to_context(context, descriptor = sanitize(context.name))
     link_to( descriptor, context_path(context), :title => "View context: #{context.name}" )
