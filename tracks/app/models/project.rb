@@ -33,6 +33,7 @@ class Project < ActiveRecord::Base
   end
   
   attr_protected :user
+  attr_accessor :cached_note_count
 
   def self.null_object
     NullProject.new
@@ -65,6 +66,10 @@ class Project < ActiveRecord::Base
         t.save
       end
     end
+  end
+  
+  def note_count
+    cached_note_count || notes.count
   end
   
   alias_method :original_default_context, :default_context

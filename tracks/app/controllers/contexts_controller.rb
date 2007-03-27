@@ -4,7 +4,7 @@ class ContextsController < ApplicationController
 
   before_filter :init, :except => [:create, :destroy, :order]
   before_filter :init_todos, :only => :show
-  before_filter :check_user_set_context, :only => [:update, :destroy]
+  before_filter :set_context_from_params, :only => [:update, :destroy]
   skip_before_filter :login_required, :only => [:index]
   prepend_before_filter :login_or_feed_token_required, :only => [:index]
   session :off, :only => :index, :if => Proc.new { |req| ['rss','atom','txt'].include?(req.parameters[:format]) }
@@ -91,9 +91,7 @@ class ContextsController < ApplicationController
   #
   def order
     params["list-contexts"].each_with_index do |id, position|
-      if check_user_matches_context_user(id)
-        Context.update(id, :position => position + 1)
-      end
+      @user.contexts.update(id, :position => position + 1)
     end
     render :nothing => true
   end
@@ -115,32 +113,8 @@ class ContextsController < ApplicationController
       end
     end
 
-    def check_user_set_context
+    def set_context_from_params
       @context = @user.contexts.find_by_params(params)
-      if @context.nil?
-        render :text => "Context not found.", :status => 404
-      end
-    end
-
-    def check_user_matches_context_user(id)
-       @context = Context.find_by_id_and_user_id(id, @user.id)
-       if @user == @context.user
-         return @context
-       else
-         @context = nil
-         notify :warning, "Project and session user mis-match: #{@context.user_id} and #{@user.id}!"
-         render :text => ''
-       end
-    end
-    
-    def check_user_return_item
-      item = Todo.find( params['id'] )
-      if @user == item.user
-        return item
-      else
-        notify :warning, "Item and session user mis-match: #{item.user.name} and #{@user.name}!"
-        render :text => ''
-      end
     end
      
     def init
@@ -154,7 +128,7 @@ class ContextsController < ApplicationController
     end
 
     def init_todos
-      check_user_set_context
+      set_context_from_params
       @done = @context.done_todos
       # @not_done_todos = @context.not_done_todos
       # TODO: Temporarily doing this search manually until I can work out a way

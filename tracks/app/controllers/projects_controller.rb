@@ -2,7 +2,7 @@ class ProjectsController < ApplicationController
 
   helper :application, :todos, :notes
   before_filter :init, :except => [:create, :destroy, :order]
-  before_filter :check_user_set_project, :only => [:update, :destroy, :show]
+  before_filter :set_project_from_params, :only => [:update, :destroy, :show]
   before_filter :default_context_filter, :only => [:create,:update]
   skip_before_filter :login_required, :only => [:index]
   prepend_before_filter :login_or_feed_token_required, :only => [:index]
@@ -136,13 +136,7 @@ class ProjectsController < ApplicationController
         @active_projects = @projects.select{ |p| p.active? }
         @hidden_projects = @projects.select{ |p| p.hidden? }
         @completed_projects = @projects.select{ |p| p.completed? }
-        project_note_counts = Note.count(:group => 'project_id')
-        @projects.each do |project|
-          #define a singlton method "notes_count" on each project object
-          class << project; self end.send(:define_method, :notes_count) do
-            project_note_counts[project.id] || 0
-          end
-        end
+        @projects.cache_note_counts
         @new_project = @user.projects.build
         render
       end
@@ -171,21 +165,10 @@ class ProjectsController < ApplicationController
       end
     end
         
-    def check_user_set_project
+    def set_project_from_params
       @project = @user.projects.find_by_params(params)
-      render :text => 'Project not found', :status => 404 if @project.nil?
     end
-        
-    def check_user_return_item
-      item = Todo.find( params['id'] )
-      if @user == item.user
-        return item
-      else
-        notify :warning, "Item and session user mis-match: #{item.user.name} and #{@user.name}!"
-        render :text => ''
-      end
-    end
-     
+
     def init
       @source_view = params['_source_view'] || 'project'
       @projects = @user.projects

@@ -3,6 +3,7 @@ class TodosController < ApplicationController
   helper :todos
 
   append_before_filter :init, :except => [ :destroy, :completed, :completed_archive, :check_deferred ]
+  append_before_filter :get_todo_from_params, :only => [ :edit, :toggle_check, :show, :update, :destroy ]
   skip_before_filter :login_required, :only => [:index]
   prepend_before_filter :login_or_feed_token_required, :only => [:index]
   session :off, :only => :index, :if => Proc.new { |req| is_feed_request(req) }
@@ -83,20 +84,17 @@ class TodosController < ApplicationController
   end
   
   def edit
-    @todo = check_user_return_todo
   end
   
   def show
-    item = check_user_return_todo
-    respond_to do |wants|
-       wants.xml { render :xml => item.to_xml( :root => 'todo', :except => :user_id ) }
-     end
+    respond_to do |format|
+      format.xml { render :xml => @todo.to_xml( :root => 'todo', :except => :user_id ) }
+    end
   end
 
   # Toggles the 'done' status of the action
   #
   def toggle_check
-    @todo = check_user_return_todo
     @todo.toggle_completion!
     @saved = @todo.save
     respond_to do |format|
@@ -122,7 +120,6 @@ class TodosController < ApplicationController
   end
 
   def update
-    @todo = check_user_return_todo
     @todo.tag_with(params[:tag_list],@user)
     @original_item_context_id = @todo.context_id
     @original_item_project_id = @todo.project_id
@@ -173,7 +170,7 @@ class TodosController < ApplicationController
   end
     
   def destroy
-    @todo = check_user_return_todo
+    @todo = get_todo_from_params
     @context_id = @todo.context_id
     @project_id = @todo.project_id
     @saved = @todo.destroy
@@ -271,21 +268,8 @@ class TodosController < ApplicationController
   
   private
 
-    def check_user_return_todo
-      todo = Todo.find( params['id'].to_i )
-      if @user == todo.user
-        return todo
-      else
-        @error_message = 'Item and session user mis-match: #{todo.user.name} and #{@todo.name}!'
-        respond_to do |wants|
-          wants.html do
-            notify :error, @error_message, 8.0
-            render :action => "index"
-          end
-          wants.js { render :action => 'error' }
-          wants.xml { render :text => @error_message, :status => 403 }
-        end
-      end
+    def get_todo_from_params
+      @todo = @user.todos.find(params['id'])
     end
 
     def init
