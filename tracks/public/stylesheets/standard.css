@@ -525,7 +525,7 @@ div.buttons, div.buttons a, div.buttons a:hover {
     background-color: transparent;
     }
 
-div#list-active-projects, div#list-hidden-projects, div#list-completed-projects, div#list-contexts {
+div#list-active-projects, div#list-hidden-projects, div#list-completed-projects, div#list-contexts, div#projects-empty-nd {
     border: 1px solid #999;
     }
     

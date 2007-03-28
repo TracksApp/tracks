@@ -11,7 +11,7 @@ class ContextsController < ApplicationController
 
   def index
     respond_to do |format|
-      format.html { @page_title = "TRACKS::List Contexts"; render }
+      format.html &render_contexts_html
       format.xml  { render :xml => @contexts.to_xml( :except => :user_id ) }
       format.rss  &render_contexts_rss_feed
       format.atom &render_contexts_atom_feed
@@ -97,6 +97,14 @@ class ContextsController < ApplicationController
   end
   
   protected
+
+    def render_contexts_html
+      lambda do
+        @page_title = "TRACKS::List Contexts"
+        @no_contexts = @contexts.empty?
+        render
+      end
+    end
 
     def render_contexts_rss_feed
       lambda do

@@ -1,4 +1,5 @@
 if @saved
+  page.hide 'contexts-empty-nd'
   page.insert_html :bottom, "list-contexts", :partial => 'context_listing', :locals => { :context_listing => @context }
   page.sortable "list-contexts", get_listing_sortable_options
   page.call "Form.reset", "context-form"

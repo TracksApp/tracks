@@ -1,3 +1,4 @@
+setup :fixtures => :all
 open :controller => 'login', :action => 'logout'
 open :controller => 'login'
 assert_title 'exact:TRACKS::Login'
