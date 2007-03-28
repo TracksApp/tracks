@@ -105,6 +105,14 @@ class TodosControllerTest < Test::Unit::TestCase
     actual = t.due
     assert_equal expected, actual, "Expected #{expected.to_s(:db)}, was #{actual.to_s(:db)}"
   end
+
+  def test_update_todos_with_blank_project_name
+    t = Todo.find(1)
+    @request.session['user_id'] = users(:admin_user).id
+    xhr :post, :update, :id => 1, :_source_view => 'todo', :project_name => '', "todo"=>{"id"=>"1", "notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>"foo, bar"
+    t.reload
+    assert t.project.nil?
+  end
   
   def test_update_todo_tags_to_none
     t = Todo.find(1)

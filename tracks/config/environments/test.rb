@@ -24,5 +24,5 @@ config.action_mailer.delivery_method = :test
 SALT = "change-me" unless defined?( SALT ).nil?
 
 config.after_initialize do
-  require 'test/selenium_helper'    
+  require File.expand_path(File.dirname(__FILE__) + "/../../test/selenium_helper")
 end

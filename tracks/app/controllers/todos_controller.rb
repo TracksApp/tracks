@@ -124,7 +124,7 @@ class TodosController < ApplicationController
     @original_item_context_id = @todo.context_id
     @original_item_project_id = @todo.project_id
     @original_item_was_deferred = @todo.deferred?
-    if params['todo']['project_id'].blank? && !params['project_name'].blank?
+    if params['todo']['project_id'].blank? && !params['project_name'].nil?
       if params['project_name'] == 'None'
         project = Project.null_object
       else
