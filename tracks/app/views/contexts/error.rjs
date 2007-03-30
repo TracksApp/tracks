@@ -1,1 +1,0 @@
-page.notify :error, @error_message || "An error occurred on the server.", 8.0

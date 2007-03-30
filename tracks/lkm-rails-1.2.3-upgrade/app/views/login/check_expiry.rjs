@@ -1,3 +1,0 @@
-unless @msg == ""
-  page.replace_html "info", content_tag("div", @msg + link_to("log in again.", :controller => "login", :action => "login"), "class" => "warning")
-end

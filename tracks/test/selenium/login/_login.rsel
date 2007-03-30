@@ -1,5 +1,0 @@
-open :controller => 'login', :action => 'logout'
-open :controller => 'login'
-type "user_login", username
-type "user_password", password
-click_and_wait "login"

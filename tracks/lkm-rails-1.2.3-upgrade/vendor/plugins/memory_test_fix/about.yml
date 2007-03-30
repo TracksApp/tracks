@@ -1,7 +1,0 @@
-author: Chris Roos
-summary: Makes SQLite3 memory tests possible by preloading the schema.
-homepage: http://blog.seagul.co.uk/articles/2006/02/08/in-memory-sqlite-database-for-rails-testing
-plugin: http://topfunky.net/svn/plugins/memory_test_fix
-license: MIT
-version: 0.1
-rails_version: 1.1+

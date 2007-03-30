@@ -1,5 +1,0 @@
-setup :fixtures => :all
-login :as => 'jane'
-open '/'
-click_and_wait "xpath=//div[@id='c10'] //div[@id='todo_16'] //input[@class='item-checkbox']"
-assert_title "TRACKS::Project: Attend RailsConf"
