@@ -46,7 +46,7 @@ td {background-color: #ff9;}
 
 div.form {
   width: 350px;
-  margin: 100px auto;
+  margin: 100px auto 10px auto;
   padding: 10px;
   border: 1px solid #999;
   background: #ff9;
@@ -153,4 +153,10 @@ input.open_id {
    color: #000;
    padding-left: 18px;
    width:182px;
+}
+p.alternate_auth {
+   text-align:center;
+}
+p.alternate_auth a {
+	text-decoration:underline;
 }

@@ -1,3 +1,25 @@
+var Login = {
+  showOpenid: function() {
+    if ($('database_auth_form')) $('database_auth_form').hide();
+    if ($('openid_auth_form')) $('openid_auth_form').show();
+    if ($('alternate_auth_openid')) $('alternate_auth_openid').hide();
+    if ($('alternate_auth_database')) $('alternate_auth_database').show();
+    if ($('openid_url')) $('openid_url').focus();
+    if ($('openid_url')) $('openid_url').select();
+	new CookieManager().setCookie('preferred_auth', 'openid');
+  },
+
+  showDatabase: function(container) {
+    if ($('openid_auth_form')) $('openid_auth_form').hide();
+    if ($('database_auth_form')) $('database_auth_form').show();
+    if ($('alternate_auth_database')) $('alternate_auth_database').hide();
+    if ($('alternate_auth_openid')) $('alternate_auth_openid').show();
+    if ($('user_login')) $('user_login').focus();
+    if ($('user_login')) $('user_login').select();
+	new CookieManager().setCookie('preferred_auth', 'database');
+  }
+}
+
 Ajax.Responders.register({
   onCreate: function() {
     if($('busy') && Ajax.activeRequestCount>0)
