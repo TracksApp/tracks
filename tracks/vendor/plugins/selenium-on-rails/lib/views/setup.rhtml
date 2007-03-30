@@ -1,0 +1,67 @@
+<% @page_title = 'Setup' -%>
+<% if defined?(@session_wiped) or @cleared_tables.any? or @loaded_fixtures.any? -%>
+	<div id="notice">
+		<% if defined?(@session_wiped) -%>
+		<p>The session is wiped clean.</p>
+    <% end-%>
+		<% if @cleared_tables.any? -%>
+		<p>The following database tables are cleared:</p>
+			<ul>
+				<% for table in @cleared_tables -%>
+				<li><%= table %></li>
+				<% end-%>
+			</ul>
+		<% end -%>
+		<% if @loaded_fixtures.any? -%>
+		<p>The following fixtures are loaded:</p>
+			<ul>
+				<% for fixture in @loaded_fixtures -%>
+				<li><%= fixture %></li>
+				<% end-%>
+			</ul>
+		<% end -%>
+	</div>
+<% end -%>
+
+<div id="usagedescription">
+<p>This page can be used to setup your Selenium tests. The following options can be used:</p>
+<dl>
+	<dt><tt>keep_session</tt></dt>
+	<dd>
+		Per default the session is reset, so add <tt>keep_session</tt> in order to keep the current session.
+		<table>
+			<tr><td>open</td><td><%= url_for %>?keep_session</td><td>&nbsp;</td></tr>
+		</table>
+	</dd>
+	<dt><tt>fixtures</tt></dt>
+	<dd>
+    Loads one or many fixtures into the database. <strong>This will destroy the current data you have in your database!</strong> Use <tt>all</tt> as name in order to load all fixtures, or specify which fixtures that should be loaded (delimited by commas).<br />
+    If a test needs different data than you have in your fixtures, you can add another <em>fixture set</em>. A fixture set is just a sub directory in <tt>/test/fixtures/</tt> where you can add alternate fixtures (e.g. <tt>/test/fixtures/blank/users.yml</tt>).
+		<table>
+			<tr><td>open</td><td><%= url_for :fixtures => 'all' %></td><td>&nbsp;</td></tr>
+			<tr><td>open</td><td><%= url_for :fixtures => 'fixture' %></td><td>&nbsp;</td></tr>
+			<tr><td>open</td><td><%= url_for :fixtures => 'fixture_one' %>,fixture_two</td><td>&nbsp;</td></tr>
+		</table>
+    <b>Available fixtures</b><br />
+    <% fixtures = available_fixtures -%>
+    <% for fixture_set in fixtures.keys.sort -%>
+      In the <%= fixture_set.blank? ? 'default' : "<tt>#{fixture_set}</tt>" %> fixture set:
+	  	<ul>
+        <% fixtures[fixture_set].unshift fixture_set.blank? ? 'all' : "#{fixture_set}/all" -%>
+		    <% for fixture in fixtures[fixture_set] -%>
+          <li><tt><%= fixture %></tt></li>
+		    <% end -%>
+		  </ul>
+    <% end -%>
+	</dd>
+	<dt><tt>clear_tables</tt></dt>
+	<dd>
+    Clears one or many database tables. Another way to do the same thing is to create an empty fixture in a new fixture set (see <tt>fixtures</tt> above).
+		<table>
+			<tr><td>open</td><td><%= url_for :clear_tables => 'sessions' %></td><td>&nbsp;</td></tr>
+			<tr><td>open</td><td><%= url_for :clear_tables => 'sessions' %>,outgoing_messages</td><td>&nbsp;</td></tr>
+		</table>
+	</dd>
+</dl>
+
+</div>

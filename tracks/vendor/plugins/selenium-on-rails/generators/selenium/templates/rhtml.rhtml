@@ -1,0 +1,16 @@
+<p>It's often a good idea to start the test with opening <tt>/selenium/setup</tt> (see <%%= link_to 'here', :controller => 'selenium', :action => 'setup' %> for more info).</p>
+
+<table>
+	<tr><th colspan="3"><%%= @page_title %></th></tr>
+	<tr><td>open</td><td>/selenium/setup</td><td>&nbsp;</td></tr>
+<%% for page in ['/', '/home'] -%>
+	<tr><td>open</td><td><%%= page %></td><td>&nbsp;</td></tr>
+	<tr><td>assertTitle</td><td>Home</td><td>&nbsp;</td></tr>
+<%% end -%>
+</table>
+
+<p>More information about the commands is available <a href="http://release.openqa.org/selenium-core/nightly/reference.html">here</a>.</p>
+
+<p>You can write comments above and below the commands, but you can only have one set of commands, i.e. one table, per test.</p>
+
+<p>Point the browser to <a href="<%= testcase_link %>"><%= testcase_link %></a> to see how this test is rendered, or to <a href="<%= suite_link %>"><%= suite_link %></a> to run the suite.</p>
