@@ -1,0 +1,73 @@
+= Unobtrusive Javascript for Rails Version 0.3.2
+
+Please see www.ujs4rails.com for full documentation, articles and updates.
+
+The Unobtrusive Javascript plugin for Rails allows you to attach Javascript behaviour and events to your page elements using pure Ruby, from within your controller or view, without clogging up your rendered HTML with Javascript - either inline or in the head of your document.
+
+== Installation
+
+The recommended way of installing the plugin is to take advantage of Subversion's svn:externals feature. From within your Rails app root, enter the following on the command line:
+
+  $ ./script/plugin install -x http://opensource.agileevolved.com/svn/root/rails_plugins/unobtrusive_javascript/tags/rel-0.2 unobtrusive_javascript
+
+If you are upgrading from a previous version remember to update your applications javascripts with:
+
+  rake unobtrusive_javascript:install
+
+Finally, add the necessary routes to config/routes.rb by adding:
+
+  UJS.routes
+
+To the Routes.draw block.
+
+== Including the necessary libraries and behaviours file
+
+The only modification you need to make to your app is to add the following line somewhere in the head of your app's layout:
+
+  <%= javascript_include_tag 'prototype', :unobtrusive %>
+
+You're now up and running with unobtrusive javascript functionality.
+
+== Registering javascript behaviours
+
+The plugin offers a simple, low-level function for attaching behaviours to elements of your page using the +register_js_behaviour+ function.
+
+  <%= apply_behaviour "#coolink:click", "alert('Hello world!')" %>
+
+You can also pass a block to the function that lets you write your javascript behaviours using ruby:
+
+  <%= apply_behaviour "#sayhellothenfade:click" do |page, element, event|
+	   page.alert "Hello, I'm gonna fade..."
+	   element.visual_effect :fade
+     end %>
+
+See the API documentation for more usage examples.
+
+=== Rendering behaviours inside script blocks instead of an external file
+
+By default, all unobtrusive behaviours will be rendered in an external javascript file, generated at runtime. Sometimes, you may want to embed the behaviours directly in a page, inside <tt>script</tt> tags. You can do this by passing the option <tt>:external => false</tt> to register_js_behaviour.
+
+  <%= apply_behaviour "#coolink:click", "alert('Hello world!')", :external => false %>
+
+One of the main reasons to render javascript inside javascript tags instead of the external file is when you are embedding behaviours inside partials that are loaded into your page using AJAX. Because the external javascript file will already have been generated, any subsequent behaviours inside your AJAX-loaded partials will not register. For this reason the behaviours need to be rendered inside normal script tags. The unobtrusive_javascript plugin takes care of this for you automatically - any behaviours registered inside an AJAX-loaded partial will be rendered inside a script element without having to specify <tt>:external => false</tt> manually.
+
+== Attaching behaviours directly to elements using Rails' tag generators
+
+Rails comes with two built-in tag generator helpers - tag and content_tag. You can use these helpers to generate HTML elements and attach behaviour to them by directly specifying the events as part of the helpers' html options hash. The behaviours will be extracted and moved into the external behaviours file instead of being rendered inline.
+
+  <%= content_tag "div", "Click Me", :onclick => "alert('You clicked me')" %>
+  
+The full range of javascript events are available through this method.
+
+The above functionality is achieved with a patch to Rails' tag_options function. Because of this patch, most of Rails' javascript/ajax helpers (or any helper that generates HTML using the tag_options function and that accepts an HTML options hash) will work in an unobtrusive fashion out of the box. The list of helpers that currently work unobtrusively include:
+
+* link_to_remote
+* link_to_function
+* button_to_function
+* form_remote_tag
+* submit_to_remote
+
+== Credits
+
+The unobtrusive_javascript plugin is by Luke Redpath (http://www.lukeredpath.co.uk) and Dan Webb (http://www.vivabit.com/bollocks).  The plugin also makes use of the Low Pro JavaScript library also by
+Dan Webb, parts of which were heavily inspired by Justin Palmer's excellent event:Selectors (http://encytemedia.com/eventselectors/).
