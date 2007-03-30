@@ -1,0 +1,14 @@
+<div id="display_box">
+  
+  <%= render :partial => "contexts/context", :collection => @contexts_to_show, 
+            :locals => { :collapsible => true } %>
+  <% unless @done.nil? -%>
+    <%= render :partial => "todos/completed", 
+            :locals => { :done => @done, :collapsible => true, :append_descriptor => nil } %>
+  <% end -%>
+</div><!-- End of display_box -->
+
+<div id="input_box">
+  <%= render :partial => "shared/add_new_item_form" %>
+  <%= render "sidebar/sidebar" %>
+</div><!-- End of input box -->

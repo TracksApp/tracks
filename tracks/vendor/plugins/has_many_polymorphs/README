@@ -1,0 +1,46 @@
+
+Self-referential, polymorphic has_many :through helper
+
+Copyright 2006 Evan Weaver (see the LICENSE file)
+
+"model :parent_class" may be required in some controllers or perhaps models in order for reloading to work properly, since the parent setup must be executed on the child every time the child class is reloaded.
+
+Usage and help: 
+http://blog.evanweaver.com/articles/2006/06/02/has_many_polymorphs
+
+Also see the source code, although it's probably not going to be super helpful to you.
+
+Changelog:
+
+22. api change; prefix on methods is now singular when using :rename_individual_collections
+21. add configuration option to cache polymorphic classes in development mode
+20. collection methods (push, delete, clear) now on individual collections
+19.2. disjoint collection sides bugfix, don't raise on new records
+19.1. double classify bugfix
+19. large changes to properly support double polymorphism
+18.2. bugfix to make sure the type gets checked on doubly polymorphic parents
+18.1. bugfix for sqlite3 child attribute retrieval
+18. bugfix for instantiating attributes of namespaced models
+17.1. bugfix for double polymorphic relationships
+17. double polymorphic relationships (includes new API method)
+16. namespaced model support
+15. bugfix for postgres and mysql under 1.1.6; refactored tests (thanks hildofur); properly handles legacy table names set with set_table_name()
+14. sti support added (use the child class names, not the base class)
+13. bug regarding table names with underscores in SQL query fixed
+12.1. license change
+12. file_column bug fixed
+11. tests written; after_find and after_initialize now correctly called
+10. bugfix
+9. rollback
+8. SQL performance enhancements added
+7. rewrote singletons as full-fledged proxy class so that marshalling works (e.g. in the session)
+6. caching added
+5. fixed dependency reloading problem in development mode
+4. license change
+3. added :dependent support on the join table
+1-2. no changelog
+
+Known problems:
+
+1. Plugin's test fixtures do not load properly for non-edge postgres, invalidating the tests.
+2. quote_value() hack is stupid.

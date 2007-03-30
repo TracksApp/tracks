@@ -1,0 +1,5 @@
+setup :fixtures => :all
+login :as => 'admin'
+open "/notes/"
+assert_element_present "note_1"
+assert_element_present "note_2"

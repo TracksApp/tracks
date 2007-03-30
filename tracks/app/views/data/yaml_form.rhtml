@@ -1,0 +1,19 @@
+<div id="display_box">
+	<div id="feeds">
+	<div id="feedlegend">
+    <p>Paste the contents of the YAML file you exported into the text box below:</p>
+  </div>
+
+<p>
+<% form_for :import, @import, :url => {:controller => 'data', :action => 'yaml_import'} do |f| %>
+  <%= f.text_area :yaml %><br />
+  <input type="submit" value="Import data">
+<% end %>
+</p>
+
+	</div><!-- End of feeds -->
+</div><!-- End of display_box -->
+
+<div id="input_box">
+
+</div><!-- End of input box -->

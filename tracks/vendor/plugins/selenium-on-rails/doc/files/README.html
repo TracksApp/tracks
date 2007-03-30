@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>File: README</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+  <div id="fileHeader">
+    <h1>README</h1>
+    <table class="header-table">
+    <tr class="top-aligned-row">
+      <td><strong>Path:</strong></td>
+      <td>README
+      </td>
+    </tr>
+    <tr class="top-aligned-row">
+      <td><strong>Last Update:</strong></td>
+      <td>Fri Dec 08 00:50:30 GMT Standard Time 2006</td>
+    </tr>
+    </table>
+  </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <h1>Selenium on Rails</h1>
+<h2>Overview</h2>
+<p>
+Selenium on Rails provides an easy way to test Rails application with <a
+href="http://www.openqa.org/selenium-core/">Selenium Core</a>.
+</p>
+<p>
+This plugin does four things:
+</p>
+<ol>
+<li>The Selenium Core files don&#8217;t have to pollute <tt>/public</tt>, they
+can stay in the Selenium gem or in <tt>/vendor/selenium</tt>.
+
+</li>
+<li>No need to create suite files, they are generated on the fly &#8212; one
+suite per directory in <tt>/test/selenium</tt> (suites can be nested).
+
+</li>
+<li>Instead of writing the test cases in HTML you can use a number of better
+formats (see <tt>Formats</tt>).
+
+</li>
+<li>Loading of fixtures and wiping of session (<tt>/selenium/setup</tt>).
+
+</li>
+</ol>
+<h2>Installation</h2>
+<ol>
+<li>Selenium Core needs to be available. It could either be installed as a gem
+(<tt>gem install selenium</tt>) or in <tt>/vendor/selenium/</tt>.
+
+</li>
+<li>Install Selenium on Rails: <tt>script/plugin install <a
+href="http://svn.openqa.org/svn/selenium-on-rails/selenium-on-rails">http://svn.openqa.org/svn/selenium-on-rails/selenium-on-rails</a>/</tt>
+
+</li>
+<li><em>If RedCloth is available the Selenese test cases can use it for better
+markup.</em>
+
+</li>
+<li>Run the Rakefile in the plugin&#8217;s directory to run the tests in order
+to see that everything works. (If RedCloth isn&#8217;t installed a few
+tests will fail since they assume RedCloth is installed.)
+
+</li>
+<li>Create a test case: <tt>script/generate selenium login</tt>
+
+</li>
+<li>Start the server: <tt>script/server -e test</tt>
+
+</li>
+<li>Point your browser to <tt><a
+href="http://localhost:3000/selenium">http://localhost:3000/selenium</a></tt>
+
+</li>
+<li>If everything works as expected you should see the Selenium test runner.
+The north east frame contains all your test cases (just one for now), and
+the north frame contains your test case.
+
+</li>
+</ol>
+<h3>win32-open3</h3>
+<p>
+<a href="http://raa.ruby-lang.org/project/win32-open3/">win32-open3</a> is
+needed if you&#8217;re on Windows and want to run your tests as a Rake task
+(see <tt>test:acceptance</tt>), i.e. you don&#8217;t have to install it but
+it&#8217;s recommended.
+</p>
+<p>
+You can build it from source or install the binary:
+</p>
+<ol>
+<li>Download the latest version of win32-open3, <a
+href="http://rubyforge.org/frs/download.php/8515/open3-0.2.2.so">open3-0.2.2.so</a>
+at the time of this writing.
+
+</li>
+<li>Open up irb and run this snippet: <tt>require &#8216;rbconfig&#8217;;
+include Config; puts CONFIG[&#8216;sitearchdir&#8217;]</tt>
+
+</li>
+<li>Create a <tt>win32</tt> directory under the directory you got, e.g.
+<tt>c:\ruby\lib\ruby\site_ruby\1.8\i386-msvcrt</tt>
+
+</li>
+<li>Rename the .so file to <tt>open3.so</tt> and put it in the <tt>win32</tt>
+directory.
+
+</li>
+<li>Profit! (unless you get an error when doing <tt>require
+&#8216;win32/open3&#8216;</tt>)
+
+</li>
+</ol>
+<h2>Formats</h2>
+<p>
+The test cases can be written in a number of formats. Which one you choose
+is a matter of taste. You can generate your test files by running
+<tt>script/generate selenium</tt> or by creating them manually in your
+<tt>/test/selenium</tt> directory.
+</p>
+<h3>Selenese, .sel</h3>
+<p>
+Selenese is the dumbest format (in a good way). You just write your
+commands delimited by | characters.
+</p>
+<pre>
+ |open|/selenium/setup|
+ |open|/|
+ |goBack|
+</pre>
+<p>
+If you don&#8217;t want to write Selenese tests by hand you can use <a
+href="http://www.openqa.org/selenium-ide/">SeleniumIDE</a> which has <a
+href="http://wiki.openqa.org/display/SIDE/SeleniumOnRails">support</a> for
+Selenese.
+</p>
+<p>
+SeleniumIDE makes it super easy to record test and edit them.
+</p>
+<h3>RSelenese, .rsel</h3>
+<p>
+RSelenese enable you to write your tests in Ruby.
+</p>
+<pre>
+ setup :fixtures =&gt; :all
+ open '/'
+ assert_title 'Home'
+ ('a'..'z').each {|c| open :controller =&gt; 'user', :action =&gt; 'create', :name =&gt; c }
+</pre>
+<p>
+See <a
+href="../classes/SeleniumOnRails/TestBuilder.html">SeleniumOnRails::TestBuilder</a>
+for available commands.
+</p>
+<h3>HTML/RHTML</h3>
+<p>
+You can write your tests in HTML/RHTML but that&#8217;s mostly useful if
+you have existing tests you want to reuse.
+</p>
+<h3>Partial test cases</h3>
+<p>
+If you have some common actions you want to do in several test cases you
+can put them in a separate partial test case and include them in your other
+test cases.
+</p>
+<p>
+A partial test case is just like a normal test case besides that its
+filename has to start with _:
+</p>
+<pre>
+ #_login.rsel
+ open '/login'
+ type 'name', name
+ type 'password', password
+ click 'submit', :wait=&gt;true
+</pre>
+<p>
+To include a partial test case you write like this in a Selenese test case:
+</p>
+<pre>
+ |includePartial|login|name=John Doe|password=eoD nhoJ|
+</pre>
+<p>
+in a RSelenese test case:
+</p>
+<pre>
+ include_partial 'login', :name =&gt; 'Jane Doe', :password =&gt; 'Jane Doe'.reverse
+</pre>
+<p>
+and in a RHTML test case:
+</p>
+<pre>
+ &lt;%= render :partial =&gt; 'login', :locals =&gt; {:name = 'Joe Schmo', :password =&gt; 'Joe Schmo'.reverse} %&gt;
+</pre>
+<h2>Configuration</h2>
+<p>
+There are a number of settings available. You make them by renaming
+<tt>config.yml.example</tt> to <tt>config.yml</tt> and make your changes in
+that file.
+</p>
+<h3>Environments</h3>
+<p>
+Per default this plugin is only available in test environment. You can
+change this by setting <tt>environments</tt>, such as:
+</p>
+<pre>
+ #config.yml
+ environments:
+   - test
+   - development
+</pre>
+<h2><tt>test:acceptance</tt></h2>
+<p>
+You can run all your Selenium tests as a Rake task.
+</p>
+<p>
+First, if you&#8217;re on Windows, you have to make sure win32-open3 is
+installed. Then you have to configure which browsers you want to run, like
+this:
+</p>
+<pre>
+ #config.yml
+ browsers:
+   firefox: 'c:\Program Files\Mozilla Firefox\firefox.exe'
+   ie: 'c:\Program Files\Internet Explorer\iexplore.exe'
+</pre>
+<p>
+Now you&#8217;re all set. First start a server:
+</p>
+<pre>
+ script/server -e test
+</pre>
+<p>
+Then run the tests:
+</p>
+<pre>
+ rake test:acceptance
+</pre>
+<p>
+Now it should work, otherwise let me know!
+</p>
+<h3>Store results</h3>
+<p>
+If you want to store the results from a <tt>test:acceptance</tt> you just
+need to set in which directory they should be stored:
+</p>
+<pre>
+ #config.yml
+ result_dir: 'c:\result'
+</pre>
+<p>
+So when you run <tt>rake test:acceptance</tt> the tables with the results
+will be stored as <tt>.html</tt> files in that directory.
+</p>
+<p>
+This can be useful especially for continous integration.
+</p>
+<h2>Todo</h2>
+<h3>Standalone mode</h3>
+<p>
+More work is needed on <tt>test:acceptance</tt> on Windows to be able to
+start the server when needed.
+</p>
+<h3>user_extension.js</h3>
+<p>
+Selenium has support for <tt>user_extension.js</tt> which is a way to
+extend the functionality of Selenium Core. However there is currently no
+easy way to add such a file in Selenium on Rails.
+</p>
+<h3>More setup/teardown support?</h3>
+<p>
+Currently there is only support to load fixtures and to wipe the session in
+<tt>/selenium/setup</tt>. Is there a need for more kinds of setups or
+teardowns?
+</p>
+<h3>More documentation</h3>
+<h2>Not todo</h2>
+<h3>Editor</h3>
+<p>
+Creating an editor for the test cases is currently considered out of scope
+for this plugin. <a
+href="http://www.openqa.org/selenium-ide/">SeleniumIDE</a> does such a good
+job and has <a
+href="http://wiki.openqa.org/display/SIDE/SeleniumOnRails">support</a> for
+the Selenese format.
+</p>
+<h2>Credits</h2>
+<ul>
+<li>Jon Tirsen, <a href="http://jutopia.tirsen.com">jutopia.tirsen.com</a>
+&#8212; initial <a
+href="http://wiki.rubyonrails.com/rails/pages/SeleniumIntegration">inspiration</a>
+
+</li>
+<li>Eric Kidd, <a href="http://www.randomhacks.net">www.randomhacks.net</a>
+&#8212; contribution of RSelenese
+
+</li>
+</ul>
+<h2>Information</h2>
+<p>
+For more information, check out the <a
+href="http://www.openqa.org/selenium-on-rails/">website</a>.
+</p>
+
+    </div>
+
+
+   </div>
+
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

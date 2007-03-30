@@ -1,0 +1,8 @@
+setup :clear_tables => [:users, :preferences]
+open '/'
+assert_title 'exact:TRACKS::Sign up as the admin user'
+type "user_login", "admin"
+type "user_password", "abracadabra"
+type "user_password_confirmation", "abracadabra"
+click_and_wait "signup"
+assert_title 'exact:TRACKS::List tasks'

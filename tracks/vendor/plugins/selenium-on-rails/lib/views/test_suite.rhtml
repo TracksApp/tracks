@@ -1,0 +1,26 @@
+<% @page_title = test_suite_name @suite_path -%>
+<script type="text/javascript">
+<!--
+function openSuite(selector) {
+	var suite = selector.options[selector.selectedIndex].value;
+	if(suite == "header") return;
+	if(top.location.href != location.href) //inside a frame
+		top.location =  "<%= url_for :action => :support_file %>/TestRunner.html?test=tests" + suite
+	else
+		window.location = "<%= url_for :action => :test_file, :testname => '' %>" + suite
+}
+//-->
+</script>
+<select onchange="openSuite(this)">
+	<option value="header">Suites:</option>
+<% for name, path in test_suites @suite_path -%>
+	<option value="<%= path %>"><%= name%></option>
+<% end -%>
+</select>
+
+<table>
+	<tr><th><%=  @page_title %></th></tr>
+<% for name, path in test_cases @suite_path -%>
+	<tr><td><%= link_to_test_case name, path %></td></tr>
+<% end -%>
+</table>

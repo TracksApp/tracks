@@ -1,0 +1,6 @@
+setup :fixtures => :all
+login :as => 'admin'
+open "/contexts"
+click "css=#context_3 .buttons img.delete_item"
+assert_confirmation "Are you sure that you want to delete the context 'email'?"
+wait_for_element_not_present "context_3"

@@ -1,0 +1,10 @@
+if @saved
+  page.hide 'contexts-empty-nd'
+  page.insert_html :bottom, "list-contexts", :partial => 'context_listing', :locals => { :context_listing => @context }
+  page.sortable "list-contexts", get_listing_sortable_options
+  page.call "Form.reset", "context-form"
+  page.call "Form.focusFirstElement", "context-form"
+else
+  page.show 'status'
+  page.replace_html 'status', "#{error_messages_for('context')}"
+end

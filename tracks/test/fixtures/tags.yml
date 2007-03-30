@@ -1,0 +1,17 @@
+foo:
+  id: 1
+  name: foo
+  created_at: <%= Time.now.utc.to_s(:db) %>
+  updated_at: <%= Time.now.utc.to_s(:db) %>
+
+bar:
+  id: 2
+  name: bar
+  created_at: <%= Time.now.utc.to_s(:db) %>
+  updated_at: <%= Time.now.utc.to_s(:db) %>
+  
+baz:
+  id: 3
+  name: baz
+  created_at: <%= Time.now.utc.to_s(:db) %>
+  updated_at: <%= Time.now.utc.to_s(:db) %>
