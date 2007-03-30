@@ -1,1 +1,0 @@
-`rake update_scripts`
