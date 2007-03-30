@@ -1,0 +1,18 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+	<title>Selenium on Rails<%= defined?(@page_title) ? ": #{@page_title}" : '' %></title>
+</head>
+<style type="text/css">
+body, html { font-family: Verdana, Arial, sans-serif; }
+table { border-collapse: collapse; margin: 10px 0px; }
+td, th { border: 2px solid black; }
+#notice { text-align: center; color: darkgreen; background-color: lightgreen; padding: 5px 15px; width: 400px; margin-left: auto; margin-right: auto; }
+#notice * { text-align: left; }
+#usagedescription { margin: 15px 30px; }
+</style>
+<body>
+<%= @content_for_layout %>
+</body>
+</html>

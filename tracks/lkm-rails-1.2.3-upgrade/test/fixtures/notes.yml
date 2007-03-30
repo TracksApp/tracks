@@ -1,0 +1,29 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+<% 
+def today 
+  Time.now.utc.to_s(:db) 
+end
+ 
+def next_week 
+  1.week.from_now.utc.to_s(:db) 
+end
+ 
+def last_week 
+  1.week.ago.utc.to_s(:db) 
+end 
+%>
+
+first_notes:
+  id: 1
+  user_id: 1
+  project_id: 1
+  body: Need to collect a catalogue from Time Machines R Us
+  created_at: <%= today %>
+  updated_at: <%= today %>
+another_notes:
+  id: 2
+  user_id: 1
+  project_id: 1
+  body: Should I go for a swirly effect or a whooshy one?
+  created_at: <%= today %>
+  updated_at: <%= today %>

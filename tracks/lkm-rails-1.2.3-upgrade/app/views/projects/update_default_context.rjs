@@ -1,0 +1,10 @@
+if @project.default_context.nil?
+  page.notify :notice, "Removed default context", 5.0
+else
+  if source_view_is :project
+    page['todo_context_name'].value = @project.default_context.name
+  end
+  page.notify :notice, "Set project's default context to #{@project.default_context.name}", 5.0
+end
+page.hide "busy"
+

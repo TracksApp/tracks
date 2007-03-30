@@ -1,0 +1,4 @@
+setup :fixtures => :all
+login :as => 'admin'
+open "/tickler/"
+assert_element_present "todo_15"

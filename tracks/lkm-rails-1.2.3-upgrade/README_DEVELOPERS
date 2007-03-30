@@ -1,0 +1,11 @@
+To run selenium tests, start Tracks in test mode using
+
+  script/server -e test
+ 
+Then open a browser to
+
+  http://localhost:3000/selenium/
+  
+and interact with the test runner.
+
+For more information about Selenium on Rails, see vendor/plugins/selenium-on-rails/README

@@ -1,0 +1,2 @@
+type 'nesting', 'Nesting partial'
+include_partial 'partials/rsel', :hello => hello.reverse

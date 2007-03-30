@@ -1,0 +1,8 @@
+chloe:
+  id: 1
+  cat_type: Kitten
+  name: Chloe
+alice:
+  id: 2
+  cat_type: Kitten
+  name: Alice

@@ -1,0 +1,22 @@
+OpenID Consumer
+===============
+
+Enable OpenID authentication and profile exchange from your application.
+
+PRE-REQUISITES
+--------------
+
+* JanRain's Yadis and OpenID 1.2 libraries in Ruby.
+  * These can be obtained using 'gem install ruby-openid'
+
+
+INSTALLATION
+------------
+
+To install you need to create a migration and add a controller.
+
+  ./script/generate open_id_migration add_open_id_tables
+	./script/generate open_id_consumer_controller open_id
+	
+This can be used well in conjunction with a login system such as ActsAsAuthenticated
+

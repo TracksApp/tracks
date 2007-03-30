@@ -1,0 +1,18 @@
+<%
+todo = text_todo
+result_string = ''
+if (todo.completed?) && todo.completed_at
+  result_string << "    [Completed: " + format_date(todo.completed_at) + "] "
+end
+
+if todo.due
+  result_string << "    [Due: " + format_date(todo.due) + "] "
+  result_string << todo.description + " "
+else
+  result_string << "    " + todo.description + " "
+end
+
+unless todo.project.nil?
+  result_string << "(" + todo.project.name + ")"
+end
+-%><%= result_string %>

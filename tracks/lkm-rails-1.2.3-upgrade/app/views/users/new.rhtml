@@ -1,0 +1,32 @@
+<div title="Account signup" id="signupform" class="form">
+<% form_tag :action=> "create" do %>
+
+  <%= error_messages_for 'user' %><br/>
+
+  <%= render_flash %>
+	
+  <h3><%= @heading -%></h3>
+
+  <table>
+    <tr>
+      <td><label for="user_login">Desired login:</label></td>
+      <td> <%= text_field "user", "login", :size => 20 %></td>
+    </tr>
+    <tr>
+      <td><label for="user_password">Choose password:</label></td>
+      <td><%= password_field "user", "password", :size => 20 %></td>
+    </tr>
+    <tr>
+      <td><label for="user_password_confirmation">Confirm password:</label></td>
+      <td><%= password_field "user", "password_confirmation", :size => 20 %></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><input type="submit" id="signup" value="Signup &#187;" class="primary" /></td>
+    </tr>
+  </table>
+  
+<% end %>
+</div>
+
+

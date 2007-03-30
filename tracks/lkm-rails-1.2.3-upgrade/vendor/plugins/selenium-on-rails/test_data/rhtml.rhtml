@@ -1,0 +1,7 @@
+<table>
+  <tr><th colspan="3"><%= @page_title %></th></tr>
+<% for page in ['/fi', '/fo', '/fum'] -%>
+  <tr><td>open</td><td><%= page %></td><td>&nbsp;</td></tr>
+<% end -%>
+  <%= render :partial => 'partial', :locals => {:source => 'RHTML'} %>
+</table>

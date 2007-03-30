@@ -1,0 +1,72 @@
+if @saved
+  status_message = 'Action saved'
+  status_message += ' to tickler' if @todo.deferred?
+  status_message = 'Added new project / ' + status_message if @new_project_created
+  status_message = 'Added new context / ' + status_message if @new_context_created
+  page.notify :notice, status_message, 5.0
+  page << "contextAutoCompleter.options.array = #{context_names_for_autocomplete}; contextAutoCompleter.changed = true" if @new_context_created
+  page << "projectAutoCompleter.options.array = #{project_names_for_autocomplete}; projectAutoCompleter.changed = true" if @new_project_created
+  if source_view_is_one_of [:todo, :context]
+    if @context_changed || @todo.deferred?
+      page[@todo].remove
+      if (@remaining_undone_in_context == 0)
+        source_view do |from|
+           from.todo { page.visual_effect :fade, "c#{@original_item_context_id}", :duration => 0.4 }
+           from.context { page.show "c#{@original_item_context_id}empty-nd" }
+         end
+      end
+      if source_view_is(:todo) && @todo.active?
+        page.call "todoItems.ensureVisibleWithEffectAppear", "c#{@todo.context_id}"
+        page.call "todoItems.expandNextActionListingByContext", "c#{@todo.context_id}items", true
+        page.insert_html :bottom, "c#{@todo.context_id}items", :partial => 'todos/todo', :locals => { :parent_container_type => parent_container_type }
+      end
+      page.replace_html("badge_count", @remaining_undone_in_context) if source_view_is :context
+      page.delay(0.5) do
+        page.call "todoItems.ensureContainerHeight", "c#{@original_item_context_id}items"
+        if source_view_is(:todo) && @todo.active?
+          page.call "todoItems.ensureContainerHeight", "c#{@todo.context_id}items"
+          page.visual_effect :highlight, dom_id(@todo), :duration => 3
+        end
+      end
+    else
+      page.replace dom_id(@todo), :partial => 'todos/todo', :locals => { :parent_container_type => parent_container_type }
+      page.visual_effect :highlight, dom_id(@todo), :duration => 3
+    end    
+  elsif source_view_is :project
+    if @project_changed
+      page[@todo].remove
+      page.show("p#{@original_item_project_id}empty-nd") if (@remaining_undone_in_project == 0)
+      page.replace_html "badge_count", @remaining_undone_in_project
+    elsif @todo.deferred? 
+      page[@todo].remove
+      page.show("p#{@original_item_project_id}empty-nd") if (@remaining_undone_in_project == 0)
+      page.insert_html :bottom, "tickler", :partial => 'todos/todo', :locals => { :parent_container_type => parent_container_type }
+      page['tickler-empty-nd'].hide
+      page.replace_html "badge_count", @down_count
+    elsif @todo_was_activated_from_deferred_state
+      page[@todo].remove
+      page['tickler-empty-nd'].show if (@deferred_count == 0)
+      page.insert_html :bottom, "p#{@todo.project_id}", :partial => 'todos/todo', :locals => { :parent_container_type => parent_container_type }
+      page["p#{@todo.project_id}empty-nd"].hide
+      page.replace_html "badge_count", @down_count
+    else
+      page.replace dom_id(@todo), :partial => 'todos/todo', :locals => { :parent_container_type => parent_container_type }
+      page.visual_effect :highlight, dom_id(@todo), :duration => 3
+    end
+  elsif source_view_is :deferred
+    if @todo.deferred?
+      page.replace dom_id(@todo), :partial => 'todos/todo', :locals => { :parent_container_type => parent_container_type }
+      page.visual_effect :highlight, dom_id(@todo), :duration => 3
+    else
+      page[@todo].remove
+      page.show(empty_container_msg_div_id) if (@down_count == 0)
+      page.replace_html "badge_count", @down_count
+    end
+  else
+    logger.error "unexpected source_view '#{params[:_source_view]}'"
+  end
+  
+else
+  page.show 'error_status'
+  page.replace_html 'error_status', "#{error_messages_for('item')}"
+end

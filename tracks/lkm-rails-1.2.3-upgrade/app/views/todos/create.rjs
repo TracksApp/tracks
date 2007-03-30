@@ -1,0 +1,25 @@
+if @saved
+  page.hide 'status'
+  status_message = 'Added new next action'
+  status_message += ' to tickler' if @todo.deferred?
+  status_message = 'Added new project / ' + status_message if @new_project_created
+  status_message = 'Added new context / ' + status_message if @new_context_created
+  page.notify :notice, status_message, 5.0
+  page['badge_count'].replace_html @down_count
+  page.send :record, "Form.reset('todo-form-new-action');Form.focusFirstElement('todo-form-new-action')"
+  page << "contextAutoCompleter.options.array = #{context_names_for_autocomplete}" if @new_context_created
+  page << "projectAutoCompleter.options.array = #{project_names_for_autocomplete}" if @new_project_created
+  if should_show_new_item()
+    if @new_context_created
+      page.insert_html :top, 'display_box', :partial => 'contexts/context', :locals => { :context => @todo.context, :collapsible => true }
+    else
+      page.call "todoItems.ensureVisibleWithEffectAppear", "c#{@todo.context_id}" if source_view_is(:todo)
+      page.insert_html :bottom, item_container_id, :partial => 'todos/todo', :locals => { :parent_container_type => parent_container_type, :source_view => @source_view }
+      page.visual_effect :highlight, dom_id(@todo), :duration => 3
+      page[empty_container_msg_div_id].hide unless empty_container_msg_div_id.nil?
+    end
+  end
+else
+  page.show 'status'
+  page.replace_html 'status', "#{error_messages_for('todo')}"
+end
