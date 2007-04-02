@@ -220,7 +220,7 @@ DateDueKeyboardShortcutSupport.prototype = {
     this.dateFormat = dateFormat || "%Y/%m/%d";
     Event.observe(this.element,'keypress',this.onkeypress.bindAsEventListener(this));
     title = this.element.getAttributeNode("title");
-		tooltip = 'Shortcuts: [t] today; [-] previous day; [+] next day; Click to show calendar';
+		tooltip = 'Shortcuts: (t) today; (-) or (<) previous day; (+) or (>) next day; ([) previous week; (]) next week; ({) previous month; (}) next month; Click to show calendar';
     if (title && title.value)
     {
       this.element.setAttribute("title", title.value + ' (' + tooltip + ')');
@@ -237,11 +237,25 @@ DateDueKeyboardShortcutSupport.prototype = {
         this.setTextBoxToTodaysDate();
         break;
       case "+": 
+      case ">": 
       case "=": 
         this.setTextBoxToNextDay();
         break;
       case "-": 
+      case "<": 
         this.setTextBoxToPreviousDay();
+        break;
+      case "[": 
+        this.setTextBoxToPreviousWeek();
+        break;
+      case "]": 
+        this.setTextBoxToNextWeek();
+        break;
+      case "{": 
+        this.setTextBoxToPreviousMonth();
+        break;
+      case "}": 
+        this.setTextBoxToNextMonth();
         break;
       default:
         handled = false;
@@ -270,9 +284,29 @@ DateDueKeyboardShortcutSupport.prototype = {
     this.addDaysToTextBoxDate(-1);
   },
 
+  setTextBoxToNextWeek : function() {
+    this.addDaysToTextBoxDate(7);
+  },
+  
+  setTextBoxToPreviousWeek : function() {
+    this.addDaysToTextBoxDate(-7);
+  },
+
   addDaysToTextBoxDate : function(numDays) {
     date = Date.parseDate(this.element.value, this.dateFormat);
     date.setDate(date.getDate() + numDays);
+    this.setDate(date);
+  },
+
+  setTextBoxToNextMonth : function() {
+    date = Date.parseDate(this.element.value, this.dateFormat);
+    date.setMonth(date.getMonth() + 1);
+    this.setDate(date);
+  },
+
+  setTextBoxToPreviousMonth : function() {
+    date = Date.parseDate(this.element.value, this.dateFormat);
+    date.setMonth(date.getMonth() - 1);
     this.setDate(date);
   },
 
