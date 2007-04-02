@@ -5,6 +5,8 @@ require 'data_controller'
 class DataController; def rescue_action(e) raise e end; end
 
 class DataControllerTest < Test::Unit::TestCase
+  fixtures :users, :preferences, :projects, :notes
+
   def setup
     @controller = DataController.new
     @request    = ActionController::TestRequest.new
@@ -12,7 +14,9 @@ class DataControllerTest < Test::Unit::TestCase
   end
 
   # Replace this with your real tests.
-  def test_truth
-    assert true
+  def test_csv_export_completes_without_error
+    @request.session['user_id'] = users(:admin_user).id
+    get :csv_notes
+    puts @response.body
   end
 end

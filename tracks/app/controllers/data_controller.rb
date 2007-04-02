@@ -55,7 +55,9 @@ class DataController < ApplicationController
     CSV::Writer.generate(result = "") do |csv|
       csv << ["ID", "User ID", "Project", "Note",
               "Created at", "Updated at"]
-      @user.notes.find(:all, :include => [:project]).each do |note|
+      # had to remove project include because it's association order is leaking through
+      # and causing an ambiguous column ref even with_exclusive_scope didn't seem to help -JamesKebinger 
+      @user.notes.find(:all,:order=>"notes.created_at").each do |note|
         # Format dates in ISO format for easy sorting in spreadsheet
         # Print context and project names for easy viewing
         csv << [note.id, note.user_id, 
