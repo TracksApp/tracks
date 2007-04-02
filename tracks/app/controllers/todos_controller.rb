@@ -445,7 +445,7 @@ class TodosController < ApplicationController
             else
             
               # Exclude hidden projects from count on home page
-              @todos = @user.todos.find(:all, :conditions => ['todos.state = ? or todos.state = ?', 'active', 'complete'], :include => [ :project, :context, :tags ])
+              @todos = @user.todos.find(:all, :conditions => ['todos.state = ? or todos.state = ?', 'active', 'completed'], :include => [ :project, :context, :tags ])
 
               # Exclude hidden projects from the home page
               @not_done_todos = @user.todos.find(:all, :conditions => ['todos.state = ?', 'active'], :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC", :include => [ :project, :context, :tags ])

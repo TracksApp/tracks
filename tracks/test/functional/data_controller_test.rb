@@ -17,6 +17,5 @@ class DataControllerTest < Test::Unit::TestCase
   def test_csv_export_completes_without_error
     @request.session['user_id'] = users(:admin_user).id
     get :csv_notes
-    puts @response.body
   end
 end
