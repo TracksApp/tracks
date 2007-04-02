@@ -185,6 +185,11 @@ module TodosHelper
     split_notes = notes.split(/\n/)
     joined_notes = split_notes.join("\\n")
   end
+  
+  def formatted_pagination(total, per_page)
+    s = will_paginate(@down_count, 6)
+    (s.gsub /(<\/[^<]+>)/, '\1 ').chomp(' ')
+  end
     
   private
   

@@ -27,7 +27,7 @@ module Tracks
       end
   
       def source_view
-        responder = Tracks::SourceViewSwitching::Responder.new(params[:_source_view])
+        responder = Tracks::SourceViewSwitching::Responder.new(params[:_source_view] || @source_view)
         block_given? ? yield(responder) : responder
       end
           

@@ -1,0 +1,58 @@
+WillPaginate
+
+Ruby port by: PJ Hyett
+Original PHP source: http://www.strangerstudios.com/sandbox/pagination/diggstyle.php
+Contributors: K. Adam Christensen, Chris Wanstrath, Dr. Nic Williams
+
+Example usage: 
+
+app/models/post.rb
+
+  class Post < ActiveRecord::Base
+    cattr_reader :per_page
+    @@per_page = 50
+  end
+
+app/controller/posts_controller.rb
+
+  def index
+    @board = Board.find(params[:id])
+    @posts, @page = Post.paginate_all_by_board_id(@board.id, :page => params[:page])
+  end
+
+app/views/posts/index.rhtml
+
+  <%= will_paginate(@board.topic_count, Post.per_page) %>
+
+
+Copy the following css into your stylesheet for a good start:
+
+.pagination {
+	padding: 3px;
+	margin: 3px;
+}
+.pagination a {
+	padding: 2px 5px 2px 5px;
+	margin: 2px;
+	border: 1px solid #aaaadd;
+	text-decoration: none;
+	color: #000099;
+}
+.pagination a:hover, .pagination a:active {
+	border: 1px solid #000099;
+	color: #000;
+}
+.pagination span.current {
+	padding: 2px 5px 2px 5px;
+	margin: 2px;
+	border: 1px solid #000099;
+	font-weight: bold;
+	background-color: #000099;
+	color: #FFF;
+}
+.pagination span.disabled {
+	padding: 2px 5px 2px 5px;
+	margin: 2px;
+	border: 1px solid #eee;
+	color: #ddd;
+}

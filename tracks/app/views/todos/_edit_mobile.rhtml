@@ -2,8 +2,8 @@
 <%= error_messages_for("todo") %>
 </span>
 <% this_year = user_time.to_date.strftime("%Y").to_i -%>
-<p><label for="todo_state">Done?</label></p>
-<p><%= check_box( "todo", "state", "tabindex" => 1) %></p>
+<p><label for="done">Done?</label></p>
+<p><%= check_box_tag("done", 1, @todo && @todo.completed?, "tabindex" => 1) %></p>
 <p><label for="todo_description">Next action</label></p>
 <p><%= text_field( "todo", "description", "tabindex" => 2) %></p>
 <p><label for="todo_notes">Notes</label></p>
@@ -18,4 +18,3 @@
 <p><label for="todo_show_from">Show from</label></p>
 <p><%= date_select("todo", "show_from", :order => [:day, :month, :year], 
                     :start_year => this_year, :include_blank => true) %></p>
-<p><input type="submit" value="Update" tabindex="6" /></p>

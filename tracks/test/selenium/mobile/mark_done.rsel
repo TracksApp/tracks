@@ -1,0 +1,11 @@
+setup :fixtures => :all
+login :as => 'admin'
+
+open '/m'
+wait_for_text 'css=h1 span.count', '10'
+
+open_and_wait '/todos/6.m'
+click "done"
+click_and_wait "//input[@value='Update']"
+
+wait_for_text 'css=h1 span.count', '9'

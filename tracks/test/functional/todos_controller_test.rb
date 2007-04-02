@@ -242,5 +242,34 @@ class TodosControllerTest < Test::Unit::TestCase
     assert !(/&nbsp;/.match(@response.body))
     #puts @response.body
   end
+  
+  def test_mobile_index_uses_text_html_content_type
+    @request.session['user_id'] = users(:admin_user).id
+    get :index, { :format => "m" }
+    assert_equal 'text/html; charset=utf-8', @response.headers["Content-Type"]
+  end
+  
+  def test_mobile_index_assigns_down_count
+    @request.session['user_id'] = users(:admin_user).id
+    get :index, { :format => "m" }
+    assert_equal 10, assigns['down_count']
+  end
+  
+  def test_mobile_create_action
+    @request.session['user_id'] = users(:admin_user).id
+    post :create, {"format"=>"m", "todo"=>{"context_id"=>"2",
+                   "due(1i)"=>"2007", "due(2i)"=>"1", "due(3i)"=>"2",
+                   "show_from(1i)"=>"", "show_from(2i)"=>"", "show_from(3i)"=>"",
+                   "project_id"=>"1", 
+                   "notes"=>"test notes", "description"=>"test_mobile_create_action", "state"=>"0"}}
+    t = Todo.find_by_description("test_mobile_create_action")
+    assert_not_nil t
+    assert_equal 2, t.context_id
+    assert_equal 1, t.project_id
+    assert t.active?
+    assert_equal 'test notes', t.notes
+    assert_nil t.show_from
+    assert_equal Date.new(2007,1,2).to_s, t.due.to_s
+  end
 
 end

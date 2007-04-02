@@ -41,9 +41,9 @@ class ContextsController < ApplicationController
     end
     @saved = @context.save
     @context_not_done_counts = { @context.id => 0 }
-    respond_to do |wants|
-      wants.js
-      wants.xml do
+    respond_to do |format|
+      format.js
+      format.xml do
         if @context.new_record? && params_are_invalid
           render_failure "Expected post format is valid xml like so: <request><context><name>context name</name></context></request>."
         elsif @context.new_record?

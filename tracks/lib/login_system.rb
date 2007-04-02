@@ -114,6 +114,7 @@ module LoginSystem
   def access_denied
     respond_to do |format|
       format.html { redirect_to :controller=>"login", :action =>"login" }
+      format.m { redirect_to :controller=>"login", :action =>"login" }
       format.js { render :partial => 'login/redirect_to_login' }
       format.xml { basic_auth_denied }
       format.rss { basic_auth_denied }

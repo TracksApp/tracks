@@ -1,0 +1,6 @@
+<h1><span class="count"><%= @down_count %></span> <%= @page_title %>
+<%= link_to "+", formatted_new_todo_path(:m) %></h1>
+<hr />
+<%= render :partial => 'mobile_actions' %>
+<hr />
+<%= link_to "Logout", :controller => 'login', :action => 'logout' %>

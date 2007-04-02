@@ -6,7 +6,7 @@ ActiveRecord::Schema.define(:version => 31) do
 
   create_table "contexts", :force => true do |t|
     t.column "name",       :string,                :default => "", :null => false
-    t.column "hide",       :boolean,  :default => false
+    t.column "hide",       :integer,  :limit => 4, :default => 0,  :null => false
     t.column "position",   :integer,               :default => 0,  :null => false
     t.column "user_id",    :integer,               :default => 0,  :null => false
     t.column "created_at", :datetime

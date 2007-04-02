@@ -80,3 +80,6 @@ if (AUTHENTICATION_SCHEMES.include? 'open_id')
   #requires ruby-openid gem to be installed
 end
 
+
+MOBILE_CONTENT_TYPE = 'tracks/mobile'
+Mime::Type.register(MOBILE_CONTENT_TYPE, :m)

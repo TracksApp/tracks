@@ -28,7 +28,7 @@ class ApplicationController < ActionController::Base
   def set_charset
     headers["Content-Type"] ||= "text/html; charset=UTF-8" 
   end
-
+  
   def set_session_expiration
     # http://wiki.rubyonrails.com/rails/show/HowtoChangeSessionOptions
     unless session == nil
@@ -56,13 +56,13 @@ class ApplicationController < ActionController::Base
   
   def rescue_action(exception)
     log_error(exception) if logger
-    respond_to do |wants|
-      wants.html do
+    respond_to do |format|
+      format.html do
         notify :warning, "An error occurred on the server."
         render :action => "index"
       end
-      wants.js { render :action => 'error' }
-      wants.xml { render :text => 'An error occurred on the server.' + $! }
+      format.js { render :action => 'error' }
+      format.xml { render :text => 'An error occurred on the server.' + $! }
     end
   end
   

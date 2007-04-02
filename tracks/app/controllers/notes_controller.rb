@@ -3,9 +3,9 @@ class NotesController < ApplicationController
   def index
     @all_notes = @user.notes
     @page_title = "TRACKS::All notes"
-    respond_to do |wants|
-      wants.html
-      wants.xml { render :xml => @all_notes.to_xml( :except => :user_id )  }
+    respond_to do |format|
+      format.html
+      format.xml { render :xml => @all_notes.to_xml( :except => :user_id )  }
     end
   end
 

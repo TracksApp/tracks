@@ -53,9 +53,9 @@ class ProjectsController < ApplicationController
     @project_not_done_counts = { @project.id => 0 }
     @active_projects_count = @user.projects.count(:conditions => "state = 'active'")
     @contexts = @user.contexts
-    respond_to do |wants|
-      wants.js
-      wants.xml do
+    respond_to do |format|
+      format.js
+      format.xml do
         if @project.new_record? && params_are_invalid
           render_failure "Expected post format is valid xml like so: <request><project><name>project name</name></project></request>."
         elsif @project.new_record?

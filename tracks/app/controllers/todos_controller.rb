@@ -2,13 +2,17 @@ class TodosController < ApplicationController
 
   helper :todos
 
-  append_before_filter :init, :except => [ :destroy, :completed, :completed_archive, :check_deferred ]
-  append_before_filter :get_todo_from_params, :only => [ :edit, :toggle_check, :show, :update, :destroy ]
   skip_before_filter :login_required, :only => [:index]
   prepend_before_filter :login_or_feed_token_required, :only => [:index]
+  append_before_filter :init, :except => [ :destroy, :completed, :completed_archive, :check_deferred ]
+  append_before_filter :get_todo_from_params, :only => [ :edit, :toggle_check, :show, :update, :destroy ]
+
+  prepend_before_filter :enable_mobile_content_negotiation
+  after_filter :restore_content_type_for_mobile
+
   session :off, :only => :index, :if => Proc.new { |req| is_feed_request(req) }
 
-  layout 'standard'
+  layout proc{ |controller| controller.mobile? ? "mobile" : "standard" }
 
   def index
     @projects = @user.projects.find(:all, :include => [ :todos ])
@@ -17,20 +21,29 @@ class TodosController < ApplicationController
     @contexts_to_show = @contexts.reject {|x| x.hide? }
 
     respond_to do |format|
-      format.html &render_todos_html
-      format.xml { render :action => 'list.rxml', :layout => false }
+      format.html  &render_todos_html
+      format.m     &render_todos_mobile
+      format.xml   { render :action => 'list.rxml', :layout => false }
       format.rss   &render_rss_feed
       format.atom  &render_atom_feed
       format.text  &render_text_feed
       format.ics   &render_ical_feed
     end
   end
-
+  
+  def new
+    @projects = @user.projects.find(:all)
+    @contexts = @user.contexts.find(:all)
+    respond_to do |format|
+      format.m { render :action => "new_mobile" }
+    end
+  end
+  
   def create
     @todo = @user.todos.build
     p = params['request'] || params
     
-    if p['todo']['show_from']
+    if p['todo']['show_from'] && !mobile?
       p['todo']['show_from'] = parse_date_per_user_prefs(p['todo']['show_from'])
     end
     
@@ -60,34 +73,46 @@ class TodosController < ApplicationController
     end
 
     if @todo.due?
-      @todo.due = parse_date_per_user_prefs(p['todo']['due'])
+      @todo.due = parse_date_per_user_prefs(p['todo']['due']) unless mobile?
     else
       @todo.due = ""
     end
     
     @saved = @todo.save
     if @saved
-      @todo.tag_with(params[:tag_list],@user)
+      @todo.tag_with(params[:tag_list],@user) if params[:tag_list] 
       @todo.reload
     end
     
-    respond_to do |wants|
-      wants.html { redirect_to :action => "index" }
-      wants.js do
+    respond_to do |format|
+      format.html { redirect_to :action => "index" }
+      format.m do
         if @saved
-          determine_down_count
+          redirect_to :action => "index", :format => :m
+        else
+          render :action => "new", :format => :m
         end
+      end
+      format.js do
+        determine_down_count if @saved
         render :action => 'create'
       end
-      wants.xml { render :xml => @todo.to_xml( :root => 'todo', :except => :user_id ) }
+      format.xml { render :xml => @todo.to_xml( :root => 'todo', :except => :user_id ) }
     end
   end
   
   def edit
+    @projects = @user.projects.find(:all)
+    @contexts = @user.contexts.find(:all)
   end
   
   def show
     respond_to do |format|
+      format.m do
+        @projects = @user.projects.find(:all)
+        @contexts = @user.contexts.find(:all)
+        render :action => 'show_mobile'
+      end
       format.xml { render :xml => @todo.to_xml( :root => 'todo', :except => :user_id ) }
     end
   end
@@ -120,7 +145,7 @@ class TodosController < ApplicationController
   end
 
   def update
-    @todo.tag_with(params[:tag_list],@user)
+    @todo.tag_with(params[:tag_list],@user) if params[:tag_list]
     @original_item_context_id = @todo.context_id
     @original_item_project_id = @todo.project_id
     @original_item_was_deferred = @todo.deferred?
@@ -160,6 +185,10 @@ class TodosController < ApplicationController
       params['todo']['show_from'] = parse_date_per_user_prefs(params['todo']['show_from'])
     end
     
+    if params['done'] == '1' && !@todo.completed?
+      @todo.complete!
+    end
+    
     @saved = @todo.update_attributes params["todo"]
     @context_changed = @original_item_context_id != @todo.context_id
     @todo_was_activated_from_deferred_state = @original_item_was_deferred && @todo.active?
@@ -167,6 +196,16 @@ class TodosController < ApplicationController
     @project_changed = @original_item_project_id != @todo.project_id
     if (@project_changed && !@original_item_project_id.nil?) then @remaining_undone_in_project = @user.projects.find(@original_item_project_id).not_done_todo_count; end
     determine_down_count
+    respond_to do |format|
+      format.js
+      format.m do
+        if @saved
+          redirect_to formatted_todos_path(:m)
+        else
+          render :action => "edit", :format => :m
+        end
+      end
+    end
   end
     
   def destroy
@@ -175,9 +214,9 @@ class TodosController < ApplicationController
     @project_id = @todo.project_id
     @saved = @todo.destroy
     
-    respond_to do |wants|
+    respond_to do |format|
       
-      wants.html do
+      format.html do
         if @saved
           notify :notice, "Successfully deleted next action", 2.0
           redirect_to :action => 'index'
@@ -185,9 +224,9 @@ class TodosController < ApplicationController
           notify :error, "Failed to delete the action", 2.0
           redirect_to :action => 'index'
         end
-      end
+      end  
       
-      wants.js do
+      format.js do
         if @saved
           determine_down_count
           source_view do |from|
@@ -199,7 +238,7 @@ class TodosController < ApplicationController
         render
       end
       
-      wants.xml { render :text => '200 OK. Action deleted.', :status => 200 }
+      format.xml { render :text => '200 OK. Action deleted.', :status => 200 }
     
     end
   end
@@ -236,6 +275,16 @@ class TodosController < ApplicationController
     end
   end
   
+  def filter_to_context
+    context = @user.contexts.find(params['context']['id'])
+    redirect_to formatted_context_todos_path(context, :m)
+  end
+  
+  def filter_to_project
+    project = @user.projects.find(params['project']['id'])
+    redirect_to formatted_project_todos_path(project, :m)
+  end
+  
   # /todos/tag/[tag_name] shows all the actions tagged with tag_name
   #
   def tag
@@ -266,15 +315,47 @@ class TodosController < ApplicationController
 
   end
   
-  private
+  # Here's the concept behind this "mobile content negotiation" hack:
+  # In addition to the main, AJAXy Web UI, Tracks has a lightweight
+  # low-feature 'mobile' version designed to be suitablef or use
+  # from a phone or PDA. It makes some sense that tne pages of that
+  # mobile version are simply alternate representations of the same
+  # Todo resources. The implementation goal was to treat mobile
+  # as another format and be able to use respond_to to render both
+  # versions. Unfortunately, I ran into a lot of trouble simply
+  # registering a new mime type 'text/html' with format :m because
+  # :html already is linked to that mime type and the new
+  # registration was forcing all html requests to be rendered in
+  # the mobile view. The before_filter and after_filter hackery
+  # below accomplishs that implementation goal by using a 'fake'
+  # mime type during the processing and then setting it to 
+  # 'text/html' in an 'after_filter' -LKM 2007-04-01
+  def mobile?
+    return params[:format] == 'm' || response.content_type == MOBILE_CONTENT_TYPE
+  end
 
+  def enable_mobile_content_negotiation
+    if mobile?
+      request.accepts.unshift(Mime::Type::lookup(MOBILE_CONTENT_TYPE))
+    end
+  end
+
+  def restore_content_type_for_mobile
+    if mobile?
+      response.content_type = 'text/html'
+    end
+  end
+  
+  private
+    
+  
     def get_todo_from_params
       @todo = @user.todos.find(params['id'])
     end
 
     def init
       @source_view = params['_source_view'] || 'todo'
-      init_data_for_sidebar
+      init_data_for_sidebar unless mobile?
       init_todos      
     end
 
@@ -321,13 +402,13 @@ class TodosController < ApplicationController
 
     def with_parent_resource_scope(&block)
       if (params[:context_id])
-        context = @user.contexts.find_by_params(params)
-        Todo.with_scope :find => {:conditions => ['todos.context_id = ?', context.id]} do
+        @context = @user.contexts.find_by_params(params)
+        Todo.with_scope :find => {:conditions => ['todos.context_id = ?', @context.id]} do
           yield
         end
       elsif (params[:project_id])
-        project = @user.projects.find_by_params(params)
-        Todo.with_scope :find => {:conditions => ['todos.project_id = ?', project.id]} do
+        @project = @user.projects.find_by_params(params)
+        Todo.with_scope :find => {:conditions => ['todos.project_id = ?', @project.id]} do
           yield
         end
       else
@@ -350,12 +431,26 @@ class TodosController < ApplicationController
       with_feed_query_scope do
         with_parent_resource_scope do
           with_limit_scope do
+            
+            if mobile?
+            
+              @todos, @page = @user.todos.paginate(:all, 
+                  :conditions => ['state = ?', 'active' ], :include => [:context],
+                  :order =>  'due IS NULL, due ASC, todos.created_at ASC',
+                  :page => params[:page], :per_page => 6)
+              @pagination_params = { :format => :m }
+              @pagination_params[:context_id] = @context.to_param if @context
+              @pagination_params[:project_id] = @project.to_param if @project
+              
+            else
+            
+              # Exclude hidden projects from count on home page
+              @todos = @user.todos.find(:all, :conditions => ['todos.state = ? or todos.state = ?', 'active', 'complete'], :include => [ :project, :context, :tags ])
 
-            # Exclude hidden projects from count on home page
-            @todos = @user.todos.find(:all, :conditions => ['todos.state = ? or todos.state = ?', 'active', 'complete'], :include => [ :project, :context, :tags ])
-
-            # Exclude hidden projects from the home page
-            @not_done_todos = @user.todos.find(:all, :conditions => ['todos.state = ?', 'active'], :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC", :include => [ :project, :context, :tags ])
+              # Exclude hidden projects from the home page
+              @not_done_todos = @user.todos.find(:all, :conditions => ['todos.state = ?', 'active'], :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC", :include => [ :project, :context, :tags ])
+            
+            end
 
           end
         end
@@ -413,6 +508,23 @@ class TodosController < ApplicationController
        @default_project_context_name_map = build_default_project_context_name_map(@projects).to_json
        
        render
+      end
+    end
+
+    def render_todos_mobile
+      lambda do
+        @page_title = "All actions"
+        if @context
+          @page_title += " in context #{@context.name}" 
+          @down_count = @context.not_done_todo_count
+        elsif @project
+          @page_title += " in project #{@project.name}" 
+          @down_count = @project.not_done_todo_count
+        else
+          determine_down_count
+        end
+        
+        render :action => 'index_mobile'
       end
     end
     

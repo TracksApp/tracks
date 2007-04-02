@@ -1,0 +1,33 @@
+<%= render_flash %>
+<% if @todos.length == 0 -%>
+  <p>There are no incomplete actions in this <%= @type %></p>
+<% else -%>
+  <ul>
+  <% for todo in @todos -%>
+    <li id="<%= dom_id(todo) %>">
+      <%= link_to "&raquo;", formatted_todo_path(todo, :m) %>
+      <% if todo.due? -%>
+        <%= due_date_mobile(todo.due) %>
+      <% end -%>
+      <%= todo.description %>
+      (<em><%= todo.context.name %></em>)
+    </li>
+  <% end -%>
+  </ul>
+  <% if @down_count > 6 -%>
+    <hr />
+    Pages: <%= formatted_pagination(@down_count, 6) %>
+  <% end -%>
+<% end -%>
+<hr />
+<% form_tag( formatted_filter_to_context_todos_path(:m), :method => :post ) do -%>
+<%= collection_select( "context", "id", @contexts, "id", "name", 
+                        { :include_blank => true } ) %>
+<%= submit_tag( "Go", :id => 'change_context' ) %>
+<% end -%>
+
+<% form_tag( formatted_filter_to_project_todos_path(:m), :method => :post ) do -%>
+<%= collection_select( "project", "id", @projects, "id", "name",
+                        { :include_blank => true } ) %>
+<%= submit_tag( "Go", :id => 'change_project' ) %>
+<% end -%>

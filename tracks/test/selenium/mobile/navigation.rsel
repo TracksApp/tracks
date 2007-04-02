@@ -1,0 +1,25 @@
+setup :fixtures => :all
+login :as => 'admin'
+
+open '/m'
+wait_for_title "All actions"
+wait_for_text 'css=h1 span.count', '10'
+
+click_and_wait "link=2"
+verify_title "All actions"
+wait_for_text 'css=h1 span.count', '10'
+
+select "context_id", "label=agenda"
+click_and_wait "change_context"
+verify_title "All actions in context agenda"
+wait_for_text 'css=h1 span.count', '5'
+
+select "context_id", "label=call"
+click_and_wait "change_context"
+verify_title "All actions in context call"
+wait_for_text 'css=h1 span.count', '3'
+
+select "project_id", "label=Build a working time machine"
+click_and_wait "change_project"
+verify_title "All actions in project Build a working time machine"
+wait_for_text 'css=h1 span.count', '2'
