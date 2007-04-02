@@ -9,7 +9,7 @@
 
 <div id="input_box">
   <a id="toggle-new-context-form" href="#" accesskey="n" title="Create a new context">Create new context &#187;</a>
-  <div id="context_new" class="context_new" style="display:none">
+  <div id="context_new" class="context_new" style="display:block">
     <% form_remote_tag :url => contexts_path, :method => :post, :html=> { :id => 'context-form', :name => 'context', :class => 'inline-form' } do -%>
 
       <div id="status"><%= error_messages_for('context') %></div>

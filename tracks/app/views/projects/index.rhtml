@@ -13,7 +13,7 @@
                        "Element.toggle('project_new');Form.focusFirstElement('project-form');",
                        {:title => "Add a next action", :accesskey => "n"}) %>
 
-  <div id="project_new" class="project_new" style="display:none">
+  <div id="project_new" class="project_new" style="display:block">
     <% form_remote_tag :url => projects_path, :method => :post,
                        :html=> { :id=>'project-form', :name=>'project', :class => 'inline-form' } do -%>
 
