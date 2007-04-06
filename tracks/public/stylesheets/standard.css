@@ -526,8 +526,15 @@ div.buttons, div.buttons a, div.buttons a:hover {
     }
 
 div#list-active-projects, div#list-hidden-projects, div#list-completed-projects, div#list-contexts, div#projects-empty-nd {
-    border: 1px solid #999;
+    clear:right;
+	border: 1px solid #999;
     }
+
+div.alpha_sort {
+	margin-top:-20px;
+	float:right;
+}
+
     
 .container td {
     border: none;

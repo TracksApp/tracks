@@ -269,5 +269,14 @@ class UserTest < Test::Unit::TestCase
     todos = @admin_user.completed_todos.completed_more_than(@admin_user.time - 1.day)
     assert_equal 1, todos.length
   end
+  
+  def test_sort_active_projects_alphabetically
+    u = users(:admin_user)
+    u.projects.alphabetize(:state => "active")
+    assert_equal 1, projects(:timemachine).position 
+    assert_equal 2, projects(:gardenclean).position
+    assert_equal 3, projects(:moremoney).position 
+  end
+  
 
 end

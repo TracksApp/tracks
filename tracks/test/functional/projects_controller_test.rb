@@ -214,6 +214,31 @@ class ProjectsControllerTest < TodoContainerControllerTestBase
     get :index, { :format => "txt", :token => users(:admin_user).word }
     assert_response :ok
   end
+  
+  def test_alphabetize_sorts_active_projects_alphabetically
+    u = users(:admin_user)
+    @request.session['user_id'] = u.id
+    post :alphabetize, { :state => "active" }
+    assert_equal 1, projects(:timemachine).position 
+    assert_equal 2, projects(:gardenclean).position
+    assert_equal 3, projects(:moremoney).position 
+  end
+
+  def test_alphabetize_assigns_state
+    @request.session['user_id'] = users(:admin_user).id
+    post :alphabetize, { :state => "active" }
+    assert_equal "active", assigns['state']
+  end
+
+  def test_alphabetize_assigns_projects
+    @request.session['user_id'] = users(:admin_user).id
+    post :alphabetize, { :state => "active" }
+    exposed_projects = assigns['projects']
+    assert_equal 3, exposed_projects.length
+    assert_equal projects(:timemachine), exposed_projects[0]
+    assert_equal projects(:gardenclean), exposed_projects[1]
+    assert_equal projects(:moremoney), exposed_projects[2]
+  end
 
   private
   def show(project)

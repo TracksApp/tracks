@@ -42,6 +42,12 @@ class User < ActiveRecord::Base
                   project.cached_note_count = project_note_counts[project.id] || 0
                 end
               end
+              def alphabetize(scope_conditions = {})
+                projects = find(:all, :conditions => scope_conditions)
+                projects.sort!{ |x,y| x.name <=> y.name }
+                self.update_positions(projects.map{ |p| p.id })
+                return projects
+              end
             end
   has_many :todos,
            :order => 'completed_at DESC, todos.created_at DESC',

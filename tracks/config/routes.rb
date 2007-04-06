@@ -19,7 +19,7 @@ ActionController::Routing::Routes.draw do |map|
   end
 
   # Projects Routes
-  map.resources :projects, :collection => {:order => :post} do |projects|
+  map.resources :projects, :collection => {:order => :post, :alphabetize => :post} do |projects|
     projects.resources :todos, :name_prefix => "project_"
   end
 

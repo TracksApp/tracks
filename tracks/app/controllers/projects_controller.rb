@@ -127,6 +127,11 @@ class ProjectsController < ApplicationController
     redirect_to :action => 'index'
   end
   
+  def alphabetize
+    @state = params['state']
+    @projects = @user.projects.alphabetize(:state => @state) if @state
+  end
+  
   protected
     
     def render_projects_html
