@@ -1,9 +1,9 @@
 setup :fixtures => :all
 next_available_todo_id = 18
 login :as => 'admin'
-open "/projects/Build_a_working_time_machine"
+open "/projects/1"
 include_partial 'project_detail/add_deferred_todo'
-open "/projects/Build_a_working_time_machine"
+open "/projects/1"
 click "edit_icon_todo_#{next_available_todo_id}"
 wait_for_element_present "show_from_todo_#{next_available_todo_id}"
 type "show_from_todo_#{next_available_todo_id}", ""

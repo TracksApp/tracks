@@ -21,7 +21,8 @@
     %>
 <% end -%>
 <% if source_view_is :context %>
-	<%= in_place_editor_field :context, :name, {}, { :url => url_for(:controller => 'context', :action => 'update', :id => context.id, :field => 'name', :wants_render => false) } %>
+  <span class="in_place_editor_field" id="context_name_in_place_editor"><%= context.name %></span>
+  <%= in_place_editor 'context_name_in_place_editor', { :url => { :controller => 'contexts', :action => 'update', :id => context.id, :field => 'name', :wants_render => false, :escape => false}  , :options=>"{method:'put'}" } %>
 <% else %>
     <%= link_to_context( context )  %>
 <% end %>

@@ -5,34 +5,14 @@ class User < ActiveRecord::Base
            :order => 'position ASC',
            :dependent => :delete_all do
              def find_by_params(params)
-               if params['url_friendly_name']
-                 find_by_url_friendly_name(params['url_friendly_name'])
-               elsif params['id'] && params['id'] =~ /^\d+$/
-                 find(params['id'])
-               elsif params['id']
-                 find_by_url_friendly_name(params['id'])
-               elsif params['context']
-                 find_by_url_friendly_name(params['context'])
-               elsif params['context_id']
-                 find_by_url_friendly_name(params['context_id'])
-               end
+               find(params['id'] || params['context_id'])
              end
            end
   has_many :projects,
            :order => 'position ASC',
            :dependent => :delete_all do
               def find_by_params(params)
-                if params['url_friendly_name']
-                  find_by_url_friendly_name(params['url_friendly_name'])
-                elsif params['id'] && params['id'] =~ /^\d+$/
-                  find(params['id'])
-                elsif params['id']
-                  find_by_url_friendly_name(params['id'])
-                elsif params['project']
-                  find_by_url_friendly_name(params['project'])
-                elsif params['project_id']
-                  find_by_url_friendly_name(params['project_id'])
-                end
+                find(params['id'] || params['project_id'])
               end
               def update_positions(project_ids)
                 project_ids.each_with_index do |id, position|

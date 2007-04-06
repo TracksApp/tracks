@@ -57,18 +57,18 @@ class ProjectsControllerTest < TodoContainerControllerTestBase
   def test_create_project_and_go_to_project_page
     num_projects = Project.count
     xhr :post, :create, { :project => {:name => 'Immediate Project Planning Required'}, :go_to_project => 1}
-    assert_js_redirected_to '/projects/Immediate_Project_Planning_Required'
+    assert_js_redirected_to '/projects/5'
     assert_equal num_projects + 1, Project.count
   end
 
-  def test_create_with_slash_in_name_does_not_increment_number_of_projects
-    assert_ajax_create_does_not_increment_count 'foo/bar'
+  def test_create_with_comma_in_name_does_not_increment_number_of_projects
+    assert_ajax_create_does_not_increment_count 'foo,bar'
   end
   
-  def test_create_with_slash_in_name_fails_with_rjs
-    ajax_create 'foo/bar'
+  def test_create_with_comma_in_name_fails_with_rjs
+    ajax_create 'foo,bar'
     assert_rjs :show, 'status'
-    assert_rjs :update, 'status', "<div class=\"ErrorExplanation\" id=\"ErrorExplanation\"><h2>1 error prohibited this record from being saved</h2><p>There were problems with the following fields:</p><ul>Name cannot contain the slash ('/') character</ul></div>"
+    assert_rjs :update, 'status', "<div class=\"ErrorExplanation\" id=\"ErrorExplanation\"><h2>1 error prohibited this record from being saved</h2><p>There were problems with the following fields:</p><ul>Name cannot contain the comma (',') character</ul></div>"
   end
   
   def test_todo_state_is_project_hidden_after_hiding_project

@@ -227,29 +227,17 @@ class UserTest < Test::Unit::TestCase
 
   def test_find_context_by_params
     u = @admin_user
-    c = u.contexts.find_by_params('url_friendly_name' => 'agenda')
-    assert_equal contexts(:agenda), c
-    c = u.contexts.find_by_params('id' => 'agenda')
-    assert_equal contexts(:agenda), c
     c = u.contexts.find_by_params('id' => '1')
     assert_equal contexts(:agenda), c
-    c = u.contexts.find_by_params('context' => 'agenda')
-    assert_equal contexts(:agenda), c
-    c = u.contexts.find_by_params('context_id' => 'agenda')
+    c = u.contexts.find_by_params('context_id' => '1')
     assert_equal contexts(:agenda), c
   end
 
   def test_find_project_by_params
     u = @admin_user
-    p = u.projects.find_by_params('url_friendly_name' => 'Build_a_working_time_machine')
-    assert_equal projects(:timemachine), p
-    p = u.projects.find_by_params('id' => 'Build_a_working_time_machine')
-    assert_equal projects(:timemachine), p
     p = u.projects.find_by_params('id' => '1')
     assert_equal projects(:timemachine), p
-    p = u.projects.find_by_params('project' => 'Build_a_working_time_machine')
-    assert_equal projects(:timemachine), p
-    p = u.projects.find_by_params('project_id' => 'Build_a_working_time_machine')
+    p = u.projects.find_by_params('project_id' => '1')
     assert_equal projects(:timemachine), p
   end
 

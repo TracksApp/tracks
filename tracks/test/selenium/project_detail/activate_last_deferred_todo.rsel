@@ -1,6 +1,6 @@
 setup :fixtures => :all
 login :as => 'admin'
-open "/projects/Build_a_working_time_machine"
+open "/projects/1"
 click "edit_icon_todo_15"
 wait_for_element_present "show_from_todo_15"
 type "show_from_todo_15", ""

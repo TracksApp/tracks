@@ -30,15 +30,7 @@ class ProjectTest < Test::Unit::TestCase
     assert_equal 1, newproj.errors.count
     assert_equal "already exists", newproj.errors.on(:name)
   end
-  
-  def test_validate_name_does_not_contain_slash
-    newproj = Project.new
-    newproj.name = "Save Earth/Mankind from Evil"
-    assert !newproj.save
-    assert_equal 1, newproj.errors.count
-    assert_equal "cannot contain the slash ('/') character", newproj.errors.on(:name)
-  end
-  
+    
   def test_validate_name_does_not_contain_comma
     newproj = Project.new
     newproj.name = "Buy iPhones for Luke,bsag,David Allen"
@@ -114,33 +106,9 @@ class ProjectTest < Test::Unit::TestCase
     t.save!
     assert_equal 2, Project.find(@timemachine.id).deferred_todos.size
   end
-  
-  def test_url_friendly_name_for_name_with_spaces
-    assert_url_friendly_name_converts_properly 'Build a playhouse', 'Build_a_playhouse'
-  end
-  
-  def test_url_friendly_name_for_name_without_spaces
-    assert_url_friendly_name_converts_properly 'NoSpacesHere', 'NoSpacesHere'
-  end
-  
-  def test_url_friendly_name_for_name_with_an_underscore
-    assert_url_friendly_name_converts_properly 'there is an_underscore', 'there_is_an__underscore'
-  end
-  
-  def test_url_friendly_name_for_name_with_a_dot
-    assert_url_friendly_name_converts_properly 'hello.com', 'hello__dot__com'
-  end
-  
-  def assert_url_friendly_name_converts_properly(name, url_friendly_name)
-    project = Project.create(:name => name)
-    assert_equal url_friendly_name, project.url_friendly_name
-    found_project = Project.find_by_url_friendly_name(url_friendly_name)
-    assert_not_nil project
-    assert_equal project.id, found_project.id
-  end
-  
-  def test_to_param_returns_url_friendly_name
-    assert_equal 'Build_a_working_time_machine', @timemachine.to_param
+    
+  def test_to_param_returns_id
+    assert_equal '1', @timemachine.to_param
   end
 
   def test_null_object

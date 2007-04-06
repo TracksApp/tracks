@@ -44,27 +44,27 @@ class FeedSmokeTest < ActionController::IntegrationTest
   end
 
   def test_all_actions_in_context_rss
-    assert_success "/contexts/agenda/todos.rss?token=#{ users(:admin_user).word }"
+    assert_success "/contexts/1/todos.rss?token=#{ users(:admin_user).word }"
   end
 
   def test_all_actions_in_context_txt
-    assert_success "/contexts/agenda/todos.txt?token=#{ users(:admin_user).word }"
+    assert_success "/contexts/1/todos.txt?token=#{ users(:admin_user).word }"
   end
 
   def test_all_actions_in_context_ical
-    assert_success "/contexts/agenda/todos.ics?token=#{ users(:admin_user).word }"
+    assert_success "/contexts/1/todos.ics?token=#{ users(:admin_user).word }"
   end
 
   def test_all_actions_in_project_rss
-    assert_success "/projects/Build_a_working_time_machine/todos.rss?token=#{ users(:admin_user).word }"
+    assert_success "/projects/1/todos.rss?token=#{ users(:admin_user).word }"
   end
 
   def test_all_actions_in_project_txt
-    assert_success "/projects/Build_a_working_time_machine/todos.txt?token=#{ users(:admin_user).word }"
+    assert_success "/projects/1/todos.txt?token=#{ users(:admin_user).word }"
   end
 
   def test_all_actions_in_project_ical
-    assert_success "/projects/Build_a_working_time_machine/todos.ics?token=#{ users(:admin_user).word }"
+    assert_success "/projects/1/todos.ics?token=#{ users(:admin_user).word }"
   end
 
   def test_all_actions_due_today_or_earlier_rss
@@ -120,7 +120,7 @@ class FeedSmokeTest < ActionController::IntegrationTest
     p.hide!
     assert_success "/projects.txt?token=#{ users(:admin_user).word }"
   end
-  
+
   private
   
   def assert_success(url)

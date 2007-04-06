@@ -1,5 +1,5 @@
 setup :fixtures => :all
 login :as => 'admin'
-open "/projects/Build_a_working_time_machine"
+open "/projects/1"
 click_and_wait "css=#note_1 .link_to_notes"
 assert_element_present "note_1"

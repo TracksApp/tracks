@@ -7,14 +7,12 @@ class Project < ActiveRecord::Base
   validates_presence_of :name, :message => "project must have a name"
   validates_length_of :name, :maximum => 255, :message => "project name must be less than 256 characters"
   validates_uniqueness_of :name, :message => "already exists", :scope =>"user_id"
-  validates_does_not_contain :name, :string => '/', :message => "cannot contain the slash ('/') character"
   validates_does_not_contain :name, :string => ',', :message => "cannot contain the comma (',') character"
 
   acts_as_list :scope => 'user_id = #{user_id} AND state = \'#{state}\''
   acts_as_state_machine :initial => :active, :column => 'state'
   extend NamePartFinder
   include Tracks::TodoList
-  include UrlFriendlyName
   
   state :active
   state :hidden, :enter => :hide_todos, :exit => :unhide_todos
@@ -45,11 +43,7 @@ class Project < ActiveRecord::Base
       :description => "Lists all the projects for #{user.display_name}"
     }
   end
-  
-  def to_param
-    url_friendly_name
-  end
-    
+      
   def hide_todos
     todos.each do |t|
       unless t.completed? || t.deferred?

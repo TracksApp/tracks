@@ -1,5 +1,5 @@
 setup :fixtures => :all
 login :as => 'admin'
-open "/projects/Make_more_money_than_Billy_Gates"
+open "/projects/2"
 include_partial 'project_detail/add_deferred_todo'
 assert_not_visible "tickler-empty-nd"

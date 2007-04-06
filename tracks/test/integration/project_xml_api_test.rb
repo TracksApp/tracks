@@ -43,9 +43,9 @@ class ProjectXmlApiTest < ActionController::IntegrationTest
     assert_response_and_body 404, "Name project name must be less than 256 characters"
   end
   
-  def test_fails_with_slash_in_name
-    authenticated_post_xml_to_project_create "<request><project><name>foo/bar</name></project></request>"
-    assert_response_and_body 404, "Name cannot contain the slash ('/') character"
+  def test_fails_with_comma_in_name
+    authenticated_post_xml_to_project_create "<request><project><name>foo,bar</name></project></request>"
+    assert_response_and_body 404, "Name cannot contain the comma (',') character"
   end
     
   def test_creates_new_project

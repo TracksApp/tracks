@@ -32,14 +32,6 @@ class ContextTest < Test::Unit::TestCase
      assert_equal "already exists", newcontext.errors.on(:name)
   end
   
-  def test_validate_name_does_not_contain_slash
-     newcontext = Context.new
-     newcontext.name = "phone/telegraph"
-     assert !newcontext.save
-     assert_equal 1, newcontext.errors.count
-     assert_equal "cannot contain the slash ('/') character", newcontext.errors.on(:name)
-  end
-
   def test_validate_name_does_not_contain_comma
      newcontext = Context.new
      newcontext.name = "phone,telegraph"
@@ -85,28 +77,8 @@ class ContextTest < Test::Unit::TestCase
     assert_equal 2, Context.find(@agenda.id).done_todos.size
   end
   
-  def test_url_friendly_name_for_name_with_spaces
-    assert_url_friendly_name_converts_properly 'any computer', 'any_computer'
-  end
-  
-  def test_url_friendly_name_for_name_without_spaces
-    assert_url_friendly_name_converts_properly 'NoSpacesHere', 'NoSpacesHere'
-  end
-  
-  def test_url_friendly_name_for_name_with_underscores
-    assert_url_friendly_name_converts_properly 'there is an_underscore', 'there_is_an__underscore'
-  end
-  
-  def assert_url_friendly_name_converts_properly(name, url_friendly_name)
-    context = Context.create(:name => name)
-    assert_equal url_friendly_name, context.url_friendly_name
-    found_context = Context.find_by_url_friendly_name(url_friendly_name)
-    assert_not_nil context
-    assert_equal context.id, found_context.id
-  end
-  
-  def test_to_param_returns_url_friendly_name
-    assert_equal 'agenda', @agenda.to_param
+  def test_to_param_returns_id
+    assert_equal '1', @agenda.to_param
   end
     
   def test_title_reader_returns_name

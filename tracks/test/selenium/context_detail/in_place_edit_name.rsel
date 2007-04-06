@@ -1,0 +1,10 @@
+setup :fixtures => :all
+login :as => 'admin'
+open "/contexts/1"
+click "context_name_in_place_editor"
+wait_for_element_present "css=#context_name_in_place_editor-inplaceeditor input.editor_field"
+type "css=#context_name_in_place_editor-inplaceeditor input.editor_field", "Test Foo"
+click "css=#context_name_in_place_editor-inplaceeditor input.editor_ok_button"
+wait_for_text "context_name_in_place_editor", "Test Foo"
+open "/contexts/1"
+wait_for_text "context_name_in_place_editor", "Test Foo"

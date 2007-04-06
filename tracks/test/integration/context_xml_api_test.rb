@@ -46,11 +46,11 @@ class ContextXmlApiTest < ActionController::IntegrationTest
     end
   end
   
-  def test_fails_with_slash_in_name
-    authenticated_post_xml_to_context_create "<request><context><name>foo/bar</name></context></request>"
+  def test_fails_with_comma_in_name
+    authenticated_post_xml_to_context_create "<request><context><name>foo,bar</name></context></request>"
     assert_response 404
     assert_xml_select 'errors' do
-      assert_select 'error', 1, 'Name cannot contain the slash (\'/\') character'
+      assert_select 'error', 1, 'Name cannot contain the comma (\',\') character'
     end
   end
     

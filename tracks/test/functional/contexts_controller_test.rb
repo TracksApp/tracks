@@ -30,14 +30,14 @@ class ContextsControllerTest < TodoContainerControllerTestBase
     assert_rjs :call, "Form.focusFirstElement", "context-form"
   end
 
-  def test_create_via_ajax_with_slash_in_name_does_not_increment_number_of_contexts
-    assert_ajax_create_does_not_increment_count 'foo/bar'
+  def test_create_via_ajax_with_comma_in_name_does_not_increment_number_of_contexts
+    assert_ajax_create_does_not_increment_count 'foo,bar'
   end
   
-  def test_create_with_slash_in_name_fails_with_rjs
-    ajax_create 'foo/bar'
+  def test_create_with_comma_in_name_fails_with_rjs
+    ajax_create 'foo,bar'
     assert_rjs :show, 'status'
-    assert_rjs :update, 'status', "<div class=\"ErrorExplanation\" id=\"ErrorExplanation\"><h2>1 error prohibited this record from being saved</h2><p>There were problems with the following fields:</p><ul>Name cannot contain the slash ('/') character</ul></div>"
+    assert_rjs :update, 'status', "<div class=\"ErrorExplanation\" id=\"ErrorExplanation\"><h2>1 error prohibited this record from being saved</h2><p>There were problems with the following fields:</p><ul>Name cannot contain the comma (',') character</ul></div>"
   end
 
   def test_rss_feed_content
