@@ -25,7 +25,7 @@
                        :method => :post,
                      :update => "notes",
                      :position => "bottom",
-                     :complete => "new Effect.Highlight('notes');$('empty-n').hide();",
+                     :complete => "new Effect.Highlight('notes');$('empty-n').hide();Form.reset('form-new-note');",
                      :html => {:id=>'form-new-note', :class => 'inline-form'} do %>
     <%= hidden_field( "new_note", "project_id", "value" => "#{@project.id}" ) %>
     <%= text_area( "new_note", "body", "cols" => 50, "rows" => 3, "tabindex" => 1 ) %>
