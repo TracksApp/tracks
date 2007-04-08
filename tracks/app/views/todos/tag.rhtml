@@ -8,9 +8,14 @@
   
   <%= render :partial => "contexts/context", :collection => @contexts_to_show, 
             :locals => { :collapsible => true } %>
+
+  <% unless @deferred.nil? -%>
+      <%= render :partial => "todos/deferred", :locals => { :deferred => @deferred, :collapsible => true, :append_descriptor => "for this tag" } %>
+  <% end -%>
+  
   <% unless @done.nil? -%>
     <%= render :partial => "todos/completed", 
-            :locals => { :done => @done, :collapsible => true, :append_descriptor => nil } %>
+            :locals => { :done => @done, :collapsible => true, :append_descriptor => "for this tag" } %>
   <% end -%>
 </div><!-- End of display_box -->
 

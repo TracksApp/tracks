@@ -303,12 +303,14 @@ class TodosController < ApplicationController
     
     @contexts = @user.contexts.find(:all, :include => [ :todos ])
     @contexts_to_show = @contexts.reject {|x| x.hide? }
+    
+    @deferred = tag_collection.find(:all, :conditions => ['taggings.user_id = ? and state = ?', @user.id, 'deferred'])
 
     @page_title = "TRACKS::Tagged with \'#{@tag}\'"
     # If you've set no_completed to zero, the completed items box
     # isn't shown on the home page
     max_completed = @user.prefs.show_number_completed
-    @done = @user.completed_todos.find(:all, :limit => max_completed, :include => [ :context, :project, :tags ]) unless max_completed == 0
+    @done = tag_collection.find(:all, :limit => max_completed, :conditions => ['taggings.user_id = ? and state = ?', @user.id, 'completed'])
     # Set count badge to number of items with this tag
     @not_done_todos.empty? ? @count = 0 : @count = @not_done_todos.size
     @default_project_context_name_map = build_default_project_context_name_map(@projects).to_json
