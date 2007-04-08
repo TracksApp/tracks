@@ -44,7 +44,7 @@ class User < ActiveRecord::Base
               end
               def alphabetize(scope_conditions = {})
                 projects = find(:all, :conditions => scope_conditions)
-                projects.sort!{ |x,y| x.name <=> y.name }
+                projects.sort!{ |x,y| x.name.downcase <=> y.name.downcase }
                 self.update_positions(projects.map{ |p| p.id })
                 return projects
               end

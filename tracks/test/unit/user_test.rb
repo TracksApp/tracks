@@ -278,5 +278,15 @@ class UserTest < Test::Unit::TestCase
     assert_equal 3, projects(:moremoney).position 
   end
   
+  def test_sort_active_projects_alphabetically_case_insensitive
+    u = users(:admin_user)
+    projects(:timemachine).name = projects(:timemachine).name.downcase
+    projects(:timemachine).save!
+    u.projects.alphabetize(:state => "active")
+    assert_equal 1, projects(:timemachine).position 
+    assert_equal 2, projects(:gardenclean).position
+    assert_equal 3, projects(:moremoney).position 
+  end
+  
 
 end
