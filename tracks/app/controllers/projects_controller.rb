@@ -1,7 +1,7 @@
 class ProjectsController < ApplicationController
 
   helper :application, :todos, :notes
-  before_filter :init, :except => [:create, :destroy, :order]
+  before_filter :set_source_view
   before_filter :set_project_from_params, :only => [:update, :destroy, :show]
   before_filter :default_context_filter, :only => [:create,:update]
   skip_before_filter :login_required, :only => [:index]
@@ -9,6 +9,9 @@ class ProjectsController < ApplicationController
   session :off, :only => :index, :if => Proc.new { |req| ['rss','atom','txt'].include?(req.parameters[:format]) }
 
   def index
+    @projects = @user.projects
+    @contexts = @user.contexts
+    init_not_done_counts(['project'])
     if params[:only_active_with_no_next_actions]
       @projects = @projects.select { |p| p.active? && count_undone_todos(p) == 0 }
     end
@@ -22,6 +25,9 @@ class ProjectsController < ApplicationController
   end
 
   def show
+    init_data_for_sidebar
+    @projects = @user.projects
+    @contexts = @user.contexts
     @page_title = "TRACKS::Project: #{@project.name}"
     @not_done = @project.not_done_todos(:include_project_hidden_todos => true)
     @deferred = @project.deferred_todos
@@ -88,8 +94,10 @@ class ProjectsController < ApplicationController
           @project_project_hidden_todo_counts = Hash.new
           @project_project_hidden_todo_counts[@project.id] = @project.reload().not_done_todo_count(:include_project_hidden_todos => true)
         else
+          @project_not_done_counts = Hash.new
           @project_not_done_counts[@project.id] = @project.reload().not_done_todo_count(:include_project_hidden_todos => true)
         end
+        @contexts = @user.contexts
         @active_projects_count = @user.projects.count(:conditions => "state = 'active'")
         @hidden_projects_count = @user.projects.count(:conditions => "state = 'hidden'")
         @completed_projects_count = @user.projects.count(:conditions => "state = 'completed'")
@@ -130,13 +138,15 @@ class ProjectsController < ApplicationController
   def alphabetize
     @state = params['state']
     @projects = @user.projects.alphabetize(:state => @state) if @state
+    @contexts = @user.contexts
+    init_not_done_counts(['project'])
   end
   
   protected
     
     def render_projects_html
       lambda do
-        init_project_hidden_todo_counts
+        init_project_hidden_todo_counts(['project'])
         @page_title = "TRACKS::List Projects"
         @active_projects = @projects.select{ |p| p.active? }
         @hidden_projects = @projects.select{ |p| p.hidden? }
@@ -174,27 +184,23 @@ class ProjectsController < ApplicationController
     def set_project_from_params
       @project = @user.projects.find_by_params(params)
     end
-
-    def init
+    
+    def set_source_view
       @source_view = params['_source_view'] || 'project'
-      @projects = @user.projects
-      @contexts = @user.contexts
-      @todos = @user.todos
-      init_data_for_sidebar
     end
     
-     def default_context_filter
-        p = params['project']
-        p = params['request']['project'] if p.nil? && params['request']
-        p = {} if p.nil?
-        default_context_name = p['default_context_name']
-        p.delete('default_context_name')
+    def default_context_filter
+      p = params['project']
+      p = params['request']['project'] if p.nil? && params['request']
+      p = {} if p.nil?
+      default_context_name = p['default_context_name']
+      p.delete('default_context_name')
 
-        unless default_context_name.blank?
-          default_context = Context.find_or_create_by_name(default_context_name)
-          p['default_context_id'] = default_context.id
-        end
+      unless default_context_name.blank?
+        default_context = Context.find_or_create_by_name(default_context_name)
+        p['default_context_id'] = default_context.id
       end
+    end
 
     def summary(project)
       project_description = ''

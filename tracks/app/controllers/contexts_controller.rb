@@ -2,7 +2,7 @@ class ContextsController < ApplicationController
 
   helper :todos
 
-  before_filter :init, :except => [:create, :destroy, :order]
+  before_filter :init, :except => [:index, :create, :destroy, :order]
   before_filter :init_todos, :only => :show
   before_filter :set_context_from_params, :only => [:update, :destroy]
   skip_before_filter :login_required, :only => [:index]
@@ -10,6 +10,8 @@ class ContextsController < ApplicationController
   session :off, :only => :index, :if => Proc.new { |req| ['rss','atom','txt'].include?(req.parameters[:format]) }
 
   def index
+    @contexts = @user.contexts
+    init_not_done_counts(['context'])
     respond_to do |format|
       format.html &render_contexts_html
       format.xml  { render :xml => @contexts.to_xml( :except => :user_id ) }
@@ -131,8 +133,6 @@ class ContextsController < ApplicationController
       # if the user sets the preference for them to be shown
       # @projects = @user.projects.reject { |x| x.completed? }
       init_data_for_sidebar
-      @todos = @user.todos
-      @done = @user.todos.find_in_state(:all, :completed, :order => "todos.completed_at DESC")
     end
 
     def init_todos
