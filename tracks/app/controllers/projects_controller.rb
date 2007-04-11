@@ -180,7 +180,6 @@ class ProjectsController < ApplicationController
       @projects = @user.projects
       @contexts = @user.contexts
       @todos = @user.todos
-      @done = @user.todos.find_in_state(:all, :completed, :order => "completed_at DESC")
       init_data_for_sidebar
     end
     
