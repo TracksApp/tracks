@@ -18,6 +18,7 @@ if @saved
       if source_view_is(:todo) && @todo.active?
         page.call "todoItems.ensureVisibleWithEffectAppear", "c#{@todo.context_id}"
         page.call "todoItems.expandNextActionListingByContext", "c#{@todo.context_id}items", true
+        page[empty_container_msg_div_id].hide unless empty_container_msg_div_id.nil?
         page.insert_html :bottom, "c#{@todo.context_id}items", :partial => 'todos/todo', :locals => { :parent_container_type => parent_container_type }
       end
       page.replace_html("badge_count", @remaining_undone_in_context) if source_view_is :context
