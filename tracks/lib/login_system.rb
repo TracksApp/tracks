@@ -53,7 +53,7 @@ module LoginSystem
   def login_required
     
     if not protect?(action_name)
-      return true  
+      return true
     end
 
     if session['user_id'] and authorize?(get_current_user)
@@ -113,8 +113,8 @@ module LoginSystem
   # a popup window might just close itself for instance
   def access_denied
     respond_to do |format|
-      format.html { redirect_to :controller=>"login", :action =>"login" }
-      format.m { redirect_to :controller=>"login", :action =>"login" }
+      format.html { redirect_to login_path }
+      format.m { redirect_to formatted_login_path(:format => 'm') }
       format.js { render :partial => 'login/redirect_to_login' }
       format.xml { basic_auth_denied }
       format.rss { basic_auth_denied }

@@ -7,12 +7,7 @@ class TodosController < ApplicationController
   append_before_filter :init, :except => [ :destroy, :completed, :completed_archive, :check_deferred ]
   append_before_filter :get_todo_from_params, :only => [ :edit, :toggle_check, :show, :update, :destroy ]
 
-  prepend_before_filter :enable_mobile_content_negotiation
-  after_filter :restore_content_type_for_mobile
-
   session :off, :only => :index, :if => Proc.new { |req| is_feed_request(req) }
-
-  layout proc{ |controller| controller.mobile? ? "mobile" : "standard" }
 
   def index
     @projects = @user.projects.find(:all, :include => [ :todos ])
@@ -317,39 +312,7 @@ class TodosController < ApplicationController
 
   end
   
-  # Here's the concept behind this "mobile content negotiation" hack:
-  # In addition to the main, AJAXy Web UI, Tracks has a lightweight
-  # low-feature 'mobile' version designed to be suitablef or use
-  # from a phone or PDA. It makes some sense that tne pages of that
-  # mobile version are simply alternate representations of the same
-  # Todo resources. The implementation goal was to treat mobile
-  # as another format and be able to use respond_to to render both
-  # versions. Unfortunately, I ran into a lot of trouble simply
-  # registering a new mime type 'text/html' with format :m because
-  # :html already is linked to that mime type and the new
-  # registration was forcing all html requests to be rendered in
-  # the mobile view. The before_filter and after_filter hackery
-  # below accomplishs that implementation goal by using a 'fake'
-  # mime type during the processing and then setting it to 
-  # 'text/html' in an 'after_filter' -LKM 2007-04-01
-  def mobile?
-    return params[:format] == 'm' || response.content_type == MOBILE_CONTENT_TYPE
-  end
-
-  def enable_mobile_content_negotiation
-    if mobile?
-      request.accepts.unshift(Mime::Type::lookup(MOBILE_CONTENT_TYPE))
-    end
-  end
-
-  def restore_content_type_for_mobile
-    if mobile?
-      response.content_type = 'text/html'
-    end
-  end
-  
-  private
-    
+  private  
   
     def get_todo_from_params
       @todo = @user.todos.find(params['id'])

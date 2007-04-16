@@ -14,11 +14,12 @@ class ApplicationController < ActionController::Base
   helper :application
   include LoginSystem
 
-  layout 'standard'
+  layout proc{ |controller| controller.mobile? ? "mobile" : "standard" }
   
   before_filter :set_session_expiration
   prepend_before_filter :login_required
-  
+  prepend_before_filter :enable_mobile_content_negotiation
+  after_filter :restore_content_type_for_mobile
   after_filter :set_charset
 
   include ActionView::Helpers::TextHelper
@@ -115,6 +116,37 @@ class ApplicationController < ActionController::Base
   def build_default_project_context_name_map(projects)
     Hash[*projects.reject{ |p| p.default_context.nil? }.map{ |p| [p.name, p.default_context.name] }.flatten].to_json 
   end
+  
+  # Here's the concept behind this "mobile content negotiation" hack:
+  # In addition to the main, AJAXy Web UI, Tracks has a lightweight
+  # low-feature 'mobile' version designed to be suitablef or use
+  # from a phone or PDA. It makes some sense that tne pages of that
+  # mobile version are simply alternate representations of the same
+  # Todo resources. The implementation goal was to treat mobile
+  # as another format and be able to use respond_to to render both
+  # versions. Unfortunately, I ran into a lot of trouble simply
+  # registering a new mime type 'text/html' with format :m because
+  # :html already is linked to that mime type and the new
+  # registration was forcing all html requests to be rendered in
+  # the mobile view. The before_filter and after_filter hackery
+  # below accomplishs that implementation goal by using a 'fake'
+  # mime type during the processing and then setting it to 
+  # 'text/html' in an 'after_filter' -LKM 2007-04-01
+  def mobile?
+    return params[:format] == 'm' || response.content_type == MOBILE_CONTENT_TYPE
+  end
+
+  def enable_mobile_content_negotiation
+    if mobile?
+      request.accepts.unshift(Mime::Type::lookup(MOBILE_CONTENT_TYPE))
+    end
+  end
+
+  def restore_content_type_for_mobile
+    if mobile?
+      response.content_type = 'text/html'
+    end
+  end
    
   protected
   
@@ -126,7 +158,10 @@ class ApplicationController < ActionController::Base
   end
   
   def redirect_back_or_home
-    redirect_back_or_default home_url
+    respond_to do |format|
+      format.html { redirect_back_or_default home_url }
+      format.m { redirect_back_or_default mobile_url }
+    end
   end
   
   def boolean_param(param_name)

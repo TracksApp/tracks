@@ -35,7 +35,7 @@
 		  page.select('.notes').each { |e| e.toggle }
 		end
 	-%>&nbsp;|&nbsp;
-    <%= link_to "Logout (#{@user.display_name}) »", :controller => "login", :action=>"logout"%>
+    <%= link_to "Logout (#{@user.display_name}) »", logout_path %>
 </div>
 
 <div id="navcontainer">

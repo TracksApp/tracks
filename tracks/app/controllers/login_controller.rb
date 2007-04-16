@@ -1,6 +1,6 @@
 class LoginController < ApplicationController
   
-  layout  'login'
+  layout 'login'
   skip_before_filter :set_session_expiration
   skip_before_filter :login_required
   before_filter :get_current_user
@@ -20,6 +20,7 @@ class LoginController < ApplicationController
           notify :notice, "Login successful: session #{msg}"
           cookies[:tracks_login] = { :value => @user.login, :expires => Time.now + 1.year }
           redirect_back_or_home
+          return
         else
           @login = params['user_login']
           notify :warning, "Login unsuccessful"
@@ -27,7 +28,12 @@ class LoginController < ApplicationController
       when :get
         if User.no_users_yet?
           redirect_to :controller => 'users', :action => 'new'
+          return
         end
+    end
+    respond_to do |format|
+      format.html
+      format.m   { render :action => 'login_mobile.rhtml', :layout => 'mobile' }
     end
   end
   
@@ -44,10 +50,13 @@ class LoginController < ApplicationController
         # to the server using the redirect_url the library created for us.
 
         # redirect to the server
-        redirect_to open_id_response.redirect_url((request.protocol + request.host_with_port + "/"), url_for(:action => 'complete'))
+        respond_to do |format|
+          format.html { redirect_to open_id_response.redirect_url((request.protocol + request.host_with_port + "/"), open_id_complete_url) }
+          format.m { redirect_to open_id_response.redirect_url((request.protocol + request.host_with_port + "/"), formatted_open_id_complete_url(:format => 'm')) }
+        end
       else
         notify :warning, "Unable to find openid server for <q>#{openid_url}</q>"
-        redirect_to :action => 'login'
+        redirect_to_login
     end
   end
 
@@ -92,14 +101,14 @@ class LoginController < ApplicationController
       else
         notify :warning, "Unknown response status: #{open_id_response.status}"
     end
-    redirect_to :action => 'login' unless performed?
+    redirect_to_login unless performed?
   end
 
   def logout
     session['user_id'] = nil
     reset_session
     notify :notice, "You have been logged out of Tracks."
-    redirect_to :action => "login"
+    redirect_to_login
   end
   
   def check_expiry
@@ -122,6 +131,13 @@ class LoginController < ApplicationController
   
   private
       
+  def redirect_to_login
+    respond_to do |format|
+      format.html { redirect_to login_path }
+      format.m { redirect_to formatted_login_path(:format => 'm') }
+    end
+  end
+  
   def should_expire_sessions?
     session['noexpiry'] != "on"
   end

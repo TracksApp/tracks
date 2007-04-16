@@ -2,9 +2,17 @@ ActionController::Routing::Routes.draw do |map|
   UJS::routes
   
   # Login Routes
-  map.connect 'login', :controller => 'login', :action => 'login' 
-  map.connect 'logout', :controller => 'login', :action => 'logout'
-
+  map.with_options :controller => 'login' do |login|
+    login.login 'login', :action => 'login'
+    login.formatted_login 'login.:format', :action => 'login'
+    login.logout 'logout', :action => 'logout'
+    login.formatted_logout 'logout.:format', :action => 'logout'
+    login.open_id_begin 'begin', :action => 'begin'
+    login.formatted_open_id_begin 'begin.:format', :action => 'begin'
+    login.open_id_complete 'complete', :action => 'complete'
+    login.formatted_open_id_complete 'complete.:format', :action => 'complete'
+  end
+  
   map.resources :users,
                 :member => {:change_password => :get, :update_password => :post,
                              :change_auth_type => :get, :update_auth_type => :post, :complete => :get,
