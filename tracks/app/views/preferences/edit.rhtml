@@ -18,6 +18,7 @@
       <li><strong>show number completed:</strong> number of completed actions to show on the home page. If you set this to zero, the completed actions box will not be shown on the home page or on the individual context or project pages. You can still see all your completed items by clicking the 'Done' link in the navigation bar at the top of each page.</li>
       <li><strong>refresh:</strong> automatic refresh interval for each of the pages (in minutes)</li>
       <li><strong>verbose action descriptor:</strong> when true, show project/context name in action listing; when false show [P]/[C] with tool tips</li>
+      <li><strong>mobile todos per page:</strong> the maximum number of actions to show on a single page in the mobile view</li>
     </ul>
 </div>
 
@@ -65,6 +66,7 @@
 	  <%= row_with_text_field('show_number_completed') %>
 	  <%= row_with_text_field('refresh') %>
 	  <%= row_with_select_field("verbose_action_descriptors") %>
+	  <%= row_with_text_field("mobile_todos_per_page") %>
 
 	    <tr><td><%= submit_tag "Update" %></td>
 	        <td><%= link_to "Cancel", :action => 'index' %></td>

@@ -402,7 +402,7 @@ class TodosController < ApplicationController
               @todos, @page = @user.todos.paginate(:all, 
                   :conditions => ['state = ?', 'active' ], :include => [:context],
                   :order =>  'due IS NULL, due ASC, todos.created_at ASC',
-                  :page => params[:page], :per_page => 6)
+                  :page => params[:page], :per_page => @prefs.mobile_todos_per_page)
               @pagination_params = { :format => :m }
               @pagination_params[:context_id] = @context.to_param if @context
               @pagination_params[:project_id] = @project.to_param if @project
