@@ -1,0 +1,61 @@
+<% auth_schemes = Tracks::Config.auth_schemes
+   show_database_form = auth_schemes.include?('database')
+   show_openid_form = auth_schemes.include?('open_id')
+-%>
+
+<div title="Account login" id="loginform" class="form">
+
+  <%= render_flash %>
+
+  <h3>Please log in to use Tracks:</h3>
+
+<% if show_database_form %>
+  <div id="database_auth_form">
+      <% form_tag formatted_login_path(:format => 'm') do %>
+        <table>
+          <tr>
+            <td width="100px"><label for="user_login">Login:</label></td>
+            <td width="100px"><input type="text" name="user_login" id="user_login" value="" class="login_text" /></td>
+          </tr>
+          <tr> 
+            <td width="100px"><label for="user_password">Password:</label></td>
+            <td width="100px"><input type="password" name="user_password" id="user_password" class="login_text" /></td>
+          </tr>
+         <tr> 
+            <td width="100px"><label for="user_noexpiry">Stay logged in:</label></td>
+            <td width="100px"><input type="checkbox" name="user_noexpiry" id="user_noexpiry" checked  /></td>
+          </tr>
+          <tr> 
+            <td width="100px"></td>
+            <td><input type="submit" name="login" value="Sign In &#187;" class="primary" /></td>
+          </tr>
+        </table>
+      <% end %>
+  </div>
+<% end %>
+
+<% if show_openid_form %>
+
+  <h4>...or login with an Open ID:</h4>
+
+  <div id="openid_auth_form">
+    <% form_tag formatted_open_id_begin_path(:format => 'm') do %>
+      <table>
+        <tr>
+          <td width="100px"><label for="openid_url">Identity URL:</label></td>
+          <td width="100px"><input type="text" name="openid_url" id="openid_url" value="<%= @openid_url %>" class="login_text open_id" /></td>
+        </tr>
+       <tr> 
+          <td width="100px"><label for="user_noexpiry">Stay logged in:</label></td>
+          <td width="100px"><input type="checkbox" name="user_noexpiry" id="user_noexpiry" checked  /></td>
+        </tr>
+        <tr> 
+          <td width="100px"></td>
+          <td><input type="submit" name="login" value="Sign In &#187;" class="primary" /></td>
+        </tr>
+      </table>
+    <% end %>
+  </div>
+ <% end %>
+ 
+</div>
