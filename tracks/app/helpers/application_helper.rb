@@ -47,7 +47,7 @@ module ApplicationHelper
            "<a title='#{format_date(due)}'><span class=\"amber\">Due Tomorrow</span></a> "
       # due 2-7 days away
       when 2..7
-      if @user.prefs.due_style == "1"
+      if @user.prefs.due_style == Preference::DUE_ON_DUE_STYLE
         "<a title='#{format_date(due)}'><span class=\"orange\">Due on #{due.strftime("%A")}</span></a> "
       else
         "<a title='#{format_date(due)}'><span class=\"orange\">Due in #{pluralize(days, 'day')}</span></a> "
