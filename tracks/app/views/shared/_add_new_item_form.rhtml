@@ -5,10 +5,18 @@
   @initial_context_name ||= @contexts[0].name unless @contexts[0].nil?
   @initial_project_name = @project.name unless @project.nil?
 %>
+<div id="todo_new_action_container">
 
-<%= link_to_function("Add a next action &#187;",
-                     "Element.toggle('todo_new_action');Form.focusFirstElement('todo-form-new-action');",
-                     {:title => "Add a next action", :accesskey => "n"}) %>
+<div id="show_todo_new_action" style="display:none">
+  <%= link_to_function("Add a next action &#187;",
+                       "todoItems.showNewActionForm();return false;",
+                       {:title => "Add a next action"}) %>
+</div>
+<div id="hide_todo_new_action" style="display:block">
+  <%= link_to_function("&laquo; Hide form",
+                       "todoItems.hideNewActionForm();return false;",
+                       {:title => "Hide next action form", :accesskey => "n"}) %>
+                     </div>
 
 <div id="todo_new_action" class="context_new" style="display:block">
 
@@ -20,13 +28,13 @@
 <div id="status"><%= error_messages_for("item") %></div>
 
 <label for="todo_description">Description</label>
-<%= text_field( "todo", "description", "size" => 25, "tabindex" => 1) %>
+<%= text_field( "todo", "description", "size" => 30, "tabindex" => 1) %>
 
 <label for="todo_notes">Notes</label>
-<%= text_area( "todo", "notes", "cols" => 25, "rows" => 6, "tabindex" => 2) %>
+<%= text_area( "todo", "notes", "cols" => 29, "rows" => 6, "tabindex" => 2) %>
 
 <label for="todo_project_name">Project</label>
-<input id="todo_project_name" name="project_name" autocomplete="off" tabindex="3" size="25" type="text" value="<%= @initial_project_name %>" />
+<input id="todo_project_name" name="project_name" autocomplete="off" tabindex="3" size="30" type="text" value="<%= @initial_project_name %>" />
 <div class="page_name_auto_complete" id="project_list" style="display:none"></div>
 
 <script type="text/javascript">
@@ -44,7 +52,7 @@ Event.observe($('todo_project_name'), "blur", selectDefaultContext.bind($('todo_
 </script>
 
 <label for="todo_context_name">Context</label>
-<input id="todo_context_name" name="context_name" autocomplete="off" tabindex="4" size="25" type="text" value="<%= @initial_context_name %>" />
+<input id="todo_context_name" name="context_name" autocomplete="off" tabindex="4" size="30" type="text" value="<%= @initial_context_name %>" />
 <div class="page_name_auto_complete" id="context_list" style="display:none"></div>
 
 <script type="text/javascript">
@@ -56,19 +64,25 @@ Event.observe($('todo_context_name'), "click", contextAutoCompleter.activate.bin
 </script>
 
 <label for="tag_list">Tags (separate with commas)</label>
-<%= text_field_tag "tag_list", nil, :size => 40, :tabindex => 5 %> 
+<%= text_field_tag "tag_list", nil, :size => 30, :tabindex => 5 %> 
 
+<div class="due_input">
 <label for="todo_due">Due</label>
-<%= text_field("todo", "due", "size" => 10, "class" => "Date", "onfocus" => "Calendar.setup", "tabindex" => 6, "autocomplete" => "off") %>
+<%= text_field("todo", "due", "size" => 12, "class" => "Date", "onfocus" => "Calendar.setup", "tabindex" => 6, "autocomplete" => "off") %>
+</div>
 
+<div class="show_from_input">
 <label for="todo_show_from">Show from</label>
-  <%= text_field("todo", "show_from", "size" => 10, "class" => "Date", "onfocus" => "Calendar.setup", "tabindex" => 7, "autocomplete" => "off") %>
+  <%= text_field("todo", "show_from", "size" => 12, "class" => "Date", "onfocus" => "Calendar.setup", "tabindex" => 7, "autocomplete" => "off") %>
+</div>
+
 
 <%= source_view_tag( @source_view ) %>
-<div class="submit_box"><input type="submit" value="Add item" tabindex="8" /></div>
+<div class="submit_box"><input type="submit" value="Add action" tabindex="8" /></div>
 <% end -%><!--[eoform:todo]-->
 
                   
 <%= calendar_setup( "todo_due"  ) %>
 <%= calendar_setup( "todo_show_from"  ) %>
 </div><!-- [end:todo-new-action] -->
+</div>

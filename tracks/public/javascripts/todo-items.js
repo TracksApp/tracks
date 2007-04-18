@@ -162,7 +162,27 @@ ToDoItems.prototype = {
   		parentElem = parentElem.parentNode;
   	}
   	return null;
+  },
+
+  showNewActionForm: function()
+  {
+	Element.show('todo_new_action');
+	Element.hide('show_todo_new_action');
+	$('show_todo_new_action').down('a').accessKey = '';
+	$('hide_todo_new_action').down('a').accessKey = 'n';
+	Element.show('hide_todo_new_action');
+	Form.focusFirstElement('todo-form-new-action');
+  },
+
+  hideNewActionForm: function()
+  {
+	Element.hide('todo_new_action');
+	Element.hide('hide_todo_new_action');
+	$('hide_todo_new_action').down('a').accessKey = '';
+	$('show_todo_new_action').down('a').accessKey = 'n';
+	Element.show('show_todo_new_action');
   }
+
 }
 
 todoItems = new ToDoItems();

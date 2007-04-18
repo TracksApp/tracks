@@ -2,21 +2,21 @@
 <p>You have completed <%= pluralize @done_today.length, 'action' %> so far today.</p>
 <div class="container">
   <h2>Completed in the last 24 hours</h2>
-  <table class="next_actions" cellspacing="5" cellpadding="0" border="0">
+  <table class="next_actions" border="0">
     <%= render :partial => "done", :collection => @done_today %>
   </table>
 </div>
 
 <div class="container">
   <h2>Completed in last 7 days</h2>
-  <table class="next_actions" cellspacing="5" cellpadding="0" border="0">
+  <table class="next_actions" border="0">
     <%= render :partial => "done", :collection => @done_this_week %>
   </table>
 </div>
 
 <div class="container">
   <h2>Completed in the last 28 days</h2>
-  <table class="next_actions" cellspacing="5" cellpadding="0" border="0">
+  <table class="next_actions" border="0">
     <%= render :partial => "done", :collection => @done_this_month %>
   </table>
 </div>

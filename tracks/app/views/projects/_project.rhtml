@@ -8,7 +8,7 @@
     <span class="in_place_editor_field" id="project_name_in_place_editor"><%= project.name %></span>
     <%= in_place_editor 'project_name_in_place_editor', { :url => { :controller => 'projects', :action => 'update', :id => project.id, :field => 'name', :wants_render => false, :escape => false}  , :options=>"{method:'put'}" } %>
   </h2>
-  <% if @project.description -%>
+  <% unless @project.description.blank? -%>
     <div class="project_description"><%= sanitize(@project.description) %></div>
   <% end -%>
   

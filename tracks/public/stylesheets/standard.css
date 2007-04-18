@@ -1,9 +1,37 @@
-/* Stylesheet for the main listing page */
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td { 
+	margin:0;
+	padding:0;
+}
+table {
+	border-collapse:collapse;
+	border-spacing:0;
+}
+fieldset,img { 
+	border:0;
+}
+address,caption,cite,code,dfn,em,strong,th,var {
+	font-style:normal;
+	font-weight:normal;
+}
+ol,ul {
+	list-style:none;
+}
+caption,th {
+	text-align:left;
+}
+h1,h2,h3,h4,h5,h6 {
+	font-size:100%;
+	font-weight:normal;
+}
+q:before,q:after {
+	content:'';
+}
+abbr,acronym { border:0;
+}
 
 body {
       font-family: "Lucida Grande", Verdana, Geneva, Arial, sans-serif;
-      font-size: 12px;
-      line-height: 140%;
+      font-size: 85%;
       padding: 0px 10px;
       margin: 0px;
       background: #eee;
@@ -11,6 +39,8 @@ body {
 
 p {
       padding: 2px;
+      font-size: 92%;
+      line-height: 140%;
       }
 
 a, a:link, a:active, a:visited {
@@ -24,7 +54,22 @@ a:hover {
       color: #fff;
       background-color: #cc3334;
       } 
-      
+
+h1 {
+	font-size: 304%;
+	font-weight: bold;
+}
+
+h2 {
+	font-size: 148%;
+	font-weight: bold;
+}
+
+h3 {
+	font-size: 129%;
+	font-weight: bold;
+}
+
 /* Rules for the icon links */
 
 img.edit_item {background-image: url(../images/edit_off.png); background-repeat: no-repeat; border: none;}
@@ -57,7 +102,7 @@ a.show_notes:hover, a.link_to_notes:hover {background-image: url(../images/notes
 #display_box {
       float: left;
       width: 55%;
-      margin: 0px 15px 50px 15px;
+      margin: 0px 10px 50px 15px;
       }
 
 #single_box {
@@ -136,12 +181,12 @@ a.show_notes:hover, a.link_to_notes:hover {background-image: url(../images/notes
       float: left;
       width: 45%;
       padding-left: 15px;
+      margin-top: 15px;
       margin-bottom: 5px;
       white-space: nowrap; /* added 2006-05-17 for safari display, timfm */ 
       }
 #date h1 {
-      font-family: "Lucida Grande", Verdana, Geneva, Arial, sans-serif;
-      font-size: 14pt;
+      font-size: 152%;
       }
       
 #minilinks {
@@ -158,9 +203,16 @@ a.show_notes:hover, a.link_to_notes:hover {background-image: url(../images/notes
       margin: 0px 0px 15px 0px;
       background: #fff; 
       }
+
+.completed {
+    background: #eee; 	
+}
       
 .container h2 {
-      background: #CCC;
+      background: #ccc;
+      background-image: url('/images/container-gradient.png');
+      background-repeat: repeat-y;
+      background-position: right;
       padding: 5px;
       margin-top: 0px;
       margin-left: -5px;
@@ -188,7 +240,7 @@ h2 a:hover {
       }
       
 div#input_box {
-      margin: 0% 5% 0% 60%;
+      margin: 0px 15px 0px 58%;
       padding: 0px 15px 0px 0px;
       }
 
@@ -199,13 +251,27 @@ div#input_box {
 
 #input_box ul {list-style-type: circle; font-size: 0.9em;}
 
+#input_box .show_from_input, #input_box .due_input {
+	float:left;
+	width:50%;
+}
+
+#input_box .submit_box {
+	width:100%;
+	text-align:center;
+}
+
+#input_box .submit_box input {
+	margin-top:10px;
+}
+
 .box {
       float: left;
       width: 20px;
       }
 
 div.item-container {
-      padding: 3px;
+      padding: 3px 0px;
       clear: both;
       }
       
@@ -223,9 +289,6 @@ input.item-checkbox {
 
 .description {
       margin-left: 70px;
-      margin-right: 10px;
-      _margin-left: 0px; 
-      _margin-right: 0px;
       }
 
 .stale_l1, .stale_l2, .stale_l3 {
@@ -245,7 +308,7 @@ input.item-checkbox {
             
 #footer {
       clear: both;
-      font-size: 0.8em;
+      font-size: 85%;
       text-align: center;
       color: #999;
       margin: 20px 20px 5px 20px;
@@ -302,6 +365,7 @@ div.note_footer a, div.note_footer a:hover {
       }
 
 div.add_note_link {
+	margin-top:12px;
 	float: right;
 	}
 div#project_status > div {
@@ -391,35 +455,35 @@ h4.notice {
       color: #fff;
       background: #f00;
       padding: 1px;
-      font-size: 10px;
+      font-size: 85%;
       }
       
 .amber {
       color: #fff;
       background: #ff6600;
       padding: 1px;
-      font-size: 10px;
+      font-size: 85%;
       }
          
 .orange {
       color: #fff;
       background: #FFA500;
       padding: 1px;
-      font-size: 10px;
+      font-size: 85%;
       }
 
 .green {
       color: #fff;
       background: #33cc00;
       padding: 1px;
-      font-size: 10px;
+      font-size: 85%;
       }
       
 .grey {
       color: #fff;
       background: #999;
-      padding: 1px;
-      font-size: 10px;
+      padding: 2px;
+      font-size: 85%;
       }
       
 .info {
@@ -463,6 +527,11 @@ h4.notice {
 ul {
       list-style-type: none;
       }
+
+#sidebar h3 {
+	margin-top:15px;
+	margin-bottom:5px;
+}
       
 #sidebar ul {
       margin-left: auto;
@@ -502,10 +571,6 @@ input {
 
 /* Positioning the 'cells' in the list */
 
-.position {
-    float: left;
-    }
-
 img.position, a:hover img.position {
     text-align: left;
     vertical-align: middle;
@@ -529,7 +594,9 @@ div#list-active-projects, div#list-hidden-projects, div#list-completed-projects,
     clear:right;
 	border: 1px solid #999;
     }
-
+.project-state-group h2 {
+	margin:20px 0px 8px 13px;
+}
 div.alpha_sort {
 	margin-top:-20px;
 	float:right;
@@ -589,6 +656,17 @@ form {
 .inline-form table td.label {
     width: 13ex;
     }
+#todo_new_action_container {
+	background:#ddd;
+	width:270px;
+	padding:5px;
+	background-image: url('/images/new-action-gradient.png');
+    background-repeat: repeat-x;
+    background-position: top;
+}
+#hide_todo_new_action {
+	text-align:right;
+}
 #todo-form-new-action label {
     display:block;
 }
@@ -604,7 +682,7 @@ label {
     padding: 0px 0px;
     }
     
-input, select {
+input, select, textarea {
     margin: 0px 0px 5px 0px;
     }
     
@@ -622,12 +700,16 @@ input, select {
     }
     
 /* Classes for Drag and Drop */
+.position {
+    float: left;
+	margin-top:2px;
+    }
 .handle {
     color: #fff;
     background: #000;
-    padding: 1px;
-    font-size: 10px;
-    cursor: move;    
+    padding: 2px;
+    font-size: 92%;
+    cursor: move;
 }
 
 div.message {
@@ -772,6 +854,10 @@ div.page_name_auto_complete ul strong.highlight {
 	color: #800; 
 	margin: 0;
 	padding: 0;
+}
+
+table.next_actions td {
+	padding:5px 3px 2px 0px;
 }
 
 table.users_table {
