@@ -255,6 +255,7 @@ class TodosController < ApplicationController
   def list_deferred
     @source_view = 'deferred'
     @page_title = "TRACKS::Tickler"
+    @user.deferred_todos.find_and_activate_ready
     @tickles = @user.deferred_todos
     @count = @tickles.size
     @default_project_context_name_map = build_default_project_context_name_map(@projects).to_json
