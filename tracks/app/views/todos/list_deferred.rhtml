@@ -1,18 +1,8 @@
 <div id="display_box">
   
-	<div id="tickler" class="container project">
-	  <h2>Deferred actions</h2>
+  <%= render :partial => "contexts/context", :collection => @contexts, 
+            :locals => { :collapsible => true } %>
 
-	  <div id="tickler-items" class="items toggle_target">
-	    <div id="tickler-empty-nd" style="display:<%= @tickles.empty? ? 'block' : 'none'%>;">
-	      <div class="message"><p>Currently there are no deferred actions</p></div>
-	    </div>
-
-	    <%= render :partial => "todos/todo", :collection => @tickles, :locals => { :parent_container_type => 'tickler' } %>
-
-	  </div><!-- [end:items] -->
-	</div><!-- [end:tickler] -->
-	
 </div><!-- End of display_box -->
 
 <div id="input_box">

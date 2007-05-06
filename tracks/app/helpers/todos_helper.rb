@@ -71,7 +71,7 @@ module TodosHelper
        "(#{@todo.context.name}#{", " + @todo.project.name unless @todo.project.nil?})"
     else
       str = ''
-      if (['project', 'tickler', 'tag'].include?(parent_container_type))
+      if (['project', 'tag'].include?(parent_container_type))
         str << item_link_to_context( @todo )
       end
       if (['context', 'tickler', 'tag'].include?(parent_container_type)) && @todo.project_id
@@ -143,7 +143,6 @@ module TodosHelper
   end
   
   def item_container_id
-    return "tickler-items" if source_view_is :deferred
     if source_view_is :project
       return "p#{@todo.project_id}" if @todo.active?
       return "tickler" if @todo.deferred?
