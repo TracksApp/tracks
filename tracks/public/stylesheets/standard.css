@@ -31,7 +31,7 @@ abbr,acronym { border:0;
 
 body {
       font-family: "Lucida Grande", Verdana, Geneva, Arial, sans-serif;
-      font-size: 85%;
+      font-size: 80%;
       padding: 0px 10px;
       margin: 0px;
       background: #eee;
@@ -210,9 +210,6 @@ a.show_notes:hover, a.link_to_notes:hover {background-image: url(../images/notes
       
 .container h2 {
       background: #ccc;
-      background-image: url('/images/container-gradient.png');
-      background-repeat: repeat-y;
-      background-position: right;
       padding: 5px;
       margin-top: 0px;
       margin-left: -5px;
@@ -253,11 +250,10 @@ div#input_box {
 
 #input_box .show_from_input, #input_box .due_input {
 	float:left;
-	width:50%;
 }
 
 #input_box .submit_box {
-	width:100%;
+	width:50%;
 	text-align:center;
 }
 
@@ -271,7 +267,8 @@ div#input_box {
       }
 
 div.item-container {
-      padding: 3px 0px;
+      padding: 2px 0px;
+      line-height:20px;
       clear: both;
       }
       
@@ -663,6 +660,26 @@ form {
 	background-image: url('/images/new-action-gradient.png');
     background-repeat: repeat-x;
     background-position: top;
+}
+#todo_new_action_container input, #todo_new_action_container textarea {
+	width:260px;
+}
+#todo_new_action_container .show_from_input input {
+	width:120px;
+}
+#todo_new_action_container .show_from_input {
+	margin-left:15px;
+}
+
+#todo_new_action_container .due_input input {
+	width:120px;
+}
+#todo-form-new-action .submit_box {
+	width:260px;
+	text-align:center;
+}
+#todo-form-new-action .submit_box input {
+	width:50%;
 }
 #hide_todo_new_action {
 	text-align:right;
