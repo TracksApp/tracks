@@ -3,57 +3,65 @@
 <%= hidden_field( "todo", "id" ) %>
 <%= source_view_tag( @source_view ) %>
 
-<table>
-  <tr>
-    <td class="label"><label for="todo_description">Next action</label></td>
-    <td><%= text_field( "todo", "description", "tabindex" => 8) %></td>
-  </tr>
-  <tr>
-    <td class="label"><label for="todo_notes">Notes</label></td>
-    <td><%= text_area( "todo", "notes", "cols" => 20, "rows" => 5, "tabindex" => 9) %></td>
-  </tr>
-  <tr>
-    <td class="label"><label for="<%= dom_id(@todo, 'project_name') %>">Project</label></td>
-    <td>
-      <input id="<%= dom_id(@todo, 'project_name') %>" name="project_name" autocomplete="off" tabindex="10" size="25" type="text" value="<%= @todo.project.nil? ? 'None' : @todo.project.name %>" />
-      <div class="page_name_auto_complete" id="<%= dom_id(@todo, 'project_list') %>" style="display:none"></div>
-    </td>
-   <script type="text/javascript">
-    editFormProjectAutoCompleter = new Autocompleter.Local('<%= dom_id(@todo, 'project_name') %>', '<%= dom_id(@todo, 'project_list') %>', <%= project_names_for_autocomplete %>, {choices:100,autoSelect:false});
-    Event.observe($('<%= dom_id(@todo, 'project_name') %>'), "focus", editFormProjectAutoCompleter.activate.bind(editFormProjectAutoCompleter));
-    Event.observe($('<%= dom_id(@todo, 'project_name') %>'), "click", editFormProjectAutoCompleter.activate.bind(editFormProjectAutoCompleter));
-    </script>
-  </tr>
-  <tr>
-    <td class="label"><label for="<%= dom_id(@todo, 'context_name') %>">Context</label></td>
-    <td><input id="<%= dom_id(@todo, 'context_name') %>" name="context_name" autocomplete="off" tabindex="11" size="25" type="text" value="<%= @todo.context.name %>" />
-    <div class="page_name_auto_complete" id="<%= dom_id(@todo, 'context_list') %>" style="display:none"></div></td>
-    <script type="text/javascript">
-    editFormContextAutoCompleter = new Autocompleter.Local('<%= dom_id(@todo, 'context_name') %>', '<%= dom_id(@todo, 'context_list') %>', <%= context_names_for_autocomplete %>, {choices:100,autoSelect:false});
-    Event.observe($('<%= dom_id(@todo, 'context_name') %>'), "focus", editFormContextAutoCompleter.activate.bind(editFormContextAutoCompleter));
-    Event.observe($('<%= dom_id(@todo, 'context_name') %>'), "click", editFormContextAutoCompleter.activate.bind(editFormContextAutoCompleter));
-    </script>
-  </tr>
-  <tr>
-    <td class="label"><label for="<%= dom_id(@todo, 'tag_list') %>">Tags (separate with commas)</label></td>
-    <td><%= text_field_tag "tag_list", @todo.tags.collect{|t| t.name}.join(", "), :size => 40, :tabindex => 12 %></td>
-  </tr>
-  <tr>
-    <td class="label"><label for="<%= dom_id(@todo, 'due') %>">Due</td>
-    <td><input name="todo[due]" id="<%= dom_id(@todo, 'due') %>" type="text" value="<%= format_date(@todo.due) %>" tabindex="13" size="10" onfocus="Calendar.setup" autocomplete="off"  class="Date" /></td>
-  </tr>
-  <tr>
-    <td class="label"><label for="<%= dom_id(@todo, 'show_from') %>">Show from</td>
-    <td><input name="todo[show_from]" id="<%= dom_id(@todo, 'show_from') %>" type="text" value="<%= format_date(@todo.show_from) %>" tabindex="14" size="10" onfocus="Calendar.setup" autocomplete="off" class="Date" /></td>
-  </tr>
-    <% if controller.controller_name == "project" || @todo.deferred? -%>
-      <input type="hidden" name="on_project_page" value="true" />
-    <% end -%>
-  <tr>
-    <td colspan="2"><input id="<%= dom_id(@todo, 'submit') %>" type="submit" value="Update" tabindex="14" />
-        <a href="javascript:void(0);" onclick="Element.toggle('<%= dom_id(@todo, 'line') %>');Element.toggle('<%= dom_id(@todo, 'edit') %>');">Cancel</a></td>
-  </tr>
-</table>
+<label for="<%= dom_id(@todo, 'description') %>">Description</label>
+<%= text_field( "todo", "description", "size" => 30, "tabindex" => 8) %>
 
+<label for="<%= dom_id(@todo, 'notes') %>">Notes</label>
+<%= text_area( "todo", "notes", "cols" => 29, "rows" => 4, "tabindex" => 9) %>
+
+<div class="project_input">
+<label for="<%= dom_id(@todo, 'project_name') %>">Project</label>
+<input id="<%= dom_id(@todo, 'project_name') %>" name="project_name" autocomplete="off" tabindex="10" size="30" type="text" value="<%= @todo.project.nil? ? 'None' : @todo.project.name %>" />
+<div class="page_name_auto_complete" id="<%= dom_id(@todo, 'project_list') %>" style="display:none"></div>
+
+<script type="text/javascript">
+<%= dom_id(@todo, 'project_autocompleter') %> = new Autocompleter.Local('<%= dom_id(@todo, 'project_name') %>', '<%= dom_id(@todo, 'project_list') %>', <%= project_names_for_autocomplete %>, {choices:100,autoSelect:false});
+function selectDefaultContext() {
+  todoContextNameElement = $('<%= dom_id(@todo, 'context_name') %>');
+  defaultContextName = $('todo_context_name').projectDefaultContextsMap[this.value];
+  if (defaultContextName && !todoContextNameElement.editedByTracksUser) {
+    todoContextNameElement.value = defaultContextName;
+  }
+}
+Event.observe($('<%= dom_id(@todo, 'project_name') %>'), "focus", <%= dom_id(@todo, 'project_autocompleter') %>.activate.bind(<%= dom_id(@todo, 'project_autocompleter') %>));
+Event.observe($('<%= dom_id(@todo, 'project_name') %>'), "click", <%= dom_id(@todo, 'project_autocompleter') %>.activate.bind(<%= dom_id(@todo, 'project_autocompleter') %>));
+Event.observe($('<%= dom_id(@todo, 'project_name') %>'), "blur", selectDefaultContext.bind($('<%= dom_id(@todo, 'project_name') %>')));
+</script>
+</div>
+
+<div class="context_input">
+<label for="<%= dom_id(@todo, 'context_name') %>">Context</label>
+<input id="<%= dom_id(@todo, 'context_name') %>" name="context_name" autocomplete="off" tabindex="11" size="30" type="text" value="<%= @todo.context.name %>" />
+<div class="page_name_auto_complete" id="<%= dom_id(@todo, 'context_list') %>" style="display:none"></div>
+
+<script type="text/javascript">
+<%= dom_id(@todo, 'context_autocompleter') %> = new Autocompleter.Local('<%= dom_id(@todo, 'context_name') %>', '<%= dom_id(@todo, 'context_list') %>', <%= context_names_for_autocomplete %>, {choices:100,autoSelect:false});
+Event.observe($('<%= dom_id(@todo, 'context_name') %>'), "focus", function(){ $('<%= dom_id(@todo, 'context_name') %>').editedByTracksUser = true; });
+Event.observe($('<%= dom_id(@todo, 'context_name') %>'), "focus", <%= dom_id(@todo, 'context_autocompleter') %>.activate.bind(<%= dom_id(@todo, 'context_autocompleter') %>));
+Event.observe($('<%= dom_id(@todo, 'context_name') %>'), "click", <%= dom_id(@todo, 'context_autocompleter') %>.activate.bind(<%= dom_id(@todo, 'context_autocompleter') %>));
+</script>
+</div>
+
+<label class="tag_list_label" for="<%= dom_id(@todo, 'tag_list') %>">Tags (separate with commas)</label>
+<%= text_field_tag dom_id(@todo, 'tag_list'), nil, :size => 30, :tabindex => 12 %> 
+
+<div class="due_input">
+<label for="<%= dom_id(@todo, 'due') %>">Due</label>
+<%= text_field("todo", "due", "size" => 12, "id" => dom_id(@todo, 'due'), "class" => "Date", "onfocus" => "Calendar.setup", "tabindex" => 13, "autocomplete" => "off") %>
+</div>
+
+<div class="show_from_input">
+<label for="<%= dom_id(@todo, 'show_from') %>">Show from</label>
+  <%= text_field("todo", "show_from", "size" => 12, "id" => dom_id(@todo, 'show_from'), "class" => "Date", "onfocus" => "Calendar.setup", "tabindex" => 14, "autocomplete" => "off") %>
+</div>
+
+<% if controller.controller_name == "project" || @todo.deferred? -%>
+  <input type="hidden" name="on_project_page" value="true" />
+<% end -%>
+
+<div class="submit_box"><input id="<%= dom_id(@todo, 'submit') %>" type="submit" value="Update" tabindex="14" />
+<a href="javascript:void(0);" onclick="Element.toggle('<%= dom_id(@todo, 'line') %>');Element.toggle('<%= dom_id(@todo, 'edit') %>');">Cancel</a>
+</div>
+        
 <%= calendar_setup( dom_id(@todo, 'due') ) %>
 <%= calendar_setup( dom_id(@todo, 'show_from') ) %>

@@ -248,7 +248,7 @@ div#input_box {
 
 #input_box ul {list-style-type: circle; font-size: 0.9em;}
 
-#input_box .show_from_input, #input_box .due_input {
+.show_from_input, .due_input, .project_input, .context_input {
 	float:left;
 }
 
@@ -661,11 +661,24 @@ form {
     background-repeat: repeat-x;
     background-position: top;
 }
+.edit_todo_form {
+	padding:5px;
+	width:100%;	
+}
+.edit_todo_form input, .edit_todo_form textarea {
+	width:95%;
+}
 #todo_new_action_container input, #todo_new_action_container textarea {
 	width:260px;
 }
 #todo_new_action_container .show_from_input input {
 	width:120px;
+}
+.edit_todo_form .show_from_input input, .edit_todo_form .context_input input {
+	width:45%;
+}
+.edit_todo_form .show_from_input, .edit_todo_form .context_input {
+	margin-left:5%;
 }
 #todo_new_action_container .show_from_input {
 	margin-left:15px;
@@ -674,6 +687,19 @@ form {
 #todo_new_action_container .due_input input {
 	width:120px;
 }
+.edit_todo_form .tag_list_label {
+	clear:both;
+}
+.edit_todo_form .due_input, .edit_todo_form .show_from_input, .edit_todo_form .project_input, .edit_todo_form .context_input {
+	width:45%;
+}
+.edit_todo_form .due_input input, .edit_todo_form .show_from_input input, .edit_todo_form .project_input input, .edit_todo_form .context_input input {
+	width:100%;
+}
+.edit_todo_form .submit_box {
+	width:95%;
+	text-align:center;	
+}
 #todo-form-new-action .submit_box {
 	width:260px;
 	text-align:center;
@@ -681,10 +707,13 @@ form {
 #todo-form-new-action .submit_box input {
 	width:50%;
 }
+.edit_todo_form .submit_box input {
+	width:120px;
+}
 #hide_todo_new_action {
 	text-align:right;
 }
-#todo-form-new-action label {
+#todo-form-new-action label, .edit_todo_form label {
     display:block;
 }
 
