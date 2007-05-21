@@ -22,7 +22,18 @@ class ContextsController < ApplicationController
   end
   
   def show
-    @page_title = "TRACKS::Context: #{@context.name}"
+    if (@context.nil?)
+      respond_to do |format|
+        format.html { render :text => 'Context not found', :status => 404 }
+        format.xml  { render :xml => '<error>Context not found</error>', :status => 404 }
+      end
+    else
+      @page_title = "TRACKS::Context: #{@context.name}"
+      respond_to do |format|
+        format.html
+        format.xml  { render :xml => @context.to_xml( :except => :user_id ) }
+      end
+    end
   end
   
   # Example XML usage: curl -H 'Accept: application/xml' -H 'Content-Type: application/xml'
@@ -32,7 +43,7 @@ class ContextsController < ApplicationController
   #
   def create
     if params[:format] == 'application/xml' && params['exception']
-      render_failure "Expected post format is valid xml like so: <request><context><name>context name</name></context></request>."
+      render_failure "Expected post format is valid xml like so: <request><context><name>context name</name></context></request>.", 400
       return
     end
     @context = @user.contexts.build
@@ -47,11 +58,11 @@ class ContextsController < ApplicationController
       format.js
       format.xml do
         if @context.new_record? && params_are_invalid
-          render_failure "Expected post format is valid xml like so: <request><context><name>context name</name></context></request>."
+          render_failure "Expected post format is valid xml like so: <request><context><name>context name</name></context></request>.", 400
         elsif @context.new_record?
-          render_failure @context.errors.to_xml
+          render_failure @context.errors.to_xml, 409
         else
-          render :xml => @context.to_xml( :except => :user_id )
+          render :xml => @context.to_xml( :except => :user_id ), :status => 201
         end
        end
     end
@@ -125,6 +136,8 @@ class ContextsController < ApplicationController
 
     def set_context_from_params
       @context = @user.contexts.find_by_params(params)
+    rescue
+      @context = nil
     end
      
     def init
@@ -137,14 +150,16 @@ class ContextsController < ApplicationController
 
     def init_todos
       set_context_from_params
-      @done = @context.done_todos
-      # @not_done_todos = @context.not_done_todos
-      # TODO: Temporarily doing this search manually until I can work out a way
-      # to do the same thing using not_done_todos acts_as_todo_container method
-      # Hides actions in hidden projects from context.
-      @not_done_todos = @context.todos.find(:all, :conditions => ['todos.state = ?', 'active'], :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC", :include => :project)
-      @count = @not_done_todos.size
-      @default_project_context_name_map = build_default_project_context_name_map(@projects).to_json
+      unless @context.nil?
+        @done = @context.done_todos
+        # @not_done_todos = @context.not_done_todos
+        # TODO: Temporarily doing this search manually until I can work out a way
+        # to do the same thing using not_done_todos acts_as_todo_container method
+        # Hides actions in hidden projects from context.
+        @not_done_todos = @context.todos.find(:all, :conditions => ['todos.state = ?', 'active'], :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC", :include => :project)
+        @count = @not_done_todos.size
+        @default_project_context_name_map = build_default_project_context_name_map(@projects).to_json
+      end
     end
 
 end

@@ -36,6 +36,10 @@ class ProjectsController < ApplicationController
     @next_project = @user.projects.next_from(@project)
     @previous_project = @user.projects.previous_from(@project)
     @default_project_context_name_map = build_default_project_context_name_map(@projects).to_json
+    respond_to do |format|
+      format.html
+      format.xml   { render :xml => @project.to_xml( :except => :user_id )  }
+    end
   end
 
   # Example XML usage: curl -H 'Accept: application/xml' -H 'Content-Type: application/xml'

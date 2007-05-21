@@ -40,7 +40,7 @@ class ContextXmlApiTest < ActionController::IntegrationTest
   def test_fails_with_too_long_name
     invalid_with_long_name_postdata = "<request><context><name>foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo arfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo arfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfo barfoobarfoobarfoobarfoobarfoobarfoobar</name></context></request>"
     authenticated_post_xml_to_context_create invalid_with_long_name_postdata
-    assert_response 404
+    assert_response 409
     assert_xml_select 'errors' do
       assert_select 'error', 1, 'Name context name must be less than 256 characters'
     end
@@ -48,7 +48,7 @@ class ContextXmlApiTest < ActionController::IntegrationTest
   
   def test_fails_with_comma_in_name
     authenticated_post_xml_to_context_create "<request><context><name>foo,bar</name></context></request>"
-    assert_response 404
+    assert_response 409
     assert_xml_select 'errors' do
       assert_select 'error', 1, 'Name cannot contain the comma (\',\') character'
     end
@@ -57,7 +57,7 @@ class ContextXmlApiTest < ActionController::IntegrationTest
   def test_creates_new_context
     initial_count = Context.count
     authenticated_post_xml_to_context_create
-    assert_response 200
+    assert_response 201
     assert_xml_select 'context' do
       assert_select 'created-at', /\d{4}+-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/
       assert_select 'hide', /false|0/ #TODO: Figure out schema issues
@@ -78,7 +78,7 @@ class ContextXmlApiTest < ActionController::IntegrationTest
   end
 
   def assert_404_invalid_xml
-    assert_response_and_body 404, "Expected post format is valid xml like so: <request><context><name>context name</name></context></request>."
+    assert_response_and_body 400, "Expected post format is valid xml like so: <request><context><name>context name</name></context></request>."
   end
   
 end

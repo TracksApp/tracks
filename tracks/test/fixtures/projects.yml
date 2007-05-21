@@ -1,10 +1,8 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-<% 
-
+<%
 def today 
-  Time.now.utc.to_date.to_time.to_s(:db) 
+  Time.now.utc.beginning_of_day.to_s(:db) 
 end
-
 %>
 
 timemachine:

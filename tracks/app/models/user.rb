@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
            :order => 'position ASC',
            :dependent => :delete_all do
              def find_by_params(params)
-               find(params['id'] || params['context_id'])
+               find(params['id'] || params['context_id']) || nil
              end
            end
   has_many :projects,
@@ -57,7 +57,7 @@ class User < ActiveRecord::Base
            :conditions => [ 'state = ?', 'deferred' ],
            :order => 'show_from ASC, todos.created_at DESC' do
               def find_and_activate_ready
-                find(:all, :conditions => ['show_from <= ?', Time.now.utc.to_date.to_time ]).collect { |t| t.activate_and_save! }
+                find(:all, :conditions => ['show_from <= ?', Time.now.utc.beginning_of_day ]).collect { |t| t.activate_and_save! }
               end
            end
   has_many :completed_todos,

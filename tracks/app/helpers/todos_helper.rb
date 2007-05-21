@@ -189,6 +189,10 @@ module TodosHelper
     s = will_paginate(@down_count, 6)
     (s.gsub /(<\/[^<]+>)/, '\1 ').chomp(' ')
   end
+
+  def date_field_tag(name, id, value = nil, options = {})
+    text_field_tag name, value, {"size" => 12, "id" => id, "class" => "Date", "onfocus" => "Calendar.setup", "autocomplete" => "off"}.update(options.stringify_keys)
+  end
     
   private
   

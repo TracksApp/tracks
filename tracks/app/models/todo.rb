@@ -39,7 +39,6 @@ class Todo < ActiveRecord::Base
   validates_presence_of :description
   validates_length_of :description, :maximum => 100
   validates_length_of :notes, :maximum => 60000, :allow_nil => true 
-  # validates_chronic_date :due, :allow_nil => true
   validates_presence_of :show_from, :if => :deferred?
   validates_presence_of :context
   

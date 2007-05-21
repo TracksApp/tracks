@@ -255,6 +255,9 @@ class UserTest < Test::Unit::TestCase
 
   def test_find_and_activate_deferred_todos_that_are_ready
     assert_equal 1, @admin_user.deferred_todos.count
+    @admin_user.deferred_todos[0].show_from = Time.now.utc.to_date
+    @admin_user.deferred_todos[0].save
+    @admin_user.deferred_todos.reload
     @admin_user.deferred_todos.find_and_activate_ready
     @admin_user.deferred_todos.reload
     assert_equal 0, @admin_user.deferred_todos.count
