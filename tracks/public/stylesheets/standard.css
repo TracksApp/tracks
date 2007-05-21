@@ -809,7 +809,7 @@ div.message {
   list-style-position: inside;
 }
 
-ul#prefs {list-style-type: disc; margin-left: 5px;}
+ul#prefs {list-style-type: disc; margin-left: 15px;}
 #token_area, #authentication_area {
   text-align:center;
   margin-top:20px;
