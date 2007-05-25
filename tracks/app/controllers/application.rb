@@ -7,7 +7,7 @@ require "redcloth"
 
 require 'date'
 require 'time'
-Tag # We need this in development mode, or you get 'method missing' errors
+#Tag # We need this in development mode, or you get 'method missing' errors
 
 class ApplicationController < ActionController::Base
 

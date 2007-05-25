@@ -150,4 +150,36 @@ class ContextsControllerTest < TodoContainerControllerTestBase
     assert_response :ok
   end
   
+  def test_show_sets_title
+    @request.session['user_id'] = users(:admin_user).id
+    get :show, { :id => "1" }
+    assert_equal 'TRACKS::Context: agenda', assigns['page_title']
+  end
+  
+  def test_show_renders_show_template
+    @request.session['user_id'] = users(:admin_user).id
+    get :show, { :id => "1" }
+    assert_template "contexts/show"
+  end
+  
+  def test_show_xml_renders_context_to_xml
+    @request.session['user_id'] = users(:admin_user).id
+    get :show, { :id => "1", :format => 'xml' }
+    assert_equal contexts(:agenda).to_xml( :except => :user_id ), @response.body
+  end
+  
+  def test_show_with_nil_context_returns_404
+    @request.session['user_id'] = users(:admin_user).id
+    get :show, { :id => "0" }
+    assert_equal 'Context not found', @response.body 
+    assert_response 404
+  end
+  
+  def test_show_xml_with_nil_context_returns_404
+    @request.session['user_id'] = users(:admin_user).id
+    get :show, { :id => "0", :format => 'xml' }
+    assert_response 404
+    assert_xml_select 'error', 'Context not found'
+  end
+  
 end

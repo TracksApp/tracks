@@ -57,7 +57,7 @@ class ProjectsControllerTest < TodoContainerControllerTestBase
   def test_create_project_and_go_to_project_page
     num_projects = Project.count
     xhr :post, :create, { :project => {:name => 'Immediate Project Planning Required'}, :go_to_project => 1}
-    assert_js_redirected_to '/projects/5'
+    assert_js_redirected_to %r{/?projects/\d+}
     assert_equal num_projects + 1, Project.count
   end
 

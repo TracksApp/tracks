@@ -5,7 +5,7 @@ class TodosController < ApplicationController
   skip_before_filter :login_required, :only => [:index]
   prepend_before_filter :login_or_feed_token_required, :only => [:index]
   append_before_filter :init, :except => [ :destroy, :completed, :completed_archive, :check_deferred ]
-  append_before_filter :get_todo_from_params, :only => [ :edit, :toggle_check, :show, :update, :destroy ]
+  append_before_filter :get_todo_from_params, :only => [ :edit, :toggle_check, :toggle_star, :show, :update, :destroy ]
 
   session :off, :only => :index, :if => Proc.new { |req| is_feed_request(req) }
 
@@ -137,6 +137,11 @@ class TodosController < ApplicationController
         end
       end
     end
+  end
+  
+  def toggle_star
+    @todo.toggle_star!
+    @saved = @todo.save!
   end
 
   def update

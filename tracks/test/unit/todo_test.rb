@@ -1,8 +1,8 @@
 require File.dirname(__FILE__) + '/../test_helper'
 require 'date'
 
-class TodoTest < Test::Unit::TestCase
-  fixtures :todos, :users, :contexts, :preferences
+class TodoTest < Test::Rails::TestCase
+  fixtures :todos, :users, :contexts, :preferences, :tags, :taggings
 
   def setup
     @not_completed1 = Todo.find(1).reload
@@ -137,6 +137,30 @@ class TodoTest < Test::Unit::TestCase
     t.save!
     t.reload
     assert_equal :deferred, t.current_state
+  end
+  
+  def test_todo_is_not_starred
+    assert !@not_completed1.starred?
+  end
+  
+  def test_todo_2_is_not_starred
+    assert !Todo.find(2).starred?
+  end
+  
+  def test_todo_is_starred_after_starred_tag_is_added
+    @not_completed1.add_tag('starred')
+    assert @not_completed1.starred?
+  end
+
+  def test_todo_is_starred_after_toggle_starred
+    @not_completed1.toggle_star!
+    assert @not_completed1.starred?
+  end
+  
+  def test_todo_is_not_starred_after_toggle_starred_twice
+    @not_completed1.toggle_star!
+    @not_completed1.toggle_star!
+    assert !@not_completed1.starred?
   end
   
 end

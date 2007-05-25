@@ -6,13 +6,9 @@ class PolymorphTest < Test::Unit::TestCase
               :"aquatic/fish", :"aquatic/whales", :"aquatic/little_whale_pupils",
               :keep_your_enemies_close
   require 'beautiful_fight_relationship'  
-  
-  # to-do: finder queries on the collection
-  #           order-mask column on the join table for polymorphic order
-  #           rework load order so you could push and pop without ever loading the whole collection
-  #           so that limit works in a sane way
-      
+        
   def setup
+   @association_error = ActiveRecord::Associations::PolymorphicError
    @kibbles = Petfood.find(1)
    @bits = Petfood.find(2) 
    @shamu = Aquatic::Whale.find(1)
@@ -25,8 +21,8 @@ class PolymorphTest < Test::Unit::TestCase
    @froggy = Frog.find(1)
 
    @join_count = EatersFoodstuff.count    
-   @l = @kibbles.eaters.length  
-   @m = @bits.eaters.count
+   @l = @kibbles.eaters.size
+   @m = @bits.eaters.size
   end
   
   def test_all_relationship_validities
@@ -53,21 +49,16 @@ class PolymorphTest < Test::Unit::TestCase
     assert_equal @l += 1, @kibbles.eaters.count
 
     @kibbles.reload
-    assert_equal @l, @kibbles.eaters.count
-    
+    assert_equal @l, @kibbles.eaters.count    
   end
   
   def test_duplicate_assignment
-    # try to add a duplicate item
+    # try to add a duplicate item when :ignore_duplicates is false
     @kibbles.eaters.push(@alice)
     assert @kibbles.eaters.include?(@alice)
     @kibbles.eaters.push(@alice)
-    assert_equal @l + 1, @kibbles.eaters.count
-    assert_equal @join_count + 1, EatersFoodstuff.count
-    
-    @kibbles.reload
-    assert_equal @l + 1, @kibbles.eaters.count
-    assert_equal @join_count + 1, EatersFoodstuff.count
+    assert_equal @l + 2, @kibbles.eaters.count
+    assert_equal @join_count + 2, EatersFoodstuff.count
   end
   
   def test_create_and_push
@@ -97,31 +88,27 @@ class PolymorphTest < Test::Unit::TestCase
     assert @join_record.id
     assert_equal @join_count + 1, EatersFoodstuff.count
 
-    # has the parent changed if we don't reload?
-    assert_equal @m, @bits.eaters.count
-    
-    # if we do reload, is the new association there?
-    # XXX no, because TestCase breaks reload. it works fine in the app.
+    # not reloaded
+    assert_equal @m, @bits.eaters.size
+    assert_equal @m + 1, @bits.eaters.count # SQL :)
 
-    assert_equal Petfood, @bits.eaters.reload.class
-    assert_equal @m + 1, @bits.eaters.count
+    # is the new association there?
+    assert @bits.eaters.reload
     assert @bits.eaters.include?(@chloe)
-
-#    puts "XXX #{EatersFoodstuff.count}"
-   
   end
-  
-  def test_add_unsaved   
-    # add an unsaved item
-    assert @bits.eaters << Kitten.new(:name => "Bridget")
-    assert_nil Kitten.find_by_name("Bridget")
-    assert_equal @m + 1, @bits.eaters.count
 
-    assert @bits.save
-    @bits.reload
-    assert_equal @m + 1, @bits.eaters.count
-    
-  end
+#  not supporting this, since has_many :through doesn't support it either  
+#  def test_add_unsaved   
+#    # add an unsaved item
+#    assert @bits.eaters << Kitten.new(:name => "Bridget")
+#    assert_nil Kitten.find_by_name("Bridget")
+#    assert_equal @m + 1, @bits.eaters.count
+#
+#    assert @bits.save
+#    @bits.reload
+#    assert_equal @m + 1, @bits.eaters.count
+#    
+#  end
   
   def test_self_reference
     assert @kibbles.eaters << @bits
@@ -154,11 +141,10 @@ class PolymorphTest < Test::Unit::TestCase
   def test_clear
     @kibbles.eaters << [@chloe, @spot, @rover]
     @kibbles.reload
-    assert_equal 3, @kibbles.eaters.clear.size
+    assert @kibbles.eaters.clear.blank?    
     assert @kibbles.eaters.blank?    
     @kibbles.reload    
     assert @kibbles.eaters.blank?    
-    assert_equal 0, @kibbles.eaters.clear.size
   end
     
   def test_individual_collections
@@ -169,7 +155,7 @@ class PolymorphTest < Test::Unit::TestCase
     assert 1, @rover.eaters_foodstuffs.count
   end
   
-  def test_invididual_collections_push
+  def test_individual_collections_push
     assert_equal [@chloe], (@kibbles.eater_kittens << @chloe)
     @kibbles.reload
     assert @kibbles.eaters.include?(@chloe)
@@ -177,24 +163,31 @@ class PolymorphTest < Test::Unit::TestCase
     assert !@kibbles.eater_dogs.include?(@chloe)
   end
 
-  def test_invididual_collections_delete
+  def test_individual_collections_delete
     @kibbles.eaters << [@chloe, @spot, @rover]
     @kibbles.reload
     assert_equal [@chloe], @kibbles.eater_kittens.delete(@chloe)
     assert @kibbles.eater_kittens.empty?
-    assert  !@kibbles.eater_kittens.delete(@chloe)
+    @kibbles.eater_kittens.delete(@chloe) # what should this return?
     
     @kibbles.reload    
     assert @kibbles.eater_kittens.empty?
     assert @kibbles.eater_dogs.include?(@spot)
   end
   
-  def test_invididual_collections_clear
+  def test_individual_collections_clear
     @kibbles.eaters << [@chloe, @spot, @rover]
     @kibbles.reload
-    assert_equal [@chloe], @kibbles.eater_kittens.clear
+
+    assert_equal [], @kibbles.eater_kittens.clear
     assert @kibbles.eater_kittens.empty?    
     assert_equal 2, @kibbles.eaters.size
+
+    assert @kibbles.eater_kittens.empty?    
+    assert_equal 2, @kibbles.eaters.size
+    assert !@kibbles.eater_kittens.include?(@chloe)
+    assert !@kibbles.eaters.include?(@chloe)
+
     @kibbles.reload    
     assert @kibbles.eater_kittens.empty?    
     assert_equal 2, @kibbles.eaters.size
@@ -229,26 +222,20 @@ class PolymorphTest < Test::Unit::TestCase
   
   def test_normal_callbacks
     assert @rover.respond_to?(:after_initialize)
-    assert @rover.respond_to?(:after_find)
-    
+    assert @rover.respond_to?(:after_find)    
     assert @rover.after_initialize_test
     assert @rover.after_find_test
   end    
   
-  def test_our_callbacks
+  def test_model_callbacks_not_overridden_by_plugin_callbacks
     assert 0, @bits.eaters.count
     assert @bits.eaters.push(@rover)
     @bits.save
-    
-#    puts "Testing callbacks."
     @bits2 = Petfood.find_by_name("Bits")
     @bits.reload
-    
     assert rover = @bits2.eaters.select { |x| x.name == "Rover" }[0]
     assert rover.after_initialize_test
     assert rover.after_find_test
-#    puts "Done."
-    
   end
 
   def test_number_of_join_records
@@ -268,8 +255,8 @@ class PolymorphTest < Test::Unit::TestCase
     @join_record.save!
     @bits.eaters.reload
 
-    assert_equal 'Puma', @puma.name
-    assert_equal 'Puma', @bits.eaters.first.name
+    assert_equal "Puma", @puma.name
+    assert_equal "Puma", @bits.eaters.first.name
   end
   
   def test_before_save_on_join_table_is_not_clobbered_by_sti_base_class_fix
@@ -345,6 +332,10 @@ class PolymorphTest < Test::Unit::TestCase
     assert_equal 2, @alice.beautiful_fight_relationships_as_protector.size
     assert_equal 1, @alice.beautiful_fight_relationships_as_enemy.size
     assert_equal 3, @alice.beautiful_fight_relationships.size
+  end
+  
+  def test_double_dependency_injection
+#    breakpoint
   end
   
   def test_double_collection_deletion
@@ -432,17 +423,12 @@ class PolymorphTest < Test::Unit::TestCase
     assert !@spot.protectors.include?(@alice)
   end
 
-  def test_hmp_passed_block_manipulates_proxy_class
-    assert_equal "result", @shamu.aquatic_pupils.blow
-    assert_raises(NoMethodError) { @kibbles.eaters.blow }
-  end
-
   def test_collection_query_on_unsaved_record
     assert Dog.new.enemies.empty?
     assert Dog.new.foodstuffs_of_eaters.empty?
   end
  
-  def test_double_invididual_collections_push
+  def test_double_individual_collections_push
     assert_equal [@chloe], (@spot.protector_kittens << @chloe)
     @spot.reload
     assert @spot.protectors.include?(@chloe)
@@ -456,22 +442,22 @@ class PolymorphTest < Test::Unit::TestCase
     assert !@spot.enemy_dogs.include?(@froggy)
   end
 
-  def test_double_invididual_collections_delete
+  def test_double_individual_collections_delete
     @spot.protectors << [@chloe, @puma]
     @spot.reload
     assert_equal [@chloe], @spot.protector_kittens.delete(@chloe)
     assert @spot.protector_kittens.empty?
-    assert  !@spot.protector_kittens.delete(@chloe)
+    @spot.protector_kittens.delete(@chloe) # again, unclear what .delete should return
     
     @spot.reload    
     assert @spot.protector_kittens.empty?
     assert @spot.wild_boars.include?(@puma)
   end
   
-  def test_double_invididual_collections_clear
+  def test_double_individual_collections_clear
     @spot.protectors << [@chloe, @puma, @alice]
     @spot.reload
-    assert_equal [@chloe, @alice], @spot.protector_kittens.clear.sort_by(&:id)
+    assert_equal [], @spot.protector_kittens.clear
     assert @spot.protector_kittens.empty?    
     assert_equal 1, @spot.protectors.size
     @spot.reload    
@@ -481,7 +467,156 @@ class PolymorphTest < Test::Unit::TestCase
     assert !@spot.protectors.include?(@chloe)
     assert !@spot.protector_kittens.include?(@alice)
     assert !@spot.protectors.include?(@alice)
+    assert @spot.protectors.include?(@puma)
+    assert @spot.wild_boars.include?(@puma)
   end 
 
+  def test_single_extensions
+    assert_equal :correct_block_result, @shamu.aquatic_pupils.a_method
+    @kibbles.eaters.push(@alice)
+    @kibbles.eaters.push(@spot)
+    assert_equal :correct_join_result, @kibbles.eaters_foodstuffs.a_method
+    assert_equal :correct_module_result, @kibbles.eaters.a_method
+    assert_equal :correct_other_module_result, @kibbles.eaters.another_method
+    @kibbles.eaters.each do |eater| 
+      assert_equal :correct_join_result, eater.eaters_foodstuffs.a_method
+    end
+    assert_equal :correct_parent_proc_result, @kibbles.foodstuffs_of_eaters.a_method
+    assert_equal :correct_parent_proc_result, @kibbles.eaters.first.foodstuffs_of_eaters.a_method
+  end
+
+  def test_double_extensions
+    assert_equal :correct_proc_result, @spot.protectors.a_method 
+    assert_equal :correct_module_result, @spot.enemies.a_method 
+    assert_equal :correct_join_result, @spot.beautiful_fight_relationships_as_enemy.a_method
+    assert_equal :correct_join_result, @spot.beautiful_fight_relationships_as_protector.a_method
+    assert_equal :correct_join_result, @froggy.beautiful_fight_relationships.a_method
+    assert_equal :correct_join_result, @froggy.beautiful_fight_relationships_as_enemy.a_method    
+    assert_raises(NoMethodError) {@froggy.beautiful_fight_relationships_as_protector.a_method}    
+  end
+  
+  def test_pluralization_checks    
+    assert_raises(@association_error) {
+      eval "class SomeModel < ActiveRecord::Base
+        has_many_polymorphs :polymorphs, :from => [:dog, :cats]
+      end" }
+    assert_raises(@association_error) {
+      eval "class SomeModel < ActiveRecord::Base
+        has_many_polymorphs :polymorph, :from => [:dogs, :cats]
+      end" }
+    assert_raises(@association_error) {
+      eval "class SomeModel < ActiveRecord::Base
+       acts_as_double_polymorphic_join :polymorph => [:dogs, :cats], :unimorphs => [:dogs, :cats]
+      end" }    
+  end
+
+  def test_single_custom_finders
+    [@kibbles, @alice, @puma, @spot, @bits].each {|record| @kibbles.eaters << record; sleep 1} # XXX yeah i know
+    assert_equal @kibbles.eaters, @kibbles.eaters.find(:all, :order => "eaters_foodstuffs.created_at ASC") 
+    assert_equal @kibbles.eaters.reverse, @kibbles.eaters.find(:all, :order => "eaters_foodstuffs.created_at DESC") 
+    if ActiveRecord::Base.connection.is_a? ActiveRecord::ConnectionAdapters::MysqlAdapter
+      assert_equal @kibbles.eaters.sort_by(&:created_at), @kibbles.eaters.find(:all, :order => "IFNULL(bow_wows.created_at,(IFNULL(petfoods.created_at,(IFNULL(wild_boars.created_at,(IFNULL(cats.created_at,fish.created_at))))))) ASC") 
+    end
+    assert_equal @kibbles.eaters.select{|x| x.is_a? Petfood}, @kibbles.eater_petfoods.find(:all, :order => "eaters_foodstuffs.created_at ASC") 
+  end
+ 
+  def test_double_custom_finders
+    @spot.protectors << [@chloe, @puma, @alice]
+    assert_equal [@chloe], @spot.protectors.find(:all, :conditions => ["cats.name = ?", @chloe.name], :limit => 1)
+    assert_equal [], @spot.protectors.find(:all, :conditions => ["cats.name = ?", @chloe.name], :limit => 1, :offset => 1)
+    assert_equal 2, @spot.protectors.find(:all, :limit => 100, :offset => 1).size
+  end
+  
+  def test_single_custom_finder_parameters_carry_to_individual_relationships
+   # XXX test nullout here
+  end
+
+  def test_double_custom_finder_parameters_carry_to_individual_relationships
+   # XXX test nullout here
+  end
+  
+  def test_include_doesnt_fail
+    assert_nothing_raised do
+      @spot.protectors.find(:all, :include => :wild_boars)
+    end
+  end
+
+  def test_abstract_method
+    assert_equal :correct_abstract_method_response, @spot.an_abstract_method
+  end
+  
+  def test_missing_target_should_raise
+    @kibbles.eaters << [@kibbles, @alice, @puma, @spot, @bits]
+    @spot.destroy_without_callbacks
+    assert_raises(@association_error) { @kibbles.eaters.reload }
+#    assert_raises(@association_error) { @kibbles.eater_dogs.reload }  # bah AR
+  end
+  
+  def test_lazy_loading_is_lazy
+    # XXX
+  end
+  
+  def test_push_with_skip_duplicates_false_doesnt_load_target
+    # XXX
+  end
+  
+  def test_association_foreign_key_is_sane
+    assert_equal "eater_id", Petfood.reflect_on_association(:eaters).association_foreign_key
+  end
+
+  def test_reflection_instance_methods_are_sane
+    assert_equal EatersFoodstuff, Petfood.reflect_on_association(:eaters).klass
+    assert_equal EatersFoodstuff.name, Petfood.reflect_on_association(:eaters).class_name
+  end
+  
+  def test_parent_order_orders_parents
+    @alice.foodstuffs_of_eaters << Petfood.find(:all, :order => "the_petfood_primary_key ASC")
+    @alice.reload #not necessary
+    assert_equal [2,1], @alice.foodstuffs_of_eaters.map(&:id)  
+  end
+
+#  def test_polymorphic_include
+#    @kibbles.eaters << [@kibbles, @alice, @puma, @spot, @bits]
+#    assert @kibbles.eaters.include?(@kibbles.eaters_foodstuffs.find(:all, :include => :eater).first.eater)
+#  end
+#
+#  def test_double_polymorphic_include
+#  end
+#
+#  def test_single_child_include  
+#  end
+#  
+#  def test_double_child_include  
+#  end
+#  
+#  def test_single_include_from_parent  
+#  end
+#
+#  def test_double_include_from_parent  
+#  end
+#
+#  def test_meta_referential_single_include  
+#  end
+#
+#  def test_meta_referential_double_include  
+#  end
+#  
+#  def test_meta_referential_single_include  
+#  end
+#
+#  def test_meta_referential_single_double_multi_include  
+#  end  
+#  
+#  def test_dont_ignore_duplicates  
+#  end
+#
+#  def test_ignore_duplicates  
+#  end
+#    
+#  def test_tagging_system_generator  
+#  end
+#
+#  def test_tagging_system_library  
+#  end
 
 end

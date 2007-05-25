@@ -1,0 +1,12 @@
+
+Thank you for installing has_many_polymorphs!
+
+There is an experimental tagging system generator in place.
+
+  ./script/generator tagging TaggableModel1 TaggableModel2 [..]
+
+You can use the flags --skip-migration and/or --self-referential.
+
+Tests will be generated, but will not work unless you have at
+least 2 fixture entries for each taggable model. Their ids must
+be 1 and 2.

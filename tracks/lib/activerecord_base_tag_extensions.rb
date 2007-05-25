@@ -22,5 +22,9 @@ class ActiveRecord::Base
      split = tag_string.downcase.split(", ")
      tags.delete tags.select{|t| split.include? t.name}
   end
+  
+  def add_tag tag_name
+    Tag.find_or_create_by_name(tag_name).on(self,user)
+  end
 
 end

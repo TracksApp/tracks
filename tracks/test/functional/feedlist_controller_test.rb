@@ -4,7 +4,7 @@ require 'feedlist_controller'
 # Re-raise errors caught by the controller.
 class FeedlistController; def rescue_action(e) raise e end; end
 
-class FeedlistControllerTest < Test::Unit::TestCase
+class FeedlistControllerTest < Test::Rails::TestCase
   fixtures :users, :preferences, :projects, :contexts, :todos, :notes
   
   def setup

@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-class ContextTest < Test::Unit::TestCase
+class ContextTest < Test::Rails::TestCase
   fixtures :contexts, :todos, :users, :preferences
 
   def setup
@@ -105,6 +105,13 @@ class ContextTest < Test::Unit::TestCase
     @agenda.hide = true
     @agenda.save!
     assert_equal "<p>#{undone_todo_count}. Context is Hidden.</p>", @agenda.summary(undone_todo_count)
+  end
+
+  def test_null_object
+    c = Context.null_object
+    assert c.nil?
+    assert_nil c.id
+    assert_equal '', c.name
   end
 
 end

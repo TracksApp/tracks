@@ -5,7 +5,7 @@ require 'preference'
 # Re-raise errors caught by the controller.
 class PreferencesController; def rescue_action(e) raise e end; end
 
-class PreferencesControllerTest < Test::Unit::TestCase
+class PreferencesControllerTest < Test::Rails::TestCase
   fixtures :users
   
   def setup

@@ -4,6 +4,8 @@ class Todo < ActiveRecord::Base
   belongs_to :project
   belongs_to :user
   
+  STARRED_TAG_NAME = "starred"
+  
   acts_as_state_machine :initial => :active, :column => 'state'
   
   state :active, :enter => Proc.new { |t| t[:show_from] = nil }
@@ -88,6 +90,22 @@ class Todo < ActiveRecord::Base
       :title => 'Tracks Actions',
       :description => "Actions for #{user.display_name}"
     }
+  end
+  
+  
+  def starred?
+    tags.any? {|tag| tag.name == STARRED_TAG_NAME}
+  end
+  
+  def toggle_star!
+    if starred?
+      delete_tags STARRED_TAG_NAME
+      tags.reload
+    else
+      add_tag STARRED_TAG_NAME
+      tags.reload
+    end 
+    starred?  
   end
 
 end

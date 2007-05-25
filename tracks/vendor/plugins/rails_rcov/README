@@ -1,0 +1,86 @@
+ = rails_rcov plugin for Rails
+
+rails_rcov provides easy-to-use Rake tasks to determine the code coverage of
+your unit, functional, and integration tests using Mauricio Fernandez's rcov
+tool.
+
+== Installation
+
+First, install rcov from Mauricio's web site
+[http://eigenclass.org/hiki.rb?rcov]. Make sure it's on your system path, so
+that typing +rcov+ on the command line actually runs it. THIS PLUGIN DOESN'T DO
+ANYTHING BESIDES GENERATE ERRORS UNLESS YOU INSTALL RCOV FIRST. RCOV CONTAINS
+ALL THE MAGIC, THIS PLUGIN JUST RUNS IT.
+
+Second, install this plugin. If your project is source-controlled by Subversion
+(which it should be, really), the easiest way to install this is via Rails'
+plugin script:
+
+  ./script/plugin install -x http://svn.codahale.com/rails_rcov
+
+If you're not using Subversion, or if you don't want it adding
+<tt>svn:externals</tt> in your project, remove the <tt>-x</tt> switch:
+
+  ./script/plugin install http://svn.codahale.com/rails_rcov
+
+== Usage
+
+For each <tt>test:blah</tt> task you have for your Rails project, rails_rcov
+adds two more: <tt>test:blah:rcov</tt> and <tt>test:blah:clobber_rcov</tt>.
+
+Running <tt>rake test:units:rcov</tt>, for example, will run your unit tests
+through rcov and write the code coverage reports to
+<tt>your_rails_app/coverage/units</tt>.
+
+Running <tt>test:units:clobber_rcov</tt> will erase the generated report for the
+unit tests.
+
+Each rcov task takes two optional parameters: RCOV_PARAMS, whose argument is
+passed along to rcov, and SHOW_ONLY, which limits the files displayed in the
+report.
+
+RCOV_PARAMS:
+  # sort by coverage
+  rake test:units:rcov RCOV_PARAMS="--sort=coverage"
+
+  # show callsites and hide fully covered files
+  rake test:units:rcov RCOV_PARAMS="--callsites --only-uncovered"
+
+Check the rcov documentation for more details.
+
+SHOW_ONLY is a comma-separated list of the files you'd like to see. Right now
+there are four types of files rake_rcov recognizes: models, helpers,
+controllers, and lib. These can be abbreviated to their first letters:
+
+  # only show files from app/models
+  rake test:units:rcov SHOW_ONLY=models
+  
+  # only show files from app/helpers and app/controllers
+  rake test:units:rcov SHOW_ONLY=helpers,controllers
+  
+  # only show files from app/helpers and app/controllers, with less typing
+  rake test:units:rcov SHOW_ONLY=h,c
+
+Please note that rails_rcov has only been tested with a Bash shell, and any
+other environment could well explode in your face. If you're having trouble
+getting this to work on Windows, please take the time to figure out what's not
+working. Most of the time it boils down to the different ways the Window shell
+and the Bash shell escape metacharacters. Play around with the way rcov_rake
+escapes data (like on line 73, or 78) and send me a fix. I don't have a working
+Windows environment anymore, so leaving it up to me won't solve anything. ;-)
+
+== Resources
+
+=== Subversion
+
+* http://svn.codahale.com/rails_rcov
+
+=== Blog
+
+* http://blog.codahale.com
+
+== Credits
+
+Written by Coda Hale <coda.hale@gmail.com>. Thanks to Nils Franzen for a Win32
+escaping patch. Thanks to Alex Wayne for suggesting how to make SHOW_ONLY not be
+useless.

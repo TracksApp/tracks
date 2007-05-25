@@ -1,17 +1,24 @@
 
-Self-referential, polymorphic has_many :through helper
+Self-referential, polymorphic has_many :through helper for ActiveRecord.
 
-Copyright 2006 Evan Weaver (see the LICENSE file)
+Copyright 2007 Cloudburst, LLC (see the LICENSE file)
 
-"model :parent_class" may be required in some controllers or perhaps models in order for reloading to work properly, since the parent setup must be executed on the child every time the child class is reloaded.
-
-Usage and help: 
-http://blog.evanweaver.com/articles/2006/06/02/has_many_polymorphs
-
-Also see the source code, although it's probably not going to be super helpful to you.
+Documentation: 
+http://blog.evanweaver.com/pages/has_many_polymorphs
 
 Changelog:
 
+27.3. use new :source and :source_type options in 1.2.3 (David Lemstra); fix pluralization bug; add some tests; experimental tagging generator
+27.2. deprecate has_many_polymorphs_cache_classes= option, because it doesn't really work. use config.cache_classes= instead to cache all reloadable items
+27.1. dispatcher.to_prepare didn't fire in the console; now using a config.after_initialize wrapper instead
+27. dependency injection framework elimates having to care about load order
+26. make the logger act sane for the gem version
+25.2. allow :skip_duplicates on double relationships
+25.1. renamed :ignore_duplicates to :skip_duplicates to better express its non-passive behavior, made sure not to load target set on push unless necessary
+25. activerecord compatibility branch becomes trunk. extra options now supported for double polymorphism; conditions nulled-out and propogated to child relationships; more tests; new :ignore_duplicates option on macro can be set to false if you want << to try to push duplicate associations
+24.1. code split into multiple files. tests added for pluralization check. rails 1.1.6 no longer officially supported.
+24. unlimited mixed class association extensions for both single and double targets and joins
+23. gem version
 22. api change; prefix on methods is now singular when using :rename_individual_collections
 21. add configuration option to cache polymorphic classes in development mode
 20. collection methods (push, delete, clear) now on individual collections
@@ -40,7 +47,3 @@ Changelog:
 3. added :dependent support on the join table
 1-2. no changelog
 
-Known problems:
-
-1. Plugin's test fixtures do not load properly for non-edge postgres, invalidating the tests.
-2. quote_value() hack is stupid.

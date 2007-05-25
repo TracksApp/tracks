@@ -8,3 +8,9 @@ require 'rake/testtask'
 require 'rake/rdoctask'
 
 require 'tasks/rails'
+
+begin
+  require 'test/rails/rake_tasks'
+rescue LoadError => e
+  #It's ok if you don't have ZenTest installed if you're not a developer
+end

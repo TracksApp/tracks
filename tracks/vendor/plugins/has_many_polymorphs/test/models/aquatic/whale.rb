@@ -5,7 +5,9 @@ require 'aquatic/pupils_whale'
 
 class Aquatic::Whale < ActiveRecord::Base
   has_many_polymorphs(:aquatic_pupils, :from => [:dogs, :"aquatic/fish"],
-                      :through => "aquatic/pupils_whales") do 
-                        def blow; "result"; end
-                      end
+                      :through => "aquatic/pupils_whales") do
+                        def a_method
+                          :correct_block_result 
+                        end
+                      end    
 end

@@ -1,11 +1,11 @@
 <%
   @todo = todo
-  Tag
 %>
 <div id="<%= dom_id(todo) %>" class="item-container">
   <div id="<%= dom_id(todo, 'line') %>">
     <%= remote_delete_icon %>
     <%= remote_edit_icon %>
+    <%= remote_star_icon %>
     <%= remote_toggle_checkbox unless source_view_is :deferred %>
     <div class="description<%= staleness_class( todo ) %>">
       <%= date_span %>

@@ -1,4 +1,4 @@
-class TodoContainerControllerTestBase < Test::Unit::TestCase
+class TodoContainerControllerTestBase < Test::Rails::TestCase
 
   def perform_setup(container_class, controller_class)
     @controller = controller_class.new

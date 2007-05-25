@@ -4,7 +4,7 @@ require 'todos_controller'
 # Re-raise errors caught by the controller.
 class TodosController; def rescue_action(e) raise e end; end
 
-class TodosControllerTest < Test::Unit::TestCase
+class TodosControllerTest < Test::Rails::TestCase
   fixtures :users, :preferences, :projects, :contexts, :todos, :tags, :taggings
   
   def setup
@@ -23,6 +23,15 @@ class TodosControllerTest < Test::Unit::TestCase
     assert_equal 2, assigns['project_not_done_counts'][projects(:timemachine).id]
     assert_equal 3, assigns['context_not_done_counts'][contexts(:call).id]
     assert_equal 1, assigns['context_not_done_counts'][contexts(:lab).id]
+  end
+  
+  def test_tag_is_retrieved_properly
+    @request.session['user_id'] = users(:admin_user).id
+    get :index
+    t = assigns['not_done_todos'].find{|t| t.id == 2}
+    assert_equal 1, t.tags.count
+    assert_equal 'foo', t.tags[0].name
+    assert !t.starred?
   end
   
   def test_not_done_counts_after_hiding_project

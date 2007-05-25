@@ -33,7 +33,7 @@ ActionController::Routing::Routes.draw do |map|
 
     # ToDo Routes
   map.resources :todos,
-                :member => {:toggle_check => :post},
+                :member => {:toggle_check => :put, :toggle_star => :put},
                 :collection => {:check_deferred => :post, :filter_to_context => :post, :filter_to_project => :post}
   map.with_options :controller => "todos" do |todos|
     todos.home '', :action => "index"

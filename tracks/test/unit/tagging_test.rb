@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-class TaggingTest < Test::Unit::TestCase
+class TaggingTest < Test::Rails::TestCase
   fixtures :taggings
 
   # Replace this with your real tests.

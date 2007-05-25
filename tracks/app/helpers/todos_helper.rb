@@ -24,6 +24,17 @@ module TodosHelper
     str
   end
   
+  def remote_star_icon
+    str = link_to( image_tag_for_star(@todo),
+                   toggle_star_todo_path(@todo),
+                   :class => "icon star_item", :title => "star the action '#{@todo.description}'")
+    apply_behavior '.item-container a.star_item:click', 
+      remote_function(:url => javascript_variable('this.href'), :method => 'put',
+                      :with => "{ _source_view : '#{@source_view}' }"),
+      :prevent_default => true
+    str                   
+  end
+  
   def remote_edit_icon
     if !@todo.completed?
       str = link_to( image_tag_for_edit,
@@ -41,8 +52,8 @@ module TodosHelper
   def remote_toggle_checkbox
     str = check_box_tag('item_id', toggle_check_todo_path(@todo), @todo.completed?, :class => 'item-checkbox')
     apply_behavior '.item-container input.item-checkbox:click',
-                   remote_function(:url => javascript_variable('this.value'),
-                                   :with => "{ method : 'post', _source_view : '#{@source_view}' }")
+                   remote_function(:url => javascript_variable('this.value'), :method => 'put',
+                                   :with => "{ _source_view : '#{@source_view}' }")
     str
   end
   
@@ -57,7 +68,8 @@ module TodosHelper
   end
   
   def tag_list
-    @todo.tags.collect{|t| "<span class=\"tag\">" + link_to(t.name, :action => "tag", :id => t.name) + "</span>"}.join('')
+    tag_list = @todo.tags.reject{|t| t.name == Todo::STARRED_TAG_NAME}.collect{|t| "<span class=\"tag\">" + link_to(t.name, :action => "tag", :id => t.name) + "</span>"}.join('')
+    "<span class='tags'>#{tag_list}</span>"
   end
   
   def deferred_due_date
@@ -203,5 +215,10 @@ module TodosHelper
   def image_tag_for_edit
     image_tag("blank.png", :title =>"Edit action", :class=>"edit_item", :id=> dom_id(@todo, 'edit_icon'))
   end
+  
+  def image_tag_for_star(todo)
+    class_str = todo.starred? ? "starred_todo" : "unstarred_todo"
+    image_tag("blank.png", :title =>"Star action", :class => class_str)
+  end  
   
 end

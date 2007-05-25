@@ -1,6 +1,8 @@
-class Dog < ActiveRecord::Base
-  attr_accessor :after_find_test, :after_initialize_test
 
+require 'canine'
+
+class Dog < Canine
+  attr_accessor :after_find_test, :after_initialize_test
   set_table_name "bow_wows"
   
   def after_find

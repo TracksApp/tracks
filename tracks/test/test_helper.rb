@@ -1,7 +1,10 @@
 ENV["RAILS_ENV"] = "test"
 require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
+require File.expand_path(File.dirname(__FILE__) + "/../app/controllers/application")
+require 'test/rails' #you need the zentest gem isntalled
 require 'test_help'
-
+require 'flexmock/test_unit' #and the flexmock gem, too!
+  
 module Tracks
   class Config
     def self.salt
@@ -11,6 +14,20 @@ module Tracks
 end
 
 class Test::Unit::TestCase
+  
+  def xml_document
+    @xml_document ||= HTML::Document.new(@response.body, false, true)
+  end
+
+  def assert_xml_select(*args, &block)
+    @html_document = xml_document
+    assert_select(*args, &block)
+  end
+
+end
+
+class Test::Rails::TestCase < Test::Unit::TestCase
+    
   # Turn off transactional fixtures if you're working with MyISAM tables in MySQL
   self.use_transactional_fixtures = true
   
@@ -30,16 +47,7 @@ class Test::Unit::TestCase
     end
     return string
   end
-  
-  def xml_document
-    @xml_document ||= HTML::Document.new(@response.body, false, true)
-  end
-  
-  def assert_xml_select(*args, &block)
-    @html_document = xml_document
-    assert_select(*args, &block)
-  end
-  
+      
   def next_week
     1.week.from_now.utc.to_date
   end
@@ -58,6 +66,8 @@ class Test::Unit::TestCase
 
      if options.is_a?(String)
        assert_equal(options.gsub(/^\//, ''), redirected_to, message)
+     elsif options.is_a?(Regexp)
+       assert(options =~ redirected_to, "#{message} #{options} #{redirected_to}")
      else
        msg = build_message(message, "response is not a redirection to all of the options supplied (redirection is <?>)", redirected_to)
        assert_equal(@controller.url_for(options).match(js_regexp)[3], redirected_to, msg)
@@ -69,7 +79,7 @@ class Test::Unit::TestCase
 end
 
 class ActionController::IntegrationTest
-  
+    
   def assert_test_environment_ok
     assert_equal "test", ENV['RAILS_ENV']
     assert_equal "change-me", Tracks::Config.salt

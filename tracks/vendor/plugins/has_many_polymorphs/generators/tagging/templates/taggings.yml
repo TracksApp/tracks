@@ -1,0 +1,21 @@
+--- 
+taggings_003: 
+  <%= parent_association_name -%>_id: "2"
+  id: "3"
+  taggable_type: <%= taggable_models[0][1..-1].classify %>
+  taggable_id: "1"
+taggings_004: 
+  <%= parent_association_name -%>_id: "2"
+  id: "4"
+  taggable_type: <%= taggable_models[1][1..-1].classify %>
+  taggable_id: "2"
+taggings_001: 
+  <%= parent_association_name -%>_id: "1"
+  id: "1"
+  taggable_type: <%= taggable_models[1][1..-1].classify %>
+  taggable_id: "1"
+taggings_002: 
+  <%= parent_association_name -%>_id: "1"
+  id: "2"
+  taggable_type: <%= taggable_models[1][1..-1].classify %>
+  taggable_id: "2"
