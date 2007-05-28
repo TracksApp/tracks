@@ -14,6 +14,7 @@ timemachine:
   user_id: 1
   created_at: <%= today %>
   updated_at: <%= today %>
+  default_context_id: 5
 
 moremoney:
   id: 2

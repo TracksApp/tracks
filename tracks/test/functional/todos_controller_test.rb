@@ -281,4 +281,10 @@ class TodosControllerTest < Test::Rails::TestCase
     assert_equal Date.new(2007,1,2).to_s, t.due.to_s
   end
 
+  def test_index_html_assigns_default_project_name_map
+    @request.session['user_id'] = users(:admin_user).id
+    get :index, {"format"=>"html"}
+    assert_equal '"{\\"Build a working time machine\\": \\"lab\\"}"', assigns(:default_project_context_name_map)
+  end
+
 end
