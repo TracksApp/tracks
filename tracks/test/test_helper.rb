@@ -26,6 +26,13 @@ class Test::Unit::TestCase
 
 end
 
+class Test::Rails::HelperTestCase
+
+  self.use_transactional_fixtures = false
+  self.use_instantiated_fixtures  = false
+
+end
+
 class Test::Rails::TestCase < Test::Unit::TestCase
     
   # Turn off transactional fixtures if you're working with MyISAM tables in MySQL
