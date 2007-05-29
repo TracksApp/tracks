@@ -43,7 +43,7 @@ Event.observe($('<%= dom_id(@todo, 'context_name') %>'), "click", <%= dom_id(@to
 </div>
 
 <label class="tag_list_label" for="<%= dom_id(@todo, 'tag_list') %>">Tags (separate with commas)</label>
-<%= text_field_tag dom_id(@todo, 'tag_list'), nil, :size => 30, :tabindex => 12 %> 
+<%= text_field_tag 'tag_list', tag_list_text, :id => dom_id(@todo, 'tag_list'), :size => 30, :tabindex => 12 %> 
 
 <div class="due_input">
 <label for="<%= dom_id(@todo, 'due') %>">Due</label>

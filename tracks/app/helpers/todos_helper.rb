@@ -67,6 +67,10 @@ module TodosHelper
     end    
   end
   
+  def tag_list_text
+    @todo.tags.collect{|t| t.name}.join(', ')
+  end
+  
   def tag_list
     tag_list = @todo.tags.reject{|t| t.name == Todo::STARRED_TAG_NAME}.collect{|t| "<span class=\"tag\">" + link_to(t.name, :action => "tag", :id => t.name) + "</span>"}.join('')
     "<span class='tags'>#{tag_list}</span>"
