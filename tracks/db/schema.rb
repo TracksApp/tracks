@@ -2,26 +2,13 @@
 # migrations feature of ActiveRecord to incrementally modify your database, and
 # then regenerate this schema definition.
 
-ActiveRecord::Schema.define(:version => 0) do
-
-  create_table "bow_wows", :force => true do |t|
-    t.column "name",       :string
-    t.column "created_at", :datetime, :null => false
-    t.column "updated_at", :datetime, :null => false
-  end
-
-  create_table "cats", :force => true do |t|
-    t.column "name",       :string
-    t.column "cat_type",   :string
-    t.column "created_at", :datetime, :null => false
-    t.column "updated_at", :datetime, :null => false
-  end
+ActiveRecord::Schema.define(:version => 32) do
 
   create_table "contexts", :force => true do |t|
-    t.column "name",       :string,                :default => "", :null => false
-    t.column "hide",       :integer,  :limit => 4, :default => 0,  :null => false
-    t.column "position",   :integer,               :default => 0,  :null => false
-    t.column "user_id",    :integer,               :default => 0,  :null => false
+    t.column "name",       :string,   :default => "",    :null => false
+    t.column "position",   :integer,                     :null => false
+    t.column "hide",       :boolean,  :default => false
+    t.column "user_id",    :integer,  :default => 1
     t.column "created_at", :datetime
     t.column "updated_at", :datetime
   end
@@ -29,48 +16,9 @@ ActiveRecord::Schema.define(:version => 0) do
   add_index "contexts", ["user_id"], :name => "index_contexts_on_user_id"
   add_index "contexts", ["user_id", "name"], :name => "index_contexts_on_user_id_and_name"
 
-  create_table "eaters_foodstuffs", :force => true do |t|
-    t.column "foodstuff_id",   :integer
-    t.column "eater_id",       :integer
-    t.column "some_attribute", :integer,  :default => 0
-    t.column "eater_type",     :string
-    t.column "created_at",     :datetime,                :null => false
-    t.column "updated_at",     :datetime,                :null => false
-  end
-
-  create_table "fish", :force => true do |t|
-    t.column "name",       :string
-    t.column "speed",      :integer
-    t.column "created_at", :datetime, :null => false
-    t.column "updated_at", :datetime, :null => false
-  end
-
-  create_table "frogs", :force => true do |t|
-    t.column "name",       :string
-    t.column "created_at", :datetime, :null => false
-    t.column "updated_at", :datetime, :null => false
-  end
-
-  create_table "keep_your_enemies_close", :force => true do |t|
-    t.column "enemy_id",       :integer
-    t.column "enemy_type",     :string
-    t.column "protector_id",   :integer
-    t.column "protector_type", :string
-    t.column "created_at",     :datetime, :null => false
-    t.column "updated_at",     :datetime, :null => false
-  end
-
-  create_table "little_whale_pupils", :force => true do |t|
-    t.column "whale_id",           :integer
-    t.column "aquatic_pupil_id",   :integer
-    t.column "aquatic_pupil_type", :string
-    t.column "created_at",         :datetime, :null => false
-    t.column "updated_at",         :datetime, :null => false
-  end
-
   create_table "notes", :force => true do |t|
-    t.column "user_id",    :integer,  :default => 0, :null => false
-    t.column "project_id", :integer,  :default => 0, :null => false
+    t.column "user_id",    :integer,  :null => false
+    t.column "project_id", :integer,  :null => false
     t.column "body",       :text
     t.column "created_at", :datetime
     t.column "updated_at", :datetime
@@ -95,15 +43,8 @@ ActiveRecord::Schema.define(:version => 0) do
     t.column "value",   :binary
   end
 
-  create_table "petfoods", :id => false, :force => true do |t|
-    t.column "the_petfood_primary_key", :integer,  :null => false
-    t.column "name",                    :string
-    t.column "created_at",              :datetime, :null => false
-    t.column "updated_at",              :datetime, :null => false
-  end
-
   create_table "preferences", :force => true do |t|
-    t.column "user_id",                            :integer,               :default => 0,                              :null => false
+    t.column "user_id",                            :integer,                                                           :null => false
     t.column "date_format",                        :string,  :limit => 40, :default => "%d/%m/%Y",                     :null => false
     t.column "week_starts",                        :integer,               :default => 0,                              :null => false
     t.column "show_number_completed",              :integer,               :default => 5,                              :null => false
@@ -125,8 +66,8 @@ ActiveRecord::Schema.define(:version => 0) do
 
   create_table "projects", :force => true do |t|
     t.column "name",               :string,                 :default => "",       :null => false
-    t.column "position",           :integer,                :default => 0,        :null => false
-    t.column "user_id",            :integer,                :default => 0,        :null => false
+    t.column "position",           :integer,                                      :null => false
+    t.column "user_id",            :integer,                :default => 1
     t.column "description",        :text
     t.column "state",              :string,   :limit => 20, :default => "active", :null => false
     t.column "created_at",         :datetime
@@ -143,7 +84,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.column "updated_at", :datetime
   end
 
-  add_index "sessions", ["session_id"], :name => "sessions_session_id_index"
+  add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
 
   create_table "taggings", :force => true do |t|
     t.column "taggable_id",   :integer
@@ -163,16 +104,16 @@ ActiveRecord::Schema.define(:version => 0) do
   add_index "tags", ["name"], :name => "index_tags_on_name"
 
   create_table "todos", :force => true do |t|
-    t.column "context_id",   :integer,                 :default => 0,           :null => false
-    t.column "description",  :string,   :limit => 100, :default => "",          :null => false
+    t.column "context_id",   :integer,                                         :null => false
+    t.column "project_id",   :integer
+    t.column "description",  :string,                 :default => "",          :null => false
     t.column "notes",        :text
     t.column "created_at",   :datetime
     t.column "due",          :date
     t.column "completed_at", :datetime
-    t.column "project_id",   :integer
-    t.column "user_id",      :integer,                 :default => 0,           :null => false
+    t.column "user_id",      :integer,                :default => 1
     t.column "show_from",    :date
-    t.column "state",        :string,   :limit => 20,  :default => "immediate", :null => false
+    t.column "state",        :string,   :limit => 20, :default => "immediate", :null => false
   end
 
   add_index "todos", ["user_id", "state"], :name => "index_todos_on_user_id_and_state"
@@ -182,10 +123,10 @@ ActiveRecord::Schema.define(:version => 0) do
   add_index "todos", ["user_id", "context_id"], :name => "index_todos_on_user_id_and_context_id"
 
   create_table "users", :force => true do |t|
-    t.column "login",       :string,  :limit => 80
-    t.column "password",    :string,  :limit => 40
+    t.column "login",       :string,  :limit => 80, :default => "",         :null => false
+    t.column "password",    :string,  :limit => 40, :default => "",         :null => false
     t.column "word",        :string
-    t.column "is_admin",    :integer, :limit => 4,  :default => 0,          :null => false
+    t.column "is_admin",    :boolean,               :default => false,      :null => false
     t.column "first_name",  :string
     t.column "last_name",   :string
     t.column "auth_type",   :string,                :default => "database", :null => false
@@ -193,17 +134,5 @@ ActiveRecord::Schema.define(:version => 0) do
   end
 
   add_index "users", ["login"], :name => "index_users_on_login"
-
-  create_table "whales", :force => true do |t|
-    t.column "name",       :string
-    t.column "created_at", :datetime, :null => false
-    t.column "updated_at", :datetime, :null => false
-  end
-
-  create_table "wild_boars", :force => true do |t|
-    t.column "name",       :string
-    t.column "created_at", :datetime, :null => false
-    t.column "updated_at", :datetime, :null => false
-  end
 
 end

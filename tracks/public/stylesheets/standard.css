@@ -659,16 +659,18 @@ form {
     width: 13ex;
     }
 #todo_new_action_container {
-	background:#ddd;
-	width:270px;
-	padding:5px;
-	background-image: url('/images/new-action-gradient.png');
-    background-repeat: repeat-x;
-    background-position: top;
+	background: #ddd;
+	width: 270px;
+	padding: 5px 10px;
+	background-color: #000;
+	filter: alpha(opacity=75);
+	-moz-opacity: .75;
+	opacity: .75;
+	color: #eee;
 }
 .edit_todo_form {
-	padding:5px;
-	width:100%;	
+	padding: 5px;
+	width: 100%;	
 }
 .edit_todo_form input, .edit_todo_form textarea {
 	width:95%;
@@ -702,9 +704,11 @@ form {
 	width:100%;
 }
 .edit_todo_form .submit_box {
-	width:95%;
-	text-align:center;	
+	width: 95%;
+	text-align: center;	
+	margin-top: 40px;
 }
+
 #todo-form-new-action .submit_box {
 	width:260px;
 	text-align:center;
@@ -719,7 +723,8 @@ form {
 	text-align:right;
 }
 #todo-form-new-action label, .edit_todo_form label {
-    display:block;
+    display: block;
+    padding-bottom: 3px;
 }
 
 form.button-to {
@@ -895,6 +900,7 @@ div.page_name_auto_complete ul li {
 	padding: 2px;
 	font-weight:bold;
 	list-style-type: none;
+	color: #000;
 }
 
 div.page_name_auto_complete ul li.selected { 
