@@ -59,8 +59,17 @@ Event.observe($('<%= dom_id(@todo, 'context_name') %>'), "click", <%= dom_id(@to
   <input type="hidden" name="on_project_page" value="true" />
 <% end -%>
 
-<div class="submit_box"><input id="<%= dom_id(@todo, 'submit') %>" type="submit" value="Update" tabindex="15" />
-<a href="javascript:void(0);" onclick="Element.toggle('<%= dom_id(@todo, 'line') %>');Element.toggle('<%= dom_id(@todo, 'edit') %>');">Cancel</a>
+<div class="submit_box">
+  <div class="widgets">
+    <button type="submit" class="positive" id="<%= dom_id(@todo, 'submit') %>" tabindex="15">
+        <img src="/images/accept.png" alt=""/> 
+        Update
+    </button>
+    <a href="javascript:void(0);" onclick="Element.toggle('<%= dom_id(@todo, 'line') %>');Element.toggle('<%= dom_id(@todo, 'edit') %>');" class="negative">
+        <img src="/images/cancel.png" alt=""/>
+        Cancel
+    </a>
+  </div>
 </div>
         
 <%= calendar_setup( dom_id(@todo, 'due') ) %>

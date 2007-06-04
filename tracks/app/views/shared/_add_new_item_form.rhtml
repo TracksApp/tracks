@@ -76,9 +76,15 @@ Event.observe($('todo_context_name'), "click", contextAutoCompleter.activate.bin
   <%= text_field("todo", "show_from", "size" => 12, "class" => "Date", "onfocus" => "Calendar.setup", "tabindex" => 7, "autocomplete" => "off") %>
 </div>
 
+<div class="submit_box">
+  <div class="widgets">
+    <button type="submit" class="positive">
+        <img src="/images/accept.png" alt=""/> 
+        Add action
+    </button>
+  </div>
 
-<%= source_view_tag( @source_view ) %>
-<div class="submit_box"><input type="submit" value="Add action" tabindex="8" /></div>
+</div>
 <% end -%><!--[eoform:todo]-->
 
                   

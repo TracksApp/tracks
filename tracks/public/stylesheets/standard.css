@@ -1,3 +1,5 @@
+/* @override http://0.0.0.0:3000/stylesheets/standard.css?1180885851 */
+
 body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td { 
 	margin:0;
 	padding:0;
@@ -255,15 +257,6 @@ div#input_box {
 
 .show_from_input, .due_input, .project_input, .context_input {
 	float:left;
-}
-
-#input_box .submit_box {
-	width:50%;
-	text-align:center;
-}
-
-#input_box .submit_box input {
-	margin-top:10px;
 }
 
 .box {
@@ -557,7 +550,7 @@ li {
 
 .edit-form {
       background: #ccc;
-      padding: 5px;
+      padding: 0 10px;
       border-top: 1px solid #999;
       border-bottom: 1px solid #999;
       }
@@ -668,54 +661,48 @@ form {
 	opacity: .75;
 	color: #eee;
 }
-.edit_todo_form {
-	padding: 5px;
-	width: 100%;	
-}
-.edit_todo_form input, .edit_todo_form textarea {
-	width:95%;
-}
+
 #todo_new_action_container input, #todo_new_action_container textarea {
-	width:260px;
-}
-#todo_new_action_container .show_from_input input {
-	width:120px;
-}
-.edit_todo_form .show_from_input input, .edit_todo_form .context_input input {
-	width:45%;
-}
-.edit_todo_form .show_from_input, .edit_todo_form .context_input {
-	margin-left:5%;
-}
-#todo_new_action_container .show_from_input {
-	margin-left:15px;
+	width: 100%;
 }
 
-#todo_new_action_container .due_input input {
-	width:120px;
+#todo_new_action_container .show_from_input, #todo_new_action_container .due_input {
+	width: 45%;
 }
+
+#todo_new_action_container .show_from_input {
+	float: right;
+}
+
+#todo-form-new-action .submit_box {
+	height: 30px;
+	padding: 5px 0;
+	text-align: center;
+	clear: right;
+}
+
+.edit_todo_form .submit_box {
+	height: 30px;
+	padding: 5px 0;
+	text-align: center;
+	clear: right;
+}
+
+.edit_todo_form input, .edit_todo_form textarea {
+	width:100%;
+}
+
 .edit_todo_form .tag_list_label {
 	clear:both;
 }
 .edit_todo_form .due_input, .edit_todo_form .show_from_input, .edit_todo_form .project_input, .edit_todo_form .context_input {
-	width:45%;
-}
-.edit_todo_form .due_input input, .edit_todo_form .show_from_input input, .edit_todo_form .project_input input, .edit_todo_form .context_input input {
-	width:100%;
-}
-.edit_todo_form .submit_box {
-	width: 95%;
-	text-align: center;	
-	margin-top: 40px;
+	width:48%;
 }
 
-#todo-form-new-action .submit_box {
-	width:260px;
-	text-align:center;
+.edit_todo_form .show_from_input, .edit_todo_form .context_input {
+	float: right;
 }
-#todo-form-new-action .submit_box input {
-	width:50%;
-}
+
 .edit_todo_form .submit_box input {
 	width:120px;
 }
@@ -927,3 +914,88 @@ table.users_table {
 
 .users_table th {color: #fff; background-color: #000;}
 .users_table td {border: none;}
+
+/* Submit button styling from ParticleTree
+    http://particletree.com/features/rediscovering-the-button-element/ */
+
+.widgets a, .widgets button{
+    display:block;
+    float: left;
+    margin:0px 7px 0 0;
+    background-color:#f5f5f5;
+    border:1px solid #dedede;
+    border-top:1px solid #eee;
+    border-left:1px solid #eee;
+
+    font-family:"Lucida Grande", Verdana, Geneva, Arial, sans-serif;
+    font-size:100%;
+    line-height:130%;
+    text-decoration:none;
+    font-weight:bold;
+    color:#565656;
+    cursor:pointer;
+    padding:5px 10px 6px 7px; /* Links */
+}
+
+.widgets button{
+    width:auto;
+    overflow:visible;
+    padding:4px 10px 3px 7px; /* IE6 */
+}
+
+.widgets button[type]{
+    padding:5px 10px 5px 7px; /* Firefox */
+    line-height:17px; /* Safari */
+}
+.widgets button img, .widgets a img{
+    margin:0 3px -3px 0 !important;
+    padding:0;
+    border:none;
+    width:16px;
+    height:16px;
+}
+
+/* STANDARD */
+
+button:hover, .widgets a:hover{
+    background-color:#dff4ff;
+    border:1px solid #c2e1ef;
+    color:#336699;
+}
+.widgets a:active{
+    background-color:#6299c5;
+    border:1px solid #6299c5;
+    color:#fff;
+}
+
+/* POSITIVE */
+
+button.positive, .widgets a.positive{
+    color: #498111;
+}
+.widgets a.positive:hover, button.positive:hover{
+    background-color:#E6EFC2;
+    border:1px solid #C6D880;
+    color:#529214;
+}
+.widgets a.positive:active{
+    background-color:#529214;
+    border:1px solid #529214;
+    color:#fff;
+}
+
+/* NEGATIVE */
+
+.widgets a.negative, button.negative{
+    color:#d12f19;
+}
+.widgets a.negative:hover, button.negative:hover{
+    background:#fbe3e4;
+    border:1px solid #fbc2c4;
+    color:#d12f19;
+}
+.widgets a.negative:active{
+    background-color:#d12f19;
+    border:1px solid #d12f19;
+    color:#fff;
+}
