@@ -56,11 +56,14 @@ Event.observe($('todo_project_name'), "blur", selectDefaultContext.bind($('todo_
 <div class="page_name_auto_complete" id="context_list" style="display:none"></div>
 
 <script type="text/javascript">
-contextAutoCompleter = new Autocompleter.Local('todo_context_name', 'context_list', <%= context_names_for_autocomplete %>, {choices:100,autoSelect:false});
-$('todo_context_name').projectDefaultContextsMap = eval('(' + <%= @default_project_context_name_map %> + ')');
-Event.observe($('todo_context_name'), "focus", function(){ $('todo_context_name').editedByTracksUser = true; });
-Event.observe($('todo_context_name'), "focus", contextAutoCompleter.activate.bind(contextAutoCompleter));
-Event.observe($('todo_context_name'), "click", contextAutoCompleter.activate.bind(contextAutoCompleter));
+contextNamesForAutoComplete = <%= context_names_for_autocomplete %>;
+if (contextNamesForAutoComplete.length > 1 || contextNamesForAutoComplete[0].length > 0)
+  contextAutoCompleter = new Autocompleter.Local('todo_context_name', 'context_list', contextNamesForAutoComplete, {choices:100,autoSelect:false});
+  $('todo_context_name').projectDefaultContextsMap = eval('(' + <%= @default_project_context_name_map %> + ')');
+  Event.observe($('todo_context_name'), "focus", function(){ $('todo_context_name').editedByTracksUser = true; });
+  Event.observe($('todo_context_name'), "focus", contextAutoCompleter.activate.bind(contextAutoCompleter));
+  Event.observe($('todo_context_name'), "click", contextAutoCompleter.activate.bind(contextAutoCompleter));
+}
 </script>
 
 <label for="tag_list">Tags (separate with commas)</label>

@@ -192,7 +192,7 @@ module TodosHelper
   end
   
   def context_names_for_autocomplete
-     return array_or_string_for_javascript(['Create a new context']) if @contexts.empty?
+     #return array_or_string_for_javascript(['Create a new context']) if @contexts.empty?
      array_or_string_for_javascript( @contexts.collect{|c| escape_javascript(c.name) } )
   end
 
