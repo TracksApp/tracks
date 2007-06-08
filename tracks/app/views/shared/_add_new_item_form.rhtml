@@ -25,7 +25,7 @@
     :url => todos_path, :method => :post,
     :html=> { :id=>'todo-form-new-action', :name=>'todo', :class => 'inline-form' }) do -%>
 
-<div id="status"><%= error_messages_for("item") %></div>
+<div id="status"><%= error_messages_for("item", :object_name => 'action') %></div>
 
 <label for="todo_description">Description</label>
 <%= text_field( "todo", "description", "size" => 30, "tabindex" => 1) %>

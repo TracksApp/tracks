@@ -21,5 +21,5 @@ if @saved
   end
 else
   page.show 'status'
-  page.replace_html 'status', "#{error_messages_for('todo')}"
+  page.replace_html 'status', "#{error_messages_for('todo', :object_name => 'action')}"
 end

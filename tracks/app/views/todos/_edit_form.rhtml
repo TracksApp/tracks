@@ -1,4 +1,4 @@
-<div id="error_status"><%= error_messages_for("todo") %></div>
+<div id="error_status"><%= error_messages_for("todo", :object_name => 'action') %></div>
 
 <%= hidden_field( "todo", "id" ) %>
 <%= source_view_tag( @source_view ) %>

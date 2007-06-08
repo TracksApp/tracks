@@ -794,8 +794,9 @@ div.message {
   color: #fff;
 }
 
-#errorExplanation p {
+#errorExplanation > p {
   color: #333;
+  margin-top: 5px;
   margin-bottom: 0;
   padding: 5px;
 }
@@ -804,6 +805,8 @@ div.message {
   font-size: 1em;
   list-style-type: disc;
   list-style-position: inside;
+  margin-left:7px;
+  color: #333; 
 }
 
 ul#prefs {list-style-type: disc; margin-left: 15px;}
