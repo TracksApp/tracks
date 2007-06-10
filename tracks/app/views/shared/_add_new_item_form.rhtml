@@ -57,7 +57,7 @@ Event.observe($('todo_project_name'), "blur", selectDefaultContext.bind($('todo_
 
 <script type="text/javascript">
 contextNamesForAutoComplete = <%= context_names_for_autocomplete %>;
-if (contextNamesForAutoComplete.length > 1 || contextNamesForAutoComplete[0].length > 0)
+if (contextNamesForAutoComplete.length > 1 || contextNamesForAutoComplete[0].length > 0) {
   contextAutoCompleter = new Autocompleter.Local('todo_context_name', 'context_list', contextNamesForAutoComplete, {choices:100,autoSelect:false});
   $('todo_context_name').projectDefaultContextsMap = eval('(' + <%= @default_project_context_name_map %> + ')');
   Event.observe($('todo_context_name'), "focus", function(){ $('todo_context_name').editedByTracksUser = true; });
