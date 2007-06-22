@@ -329,6 +329,7 @@ input.item-checkbox {
       
 .notes ul, .note_wrapper ul {
       list-style-type: disc;
+      margin-left:20px;
 }
 
 .notes ol {
