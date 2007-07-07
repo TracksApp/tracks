@@ -1,7 +1,7 @@
 ENV["RAILS_ENV"] = "test"
 require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
 require File.expand_path(File.dirname(__FILE__) + "/../app/controllers/application")
-require 'test/rails' #you need the zentest gem isntalled
+require 'test/rails' #you need the zentest gem installed
 require 'test_help'
 require 'flexmock/test_unit' #and the flexmock gem, too!
   
@@ -14,7 +14,8 @@ module Tracks
 end
 
 class Test::Unit::TestCase
-  
+  include AuthenticatedTestHelper
+
   def xml_document
     @xml_document ||= HTML::Document.new(@response.body, false, true)
   end
@@ -23,6 +24,13 @@ class Test::Unit::TestCase
     @html_document = xml_document
     assert_select(*args, &block)
   end
+
+  def assert_error_on(model_instance, attribute, expected_error)
+    actual_error = model_instance.errors.on attribute.to_sym
+    assert_equal expected_error, actual_error
+  end
+  
+  alias_method :assert_errors_on, :assert_error_on
 
 end
 

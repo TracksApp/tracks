@@ -55,77 +55,57 @@ class UserTest < Test::Rails::TestCase
   # Test a password shorter than 5 characters
   #
   def test_validate_short_password
-    assert_equal "#{Digest::SHA1.hexdigest("#{Tracks::Config.salt}--sesame--")}", @other_user.password
-    @other_user.password = "four"
-    assert !@other_user.save
-    assert_equal 1, @other_user.errors.count
-    assert_equal "is too short (minimum is 5 characters)", @other_user.errors.on(:password)
+    assert_no_difference User, :count do
+      u = create_user :password => generate_random_string(4)
+      assert_error_on u, :password, "is too short (minimum is 5 characters)"
+    end
   end
 
-  # Test a password longer than 40 characters
-  #
   def test_validate_long_password
-    assert_equal "#{Digest::SHA1.hexdigest("#{Tracks::Config.salt}--sesame--")}", @other_user.password
-    @other_user.password = generate_random_string(41)
-    assert !@other_user.save
-    assert_equal 1, @other_user.errors.count
-    assert_equal "is too long (maximum is 40 characters)", @other_user.errors.on(:password)
+    assert_no_difference User, :count do
+      u = create_user :password => generate_random_string(41)
+      assert_error_on u, :password, "is too long (maximum is 40 characters)"
+    end
   end
 
-  # Test that correct length password is valid
-  #
   def test_validate_correct_length_password
-    assert_equal "#{Digest::SHA1.hexdigest("#{Tracks::Config.salt}--sesame--")}", @other_user.password
-    @other_user.password = generate_random_string(6)
-    assert @other_user.save
+    assert_difference User, :count do
+      create_user :password => generate_random_string(6)
+    end
   end
 
-  # Test a missing password
-  #
   def test_validate_missing_password
-    assert_equal 2, @other_user.id
-    @other_user.password = ""
-    assert !@other_user.save
-    assert_equal 2, @other_user.errors.count
-    assert_equal ["is too short (minimum is 5 characters)", "can't be blank"], @other_user.errors.on(:password)
+    assert_no_difference User, :count do
+      u = create_user :password => ''
+      assert_errors_on u, :password, ["is too short (minimum is 5 characters)", "can't be blank"]
+    end
   end
 
-  # Test a login shorter than 3 characters
-  #
   def test_validate_short_login
-    assert_equal "jane", @other_user.login
-    @other_user.login = "ba"
-    assert !@other_user.save
-    assert_equal 1, @other_user.errors.count
-    assert_equal "is too short (minimum is 3 characters)", @other_user.errors.on(:login)
+    assert_no_difference User, :count do
+      u = create_user :login => 'ba'
+      assert_error_on u, :login, "is too short (minimum is 3 characters)"
+    end
   end
 
-  # Test a login longer than 80 characters
-  #
   def test_validate_long_login
-    assert_equal "jane", @other_user.login
-    @other_user.login = generate_random_string(81)
-    assert !@other_user.save
-    assert_equal 1, @other_user.errors.count
-    assert_equal "is too long (maximum is 80 characters)", @other_user.errors.on(:login)
+    assert_no_difference User, :count do
+      u = create_user :login => generate_random_string(81)
+      assert_error_on u, :login, "is too long (maximum is 80 characters)"
+    end    
   end
-
-  # Test that correct length login is valid
-  #
+  
   def test_validate_correct_length_login
-    assert_equal "jane", @other_user.login
-    @other_user.login = generate_random_string(6)
-    assert @other_user.save
+    assert_difference User, :count do
+      create_user :login => generate_random_string(6)
+    end
   end
 
-  # Test a missing login
-  #
   def test_validate_missing_login
-    assert_equal 2, @other_user.id
-    @other_user.login = ""
-    assert !@other_user.save
-    assert_equal 2, @other_user.errors.count
-    assert_equal ["is too short (minimum is 3 characters)", "can't be blank"], @other_user.errors.on(:login)
+    assert_no_difference User, :count do
+      u = create_user :login => ''
+      assert_errors_on u, :login, ["is too short (minimum is 3 characters)", "can't be blank"]
+    end
   end
 
   def test_display_name_with_first_and_last_name_set
@@ -290,6 +270,53 @@ class UserTest < Test::Rails::TestCase
     assert_equal 2, projects(:gardenclean).position
     assert_equal 3, projects(:moremoney).position 
   end
+
+  def test_should_create_user
+    assert_difference User, :count do
+      user = create_user
+      assert !user.new_record?, "#{user.errors.full_messages.to_sentence}"
+    end
+  end
+
+  def test_should_require_login
+    assert_no_difference User, :count do
+      u = create_user(:login => nil)
+      assert u.errors.on(:login)
+    end
+  end
+
+  def test_should_require_password
+    assert_no_difference User, :count do
+      u = create_user(:password => nil)
+      assert u.errors.on(:password)
+    end
+  end
+
+  def test_should_require_password_confirmation
+    assert_no_difference User, :count do
+      u = create_user(:password_confirmation => nil)
+      assert u.errors.on(:password_confirmation)
+    end
+  end
+
+  def test_should_reset_password
+    users(:other_user).update_attributes(:password => 'new password', :password_confirmation => 'new password')
+    assert_equal users(:other_user), User.authenticate('jane', 'new password')
+  end
   
+  def test_should_not_rehash_password
+    users(:other_user).update_attributes(:login => 'jane2')
+    assert_equal users(:other_user), User.authenticate('jane2', 'sesame')
+  end
+  
+  def test_should_authenticate_user
+    assert_equal users(:other_user), User.authenticate('jane', 'sesame')
+  end
+  
+  protected
+    def create_user(options = {})
+      options[:password_confirmation] = options[:password] unless options.has_key?(:password_confirmation) || !options.has_key?(:password)
+      User.create({ :login => 'quire', :password => 'quire', :password_confirmation => 'quire' }.merge(options))
+    end
 
 end

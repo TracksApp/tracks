@@ -83,6 +83,7 @@ class User < ActiveRecord::Base
   validates_presence_of :login
   validates_presence_of :password, :if => :password_required?
   validates_length_of :password, :within => 5..40, :if => :password_required?
+  validates_presence_of :password_confirmation, :if => :password_required?
   validates_confirmation_of :password  
   validates_length_of :login, :within => 3..80
   validates_uniqueness_of :login, :on => :create
