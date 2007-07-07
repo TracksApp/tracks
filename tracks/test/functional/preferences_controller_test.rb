@@ -38,7 +38,7 @@ class PreferencesControllerTest < Test::Rails::TestCase
   end
   
   def test_update_preferences
-    @request.session['user_id'] = users(:admin_user).id # log in the admin user
+    login_as :admin_user
     post :update, {:user => { :first_name => 'Jane', :last_name => 'Doe'}, :prefs => { :date_format => "%m-%d-%Y", :week_starts => "0", :show_number_completed => "10", :show_completed_projects_in_sidebar => "false", :show_hidden_contexts_in_sidebar => "false", :staleness_starts => "14", :due_style => "1", :admin_email => "my.email@domain.com" }}
     updated_admin_user = User.find(users(:admin_user).id)
     assert_not_nil updated_admin_user.preference

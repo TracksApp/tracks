@@ -313,6 +313,19 @@ class UserTest < Test::Rails::TestCase
     assert_equal users(:other_user), User.authenticate('jane', 'sesame')
   end
   
+  def test_should_set_remember_token
+    users(:other_user).remember_me
+    assert_not_nil users(:other_user).remember_token
+    assert_not_nil users(:other_user).remember_token_expires_at
+  end
+  
+  def test_should_unset_remember_token
+    users(:other_user).remember_me
+    assert_not_nil users(:other_user).remember_token
+    users(:other_user).forget_me
+    assert_nil users(:other_user).remember_token
+  end
+  
   protected
     def create_user(options = {})
       options[:password_confirmation] = options[:password] unless options.has_key?(:password_confirmation) || !options.has_key?(:password)
