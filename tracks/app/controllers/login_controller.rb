@@ -4,6 +4,7 @@ class LoginController < ApplicationController
   filter_parameter_logging :user_password 
   skip_before_filter :set_session_expiration
   skip_before_filter :login_required
+  before_filter :login_optional
   before_filter :get_current_user
   open_id_consumer if Tracks::Config.openid_enabled?
   
@@ -15,11 +16,15 @@ class LoginController < ApplicationController
         if @user = User.authenticate(params['user_login'], params['user_password'])
           session['user_id'] = @user.id
           # If checkbox on login page checked, we don't expire the session after 1 hour
-          # of inactivity
+          # of inactivity and we remember this user for future browser sessions
           session['noexpiry'] = params['user_noexpiry']
           msg = (should_expire_sessions?) ? "will expire after 1 hour of inactivity." : "will not expire." 
           notify :notice, "Login successful: session #{msg}"
           cookies[:tracks_login] = { :value => @user.login, :expires => Time.now + 1.year }
+          unless should_expire_sessions?
+            @user.remember_me
+            cookies[:auth_token] = { :value => @user.remember_token , :expires => @user.remember_token_expires_at }
+          end
           redirect_back_or_home
           return
         else
@@ -90,6 +95,10 @@ class LoginController < ApplicationController
           msg = (should_expire_sessions?) ? "will expire after 1 hour of inactivity." : "will not expire." 
           notify :notice, "You have successfully verified #{openid_url} as your identity. Login successful: session #{msg}"
           cookies[:tracks_login] = { :value => @user.login, :expires => Time.now + 1.year }
+          unless should_expire_sessions?
+            @user.remember_me
+            cookies[:auth_token] = { :value => @user.remember_token , :expires => @user.remember_token_expires_at }
+          end
           cookies[:openid_url] = { :value => openid_url, :expires => Time.now + 1.year }
           redirect_back_or_home
         else
@@ -106,6 +115,8 @@ class LoginController < ApplicationController
   end
 
   def logout
+    @user.forget_me if logged_in?
+    cookies.delete :auth_token
     session['user_id'] = nil
     reset_session
     notify :notice, "You have been logged out of Tracks."

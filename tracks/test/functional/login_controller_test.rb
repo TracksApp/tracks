@@ -76,6 +76,44 @@ class LoginControllerTest < Test::Rails::TestCase
     assert_response :success
   end
   
+  def test_should_remember_me
+    post :login, :user_login => 'jane', :user_password => 'sesame', :user_noexpiry => "on"
+    assert_not_nil @response.cookies["auth_token"]
+  end
+
+  def test_should_not_remember_me
+    post :login, :user_login => 'jane', :user_password => 'sesame', :user_noexpiry => "off"
+    assert_nil @response.cookies["auth_token"]
+  end
+  
+  def test_should_delete_token_on_logout
+    login_as :other_user
+    get :logout
+    assert_equal @response.cookies["auth_token"], []
+  end
+
+  def test_should_login_with_cookie
+    users(:other_user).remember_me
+    @request.cookies["auth_token"] = cookie_for(:other_user)
+    get :login
+    assert @controller.send(:logged_in?)
+  end
+
+  def test_should_fail_expired_cookie_login
+    users(:other_user).remember_me
+    users(:other_user).update_attribute :remember_token_expires_at, 5.minutes.ago
+    @request.cookies["auth_token"] = cookie_for(:other_user)
+    get :login
+    assert !@controller.send(:logged_in?)
+  end
+
+  def test_should_fail_cookie_login
+    users(:other_user).remember_me
+    @request.cookies["auth_token"] = auth_token('invalid_auth_token')
+    get :login
+    assert !@controller.send(:logged_in?)
+  end
+  
   private
   
   # Logs in a user and returns the user object found in the session object
@@ -83,6 +121,14 @@ class LoginControllerTest < Test::Rails::TestCase
     post :login, {:user_login => login, :user_password => password, :user_noexpiry => expiry}
     assert_not_nil(session['user_id'])
     return User.find(session['user_id'])
+  end
+  
+  def auth_token(token)
+    CGI::Cookie.new('name' => 'auth_token', 'value' => token)
+  end
+    
+  def cookie_for(user)
+    auth_token users(user).remember_token
   end
   
     

@@ -21,6 +21,8 @@ class ApplicationController < ActionController::Base
   prepend_before_filter :enable_mobile_content_negotiation
   after_filter :restore_content_type_for_mobile
   after_filter :set_charset
+  
+
 
   include ActionView::Helpers::TextHelper
   helper_method :format_date, :markdown

@@ -31,6 +31,12 @@ class Test::Unit::TestCase
   end
   
   alias_method :assert_errors_on, :assert_error_on
+  
+  def assert_value_changed(object, method = nil)
+    initial_value = object.send(method)
+    yield
+    assert_not_equal initial_value, object.send(method), "#{object}##{method}"
+  end
 
 end
 

@@ -31,6 +31,20 @@ module LoginSystem
     true
   end
   
+  # When called with before_filter :login_from_cookie will check for an :auth_token
+  # cookie and log the user back in if appropriate
+  def login_from_cookie
+    return unless cookies[:auth_token] && !logged_in?
+    user = User.find_by_remember_token(cookies[:auth_token])
+    if user && user.remember_token?
+      session['user_id'] = user.id
+      @user = user
+      @user.remember_me
+      cookies[:auth_token] = { :value => @user.remember_token , :expires => @user.remember_token_expires_at }
+      flash[:notice] = "Logged in successfully. Welcome back!"
+    end
+  end  
+  
   def login_or_feed_token_required
     if ['rss', 'atom', 'txt', 'ics'].include?(params[:format])
       if user = User.find_by_word(params[:token])
@@ -55,6 +69,8 @@ module LoginSystem
     if not protect?(action_name)
       return true
     end
+    
+    login_from_cookie
 
     if session['user_id'] and authorize?(get_current_user)
       return true
@@ -78,6 +94,8 @@ module LoginSystem
   
   def login_optional
 
+    login_from_cookie
+    
     if session['user_id'] and authorize?(get_current_user)
       return true
     end
@@ -90,6 +108,11 @@ module LoginSystem
     end
 
     return true 
+  end
+  
+  def logged_in?
+    get_current_user
+    @user != nil
   end
   
   def get_current_user
@@ -164,6 +187,6 @@ module LoginSystem
       response.headers["Status"] = "Unauthorized"
       response.headers["WWW-Authenticate"] = "Basic realm=\"'Tracks Login Required'\""
       render :text => "401 Unauthorized: You are not authorized to interact with Tracks.", :status => 401
-  end  
+  end
 
 end

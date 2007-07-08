@@ -33,7 +33,7 @@ class UserTest < Test::Rails::TestCase
     assert_kind_of User, @admin_user
     assert_equal 1, @admin_user.id
     assert_equal "admin", @admin_user.login
-    assert_equal "#{Digest::SHA1.hexdigest("#{Tracks::Config.salt}--abracadabra--")}", @admin_user.password
+    assert_equal "#{Digest::SHA1.hexdigest("#{Tracks::Config.salt}--abracadabra--")}", @admin_user.crypted_password
     assert_not_nil @admin_user.word
     assert @admin_user.is_admin
   end
@@ -43,7 +43,7 @@ class UserTest < Test::Rails::TestCase
     assert_kind_of User, @other_user
     assert_equal 2, @other_user.id
     assert_equal "jane", @other_user.login
-    assert_equal "#{Digest::SHA1.hexdigest("#{Tracks::Config.salt}--sesame--")}", @other_user.password
+    assert_equal "#{Digest::SHA1.hexdigest("#{Tracks::Config.salt}--sesame--")}", @other_user.crypted_password
     assert_not_nil @other_user.word
     assert @other_user.is_admin == false || @other_user.is_admin == 0
   end
@@ -179,9 +179,9 @@ class UserTest < Test::Rails::TestCase
   end
 
   def test_crypt_word_updates_word
-    old_word = @admin_user.word
-    @admin_user.crypt_word
-    assert_not_equal old_word, @admin_user.word
+    assert_value_changed @admin_user, :word do
+      @admin_user.send :crypt_word
+    end
   end
 
   def test_find_admin

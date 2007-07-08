@@ -1,6 +1,9 @@
 require 'digest/sha1'
 
 class User < ActiveRecord::Base
+  # Virtual attribute for the unencrypted password
+  attr_accessor :password
+
   has_many :contexts,
            :order => 'position ASC',
            :dependent => :delete_all do
@@ -89,6 +92,9 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :login, :on => :create
   validates_presence_of :open_id_url, :if => Proc.new{|user| user.auth_type == 'open_id'}
 
+  before_create :crypt_password, :crypt_word
+  before_update :crypt_password
+  
   def validate
     unless Tracks::Config.auth_schemes.include?(auth_type)
       errors.add("auth_type", "not a valid authentication type")
@@ -101,7 +107,7 @@ class User < ActiveRecord::Base
     candidate = find(:first, :conditions => ["login = ?", login])
     return nil if candidate.nil?
     if candidate.auth_type == 'database'
-      return candidate if candidate.password == sha1(pass)
+      return candidate if candidate.crypted_password == sha1(pass)
     elsif candidate.auth_type == 'ldap' && Tracks::Config.auth_schemes.include?('ldap')
       return candidate if SimpleLdapAuthenticator.valid?(login, pass)
     end
@@ -136,10 +142,6 @@ class User < ActiveRecord::Base
     self.password_confirmation = pass_confirm
     save!
   end
-
-  def crypt_word
-    write_attribute("word", self.class.sha1(login + Time.now.to_i.to_s + rand.to_s))
-  end
   
   def time
     prefs.tz.adjust(Time.now.utc)
@@ -148,22 +150,45 @@ class User < ActiveRecord::Base
   def date
     time.to_date
   end
+  
+  def remember_token?
+    remember_token_expires_at && Time.now.utc < remember_token_expires_at 
+  end
+  
+  # These create and unset the fields required for remembering users between browser closes
+  def remember_me
+    self.remember_token_expires_at = 2.weeks.from_now.utc
+    self.remember_token = self.class.sha1("#{login}--#{remember_token_expires_at}")
+    save(false)
+  end
+
+  def forget_me
+    self.remember_token_expires_at = nil
+    self.remember_token            = nil
+    save(false)
+  end
 
 protected
 
   def self.sha1(pass)
     Digest::SHA1.hexdigest("#{Tracks::Config.salt}--#{pass}--")
   end
-
-  before_create :crypt_password, :crypt_word
-  before_update :crypt_password
+  
+  def crypt_word
+    write_attribute("word", self.class.sha1(login + Time.now.to_i.to_s + rand.to_s))
+  end
   
   def crypt_password
-    write_attribute("password", self.class.sha1(password)) if password == @password_confirmation
+    return if password.blank?
+    write_attribute("crypted_password", self.class.sha1(password)) if password == password_confirmation
   end
   
   def password_required?
-    auth_type == 'database'
+    auth_type == 'database' && crypted_password.blank? || !password.blank?
+  end
+  
+  def password_matches?(pass)
+    crypted_password == sha1(pass)
   end
     
 end

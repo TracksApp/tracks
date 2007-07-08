@@ -2,7 +2,7 @@
 admin_user:
   id: 1
   login: admin
-  password: <%= Digest::SHA1.hexdigest("#{Tracks::Config.salt}--abracadabra--") %>
+  crypted_password: <%= Digest::SHA1.hexdigest("#{Tracks::Config.salt}--abracadabra--") %>
   word: <%= Digest::SHA1.hexdigest("adminSat Feb 25 17:14:00 GMT 20060.236961325863376") %>
   is_admin: true
   first_name: Admin
@@ -12,7 +12,7 @@ admin_user:
 other_user:
   id: 2
   login: jane
-  password: <%= Digest::SHA1.hexdigest("#{Tracks::Config.salt}--sesame--") %>
+  crypted_password: <%= Digest::SHA1.hexdigest("#{Tracks::Config.salt}--sesame--") %>
   word: <%= Digest::SHA1.hexdigest("janeSun Feb 19 14:42:45 GMT 20060.408173979260027") %>
   is_admin: false
   first_name: Jane
@@ -22,7 +22,7 @@ other_user:
 ldap_user:
   id: 3
   login: john
-  password: test
+  crypted_password: test
   word: <%= Digest::SHA1.hexdigest("johnSun Feb 19 14:42:45 GMT 20060.408173979260027") %>
   is_admin: false
   first_name: John
