@@ -20,10 +20,12 @@
 
 <div id="todo_new_action" style="display:block">
 
-<!--[form:todo]-->
 <% form_remote_tag(
     :url => todos_path, :method => :post,
-    :html=> { :id=>'todo-form-new-action', :name=>'todo', :class => 'inline-form' }) do -%>
+    :html=> { :id=>'todo-form-new-action', :name=>'todo', :class => 'inline-form' },
+    :before => "$('todo_new_action_submit').startWaiting()",
+    :complete => "$('todo_new_action_submit').stopWaiting()",
+    :condition => "!$('todo_new_action_submit').isWaiting()") do -%>
 
 <div id="status"><%= error_messages_for("item", :object_name => 'action') %></div>
 
@@ -83,16 +85,16 @@ if (contextNamesForAutoComplete.length > 1 || contextNamesForAutoComplete[0].len
 
 <div class="submit_box">
   <div class="widgets">
-    <button type="submit" class="positive">
+    <button type="submit" class="positive" id="todo_new_action_submit">
         <img src="/images/accept.png" alt=""/> 
         Add action
     </button>
   </div>
 </div>
-<% end -%><!--[eoform:todo]-->
+<% end -%>
 
                   
 <%= calendar_setup( "todo_due"  ) %>
 <%= calendar_setup( "todo_show_from"  ) %>
-</div><!-- [end:todo-new-action] -->
+</div>
 </div>

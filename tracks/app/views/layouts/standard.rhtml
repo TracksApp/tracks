@@ -14,6 +14,7 @@
   <%= javascript_include_tag "accesskey-hints" %>
   <%= javascript_include_tag "todo-items" %>
   <%= javascript_include_tag "niftycube" %> 
+  <%= javascript_include_tag "protoload" %> 
   
   <link rel="shortcut icon" href="<%= url_for(:controller => 'favicon.ico') %>" />
   <%= auto_discovery_link_tag(:rss,{:controller => "feed", :action => "na_feed", :name => "#{@user.login}", :token => "#{@user.word}"}, {:title => "RSS feed of next actions"})  %>
