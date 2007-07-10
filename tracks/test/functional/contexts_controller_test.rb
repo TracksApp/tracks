@@ -53,7 +53,7 @@ class ContextsControllerTest < TodoContainerControllerTestBase
         assert_select 'language', 'en-us'
         assert_select 'ttl', '40'
       end
-      assert_select 'item', 9 do
+      assert_select 'item', 10 do
         assert_select 'title', /.+/
         assert_select 'description' do
           assert_select_encoded do
@@ -95,7 +95,7 @@ class ContextsControllerTest < TodoContainerControllerTestBase
     assert_xml_select 'feed[xmlns="http://www.w3.org/2005/Atom"]' do
       assert_select '>title', 'Tracks Contexts'
       assert_select '>subtitle', "Lists all the contexts for #{users(:admin_user).display_name}"
-      assert_select 'entry', 9 do
+      assert_select 'entry', 10 do
         assert_select 'title', /.+/
         assert_select 'content[type="html"]' do
           assert_select_encoded do

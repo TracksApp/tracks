@@ -104,3 +104,12 @@ waitingfor_otheruser:
   user_id: 2
   created_at: <%= today %>
   updated_at: <%= today %>
+
+someday_maybe:
+  id: 12
+  name: someday maybe
+  position: 10
+  hide: true
+  user_id: 1
+  created_at: <%= today %>
+  updated_at: <%= today %>
