@@ -5,4 +5,8 @@ assert_title 'exact:TRACKS::Login'
 type "user_login", "admin"
 type "user_password", "abracadabra"
 click_and_wait "login"
-assert_title 'exact:TRACKS::List tasks' 
+assert_title 'exact:TRACKS::List tasks'
+wait_for_visible "flash"
+wait_for_text "flash", "Login successful: session will not expire."
+#next line slows down the test unacceptably, but is useful in ensuring that the message disappears.
+#wait_for_not_visible "flash"

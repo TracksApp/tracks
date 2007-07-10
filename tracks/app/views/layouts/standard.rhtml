@@ -21,7 +21,8 @@
 
 <script type="text/javascript">
 window.onload=function(){
-Nifty("div#todo_new_action_container","normal");
+  Nifty("div#todo_new_action_container","normal");
+  if ($('flash').visible()) { new Effect.Fade("flash",{duration:5.0}); }
 }
 </script>
 
