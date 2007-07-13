@@ -371,6 +371,7 @@ div#project_status > div {
 	}
 #project_status span {
 	margin-right:5px;
+	background-color:white;
 }
 #project_status .active_state {
 	font-weight:bold;
