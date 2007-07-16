@@ -334,6 +334,7 @@ input.item-checkbox {
 
 .notes ol {
       list-style-type: decimal;
+      margin-left:20px;
 }
 
 /* The notes for the project */
