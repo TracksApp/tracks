@@ -97,7 +97,7 @@ class User < ActiveRecord::Base
   
   def validate
     unless Tracks::Config.auth_schemes.include?(auth_type)
-      errors.add("auth_type", "not a valid authentication type")
+      errors.add("auth_type", "not a valid authentication type (#{auth_type})")
     end
   end
 
