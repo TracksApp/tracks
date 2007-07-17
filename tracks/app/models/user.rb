@@ -92,7 +92,7 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :login, :on => :create
   validates_presence_of :open_id_url, :if => Proc.new{|user| user.auth_type == 'open_id'}
 
-  before_create :crypt_password, :crypt_token
+  before_create :crypt_password, :generate_token
   before_update :crypt_password
   
   def validate
@@ -151,6 +151,11 @@ class User < ActiveRecord::Base
     time.to_date
   end
   
+  def generate_token
+    new_token = Digest::SHA1.hexdigest "#{Time.now.to_i}#{rand}"
+    write_attribute("token", new_token)
+  end
+  
   def remember_token?
     remember_token_expires_at && Time.now.utc < remember_token_expires_at 
   end
@@ -170,12 +175,8 @@ class User < ActiveRecord::Base
 
 protected
 
-  def self.sha1(pass)
-    Digest::SHA1.hexdigest("#{Tracks::Config.salt}--#{pass}--")
-  end
-  
-  def crypt_token
-    write_attribute("token", self.class.sha1(login + Time.now.to_i.to_s + rand.to_s))
+  def self.sha1(s)
+    Digest::SHA1.hexdigest("#{Tracks::Config.salt}--#{s}--")
   end
   
   def crypt_password

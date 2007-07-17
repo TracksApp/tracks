@@ -178,9 +178,9 @@ class UserTest < Test::Rails::TestCase
     assert User.no_users_yet?
   end
 
-  def test_crypt_token_updates_token
+  def test_generate_token_updates_token
     assert_value_changed @admin_user, :token do
-      @admin_user.send :crypt_token
+      @admin_user.send :generate_token
     end
   end
 

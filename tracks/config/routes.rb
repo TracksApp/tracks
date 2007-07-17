@@ -51,6 +51,8 @@ ActionController::Routing::Routes.draw do |map|
 
   # Feed Routes
   map.connect 'feeds', :controller => 'feedlist', :action => 'index'
+  
+  map.preferences 'preferences', :controller => 'preferences', :action => 'index'
 
   # Install the default route as the lowest priority.
   map.connect ':controller/:action/:id'

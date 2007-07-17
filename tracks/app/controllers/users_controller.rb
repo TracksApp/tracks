@@ -142,7 +142,7 @@ class UsersController < ApplicationController
   def update_password
     @user.change_password(params[:updateuser][:password], params[:updateuser][:password_confirmation])
     notify :notice, "Password updated."
-    redirect_to :controller => 'preferences'
+    redirect_to preferences_path
   rescue Exception => error
     notify :error, error.message
     redirect_to :action => 'change_password'
@@ -171,7 +171,7 @@ class UsersController < ApplicationController
     @user.auth_type = params[:user][:auth_type]
     if @user.save
       notify :notice, "Authentication type updated."
-      redirect_to :controller => 'preferences'
+      redirect_to preferences_path
     else
       notify :warning, "There was a problem updating your authentication type: #{ @user.errors.full_messages.join(', ')}"
       redirect_to :action => 'change_auth_type'
@@ -207,7 +207,7 @@ class UsersController < ApplicationController
         else
           notify :warning, "You have successfully verified #{openid_url} as your identity but there was a problem saving your authentication preferences."
         end
-        redirect_to :controller => 'preferences', :action => 'index'
+        redirect_to preferences_path
 
       when OpenID::CANCEL
         notify :warning, "Verification cancelled."
@@ -220,10 +220,10 @@ class UsersController < ApplicationController
   
   
   def refresh_token
-    @user.crypt_token
-    @user.save
+    @user.generate_token
+    @user.save!
     notify :notice, "New token successfully generated"
-    redirect_to :controller => 'preferences', :action => 'index'
+    redirect_to preferences_path
   end
   
   private
