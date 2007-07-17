@@ -220,7 +220,7 @@ class UsersController < ApplicationController
   
   
   def refresh_token
-    @user.crypt_word
+    @user.crypt_token
     @user.save
     notify :notice, "New token successfully generated"
     redirect_to :controller => 'preferences', :action => 'index'

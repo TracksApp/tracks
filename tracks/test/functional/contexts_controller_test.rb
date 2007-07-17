@@ -82,7 +82,7 @@ class ContextsControllerTest < TodoContainerControllerTestBase
   
   def test_rss_feed_accessible_to_anonymous_user_with_valid_token
     @request.session['user_id'] = nil
-    get :index, { :format => "rss", :token => users(:admin_user).word }
+    get :index, { :format => "rss", :token => users(:admin_user).token }
     assert_response :ok
   end
   
@@ -121,7 +121,7 @@ class ContextsControllerTest < TodoContainerControllerTestBase
   
   def test_atom_feed_accessible_to_anonymous_user_with_valid_token
     @request.session['user_id'] = nil
-    get :index, { :format => "atom", :token => users(:admin_user).word }
+    get :index, { :format => "atom", :token => users(:admin_user).token }
     assert_response :ok
   end
  
@@ -146,7 +146,7 @@ class ContextsControllerTest < TodoContainerControllerTestBase
   
   def test_text_feed_accessible_to_anonymous_user_with_valid_token
     @request.session['user_id'] = nil
-    get :index, { :format => "txt", :token => users(:admin_user).word }
+    get :index, { :format => "txt", :token => users(:admin_user).token }
     assert_response :ok
   end
   

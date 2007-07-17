@@ -36,7 +36,7 @@
   <h2>Your token</h2>
   <div id="token_area">
     <div class="description">Token (for feeds and API use):</div>
-    <div id="token><span class="highlight"><%= @user.word %></span></div>
+    <div id="token><span class="highlight"><%= @user.token %></span></div>
     <div class="token_regenerate">
       <%= button_to "Generate a new token", refresh_token_user_path(@user),
           :confirm => "Are you sure? Generating a new token will replace the existing one and break any external usages of this token." %>

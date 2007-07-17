@@ -34,7 +34,7 @@ class UserTest < Test::Rails::TestCase
     assert_equal 1, @admin_user.id
     assert_equal "admin", @admin_user.login
     assert_equal "#{Digest::SHA1.hexdigest("#{Tracks::Config.salt}--abracadabra--")}", @admin_user.crypted_password
-    assert_not_nil @admin_user.word
+    assert_not_nil @admin_user.token
     assert @admin_user.is_admin
   end
 
@@ -44,7 +44,7 @@ class UserTest < Test::Rails::TestCase
     assert_equal 2, @other_user.id
     assert_equal "jane", @other_user.login
     assert_equal "#{Digest::SHA1.hexdigest("#{Tracks::Config.salt}--sesame--")}", @other_user.crypted_password
-    assert_not_nil @other_user.word
+    assert_not_nil @other_user.token
     assert @other_user.is_admin == false || @other_user.is_admin == 0
   end
 
@@ -178,9 +178,9 @@ class UserTest < Test::Rails::TestCase
     assert User.no_users_yet?
   end
 
-  def test_crypt_word_updates_word
-    assert_value_changed @admin_user, :word do
-      @admin_user.send :crypt_word
+  def test_crypt_token_updates_token
+    assert_value_changed @admin_user, :token do
+      @admin_user.send :crypt_token
     end
   end
 
@@ -192,7 +192,7 @@ class UserTest < Test::Rails::TestCase
     @other_user.auth_type = 'dnacheck'
     assert !@other_user.save
     assert_equal 1, @other_user.errors.count
-    assert_equal "not a valid authentication type", @other_user.errors.on(:auth_type)
+    assert_equal "not a valid authentication type (dnacheck)", @other_user.errors.on(:auth_type)
   end
 
   def test_authenticate_can_use_ldap

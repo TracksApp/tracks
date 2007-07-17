@@ -6,14 +6,14 @@ class BackendController < ApplicationController
   
   
   def new_todo(username, token, context_id, description)
-    check_token_against_user_word(username, token)
+    check_token(username, token)
     check_context_belongs_to_user(context_id)
     item = create_todo(description, context_id)
     item.id
   end
   
   def new_rich_todo(username, token, default_context_id, description)
-    check_token_against_user_word(username,token)
+    check_token(username,token)
     description,context = split_by_char('@',description)
     description,project = split_by_char('>',description)
     if(!context.nil? && project.nil?)
@@ -44,23 +44,23 @@ class BackendController < ApplicationController
   end
   
   def list_contexts(username, token)
-    check_token_against_user_word(username, token)
+    check_token(username, token)
     
     @user.contexts
   end
   
   def list_projects(username, token)
-    check_token_against_user_word(username, token)
+    check_token(username, token)
     
     @user.projects
   end
   
   private
 
-    # Check whether the token in the URL matches the word in the User's table
-    def check_token_against_user_word(username, token)
+    # Check whether the token in the URL matches the token in the User's table
+    def check_token(username, token)
       @user = User.find_by_login( username )
-      unless (token == @user.word)
+      unless (token == @user.token)
         raise(InvalidToken, "Sorry, you don't have permission to perform this action.")
       end
     end

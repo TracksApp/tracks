@@ -92,7 +92,7 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :login, :on => :create
   validates_presence_of :open_id_url, :if => Proc.new{|user| user.auth_type == 'open_id'}
 
-  before_create :crypt_password, :crypt_word
+  before_create :crypt_password, :crypt_token
   before_update :crypt_password
   
   def validate
@@ -174,8 +174,8 @@ protected
     Digest::SHA1.hexdigest("#{Tracks::Config.salt}--#{pass}--")
   end
   
-  def crypt_word
-    write_attribute("word", self.class.sha1(login + Time.now.to_i.to_s + rand.to_s))
+  def crypt_token
+    write_attribute("token", self.class.sha1(login + Time.now.to_i.to_s + rand.to_s))
   end
   
   def crypt_password

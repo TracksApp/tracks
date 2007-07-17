@@ -18,7 +18,7 @@ class BackendControllerTest < Test::Rails::TestCase
   end
   
   def test_new_todo_fails_with_context_that_does_not_belong_to_user
-     assert_raise(CannotAccessContext, "Cannot access a context that does not belong to this user.") { @controller.new_todo(users('other_user').login, users('other_user').word, contexts('agenda').id, 'test') }
+     assert_raise(CannotAccessContext, "Cannot access a context that does not belong to this user.") { @controller.new_todo(users('other_user').login, users('other_user').token, contexts('agenda').id, 'test') }
   end
   
   def test_new_rich_todo_fails_with_incorrect_token
@@ -39,7 +39,7 @@ class BackendControllerTest < Test::Rails::TestCase
   def test_new_rich_todo_creates_todo_with_new_project
     max_todo_id = Todo.maximum('id')
     max_project_id = Project.maximum('id')
-    @controller.new_rich_todo(users(:admin_user).login, users(:admin_user).word, contexts(:agenda).id, 'Call mfox @call > new:Run for president')
+    @controller.new_rich_todo(users(:admin_user).login, users(:admin_user).token, contexts(:agenda).id, 'Call mfox @call > new:Run for president')
     todo = Todo.find(:first, :conditions => ["id > ?", max_todo_id])
     new_project = Project.find(:first, :conditions => ["id > ?", max_project_id])
     assert_equal(users(:admin_user).id, todo.user_id)
@@ -50,7 +50,7 @@ class BackendControllerTest < Test::Rails::TestCase
   
   def assert_new_rich_todo_creates_mfox_todo(description_input)
     max_id = Todo.maximum('id')
-    @controller.new_rich_todo(users(:admin_user).login, users(:admin_user).word, contexts(:agenda).id, 'Call mfox @cal > Build')
+    @controller.new_rich_todo(users(:admin_user).login, users(:admin_user).token, contexts(:agenda).id, 'Call mfox @cal > Build')
     todo = Todo.find(:first, :conditions => ["id > ?", max_id])
     assert_equal(users(:admin_user).id, todo.user_id)
     assert_equal(contexts(:call).id, todo.context_id)
@@ -59,7 +59,7 @@ class BackendControllerTest < Test::Rails::TestCase
   end
   
   def test_new_rich_todo_fails_with_context_that_does_not_belong_to_user
-     assert_raise(CannotAccessContext, "Cannot access a context that does not belong to this user.") { @controller.new_rich_todo(users('other_user').login, users('other_user').word, contexts('agenda').id, 'test') }
+     assert_raise(CannotAccessContext, "Cannot access a context that does not belong to this user.") { @controller.new_rich_todo(users('other_user').login, users('other_user').token, contexts('agenda').id, 'test') }
   end
 
   def test_list_projects_fails_with_incorrect_token
