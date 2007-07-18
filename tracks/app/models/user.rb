@@ -152,8 +152,7 @@ class User < ActiveRecord::Base
   end
   
   def generate_token
-    new_token = Digest::SHA1.hexdigest "#{Time.now.to_i}#{rand}"
-    write_attribute("token", new_token)
+    self.token = Digest::SHA1.hexdigest "#{Time.now.to_i}#{rand}"
   end
   
   def remember_token?
