@@ -341,7 +341,6 @@ class TodosController < ApplicationController
       end
 
       condition_builder = FindConditionBuilder.new
-      options = Hash.new
 
       if params.key?('done')
         condition_builder.add 'todos.state = ?', 'completed'
@@ -368,7 +367,7 @@ class TodosController < ApplicationController
         @title << " actions completed"
         @description << " in the last #{done_in_last.to_s} days"
       end
-
+      
       Todo.with_scope :find => {:conditions => condition_builder.to_conditions} do
         yield
       end
@@ -393,10 +392,16 @@ class TodosController < ApplicationController
 
     def with_limit_scope(&block)
       if params.key?('limit')
-        Todo.with_scope :find => {:limit => params['limit']} do
+        Todo.with_scope :find => { :limit => params['limit'] } do
           yield
         end
-        #@description = limit ? "Lists the last #{limit} incomplete next actions" : "Lists incomplete next actions"
+        if TodosController.is_feed_request(request) && @description
+          if params.key?('limit')
+            @description << "Lists the last #{params['limit']} incomplete next actions"
+          else
+            @description << "Lists incomplete next actions"
+          end
+        end
       else
         yield
       end
@@ -419,11 +424,13 @@ class TodosController < ApplicationController
               
             else
             
+              # Note: these next two finds were previously using @users.todos.find but that broke with_scope for :limit
+
               # Exclude hidden projects from count on home page
-              @todos = @user.todos.find(:all, :conditions => ['todos.state = ? or todos.state = ?', 'active', 'completed'], :include => [ :project, :context, :tags ])
+              @todos = Todo.find(:all, :conditions => ['todos.user_id = ? and todos.state = ? or todos.state = ?', @user.id, 'active', 'completed'], :include => [ :project, :context, :tags ])
 
               # Exclude hidden projects from the home page
-              @not_done_todos = @user.todos.find(:all, :conditions => ['todos.state = ?', 'active'], :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC", :include => [ :project, :context, :tags ])
+              @not_done_todos = Todo.find(:all, :conditions => ['todos.user_id = ? and todos.state = ?', @user.id, 'active'], :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC", :include => [ :project, :context, :tags ])
             
             end
 

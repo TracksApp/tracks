@@ -140,8 +140,8 @@ class TodosControllerTest < Test::Rails::TestCase
     assert_response :success
     assert_equal 3, @tagged
   end
-
-  def test_find_tagged_withd_content
+  
+  def test_rss_feed
     @request.session['user_id'] = users(:admin_user).id
     get :index, { :format => "rss" }
     assert_equal 'application/rss+xml; charset=utf-8', @response.headers["Content-Type"]
@@ -165,6 +165,22 @@ class TodosControllerTest < Test::Rails::TestCase
     end
   end
 
+  def test_rss_feed_with_limit
+    @request.session['user_id'] = users(:admin_user).id
+    get :index, { :format => "rss", :limit => '5' }
+
+    assert_xml_select 'rss[version="2.0"]' do
+      assert_select 'channel' do
+        assert_select '>title', 'Tracks Actions'
+        assert_select '>description', "Actions for #{users(:admin_user).display_name}"
+        assert_select 'item', 5 do
+          assert_select 'title', /.+/
+          assert_select 'description', /.*/
+        end
+      end
+    end
+  end
+  
   def test_rss_feed_not_accessible_to_anonymous_user_without_token
     @request.session['user_id'] = nil
     get :index, { :format => "rss" }
