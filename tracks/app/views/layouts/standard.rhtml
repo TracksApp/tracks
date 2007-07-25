@@ -17,7 +17,7 @@
   <%= javascript_include_tag "protoload" %> 
   
   <link rel="shortcut icon" href="<%= url_for(:controller => 'favicon.ico') %>" />
-  <%= auto_discovery_link_tag(:rss,{:controller => "feed", :action => "na_feed", :name => "#{@user.login}", :token => "#{@user.token}"}, {:title => "RSS feed of next actions"})  %>
+  <%= auto_discovery_link_tag(:rss,{:controller => "todos", :action => "index", :format => 'rss', :token => "#{@user.token}"}, {:title => "RSS feed of next actions"})  %>
 
 <script type="text/javascript">
 window.onload=function(){
