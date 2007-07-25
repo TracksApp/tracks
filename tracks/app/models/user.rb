@@ -90,10 +90,11 @@ class User < ActiveRecord::Base
   validates_confirmation_of :password  
   validates_length_of :login, :within => 3..80
   validates_uniqueness_of :login, :on => :create
-  validates_presence_of :open_id_url, :if => Proc.new{|user| user.auth_type == 'open_id'}
+  validates_presence_of :open_id_url, :if => :using_openid?
 
   before_create :crypt_password, :generate_token
   before_update :crypt_password
+  before_save :normalize_open_id_url
   
   def validate
     unless Tracks::Config.auth_schemes.include?(auth_type)
@@ -112,6 +113,11 @@ class User < ActiveRecord::Base
       return candidate if SimpleLdapAuthenticator.valid?(login, pass)
     end
     nil
+  end
+  
+  def self.find_by_open_id_url(raw_open_id_url)
+    normalized_open_id_url = normalize_open_id_url(raw_open_id_url)
+    find(:first, :conditions => ['open_id_url = ?', normalized_open_id_url])
   end
   
   def self.no_users_yet?
@@ -187,8 +193,23 @@ protected
     auth_type == 'database' && crypted_password.blank? || !password.blank?
   end
   
+  def using_openid?
+    auth_type == 'open_id'
+  end
+  
   def password_matches?(pass)
     crypted_password == sha1(pass)
+  end
+  
+  def normalize_open_id_url
+    return if open_id_url.nil?
+    self.open_id_url = self.class.normalize_open_id_url(open_id_url)
+  end
+  
+  def self.normalize_open_id_url(raw_open_id_url)
+    normalized = raw_open_id_url
+    normalized = "http://#{raw_open_id_url}" unless raw_open_id_url =~ /\:\/\//
+    normalized.downcase.chomp('/')
   end
     
 end
