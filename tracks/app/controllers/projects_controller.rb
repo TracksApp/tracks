@@ -9,8 +9,8 @@ class ProjectsController < ApplicationController
   session :off, :only => :index, :if => Proc.new { |req| ['rss','atom','txt'].include?(req.parameters[:format]) }
 
   def index
-    @projects = @user.projects
-    @contexts = @user.contexts
+    @projects = current_user.projects
+    @contexts = current_user.contexts
     init_not_done_counts(['project'])
     if params[:only_active_with_no_next_actions]
       @projects = @projects.select { |p| p.active? && count_undone_todos(p) == 0 }
@@ -26,15 +26,15 @@ class ProjectsController < ApplicationController
 
   def show
     init_data_for_sidebar
-    @projects = @user.projects
-    @contexts = @user.contexts
+    @projects = current_user.projects
+    @contexts = current_user.contexts
     @page_title = "TRACKS::Project: #{@project.name}"
     @not_done = @project.not_done_todos(:include_project_hidden_todos => true)
     @deferred = @project.deferred_todos
     @done = @project.done_todos
     @count = @not_done.size
-    @next_project = @user.projects.next_from(@project)
-    @previous_project = @user.projects.previous_from(@project)
+    @next_project = current_user.projects.next_from(@project)
+    @previous_project = current_user.projects.previous_from(@project)
     @default_project_context_name_map = build_default_project_context_name_map(@projects).to_json
     respond_to do |format|
       format.html
@@ -52,7 +52,7 @@ class ProjectsController < ApplicationController
       render_failure "Expected post format is valid xml like so: <request><project><name>project name</name></project></request>."
       return
     end
-    @project = @user.projects.build
+    @project = current_user.projects.build
     params_are_invalid = true
     if (params['project'] || (params['request'] && params['request']['project']))
       @project.attributes = params['project'] || params['request']['project']
@@ -61,8 +61,8 @@ class ProjectsController < ApplicationController
     @go_to_project = params['go_to_project']
     @saved = @project.save
     @project_not_done_counts = { @project.id => 0 }
-    @active_projects_count = @user.projects.count(:conditions => "state = 'active'")
-    @contexts = @user.contexts
+    @active_projects_count = current_user.projects.count(:conditions => "state = 'active'")
+    @contexts = current_user.contexts
     respond_to do |format|
       format.js
       format.xml do
@@ -101,10 +101,10 @@ class ProjectsController < ApplicationController
           @project_not_done_counts = Hash.new
           @project_not_done_counts[@project.id] = @project.reload().not_done_todo_count(:include_project_hidden_todos => true)
         end
-        @contexts = @user.contexts
-        @active_projects_count = @user.projects.count(:conditions => "state = 'active'")
-        @hidden_projects_count = @user.projects.count(:conditions => "state = 'hidden'")
-        @completed_projects_count = @user.projects.count(:conditions => "state = 'completed'")
+        @contexts = current_user.contexts
+        @active_projects_count = current_user.projects.count(:conditions => "state = 'active'")
+        @hidden_projects_count = current_user.projects.count(:conditions => "state = 'hidden'")
+        @completed_projects_count = current_user.projects.count(:conditions => "state = 'completed'")
         render
       elsif boolean_param('update_status')
         render :action => 'update_status'
@@ -121,9 +121,9 @@ class ProjectsController < ApplicationController
   
   def destroy
     @project.destroy
-    @active_projects_count = @user.projects.count(:conditions => "state = 'active'")
-    @hidden_projects_count = @user.projects.count(:conditions => "state = 'hidden'")
-    @completed_projects_count = @user.projects.count(:conditions => "state = 'completed'")
+    @active_projects_count = current_user.projects.count(:conditions => "state = 'active'")
+    @hidden_projects_count = current_user.projects.count(:conditions => "state = 'hidden'")
+    @completed_projects_count = current_user.projects.count(:conditions => "state = 'completed'")
     respond_to do |format|
       format.js
       format.xml { render :text => "Deleted project #{@project.name}" }
@@ -132,7 +132,7 @@ class ProjectsController < ApplicationController
   
   def order
     project_ids = params["list-active-projects"] || params["list-hidden-projects"] || params["list-completed-projects"]    
-    projects = @user.projects.update_positions( project_ids )
+    projects = current_user.projects.update_positions( project_ids )
     render :nothing => true
   rescue
     notify :error, $!
@@ -141,8 +141,8 @@ class ProjectsController < ApplicationController
   
   def alphabetize
     @state = params['state']
-    @projects = @user.projects.alphabetize(:state => @state) if @state
-    @contexts = @user.contexts
+    @projects = current_user.projects.alphabetize(:state => @state) if @state
+    @contexts = current_user.contexts
     init_not_done_counts(['project'])
   end
   
@@ -157,25 +157,29 @@ class ProjectsController < ApplicationController
         @completed_projects = @projects.select{ |p| p.completed? }
         @no_projects = @projects.empty?
         @projects.cache_note_counts
-        @new_project = @user.projects.build
+        @new_project = current_user.projects.build
         render
       end
     end
 
     def render_rss_feed
       lambda do
-        render_rss_feed_for @projects, :feed => Project.feed_options(@user),
+        render_rss_feed_for @projects, :feed => feed_options,
                                        :item => { :title => :name, :description => lambda { |p| summary(p) } }
       end
     end
 
     def render_atom_feed
       lambda do
-        render_atom_feed_for @projects, :feed => Project.feed_options(@user),
+        render_atom_feed_for @projects, :feed => feed_options,
                                         :item => { :description => lambda { |p| summary(p) },
                                                    :title => :name,
                                                    :author => lambda { |p| nil } }
       end
+    end
+    
+    def feed_options
+      Project.feed_options(current_user)
     end
 
     def render_text_feed
@@ -186,7 +190,7 @@ class ProjectsController < ApplicationController
     end
         
     def set_project_from_params
-      @project = @user.projects.find_by_params(params)
+      @project = current_user.projects.find_by_params(params)
     end
     
     def set_source_view

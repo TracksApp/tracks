@@ -8,7 +8,7 @@
 
   <% form_tag :action => 'update_auth_type' do %>
 	  <div><label for="user_auth_type">Authentication type:</label> <%=   select('user', 'auth_type', Tracks::Config.auth_schemes.collect {|p| [ p, p ] }) %></div>
-	  <div id="open_id" style="display:<%= @user.auth_type == 'open_id' ? 'block' : 'none' %>"><label for="user_open_id_url">Identity URL:</label> <input type="text" name="openid_url" value="<%= @user.open_id_url %>" class="open_id" /></div>
+	  <div id="open_id" style="display:<%= current_user.auth_type == 'open_id' ? 'block' : 'none' %>"><label for="user_open_id_url">Identity URL:</label> <input type="text" name="openid_url" value="<%= current_user.open_id_url %>" class="open_id" /></div>
 		<div class="actions"><%= submit_tag 'Change Authentication Type' %> <%= link_to 'Cancel', preferences_path %></div>
 
 		<%= observe_field( :user_auth_type, :function => "$('open_id').style.display = value == 'open_id' ? 'block' : 'none'") %>

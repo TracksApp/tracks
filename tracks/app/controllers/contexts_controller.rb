@@ -10,7 +10,7 @@ class ContextsController < ApplicationController
   session :off, :only => :index, :if => Proc.new { |req| ['rss','atom','txt'].include?(req.parameters[:format]) }
 
   def index
-    @contexts = @user.contexts
+    @contexts = current_user.contexts
     init_not_done_counts(['context'])
     respond_to do |format|
       format.html &render_contexts_html
@@ -46,7 +46,7 @@ class ContextsController < ApplicationController
       render_failure "Expected post format is valid xml like so: <request><context><name>context name</name></context></request>.", 400
       return
     end
-    @context = @user.contexts.build
+    @context = current_user.contexts.build
     params_are_invalid = true
     if (params['context'] || (params['request'] && params['request']['context']))
       @context.attributes = params['context'] || params['request']['context']
@@ -104,7 +104,7 @@ class ContextsController < ApplicationController
   #
   def order
     params["list-contexts"].each_with_index do |id, position|
-      @user.contexts.update(id, :position => position + 1)
+      current_user.contexts.update(id, :position => position + 1)
     end
     render :nothing => true
   end
@@ -121,30 +121,31 @@ class ContextsController < ApplicationController
 
     def render_contexts_rss_feed
       lambda do
-        render_rss_feed_for @contexts, :feed => Context.feed_options(@user),
+        render_rss_feed_for @contexts, :feed => feed_options,
                                        :item => { :description => lambda { |c| c.summary(count_undone_todos_phrase(c)) } }
       end
     end
 
     def render_contexts_atom_feed
       lambda do
-        render_atom_feed_for @contexts, :feed => Context.feed_options(@user),
+        render_atom_feed_for @contexts, :feed => feed_options,
                                         :item => { :description => lambda { |c| c.summary(count_undone_todos_phrase(c)) },
                                                    :author => lambda { |c| nil } }
       end
     end
+    
+    def feed_options
+      Context.feed_options(current_user)
+    end
 
     def set_context_from_params
-      @context = @user.contexts.find_by_params(params)
+      @context = current_user.contexts.find_by_params(params)
     rescue
       @context = nil
     end
      
     def init
       @source_view = params['_source_view'] || 'context'
-      # If we exclude completed projects, then we can't display them in the sidebar
-      # if the user sets the preference for them to be shown
-      # @projects = @user.projects.reject { |x| x.completed? }
       init_data_for_sidebar
     end
 

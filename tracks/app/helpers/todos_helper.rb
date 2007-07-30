@@ -107,11 +107,11 @@ module TodosHelper
   def staleness_class(item)
     if item.due || item.completed?
       return ""
-    elsif item.created_at < user_time - (@user.prefs.staleness_starts * 3).days
+    elsif item.created_at < user_time - (prefs.staleness_starts * 3).days
       return " stale_l3"
-    elsif item.created_at < user_time - (@user.prefs.staleness_starts * 2).days
+    elsif item.created_at < user_time - (prefs.staleness_starts * 2).days
       return " stale_l2"
-    elsif item.created_at < user_time - (@user.prefs.staleness_starts).days
+    elsif item.created_at < user_time - (prefs.staleness_starts).days
       return " stale_l1"
     else
       return ""
@@ -138,7 +138,7 @@ module TodosHelper
            "<a title='" + format_date(due) + "'><span class=\"amber\">Show Tomorrow</span></a> "
       # due 2-7 days away
       when 2..7
-      if @user.prefs.due_style == Preference::DUE_ON_DUE_STYLE
+      if prefs.due_style == Preference::DUE_ON_DUE_STYLE
         "<a title='" + format_date(due) + "'><span class=\"orange\">Show on " + due.strftime("%A") + "</span></a> "
       else
         "<a title='" + format_date(due) + "'><span class=\"orange\">Show in " + days.to_s + " days</span></a> "
@@ -150,10 +150,8 @@ module TodosHelper
   end
   
   def calendar_setup( input_field )
-    date_format = @user.prefs.date_format
-    week_starts = @user.prefs.week_starts
-    str = "Calendar.setup({ ifFormat:\"#{date_format}\""
-    str << ",firstDay:#{week_starts},showOthers:true,range:[2004, 2010]"
+    str = "Calendar.setup({ ifFormat:\"#{prefs.date_format}\""
+    str << ",firstDay:#{prefs.week_starts},showOthers:true,range:[2004, 2010]"
     str << ",step:1,inputField:\"" + input_field + "\",cache:true,align:\"TR\" })\n"
     javascript_tag str
   end

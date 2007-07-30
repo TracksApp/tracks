@@ -11,7 +11,7 @@
       <li><strong>show completed projects in sidebar:</strong> whether or not projects marked as complete are shown in the sidebar on the home page and elsewhere</li>
       <li><strong>show hidden contexts in sidebar:</strong> whether or not contexts marked as hidden are shown in the sidebar on the home page and elsewhere</li>
       <li><strong>show project on todo done:</strong> whether or not to redirect to the project page when an action associated with a project is marked complete</li>
-      <% if @user.is_admin? %>
+      <% if current_user.is_admin? %>
         <li><strong>admin email:</strong> email address for the admin user of Tracks (displayed on the signup page for users to contact to obtain an account)</li>
       <% end %>
       <li><strong>staleness starts:</strong> the number of days before items with no due date get marked as stale (with a yellow highlight)</li>
@@ -61,7 +61,7 @@
 	  <%= row_with_select_field("show_hidden_contexts_in_sidebar") %>
 	  <%= row_with_select_field("show_project_on_todo_done") %>
 
-	  <% if @user.is_admin? %> <%= row_with_text_field('admin_email') %> <% end %>
+	  <% if current_user.is_admin? %> <%= row_with_text_field('admin_email') %> <% end %>
 	  <%= row_with_text_field('staleness_starts', true) %>
 	  <%= row_with_text_field('show_number_completed') %>
 	  <%= row_with_text_field('refresh') %>

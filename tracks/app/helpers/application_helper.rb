@@ -2,7 +2,7 @@
 module ApplicationHelper
   
   def user_time
-    @user.time
+    current_user.time
   end
   
   # Replicates the link_to method but also checks request.request_uri to find
@@ -47,7 +47,7 @@ module ApplicationHelper
            "<a title='#{format_date(due)}'><span class=\"amber\">Due Tomorrow</span></a> "
       # due 2-7 days away
       when 2..7
-      if @user.prefs.due_style == Preference::DUE_ON_DUE_STYLE
+      if prefs.due_style == Preference::DUE_ON_DUE_STYLE
         "<a title='#{format_date(due)}'><span class=\"orange\">Due on #{due.strftime("%A")}</span></a> "
       else
         "<a title='#{format_date(due)}'><span class=\"orange\">Due in #{pluralize(days, 'day')}</span></a> "
@@ -114,13 +114,13 @@ module ApplicationHelper
   
   def item_link_to_context(item)
     descriptor = "[C]"
-    descriptor = "[#{item.context.name}]" if (@user.prefs.verbose_action_descriptors)
+    descriptor = "[#{item.context.name}]" if prefs.verbose_action_descriptors
     link_to_context( item.context, descriptor )
   end
   
   def item_link_to_project(item)
     descriptor = "[P]"
-    descriptor = "[#{item.project.name}]" if (@user.prefs.verbose_action_descriptors)
+    descriptor = "[#{item.project.name}]" if prefs.verbose_action_descriptors
     link_to_project( item.project, descriptor )
   end
   

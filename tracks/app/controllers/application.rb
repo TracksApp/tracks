@@ -13,6 +13,7 @@ class ApplicationController < ActionController::Base
 
   helper :application
   include LoginSystem
+  helper_method :current_user, :prefs
 
   layout proc{ |controller| controller.mobile? ? "mobile" : "standard" }
   
@@ -94,12 +95,12 @@ class ApplicationController < ActionController::Base
     count || 0
   end
 
-  # Convert a date object to the format specified
+  # Convert a date object to the format specified in the user's preferences
   # in config/settings.yml
   #  
   def format_date(date)
     if date
-      date_format = @user.prefs.date_format
+      date_format = prefs.date_format
       formatted_date = date.strftime("#{date_format}")
     else
       formatted_date = ''
@@ -178,27 +179,27 @@ class ApplicationController < ActionController::Base
         
   def parse_date_per_user_prefs( s )
     return nil if s.blank?
-    Date.strptime(s, @user.prefs.date_format)
+    Date.strptime(s, prefs.date_format)
   end
     
   def init_data_for_sidebar
-    @projects = @projects || @user.projects
-    @contexts = @contexts || @user.contexts
+    @projects = @projects || current_user.projects
+    @contexts = @contexts || current_user.contexts
     init_not_done_counts
-    if @prefs.show_hidden_projects_in_sidebar
+    if prefs.show_hidden_projects_in_sidebar
       init_project_hidden_todo_counts(['project'])
     end
   end
   
   def init_not_done_counts(parents = ['project','context'])
     parents.each do |parent|
-      eval("@#{parent}_not_done_counts = @#{parent}_not_done_counts || Todo.count(:conditions => ['user_id = ? and state = ?', @user.id, 'active'], :group => :#{parent}_id)")
+      eval("@#{parent}_not_done_counts = @#{parent}_not_done_counts || Todo.count(:conditions => ['user_id = ? and state = ?', current_user.id, 'active'], :group => :#{parent}_id)")
     end
   end
   
   def init_project_hidden_todo_counts(parents = ['project','context'])
     parents.each do |parent|
-      eval("@#{parent}_project_hidden_todo_counts = @#{parent}_project_hidden_todo_counts || Todo.count(:conditions => ['user_id = ? and state = ?', @user.id, 'project_hidden'], :group => :#{parent}_id)")
+      eval("@#{parent}_project_hidden_todo_counts = @#{parent}_project_hidden_todo_counts || Todo.count(:conditions => ['user_id = ? and state = ?', current_user.id, 'project_hidden'], :group => :#{parent}_id)")
     end
   end  
   

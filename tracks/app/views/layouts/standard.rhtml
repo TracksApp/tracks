@@ -17,7 +17,7 @@
   <%= javascript_include_tag "protoload" %> 
   
   <link rel="shortcut icon" href="<%= url_for(:controller => 'favicon.ico') %>" />
-  <%= auto_discovery_link_tag(:rss,{:controller => "todos", :action => "index", :format => 'rss', :token => "#{@user.token}"}, {:title => "RSS feed of next actions"})  %>
+  <%= auto_discovery_link_tag(:rss, {:controller => "todos", :action => "index", :format => 'rss', :token => "#{current_user.token}"}, {:title => "RSS feed of next actions"}) %>
 
 <script type="text/javascript">
 window.onload=function(){
@@ -44,7 +44,7 @@ window.onload=function(){
 		  page.select('.notes').each { |e| e.toggle }
 		end
 	-%>&nbsp;|&nbsp;
-    <%= link_to "Logout (#{@user.display_name}) »", logout_path %>
+    <%= link_to "Logout (#{current_user.display_name}) »", logout_path %>
 </div>
 
 <div id="navcontainer">
@@ -57,7 +57,7 @@ window.onload=function(){
   <li><%= navigation_link( "Notes", notes_path, {:accesskey => "o", :title => "Show all notes"} ) %></li>
   <li><%= navigation_link( "Preferences", preferences_path, {:accesskey => "u", :title => "Show my preferences"} ) %></li>
   <li><%= navigation_link( "Import/Export", {:controller => "data", :action => "index"}, {:accesskey => "i", :title => "Import and export data"} ) %></li>
-  <% if @user.is_admin? -%>
+  <% if current_user.is_admin? -%>
     <li><%= navigation_link("Admin", users_path, {:accesskey => "a", :title => "Add or delete users"} ) %></li>
   <% end -%>
   <li><%= navigation_link(image_tag("feed-icon.png", :size => "16X16", :border => 0), {:controller => "feedlist", :action => "index"}, :title => "See a list of available feeds" ) %></li>

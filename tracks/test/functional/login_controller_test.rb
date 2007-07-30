@@ -114,6 +114,26 @@ class LoginControllerTest < Test::Rails::TestCase
     assert !@controller.send(:logged_in?)
   end
   
+  def test_current_user_nil
+    get :login
+    assert_nil @controller.current_user
+  end
+  
+  def test_current_user_correct
+    user = login('jane','sesame', 'off')
+    assert_equal user, @controller.current_user
+  end
+  
+  def test_prefs_nil
+    get :login
+    assert_nil @controller.prefs
+  end
+  
+  def test_prefs_correct
+    user = login('jane','sesame', 'off')
+    assert_equal user.prefs, @controller.prefs
+  end
+  
   private
   
   # Logs in a user and returns the user object found in the session object

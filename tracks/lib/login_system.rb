@@ -1,7 +1,15 @@
 require_dependency "user"
 
 module LoginSystem 
-  
+
+  def current_user
+    get_current_user
+  end
+
+  def prefs
+    current_user.prefs unless current_user.nil?
+  end
+    
   protected
   
   # overwrite this if you want to restrict access to only a few actions
@@ -38,9 +46,9 @@ module LoginSystem
     user = User.find_by_remember_token(cookies[:auth_token])
     if user && user.remember_token?
       session['user_id'] = user.id
-      @user = user
-      @user.remember_me
-      cookies[:auth_token] = { :value => @user.remember_token , :expires => @user.remember_token_expires_at }
+      set_current_user(user)
+      current_user.remember_me
+      cookies[:auth_token] = { :value => current_user.remember_token , :expires => current_user.remember_token_expires_at }
       flash[:notice] = "Logged in successfully. Welcome back!"
     end
   end  
@@ -111,8 +119,7 @@ module LoginSystem
   end
   
   def logged_in?
-    get_current_user
-    @user != nil
+    current_user != nil
   end
   
   def get_current_user
@@ -125,8 +132,6 @@ module LoginSystem
   
   def set_current_user(user)
     @user = user
-    @prefs = @user.prefs unless @user.nil?
-    @user
   end
 
   # overwrite if you want to have special behavior in case the user is not authorized

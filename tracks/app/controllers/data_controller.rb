@@ -17,10 +17,10 @@ class DataController < ApplicationController
   def yaml_export
     all_tables = {}
     
-    all_tables['todos'] = @user.todos.find(:all)
-    all_tables['contexts'] = @user.contexts.find(:all)
-    all_tables['projects'] = @user.projects.find(:all)
-    all_tables['notes'] = @user.notes.find(:all)
+    all_tables['todos'] = current_user.todos.find(:all)
+    all_tables['contexts'] = current_user.contexts.find(:all)
+    all_tables['projects'] = current_user.projects.find(:all)
+    all_tables['notes'] = current_user.notes.find(:all)
     
     result = all_tables.to_yaml
     result.gsub!(/\n/, "\r\n")   # TODO: general functionality for line endings
@@ -33,7 +33,7 @@ class DataController < ApplicationController
       csv << ["ID", "Context", "Project", "Description", "Notes",
               "Created at", "Due", "Completed at", "User ID", "Show from",
               "state"]
-      @user.todos.find(:all, :include => [:context, :project]).each do |todo|
+      current_user.todos.find(:all, :include => [:context, :project]).each do |todo|
         # Format dates in ISO format for easy sorting in spreadsheet
         # Print context and project names for easy viewing
         csv << [todo.id, todo.context.name, 
@@ -57,7 +57,7 @@ class DataController < ApplicationController
               "Created at", "Updated at"]
       # had to remove project include because it's association order is leaking through
       # and causing an ambiguous column ref even with_exclusive_scope didn't seem to help -JamesKebinger 
-      @user.notes.find(:all,:order=>"notes.created_at").each do |note|
+      current_user.notes.find(:all,:order=>"notes.created_at").each do |note|
         # Format dates in ISO format for easy sorting in spreadsheet
         # Print context and project names for easy viewing
         csv << [note.id, note.user_id, 
@@ -71,10 +71,10 @@ class DataController < ApplicationController
   
   def xml_export
     result = ""
-    result << @user.todos.find(:all).to_xml
-    result << @user.contexts.find(:all).to_xml(:skip_instruct => true)
-    result << @user.projects.find(:all).to_xml(:skip_instruct => true)
-    result << @user.notes.find(:all).to_xml(:skip_instruct => true)
+    result << current_user.todos.find(:all).to_xml
+    result << current_user.contexts.find(:all).to_xml(:skip_instruct => true)
+    result << current_user.projects.find(:all).to_xml(:skip_instruct => true)
+    result << current_user.notes.find(:all).to_xml(:skip_instruct => true)
     send_data(result, :filename => "tracks_backup.xml", :type => 'text/xml')
   end
   

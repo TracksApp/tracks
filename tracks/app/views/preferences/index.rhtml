@@ -3,31 +3,31 @@
   <h2>Your preferences</h2>
 
   <ul id="prefs">
-    <li>First name: <span class="highlight"><%= @user.first_name %></span></li>
-    <li>Last name: <span class="highlight"><%= @user.last_name %></span></li>
-    <li>Date format: <span class="highlight"><%= @prefs.date_format %></span> Your current date: <%= format_date(user_time) %></li>
-    <li>Title date format: <span class="highlight"><%= @prefs.title_date_format %></span> Your current title date: <%= user_time.strftime(@prefs.title_date_format) %></li>
-    <li>Time zone: <span class="highlight"><%= @prefs.tz %></span> Your current time: <%= user_time.strftime('%I:%M %p') %></li>
-    <li>Week starts on: <span class="highlight"><%= Preference.day_number_to_name_map[@prefs.week_starts] %></span></li>
-    <li>Show the last <span class="highlight"><%= @prefs.show_number_completed %></span> completed items on the home page</li>
-    <li>Show completed projects in sidebar: <span class="highlight"><%= @prefs.show_completed_projects_in_sidebar %></span></li>
-    <li>Show hidden projects in sidebar: <span class="highlight"><%= @prefs.show_hidden_projects_in_sidebar %></span></li>
-    <li>Show hidden contexts in sidebar: <span class="highlight"><%= @prefs.show_hidden_contexts_in_sidebar %></span></li>
-    <li>Go to project page on todo complete: <span class="highlight"><%= @prefs.show_project_on_todo_done %></span></li>
-    <li>Staleness starts after <span class="highlight"><%= @prefs.staleness_starts %></span> days</li>
+    <li>First name: <span class="highlight"><%= current_user.first_name %></span></li>
+    <li>Last name: <span class="highlight"><%= current_user.last_name %></span></li>
+    <li>Date format: <span class="highlight"><%= prefs.date_format %></span> Your current date: <%= format_date(user_time) %></li>
+    <li>Title date format: <span class="highlight"><%= prefs.title_date_format %></span> Your current title date: <%= user_time.strftime(prefs.title_date_format) %></li>
+    <li>Time zone: <span class="highlight"><%= prefs.tz %></span> Your current time: <%= user_time.strftime('%I:%M %p') %></li>
+    <li>Week starts on: <span class="highlight"><%= Preference.day_number_to_name_map[prefs.week_starts] %></span></li>
+    <li>Show the last <span class="highlight"><%= prefs.show_number_completed %></span> completed items on the home page</li>
+    <li>Show completed projects in sidebar: <span class="highlight"><%= prefs.show_completed_projects_in_sidebar %></span></li>
+    <li>Show hidden projects in sidebar: <span class="highlight"><%= prefs.show_hidden_projects_in_sidebar %></span></li>
+    <li>Show hidden contexts in sidebar: <span class="highlight"><%= prefs.show_hidden_contexts_in_sidebar %></span></li>
+    <li>Go to project page on todo complete: <span class="highlight"><%= prefs.show_project_on_todo_done %></span></li>
+    <li>Staleness starts after <span class="highlight"><%= prefs.staleness_starts %></span> days</li>
     <li>Due style: <span class="highlight">
-  	<% if @prefs.due_style == Preference::DUE_IN_N_DAYS_DUE_STYLE %>
+  	<% if prefs.due_style == Preference::DUE_IN_N_DAYS_DUE_STYLE %>
   		Due in ___ days
   	<% else %>
   		Due on ________
   	<% end %>
   		 </span></li>
-    <% if @user.is_admin? %>
-      <li>Admin email: <span class="highlight"><%= @prefs.admin_email %></span></li>
+    <% if current_user.is_admin? %>
+      <li>Admin email: <span class="highlight"><%= prefs.admin_email %></span></li>
     <% end %>
-    <li>Refresh interval (in minutes): <span class="highlight"><%= @prefs.refresh %></span></li>
-    <li>Verbose action descriptors: <span class="highlight"><%= @prefs.verbose_action_descriptors %></span></li>
-    <li>Actions per page (Mobile View): <span class="highlight"><%= @prefs.mobile_todos_per_page %></span></li>
+    <li>Refresh interval (in minutes): <span class="highlight"><%= prefs.refresh %></span></li>
+    <li>Verbose action descriptors: <span class="highlight"><%= prefs.verbose_action_descriptors %></span></li>
+    <li>Actions per page (Mobile View): <span class="highlight"><%= prefs.mobile_todos_per_page %></span></li>
   </ul>
   <div class="actions">
     <%= link_to "Edit preferences &raquo;", { :controller => 'preferences', :action => 'edit'}, :class => 'edit_link' %>
@@ -36,29 +36,29 @@
   <h2>Your token</h2>
   <div id="token_area">
     <div class="description">Token (for feeds and API use):</div>
-    <div id="token><span class="highlight"><%= @user.token %></span></div>
+    <div id="token><span class="highlight"><%= current_user.token %></span></div>
     <div class="token_regenerate">
-      <%= button_to "Generate a new token", refresh_token_user_path(@user),
+      <%= button_to "Generate a new token", refresh_token_user_path(current_user),
           :confirm => "Are you sure? Generating a new token will replace the existing one and break any external usages of this token." %>
     </div>
   </div>
   <h2>Your authentication</h2>
   <div id="authentication_area">
 	<% if Tracks::Config.auth_schemes.length > 1 %>
-	<p>Your authentication type is <span class="highlight"><%= @user.auth_type %></span>.
+	<p>Your authentication type is <span class="highlight"><%= current_user.auth_type %></span>.
 	<div class="actions">
-    	<%= link_to "Change your authentication type &raquo;", change_auth_type_user_path(@user), :class => 'edit_link' %>
+    	<%= link_to "Change your authentication type &raquo;", change_auth_type_user_path(current_user), :class => 'edit_link' %>
   	</div>
 	<% end %>
-	<% if @user.auth_type == 'database' %>
+	<% if current_user.auth_type == 'database' %>
 	<div class="actions">
-    	<%= link_to 'Change your password &raquo;', change_password_user_path(@user) %>
+    	<%= link_to 'Change your password &raquo;', change_password_user_path(current_user) %>
   	</div>
 	<% end %>
-	<% if @user.auth_type == 'open_id' %>
-	<p>Your Open ID URL is <span class="highlight"><%= @user.open_id_url %></span>.
+	<% if current_user.auth_type == 'open_id' %>
+	<p>Your Open ID URL is <span class="highlight"><%= current_user.open_id_url %></span>.
 	<div class="actions">
-      <%= link_to 'Change Your Identity URL &raquo;', change_auth_type_user_path(@user) %></p>
+      <%= link_to 'Change Your Identity URL &raquo;', change_auth_type_user_path(current_user) %></p>
 	</div>
   	<% end %>
   </div>
