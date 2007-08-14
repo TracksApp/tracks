@@ -2,8 +2,8 @@ class ProjectsController < ApplicationController
 
   helper :application, :todos, :notes
   before_filter :set_source_view
-  before_filter :set_project_from_params, :only => [:update, :destroy, :show]
-  before_filter :default_context_filter, :only => [:create,:update]
+  before_filter :set_project_from_params, :only => [:update, :destroy, :show, :edit]
+  before_filter :default_context_filter, :only => [:create, :update]
   skip_before_filter :login_required, :only => [:index]
   prepend_before_filter :login_or_feed_token_required, :only => [:index]
   session :off, :only => :index, :if => Proc.new { |req| ['rss','atom','txt'].include?(req.parameters[:format]) }
@@ -41,7 +41,7 @@ class ProjectsController < ApplicationController
       format.xml   { render :xml => @project.to_xml( :except => :user_id )  }
     end
   end
-
+  
   # Example XML usage: curl -H 'Accept: application/xml' -H 'Content-Type: application/xml'
   #                    -u username:password
   #                    -d '<request><project><name>new project_name</name></project></request>'
@@ -116,6 +116,13 @@ class ProjectsController < ApplicationController
     else
       notify :warning, "Couldn't update project"
       render :text => ''
+    end
+  end
+  
+  def edit
+    @contexts = current_user.contexts
+    respond_to do |format|
+      format.js
     end
   end
   

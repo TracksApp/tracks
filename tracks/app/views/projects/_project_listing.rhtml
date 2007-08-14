@@ -17,34 +17,16 @@
            page << "  new Ajax.Request(this.href, {asynchronous:true,"
            page << "                               evalScripts:true, method:'delete'}); };"
          end -%>
-         <a class="edit_project_button" href="#"><%= image_tag( "blank.png", :title => "Edit project", :class=>"edit_item") %></a>
-         <%= apply_behavior 'a.edit_project_button:click', {:prevent_default => true, :external => true} do |page, element|
-              element.up('.project').toggle 
-              editform = element.up('.list').down('.edit-form')
-              editform.toggle 
-              editform.visual_effect(:appear) 
-              editform.down('input').focus
-            end
+      <a class="edit_project_button" id="<%= dom_id(project, 'editbutton') %>" href="<%= formatted_edit_project_path(project, :js) %>" title="delete the project '<%= project.name %>'"><%= image_tag( "blank.png", :title => "Edit project", :class=>"edit_item") %></a>
+         <%= apply_behavior "a.edit_project_button:click", { :prevent_default => true, :external => true} do |page|
+              page << "  this.up('.project').startWaiting();"
+              page << "  new Ajax.Request( this.href, {asynchronous:true, evalScripts:true, method:'get'});"
+             end
          -%>
     </div>
   </div>
 
   <div id="<%= dom_id(project, 'edit') %>" class="edit-form" style="display:none;">
-    <% form_tag project_path(project), { :id => dom_id(project, 'edit_form'), :class => "inline-form edit-project-form", :method => :put } do -%>
-    <table style="table-layout: fixed;" width="450">
-      <%= render :partial => 'project_form', :object => project %>
-      <tr>
-        <td width="150">&nbsp; <input type="hidden" name="wants_render" value="true" /></td>
-        <td width="300"><input type="submit" value="Update" />&nbsp;<a href="#" class="form_reset">Cancel</a></td>
-      </tr>
-    </table>
-  <% end -%>
-  <%= apply_behavior ".edit-project-form", make_remote_form(:complete => "Effect.Appear($(this).up('.list'));" ), :external => true %>
-  <%= apply_behavior "a.form_reset:click", :prevent_default => true do |page, element|
-       element.up('.list').down('.project').toggle
-       element.up('.edit-form').toggle
-       element.up('form').reset
-     end %>
   </div>
 </div>
 <% if controller.action_name == 'create' %>
