@@ -53,7 +53,7 @@ class User < ActiveRecord::Base
               end
             end
   has_many :todos,
-           :order => 'completed_at DESC, todos.created_at DESC',
+           :order => 'todos.completed_at DESC, todos.created_at DESC',
            :dependent => :delete_all
   has_many :deferred_todos,
            :class_name => 'Todo',

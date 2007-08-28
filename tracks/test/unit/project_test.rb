@@ -57,9 +57,12 @@ class ProjectTest < Test::Rails::TestCase
   end
   
   def test_complete_project
+    assert_nil @timemachine.completed_at
     @timemachine.complete!
     assert_equal :completed, @timemachine.current_state
     assert @timemachine.completed?
+    assert_not_nil @timemachine.completed_at, "completed_at not expected to be nil"
+    assert_in_delta Time.now, @timemachine.completed_at, 1
   end
   
   def test_find_project_by_namepart_with_exact_match
