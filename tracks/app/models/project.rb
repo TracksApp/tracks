@@ -16,7 +16,7 @@ class Project < ActiveRecord::Base
   
   state :active
   state :hidden, :enter => :hide_todos, :exit => :unhide_todos
-  state :completed#, :enter => Proc.new { |p| p.completed_at = Time.now.utc }, :exit => Proc.new { |p| p.completed_at = nil }
+  state :completed, :enter => Proc.new { |p| p.completed_at = Time.now.utc }, :exit => Proc.new { |p| p.completed_at = nil }
 
   event :activate do
     transitions :to => :active,   :from => [:hidden, :completed]

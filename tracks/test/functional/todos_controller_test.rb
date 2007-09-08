@@ -103,6 +103,14 @@ class TodosControllerTest < Test::Rails::TestCase
     assert_nil t.project_id
   end
   
+  def test_update_todo_to_deferred_is_reflected_in_badge_count
+    login_as(:admin_user)
+    get :index
+    assert_equal 10, assigns['count']
+    xhr :post, :update, :id => 1, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Make more money than Billy Gates", "todo"=>{"id"=>"1", "notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006", "show_from"=>"30/11/2030"}, "tag_list"=>"foo bar"
+    assert_equal 9, assigns['down_count']
+  end
+  
   def test_update_todo
     t = Todo.find(1)
     @request.session['user_id'] = users(:admin_user).id
