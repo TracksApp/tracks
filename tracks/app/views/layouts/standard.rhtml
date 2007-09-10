@@ -5,16 +5,10 @@
     <% if @prefs.refresh != 0 -%>
       <meta http-equiv="Refresh" content="<%= @prefs["refresh"].to_i*60 %>;url=<%= request.request_uri %>">
     <% end -%>
-  <%= stylesheet_link_tag "standard" %>
+  <%= javascript_include_merged :tracks %>
+  <%= javascript_include_tag :unobtrusive %>
+  <%= stylesheet_link_merged :tracks %>
   <%= stylesheet_link_tag "print", :media => "print" %>
-  <%= javascript_include_tag :defaults, :unobtrusive %>
-  <%= javascript_include_tag "selector-addon-v1" %>
-  <%= stylesheet_link_tag 'calendar-system.css' %>
-  <%= javascript_include_tag 'calendar', 'calendar-en', 'calendar-setup' %>
-  <%= javascript_include_tag "accesskey-hints" %>
-  <%= javascript_include_tag "todo-items" %>
-  <%= javascript_include_tag "niftycube" %> 
-  <%= javascript_include_tag "protoload" %> 
   
   <link rel="shortcut icon" href="<%= url_for(:controller => 'favicon.ico') %>" />
   <%= auto_discovery_link_tag(:rss, {:controller => "todos", :action => "index", :format => 'rss', :token => "#{current_user.token}"}, {:title => "RSS feed of next actions"}) %>

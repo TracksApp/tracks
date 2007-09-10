@@ -13,7 +13,8 @@ module ActionView::Helpers::AssetTagHelper
   def javascript_include_tag(*sources)
    if sources.delete :unobtrusive
      sources = sources.concat(
-       ['lowpro', behaviours_url]
+        #['lowpro', behaviours_url] ## This is the original. Hacking to make asset_packager more effective
+        [behaviours_url]
      ).uniq
    end
    rails_javascript_include_tag(*sources)

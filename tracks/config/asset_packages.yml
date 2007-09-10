@@ -1,0 +1,22 @@
+--- 
+javascripts: 
+- tracks: 
+  - prototype
+  - effects
+  - dragdrop
+  - controls
+  - application
+  - selector-addon-v1
+  - calendar
+  - calendar-en
+  - calendar-setup
+  - accesskey-hints
+  - todo-items
+  - niftycube
+  - protoload
+  - lowpro
+stylesheets: 
+- tracks: 
+  - standard
+  - calendar-system
+  - niftyCorners
