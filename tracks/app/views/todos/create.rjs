@@ -7,7 +7,7 @@ if @saved
   page.notify :notice, status_message, 5.0
   page['badge_count'].replace_html @down_count
   page.send :record, "Form.reset('todo-form-new-action');Form.focusFirstElement('todo-form-new-action')"
-  page << "contextAutoCompleter.options.array = #{context_names_for_autocomplete}" if @new_context_created
+  page << "updateContextNamesForAutoComplete(#{context_names_for_autocomplete})" if @new_context_created
   page << "projectAutoCompleter.options.array = #{project_names_for_autocomplete}" if @new_project_created
   if should_show_new_item()
     if @new_context_created
