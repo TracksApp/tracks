@@ -25,6 +25,10 @@ module Tracks
         base.send(:helper, Tracks::SourceViewSwitching::Helper)
         base.send(:helper_method, :source_view)
       end
+      
+      def source_view_is( s )
+        s == (params[:_source_view] || @source_view).to_sym
+      end
   
       def source_view
         responder = Tracks::SourceViewSwitching::Responder.new(params[:_source_view] || @source_view)

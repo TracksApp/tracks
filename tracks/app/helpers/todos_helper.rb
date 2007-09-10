@@ -181,7 +181,6 @@ module TodosHelper
   def empty_container_msg_div_id
     return "tickler-empty-nd" if source_view_is(:project) && @todo.deferred?
     return "p#{@todo.project_id}empty-nd" if source_view_is :project
-    return "tickler-empty-nd" if source_view_is :deferred
     return "c#{@todo.context_id}empty-nd"
   end
   

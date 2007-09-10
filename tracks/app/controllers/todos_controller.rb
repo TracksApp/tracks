@@ -120,7 +120,7 @@ class TodosController < ApplicationController
     respond_to do |format|
       format.js do
         if @saved
-          @remaining_undone_in_context = current_user.contexts.find(@todo.context_id).not_done_todo_count
+          determine_remaining_in_context_count(@todo.context_id)
           determine_down_count
           determine_completed_count
         end
@@ -192,7 +192,7 @@ class TodosController < ApplicationController
     @saved = @todo.update_attributes params["todo"]
     @context_changed = @original_item_context_id != @todo.context_id
     @todo_was_activated_from_deferred_state = @original_item_was_deferred && @todo.active?
-    if @context_changed then @remaining_undone_in_context = current_user.contexts.find(@original_item_context_id).not_done_todo_count; end
+    determine_remaining_in_context_count(@original_item_context_id) if @context_changed
     @project_changed = @original_item_project_id != @todo.project_id
     if (@project_changed && !@original_item_project_id.nil?) then @remaining_undone_in_project = current_user.projects.find(@original_item_project_id).not_done_todo_count; end
     determine_down_count
@@ -231,7 +231,7 @@ class TodosController < ApplicationController
           determine_down_count
           source_view do |from|
              from.todo do
-               @remaining_undone_in_context = current_user.contexts.find(@context_id).not_done_todo_count
+               determine_remaining_in_context_count(@context_id)
              end
            end
         end
@@ -456,6 +456,14 @@ class TodosController < ApplicationController
          from.deferred do
            @down_count = current_user.todos.count_in_state(:deferred)
          end
+      end
+    end 
+    
+    def determine_remaining_in_context_count(context_id = @todo.context_id)
+      if source_view_is :deferred
+        @remaining_in_context = current_user.contexts.find(context_id).deferred_todo_count
+      else
+        @remaining_in_context = current_user.contexts.find(context_id).not_done_todo_count
       end
     end 
     

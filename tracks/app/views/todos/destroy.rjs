@@ -1,7 +1,7 @@
 if @saved
   page[@todo].remove
   page['badge_count'].replace_html @down_count
-  page.visual_effect :fade, item_container_id, :duration => 0.4 if source_view_is(:todo) && @remaining_undone_in_context == 0
+  page.visual_effect :fade, item_container_id, :duration => 0.4 if source_view_is(:todo) && @remaining_in_context == 0
   page[empty_container_msg_div_id].show if !empty_container_msg_div_id.nil? && @down_count == 0
 else
   page.notify :error, "There was an error deleting the item #{@todo.description}", 8.0

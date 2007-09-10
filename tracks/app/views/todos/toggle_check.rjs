@@ -9,7 +9,7 @@ if @saved
       page.show 'tickler-empty-nd' if source_view_is(:project) && @deferred_count == 0
       page.hide 'empty-d' # If we've checked something as done, completed items can't be empty
     end
-    if @remaining_undone_in_context == 0 && source_view_is(:todo)
+    if @remaining_in_context == 0 && source_view_is(:todo)
       page.visual_effect :fade, item_container_id, :duration => 0.4
     end
   else

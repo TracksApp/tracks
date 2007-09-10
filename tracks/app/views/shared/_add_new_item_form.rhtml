@@ -69,7 +69,7 @@ function initializeNamesForAutoComplete(contextNamesForAutoComplete) {
 	Event.observe($('todo_context_name'), "click", contextAutoCompleter.activate.bind(contextAutoCompleter));	
 }
 function updateContextNamesForAutoComplete(contextNamesForAutoComplete) {
-	if (contextAutoCompleter) // if we're already initialized
+	if (contextAutoCompleter) // i.e. if we're already initialized
 	{
 		contextAutoCompleter.options.array = contextNamesForAutoComplete
 	}
