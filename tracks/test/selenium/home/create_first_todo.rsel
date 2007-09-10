@@ -1,9 +1,9 @@
 setup :fixtures => :users, :clear_tables => [:projects, :contexts, :todos]
 login :as => 'admin'
 open "/"
-store_eval "this.browserbot.getCurrentWindow().$$('.context').length", 'initial_context_count'
+store_context_count 'initial_context_count'
 type "todo_description", "a new action"
 type "todo_context_name", "Brand new context"
 click "css=#todo-form-new-action .submit_box button"
 store_eval "${initial_context_count} + 1", 'expected_context_count'
-wait_for_eval "this.browserbot.getCurrentWindow().$$('.context').length", "${expected_context_count}"
+wait_for_context_count "${expected_context_count}"
