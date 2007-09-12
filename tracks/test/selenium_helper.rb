@@ -22,7 +22,8 @@ end
 # For each +store_foo+ there's +assert_foo+, +assert_not_foo+, +verify_foo+,
 # +verify_not_foo+, +wait_for_foo+, +wait_for_not_foo+.
 module SeleniumOnRails::TestBuilderAccessors
-  # Has an alert occurred? 
+  
+  # How many elements with the class "context" are present on the page? 
   #
   # Related Assertions, automatically generated:
   # * +assert_context_count+
@@ -41,4 +42,10 @@ module SeleniumOnRails::TestBuilderAccessors
     end
   end
   
+  def assert_context_count_incremented(&block)
+    store_context_count 'initial_context_count'
+    store_eval "${initial_context_count} + 1", 'expected_context_count'
+    yield
+    wait_for_context_count "${expected_context_count}"
+  end
 end
