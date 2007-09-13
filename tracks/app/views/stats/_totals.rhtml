@@ -4,8 +4,8 @@ Of those <%= @projects.count(:conditions => "state = 'active'")%> are active pro
 <%= @projects.count(:conditions => "state = 'completed'")%> completed projects</p>
 
 <p>You have <%= @contexts.count%> contexts. 
-Of those <%= @contexts.count(:conditions => "hide = 'false'")%> are visible contexts and 
-<%= @contexts.count(:conditions => "hide = 'true'") %> are hidden contexts
+Of those <%= @contexts.count(:conditions => ["hide = ?", false])%> are visible contexts and 
+<%= @contexts.count(:conditions => ["hide = ?", true]) %> are hidden contexts
 
 <p>You have <%= @actions.reject{ |t| t.completed? }.length %> uncompleted actions of which
 <%= @actions.select{ |t| t.deferred? }.length %> are deferred actions. 
