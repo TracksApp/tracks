@@ -1,0 +1,29 @@
+<p>Of all your completed actions, the average time to complete is <%= @actions_avg_ttc %> days. 
+The Max-/minimum days to complete is <%= @actions_max_ttc%>/<%= @actions_min_ttc %>. 
+The minimum time to complete is <%= @actions_min_ttc_sec %></p>
+
+<p>In the last 30 days you created on average <%=@sum_actions_created_last30days/30%> actions 
+and completed on average <%=@sum_actions_done_last30days/30%> actions per day. 
+In the last 12 months you created on average <%=@sum_actions_created_last12months/12 %> actions 
+and completed on average <%=@sum_actions_done_last12months/12%> actions per month.
+<p><br/>
+<%= render :partial => 'chart', :locals => {:width => @chart_width, :height => @chart_height, :data => '/stats/actions_done_last30days_data'} -%>
+&nbsp;
+<%= render :partial => 'chart', :locals => {:width => @chart_width, :height => @chart_height, :data => '/stats/actions_done_last12months_data'} -%>
+
+<p><br/>
+<%= render :partial => 'chart', :locals => {:width => @chart_width, :height => @chart_height, :data => '/stats/actions_completion_time_data'} -%>
+<p><br/>
+<%= render :partial => 'chart', :locals => {:width => @chart_width, :height => @chart_height, :data => '/stats/actions_visible_running_time_data'} -%>
+&nbsp;
+<%= render :partial => 'chart', :locals => {:width => @chart_width, :height => @chart_height, :data => '/stats/actions_running_time_data'} -%>
+
+<p><br/>
+<%= render :partial => 'chart', :locals => {:width => @chart_width, :height => @chart_height, :data => '/stats/actions_day_of_week_all_data'} -%>
+&nbsp;
+<%= render :partial => 'chart', :locals => {:width => @chart_width, :height => @chart_height, :data => '/stats/actions_day_of_week_30days_data'} -%>
+
+<p><br/>
+<%= render :partial => 'chart', :locals => {:width => @chart_width, :height => @chart_height, :data => '/stats/actions_time_of_day_all_data'} -%>
+&nbsp;
+<%= render :partial => 'chart', :locals => {:width => @chart_width, :height => @chart_height, :data => '/stats/actions_time_of_day_30days_data'} -%>

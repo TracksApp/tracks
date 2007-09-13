@@ -1,0 +1,27 @@
+&title=Current running time of uncompleted visible actions,{font-size:16},&
+&y_legend=Actions,12,0x736AFF&
+&x_legend=Running time of an action (weeks),12,0x736AFF&
+&y_ticks=5,10,5&
+&filled_bar=50,0x9933CC,0x8010A0&
+&values=
+<% @count = @max_days > @cut_off*7 ? @cut_off : @max_days/7
+   0.upto @count-1 do |i| -%>
+<%= @actions_running_time_hash[i] -%>,
+<% end -%>
+<% 
+    @sum=0
+    @count.upto @max_days/7 do |i|
+       @sum += @actions_running_time_hash[i]
+    end -%>
+<%=@sum%>&
+&x_labels=< 1,
+<% 1.upto @count-1 do |i| -%>
+<%= i %>-<%= i+1 %>,
+<% end -%>
+><%=@count-%>&
+&y_min=0&
+<% @max_actions = @sum > @max_actions ? @sum : @max_actions -%>
+<% # add one to @max for people who have no actions completed yet. 
+   # OpenFlashChart cannot handle y_max=0 -%>
+&y_max=<%=1+@max_actions+@max_actions/10-%>&
+&x_label_style=9,,2,2&

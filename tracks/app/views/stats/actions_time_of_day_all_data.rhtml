@@ -1,0 +1,23 @@
+&title=Time of day (all actions),{font-size:16},&
+&y_legend=Number of actions,12,0x736AFF&
+&x_legend=Time of Day,12,0x736AFF&
+&y_ticks=5,10,5&
+&filled_bar=50,0x9933CC,0x8010A0,Created,8&
+&filled_bar_2=50,0x0066CC,0x0066CC,Completed,8&
+&values=<% 
+0.upto 22 do |i| -%>
+  <%=@actions_creation_hour_array[i] -%>,
+<% end -%><%=@actions_creation_hour_array[23]%>&
+&values_2=<% 
+0.upto 22 do |i| -%>
+  <%=@actions_completion_hour_array[i] -%>,
+<% end -%><%=@actions_completion_hour_array[23]%>&
+&x_labels= <% 
+0.upto 22 do |i| -%>
+  <%=i-%>,
+<% end -%>23&
+&y_min=0&
+<% # add one to @max for people who have no actions completed yet. 
+   # OpenFlashChart cannot handle y_max=0 -%>
+&y_max=<%=@max+1 -%>&
+&x_label_style=9,,1,1&

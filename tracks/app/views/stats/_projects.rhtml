@@ -1,0 +1,42 @@
+<br/>
+<p><b>Top 10 projects</b><br/>
+<% i=0
+   @projects_and_actions.each do |p| 
+     i+=1 -%>
+     <%= i -%> - <%= p.name %> (<%=p.count %> actions) <br/>
+<% end 
+  if i < 10
+    i.upto 10 do |j| %>
+       <%= i -%> - n/a (n/a) <br/>
+  <% end
+  end
+%>
+
+<br/>
+<p><b>Top 10 project in past 30 days</b><br/>
+<% i=0
+   @projects_and_actions_last30days.each do |p| 
+     i+=1 -%>
+     <%= i -%> - <%= p.name %> (<%=p.count %> actions) <br/>
+<% end 
+  if i < 10
+    i.upto 10 do |j| %>
+       <%= i -%> - n/a (n/a) <br/>
+  <% end
+  end
+%>
+
+<br/>
+<p><b>Top 10 longest running projects</b><br/>
+<% i=0
+   @projects_and_runtime.each do |p| 
+     i+=1 -%>
+     <%= i -%> - <%= p.name %> (<%=p.days %> days) <br/>
+<% end 
+  if i < 10
+    i.upto 10 do |j| %>
+       <%= i -%> - n/a (n/a) <br/>
+  <% end
+  end
+%>
+<br/>

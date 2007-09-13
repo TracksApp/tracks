@@ -1,0 +1,16 @@
+&title=Spread of actions for all context,{font-size:16}& 
+&pie=70,#505050,#000000,true,1& 
+&x_axis_steps=1& &y_ticks=5,10,5& &line=3,#87421F& &y_min=0& &y_max=20& 
+&values=<%
+0.upto @actions_per_context.size()-2 do | i |
+    %><%=@actions_per_context[i]['total'].to_i*100/@sum%>,<%
+end
+-%><%=@actions_per_context[@actions_per_context.size()-1]['total'].to_i*100/@sum%>& 
+&pie_labels=<%
+0.upto @actions_per_context.size()-2 do | i |
+    %><%=@actions_per_context[i]['name']%>,<%
+end
+-%><%=@actions_per_context[@actions_per_context.size()-1]['name']%>& 
+&colours=#d01f3c,#356aa0,#C79810,#c61fd0,#1fc6d0,#1fd076,#72d01f,#c6d01f,#d0941f& 
+&tool_tip=#x_label#: #val#%25& 
+&x_label_style=9,,2,1&

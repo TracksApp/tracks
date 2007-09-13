@@ -1,0 +1,15 @@
+<br/>
+<P><B>Tag Cloud</b></p>
+<p>
+    <% if @tags_for_cloud.size < 1
+    %> no tags available <%
+    else
+    @tags_for_cloud.each do |t| %>
+    <%= link_to t.name, 
+    {:controller => "todos", :action => "tag", :id => t.name}, 
+    {:style => "font-size: " + (9 + 2*(t.count.to_i-@tags_min)/@tags_divisor).to_s + "pt",
+    :title => t.count+" actions"}
+    -%> <%
+    end 
+    end-%>
+</p>

@@ -1,0 +1,30 @@
+<p><br/>
+<%= render :partial => 'chart', :locals => {:width => @pie_width, :height => @pie_height, :data => '/stats/context_total_actions_data'} -%>
+&nbsp;
+<%= render :partial => 'chart', :locals => {:width => @pie_width, :height => @pie_height, :data => '/stats/context_running_actions_data'} -%>
+
+<br/><p><b>Top 5 Contexts</b><br>
+<%
+    1.upto 5 do |i|
+      %><%=i-%> - 
+      <%= i <= @actions_per_context.size ? @actions_per_context[i-1]['name'] : "n/a"%> 
+      (
+      <%= i <= @actions_per_context.size ? @actions_per_context[i-1]['total'] : "n/a"%>
+      )
+      <br/><%
+    end
+-%>    
+</p>
+
+<br/><p><b>Top 5 Visible Contexts with uncomplete actions</b><br>
+<%
+    1.upto 5 do |i|
+      %><%=i-%> -
+      <%= i <= @running_actions_per_context.size ? @running_actions_per_context[i-1]['name'] : "n/a"-%>
+      (
+      <%= i <= @running_actions_per_context.size ? @running_actions_per_context[i-1]['total'] : "n/a"-%>
+      )
+      <br/><%
+    end
+-%>    
+</p>
