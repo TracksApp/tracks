@@ -185,7 +185,11 @@ a.show_notes:hover, a.link_to_notes:hover {background-image: url(../images/notes
       width: 100%;
       z-index:1100;
       }
-      
+body.stats #topbar {
+    filter: alpha(opacity=100);
+    -moz-opacity: 1;
+    opacity: 1;
+}      
 #date {
       float: left;
       width: 45%;
@@ -1033,4 +1037,16 @@ button.positive, .widgets a.positive{
 	background-repeat:no-repeat;
 	background-position:center center;
 	background-color:black;
+}
+.stats_content .open-flash-chart, .stats_content .stats_module {
+	float: left;
+	width: 450px;
+	margin-right:20px;
+	padding-bottom:20px;
+}
+.stats_content h2
+{
+	clear:both;
+	margin-top:15px;
+	margin-bottom:15px;
 }

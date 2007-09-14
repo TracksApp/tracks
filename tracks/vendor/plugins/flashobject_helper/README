@@ -1,0 +1,35 @@
+FlashObject v.1.0
+====================
+This FlashObject Helper is based on the flash view helper of the plugin http://laszlo-plugin.rubyforge.org/
+
+It's only copy the FlashObject.js (version 1.5) on your public/javascript directory and register it in the AssetTagHelper of rails,
+so for include the javascript in your page you only can add this (if you havn't yet):
+
+<%= javascript_include_tag :defaults %>
+
+or if you only need the flashobject add this:
+
+<%= javascript_include_tag "flashobject" %>
+
+The is very simple for add a Flash in your page add this:
+
+<%= flashobject_tag "/source/of/your/flash.swf" %>
+
+It's simple.
+
+You can add some options if you want:
+
+- div_id: the HTML +id+ of the +div+ element that is used to contain the Flash object; default "flashcontent"
+- flash_id: the +id+ of the Flash object itself.
+- background_color: the background color of the Flash object; default white
+- flash_version: the version of the Flash player that is required; default "7"
+- size: the size of the Flash object, in the form "100x100".  Defaults to "100%x100%"
+- variables: a Hash of initialization variables that are passed to the object; default <tt>{:lzproxied => false}</tt>
+- parameters: a Hash of parameters that configure the display of the object; default <tt>{:scale => 'noscale'}</tt>
+- fallback_html: HTML text that is displayed when the Flash player is not available.
+
+Example:
+<%= flashobject_tag "/source/of/your/flash.swf", :size => "350x320" %>
+
+
+Vist my website: http://blog.lipsiasoft.com

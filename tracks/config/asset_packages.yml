@@ -15,6 +15,7 @@ javascripts:
   - niftycube
   - protoload
   - lowpro
+  - flashobject
 stylesheets: 
 - tracks: 
   - standard

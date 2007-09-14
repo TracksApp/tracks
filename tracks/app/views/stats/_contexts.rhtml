@@ -1,9 +1,9 @@
-<p><br/>
-<%= render :partial => 'chart', :locals => {:width => @pie_width, :height => @pie_height, :data => '/stats/context_total_actions_data'} -%>
-&nbsp;
-<%= render :partial => 'chart', :locals => {:width => @pie_width, :height => @pie_height, :data => '/stats/context_running_actions_data'} -%>
+<%= render :partial => 'chart', :locals => {:width => @pie_width, :height => @pie_height, :data => url_for(:action => 'context_total_actions_data')} -%>
 
-<br/><p><b>Top 5 Contexts</b><br>
+<%= render :partial => 'chart', :locals => {:width => @pie_width, :height => @pie_height, :data => url_for(:action => 'context_running_actions_data')} -%>
+
+<div class="stats_module">
+<h3>Top 5 Contexts</h3>
 <%
     1.upto 5 do |i|
       %><%=i-%> - 
@@ -14,9 +14,10 @@
       <br/><%
     end
 -%>    
-</p>
+</div>
 
-<br/><p><b>Top 5 Visible Contexts with uncomplete actions</b><br>
+<div class="stats_module">
+<h3>Top 5 Visible Contexts with uncomplete actions</h3>
 <%
     1.upto 5 do |i|
       %><%=i-%> -
@@ -27,4 +28,4 @@
       <br/><%
     end
 -%>    
-</p>
+</div>
