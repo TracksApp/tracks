@@ -66,6 +66,7 @@ require 'name_part_finder'
 require 'todo_list'
 require 'config'
 require 'activerecord_base_tag_extensions' # Needed for tagging-specific extensions
+require 'digest/sha1' #Needed to support 'rake db:fixtures:load' on some ruby installs: http://dev.rousette.org.uk/ticket/557
 
 if (AUTHENTICATION_SCHEMES.include? 'ldap')
   require 'net/ldap' #requires ruby-net-ldap gem be installed
