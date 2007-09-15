@@ -477,7 +477,7 @@ class StatsController < ApplicationController
     "       datediff(now(), t.completed_at) < 30) "+
     "AND p.user_id="+@user.id.to_s+" "+
     "GROUP BY p.id "+
-    "ORDER BY count DESC" +
+    "ORDER BY count DESC " +
     "LIMIT 10"
     )
     
