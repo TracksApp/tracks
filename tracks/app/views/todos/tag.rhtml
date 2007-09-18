@@ -10,12 +10,12 @@
             :locals => { :collapsible => true } %>
 
   <% unless @deferred.nil? -%>
-      <%= render :partial => "todos/deferred", :locals => { :deferred => @deferred, :collapsible => true, :append_descriptor => "for this tag" } %>
+      <%= render :partial => "todos/deferred", :locals => { :deferred => @deferred, :collapsible => true, :append_descriptor => "tagged with &lsquo;#{@tag}&rsquo;" } %>
   <% end -%>
   
   <% unless @done.nil? -%>
     <%= render :partial => "todos/completed", 
-            :locals => { :done => @done, :collapsible => true, :append_descriptor => "for this tag" } %>
+            :locals => { :done => @done, :collapsible => true, :append_descriptor => "tagged with &lsquo;#{@tag}&rsquo;" } %>
   <% end -%>
 </div><!-- End of display_box -->
 
