@@ -34,8 +34,8 @@ window.onload=function(){
   </h1>
 </div>
 <div id="minilinks">
-	<%= link_to_function("Toggle notes", nil, {:accesskey => "S", :title => "Toggle all notes"}) do |page|
-		  page.select('.notes').each { |e| e.toggle }
+	<%= link_to_function("Toggle notes", nil, {:accesskey => "S", :title => "Toggle all notes", :id => "toggle-notes-nav"}) do |page|
+		  page.select('body .notes').each { |e| e.toggle }
 		end
 	-%>&nbsp;|&nbsp;
     <%= link_to "Logout (#{current_user.display_name}) »", logout_path %>
