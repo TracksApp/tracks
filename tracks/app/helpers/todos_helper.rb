@@ -139,7 +139,7 @@ module TodosHelper
            "<a title='" + format_date(due) + "'><span class=\"amber\">Show Tomorrow</span></a> "
       # due 2-7 days away
       when 2..7
-      if prefs.due_style == Preference::DUE_ON_DUE_STYLE
+      if prefs.due_style == Preference.due_styles[:due_on]
         "<a title='" + format_date(due) + "'><span class=\"orange\">Show on " + due.strftime("%A") + "</span></a> "
       else
         "<a title='" + format_date(due) + "'><span class=\"orange\">Show in " + days.to_s + " days</span></a> "

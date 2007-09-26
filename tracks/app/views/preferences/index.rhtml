@@ -16,7 +16,7 @@
     <li>Go to project page on todo complete: <span class="highlight"><%= prefs.show_project_on_todo_done %></span></li>
     <li>Staleness starts after <span class="highlight"><%= prefs.staleness_starts %></span> days</li>
     <li>Due style: <span class="highlight">
-  	<% if prefs.due_style == Preference::DUE_IN_N_DAYS_DUE_STYLE %>
+  	<% if prefs.due_style == Preference.due_styles[:due_in_n_days] %>
   		Due in ___ days
   	<% else %>
   		Due on ________

@@ -3,10 +3,11 @@ class Preference < ActiveRecord::Base
   composed_of :tz,
               :class_name => 'TimeZone',
               :mapping => %w(time_zone name)
-  
-  DUE_ON_DUE_STYLE = 1
-  DUE_IN_N_DAYS_DUE_STYLE = 0
-              
+    
+  def self.due_styles
+    { :due_in_n_days => 0, :due_on => 1}
+  end
+           
   def self.day_number_to_name_map
     { 0 => "Sunday",
 		  1 => "Monday",
