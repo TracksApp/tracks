@@ -13,7 +13,7 @@ class StatsController < ApplicationController
     @first_action = @actions.find(:first, :order => "created_at asc")
     
     # default chart dimensions
-    @chart_width=450
+    @chart_width=460
     @chart_height=250
     @pie_width=@chart_width
     @pie_height=325
@@ -117,7 +117,7 @@ class StatsController < ApplicationController
     # convert to hash to be able to fill in non-existing days in
     # @actions_completion_time also convert days to weeks (/7)
        
-    @max_days, @max_actions=0,0
+    @max_days, @max_actions, @sum_actions=0,0,0
     @actions_completion_time_hash = Hash.new(0)
     @actions_completion_time.each do |days, total|
       # RAILS_DEFAULT_LOGGER.error("\n" + total.to_s + " - " + days + "\n")
@@ -125,6 +125,7 @@ class StatsController < ApplicationController
       
       @max_days=days.to_i if days.to_i > @max_days
       @max_actions = @actions_completion_time_hash[days.to_i/7] if @actions_completion_time_hash[days.to_i/7] > @max_actions
+      @sum_actions += total
     end
           
     # stop the chart after 10 weeks
@@ -145,7 +146,7 @@ class StatsController < ApplicationController
     # convert to hash to be able to fill in non-existing days in
     # @actions_running_time also convert days to weeks (/7)
            
-    @max_days, @max_actions=0,0
+    @max_days, @max_actions, @sum_actions=0,0,0
     @actions_running_time_hash = Hash.new(0)
     @actions_running_time.each do |days, total|
       # RAILS_DEFAULT_LOGGER.error("\n" + total.to_s + " - " + days + "\n")
@@ -153,6 +154,7 @@ class StatsController < ApplicationController
       
       @max_days=days.to_i if days.to_i > @max_days
       @max_actions = @actions_running_time_hash[days.to_i/7] if @actions_running_time_hash[days.to_i/7] > @max_actions
+      @sum_actions += total
     end
                     
     # cut off chart at 52 weeks = one year
@@ -164,12 +166,6 @@ class StatsController < ApplicationController
   def actions_visible_running_time_data
     @actions = @user.todos
           
-    @actions_running_time = @actions.count(:all, {
-        :group => "datediff(now(), created_at)", 
-        :conditions => "completed_at is null", 
-        :order => "datediff(now(), created_at) ASC" 
-      })
-
     @actions_running_time = @actions.find_by_sql(
       "SELECT datediff(now(), t.created_at) AS days, count(*) AS total "+
         "FROM todos t LEFT OUTER JOIN projects p ON t.project_id = p.id LEFT OUTER JOIN contexts c ON t.context_id = c.id "+
@@ -182,7 +178,7 @@ class StatsController < ApplicationController
     # convert to hash to be able to fill in non-existing days in
     # @actions_running_time also convert days to weeks (/7)
            
-    @max_days, @max_actions=0,0
+    @max_days, @max_actions, @sum_actions=0,0,0
     @actions_running_time_hash = Hash.new(0)
     @actions_running_time.each do |a|
       # RAILS_DEFAULT_LOGGER.error("\n" + total.to_s + " - " + days + "\n")
@@ -190,6 +186,7 @@ class StatsController < ApplicationController
       
       @max_days=a.days.to_i if a.days.to_i > @max_days
       @max_actions = @actions_running_time_hash[a.days.to_i/7] if @actions_running_time_hash[a.days.to_i/7] > @max_actions
+      @sum_actions += a.total.to_i
     end
                     
     # cut off chart at 52 weeks = one year
@@ -465,24 +462,49 @@ class StatsController < ApplicationController
     # tag cloud code inspired by this article
     #  http://www.juixe.com/techknow/index.php/2006/07/15/acts-as-taggable-tag-cloud/
 
+    levels=10
     # TODO: parameterize limit
+    
+    # Get the tag cloud for all tags for actions
     query = "SELECT tags.id, name, count(*) AS count"
     query << " FROM taggings, tags"
     query << " WHERE tags.id = tag_id"
     query << " AND taggings.user_id="+@user.id.to_s+" "
+    query << " AND taggings.taggable_type='Todo' "
     query << " GROUP BY tag_id"
     query << " ORDER BY count DESC, name"
     query << " LIMIT 100"
     @tags_for_cloud = Tag.find_by_sql(query).sort_by { |tag| tag.name.downcase }
-      
+        
     max, @tags_min = 0, 0
     @tags_for_cloud.each { |t|
       max = t.count.to_i if t.count.to_i > max
       @tags_min = t.count.to_i if t.count.to_i < @tags_min
     }
 
-    # 10 = number of levels
-    @tags_divisor = ((max - @tags_min) / 10) + 1
+    @tags_divisor = ((max - @tags_min) / levels) + 1
 
+        # Get the tag cloud for all tags for actions
+    query = "SELECT tags.id, tags.name AS name, count(*) AS count"
+    query << " FROM taggings, tags, todos"
+    query << " WHERE tags.id = tag_id"
+    query << " AND taggings.user_id="+@user.id.to_s+" "
+    query << " AND taggings.taggable_type='Todo' "
+    query << " AND taggings.taggable_id=todos.id "
+    query << " AND (datediff(now(), todos.created_at) < 90 OR "
+    query << "      datediff(now(), todos.completed_at) < 90) "
+    query << " GROUP BY tag_id"
+    query << " ORDER BY count DESC, name"
+    query << " LIMIT 100"
+    @tags_for_cloud_90days = Tag.find_by_sql(query).sort_by { |tag| tag.name.downcase }
+
+    max_90days, @tags_min_90days = 0, 0
+    @tags_for_cloud_90days.each { |t|
+      max_90days = t.count.to_i if t.count.to_i > max_90days
+      @tags_min_90days = t.count.to_i if t.count.to_i < @tags_min_90days
+    }
+
+    @tags_divisor_90days = ((max_90days - @tags_min_90days) / levels) + 1
+    
   end
 end

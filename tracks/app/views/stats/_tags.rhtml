@@ -1,6 +1,8 @@
 <div class="stats_module">
-<h3>Tag Cloud</h3>
-<p>
+<h3>Tag Cloud for all actions</h3>
+<p>This tag cloud includes tags of all actions (completed, not completed, visible and/or hidden)</p>
+
+  <p>
     <% if @tags_for_cloud.size < 1
     %> no tags available <%
     else
@@ -8,6 +10,25 @@
     <%= link_to t.name, 
     {:controller => "todos", :action => "tag", :id => t.name}, 
     {:style => "font-size: " + (9 + 2*(t.count.to_i-@tags_min)/@tags_divisor).to_s + "pt",
+    :title => t.count+" actions"}
+    -%> <%
+    end 
+    end-%>
+</p>
+</div>
+
+<div class="stats_module">
+<h3>Tag Cloud actions in past 90 days</h3>
+<p>This tag cloud includes tags of actions that were created or completed in 
+  the past 90 days.</p>
+  <p>
+    <% if @tags_for_cloud_90days.size < 1
+    %> no tags available <%
+    else
+    @tags_for_cloud_90days.each do |t| %>
+    <%= link_to t.name, 
+    {:controller => "todos", :action => "tag", :id => t.name}, 
+    {:style => "font-size: " + (9 + 2*(t.count.to_i-@tags_min_90days)/@tags_divisor_90days).to_s + "pt",
     :title => t.count+" actions"}
     -%> <%
     end 

@@ -1,5 +1,6 @@
 &title=Current running time of uncompleted visible actions,{font-size:16},&
-&y_legend=Actions,12,0x736AFF&
+&y_legend=Actions,10,0x736AFF&
+&y2_legend=Percentage,10,0xFF0000&
 &x_legend=Running time of an action (weeks),12,0x736AFF&
 &y_ticks=5,10,5&
 &filled_bar=50,0x9933CC,0x8010A0&
@@ -14,6 +15,15 @@
        @sum += @actions_running_time_hash[i]
     end -%>
 <%=@sum%>&
+&line_2=2,0xFF0000&
+&values_2=
+<% total=0
+   @count = @max_days > @cut_off*7 ? @cut_off : @max_days/7
+   0.upto @count-1 do |i| 
+     total += @actions_running_time_hash[i] -%>
+     <%= total*100.0/@sum_actions -%>,
+<% end -%>
+<%= (total+@sum)*100.0/@sum_actions%>&
 &x_labels=< 1,
 <% 1.upto @count-1 do |i| -%>
 <%= i %>-<%= i+1 %>,
@@ -25,3 +35,7 @@
    # OpenFlashChart cannot handle y_max=0 -%>
 &y_max=<%=1+@max_actions+@max_actions/10-%>&
 &x_label_style=9,,2,2&
+&show_y2=true&
+&y2_lines=2&
+&y2_min=0&
+&y2_max=100&
