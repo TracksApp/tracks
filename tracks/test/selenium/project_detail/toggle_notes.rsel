@@ -1,5 +1,5 @@
 setup :fixtures => :all
 login :as => 'admin'
 open "/projects/1"
-click_and_wait "css=#toggle-notes-nav"
-assert_element_present "notes_todo_6"
+click "css=#toggle-notes-nav"
+wait_for_element_present "notes_todo_6"
