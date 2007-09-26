@@ -1,10 +1,10 @@
 class TodoApi < ActionWebService::API::Base
   api_method :new_todo,
-             :expects => [{:username => :string}, {:token => :string}, {:context_id => :int}, {:description => :string}],
+             :expects => [{:username => :string}, {:token => :string}, {:context_id => :int}, {:description => :string}, {:notes => :string}],
              :returns => [:int]
   
   api_method :new_rich_todo,
-             :expects => [{:username => :string}, {:token => :string}, {:default_context_id => :int}, {:description => :string}],
+             :expects => [{:username => :string}, {:token => :string}, {:default_context_id => :int}, {:description => :string}, {:notes => :string}],
              :returns => [:int]
              
   api_method :list_contexts,

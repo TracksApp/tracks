@@ -5,14 +5,14 @@ class BackendController < ApplicationController
   skip_before_filter :login_required
   
   
-  def new_todo(username, token, context_id, description)
+  def new_todo(username, token, context_id, description, notes)
     check_token(username, token)
     check_context_belongs_to_user(context_id)
-    item = create_todo(description, context_id)
+    item = create_todo(description, context_id, nil, notes)
     item.id
   end
   
-  def new_rich_todo(username, token, default_context_id, description)
+  def new_rich_todo(username, token, default_context_id, description, notes)
     check_token(username,token)
     description,context = split_by_char('@',description)
     description,project = split_by_char('>',description)
@@ -39,7 +39,7 @@ class BackendController < ApplicationController
       project_id = found_project.id unless found_project.nil?
     end
 
-    todo = create_todo(description, context_id, project_id)
+    todo = create_todo(description, context_id, project_id, notes)
     todo.id
   end
   
@@ -71,9 +71,10 @@ class BackendController < ApplicationController
       end
     end
     
-    def create_todo(description, context_id, project_id = nil)
+    def create_todo(description, context_id, project_id = nil, notes="")
       item = @user.todos.build
       item.description = description
+      item.notes = notes
       item.context_id = context_id
       item.project_id = project_id unless project_id.nil?
       item.save
