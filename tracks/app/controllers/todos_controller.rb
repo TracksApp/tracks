@@ -13,8 +13,8 @@ class TodosController < ApplicationController
     @projects = current_user.projects.find(:all, :include => [ :todos ])
     @contexts = current_user.contexts.find(:all, :include => [ :todos ])
 
-    @contexts_to_show = @contexts.reject {|x| x.hide? }
-
+    @contexts_to_show = @contexts.reject {|x| x.hide? }    
+    
     respond_to do |format|
       format.html  &render_todos_html
       format.m     &render_todos_mobile
@@ -409,19 +409,11 @@ class TodosController < ApplicationController
 
     def init_todos
       with_feed_query_scope do
-        with_parent_resource_scope do
+        with_parent_resource_scope do # @context or @project may get defined here
           with_limit_scope do
             
             if mobile?
-            
-              @todos, @page = current_user.todos.paginate(:all, 
-                  :conditions => ['state = ?', 'active' ], :include => [:context],
-                  :order =>  'due IS NULL, due ASC, todos.created_at ASC',
-                  :page => params[:page], :per_page => prefs.mobile_todos_per_page)
-              @pagination_params = { :format => :m }
-              @pagination_params[:context_id] = @context.to_param if @context
-              @pagination_params[:project_id] = @project.to_param if @project
-              
+              init_todos_for_mobile_view              
             else
             
               # Note: these next two finds were previously using current_users.todos.find but that broke with_scope for :limit
@@ -437,6 +429,23 @@ class TodosController < ApplicationController
           end
         end
       end
+    end
+    
+    def init_todos_for_mobile_view
+      if @context or @project
+        conditions = ['state = ?', 'active']
+      else
+        conditions = ['state = ? AND hide = ?', 'active', false] # hidden todos should not be visible in the homepage view
+      end
+      
+      @todos, @page = current_user.todos.paginate(:all, 
+          :conditions => conditions, 
+          :include => [:context],
+          :order =>  'due IS NULL, due ASC, todos.created_at ASC',
+          :page => params[:page], :per_page => prefs.mobile_todos_per_page)
+      @pagination_params = { :format => :m }
+      @pagination_params[:context_id] = @context.to_param if @context
+      @pagination_params[:project_id] = @project.to_param if @project
     end
     
     def determine_down_count
@@ -513,7 +522,7 @@ class TodosController < ApplicationController
         else
           determine_down_count
         end
-        
+    
         render :action => 'index_mobile'
       end
     end
