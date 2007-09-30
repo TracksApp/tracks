@@ -13,6 +13,24 @@ Trac (for bug reports and feature requests): http://dev.rousette.org.uk/report/6
 
 Wiki (deprecated - please use Trac): http://www.rousette.org.uk/projects/wiki/
 
+== Version trunk
+1. Show from date allows you to postpone the appearance of actions in the list until you can do something about them (like a 'tickler')
+2. Tagging of actions
+3. Simple management of users (deleting users through the web interface)
+4. Import and export of data in various formats
+5. Fantastic RESTful API to provide access to actions via scripts
+6. Mobile interface designed for use on mobile phone browsers
+7. Improved ease-of-use for installation and upgrading
+8. Optional support for authentication via OpenID or LDAP
+9. Update to Rails 1.2.3
+10. Per-user time zone preference
+11. Use autocomplete fields for Project and Context specification to support on-the-fly adding of each
+12. Add a "Hidden" status to projects
+13. Add optional Default Context for a Project
+14. Add ability to sort projects alphabetically
+15. Add "starring" of actions
+16. Statistics page with graphs 
+
 == Version 1.041
 
 === New features
