@@ -294,24 +294,20 @@ class TodosController < ApplicationController
   #
   def tag
     
-    @tag = tag_name = params[:name]
-    
-    if Tag.find_by_name(tag_name).nil?
-      # TODO: This doesn't work - you get kicked back to the index
-      # with a generic "Error occured on the server error"
-      notify :error, "Tag \'#{@tag}\' does not exist", 2.0
-      @not_done_todos = []
-    else 
-      tag_collection = Tag.find_by_name(tag_name).todos
-      @not_done_todos = tag_collection.find(:all, :conditions => ['taggings.user_id = ? and state = ?', current_user.id, 'active'])
+    @tag_name = params[:name]
+    @tag = Tag.find_by_name(@tag_name)
+    if @tag.nil?
+      @tag = Tag.new(:name => @tag_name)
     end
+    tag_collection = @tag.todos
+    @not_done_todos = tag_collection.find(:all, :conditions => ['taggings.user_id = ? and state = ?', current_user.id, 'active'])
     
     @contexts = current_user.contexts.find(:all, :include => [ :todos ])
     @contexts_to_show = @contexts.reject {|x| x.hide? }
     
     @deferred = tag_collection.find(:all, :conditions => ['taggings.user_id = ? and state = ?', current_user.id, 'deferred'])
 
-    @page_title = "TRACKS::Tagged with \'#{@tag}\'"
+    @page_title = "TRACKS::Tagged with \'#{@tag_name}\'"
     # If you've set no_completed to zero, the completed items box
     # isn't shown on the home page
     max_completed = current_user.prefs.show_number_completed
