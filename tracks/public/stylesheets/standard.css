@@ -317,7 +317,7 @@ input.item-checkbox {
       }
       
 /* The notes which may be attached to an item */      
-.notes {
+.todo_notes {
       margin: 5px;
       padding: 3px;
       border: 1px solid #F5ED59;
@@ -325,18 +325,18 @@ input.item-checkbox {
       color: #666666;
       }
       
-.notes p, .notes li {
+.todo_notes p, .todo_notes li {
       padding: 1px;
       margin: 0px;
       font-size: 12px;
       }
       
-.notes ul, .note_wrapper ul {
+.todo_notes ul, .note_wrapper ul {
       list-style-type: disc;
       margin-left:20px;
 }
 
-.notes ol {
+.todo_notes ol {
       list-style-type: decimal;
       margin-left:20px;
 }
