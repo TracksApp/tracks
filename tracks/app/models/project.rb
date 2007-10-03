@@ -86,7 +86,10 @@ class Project < ActiveRecord::Base
         complete!
     end
   end
-      
+  
+  def name=(value)
+    self[:name] = value.gsub(/\s{2,}/, " ").strip
+  end
 end
 
 class NullProject

@@ -39,6 +39,19 @@ class ProjectTest < Test::Rails::TestCase
     assert_equal "cannot contain the comma (',') character", newproj.errors.on(:name)
   end
   
+  def test_name_removes_extra_spaces
+    newproj = Project.new
+    newproj.name = "These   Words    Have   Proximity        Issues   "
+    assert newproj.save
+    assert_equal 0, newproj.errors.count
+    assert_equal "These Words Have Proximity Issues", newproj.name
+    
+    # and on update...
+    @timemachine.name = "   a     time machine    needs lots   of      spaaaaaaace         "
+    assert @timemachine.save
+    assert_equal "a time machine needs lots of spaaaaaaace", @timemachine.name
+  end
+  
   def test_project_initial_state_is_active
     assert_equal :active, @timemachine.current_state
     assert @timemachine.active?
