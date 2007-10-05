@@ -8,12 +8,12 @@
 &line_4=3,0x00FF00, Avg created, 9&
 &values=
 <% 0.upto 29 do |i| -%>
-<%= @actions_done_last30days_hash[i.to_s]%>,
-<% end -%><%= @actions_done_last30days_hash["30"]%>&
+<%= @actions_done_last30days_hash[i]%>,
+<% end -%><%= @actions_done_last30days_hash[30]%>&
 &values_2=
 <% 0.upto 29 do |i| -%>
-<%= @actions_created_last30days_hash[i.to_s]%>,
-<% end -%><%= @actions_created_last30days_hash["30"]%>&
+<%= @actions_created_last30days_hash[i]%>,
+<% end -%><%= @actions_created_last30days_hash[30]%>&
 &values_3=
 <%0.upto 29 do |i| -%>
 <%=@sum_actions_done_last30days/30-%>,

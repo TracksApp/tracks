@@ -5,20 +5,18 @@
 &y_ticks=5,10,5&
 &filled_bar=50,0x9933CC,0x8010A0&
 &values=
-<% @count = @max_days > @cut_off*7 ? @cut_off : @max_days/7
+<% @count = @max_days > @cut_off*7 ? @cut_off : (@max_days/7).to_i
    0.upto @count-1 do |i| -%>
 <%= @actions_running_time_hash[i] -%>,
 <% end -%>
 <% 
     @sum=0
-    @count.upto @max_days/7 do |i|
-       @sum += @actions_running_time_hash[i]
-    end -%>
+    @count.upto((@max_days/7).to_i) {|i| @sum += @actions_running_time_hash[i]} -%>
 <%=@sum%>&
 &line_2=2,0xFF0000&
 &values_2=
 <% total=0
-   @count = @max_days > @cut_off*7 ? @cut_off : @max_days/7
+   @count = @max_days > @cut_off*7 ? @cut_off : (@max_days/7).to_i
    0.upto @count-1 do |i| 
      total += @actions_running_time_hash[i] -%>
      <%= total*100.0/@sum_actions -%>,
