@@ -73,7 +73,7 @@ module TodosHelper
   
   def tag_list
     tags_except_starred = @todo.tags.reject{|t| t.name == Todo::STARRED_TAG_NAME}
-    tag_list = tags_except_starred.collect{|t| "<span class=\"tag #{t.name.gsub(' ','-')}\">" + link_to(t.name, :action => "tag", :id => t.name) + "</span>"}.join('')
+    tag_list = tags_except_starred.collect{|t| "<span class=\"tag #{t.name.gsub(' ','-')}\">" + link_to(t.name, :controller => "todos", :action => "tag", :id => t.name) + "</span>"}.join('')
     "<span class='tags'>#{tag_list}</span>"
   end
   

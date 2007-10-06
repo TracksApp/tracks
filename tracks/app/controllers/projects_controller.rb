@@ -26,8 +26,6 @@ class ProjectsController < ApplicationController
 
   def show
     init_data_for_sidebar
-    @projects = current_user.projects
-    @contexts = current_user.contexts
     @page_title = "TRACKS::Project: #{@project.name}"
     @not_done = @project.not_done_todos(:include_project_hidden_todos => true)
     @deferred = @project.deferred_todos
