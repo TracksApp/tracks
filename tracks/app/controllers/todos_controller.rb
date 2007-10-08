@@ -4,7 +4,7 @@ class TodosController < ApplicationController
 
   skip_before_filter :login_required, :only => [:index]
   prepend_before_filter :login_or_feed_token_required, :only => [:index]
-  append_before_filter :init, :except => [ :destroy, :completed, :completed_archive, :check_deferred, :toggle_check, :toggle_star ]
+  append_before_filter :init, :except => [ :destroy, :completed, :completed_archive, :check_deferred, :toggle_check, :toggle_star, :edit, :update ]
   append_before_filter :get_todo_from_params, :only => [ :edit, :toggle_check, :toggle_star, :show, :update, :destroy ]
 
   session :off, :only => :index, :if => Proc.new { |req| is_feed_request(req) }
@@ -99,6 +99,7 @@ class TodosController < ApplicationController
   def edit
     @projects = current_user.projects.find(:all)
     @contexts = current_user.contexts.find(:all)
+    @source_view = params['_source_view'] || 'todo'
   end
   
   def show
@@ -145,6 +146,7 @@ class TodosController < ApplicationController
   end
 
   def update
+    init_data_for_sidebar unless mobile?
     @todo.tag_with(params[:tag_list], current_user) if params[:tag_list]
     @original_item_context_id = @todo.context_id
     @original_item_project_id = @todo.project_id
