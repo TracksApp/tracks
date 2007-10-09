@@ -15,7 +15,7 @@ class DataControllerTest < Test::Rails::TestCase
 
   # Replace this with your real tests.
   def test_csv_export_completes_without_error
-    @request.session['user_id'] = users(:admin_user).id
+    login_as :admin_user
     get :csv_notes
   end
 end

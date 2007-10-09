@@ -21,7 +21,7 @@ class FeedlistControllerTest < Test::Rails::TestCase
   end
   
   def test_get_index_by_logged_in_user
-    @request.session['user_id'] = users(:other_user).id
+    login_as :other_user
     get :index
     assert_response :success
     assert_equal "TRACKS::Feeds", assigns['page_title']  

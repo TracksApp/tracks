@@ -3,7 +3,7 @@ class TodoContainerControllerTestBase < Test::Rails::TestCase
   def perform_setup(container_class, controller_class)
     @controller = controller_class.new
     @request, @response = ActionController::TestRequest.new, ActionController::TestResponse.new
-    @request.session['user_id'] = users(:other_user).id
+    login_as :other_user
     @initial_count = container_class.count
     @container_class = container_class
   end

@@ -13,7 +13,7 @@ class ContextsControllerTest < TodoContainerControllerTestBase
   end
 
   def test_contexts_list
-    @request.session['user_id'] = users(:admin_user).id
+    login_as :admin_user
     get :index
   end
 
@@ -41,7 +41,7 @@ class ContextsControllerTest < TodoContainerControllerTestBase
   end
 
   def test_rss_feed_content
-    @request.session['user_id'] = users(:admin_user).id
+    login_as :admin_user
     get :index, { :format => "rss" }
     assert_equal 'application/rss+xml; charset=utf-8', @response.headers["Content-Type"]
     #puts @response.body
@@ -69,25 +69,25 @@ class ContextsControllerTest < TodoContainerControllerTestBase
   end
   
   def test_rss_feed_not_accessible_to_anonymous_user_without_token
-    @request.session['user_id'] = nil
+    login_as nil
     get :index, { :format => "rss" }
     assert_response 401
   end
   
   def test_rss_feed_not_accessible_to_anonymous_user_with_invalid_token
-    @request.session['user_id'] = nil
+    login_as nil
     get :index, { :format => "rss", :token => 'foo'  }
     assert_response 401
   end
   
   def test_rss_feed_accessible_to_anonymous_user_with_valid_token
-    @request.session['user_id'] = nil
+    login_as nil
     get :index, { :format => "rss", :token => users(:admin_user).token }
     assert_response :ok
   end
   
   def test_atom_feed_content
-    @request.session['user_id'] = users(:admin_user).id
+    login_as :admin_user
     get :index, { :format => "atom" }
     assert_equal 'application/atom+xml; charset=utf-8', @response.headers["Content-Type"]
     #puts @response.body
@@ -108,75 +108,75 @@ class ContextsControllerTest < TodoContainerControllerTestBase
   end
  
   def test_atom_feed_not_accessible_to_anonymous_user_without_token
-    @request.session['user_id'] = nil
+    login_as nil
     get :index, { :format => "atom" }
     assert_response 401
   end
   
   def test_atom_feed_not_accessible_to_anonymous_user_with_invalid_token
-    @request.session['user_id'] = nil
+    login_as nil
     get :index, { :format => "atom", :token => 'foo'  }
     assert_response 401
   end
   
   def test_atom_feed_accessible_to_anonymous_user_with_valid_token
-    @request.session['user_id'] = nil
+    login_as nil
     get :index, { :format => "atom", :token => users(:admin_user).token }
     assert_response :ok
   end
  
   def test_text_feed_content
-    @request.session['user_id'] = users(:admin_user).id
+    login_as :admin_user
     get :index, { :format => "txt" }
     assert_equal 'text/plain; charset=utf-8', @response.headers["Content-Type"]
     assert !(/&nbsp;/.match(@response.body)) 
   end
   
   def test_text_feed_not_accessible_to_anonymous_user_without_token
-    @request.session['user_id'] = nil
+    login_as nil
     get :index, { :format => "txt" }
     assert_response 401
   end
   
   def test_text_feed_not_accessible_to_anonymous_user_with_invalid_token
-    @request.session['user_id'] = nil
+    login_as nil
     get :index, { :format => "txt", :token => 'foo'  }
     assert_response 401
   end
   
   def test_text_feed_accessible_to_anonymous_user_with_valid_token
-    @request.session['user_id'] = nil
+    login_as nil
     get :index, { :format => "txt", :token => users(:admin_user).token }
     assert_response :ok
   end
   
   def test_show_sets_title
-    @request.session['user_id'] = users(:admin_user).id
+    login_as :admin_user
     get :show, { :id => "1" }
     assert_equal 'TRACKS::Context: agenda', assigns['page_title']
   end
   
   def test_show_renders_show_template
-    @request.session['user_id'] = users(:admin_user).id
+    login_as :admin_user
     get :show, { :id => "1" }
     assert_template "contexts/show"
   end
   
   def test_show_xml_renders_context_to_xml
-    @request.session['user_id'] = users(:admin_user).id
+    login_as :admin_user
     get :show, { :id => "1", :format => 'xml' }
     assert_equal contexts(:agenda).to_xml( :except => :user_id ), @response.body
   end
   
   def test_show_with_nil_context_returns_404
-    @request.session['user_id'] = users(:admin_user).id
+    login_as :admin_user
     get :show, { :id => "0" }
     assert_equal 'Context not found', @response.body 
     assert_response 404
   end
   
   def test_show_xml_with_nil_context_returns_404
-    @request.session['user_id'] = users(:admin_user).id
+    login_as :admin_user
     get :show, { :id => "0", :format => 'xml' }
     assert_response 404
     assert_xml_select 'error', 'Context not found'

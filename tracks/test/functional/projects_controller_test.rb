@@ -13,13 +13,14 @@ class ProjectsControllerTest < TodoContainerControllerTestBase
   end
   
   def test_projects_list
-    @request.session['user_id'] = users(:admin_user).id
+    login_as :admin_user
     get :index
   end
   
   def test_show_exposes_deferred_todos
     p = projects(:timemachine)
-    show p
+    login_as :admin_user
+    get :show, :id => p.to_param
     assert_not_nil assigns['deferred']
     assert_equal 1, assigns['deferred'].size
 
@@ -32,12 +33,14 @@ class ProjectsControllerTest < TodoContainerControllerTestBase
   end
 
   def test_show_exposes_next_project_in_same_state
-    show projects(:timemachine)
+    login_as :admin_user
+    get :show, :id => projects(:timemachine).to_param
     assert_equal(projects(:moremoney), assigns['next_project'])
   end
 
   def test_show_exposes_previous_project_in_same_state
-    show projects(:moremoney)
+    login_as :admin_user
+    get :show, :id => projects(:moremoney).to_param
     assert_equal(projects(:timemachine), assigns['previous_project'])
   end
 
@@ -74,7 +77,7 @@ class ProjectsControllerTest < TodoContainerControllerTestBase
   def test_todo_state_is_project_hidden_after_hiding_project
     p = projects(:timemachine)
     todos = p.todos.find_in_state(:all, :active)
-    @request.session['user_id'] = users(:admin_user).id
+    login_as(:admin_user)
     xhr :post, :update, :id => 1, "project"=>{"name"=>p.name, "description"=>p.description, "state"=>"hidden"}
     todos.each do |t|
       assert_equal :project_hidden, t.reload().current_state
@@ -85,7 +88,7 @@ class ProjectsControllerTest < TodoContainerControllerTestBase
   def test_not_done_counts_after_hiding_and_unhiding_project
     p = projects(:timemachine)
     todos = p.todos.find_in_state(:all, :active)
-    @request.session['user_id'] = users(:admin_user).id
+    login_as(:admin_user)
     xhr :post, :update, :id => 1, "project"=>{"name"=>p.name, "description"=>p.description, "state"=>"hidden"}
     xhr :post, :update, :id => 1, "project"=>{"name"=>p.name, "description"=>p.description, "state"=>"active"}
     todos.each do |t|
@@ -95,7 +98,7 @@ class ProjectsControllerTest < TodoContainerControllerTestBase
   end
   
   def test_rss_feed_content
-    @request.session['user_id'] = users(:admin_user).id
+    login_as(:admin_user)
     get :index, { :format => "rss" }
     assert_equal 'application/rss+xml; charset=utf-8', @response.headers["Content-Type"]
     #puts @response.body
@@ -123,25 +126,25 @@ class ProjectsControllerTest < TodoContainerControllerTestBase
   end
     
   def test_rss_feed_not_accessible_to_anonymous_user_without_token
-    @request.session['user_id'] = nil
+    login_as nil
     get :index, { :format => "rss" }
     assert_response 401
   end
   
   def test_rss_feed_not_accessible_to_anonymous_user_with_invalid_token
-    @request.session['user_id'] = nil
+    login_as nil
     get :index, { :format => "rss", :token => 'foo'  }
     assert_response 401
   end
   
   def test_rss_feed_accessible_to_anonymous_user_with_valid_token
-    @request.session['user_id'] = nil
+    login_as nil
     get :index, { :format => "rss", :token => users(:admin_user).token }
     assert_response :ok
   end
   
   def test_atom_feed_content
-    @request.session['user_id'] = users(:admin_user).id
+    login_as :admin_user
     get :index, { :format => "atom" }
     assert_equal 'application/atom+xml; charset=utf-8', @response.headers["Content-Type"]
     #puts @response.body
@@ -162,25 +165,25 @@ class ProjectsControllerTest < TodoContainerControllerTestBase
   end
   
   def test_atom_feed_not_accessible_to_anonymous_user_without_token
-    @request.session['user_id'] = nil
+    login_as nil
     get :index, { :format => "atom" }
     assert_response 401
   end
   
   def test_atom_feed_not_accessible_to_anonymous_user_with_invalid_token
-    @request.session['user_id'] = nil
+    login_as nil
     get :index, { :format => "atom", :token => 'foo'  }
     assert_response 401
   end
   
   def test_atom_feed_accessible_to_anonymous_user_with_valid_token
-    @request.session['user_id'] = nil
+    login_as nil
     get :index, { :format => "atom", :token => users(:admin_user).token }
     assert_response :ok
   end
 
   def test_text_feed_content
-    @request.session['user_id'] = users(:admin_user).id
+    login_as :admin_user
     get :index, { :format => "txt" }
     assert_equal 'text/plain; charset=utf-8', @response.headers["Content-Type"]
     assert !(/&nbsp;/.match(@response.body)) 
@@ -188,7 +191,7 @@ class ProjectsControllerTest < TodoContainerControllerTestBase
   end
   
   def test_text_feed_content_for_projects_with_no_actions
-    @request.session['user_id'] = users(:admin_user).id
+    login_as :admin_user
     p = projects(:timemachine)
     p.todos.each { |t| t.destroy }
     
@@ -198,26 +201,26 @@ class ProjectsControllerTest < TodoContainerControllerTestBase
   end
   
   def test_text_feed_not_accessible_to_anonymous_user_without_token
-    @request.session['user_id'] = nil
+    login_as nil
     get :index, { :format => "txt" }
     assert_response 401
   end
   
   def test_text_feed_not_accessible_to_anonymous_user_with_invalid_token
-    @request.session['user_id'] = nil
+    login_as nil
     get :index, { :format => "txt", :token => 'foo'  }
     assert_response 401
   end
   
   def test_text_feed_accessible_to_anonymous_user_with_valid_token
-    @request.session['user_id'] = nil
+    login_as nil
     get :index, { :format => "txt", :token => users(:admin_user).token }
     assert_response :ok
   end
   
   def test_alphabetize_sorts_active_projects_alphabetically
+    login_as :admin_user
     u = users(:admin_user)
-    @request.session['user_id'] = u.id
     post :alphabetize, { :state => "active" }
     assert_equal 1, projects(:timemachine).position 
     assert_equal 2, projects(:gardenclean).position
@@ -225,25 +228,18 @@ class ProjectsControllerTest < TodoContainerControllerTestBase
   end
 
   def test_alphabetize_assigns_state
-    @request.session['user_id'] = users(:admin_user).id
+    login_as :admin_user
     post :alphabetize, { :state => "active" }
     assert_equal "active", assigns['state']
   end
 
   def test_alphabetize_assigns_projects
-    @request.session['user_id'] = users(:admin_user).id
+    login_as :admin_user
     post :alphabetize, { :state => "active" }
     exposed_projects = assigns['projects']
     assert_equal 3, exposed_projects.length
     assert_equal projects(:timemachine), exposed_projects[0]
     assert_equal projects(:gardenclean), exposed_projects[1]
     assert_equal projects(:moremoney), exposed_projects[2]
-  end
-
-  private
-  def show(project)
-    @request.session['user_id'] = project.user_id
-    get :show, :id => project.to_param
-  end
-  
+  end  
 end

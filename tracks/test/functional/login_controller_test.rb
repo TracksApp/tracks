@@ -14,7 +14,6 @@ class LoginControllerTest < Test::Rails::TestCase
     @controller = LoginController.new
     @request = ActionController::TestRequest.new
     @response = ActionController::TestResponse.new
-    @num_users_in_fixture = User.count
   end
 
   #============================================
@@ -30,7 +29,8 @@ class LoginControllerTest < Test::Rails::TestCase
   
   def test_login_with_valid_admin_user
     @request.session['return-to'] = "/bogus/location"
-    user = login('admin', 'abracadabra', 'on')
+    post :login, {:user_login => 'admin', :user_password => 'abracadabra', :user_noexpiry => 'on'}
+    user = User.find(session['user_id'])
     assert_equal user.id, @response.session['user_id']
     assert_equal user.login, "admin"
     assert user.is_admin
@@ -39,7 +39,8 @@ class LoginControllerTest < Test::Rails::TestCase
   end
   
   def test_login_with_valid_standard_user
-    user = login('jane','sesame', 'off')
+    post :login, {:user_login => 'jane', :user_password => 'sesame', :user_noexpiry => 'off'}
+    user = User.find(session['user_id'])
     assert_equal user.id, @response.session['user_id']
     assert_equal user.login, "jane"
     assert user.is_admin == false || user.is_admin == 0
@@ -54,7 +55,7 @@ class LoginControllerTest < Test::Rails::TestCase
   end
   
   def test_logout
-    user = login('admin','abracadabra', 'on')
+    login_as :admin_user
     get :logout
     assert_nil(session['user_id'])
     assert_redirected_to :controller => 'login', :action => 'login'
@@ -94,7 +95,7 @@ class LoginControllerTest < Test::Rails::TestCase
 
   def test_should_login_with_cookie
     users(:other_user).remember_me
-    @request.cookies["auth_token"] = cookie_for(:other_user)
+    @request.cookies["auth_token"] = auth_token_cookie_for(:other_user)
     get :login
     assert @controller.send(:logged_in?)
   end
@@ -102,14 +103,14 @@ class LoginControllerTest < Test::Rails::TestCase
   def test_should_fail_expired_cookie_login
     users(:other_user).remember_me
     users(:other_user).update_attribute :remember_token_expires_at, 5.minutes.ago
-    @request.cookies["auth_token"] = cookie_for(:other_user)
+    @request.cookies["auth_token"] = auth_token_cookie_for(:other_user)
     get :login
     assert !@controller.send(:logged_in?)
   end
 
   def test_should_fail_cookie_login
     users(:other_user).remember_me
-    @request.cookies["auth_token"] = auth_token('invalid_auth_token')
+    @request.cookies["auth_token"] = CGI::Cookie.new('name' => 'auth_token', 'value' => 'invalid_auth_token')
     get :login
     assert !@controller.send(:logged_in?)
   end
@@ -120,35 +121,25 @@ class LoginControllerTest < Test::Rails::TestCase
   end
   
   def test_current_user_correct
-    user = login('jane','sesame', 'off')
-    assert_equal user, @controller.current_user
+    post :login, {:user_login => 'jane', :user_password => 'sesame', :user_noexpiry => 'off'}
+    assert_equal users(:other_user), @controller.current_user
   end
   
   def test_prefs_nil
+    login_as nil
     get :login
     assert_nil @controller.prefs
   end
   
   def test_prefs_correct
-    user = login('jane','sesame', 'off')
-    assert_equal user.prefs, @controller.prefs
+    post :login, {:user_login => 'jane', :user_password => 'sesame', :user_noexpiry => 'off'}
+    assert_equal users(:other_user).prefs, @controller.prefs
   end
   
   private
-  
-  # Logs in a user and returns the user object found in the session object
-  def login(login,password,expiry)
-    post :login, {:user_login => login, :user_password => password, :user_noexpiry => expiry}
-    assert_not_nil(session['user_id'])
-    return User.find(session['user_id'])
-  end
-  
-  def auth_token(token)
-    CGI::Cookie.new('name' => 'auth_token', 'value' => token)
-  end
-    
-  def cookie_for(user)
-    auth_token users(user).remember_token
+        
+  def auth_token_cookie_for(user)
+    CGI::Cookie.new('name' => 'auth_token', 'value' => users(user).remember_token)
   end
   
     
