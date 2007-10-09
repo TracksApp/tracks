@@ -83,9 +83,11 @@ class TodosController < ApplicationController
       format.html { redirect_to :action => "index" }
       format.m do
         if @saved
-          redirect_to :action => "index", :format => :m
+          redirect_to mobile_abbrev_url
         else
-          render :action => "new", :format => :m
+          @projects = current_user.projects.find(:all)
+          @contexts = current_user.contexts.find(:all)
+          render :action => "new_mobile"
         end
       end
       format.js do

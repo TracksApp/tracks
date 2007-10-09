@@ -18,7 +18,7 @@ class TodosControllerTest < Test::Rails::TestCase
   end
   
   def test_not_done_counts
-    @request.session['user_id'] = users(:admin_user).id
+    login_as(:admin_user)
     get :index
     assert_equal 2, assigns['project_not_done_counts'][projects(:timemachine).id]
     assert_equal 3, assigns['context_not_done_counts'][contexts(:call).id]
@@ -26,7 +26,7 @@ class TodosControllerTest < Test::Rails::TestCase
   end
   
   def test_tag_is_retrieved_properly
-    @request.session['user_id'] = users(:admin_user).id
+    login_as(:admin_user)
     get :index
     t = assigns['not_done_todos'].find{|t| t.id == 2}
     assert_equal 1, t.tags.count
@@ -38,7 +38,7 @@ class TodosControllerTest < Test::Rails::TestCase
     p = Project.find(1)
     p.hide!
     p.save!
-    @request.session['user_id'] = users(:admin_user).id
+    login_as(:admin_user)
     get :index
     assert_equal nil, assigns['project_not_done_counts'][projects(:timemachine).id]
     assert_equal 2, assigns['context_not_done_counts'][contexts(:call).id]
@@ -51,7 +51,7 @@ class TodosControllerTest < Test::Rails::TestCase
     p.save!
     p.activate!
     p.save!
-    @request.session['user_id'] = users(:admin_user).id
+    login_as(:admin_user)
     get :index
     assert_equal 2, assigns['project_not_done_counts'][projects(:timemachine).id]
     assert_equal 3, assigns['context_not_done_counts'][contexts(:call).id]
@@ -59,7 +59,7 @@ class TodosControllerTest < Test::Rails::TestCase
   end
   
   def test_deferred_count_for_project_source_view
-    @request.session['user_id'] = users(:admin_user).id
+    login_as(:admin_user)
     xhr :post, :toggle_check, :id => 5, :_source_view => 'project' 
     assert_equal 1, assigns['deferred_count']
     xhr :post, :toggle_check, :id => 15, :_source_view => 'project' 
@@ -67,7 +67,7 @@ class TodosControllerTest < Test::Rails::TestCase
   end
   
   def test_destroy_todo
-    @request.session['user_id'] = users(:admin_user).id
+    login_as(:admin_user)
     xhr :post, :destroy, :id => 1, :_source_view => 'todo'
     assert_rjs :page, "todo_1", :remove
     #assert_rjs :replace_html, "badge-count", '9' 
@@ -75,21 +75,21 @@ class TodosControllerTest < Test::Rails::TestCase
   
   def test_create_todo
     original_todo_count = Todo.count
-    @request.session['user_id'] = users(:admin_user).id
+    login_as(:admin_user)
     put :create, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{"notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>"foo bar"
     assert_equal original_todo_count + 1, Todo.count
   end
   
   def test_create_deferred_todo
     original_todo_count = Todo.count
-    @request.session['user_id'] = users(:admin_user).id
+    login_as(:admin_user)
     put :create, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{"notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2026", 'show_from' => '30/10/2026'}, "tag_list"=>"foo bar"
     assert_equal original_todo_count + 1, Todo.count
   end
   
   def test_update_todo_project
     t = Todo.find(1)
-    @request.session['user_id'] = users(:admin_user).id
+    login_as(:admin_user)
     xhr :post, :update, :id => 1, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{"id"=>"1", "notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>"foo bar"
     t = Todo.find(1)
     assert_equal 1, t.project_id
@@ -97,7 +97,7 @@ class TodosControllerTest < Test::Rails::TestCase
   
   def test_update_todo_project_to_none
     t = Todo.find(1)
-    @request.session['user_id'] = users(:admin_user).id
+    login_as(:admin_user)
     xhr :post, :update, :id => 1, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"None", "todo"=>{"id"=>"1", "notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>"foo bar"
     t = Todo.find(1)
     assert_nil t.project_id
@@ -113,7 +113,7 @@ class TodosControllerTest < Test::Rails::TestCase
   
   def test_update_todo
     t = Todo.find(1)
-    @request.session['user_id'] = users(:admin_user).id
+    login_as(:admin_user)
     xhr :post, :update, :id => 1, :_source_view => 'todo', "todo"=>{"context_id"=>"1", "project_id"=>"2", "id"=>"1", "notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>"foo, bar"
     t = Todo.find(1)
     assert_equal "Call Warren Buffet to find out how much he makes per day", t.description
@@ -125,7 +125,7 @@ class TodosControllerTest < Test::Rails::TestCase
 
   def test_update_todos_with_blank_project_name
     t = Todo.find(1)
-    @request.session['user_id'] = users(:admin_user).id
+    login_as(:admin_user)
     xhr :post, :update, :id => 1, :_source_view => 'todo', :project_name => '', "todo"=>{"id"=>"1", "notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>"foo, bar"
     t.reload
     assert t.project.nil?
@@ -133,14 +133,14 @@ class TodosControllerTest < Test::Rails::TestCase
   
   def test_update_todo_tags_to_none
     t = Todo.find(1)
-    @request.session['user_id'] = users(:admin_user).id
+    login_as(:admin_user)
     xhr :post, :update, :id => 1, :_source_view => 'todo', "todo"=>{"context_id"=>"1", "project_id"=>"2", "id"=>"1", "notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>""
     t = Todo.find(1)
     assert_equal true, t.tag_list.empty?
   end
   
   def test_find_tagged_with
-    @request.session['user_id'] = users(:admin_user).id
+    login_as(:admin_user)
     @user = User.find(@request.session['user_id'])
     tag = Tag.find_by_name('foo').todos
     @tagged = tag.find(:all, :conditions => ['taggings.user_id = ?', @user.id]).size
@@ -150,7 +150,7 @@ class TodosControllerTest < Test::Rails::TestCase
   end
   
   def test_rss_feed
-    @request.session['user_id'] = users(:admin_user).id
+    login_as(:admin_user)
     get :index, { :format => "rss" }
     assert_equal 'application/rss+xml; charset=utf-8', @response.headers["Content-Type"]
     #puts @response.body
@@ -174,7 +174,7 @@ class TodosControllerTest < Test::Rails::TestCase
   end
 
   def test_rss_feed_with_limit
-    @request.session['user_id'] = users(:admin_user).id
+    login_as(:admin_user)
     get :index, { :format => "rss", :limit => '5' }
 
     assert_xml_select 'rss[version="2.0"]' do
@@ -190,25 +190,25 @@ class TodosControllerTest < Test::Rails::TestCase
   end
   
   def test_rss_feed_not_accessible_to_anonymous_user_without_token
-    @request.session['user_id'] = nil
+    login_as nil
     get :index, { :format => "rss" }
     assert_response 401
   end
 
   def test_rss_feed_not_accessible_to_anonymous_user_with_invalid_token
-    @request.session['user_id'] = nil
+    login_as nil
     get :index, { :format => "rss", :token => 'foo'  }
     assert_response 401
   end
 
   def test_rss_feed_accessible_to_anonymous_user_with_valid_token
-    @request.session['user_id'] = nil
+    login_as nil
     get :index, { :format => "rss", :token => users(:admin_user).token }
     assert_response :ok
   end
 
   def test_atom_feed_content
-    @request.session['user_id'] = users(:admin_user).id
+    login_as :admin_user
     get :index, { :format => "atom" }
     assert_equal 'application/atom+xml; charset=utf-8', @response.headers["Content-Type"]
     #puts @response.body
@@ -225,25 +225,25 @@ class TodosControllerTest < Test::Rails::TestCase
   end
 
   def test_atom_feed_not_accessible_to_anonymous_user_without_token
-    @request.session['user_id'] = nil
+    login_as nil
     get :index, { :format => "atom" }
     assert_response 401
   end
 
   def test_atom_feed_not_accessible_to_anonymous_user_with_invalid_token
-    @request.session['user_id'] = nil
+    login_as nil
     get :index, { :format => "atom", :token => 'foo'  }
     assert_response 401
   end
 
   def test_atom_feed_accessible_to_anonymous_user_with_valid_token
-    @request.session['user_id'] = nil
+    login_as nil
     get :index, { :format => "atom", :token => users(:admin_user).token }
     assert_response :ok
   end
 
   def test_text_feed_content
-    @request.session['user_id'] = users(:admin_user).id
+    login_as(:admin_user)
     get :index, { :format => "txt" }
     assert_equal 'text/plain; charset=utf-8', @response.headers["Content-Type"]
     assert !(/&nbsp;/.match(@response.body))
@@ -251,25 +251,25 @@ class TodosControllerTest < Test::Rails::TestCase
   end
 
   def test_text_feed_not_accessible_to_anonymous_user_without_token
-    @request.session['user_id'] = nil
+    login_as nil
     get :index, { :format => "txt" }
     assert_response 401
   end
 
   def test_text_feed_not_accessible_to_anonymous_user_with_invalid_token
-    @request.session['user_id'] = nil
+    login_as nil
     get :index, { :format => "txt", :token => 'foo'  }
     assert_response 401
   end
 
   def test_text_feed_accessible_to_anonymous_user_with_valid_token
-    @request.session['user_id'] = nil
+    login_as nil
     get :index, { :format => "txt", :token => users(:admin_user).token }
     assert_response :ok
   end
 
   def test_ical_feed_content
-    @request.session['user_id'] = users(:admin_user).id
+    login_as :admin_user
     get :index, { :format => "ics" }
     assert_equal 'text/calendar; charset=utf-8', @response.headers["Content-Type"]
     assert !(/&nbsp;/.match(@response.body))
@@ -277,19 +277,19 @@ class TodosControllerTest < Test::Rails::TestCase
   end
   
   def test_mobile_index_uses_text_html_content_type
-    @request.session['user_id'] = users(:admin_user).id
+    login_as(:admin_user)
     get :index, { :format => "m" }
     assert_equal 'text/html; charset=utf-8', @response.headers["Content-Type"]
   end
   
   def test_mobile_index_assigns_down_count
-    @request.session['user_id'] = users(:admin_user).id
+    login_as(:admin_user)
     get :index, { :format => "m" }
     assert_equal 10, assigns['down_count']
   end
   
-  def test_mobile_create_action
-    @request.session['user_id'] = users(:admin_user).id
+  def test_mobile_create_action_creates_a_new_todo
+    login_as(:admin_user)
     post :create, {"format"=>"m", "todo"=>{"context_id"=>"2",
                    "due(1i)"=>"2007", "due(2i)"=>"1", "due(3i)"=>"2",
                    "show_from(1i)"=>"", "show_from(2i)"=>"", "show_from(3i)"=>"",
@@ -304,9 +304,29 @@ class TodosControllerTest < Test::Rails::TestCase
     assert_nil t.show_from
     assert_equal Date.new(2007,1,2).to_s, t.due.to_s
   end
+  
+  def test_mobile_create_action_redirects_to_mobile_home_page_when_successful
+    login_as(:admin_user)
+    post :create, {"format"=>"m", "todo"=>{"context_id"=>"2",
+                   "due(1i)"=>"2007", "due(2i)"=>"1", "due(3i)"=>"2",
+                   "show_from(1i)"=>"", "show_from(2i)"=>"", "show_from(3i)"=>"",
+                   "project_id"=>"1", 
+                   "notes"=>"test notes", "description"=>"test_mobile_create_action", "state"=>"0"}}
+    assert_redirected_to '/m'
+  end
+
+  def test_mobile_create_action_renders_new_template_when_save_fails
+    login_as(:admin_user)
+    post :create, {"format"=>"m", "todo"=>{"context_id"=>"2",
+                   "due(1i)"=>"2007", "due(2i)"=>"1", "due(3i)"=>"2",
+                   "show_from(1i)"=>"", "show_from(2i)"=>"", "show_from(3i)"=>"",
+                   "project_id"=>"1", 
+                   "notes"=>"test notes", "state"=>"0"}}
+    assert_template 'todos/new_mobile'
+  end
 
   def test_index_html_assigns_default_project_name_map
-    @request.session['user_id'] = users(:admin_user).id
+    login_as(:admin_user)
     get :index, {"format"=>"html"}
     assert_equal '"{\\"Build a working time machine\\": \\"lab\\"}"', assigns(:default_project_context_name_map)
   end
