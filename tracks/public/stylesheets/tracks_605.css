@@ -67,10 +67,10 @@ input.item-checkbox {float: left; margin-left: 10px; vertical-align: middle}
 .stale_l1 {background: #ffC}
 .tools {margin-left: 25px; width: 40px; border-top: 1px solid #999}
 #footer {clear: both; font-size: 85%; text-align: center; color: #999; margin: 20px 20px 5px 20px; padding: 0px}
-.notes {margin: 5px; padding: 3px; border: 1px solid #F5ED59; background: #FAF6AE; color: #666666}
-.notes p, .notes li {padding: 1px; margin: 0px; font-size: 12px}
-.notes ul, .note_wrapper ul {list-style-type: disc; margin-left:20px}
-.notes ol {list-style-type: decimal; margin-left:20px}
+.todo_notes {margin: 5px; padding: 3px; border: 1px solid #F5ED59; background: #FAF6AE; color: #666666}
+.todo_notes p, .todo_notes li {padding: 1px; margin: 0px; font-size: 12px}
+.todo_notes ul, .note_wrapper ul {list-style-type: disc; margin-left:20px}
+.todo_notes ol {list-style-type: decimal; margin-left:20px}
 div.note_wrapper {margin: 3px; padding: 2px}
 div.note_wrapper p {display: inline}
 div.note_footer {border-top: 1px solid #999; padding-top: 3px; font-style: italic; font-size: 0.9em; color: #666}

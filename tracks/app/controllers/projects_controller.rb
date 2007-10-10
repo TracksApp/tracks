@@ -28,7 +28,7 @@ class ProjectsController < ApplicationController
     init_data_for_sidebar
     @page_title = "TRACKS::Project: #{@project.name}"
     @not_done = @project.not_done_todos(:include_project_hidden_todos => true)
-    @deferred = @project.deferred_todos
+    @deferred = @project.deferred_todos.sort_by { |todo| todo.show_from }
     @done = @project.done_todos
     @count = @not_done.size
     @next_project = current_user.projects.next_from(@project)
