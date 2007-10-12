@@ -26,20 +26,20 @@ class StatsController < ApplicationController
   def actions_done_last12months_data
     @actions = @user.todos
        
-    # get actions created and completed in the past 12 months.
+    # get actions created and completed in the past 12+3 months. +3 for running
+    # average
     @actions_done_last12months = @actions.find(:all, {
         :select => "completed_at",
-        :conditions => ["completed_at > ? AND NOT completed_at is null", @cut_off_year]
+        :conditions => ["completed_at > ? AND NOT completed_at is null", @cut_off_year_plus3]
       })
     @actions_created_last12months = @actions.find(:all, {
         :select => "created_at",
-        :conditions => ["created_at > ?", @cut_off_year]
+        :conditions => ["created_at > ?", @cut_off_year_plus3]
       })
     
     # convert to hash to be able to fill in non-existing days in
     # @actions_done_last12months and count the total actions done in the past 12
     # months to be able to calculate percentage
-    @sum_actions_done_last12months=0
     
     # use 0 to initialise action count to zero
     @actions_done_last12months_hash = Hash.new(0) 
@@ -47,13 +47,11 @@ class StatsController < ApplicationController
       months = (@today.year - r.completed_at.year)*12 + (@today.month - r.completed_at.month)
 
       @actions_done_last12months_hash[months] += 1
-      @sum_actions_done_last12months += 1      
     end
         
     # convert to hash to be able to fill in non-existing days in
     # @actions_created_last12months and count the total actions done in the past
     # 12 months to be able to calculate percentage
-    @sum_actions_created_last12months=0
 
     # use 0 to initialise action count to zero
     @actions_created_last12months_hash = Hash.new(0)
@@ -61,14 +59,40 @@ class StatsController < ApplicationController
       months = (@today.year - r.created_at.year)*12 + (@today.month - r.created_at.month)
       
       @actions_created_last12months_hash[months] += 1
-      @sum_actions_created_last12months += 1
     end
+
+    @sum_actions_done_last12months=0
+    @sum_actions_created_last12months=0
 
     # find max for graph in both hashes
     @max=0
-    0.upto(30) { |i| @max = @actions_done_last12months_hash[i] if @actions_done_last12months_hash[i] > @max }   
-    0.upto(30) { |i| @max = @actions_created_last12months_hash[i] if @actions_created_last12months_hash[i] > @max }
-      
+    0.upto 13 do |i|             
+      @sum_actions_done_last12months += @actions_done_last12months_hash[i] 
+      @max = @actions_done_last12months_hash[i] if @actions_done_last12months_hash[i] > @max
+    end
+    0.upto 13 do |i| 
+      @sum_actions_created_last12months += @actions_created_last12months_hash[i]
+      @max = @actions_created_last12months_hash[i] if @actions_created_last12months_hash[i] > @max
+    end
+    
+    # find running avg for month i by calculating avg of month i and the two
+    # after them. Ignore current month because you do not have full data for it
+    @actions_done_avg_last12months_hash = Hash.new("null")
+    1.upto(12) { |i| 
+      @actions_done_avg_last12months_hash[i] = (@actions_done_last12months_hash[i] +
+          @actions_done_last12months_hash[i+1] + 
+          @actions_done_last12months_hash[i+2])/3.0
+    }    
+
+    # find running avg for month i by calculating avg of month i and the two
+    # after them. Ignore current month because you do not have full data for it
+    @actions_created_avg_last12months_hash = Hash.new("null")
+    1.upto(12) { |i| 
+      @actions_created_avg_last12months_hash[i] = (@actions_created_last12months_hash[i] +
+          @actions_created_last12months_hash[i+1] + 
+          @actions_created_last12months_hash[i+2])/3.0
+    }    
+    
     render :layout => false
   end
 
@@ -386,7 +410,7 @@ class StatsController < ApplicationController
     @contexts = @user.contexts
     @tags = @user.tags
   
-   # get the current date wih time set to 0:0
+    # get the current date wih time set to 0:0
     now = Time.new
     @today = Time.utc(now.year, now.month, now.day, 0,0)
 
@@ -396,6 +420,9 @@ class StatsController < ApplicationController
     # define cut_off date and discard the time for a month, 3 months and a year
     cut_off_time = 13.months.ago()
     @cut_off_year = Time.utc(cut_off_time.year, cut_off_time.month, cut_off_time.day,0,0)
+
+    cut_off_time = 16.months.ago()
+    @cut_off_year_plus3 = Time.utc(cut_off_time.year, cut_off_time.month, cut_off_time.day,0,0)
         
     cut_off_time = 31.days.ago
     @cut_off_month = Time.utc(cut_off_time.year, cut_off_time.month, cut_off_time.day,0,0)
