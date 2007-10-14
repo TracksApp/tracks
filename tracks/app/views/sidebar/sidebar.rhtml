@@ -25,5 +25,7 @@
 	           :locals => { :list_name => 'Hidden Contexts',
 	           				:contexts => @contexts.select{|c| c.hide? } } -%>
 	<% end -%>
+	
+	<div class="integrations-link"><%= link_to 'Integrate Tracks', integrations_path %></div>
 
 </div>

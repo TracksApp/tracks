@@ -549,6 +549,11 @@ li {
 #sidebar li {
       padding: auto;
       }
+#sidebar .integrations-link {
+	margin-top:10px;
+	padding-top:10px;
+	font-size: 0.8em;
+}
 .sortable_row {
       background: #fff;
       _background: transparent;
@@ -1049,4 +1054,24 @@ button.positive, .widgets a.positive{
 	clear:both;
 	margin-top:15px;
 	margin-bottom:15px;
+}
+body.integrations h2 {
+	margin-top:40px;
+	padding-top:20px;
+	margin-bottom:10px;
+	border-top:1px solid #ccc;
+}
+body.integrations p, body.integrations li {
+	font-size:1.0em;
+}
+body.integrations li {
+	list-style-type: disc;
+	list-style-position: inside;
+	margin-left:30px;	
+}
+body.integrations textarea {
+	margin:10px;
+	padding:3px;
+	width:80%;
+	background-color:#ddd;
 }

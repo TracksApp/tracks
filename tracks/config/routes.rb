@@ -1,7 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
   UJS::routes
   
-  # Login Routes
   map.with_options :controller => 'login' do |login|
     login.login 'login', :action => 'login'
     login.formatted_login 'login.:format', :action => 'login'
@@ -21,17 +20,14 @@ ActionController::Routing::Routes.draw do |map|
     users.signup 'signup', :action => "new"
   end
 
-  # Context Routes
   map.resources :contexts, :collection => {:order => :post} do |contexts|
     contexts.resources :todos, :name_prefix => "context_"
   end
 
-  # Projects Routes
   map.resources :projects, :collection => {:order => :post, :alphabetize => :post} do |projects|
     projects.resources :todos, :name_prefix => "project_"
   end
 
-    # ToDo Routes
   map.resources :todos,
                 :member => {:toggle_check => :put, :toggle_star => :put},
                 :collection => {:check_deferred => :post, :filter_to_context => :post, :filter_to_project => :post}
@@ -46,13 +42,11 @@ ActionController::Routing::Routes.draw do |map|
     todos.mobile_abbrev_new 'm/new', :action => "new", :format => 'm'
   end
   
-  # Notes Routes
   map.resources :notes
-
-  # Feed Routes
-  map.connect 'feeds', :controller => 'feedlist', :action => 'index'
+  map.feeds 'feeds', :controller => 'feedlist', :action => 'index'
   
   map.preferences 'preferences', :controller => 'preferences', :action => 'index'
+  map.integrations 'integrations', :controller => 'integrations', :action => 'index'
 
   # Install the default route as the lowest priority.
   map.connect ':controller/:action/:id'

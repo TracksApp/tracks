@@ -1,0 +1,20 @@
+(* Pops up a dialog box in which you enter a description for a next action.
+   It then creates that next action in Tracks in the context specified below.
+ *)
+
+set myUsername to "<%= current_user.login %>"
+set myToken to "<%= current_user.token %>"
+set myContextID to <%= context.id %> (* <%= context.name %> *)
+
+-- Display dialog to enter your description 
+display dialog "Description of next action:" default answer ""
+set myDesc to text returned of the result
+
+-- Now send all that info to Tracks
+-- Edit the URL of your Tracks installation if necessary"
+tell application "<%= home_url %>backend/api"
+	set returnValue to call xmlrpc {method name:"NewTodo", parameters:{myUsername, myToken, myContextID, myDesc}}
+end tell
+
+-- Show the ID of the newly created next action
+display dialog "New next action with id " & returnValue & " created"

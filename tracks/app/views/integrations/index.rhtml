@@ -1,0 +1,92 @@
+<h1>Integrations</h1>
+<p>Tracks can be integrated with a number of other tools... whatever it takes to help you get things done! This page has information on setting up some of these. Not all of these are applicable to all platforms, and some require more technical knowledge than others.</p>
+<p>Contents:
+	<ol>
+	<li><a href="#applescript1-section">Add an Action with Applescript</a></li>
+	<li><a href="#applescript2-section">Add an Action with Applescript based on the currently selected Email in Mail.app</a></li>
+	<li><a href="#quicksilver-applescript-section">Add Actions with Quicksilver and Applescript</a></li>
+	<li><a href="#email-cron-section">Automatically Email Yourself Upcoming Actions</a></li>
+</ol><br />
+</p>
+<p>Do you have one of your own to add? <a href="http://www.rousette.org.uk/projects/forums/viewforum/10/" title="Tracks | Tips and Tricks">Tell us about it in our Tips and Tricks forum
+</a> and we may include it on this page in a future versions of Tracks.</p>
+
+<a name="applescript1-section"> </a>
+<h2>Add an Action with Applescript</h2>
+<p>This is a simple script that pops up a dialog box asking for a description, and then sends that to Tracks with a hard-coded context.</p>
+
+<ol>
+	<li>Choose the context you want to add actions to: <select name="applescript1-contexts" id="applescript1-contexts"><%= options_from_collection_for_select(current_user.contexts, "id", "name", current_user.contexts.first.id) %></select>
+		<%= observe_field "applescript1-contexts", :update => "applescript1",
+		:with => 'context_id',
+		:url => { :controller => "integrations", :action => "get_applescript1" },
+		:before => "$('applescript1').startWaiting()",
+	    :complete => "$('applescript1').stopWaiting()"
+	     %>
+	</li>
+	<li>Copy the Applescript below to the clipboard.<br />
+	
+	<textarea id="applescript1" name="applescript1" rows="15"><%= render :partial => 'applescript1', :locals => { :context => current_user.contexts.first } %></textarea>
+	</li>
+ 	<li>Open Script Editor and paste the script into a new document.</li>
+ 	<li>Compile and save the script. Run it as necessary.</li>
+</ol>
+
+<a name="applescript2-section"> </a>
+<h2>Add an Action with Applescript based on the currently selected Email in Mail.app</h2>
+<p>This script takes the sender and subject of the selected email(s) in Mail and creates a new action for each one, with the description, "Email [sender] about [subject]". The description gets truncated to 100 characters (the validation limit for the field) if it is longer than that. It also has Growl notifications if you have Growl installed.</p>
+
+<ol>
+	<li>Choose the context you want to add actions to: <select name="applescript2-contexts" id="applescript2-contexts"><%= options_from_collection_for_select(current_user.contexts, "id", "name", current_user.contexts.first.id) %></select>
+		<%= observe_field "applescript2-contexts", :update => "applescript2",
+		:with => 'context_id',
+		:url => { :controller => "integrations", :action => "get_applescript2" },
+		:before => "$('applescript2').startWaiting()",
+	    :complete => "$('applescript2').stopWaiting()"
+	     %>
+	</li>
+	<li>Copy the Applescript below to the clipboard.<br />
+	
+	<textarea id="applescript2" name="applescript2" rows="15"><%= render :partial => 'applescript2', :locals => { :context => current_user.contexts.first } %></textarea>
+	</li>
+ 	<li>Open Script Editor and paste the script into a new document.</li>
+ 	<li>Compile and save the script to the ~/Library/Scriipts/Mail Scripts directory.</li>
+	<li>For more information on using AppleScript with Mail.app, see <a href="http://www.apple.com/applescript/mail/" title="Scriptable Applications: Mail">this overview</a>.
+</ol>
+
+<a name="quicksilver-applescript-section"></a>
+<h2>Add Actions with Quicksilver and Applescript</h2>
+
+<p>This integration will allow you to add actions to Tracks via <a href="http://quicksilver.blacktree.com/">Quicksilver</a>.</p>
+
+<ol>
+	<li>Choose the context you want to add actions to: <select name="quicksilver-contexts" id="quicksilver-contexts"><%= options_from_collection_for_select(current_user.contexts, "id", "name", current_user.contexts.first.id) %></select>
+		<%= observe_field "quicksilver-contexts", :update => "quicksilver",
+		:with => 'context_id',
+		:url => { :controller => "integrations", :action => "get_quicksilver_applescript" },
+		:before => "$('quicksilver').startWaiting()",
+	    :complete => "$('quicksilver').stopWaiting()"
+	     %>
+</li>
+<li>Copy the Applescript below to the clipboard.<br />
+	
+<textarea id="quicksilver" name="quicksilver" rows="15"><%= render :partial => 'quicksilver_applescript', :locals => { :context => current_user.contexts.first } %></textarea>
+</li>
+	<li>Open Script Editor and paste the script into a new document.</li>
+ <li>Compile and save the script as "Add to Tracks.scpt" in ~/Library/Application Support/Quicksilver/Actions/ (you may need to create the Actions directory)</li>
+ <li>Restart Quicksilver</li>
+ <li>Activate Quicksilver (Ctrl+Space by default)</li>
+ <li>Press "." to put quicksilver into text mode</li>
+ <li>Type the description of the next action you want to add</li>
+ <li>Press tab to switch to the action pane.</li>
+ <li>By typing or scrolling, choose the "Add to Tracks" action.</li>
+</ol>
+
+<a name="email-cron-section"> </a>
+<h2>Automatically Email Yourself Upcoming Actions</h2>
+
+<p>If you enter the following entry to your crontab, you will receive email every day around 5 AM with a list of the upcoming actions which are due within the next 7 days.</p>
+
+<textarea id="cron" name="cron">0 5 * * * /usr/bin/curl -0 <%= home_url %>/feed/text/<%= current_user.login %>/<%= current_user.token %>?due=6 | /usr/bin/mail -E -s 'Tracks actions due in the next 7 days' youremail@yourdomain.com</textarea>
+
+<p>You can of course use other text <%= link_to 'feeds provided by Tracks', feeds_path %> -- why not email a list of next actions in a particular project to a group of colleagues who are working on the project?</p>
