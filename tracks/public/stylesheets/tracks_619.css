@@ -107,6 +107,7 @@ ul {list-style-type: none}
 #sidebar ul {margin-left: auto; list-style-position: inside}
 li {font-size: 1.1em; padding: 3px 0px}
 #sidebar li {padding: auto}
+#sidebar .integrations-link {margin-top:10px; padding-top:10px; font-size: 0.8em}
 .sortable_row {background: #fff; _background: transparent; padding: 4px 4px 4px 8px; margin: 2px 2px; border: 1px solid #ccc}
 .edit-form {background: #ccc; padding: 0 10px; border-top: 1px solid #999; border-bottom: 1px solid #999}
 .label {text-align: right}
@@ -194,6 +195,10 @@ button.positive, .widgets a.positive{ color: #498111}
 .bigBlackWaiting {background-image:url('/images/bigBlackWaiting.gif'); background-repeat:no-repeat; background-position:center center; background-color:black}
 .stats_content .open-flash-chart, .stats_content .stats_module {float: left; width: 450px; margin-right:20px; padding-bottom:20px}
 .stats_content h2 {clear:both; margin-top:15px; margin-bottom:15px}
+body.integrations h2 {margin-top:40px; padding-top:20px; margin-bottom:10px; border-top:1px solid #ccc}
+body.integrations p, body.integrations li {font-size:1.0em}
+body.integrations li {list-style-type: disc; list-style-position: inside; margin-left:30px}
+body.integrations textarea {margin:10px; padding:3px; width:80%; background-color:#ddd}
 div.calendar {position: relative}
 .calendar, .calendar table {border: 1px solid #556; font-size: 11px; color: #000; cursor: default; background: #eef; z-index: 110; font-family: tahoma,verdana,sans-serif}
 .calendar .button {text-align: center; padding: 2px}
