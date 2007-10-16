@@ -30,7 +30,7 @@ class DataController < ApplicationController
   def csv_actions
     content_type = 'text/csv'
     CSV::Writer.generate(result = "") do |csv|
-      csv << ["ID", "Context", "Project", "Description", "Notes",
+      csv << ["id", "Context", "Project", "Description", "Notes",
               "Created at", "Due", "Completed at", "User ID", "Show from",
               "state"]
       current_user.todos.find(:all, :include => [:context, :project]).each do |todo|
@@ -53,7 +53,7 @@ class DataController < ApplicationController
   def csv_notes
     content_type = 'text/csv'
     CSV::Writer.generate(result = "") do |csv|
-      csv << ["ID", "User ID", "Project", "Note",
+      csv << ["id", "User ID", "Project", "Note",
               "Created at", "Updated at"]
       # had to remove project include because it's association order is leaking through
       # and causing an ambiguous column ref even with_exclusive_scope didn't seem to help -JamesKebinger 
