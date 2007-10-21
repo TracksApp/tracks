@@ -2,35 +2,45 @@ module TodosHelper
 
   require 'users_controller'
   # Counts the number of incomplete items in the specified context
-  #
+  # 
   def count_items(context)
     count = Todo.find_all("done=0 AND context_id=#{context.id}").length
   end
 
   def form_remote_tag_edit_todo( &block )
-    form_tag( todo_path(@todo), {:method => :put, :id => dom_id(@todo, 'form'), :class => "edit_todo_form inline-form" }, &block )
-    apply_behavior 'form.edit_todo_form', make_remote_form(:method => :put), :prevent_default => true
+    form_tag( 
+      todo_path(@todo), {
+        :method => :put, 
+        :id => dom_id(@todo, 'form'), 
+        :class => dom_id(@todo, 'form') + " inline-form edit_todo_form" }, 
+      &block )
+    apply_behavior 'form.'+dom_id(@todo, 'form'), make_remote_form(
+      :method => :put, 
+      :before => "$('" + dom_id(@todo, 'submit') + "').startWaiting()",
+      :loaded => "$('" + dom_id(@todo, 'submit') + "').stopWaiting()",
+      :condition => "!$('" + dom_id(@todo, 'submit') + "').isWaiting()"),
+      :prevent_default => true
   end
   
   def remote_delete_icon
     str = link_to( image_tag_for_delete,
-                   todo_path(@todo),
-                   :class => "icon delete_icon", :title => "delete the action '#{@todo.description}'")
+      todo_path(@todo),
+      :class => "icon delete_icon", :title => "delete the action '#{@todo.description}'")
     apply_behavior '.item-container a.delete_icon:click', :prevent_default => true do |page|
-       page << "if (confirm('Are you sure that you want to ' + this.title + '?')) {"
-       page << "  new Ajax.Request(this.href, { asynchronous : true, evalScripts : true, method : 'delete', parameters : { '_source_view' : '#{@source_view}' }})"
-       page << "}"
+      page << "if (confirm('Are you sure that you want to ' + this.title + '?')) {"
+      page << "  new Ajax.Request(this.href, { asynchronous : true, evalScripts : true, method : 'delete', parameters : { '_source_view' : '#{@source_view}' }})"
+      page << "}"
     end
     str
   end
   
   def remote_star_icon
     str = link_to( image_tag_for_star(@todo),
-                   toggle_star_todo_path(@todo),
-                   :class => "icon star_item", :title => "star the action '#{@todo.description}'")
+      toggle_star_todo_path(@todo),
+      :class => "icon star_item", :title => "star the action '#{@todo.description}'")
     apply_behavior '.item-container a.star_item:click', 
       remote_function(:url => javascript_variable('this.href'), :method => 'put',
-                      :with => "{ _source_view : '#{@source_view}' }"),
+      :with => "{ _source_view : '#{@source_view}' }"),
       :prevent_default => true
     str                   
   end
@@ -38,8 +48,8 @@ module TodosHelper
   def remote_edit_icon
     if !@todo.completed?
       str = link_to( image_tag_for_edit,
-                      edit_todo_path(@todo),
-                      :class => "icon edit_icon")
+        edit_todo_path(@todo),
+        :class => "icon edit_icon")
       apply_behavior '.item-container a.edit_icon:click', :prevent_default => true do |page|
         page << "new Ajax.Request(this.href, { asynchronous : true, evalScripts : true, method : 'get', parameters : { '_source_view' : '#{@source_view}' }, onLoading: function(request){ Effect.Pulsate(this)}});"
       end
@@ -52,8 +62,8 @@ module TodosHelper
   def remote_toggle_checkbox
     str = check_box_tag('item_id', toggle_check_todo_path(@todo), @todo.completed?, :class => 'item-checkbox')
     apply_behavior '.item-container input.item-checkbox:click',
-                   remote_function(:url => javascript_variable('this.value'), :method => 'put',
-                                   :with => "{ _source_view : '#{@source_view}' }")
+      remote_function(:url => javascript_variable('this.value'), :method => 'put',
+      :with => "{ _source_view : '#{@source_view}' }")
     str
   end
   
@@ -85,7 +95,7 @@ module TodosHelper
   
   def project_and_context_links(parent_container_type)
     if @todo.completed?
-       "(#{@todo.context.name}#{", " + @todo.project.name unless @todo.project.nil?})"
+      "(#{@todo.context.name}#{", " + @todo.project.name unless @todo.project.nil?})"
     else
       str = ''
       if (['project', 'tag'].include?(parent_container_type))
@@ -98,13 +108,13 @@ module TodosHelper
     end
   end
     
-  # Uses the 'staleness_starts' value from settings.yml (in days) to colour
-  # the background of the action appropriately according to the age
-  # of the creation date:
+  # Uses the 'staleness_starts' value from settings.yml (in days) to colour the
+  # background of the action appropriately according to the age of the creation
+  # date:
   # * l1: created more than 1 x staleness_starts, but < 2 x staleness_starts
   # * l2: created more than 2 x staleness_starts, but < 3 x staleness_starts
   # * l3: created more than 3 x staleness_starts
-  #
+  # 
   def staleness_class(item)
     if item.due || item.completed?
       return ""
@@ -119,9 +129,9 @@ module TodosHelper
     end
   end
 
-  # Check show_from date in comparison to today's date
-  # Flag up date appropriately with a 'traffic light' colour code
-  #
+  # Check show_from date in comparison to today's date Flag up date
+  # appropriately with a 'traffic light' colour code
+  # 
   def show_date(due)
     if due == nil
       return ""
@@ -131,22 +141,22 @@ module TodosHelper
        
     case days
       # overdue or due very soon! sound the alarm!
-      when -1000..-1
-        "<a title='" + format_date(due) + "'><span class=\"red\">Shown on " + (days * -1).to_s + " days</span></a> "
-      when 0
-           "<a title='" + format_date(due) + "'><span class=\"amber\">Show Today</span></a> "
-      when 1
-           "<a title='" + format_date(due) + "'><span class=\"amber\">Show Tomorrow</span></a> "
+    when -1000..-1
+      "<a title='" + format_date(due) + "'><span class=\"red\">Shown on " + (days * -1).to_s + " days</span></a> "
+    when 0
+      "<a title='" + format_date(due) + "'><span class=\"amber\">Show Today</span></a> "
+    when 1
+      "<a title='" + format_date(due) + "'><span class=\"amber\">Show Tomorrow</span></a> "
       # due 2-7 days away
-      when 2..7
+    when 2..7
       if prefs.due_style == Preference.due_styles[:due_on]
         "<a title='" + format_date(due) + "'><span class=\"orange\">Show on " + due.strftime("%A") + "</span></a> "
       else
         "<a title='" + format_date(due) + "'><span class=\"orange\">Show in " + days.to_s + " days</span></a> "
       end
       # more than a week away - relax
-      else
-        "<a title='" + format_date(due) + "'><span class=\"green\">Show in " + days.to_s + " days</span></a> "
+    else
+      "<a title='" + format_date(due) + "'><span class=\"green\">Show in " + days.to_s + " days</span></a> "
     end
   end
   
@@ -186,12 +196,13 @@ module TodosHelper
   end
   
   def project_names_for_autocomplete
-     array_or_string_for_javascript( ['None'] + @projects.select{ |p| p.active? }.collect{|p| escape_javascript(p.name) } )
+    array_or_string_for_javascript( ['None'] + @projects.select{ |p| p.active? }.collect{|p| escape_javascript(p.name) } )
   end
   
   def context_names_for_autocomplete
-     #return array_or_string_for_javascript(['Create a new context']) if @contexts.empty?
-     array_or_string_for_javascript( @contexts.collect{|c| escape_javascript(c.name) } )
+    # #return array_or_string_for_javascript(['Create a new context']) if
+    # @contexts.empty?
+    array_or_string_for_javascript( @contexts.collect{|c| escape_javascript(c.name) } )
   end
 
   def format_ical_notes(notes)
