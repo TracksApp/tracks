@@ -74,10 +74,19 @@ class TodosControllerTest < Test::Rails::TestCase
   end
   
   def test_create_todo
-    original_todo_count = Todo.count
+    assert_difference Todo, :count do
+      login_as(:admin_user)
+      put :create, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{"notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>"foo bar"
+    end
+  end
+  
+  def test_create_todo_via_xml
     login_as(:admin_user)
-    put :create, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{"notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>"foo bar"
-    assert_equal original_todo_count + 1, Todo.count
+    put :create, :format => "xml", "request" => { "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{"notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>"foo bar" }
+    assert_response 201
+    assert_xml_select "todo" do
+      assert_xml_select "id", /\d+/
+    end
   end
   
   def test_create_deferred_todo

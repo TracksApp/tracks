@@ -94,7 +94,10 @@ class TodosController < ApplicationController
         determine_down_count if @saved
         render :action => 'create'
       end
-      format.xml { render :xml => @todo.to_xml( :root => 'todo', :except => :user_id ) }
+      format.xml do
+        @todo.reload
+        render :xml => @todo.to_xml( :root => 'todo', :except => :user_id ), :status => 201
+      end
     end
   end
   
