@@ -95,8 +95,11 @@ class TodosController < ApplicationController
         render :action => 'create'
       end
       format.xml do
-        @todo.reload
-        render :xml => @todo.to_xml( :root => 'todo', :except => :user_id ), :status => 201
+        if @saved
+          render :xml => @todo.to_xml( :root => 'todo', :except => :user_id ), :status => 201
+        else
+          render :xml => @todo.errors.to_xml, :status => 422
+        end
       end
     end
   end

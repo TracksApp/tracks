@@ -88,6 +88,16 @@ class TodosControllerTest < Test::Rails::TestCase
       assert_xml_select "id", /\d+/
     end
   end
+
+  def test_fail_to_create_todo_via_xml
+    login_as(:admin_user)
+    #try to create with no context, which is not valid
+    put :create, :format => "xml", "request" => { "project_name"=>"Build a working time machine", "todo"=>{"notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>"foo bar" }
+    assert_response 422
+    assert_xml_select "errors" do
+       assert_xml_select "error", "Context can't be blank"
+    end
+  end
   
   def test_create_deferred_todo
     original_todo_count = Todo.count
