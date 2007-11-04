@@ -178,8 +178,7 @@ class ApplicationController < ActionController::Base
   private
         
   def parse_date_per_user_prefs( s )
-    return nil if s.blank?
-    Date.strptime(s, prefs.date_format)
+    prefs.parse_date(s)
   end
     
   def init_data_for_sidebar

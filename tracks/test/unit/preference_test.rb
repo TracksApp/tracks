@@ -19,5 +19,17 @@ class PreferenceTest < Test::Rails::TestCase
     assert @other_user.preference.show_project_on_todo_done
     assert !@admin_user.preference.show_project_on_todo_done
   end
+  
+  def test_parse_date
+    assert_equal Date.new(2007, 5, 20).to_s, @admin_user.preference.parse_date('20/5/2007').to_s
+  end
+  
+  def test_parse_date_returns_nil_if_string_is_empty
+    assert_nil @admin_user.preference.parse_date('')
+  end
+
+  def test_parse_date_returns_nil_if_string_is_nil
+    assert_nil @admin_user.preference.parse_date(nil)
+  end
 
 end

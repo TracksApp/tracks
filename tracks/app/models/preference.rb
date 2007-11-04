@@ -22,4 +22,9 @@ class Preference < ActiveRecord::Base
     return show_number_completed == 0
   end
   
+  def parse_date(s)
+    return nil if s.blank?
+    Date.strptime(s, date_format)
+  end
+  
 end

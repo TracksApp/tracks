@@ -38,6 +38,10 @@ class Context < ActiveRecord::Base
     s += "Context is #{hidden? ? 'Hidden' : 'Active'}."
     s += "</p>"
     s
+  end
+  
+  def new_record_before_save?
+    @new_record_before_save
   end  
 
 end

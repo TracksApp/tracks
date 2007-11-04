@@ -35,48 +35,28 @@ class TodosController < ApplicationController
   end
   
   def create
-    @todo = current_user.todos.build
-    p = params['request'] || params
+    p = TodoCreateParamsHelper.new(params, prefs)        
+    p.parse_dates() unless mobile?
     
-    if p['todo']['show_from'] && !mobile?
-      p['todo']['show_from'] = parse_date_per_user_prefs(p['todo']['show_from'])
-    end
+    @todo = current_user.todos.build(p.attributes)
     
-    @todo.attributes = p['todo']
-    
-    if p['todo']['project_id'].blank? && !p['project_name'].blank? && p['project_name'] != 'None'
-      project = current_user.projects.find_by_name(p['project_name'].strip)
-      unless project
-          project = current_user.projects.build
-          project.name = p['project_name'].strip
-          project.save
-          @new_project_created = true
-      end
+    if p.project_specified_by_name?
+      project = current_user.projects.find_or_create_by_name(p.project_name)
+      @new_project_created = project.new_record_before_save?
       @todo.project_id = project.id
     end
     
-    if p['todo']['context_id'].blank? && !p['context_name'].blank?
-      context = current_user.contexts.find_by_name(p['context_name'].strip)
-      unless context
-          context = current_user.contexts.build
-          context.name = p['context_name'].strip
-          context.save
-          @new_context_created = true
-          @not_done_todos = [@todo]
-      end
+    if p.context_specified_by_name?
+      context = current_user.contexts.find_or_create_by_name(p.context_name)
+      @new_context_created = context.new_record_before_save?
+      @not_done_todos = [@todo] if @new_context_created
       @todo.context_id = context.id
     end
 
-    if @todo.due?
-      @todo.due = parse_date_per_user_prefs(p['todo']['due']) unless mobile?
-    else
-      @todo.due = ""
-    end
-    
     @saved = @todo.save
-    if @saved
-      @todo.tag_with(params[:tag_list], current_user) if params[:tag_list] 
-      @todo.reload
+    unless (@saved == false) || p.tag_list.blank?
+      @todo.tag_with(p.tag_list, current_user)
+      @todo.tags.reload
     end
     
     respond_to do |format|
@@ -303,7 +283,6 @@ class TodosController < ApplicationController
   end
   
   # /todos/tag/[tag_name] shows all the actions tagged with tag_name
-  #
   def tag
     
     @tag_name = params[:name]
@@ -610,4 +589,56 @@ class TodosController < ApplicationController
       end
     end
 
+    class TodoCreateParamsHelper
+
+      def initialize(params, prefs)
+        @params = params['request'] || params
+        @prefs = prefs
+        @attributes = params['request'] && params['request']['todo']  || params['todo']
+      end
+      
+      def attributes
+        @attributes
+      end
+      
+      def show_from
+        @attributes['show_from']
+      end
+      
+      def due
+        @attributes['due']
+      end
+      
+      def project_name
+        @params['project_name'].strip unless @params['project_name'].nil?
+      end
+      
+      def context_name
+        @params['context_name'].strip unless @params['context_name'].nil?
+      end
+      
+      def tag_list
+        @params['tag_list']
+      end
+      
+      def parse_dates()
+        @attributes['show_from'] = @prefs.parse_date(show_from)
+        @attributes['due'] = @prefs.parse_date(due)
+        @attributes['due'] ||= ''
+      end
+      
+      def project_specified_by_name?
+        return false unless @attributes['project_id'].blank?
+        return false if project_name.blank?
+        return false if project_name == 'None'
+        true
+      end
+      
+      def context_specified_by_name?
+        return false unless @attributes['context_id'].blank?
+        return false if context_name.blank?
+        true
+      end
+      
+    end
 end

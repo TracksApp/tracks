@@ -90,6 +90,11 @@ class Project < ActiveRecord::Base
   def name=(value)
     self[:name] = value.gsub(/\s{2,}/, " ").strip
   end
+  
+  def new_record_before_save?
+    @new_record_before_save
+  end  
+  
 end
 
 class NullProject
