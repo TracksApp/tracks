@@ -92,6 +92,8 @@ class TodosController < ApplicationController
       end
       format.js do
         determine_down_count if @saved
+        @contexts = current_user.contexts.find(:all) if @new_context_created
+        @projects = current_user.projects.find(:all) if @new_project_created
         render :action => 'create'
       end
       format.xml do
