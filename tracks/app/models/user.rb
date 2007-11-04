@@ -60,7 +60,7 @@ class User < ActiveRecord::Base
            :conditions => [ 'state = ?', 'deferred' ],
            :order => 'show_from ASC, todos.created_at DESC' do
               def find_and_activate_ready
-                find(:all, :conditions => ['show_from <= ?', Time.now.beginning_of_day ]).collect { |t| t.activate_and_save! }
+                find(:all, :conditions => ['show_from <= ?', proxy_owner.time ]).collect { |t| t.activate_and_save! }
               end
            end
   has_many :completed_todos,

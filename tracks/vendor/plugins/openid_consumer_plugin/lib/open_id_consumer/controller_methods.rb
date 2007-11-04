@@ -16,7 +16,7 @@
 # under the License.
 
 begin
-  require_gem "ruby-openid", ">= 1.0"
+  gem "ruby-openid", ">= 1.0"
 rescue LoadError
   require "openid"
 end
