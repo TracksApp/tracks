@@ -77,12 +77,19 @@ class TodoTest < Test::Rails::TestCase
   
   def test_create_a_new_deferred_todo
     user = users(:other_user)
-    item = user.todos.build
-    item.show_from = next_week
-    item.context_id = 1
-    item.description = 'foo'
-    assert item.save, "should have saved successfully" + item.errors.to_xml
-    assert_equal :deferred, item.current_state
+    todo = user.todos.build
+    todo.show_from = next_week
+    todo.context_id = 1
+    todo.description = 'foo'
+    assert todo.save, "should have saved successfully" + todo.errors.to_xml
+    assert_equal :deferred, todo.current_state
+  end
+
+  def test_create_a_new_deferred_todo_by_passing_attributes
+    user = users(:other_user)
+    todo = user.todos.build(:show_from => next_week, :context_id => 1, :description => 'foo')
+    assert todo.save, "should have saved successfully" + todo.errors.to_xml
+    assert_equal :deferred, todo.current_state
   end
 
   def test_feed_options

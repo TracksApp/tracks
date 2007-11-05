@@ -29,6 +29,10 @@ module Tracks
       def source_view_is( s )
         s == (params[:_source_view] || @source_view).to_sym
       end
+      
+      def source_view_is_one_of( *s )
+        s.include?(params[:_source_view].to_sym)
+      end
   
       def source_view
         responder = Tracks::SourceViewSwitching::Responder.new(params[:_source_view] || @source_view)
@@ -47,7 +51,7 @@ module Tracks
         s == (params[:_source_view] || @source_view).to_sym
       end
     
-      def source_view_is_one_of( s=[] )
+      def source_view_is_one_of( *s )
         s.include?(params[:_source_view].to_sym)
       end
 

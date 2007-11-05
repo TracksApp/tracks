@@ -1,5 +1,9 @@
 <div id="display_box">
   
+  <div id="tickler-empty-nd" style="display:<%= (@count == 0) ? 'block' : 'none'%>;">
+    <div class="message"><p>Currently there are no deferred actions.</p></div>
+  </div>
+
   <%= render :partial => "contexts/context", :collection => @contexts, 
             :locals => { :collapsible => true } %>
 

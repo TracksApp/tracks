@@ -73,8 +73,8 @@ module TodosHelper
     elsif @todo.deferred?
       show_date( @todo.show_from )
     else
-      due_date( @todo.due ) 
-    end    
+      due_date( @todo.due )
+    end
   end
   
   def tag_list_text
@@ -132,31 +132,31 @@ module TodosHelper
   # Check show_from date in comparison to today's date Flag up date
   # appropriately with a 'traffic light' colour code
   # 
-  def show_date(due)
-    if due == nil
+  def show_date(d)
+    if d == nil
       return ""
     end
 
-    days = days_from_today(due)
+    days = days_from_today(d)
        
     case days
       # overdue or due very soon! sound the alarm!
     when -1000..-1
-      "<a title='" + format_date(due) + "'><span class=\"red\">Shown on " + (days * -1).to_s + " days</span></a> "
+      "<a title=\"" + format_date(d) + "\"><span class=\"red\">Scheduled to show " + (days * -1).to_s + " days ago</span></a> "
     when 0
-      "<a title='" + format_date(due) + "'><span class=\"amber\">Show Today</span></a> "
+      "<a title=\"" + format_date(d) + "\"><span class=\"amber\">Show Today</span></a> "
     when 1
-      "<a title='" + format_date(due) + "'><span class=\"amber\">Show Tomorrow</span></a> "
+      "<a title=\"" + format_date(d) + "\"><span class=\"amber\">Show Tomorrow</span></a> "
       # due 2-7 days away
     when 2..7
       if prefs.due_style == Preference.due_styles[:due_on]
-        "<a title='" + format_date(due) + "'><span class=\"orange\">Show on " + due.strftime("%A") + "</span></a> "
+        "<a title=\"" + format_date(d) + "\"><span class=\"orange\">Show on " + d.strftime("%A") + "</span></a> "
       else
-        "<a title='" + format_date(due) + "'><span class=\"orange\">Show in " + days.to_s + " days</span></a> "
+        "<a title=\"" + format_date(d) + "\"><span class=\"orange\">Show in " + days.to_s + " days</span></a> "
       end
       # more than a week away - relax
     else
-      "<a title='" + format_date(due) + "'><span class=\"green\">Show in " + days.to_s + " days</span></a> "
+      "<a title=\"" + format_date(d) + "\"><span class=\"green\">Show in " + days.to_s + " days</span></a> "
     end
   end
   

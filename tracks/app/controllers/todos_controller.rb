@@ -221,11 +221,9 @@ class TodosController < ApplicationController
       format.js do
         if @saved
           determine_down_count
-          source_view do |from|
-             from.todo do
-               determine_remaining_in_context_count(@context_id)
-             end
-           end
+          if source_view_is_one_of(:todo, :deferred)
+            determine_remaining_in_context_count(@context_id)
+          end
         end
         render
       end

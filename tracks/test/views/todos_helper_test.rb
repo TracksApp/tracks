@@ -6,8 +6,51 @@ class TodosHelperTest < Test::Rails::HelperTestCase
     super
   end
 
+  include ActionView::Helpers::DateHelper
+  include ApplicationHelper
   include TodosHelper
+  
+  def user_time
+    Time.now
+  end
+  
+  def format_date(date)
+    if date
+      date_format = "%d/%m/%Y"
+      date.strftime("#{date_format}")
+    else
+      ''
+    end
+  end
     
+  def test_show_date_in_past
+    date = 3.days.ago.to_date
+    html = show_date(date)
+    formatted_date = format_date(date)
+    assert_equal %Q{<a title="#{formatted_date}"><span class="red">Scheduled to show 3 days ago</span></a> }, html
+  end
+  
+  def test_show_date_today
+    date = Time.now.to_date
+    html = show_date(date)
+    formatted_date = format_date(date)
+    assert_equal %Q{<a title="#{formatted_date}"><span class="amber">Show Today</span></a> }, html
+  end
+  
+  def test_show_date_tomorrow
+    date = 1.day.from_now.to_date
+    html = show_date(date)
+    formatted_date = format_date(date)
+    assert_equal %Q{<a title="#{formatted_date}"><span class="amber">Show Tomorrow</span></a> }, html
+  end
+  
+  def test_show_date_future
+    date = 10.days.from_now.to_date
+    html = show_date(date)
+    formatted_date = format_date(date)
+    assert_equal %Q{<a title="#{formatted_date}"><span class="green">Show in 10 days</span></a> }, html
+  end
+  
   def test_remote_star_icon_unstarred
     @todo = flexmock(:id => 1, :to_param => 1, :description => 'Get gas', :starred? => false)
     assert_remote_star_icon_helper_matches %r{<a href="/todos/1;toggle_star" class="icon star_item" title="star the action 'Get gas'"><img alt="Blank" class="unstarred_todo" src="/images/blank.png[?0-9]*" title="Star action" /></a>}

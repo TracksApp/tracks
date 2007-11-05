@@ -33,7 +33,7 @@ class Todo < ActiveRecord::Base
     transitions :to => :deferred, :from => [:project_hidden], :guard => Proc.new{|t| !t.show_from.blank? }
     transitions :to => :active, :from => [:project_hidden]
   end
-  
+    
   attr_protected :user
 
   # Description field can't be empty, and must be < 100 bytes
@@ -63,6 +63,10 @@ class Todo < ActiveRecord::Base
     save!
   end
 
+  def show_from
+    self[:show_from]
+  end
+  
   def show_from=(date)
     activate! if deferred? && date.blank?
     defer! if active? && !date.blank? && date > user.date
@@ -84,6 +88,15 @@ class Todo < ActiveRecord::Base
       original_set_initial_state
     end
   end
+  
+  alias_method :original_run_initial_state_actions, :run_initial_state_actions
+  
+  def run_initial_state_actions
+    #only run the initial state actions if the standard initial state hasn't been changed
+    if self.class.initial_state.to_sym == current_state
+      original_run_initial_state_actions
+    end
+  end
 
   def self.feed_options(user)
     {
@@ -91,7 +104,6 @@ class Todo < ActiveRecord::Base
       :description => "Actions for #{user.display_name}"
     }
   end
-  
   
   def starred?
     tags.any? {|tag| tag.name == STARRED_TAG_NAME}
