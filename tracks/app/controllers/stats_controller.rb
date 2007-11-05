@@ -93,6 +93,11 @@ class StatsController < ApplicationController
           @actions_created_last12months_hash[i+2])/3.0
     }    
     
+    # interpolate avg for this month. Assume 31 days in this month
+    days_passed_this_month = Time.new.day/1.0
+    @interpolated_actions_created_this_month = @actions_created_last12months_hash[0]/days_passed_this_month*31.0
+    @interpolated_actions_done_this_month = @actions_done_last12months_hash[0]/days_passed_this_month*31.0
+    
     render :layout => false
   end
 
