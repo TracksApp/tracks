@@ -20,6 +20,8 @@ class DataController < ApplicationController
     all_tables['todos'] = current_user.todos.find(:all)
     all_tables['contexts'] = current_user.contexts.find(:all)
     all_tables['projects'] = current_user.projects.find(:all)
+    all_tables['tags'] = current_user.tags.find(:all)
+    all_tables['taggings'] = current_user.taggings.find(:all)
     all_tables['notes'] = current_user.notes.find(:all)
     
     result = all_tables.to_yaml
@@ -30,7 +32,7 @@ class DataController < ApplicationController
   def csv_actions
     content_type = 'text/csv'
     CSV::Writer.generate(result = "") do |csv|
-      csv << ["id", "Context", "Project", "Description", "Notes",
+      csv << ["id", "Context", "Project", "Description", "Notes", "Tags",
               "Created at", "Due", "Completed at", "User ID", "Show from",
               "state"]
       current_user.todos.find(:all, :include => [:context, :project]).each do |todo|
@@ -39,7 +41,8 @@ class DataController < ApplicationController
         csv << [todo.id, todo.context.name, 
                 todo.project_id = todo.project_id.nil? ? "" : todo.project.name,
                 todo.description, 
-                todo.notes, todo.created_at.to_formatted_s(:db),
+                todo.notes, todo.tags.collect{|t| t.name}.join(', '),
+                todo.created_at.to_formatted_s(:db),
                 todo.due = todo.due? ? todo.due.to_formatted_s(:db) : "",
                 todo.completed_at = todo.completed_at? ? todo.completed_at.to_formatted_s(:db) : "", 
                 todo.user_id, 
@@ -74,6 +77,8 @@ class DataController < ApplicationController
     result << current_user.todos.find(:all).to_xml
     result << current_user.contexts.find(:all).to_xml(:skip_instruct => true)
     result << current_user.projects.find(:all).to_xml(:skip_instruct => true)
+    result << current_user.tags.find(:all).to_xml(:skip_instruct => true)
+    result << current_user.taggings.find(:all).to_xml(:skip_instruct => true)
     result << current_user.notes.find(:all).to_xml(:skip_instruct => true)
     send_data(result, :filename => "tracks_backup.xml", :type => 'text/xml')
   end
