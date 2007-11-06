@@ -7,7 +7,7 @@
 Of those <%= @contexts.count(:conditions => ["hide = ?", false])%> are visible contexts and 
 <%= @contexts.count(:conditions => ["hide = ?", true]) %> are hidden contexts
 
-<% unless @actions.count == 0 -%>
+<% unless @actions.empty? -%>
 <p>You have <%= @actions.count(:conditions => "completed_at IS NULL") %> uncompleted actions of which
 <%= @actions.count(:conditions => "completed_at IS NULL AND NOT show_from IS NULL") %> are 
 deferred actions. </p>

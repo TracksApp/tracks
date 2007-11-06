@@ -25,10 +25,12 @@
       <label for="project_description">Description (optional):</label><br />
       <%= text_area 'project', 'description', "cols" => 30, "rows" => 4, "tabindex" => 2  %><br />
 
+	<% unless @contexts.empty? -%>
     <label for="default_context_name">Default Context (optional):</label><br />
     <%= text_field_tag("project[default_context_name]", @project.default_context.name, :tabindex => 3) %>
     <%= render :partial => 'default_context_autocomplete' %>
         <br />
+	<% end -%>
 
       <input type="submit" value="Add Project" tabindex="4" /><br />
       
