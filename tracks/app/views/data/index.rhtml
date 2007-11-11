@@ -1,15 +1,37 @@
-<div id="display_box">
-	<div id="feeds">
+<div id="feeds">
 	<div id="feedlegend">
-		<h3>Importing and exporting data into Tracks</h3>
-	  <p>You can export your data in a number of different forms. Note: you can only export/import your own data (i.e. the data available when you are logged in).</p>
+		<h3>Exporting data</h3>
+	  <p>You can choose between the following formats:</p>
+	  <ul>
+	    <li><strong>YAML: </strong>Best for porting data between Tracks installations</li>
+	    <li><strong>CSV: </strong>Best for importing into spreadsheet or data analysis software</li>
+	    <li><strong>XML: </strong>Best for importing or repurposing the data</li>
+	  </ul
 	</div>
+
+<p>
+<table class="users_table">
+<tr>
+  <th>Description</th>
+  <th>Download link</th>
+</tr>
+<tr>
+<td>YAML file containing all your actions, contexts, projects, tags and notes</td>
+<td><%= link_to "YAML file", :controller => 'data', :action => 'yaml_export' %></td>
+</tr>
+<tr>
+<td>CSV file containing all of your actions, with named contexts and projects</td>
+<td><%= link_to "CSV file (actions, contexts and projects)", :controller => 'data', :action => 'csv_actions' %></td>
+</tr>
+<tr>
+  <td>CSV file containing all your notes</td>
+  <td><%= link_to "CSV file (notes only)", :controller => 'data', :action => 'csv_notes' %></td>
+</tr>
+<tr>
+  <td>XML file containing all your actions, contexts, projects, tags and notes</td>
+  <td><%= link_to "XML file (actions only)", :controller => 'data', :action => 'xml_export' %></td>
+</tr>
+</table>
+</p>
 	
-			<ul>
-			  <li>Import</li>
-        <li>
-          <%= link_to "Export", :controller => 'data', :action => 'export' %>
-        </li>
-			</ul>
-	</div><!-- End of feeds -->
-</div><!-- End of display_box -->
+</div><!-- End of feeds -->

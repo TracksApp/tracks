@@ -50,7 +50,7 @@ window.onload=function(){
   <li><%= navigation_link( "Done", done_path, {:accesskey=>"d", :title=>"Completed"} ) %></li>
   <li><%= navigation_link( "Notes", notes_path, {:accesskey => "o", :title => "Show all notes"} ) %></li>
   <li><%= navigation_link( "Preferences", preferences_path, {:accesskey => "u", :title => "Show my preferences"} ) %></li>
-  <li><%= navigation_link( "Import/Export", {:controller => "data", :action => "index"}, {:accesskey => "i", :title => "Import and export data"} ) %></li>
+  <li><%= navigation_link( "Export", {:controller => "data", :action => "index"}, {:accesskey => "i", :title => "Import and export data"} ) %></li>
   <% if current_user.is_admin? -%>
     <li><%= navigation_link("Admin", users_path, {:accesskey => "a", :title => "Add or delete users"} ) %></li>
   <% end -%>
