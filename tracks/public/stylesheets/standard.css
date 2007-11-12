@@ -932,6 +932,15 @@ table.users_table {
 .users_table th {color: #fff; background-color: #000;}
 .users_table td {border: none;}
 
+table.export_table {
+  border: 1px solid #666;
+  background-color: #fff;
+  border-spacing: 0px;    
+}
+
+.export_table th {color: #fff; background-color: #000;}
+.export_table td {border: 1px; padding: 5px 0px 5px 5px;}
+
 /* Submit button styling from ParticleTree
     http://particletree.com/features/rediscovering-the-button-element/ */
 
