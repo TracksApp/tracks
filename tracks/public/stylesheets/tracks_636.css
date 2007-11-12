@@ -177,6 +177,9 @@ table.next_actions td {padding:5px 3px 2px 0px}
 table.users_table {width: 100%; text-align: center; border: 1px solid #666; background-color: #fff; border-spacing: 0px}
 .users_table th {color: #fff; background-color: #000;}
 .users_table td {border: none;}
+table.export_table {border: 1px solid #666; background-color: #fff; border-spacing: 0px}
+.export_table th {color: #fff; background-color: #000;}
+.export_table td {border: 1px; padding: 5px 0px 5px 5px;}
 .widgets a, .widgets button{ display:block; float: left; margin:0px 7px 0 0; background-color:#f5f5f5; border:1px solid #dedede; border-top:1px solid #eee; border-left:1px solid #eee; font-family:"Lucida Grande", Verdana, Geneva, Arial, sans-serif; font-size:80%; line-height:100%; text-decoration:none; font-weight:bold; color:#565656; cursor:pointer; padding:3px 5px 7px 5px}
 .widgets button{ width:auto; overflow:visible; padding:3px 5px 5px 5px}
 .widgets button[type]{ padding:3px 5px 4px 5px; line-height:15px}
