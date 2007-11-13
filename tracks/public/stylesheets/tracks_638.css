@@ -127,11 +127,13 @@ form {border: 1px solid #CCC; padding: 10px; margin: 0px}
 .inline-form table {padding-right: 3px}
 .inline-form table, .inline-form textarea#item_notes, .inline-form input#item_description {width: 100%}
 .inline-form table td.label {width: 13ex}
-#todo_new_action_container {background: #ddd; width: 270px; padding: 5px 10px; background-color: #000; filter: alpha(opacity=75); -moz-opacity: .75; opacity: .75; color: #eee}
-#todo_new_action_container input, #todo_new_action_container textarea {width: 100%}
+#todo_new_action_container, #project_new_project_container, #context_new_container {background: #ddd; width: 270px; padding: 5px 10px; background-color: #000; filter: alpha(opacity=75); -moz-opacity: .75; opacity: .75; color: #eee}
+#project_new_project_filler {padding-top: 50px}
+#todo_new_action_container input, #todo_new_action_container textarea, #project_new_project_container input, #project_new_project_container textarea, #context_new_container input {width: 100%}
+input#go_to_project, input#context_hide {width: 5%}
 #todo_new_action_container .show_from_input, #todo_new_action_container .due_input {width: 45%}
 #todo_new_action_container .show_from_input {float: right}
-#todo-form-new-action .submit_box {height: 25px; padding: 5px 0; text-align: center; clear: right}
+#todo-form-new-action .submit_box, #project_form .submit_box, #context_form .submit_box {height: 25px; padding: 5px 0; text-align: center; clear: right}
 .edit_todo_form .submit_box {height: 25px; padding: 5px 0; text-align: center; clear: right}
 .edit_todo_form input, .edit_todo_form textarea {width:100%}
 .edit_todo_form .tag_list_label {clear:both}
