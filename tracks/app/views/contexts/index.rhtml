@@ -1,6 +1,6 @@
 <div id="display_box">
   <div id="list-contexts">
-    <div id="contexts-empty-nd" style="display:<%= @no_contexts ? 'block' : 'none'%>;">
+    <div id="contexts-empty-nd" style="<%= @no_contexts ? 'display:block' : 'display:none'%>">
       <div class="message"><p>Currently there are no contexts</p></div>
     </div>
     <%= render :partial => 'context_listing', :collection => @contexts %>
@@ -8,20 +8,35 @@
 </div>
 
 <div id="input_box">
-  <a id="toggle-new-context-form" href="#" accesskey="n" title="Create a new context">Create new context &#187;</a>
-  <div id="context_new" class="context_new" style="display:block">
-    <% form_remote_tag :url => contexts_path, :method => :post, :html=> { :id => 'context-form', :name => 'context', :class => 'inline-form' } do -%>
-
-      <div id="status"><%= error_messages_for('context') %></div>
-
-      <label for="context_name">Context name</label><br />                               
-      <%= text_field( "context", "name" ) %><br />
-
-      <label for="new_context_on_front">Hide from front page?</label>
-      <%= check_box( "context", "hide" ) %><br />
+  <div id="context_new_container">
+    <a id="toggle-new-context-form" href="#" accesskey="n" title="Create a new context">Create new context &#187;</a>
+    <div id="context_new" class="context_new" style="display:block">
+      <% form_remote_tag(
+        :url => contexts_path, 
+        :method => :post, 
+        :html=> { :id => 'context-form', :name => 'context', :class => 'inline-form'},
+        :before => "$('context_new_submit').startWaiting()",
+        :complete => "$('context_new_submit').stopWaiting()",
+        :condition => "!$('context_new_submit').isWaiting()") do -%>
       
-      <input type="submit" value="Add" />
-    <% end -%>
+        <div id="status"><%= error_messages_for('context') %></div>
+      
+        <label for="context_name">Context name</label><br />                               
+        <%= text_field( "context", "name" ) %><br />
+      
+        <label for="context_hide">Hide from front page?</label>
+        <%= check_box( "context", "hide" ) %><br />
+      
+        <div class="submit_box">
+          <div class="widgets">
+            <button type="submit" class="positive" id="context_new_submit">
+              <%= image_tag("accept.png", :alt => "") + 'Add Context' %>
+            </button>
+          </div>
+        </div>
+      <br/><br/>
+      <% end -%>
+    </div>
   </div>
 </div>
 <%
