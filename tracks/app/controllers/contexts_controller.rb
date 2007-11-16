@@ -55,7 +55,9 @@ class ContextsController < ApplicationController
     @saved = @context.save
     @context_not_done_counts = { @context.id => 0 }
     respond_to do |format|
-      format.js
+      format.js do
+        @down_count = current_user.contexts.size
+      end
       format.xml do
         if @context.new_record? && params_are_invalid
           render_failure "Expected post format is valid xml like so: <request><context><name>context name</name></context></request>.", 400
@@ -95,7 +97,7 @@ class ContextsController < ApplicationController
   def destroy
     @context.destroy
     respond_to do |format|
-      format.js
+      format.js { @down_count = current_user.contexts.size }
       format.xml { render :text => "Deleted context #{@context.name}" }
     end
   end
@@ -115,6 +117,7 @@ class ContextsController < ApplicationController
       lambda do
         @page_title = "TRACKS::List Contexts"
         @no_contexts = @contexts.empty?
+        @count = @contexts.size
         render
       end
     end

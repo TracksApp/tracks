@@ -62,7 +62,7 @@ class ProjectsController < ApplicationController
     @active_projects_count = current_user.projects.count(:conditions => "state = 'active'")
     @contexts = current_user.contexts
     respond_to do |format|
-      format.js
+      format.js { @down_count = current_user.projects.size }
       format.xml do
         if @project.new_record? && params_are_invalid
           render_failure "Expected post format is valid xml like so: <request><project><name>project name</name></project></request>."
@@ -130,7 +130,7 @@ class ProjectsController < ApplicationController
     @hidden_projects_count = current_user.projects.count(:conditions => "state = 'hidden'")
     @completed_projects_count = current_user.projects.count(:conditions => "state = 'completed'")
     respond_to do |format|
-      format.js
+      format.js { @down_count = current_user.projects.size }
       format.xml { render :text => "Deleted project #{@project.name}" }
     end
   end
@@ -157,6 +157,7 @@ class ProjectsController < ApplicationController
       lambda do
         init_project_hidden_todo_counts(['project'])
         @page_title = "TRACKS::List Projects"
+        @count = current_user.projects.size 
         @active_projects = @projects.select{ |p| p.active? }
         @hidden_projects = @projects.select{ |p| p.hidden? }
         @completed_projects = @projects.select{ |p| p.completed? }
