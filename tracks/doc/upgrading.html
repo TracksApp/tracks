@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+	"http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<!-- Processed by MultiMarkdown -->
+		<meta name="Author" content="Tracks Development Team" />
+		<link type="text/css" rel="stylesheet" href="manual.css" />
+		<meta name="Date" content="2007-11-17" />
+		<meta name="Format" content="Complete" />
+		<title>Upgrading to Tracks 1.5</title>
+	</head>
+<body>
+
+<!-- The HTML file upgrading.html is generated from upgrading.markdown, so make edits to upgrading.markdown -->
+
+<h1 id="upgradingtotracks1.5">Upgrading to Tracks 1.5</h1>
+
+<p><strong>NB: THIS IS A WORK IN PROGRESS - LINKS AND SVN URLS MENTIONED MAY NOT BE ACTIVE YET.</strong></p>
+
+<p><strong>TODO: Instructions for upgrading from a version earlier than 1.043</strong></p>
+
+<h2 id="upgradingfromtracks1.043">Upgrading from Tracks 1.043</h2>
+
+<p>This should be a relatively straightforward, and involves the following main steps:</p>
+
+<ol>
+<li><a href="#backup" title="Backing up">Back up</a> your existing database and installation of Tracks</li>
+<li><a href="#install1.5" title="Install Tracks 1.5">Install Tracks 1.5</a> in a new directory</li>
+<li><a href="#config" title="Copy over old configuration files">Copy over</a> a few configuration files from your Tracks 1.043 directory. If using SQLite3, copy the old database into the new Tracks 1.5 directory</li>
+<li>Run <code>rake db:migrate RAILS_ENV=production</code> to <a href="#rake" title="Update your old database to the new format">update your old database</a> to the new schema &#8211; you did back up your database didn&#8217;t you?</li>
+<li>Run <code>script/server</code> inside your Tracks 1.5 directory to <a href="#startserver" title="Start the server">start up Tracks 1.5</a>.</li>
+<li>Once you are happy that everything is working well, <a href="#cleanup" title="Clean up your old installation">delete your old Tracks directory</a>.</li>
+</ol>
+
+<h3 id="backup">Backing up</h3>
+
+<p>It&#8217;s very important that you <strong>back up your database</strong> before you start the upgrade process. It&#8217;s always possible for things to go wrong with the database update, and you don&#8217;t want to lose any data. If you are using SQLite3 and you are leaving your old Tracks directory in place, then you don&#8217;t need to do anything. However, there is no harm in taking extra precautions and copying your database from <code>/db</code> to a safe location as an extra backup, or making a dump of the schema and contents. You will never regret making too many backups! If you are using MySQL, make a SQL dump of your database, replacing the terms in square brackets with the correct information for your setup:</p>
+
+<p><code>mysqldump –-user [user name] –-password=[password] [database name] &gt; [dump file]</code></p>
+
+<p>Rename your old Tracks installation (e.g. to &#8216;tracks-old&#8217;) so that you can install Tracks 1.5 along side it.</p>
+
+<h3 id="install1.5">Install Tracks 1.5</h3>
+
+<p>There are two methods of downloading Tracks 1.5:</p>
+
+<ol>
+<li>(Recommended for most people) Download the <a href="http://www.rousette.org.uk/projects/files/tracks-current.zip">zipped package</a>, and unzip in your preferred location (e.g. <code>~/Sites</code> for Mac OS X users).</li>
+<li>Download using Subversion:
+<code>svn co --username=guest http://www.rousette.org.uk/svn/tracks-repos/tags/current tracks</code></li>
+</ol>
+
+<h3 id="config">Copy over old configuration files</h3>
+
+<p>There are a few files you need to copy over from your old installation. If you copy them over rather than moving them, you can still run your old version of Tracks if anything goes awry with the installation process.</p>
+
+<ol>
+<li>Copy <code>/config/database.yml</code> from your old Tracks directory to the same location in the new one. Double check that the information there is still correct.</li>
+<li>Duplicate <code>/config/environment.rb.tmpl</code> in the Tracks 1.5 directory, and rename the file to <code>environment.rb</code>. Open the file and alter the line <code>SALT = "change-me"</code> so that it matches what you had in this file in your old installation. You may also want to change the time zone setting as appropriate for your location (<code>ENV['TZ'] = 'US/Eastern'</code>). If you have made any other customisations to <code>environment.rb</code> in the past, copy those over, but the contents of the file have changed quite a lot since 1.043, so check it carefully.</li>
+<li>Copy your <code>/log</code> directory over from your old installation to the root of the new one, or just rename <code>/log.tmpl</code> to <code>log</code> to start afresh.</li>
+<li>If you are using SQLite3, copy your database from <code>/db</code> in your old Tracks directory to the same location in the new one.</li>
+<li>If you are using Windows, you may need to check that the &#8216;shebang&#8217; lines (<code>#!/usr/bin/env ruby</code>)<a href="#fn:env" id="fnref:env" class="footnote">1</a> in many of the files in <code>/script</code> directory are correct for your environment. Check the format of those lines in your old installation, and change the new ones as necessary.</li>
+</ol>
+
+<h3 id="rake">Update your old database to the new format</h3>
+
+<p>In a terminal, change directories so that you are inside the Tracks 1.5 directory. Then issue the command:</p>
+
+<p><code>rake db:migrate RAILS_ENV=production</code></p>
+
+<p>Watch the output carefully for errors, but it should report at the end of the process that everything worked OK. If you do get errors, you&#8217;ll have to fix them before you proceed any further. Running rake with the <code>--trace</code> option can help to track down the problem.</p>
+
+<h3 id="startserver">Start the server</h3>
+
+<p>If you&#8217;re still in the Tracks 1.5 root directory in a terminal, enter the following command to start up Tracks in production mode:</p>
+
+<p><code>script/server -e production</code></p>
+
+<p>Visit the URL indicated by the output (e.g. <code>** Mongrel available at 0.0.0.0:3000</code>
+) in a browser, and with any luck, you should be able to log in and find all your actions as you left them!</p>
+
+<h3 id="cleanup">Clean up your old installation</h3>
+
+<p>Once you&#8217;re certain that your new Tracks 1.5 installation is working perfectly, you can delete your old Tracks directory.</p>
+
+<div class="footnotes">
+<hr />
+<ol>
+
+<li id="fn:env"><p>The <code>env</code> binary helps to locate other binaries, regardless of their location. If you don&#8217;t have <code>env</code> installed, you&#8217;ll need to change this line to point to the location of your Ruby binary.<a href="#fnref:env" class="reversefootnote">&#160;&#8617;</a></p></li>
+
+</ol>
+</div>
+</body>
+</html>

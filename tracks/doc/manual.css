@@ -1,0 +1,29 @@
+body {
+  width: 60%;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 1em;
+  margin: 20px auto;
+  line-height: 1.5em;
+}
+
+a {
+  color: #9E2029;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #DE8E30;
+  text-decoration: underline;
+}
+
+a:visited {
+  color: #DE8E30;
+}
+
+code {
+  color: #000;
+  background-color: #E3E3E3;
+  padding: 2px;
+}
+
+.footnote {font-size: 0.9em; vertical-align: super;}
