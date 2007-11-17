@@ -1,2 +1,6 @@
+status_message = 'Context saved'
+page.notify :notice, status_message, 5.0
 page.replace_html dom_id(@context, 'container'), :partial => 'context_listing', :object => @context
 page.sortable "list-contexts", get_listing_sortable_options
+
+page.hide "busy"

@@ -1,44 +1,45 @@
 <%
     project = project_form
 %>
-<% form_tag project_path(project), { :id => dom_id(project, 'edit_form'), :class => "inline-form edit-project-form", :method => :put } do -%>
-<table style="table-layout: fixed;" width="450">
+<% form_tag project_path(project), { :id => dom_id(project, 'edit_form'), :class => "inline-form "+dom_id(project, 'edit_form')+"-edit-project-form", :method => :put } do -%>
 
-<tr>
-  <td width="150"><label for="project_name">Name:</label></td>
-  <td width="300"><%= text_field :project, 'name', :class => 'project-name'  %></td>
-</tr>
-<tr>
-  <td width="150"><label for="project_description">Description (optional):</label></td>
-  <td width="300"><%= text_area :project, 'description', "cols" => 30, "rows" => 4, :class => 'project-description'  %></td>
-</tr>
-<tr>
-  <td width="150"><label for="project_done">Project status:</label></td>
-  <td width="300">
-   <% ['active', 'hidden', 'completed'].each do | state | %>
-    <%= radio_button(:project, 'state', state) %> <%= state.titlecase %> 
-   <% end %>
-  </td>
-</tr>
-<tr>
-    <td width="150"><label for="project[default_context_name]">Default Context</label></td>
-    <td width="300">
-        <%= text_field_tag("project[default_context_name]", project.default_context.name, {:tabindex=>1,:size=> 25}) %>
-        <%= render :partial => 'default_context_autocomplete' %>
-    </td>
-</tr>
+  <label for="project_name">Name:</label><br/>
+  <%= text_field :project, 'name', :class => 'project-name'  %><br/>
 
-  <tr>
-    <td width="150">&nbsp; <input type="hidden" name="wants_render" value="true" /></td>
-    <td width="300"><input type="submit" value="Update" />&nbsp;<a href="#" class="form_reset">Cancel</a></td>
-  </tr>
-</table>
+  <label for="project_description">Description (optional):</label><br/>
+  <%= text_area :project, 'description', "cols" => 30, "rows" => 4, :class => 'project-description'  %><br/>
 
-<%= apply_behavior ".edit-project-form", make_remote_form(:external => false) %>
-<%= apply_behavior "a.form_reset:click", :prevent_default => false do |page, element|
-     element.up('.list').down('.project').toggle
-     element.up('.edit-form').toggle
-     element.up('form').reset
-   end %>
+  <label for="project_done">Project status:</label><br/>
+  <% ['active', 'hidden', 'completed'].each do | state | %>
+           <%= radio_button(:project, 'state', state) %> <%= state.titlecase %> 
+  <% end %><br/>
 
-<% end -%>
+  <label for="project[default_context_name]">Default Context</label><br/>
+  <%= text_field_tag("project[default_context_name]", project.default_context.name, {:tabindex=>1,:size=> 25}) %>
+  <%= render :partial => 'default_context_autocomplete' %>
+  <br/>
+
+  <input type="hidden" name="wants_render" value="true" />
+  <div class="submit_box">
+    <div class="widgets" id="<%= dom_id(project, 'widgets') %>">
+      <button type="submit" class="positive" id="<%= dom_id(project, 'submit') %>" tabindex="15">
+        <%=image_tag("accept.png", :alt => "") %>
+        Update
+      </button>
+      <a href="javascript:void(0);" id="<%= dom_id(project, 'cancel') %>" onclick="Element.toggle('<%= dom_id(project) %>');Element.toggle('<%= dom_id(project, 'edit') %>');" class="negative">
+        <%=image_tag("cancel.png", :alt => "") %>
+        Cancel
+      </a>
+    </div>
+  </div>
+  <br/><br/>
+
+  <% end -%>
+
+  
+<%= apply_behavior "."+dom_id(project, 'edit_form')+"-edit-project-form", make_remote_form(
+  :before => "$('"+dom_id(project, 'submit')+"').startWaiting();",
+  :complete => "$('"+dom_id(project, 'submit')+"').stopWaiting();Effect.Appear($(this).up('.list'))",
+  :condition => "!$('"+dom_id(project, 'submit')+"').isWaiting()", 
+  :external => false) %>
+
