@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+	"http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<!-- Processed by MultiMarkdown -->
+		<meta name="Author" content="Tracks Development Team" />
+		<link type="text/css" rel="stylesheet" href="manual.css" />
+		<meta name="Date" content="2007-11-18" />
+		<meta name="Format" content="Complete" />
+		<title>Installing Tracks 1.5</title>
+	</head>
+<body>
+
+<!-- The HTML file installing.html is generated from installing.markdown, so make edits to installing.markdown -->
+
+<h1 id="installingtracks1.5">Installing Tracks 1.5</h1>
+
+<h2 id="introduction">Introduction</h2>
+
+<p>Tracks 1.5 has been thoroughly beta tested by a large number of people, and should be fully stable for everyday use. However, once set up, Tracks will contain the majority of your plans for your work and personal life, so it&#8217;s only sensible to make sure that you have frequent, reliable backups of your data. Full changenotes on the release can be found in <code>doc/CHANGELOG</code>. Full API documentation can be found at <code>doc/app/index.html</code>, once you have run <code>rake appdoc</code></p>
+
+<p>There are two methods of downloading Tracks 1.5:</p>
+
+<ol>
+<li>(Recommended for most people) Download the <a href="http://www.rousette.org.uk/projects/files/tracks-current.zip">zipped package</a>, and unzip in your preferred location (e.g. <code>~/Sites</code> for Mac OS X users).</li>
+<li>Download using Subversion:
+<code>svn co --username=guest http://www.rousette.org.uk/svn/tracks-repos/tags/current tracks</code></li>
+</ol>
+
+<h2 id="requirements">Requirements</h2>
+
+<p>The Tracks interface is accessed through a web browser, so you need to run a webserver to serve the Tracks pages up to you. This isn&#8217;t as daunting as it sounds, however: Tracks ships with a built-in web server called Mongrel which you can run on your own computer to serve the Tracks application locally. If you want to be able to access Tracks from any computer connected to the Internet, then you need to install Tracks on a publicly accessible server, and you will probably be better off using a more robust server such as <a href="http://www.apache.org/">Apache</a> or <a href="http://www.lighttpd.net/">Lighttpd</a> to serve the pages, particularly if it will be used by many people.</p>
+
+<p>Tracks stores its data in a database, and you can either use SQLite3, MySQL or PostgreSQL. SQLite3 is the best choice for a single user (or a small number of users) on a local installation, while MySQL or PostgreSQL is better for multiple users on a remote installation.</p>
+
+<h3 id="allinoneinstallations">All in one installations</h3>
+
+<p>This is the easiest solution for Mac OS X 10.4 or Windows users wanting to run Tracks locally.</p>
+
+<ol>
+<li><strong>Mac OS X</strong>. <a href="http://locomotive.sourceforge.net/">Locomotive</a> is an all-in one installer for Mac OS X 10.4, which includes everything you need to run Tracks with a SQLite3 database. Locomotive isn&#8217;t currently Leopard compatible, and doesn&#8217;t work with Panther.</li>
+<li><strong>Windows</strong>. <a href="http://instantrails.rubyforge.org/wiki/wiki.pl">Instant Rails</a> includes everything you need, including MySQL.</li>
+</ol>
+
+<h3 id="whatisincludedwiththetrackspackage">What is included with the Tracks package</h3>
+
+<ol>
+<li>Tracks itself</li>
+<li>Rails 1.2.5 (installed in the <code>/vendor/rails</code> directory, so you do not need to install Rails yourself)</li>
+<li>An empty SQLite3 database, set up with the correct database schema</li>
+</ol>
+
+<h3 id="whatyouneed">What you need to install</h3>
+
+<p>If you don&#8217;t want to (or can&#8217;t) use one of the all in one installations, you&#8217;ll need to install a few things, depending on your platform and your needs.</p>
+
+<ol>
+<li><strong>Ruby</strong>. Version 1.8.6 is recommended, but it is also possible to use 1.8.5, 1.8.4 and 1.8.2. Note that 1.8.3 is not compatible. If you are running Mac OS X Leopard, you already have Ruby 1.8.6 installed by default, so you have nothing to do here. You can get the source to compile yourself <a href="http://ftp.ruby-lang.org/pub/ruby/1.8/ruby-1.8.6.tar.gz">here</a> for all platforms, or Windows users can use an easy <a href="http://rubyforge.org/frs/?group_id=167">installer</a>. If you&#8217;re using a version of Mac OS X earlier than 10.5.0, it is recommended that you use the <a href="http://hivelogic.com/narrative/articles/ruby-rails-mongrel-mysql-osx">instructions here</a> to install all the Rails dependencies, though you can skip the step to install Rails if you like.</li>
+<li><strong>RubyGems</strong>. The gems needed by Rails to interact with the database have to be compiled on the platform on which they will be run, so we cannot include them with the Tracks package, unlike some other gems. So you will need to <a href="http://rubyforge.org/frs/?group_id=126">download</a> and install RubyGems (run <code>ruby setup.rb</code> after extracting the package). Note that once again, Mac OS X Leopard users get an easy life, because RubyGems and the SQLite3 gem is already installed. Once installed you can use RubyGems to install the gems you need for your database. If you are using SQLite3, run <code>sudo gem install sqlite3-ruby</code>, then select the appropriate package for your platform (version 1.2.1 recommended). You can use MySQL without installing a gem, but installing the gem can speed things up a bit: <code>sudo install gem mysql</code>. If you&#8217;re using Leopard, there are a few work-arounds necessary, which are explained on <a href="http://trac.macosforge.org/projects/ruby/wiki/Troubleshooting#IcannotbuildrubymysqlonLeopardwithmysql.combinaries">Mac OS Forge</a>. The ruby-mysql bindings can sometimes be a bit troublesome to install, so to be honest, it&#8217;s probably not worth the bother unless you are trying to wring maximum speed out of your system. If you are using PostgreSQL, then you can install a postgres gem: <code>gem install postgres</code>.</li>
+<li><strong>Database</strong>. The easiest option is to use SQLite3, as the database is included in the package. All you need then is the <code>sqlite3-ruby</code> gem, as described in step 2, and the SQLite3 libraries and binary (see <a href="http://sqlite.org/download.html">sqlite.org</a> for downloads and installation instructions). If you want to use MySQL, download and install a package for your platform from <a href="http://dev.mysql.com/downloads/mysql/5.0.html">MySQL.com</a>. The basic steps for Postgresql should be similar to those for MySQL, but they will not be discussed further here.</li>
+</ol>
+
+<h2 id="installation">Installation</h2>
+
+<ol>
+<li><a href="#unzip" title="Unzip Tracks and install">Unzip tracks</a> and install in a directory</li>
+<li>Decide on a <a href="#database" title="Decide on a database">database</a> to use
+<ol><li>SQLite3 - change database.yml to point to SQLite3 database</li>
+<li>MySQL - create new MySQL db and grant all privs</li></ol></li>
+<li><a href="#config" title="Configure variables">Configure some variables</a></li>
+<li>Populate the database with the <a href="#rake" title="Populate your database with the Tracks 1.5 schema">Tracks 1.5 schema</a></li>
+<li><a href="#startserver" title="Start the server">Start the server</a></li>
+<li><a href="#signup" title="Visit Tracks in a browser">Visit Tracks in a browser</a></li>
+<li><a href="#customise" title="Customise Tracks">Customise Tracks</a></li>
+</ol>
+
+<h3 id="unzip">Unzip Tracks and install</h3>
+
+<p>Unzip the package and move Tracks into the directory you want to run it from. For example, for Mac OS X users, <code>~/Sites</code> is a good choice.</p>
+
+<h3 id="database">Decide on a database</h3>
+
+<p>Before you go any further, you need to decide which database you will use. See the <a href="#whatyouneed" title="What you need to install">What you need to install</a> section for details on installing the required components for you choice of database.</p>
+
+<ol>
+<li><strong>SQLite3</strong>. All you need to do is make sure that you point Tracks to the included SQLite3 database in <code>/db</code> in the next step, <a href="#config" title="Configure variables">Configure variables</a>.</li>
+<li><strong>MySQL</strong>. Once you have MySQL installed, you need to create a database to use with Tracks 1.5. Go into a terminal and issue the following commands:</li>
+</ol>
+
+<pre>
+<code>
+    mysql -uroot -p
+    mysql> CREATE DATABASE tracks15;
+    mysql> GRANT ALL PRIVILEGES ON tracks15.* TO yourmysqluser@localhost \
+    IDENTIFIED BY 'password-goes-here' WITH GRANT OPTION;
+</code>
+</pre>
+
+<h3 id="config">Configure variables</h3>
+
+<ol>
+<li>Open the file <code>/config/database.yml</code> and edit the <code>production:</code> section with the details of your database. If you are using MySQL the <code>adapter:</code> line should read <code>adapter: mysql</code>, <code>host: localhost</code> (in the majority of cases), and your username and password should match those you assigned when you created the database. If you are using SQLite3, you should have only two lines under the production section: <code>adapter: sqlite3</code> and <code>database: db/tracks-15.db</code>.</li>
+<li>Open the file <code>/config/environment.rb</code>, and read through the settings to make sure that they suit your setup. In most cases, all you need to change is the <code>SALT = "change-me"</code> line (change the string &#8220;change-me&#8221; to some other string of your choice), and the time zone setting.</li>
+<li>If you downloaded Tracks 1.5 via Subversion, you need to duplicate the files <code>database.yml.tmpl</code> and <code>environment.yml.tmpl</code> and remove the <code>*.tmpl</code> extension from the duplicates. Similarly, duplicate <code>/log.tmpl</code> and remove the <code>*.tmpl</code> extension, then edit the files as described in steps 1 and 2 above.</li>
+<li>If you are using Windows, you may need to check the &#8216;shebang&#8217; lines (<code>#!/usr/bin/env ruby</code>) of the <code>/public/dispatch.*</code> files and all the files in the <code>/script</code> directory. They are set to <code>#!/usr/bin/env ruby</code> by default. This should work for all *nix based setups (Linux or Mac OS X), but Windows users will probably have to change it to something like <code>#c:/ruby/bin/ruby</code> to point to the Ruby binary on your system.</li>
+</ol>
+
+<h3 id="rake">Populate your database with the Tracks 1.5 schema</h3>
+
+<p>Open a terminal and change into the root of your Tracks 1.5 directory. Enter the following command:</p>
+
+<p><code>rake db:migrate RAILS_ENV=production</code></p>
+
+<p>This will update your database with the required schema for Tracks 1.5. If you are using SQLite3, it is not strictly necessary, because the SQLite3 database included with Tracks already has the schema included in it, but it should not do any harm to run the command (nothing will happen if it is up to date).</p>
+
+<h3 id="startserver">Start the server</h3>
+
+<p>While still in the Terminal inside the Tracks 1.5 root directory, issue the following command:</p>
+
+<p><code>script/server -e production</code></p>
+
+<p>If all goes well, you should see some text informing you that the Mongrel server is running: <code>** Mongrel available at 0.0.0.0:3000</code>. If you are already running other services on port 3000, you need to select a different port when running the server, using the <code>-p</code> option. You can stop the server again by the key combination Ctrl-C.</p>
+
+<h3 id="signup">Visit Tracks in a browser</h3>
+
+<p>Visit <code>http://0.0.0.0:3000/signup</code> in a browser (or whatever URL and port was reported when you started the server in the step above) and chose a user name and password for admin user. Once logged in as admin, you can add other (ordinary level) users.</p>
+
+<h3 id="customise">Customise Tracks</h3>
+
+<p>Once logged in, add some Contexts and Projects, and then go ahead and add your actions. You might also want to visit the Preferences page to edit various settings to your liking. Have fun!</p>
+</body>
+</html>

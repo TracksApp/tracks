@@ -47,7 +47,7 @@ There are a few files you need to copy over from your old installation. If you c
 2. Duplicate `/config/environment.rb.tmpl` in the Tracks 1.5 directory, and rename the file to `environment.rb`. Open the file and alter the line `SALT = "change-me"` so that it matches what you had in this file in your old installation. You may also want to change the time zone setting as appropriate for your location (`ENV['TZ'] = 'US/Eastern'`). If you have made any other customisations to `environment.rb` in the past, copy those over, but the contents of the file have changed quite a lot since 1.043, so check it carefully.
 3. Copy your `/log` directory over from your old installation to the root of the new one, or just rename `/log.tmpl` to `log` to start afresh.
 4. If you are using SQLite3, copy your database from `/db` in your old Tracks directory to the same location in the new one.
-5. If you are using Windows, you may need to check that the 'shebang' lines (`#!/usr/bin/env ruby`)[^env] in many of the files in `/script` directory are correct for your environment. Check the format of those lines in your old installation, and change the new ones as necessary.
+5. If you are using Windows, you may need to check the 'shebang' lines (`#!/usr/bin/env ruby`)[^env] of the `/public/dispatch.*` files and all the files in the `/script` directory. They are set to `#!/usr/bin/env ruby` by default. Check the format of those lines in your old installation, and change the new ones as necessary.
 
 ### Update your old database to the new format [rake] ###
 
