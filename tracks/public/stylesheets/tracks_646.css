@@ -140,7 +140,7 @@ input#go_to_project, input#context_hide {width: 5%}
 .edit_todo_form .due_input, .edit_todo_form .show_from_input, .edit_todo_form .project_input, .edit_todo_form .context_input {width:48%}
 .edit_todo_form .show_from_input, .edit_todo_form .context_input {float: right}
 .edit_todo_form .submit_box input {width:120px}
-#hide_todo_new_action {text-align:right}
+.hide_form {text-align:right}
 #todo-form-new-action label, .edit_todo_form label {display: block; padding-bottom: 3px}
 form.button-to {border: none; padding: 0px; margin: 0px}
 label {font-weight: bold; padding: 0px 0px}
