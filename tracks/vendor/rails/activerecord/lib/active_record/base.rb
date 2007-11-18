@@ -575,7 +575,7 @@ module ActiveRecord #:nodoc:
 
       # Specifies that the attribute by the name of +attr_name+ should be serialized before saving to the database and unserialized
       # after loading from the database. The serialization is done through YAML. If +class_name+ is specified, the serialized
-      # object must be of that class on retrieval or +SerializationTypeMismatch+ will be raised.
+      # object must be of that class on retrieval, or nil. Otherwise, +SerializationTypeMismatch+ will be raised.
       def serialize(attr_name, class_name = Object)
         serialized_attributes[attr_name.to_s] = class_name
       end
@@ -1188,6 +1188,9 @@ module ActiveRecord #:nodoc:
         #
         # It's even possible to use all the additional parameters to find. For example, the full interface for find_all_by_amount
         # is actually find_all_by_amount(amount, options).
+        #
+        # This also enables you to initialize a record if it is not found, such as find_or_initialize_by_amount(amount) 
+        # or find_or_create_by_user_and_password(user, password).
         def method_missing(method_id, *arguments)
           if match = /^find_(all_by|by)_([_a-zA-Z]\w*)$/.match(method_id.to_s)
             finder, deprecated_finder = determine_finder(match), determine_deprecated_finder(match)
@@ -1957,7 +1960,7 @@ module ActiveRecord #:nodoc:
       def unserialize_attribute(attr_name)
         unserialized_object = object_from_yaml(@attributes[attr_name])
 
-        if unserialized_object.is_a?(self.class.serialized_attributes[attr_name])
+        if unserialized_object.is_a?(self.class.serialized_attributes[attr_name]) || unserialized_object.nil?
           @attributes[attr_name] = unserialized_object
         else
           raise SerializationTypeMismatch,
@@ -2156,7 +2159,13 @@ module ActiveRecord #:nodoc:
 
       def clone_attribute_value(reader_method, attribute_name)
         value = send(reader_method, attribute_name)
-        value.clone
+
+        case value
+        when nil, Fixnum, true, false
+          value
+        else
+          value.clone
+        end
       rescue TypeError, NoMethodError
         value
       end

@@ -265,7 +265,7 @@ class LegacyRouteSetTests < Test::Unit::TestCase
       map.content '/content/:query', :controller => 'content', :action => 'show'
     end
     exception = assert_raise(ActionController::RoutingError) { rs.generate(:controller => 'content', :action => 'show', :use_route => "content") }
-    expected_message = %[content_url failed to generate from {:action=>"show", :controller=>"content"} - you may have ambiguous routes, or you may need to supply additional parameters for this route.  content_url has the following required parameters: ["content", :query] - are they all satisifed?]
+    expected_message = "content_url failed to generate from #{{:action=>"show", :controller=>"content"}.inspect} - you may have ambiguous routes, or you may need to supply additional parameters for this route.  content_url has the following required parameters: [\"content\", :query] - are they all satisifed?"
     assert_equal expected_message, exception.message
   end
   
@@ -946,7 +946,7 @@ class RouteTest < Test::Unit::TestCase
   end
 
   def test_expand_array_build_query_string
-    assert_equal '?x[]=1&x[]=2', order_query_string(@route.build_query_string(:x => [1, 2]))
+    assert_equal '?x%5B%5D=1&x%5B%5D=2', order_query_string(@route.build_query_string(:x => [1, 2]))
   end
 
   def test_escape_spaces_build_query_string_selected_keys

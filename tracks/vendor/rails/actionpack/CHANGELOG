@@ -1,6 +1,55 @@
+*1.13.5* (October 12th, 2007)
+
+* Backport: allow array and hash query parameters. Array route parameters are converted/to/a/path as before.  #6765, #7047, #7462 [bgipsy, Jeremy McAnally, Dan Kubb, brendan, Diego Algorta Casamayou]
+
+* Fix in place editor's setter action with non-string fields.  #7418 [Andreas]
+
+
+*1.13.4* (October 4th, 2007)
+
+* Only accept session ids from cookies, prevents session fixation attacks.  [bradediger]
+
+* Change the resource seperator from ; to / change the generated routes to use the new-style named routes.  e.g.  new_group_user_path(@group) instead of group_new_user_path(@group). [pixeltrix]
+
+* Integration tests: introduce methods for other HTTP methods.  #6353 [caboose]
+
+* Improve performance of action caching. Closes #8231 [skaes]
+
+* Fix errors with around_filters which do not yield, restore 1.1 behaviour with after filters. Closes #8891 [skaes]
+
+  After filters will *no longer* be run if an around_filter fails to yield, users relying on
+  this behaviour are advised to put the code in question after a yield statement in an around filter.
+
+* Allow you to delete cookies with options. Closes #3685 [josh, Chris Wanstrath]
+
+* Deprecate pagination. Install the classic_pagination plugin for forward compatibility, or move to the superior will_paginate plugin.  #8157 [Mislav Marohnic]
+
+* Fix filtered parameter logging with nil parameter values.  #8422 [choonkeat]
+
+* Integration tests: alias xhr to xml_http_request and add a request_method argument instead of always using POST.  #7124 [Nik Wakelin, Francois Beausoleil, Wizard]
+
+* Document caches_action.  #5419 [Jarkko Laine]
+
+* observe_form always sends the serialized form.  #5271 [manfred, normelton@gmail.com]
+
+* Update UrlWriter to accept :anchor parameter. Closes #6771. [octopod]
+
+* Replace the current block/continuation filter chain handling by an implementation based on a simple loop.  Closes #8226 [Stefan Kaes]
+
+* Return the string representation from an Xml Builder when rendering a partial.  #5044 [tpope]
+
+* Cleaned up, corrected, and mildly expanded ActionPack documentation.  Closes #7190 [jeremymcanally]
+
+* Small collection of ActionController documentation cleanups.  Closes #7319 [jeremymcanally]
+
+* Performance: patch cgi/session/pstore to require digest/md5 once rather than per #initialize.  #7583 [Stefan Kaes]
+
+* Deprecation: verification with :redirect_to => :named_route shouldn't be deprecated.  #7525 [Justin French]
+
+
 *1.13.3* (March 12th, 2007)
 
-* Apply [5709] to stable.
+* Fix a bug in Routing where a parameter taken from the path of the current request could not be used as a query parameter for the next.  #6752 [Nicholas Seckar]
 
 * session_enabled? works with session :off.  #6680 [Catfish]
 
@@ -440,7 +489,7 @@
 
 * Avoid naming collision among compiled view methods. [Jeremy Kemper]
 
-* Fix CGI extensions when they expect string but get nil in Windows. Closes #5276 [mislav@nippur.irb.hr]
+* Fix CGI extensions when they expect string but get nil in Windows. Closes #5276 [Mislav Marohnic]
 
 * Determine the correct template_root for deeply nested components.  #2841 [s.brink@web.de]
 

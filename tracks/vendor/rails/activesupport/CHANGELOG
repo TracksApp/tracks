@@ -1,3 +1,19 @@
+*1.4.4* (October 12th, 2007)
+
+* Backport: allow array and hash query parameters. Array route parameters are converted/to/a/path as before.  #6765, #7047, #7462 [bgipsy, Jeremy McAnally, Dan Kubb, brendan, Diego Algorta Casamayou]
+
+
+*1.4.3* (October 4th, 2007)
+
+* Demote Hash#to_xml to use XmlSimple#xml_in_string so it can't read files or stdin.  #8453 [candlerb, Jeremy Kemper]
+
+* Document Object#blank?.  #6491 [Chris Mear]
+
+* Update Dependencies to ignore constants inherited from ancestors. Closes #6951. [Nicholas Seckar]
+
+* Improved multibyte performance by relying less on exception raising #8159 [Blaine]
+
+
 *1.4.2* (March 12th, 2007)
 
 * Ruby 1.8.6 and 1.9 define private Time#to_date and #to_datetime; make them

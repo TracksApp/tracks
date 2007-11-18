@@ -53,13 +53,13 @@ class TodosHelperTest < Test::Rails::HelperTestCase
   
   def test_remote_star_icon_unstarred
     @todo = flexmock(:id => 1, :to_param => 1, :description => 'Get gas', :starred? => false)
-    assert_remote_star_icon_helper_matches %r{<a href="/todos/1;toggle_star" class="icon star_item" title="star the action 'Get gas'"><img alt="Blank" class="unstarred_todo" src="/images/blank.png[?0-9]*" title="Star action" /></a>}
+    assert_remote_star_icon_helper_matches %r{<a href="/todos/1/toggle_star" class="icon star_item" title="star the action 'Get gas'"><img alt="Blank" class="unstarred_todo" src="/images/blank.png[?0-9]*" title="Star action" /></a>}
     assert_behavior_registered
   end
 
   def test_remote_star_icon_starred
     @todo = flexmock(:id => 1, :to_param => 1, :description => 'Get gas', :starred? => true)
-    assert_remote_star_icon_helper_matches %r{<a href="/todos/1;toggle_star" class="icon star_item" title="star the action 'Get gas'"><img alt="Blank" class="starred_todo" src="/images/blank.png[?0-9]*" title="Star action" /></a>}
+    assert_remote_star_icon_helper_matches %r{<a href="/todos/1/toggle_star" class="icon star_item" title="star the action 'Get gas'"><img alt="Blank" class="starred_todo" src="/images/blank.png[?0-9]*" title="Star action" /></a>}
     assert_behavior_registered
   end
   

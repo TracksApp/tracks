@@ -1,6 +1,30 @@
+*1.2.5* (October 12th, 2007)
+
+* Correct RAILS_GEM_VERSION regexp. Use =version gem requirement instead of ~>version so you don't get surprised by a beta gem in production. This change means upgrading to 1.2.5 will require a boot.rb upgrade.  [Jeremy Kemper]
+
+* Move custom inflections example so available before route generation.  #6829 [dcmanges, Nate, piotrb]
+
+
+*1.2.4* (October 4th, 2007)
+
+* Add a new rake task to aid debugging of named routes.  
+
+  rake routes
+
+* use Gem.find_name instead of search when freezing gems.  Prevent false positives for other gems with rails in the name. Closes #8729 [wselman]
+
+* Fix syntax error in dispatcher than wrecked failsafe responses.  #8625 [mtitorenko]
+
+* Add Active Resource to rails:freeze:edge and drop Action Web Service.  #8205 [underbluewaters, Jeremy Kemper]
+
+* Give generate scaffold a more descriptive database message.  Closes #7316 [jeremymcanally]
+
+* Canonicalize RAILS_ROOT by using File.expand_path on Windows, which doesn't have to worry about symlinks, and Pathname#realpath elsewhere, which respects symlinks in relative paths but is incompatible with Windows.  #6755 [Jeremy Kemper, trevor]
+
+
 *1.2.3* (March 12th, 2007)
 
-* Ruby 1.8.6 compatibility
+* Ruby 1.8.6 compatibility fixes. Upgrade rake dependency to 0.7.2.
 
 * Windows: include MinGW in RUBY_PLATFORM check.  #2982 [okkez000@gmail.com, Kaspar Schiess]
 

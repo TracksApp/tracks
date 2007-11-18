@@ -125,7 +125,7 @@ class PrototypeHelperTest < Test::Unit::TestCase
   end
   
   def test_observe_field
-    assert_dom_equal %(<script type=\"text/javascript\">\n//<![CDATA[\nnew Form.Element.Observer('glass', 300, function(element, value) {new Ajax.Request('http://www.example.com/reorder_if_empty', {asynchronous:true, evalScripts:true})})\n//]]>\n</script>),
+    assert_dom_equal %(<script type=\"text/javascript\">\n//<![CDATA[\nnew Form.Element.Observer('glass', 300, function(element, value) {new Ajax.Request('http://www.example.com/reorder_if_empty', {asynchronous:true, evalScripts:true, parameters:value})})\n//]]>\n</script>),
       observe_field("glass", :frequency => 5.minutes, :url => { :action => "reorder_if_empty" })
   end
   
@@ -135,7 +135,7 @@ class PrototypeHelperTest < Test::Unit::TestCase
   end
   
   def test_observe_form
-    assert_dom_equal %(<script type=\"text/javascript\">\n//<![CDATA[\nnew Form.Observer('cart', 2, function(element, value) {new Ajax.Request('http://www.example.com/cart_changed', {asynchronous:true, evalScripts:true})})\n//]]>\n</script>),
+    assert_dom_equal %(<script type=\"text/javascript\">\n//<![CDATA[\nnew Form.Observer('cart', 2, function(element, value) {new Ajax.Request('http://www.example.com/cart_changed', {asynchronous:true, evalScripts:true, parameters:value})})\n//]]>\n</script>),
       observe_form("cart", :frequency => 2, :url => { :action => "cart_changed" })
   end
   
@@ -170,23 +170,23 @@ class JavaScriptGeneratorTest < Test::Unit::TestCase
   end
   
   def test_insert_html_with_string
-    assert_equal 'new Insertion.Top("element", "<p>This is a test</p>");',
+    assert_equal 'new Insertion.Top("element", "\074p\076This is a test\074/p\076");',
       @generator.insert_html(:top, 'element', '<p>This is a test</p>')
-    assert_equal 'new Insertion.Bottom("element", "<p>This is a test</p>");',
+    assert_equal 'new Insertion.Bottom("element", "\074p\076This is a test\074/p\076");',
       @generator.insert_html(:bottom, 'element', '<p>This is a test</p>')
-    assert_equal 'new Insertion.Before("element", "<p>This is a test</p>");',
+    assert_equal 'new Insertion.Before("element", "\074p\076This is a test\074/p\076");',
       @generator.insert_html(:before, 'element', '<p>This is a test</p>')
-    assert_equal 'new Insertion.After("element", "<p>This is a test</p>");',
+    assert_equal 'new Insertion.After("element", "\074p\076This is a test\074/p\076");',
       @generator.insert_html(:after, 'element', '<p>This is a test</p>')
   end
   
   def test_replace_html_with_string
-    assert_equal 'Element.update("element", "<p>This is a test</p>");',
+    assert_equal 'Element.update("element", "\074p\076This is a test\074/p\076");',
       @generator.replace_html('element', '<p>This is a test</p>')
   end
   
   def test_replace_element_with_string
-    assert_equal 'Element.replace("element", "<div id=\"element\"><p>This is a test</p></div>");',
+    assert_equal 'Element.replace("element", "\074div id=\"element\"\076\074p\076This is a test\074/p\076\074/div\076");',
       @generator.replace('element', '<div id="element"><p>This is a test</p></div>')
   end
   
@@ -241,12 +241,12 @@ class JavaScriptGeneratorTest < Test::Unit::TestCase
     @generator.remove('foo', 'bar')
     @generator.replace_html('baz', '<p>This is a test</p>')
     
-    assert_equal <<-EOS.chomp, @generator.to_s
-new Insertion.Top("element", "<p>This is a test</p>");
-new Insertion.Bottom("element", "<p>This is a test</p>");
+    expected = %q(new Insertion.Top("element", "\074p\076This is a test\074/p\076");
+new Insertion.Bottom("element", "\074p\076This is a test\074/p\076");
 ["foo", "bar"].each(Element.remove);
-Element.update("baz", "<p>This is a test</p>");
-    EOS
+Element.update("baz", "\074p\076This is a test\074/p\076");)
+
+    assert_equal expected, @generator.to_s
   end
 
   def test_element_access

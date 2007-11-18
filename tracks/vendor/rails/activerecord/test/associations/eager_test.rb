@@ -168,6 +168,12 @@ class EagerAssociationTest < Test::Unit::TestCase
     posts = Post.find(:all, :include => [ :author, :comments ], :limit => 2, :conditions => "posts.title = 'magic forest'")
     assert_equal 0, posts.size
   end
+  
+  def test_eager_count_performed_on_a_has_many_association_with_multi_table_conditional
+    author = authors(:david)
+    author_posts_without_comments = author.posts.select { |post| post.comments.blank? }
+    assert_equal author_posts_without_comments.size, author.posts.count(:all, :include => :comments, :conditions => 'comments.id is null')
+  end
 
   def test_eager_with_has_and_belongs_to_many_and_limit
     posts = Post.find(:all, :include => :categories, :order => "posts.id", :limit => 3)
@@ -270,6 +276,13 @@ class EagerAssociationTest < Test::Unit::TestCase
             :conditions => ["companies.name = ?", "37signals"])
     assert_not_nil f.account
     assert_equal companies(:first_firm, :reload).account, f.account
+  end
+  
+  def test_eager_with_multi_table_conditional_properly_counts_the_records_when_using_size
+    author = authors(:david)
+    posts_with_no_comments = author.posts.select { |post| post.comments.blank? }
+    assert_equal posts_with_no_comments.size, author.posts_with_no_comments.size
+    assert_equal posts_with_no_comments, author.posts_with_no_comments
   end
 
   def test_eager_with_invalid_association_reference

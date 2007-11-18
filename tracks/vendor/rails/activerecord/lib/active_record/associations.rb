@@ -352,7 +352,15 @@ module ActiveRecord
     #   for post in Post.find(:all, :include => [ :author, :comments ])
     #
     # That'll add another join along the lines of: LEFT OUTER JOIN comments ON comments.post_id = posts.id. And we'll be down to 1 query.
-    # But that shouldn't fool you to think that you can pull out huge amounts of data with no performance penalty just because you've reduced
+    #
+    # To include a deep hierarchy of associations, using a hash:
+    #
+    #   for post in Post.find(:all, :include => [ :author, { :comments => { :author => :gravatar } } ])
+    #
+    # That'll grab not only all the comments but all their authors and gravatar pictures.  You can mix and match
+    # symbols, arrays and hashes in any combination to describe the associations you want to load.
+    #
+    # All of this power shouldn't fool you into thinking that you can pull out huge amounts of data with no performance penalty just because you've reduced
     # the number of queries. The database still needs to send all the data to Active Record and it still needs to be processed. So it's no
     # catch-all for performance problems, but it's a great way to cut down on the number of queries in a situation as the one described above.
     # 
@@ -734,6 +742,7 @@ module ActiveRecord
           deprecated_association_comparison_method(reflection.name, reflection.class_name)
         end
 
+        # Create the callbacks to update counter cache
         if options[:counter_cache]
           cache_column = options[:counter_cache] == true ?
             "#{self.to_s.underscore.pluralize}_count" :
@@ -871,6 +880,12 @@ module ActiveRecord
       end
 
       private
+        # Generate a join table name from two provided tables names.
+        # The order of names in join name is determined by lexical precedence.
+        #   join_table_name("members", "clubs")
+        #   => "clubs_members"
+        #   join_table_name("members", "special_clubs")
+        #   => "members_special_clubs"
         def join_table_name(first_table_name, second_table_name)
           if first_table_name < second_table_name
             join_table = "#{first_table_name}_#{second_table_name}"
@@ -880,7 +895,7 @@ module ActiveRecord
 
           table_name_prefix + join_table + table_name_suffix
         end
-        
+      
         def association_accessor_methods(reflection, association_proxy_class)
           define_method(reflection.name) do |*params|
             force_reload = params.first unless params.empty?
@@ -901,7 +916,7 @@ module ActiveRecord
 
           define_method("#{reflection.name}=") do |new_value|
             association = instance_variable_get("@#{reflection.name}")
-            if association.nil?
+            if association.nil? || association.target != new_value
               association = association_proxy_class.new(self, reflection)
             end
 
@@ -911,10 +926,7 @@ module ActiveRecord
               instance_variable_set("@#{reflection.name}", association)
             else
               instance_variable_set("@#{reflection.name}", nil)
-              return nil
             end
-
-            association
           end
 
           define_method("set_#{reflection.name}_target") do |target|
@@ -981,18 +993,21 @@ module ActiveRecord
 
           after_callback = <<-end_eval
             association = instance_variable_get("@#{association_name}")
-            
-            if association.respond_to?(:loaded?)
-              if @new_record_before_save
-                records_to_save = association
-              else
-                records_to_save = association.select { |record| record.new_record? }
-              end
+
+            records_to_save = if @new_record_before_save
+              association
+            elsif association.respond_to?(:loaded?) && association.loaded?
+              association.select { |record| record.new_record? }
+            else
+              []
+            end
+
+            if !records_to_save.blank?
               records_to_save.each { |record| association.send(:insert_record, record) }
               association.send(:construct_sql)   # reconstruct the SQL queries now that we know the owner's id
             end
           end_eval
-                
+
           # Doesn't use after_save as that would save associations added in after_create/after_update twice
           after_create(after_callback)
           after_update(after_callback)

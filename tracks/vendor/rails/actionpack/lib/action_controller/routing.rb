@@ -451,26 +451,17 @@ module ActionController
       # is given (as an array), only the keys indicated will be used to build
       # the query string. The query string will correctly build array parameter
       # values.
-      def build_query_string(hash, only_keys=nil)
+      def build_query_string(hash, only_keys = nil)
         elements = []
-
-        only_keys ||= hash.keys
         
-        only_keys.each do |key|
-          value = hash[key] or next
-          key = CGI.escape key.to_s
-          if value.class == Array
-            key <<  '[]'
-          else    
-            value = [ value ] 
-          end     
-          value.each { |val| elements << "#{key}=#{CGI.escape(val.to_param.to_s)}" }
-        end     
-        
-        query_string = "?#{elements.join("&")}" unless elements.empty?
-        query_string || ""
+        (only_keys || hash.keys).each do |key|
+          if value = hash[key]
+            elements << value.to_query(key)
+          end
+        end
+        elements.empty? ? '' : "?#{elements.sort * '&'}"
       end
-  
+
       # Write the real recognition implementation and then resend the message.
       def recognize(path, environment={})
         write_recognition
@@ -668,7 +659,7 @@ module ActionController
       end
   
       def extract_value
-        "#{local_name} = hash[:#{key}] #{"|| #{default.inspect}" if default}"
+        "#{local_name} = hash[:#{key}] && hash[:#{key}].to_param #{"|| #{default.inspect}" if default}"
       end
       def value_check
         if default # Then we know it won't be nil
@@ -989,6 +980,10 @@ module ActionController
         def named_route(name, path, options = {})
           @set.add_named_route(name, path, options)
         end
+        
+        def deprecated_named_route(name, deprecated_name, options = {})
+          @set.add_deprecated_named_route(name, deprecated_name)
+        end
 
         # Added deprecation notice for anyone who already added a named route called "root".
         # It'll be used as a shortcut for map.connect '' in Rails 2.0.
@@ -1019,7 +1014,7 @@ module ActionController
         def clear!
           @routes = {}
           @helpers = []
-          
+
           @module ||= Module.new
           @module.instance_methods.each do |selector|
             @module.send :remove_method, selector
@@ -1054,6 +1049,38 @@ module ActionController
 
         def install(destinations = [ActionController::Base, ActionView::Base])
           Array(destinations).each { |dest| dest.send :include, @module }
+        end
+        
+        def define_deprecated_named_route_methods(name, deprecated_name)
+
+          [:url, :path].each do |kind|
+            @module.send :module_eval, <<-end_eval # We use module_eval to avoid leaks
+
+              def #{url_helper_name(deprecated_name, kind)}(*args)
+
+                ActiveSupport::Deprecation.warn(
+                  'The named route "#{url_helper_name(deprecated_name, kind)}" uses a format that has been deprecated. ' +
+                  'You should use "#{url_helper_name(name, kind)}" instead.', caller
+                )
+
+                send :#{url_helper_name(name, kind)}, *args
+
+              end
+
+              def #{hash_access_name(deprecated_name, kind)}(*args)
+
+                ActiveSupport::Deprecation.warn(
+                  'The named route "#{hash_access_name(deprecated_name, kind)}" uses a format that has been deprecated. ' +
+                  'You should use "#{hash_access_name(name, kind)}" instead.', caller
+                )
+
+                send :#{hash_access_name(name, kind)}, *args
+
+              end
+
+            end_eval
+          end
+
         end
 
         private
@@ -1177,6 +1204,10 @@ module ActionController
       def add_named_route(name, path, options = {})
         named_routes[name] = add_route(path, options)
       end
+      
+      def add_deprecated_named_route(name, deprecated_name)
+        named_routes.define_deprecated_named_route_methods(name, deprecated_name)
+      end
   
       def options_as_params(options)
         # If an explicit :controller was given, always make :action explicit
@@ -1190,10 +1221,9 @@ module ActionController
         #
         # great fun, eh?
 
-        options_as_params = options[:controller] ? { :action => "index" } : {}
-        options.each do |k, value|
-          options_as_params[k] = value.to_param
-        end
+        options_as_params = options.clone
+        options_as_params[:action] ||= 'index' if options[:controller]
+        options_as_params[:action] = options_as_params[:action].to_s if options_as_params[:action]
         options_as_params
       end
   
@@ -1224,6 +1254,9 @@ module ActionController
         options = options_as_params(options)
         expire_on = build_expiry(options, recall)
 
+        if options[:controller]
+          options[:controller] = options[:controller].to_s
+        end
         # if the controller has changed, make sure it changes relative to the
         # current controller module, if any. In other words, if we're currently
         # on admin/get, and the new controller is 'set', the new controller

@@ -50,7 +50,7 @@ module ActiveRecord
           options[:conditions] = options[:conditions].nil? ?
             @finder_sql :
             @finder_sql + " AND (#{sanitize_sql(options[:conditions])})"
-          options[:include] = @reflection.options[:include]
+          options[:include] ||= @reflection.options[:include]
 
           @reflection.klass.count(column_name, options)
         end
@@ -138,7 +138,7 @@ module ActiveRecord
           elsif @reflection.options[:counter_sql]
             @reflection.klass.count_by_sql(@counter_sql)
           else
-            @reflection.klass.count(:conditions => @counter_sql)
+            @reflection.klass.count(:conditions => @counter_sql, :include => @reflection.options[:include])
           end
           
           @target = [] and loaded if count == 0

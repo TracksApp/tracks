@@ -1,3 +1,37 @@
+*1.15.5* (October 12th, 2007)
+
+* Depend on Action Pack 1.4.4
+
+
+*1.15.4* (October 4th, 2007)
+
+* Fix #count on a has_many :through association so that it recognizes the :uniq option. Closes #8801 [lifofifo]
+
+* Don't clobber includes passed to has_many.count [danger]
+
+* Make sure has_many uses :include when counting [danger]
+
+* Save associated records only if the association is already loaded.  #8713 [blaine]
+
+* Changing the :default Date format doesn't break date quoting.  #6312 [bshand, Elias]
+
+* Allow nil serialized attributes with a set class constraint. #7293 [sandofsky]
+
+* belongs_to assignment creates a new proxy rather than modifying its target in-place.  #8412 [mmangino@elevatedrails.com]
+
+* Fix column type detection while loading fixtures.  Closes #7987 [roderickvd]
+
+* Document deep eager includes.  #6267 [Josh Susser, Dan Manges]
+
+* Oracle: extract column length for CHAR also.  #7866 [ymendel]
+
+* Small additions and fixes for ActiveRecord documentation.  Closes #7342 [jeremymcanally]
+
+* SQLite: binary escaping works with $KCODE='u'.  #7862 [tsuka]
+
+* Improved cloning performance by relying less on exception raising #8159 [Blaine]
+
+
 *1.15.3* (March 12th, 2007)
 
 * Allow a polymorphic :source for has_many :through associations. Closes #7143 [protocool] 
