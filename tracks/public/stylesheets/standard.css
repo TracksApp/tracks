@@ -732,7 +732,7 @@ input#go_to_project, input#context_hide {
 .edit_todo_form .submit_box input {
 	width:120px;
 }
-#hide_todo_new_action, .hide_form {
+.hide_form {
 	text-align:right;
 }
 #todo-form-new-action label, .edit_todo_form label {
