@@ -9,7 +9,17 @@
 
 <div id="input_box">
   <div id="context_new_container">
-    <a id="toggle-new-context-form" href="#" accesskey="n" title="Create a new context">Create new context &#187;</a>
+    
+    <div id="toggle_context_new" class="hide_form">
+      <a title="Hide new context form" accesskey="n">&laquo; Hide form</a>
+      <%  apply_behavior '#toggle_context_new a:click', :prevent_default => true do |page|
+            page << "TracksForm.toggle('toggle_context_new', 'context_new', 'context-form',
+                                       '&laquo; Hide form', 'Hide new context form',
+                                       'Create a new context &#187;', 'Add a context');"
+          end
+      %>
+    </div>
+  
     <div id="context_new" class="context_new" style="display:block">
       <% form_remote_tag(
         :url => contexts_path, 
@@ -41,10 +51,4 @@
 </div>
 <%
 sortable_element 'list-contexts', get_listing_sortable_options
-
-apply_behavior '#toggle-new-context-form:click', :prevent_default => true do |page|
-  page['context_new'].toggle
-  page['context-form'].down('input').focus
-  #page << "Form.focusFirstElement('context-form');"
-end
 -%>

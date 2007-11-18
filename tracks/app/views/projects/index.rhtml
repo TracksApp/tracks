@@ -12,10 +12,16 @@
   <div id="project_new_project_filler">
     <div id="project_new_project_container">
       
-      <%= link_to_function("Create a new project &#187;",
-        "Element.toggle('project_new');Form.focusFirstElement('project-form');",
-        {:title => "Add a next action", :accesskey => "n"}) %>
-      
+      <div id="toggle_project_new" class="hide_form">
+        <a title="Hide new project form" accesskey="n">&laquo; Hide form</a>
+        <%  apply_behavior '#toggle_project_new a:click', :prevent_default => true do |page|
+              page << "TracksForm.toggle('toggle_project_new', 'project_new', 'project-form',
+                                         '&laquo; Hide form', 'Hide new project form',
+                                         'Create a new project &#187;', 'Add a project');"
+            end
+        %>
+      </div>
+
       <div id="project_new" class="project_new" style="display:block">
         <% form_remote_tag(:url => projects_path, :method => :post,
           :html=> { :id=>'project-form', :name=>'project', :class => 'inline-form'},

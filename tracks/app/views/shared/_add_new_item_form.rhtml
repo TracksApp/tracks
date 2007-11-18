@@ -7,16 +7,15 @@
 %>
 <div id="todo_new_action_container">
 
-<div id="show_todo_new_action" style="display:none">
-  <%= link_to_function("Add a next action &#187;",
-                       "todoItems.showNewActionForm();return false;",
-                       {:title => "Add a next action"}) %>
-</div>
-<div id="hide_todo_new_action" style="display:block">
-  <%= link_to_function("&laquo; Hide form",
-                       "todoItems.hideNewActionForm();return false;",
-                       {:title => "Hide next action form", :accesskey => "n"}) %>
-                     </div>
+  <div id="toggle_action_new" class="hide_form">
+    <a title="Hide new action form" accesskey="n">&laquo; Hide form</a>
+    <%  apply_behavior '#toggle_action_new a:click', :prevent_default => true do |page|
+          page << "TracksForm.toggle('toggle_action_new', 'todo_new_action', 'todo-form-new-action',
+                                     '&laquo; Hide form', 'Hide next action form',
+                                     'Add a next action &#187;', 'Add a next action');"
+          end
+    %>
+  </div>
 
 <div id="todo_new_action" style="display:block">
 

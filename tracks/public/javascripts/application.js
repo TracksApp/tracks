@@ -19,7 +19,21 @@ var Login = {
 	new CookieManager().setCookie('preferred_auth', 'database');
   }
 }
-
+var TracksForm = {
+  toggle: function(toggleDivId, formContainerId, formId, hideLinkText, hideLinkTitle, showLinkText, showLinkTitle) {
+    $(formContainerId).toggle();
+    toggleDiv = $(toggleDivId);
+    toggleLink = toggleDiv.down('a');
+    if (toggleDiv.hasClassName('hide_form')) {
+      toggleLink.update(showLinkText).setAttribute('title', showLinkTitle);
+    }
+    else {
+      toggleLink.update(hideLinkText).setAttribute('title', hideLinkTitle);
+      Form.focusFirstElement(formId);
+    }
+    toggleDiv.toggleClassName('hide_form');
+  }
+}
 Ajax.Responders.register({
   onCreate: function() {
     if($('busy') && Ajax.activeRequestCount>0)
