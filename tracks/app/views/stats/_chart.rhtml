@@ -1,1 +1,1 @@
-<%= flashobject_tag "open-flash-chart.swf", :query_params => { 'width' => width, 'height' => height, 'data' => data}, :size => "#{width}x#{height}", :parameters => { 'allowScriptAccess' => 'sameDomain'}, :class_name => 'open-flash-chart', :flash_id => 'chart' %>
+<%= flashobject_tag "open-flash-chart.swf", :query_params => { 'width' => width, 'height' => height, 'data' => data}, :size => "#{width}x#{height}", :parameters => { 'allowScriptAccess' => 'sameDomain', 'wmode' => 'transparent'}, :class_name => 'open-flash-chart', :flash_id => 'chart' %>
