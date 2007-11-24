@@ -229,6 +229,7 @@ body.stats #topbar {
       margin-right: -5px;
       margin-bottom: 0px;      
       color: #666;
+      position:relative;
       /* text-shadow: rgba(0,0,0,.4) 0px 2px 5px; */
       }
 
@@ -290,6 +291,7 @@ input.item-checkbox {
 
 .description {
       margin-left: 85px;
+      position:relative
       }
 
 .stale_l1, .stale_l2, .stale_l3 {
@@ -567,6 +569,7 @@ li {
       padding: 0 10px;
       border-top: 1px solid #999;
       border-bottom: 1px solid #999;
+      position:relative;
       }
 
 /* Right align labels in forms */
