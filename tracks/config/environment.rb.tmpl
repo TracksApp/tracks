@@ -84,4 +84,9 @@ end
 MOBILE_CONTENT_TYPE = 'tracks/mobile'
 Mime::Type.register(MOBILE_CONTENT_TYPE, :m)
 
-TRACKS_VERSION = '1.50-trunk'
+info = `svn info`[/Last Changed Rev: (.*?)\n/]
+if info
+  TRACKS_VERSION = '1.50-trunk-rev'+info[/(\d+)/]
+else
+  TRACKS_VERSION = '1.50-trunk'
+end
