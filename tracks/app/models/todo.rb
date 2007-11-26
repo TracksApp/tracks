@@ -60,11 +60,6 @@ class Todo < ActiveRecord::Base
     return saved
   end
   
-  def activate_and_save!
-    activate!
-    save!
-  end
-
   def show_from
     self[:show_from]
   end

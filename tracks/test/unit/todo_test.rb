@@ -107,13 +107,13 @@ class TodoTest < Test::Rails::TestCase
     assert_equal :active, t.current_state
   end
 
-  def test_activate_and_save
+  def test_activate_also_saves
     t = @not_completed1
     t.show_from = 1.week.from_now.to_date
     t.save!
     assert t.deferred?
     t.reload
-    t.activate_and_save!
+    t.activate!
     assert t.active?
     t.reload
     assert t.active?
