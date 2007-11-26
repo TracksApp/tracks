@@ -106,14 +106,13 @@ class TodosController < ApplicationController
   # Toggles the 'done' status of the action
   #
   def toggle_check
-    @todo.toggle_completion!
-    @saved = @todo.save
+    @saved = @todo.toggle_completion!
     respond_to do |format|
       format.js do
         if @saved
           determine_remaining_in_context_count(@todo.context_id)
           determine_down_count
-          determine_completed_count
+          determine_completed_count if @todo.completed?
         end
         render
       end

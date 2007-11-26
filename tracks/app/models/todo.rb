@@ -51,11 +51,13 @@ class Todo < ActiveRecord::Base
   end
   
   def toggle_completion!
+    saved = false
     if completed?
-      activate!
+      saved = activate!
     else
-      complete!
+      saved = complete!
     end
+    return saved
   end
   
   def activate_and_save!
