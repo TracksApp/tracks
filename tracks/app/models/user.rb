@@ -108,12 +108,11 @@ class User < ActiveRecord::Base
     return nil if login.blank?
     candidate = find(:first, :conditions => ["login = ?", login])
     return nil if candidate.nil?
-    if candidate.auth_type == 'database'
-      return candidate if candidate.crypted_password == sha1(pass)
-    elsif candidate.auth_type == 'ldap' && Tracks::Config.auth_schemes.include?('ldap')
-      return candidate if SimpleLdapAuthenticator.valid?(login, pass)
+    return candidate if candidate.auth_type == 'database' && candidate.crypted_password == sha1(pass)
+    if Tracks::Config.auth_schemes.include?('ldap')
+      return candidate if candidate.auth_type == 'ldap' && SimpleLdapAuthenticator.valid?(login, pass)
     end
-    nil
+    return nil
   end
   
   def self.find_by_open_id_url(raw_open_id_url)
