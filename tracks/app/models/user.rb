@@ -105,6 +105,7 @@ class User < ActiveRecord::Base
   alias_method :prefs, :preference
 
   def self.authenticate(login, pass)
+    return nil if login.blank?
     candidate = find(:first, :conditions => ["login = ?", login])
     return nil if candidate.nil?
     if candidate.auth_type == 'database'
