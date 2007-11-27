@@ -1,5 +1,7 @@
 <%
   @todo = todo
+  suppress_context ||= false
+  suppress_project ||= false
 %>
 <div id="<%= dom_id(todo) %>" class="item-container">
   <div id="<%= dom_id(todo, 'line') %>">
@@ -12,7 +14,7 @@
       <%= sanitize(todo.description) %>
       <%= tag_list %>
       <%= deferred_due_date %>
-      <%= project_and_context_links( parent_container_type ) %>
+      <%= project_and_context_links( parent_container_type, :suppress_context => suppress_context, :suppress_project => suppress_project ) %>
       <%= render(:partial => "todos/toggle_notes", :locals => { :item => todo }) if todo.notes? %>
     </div>
   </div>

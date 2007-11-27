@@ -22,3 +22,29 @@ namespace :query_trace do
     puts "QueryTrace plugin disabled. Must restart server to take effect."
   end
 end
+
+namespace :query_analyzer do
+  desc "Enables the query_analyzer plugin. Must restart server to take effect."
+  task :on => :environment do
+    unless File.exist?("#{RAILS_ROOT}/vendor/query_analyzer.tar.gz")
+      Dir.chdir("#{RAILS_ROOT}/vendor") do
+        url = "http://svn.nfectio.us/plugins/query_analyzer"
+        puts "Loading query_analyzer from #{url}..."
+        system "svn co #{url} query_analyzer"
+        system "tar zcf query_analyzer.tar.gz --exclude=.svn query_analyzer"
+        FileUtils.rm_rf("query_analyzer")
+      end
+    end
+    Dir.chdir("#{RAILS_ROOT}/vendor/plugins") do
+      system "tar zxf ../query_analyzer.tar.gz query_analyzer"
+    end
+    puts "QueryAnalyzer plugin enabled. Must restart server to take effect."
+  end
+
+  desc "Disables the query_analyzer plugin. Must restart server to take effect."
+  task :off => :environment do
+    FileUtils.rm_rf("#{RAILS_ROOT}/vendor/plugins/query_analyzer")
+    puts "QueryAnalyzer plugin disabled. Must restart server to take effect."
+  end
+end
+

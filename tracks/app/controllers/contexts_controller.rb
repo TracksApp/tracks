@@ -155,12 +155,14 @@ class ContextsController < ApplicationController
     def init_todos
       set_context_from_params
       unless @context.nil?
-        @done = @context.done_todos
+        @context.todos.with_scope :find => { :include => [:project, :tags] } do
+          @done = @context.done_todos
+        end
         # @not_done_todos = @context.not_done_todos
         # TODO: Temporarily doing this search manually until I can work out a way
         # to do the same thing using not_done_todos acts_as_todo_container method
         # Hides actions in hidden projects from context.
-        @not_done_todos = @context.todos.find(:all, :conditions => ['todos.state = ?', 'active'], :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC", :include => :project)
+        @not_done_todos = @context.todos.find(:all, :conditions => ['todos.state = ?', 'active'], :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC", :include => [:project, :tags])
         @count = @not_done_todos.size
         @default_project_context_name_map = build_default_project_context_name_map(@projects).to_json
       end

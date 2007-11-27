@@ -93,19 +93,23 @@ module TodosHelper
     end
   end
   
-  def project_and_context_links(parent_container_type)
+  def project_and_context_links(parent_container_type, opts = {})
+    str = ''
     if @todo.completed?
-      "(#{@todo.context.name}#{", " + @todo.project.name unless @todo.project.nil?})"
+      str += @todo.context.name unless opts[:suppress_context]
+      should_suppress_project = opts[:suppress_project] || @todo.project.nil?
+      str += ", " unless str.blank? || should_suppress_project
+      str += @todo.project.name unless should_suppress_project
+      str = "(#{str})" unless str.blank?
     else
-      str = ''
       if (['project', 'tag'].include?(parent_container_type))
         str << item_link_to_context( @todo )
       end
       if (['context', 'tickler', 'tag'].include?(parent_container_type)) && @todo.project_id
         str << item_link_to_project( @todo )
       end
-      str
     end
+    return str
   end
     
   # Uses the 'staleness_starts' value from settings.yml (in days) to colour the
