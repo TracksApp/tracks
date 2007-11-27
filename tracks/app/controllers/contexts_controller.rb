@@ -10,7 +10,7 @@ class ContextsController < ApplicationController
   session :off, :only => :index, :if => Proc.new { |req| ['rss','atom','txt'].include?(req.parameters[:format]) }
 
   def index
-    @contexts = current_user.contexts.reload #reload is called here to force an immediate load so that size and empty? checks later don't result in separate SQL queries
+    @contexts = current_user.contexts(true) #true is passed here to force an immediate load so that size and empty? checks later don't result in separate SQL queries
     init_not_done_counts(['context'])
     respond_to do |format|
       format.html &render_contexts_html

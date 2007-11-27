@@ -9,8 +9,8 @@ class ProjectsController < ApplicationController
   session :off, :only => :index, :if => Proc.new { |req| ['rss','atom','txt'].include?(req.parameters[:format]) }
 
   def index
-    @projects = current_user.projects
-    @contexts = current_user.contexts
+    @projects = current_user.projects(true)
+    @contexts = current_user.contexts(true)
     init_not_done_counts(['project'])
     if params[:only_active_with_no_next_actions]
       @projects = @projects.select { |p| p.active? && count_undone_todos(p) == 0 }
