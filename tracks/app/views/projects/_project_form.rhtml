@@ -39,7 +39,6 @@
   
 <%= apply_behavior "."+dom_id(project, 'edit_form')+"-edit-project-form", make_remote_form(
   :before => "$('"+dom_id(project, 'submit')+"').startWaiting();",
-  :complete => "$('"+dom_id(project, 'submit')+"').stopWaiting();Effect.Appear($(this).up('.list'))",
   :condition => "!$('"+dom_id(project, 'submit')+"').isWaiting()", 
   :external => false) %>
 
