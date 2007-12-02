@@ -95,8 +95,15 @@ class StatsController < ApplicationController
     
     # interpolate avg for this month. Assume 31 days in this month
     days_passed_this_month = Time.new.day/1.0
-    @interpolated_actions_created_this_month = @actions_created_last12months_hash[0]/days_passed_this_month*31.0
-    @interpolated_actions_done_this_month = @actions_done_last12months_hash[0]/days_passed_this_month*31.0
+    @interpolated_actions_created_this_month = (
+      @actions_created_last12months_hash[0]/days_passed_this_month*31.0+
+        @actions_created_last12months_hash[1]+
+        @actions_created_last12months_hash[2]) / 3.0
+  
+    @interpolated_actions_done_this_month = (
+      @actions_done_last12months_hash[0]/days_passed_this_month*31.0 +
+        @actions_done_last12months_hash[1]+
+        @actions_done_last12months_hash[2]) / 3.0
     
     render :layout => false
   end
@@ -242,7 +249,7 @@ class StatsController < ApplicationController
   
   def context_total_actions_data
     # get total action count per context
-    @actions_per_context = @contexts.find_by_sql(
+    @all_actions_per_context = @contexts.find_by_sql(
       "SELECT c.name AS name, count(*) AS total "+
         "FROM contexts c, todos t "+
         "WHERE t.context_id=c.id "+
@@ -250,18 +257,36 @@ class StatsController < ApplicationController
         "GROUP BY c.id "+
         "ORDER BY total DESC"
     )
-            
-    @sum=0
-    0.upto @actions_per_context.size()-1 do |i|
-      @sum += @actions_per_context[i]['total'].to_i
+
+    pie_cutoff=10
+    size = @all_actions_per_context.size()
+    size = pie_cutoff if size > pie_cutoff
+    @actions_per_context = Array.new(size)
+    0.upto size-1 do |i|
+      @actions_per_context[i] = @all_actions_per_context[i]
     end
-            
+
+    if size==pie_cutoff
+      @actions_per_context[size-1]['name']='(others)'
+      @actions_per_context[size-1]['total']=0
+      (size-1).upto @all_actions_per_context.size()-1 do |i|
+        @actions_per_context[size-1]['total']+=@all_actions_per_context[i]['total'].to_i
+      end
+    end
+    
+    @sum=0
+    0.upto @all_actions_per_context.size()-1 do |i|
+      @sum += @all_actions_per_context[i]['total'].to_i
+    end
+    
+    @truncate_chars = 15            
+    
     render :layout => false
   end
 
   def context_running_actions_data
     # get uncompleted action count per visible context
-    @actions_per_context = @contexts.find_by_sql(
+    @all_actions_per_context = @contexts.find_by_sql(
       "SELECT c.name AS name, count(*) AS total "+
         "FROM contexts c, todos t "+
         "WHERE t.context_id=c.id AND t.completed_at IS NULL AND NOT c.hide "+
@@ -269,12 +294,30 @@ class StatsController < ApplicationController
         "GROUP BY c.id "+
         "ORDER BY total DESC"
     )
-            
+    
+    pie_cutoff=10
+    size = @all_actions_per_context.size()
+    size = pie_cutoff if size > pie_cutoff
+    @actions_per_context = Array.new(size)
+    0.upto size-1 do |i|
+      @actions_per_context[i] = @all_actions_per_context[i]
+    end
+
+    if size==pie_cutoff
+      @actions_per_context[size-1]['name']='(others)'
+      @actions_per_context[size-1]['total']=0
+      (size-1).upto @all_actions_per_context.size()-1 do |i|
+        @actions_per_context[size-1]['total']+=@all_actions_per_context[i]['total'].to_i
+      end
+    end
+    
     @sum=0
-    0.upto @actions_per_context.size()-1 do |i|
-      @sum += @actions_per_context[i]['total'].to_i
+    0.upto @all_actions_per_context.size()-1 do |i|
+      @sum += @all_actions_per_context[i]['total'].to_i
     end
             
+    @truncate_chars = 15
+    
     render :layout => false
   end
 
