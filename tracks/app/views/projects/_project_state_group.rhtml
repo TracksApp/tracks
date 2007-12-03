@@ -3,14 +3,16 @@
   <div class="alpha_sort">
     <%= link_to("Sort Alphabetically", alphabetize_projects_path(:state => state),
                  :class => "alphabetize_link", :title => "Sort these projects alphabetically") %>
-    <%  apply_behavior '.alphabetize_link:click', :prevent_default => true do |page|
-          page << "if (confirm('Are you sure that you want to sort these projects alphabetically? This will replace the existing sort order.')) {"
-          page << "  new Ajax.Request(this.href, { asynchronous : true, evalScripts : true, method : 'post' })"
-          page << "}"
+    <%  apply_behavior '.alphabetize_link:click', :prevent_default => true do |page, element|
+          page.confirming 'Are you sure that you want to sort these projects alphabetically? This will replace the existing sort order.' do
+            page << "alphaSort = this.up('.alpha_sort');
+                     alphaSort.startWaiting();"
+            page << remote_to_href(:complete => "alphaSort.stopWaiting()")
+          end
         end
      %></div>
   
-  <div id="list-<%= state %>-projects">
+  <div id="list-<%= state %>-projects" class="project-list">
     <%= render :partial => 'project_listing', :collection => project_state_group %>
   </div>
   <%= sortable_element "list-#{state}-projects", get_listing_sortable_options("list-#{state}-projects") %>

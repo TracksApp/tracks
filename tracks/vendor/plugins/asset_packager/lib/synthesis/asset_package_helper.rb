@@ -13,7 +13,7 @@ module Synthesis
       end
 
       sources.collect!{|s| s.to_s}
-      sources = (RAILS_ENV != "development" ? 
+      sources = (RAILS_ENV != "development" || SUPPRESS_ASSET_PACKAGER ? 
         AssetPackage.targets_from_sources("javascripts", sources) : 
         AssetPackage.sources_from_targets("javascripts", sources))
         
@@ -24,7 +24,7 @@ module Synthesis
       options = sources.last.is_a?(Hash) ? sources.pop.stringify_keys : { }
 
       sources.collect!{|s| s.to_s}
-      sources = (RAILS_ENV != "development" ? 
+      sources = (RAILS_ENV != "development" || SUPPRESS_ASSET_PACKAGER ? 
         AssetPackage.targets_from_sources("stylesheets", sources) : 
         AssetPackage.sources_from_targets("stylesheets", sources))
 

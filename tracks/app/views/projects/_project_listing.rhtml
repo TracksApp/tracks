@@ -11,17 +11,22 @@
     </div>
     <div class="buttons">
       <span class="grey"><%= project.current_state.to_s.upcase %></span>
-      <a class="delete_project_button" href="<%= formatted_project_path(project, :js) %>" title="delete the project '<%= project.name %>'"><%= image_tag( "blank.png", :title => "Delete project", :class=>"delete_item") %></a>
-      <%= apply_behavior "a.delete_project_button:click", { :prevent_default => true, :external => true} do |page|
-           page << "if (confirm('Are you sure that you want to ' + this.title + '?')) {"
-           page << "  new Ajax.Request(this.href, {asynchronous:true,"
-           page << "                               evalScripts:true, method:'delete'}); };"
+      <a class="delete_project_button"
+         href="<%= formatted_project_path(project, :js) %>"
+         title="delete the project '<%= project.name %>'"><%= image_tag( "blank.png",
+                                                                         :title => "Delete project",
+                                                                         :class=>"delete_item") %></a>
+     <%= apply_behavior "a.delete_project_button:click", { :prevent_default => true, :external => true } do |page, element|
+           page.confirming "'Are you sure that you want to ' + this.title + '?'" do
+             element.up('.project').start_waiting
+             page << remote_to_href(:method => 'delete')
+           end
          end -%>
       <a class="edit_project_button" id="<%= dom_id(project, 'editbutton') %>" href="<%= formatted_edit_project_path(project, :js) %>" title="delete the project '<%= project.name %>'"><%= image_tag( "blank.png", :title => "Edit project", :class=>"edit_item") %></a>
-         <%= apply_behavior "a.edit_project_button:click", { :prevent_default => true, :external => true} do |page|
-              page << "  this.up('.project').startWaiting();"
-              page << "  new Ajax.Request( this.href, {asynchronous:true, evalScripts:true, method:'get'});"
-             end
+         <%= apply_behavior 'a.edit_project_button:click', { :prevent_default => true, :external => true } do |page, element|
+              element.up('div.project').start_waiting
+              page << remote_to_href(:method => 'get')
+            end
          -%>
     </div>
   </div>

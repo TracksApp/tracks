@@ -15,10 +15,11 @@
         <span class="grey">VISIBLE</span>
       <% end %>
       <a class="delete_context_button" href="<%= formatted_context_path(context, :js) %>" title="delete the context '<%= context.name %>'"><%= image_tag( "blank.png", :title => "Delete context", :class=>"delete_item") %></a>
-      <%= apply_behavior "a.delete_context_button:click", { :prevent_default => true, :external => true} do |page|
-               page << "if (confirm('Are you sure that you want to ' + this.title + '?')) {"
-               page << "  new Ajax.Request(this.href, {asynchronous:true,"
-               page << "                               evalScripts:true, method:'delete'}); };"
+      <%= apply_behavior "a.delete_context_button:click", { :prevent_default => true, :external => true} do |page, element|
+               page.confirming "'Are you sure that you want to ' + this.title + '?'" do
+                 element.up('.context').start_waiting
+                 page << remote_to_href(:method => 'delete')
+               end
          end -%>
       <a class="edit_context_button" href="#"><%= image_tag( "blank.png", :title => "Edit context", :class=>"edit_item") %></a>
       <%= apply_behavior 'a.edit_context_button:click', :prevent_default => true do |page, element|
@@ -33,8 +34,3 @@
   </div>
   <%= render :partial => 'context_form', :object => context %>
 </div>
-<% if controller.action_name == 'create' %>
-  <script>
-    new Effect.Appear('<%= dom_id(context) %>');
-      </script>
-<% end %>

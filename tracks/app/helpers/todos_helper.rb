@@ -14,12 +14,12 @@ module TodosHelper
         :id => dom_id(@todo, 'form'), 
         :class => dom_id(@todo, 'form') + " inline-form edit_todo_form" }, 
       &block )
-    apply_behavior 'form.'+dom_id(@todo, 'form'), make_remote_form(
-      :method => :put, 
-      :before => "$('" + dom_id(@todo, 'submit') + "').startWaiting()",
-      :loaded => "$('" + dom_id(@todo, 'submit') + "').stopWaiting()",
-      :condition => "!$('" + dom_id(@todo, 'submit') + "').isWaiting()"),
-      :prevent_default => true
+      apply_behavior 'form.edit_todo_form', make_remote_form(
+        :method => :put, 
+        :before => "this.down('button.positive').startWaiting()",
+        :loaded => "this.down('button.positive').stopWaiting()",
+        :condition => "!(this.down('button.positive').isWaiting())"),
+        :prevent_default => true
   end
   
   def remote_delete_icon
@@ -27,9 +27,10 @@ module TodosHelper
       todo_path(@todo),
       :class => "icon delete_icon", :title => "delete the action '#{@todo.description}'")
     apply_behavior '.item-container a.delete_icon:click', :prevent_default => true do |page|
-      page << "if (confirm('Are you sure that you want to ' + this.title + '?')) {"
-      page << "  new Ajax.Request(this.href, { asynchronous : true, evalScripts : true, method : 'delete', parameters : { '_source_view' : '#{@source_view}' }})"
-      page << "}"
+      page.confirming "'Are you sure that you want to ' + this.title + '?'" do
+        page << "itemContainer = this.up('.item-container'); itemContainer.startWaiting();"
+        page << remote_to_href(:method => 'delete', :with => "{ '_source_view' : '#{@source_view}' }", :complete => "itemContainer.stopWaiting();")
+      end
     end
     str
   end
@@ -39,10 +40,9 @@ module TodosHelper
       toggle_star_todo_path(@todo),
       :class => "icon star_item", :title => "star the action '#{@todo.description}'")
     apply_behavior '.item-container a.star_item:click', 
-      remote_function(:url => javascript_variable('this.href'), :method => 'put',
-      :with => "{ _source_view : '#{@source_view}' }"),
+      remote_to_href(:method => 'put', :with => "{ _source_view : '#{@source_view}' }"),
       :prevent_default => true
-    str                   
+    str
   end
   
   def remote_edit_icon
@@ -51,7 +51,8 @@ module TodosHelper
         edit_todo_path(@todo),
         :class => "icon edit_icon")
       apply_behavior '.item-container a.edit_icon:click', :prevent_default => true do |page|
-        page << "new Ajax.Request(this.href, { asynchronous : true, evalScripts : true, method : 'get', parameters : { '_source_view' : '#{@source_view}' }, onLoading: function(request){ Effect.Pulsate(this)}});"
+        page << "Effect.Pulsate(this);"
+        page << remote_to_href(:method => 'get', :with => "{ _source_view : '#{@source_view}' }")
       end
     else
       str = '<a class="icon">' + image_tag("blank.png") + "</a> "
@@ -62,8 +63,7 @@ module TodosHelper
   def remote_toggle_checkbox
     str = check_box_tag('item_id', toggle_check_todo_path(@todo), @todo.completed?, :class => 'item-checkbox')
     apply_behavior '.item-container input.item-checkbox:click',
-      remote_function(:url => javascript_variable('this.value'), :method => 'put',
-      :with => "{ _source_view : '#{@source_view}' }")
+      remote_to_href(:method => 'put', :with => "{ _source_view : '#{@source_view}' }")
     str
   end
   

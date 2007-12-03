@@ -1,7 +1,7 @@
 <% context = context_form 
    @context = context-%>
 <div id="<%= dom_id(context, 'edit') %>" class="edit-form" style="display:none;">
-  <% form_tag(context_path(context), {:id => dom_id(context, 'edit_form'), :class => "inline-form "+dom_id(context, 'edit_form')+"-edit-context-form", :method => :put}) do -%>
+  <% form_tag(context_path(context), {:id => dom_id(context, 'edit_form'), :class => "inline-form "+dom_id(context, 'edit_form')+"-edit-context-form edit-context-form", :method => :put}) do -%>
               <%= error_messages_for 'context' %>
   
     <label for="context_name">Context name</label><br/>
@@ -26,11 +26,10 @@
     <br/><br/>
   
     <% end %>
-  <%= apply_behavior "."+dom_id(context, 'edit_form')+"-edit-context-form", make_remote_form(
-    :before => "$('"+dom_id(context, 'submit')+"').startWaiting()",
-    :complete => "$('"+dom_id(context, 'submit')+"').stopWaiting(); Effect.Appear($(this).up('.list'))",
-    :condition => "!$('"+dom_id(context, 'submit')+"').isWaiting()"), 
-   :external => true
+  <%= apply_behavior ".edit-context-form", make_remote_form(
+      :before => "this.up('div.edit-form').down('button.positive').startWaiting()",
+      :condition => "!(this.up('div.edit-form').down('button.positive')).isWaiting()"), 
+      :external => true
 @context = nil %>
 </div>
 
