@@ -32,7 +32,7 @@ window.onload=function(){
   <% if @count %>
     <span id="badge_count" class="badge"><%= @count %></span>
   <% end %>
-  <%= user_time.strftime(@prefs.title_date_format) %> <%= image_tag("spinner.gif", :size => "16X16", :border => 0, :id => 'busy', :style => 'display:none' ) %>
+  <%= user_time.strftime(@prefs.title_date_format) %>
   </h1>
 </div>
 <div id="minilinks">

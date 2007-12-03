@@ -8,4 +8,3 @@ page.select('#project_status .completed span').each do |element|
   element.className = @project.current_state == :completed ? 'active_state' : 'inactive_state'
 end
 page.notify :notice, "Set project status to #{@project.current_state}", 5.0
-page.hide 'busy'

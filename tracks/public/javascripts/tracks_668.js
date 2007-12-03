@@ -369,9 +369,7 @@ this.editField=this.cached_selectTag;if(this.options.loadTextURL)this.loadExtern
 var TracksForm={toggle:function(toggleDivId,formContainerId,formId,hideLinkText,hideLinkTitle,showLinkText,showLinkTitle){$(formContainerId).toggle();toggleDiv=$(toggleDivId);toggleLink=toggleDiv.down('a');if(toggleDiv.hasClassName('hide_form')){toggleLink.update(showLinkText).setAttribute('title',showLinkTitle);}
 else{toggleLink.update(hideLinkText).setAttribute('title',hideLinkTitle);Form.focusFirstElement(formId);}
 toggleDiv.toggleClassName('hide_form');}}
-Ajax.Responders.register({onCreate:function(){if($('busy')&&Ajax.activeRequestCount>0)
-Effect.Appear('busy',{duration:0.5,queue:'end'});},onComplete:function(){if($('busy')&&Ajax.activeRequestCount==0)
-Element.hide('busy');}});Event.observe(window,'load',function(){$A(document.getElementsByClassName('alert')).each(function(o){o.opacity=100.0
+Event.observe(window,'load',function(){$A(document.getElementsByClassName('alert')).each(function(o){o.opacity=100.0
 Effect.Fade(o,{duration:8.0})});});CookieManager=Class.create();CookieManager.prototype={BROWSER_IS_IE:(document.all&&window.ActiveXObject&&navigator.userAgent.toLowerCase().indexOf("msie")>-1&&navigator.userAgent.toLowerCase().indexOf("opera")==-1),BROWSER_IS_OPERA:(navigator.userAgent.toLowerCase().indexOf("opera")!=-1),initialize:function(options)
 {this.options=Object.extend({shelfLife:365,userData:false},options||{});this.cookieShelfLife=this.options.shelfLife;this.userDataForIE=this.options.userData;if(this.BROWSER_IS_IE&&this.userDataForIE)
 {this.IE_CACHE_NAME="storage";if($(this.IE_CACHE_NAME)==null)
