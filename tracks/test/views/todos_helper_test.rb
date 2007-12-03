@@ -77,7 +77,7 @@ class TodosHelperTest < Test::Rails::HelperTestCase
     assert_equal 1, behaviors[:rules].length
     rule = behaviors[:rules][0]
     assert_equal ".item-container a.star_item:click", rule[0]
-    assert_equal "new Ajax.Request(this.href, {asynchronous:true, evalScripts:true, method:'put', parameters:{ _source_view : '' }}); return false;",
+    assert_equal "new Ajax.Request(this.href, {asynchronous:true, evalScripts:true, method:'put', parameters:{ _source_view : '' }})\n; return false;",
                  rule[1]
   end
 end
