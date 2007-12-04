@@ -64,7 +64,7 @@ class ContextsController < ApplicationController
         elsif @context.new_record?
           render_failure @context.errors.to_xml, 409
         else
-          render :xml => @context.to_xml( :except => :user_id ), :status => 201
+          head :created, :location => context_url(@context)
         end
        end
     end

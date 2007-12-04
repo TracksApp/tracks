@@ -82,10 +82,9 @@ class TodosControllerTest < Test::Rails::TestCase
   
   def test_create_todo_via_xml
     login_as(:admin_user)
-    put :create, :format => "xml", "request" => { "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{"notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>"foo bar" }
-    assert_response 201
-    assert_xml_select "todo" do
-      assert_xml_select "id", /\d+/
+    assert_difference Todo, :count do
+      put :create, :format => "xml", "request" => { "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{"notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>"foo bar" }
+      assert_response 201
     end
   end
 

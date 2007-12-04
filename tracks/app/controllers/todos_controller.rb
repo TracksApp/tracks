@@ -18,7 +18,7 @@ class TodosController < ApplicationController
     respond_to do |format|
       format.html  &render_todos_html
       format.m     &render_todos_mobile
-      format.xml   { render :action => 'list.rxml', :layout => false }
+      format.xml   { render :xml => @todos.to_xml( :except => :user_id ) }
       format.rss   &render_rss_feed
       format.atom  &render_atom_feed
       format.text  &render_text_feed
@@ -78,7 +78,7 @@ class TodosController < ApplicationController
       end
       format.xml do
         if @saved
-          render :xml => @todo.to_xml( :root => 'todo', :except => :user_id ), :status => 201
+          head :created, :location => todo_url(@todo)
         else
           render :xml => @todo.errors.to_xml, :status => 422
         end

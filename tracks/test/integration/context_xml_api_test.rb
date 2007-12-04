@@ -55,18 +55,10 @@ class ContextXmlApiTest < ActionController::IntegrationTest
   end
     
   def test_creates_new_context
-    initial_count = Context.count
-    authenticated_post_xml_to_context_create
-    assert_response 201
-    assert_xml_select 'context' do
-      assert_select 'created-at', /\d{4}+-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/
-      assert_select 'hide', /false|0/ #TODO: Figure out schema issues
-      assert_select 'id', /\d+/
-      assert_select 'name', @@context_name
-      assert_select 'position', '3'
-      assert_select 'updated-at', /\d{4}+-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/
+    assert_difference Context, :count do
+      authenticated_post_xml_to_context_create
+      assert_response 201
     end
-    assert_equal initial_count + 1, Context.count
     context1 = Context.find_by_name(@@context_name)
     assert_not_nil context1, "expected context '#{@@context_name}' to be created"
   end

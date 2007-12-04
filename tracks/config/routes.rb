@@ -11,7 +11,7 @@ ActionController::Routing::Routes.draw do |map|
     login.open_id_complete 'complete', :action => 'complete'
     login.formatted_open_id_complete 'complete.:format', :action => 'complete'
   end
-  
+
   map.resources :users,
                 :member => {:change_password => :get, :update_password => :post,
                              :change_auth_type => :get, :update_auth_type => :post, :complete => :get,

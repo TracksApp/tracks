@@ -71,7 +71,7 @@ class ProjectsController < ApplicationController
         elsif @project.new_record?
           render_failure @project.errors.full_messages.join(', ')
         else
-          render :xml => @project.to_xml( :except => :user_id )
+          head :created, :location => project_url(@project)
        end
       end
     end
