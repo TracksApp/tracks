@@ -1,11 +1,11 @@
 <h1>Integrations</h1>
-<p>Tracks can be integrated with a number of other tools... whatever it takes to help you get things done! This page has information on setting up some of these. Not all of these are applicable to all platforms, and some require more technical knowledge than others.</p>
+<p>Tracks can be integrated with a number of other tools... whatever it takes to help you get things done! This page has information on setting up some of these. Not all of these are applicable to all platforms, and some require more technical knowledge than others. See also <%= link_to "developer documentation for Tracks' REST API", url_for(:action => 'rest_api') %>.</p>
 <p>Contents:
-	<ol>
-	<li><a href="#applescript1-section">Add an Action with Applescript</a></li>
-	<li><a href="#applescript2-section">Add an Action with Applescript based on the currently selected Email in Mail.app</a></li>
-	<li><a href="#quicksilver-applescript-section">Add Actions with Quicksilver and Applescript</a></li>
-	<li><a href="#email-cron-section">Automatically Email Yourself Upcoming Actions</a></li>
+  <ol>
+  <li><a href="#applescript1-section">Add an Action with Applescript</a></li>
+  <li><a href="#applescript2-section">Add an Action with Applescript based on the currently selected Email in Mail.app</a></li>
+  <li><a href="#quicksilver-applescript-section">Add Actions with Quicksilver and Applescript</a></li>
+  <li><a href="#email-cron-section">Automatically Email Yourself Upcoming Actions</a></li>
 </ol><br />
 </p>
 <p>Do you have one of your own to add? <a href="http://www.rousette.org.uk/projects/forums/viewforum/10/" title="Tracks | Tips and Tricks">Tell us about it in our Tips and Tricks forum
@@ -16,7 +16,7 @@
 <p>This is a simple script that pops up a dialog box asking for a description, and then sends that to Tracks with a hard-coded context.</p>
 
 <ol>
-	<li>Choose the context you want to add actions to: <select name="applescript1-contexts" id="applescript1-contexts"><%= options_from_collection_for_select(current_user.contexts, "id", "name", current_user.contexts.first.id) %></select>
+  <li>Choose the context you want to add actions to: <select name="applescript1-contexts" id="applescript1-contexts"><%= options_from_collection_for_select(current_user.contexts, "id", "name", current_user.contexts.first.id) %></select>
 		<%= observe_field "applescript1-contexts", :update => "applescript1",
 		:with => 'context_id',
 		:url => { :controller => "integrations", :action => "get_applescript1" },

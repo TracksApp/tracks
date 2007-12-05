@@ -116,6 +116,7 @@ class TodosController < ApplicationController
         end
         render
       end
+      format.xml { render :xml => @todo.to_xml( :except => :user_id ) }
       format.html do
         if @saved
           # TODO: I think this will work, but can't figure out how to test it
@@ -132,6 +133,10 @@ class TodosController < ApplicationController
   def toggle_star
     @todo.toggle_star!
     @saved = @todo.save!
+    respond_to do |format|
+      format.js
+      format.xml { render :xml => @todo.to_xml( :except => :user_id ) }
+    end
   end
 
   def update
@@ -189,6 +194,7 @@ class TodosController < ApplicationController
     determine_down_count
     respond_to do |format|
       format.js
+      format.xml { render :xml => @todo.to_xml( :except => :user_id ) }
       format.m do
         if @saved
           redirect_to formatted_todos_path(:m)

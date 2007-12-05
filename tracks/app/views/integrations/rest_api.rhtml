@@ -1,0 +1,218 @@
+<h1>REST API Documentation for Developers</h1>
+            
+<h2>Introduction</h2>
+
+<p>Tracks is designed to be integrated with scripts, web services, and third-party applications. This page serves as the documentation of our REST API.</p>
+
+<h2>Tracks REST API</h2>
+
+<p>The Tracks REST API allows developers to integrate Tracks into their applications. It allows applications to access and modify Tracks data, and is implemented as Vanilla XML over HTTP.</p>
+
+<p>The API is a <a href="http://en.wikipedia.org/wiki/REST">RESTful</a> service. All data is available through the API as a resource to which can be referred using a unique identifier. It responds to a number of the HTTP methods, specifically GET, PUT, POST and UPDATE, and all responses from the API are in a simple XML format encoded as UTF-8.</p>
+
+<h2>Authentication</h2>
+
+<p>Authentication is handled using <a href="http://en.wikipedia.org/wiki/Basic_authentication">Basic HTTP authentication</a>. Your Tracks username and password is used as the authentication credentials for the API. Note that in Basic HTTP authentication, your password is sent in clear text. If you need a more secure authentication solution, you should configure your web server to run Tracks under HTTPS.</p>
+
+<h2>Retrieving data from the API</h2>
+
+<p>To retrieve data you only need to do an HTTP GET on a resource identifier. For example, if you want to get all the contexts with <a href="http://en.wikipedia.org/wiki/CURL">cURL</a>:</p>
+
+<pre>
+<code>
+  $ curl -u username:p4ssw0rd \
+      <%= home_url %>contexts.xml
+  &gt;&gt; &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+  &lt;contexts&gt;...&lt;/contexts&gt;
+</code>
+</pre>
+
+<p>Getting a single context:</p>
+
+<pre>
+<code>
+  $ curl -u username:p4ssw0rd \
+      <%= home_url %>contexts/51.xml
+  &gt;&gt; &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+  &lt;context&gt;...&lt;/context&gt;
+</code>
+</pre>
+
+<p>Getting the todos within a context:</p>
+
+<pre>
+<code>
+  $ curl -u username:p4ssw0rd \
+  <%= home_url %>contexts/51/todos.xml
+  &gt;&gt; &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+  &lt;todos type="array"&gt;...&lt;/todos&gt;
+</code>
+</pre>
+
+<p>You also can apply the pattern shown above with projects instead of contexts.</p>
+
+<p>All data is available according to the following resource paths:</p>
+
+<ul>
+  <li>/todos.xml</li>
+  <li>/todos/<code>ID</code>.xml</li>
+  <li>/contexts.xml</li>
+  <li>/contexts/<code>ID</code>.xml</li>
+  <li>/contexts/<code>ID</code>/todos.xml</li>
+  <li>/projects.xml</li>
+  <li>/projects/<code>ID</code>.xml</li>
+  <li>/projects/<code>ID</code>/todos.xml</li>
+</ul>
+
+<h2>Writing to the API</h2>
+
+<p>The API provides mechanisms for adding, updating and deleting resources using the HTTP methods <code>PUT</code>, <code>POST</code> and <code>DELETE</code> in combination with the content.</p>
+
+<p>Creating a new project, using curl:</p>
+
+<pre>
+<code>
+$ curl -u username:p4ssw0rd \
+    -d "project[name]=Build a treehouse for the kids" \
+    <%= home_url %>projects.xml -i
+&gt;&gt; HTTP/1.1 201 Created
+Location: <%= home_url %>projects/65.xml
+...
+</code>
+</pre>
+
+<p>The response is an <code>HTTP/1.1 201 Created</code> with <code>Location</code> header indicating where the new project resource can be found. Now we can add a todo to this project, using curl:</p>
+
+<pre>
+<code>
+$ curl -u username:p4ssw0rd \
+    -d "todo[description]=Model treehouse in SketchUp&#38;todo[context_id]=2&#38;todo[project_id]=65" \
+    <%= home_url %>todos.xml -i
+&gt;&gt; HTTP/1.1 201 Created
+Location: <%= home_url %>todos/452.xml
+...
+</code>
+</pre>
+
+<p>The response is a again an <code>HTTP/1.1 201 Created</code> with <code>Location</code> header indicating where the new todo resource can be found. Changing the todo notes, again using curl:</p>
+
+<pre>
+<code>
+  $ curl -u username:p4ssw0rd -X PUT \
+      -d "todo[notes]=use maple texture" \
+      <%= home_url %>todos/452.xml -i
+  &gt;&gt; HTTP/1.1 200 OK
+  ...
+
+  &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+  &lt;todo&gt;
+    ...
+    &lt;description&gt;Model treehouse in SketchUp&lt;/description&gt;
+
+    &lt;notes&gt;use maple texture&lt;/notes&gt;
+    ...
+  &lt;/todo&gt;
+</code>
+</pre>
+
+<p>The response is an <code>HTTP/1.1 200 OK</code> with in the body the XML representation of the updated todo. We provide a shorcut method to toggle a todo done or undone without having to perform the update with the right field values:</p>
+
+<pre>
+<code>
+  $ curl -u username:p4ssw0rd -X PUT \
+      <%= home_url %>todos/452/toggle_check.xml -i
+  &gt;&gt; HTTP/1.1 200 OK
+  ...
+
+  &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+  &lt;todo&gt;
+    ...
+    &lt;completed-at type=\"datetime\"&gt;2007-12-05T06:43:25Z&lt;/completed-at&gt;
+
+    &lt;state&gt;completed&lt;/state&gt;
+    ...
+  &lt;/todo&gt;
+</code>
+</pre>
+
+
+<p>If we want to delete that todo we can call its unique resource identifier (the URL) with the HTTP method <code>DELETE</code>, again with curl:</p>
+
+<pre>
+<code>
+  $ curl -u username:p4ssw0rd -X DELETE \
+      <%= home_url %>todos/452.xml -i
+  &gt;&gt; HTTP/1.1 200 OK
+  ...
+</code>
+</pre>
+
+	<p>The API returns an <code>HTTP/1.1 200 OK</code> and the todo is now deleted.</p>
+
+
+<h2>Dealing with the response and response status</h2>
+
+
+<p>All successful operations respond with a status code of <code>200 OK</code> or <code>201 Created</code> depending on the operation. Sometimes a list, say <code>GET /contexts/2/todos.xml</code> will not have any items, it will return an empty list.</p>
+
+<p>The XML for empty list responses look like this, again with curl:</p>
+
+<pre>
+<code>
+$ curl -u username:p4ssw0rd \
+    <%= home_url %>contexts/2/todos.xml
+&gt;&gt; &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;nil-classes type="array"/&gt;
+
+</code>
+</pre>
+
+<h2>Consuming the API with ActiveResource</h2>
+
+<p><a href="http://weblog.rubyonrails.org/2007/9/30/rails-2-0-0-preview-release">ActiveResource</a> is a thin but powerful wrapper around RESTful services exposed by <a href="http://www.rubyonrails.org">Ruby on Rails</a>. It will be part of Rails 2.0 but until then you can get it with <code>gem install activeresource --source http://gems.rubyonrails.org --include-dependencies</code>.</p>
+
+<pre>
+<code>
+$ script/console 
+Loading development environment (Rails 1.2.4)
+&gt;&gt; class Context &lt; ActiveResource::Base; end
+=&gt; nil
+&gt;&gt; Context.site = "<%= home_url %>"
+=&gt; "<%= home_url %>" 
+&gt;&gt; Context.site.user = "username" 
+=&gt; "username" 
+
+&gt;&gt; Context.site.password = CGI.escape "p4ssw0rd" 
+=&gt; "p4ssw0rd" 
+&gt;&gt; Context.find :first
+=&gt; #&lt;Context:0x262396c @prefix_options={}, @attributes={...}&gt;
+&gt;&gt; &gt;&gt; Context.find :all
+=&gt; [#&lt;Context:0x274cfc8 @prefix_options={}, @attributes={...}, ...]
+</code>
+
+</pre>
+
+	<p>Inspired by <a href="http://www.37signals.com">37 Signals</a> &#8217;s Highrise wrapper, we&#8217;ve put together a small ruby wrapper (find it in the doc/ directory) for the API which sets up the ActiveResource models for you to play with in an IRB session:</p>
+
+<pre>
+<code>
+$ SITE="http://username:p4ssw0rd@<%= @request.host_with_port %>" irb \
+    -r tracks_api_wrapper.rb
+
+irb(main):001:0&gt; inbox = Tracks::Context.find :first
+irb(main):002:0&gt; inbox.name
+=&gt; "@inbox" 
+irb(main):003:0&gt;
+</code>
+</pre>
+
+	<h3>Notes about the documentation</h3>
+
+	<p>A few conventions have been applied in the documentation, these are:</p>
+
+<ul>
+  <li><code>ID</code>&#8217;s in a resource <span class="caps">URL</span> indicate that the resource&#8217;s unique ID needs to be inserted there</li>
+  <li><code>...</code> indicates that unimportant bits of response data have been removed to eliminate noise from the documentation</li>
+</ul>
+
+<p>All examples make use of <a href="http://en.wikipedia.org/wiki/CURL">cURL</a> .</p></div>
