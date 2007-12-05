@@ -26,6 +26,9 @@
 	           				:contexts => @contexts.select{|c| c.hide? } } -%>
 	<% end -%>
 	
-	<div class="integrations-link"><%= link_to 'Integrate Tracks', integrations_path %></div>
+	<div class="integrations-link"><ul>
+	  <li><%= link_to 'Integrate Tracks', integrations_path %></li>
+	  <li><%= link_to 'REST API Docs', url_for(:controller => 'integrations', :action => 'rest_api') %></li>
+	</ul></div>
 
 </div>
