@@ -18,7 +18,7 @@ Protoload = {
 		if (typeof element == 'string')
 			element = document.getElementById(element);
 		if (className == undefined)
-			className = 'waiting';
+			className = 'tracks__waiting';
 		if (timeUntilShow == undefined)
 			timeUntilShow = Protoload.timeUntilShow;
 		

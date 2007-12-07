@@ -1040,7 +1040,7 @@ button.positive, .widgets a.positive{
     border:1px solid #d12f19;
     color:#fff;
 }
-.waiting {
+.tracks__waiting {
 	background-image:url('/images/waiting.gif');
 	background-repeat:no-repeat;
 	background-position:center center;
