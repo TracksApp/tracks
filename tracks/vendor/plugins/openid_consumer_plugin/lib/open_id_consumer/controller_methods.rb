@@ -17,6 +17,7 @@
 
 begin
   gem "ruby-openid", ">= 1.0"
+  require "openid"
 rescue LoadError
   require "openid"
 end
