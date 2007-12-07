@@ -194,7 +194,7 @@ button.positive, .widgets a.positive{ color: #498111}
 .widgets a.negative, button.negative{ color:#d12f19}
 .widgets a.negative:hover, button.negative:hover{ background:#fbe3e4; border:1px solid #fbc2c4; color:#d12f19}
 .widgets a.negative:active{ background-color:#d12f19; border:1px solid #d12f19; color:#fff}
-.waiting {background-image:url('/images/waiting.gif'); background-repeat:no-repeat; background-position:center center; background-color:white}
+.tracks__waiting {background-image:url('/images/waiting.gif'); background-repeat:no-repeat; background-position:center center; background-color:white}
 .bigWaiting {background-image:url('/images/bigWaiting.gif'); background-repeat:no-repeat; background-position:center 20%; background-color:white}
 .blackWaiting {background-image:url('/images/blackWaiting.gif'); background-repeat:no-repeat; background-position:center center; background-color:black}
 .bigBlackWaiting {background-image:url('/images/bigBlackWaiting.gif'); background-repeat:no-repeat; background-position:center center; background-color:black}

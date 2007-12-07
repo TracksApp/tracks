@@ -717,7 +717,7 @@ function Mix(c1,c2){var i,step1,step2,x,y,r=new Array(3);if(c1.length==4)step1=1
 return("#"+r[0]+r[1]+r[2]);}
 Protoload={timeUntilShow:250,opacity:0.8,startWaiting:function(element,className,timeUntilShow){if(typeof element=='string')
 element=document.getElementById(element);if(className==undefined)
-className='waiting';if(timeUntilShow==undefined)
+className='tracks__waiting';if(timeUntilShow==undefined)
 timeUntilShow=Protoload.timeUntilShow;element._waiting=true;if(!element._loading){var e=document.createElement('div');(element.offsetParent||document.body).appendChild(element._loading=e);e.style.position='absolute';try{e.style.opacity=Protoload.opacity;}catch(e){}
 try{e.style.MozOpacity=Protoload.opacity;}catch(e){}
 try{e.style.filter='alpha(opacity='+Math.round(Protoload.opacity*100)+')';}catch(e){}
