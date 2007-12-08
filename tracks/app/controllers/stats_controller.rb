@@ -249,12 +249,14 @@ class StatsController < ApplicationController
   
   def context_total_actions_data
     # get total action count per context
+    # Went from GROUP BY c.id to c.name for compatibility with postgresql. Since
+    # the name is forced to be unique, this should work.
     @all_actions_per_context = @contexts.find_by_sql(
       "SELECT c.name AS name, count(*) AS total "+
         "FROM contexts c, todos t "+
         "WHERE t.context_id=c.id "+
         "AND t.user_id="+@user.id.to_s+" "+
-        "GROUP BY c.id "+
+        "GROUP BY c.name "+
         "ORDER BY total DESC"
     )
 
@@ -286,12 +288,15 @@ class StatsController < ApplicationController
 
   def context_running_actions_data
     # get uncompleted action count per visible context
+    # 
+    # Went from GROUP BY c.id to c.name for compatibility with postgresql. Since
+    # the name is forced to be unique, this should work.
     @all_actions_per_context = @contexts.find_by_sql(
       "SELECT c.name AS name, count(*) AS total "+
         "FROM contexts c, todos t "+
         "WHERE t.context_id=c.id AND t.completed_at IS NULL AND NOT c.hide "+
         "AND t.user_id="+@user.id.to_s+" "+
-        "GROUP BY c.id "+
+        "GROUP BY c.name "+
         "ORDER BY total DESC"
     )
     
@@ -527,47 +532,59 @@ class StatsController < ApplicationController
 
   def get_stats_contexts
     # get action count per context for TOP 5
+    # 
+    # Went from GROUP BY c.id to c.name for compatibility with postgresql. Since
+    # the name is forced to be unique, this should work.
     @actions_per_context = @contexts.find_by_sql(
       "SELECT c.name AS name, count(*) AS total "+
         "FROM contexts c, todos t "+
         "WHERE t.context_id=c.id "+
         "AND t.user_id="+@user.id.to_s+" "+
-        "GROUP BY c.id ORDER BY total DESC " +
+        "GROUP BY c.name ORDER BY total DESC " +
         "LIMIT 5"
     )
 
     # get uncompleted action count per visible context for TOP 5
+    # 
+    # Went from GROUP BY c.id to c.name for compatibility with postgresql. Since
+    # the name is forced to be unique, this should work.
     @running_actions_per_context = @contexts.find_by_sql(
       "SELECT c.name AS name, count(*) AS total "+
         "FROM contexts c, todos t "+
         "WHERE t.context_id=c.id AND t.completed_at IS NULL AND NOT c.hide "+
         "AND t.user_id="+@user.id.to_s+" "+
-        "GROUP BY c.id ORDER BY total DESC " +
+        "GROUP BY c.name ORDER BY total DESC " +
         "LIMIT 5"
     )    
   end
 
   def get_stats_projects
     # get the first 10 projects and their action count (all actions)
+    # 
+    # Went from GROUP BY p.id to p.name for compatibility with postgresql. Since
+    # the name is forced to be unique, this should work.
     @projects_and_actions = @projects.find_by_sql(
       "SELECT p.name, count(*) AS count "+
         "FROM projects p, todos t "+
         "WHERE p.id = t.project_id "+
         "AND p.user_id="+@user.id.to_s+" "+
-        "GROUP BY p.id "+
+        "GROUP BY p.name "+
         "ORDER BY count DESC " +
         "LIMIT 10"
     )
     
     # get the first 10 projects with their actions count of actions that have
     # been created or completed the past 30 days
+    
+    # using GROUP BY p.name (was: p.id) for compatibility with Postgresql. Since
+    # you cannot create two contexts with the same name, this will work.
     @projects_and_actions_last30days = @projects.find_by_sql([
         "SELECT p.name, count(*) AS count "+
           "FROM todos t, projects p "+
           "WHERE t.project_id = p.id AND "+
           "      (t.created_at > ? OR t.completed_at > ?) "+
           "AND p.user_id=? "+
-          "GROUP BY p.id "+
+          "GROUP BY p.name "+
           "ORDER BY count DESC " +
           "LIMIT 10", @cut_off_month, @cut_off_month, @user.id]
     )
@@ -607,7 +624,7 @@ class StatsController < ApplicationController
     query << " WHERE tags.id = tag_id"
     query << " AND taggings.user_id="+@user.id.to_s+" "
     query << " AND taggings.taggable_type='Todo' "
-    query << " GROUP BY tag_id"
+    query << " GROUP BY tags.id"
     query << " ORDER BY count DESC, name"
     query << " LIMIT 100"
     @tags_for_cloud = Tag.find_by_sql(query).sort_by { |tag| tag.name.downcase }
@@ -629,7 +646,7 @@ class StatsController < ApplicationController
     query << " AND taggings.taggable_id=todos.id "
     query << " AND (todos.created_at > ? OR "
     query << "      todos.completed_at > ?) "
-    query << " GROUP BY tag_id"
+    query << " GROUP BY tags.id"
     query << " ORDER BY count DESC, name"
     query << " LIMIT 100"
     @tags_for_cloud_90days = Tag.find_by_sql(
