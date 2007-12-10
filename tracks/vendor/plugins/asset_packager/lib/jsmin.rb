@@ -1,5 +1,5 @@
 #!/usr/bin/ruby
-# jsmin.rb 2007-01-23
+# jsmin.rb 2007-07-20
 # Author: Uladzislau Latynski
 # This work is a translation from C to Ruby of jsmin.c published by
 # Douglas Crockford.  Permission is hereby granted to use the Ruby
@@ -122,7 +122,9 @@ def action(a)
         $theB = mynext
         if ($theB == "/" && ($theA == "(" || $theA == "," || $theA == "=" ||
                              $theA == ":" || $theA == "[" || $theA == "!" ||
-                             $theA == "&" || $theA == "|" || $theA == "?"))
+                             $theA == "&" || $theA == "|" || $theA == "?" ||
+                             $theA == "{" || $theA == "}" || $theA == ";" ||
+                             $theA == "\n"))
             $stdout.write $theA
             $stdout.write $theB
             while (true)
@@ -180,7 +182,7 @@ def jsmin
                 end
             when "\n"
                 case ($theA)
-                when "}","]",")","+","-","\"","\\"
+                when "}","]",")","+","-","\"","\\", "'", '"'
                     action(1)
                 else
                     if (isAlphanum($theA))
@@ -194,6 +196,10 @@ def jsmin
             end
         end
     end
+end
+
+ARGV.each do |anArg|
+    $stdout.write "// #{anArg}\n"
 end
 
 jsmin

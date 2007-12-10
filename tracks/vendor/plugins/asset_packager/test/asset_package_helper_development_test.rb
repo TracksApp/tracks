@@ -4,6 +4,7 @@ ENV['RAILS_ENV'] = "development"
 require File.dirname(__FILE__) + '/../../../../config/environment'
 require 'test/unit'
 require 'rubygems'
+require 'mocha'
 
 require 'action_controller/test_process'
 
@@ -20,6 +21,8 @@ class AssetPackageHelperProductionTest < Test::Unit::TestCase
   include Synthesis::AssetPackageHelper
 
   def setup
+    Synthesis::AssetPackage.any_instance.stubs(:log)
+
     @controller = Class.new do
       attr_reader :request
       def initialize
@@ -77,18 +80,18 @@ class AssetPackageHelperProductionTest < Test::Unit::TestCase
   end
 
   def test_css_multiple_packages
-    assert_dom_equal build_css_expected_string("screen", "foo"), 
-      stylesheet_link_merged("screen", "foo")
+    assert_dom_equal build_css_expected_string("screen", "foo", "subdir/bar"), 
+      stylesheet_link_merged("screen", "foo", "subdir/bar")
   end
   
   def test_css_unpackaged_file
-    assert_dom_equal build_css_expected_string("screen", "foo", "not_part_of_a_package"), 
-      stylesheet_link_merged("screen", "foo", "not_part_of_a_package")
+    assert_dom_equal build_css_expected_string("screen", "foo", "not_part_of_a_package", "subdir/bar"), 
+      stylesheet_link_merged("screen", "foo", "not_part_of_a_package", "subdir/bar")
   end
   
   def test_css_multiple_from_same_package
-    assert_dom_equal build_css_expected_string("screen", "header", "not_part_of_a_package", "foo", "bar"), 
-      stylesheet_link_merged("screen", "header", "not_part_of_a_package", "foo", "bar")
+    assert_dom_equal build_css_expected_string("screen", "header", "not_part_of_a_package", "foo", "bar", "subdir/foo", "subdir/bar"), 
+      stylesheet_link_merged("screen", "header", "not_part_of_a_package", "foo", "bar", "subdir/foo", "subdir/bar")
   end
 
   def test_css_by_package_name
@@ -97,8 +100,8 @@ class AssetPackageHelperProductionTest < Test::Unit::TestCase
   end
   
   def test_css_multiple_package_names
-    assert_dom_equal build_css_expected_string("screen", "header", "foo", "bar"), 
-      stylesheet_link_merged(:base, :secondary)
+    assert_dom_equal build_css_expected_string("screen", "header", "foo", "bar", "subdir/foo", "subdir/bar"), 
+      stylesheet_link_merged(:base, :secondary, "subdir/styles")
   end
   
 end

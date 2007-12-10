@@ -1,86 +1,113 @@
 module Synthesis
   class AssetPackage
+
     # class variables
     @@asset_packages_yml = $asset_packages_yml || 
       (File.exists?("#{RAILS_ROOT}/config/asset_packages.yml") ? YAML.load_file("#{RAILS_ROOT}/config/asset_packages.yml") : nil)
   
     # singleton methods
-    def self.find_by_type(asset_type)
-      @@asset_packages_yml[asset_type].map { |p| self.new(asset_type, p) }
-    end
+    class << self
+      
+      def merge_environments=(environments)
+        @@merge_environments = environments
+      end
+      
+      def merge_environments
+        @@merge_environments ||= ["production"]
+      end
+      
+      def parse_path(path)
+        /^(?:(.*)\/)?([^\/]+)$/.match(path).to_a
+      end
 
-    def self.find_by_target(asset_type, target)
-      package_hash = @@asset_packages_yml[asset_type].find {|p| p.keys.first == target }
-      package_hash ? self.new(asset_type, package_hash) : nil
-    end
-  
-    def self.find_by_source(asset_type, source)
-      package_hash = @@asset_packages_yml[asset_type].find {|p| p[p.keys.first].include?(source) }
-      package_hash ? self.new(asset_type, package_hash) : nil
-    end
-  
-    def self.targets_from_sources(asset_type, sources)
-      package_names = Array.new
-      sources.each do |source|
-        package = find_by_target(asset_type, source) || find_by_source(asset_type, source)
-        package_names << (package ? package.current_file : source)
+      def find_by_type(asset_type)
+        @@asset_packages_yml[asset_type].map { |p| self.new(asset_type, p) }
       end
-      package_names.uniq
-    end
-    
-    def self.sources_from_targets(asset_type, targets)
-      source_names = Array.new
-      targets.each do |target|
-        package = find_by_target(asset_type, target)
-        source_names += (package ? package.sources : target.to_a)
-      end
-      source_names.uniq
-    end
-  
-    def self.build_all
-      @@asset_packages_yml.keys.each do |asset_type|
-        @@asset_packages_yml[asset_type].each { |p| self.new(asset_type, p).build }
-      end
-    end
-    
-    def self.delete_all
-      @@asset_packages_yml.keys.each do |asset_type|
-        @@asset_packages_yml[asset_type].each { |p| self.new(asset_type, p).delete_all_builds }
-      end
-    end
-    
-    def self.create_yml
-      unless File.exists?("#{RAILS_ROOT}/config/asset_packages.yml")
-        asset_yml = Hash.new
-        
-        asset_yml['javascripts'] = [{"base" => build_file_list("#{RAILS_ROOT}/public/javascripts", "js")}]
-        asset_yml['stylesheets'] = [{"base" => build_file_list("#{RAILS_ROOT}/public/stylesheets", "css")}]
 
-        File.open("#{RAILS_ROOT}/config/asset_packages.yml", "w") do |out|
-          YAML.dump(asset_yml, out)
+      def find_by_target(asset_type, target)
+        package_hash = @@asset_packages_yml[asset_type].find {|p| p.keys.first == target }
+        package_hash ? self.new(asset_type, package_hash) : nil
+      end
+
+      def find_by_source(asset_type, source)
+        path_parts = parse_path(source)
+        package_hash = @@asset_packages_yml[asset_type].find do |p|
+          key = p.keys.first
+          p[key].include?(path_parts[2]) && (parse_path(key)[1] == path_parts[1])
         end
-    
-        puts "config/asset_packages.yml example file created!"
-        puts "Please reorder files under 'base' so dependencies are loaded in correct order."
-      else
-        puts "config/asset_packages.yml already exists. Aborting task..."
+        package_hash ? self.new(asset_type, package_hash) : nil
       end
+
+      def targets_from_sources(asset_type, sources)
+        package_names = Array.new
+        sources.each do |source|
+          package = find_by_target(asset_type, source) || find_by_source(asset_type, source)
+          package_names << (package ? package.current_file : source)
+        end
+        package_names.uniq
+      end
+
+      def sources_from_targets(asset_type, targets)
+        source_names = Array.new
+        targets.each do |target|
+          package = find_by_target(asset_type, target)
+          source_names += (package ? package.sources.collect do |src|
+            package.target_dir.gsub(/^(.+)$/, '\1/') + src
+          end : target.to_a)
+        end
+        source_names.uniq
+      end
+
+      def build_all
+        @@asset_packages_yml.keys.each do |asset_type|
+          @@asset_packages_yml[asset_type].each { |p| self.new(asset_type, p).build }
+        end
+      end
+
+      def delete_all
+        @@asset_packages_yml.keys.each do |asset_type|
+          @@asset_packages_yml[asset_type].each { |p| self.new(asset_type, p).delete_all_builds }
+        end
+      end
+
+      def create_yml
+        unless File.exists?("#{RAILS_ROOT}/config/asset_packages.yml")
+          asset_yml = Hash.new
+
+          asset_yml['javascripts'] = [{"base" => build_file_list("#{RAILS_ROOT}/public/javascripts", "js")}]
+          asset_yml['stylesheets'] = [{"base" => build_file_list("#{RAILS_ROOT}/public/stylesheets", "css")}]
+
+          File.open("#{RAILS_ROOT}/config/asset_packages.yml", "w") do |out|
+            YAML.dump(asset_yml, out)
+          end
+
+          log "config/asset_packages.yml example file created!"
+          log "Please reorder files under 'base' so dependencies are loaded in correct order."
+        else
+          log "config/asset_packages.yml already exists. Aborting task..."
+        end
+      end
+
     end
     
     # instance methods
-    attr_accessor :asset_type, :target, :sources
+    attr_accessor :asset_type, :target, :target_dir, :sources
   
     def initialize(asset_type, package_hash)
-      @target  = package_hash.keys.first
-      @sources = package_hash[@target]
+      target_parts = self.class.parse_path(package_hash.keys.first)
+      @target_dir = target_parts[1].to_s
+      @target = target_parts[2].to_s
+      @sources = package_hash[package_hash.keys.first]
       @asset_type = asset_type
-      @asset_path = $asset_base_path ? "#{$asset_base_path}/#{@asset_type}" : "#{RAILS_ROOT}/public/#{@asset_type}"
+      @asset_path = ($asset_base_path ? "#{$asset_base_path}/" : "#{RAILS_ROOT}/public/") +
+          "#{@asset_type}#{@target_dir.gsub(/^(.+)$/, '/\1')}"
       @extension = get_extension
       @match_regex = Regexp.new("\\A#{@target}_\\d+.#{@extension}\\z")
     end
   
     def current_file
-      Dir.new(@asset_path).entries.delete_if { |x| ! (x =~ @match_regex) }.sort.reverse[0].chomp(".#{@extension}")
+      @target_dir.gsub(/^(.+)$/, '\1/') +
+          Dir.new(@asset_path).entries.delete_if { |x| ! (x =~ @match_regex) }.sort.reverse[0].chomp(".#{@extension}")
     end
 
     def build
@@ -126,10 +153,10 @@ module Synthesis
 
       def create_new_build
         if File.exists?("#{@asset_path}/#{@target}_#{revision}.#{@extension}")
-          puts "Latest version already exists: #{@asset_path}/#{@target}_#{revision}.#{@extension}"
+          log "Latest version already exists: #{@asset_path}/#{@target}_#{revision}.#{@extension}"
         else
           File.open("#{@asset_path}/#{@target}_#{revision}.#{@extension}", "w") {|f| f.write(compressed_file) }
-          puts "Created #{@asset_path}/#{@target}_#{revision}.#{@extension}"
+          log "Created #{@asset_path}/#{@target}_#{revision}.#{@extension}"
         end
       end
 
@@ -186,6 +213,10 @@ module Synthesis
           when "javascripts" then "js"
           when "stylesheets" then "css"
         end
+      end
+      
+      def log(message)
+        puts message
       end
 
       def self.build_file_list(path, extension)

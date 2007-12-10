@@ -1,5 +1,6 @@
 require File.dirname(__FILE__) + '/../../../../config/environment'
 require 'test/unit'
+require 'mocha'
 
 $asset_packages_yml = YAML.load_file("#{RAILS_ROOT}/vendor/plugins/asset_packager/test/asset_packages.yml")
 $asset_base_path = "#{RAILS_ROOT}/vendor/plugins/asset_packager/test/assets"
@@ -8,6 +9,7 @@ class AssetPackagerTest < Test::Unit::TestCase
   include Synthesis
   
   def setup
+    Synthesis::AssetPackage.any_instance.stubs(:log)
     Synthesis::AssetPackage.build_all
   end
   
@@ -38,20 +40,25 @@ class AssetPackagerTest < Test::Unit::TestCase
     Synthesis::AssetPackage.delete_all
     js_package_names = Dir.new("#{$asset_base_path}/javascripts").entries.delete_if { |x| ! (x =~ /\A\w+_\d+.js/) }
     css_package_names = Dir.new("#{$asset_base_path}/stylesheets").entries.delete_if { |x| ! (x =~ /\A\w+_\d+.css/) }
+    css_subdir_package_names = Dir.new("#{$asset_base_path}/stylesheets/subdir").entries.delete_if { |x| ! (x =~ /\A\w+_\d+.css/) }
     
     assert_equal 0, js_package_names.length
     assert_equal 0, css_package_names.length
+    assert_equal 0, css_subdir_package_names.length
 
     Synthesis::AssetPackage.build_all
     js_package_names = Dir.new("#{$asset_base_path}/javascripts").entries.delete_if { |x| ! (x =~ /\A\w+_\d+.js/) }.sort
     css_package_names = Dir.new("#{$asset_base_path}/stylesheets").entries.delete_if { |x| ! (x =~ /\A\w+_\d+.css/) }.sort
+    css_subdir_package_names = Dir.new("#{$asset_base_path}/stylesheets/subdir").entries.delete_if { |x| ! (x =~ /\A\w+_\d+.css/) }.sort
     
     assert_equal 2, js_package_names.length
     assert_equal 2, css_package_names.length
+    assert_equal 1, css_subdir_package_names.length
     assert js_package_names[0].match(/\Abase_\d+.js\z/)
     assert js_package_names[1].match(/\Asecondary_\d+.js\z/)
     assert css_package_names[0].match(/\Abase_\d+.css\z/)
     assert css_package_names[1].match(/\Asecondary_\d+.css\z/)
+    assert css_subdir_package_names[0].match(/\Astyles_\d+.css\z/)
   end
   
   def test_js_names_from_sources
@@ -71,5 +78,15 @@ class AssetPackagerTest < Test::Unit::TestCase
     assert package_names[2].match(/\Asecondary_\d+\z/)
     assert_equal package_names[3], "noexist2"
   end
+  
+  def test_should_return_merge_environments_when_set
+    Synthesis::AssetPackage.merge_environments = ["staging", "production"]
+    assert_equal ["staging", "production"], Synthesis::AssetPackage.merge_environments
+  end
+
+  def test_should_only_return_production_merge_environment_when_not_set
+    assert_equal ["production"], Synthesis::AssetPackage.merge_environments
+  end
+
   
 end

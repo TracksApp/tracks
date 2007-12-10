@@ -1,4 +1,51 @@
 ------------------------------------------------------------------------
+r52 | sbecker | 2007-11-04 01:38:21 -0400 (Sun, 04 Nov 2007) | 3 lines
+
+* Allow configuration of which environments the helpers should merge scripts with the Synthesis::AssetPackage.merge_environments variable.
+* Refactored tests so they can all run together, and not depend on what the RAILS_ENV constant is.
+* Only add file extension if it was explicitly passed in, fixes other helpers in rails.
+------------------------------------------------------------------------
+r51 | sbecker | 2007-10-26 16:24:48 -0400 (Fri, 26 Oct 2007) | 1 line
+
+* Updated jsmin.rb to latest version from 2007-07-20
+------------------------------------------------------------------------
+r50 | sbecker | 2007-10-23 23:16:07 -0400 (Tue, 23 Oct 2007) | 1 line
+
+Updated CHANGELOG
+
+------------------------------------------------------------------------
+r49 | sbecker | 2007-10-23 23:13:27 -0400 (Tue, 23 Oct 2007) | 1 line
+
+* Finally committed the subdirectory patch. (Thanks James Coglan!)
+------------------------------------------------------------------------
+r48 | sbecker | 2007-10-15 15:10:43 -0400 (Mon, 15 Oct 2007) | 1 line
+
+* Speed up rake tasks and remove rails environment dependencies
+------------------------------------------------------------------------
+r43 | sbecker | 2007-07-02 15:30:29 -0400 (Mon, 02 Jul 2007) | 1 line
+
+* Updated the docs regarding testing.
+------------------------------------------------------------------------
+r42 | sbecker | 2007-07-02 15:27:00 -0400 (Mon, 02 Jul 2007) | 1 line
+
+* For production helper test, build packages once - on first setup.
+------------------------------------------------------------------------
+r41 | sbecker | 2007-07-02 15:14:13 -0400 (Mon, 02 Jul 2007) | 1 line
+
+* Put build_all in test setup and delete_all in test teardown so all tests will pass the on first run of test suite.
+------------------------------------------------------------------------
+r40 | sbecker | 2007-07-02 14:55:28 -0400 (Mon, 02 Jul 2007) | 1 line
+
+* Fix quotes, add contact info
+------------------------------------------------------------------------
+r39 | sbecker | 2007-07-02 14:53:52 -0400 (Mon, 02 Jul 2007) | 1 line
+
+* Add note on how to run the tests for asset packager.
+------------------------------------------------------------------------
+r38 | sbecker | 2007-01-25 15:36:42 -0500 (Thu, 25 Jan 2007) | 1 line
+
+added CHANGELOG w/ subversion log entries
+------------------------------------------------------------------------
 r37 | sbecker | 2007-01-25 15:34:39 -0500 (Thu, 25 Jan 2007) | 1 line
 
 updated jsmin with new version from 2007-01-23

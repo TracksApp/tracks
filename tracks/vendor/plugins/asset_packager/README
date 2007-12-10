@@ -152,20 +152,15 @@ All options for stylesheet_link_tag still work, so if you want to specify a diff
 
 So you want to run the tests eh? Ok, then listen:
 
-This plugin has a full suite of tests. But you've gotta follow a 
-certain procedure. If you do, all tests should pass. You cant run 
-them all at once (unfortunately) by running "rake" because the 
-tests depend on ENV['RAILS_ENV'] being different, and as far as I 
-know, this can't be changed in a running script once it is set. So,
-we run them separately. Observe:
+This plugin has a full suite of tests. But since they
+depend on rails, it has to be run in the context of a
+rails app, in the vendor/plugins directory. Observe:
 
 > rails newtestapp
 > cd newtestapp
 > ./script/plugin install http://sbecker.net/shared/plugins/asset_packager
-> cd vendor/plugins/asset_packager/test/
-> ruby asset_packager_test.rb # all pass
-> ruby asset_package_helper_development_test.rb # all pass
-> ruby asset_package_helper_production_test.rb # all pass
+> cd vendor/plugins/asset_packager/
+> rake # all tests pass
 
 == License
 Copyright (c) 2006 Scott Becker - http://synthesis.sbecker.net
