@@ -1,6 +1,6 @@
 module TodosHelper
 
-  require 'users_controller'
+  #require 'users_controller'
   # Counts the number of incomplete items in the specified context
   # 
   def count_items(context)
