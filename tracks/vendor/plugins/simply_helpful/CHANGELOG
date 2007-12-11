@@ -1,0 +1,9 @@
+* Added formatted_polymorphic_url, formatted_polymorphic_path
+
+* Added support for route options. Example:
+
+    polymorphic_url(:id => @subject, :anchor => "photo")
+
+* Added polymorphic routes for new and edit actions (new_polymorphic_url, edit_polymorphic_url)
+
+* Moved polymorphic routes from SimplyHelpful::RecordIdentifier to SimplyHelpful::PolymorphicRoutes
