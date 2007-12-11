@@ -428,11 +428,12 @@ class TodosController < ApplicationController
         conditions = ['state = ? AND hide = ?', 'active', false] # hidden todos should not be visible in the homepage view
       end
       
-      @todos, @page = current_user.todos.paginate(:all, 
+      @page = params[:page]
+      @todos = current_user.todos.paginate(:all, 
           :conditions => conditions, 
           :include => [:context],
           :order =>  'due IS NULL, due ASC, todos.created_at ASC',
-          :page => params[:page], :per_page => prefs.mobile_todos_per_page)
+          :page => @page, :per_page => prefs.mobile_todos_per_page)
       @pagination_params = { :format => :m }
       @pagination_params[:context_id] = @context.to_param if @context
       @pagination_params[:project_id] = @project.to_param if @project

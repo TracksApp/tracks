@@ -14,9 +14,9 @@
     </li>
   <% end -%>
   </ul>
-  <% if @down_count > 6 -%>
+  <% if @down_count > @prefs.mobile_todos_per_page -%>
     <hr />
-    Pages: <%= formatted_pagination(@down_count, 6) %>
+    Pages: <%= formatted_pagination(@todos) %>
   <% end -%>
 <% end -%>
 <hr />

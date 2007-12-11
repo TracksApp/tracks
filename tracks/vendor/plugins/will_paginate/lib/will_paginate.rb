@@ -1,43 +1,57 @@
-module WillPaginate
-  def will_paginate(total_count, per_page, page = @page)
-    adjacents = 2
-    prev_page = page - 1
-    next_page = page + 1
-    last_page = (total_count / per_page.to_f).ceil
-    lpm1      = last_page - 1
+require 'active_support'
 
-    returning '' do |pgn|
-      if last_page > 1
-        pgn << %{<div class="pagination">}
-  
-        # not enough pages to bother breaking
-        if last_page < 7 + (adjacents * 2)
-          1.upto(last_page) { |ctr| pgn << (ctr == page ? content_tag(:span, ctr, :class => 'current') : link_to(ctr, params.merge(:page => ctr))) }
+# = You *will* paginate!
+#
+# First read about WillPaginate::Finder::ClassMethods, then see
+# WillPaginate::ViewHelpers. The magical array you're handling in-between is
+# WillPaginate::Collection.
+#
+# Happy paginating!
+module WillPaginate
+  class << self
+    def enable
+      enable_actionpack
+      enable_activerecord
+    end
     
-        # enough pages to hide some
-        elsif last_page > 5 + (adjacents * 2) 
+    def enable_actionpack
+      return if ActionView::Base.instance_methods.include? 'will_paginate'
+      require 'will_paginate/view_helpers'
+      ActionView::Base.class_eval { include ViewHelpers }
+    end
     
-          # close to beginning, only hide later pages
-          if page < 1 + (adjacents * 2)
-            1.upto(3 + (adjacents * 2)) { |ctr| pgn << (ctr == page ? content_tag(:span, ctr, :class => 'current') : link_to(ctr, :page => ctr)) }
-            pgn << "..." + link_to(lpm1, params.merge(:page => lpm1)) + link_to(last_page, params.merge(:page => last_page))
-  
-          # in middle, hide some from both sides
-          elsif last_page - (adjacents * 2) > page && page > (adjacents * 2)
-            pgn << link_to('1', params.merge(:page => 1)) + link_to('2', params.merge(:page => 2)) + "..."
-            (page - adjacents).upto(page + adjacents) { |ctr| pgn << (ctr == page ? content_tag(:span, ctr, :class => 'current') : link_to(ctr, params.merge(:page => ctr))) }
-            pgn << "..." + link_to(lpm1, params.merge(:page => lpm1)) + link_to(last_page, params.merge(:page => last_page))
-  
-          # close to end, only hide early pages
-          else
-            pgn << link_to('1', params.merge(:page => 1)) + link_to('2', params.merge(:page => 2)) + "..."
-            (last_page - (2 + (adjacents * 2))).upto(last_page) { |ctr| pgn << (ctr == page ? content_tag(:span, ctr, :class => 'current') : link_to(ctr, params.merge(:page => ctr))) }
-          end
+    def enable_activerecord
+      return if ActiveRecord::Base.respond_to? :paginate
+      require 'will_paginate/finder'
+      ActiveRecord::Base.class_eval { include Finder }
+
+      associations = ActiveRecord::Associations
+      collection = associations::AssociationCollection
+      
+      # to support paginating finders on associations, we have to mix in the
+      # method_missing magic from WillPaginate::Finder::ClassMethods to AssociationProxy
+      # subclasses, but in a different way for Rails 1.2.x and 2.0
+      (collection.instance_methods.include?(:create!) ?
+        collection : collection.subclasses.map(&:constantize)
+      ).push(associations::HasManyThroughAssociation).each do |klass|
+        klass.class_eval do
+          include Finder::ClassMethods
+          alias_method_chain :method_missing, :paginate
         end
-        pgn << (page > 1 ? link_to("&laquo; Previous", params.merge(:page => prev_page)) : content_tag(:span, "&laquo; Previous", :class => 'disabled'))
-        pgn << (page < last_page ? link_to("Next &raquo;", params.merge(:page => next_page)) : content_tag(:span, "Next &raquo;", :class => 'disabled'))
-        pgn << '</div>'
       end
+    end
+  end
+
+  module Deprecation
+    extend ActiveSupport::Deprecation
+
+    def self.warn(message, callstack = caller)
+      message = 'WillPaginate: ' + message.strip.gsub(/ {3,}/, ' ')
+      behavior.call(message, callstack) if behavior && !silenced?
+    end
+
+    def self.silenced?
+      ActiveSupport::Deprecation.silenced?
     end
   end
 end
