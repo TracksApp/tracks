@@ -1,0 +1,23 @@
+--- 
+<% if commentable_models.size > 1 -%>
+commentings_003: 
+  <%= parent_association_name -%>_id: "2"
+  id: "3"
+  commentable_type: <%= model_one %>
+  commentable_id: "1"                
+<% end -%>
+commentings_004: 
+  <%= parent_association_name -%>_id: "2"
+  id: "4"
+  commentable_type: <%= model_two %>
+  commentable_id: "2"
+commentings_001: 
+  <%= parent_association_name -%>_id: "1"
+  id: "1"
+  commentable_type: <%= model_two %>
+  commentable_id: "1"
+commentings_002: 
+  <%= parent_association_name -%>_id: "1"
+  id: "2"
+  commentable_type: <%= model_two %>
+  commentable_id: "2"
