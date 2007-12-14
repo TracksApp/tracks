@@ -624,7 +624,7 @@ class StatsController < ApplicationController
     query << " WHERE tags.id = tag_id"
     query << " AND taggings.user_id="+@user.id.to_s+" "
     query << " AND taggings.taggable_type='Todo' "
-    query << " GROUP BY tags.id"
+    query << " GROUP BY tags.id, tags.name"
     query << " ORDER BY count DESC, name"
     query << " LIMIT 100"
     @tags_for_cloud = Tag.find_by_sql(query).sort_by { |tag| tag.name.downcase }
@@ -646,7 +646,7 @@ class StatsController < ApplicationController
     query << " AND taggings.taggable_id=todos.id "
     query << " AND (todos.created_at > ? OR "
     query << "      todos.completed_at > ?) "
-    query << " GROUP BY tags.id"
+    query << " GROUP BY tags.id, tags.name"
     query << " ORDER BY count DESC, name"
     query << " LIMIT 100"
     @tags_for_cloud_90days = Tag.find_by_sql(
