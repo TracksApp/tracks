@@ -252,11 +252,11 @@ class StatsController < ApplicationController
     # Went from GROUP BY c.id to c.name for compatibility with postgresql. Since
     # the name is forced to be unique, this should work.
     @all_actions_per_context = @contexts.find_by_sql(
-      "SELECT c.name AS name, count(*) AS total "+
+      "SELECT c.name AS name, c.id as id, count(*) AS total "+
         "FROM contexts c, todos t "+
         "WHERE t.context_id=c.id "+
         "AND t.user_id="+@user.id.to_s+" "+
-        "GROUP BY c.name "+
+        "GROUP BY c.name, c.id "+
         "ORDER BY total DESC"
     )
 
@@ -271,6 +271,7 @@ class StatsController < ApplicationController
     if size==pie_cutoff
       @actions_per_context[size-1]['name']='(others)'
       @actions_per_context[size-1]['total']=0
+      @actions_per_context[size-1]['id']=-1
       (size-1).upto @all_actions_per_context.size()-1 do |i|
         @actions_per_context[size-1]['total']+=@all_actions_per_context[i]['total'].to_i
       end
@@ -292,11 +293,11 @@ class StatsController < ApplicationController
     # Went from GROUP BY c.id to c.name for compatibility with postgresql. Since
     # the name is forced to be unique, this should work.
     @all_actions_per_context = @contexts.find_by_sql(
-      "SELECT c.name AS name, count(*) AS total "+
+      "SELECT c.name AS name, c.id as id, count(*) AS total "+
         "FROM contexts c, todos t "+
         "WHERE t.context_id=c.id AND t.completed_at IS NULL AND NOT c.hide "+
         "AND t.user_id="+@user.id.to_s+" "+
-        "GROUP BY c.name "+
+        "GROUP BY c.name, c.id "+
         "ORDER BY total DESC"
     )
     
@@ -311,6 +312,7 @@ class StatsController < ApplicationController
     if size==pie_cutoff
       @actions_per_context[size-1]['name']='(others)'
       @actions_per_context[size-1]['total']=0
+      @actions_per_context[size-1]['id']=-1
       (size-1).upto @all_actions_per_context.size()-1 do |i|
         @actions_per_context[size-1]['total']+=@all_actions_per_context[i]['total'].to_i
       end
@@ -536,7 +538,7 @@ class StatsController < ApplicationController
     # Went from GROUP BY c.id to c.name for compatibility with postgresql. Since
     # the name is forced to be unique, this should work.
     @actions_per_context = @contexts.find_by_sql(
-      "SELECT c.name AS name, count(*) AS total "+
+      "SELECT c.id AS id, c.name AS name, count(*) AS total "+
         "FROM contexts c, todos t "+
         "WHERE t.context_id=c.id "+
         "AND t.user_id="+@user.id.to_s+" "+
@@ -549,7 +551,7 @@ class StatsController < ApplicationController
     # Went from GROUP BY c.id to c.name for compatibility with postgresql. Since
     # the name is forced to be unique, this should work.
     @running_actions_per_context = @contexts.find_by_sql(
-      "SELECT c.name AS name, count(*) AS total "+
+      "SELECT c.id AS id, c.name AS name, count(*) AS total "+
         "FROM contexts c, todos t "+
         "WHERE t.context_id=c.id AND t.completed_at IS NULL AND NOT c.hide "+
         "AND t.user_id="+@user.id.to_s+" "+
@@ -564,7 +566,7 @@ class StatsController < ApplicationController
     # Went from GROUP BY p.id to p.name for compatibility with postgresql. Since
     # the name is forced to be unique, this should work.
     @projects_and_actions = @projects.find_by_sql(
-      "SELECT p.name, count(*) AS count "+
+      "SELECT p.id, p.name, count(*) AS count "+
         "FROM projects p, todos t "+
         "WHERE p.id = t.project_id "+
         "AND p.user_id="+@user.id.to_s+" "+
@@ -579,7 +581,7 @@ class StatsController < ApplicationController
     # using GROUP BY p.name (was: p.id) for compatibility with Postgresql. Since
     # you cannot create two contexts with the same name, this will work.
     @projects_and_actions_last30days = @projects.find_by_sql([
-        "SELECT p.name, count(*) AS count "+
+        "SELECT p.id, p.name, count(*) AS count "+
           "FROM todos t, projects p "+
           "WHERE t.project_id = p.id AND "+
           "      (t.created_at > ? OR t.completed_at > ?) "+
@@ -592,7 +594,7 @@ class StatsController < ApplicationController
     # get the first 10 projects and their running time (creation date versus
     # now())
     @projects_and_runtime_sql = @projects.find_by_sql(
-      "SELECT name, created_at "+
+      "SELECT id, name, created_at "+
         "FROM projects "+
         "WHERE state='active' "+
         "AND user_id="+@user.id.to_s+" "+
@@ -601,11 +603,11 @@ class StatsController < ApplicationController
     )
 
     i=0
-    @projects_and_runtime = Array.new(10, ["n/a", "n/a"])
+    @projects_and_runtime = Array.new(10, [-1, "n/a", "n/a"])
     @projects_and_runtime_sql.each do |r|
       days = (@today - r.created_at) / @seconds_per_day
       # add one so that a project that you just create returns 1 day
-      @projects_and_runtime[i]=[r.name, days.to_i+1]
+      @projects_and_runtime[i]=[r.id, r.name, days.to_i+1]
       i += 1
     end
     

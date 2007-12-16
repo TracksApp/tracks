@@ -7,7 +7,7 @@
 <%
     1.upto 5 do |i|
       %><%=i-%> - 
-      <%= i <= @actions_per_context.size ? @actions_per_context[i-1]['name'] : "n/a"%> 
+      <%= i <= @actions_per_context.size ? link_to(@actions_per_context[i-1]['name'], {:controller => "contexts", :action => "show", :id => @actions_per_context[i-1]['id']}) : "n/a"%> 
       (
       <%= i <= @actions_per_context.size ? @actions_per_context[i-1]['total'] : "n/a"%>
       )
@@ -21,7 +21,7 @@
 <%
     1.upto 5 do |i|
       %><%=i-%> -
-      <%= i <= @running_actions_per_context.size ? @running_actions_per_context[i-1]['name'] : "n/a"-%>
+      <%= i <= @running_actions_per_context.size ? link_to(@running_actions_per_context[i-1]['name'], {:controller => "contexts", :action => "show", :id => @running_actions_per_context[i-1]['id']}) : "n/a"-%>
       (
       <%= i <= @running_actions_per_context.size ? @running_actions_per_context[i-1]['total'] : "n/a"-%>
       )

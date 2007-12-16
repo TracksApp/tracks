@@ -3,7 +3,7 @@
   <% i=0
   @projects_and_actions.each do |p| 
     i+=1 -%>
-    <%= i -%> - <%= p.name %> (<%=p.count %> actions) <br/>
+    <%= i -%> - <%= link_to p.name, {:controller => "projects", :action => "show", :id => p.id}%> (<%=p.count %> actions) <br/>
   <% end 
   if i < 10
     i.upto 10 do |j| -%>
@@ -18,7 +18,7 @@
   <% i=0
   @projects_and_actions_last30days.each do |p| 
     i+=1 -%>
-    <%= i -%> - <%= p.name %> (<%=p.count %> actions) <br/>
+    <%= i -%> - <%= link_to p.name, {:controller => "projects", :action => "show", :id => p.id} %> (<%=p.count %> actions) <br/>
   <% end 
   if i < 10
     i.upto 10 do |j| -%>
@@ -31,8 +31,8 @@
 <div class="stats_module">
   <h3>Top 10 longest running projects</h3>
   <% i=0
-  @projects_and_runtime.each do |name, days| 
+  @projects_and_runtime.each do |id, name, days| 
     i+=1 -%>
-    <%= i -%> - <%= name %> (<%=days %> days) <br/>
+    <%= i -%> - <%= link_to name, {:controller => "projects", :action => "show", :id => id} %> (<%=days %> days) <br/>
   <% end -%>
 </div>

@@ -11,6 +11,11 @@ end
     %><%=truncate(@actions_per_context[i]['name'],@truncate_chars, '...')%>,<%
 end
 -%><%=truncate(@actions_per_context[@actions_per_context.size()-1]['name'],@truncate_chars,'...') %>& 
+&links=<%
+0.upto @actions_per_context.size()-2 do | i |
+    %><%=url_for :controller => "contexts", :action => "show", :id=>@actions_per_context[i]['id']%>,<%
+end
+-%><%=url_for :controller => "contexts", :action => "show", :id=>@actions_per_context[@actions_per_context.size()-1]['id']%>& 
 &colours=#d01f3c,#356aa0,#C79810,#c61fd0,#1fc6d0,#1fd076,#72d01f,#c6d01f,#d0941f,#40941f& 
 &tool_tip=#x_label#: #val#%25& 
 &x_label_style=9,,2,1&
