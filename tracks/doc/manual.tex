@@ -44,7 +44,7 @@
 \chapterstyle{BlueBox}
 
 \setsecheadstyle{\sffamily\bfseries\Large}
-\setsubsecheadstyle{\sffamily\bfseries\normal}
+\setsubsecheadstyle{\sffamily\bfseries\Normal}
 
 \makepagestyle{myruledpagestyle}
 \makeevenhead{myruledpagestyle}{\thepage}{}{\leftmark}
@@ -112,11 +112,11 @@
 \usepackage{booktabs}			% Better tables
 \usepackage{tabulary}			% Support longer table cells
 \usepackage[utf8]{inputenc}		% For UTF-8 support
-\usepackage{xcolor}				% Allow for color (annotations)
+% \usepackage{xcolor}				% Allow for color (annotations)
 
 %\geometry{landscape}			% Activate for rotated page geometry
 
-\usepackage[parfill]{parskip}	% Activate to begin paragraphs with an empty
+% \usepackage[parfill]{parskip}	% Activate to begin paragraphs with an empty
 								% line rather than an indent
 
 
@@ -133,11 +133,11 @@
 \date{2007-11-25}
 \def\format{complete}
 \def\latexxslt{memoir-twosided-manual.xslt}
-\def\revision{Revision: \$Id: manual.markdown 654 2007-11-25 16:19:05Z bsag \$}
+\def\revision{Revision: \$Id: manual.markdown 654 2007-12-16 15:01:05Z bsag \$}
 \def\mytitle{Tracks 1.5 Manual}
 \def\version{1.5}
-\usepackage{xmpincl}
-\includexmp{CCAttributionShareAlike}
+% \usepackage{xmpincl}
+% \includexmp{CCAttributionShareAlike}
 
 
 %
@@ -457,11 +457,8 @@ Once logged in, add some Contexts and Projects, and then go ahead and add your a
 \chapter{Upgrading to Tracks 1.5}
 \label{upgrading}
 
-\textbf{TODO: Instructions for upgrading from a version earlier than 1.043}
-
-
 \section{Upgrading from Tracks 1.043}
-\label{upgradingfromtracks1.043}
+\label{upgrading_1043}
 
 This should be a relatively straightforward, and involves the following main steps:
 
@@ -536,7 +533,7 @@ There are a few files you need to copy over from your old installation. If you c
 
 \item If you are using SQLite3, copy your database from \texttt{/db} in your old Tracks directory to the same location in the new one.
 
-\item If you are using Windows, you may need to check the `shebang' lines (\texttt{\#!/usr/bin/env ruby})\footnote{The \texttt{env} binary helps to locate other binaries, regardless of their location. If you don't have \texttt{env} installed, you'll need to change this line to point to the location of your Ruby binary.} of the \texttt{/public/dispatch.*} files and all the files in the \texttt{/script} directory. They are set to \texttt{\#!/usr/bin/env ruby} by default. Check the format of those lines in your old installation, and change the new ones as necessary.
+\item If you are using Windows, you may need to check the `shebang' lines (\texttt{\#!/usr/bin/env ruby})\footnote{The \texttt{env} binary helps to locate other binaries, regardless of their location. If you don't have \texttt{env} installed, you'll need to change this line to point to the location of your Ruby binary.The \texttt{env} binary helps to locate other binaries, regardless of their location. If you don't have \texttt{env} installed, you'll need to change this line to point to the location of your Ruby binary.} of the \texttt{/public/dispatch.*} files and all the files in the \texttt{/script} directory. They are set to \texttt{\#!/usr/bin/env ruby} by default. Check the format of those lines in your old installation, and change the new ones as necessary.
 \end{enumerate}
 
 \subsection{Update your old database to the new format}
@@ -569,6 +566,40 @@ Visit the URL indicated by the output (e.g.\ \texttt{** Mongrel available at 0.0
 
 Once you're certain that your new Tracks 1.5 installation is working perfectly, you can delete your old Tracks directory.
 
+
+\section{Upgrading from versions prior to 1.043}
+\label{upgradingfromversionspriorto1.043}
+
+The best option for versions prior to 1.043 is to follow the instructions below to upgrade to version 1.043, then use the instructions above to upgrade from version 1.043 (\autoref{upgrading_1043}).
+
+
+\begin{enumerate}
+
+
+\item For safety, rename your current Tracks directory to `tracks-old' or something similar.
+
+\item Before you do anything else, \textbf{BACK UP YOUR DATABASE} (tables and content) and keep the SQL dumps somewhere safe so that you can recreate the old database if necesary.
+
+\item Download a copy of Tracks 1.043 and unzip alongside your `tracks-old' directory.
+
+\item Open the file \texttt{config/environment.rb} and look at the last line which should read: \texttt{SALT = "change-me"}. Change the word change-me to something else of your choosing. This string will be used as a `salt' to encrypt your password and make it a bit more secure. Also look at the timezone setting at the bottom. You can leave it commented out if your server is in the same time zone as you, but you may need to adjust it if your server is in a different time zone.
+
+\item In \texttt{database.yml} insert your old database name, user and password under the `development' section. If you are using SQLite3 rather than MySQL or PostgreSQL, you need only the database name, and to change the `adapter' line to `sqlite3'. You also need to copy (NOT MOVE!), your SQLite3 database from your tracks-old \texttt{db} directory to your new tracks \texttt{db} directory
+
+\item Run the command \texttt{rake extract\_fixtures} inside the Tracks directory. This will populate the \texttt{db/exported\_fixtures} directory with \texttt{*.yml} files corresponding to the contexts, projects and todos table from the contents of your old database.
+
+\item Open \texttt{db/exported\_fixtures/todos.yml} and search for the lines starting \texttt{created:} and replace with \texttt{created\_at:}. If you are using SQLite3, you also need to change the following: \texttt{done: "0"} with \texttt{done: "f"} and \texttt{done: "1"} with \texttt{done: "t"}. You need to replace the similar `done' lines in \texttt{projects.yml}, and in \texttt{contexts.yml} replace \texttt{hide: "0"} with \texttt{hide: "f"} and \texttt{hide: "1"} with \texttt{hide: "t"}.
+
+\item Create a new MySQL database (named tracks1043, for example). In \texttt{database.yml} insert this new database name, user and password under the `development' and `production' sections. If you are using SQLite3, insert a new name for a database to hold your Tracks 1.043 data.
+
+\item Run the command \texttt{rake db\_schema\_import} inside the Tracks directory. This should import the upgraded schema for 1.043 into your new database.
+
+\item Run the command \texttt{rake load\_exported\_fixtures} which will import the contents of your old database from the fixtures files in \texttt{db/exported\_fixtures}.
+
+\item If you are using Windows, you may need to check the `shebang' lines (\texttt{\#!/usr/bin/env ruby})\footnote{The \texttt{env} binary helps to locate other binaries, regardless of their location. If you don't have \texttt{env} installed, you'll need to change this line to point to the location of your Ruby binary.The \texttt{env} binary helps to locate other binaries, regardless of their location. If you don't have \texttt{env} installed, you'll need to change this line to point to the location of your Ruby binary.} of the \texttt{/public/dispatch.*} files and all the files in the \texttt{/script} directory. They are set to \texttt{\#!/usr/bin/env ruby} by default. Check the format of those lines in your old installation, and change the new ones as necessary.
+
+\item Try starting up the server with \texttt{script/server} to make sure that all your data has migrated successfully. If all is well, follow the instructions above to upgrade from version 1.043 (\autoref{upgrading_1043}) to Tracks 1.5
+\end{enumerate}
 
 %
 % Back Matter
