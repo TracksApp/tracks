@@ -30,7 +30,7 @@ class StatsController < ApplicationController
     # average
     @actions_done_last12months = @actions.find(:all, {
         :select => "completed_at",
-        :conditions => ["completed_at > ? AND NOT completed_at is null", @cut_off_year_plus3]
+        :conditions => ["completed_at > ? AND completed_at IS NOT NULL", @cut_off_year_plus3]
       })
     @actions_created_last12months = @actions.find(:all, {
         :select => "created_at",
@@ -112,7 +112,7 @@ class StatsController < ApplicationController
     # get actions created and completed in the past 30 days.
     @actions_done_last30days = @actions.find(:all, {
         :select => "completed_at",
-        :conditions => ["completed_at > ? AND NOT completed_at IS NULL", @cut_off_month]
+        :conditions => ["completed_at > ? AND completed_at IS NOT NULL", @cut_off_month]
       })
     @actions_created_last30days = @actions.find(:all, {
         :select => "created_at",
@@ -162,7 +162,7 @@ class StatsController < ApplicationController
   def actions_completion_time_data
     @actions_completion_time = @actions.find(:all, {
         :select => "completed_at, created_at",
-        :conditions => "not completed_at is null"
+        :conditions => "completed_at IS NOT NULL"
       })
     
     # convert to hash to be able to fill in non-existing days in
@@ -337,7 +337,7 @@ class StatsController < ApplicationController
     
     @actions_completion_day = @actions.find(:all, {
         :select => "completed_at",
-        :conditions => "not completed_at is null" 
+        :conditions => "completed_at IS NOT NULL" 
       })
 
     # convert to hash to be able to fill in non-existing days
@@ -372,7 +372,7 @@ class StatsController < ApplicationController
         
     @actions_completion_day = @actions.find(:all, {
         :select => "completed_at",
-        :conditions => ["NOT completed_at IS NULL AND completed_at > ?", @cut_off_month]
+        :conditions => ["completed_at IS NOT NULL AND completed_at > ?", @cut_off_month]
       })
 
     # convert to hash to be able to fill in non-existing days
@@ -403,7 +403,7 @@ class StatsController < ApplicationController
       })    
     @actions_completion_hour = @actions.find(:all, {
         :select => "completed_at", 
-        :conditions => "NOT completed_at IS NULL" 
+        :conditions => "completed_at IS NOT NULL" 
       })
 
     # convert to hash to be able to fill in non-existing days
@@ -434,7 +434,7 @@ class StatsController < ApplicationController
         
     @actions_completion_hour = @actions.find(:all, {
         :select => "completed_at",
-        :conditions => ["NOT completed_at IS NULL AND completed_at > ?", @cut_off_month]
+        :conditions => ["completed_at IS NOT NULL AND completed_at > ?", @cut_off_month]
       })
 
     # convert to hash to be able to fill in non-existing days
@@ -491,7 +491,7 @@ class StatsController < ApplicationController
     # time to complete
     @completed_actions = @actions.find(:all, {
         :select => "completed_at, created_at",
-        :conditions => "NOT completed_at IS NULL",
+        :conditions => "completed_at IS NOT NULL",
       })
     
     actions_sum, actions_max, actions_min = 0,0,-1
@@ -517,7 +517,7 @@ class StatsController < ApplicationController
     
     # get count of actions created and actions done in the past 30 days.
     @sum_actions_done_last30days = @actions.count(:all, {
-        :conditions => ["completed_at > ? AND NOT completed_at IS NULL", @cut_off_month] 
+        :conditions => ["completed_at > ? AND completed_at IS NOT NULL", @cut_off_month] 
       })
     @sum_actions_created_last30days = @actions.count(:all, {
         :conditions => ["created_at > ?", @cut_off_month]
@@ -525,7 +525,7 @@ class StatsController < ApplicationController
     
     # get count of actions done in the past 12 months.
     @sum_actions_done_last12months = @actions.count(:all, {
-        :conditions => ["completed_at > ? AND NOT completed_at IS null", @cut_off_year]
+        :conditions => ["completed_at > ? AND completed_at IS NOT NULL", @cut_off_year]
       })
     @sum_actions_created_last12months = @actions.count(:all, {
         :conditions => ["created_at > ?", @cut_off_year] 
