@@ -189,7 +189,7 @@ class StatsController < ApplicationController
   def actions_running_time_data
     @actions_running_time = @actions.find(:all, {
         :select => "created_at",
-        :conditions => "completed_at is null"
+        :conditions => "completed_at IS NULL"
       })
 
     # convert to hash to be able to fill in non-existing days in
@@ -535,27 +535,27 @@ class StatsController < ApplicationController
   def get_stats_contexts
     # get action count per context for TOP 5
     # 
-    # Went from GROUP BY c.id to c.name for compatibility with postgresql. Since
+    # Went from GROUP BY c.id to c.id, c.name for compatibility with postgresql. Since
     # the name is forced to be unique, this should work.
     @actions_per_context = @contexts.find_by_sql(
       "SELECT c.id AS id, c.name AS name, count(*) AS total "+
         "FROM contexts c, todos t "+
         "WHERE t.context_id=c.id "+
         "AND t.user_id="+@user.id.to_s+" "+
-        "GROUP BY c.name ORDER BY total DESC " +
+        "GROUP BY c.id, c.name ORDER BY total DESC " +
         "LIMIT 5"
     )
 
     # get uncompleted action count per visible context for TOP 5
     # 
-    # Went from GROUP BY c.id to c.name for compatibility with postgresql. Since
+    # Went from GROUP BY c.id to c.id, c.name for compatibility with postgresql. Since
     # the name is forced to be unique, this should work.
     @running_actions_per_context = @contexts.find_by_sql(
       "SELECT c.id AS id, c.name AS name, count(*) AS total "+
         "FROM contexts c, todos t "+
         "WHERE t.context_id=c.id AND t.completed_at IS NULL AND NOT c.hide "+
         "AND t.user_id="+@user.id.to_s+" "+
-        "GROUP BY c.name ORDER BY total DESC " +
+        "GROUP BY c.id, c.name ORDER BY total DESC " +
         "LIMIT 5"
     )    
   end
@@ -570,7 +570,7 @@ class StatsController < ApplicationController
         "FROM projects p, todos t "+
         "WHERE p.id = t.project_id "+
         "AND p.user_id="+@user.id.to_s+" "+
-        "GROUP BY p.name "+
+        "GROUP BY p.id, p.name "+
         "ORDER BY count DESC " +
         "LIMIT 10"
     )
@@ -586,7 +586,7 @@ class StatsController < ApplicationController
           "WHERE t.project_id = p.id AND "+
           "      (t.created_at > ? OR t.completed_at > ?) "+
           "AND p.user_id=? "+
-          "GROUP BY p.name "+
+          "GROUP BY p.id, p.name "+
           "ORDER BY count DESC " +
           "LIMIT 10", @cut_off_month, @cut_off_month, @user.id]
     )
