@@ -30,6 +30,7 @@ Wiki (deprecated - please use Trac): http://www.rousette.org.uk/projects/wiki/
 14. Add ability to sort projects alphabetically
 15. Add "starring" of actions
 16. Statistics page with graphs 
+17. Rake task to set password. Usage: rake tracks:password USER=useranme
 
 == Version 1.041
 
