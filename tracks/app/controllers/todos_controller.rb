@@ -524,6 +524,7 @@ class TodosController < ApplicationController
                                     :item => {
                                                 :title => :description,
                                                 :link => lambda { |t| context_url(t.context) },
+                                                :guid => lambda { |t| todo_url(t) },
                                                 :description => todo_feed_content
                                              }
       end
