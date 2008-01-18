@@ -36,11 +36,12 @@ class ContextsController < ApplicationController
     end
   end
   
-  # Example XML usage: curl -H 'Accept: application/xml' -H 'Content-Type: application/xml'
+  # Example XML usage: curl -H 'Accept: application/xml' -H 'Content-Type:
+  # application/xml'
   #                    -u username:password
   #                    -d '<request><context><name>new context_name</name></context></request>'
   #                    http://our.tracks.host/contexts
-  #
+  # 
   def create
     if params[:format] == 'application/xml' && params['exception']
       render_failure "Expected post format is valid xml like so: <request><context><name>context name</name></context></request>.", 400
@@ -66,12 +67,12 @@ class ContextsController < ApplicationController
         else
           head :created, :location => context_url(@context)
         end
-       end
+      end
     end
   end
   
   # Edit the details of the context
-  #
+  # 
   def update
     params['context'] ||= {}
     success_text = if params['field'] == 'name' && params['value']
@@ -91,9 +92,9 @@ class ContextsController < ApplicationController
     end
   end
 
-  # Fairly self-explanatory; deletes the context
-  # If the context contains actions, you'll get a warning dialogue.
-  # If you choose to go ahead, any actions in the context will also be deleted.
+  # Fairly self-explanatory; deletes the context If the context contains
+  # actions, you'll get a warning dialogue. If you choose to go ahead, any
+  # actions in the context will also be deleted.
   def destroy
     @context.destroy
     respond_to do |format|
@@ -103,7 +104,7 @@ class ContextsController < ApplicationController
   end
 
   # Methods for changing the sort order of the contexts in the list
-  #
+  # 
   def order
     params["list-contexts"].each_with_index do |id, position|
       current_user.contexts.update(id, :position => position + 1)
@@ -113,59 +114,62 @@ class ContextsController < ApplicationController
   
   protected
 
-    def render_contexts_html
-      lambda do
-        @page_title = "TRACKS::List Contexts"
-        @no_contexts = @contexts.empty?
-        @count = @contexts.size
-        render
-      end
+  def render_contexts_html
+    lambda do
+      @page_title = "TRACKS::List Contexts"
+      @no_contexts = @contexts.empty?
+      @count = @contexts.size
+      render
     end
+  end
 
-    def render_contexts_rss_feed
-      lambda do
-        render_rss_feed_for @contexts, :feed => feed_options,
-                                       :item => { :description => lambda { |c| c.summary(count_undone_todos_phrase(c)) } }
-      end
+  def render_contexts_rss_feed
+    lambda do
+      render_rss_feed_for @contexts, :feed => feed_options,
+        :item => { :description => lambda { |c| c.summary(count_undone_todos_phrase(c)) } }
     end
+  end
 
-    def render_contexts_atom_feed
-      lambda do
-        render_atom_feed_for @contexts, :feed => feed_options,
-                                        :item => { :description => lambda { |c| c.summary(count_undone_todos_phrase(c)) },
-                                                   :author => lambda { |c| nil } }
-      end
+  def render_contexts_atom_feed
+    lambda do
+      render_atom_feed_for @contexts, :feed => feed_options,
+        :item => { :description => lambda { |c| c.summary(count_undone_todos_phrase(c)) },
+        :author => lambda { |c| nil } }
     end
+  end
     
-    def feed_options
-      Context.feed_options(current_user)
-    end
+  def feed_options
+    Context.feed_options(current_user)
+  end
 
-    def set_context_from_params
-      @context = current_user.contexts.find_by_params(params)
-    rescue
-      @context = nil
-    end
+  def set_context_from_params
+    @context = current_user.contexts.find_by_params(params)
+  rescue
+    @context = nil
+  end
      
-    def init
-      @source_view = params['_source_view'] || 'context'
-      init_data_for_sidebar
-    end
+  def init
+    @source_view = params['_source_view'] || 'context'
+    init_data_for_sidebar
+  end
 
-    def init_todos
-      set_context_from_params
-      unless @context.nil?
-        @context.todos.with_scope :find => { :include => [:project, :tags] } do
-          @done = @context.done_todos
-        end
-        # @not_done_todos = @context.not_done_todos
-        # TODO: Temporarily doing this search manually until I can work out a way
-        # to do the same thing using not_done_todos acts_as_todo_container method
-        # Hides actions in hidden projects from context.
-        @not_done_todos = @context.todos.find(:all, :conditions => ['todos.state = ?', 'active'], :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC", :include => [:project, :tags])
-        @count = @not_done_todos.size
-        @default_project_context_name_map = build_default_project_context_name_map(@projects).to_json
+  def init_todos
+    set_context_from_params
+    unless @context.nil?
+      @context.todos.with_scope :find => { :include => [:project, :tags] } do
+        @done = @context.done_todos
       end
+
+      @max_completed = current_user.prefs.show_number_completed
+        
+      # @not_done_todos = @context.not_done_todos TODO: Temporarily doing this
+      # search manually until I can work out a way to do the same thing using
+      # not_done_todos acts_as_todo_container method Hides actions in hidden
+      # projects from context.
+      @not_done_todos = @context.todos.find(:all, :conditions => ['todos.state = ?', 'active'], :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC", :include => [:project, :tags])
+      @count = @not_done_todos.size
+      @default_project_context_name_map = build_default_project_context_name_map(@projects).to_json
     end
+  end
 
 end

@@ -32,6 +32,9 @@ class ProjectsController < ApplicationController
       @deferred = @project.deferred_todos.sort_by { |todo| todo.show_from }
       @done = @project.done_todos
     end
+    
+    @max_completed = current_user.prefs.show_number_completed
+    
     @count = @not_done.size
     @next_project = current_user.projects.next_from(@project)
     @previous_project = current_user.projects.previous_from(@project)
@@ -42,11 +45,12 @@ class ProjectsController < ApplicationController
     end
   end
   
-  # Example XML usage: curl -H 'Accept: application/xml' -H 'Content-Type: application/xml'
+  # Example XML usage: curl -H 'Accept: application/xml' -H 'Content-Type:
+  # application/xml'
   #                    -u username:password
   #                    -d '<request><project><name>new project_name</name></project></request>'
   #                    http://our.tracks.host/projects
-  #
+  # 
   def create
     if params[:format] == 'application/xml' && params['exception']
       render_failure "Expected post format is valid xml like so: <request><project><name>project name</name></project></request>."
@@ -72,13 +76,13 @@ class ProjectsController < ApplicationController
           render_failure @project.errors.full_messages.join(', ')
         else
           head :created, :location => project_url(@project)
-       end
+        end
       end
     end
   end
 
   # Edit the details of the project
-  #
+  # 
   def update
     params['project'] ||= {}
     if params['project']['state']
@@ -155,76 +159,76 @@ class ProjectsController < ApplicationController
   
   protected
     
-    def render_projects_html
-      lambda do
-        init_project_hidden_todo_counts(['project'])
-        @page_title = "TRACKS::List Projects"
-        @count = current_user.projects.size 
-        @active_projects = @projects.select{ |p| p.active? }
-        @hidden_projects = @projects.select{ |p| p.hidden? }
-        @completed_projects = @projects.select{ |p| p.completed? }
-        @no_projects = @projects.empty?
-        @projects.cache_note_counts
-        @new_project = current_user.projects.build
-        render
-      end
+  def render_projects_html
+    lambda do
+      init_project_hidden_todo_counts(['project'])
+      @page_title = "TRACKS::List Projects"
+      @count = current_user.projects.size 
+      @active_projects = @projects.select{ |p| p.active? }
+      @hidden_projects = @projects.select{ |p| p.hidden? }
+      @completed_projects = @projects.select{ |p| p.completed? }
+      @no_projects = @projects.empty?
+      @projects.cache_note_counts
+      @new_project = current_user.projects.build
+      render
     end
+  end
 
-    def render_rss_feed
-      lambda do
-        render_rss_feed_for @projects, :feed => feed_options,
-                                       :item => { :title => :name, :description => lambda { |p| summary(p) } }
-      end
+  def render_rss_feed
+    lambda do
+      render_rss_feed_for @projects, :feed => feed_options,
+        :item => { :title => :name, :description => lambda { |p| summary(p) } }
     end
+  end
 
-    def render_atom_feed
-      lambda do
-        render_atom_feed_for @projects, :feed => feed_options,
-                                        :item => { :description => lambda { |p| summary(p) },
-                                                   :title => :name,
-                                                   :author => lambda { |p| nil } }
-      end
+  def render_atom_feed
+    lambda do
+      render_atom_feed_for @projects, :feed => feed_options,
+        :item => { :description => lambda { |p| summary(p) },
+        :title => :name,
+        :author => lambda { |p| nil } }
     end
+  end
     
-    def feed_options
-      Project.feed_options(current_user)
-    end
+  def feed_options
+    Project.feed_options(current_user)
+  end
 
-    def render_text_feed
-      lambda do
-        init_project_hidden_todo_counts(['project'])
-        render :action => 'index_text', :layout => false, :content_type => Mime::TEXT
-      end
+  def render_text_feed
+    lambda do
+      init_project_hidden_todo_counts(['project'])
+      render :action => 'index_text', :layout => false, :content_type => Mime::TEXT
     end
+  end
         
-    def set_project_from_params
-      @project = current_user.projects.find_by_params(params)
-    end
+  def set_project_from_params
+    @project = current_user.projects.find_by_params(params)
+  end
     
-    def set_source_view
-      @source_view = params['_source_view'] || 'project'
-    end
+  def set_source_view
+    @source_view = params['_source_view'] || 'project'
+  end
     
-    def default_context_filter
-      p = params['project']
-      p = params['request']['project'] if p.nil? && params['request']
-      p = {} if p.nil?
-      default_context_name = p['default_context_name']
-      p.delete('default_context_name')
+  def default_context_filter
+    p = params['project']
+    p = params['request']['project'] if p.nil? && params['request']
+    p = {} if p.nil?
+    default_context_name = p['default_context_name']
+    p.delete('default_context_name')
 
-      unless default_context_name.blank?
-        default_context = Context.find_or_create_by_name(default_context_name)
-        p['default_context_id'] = default_context.id
-      end
+    unless default_context_name.blank?
+      default_context = Context.find_or_create_by_name(default_context_name)
+      p['default_context_id'] = default_context.id
     end
+  end
 
-    def summary(project)
-      project_description = ''
-      project_description += sanitize(markdown( project.description )) unless project.description.blank?
-      project_description += "<p>#{count_undone_todos_phrase(p)}. "
-      project_description += "Project is #{project.state}."
-      project_description += "</p>"
-      project_description
-    end
+  def summary(project)
+    project_description = ''
+    project_description += sanitize(markdown( project.description )) unless project.description.blank?
+    project_description += "<p>#{count_undone_todos_phrase(p)}. "
+    project_description += "Project is #{project.state}."
+    project_description += "</p>"
+    project_description
+  end
 
 end
