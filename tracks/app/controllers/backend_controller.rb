@@ -57,40 +57,48 @@ class BackendController < ApplicationController
   
   private
 
-    # Check whether the token in the URL matches the token in the User's table
-    def check_token(username, token)
-      @user = User.find_by_login( username )
-      unless (token == @user.token)
-        raise(InvalidToken, "Sorry, you don't have permission to perform this action.")
-      end
+  # Check whether the token in the URL matches the token in the User's table
+  def check_token(username, token)
+    @user = User.find_by_login( username )
+    unless (token == @user.token)
+      raise(InvalidToken, "Sorry, you don't have permission to perform this action.")
     end
+  end
     
-    def check_context_belongs_to_user(context_id)
-      unless @user.contexts.exists? context_id
-        raise(CannotAccessContext, "Cannot access a context that does not belong to this user.")
-      end
+  def check_context_belongs_to_user(context_id)
+    unless @user.contexts.exists? context_id
+      raise(CannotAccessContext, "Cannot access a context that does not belong to this user.")
     end
+  end
     
-    def create_todo(description, context_id, project_id = nil, notes="")
-      item = @user.todos.build
-      item.description = description
-      item.notes = notes
-      item.context_id = context_id
-      item.project_id = project_id unless project_id.nil?
-      item.save
-      raise item.errors.full_messages.to_s if item.new_record?
-      item
-    end
+  def create_todo(description, context_id, project_id = nil, notes="")
+    item = @user.todos.build
+    item.description = description
+    item.notes = notes
+    item.context_id = context_id
+    item.project_id = project_id unless project_id.nil?
+    item.save
+    raise item.errors.full_messages.to_s if item.new_record?
+    item
+  end
     
-    def split_by_char(separator,string)
-      parts = string.split(separator)
-      return safe_strip(parts[0]), safe_strip(parts[1])
+  def split_by_char(separator,string)
+    parts = string.split(separator)
+      
+    # if the separator is used more than once, concat the last parts this is
+    # needed to get 'description @ @home > project' working for contexts
+    # starting with @
+    if parts.length > 2
+      2.upto(parts.length-1) { |i| parts[1] += parts[i] }
     end
+
+    return safe_strip(parts[0]), safe_strip(parts[1])
+  end
     
-    def safe_strip(s)
-      s.strip! unless s.nil?
-      s
-    end
+  def safe_strip(s)
+    s.strip! unless s.nil?
+    s
+  end
 end
 
 class InvalidToken < RuntimeError; end
