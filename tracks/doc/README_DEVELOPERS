@@ -1,0 +1,23 @@
+1. SQLITE3 FOR TESTING
+
+By default, tests are configured to run using sqlite3 in memory mode to increase speed. You will need the sqlite3-ruby gem for this.
+
+To avoid showing the migrations as tests are run, add the following to your database.yml below 'database: ":memory:"':
+
+  verbosity: quiet
+
+If you want to run tests using another database, that's fine, too. Just change your database.yml accordingly.
+
+2. SELENIUM TESTS
+
+To run selenium tests, start Tracks in test mode using
+
+  script/server -e test
+ 
+Then open a browser to
+
+  http://localhost:3000/selenium/
+  
+and interact with the test runner.
+
+For more information about Selenium on Rails, see vendor/plugins/selenium-on-rails/README
