@@ -8,8 +8,8 @@ class ActiveRecord::Base
   def tag_with(tags, user)
     Tag.transaction do
       Tagging.delete_all("taggable_id = #{self.id} and taggable_type = '#{self.class}' and user_id = #{user.id}")
-      tags.downcase.split(", ").each do |tag|
-        Tag.find_or_create_by_name(tag).on(self, user)
+      tags.downcase.split(",").each do |tag|
+        Tag.find_or_create_by_name(tag.strip).on(self, user)
       end
     end
   end
@@ -19,12 +19,12 @@ class ActiveRecord::Base
   end
   
   def delete_tags tag_string
-     split = tag_string.downcase.split(", ")
-     tags.delete tags.select{|t| split.include? t.name}
+     split = tag_string.downcase.split(",")
+     tags.delete tags.select{|t| split.include? t.name.strip}
   end
   
   def add_tag tag_name
-    Tag.find_or_create_by_name(tag_name).on(self,user)
+    Tag.find_or_create_by_name(tag_name.strip).on(self,user)
   end
 
 end
