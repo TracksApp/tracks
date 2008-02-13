@@ -5,6 +5,8 @@ require 'stats_controller'
 class StatsController; def rescue_action(e) raise e end; end
 
 class StatsControllerTest < Test::Unit::TestCase
+  fixtures :users, :preferences, :projects, :contexts, :todos, :tags, :taggings
+  
   def setup
     @controller = StatsController.new
     @request    = ActionController::TestRequest.new
@@ -15,4 +17,49 @@ class StatsControllerTest < Test::Unit::TestCase
   def test_truth
     assert true
   end
+  
+  def test_get_index_when_not_logged_in
+    get :index
+    assert_redirected_to :controller => 'login', :action => 'login'
+  end
+  
+  def test_get_index
+    login_as(:admin_user)
+    get :index
+    assert_response :success
+  end
+
+  def test_get_charts
+    login_as(:admin_user)
+    %w{    actions_done_last30days_data
+	   actions_done_last12months_data
+	   actions_completion_time_data
+           actions_visible_running_time_data
+	   actions_running_time_data
+	   actions_day_of_week_all_data
+	   actions_day_of_week_30days_data
+	   actions_time_of_day_all_data
+	   actions_time_of_day_30days_data
+           context_total_actions_data
+           context_running_actions_data
+    }.each do |action|
+      get action
+      assert_response :success
+      assert_template "stats/"+action
+    end
+  end
+
+  def test_totals
+    login_as(:admin_user)
+    get :index
+    assert_response :success
+    assert_equal 3, assigns['projects'].count
+    assert_equal 3, assigns['projects'].count(:conditions => "state = 'active'")
+    assert_equal 10, assigns['contexts'].count
+    assert_equal 15, assigns['actions'].count
+    assert_equal 4, assigns['tags'].count
+    assert_equal 2, assigns['unique_tags'].size
+    assert_equal 2.week.ago.utc.beginning_of_day, assigns['first_action'].created_at
+  end
+  
 end
