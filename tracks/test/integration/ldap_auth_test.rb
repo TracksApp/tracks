@@ -22,8 +22,11 @@ class LdapAuthTest < ActionController::IntegrationTest
   SLAPD_TEST_PORT = 10389
   OUTPUT_DEBUG_INFO = false
 
-  require 'net/ldap' #requires ruby-net-ldap gem be installed
-  require 'simple_ldap_authenticator'
+  begin
+    require 'net/ldap' #requires ruby-net-ldap gem be installed
+    require 'simple_ldap_authenticator'
+  end if RUN_LDAP_TESTS
+
   SimpleLdapAuthenticator.ldap_library = 'net/ldap'
   SimpleLdapAuthenticator.servers = %w'localhost'
   SimpleLdapAuthenticator.use_ssl = false

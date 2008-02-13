@@ -102,7 +102,7 @@ class LoginControllerTest < Test::Rails::TestCase
 
   def test_should_fail_expired_cookie_login
     users(:other_user).remember_me
-    users(:other_user).update_attribute :remember_token_expires_at, 5.minutes.ago
+    users(:other_user).update_attribute :remember_token_expires_at, 5.minutes.ago.utc
     @request.cookies["auth_token"] = auth_token_cookie_for(:other_user)
     get :login
     assert !@controller.send(:logged_in?)

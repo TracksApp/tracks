@@ -182,9 +182,8 @@ class TodosControllerTest < Test::Rails::TestCase
         assert_select 'item', 10 do
           assert_select 'title', /.+/
           assert_select 'description', /.*/
-          %w(guid link).each do |node|
-            assert_select node, /http:\/\/test.host\/contexts\/.+/
-          end
+          assert_select 'link', %r{http://test.host/contexts/.+}
+          assert_select 'guid', %r{http://test.host/todos/.+}
           assert_select 'pubDate', projects(:timemachine).updated_at.to_s(:rfc822)
         end
       end
