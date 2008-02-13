@@ -2,6 +2,7 @@ class NotesController < ApplicationController
 
   def index
     @all_notes = current_user.notes
+    @count = @all_notes.size
     @page_title = "TRACKS::All notes"
     respond_to do |format|
       format.html

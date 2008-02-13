@@ -244,11 +244,13 @@ class TodosController < ApplicationController
     @done_today = @done.completed_within current_user.time - 1.day
     @done_this_week = @done.completed_within current_user.time - 1.week
     @done_this_month = @done.completed_within current_user.time - 4.week
+    @count = @done_today.size + @done_this_week.size + @done_this_month.size
   end
 
   def completed_archive
     @page_title = "TRACKS::Archived completed tasks"
     @done = current_user.completed_todos
+    @count = @done.size
     @done_archive = @done.completed_more_than current_user.time - 28.days
   end
   
