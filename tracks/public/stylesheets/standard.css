@@ -229,7 +229,7 @@ body.stats #topbar {
       margin-right: -5px;
       margin-bottom: 0px;      
       color: #666;
-      position:relative;
+      position:left;  /* changed from relative to left in order to show 'add note' */
       /* text-shadow: rgba(0,0,0,.4) 0px 2px 5px; */
       }
 
