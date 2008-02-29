@@ -11,6 +11,9 @@
 @sum=0
 @count.upto((@max_days/7).to_i) { |i|  @sum += @actions_running_time_hash[i] } -%>
 <%=@sum%>&
+&links=<%
+0.upto(@count-1) { |i| %><%= url_for :controller => 'stats', :action => 'show_selected_actions_from_chart', :index => i, :id=> "avrt" %>, <% }
+%><%= url_for :controller => 'stats', :action => 'show_selected_actions_from_chart', :index => @count, :id=> "avrt_end" %>&
 &line_2=2,0xFF0000&
 &values_2=
 <% total=0

@@ -103,10 +103,10 @@ module TodosHelper
       str += @todo.project.name unless should_suppress_project
       str = "(#{str})" unless str.blank?
     else
-      if (['project', 'tag'].include?(parent_container_type))
+      if (['project', 'tag', 'stats'].include?(parent_container_type))
         str << item_link_to_context( @todo )
       end
-      if (['context', 'tickler', 'tag'].include?(parent_container_type)) && @todo.project_id
+      if (['context', 'tickler', 'tag', 'stats'].include?(parent_container_type)) && @todo.project_id
         str << item_link_to_project( @todo )
       end
     end
@@ -191,6 +191,7 @@ module TodosHelper
   def parent_container_type
     return 'tickler' if source_view_is :deferred
     return 'project' if source_view_is :project
+    return 'stats' if source_view_is :stats
     return 'context'
   end
   

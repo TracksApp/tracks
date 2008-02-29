@@ -1,5 +1,7 @@
 class StatsController < ApplicationController
 
+  helper :todos
+
   append_before_filter :init, :exclude => []
   
   def index
@@ -8,12 +10,6 @@ class StatsController < ApplicationController
     @unique_tags = @tags.count(:all, {:group=>"tag_id"})
     @hidden_contexts = @contexts.find(:all, {:conditions => ["hide = ? ", true]})
     @first_action = @actions.find(:first, :order => "created_at ASC")
-    
-    # default chart dimensions
-    @chart_width=460
-    @chart_height=250
-    @pie_width=@chart_width
-    @pie_height=325
     
     get_stats_actions
     get_stats_contexts
@@ -27,7 +23,7 @@ class StatsController < ApplicationController
     @actions = @user.todos
        
     # get actions created and completed in the past 12+3 months. +3 for running
-    # average
+    #   average
     @actions_done_last12months = @actions.find(:all, {
         :select => "completed_at",
         :conditions => ["completed_at > ? AND completed_at IS NOT NULL", @cut_off_year_plus3]
@@ -38,8 +34,8 @@ class StatsController < ApplicationController
       })
     
     # convert to hash to be able to fill in non-existing days in
-    # @actions_done_last12months and count the total actions done in the past 12
-    # months to be able to calculate percentage
+    #   @actions_done_last12months and count the total actions done in the past
+    #   12 months to be able to calculate percentage
     
     # use 0 to initialise action count to zero
     @actions_done_last12months_hash = Hash.new(0) 
@@ -50,8 +46,8 @@ class StatsController < ApplicationController
     end
         
     # convert to hash to be able to fill in non-existing days in
-    # @actions_created_last12months and count the total actions done in the past
-    # 12 months to be able to calculate percentage
+    #   @actions_created_last12months and count the total actions done in the
+    #   past 12 months to be able to calculate percentage
 
     # use 0 to initialise action count to zero
     @actions_created_last12months_hash = Hash.new(0)
@@ -76,7 +72,8 @@ class StatsController < ApplicationController
     end
     
     # find running avg for month i by calculating avg of month i and the two
-    # after them. Ignore current month because you do not have full data for it
+    #   after them. Ignore current month because you do not have full data for
+    #   it
     @actions_done_avg_last12months_hash = Hash.new("null")
     1.upto(12) { |i| 
       @actions_done_avg_last12months_hash[i] = (@actions_done_last12months_hash[i] +
@@ -85,7 +82,8 @@ class StatsController < ApplicationController
     }    
 
     # find running avg for month i by calculating avg of month i and the two
-    # after them. Ignore current month because you do not have full data for it
+    #   after them. Ignore current month because you do not have full data for
+    #   it
     @actions_created_avg_last12months_hash = Hash.new("null")
     1.upto(12) { |i| 
       @actions_created_avg_last12months_hash[i] = (@actions_created_last12months_hash[i] +
@@ -120,8 +118,8 @@ class StatsController < ApplicationController
       })
     
     # convert to hash to be able to fill in non-existing days in
-    # @actions_done_last30days and count the total actions done in the past 30
-    # days to be able to calculate percentage
+    #   @actions_done_last30days and count the total actions done in the past 30
+    #   days to be able to calculate percentage
     @sum_actions_done_last30days=0
     
     # use 0 to initialise action count to zero
@@ -136,8 +134,8 @@ class StatsController < ApplicationController
     end
         
     # convert to hash to be able to fill in non-existing days in
-    # @actions_done_last30days and count the total actions done in the past 30
-    # days to be able to calculate percentage
+    #   @actions_done_last30days and count the total actions done in the past 30
+    #   days to be able to calculate percentage
     @sum_actions_created_last30days=0
 
     # use 0 to initialise action count to zero
@@ -166,7 +164,7 @@ class StatsController < ApplicationController
       })
     
     # convert to hash to be able to fill in non-existing days in
-    # @actions_completion_time also convert days to weeks (/7)
+    #   @actions_completion_time also convert days to weeks (/7)
        
     @max_days, @max_actions, @sum_actions=0,0,0
     @actions_completion_time_hash = Hash.new(0)
@@ -193,7 +191,7 @@ class StatsController < ApplicationController
       })
 
     # convert to hash to be able to fill in non-existing days in
-    # @actions_running_time also convert days to weeks (/7)
+    #   @actions_running_time also convert days to weeks (/7)
            
     @max_days, @max_actions, @sum_actions=0,0,0
     @actions_running_time_hash = Hash.new(0)
@@ -215,11 +213,18 @@ class StatsController < ApplicationController
   end
 
   def actions_visible_running_time_data
+    # running means
+    # - not completed (completed_at must be null) visible means
+    # - actions not part of a hidden project
+    # - actions not part of a hidden context
+    # - actions not deferred (show_from must be null)
+    
     @actions_running_time = @actions.find_by_sql([
         "SELECT t.created_at "+
           "FROM todos t LEFT OUTER JOIN projects p ON t.project_id = p.id LEFT OUTER JOIN contexts c ON t.context_id = c.id "+
           "WHERE t.user_id=? "+
-          "AND t.completed_at is null " +
+          "AND t.completed_at IS NULL " +
+          "AND t.show_from IS NULL " +
           "AND NOT (p.state='hidden' OR c.hide=?) " +
           "ORDER BY t.created_at ASC", @user.id, true]
     )
@@ -248,9 +253,9 @@ class StatsController < ApplicationController
 
   
   def context_total_actions_data
-    # get total action count per context
-    # Went from GROUP BY c.id to c.name for compatibility with postgresql. Since
-    # the name is forced to be unique, this should work.
+    # get total action count per context Went from GROUP BY c.id to c.name for
+    # compatibility with postgresql. Since the name is forced to be unique, this
+    # should work.
     @all_actions_per_context = @contexts.find_by_sql(
       "SELECT c.name AS name, c.id as id, count(*) AS total "+
         "FROM contexts c, todos t "+
@@ -456,6 +461,79 @@ class StatsController < ApplicationController
                       
     render :layout => false
   end
+  
+  def show_selected_actions_from_chart
+    @page_title = "TRACKS::Action selection"
+    @count = 99
+
+    @source_view = 'stats'
+    
+    case params['id']
+    when 'avrt', 'avrt_end' # actions_visible_running_time
+      
+      # HACK: because open flash chart uses & to denote the end of a parameter,
+      # we cannot use URLs with multiple parameters (that would use &). So we
+      # revert to using two id's for the same selection. avtr_end means that the
+      # last bar of the chart is selected. avtr is used for all other bars
+      
+      week_from = params['index'].to_i
+      week_to = week_from+1
+      
+      @chart_name = "actions_visible_running_time_data"
+      @page_title = "Actions selected from week "
+      if params['id'] == 'avrt_end'
+        @page_title += week_from.to_s + " and further"
+      else
+        @page_title += week_from.to_s + " - " + week_to.to_s + ""
+      end
+
+      # get all running actions that are visible
+      @actions_running_time = @actions.find_by_sql([
+          "SELECT t.id, t.created_at "+
+            "FROM todos t LEFT OUTER JOIN projects p ON t.project_id = p.id LEFT OUTER JOIN contexts c ON t.context_id = c.id "+
+            "WHERE t.user_id=? "+
+            "AND t.completed_at IS NULL " +
+            "AND t.show_from IS NULL " +
+            "AND NOT (p.state='hidden' OR c.hide=?) " +
+            "ORDER BY t.created_at ASC", @user.id, true]
+      )
+
+      @selected_todo_ids = ""
+      
+      @count=0
+      @actions_running_time.each do |r|
+        days = (@today - r.created_at) / @seconds_per_day
+        weeks = (days/7).to_i
+        if params['id'] == 'avrt_end'
+          if weeks >= week_from
+            @selected_todo_ids += r.id.to_s+","
+            @count+=1            
+          end
+        else
+          if weeks.between?(week_from, week_to-1)
+            @selected_todo_ids += r.id.to_s+","
+            @count+=1
+          end
+        end
+      end
+      
+      # strip trailing comma
+      @selected_todo_ids = @selected_todo_ids[0..@selected_todo_ids.length-2]
+      
+      @actions = @user.todos
+       
+      # get actions created and completed in the past 12+3 months. +3 for
+      # running average
+      @selected_actions = @actions.find(:all, {
+          :conditions => "id in (" + @selected_todo_ids + ")"
+        })
+      
+      render :action => "show_selection_from_chart"
+    else
+      # render error
+      render_failure "404 NOT FOUND. Unknown query selected"
+    end
+  end
 
   private
 
@@ -464,6 +542,12 @@ class StatsController < ApplicationController
     @projects = @user.projects
     @contexts = @user.contexts
     @tags = @user.tags
+
+    # default chart dimensions
+    @chart_width=460
+    @chart_height=250
+    @pie_width=@chart_width
+    @pie_height=325
   
     # get the current date wih time set to 0:0
     now = Time.new
@@ -535,8 +619,8 @@ class StatsController < ApplicationController
   def get_stats_contexts
     # get action count per context for TOP 5
     # 
-    # Went from GROUP BY c.id to c.id, c.name for compatibility with postgresql. Since
-    # the name is forced to be unique, this should work.
+    # Went from GROUP BY c.id to c.id, c.name for compatibility with postgresql.
+    # Since the name is forced to be unique, this should work.
     @actions_per_context = @contexts.find_by_sql(
       "SELECT c.id AS id, c.name AS name, count(*) AS total "+
         "FROM contexts c, todos t "+
@@ -548,8 +632,8 @@ class StatsController < ApplicationController
 
     # get uncompleted action count per visible context for TOP 5
     # 
-    # Went from GROUP BY c.id to c.id, c.name for compatibility with postgresql. Since
-    # the name is forced to be unique, this should work.
+    # Went from GROUP BY c.id to c.id, c.name for compatibility with postgresql.
+    # Since the name is forced to be unique, this should work.
     @running_actions_per_context = @contexts.find_by_sql(
       "SELECT c.id AS id, c.name AS name, count(*) AS total "+
         "FROM contexts c, todos t "+
