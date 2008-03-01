@@ -498,32 +498,34 @@ class StatsController < ApplicationController
             "ORDER BY t.created_at ASC", @user.id, true]
       )
 
-      @selected_todo_ids = ""
+      @selected_todo_ids, @count = get_ids_from(@actions_running_time, week_from, week_to, params['id']== 'avrt_end')            
+      @actions = @user.todos       
+      @selected_actions = @actions.find(:all, {
+          :conditions => "id in (" + @selected_todo_ids + ")"
+        })
       
-      @count=0
-      @actions_running_time.each do |r|
-        days = (@today - r.created_at) / @seconds_per_day
-        weeks = (days/7).to_i
-        if params['id'] == 'avrt_end'
-          if weeks >= week_from
-            @selected_todo_ids += r.id.to_s+","
-            @count+=1            
-          end
-        else
-          if weeks.between?(week_from, week_to-1)
-            @selected_todo_ids += r.id.to_s+","
-            @count+=1
-          end
-        end
+      render :action => "show_selection_from_chart"
+      
+    when 'art', 'art_end'
+      week_from = params['index'].to_i
+      week_to = week_from+1
+      
+      @chart_name = "actions_running_time_data"
+      @page_title = "Actions selected from week "
+      if params['id'] == 'art_end'
+        @page_title += week_from.to_s + " and further"
+      else
+        @page_title += week_from.to_s + " - " + week_to.to_s + ""
       end
-      
-      # strip trailing comma
-      @selected_todo_ids = @selected_todo_ids[0..@selected_todo_ids.length-2]
-      
+
       @actions = @user.todos
-       
-      # get actions created and completed in the past 12+3 months. +3 for
-      # running average
+      # get all running actions
+      @actions_running_time = @actions.find(:all, {
+          :select => "id, created_at",
+          :conditions => "completed_at IS NULL"
+        })
+
+      @selected_todo_ids, @count = get_ids_from(@actions_running_time, week_from, week_to, params['id']=='art_end')           
       @selected_actions = @actions.find(:all, {
           :conditions => "id in (" + @selected_todo_ids + ")"
         })
@@ -748,4 +750,31 @@ class StatsController < ApplicationController
     @tags_divisor_90days = ((max_90days - @tags_min_90days) / levels) + 1
     
   end
+  
+  def get_ids_from (actions_running_time, week_from, week_to, at_end)
+    count=0
+    selected_todo_ids = ""
+    
+    actions_running_time.each do |r|
+      days = (@today - r.created_at) / @seconds_per_day
+      weeks = (days/7).to_i
+      if at_end
+        if weeks >= week_from
+          selected_todo_ids += r.id.to_s+","
+          count+=1            
+        end
+      else
+        if weeks.between?(week_from, week_to-1)
+          selected_todo_ids += r.id.to_s+","
+          count+=1
+        end
+      end
+    end
+      
+    # strip trailing comma
+    selected_todo_ids = selected_todo_ids[0..selected_todo_ids.length-2]
+    
+    return selected_todo_ids, count
+  end
+  
 end
