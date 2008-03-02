@@ -62,4 +62,33 @@ class StatsControllerTest < Test::Unit::TestCase
     assert_equal 2.week.ago.utc.beginning_of_day, assigns['first_action'].created_at
   end
   
+  def test_downdrill
+    login_as(:admin_user)
+    
+    # drill down without parameters
+    get :show_selected_actions_from_chart
+    assert_response :not_found
+    assert_template nil
+    
+    # get week 0-1 for actions visible running
+    get :show_selected_actions_from_chart, :id => 'avrt', :index => 0
+    assert_response :success
+    assert_template "stats/show_selection_from_chart"
+
+    # get week 0 and further for actions visible running 
+    get :show_selected_actions_from_chart, :id => 'avrt_end', :index => 0
+    assert_response :success
+    assert_template "stats/show_selection_from_chart"
+
+    # get week 0-1 for actions running
+    get :show_selected_actions_from_chart, :id => 'art', :index => 0
+    assert_response :success
+    assert_template "stats/show_selection_from_chart"
+
+    # get week 0 and further for actions running
+    get :show_selected_actions_from_chart, :id => 'art_end', :index => 0
+    assert_response :success
+    assert_template "stats/show_selection_from_chart"
+  end
+  
 end
