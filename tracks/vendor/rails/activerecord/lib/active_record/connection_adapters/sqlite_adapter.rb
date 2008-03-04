@@ -259,6 +259,7 @@ module ActiveRecord
             self.type    = type
             self.limit   = options[:limit] if options.include?(:limit)
             self.default = options[:default] if include_default
+            self.null    = options[:null] if options.include?(:null)
           end
         end
       end
