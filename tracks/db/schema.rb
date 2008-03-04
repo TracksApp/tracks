@@ -2,11 +2,11 @@
 # migrations feature of ActiveRecord to incrementally modify your database, and
 # then regenerate this schema definition.
 
-ActiveRecord::Schema.define(:version => 37) do
+ActiveRecord::Schema.define(:version => 38) do
 
   create_table "contexts", :force => true do |t|
     t.column "name",       :string,   :default => "",    :null => false
-    t.column "position",   :integer,                     :null => false
+    t.column "position",   :string,   :default => ""
     t.column "hide",       :boolean,  :default => false
     t.column "user_id",    :integer,  :default => 1
     t.column "created_at", :datetime
@@ -69,7 +69,7 @@ ActiveRecord::Schema.define(:version => 37) do
 
   create_table "projects", :force => true do |t|
     t.column "name",               :string,                 :default => "",       :null => false
-    t.column "position",           :integer,                                      :null => false
+    t.column "position",           :string,                 :default => ""
     t.column "user_id",            :integer,                :default => 1
     t.column "description",        :text
     t.column "state",              :string,   :limit => 20, :default => "active", :null => false
@@ -88,7 +88,7 @@ ActiveRecord::Schema.define(:version => 37) do
     t.column "updated_at", :datetime
   end
 
-  add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
+  add_index "sessions", ["session_id"], :name => "sessions_session_id_index"
 
   create_table "taggings", :force => true do |t|
     t.column "taggable_id",   :integer
