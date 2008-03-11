@@ -36,7 +36,12 @@ ActionController::Routing::Routes.draw do |map|
     todos.tickler 'tickler', :action => "list_deferred"
     todos.done 'done', :action => "completed"
     todos.done_archive 'done/archive', :action => "completed_archive"
-    todos.tag 'todos/tag/:name', :action => "tag"
+    
+    # This route works for tags with dots like /todos/tag/version1.5
+    # please note that this pattern consumes everything after /todos/tag
+    # so /todos/tag/version1.5.xml will result in :name => 'version1.5.xml'
+    todos.tag 'todos/tag/:name', :action => "tag", :name => /.*/
+    
     todos.mobile 'mobile', :action => "index", :format => 'm'
     todos.mobile_abbrev 'm', :action => "index", :format => 'm'
     todos.mobile_abbrev_new 'm/new', :action => "new", :format => 'm'
