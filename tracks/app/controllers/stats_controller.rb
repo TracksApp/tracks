@@ -293,7 +293,7 @@ class StatsController < ApplicationController
   end
 
   def context_running_actions_data
-    # get incompleted action count per visible context
+    # get incomplete action count per visible context
     # 
     # Went from GROUP BY c.id to c.name for compatibility with postgresql. Since
     # the name is forced to be unique, this should work.
@@ -632,7 +632,7 @@ class StatsController < ApplicationController
         "LIMIT 5"
     )
 
-    # get incompleted action count per visible context for TOP 5
+    # get incomplete action count per visible context for TOP 5
     # 
     # Went from GROUP BY c.id to c.id, c.name for compatibility with postgresql.
     # Since the name is forced to be unique, this should work.
