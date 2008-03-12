@@ -23,13 +23,18 @@ module TodosHelper
   end
   
   def remote_delete_icon
+    if @source_view == 'tag'
+      parameters = "{ _source_view : '#{@source_view}', _tag_name : '#{@tag_name}' }"
+    else
+      parameters = "{ _source_view : '#{@source_view}' }"      
+    end
     str = link_to( image_tag_for_delete,
       todo_path(@todo),
       :class => "icon delete_icon", :title => "delete the action '#{@todo.description}'")
     apply_behavior '.item-container a.delete_icon:click', :prevent_default => true do |page|
       page.confirming "'Are you sure that you want to ' + this.title + '?'" do
         page << "itemContainer = this.up('.item-container'); itemContainer.startWaiting();"
-        page << remote_to_href(:method => 'delete', :with => "{ '_source_view' : '#{@source_view}' }", :complete => "itemContainer.stopWaiting();")
+        page << remote_to_href(:method => 'delete', :with => parameters, :complete => "itemContainer.stopWaiting();")
       end
     end
     str
@@ -46,13 +51,18 @@ module TodosHelper
   end
   
   def remote_edit_icon
+    if @source_view == 'tag'
+      parameters = "{ _source_view : '#{@source_view}', _tag_name : '#{@tag_name}' }"
+    else
+      parameters = "{ _source_view : '#{@source_view}' }"      
+    end
     if !@todo.completed?
       str = link_to( image_tag_for_edit,
         edit_todo_path(@todo),
         :class => "icon edit_icon")
       apply_behavior '.item-container a.edit_icon:click', :prevent_default => true do |page|
         page << "Effect.Pulsate(this);"
-        page << remote_to_href(:method => 'get', :with => "{ _source_view : '#{@source_view}' }")
+        page << remote_to_href(:method => 'get', :with => parameters)
       end
     else
       str = '<a class="icon">' + image_tag("blank.png") + "</a> "
@@ -62,9 +72,14 @@ module TodosHelper
   
   def remote_toggle_checkbox
     str = check_box_tag('item_id', toggle_check_todo_path(@todo), @todo.completed?, :class => 'item-checkbox')
+    if @source_view == 'tag'
+      parameters = "{ _source_view : '#{@source_view}', _tag_name : '#{@tag_name}' }"
+    else
+      parameters = "{ _source_view : '#{@source_view}' }"      
+    end
     apply_behavior '.item-container input.item-checkbox:click',
       remote_function(:url => javascript_variable('this.value'), :method => 'put',
-        :with => "{ _source_view : '#{@source_view}' }")
+        :with => parameters)
     str
   end
   
