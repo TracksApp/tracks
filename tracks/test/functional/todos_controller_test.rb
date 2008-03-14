@@ -157,15 +157,15 @@ class TodosControllerTest < Test::Rails::TestCase
     assert_equal true, t.tag_list.empty?
   end
 
-  def test_update_todo_tags_with_whitespace
+  def test_update_todo_tags_with_whitespace_and_dots
     t = Todo.find(1)
     login_as(:admin_user)
-    taglist = "  one  ,  two,three    ,four"
+    taglist = "  one  ,  two,three    ,four, 8.1.2, version1.5"
     xhr :post, :update, :id => 1, :_source_view => 'todo', "todo"=>{"context_id"=>"1", "project_id"=>"2", "id"=>"1", "notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>taglist
     t = Todo.find(1)
-    assert_equal "one, two, three, four", t.tag_list
+    assert_equal "one, two, three, four, 8.1.2, version1.5", t.tag_list
   end
-  
+
   def test_find_tagged_with
     login_as(:admin_user)
     @user = User.find(@request.session['user_id'])
