@@ -170,7 +170,7 @@ ul#prefs {list-style-type: disc; margin-left: 15px;}
 #feeds li {font-size:13px; font-family: "Lucida Grande", Verdana, Geneva, Arial, sans-serif}
 #feeds li h4 {margin-top: 12px; margin-bottom: 4px; font-weight: normal; font-style:oblique}
 input.open_id {background: url(../images/open-id-login-bg.gif) no-repeat; background-color: #fff; background-position: 0 50%; color: #000; padding-left: 18px; width:182px}
-div.page_name_auto_complete {width: 100%; background: #fff; display: inline}
+div.page_name_auto_complete {width: 100%; background: #fff; display: inline; z-index: 100}
 div.page_name_auto_complete ul {border: 1px solid #888; margin: 0; padding: 0; width: 100%; list-style-type: none}
 div.page_name_auto_complete ul li {margin: 0; padding: 2px; font-weight:bold; list-style-type: none; color: #000}
 div.page_name_auto_complete ul li.selected {background-color: #ffb}
