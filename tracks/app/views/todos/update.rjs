@@ -73,7 +73,6 @@ if @saved
       page.replace_html "badge_count", @down_count
     elsif @context_changed
       page[@todo].remove
-      page.call "console.log", "'@remaining_in_context = #{@remaining_in_context}'"
       page.visual_effect(:fade, "c#{@original_item_context_id}", :duration => 0.4) if (@remaining_in_context == 0)
       page.call "todoItems.ensureVisibleWithEffectAppear", "c#{@todo.context_id}"
       page.call "todoItems.expandNextActionListingByContext", "c#{@todo.context_id}items", true
