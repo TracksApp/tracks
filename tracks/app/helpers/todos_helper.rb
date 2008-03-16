@@ -1,7 +1,7 @@
 module TodosHelper
 
-  #require 'users_controller'
-  # Counts the number of incomplete items in the specified context
+  # #require 'users_controller' Counts the number of incomplete items in the
+  # specified context
   # 
   def count_items(context)
     count = Todo.find_all("done=0 AND context_id=#{context.id}").length
@@ -14,12 +14,12 @@ module TodosHelper
         :id => dom_id(@todo, 'form'), 
         :class => dom_id(@todo, 'form') + " inline-form edit_todo_form" }, 
       &block )
-      apply_behavior 'form.edit_todo_form', make_remote_form(
-        :method => :put, 
-        :before => "this.down('button.positive').startWaiting()",
-        :loaded => "this.down('button.positive').stopWaiting()",
-        :condition => "!(this.down('button.positive').isWaiting())"),
-        :prevent_default => true
+    apply_behavior 'form.edit_todo_form', make_remote_form(
+      :method => :put, 
+      :before => "this.down('button.positive').startWaiting()",
+      :loaded => "this.down('button.positive').stopWaiting()",
+      :condition => "!(this.down('button.positive').isWaiting())"),
+      :prevent_default => true
   end
   
   def remote_delete_icon
@@ -79,7 +79,7 @@ module TodosHelper
     end
     apply_behavior '.item-container input.item-checkbox:click',
       remote_function(:url => javascript_variable('this.value'), :method => 'put',
-        :with => parameters)
+      :with => parameters)
     str
   end
   
@@ -196,6 +196,14 @@ module TodosHelper
   end
 
   def should_show_new_item
+
+    if @todo.project.nil? == false
+      # do not show new actions that were added to hidden or completed projects
+      # on home page and context page
+      return false if source_view_is(:todo) && (@todo.project.hidden? || @todo.project.completed?)
+      return false if source_view_is(:context) && (@todo.project.hidden? || @todo.project.completed?)      
+    end
+
     return true if source_view_is(:deferred) && @todo.deferred?
     return true if source_view_is(:project) && @todo.project.hidden? && @todo.project_hidden?
     return true if source_view_is(:project) && @todo.deferred?
