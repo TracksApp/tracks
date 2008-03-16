@@ -2,9 +2,9 @@
 
 * Homepage: http://www.rousette.org.uk/projects/
 * Author: bsag (http://www.rousette.org.uk/)
-* Contributors: Nicholas Lee, Lolindrath, Jim Ray, Arnaud Limbourg, Timothy Martens, Luke Melia, John Leonard (for great installation tutorials on Windows XP), Jim Strupp, Eric Lesh, Damien Cirotteau, Janet Riley
-* Version: 1.04
-* Copyright: (cc) 2004-2006 rousette.org.uk
+* Contributors: Nicholas Lee, Lolindrath, Jim Ray, Arnaud Limbourg, Timothy Martens, Luke Melia, John Leonard, Jim Strupp, Eric Lesh, Damien Cirotteau, Janet Riley, Reinier Balt, Jacqui Maher, James Kebinger
+* Version: 1.5rc1
+* Copyright: (cc) 2004-2008 rousette.org.uk
 * License: GNU GPL
 
 Main project site: http://www.rousette.org.uk/projects/
@@ -13,7 +13,7 @@ Trac (for bug reports and feature requests): http://dev.rousette.org.uk/report/6
 
 Wiki (deprecated - please use Trac): http://www.rousette.org.uk/projects/wiki/
 
-== Version trunk
+== Version 1.5rc1
 1. Show from date allows you to postpone the appearance of actions in the list until you can do something about them (like a 'tickler')
 2. Tagging of actions
 3. Simple management of users (deleting users through the web interface)
