@@ -904,6 +904,7 @@ div.page_name_auto_complete {
 	width: 100%;
 	background: #fff;
 	display: inline;
+        z-index: 100;
 }
 
 div.page_name_auto_complete ul {
