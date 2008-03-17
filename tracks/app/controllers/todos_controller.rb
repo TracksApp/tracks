@@ -414,7 +414,7 @@ class TodosController < ApplicationController
             @todos = Todo.find(:all, :conditions => ['todos.user_id = ? and todos.state = ? or todos.state = ?', current_user.id, 'active', 'completed'], :include => [ :project, :context, :tags ])
 
             # Exclude hidden projects from the home page
-            @not_done_todos = Todo.find(:all, :conditions => ['todos.user_id = ? and todos.state = ? AND (projects.state = ? OR todos.project_id IS NULL)', current_user.id, 'active', 'active'], :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC", :include => [ :project, :context, :tags ])
+            @not_done_todos = Todo.find(:all, :conditions => ['todos.user_id = ? and todos.state = ? AND contexts.hide = ? AND (projects.state = ? OR todos.project_id IS NULL)', current_user.id, 'active', false, 'active'], :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC", :include => [ :project, :context, :tags ])
             
           end
 
@@ -444,7 +444,15 @@ class TodosController < ApplicationController
   def determine_down_count
     source_view do |from|
       from.todo do
-        @down_count = Todo.count_by_sql(['SELECT COUNT(*) FROM todos, contexts WHERE todos.context_id = contexts.id and todos.user_id = ? and todos.state = ? and contexts.hide = ?', current_user.id, 'active', false])
+        @down_count = Todo.count(
+          :all, 
+          :conditions => ['todos.user_id = ? and todos.state = ? and contexts.hide = ? AND (projects.state = ? OR todos.project_id IS NULL)', current_user.id, 'active', false, 'active'], 
+          :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC", 
+          :include => [ :project, :context ])
+        # #@down_count = Todo.count_by_sql(['SELECT COUNT(*) FROM todos,
+        # contexts WHERE todos.context_id = contexts.id and todos.user_id = ?
+        # and todos.state = ? and contexts.hide = ?', current_user.id, 'active',
+        # false])
       end
       from.context do
         @down_count = current_user.contexts.find(@todo.context_id).not_done_todo_count
@@ -505,7 +513,16 @@ class TodosController < ApplicationController
       @done = current_user.completed_todos.find(:all, :limit => max_completed, :include => [ :context, :project, :tags ]) unless max_completed == 0
 
       # Set count badge to number of not-done, not hidden context items
-      @count = @todos.reject { |x| !x.active? || x.context.hide? }.size
+      @count = 0
+      @todos.each do |x|
+        if x.active?
+          if x.project.nil?
+            @count += 1 if !x.context.hide?
+          else
+            @count += 1 if x.project.active?  && !x.context.hide?
+          end
+        end
+      end
        
       @default_project_context_name_map = build_default_project_context_name_map(@projects).to_json
        
