@@ -6,7 +6,7 @@ ActiveRecord::Schema.define(:version => 38) do
 
   create_table "contexts", :force => true do |t|
     t.column "name",       :string,   :default => "",    :null => false
-    t.column "position",   :integer,  :default => 0
+    t.column "position",   :integer
     t.column "hide",       :boolean,  :default => false
     t.column "user_id",    :integer,  :default => 1
     t.column "created_at", :datetime
@@ -69,7 +69,7 @@ ActiveRecord::Schema.define(:version => 38) do
 
   create_table "projects", :force => true do |t|
     t.column "name",               :string,                 :default => "",       :null => false
-    t.column "position",           :integer,                :default => 0
+    t.column "position",           :integer
     t.column "user_id",            :integer,                :default => 1
     t.column "description",        :text
     t.column "state",              :string,   :limit => 20, :default => "active", :null => false

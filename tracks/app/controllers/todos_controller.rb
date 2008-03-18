@@ -411,7 +411,7 @@ class TodosController < ApplicationController
             # current_users.todos.find but that broke with_scope for :limit
 
             # Exclude hidden projects from count on home page
-            @todos = Todo.find(:all, :conditions => ['todos.user_id = ? and todos.state = ? or todos.state = ?', current_user.id, 'active', 'completed'], :include => [ :project, :context, :tags ])
+            @todos = Todo.find(:all, :conditions => ['todos.user_id = ? and todos.state = ?', current_user.id, 'active'], :include => [ :project, :context, :tags ])
 
             # Exclude hidden projects from the home page
             @not_done_todos = Todo.find(:all, :conditions => ['todos.user_id = ? and todos.state = ? AND contexts.hide = ? AND (projects.state = ? OR todos.project_id IS NULL)', current_user.id, 'active', false, 'active'], :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC", :include => [ :project, :context, :tags ])
