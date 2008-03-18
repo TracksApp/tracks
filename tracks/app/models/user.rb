@@ -12,7 +12,7 @@ class User < ActiveRecord::Base
              end
            end
   has_many :projects,
-           :order => 'position ASC',
+           :order => 'projects.position ASC',
            :dependent => :delete_all do
               def find_by_params(params)
                 find(params['id'] || params['project_id'])

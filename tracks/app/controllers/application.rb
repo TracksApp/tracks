@@ -182,7 +182,7 @@ class ApplicationController < ActionController::Base
   end
     
   def init_data_for_sidebar
-    @projects = @projects || current_user.projects
+    @projects = @projects || current_user.projects.find(:all, :include => [:default_context ])
     @contexts = @contexts || current_user.contexts
     init_not_done_counts
     if prefs.show_hidden_projects_in_sidebar

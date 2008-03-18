@@ -10,7 +10,7 @@ class TodosController < ApplicationController
   session :off, :only => :index, :if => Proc.new { |req| is_feed_request(req) }
 
   def index
-    @projects = current_user.projects.find(:all, :include => [ :todos ])
+    @projects = current_user.projects.find(:all, :include => [ :todos, :default_context ])
     @contexts = current_user.contexts.find(:all, :include => [ :todos ])
 
     @contexts_to_show = @contexts.reject {|x| x.hide? }    
@@ -258,7 +258,7 @@ class TodosController < ApplicationController
     @source_view = 'deferred'
     @page_title = "TRACKS::Tickler"
     
-    @projects = current_user.projects.find(:all, :include => [ :todos ])
+    @projects = current_user.projects.find(:all, :include => [ :todos, :default_context ])
     @contexts_to_show = @contexts = current_user.contexts.find(:all, :include => [ :todos ])
     
     current_user.deferred_todos.find_and_activate_ready
@@ -415,7 +415,6 @@ class TodosController < ApplicationController
 
             # Exclude hidden projects from the home page
             @not_done_todos = Todo.find(:all, :conditions => ['todos.user_id = ? and todos.state = ? AND contexts.hide = ? AND (projects.state = ? OR todos.project_id IS NULL)', current_user.id, 'active', false, 'active'], :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC", :include => [ :project, :context, :tags ])
-            
           end
 
         end
