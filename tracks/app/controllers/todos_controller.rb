@@ -10,7 +10,7 @@ class TodosController < ApplicationController
   session :off, :only => :index, :if => Proc.new { |req| is_feed_request(req) }
 
   def index
-    @projects = current_user.projects.find(:all)
+    @projects = current_user.projects.find(:all, :include => [:default_context])
     @contexts = current_user.contexts.find(:all)
 
     @contexts_to_show = @contexts.reject {|x| x.hide? }    
