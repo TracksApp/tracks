@@ -27,13 +27,24 @@ class NotesController < ApplicationController
   end
 
   def destroy
-    note = current_user.notes.find(params['id'])
-    if note.destroy
-      render :text => ''
-    else
-      notify :warning, "Couldn't delete note \"#{note.id}\""
-      render :text => ''
+    @note = current_user.notes.find(params['id'])
+
+    @note.destroy
+    
+    respond_to do |format|
+      format.html
+      format.js do
+        @count = current_user.notes.size
+        render
+      end
     end
+      
+    #    if note.destroy
+    #      render :text => ''
+    #    else
+    #      notify :warning, "Couldn't delete note \"#{note.id}\""
+    #      render :text => ''
+    #    end
   end
 
   def update

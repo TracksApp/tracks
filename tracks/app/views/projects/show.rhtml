@@ -11,7 +11,7 @@
 
 <div class="container">
  <div id="notes">
-  <div class="add_note_link"><%= link_to_function( "Add a note", "Element.toggle('new-note'); Form.focusFirstElement('form-new-note');") %></div>
+  <div class="add_note_link"><%= link_to_function( "Add a note", "Element.toggle('new-note'); Form.focusFirstElement('form-new-note');", :id=>"add_note_href") %></div>
    <h2>Notes</h2>
    <div id="empty-n" style="display:<%= @project.notes.empty? ? 'block' : 'none'%>;">
     <%= render :partial => "shared/empty", 
@@ -32,7 +32,7 @@
     <%= hidden_field( "new_note", "project_id", "value" => "#{@project.id}" ) %>
     <%= text_area( "new_note", "body", "cols" => 50, "rows" => 3, "tabindex" => 1 ) %>
     <br /><br />
-    <input type="submit" value="Add note" tabindex="2" />
+    <input type="submit" value="Add note" name="add-new-note" tabindex="2" />
     <% end -%>
     </div>
 
