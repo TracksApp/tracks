@@ -29,7 +29,7 @@ module TodosHelper
       parameters = "{ _source_view : '#{@source_view}' }"      
     end
     str = link_to( image_tag_for_delete,
-      todo_path(@todo),
+      todo_path(@todo), :id => "delete_icon_"+@todo.id.to_s,
       :class => "icon delete_icon", :title => "delete the action '#{@todo.description}'")
     apply_behavior '.item-container a.delete_icon:click', :prevent_default => true do |page|
       page.confirming "'Are you sure that you want to ' + this.title + '?'" do

@@ -1,0 +1,23 @@
+setup :fixtures => :all
+login :as => 'admin'
+open "/notes/"
+assert_text 'badge_count', '2'
+
+# add new note
+open "/projects/1"
+click "css=#add_note_href"
+type "css=#new_note_body", "new note"
+click "add-new-note"
+
+# check badge count is one more
+open "/notes/"
+assert_text 'badge_count', '3'
+
+# delete note
+click "css=#delete_note_1"
+assert_confirmation "Are you sure that you want to delete the note '1'?"
+
+# check badge decreased
+wait_for_visible "flash"
+wait_for_element_not_present "container_note_1"
+assert_text 'badge_count', '2'
