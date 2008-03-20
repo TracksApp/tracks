@@ -52,6 +52,7 @@ Event.observe($('todo_project_name'), "click", projectAutoCompleter.activate.bin
 Event.observe($('todo_project_name'), "blur", selectDefaultContext.bind($('todo_project_name')));
 </script>
 
+<input id="default_context_name_id" name="default_context_name" type="hidden" value="<%=@initial_context_name-%>" />
 <label for="todo_context_name">Context</label>
 <input id="todo_context_name" name="context_name" autocomplete="off" tabindex="4" size="30" type="text" value="<%= @initial_context_name %>" />
 <div class="page_name_auto_complete" id="context_list" style="display:none"></div>

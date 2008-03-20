@@ -113,6 +113,7 @@ class ProjectsController < ApplicationController
       elsif boolean_param('update_status')
         render :action => 'update_status'
       elsif boolean_param('update_default_context')
+        @initial_context_name = @project.default_context.name 
         render :action => 'update_default_context'
       else
         render :text => success_text || 'Success'
