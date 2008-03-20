@@ -1,0 +1,11 @@
+setup :fixtures => :users, :clear_tables => [:projects, :contexts, :todos]
+login :as => 'admin'
+open "/integrations"
+wait_for_element_present "no_context_msg"
+
+open "/contexts"
+type "context_name", "my first context"
+click "context_new_submit"
+
+open "/integrations"
+wait_for_element_present "applescript1-contexts"
