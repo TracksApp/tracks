@@ -198,7 +198,7 @@ class ApplicationController < ActionController::Base
   
   def init_project_hidden_todo_counts(parents = ['project','context'])
     parents.each do |parent|
-      eval("@#{parent}_project_hidden_todo_counts = @#{parent}_project_hidden_todo_counts || Todo.count(:conditions => ['user_id = ? and state = ?', current_user.id, 'project_hidden'], :group => :#{parent}_id)")
+      eval("@#{parent}_project_hidden_todo_counts = @#{parent}_project_hidden_todo_counts || Todo.count(:conditions => ['user_id = ? and (state = ? or state = ?)', current_user.id, 'project_hidden', 'active'], :group => :#{parent}_id)")
     end
   end  
   
