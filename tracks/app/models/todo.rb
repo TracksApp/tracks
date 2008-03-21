@@ -8,7 +8,9 @@ class Todo < ActiveRecord::Base
   
   acts_as_state_machine :initial => :active, :column => 'state'
   
-  state :active, :enter => Proc.new { |t| t[:show_from] = nil }
+  # when entering active state, also remove completed_at date. 
+  # Looks like :exit of state completed is not run, see #679
+  state :active, :enter => Proc.new { |t| t[:show_from], t.completed_at = nil, nil }
   state :project_hidden
   state :completed, :enter => Proc.new { |t| t.completed_at = Time.now.utc }, :exit => Proc.new { |t| t.completed_at = nil }
   state :deferred

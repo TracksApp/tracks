@@ -31,6 +31,15 @@ class TodoTest < Test::Rails::TestCase
     assert_not_nil @completed.completed_at
   end
   
+  def test_completed_at_cleared_after_toggle_to_active
+    assert_kind_of Todo, @completed
+    assert @completed.completed?
+    @completed.toggle_completion!
+    assert @completed.active?
+    assert_nil @completed.completed_at
+  end
+  
+  
   # Validation tests
   #
   def test_validate_presence_of_description
