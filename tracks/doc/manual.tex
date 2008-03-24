@@ -44,7 +44,7 @@
 \chapterstyle{BlueBox}
 
 \setsecheadstyle{\sffamily\bfseries\Large}
-\setsubsecheadstyle{\sffamily\bfseries\Normal}
+\setsubsecheadstyle{\sffamily\bfseries\normal}
 
 \makepagestyle{myruledpagestyle}
 \makeevenhead{myruledpagestyle}{\thepage}{}{\leftmark}
@@ -112,11 +112,11 @@
 \usepackage{booktabs}			% Better tables
 \usepackage{tabulary}			% Support longer table cells
 \usepackage[utf8]{inputenc}		% For UTF-8 support
-% \usepackage{xcolor}				% Allow for color (annotations)
+\usepackage{xcolor}				% Allow for color (annotations)
 
 %\geometry{landscape}			% Activate for rotated page geometry
 
-% \usepackage[parfill]{parskip}	% Activate to begin paragraphs with an empty
+\usepackage[parfill]{parskip}	% Activate to begin paragraphs with an empty
 								% line rather than an indent
 
 
@@ -129,15 +129,15 @@
 \VerbatimFootnotes
 \def\myauthor{Tracks Development Team}
 \def\baseheaderlevel{2}
-\def\mycopyright{2007 rousette.org.uk \\ This work is licensed under a Creative Commons License. \\ http://creativecommons.org/licenses/by-nc-sa/3.0/}
-\date{2007-11-25}
+\def\mycopyright{2008 rousette.org.uk \\ This work is licensed under a Creative Commons License. \\ http://creativecommons.org/licenses/by-nc-sa/3.0/}
+\date{2008-03-06}
 \def\format{complete}
 \def\latexxslt{memoir-twosided-manual.xslt}
-\def\revision{Revision: \$Id: manual.markdown 654 2007-12-16 15:01:05Z bsag \$}
+\def\revision{Revision: \$Id: manual.markdown 733 2008-03-06 17:42:00Z bsag \$}
 \def\mytitle{Tracks 1.5 Manual}
 \def\version{1.5}
-% \usepackage{xmpincl}
-% \includexmp{CCAttributionShareAlike}
+\usepackage{xmpincl}
+\includexmp{CCAttributionShareAlike}
 
 
 %
@@ -263,7 +263,7 @@
 Tracks 1.5 has been thoroughly beta tested by a large number of people, and should be fully stable for everyday use. However, once set up, Tracks will contain the majority of your plans for your work and personal life, so it's only sensible to make sure that you have frequent, reliable backups of your data. Full changenotes on the release can be found in \texttt{doc/CHANGELOG}. Full API documentation can be found at \texttt{doc/app/index.html}, once you have run \texttt{rake appdoc}
 
 
-There are two methods of downloading Tracks 1.5:
+There are two methods of downloading Tracks 1.5 \textbf{(N.B. These links will not work until Tracks 1.5 final is released)}):
 
 
 \begin{enumerate}
@@ -303,7 +303,7 @@ This is the easiest solution for Mac OS X 10.4 or Windows users wanting to run T
 \begin{enumerate}
 
 
-\item \textbf{Mac OS X}. \href{http://locomotive.sourceforge.net/}{Locomotive} is an all-in one installer for Mac OS X 10.4, which includes everything you need to run Tracks with a SQLite3 database. Locomotive isn't currently Leopard compatible, and doesn't work with Panther.
+\item \textbf{Mac OS X}. \href{http://locomotive.sourceforge.net/}{Locomotive} is an all-in one installer for Mac OS X 10.4, which includes everything you need to run Tracks with a SQLite3 database. Locomotive doesn't work with Panther, and isn't really required for Leopard because the default Rails installation works very well. However, if you prefer to use Locomotive, it does work on Leopard.
 
 \item \textbf{Windows}. \href{http://instantrails.rubyforge.org/wiki/wiki.pl}{Instant Rails} includes everything you need, including MySQL.
 \end{enumerate}
@@ -411,7 +411,7 @@ Before you go any further, you need to decide which database you will use. See t
 
 \item If you downloaded Tracks 1.5 via Subversion, you need to duplicate the files \texttt{database.yml.tmpl} and \texttt{environment.yml.tmpl} and remove the \texttt{*.tmpl} extension from the duplicates. Similarly, duplicate \texttt{/log.tmpl} and remove the \texttt{*.tmpl} extension, then edit the files as described in steps 2 and 3.
 
-\item Open the file \texttt{/config/database.yml} and edit the \texttt{production:} section with the details of your database. If you are using MySQL the \texttt{adapter:} line should read \texttt{adapter: mysql}, \texttt{host: localhost} (in the majority of cases), and your username and password should match those you assigned when you created the database. If you are using SQLite3, you should have only two lines under the production section: \texttt{adapter: sqlite3} and \texttt{database: db/tracks-15.db}.
+\item Open the file \texttt{/config/database.yml} and edit the \texttt{production:} section with the details of your database. If you are using MySQL the \texttt{adapter:} line should read \texttt{adapter: mysql}, \texttt{host: localhost} (in the majority of cases), and your username and password should match those you assigned when you created the database. If you are using SQLite3, you should have only two lines under the production section: \texttt{adapter: sqlite3} and \texttt{database: db/tracks-15-blank.db}. If you downloaded the zipped file, the database.yml file is already configured to use the provided SQLite3 file.
 
 \item Open the file \texttt{/config/environment.rb}, and read through the settings to make sure that they suit your setup. In most cases, all you need to change is the \texttt{SALT = "change-me"} line (change the string ``change-me" to some other string of your choice), and the time zone setting.
 

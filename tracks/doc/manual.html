@@ -8,13 +8,13 @@
 		<meta name="Author" content="Tracks Development Team" />
 		<meta name="BaseHeaderLevel" content="2" />
 		<link type="text/css" rel="stylesheet" href="manual.css" />
-		<meta name="Copyright" content="2007 rousette.org.uk  
+		<meta name="Copyright" content="2008 rousette.org.uk  
 This work is licensed under a Creative Commons License.  
 http://creativecommons.org/licenses/by-nc-sa/3.0/" />
-		<meta name="Date" content="2007-11-25" />
+		<meta name="Date" content="2008-03-06" />
 		<meta name="Format" content="complete" />
 		<meta name="LaTeXXSLT" content="memoir-twosided-manual.xslt" />
-		<meta name="Revision" content="$Id: manual.markdown 654 2007-12-16 15:01:05Z bsag $" />
+		<meta name="Revision" content="$Id: manual.markdown 733 2008-03-06 17:42:00Z bsag $" />
 		<title>Tracks 1.5 Manual</title>
 		<meta name="Version" content="1.5" />
 		<meta name="XMP" content="CCAttributionShareAlike" />
@@ -29,7 +29,7 @@ http://creativecommons.org/licenses/by-nc-sa/3.0/" />
 
 <p>Tracks 1.5 has been thoroughly beta tested by a large number of people, and should be fully stable for everyday use. However, once set up, Tracks will contain the majority of your plans for your work and personal life, so it&#8217;s only sensible to make sure that you have frequent, reliable backups of your data. Full changenotes on the release can be found in <code>doc/CHANGELOG</code>. Full API documentation can be found at <code>doc/app/index.html</code>, once you have run <code>rake appdoc</code></p>
 
-<p>There are two methods of downloading Tracks 1.5:</p>
+<p>There are two methods of downloading Tracks 1.5 <strong>(N.B. These links will not work until Tracks 1.5 final is released)</strong>):</p>
 
 <ol>
 <li>(Recommended for most people) Download the <a href="http://www.rousette.org.uk/projects/files/tracks-current.zip">zipped package</a>, and unzip in your preferred location (e.g. <code>~/Sites</code> for Mac OS X users).</li>
@@ -54,7 +54,7 @@ http://creativecommons.org/licenses/by-nc-sa/3.0/" />
 <p>This is the easiest solution for Mac OS X 10.4 or Windows users wanting to run Tracks locally.</p>
 
 <ol>
-<li><strong>Mac OS X</strong>. <a href="http://locomotive.sourceforge.net/">Locomotive</a> is an all-in one installer for Mac OS X 10.4, which includes everything you need to run Tracks with a SQLite3 database. Locomotive isn&#8217;t currently Leopard compatible, and doesn&#8217;t work with Panther.</li>
+<li><strong>Mac OS X</strong>. <a href="http://locomotive.sourceforge.net/">Locomotive</a> is an all-in one installer for Mac OS X 10.4, which includes everything you need to run Tracks with a SQLite3 database. Locomotive doesn&#8217;t work with Panther, and isn&#8217;t really required for Leopard because the default Rails installation works very well. However, if you prefer to use Locomotive, it does work on Leopard.</li>
 <li><strong>Windows</strong>. <a href="http://instantrails.rubyforge.org/wiki/wiki.pl">Instant Rails</a> includes everything you need, including MySQL.</li>
 </ol>
 
@@ -118,7 +118,7 @@ http://creativecommons.org/licenses/by-nc-sa/3.0/" />
 
 <ol>
 <li>If you downloaded Tracks 1.5 via Subversion, you need to duplicate the files <code>database.yml.tmpl</code> and <code>environment.yml.tmpl</code> and remove the <code>*.tmpl</code> extension from the duplicates. Similarly, duplicate <code>/log.tmpl</code> and remove the <code>*.tmpl</code> extension, then edit the files as described in steps 2 and 3.</li>
-<li>Open the file <code>/config/database.yml</code> and edit the <code>production:</code> section with the details of your database. If you are using MySQL the <code>adapter:</code> line should read <code>adapter: mysql</code>, <code>host: localhost</code> (in the majority of cases), and your username and password should match those you assigned when you created the database. If you are using SQLite3, you should have only two lines under the production section: <code>adapter: sqlite3</code> and <code>database: db/tracks-15.db</code>.</li>
+<li>Open the file <code>/config/database.yml</code> and edit the <code>production:</code> section with the details of your database. If you are using MySQL the <code>adapter:</code> line should read <code>adapter: mysql</code>, <code>host: localhost</code> (in the majority of cases), and your username and password should match those you assigned when you created the database. If you are using SQLite3, you should have only two lines under the production section: <code>adapter: sqlite3</code> and <code>database: db/tracks-15-blank.db</code>. If you downloaded the zipped file, the database.yml file is already configured to use the provided SQLite3 file.</li>
 <li>Open the file <code>/config/environment.rb</code>, and read through the settings to make sure that they suit your setup. In most cases, all you need to change is the <code>SALT = "change-me"</code> line (change the string &#8220;change-me&#8221; to some other string of your choice), and the time zone setting.</li>
 <li>If you are using Windows, you may need to check the &#8216;shebang&#8217; lines (<code>#!/usr/bin/env ruby</code>) of the <code>/public/dispatch.*</code> files and all the files in the <code>/script</code> directory. They are set to <code>#!/usr/bin/env ruby</code> by default. This should work for all *nix based setups (Linux or Mac OS X), but Windows users will probably have to change it to something like <code>#c:/ruby/bin/ruby</code> to point to the Ruby binary on your system.</li>
 </ol>

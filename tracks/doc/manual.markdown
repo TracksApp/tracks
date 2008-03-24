@@ -1,9 +1,9 @@
 Title:              Tracks 1.5 Manual
 Author:             Tracks Development Team
-Date:               2007-11-25
-Revision:           $Id: manual.markdown 654 2007-12-16 15:01:05Z bsag $
+Date:               2008-03-06
+Revision:           $Id: manual.markdown 733 2008-03-06 17:42:00Z bsag $
 Version:            1.5
-Copyright:			    2007 rousette.org.uk  
+Copyright:			    2008 rousette.org.uk  
 					This work is licensed under a Creative Commons License.  
 					http://creativecommons.org/licenses/by-nc-sa/3.0/
 XMP:                CCAttributionShareAlike
@@ -20,7 +20,7 @@ CSS:                manual.css
 
 Tracks 1.5 has been thoroughly beta tested by a large number of people, and should be fully stable for everyday use. However, once set up, Tracks will contain the majority of your plans for your work and personal life, so it's only sensible to make sure that you have frequent, reliable backups of your data. Full changenotes on the release can be found in `doc/CHANGELOG`. Full API documentation can be found at `doc/app/index.html`, once you have run `rake appdoc`
 
-There are two methods of downloading Tracks 1.5:
+There are two methods of downloading Tracks 1.5 **(N.B. These links will not work until Tracks 1.5 final is released)**):
 
 1. (Recommended for most people) Download the [zipped package](http://www.rousette.org.uk/projects/files/tracks-current.zip), and unzip in your preferred location (e.g. `~/Sites` for Mac OS X users).
 2. Download using Subversion:
@@ -41,7 +41,7 @@ Tracks stores its data in a database, and you can either use SQLite3, MySQL or P
 
 This is the easiest solution for Mac OS X 10.4 or Windows users wanting to run Tracks locally.
 
-1. **Mac OS X**. [Locomotive](http://locomotive.sourceforge.net/) is an all-in one installer for Mac OS X 10.4, which includes everything you need to run Tracks with a SQLite3 database. Locomotive isn't currently Leopard compatible, and doesn't work with Panther.
+1. **Mac OS X**. [Locomotive](http://locomotive.sourceforge.net/) is an all-in one installer for Mac OS X 10.4, which includes everything you need to run Tracks with a SQLite3 database. Locomotive doesn't work with Panther, and isn't really required for Leopard because the default Rails installation works very well. However, if you prefer to use Locomotive, it does work on Leopard.
 2. **Windows**. [Instant Rails](http://instantrails.rubyforge.org/wiki/wiki.pl) includes everything you need, including MySQL.
 
 ### What is included with the Tracks package ###
@@ -94,7 +94,7 @@ Before you go any further, you need to decide which database you will use. See t
 ### Configure variables [config_install] ###
 
 1. If you downloaded Tracks 1.5 via Subversion, you need to duplicate the files `database.yml.tmpl` and `environment.yml.tmpl` and remove the `*.tmpl` extension from the duplicates. Similarly, duplicate `/log.tmpl` and remove the `*.tmpl` extension, then edit the files as described in steps 2 and 3.
-2. Open the file `/config/database.yml` and edit the `production:` section with the details of your database. If you are using MySQL the `adapter:` line should read `adapter: mysql`, `host: localhost` (in the majority of cases), and your username and password should match those you assigned when you created the database. If you are using SQLite3, you should have only two lines under the production section: `adapter: sqlite3` and `database: db/tracks-15.db`.
+2. Open the file `/config/database.yml` and edit the `production:` section with the details of your database. If you are using MySQL the `adapter:` line should read `adapter: mysql`, `host: localhost` (in the majority of cases), and your username and password should match those you assigned when you created the database. If you are using SQLite3, you should have only two lines under the production section: `adapter: sqlite3` and `database: db/tracks-15-blank.db`. If you downloaded the zipped file, the database.yml file is already configured to use the provided SQLite3 file.
 3. Open the file `/config/environment.rb`, and read through the settings to make sure that they suit your setup. In most cases, all you need to change is the `SALT = "change-me"` line (change the string "change-me" to some other string of your choice), and the time zone setting.
 4. If you are using Windows, you may need to check the 'shebang' lines (`#!/usr/bin/env ruby`) of the `/public/dispatch.*` files and all the files in the `/script` directory. They are set to `#!/usr/bin/env ruby` by default. This should work for all *nix based setups (Linux or Mac OS X), but Windows users will probably have to change it to something like `#c:/ruby/bin/ruby` to point to the Ruby binary on your system.
 
