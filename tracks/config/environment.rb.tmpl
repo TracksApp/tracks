@@ -85,4 +85,8 @@ end
 MOBILE_CONTENT_TYPE = 'tracks/mobile'
 Mime::Type.register(MOBILE_CONTENT_TYPE, :m)
 
-TRACKS_VERSION = '1.50-trunk'
+TRACKS_VERSION = '1.5-trunk'
+info = `svn info #{RAILS_ROOT} --config-dir /etc/subversion`[/Last Changed Rev: (.*?)\n/]
+if info
+  TRACKS_VERSION += '-rev'+info[/(\d+)/]
+end
