@@ -168,6 +168,7 @@ class TodosController < ApplicationController
         context.name = params['context_name'].strip
         context.save
         @new_context_created = true
+        @not_done_todos = [@todo]
       end
       params["todo"]["context_id"] = context.id
     end
