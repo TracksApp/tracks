@@ -9,6 +9,10 @@ click "css=#add_note_href"
 type "css=#new_note_body", "new note"
 click "add-new-note"
 
+# wait until new note is saved
+wait_for_text_not_present "new note"
+wait_for_text_present "new note"
+
 # check badge count is one more
 open "/notes/"
 assert_text 'badge_count', '3'

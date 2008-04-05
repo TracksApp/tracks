@@ -1,12 +1,19 @@
 setup :fixtures => :all
 login :as => 'admin'
 
+open "/"
+# we should start with 10 actions on home page
+assert_text 'badge_count', '10'
+
 # set project to hidden state
 open "/projects/2"
 click 'project_state_completed'
+# wait for flash before navigating away from project page
+wait_for_visible "flash"
 
 # monitor badge count on home page. It should be 7 at the start
 open "/"
+wait_for_visible 'badge_count'
 assert_text 'badge_count', '7'
 
 # add todo to hidden project

@@ -4,6 +4,9 @@ login :as => 'admin'
 # set project to hidden state
 open "/projects/2"
 click 'project_state_hidden'
+# wait for flash before navigating away from project page to make sure that
+# the changes have been saved
+wait_for_visible "flash"
 
 # monitor badge count on home page. It should be 7 at the start
 open "/"
