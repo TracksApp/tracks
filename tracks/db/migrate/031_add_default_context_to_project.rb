@@ -4,6 +4,6 @@ class AddDefaultContextToProject < ActiveRecord::Migration
   end
 
   def self.down
-    remove_column :projects, :default_context_id, :integer
+    remove_column :projects, :default_context_id
   end
 end
