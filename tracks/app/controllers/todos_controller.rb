@@ -448,7 +448,7 @@ class TodosController < ApplicationController
         @down_count = Todo.count(
           :all, 
           :conditions => ['todos.user_id = ? and todos.state = ? and contexts.hide = ? AND (projects.state = ? OR todos.project_id IS NULL)', current_user.id, 'active', false, 'active'], 
-          :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC", 
+          :group => "todos.id",
           :include => [ :project, :context ])
         # #@down_count = Todo.count_by_sql(['SELECT COUNT(*) FROM todos,
         # contexts WHERE todos.context_id = contexts.id and todos.user_id = ?
