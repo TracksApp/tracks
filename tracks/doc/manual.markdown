@@ -1,7 +1,7 @@
 Title:              Tracks 1.5 Manual
 Author:             Tracks Development Team
-Date:               2008-03-06
-Revision:           $Id: manual.markdown 733 2008-03-06 17:42:00Z bsag $
+Date:               2008-04-07
+Revision:           $Id: manual.markdown 811 2008-04-07 20:21:00Z bsag $
 Version:            1.5
 Copyright:			    2008 rousette.org.uk  
 					This work is licensed under a Creative Commons License.  
@@ -37,12 +37,11 @@ The Tracks interface is accessed through a web browser, so you need to run a web
 
 Tracks stores its data in a database, and you can either use SQLite3, MySQL or PostgreSQL. SQLite3 is the best choice for a single user (or a small number of users) on a local installation, while MySQL or PostgreSQL is better for multiple users on a remote installation.
 
-### All-in-one installations ###
+### Easy installation options ###
 
-This is the easiest solution for Mac OS X 10.4 or Windows users wanting to run Tracks locally.
+If you'd like to install Tracks on a local machine, try [BitNami](http://bitnami.org/stack/tracks) -- it runs on Windows, Mac OS X and Linux.
 
-1. **Mac OS X**. [Locomotive](http://locomotive.sourceforge.net/) is an all-in one installer for Mac OS X 10.4, which includes everything you need to run Tracks with a SQLite3 database. Locomotive doesn't work with Panther, and isn't really required for Leopard because the default Rails installation works very well. However, if you prefer to use Locomotive, it does work on Leopard.
-2. **Windows**. [Instant Rails](http://instantrails.rubyforge.org/wiki/wiki.pl) includes everything you need, including MySQL.
+If you'd like an easy way to access Tracks from any internet-connected computer, sign up for a free account at [Morph eXchange](http://www.morphexchange.com/). Sign up for a free account, then choose 'Subscriptions' to subscribe to the Tracks service.
 
 ### What is included with the Tracks package ###
 
@@ -57,6 +56,8 @@ If you don't want to (or can't) use one of the all in one installations, you'll 
 1. **Ruby**. Version 1.8.6 is recommended, but it is also possible to use 1.8.5, 1.8.4 and 1.8.2. Note that 1.8.3 is not compatible. If you are running Mac OS X Leopard, you already have Ruby 1.8.6 installed by default, so you have nothing to do here. You can get the source to compile yourself [here](http://ftp.ruby-lang.org/pub/ruby/1.8/ruby-1.8.6.tar.gz) for all platforms, or Windows users can use an easy [installer](http://rubyforge.org/frs/?group_id=167). If you're using a version of Mac OS X earlier than 10.5.0, it is recommended that you use the [instructions here](http://hivelogic.com/narrative/articles/ruby-rails-mongrel-mysql-osx) to install all the Rails dependencies, though you can skip the step to install Rails if you like.
 2. **RubyGems**. The gems needed by Rails to interact with the database have to be compiled on the platform on which they will be run, so we cannot include them with the Tracks package, unlike some other gems. So you will need to [download](http://rubyforge.org/frs/?group_id=126) and install RubyGems (run `ruby setup.rb` after extracting the package). Note that once again, Mac OS X Leopard users get an easy life, because RubyGems and the SQLite3 gem is already installed. Once installed you can use RubyGems to install the gems you need for your database. If you are using SQLite3, run `sudo gem install sqlite3-ruby`, then select the appropriate package for your platform (version 1.2.1 recommended). You can use MySQL without installing a gem, but installing the gem can speed things up a bit: `sudo install gem mysql`. If you're using Leopard, there are a few work-arounds necessary, which are explained on [Mac OS Forge](http://trac.macosforge.org/projects/ruby/wiki/Troubleshooting#IcannotbuildrubymysqlonLeopardwithmysql.combinaries). The ruby-mysql bindings can sometimes be a bit troublesome to install, so to be honest, it's probably not worth the bother unless you are trying to wring maximum speed out of your system. If you are using PostgreSQL, then you can install a postgres gem: `gem install postgres`.
 3. **Database**. The easiest option is to use SQLite3, as the database is included in the package. All you need then is the `sqlite3-ruby` gem, as described in step 2, and the SQLite3 libraries and binary (see [sqlite.org](http://sqlite.org/download.html) for downloads and installation instructions). If you want to use MySQL, download and install a package for your platform from [MySQL.com](http://dev.mysql.com/downloads/mysql/5.0.html). The basic steps for Postgresql should be similar to those for MySQL, but they will not be discussed further here.
+
+If you are using Unix, you might find [this guide](http://www.cooldown.com.ar/2006/12/16/install-tracks-on-ubuntu-or-debian/) by c00i90wn helpful. It was written for Tracks 1.043, but it should work for Tracks 1.5.
 
 ## Installation ##
 
@@ -116,7 +117,7 @@ If all goes well, you should see some text informing you that the Mongrel server
 
 ### Visit Tracks in a browser [signup_install] ###
 
-Visit `http://0.0.0.0:3000/signup` in a browser (or whatever URL and port was reported when you started the server in the step above) and chose a user name and password for admin user. Once logged in as admin, you can add other (ordinary level) users.
+Visit `http://0.0.0.0:3000/signup` in a browser (or whatever URL and port was reported when you started the server in the step above) and chose a user name and password for admin user. Once logged in as admin, you can add other (ordinary level) users. If you need to access Tracks from a mobile/cellular phone browser, visit `http://yourdomain.com/mobile/`. This mobile version is a special, lightweight version of Tracks, designed to use on a mobile browser.
 
 ### Customise Tracks [customise_install] ###
 
@@ -168,7 +169,7 @@ There are a few files you need to copy over from your old installation. If you c
 
 ### Update your old database to the new format [rake_upgrade] ###
 
-In a terminal, change directories so that you are inside the Tracks 1.5 directory. Then issue the command:
+In a terminal, change directories so that you are inside the Tracks 1.5 directory. Then issue the command to update your Tracks 1.043 database to the format required for Tracks 1.5:
 
 `rake db:migrate RAILS_ENV=production`
 
@@ -181,7 +182,7 @@ If you're still in the Tracks 1.5 root directory in a terminal, enter the follow
 `script/server -e production`
 
 Visit the URL indicated by the output (e.g. `** Mongrel available at 0.0.0.0:3000`
-) in a browser, and with any luck, you should be able to log in and find all your actions as you left them!
+) in a browser, and with any luck, you should be able to log in and find all your actions as you left them! If you need to access Tracks from a mobile/cellular phone browser, visit `http://yourdomain.com/mobile/`. This mobile version is a special, lightweight version of Tracks, designed to use on a mobile browser.
 
 ### Clean up your old installation [cleanup_upgrade] ###
 
@@ -204,4 +205,4 @@ The best option for versions prior to 1.043 is to follow the instructions below 
 9. Run the command `rake db_schema_import` inside the Tracks directory. This should import the upgraded schema for 1.043 into your new database.
 10. Run the command `rake load_exported_fixtures` which will import the contents of your old database from the fixtures files in `db/exported_fixtures`.
 11. If you are using Windows, you may need to check the 'shebang' lines (`#!/usr/bin/env ruby`)[^env] of the `/public/dispatch.*` files and all the files in the `/script` directory. They are set to `#!/usr/bin/env ruby` by default. Check the format of those lines in your old installation, and change the new ones as necessary.
-12. Try starting up the server with `script/server` to make sure that all your data has migrated successfully. If all is well, follow the instructions above to [upgrade from version 1.043][upgrading_1043] to Tracks 1.5
+12. Try starting up the server with `script/server` to make sure that all your data has migrated successfully. If all is well, follow the instructions above to [upgrade from version 1.043][upgrading_1043] to Tracks 1.5. If you need to access Tracks from a mobile/cellular phone browser, visit `http://yourdomain.com/mobile/`. This mobile version is a special, lightweight version of Tracks, designed to use on a mobile browser.
