@@ -20,7 +20,7 @@ class ConvertTodoToStateMachine < ActiveRecord::Migration
       end
       todo.save
     end
-    rename_column :todos, :completed, :completed_at
+    rename_column :todos, 'completed', 'completed_at' #bug in sqlite requires column names as strings
     remove_column :todos, :done
     remove_column :todos, :type
   end
@@ -28,7 +28,7 @@ class ConvertTodoToStateMachine < ActiveRecord::Migration
   def self.down
     add_column :todos, :done, :integer, :limit => 4, :default => 0, :null => false
     add_column :todos, :type, :string, :default => "Immediate", :null => false
-    rename_column :todos, :completed_at, :completed
+    rename_column :todos, 'completed_at', 'completed' #bug in sqlite requires column names as strings
     @todos = Todo.find(:all)
     @todos.each do |todo|
       todo.done = todo.state == 'completed'

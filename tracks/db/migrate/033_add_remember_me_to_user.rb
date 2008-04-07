@@ -8,6 +8,6 @@ class AddRememberMeToUser < ActiveRecord::Migration
   def self.down
     remove_column :users, :remember_token
     remove_column :users, :remember_token_expires_at
-    rename_column :users, :password, :crypted_password
+    rename_column :users,  'password', 'crypted_password' #bug in sqlite requires column names as strings
   end
 end
