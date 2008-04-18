@@ -10,17 +10,30 @@ class ProjectsController < ApplicationController
 
   def index
     @projects = current_user.projects(true)
-    @contexts = current_user.contexts(true)
-    init_not_done_counts(['project'])
-    if params[:only_active_with_no_next_actions]
-      @projects = @projects.select { |p| p.active? && count_undone_todos(p) == 0 }
+    if params[:projects_and_actions]
+      projects_and_actions
+    else      
+      @contexts = current_user.contexts(true)
+      init_not_done_counts(['project'])
+      if params[:only_active_with_no_next_actions]
+        @projects = @projects.select { |p| p.active? && count_undone_todos(p) == 0 }
+      end
+      respond_to do |format|
+        format.html  &render_projects_html
+        format.xml   { render :xml => @projects.to_xml( :except => :user_id )  }
+        format.rss   &render_rss_feed
+        format.atom  &render_atom_feed
+        format.text  &render_text_feed
+      end
     end
+  end
+  
+  def projects_and_actions
+    @projects = @projects.select { |p| p.active? }
     respond_to do |format|
-      format.html  &render_projects_html
-      format.xml   { render :xml => @projects.to_xml( :except => :user_id )  }
-      format.rss   &render_rss_feed
-      format.atom  &render_atom_feed
-      format.text  &render_text_feed
+      format.text  { 
+        render :action => 'index_text_projects_and_actions', :layout => false, :content_type => Mime::TEXT
+      }
     end
   end
 
