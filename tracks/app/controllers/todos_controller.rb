@@ -27,10 +27,13 @@ class TodosController < ApplicationController
   end
   
   def new
-    @projects = current_user.projects.find(:all)
+    @projects = current_user.projects.select { |p| p.active? }
     @contexts = current_user.contexts.find(:all)
     respond_to do |format|
-      format.m { render :action => "new_mobile" }
+      format.m { 
+        @new_mobile = true
+        render :action => "new_mobile" 
+      }
     end
   end
   
@@ -96,8 +99,9 @@ class TodosController < ApplicationController
   def show
     respond_to do |format|
       format.m do
-        @projects = current_user.projects.find(:all)
+        @projects = current_user.projects.select { |p| p.active? }
         @contexts = current_user.contexts.find(:all)
+        @edit_mobile = true
         render :action => 'show_mobile'
       end
       format.xml { render :xml => @todo.to_xml( :root => 'todo', :except => :user_id ) }
@@ -186,6 +190,11 @@ class TodosController < ApplicationController
     if params['done'] == '1' && !@todo.completed?
       @todo.complete!
     end
+    # strange. if checkbox is not checked, there is no 'done' in params.
+    # Therfore I've used the negation
+    if !(params['done'] == '1') && @todo.completed?
+      @todo.activate!
+    end
     
     @saved = @todo.update_attributes params["todo"]
     @context_changed = @original_item_context_id != @todo.context_id
@@ -266,7 +275,12 @@ class TodosController < ApplicationController
     current_user.deferred_todos.find_and_activate_ready
     @not_done_todos = current_user.deferred_todos
     @count = @not_done_todos.size
-    @default_project_context_name_map = build_default_project_context_name_map(@projects).to_json
+    @default_project_context_name_map = build_default_project_context_name_map(@projects).to_json unless mobile?
+    
+    respond_to do |format|
+      format.html
+      format.m { render :action => 'mobile_list_deferred' }
+    end
   end
   
   # Check for any due tickler items, activate them Called by
@@ -293,6 +307,12 @@ class TodosController < ApplicationController
   def tag
     @source_view = params['_source_view'] || 'tag'
     @tag_name = params[:name]
+    
+    # mobile tags are routed with :name ending on .m. So we need to chomp it
+    if mobile?
+      @tag_name = @tag_name.chomp('.m')
+    end
+    
     @tag = Tag.find_by_name(@tag_name)
     if @tag.nil?
       @tag = Tag.new(:name => @tag_name)
@@ -312,7 +332,14 @@ class TodosController < ApplicationController
     @done = tag_collection.find(:all, :limit => max_completed, :conditions => ['taggings.user_id = ? and state = ?', current_user.id, 'completed'])
     # Set count badge to number of items with this tag
     @not_done_todos.empty? ? @count = 0 : @count = @not_done_todos.size
-    @default_project_context_name_map = build_default_project_context_name_map(@projects).to_json
+    # #@default_project_context_name_map =
+    # build_default_project_context_name_map(@projects).to_json
+    respond_to do |format|
+      format.html
+      format.m { 
+        render :action => "mobile_tag"         
+      }
+    end
   end
   
   private  
@@ -425,21 +452,15 @@ class TodosController < ApplicationController
   end
     
   def init_todos_for_mobile_view
-    if @context or @project
-      conditions = ['state = ?', 'active']
-    else
-      conditions = ['state = ? AND hide = ?', 'active', false] # hidden todos should not be visible in the homepage view
-    end
-      
-    @page = params[:page]
-    @todos = current_user.todos.paginate(:all, 
-      :conditions => conditions, 
-      :include => [:context],
-      :order =>  'due IS NULL, due ASC, todos.created_at ASC',
-      :page => @page, :per_page => prefs.mobile_todos_per_page)
-    @pagination_params = { :format => :m }
-    @pagination_params[:context_id] = @context.to_param if @context
-    @pagination_params[:project_id] = @project.to_param if @project
+    # Note: these next two finds were previously using current_users.todos.find
+    # but that broke with_scope for :limit
+
+    # Exclude hidden projects from the home page
+    @not_done_todos = Todo.find(:all, 
+      :conditions => ['todos.user_id = ? AND todos.state = ? AND contexts.hide = ?', 
+        current_user.id, 'active', false], 
+      :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC", 
+      :include => [ :project, :context ])
   end
     
   def determine_down_count
@@ -540,6 +561,7 @@ class TodosController < ApplicationController
         @page_title += " in project #{@project.name}" 
         @down_count = @project.not_done_todo_count
       else
+        @home = true
         determine_down_count
       end
     

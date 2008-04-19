@@ -1,33 +1,5 @@
-<%= render_flash %>
-<% if @todos.length == 0 -%>
-  <p>There are no incomplete actions in this <%= @type %></p>
+<% if @not_done_todos.empty? -%>
+  <p>There are no incomplete actions</p>
 <% else -%>
-  <ul>
-  <% for todo in @todos -%>
-    <li id="<%= dom_id(todo) %>">
-      <%= link_to "&raquo;", formatted_todo_path(todo, :m) %>
-      <% if todo.due? -%>
-        <%= due_date_mobile(todo.due) %>
-      <% end -%>
-      <%= todo.description %>
-      (<em><%= todo.context.name %></em>)
-    </li>
-  <% end -%>
-  </ul>
-  <% if @down_count > @prefs.mobile_todos_per_page -%>
-    <hr />
-    Pages: <%= formatted_pagination(@todos) %>
-  <% end -%>
-<% end -%>
-<hr />
-<% form_tag( formatted_filter_to_context_todos_path(:m), :method => :post ) do -%>
-<%= collection_select( "context", "id", @contexts, "id", "name", 
-                        { :include_blank => true } ) %>
-<%= submit_tag( "Go", :id => 'change_context' ) %>
-<% end -%>
-
-<% form_tag( formatted_filter_to_project_todos_path(:m), :method => :post ) do -%>
-<%= collection_select( "project", "id", @projects, "id", "name",
-                        { :include_blank => true } ) %>
-<%= submit_tag( "Go", :id => 'change_project' ) %>
+  <%= render :partial => "contexts/mobile_context", :collection => @contexts_to_show %>
 <% end -%>

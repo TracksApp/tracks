@@ -13,6 +13,16 @@ class NotesController < ApplicationController
   def show
     @note = current_user.notes.find(params['id'])
     @page_title = "TRACKS::Note " + @note.id.to_s
+    respond_to do |format|
+      format.html
+      format.m &render_note_mobile
+    end
+  end
+
+  def render_note_mobile
+    lambda do
+      render :action => 'note_mobile'
+    end
   end
 
   def create

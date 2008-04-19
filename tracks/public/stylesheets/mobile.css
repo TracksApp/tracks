@@ -1,9 +1,85 @@
-a {text-decoration: none;}
+body {
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: smaller;
+}
 
-h1 {color: #f00;}
+div.footer {
+    font-size: XX-small;
+    color: #999999;
+    text-align: center;
+    }
+    
+div.footer a {        
+    text-decoration: underline;
+    color: #999999;
+    }
 
-ul {list-style-type: none;}
+.m_t_d a {
+    text-decoration: none;
+    color: #000000;
+}
 
+.m_t_d a:hover {
+    text-decoration: underline;
+    color: #0000FF;
+}
+
+.m_t_d .red, .m_t_d .amber, .m_t_d .orange, .m_t_d .green{
+    background-color: #999999;
+}
+
+h1 {
+    color: #f00;
+    font-size: small;
+}
+
+h2 {
+    background-color: #cccccc;
+    font-size : small;
+    margin-top: 10px;
+    margin-bottom: 0;
+}
+
+h4.alert  {
+  border: 1px solid #666666; 
+   text-align: center;
+}
+
+h4.warning  {
+  border: 1px solid #ED2E38; 
+  background-color: #F6979C;
+  color: #000;
+}
+h4.error  {
+   color:#fff; 
+   background:#c00;
+}
+h4.notice {
+  border: 1px solid #007E00; 
+  background-color: #c2ffc2;
+  color: #007E00;
+}
+
+div.t {
+    padding-left:5px;
+}
+
+span.tag {
+  font-size: XX-small;
+  background-color: #CCE7FF;
+  color: #000;
+  padding: 1px;
+  margin-right: 2px;
+}
+
+span.r {
+    font-size: XX-small;
+    color: #777777;
+}
+
+span.prj, span.ctx{
+    font-size: X-small;    
+}
 /*   Draw attention to some text 
     Same format as traffic lights */
 .red {
@@ -44,6 +120,7 @@ ul {list-style-type: none;}
 .count {
       color: #fff;
       background: #000;
+      font-size: medium;     
 }
 
 .errors {

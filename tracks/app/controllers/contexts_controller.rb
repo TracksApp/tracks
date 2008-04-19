@@ -14,6 +14,7 @@ class ContextsController < ApplicationController
     init_not_done_counts(['context'])
     respond_to do |format|
       format.html &render_contexts_html
+      format.m    &render_contexts_mobile
       format.xml  { render :xml => @contexts.to_xml( :except => :user_id ) }
       format.rss  &render_contexts_rss_feed
       format.atom &render_contexts_atom_feed
@@ -31,6 +32,7 @@ class ContextsController < ApplicationController
       @page_title = "TRACKS::Context: #{@context.name}"
       respond_to do |format|
         format.html
+        format.m    &render_context_mobile
         format.xml  { render :xml => @context.to_xml( :except => :user_id ) }
       end
     end
@@ -120,6 +122,20 @@ class ContextsController < ApplicationController
       @no_contexts = @contexts.empty?
       @count = @contexts.size
       render
+    end
+  end
+  
+  def render_contexts_mobile
+    lambda do
+      @active_contexts = @contexts.find(:all, { :conditions => ["hide = ?", false]})
+      @hidden_contexts = @contexts.find(:all, { :conditions => ["hide = ?", true]})
+      render :action => 'index_mobile'
+    end
+  end
+    
+  def render_context_mobile
+    lambda do
+      render :action => 'mobile_show_context'
     end
   end
 

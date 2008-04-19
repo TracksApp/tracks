@@ -20,6 +20,7 @@ class ProjectsController < ApplicationController
       end
       respond_to do |format|
         format.html  &render_projects_html
+        format.m     &render_projects_mobile
         format.xml   { render :xml => @projects.to_xml( :except => :user_id )  }
         format.rss   &render_rss_feed
         format.atom  &render_atom_feed
@@ -38,7 +39,8 @@ class ProjectsController < ApplicationController
   end
 
   def show
-    init_data_for_sidebar
+    init_data_for_sidebar unless mobile?
+    @projects = current_user.projects
     @page_title = "TRACKS::Project: #{@project.name}"
     @project.todos.with_scope :find => { :include => [:context, :tags] } do
       @not_done = @project.not_done_todos(:include_project_hidden_todos => true)
@@ -54,6 +56,7 @@ class ProjectsController < ApplicationController
     @default_project_context_name_map = build_default_project_context_name_map(@projects).to_json
     respond_to do |format|
       format.html
+      format.m     &render_project_mobile
       format.xml   { render :xml => @project.to_xml( :except => :user_id )  }
     end
   end
@@ -188,6 +191,27 @@ class ProjectsController < ApplicationController
     end
   end
 
+  def render_projects_mobile
+    lambda do
+      @active_projects = @projects.select{ |p| p.active? }
+      @hidden_projects = @projects.select{ |p| p.hidden? }
+      @completed_projects = @projects.select{ |p| p.completed? }
+      render :action => 'index_mobile'
+    end
+  end
+    
+  def render_project_mobile
+    lambda do
+      if @project.default_context.nil?
+        @project_default_context = "This project does not have a default context"
+      else
+        @project_default_context = "The default context for this project is "+
+          @project.default_context.name
+      end
+      render :action => 'project_mobile'
+    end
+  end
+    
   def render_rss_feed
     lambda do
       render_rss_feed_for @projects, :feed => feed_options,

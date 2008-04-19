@@ -34,12 +34,16 @@ ActionController::Routing::Routes.draw do |map|
   map.with_options :controller => "todos" do |todos|
     todos.home '', :action => "index"
     todos.tickler 'tickler', :action => "list_deferred"
+    todos.mobile_tickler 'tickler.m', :action => "list_deferred", :format => 'm'
     todos.done 'done', :action => "completed"
     todos.done_archive 'done/archive', :action => "completed_archive"
     
     # This route works for tags with dots like /todos/tag/version1.5
     # please note that this pattern consumes everything after /todos/tag
     # so /todos/tag/version1.5.xml will result in :name => 'version1.5.xml'
+    # UPDATE: added support for mobile view. All tags ending on .m will be
+    # routed to mobile view of tags.
+    todos.tag 'todos/tag/:name', :action => "tag", :format => 'm', :name => /.*\.m/
     todos.tag 'todos/tag/:name', :action => "tag", :name => /.*/
     
     todos.mobile 'mobile', :action => "index", :format => 'm'
@@ -49,6 +53,7 @@ ActionController::Routing::Routes.draw do |map|
   
   map.resources :notes
   map.feeds 'feeds', :controller => 'feedlist', :action => 'index'
+  map.feeds 'feeds.m', :controller => 'feedlist', :action => 'index', :format => 'm'
   
   map.preferences 'preferences', :controller => 'preferences', :action => 'index'
   map.integrations 'integrations', :controller => 'integrations', :action => 'index'

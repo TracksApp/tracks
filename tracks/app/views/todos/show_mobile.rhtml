@@ -1,5 +1,5 @@
 <% form_tag formatted_todo_path(@todo, :m), :method => :put do %>
-  <%= render :partial => 'edit_mobile' %>
+  <%= render :partial => 'edit_mobile', :locals => { :parent_container_type => "show_mobile" } %>
   <p><input type="submit" value="Update" tabindex="6" /></p>
 <% end -%>
-<%= link_to "Back", formatted_todos_path(:m) %>
+<% #= link_to "Back", formatted_todos_path(:m) %>

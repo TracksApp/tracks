@@ -103,6 +103,17 @@ module TodosHelper
     "<span class='tags'>#{tag_list}</span>"
   end
   
+  def tag_list_mobile
+    tags_except_starred = @todo.tags.reject{|t| t.name == Todo::STARRED_TAG_NAME}
+    # removed the link. TODO: add link to mobile view of tagged actions
+    tag_list = tags_except_starred.collect{|t| 
+      "<span class=\"tag #{t.name.gsub(' ','-')}\">" + 
+        link_to(t.name, {:action => "tag", :controller => "todos", :id => t.name+".m"}) + 
+        #        link_to(t.name, formatted_tag_path(t, :m)) +
+      "</span>"}.join('')
+    "<span class='tags'>#{tag_list}</span>"
+  end
+  
   def deferred_due_date
     if @todo.deferred? && @todo.due
       "(action due on #{format_date(@todo.due)})"

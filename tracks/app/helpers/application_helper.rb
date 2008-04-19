@@ -115,6 +115,10 @@ module ApplicationHelper
     link_to( descriptor, project_path(project), :title => "View project: #{project.name}" )
   end
   
+  def link_to_project_mobile(project, descriptor = sanitize(project.name))
+    link_to( descriptor, formatted_project_path(project, :m), :title => "View project: #{project.name}" )
+  end
+  
   def item_link_to_context(item)
     descriptor = "[C]"
     descriptor = "[#{item.context.name}]" if prefs.verbose_action_descriptors

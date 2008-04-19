@@ -1,0 +1,8 @@
+<h2>Active projects</h2>
+<%= render :partial => 'mobile_project_listing', :collection => @active_projects%>
+
+<h2>Hidden projects</h2>
+<%= render :partial => 'mobile_project_listing', :collection => @hidden_projects %>
+
+<h2>Completed projects</h2>
+<%= render :partial => 'mobile_project_listing', :collection => @completed_projects %>
