@@ -1,6 +1,5 @@
 <% project = @project %>
 <%= project_next_prev_mobile %>
-<hr/>
 <h2><%=project.name%></h2>
 <% unless @project.description.blank? -%>
 <div class="project_description"><%= sanitize(@project.description) %></div>

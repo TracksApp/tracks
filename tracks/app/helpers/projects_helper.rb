@@ -35,12 +35,12 @@ module ProjectsHelper
     html = ''
     unless @previous_project.nil?
       project_name = truncate(@previous_project.name, 40, "...")
-      html << link_to_project_mobile(@previous_project, "&laquo; #{project_name}")
+      html << link_to_project_mobile(@previous_project, "5", "&laquo; 5-#{project_name}")
     end
     html << ' | ' if @previous_project && @next_project
     unless @next_project.nil?
       project_name = truncate(@next_project.name, 40, "...")
-      html << link_to_project_mobile(@next_project, "#{project_name} &raquo;")
+      html << link_to_project_mobile(@next_project, "6", "6-#{project_name} &raquo;")
     end
     html
   end
