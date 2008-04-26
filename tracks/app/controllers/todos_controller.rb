@@ -356,10 +356,11 @@ class TodosController < ApplicationController
 
   def with_feed_query_scope(&block)
     unless TodosController.is_feed_request(request)
-      yield
-      return
+      Todo.with_scope :find => {:conditions => ['todos.state = ?', 'active']} do
+        yield
+        return
+      end
     end
-
     condition_builder = FindConditionBuilder.new
 
     if params.key?('done')
@@ -440,10 +441,10 @@ class TodosController < ApplicationController
             # current_users.todos.find but that broke with_scope for :limit
 
             # Exclude hidden projects from count on home page
-            @todos = Todo.find(:all, :conditions => ['todos.user_id = ? and todos.state = ?', current_user.id, 'active'], :include => [ :project, :context, :tags ])
+            @todos = Todo.find(:all, :conditions => ['todos.user_id = ?', current_user.id], :include => [ :project, :context, :tags ])
 
             # Exclude hidden projects from the home page
-            @not_done_todos = Todo.find(:all, :conditions => ['todos.user_id = ? and todos.state = ? AND contexts.hide = ? AND (projects.state = ? OR todos.project_id IS NULL)', current_user.id, 'active', false, 'active'], :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC", :include => [ :project, :context, :tags ])
+            @not_done_todos = Todo.find(:all, :conditions => ['todos.user_id = ? AND contexts.hide = ? AND (projects.state = ? OR todos.project_id IS NULL)', current_user.id, false, 'active'], :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC", :include => [ :project, :context, :tags ])
           end
 
         end
