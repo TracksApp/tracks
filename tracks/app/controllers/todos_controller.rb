@@ -32,6 +32,7 @@ class TodosController < ApplicationController
     respond_to do |format|
       format.m { 
         @new_mobile = true
+        @return_path=cookies[:mobile_url]
         render :action => "new_mobile" 
       }
     end
@@ -102,6 +103,7 @@ class TodosController < ApplicationController
         @projects = current_user.projects.select { |p| p.active? }
         @contexts = current_user.contexts.find(:all)
         @edit_mobile = true
+        @return_path=cookies[:mobile_url]
         render :action => 'show_mobile'
       end
       format.xml { render :xml => @todo.to_xml( :root => 'todo', :except => :user_id ) }
@@ -208,7 +210,11 @@ class TodosController < ApplicationController
       format.xml { render :xml => @todo.to_xml( :except => :user_id ) }
       format.m do
         if @saved
-          redirect_to formatted_todos_path(:m)
+          if cookies[:mobile_url]
+            redirect_to cookies[:mobile_url]
+          else
+            redirect_to formatted_todos_path(:m)
+          end
         else
           render :action => "edit", :format => :m
         end
@@ -275,6 +281,7 @@ class TodosController < ApplicationController
     current_user.deferred_todos.find_and_activate_ready
     @not_done_todos = current_user.deferred_todos
     @count = @not_done_todos.size
+    @down_count = @count
     @default_project_context_name_map = build_default_project_context_name_map(@projects).to_json unless mobile?
     
     respond_to do |format|
@@ -332,11 +339,13 @@ class TodosController < ApplicationController
     @done = tag_collection.find(:all, :limit => max_completed, :conditions => ['taggings.user_id = ? and state = ?', current_user.id, 'completed'])
     # Set count badge to number of items with this tag
     @not_done_todos.empty? ? @count = 0 : @count = @not_done_todos.size
-    # #@default_project_context_name_map =
+    @down_count = @count 
+    # @default_project_context_name_map =
     # build_default_project_context_name_map(@projects).to_json
     respond_to do |format|
       format.html
       format.m { 
+        cookies[:mobile_url]=request.request_uri
         render :action => "mobile_tag"         
       }
     end
@@ -555,16 +564,9 @@ class TodosController < ApplicationController
   def render_todos_mobile
     lambda do
       @page_title = "All actions"
-      if @context
-        @page_title += " in context #{@context.name}" 
-        @down_count = @context.not_done_todo_count
-      elsif @project
-        @page_title += " in project #{@project.name}" 
-        @down_count = @project.not_done_todo_count
-      else
-        @home = true
-        determine_down_count
-      end
+      @home = true
+      cookies[:mobile_url]=request.request_uri
+      determine_down_count
     
       render :action => 'index_mobile'
     end

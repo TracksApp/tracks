@@ -127,14 +127,21 @@ class ContextsController < ApplicationController
   
   def render_contexts_mobile
     lambda do
+      @page_title = "TRACKS::List Contexts"
       @active_contexts = @contexts.find(:all, { :conditions => ["hide = ?", false]})
       @hidden_contexts = @contexts.find(:all, { :conditions => ["hide = ?", true]})
+      @down_count = @active_contexts.size + @hidden_contexts.size 
+      cookies[:mobile_url]=request.request_uri
       render :action => 'index_mobile'
     end
   end
     
   def render_context_mobile
     lambda do
+      @page_title = "TRACKS::List actions in "+@context.name
+      @not_done = @not_done_todos.select {|t| t.context_id == @context.id } 
+      @down_count = @not_done.size 
+      cookies[:mobile_url]=request.request_uri
       render :action => 'mobile_show_context'
     end
   end

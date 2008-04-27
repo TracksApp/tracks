@@ -1,25 +1,41 @@
 setup :fixtures => :all
 login :as => 'admin'
 
+# open home page
 open '/m'
 wait_for_title "All actions"
 wait_for_text 'css=h1 span.count', '10'
 
-click_and_wait "link=2"
-verify_title "All actions"
-wait_for_text 'css=h1 span.count', '10'
-
-select "context_id", "label=agenda"
-click_and_wait "change_context"
-verify_title "All actions in context agenda"
+# open context page
+click_and_wait "link=2-Contexts"
+verify_title "TRACKS::List Contexts"
+# choose agenda context
+click_and_wait "link=agenda"
+verify_title "TRACKS::List actions in agenda"
 wait_for_text 'css=h1 span.count', '5'
 
-select "context_id", "label=call"
-click_and_wait "change_context"
-verify_title "All actions in context call"
+# click on tag foo to go to tag page
+click_and_wait "link=foo"
+verify_title "TRACKS::Tagged with 'foo'"
+wait_for_text 'css=h1 span.count', '2'
+
+click_and_wait "link=3-Projects"
+wait_for_text 'css=h1 span.count', '3'
+click_and_wait "link=Build a working time machine"
 wait_for_text 'css=h1 span.count', '3'
 
-select "project_id", "label=Build a working time machine"
-click_and_wait "change_project"
-verify_title "All actions in project Build a working time machine"
-wait_for_text 'css=h1 span.count', '2'
+# follow link of action to edit form and mark done
+click_and_wait "link=Select Delorean model"
+open_and_wait '/todos/6.m'
+click "done"
+click_and_wait "//input[@value='Update']"
+# should return to project view
+verify_title "TRACKS::Project: Build a working time machine"
+open_and_wait '/m'
+# on home page the count should be increased
+wait_for_text 'css=h1 span.count', '9'
+
+# just test the navigation. 
+click_and_wait "link=Tickler"
+wait_for_text 'css=h1 span.count', '1'
+click_and_wait "link=Feeds"

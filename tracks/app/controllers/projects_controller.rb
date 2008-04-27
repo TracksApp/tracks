@@ -51,6 +51,7 @@ class ProjectsController < ApplicationController
     @max_completed = current_user.prefs.show_number_completed
     
     @count = @not_done.size
+    @down_count = @count + @deferred.size 
     @next_project = current_user.projects.next_from(@project)
     @previous_project = current_user.projects.previous_from(@project)
     @default_project_context_name_map = build_default_project_context_name_map(@projects).to_json
@@ -196,6 +197,8 @@ class ProjectsController < ApplicationController
       @active_projects = @projects.select{ |p| p.active? }
       @hidden_projects = @projects.select{ |p| p.hidden? }
       @completed_projects = @projects.select{ |p| p.completed? }
+      @down_count = @active_projects.size + @hidden_projects.size + @completed_projects.size 
+      cookies[:mobile_url]=request.request_uri
       render :action => 'index_mobile'
     end
   end
@@ -208,6 +211,7 @@ class ProjectsController < ApplicationController
         @project_default_context = "The default context for this project is "+
           @project.default_context.name
       end
+      cookies[:mobile_url]=request.request_uri
       render :action => 'project_mobile'
     end
   end
