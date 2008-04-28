@@ -6,23 +6,16 @@ module ActiveRecord
         construct_sql
       end
 
-      def create(attributes = {}, replace_existing = true)
-        record = build(attributes, replace_existing)
-        record.save
-        record
+      def create(attrs = {}, replace_existing = true)
+        new_record(replace_existing) { |klass| klass.create(attrs) }
       end
 
-      def build(attributes = {}, replace_existing = true)
-        record = @reflection.klass.new(attributes)
+      def create!(attrs = {}, replace_existing = true)
+        new_record(replace_existing) { |klass| klass.create!(attrs) }
+      end
 
-        if replace_existing
-          replace(record, true) 
-        else
-          record[@reflection.primary_key_name] = @owner.id unless @owner.new_record?
-          self.target = record
-        end
-
-        record
+      def build(attrs = {}, replace_existing = true)
+        new_record(replace_existing) { |klass| klass.new(attrs) }
       end
 
       def replace(obj, dont_save = false)
@@ -74,6 +67,29 @@ module ActiveRecord
               @finder_sql = "#{@reflection.table_name}.#{@reflection.primary_key_name} = #{@owner.quoted_id}"
           end
           @finder_sql << " AND (#{conditions})" if conditions
+        end
+        
+        def construct_scope
+          create_scoping = {}
+          set_belongs_to_association_for(create_scoping)
+          { :create => create_scoping }
+        end
+
+        def new_record(replace_existing)
+          # Make sure we load the target first, if we plan on replacing the existing
+          # instance. Otherwise, if the target has not previously been loaded
+          # elsewhere, the instance we create will get orphaned.
+          load_target if replace_existing
+          record = @reflection.klass.send(:with_scope, :create => construct_scope[:create]) { yield @reflection.klass }
+
+          if replace_existing
+            replace(record, true) 
+          else
+            record[@reflection.primary_key_name] = @owner.id unless @owner.new_record?
+            self.target = record
+          end
+
+          record
         end
     end
   end

@@ -1,5 +1,4 @@
-require 'test/unit'
-require File.dirname(__FILE__) + "/../abstract_unit"
+require "#{File.dirname(__FILE__)}/../abstract_unit"
 
 class DateHelperTest < Test::Unit::TestCase
   include ActionView::Helpers::DateHelper
@@ -14,11 +13,14 @@ class DateHelperTest < Test::Unit::TestCase
       def id_before_type_cast
         123
       end
+      def to_param
+        '123'
+      end
     end
   end
 
   def test_distance_in_words
-    from = Time.mktime(2004, 3, 6, 21, 45, 0)
+    from = Time.mktime(2004, 6, 6, 21, 45, 0)
 
     # 0..1 with include_seconds
     assert_equal "less than 5 seconds", distance_of_time_in_words(from, from + 0.seconds, true)
@@ -64,16 +66,16 @@ class DateHelperTest < Test::Unit::TestCase
     assert_equal "about 1 month", distance_of_time_in_words(from, from + 29.days + 23.hours + 59.minutes + 30.seconds)
     assert_equal "about 1 month", distance_of_time_in_words(from, from + 59.days + 23.hours + 59.minutes + 29.seconds)
 
-    # 86400..525959
+    # 86400..525599
     assert_equal "2 months", distance_of_time_in_words(from, from + 59.days + 23.hours + 59.minutes + 30.seconds)
     assert_equal "12 months", distance_of_time_in_words(from, from + 1.years - 31.seconds)
 
-    # 525960..1051919
+    # 525600..1051199
     assert_equal "about 1 year", distance_of_time_in_words(from, from + 1.years - 30.seconds)
     assert_equal "about 1 year", distance_of_time_in_words(from, from + 2.years - 31.seconds)
 
-    # > 1051920
-    assert_equal "over 2 years", distance_of_time_in_words(from, from + 2.years - 30.seconds)
+    # > 1051199
+    assert_equal "over 2 years", distance_of_time_in_words(from, from + 2.years + 30.seconds)
     assert_equal "over 10 years", distance_of_time_in_words(from, from + 10.years)
 
     # test to < from
@@ -94,8 +96,7 @@ class DateHelperTest < Test::Unit::TestCase
   end
 
   def test_time_ago_in_words
-    t = Time.now - 1.years
-    assert_equal "about 1 year", time_ago_in_words(t)
+    assert_equal "about 1 year", time_ago_in_words(1.year.ago - 1.day)
   end
 
   def test_select_day
@@ -226,6 +227,14 @@ class DateHelperTest < Test::Unit::TestCase
     assert_equal expected, select_month(8, :use_month_names => month_names)
   end
 
+  def test_select_month_with_hidden
+    assert_dom_equal "<input type=\"hidden\" id=\"date_month\" name=\"date[month]\" value=\"8\" />\n", select_month(8, :use_hidden => true)
+  end
+
+  def test_select_month_with_hidden_and_field_name
+    assert_dom_equal "<input type=\"hidden\" id=\"date_mois\" name=\"date[mois]\" value=\"8\" />\n", select_month(8, :use_hidden => true, :field_name => 'mois')
+  end
+
   def test_select_year
     expected = %(<select id="date_year" name="date[year]">\n)
     expected << %(<option value="2003" selected="selected">2003</option>\n<option value="2004">2004</option>\n<option value="2005">2005</option>\n)
@@ -271,6 +280,14 @@ class DateHelperTest < Test::Unit::TestCase
 
     assert_equal expected, select_year(Time.mktime(2005, 8, 16), :start_year => 2005, :end_year => 2003)
     assert_equal expected, select_year(2005, :start_year => 2005, :end_year => 2003)
+  end
+
+  def test_select_year_with_hidden
+    assert_dom_equal "<input type=\"hidden\" id=\"date_year\" name=\"date[year]\" value=\"2007\" />\n", select_year(2007, :use_hidden => true)
+  end
+
+  def test_select_year_with_hidden_and_field_name
+    assert_dom_equal "<input type=\"hidden\" id=\"date_anno\" name=\"date[anno]\" value=\"2007\" />\n", select_year(2007, :use_hidden => true, :field_name => 'anno')
   end
 
   def test_select_hour
@@ -367,6 +384,14 @@ class DateHelperTest < Test::Unit::TestCase
     expected << "</select>\n"
 
     assert_equal expected, select_minute(nil, { :include_blank => true , :minute_step => 15 })
+  end
+
+  def test_select_minute_with_hidden
+    assert_dom_equal "<input type=\"hidden\" id=\"date_minute\" name=\"date[minute]\" value=\"8\" />\n", select_minute(8, :use_hidden => true)
+  end
+
+  def test_select_minute_with_hidden_and_field_name
+    assert_dom_equal "<input type=\"hidden\" id=\"date_minuto\" name=\"date[minuto]\" value=\"8\" />\n", select_minute(8, :use_hidden => true, :field_name => 'minuto')
   end
 
   def test_select_second
@@ -784,6 +809,23 @@ class DateHelperTest < Test::Unit::TestCase
     expected << "</select>\n"
 
     assert_equal expected, date_select("post", "written_on")
+  end
+
+  def test_date_select_without_day
+    @post = Post.new
+    @post.written_on = Date.new(2004, 6, 15)
+
+    expected = "<input type=\"hidden\" id=\"post_written_on_3i\" name=\"post[written_on(3i)]\" value=\"1\" />\n"
+
+    expected <<  %{<select id="post_written_on_2i" name="post[written_on(2i)]">\n}
+    expected << %{<option value="1">January</option>\n<option value="2">February</option>\n<option value="3">March</option>\n<option value="4">April</option>\n<option value="5">May</option>\n<option value="6" selected="selected">June</option>\n<option value="7">July</option>\n<option value="8">August</option>\n<option value="9">September</option>\n<option value="10">October</option>\n<option value="11">November</option>\n<option value="12">December</option>\n}
+    expected << "</select>\n"
+
+    expected << %{<select id="post_written_on_1i" name="post[written_on(1i)]">\n}
+    expected << %{<option value="1999">1999</option>\n<option value="2000">2000</option>\n<option value="2001">2001</option>\n<option value="2002">2002</option>\n<option value="2003">2003</option>\n<option value="2004" selected="selected">2004</option>\n<option value="2005">2005</option>\n<option value="2006">2006</option>\n<option value="2007">2007</option>\n<option value="2008">2008</option>\n<option value="2009">2009</option>\n}
+    expected << "</select>\n"
+
+    assert_equal expected, date_select("post", "written_on", :order => [ :month, :year ])
   end
 
   def test_date_select_within_fields_for
@@ -1318,5 +1360,79 @@ class DateHelperTest < Test::Unit::TestCase
     expected << "</select>\n"
 
     assert_equal expected, datetime_select("post", "updated_at", :order => [:day, :month])
+  end
+
+  def test_datetime_select_with_default_value_as_time
+    @post = Post.new
+    @post.updated_at = nil
+
+    expected = %{<select id="post_updated_at_1i" name="post[updated_at(1i)]">\n}
+    2001.upto(2011) { |i| expected << %(<option value="#{i}"#{' selected="selected"' if i == 2006}>#{i}</option>\n) }
+    expected << "</select>\n"
+    expected << %{<select id="post_updated_at_2i" name="post[updated_at(2i)]">\n}
+    1.upto(12) { |i| expected << %(<option value="#{i}"#{' selected="selected"' if i == 9}>#{Date::MONTHNAMES[i]}</option>\n) }
+    expected << "</select>\n"
+    expected << %{<select id="post_updated_at_3i" name="post[updated_at(3i)]">\n}
+    1.upto(31) { |i| expected << %(<option value="#{i}"#{' selected="selected"' if i == 19}>#{i}</option>\n) }
+    expected << "</select>\n"
+
+    expected << " &mdash; "
+
+    expected << %{<select id="post_updated_at_4i" name="post[updated_at(4i)]">\n}
+    0.upto(23) { |i| expected << %(<option value="#{leading_zero_on_single_digits(i)}"#{' selected="selected"' if i == 15}>#{leading_zero_on_single_digits(i)}</option>\n) }
+    expected << "</select>\n"
+    expected << " : "
+    expected << %{<select id="post_updated_at_5i" name="post[updated_at(5i)]">\n}
+    0.upto(59) { |i| expected << %(<option value="#{leading_zero_on_single_digits(i)}"#{' selected="selected"' if i == 16}>#{leading_zero_on_single_digits(i)}</option>\n) }
+    expected << "</select>\n"
+
+    assert_equal expected, datetime_select("post", "updated_at", :default => Time.local(2006, 9, 19, 15, 16, 35))
+  end
+
+  def test_include_blank_overrides_default_option
+    @post = Post.new
+    @post.updated_at = nil
+
+    expected = %{<select id="post_updated_at_1i" name="post[updated_at(1i)]">\n}
+    expected << %(<option value=""></option>\n)
+    2002.upto(2012) { |i| expected << %(<option value="#{i}">#{i}</option>\n) }
+    expected << "</select>\n"
+    expected << %{<select id="post_updated_at_2i" name="post[updated_at(2i)]">\n}
+    expected << %(<option value=""></option>\n)
+    1.upto(12) { |i| expected << %(<option value="#{i}">#{Date::MONTHNAMES[i]}</option>\n) }
+    expected << "</select>\n"
+    expected << %{<select id="post_updated_at_3i" name="post[updated_at(3i)]">\n}
+    expected << %(<option value=""></option>\n)
+    1.upto(31) { |i| expected << %(<option value="#{i}">#{i}</option>\n) }
+    expected << "</select>\n"
+
+    assert_equal expected, date_select("post", "updated_at", :default => Time.local(2006, 9, 19, 15, 16, 35), :include_blank => true)
+  end
+
+  def test_datetime_select_with_default_value_as_hash
+    @post = Post.new
+    @post.updated_at = nil
+
+    expected = %{<select id="post_updated_at_1i" name="post[updated_at(1i)]">\n}
+    (Time.now.year - 5).upto(Time.now.year + 5) { |i| expected << %(<option value="#{i}"#{' selected="selected"' if i == Time.now.year}>#{i}</option>\n) }
+    expected << "</select>\n"
+    expected << %{<select id="post_updated_at_2i" name="post[updated_at(2i)]">\n}
+    1.upto(12) { |i| expected << %(<option value="#{i}"#{' selected="selected"' if i == 10}>#{Date::MONTHNAMES[i]}</option>\n) }
+    expected << "</select>\n"
+    expected << %{<select id="post_updated_at_3i" name="post[updated_at(3i)]">\n}
+    1.upto(31) { |i| expected << %(<option value="#{i}"#{' selected="selected"' if i == Time.now.day}>#{i}</option>\n) }
+    expected << "</select>\n"
+
+    expected << " &mdash; "
+
+    expected << %{<select id="post_updated_at_4i" name="post[updated_at(4i)]">\n}
+    0.upto(23) { |i| expected << %(<option value="#{leading_zero_on_single_digits(i)}"#{' selected="selected"' if i == 9}>#{leading_zero_on_single_digits(i)}</option>\n) }
+    expected << "</select>\n"
+    expected << " : "
+    expected << %{<select id="post_updated_at_5i" name="post[updated_at(5i)]">\n}
+    0.upto(59) { |i| expected << %(<option value="#{leading_zero_on_single_digits(i)}"#{' selected="selected"' if i == 42}>#{leading_zero_on_single_digits(i)}</option>\n) }
+    expected << "</select>\n"
+
+    assert_equal expected, datetime_select("post", "updated_at", :default => { :month => 10, :minute => 42, :hour => 9 })
   end
 end

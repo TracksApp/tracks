@@ -89,10 +89,23 @@ module ActiveRecord
       
       # Clears the cache which maps classes 
       def clear_reloadable_connections!
-        @@active_connections.each do |name, conn|
-          if conn.requires_reloading?
-            conn.disconnect!
-            @@active_connections.delete(name)
+        if @@allow_concurrency
+          # With concurrent connections @@active_connections is
+          # a hash keyed by thread id.
+          @@active_connections.each do |thread_id, conns|
+            conns.each do |name, conn|
+              if conn.requires_reloading?
+                conn.disconnect!
+                @@active_connections[thread_id].delete(name)
+              end
+            end
+          end
+        else
+          @@active_connections.each do |name, conn|
+            if conn.requires_reloading?
+              conn.disconnect!
+              @@active_connections.delete(name)
+            end
           end
         end
       end
@@ -206,15 +219,31 @@ module ActiveRecord
         else
           spec = spec.symbolize_keys
           unless spec.key?(:adapter) then raise AdapterNotSpecified, "database configuration does not specify adapter" end
+
+          begin
+            require 'rubygems'
+            gem "activerecord-#{spec[:adapter]}-adapter"
+            require "active_record/connection_adapters/#{spec[:adapter]}_adapter"
+          rescue LoadError
+            begin
+              require "active_record/connection_adapters/#{spec[:adapter]}_adapter"
+            rescue LoadError
+              raise "Please install the #{spec[:adapter]} adapter: `gem install activerecord-#{spec[:adapter]}-adapter` (#{$!})"
+            end
+          end
+
           adapter_method = "#{spec[:adapter]}_connection"
-          unless respond_to?(adapter_method) then raise AdapterNotFound, "database configuration specifies nonexistent #{spec[:adapter]} adapter" end
+          if !respond_to?(adapter_method)
+            raise AdapterNotFound, "database configuration specifies nonexistent #{spec[:adapter]} adapter"
+          end
+
           remove_connection
           establish_connection(ConnectionSpecification.new(spec, adapter_method))
       end
     end
 
     # Locate the connection of the nearest super class. This can be an
-    # active or defined connections: if it is the latter, it will be
+    # active or defined connection: if it is the latter, it will be
     # opened and set as the active connection for the class it was defined
     # for (not necessarily the current class).
     def self.retrieve_connection #:nodoc:
@@ -235,15 +264,15 @@ module ActiveRecord
       conn or raise ConnectionNotEstablished
     end
 
-    # Returns true if a connection that's accessible to this class have already been opened.
+    # Returns true if a connection that's accessible to this class has already been opened.
     def self.connected?
       active_connections[active_connection_name] ? true : false
     end
 
     # Remove the connection for this class. This will close the active
     # connection and the defined connection (if they exist). The result
-    # can be used as argument for establish_connection, for easy
-    # re-establishing of the connection.
+    # can be used as an argument for establish_connection, for easily
+    # re-establishing the connection.
     def self.remove_connection(klass=self)
       spec = @@defined_connections[klass.name]
       konn = active_connections[klass.name]

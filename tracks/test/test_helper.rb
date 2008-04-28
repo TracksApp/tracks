@@ -4,6 +4,7 @@ require File.expand_path(File.dirname(__FILE__) + "/../app/controllers/applicati
 require 'test/rails' #you need the zentest gem installed
 require 'test_help'
 require 'flexmock/test_unit' #and the flexmock gem, too!
+require 'action_web_service/test_invoke'
   
 module Tracks
   class Config
@@ -77,7 +78,7 @@ class Test::Rails::TestCase < Test::Unit::TestCase
   def assert_js_redirected_to(options={}, message=nil)
    clean_backtrace do
      assert_response(:success, message)
-     assert_equal 'text/javascript; charset=utf-8', @response.headers['Content-Type'], 'Response should be Javascript content-type';
+     assert_equal 'text/javascript', @response.content_type, 'Response should be Javascript content-type';
      js_regexp = %r{(\w+://)?.*?(/|$|\\\?)(.*)}
      url_regexp = %r{^window\.location\.href [=] ['"]#{js_regexp}['"][;]$}
      redirected_to = @response.body.match(url_regexp)
@@ -100,7 +101,8 @@ class Test::Rails::TestCase < Test::Unit::TestCase
 end
 
 class ActionController::IntegrationTest
-    
+  Tag #avoid errors in integration tests
+  
   def assert_test_environment_ok
     assert_equal "test", ENV['RAILS_ENV']
     assert_equal "change-me", Tracks::Config.salt

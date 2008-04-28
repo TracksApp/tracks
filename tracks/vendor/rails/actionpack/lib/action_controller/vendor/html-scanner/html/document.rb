@@ -1,9 +1,9 @@
-require File.dirname(__FILE__) + '/tokenizer'
-require File.dirname(__FILE__) + '/node'
-require File.dirname(__FILE__) + '/selector'
+require 'html/tokenizer'
+require 'html/node'
+require 'html/selector'
+require 'html/sanitizer'
 
 module HTML #:nodoc:
-  
   # A top-level HTMl document. You give it a body of text, and it will parse that
   # text into a tree of nodes.
   class Document #:nodoc:
@@ -23,6 +23,9 @@ module HTML #:nodoc:
         if node.tag?
           if node_stack.length > 1 && node.closing == :close
             if node_stack.last.name == node.name
+              if node_stack.last.children.empty?
+                node_stack.last.children << Text.new(node_stack.last, node.line, node.position, "")
+              end
               node_stack.pop
             else
               open_start = node_stack.last.position - 20

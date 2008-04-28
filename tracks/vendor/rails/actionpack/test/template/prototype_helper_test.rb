@@ -1,6 +1,34 @@
-require File.dirname(__FILE__) + '/../abstract_unit'
+require "#{File.dirname(__FILE__)}/../abstract_unit"
+
+Bunny = Struct.new(:Bunny, :id)
+
+class Author
+  attr_reader :id
+  def save; @id = 1 end
+  def new_record?; @id.nil? end
+  def name
+    @id.nil? ? 'new author' : "author ##{@id}"
+  end
+end
+
+class Article
+  attr_reader :id
+  attr_reader :author_id
+  def save; @id = 1; @author_id = 1 end
+  def new_record?; @id.nil? end
+  def name
+    @id.nil? ? 'new article' : "article ##{@id}"
+  end
+end
+
+class Author::Nested < Author; end
+
 
 module BaseTest
+  def self.included(base)
+    base.send :attr_accessor, :template_format
+  end
+
   include ActionView::Helpers::JavaScriptHelper
   include ActionView::Helpers::PrototypeHelper
   include ActionView::Helpers::ScriptaculousHelper
@@ -11,11 +39,13 @@ module BaseTest
   include ActionView::Helpers::FormTagHelper
   include ActionView::Helpers::FormHelper
   include ActionView::Helpers::CaptureHelper
+  include ActionView::Helpers::RecordIdentificationHelper
+  include ActionController::PolymorphicRoutes
   
   def setup
     @template = nil
     @controller = Class.new do
-      def url_for(options, *parameters_for_method_reference)
+      def url_for(options)
         if options.is_a?(String)
           options
         else
@@ -30,6 +60,15 @@ module BaseTest
   end
 
 protected
+  
+  def request_forgery_protection_token
+    nil
+  end
+  
+  def protect_against_forgery?
+    false
+  end
+  
   def create_generator
     block = Proc.new { |*args| yield *args if block_given? } 
     JavaScriptGenerator.new self, &block
@@ -39,22 +78,40 @@ end
 class PrototypeHelperTest < Test::Unit::TestCase
   include BaseTest
   
+  def setup
+    @record = @author = Author.new
+    @article = Article.new
+    super
+  end
+
   def test_link_to_remote
-    assert_dom_equal %(<a class=\"fine\" href=\"#\" onclick=\"new Ajax.Request('http://www.example.com/whatnot', {asynchronous:true, evalScripts:true}); return false;\">Remote outpost</a>),
-      link_to_remote("Remote outpost", { :url => { :action => "whatnot"  }}, { :class => "fine"  })
-    assert_dom_equal %(<a href=\"#\" onclick=\"new Ajax.Request('http://www.example.com/whatnot', {asynchronous:true, evalScripts:true, onComplete:function(request){alert(request.reponseText)}}); return false;\">Remote outpost</a>),
-      link_to_remote("Remote outpost", :complete => "alert(request.reponseText)", :url => { :action => "whatnot"  })      
-    assert_dom_equal %(<a href=\"#\" onclick=\"new Ajax.Request('http://www.example.com/whatnot', {asynchronous:true, evalScripts:true, onSuccess:function(request){alert(request.reponseText)}}); return false;\">Remote outpost</a>),
-      link_to_remote("Remote outpost", :success => "alert(request.reponseText)", :url => { :action => "whatnot"  })
-    assert_dom_equal %(<a href=\"#\" onclick=\"new Ajax.Request('http://www.example.com/whatnot', {asynchronous:true, evalScripts:true, onFailure:function(request){alert(request.reponseText)}}); return false;\">Remote outpost</a>),
-      link_to_remote("Remote outpost", :failure => "alert(request.reponseText)", :url => { :action => "whatnot"  })
-    assert_dom_equal %(<a href=\"#\" onclick=\"new Ajax.Request('http://www.example.com/whatnot?a=10&amp;b=20', {asynchronous:true, evalScripts:true, onFailure:function(request){alert(request.reponseText)}}); return false;\">Remote outpost</a>),
-      link_to_remote("Remote outpost", :failure => "alert(request.reponseText)", :url => { :action => "whatnot", :a => '10', :b => '20' })
+    assert_dom_equal %(<a class=\"fine\" href=\"#\" onclick=\"new Ajax.Request('http://www.example.com/whatnot', {asynchronous:true, evalScripts:true}); return false;\">Remote outauthor</a>),
+      link_to_remote("Remote outauthor", { :url => { :action => "whatnot"  }}, { :class => "fine"  })
+    assert_dom_equal %(<a href=\"#\" onclick=\"new Ajax.Request('http://www.example.com/whatnot', {asynchronous:true, evalScripts:true, onComplete:function(request){alert(request.responseText)}}); return false;\">Remote outauthor</a>),
+      link_to_remote("Remote outauthor", :complete => "alert(request.responseText)", :url => { :action => "whatnot"  })      
+    assert_dom_equal %(<a href=\"#\" onclick=\"new Ajax.Request('http://www.example.com/whatnot', {asynchronous:true, evalScripts:true, onSuccess:function(request){alert(request.responseText)}}); return false;\">Remote outauthor</a>),
+      link_to_remote("Remote outauthor", :success => "alert(request.responseText)", :url => { :action => "whatnot"  })
+    assert_dom_equal %(<a href=\"#\" onclick=\"new Ajax.Request('http://www.example.com/whatnot', {asynchronous:true, evalScripts:true, onFailure:function(request){alert(request.responseText)}}); return false;\">Remote outauthor</a>),
+      link_to_remote("Remote outauthor", :failure => "alert(request.responseText)", :url => { :action => "whatnot"  })
+    assert_dom_equal %(<a href=\"#\" onclick=\"new Ajax.Request('http://www.example.com/whatnot?a=10&amp;b=20', {asynchronous:true, evalScripts:true, onFailure:function(request){alert(request.responseText)}}); return false;\">Remote outauthor</a>),
+      link_to_remote("Remote outauthor", :failure => "alert(request.responseText)", :url => { :action => "whatnot", :a => '10', :b => '20' })
+  end
+  
+  def test_link_to_remote_html_options
+    assert_dom_equal %(<a class=\"fine\" href=\"#\" onclick=\"new Ajax.Request('http://www.example.com/whatnot', {asynchronous:true, evalScripts:true}); return false;\">Remote outauthor</a>),
+      link_to_remote("Remote outauthor", { :url => { :action => "whatnot"  }, :html => { :class => "fine" } })
   end
   
   def test_periodically_call_remote
     assert_dom_equal %(<script type="text/javascript">\n//<![CDATA[\nnew PeriodicalExecuter(function() {new Ajax.Updater('schremser_bier', 'http://www.example.com/mehr_bier', {asynchronous:true, evalScripts:true})}, 10)\n//]]>\n</script>),
       periodically_call_remote(:update => "schremser_bier", :url => { :action => "mehr_bier" })
+  end
+  
+  def test_periodically_call_remote_with_frequency
+    assert_dom_equal(
+      "<script type=\"text/javascript\">\n//<![CDATA[\nnew PeriodicalExecuter(function() {new Ajax.Request('http://www.example.com/', {asynchronous:true, evalScripts:true})}, 2)\n//]]>\n</script>",
+      periodically_call_remote(:frequency => 2)
+    )
   end
   
   def test_form_remote_tag
@@ -78,7 +135,50 @@ class PrototypeHelperTest < Test::Unit::TestCase
     form_remote_tag(:update => "glass_of_beer", :url => { :action => :fast  }) { _erbout.concat "Hello world!" }
     assert_dom_equal %(<form action=\"http://www.example.com/fast\" method=\"post\" onsubmit=\"new Ajax.Updater('glass_of_beer', 'http://www.example.com/fast', {asynchronous:true, evalScripts:true, parameters:Form.serialize(this)}); return false;\">Hello world!</form>), _erbout
   end
+
+  def test_remote_form_for_with_record_identification_with_new_record
+    _erbout = ''
+    remote_form_for(@record, {:html => { :id => 'create-author' }}) {}
+    
+    expected = %(<form action='#{authors_path}' onsubmit="new Ajax.Request('#{authors_path}', {asynchronous:true, evalScripts:true, parameters:Form.serialize(this)}); return false;" class='new_author' id='create-author' method='post'></form>)
+    assert_dom_equal expected, _erbout
+  end
+
+  def test_remote_form_for_with_record_identification_without_html_options
+    _erbout = ''
+    remote_form_for(@record) {}
+    
+    expected = %(<form action='#{authors_path}' onsubmit="new Ajax.Request('#{authors_path}', {asynchronous:true, evalScripts:true, parameters:Form.serialize(this)}); return false;" class='new_author' method='post' id='new_author'></form>)
+    assert_dom_equal expected, _erbout
+  end
+
+  def test_remote_form_for_with_record_identification_with_existing_record
+    @record.save
+    _erbout = ''
+    remote_form_for(@record) {}
+    
+    expected = %(<form action='#{author_path(@record)}' id='edit_author_1' method='post' onsubmit="new Ajax.Request('#{author_path(@record)}', {asynchronous:true, evalScripts:true, parameters:Form.serialize(this)}); return false;" class='edit_author'><div style='margin:0;padding:0'><input name='_method' type='hidden' value='put' /></div></form>)
+    assert_dom_equal expected, _erbout
+  end
+
+  def test_remote_form_for_with_new_object_in_list
+    _erbout = ''
+    remote_form_for([@author, @article]) {}
+    
+    expected = %(<form action='#{author_articles_path(@author)}' onsubmit="new Ajax.Request('#{author_articles_path(@author)}', {asynchronous:true, evalScripts:true, parameters:Form.serialize(this)}); return false;" class='new_article' method='post' id='new_article'></form>)
+    assert_dom_equal expected, _erbout
+  end
   
+  def test_remote_form_for_with_existing_object_in_list
+    @author.save
+    @article.save
+    _erbout = ''
+    remote_form_for([@author, @article]) {}
+    
+    expected = %(<form action='#{author_article_path(@author, @article)}' id='edit_article_1' method='post' onsubmit="new Ajax.Request('#{author_article_path(@author, @article)}', {asynchronous:true, evalScripts:true, parameters:Form.serialize(this)}); return false;" class='edit_article'><div style='margin:0;padding:0'><input name='_method' type='hidden' value='put' /></div></form>)
+    assert_dom_equal expected, _erbout
+  end
+
   def test_on_callbacks
     callbacks = [:uninitialized, :loading, :loaded, :interactive, :complete, :success, :failure]
     callbacks.each do |callback|
@@ -129,6 +229,17 @@ class PrototypeHelperTest < Test::Unit::TestCase
       observe_field("glass", :frequency => 5.minutes, :url => { :action => "reorder_if_empty" })
   end
   
+  def test_observe_field_using_with_option
+    expected = %(<script type=\"text/javascript\">\n//<![CDATA[\nnew Form.Element.Observer('glass', 300, function(element, value) {new Ajax.Request('http://www.example.com/check_value', {asynchronous:true, evalScripts:true, parameters:'id=' + value})})\n//]]>\n</script>)
+    assert_dom_equal expected, observe_field("glass", :frequency => 5.minutes, :url => { :action => "check_value" }, :with => 'id')
+    assert_dom_equal expected, observe_field("glass", :frequency => 5.minutes, :url => { :action => "check_value" }, :with => "'id=' + value")
+  end
+  
+  def test_observe_field_using_json_in_with_option
+    expected = %(<script type=\"text/javascript\">\n//<![CDATA[\nnew Form.Element.Observer('glass', 300, function(element, value) {new Ajax.Request('http://www.example.com/check_value', {asynchronous:true, evalScripts:true, parameters:{'id':value}})})\n//]]>\n</script>)
+    assert_dom_equal expected, observe_field("glass", :frequency => 5.minutes, :url => { :action => "check_value" }, :with => "{'id':value}")    
+  end
+  
   def test_observe_field_using_function_for_callback
     assert_dom_equal %(<script type=\"text/javascript\">\n//<![CDATA[\nnew Form.Element.Observer('glass', 300, function(element, value) {alert('Element changed')})\n//]]>\n</script>),
       observe_field("glass", :frequency => 5.minutes, :function => "alert('Element changed')")
@@ -143,7 +254,12 @@ class PrototypeHelperTest < Test::Unit::TestCase
     assert_dom_equal %(<script type=\"text/javascript\">\n//<![CDATA[\nnew Form.Observer('cart', 2, function(element, value) {alert('Form changed')})\n//]]>\n</script>),
       observe_form("cart", :frequency => 2, :function => "alert('Form changed')")
   end
-  
+
+  def test_observe_field_without_frequency
+    assert_dom_equal %(<script type=\"text/javascript\">\n//<![CDATA[\nnew Form.Element.EventObserver('glass', function(element, value) {new Ajax.Request('http://www.example.com/', {asynchronous:true, evalScripts:true, parameters:value})})\n//]]>\n</script>),
+      observe_field("glass")
+  end
+
   def test_update_page
     block = Proc.new { |page| page.replace_html('foo', 'bar') }
     assert_equal create_generator(&block).to_s, update_page(&block)
@@ -159,6 +275,23 @@ class PrototypeHelperTest < Test::Unit::TestCase
     assert_equal javascript_tag(create_generator(&block).to_s, {:defer => 'true'}), update_page_tag({:defer => 'true'}, &block)
   end
 
+
+  protected
+    def author_path(record)
+      "/authors/#{record.id}"
+    end
+    
+    def authors_path
+      "/authors"
+    end
+    
+    def author_articles_path(author)
+      "/authors/#{author.id}/articles"
+    end
+    
+    def author_article_path(author, article)
+      "/authors/#{author.id}/articles/#{article.id}"
+    end
 end
 
 class JavaScriptGeneratorTest < Test::Unit::TestCase
@@ -170,23 +303,23 @@ class JavaScriptGeneratorTest < Test::Unit::TestCase
   end
   
   def test_insert_html_with_string
-    assert_equal 'new Insertion.Top("element", "\074p\076This is a test\074/p\076");',
+    assert_equal 'new Insertion.Top("element", "\\u003Cp\\u003EThis is a test\\u003C/p\\u003E");',
       @generator.insert_html(:top, 'element', '<p>This is a test</p>')
-    assert_equal 'new Insertion.Bottom("element", "\074p\076This is a test\074/p\076");',
+    assert_equal 'new Insertion.Bottom("element", "\\u003Cp\u003EThis is a test\\u003C/p\u003E");',
       @generator.insert_html(:bottom, 'element', '<p>This is a test</p>')
-    assert_equal 'new Insertion.Before("element", "\074p\076This is a test\074/p\076");',
+    assert_equal 'new Insertion.Before("element", "\\u003Cp\u003EThis is a test\\u003C/p\u003E");',
       @generator.insert_html(:before, 'element', '<p>This is a test</p>')
-    assert_equal 'new Insertion.After("element", "\074p\076This is a test\074/p\076");',
+    assert_equal 'new Insertion.After("element", "\\u003Cp\u003EThis is a test\\u003C/p\u003E");',
       @generator.insert_html(:after, 'element', '<p>This is a test</p>')
   end
   
   def test_replace_html_with_string
-    assert_equal 'Element.update("element", "\074p\076This is a test\074/p\076");',
+    assert_equal 'Element.update("element", "\\u003Cp\\u003EThis is a test\\u003C/p\\u003E");',
       @generator.replace_html('element', '<p>This is a test</p>')
   end
   
   def test_replace_element_with_string
-    assert_equal 'Element.replace("element", "\074div id=\"element\"\076\074p\076This is a test\074/p\076\074/div\076");',
+    assert_equal 'Element.replace("element", "\\u003Cdiv id=\"element\"\\u003E\\u003Cp\\u003EThis is a test\\u003C/p\\u003E\\u003C/div\\u003E");',
       @generator.replace('element', '<div id="element"><p>This is a test</p></div>')
   end
   
@@ -241,16 +374,21 @@ class JavaScriptGeneratorTest < Test::Unit::TestCase
     @generator.remove('foo', 'bar')
     @generator.replace_html('baz', '<p>This is a test</p>')
     
-    expected = %q(new Insertion.Top("element", "\074p\076This is a test\074/p\076");
-new Insertion.Bottom("element", "\074p\076This is a test\074/p\076");
+    assert_equal <<-EOS.chomp, @generator.to_s
+new Insertion.Top("element", "\\u003Cp\\u003EThis is a test\\u003C/p\\u003E");
+new Insertion.Bottom("element", "\\u003Cp\\u003EThis is a test\\u003C/p\\u003E");
 ["foo", "bar"].each(Element.remove);
-Element.update("baz", "\074p\076This is a test\074/p\076");)
-
-    assert_equal expected, @generator.to_s
+Element.update("baz", "\\u003Cp\\u003EThis is a test\\u003C/p\\u003E");
+    EOS
   end
 
   def test_element_access
     assert_equal %($("hello");), @generator['hello']
+  end
+
+  def test_element_access_on_records
+    assert_equal %($("bunny_5");),   @generator[Bunny.new(:id => 5)]
+    assert_equal %($("new_bunny");), @generator[Bunny.new]
   end
 
   def test_element_proxy_one_deep
@@ -419,6 +557,29 @@ return array.reverse();
     assert_equal <<-EOS.strip, @generator.to_s
 var a = $$("p").findAll(function(value, index) {
 return (value.className == "welcome");
+});
+    EOS
+  end
+  
+  def test_collection_proxy_with_in_groups_of
+    @generator.select('p').in_groups_of('a', 3)
+    @generator.select('p').in_groups_of('a', 3, 'x')
+    assert_equal <<-EOS.strip, @generator.to_s
+var a = $$("p").inGroupsOf(3);
+var a = $$("p").inGroupsOf(3, "x");
+    EOS
+  end
+  
+  def test_collection_proxy_with_each_slice
+    @generator.select('p').each_slice('a', 3)
+    @generator.select('p').each_slice('a', 3) do |group, index|
+      group.reverse
+    end
+      
+    assert_equal <<-EOS.strip, @generator.to_s
+var a = $$("p").eachSlice(3);
+var a = $$("p").eachSlice(3, function(value, index) {
+return value.reverse();
 });
     EOS
   end

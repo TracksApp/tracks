@@ -179,7 +179,7 @@ class TodosControllerTest < Test::Rails::TestCase
   def test_rss_feed
     login_as(:admin_user)
     get :index, { :format => "rss" }
-    assert_equal 'application/rss+xml; charset=utf-8', @response.headers["Content-Type"]
+    assert_equal 'application/rss+xml', @response.content_type
     #puts @response.body
 
     assert_xml_select 'rss[version="2.0"]' do
@@ -236,7 +236,7 @@ class TodosControllerTest < Test::Rails::TestCase
   def test_atom_feed_content
     login_as :admin_user
     get :index, { :format => "atom" }
-    assert_equal 'application/atom+xml; charset=utf-8', @response.headers["Content-Type"]
+    assert_equal 'application/atom+xml', @response.content_type
     #puts @response.body
 
     assert_xml_select 'feed[xmlns="http://www.w3.org/2005/Atom"]' do
@@ -271,7 +271,7 @@ class TodosControllerTest < Test::Rails::TestCase
   def test_text_feed_content
     login_as(:admin_user)
     get :index, { :format => "txt" }
-    assert_equal 'text/plain; charset=utf-8', @response.headers["Content-Type"]
+    assert_equal 'text/plain', @response.content_type
     assert !(/&nbsp;/.match(@response.body))
     #puts @response.body
   end
@@ -297,7 +297,7 @@ class TodosControllerTest < Test::Rails::TestCase
   def test_ical_feed_content
     login_as :admin_user
     get :index, { :format => "ics" }
-    assert_equal 'text/calendar; charset=utf-8', @response.headers["Content-Type"]
+    assert_equal 'text/calendar', @response.content_type
     assert !(/&nbsp;/.match(@response.body))
     #puts @response.body
   end
@@ -305,7 +305,7 @@ class TodosControllerTest < Test::Rails::TestCase
   def test_mobile_index_uses_text_html_content_type
     login_as(:admin_user)
     get :index, { :format => "m" }
-    assert_equal 'text/html; charset=utf-8', @response.headers["Content-Type"]
+    assert_equal 'text/html', @response.content_type
   end
   
   def test_mobile_index_assigns_down_count
@@ -348,7 +348,7 @@ class TodosControllerTest < Test::Rails::TestCase
                    "show_from(1i)"=>"", "show_from(2i)"=>"", "show_from(3i)"=>"",
                    "project_id"=>"1", 
                    "notes"=>"test notes", "state"=>"0"}}
-    assert_template 'todos/new_mobile'
+    assert_template 'todos/new'
   end
 
   def test_index_html_assigns_default_project_name_map

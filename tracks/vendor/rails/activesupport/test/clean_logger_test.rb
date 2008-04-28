@@ -40,41 +40,18 @@ class CleanLoggerTest < Test::Unit::TestCase
 
     assert_equal "error\nfatal\nerror\nfatal\nunsilenced\n", @out.string
   end
-end
-
-class CleanLogger_182_to_183_Test < Test::Unit::TestCase
-  def setup
-    silence_warnings do
-      if Logger.method_defined?(:formatter=)
-        Logger.send(:alias_method, :hide_formatter=, :formatter=)
-        Logger.send(:undef_method, :formatter=)
-      else
-        Logger.send(:define_method, :formatter=) { }
-      end
-      load File.dirname(__FILE__) + '/../lib/active_support/clean_logger.rb'
-    end
-
-    @out = StringIO.new
-    @logger = Logger.new(@out)
-    @logger.progname = 'CLEAN LOGGER TEST'
+  
+  def test_datetime_format
+    @logger.formatter = Logger::Formatter.new
+    @logger.datetime_format = "%Y-%m-%d"
+    @logger.debug 'debug'
+    assert_equal "%Y-%m-%d", @logger.datetime_format
+    assert_match(/D, \[\d\d\d\d-\d\d-\d\d#\d+\] DEBUG -- : debug/, @out.string)
   end
-
-  def teardown
-    silence_warnings do
-      if Logger.method_defined?(:hide_formatter=)
-        Logger.send(:alias_method, :formatter=, :hide_formatter=)
-      else
-        Logger.send(:undef_method, :formatter=)
-      end
-      load File.dirname(__FILE__) + '/../lib/active_support/clean_logger.rb'
-    end
-  end
-
-  # Since we've fooled Logger into thinking we're on 1.8.2 if we're on 1.8.3
-  # and on 1.8.3 if we're on 1.8.2, it'll define format_message with the
-  # wrong order of arguments and therefore print progname instead of msg.
-  def test_format_message_with_faked_version
-    @logger.error 'error'
-    assert_equal "CLEAN LOGGER TEST\n", @out.string
+  
+  def test_nonstring_formatting
+    an_object = [1, 2, 3, 4, 5]
+    @logger.debug an_object
+    assert_equal("#{an_object.inspect}\n", @out.string)
   end
 end

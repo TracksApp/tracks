@@ -48,6 +48,7 @@ Rake::RDocTask.new { |rdoc|
   rdoc.rdoc_dir = 'doc'
   rdoc.title    = "Action Pack -- On rails from request to response"
   rdoc.options << '--line-numbers' << '--inline-source'
+  rdoc.options << '--charset' << 'utf-8'
   rdoc.template = "#{ENV['template']}.rb" if ENV['template']
   if ENV['DOC_FILES'] 
     rdoc.rdoc_files.include(ENV['DOC_FILES'].split(/,\s*/))
@@ -58,7 +59,7 @@ Rake::RDocTask.new { |rdoc|
 }
 
 # Create compressed packages
-dist_dirs = [ "lib", "test", "examples" ]
+dist_dirs = [ "lib", "test" ]
 
 spec = Gem::Specification.new do |s|
   s.platform = Gem::Platform::RUBY
@@ -75,17 +76,15 @@ spec = Gem::Specification.new do |s|
   s.has_rdoc = true
   s.requirements << 'none'
 
-  s.add_dependency('activesupport', '= 1.4.4' + PKG_BUILD)
+  s.add_dependency('activesupport', '= 2.0.2' + PKG_BUILD)
 
   s.require_path = 'lib'
   s.autorequire = 'action_controller'
 
-  s.files = [ "Rakefile", "install.rb", "README", "RUNNING_UNIT_TESTS", "CHANGELOG", "MIT-LICENSE", "examples/.htaccess" ]
+  s.files = [ "Rakefile", "install.rb", "README", "RUNNING_UNIT_TESTS", "CHANGELOG", "MIT-LICENSE" ]
   dist_dirs.each do |dir|
     s.files = s.files + Dir.glob( "#{dir}/**/*" ).delete_if { |item| item.include?( "\.svn" ) }
   end
-  s.files.delete "examples/benchmark.rb"
-  s.files.delete "examples/benchmark_with_ar.fcgi"
 end
   
 Rake::GemPackageTask.new(spec) do |p|

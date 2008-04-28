@@ -13,13 +13,25 @@ class Topic < ActiveRecord::Base
   def topic_id
     id
   end
+  
 
   protected
+    def approved=(val)
+      @custom_approved = val
+      write_attribute(:approved, val)
+    end
+
     def default_written_on
       self.written_on = Time.now unless attribute_present?("written_on")
     end
 
     def destroy_children
       self.class.delete_all "parent_id = #{id}"
+    end
+
+    def after_initialize
+      if self.new_record?
+        self.author_email_address = 'test@test.com'
+      end
     end
 end

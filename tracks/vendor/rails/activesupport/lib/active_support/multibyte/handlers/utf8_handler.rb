@@ -140,6 +140,83 @@ module ActiveSupport::Multibyte::Handlers #:nodoc:
         bidx ? (u_unpack(str.slice(0...bidx)).size) : nil
       end
       
+      # Works just like the indexed replace method on string, except instead of byte offsets you specify
+      # character offsets.
+      #
+      # Example:
+      #
+      #   s = "Müller"
+      #   s.chars[2] = "e" # Replace character with offset 2
+      #   s
+      #   #=> "Müeler"
+      #
+      #   s = "Müller"
+      #   s.chars[1, 2] = "ö" # Replace 2 characters at character offset 1
+      #   s
+      #   #=> "Möler"
+      def []=(str, *args)
+        replace_by = args.pop
+        # Indexed replace with regular expressions already works
+        return str[*args] = replace_by if args.first.is_a?(Regexp)
+        result = u_unpack(str)
+        if args[0].is_a?(Fixnum)
+          raise IndexError, "index #{args[0]} out of string" if args[0] >= result.length
+          min = args[0]
+          max = args[1].nil? ? min : (min + args[1] - 1)
+          range = Range.new(min, max)
+          replace_by = [replace_by].pack('U') if replace_by.is_a?(Fixnum)
+        elsif args.first.is_a?(Range)
+          raise RangeError, "#{args[0]} out of range" if args[0].min >= result.length
+          range = args[0]
+        else
+          needle = args[0].to_s
+          min = index(str, needle)
+          max = min + length(needle) - 1
+          range = Range.new(min, max)
+        end
+        result[range] = u_unpack(replace_by)
+        str.replace(result.pack('U*'))
+      end
+      
+      # Works just like String#rjust, only integer specifies characters instead of bytes.
+      #
+      # Example:
+      #
+      #   "¾ cup".chars.rjust(8).to_s
+      #   #=> "   ¾ cup"
+      #
+      #   "¾ cup".chars.rjust(8, " ").to_s # Use non-breaking whitespace
+      #   #=> "   ¾ cup"
+      def rjust(str, integer, padstr=' ')
+        justify(str, integer, :right, padstr)
+      end
+      
+      # Works just like String#ljust, only integer specifies characters instead of bytes.
+      #
+      # Example:
+      #
+      #   "¾ cup".chars.rjust(8).to_s
+      #   #=> "¾ cup   "
+      #
+      #   "¾ cup".chars.rjust(8, " ").to_s # Use non-breaking whitespace
+      #   #=> "¾ cup   "
+      def ljust(str, integer, padstr=' ')
+        justify(str, integer, :left, padstr)
+      end
+      
+      # Works just like String#center, only integer specifies characters instead of bytes.
+      #
+      # Example:
+      #
+      #   "¾ cup".chars.center(8).to_s
+      #   #=> " ¾ cup  "
+      #
+      #   "¾ cup".chars.center(8, " ").to_s # Use non-breaking whitespace
+      #   #=> " ¾ cup  "
+      def center(str, integer, padstr=' ')
+        justify(str, integer, :center, padstr)
+      end
+      
       # Does Unicode-aware rstrip
       def rstrip(str)
         str.gsub(UNICODE_TRAILERS_PAT, '')
@@ -169,11 +246,17 @@ module ActiveSupport::Multibyte::Handlers #:nodoc:
       # Implements Unicode-aware slice with codepoints. Slicing on one point returns the codepoints for that
       # character.
       def slice(str, *args)
-        if (args.size == 2 && args.first.is_a?(Range))
-          raise TypeError, 'cannot convert Range into Integer' # Do as if we were native
+        if args.size > 2
+          raise ArgumentError, "wrong number of arguments (#{args.size} for 1)" # Do as if we were native
+        elsif (args.size == 2 && !(args.first.is_a?(Numeric) || args.first.is_a?(Regexp)))
+          raise TypeError, "cannot convert #{args.first.class} into Integer" # Do as if we were native
+        elsif (args.size == 2 && !args[1].is_a?(Numeric))
+          raise TypeError, "cannot convert #{args[1].class} into Integer" # Do as if we were native
         elsif args[0].kind_of? Range
           cps = u_unpack(str).slice(*args)
           cps.nil? ? nil : cps.pack('U*')
+        elsif args[0].kind_of? Regexp
+          str.slice(*args)
         elsif args.size == 1 && args[0].kind_of?(Numeric)
           u_unpack(str)[args[0]]
         else
@@ -200,8 +283,8 @@ module ActiveSupport::Multibyte::Handlers #:nodoc:
       # Returns the KC normalization of the string by default. NFKC is considered the best normalization form for
       # passing strings to databases and validations.
       #
-      # * <tt>str</tt>: The string to perform normalization on.
-      # * <tt>form</tt>: The form you want to normalize in. Should be one of the following: :c, :kc, :d or :kd.
+      # * <tt>str</tt> - The string to perform normalization on.
+      # * <tt>form</tt> - The form you want to normalize in. Should be one of the following: :c, :kc, :d or :kd.
       def normalize(str, form=ActiveSupport::Multibyte::DEFAULT_NORMALIZATION_FORM)
         # See http://www.unicode.org/reports/tr15, Table 1
         codepoints = u_unpack(str)
@@ -235,8 +318,8 @@ module ActiveSupport::Multibyte::Handlers #:nodoc:
       
       # Used to translate an offset from bytes to characters, for instance one received from a regular expression match
       def translate_offset(str, byte_offset)
-        return 0 if str == ''
         return nil if byte_offset.nil?
+        return 0 if str == ''
         chunk = str[0..byte_offset]
         begin
           begin
@@ -336,6 +419,33 @@ module ActiveSupport::Multibyte::Handlers #:nodoc:
       # Reverse operation of g_unpack
       def g_pack(unpacked)
         unpacked.flatten
+      end
+      
+      # Justifies a string in a certain way. Valid values for <tt>way</tt> are <tt>:right</tt>, <tt>:left</tt> and
+      # <tt>:center</tt>. Is primarily used as a helper method by <tt>rjust</tt>, <tt>ljust</tt> and <tt>center</tt>.
+      def justify(str, integer, way, padstr=' ')
+        raise ArgumentError, "zero width padding" if padstr.length == 0
+        padsize = integer - size(str)
+        padsize = padsize > 0 ? padsize : 0
+        case way
+        when :right
+          str.dup.insert(0, padding(padsize, padstr))
+        when :left
+          str.dup.insert(-1, padding(padsize, padstr))
+        when :center
+          lpad = padding((padsize / 2.0).floor, padstr)
+          rpad = padding((padsize / 2.0).ceil, padstr)
+          str.dup.insert(0, lpad).insert(-1, rpad)
+        end
+      end
+      
+      # Generates a padding string of a certain size.
+      def padding(padsize, padstr=' ')
+        if padsize != 0
+          slice(padstr * ((padsize / size(padstr)) + 1), 0, padsize)
+        else
+          ''
+        end
       end
       
       # Convert characters to a different case

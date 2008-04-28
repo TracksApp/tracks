@@ -47,8 +47,15 @@ module Inflector
     #   irregular 'octopus', 'octopi'
     #   irregular 'person', 'people'
     def irregular(singular, plural)
-      plural(Regexp.new("(#{singular[0,1]})#{singular[1..-1]}$", "i"), '\1' + plural[1..-1])
-      singular(Regexp.new("(#{plural[0,1]})#{plural[1..-1]}$", "i"), '\1' + singular[1..-1])
+      if singular[0,1].upcase == plural[0,1].upcase
+        plural(Regexp.new("(#{singular[0,1]})#{singular[1..-1]}$", "i"), '\1' + plural[1..-1])
+        singular(Regexp.new("(#{plural[0,1]})#{plural[1..-1]}$", "i"), '\1' + singular[1..-1])
+      else
+        plural(Regexp.new("#{singular[0,1].upcase}(?i)#{singular[1..-1]}$"), plural[0,1].upcase + plural[1..-1])
+        plural(Regexp.new("#{singular[0,1].downcase}(?i)#{singular[1..-1]}$"), plural[0,1].downcase + plural[1..-1])
+        singular(Regexp.new("#{plural[0,1].upcase}(?i)#{plural[1..-1]}$"), singular[0,1].upcase + singular[1..-1])
+        singular(Regexp.new("#{plural[0,1].downcase}(?i)#{plural[1..-1]}$"), singular[0,1].downcase + singular[1..-1])       
+      end
     end
 
     # Add uncountable words that shouldn't be attempted inflected.
@@ -99,7 +106,7 @@ module Inflector
   def pluralize(word)
     result = word.to_s.dup
 
-    if inflections.uncountables.include?(result.downcase)
+    if word.empty? || inflections.uncountables.include?(result.downcase)
       result
     else
       inflections.plurals.each { |(rule, replacement)| break if result.gsub!(rule, replacement) }
@@ -263,9 +270,9 @@ module Inflector
       "#{number}th"
     else
       case number.to_i % 10
-        when 1: "#{number}st"
-        when 2: "#{number}nd"
-        when 3: "#{number}rd"
+        when 1; "#{number}st"
+        when 2; "#{number}nd"
+        when 3; "#{number}rd"
         else    "#{number}th"
       end
     end

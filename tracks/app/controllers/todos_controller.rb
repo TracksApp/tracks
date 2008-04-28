@@ -30,15 +30,16 @@ class TodosController < ApplicationController
     @projects = current_user.projects.select { |p| p.active? }
     @contexts = current_user.contexts.find(:all)
     respond_to do |format|
-      format.m { 
+      format.m {
         @new_mobile = true
         @return_path=cookies[:mobile_url]
-        render :action => "new_mobile" 
+        render :action => "new" 
       }
     end
   end
   
   def create
+    @source_view = params['_source_view'] || 'todo'
     p = TodoCreateParamsHelper.new(params, prefs)        
     p.parse_dates() unless mobile?
     
@@ -71,7 +72,7 @@ class TodosController < ApplicationController
         else
           @projects = current_user.projects.find(:all)
           @contexts = current_user.contexts.find(:all)
-          render :action => "new_mobile"
+          render :action => "new"
         end
       end
       format.js do
@@ -95,6 +96,9 @@ class TodosController < ApplicationController
     @projects = current_user.projects.find(:all)
     @contexts = current_user.contexts.find(:all)
     @source_view = params['_source_view'] || 'todo'
+    respond_to do |format|
+      format.js
+    end
   end
   
   def show
@@ -104,7 +108,7 @@ class TodosController < ApplicationController
         @contexts = current_user.contexts.find(:all)
         @edit_mobile = true
         @return_path=cookies[:mobile_url]
-        render :action => 'show_mobile'
+        render :action => 'show'
       end
       format.xml { render :xml => @todo.to_xml( :root => 'todo', :except => :user_id ) }
     end
@@ -211,6 +215,7 @@ class TodosController < ApplicationController
       format.m do
         if @saved
           if cookies[:mobile_url]
+            cookies[:mobile_url] = nil
             redirect_to cookies[:mobile_url]
           else
             redirect_to formatted_todos_path(:m)
@@ -365,7 +370,7 @@ class TodosController < ApplicationController
 
   def with_feed_query_scope(&block)
     unless TodosController.is_feed_request(request)
-      Todo.with_scope :find => {:conditions => ['todos.state = ?', 'active']} do
+      Todo.send(:with_scope, :find => {:conditions => ['todos.state = ?', 'active']}) do
         yield
         return
       end
@@ -398,7 +403,7 @@ class TodosController < ApplicationController
       @description << " in the last #{done_in_last.to_s} days"
     end
       
-    Todo.with_scope :find => {:conditions => condition_builder.to_conditions} do
+    Todo.send :with_scope, :find => {:conditions => condition_builder.to_conditions} do
       yield
     end
       
@@ -407,12 +412,12 @@ class TodosController < ApplicationController
   def with_parent_resource_scope(&block)
     if (params[:context_id])
       @context = current_user.contexts.find_by_params(params)
-      Todo.with_scope :find => {:conditions => ['todos.context_id = ?', @context.id]} do
+      Todo.send :with_scope, :find => {:conditions => ['todos.context_id = ?', @context.id]} do
         yield
       end
     elsif (params[:project_id])
       @project = current_user.projects.find_by_params(params)
-      Todo.with_scope :find => {:conditions => ['todos.project_id = ?', @project.id]} do
+      Todo.send :with_scope, :find => {:conditions => ['todos.project_id = ?', @project.id]} do
         yield
       end
     else
@@ -422,7 +427,7 @@ class TodosController < ApplicationController
 
   def with_limit_scope(&block)
     if params.key?('limit')
-      Todo.with_scope :find => { :limit => params['limit'] } do
+      Todo.send :with_scope, :find => { :limit => params['limit'] } do
         yield
       end
       if TodosController.is_feed_request(request) && @description
@@ -464,7 +469,7 @@ class TodosController < ApplicationController
   def init_todos_for_mobile_view
     # Note: these next two finds were previously using current_users.todos.find
     # but that broke with_scope for :limit
-
+    
     # Exclude hidden projects from the home page
     @not_done_todos = Todo.find(:all, 
       :conditions => ['todos.user_id = ? AND todos.state = ? AND contexts.hide = ?', 
@@ -568,7 +573,7 @@ class TodosController < ApplicationController
       cookies[:mobile_url]=request.request_uri
       determine_down_count
     
-      render :action => 'index_mobile'
+      render :action => 'index'
     end
   end
     
@@ -617,13 +622,13 @@ class TodosController < ApplicationController
 
   def render_text_feed
     lambda do
-      render :action => 'index_text', :layout => false, :content_type => Mime::TEXT
+      render :action => 'index', :layout => false, :content_type => Mime::TEXT
     end
   end
 
   def render_ical_feed
     lambda do
-      render :action => 'index_ical', :layout => false, :content_type => Mime::ICS
+      render :action => 'index', :layout => false, :content_type => Mime::ICS
     end
   end
 

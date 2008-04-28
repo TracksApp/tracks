@@ -22,23 +22,28 @@
 #++
 
 $:.unshift(File.dirname(__FILE__))
-$:.unshift(File.dirname(__FILE__) + "/active_support/vendor")
 
-require 'builder'
-
+require 'active_support/vendor'
+require 'active_support/basic_object'
 require 'active_support/inflector'
 
 require 'active_support/core_ext'
+
 require 'active_support/clean_logger'
+require 'active_support/buffered_logger'
+
 require 'active_support/dependencies'
-require 'active_support/reloadable'
 require 'active_support/deprecation'
 
 require 'active_support/ordered_options'
 require 'active_support/option_merger'
 
 require 'active_support/values/time_zone'
+require 'active_support/duration'
 
 require 'active_support/json'
 
 require 'active_support/multibyte'
+
+require 'active_support/testing'
+

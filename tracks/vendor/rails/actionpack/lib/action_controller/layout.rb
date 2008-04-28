@@ -64,13 +64,13 @@ module ActionController #:nodoc:
     #
     # If there is a template in <tt>app/views/layouts/</tt> with the same name as the current controller then it will be automatically
     # set as that controller's layout unless explicitly told otherwise. Say you have a WeblogController, for example. If a template named 
-    # <tt>app/views/layouts/weblog.rhtml</tt> or <tt>app/views/layouts/weblog.rxml</tt> exists then it will be automatically set as
-    # the layout for your WeblogController. You can create a layout with the name <tt>application.rhtml</tt> or <tt>application.rxml</tt>
+    # <tt>app/views/layouts/weblog.erb</tt> or <tt>app/views/layouts/weblog.builder</tt> exists then it will be automatically set as
+    # the layout for your WeblogController. You can create a layout with the name <tt>application.erb</tt> or <tt>application.builder</tt>
     # and this will be set as the default controller if there is no layout with the same name as the current controller and there is 
     # no layout explicitly assigned with the +layout+ method. Nested controllers use the same folder structure for automatic layout.
-    # assignment. So an Admin::WeblogController will look for a template named <tt>app/views/layouts/admin/weblog.rhtml</tt>.
+    # assignment. So an Admin::WeblogController will look for a template named <tt>app/views/layouts/admin/weblog.erb</tt>.
     # Setting a layout explicitly will always override the automatic behaviour for the controller where the layout is set.
-    # Explicitly setting the layout in a parent class, though, will not override the child class's layout assignement if the child
+    # Explicitly setting the layout in a parent class, though, will not override the child class's layout assignment if the child
     # class has a layout with the same name. 
     #
     # == Inheritance for layouts
@@ -124,7 +124,8 @@ module ActionController #:nodoc:
     #   class WeblogController < ActionController::Base
     #     layout "weblog_standard"
     #
-    # If no directory is specified for the template name, the template will by default by looked for in +app/views/layouts/+.
+    # If no directory is specified for the template name, the template will by default be looked for in +app/views/layouts/+. 
+    # Otherwise, it will be looked up relative to the template root.
     #
     # == Conditional layouts
     #
@@ -165,30 +166,39 @@ module ActionController #:nodoc:
     # variable. The preferred notation now is to use <tt>yield</tt>, as documented above.
     module ClassMethods
       # If a layout is specified, all rendered actions will have their result rendered  
-      # when the layout<tt>yield</tt>'s. This layout can itself depend on instance variables assigned during action
+      # when the layout <tt>yield</tt>s. This layout can itself depend on instance variables assigned during action
       # performance and have access to them as any normal template would.
-      def layout(template_name, conditions = {})
+      def layout(template_name, conditions = {}, auto = false)
         add_layout_conditions(conditions)
         write_inheritable_attribute "layout", template_name
+        write_inheritable_attribute "auto_layout", auto
       end
 
       def layout_conditions #:nodoc:
         @layout_conditions ||= read_inheritable_attribute("layout_conditions")
       end
       
-      def default_layout #:nodoc:
-        @default_layout ||= read_inheritable_attribute("layout")
+      def default_layout(format) #:nodoc:
+        layout = read_inheritable_attribute("layout")                 
+        return layout unless read_inheritable_attribute("auto_layout")
+        @default_layout ||= {}
+        @default_layout[format] ||= default_layout_with_format(format, layout)
+        @default_layout[format]
       end
-
+      
+      def layout_list #:nodoc:
+        view_paths.collect do |path|
+          Dir["#{path}/layouts/**/*"]
+        end.flatten
+      end
+      
       private
         def inherited_with_layout(child)
           inherited_without_layout(child)
-          layout_match = child.name.underscore.sub(/_controller$/, '').sub(/^controllers\//, '')
-          child.layout(layout_match) unless layout_list.grep(%r{layouts/#{layout_match}\.[a-z][0-9a-z]*$}).empty?
-        end
-
-        def layout_list
-          Dir.glob("#{template_root}/layouts/**/*")
+          unless child.name.blank?
+            layout_match = child.name.underscore.sub(/_controller$/, '').sub(/^controllers\//, '')
+            child.layout(layout_match, {}, true) unless child.layout_list.grep(%r{layouts/#{layout_match}(\.[a-z][0-9a-z]*)+$}).empty?
+          end
         end
 
         def add_layout_conditions(conditions)
@@ -204,6 +214,15 @@ module ActionController #:nodoc:
             h[dirname] = File.directory? dirname
           end
         end
+        
+        def default_layout_with_format(format, layout)
+          list = layout_list
+          if list.grep(%r{layouts/#{layout}\.#{format}(\.[a-z][0-9a-z]*)+$}).empty?
+            (!list.grep(%r{layouts/#{layout}\.([a-z][0-9a-z]*)+$}).empty? && format == :html) ? layout : nil
+          else
+            layout
+          end
+        end
     end
 
     # Returns the name of the active layout. If the layout was specified as a method reference (through a symbol), this method
@@ -211,11 +230,10 @@ module ActionController #:nodoc:
     # object). If the layout was defined without a directory, layouts is assumed. So <tt>layout "weblog/standard"</tt> will return
     # weblog/standard, but <tt>layout "standard"</tt> will return layouts/standard.
     def active_layout(passed_layout = nil)
-      layout = passed_layout || self.class.default_layout
-
+      layout = passed_layout || self.class.default_layout(response.template.template_format)
       active_layout = case layout
         when String then layout
-        when Symbol then send(layout)
+        when Symbol then send!(layout)
         when Proc   then layout.call(self)
       end
       
@@ -231,34 +249,30 @@ module ActionController #:nodoc:
       end
     end
 
-    def render_with_a_layout(options = nil, deprecated_status = nil, deprecated_layout = nil, &block) #:nodoc:
-      template_with_options = options.is_a?(Hash)
+    protected
+      def render_with_a_layout(options = nil, &block) #:nodoc:
+        template_with_options = options.is_a?(Hash)
+        
+        if apply_layout?(template_with_options, options) && (layout = pick_layout(template_with_options, options))
+          assert_existence_of_template_file(layout)
 
-      if apply_layout?(template_with_options, options) && (layout = pick_layout(template_with_options, options, deprecated_layout))
-        assert_existence_of_template_file(layout)
+          options = options.merge :layout => false if template_with_options
+          logger.info("Rendering template within #{layout}") if logger
 
-        options = options.merge :layout => false if template_with_options
-        logger.info("Rendering #{options} within #{layout}") if logger
-
-        if template_with_options
           content_for_layout = render_with_no_layout(options, &block)
-          deprecated_status = options[:status] || deprecated_status
+          erase_render_results
+          add_variables_to_assigns
+          @template.instance_variable_set("@content_for_layout", content_for_layout)
+          response.layout = layout
+          status = template_with_options ? options[:status] : nil
+          render_for_text(@template.render_file(layout, true), status)
         else
-          content_for_layout = render_with_no_layout(options, deprecated_status, &block)
+          render_with_no_layout(options, &block)
         end
-
-        erase_render_results
-        add_variables_to_assigns
-        @template.instance_variable_set("@content_for_layout", content_for_layout)
-        response.layout = layout
-        render_text(@template.render_file(layout, true), deprecated_status)
-      else
-        render_with_no_layout(options, deprecated_status, &block)
       end
-    end
+
 
     private
-    
       def apply_layout?(template_with_options, options)
         return false if options == :update
         template_with_options ?  candidate_for_layout?(options) : !template_exempt_from_layout?
@@ -266,14 +280,12 @@ module ActionController #:nodoc:
 
       def candidate_for_layout?(options)
         (options.has_key?(:layout) && options[:layout] != false) || 
-        options.values_at(:text, :xml, :json, :file, :inline, :partial, :nothing).compact.empty? &&
-        !template_exempt_from_layout?(default_template_name(options[:action] || options[:template]))
+          options.values_at(:text, :xml, :json, :file, :inline, :partial, :nothing).compact.empty? &&
+          !template_exempt_from_layout?(options[:template] || default_template_name(options[:action]))
       end
 
-      def pick_layout(template_with_options, options, deprecated_layout)
-        if deprecated_layout
-          deprecated_layout
-        elsif template_with_options
+      def pick_layout(template_with_options, options)
+        if template_with_options
           case layout = options[:layout]
             when FalseClass
               nil
@@ -305,9 +317,10 @@ module ActionController #:nodoc:
       # Does a layout directory for this class exist?
       # we cache this info in a class level hash
       def layout_directory?(layout_name)
-        template_path = File.join(self.class.view_root, 'layouts', layout_name)
-        dirname = File.dirname(template_path)
-        self.class.send(:layout_directory_exists_cache)[dirname]
+        view_paths.find do |path| 
+          next unless template_path = Dir[File.join(path, 'layouts', layout_name) + ".*"].first
+          self.class.send!(:layout_directory_exists_cache)[File.dirname(template_path)]
+        end
       end
   end
 end

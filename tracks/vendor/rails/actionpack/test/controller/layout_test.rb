@@ -1,15 +1,17 @@
 require File.dirname(__FILE__) + '/../abstract_unit'
 
-# The template_root must be set on Base and not LayoutTest so that LayoutTest's inherited method has access to
-# the template_root when looking for a layout
-ActionController::Base.template_root = File.dirname(__FILE__) + '/../fixtures/layout_tests/'
+# The view_paths array must be set on Base and not LayoutTest so that LayoutTest's inherited
+# method has access to the view_paths array when looking for a layout to automatically assign.
+old_load_paths = ActionController::Base.view_paths
+ActionController::Base.view_paths = [ File.dirname(__FILE__) + '/../fixtures/layout_tests/' ]
 
 class LayoutTest < ActionController::Base
   def self.controller_path; 'views' end
+  self.view_paths = ActionController::Base.view_paths.dup
 end
 
-# Restore template root to be unset
-ActionController::Base.template_root = nil
+# Restore view_paths to previous value
+ActionController::Base.view_paths = old_load_paths
 
 class ProductController < LayoutTest
 end
@@ -24,6 +26,9 @@ module ControllerNameSpace
 end
 
 class ControllerNameSpace::NestedController < LayoutTest
+end
+
+class MultipleExtensions < LayoutTest
 end
 
 class MabView
@@ -61,6 +66,7 @@ class LayoutAutoDiscoveryTest < Test::Unit::TestCase
     @controller = ThirdPartyTemplateLibraryController.new
     get :hello
     assert_equal 'layouts/third_party_template_library', @controller.active_layout
+    assert_equal 'layouts/third_party_template_library', @response.layout
     assert_equal 'Mab', @response.body
   end
   
@@ -69,6 +75,13 @@ class LayoutAutoDiscoveryTest < Test::Unit::TestCase
     get :hello
     assert_equal 'layouts/controller_name_space/nested', @controller.active_layout
     assert_equal 'controller_name_space/nested.rhtml hello.rhtml', @response.body
+  end
+  
+  def test_namespaced_controllers_auto_detect_layouts
+    @controller = MultipleExtensions.new
+    get :hello
+    assert_equal 'layouts/multiple_extensions', @controller.active_layout
+    assert_equal 'multiple_extensions.html.erb hello.rhtml', @response.body.strip
   end
 end
 
@@ -80,16 +93,16 @@ class ExemptFromLayoutTest < Test::Unit::TestCase
   end
 
   def test_rjs_exempt_from_layout
-    assert @controller.send(:template_exempt_from_layout?, 'test.rjs')
+    assert @controller.send!(:template_exempt_from_layout?, 'test.rjs')
   end
 
   def test_rhtml_and_rxml_not_exempt_from_layout
-    assert !@controller.send(:template_exempt_from_layout?, 'test.rhtml')
-    assert !@controller.send(:template_exempt_from_layout?, 'test.rxml')
+    assert !@controller.send!(:template_exempt_from_layout?, 'test.rhtml')
+    assert !@controller.send!(:template_exempt_from_layout?, 'test.rxml')
   end
 
   def test_other_extension_not_exempt_from_layout
-    assert !@controller.send(:template_exempt_from_layout?, 'test.random')
+    assert !@controller.send!(:template_exempt_from_layout?, 'test.random')
   end
 
   def test_add_extension_to_exempt_from_layout
@@ -97,18 +110,20 @@ class ExemptFromLayoutTest < Test::Unit::TestCase
       assert_nothing_raised do
         ActionController::Base.exempt_from_layout ext
       end
-      assert @controller.send(:template_exempt_from_layout?, "test.#{ext}")
+      assert @controller.send!(:template_exempt_from_layout?, "test.#{ext}")
     end
   end
 
   def test_add_regexp_to_exempt_from_layout
     ActionController::Base.exempt_from_layout /\.rdoc/
-    assert @controller.send(:template_exempt_from_layout?, 'test.rdoc')
+    assert @controller.send!(:template_exempt_from_layout?, 'test.rdoc')
   end
 
   def test_rhtml_exempt_from_layout_status_should_prevent_layout_render
     ActionController::Base.exempt_from_layout :rhtml
-    assert @controller.send(:template_exempt_from_layout?, 'test.rhtml')
+    
+    assert @controller.send!(:template_exempt_from_layout?, 'test.rhtml')
+    assert @controller.send!(:template_exempt_from_layout?, 'hello.rhtml')
 
     get :hello
     assert_equal 'hello.rhtml', @response.body
@@ -165,8 +180,26 @@ class LayoutSetInResponseTest < Test::Unit::TestCase
     get :hello
     assert_nil @response.layout
   end
+
+  def test_exempt_from_layout_honored_by_render_template
+    ActionController::Base.exempt_from_layout :rhtml
+    @controller = RenderWithTemplateOptionController.new
+
+    assert @controller.send(:template_exempt_from_layout?, 'alt/hello.rhtml')
+
+    get :hello
+    assert_equal "alt/hello.rhtml", @response.body.strip
+
+  ensure
+    ActionController::Base.exempt_from_layout.delete(/\.rhtml$/)
+  end
 end
 
+class RenderWithTemplateOptionController < LayoutTest
+  def hello
+    render :template => 'alt/hello'
+  end
+end
 
 class SetsNonExistentLayoutFile < LayoutTest
   layout "nofile.rhtml"
@@ -183,5 +216,24 @@ class LayoutExceptionRaised < Test::Unit::TestCase
     get :hello
     @response.template.class.module_eval { attr_accessor :exception }
     assert_equal ActionController::MissingTemplate, @response.template.exception.class
+  end
+end
+
+class LayoutStatusIsRendered < LayoutTest
+  def hello
+    render :status => 401
+  end
+end
+
+class LayoutStatusIsRenderedTest < Test::Unit::TestCase
+  def setup
+    @request    = ActionController::TestRequest.new
+    @response   = ActionController::TestResponse.new
+  end
+
+  def test_layout_status_is_rendered
+    @controller = LayoutStatusIsRendered.new
+    get :hello
+    assert_response 401
   end
 end

@@ -7,9 +7,11 @@ require "redcloth"
 
 require 'date'
 require 'time'
-#Tag # We need this in development mode, or you get 'method missing' errors
+Tag # We need this in development mode, or you get 'method missing' errors
 
 class ApplicationController < ActionController::Base
+
+  protect_from_forgery :secret => SALT
 
   helper :application
   include LoginSystem
@@ -26,6 +28,7 @@ class ApplicationController < ActionController::Base
 
 
   include ActionView::Helpers::TextHelper
+  include ActionView::Helpers::SanitizeHelper
   helper_method :format_date, :markdown
 
   # By default, sets the charset to UTF-8 if it isn't already set
@@ -58,17 +61,17 @@ class ApplicationController < ActionController::Base
     render :text => message, :status => status
   end
   
-  def rescue_action(exception)
-    log_error(exception) if logger
-    respond_to do |format|
-      format.html do
-        notify :warning, "An error occurred on the server."
-        render :action => "index"
-      end
-      format.js { render :action => 'error' }
-      format.xml { render :text => 'An error occurred on the server.' + $! }
-    end
-  end
+  # def rescue_action(exception)
+  #   log_error(exception) if logger
+  #   respond_to do |format|
+  #     format.html do
+  #       notify :warning, "An error occurred on the server."
+  #       render :action => "index"
+  #     end
+  #     format.js { render :action => 'error' }
+  #     format.xml { render :text => 'An error occurred on the server.' + $! }
+  #   end
+  # end
   
   # Returns a count of next actions in the given context or project
   # The result is count and a string descriptor, correctly pluralised if there are no

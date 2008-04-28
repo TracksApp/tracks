@@ -5,6 +5,16 @@ module XMLRPC # :nodoc:
   class FaultException # :nodoc:
     alias :message :faultString
   end
+  
+  class Create
+    def wrong_type(value)
+      if BigDecimal === value
+        [true, value.to_f]
+      else
+        false
+      end
+    end
+  end
 end
 
 module ActionWebService # :nodoc:
@@ -35,6 +45,8 @@ module ActionWebService # :nodoc:
         def decode_request(raw_request, service_name)
           method_name, params = XMLRPC::Marshal.load_call(raw_request)
           Request.new(self, method_name, params, service_name)
+        rescue
+          return nil
         end
 
         def encode_request(method_name, params, param_types)

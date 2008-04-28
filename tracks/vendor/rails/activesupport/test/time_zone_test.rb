@@ -34,7 +34,7 @@ class TimeZoneTest < Test::Unit::TestCase
   end
 
   def test_adjust_negative
-    zone = TimeZone.create( "Test", -4200 )
+    zone = TimeZone.create( "Test", -4200 ) # 4200s == 70 mins
     assert_equal Time.utc(2004,7,24,23,55,0), zone.adjust(Time.utc(2004,7,25,1,5,0))
   end
 
@@ -67,7 +67,7 @@ class TimeZoneTest < Test::Unit::TestCase
 
   def test_to_s
     zone = TimeZone.create( "Test", 4200 )
-    assert_equal "(GMT+01:10) Test", zone.to_s
+    assert_equal "(UTC+01:10) Test", zone.to_s
   end
 
   def test_all_sorted
@@ -80,12 +80,19 @@ class TimeZoneTest < Test::Unit::TestCase
   def test_index
     assert_nil TimeZone["bogus"]
     assert_not_nil TimeZone["Central Time (US & Canada)"]
+    assert_not_nil TimeZone[8]
+    assert_raises(ArgumentError) { TimeZone[false] }
   end
-
+  
   def test_new
     a = TimeZone.new("Berlin")
     b = TimeZone.new("Berlin")
     assert_same a, b
     assert_nil TimeZone.new("bogus")
   end
+  
+  def test_us_zones
+    assert TimeZone.us_zones.include?(TimeZone["Hawaii"])
+    assert !TimeZone.us_zones.include?(TimeZone["Kuala Lumpur"])
+  end 
 end

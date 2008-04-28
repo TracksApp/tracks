@@ -261,6 +261,23 @@ Example:
 This example invokes the API method <tt>test</tt>, defined on 
 the PersonController, and returns the result.
 
+If you're not using SOAP (or you're having serialisation difficulties), 
+you can test XMLRPC like this:
+
+  class PersonApiControllerTest < Test::Unit::TestCase
+    def setup
+      @controller = PersonController.new
+      @request    = ActionController::TestRequest.new
+      @response   = ActionController::TestResponse.new
+
+      @protocol   = :xmlrpc # can also be :soap, the default
+    end
+
+    def test_add
+      result = invoke :remove, 1 # no change here
+      assert_equal true, result
+    end
+  end
 
 === Scaffolding
 

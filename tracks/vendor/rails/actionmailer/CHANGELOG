@@ -1,11 +1,49 @@
-*1.3.5* (October 12th, 2007)
+*2.0.2* (December 16th, 2007)
 
-* Depend on Action Pack 1.13.5
+* Included in Rails 2.0.2
 
 
-*1.3.4* (October 4th, 2007)
+*2.0.1* (December 7th, 2007)
 
-* Depend on Action Pack 1.13.4
+* Update ActionMailer so it treats ActionView the same way that ActionController does.  Closes #10244 [rick]
+
+  * Pass the template_root as an array as ActionView's view_path
+  * Request templates with the "#{mailer_name}/#{action}" as opposed to just "#{action}"
+
+* Fixed that partials would be broken when using text.plain.erb as the extension #10130 [java]
+
+* Update README to use new smtp settings configuration API. Closes #10060 [psq]
+
+* Allow ActionMailer subclasses to individually set their delivery method (so two subclasses can have different delivery methods) #10033 [zdennis]
+
+* Update TMail to v1.1.0.  Use an updated version of TMail if available.  [mikel]
+
+* Introduce a new base test class for testing Mailers.  ActionMailer::TestCase [Koz]
+
+* Fix silent failure of rxml templates.  #9879 [jstewart]
+
+* Fix attachment decoding when using the TMail C extension.  #7861 [orangechicken]
+
+* Increase mail delivery test coverage.  #8692 [Kamal Fariz Mahyuddin]
+
+* Register alternative template engines using ActionMailer::Base.register_template_extension('haml').  #7534 [cwd, Josh Peek]
+
+* Only load ActionController::UrlWriter if ActionController is present [Rick Olson]
+
+* Make sure parsed emails recognized attachments nested inside multipart parts. #6714 [Jamis Buck]
+
+* Allow mailer actions named send by using __send__ internally.  #6467 [iGEL]
+
+* Add assert_emails and assert_no_emails to test the number of emails delivered.  #6479 [Jonathan Viney]
+    # Assert total number of emails delivered:
+    assert_emails 0
+    ContactMailer.deliver_contact
+    assert_emails 1
+
+    # Assert number of emails delivered within a block:
+    assert_emails 1 do
+      post :signup, :name => 'Jonathan'
+    end
 
 
 *1.3.3* (March 12th, 2007)
@@ -39,6 +77,8 @@
 
 * Replace Reloadable with Reloadable::Deprecated. [Nicholas Seckar]
 
+* Mailer template root applies to a class and its subclasses rather than acting globally. #5555 [somekool@gmail.com]
+
 * Resolve action naming collision. #5520 [ssinghi@kreeti.com]
 
 * ActionMailer::Base documentation rewrite. Closes #4991 [Kevin Clark, Marcel Molina Jr.]
@@ -47,29 +87,7 @@
 
 * Replace Ruby's deprecated append_features in favor of included. [Marcel Molina Jr.]
 
-
-*1.2.5* (August 10th, 2006)
-
-* Depend on Action Pack 1.12.5
-
-
-*1.2.4* (August 8th, 2006)
-
-* Backport of documentation enhancements. [Kevin Clark, Marcel Molina Jr]
-
 * Correct spurious documentation example code which results in a SyntaxError. [Marcel Molina Jr.]
-
-* Mailer template root applies to a class and its subclasses rather than acting globally. #5555 [somekool@gmail.com]
-
-
-*1.2.3* (June 29th, 2006)
-
-* Depend on Action Pack 1.12.3
-
-
-*1.2.2* (June 27th, 2006)
-
-* Depend on Action Pack 1.12.2
 
 
 *1.2.1* (April 6th, 2006)

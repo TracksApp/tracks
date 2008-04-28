@@ -4,6 +4,10 @@ require 'fixtures/topic'
 
 Company.has_many :accounts
 
+class NumericData < ActiveRecord::Base
+  self.table_name = 'numeric_data'
+end
+
 class CalculationsTest < Test::Unit::TestCase
   fixtures :companies, :accounts, :topics
 
@@ -15,6 +19,10 @@ class CalculationsTest < Test::Unit::TestCase
     value = Account.average(:credit_limit)
     assert_kind_of Float, value
     assert_in_delta 53.0, value, 0.001
+  end
+
+  def test_should_return_nil_as_average
+    assert_nil NumericData.average(:bank_balance)
   end
 
   def test_should_get_maximum_of_field
@@ -131,6 +139,26 @@ class CalculationsTest < Test::Unit::TestCase
     assert_equal 2, c[companies(:rails_core)]
     assert_equal 1, c[companies(:first_client)]
   end
+
+  uses_mocha 'group_by_non_numeric_foreign_key_association' do
+    def test_should_group_by_association_with_non_numeric_foreign_key
+      ActiveRecord::Base.connection.expects(:select_all).returns([{"count_all" => 1, "firm_id" => "ABC"}])
+
+      firm = mock()
+      firm.expects(:id).returns("ABC")
+      firm.expects(:class).returns(Firm)
+      Company.expects(:find).with(["ABC"]).returns([firm])
+
+      column = mock()
+      column.expects(:name).at_least_once.returns(:firm_id)
+      column.expects(:type_cast).with("ABC").returns("ABC")
+      Account.expects(:columns).at_least_once.returns([column])
+
+      c = Account.count(:all, :group => :firm)
+      assert_equal Firm, c.first.first.class
+      assert_equal 1, c.first.last
+    end
+  end
   
   def test_should_not_modify_options_when_using_includes
     options = {:conditions => 'companies.id > 1', :include => :firm}
@@ -199,16 +227,20 @@ class CalculationsTest < Test::Unit::TestCase
     assert_raises(ArgumentError) { Company.send(:validate_calculation_options, :sum,   :foo => :bar) }
     assert_raises(ArgumentError) { Company.send(:validate_calculation_options, :count, :foo => :bar) }
   end
-
+  
   def test_should_count_selected_field_with_include
     assert_equal 6, Account.count(:distinct => true, :include => :firm)
     assert_equal 4, Account.count(:distinct => true, :include => :firm, :select => :credit_limit)
   end
-
-  def test_deprecated_count_with_string_parameters
-    assert_deprecated('count') { Account.count('credit_limit > 50') }
+  
+  def test_count_with_column_parameter
+    assert_equal 5, Account.count(:firm_id)
   end
-
+  
+  def test_count_with_column_and_options_parameter
+    assert_equal 2, Account.count(:firm_id, :conditions => "credit_limit = 50")
+  end
+  
   def test_count_with_no_parameters_isnt_deprecated
     assert_not_deprecated { Account.count }
   end

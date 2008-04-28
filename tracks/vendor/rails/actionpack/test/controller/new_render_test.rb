@@ -1,6 +1,8 @@
 require File.dirname(__FILE__) + '/../abstract_unit'
+require File.dirname(__FILE__) + '/fake_models'
 
-silence_warnings { Customer = Struct.new("Customer", :name) }
+class CustomersController < ActionController::Base
+end
 
 module Fun
   class GamesController < ActionController::Base
@@ -60,12 +62,12 @@ class NewRenderTestController < ActionController::Base
 
   def render_file_with_instance_variables
     @secret = 'in the sauce'
-    path = File.join(File.dirname(__FILE__), '../fixtures/test/render_file_with_ivar.rhtml')
+    path = File.join(File.dirname(__FILE__), '../fixtures/test/render_file_with_ivar.erb')
     render :file => path
   end
 
   def render_file_with_locals
-    path = File.join(File.dirname(__FILE__), '../fixtures/test/render_file_with_locals.rhtml')
+    path = File.join(File.dirname(__FILE__), '../fixtures/test/render_file_with_locals.erb')
     render :file => path, :locals => {:secret => 'in the sauce'} 
   end
 
@@ -150,15 +152,27 @@ class NewRenderTestController < ActionController::Base
   def partial_with_hash_object
     render :partial => "hash_object", :object => {:first_name => "Sam"}
   end
-
+  
+  def partial_hash_collection
+    render :partial => "hash_object", :collection => [ {:first_name => "Pratik"}, {:first_name => "Amy"} ]
+  end
+  
+  def partial_hash_collection_with_locals
+    render :partial => "hash_greeting", :collection => [ {:first_name => "Pratik"}, {:first_name => "Amy"} ], :locals => { :greeting => "Hola" }
+  end
+  
   def partial_with_implicit_local_assignment
     @customer = Customer.new("Marcel")
     render :partial => "customer"
   end
   
+  def missing_partial
+    render :partial => 'thisFileIsntHere'
+  end
+  
   def hello_in_a_string
     @customers = [ Customer.new("david"), Customer.new("mary") ]
-    render :text =>  "How's there? #{render_to_string("test/list")}"
+    render :text =>  "How's there? " << render_to_string(:template => "test/list")
   end
   
   def render_to_string_with_assigns
@@ -197,7 +211,7 @@ class NewRenderTestController < ActionController::Base
   end
 
   def render_with_explicit_template
-    render "test/hello_world"
+    render :template => "test/hello_world"
   end
 
   def double_render
@@ -227,11 +241,11 @@ class NewRenderTestController < ActionController::Base
   end
 
   def hello_world_from_rxml_using_action
-    render :action => "hello_world.rxml"
+    render :action => "hello_world_from_rxml.builder"
   end
 
   def hello_world_from_rxml_using_template
-    render :template => "test/hello_world.rxml"
+    render :template => "test/hello_world_from_rxml.builder"
   end
 
   def head_with_location_header
@@ -256,6 +270,25 @@ class NewRenderTestController < ActionController::Base
 
   def head_with_status_code_first
     head :forbidden, :x_custom_header => "something"
+  end
+
+  def render_with_location
+    render :xml => "<hello/>", :location => "http://example.com", :status => 201
+  end
+  
+  def render_with_object_location
+    customer = Customer.new("Some guy", 1)
+    render :xml => "<customer/>", :location => customer_url(customer), :status => :created
+  end
+
+  def render_with_to_xml
+    to_xmlable = Class.new do
+      def to_xml
+        "<i-am-xml/>"
+      end
+    end.new
+    
+    render :xml => to_xmlable
   end
 
   helper NewRenderTestHelper
@@ -324,6 +357,14 @@ class NewRenderTestController < ActionController::Base
     render :text => "hello world!"
   end
 
+  def render_call_to_partial_with_layout
+    render :action => "calling_partial_with_layout"
+  end
+
+  def render_using_layout_around_block
+    render :action => "using_layout_around_block"
+  end
+
   def rescue_action(e) raise end
     
   private
@@ -350,8 +391,8 @@ class NewRenderTestController < ActionController::Base
     end
 end
 
-NewRenderTestController.template_root = File.dirname(__FILE__) + "/../fixtures/"
-Fun::GamesController.template_root = File.dirname(__FILE__) + "/../fixtures/"
+NewRenderTestController.view_paths = [ File.dirname(__FILE__) + "/../fixtures/" ]
+Fun::GamesController.view_paths = [ File.dirname(__FILE__) + "/../fixtures/" ]
 
 class NewRenderTest < Test::Unit::TestCase
   def setup
@@ -460,14 +501,9 @@ class NewRenderTest < Test::Unit::TestCase
     ActionController::Base.protected_variables_cache = nil
 
     get :hello_world
-    assert assigns.include?('request'), 'request should be in assigns'
-    assert_deprecated 'request' do
-      assert_kind_of ActionController::AbstractRequest, assigns['request']
-    end
-    assert_not_deprecated do
-      assert_kind_of ActionController::AbstractRequest, @response.template.request
-      assert_kind_of ActionController::AbstractRequest, assigns['_request']
-    end
+    assert !assigns.include?('request'), 'request should not be in assigns'
+    assert_kind_of ActionController::AbstractRequest, assigns['_request']
+    assert_kind_of ActionController::AbstractRequest, @response.template.request
 
   ensure
     ActionController::Base.view_controller_internals = view_internals_old_value
@@ -594,7 +630,7 @@ EOS
   end
 
   def test_render_with_explicit_template
-    assert_deprecated(/render/) { get :render_with_explicit_template }
+    get :render_with_explicit_template
     assert_response :success
   end
 
@@ -653,12 +689,28 @@ EOS
 
   def test_partial_with_hash_object
     get :partial_with_hash_object
-    assert_equal "Sam", @response.body
+    assert_equal "Sam\nmaS\n", @response.body
+  end
+  
+  def test_hash_partial_collection
+    get :partial_hash_collection
+    assert_equal "Pratik\nkitarP\nAmy\nymA\n", @response.body
+  end
+  
+  def test_partial_hash_collection_with_locals
+    get :partial_hash_collection_with_locals
+    assert_equal "Hola: PratikHola: Amy", @response.body
   end
 
   def test_partial_with_implicit_local_assignment
     get :partial_with_implicit_local_assignment
     assert_equal "Hello: Marcel", @response.body
+  end
+  
+  def test_render_missing_partial_template
+    assert_raises(ActionView::ActionViewError) do
+      get :missing_partial
+    end
   end
   
   def test_render_text_with_assigns
@@ -669,14 +721,14 @@ EOS
   def test_update_page
     get :update_page
     assert_template nil
-    assert_equal 'text/javascript; charset=utf-8', @response.headers['Content-Type']
+    assert_equal 'text/javascript; charset=utf-8', @response.headers['type']
     assert_equal 2, @response.body.split($/).length
   end
   
   def test_update_page_with_instance_variables
     get :update_page_with_instance_variables
     assert_template nil
-    assert_equal 'text/javascript; charset=utf-8', @response.headers['Content-Type']
+    assert_equal 'text/javascript; charset=utf-8', @response.headers['type']
     assert_match /balance/, @response.body
     assert_match /\$37/, @response.body
   end
@@ -746,5 +798,35 @@ EOS
     assert_equal "Forbidden", @response.message
     assert_equal "something", @response.headers["X-Custom-Header"]
     assert_response :forbidden
+  end
+
+  def test_rendering_with_location_should_set_header
+    get :render_with_location
+    assert_equal "http://example.com", @response.headers["Location"]
+  end
+  
+  def test_rendering_xml_should_call_to_xml_if_possible
+    get :render_with_to_xml
+    assert_equal "<i-am-xml/>", @response.body
+  end
+  
+  def test_rendering_with_object_location_should_set_header_with_url_for
+    ActionController::Routing::Routes.draw do |map|
+      map.resources :customers
+      map.connect ':controller/:action/:id'
+    end
+
+    get :render_with_object_location
+    assert_equal "http://www.nextangle.com/customers/1", @response.headers["Location"]
+  end
+
+  def test_render_call_to_partial_with_layout
+    get :render_call_to_partial_with_layout
+    assert_equal "Before (David)\nInside from partial (David)\nAfter", @response.body
+  end
+  
+  def test_using_layout_around_block
+    get :using_layout_around_block
+    assert_equal "Before (David)\nInside from block\nAfter", @response.body
   end
 end

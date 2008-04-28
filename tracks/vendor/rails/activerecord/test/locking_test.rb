@@ -1,5 +1,6 @@
 require 'abstract_unit'
 require 'fixtures/person'
+require 'fixtures/reader'
 require 'fixtures/legacy_thing'
 
 class LockWithoutDefault < ActiveRecord::Base; end
@@ -9,8 +10,17 @@ class LockWithCustomColumnWithoutDefault < ActiveRecord::Base
   set_locking_column :custom_lock_version
 end
 
+class ReadonlyFirstNamePerson < Person
+  attr_readonly :first_name
+end
+
 class OptimisticLockingTest < Test::Unit::TestCase
   fixtures :people, :legacy_things
+
+  # need to disable transactional fixtures, because otherwise the sqlite3
+  # adapter (at least) chokes when we try and change the schema in the middle
+  # of a test (see test_increment_counter_*).
+  self.use_transactional_fixtures = false
 
   def test_lock_existing
     p1 = Person.find(1)
@@ -22,6 +32,20 @@ class OptimisticLockingTest < Test::Unit::TestCase
     assert_equal 1, p1.lock_version
     assert_equal 0, p2.lock_version
 
+    assert_raises(ActiveRecord::StaleObjectError) { p2.save! }
+  end
+  
+  def test_lock_repeating
+    p1 = Person.find(1)
+    p2 = Person.find(1)
+    assert_equal 0, p1.lock_version
+    assert_equal 0, p2.lock_version
+
+    p1.save!
+    assert_equal 1, p1.lock_version
+    assert_equal 0, p2.lock_version
+
+    assert_raises(ActiveRecord::StaleObjectError) { p2.save! }
     assert_raises(ActiveRecord::StaleObjectError) { p2.save! }
   end
 
@@ -40,6 +64,15 @@ class OptimisticLockingTest < Test::Unit::TestCase
 
     assert_raises(ActiveRecord::StaleObjectError) { p2.save! }
   end
+  
+  def test_lock_new_with_nil
+    p1 = Person.new(:first_name => 'anika')
+    p1.save!
+    p1.lock_version = nil # simulate bad fixture or column with no default
+    p1.save!
+    assert_equal 1, p1.lock_version
+  end
+    
 
   def test_lock_column_name_existing
     t1 = LegacyThing.find(1)
@@ -73,6 +106,65 @@ class OptimisticLockingTest < Test::Unit::TestCase
     t1 = LockWithCustomColumnWithoutDefault.new
     assert_equal 0, t1.custom_lock_version
   end
+
+  def test_readonly_attributes
+    assert_equal Set.new([ 'first_name' ]), ReadonlyFirstNamePerson.readonly_attributes
+
+    p = ReadonlyFirstNamePerson.create(:first_name => "unchangeable name")
+    p.reload
+    assert_equal "unchangeable name", p.first_name
+
+    p.update_attributes(:first_name => "changed name")
+    p.reload
+    assert_equal "unchangeable name", p.first_name
+  end
+
+  { :lock_version => Person, :custom_lock_version => LegacyThing }.each do |name, model|
+    define_method("test_increment_counter_updates_#{name}") do
+      counter_test model, 1 do |id|
+        model.increment_counter :test_count, id
+      end
+    end
+
+    define_method("test_decrement_counter_updates_#{name}") do
+      counter_test model, -1 do |id|
+        model.decrement_counter :test_count, id
+      end
+    end
+
+    define_method("test_update_counters_updates_#{name}") do
+      counter_test model, 1 do |id|
+        model.update_counters id, :test_count => 1
+      end
+    end
+  end
+
+  private
+
+    def add_counter_column_to(model)
+      model.connection.add_column model.table_name, :test_count, :integer, :null => false, :default => 0
+      model.reset_column_information
+      # OpenBase does not set a value to existing rows when adding a not null default column
+      model.update_all(:test_count => 0) if current_adapter?(:OpenBaseAdapter)
+    end
+
+    def remove_counter_column_from(model)
+      model.connection.remove_column model.table_name, :test_count
+      model.reset_column_information
+    end
+
+    def counter_test(model, expected_count)
+      add_counter_column_to(model)
+      object = model.find(:first)
+      assert_equal 0, object.test_count
+      assert_equal 0, object.send(model.locking_column)
+      yield object.id
+      object.reload
+      assert_equal expected_count, object.test_count
+      assert_equal 1, object.send(model.locking_column)
+    ensure
+      remove_counter_column_from(model)
+    end
 end
 
 
@@ -81,9 +173,9 @@ end
 # blocks, so separate script called by Kernel#system is needed.
 # (See exec vs. async_exec in the PostgreSQL adapter.)
 
-# TODO: The SQL Server and Sybase adapters currently have no support for pessimistic locking
+# TODO: The SQL Server, Sybase, and OpenBase adapters currently have no support for pessimistic locking
 
-unless current_adapter?(:SQLServerAdapter, :SybaseAdapter)
+unless current_adapter?(:SQLServerAdapter, :SybaseAdapter, :OpenBaseAdapter)
   class PessimisticLockingTest < Test::Unit::TestCase
     self.use_transactional_fixtures = false
     fixtures :people, :readers

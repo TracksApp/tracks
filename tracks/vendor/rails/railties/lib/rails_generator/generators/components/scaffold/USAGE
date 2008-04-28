@@ -1,32 +1,25 @@
 Description:
-    The scaffold generator creates a controller to interact with a model.
-    If the model does not exist, it creates the model as well.  The generated
-    code is equivalent to the "scaffold :model" declaration, making it easy
-    to migrate when you wish to customize your controller and views.
+    Scaffolds an entire resource, from model and migration to controller and
+    views, along with a full test suite. The resource is ready to use as a
+    starting point for your restful, resource-oriented application.
 
-    The generator takes a model name, an optional controller name, and a
-    list of views as arguments.  Scaffolded actions and views are created
-    automatically.  Any views left over generate empty stubs.
+    Pass the name of the model, either CamelCased or under_scored, as the first
+    argument, and an optional list of attribute pairs.
 
-    The scaffolded actions and views are:
-        index, list, show, new, create, edit, update, destroy
+    Attribute pairs are column_name:sql_type arguments specifying the
+    model's attributes. Timestamps are added by default, so you don't have to
+    specify them by hand as 'created_at:datetime updated_at:datetime'.
 
-    If a controller name is not given, the plural form of the model name
-    will be used.  The model and controller names may be given in CamelCase
-    or under_score and should not be suffixed with 'Model' or 'Controller'.
-    Both model and controller names may be prefixed with a module like a
-    file path; see the Modules Example for usage.
+    You don't have to think up every attribute up front, but it helps to
+    sketch out a few so you can start working with the resource immediately.
 
-Example:
-    ./script/generate scaffold Account Bank debit credit
+    For example, `scaffold post title:string body:text published:boolean`
+    gives you a model with those three attributes, a controller that handles
+    the create/show/update/destroy, forms to create and edit your posts, and
+    an index that lists them all, as well as a map.resources :posts
+    declaration in config/routes.rb.
 
-    This will generate an Account model and BankController with a full test
-    suite and a basic user interface.  Now create the accounts table in your
-    database and browse to http://localhost/bank/ -- voila, you're on Rails!
-
-Modules Example:
-    ./script/generate scaffold CreditCard 'admin/credit_card' suspend late_fee
-
-    This will generate a CreditCard model and CreditCardController controller
-    in the admin module.
-
+Examples:
+    `./script/generate scaffold post` # no attributes, view will be anemic
+    `./script/generate scaffold post title:string body:text published:boolean`
+    `./script/generate scaffold purchase order_id:integer amount:decimal`

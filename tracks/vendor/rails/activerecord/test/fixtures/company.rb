@@ -1,4 +1,8 @@
-class Company < ActiveRecord::Base
+class AbstractCompany < ActiveRecord::Base
+  self.abstract_class = true
+end
+
+class Company < AbstractCompany
   attr_protected :rating
   set_sequence_name :companies_nonstd_seq
 
@@ -34,6 +38,7 @@ class Firm < Company
   has_many :no_clients_using_counter_sql, :class_name => "Client",
            :finder_sql  => 'SELECT * FROM companies WHERE client_of = 1000',
            :counter_sql => 'SELECT COUNT(*) FROM companies WHERE client_of = 1000'
+  has_many :clients_using_finder_sql, :class_name => "Client", :finder_sql => 'SELECT * FROM companies WHERE 1=1'
   has_many :plain_clients, :class_name => 'Client'
 
   has_one :account, :foreign_key => "firm_id", :dependent => :destroy
@@ -46,6 +51,8 @@ end
 
 class ExclusivelyDependentFirm < Company
   has_one :account, :foreign_key => "firm_id", :dependent => :delete
+  has_many :dependent_sanitized_conditional_clients_of_firm, :foreign_key => "client_of", :class_name => "Client", :order => "id", :dependent => :delete_all, :conditions => "name = 'BigShot Inc.'"
+  has_many :dependent_conditional_clients_of_firm, :foreign_key => "client_of", :class_name => "Client", :order => "id", :dependent => :delete_all, :conditions => ["name = ?", 'BigShot Inc.']
 end
 
 class Client < Company

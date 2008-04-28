@@ -77,7 +77,7 @@ class UserTest < Test::Rails::TestCase
   def test_validate_missing_password
     assert_no_difference User, :count do
       u = create_user :password => ''
-      assert_errors_on u, :password, ["is too short (minimum is 5 characters)", "can't be blank"]
+      assert_errors_on u, :password, ["can't be blank", "is too short (minimum is 5 characters)"]
     end
   end
 
@@ -104,7 +104,7 @@ class UserTest < Test::Rails::TestCase
   def test_validate_missing_login
     assert_no_difference User, :count do
       u = create_user :login => ''
-      assert_errors_on u, :login, ["is too short (minimum is 3 characters)", "can't be blank"]
+      assert_errors_on u, :login, ["can't be blank", "is too short (minimum is 3 characters)"]
     end
   end
 

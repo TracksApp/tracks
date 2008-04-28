@@ -38,7 +38,7 @@ module Tracks
       if opts.has_key?(:include_project_hidden_todos) && (opts[:include_project_hidden_todos] == true)
         conditions = ["(todos.state = ? or todos.state = ?)", 'active', 'project_hidden']
       end
-      self.todos.with_scope :find => {:conditions => conditions} do
+      self.todos.send :with_scope, :find => {:conditions => conditions} do
         yield
       end
     end

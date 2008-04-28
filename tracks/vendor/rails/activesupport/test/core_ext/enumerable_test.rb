@@ -8,8 +8,7 @@ end
 class EnumerableTests < Test::Unit::TestCase
   def test_group_by
     names = %w(marcel sam david jeremy)
-    klass = Class.new
-    klass.send(:attr_accessor, :name)
+    klass = Struct.new(:name)
     objects = (1..50).inject([]) do |people,|
       p = klass.new
       p.name = names.sort_by { rand }.first
@@ -38,24 +37,25 @@ class EnumerableTests < Test::Unit::TestCase
   end
 
   def test_nil_sums
-    assert_raise(TypeError) { [5, 15, nil].sum }
+    expected_raise = TypeError
+
+    assert_raise(expected_raise) { [5, 15, nil].sum }
 
     payments = [ Payment.new(5), Payment.new(15), Payment.new(10), Payment.new(nil) ]
-    assert_raise(TypeError) { payments.sum(&:price) }
+    assert_raise(expected_raise) { payments.sum(&:price) }
+
     assert_equal 60, payments.sum { |p| p.price.to_i * 2 }
   end
-  
+
   def test_empty_sums
     assert_equal 0, [].sum
     assert_equal 0, [].sum { |i| i }
     assert_equal Payment.new(0), [].sum(Payment.new(0))
   end
-  
+
   def test_index_by
     payments = [ Payment.new(5), Payment.new(15), Payment.new(10) ]
-    assert_equal(
-      {5 => payments[0], 15 => payments[1], 10 => payments[2]},
-      payments.index_by(&:price)
-    )
+    assert_equal({ 5 => payments[0], 15 => payments[1], 10 => payments[2] },
+                 payments.index_by { |p| p.price })
   end
 end

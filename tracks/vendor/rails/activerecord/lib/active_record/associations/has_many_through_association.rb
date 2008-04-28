@@ -9,7 +9,7 @@ module ActiveRecord
       end
 
       def find(*args)
-        options = Base.send(:extract_options_from_args!, args)
+        options = args.extract_options!
 
         conditions = "#{@finder_sql}"
         if sanitized_conditions = sanitize_sql(options[:conditions])
@@ -51,16 +51,14 @@ module ActiveRecord
         through = @reflection.through_reflection
         raise ActiveRecord::HasManyThroughCantAssociateNewRecords.new(@owner, through) if @owner.new_record?
 
-        load_target
-
         klass = through.klass
         klass.transaction do
           flatten_deeper(records).each do |associate|
             raise_on_type_mismatch(associate)
             raise ActiveRecord::HasManyThroughCantAssociateNewRecords.new(@owner, through) unless associate.respond_to?(:new_record?) && !associate.new_record?
 
-            @owner.send(@reflection.through_reflection.name).proxy_target << klass.with_scope(:create => construct_join_attributes(associate)) { klass.create! }
-            @target << associate
+            @owner.send(@reflection.through_reflection.name).proxy_target << klass.send(:with_scope, :create => construct_join_attributes(associate)) { klass.create! }
+            @target << associate if loaded?
           end
         end
 
@@ -69,32 +67,49 @@ module ActiveRecord
 
       [:push, :concat].each { |method| alias_method method, :<< }
 
-      # Remove +records+ from this association.  Does not destroy +records+.
+      # Removes +records+ from this association.  Does not destroy +records+.
       def delete(*records)
         records = flatten_deeper(records)
         records.each { |associate| raise_on_type_mismatch(associate) }
-        records.reject! { |associate| @target.delete(associate) if associate.new_record? }
-        return if records.empty?
-        
-        @delete_join_finder ||= "find_all_by_#{@reflection.source_reflection.association_foreign_key}"
+
         through = @reflection.through_reflection
-        through.klass.transaction do
-          records.each do |associate|
-            joins = @owner.send(through.name).send(@delete_join_finder, associate.id)
-            @owner.send(through.name).delete(joins)
+        raise ActiveRecord::HasManyThroughCantDissociateNewRecords.new(@owner, through) if @owner.new_record?
+
+        load_target
+
+        klass = through.klass
+        klass.transaction do
+          flatten_deeper(records).each do |associate|
+            raise_on_type_mismatch(associate)
+            raise ActiveRecord::HasManyThroughCantDissociateNewRecords.new(@owner, through) unless associate.respond_to?(:new_record?) && !associate.new_record?
+
+            @owner.send(through.name).proxy_target.delete(klass.delete_all(construct_join_attributes(associate)))
             @target.delete(associate)
           end
         end
+
+        self
       end
 
       def build(attrs = nil)
         raise ActiveRecord::HasManyThroughCantAssociateNewRecords.new(@owner, @reflection.through_reflection)
       end
+      alias_method :new, :build
 
       def create!(attrs = nil)
         @reflection.klass.transaction do
-          self << @reflection.klass.with_scope(:create => attrs) { @reflection.klass.create! }
+          self << (object = @reflection.klass.send(:with_scope, :create => attrs) { @reflection.klass.create! })
+          object
         end
+      end
+
+      # Returns the size of the collection by executing a SELECT COUNT(*) query if the collection hasn't been loaded and
+      # calling collection.size if it has. If it's more likely than not that the collection does have a size larger than zero
+      # and you need to fetch that collection afterwards, it'll take one less SELECT query if you use length.
+      def size
+        return @owner.send(:read_attribute, cached_counter_attribute_name) if has_cached_counter?
+        return @target.size if loaded?
+        return count
       end
 
       # Calculate sum using SQL, not Enumerable
@@ -103,9 +118,9 @@ module ActiveRecord
       end
       
       def count(*args)
-        column_name, options = @reflection.klass.send(:construct_count_options_from_legacy_args, *args)
+        column_name, options = @reflection.klass.send(:construct_count_options_from_args, *args)
         if @reflection.options[:uniq]
-          # This is needed becase 'SELECT count(DISTINCT *)..' is not valid sql statement.
+          # This is needed because 'SELECT count(DISTINCT *)..' is not valid sql statement.
           column_name = "#{@reflection.klass.table_name}.#{@reflection.klass.primary_key}" if column_name == :all
           options.merge!(:distinct => true) 
         end
@@ -117,7 +132,7 @@ module ActiveRecord
           if @target.respond_to?(method) || (!@reflection.klass.respond_to?(method) && Class.respond_to?(method))
             super
           else
-            @reflection.klass.with_scope(construct_scope) { @reflection.klass.send(method, *args, &block) }
+            @reflection.klass.send(:with_scope, construct_scope) { @reflection.klass.send(method, *args, &block) }
           end
         end
 
@@ -133,7 +148,8 @@ module ActiveRecord
             :include    => @reflection.options[:include] || @reflection.source_reflection.options[:include]
           )
 
-          @reflection.options[:uniq] ? records.to_set.to_a : records
+          records.uniq! if @reflection.options[:uniq]
+          records
         end
 
         # Construct attributes for associate pointing to owner.
@@ -148,11 +164,11 @@ module ActiveRecord
 
         # Construct attributes for :through pointing to owner and associate.
         def construct_join_attributes(associate)
-          returning construct_owner_attributes(@reflection.through_reflection).merge(@reflection.source_reflection.primary_key_name => associate.id) do |join_attributes|
-            if @reflection.options[:source_type]
-              join_attributes.merge!(@reflection.source_reflection.options[:foreign_type] => associate.class.base_class.name.to_s)
-            end
+          join_attributes = construct_owner_attributes(@reflection.through_reflection).merge(@reflection.source_reflection.primary_key_name => associate.id)
+          if @reflection.options[:source_type]
+            join_attributes.merge!(@reflection.source_reflection.options[:foreign_type] => associate.class.base_class.name.to_s)
           end
+          join_attributes
         end
 
         # Associate attributes pointing to owner, quoted.
@@ -220,7 +236,9 @@ module ActiveRecord
             :find   => { :from        => construct_from,
                          :conditions  => construct_conditions,
                          :joins       => construct_joins,
-                         :select      => construct_select } }
+                         :select      => construct_select,
+                         :order       => @reflection.options[:order],
+                         :limit       => @reflection.options[:limit] } }
         end
 
         def construct_sql
@@ -247,11 +265,20 @@ module ActiveRecord
           @conditions ||= [
             (interpolate_sql(@reflection.klass.send(:sanitize_sql, @reflection.options[:conditions])) if @reflection.options[:conditions]),
             (interpolate_sql(@reflection.active_record.send(:sanitize_sql, @reflection.through_reflection.options[:conditions])) if @reflection.through_reflection.options[:conditions]),
+            (interpolate_sql(@reflection.active_record.send(:sanitize_sql, @reflection.source_reflection.options[:conditions])) if @reflection.source_reflection.options[:conditions]),
             ("#{@reflection.through_reflection.table_name}.#{@reflection.through_reflection.klass.inheritance_column} = #{@reflection.klass.quote_value(@reflection.through_reflection.klass.name.demodulize)}" unless @reflection.through_reflection.klass.descends_from_active_record?)
-          ].compact.collect { |condition| "(#{condition})" }.join(' AND ') unless (!@reflection.options[:conditions] && !@reflection.through_reflection.options[:conditions] && @reflection.through_reflection.klass.descends_from_active_record?)
+          ].compact.collect { |condition| "(#{condition})" }.join(' AND ') unless (!@reflection.options[:conditions] && !@reflection.through_reflection.options[:conditions]  && !@reflection.source_reflection.options[:conditions] && @reflection.through_reflection.klass.descends_from_active_record?)
         end
 
         alias_method :sql_conditions, :conditions
+
+        def has_cached_counter?
+          @owner.attribute_present?(cached_counter_attribute_name)
+        end
+
+        def cached_counter_attribute_name
+          "#{@reflection.name}_count"
+        end
     end
   end
 end

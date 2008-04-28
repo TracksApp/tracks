@@ -3,8 +3,8 @@
 # Under MIT and/or CC By license.
 #++
 
-require File.dirname(__FILE__) + '/../abstract_unit'
-require File.dirname(__FILE__) + '/fake_controllers'
+require "#{File.dirname(__FILE__)}/../abstract_unit"
+require "#{File.dirname(__FILE__)}/fake_controllers"
 
 
 unless defined?(ActionMailer)
@@ -73,7 +73,12 @@ class AssertSelectTest < Test::Unit::TestCase
   def teardown
     ActionMailer::Base.deliveries.clear
   end
-
+  
+  def assert_failure(message, &block)
+    e = assert_raises(AssertionFailedError, &block)
+    assert_match(message, e.message) if Regexp === message
+    assert_equal(message, e.message) if String === message
+  end
 
   #
   # Test assert select.
@@ -82,8 +87,8 @@ class AssertSelectTest < Test::Unit::TestCase
   def test_assert_select
     render_html %Q{<div id="1"></div><div id="2"></div>}
     assert_select "div", 2
-    assert_raises(AssertionFailedError) { assert_select "div", 3 }
-    assert_raises(AssertionFailedError){ assert_select "p" }
+    assert_failure(/Expected at least 3 elements matching \"div\", found 2/) { assert_select "div", 3 }
+    assert_failure(/Expected at least 1 element matching \"p\", found 0/) { assert_select "p" }
   end
 
 
@@ -131,22 +136,34 @@ class AssertSelectTest < Test::Unit::TestCase
   end
 
 
-  def test_equality_of_instances
+  def test_counts
     render_html %Q{<div id="1">foo</div><div id="2">foo</div>}
     assert_nothing_raised               { assert_select "div", 2 }
-    assert_raises(AssertionFailedError) { assert_select "div", 3 }
+    assert_failure(/Expected at least 3 elements matching \"div\", found 2/) do
+      assert_select "div", 3
+    end
     assert_nothing_raised               { assert_select "div", 1..2 }
-    assert_raises(AssertionFailedError) { assert_select "div", 3..4 }
+    assert_failure(/Expected between 3 and 4 elements matching \"div\", found 2/) do
+      assert_select "div", 3..4
+    end
     assert_nothing_raised               { assert_select "div", :count=>2 }
-    assert_raises(AssertionFailedError) { assert_select "div", :count=>3 }
+    assert_failure(/Expected at least 3 elements matching \"div\", found 2/) do
+      assert_select "div", :count=>3
+    end
     assert_nothing_raised               { assert_select "div", :minimum=>1 }
     assert_nothing_raised               { assert_select "div", :minimum=>2 }
-    assert_raises(AssertionFailedError) { assert_select "div", :minimum=>3 }
+    assert_failure(/Expected at least 3 elements matching \"div\", found 2/) do
+      assert_select "div", :minimum=>3
+    end
     assert_nothing_raised               { assert_select "div", :maximum=>2 }
     assert_nothing_raised               { assert_select "div", :maximum=>3 }
-    assert_raises(AssertionFailedError) { assert_select "div", :maximum=>1 }
+    assert_failure(/Expected at most 1 element matching \"div\", found 2/) do
+      assert_select "div", :maximum=>1
+    end
     assert_nothing_raised               { assert_select "div", :minimum=>1, :maximum=>2 }
-    assert_raises(AssertionFailedError) { assert_select "div", :minimum=>3, :maximum=>4 }
+    assert_failure(/Expected between 3 and 4 elements matching \"div\", found 2/) do
+      assert_select "div", :minimum=>3, :maximum=>4
+    end
   end
 
 
@@ -181,6 +198,12 @@ class AssertSelectTest < Test::Unit::TestCase
         assert_select "#1"
         assert_select "#2"
         assert_select "#3", false
+      end
+    end
+    
+    assert_failure(/Expected at least 1 element matching \"#4\", found 0\./) do
+      assert_select "div" do
+        assert_select "#4"
       end
     end
   end
@@ -408,6 +431,90 @@ class AssertSelectTest < Test::Unit::TestCase
     assert_raises(AssertionFailedError) { assert_select_rjs :replace_html, "test1" }
   end
 
+  # Simple remove
+  def test_assert_select_rjs_for_remove
+    render_rjs do |page|
+      page.remove "test1"
+    end
+
+    assert_select_rjs :remove, "test1"
+  end
+
+  def test_assert_select_rjs_for_remove_ignores_block
+    render_rjs do |page|
+      page.remove "test1"
+    end
+
+    assert_nothing_raised do
+      assert_select_rjs :remove, "test1" do
+        assert_select "p"
+      end
+    end
+  end
+
+  # Simple show
+  def test_assert_select_rjs_for_show
+    render_rjs do |page|
+      page.show "test1"
+    end
+
+    assert_select_rjs :show, "test1"
+  end
+
+  def test_assert_select_rjs_for_show_ignores_block
+    render_rjs do |page|
+      page.show "test1"
+    end
+
+    assert_nothing_raised do
+      assert_select_rjs :show, "test1" do
+        assert_select "p"
+      end
+    end
+  end
+  
+  # Simple hide
+  def test_assert_select_rjs_for_hide
+    render_rjs do |page|
+      page.hide "test1"
+    end
+
+    assert_select_rjs :hide, "test1"
+  end
+
+  def test_assert_select_rjs_for_hide_ignores_block
+    render_rjs do |page|
+      page.hide "test1"
+    end
+
+    assert_nothing_raised do
+      assert_select_rjs :hide, "test1" do
+        assert_select "p"
+      end
+    end
+  end
+  
+  # Simple toggle
+  def test_assert_select_rjs_for_toggle
+    render_rjs do |page|
+      page.toggle "test1"
+    end
+
+    assert_select_rjs :toggle, "test1"
+  end
+
+  def test_assert_select_rjs_for_toggle_ignores_block
+    render_rjs do |page|
+      page.toggle "test1"
+    end
+
+    assert_nothing_raised do
+      assert_select_rjs :toggle, "test1" do
+        assert_select "p"
+      end
+    end
+  end
+  
   # Non-positioned insert.
   def test_assert_select_rjs_for_nonpositioned_insert
     render_rjs do |page|
@@ -454,8 +561,7 @@ class AssertSelectTest < Test::Unit::TestCase
       assert_select "div", 4
     end
   end
-
-
+  
   # Simple selection from a single result.
   def test_nested_assert_select_rjs_with_single_result
     render_rjs do |page|

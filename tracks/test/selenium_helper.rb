@@ -1,8 +1,13 @@
 class SeleniumHelperController < ActionController::Base
   def login
     if params[:as]
-      session['user_id'] = User.find_by_login(params[:as].to_s)
+      user = User.find_by_login(params[:as].to_s)
+      session['user_id'] = user
+      user.contexts.each do |c|
+        cookies["tracks_#{user.login}_context_c#{c.id}_collapsed"] = nil
+      end
     end
+    
     render :text => "Logged in as #{params[:as]}"
   end
 end

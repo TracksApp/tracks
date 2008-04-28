@@ -54,7 +54,7 @@ module ActiveRecord
       # [<tt>:temporary</tt>]
       #   Make a temporary table.
       # [<tt>:force</tt>]
-      #   Set to true or false to drop the table before creating it.
+      #   Set to true to drop the table before creating it.
       #   Defaults to false.
       #
       # ===== Examples
@@ -81,45 +81,45 @@ module ActiveRecord
       #    t.column :supplier_id, :integer
       #  end
       # generates:
-      #  CREATE TABLE categories_suppliers_join (
+      #  CREATE TABLE categories_suppliers (
       #    category_id int,
       #    supplier_id int
       #  )
       #
       # See also TableDefinition#column for details on how to create columns.
-      def create_table(name, options = {})
+      def create_table(table_name, options = {})
         table_definition = TableDefinition.new(self)
         table_definition.primary_key(options[:primary_key] || "id") unless options[:id] == false
 
         yield table_definition
 
         if options[:force]
-          drop_table(name, options) rescue nil
+          drop_table(table_name, options) rescue nil
         end
 
         create_sql = "CREATE#{' TEMPORARY' if options[:temporary]} TABLE "
-        create_sql << "#{name} ("
+        create_sql << "#{quote_table_name(table_name)} ("
         create_sql << table_definition.to_sql
         create_sql << ") #{options[:options]}"
         execute create_sql
       end
-      
+
       # Renames a table.
       # ===== Example
       #  rename_table('octopuses', 'octopi')
-      def rename_table(name, new_name)
+      def rename_table(table_name, new_name)
         raise NotImplementedError, "rename_table is not implemented"
       end
 
       # Drops a table from the database.
-      def drop_table(name, options = {})
-        execute "DROP TABLE #{name}"
+      def drop_table(table_name, options = {})
+        execute "DROP TABLE #{quote_table_name(table_name)}"
       end
 
       # Adds a new column to the named table.
       # See TableDefinition#column for details of the options you can use.
       def add_column(table_name, column_name, type, options = {})
-        add_column_sql = "ALTER TABLE #{table_name} ADD #{quote_column_name(column_name)} #{type_to_sql(type, options[:limit], options[:precision], options[:scale])}"
+        add_column_sql = "ALTER TABLE #{quote_table_name(table_name)} ADD #{quote_column_name(column_name)} #{type_to_sql(type, options[:limit], options[:precision], options[:scale])}"
         add_column_options!(add_column_sql, options)
         execute(add_column_sql)
       end
@@ -128,7 +128,7 @@ module ActiveRecord
       # ===== Examples
       #  remove_column(:suppliers, :qualification)
       def remove_column(table_name, column_name)
-        execute "ALTER TABLE #{table_name} DROP #{quote_column_name(column_name)}"
+        execute "ALTER TABLE #{quote_table_name(table_name)} DROP #{quote_column_name(column_name)}"
       end
 
       # Changes the column's definition according to the new options.
@@ -142,7 +142,7 @@ module ActiveRecord
 
       # Sets a new default value for a column.  If you want to set the default
       # value to +NULL+, you are out of luck.  You need to
-      # DatabaseStatements#execute the apppropriate SQL statement yourself.
+      # DatabaseStatements#execute the appropriate SQL statement yourself.
       # ===== Examples
       #  change_column_default(:suppliers, :qualification, 'new')
       #  change_column_default(:accounts, :authorized, 1)
@@ -160,13 +160,13 @@ module ActiveRecord
       # Adds a new index to the table.  +column_name+ can be a single Symbol, or
       # an Array of Symbols.
       #
-      # The index will be named after the table and the first column names,
+      # The index will be named after the table and the first column name,
       # unless you pass +:name+ as an option.
       #
       # When creating an index on multiple columns, the first column is used as a name
       # for the index. For example, when you specify an index on two columns
       # [+:first+, +:last+], the DBMS creates an index for both columns as well as an
-      # index for the first colum +:first+. Using just the first name for this index
+      # index for the first column +:first+. Using just the first name for this index
       # makes sense, because you will never have to create a singular index with this
       # name.
       #
@@ -194,7 +194,7 @@ module ActiveRecord
           index_type = options
         end
         quoted_column_names = column_names.map { |e| quote_column_name(e) }.join(", ")
-        execute "CREATE #{index_type} INDEX #{quote_column_name(index_name)} ON #{table_name} (#{quoted_column_names})"
+        execute "CREATE #{index_type} INDEX #{quote_column_name(index_name)} ON #{quote_table_name(table_name)} (#{quoted_column_names})"
       end
 
       # Remove the given index from the table.
@@ -234,17 +234,17 @@ module ActiveRecord
       # The migrations module handles this automatically.
       def initialize_schema_information
         begin
-          execute "CREATE TABLE #{ActiveRecord::Migrator.schema_info_table_name} (version #{type_to_sql(:integer)})"
-          execute "INSERT INTO #{ActiveRecord::Migrator.schema_info_table_name} (version) VALUES(0)"
+          execute "CREATE TABLE #{quote_table_name(ActiveRecord::Migrator.schema_info_table_name)} (version #{type_to_sql(:integer)})"
+          execute "INSERT INTO #{quote_table_name(ActiveRecord::Migrator.schema_info_table_name)} (version) VALUES(0)"
         rescue ActiveRecord::StatementInvalid
-          # Schema has been intialized
+          # Schema has been initialized
         end
       end
 
       def dump_schema_information #:nodoc:
         begin
           if (current_schema = ActiveRecord::Migrator.current_version) > 0
-            return "INSERT INTO #{ActiveRecord::Migrator.schema_info_table_name} (version) VALUES (#{current_schema})" 
+            return "INSERT INTO #{quote_table_name(ActiveRecord::Migrator.schema_info_table_name)} (version) VALUES (#{current_schema})" 
           end
         rescue ActiveRecord::StatementInvalid 
           # No Schema Info
@@ -253,25 +253,28 @@ module ActiveRecord
 
 
       def type_to_sql(type, limit = nil, precision = nil, scale = nil) #:nodoc:
-        native = native_database_types[type]
-        column_type_sql = native.is_a?(Hash) ? native[:name] : native
-        if type == :decimal # ignore limit, use precison and scale
-          precision ||= native[:precision]
-          scale ||= native[:scale]
-          if precision
-            if scale
-              column_type_sql << "(#{precision},#{scale})"
+        if native = native_database_types[type]
+          column_type_sql = native.is_a?(Hash) ? native[:name] : native
+          if type == :decimal # ignore limit, use precision and scale
+            precision ||= native[:precision]
+            scale ||= native[:scale]
+            if precision
+              if scale
+                column_type_sql << "(#{precision},#{scale})"
+              else
+                column_type_sql << "(#{precision})"
+              end
             else
-              column_type_sql << "(#{precision})"
+              raise ArgumentError, "Error adding decimal column: precision cannot be empty if scale if specified" if scale
             end
+            column_type_sql
           else
-            raise ArgumentError, "Error adding decimal column: precision cannot be empty if scale if specified" if scale
+            limit ||= native[:limit]
+            column_type_sql << "(#{limit})" if limit
+            column_type_sql
           end
-          column_type_sql
         else
-          limit ||= native[:limit]
-          column_type_sql << "(#{limit})" if limit
-          column_type_sql
+          column_type_sql = type
         end
       end
 
@@ -291,7 +294,7 @@ module ActiveRecord
       # ORDER BY clause for the passed order option.
       # PostgreSQL overrides this due to its stricter standards compliance.
       def add_order_by_for_association_limiting!(sql, options)
-        sql << "ORDER BY #{options[:order]}"
+        sql << " ORDER BY #{options[:order]}"
       end
 
       protected

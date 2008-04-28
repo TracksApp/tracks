@@ -7,7 +7,7 @@ module ActiveRecord
         load_target
         @target.to_ary
       end
-  
+
       def reset
         reset_target!
         @loaded = false
@@ -17,7 +17,7 @@ module ActiveRecord
       # Since << flattens its argument list and inserts each record, +push+ and +concat+ behave identically.
       def <<(*records)
         result = true
-        load_target
+        load_target if @owner.new_record?
 
         @owner.transaction do
           flatten_deeper(records).each do |record|
@@ -34,7 +34,7 @@ module ActiveRecord
 
       alias_method :push, :<<
       alias_method :concat, :<<
-                      
+
       # Remove all records from this association
       def delete_all
         load_target
@@ -66,9 +66,9 @@ module ActiveRecord
 
       # Removes all records from this association.  Returns +self+ so method calls may be chained.
       def clear
-        return self if length.zero? # forces load_target if hasn't happened already
+        return self if length.zero? # forces load_target if it hasn't happened already
 
-        if @reflection.options[:dependent] && @reflection.options[:dependent] == :delete_all
+        if @reflection.options[:dependent] && @reflection.options[:dependent] == :destroy
           destroy_all
         else          
           delete_all
@@ -84,27 +84,24 @@ module ActiveRecord
 
         reset_target!
       end
-
-      def create(attributes = {})
-        # Can't use Base.create since the foreign key may be a protected attribute.
-        if attributes.is_a?(Array)
-          attributes.collect { |attr| create(attr) }
+      
+      def create(attrs = {})
+        if attrs.is_a?(Array)
+          attrs.collect { |attr| create(attr) }
         else
-          record = build(attributes)
-          if @owner.new_record?
-            ActiveSupport::Deprecation.warn("Calling .create on a has_many association without saving its owner will not work in rails 2.0, you probably want .build instead")
-          else
-            record.save
-          end
-          record
+          create_record(attrs) { |record| record.save }
         end
+      end
+
+      def create!(attrs = {})
+        create_record(attrs) { |record| record.save! }
       end
 
       # Returns the size of the collection by executing a SELECT COUNT(*) query if the collection hasn't been loaded and
       # calling collection.size if it has. If it's more likely than not that the collection does have a size larger than zero
       # and you need to fetch that collection afterwards, it'll take one less SELECT query if you use length.
       def size
-        if loaded? && !@reflection.options[:uniq]
+        if @owner.new_record? || (loaded? && !@reflection.options[:uniq])
           @target.size
         elsif !loaded? && !@reflection.options[:uniq] && @target.is_a?(Array)
           unsaved_records = Array(@target.detect { |r| r.new_record? })
@@ -122,6 +119,14 @@ module ActiveRecord
 
       def empty?
         size.zero?
+      end
+
+      def any?(&block)
+        if block_given?
+          method_missing(:any?, &block)
+        else
+          !empty?
+        end
       end
 
       def uniq(collection = self)
@@ -150,7 +155,21 @@ module ActiveRecord
         end
       end
 
+
       protected
+        def method_missing(method, *args, &block)
+          if @target.respond_to?(method) || (!@reflection.klass.respond_to?(method) && Class.respond_to?(method))
+            super
+          else
+            @reflection.klass.send(:with_scope, construct_scope) { @reflection.klass.send(method, *args, &block) }
+          end
+        end
+
+        # overloaded in derived Association classes to provide useful scoping depending on association type.
+        def construct_scope
+          {}
+        end
+
         def reset_target!
           @target = Array.new
         end
@@ -167,6 +186,27 @@ module ActiveRecord
         end
 
       private
+
+        def create_record(attrs, &block)
+          ensure_owner_is_not_new
+          record = @reflection.klass.send(:with_scope, :create => construct_scope[:create]) { @reflection.klass.new(attrs) }
+          add_record_to_target_with_callbacks(record, &block)
+        end
+
+        def build_record(attrs, &block)
+          record = @reflection.klass.new(attrs)
+          add_record_to_target_with_callbacks(record, &block)
+        end
+
+        def add_record_to_target_with_callbacks(record)
+          callback(:before_add, record)
+          yield(record) if block_given?
+          @target ||= [] unless loaded?
+          @target << record
+          callback(:after_add, record)
+          record
+        end
+
         def callback(method, record)
           callbacks_for(method).each do |callback|
             case callback
@@ -187,8 +227,14 @@ module ActiveRecord
         def callbacks_for(callback_name)
           full_callback_name = "#{callback_name}_for_#{@reflection.name}"
           @owner.class.read_inheritable_attribute(full_callback_name.to_sym) || []
-        end
+        end   
         
+        def ensure_owner_is_not_new
+          if @owner.new_record?
+            raise ActiveRecord::RecordNotSaved, "You cannot call create unless the parent is saved"
+          end
+        end
+               
     end
   end
 end

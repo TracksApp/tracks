@@ -1,4 +1,4 @@
-# this class has dubious semantics and we only have it so that
+# This class has dubious semantics and we only have it so that
 # people can write params[:key] instead of params['key']
 
 class HashWithIndifferentAccess < Hash
@@ -63,13 +63,27 @@ class HashWithIndifferentAccess < Hash
 
   def stringify_keys!; self end
   def symbolize_keys!; self end
+  def to_options!; self end
+
+  # Convert to a Hash with String keys.
+  def to_hash
+    Hash.new(default).merge(self)
+  end
 
   protected
     def convert_key(key)
       key.kind_of?(Symbol) ? key.to_s : key
     end
+
     def convert_value(value)
-      value.is_a?(Hash) ? value.with_indifferent_access : value
+      case value
+      when Hash
+        value.with_indifferent_access
+      when Array
+        value.collect { |e| e.is_a?(Hash) ? e.with_indifferent_access : e }
+      else
+        value
+      end
     end
 end
 

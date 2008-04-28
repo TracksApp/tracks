@@ -169,9 +169,10 @@ class FinderTest < ActiveRecordTestCase
   end
 
   def test_paginate_with_group
-    entries = Developer.paginate :page => 1, :per_page => 10, :group => 'salary'
+    entries = Developer.paginate :page => 1, :per_page => 10,
+                                 :group => 'salary', :select => 'salary', :order => 'salary'
     expected = [ users(:david), users(:jamis), users(:dev_10), users(:poor_jamis) ].map(&:salary).sort
-    assert_equal expected, entries.map(&:salary).sort
+    assert_equal expected, entries.map(&:salary)
   end
 
   def test_paginate_with_dynamic_finder
@@ -193,54 +194,42 @@ class FinderTest < ActiveRecordTestCase
     end
   end
 
-  def test_paginate_by_sql
-    assert_respond_to Developer, :paginate_by_sql
-    entries = Developer.paginate_by_sql ['select * from users where salary > ?', 80000],
-      :page => 2, :per_page => 3, :total_entries => 9
-
-    assert_equal (5..7).to_a, entries.map(&:id)
-    assert_equal 9, entries.total_entries
-  end
-
-  def test_count_by_sql
-    entries = Developer.paginate_by_sql ['select * from users where salary > ?', 60000],
-      :page => 2, :per_page => 3
-
-    assert_equal 12, entries.total_entries
-  end
-
-  def test_count_distinct
-    entries = Developer.paginate :select => 'DISTINCT salary', :page => 1, :per_page => 4
-    assert_equal 4, entries.size
-    assert_equal 4, entries.total_entries
-  end
-
   def test_scoped_paginate
-    entries =
-      Developer.with_poor_ones do
-        Developer.paginate :page => 1
-      end
+    entries = Developer.with_poor_ones { Developer.paginate :page => 1 }
 
     assert_equal 2, entries.size
     assert_equal 2, entries.total_entries
   end
 
-  # Are we on edge? Find out by testing find_all which was removed in [6998]
+  def test_readonly
+    assert_nothing_raised { Developer.paginate :readonly => true, :page => 1 }
+  end
+
+  # this functionality is temporarily removed
+  def xtest_pagination_defines_method
+    pager = "paginate_by_created_at"
+    assert !User.methods.include?(pager), "User methods should not include `#{pager}` method"
+    # paginate!
+    assert 0, User.send(pager, nil, :page => 1).total_entries
+    # the paging finder should now be defined
+    assert User.methods.include?(pager), "`#{pager}` method should be defined on User"
+  end
+
+  # Is this Rails 2.0? Find out by testing find_all which was removed in [6998]
   unless Developer.respond_to? :find_all
     def test_paginate_array_of_ids
       # AR finders also accept arrays of IDs
       # (this was broken in Rails before [6912])
-      entries = Developer.paginate((1..8).to_a, :per_page => 3, :page => 2)
+      entries = Developer.paginate((1..8).to_a, :per_page => 3, :page => 2, :order => 'id')
       assert_equal (4..6).to_a, entries.map(&:id)
       assert_equal 8, entries.total_entries
     end
   end
 
-  uses_mocha 'parameter' do
+  uses_mocha 'internals' do
     def test_implicit_all_with_dynamic_finders
       Topic.expects(:find_all_by_foo).returns([])
-      Topic.expects(:wp_extract_finder_conditions)
-      Topic.expects(:count)
+      Topic.expects(:count).returns(0)
       Topic.paginate_by_foo :page => 1
     end
     
@@ -253,17 +242,22 @@ class FinderTest < ActiveRecordTestCase
     end
     
     def test_extra_parameters_stay_untouched
-      Topic.expects(:find).with() { |*args| args.last.key? :foo }.returns(Array.new(5))
-      Topic.expects(:count).with(){ |*args| args.last.key? :foo }.returns(1)
+      Topic.expects(:find).with(:all, {:foo => 'bar', :limit => 4, :offset => 0 }).returns(Array.new(5))
+      Topic.expects(:count).with({:foo => 'bar'}).returns(1)
 
       Topic.paginate :foo => 'bar', :page => 1, :per_page => 4
     end
 
-    def test_count_doesnt_use_select_options
-      Developer.expects(:find).with() { |*args| args.last.key? :select }.returns(Array.new(5))
-      Developer.expects(:count).with(){ |*args| !args.last.key?(:select) }.returns(1)
-      
-      Developer.paginate :select => 'users.*', :page => 1, :per_page => 4
+    def test_count_skips_select
+      Developer.stubs(:find).returns([])
+      Developer.expects(:count).with({}).returns(0)
+      Developer.paginate :select => 'salary', :page => 1
+    end
+
+    def test_count_select_when_distinct
+      Developer.stubs(:find).returns([])
+      Developer.expects(:count).with(:select => 'DISTINCT salary').returns(0)
+      Developer.paginate :select => 'DISTINCT salary', :page => 1
     end
 
     def test_should_use_scoped_finders_if_present
@@ -274,12 +268,55 @@ class FinderTest < ActiveRecordTestCase
       Topic.paginate_best :page => 1, :per_page => 4
     end
 
+    def test_paginate_by_sql
+      assert_respond_to Developer, :paginate_by_sql
+      Developer.expects(:find_by_sql).with(regexp_matches(/sql LIMIT 3(,| OFFSET) 3/)).returns([])
+      Developer.expects(:count_by_sql).with('SELECT COUNT(*) FROM (sql) AS count_table').returns(0)
+      
+      entries = Developer.paginate_by_sql 'sql', :page => 2, :per_page => 3
+    end
+
+    def test_paginate_by_sql_respects_total_entries_setting
+      Developer.expects(:find_by_sql).returns([])
+      Developer.expects(:count_by_sql).never
+      
+      entries = Developer.paginate_by_sql 'sql', :page => 1, :total_entries => 999
+      assert_equal 999, entries.total_entries
+    end
+
+    def test_paginate_by_sql_strips_order_by_when_counting
+      Developer.expects(:find_by_sql).returns([])
+      Developer.expects(:count_by_sql).with("SELECT COUNT(*) FROM (sql\n ) AS count_table").returns(0)
+      
+      entries = Developer.paginate_by_sql "sql\n ORDER\nby foo, bar, `baz` ASC", :page => 1
+    end
+
+    # TODO: counts are still wrong
     def test_ability_to_use_with_custom_finders
-      # acts_as_taggable defines `find_tagged_with(tag, options)`
+      # acts_as_taggable defines find_tagged_with(tag, options)
       Topic.expects(:find_tagged_with).with('will_paginate', :offset => 0, :limit => 5).returns([])
       Topic.expects(:count).with({}).returns(0)
       
       Topic.paginate_tagged_with 'will_paginate', :page => 1, :per_page => 5
+    end
+    
+    def test_array_argument_doesnt_eliminate_count
+      ids = (1..8).to_a
+      Developer.expects(:find_all_by_id).returns([])
+      Developer.expects(:count).returns(0)
+      
+      Developer.paginate_by_id(ids, :per_page => 3, :page => 2, :order => 'id')
+    end
+
+    def test_paginating_finder_doesnt_mangle_options
+      Developer.expects(:find).returns([])
+      Developer.expects(:count).returns(0)
+      options = { :page => 1 }
+      options.expects(:delete).never
+      options_before = options.dup
+      
+      Developer.paginate(options)
+      assert_equal options, options_before
     end
   end
 end

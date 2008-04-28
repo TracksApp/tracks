@@ -12,7 +12,7 @@ Inflector.inflections do |inflect|
   inflect.plural(/(hive)$/i, '\1s')
   inflect.plural(/([^aeiouy]|qu)y$/i, '\1ies')
   inflect.plural(/(x|ch|ss|sh)$/i, '\1es')
-  inflect.plural(/(matr|vert|ind)ix|ex$/i, '\1ices')
+  inflect.plural(/(matr|vert|ind)(?:ix|ex)$/i, '\1ices')
   inflect.plural(/([m|l])ouse$/i, '\1ice')
   inflect.plural(/^(ox)$/i, '\1en')
   inflect.plural(/(quiz)$/i, '\1zes')
@@ -47,6 +47,7 @@ Inflector.inflections do |inflect|
   inflect.irregular('child', 'children')
   inflect.irregular('sex', 'sexes')
   inflect.irregular('move', 'moves')
+  inflect.irregular('cow', 'kine')
 
   inflect.uncountable(%w(equipment information rice money species series fish sheep))
 end

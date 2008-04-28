@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2004-2006 David Heinemeier Hansson
+# Copyright (c) 2004-2007 David Heinemeier Hansson
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -26,27 +26,24 @@ $:.unshift(File.dirname(__FILE__)) unless
 
 unless defined?(ActiveSupport)
   begin
-    $:.unshift(File.dirname(__FILE__) + "/../../activesupport/lib")
-    require 'active_support'  
+    $:.unshift "#{File.dirname(__FILE__)}/../../activesupport/lib"
+    require 'active_support'
   rescue LoadError
     require 'rubygems'
     gem 'activesupport'
   end
 end
 
+$:.unshift "#{File.dirname(__FILE__)}/action_controller/vendor/html-scanner"
+
 require 'action_controller/base'
-require 'action_controller/deprecated_redirects'
 require 'action_controller/request'
-require 'action_controller/deprecated_request_methods'
 require 'action_controller/rescue'
 require 'action_controller/benchmarking'
 require 'action_controller/flash'
 require 'action_controller/filters'
 require 'action_controller/layout'
-require 'action_controller/deprecated_dependencies'
 require 'action_controller/mime_responds'
-require 'action_controller/pagination'
-require 'action_controller/scaffolding'
 require 'action_controller/helpers'
 require 'action_controller/cookies'
 require 'action_controller/cgi_process'
@@ -54,9 +51,10 @@ require 'action_controller/caching'
 require 'action_controller/verification'
 require 'action_controller/streaming'
 require 'action_controller/session_management'
+require 'action_controller/http_authentication'
 require 'action_controller/components'
-require 'action_controller/macros/auto_complete'
-require 'action_controller/macros/in_place_editing'
+require 'action_controller/record_identifier'
+require 'action_controller/request_forgery_protection'
 
 require 'action_view'
 ActionController::Base.template_class = ActionView::Base
@@ -67,17 +65,15 @@ ActionController::Base.class_eval do
   include ActionController::Layout
   include ActionController::Benchmarking
   include ActionController::Rescue
-  include ActionController::Dependencies
   include ActionController::MimeResponds
-  include ActionController::Pagination
-  include ActionController::Scaffolding
   include ActionController::Helpers
   include ActionController::Cookies
   include ActionController::Caching
   include ActionController::Verification
   include ActionController::Streaming
   include ActionController::SessionManagement
+  include ActionController::HttpAuthentication::Basic::ControllerMethods
   include ActionController::Components
-  include ActionController::Macros::AutoComplete
-  include ActionController::Macros::InPlaceEditing
+  include ActionController::RecordIdentifier
+  include ActionController::RequestForgeryProtection
 end

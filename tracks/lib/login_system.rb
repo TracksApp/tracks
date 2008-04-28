@@ -162,7 +162,7 @@ module LoginSystem
     if session['return-to'].nil?
       redirect_to default
     else
-      redirect_to_url session['return-to']
+      redirect_to session['return-to']
       session['return-to'] = nil
     end
   end

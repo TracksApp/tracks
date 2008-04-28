@@ -83,11 +83,8 @@ class PrimaryKeysTest < Test::Unit::TestCase
   def test_delete_should_quote_pkey
     assert_nothing_raised { MixedCaseMonkey.delete(1) }
   end
-  def test_increment_counter_should_quote_pkey_and_quote_counter_columns
-    assert_nothing_raised { MixedCaseMonkey.increment_counter(:fleaCount, 1) }
-  end
-  def test_decrement_counter_should_quote_pkey_and_quote_counter_columns
-    assert_nothing_raised { MixedCaseMonkey.decrement_counter(:fleaCount, 1) }
+  def test_update_counters_should_quote_pkey_and_quote_counter_columns
+    assert_nothing_raised { MixedCaseMonkey.update_counters(1, :fleaCount => 99) }
   end
   def test_find_with_one_id_should_quote_pkey
     assert_nothing_raised { MixedCaseMonkey.find(1) }
@@ -98,7 +95,7 @@ class PrimaryKeysTest < Test::Unit::TestCase
   def test_instance_update_should_quote_pkey
     assert_nothing_raised { MixedCaseMonkey.find(1).save }
   end
-  def test_instance_destry_should_quote_pkey
+  def test_instance_destroy_should_quote_pkey
     assert_nothing_raised { MixedCaseMonkey.find(1).destroy }
   end
 end

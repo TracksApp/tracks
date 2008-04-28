@@ -21,7 +21,7 @@ class ContextXmlApiTest < ActionController::IntegrationTest
   
  def test_fails_with_invalid_xml_format
    authenticated_post_xml_to_context_create "<foo></bar>"
-   assert_404_invalid_xml
+   assert_equal 500, @integration_session.status
  end
     
   def test_fails_with_invalid_xml_format2

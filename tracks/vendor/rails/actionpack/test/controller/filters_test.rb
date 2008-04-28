@@ -1,5 +1,6 @@
 require File.dirname(__FILE__) + '/../abstract_unit'
 
+# FIXME: crashes Ruby 1.9
 class FilterTest < Test::Unit::TestCase
   class TestController < ActionController::Base
     before_filter :ensure_login
@@ -44,7 +45,9 @@ class FilterTest < Test::Unit::TestCase
     (1..3).each do |i|
       define_method "try_#{i}" do
         instance_variable_set :@try, i
-        action_name != "fail_#{i}"
+        if action_name == "fail_#{i}"
+          head(404)
+        end
       end
     end
   end
@@ -234,7 +237,7 @@ class FilterTest < Test::Unit::TestCase
     before_filter(AuditFilter)
 
     def show
-      render_text "hello"
+      render :text => "hello"
     end
   end
 
@@ -271,11 +274,11 @@ class FilterTest < Test::Unit::TestCase
     before_filter :second, :only => :foo
 
     def foo
-      render_text 'foo'
+      render :text => 'foo'
     end
 
     def bar
-      render_text 'bar'
+      render :text => 'bar'
     end
 
     protected
@@ -322,6 +325,31 @@ class FilterTest < Test::Unit::TestCase
     end
     def show
       render :text => 'hello'
+    end
+  end
+
+  class ErrorToRescue < Exception; end
+
+  class RescuingAroundFilterWithBlock
+    def filter(controller)
+      begin
+        yield
+      rescue ErrorToRescue => ex
+        controller.send! :render, :text => "I rescued this: #{ex.inspect}"
+      end
+    end
+  end
+
+  class RescuedController < ActionController::Base
+    around_filter RescuingAroundFilterWithBlock.new
+
+    def show
+      raise ErrorToRescue.new("Something made the bad noise.")
+    end
+
+  private
+    def rescue_action(exception)
+      raise exception
     end
   end
 
@@ -558,6 +586,16 @@ class FilterTest < Test::Unit::TestCase
     assert_equal nil, test_process(ChangingTheRequirementsController, "go_wild").template.assigns['ran_filter']
   end
 
+  def test_a_rescuing_around_filter
+    response = nil
+    assert_nothing_raised do
+      response = test_process(RescuedController)
+    end
+
+    assert response.success?
+    assert_equal("I rescued this: #<FilterTest::ErrorToRescue: Something made the bad noise.>", response.body)
+  end
+
   private
     def test_process(controller, action = "show")
       request = ActionController::TestRequest.new
@@ -788,7 +826,7 @@ class YieldingAroundFiltersTest < Test::Unit::TestCase
   def test_first_filter_in_multiple_before_filter_chain_halts
     controller = ::FilterTest::TestMultipleFiltersController.new
     response = test_process(controller, 'fail_1')
-    assert_equal '', response.body
+    assert_equal ' ', response.body
     assert_equal 1, controller.instance_variable_get(:@try)
     assert controller.instance_variable_get(:@before_filter_chain_aborted)
   end
@@ -796,7 +834,7 @@ class YieldingAroundFiltersTest < Test::Unit::TestCase
   def test_second_filter_in_multiple_before_filter_chain_halts
     controller = ::FilterTest::TestMultipleFiltersController.new
     response = test_process(controller, 'fail_2')
-    assert_equal '', response.body
+    assert_equal ' ', response.body
     assert_equal 2, controller.instance_variable_get(:@try)
     assert controller.instance_variable_get(:@before_filter_chain_aborted)
   end
@@ -804,7 +842,7 @@ class YieldingAroundFiltersTest < Test::Unit::TestCase
   def test_last_filter_in_multiple_before_filter_chain_halts
     controller = ::FilterTest::TestMultipleFiltersController.new
     response = test_process(controller, 'fail_3')
-    assert_equal '', response.body
+    assert_equal ' ', response.body
     assert_equal 3, controller.instance_variable_get(:@try)
     assert controller.instance_variable_get(:@before_filter_chain_aborted)
   end

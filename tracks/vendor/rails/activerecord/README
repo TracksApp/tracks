@@ -65,20 +65,6 @@ A short rundown of the major features:
     end
 
   {Learn more}[link:classes/ActiveRecord/Validations.html]
-
-
-* Acts that can make records work as lists or trees:
-
-    class Item < ActiveRecord::Base
-      belongs_to   :list
-      acts_as_list :scope => :list
-    end
-    
-    item.move_higher
-    item.move_to_bottom
-
-  Learn about {acts_as_list}[link:classes/ActiveRecord/Acts/List/ClassMethods.html], {the instance methods acts_as_list provides}[link:classes/ActiveRecord/Acts/List/InstanceMethods.html], and
-  {acts_as_tree}[link:classes/ActiveRecord/Acts/Tree/ClassMethods.html]
  
 * Callbacks as methods or queues on the entire lifecycle (instantiation, saving, destroying, validating, etc).
 
@@ -176,7 +162,7 @@ A short rundown of the major features:
    )
 
   {Learn more}[link:classes/ActiveRecord/Base.html#M000081] and read about the built-in support for
-  MySQL[link:classes/ActiveRecord/ConnectionAdapters/MysqlAdapter.html], PostgreSQL[link:classes/ActiveRecord/ConnectionAdapters/PostgreSQLAdapter.html], SQLite[link:classes/ActiveRecord/ConnectionAdapters/SQLiteAdapter.html], Oracle[link:classes/ActiveRecord/ConnectionAdapters/OCIAdapter.html], SQLServer[link:classes/ActiveRecord/ConnectionAdapters/SQLServerAdapter.html], and DB2[link:classes/ActiveRecord/ConnectionAdapters/DB2Adapter.html].
+  MySQL[link:classes/ActiveRecord/ConnectionAdapters/MysqlAdapter.html], PostgreSQL[link:classes/ActiveRecord/ConnectionAdapters/PostgreSQLAdapter.html], SQLite[link:classes/ActiveRecord/ConnectionAdapters/SQLiteAdapter.html], Oracle[link:classes/ActiveRecord/ConnectionAdapters/OracleAdapter.html], SQLServer[link:classes/ActiveRecord/ConnectionAdapters/SQLServerAdapter.html], and DB2[link:classes/ActiveRecord/ConnectionAdapters/DB2Adapter.html].
 
 
 * Logging support for Log4r[http://log4r.sourceforge.net] and Logger[http://www.ruby-doc.org/stdlib/libdoc/logger/rdoc]

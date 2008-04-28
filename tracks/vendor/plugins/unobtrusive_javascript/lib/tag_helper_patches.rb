@@ -13,7 +13,7 @@ module ActionView::Helpers::TagHelper
     # This behaviour affects any built-in Rails helpers that generate
     # HTML. Event extraction behaviour can be bypassed by passing in
     # <tt>:inline => true</tt> as part of a helper's HTML options hash.
-    def tag_options(opts)
+    def tag_options(opts, escape = true)
       set_default_external!(opts)
       if opts[:external]
         JAVASCRIPT_EVENTS.each do |event|
@@ -25,7 +25,7 @@ module ActionView::Helpers::TagHelper
         end
         opts.delete(:external)
       end
-      rails_tag_options(opts)
+      rails_tag_options(opts, escape)
     end
 
     # Generate a unique id to be used as the HTML +id+ attribute.

@@ -2,9 +2,8 @@ require 'fileutils'
 require File.dirname(__FILE__) + '/../abstract_unit'
 
 CACHE_DIR = 'test_cache'
-# Don't change '/../temp/' cavalierly or you might hoze something you don't want hozed
+# Don't change '/../temp/' cavalierly or you might hose something you don't want hosed
 FILE_STORE_PATH = File.join(File.dirname(__FILE__), '/../temp/', CACHE_DIR)
-ActionController::Base.perform_caching = true
 ActionController::Base.page_cache_directory = FILE_STORE_PATH
 ActionController::Base.fragment_cache_store = :file_store, FILE_STORE_PATH
 
@@ -26,10 +25,26 @@ class PageCachingTestController < ActionController::Base
   def not_found
     head :not_found
   end
+  
+  def custom_path
+    render :text => "Super soaker"
+    cache_page("Super soaker", "/index.html")
+  end
+  
+  def expire_custom_path
+    expire_page("/index.html")
+    head :ok
+  end
+  
+  def trailing_slash
+    render :text => "Sneak attack"
+  end
 end
 
 class PageCachingTest < Test::Unit::TestCase
   def setup
+    ActionController::Base.perform_caching = true
+
     ActionController::Routing::Routes.draw do |map|
       map.main '', :controller => 'posts'
       map.resources :posts
@@ -51,6 +66,8 @@ class PageCachingTest < Test::Unit::TestCase
 
   def teardown
     FileUtils.rm_rf(File.dirname(FILE_STORE_PATH))
+
+    ActionController::Base.perform_caching = false
   end
 
   def test_page_caching_resources_saves_to_correct_path_with_extension_even_if_default_route
@@ -64,6 +81,38 @@ class PageCachingTest < Test::Unit::TestCase
     get :ok
     assert_response :ok
     assert_page_cached :ok, "get with ok status should have been cached"
+  end
+
+  def test_should_cache_with_custom_path
+    get :custom_path
+    assert File.exist?("#{FILE_STORE_PATH}/index.html")
+  end
+
+  def test_should_expire_cache_with_custom_path
+    get :custom_path
+    assert File.exist?("#{FILE_STORE_PATH}/index.html")
+
+    get :expire_custom_path
+    assert !File.exist?("#{FILE_STORE_PATH}/index.html")
+  end
+  
+  def test_should_cache_without_trailing_slash_on_url
+    @controller.class.cache_page 'cached content', '/page_caching_test/trailing_slash'
+    assert File.exist?("#{FILE_STORE_PATH}/page_caching_test/trailing_slash.html")
+  end
+
+  def test_should_cache_with_trailing_slash_on_url
+    @controller.class.cache_page 'cached content', '/page_caching_test/trailing_slash/'
+    assert File.exist?("#{FILE_STORE_PATH}/page_caching_test/trailing_slash.html")
+  end
+
+  uses_mocha("should_cache_ok_at_custom_path") do
+    def test_should_cache_ok_at_custom_path
+      @request.expects(:path).returns("/index.html")
+      get :ok
+      assert_response :ok
+      assert File.exist?("#{FILE_STORE_PATH}/index.html")
+    end
   end
 
   [:ok, :no_content, :found, :not_found].each do |status|
@@ -93,14 +142,28 @@ class PageCachingTest < Test::Unit::TestCase
     end
 end
 
+
 class ActionCachingTestController < ActionController::Base
-  caches_action :index
+  caches_action :index, :redirected, :forbidden
+  caches_action :show, :cache_path => 'http://test.host/custom/show'
+  caches_action :edit, :cache_path => Proc.new { |c| c.params[:id] ? "http://test.host/#{c.params[:id]};edit" : "http://test.host/edit" }
 
   def index
-    sleep 0.01
     @cache_this = Time.now.to_f.to_s
     render :text => @cache_this
   end
+
+  def redirected
+    redirect_to :action => 'index'
+  end
+
+  def forbidden
+    render :text => "Forbidden"
+    headers["Status"] = "403 Forbidden"
+  end
+
+  alias_method :show, :index
+  alias_method :edit, :index
 
   def expire
     expire_action :controller => 'action_caching_test', :action => 'index'
@@ -146,10 +209,31 @@ class ActionCacheTest < Test::Unit::TestCase
     get :index
     cached_time = content_to_cache
     assert_equal cached_time, @response.body
+    assert_cache_exists 'hostname.com/action_caching_test'
     reset!
 
     get :index
     assert_equal cached_time, @response.body
+  end
+  
+  def test_action_cache_with_custom_cache_path
+    get :show
+    cached_time = content_to_cache
+    assert_equal cached_time, @response.body
+    assert_cache_exists 'test.host/custom/show'
+    reset!
+
+    get :show
+    assert_equal cached_time, @response.body
+  end
+
+  def test_action_cache_with_custom_cache_path_in_block
+    get :edit
+    assert_cache_exists 'test.host/edit'
+    reset!
+
+    get :edit, :id => 1
+    assert_cache_exists 'test.host/1;edit'
   end
 
   def test_cache_expiration
@@ -178,19 +262,43 @@ class ActionCacheTest < Test::Unit::TestCase
     @request.host = 'jamis.hostname.com'
     get :index
     jamis_cache = content_to_cache
-
+    
+    reset!
+    
     @request.host = 'david.hostname.com'
     get :index
     david_cache = content_to_cache
     assert_not_equal jamis_cache, @response.body
 
+    reset!
+
     @request.host = 'jamis.hostname.com'
     get :index
     assert_equal jamis_cache, @response.body
 
+    reset!
+
     @request.host = 'david.hostname.com'
     get :index
     assert_equal david_cache, @response.body
+  end
+
+  def test_redirect_is_not_cached
+    get :redirected
+    assert_response :redirect
+    reset!
+
+    get :redirected
+    assert_response :redirect
+  end
+
+  def test_forbidden_is_not_cached
+    get :forbidden
+    assert_response :forbidden
+    reset!
+
+    get :forbidden
+    assert_response :forbidden
   end
 
   def test_xml_version_of_resource_is_treated_as_different_cache
@@ -199,6 +307,13 @@ class ActionCacheTest < Test::Unit::TestCase
     path_object = @path_class.new(@mock_controller, {})
     assert_equal 'xml', path_object.extension
     assert_equal 'example.org/posts/index.xml', path_object.path
+  end
+  
+  def test_correct_content_type_is_returned_for_cache_hit
+    # run it twice to cache it the first time
+    get :index, :id => 'content-type.xml'
+    get :index, :id => 'content-type.xml'
+    assert_equal 'application/xml', @response.content_type
   end
 
   def test_empty_path_is_normalized
@@ -225,5 +340,10 @@ class ActionCacheTest < Test::Unit::TestCase
       @response   = ActionController::TestResponse.new
       @controller = ActionCachingTestController.new
       @request.host = 'hostname.com'
+    end
+    
+    def assert_cache_exists(path)
+      full_path = File.join(FILE_STORE_PATH, path + '.cache')
+      assert File.exist?(full_path), "#{full_path.inspect} does not exist."
     end
 end

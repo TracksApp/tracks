@@ -18,7 +18,7 @@ class ContextsController < ApplicationController
       format.xml  { render :xml => @contexts.to_xml( :except => :user_id ) }
       format.rss  &render_contexts_rss_feed
       format.atom &render_contexts_atom_feed
-      format.text { render :action => 'index_text', :layout => false, :content_type => Mime::TEXT }
+      format.text { render :action => 'index', :layout => false, :content_type => Mime::TEXT }
     end
   end
   
@@ -84,7 +84,9 @@ class ContextsController < ApplicationController
     @context.attributes = params["context"]
     if @context.save
       if params['wants_render']
-        render
+        respond_to do |format|
+          format.js
+        end
       else
         render :text => success_text || 'Success'
       end
@@ -179,7 +181,7 @@ class ContextsController < ApplicationController
   def init_todos
     set_context_from_params
     unless @context.nil?
-      @context.todos.with_scope :find => { :include => [:project, :tags] } do
+      @context.todos.send :with_scope, :find => { :include => [:project, :tags] } do
         @done = @context.done_todos
       end
 

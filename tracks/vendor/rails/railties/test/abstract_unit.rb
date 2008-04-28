@@ -4,17 +4,21 @@ $:.unshift File.dirname(__FILE__) + "/../lib"
 $:.unshift File.dirname(__FILE__) + "/../builtin/rails_info"
 
 require 'test/unit'
-require 'rubygems'
+require 'stringio'
+require 'active_support'
 
-# Needed for the class mock delegation
-#require File.dirname(__FILE__) + "/../../activesupport/lib/active_support/core_ext/class/attribute_accessors"
+# Wrap tests that use Mocha and skip if unavailable.
+def uses_mocha(test_name)
+  require 'rubygems'
+  gem 'mocha', '>= 0.5.5'
+  require 'mocha'
+  yield
+rescue LoadError
+  $stderr.puts "Skipping #{test_name} tests. `gem install mocha` and try again."
+end
 
 if defined?(RAILS_ROOT)
   RAILS_ROOT.replace File.dirname(__FILE__)
 else
   RAILS_ROOT = File.dirname(__FILE__)
-end
-
-class Test::Unit::TestCase
-  # Add stuff here if you need it
 end

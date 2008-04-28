@@ -29,6 +29,9 @@ module ActionController #:nodoc:
       # * <tt>:buffer_size</tt> - specifies size (in bytes) of the buffer used to stream the file.
       #   Defaults to 4096.
       # * <tt>:status</tt> - specifies the status code to send with the response. Defaults to '200 OK'.
+      # * <tt>:url_based_filename</tt> - set to true if you want the browser guess the filename from 
+      #   the URL, which is necessary for i18n filenames on certain browsers 
+      #   (setting :filename overrides this option).
       #
       # The default Content-Type and Content-Disposition headers are
       # set to download arbitrary binary files in as many browsers as
@@ -42,7 +45,7 @@ module ActionController #:nodoc:
       #   send_file '/path/to.jpeg', :type => 'image/jpeg', :disposition => 'inline'
       #
       # Show a 404 page in the browser:
-      #   send_file '/path/to/404.html, :type => 'text/html; charset=utf-8', :status => 404
+      #   send_file '/path/to/404.html', :type => 'text/html; charset=utf-8', :status => 404
       #
       # Read about the other Content-* HTTP headers if you'd like to
       # provide the user with more information (such as Content-Description).
@@ -59,7 +62,7 @@ module ActionController #:nodoc:
         raise MissingFile, "Cannot read file #{path}" unless File.file?(path) and File.readable?(path)
 
         options[:length]   ||= File.size(path)
-        options[:filename] ||= File.basename(path)
+        options[:filename] ||= File.basename(path) unless options[:url_based_filename]
         send_file_headers! options
 
         @performed_render = false
@@ -121,7 +124,7 @@ module ActionController #:nodoc:
 
         headers.update(
           'Content-Length'            => options[:length],
-          'Content-Type'              => options[:type].strip,  # fixes a problem with extra '\r' with some browsers
+          'Content-Type'              => options[:type].to_s.strip,  # fixes a problem with extra '\r' with some browsers
           'Content-Disposition'       => disposition,
           'Content-Transfer-Encoding' => 'binary'
         )

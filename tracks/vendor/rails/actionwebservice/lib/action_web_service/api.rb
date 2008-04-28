@@ -14,13 +14,12 @@ module ActionWebService # :nodoc:
     # See ActionWebService::Container::Direct::ClassMethods for an example
     # of use.
     class Base
-      # Action WebService API subclasses should be reloaded by the dispatcher in Rails
-      # when Dependencies.mechanism = :load.
-      include Reloadable::Deprecated
-      
       # Whether to transform the public API method names into camel-cased names 
       class_inheritable_option :inflect_names, true
 
+      # By default only HTTP POST requests are processed
+      class_inheritable_option :allowed_http_methods, [ :post ]
+      
       # Whether to allow ActiveRecord::Base models in <tt>:expects</tt>.
       # The default is +false+; you should be aware of the security implications
       # of allowing this, and ensure that you don't allow remote callers to
@@ -95,17 +94,34 @@ module ActionWebService # :nodoc:
         end
 
         # Whether the given method name is a service method on this API
+        #
+        #   class ProjectsApi < ActionWebService::API::Base
+        #     api_method :getCount, :returns => [:int]
+        #   end
+        #
+        #   ProjectsApi.has_api_method?('GetCount')   #=> false
+        #   ProjectsApi.has_api_method?(:getCount)    #=> true
         def has_api_method?(name)
           api_methods.has_key?(name)
         end
   
         # Whether the given public method name has a corresponding service method
         # on this API
+        #
+        #   class ProjectsApi < ActionWebService::API::Base
+        #     api_method :getCount, :returns => [:int]
+        #   end
+        #
+        #   ProjectsApi.has_api_method?(:getCount)    #=> false
+        #   ProjectsApi.has_api_method?('GetCount')   #=> true
         def has_public_api_method?(public_name)
           api_public_method_names.has_key?(public_name)
         end
   
         # The corresponding public method name for the given service method name
+        #
+        #   ProjectsApi.public_api_method_name('GetCount')  #=> "GetCount"
+        #   ProjectsApi.public_api_method_name(:getCount)   #=> "GetCount"
         def public_api_method_name(name)
           if inflect_names
             name.to_s.camelize
@@ -115,22 +131,54 @@ module ActionWebService # :nodoc:
         end
   
         # The corresponding service method name for the given public method name
+        #
+        #   class ProjectsApi < ActionWebService::API::Base
+        #     api_method :getCount, :returns => [:int]
+        #   end
+        #        
+        #   ProjectsApi.api_method_name('GetCount') #=> :getCount
         def api_method_name(public_name)
           api_public_method_names[public_name]
         end
   
         # A Hash containing all service methods on this API, and their
         # associated metadata.
+        #
+        #   class ProjectsApi < ActionWebService::API::Base
+        #     api_method :getCount,          :returns => [:int]
+        #     api_method :getCompletedCount, :returns => [:int]
+        #   end
+        #
+        #   ProjectsApi.api_methods #=> 
+        #     {:getCount=>#<ActionWebService::API::Method:0x24379d8 ...>,
+        #      :getCompletedCount=>#<ActionWebService::API::Method:0x2437794 ...>}
+        #   ProjectsApi.api_methods[:getCount].public_name #=> "GetCount"
         def api_methods
           read_inheritable_attribute("api_methods") || {}
         end
 
         # The Method instance for the given public API method name, if any
+        #
+        #   class ProjectsApi < ActionWebService::API::Base
+        #     api_method :getCount,          :returns => [:int]
+        #     api_method :getCompletedCount, :returns => [:int]
+        #   end
+        #
+        #   ProjectsApi.public_api_method_instance('GetCount')  #=> <#<ActionWebService::API::Method:0x24379d8 ...>
+        #   ProjectsApi.public_api_method_instance(:getCount)   #=> nil
         def public_api_method_instance(public_method_name)
           api_method_instance(api_method_name(public_method_name))
         end
 
         # The Method instance for the given API method name, if any
+        #
+        #   class ProjectsApi < ActionWebService::API::Base
+        #     api_method :getCount,          :returns => [:int]
+        #     api_method :getCompletedCount, :returns => [:int]
+        #   end
+        #
+        #   ProjectsApi.api_method_instance(:getCount) #=> <ActionWebService::API::Method:0x24379d8 ...>
+        #   ProjectsApi.api_method_instance('GetCount') #=> <ActionWebService::API::Method:0x24379d8 ...>
         def api_method_instance(method_name)
           api_methods[method_name]
         end

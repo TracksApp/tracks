@@ -1,5 +1,4 @@
-require File.dirname(__FILE__) + '/../abstract_unit'
-require File.dirname(__FILE__) + '/../../lib/action_view/helpers/number_helper'
+require "#{File.dirname(__FILE__)}/../abstract_unit"
 
 class NumberHelperTest < Test::Unit::TestCase
   include ActionView::Helpers::NumberHelper
@@ -22,7 +21,7 @@ class NumberHelperTest < Test::Unit::TestCase
   def test_number_to_currency
     assert_equal("$1,234,567,890.50", number_to_currency(1234567890.50))
     assert_equal("$1,234,567,890.51", number_to_currency(1234567890.506))
-    assert_equal("$1,234,567,891", number_to_currency(1234567890.51, {:precision => 0}))
+    assert_equal("$1,234,567,892", number_to_currency(1234567891.50, {:precision => 0}))
     assert_equal("$1,234,567,890.5", number_to_currency(1234567890.50, {:precision => 1}))
     assert_equal("&pound;1234567890,50", number_to_currency(1234567890.50, {:unit => "&pound;", :separator => ",", :delimiter => ""}))
     assert_equal("$1,234,567,890.50", number_to_currency("1234567890.50"))
@@ -53,16 +52,20 @@ class NumberHelperTest < Test::Unit::TestCase
     assert_equal("x", number_with_delimiter("x"))
     assert_nil number_with_delimiter(nil)
   end
-  
+
   def test_number_with_precision
     assert_equal("111.235", number_with_precision(111.2346))
     assert_equal("111.23", number_with_precision(111.2346, 2))
     assert_equal("111.00", number_with_precision(111, 2))
     assert_equal("111.235", number_with_precision("111.2346"))
+    assert_equal("112", number_with_precision(111.50, 0))
+    assert_equal("1234567892", number_with_precision(1234567891.50, 0))
+
+    # Return non-numeric params unchanged.
     assert_equal("x", number_with_precision("x"))
     assert_nil number_with_precision(nil)
   end
-  
+
   def test_number_to_human_size
     assert_equal '0 Bytes',   number_to_human_size(0)
     assert_equal '1 Byte',    number_to_human_size(1)
@@ -80,13 +83,11 @@ class NumberHelperTest < Test::Unit::TestCase
     assert_equal '1.18 MB',   number_to_human_size(1234567, 2)
     assert_equal '3 Bytes',   number_to_human_size(3.14159265, 4)
     assert_equal("123 Bytes", number_to_human_size("123"))
+    assert_equal '1.01 KB',   number_to_human_size(1.0123.kilobytes, 2)
+    assert_equal '1.01 KB',   number_to_human_size(1.0100.kilobytes, 4)
+    assert_equal '10 KB',   number_to_human_size(10.000.kilobytes, 4)
+    assert_equal '1 Byte',   number_to_human_size(1.1)
     assert_nil number_to_human_size('x')
     assert_nil number_to_human_size(nil)
-  end
-  
-  def test_human_size_alias_is_deprecated
-    assert_deprecated 'human_size' do
-      assert_equal '0 Bytes', human_size(0)
-    end
   end
 end

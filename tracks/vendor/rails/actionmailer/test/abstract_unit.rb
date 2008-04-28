@@ -2,6 +2,7 @@ require 'test/unit'
 
 $:.unshift "#{File.dirname(__FILE__)}/../lib"
 require 'action_mailer'
+require 'action_mailer/test_case'
 
 # Show backtraces for deprecated behavior for quicker cleanup.
 ActiveSupport::Deprecation.debug = true
@@ -27,4 +28,22 @@ class Net::SMTP
   def self.start(*args)
     yield MockSMTP.new
   end
+end
+
+# Wrap tests that use Mocha and skip if unavailable.
+def uses_mocha(test_name)
+  gem 'mocha', ">=0.5"
+  require 'stubba'
+  yield
+rescue Gem::LoadError
+  $stderr.puts "Skipping #{test_name} tests (Mocha >= 0.5 is required). `gem install mocha` and try again."
+end
+
+def set_delivery_method(delivery_method)
+  @old_delivery_method = ActionMailer::Base.delivery_method
+  ActionMailer::Base.delivery_method = delivery_method
+end
+
+def restore_delivery_method
+  ActionMailer::Base.delivery_method = @old_delivery_method
 end

@@ -15,6 +15,10 @@ class Test::Unit::TestCase
   # in MySQL.  Turn off transactional fixtures in this case; however, if you
   # don't care one way or the other, switching from MyISAM to InnoDB tables
   # is recommended.
+  #
+  # The only drawback to using transactional fixtures is when you actually 
+  # need to test transactions.  Since your test is bracketed by a transaction,
+  # any transactions started in your code will be automatically rolled back.
   self.use_transactional_fixtures = true
 
   # Instantiated fixtures are slow, but give you @david where otherwise you
@@ -23,6 +27,12 @@ class Test::Unit::TestCase
   # instantiated fixtures translates to a database query per test method),
   # then set this back to true.
   self.use_instantiated_fixtures  = false
+
+  # Setup all fixtures in test/fixtures/*.(yml|csv) for all tests in alphabetical order.
+  #
+  # Note: You'll currently still have to declare fixtures explicitly in integration tests
+  # -- they do not yet inherit this setting
+  fixtures :all
 
   # Add more helper methods to be used by all tests here...
 end

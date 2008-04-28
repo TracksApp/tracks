@@ -3,8 +3,8 @@
 # Under MIT and/or CC By license.
 #++
 
-require File.dirname(__FILE__) + '/../abstract_unit'
-require File.dirname(__FILE__) + '/fake_controllers'
+require "#{File.dirname(__FILE__)}/../abstract_unit"
+require "#{File.dirname(__FILE__)}/fake_controllers"
 
 class SelectorTest < Test::Unit::TestCase
   #
@@ -85,11 +85,11 @@ class SelectorTest < Test::Unit::TestCase
     assert_equal 2, @matches.size
     assert_equal "2", @matches[0].attributes["id"]
     assert_equal "3", @matches[1].attributes["id"]
-    # Match alement with attribute value.
+    # Match element with attribute value.
     select("*[title=foo]")
     assert_equal 1, @matches.size
     assert_equal "3", @matches[0].attributes["id"]
-    # Match alement with attribute and attribute value.
+    # Match element with attribute and attribute value.
     select("[bar=foo][title]")
     assert_equal 1, @matches.size
     assert_equal "2", @matches[0].attributes["id"]
@@ -177,7 +177,7 @@ class SelectorTest < Test::Unit::TestCase
     assert_equal 2, @matches.size
     assert_equal "foo", @matches[0].attributes["href"]
     assert_equal "baz", @matches[1].attributes["href"]
-    # And now for the three selector challange.
+    # And now for the three selector challenge.
     parse(%Q{<h1 id="1"><a href="foo"></a></h1><h2 id="2"><a href="bar"></a></h2><h3 id="2"><a href="baz"></a></h3>})
     select("h1 a, h2 a, h3 a")
     assert_equal 3, @matches.size

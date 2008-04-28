@@ -5,6 +5,7 @@ class HashExtTest < Test::Unit::TestCase
     @strings = { 'a' => 1, 'b' => 2 }
     @symbols = { :a  => 1, :b  => 2 }
     @mixed   = { :a  => 1, 'b' => 2 }
+    @fixnums = {  0  => 1,  1  => 2 }
   end
 
   def test_methods
@@ -33,6 +34,11 @@ class HashExtTest < Test::Unit::TestCase
     assert_raises(NoMethodError) { { [] => 1 }.symbolize_keys }
   end
 
+  def test_symbolize_keys_preserves_fixnum_keys
+    assert_equal @fixnums, @fixnums.symbolize_keys
+    assert_equal @fixnums, @fixnums.dup.symbolize_keys!
+  end
+
   def test_stringify_keys
     assert_equal @strings, @symbols.stringify_keys
     assert_equal @strings, @strings.stringify_keys
@@ -50,7 +56,7 @@ class HashExtTest < Test::Unit::TestCase
     @symbols = @symbols.with_indifferent_access
     @mixed   = @mixed.with_indifferent_access
 
-    assert_equal 'a', @strings.send(:convert_key, :a)
+    assert_equal 'a', @strings.send!(:convert_key, :a)
 
     assert_equal 1, @strings.fetch('a')
     assert_equal 1, @strings.fetch(:a.to_s)
@@ -63,9 +69,9 @@ class HashExtTest < Test::Unit::TestCase
 
     hashes.each do |name, hash|
       method_map.sort_by { |m| m.to_s }.each do |meth, expected|
-        assert_equal(expected, hash.send(meth, 'a'),
+        assert_equal(expected, hash.send!(meth, 'a'),
                      "Calling #{name}.#{meth} 'a'")
-        assert_equal(expected, hash.send(meth, :a),
+        assert_equal(expected, hash.send!(meth, :a),
                      "Calling #{name}.#{meth} :a")
       end
     end
@@ -139,7 +145,7 @@ class HashExtTest < Test::Unit::TestCase
     assert_equal updated_with_mixed[:a], 1
     assert_equal updated_with_mixed['b'], 2
 
-    assert [updated_with_strings, updated_with_symbols, updated_with_mixed].all? {|hash| hash.keys.size == 2}
+    assert [updated_with_strings, updated_with_symbols, updated_with_mixed].all? { |h| h.keys.size == 2 }
   end
 
   def test_indifferent_merging
@@ -171,6 +177,23 @@ class HashExtTest < Test::Unit::TestCase
     assert_equal hash.delete('a'), nil
   end
 
+  def test_indifferent_to_hash
+    # Should convert to a Hash with String keys.
+    assert_equal @strings, @mixed.with_indifferent_access.to_hash
+
+    # Should preserve the default value.
+    mixed_with_default = @mixed.dup
+    mixed_with_default.default = '1234'
+    roundtrip = mixed_with_default.with_indifferent_access.to_hash
+    assert_equal @strings, roundtrip
+    assert_equal '1234', roundtrip.default
+  end
+
+  def test_indifferent_hash_with_array_of_hashes
+    hash = { "urls" => { "url" => [ { "address" => "1" }, { "address" => "2" } ] }}.with_indifferent_access
+    assert_equal "1", hash[:urls][:url].first[:address]
+  end
+
   def test_stringify_and_symbolize_keys_on_indifferent_preserves_hash
     h = HashWithIndifferentAccess.new
     h[:first] = 1
@@ -180,6 +203,22 @@ class HashExtTest < Test::Unit::TestCase
     h['first'] = 1
     h.symbolize_keys!
     assert_equal 1, h[:first]
+  end
+
+  def test_to_options_on_indifferent_preserves_hash
+    h = HashWithIndifferentAccess.new
+    h['first'] = 1
+    h.to_options!
+    assert_equal 1, h['first']
+  end
+
+
+  def test_indifferent_subhashes
+    h = {'user' => {'id' => 5}}.with_indifferent_access
+    ['user', :user].each {|user| [:id, 'id'].each {|id| assert_equal 5, h[user][id], "h[#{user.inspect}][#{id.inspect}] should be 5"}}
+
+    h = {:user => {:id => 5}}.with_indifferent_access
+    ['user', :user].each {|user| [:id, 'id'].each {|id| assert_equal 5, h[user][id], "h[#{user.inspect}][#{id.inspect}] should be 5"}}
   end
 
   def test_assert_valid_keys
@@ -194,14 +233,6 @@ class HashExtTest < Test::Unit::TestCase
     end
   end
 
-  def test_indifferent_subhashes
-    h = {'user' => {'id' => 5}}.with_indifferent_access
-    ['user', :user].each {|user| [:id, 'id'].each {|id| assert_equal 5, h[user][id], "h[#{user.inspect}][#{id.inspect}] should be 5"}}
-
-    h = {:user => {:id => 5}}.with_indifferent_access
-    ['user', :user].each {|user| [:id, 'id'].each {|id| assert_equal 5, h[user][id], "h[#{user.inspect}][#{id.inspect}] should be 5"}}
-  end
-
   def test_assorted_keys_not_stringified
     original = {Object.new => 2, 1 => 2, [] => true}
     indiff = original.with_indifferent_access
@@ -209,11 +240,69 @@ class HashExtTest < Test::Unit::TestCase
   end
 
   def test_reverse_merge
-    assert_equal({ :a => 1, :b => 2, :c => 10 }, { :a => 1, :b => 2 }.reverse_merge({:a => "x", :b => "y", :c => 10}) )
+    defaults = { :a => "x", :b => "y", :c => 10 }.freeze
+    options  = { :a => 1, :b => 2 }
+    expected = { :a => 1, :b => 2, :c => 10 }
+
+    # Should merge defaults into options, creating a new hash.
+    assert_equal expected, options.reverse_merge(defaults)
+    assert_not_equal expected, options
+
+    # Should merge! defaults into options, replacing options.
+    merged = options.dup
+    assert_equal expected, merged.reverse_merge!(defaults)
+    assert_equal expected, merged
+
+    # Should be an alias for reverse_merge!
+    merged = options.dup
+    assert_equal expected, merged.reverse_update(defaults)
+    assert_equal expected, merged
   end
 
   def test_diff
     assert_equal({ :a => 2 }, { :a => 2, :b => 5 }.diff({ :a => 1, :b => 5 }))
+  end
+
+  def test_slice
+    original = { :a => 'x', :b => 'y', :c => 10 }
+    expected = { :a => 'x', :b => 'y' }
+
+    # Should return a new hash with only the given keys.
+    assert_equal expected, original.slice(:a, :b)
+    assert_not_equal expected, original
+
+    # Should replace the hash with only the given keys.
+    assert_equal expected, original.slice!(:a, :b)
+    assert_equal expected, original
+  end
+
+  def test_indifferent_slice
+    original = { :a => 'x', :b => 'y', :c => 10 }.with_indifferent_access
+    expected = { :a => 'x', :b => 'y' }.with_indifferent_access
+
+    [['a', 'b'], [:a, :b]].each do |keys|
+      # Should return a new hash with only the given keys.
+      assert_equal expected, original.slice(*keys), keys.inspect
+      assert_not_equal expected, original
+
+      # Should replace the hash with only the given keys.
+      copy = original.dup
+      assert_equal expected, copy.slice!(*keys)
+      assert_equal expected, copy
+    end
+  end
+
+  def test_except
+    original = { :a => 'x', :b => 'y', :c => 10 }
+    expected = { :a => 'x', :b => 'y' }
+
+    # Should return a new hash with only the given keys.
+    assert_equal expected, original.except(:c)
+    assert_not_equal expected, original
+
+    # Should replace the hash with only the given keys.
+    assert_equal expected, original.except!(:c)
+    assert_equal expected, original
   end
 end
 
@@ -255,13 +344,14 @@ class HashToXmlTest < Test::Unit::TestCase
   end
 
   def test_one_level_with_types
-    xml = { :name => "David", :street => "Paulina", :age => 26, :age_in_millis => 820497600000, :moved_on => Date.new(2005, 11, 15) }.to_xml(@xml_options)
+    xml = { :name => "David", :street => "Paulina", :age => 26, :age_in_millis => 820497600000, :moved_on => Date.new(2005, 11, 15), :resident => :yes }.to_xml(@xml_options)
     assert_equal "<person>", xml.first(8)
     assert xml.include?(%(<street>Paulina</street>))
     assert xml.include?(%(<name>David</name>))
     assert xml.include?(%(<age type="integer">26</age>))
     assert xml.include?(%(<age-in-millis type="integer">820497600000</age-in-millis>))
     assert xml.include?(%(<moved-on type="date">2005-11-15</moved-on>))
+    assert xml.include?(%(<resident type="symbol">yes</resident>))
   end
 
   def test_one_level_with_nils
@@ -278,6 +368,17 @@ class HashToXmlTest < Test::Unit::TestCase
     assert xml.include?(%(<street>Paulina</street>))
     assert xml.include?(%(<name>David</name>))
     assert xml.include?(%(<age nil="true"></age>))
+  end
+
+  def test_one_level_with_yielding
+    xml = { :name => "David", :street => "Paulina" }.to_xml(@xml_options) do |x|
+      x.creator("Rails")
+    end
+
+    assert_equal "<person>", xml.first(8)
+    assert xml.include?(%(<street>Paulina</street>))
+    assert xml.include?(%(<name>David</name>))
+    assert xml.include?(%(<creator>Rails</creator>))
   end
 
   def test_two_levels
@@ -297,7 +398,7 @@ class HashToXmlTest < Test::Unit::TestCase
   def test_two_levels_with_array
     xml = { :name => "David", :addresses => [{ :street => "Paulina" }, { :street => "Evergreen" }] }.to_xml(@xml_options)
     assert_equal "<person>", xml.first(8)
-    assert xml.include?(%(<addresses><address>))
+    assert xml.include?(%(<addresses type="array"><address>))
     assert xml.include?(%(<address><street>Paulina</street></address>))
     assert xml.include?(%(<address><street>Evergreen</street></address>))
     assert xml.include?(%(<name>David</name>))
@@ -305,7 +406,7 @@ class HashToXmlTest < Test::Unit::TestCase
 
   def test_three_levels_with_array
     xml = { :name => "David", :addresses => [{ :streets => [ { :name => "Paulina" }, { :name => "Paulina" } ] } ] }.to_xml(@xml_options)
-    assert xml.include?(%(<addresses><address><streets><street><name>))
+    assert xml.include?(%(<addresses type="array"><address><streets type="array"><street><name>))
   end
 
   def test_single_record_from_xml
@@ -319,9 +420,12 @@ class HashToXmlTest < Test::Unit::TestCase
         <replies-close-in type="integer">2592000000</replies-close-in>
         <written-on type="date">2003-07-16</written-on>
         <viewed-at type="datetime">2003-07-16T09:28:00+0000</viewed-at>
-        <content>Have a nice day</content>
+        <content type="yaml">--- \n1: should be an integer\n:message: Have a nice day\narray: \n- should-have-dashes: true\n  should_have_underscores: true\n</content>
         <author-email-address>david@loudthinking.com</author-email-address>
         <parent-id></parent-id>
+        <ad-revenue type="decimal">1.5</ad-revenue>
+        <optimum-viewing-angle type="float">135</optimum-viewing-angle>
+        <resident type="symbol">yes</resident>
       </topic>
     EOT
 
@@ -334,9 +438,12 @@ class HashToXmlTest < Test::Unit::TestCase
       :replies_close_in => 2592000000,
       :written_on => Date.new(2003, 7, 16),
       :viewed_at => Time.utc(2003, 7, 16, 9, 28),
-      :content => "Have a nice day",
+      :content => { :message => "Have a nice day", 1 => "should be an integer", "array" => [{ "should-have-dashes" => true, "should_have_underscores" => true }] },
       :author_email_address => "david@loudthinking.com",
-      :parent_id => nil
+      :parent_id => nil,
+      :ad_revenue => BigDecimal("1.50"),
+      :optimum_viewing_angle => 135.0,
+      :resident => :yes
     }.stringify_keys
 
     assert_equal expected_topic_hash, Hash.from_xml(topic_xml)["topic"]
@@ -350,6 +457,7 @@ class HashToXmlTest < Test::Unit::TestCase
         <approved type="boolean"></approved>
         <written-on type="date"></written-on>
         <viewed-at type="datetime"></viewed-at>
+        <content type="yaml"></content>
         <parent-id></parent-id>
       </topic>
     EOT
@@ -359,7 +467,8 @@ class HashToXmlTest < Test::Unit::TestCase
       :id         => nil,
       :approved   => nil,
       :written_on => nil,
-      :viewed_at  => nil, 
+      :viewed_at  => nil,
+      :content    => nil, 
       :parent_id  => nil
     }.stringify_keys
 
@@ -368,7 +477,7 @@ class HashToXmlTest < Test::Unit::TestCase
 
   def test_multiple_records_from_xml
     topics_xml = <<-EOT
-      <topics>
+      <topics type="array">
         <topic>
           <title>The First Topic</title>
           <author-name>David</author-name>
@@ -412,7 +521,7 @@ class HashToXmlTest < Test::Unit::TestCase
       :parent_id => nil
     }.stringify_keys
 
-    assert_equal expected_topic_hash, Hash.from_xml(topics_xml)["topics"]["topic"].first
+    assert_equal expected_topic_hash, Hash.from_xml(topics_xml)["topics"].first
   end
 
   def test_single_record_from_xml_with_attributes_other_than_type
@@ -436,6 +545,93 @@ class HashToXmlTest < Test::Unit::TestCase
     }.stringify_keys
 
     assert_equal expected_topic_hash, Hash.from_xml(topic_xml)["rsp"]["photos"]["photo"]
+  end
+  
+  def test_empty_array_from_xml
+    blog_xml = <<-XML
+      <blog>
+        <posts type="array"></posts>
+      </blog>
+    XML
+    expected_blog_hash = {"blog" => {"posts" => []}}
+    assert_equal expected_blog_hash, Hash.from_xml(blog_xml)
+  end
+
+  def test_empty_array_with_whitespace_from_xml
+    blog_xml = <<-XML
+      <blog>
+        <posts type="array">
+        </posts>
+      </blog>
+    XML
+    expected_blog_hash = {"blog" => {"posts" => []}}
+    assert_equal expected_blog_hash, Hash.from_xml(blog_xml)
+  end
+
+  def test_array_with_one_entry_from_xml
+    blog_xml = <<-XML
+      <blog>
+        <posts type="array">
+          <post>a post</post>
+        </posts>
+      </blog>
+    XML
+    expected_blog_hash = {"blog" => {"posts" => ["a post"]}}
+    assert_equal expected_blog_hash, Hash.from_xml(blog_xml)
+  end
+
+  def test_array_with_multiple_entries_from_xml
+    blog_xml = <<-XML
+      <blog>
+        <posts type="array">
+          <post>a post</post>
+          <post>another post</post>
+        </posts>
+      </blog>
+    XML
+    expected_blog_hash = {"blog" => {"posts" => ["a post", "another post"]}}
+    assert_equal expected_blog_hash, Hash.from_xml(blog_xml)
+  end
+
+  def test_xsd_like_types_from_xml
+    bacon_xml = <<-EOT
+    <bacon>
+      <weight type="double">0.5</weight>
+      <price type="decimal">12.50</price>
+      <chunky type="boolean"> 1 </chunky>
+      <expires-at type="dateTime">2007-12-25T12:34:56+0000</expires-at>
+      <notes type="string"></notes>
+      <illustration type="base64Binary">YmFiZS5wbmc=</illustration>
+    </bacon>
+    EOT
+
+    expected_bacon_hash = {
+      :weight => 0.5,
+      :chunky => true,
+      :price => BigDecimal("12.50"),
+      :expires_at => Time.utc(2007,12,25,12,34,56),
+      :notes => "",
+      :illustration => "babe.png"
+    }.stringify_keys
+
+    assert_equal expected_bacon_hash, Hash.from_xml(bacon_xml)["bacon"]
+  end
+  
+  def test_type_trickles_through_when_unknown
+    product_xml = <<-EOT
+    <product>
+      <weight type="double">0.5</weight>
+      <image type="ProductImage"><filename>image.gif</filename></image>
+      
+    </product>
+    EOT
+
+    expected_product_hash = {
+      :weight => 0.5,
+      :image => {'type' => 'ProductImage', 'filename' => 'image.gif' },
+    }.stringify_keys
+
+    assert_equal expected_product_hash, Hash.from_xml(product_xml)["product"]    
   end
 
   def test_should_use_default_value_for_unknown_key
@@ -469,6 +665,40 @@ class HashToXmlTest < Test::Unit::TestCase
       assert_equal expected, hash.to_xml(@xml_options)
     end
   end
+  
+  def test_empty_string_works_for_typecast_xml_value    
+    assert_nothing_raised do
+      Hash.send!(:typecast_xml_value, "")
+    end
+  end
+  
+  def test_escaping_to_xml
+    hash = { 
+      :bare_string        => 'First & Last Name', 
+      :pre_escaped_string => 'First &amp; Last Name'
+    }.stringify_keys
+    
+    expected_xml = '<person><bare-string>First &amp; Last Name</bare-string><pre-escaped-string>First &amp;amp; Last Name</pre-escaped-string></person>'
+    assert_equal expected_xml, hash.to_xml(@xml_options)
+  end
+  
+  def test_unescaping_from_xml
+    xml_string = '<person><bare-string>First &amp; Last Name</bare-string><pre-escaped-string>First &amp;amp; Last Name</pre-escaped-string></person>'
+    expected_hash = { 
+      :bare_string        => 'First & Last Name', 
+      :pre_escaped_string => 'First &amp; Last Name'
+    }.stringify_keys
+    assert_equal expected_hash, Hash.from_xml(xml_string)['person']
+  end
+  
+  def test_roundtrip_to_xml_from_xml
+    hash = { 
+      :bare_string        => 'First & Last Name', 
+      :pre_escaped_string => 'First &amp; Last Name'
+    }.stringify_keys
+
+    assert_equal hash, Hash.from_xml(hash.to_xml(@xml_options))['person']
+  end
 end
 
 class QueryTest < Test::Unit::TestCase
@@ -481,29 +711,33 @@ class QueryTest < Test::Unit::TestCase
   end
 
   def test_nil_parameter_value
-    empty = Object.new 
+    empty = Object.new
     def empty.to_param; nil end
     assert_query_equal 'a=', 'a' => empty
   end
 
   def test_nested_conversion
-    assert_query_equal 'person%5Bname%5D=Nicholas&person%5Blogin%5D=seckar',
+    assert_query_equal 'person%5Blogin%5D=seckar&person%5Bname%5D=Nicholas',
       :person => {:name => 'Nicholas', :login => 'seckar'}
   end
-  
+
   def test_multiple_nested
     assert_query_equal 'account%5Bperson%5D%5Bid%5D=20&person%5Bid%5D=10',
       :person => {:id => 10}, :account => {:person => {:id => 20}}
   end
-  
+
   def test_array_values
     assert_query_equal 'person%5Bid%5D%5B%5D=10&person%5Bid%5D%5B%5D=20',
       :person => {:id => [10, 20]}
   end
 
+  def test_array_values_are_not_sorted
+    assert_query_equal 'person%5Bid%5D%5B%5D=20&person%5Bid%5D%5B%5D=10',
+      :person => {:id => [20, 10]}
+  end
+
   private
     def assert_query_equal(expected, actual, message = nil)
-      assert_equal expected.split('&').sort, actual.to_query.split('&').sort
+      assert_equal expected.split('&'), actual.to_query.split('&')
     end
 end
-

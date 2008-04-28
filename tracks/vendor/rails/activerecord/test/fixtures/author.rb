@@ -15,13 +15,18 @@ class Author < ActiveRecord::Base
     end
   end
   has_many :comments, :through => :posts
+  has_many :comments_desc, :through => :posts, :source => :comments, :order => 'comments.id DESC'
+  has_many :limited_comments, :through => :posts, :source => :comments, :limit => 1
   has_many :funky_comments, :through => :posts, :source => :comments
+  has_many :ordered_uniq_comments, :through => :posts, :source => :comments, :uniq => true, :order => 'comments.id'
+  has_many :ordered_uniq_comments_desc, :through => :posts, :source => :comments, :uniq => true, :order => 'comments.id DESC'
 
   has_many :special_posts
   has_many :special_post_comments, :through => :special_posts, :source => :comments
   
   has_many :special_nonexistant_posts, :class_name => "SpecialPost", :conditions => "posts.body = 'nonexistant'"
   has_many :special_nonexistant_post_comments, :through => :special_nonexistant_posts, :source => :comments, :conditions => "comments.post_id = 0"
+  has_many :nonexistant_comments, :through => :posts
 
   has_many :hello_posts, :class_name => "Post", :conditions => "posts.body = 'hello'"
   has_many :hello_post_comments, :through => :hello_posts, :source => :comments
@@ -33,13 +38,13 @@ class Author < ActiveRecord::Base
            :before_remove => :log_before_removing,
            :after_remove  => :log_after_removing
   has_many :posts_with_proc_callbacks, :class_name => "Post",
-           :before_add    => Proc.new {|o, r| o.post_log << "before_adding#{r.id}"},
-           :after_add     => Proc.new {|o, r| o.post_log << "after_adding#{r.id}"},
+           :before_add    => Proc.new {|o, r| o.post_log << "before_adding#{r.id || '<new>'}"},
+           :after_add     => Proc.new {|o, r| o.post_log << "after_adding#{r.id || '<new>'}"},
            :before_remove => Proc.new {|o, r| o.post_log << "before_removing#{r.id}"},
            :after_remove  => Proc.new {|o, r| o.post_log << "after_removing#{r.id}"}
   has_many :posts_with_multiple_callbacks, :class_name => "Post",
-           :before_add => [:log_before_adding, Proc.new {|o, r| o.post_log << "before_adding_proc#{r.id}"}],
-           :after_add  => [:log_after_adding,  Proc.new {|o, r| o.post_log << "after_adding_proc#{r.id}"}]
+           :before_add => [:log_before_adding, Proc.new {|o, r| o.post_log << "before_adding_proc#{r.id || '<new>'}"}],
+           :after_add  => [:log_after_adding,  Proc.new {|o, r| o.post_log << "after_adding_proc#{r.id || '<new>'}"}]
   has_many :unchangable_posts, :class_name => "Post", :before_add => :raise_exception, :after_add => :log_after_adding
 
   has_many :categorizations
@@ -68,9 +73,13 @@ class Author < ActiveRecord::Base
     @post_log = []
   end
 
+  def label
+    "#{id}-#{name}"
+  end
+
   private
     def log_before_adding(object)
-      @post_log << "before_adding#{object.id}"
+      @post_log << "before_adding#{object.id || '<new>'}"
     end
 
     def log_after_adding(object)

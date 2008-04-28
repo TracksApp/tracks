@@ -172,6 +172,15 @@ class TestMailer < ActionMailer::Base
     body["recipient"] = recipient
   end
 
+  def custom_templating_extension(recipient)
+    recipients recipient
+    subject    "[Signed up] Welcome #{recipient}"
+    from       "system@loudthinking.com"
+    sent_on    Time.local(2004, 12, 12)
+
+    body["recipient"] = recipient
+  end
+
   def various_newlines(recipient)
     recipients   recipient
     subject      "various newlines"
@@ -201,6 +210,16 @@ class TestMailer < ActionMailer::Base
     attachment :content_type => "application/octet-stream",:filename => "test.txt", :body => "test abcdefghijklmnopqstuvwxyz"
   end
   
+  def nested_multipart_with_body(recipient)
+    recipients   recipient
+    subject      "nested multipart with body"
+    from         "test@example.com"
+    content_type "multipart/mixed"
+    part :content_type => "multipart/alternative", :content_disposition => "inline", :body => "Nothing to see here." do |p|
+      p.part :content_type => "text/html", :body => "<b>test</b> HTML<br/>"
+    end
+  end
+
   def attachment_with_custom_header(recipient)
     recipients   recipient
     subject      "custom header in attachment"
@@ -236,6 +255,14 @@ class TestMailer < ActionMailer::Base
     body         "testing"
   end
 
+  def return_path
+    recipients   "no.one@nowhere.test"
+    subject      "return path test"
+    from         "some.one@somewhere.test"
+    body         "testing"
+    headers      "return-path" => "another@somewhere.test"
+  end
+
   class <<self
     attr_accessor :received_body
   end
@@ -244,6 +271,8 @@ class TestMailer < ActionMailer::Base
     self.class.received_body = mail.body
   end
 end
+
+uses_mocha 'ActionMailerTest' do
 
 class ActionMailerTest < Test::Unit::TestCase
   include ActionMailer::Quoting
@@ -261,12 +290,20 @@ class ActionMailerTest < Test::Unit::TestCase
     mail
   end
 
+  # Replacing logger work around for mocha bug. Should be fixed in mocha 0.3.3
   def setup
-    ActionMailer::Base.delivery_method = :test
+    set_delivery_method :test
     ActionMailer::Base.perform_deliveries = true
+    ActionMailer::Base.raise_delivery_errors = true
     ActionMailer::Base.deliveries = []
 
+    @original_logger = TestMailer.logger
     @recipient = 'test@localhost'
+  end
+
+  def teardown
+    TestMailer.logger = @original_logger
+    restore_delivery_method
   end
 
   def test_nested_parts
@@ -281,6 +318,19 @@ class ActionMailerTest < Test::Unit::TestCase
     assert_equal "text/plain", created.parts.first.parts.first.content_type
     assert_equal "text/html", created.parts.first.parts[1].content_type
     assert_equal "application/octet-stream", created.parts[1].content_type
+  end
+
+  def test_nested_parts_with_body
+    created = nil
+    assert_nothing_raised { created = TestMailer.create_nested_multipart_with_body(@recipient)}
+    assert_equal 1,created.parts.size
+    assert_equal 2,created.parts.first.parts.size
+
+    assert_equal "multipart/mixed", created.content_type
+    assert_equal "multipart/alternative", created.parts.first.content_type
+    assert_equal "Nothing to see here.", created.parts.first.parts.first.body
+    assert_equal "text/plain", created.parts.first.parts.first.content_type
+    assert_equal "text/html", created.parts.first.parts[1].content_type
   end
 
   def test_attachment_with_custom_header
@@ -320,7 +370,37 @@ class ActionMailerTest < Test::Unit::TestCase
     assert_not_nil created
     assert_equal expected.encoded, created.encoded
   end
-  
+
+  def test_custom_templating_extension
+    #
+    # N.b., custom_templating_extension.text.plain.haml is expected to be in fixtures/test_mailer directory
+    expected = new_mail
+    expected.to      = @recipient
+    expected.subject = "[Signed up] Welcome #{@recipient}"
+    expected.body    = "Hello there, \n\nMr. #{@recipient}"
+    expected.from    = "system@loudthinking.com"
+    expected.date    = Time.local(2004, 12, 12)
+    
+    # Stub the render method so no alternative renderers need be present.
+    ActionView::Base.any_instance.stubs(:render).returns("Hello there, \n\nMr. #{@recipient}")
+    
+    # If the template is not registered, there should be no parts.
+    created = nil
+    assert_nothing_raised { created = TestMailer.create_custom_templating_extension(@recipient) }
+    assert_not_nil created
+    assert_equal 0, created.parts.length
+    
+    ActionMailer::Base.register_template_extension('haml')
+    
+    # Now that the template is registered, there should be one part. The text/plain part.
+    created = nil
+    assert_nothing_raised { created = TestMailer.create_custom_templating_extension(@recipient) }
+    assert_not_nil created
+    assert_equal 2, created.parts.length
+    assert_equal 'text/plain', created.parts[0].content_type
+    assert_equal 'text/html', created.parts[1].content_type
+  end
+
   def test_cancelled_account
     expected = new_mail
     expected.to      = @recipient
@@ -434,6 +514,29 @@ class ActionMailerTest < Test::Unit::TestCase
     ActionMailer::Base.perform_deliveries = true
     TestMailer.deliver_signed_up(@recipient)
     assert_equal 1, ActionMailer::Base.deliveries.size
+  end
+  
+  def test_doesnt_raise_errors_when_raise_delivery_errors_is_false
+    ActionMailer::Base.raise_delivery_errors = false
+    TestMailer.any_instance.expects(:perform_delivery_test).raises(Exception)
+    assert_nothing_raised { TestMailer.deliver_signed_up(@recipient) }
+  end
+
+  def test_performs_delivery_via_sendmail
+    sm = mock()
+    sm.expects(:print).with(anything)
+    sm.expects(:flush)
+    IO.expects(:popen).once.with('/usr/sbin/sendmail -i -t', 'w+').yields(sm)
+    ActionMailer::Base.delivery_method = :sendmail
+    TestMailer.deliver_signed_up(@recipient)
+  end
+
+  def test_delivery_logs_sent_mail
+    mail = TestMailer.create_signed_up(@recipient)
+    logger = mock()
+    logger.expects(:info).with("Sent mail:\n #{mail.encoded}")
+    TestMailer.logger = logger
+    TestMailer.deliver_signed_up(@recipient)
   end
 
   def test_unquote_quoted_printable_subject
@@ -663,23 +766,23 @@ EOF
 
   def test_implicitly_multipart_messages
     mail = TestMailer.create_implicitly_multipart_example(@recipient)
-    assert_equal 3, mail.parts.length
+    assert_equal 6, mail.parts.length
     assert_equal "1.0", mail.mime_version
     assert_equal "multipart/alternative", mail.content_type
     assert_equal "text/yaml", mail.parts[0].content_type
     assert_equal "utf-8", mail.parts[0].sub_header("content-type", "charset")
-    assert_equal "text/plain", mail.parts[1].content_type
-    assert_equal "utf-8", mail.parts[1].sub_header("content-type", "charset")
-    assert_equal "text/html", mail.parts[2].content_type
+    assert_equal "text/plain", mail.parts[2].content_type
     assert_equal "utf-8", mail.parts[2].sub_header("content-type", "charset")
+    assert_equal "text/html", mail.parts[4].content_type
+    assert_equal "utf-8", mail.parts[4].sub_header("content-type", "charset")
   end
 
   def test_implicitly_multipart_messages_with_custom_order
     mail = TestMailer.create_implicitly_multipart_example(@recipient, nil, ["text/yaml", "text/plain"])
-    assert_equal 3, mail.parts.length
+    assert_equal 6, mail.parts.length
     assert_equal "text/html", mail.parts[0].content_type
-    assert_equal "text/plain", mail.parts[1].content_type
-    assert_equal "text/yaml", mail.parts[2].content_type
+    assert_equal "text/plain", mail.parts[2].content_type
+    assert_equal "text/yaml", mail.parts[4].content_type
   end
 
   def test_implicitly_multipart_messages_with_charset
@@ -749,12 +852,6 @@ EOF
     assert_nothing_raised { mail.body }
   end
 
-  def test_decode_message_with_unquoted_atchar_in_header
-    fixture = File.read(File.dirname(__FILE__) + "/fixtures/raw_email11")
-    mail = TMail::Mail.parse(fixture)
-    assert_not_nil mail.from
-  end
-
   def test_empty_header_values_omitted
     result = TestMailer.create_unnamed_attachment(@recipient).encoded
     assert_match %r{Content-Type: application/octet-stream[^;]}, result
@@ -787,20 +884,20 @@ EOF
     assert_match %r{format=flowed}, mail['content-type'].to_s
     assert_match %r{charset=utf-8}, mail['content-type'].to_s
   end
-  
-  def test_deprecated_server_settings
-    old_smtp_settings = ActionMailer::Base.smtp_settings
-    assert_deprecated do
-      ActionMailer::Base.server_settings
-    end
-    assert_deprecated do
-      ActionMailer::Base.server_settings={}
-      assert_equal Hash.new, ActionMailer::Base.smtp_settings
-    end
-  ensure
-    ActionMailer::Base.smtp_settings=old_smtp_settings    
+
+  def test_return_path_with_create
+    mail = TestMailer.create_return_path
+    assert_equal "<another@somewhere.test>", mail['return-path'].to_s
+  end
+
+  def test_return_path_with_deliver
+    ActionMailer::Base.delivery_method = :smtp
+    TestMailer.deliver_return_path
+    assert_match %r{^Return-Path: <another@somewhere.test>}, MockSMTP.deliveries[0][0]
   end
 end
+
+end # uses_mocha
 
 class InheritableTemplateRootTest < Test::Unit::TestCase
   def test_attr
@@ -812,5 +909,31 @@ class InheritableTemplateRootTest < Test::Unit::TestCase
 
     assert_equal 'test/path', sub.template_root
     assert_equal expected, FunkyPathMailer.template_root
+  end
+end
+
+class MethodNamingTest < Test::Unit::TestCase
+  class TestMailer < ActionMailer::Base
+    def send
+      body 'foo'
+    end
+  end
+
+  def setup
+    set_delivery_method :test
+    ActionMailer::Base.perform_deliveries = true
+    ActionMailer::Base.deliveries = []
+  end
+
+  def teardown
+    restore_delivery_method
+  end
+
+  def test_send_method
+    assert_nothing_raised do
+      assert_emails 1 do
+        TestMailer.deliver_send
+      end
+    end
   end
 end

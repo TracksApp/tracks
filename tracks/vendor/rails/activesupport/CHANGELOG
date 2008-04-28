@@ -1,17 +1,271 @@
-*1.4.4* (October 12th, 2007)
+*SVN*
 
-* Backport: allow array and hash query parameters. Array route parameters are converted/to/a/path as before.  #6765, #7047, #7462 [bgipsy, Jeremy McAnally, Dan Kubb, brendan, Diego Algorta Casamayou]
+* Ruby 1.9 compatibility.  #1689, #10466, #10468 [Cheah Chu Yeow, Pratik Naik, Jeremy Kemper]
+
+* TimeZone#to_s uses UTC rather than GMT.  #1689 [Cheah Chu Yeow]
+
+* Refactor of Hash#symbolize_keys! to use Hash#replace.  Closes #10420 [ReinH]
+
+* Fix HashWithIndifferentAccess#to_options! so it doesn't clear the options hash.  Closes #10419 [ReinH]
 
 
-*1.4.3* (October 4th, 2007)
+*2.0.1* (December 7th, 2007)
+
+* Added Array#from and Array#to that behaves just from String#from and String#to [DHH]
+
+* Fix that empty collections should be treated as empty arrays regardless of whitespace for Hash#from_xml #10255 [adamj]
+
+* Time#time_with_datetime_fallback, Time#to_datetime, Date#to_datetime and String#to_datetime honor Ruby's default calendar reform setting. #10201 [Geoff Buesing]
+
+* Change Time and DateTime #end_of_month to return last second of month instead of beginning of last day of month. Closes #10200 [Geoff Buesing]
+
+* Speedup String#blank?  [Jeremy Kemper, Koz]
+
+* Add documentation for Hash#diff. Closes #9306 [Tarmo Tänav]
+
+* Add new superclass_delegating_accessors.  Similar to class inheritable attributes but with subtly different semantics. [Koz, Tarmo Tänav]
+
+* Change JSON to encode %w(< > &) as 4 digit hex codes to be in compliance with the JSON spec.  Closes #9975 [Josh Peek, Cheah Chu Yeow, Tim Pope]
+
+* Fix JSON encoding/decoding bugs dealing with /'s.  Closes #9990 [Rick, theamazingrando]
+
+* Introduce a base class for all test cases used by rails applications. ActiveSupport::TestCase [Koz]
+
+  The intention is to use this to reduce the amount of monkeypatching / overriding that 
+  is done to test/unit's classes.
+
+* Document Enumerable and Hash #to_json.  #9970 [Cheah Chu Yeow]
+
+* Hash#to_xml handles symbol values.  #9954 [Assaf]
+
+* Hash#symbolize_keys behaves well with integer keys.  #9890 [PotatoSalad]
+
+* Multibyte: String#slice supports regexp argument.  #9646 [yob]
+
+* object.duplicable? returns true if object.dup is safe. False for nil, true, false, symbols, and numbers; true otherwise.  #9333 [sur]
+
+* Time, Date and DateTime #advance accept :weeks option.  #9866 [Geoff Buesing]
+
+* Fix Time#years_ago and #years_since from leap days.  #9865 [Geoff Buesing]
+
+* Time and DateTime#advance accept :hours, :minutes, and :seconds options.  #9825 [Geoff Buesing]
+
+* Fix Date#years_ago and #years_since from leap days.  #9864 [Geoff Buesing]
+
+* Refactor Time and Date#months_since and #months_ago to use #advance.  #9863 [Geoff Buesing]
+
+* Rebundle Builder 2.1.2 but prefer a newer RubyGem if available.  [Jeremy Kemper]
+
+* Add Range#overlaps?(range), Range#include?(range), and Range#step without a block. [brandon]
+
+* Correct BufferedLogger#level? checks.  #9806 [wildchild, Johan Sorensen]
+
+* String#to_xs uses Eric Wong's fast_xs extension, if available, for Builder speedup.  http://bogomips.org/fast_xs/  [Jeremy Kemper]
+
+* Introduce BasicObject as Builder::BlankSlate for Ruby 1.9 forward compatibility.  [Jeremy Kemper]
+
+* Unbundle Builder in favor of a gem dependency.  [Jeremy Kemper]
+
+* Disambiguate Time, Date, and DateTime#to_json formatting.  #9750 [Geoff Buesing, Cheah Chu Yeow]
+
+* Hash#to_json takes :only or :except options to specific or omit certain hash keys. Enumerable#to_json passes through its options to each element.  #9751 [Cheah Chu Yeow]
+
+* BufferedLogger#auto_flushing = N flushes the log every N messages. Buffers with an array instead of string. Disabling auto_flushing still flushes when the buffer hits a maximum size, as a failsafe against memory-gobbling.  [Jeremy Kemper]
+
+* Fixed Date#xmlschema for dates outside the range of what can be created with Time #9744 [Geoff Buesing]
+
+* Fixed that La Paz was included in -25200 and -14400 offsets when it should only be in -14400 #9735 [bermi]
+
+* Fixed JSON encoding to use quoted keys according to the JSON standard.  #8762 [choonkat, Cheah Chu Yeow]
+
+* Alias Object#send to send! for Ruby 1.9 forward compatibility.  [Jeremy Kemper]
+
+* Backport Object#instance_variable_defined? for Ruby < 1.8.6.  [Jeremy Kemper]
+
+* BufferedLogger#add converts the message to a string.  #9702, #9724 [eigentone, DrMark, tomafro]
+
+* Added ActiveSupport::BufferedLogger as a duck-typing alternative (albeit with no formatter) to the Ruby Logger, which provides a very nice speed bump (inspired by Ezra's buffered logger) [DHH]
+
+* Object#instance_exec produces fewer garbage methods.  [Mauricio Fernandez]
+
+* Decode json strings as Dates/Times if they're using a YAML-compatible format.  Closes #9614 [Rick]
+
+* Fixed cache_page to use the request url instead of the routing options when picking a save path.  #8614 [Josh Peek]
+
+* Object.subclasses_of includes anonymous subclasses.  [Jeremy Kemper]
+
+* Fixed that pluralizing an empty string should return the same empty string, not "s".  #7720 [Josh Peek]
+
+* Added call to inspect on non-string classes for the logger #8533 [codahale]
+
+* Deprecation: remove deprecated :mday option from Time, Date, and DateTime#change.  [Jeremy Kemper]
+
+* Fix JSON decoder with nested quotes and commas.  #9579 [zdennis]
+
+* Hash#to_xml doesn't double-unescape.  #8806 [Ezran]
+
+* Added Array#rand #9170 [Norbert Crombach]. Examples:
+
+    [].rand       # => nil
+    ['a'].rand    # => 'a'
+    [1,2,3].rand  # => 1 or 2 or 3
+
+* Deprecation: removed Reloadable.  [Jeremy Kemper]
+
+* Make the utf-handler return the correct value for non-matching regular expressions. Closes #9049 [manfred]
+
+* Add ljust, rjust and center to utf8-handler. Closes #9165 [manfred]
+
+* Fix Time#advance bug when trying to advance a year from leap day.  Closes #8655 [gbuesing]
+
+* Add support for []= on ActiveSupport::Multibyte::Chars. Closes #9142. [ewan, manfred]
+
+* Added Array#extract_options! to encapsulate the pattern of getting an options hash out of a variable number of parameters.  #8759 [Norbert Crombach]
+
+* Let alias_attribute work with attributes with initial capital letters (legacy columns etc).  Closes #8596 [mpalmer]
+
+* Added Hash#except which is the inverse of Hash#slice -- return the hash except the keys that are specified [DHH]
+
+* Added support for pluralization with a different starting letter than the singular version (cow/kine) #4929 [norri_b/hasmanyjosh]
 
 * Demote Hash#to_xml to use XmlSimple#xml_in_string so it can't read files or stdin.  #8453 [candlerb, Jeremy Kemper]
 
+* Backport clean_logger changes to support ruby 1.8.2 [mislav]
+
+* Added proper handling of arrays #8537 [hasmanyjosh]
+
+  Before:
+    Hash.from_xml '<images></images>'
+    # => {:images => nil}
+
+    Hash.from_xml '<images><image>foo.jpg</image></images>'
+    # => {:images => {:image => "foo.jpg"}}
+
+    Hash.from_xml '<images><image>foo.jpg</image><image>bar.jpg</image></images>'
+    # => {:images => {:image => ["foo.jpg", "bar.jpg"]}}
+
+  After:
+    Hash.from_xml '<images type="array"></images>'
+    # => {:images => []}
+
+    Hash.from_xml '<images type="array"><image>foo.jpg</image></images>'
+    # => {:images => ["foo.jpg"]}
+
+    Hash.from_xml '<images type="array"><image>foo.jpg</image><image>bar.jpg</image></images>'
+    # => {:images => ["foo.jpg", "bar.jpg"]}
+
+* Improve Time and Date test coverage.  #8646 [Josh Peek]
+
+* Add Date#since, ago, beginning_of_day, and end_of_day. Date + seconds works now.  #8575 [Geoff Buesing]
+
+* String#to_time overflows to DateTime. Add String#to_datetime.  #8572 [Geoff Buesing]
+
+* Date.yesterday and .tomorrow.  #8571 [Geoff Buesing]
+
+* Readable Date and DateTime#inspect.  #8570 [Geoff Buesing]
+
+* Move common DateTime calculations to Date.  #8536 [Geoff Buesing]
+
+* Added Date#change (like Time#change) [DHH]
+
+* DateTime#to_time converts to Time unless out of range.  #8512 [Geoff Buesing]
+
+* Date#to_datetime, #to_s(:rfc822).  #8512 [Geoff Buesing]
+
+* Time durations use since instead of + for accuracy.  #8513 [Geoff Buesing]
+
+* escape <'s and >'s in JSON strings. #8371 [Rick]
+
+* Inflections: MatrixTest -> MatrixTests instead of MatricesTest.  #8496 [jbwiv]
+
+* Multibyte strings respond_to the String methods they proxy so they can be duck-typed.  #6549 [Tuxie]
+
+* Array#to_xml yields the builder just like Hash and ActiveRecord::Base.  #8472 [seth]
+
+* Date, Time, and DateTime support formatting blocks in addition to strftime strings. Introduce :long_ordinal format, e.g. "February 21st, 2005".  #8191 [Coda Hale]
+
 * Document Object#blank?.  #6491 [Chris Mear]
+
+* Date, Time, and DateTime#to_json.  #8399 [wycats]
+
+* Simplify API of assert_difference by passing in an expression that is evaluated before and after the passed in block. See documenation for examples of new API. [Marcel Molina Jr.]
+
+* Added assert_difference and assert_no_difference to test/unit assertions [Tobias Luetke]
+
+* Removed breakpointer and Binding.of_caller in favor of relying on ruby-debug by Kent Sibilev since the breakpointer has been broken since Ruby 1.8.4 and will not be coming back [DHH]
+
+* Added parsing of file type in Hash.xml_in so you can easily do file uploads with base64 from an API [DHH]
+
+    <person>
+      <name>David</name>
+      <avatar type="file" name="me.jpg" content_type="image/jpg">R0lGODlhkACZAPUAAM5lcfjrtMQCG=\n</avatar>
+    </person>
+  
+  ...becomes:
+  
+    attributes = { :person => { :name => "David", :avatar => #<StringIO> } }
+    attributes[:person][:avatar].content_type      # => "image/jpg"
+    attributes[:person][:avatar].original_filename # => "me.jpg"
+    attributes[:person][:avatar].read # => binary data of the file
+  
+  Which is duck-type compatible with the files that you get when doing multipart uploads through HTML.
+
+* Improved multibyte performance by relying less on exception raising #8159 [Blaine]
+
+* Use XSD-compatible type names for Hash#to_xml and make the converters extendable #8047 [Tim Pope]
+
+* Added yielding of builder in Hash#to_xml [DHH]
+
+* Hash#with_indifferent_access now also converts hashes kept in arrays to indifferent access (makes it easier to treat HTML and XML parameters the same) [DHH]
+
+* Hash#to_xml supports YAML attributes.  #7502 [jonathan]
+
+* Refactor ActiveSupport::JSON to be less obtuse.  Add support for JSON decoding by way of Syck with ActiveSupport::JSON.decode(json_string).  Prevent hash keys that are JavaScript reserved words from being unquoted during encoding.  [Sam Stephenson]
+
+* alias_method_chain preserves the original method's visibility.  #7854 [Jonathan Viney]
 
 * Update Dependencies to ignore constants inherited from ancestors. Closes #6951. [Nicholas Seckar]
 
-* Improved multibyte performance by relying less on exception raising #8159 [Blaine]
+* Array#to_query preserves its ordering.  #7756 [Greg Spurrier]
+
+* Out-of-range Time calculations transparently overflow to DateTime. Introduce Time#to_datetime.  #7706, #7715 [Geoff Buesing]
+
+* DateTime calculations analogous to the Date and Time extensions.  #7693 [Geoff Buesing]
+
+* Give DateTime correct .to_s implementations, lets it play nice with ActiveRecord quoting.  #7649 [Geoff Buesing]
+
+* Add File.atomic_write,  allows you to write large files in an atomic manner, preventing users from seeing half written files.  [Koz]
+
+* Allow users to provide custom formatters to Logger. [aeden]
+
+* Hash#to_query CGI-escapes its keys.  [Jeremy Kemper]
+
+* Optimize Class Inheritable Attributes so that unnecessary hashes are not created.  Closes #7472 [Bruce Perens]
+
+* :db format for Date#to_s [Jeremy Kemper]
+    Date.new(2007, 1, 27).to_s(:db) # => '2007-01-27'
+
+* Added :instance_writer option to #mattr_writer/accessor, #cattr_writer/accessor, and #class_inheritable_writer to skip the creation of the instance writer.  [Rick]
+
+* Added Hash#to_query to turn a hash of values into a form-encoded query string [Nicholas Seckar]
+
+* Increase test coverage for subclasses_of. Closes #7335. [Roman2K, Nicholas Seckar]
+
+* Remove unused code from Duration#inspect.  Closes #7180.  [Rich Collins]
+
+* Added test coverage for Inflector.inflections.clear.  Closes #7179. [Rich Collins]
+
+* ActiveSupport::Multibyte::Handlers::UTF8Handler should raise when a range and an integer are passed in (just like the native implementation).  Closes #7176 [Rich Collins]
+
+* A couple extra tests for #classify.  Closes #7273. [Josh Susser]
+
+* Better docs for Object extensions [zackchandler, Jamis Buck]
+
+* Fix that Dates couldn't be subtracted from Dates after [5940].  [Sam Stephenson]
+
+* Add Object#acts_like? and Time#acts_like_time? and Date#acts_like_date? to facilitate duck-typing. [Jamis Buck]
+
+* Make 1.months and friends accurate by introducing a Duration class.  #6835 [eventualbuddha]
 
 
 *1.4.2* (March 12th, 2007)
@@ -43,11 +297,21 @@ public for compatibility.  [Jeremy Kemper]
 
 * Deprecation: silence warnings when reporting test errors.  [Jeremy Kemper]
 
+* Hash#slice(*keys) returns a new hash with only the given keys. #slice! replaces the hash with only the given keys. Works with HashWithIndifferentAccess also.  [Jeremy Kemper]
+
+* HashWithIndifferentAccess#to_hash converts to a Hash with String keys and the same default value.  [Jeremy Kemper]
+
 * Fix remove_constant to correctly handle constant names of the form "::A::...". References #6720. [Nicholas Seckar]
 
 * Fixed Array#to_xml when it contains a series of hashes (each piece would get its own XML declaration) #6610 [thkarcher/cyu]
 
+* Added Time#to_s(:time) which will just return H:M, like 17:44 [DHH]
+
+* Add Module#attr_accessor_with_default to initialize value of attribute before setting it. Closes #6538. [Stuart Halloway, Marcel Molina Jr.]
+
 * Hash#to_xml handles keys with the same name as Kernel methods.  #6613 [Catfish]
+
+* Added Time#end_of_day to get 23:59:59 of that day [DHH]
 
 * Don't quote hash keys in Hash#to_json if they're valid JavaScript identifiers.  Disable this with ActiveSupport::JSON.unquote_hash_key_identifiers = false if you need strict JSON compliance. [Sam Stephenson]
 
@@ -57,7 +321,7 @@ public for compatibility.  [Jeremy Kemper]
 
 * Fix unicode JSON regexp for Onigurama compatibility.  #6494 [whitley]
 
-* Update XmlSimple to 1.0.10. Closes #6532. [nicksieger]
+* update XmlSimple to 1.0.10. Closes #6532. [nicksieger]
 
 * Update dependencies to allow constants to be defined alongside their siblings. A common case for this is AR model classes with STI; user.rb might define User, Administrator and Guest for example. [Nicholas Seckar]
 
@@ -73,7 +337,7 @@ public for compatibility.  [Jeremy Kemper]
 
 * Make String#chars slicing behaviour consistent with String. Closes #6387 [Manfred Stienstra]
 
-* Pull in latest multibye patch. Closes #6346 [Manfred Stienstra]
+* Pull in latest multibyte patch. Closes #6346 [Manfred Stienstra]
 
 * Add ActiveSupport::Multibyte.  Provides String#chars which lets you deal with strings as a sequence of chars, not of bytes. Closes #6242 [Julian Tarkhanov, Manfred Stienstra, Thijs van der Vossen & Jan Behrens]
 
@@ -92,6 +356,8 @@ public for compatibility.  [Jeremy Kemper]
 * Fix logic error in determining what was loaded by a given file. Closes #6039. [Nicholas Seckar]
 
 * Equate Kernel.const_missing with Object.const_missing. Fixes #5988. [Nicholas Seckar]
+
+* Add ApplicationController special case to Dependencies. [Nicholas Seckar]
 
 * Don't pad remaining places with in_groups_of if specified padding value is false. [Marcel Molina Jr.]
 
@@ -136,6 +402,8 @@ public for compatibility.  [Jeremy Kemper]
 * Raise fully qualified names upon name errors. #5533 [lars@pinds.com, Nicholas Seckar]
 
 * Add extention to obtain the missing constant from NameError instances. [Nicholas Seckar]
+
+* Thoroughly document inflections.  #5700 [petermichaux@gmail.com]
 
 * Added Module#alias_attribute [Jamis/DHH]. Example:
 
@@ -259,7 +527,6 @@ public for compatibility.  [Jeremy Kemper]
 * Updated to Builder 2.0 [DHH]
 
 * Add Array#split for dividing arrays into one or more subarrays by value or block. [Sam Stephenson]
-
 
 *1.3.1* (April 6th, 2006)
 

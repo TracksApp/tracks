@@ -8,6 +8,7 @@ require 'active_record/connection_adapters/abstract/schema_statements'
 require 'active_record/connection_adapters/abstract/database_statements'
 require 'active_record/connection_adapters/abstract/quoting'
 require 'active_record/connection_adapters/abstract/connection_specification'
+require 'active_record/connection_adapters/abstract/query_cache'
 
 module ActiveRecord
   module ConnectionAdapters # :nodoc:
@@ -22,8 +23,9 @@ module ActiveRecord
     # SchemaStatements#remove_column are very useful.
     class AbstractAdapter
       include Quoting, DatabaseStatements, SchemaStatements
+      include QueryCache
       @@row_even = true
-      
+
       def initialize(connection, logger = nil) #:nodoc:
         @connection, @logger = connection, logger
         @runtime = 0
@@ -41,7 +43,7 @@ module ActiveRecord
       def supports_migrations?
         false
       end
-      
+
       # Does this adapter support using DISTINCT within COUNT?  This is +true+
       # for all adapters except sqlite.
       def supports_count_distinct?
@@ -61,6 +63,19 @@ module ActiveRecord
         rt
       end
 
+      # QUOTING ==================================================
+
+      # Override to return the quoted table name if the database needs it
+      def quote_table_name(name)
+        name
+      end
+
+      # REFERENTIAL INTEGRITY ====================================
+
+      # Override to turn off referential integrity while executing +&block+
+      def disable_referential_integrity(&block)
+        yield
+      end
 
       # CONNECTION MANAGEMENT ====================================
 
@@ -86,7 +101,7 @@ module ActiveRecord
       end
 
       # Lazily verify this connection, calling +active?+ only if it hasn't
-      # been called for +timeout+ seconds.       
+      # been called for +timeout+ seconds.
       def verify!(timeout)
         now = Time.now.to_i
         if (now - @last_verification) > timeout
@@ -94,7 +109,7 @@ module ActiveRecord
           @last_verification = now
         end
       end
-      
+
       # Provides access to the underlying database connection. Useful for
       # when you need to call a proprietary method such as postgresql's lo_*
       # methods
@@ -102,10 +117,17 @@ module ActiveRecord
         @connection
       end
 
+      def log_info(sql, name, runtime)
+        if @logger && @logger.debug?
+          name = "#{name.nil? ? "SQL" : name} (#{sprintf("%f", runtime)})"
+          @logger.debug format_log_entry(name, sql.squeeze(' '))
+        end
+      end
+
       protected
         def log(sql, name)
           if block_given?
-            if @logger and @logger.level <= Logger::INFO
+            if @logger and @logger.debug?
               result = nil
               seconds = Benchmark.realtime { result = yield }
               @runtime += seconds
@@ -120,23 +142,12 @@ module ActiveRecord
           end
         rescue Exception => e
           # Log message and raise exception.
-          # Set last_verfication to 0, so that connection gets verified
+          # Set last_verification to 0, so that connection gets verified
           # upon reentering the request loop
           @last_verification = 0
           message = "#{e.class.name}: #{e.message}: #{sql}"
           log_info(message, name, 0)
           raise ActiveRecord::StatementInvalid, message
-        end
-
-        def log_info(sql, name, runtime)
-          return unless @logger
-
-          @logger.debug(
-            format_log_entry(
-              "#{name.nil? ? "SQL" : name} (#{sprintf("%f", runtime)})",
-              sql.gsub(/ +/, " ")
-            )
-          )
         end
 
         def format_log_entry(message, dump = nil)

@@ -31,10 +31,10 @@ class PrototypeHelperExtensionsTest < Test::Unit::TestCase
           raise 'unhandled type' + options.class.inspect
         end
       end
+
     end.new
     @generator = create_generator
   end
-
   
   def test_confirming
     @generator.confirming("Please confirm.") do
@@ -62,6 +62,10 @@ class PrototypeHelperExtensionsTest < Test::Unit::TestCase
     def create_generator
       block = Proc.new { |*args| yield *args if block_given? }
       JavaScriptGenerator.new self, &block
+    end
+    
+    def protect_against_forgery?
+      false
     end
         
 end

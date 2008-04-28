@@ -9,7 +9,7 @@ module Arts
   def assert_rjs(action, *args, &block)
     respond_to?("assert_rjs_#{action}") ?
       send("assert_rjs_#{action}", *args) :
-      assert(lined_response.include?(create_generator.send(action, *args, &block)), 
+      assert_response_contains(create_generator.send(action, *args, &block), 
          generic_error(action, args))
   end
   
@@ -29,11 +29,11 @@ module Arts
           assert_match Regexp.new("new Insertion\.#{position.to_s.camelize}(.*#{item_id}.*,.*#{content.source}.*);"),
                        @response.body
         when String
-          assert lined_response.include?("new Insertion.#{position.to_s.camelize}(\"#{item_id}\", #{content});"),
+          assert_response_contains("new Insertion.#{position.to_s.camelize}(\"#{item_id}\", #{content});",
                  "No insert_html call found for \n" +
                  "     position: '#{position}' id: '#{item_id}' \ncontent: \n" +
                  "#{content}\n" +
-                 "in response:\n#{lined_response}"
+                 "in response:\n#{@response.body}")
         else
           raise "Invalid content type"
       end
@@ -53,9 +53,9 @@ module Arts
           assert_match Regexp.new("Element.update(.*#{div}.*,.*#{content.source}.*);"),
                        @response.body
         when String
-          assert lined_response.include?("Element.update(\"#{div}\", #{content});"), 
+          assert_response_contains("Element.update(\"#{div}\", #{content});", 
                  "No replace_html call found on div: '#{div}' and content: \n#{content}\n" +
-                 "in response:\n#{lined_response}"
+                 "in response:\n#{@response.body}")
         else
           raise "Invalid content type"
       end
@@ -74,9 +74,9 @@ module Arts
           assert_match Regexp.new("Element.replace(.*#{div}.*,.*#{content.source}.*);"),
                        @response.body
         when String
-          assert lined_response.include?("Element.replace(\"#{div}\", #{content});"), 
+          assert_response_contains("Element.replace(\"#{div}\", #{content});", 
                  "No replace call found on div: '#{div}' and content: \n#{content}\n" +
-                 "in response:\n#{lined_response}"
+                 "in response:\n#{@response.body}")
         else
           raise "Invalid content type"
       end
@@ -94,6 +94,10 @@ module Arts
   
   protected
   
+  def assert_response_contains(str, message)
+     assert @response.body.to_s.index(str), message
+  end
+  
   def build_method_chain!(args)
     content = create_generator.send(:[], args.shift) # start $('some_id')....
     
@@ -110,17 +114,13 @@ module Arts
     content
   end
   
-  def lined_response
-    @response.body.split("\n")
-  end
-  
   def create_generator
     block = Proc.new { |*args| yield *args if block_given? } 
     JavaScriptGenerator.new self, &block
   end
   
   def generic_error(action, args)
-    "#{action} with args [#{args.join(" ")}] does not show up in response:\n#{lined_response}"
+    "#{action} with args [#{args.join(" ")}] does not show up in response:\n#{@response.body}"
   end
   
   def extract_matchable_content(args)

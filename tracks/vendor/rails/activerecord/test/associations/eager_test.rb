@@ -37,6 +37,18 @@ class EagerAssociationTest < Test::Unit::TestCase
     end
   end
 
+  def test_with_two_tables_in_from_without_getting_double_quoted
+    posts = Post.find(:all,
+      :select     => "posts.*",
+      :from       => "authors, posts",
+      :include    => :comments,
+      :conditions => "posts.author_id = authors.id",
+      :order      => "posts.id"
+    )
+
+    assert_equal 2, posts.first.comments.size
+  end
+
   def test_loading_with_multiple_associations
     posts = Post.find(:all, :include => [ :comments, :author, :categories ], :order => "posts.id")
     assert_equal 2, posts.first.comments.size
@@ -103,6 +115,11 @@ class EagerAssociationTest < Test::Unit::TestCase
     assert_equal [2], posts.collect { |p| p.id }
   end
   
+  def test_eager_association_loading_with_explicit_join
+    posts = Post.find(:all, :include => :comments, :joins => "INNER JOIN authors ON posts.author_id = authors.id AND authors.name = 'Mary'", :limit => 1, :order => 'author_id')
+    assert_equal 1, posts.length
+  end
+  
   def test_eager_with_has_many_through
     posts_with_comments = people(:michael).posts.find(:all, :include => :comments)
     posts_with_author = people(:michael).posts.find(:all, :include => :author )
@@ -135,13 +152,21 @@ class EagerAssociationTest < Test::Unit::TestCase
   end
 
   def test_eager_with_has_many_and_limit_and_conditions
-    posts = Post.find(:all, :include => [ :author, :comments ], :limit => 2, :conditions => "posts.body = 'hello'", :order => "posts.id")
+    if current_adapter?(:OpenBaseAdapter)
+      posts = Post.find(:all, :include => [ :author, :comments ], :limit => 2, :conditions => "FETCHBLOB(posts.body) = 'hello'", :order => "posts.id")
+    else
+      posts = Post.find(:all, :include => [ :author, :comments ], :limit => 2, :conditions => "posts.body = 'hello'", :order => "posts.id")
+    end
     assert_equal 2, posts.size
     assert_equal [4,5], posts.collect { |p| p.id }
   end
 
   def test_eager_with_has_many_and_limit_and_conditions_array
-    posts = Post.find(:all, :include => [ :author, :comments ], :limit => 2, :conditions => [ "posts.body = ?", 'hello' ], :order => "posts.id")
+    if current_adapter?(:OpenBaseAdapter)
+      posts = Post.find(:all, :include => [ :author, :comments ], :limit => 2, :conditions => [ "FETCHBLOB(posts.body) = ?", 'hello' ], :order => "posts.id")
+    else
+      posts = Post.find(:all, :include => [ :author, :comments ], :limit => 2, :conditions => [ "posts.body = ?", 'hello' ], :order => "posts.id")
+    end
     assert_equal 2, posts.size
     assert_equal [4,5], posts.collect { |p| p.id }    
   end
@@ -237,6 +262,15 @@ class EagerAssociationTest < Test::Unit::TestCase
       assert_equal count, posts.size
     end
   end
+
+  def test_eager_with_scoped_order_using_association_limiting_without_explicit_scope
+    posts_with_explicit_order = Post.find(:all, :conditions => 'comments.id is not null', :include => :comments, :order => 'posts.id DESC', :limit => 2)
+    posts_with_scoped_order = Post.with_scope(:find => {:order => 'posts.id DESC'}) do
+      Post.find(:all, :conditions => 'comments.id is not null', :include => :comments, :limit => 2)
+    end
+    assert_equal posts_with_explicit_order, posts_with_scoped_order
+  end
+
   def test_eager_association_loading_with_habtm
     posts = Post.find(:all, :include => :categories, :order => "posts.id")
     assert_equal 2, posts[0].categories.size
@@ -305,13 +339,13 @@ class EagerAssociationTest < Test::Unit::TestCase
   end
   
   def test_limited_eager_with_order
-    assert_equal [posts(:thinking), posts(:sti_comments)], Post.find(:all, :include => [:author, :comments], :conditions => "authors.name = 'David'", :order => 'UPPER(posts.title)', :limit => 2, :offset => 1)
-    assert_equal [posts(:sti_post_and_comments), posts(:sti_comments)], Post.find(:all, :include => [:author, :comments], :conditions => "authors.name = 'David'", :order => 'UPPER(posts.title) DESC', :limit => 2, :offset => 1)
+    assert_equal posts(:thinking, :sti_comments), Post.find(:all, :include => [:author, :comments], :conditions => "authors.name = 'David'", :order => 'UPPER(posts.title)', :limit => 2, :offset => 1)
+    assert_equal posts(:sti_post_and_comments, :sti_comments), Post.find(:all, :include => [:author, :comments], :conditions => "authors.name = 'David'", :order => 'UPPER(posts.title) DESC', :limit => 2, :offset => 1)
   end
   
   def test_limited_eager_with_multiple_order_columns
-    assert_equal [posts(:thinking), posts(:sti_comments)], Post.find(:all, :include => [:author, :comments], :conditions => "authors.name = 'David'", :order => 'UPPER(posts.title), posts.id', :limit => 2, :offset => 1)
-    assert_equal [posts(:sti_post_and_comments), posts(:sti_comments)], Post.find(:all, :include => [:author, :comments], :conditions => "authors.name = 'David'", :order => 'UPPER(posts.title) DESC, posts.id', :limit => 2, :offset => 1)
+    assert_equal posts(:thinking, :sti_comments), Post.find(:all, :include => [:author, :comments], :conditions => "authors.name = 'David'", :order => 'UPPER(posts.title), posts.id', :limit => 2, :offset => 1)
+    assert_equal posts(:sti_post_and_comments, :sti_comments), Post.find(:all, :include => [:author, :comments], :conditions => "authors.name = 'David'", :order => 'UPPER(posts.title) DESC, posts.id', :limit => 2, :offset => 1)
   end
 
   def test_eager_with_multiple_associations_with_same_table_has_many_and_habtm
@@ -399,6 +433,8 @@ class EagerAssociationTest < Test::Unit::TestCase
   def test_count_with_include
     if current_adapter?(:SQLServerAdapter, :SybaseAdapter)
       assert_equal 3, authors(:david).posts_with_comments.count(:conditions => "len(comments.body) > 15")
+    elsif current_adapter?(:OpenBaseAdapter)
+      assert_equal 3, authors(:david).posts_with_comments.count(:conditions => "length(FETCHBLOB(comments.body)) > 15")
     else
       assert_equal 3, authors(:david).posts_with_comments.count(:conditions => "length(comments.body) > 15")
     end

@@ -10,6 +10,7 @@ class SeleniumController < ActionController::Base
       @session_wiped = true
     end
     @cleared_tables = clear_tables params[:clear_tables].to_s
+    Fixtures.reset_cache # added in during Rails 2 transition to address issue with selenium tests not relaoding fixtures
     @loaded_fixtures = load_fixtures params[:fixtures].to_s
     render :file => view_path('setup.rhtml'), :layout => layout_path
   end

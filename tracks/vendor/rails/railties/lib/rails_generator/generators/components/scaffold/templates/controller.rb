@@ -1,58 +1,85 @@
 class <%= controller_class_name %>Controller < ApplicationController
-<% unless suffix -%>
+  # GET /<%= table_name %>
+  # GET /<%= table_name %>.xml
   def index
-    list
-    render :action => 'list'
-  end
-<% end -%>
+    @<%= table_name %> = <%= class_name %>.find(:all)
 
-<% for action in unscaffolded_actions -%>
-  def <%= action %><%= suffix %>
-  end
-
-<% end -%>
-  # GETs should be safe (see http://www.w3.org/2001/tag/doc/whenToUseGet.html)
-  verify :method => :post, :only => [ :destroy<%= suffix %>, :create<%= suffix %>, :update<%= suffix %> ],
-         :redirect_to => { :action => :list<%= suffix %> }
-
-  def list<%= suffix %>
-    @<%= singular_name %>_pages, @<%= plural_name %> = paginate :<%= plural_name %>, :per_page => 10
-  end
-
-  def show<%= suffix %>
-    @<%= singular_name %> = <%= model_name %>.find(params[:id])
-  end
-
-  def new<%= suffix %>
-    @<%= singular_name %> = <%= model_name %>.new
-  end
-
-  def create<%= suffix %>
-    @<%= singular_name %> = <%= model_name %>.new(params[:<%= singular_name %>])
-    if @<%= singular_name %>.save
-      flash[:notice] = '<%= model_name %> was successfully created.'
-      redirect_to :action => 'list<%= suffix %>'
-    else
-      render :action => 'new<%= suffix %>'
+    respond_to do |format|
+      format.html # index.html.erb
+      format.xml  { render :xml => @<%= table_name %> }
     end
   end
 
-  def edit<%= suffix %>
-    @<%= singular_name %> = <%= model_name %>.find(params[:id])
+  # GET /<%= table_name %>/1
+  # GET /<%= table_name %>/1.xml
+  def show
+    @<%= file_name %> = <%= class_name %>.find(params[:id])
+
+    respond_to do |format|
+      format.html # show.html.erb
+      format.xml  { render :xml => @<%= file_name %> }
+    end
   end
 
+  # GET /<%= table_name %>/new
+  # GET /<%= table_name %>/new.xml
+  def new
+    @<%= file_name %> = <%= class_name %>.new
+
+    respond_to do |format|
+      format.html # new.html.erb
+      format.xml  { render :xml => @<%= file_name %> }
+    end
+  end
+
+  # GET /<%= table_name %>/1/edit
+  def edit
+    @<%= file_name %> = <%= class_name %>.find(params[:id])
+  end
+
+  # POST /<%= table_name %>
+  # POST /<%= table_name %>.xml
+  def create
+    @<%= file_name %> = <%= class_name %>.new(params[:<%= file_name %>])
+
+    respond_to do |format|
+      if @<%= file_name %>.save
+        flash[:notice] = '<%= class_name %> was successfully created.'
+        format.html { redirect_to(@<%= file_name %>) }
+        format.xml  { render :xml => @<%= file_name %>, :status => :created, :location => @<%= file_name %> }
+      else
+        format.html { render :action => "new" }
+        format.xml  { render :xml => @<%= file_name %>.errors, :status => :unprocessable_entity }
+      end
+    end
+  end
+
+  # PUT /<%= table_name %>/1
+  # PUT /<%= table_name %>/1.xml
   def update
-    @<%= singular_name %> = <%= model_name %>.find(params[:id])
-    if @<%= singular_name %>.update_attributes(params[:<%= singular_name %>])
-      flash[:notice] = '<%= model_name %> was successfully updated.'
-      redirect_to :action => 'show<%= suffix %>', :id => @<%= singular_name %>
-    else
-      render :action => 'edit<%= suffix %>'
+    @<%= file_name %> = <%= class_name %>.find(params[:id])
+
+    respond_to do |format|
+      if @<%= file_name %>.update_attributes(params[:<%= file_name %>])
+        flash[:notice] = '<%= class_name %> was successfully updated.'
+        format.html { redirect_to(@<%= file_name %>) }
+        format.xml  { head :ok }
+      else
+        format.html { render :action => "edit" }
+        format.xml  { render :xml => @<%= file_name %>.errors, :status => :unprocessable_entity }
+      end
     end
   end
 
-  def destroy<%= suffix %>
-    <%= model_name %>.find(params[:id]).destroy
-    redirect_to :action => 'list<%= suffix %>'
+  # DELETE /<%= table_name %>/1
+  # DELETE /<%= table_name %>/1.xml
+  def destroy
+    @<%= file_name %> = <%= class_name %>.find(params[:id])
+    @<%= file_name %>.destroy
+
+    respond_to do |format|
+      format.html { redirect_to(<%= table_name %>_url) }
+      format.xml  { head :ok }
+    end
   end
 end

@@ -1,19 +1,15 @@
 require File.dirname(__FILE__) + '/../abstract_unit'
-require 'stringio'
 
 class WebServiceTest < Test::Unit::TestCase
-
   class MockCGI < CGI #:nodoc:
-    attr_accessor :stdinput, :stdoutput, :env_table
+    attr_accessor :stdoutput, :env_table
 
-    def initialize(env, data = '')      
+    def initialize(env, data = '')
       self.env_table = env
-      self.stdinput = StringIO.new(data)
       self.stdoutput = StringIO.new
-      super()
+      super(nil, StringIO.new(data))
     end
   end
-
 
   class TestController < ActionController::Base
     session :off
@@ -40,10 +36,13 @@ class WebServiceTest < Test::Unit::TestCase
   
   def setup
     @controller = TestController.new
-    ActionController::Base.param_parsers.clear
-    ActionController::Base.param_parsers[Mime::XML] = :xml_node
+    @default_param_parsers = ActionController::Base.param_parsers.dup
   end
-  
+
+  def teardown
+    ActionController::Base.param_parsers = @default_param_parsers
+  end
+
   def test_check_parameters
     process('GET')
     assert_equal '', @controller.response.body
@@ -54,7 +53,7 @@ class WebServiceTest < Test::Unit::TestCase
     
     assert_equal 'entry', @controller.response.body
     assert @controller.params.has_key?(:entry)
-    assert_equal 'content...', @controller.params["entry"].summary.node_value
+    assert_equal 'content...', @controller.params["entry"]['summary']
     assert_equal 'true', @controller.params["entry"]['attributed']
   end
   
@@ -63,7 +62,7 @@ class WebServiceTest < Test::Unit::TestCase
     
     assert_equal 'entry', @controller.response.body
     assert @controller.params.has_key?(:entry)
-    assert_equal 'content...', @controller.params["entry"].summary.node_value
+    assert_equal 'content...', @controller.params["entry"]['summary']
     assert_equal 'true', @controller.params["entry"]['attributed']
   end
 
@@ -97,15 +96,6 @@ class WebServiceTest < Test::Unit::TestCase
     ActionController::Base.param_parsers[Mime::XML] = :xml_simple
     assert_nothing_raised { process('POST', 'application/xml', "") }
     assert_equal "", @controller.response.body
-  end
-  
-  def test_deprecated_request_methods
-    process('POST', 'application/x-yaml')
-    assert_equal Mime::YAML, @controller.request.content_type
-    assert_equal true, @controller.request.post?
-    assert_equal :yaml, @controller.request.post_format
-    assert_equal true, @controller.request.yaml_post?
-    assert_equal false, @controller.request.xml_post?    
   end
 
   def test_dasherized_keys_as_xml
@@ -191,58 +181,4 @@ class WebServiceTest < Test::Unit::TestCase
     @controller.send(:process, ActionController::CgiRequest.new(cgi, {}), ActionController::CgiResponse.new(cgi))
   end
     
-end
-
-
-class XmlNodeTest < Test::Unit::TestCase
-  def test_all
-    xn = XmlNode.from_xml(%{<?xml version="1.0" encoding="UTF-8"?>
-      <response success='true'>
-      <page title='Ajax Summit' id='1133' email_address='ry87ib@backpackit.com'>
-        <description>With O'Reilly and Adaptive Path</description>
-        <notes>
-          <note title='Hotel' id='1020' created_at='2005-05-14 16:41:11'>
-            Staying at the Savoy
-          </note>
-        </notes>
-        <tags>
-          <tag name='Technology' id='4' />
-          <tag name='Travel' id='5' />
-        </tags>
-      </page>
-      </response>
-     }
-    )     
-    assert_equal 'UTF-8', xn.node.document.encoding
-    assert_equal '1.0', xn.node.document.version
-    assert_equal 'true', xn['success']
-    assert_equal 'response', xn.node_name
-    assert_equal 'Ajax Summit', xn.page['title']
-    assert_equal '1133', xn.page['id']
-    assert_equal "With O'Reilly and Adaptive Path", xn.page.description.node_value
-    assert_equal nil, xn.nonexistent
-    assert_equal "Staying at the Savoy", xn.page.notes.note.node_value.strip
-    assert_equal 'Technology', xn.page.tags.tag[0]['name']
-    assert_equal 'Travel', xn.page.tags.tag[1][:name]
-    matches = xn.xpath('//@id').map{ |id| id.to_i }
-    assert_equal [4, 5, 1020, 1133], matches.sort
-    matches = xn.xpath('//tag').map{ |tag| tag['name'] }
-    assert_equal ['Technology', 'Travel'], matches.sort
-    assert_equal "Ajax Summit", xn.page['title']
-    xn.page['title'] = 'Ajax Summit V2'
-    assert_equal "Ajax Summit V2", xn.page['title']
-    assert_equal "Staying at the Savoy", xn.page.notes.note.node_value.strip
-    xn.page.notes.note.node_value = "Staying at the Ritz"
-    assert_equal "Staying at the Ritz", xn.page.notes.note.node_value.strip
-    assert_equal '5', xn.page.tags.tag[1][:id]
-    xn.page.tags.tag[1]['id'] = '7'
-    assert_equal '7', xn.page.tags.tag[1]['id']
-  end
-  
-
-  def test_small_entry
-    node = XmlNode.from_xml('<entry>hi</entry>')
-    assert_equal 'hi', node.node_value
-  end
-
 end

@@ -9,12 +9,37 @@ end
 class ThreadsController  < ResourcesController; end
 class MessagesController < ResourcesController; end
 class CommentsController < ResourcesController; end
+class AuthorsController < ResourcesController; end
+class LogosController < ResourcesController; end
 
-class AccountController  < ResourcesController; end
-class AdminController    < ResourcesController; end
-class ProductsController < ResourcesController; end
+class AccountsController <  ResourcesController; end
+class AdminController   <  ResourcesController; end
+
+module Backoffice
+  class ProductsController < ResourcesController; end
+  class TagsController < ResourcesController; end
+  class ManufacturersController < ResourcesController; end
+  class ImagesController < ResourcesController; end
+
+  module Admin
+    class ProductsController < ResourcesController; end
+    class ImagesController < ResourcesController; end
+  end
+end
 
 class ResourcesTest < Test::Unit::TestCase
+  
+  
+  # The assertions in these tests are incompatible with the hash method
+  # optimisation.  This could indicate user level problems
+  def setup
+    ActionController::Base.optimise_named_routes = false
+  end
+  
+  def tear_down
+    ActionController::Base.optimise_named_routes = true
+  end
+  
   def test_should_arrange_actions
     resource = ActionController::Resources::Resource.new(:messages,
       :collection => { :rss => :get, :reorder => :post, :csv => :post },
@@ -58,6 +83,37 @@ class ResourcesTest < Test::Unit::TestCase
     end
   end
 
+  def test_with_custom_conditions
+    with_restful_routing :messages, :conditions => { :subdomain => 'app' } do
+      assert_equal 'app', ActionController::Routing::Routes.named_routes.routes[:messages].conditions[:subdomain]
+    end
+  end
+
+  def test_irregular_id_with_no_requirements_should_raise_error
+    expected_options = {:controller => 'messages', :action => 'show', :id => '1.1.1'}
+
+    with_restful_routing :messages do
+      assert_raises(ActionController::RoutingError) do
+        assert_recognizes(expected_options, :path => 'messages/1.1.1', :method => :get)
+      end
+    end
+  end
+
+  def test_irregular_id_with_requirements_should_pass
+    expected_options = {:controller => 'messages', :action => 'show', :id => '1.1.1'}
+
+    with_restful_routing(:messages, :requirements => {:id => /[0-9]\.[0-9]\.[0-9]/}) do
+      assert_recognizes(expected_options, :path => 'messages/1.1.1', :method => :get)
+    end
+  end
+
+  def test_with_path_prefix_requirements
+    expected_options = {:controller => 'messages', :action => 'show', :thread_id => '1.1.1', :id => '1'}
+    with_restful_routing :messages, :path_prefix => '/thread/:thread_id', :requirements => {:thread_id => /[0-9]\.[0-9]\.[0-9]/} do
+      assert_recognizes(expected_options, :path => 'thread/1.1.1/messages/1', :method => :get)
+    end
+  end
+
   def test_with_path_prefix
     with_restful_routing :messages, :path_prefix => '/thread/:thread_id' do
       assert_simply_restful_for :messages, :path_prefix => 'thread/5/', :options => { :thread_id => '5' }
@@ -77,24 +133,55 @@ class ResourcesTest < Test::Unit::TestCase
     end
   end
 
-  def test_with_collection_action
-    rss_options = {:action => 'rss'}
-    rss_path    = "/messages/rss"
-    actions = { 'a' => :put, 'b' => :post, 'c' => :delete }
+  def test_with_collection_actions
+    actions = { 'a' => :get, 'b' => :put, 'c' => :post, 'd' => :delete }
 
-    with_restful_routing :messages, :collection => { :rss => :get }.merge(actions) do
+    with_restful_routing :messages, :collection => actions do
       assert_restful_routes_for :messages do |options|
-        assert_routing rss_path, options.merge(rss_options)
-
         actions.each do |action, method|
           assert_recognizes(options.merge(:action => action), :path => "/messages/#{action}", :method => method)
         end
       end
 
       assert_restful_named_routes_for :messages do |options|
-        assert_named_route rss_path, :rss_messages_path, rss_options
         actions.keys.each do |action|
           assert_named_route "/messages/#{action}", "#{action}_messages_path", :action => action
+        end
+      end
+    end
+  end
+
+  def test_with_collection_actions_and_name_prefix
+    actions = { 'a' => :get, 'b' => :put, 'c' => :post, 'd' => :delete }
+  
+    with_restful_routing :messages, :path_prefix => '/threads/:thread_id', :name_prefix => "thread_", :collection => actions do
+      assert_restful_routes_for :messages, :path_prefix => 'threads/1/', :name_prefix => 'thread_', :options => { :thread_id => '1' } do |options|
+        actions.each do |action, method|
+          assert_recognizes(options.merge(:action => action), :path => "/threads/1/messages/#{action}", :method => method)
+        end
+      end
+  
+      assert_restful_named_routes_for :messages, :path_prefix => 'threads/1/', :name_prefix => 'thread_', :options => { :thread_id => '1' } do |options|
+        actions.keys.each do |action|
+          assert_named_route "/threads/1/messages/#{action}", "#{action}_thread_messages_path", :action => action
+        end
+      end
+    end
+  end
+
+  def test_with_collection_action_and_name_prefix_and_formatted
+    actions = { 'a' => :get, 'b' => :put, 'c' => :post, 'd' => :delete }
+  
+    with_restful_routing :messages, :path_prefix => '/threads/:thread_id', :name_prefix => "thread_", :collection => actions do
+      assert_restful_routes_for :messages, :path_prefix => 'threads/1/', :name_prefix => 'thread_', :options => { :thread_id => '1' } do |options|
+        actions.each do |action, method|
+          assert_recognizes(options.merge(:action => action, :format => 'xml'), :path => "/threads/1/messages/#{action}.xml", :method => method)
+        end
+      end
+  
+      assert_restful_named_routes_for :messages, :path_prefix => 'threads/1/', :name_prefix => 'thread_', :options => { :thread_id => '1' } do |options|
+        actions.keys.each do |action|
+          assert_named_route "/threads/1/messages/#{action}.xml", "formatted_#{action}_thread_messages_path", :action => action, :format => 'xml'
         end
       end
     end
@@ -147,12 +234,40 @@ class ResourcesTest < Test::Unit::TestCase
       end
     end
   end
+  
+  def test_with_new_action_with_name_prefix
+    with_restful_routing :messages, :new => { :preview => :post }, :path_prefix => '/threads/:thread_id', :name_prefix => 'thread_' do
+      preview_options = {:action => 'preview', :thread_id => '1'}
+      preview_path    = "/threads/1/messages/new/preview"
+      assert_restful_routes_for :messages, :path_prefix => 'threads/1/', :name_prefix => 'thread_', :options => { :thread_id => '1' } do |options|
+        assert_recognizes(options.merge(preview_options), :path => preview_path, :method => :post)
+      end
 
+      assert_restful_named_routes_for :messages, :path_prefix => 'threads/1/', :name_prefix => 'thread_', :options => { :thread_id => '1' } do |options|
+        assert_named_route preview_path, :preview_new_thread_message_path, preview_options
+      end
+    end
+  end
+  
+  def test_with_formatted_new_action_with_name_prefix
+    with_restful_routing :messages, :new => { :preview => :post }, :path_prefix => '/threads/:thread_id', :name_prefix => 'thread_' do
+      preview_options = {:action => 'preview', :thread_id => '1', :format => 'xml'}
+      preview_path    = "/threads/1/messages/new/preview.xml"
+      assert_restful_routes_for :messages, :path_prefix => 'threads/1/', :name_prefix => 'thread_', :options => { :thread_id => '1' } do |options|
+        assert_recognizes(options.merge(preview_options), :path => preview_path, :method => :post)
+      end
+
+      assert_restful_named_routes_for :messages, :path_prefix => 'threads/1/', :name_prefix => 'thread_', :options => { :thread_id => '1' } do |options|
+        assert_named_route preview_path, :formatted_preview_new_thread_message_path, preview_options
+      end
+    end
+  end
+  
   def test_override_new_method
     with_restful_routing :messages do
       assert_restful_routes_for :messages do |options|
         assert_recognizes(options.merge(:action => "new"), :path => "/messages/new", :method => :get)
-        assert_raises(ActionController::RoutingError) do
+        assert_raises(ActionController::MethodNotAllowed) do
           ActionController::Routing::Routes.recognize_path("/messages/new", :method => :post)
         end
       end
@@ -178,12 +293,32 @@ class ResourcesTest < Test::Unit::TestCase
 
       assert_simply_restful_for :threads
       assert_simply_restful_for :messages,
-        :path_prefix => 'threads/1/',
         :name_prefix => 'thread_',
+        :path_prefix => 'threads/1/',
+        :options => { :thread_id => '1' }
+      assert_simply_restful_for :comments,
+        :name_prefix => 'thread_message_',
+        :path_prefix => 'threads/1/messages/2/',
+        :options => { :thread_id => '1', :message_id => '2' }
+    end
+  end
+
+  def test_nested_restful_routes_with_overwritten_defaults
+    with_routing do |set|
+      set.draw do |map|
+        map.resources :threads do |map|
+          map.resources :messages, :name_prefix => nil do |map|
+            map.resources :comments, :name_prefix => nil
+          end
+        end
+      end
+
+      assert_simply_restful_for :threads
+      assert_simply_restful_for :messages,
+        :path_prefix => 'threads/1/',
         :options => { :thread_id => '1' }
       assert_simply_restful_for :comments,
         :path_prefix => 'threads/1/messages/2/',
-        :name_prefix => 'thread_message_',
         :options => { :thread_id => '1', :message_id => '2' }
     end
   end
@@ -207,22 +342,45 @@ class ResourcesTest < Test::Unit::TestCase
   end
 
   def test_should_create_multiple_singleton_resource_routes
-    with_singleton_resources :account, :admin do
+    with_singleton_resources :account, :logo do
       assert_singleton_restful_for :account
-      assert_singleton_restful_for :admin
+      assert_singleton_restful_for :logo
     end
   end
 
   def test_should_create_nested_singleton_resource_routes
     with_routing do |set|
       set.draw do |map|
-        map.resource :admin do |admin|
+        map.resource :admin, :controller => 'admin' do |admin|
           admin.resource :account
         end
       end
 
-      assert_singleton_restful_for :admin
-      assert_singleton_restful_for :account, :path_prefix => 'admin/', :name_prefix => 'admin_'
+      assert_singleton_restful_for :admin, :controller => 'admin'
+      assert_singleton_restful_for :account, :name_prefix => "admin_", :path_prefix => 'admin/'
+    end
+  end
+
+  def test_resource_has_many_should_become_nested_resources
+    with_routing do |set|
+      set.draw do |map|
+        map.resources :messages, :has_many => [ :comments, :authors ]
+      end
+
+      assert_simply_restful_for :messages
+      assert_simply_restful_for :comments, :name_prefix => "message_", :path_prefix => 'messages/1/', :options => { :message_id => '1' }
+      assert_simply_restful_for :authors,  :name_prefix => "message_", :path_prefix => 'messages/1/', :options => { :message_id => '1' }
+    end
+  end
+
+  def test_resource_has_one_should_become_nested_resources
+    with_routing do |set|
+      set.draw do |map|
+        map.resources :messages, :has_one => :logo
+      end
+
+      assert_simply_restful_for :messages
+      assert_singleton_restful_for :logo, :name_prefix => 'message_', :path_prefix => 'messages/1/', :options => { :message_id => '1' }
     end
   end
 
@@ -269,7 +427,7 @@ class ResourcesTest < Test::Unit::TestCase
       end
 
       assert_singleton_restful_for :account
-      assert_simply_restful_for :messages, :path_prefix => 'account/', :name_prefix => 'account_'
+      assert_simply_restful_for :messages, :name_prefix => "account_", :path_prefix => 'account/'
     end
   end
 
@@ -282,7 +440,7 @@ class ResourcesTest < Test::Unit::TestCase
       end
 
       assert_singleton_restful_for :account, :path_prefix => '7/', :options => { :site_id => '7' }
-      assert_simply_restful_for :messages, :path_prefix => '7/account/', :name_prefix => 'account_', :options => { :site_id => '7' }
+      assert_simply_restful_for :messages, :name_prefix => "account_", :path_prefix => '7/account/', :options => { :site_id => '7' }
     end
   end
 
@@ -290,12 +448,12 @@ class ResourcesTest < Test::Unit::TestCase
     with_routing do |set|
       set.draw do |map|
         map.resources :threads do |thread|
-          thread.resource :admin
+          thread.resource :admin, :controller => 'admin'
         end
       end
 
       assert_simply_restful_for :threads
-      assert_singleton_restful_for :admin, :path_prefix => 'threads/5/', :name_prefix => 'thread_', :options => { :thread_id => '5' }
+      assert_singleton_restful_for :admin, :controller => 'admin', :name_prefix => 'thread_', :path_prefix => 'threads/5/', :options => { :thread_id => '5' }
     end
   end
 
@@ -305,11 +463,11 @@ class ResourcesTest < Test::Unit::TestCase
       options = { :controller => controller_name.to_s }
       collection_path = "/#{controller_name}"
 
-      assert_raises(ActionController::RoutingError) do
+      assert_raises(ActionController::MethodNotAllowed) do
         assert_recognizes(options.merge(:action => 'update'), :path => collection_path, :method => :put)
       end
 
-      assert_raises(ActionController::RoutingError) do
+      assert_raises(ActionController::MethodNotAllowed) do
         assert_recognizes(options.merge(:action => 'destroy'), :path => collection_path, :method => :delete)
       end
     end
@@ -321,9 +479,9 @@ class ResourcesTest < Test::Unit::TestCase
         map.resources :messages, :collection => {:search => :get}, :new => {:preview => :any}, :name_prefix => 'thread_', :path_prefix => '/threads/:thread_id'
         map.resource :account, :member => {:login => :get}, :new => {:preview => :any}, :name_prefix => 'admin_', :path_prefix => '/admin'
       end
-
+      
       action_separator = ActionController::Base.resource_action_separator
-
+      
       assert_simply_restful_for :messages, :name_prefix => 'thread_', :path_prefix => 'threads/1/', :options => { :thread_id => '1' }
       assert_named_route "/threads/1/messages#{action_separator}search", "search_thread_messages_path", {}
       assert_named_route "/threads/1/messages/new", "new_thread_message_path", {}
@@ -359,134 +517,95 @@ class ResourcesTest < Test::Unit::TestCase
     end
   end
 
-  def test_should_add_deprecated_named_routes_for_resource
+  def test_resources_in_namespace
     with_routing do |set|
       set.draw do |map|
-        map.resources :messages, :collection => {:search => :get}, :new => {:preview => :any}, :name_prefix => 'thread_', :path_prefix => '/threads/:thread_id'
+        map.namespace :backoffice do |backoffice|
+          backoffice.resources :products
+        end
       end
-      assert_simply_restful_for :messages, :name_prefix => 'thread_', :path_prefix => 'threads/1/', :options => { :thread_id => '1' }
-      assert_deprecated do
-        assert_named_route "/threads/1/messages/search", "thread_search_messages_path", {}
-        assert_named_route "/threads/1/messages/new", "thread_new_message_path", {}
-        assert_named_route "/threads/1/messages/new/preview", "thread_preview_new_message_path", {}
-      end
+
+      assert_simply_restful_for :products, :controller => "backoffice/products", :name_prefix => 'backoffice_', :path_prefix => 'backoffice/'
     end
   end
 
-  def test_should_add_deprecated_named_routes_for_singleton_resource
+  def test_resource_has_many_in_namespace
     with_routing do |set|
       set.draw do |map|
-        map.resource :account, :member => {:login => :get}, :new => {:preview => :any}, :name_prefix => 'admin_', :path_prefix => '/admin'
+        map.namespace :backoffice do |backoffice|
+          backoffice.resources :products, :has_many => :tags
+        end
       end
-      assert_singleton_restful_for :account, :name_prefix => 'admin_', :path_prefix => 'admin/'
-      assert_deprecated do
-        assert_named_route "/admin/account/login", "admin_login_account_path", {}
-        assert_named_route "/admin/account/new", "admin_new_account_path", {}
-        assert_named_route "/admin/account/new/preview", "admin_preview_new_account_path", {}
-      end
+
+      assert_simply_restful_for :products,  :controller => "backoffice/products", :name_prefix => 'backoffice_',          :path_prefix => 'backoffice/'
+      assert_simply_restful_for :tags,      :controller => "backoffice/tags",     :name_prefix => "backoffice_product_",  :path_prefix => 'backoffice/products/1/', :options => { :product_id => '1' }
     end
   end
 
-  def test_should_add_deprecated_named_routes_for_nested_resources
+  def test_resource_has_one_in_namespace
     with_routing do |set|
       set.draw do |map|
-        map.resources :threads do |map|
-          map.resources :messages do |map|
-            map.resources :comments
+        map.namespace :backoffice do |backoffice|
+          backoffice.resources :products, :has_one => :manufacturer
+        end
+      end
+
+      assert_simply_restful_for :products, :controller => "backoffice/products", :name_prefix => 'backoffice_', :path_prefix => 'backoffice/'
+      assert_singleton_restful_for :manufacturer, :controller => "backoffice/manufacturers", :name_prefix => 'backoffice_product_', :path_prefix => 'backoffice/products/1/', :options => { :product_id => '1' }
+    end
+  end
+
+  def test_resources_in_nested_namespace
+    with_routing do |set|
+      set.draw do |map|
+        map.namespace :backoffice do |backoffice|
+          backoffice.namespace :admin do |admin|
+            admin.resources :products
           end
         end
       end
 
-      assert_simply_restful_for :threads
-      assert_simply_restful_for :messages,
-        :path_prefix => 'threads/1/',
-        :name_prefix => 'thread_',
-        :options => { :thread_id => '1' }
-      assert_simply_restful_for :comments,
-        :path_prefix => 'threads/1/messages/2/',
-        :name_prefix => 'thread_message_',
-        :options => { :thread_id => '1', :message_id => '2' }
-
-      assert_deprecated do
-        assert_named_route "/threads/1/messages", "messages_path", {}
-        assert_named_route "/threads/1/messages/1", "message_path", {:thread_id => '1', :id => '1'}
-        assert_named_route "/threads/1/messages/new", "new_message_path", {:thread_id => '1'}
-        assert_named_route "/threads/1/messages/1/edit", "edit_message_path", {:thread_id => '1', :id => '1'}
-      end
+      assert_simply_restful_for :products, :controller => "backoffice/admin/products", :name_prefix => 'backoffice_admin_', :path_prefix => 'backoffice/admin/'
     end
   end
 
-  def test_should_add_deprecated_named_routes_for_nested_singleton_resources
+  def test_resources_using_namespace
     with_routing do |set|
       set.draw do |map|
-        map.resource :admin do |admin|
-          admin.resource :account
+        map.resources :products, :namespace => "backoffice/"
+      end
+
+      assert_simply_restful_for :products, :controller => "backoffice/products"
+    end
+  end
+  
+  def test_nested_resources_using_namespace
+    with_routing do |set|
+      set.draw do |map|
+        map.namespace :backoffice do |backoffice|
+          backoffice.resources :products do |products|
+            products.resources :images
+          end
         end
       end
 
-      assert_singleton_restful_for :admin
-      assert_singleton_restful_for :account, :path_prefix => 'admin/', :name_prefix => 'admin_'
-
-      assert_deprecated do
-        assert_named_route "/admin/account", "account_path", {}
-        assert_named_route "/admin/account/new", "new_account_path", {}
-        assert_named_route "/admin/account/edit", "edit_account_path", {}
-      end
+      assert_simply_restful_for :images, :controller => "backoffice/images", :name_prefix => 'backoffice_product_', :path_prefix => 'backoffice/products/1/', :options => {:product_id => '1'}
     end
   end
 
-  def test_should_add_deprecated_named_routes_for_nested_resources_in_singleton_resource
+  def test_nested_resources_in_nested_namespace
     with_routing do |set|
       set.draw do |map|
-        map.resource :account do |account|
-          account.resources :messages
+        map.namespace :backoffice do |backoffice|
+          backoffice.namespace :admin do |admin|
+            admin.resources :products do |products|
+              products.resources :images
+            end
+          end
         end
       end
 
-      assert_singleton_restful_for :account
-      assert_simply_restful_for :messages, :path_prefix => 'account/', :name_prefix => 'account_'
-
-      assert_deprecated do
-        assert_named_route "/account/messages", "messages_path", {}
-        assert_named_route "/account/messages/1", "message_path", {:id => '1'}
-        assert_named_route "/account/messages/new", "new_message_path", {}
-        assert_named_route "/account/messages/1/edit", "edit_message_path", {:id => '1'}
-      end
-    end
-  end
-
-  def test_should_add_deprecated_named_routes_for_nested_singleton_resource_in_resources
-    with_routing do |set|
-      set.draw do |map|
-        map.resources :threads do |thread|
-          thread.resource :admin
-        end
-      end
-
-      assert_simply_restful_for :threads
-      assert_singleton_restful_for :admin, :path_prefix => 'threads/5/', :name_prefix => 'thread_', :options => { :thread_id => '5' }
-
-      assert_deprecated do
-        assert_named_route "/threads/5/admin", "admin_path", {}
-        assert_named_route "/threads/5/admin/new", "new_admin_path", {}
-        assert_named_route "/threads/5/admin/edit", "edit_admin_path", {}
-      end
-    end
-  end
-
-  def test_should_add_deprecated_formatted_routes
-    with_routing do |set|
-      set.draw do |map|
-        map.resources :products, :collection => { :specials => :get }, :member => { :thumbnail => :get }
-        map.resource :account, :member => { :icon => :get }
-      end
-      assert_restful_routes_for :products do |options|
-        assert_recognizes options.merge({ :action => 'specials', :format => 'xml' }), :path => '/products.xml;specials', :method => :get
-        assert_recognizes options.merge({ :action => 'thumbnail', :format => 'jpg', :id => '1' }), :path => '/products/1.jpg;thumbnail', :method => :get
-      end
-      assert_singleton_restful_for :account do |options|
-        assert_recognizes options.merge({ :action => 'icon', :format => 'jpg' }), :path => '/account.jpg;icon', :method => :get
-      end
+      assert_simply_restful_for :images, :controller => "backoffice/admin/images", :name_prefix => 'backoffice_admin_product_', :path_prefix => 'backoffice/admin/products/1/', :options => {:product_id => '1'}
     end
   end
 
@@ -508,7 +627,7 @@ class ResourcesTest < Test::Unit::TestCase
     # runs assert_restful_routes_for and assert_restful_named_routes for on the controller_name and options, without passing a block.
     def assert_simply_restful_for(controller_name, options = {})
       assert_restful_routes_for       controller_name, options
-      assert_restful_named_routes_for controller_name, options
+      assert_restful_named_routes_for controller_name, nil, options
     end
 
     def assert_singleton_restful_for(singleton_name, options = {})
@@ -517,7 +636,8 @@ class ResourcesTest < Test::Unit::TestCase
     end
 
     def assert_restful_routes_for(controller_name, options = {})
-      (options[:options] ||= {})[:controller] = controller_name.to_s
+      options[:options] ||= {}
+      options[:options][:controller] = options[:controller] || controller_name.to_s
 
       collection_path            = "/#{options[:path_prefix]}#{controller_name}"
       member_path                = "#{collection_path}/1"
@@ -562,8 +682,11 @@ class ResourcesTest < Test::Unit::TestCase
         singular_name = nil
       end
       singular_name ||= controller_name.to_s.singularize
-      (options[:options] ||= {})[:controller] = controller_name.to_s
-      @controller = "#{controller_name.to_s.camelize}Controller".constantize.new
+
+      options[:options] ||= {}
+      options[:options][:controller] = options[:controller] || controller_name.to_s
+
+      @controller = "#{options[:options][:controller].camelize}Controller".constantize.new
       @request    = ActionController::TestRequest.new
       @response   = ActionController::TestResponse.new
       get :index, options[:options]
@@ -571,20 +694,23 @@ class ResourcesTest < Test::Unit::TestCase
 
       full_prefix = "/#{options[:path_prefix]}#{controller_name}"
       name_prefix = options[:name_prefix]
-
+      
       assert_named_route "#{full_prefix}",            "#{name_prefix}#{controller_name}_path",              options[:options]
-      assert_named_route "#{full_prefix}/new",        "new_#{name_prefix}#{singular_name}_path",            options[:options]
-      assert_named_route "#{full_prefix}/1",          "#{name_prefix}#{singular_name}_path",                options[:options].merge(:id => '1')
-      assert_named_route "#{full_prefix}/1/edit",     "edit_#{name_prefix}#{singular_name}_path",           options[:options].merge(:id => '1')
       assert_named_route "#{full_prefix}.xml",        "formatted_#{name_prefix}#{controller_name}_path",    options[:options].merge(            :format => 'xml')
-      assert_named_route "#{full_prefix}/new.xml",    "formatted_new_#{name_prefix}#{singular_name}_path",  options[:options].merge(            :format => 'xml')
+      assert_named_route "#{full_prefix}/1",          "#{name_prefix}#{singular_name}_path",                options[:options].merge(:id => '1')
       assert_named_route "#{full_prefix}/1.xml",      "formatted_#{name_prefix}#{singular_name}_path",      options[:options].merge(:id => '1', :format => 'xml')
+
+      assert_named_route "#{full_prefix}/new",        "new_#{name_prefix}#{singular_name}_path",            options[:options]
+      assert_named_route "#{full_prefix}/new.xml",    "formatted_new_#{name_prefix}#{singular_name}_path",  options[:options].merge(            :format => 'xml')
+      assert_named_route "#{full_prefix}/1/edit",     "edit_#{name_prefix}#{singular_name}_path",           options[:options].merge(:id => '1')
       assert_named_route "#{full_prefix}/1/edit.xml", "formatted_edit_#{name_prefix}#{singular_name}_path", options[:options].merge(:id => '1', :format => 'xml')
+
       yield options[:options] if block_given?
     end
-
+    
     def assert_singleton_routes_for(singleton_name, options = {})
-      (options[:options] ||= {})[:controller] ||= singleton_name.to_s
+      options[:options] ||= {}
+      options[:options][:controller] = options[:controller] || singleton_name.to_s.pluralize
 
       full_path           = "/#{options[:path_prefix]}#{singleton_name}"
       new_path            = "#{full_path}/new"
@@ -618,7 +744,7 @@ class ResourcesTest < Test::Unit::TestCase
     end
 
     def assert_singleton_named_routes_for(singleton_name, options = {})
-      (options[:options] ||= {})[:controller] ||= singleton_name.to_s
+      (options[:options] ||= {})[:controller] ||= singleton_name.to_s.pluralize
       @controller = "#{options[:options][:controller].camelize}Controller".constantize.new
       @request    = ActionController::TestRequest.new
       @response   = ActionController::TestResponse.new
@@ -626,21 +752,22 @@ class ResourcesTest < Test::Unit::TestCase
       options[:options].delete :action
 
       full_path = "/#{options[:path_prefix]}#{singleton_name}"
-      full_name = "#{options[:name_prefix]}#{singleton_name}"
+      name_prefix = options[:name_prefix]
 
-      assert_named_route "#{full_path}",          "#{full_name}_path",                options[:options]
-      assert_named_route "#{full_path}/new",      "new_#{full_name}_path",            options[:options]
-      assert_named_route "#{full_path}/edit",     "edit_#{full_name}_path",           options[:options]
-      assert_named_route "#{full_path}.xml",      "formatted_#{full_name}_path",      options[:options].merge(:format => 'xml')
-      assert_named_route "#{full_path}/new.xml",  "formatted_new_#{full_name}_path",  options[:options].merge(:format => 'xml')
-      assert_named_route "#{full_path}/edit.xml", "formatted_edit_#{full_name}_path", options[:options].merge(:format => 'xml')
+      assert_named_route "#{full_path}",          "#{name_prefix}#{singleton_name}_path",                options[:options]
+      assert_named_route "#{full_path}.xml",      "formatted_#{name_prefix}#{singleton_name}_path",      options[:options].merge(:format => 'xml')
+
+      assert_named_route "#{full_path}/new",      "new_#{name_prefix}#{singleton_name}_path",            options[:options]
+      assert_named_route "#{full_path}/new.xml",  "formatted_new_#{name_prefix}#{singleton_name}_path",  options[:options].merge(:format => 'xml')
+      assert_named_route "#{full_path}/edit",     "edit_#{name_prefix}#{singleton_name}_path",           options[:options]
+      assert_named_route "#{full_path}/edit.xml", "formatted_edit_#{name_prefix}#{singleton_name}_path", options[:options].merge(:format => 'xml')
     end
 
     def assert_named_route(expected, route, options)
       actual =  @controller.send(route, options) rescue $!.class.name
       assert_equal expected, actual, "Error on route: #{route}(#{options.inspect})"
     end
-
+    
     def assert_resource_methods(expected, resource, action_method, method)
       assert_equal expected.length, resource.send("#{action_method}_methods")[method].size, "#{resource.send("#{action_method}_methods")[method].inspect}"
       expected.each do |action|
@@ -657,5 +784,4 @@ class ResourcesTest < Test::Unit::TestCase
       end
       true
     end
-
 end

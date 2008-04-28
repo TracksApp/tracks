@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2004-2006 David Heinemeier Hansson
+# Copyright (c) 2004-2007 David Heinemeier Hansson
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -31,13 +31,15 @@ unless defined?(ActionController)
   end
 end
 
-$:.unshift(File.dirname(__FILE__) + "/action_mailer/vendor/")
+require 'action_mailer/vendor'
+require 'tmail'
 
 require 'action_mailer/base'
 require 'action_mailer/helpers'
 require 'action_mailer/mail_helper'
 require 'action_mailer/quoting'
-require 'tmail'
+require 'action_mailer/test_helper'
+
 require 'net/smtp'
 
 ActionMailer::Base.class_eval do

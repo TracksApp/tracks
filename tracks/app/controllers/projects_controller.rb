@@ -28,7 +28,7 @@ class ProjectsController < ApplicationController
       end
     end
   end
-  
+
   def projects_and_actions
     @projects = @projects.select { |p| p.active? }
     respond_to do |format|
@@ -42,7 +42,7 @@ class ProjectsController < ApplicationController
     init_data_for_sidebar unless mobile?
     @projects = current_user.projects
     @page_title = "TRACKS::Project: #{@project.name}"
-    @project.todos.with_scope :find => { :include => [:context, :tags] } do
+    @project.todos.send :with_scope, :find => { :include => [:context, :tags] } do
       @not_done = @project.not_done_todos(:include_project_hidden_todos => true)
       @deferred = @project.deferred_todos.sort_by { |todo| todo.show_from }
       @done = @project.done_todos
@@ -126,19 +126,25 @@ class ProjectsController < ApplicationController
         @active_projects_count = current_user.projects.count(:conditions => "state = 'active'")
         @hidden_projects_count = current_user.projects.count(:conditions => "state = 'hidden'")
         @completed_projects_count = current_user.projects.count(:conditions => "state = 'completed'")
-        render
+        render :template => 'projects/update.js.rjs'
+        return
       elsif boolean_param('update_status')
-        render :action => 'update_status'
+        render :template => 'projects/update_status.js.rjs'
+        return
       elsif boolean_param('update_default_context')
         @initial_context_name = @project.default_context.name 
-        render :action => 'update_default_context'
+        render :template => 'projects/update_default_context.js.rjs'
+        return
       else
         render :text => success_text || 'Success'
+        return
       end
     else
       notify :warning, "Couldn't update project"
       render :text => ''
+      return
     end
+    render :template => 'projects/update.js.rjs'
   end
   
   def edit
@@ -215,7 +221,7 @@ class ProjectsController < ApplicationController
       render :action => 'project_mobile'
     end
   end
-    
+
   def render_rss_feed
     lambda do
       render_rss_feed_for @projects, :feed => feed_options,
@@ -239,7 +245,7 @@ class ProjectsController < ApplicationController
   def render_text_feed
     lambda do
       init_project_hidden_todo_counts(['project'])
-      render :action => 'index_text', :layout => false, :content_type => Mime::TEXT
+      render :action => 'index', :layout => false, :content_type => Mime::TEXT
     end
   end
         

@@ -37,12 +37,20 @@ require 'rails_generator'
 
 
 class RailsGeneratorTest < Test::Unit::TestCase
-  BUILTINS = %w(controller mailer model scaffold)
+  BUILTINS = %w(controller integration_test mailer migration model observer plugin resource scaffold session_migration)
   CAPITALIZED_BUILTINS = BUILTINS.map { |b| b.capitalize }
 
+  def setup
+    ActiveRecord::Base.pluralize_table_names = true
+  end
+
   def test_sources
-    expected = [:lib, :vendor, :plugins, :user, :RubyGems, :builtin]
-    expected.delete(:gem) unless Object.const_defined?(:Gem)
+    expected = [:lib, :vendor, 
+                :plugins, :plugins, # <plugin>/generators and <plugin>/rails_generators
+                :user, 
+                :RubyGems, :RubyGems, # gems named <x>_generator, gems containing /rails_generator/ folder
+                :builtin]
+    expected.delete(:RubyGems) unless Object.const_defined?(:Gem)
     assert_equal expected, Rails::Generator::Base.sources.map { |s| s.label }
   end
 
@@ -80,8 +88,8 @@ class RailsGeneratorTest < Test::Unit::TestCase
   end
 
   def test_generator_usage
-    BUILTINS.each do |name|
-      assert_raise(Rails::Generator::UsageError) {
+    (BUILTINS - ["session_migration"]).each do |name|
+      assert_raise(Rails::Generator::UsageError, "Generator '#{name}' should raise an error without arguments") {
         Rails::Generator::Base.instance(name)
       }
     end
@@ -96,7 +104,6 @@ class RailsGeneratorTest < Test::Unit::TestCase
   end
 
   def test_named_generator_attributes
-    ActiveRecord::Base.pluralize_table_names = true
     g = Rails::Generator::Base.instance('working', %w(admin/foo bar baz))
     assert_equal 'admin/foo', g.name
     assert_equal %w(admin), g.class_path
@@ -105,23 +112,26 @@ class RailsGeneratorTest < Test::Unit::TestCase
     assert_equal 'foo', g.singular_name
     assert_equal 'foos', g.plural_name
     assert_equal g.singular_name, g.file_name
-    assert_equal g.plural_name, g.table_name
+    assert_equal "admin_#{g.plural_name}", g.table_name
     assert_equal %w(bar baz), g.args
   end
 
   def test_named_generator_attributes_without_pluralized
     ActiveRecord::Base.pluralize_table_names = false
     g = Rails::Generator::Base.instance('working', %w(admin/foo bar baz))
-    assert_equal g.singular_name, g.table_name
+    assert_equal "admin_#{g.singular_name}", g.table_name
   end
-  
+
+  def test_session_migration_generator_with_pluralization
+    g = Rails::Generator::Base.instance('session_migration')
+    assert_equal 'session'.pluralize, g.send(:default_session_table_name)
+    ActiveRecord::Base.pluralize_table_names = false
+    assert_equal 'session', g.send(:default_session_table_name)
+  end
+
   def test_scaffold_controller_name
     # Default behaviour is use the model name
     g = Rails::Generator::Base.instance('scaffold', %w(Product))
-    assert_equal "Product", g.controller_name
-    
-    # When we specify a controller name make sure it sticks!!
-    g = Rails::Generator::Base.instance('scaffold', %w(Product Admin))
-    assert_equal "Admin", g.controller_name
-  end  
+    assert_equal "Products", g.controller_name
+  end
 end

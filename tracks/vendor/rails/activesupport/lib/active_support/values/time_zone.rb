@@ -45,7 +45,7 @@ class TimeZone
 
   # Adjust the given time to the time zone represented by +self+.
   def adjust(time)
-    time = time.to_time
+    time = time.to_time unless time.is_a?(::Time)
     time + utc_offset - time.utc_offset
   end
 
@@ -53,8 +53,9 @@ class TimeZone
   # zone, and then adjusts it to return the corresponding time in the
   # local time zone.
   def unadjust(time)
-    time = Time.local(*time.to_time.to_a)
-    time - utc_offset + time.utc_offset
+    time = time.to_time unless time.is_a?(::Time)
+    time = time.localtime
+    time - utc_offset - time.utc_offset
   end
 
   # Compare this time zone to the parameter. The two are comapred first on
@@ -67,7 +68,7 @@ class TimeZone
 
   # Returns a textual representation of this time zone.
   def to_s
-    "(GMT#{formatted_offset}) #{name}"
+    "(UTC#{formatted_offset}) #{name}"
   end
 
   @@zones = nil
@@ -76,7 +77,7 @@ class TimeZone
     # Create a new TimeZone instance with the given name and offset.
     def create(name, offset)
       zone = allocate
-      zone.send :initialize, name, offset
+      zone.send!(:initialize, name, offset)
       zone
     end
 
@@ -98,8 +99,8 @@ class TimeZone
          [-36_000, "Hawaii" ],
          [-32_400, "Alaska" ],
          [-28_800, "Pacific Time (US & Canada)", "Tijuana" ],
-         [-25_200, "Mountain Time (US & Canada)", "Chihuahua", "La Paz",
-                   "Mazatlan", "Arizona" ],
+         [-25_200, "Mountain Time (US & Canada)", "Chihuahua", "Mazatlan", 
+                   "Arizona" ],
          [-21_600, "Central Time (US & Canada)", "Saskatchewan", "Guadalajara",
                    "Mexico City", "Monterrey", "Central America" ],
          [-18_000, "Eastern Time (US & Canada)", "Indiana (East)", "Bogota",

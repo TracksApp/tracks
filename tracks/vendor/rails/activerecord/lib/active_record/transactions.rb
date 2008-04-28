@@ -1,5 +1,3 @@
-require 'active_record/vendor/simple.rb'
-Transaction::Simple.send(:remove_method, :transaction)
 require 'thread'
 
 module ActiveRecord
@@ -32,6 +30,19 @@ module ActiveRecord
     # Exceptions will force a ROLLBACK that returns the database to the state before the transaction was begun. Be aware, though,
     # that the objects by default will _not_ have their instance data returned to their pre-transactional state.
     #
+    # == Different ActiveRecord classes in a single transaction
+    #
+    # Though the transaction class method is called on some ActiveRecord class,
+    # the objects within the transaction block need not all be instances of
+    # that class.
+    # In this example a <tt>Balance</tt> record is transactionally saved even
+    # though <tt>transaction</tt> is called on the <tt>Account</tt> class:
+    #
+    #   Account.transaction do
+    #     balance.save!
+    #     account.save!
+    #   end
+    #
     # == Transactions are not distributed across database connections
     #
     # A transaction acts on a single database connection.  If you have
@@ -53,52 +64,20 @@ module ActiveRecord
     #
     # Both Base#save and Base#destroy come wrapped in a transaction that ensures that whatever you do in validations or callbacks
     # will happen under the protected cover of a transaction. So you can use validations to check for values that the transaction
-    # depend on or you can raise exceptions in the callbacks to rollback.
-    #
-    # == Object-level transactions (deprecated)
-    #
-    # You can enable object-level transactions for Active Record objects, though. You do this by naming each of the Active Records
-    # that you want to enable object-level transactions for, like this:
-    #
-    #   Account.transaction(david, mary) do
-    #     david.withdrawal(100)
-    #     mary.deposit(100)
-    #   end
-    #
-    # If the transaction fails, David and Mary will be returned to their
-    # pre-transactional state. No money will have changed hands in neither
-    # object nor database.
-    #
-    # However, useful state such as validation errors are also rolled back,
-    # limiting the usefulness of this feature. As such it is deprecated in
-    # Rails 1.2 and will be removed in the next release. Install the
-    # object_transactions plugin if you wish to continue using it.
+    # depends on or you can raise exceptions in the callbacks to rollback.
     #
     # == Exception handling
     #
     # Also have in mind that exceptions thrown within a transaction block will be propagated (after triggering the ROLLBACK), so you
-    # should be ready to catch those in your application code.
-    #
-    # Tribute: Object-level transactions are implemented by Transaction::Simple by Austin Ziegler.
+    # should be ready to catch those in your application code. One exception is the ActiveRecord::Rollback exception, which will
+    # trigger a ROLLBACK when raised, but not be re-raised by the transaction block.
     module ClassMethods
-      def transaction(*objects, &block)
+      def transaction(&block)
         previous_handler = trap('TERM') { raise TransactionError, "Transaction aborted" }
         increment_open_transactions
 
         begin
-          unless objects.empty?
-            ActiveSupport::Deprecation.warn "Object transactions are deprecated and will be removed from Rails 2.0.  See http://www.rubyonrails.org/deprecation for details.", caller
-            objects.each { |o| o.extend(Transaction::Simple) }
-            objects.each { |o| o.start_transaction }
-          end
-
-          result = connection.transaction(Thread.current['start_db_transaction'], &block)
-
-          objects.each { |o| o.commit_transaction }
-          return result
-        rescue Exception => object_transaction_rollback
-          objects.each { |o| o.abort_transaction }
-          raise
+          connection.transaction(Thread.current['start_db_transaction'], &block)
         ensure
           decrement_open_transactions
           trap('TERM', previous_handler)
@@ -117,8 +96,8 @@ module ActiveRecord
         end
     end
 
-    def transaction(*objects, &block)
-      self.class.transaction(*objects, &block)
+    def transaction(&block)
+      self.class.transaction(&block)
     end
 
     def destroy_with_transactions #:nodoc:
@@ -126,11 +105,28 @@ module ActiveRecord
     end
 
     def save_with_transactions(perform_validation = true) #:nodoc:
-      transaction { save_without_transactions(perform_validation) }
+      rollback_active_record_state! { transaction { save_without_transactions(perform_validation) } }
     end
 
     def save_with_transactions! #:nodoc:
-      transaction { save_without_transactions! }
+      rollback_active_record_state! { transaction { save_without_transactions! } }
+    end
+
+    # Reset id and @new_record if the transaction rolls back.
+    def rollback_active_record_state!
+      id_present = has_attribute?(self.class.primary_key)
+      previous_id = id
+      previous_new_record = @new_record
+      yield
+    rescue Exception
+      @new_record = previous_new_record
+      if id_present
+        self.id = previous_id
+      else
+        @attributes.delete(self.class.primary_key)
+        @attributes_cache.delete(self.class.primary_key)
+      end  
+      raise
     end
   end
 end

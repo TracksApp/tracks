@@ -52,9 +52,9 @@ module ActionMailer #:nodoc:
   #
   # Like ActionController, each mailer class has a corresponding view directory
   # in which each method of the class looks for a template with its name.
-  # To define a template to be used with a mailing, create an <tt>.rhtml</tt> file with the same name as the method
+  # To define a template to be used with a mailing, create an <tt>.erb</tt> file with the same name as the method
   # in your mailer model. For example, in the mailer defined above, the template at 
-  # <tt>app/views/notifier/signup_notification.rhtml</tt> would be used to generate the email.
+  # <tt>app/views/notifier/signup_notification.erb</tt> would be used to generate the email.
   #
   # Variables defined in the model are accessible as instance variables in the view.
   #
@@ -103,7 +103,7 @@ module ActionMailer #:nodoc:
   #
   # = HTML email
   #
-  # To send mail as HTML, make sure your view (the <tt>.rhtml</tt> file) generates HTML and
+  # To send mail as HTML, make sure your view (the <tt>.erb</tt> file) generates HTML and
   # set the content type to html.
   #
   #   class MyMailer < ActionMailer::Base
@@ -142,10 +142,10 @@ module ActionMailer #:nodoc:
   # by the content type. Each such detected template will be added as separate part to the message.
   # 
   # For example, if the following templates existed:
-  # * signup_notification.text.plain.rhtml
-  # * signup_notification.text.html.rhtml
-  # * signup_notification.text.xml.rxml
-  # * signup_notification.text.x-yaml.rhtml
+  # * signup_notification.text.plain.erb
+  # * signup_notification.text.html.erb
+  # * signup_notification.text.xml.builder
+  # * signup_notification.text.x-yaml.erb
   #  
   # Each would be rendered and added as a separate part to the message,
   # with the corresponding content type. The same body hash is passed to
@@ -219,16 +219,15 @@ module ActionMailer #:nodoc:
   #   <tt>@implicit_parts_order</tt>.
   class Base
     include AdvAttrAccessor, PartContainer
-    include ActionController::UrlWriter
+    include ActionController::UrlWriter if Object.const_defined?(:ActionController)
 
-    # Action Mailer subclasses should be reloaded by the dispatcher in Rails
-    # when Dependencies.mechanism = :load.
-    include Reloadable::Deprecated
-    
     private_class_method :new #:nodoc:
 
     class_inheritable_accessor :template_root
     cattr_accessor :logger
+
+    cattr_accessor :template_extensions
+    @@template_extensions = ['erb', 'builder', 'rhtml', 'rxml']
 
     @@smtp_settings = { 
       :address        => "localhost", 
@@ -249,8 +248,8 @@ module ActionMailer #:nodoc:
     @@raise_delivery_errors = true
     cattr_accessor :raise_delivery_errors
 
-    @@delivery_method = :smtp
-    cattr_accessor :delivery_method
+    superclass_delegating_accessor :delivery_method
+    self.delivery_method = :smtp
     
     @@perform_deliveries = true
     cattr_accessor :perform_deliveries
@@ -299,11 +298,6 @@ module ActionMailer #:nodoc:
     # This defaults to the value for the +default_implicit_parts_order+.
     adv_attr_accessor :implicit_parts_order
     
-    # Override the mailer name, which defaults to an inflected version of the
-    # mailer's class name. If you want to use a template in a non-standard
-    # location, you can use this to specify that location.
-    adv_attr_accessor :mailer_name
-    
     # Defaults to "1.0", but may be explicitly given if needed.
     adv_attr_accessor :mime_version
     
@@ -323,10 +317,35 @@ module ActionMailer #:nodoc:
     # have multiple mailer methods share the same template.
     adv_attr_accessor :template
 
+    # Override the mailer name, which defaults to an inflected version of the
+    # mailer's class name. If you want to use a template in a non-standard
+    # location, you can use this to specify that location.
+    def mailer_name(value = nil)
+      if value
+        self.mailer_name = value
+      else
+        self.class.mailer_name
+      end
+    end
+    
+    def mailer_name=(value)
+      self.class.mailer_name = value
+    end
+
     # The mail object instance referenced by this mailer.
     attr_reader :mail
 
     class << self
+      attr_writer :mailer_name
+
+      def mailer_name
+        @mailer_name ||= name.underscore
+      end
+
+      # for ActionView compatibility
+      alias_method :controller_name, :mailer_name
+      alias_method :controller_path, :mailer_name
+
       def method_missing(method_symbol, *parameters)#:nodoc:
         case method_symbol.id2name
           when /^create_([_a-z]\w*)/  then new($1, *parameters).mail
@@ -363,18 +382,17 @@ module ActionMailer #:nodoc:
       def deliver(mail)
         new.deliver!(mail)
       end
-      
-      # Server Settings is the old name for <tt>smtp_settings</tt>
-      def server_settings
-        smtp_settings
+
+      # Register a template extension so mailer templates written in a
+      # templating language other than rhtml or rxml are supported.
+      # To use this, include in your template-language plugin's init
+      # code or on a per-application basis, this can be invoked from
+      # config/environment.rb:
+      #
+      #   ActionMailer::Base.register_template_extension('haml')
+      def register_template_extension(extension)
+        template_extensions << extension
       end
-      deprecate :server_settings=>"It's now named smtp_settings"
-      
-      def server_settings=(settings)
-        ActiveSupport::Deprecation.warn("server_settings has been renamed smtp_settings, this warning will be removed with rails 2.0", caller)
-        self.smtp_settings=settings
-      end
-      
     end
 
     # Instantiate a new mailer object. If +method_name+ is not +nil+, the mailer
@@ -389,20 +407,20 @@ module ActionMailer #:nodoc:
     # rendered and a new TMail::Mail object created.
     def create!(method_name, *parameters) #:nodoc:
       initialize_defaults(method_name)
-      send(method_name, *parameters)
+      __send__(method_name, *parameters)
 
       # If an explicit, textual body has not been set, we check assumptions.
       unless String === @body
         # First, we look to see if there are any likely templates that match,
         # which include the content-type in their file name (i.e.,
-        # "the_template_file.text.html.rhtml", etc.). Only do this if parts
+        # "the_template_file.text.html.erb", etc.). Only do this if parts
         # have not already been specified manually.
         if @parts.empty?
           templates = Dir.glob("#{template_path}/#{@template}.*")
           templates.each do |path|
-            # TODO: don't hardcode rhtml|rxml
             basename = File.basename(path)
-            next unless md = /^([^\.]+)\.([^\.]+\.[^\.]+)\.(rhtml|rxml)$/.match(basename)
+            template_regex = Regexp.new("^([^\\\.]+)\\\.([^\\\.]+\\\.[^\\\.]+)\\\.(" + template_extensions.join('|') + ")$")
+            next unless md = template_regex.match(basename)
             template_name = basename
             content_type = md.captures[1].gsub('.', '/')
             @parts << Part.new(:content_type => content_type,
@@ -448,7 +466,7 @@ module ActionMailer #:nodoc:
       logger.info "Sent mail:\n #{mail.encoded}" unless logger.nil?
 
       begin
-        send("perform_delivery_#{delivery_method}", mail) if perform_deliveries
+        __send__("perform_delivery_#{delivery_method}", mail) if perform_deliveries
       rescue Exception => e  # Net::SMTP errors or sendmail pipe errors
         raise e if raise_delivery_errors
       end
@@ -478,6 +496,9 @@ module ActionMailer #:nodoc:
 
       def render(opts)
         body = opts.delete(:body)
+        if opts[:file] && opts[:file] !~ /\//
+          opts[:file] = "#{mailer_name}/#{opts[:file]}"
+        end
         initialize_template_class(body).render(opts)
       end
 
@@ -486,7 +507,7 @@ module ActionMailer #:nodoc:
       end
 
       def initialize_template_class(assigns)
-        ActionView::Base.new(template_path, assigns, self)
+        ActionView::Base.new([template_root], assigns, self)
       end
 
       def sort_parts(parts, order = [])

@@ -70,7 +70,7 @@ module ActiveRecord
     #  end
     #  
     # Now it's possible to access attributes from the database through the value objects instead. If you choose to name the
-    # composition the same as the attributes name, it will be the only way to access that attribute. That's the case with our
+    # composition the same as the attribute's name, it will be the only way to access that attribute. That's the case with our
     # +balance+ attribute. You interact with the value objects just like you would any other attribute, though:
     #
     #   customer.balance = Money.new(20)     # sets the Money value object and the attribute
@@ -92,19 +92,19 @@ module ActiveRecord
     #
     # == Writing value objects
     #
-    # Value objects are immutable and interchangeable objects that represent a given value, such as a Money object representing
-    # $5. Two Money objects both representing $5 should be equal (through methods such as == and <=> from Comparable if ranking
-    # makes sense). This is unlike entity objects where equality is determined by identity. An entity class such as Customer can
+    # Value objects are immutable and interchangeable objects that represent a given value, such as a +Money+ object representing
+    # $5. Two +Money+ objects both representing $5 should be equal (through methods such as == and <=> from +Comparable+ if ranking
+    # makes sense). This is unlike entity objects where equality is determined by identity. An entity class such as +Customer+ can
     # easily have two different objects that both have an address on Hyancintvej. Entity identity is determined by object or
-    # relational unique identifiers (such as primary keys). Normal ActiveRecord::Base classes are entity objects.
+    # relational unique identifiers (such as primary keys). Normal <tt>ActiveRecord::Base</tt> classes are entity objects.
     #
-    # It's also important to treat the value objects as immutable. Don't allow the Money object to have its amount changed after
-    # creation. Create a new money object with the new value instead. This is exemplified by the Money#exchanged_to method that
+    # It's also important to treat the value objects as immutable. Don't allow the +Money+ object to have its amount changed after
+    # creation. Create a new +Money+ object with the new value instead. This is exemplified by the <tt>Money#exchanged_to</tt> method that
     # returns a new value object instead of changing its own values. Active Record won't persist value objects that have been
-    # changed through other means than the writer method.
+    # changed through means other than the writer method.
     #
     # The immutable requirement is enforced by Active Record by freezing any object assigned as a value object. Attempting to 
-    # change it afterwards will result in a TypeError.
+    # change it afterwards will result in a <tt>TypeError</tt>.
     # 
     # Read more about value objects on http://c2.com/cgi/wiki?ValueObject and on the dangers of not keeping value objects
     # immutable on http://c2.com/cgi/wiki?ValueObjectsShouldBeImmutable
@@ -119,71 +119,60 @@ module ActiveRecord
       # * <tt>:mapping</tt> - specifies a number of mapping arrays (attribute, parameter) that bind an attribute name
       #   to a constructor parameter on the value class.
       # * <tt>:allow_nil</tt> - specifies that the aggregate object will not be instantiated when all mapped
-      #   attributes are nil.  Setting the aggregate class to nil has the effect of writing nil to all mapped attributes.
-      #   This defaults to false.
+      #   attributes are +nil+.  Setting the aggregate class to +nil+ has the effect of writing +nil+ to all mapped attributes.
+      #   This defaults to +false+.
+      #
+      # An optional block can be passed to convert the argument that is passed to the writer method into an instance of
+      # <tt>:class_name</tt>. The block will only be called if the argument is not already an instance of <tt>:class_name</tt>.
       #
       # Option examples:
       #   composed_of :temperature, :mapping => %w(reading celsius)
-      #   composed_of :balance, :class_name => "Money", :mapping => %w(balance amount)
+      #   composed_of(:balance, :class_name => "Money", :mapping => %w(balance amount)) {|balance| balance.to_money }
       #   composed_of :address, :mapping => [ %w(address_street street), %w(address_city city) ]
       #   composed_of :gps_location
       #   composed_of :gps_location, :allow_nil => true
       #
-      def composed_of(part_id, options = {})
+      def composed_of(part_id, options = {}, &block)
         options.assert_valid_keys(:class_name, :mapping, :allow_nil)
 
         name        = part_id.id2name
         class_name  = options[:class_name] || name.camelize
         mapping     = options[:mapping]    || [ name, name ]
+        mapping     = [ mapping ] unless mapping.first.is_a?(Array)
         allow_nil   = options[:allow_nil]  || false
 
         reader_method(name, class_name, mapping, allow_nil)
-        writer_method(name, class_name, mapping, allow_nil)
+        writer_method(name, class_name, mapping, allow_nil, block)
         
         create_reflection(:composed_of, part_id, options, self)
       end
 
       private
         def reader_method(name, class_name, mapping, allow_nil)
-          mapping = (Array === mapping.first ? mapping : [ mapping ])
-
-          allow_nil_condition = if allow_nil
-            mapping.collect { |pair| "!read_attribute(\"#{pair.first}\").nil?"}.join(" && ")
-          else
-            "true"
+          module_eval do
+            define_method(name) do |*args|
+              force_reload = args.first || false
+              if (instance_variable_get("@#{name}").nil? || force_reload) && (!allow_nil || mapping.any? {|pair| !read_attribute(pair.first).nil? })
+                instance_variable_set("@#{name}", class_name.constantize.new(*mapping.collect {|pair| read_attribute(pair.first)}))
+              end
+              return instance_variable_get("@#{name}")
+            end
           end
 
-          module_eval <<-end_eval
-            def #{name}(force_reload = false)
-              if (@#{name}.nil? || force_reload) && #{allow_nil_condition}
-                @#{name} = #{class_name}.new(#{mapping.collect { |pair| "read_attribute(\"#{pair.first}\")"}.join(", ")})
-              end
-              return @#{name}
-            end
-          end_eval
-        end        
-        
-        def writer_method(name, class_name, mapping, allow_nil)
-          mapping = (Array === mapping.first ? mapping : [ mapping ])
+        end
 
-          if allow_nil
-            module_eval <<-end_eval
-              def #{name}=(part)
-                if part.nil?
-                  #{mapping.collect { |pair| "@attributes[\"#{pair.first}\"] = nil" }.join("\n")}
-                else
-                  @#{name} = part.freeze
-                  #{mapping.collect { |pair| "@attributes[\"#{pair.first}\"] = part.#{pair.last}" }.join("\n")}
-                end
+        def writer_method(name, class_name, mapping, allow_nil, conversion)
+          module_eval do
+            define_method("#{name}=") do |part|
+              if part.nil? && allow_nil
+                mapping.each { |pair| @attributes[pair.first] = nil }
+                instance_variable_set("@#{name}", nil)
+              else
+                part = conversion.call(part) unless part.is_a?(class_name.constantize) || conversion.nil?
+                mapping.each { |pair| @attributes[pair.first] = part.send(pair.last) }
+                instance_variable_set("@#{name}", part.freeze)
               end
-            end_eval
-          else
-            module_eval <<-end_eval
-              def #{name}=(part)
-                @#{name} = part.freeze
-                #{mapping.collect{ |pair| "@attributes[\"#{pair.first}\"] = part.#{pair.last}" }.join("\n")}
-              end
-            end_eval
+            end
           end
         end
     end

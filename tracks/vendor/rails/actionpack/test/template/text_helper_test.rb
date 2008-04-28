@@ -1,11 +1,11 @@
-require File.dirname(__FILE__) + '/../abstract_unit'
+require "#{File.dirname(__FILE__)}/../abstract_unit"
 require "#{File.dirname(__FILE__)}/../testing_sandbox"
 
 class TextHelperTest < Test::Unit::TestCase
   include ActionView::Helpers::TextHelper
   include ActionView::Helpers::TagHelper
   include TestingSandbox
-  
+
   def setup
     # This simulates the fact that instance variables are reset every time
     # a view is rendered.  The cycle helper depends on this behavior.
@@ -31,6 +31,11 @@ class TextHelperTest < Test::Unit::TestCase
     assert_equal "Hello Wor...", truncate("Hello World!!", 12)
   end
 
+  def test_truncate_should_use_default_length_of_30
+    str = "This is a string that will go longer then the default truncate length of 30"
+    assert_equal str[0...27] + "...", truncate(str)
+  end
+
   def test_truncate_multibyte
     with_kcode 'none' do
       assert_equal "\354\225\210\353\205\225\355...", truncate("\354\225\210\353\205\225\355\225\230\354\204\270\354\232\224", 10) 
@@ -41,10 +46,6 @@ class TextHelperTest < Test::Unit::TestCase
     end
   end
   
-  def test_strip_links
-    assert_equal "on my mind\nall day long", strip_links("<a href='almost'>on my mind</a>\n<A href='almost'>all day long</A>")
-  end
-
   def test_highlighter
     assert_equal(
       "This is a <strong class=\"highlight\">beautiful</strong> morning",
@@ -65,6 +66,8 @@ class TextHelperTest < Test::Unit::TestCase
       "This text is not changed because we supplied an empty phrase",
       highlight("This text is not changed because we supplied an empty phrase", nil)
     )
+
+    assert_equal '   ', highlight('   ', 'blank text is returned verbatim')
   end
 
   def test_highlighter_with_regexp
@@ -82,6 +85,10 @@ class TextHelperTest < Test::Unit::TestCase
       "This is a <strong class=\"highlight\">beautiful? morning</strong>",
       highlight("This is a beautiful? morning", "beautiful? morning")
     )
+  end
+
+  def test_highlighting_multiple_phrases_in_one_pass
+    assert_equal %(<em>wow</em> <em>em</em>), highlight('wow em', %w(wow em), '<em>\1</em>')
   end
 
   def test_excerpt
@@ -109,6 +116,10 @@ class TextHelperTest < Test::Unit::TestCase
     assert_equal("my very very\nvery long\nstring", word_wrap("my very very very long string", 15))
   end
 
+  def test_word_wrap_with_extra_newlines
+    assert_equal("my very very\nvery long\nstring\n\nwith another\nline", word_wrap("my very very very long string\n\nwith another line", 15))
+  end
+
   def test_pluralization
     assert_equal("1 count", pluralize(1, "count"))
     assert_equal("2 counts", pluralize(2, "count"))
@@ -117,6 +128,20 @@ class TextHelperTest < Test::Unit::TestCase
     assert_equal("1,066 counts", pluralize('1,066', "count"))
     assert_equal("1.25 counts", pluralize('1.25', "count"))
     assert_equal("2 counters", pluralize(2, "count", "counters"))
+    assert_equal("0 counters", pluralize(nil, "count", "counters"))
+    assert_equal("2 people", pluralize(2, "person"))
+    assert_equal("10 buffaloes", pluralize(10, "buffalo")) 
+  end
+
+  uses_mocha("should_just_add_s_for_pluralize_without_inflector_loaded") do
+    def test_should_just_add_s_for_pluralize_without_inflector_loaded
+      Object.expects(:const_defined?).with("Inflector").times(4).returns(false)
+      assert_equal("1 count", pluralize(1, "count"))
+      assert_equal("2 persons", pluralize(2, "person"))
+      assert_equal("2 personss", pluralize("2", "persons"))
+      assert_equal("2 counts", pluralize(2, "count"))
+      assert_equal("10 buffalos", pluralize(10, "buffalo"))
+    end
   end
 
   def test_auto_link_parsing
@@ -132,6 +157,7 @@ class TextHelperTest < Test::Unit::TestCase
               http://www.rubyonrails.com/contact;new?with=query&string=params
               http://www.rubyonrails.com/~minam/contact;new?with=query&string=params
               http://en.wikipedia.org/wiki/Wikipedia:Today%27s_featured_picture_%28animation%29/January_20%2C_2007
+              http://www.mail-archive.com/rails@lists.rubyonrails.org/
             )
 
     urls.each do |url|
@@ -142,6 +168,8 @@ class TextHelperTest < Test::Unit::TestCase
   def test_auto_linking
     email_raw    = 'david@loudthinking.com'
     email_result = %{<a href="mailto:#{email_raw}">#{email_raw}</a>}
+    email2_raw    = '+david@loudthinking.com'
+    email2_result = %{<a href="mailto:#{email2_raw}">#{email2_raw}</a>}
     link_raw     = 'http://www.rubyonrails.com'
     link_result  = %{<a href="#{link_raw}">#{link_raw}</a>}
     link_result_with_options  = %{<a href="#{link_raw}" target="_blank">#{link_raw}</a>}
@@ -161,6 +189,8 @@ class TextHelperTest < Test::Unit::TestCase
     link8_result = %{<a href="#{link8_raw}">#{link8_raw}</a>}
     link9_raw    = 'http://business.timesonline.co.uk/article/0,,9065-2473189,00.html'
     link9_result = %{<a href="#{link9_raw}">#{link9_raw}</a>}
+    link10_raw    = 'http://www.mail-archive.com/ruby-talk@ruby-lang.org/'
+    link10_result = %{<a href="#{link10_raw}">#{link10_raw}</a>}
 
     assert_equal %(hello #{email_result}), auto_link("hello #{email_raw}", :email_addresses)
     assert_equal %(Go to #{link_result}), auto_link("Go to #{link_raw}", :urls)
@@ -200,6 +230,8 @@ class TextHelperTest < Test::Unit::TestCase
     assert_equal %(<p>#{link9_result} Link</p>), auto_link("<p>#{link9_raw} Link</p>")
     assert_equal %(Go to #{link9_result}.), auto_link(%(Go to #{link9_raw}.))
     assert_equal %(<p>Go to #{link9_result}. seriously, #{link9_result}? i think I'll say hello to #{email_result}. instead.</p>), auto_link(%(<p>Go to #{link9_raw}. seriously, #{link9_raw}? i think I'll say hello to #{email_raw}. instead.</p>))
+    assert_equal %(<p>#{link10_result} Link</p>), auto_link("<p>#{link10_raw} Link</p>")
+    assert_equal email2_result, auto_link(email2_raw)
     assert_equal '', auto_link(nil)
     assert_equal '', auto_link('')
   end
@@ -218,42 +250,6 @@ class TextHelperTest < Test::Unit::TestCase
     assert_equal %(<p><a href="#{url}">#{url[0...7]}...</a><br /><a href="mailto:#{email}">#{email[0...7]}...</a><br /></p>), auto_link("<p>#{url}<br />#{email}<br /></p>") { |url| truncate(url, 10) }
   end
 
-  def test_sanitize_form
-    raw = "<form action=\"/foo/bar\" method=\"post\"><input></form>"
-    result = sanitize(raw)
-    assert_equal %(&lt;form action="/foo/bar" method="post"><input>&lt;/form>), result
-  end
-
-  def test_sanitize_plaintext
-    raw = "<plaintext><span>foo</span></plaintext>"
-    result = sanitize(raw)
-    assert_equal "&lt;plaintext><span>foo</span>&lt;/plaintext>", result
-  end
-
-  def test_sanitize_script
-    raw = "<script language=\"Javascript\">blah blah blah</script>"
-    result = sanitize(raw)
-    assert_equal %(&lt;script language="Javascript">blah blah blah&lt;/script>), result
-  end
-
-  def test_sanitize_js_handlers
-    raw = %{onthis="do that" <a href="#" onclick="hello" name="foo" onbogus="remove me">hello</a>}
-    result = sanitize(raw)
-    assert_equal %{onthis="do that" <a name="foo" href="#">hello</a>}, result
-  end
-
-  def test_sanitize_javascript_href
-    raw = %{href="javascript:bang" <a href="javascript:bang" name="hello">foo</a>, <span href="javascript:bang">bar</span>}
-    result = sanitize(raw)
-    assert_equal %{href="javascript:bang" <a name="hello">foo</a>, <span>bar</span>}, result
-  end
-  
-  def test_sanitize_image_src
-    raw = %{src="javascript:bang" <img src="javascript:bang" width="5">foo</img>, <span src="javascript:bang">bar</span>}
-    result = sanitize(raw)
-    assert_equal %{src="javascript:bang" <img width="5">foo</img>, <span>bar</span>}, result
-  end
-  
   def test_cycle_class
     value = Cycle.new("one", 2, "3")
     assert_equal("one", value.to_s)
@@ -335,15 +331,5 @@ class TextHelperTest < Test::Unit::TestCase
     assert_equal("blue", cycle("red", "blue"))
     assert_equal("red", cycle("red", "blue"))
     assert_equal(%w{Specialized Fuji Giant}, @cycles)
-  end
-
-  def test_strip_tags
-    assert_equal("This is a test.", strip_tags("<p>This <u>is<u> a <a href='test.html'><strong>test</strong></a>.</p>"))
-    assert_equal("This is a test.", strip_tags("This is a test."))
-    assert_equal(
-    %{This is a test.\n\n\nIt no longer contains any HTML.\n}, strip_tags(
-    %{<title>This is <b>a <a href="" target="_blank">test</a></b>.</title>\n\n<!-- it has a comment -->\n\n<p>It no <b>longer <strong>contains <em>any <strike>HTML</strike></em>.</strong></b></p>\n}))
-    assert_equal "This has a  here.", strip_tags("This has a <!-- comment --> here.")
-    [nil, '', '   '].each { |blank| assert_equal blank, strip_tags(blank) }
   end
 end

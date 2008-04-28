@@ -80,4 +80,8 @@ class TodosHelperTest < Test::Rails::HelperTestCase
     assert_equal "new Ajax.Request(this.href, {asynchronous:true, evalScripts:true, method:'put', parameters:{ _source_view : '' }})\n; return false;",
                  rule[1]
   end
+  
+  def protect_against_forgery?
+    false
+  end
 end

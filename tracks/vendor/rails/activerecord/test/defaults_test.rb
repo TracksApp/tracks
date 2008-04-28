@@ -31,7 +31,8 @@ class DefaultTest < Test::Unit::TestCase
 
       assert_equal 0, klass.columns_hash['zero'].default
       assert !klass.columns_hash['zero'].null
-      assert_equal nil, klass.columns_hash['omit'].default
+      # 0 in MySQL 4, nil in 5.
+      assert [0, nil].include?(klass.columns_hash['omit'].default)
       assert !klass.columns_hash['omit'].null
 
       assert_raise(ActiveRecord::StatementInvalid) { klass.create! }
@@ -55,6 +56,12 @@ class DefaultTest < Test::Unit::TestCase
       assert_equal -1, default.negative_integer
       assert_instance_of BigDecimal, default.decimal_number
       assert_equal BigDecimal.new("2.78"), default.decimal_number
+    end
+  end
+
+  if current_adapter?(:PostgreSQLAdapter)
+    def test_multiline_default_text
+      assert_equal "--- []\n\n", Default.columns_hash['multiline_default'].default
     end
   end
 end

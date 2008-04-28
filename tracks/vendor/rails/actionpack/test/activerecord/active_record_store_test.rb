@@ -53,7 +53,7 @@ class ActiveRecordStoreTest < ActiveRecordTestCase
     @new_session['foo'] = 'bar'
   end
 
-# this test only applies for eager sesssion saving
+# this test only applies for eager session saving
 #  def test_another_instance
 #    @another = CGI::Session.new(@cgi, 'session_id' => @new_session.session_id, 'database_manager' => CGI::Session::ActiveRecordStore)
 #    assert_equal @new_session.session_id, @another.session_id
@@ -128,7 +128,7 @@ end
 
 class SqlBypassActiveRecordStoreTest < ActiveRecordStoreTest
   def session_class
-    unless @session_class
+    unless defined? @session_class
       @session_class = CGI::Session::ActiveRecordStore::SqlBypass
       @session_class.connection = CGI::Session::ActiveRecordStore::Session.connection
     end

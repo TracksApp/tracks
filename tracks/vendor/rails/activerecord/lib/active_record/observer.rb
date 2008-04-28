@@ -84,10 +84,11 @@ module ActiveRecord
   #
   # Observers will by default be mapped to the class with which they share a name. So CommentObserver will
   # be tied to observing Comment, ProductManagerObserver to ProductManager, and so on. If you want to name your observer
-  # differently than the class you're interested in observing, you can use the Observer.observe class method:
+  # differently than the class you're interested in observing, you can use the Observer.observe class method which takes
+  # either the concrete class (Product) or a symbol for that class (:product):
   #
   #   class AuditObserver < ActiveRecord::Observer
-  #     observe Account
+  #     observe :account
   #
   #     def after_update(account)
   #       AuditTrail.new(account, "UPDATED")
@@ -97,7 +98,7 @@ module ActiveRecord
   # If the audit observer needs to watch more than one kind of object, this can be specified with multiple arguments:
   #
   #   class AuditObserver < ActiveRecord::Observer
-  #     observe Account, Balance
+  #     observe :account, :balance
   #
   #     def after_update(record)
   #       AuditTrail.new(record, "UPDATED")
@@ -127,20 +128,22 @@ module ActiveRecord
   class Observer
     include Singleton
 
-    # Observer subclasses should be reloaded by the dispatcher in Rails
-    # when Dependencies.mechanism = :load.
-    include Reloadable::Deprecated
-
     class << self
       # Attaches the observer to the supplied model classes.
       def observe(*models)
+        models.flatten!
+        models.collect! { |model| model.is_a?(Symbol) ? model.to_s.camelize.constantize : model }
         define_method(:observed_classes) { Set.new(models) }
       end
 
       # The class observed by default is inferred from the observer's class name:
       #   assert_equal [Person], PersonObserver.observed_class
       def observed_class
-        name.scan(/(.*)Observer/)[0][0].constantize
+        if observed_class_name = name.scan(/(.*)Observer/)[0]
+          observed_class_name[0].constantize
+        else
+          nil
+        end
       end
     end
 
@@ -163,11 +166,11 @@ module ActiveRecord
 
     protected
       def observed_classes
-        Set.new([self.class.observed_class].flatten)
+        Set.new([self.class.observed_class].compact.flatten)
       end
 
       def observed_subclasses
-        observed_classes.sum(&:subclasses)
+        observed_classes.collect(&:subclasses).flatten
       end
 
       def add_observer!(klass)
