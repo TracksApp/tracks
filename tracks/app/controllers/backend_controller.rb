@@ -1,6 +1,4 @@
 class BackendController < ApplicationController
-  include ActionWebService::Protocol::Soap
-  
   wsdl_service_name 'Backend'
   web_service_api TodoApi
   web_service_scaffold :invoke
