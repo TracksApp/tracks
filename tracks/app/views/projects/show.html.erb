@@ -46,7 +46,7 @@
    <% end %>
    <% apply_behavior "#project_status input:click",
                      remote_function(:url => project_path(@project), :method => :put,
-                                     :with => "{wants_render: false, update_status: true, 'project[state]' : this.value}" )
+                                     :with => "'wants_render=false&update_status=true&project[state]='+this.value" )
    %>
   </div>
  </div>
