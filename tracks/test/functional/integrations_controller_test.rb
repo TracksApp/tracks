@@ -5,6 +5,8 @@ require 'integrations_controller'
 class IntegrationsController; def rescue_action(e) raise e end; end
 
 class IntegrationsControllerTest < Test::Unit::TestCase
+  fixtures :users, :preferences, :projects, :contexts, :todos, :tags, :taggings
+
   def setup
     @controller = IntegrationsController.new
     @request    = ActionController::TestRequest.new
@@ -15,4 +17,11 @@ class IntegrationsControllerTest < Test::Unit::TestCase
   def test_truth
     assert true
   end
+  
+  def test_page_load
+    login_as(:admin_user)
+    get :rest_api
+    assert_response :success
+  end
+  
 end

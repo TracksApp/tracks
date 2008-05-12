@@ -196,7 +196,7 @@ Loading development environment (Rails 1.2.4)
 
 <pre>
 <code>
-$ SITE="http://username:p4ssw0rd@<%= @request.host_with_port %>" irb \
+$ SITE="http://username:p4ssw0rd@<%= request.host_with_port %>" irb \
     -r tracks_api_wrapper.rb
 
 irb(main):001:0&gt; inbox = Tracks::Context.find :first
