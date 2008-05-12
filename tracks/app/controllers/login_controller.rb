@@ -39,7 +39,7 @@ class LoginController < ApplicationController
     end
     respond_to do |format|
       format.html
-      format.m   { render :action => 'login_mobile.rhtml', :layout => 'mobile' }
+      format.m   { render :action => 'login_mobile.html.erb', :layout => 'mobile' }
     end
   end
   
