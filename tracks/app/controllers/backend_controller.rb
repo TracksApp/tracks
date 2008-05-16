@@ -19,10 +19,12 @@ class BackendController < ApplicationController
     if(!context.nil? && project.nil?)
       context,project = split_by_char('>',context)
     end
+#    logger.info("context='#{context}' project='#{project}")
 
     context_id = default_context_id
     unless(context.nil?)
-      found_context = @user.contexts.find_by_namepart(context)
+      found_context = @user.active_contexts.find_by_namepart(context)
+      found_context = @user.contexts.find_by_namepart(context) if found_context.nil?
       context_id = found_context.id unless found_context.nil?
     end
     check_context_belongs_to_user(context_id)
@@ -34,7 +36,8 @@ class BackendController < ApplicationController
         found_project.name = project[4..255+4].strip
         found_project.save!
       else
-        found_project = @user.projects.find_by_namepart(project)
+        found_project = @user.active_projects.find_by_namepart(project)
+        found_project = @user.projects.find_by_namepart(project) if found_project.nil?
       end
       project_id = found_project.id unless found_project.nil?
     end
@@ -89,7 +92,7 @@ class BackendController < ApplicationController
     # needed to get 'description @ @home > project' working for contexts
     # starting with @
     if parts.length > 2
-      2.upto(parts.length-1) { |i| parts[1] += parts[i] }
+      2.upto(parts.length-1) { |i| parts[1] += (separator +parts[i]) }
     end
 
     return safe_strip(parts[0]), safe_strip(parts[1])

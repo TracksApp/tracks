@@ -52,6 +52,14 @@ class User < ActiveRecord::Base
                 return projects
               end
             end
+  has_many :active_projects,
+           :class_name => 'Project',
+           :order => 'projects.position ASC',
+           :conditions => [ 'state = ?', 'active' ]
+  has_many :active_contexts,
+           :class_name => 'Context',
+           :order => 'position ASC',
+           :conditions => [ 'hide = ?', 'true' ]
   has_many :todos,
            :order => 'todos.completed_at DESC, todos.created_at DESC',
            :dependent => :delete_all
