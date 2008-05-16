@@ -17,7 +17,7 @@
   <% elsif @project.completed? -%>
     <p class="project_completed">Project has been marked as hidden</p>
   <% end -%>
-  <div id=""p<%= project.id %>items" class="items toggle_target">
+  <div id="p<%= project.id %>items" class="items toggle_target">
     <div id="p<%= project.id %>empty-nd" style="display:<%= @not_done.empty? ? 'block' : 'none'%>;">
       <div class="message"><p>Currently there are no incomplete actions in this project</p></div>
     </div>
