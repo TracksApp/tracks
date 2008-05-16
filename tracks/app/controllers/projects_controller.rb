@@ -18,6 +18,7 @@ class ProjectsController < ApplicationController
       if params[:only_active_with_no_next_actions]
         @projects = @projects.select { |p| p.active? && count_undone_todos(p) == 0 }
       end
+      init_project_hidden_todo_counts(['project'])
       respond_to do |format|
         format.html  &render_projects_html
         format.m     &render_projects_mobile
@@ -185,7 +186,6 @@ class ProjectsController < ApplicationController
     
   def render_projects_html
     lambda do
-      init_project_hidden_todo_counts(['project'])
       @page_title = "TRACKS::List Projects"
       @count = current_user.projects.size 
       @active_projects = @projects.select{ |p| p.active? }

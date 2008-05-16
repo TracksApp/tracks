@@ -89,7 +89,7 @@ module ApplicationHelper
     end
   end
   
-  # Returns a count of next actions in the given context or project The result
+  # Returns a count of next actions in the given context or project. The result
   # is count and a string descriptor, correctly pluralised if there are no
   # actions or multiple actions
   # 
