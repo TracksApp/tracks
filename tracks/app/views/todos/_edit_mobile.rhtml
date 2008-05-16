@@ -1,3 +1,5 @@
+<% @tag_list_text = "" 
+   @tag_list_text = tag_list_text if @todo -%>
 <span class="errors">
 <%= error_messages_for("todo") %>
 </span>
@@ -14,6 +16,8 @@ if parent_container_type == 'show_mobile' -%>
 <h2><label for="todo_project_id">Project</label></h2>
 <%= collection_select( "todo", "project_id", @projects, "id", "name",
                           {:include_blank => true}, {"tabindex" => 5} ) %>
+<h2><label for="tag_list">Tags (separate with commas)</label></h2>
+<%= text_field_tag "tag_list", @tag_list_text, :size => 30, :tabindex => 6 %> 
 <h2><label for="todo_due">Due</label></h2>
 <%= date_select("todo", "due", :order => [:day, :month, :year],
                     :start_year => this_year, :include_blank => true) %>
