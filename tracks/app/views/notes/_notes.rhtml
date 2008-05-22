@@ -32,7 +32,7 @@
                     :html => { :id => dom_id(note, 'edit_form'), :class => "inline-form" },
                     :update => dom_id(note, 'container'),
                     :complete => visual_effect(:appear, dom_id(note, 'container')) do -%>
-         <%= render :partial => "note_edit_form", :object => note %>
+         <%= render :partial => "notes/note_edit_form", :object => note %>
      <% end -%>
      </div>
 </div>

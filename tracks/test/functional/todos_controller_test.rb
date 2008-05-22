@@ -346,8 +346,8 @@ class TodosControllerTest < Test::Rails::TestCase
     post :create, {"format"=>"m", "todo"=>{"context_id"=>"2",
                    "due(1i)"=>"2007", "due(2i)"=>"1", "due(3i)"=>"2",
                    "show_from(1i)"=>"", "show_from(2i)"=>"", "show_from(3i)"=>"",
-                   "project_id"=>"1", 
-                   "notes"=>"test notes", "state"=>"0"}}
+                   "project_id"=>"1",
+                   "notes"=>"test notes", "state"=>"0"}, "tag_list"=>"test, test2"}
     assert_template 'todos/new'
   end
 

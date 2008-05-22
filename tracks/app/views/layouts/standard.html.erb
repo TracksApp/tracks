@@ -59,6 +59,7 @@ window.onload=function(){
   <li><%= navigation_link(image_tag("feed-icon.png", :size => "16X16", :border => 0), {:controller => "feedlist", :action => "index"}, :title => "See a list of available feeds" ) %></li>
   <li><%= navigation_link(image_tag("menustar.gif", :size => "16X16", :border => 0), tag_path("starred"), :title => "See your starred actions" ) %></li>
   <li><%= navigation_link(image_tag("stats.gif", :size => "16X16", :border => 0), {:controller => "stats", :action => "index"}, :title => "See your statistics" ) %></li>
+  <li><%= navigation_link(image_tag("system-search.png", :size => "16X16", :border => 0), {:controller => "search", :action => "index"}, :title => "Search All Items" ) %></li>
 </ul>
 </div>
 

@@ -67,6 +67,9 @@ class TodosController < ApplicationController
     respond_to do |format|
       format.html { redirect_to :action => "index" }
       format.m do
+        @return_path=cookies[:mobile_url]
+        # todo: use function for this fixed path
+        @return_path='/mobile' if @return_path.nil?
         if @saved
           redirect_to mobile_abbrev_url
         else

@@ -609,6 +609,11 @@ div#list-active-projects, div#list-hidden-projects, div#list-completed-projects,
 .project-state-group h2 {
 	margin:20px 0px 8px 13px;
 }
+
+.search-result-group h2 {
+        margin:20px 0px 8px 13px
+}
+
 div.alpha_sort {
 	margin-top:-20px;
 	float:right;
