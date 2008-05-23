@@ -1004,7 +1004,7 @@ table.export_table {
 
 /* STANDARD */
 
-button:hover, .widgets a:hover{
+.widgets a:hover{
     background-color:#dff4ff;
     border:1px solid #c2e1ef;
     color:#336699;
