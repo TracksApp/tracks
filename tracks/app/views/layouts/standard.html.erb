@@ -40,13 +40,7 @@ window.onload=function(){
 		  page.select('body .todo_notes').each { |e| e.toggle }
 		end
 	-%>&nbsp;|&nbsp;
-    <%= link_to "Logout (#{current_user.display_name}) »", logout_path %><br/><% 
-    form_tag({:controller => :search, :action => :results}, {:class => "inline-form"}) do %>
-    <br/><%= text_field_tag(:search, params[:search]) %>
-    <button type="submit" class="search_submit"><%=
-    image_tag("system-search.png", :alt => "Search") -%>
-    </button>
-    <% end %>
+    <%= link_to "Logout (#{current_user.display_name}) »", logout_path %>
 </div>
 
 <div id="navcontainer">
@@ -65,6 +59,7 @@ window.onload=function(){
   <li><%= navigation_link(image_tag("feed-icon.png", :size => "16X16", :border => 0), {:controller => "feedlist", :action => "index"}, :title => "See a list of available feeds" ) %></li>
   <li><%= navigation_link(image_tag("menustar.gif", :size => "16X16", :border => 0), tag_path("starred"), :title => "See your starred actions" ) %></li>
   <li><%= navigation_link(image_tag("stats.gif", :size => "16X16", :border => 0), {:controller => "stats", :action => "index"}, :title => "See your statistics" ) %></li>
+  <li><%= navigation_link(image_tag("system-search.png", :size => "16X16", :border => 0), {:controller => "search", :action => "index"}, :title => "Search All Items" ) %></li> 
 </ul>
 </div>
 
