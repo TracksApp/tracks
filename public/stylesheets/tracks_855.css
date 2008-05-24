@@ -117,6 +117,7 @@ img.position, a:hover img.position {text-align: left; vertical-align: middle; ba
 div.buttons, div.buttons a, div.buttons a:hover {text-align: right; margin-right: 0px; vertical-align: middle; background-color: transparent}
 div#list-active-projects, div#list-hidden-projects, div#list-completed-projects, div#list-contexts, div#projects-empty-nd {clear:right; border: 1px solid #999}
 .project-state-group h2 {margin:20px 0px 8px 13px}
+.search-result-group h2 {margin:20px 0px 8px 13px }
 div.alpha_sort {margin-top:-20px; float:right}
 .container td {border: none; padding-bottom: 5px}
 .container form {border: none}
@@ -186,7 +187,7 @@ table.export_table {border: 1px solid #666; background-color: #fff; border-spaci
 .widgets button{ width:auto; overflow:visible; padding:3px 5px 5px 5px}
 .widgets button[type]{ padding:3px 5px 4px 5px; line-height:15px}
 .widgets button img, .widgets a img{ margin:0 3px -3px 0 !important; padding:0; border:none; width:16px; height:16px}
-button:hover, .widgets a:hover{ background-color:#dff4ff; border:1px solid #c2e1ef; color:#336699}
+.widgets a:hover{ background-color:#dff4ff; border:1px solid #c2e1ef; color:#336699}
 .widgets a:active{ background-color:#6299c5; border:1px solid #6299c5; color:#fff}
 button.positive, .widgets a.positive{ color: #498111}
 .widgets a.positive:hover, button.positive:hover{ background-color:#E6EFC2; border:1px solid #C6D880; color:#529214}

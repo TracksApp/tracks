@@ -36,11 +36,17 @@ window.onload=function(){
   </h1>
 </div>
 <div id="minilinks">
-	<%= link_to_function("Toggle notes", nil, {:accesskey => "S", :title => "Toggle all notes", :id => "toggle-notes-nav"}) do |page|
+  <%= link_to_function("Toggle notes", nil, {:accesskey => "S", :title => "Toggle all notes", :id => "toggle-notes-nav"}) do |page|
 		  page.select('body .todo_notes').each { |e| e.toggle }
 		end
 	-%>&nbsp;|&nbsp;
-    <%= link_to "Logout (#{current_user.display_name}) »", logout_path %>
+    <%= link_to "Logout (#{current_user.display_name}) »", logout_path %><br/><% 
+    form_tag({:controller => :search, :action => :results}, {:class => "inline-form"}) do %>
+    <br/><%= text_field_tag(:search, params[:search]) %>
+    <button type="submit" class="search_submit"><%=
+    image_tag("system-search.png", :alt => "Search") -%>
+    </button>
+    <% end %>
 </div>
 
 <div id="navcontainer">

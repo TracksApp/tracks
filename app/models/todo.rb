@@ -8,8 +8,8 @@ class Todo < ActiveRecord::Base
   
   acts_as_state_machine :initial => :active, :column => 'state'
   
-  # when entering active state, also remove completed_at date. 
-  # Looks like :exit of state completed is not run, see #679
+  # when entering active state, also remove completed_at date. Looks like :exit
+  # of state completed is not run, see #679
   state :active, :enter => Proc.new { |t| t[:show_from], t.completed_at = nil, nil }
   state :project_hidden
   state :completed, :enter => Proc.new { |t| t.completed_at = Time.now.utc }, :exit => Proc.new { |t| t.completed_at = nil }
@@ -38,8 +38,8 @@ class Todo < ActiveRecord::Base
     
   attr_protected :user
 
-  # Description field can't be empty, and must be < 100 bytes
-  # Notes must be < 60,000 bytes (65,000 actually, but I'm being cautious)
+  # Description field can't be empty, and must be < 100 bytes Notes must be <
+  # 60,000 bytes (65,000 actually, but I'm being cautious)
   validates_presence_of :description
   validates_length_of :description, :maximum => 100
   validates_length_of :notes, :maximum => 60000, :allow_nil => true 
@@ -91,7 +91,8 @@ class Todo < ActiveRecord::Base
   alias_method :original_run_initial_state_actions, :run_initial_state_actions
   
   def run_initial_state_actions
-    #only run the initial state actions if the standard initial state hasn't been changed
+    # only run the initial state actions if the standard initial state hasn't
+    # been changed
     if self.class.initial_state.to_sym == current_state
       original_run_initial_state_actions
     end

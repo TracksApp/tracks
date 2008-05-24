@@ -609,6 +609,11 @@ div#list-active-projects, div#list-hidden-projects, div#list-completed-projects,
 .project-state-group h2 {
 	margin:20px 0px 8px 13px;
 }
+
+.search-result-group h2 {
+        margin:20px 0px 8px 13px
+}
+
 div.alpha_sort {
 	margin-top:-20px;
 	float:right;
@@ -999,7 +1004,7 @@ table.export_table {
 
 /* STANDARD */
 
-button:hover, .widgets a:hover{
+.widgets a:hover{
     background-color:#dff4ff;
     border:1px solid #c2e1ef;
     color:#336699;
