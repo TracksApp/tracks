@@ -11,7 +11,7 @@ end -%>
 <%  else 
 -%><span class="m_t">
 <%  end -%>
-<%= date_span -%><%= link_to mobile_todo.description, formatted_todo_path(mobile_todo, :m) -%>
+<%= date_span -%> <%= link_to mobile_todo.description, formatted_todo_path(mobile_todo, :m) -%>
 <%  if parent_container_type == 'context' or parent_container_type == 'tag' -%>
 <%=    "<span class=prj> (" + 
        link_to(mobile_todo.project.name, formatted_project_path(mobile_todo.project, :m)) + 
