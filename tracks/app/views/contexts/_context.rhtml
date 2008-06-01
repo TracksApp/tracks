@@ -31,6 +31,14 @@
     <div id="c<%= context.id %>empty-nd" style="display:<%= @not_done.empty? ? 'block' : 'none'%>;">
       <div class="message"><p>Currently there are no incomplete actions in this context</p></div>
     </div>
-<%= render :partial => "todos/todo", :collection => @not_done, :locals => { :parent_container_type => "context" } %>
+    <%= render :partial => "todos/todo", :collection => @not_done, :locals => { :parent_container_type => "context" } %>
+    <% if @not_done.empty? 
+      # fix (hack) for #713
+      set_behavior_for_delete_icon
+      set_behavior_for_star_icon
+      set_behavior_for_edit_icon
+      set_behavior_for_toggle_checkbox
+    end
+    -%>
   </div><!-- [end:items] -->
 </div><!-- [end:c<%= context.id %>] -->
