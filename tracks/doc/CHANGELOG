@@ -2,8 +2,8 @@
 
 * Homepage: http://www.rousette.org.uk/projects/
 * Author: bsag (http://www.rousette.org.uk/)
-* Contributors: Nicholas Lee, Lolindrath, Jim Ray, Arnaud Limbourg, Timothy Martens, Luke Melia, John Leonard, Jim Strupp, Eric Lesh, Damien Cirotteau, Janet Riley, Reinier Balt, Jacqui Maher, James Kebinger
-* Version: 1.5rc1
+* Contributors: Nicholas Lee, Lolindrath, Jim Ray, Arnaud Limbourg, Timothy Martens, Luke Melia, John Leonard, Jim Strupp, Eric Lesh, Damien Cirotteau, Janet Riley, Reinier Balt, Jacqui Maher, James Kebinger, Jeffrey Gipson
+* Version: 1.6
 * Copyright: (cc) 2004-2008 rousette.org.uk
 * License: GNU GPL
 
@@ -13,7 +13,13 @@ Trac (for bug reports and feature requests): http://dev.rousette.org.uk/report/6
 
 Wiki (deprecated - please use Trac): http://www.rousette.org.uk/projects/wiki/
 
-== Version 1.5rc1
+== Version 1.6
+1. upgrade to rails 2.0
+2. new mobile interface
+3. new search functionality to search on todos, projects, contexts and notes 
+4. Bugfixes
+
+== Version 1.5
 1. Show from date allows you to postpone the appearance of actions in the list until you can do something about them (like a 'tickler')
 2. Tagging of actions
 3. Simple management of users (deleting users through the web interface)
