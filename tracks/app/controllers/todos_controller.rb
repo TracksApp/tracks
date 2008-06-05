@@ -154,6 +154,7 @@ class TodosController < ApplicationController
   end
 
   def update
+    @source_view = params['_source_view'] || 'todo'
     init_data_for_sidebar unless mobile?
     @todo.tag_with(params[:tag_list], current_user) if params[:tag_list]
     @original_item_context_id = @todo.context_id
