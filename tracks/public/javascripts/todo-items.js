@@ -12,6 +12,8 @@ ToDoItems = Class.create();
 ToDoItems.prototype = {
   initialize: function()
   {
+    /* keep track of last effect so you can check if the animation has finised */
+    this.lastEffect= null;
     this.initialized = true;
     this.contextCollapseCookieManager = new CookieManager();
     this.toggleItemsMap = {};
@@ -112,7 +114,7 @@ ToDoItems.prototype = {
     }
     else
     {
-      Effect.BlindDown(itemsElem, { duration: 0.4 });
+      this.lastEffect = Effect.BlindDown(itemsElem, { duration: 0.4 });
     }
     toggleElem.setAttribute('title', 'Collapse');
     imgElem = this.findToggleImgElem(toggleElem);
@@ -133,7 +135,7 @@ ToDoItems.prototype = {
   },
   collapseNextActionListing: function(toggleElem, itemsElem)
   {
-    Effect.BlindUp(itemsElem, { duration: 0.4});
+    this.lastEffect = Effect.BlindUp(itemsElem, { duration: 0.4});
     toggleElem.setAttribute('title', 'Expand');
     imgElem = this.findToggleImgElem(toggleElem);
    	imgElem.src = imgElem.src.replace('collapse','expand');
