@@ -19,6 +19,8 @@
       <li><strong>refresh:</strong> automatic refresh interval for each of the pages (in minutes)</li>
       <li><strong>verbose action descriptor:</strong> when true, show project/context name in action listing; when false show [P]/[C] with tool tips</li>
       <li><strong>mobile todos per page:</strong> the maximum number of actions to show on a single page in the mobile view</li>
+      <li><strong>SMS email:</string> the email address of your cell phone for sending text messages to your Tracks account</li>
+      <li><string>SMS context:</string> the context to which tasks sent in via SMS should be added</li>
     </ul>
 </div>
 
@@ -67,6 +69,8 @@
 	  <%= row_with_text_field('refresh') %>
 	  <%= row_with_select_field("verbose_action_descriptors") %>
 	  <%= row_with_text_field("mobile_todos_per_page") %>
+	  <%= row_with_text_field("sms_email") %>
+	  <%= table_row("sms_context", false) { select('prefs', 'sms_context_id', current_user.contexts.map{|c| [c.name, c.id]}) } %>
 
 	    <tr><td><%= submit_tag "Update" %></td>
 	        <td><%= link_to "Cancel", :action => 'index' %></td>
