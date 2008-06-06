@@ -28,7 +28,7 @@ ToDoItems.prototype = {
     {
       toggleElem = this.containerToggles[i];
       containerElem = toggleElem.parentNode.parentNode
-      itemsElem = document.getElementsByClassName('toggle_target',containerElem)[0];
+      itemsElem = $(containerElem.id).select("div#"+containerElem.id+"items")[0];
       this.toggleContainerMap[toggleElem.id] = containerElem;
       this.toggleItemsMap[toggleElem.id] = itemsElem;
       this.containerItemsMap[containerElem.id] = itemsElem;
@@ -138,7 +138,7 @@ ToDoItems.prototype = {
     this.lastEffect = Effect.BlindUp(itemsElem, { duration: 0.4});
     toggleElem.setAttribute('title', 'Expand');
     imgElem = this.findToggleImgElem(toggleElem);
-   	imgElem.src = imgElem.src.replace('collapse','expand');
+imgElem.src = imgElem.src.replace('collapse','expand');
    	imgElem.setAttribute('title','Expand');
   },
   findToggleImgElem: function(toggleElem)
