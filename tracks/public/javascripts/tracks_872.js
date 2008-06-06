@@ -726,7 +726,7 @@ Event.observe(window,"load",accessKeyHintsAdder.run.bindAsEventListener(accessKe
 {this.lastEffect=null;this.initialized=true;this.contextCollapseCookieManager=new CookieManager();this.toggleItemsMap={};this.toggleContainerMap={};this.containerItemsMap={};},addNextActionListingToggles:function()
 {this.containerToggles=$$('.container_toggle');containerTogglesClick=this.toggleNextActionListing.bindAsEventListener(this);for(i=0;i<this.containerToggles.length;i++)
 {toggleElem=this.containerToggles[i];containerElem=toggleElem.parentNode.parentNode
-itemsElem=document.getElementsByClassName('toggle_target',containerElem)[0];this.toggleContainerMap[toggleElem.id]=containerElem;this.toggleItemsMap[toggleElem.id]=itemsElem;this.containerItemsMap[containerElem.id]=itemsElem;}
+itemsElem=$(containerElem.id).select("div#"+containerElem.id+"items")[0];this.toggleContainerMap[toggleElem.id]=containerElem;this.toggleItemsMap[toggleElem.id]=itemsElem;this.containerItemsMap[containerElem.id]=itemsElem;}
 this.setNextActionListingTogglesToCookiedState();},setNextActionListingTogglesToCookiedState:function()
 {for(i=0;i<this.containerToggles.length;i++)
 {toggleElem=this.containerToggles[i];containerElem=this.toggleContainerMap[toggleElem.id];collapsedCookie=this.contextCollapseCookieManager.getCookie(this.buildCookieName(containerElem));itemsElem=this.toggleItemsMap[toggleElem.id];isExpanded=Element.visible(itemsElem);if(collapsedCookie&&isExpanded)
