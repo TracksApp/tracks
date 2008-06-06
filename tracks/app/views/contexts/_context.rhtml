@@ -5,7 +5,7 @@
     <a href="#" class="container_toggle" id="toggle_c<%= context.id %>"><%= image_tag("collapse.png") %></a>
     <% apply_behavior '.container_toggle:click', :prevent_default => true do |page|
          page << " /* only handle the click if a previous click had finished its animation */
-         if (todoItems.lastEffect == null  || todoItems.lastEffect.state!='running') {  
+         if (todoItems.lastEffect == null  || todoItems.lastEffect.state=='finished') {  
            containerElem = this.up('.container')
            toggleTarget = containerElem.down('.toggle_target')
            if (Element.visible(toggleTarget))
