@@ -48,4 +48,12 @@ class SMSGatewayTest < Test::Rails::TestCase
     assert_equal(@user, message_todo.user)
     assert_equal("This is the message body", message_todo.notes)
   end
+
+  def test_no_user
+    todo_count = Todo.count
+    badmessage = File.read(File.join(RAILS_ROOT, 'test', 'fixtures', 'sample_sms.txt'))
+    badmessage.gsub!("5555555555", "notauser")
+    SMSGateway.receive(badmessage)
+    assert_equal(todo_count, Todo.count)
+  end
 end
