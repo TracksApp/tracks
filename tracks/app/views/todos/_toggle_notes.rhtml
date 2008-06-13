@@ -3,5 +3,5 @@
   element.next('.todo_notes').toggle
 end -%>
 <div class="todo_notes" id="<%= dom_id(item, 'notes') %>" style="display:none">
-  <%= markdown( item.notes.gsub(/((https?:\/\/[^ ]*))/, '<a href="\2">\1</a>') ) %>
+  <%= markdown( item.notes.gsub(/((https?:\/\/[^ \n\t]*))/, '"\1":\2') ) %>
 </div>
