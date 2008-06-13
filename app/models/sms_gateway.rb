@@ -2,7 +2,9 @@ class SMSGateway < ActionMailer::Base
   CONTEXT_NAME = 'Inbox'
   def receive(email)
     user = User.find(:first, :include => [:preference], :conditions => ["preferences.sms_email = ?", email.from[0].strip])
-    logger.info "Receiving SMS task from #{email.from[0].strip} For user #{user.nil? nil : user.login}"
+    if user.nil?
+      user = User.find(:first, :include => [:preference], :conditions => ["preferences.sms_email = ?", email.from[0].strip[1,100]])
+    end
     return if user.nil?
     context = user.prefs.sms_context
 
