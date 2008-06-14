@@ -1,0 +1,33 @@
+= YamlDb
+
+YamlDb is a database-independent format for dumping and restoring data.  It complements the the database-independent schema format found in db/schema.rb.  The data is saved into db/data.yml.
+
+This can be used as a replacement for mysqldump or pg_dump, but only for the databases typically used by Rails apps.  Users, permissions, schemas, triggers, and other advanced database features are not supported - by design.
+
+Any database that has an ActiveRecord adapter should work.
+
+== Usage
+
+rake db:data:dump   ->   Dump contents of Rails database to db/data.yml
+rake db:data:load   ->   Load contents of db/data.yml into the database
+
+Further, there are tasks db:dump and db:load which do the entire database (the equivalent of running db:schema:dump followed by db:data:load).
+
+== Examples
+
+One common use would be to switch your data from one database backend to another.  For example, let's say you wanted to switch from SQLite to MySQL.  You might execute the following steps:
+
+1. rake db:dump
+
+2. Edit config/database.yml and change your adapter to mysql, set up database params
+
+3. mysqladmin create [database name]
+
+4. rake db:load
+
+== Credits
+
+Created by Orion Henry and Adam Wiggins.  Major updates by Ricardo Chimal, Jr.  Patches contributed by Michael Irwin.
+
+Send questions, feedback, or patches to the Heroku mailing list: http://groups.google.com/group/heroku
+
