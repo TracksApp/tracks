@@ -12,16 +12,16 @@
 ActiveRecord::Schema.define(:version => 38) do
 
   create_table "contexts", :force => true do |t|
-    t.string   "name",       :default => "",    :null => false
-    t.integer  "position"
-    t.boolean  "hide",       :default => false
-    t.integer  "user_id",    :default => 1
+    t.string   "name",                                         :null => false
+    t.integer  "position",   :limit => 255, :default => 0
+    t.boolean  "hide",                      :default => false
+    t.integer  "user_id",                   :default => 1
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "contexts", ["user_id"], :name => "index_contexts_on_user_id"
   add_index "contexts", ["user_id", "name"], :name => "index_contexts_on_user_id_and_name"
+  add_index "contexts", ["user_id"], :name => "index_contexts_on_user_id"
 
   create_table "notes", :force => true do |t|
     t.integer  "user_id",    :null => false
@@ -31,8 +31,8 @@ ActiveRecord::Schema.define(:version => 38) do
     t.datetime "updated_at"
   end
 
-  add_index "notes", ["project_id"], :name => "index_notes_on_project_id"
   add_index "notes", ["user_id"], :name => "index_notes_on_user_id"
+  add_index "notes", ["project_id"], :name => "index_notes_on_project_id"
 
   create_table "open_id_associations", :force => true do |t|
     t.binary  "server_url"
@@ -75,19 +75,19 @@ ActiveRecord::Schema.define(:version => 38) do
   add_index "preferences", ["user_id"], :name => "index_preferences_on_user_id"
 
   create_table "projects", :force => true do |t|
-    t.string   "name",                             :default => "",       :null => false
-    t.integer  "position"
-    t.integer  "user_id",                          :default => 1
+    t.string   "name",                                                    :null => false
+    t.integer  "position",           :limit => 255, :default => 0
+    t.integer  "user_id",                           :default => 1
     t.text     "description"
-    t.string   "state",              :limit => 20, :default => "active", :null => false
+    t.string   "state",              :limit => 20,  :default => "active", :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "default_context_id"
     t.datetime "completed_at"
   end
 
-  add_index "projects", ["user_id"], :name => "index_projects_on_user_id"
   add_index "projects", ["user_id", "name"], :name => "index_projects_on_user_id_and_name"
+  add_index "projects", ["user_id"], :name => "index_projects_on_user_id"
 
   create_table "sessions", :force => true do |t|
     t.string   "session_id"
@@ -95,7 +95,7 @@ ActiveRecord::Schema.define(:version => 38) do
     t.datetime "updated_at"
   end
 
-  add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
+  add_index "sessions", ["session_id"], :name => "sessions_session_id_index"
 
   create_table "taggings", :force => true do |t|
     t.integer "taggable_id"
@@ -117,7 +117,7 @@ ActiveRecord::Schema.define(:version => 38) do
   create_table "todos", :force => true do |t|
     t.integer  "context_id",                                          :null => false
     t.integer  "project_id"
-    t.string   "description",                :default => "",          :null => false
+    t.string   "description",                                         :null => false
     t.text     "notes"
     t.datetime "created_at"
     t.date     "due"
@@ -127,15 +127,15 @@ ActiveRecord::Schema.define(:version => 38) do
     t.string   "state",        :limit => 20, :default => "immediate", :null => false
   end
 
-  add_index "todos", ["user_id", "state"], :name => "index_todos_on_user_id_and_state"
-  add_index "todos", ["user_id", "project_id"], :name => "index_todos_on_user_id_and_project_id"
-  add_index "todos", ["project_id"], :name => "index_todos_on_project_id"
-  add_index "todos", ["context_id"], :name => "index_todos_on_context_id"
   add_index "todos", ["user_id", "context_id"], :name => "index_todos_on_user_id_and_context_id"
+  add_index "todos", ["context_id"], :name => "index_todos_on_context_id"
+  add_index "todos", ["project_id"], :name => "index_todos_on_project_id"
+  add_index "todos", ["user_id", "project_id"], :name => "index_todos_on_user_id_and_project_id"
+  add_index "todos", ["user_id", "state"], :name => "index_todos_on_user_id_and_state"
 
   create_table "users", :force => true do |t|
-    t.string   "login",                     :limit => 80, :default => "",         :null => false
-    t.string   "crypted_password",          :limit => 40
+    t.string   "login",                     :limit => 80,                         :null => false
+    t.string   "crypted_password",          :limit => 40,                         :null => false
     t.string   "token"
     t.boolean  "is_admin",                                :default => false,      :null => false
     t.string   "first_name"

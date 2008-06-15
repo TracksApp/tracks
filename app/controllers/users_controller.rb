@@ -116,7 +116,7 @@ class UsersController < ApplicationController
   # DELETE /users/somelogin
   # DELETE /users/somelogin.xml
   def destroy
-    @deleted_user = User.find_by_id(params[:id])
+    @deleted_user = User.find_by_login(params[:id])
     @saved = @deleted_user.destroy
     @total_users = User.find(:all).size
     

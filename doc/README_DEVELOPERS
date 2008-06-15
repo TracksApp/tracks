@@ -1,4 +1,8 @@
-1. SQLITE3 FOR TESTING
+1. Wiki
+
+There are some pointers for setting up your Tracks copy for testing at http://dev.rousette.org.uk/wiki/Tracks/Testing
+
+2. SQLITE3 FOR TESTING
 
 By default, tests are configured to run using sqlite3 in memory mode to increase speed. You will need the sqlite3-ruby gem for this.
 
@@ -8,7 +12,7 @@ To avoid showing the migrations as tests are run, add the following to your data
 
 If you want to run tests using another database, that's fine, too. Just change your database.yml accordingly.
 
-2. SELENIUM TESTS
+3. SELENIUM TESTS
 
 To run selenium tests, start Tracks in test mode using
 

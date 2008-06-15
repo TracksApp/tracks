@@ -1,7 +1,6 @@
 # Tracks: a GTD(TM) web application, built with Ruby on Rails
 
 * Project homepage: http://www.rousette.org.uk/projects/
-* Development page: http://tracks.lighthouseapp.com/projects/11609-tracks/overview
 * GitHub: http://github.com/bsag/tracks/
 * Trac (for bug reports and feature requests): http://dev.rousette.org.uk/report/6
 * Wiki (community contributed information): http://www.rousette.org.uk/projects/wiki/
@@ -9,9 +8,11 @@
 * Mailing list: http://lists.rousette.org.uk/mailman/listinfo/tracks-discuss
 * Original developer: bsag (http://www.rousette.org.uk/)
 * Contributors: http://dev.rousette.org.uk/wiki/Tracks/Contributing/Contributors
-* Version: 1.5
-* Copyright: (cc) 2004-2006 rousette.org.uk.
+* Version: 1.6
+* Copyright: (cc) 2004-2008 rousette.org.uk.
 * License:  GNU GPL
+
+**An important note for version 1.6: OpenID support is broken in this release. The fix isn't trivial because of changes to the `ruby-openid` gem, so we wanted to get this version out now and fix OpenID for the next release. If you depend on OpenID integration, we recommend waiting until the next release.**
 
 All the documentation for Tracks can be found within the /doc directory. It contains a manual in HTML (manual.html) or PDF format (manual.pdf), and this includes full instructions for both new installations and upgrades from older installations of Tracks. The instructions might appear long and intimidatingly complex, but that is mostly because of the number of different platforms supported, and the different configurations which can be used (e.g. running Tracks on your local computer or on a remote server). If you choose the appropriate section for your situation (installation vs. upgrade), and use the easiest (recommended) method, you should find the instructions easy to follow. If you encounter problems, try searching the wiki, forum or mailing list (URLs above), and ask a question if you cannot find a solution to your problem.
 
