@@ -12,10 +12,10 @@
 ActiveRecord::Schema.define(:version => 38) do
 
   create_table "contexts", :force => true do |t|
-    t.string   "name",                                         :null => false
-    t.integer  "position",   :limit => 255, :default => 0
-    t.boolean  "hide",                      :default => false
-    t.integer  "user_id",                   :default => 1
+    t.string   "name",                          :null => false
+    t.integer  "position"
+    t.boolean  "hide",       :default => false
+    t.integer  "user_id",    :default => 1
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -75,11 +75,11 @@ ActiveRecord::Schema.define(:version => 38) do
   add_index "preferences", ["user_id"], :name => "index_preferences_on_user_id"
 
   create_table "projects", :force => true do |t|
-    t.string   "name",                                                    :null => false
-    t.integer  "position",           :limit => 255, :default => 0
-    t.integer  "user_id",                           :default => 1
+    t.string   "name",                                                   :null => false
+    t.integer  "position"
+    t.integer  "user_id",                          :default => 1
     t.text     "description"
-    t.string   "state",              :limit => 20,  :default => "active", :null => false
+    t.string   "state",              :limit => 20, :default => "active", :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "default_context_id"
@@ -95,7 +95,7 @@ ActiveRecord::Schema.define(:version => 38) do
     t.datetime "updated_at"
   end
 
-  add_index "sessions", ["session_id"], :name => "sessions_session_id_index"
+  add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
 
   create_table "taggings", :force => true do |t|
     t.integer "taggable_id"

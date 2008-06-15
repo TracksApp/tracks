@@ -38,7 +38,7 @@ class UsersControllerTest < Test::Rails::TestCase
   def test_destroy_user
     login_as :admin_user
     @no_users_before = User.find(:all).size
-    xhr :post, :destroy, :id => 3
+    xhr :post, :destroy, :id => users(:ldap_user).to_param
     assert_rjs :page, "user-3", :remove
     assert_equal @no_users_before-1, User.find(:all).size
   end
