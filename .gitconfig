@@ -1,0 +1,4 @@
+db/data.yml
+config/database.yml
+config/environment.yml
+log

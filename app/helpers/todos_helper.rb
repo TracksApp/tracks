@@ -22,55 +22,71 @@ module TodosHelper
       :prevent_default => true
   end
   
-  def remote_delete_icon
+  def set_behavior_for_delete_icon
     parameters = "_source_view=#{@source_view}"
     parameters += "&_tag_name=#{@tag_name}" if @source_view == 'tag'
-    str = link_to( image_tag_for_delete,
-      todo_path(@todo), :id => "delete_icon_"+@todo.id.to_s,
-      :class => "icon delete_icon", :title => "delete the action '#{@todo.description}'")
     apply_behavior '.item-container a.delete_icon:click', :prevent_default => true do |page|
       page.confirming "'Are you sure that you want to ' + this.title + '?'" do
         page << "itemContainer = this.up('.item-container'); itemContainer.startWaiting();"
         page << remote_to_href(:method => 'delete', :with => "'#{parameters}'", :complete => "itemContainer.stopWaiting();")
-      end
+      end    
     end
+  end
+  
+  def remote_delete_icon
+    str = link_to( image_tag_for_delete,
+      todo_path(@todo), :id => "delete_icon_"+@todo.id.to_s,
+      :class => "icon delete_icon", :title => "delete the action '#{@todo.description}'")
+    set_behavior_for_delete_icon
     str
   end
   
+  def set_behavior_for_star_icon
+    apply_behavior '.item-container a.star_item:click', 
+      remote_to_href(:method => 'put', :with => "{ _source_view : '#{@source_view}' }"),
+      :prevent_default => true
+  end    
+
   def remote_star_icon
     str = link_to( image_tag_for_star(@todo),
       toggle_star_todo_path(@todo),
       :class => "icon star_item", :title => "star the action '#{@todo.description}'")
-    apply_behavior '.item-container a.star_item:click', 
-      remote_to_href(:method => 'put', :with => "{ _source_view : '#{@source_view}' }"),
-      :prevent_default => true
+    set_behavior_for_star_icon
     str
   end
   
-  def remote_edit_icon
+  def set_behavior_for_edit_icon
     parameters = "_source_view=#{@source_view}"
     parameters += "&_tag_name=#{@tag_name}" if @source_view == 'tag'
+    apply_behavior '.item-container a.edit_icon:click', :prevent_default => true do |page|
+      page << "Effect.Pulsate(this);"
+      page << remote_to_href(:method => 'get', :with => "'#{parameters}'")
+    end
+  end
+  
+  def remote_edit_icon
     if !@todo.completed?
       str = link_to( image_tag_for_edit,
         edit_todo_path(@todo),
         :class => "icon edit_icon")
-      apply_behavior '.item-container a.edit_icon:click', :prevent_default => true do |page|
-        page << "Effect.Pulsate(this);"
-        page << remote_to_href(:method => 'get', :with => "'#{parameters}'")
-      end
+      set_behavior_for_edit_icon
     else
       str = '<a class="icon">' + image_tag("blank.png") + "</a> "
     end
     str
   end
   
-  def remote_toggle_checkbox
-    str = check_box_tag('item_id', toggle_check_todo_path(@todo), @todo.completed?, :class => 'item-checkbox')
+  def set_behavior_for_toggle_checkbox
     parameters = "_source_view=#{@source_view}"
     parameters += "&_tag_name=#{@tag_name}" if @source_view == 'tag'
     apply_behavior '.item-container input.item-checkbox:click',
       remote_function(:url => javascript_variable('this.value'), :method => 'put',
-      :with => "'#{parameters}'")
+      :with => "'#{parameters}'")    
+  end
+  
+  def remote_toggle_checkbox
+    str = check_box_tag('item_id', toggle_check_todo_path(@todo), @todo.completed?, :class => 'item-checkbox')
+    set_behavior_for_toggle_checkbox
     str
   end
   

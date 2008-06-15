@@ -35,13 +35,12 @@ window.onload=function(){
   <%= user_time.strftime(@prefs.title_date_format) %>
   </h1>
 </div>
-<div id="minilinks">	
+<div id="minilinks">   
   <%= link_to_function("Toggle notes", nil, {:accesskey => "S", :title => "Toggle all notes", :id => "toggle-notes-nav"}) do |page|
-		  page.select('body .todo_notes').each { |e| e.toggle }
-		end
-	-%>&nbsp;|&nbsp;
-    <%= link_to "Logout (#{current_user.display_name}) »", logout_path %> 
-    <% end %>
+    page.select('body .todo_notes').each { |e| e.toggle }
+  end
+      -%>&nbsp;|&nbsp;
+<%= link_to "Logout (#{current_user.display_name}) »", logout_path %>
 </div>
 
 <div id="navcontainer">

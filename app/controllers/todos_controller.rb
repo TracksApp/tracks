@@ -154,6 +154,7 @@ class TodosController < ApplicationController
   end
 
   def update
+    @source_view = params['_source_view'] || 'todo'
     init_data_for_sidebar unless mobile?
     @todo.tag_with(params[:tag_list], current_user) if params[:tag_list]
     @original_item_context_id = @todo.context_id
@@ -461,7 +462,11 @@ class TodosController < ApplicationController
             @todos = Todo.find(:all, :conditions => ['todos.user_id = ?', current_user.id], :include => [ :project, :context, :tags ])
 
             # Exclude hidden projects from the home page
-            @not_done_todos = Todo.find(:all, :conditions => ['todos.user_id = ? AND contexts.hide = ? AND (projects.state = ? OR todos.project_id IS NULL)', current_user.id, false, 'active'], :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC", :include => [ :project, :context, :tags ])
+            @not_done_todos = Todo.find(:all, 
+              :conditions => ['todos.user_id = ? AND contexts.hide = ? AND (projects.state = ? OR todos.project_id IS NULL)', 
+                current_user.id, false, 'active'], 
+              :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC", 
+              :include => [ :project, :context, :tags ])
           end
 
         end
@@ -475,8 +480,8 @@ class TodosController < ApplicationController
     
     # Exclude hidden projects from the home page
     @not_done_todos = Todo.find(:all, 
-      :conditions => ['todos.user_id = ? AND todos.state = ? AND contexts.hide = ?', 
-        current_user.id, 'active', false], 
+      :conditions => ['todos.user_id = ? AND todos.state = ? AND contexts.hide = ? AND (projects.state = ? OR todos.project_id IS NULL)', 
+        current_user.id, 'active', false, 'active'], 
       :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC", 
       :include => [ :project, :context ])
   end

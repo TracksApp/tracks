@@ -11,7 +11,7 @@
 
 <div class="project_input">
 <label for="<%= dom_id(@todo, 'project_name') %>">Project</label>
-<input id="<%= dom_id(@todo, 'project_name') %>" name="project_name" autocomplete="off" tabindex="10" size="30" type="text" value="<%= @todo.project.nil? ? 'None' : @todo.project.name %>" />
+<input id="<%= dom_id(@todo, 'project_name') %>" name="project_name" autocomplete="off" tabindex="10" size="30" type="text" value="<%= @todo.project.nil? ? 'None' : @todo.project.name.gsub(/"/,"&quot;") %>" />
 <div class="page_name_auto_complete" id="<%= dom_id(@todo, 'project_list') %>" style="display:none"></div>
 
 <script type="text/javascript">

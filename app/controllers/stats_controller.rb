@@ -481,8 +481,10 @@ class StatsController < ApplicationController
       
       @chart_name = "actions_visible_running_time_data"
       @page_title = "Actions selected from week "
+      @further = false
       if params['id'] == 'avrt_end'
         @page_title += week_from.to_s + " and further"
+        @further = true
       else
         @page_title += week_from.to_s + " - " + week_to.to_s + ""
       end
@@ -512,8 +514,10 @@ class StatsController < ApplicationController
       
       @chart_name = "actions_running_time_data"
       @page_title = "Actions selected from week "
+      @further = false
       if params['id'] == 'art_end'
         @page_title += week_from.to_s + " and further"
+        @further = true
       else
         @page_title += week_from.to_s + " - " + week_to.to_s + ""
       end
