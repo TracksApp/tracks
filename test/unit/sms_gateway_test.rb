@@ -119,7 +119,7 @@ class SMSGatewayTest < Test::Rails::TestCase
     SMSGateway.receive(valid_show_msg2)
     valid_show_todo2 = Todo.find(:first, :conditions => {:description => "do something next week and remember it!"})
     assert_not_nil(valid_show_todo2)
-    assert_equal(Date.tomorrow.next_week, valid_show_todo2.show_from)
+    assert_equal(Date.today.next_week, valid_show_todo2.show_from)
 
     SMSGateway.receive(valid_show_msg3)
     valid_show_todo3 = Todo.find(:first, :conditions => {:description => "alternative format"})
