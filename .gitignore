@@ -4,3 +4,4 @@ log
 tmp
 db/data.yml
 db/*.sqlite3
+nbproject
