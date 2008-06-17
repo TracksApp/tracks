@@ -5,7 +5,7 @@ require 'contexts_controller'
 class ContextsController; def rescue_action(e) raise e end; end
 
 class ContextXmlApiTest < ActionController::IntegrationTest
-  fixtures :users, :contexts
+  fixtures :users, :contexts, :preferences
 
   @@context_name = "@newcontext"
   @@valid_postdata = "<request><context><name>#{@@context_name}</name></context></request>"
