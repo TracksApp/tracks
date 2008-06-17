@@ -1,6 +1,6 @@
 class SeleniumOnRails::Selenese
 end
-ActionView::Base.register_template_handler 'sel', SeleniumOnRails::Selenese
+ActionView::Template.register_template_handler 'sel', SeleniumOnRails::Selenese
 
 
 class SeleniumOnRails::Selenese
@@ -8,8 +8,8 @@ class SeleniumOnRails::Selenese
     @view = view
   end
 
-  def render template, local_assigns
-    name = (@view.assigns['page_title'] or local_assigns['page_title'])
+  def render template
+    name = @view.assigns['page_title']
     lines = template.strip.split "\n"
     html = ''
     html << extract_comments(lines)
@@ -17,6 +17,10 @@ class SeleniumOnRails::Selenese
     html << extract_comments(lines)
     raise 'You cannot have comments in the middle of commands!' if next_line lines, :any
     html
+  end
+  
+  def compilable?
+    false
   end
 
   private

@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../abstract_unit'
+require 'abstract_unit'
 
 Payment = Struct.new(:price)
 class SummablePayment < Payment
@@ -15,9 +15,14 @@ class EnumerableTests < Test::Unit::TestCase
       people << p
     end
 
-    objects.group_by {|object| object.name}.each do |name, group|
-      assert group.all? {|person| person.name == name}
+    grouped = objects.group_by { |object| object.name }
+
+    grouped.each do |name, group|
+      assert group.all? { |person| person.name == name }
     end
+
+    assert_equal objects.uniq.map(&:name), grouped.keys
+    assert({}.merge(grouped), "Could not convert ActiveSupport::OrderedHash into Hash")
   end
 
   def test_sums

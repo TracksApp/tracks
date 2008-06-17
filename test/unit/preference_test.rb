@@ -12,7 +12,6 @@ class PreferenceTest < Test::Rails::TestCase
 
   def test_time_zone
     assert_equal 'London', @admin_user.preference.time_zone
-    assert_equal @admin_user.preference.tz, TimeZone['London']
   end
   
   def test_show_project_on_todo_done

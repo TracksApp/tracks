@@ -26,6 +26,8 @@ config.action_controller.allow_forgery_protection    = false
 # config.pre_loaded_fixtures = false
 SALT = "change-me" unless defined?( SALT ).nil?
 
+config.time_zone = 'UTC'
+
 config.after_initialize do
   require File.expand_path(File.dirname(__FILE__) + "/../../test/selenium_helper")
 end

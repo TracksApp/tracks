@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../abstract_unit'
+require 'abstract_unit'
 
 class HashExtTest < Test::Unit::TestCase
   def setup
@@ -6,6 +6,11 @@ class HashExtTest < Test::Unit::TestCase
     @symbols = { :a  => 1, :b  => 2 }
     @mixed   = { :a  => 1, 'b' => 2 }
     @fixnums = {  0  => 1,  1  => 2 }
+    if RUBY_VERSION < '1.9.0'
+      @illegal_symbols = { "\0" => 1, "" => 2, [] => 3 }
+    else
+      @illegal_symbols = { [] => 3 }
+    end
   end
 
   def test_methods
@@ -22,16 +27,17 @@ class HashExtTest < Test::Unit::TestCase
     assert_equal @symbols, @symbols.symbolize_keys
     assert_equal @symbols, @strings.symbolize_keys
     assert_equal @symbols, @mixed.symbolize_keys
-
-    assert_raises(NoMethodError) { { [] => 1 }.symbolize_keys }
   end
 
   def test_symbolize_keys!
     assert_equal @symbols, @symbols.dup.symbolize_keys!
     assert_equal @symbols, @strings.dup.symbolize_keys!
     assert_equal @symbols, @mixed.dup.symbolize_keys!
+  end
 
-    assert_raises(NoMethodError) { { [] => 1 }.symbolize_keys }
+  def test_symbolize_keys_preserves_keys_that_cant_be_symbolized
+    assert_equal @illegal_symbols, @illegal_symbols.symbolize_keys
+    assert_equal @illegal_symbols, @illegal_symbols.dup.symbolize_keys!
   end
 
   def test_symbolize_keys_preserves_fixnum_keys
@@ -527,9 +533,9 @@ class HashToXmlTest < Test::Unit::TestCase
   def test_single_record_from_xml_with_attributes_other_than_type
     topic_xml = <<-EOT
     <rsp stat="ok">
-    	<photos page="1" pages="1" perpage="100" total="16">
-    		<photo id="175756086" owner="55569174@N00" secret="0279bf37a1" server="76" title="Colored Pencil PhotoBooth Fun" ispublic="1" isfriend="0" isfamily="0"/>
-    	</photos>
+      <photos page="1" pages="1" perpage="100" total="16">
+        <photo id="175756086" owner="55569174@N00" secret="0279bf37a1" server="76" title="Colored Pencil PhotoBooth Fun" ispublic="1" isfriend="0" isfamily="0"/>
+      </photos>
     </rsp>
     EOT
 
@@ -591,6 +597,34 @@ class HashToXmlTest < Test::Unit::TestCase
     XML
     expected_blog_hash = {"blog" => {"posts" => ["a post", "another post"]}}
     assert_equal expected_blog_hash, Hash.from_xml(blog_xml)
+  end
+
+  def test_file_from_xml
+    blog_xml = <<-XML
+      <blog>
+        <logo type="file" name="logo.png" content_type="image/png">
+        </logo>
+      </blog>
+    XML
+    hash = Hash.from_xml(blog_xml)
+    assert hash.has_key?('blog')
+    assert hash['blog'].has_key?('logo')
+
+    file = hash['blog']['logo']
+    assert_equal 'logo.png', file.original_filename
+    assert_equal 'image/png', file.content_type
+  end
+
+  def test_file_from_xml_with_defaults
+    blog_xml = <<-XML
+      <blog>
+        <logo type="file">
+        </logo>
+      </blog>
+    XML
+    file = Hash.from_xml(blog_xml)['blog']['logo']
+    assert_equal 'untitled', file.original_filename
+    assert_equal 'application/octet-stream', file.content_type
   end
 
   def test_xsd_like_types_from_xml
@@ -698,6 +732,44 @@ class HashToXmlTest < Test::Unit::TestCase
     }.stringify_keys
 
     assert_equal hash, Hash.from_xml(hash.to_xml(@xml_options))['person']
+  end
+  
+  def test_datetime_xml_type_with_utc_time
+    alert_xml = <<-XML
+      <alert>
+        <alert_at type="datetime">2008-02-10T15:30:45Z</alert_at>
+      </alert>
+    XML
+    alert_at = Hash.from_xml(alert_xml)['alert']['alert_at']
+    assert alert_at.utc?
+    assert_equal Time.utc(2008, 2, 10, 15, 30, 45), alert_at
+  end
+  
+  def test_datetime_xml_type_with_non_utc_time
+    alert_xml = <<-XML
+      <alert>
+        <alert_at type="datetime">2008-02-10T10:30:45-05:00</alert_at>
+      </alert>
+    XML
+    alert_at = Hash.from_xml(alert_xml)['alert']['alert_at']
+    assert alert_at.utc?
+    assert_equal Time.utc(2008, 2, 10, 15, 30, 45), alert_at
+  end
+  
+  def test_datetime_xml_type_with_far_future_date
+    alert_xml = <<-XML
+      <alert>
+        <alert_at type="datetime">2050-02-10T15:30:45Z</alert_at>
+      </alert>
+    XML
+    alert_at = Hash.from_xml(alert_xml)['alert']['alert_at']
+    assert alert_at.utc?
+    assert_equal 2050,  alert_at.year
+    assert_equal 2,     alert_at.month
+    assert_equal 10,    alert_at.day
+    assert_equal 15,    alert_at.hour
+    assert_equal 30,    alert_at.min
+    assert_equal 45,    alert_at.sec
   end
 end
 

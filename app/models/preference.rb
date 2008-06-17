@@ -1,8 +1,5 @@
 class Preference < ActiveRecord::Base
   belongs_to :user
-  composed_of :tz,
-              :class_name => 'TimeZone',
-              :mapping => %w(time_zone name)
     
   def self.due_styles
     { :due_in_n_days => 0, :due_on => 1}

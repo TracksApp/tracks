@@ -1,7 +1,7 @@
 class Project < ActiveRecord::Base
   has_many :todos, :dependent => :delete_all, :include => :context
   has_many :notes, :dependent => :delete_all, :order => "created_at DESC"
-  belongs_to :default_context, :dependent => :nullify, :class_name => "Context", :foreign_key => "default_context_id"
+  belongs_to :default_context, :class_name => "Context", :foreign_key => "default_context_id"
   belongs_to :user
   
   validates_presence_of :name, :message => "project must have a name"

@@ -160,7 +160,7 @@ class ProjectsControllerTest < TodoContainerControllerTestBase
             assert_select 'p', /\d+&nbsp;actions. Project is (active|hidden|completed)./
           end
         end
-        assert_select 'published', /(#{projects(:timemachine).updated_at.xmlschema}|#{projects(:moremoney).updated_at.xmlschema})/
+        assert_select 'published', /(#{Regexp.escape(projects(:timemachine).updated_at.xmlschema)}|#{Regexp.escape(projects(:moremoney).updated_at.xmlschema)})/
       end
     end
   end

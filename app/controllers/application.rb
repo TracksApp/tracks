@@ -2,7 +2,7 @@
 # Likewise will all the methods added be available for all controllers.
 
 require_dependency "login_system"
-require_dependency "source_view"
+require_dependency "tracks/source_view"
 require "redcloth"
 
 require 'date'
@@ -20,6 +20,7 @@ class ApplicationController < ActionController::Base
   layout proc{ |controller| controller.mobile? ? "mobile" : "standard" }
   
   before_filter :set_session_expiration
+  before_filter :set_time_zone
   prepend_before_filter :login_required
   prepend_before_filter :enable_mobile_content_negotiation
   after_filter :restore_content_type_for_mobile
@@ -178,6 +179,14 @@ class ApplicationController < ActionController::Base
     raise ArgumentError.new("invalid value for Boolean: \"#{s}\"")
   end
   
+  def self.openid_enabled?
+    Tracks::Config.openid_enabled?
+  end
+  
+  def openid_enabled?
+    self.class.openid_enabled?
+  end
+  
   private
         
   def parse_date_per_user_prefs( s )
@@ -211,6 +220,10 @@ class ApplicationController < ActionController::Base
   def notify(type, message)
     flash[type] = message
     logger.error("ERROR: #{message}") if type == :error
+  end
+  
+  def set_time_zone
+    Time.zone = current_user.prefs.time_zone if logged_in?
   end
   
 end

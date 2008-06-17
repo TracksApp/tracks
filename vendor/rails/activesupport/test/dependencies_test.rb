@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/abstract_unit'
+require 'abstract_unit'
 require 'pp'
 
 module ModuleWithMissing
@@ -31,14 +31,14 @@ class DependenciesTest < Test::Unit::TestCase
   end
 
   def test_tracking_loaded_files
-    require_dependency(File.dirname(__FILE__) + "/dependencies/service_one")
-    require_dependency(File.dirname(__FILE__) + "/dependencies/service_two")
+    require_dependency 'dependencies/service_one'
+    require_dependency 'dependencies/service_two'
     assert_equal 2, Dependencies.loaded.size
   end
 
   def test_tracking_identical_loaded_files
-    require_dependency(File.dirname(__FILE__) + "/dependencies/service_one")
-    require_dependency(File.dirname(__FILE__) + "/dependencies/service_one")
+    require_dependency 'dependencies/service_one'
+    require_dependency 'dependencies/service_one'
     assert_equal 1, Dependencies.loaded.size
   end
 
@@ -52,7 +52,7 @@ class DependenciesTest < Test::Unit::TestCase
 
   def test_dependency_which_raises_exception_isnt_added_to_loaded_set
     with_loading do
-      filename = "#{File.dirname(__FILE__)}/dependencies/raises_exception"
+      filename = 'dependencies/raises_exception'
       $raises_exception_load_count = 0
 
       5.times do |count|
@@ -584,6 +584,12 @@ class DependenciesTest < Test::Unit::TestCase
     assert_equal [], m
   end
 
+  def test_new_constants_in_with_illegal_module_name_raises_correct_error
+    assert_raises(NameError) do
+      Dependencies.new_constants_in("Illegal-Name") {}
+    end
+  end
+
   def test_file_with_multiple_constants_and_require_dependency
     with_loading 'autoloading_fixtures' do
       assert ! defined?(MultipleConstantFile)
@@ -667,7 +673,7 @@ class DependenciesTest < Test::Unit::TestCase
         assert !defined?(::RaisesNoMethodError), "::RaisesNoMethodError is defined but it should have failed!"
       end
     end
-  
+
   ensure
     Object.class_eval { remove_const :RaisesNoMethodError if const_defined?(:RaisesNoMethodError) }
   end
@@ -680,9 +686,18 @@ class DependenciesTest < Test::Unit::TestCase
         assert !defined?(::RaisesNoMethodError), "::RaisesNoMethodError is defined but it should have failed!"
       end
     end
-  
+
   ensure
     Object.class_eval { remove_const :RaisesNoMethodError if const_defined?(:RaisesNoMethodError) }
+  end
+
+  def test_autoload_doesnt_shadow_error_when_mechanism_not_set_to_load
+    with_loading 'autoloading_fixtures' do
+      Dependencies.mechanism = :require
+      2.times do
+        assert_raise(NameError) {"RaisesNameError".constantize}
+      end
+    end
   end
 
   def test_autoload_doesnt_shadow_name_error
@@ -708,7 +723,7 @@ class DependenciesTest < Test::Unit::TestCase
   ensure
     Object.class_eval { remove_const :RaisesNoMethodError if const_defined?(:RaisesNoMethodError) }
   end
-  
+
   def test_remove_constant_handles_double_colon_at_start
     Object.const_set 'DeleteMe', Module.new
     DeleteMe.const_set 'OrMe', Module.new
@@ -718,7 +733,7 @@ class DependenciesTest < Test::Unit::TestCase
     Dependencies.remove_constant "::DeleteMe"
     assert ! defined?(DeleteMe)
   end
-  
+
   def test_load_once_constants_should_not_be_unloaded
     with_loading 'autoloading_fixtures' do
       Dependencies.load_once_paths = Dependencies.load_paths
@@ -731,7 +746,7 @@ class DependenciesTest < Test::Unit::TestCase
     Dependencies.load_once_paths = []
     Object.class_eval { remove_const :A if const_defined?(:A) }
   end
-  
+
   def test_load_once_paths_should_behave_when_recursively_loading
     with_loading 'dependencies', 'autoloading_fixtures' do
       Dependencies.load_once_paths = [Dependencies.load_paths.last]
@@ -747,5 +762,4 @@ class DependenciesTest < Test::Unit::TestCase
   ensure
     Dependencies.load_once_paths = []
   end
-  
 end

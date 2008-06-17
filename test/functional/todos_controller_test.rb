@@ -245,7 +245,7 @@ class TodosControllerTest < Test::Rails::TestCase
       assert_xml_select 'entry', 10 do
         assert_xml_select 'title', /.+/
         assert_xml_select 'content[type="html"]', /.*/
-        assert_xml_select 'published', /(#{projects(:timemachine).updated_at.xmlschema}|#{projects(:moremoney).updated_at.xmlschema})/
+        assert_xml_select 'published', /(#{Regexp.escape(projects(:timemachine).updated_at.xmlschema)}|#{Regexp.escape(projects(:moremoney).updated_at.xmlschema)})/
       end
     end
   end

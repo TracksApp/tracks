@@ -1,15 +1,15 @@
-require File.dirname(__FILE__) + '/../abstract_unit'
+require 'abstract_unit'
 
 class DateTimeExtCalculationsTest < Test::Unit::TestCase
   def test_to_s
     datetime = DateTime.new(2005, 2, 21, 14, 30, 0, 0)
-    assert_match(/^2005-02-21T14:30:00(Z|\+00:00)$/,  datetime.to_s)
     assert_equal "2005-02-21 14:30:00",               datetime.to_s(:db)
     assert_equal "14:30",                             datetime.to_s(:time)
     assert_equal "21 Feb 14:30",                      datetime.to_s(:short)
     assert_equal "February 21, 2005 14:30",           datetime.to_s(:long)
     assert_equal "Mon, 21 Feb 2005 14:30:00 +0000",   datetime.to_s(:rfc822)
     assert_equal "February 21st, 2005 14:30",         datetime.to_s(:long_ordinal)
+    assert_match(/^2005-02-21T14:30:00(Z|\+00:00)$/,  datetime.to_s)
   end
 
   def test_readable_inspect
@@ -212,16 +212,74 @@ class DateTimeExtCalculationsTest < Test::Unit::TestCase
   end
 
   def test_local_offset
-    with_timezone 'US/Eastern' do
+    with_env_tz 'US/Eastern' do
       assert_equal Rational(-5, 24), DateTime.local_offset
     end
-    with_timezone 'US/Central' do
+    with_env_tz 'US/Central' do
       assert_equal Rational(-6, 24), DateTime.local_offset
     end
   end
+  
+  def test_utc?
+    assert_equal true, DateTime.civil(2005, 2, 21, 10, 11, 12).utc?
+    assert_equal true, DateTime.civil(2005, 2, 21, 10, 11, 12, 0).utc?
+    assert_equal false, DateTime.civil(2005, 2, 21, 10, 11, 12, 0.25).utc?
+    assert_equal false, DateTime.civil(2005, 2, 21, 10, 11, 12, -0.25).utc?
+  end
+  
+  def test_utc_offset
+    assert_equal 0, DateTime.civil(2005, 2, 21, 10, 11, 12).utc_offset
+    assert_equal 0, DateTime.civil(2005, 2, 21, 10, 11, 12, 0).utc_offset
+    assert_equal 21600, DateTime.civil(2005, 2, 21, 10, 11, 12, 0.25).utc_offset
+    assert_equal( -21600, DateTime.civil(2005, 2, 21, 10, 11, 12, -0.25).utc_offset )
+    assert_equal( -18000, DateTime.civil(2005, 2, 21, 10, 11, 12, Rational(-5, 24)).utc_offset )
+  end
+  
+  def test_utc
+    assert_equal DateTime.civil(2005, 2, 21, 16, 11, 12, 0), DateTime.civil(2005, 2, 21, 10, 11, 12, Rational(-6, 24)).utc
+    assert_equal DateTime.civil(2005, 2, 21, 15, 11, 12, 0), DateTime.civil(2005, 2, 21, 10, 11, 12, Rational(-5, 24)).utc
+    assert_equal DateTime.civil(2005, 2, 21, 10, 11, 12, 0), DateTime.civil(2005, 2, 21, 10, 11, 12, 0).utc
+    assert_equal DateTime.civil(2005, 2, 21, 9, 11, 12, 0), DateTime.civil(2005, 2, 21, 10, 11, 12, Rational(1, 24)).utc
+    assert_equal DateTime.civil(2005, 2, 21, 9, 11, 12, 0), DateTime.civil(2005, 2, 21, 10, 11, 12, Rational(1, 24)).getutc
+  end
+  
+  def test_formatted_offset_with_utc
+    assert_equal '+00:00', DateTime.civil(2000).formatted_offset
+    assert_equal '+0000', DateTime.civil(2000).formatted_offset(false)
+    assert_equal 'UTC', DateTime.civil(2000).formatted_offset(true, 'UTC')
+  end
+  
+  def test_formatted_offset_with_local
+    dt = DateTime.civil(2005, 2, 21, 10, 11, 12, Rational(-5, 24))
+    assert_equal '-05:00', dt.formatted_offset
+    assert_equal '-0500', dt.formatted_offset(false)
+  end
+  
+  def test_compare_with_time
+    assert_equal  1, DateTime.civil(2000) <=> Time.utc(1999, 12, 31, 23, 59, 59)
+    assert_equal  0, DateTime.civil(2000) <=> Time.utc(2000, 1, 1, 0, 0, 0)
+    assert_equal(-1, DateTime.civil(2000) <=> Time.utc(2000, 1, 1, 0, 0, 1))
+  end
+  
+  def test_compare_with_datetime
+    assert_equal  1, DateTime.civil(2000) <=> DateTime.civil(1999, 12, 31, 23, 59, 59)
+    assert_equal  0, DateTime.civil(2000) <=> DateTime.civil(2000, 1, 1, 0, 0, 0)
+    assert_equal(-1, DateTime.civil(2000) <=> DateTime.civil(2000, 1, 1, 0, 0, 1))
+  end
+  
+  def test_compare_with_time_with_zone
+    assert_equal  1, DateTime.civil(2000) <=> ActiveSupport::TimeWithZone.new( Time.utc(1999, 12, 31, 23, 59, 59), TimeZone['UTC'] )
+    assert_equal  0, DateTime.civil(2000) <=> ActiveSupport::TimeWithZone.new( Time.utc(2000, 1, 1, 0, 0, 0), TimeZone['UTC'] )
+    assert_equal(-1, DateTime.civil(2000) <=> ActiveSupport::TimeWithZone.new( Time.utc(2000, 1, 1, 0, 0, 1), TimeZone['UTC'] ))
+  end
+  
+  def test_to_f
+    assert_equal 946684800.0, DateTime.civil(2000).to_f
+    assert_equal 946684800.0, DateTime.civil(1999,12,31,19,0,0,Rational(-5,24)).to_f
+  end
 
   protected
-    def with_timezone(new_tz = 'US/Eastern')
+    def with_env_tz(new_tz = 'US/Eastern')
       old_tz, ENV['TZ'] = ENV['TZ'], new_tz
       yield
     ensure

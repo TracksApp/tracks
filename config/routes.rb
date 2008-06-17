@@ -57,7 +57,11 @@ ActionController::Routing::Routes.draw do |map|
   
   map.preferences 'preferences', :controller => 'preferences', :action => 'index'
   map.integrations 'integrations', :controller => 'integrations', :action => 'index'
-
+  
+  if Rails.env == 'test'
+    map.connect '/selenium_helper/login', :controller => 'selenium_helper', :action => 'login'
+  end
+  
   # Install the default route as the lowest priority.
   map.connect ':controller/:action/:id'
 

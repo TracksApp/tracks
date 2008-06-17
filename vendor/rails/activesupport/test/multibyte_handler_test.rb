@@ -1,4 +1,7 @@
-require File.dirname(__FILE__) + '/abstract_unit'
+# encoding: utf-8
+require 'abstract_unit'
+
+if RUBY_VERSION < '1.9'
 
 $KCODE = 'UTF8'
 
@@ -364,4 +367,6 @@ class UTF8HandlingTestPure < Test::Unit::TestCase
     common_setup
     @handler = ::ActiveSupport::Multibyte::Handlers::UTF8Handler
   end
+end
+
 end

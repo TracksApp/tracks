@@ -12,8 +12,6 @@ class SeleniumHelperController < ActionController::Base
   end
 end
 
-ActionController::Routing::Routes.add_route '/selenium_helper/login', :controller => 'selenium_helper', :action => 'login'
-
 module SeleniumOnRails::TestBuilderActions
   def login options = {}
     options = {options => nil} unless options.is_a? Hash

@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + "/abstract_unit"
+require 'abstract_unit'
 
 uses_mocha 'fcgi dispatcher tests' do
 
@@ -59,11 +59,12 @@ class RailsFCGIHandlerTest < Test::Unit::TestCase
     @handler.process!
   end
 
-  def test_restart_handler
+  def test_restart_handler_outside_request
     @handler.expects(:dispatcher_log).with(:info, "asked to restart ASAP")
+    @handler.expects(:restart!).once
 
     @handler.send(:restart_handler, nil)
-    assert_equal :restart, @handler.when_ready
+    assert_equal nil, @handler.when_ready
   end
 
   def test_install_signal_handler_should_log_on_bad_signal
@@ -123,6 +124,24 @@ end
 
 
 class RailsFCGIHandlerSignalsTest < Test::Unit::TestCase
+  class ::RailsFCGIHandler
+    attr_accessor :signal
+    alias_method :old_gc_countdown, :gc_countdown
+    def gc_countdown
+      signal ? Process.kill(signal, $$) : old_gc_countdown
+    end
+  end
+
+  class ::Dispatcher
+    class << self
+      attr_accessor :signal
+      alias_method :old_dispatch, :dispatch
+      def dispatch(cgi)
+        signal ? Process.kill(signal, $$) : old_dispatch
+      end
+    end
+  end
+
   def setup
     @log = StringIO.new
     @handler = RailsFCGIHandler.new(@log)
@@ -131,7 +150,7 @@ class RailsFCGIHandlerSignalsTest < Test::Unit::TestCase
   def test_interrupted_via_HUP_when_not_in_request
     cgi = mock
     FCGI.expects(:each_cgi).once.yields(cgi)
-    @handler.expects(:gc_countdown).returns { Process.kill 'HUP', $$ }
+    @handler.expects(:signal).times(2).returns('HUP')
 
     @handler.expects(:reload!).once
     @handler.expects(:close_connection).never
@@ -144,7 +163,7 @@ class RailsFCGIHandlerSignalsTest < Test::Unit::TestCase
   def test_interrupted_via_HUP_when_in_request
     cgi = mock
     FCGI.expects(:each_cgi).once.yields(cgi)
-    Dispatcher.expects(:dispatch).with(cgi).returns { Process.kill 'HUP', $$ }
+    Dispatcher.expects(:signal).times(2).returns('HUP')
 
     @handler.expects(:reload!).once
     @handler.expects(:close_connection).never
@@ -157,7 +176,7 @@ class RailsFCGIHandlerSignalsTest < Test::Unit::TestCase
   def test_interrupted_via_USR1_when_not_in_request
     cgi = mock
     FCGI.expects(:each_cgi).once.yields(cgi)
-    @handler.expects(:gc_countdown).returns { Process.kill 'USR1', $$ }
+    @handler.expects(:signal).times(2).returns('USR1')
     @handler.expects(:exit_handler).never
 
     @handler.expects(:reload!).never
@@ -171,7 +190,7 @@ class RailsFCGIHandlerSignalsTest < Test::Unit::TestCase
   def test_interrupted_via_USR1_when_in_request
     cgi = mock
     FCGI.expects(:each_cgi).once.yields(cgi)
-    Dispatcher.expects(:dispatch).with(cgi).returns { Process.kill 'USR1', $$ }
+    Dispatcher.expects(:signal).times(2).returns('USR1')
 
     @handler.expects(:reload!).never
     @handler.expects(:close_connection).with(cgi).once
@@ -181,10 +200,25 @@ class RailsFCGIHandlerSignalsTest < Test::Unit::TestCase
     assert_equal :exit, @handler.when_ready
   end
 
+  def test_restart_via_USR2_when_in_request
+    cgi = mock
+    FCGI.expects(:each_cgi).once.yields(cgi)
+    @handler.expects(:signal).times(2).returns('USR2')
+    @handler.expects(:exit_handler).never
+
+    @handler.expects(:reload!).never
+    @handler.expects(:close_connection).with(cgi).once
+    @handler.expects(:exit).never
+    @handler.expects(:restart!).once
+
+    @handler.process!
+    assert_equal :restart, @handler.when_ready
+  end
+
   def test_interrupted_via_TERM
     cgi = mock
     FCGI.expects(:each_cgi).once.yields(cgi)
-    Dispatcher.expects(:dispatch).with(cgi).returns { Process.kill 'TERM', $$ }
+    Dispatcher.expects(:signal).times(2).returns('TERM')
 
     @handler.expects(:reload!).never
     @handler.expects(:close_connection).never
