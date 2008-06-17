@@ -384,7 +384,21 @@ class TodosController < ApplicationController
     end
   end
   
-  private  
+  def defer
+    @source_view = params['_source_view'] || 'todo'
+    numdays = params['days'].to_i
+    @todo = Todo.find(params[:id])
+    @todo.show_from = (@todo.show_from || Time.now.to_date) + numdays.days
+    @saved = @todo.save
+  
+    respond_to do |format|
+      format.html { redirect_to :back }
+      format.js {render :action => 'update'}
+    end
+  end
+  
+  
+  private
   
   def get_todo_from_params
     @todo = current_user.todos.find(params['id'])

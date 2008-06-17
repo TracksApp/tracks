@@ -1201,3 +1201,7 @@ body.integrations textarea {
     width:80%;
     background-color:#ddd;
 }
+.defer-container {
+  position: absolute;
+  right: 2px;
+}
