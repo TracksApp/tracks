@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../abstract_unit'
+require 'abstract_unit'
 
 class ClassA; end
 class ClassB < ClassA; end
@@ -180,6 +180,10 @@ class ObjectInstanceVariableTest < Test::Unit::TestCase
     @source, @dest = Object.new, Object.new
     @source.instance_variable_set(:@bar, 'bar')
     @source.instance_variable_set(:@baz, 'baz')
+  end
+
+  def test_instance_variable_names
+    assert_equal %w(@bar @baz), @source.instance_variable_names.sort
   end
 
   def test_instance_variable_defined

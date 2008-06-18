@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/abstract_unit'
+require 'abstract_unit'
 require 'inflector_test_cases'
 
 module Ace
@@ -120,14 +120,8 @@ class InflectorTest < Test::Unit::TestCase
     assert_raises(NameError) { Inflector.constantize("InvalidClass\n") }
   end
 
-  if RUBY_VERSION < '1.9.0'
-    def test_constantize_does_lexical_lookup
-      assert_raises(NameError) { Inflector.constantize("Ace::Base::InflectorTest") }
-    end
-  else
-    def test_constantize_does_dynamic_lookup
-      assert_equal self.class, Inflector.constantize("Ace::Base::InflectorTest")
-    end
+  def test_constantize_does_lexical_lookup
+    assert_raises(NameError) { Inflector.constantize("Ace::Base::InflectorTest") }
   end
 
   def test_ordinal

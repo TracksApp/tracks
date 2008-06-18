@@ -1,9 +1,9 @@
-require File.dirname(__FILE__) + '/../abstract_unit'
+require 'abstract_unit'
 
 class NumericExtTimeAndDateTimeTest < Test::Unit::TestCase
   def setup
-    @now = Time.now
-    @dtnow = DateTime.now
+    @now = Time.local(2005,2,10,15,30,45)
+    @dtnow = DateTime.civil(2005,2,10,15,30,45)
     @seconds = {
       1.minute   => 60,
       10.minutes => 600,
@@ -143,5 +143,20 @@ class NumericExtSizeTest < Test::Unit::TestCase
     assert_equal 3377699720527872, 3.petabyte
     assert_equal 3458764513820540928, 3.exabytes
     assert_equal 3458764513820540928, 3.exabyte
+  end
+end
+
+class NumericExtConversionsTest < Test::Unit::TestCase
+  
+  def test_to_utc_offset_s_with_colon
+    assert_equal "-06:00", -21_600.to_utc_offset_s
+    assert_equal "+00:00", 0.to_utc_offset_s
+    assert_equal "+05:00", 18_000.to_utc_offset_s
+  end
+  
+  def test_to_utc_offset_s_without_colon
+    assert_equal "-0600", -21_600.to_utc_offset_s(false)
+    assert_equal "+0000", 0.to_utc_offset_s(false)
+    assert_equal "+0500", 18_000.to_utc_offset_s(false)
   end
 end

@@ -103,7 +103,7 @@ class ContextsControllerTest < TodoContainerControllerTestBase
             assert_select 'p', /\d+&nbsp;actions. Context is (Active|Hidden)./
           end
         end
-        assert_select 'published', /(#{contexts(:agenda).created_at.xmlschema}|#{contexts(:library).created_at.xmlschema})/
+        assert_select 'published', /(#{Regexp.escape(contexts(:agenda).created_at.xmlschema)}|#{Regexp.escape(contexts(:library).created_at.xmlschema)})/
       end
     end
   end

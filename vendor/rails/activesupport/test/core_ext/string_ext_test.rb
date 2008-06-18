@@ -1,5 +1,6 @@
+# encoding: utf-8
 require 'date'
-require File.dirname(__FILE__) + '/../abstract_unit'
+require 'abstract_unit'
 require 'inflector_test_cases'
 
 class StringInflectionsTest < Test::Unit::TestCase
@@ -167,14 +168,32 @@ class StringInflectionsTest < Test::Unit::TestCase
     assert !s.end_with?('el')
   end
 
-  # FIXME: Ruby 1.9
-  def test_each_char_with_utf8_string_when_kcode_is_utf8
-    old_kcode, $KCODE = $KCODE, 'UTF8'
-    '€2.99'.each_char do |char|
-      assert_not_equal 1, char.length
-      break
+  def test_string_squish
+    original = %{ A string with tabs(\t\t), newlines(\n\n), and
+                  many spaces(  ). }
+
+    expected = "A string with tabs( ), newlines( ), and many spaces( )."
+
+    # Make sure squish returns what we expect:
+    assert_equal original.squish,  expected
+    # But doesn't modify the original string:
+    assert_not_equal original, expected
+
+    # Make sure squish! returns what we expect:
+    assert_equal original.squish!, expected
+    # And changes the original string:
+    assert_equal original, expected
+  end
+
+  if RUBY_VERSION < '1.9'
+    def test_each_char_with_utf8_string_when_kcode_is_utf8
+      old_kcode, $KCODE = $KCODE, 'UTF8'
+      '€2.99'.each_char do |char|
+        assert_not_equal 1, char.length
+        break
+      end
+    ensure
+      $KCODE = old_kcode
     end
-  ensure
-    $KCODE = old_kcode
   end
 end

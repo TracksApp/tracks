@@ -25,11 +25,13 @@ Tracks 1.6 has been thoroughly beta tested by a large number of people, and shou
 There are two methods of downloading Tracks 1.6:
 
 1. (Recommended for most people) Download the [zipped package](http://www.rousette.org.uk/projects/files/tracks-current.zip), and unzip in your preferred location (e.g. `~/Sites` for Mac OS X users).
-2. Download using Subversion:
+2. If you want to live on the edge, you can get the latest development version from GitHub using git (bear in mind that this may be less stable than the released versions):
+
 <pre>
 <code>
-  svn co --username=guest
-  http://www.rousette.org.uk/svn/tracks-repos/tags/current tracks
+  cd ~/Sites
+  git clone git://github.com/bsag/tracks.git
+  cd tracks
 </code>
 </pre>
 
@@ -162,11 +164,13 @@ Rename your old Tracks installation (e.g. to 'tracks-old') so that you can insta
 There are two methods of downloading Tracks 1.6:
 
 1. (Recommended for most people) Download the [zipped package](http://www.rousette.org.uk/projects/files/tracks-current.zip), and unzip in your preferred location (e.g. `~/Sites` for Mac OS X users).
-2. Download using Subversion:
+2. If you want to live on the edge, you can get the latest development version from GitHub using git (bear in mind that this may be less stable than the released versions):
+3. 
 <pre>
 <code>
-    svn co --username=guest \ 
-    http://www.rousette.org.uk/svn/tracks-repos/tags/current tracks
+  cd ~/Sites
+  git clone git://github.com/bsag/tracks.git
+  cd tracks
 </code>
 </pre>
 

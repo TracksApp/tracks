@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../abstract_unit'
+require 'abstract_unit'
 
 class DateExtCalculationsTest < Test::Unit::TestCase
   def test_to_s
@@ -58,6 +58,29 @@ class DateExtCalculationsTest < Test::Unit::TestCase
     assert_equal Date.new(2005,1,1),  Date.new(2005,1,1).beginning_of_quarter
     assert_equal Date.new(2005,10,1), Date.new(2005,12,31).beginning_of_quarter
     assert_equal Date.new(2005,4,1),  Date.new(2005,6,30).beginning_of_quarter
+  end
+
+  def test_end_of_week
+    assert_equal Date.new(2008,2,24), Date.new(2008,2,22).end_of_week
+    assert_equal Date.new(2008,3,2), Date.new(2008,2,25).end_of_week #monday
+    assert_equal Date.new(2008,3,2), Date.new(2008,2,26).end_of_week #tuesday
+    assert_equal Date.new(2008,3,2), Date.new(2008,2,27).end_of_week #wednesday
+    assert_equal Date.new(2008,3,2), Date.new(2008,2,28).end_of_week #thursday
+    assert_equal Date.new(2008,3,2), Date.new(2008,2,29).end_of_week #friday
+    assert_equal Date.new(2008,3,2), Date.new(2008,3,01).end_of_week #saturday
+    assert_equal Date.new(2008,3,2), Date.new(2008,3,02).end_of_week #sunday
+  end
+
+  def test_end_of_quarter
+    assert_equal Date.new(2008,3,31),  Date.new(2008,2,15).end_of_quarter
+    assert_equal Date.new(2008,3,31),  Date.new(2008,3,31).end_of_quarter
+    assert_equal Date.new(2008,12,31), Date.new(2008,10,8).end_of_quarter
+    assert_equal Date.new(2008,6,30),  Date.new(2008,4,14).end_of_quarter
+    assert_equal Date.new(2008,9,30),  Date.new(2008,8,21).end_of_quarter
+  end
+
+  def test_end_of_year
+    assert_equal Date.new(2008,12,31).to_s, Date.new(2008,2,22).end_of_year.to_s
   end
 
   def test_end_of_month
@@ -175,7 +198,7 @@ class DateExtCalculationsTest < Test::Unit::TestCase
   end
   
   def test_xmlschema
-    with_timezone 'US/Eastern' do
+    with_env_tz 'US/Eastern' do
       assert_match(/^1980-02-28T00:00:00-05:?00$/, Date.new(1980, 2, 28).xmlschema)
       assert_match(/^1980-06-28T00:00:00-04:?00$/, Date.new(1980, 6, 28).xmlschema)
       # these tests are only of interest on platforms where older dates #to_time fail over to DateTime
@@ -185,9 +208,32 @@ class DateExtCalculationsTest < Test::Unit::TestCase
       end
     end
   end
+  
+  uses_mocha 'TestDateCurrent' do
+    def test_current_returns_date_today_when_zone_default_not_set
+      with_env_tz 'US/Central' do
+        Time.stubs(:now).returns Time.local(1999, 12, 31, 23)
+        assert_equal Date.new(1999, 12, 31), Date.today
+        assert_equal Date.new(1999, 12, 31), Date.current
+      end
+    end
+    
+    def test_current_returns_time_zone_today_when_zone_default_set
+      silence_warnings do # silence warnings raised by tzinfo gem
+        Time.zone_default = TimeZone['Eastern Time (US & Canada)']
+        with_env_tz 'US/Central' do
+          Time.stubs(:now).returns Time.local(1999, 12, 31, 23)
+          assert_equal Date.new(1999, 12, 31), Date.today
+          assert_equal Date.new(2000, 1, 1), Date.current
+        end
+      end
+    ensure
+      Time.zone_default = nil
+    end
+  end
 
   protected
-    def with_timezone(new_tz = 'US/Eastern')
+    def with_env_tz(new_tz = 'US/Eastern')
       old_tz, ENV['TZ'] = ENV['TZ'], new_tz
       yield
     ensure

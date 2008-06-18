@@ -1,7 +1,7 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 <%
 def today 
-  Time.now.utc.beginning_of_day.to_s(:db) 
+  Time.zone.now.beginning_of_day.to_s(:db) 
 end
 %>
 

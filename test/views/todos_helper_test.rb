@@ -10,10 +10,6 @@ class TodosHelperTest < Test::Rails::HelperTestCase
   include ApplicationHelper
   include TodosHelper
   
-  def user_time
-    Time.now
-  end
-  
   def format_date(date)
     if date
       date_format = "%d/%m/%Y"
@@ -31,7 +27,7 @@ class TodosHelperTest < Test::Rails::HelperTestCase
   end
   
   def test_show_date_today
-    date = Time.now.to_date
+    date = Time.zone.now.to_date
     html = show_date(date)
     formatted_date = format_date(date)
     assert_equal %Q{<a title="#{formatted_date}"><span class="amber">Show Today</span></a> }, html

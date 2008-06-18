@@ -1,2 +1,4 @@
-/pkg
 /doc
+/rails
+*.gem
+/coverage

@@ -112,12 +112,12 @@
 \usepackage{booktabs}			% Better tables
 \usepackage{tabulary}			% Support longer table cells
 \usepackage[utf8]{inputenc}		% For UTF-8 support
-%\usepackage{xcolor}				% Allow for color (annotations)
-
-%\geometry{landscape}			% Activate for rotated page geometry
-
-%\usepackage[parfill]{parskip}	% Activate to begin paragraphs with an empty
-								% line rather than an indent
+% \usepackage{xcolor}				% Allow for color (annotations)
+% 
+% %\geometry{landscape}			% Activate for rotated page geometry
+% 
+% \usepackage[parfill]{parskip}	% Activate to begin paragraphs with an empty
+% 								% line rather than an indent
 
 
 \def\myauthor{Author}			% In case these were not included in metadata
@@ -136,8 +136,8 @@
 \def\revision{Revision: \$Id: manual.markdown 864 2008-06-03 17:01:00Z bsag \$}
 \def\mytitle{Tracks 1.6 Manual}
 \def\version{1.6}
-%%\usepackage{xmpincl}
-%%\includexmp{CCAttributionShareAlike}
+% \usepackage{xmpincl}
+% \includexmp{CCAttributionShareAlike}
 
 
 %
@@ -274,15 +274,16 @@ There are two methods of downloading Tracks 1.6:
 
 \item (Recommended for most people) Download the \href{http://www.rousette.org.uk/projects/files/tracks-current.zip}{zipped package}, and unzip in your preferred location (e.g.\ \texttt{\ensuremath{\sim}/Sites} for Mac OS X users).
 
-\item Download using Subversion:
+\item If you want to live on the edge, you can get the latest development version from GitHub using git (bear in mind that this may be less stable than the released versions):
 \end{enumerate}
 
 \begin{adjustwidth}{2.5em}{2.5em}
 \begin{verbatim}
 
 
-  svn co --username=guest
-  http://www.rousette.org.uk/svn/tracks-repos/tags/current tracks
+  cd ~/Sites
+  git clone git://github.com/bsag/tracks.git
+  cd tracks
 
 
 \end{verbatim}
@@ -523,15 +524,16 @@ There are two methods of downloading Tracks 1.6:
 
 \item (Recommended for most people) Download the \href{http://www.rousette.org.uk/projects/files/tracks-current.zip}{zipped package}, and unzip in your preferred location (e.g.\ \texttt{\ensuremath{\sim}/Sites} for Mac OS X users).
 
-\item Download using Subversion:
+\item If you want to live on the edge, you can get the latest development version from GitHub using git (bear in mind that this may be less stable than the released versions):
 \end{enumerate}
 
 \begin{adjustwidth}{2.5em}{2.5em}
 \begin{verbatim}
 
 
-    svn co --username=guest \ 
-    http://www.rousette.org.uk/svn/tracks-repos/tags/current tracks
+  cd ~/Sites
+  git clone git://github.com/bsag/tracks.git
+  cd tracks
 
 
 \end{verbatim}

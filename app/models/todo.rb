@@ -1,6 +1,6 @@
 class Todo < ActiveRecord::Base
 
-  belongs_to :context, :order => 'name'
+  belongs_to :context
   belongs_to :project
   belongs_to :user
   

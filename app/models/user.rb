@@ -158,7 +158,7 @@ class User < ActiveRecord::Base
   end
   
   def time
-    prefs.tz.adjust(Time.now.utc)
+    Time.now.in_time_zone(prefs.time_zone)
   end
 
   def date

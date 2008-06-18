@@ -267,9 +267,9 @@ class TodosController < ApplicationController
   def completed
     @page_title = "TRACKS::Completed tasks"
     @done = current_user.completed_todos
-    @done_today = @done.completed_within current_user.time - 1.day
-    @done_this_week = @done.completed_within current_user.time - 1.week
-    @done_this_month = @done.completed_within current_user.time - 4.week
+    @done_today = @done.completed_within Time.zone.now - 1.day
+    @done_this_week = @done.completed_within Time.zone.now - 1.week
+    @done_this_month = @done.completed_within Time.zone.now - 4.week
     @count = @done_today.size + @done_this_week.size + @done_this_month.size
   end
 
@@ -277,7 +277,7 @@ class TodosController < ApplicationController
     @page_title = "TRACKS::Archived completed tasks"
     @done = current_user.completed_todos
     @count = @done.size
-    @done_archive = @done.completed_more_than current_user.time - 28.days
+    @done_archive = @done.completed_more_than Time.zone.now - 28.days
   end
   
   def list_deferred
@@ -392,7 +392,7 @@ class TodosController < ApplicationController
 
     if params.key?('due')
       due_within = params['due'].to_i
-      due_within_when = current_user.time + due_within.days
+      due_within_when = Time.zone.now + due_within.days
       condition_builder.add('todos.due <= ?', due_within_when)
       due_within_date_s = due_within_when.strftime("%Y-%m-%d")
       @title << " due today" if (due_within == 0)
@@ -402,7 +402,7 @@ class TodosController < ApplicationController
 
     if params.key?('done')
       done_in_last = params['done'].to_i
-      condition_builder.add('todos.completed_at >= ?', current_user.time - done_in_last.days)
+      condition_builder.add('todos.completed_at >= ?', Time.zone.now - done_in_last.days)
       @title << " actions completed"
       @description << " in the last #{done_in_last.to_s} days"
     end

@@ -6,11 +6,11 @@ class LoginController < ApplicationController
   skip_before_filter :login_required
   before_filter :login_optional
   before_filter :get_current_user
-  open_id_consumer if Tracks::Config.openid_enabled?
+  open_id_consumer if openid_enabled?
   
   def login
     @page_title = "TRACKS::Login"
-    @openid_url = cookies[:openid_url] if Tracks::Config.openid_enabled?
+    @openid_url = cookies[:openid_url] if openid_enabled?
     case request.method
       when :post
         if @user = User.authenticate(params['user_login'], params['user_password'])

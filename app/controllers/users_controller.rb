@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
 
-  if Tracks::Config.openid_enabled?
+  if openid_enabled?
      open_id_consumer
      before_filter  :begin_open_id_auth,    :only => :update_auth_type
   end
@@ -153,7 +153,7 @@ class UsersController < ApplicationController
   end
   
   def update_auth_type
-    if (params[:user][:auth_type] == 'open_id') && Tracks::Config.openid_enabled?
+    if (params[:user][:auth_type] == 'open_id') && openid_enabled?
       case open_id_response.status
         when OpenID::SUCCESS
           # The URL was a valid identity URL. Now we just need to send a redirect
@@ -179,7 +179,7 @@ class UsersController < ApplicationController
   end
   
   def complete
-    return unless Tracks::Config.openid_enabled?
+    return unless openid_enabled?
     openid_url = session['openid_url']
     if openid_url.blank?
       notify :error, "expected an openid_url"

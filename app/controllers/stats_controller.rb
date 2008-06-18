@@ -415,7 +415,7 @@ class StatsController < ApplicationController
     @max=0
     @actions_creation_hour_array = Array.new(24) { |i| 0}
     @actions_creation_hour.each do |r|
-      hour = current_user.prefs.tz.adjust(r.created_at).hour
+      hour = r.created_at.hour
       @actions_creation_hour_array[hour] += 1
     end
     0.upto(23) { |i| @max = @actions_creation_hour_array[i] if @actions_creation_hour_array[i] >  @max}
@@ -423,7 +423,7 @@ class StatsController < ApplicationController
     # convert to hash to be able to fill in non-existing days
     @actions_completion_hour_array = Array.new(24) { |i| 0}
     @actions_completion_hour.each do |r|              
-      hour = current_user.prefs.tz.adjust(r.completed_at).hour
+      hour = r.completed_at.hour
       @actions_completion_hour_array[hour] += 1
     end
     0.upto(23) { |i| @max = @actions_completion_hour_array[i] if @actions_completion_hour_array[i] >  @max}
@@ -446,7 +446,7 @@ class StatsController < ApplicationController
     @max=0
     @actions_creation_hour_array = Array.new(24) { |i| 0}
     @actions_creation_hour.each do |r|
-      hour = current_user.prefs.tz.adjust(r.created_at).hour
+      hour = r.created_at.hour
       @actions_creation_hour_array[hour] += 1
     end
     0.upto(23) { |i| @max = @actions_creation_hour_array[i] if @actions_creation_hour_array[i] >  @max}
@@ -454,7 +454,7 @@ class StatsController < ApplicationController
     # convert to hash to be able to fill in non-existing days
     @actions_completion_hour_array = Array.new(24) { |i| 0}
     @actions_completion_hour.each do |r|              
-      hour = current_user.prefs.tz.adjust(r.completed_at).hour
+      hour = r.completed_at.hour
       @actions_completion_hour_array[hour] += 1
     end
     0.upto(23) { |i| @max = @actions_completion_hour_array[i] if @actions_completion_hour_array[i] >  @max}

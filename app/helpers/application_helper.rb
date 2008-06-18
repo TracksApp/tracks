@@ -3,7 +3,7 @@
 module ApplicationHelper
   
   def user_time
-    current_user.time
+    Time.zone.now
   end
   
   # Replicates the link_to method but also checks request.request_uri to find

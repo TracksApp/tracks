@@ -1,4 +1,4 @@
-require "#{File.dirname(__FILE__)}/abstract_unit"
+require 'abstract_unit'
 require 'initializer'
 require "#{File.dirname(__FILE__)}/../environments/boot"
 
@@ -36,6 +36,7 @@ class BootTest < Test::Unit::TestCase
 
   def test_boot_vendor_rails_by_default
     Rails.expects(:booted?).returns(false)
+    Rails.expects(:preinitialize)
     File.expects(:exist?).with("#{RAILS_ROOT}/vendor/rails").returns(true)
     Rails::VendorBoot.any_instance.expects(:run).returns('result')
     assert_equal 'result', Rails.boot!
@@ -43,6 +44,7 @@ class BootTest < Test::Unit::TestCase
 
   def test_boot_gem_rails_otherwise
     Rails.expects(:booted?).returns(false)
+    Rails.expects(:preinitialize)
     File.expects(:exist?).with("#{RAILS_ROOT}/vendor/rails").returns(false)
     Rails::GemBoot.any_instance.expects(:run).returns('result')
     assert_equal 'result', Rails.boot!

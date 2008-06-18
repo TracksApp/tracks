@@ -48,6 +48,10 @@ Rails::Initializer.run do |config|
   # Make Active Record use UTC-base instead of local time
   config.active_record.default_timezone = :utc
   
+  # You''ll probably want to change this to the time zone of the computer where Tracks is running
+  # run rake time:zones:local have Rails suggest time zone names on your system
+  config.time_zone = 'UTC'
+  
   # Use Active Record's schema dumper instead of SQL when creating the test database
   # (enables use of different database adapters for development and test environments)
   config.active_record.schema_format = :ruby
@@ -66,18 +70,13 @@ end
 
 # Include your application configuration below
 
-# Time zone setting. Set your local time zone here. # 
-# You should be able to find a list of time zones in /usr/share/zoneinfo
-# e.g. if you are in the Eastern time zone of the US, set the value below.
-# ENV['TZ'] = 'US/Eastern'
-
 # Leave this alone or set it to one or more of ['database', 'ldap', 'open_id'].
 # If you choose ldap, see the additional configuration options further down.
 AUTHENTICATION_SCHEMES = ['database']
 
 require 'name_part_finder'
-require 'todo_list'
-require 'config'
+require 'tracks/todo_list'
+require 'tracks/config'
 require 'activerecord_base_tag_extensions' # Needed for tagging-specific extensions
 require 'digest/sha1' #Needed to support 'rake db:fixtures:load' on some ruby installs: http://dev.rousette.org.uk/ticket/557
 require 'prototype_helper_extensions'
