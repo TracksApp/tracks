@@ -3,6 +3,7 @@ require 'resource_feeder/common'
 module ResourceFeeder
   module Atom
     include ResourceFeeder::Common
+    include ActionController::Routing
     extend self
     
     def render_atom_feed_for(resources, options = {})
@@ -25,14 +26,14 @@ module ResourceFeeder
       
       options[:feed][:title] ||= klass.name.pluralize
       options[:feed][:id]    ||= "tag:#{request.host_with_port}:#{klass.name.pluralize}"
-      options[:feed][:link]  ||= SimplyHelpful::PolymorphicRoutes.polymorphic_url(new_record, options[:url_writer])
+      options[:feed][:link]  ||= polymorphic_url(new_record, :controller => options[:url_writer])
       
       options[:item][:title]       ||= [ :title, :subject, :headline, :name ]
       options[:item][:description] ||= [ :description, :body, :content ]
       options[:item][:pub_date]    ||= [ :updated_at, :updated_on, :created_at, :created_on ]
       options[:item][:author]      ||= [ :author, :creator ]
       
-      resource_link = lambda { |r| SimplyHelpful::PolymorphicRoutes.polymorphic_url(r, options[:url_writer]) }
+      resource_link = lambda { |r| polymorphic_url(r, :controller => options[:url_writer]) }
 
       xml.instruct!
       xml.feed "xml:lang" => "en-US", "xmlns" => 'http://www.w3.org/2005/Atom' do
