@@ -10,12 +10,13 @@
           :title =>"Delete this note", 
           :class=>"delete_item",
           :id => "delete_note_"+note.id.to_s), 
-        :update => dom_id(note),
+        {:update => dom_id(note),
         :loading => visual_effect(:fade, dom_id(note, 'container')),
         :complete => "Element.remove('#{dom_id(note, 'container')}');",
         :url => note_path(note),
         :method => :delete,
-        :confirm => "Are you sure that you want to delete the note \'#{note.id.to_s}\'?" ) + "&nbsp;" -%>
+        :confirm => "Are you sure that you want to delete the note \'#{note.id.to_s}\'?" },
+        { :class => 'delete_note' }) -%>&nbsp;
       <%= link_to_function(image_tag( "blank.png", :title => "Edit item", :class=>"edit_item"),
         "Element.toggle('#{dom_id(note)}'); Element.toggle('#{dom_id(note, 'edit')}'); Effect.Appear('#{dom_id(note, 'edit')}'); Form.focusFirstElement('#{dom_id(note, 'edit_form')}');" ) + " | " %>
       <%= link_to("In: " + note.project.name, project_path(note.project), :class=>"footer_link" ) %>&nbsp;|&nbsp;
