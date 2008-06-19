@@ -7,6 +7,7 @@ require 'spec'
 require 'spec/rails'
 require 'spec/story'
 require 'webrat/selenium'
+require 'action_controller/test_process'
 
 module Spec
   module Story
@@ -47,8 +48,28 @@ class SeleniumRailsStory < Test::Unit::TestCase
     end
   end
   
+  def should_not_see(text_or_regexp)
+    if text_or_regexp.is_a?(Regexp)
+      response.should_not have_tag("*", text_or_regexp)
+    else
+      response.should_not have_tag("*", /#{Regexp.escape(text_or_regexp)}/i)
+    end
+  end
+  
   def response
     webrat_session.response_body
+  end
+  
+  def logged_in_as(user)
+    visits("/selenium_helper/login?as=#{user.login}")
+  end
+  
+  def selenium
+    SeleniumDriverManager.instance.running_selenium_driver
+  end
+    
+  def badge_count_should_show(count)
+    response.should have_tag('#badge_count', count.to_s)
   end
   
   def method_missing(name, *args)
@@ -70,6 +91,7 @@ end
 
 class DatabaseResetListener
   include Singleton
+  
   def scenario_started(*args)
     if defined?(ActiveRecord::Base)
       connection = ActiveRecord::Base.connection 
@@ -79,24 +101,23 @@ class DatabaseResetListener
     end
   end
 
-  def scenario_succeeded(*args)
+  def method_missing sym, *args, &block
+    # ignore all messages you don't care about
   end
-  alias :scenario_pending :scenario_succeeded
-  alias :scenario_failed :scenario_succeeded
 end
 
 class CookieResetListener
   include Singleton
+  
   def scenario_started(*args)
     %w[tracks_login auth_token _session_id].each do |cookie_name|
       SeleniumDriverManager.instance.running_selenium_driver.get_eval("window.document.cookie = '#{cookie_name}=;expires=Thu, 01-Jan-1970 00:00:01 GMT; path=/';")
     end
   end
   
-  def scenario_succeeded(*args)
+  def method_missing sym, *args, &block
+    # ignore all messages you don't care about
   end
-  alias :scenario_pending :scenario_succeeded
-  alias :scenario_failed :scenario_succeeded
 end
 
 class Spec::Story::Runner::ScenarioRunner

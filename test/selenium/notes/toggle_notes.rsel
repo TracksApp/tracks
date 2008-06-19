@@ -1,5 +1,0 @@
-setup :fixtures => :all
-login :as => 'admin'
-open "/notes"
-click "css=#toggle-notes-nav"
-wait_for_element_present "css=body.notes"
