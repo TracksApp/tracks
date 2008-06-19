@@ -1,0 +1,77 @@
+#!/usr/bin/env ruby
+require 'rubygems'
+
+class StoryCommand
+  ROOT_PATH = File.expand_path(File.dirname(__FILE__) + "/..")
+  
+  STORIES_PATH        = "#{ROOT_PATH}/stories"
+  STEP_MATCHERS_PATH  = "#{ROOT_PATH}/stories/steps"
+  HELPER_PATH         = "#{ROOT_PATH}/stories/helper"
+  DRIVER_MANAGER_PATH = "#{ROOT_PATH}/lib/selenium_driver_manager"
+
+  require DRIVER_MANAGER_PATH
+  
+  def self.run
+    self.new.run
+  end
+  
+  def run
+    if ARGV.reject { |a| a =~ /^-/ }.any?
+      run_story_files(ARGV.dup)
+    else
+      run_story_files(all_story_files)
+    end
+  ensure
+    SeleniumDriverManager.instance.stop
+  end
+  
+  def all_story_files
+    Dir["#{STORIES_PATH}/**/*.story"].uniq
+  end
+  
+  def clean_story_paths(paths)
+    paths.reject! { |path| path =~ /^-/ }
+    paths.map! { |path| File.expand_path(path) }
+    paths.map! { |path| path.gsub(/\.story$/, "") }
+    paths.map! { |path| path.gsub(/#{STORIES_PATH}\//, "") }
+  end
+  
+  def run_story_files(stories)
+    clean_story_paths(stories).each do |story|
+      setup_and_run_story(File.readlines("#{STORIES_PATH}/#{story}.story"), story)
+    end
+  end
+  
+  def setup_and_run_story(lines, story_name)
+    require HELPER_PATH
+    
+    steps = steps_for_story(lines, story_name)
+    steps.reject! { |step| !File.exist?("#{STEP_MATCHERS_PATH}/#{step}.rb") }
+    steps.each    { |step| require "#{STEP_MATCHERS_PATH}/#{step}" }
+    
+    run_story(lines, steps)
+  end
+  
+  def steps_for_story(lines, story_name)
+    if lines.first =~ /^# steps: /
+      lines.first.gsub(/^# steps: /, "").split(",").map(&:strip)
+    else
+      story_name.to_s.split("/")
+    end
+  end
+  
+  def run_story(lines, steps)
+    tempfile = Tempfile.new("story")
+    lines.each do |line|
+      tempfile.puts line
+    end
+    tempfile.close
+    
+    with_steps_for(*steps.map(&:to_sym)) do
+      run tempfile.path, :type => SeleniumRailsStory
+    end
+  end
+  
+end
+
+StoryCommand.run

@@ -12,8 +12,10 @@ To avoid showing the migrations as tests are run, add the following to your data
 
 If you want to run tests using another database, that's fine, too. Just change your database.yml accordingly.
 
-3. SELENIUM TESTS
+3. SELENIUM TESTS (Selenium on Rails)
 
+This testing style is deprecated and are being moved over to Selenium via RSpec stories by lukemelia (See #4 below for the new style).
+ 
 To run selenium tests, start Tracks in test mode using
 
   script/server -e test
@@ -25,3 +27,24 @@ Then open a browser to
 and interact with the test runner.
 
 For more information about Selenium on Rails, see vendor/plugins/selenium-on-rails/README
+
+4. RSPEC STORY RUNNER TESTS
+
+To run the stories, which are browser tests using selenium, start Tracks in test mode using
+
+  rake db:test:prepare
+  script/server -e test
+ 
+Then start Selenium by running
+
+  selenium
+ 
+which is a script installed with the Selenium gem (sudo gem install Selenium)
+
+Once the site and selenium server are running, then run all stories with
+
+  script/story
+
+or a specific set with
+
+  script/story stories/login/*.story
