@@ -20,7 +20,7 @@
 
 <pre>
 <code>
-  $ curl -u username:p4ssw0rd \
+  $ curl -u username:p4ssw0rd -H "Content-Type: text/xml" \
       <%= home_url %>contexts.xml
   &gt;&gt; &lt;?xml version="1.0" encoding="UTF-8"?&gt;
   &lt;contexts&gt;...&lt;/contexts&gt;
@@ -31,7 +31,7 @@
 
 <pre>
 <code>
-  $ curl -u username:p4ssw0rd \
+  $ curl -u username:p4ssw0rd -H "Content-Type: text/xml" \
       <%= home_url %>contexts/51.xml
   &gt;&gt; &lt;?xml version="1.0" encoding="UTF-8"?&gt;
   &lt;context&gt;...&lt;/context&gt;
@@ -42,7 +42,7 @@
 
 <pre>
 <code>
-  $ curl -u username:p4ssw0rd \
+  $ curl -u username:p4ssw0rd -H "Content-Type: text/xml" \
   <%= home_url %>contexts/51/todos.xml
   &gt;&gt; &lt;?xml version="1.0" encoding="UTF-8"?&gt;
   &lt;todos type="array"&gt;...&lt;/todos&gt;
@@ -72,7 +72,7 @@
 
 <pre>
 <code>
-$ curl -u username:p4ssw0rd \
+$ curl -u username:p4ssw0rd -H "Content-Type: text/xml" \
     -d "project[name]=Build a treehouse for the kids" \
     <%= home_url %>projects.xml -i
 &gt;&gt; HTTP/1.1 201 Created
@@ -85,7 +85,7 @@ Location: <%= home_url %>projects/65.xml
 
 <pre>
 <code>
-$ curl -u username:p4ssw0rd \
+$ curl -u username:p4ssw0rd -H "Content-Type: text/xml" \
     -d "todo[description]=Model treehouse in SketchUp&#38;todo[context_id]=2&#38;todo[project_id]=65" \
     <%= home_url %>todos.xml -i
 &gt;&gt; HTTP/1.1 201 Created
@@ -98,7 +98,7 @@ Location: <%= home_url %>todos/452.xml
 
 <pre>
 <code>
-  $ curl -u username:p4ssw0rd -X PUT \
+  $ curl -u username:p4ssw0rd -H "Content-Type: text/xml" -X PUT \
       -d "todo[notes]=use maple texture" \
       <%= home_url %>todos/452.xml -i
   &gt;&gt; HTTP/1.1 200 OK
@@ -119,7 +119,7 @@ Location: <%= home_url %>todos/452.xml
 
 <pre>
 <code>
-  $ curl -u username:p4ssw0rd -X PUT \
+  $ curl -u username:p4ssw0rd -H "Content-Type: text/xml" -X PUT \
       <%= home_url %>todos/452/toggle_check.xml -i
   &gt;&gt; HTTP/1.1 200 OK
   ...
@@ -140,7 +140,7 @@ Location: <%= home_url %>todos/452.xml
 
 <pre>
 <code>
-  $ curl -u username:p4ssw0rd -X DELETE \
+  $ curl -u username:p4ssw0rd -H "Content-Type: text/xml" -X DELETE \
       <%= home_url %>todos/452.xml -i
   &gt;&gt; HTTP/1.1 200 OK
   ...
@@ -159,7 +159,7 @@ Location: <%= home_url %>todos/452.xml
 
 <pre>
 <code>
-$ curl -u username:p4ssw0rd \
+$ curl -u username:p4ssw0rd -H "Content-Type: text/xml" \
     <%= home_url %>contexts/2/todos.xml
 &gt;&gt; &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;nil-classes type="array"/&gt;
