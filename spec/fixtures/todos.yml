@@ -1,0 +1,57 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+<% 
+
+def today 
+  Time.zone.now.beginning_of_day.to_s(:db)
+end
+
+def next_week 
+  1.week.from_now.beginning_of_day.to_s(:db)
+end 
+
+def last_week 
+  1.week.ago.beginning_of_day.to_s(:db)
+end
+
+def two_weeks_ago
+  2.weeks.ago.beginning_of_day.to_s(:db)
+end
+
+def two_weeks_hence
+  2.weeks.from_now.beginning_of_day.to_s(:db)
+end
+
+%>
+
+billgates:
+  id: 2
+  context_id: 2
+  project_id: 2
+  description: Call Bill Gates to find out how much he makes per day
+  notes: ~
+  state: active
+  due: <%= two_weeks_hence %>
+  completed_at: ~
+  user: admin_user
+
+dinoexterm:
+  id: 3
+  context_id: 2
+  project_id: 3
+  description: Call dinosaur exterminator
+  notes: Ask him if I need to hire a skip for the corpses.
+  state: active
+  due: <%= two_weeks_hence %>
+  completed_at: ~
+  user: admin_user
+
+buymilk:
+  id: 4
+  context_id: 2
+  project_id: ~
+  description: Buy milk
+  notes: ~
+  state: completed
+  due: ~
+  completed_at: <%= today %>
+  user: admin_user
