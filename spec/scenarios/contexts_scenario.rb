@@ -1,4 +1,6 @@
 class ContextsScenario < Scenario::Base
+  uses :users
+
   def load
     %w(Call Email Errand Someday).each_with_index do |context, index|
       create_context context, index+1
