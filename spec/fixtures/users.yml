@@ -1,0 +1,27 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+admin_user:
+  login: admin
+  crypted_password: <%= Digest::SHA1.hexdigest("#{Tracks::Config.salt}--abracadabra--") %>
+  token: <%= Digest::SHA1.hexdigest("adminSat Feb 25 17:14:00 GMT 20060.236961325863376") %>
+  is_admin: true
+  first_name: Admin
+  last_name: Schmadmin
+  auth_type: database
+
+other_user:
+  login: jane
+  crypted_password: <%= Digest::SHA1.hexdigest("#{Tracks::Config.salt}--sesame--") %>
+  token: <%= Digest::SHA1.hexdigest("janeSun Feb 19 14:42:45 GMT 20060.408173979260027") %>
+  is_admin: false
+  first_name: Jane
+  last_name: Doe
+  auth_type: database
+
+ldap_user:
+  login: john
+  crypted_password: test
+  token: <%= Digest::SHA1.hexdigest("johnSun Feb 19 14:42:45 GMT 20060.408173979260027") %>
+  is_admin: false
+  first_name: John
+  last_name: Deere
+  auth_type: ldap

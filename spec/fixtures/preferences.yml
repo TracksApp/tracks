@@ -1,0 +1,34 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+admin_user_prefs:
+  user: admin_user
+  staleness_starts: 7
+  date_format: "%d/%m/%Y"
+  title_date_format: "%A, %d %B %Y"
+  show_number_completed: 5
+  show_completed_projects_in_sidebar: true
+  show_hidden_contexts_in_sidebar: true
+  show_hidden_projects_in_sidebar: true
+  admin_email: butshesagirl@rousette.org.uk
+  week_starts: 1
+  due_style: 0
+  refresh: 0
+  time_zone: "London"
+  verbose_action_descriptors: true
+  show_project_on_todo_done: false
+
+other_user_prefs:
+  user: jane
+  staleness_starts: 7
+  date_format: "%d/%m/%Y"
+  title_date_format: "%A, %d %B %Y"
+  show_number_completed: 5
+  show_completed_projects_in_sidebar: true
+  show_hidden_contexts_in_sidebar: true
+  show_hidden_projects_in_sidebar: true
+  admin_email: butshesagirl@rousette.org.uk
+  week_starts: 1
+  due_style: 0
+  refresh: 0
+  time_zone: "London"
+  verbose_action_descriptors: false
+  show_project_on_todo_done: true
