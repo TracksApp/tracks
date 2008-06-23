@@ -30,9 +30,8 @@ describe "Context validations" do
   it "should have two errors with a missing name" do
     @context.attributes = valid_context_attributes.except(:name)
     @context.should_not be_valid
-    @context.should have(2).error_on(:name)
-    @context.errors.on(:name)[0].should eql("context must have a name")
-    @context.errors.on(:name)[1].should eql("context name must be less than 256 characters")
+    @context.should have(1).error_on(:name)
+    @context.error_on(:name).should include('context must have a name')
   end
 
   it "should have one error with a name of more than 255 characters" do
