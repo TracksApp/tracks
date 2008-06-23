@@ -18,14 +18,14 @@ module LuckySneaks
         it "should not be valid if #{attribute} length is more than #{maximum}" do
           instance.send "#{attribute}=", 'x'*(maximum+1)
           instance.errors_on(attribute).should include(
-            ActiveRecord::Errors.default_error_messages[:too_long] % maximum
+            options[:message_too_long] || ActiveRecord::Errors.default_error_messages[:too_long] % maximum
           )
         end if maximum
 
         it "should not be valid if #{attribute} length is less than #{minimum}" do
           instance.send "#{attribute}=", 'x'*(minimum-1)
           instance.errors_on(attribute).should include(
-            ActiveRecord::Errors.default_error_messages[:too_short] % minimum
+            options[:message_to_short] || ActiveRecord::Errors.default_error_messages[:too_short] % minimum
           )
         end if minimum
       end
