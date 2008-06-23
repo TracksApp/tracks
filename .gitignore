@@ -6,3 +6,4 @@ tmp
 db/data.yml
 db/*.sqlite3
 nbproject
+db/schema.rb
