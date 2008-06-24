@@ -1,0 +1,12 @@
+<tr class="<%%= cycle("odd", "even") %>">
+<% if attributes.blank? -%>
+  <td><%= model_name %> #<%%= <%= singular_name %>.id %></td>
+<% else -%>
+  <%- attributes.each do |attribute| -%>
+  <td><%%=h <%= singular_name %>.<%= attribute.name %> %></td>
+  <%- end %>
+<% end -%>
+  <td class="show"><%%= button_to "Show", <%= singular_name %>, :method => "get" %></td>
+  <td class="edit"><%%= button_to "Edit", edit_<%= singular_name %>_path(<%= singular_name %>), :method => "get" %></td>
+  <td class="delete"><%%= button_to "Delete", <%= singular_name %>, :method => "delete" %></td>
+</tr>

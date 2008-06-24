@@ -1,0 +1,15 @@
+<h1>Show <%= model_name %></h1>
+<% if attributes.blank? -%>
+<p>Add your customized markup here, please!</p>
+<% else -%>
+  <%- attributes.each do |attribute| -%>
+<p>
+  <label><%= attribute.name.titleize %>:</label>
+  <%%=h @<%= singular_name %>.<%= attribute.name %> %>
+</p>
+  <%- end -%>
+<% end -%>
+<div id="commands">
+  <%%= button_to "Edit", edit_<%= singular_name %>_path(@<%= singular_name %>), :method => "get" %>
+  <%%= button_to "Back to List", <%= plural_name %>_path, :method => "get" %>
+</div>
