@@ -1,0 +1,23 @@
+%h1 <%= model_name %> List
+%table
+  - if @<%= plural_name %>.empty?
+    %tbody
+      %tr.empty
+        %td== There are no <%= plural_name.humanize.downcase %>
+  - else
+    %thead
+      %tr
+<% if attributes.blank? -%>
+        %th=        # Generic display column
+<% else -%>
+  <%- attributes.each do |attribute| -%>
+        %th <%= attribute.name.titleize %>
+  <%- end -%>
+<% end -%>
+        %th.show=   # 'Show' link column
+        %th.edit=   # 'Edit' link column
+        %th.delete= # 'Delete' link column
+    %tbody
+      = render :partial => @<%= plural_name %>
+#commands
+  = button_to "New <%= singular_name.titleize %>", new_<%= singular_name %>_path, :method => "get"
