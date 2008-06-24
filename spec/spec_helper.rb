@@ -4,6 +4,34 @@ ENV["RAILS_ENV"] = "test"
 require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
 require 'spec'
 require 'spec/rails'
+require 'skinny_spec'
+require 'scenarios'
+
+module LuckySneaks
+  module ModelSpecHelpers
+    module ExampleGroupLevelMethods
+      def it_should_validate_length_of(attribute, options={})
+        maximum = options[:maximum] || (options[:within] || []).last   || false
+        minimum = options[:minimum] || (options[:within] || []).first  || false
+        raise ArgumentError unless maximum || minimum
+
+        it "should not be valid if #{attribute} length is more than #{maximum}" do
+          instance.send "#{attribute}=", 'x'*(maximum+1)
+          instance.errors_on(attribute).should include(
+            options[:message_too_long] || ActiveRecord::Errors.default_error_messages[:too_long] % maximum
+          )
+        end if maximum
+
+        it "should not be valid if #{attribute} length is less than #{minimum}" do
+          instance.send "#{attribute}=", 'x'*(minimum-1)
+          instance.errors_on(attribute).should include(
+            options[:message_to_short] || ActiveRecord::Errors.default_error_messages[:too_short] % minimum
+          )
+        end if minimum
+      end
+    end
+  end
+end
 
 Spec::Runner.configure do |config|
   # If you're not using ActiveRecord you should remove these

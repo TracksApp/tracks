@@ -1,151 +1,105 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
-
-module ContextSpecHelper
  
-   def valid_context_attributes
-     {
-      :name => "FooBar",
-      :position => 1,
-      :hide => true,
-      :user_id => 1
-     }
-   end
-   
-end
- 
-describe "Context validations" do
-  include ContextSpecHelper
+describe Context do
+  def valid_attributes
+    {:name => 'Errands'}
+  end
  
   before(:each) do
     @context = Context.new
   end
- 
-  it "should be valid" do
-    @context.attributes = valid_context_attributes
-    @context.should be_valid
-    @context.save
-    Context.should have(4).records # 3 in fixtures 1 set up here
+
+  it 'has many users' do
+    Context.should have_many(:todos).
+      with_order('todos.completed_at DESC').
+      with_dependent(:delete_all).
+      with_include(:project)
   end
 
-  it "should have two errors with a missing name" do
-    @context.attributes = valid_context_attributes.except(:name)
-    @context.should_not be_valid
-    @context.should have(2).error_on(:name)
-    @context.errors.on(:name)[0].should eql("context must have a name")
-    @context.errors.on(:name)[1].should eql("context name must be less than 256 characters")
+  it_should_belong_to :user
+
+  it_should_validate_presence_of :name, 'context must have a name'
+  it_should_validate_length_of :name, :maximum => 255,
+    :message_too_long => 'context name must be less than 256 characters'
+  it_should_validate_uniqueness_of :name, 'already exists' # TODO: scope user_id
+  it_should_not_accept_as_valid :name, ',',
+    :message => "cannot contain the comma (',') character"
+
+  it 'is hidden when hide is true' do
+    Context.new(:hide => false).should_not be_hidden
+    Context.new(:hide => true).should be_hidden
   end
 
-  it "should have one error with a name of more than 255 characters" do
-    @context.name = "z" * 256
-    @context.should_not be_valid
-    @context.should have(1).error_on(:name)
-    @context.errors.on(:name).should eql("context name must be less than 256 characters")
+  it 'produces correct summary depending on visibility' do
+    Context.new(:hide => true).summary(3).should == '<p>3. Context is Hidden.</p>'
+    Context.new(:hide => false).summary(3).should == '<p>3. Context is Active.</p>'
   end
 
-  it "should have one error with name containing comma" do
-    @context.name = "Foo,Bar"
-    @context.should_not be_valid
-    @context.should have(1).error_on(:name)
-    @context.errors.on(:name).should eql("cannot contain the comma (',') character")
-  end
-  
-  it "should have one error if name already exists for user" do
-    @existing_context = Context.new
-    @existing_context.attributes = valid_context_attributes
-    @existing_context.save
-    @context.attributes = valid_context_attributes
-    @context.should_not be_valid
-    @context.should have(1).error_on(:name)
-    @context.errors.on(:name).should eql("already exists")
+  it 'returns name as title' do
+    Context.new(:name => 'foo').title.should == 'foo'
   end
 
-  it "should have one record in Context model class" do
-    @context.name = "FooBar"
-    @context.save
-    Context.should have(4).records # 3 in fixture, one set up here
-  end
-  
-end
-
-describe "Context model" do
-  fixtures :users, :todos, :contexts, :preferences
-  
-  include ContextSpecHelper
-    
-  it "should show hidden" do
-    contexts(:call).should be_hide # :hide should be true
+  it 'returns an instance NullContext for null_object' do
+    Context.null_object.should be_an_instance_of(NullContext)
   end
 
-  it "should be produce correct .summary text for hidden context" do
-    contexts(:call).summary(1).should eql("<p>1. Context is Hidden.</p>")
+  it "returns feed options with description containing user's name" do
+    user = mock_model(User, :display_name => 'simon')
+    feed_options_for_user = Context.feed_options(user)
+    feed_options_for_user[:title].should == 'Tracks Contexts'
+    feed_options_for_user[:description].should == 'Lists all the contexts for simon'
   end
 
-  it "should show not hidden" do
-    contexts(:call).hide = false
-    contexts(:call).should_not be_hide # :hide should be true
-  end
+  describe 'when finding by namepart' do
+    scenario :todos
 
-  it "should produce correct .summary text for active context" do
-    contexts(:call).hide = false
-    contexts(:call).summary(1).should eql("<p>1. Context is Active.</p>")
-  end
+    it 'finds with exact match' do
+      Context.find_by_namepart('errand').should == contexts(:errand)
+    end
 
-  it "should return .title which matches name" do
-    contexts(:agenda).title.should eql(contexts(:agenda).name)
-  end
-  
-  it "should .find_by_namepart with exact match" do
-    @found = Context.find_by_namepart('agenda')
-    @found.should_not eql(nil)
-    @found.id.should eql(contexts(:agenda).id)
-  end
-  
-  it "should .find_by_namepart with partial match" do
-    @found = Context.find_by_namepart('ag')
-    @found.should_not eql(nil)
-    @found.id.should eql(contexts(:agenda).id)
-  end
-  
-  it "should return id with .to_param" do
-    Context.find(2).to_param.should eql("2")
-  end
-  
-  it "should return feed options" do
-    opts = Context.feed_options(users(:admin_user))
-    opts[:title].should eql("Tracks Contexts")
-    opts[:description].should eql("Lists all the contexts for Admin Schmadmin")
-  end
-  
-  it "should create null Context with .null_object" do
-    @empty = Context.null_object
-    @empty.should be_an_instance_of(NullContext)
-    @empty.id.should eql(nil)
-    @empty.name.should eql('')
-  end
-  
-  it "should delete todos within context when context deleted" do
-    contexts(:agenda).todos.count.should eql(3)
-    agenda_todo_ids = contexts(:agenda).todos.collect{|t| t.id }
-    contexts(:agenda).destroy
-    agenda_todo_ids.each do |todo_id|
-      Todo.find(:all).should_not include(todo_id)
+    it 'finds with partial match' do
+      Context.find_by_namepart('err').should == contexts(:errand)
+    end
+
+    it 'deletes todos within context when context deleted' do
+      contexts(:call).should have(2).todos
+      call_todos = contexts(:call).todos
+      contexts(:call).destroy
+      Todo.find(:all).should_not include(call_todos)
     end
   end
-  
-  it "should return correct number of done todos" do
-    contexts(:agenda).done_todos.size.should eql(1)
-    t = contexts(:agenda).not_done_todos[0]
-    t.complete!
-    t.save!
-    Context.find(contexts(:agenda)).done_todos.size.should eql(2)
+
+  describe 'when counting todos' do
+    scenario :todos
+
+    it 'returns correct number of completed todos' do
+      contexts(:call).should_not have(:any).done_todos
+      contexts(:call).todos.first.complete!
+      contexts(:call).should have(1).done_todos
+    end
+
+    it 'returns correct number of not done todos' do
+      contexts(:call).should have(2).not_done_todos
+      contexts(:call).todos.last.complete!
+      contexts(:call).should have(1).not_done_todos
+    end
   end
-  
-  it "should return correct number of not done todos" do
-    contexts(:agenda).not_done_todos.size.should eql(2)
-    t = contexts(:agenda).not_done_todos[0]
-    t.complete!
-    t.save!
-    Context.find(contexts(:agenda)).not_done_todos.size.should eql(1)
+end
+
+describe NullContext do
+  before(:each) do
+    @context = NullContext.new
   end
 
+  it 'is nil' do
+    @context.should be_nil
+  end
+
+  it 'has no id' do
+    @context.id.should be_nil
+  end
+
+  it 'has a blank name' do
+    @context.name.should be_blank
+  end
 end
