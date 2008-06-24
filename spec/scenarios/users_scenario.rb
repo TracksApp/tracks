@@ -1,6 +1,5 @@
 class UsersScenario < Scenario::Base
   def load
-    create_preference
     create_user :login => 'johnny', :first_name => 'Johnny',  :last_name => 'Smith'
     create_user :login => 'jane',   :first_name => 'Jane',    :last_name => 'Pilbeam'
     create_user :login => 'sean',   :first_name => 'Sean',    :last_name => 'Pallmer'
@@ -12,12 +11,9 @@ class UsersScenario < Scenario::Base
       :password   => password,
       :password_confirmation => password,
       :is_admin   => attributes[:is_admin]  || false,
-      :preference => preferences(:default)
     }.merge(attributes)
-    create_model :user, attributes[:login].downcase.to_sym, attributes
-  end
-
-  def create_preference
-    create_record :preference, :default, :show_number_completed => 5
+    identifier = attributes[:login].downcase.to_sym
+    user = create_model :user, identifier, attributes
+    Preference.create(:show_number_completed => 5, :user => user)
   end
 end
