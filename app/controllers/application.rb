@@ -7,7 +7,13 @@ require "redcloth"
 
 require 'date'
 require 'time'
-Tag # We need this in development mode, or you get 'method missing' errors
+
+# Commented the following line because of #744. It prevented rake db:migrate to 
+# run because this tag went looking for the taggings table that did not exist
+# when you feshly create a new database
+# Old comment: We need this in development mode, or you get 'method missing' errors
+# 
+# Tag 
 
 class ApplicationController < ActionController::Base
 
