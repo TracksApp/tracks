@@ -12,7 +12,7 @@
     <%= remote_toggle_checkbox unless source_view_is :deferred %>
     <div class="description<%= staleness_class( todo ) %>">
       <%= date_span -%>
-      <span class="todo.descr"><%= sanitize(todo.description) %></span>
+      <span class="todo.descr"><%= h sanitize(todo.description) %></span>
       <%= tag_list %>
       <%= deferred_due_date %>
       <%= project_and_context_links( parent_container_type, :suppress_context => suppress_context, :suppress_project => suppress_project ) %>

@@ -54,6 +54,10 @@
 			<%= text_formatted_link({:controller => 'projects', :action => 'index', :only_active_with_no_next_actions => true}) %>
 			Active projects with no next actions
 		</li>
+		<li>
+                        <%= text_formatted_link({:controller => 'projects', :action => 'index', :projects_and_actions => true}) %>
+                        Active projects with their actions                   
+	        </li>
 		<li><h4>Feeds for incomplete actions in a specific context:</h4>
 			<ul>
 				<% for context in @contexts %>
