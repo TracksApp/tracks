@@ -11,6 +11,8 @@
 &line_7=1,0xAA0000&
 &line_8=1,0x007700&
 &values=<% 0.upto 11 do |i| -%><%= @actions_created_last12months_hash[i]%>,<% end -%><%= @actions_created_last12months_hash[12]%>&
+&links=<% 0.upto 11 do |i| -%><%=  url_for :controller => 'stats', :action => 'actions_done_last_years' %>,<% end -%><%=  url_for :controller => 'stats', :action => 'actions_done_last_years' %>&
+&links_2=<% 0.upto 11 do |i| -%><%=  url_for :controller => 'stats', :action => 'actions_done_last_years' %>,<% end -%><%=  url_for :controller => 'stats', :action => 'actions_done_last_years' %>&
 &values_2=<% 0.upto 11 do |i| -%><%= @actions_done_last12months_hash[i]%>,<% end -%><%= @actions_done_last12months_hash[12]%>&
 &values_3=<%0.upto 11 do |i| -%><%=@sum_actions_created_last12months/12-%>,<%end-%><%=@sum_actions_created_last12months/12-%>&
 &values_4=<%0.upto 11 do |i| -%><%=@sum_actions_done_last12months/12-%>,<%end-%><%=@sum_actions_done_last12months/12-%>&

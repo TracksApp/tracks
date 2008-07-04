@@ -105,7 +105,107 @@ class StatsController < ApplicationController
     
     render :layout => false
   end
+  
+  def actions_done_last_years
+    @chart_width = 900
+    @chart_height = 400
+  end
+  
+  def actions_done_lastyears_data
+    @actions = @user.todos
+       
+    # get actions created and completed in the past 12+3 months. +3 for running
+    #   average
+    @actions_done_last_months = @actions.find(:all, {
+        :select => "completed_at",
+        :conditions => ["completed_at IS NOT NULL"]
+      })
+    @actions_created_last_months = @actions.find(:all, {
+        :select => "created_at",
+      })
+    
+    @month_count = 0
+    
+    # convert to hash to be able to fill in non-existing days in
+    #   @actions_done_last12months and count the total actions done in the past
+    #   12 months to be able to calculate percentage
+    
+    # use 0 to initialise action count to zero
+    @actions_done_last_months_hash = Hash.new(0) 
+    @actions_done_last_months.each do |r|      
+      months = (@today.year - r.completed_at.year)*12 + (@today.month - r.completed_at.month)
+      @month_count = months if months > @month_count
+      @actions_done_last_months_hash[months] += 1
+    end
+        
+    # convert to hash to be able to fill in non-existing days in
+    #   @actions_created_last12months and count the total actions done in the
+    #   past 12 months to be able to calculate percentage
 
+    # use 0 to initialise action count to zero
+    @actions_created_last_months_hash = Hash.new(0)
+    @actions_created_last_months.each do |r|
+      months = (@today.year - r.created_at.year)*12 + (@today.month - r.created_at.month)
+      @month_count = months if months > @month_count
+      @actions_created_last_months_hash[months] += 1
+    end
+
+    @sum_actions_done_last_months=0
+    @sum_actions_created_last_months=0
+
+    # find max for graph in both hashes
+    @max=0
+    0.upto @month_count do |i|
+      @sum_actions_done_last_months += @actions_done_last_months_hash[i] 
+      @max = @actions_done_last_months_hash[i] if @actions_done_last_months_hash[i] > @max
+    end
+    0.upto @month_count do |i| 
+      @sum_actions_created_last_months += @actions_created_last_months_hash[i]
+      @max = @actions_created_last_months_hash[i] if @actions_created_last_months_hash[i] > @max
+    end
+    
+    # find running avg for month i by calculating avg of month i and the two
+    #   after them. Ignore current month because you do not have full data for
+    #   it
+    @actions_done_avg_last_months_hash = Hash.new("null")
+    1.upto(@month_count) { |i| 
+      @actions_done_avg_last_months_hash[i] = (@actions_done_last_months_hash[i] +
+          @actions_done_last_months_hash[i+1] + 
+          @actions_done_last_months_hash[i+2])/3.0
+    }
+    # correct last two months
+    @actions_done_avg_last_months_hash[@month_count] = @actions_done_avg_last_months_hash[@month_count] * 3
+    @actions_done_avg_last_months_hash[@month_count-1] = @actions_done_avg_last_months_hash[@month_count-1] * 3 / 2 if @month_count > 1
+
+    # find running avg for month i by calculating avg of month i and the two
+    #   after them. Ignore current month because you do not have full data for
+    #   it
+    @actions_created_avg_last_months_hash = Hash.new("null")
+    1.upto(@month_count) { |i| 
+      @actions_created_avg_last_months_hash[i] = (@actions_created_last_months_hash[i] +
+          @actions_created_last_months_hash[i+1] + 
+          @actions_created_last_months_hash[i+2])/3.0
+    }    
+    # correct last two months
+    @actions_created_avg_last_months_hash[@month_count] = @actions_created_avg_last_months_hash[@month_count] * 3
+    @actions_created_avg_last_months_hash[@month_count-1] = @actions_created_avg_last_months_hash[@month_count-1] * 3 / 2 if @month_count > 1
+    
+    # interpolate avg for this month. Assume 31 days in this month
+    days_passed_this_month = Time.new.day/1.0
+    @interpolated_actions_created_this_month = (
+      @actions_created_last_months_hash[0]/days_passed_this_month*31.0+
+        @actions_created_last_months_hash[1]+
+        @actions_created_last_months_hash[2]) / 3.0
+  
+    @interpolated_actions_done_this_month = (
+      @actions_done_last_months_hash[0]/days_passed_this_month*31.0 +
+        @actions_done_last_months_hash[1]+
+        @actions_done_last_months_hash[2]) / 3.0
+    
+    render :layout => false
+  end
+
+  
   def actions_done_last30days_data
     # get actions created and completed in the past 30 days.
     @actions_done_last30days = @actions.find(:all, {
