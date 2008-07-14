@@ -34,6 +34,20 @@ class UsersControllerTest < Test::Rails::TestCase
     assert_equal 3, assigns['total_users']
     assert_equal "/users", session['return-to']
   end
+
+  def test_index_pagination_page_1
+    User.per_page = 1
+    login_as :admin_user
+    get :index
+    assert_equal assigns['users'],[User.find_by_login('admin')]
+  end
+
+  def test_index_pagination_page_2
+    User.per_page = 1
+    login_as :admin_user
+    get :index, :page => 2
+    assert_equal assigns['users'],[User.find_by_login('jane')]
+  end
   
   def test_destroy_user
     login_as :admin_user

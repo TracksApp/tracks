@@ -16,7 +16,7 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html do
         @page_title = "TRACKS::Manage Users"
-        @user_pages, @users = paginate :users, :order => 'login ASC', :per_page => 10
+        @users = User.paginate :page => params[:page], :order => 'login ASC'
         @total_users = User.count
         # When we call users/signup from the admin page
         # we store the URL so that we get returned here when signup is successful

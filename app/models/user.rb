@@ -103,6 +103,10 @@ class User < ActiveRecord::Base
   before_create :crypt_password, :generate_token
   before_update :crypt_password
   before_save :normalize_open_id_url
+
+  #for will_paginate plugin
+  cattr_accessor :per_page
+  @@per_page = 1
   
   def validate
     unless Tracks::Config.auth_schemes.include?(auth_type)

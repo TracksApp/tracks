@@ -29,8 +29,7 @@
   <% end %> 
   </table>
   <p>
-    <%= link_to "&laquo; Previous page", { :page => @user_pages.current.previous } if @user_pages.current.previous %> &nbsp;
-    <%= link_to "Next page &raquo;", { :page => @user_pages.current.next } if @user_pages.current.next %>
+    <%= will_paginate @users %>
   </p>
  
   <p><%= link_to 'Signup new user', signup_path %></p>
