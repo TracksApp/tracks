@@ -18,6 +18,7 @@ window.onload=function(){
   Nifty("div#todo_new_action_container","normal");
   Nifty("div#project_new_project_container","normal");
   Nifty("div#context_new_container","normal");
+  Nifty("div#recurring_new_container","normal");
   if ($('flash').visible()) { new Effect.Fade("flash",{duration:5.0}); }
 }
 </script>
@@ -56,6 +57,7 @@ window.onload=function(){
   <% if current_user.is_admin? -%>
     <li><%= navigation_link("Admin", users_path, {:accesskey => "a", :title => "Add or delete users"} ) %></li>
   <% end -%>
+  <li><%= navigation_link(image_tag("recurring_menu16x16.png", :size => "16X16", :border => 0), {:controller => "recurring_todos", :action => "index"}, :title => "Manage recurring actions" ) %></li>
   <li><%= navigation_link(image_tag("feed-icon.png", :size => "16X16", :border => 0), {:controller => "feedlist", :action => "index"}, :title => "See a list of available feeds" ) %></li>
   <li><%= navigation_link(image_tag("menustar.gif", :size => "16X16", :border => 0), tag_path("starred"), :title => "See your starred actions" ) %></li>
   <li><%= navigation_link(image_tag("stats.gif", :size => "16X16", :border => 0), {:controller => "stats", :action => "index"}, :title => "See your statistics" ) %></li>

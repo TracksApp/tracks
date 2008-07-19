@@ -121,6 +121,10 @@ class TodosController < ApplicationController
   # 
   def toggle_check
     @saved = @todo.toggle_completion!
+    
+    # check if this todo has a related recurring_todo. If so, create next todo
+    check_for_next_todo if @saved
+    
     respond_to do |format|
       format.js do
         if @saved
@@ -235,6 +239,10 @@ class TodosController < ApplicationController
     @todo = get_todo_from_params
     @context_id = @todo.context_id
     @project_id = @todo.project_id
+
+    # check if this todo has a related recurring_todo. If so, create next todo
+    check_for_next_todo
+    
     @saved = @todo.destroy
     
     respond_to do |format|
@@ -643,6 +651,19 @@ class TodosController < ApplicationController
   def self.is_feed_request(req)
     ['rss','atom','txt','ics'].include?(req.parameters[:format])
   end
+  
+  def check_for_next_todo
+    # check if this todo has a related recurring_todo. If so, create next todo
+    @new_recurring_todo = nil
+    @recurring_todo = nil
+    if @todo.from_recurring_todo?
+      @recurring_todo = current_user.recurring_todos.find(@todo.recurring_todo_id)
+      if @recurring_todo.active? && @recurring_todo.has_next_todo(@todo.due)
+        date = @todo.due >= Date.today() ? @todo.due : Date.today()-1.day
+        @new_recurring_todo = create_todo_from_recurring_todo(@recurring_todo, date) 
+      end
+    end 
+  end
 
   class FindConditionBuilder
 
@@ -711,6 +732,6 @@ class TodosController < ApplicationController
       return false if context_name.blank?
       true
     end
-      
+          
   end
 end

@@ -63,6 +63,9 @@ class User < ActiveRecord::Base
   has_many :todos,
            :order => 'todos.completed_at DESC, todos.created_at DESC',
            :dependent => :delete_all
+  has_many :recurring_todos,
+           :order => 'recurring_todos.completed_at DESC, recurring_todos.created_at DESC',
+           :dependent => :delete_all
   has_many :deferred_todos,
            :class_name => 'Todo',
            :conditions => [ 'state = ?', 'deferred' ],

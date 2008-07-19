@@ -47,7 +47,7 @@ module TodosHelper
       :prevent_default => true
   end    
 
-  def remote_star_icon
+  def remote_star_icon 
     str = link_to( image_tag_for_star(@todo),
       toggle_star_todo_path(@todo),
       :class => "icon star_item", :title => "star the action '#{@todo.description}'")
@@ -66,7 +66,7 @@ module TodosHelper
   
   def remote_edit_icon
     if !@todo.completed?
-      str = link_to( image_tag_for_edit,
+      str = link_to( image_tag_for_edit(@todo),
         edit_todo_path(@todo),
         :class => "icon edit_icon")
       set_behavior_for_edit_icon
@@ -205,12 +205,12 @@ module TodosHelper
     javascript_tag str
   end
   
-  def item_container_id
+  def item_container_id (todo)
     if source_view_is :project
-      return "p#{@todo.project_id}" if @todo.active?
-      return "tickler" if @todo.deferred?
+      return "p#{todo.project_id}" if todo.active?
+      return "tickler" if todo.deferred?
     end
-    return "c#{@todo.context_id}"
+    return "c#{todo.context_id}"
   end
 
   def should_show_new_item
@@ -272,8 +272,8 @@ module TodosHelper
     image_tag("blank.png", :title =>"Delete action", :class=>"delete_item")
   end
   
-  def image_tag_for_edit
-    image_tag("blank.png", :title =>"Edit action", :class=>"edit_item", :id=> dom_id(@todo, 'edit_icon'))
+  def image_tag_for_edit(todo)
+    image_tag("blank.png", :title =>"Edit action", :class=>"edit_item", :id=> dom_id(todo, 'edit_icon'))
   end
   
   def image_tag_for_star(todo)

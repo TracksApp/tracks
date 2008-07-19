@@ -3,6 +3,7 @@ class Todo < ActiveRecord::Base
   belongs_to :context
   belongs_to :project
   belongs_to :user
+  belongs_to :recurring_todo
   
   STARRED_TAG_NAME = "starred"
   
@@ -120,4 +121,8 @@ class Todo < ActiveRecord::Base
     starred?  
   end
 
+  def from_recurring_todo?
+    return self.recurring_todo_id != nil
+  end
+  
 end

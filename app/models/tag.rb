@@ -1,6 +1,6 @@
 class Tag < ActiveRecord::Base
   has_many_polymorphs :taggables,
-                      :from => [:todos], 
+                      :from => [:todos, :recurring_todos], 
                       :through => :taggings,
                       :dependent => :destroy
 

@@ -1,0 +1,20 @@
+page.show 'status'
+page.replace_html 'status', "#{error_messages_for('recurring_todo')}"
+
+page.notify :notice, @message, 5.0
+if @recurring_saved
+  # reset form
+  page << "TracksForm.hide_all_recurring(); $('recurring_daily').show();"
+  page << "Form.reset('recurring-todo-form-new-action');"
+  page << "Form.focusFirstElement('recurring-todo-form-new-action');"
+  # hide overlayed edit form
+  page << "TracksForm.toggle_overlay();"
+  # insert new recurring todo
+  page.hide 'recurring-todos-empty-nd'
+  page.insert_html :bottom, 
+    'recurring_todos_container', 
+    :partial => 'recurring_todos/recurring_todo'
+  page.visual_effect :highlight, dom_id(@recurring_todo), :duration => 3
+  # update badge count
+  page['badge_count'].replace_html @count
+end

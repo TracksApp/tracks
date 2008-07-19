@@ -58,6 +58,10 @@ ActionController::Routing::Routes.draw do |map|
   map.preferences 'preferences', :controller => 'preferences', :action => 'index'
   map.integrations 'integrations', :controller => 'integrations', :action => 'index'
 
+  map.resources :recurring_todos,
+    :member => {:toggle_check => :put, :toggle_star => :put}
+  map.recurring_todos 'recurring_todos', :controller => 'recurring_todos', :action => 'index'
+
   # Install the default route as the lowest priority.
   map.connect ':controller/:action/:id'
 

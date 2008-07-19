@@ -6,7 +6,7 @@ if @saved
   status_message = 'Added new context / ' + status_message if @new_context_created
   page.notify :notice, status_message, 5.0
   
-  #update auto completer arrays for context and project
+  # #update auto completer arrays for context and project
   page << "contextAutoCompleter.options.array = #{context_names_for_autocomplete}; contextAutoCompleter.changed = true" if @new_context_created
   page << "projectAutoCompleter.options.array = #{project_names_for_autocomplete}; projectAutoCompleter.changed = true" if @new_project_created
   if source_view_is_one_of(:todo, :context)
@@ -88,9 +88,9 @@ if @saved
       page.replace dom_id(@todo), :partial => 'todos/todo', :locals => { :parent_container_type => parent_container_type }
       page.visual_effect :highlight, dom_id(@todo), :duration => 3
     end
-    elsif source_view_is :stats
-      page.replace dom_id(@todo), :partial => 'todos/todo', :locals => { :parent_container_type => parent_container_type }
-      page.visual_effect :highlight, dom_id(@todo), :duration => 3    
+  elsif source_view_is :stats
+    page.replace dom_id(@todo), :partial => 'todos/todo', :locals => { :parent_container_type => parent_container_type }
+    page.visual_effect :highlight, dom_id(@todo), :duration => 3    
   else
     logger.error "unexpected source_view '#{params[:_source_view]}'"
   end

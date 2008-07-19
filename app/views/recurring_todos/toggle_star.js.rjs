@@ -1,0 +1,3 @@
+if @saved
+  page[@recurring_todo].down('a.star_item').down('img').toggleClassName('starred_todo').toggleClassName('unstarred_todo')
+end

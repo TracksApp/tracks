@@ -1,5 +1,6 @@
-# The filters added to this controller will be run for all controllers in the application.
-# Likewise will all the methods added be available for all controllers.
+# The filters added to this controller will be run for all controllers in the
+# application. Likewise will all the methods added be available for all
+# controllers.
 
 require_dependency "login_system"
 require_dependency "tracks/source_view"
@@ -47,11 +48,12 @@ class ApplicationController < ActionController::Base
     # http://wiki.rubyonrails.com/rails/show/HowtoChangeSessionOptions
     unless session == nil
       return if @controller_name == 'feed' or session['noexpiry'] == "on"
-      # If the method is called by the feed controller (which we don't have under session control)
-      # or if we checked the box to keep logged in on login
-      # don't set the session expiry time.
+      # If the method is called by the feed controller (which we don't have
+      # under session control) or if we checked the box to keep logged in on
+      # login don't set the session expiry time.
       if session
-        # Get expiry time (allow ten seconds window for the case where we have none)
+        # Get expiry time (allow ten seconds window for the case where we have
+        # none)
         expiry_time = session['expiry_time'] || Time.now + 10
         if expiry_time < Time.now
           # Too late, matey...  bang goes your session!
@@ -80,10 +82,10 @@ class ApplicationController < ActionController::Base
   #   end
   # end
   
-  # Returns a count of next actions in the given context or project
-  # The result is count and a string descriptor, correctly pluralised if there are no
+  # Returns a count of next actions in the given context or project The result
+  # is count and a string descriptor, correctly pluralised if there are no
   # actions or multiple actions
-  #
+  # 
   def count_undone_todos_phrase(todos_parent, string="actions")
     count = count_undone_todos(todos_parent)
     if count == 1
@@ -105,9 +107,9 @@ class ApplicationController < ActionController::Base
     count || 0
   end
 
-  # Convert a date object to the format specified in the user's preferences
-  # in config/settings.yml
-  #  
+  # Convert a date object to the format specified in the user's preferences in
+  # config/settings.yml
+  # 
   def format_date(date)
     if date
       date_format = prefs.date_format
@@ -118,10 +120,10 @@ class ApplicationController < ActionController::Base
     formatted_date
   end
 
-  # Uses RedCloth to transform text using either Textile or Markdown
-  # Need to require redcloth above
-  # RedCloth 3.0 or greater is needed to use Markdown, otherwise it only handles Textile
-  #
+  # Uses RedCloth to transform text using either Textile or Markdown Need to
+  # require redcloth above RedCloth 3.0 or greater is needed to use Markdown,
+  # otherwise it only handles Textile
+  # 
   def markdown(text)
     RedCloth.new(text).to_html
   end
@@ -130,21 +132,19 @@ class ApplicationController < ActionController::Base
     Hash[*projects.reject{ |p| p.default_context.nil? }.map{ |p| [p.name, p.default_context.name] }.flatten].to_json 
   end
   
-  # Here's the concept behind this "mobile content negotiation" hack:
-  # In addition to the main, AJAXy Web UI, Tracks has a lightweight
-  # low-feature 'mobile' version designed to be suitablef or use
-  # from a phone or PDA. It makes some sense that tne pages of that
-  # mobile version are simply alternate representations of the same
-  # Todo resources. The implementation goal was to treat mobile
-  # as another format and be able to use respond_to to render both
-  # versions. Unfortunately, I ran into a lot of trouble simply
-  # registering a new mime type 'text/html' with format :m because
-  # :html already is linked to that mime type and the new
-  # registration was forcing all html requests to be rendered in
-  # the mobile view. The before_filter and after_filter hackery
-  # below accomplishs that implementation goal by using a 'fake'
-  # mime type during the processing and then setting it to 
-  # 'text/html' in an 'after_filter' -LKM 2007-04-01
+  # Here's the concept behind this "mobile content negotiation" hack: In
+  # addition to the main, AJAXy Web UI, Tracks has a lightweight low-feature
+  # 'mobile' version designed to be suitablef or use from a phone or PDA. It
+  # makes some sense that tne pages of that mobile version are simply alternate
+  # representations of the same Todo resources. The implementation goal was to
+  # treat mobile as another format and be able to use respond_to to render both
+  # versions. Unfortunately, I ran into a lot of trouble simply registering a
+  # new mime type 'text/html' with format :m because :html already is linked to
+  # that mime type and the new registration was forcing all html requests to be
+  # rendered in the mobile view. The before_filter and after_filter hackery
+  # below accomplishs that implementation goal by using a 'fake' mime type
+  # during the processing and then setting it to 'text/html' in an
+  # 'after_filter' -LKM 2007-04-01
   def mobile?
     return params[:format] == 'm' || response.content_type == MOBILE_CONTENT_TYPE
   end
@@ -220,9 +220,9 @@ class ApplicationController < ActionController::Base
     end
   end  
   
-  # Set the contents of the flash message from a controller
-  # Usage: notify :warning, "This is the message"
-  # Sets the flash of type 'warning' to "This is the message"
+  # Set the contents of the flash message from a controller Usage: notify
+  # :warning, "This is the message" Sets the flash of type 'warning' to "This is
+  # the message"
   def notify(type, message)
     flash[type] = message
     logger.error("ERROR: #{message}") if type == :error
@@ -230,6 +230,30 @@ class ApplicationController < ActionController::Base
   
   def set_time_zone
     Time.zone = current_user.prefs.time_zone if logged_in?
+  end
+
+  def create_todo_from_recurring_todo(rt, date=nil)
+    # create todo and initialize with data from recurring_todo rt
+    todo = current_user.todos.build( { :description => rt.description, :notes => rt.notes, :project_id => rt.project_id, :context_id => rt.context_id})
+    
+    # set dates
+    todo.due = rt.get_due_date(date)
+    todo.show_from = rt.get_show_from_date(date)
+    todo.recurring_todo_id = rt.id
+    saved = todo.save
+    if saved
+      todo.tag_with(rt.tag_list, current_user)
+      todo.tags.reload 
+    end
+
+    # increate number of occurences created from recurring todo
+    rt.inc_occurences
+    
+    # mark recurring todo complete if there are no next actions left
+    checkdate = todo.due.nil? ? todo.show_from : todo.due
+    rt.toggle_completion! unless rt.has_next_todo(checkdate)
+    
+    return saved ? todo : nil
   end
   
 end

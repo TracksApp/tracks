@@ -1,9 +1,23 @@
 if @saved
   page[@todo].remove
   page['badge_count'].replace_html @down_count
-  page.visual_effect :fade, item_container_id, :duration => 0.4 if source_view_is_one_of(:todo, :deferred) && @remaining_in_context == 0
+  
+  # remove context if empty
+  page.visual_effect :fade, item_container_id(@todo), :duration => 0.4 if source_view_is_one_of(:todo, :deferred) && @remaining_in_context == 0
+  
+  # show message if there are no actions
   page[empty_container_msg_div_id].show if !empty_container_msg_div_id.nil? && @down_count == 0
   page['tickler-empty-nd'].show if source_view_is(:deferred) && @down_count == 0
+  
+  # show new todo if the completed todo was recurring
+  unless @new_recurring_todo.nil?
+    page.call "todoItems.ensureVisibleWithEffectAppear", item_container_id(@new_recurring_todo)
+    page.insert_html :bottom, item_container_id(@new_recurring_todo), :partial => 'todos/todo', :locals => { :todo => @new_recurring_todo, :parent_container_type => parent_container_type }
+    page.visual_effect :highlight, dom_id(@new_recurring_todo, 'line'), {'startcolor' => "'#99ff99'"}      
+    page.notify :notice, "Action was deleted. Because this action is recurring, a new action was added", 6.0
+  else
+    page.notify :notice, "There is no next action after the recurring action you just deleted. The recurrence is completed", 6.0 unless @recurring_todo.nil?
+  end
 else
   page.notify :error, "There was an error deleting the item #{@todo.description}", 8.0
 end

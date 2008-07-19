@@ -1,0 +1,129 @@
+1:
+  id: 1
+  user_id: 1
+  context_id: 1
+  project_id: 2
+  description: Call Bill Gates every day
+  notes: ~
+  state: active
+  start_from: ~
+  ends_on: no_end_date
+  end_date: ~
+  number_of_occurences: ~
+  target: due_date
+  show_from_delta: ~
+  recurring_period: daily
+  recurrence_selector: ~
+  every_other1: 1
+  every_other2: ~
+  every_other3: ~
+  every_day: ~
+  only_work_days: false
+  every_count: ~
+  weekday: ~
+  created_at: <%= last_week %>
+  completed_at: ~
+
+2:
+  id: 2
+  user_id: 1
+  context_id: 1
+  project_id: 2
+  description: Call Bill Gates every workday
+  notes: ~
+  state: active
+  start_from: ~
+  ends_on: no_end_date
+  end_date: ~
+  number_of_occurences: ~
+  target: due_date
+  show_from_delta: ~
+  recurring_period: daily
+  recurrence_selector: ~
+  every_other1: ~
+  every_other2: ~
+  every_other3: ~
+  every_day: ~
+  only_work_days: true
+  every_count: ~
+  weekday: ~
+  created_at: <%= last_week %>
+  completed_at: ~
+
+3:
+  id: 3
+  user_id: 1
+  context_id: 1
+  project_id: 2
+  description: Call Bill Gates every week
+  notes: ~
+  state: active
+  start_from: ~
+  ends_on: no_end_date
+  end_date: ~
+  number_of_occurences: ~
+  target: due_date
+  show_from_delta: ~
+  recurring_period: weekly
+  recurrence_selector: ~
+  every_other1: 2
+  every_other2: ~
+  every_other3: ~
+  every_day: smtwtfs
+  only_work_days: false
+  every_count: ~
+  weekday: ~
+  created_at: <%= last_week %>
+  completed_at: ~
+
+4:
+  id: 4
+  user_id: 1
+  context_id: 1
+  project_id: 2
+  description: Check with Bill every last friday of the month
+  notes: ~
+  state: active
+  start_from: ~
+  ends_on: no_end_date
+  end_date: ~
+  number_of_occurences: ~
+  target: due_date
+  show_from_delta: 5
+  recurring_period: monthly
+  recurrence_selector: 1
+  every_other1: 1
+  every_other2: 2
+  every_other3: 5
+  every_day: ~
+  only_work_days: false
+  every_count: 5
+  weekday: ~
+  created_at: <%= last_week %>
+  completed_at: ~
+
+5:
+  id: 5
+  user_id: 1
+  context_id: 1
+  project_id: 2
+  description: Congratulate Reinier on his birthday
+  notes: ~
+  state: active
+  start_from: ~
+  ends_on: no_end_date
+  end_date: ~
+  number_of_occurences: ~
+  target: due_date
+  show_from_delta: 5
+  recurring_period: yearly
+  recurrence_selector: 0
+  every_other1: 8
+  every_other2: 6
+  every_other3: ~
+  every_day: ~
+  only_work_days: false
+  every_count: ~
+  weekday: ~
+  created_at: <%= last_week %>
+  completed_at: ~

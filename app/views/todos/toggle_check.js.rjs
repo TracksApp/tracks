@@ -1,7 +1,8 @@
 if @saved  
   page[@todo].remove
   if @todo.completed?
-    # Don't try to insert contents into a non-existent container!
+    # completed todos move from their context to the completed container
+    
     unless @prefs.hide_completed_actions?
       page.insert_html :top, "completed", :partial => 'todos/todo', :locals => { :parent_container_type => "completed" }
       page.visual_effect :highlight, dom_id(@todo, 'line'), {'startcolor' => "'#99ff99'"}
@@ -9,16 +10,30 @@ if @saved
       page.show 'tickler-empty-nd' if source_view_is(:project) && @deferred_count == 0
       page.hide 'empty-d' # If we've checked something as done, completed items can't be empty
     end
+    
+    # remove container if empty
     if @remaining_in_context == 0 && source_view_is(:todo)
-      page.visual_effect :fade, item_container_id, :duration => 0.4
+      page.visual_effect :fade, item_container_id(@todo), :duration => 0.4
     end
+    
+    # show new todo if the completed todo was recurring
+    unless @new_recurring_todo.nil?
+      page.call "todoItems.ensureVisibleWithEffectAppear", item_container_id(@new_recurring_todo)
+      page.insert_html :bottom, item_container_id(@new_recurring_todo), :partial => 'todos/todo', :locals => { :todo => @new_recurring_todo, :parent_container_type => parent_container_type }
+      page.visual_effect :highlight, dom_id(@new_recurring_todo, 'line'), {'startcolor' => "'#99ff99'"}      
+    else
+      page.notify :notice, "There is no next action after the recurring action you just finished. The recurrence is completed", 6.0 unless @recurring_todo.nil?
+    end
+    
   else
-    page.call "todoItems.ensureVisibleWithEffectAppear", item_container_id
-    page.insert_html :bottom, item_container_id, :partial => 'todos/todo', :locals => { :parent_container_type => parent_container_type }
+    # todo is activated from completed container
+    page.call "todoItems.ensureVisibleWithEffectAppear", item_container_id(@todo)
+    page.insert_html :bottom, item_container_id(@todo), :partial => 'todos/todo', :locals => { :parent_container_type => parent_container_type }
     page.visual_effect :highlight, dom_id(@todo, 'line'), {'startcolor' => "'#99ff99'"}
     page.show "empty-d" if @completed_count == 0
     page[empty_container_msg_div_id].hide unless empty_container_msg_div_id.nil? # If we've checked something as undone, incomplete items can't be empty
   end
+  
   page.hide "status"
   page.replace_html "badge_count", @down_count
   if @todo.completed?  && !@todo.project_id.nil? && @prefs.show_project_on_todo_done && !source_view_is(:project)
