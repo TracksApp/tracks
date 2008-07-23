@@ -328,19 +328,12 @@ LowPro.SelectorLite.prototype = {
         var cursor = Math.max(id, klass);
         
         if(cursor == -1) params.tag = selector.toUpperCase();
-<<<<<<< HEAD:public/javascripts/lowpro.js
-        else if(id == -1 || klass == cursor) params.classes.push(selector.substring(klass + 1))
-=======
         else if(id == -1 || klass == cursor) params.classes.push(selector.substring(klass + 1));
->>>>>>> recurring_work:public/javascripts/lowpro.js
         else if(!params.id) params.id = selector.substring(id + 1);
         
         selector = selector.substring(0, cursor);
       } while(cursor > 0);
-<<<<<<< HEAD:public/javascripts/lowpro.js
-=======
       
->>>>>>> recurring_work:public/javascripts/lowpro.js
       this.selectors[i] = params;
     }
     
@@ -353,36 +346,20 @@ LowPro.SelectorLite.prototype = {
   
   findElements: function(parent, descendant) {
     var selector = this.selectors[this.index], results = [], element;
-<<<<<<< HEAD:public/javascripts/lowpro.js
-    if(selector.id) {
-      element = $(selector.id);
-      if(element && (selector.tag == '*' || element.tagName == selector.tag) && 
-        (element.childOf(parent))) {
-        results = [element];
-=======
     if (selector.id) {
       element = $(selector.id);
       if (element && (selector.tag == '*' || element.tagName == selector.tag) && (element.childOf(parent))) {
           results = [element];
->>>>>>> recurring_work:public/javascripts/lowpro.js
       }
     } else {
       results = $A(parent.getElementsByTagName(selector.tag));
     }
     
-<<<<<<< HEAD:public/javascripts/lowpro.js
-    if(selector.classes.length == 1) {
-      results = results.select(function(target) {
-       return $(target).hasClassName(selector.classes[0]);
-      });
-    } else if(selector.classes.length > 1) {
-=======
     if (selector.classes.length == 1) {
       results = results.select(function(target) {
        return $(target).hasClassName(selector.classes[0]);
       });
     } else if (selector.classes.length > 1) {
->>>>>>> recurring_work:public/javascripts/lowpro.js
       results = results.select(function(target) {
         var klasses = $(target).classNames();
         return selector.classes.all(function(klass) {
@@ -391,11 +368,7 @@ LowPro.SelectorLite.prototype = {
       });
     }
     
-<<<<<<< HEAD:public/javascripts/lowpro.js
-    if(descendant) {
-=======
     if (descendant) {
->>>>>>> recurring_work:public/javascripts/lowpro.js
       this.results = this.results.concat(results);
     } else {
       ++this.index;
@@ -404,18 +377,6 @@ LowPro.SelectorLite.prototype = {
       }.bind(this));
     }
   }
-<<<<<<< HEAD:public/javascripts/lowpro.js
-}
-
-LowPro.$$old=$$;
-LowPro.optimize$$ = true;
-
-function $$(a,b) {
-  if (LowPro.optimize$$ == false || b || a.indexOf("[")>=0) 
-    return LowPro.$$old.apply(this, arguments);
-  return new LowPro.SelectorLite(a.split(/\s+/)).get();
-}
-=======
 };
 
 LowPro.$$old=$$;
@@ -426,5 +387,3 @@ $$ = function(a,b) {
     return LowPro.$$old(a, b);
   return new LowPro.SelectorLite(a.split(/\s+/)).get();
 };
->>>>>>> recurring_work:public/javascripts/lowpro.js
-
