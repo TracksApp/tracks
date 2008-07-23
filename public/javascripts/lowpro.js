@@ -1,5 +1,91 @@
 LowPro = {};
-LowPro.Version = '0.1';
+LowPro.Version = '0.2';
+
+if (!Element.addMethods) 
+  Element.addMethods = function(o) { Object.extend(Element.Methods, o) };
+
+// Simple utility methods for working with the DOM
+DOM = {
+  nextElement : function(element) {
+    element = $(element);
+    while (element = element.nextSibling) 
+      if (element.nodeType == 1) return $(element);
+    return null;
+  },
+  previousElement : function(element) {
+    element = $(element);
+    while (element = element.previousSibling) 
+      if (element.nodeType == 1) return $(element);
+    return null;
+  },
+  remove : function(element) {
+    return $(element).parentNode.removeChild(element);
+  },
+  insertAfter : function(element, node) {
+    return $(element).previousSibling.inserBefore(node);
+  },
+  replaceElement : function(element, node) {
+    $(element).parentNode.replaceChild(node, element);
+    return node;
+  }
+};
+
+// Add them to the element mixin
+Element.addMethods(DOM);
+
+// DOMBuilder for prototype
+DOM.Builder = {
+  IE_TRANSLATIONS : {
+    'class' : 'className',
+    'for' : 'htmlFor'
+  },
+  ieAttrSet : function(attrs, attr, el) {
+    var trans;
+    if (trans = this.IE_TRANSLATIONS[attr]) el[trans] = attrs[attr];
+    else if (attr == 'style') el.style.cssText = attrs[attr];
+    else if (attr.match(/^on/)) el[attr] = new Function(attrs[attr]);
+    else el.setAttribute(attr, attrs[attr]);
+  },
+	tagFunc : function(tag) {
+	  return function() {
+	    var attrs, children; 
+	    if (arguments.length>0) { 
+	      if (arguments[0].nodeName || typeof arguments[0] == "string") children = arguments; 
+	      else { attrs = arguments[0]; children = [].slice.call(arguments, 1); };
+	    }
+	    return DOM.Builder.create(tag, attrs, children);
+	  };
+  },
+	create : function(tag, attrs, children) {
+		attrs = attrs || {}; children = children || [];
+		var isIE = navigator.userAgent.match(/MSIE/);
+		var el = document.createElement((isIE && attrs.name) ? "<" + tag + " name=" + attrs.name + ">" : tag);
+		for (var attr in attrs) {
+		  if (typeof attrs[attr] != 'function') {
+		    if (isIE) this.ieAttrSet(attrs, attrs, el);
+		    else el.setAttribute(attr, attrs[attr]);
+		  };
+	  }
+		for (var i=0; i<children.length; i++) {
+			if (typeof children[i] == 'string') children[i] = document.createTextNode(children[i]);
+			el.appendChild(children[i]);
+		}
+		return $(el);
+	}
+};
+
+// Automatically create node builders as $tagName.
+(function() { 
+	var els = ("p|div|span|strong|em|img|table|tr|td|th|thead|tbody|tfoot|pre|code|" + 
+				   "h1|h2|h3|h4|h5|h6|ul|ol|li|form|input|textarea|legend|fieldset|" + 
+				   "select|option|blockquote|cite|br|hr|dd|dl|dt|address|a|button|abbr|acronym|" +
+				   "script|link|style|bdo|ins|del|object|param|col|colgroup|optgroup|caption|" + 
+				   "label|dfn|kbd|samp|var").split("|");
+  var el, i=0;
+	while (el = els[i++]) window['$' + el] = DOM.Builder.tagFunc(el);
+})();
+
+
 
 // Adapted from DOM Ready extension by Dan Webb
 // http://www.vivabit.com/bollocks/2006/06/21/a-dom-ready-extension-for-prototype
@@ -48,9 +134,6 @@ Object.extend(Event, {
     Event._readyCallbacks.push(f);
   }
 });
-
-if (!Element.addMethods) 
-  Element.addMethods = function(o) { Object.extend(Element.Methods, o) };
 
 // Extend Element with observe and stopObserving.
 Element.addMethods({
@@ -200,7 +283,7 @@ Event.observe(window, 'unload', Event.addBehavior.unload.bind(Event.addBehavior)
 // Event.addBehavior({ 'a.rollover' : MyBehavior });
 Behavior = {
   create : function(members) {
-    var behavior = Class.create();
+    var behavior = function(element) { this.element = $(element) };
     behavior.prototype.initialize = Prototype.K;
     Object.extend(behavior.prototype, members);
     Object.extend(behavior, Behavior.ClassMethods);
@@ -208,8 +291,8 @@ Behavior = {
   },
   ClassMethods : {
     attach : function(element) {
-      var bound = new this;
-      bound.element = $(element);
+      var bound = new this(element);
+      bound.initialize.apply(bound);
       this._bindEvents(bound);
       return bound;
     },
@@ -245,11 +328,19 @@ LowPro.SelectorLite.prototype = {
         var cursor = Math.max(id, klass);
         
         if(cursor == -1) params.tag = selector.toUpperCase();
+<<<<<<< HEAD:public/javascripts/lowpro.js
         else if(id == -1 || klass == cursor) params.classes.push(selector.substring(klass + 1))
+=======
+        else if(id == -1 || klass == cursor) params.classes.push(selector.substring(klass + 1));
+>>>>>>> recurring_work:public/javascripts/lowpro.js
         else if(!params.id) params.id = selector.substring(id + 1);
         
         selector = selector.substring(0, cursor);
       } while(cursor > 0);
+<<<<<<< HEAD:public/javascripts/lowpro.js
+=======
+      
+>>>>>>> recurring_work:public/javascripts/lowpro.js
       this.selectors[i] = params;
     }
     
@@ -262,21 +353,36 @@ LowPro.SelectorLite.prototype = {
   
   findElements: function(parent, descendant) {
     var selector = this.selectors[this.index], results = [], element;
+<<<<<<< HEAD:public/javascripts/lowpro.js
     if(selector.id) {
       element = $(selector.id);
       if(element && (selector.tag == '*' || element.tagName == selector.tag) && 
         (element.childOf(parent))) {
         results = [element];
+=======
+    if (selector.id) {
+      element = $(selector.id);
+      if (element && (selector.tag == '*' || element.tagName == selector.tag) && (element.childOf(parent))) {
+          results = [element];
+>>>>>>> recurring_work:public/javascripts/lowpro.js
       }
     } else {
       results = $A(parent.getElementsByTagName(selector.tag));
     }
     
+<<<<<<< HEAD:public/javascripts/lowpro.js
     if(selector.classes.length == 1) {
       results = results.select(function(target) {
        return $(target).hasClassName(selector.classes[0]);
       });
     } else if(selector.classes.length > 1) {
+=======
+    if (selector.classes.length == 1) {
+      results = results.select(function(target) {
+       return $(target).hasClassName(selector.classes[0]);
+      });
+    } else if (selector.classes.length > 1) {
+>>>>>>> recurring_work:public/javascripts/lowpro.js
       results = results.select(function(target) {
         var klasses = $(target).classNames();
         return selector.classes.all(function(klass) {
@@ -285,7 +391,11 @@ LowPro.SelectorLite.prototype = {
       });
     }
     
+<<<<<<< HEAD:public/javascripts/lowpro.js
     if(descendant) {
+=======
+    if (descendant) {
+>>>>>>> recurring_work:public/javascripts/lowpro.js
       this.results = this.results.concat(results);
     } else {
       ++this.index;
@@ -294,6 +404,7 @@ LowPro.SelectorLite.prototype = {
       }.bind(this));
     }
   }
+<<<<<<< HEAD:public/javascripts/lowpro.js
 }
 
 LowPro.$$old=$$;
@@ -304,4 +415,16 @@ function $$(a,b) {
     return LowPro.$$old.apply(this, arguments);
   return new LowPro.SelectorLite(a.split(/\s+/)).get();
 }
+=======
+};
+
+LowPro.$$old=$$;
+LowPro.optimize$$ = false;
+
+$$ = function(a,b) {
+  if (LowPro.optimize$$ == false || b || a.indexOf("[")>=0) 
+    return LowPro.$$old(a, b);
+  return new LowPro.SelectorLite(a.split(/\s+/)).get();
+};
+>>>>>>> recurring_work:public/javascripts/lowpro.js
 

@@ -305,8 +305,7 @@ body.stats #topbar {
     margin-right: -5px;
     margin-bottom: 0px;      
     color: #666;
-    position:left;  /* changed from relative to left in order to show 'add note' */
-    /* text-shadow: rgba(0,0,0,.4) 0px 2px 5px; */
+    position:static;  
 }
 
 .container_toggle img {
@@ -629,9 +628,7 @@ li {
     font-size: 1.1em;
     padding: 3px 0px;
 }
-#sidebar li {
-    padding: auto;
-}
+
 #sidebar .integrations-link {
     margin-top:10px;
     padding-top:10px;
@@ -639,7 +636,7 @@ li {
 }
 .sortable_row {
     background: #fff;
-    _background: transparent;
+    _background: transparent; /* the underscore is only used by ie6 and below */
     padding: 4px 4px 4px 8px;
     margin: 2px 2px;
     border: 1px solid #ccc;

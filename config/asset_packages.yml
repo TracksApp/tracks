@@ -6,7 +6,6 @@ javascripts:
   - dragdrop
   - controls
   - application
-  - selector-addon-v1
   - calendar
   - calendar-en
   - calendar-setup
@@ -14,8 +13,8 @@ javascripts:
   - todo-items
   - niftycube
   - protoload
-  - lowpro
   - flashobject
+  - lowpro
 stylesheets: 
 - tracks: 
   - standard
