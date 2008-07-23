@@ -12,10 +12,8 @@
       <div id="recurring_todo">
         <label for="recurring_todo_description">Description</label><%= 
         text_field_tag( "recurring_todo[description]", "", "size" => 30, "tabindex" => 1) -%>
-                  
         <label for="recurring_todo_notes">Notes</label><%= 
         text_area_tag( "recurring_todo[notes]", nil, {:cols => 29, :rows => 6, :tabindex => 2}) -%>
-                
         <label for="recurring_todo_project_name">Project</label>
         <input id="recurring_todo_project_name" name="project_name" autocomplete="off" tabindex="3" size="30" type="text" value="" />
         <div class="page_name_auto_complete" id="project_list" style="display:none"></div>
@@ -63,13 +61,15 @@
       </div>        
     </div>
     <div id="recurring_period_id">
-      <label>Recurrence period</label><br/>
-      <%= radio_button_tag('recurring_todo[recurring_period]', 'daily', true)%> Daily<br/>
-      <%= radio_button_tag('recurring_todo[recurring_period]', 'weekly')%> Weekly<br/>
-      <%= radio_button_tag('recurring_todo[recurring_period]', 'monthly')%> Monthly<br/>
-      <%= radio_button_tag('recurring_todo[recurring_period]', 'yearly')%> Yearly<br/>
-      <% apply_behaviour "#recurring_period_id:click", 
-        "TracksForm.hide_all_recurring(); $('recurring_'+TracksForm.get_period()).show();" %>
+      <div id="recurring_period">
+        <label>Recurrence period</label><br/>
+        <%= radio_button_tag('recurring_todo[recurring_period]', 'daily', true)%> Daily<br/>
+        <%= radio_button_tag('recurring_todo[recurring_period]', 'weekly')%> Weekly<br/>
+        <%= radio_button_tag('recurring_todo[recurring_period]', 'monthly')%> Monthly<br/>
+        <%= radio_button_tag('recurring_todo[recurring_period]', 'yearly')%> Yearly<br/>
+        <% apply_behaviour "#recurring_period:click", 
+          "TracksForm.hide_all_recurring(); $('recurring_'+TracksForm.get_period()).show();" %>
+      </div>
       <div id="recurring_timespan">
         <br/>
         <label for="recurring_todo[start_from]">Starts on </label><%= 
