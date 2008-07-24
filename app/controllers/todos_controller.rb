@@ -542,11 +542,17 @@ class TodosController < ApplicationController
   end 
     
   def determine_remaining_in_context_count(context_id = @todo.context_id)
-    if source_view_is :deferred
-      @remaining_in_context = current_user.contexts.find(context_id).deferred_todo_count
-    else
-      @remaining_in_context = current_user.contexts.find(context_id).not_done_todo_count
+    source_view do |from|
+      from.deferred { @remaining_in_context = current_user.contexts.find(context_id).deferred_todo_count }
+      from.tag      { 
+        tag = Tag.find_by_name(params['_tag_name'])
+        if tag.nil?
+          tag = Tag.new(:name => params['tag'])
+        end
+        @remaining_in_context = current_user.contexts.find(context_id).not_done_todo_count({:tag => tag.id})
+      }
     end
+    @remaining_in_context = current_user.contexts.find(context_id).not_done_todo_count if @remaining_in_context.nil?
   end 
     
   def determine_completed_count

@@ -9,7 +9,7 @@ if @saved
   # #update auto completer arrays for context and project
   page << "contextAutoCompleter.options.array = #{context_names_for_autocomplete}; contextAutoCompleter.changed = true" if @new_context_created
   page << "projectAutoCompleter.options.array = #{project_names_for_autocomplete}; projectAutoCompleter.changed = true" if @new_project_created
-  if source_view_is_one_of(:todo, :context)
+  if source_view_is_one_of(:todo, :context, :tag)
     if @context_changed || @todo.deferred?
       page[@todo].remove 
       
@@ -17,11 +17,12 @@ if @saved
         # remove context container from page if empty
         source_view do |from|
           from.todo { page.visual_effect :fade, "c#{@original_item_context_id}", :duration => 0.4 }
+          from.tag { page.visual_effect :fade, "c#{@original_item_context_id}", :duration => 0.4 }
           from.context { page.show "c#{@original_item_context_id}empty-nd" }
         end
       end
       
-      if source_view_is(:todo) && @todo.active?
+      if source_view_is_one_of(:todo, :tag) && @todo.active?
         page.call "todoItems.ensureVisibleWithEffectAppear", "c#{@todo.context_id}"
         page.call "todoItems.expandNextActionListingByContext", "c#{@todo.context_id}items", true
         page[empty_container_msg_div_id].hide unless empty_container_msg_div_id.nil?
@@ -36,7 +37,7 @@ if @saved
       # show todo in context
       page.delay(0.5) do
         page.call "todoItems.ensureContainerHeight", "c#{@original_item_context_id}items"
-        if source_view_is(:todo) && @todo.active?
+        if source_view_is_one_of(:todo, :tag) && @todo.active?
           page.call "todoItems.ensureContainerHeight", "c#{@todo.context_id}items"
           page.visual_effect :highlight, dom_id(@todo), :duration => 3
         end

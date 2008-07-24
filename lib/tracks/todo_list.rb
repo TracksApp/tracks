@@ -36,9 +36,12 @@ module Tracks
     def with_not_done_scope(opts={})
       conditions = ["todos.state = ?", 'active']
       if opts.has_key?(:include_project_hidden_todos) && (opts[:include_project_hidden_todos] == true)
-        conditions = ["(todos.state = ? or todos.state = ?)", 'active', 'project_hidden']
+        conditions = ["(todos.state = ? OR todos.state = ?)", 'active', 'project_hidden']
       end
-      self.todos.send :with_scope, :find => {:conditions => conditions} do
+      if opts.has_key?(:tag)
+        conditions = ["todos.state = ? AND taggings.tag_id = ?", 'active', opts[:tag]]
+      end
+      self.todos.send :with_scope, :find => {:conditions => conditions, :include => [:taggings]} do
         yield
       end
     end
