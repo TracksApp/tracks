@@ -416,6 +416,14 @@ class TodosController < ApplicationController
       @title << " actions completed"
       @description << " in the last #{done_in_last.to_s} days"
     end
+    
+    if params.key?('tag')
+      tag = Tag.find_by_name(params['tag'])
+      if tag.nil?
+        tag = Tag.new(:name => params['tag'])
+      end
+      condition_builder.add('taggings.tag_id = ?', tag.id)
+    end
       
     Todo.send :with_scope, :find => {:conditions => condition_builder.to_conditions} do
       yield
