@@ -360,7 +360,9 @@ class TodosController < ApplicationController
     # @default_project_context_name_map =
     # build_default_project_context_name_map(@projects).to_json
     respond_to do |format|
-      format.html
+      format.html {
+        @default_project_context_name_map = build_default_project_context_name_map(@projects).to_json
+      }
       format.m { 
         cookies[:mobile_url]=request.request_uri
         render :action => "mobile_tag"         
