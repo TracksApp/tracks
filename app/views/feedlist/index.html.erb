@@ -60,26 +60,49 @@
       </li>
       <li><h4>Feeds for incomplete actions in a specific context:</h4>
         <ul>
-          <% for context in @contexts %>
-            <li>
-              <%= rss_formatted_link({ :controller=> 'todos', :action => 'index', :context_id => context.to_param }) %>
-              <%= text_formatted_link({ :controller=> 'todos', :action => 'index', :context_id => context.to_param }) %>
-              <%= ical_formatted_link({ :controller=> 'todos', :action => 'index', :context_id => context.to_param }) %>
-              Next actions in <strong><%=h context.name %></strong>
-            </li>
-          <% end %>
+          <li>Step 1 - Choose the context you want a feed of: 
+            <select name="feed-contexts" id="feed-contexts">
+              <%= options_from_collection_for_select(@active_contexts, "id", "name", @active_contexts.first.id) -%>
+              <%= options_from_collection_for_select(@hidden_contexts, "id", "name") -%>
+            </select>
+            <%= observe_field "feed-contexts", :update => "feeds-for-context",
+              :with => 'context_id',
+              :url => { :controller => "feedlist", :action => "get_feeds_for_context" },
+              :before => "$('feeds-for-context').startWaiting()",
+              :complete => "$('feeds-for-context').stopWaiting()"
+            -%>            
+          </li>
+          <li>Step 2 - Select the feed for this context
+            <div id="feedicons-context">
+              <div id="feeds-for-context">
+                <%= render :partial => 'feed_for_context', :locals => { :context => @active_contexts.first } %>
+              </div>
+            </div>
+          </li>
         </ul>
       </li>
       <li><h4>Feeds for incomplete actions in a specific project:</h4>
         <ul>
-          <% for project in @projects %>
-            <li>
-              <%= rss_formatted_link({ :controller=> 'todos', :action => 'index', :project_id => project.to_param }) %>
-              <%= text_formatted_link({ :controller=> 'todos', :action => 'index', :project_id => project.to_param }) %>
-              <%= ical_formatted_link({ :controller=> 'todos', :action => 'index', :project_id => project.to_param }) %>
-              Next actions for <strong><%=h project.name %></strong>
-            </li>
-          <% end %>
+          <li>Step 1 - Choose the project you want a feed of: 
+            <select name="feed-projects" id="feed-projects">
+              <%=  options_from_collection_for_select(@active_projects, "id", "name", @active_projects.first.id) -%>
+              <%=  options_from_collection_for_select(@hidden_projects, "id", "name") -%>
+              <%=  options_from_collection_for_select(@completed_projects, "id", "name") -%>
+            </select>
+            <%= observe_field "feed-projects", :update => "feeds-for-project",
+              :with => 'project_id',
+              :url => { :controller => "feedlist", :action => "get_feeds_for_project" },
+              :before => "$('feeds-for-project').startWaiting()",
+              :complete => "$('feeds-for-project').stopWaiting()"
+            -%>            
+          </li>
+          <li>Step 2 - Select the feed for this project
+            <div id="feedicons-project">
+              <div id="feeds-for-project">
+                <%= render :partial => 'feed_for_project', :locals => { :project => @active_projects.first } %>
+              </div>
+            </div>
+          </li>
         </ul>
       </li>
     </ul>
@@ -89,3 +112,11 @@
 <div id="input_box">
   <%= render "sidebar/sidebar" %>
 </div><!-- End of input box -->
+
+<script type="text/javascript">
+    window.onload=function(){
+        Nifty("div#feedicons-project","normal");
+        Nifty("div#feedicons-context","normal");
+        Nifty("div#feedlegend","normal");
+    }
+</script>

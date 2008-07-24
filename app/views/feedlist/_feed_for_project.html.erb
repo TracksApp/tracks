@@ -1,0 +1,6 @@
+<li>
+  <%= rss_formatted_link({ :controller=> 'todos', :action => 'index', :project_id => project.to_param }) %>
+  <%= text_formatted_link({ :controller=> 'todos', :action => 'index', :project_id => project.to_param }) %>
+  <%= ical_formatted_link({ :controller=> 'todos', :action => 'index', :project_id => project.to_param }) %>
+  <strong><%=h project.name %></strong>
+</li>

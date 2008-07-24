@@ -845,6 +845,13 @@ input, select, textarea {
     margin: 0px 0px 5px 0px;
 }
 
+#feedicons-project, #feedicons-context {
+    background-color: #D2D3D6;
+    margin: 0px 0px 0px 60px;
+    padding: 0px 0px 0px 5px;
+    width: 70%;
+}
+
 .feed {
     font-family: verdana, sans-serif; 
     font-size: 10px; 
@@ -948,7 +955,6 @@ ul#prefs {list-style-type: disc; margin-left: 15px;}
 }
 #feedlegend {
     padding: 2px;
-    border: 1px solid #CCC; 
     background-color: #D2D3D6;
     color: #666;
     padding: 5px 20px;
