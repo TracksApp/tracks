@@ -32,8 +32,10 @@ class RecurringTodosController < ApplicationController
 
     # we needed to rename the recurring_period selector in the edit form 
     # because the form for a new recurring todo and the edit form are on the
-    # same page.
+    # same page. Same goed for start_from and end_date
     params['recurring_todo']['recurring_period']=params['recurring_edit_todo']['recurring_period']
+    params['recurring_todo']['end_date']=params['recurring_todo_edit_end_date']
+    params['recurring_todo']['start_from']=params['recurring_todo_edit_start_from']
     
     # update project
     if params['recurring_todo']['project_id'].blank? && !params['project_name'].nil?
