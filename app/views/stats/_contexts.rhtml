@@ -2,6 +2,8 @@
 
 <%= render :partial => 'chart', :locals => {:width => @pie_width, :height => @pie_height, :data => url_for(:action => 'context_running_actions_data')} -%>
 
+<br style="clear:both">
+
 <div class="stats_module">
 <h3>Top 5 Contexts</h3>
 <%
