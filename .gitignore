@@ -8,3 +8,4 @@ db/*.sqlite3
 nbproject
 vendor/plugins/query_trace/
 db/schema.rb
+.dotest

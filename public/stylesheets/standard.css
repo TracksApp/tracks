@@ -1193,3 +1193,8 @@ body.integrations textarea {
     width:80%;
     background-color:#ddd;
 }
+
+.date_clear
+{
+	float: right;
+}
