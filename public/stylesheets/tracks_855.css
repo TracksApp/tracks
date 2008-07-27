@@ -1,0 +1,275 @@
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td {margin:0; padding:0}
+table {border-collapse:collapse; border-spacing:0}
+fieldset,img {border:0}
+address,caption,cite,code,dfn,em,strong,th,var {font-style:normal; font-weight:normal}
+ol,ul {list-style:none}
+caption,th {text-align:left}
+h1,h2,h3,h4,h5,h6 {font-size:100%; font-weight:normal}
+q:before,q:after {content:''}
+abbr,acronym {border:0}
+body {font-family: "Lucida Grande", Verdana, Geneva, Arial, sans-serif; font-size: 80%; padding: 0px 10px; margin: 0px; background: #eee}
+p {padding: 2px; font-size: 92%; line-height: 140%}
+a, a:link, a:active, a:visited {color: #cc3334; text-decoration: none; padding-left: 1px; padding-right: 1px}
+a:hover {color: #fff; background-color: #cc3334}
+h1 {font-size: 304%; font-weight: bold}
+h2 {font-size: 148%; font-weight: bold}
+h3 {font-size: 129%; font-weight: bold}
+img.edit_item {background-image: url(../images/edit_off.png); background-repeat: no-repeat; border: none;}
+a:hover img.edit_item {background-image: url(../images/edit_on.png); background-color: transparent; background-repeat: no-repeat; border: none;}
+img.delete_item {background-image: url(../images/delete_off.png); background-repeat: no-repeat; border: none;}
+a:hover img.delete_item {background-image: url(../images/delete_on.png);background-color: transparent;background-repeat: no-repeat; border: none;}
+img.starred_todo {background-image: url(../images/staricons.png); background-repeat: no-repeat; border:none; background-position: 0px 0px;}
+a:hover img.starred_todo {background-image: url(../images/staricons.png); background-repeat: no-repeat; border:none; background-position: -16px 0px;}
+img.unstarred_todo {background-image: url(../images/staricons.png); background-repeat: no-repeat; border:none; background-position: -32px 0px;}
+a:hover img.unstarred_todo {background-image: url(../images/staricons.png); background-repeat: no-repeat; border:none; background-position: -48px 0px;}
+a.to_top {background: transparent url(../images/top_off.png) no-repeat;}
+a.to_top:hover {background: transparent url(../images/top_on.png) no-repeat;}
+a.up {background: transparent url(../images/up_off.png) no-repeat;}
+a.up:hover {background: transparent url(../images/up_on.png) no-repeat;}
+a.down {background: transparent url(../images/down_off.png) no-repeat;}
+a.down:hover {background: transparent url(../images/down_on.png) no-repeat;}
+a.to_bottom {background: transparent url(../images/bottom_off.png) no-repeat;}
+a.to_bottom:hover {background: transparent url(../images/bottom_on.png) no-repeat;}
+a.show_notes, a.link_to_notes {background-image: url(../images/notes_off.png); background-repeat: no-repeat; padding: 1px; background-color: transparent;}
+a.show_notes:hover, a.link_to_notes:hover {background-image: url(../images/notes_on.png); background-repeat: no-repeat; padding: 1px; background-color: transparent;}
+#content {margin-top: 90px}
+#display_box {float: left; width: 55%; margin: 0px 10px 50px 15px}
+#single_box {width: 60%; margin: 80px auto}
+#full_width_display {float: left; width: 95%; margin: 0px 15px 90px 15px}
+#display_box_projects {float: left; width: 95%; margin: 0px 15px 90px 15px}
+#navcontainer {position: fixed; top: 48px; left: 0px}
+#navlist {margin: 0; padding: 0 0 20px 5px}
+#navlist ul, #navlist li {margin: 0; padding: 0; display: inline; list-style-type: none}
+#navlist a:link, #navlist a:visited {float: left; line-height: 14px; font-weight: bold; margin: 0 10px 4px 10px; text-decoration: none; color: #eee}
+#navlist a:link#current, #navlist a:visited#current, #navlist a:hover {border-bottom: 4px solid #CCC; padding-bottom: 2px; background: transparent; color: #CCC}
+#navlist a:hover {color: #CCC}
+#topbar {position: fixed; top: 0px; left: 0px; height: 68px; margin-bottom: 20px; clear: both; background-color: #000; filter: alpha(opacity=75); -moz-opacity: .75; opacity: .75; color: #eee; width: 100%; z-index:1100}
+body.stats #topbar {filter: alpha(opacity=100); -moz-opacity: 1; opacity: 1}
+#date {float: left; width: 45%; padding-left: 15px; margin-top: 15px; margin-bottom: 5px; white-space: nowrap}
+#date h1 {font-size: 152%}
+#minilinks {text-align: right; position: fixed; right: 15px; top: 10px; font-size: 0.9em}
+.container {padding: 0px 5px 0px 5px; border: 1px solid #999; margin: 0px 0px 15px 0px; background: #fff}
+.completed {background: #eee}
+.container h2 {background: #ccc; padding: 5px; margin-top: 0px; margin-left: -5px; margin-right: -5px; margin-bottom: 0px; color: #666; position:left}
+.container_toggle img {height:20px; width:20px; border:0px}
+h2 a, h2 a:link, h2 a:active, h2 a:visited {color: #666; text-decoration: none}
+h2 a:hover {color: #cc3334; background-color: transparent; text-decoration: none}
+div#input_box {margin: 0px 15px 0px 58%; padding: 0px 15px 0px 0px}
+#input_box h2 {color: #999}
+#input_box ul {list-style-type: circle; font-size: 0.9em;}
+.show_from_input, .due_input, .project_input, .context_input {float:left}
+.box {float: left; width: 20px}
+div.item-container {padding: 2px 0px; line-height:20px; clear: both}
+a.icon {float: left; vertical-align: middle; background-color: transparent}
+input.item-checkbox {float: left; margin-left: 10px; vertical-align: middle}
+.description {margin-left: 85px; position:relative }
+.stale_l1, .stale_l2, .stale_l3 {margin-left: 82px; padding-left: 3px}
+.stale_l1 {background: #ffC}
+.tools {margin-left: 25px; width: 40px; border-top: 1px solid #999}
+#footer {clear: both; font-size: 85%; text-align: center; color: #999; margin: 20px 20px 5px 20px; padding: 0px}
+.todo_notes {margin: 5px; padding: 3px; border: 1px solid #F5ED59; background: #FAF6AE; color: #666666}
+.todo_notes p, .todo_notes li {padding: 1px; margin: 0px; font-size: 12px}
+.todo_notes ul, .note_wrapper ul {list-style-type: disc; margin-left:20px}
+.todo_notes ol {list-style-type: decimal; margin-left:20px}
+div.note_wrapper {margin: 3px; padding: 2px}
+div.note_wrapper p {display: inline}
+div.note_footer {border-top: 1px solid #999; padding-top: 3px; font-style: italic; font-size: 0.9em; color: #666}
+div.note_footer a, div.note_footer a:hover {border-top: none; padding-top: 0px; vertical-align: middle; background-color: transparent}
+div.add_note_link {margin-top:12px; float: right}
+div#project_status > div {padding: 10px}
+#project_status span {margin-right:5px; background-color:white}
+#project_status .active_state {font-weight:bold}
+div#default_context > div{ padding:10px}
+a.footer_link {color: #cc3334; font-style: normal;}
+a.footer_link:hover {color: #fff; background-color: #cc3334 !important;}
+span.tag {font-size: 0.8em; background-color: #CCE7FF; color: #000; padding: 1px; margin-right: 2px}
+span.tag a, span.tag a:link, span.tag a:active, span.tag a:visited {color: #000}
+span.tag a:hover {background-color: #99CCFF; color: #333}
+div#message_holder {position: absolute; z-index: 100; left: 60%; top: 30px; right: 0px; margin: 0px}
+h4.alert {font-size: 1em; margin: 0px; padding: 5px; text-align: center}
+h4.warning {border: 1px solid #ED2E38; background-color: #F6979C; color: #000}
+h4.error {color:#fff; background:#c00}
+h4.notice {border: 1px solid #007E00; background-color: #c2ffc2; color: #007E00}
+.project_completed {border: 1px solid #007E00; background-color: #c2ffc2; padding: 5px; color: #007E00; text-align: center}
+.red {color: #fff; background: #f00; padding: 1px; font-size: 85%}
+.amber {color: #fff; background: #ff6600; padding: 1px; font-size: 85%}
+.orange {color: #fff; background: #FFA500; padding: 1px; font-size: 85%}
+.green {color: #fff; background: #33cc00; padding: 1px; font-size: 85%}
+.grey {color: #fff; background: #999; padding: 2px; font-size: 85%}
+.info {color: #fff; background: #CCC; border: 1px solid #999; padding: 5px; text-align: center}
+.highlight {background: #ffC; padding: 2px}
+.stale_l1 {background: #ffC}
+.stale_l2 {background: #ff6}
+.stale_l3 {background: #ff0}
+.badge {color: #fff; background: #f00; padding: 3px 5px; font-size: 12pt; margin: 10px 10px 0px 0px; height:26px}
+ul {list-style-type: none}
+#sidebar h3 {margin-top:15px; margin-bottom:5px}
+#sidebar ul {margin-left: auto; list-style-position: inside}
+li {font-size: 1.1em; padding: 3px 0px}
+#sidebar li {padding: auto}
+#sidebar .integrations-link {margin-top:10px; padding-top:10px; font-size: 0.8em}
+.sortable_row {background: #fff; _background: transparent; padding: 4px 4px 4px 8px; margin: 2px 2px; border: 1px solid #ccc}
+.edit-form {background: #ccc; padding: 0 10px; border-top: 1px solid #999; border-bottom: 1px solid #999; position:relative}
+.label {text-align: right}
+input {vertical-align: middle}
+img.position, a:hover img.position {text-align: left; vertical-align: middle; background-color: transparent}
+.data {text-align: left; margin-left: 20px; float: left}
+div.buttons, div.buttons a, div.buttons a:hover {text-align: right; margin-right: 0px; vertical-align: middle; background-color: transparent}
+div#list-active-projects, div#list-hidden-projects, div#list-completed-projects, div#list-contexts, div#projects-empty-nd {clear:right; border: 1px solid #999}
+.project-state-group h2 {margin:20px 0px 8px 13px}
+.search-result-group h2 {margin:20px 0px 8px 13px }
+div.alpha_sort {margin-top:-20px; float:right}
+.container td {border: none; padding-bottom: 5px}
+.container form {border: none}
+div.project_description {background: #eee; padding: 5px; margin-top: 0px; margin-left: -5px; margin-right: -5px; color: #666; font-style: italic; font-size: 12px; font-weight: normal}
+#project-next-prev {text-align:right}
+form {border: 1px solid #CCC; padding: 10px; margin: 0px}
+.inline-form {border: none; padding: 3px}
+.inline-form table {padding-right: 3px}
+.inline-form table, .inline-form textarea#item_notes, .inline-form input#item_description {width: 100%}
+.inline-form table td.label {width: 13ex}
+#todo_new_action_container, #project_new_project_container, #context_new_container {background: #ddd; width: 270px; padding: 5px 10px; background-color: #000; filter: alpha(opacity=75); -moz-opacity: .75; opacity: .75; color: #eee}
+#project_new_project_filler {padding-top: 50px}
+#todo_new_action_container input, #todo_new_action_container textarea, #project_new_project_container input, #project_new_project_container textarea, #context_new_container input {width: 100%}
+input#go_to_project, input#context_hide {width: 5%}
+#todo_new_action_container .show_from_input, #todo_new_action_container .due_input {width: 45%}
+#todo_new_action_container .show_from_input {float: right}
+#todo-form-new-action .submit_box, #project_form .submit_box, #context_form .submit_box {height: 25px; padding: 5px 0; text-align: center; clear: right}
+.edit_todo_form .submit_box {height: 25px; padding: 5px 0; text-align: center; clear: right}
+.edit_todo_form input, .edit_todo_form textarea {width:100%}
+.edit_todo_form .tag_list_label {clear:both}
+.edit_todo_form .due_input, .edit_todo_form .show_from_input, .edit_todo_form .project_input, .edit_todo_form .context_input {width:48%}
+.edit_todo_form .show_from_input, .edit_todo_form .context_input {float: right}
+.edit_todo_form .submit_box input {width:120px}
+.hide_form {text-align:right}
+#todo-form-new-action label, .edit_todo_form label {display: block; padding-bottom: 3px}
+form.button-to {border: none; padding: 0px; margin: 0px}
+label {font-weight: bold; padding: 0px 0px}
+input, select, textarea {margin: 0px 0px 5px 0px}
+.feed {font-family: verdana, sans-serif; font-size: 10px; font-weight:bold; text-decoration:none; color: white; background-color: #F60; border:1px solid; border-color: #FC9 #630 #330 #F96; padding:0px 3px 0px 3px; margin:0px}
+.position {float: left; margin-top:2px}
+.handle {color: #fff; background: #000; padding: 2px; font-size: 92%; cursor: move}
+div.message {margin: 5px 0px; background: #FAF4B5; padding: 2px}
+.message p {margin: 0px; padding: 0px; text-align: center; font-size: 1em; color: #666}
+.fieldWithErrors {padding: 2px; background-color: red; display: table}
+#errorExplanation {border: 2px solid #ff0000; padding: 7px; padding-bottom: 12px; margin: 10px auto 20px auto; background-color: #f0f0f0}
+#errorExplanation h2 {text-align: left; font-weight: bold; padding: 5px 5px 5px 15px; font-size: 12px; margin: -7px; background-color: #c00; color: #fff}
+#errorExplanation > p {color: #333; margin-top: 5px; margin-bottom: 0; padding: 5px}
+#errorExplanation ul li {font-size: 1em; list-style-type: disc; list-style-position: inside; margin-left:7px; color: #333}
+ul#prefs {list-style-type: disc; margin-left: 15px;}
+#token_area, #authentication_area {text-align:center; margin-top:20px; margin-bottom:10px}
+#token_area .description{ font-weight:bold}
+#token_area form {width:100%; text-align:center}
+.prefscontainer .actions {text-align:center; margin-bottom:20px}
+.authtype_container .actions {margin-top:20px; margin-bottom:20px}
+#feedlegend {padding: 2px; border: 1px solid #CCC; background-color: #D2D3D6; color: #666; padding: 5px 20px; text-align: left}
+#feedlegend h3, #feedlegend dl, #feedlegend dt, #feedlegend dd {display: inline}
+#feedlegend dt {margin-left: 15px}
+#feedlegend dd {margin-left: 3px}
+#feedlegend p {margin-bottom: 0px}
+#feeds img.rss-icon {margin-bottom: -4px}
+#feeds li {font-size:13px; font-family: "Lucida Grande", Verdana, Geneva, Arial, sans-serif}
+#feeds li h4 {margin-top: 12px; margin-bottom: 4px; font-weight: normal; font-style:oblique}
+input.open_id {background: url(../images/open-id-login-bg.gif) no-repeat; background-color: #fff; background-position: 0 50%; color: #000; padding-left: 18px; width:182px}
+div.page_name_auto_complete {width: 100%; background: #fff; display: inline; z-index: 100}
+div.page_name_auto_complete ul {border: 1px solid #888; margin: 0; padding: 0; width: 100%; list-style-type: none}
+div.page_name_auto_complete ul li {margin: 0; padding: 2px; font-weight:bold; list-style-type: none; color: #000}
+div.page_name_auto_complete ul li.selected {background-color: #ffb}
+div.page_name_auto_complete ul strong.highlight {color: #800; margin: 0; padding: 0}
+table.next_actions td {padding:5px 3px 2px 0px}
+table.users_table {width: 100%; text-align: center; border: 1px solid #666; background-color: #fff; border-spacing: 0px}
+.users_table th {color: #fff; background-color: #000;}
+.users_table td {border: none;}
+table.export_table {border: 1px solid #666; background-color: #fff; border-spacing: 0px}
+.export_table th {color: #fff; background-color: #000;}
+.export_table td {border: 1px; padding: 5px 0px 5px 5px;}
+.widgets a, .widgets button{ display:block; float: left; margin:0px 7px 0 0; background-color:#f5f5f5; border:1px solid #dedede; border-top:1px solid #eee; border-left:1px solid #eee; font-family:"Lucida Grande", Verdana, Geneva, Arial, sans-serif; font-size:80%; line-height:100%; text-decoration:none; font-weight:bold; color:#565656; cursor:pointer; padding:3px 5px 7px 5px}
+.widgets button{ width:auto; overflow:visible; padding:3px 5px 5px 5px}
+.widgets button[type]{ padding:3px 5px 4px 5px; line-height:15px}
+.widgets button img, .widgets a img{ margin:0 3px -3px 0 !important; padding:0; border:none; width:16px; height:16px}
+.widgets a:hover{ background-color:#dff4ff; border:1px solid #c2e1ef; color:#336699}
+.widgets a:active{ background-color:#6299c5; border:1px solid #6299c5; color:#fff}
+button.positive, .widgets a.positive{ color: #498111}
+.widgets a.positive:hover, button.positive:hover{ background-color:#E6EFC2; border:1px solid #C6D880; color:#529214}
+.widgets a.positive:active{ background-color:#529214; border:1px solid #529214; color:#fff}
+.widgets a.negative, button.negative{ color:#d12f19}
+.widgets a.negative:hover, button.negative:hover{ background:#fbe3e4; border:1px solid #fbc2c4; color:#d12f19}
+.widgets a.negative:active{ background-color:#d12f19; border:1px solid #d12f19; color:#fff}
+.tracks__waiting {background-image:url('../images/waiting.gif'); background-repeat:no-repeat; background-position:center center; background-color:white}
+.bigWaiting {background-image:url('../images/bigWaiting.gif'); background-repeat:no-repeat; background-position:center 20%; background-color:white}
+.blackWaiting {background-image:url('../images/blackWaiting.gif'); background-repeat:no-repeat; background-position:center center; background-color:black}
+.bigBlackWaiting {background-image:url('../images/bigBlackWaiting.gif'); background-repeat:no-repeat; background-position:center center; background-color:black}
+.stats_content .open-flash-chart, .stats_content .stats_module {float: left; width: 450px; margin-right:20px; padding-bottom:20px}
+.stats_content h2 {clear:both; margin-top:15px; margin-bottom:15px}
+body.integrations h2 {margin-top:40px; padding-top:20px; margin-bottom:10px; border-top:1px solid #ccc}
+body.integrations p, body.integrations li {font-size:1.0em}
+body.integrations li {list-style-type: disc; list-style-position: inside; margin-left:30px}
+body.integrations textarea {margin:10px; padding:3px; width:80%; background-color:#ddd}
+div.calendar {position: relative}
+.calendar, .calendar table {border: 1px solid #556; font-size: 11px; color: #000; cursor: default; background: #eef; z-index: 110; font-family: tahoma,verdana,sans-serif}
+.calendar .button {text-align: center; padding: 2px}
+.calendar .nav {background: #778 url(../images/menuarrow.gif) no-repeat 100% 100%}
+.calendar thead .title {font-weight: bold; text-align: center; background: #fff; color: #000; padding: 2px}
+.calendar thead .headrow {background: #778; color: #fff}
+.calendar thead .daynames {background: #bdf}
+.calendar thead .name {border-bottom: 1px solid #556; padding: 2px; text-align: center; color: #000}
+.calendar thead .weekend {color: #a66}
+.calendar thead .hilite {background-color: #aaf; color: #000; border: 1px solid #04f; padding: 1px}
+.calendar thead .active {background-color: #77c; padding: 2px 0px 0px 2px}
+.calendar tbody .day {width: 2em; color: #456; text-align: right; padding: 2px 4px 2px 2px}
+.calendar tbody .day.othermonth {font-size: 80%; color: #bbb}
+.calendar tbody .day.othermonth.oweekend {color: #fbb}
+.calendar table .wn {padding: 2px 3px 2px 2px; border-right: 1px solid #000; background: #bdf}
+.calendar tbody .rowhilite td {background: #def}
+.calendar tbody .rowhilite td.wn {background: #eef}
+.calendar tbody td.hilite {background: #def; padding: 1px 3px 1px 1px; border: 1px solid #bbb}
+.calendar tbody td.active {background: #cde; padding: 2px 2px 0px 2px}
+.calendar tbody td.selected {font-weight: bold; border: 1px solid #000; padding: 1px 3px 1px 1px; background: #fff; color: #000}
+.calendar tbody td.weekend {color: #a66}
+.calendar tbody td.today {font-weight: bold; color: #00f}
+.calendar tbody .disabled {color: #999}
+.calendar tbody .emptycell {visibility: hidden}
+.calendar tbody .emptyrow {display: none}
+.calendar tfoot .footrow {text-align: center; background: #556; color: #fff}
+.calendar tfoot .ttip {background: #fff; color: #445; border-top: 1px solid #556; padding: 1px}
+.calendar tfoot .hilite {background: #aaf; border: 1px solid #04f; color: #000; padding: 1px}
+.calendar tfoot .active {background: #77c; padding: 2px 0px 0px 2px}
+.calendar .combo {position: absolute; display: none; top: 0px; left: 0px; width: 4em; cursor: default; border: 1px solid #655; background: #def; color: #000; font-size: 90%; z-index: 100}
+.calendar .combo .label, .calendar .combo .label-IEfix {text-align: center; padding: 1px}
+.calendar .combo .label-IEfix {width: 4em}
+.calendar .combo .hilite {background: #acf}
+.calendar .combo .active {border-top: 1px solid #46a; border-bottom: 1px solid #46a; background: #eef; font-weight: bold}
+.calendar td.time {border-top: 1px solid #000; padding: 1px 0px; text-align: center; background-color: #f4f0e8}
+.calendar td.time .hour, .calendar td.time .minute, .calendar td.time .ampm {padding: 0px 3px 0px 4px; border: 1px solid #889; font-weight: bold; background-color: #fff}
+.calendar td.time .ampm {text-align: center}
+.calendar td.time .colon {padding: 0px 2px 0px 3px; font-weight: bold}
+.calendar td.time span.hilite {border-color: #000; background-color: #667; color: #fff}
+.calendar td.time span.active {border-color: #f00; background-color: #000; color: #0f0}
+b.niftycorners,b.niftyfill{display:block}
+b.niftycorners *{display:block;height: 1px;line-height:1px;font-size: 1px; overflow:hidden;border-style:solid;border-width: 0 1px}
+b.r1{margin: 0 3px;border-width: 0 2px}
+b.r2{margin: 0 2px}
+b.r3{margin: 0 1px}
+b.r4{height: 2px}
+b.rb1{margin: 0 8px;border-width:0 2px}
+b.rb2{margin: 0 6px;border-width:0 2px}
+b.rb3{margin: 0 5px}
+b.rb4{margin: 0 4px}
+b.rb5{margin: 0 3px}
+b.rb6{margin: 0 2px}
+b.rb7{margin: 0 1px;height:2px}
+b.rb8{margin: 0;height:2px}
+b.rs1{margin: 0 1px}
+b.t1{border-width: 0 5px}
+b.t2{border-width: 0 3px}
+b.t3{border-width: 0 2px}
+b.t4{height: 2px}
+b.tb1{border-width: 0 10px}
+b.tb2{border-width: 0 8px}
+b.tb3{border-width: 0 6px}
+b.tb4{border-width: 0 5px}
+b.tb5{border-width: 0 4px}
+b.tb6{border-width: 0 3px}
+b.tb7{border-width: 0 2px;height:2px}
+b.tb8{border-width: 0 1px;height:2px}
+b.ts1{border-width: 0 2px}

@@ -46,13 +46,19 @@ Event.observe($('<%= dom_id(@todo, 'context_name') %>'), "click", <%= dom_id(@to
 <%= text_field_tag 'tag_list', tag_list_text, :id => dom_id(@todo, 'tag_list'), :size => 30, :tabindex => 12 %> 
 
 <div class="due_input">
-<label for="<%= dom_id(@todo, 'due') %>">Due</label>
+<label for="<%= dom_id(@todo, 'due_label') %>">Due</label>
 <%= date_field_tag("todo[due]", dom_id(@todo, 'due'), format_date(@todo.due), "tabindex" => 13) %>
+<a href="#" id="<%= dom_id(@todo, 'due_x') %>" class="date_clear">
+	<%= image_tag("cancel.png", :alt => "") %>
+</a>
 </div>
 
 <div class="show_from_input">
 <label for="<%= dom_id(@todo, 'show_from') %>">Show from</label>
 <%= date_field_tag("todo[show_from]", dom_id(@todo, 'show_from'), format_date(@todo.show_from), "tabindex" => 14) %>
+<a href="#" id="<%= dom_id(@todo, 'show_from_x') %>" class="date_clear">
+	<%= image_tag("cancel.png", :alt => "") %>
+</a>
 </div>
 
 <% if controller.controller_name == "project" || @todo.deferred? -%>
