@@ -6,7 +6,7 @@
     :complete => "$('recurring_todo_new_action_submit').stopWaiting();",
     :condition => "!$('recurring_todo_new_action_submit').isWaiting()") do 
     -%>
-    <div id="status"><%= error_messages_for("item", :object_name => 'action') %></div>
+    <div id="new_status"><%= error_messages_for("item", :object_name => 'action') %></div>
   
     <div id="recurring_todo_form_container">
       <div id="recurring_todo">
@@ -106,7 +106,7 @@
       <%= radio_button_tag('recurring_todo[monthly_selector]', 'monthly_every_xth_day')%> The <%= 
       select_tag('recurring_todo[monthly_every_xth_day]', options_for_select(@xth_day), {}) %> <%= 
       select_tag('recurring_todo[monthly_day_of_week]' , options_for_select(@days_of_week, Time.now.wday), {}) %> of every <%= 
-      text_field_tag('recurring_todo[monthly_every_x_month]', 1, {"size" => 3, "tabindex" => 11}) %> month<br/>
+      text_field_tag('recurring_todo[monthly_every_x_month2]', 1, {"size" => 3, "tabindex" => 11}) %> month<br/>
     </div>
     <div id="recurring_yearly" style="display:none">
       <label>Recurrence</label><br/>
@@ -116,7 +116,7 @@
       <%= radio_button_tag('recurring_todo[yearly_selector]', 'yearly_every_xth_day')%> The <%= 
       select_tag('recurring_todo[yearly_every_xth_day]', options_for_select(@xth_day), {}) %> <%= 
       select_tag('recurring_todo[yearly_day_of_week]', options_for_select(@days_of_week, Time.now.wday), {}) %> of <%= 
-      select_tag('recurring_todo[yearly_month_of_year]', options_for_select(@months_of_year, Time.now.month), {}) %><br/>
+      select_tag('recurring_todo[yearly_month_of_year2]', options_for_select(@months_of_year, Time.now.month), {}) %><br/>
     </div>
     <div id="recurring_target">
       <label>Set recurrence on</label><br/>

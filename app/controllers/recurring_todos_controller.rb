@@ -30,9 +30,9 @@ class RecurringTodosController < ApplicationController
     @original_item_context_id = @recurring_todo.context_id
     @original_item_project_id = @recurring_todo.project_id
 
-    # we needed to rename the recurring_period selector in the edit form 
-    # because the form for a new recurring todo and the edit form are on the
-    # same page. Same goes for start_from and end_date
+    # we needed to rename the recurring_period selector in the edit form because
+    # the form for a new recurring todo and the edit form are on the same page.
+    # Same goes for start_from and end_date
     params['recurring_todo']['recurring_period']=params['recurring_edit_todo']['recurring_period']
     params['recurring_todo']['end_date']=params['recurring_todo_edit_end_date']
     params['recurring_todo']['start_from']=params['recurring_todo_edit_start_from']
@@ -81,7 +81,7 @@ class RecurringTodosController < ApplicationController
   end
   
   def create
-    p = RecurringTodoCreateParamsHelper.new(params)        
+    p = RecurringTodoCreateParamsHelper.new(params)
     @recurring_todo = current_user.recurring_todos.build(p.attributes)
 
     if p.project_specified_by_name?
@@ -185,7 +185,17 @@ class RecurringTodosController < ApplicationController
 
     def initialize(params)
       @params = params['request'] || params
-      @attributes = params['request'] && params['request']['recurring_todo']  || params['recurring_todo']
+      attr = params['request'] && params['request']['recurring_todo']  || params['recurring_todo']
+      
+      # make sure all selectors (recurring_period, recurrence_selector,
+      # daily_selector, monthly_selector and yearly_selector) are first in hash
+      # so that they are processed first by the model
+      @attributes = {
+        'recurring_period' => attr['recurring_period'],
+        'daily_selector' => attr['daily_selector'],
+        'monthly_selector' => attr['monthly_selector'],
+        'yearly_selector' => attr['yearly_selector']
+      }.merge(attr)
     end
       
     def attributes

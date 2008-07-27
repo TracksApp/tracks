@@ -17,6 +17,6 @@ if @saved
   page.visual_effect :highlight, dom_id(@recurring_todo), :duration => 3
 
 else
-  page.show 'error_status'
-  page.replace_html 'error_status', "#{error_messages_for('todo')}"
+  page.show 'edit_status'
+  page.replace_html 'edit_status', "#{error_messages_for('recurring_todo')}"
 end

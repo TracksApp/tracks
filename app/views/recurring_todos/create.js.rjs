@@ -1,5 +1,5 @@
-page.show 'status'
-page.replace_html 'status', "#{error_messages_for('recurring_todo')}"
+page.show 'new_status'
+page.replace_html 'new_status', "#{error_messages_for('recurring_todo')}"
 
 page.notify :notice, @message, 5.0
 if @recurring_saved

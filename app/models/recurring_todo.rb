@@ -58,6 +58,8 @@ class RecurringTodo < ActiveRecord::Base
       self.only_work_days = false
     when 'daily_every_work_day'
       self.only_work_days = true
+    else
+      raise Exception.new, "unknown daily recurrence pattern: '#{selector}'"      
     end
   end
   
@@ -67,12 +69,18 @@ class RecurringTodo < ActiveRecord::Base
     end
   end
   
+  def daily_every_x_days
+    return self.every_other1
+  end
+  
   # WEEKLY
   
   def weekly_every_x_week=(x)
-    if recurring_period=='weekly'
-      self.every_other1 = x
-    end
+    self.every_other1 = x if recurring_period=='weekly'
+  end
+  
+  def weekly_every_x_week
+    return self.every_other1
   end
   
   def switch_week_day (day, position)
@@ -83,9 +91,7 @@ class RecurringTodo < ActiveRecord::Base
   end
   
   def weekly_return_monday=(selector)
-    if recurring_period=='weekly'
-      switch_week_day(selector,1)
-    end
+    switch_week_day(selector,1) if recurring_period=='weekly'
   end
 
   def weekly_return_tuesday=(selector)
@@ -154,31 +160,58 @@ class RecurringTodo < ActiveRecord::Base
     if recurring_period=='monthly'
       self.recurrence_selector= (selector=='monthly_every_x_day')? 0 : 1
     end
-    # todo
   end
   
   def monthly_every_x_day=(x)
-    if recurring_period=='monthly'
-      self.every_other1 = x
-    end
+    self.every_other1 = x if recurring_period=='monthly'
+  end
+  
+  def monthly_every_x_day
+    return self.every_other1
   end
   
   def monthly_every_x_month=(x)
-    if recurring_period=='monthly'
-      self.every_other2 = x
+    self.every_other2 = x if recurring_period=='monthly' && recurrence_selector == 0
+  end
+  
+  def monthly_every_x_month
+    # in case monthly pattern is every day x, return every_other2 otherwise
+    # return a default value
+    if self.recurrence_selector == 0
+      return self.every_other2
+    else
+      return 1
+    end
+  end
+
+  def monthly_every_x_month2=(x)    
+    self.every_other2 = x if recurring_period=='monthly' && recurrence_selector == 1
+  end
+
+  def monthly_every_x_month2
+    # in case monthly pattern is every xth day, return every_other2 otherwise
+    # return a default value
+    if self.recurrence_selector == 1
+      return self.every_other2
+    else
+      return 1
     end
   end
   
   def monthly_every_xth_day=(x)
-    if recurring_period=='monthly' 
-      self.every_other3 = x
-    end
+    self.every_other3 = x if recurring_period=='monthly' 
+  end
+  
+  def monthly_every_xth_day
+    return self.every_other3
   end
   
   def monthly_day_of_week=(dow)
-    if recurring_period=='monthly'
-      self.every_count = dow
-    end
+    self.every_count = dow if recurring_period=='monthly'
+  end
+  
+  def monthly_day_of_week
+    return self.every_count
   end
   
   # YEARLY
@@ -190,27 +223,55 @@ class RecurringTodo < ActiveRecord::Base
   end
   
   def yearly_month_of_year=(moy)
-    if recurring_period=='yearly'
-      self.every_other2 = moy
+    self.every_other2 = moy if self.recurring_period=='yearly'  && self.recurrence_selector == 0
+  end
+  
+  def yearly_month_of_year
+    # if recurrence pattern is every x day in a month, return month otherwise
+    # return a default value
+    if self.recurrence_selector == 0
+      return self.every_other2
+    else
+      return Time.now.month
+    end
+  end
+
+  def yearly_month_of_year2=(moy)
+    self.every_other2 = moy if self.recurring_period=='yearly' && self.recurrence_selector == 1
+  end
+  
+  def yearly_month_of_year2
+    # if recurrence pattern is every xth day in a month, return month otherwise
+    # return a default value
+    if self.recurrence_selector == 1
+      return self.every_other2
+    else
+      return Time.now.month
     end
   end
   
   def yearly_every_x_day=(x)
-    if recurring_period=='yearly'
-      self.every_other1 = x
-    end
+    self.every_other1 = x if recurring_period=='yearly'
+  end
+  
+  def yearly_every_x_day
+    return self.every_other1
   end
   
   def yearly_every_xth_day=(x)
-    if recurring_period=='yearly'
-      self.every_other3 = x
-    end
+    self.every_other3 = x if recurring_period=='yearly'
+  end
+  
+  def yearly_every_xth_day
+    return self.every_other3
   end
   
   def yearly_day_of_week=(dow)
-    if recurring_period=='yearly'
-      self.every_count=dow
-    end
+    self.every_count=dow if recurring_period=='yearly'
+  end
+  
+  def yearly_day_of_week
+    return self.every_count
   end
   
   # target
@@ -243,7 +304,7 @@ class RecurringTodo < ActiveRecord::Base
       end
     when 'monthly'
       if self.recurrence_selector == 0
-        return "every month on day #{self.every_other1}"
+        return "every #{self.every_other2} month#{self.every_other2>1?'s':''} on day #{self.every_other1}"
       else
         return "every #{self.xth} #{self.day_of_week} of every #{self.every_other2} month#{self.every_other2>1?'s':''}"
       end
@@ -512,6 +573,12 @@ class RecurringTodo < ActiveRecord::Base
   def inc_occurences
     self.occurences_count += 1
     self.save
+  end
+  
+  protected
+  
+  def validate
+    errors.add("", "At least one day must be selected in the weekly pattern") if self.every_day == '       '
   end
   
 end
