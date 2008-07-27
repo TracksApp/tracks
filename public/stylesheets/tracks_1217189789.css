@@ -218,6 +218,7 @@ body.integrations h2 {margin-top:40px; padding-top:20px; margin-bottom:10px; bor
 body.integrations p, body.integrations li {font-size:1.0em}
 body.integrations li {list-style-type: disc; list-style-position: inside; margin-left:30px}
 body.integrations textarea {margin:10px; padding:3px; width:80%; background-color:#ddd}
+.date_clear {float: right}
 div.calendar {position: relative}
 .calendar, .calendar table {border: 1px solid #556; font-size: 11px; color: #000; cursor: default; background: #eef; z-index: 110; font-family: tahoma,verdana,sans-serif}
 .calendar .button {text-align: center; padding: 2px}
