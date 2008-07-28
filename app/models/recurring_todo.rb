@@ -170,6 +170,16 @@ class RecurringTodo < ActiveRecord::Base
     return self.every_other1
   end
   
+  def is_monthly_every_x_day
+    return self.recurrence_selector == 0 if recurring_period == 'monthly'
+    return false
+  end
+
+  def is_monthly_every_xth_day
+    return self.recurrence_selector == 1 if recurring_period == 'monthly'
+    return false
+  end
+  
   def monthly_every_x_month=(x)
     self.every_other2 = x if recurring_period=='monthly' && recurrence_selector == 0
   end
@@ -202,8 +212,9 @@ class RecurringTodo < ActiveRecord::Base
     self.every_other3 = x if recurring_period=='monthly' 
   end
   
-  def monthly_every_xth_day
-    return self.every_other3
+  def monthly_every_xth_day(default=nil)
+    return self.every_other3 unless self.every_other3.nil?
+    return default
   end
   
   def monthly_day_of_week=(dow)

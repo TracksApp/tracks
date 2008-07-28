@@ -102,11 +102,11 @@
     </div>
     <div id="recurring_edit_monthly" style="display:<%= @recurring_todo.recurring_period == 'monthly' ? 'block' : 'none' %>">
       <label>Recurrence</label><br/>
-      <%= radio_button_tag('recurring_todo[monthly_selector]', 'monthly_every_x_day', @recurring_todo.recurrence_selector == 0)%> Day <%= 
+      <%= radio_button_tag('recurring_todo[monthly_selector]', 'monthly_every_x_day', @recurring_todo.is_monthly_every_x_day || @recurring_todo.recurring_period == 'weekly')%> Day <%= 
       text_field_tag('recurring_todo[monthly_every_x_day]', @recurring_todo.monthly_every_x_day, {"size" => 3, "tabindex" => 9}) %> on every <%= 
       text_field_tag('recurring_todo[monthly_every_x_month]', @recurring_todo.monthly_every_x_month, {"size" => 3, "tabindex" => 10}) %> month<br/>
-      <%= radio_button_tag('recurring_todo[monthly_selector]', 'monthly_every_xth_day', @recurring_todo.recurrence_selector == 1)%> The <%= 
-      select_tag('recurring_todo[monthly_every_xth_day]', options_for_select(@xth_day, @xth_day[@recurring_todo.monthly_every_xth_day-1][1])) %> <%= 
+      <%= radio_button_tag('recurring_todo[monthly_selector]', 'monthly_every_xth_day', @recurring_todo.is_monthly_every_xth_day)%> The <%= 
+      select_tag('recurring_todo[monthly_every_xth_day]', options_for_select(@xth_day, @xth_day[@recurring_todo.monthly_every_xth_day(1)-1][1])) %> <%= 
       select_tag('recurring_todo[monthly_day_of_week]' , options_for_select(@days_of_week, @recurring_todo.monthly_day_of_week), {}) %> of every <%= 
       text_field_tag('recurring_todo[monthly_every_x_month2]', @recurring_todo.monthly_every_x_month2, {"size" => 3, "tabindex" => 11}) %> month<br/>
     </div>

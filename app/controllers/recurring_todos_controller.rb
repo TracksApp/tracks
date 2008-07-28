@@ -82,7 +82,8 @@ class RecurringTodosController < ApplicationController
   
   def create
     p = RecurringTodoCreateParamsHelper.new(params)
-    @recurring_todo = current_user.recurring_todos.build(p.attributes)
+    @recurring_todo = current_user.recurring_todos.build(p.selector_attributes)
+    @recurring_todo.update_attributes(p.attributes)
 
     if p.project_specified_by_name?
       project = current_user.projects.find_or_create_by_name(p.project_name)
@@ -185,21 +186,25 @@ class RecurringTodosController < ApplicationController
 
     def initialize(params)
       @params = params['request'] || params
-      attr = params['request'] && params['request']['recurring_todo']  || params['recurring_todo']
+      @attributes = params['request'] && params['request']['recurring_todo']  || params['recurring_todo']
       
       # make sure all selectors (recurring_period, recurrence_selector,
       # daily_selector, monthly_selector and yearly_selector) are first in hash
       # so that they are processed first by the model
-      @attributes = {
-        'recurring_period' => attr['recurring_period'],
-        'daily_selector' => attr['daily_selector'],
-        'monthly_selector' => attr['monthly_selector'],
-        'yearly_selector' => attr['yearly_selector']
-      }.merge(attr)
+      @selector_attributes = {
+        'recurring_period' => @attributes['recurring_period'],
+        'daily_selector' => @attributes['daily_selector'],
+        'monthly_selector' => @attributes['monthly_selector'],
+        'yearly_selector' => @attributes['yearly_selector']
+      }
     end
       
     def attributes
       @attributes
+    end
+    
+    def selector_attributes
+      return @selector_attributes
     end
             
     def project_name
