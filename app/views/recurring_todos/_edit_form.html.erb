@@ -17,36 +17,36 @@
         <label for="recurring_todo_notes">Notes</label><%= 
         text_area_tag( "recurring_todo[notes]", @recurring_todo.notes, {:cols => 29, :rows => 6, :tabindex => 2}) -%>
                             
-        <label for="recurring_todo_project_name">Project</label>
-        <input id="recurring_todo_project_name" name="project_name" autocomplete="off" tabindex="3" size="30" type="text" value="<%= @recurring_todo.project.nil? ? 'None' : @recurring_todo.project.name.gsub(/"/,"&quot;") %>" />
-        <div class="page_name_auto_complete" id="project_list" style="display:none"></div>
+        <label for="edit_recurring_todo_project_name">Project</label>
+        <input id="edit_recurring_todo_project_name" name="project_name" autocomplete="off" tabindex="3" size="30" type="text" value="<%= @recurring_todo.project.nil? ? 'None' : @recurring_todo.project.name.gsub(/"/,"&quot;") %>" />
+        <div class="page_name_auto_complete" id="edit_project_list" style="display:none"></div>
         <script type="text/javascript">
-            projectAutoCompleter = new Autocompleter.Local('recurring_todo_project_name', 'project_list', <%= project_names_for_autocomplete %>, {choices:100,autoSelect:false});
+            projectAutoCompleter = new Autocompleter.Local('edit_recurring_todo_project_name', 'edit_project_list', <%= project_names_for_autocomplete %>, {choices:100,autoSelect:false});
             function selectDefaultContext() {
-                todoContextNameElement = $('recurring_todo_context_name');
+                todoContextNameElement = $('edit_recurring_todo_context_name');
                 defaultContextName = todoContextNameElement.projectDefaultContextsMap[this.value];
                 if (defaultContextName && !todoContextNameElement.editedByTracksUser) {
                     todoContextNameElement.value = defaultContextName;
                 }
             }
-            Event.observe($('recurring_todo_project_name'), "focus", projectAutoCompleter.activate.bind(projectAutoCompleter));
-            Event.observe($('recurring_todo_project_name'), "click", projectAutoCompleter.activate.bind(projectAutoCompleter));
-            Event.observe($('recurring_todo_project_name'), "blur", selectDefaultContext.bind($('recurring_todo_project_name')));
+            Event.observe($('edit_recurring_todo_project_name'), "focus", projectAutoCompleter.activate.bind(projectAutoCompleter));
+            Event.observe($('edit_recurring_todo_project_name'), "click", projectAutoCompleter.activate.bind(projectAutoCompleter));
+            Event.observe($('edit_recurring_todo_project_name'), "blur", selectDefaultContext.bind($('edit_recurring_todo_project_name')));
         </script>
       
-        <label for="recurring_todo_context_name">Context</label>
-        <input id="recurring_todo_context_name" name="context_name" autocomplete="off" tabindex="4" size="30" type="text" value="<%= @recurring_todo.context.name %>" />
-        <div class="page_name_auto_complete" id="context_list" style="display:none"></div>  
+        <label for="edit_recurring_todo_context_name">Context</label>
+        <input id="edit_recurring_todo_context_name" name="context_name" autocomplete="off" tabindex="4" size="30" type="text" value="<%= @recurring_todo.context.name %>" />
+        <div class="page_name_auto_complete" id="edit_context_list" style="display:none"></div>  
         <script type="text/javascript">
             var contextAutoCompleter;
             function initializeNamesForAutoComplete(contextNamesForAutoComplete) {
                 if (contextNamesForAutoComplete.length == 0 || contextNamesForAutoComplete[0].length == 0) {
                     return;
                 }
-                contextAutoCompleter = new Autocompleter.Local('recurring_todo_context_name', 'context_list', contextNamesForAutoComplete, {choices:100,autoSelect:false});
-                Event.observe($('recurring_todo_context_name'), "focus", function(){ $('recurring_todo_context_name').editedByTracksUser = true; });
-                Event.observe($('recurring_todo_context_name'), "focus", contextAutoCompleter.activate.bind(contextAutoCompleter));
-                Event.observe($('recurring_todo_context_name'), "click", contextAutoCompleter.activate.bind(contextAutoCompleter));	
+                contextAutoCompleter = new Autocompleter.Local('edit_recurring_todo_context_name', 'edit_context_list', contextNamesForAutoComplete, {choices:100,autoSelect:false});
+                Event.observe($('edit_recurring_todo_context_name'), "focus", function(){ $('edit_recurring_todo_context_name').editedByTracksUser = true; });
+                Event.observe($('edit_recurring_todo_context_name'), "focus", contextAutoCompleter.activate.bind(contextAutoCompleter));
+                Event.observe($('edit_recurring_todo_context_name'), "click", contextAutoCompleter.activate.bind(contextAutoCompleter));	
             }
             function updateContextNamesForAutoComplete(contextNamesForAutoComplete) {
                 if (contextAutoCompleter) { // i.e. if we're already initialized 
@@ -56,7 +56,7 @@
                 }
             }
             initializeNamesForAutoComplete(<%= context_names_for_autocomplete %>);
-            $('recurring_todo_context_name').projectDefaultContextsMap = eval('(' + <%= @default_project_context_name_map %> + ')');
+            $('edit_recurring_todo_context_name').projectDefaultContextsMap = eval('(' + <%= @default_project_context_name_map %> + ')');
         </script>
       
         <label for="tag_list">Tags (separate with commas)</label><%= 

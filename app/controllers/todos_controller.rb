@@ -343,7 +343,6 @@ class TodosController < ApplicationController
     @hidden_todos = current_user.todos.find(:all, 
       :include => [:taggings, :tags, :context], 
       :conditions => ['tags.name = ? AND (todos.state = ? OR (contexts.hide = ? AND todos.state = ?))', @tag_name, 'project_hidden', true, 'active'])
-    #@hidden_todos = tag_collection.find(:all, :conditions => ['taggings.user_id = ? and state = ?', current_user.id, 'project_hidden'])
     
     @contexts = current_user.contexts.find(:all)
     @contexts_to_show = @contexts.reject {|x| x.hide? }
