@@ -74,6 +74,7 @@ class RecurringTodoTest < Test::Rails::TestCase
     
     # check show from get the next day
     assert_equal @today, @every_day.get_show_from_date(@today-1.days)
+    assert_equal @today+1.day, @every_day.get_show_from_date(@today)
     
     @every_day.target='due_date'
     # when target on due_date, show_from is relative to due date unless delta=0
@@ -144,9 +145,9 @@ class RecurringTodoTest < Test::Rails::TestCase
   def test_monthly_pattern
     due_date = @monthly_every_last_friday.get_due_date(@sunday)
     assert_equal Time.utc(2008,6,27), due_date
-
+    
     friday_is_last_day_of_month = Time.utc(2008,10,31)
-    due_date = @monthly_every_last_friday.get_due_date(friday_is_last_day_of_month )
+    due_date = @monthly_every_last_friday.get_due_date(friday_is_last_day_of_month-1.day )
     assert_equal friday_is_last_day_of_month , due_date
     
     @monthly_every_third_friday = @monthly_every_last_friday

@@ -466,7 +466,7 @@ class RecurringTodo < ActiveRecord::Base
       
     when 1 # relative weekday of a month
       the_next = get_xth_day_of_month(self.every_other3, self.every_count, start.month, start.year)
-      if the_next.nil? || the_next < start
+      if the_next.nil? || the_next <= start
         # the nth day is already passed in this month, go to next month and try
         # again
         the_next = the_next+n.months
