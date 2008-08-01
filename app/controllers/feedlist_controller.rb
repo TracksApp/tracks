@@ -4,7 +4,13 @@ class FeedlistController < ApplicationController
 
   def index
     @page_title = 'TRACKS::Feeds'
-    init_data_for_sidebar unless mobile?
+    
+    unless mobile?
+      init_data_for_sidebar 
+    else
+      @projects = current_user.projects
+      @contexts = current_user.contexts
+    end
     
     @active_projects = @projects.select{ |p| p.active? }
     @hidden_projects = @projects.select{ |p| p.hidden? }

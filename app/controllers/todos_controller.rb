@@ -502,7 +502,7 @@ class TodosController < ApplicationController
       :conditions => ['todos.user_id = ? AND todos.state = ? AND contexts.hide = ? AND (projects.state = ? OR todos.project_id IS NULL)', 
         current_user.id, 'active', false, 'active'], 
       :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC", 
-      :include => [ :project, :context ])
+      :include => [ :project, :context, :tags ])
   end
     
   def determine_down_count

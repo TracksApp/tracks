@@ -27,6 +27,9 @@
 <li><%= rss_formatted_link({:controller => 'projects', :action => 'index', :only_active_with_no_next_actions => true}) %>
  <%= text_formatted_link({:controller => 'projects', :action => 'index', :only_active_with_no_next_actions => true}) %>
  Active projects with no next actions</li>
+<li><%= rss_formatted_link({:controller => 'todos', :action => 'index', :tag => 'starred'}) %>
+<%= text_formatted_link({:controller => 'todos', :action => 'index', :tag => 'starred'}) %>
+ All starred, active actions</li>
 <li><%= text_formatted_link({:controller => 'projects', :action => 'index', :projects_and_actions => true}) %>
- Active projects with their actions                    
-</li></ul>
+ Active projects with their actions</li>
+</ul>
