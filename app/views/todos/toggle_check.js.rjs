@@ -4,7 +4,7 @@ if @saved
     # completed todos move from their context to the completed container
     
     unless @prefs.hide_completed_actions?
-      page.insert_html :top, "completed", :partial => 'todos/todo', :locals => { :parent_container_type => "completed" }
+      page.insert_html :top, "completed_containeritems", :partial => 'todos/todo', :locals => { :parent_container_type => "completed" }
       page.visual_effect :highlight, dom_id(@todo, 'line'), {'startcolor' => "'#99ff99'"}
       page[empty_container_msg_div_id].show if @down_count == 0 && !empty_container_msg_div_id.nil?
       page.show 'tickler-empty-nd' if source_view_is(:project) && @deferred_count == 0
