@@ -81,13 +81,13 @@
         <%= radio_button_tag('recurring_todo[ends_on]', 'ends_on_end_date')%> Ends on <%= text_field(:recurring_todo, :end_date, "size" => 12, "class" => "Date", "onfocus" => "Calendar.setup", "tabindex" => 8, "autocomplete" => "off") %><br/>
     </div></div>
     <div id="recurring_daily" style="display:block">
-      <label>Recurrence</label><br/>
+      <label>Settings for daily recurring actions</label><br/>
       <%= radio_button_tag('recurring_todo[daily_selector]', 'daily_every_x_day', true)%> Every <%= 
       text_field_tag( 'recurring_todo[daily_every_x_days]', "1", {"size" => 3, "tabindex" => 9}) %> day(s)<br/>
       <%= radio_button_tag('recurring_todo[daily_selector]', 'daily_every_work_day')%> Every work day<br/>
     </div>
     <div id="recurring_weekly" style="display:none">
-      <label>Recurrence</label><br/>
+      <label>Settings for weekly recurring actions</label><br/>
       Returns every <%= text_field_tag('recurring_todo[weekly_every_x_week]', 1, {"size" => 3, "tabindex" => 9}) %> week on<br/>
       <% week_day = Time.new.wday -%>
       <%= check_box_tag('recurring_todo[weekly_return_monday]', 'm', week_day == 1 ? true : false) %> Monday
@@ -99,7 +99,7 @@
       <%= check_box_tag('recurring_todo[weekly_return_sunday]', 's', week_day == 0 ? true : false) %> Sunday<br/>
     </div>
     <div id="recurring_monthly" style="display:none">
-      <label>Recurrence</label><br/>
+      <label>Settings for monthly recurring actions</label><br/>
       <%= radio_button_tag('recurring_todo[monthly_selector]', 'monthly_every_x_day', true)%> Day <%= 
       text_field_tag('recurring_todo[monthly_every_x_day]', Time.now.mday, {"size" => 3, "tabindex" => 9}) %> on every <%= 
       text_field_tag('recurring_todo[monthly_every_x_month]', 1, {"size" => 3, "tabindex" => 10}) %> month<br/>
@@ -109,7 +109,7 @@
       text_field_tag('recurring_todo[monthly_every_x_month2]', 1, {"size" => 3, "tabindex" => 11}) %> month<br/>
     </div>
     <div id="recurring_yearly" style="display:none">
-      <label>Recurrence</label><br/>
+      <label>Settings for yearly recurring actions</label><br/>
       <%= radio_button_tag('recurring_todo[yearly_selector]', 'yearly_every_x_day', true)%> Every <%= 
       select_tag('recurring_todo[yearly_month_of_year]', options_for_select(@months_of_year, Time.now.month), {}) %> <%= 
       text_field_tag('recurring_todo[yearly_every_x_day]', Time.now.day, "size" => 3, "tabindex" => 9) %><br/>
