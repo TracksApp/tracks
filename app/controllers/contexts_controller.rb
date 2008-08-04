@@ -144,6 +144,7 @@ class ContextsController < ApplicationController
       @not_done = @not_done_todos.select {|t| t.context_id == @context.id } 
       @down_count = @not_done.size 
       cookies[:mobile_url]=request.request_uri
+      @mobile_from_context = @context.id
       render :action => 'mobile_show_context'
     end
   end

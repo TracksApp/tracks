@@ -17,12 +17,12 @@ if @saved
     end
     
     # show new todo if the completed todo was recurring
-    unless @new_recurring_todo.nil?
+    unless @new_recurring_todo.nil? || @new_recurring_todo.deferred?
       page.call "todoItems.ensureVisibleWithEffectAppear", item_container_id(@new_recurring_todo)
       page.insert_html :bottom, item_container_id(@new_recurring_todo), :partial => 'todos/todo', :locals => { :todo => @new_recurring_todo, :parent_container_type => parent_container_type }
       page.visual_effect :highlight, dom_id(@new_recurring_todo, 'line'), {'startcolor' => "'#99ff99'"}      
     else
-      page.notify :notice, "There is no next action after the recurring action you just finished. The recurrence is completed", 6.0 unless @recurring_todo.nil?
+      page.notify :notice, "There is no next action after the recurring action you just finished. The recurrence is completed", 6.0 unless @new_recurring_todo.deferred?
     end
     
   else

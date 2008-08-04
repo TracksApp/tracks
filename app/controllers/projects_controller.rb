@@ -218,6 +218,7 @@ class ProjectsController < ApplicationController
           @project.default_context.name
       end
       cookies[:mobile_url]=request.request_uri
+      @mobile_from_project = @project.id
       render :action => 'project_mobile'
     end
   end

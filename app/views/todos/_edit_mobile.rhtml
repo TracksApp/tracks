@@ -12,10 +12,24 @@ if parent_container_type == 'show_mobile' -%>
 <h2><label for="todo_notes">Notes</label></h2>
 <%= text_area( "todo", "notes", "cols" => 30, "rows" => 5, "tabindex" => 3) %>
 <h2><label for="todo_context_id">Context</label></h2>
-<%= collection_select( "todo", "context_id", @contexts, "id", "name", {"tabindex" => 4} ) %>
+<%= unless @mobile_from_context
+  collection_select( "todo", "context_id", @contexts, "id", "name", {}, {"tabindex" => 4} ) 
+else
+  select_tag("todo[context_id]", options_from_collection_for_select(
+    @contexts, "id", "name", @mobile_from_context.id), 
+    {"id" => :todo_context_id, :tabindex => 4} )
+end %>
 <h2><label for="todo_project_id">Project</label></h2>
-<%= collection_select( "todo", "project_id", @projects, "id", "name",
-                          {:include_blank => true}, {"tabindex" => 5} ) %>
+<%= unless @mobile_from_project
+  collection_select( "todo", "project_id", @projects, "id", "name",
+                          {:include_blank => true}, {"tabindex" => 5} )
+else
+  # manually add blank option since :include_blank does not work 
+  # with options_from_collection_for_select
+  select_tag("todo[project_id]", "<option value=\"\"></option>"+options_from_collection_for_select(
+    @projects, "id", "name", @mobile_from_project.id), 
+    {"id" => :todo_project_id, :tabindex => 5} )
+end %>
 <h2><label for="tag_list">Tags (separate with commas)</label></h2>
 <%= text_field_tag "tag_list", @tag_list_text, :size => 30, :tabindex => 6 %> 
 <h2><label for="todo_due">Due</label></h2>

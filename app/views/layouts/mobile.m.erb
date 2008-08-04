@@ -1,4 +1,8 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<%
+    new_todo_params = {}
+    new_todo_params[:from_project] = @mobile_from_project if @mobile_from_project
+    new_todo_params[:from_context] = @mobile_from_context if @mobile_from_context
+-%><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -10,7 +14,7 @@
       if !@prefs.nil? -%>
 <h1><span class="count"><%= @down_count %></span> <%= 
         user_time.strftime(@prefs.title_date_format) -%></h1>
-<%=     (link_to("0-Add new action", formatted_new_todo_path(:m))+" | ") unless @new_mobile -%>
+<%=     (link_to("0-Add new action", formatted_new_todo_path(:m, new_todo_params))+" | ") unless @new_mobile -%>
 <%=     (link_to("1-Home", formatted_todos_path(:m))+" | ") unless @home -%>
 <%=     (link_to("2-Contexts", formatted_contexts_path(:m))+" | ") -%>
 <%=     (link_to("3-Projects", formatted_projects_path(:m))+" | ") -%>

@@ -33,6 +33,12 @@ class TodosController < ApplicationController
       format.m {
         @new_mobile = true
         @return_path=cookies[:mobile_url]
+        @mobile_from_context = current_user.contexts.find_by_id(params[:from_context]) if params[:from_context]
+        @mobile_from_project = current_user.projects.find_by_id(params[:from_project]) if params[:from_project]
+        if params[:from_project] && !params[:from_context]
+          # we have a project but not a context -> use the default context
+          @mobile_from_context = @mobile_from_project.default_context
+        end
         render :action => "new" 
       }
     end
@@ -71,7 +77,7 @@ class TodosController < ApplicationController
         # todo: use function for this fixed path
         @return_path='/mobile' if @return_path.nil?
         if @saved
-          redirect_to mobile_abbrev_url
+          redirect_to @return_path
         else
           @projects = current_user.projects.find(:all)
           @contexts = current_user.contexts.find(:all)
