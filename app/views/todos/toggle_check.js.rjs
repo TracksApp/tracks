@@ -1,8 +1,8 @@
 if @saved  
   page[@todo].remove
   if @todo.completed?
+
     # completed todos move from their context to the completed container
-    
     unless @prefs.hide_completed_actions?
       page.insert_html :top, "completed_containeritems", :partial => 'todos/todo', :locals => { :parent_container_type => "completed" }
       page.visual_effect :highlight, dom_id(@todo, 'line'), {'startcolor' => "'#99ff99'"}
@@ -17,12 +17,14 @@ if @saved
     end
     
     # show new todo if the completed todo was recurring
-    unless @new_recurring_todo.nil? || @new_recurring_todo.deferred?
-      page.call "todoItems.ensureVisibleWithEffectAppear", item_container_id(@new_recurring_todo)
-      page.insert_html :bottom, item_container_id(@new_recurring_todo), :partial => 'todos/todo', :locals => { :todo => @new_recurring_todo, :parent_container_type => parent_container_type }
-      page.visual_effect :highlight, dom_id(@new_recurring_todo, 'line'), {'startcolor' => "'#99ff99'"}      
-    else
-      page.notify :notice, "There is no next action after the recurring action you just finished. The recurrence is completed", 6.0 unless @new_recurring_todo.deferred?
+    if @todo.from_recurring_todo?
+      unless @new_recurring_todo.nil? || @new_recurring_todo.deferred?
+        page.call "todoItems.ensureVisibleWithEffectAppear", item_container_id(@new_recurring_todo)
+        page.insert_html :bottom, item_container_id(@new_recurring_todo), :partial => 'todos/todo', :locals => { :todo => @new_recurring_todo, :parent_container_type => parent_container_type }
+        page.visual_effect :highlight, dom_id(@new_recurring_todo, 'line'), {'startcolor' => "'#99ff99'"}      
+      else
+        page.notify :notice, "There is no next action after the recurring action you just finished. The recurrence is completed", 6.0 if @new_recurring_todo.nil?
+      end
     end
     
   else
