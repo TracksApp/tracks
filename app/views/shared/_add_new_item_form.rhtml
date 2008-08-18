@@ -8,7 +8,7 @@
 <div id="todo_new_action_container">
 
   <div id="toggle_action_new" class="hide_form">
-    <a title="Hide new action form" accesskey="n">&laquo; Hide form</a>
+    <a title="Hide new action form" accesskey="n" href="#">&laquo; Hide form</a>
     <%  apply_behavior '#toggle_action_new a:click', :prevent_default => true do |page|
           page << "TracksForm.toggle('toggle_action_new', 'todo_new_action', 'todo-form-new-action',
                                      '&laquo; Hide form', 'Hide next action form',
