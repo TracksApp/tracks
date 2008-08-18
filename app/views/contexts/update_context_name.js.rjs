@@ -1,0 +1,10 @@
+page['context_name_in_place_editor'].replace_html @context.name
+
+page['default_context_name_id'].value = @context.name
+page['todo_context_name'].value = @context.name
+
+# renew context auto complete array
+page << "contextAutoCompleter.options.array = #{context_names_for_autocomplete}; contextAutoCompleter.changed = true"
+
+status_message = "Name of context was changed"
+page.notify :notice, status_message, 5.0

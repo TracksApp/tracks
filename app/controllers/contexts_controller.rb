@@ -83,10 +83,14 @@ class ContextsController < ApplicationController
     end
     @context.attributes = params["context"]
     if @context.save
-      if params['wants_render']
+      if boolean_param('wants_render')
         respond_to do |format|
           format.js
         end
+      elsif boolean_param('update_context_name')
+        @contexts = current_user.projects
+        render :template => 'contexts/update_context_name.js.rjs'
+        return
       else
         render :text => success_text || 'Success'
       end

@@ -34,6 +34,7 @@
 <label for="todo_notes">Notes</label>
 <%= text_area( "todo", "notes", "cols" => 29, "rows" => 6, "tabindex" => 2) %>
 
+<input id="default_project_name_id" name="default_project_name" type="hidden" value="<%=@initial_project_name-%>" />
 <label for="todo_project_name">Project</label>
 <input id="todo_project_name" name="project_name" autocomplete="off" tabindex="3" size="30" type="text" value="<%= @initial_project_name %>" />
 <div class="page_name_auto_complete" id="project_list" style="display:none"></div>
