@@ -93,6 +93,8 @@ if (AUTHENTICATION_SCHEMES.include? 'open_id')
   #requires ruby-openid gem to be installed
 end
 
+# setting this to true will make the cookies only available over HTTPS
+TRACKS_COOKIES_SECURE = false  
 
 MOBILE_CONTENT_TYPE = 'tracks/mobile'
 Mime::Type.register(MOBILE_CONTENT_TYPE, :m)
