@@ -36,8 +36,8 @@ class RecurringTodosController < ApplicationController
     # the form for a new recurring todo and the edit form are on the same page.
     # Same goes for start_from and end_date
     params['recurring_todo']['recurring_period']=params['recurring_edit_todo']['recurring_period']
-    params['recurring_todo']['end_date']=params['recurring_todo_edit_end_date']
-    params['recurring_todo']['start_from']=params['recurring_todo_edit_start_from']
+    params['recurring_todo']['end_date']=parse_date_per_user_prefs(params['recurring_todo_edit_end_date'])
+    params['recurring_todo']['start_from']=parse_date_per_user_prefs(params['recurring_todo_edit_start_from'])
     
     # update project
     if params['recurring_todo']['project_id'].blank? && !params['project_name'].nil?
@@ -84,6 +84,9 @@ class RecurringTodosController < ApplicationController
   
   def create
     p = RecurringTodoCreateParamsHelper.new(params)
+    p.attributes['end_date']=parse_date_per_user_prefs(p.attributes['end_date'])
+    p.attributes['start_from']=parse_date_per_user_prefs(p.attributes['start_from'])
+
     @recurring_todo = current_user.recurring_todos.build(p.selector_attributes)
     @recurring_todo.update_attributes(p.attributes)
 
