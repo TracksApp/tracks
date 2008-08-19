@@ -3,7 +3,7 @@ module AuthenticatedTestHelper
   def login_as(user)
     @request.session['user_id'] = user ? users(user).id : nil
   end
-  
+
   def content_type(type)
     @request.env['Content-Type'] = type
   end

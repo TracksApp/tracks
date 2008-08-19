@@ -70,7 +70,7 @@ class TodosControllerTest < Test::Rails::TestCase
     login_as(:admin_user)
     xhr :post, :destroy, :id => 1, :_source_view => 'todo'
     assert_rjs :page, "todo_1", :remove
-    #assert_rjs :replace_html, "badge-count", '9' 
+    # #assert_rjs :replace_html, "badge-count", '9'
   end
   
   def test_create_todo
@@ -90,11 +90,11 @@ class TodosControllerTest < Test::Rails::TestCase
 
   def test_fail_to_create_todo_via_xml
     login_as(:admin_user)
-    #try to create with no context, which is not valid
+    # #try to create with no context, which is not valid
     put :create, :format => "xml", "request" => { "project_name"=>"Build a working time machine", "todo"=>{"notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>"foo bar" }
     assert_response 422
     assert_xml_select "errors" do
-       assert_xml_select "error", "Context can't be blank"
+      assert_xml_select "error", "Context can't be blank"
     end
   end
   
@@ -180,7 +180,7 @@ class TodosControllerTest < Test::Rails::TestCase
     login_as(:admin_user)
     get :index, { :format => "rss" }
     assert_equal 'application/rss+xml', @response.content_type
-    #puts @response.body
+    # #puts @response.body
 
     assert_xml_select 'rss[version="2.0"]' do
       assert_select 'channel' do
@@ -237,7 +237,7 @@ class TodosControllerTest < Test::Rails::TestCase
     login_as :admin_user
     get :index, { :format => "atom" }
     assert_equal 'application/atom+xml', @response.content_type
-    #puts @response.body
+    # #puts @response.body
 
     assert_xml_select 'feed[xmlns="http://www.w3.org/2005/Atom"]' do
       assert_xml_select '>title', 'Tracks Actions'
@@ -273,7 +273,7 @@ class TodosControllerTest < Test::Rails::TestCase
     get :index, { :format => "txt" }
     assert_equal 'text/plain', @response.content_type
     assert !(/&nbsp;/.match(@response.body))
-    #puts @response.body
+    # #puts @response.body
   end
 
   def test_text_feed_not_accessible_to_anonymous_user_without_token
@@ -299,7 +299,7 @@ class TodosControllerTest < Test::Rails::TestCase
     get :index, { :format => "ics" }
     assert_equal 'text/calendar', @response.content_type
     assert !(/&nbsp;/.match(@response.body))
-    #puts @response.body
+    # #puts @response.body
   end
   
   def test_mobile_index_uses_text_html_content_type
@@ -317,10 +317,10 @@ class TodosControllerTest < Test::Rails::TestCase
   def test_mobile_create_action_creates_a_new_todo
     login_as(:admin_user)
     post :create, {"format"=>"m", "todo"=>{"context_id"=>"2",
-                   "due(1i)"=>"2007", "due(2i)"=>"1", "due(3i)"=>"2",
-                   "show_from(1i)"=>"", "show_from(2i)"=>"", "show_from(3i)"=>"",
-                   "project_id"=>"1", 
-                   "notes"=>"test notes", "description"=>"test_mobile_create_action", "state"=>"0"}}
+        "due(1i)"=>"2007", "due(2i)"=>"1", "due(3i)"=>"2",
+        "show_from(1i)"=>"", "show_from(2i)"=>"", "show_from(3i)"=>"",
+        "project_id"=>"1", 
+        "notes"=>"test notes", "description"=>"test_mobile_create_action", "state"=>"0"}}
     t = Todo.find_by_description("test_mobile_create_action")
     assert_not_nil t
     assert_equal 2, t.context_id
@@ -334,20 +334,20 @@ class TodosControllerTest < Test::Rails::TestCase
   def test_mobile_create_action_redirects_to_mobile_home_page_when_successful
     login_as(:admin_user)
     post :create, {"format"=>"m", "todo"=>{"context_id"=>"2",
-                   "due(1i)"=>"2007", "due(2i)"=>"1", "due(3i)"=>"2",
-                   "show_from(1i)"=>"", "show_from(2i)"=>"", "show_from(3i)"=>"",
-                   "project_id"=>"1", 
-                   "notes"=>"test notes", "description"=>"test_mobile_create_action", "state"=>"0"}}
+        "due(1i)"=>"2007", "due(2i)"=>"1", "due(3i)"=>"2",
+        "show_from(1i)"=>"", "show_from(2i)"=>"", "show_from(3i)"=>"",
+        "project_id"=>"1", 
+        "notes"=>"test notes", "description"=>"test_mobile_create_action", "state"=>"0"}}
     assert_redirected_to '/m'
   end
 
   def test_mobile_create_action_renders_new_template_when_save_fails
     login_as(:admin_user)
     post :create, {"format"=>"m", "todo"=>{"context_id"=>"2",
-                   "due(1i)"=>"2007", "due(2i)"=>"1", "due(3i)"=>"2",
-                   "show_from(1i)"=>"", "show_from(2i)"=>"", "show_from(3i)"=>"",
-                   "project_id"=>"1", 
-                   "notes"=>"test notes", "state"=>"0"}, "tag_list"=>"test, test2"}
+        "due(1i)"=>"2007", "due(2i)"=>"1", "due(3i)"=>"2",
+        "show_from(1i)"=>"", "show_from(2i)"=>"", "show_from(3i)"=>"",
+        "project_id"=>"1", 
+        "notes"=>"test notes", "state"=>"0"}, "tag_list"=>"test, test2"}
     assert_template 'todos/new'
   end
 
@@ -357,4 +357,25 @@ class TodosControllerTest < Test::Rails::TestCase
     assert_equal '"{\\"Build a working time machine\\": \\"lab\\"}"', assigns(:default_project_context_name_map)
   end
 
+  def test_toggle_check_on_recurring_todo
+    login_as(:admin_user)
+    
+    # link todo_1 and recurring_todo_1
+    recurring_todo_1 = RecurringTodo.find(1)
+    todo_1 = Todo.find(1)
+    todo_1.recurring_todo_id = recurring_todo_1.id
+    
+    # update todo_1
+    assert todo_1.save
+    
+    # mark todo_1 as complete by toggle_check
+    xhr :post, :toggle_check, :id => 1, :_source_view => 'todo' 
+    todo_1.reload
+    assert todo_1.completed?
+
+    # check there is a new todo linked to the recurring pattern
+    next_todo = Todo.find_by_recurring_todo_id(recurring_todo_1.id)
+    assert_equal "Call Bill Gates every day", next_todo.description
+  end
+  
 end
