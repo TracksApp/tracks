@@ -18,5 +18,5 @@ class RecurringTodosControllerTest < ActionController::TestCase
     xhr :post, :destroy, :id => 1, :_source_view => 'todo'
     assert_rjs :page, "recurring_todo_1", :remove
   end
-    
+
 end

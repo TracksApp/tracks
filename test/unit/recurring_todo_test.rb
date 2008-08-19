@@ -174,12 +174,14 @@ class RecurringTodoTest < Test::Rails::TestCase
   def test_yearly_pattern
     # beginning of same year
     due_date = @yearly.get_due_date(Time.utc(2008,2,10)) # feb 10th
-    assert_equal @sunday, due_date # june 8th    
+    assert_equal @sunday, due_date # june 8th   
+    
     # same month, previous date
     due_date = @yearly.get_due_date(@saturday) # june 7th
     show_from_date = @yearly.get_show_from_date(@saturday) # june 7th
     assert_equal @sunday, due_date # june 8th
     assert_equal @sunday-5.days, show_from_date
+
     # same month, day after
     due_date = @yearly.get_due_date(@monday) # june 9th
     assert_equal Time.utc(2009,6,8), due_date # june 8th next year
@@ -197,7 +199,7 @@ class RecurringTodoTest < Test::Rails::TestCase
     due_date = @yearly.get_due_date(Time.utc(2008,6,12)) # june 7th
     assert_equal Time.utc(2009,6,10), due_date # june 10th    
     
-    # test handling of nil 
+    # test handling of nil
     due_date1 = @yearly.get_due_date(nil) 
     due_date2 = @yearly.get_due_date(Time.now.utc + 1.day)
     assert_equal due_date1, due_date2
@@ -207,7 +209,7 @@ class RecurringTodoTest < Test::Rails::TestCase
     due_date = @yearly.get_due_date(nil) 
     assert_equal due_date.year, this_year+2
   end
-
+  
   def test_toggle_completion
     t = @yearly
     assert_equal :active, t.current_state
