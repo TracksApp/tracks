@@ -508,7 +508,13 @@ class RecurringTodo < ActiveRecord::Base
     if previous.nil?
       start = self.start_from.nil? ? Time.now.utc : self.start_from
     else
-      start = previous
+      if self.start_from.nil?
+        start = previous
+      else
+        # check if the start_from date is later than previous. If so, use
+        # start_from as start to search for next date
+        start = self.start_from > previous ? self.start_from : previous
+      end
     end
 
     day = self.every_other1

@@ -203,6 +203,13 @@ class RecurringTodoTest < Test::Rails::TestCase
     due_date1 = @yearly.get_due_date(nil) 
     due_date2 = @yearly.get_due_date(Time.now.utc + 1.day)
     assert_equal due_date1, due_date2
+  end
+
+  def test_start_from_in_future
+    # start from after june 8th 2008
+    @yearly.start_from = Time.utc(2008,6,12)
+    assert_equal Time.utc(2009,6,8), @yearly.get_due_date(nil) # jun 8th next year
+    assert_equal Time.utc(2009,6,8), @yearly.get_due_date(Time.utc(2008,6,1)) # also next year
     
     this_year = Time.now.utc.year
     @yearly.start_from = Time.utc(this_year+1,6,12)
