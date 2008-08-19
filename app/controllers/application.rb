@@ -170,7 +170,11 @@ class ApplicationController < ActionController::Base
     todo.due = rt.get_due_date(date)
     # make sure that show_from is not in the past
     show_from_date = rt.get_show_from_date(date)
-    todo.show_from = show_from_date < Time.now.utc ? nil : show_from_date
+    if show_from_date.nil?
+      todo.show_from=nil
+    else
+      todo.show_from = show_from_date < Time.now.utc ? nil : show_from_date
+    end
     
     saved = todo.save
     if saved
