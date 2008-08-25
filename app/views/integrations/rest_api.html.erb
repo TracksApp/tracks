@@ -73,7 +73,7 @@
 <pre>
 <code>
 $ curl -u username:p4ssw0rd -H "Content-Type: text/xml" \
-    -d "project[name]=Build a treehouse for the kids" \
+    -d "&lt;project&gt;&lt;name&gt;Build a treehouse for the kids&lt;/name&gt;&lt;/project&gt;" \
     <%= home_url %>projects.xml -i
 &gt;&gt; HTTP/1.1 201 Created
 Location: <%= home_url %>projects/65.xml
@@ -86,7 +86,7 @@ Location: <%= home_url %>projects/65.xml
 <pre>
 <code>
 $ curl -u username:p4ssw0rd -H "Content-Type: text/xml" \
-    -d "todo[description]=Model treehouse in SketchUp&#38;todo[context_id]=2&#38;todo[project_id]=65" \
+    -d "&lt;todo&gt;&lt;description&gt;Model treehouse in SketchUp&lt;/description&gt;&lt;context_id&gt;2&lt;/context_id&gt;&lt;project_id&gt;65&lt;project_id&gt;" \
     <%= home_url %>todos.xml -i
 &gt;&gt; HTTP/1.1 201 Created
 Location: <%= home_url %>todos/452.xml
@@ -99,7 +99,7 @@ Location: <%= home_url %>todos/452.xml
 <pre>
 <code>
   $ curl -u username:p4ssw0rd -H "Content-Type: text/xml" -X PUT \
-      -d "todo[notes]=use maple texture" \
+      -d "&lt;todo&gt;&lt;notes&gt;use maple texture&lt;/notes&gt;&lt;/todos&gt;" \
       <%= home_url %>todos/452.xml -i
   &gt;&gt; HTTP/1.1 200 OK
   ...
