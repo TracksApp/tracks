@@ -64,10 +64,13 @@
         Active projects with their actions                   
       </li>
       <li><h4>Feeds for incomplete actions in a specific context:</h4>
+        <% if @active_contexts.empty? && @hidden_contexts.empty? -%>
+        <ul><li>There need to be at least one context before you can request a feed</li></ul>
+        <% else -%>
         <ul>
           <li>Step 1 - Choose the context you want a feed of: 
             <select name="feed-contexts" id="feed-contexts">
-              <%= options_from_collection_for_select(@active_contexts, "id", "name", @active_contexts.first.id) -%>
+              <%= options_from_collection_for_select(@active_contexts, "id", "name", @active_contexts.first.id) unless @active_projects.empty?-%>
               <%= options_from_collection_for_select(@hidden_contexts, "id", "name") -%>
             </select>
             <%= observe_field "feed-contexts", :update => "feeds-for-context",
@@ -80,17 +83,21 @@
           <li>Step 2 - Select the feed for this context
             <div id="feedicons-context">
               <div id="feeds-for-context">
-                <%= render :partial => 'feed_for_context', :locals => { :context => @active_contexts.first } %>
+                <%= render :partial => 'feed_for_context', :locals => { :context => @active_contexts.empty? ? @hidden_contexts.first : @active_contexts.first } %>
               </div>
             </div>
           </li>
         </ul>
+        <% end -%>
       </li>
       <li><h4>Feeds for incomplete actions in a specific project:</h4>
+        <% if @active_projects.empty? && @hidden_projects.empty? -%>
+        <ul><li>There need to be at least one project before you can request a feed</li></ul>
+        <% else -%>
         <ul>
           <li>Step 1 - Choose the project you want a feed of: 
             <select name="feed-projects" id="feed-projects">
-              <%=  options_from_collection_for_select(@active_projects, "id", "name", @active_projects.first.id) -%>
+              <%=  options_from_collection_for_select(@active_projects, "id", "name", @active_projects.first.id) unless @active_projects.empty?-%>
               <%=  options_from_collection_for_select(@hidden_projects, "id", "name") -%>
               <%=  options_from_collection_for_select(@completed_projects, "id", "name") -%>
             </select>
@@ -104,11 +111,12 @@
           <li>Step 2 - Select the feed for this project
             <div id="feedicons-project">
               <div id="feeds-for-project">
-                <%= render :partial => 'feed_for_project', :locals => { :project => @active_projects.first } %>
+                <%= render :partial => 'feed_for_project', :locals => { :project => @active_projects.empty? ? @hidden_projects.first : @active_projects.first } %>
               </div>
             </div>
           </li>
         </ul>
+        <% end -%>
       </li>
     </ul>
   </div>
