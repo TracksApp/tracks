@@ -808,6 +808,14 @@ input#go_to_project, input#context_hide {
     width:100%;
 }
 
+.edit_todo_form .Date {
+    width:89%;
+}
+
+.edit_todo_form a.date_clear:hover {
+    background: #CCCCCC;
+}
+
 .edit_todo_form .tag_list_label {
     clear:both;
 }
@@ -1192,9 +1200,4 @@ body.integrations textarea {
     padding:3px;
     width:80%;
     background-color:#ddd;
-}
-
-.date_clear
-{
-	float: right;
 }

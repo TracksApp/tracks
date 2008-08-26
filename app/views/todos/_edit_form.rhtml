@@ -49,16 +49,16 @@ Event.observe($('<%= dom_id(@todo, 'context_name') %>'), "click", <%= dom_id(@to
 <div class="due_input">
 <label for="<%= dom_id(@todo, 'due_label') %>">Due</label>
 <%= date_field_tag("todo[due]", dom_id(@todo, 'due'), format_date(@todo.due), "tabindex" => 13) %>
-<a href="#" id="<%= dom_id(@todo, 'due_x') %>" class="date_clear">
-	<%= image_tag("cancel.png", :alt => "") %>
+<a href="#" id="<%= dom_id(@todo, 'due_x') %>" class="date_clear" title="Clear due date">
+	<%= image_tag("delete_off.png", :alt => "Clear due date") %>
 </a>
 </div>
 
 <div class="show_from_input">
 <label for="<%= dom_id(@todo, 'show_from') %>">Show from</label>
 <%= date_field_tag("todo[show_from]", dom_id(@todo, 'show_from'), format_date(@todo.show_from), "tabindex" => 14) %>
-<a href="#" id="<%= dom_id(@todo, 'show_from_x') %>" class="date_clear">
-	<%= image_tag("cancel.png", :alt => "") %>
+<a href="#" id="<%= dom_id(@todo, 'show_from_x') %>" class="date_clear" title="Clear show from date">
+	<%= image_tag("delete_off.png", :alt => "Clear show from date") %>
 </a>
 </div>
 
