@@ -43,7 +43,7 @@ class ProjectsController < ApplicationController
     init_data_for_sidebar unless mobile?
     @projects = current_user.projects
     @page_title = "TRACKS::Project: #{@project.name}"
-    @project.todos.send :with_scope, :find => { :include => [:context, :tags] } do
+    @project.todos.send :with_scope, :find => { :include => [:context] } do
       @not_done = @project.not_done_todos(:include_project_hidden_todos => true)
       @deferred = @project.deferred_todos.sort_by { |todo| todo.show_from }
       @done = @project.done_todos
