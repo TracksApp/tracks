@@ -689,6 +689,7 @@ class TodosController < ApplicationController
     if @todo.from_recurring_todo?
       @recurring_todo = current_user.recurring_todos.find(@todo.recurring_todo_id)
       date_to_check = @todo.due.nil? ? @todo.show_from : @todo.due
+      date_to_check = Date.today()-1.day if date_to_check.nil?
       if @recurring_todo.active? && @recurring_todo.has_next_todo(date_to_check)
         date = date_to_check >= Date.today() ? date_to_check : Date.today()-1.day
         @new_recurring_todo = create_todo_from_recurring_todo(@recurring_todo, date) 
