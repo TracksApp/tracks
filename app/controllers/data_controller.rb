@@ -24,6 +24,7 @@ class DataController < ApplicationController
     all_tables['tags'] = current_user.tags.find(:all)
     all_tables['taggings'] = current_user.taggings.find(:all)
     all_tables['notes'] = current_user.notes.find(:all)
+    all_tables['recurring_todos'] = current_user.recurring_todos.find(:all)
     
     result = all_tables.to_yaml
     result.gsub!(/\n/, "\r\n")   # TODO: general functionality for line endings
@@ -81,6 +82,7 @@ class DataController < ApplicationController
     result << current_user.tags.find(:all).to_xml(:skip_instruct => true)
     result << current_user.taggings.find(:all).to_xml(:skip_instruct => true)
     result << current_user.notes.find(:all).to_xml(:skip_instruct => true)
+    result << current_user.recurring_todos.find(:all).to_xml(:skip_instruct => true)
     send_data(result, :filename => "tracks_backup.xml", :type => 'text/xml')
   end
   
