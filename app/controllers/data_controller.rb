@@ -3,7 +3,7 @@ class DataController < ApplicationController
   require 'csv'
   
   def index
-        @page_title = "TRACKS::Export"
+    @page_title = "TRACKS::Export"
   end
 
   def import
@@ -35,21 +35,21 @@ class DataController < ApplicationController
     content_type = 'text/csv'
     CSV::Writer.generate(result = "") do |csv|
       csv << ["id", "Context", "Project", "Description", "Notes", "Tags",
-              "Created at", "Due", "Completed at", "User ID", "Show from",
-              "state"]
+        "Created at", "Due", "Completed at", "User ID", "Show from",
+        "state"]
       current_user.todos.find(:all, :include => [:context, :project]).each do |todo|
-        # Format dates in ISO format for easy sorting in spreadsheet
-        # Print context and project names for easy viewing
+        # Format dates in ISO format for easy sorting in spreadsheet Print
+        # context and project names for easy viewing
         csv << [todo.id, todo.context.name, 
-                todo.project_id = todo.project_id.nil? ? "" : todo.project.name,
-                todo.description, 
-                todo.notes, todo.tags.collect{|t| t.name}.join(', '),
-                todo.created_at.to_formatted_s(:db),
-                todo.due = todo.due? ? todo.due.to_formatted_s(:db) : "",
-                todo.completed_at = todo.completed_at? ? todo.completed_at.to_formatted_s(:db) : "", 
-                todo.user_id, 
-                todo.show_from = todo.show_from? ? todo.show_from.to_formatted_s(:db) : "",
-                todo.state] 
+          todo.project_id = todo.project_id.nil? ? "" : todo.project.name,
+          todo.description, 
+          todo.notes, todo.tags.collect{|t| t.name}.join(', '),
+          todo.created_at.to_formatted_s(:db),
+          todo.due = todo.due? ? todo.due.to_formatted_s(:db) : "",
+          todo.completed_at = todo.completed_at? ? todo.completed_at.to_formatted_s(:db) : "", 
+          todo.user_id, 
+          todo.show_from = todo.show_from? ? todo.show_from.to_formatted_s(:db) : "",
+          todo.state] 
       end
     end
     send_data(result, :filename => "todos.csv", :type => content_type)
@@ -59,16 +59,17 @@ class DataController < ApplicationController
     content_type = 'text/csv'
     CSV::Writer.generate(result = "") do |csv|
       csv << ["id", "User ID", "Project", "Note",
-              "Created at", "Updated at"]
-      # had to remove project include because it's association order is leaking through
-      # and causing an ambiguous column ref even with_exclusive_scope didn't seem to help -JamesKebinger 
+        "Created at", "Updated at"]
+      # had to remove project include because it's association order is leaking
+      # through and causing an ambiguous column ref even with_exclusive_scope
+      # didn't seem to help -JamesKebinger
       current_user.notes.find(:all,:order=>"notes.created_at").each do |note|
-        # Format dates in ISO format for easy sorting in spreadsheet
-        # Print context and project names for easy viewing
+        # Format dates in ISO format for easy sorting in spreadsheet Print
+        # context and project names for easy viewing
         csv << [note.id, note.user_id, 
-                note.project_id = note.project_id.nil? ? "" : note.project.name,
-                note.body, note.created_at.to_formatted_s(:db),
-                note.updated_at.to_formatted_s(:db)] 
+          note.project_id = note.project_id.nil? ? "" : note.project.name,
+          note.body, note.created_at.to_formatted_s(:db),
+          note.updated_at.to_formatted_s(:db)] 
       end
     end
     send_data(result, :filename => "notes.csv", :type => content_type)
@@ -103,7 +104,6 @@ class DataController < ApplicationController
     @errmessage = ''
     @inarray = YAML::load(params['import']['yaml'])
     # arrays to handle id translations
-
 
     # contexts
     translate_context = Hash.new
@@ -153,18 +153,18 @@ class DataController < ApplicationController
 
       # state + dates
       case item.ivars['attributes']['state']
-        when 'active' : newitem.activate!
-        when 'project_hidden' : newitem.hide!
-        when 'completed' 
-          newitem.complete!
-          newitem.completed_at = adjust_time(item.ivars['attributes']['completed_at'])
-        when 'deferred' : newitem.defer!
+      when 'active' then newitem.activate!
+      when 'project_hidden' then newitem.hide!
+      when 'completed' 
+        newitem.complete!
+        newitem.completed_at = adjust_time(item.ivars['attributes']['completed_at'])
+      when 'deferred' then newitem.defer!
       end
       newitem.created_at = adjust_time(item.ivars['attributes']['created_at'])
       newitem.save(false)
     }
 
-    #tags
+    # tags
     translate_tag = Hash.new
     translate_tag[nil] = nil
     current_user.tags.each { |item| item.destroy }
@@ -182,8 +182,8 @@ class DataController < ApplicationController
       newitem.user_id = current_user.id
       newitem.tag_id = translate_tag[newitem.tag_id]
       case newitem.taggable_type
-        when 'Todo' : newitem.taggable_id = translate_todo[newitem.taggable_id]
-        else newitem.taggable_id = 0
+      when 'Todo' then newitem.taggable_id = translate_todo[newitem.taggable_id]
+      else newitem.taggable_id = 0
       end
       newitem.save
     }
@@ -198,7 +198,6 @@ class DataController < ApplicationController
       newitem.created_at = adjust_time(item.ivars['attributes']['created_at'])
       newitem.save
     }
-
   end
- 
+  
 end

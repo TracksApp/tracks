@@ -1,44 +1,49 @@
-<div id="feeds">
-	<div id="feedlegend">
-		<h3>Exporting data</h3>
-	  <p>You can choose between the following formats:</p>
-	  <ul>
-            <li><strong>YAML: </strong>Best for exporting data. <br/><i>Please note that  importing YAML files is currently supported only in experimentally. Do not rely on it for backing up critical data.</i></li>
-	    <li><strong>CSV: </strong>Best for importing into spreadsheet or data analysis software</li>
-	    <li><strong>XML: </strong>Best for importing or repurposing the data</li>
-          </ul>
-	</div>
-
-<p>
-<table class="export_table">
-<tr>
-  <th>Description</th>
-  <th>Download link</th>
-</tr>
-<tr>
-<td>YAML file containing all your actions, contexts, projects, tags and notes</td>
-<td><%= link_to "YAML file", :controller => 'data', :action => 'yaml_export' %></td>
-</tr>
-<tr>
-<td>CSV file containing all of your actions, with named contexts and projects</td>
-<td><%= link_to "CSV file (actions, contexts and projects)", :controller => 'data', :action => 'csv_actions' %></td>
-</tr>
-<tr>
-  <td>CSV file containing all your notes</td>
-  <td><%= link_to "CSV file (notes only)", :controller => 'data', :action => 'csv_notes' %></td>
-</tr>
-<tr>
-  <td>XML file containing all your actions, contexts, projects, tags and notes</td>
-  <td><%= link_to "XML file (actions only)", :controller => 'data', :action => 'xml_export' %></td>
-</tr>
-</table>
-</p>
-
-<div id="feeds">
-  <div id="feedlegend">
-   <h3>Importing data</h3>
-<p>Curently there is a experimental support for importing YAML files. Beware: all your current data will be destroyed before importing the YAML file, so if you have access to the database, we strongly reccoment backing up the database right now in case that anything goes wrong.</p>
-<p><%= link_to "Start import", :controller => 'data', :action => 'yaml_form' %>.</p>
+<div id="display_box">
+  <div id="feeds">
+    <div id="feedlegend">
+      <h3>Importing data</h3>
+      <p>Curently there is a experimental support for importing YAML files. 
+        Beware: all your current data will be destroyed before importing the YAML 
+        file, so if you have access to the database, we strongly recomment backing up 
+        the database right now in case that anything goes wrong.
+      </p>
+      <p><%= link_to "Start import", :controller => 'data', :action => 'yaml_form' %>.</p>
+      <br/><br/><h3>Exporting data</h3>
+      <p>You can choose between the following formats:</p>
+      <ul>
+        <li><strong>YAML: </strong>Best for exporting data. <br/><i>Please note that  importing YAML files is currently supported only in experimentally. Do not rely on it for backing up critical data.</i></li>
+        <li><strong>CSV: </strong>Best for importing into spreadsheet or data analysis software</li>
+        <li><strong>XML: </strong>Best for importing or repurposing the data</li>
+      </ul>
+    </div>
+    <br/><br/>
+    <table class="export_table">
+      <tr>
+        <th>Description</th>
+        <th>Download link</th>
+      </tr>
+      <tr>
+        <td>YAML file containing all your actions, contexts, projects, tags and notes</td>
+        <td><%= link_to "YAML file", :controller => 'data', :action => 'yaml_export' %></td>
+      </tr>
+      <tr>
+        <td>CSV file containing all of your actions, with named contexts and projects</td>
+        <td><%= link_to "CSV file (actions, contexts and projects)", :controller => 'data', :action => 'csv_actions' %></td>
+      </tr>
+      <tr>
+        <td>CSV file containing all your notes</td>
+        <td><%= link_to "CSV file (notes only)", :controller => 'data', :action => 'csv_notes' %></td>
+      </tr>
+      <tr>
+        <td>XML file containing all your actions, contexts, projects, tags and notes</td>
+        <td><%= link_to "XML file (actions only)", :controller => 'data', :action => 'xml_export' %></td>
+      </tr>
+    </table>  
+  </div><!-- End of feeds -->
 </div>
 
-</div><!-- End of feeds -->
+<script type="text/javascript">
+    window.onload=function(){
+        Nifty("div#feedlegend","normal");
+    }
+</script>
