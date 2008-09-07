@@ -388,7 +388,7 @@ class TodosController < ApplicationController
     @source_view = params['_source_view'] || 'todo'
     numdays = params['days'].to_i
     @todo = Todo.find(params[:id])
-    @todo.show_from = (@todo.show_from || Time.now.to_date) + numdays.days
+    @todo.show_from = (@todo.show_from || @todo.user.date) + numdays.days
     @saved = @todo.save
   
     respond_to do |format|
