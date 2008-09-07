@@ -1202,6 +1202,5 @@ body.integrations textarea {
     background-color:#ddd;
 }
 .defer-container {
-  position: absolute;
-  right: 2px;
+  float:right;
 }

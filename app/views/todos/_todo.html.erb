@@ -11,6 +11,7 @@
     <%= remote_star_icon %>
     <%= remote_toggle_checkbox unless source_view_is :deferred %>
     <div class="description<%= staleness_class( todo ) %>">
+      <span class="defer-container"><%= defer_link(1) %> <%= defer_link(7) %></span>
       <%= date_span -%>
       <span class="todo.descr"><%= h sanitize(todo.description) %></span>
       <%= link_to(image_tag("recurring16x16.png"), {:controller => "recurring_todos", :action => "index"}, :class => "recurring_icon") if @todo.from_recurring_todo? %>
@@ -18,7 +19,6 @@
       <%= deferred_due_date %>
       <%= project_and_context_links( parent_container_type, :suppress_context => suppress_context, :suppress_project => suppress_project ) %>
       <%= render(:partial => "todos/toggle_notes", :locals => { :item => todo }) if todo.notes? %>
-      <span class="defer-container"><%= defer_link(1) %> <%= defer_link(7) %></span>
     </div>
   </div>
   <div id="<%= dom_id(todo, 'edit') %>" class="edit-form" style="display:none">
