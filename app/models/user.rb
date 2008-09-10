@@ -71,8 +71,7 @@ class User < ActiveRecord::Base
            :conditions => [ 'state = ?', 'deferred' ],
            :order => 'show_from ASC, todos.created_at DESC' do
               def find_and_activate_ready
-                # assumes that active record uses :utc to store datetime in db
-                find(:all, :conditions => ['show_from <= ?', Time.now.utc ]).collect { |t| t.activate! }
+                find(:all, :conditions => ['show_from <= ?', proxy_owner.date ]).collect { |t| t.activate! }
               end
            end
   has_many :completed_todos,
