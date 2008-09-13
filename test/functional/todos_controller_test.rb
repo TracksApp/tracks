@@ -137,7 +137,7 @@ class TodosControllerTest < Test::Rails::TestCase
     assert_equal "Call Warren Buffet to find out how much he makes per day", t.description
     assert_equal "foo, bar", t.tag_list
     expected = Date.new(2006,11,30)
-    actual = t.due
+    actual = t.due.to_date
     assert_equal expected, actual, "Expected #{expected.to_s(:db)}, was #{actual.to_s(:db)}"
   end
 
@@ -328,7 +328,7 @@ class TodosControllerTest < Test::Rails::TestCase
     assert t.active?
     assert_equal 'test notes', t.notes
     assert_nil t.show_from
-    assert_equal Date.new(2007,1,2).to_s, t.due.to_s
+    assert_equal Date.new(2007,1,2), t.due.to_date
   end
   
   def test_mobile_create_action_redirects_to_mobile_home_page_when_successful

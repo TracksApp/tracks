@@ -169,7 +169,11 @@ class User < ActiveRecord::Base
   end
 
   def date
-    time.to_date
+    time.midnight
+  end
+  
+  def at_midnight(date)
+    return TimeZone[prefs.time_zone].local(date.year, date.month, date.day, 0, 0, 0)
   end
   
   def generate_token

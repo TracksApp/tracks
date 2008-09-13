@@ -68,6 +68,8 @@ class Todo < ActiveRecord::Base
   end
   
   def show_from=(date)
+    # parse Date objects into the proper timezone
+    date = user.at_midnight(date) if (date.is_a? Date)
     activate! if deferred? && date.blank?
     defer! if active? && !date.blank? && date > user.date
     self[:show_from] = date 
