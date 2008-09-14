@@ -374,7 +374,7 @@ class TodosControllerTest < Test::Rails::TestCase
     assert todo_1.completed?
 
     # check there is a new todo linked to the recurring pattern
-    next_todo = Todo.find_by_recurring_todo_id(recurring_todo_1.id)
+    next_todo = Todo.find(:first, :conditions => {:recurring_todo_id => recurring_todo_1.id, :state => 'active'})
     assert_equal "Call Bill Gates every day", next_todo.description
   end
   
