@@ -37,7 +37,7 @@ describe User do
     it 'has many active contexts' do
       User.should have_many(:active_contexts).
         with_order('position ASC').
-        with_conditions('hide = ?', 'true').
+        with_conditions('hide = ?', false).
         with_class_name('Context')
     end
 
