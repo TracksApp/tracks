@@ -125,4 +125,46 @@ class Todo < ActiveRecord::Base
     return self.recurring_todo_id != nil
   end
   
+  # Rich Todo API
+  
+  def self.from_rich_message(user, default_context_id, description, notes)
+    fields = description.match /([^>@]*)@?([^>]*)>?(.*)/
+    description = fields[1].strip
+    context = fields[2].strip
+    project = fields[3].strip
+    
+    context = nil if context == ""
+    project = nil if project == ""
+
+    context_id = default_context_id
+    unless(context.nil?)
+      found_context = user.active_contexts.find_by_namepart(context)
+      found_context = user.contexts.find_by_namepart(context) if found_context.nil?
+      context_id = found_context.id unless found_context.nil?
+    end
+    
+    unless user.contexts.exists? context_id
+      raise(CannotAccessContext, "Cannot access a context that does not belong to this user.")
+    end
+    
+    project_id = nil
+    unless(project.blank?)
+      if(project[0..3].downcase == "new:")
+        found_project = user.projects.build
+        found_project.name = project[4..255+4].strip
+        found_project.save!
+      else
+        found_project = user.active_projects.find_by_namepart(project)
+        found_project = user.projects.find_by_namepart(project) if found_project.nil?
+      end
+      project_id = found_project.id unless found_project.nil?
+    end
+    
+    todo = user.todos.build
+    todo.description = description
+    todo.notes = notes
+    todo.context_id = context_id
+    todo.project_id = project_id unless project_id.nil?
+    return todo
+  end
 end
