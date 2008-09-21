@@ -59,7 +59,7 @@ class User < ActiveRecord::Base
   has_many :active_contexts,
            :class_name => 'Context',
            :order => 'position ASC',
-           :conditions => [ 'hide = ?', 'true' ]
+           :conditions => [ 'hide = ?', false ]
   has_many :todos,
            :order => 'todos.completed_at DESC, todos.created_at DESC',
            :dependent => :delete_all

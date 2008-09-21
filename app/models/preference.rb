@@ -1,5 +1,6 @@
 class Preference < ActiveRecord::Base
   belongs_to :user
+  belongs_to :sms_context, :class_name => 'Context'
     
   def self.due_styles
     { :due_in_n_days => 0, :due_on => 1}

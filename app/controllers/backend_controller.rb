@@ -14,36 +14,10 @@ class BackendController < ApplicationController
   
   def new_rich_todo(username, token, default_context_id, description, notes)
     check_token(username,token)
-    description,context = split_by_char('@',description)
-    description,project = split_by_char('>',description)
-    if(!context.nil? && project.nil?)
-      context,project = split_by_char('>',context)
-    end
-#    logger.info("context='#{context}' project='#{project}")
-
-    context_id = default_context_id
-    unless(context.nil?)
-      found_context = @user.active_contexts.find_by_namepart(context)
-      found_context = @user.contexts.find_by_namepart(context) if found_context.nil?
-      context_id = found_context.id unless found_context.nil?
-    end
-    check_context_belongs_to_user(context_id)
-    
-    project_id = nil
-    unless(project.blank?)
-      if(project[0..3].downcase == "new:")
-        found_project = @user.projects.build
-        found_project.name = project[4..255+4].strip
-        found_project.save!
-      else
-        found_project = @user.active_projects.find_by_namepart(project)
-        found_project = @user.projects.find_by_namepart(project) if found_project.nil?
-      end
-      project_id = found_project.id unless found_project.nil?
-    end
-
-    todo = create_todo(description, context_id, project_id, notes)
-    todo.id
+    item = Todo.from_rich_message(@user, default_context_id, description, notes)
+    item.save
+    raise item.errors.full_messages.to_s if item.new_record?
+    item.id
   end
   
   def list_contexts(username, token)
@@ -84,25 +58,6 @@ class BackendController < ApplicationController
     raise item.errors.full_messages.to_s if item.new_record?
     item
   end
-    
-  def split_by_char(separator,string)
-    parts = string.split(separator)
-      
-    # if the separator is used more than once, concat the last parts this is
-    # needed to get 'description @ @home > project' working for contexts
-    # starting with @
-    if parts.length > 2
-      2.upto(parts.length-1) { |i| parts[1] += (separator +parts[i]) }
-    end
-
-    return safe_strip(parts[0]), safe_strip(parts[1])
-  end
-    
-  def safe_strip(s)
-    s.strip! unless s.nil?
-    s
-  end
 end
 
 class InvalidToken < RuntimeError; end
-class CannotAccessContext < RuntimeError; end

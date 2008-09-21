@@ -16,6 +16,8 @@ require 'time'
 # 
 # Tag
 
+class CannotAccessContext < RuntimeError; end
+
 class ApplicationController < ActionController::Base
 
   protect_from_forgery :secret => SALT

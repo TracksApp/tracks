@@ -31,7 +31,7 @@ class UsersControllerTest < Test::Rails::TestCase
     get :index
     assert_response :success
     assert_equal "TRACKS::Manage Users", assigns['page_title']  
-    assert_equal 3, assigns['total_users']
+    assert_equal 4, assigns['total_users']
     assert_equal "/users", session['return-to']
   end
 
