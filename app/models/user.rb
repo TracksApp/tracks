@@ -71,7 +71,7 @@ class User < ActiveRecord::Base
            :conditions => [ 'state = ?', 'deferred' ],
            :order => 'show_from ASC, todos.created_at DESC' do
               def find_and_activate_ready
-                find(:all, :conditions => ['show_from <= ?', proxy_owner.date ]).collect { |t| t.activate! }
+                find(:all, :conditions => ['show_from <= ?', Time.now ]).collect { |t| t.activate! }
               end
            end
   has_many :completed_todos,

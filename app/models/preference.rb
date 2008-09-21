@@ -21,7 +21,7 @@ class Preference < ActiveRecord::Base
   
   def parse_date(s)
     return nil if s.blank?
-    Date.strptime(s, date_format)
+    user.at_midnight(Date.strptime(s, date_format))
   end
   
 end
