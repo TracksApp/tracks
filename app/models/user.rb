@@ -71,7 +71,7 @@ class User < ActiveRecord::Base
            :conditions => [ 'state = ?', 'deferred' ],
            :order => 'show_from ASC, todos.created_at DESC' do
               def find_and_activate_ready
-                find(:all, :conditions => ['show_from <= ?', proxy_owner.date ]).collect { |t| t.activate! }
+                find(:all, :conditions => ['show_from <= ?', Time.zone.now ]).collect { |t| t.activate! }
               end
            end
   has_many :completed_todos,
@@ -169,7 +169,11 @@ class User < ActiveRecord::Base
   end
 
   def date
-    time.to_date
+    time.midnight
+  end
+  
+  def at_midnight(date)
+    return TimeZone[prefs.time_zone].local(date.year, date.month, date.day, 0, 0, 0)
   end
   
   def generate_token

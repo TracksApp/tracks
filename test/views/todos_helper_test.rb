@@ -20,28 +20,28 @@ class TodosHelperTest < Test::Rails::HelperTestCase
   end
     
   def test_show_date_in_past
-    date = 3.days.ago.to_date
+    date = 3.days.ago
     html = show_date(date)
     formatted_date = format_date(date)
     assert_equal %Q{<a title="#{formatted_date}"><span class="red">Scheduled to show 3 days ago</span></a> }, html
   end
   
   def test_show_date_today
-    date = Time.zone.now.to_date
+    date = Time.zone.now
     html = show_date(date)
     formatted_date = format_date(date)
     assert_equal %Q{<a title="#{formatted_date}"><span class="amber">Show Today</span></a> }, html
   end
   
   def test_show_date_tomorrow
-    date = 1.day.from_now.to_date
+    date = 1.day.from_now
     html = show_date(date)
     formatted_date = format_date(date)
     assert_equal %Q{<a title="#{formatted_date}"><span class="amber">Show Tomorrow</span></a> }, html
   end
   
   def test_show_date_future
-    date = 10.days.from_now.to_date
+    date = 10.days.from_now
     html = show_date(date)
     formatted_date = format_date(date)
     assert_equal %Q{<a title="#{formatted_date}"><span class="green">Show in 10 days</span></a> }, html

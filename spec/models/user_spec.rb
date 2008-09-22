@@ -185,8 +185,9 @@ describe User do
     user.save!
     user.create_preference
     user.preference.update_attribute('time_zone', 'Pacific Time (US & Canada)')
+#    Time.zone = 'Pacific Time (US & Canada)'
     Time.stub!(:now).and_return(Time.new.end_of_day - 20.minutes)
-    todo = user.todos.build(:description => 'test task', :context => context, :show_from => user.date + 1)
+    todo = user.todos.build(:description => 'test task', :context => context, :show_from => user.date + 1.days)
     todo.save!
 
     user.deferred_todos.find_and_activate_ready

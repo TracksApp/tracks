@@ -20,7 +20,7 @@ class PreferenceTest < Test::Rails::TestCase
   end
   
   def test_parse_date
-    assert_equal Date.new(2007, 5, 20).to_s, @admin_user.preference.parse_date('20/5/2007').to_s
+    assert_equal @admin_user.at_midnight(Date.new(2007, 5, 20)).to_s, @admin_user.preference.parse_date('20/5/2007').to_s
   end
   
   def test_parse_date_returns_nil_if_string_is_empty

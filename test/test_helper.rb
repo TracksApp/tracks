@@ -71,7 +71,7 @@ class Test::Rails::TestCase < Test::Unit::TestCase
   end
       
   def next_week
-    1.week.from_now.utc.to_date
+    1.week.from_now.utc
   end
   
   # Courtesy of http://habtm.com/articles/2006/02/20/assert-yourself-man-redirecting-with-rjs

@@ -68,9 +68,8 @@ class TodoTest < Test::Rails::TestCase
 
   def test_validate_show_from_must_be_a_date_in_the_future
     t = @not_completed2
-    t[:show_from] = 1.week.ago.to_date # we have to set this via the indexer because show_from=() updates the state
+    t[:show_from] = 1.week.ago # we have to set this via the indexer because show_from=() updates the state
                                        # and actual show_from value appropriately based on the date
-    assert_equal 1.week.ago.to_date, t.show_from
     assert !t.save
     assert_equal 1, t.errors.count
     assert_equal "must be a date in the future", t.errors.on(:show_from)
@@ -118,7 +117,7 @@ class TodoTest < Test::Rails::TestCase
 
   def test_activate_also_saves
     t = @not_completed1
-    t.show_from = 1.week.from_now.to_date
+    t.show_from = 1.week.from_now
     t.save!
     assert t.deferred?
     t.reload

@@ -13,7 +13,7 @@ class Todo < ActiveRecord::Base
   # of state completed is not run, see #679
   state :active, :enter => Proc.new { |t| t[:show_from], t.completed_at = nil, nil }
   state :project_hidden
-  state :completed, :enter => Proc.new { |t| t.completed_at = Time.now.utc }, :exit => Proc.new { |t| t.completed_at = nil }
+  state :completed, :enter => Proc.new { |t| t.completed_at = Time.zone.now }, :exit => Proc.new { |t| t.completed_at = nil }
   state :deferred
 
   event :defer do
@@ -68,6 +68,8 @@ class Todo < ActiveRecord::Base
   end
   
   def show_from=(date)
+    # parse Date objects into the proper timezone
+    date = user.at_midnight(date) if (date.is_a? Date)
     activate! if deferred? && date.blank?
     defer! if active? && !date.blank? && date > user.date
     self[:show_from] = date 

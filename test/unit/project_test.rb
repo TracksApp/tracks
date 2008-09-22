@@ -118,7 +118,7 @@ class ProjectTest < Test::Rails::TestCase
   def test_deferred_todos
     assert_equal 1, @timemachine.deferred_todos.size
     t = @timemachine.not_done_todos[0]
-    t.show_from = 1.days.from_now.utc.to_date
+    t.show_from = 1.days.from_now.utc
     t.save!
     assert_equal 2, Project.find(@timemachine.id).deferred_todos.size
   end

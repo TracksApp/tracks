@@ -101,22 +101,22 @@
     <div id="recurring_monthly" style="display:none">
       <label>Settings for monthly recurring actions</label><br/>
       <%= radio_button_tag('recurring_todo[monthly_selector]', 'monthly_every_x_day', true)%> Day <%= 
-      text_field_tag('recurring_todo[monthly_every_x_day]', Time.now.mday, {"size" => 3, "tabindex" => 9}) %> on every <%= 
+      text_field_tag('recurring_todo[monthly_every_x_day]', Time.zone.now.mday, {"size" => 3, "tabindex" => 9}) %> on every <%=
       text_field_tag('recurring_todo[monthly_every_x_month]', 1, {"size" => 3, "tabindex" => 10}) %> month<br/>
       <%= radio_button_tag('recurring_todo[monthly_selector]', 'monthly_every_xth_day')%> The <%= 
       select_tag('recurring_todo[monthly_every_xth_day]', options_for_select(@xth_day), {}) %> <%= 
-      select_tag('recurring_todo[monthly_day_of_week]' , options_for_select(@days_of_week, Time.now.wday), {}) %> of every <%= 
+      select_tag('recurring_todo[monthly_day_of_week]' , options_for_select(@days_of_week, Time.zone.now.wday), {}) %> of every <%=
       text_field_tag('recurring_todo[monthly_every_x_month2]', 1, {"size" => 3, "tabindex" => 11}) %> month<br/>
     </div>
     <div id="recurring_yearly" style="display:none">
       <label>Settings for yearly recurring actions</label><br/>
       <%= radio_button_tag('recurring_todo[yearly_selector]', 'yearly_every_x_day', true)%> Every <%= 
-      select_tag('recurring_todo[yearly_month_of_year]', options_for_select(@months_of_year, Time.now.month), {}) %> <%= 
-      text_field_tag('recurring_todo[yearly_every_x_day]', Time.now.day, "size" => 3, "tabindex" => 9) %><br/>
+      select_tag('recurring_todo[yearly_month_of_year]', options_for_select(@months_of_year, Time.zone.now.month), {}) %> <%=
+      text_field_tag('recurring_todo[yearly_every_x_day]', Time.zone.now.day, "size" => 3, "tabindex" => 9) %><br/>
       <%= radio_button_tag('recurring_todo[yearly_selector]', 'yearly_every_xth_day')%> The <%= 
       select_tag('recurring_todo[yearly_every_xth_day]', options_for_select(@xth_day), {}) %> <%= 
-      select_tag('recurring_todo[yearly_day_of_week]', options_for_select(@days_of_week, Time.now.wday), {}) %> of <%= 
-      select_tag('recurring_todo[yearly_month_of_year2]', options_for_select(@months_of_year, Time.now.month), {}) %><br/>
+      select_tag('recurring_todo[yearly_day_of_week]', options_for_select(@days_of_week, Time.zone.now.wday), {}) %> of <%=
+      select_tag('recurring_todo[yearly_month_of_year2]', options_for_select(@months_of_year, Time.zone.now.month), {}) %><br/>
     </div>
     <div id="recurring_target">
       <label>Set recurrence on</label><br/>
