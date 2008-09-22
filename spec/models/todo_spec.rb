@@ -10,7 +10,7 @@ describe Todo do
 
   def create_todo(attributes={})
     todo = Todo.new(valid_attributes(attributes))
-    todo.stub!(:user).and_return(mock_model(User, :date => Time.now))
+    todo.stub!(:user).and_return(mock_model(User, :date => Time.zone.now))
     todo.save!
     todo
   end
@@ -32,7 +32,7 @@ describe Todo do
 
   it 'ensures that show_from is a date in the future' do
     todo = Todo.new(valid_attributes)
-    todo.stub!(:user).and_return(mock_model(User, :date => Time.now))
+    todo.stub!(:user).and_return(mock_model(User, :date => Time.zone.now))
     todo.show_from = 3.days.ago
     todo.should have(1).error_on(:show_from)
   end

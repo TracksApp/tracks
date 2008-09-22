@@ -15,13 +15,13 @@ class RecurringTodoTest < Test::Rails::TestCase
     @in_three_days = Time.now.utc + 3.days
     @in_four_days = @in_three_days + 1.day    # need a day after start_from
 
-    @friday = Time.utc(2008,6,6)
-    @saturday = Time.utc(2008,6,7)
-    @sunday = Time.utc(2008,6,8)  # june 8, 2008 was a sunday
-    @monday = Time.utc(2008,6,9)
-    @tuesday = Time.utc(2008,6,10)
-    @wednesday = Time.utc(2008,6,11)
-    @thursday = Time.utc(2008,6,12)
+    @friday = Time.zone.local(2008,6,6)
+    @saturday = Time.zone.local(2008,6,7)
+    @sunday = Time.zone.local(2008,6,8)  # june 8, 2008 was a sunday
+    @monday = Time.zone.local(2008,6,9)
+    @tuesday = Time.zone.local(2008,6,10)
+    @wednesday = Time.zone.local(2008,6,11)
+    @thursday = Time.zone.local(2008,6,12)
   end
   
   def test_pattern_text
@@ -134,19 +134,19 @@ class RecurringTodoTest < Test::Rails::TestCase
   
   def test_monthly_pattern
     due_date = @monthly_every_last_friday.get_due_date(@sunday)
-    assert_equal Time.utc(2008,6,27), due_date
+    assert_equal Time.zone.local(2008,6,27), due_date
     
-    friday_is_last_day_of_month = Time.utc(2008,10,31)
+    friday_is_last_day_of_month = Time.zone.local(2008,10,31)
     due_date = @monthly_every_last_friday.get_due_date(friday_is_last_day_of_month-1.day )
     assert_equal friday_is_last_day_of_month , due_date
     
     @monthly_every_third_friday = @monthly_every_last_friday
     @monthly_every_third_friday.every_other3=3 #third
     due_date = @monthly_every_last_friday.get_due_date(@sunday) # june 8th 2008
-    assert_equal Time.utc(2008, 6, 20), due_date    
+    assert_equal Time.zone.local(2008, 6, 20), due_date
     # set date past third friday of this month
-    due_date = @monthly_every_last_friday.get_due_date(Time.utc(2008,6,21)) # june 21th 2008
-    assert_equal Time.utc(2008, 8, 15), due_date    # every 2 months, so aug
+    due_date = @monthly_every_last_friday.get_due_date(Time.zone.local(2008,6,21)) # june 21th 2008
+    assert_equal Time.zone.local(2008, 8, 15), due_date    # every 2 months, so aug
     
     @monthly = @monthly_every_last_friday
     @monthly.recurrence_selector=0
@@ -157,12 +157,12 @@ class RecurringTodoTest < Test::Rails::TestCase
     assert_equal @sunday, due_date # june 8th
     
     due_date = @monthly.get_due_date(@sunday) # june 8th
-    assert_equal Time.utc(2008,8,8), due_date # aug 8th    
+    assert_equal Time.zone.local(2008,8,8), due_date # aug 8th
   end
   
   def test_yearly_pattern
     # beginning of same year
-    due_date = @yearly.get_due_date(Time.utc(2008,2,10)) # feb 10th
+    due_date = @yearly.get_due_date(Time.zone.local(2008,2,10)) # feb 10th
     assert_equal @sunday, due_date # june 8th   
     
     # same month, previous date
@@ -173,20 +173,20 @@ class RecurringTodoTest < Test::Rails::TestCase
 
     # same month, day after
     due_date = @yearly.get_due_date(@monday) # june 9th
-    assert_equal Time.utc(2009,6,8), due_date # june 8th next year
+    assert_equal Time.zone.local(2009,6,8), due_date # june 8th next year
     
     @yearly.recurrence_selector = 1 
     @yearly.every_other3 = 2 # second
     @yearly.every_count = 3 # wednesday
     # beginning of same year
-    due_date = @yearly.get_due_date(Time.utc(2008,2,10)) # feb 10th
-    assert_equal Time.utc(2008,6,11), due_date # june 11th    
+    due_date = @yearly.get_due_date(Time.zone.local(2008,2,10)) # feb 10th
+    assert_equal Time.zone.local(2008,6,11), due_date # june 11th
     # same month, before second wednesday
     due_date = @yearly.get_due_date(@saturday) # june 7th
-    assert_equal Time.utc(2008,6,11), due_date # june 11th    
+    assert_equal Time.zone.local(2008,6,11), due_date # june 11th
     # same month, after second wednesday
-    due_date = @yearly.get_due_date(Time.utc(2008,6,12)) # june 7th
-    assert_equal Time.utc(2009,6,10), due_date # june 10th    
+    due_date = @yearly.get_due_date(Time.zone.local(2008,6,12)) # june 7th
+    assert_equal Time.zone.local(2009,6,10), due_date # june 10th
     
     # test handling of nil
     due_date1 = @yearly.get_due_date(nil) 
@@ -207,24 +207,24 @@ class RecurringTodoTest < Test::Rails::TestCase
     due_date = @every_day.get_due_date(@in_four_days)
     assert_equal @in_four_days+1.day, due_date    
 
-    @weekly_every_day.start_from = Time.utc(2020,1,1)
-    assert_equal Time.utc(2020,1,1), @weekly_every_day.get_due_date(nil)
-    assert_equal Time.utc(2020,1,1), @weekly_every_day.get_due_date(Time.utc(2019,10,1))
-    assert_equal Time.utc(2020,1,10), @weekly_every_day.get_due_date(Time.utc(2020,1,9))
+    @weekly_every_day.start_from = Time.zone.local(2020,1,1)
+    assert_equal Time.zone.local(2020,1,1), @weekly_every_day.get_due_date(nil)
+    assert_equal Time.zone.local(2020,1,1), @weekly_every_day.get_due_date(Time.zone.local(2019,10,1))
+    assert_equal Time.zone.local(2020,1,10), @weekly_every_day.get_due_date(Time.zone.local(2020,1,9))
 
-    @monthly_every_last_friday.start_from = Time.utc(2020,1,1)
-    assert_equal Time.utc(2020,1,31), @monthly_every_last_friday.get_due_date(nil) # last friday of jan
-    assert_equal Time.utc(2020,1,31), @monthly_every_last_friday.get_due_date(Time.utc(2019,12,1)) # last friday of jan
-    assert_equal Time.utc(2020,2,28), @monthly_every_last_friday.get_due_date(Time.utc(2020,2,1)) # last friday of feb
+    @monthly_every_last_friday.start_from = Time.zone.local(2020,1,1)
+    assert_equal Time.zone.local(2020,1,31), @monthly_every_last_friday.get_due_date(nil) # last friday of jan
+    assert_equal Time.zone.local(2020,1,31), @monthly_every_last_friday.get_due_date(Time.zone.local(2019,12,1)) # last friday of jan
+    assert_equal Time.zone.local(2020,2,28), @monthly_every_last_friday.get_due_date(Time.zone.local(2020,2,1)) # last friday of feb
 
     # start from after june 8th 2008
-    @yearly.start_from = Time.utc(2020,6,12)
-    assert_equal Time.utc(2021,6,8), @yearly.get_due_date(nil) # jun 8th next year
-    assert_equal Time.utc(2021,6,8), @yearly.get_due_date(Time.utc(2019,6,1)) # also next year
-    assert_equal Time.utc(2021,6,8), @yearly.get_due_date(Time.utc(2020,6,15)) # also next year
+    @yearly.start_from = Time.zone.local(2020,6,12)
+    assert_equal Time.zone.local(2021,6,8), @yearly.get_due_date(nil) # jun 8th next year
+    assert_equal Time.zone.local(2021,6,8), @yearly.get_due_date(Time.zone.local(2019,6,1)) # also next year
+    assert_equal Time.zone.local(2021,6,8), @yearly.get_due_date(Time.zone.local(2020,6,15)) # also next year
     
     this_year = Time.now.utc.year
-    @yearly.start_from = Time.utc(this_year+1,6,12)
+    @yearly.start_from = Time.zone.local(this_year+1,6,12)
     due_date = @yearly.get_due_date(nil) 
     assert_equal due_date.year, this_year+2
   end

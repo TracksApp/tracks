@@ -173,7 +173,7 @@ class ApplicationController < ActionController::Base
     if show_from_date.nil?
       todo.show_from=nil
     else
-      todo.show_from = show_from_date < Time.now.utc ? nil : show_from_date
+      todo.show_from = show_from_date < Time.zone.now ? nil : show_from_date
     end
     
     saved = todo.save
