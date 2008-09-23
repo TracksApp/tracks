@@ -51,6 +51,12 @@ class User < ActiveRecord::Base
                 self.update_positions(projects.map{ |p| p.id })
                 return projects
               end
+              def actionize(scope_conditions = {})
+                projects = find(:all, :conditions => scope_conditions)
+                projects.sort!{ |x,y| y.todos.count(:state == 'active') <=> x.todos.count(:state == 'active') }
+                self.update_positions(projects.map{ |p| p.id })
+                return projects
+              end
             end
   has_many :active_projects,
            :class_name => 'Project',
