@@ -1,0 +1,34 @@
+<div id="display_box">
+  
+  <div class="container">
+    <h2>Due today</h2>
+    <%= render :partial => "todos/todo", :collection => @due_today %>
+  </div>
+  
+  <div class="container">
+    <h2>Due this week</h2>
+    <%= render :partial => "todos/todo", :collection => @due_this_week %>
+  </div>
+  
+  <div class="container">
+    <h2>Due next week</h2>
+    <%= render :partial => "todos/todo", :collection => @due_next_week %>
+  </div>
+  
+  <div class="container">
+    <h2>Due rest of this month</h2>
+    <%= render :partial => "todos/todo", :collection => @due_this_month %>
+  </div>
+  
+  <div class="container">
+    <h2>Due next month and later</h2>
+    <%= render :partial => "todos/todo", :collection => @due_after_this_month %>
+  </div>
+  
+</div><!-- End of display_box -->
+<div id="input_box">
+  <input id="hide_tickler" type="checkbox" tabindex="5" name="hide_tickler" checked="true"/>
+  <label for="hide_tickler"> Show actions in tickler</label>
+  <br/><br/>
+  <p><span class="feed">iCal</span> - Get this calendar in iCal-format to add to your own calendar</p>
+</div>

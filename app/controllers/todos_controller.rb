@@ -4,7 +4,7 @@ class TodosController < ApplicationController
 
   skip_before_filter :login_required, :only => [:index]
   prepend_before_filter :login_or_feed_token_required, :only => [:index]
-  append_before_filter :init, :except => [ :destroy, :completed, :completed_archive, :check_deferred, :toggle_check, :toggle_star, :edit, :update, :create ]
+  append_before_filter :init, :except => [ :destroy, :completed, :completed_archive, :check_deferred, :toggle_check, :toggle_star, :edit, :update, :create, :calendar ]
   append_before_filter :get_todo_from_params, :only => [ :edit, :toggle_check, :toggle_star, :show, :update, :destroy ]
 
   session :off, :only => :index, :if => Proc.new { |req| is_feed_request(req) }
@@ -404,7 +404,37 @@ class TodosController < ApplicationController
       format.js {render :action => 'update'}
     end
   end
-  
+
+  def calendar
+    @source_view = params['_source_view'] || 'calendar'
+    @page_title = "TRACKS::Calendar"
+    
+    due_today_date = Time.zone.now
+    due_this_week_date = Time.zone.now.end_of_week
+    due_next_week_date = due_this_week_date + 7.days
+    due_this_month_date = Time.zone.now.end_of_month
+    
+    @due_today = current_user.todos.find(:all, 
+      :conditions => ['(todos.state = ? OR todos.state = ?) AND todos.due <= ?', 'active', 'deferred', due_today_date],
+      :order => "due")
+    @due_this_week = current_user.todos.find(:all, 
+      :conditions => ['(todos.state = ? OR todos.state = ?) AND todos.due > ? AND todos.due <= ?', 'active', 'deferred', due_today_date, due_this_week_date],
+      :order => "due")
+    @due_next_week = current_user.todos.find(:all, 
+      :conditions => ['(todos.state = ? OR todos.state = ?) AND todos.due > ? AND todos.due <= ?', 'active', 'deferred', due_this_week_date, due_next_week_date],
+      :order => "due")
+    @due_this_month = current_user.todos.find(:all, 
+      :conditions => ['(todos.state = ? OR todos.state = ?) AND todos.due > ? AND todos.due <= ?', 'active', 'deferred', due_next_week_date, due_this_month_date],
+      :order => "due")
+    @due_after_this_month = current_user.todos.find(:all, 
+      :conditions => ['(todos.state = ? OR todos.state = ?) AND todos.due > ?', 'active', 'deferred', due_this_month_date],
+      :order => "due")
+    
+    respond_to do |format|
+      format.html
+      format.ics   { render :text => 'Not implemented yet', :status => 200 }
+    end
+  end  
   
   private
   

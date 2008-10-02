@@ -46,6 +46,8 @@ ActionController::Routing::Routes.draw do |map|
     todos.tag 'todos/tag/:name.m', :action => "tag", :format => 'm'
     todos.tag 'todos/tag/:name', :action => "tag", :name => /.*/
     
+    todos.calendar 'calendar', :action => "calendar"
+    
     todos.mobile 'mobile', :action => "index", :format => 'm'
     todos.mobile_abbrev 'm', :action => "index", :format => 'm'
     todos.mobile_abbrev_new 'm/new', :action => "new", :format => 'm'
