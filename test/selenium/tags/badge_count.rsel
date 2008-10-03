@@ -11,6 +11,6 @@ assert_text 'badge_count', '1'
 
 # mark one complete
 click "xpath=//div[@id='c1'] //div[@id='todo_1'] //input[@class='item-checkbox']"
-wait_for_element_present "xpath=//div[@id='completed'] //div[@id='todo_1']"
+wait_for_element_present "xpath=//div[@id='completed_container'] //div[@id='todo_1']"
 
 assert_text 'badge_count', '0'

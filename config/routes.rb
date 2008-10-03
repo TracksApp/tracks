@@ -43,7 +43,7 @@ ActionController::Routing::Routes.draw do |map|
     # so /todos/tag/version1.5.xml will result in :name => 'version1.5.xml'
     # UPDATE: added support for mobile view. All tags ending on .m will be
     # routed to mobile view of tags.
-    todos.tag 'todos/tag/:name', :action => "tag", :format => 'm', :name => /.*\.m/
+    todos.tag 'todos/tag/:name.m', :action => "tag", :format => 'm'
     todos.tag 'todos/tag/:name', :action => "tag", :name => /.*/
     
     todos.mobile 'mobile', :action => "index", :format => 'm'
