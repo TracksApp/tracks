@@ -55,6 +55,10 @@ ActionController::Routing::Routes.draw do |map|
   map.feeds 'feeds', :controller => 'feedlist', :action => 'index'
   map.feeds 'feeds.m', :controller => 'feedlist', :action => 'index', :format => 'm'
   
+  if Rails.env == 'test'
+    map.connect '/selenium_helper/login', :controller => 'selenium_helper', :action => 'login'
+  end
+
   map.preferences 'preferences', :controller => 'preferences', :action => 'index'
   map.integrations 'integrations', :controller => 'integrations', :action => 'index'
 
