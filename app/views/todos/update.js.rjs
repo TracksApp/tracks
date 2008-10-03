@@ -101,6 +101,12 @@ if @saved
   elsif source_view_is :stats
     page.replace dom_id(@todo), :partial => 'todos/todo', :locals => { :parent_container_type => parent_container_type }
     page.visual_effect :highlight, dom_id(@todo), :duration => 3    
+  elsif source_view_is :calendar
+    if @due_date_changed
+      page[@todo].remove
+      page.insert_html :bottom, @new_due_id, :partial => 'todos/todo'
+      page.visual_effect :highlight, dom_id(@todo), :duration => 3
+    end
   else
     logger.error "unexpected source_view '#{params[:_source_view]}'"
   end

@@ -2,8 +2,8 @@ class TodosController < ApplicationController
 
   helper :todos
 
-  skip_before_filter :login_required, :only => [:index]
-  prepend_before_filter :login_or_feed_token_required, :only => [:index]
+  skip_before_filter :login_required, :only => [:index, :calendar]
+  prepend_before_filter :login_or_feed_token_required, :only => [:index, :calendar]
   append_before_filter :init, :except => [ :destroy, :completed, :completed_archive, :check_deferred, :toggle_check, :toggle_star, :edit, :update, :create, :calendar ]
   append_before_filter :get_todo_from_params, :only => [ :edit, :toggle_check, :toggle_star, :show, :update, :destroy ]
 
@@ -172,6 +172,7 @@ class TodosController < ApplicationController
     @original_item_context_id = @todo.context_id
     @original_item_project_id = @todo.project_id
     @original_item_was_deferred = @todo.deferred?
+    @original_item_due = @todo.due
     if params['todo']['project_id'].blank? && !params['project_name'].nil?
       if params['project_name'] == 'None'
         project = Project.null_object
@@ -221,6 +222,25 @@ class TodosController < ApplicationController
     @saved = @todo.update_attributes params["todo"]
     @context_changed = @original_item_context_id != @todo.context_id
     @todo_was_activated_from_deferred_state = @original_item_was_deferred && @todo.active?
+    
+    @due_date_changed = @original_item_due != @todo.due
+    if @due_date_changed
+      due_today_date = Time.zone.now
+      due_this_week_date = Time.zone.now.end_of_week
+      due_next_week_date = due_this_week_date + 7.days
+      due_this_month_date = Time.zone.now.end_of_month
+      if @todo.due <= due_today_date
+        @new_due_id = "due_today"
+      elsif @todo.due <= due_this_week_date
+        @new_due_id = "due_this_week"
+      elsif @todo.due <= due_next_week_date
+        @new_due_id = "due_next_week"
+      elsif @todo.due <= due_this_month_date
+        @new_due_id = "due_this_month_week"
+      else
+        @new_due_id = "due_after_this_month"
+      end      
+    end
     
     if @context_changed
       determine_remaining_in_context_count(@original_item_context_id)
@@ -432,7 +452,12 @@ class TodosController < ApplicationController
     
     respond_to do |format|
       format.html
-      format.ics   { render :text => 'Not implemented yet', :status => 200 }
+      format.ics   {
+        @due_all = current_user.todos.find(:all, 
+          :conditions => ['(todos.state = ? OR todos.state = ?) AND NOT todos.due IS NULL', 'active', 'deferred'],
+          :order => "due")
+        render :action => 'calendar', :layout => false, :content_type => Mime::ICS
+      }
     end
   end  
   
