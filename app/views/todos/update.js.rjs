@@ -16,10 +16,18 @@ if @saved
       
       if (@remaining_in_context == 0)
         # remove context container from page if empty
-        source_view do |from|
-          from.todo { page.visual_effect :fade, "c#{@original_item_context_id}", :duration => 0.4 }
-          from.tag { page.visual_effect :fade, "c#{@original_item_context_id}", :duration => 0.4 }
-          from.context { page.show "c#{@original_item_context_id}empty-nd" }
+        if @context_changed
+          source_view do |from|
+            from.todo { page.visual_effect :fade, "c#{@original_item_context_id}", :duration => 0.4 }
+            from.tag { page.visual_effect :fade, "c#{@original_item_context_id}", :duration => 0.4 }
+            from.context { page.show "c#{@original_item_context_id}empty-nd" }
+          end
+        else
+          source_view do |from|
+            from.todo { page.visual_effect :fade, item_container_id(@todo), :duration => 0.4 }
+            from.tag { page.visual_effect :fade, item_container_id(@todo), :duration => 0.4 }
+            from.context { page.show "c#{@original_item_context_id}empty-nd" }
+          end
         end
       end
       

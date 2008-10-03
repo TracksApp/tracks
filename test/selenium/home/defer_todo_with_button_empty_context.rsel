@@ -1,0 +1,8 @@
+setup :fixtures => :all
+login :as => 'admin'
+open "/"
+wait_for_element_present '//div[@id="line_todo_5"]//img[@alt="Defer_1"]/..'
+click '//div[@id="line_todo_5"]//img[@alt="Defer_1"]/..'
+wait_for_element_not_present "todo_5"
+assert_text 'badge_count', '9'
+wait_for_not_visible "c5"
