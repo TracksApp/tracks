@@ -141,8 +141,10 @@ class TodosController < ApplicationController
           determine_remaining_in_context_count(@todo.context_id)
           determine_down_count
           determine_completed_count if @todo.completed?
-          @original_item_due_id = get_due_id_for_calendar(@original_item_due)
-          @old_due_empty = is_old_due_empty(@original_item_due_id)
+          if source_view_is :calendar
+            @original_item_due_id = get_due_id_for_calendar(@original_item_due)
+            @old_due_empty = is_old_due_empty(@original_item_due_id)
+          end
         end
         render
       end
@@ -177,7 +179,7 @@ class TodosController < ApplicationController
     @original_item_project_id = @todo.project_id
     @original_item_was_deferred = @todo.deferred?
     @original_item_due = @todo.due
-    @original_item_due_id = get_due_id_for_calendar(@todo.due)
+    @original_item_due_id = get_due_id_for_calendar(@todo.due) 
     
     if params['todo']['project_id'].blank? && !params['project_name'].nil?
       if params['project_name'] == 'None'
@@ -229,14 +231,16 @@ class TodosController < ApplicationController
     @context_changed = @original_item_context_id != @todo.context_id
     @todo_was_activated_from_deferred_state = @original_item_was_deferred && @todo.active?
     
-    @due_date_changed = @original_item_due != @todo.due
-    if @due_date_changed
-      @old_due_empty = is_old_due_empty(@original_item_due_id)
-      if @todo.due.nil?
-        # do not act further on date change when date is changed to nil
-        @due_date_changed = false
-      else
-        @new_due_id = get_due_id_for_calendar(@todo.due)
+    if source_view_is :calendar
+      @due_date_changed = @original_item_due != @todo.due
+      if @due_date_changed
+        @old_due_empty = is_old_due_empty(@original_item_due_id)
+        if @todo.due.nil?
+          # do not act further on date change when date is changed to nil
+          @due_date_changed = false
+        else
+          @new_due_id = get_due_id_for_calendar(@todo.due)
+        end
       end
     end
     
@@ -295,9 +299,10 @@ class TodosController < ApplicationController
           determine_down_count
           if source_view_is_one_of(:todo, :deferred)
             determine_remaining_in_context_count(@context_id)
+          elsif source_view_is :calendar
+            @original_item_due_id = get_due_id_for_calendar(@original_item_due) 
+            @old_due_empty = is_old_due_empty(@original_item_due_id)
           end
-          @original_item_due_id = get_due_id_for_calendar(@original_item_due)
-          @old_due_empty = is_old_due_empty(@original_item_due_id)
         end
         render
       end
@@ -781,6 +786,7 @@ class TodosController < ApplicationController
   end
   
   def get_due_id_for_calendar(due)
+    return "" if due.nil?
     due_today_date = Time.zone.now
     due_this_week_date = Time.zone.now.end_of_week
     due_next_week_date = due_this_week_date + 7.days
