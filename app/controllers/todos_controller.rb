@@ -128,8 +128,10 @@ class TodosController < ApplicationController
   # Toggles the 'done' status of the action
   # 
   def toggle_check
+    @source_view = params['_source_view'] || 'todo'
+    @original_item_due = @todo.due
     @saved = @todo.toggle_completion!
-    
+  
     # check if this todo has a related recurring_todo. If so, create next todo
     check_for_next_todo if @saved
     
@@ -139,6 +141,8 @@ class TodosController < ApplicationController
           determine_remaining_in_context_count(@todo.context_id)
           determine_down_count
           determine_completed_count if @todo.completed?
+          @original_item_due_id = get_due_id_for_calendar(@original_item_due)
+          @old_due_empty = is_old_due_empty(@original_item_due_id)
         end
         render
       end
@@ -173,6 +177,8 @@ class TodosController < ApplicationController
     @original_item_project_id = @todo.project_id
     @original_item_was_deferred = @todo.deferred?
     @original_item_due = @todo.due
+    @original_item_due_id = get_due_id_for_calendar(@todo.due)
+    
     if params['todo']['project_id'].blank? && !params['project_name'].nil?
       if params['project_name'] == 'None'
         project = Project.null_object
@@ -225,21 +231,13 @@ class TodosController < ApplicationController
     
     @due_date_changed = @original_item_due != @todo.due
     if @due_date_changed
-      due_today_date = Time.zone.now
-      due_this_week_date = Time.zone.now.end_of_week
-      due_next_week_date = due_this_week_date + 7.days
-      due_this_month_date = Time.zone.now.end_of_month
-      if @todo.due <= due_today_date
-        @new_due_id = "due_today"
-      elsif @todo.due <= due_this_week_date
-        @new_due_id = "due_this_week"
-      elsif @todo.due <= due_next_week_date
-        @new_due_id = "due_next_week"
-      elsif @todo.due <= due_this_month_date
-        @new_due_id = "due_this_month_week"
+      @old_due_empty = is_old_due_empty(@original_item_due_id)
+      if @todo.due.nil?
+        # do not act further on date change when date is changed to nil
+        @due_date_changed = false
       else
-        @new_due_id = "due_after_this_month"
-      end      
+        @new_due_id = get_due_id_for_calendar(@todo.due)
+      end
     end
     
     if @context_changed
@@ -271,6 +269,7 @@ class TodosController < ApplicationController
     
   def destroy
     @todo = get_todo_from_params
+    @original_item_due = @todo.due
     @context_id = @todo.context_id
     @project_id = @todo.project_id
 
@@ -297,6 +296,8 @@ class TodosController < ApplicationController
           if source_view_is_one_of(:todo, :deferred)
             determine_remaining_in_context_count(@context_id)
           end
+          @original_item_due_id = get_due_id_for_calendar(@original_item_due)
+          @old_due_empty = is_old_due_empty(@original_item_due_id)
         end
         render
       end
@@ -435,18 +436,23 @@ class TodosController < ApplicationController
     due_this_month_date = Time.zone.now.end_of_month
     
     @due_today = current_user.todos.find(:all, 
+      :include => [:taggings, :tags], 
       :conditions => ['(todos.state = ? OR todos.state = ?) AND todos.due <= ?', 'active', 'deferred', due_today_date],
       :order => "due")
     @due_this_week = current_user.todos.find(:all, 
+      :include => [:taggings, :tags], 
       :conditions => ['(todos.state = ? OR todos.state = ?) AND todos.due > ? AND todos.due <= ?', 'active', 'deferred', due_today_date, due_this_week_date],
       :order => "due")
     @due_next_week = current_user.todos.find(:all, 
+      :include => [:taggings, :tags], 
       :conditions => ['(todos.state = ? OR todos.state = ?) AND todos.due > ? AND todos.due <= ?', 'active', 'deferred', due_this_week_date, due_next_week_date],
       :order => "due")
     @due_this_month = current_user.todos.find(:all, 
+      :include => [:taggings, :tags], 
       :conditions => ['(todos.state = ? OR todos.state = ?) AND todos.due > ? AND todos.due <= ?', 'active', 'deferred', due_next_week_date, due_this_month_date],
       :order => "due")
     @due_after_this_month = current_user.todos.find(:all, 
+      :include => [:taggings, :tags], 
       :conditions => ['(todos.state = ? OR todos.state = ?) AND todos.due > ?', 'active', 'deferred', due_this_month_date],
       :order => "due")
     
@@ -772,6 +778,51 @@ class TodosController < ApplicationController
         @new_recurring_todo = create_todo_from_recurring_todo(@recurring_todo, date) 
       end
     end 
+  end
+  
+  def get_due_id_for_calendar(due)
+    due_today_date = Time.zone.now
+    due_this_week_date = Time.zone.now.end_of_week
+    due_next_week_date = due_this_week_date + 7.days
+    due_this_month_date = Time.zone.now.end_of_month
+    if due <= due_today_date
+      new_due_id = "due_today"
+    elsif due <= due_this_week_date
+      new_due_id = "due_this_week"
+    elsif due <= due_next_week_date
+      new_due_id = "due_next_week"
+    elsif due <= due_this_month_date
+      new_due_id = "due_this_month"
+    else
+      new_due_id = "due_after_this_month"
+    end
+    return new_due_id
+  end
+  
+  def is_old_due_empty(id)
+    due_today_date = Time.zone.now
+    due_this_week_date = Time.zone.now.end_of_week
+    due_next_week_date = due_this_week_date + 7.days
+    due_this_month_date = Time.zone.now.end_of_month
+    case id
+    when "due_today"
+      return 0 == current_user.todos.count(:all, 
+        :conditions => ['(todos.state = ? OR todos.state = ?) AND todos.due <= ?', 'active', 'deferred', due_today_date])
+    when "due_this_week"
+      return 0 == current_user.todos.count(:all, 
+        :conditions => ['(todos.state = ? OR todos.state = ?) AND todos.due > ? AND todos.due <= ?', 'active', 'deferred', due_today_date, due_this_week_date])
+    when "due_next_week"
+      return 0 == current_user.todos.count(:all, 
+        :conditions => ['(todos.state = ? OR todos.state = ?) AND todos.due > ? AND todos.due <= ?', 'active', 'deferred', due_this_week_date, due_next_week_date])
+    when "due_this_month"
+      return 0 == current_user.todos.count(:all, 
+        :conditions => ['(todos.state = ? OR todos.state = ?) AND todos.due > ? AND todos.due <= ?', 'active', 'deferred', due_next_week_date, due_this_month_date])
+    when "due_after_this_month"      
+      return 0 == current_user.todos.count(:all, 
+        :conditions => ['(todos.state = ? OR todos.state = ?) AND todos.due > ?', 'active', 'deferred', due_this_month_date])
+    else
+      raise Exception.new, "unknown due id for calendar: '#{id}'"      
+    end
   end
 
   class FindConditionBuilder
