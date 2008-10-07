@@ -10,6 +10,7 @@ class TodosController < ApplicationController
   session :off, :only => :index, :if => Proc.new { |req| is_feed_request(req) }
 
   def index
+    current_user.deferred_todos.find_and_activate_ready
     @projects = current_user.projects.find(:all, :include => [:default_context])
     @contexts = current_user.contexts.find(:all)
 
