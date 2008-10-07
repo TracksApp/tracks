@@ -1201,3 +1201,9 @@ body.integrations textarea {
     width:80%;
     background-color:#ddd;
 }
+.defer-container {
+  float:right;
+}
+.defer-container a:hover {
+  background-color: inherit;
+}

@@ -18,7 +18,7 @@ class TodoCreateParamsHelperTest < Test::Rails::TestCase
   end
   
   def test_show_from_accessor
-    expected_date = Time.now.to_date
+    expected_date = Time.now
     params = { 'todo' => { 'show_from' => expected_date}}
     prefs = flexmock()
     params_helper = TodosController::TodoCreateParamsHelper.new(params, prefs)
@@ -26,7 +26,7 @@ class TodoCreateParamsHelperTest < Test::Rails::TestCase
   end
   
   def test_due_accessor
-    expected_date = Time.now.to_date
+    expected_date = Time.now
     params = { 'todo' => { 'due' => expected_date}}
     prefs = flexmock()
     params_helper = TodosController::TodoCreateParamsHelper.new(params, prefs)

@@ -37,7 +37,7 @@ describe User do
     it 'has many active contexts' do
       User.should have_many(:active_contexts).
         with_order('position ASC').
-        with_conditions('hide = ?', 'true').
+        with_conditions('hide = ?', false).
         with_class_name('Context')
     end
 
@@ -177,5 +177,21 @@ describe User do
       @user.remember_token_expires_at.should_not be_nil
       @user.remember_token_expires_at.should be_between(before, after)
     end
+  end
+
+  it "should not activate todos that are showing when UTC is tomorrow" do
+    context = Context.create(:name => 'a context')
+    user = User.create(:login => 'user7', :password => 'foobar', :password_confirmation => 'foobar')
+    user.save!
+    user.create_preference
+    user.preference.update_attribute('time_zone', 'Pacific Time (US & Canada)')
+#    Time.zone = 'Pacific Time (US & Canada)'
+    Time.stub!(:now).and_return(Time.new.end_of_day - 20.minutes)
+    todo = user.todos.build(:description => 'test task', :context => context, :show_from => user.date + 1.days)
+    todo.save!
+
+    user.deferred_todos.find_and_activate_ready
+    user = User.find(user.id)
+    user.deferred_todos.should include(todo)
   end
 end

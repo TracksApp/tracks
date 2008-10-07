@@ -5,7 +5,7 @@ require 'todos_controller'
 class TodosController; def rescue_action(e) raise e end; end
 
 class TodosControllerTest < Test::Rails::TestCase
-  fixtures :users, :preferences, :projects, :contexts, :todos, :tags, :taggings
+  fixtures :users, :preferences, :projects, :contexts, :todos, :tags, :taggings, :recurring_todos
   
   def setup
     @controller = TodosController.new
@@ -137,7 +137,7 @@ class TodosControllerTest < Test::Rails::TestCase
     assert_equal "Call Warren Buffet to find out how much he makes per day", t.description
     assert_equal "foo, bar", t.tag_list
     expected = Date.new(2006,11,30)
-    actual = t.due
+    actual = t.due.to_date
     assert_equal expected, actual, "Expected #{expected.to_s(:db)}, was #{actual.to_s(:db)}"
   end
 
@@ -328,7 +328,7 @@ class TodosControllerTest < Test::Rails::TestCase
     assert t.active?
     assert_equal 'test notes', t.notes
     assert_nil t.show_from
-    assert_equal Date.new(2007,1,2).to_s, t.due.to_s
+    assert_equal Date.new(2007,1,2), t.due.to_date
   end
   
   def test_mobile_create_action_redirects_to_mobile_home_page_when_successful
@@ -374,8 +374,26 @@ class TodosControllerTest < Test::Rails::TestCase
     assert todo_1.completed?
 
     # check there is a new todo linked to the recurring pattern
-    next_todo = Todo.find_by_recurring_todo_id(recurring_todo_1.id)
+    next_todo = Todo.find(:first, :conditions => {:recurring_todo_id => recurring_todo_1.id, :state => 'active'})
     assert_equal "Call Bill Gates every day", next_todo.description
+    
+    # change recurrence pattern to weekly and set show_from 2 days befor due date
+    # this forces the next todo to be put in the tickler
+    recurring_todo_1.show_from_delta = 2
+    recurring_todo_1.recurring_period = 'weekly'
+    recurring_todo_1.every_day = 'smtwtfs'
+    recurring_todo_1.save
+    
+    # mark next_todo as complete by toggle_check
+    xhr :post, :toggle_check, :id => next_todo.id, :_source_view => 'todo' 
+    next_todo.reload
+    assert next_todo.completed?
+
+    # check there is a new todo linked to the recurring pattern in the tickler
+    next_todo = Todo.find(:first, :conditions => {:recurring_todo_id => recurring_todo_1.id, :state => 'deferred'})
+    assert_equal "Call Bill Gates every day", next_todo.description
+    # check that the todo is in the tickler
+    assert !next_todo.show_from.nil?
   end
-  
+   
 end

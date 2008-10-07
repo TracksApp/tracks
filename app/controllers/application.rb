@@ -16,6 +16,8 @@ require 'time'
 # 
 # Tag
 
+class CannotAccessContext < RuntimeError; end
+
 class ApplicationController < ActionController::Base
 
   protect_from_forgery :secret => SALT
@@ -173,7 +175,7 @@ class ApplicationController < ActionController::Base
     if show_from_date.nil?
       todo.show_from=nil
     else
-      todo.show_from = show_from_date.to_time < Time.now.utc ? nil : show_from_date
+      todo.show_from = show_from_date < Time.zone.now ? nil : show_from_date
     end
     
     saved = todo.save

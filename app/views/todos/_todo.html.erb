@@ -11,6 +11,7 @@
     <%= remote_star_icon %>
     <%= remote_toggle_checkbox unless source_view_is :deferred %>
     <div class="description<%= staleness_class( todo ) %>">
+      <% unless @todo.completed? %><span class="defer-container"><%= defer_link(1) %> <%= defer_link(7) %></span><% end %>
       <%= date_span -%>
       <span class="todo.descr"><%= h sanitize(todo.description) %></span>
       <%= link_to(image_tag("recurring16x16.png"), {:controller => "recurring_todos", :action => "index"}, :class => "recurring_icon") if @todo.from_recurring_todo? %>

@@ -1,5 +1,6 @@
 if @saved  
   page[@todo].remove
+  page.show "empty_"+@original_item_due_id if @old_due_empty
   if @todo.completed?
 
     # completed todos move from their context to the completed container
@@ -26,7 +27,7 @@ if @saved
         page.notify :notice, "There is no next action after the recurring action you just finished. The recurrence is completed", 6.0 if @new_recurring_todo.nil?
       end
     end
-    
+        
   else
     # todo is activated from completed container
     page.call "todoItems.ensureVisibleWithEffectAppear", item_container_id(@todo)

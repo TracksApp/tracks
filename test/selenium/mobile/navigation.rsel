@@ -7,7 +7,7 @@ wait_for_title "All actions"
 wait_for_text 'css=h1 span.count', '10'
 
 # open context page
-click_and_wait "link=Contexts"
+click_and_wait "link=2-Contexts"
 # verify_title "All actions in context agenda"
 # choose agenda context
 click_and_wait "link=agenda"
@@ -18,7 +18,7 @@ click_and_wait "link=foo"
 verify_title "TRACKS::Tagged with 'foo'"
 wait_for_text 'css=h1 span.count', '2'
 
-click_and_wait "link=Projects"
+click_and_wait "link=3-Projects"
 wait_for_text 'css=h1 span.count', '3'
 click_and_wait "link=Build a working time machine"
 wait_for_text 'css=h1 span.count', '3'

@@ -43,8 +43,11 @@ ActionController::Routing::Routes.draw do |map|
     # so /todos/tag/version1.5.xml will result in :name => 'version1.5.xml'
     # UPDATE: added support for mobile view. All tags ending on .m will be
     # routed to mobile view of tags.
-    todos.tag 'todos/tag/:name', :action => "tag", :format => 'm', :name => /.*\.m/
+    todos.tag 'todos/tag/:name.m', :action => "tag", :format => 'm'
     todos.tag 'todos/tag/:name', :action => "tag", :name => /.*/
+    
+    todos.calendar 'calendar.ics', :action => "calendar", :format => 'ics'
+    todos.calendar 'calendar', :action => "calendar"
     
     todos.mobile 'mobile', :action => "index", :format => 'm'
     todos.mobile_abbrev 'm', :action => "index", :format => 'm'
@@ -55,6 +58,10 @@ ActionController::Routing::Routes.draw do |map|
   map.feeds 'feeds', :controller => 'feedlist', :action => 'index'
   map.feeds 'feeds.m', :controller => 'feedlist', :action => 'index', :format => 'm'
   
+  if Rails.env == 'test'
+    map.connect '/selenium_helper/login', :controller => 'selenium_helper', :action => 'login'
+  end
+
   map.preferences 'preferences', :controller => 'preferences', :action => 'index'
   map.integrations 'integrations', :controller => 'integrations', :action => 'index'
 

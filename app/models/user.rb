@@ -59,7 +59,7 @@ class User < ActiveRecord::Base
   has_many :active_contexts,
            :class_name => 'Context',
            :order => 'position ASC',
-           :conditions => [ 'hide = ?', 'true' ]
+           :conditions => [ 'hide = ?', false ]
   has_many :todos,
            :order => 'todos.completed_at DESC, todos.created_at DESC',
            :dependent => :delete_all
@@ -71,8 +71,7 @@ class User < ActiveRecord::Base
            :conditions => [ 'state = ?', 'deferred' ],
            :order => 'show_from ASC, todos.created_at DESC' do
               def find_and_activate_ready
-                # assumes that active record uses :utc to store datetime in db
-                find(:all, :conditions => ['show_from <= ?', Time.now.utc ]).collect { |t| t.activate! }
+                find(:all, :conditions => ['show_from <= ?', Time.zone.now ]).collect { |t| t.activate! }
               end
            end
   has_many :completed_todos,
@@ -170,7 +169,11 @@ class User < ActiveRecord::Base
   end
 
   def date
-    time.to_date
+    time.midnight
+  end
+  
+  def at_midnight(date)
+    return TimeZone[prefs.time_zone].local(date.year, date.month, date.day, 0, 0, 0)
   end
   
   def generate_token

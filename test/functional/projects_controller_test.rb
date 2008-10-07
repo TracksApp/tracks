@@ -25,7 +25,7 @@ class ProjectsControllerTest < TodoContainerControllerTestBase
     assert_equal 1, assigns['deferred'].size
 
     t = p.not_done_todos[0]
-    t.show_from = 1.days.from_now.utc.to_date
+    t.show_from = 1.days.from_now.utc
     t.save!
     
     get :show, :id => p.to_param
