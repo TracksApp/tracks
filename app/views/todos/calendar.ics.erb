@@ -7,7 +7,7 @@ X-WR-CALNAME:Tracks
 <% for todo in @due_all 
   due_date = todo.due
   overdue_text = ""
-  if due_date < Time.zone.now
+  if due_date.at_midnight < Time.zone.now.at_midnight
     due_date = Time.zone.now
     overdue_text = "Overdue: "
   end
