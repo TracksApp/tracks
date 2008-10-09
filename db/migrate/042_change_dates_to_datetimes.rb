@@ -26,6 +26,7 @@ class ChangeDatesToDatetimes < ActiveRecord::Migration
           todo.update_attribute(:start_from, at_midnight(todo.start_from)) unless todo.start_from.nil?
           todo.update_attribute(:end_date, at_midnight(todo.end_date)) unless todo.end_date.nil?
         end
+      end
     end
   end
 
