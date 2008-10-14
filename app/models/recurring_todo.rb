@@ -517,17 +517,18 @@ class RecurringTodo < ActiveRecord::Base
   end
   
   def get_yearly_date(previous)
-
     start = determine_start(previous)
     day = self.every_other1
     month = self.every_other2
     
     case self.recurrence_selector
     when 0 # specific day of a specific month
-      # if there is no next month n in this year, search in next year
-      if start.month >= month
-        start = Time.zone.local(start.year+1, month, 1) if start.day >= day
-        start = Time.zone.local(start.year, month, 1) if start.day <= day
+      if start.month > month || (start.month == month && start.day > day)
+        # if there is no next month n and day m in this year, search in next year
+        start = Time.zone.local(start.year+1, month, 1) 
+      else
+        # if there is a next month n, stay in this year
+        start = Time.zone.local(start.year, month, 1) 
       end
       return Time.zone.local(start.year, month, day)
       
