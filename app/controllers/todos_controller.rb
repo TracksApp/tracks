@@ -134,7 +134,7 @@ class TodosController < ApplicationController
     @saved = @todo.toggle_completion!
   
     # check if this todo has a related recurring_todo. If so, create next todo
-    check_for_next_todo if @saved
+    @new_recurring_todo = check_for_next_todo(@todo) if @saved
     
     respond_to do |format|
       format.js do
@@ -279,7 +279,7 @@ class TodosController < ApplicationController
     @project_id = @todo.project_id
 
     # check if this todo has a related recurring_todo. If so, create next todo
-    check_for_next_todo
+    @new_recurring_todo = check_for_next_todo(@todo)
     
     @saved = @todo.destroy
     
@@ -771,22 +771,22 @@ class TodosController < ApplicationController
     ['rss','atom','txt','ics'].include?(req.parameters[:format])
   end
   
-  def check_for_next_todo
+  def check_for_next_todo(todo)
     # check if this todo has a related recurring_todo. If so, create next todo
-    @new_recurring_todo = nil
-    @recurring_todo = nil
-    if @todo.from_recurring_todo?
-      @recurring_todo = current_user.recurring_todos.find(@todo.recurring_todo_id)
+    new_recurring_todo = nil
+    recurring_todo = nil
+    if todo.from_recurring_todo?
+      recurring_todo = current_user.recurring_todos.find(todo.recurring_todo_id)
       
       # check for next todo either from the due date or the show_from date
-      date_to_check = @todo.due.nil? ? @todo.show_from : @todo.due
+      date_to_check = todo.due.nil? ? todo.show_from : todo.due
       
       # if both due and show_from are nil, check for a next todo with yesterday
       # as reference point. We pick yesterday so that new todos for today will
       # be created instead of new todos for tomorrow.
       date_to_check = Time.zone.now-1.day if date_to_check.nil?
       
-      if @recurring_todo.active? && @recurring_todo.has_next_todo(date_to_check)
+      if recurring_todo.active? && recurring_todo.has_next_todo(date_to_check)
         
         # shift the reference date to yesterday if date_to_check is furher in
         # the past. This is to make sure we do not get older todos for overdue
@@ -795,9 +795,10 @@ class TodosController < ApplicationController
         # date. Discard the time part in the compare
         date = date_to_check.at_midnight >= Time.zone.now.at_midnight ? date_to_check : Time.zone.now-1.day
         
-        @new_recurring_todo = create_todo_from_recurring_todo(@recurring_todo, date) 
+        new_recurring_todo = create_todo_from_recurring_todo(recurring_todo, date) 
       end
-    end 
+    end
+    return new_recurring_todo    
   end
   
   def get_due_id_for_calendar(due)

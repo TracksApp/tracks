@@ -79,6 +79,11 @@ class RecurringTodosControllerTest < ActionController::TestCase
     recurring_todo_1 = RecurringTodo.find(1)
     assert recurring_todo_1.completed?
     
+    # remove remaining todo 
+    todo = Todo.find_by_recurring_todo_id(1)
+    todo.recurring_todo_id = 2
+    todo.save
+    
     todo_count = Todo.count
     
     # mark as active
@@ -119,5 +124,5 @@ class RecurringTodosControllerTest < ActionController::TestCase
     # show_from should be nil since now+4.days-10.days is in the past
     assert_equal nil, new_todo.show_from
   end
-  
+    
 end

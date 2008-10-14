@@ -53,7 +53,7 @@ class ContextTest < Test::Rails::TestCase
   end
   
   def test_delete_context_deletes_todos_within_it
-    assert_equal 6, @agenda.todos.count
+    assert_equal 7, @agenda.todos.count
     agenda_todo_ids = @agenda.todos.collect{|t| t.id }
     @agenda.destroy
     agenda_todo_ids.each do |todo_id|
@@ -62,11 +62,11 @@ class ContextTest < Test::Rails::TestCase
   end
   
   def test_not_done_todos
-    assert_equal 5, @agenda.not_done_todos.size
+    assert_equal 6, @agenda.not_done_todos.size
     t = @agenda.not_done_todos[0]
     t.complete!
     t.save!
-    assert_equal 4, Context.find(@agenda.id).not_done_todos.size
+    assert_equal 5, Context.find(@agenda.id).not_done_todos.size
   end
     
   def test_done_todos

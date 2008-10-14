@@ -523,7 +523,7 @@ class RecurringTodo < ActiveRecord::Base
     
     case self.recurrence_selector
     when 0 # specific day of a specific month
-      if start.month > month || (start.month == month && start.day > day)
+      if start.month > month || (start.month == month && start.day >= day)
         # if there is no next month n and day m in this year, search in next year
         start = Time.zone.local(start.year+1, month, 1) 
       else

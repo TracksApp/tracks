@@ -56,7 +56,7 @@ class StatsControllerTest < Test::Unit::TestCase
     assert_equal 3, assigns['projects'].count
     assert_equal 3, assigns['projects'].count(:conditions => "state = 'active'")
     assert_equal 10, assigns['contexts'].count
-    assert_equal 15, assigns['actions'].count
+    assert_equal 16, assigns['actions'].count
     assert_equal 4, assigns['tags'].count
     assert_equal 2, assigns['unique_tags'].size
     assert_equal 2.week.ago.utc.beginning_of_day, assigns['first_action'].created_at
