@@ -495,12 +495,14 @@ class RecurringTodo < ActiveRecord::Base
   
   def get_xth_day_of_month(x, weekday, month, year)
     if x == 5
-      # last -> count backwards
-      last_day = Time.zone.local(year, month, Time.days_in_month(month))
+      # last -> count backwards. use UTC to avoid strange timezone oddities
+      # where last_day -= 1.day seems to shift tz+0100 to tz+0000
+      last_day = Time.utc(year, month, Time.days_in_month(month))
       while last_day.wday != weekday
         last_day -= 1.day
       end
-      return last_day
+      # convert back to local timezone
+      return Time.zone.local(last_day.year, last_day.month, last_day.day)
     else
       # 1-4th -> count upwards
       start = Time.zone.local(year,month,1)
@@ -524,7 +526,8 @@ class RecurringTodo < ActiveRecord::Base
     case self.recurrence_selector
     when 0 # specific day of a specific month
       if start.month > month || (start.month == month && start.day >= day)
-        # if there is no next month n and day m in this year, search in next year
+        # if there is no next month n and day m in this year, search in next
+        # year
         start = Time.zone.local(start.year+1, month, 1) 
       else
         # if there is a next month n, stay in this year
