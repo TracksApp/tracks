@@ -188,16 +188,7 @@ class ProjectsController < ApplicationController
   
   def actionize
     @state = params['state']
-    query_state = ''
-    query_state = 'AND project.state = "' + params['state'] +'" 'if @state
-    projects = Project.find_by_sql([
-    "SELECT project.id, count(todo.id) as p_count " +
-    "FROM projects as project " +
-    "LEFT OUTER JOIN todos as todo ON todo.project_id = project.id "+
-    "WHERE project.user_id = ? " +
-    query_state +
-    " GROUP BY project.id ORDER by p_count DESC",current_user.id])
-    @projects = current_user.projects.actionize(projects,:state => @state) if @state
+    @projects = current_user.projects.actionize(current_user.id, :state => @state) if @state
     @contexts = current_user.contexts
     init_not_done_counts(['project'])
   end

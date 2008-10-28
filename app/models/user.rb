@@ -51,8 +51,18 @@ class User < ActiveRecord::Base
                 self.update_positions(projects.map{ |p| p.id })
                 return projects
               end
-              def actionize(proj,scope_conditions = {})
-                self.update_positions(proj.map{ |p| p.id })
+              def actionize(user_id, scope_conditions = {})
+                @state = scope_conditions[:state]
+                query_state = ''
+                query_state = 'AND project.state = "' + @state +'" 'if @state
+                projects = Project.find_by_sql([
+                    "SELECT project.id, count(todo.id) as p_count " +
+                      "FROM projects as project " +
+                      "LEFT OUTER JOIN todos as todo ON todo.project_id = project.id "+
+                      "WHERE project.user_id = ? AND NOT todo.state='completed' " +
+                      query_state +
+                      " GROUP BY project.id ORDER by p_count DESC",user_id])
+                self.update_positions(projects.map{ |p| p.id })
                 projects = find(:all, :conditions => scope_conditions)
                 return projects
               end
