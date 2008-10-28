@@ -53,8 +53,8 @@ class User < ActiveRecord::Base
               end
               def actionize(user_id, scope_conditions = {})
                 @state = scope_conditions[:state]
-                query_state = ''
-                query_state = 'AND project.state = "' + @state +'" 'if @state
+                query_state = ""
+                query_state = "AND project.state = '" + @state +"' "if @state
                 projects = Project.find_by_sql([
                     "SELECT project.id, count(todo.id) as p_count " +
                       "FROM projects as project " +
