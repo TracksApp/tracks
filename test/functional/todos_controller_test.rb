@@ -406,6 +406,52 @@ class TodosControllerTest < Test::Rails::TestCase
     # check that the todo is in the tickler
     assert !next_todo.show_from.nil?
   end
+
+  def test_toggle_check_on_rec_todo_show_from_today
+    login_as(:admin_user)
+    
+    # link todo_1 and recurring_todo_1
+    recurring_todo_1 = RecurringTodo.find(1)
+    todo_1 = Todo.find_by_recurring_todo_id(1)
+    today = Time.now.utc.at_midnight
+    
+    # change recurrence pattern to monthly and set show_from to today
+    recurring_todo_1.target = 'show_from_date'
+    recurring_todo_1.recurring_period = 'monthly'
+    recurring_todo_1.recurrence_selector = 0
+    recurring_todo_1.every_other1 = today.day
+    recurring_todo_1.every_other2 = 1
+    recurring_todo_1.save
+    
+    # mark todo_1 as complete by toggle_check, this gets rid of todo_1 that was
+    # not correctly created from the adjusted recurring pattern we defined
+    # above.
+    xhr :post, :toggle_check, :id => todo_1.id, :_source_view => 'todo' 
+    todo_1.reload
+    assert todo_1.completed?
+
+    # locate the new todo. This todo is created from the adjusted recurring
+    # pattern defined in this test
+    new_todo = Todo.find(:first, :conditions => {:recurring_todo_id => recurring_todo_1.id, :state => 'active'})
+    assert !new_todo.nil?
+
+    # mark new_todo as complete by toggle_check
+    xhr :post, :toggle_check, :id => new_todo.id, :_source_view => 'todo' 
+    new_todo.reload
+    assert todo_1.completed?
+    
+    # locate the new todo in tickler
+    new_todo = Todo.find(:first, :conditions => {:recurring_todo_id => recurring_todo_1.id, :state => 'deferred'})
+    assert !new_todo.nil?
+    
+    assert_equal "Call Bill Gates every day", new_todo.description
+    # check that the new todo is not the same as todo_1
+    assert_not_equal todo_1.id, new_todo.id
+
+    # check that the new_todo is in the tickler to show next month
+    assert !new_todo.show_from.nil?
+    assert_equal Time.utc(today.year, today.month+1, today.day), new_todo.show_from
+  end
   
   def test_check_for_next_todo
     login_as :admin_user
