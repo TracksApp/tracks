@@ -186,6 +186,13 @@ class ProjectsController < ApplicationController
     init_not_done_counts(['project'])
   end
   
+  def actionize
+    @state = params['state']
+    @projects = current_user.projects.actionize(current_user.id, :state => @state) if @state
+    @contexts = current_user.contexts
+    init_not_done_counts(['project'])
+  end
+  
   protected
     
   def render_projects_html

@@ -28,6 +28,10 @@ ActionController::Routing::Routes.draw do |map|
     projects.resources :todos, :name_prefix => "project_"
   end
 
+  map.resources :projects, :collection => {:order => :post, :actionize => :post} do |projects|
+    projects.resources :todos, :name_prefix => "project_"
+  end
+
   map.resources :todos,
                 :member => {:toggle_check => :put, :toggle_star => :put},
                 :collection => {:check_deferred => :post, :filter_to_context => :post, :filter_to_project => :post}

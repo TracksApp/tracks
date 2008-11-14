@@ -22,6 +22,7 @@ New features:
 4. New interface to import an email / sms messages into Tracks (needs an email server on the same server as Tracks)
 5. New buttons to quickly defer an action 1 or 7 days
 6. Calendar view to review due actions, includes iCal feed to use in your calendar app (tested with Google Calendar, Evolution, Outlook 2007) 
+7. You can now sort projects on number of active todos
 
 Under the hood:
 1. Move selenium tests to RSpec 

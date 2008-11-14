@@ -129,7 +129,8 @@ div.buttons, div.buttons a, div.buttons a:hover {text-align: right; margin-right
 div#list-active-projects, div#list-hidden-projects, div#list-completed-projects, div#list-contexts, div#projects-empty-nd {clear:right; border: 1px solid #999}
 .project-state-group h2 {margin:20px 0px 8px 13px}
 .search-result-group h2 {margin:20px 0px 8px 13px }
-div.alpha_sort {margin-top:-20px; float:right}
+div.menu_sort {margin-top:-20px; float:right}
+div.alpha_sort, div.tasks_sort,span.sort_separator {float:left}
 .container td {border: none; padding-bottom: 5px}
 .container form {border: none}
 div.project_description {background: #eee; padding: 5px; margin-top: 0px; margin-left: -5px; margin-right: -5px; color: #666; font-style: italic; font-size: 12px; font-weight: normal}

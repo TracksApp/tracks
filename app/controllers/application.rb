@@ -115,7 +115,7 @@ class ApplicationController < ActionController::Base
   def format_date(date)
     if date
       date_format = prefs.date_format
-      formatted_date = date.strftime("#{date_format}")
+      formatted_date = date.in_time_zone(prefs.time_zone).strftime("#{date_format}")
     else
       formatted_date = ''
     end
@@ -170,11 +170,12 @@ class ApplicationController < ActionController::Base
     # set dates
     todo.recurring_todo_id = rt.id
     todo.due = rt.get_due_date(date)
-    # make sure that show_from is not in the past
+    
     show_from_date = rt.get_show_from_date(date)
     if show_from_date.nil?
       todo.show_from=nil
     else
+      # make sure that show_from is not in the past
       todo.show_from = show_from_date < Time.zone.now ? nil : show_from_date
     end
     

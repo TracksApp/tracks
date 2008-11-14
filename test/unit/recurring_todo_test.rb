@@ -174,6 +174,9 @@ class RecurringTodoTest < Test::Rails::TestCase
     # same month, day after
     due_date = @yearly.get_due_date(@monday) # june 9th
     assert_equal Time.zone.local(2009,6,8), due_date # june 8th next year
+    # very overdue
+    due_date = @yearly.get_due_date(@monday+5.months-2.days) # november 7
+    assert_equal Time.zone.local(2009,6,8), due_date # june 8th next year
     
     @yearly.recurrence_selector = 1 
     @yearly.every_other3 = 2 # second
@@ -192,6 +195,15 @@ class RecurringTodoTest < Test::Rails::TestCase
     due_date1 = @yearly.get_due_date(nil) 
     due_date2 = @yearly.get_due_date(Time.now.utc + 1.day)
     assert_equal due_date1, due_date2
+  end
+
+  def test_last_sunday_of_march
+    @yearly.recurrence_selector = 1
+    @yearly.every_other2 = 3 # march
+    @yearly.every_other3 = 5 # last
+    @yearly.every_count = 0 # sunday
+    due_date = @yearly.get_due_date(Time.zone.local(2008,10,1)) # oct 1st
+    assert_equal Time.zone.local(2009,3,29), due_date # march 29th
   end
 
   def test_start_from_in_future

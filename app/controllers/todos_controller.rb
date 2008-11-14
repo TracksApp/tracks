@@ -10,6 +10,7 @@ class TodosController < ApplicationController
   session :off, :only => :index, :if => Proc.new { |req| is_feed_request(req) }
 
   def index
+    current_user.deferred_todos.find_and_activate_ready
     @projects = current_user.projects.find(:all, :include => [:default_context])
     @contexts = current_user.contexts.find(:all)
 
@@ -133,7 +134,7 @@ class TodosController < ApplicationController
     @saved = @todo.toggle_completion!
   
     # check if this todo has a related recurring_todo. If so, create next todo
-    check_for_next_todo if @saved
+    @new_recurring_todo = check_for_next_todo(@todo) if @saved
     
     respond_to do |format|
       format.js do
@@ -278,7 +279,7 @@ class TodosController < ApplicationController
     @project_id = @todo.project_id
 
     # check if this todo has a related recurring_todo. If so, create next todo
-    check_for_next_todo
+    @new_recurring_todo = check_for_next_todo(@todo)
     
     @saved = @todo.destroy
     
@@ -382,7 +383,7 @@ class TodosController < ApplicationController
     
     @not_done_todos = tag_collection.find(:all, 
       :conditions => ['taggings.user_id = ? and state = ?', current_user.id, 'active'],
-      :order => 'todos.completed_at DESC, todos.created_at DESC')
+      :order => 'todos.due IS NULL, todos.due ASC, todos.created_at ASC')
     @hidden_todos = current_user.todos.find(:all, 
       :include => [:taggings, :tags, :context], 
       :conditions => ['tags.name = ? AND (todos.state = ? OR (contexts.hide = ? AND todos.state = ?))', @tag_name, 'project_hidden', true, 'active'],
@@ -390,6 +391,7 @@ class TodosController < ApplicationController
     @deferred = tag_collection.find(:all, 
       :conditions => ['taggings.user_id = ? and state = ?', current_user.id, 'deferred'],
       :order => 'show_from ASC, todos.created_at DESC')
+    
     # If you've set no_completed to zero, the completed items box isn't shown on
     # the tag page
     max_completed = current_user.prefs.show_number_completed
@@ -770,33 +772,34 @@ class TodosController < ApplicationController
     ['rss','atom','txt','ics'].include?(req.parameters[:format])
   end
   
-  def check_for_next_todo
+  def check_for_next_todo(todo)
     # check if this todo has a related recurring_todo. If so, create next todo
-    @new_recurring_todo = nil
-    @recurring_todo = nil
-    if @todo.from_recurring_todo?
-      @recurring_todo = current_user.recurring_todos.find(@todo.recurring_todo_id)
+    new_recurring_todo = nil
+    recurring_todo = nil
+    if todo.from_recurring_todo?
+      recurring_todo = current_user.recurring_todos.find(todo.recurring_todo_id)
       
       # check for next todo either from the due date or the show_from date
-      date_to_check = @todo.due.nil? ? @todo.show_from : @todo.due
+      date_to_check = todo.due.nil? ? todo.show_from : todo.due
       
-      # if both due and show_from are nil, check for a next todo with yesterday
-      # as reference point. We pick yesterday so that new todos for today will
-      # be created instead of new todos for tomorrow.
-      date_to_check = Time.zone.now-1.day if date_to_check.nil?
+      # if both due and show_from are nil, check for a next todo from now
+      date_to_check = Time.zone.now if date_to_check.nil?
       
-      if @recurring_todo.active? && @recurring_todo.has_next_todo(date_to_check)
+      if recurring_todo.active? && recurring_todo.has_next_todo(date_to_check)
         
         # shift the reference date to yesterday if date_to_check is furher in
         # the past. This is to make sure we do not get older todos for overdue
         # todos. I.e. checking a daily todo that is overdue with 5 days will
         # create a new todo which is overdue by 4 days if we don't shift the
-        # date. Discard the time part in the compare
+        # date. Discard the time part in the compare. We pick yesterday so that
+        # new todos due for today will be created instead of new todos for
+        # tomorrow.
         date = date_to_check.at_midnight >= Time.zone.now.at_midnight ? date_to_check : Time.zone.now-1.day
         
-        @new_recurring_todo = create_todo_from_recurring_todo(@recurring_todo, date) 
+        new_recurring_todo = create_todo_from_recurring_todo(recurring_todo, date) 
       end
-    end 
+    end
+    return new_recurring_todo    
   end
   
   def get_due_id_for_calendar(due)

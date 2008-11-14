@@ -281,7 +281,7 @@ module TodosHelper
   end  
   
   def defer_link(days)
-    link_to_remote image_tag("defer_#{days}.png"), :url => {:controller => 'todos', :action => 'defer', :id => @todo.id, :days => days, :_source_view => (@source_view.underscore.gsub(/\s+/,'_') rescue "")}
+    link_to_remote image_tag("defer_#{days}.png", :alt => "Defer #{pluralize(days, 'day')}"), :url => {:controller => 'todos', :action => 'defer', :id => @todo.id, :days => days, :_source_view => (@source_view.underscore.gsub(/\s+/,'_') rescue "")}
   end
 
 end

@@ -124,9 +124,9 @@ class TodosControllerTest < Test::Rails::TestCase
   def test_update_todo_to_deferred_is_reflected_in_badge_count
     login_as(:admin_user)
     get :index
-    assert_equal 10, assigns['count']
+    assert_equal 11, assigns['count']
     xhr :post, :update, :id => 1, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Make more money than Billy Gates", "todo"=>{"id"=>"1", "notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006", "show_from"=>"30/11/2030"}, "tag_list"=>"foo bar"
-    assert_equal 9, assigns['down_count']
+    assert_equal 10, assigns['down_count']
   end
   
   def test_update_todo
@@ -188,7 +188,7 @@ class TodosControllerTest < Test::Rails::TestCase
         assert_select '>description', "Actions for #{users(:admin_user).display_name}"
         assert_select 'language', 'en-us'
         assert_select 'ttl', '40'
-        assert_select 'item', 10 do
+        assert_select 'item', 11 do
           assert_select 'title', /.+/
           assert_select 'description', /.*/
           assert_select 'link', %r{http://test.host/contexts/.+}
@@ -242,7 +242,7 @@ class TodosControllerTest < Test::Rails::TestCase
     assert_xml_select 'feed[xmlns="http://www.w3.org/2005/Atom"]' do
       assert_xml_select '>title', 'Tracks Actions'
       assert_xml_select '>subtitle', "Actions for #{users(:admin_user).display_name}"
-      assert_xml_select 'entry', 10 do
+      assert_xml_select 'entry', 11 do
         assert_xml_select 'title', /.+/
         assert_xml_select 'content[type="html"]', /.*/
         assert_xml_select 'published', /(#{Regexp.escape(projects(:timemachine).updated_at.xmlschema)}|#{Regexp.escape(projects(:moremoney).updated_at.xmlschema)})/
@@ -311,7 +311,7 @@ class TodosControllerTest < Test::Rails::TestCase
   def test_mobile_index_assigns_down_count
     login_as(:admin_user)
     get :index, { :format => "m" }
-    assert_equal 10, assigns['down_count']
+    assert_equal 11, assigns['down_count']
   end
   
   def test_mobile_create_action_creates_a_new_todo
@@ -362,38 +362,127 @@ class TodosControllerTest < Test::Rails::TestCase
     
     # link todo_1 and recurring_todo_1
     recurring_todo_1 = RecurringTodo.find(1)
-    todo_1 = Todo.find(1)
-    todo_1.recurring_todo_id = recurring_todo_1.id
-    
-    # update todo_1
-    assert todo_1.save
+    todo_1 = Todo.find_by_recurring_todo_id(1)
     
     # mark todo_1 as complete by toggle_check
-    xhr :post, :toggle_check, :id => 1, :_source_view => 'todo' 
+    xhr :post, :toggle_check, :id => todo_1.id, :_source_view => 'todo' 
     todo_1.reload
     assert todo_1.completed?
 
+    # check that there is only one active todo belonging to recurring_todo
+    count = Todo.count(:all, :conditions => {:recurring_todo_id => recurring_todo_1.id, :state => 'active'})
+    assert_equal 1, count
+    
     # check there is a new todo linked to the recurring pattern
     next_todo = Todo.find(:first, :conditions => {:recurring_todo_id => recurring_todo_1.id, :state => 'active'})
     assert_equal "Call Bill Gates every day", next_todo.description
+    # check that the new todo is not the same as todo_1
+    assert_not_equal todo_1.id, next_todo.id
     
-    # change recurrence pattern to weekly and set show_from 2 days befor due date
-    # this forces the next todo to be put in the tickler
+    # change recurrence pattern to monthly and set show_from 2 days before due
+    # date this forces the next todo to be put in the tickler
     recurring_todo_1.show_from_delta = 2
-    recurring_todo_1.recurring_period = 'weekly'
-    recurring_todo_1.every_day = 'smtwtfs'
+    recurring_todo_1.recurring_period = 'monthly'
+    recurring_todo_1.recurrence_selector = 0
+    recurring_todo_1.every_other1 = 1
+    recurring_todo_1.every_other2 = 2
+    recurring_todo_1.every_other3 = 5
     recurring_todo_1.save
-    
+
     # mark next_todo as complete by toggle_check
     xhr :post, :toggle_check, :id => next_todo.id, :_source_view => 'todo' 
     next_todo.reload
     assert next_todo.completed?
 
+    # check that there are three todos belonging to recurring_todo: two
+    # completed and one deferred
+    count = Todo.count(:all, :conditions => {:recurring_todo_id => recurring_todo_1.id})
+    assert_equal 3, count
+
     # check there is a new todo linked to the recurring pattern in the tickler
     next_todo = Todo.find(:first, :conditions => {:recurring_todo_id => recurring_todo_1.id, :state => 'deferred'})
+    assert !next_todo.nil?
     assert_equal "Call Bill Gates every day", next_todo.description
     # check that the todo is in the tickler
     assert !next_todo.show_from.nil?
   end
-   
+
+  def test_toggle_check_on_rec_todo_show_from_today
+    login_as(:admin_user)
+    
+    # link todo_1 and recurring_todo_1
+    recurring_todo_1 = RecurringTodo.find(1)
+    todo_1 = Todo.find_by_recurring_todo_id(1)
+    today = Time.now.utc.at_midnight
+    
+    # change recurrence pattern to monthly and set show_from to today
+    recurring_todo_1.target = 'show_from_date'
+    recurring_todo_1.recurring_period = 'monthly'
+    recurring_todo_1.recurrence_selector = 0
+    recurring_todo_1.every_other1 = today.day
+    recurring_todo_1.every_other2 = 1
+    recurring_todo_1.save
+    
+    # mark todo_1 as complete by toggle_check, this gets rid of todo_1 that was
+    # not correctly created from the adjusted recurring pattern we defined
+    # above.
+    xhr :post, :toggle_check, :id => todo_1.id, :_source_view => 'todo' 
+    todo_1.reload
+    assert todo_1.completed?
+
+    # locate the new todo. This todo is created from the adjusted recurring
+    # pattern defined in this test
+    new_todo = Todo.find(:first, :conditions => {:recurring_todo_id => recurring_todo_1.id, :state => 'active'})
+    assert !new_todo.nil?
+
+    # mark new_todo as complete by toggle_check
+    xhr :post, :toggle_check, :id => new_todo.id, :_source_view => 'todo' 
+    new_todo.reload
+    assert todo_1.completed?
+    
+    # locate the new todo in tickler
+    new_todo = Todo.find(:first, :conditions => {:recurring_todo_id => recurring_todo_1.id, :state => 'deferred'})
+    assert !new_todo.nil?
+    
+    assert_equal "Call Bill Gates every day", new_todo.description
+    # check that the new todo is not the same as todo_1
+    assert_not_equal todo_1.id, new_todo.id
+
+    # check that the new_todo is in the tickler to show next month
+    assert !new_todo.show_from.nil?
+    assert_equal Time.utc(today.year, today.month+1, today.day), new_todo.show_from
+  end
+  
+  def test_check_for_next_todo
+    login_as :admin_user
+
+    recurring_todo_1 = RecurringTodo.find(5)
+    @todo = Todo.find_by_recurring_todo_id(1)
+    assert @todo.from_recurring_todo?
+    # rewire @todo to yearly recurring todo
+    @todo.recurring_todo_id = 5
+
+    # make todo due tomorrow and change recurring date also to tomorrow
+    @todo.due = Time.zone.now + 1.day
+    @todo.save
+    recurring_todo_1.every_other1 = @todo.due.day
+    recurring_todo_1.every_other2 = @todo.due.month    
+    recurring_todo_1.save
+    
+    # mark todo complete
+    xhr :post, :toggle_check, :id => @todo.id, :_source_view => 'todo' 
+    @todo.reload
+    assert @todo.completed?
+
+    # check that there is no active todo
+    next_todo = Todo.find(:first, :conditions => {:recurring_todo_id => recurring_todo_1.id, :state => 'active'})
+    assert next_todo.nil?
+
+    # check for new deferred todo
+    next_todo = Todo.find(:first, :conditions => {:recurring_todo_id => recurring_todo_1.id, :state => 'deferred'})
+    assert !next_todo.nil?
+    # check that the due date of the new todo is later than tomorrow
+    assert next_todo.due > @todo.due    
+  end
+    
 end
