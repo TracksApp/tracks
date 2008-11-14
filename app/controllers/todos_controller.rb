@@ -383,7 +383,7 @@ class TodosController < ApplicationController
     
     @not_done_todos = tag_collection.find(:all, 
       :conditions => ['taggings.user_id = ? and state = ?', current_user.id, 'active'],
-      :order => 'todos.completed_at DESC, todos.created_at DESC')
+      :order => 'todos.due IS NULL, todos.due ASC, todos.created_at ASC')
     @hidden_todos = current_user.todos.find(:all, 
       :include => [:taggings, :tags, :context], 
       :conditions => ['tags.name = ? AND (todos.state = ? OR (contexts.hide = ? AND todos.state = ?))', @tag_name, 'project_hidden', true, 'active'],
@@ -391,6 +391,7 @@ class TodosController < ApplicationController
     @deferred = tag_collection.find(:all, 
       :conditions => ['taggings.user_id = ? and state = ?', current_user.id, 'deferred'],
       :order => 'show_from ASC, todos.created_at DESC')
+    
     # If you've set no_completed to zero, the completed items box isn't shown on
     # the tag page
     max_completed = current_user.prefs.show_number_completed
