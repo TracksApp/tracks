@@ -4,6 +4,8 @@ class RecurringTodo < ActiveRecord::Base
   belongs_to :project
   belongs_to :user
 
+  has_many :todos
+
   attr_protected :user
 
   acts_as_state_machine :initial => :active, :column => 'state'
@@ -19,6 +21,9 @@ class RecurringTodo < ActiveRecord::Base
   validates_length_of :notes, :maximum => 60000, :allow_nil => true 
 
   validates_presence_of :context
+
+  named_scope :active, :conditions => { :state => 'active'}
+  named_scope :completed, :conditions => { :state => 'completed'}
 
   event :complete do
     transitions :to => :completed, :from => [:active]

@@ -4,7 +4,10 @@ class Todo < ActiveRecord::Base
   belongs_to :project
   belongs_to :user
   belongs_to :recurring_todo
-  
+
+  named_scope :active, :conditions => { :state => 'active' }
+  named_scope :not_completed, :conditions =>  ['NOT state = ? ', 'completed']
+
   STARRED_TAG_NAME = "starred"
   
   acts_as_state_machine :initial => :active, :column => 'state'

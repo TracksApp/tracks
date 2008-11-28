@@ -127,7 +127,7 @@ class TodosController < ApplicationController
   end
 
   # Toggles the 'done' status of the action
-  # 
+  #
   def toggle_check
     @source_view = params['_source_view'] || 'todo'
     @original_item_due = @todo.due
@@ -777,26 +777,31 @@ class TodosController < ApplicationController
     new_recurring_todo = nil
     recurring_todo = nil
     if todo.from_recurring_todo?
-      recurring_todo = current_user.recurring_todos.find(todo.recurring_todo_id)
+      recurring_todo = todo.recurring_todo
+
+      # check if there are active todos belonging to this recurring todo.
+      # only add new one if all active todos are completed
+      if recurring_todo.todos.active.count == 0
       
-      # check for next todo either from the due date or the show_from date
-      date_to_check = todo.due.nil? ? todo.show_from : todo.due
+        # check for next todo either from the due date or the show_from date
+        date_to_check = todo.due.nil? ? todo.show_from : todo.due
       
-      # if both due and show_from are nil, check for a next todo from now
-      date_to_check = Time.zone.now if date_to_check.nil?
+        # if both due and show_from are nil, check for a next todo from now
+        date_to_check = Time.zone.now if date_to_check.nil?
       
-      if recurring_todo.active? && recurring_todo.has_next_todo(date_to_check)
+        if recurring_todo.active? && recurring_todo.has_next_todo(date_to_check)
         
-        # shift the reference date to yesterday if date_to_check is furher in
-        # the past. This is to make sure we do not get older todos for overdue
-        # todos. I.e. checking a daily todo that is overdue with 5 days will
-        # create a new todo which is overdue by 4 days if we don't shift the
-        # date. Discard the time part in the compare. We pick yesterday so that
-        # new todos due for today will be created instead of new todos for
-        # tomorrow.
-        date = date_to_check.at_midnight >= Time.zone.now.at_midnight ? date_to_check : Time.zone.now-1.day
+          # shift the reference date to yesterday if date_to_check is furher in
+          # the past. This is to make sure we do not get older todos for overdue
+          # todos. I.e. checking a daily todo that is overdue with 5 days will
+          # create a new todo which is overdue by 4 days if we don't shift the
+          # date. Discard the time part in the compare. We pick yesterday so
+          # that new todos due for today will be created instead of new todos
+          # for tomorrow.
+          date = date_to_check.at_midnight >= Time.zone.now.at_midnight ? date_to_check : Time.zone.now-1.day
         
-        new_recurring_todo = create_todo_from_recurring_todo(recurring_todo, date) 
+          new_recurring_todo = create_todo_from_recurring_todo(recurring_todo, date)
+        end
       end
     end
     return new_recurring_todo    

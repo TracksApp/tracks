@@ -180,7 +180,7 @@ class TodosControllerTest < Test::Rails::TestCase
     login_as(:admin_user)
     get :index, { :format => "rss" }
     assert_equal 'application/rss+xml', @response.content_type
-    # #puts @response.body
+    # puts @response.body
 
     assert_xml_select 'rss[version="2.0"]' do
       assert_select 'channel' do
@@ -193,7 +193,7 @@ class TodosControllerTest < Test::Rails::TestCase
           assert_select 'description', /.*/
           assert_select 'link', %r{http://test.host/contexts/.+}
           assert_select 'guid', %r{http://test.host/todos/.+}
-          assert_select 'pubDate', projects(:timemachine).updated_at.to_s(:rfc822)
+          assert_select 'pubDate', todos(:book).updated_at.to_s(:rfc822)
         end
       end
     end
@@ -245,7 +245,7 @@ class TodosControllerTest < Test::Rails::TestCase
       assert_xml_select 'entry', 11 do
         assert_xml_select 'title', /.+/
         assert_xml_select 'content[type="html"]', /.*/
-        assert_xml_select 'published', /(#{Regexp.escape(projects(:timemachine).updated_at.xmlschema)}|#{Regexp.escape(projects(:moremoney).updated_at.xmlschema)})/
+        assert_xml_select 'published', /(#{Regexp.escape(todos(:book).updated_at.xmlschema)}|#{Regexp.escape(projects(:moremoney).updated_at.xmlschema)})/
       end
     end
   end
