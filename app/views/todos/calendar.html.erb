@@ -31,7 +31,7 @@
   </div>
   
   <div class="container">
-    <h2>Due in rest of this month</h2>
+    <h2>Due in rest of <%= Time.zone.now.strftime("%B") %> </h2>
     <div id="empty_due_this_month" <%= "style=\"display:none\"" unless @due_this_month.empty? %>>
       No actions due in rest of this month
     </div>
@@ -41,7 +41,7 @@
   </div>
   
   <div class="container">
-    <h2>Due next month and later</h2>
+    <h2>Due in <%= (Time.zone.now+1.month).strftime("%B") %> and later</h2>
     <div id="empty_due_after_this_month" <%= "style=\"display:none\"" unless @due_after_this_month.empty? %>>
       No actions due after this month
     </div>

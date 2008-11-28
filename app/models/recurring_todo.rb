@@ -4,6 +4,8 @@ class RecurringTodo < ActiveRecord::Base
   belongs_to :project
   belongs_to :user
 
+  has_many :todos
+
   attr_protected :user
 
   acts_as_state_machine :initial => :active, :column => 'state'
@@ -20,6 +22,9 @@ class RecurringTodo < ActiveRecord::Base
 
   validates_presence_of :context
 
+  named_scope :active, :conditions => { :state => 'active'}
+  named_scope :completed, :conditions => { :state => 'completed'}
+
   event :complete do
     transitions :to => :completed, :from => [:active]
   end
@@ -29,7 +34,7 @@ class RecurringTodo < ActiveRecord::Base
   end
   
   # the following recurrence patterns can be stored:
-  # 
+  #
   # daily todos - recurrence_period = 'daily'
   #   every nth day - nth stored in every_other1
   #   every work day - only_work_days = true
@@ -392,7 +397,7 @@ class RecurringTodo < ActiveRecord::Base
     # previous is the due date of the previous todo or it is the completed_at
     # date when the completed_at date is after due_date (i.e. you did not make
     # the due date in time)
-    # 
+    #
     # assumes self.recurring_period == 'daily'
   
     # determine start
@@ -481,7 +486,14 @@ class RecurringTodo < ActiveRecord::Base
       if the_next.nil? || the_next <= start
         # the nth day is already passed in this month, go to next month and try
         # again
-        the_next = the_next+n.months
+
+        # fiddle with timezone. Looks like we hit a bug in rails here where
+        # 2008-12-01 +0100 plus 1.month becomes 2008-12-31 +0100. For now, just
+        # calculate in UTC and convert back to local timezone.
+        #  TODO: recheck if future rails versions have this problem too
+        the_next = Time.utc(the_next.year, the_next.month, the_next.day)+n.months
+        the_next = Time.zone.local(the_next.year, the_next.month, the_next.day)
+
         # TODO: if there is still no match, start will be set to nil. if we ever
         # support 5th day of the month, we need to handle this case
         the_next = get_xth_day_of_month(self.every_other3, self.every_count, the_next.month, the_next.year)
@@ -504,8 +516,10 @@ class RecurringTodo < ActiveRecord::Base
       # convert back to local timezone
       return Time.zone.local(last_day.year, last_day.month, last_day.day)
     else
-      # 1-4th -> count upwards
-      start = Time.zone.local(year,month,1)
+      # 1-4th -> count upwards last -> count backwards. use UTC to avoid strange
+      # timezone oddities where last_day -= 1.day seems to shift tz+0100 to
+      # tz+0000
+      start = Time.utc(year,month,1)
       n = x
       while n > 0
         while start.wday() != weekday
@@ -514,7 +528,8 @@ class RecurringTodo < ActiveRecord::Base
         n -= 1
         start += 1.day unless n==0 
       end
-      return start
+      # convert back to local timezone
+      return Time.zone.local(start.year, start.month, start.day)
     end
   end
   
