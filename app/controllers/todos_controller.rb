@@ -277,11 +277,11 @@ class TodosController < ApplicationController
     @original_item_due = @todo.due
     @context_id = @todo.context_id
     @project_id = @todo.project_id
+   
+    @saved = @todo.destroy
 
     # check if this todo has a related recurring_todo. If so, create next todo
-    @new_recurring_todo = check_for_next_todo(@todo)
-    
-    @saved = @todo.destroy
+    @new_recurring_todo = check_for_next_todo(@todo) if @saved
     
     respond_to do |format|
       
