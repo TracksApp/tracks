@@ -184,7 +184,7 @@ class TodosControllerTest < Test::Rails::TestCase
 
     assert_xml_select 'rss[version="2.0"]' do
       assert_select 'channel' do
-        assert_select '>title', 'Tracks Actions'
+        assert_select '>title', 'Actions'
         assert_select '>description', "Actions for #{users(:admin_user).display_name}"
         assert_select 'language', 'en-us'
         assert_select 'ttl', '40'
@@ -205,7 +205,7 @@ class TodosControllerTest < Test::Rails::TestCase
 
     assert_xml_select 'rss[version="2.0"]' do
       assert_select 'channel' do
-        assert_select '>title', 'Tracks Actions'
+        assert_select '>title', 'Actions'
         assert_select '>description', "Actions for #{users(:admin_user).display_name}"
         assert_select 'item', 5 do
           assert_select 'title', /.+/
@@ -240,7 +240,7 @@ class TodosControllerTest < Test::Rails::TestCase
     # #puts @response.body
 
     assert_xml_select 'feed[xmlns="http://www.w3.org/2005/Atom"]' do
-      assert_xml_select '>title', 'Tracks Actions'
+      assert_xml_select '>title', 'Actions'
       assert_xml_select '>subtitle', "Actions for #{users(:admin_user).display_name}"
       assert_xml_select 'entry', 11 do
         assert_xml_select 'title', /.+/

@@ -5,7 +5,7 @@ module Spec
   module Runner
     module Formatter
       describe SpecdocFormatter do
-        it_should_behave_like "sandboxed rspec_options"
+        include SandboxedOptions
         attr_reader :io, :options, :formatter, :example_group
         before(:each) do
           @io = StringIO.new
@@ -133,12 +133,12 @@ module Spec
 
           describe "#example_pending" do
             it "should push pending example name and message" do
-              formatter.example_pending(example_group.examples.first, 'reason')
+              formatter.example_pending(example_group.examples.first, 'reason', "#{__FILE__}:#{__LINE__}")
               io.string.should have_example_group_output("- example (PENDING: reason)\n")
             end
 
             it "should dump pending" do
-              formatter.example_pending(example_group.examples.first, 'reason')
+              formatter.example_pending(example_group.examples.first, 'reason', "#{__FILE__}:#{__LINE__}")
               io.rewind
               formatter.dump_pending
               io.string.should =~ /Pending\:\nExampleGroup example \(reason\)\n/

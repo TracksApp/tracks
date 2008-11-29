@@ -2,7 +2,7 @@ namespace :tracks do
   desc 'Replace the password of USER with a new one.'
   task :password => :environment do
     
-    Dependencies.load_paths.unshift(File.dirname(__FILE__) + "/..../vendor/gems/highline-1.4.0/lib")
+    Dependencies.load_paths.unshift(File.dirname(__FILE__) + "/../../vendor/gems/highline-1.5.0/lib")
     require "highline/import"
     
     user = User.find_by_login(ENV['USER'])

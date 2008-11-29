@@ -1,6 +1,21 @@
 require File.dirname(__FILE__) + '/../../spec_helper.rb'
 require 'fileutils'
 
+module Custom
+  class ExampleGroupRunner
+    attr_reader :options, :arg
+    def initialize(options, arg)
+      @options, @arg = options, arg
+    end
+
+    def load_files(files)
+    end
+
+    def run
+    end
+  end  
+end
+
 describe "OptionParser" do
   before(:each) do
     @out = StringIO.new
@@ -51,12 +66,18 @@ describe "OptionParser" do
     options.colour.should == false
   end
   
-  it "should print help to stdout if no args" do
-    pending 'A regression since 1.0.8' do
-      options = parse([])
-      @out.rewind
-      @out.read.should match(/Usage: spec \(FILE\|DIRECTORY\|GLOB\)\+ \[options\]/m)
-    end
+  it "should print help to stdout if no args and spec_comand?" do
+    Spec.stub!(:spec_command?).and_return(true)
+    options = parse([])
+    @out.rewind
+    @out.read.should match(/Usage: spec \(FILE\|DIRECTORY\|GLOB\)\+ \[options\]/m)
+  end
+    
+  it "should not print help to stdout if no args and NOT spec_command?" do
+    Spec.stub!(:spec_command?).and_return(false)
+    options = parse([])
+    @out.rewind
+    @out.read.should == ""
   end
   
   it "should print help to stdout" do
@@ -76,7 +97,7 @@ describe "OptionParser" do
   it "should print version to stdout" do
     options = parse(["--version"])
     @out.rewind
-    @out.read.should match(/RSpec-\d+\.\d+\.\d+.*\(build \d+\) - BDD for Ruby\nhttp:\/\/rspec.rubyforge.org\/\n/n)
+    @out.read.should match(/rspec \d+\.\d+\.\d+/n)
   end
   
   it "should require file when require specified" do
@@ -231,19 +252,19 @@ describe "OptionParser" do
   
   describe "when attempting a focussed spec" do
     attr_reader :file, :dir
-    before do
-      @original_rspec_options = $rspec_options
+    before(:each) do
+      @original_rspec_options = Spec::Runner.options
       @file = "#{File.dirname(__FILE__)}/spec_parser/spec_parser_fixture.rb"
       @dir = File.dirname(file)
     end
   
-    after do
-      $rspec_options = @original_rspec_options
+    after(:each) do
+      Spec::Runner.use @original_rspec_options
     end
   
     def parse(args)
       options = super
-      $rspec_options = options
+      Spec::Runner.use options
       options.filename_pattern = "*_fixture.rb"
       options
     end

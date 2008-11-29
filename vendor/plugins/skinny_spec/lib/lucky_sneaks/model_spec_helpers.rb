@@ -228,7 +228,7 @@ module LuckySneaks
       # Creates an expectation that the current model being spec'd <tt>validates_presence_of</tt>
       # the specified attribute. Takes an optional custom message to match the one in the model's
       # validation.
-      def it_should_validate_presence_of(attribute, message = ActiveRecord::Errors.default_error_messages[:blank])
+      def it_should_validate_presence_of(attribute, message = I18n.translate('activerecord.errors.messages')[:blank])
         it "should not be valid if #{attribute} is blank" do
           instance.send "#{attribute}=", nil
           instance.errors_on(attribute).should include(message)
@@ -238,7 +238,7 @@ module LuckySneaks
       # Creates an expectation that the current model being spec'd <tt>validates_numericality_of</tt>
       # the specified attribute. Takes an optional custom message to match the one in the model's
       # validation.
-      def it_should_validate_numericality_of(attribute, message = ActiveRecord::Errors.default_error_messages[:not_a_number])
+      def it_should_validate_numericality_of(attribute, message = I18n.translate('activerecord.errors.messages')[:not_a_number])
         it "should validate #{attribute} is a numeric" do
           instance.send "#{attribute}=", "NaN"
           instance.errors_on(attribute).should include(message)
@@ -248,7 +248,7 @@ module LuckySneaks
       # Creates an expectation that the current model being spec'd <tt>validates_confirmation_of</tt>
       # the specified attribute. Takes an optional custom message to match the one in the model's
       # validation.
-      def it_should_validate_confirmation_of(attribute, message = ActiveRecord::Errors.default_error_messages[:confirmation])
+      def it_should_validate_confirmation_of(attribute, message = I18n.translate('activerecord.errors.messages')[:confirmation])
         it "should validate confirmation of #{attribute}" do
           dummy_value = dummy_value_for(instance, attribute) || "try a string"
           instance.send "#{attribute}=", dummy_value
@@ -263,7 +263,7 @@ module LuckySneaks
       # 
       # <b>Note:</b> This method will fail completely if <tt>valid_attributes</tt>
       # does not provide all the attributes needed to create a valid record.
-      def it_should_validate_uniqueness_of(attribute, message = ActiveRecord::Errors.default_error_messages[:taken])
+      def it_should_validate_uniqueness_of(attribute, message = I18n.translate('activerecord.errors.messages')[:taken])
         it "should validate #{attribute} confirmation" do
           previous_instance = class_for(self.class.description_text).create!(valid_attributes)
           instance.attributes = valid_attributes

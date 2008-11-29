@@ -32,7 +32,7 @@ module Spec
           ensure_that_base_view_path_is_not_set_across_example_groups
         end
 
-        def initialize(defined_description, &implementation) #:nodoc:
+        def initialize(defined_description, options={}, &implementation) #:nodoc:
           super
           @controller_class_name = "Spec::Rails::Example::ViewExampleGroupController"
         end
@@ -150,7 +150,9 @@ module Spec
 
         protected
         def _assigns_hash_proxy
-          @_assigns_hash_proxy ||= AssignsHashProxy.new @controller
+          @_assigns_hash_proxy ||= AssignsHashProxy.new self do
+            @response.template
+          end
         end
       end
 
@@ -171,6 +173,9 @@ module Spec
           (class << template; self; end).class_eval do
             include helper_module
           end
+        end
+        
+        def forget_variables_added_to_assigns
         end
       end
     end

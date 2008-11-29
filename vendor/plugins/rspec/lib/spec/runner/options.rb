@@ -24,10 +24,13 @@ module Spec
       }
 
       STORY_FORMATTERS = {
-        'plain' => ['spec/runner/formatter/story/plain_text_formatter', 'Formatter::Story::PlainTextFormatter'],
-            'p' => ['spec/runner/formatter/story/plain_text_formatter', 'Formatter::Story::PlainTextFormatter'],
-         'html' => ['spec/runner/formatter/story/html_formatter',       'Formatter::Story::HtmlFormatter'],
-            'h' => ['spec/runner/formatter/story/html_formatter',       'Formatter::Story::HtmlFormatter']
+        'plain' => ['spec/runner/formatter/story/plain_text_formatter',   'Formatter::Story::PlainTextFormatter'],
+            'p' => ['spec/runner/formatter/story/plain_text_formatter',   'Formatter::Story::PlainTextFormatter'],
+         'html' => ['spec/runner/formatter/story/html_formatter',         'Formatter::Story::HtmlFormatter'],
+            'h' => ['spec/runner/formatter/story/html_formatter',         'Formatter::Story::HtmlFormatter'],
+     'progress' => ['spec/runner/formatter/story/progress_bar_formatter', 'Formatter::Story::ProgressBarFormatter'],
+            'r' => ['spec/runner/formatter/story/progress_bar_formatter', 'Formatter::Story::ProgressBarFormatter']
+            
       }
 
       attr_accessor(
@@ -54,7 +57,7 @@ module Spec
         :argv
       )
       attr_reader :colour, :differ_class, :files, :example_groups
-
+      
       def initialize(error_stream, output_stream)
         @error_stream = error_stream
         @output_stream = output_stream
@@ -89,14 +92,20 @@ module Spec
         return true unless examples_should_be_run?
         success = true
         begin
-          before_suite_parts.each do |part|
-            part.call
-          end
           runner = custom_runner || ExampleGroupRunner.new(self)
 
           unless @files_loaded
             runner.load_files(files_to_load)
             @files_loaded = true
+          end
+
+          # TODO - this has to happen after the files get loaded,
+          # otherwise the before_suite_parts are not populated
+          # from the configuration. There is no spec for this
+          # directly, but stories/configuration/before_blocks.story
+          # will fail if this happens before the files are loaded.
+          before_suite_parts.each do |part|
+            part.call
           end
 
           if example_groups.empty?
@@ -125,10 +134,12 @@ module Spec
 
       def colour=(colour)
         @colour = colour
-        if @colour && RUBY_PLATFORM =~ /win32/ ;\
+        if @colour && RUBY_PLATFORM =~ /mswin|mingw/ ;\
           begin ;\
+            replace_output = @output_stream.equal?($stdout) ;\
             require 'rubygems' ;\
             require 'Win32/Console/ANSI' ;\
+            @output_stream = $stdout if replace_output ;\
           rescue LoadError ;\
             warn "You must 'gem install win32console' to use colour on Windows" ;\
             @colour = false ;\

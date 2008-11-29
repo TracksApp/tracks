@@ -10,10 +10,18 @@ module Spec
         end
       
         def matches?(response)
-          @actual = response.rendered_file
-          full_path(@actual) == full_path(@expected)
+          
+          if response.respond_to?(:rendered_file)
+            @actual = response.rendered_file
+          else
+            @actual = response.rendered_template.to_s
+          end
+          return false if @actual.blank?
+          given_controller_path, given_file = path_and_file(@actual)
+          expected_controller_path, expected_file = path_and_file(@expected)
+          given_controller_path == expected_controller_path && given_file.match(expected_file)
         end
-
+        
         def failure_message
           "expected #{@expected.inspect}, got #{@actual.inspect}"
         end
@@ -27,9 +35,21 @@ module Spec
         end
       
         private
-          def full_path(path)
-            return nil if path.nil?
-            path.include?('/') ? path : "#{@controller.class.to_s.underscore.gsub('_controller','')}/#{path}"
+          def path_and_file(path)
+            parts = path.split('/')
+            file = parts.pop
+            controller = parts.empty? ? current_controller_path : parts.join('/')
+            return controller, file
+          end
+        
+          def controller_path_from(path)
+            parts = path.split('/')
+            parts.pop
+            parts.join('/')
+          end
+
+          def current_controller_path
+            @controller.class.to_s.underscore.gsub(/_controller$/,'')
           end
         
       end

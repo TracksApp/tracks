@@ -4,12 +4,13 @@ describe "/<%= table_name %>/show.<%= default_file_extension %>" do
   include <%= controller_class_name %>Helper
   
   before(:each) do
-    @<%= file_name %> = mock_model(<%= class_name %>)
-<% for attribute in attributes -%>
-    @<%= file_name %>.stub!(:<%= attribute.name %>).and_return(<%= attribute.default_value %>)
+    assigns[:<%= file_name %>] = @<%= file_name %> = stub_model(<%= class_name %><%= attributes.empty? ? ')' : ',' %>
+<% attributes.each_with_index do |attribute, attribute_index| -%><% unless attribute.name =~ /_id/ || [:datetime, :timestamp, :time, :date].index(attribute.type) -%>
+      :<%= attribute.name %> => <%= attribute.default_value %><%= attribute_index == attributes.length - 1 ? '' : ','%>
+<% end -%><% end -%>
+<% if !attributes.empty? -%>
+    )
 <% end -%>
-
-    assigns[:<%= file_name %>] = @<%= file_name %>
   end
 
   it "should render attributes in <p>" do
