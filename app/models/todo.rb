@@ -7,6 +7,7 @@ class Todo < ActiveRecord::Base
 
   named_scope :active, :conditions => { :state => 'active' }
   named_scope :not_completed, :conditions =>  ['NOT state = ? ', 'completed']
+  named_scope :are_due, :conditions => ['NOT todos.due IS NULL']
 
   STARRED_TAG_NAME = "starred"
   

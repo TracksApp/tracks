@@ -134,8 +134,8 @@ class ContextsController < ApplicationController
   def render_contexts_mobile
     lambda do
       @page_title = "TRACKS::List Contexts"
-      @active_contexts = @contexts.find(:all, { :conditions => ["hide = ?", false]})
-      @hidden_contexts = @contexts.find(:all, { :conditions => ["hide = ?", true]})
+      @active_contexts = @contexts.active
+      @hidden_contexts = @contexts.hidden
       @down_count = @active_contexts.size + @hidden_contexts.size 
       cookies[:mobile_url]= {:value => request.request_uri, :secure => TRACKS_COOKIES_SECURE}
       render :action => 'index_mobile'

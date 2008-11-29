@@ -12,12 +12,12 @@ class FeedlistController < ApplicationController
       @contexts = current_user.contexts
     end
     
-    @active_projects = @projects.select{ |p| p.active? }
-    @hidden_projects = @projects.select{ |p| p.hidden? }
-    @completed_projects = @projects.select{ |p| p.completed? }
+    @active_projects = current_user.projects.active
+    @hidden_projects = current_user.projects.hidden
+    @completed_projects = current_user.projects.completed
     
-    @active_contexts = @contexts.select{ |c| !c.hidden? }
-    @hidden_contexts = @contexts.select{ |c| c.hidden? }
+    @active_contexts = current_user.contexts.active
+    @hidden_contexts = current_user.contexts.hidden
     
     respond_to do |format|
       format.html { render :layout => 'standard' }

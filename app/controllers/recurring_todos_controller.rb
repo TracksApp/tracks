@@ -118,7 +118,7 @@ class RecurringTodosController < ApplicationController
       else
         @message += " / did not create todo"
       end
-      @count = current_user.recurring_todos.count(:all, :conditions => ["state = ?", "active"])
+      @count = current_user.recurring_todos.active.count
     else
       @message = "Error saving recurring todo"
     end    
@@ -140,7 +140,7 @@ class RecurringTodosController < ApplicationController
     
     # delete the recurring todo
     @saved = @recurring_todo.destroy
-    @remaining = current_user.recurring_todos.count(:all)
+    @remaining = current_user.recurring_todos.count
     
     respond_to do |format|
       

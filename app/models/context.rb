@@ -2,7 +2,10 @@ class Context < ActiveRecord::Base
 
   has_many :todos, :dependent => :delete_all, :include => :project, :order => "todos.completed_at DESC"
   belongs_to :user
-  
+
+  named_scope :active, :conditions => { :hide => false }
+  named_scope :hidden, :conditions => { :hide => true }
+
   acts_as_list :scope => :user
   extend NamePartFinder
   include Tracks::TodoList
