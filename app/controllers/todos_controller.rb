@@ -779,8 +779,8 @@ class TodosController < ApplicationController
     if todo.from_recurring_todo?
       recurring_todo = todo.recurring_todo
 
-      # check if there are active todos belonging to this recurring todo.
-      # only add new one if all active todos are completed
+      # check if there are active todos belonging to this recurring todo. only
+      # add new one if all active todos are completed
       if recurring_todo.todos.active.count == 0
       
         # check for next todo either from the due date or the show_from date
@@ -788,7 +788,7 @@ class TodosController < ApplicationController
       
         # if both due and show_from are nil, check for a next todo from now
         date_to_check = Time.zone.now if date_to_check.nil?
-      
+
         if recurring_todo.active? && recurring_todo.has_next_todo(date_to_check)
         
           # shift the reference date to yesterday if date_to_check is furher in
@@ -799,7 +799,7 @@ class TodosController < ApplicationController
           # that new todos due for today will be created instead of new todos
           # for tomorrow.
           date = date_to_check.at_midnight >= Time.zone.now.at_midnight ? date_to_check : Time.zone.now-1.day
-        
+
           new_recurring_todo = create_todo_from_recurring_todo(recurring_todo, date)
         end
       end

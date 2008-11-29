@@ -471,12 +471,23 @@ class RecurringTodo < ActiveRecord::Base
     start = determine_start(previous)
     day = self.every_other1
     n = self.every_other2
-    
+
     case self.recurrence_selector
     when 0 # specific day of the month
-      if start.mday >= day  
+      if start.mday >= day
         # there is no next day n in this month, search in next month
-        start += n.months
+        #  
+        #  start += n.months
+        # 
+        # The above seems to not work. Fiddle with timezone. Looks like we hit a
+        # bug in rails here where 2008-12-01 +0100 plus 1.month becomes
+        # 2008-12-31 +0100. For now, just calculate in UTC and convert back to
+        # local timezone.
+        #  
+        #  TODO: recheck if future rails versions have this problem too
+        start = Time.utc(start.year, start.month, start.day)+n.months
+        start = Time.zone.local(start.year, start.month, start.day)
+
         # go back to day
       end
       return Time.zone.local(start.year, start.month, day)
