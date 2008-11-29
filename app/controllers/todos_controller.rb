@@ -536,13 +536,17 @@ class TodosController < ApplicationController
   end
 
   def with_parent_resource_scope(&block)
+    @feed_title = "Actions "
     if (params[:context_id])
       @context = current_user.contexts.find_by_params(params)
+      @feed_title = @feed_title + "in context '#{@context.name}'"
       Todo.send :with_scope, :find => {:conditions => ['todos.context_id = ?', @context.id]} do
         yield
       end
     elsif (params[:project_id])
       @project = current_user.projects.find_by_params(params)
+      @feed_title = @feed_title + "in project '#{@project.name}'"
+      @project_feed = true
       Todo.send :with_scope, :find => {:conditions => ['todos.project_id = ?', @project.id]} do
         yield
       end
@@ -718,7 +722,7 @@ class TodosController < ApplicationController
       render_rss_feed_for @todos, :feed => todo_feed_options,
         :item => {
         :title => :description,
-        :link => lambda { |t| context_url(t.context) },
+        :link => lambda { |t| @project_feed.nil? ? context_url(t.context) : project_url(t.project) },
         :guid => lambda { |t| todo_url(t) },
         :description => todo_feed_content
       }
@@ -726,7 +730,9 @@ class TodosController < ApplicationController
   end
     
   def todo_feed_options
-    Todo.feed_options(current_user)
+    options = Todo.feed_options(current_user)
+    options[:title] = @feed_title
+    return options
   end
 
   def todo_feed_content
