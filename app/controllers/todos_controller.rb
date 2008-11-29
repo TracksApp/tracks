@@ -14,7 +14,7 @@ class TodosController < ApplicationController
     @projects = current_user.projects.find(:all, :include => [:default_context])
     @contexts = current_user.contexts.find(:all)
 
-    @contexts_to_show = @contexts.reject {|x| x.hide? }    
+    @contexts_to_show = current_user.contexts.active
     
     respond_to do |format|
       format.html  &render_todos_html
@@ -28,7 +28,7 @@ class TodosController < ApplicationController
   end
   
   def new
-    @projects = current_user.projects.select { |p| p.active? }
+    @projects = current_user.projects.active
     @contexts = current_user.contexts.find(:all)
     respond_to do |format|
       format.m {
@@ -116,7 +116,7 @@ class TodosController < ApplicationController
   def show
     respond_to do |format|
       format.m do
-        @projects = current_user.projects.select { |p| p.active? }
+        @projects = current_user.projects.active
         @contexts = current_user.contexts.find(:all)
         @edit_mobile = true
         @return_path=cookies[:mobile_url]
@@ -442,33 +442,33 @@ class TodosController < ApplicationController
     due_next_week_date = due_this_week_date + 7.days
     due_this_month_date = Time.zone.now.end_of_month
     
-    @due_today = current_user.todos.find(:all, 
+    @due_today = current_user.todos.not_completed.find(:all,
       :include => [:taggings, :tags], 
-      :conditions => ['(todos.state = ? OR todos.state = ?) AND todos.due <= ?', 'active', 'deferred', due_today_date],
+      :conditions => ['todos.due <= ?', due_today_date],
       :order => "due")
-    @due_this_week = current_user.todos.find(:all, 
+    @due_this_week = current_user.todos.not_completed.find(:all,
       :include => [:taggings, :tags], 
-      :conditions => ['(todos.state = ? OR todos.state = ?) AND todos.due > ? AND todos.due <= ?', 'active', 'deferred', due_today_date, due_this_week_date],
+      :conditions => ['todos.due > ? AND todos.due <= ?', due_today_date, due_this_week_date],
       :order => "due")
-    @due_next_week = current_user.todos.find(:all, 
+    @due_next_week = current_user.todos.not_completed.find(:all,
       :include => [:taggings, :tags], 
-      :conditions => ['(todos.state = ? OR todos.state = ?) AND todos.due > ? AND todos.due <= ?', 'active', 'deferred', due_this_week_date, due_next_week_date],
+      :conditions => ['todos.due > ? AND todos.due <= ?', due_this_week_date, due_next_week_date],
       :order => "due")
-    @due_this_month = current_user.todos.find(:all, 
+    @due_this_month = current_user.todos.not_completed.find(:all,
       :include => [:taggings, :tags], 
-      :conditions => ['(todos.state = ? OR todos.state = ?) AND todos.due > ? AND todos.due <= ?', 'active', 'deferred', due_next_week_date, due_this_month_date],
+      :conditions => ['todos.due > ? AND todos.due <= ?', due_next_week_date, due_this_month_date],
       :order => "due")
-    @due_after_this_month = current_user.todos.find(:all, 
+    @due_after_this_month = current_user.todos.not_completed.find(:all,
       :include => [:taggings, :tags], 
-      :conditions => ['(todos.state = ? OR todos.state = ?) AND todos.due > ?', 'active', 'deferred', due_this_month_date],
+      :conditions => ['todos.due > ?', due_this_month_date],
       :order => "due")
-    
+
+    @count = current_user.todos.not_completed.are_due.count
+
     respond_to do |format|
       format.html
       format.ics   {
-        @due_all = current_user.todos.find(:all, 
-          :conditions => ['(todos.state = ? OR todos.state = ?) AND NOT todos.due IS NULL', 'active', 'deferred'],
-          :order => "due")
+        @due_all = current_user.todos.not_completed.are_due.find(:all, :order => "due")
         render :action => 'calendar', :layout => false, :content_type => Mime::ICS
       }
     end
@@ -834,20 +834,20 @@ class TodosController < ApplicationController
     due_this_month_date = Time.zone.now.end_of_month
     case id
     when "due_today"
-      return 0 == current_user.todos.count(:all, 
-        :conditions => ['(todos.state = ? OR todos.state = ?) AND todos.due <= ?', 'active', 'deferred', due_today_date])
+      return 0 == current_user.todos.not_completed.count(:all,
+        :conditions => ['todos.due <= ?', due_today_date])
     when "due_this_week"
-      return 0 == current_user.todos.count(:all, 
-        :conditions => ['(todos.state = ? OR todos.state = ?) AND todos.due > ? AND todos.due <= ?', 'active', 'deferred', due_today_date, due_this_week_date])
+      return 0 == current_user.todos.not_completed.count(:all,
+        :conditions => ['todos.due > ? AND todos.due <= ?', due_today_date, due_this_week_date])
     when "due_next_week"
-      return 0 == current_user.todos.count(:all, 
-        :conditions => ['(todos.state = ? OR todos.state = ?) AND todos.due > ? AND todos.due <= ?', 'active', 'deferred', due_this_week_date, due_next_week_date])
+      return 0 == current_user.todos.not_completed.count(:all,
+        :conditions => ['todos.due > ? AND todos.due <= ?', due_this_week_date, due_next_week_date])
     when "due_this_month"
-      return 0 == current_user.todos.count(:all, 
-        :conditions => ['(todos.state = ? OR todos.state = ?) AND todos.due > ? AND todos.due <= ?', 'active', 'deferred', due_next_week_date, due_this_month_date])
+      return 0 == current_user.todos.not_completed.count(:all,
+        :conditions => ['todos.due > ? AND todos.due <= ?', due_next_week_date, due_this_month_date])
     when "due_after_this_month"      
-      return 0 == current_user.todos.count(:all, 
-        :conditions => ['(todos.state = ? OR todos.state = ?) AND todos.due > ?', 'active', 'deferred', due_this_month_date])
+      return 0 == current_user.todos.not_completed.count(:all,
+        :conditions => ['todos.due > ?', due_this_month_date])
     else
       raise Exception.new, "unknown due id for calendar: '#{id}'"      
     end
