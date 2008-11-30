@@ -13,7 +13,7 @@ if @recurring_saved
   page.hide 'recurring-todos-empty-nd'
   page.insert_html :bottom, 
     'recurring_todos_container', 
-    :partial => 'recurring_todos/recurring_todo'
+    :partial => 'recurring_todos/recurring_todo', :locals => { :recurring_todo => @recurring_todo}
   page.visual_effect :highlight, dom_id(@recurring_todo), :duration => 3
   # update badge count
   page['badge_count'].replace_html @count
