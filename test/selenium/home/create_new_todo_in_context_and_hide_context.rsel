@@ -19,3 +19,6 @@ wait_for_not_visible "todo_9"
 
 # check that newly added action is not there
 wait_for_not_visible "xpath=//span[text()='a new action']"
+
+# toggle c1 back. Selenium does not reset cookies 
+click "css=#toggle_c1"

@@ -3,7 +3,7 @@ login :as => 'admin'
 
 open "/"
 # we should start with 10 actions on home page
-assert_text 'badge_count', '10'
+assert_text 'badge_count', '11'
 
 # set project to hidden state
 open "/projects/2"
