@@ -3,6 +3,7 @@ require File.dirname(__FILE__) + '/test_helper'
 class RendererTest < Test::Unit::TestCase
   def setup
     @controller = SeleniumController.new
+    ActionController::Routing::Routes.draw
     @request    = ActionController::TestRequest.new
     @response   = ActionController::TestResponse.new
     @controller.layout_override =<<END
@@ -14,7 +15,7 @@ END
 
   def test_route
     get :test_file, :testname => 'html.html' #initialize the controller
-    assert_equal 'http://test.host/selenium/tests/suite/test_case.sel', 
+    assert_equal 'http://test.host/selenium/tests/suite%2Ftest_case.sel', 
         @controller.url_for(:controller => 'selenium', :action => 'test_file', :testname => 'suite/test_case.sel')
   end
   
@@ -53,6 +54,7 @@ END
   
   def test_selenese
     get :test_file, :testname => 'selenese.sel'
+    
     assert_headers
     expected =<<END
 <html><head><title>test layout</title></head><body>
@@ -81,7 +83,7 @@ END
   <tr><td>open</td><td>/selenium/setup?keep_session=true</td><td>&nbsp;</td></tr>
   <tr><td>open</td><td>/selenium/setup?fixtures=all</td><td>&nbsp;</td></tr>
   <tr><td>open</td><td>/selenium/setup?fixtures=foo%2Cbar</td><td>&nbsp;</td></tr>
-  <tr><td>open</td><td>/selenium/setup?fixtures=all&amp;amp;clear_tables=foo%2Cbar</td><td>&nbsp;</td></tr>
+  <tr><td>open</td><td>/selenium/setup?clear_tables=foo%2Cbar&amp;amp;fixtures=all</td><td>&nbsp;</td></tr>
   <tr><td>assertAbsoluteLocation</td><td>exact:http://test.host/selenium/setup</td><td>&nbsp;</td></tr>
   <tr><td>assertTitle</td><td>selenium</td><td>&nbsp;</td></tr>
   <tr><td>assertTitle</td><td>Partial from RSelenese</td><td>&nbsp;</td></tr>

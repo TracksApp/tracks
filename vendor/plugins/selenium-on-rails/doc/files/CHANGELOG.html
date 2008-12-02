@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>File: CHANGELOG</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+  <div id="fileHeader">
+    <h1>CHANGELOG</h1>
+    <table class="header-table">
+    <tr class="top-aligned-row">
+      <td><strong>Path:</strong></td>
+      <td>CHANGELOG
+      </td>
+    </tr>
+    <tr class="top-aligned-row">
+      <td><strong>Last Update:</strong></td>
+      <td>Sat Feb 03 23:49:15 +0100 2007</td>
+    </tr>
+    </table>
+  </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <h2>REVISION <a href="http://svn.openqa.org/fisheye/changelog/selenium-on-rails/?cs=38">38</a></h2>
+<h3>change made by Flanagan</h3>
+<ul>
+<li><a href="http://jira.openqa.org/browse/SOR-13">SOR-13</a> Corrected an
+omission of require statements.
+
+</li>
+</ul>
+<h2>REVISION 37</h2>
+<h3>change made by Flanagan</h3>
+<ul>
+<li>Undone an unwanted commit of modified Rakefile.
+
+</li>
+</ul>
+<h2>REVISION <a href="http://svn.openqa.org/fisheye/changelog/selenium-on-rails/?cs=36">36</a></h2>
+<h3>change made by Flanagan</h3>
+<ul>
+<li><a href="http://jira.openqa.org/browse/SOR-13">SOR-13</a> Added
+(experimental) support for user-extensions.js.
+
+</li>
+</ul>
+<h2>REVISION <a href="http://svn.openqa.org/fisheye/changelog/selenium-on-rails/?cs=35">35</a></h2>
+<h3>all changes made by Jonas</h3>
+<ul>
+<li><a href="http://jira.openqa.org/browse/SOR-12">SOR-12</a> removed all
+support for selenium gem
+
+</li>
+<li>Selenium Core 0.8.2 is now bundled with Selenium on Rails. If you want to
+use other version set the &#8216;selenium_path&#8217; in config.yml
+
+</li>
+<li>Updated installation instructions for Windows
+
+</li>
+</ul>
+<h2>REVISION <a href="http://svn.openqa.org/fisheye/changelog/selenium-on-rails/?cs=34">34</a></h2>
+<h3>all changes made by Flanagan</h3>
+<ul>
+<li><a href="http://jira.openqa.org/browse/SOR-11">SOR-11</a> Fixed related
+assertions for store_checked to use only locator parameter
+
+</li>
+</ul>
+<p>
+Warning: Users must change tests that pass two parameters (locator,
+pattern) to <tt>verify_checked</tt>, <tt>verify_not_checked</tt>,
+<tt>assert_checked</tt>, <tt>assert_not_checked</tt>,
+<tt>wait_for_checked</tt>, or <tt>wait_for_not_checked</tt>.
+</p>
+<p>
+Test scripts that continue to use two parameters will be broken, only one
+parameter, the locator, should be passed.
+</p>
+<p>
+For example, <tt>|verify_checked|my_checkbox|true|</tt> will be interpreted
+as <tt>|verify_checked|my_checkboxtrue||</tt> so change the test to
+<tt>|verify_checked|my_checkbox||</tt>
+</p>
+<ul>
+<li><a href="http://jira.openqa.org/browse/SOR-9">SOR-9</a> Added Mac OS X
+browsers to config.yml.example
+
+</li>
+<li><a href="http://jira.openqa.org/browse/SOR-10">SOR-10</a> Added support for
+baseUrl to acceptance_test_runner.rb as added to selenium-core 0.8.2
+
+</li>
+<li>Added &#8216;webrick&#8217; to SERVER_COMMAND in acceptance_test_runner.rb
+as parameters do not work with lighttpd
+
+</li>
+<li>Reversed expected query string in test/renderer_testrb to make tests pass
+
+</li>
+</ul>
+<p>
+Note: On Mac OS X, at least, clear_tables comes before fixtures in the
+query string; this may be an environment-specific issue if the test now
+fails on other OSes.
+</p>
+<ul>
+<li>Added this CHANGELOG file and amended the rake rdoc task to include it
+
+</li>
+<li>Added support in rselenese for a long list of actions and accessors that
+are included in selenium-core (0.8.2 and possibly earlier) but were
+previously missing in selenium-on-rails.
+
+</li>
+</ul>
+<p>
+Here are the newly supported actions:
+</p>
+<p>
+Useful for debugging:
+</p>
+<ul>
+<li><tt>brake</tt> (alias for selenium-core&#8216;s break, a reserved word in
+Ruby)
+
+</li>
+<li><tt>echo, :string</tt>
+
+</li>
+<li><tt>highlight, :locator</tt>
+
+</li>
+</ul>
+<p>
+Keyboard events:
+</p>
+<ul>
+<li><tt>alt_key_down</tt>
+
+</li>
+<li><tt>alt_key_up</tt>
+
+</li>
+<li><tt>control_key_down</tt>
+
+</li>
+<li><tt>control_key_up</tt>
+
+</li>
+<li><tt>meta_key_down</tt>
+
+</li>
+<li><tt>meta_key_up</tt>
+
+</li>
+<li><tt>shift_key_down</tt>
+
+</li>
+<li><tt>shift_key_up</tt>
+
+</li>
+<li><tt>type_keys, :locator, :string</tt>
+
+</li>
+</ul>
+<p>
+Mouse events:
+</p>
+<ul>
+<li><tt>click_at, :locator, :coord_string</tt>
+
+</li>
+<li><tt>double_click, :locator</tt>
+
+</li>
+<li><tt>double_click_at, :locator, :coord_string</tt>
+
+</li>
+<li><tt>drag_and_drop, :locator, :movements_string</tt>
+
+</li>
+<li><tt>drag_and_drop_to_object, :locator, :locator</tt>
+
+</li>
+<li><tt>mouse_down_at, :locator, :coord_string</tt>
+
+</li>
+<li><tt>mouse_move, :locator</tt>
+
+</li>
+<li><tt>mouse_move_at, :locator, :coord_string</tt>
+
+</li>
+<li><tt>mouse_out, :locator</tt>
+
+</li>
+<li><tt>mouse_up, :locator</tt>
+
+</li>
+<li><tt>mouse_up_at, :locator, :coord_string</tt>
+
+</li>
+<li><tt>set_mouse_speed, :integer</tt>
+
+</li>
+</ul>
+<p>
+Other actions:
+</p>
+<ul>
+<li><tt>create_cookie, :name_value_pair, :options_string</tt>
+
+</li>
+<li><tt>delete_cookie, :string, :string</tt>
+
+</li>
+<li><tt>open_window, :url, :integer</tt>
+
+</li>
+<li><tt>pause, :timeout</tt>
+
+</li>
+<li><tt>remove_all_selections, :locator</tt>
+
+</li>
+<li><tt>select_frame, :locator</tt>
+
+</li>
+<li><tt>set_cursor_position, :locator, :integer</tt>
+
+</li>
+<li><tt>store, :script, :variable</tt>
+
+</li>
+<li><tt>window_focus, :window_name</tt>
+
+</li>
+<li><tt>window_maximize, :window_name</tt>
+
+</li>
+</ul>
+<p>
+Here are the newly supported accessors:
+</p>
+<p>
+The following store_* accessors and their associated assert, verify and
+wait_for brethren are fully supported:
+</p>
+<ul>
+<li><tt>store_selected_id, :locator, :variable</tt>
+
+</li>
+<li><tt>store_selected_ids, :locator, :variable</tt>
+
+</li>
+<li><tt>store_selected_index, :locator, :variable</tt>
+
+</li>
+<li><tt>store_selected_indexes, :locator, :variable</tt>
+
+</li>
+<li><tt>store_selected_label, :locator, :variable</tt>
+
+</li>
+<li><tt>store_selected_labels, :locator, :variable</tt>
+
+</li>
+<li><tt>store_selected_value, :locator, :variable</tt>
+
+</li>
+<li><tt>store_selected_values, :locator, :variable</tt>
+
+</li>
+<li><tt>store_something_selected, :locator, :variable</tt>
+
+</li>
+<li><tt>store_all_window_ids, :variable</tt>
+
+</li>
+<li><tt>store_all_window_names, :variable</tt>
+
+</li>
+<li><tt>store_all_window_titles, :variable</tt>
+
+</li>
+<li><tt>store_cookie, :variable</tt>
+
+</li>
+<li><tt>store_log_messages, :variable</tt>
+
+</li>
+<li><tt>store_mouse_speed, :variable</tt>
+
+</li>
+<li><tt>store_cursor_position, :locator, :variable</tt>
+
+</li>
+<li><tt>store_attribute_from_all_windows, :attribute_name, :variable</tt>
+
+</li>
+<li><tt>store_element_height, :locator, :variable</tt>
+
+</li>
+<li><tt>store_element_index, :locator, :variable</tt>
+
+</li>
+<li><tt>store_element_width, :locator, :variable</tt>
+
+</li>
+<li><tt>store_element_position_left, :locator, :variable</tt>
+
+</li>
+<li><tt>store_element_position_top, :locator, :variable</tt>
+
+</li>
+</ul>
+<p>
+Only the associated assert, verify and wait_for brethren of the following
+store_* accessors are supported by the selenium-core, so these store_*
+accessors create exceptions in SOR:
+</p>
+<ul>
+<li><tt>store_ordered, :locator, :locator, :variable</tt>
+
+</li>
+<li><tt>store_error_on_next, :string</tt>
+
+</li>
+<li><tt>store_failure_on_next, :string</tt>
+
+</li>
+<li><tt>store_whether_this_frame_match_frame_expression, :string, :string,
+:variable</tt>
+
+</li>
+<li><tt>store_whether_this_window_match_window_expression, :string, :string,
+:variable</tt>
+
+</li>
+</ul>
+
+    </div>
+
+
+   </div>
+
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

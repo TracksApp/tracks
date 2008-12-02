@@ -78,7 +78,7 @@ The accessors available for <a
 href="TestBuilder.html">SeleniumOnRails::TestBuilder</a> tests.
 </p>
 <p>
-For each <tt>store_foo</tt> there&#8217;s <tt>assert_foo</tt>,
+For each <tt>store_foo</tt> there&#8216;s <tt>assert_foo</tt>,
 <tt>assert_not_foo</tt>, <tt>verify_foo</tt>, <tt>verify_not_foo</tt>,
 <tt>wait_for_foo</tt>, <tt>wait_for_not_foo</tt>.
 </p>
@@ -92,34 +92,61 @@ For each <tt>store_foo</tt> there&#8217;s <tt>assert_foo</tt>,
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000058">store_absolute_location</a>&nbsp;&nbsp;
-      <a href="#M000055">store_alert</a>&nbsp;&nbsp;
-      <a href="#M000052">store_alert_present</a>&nbsp;&nbsp;
-      <a href="#M000075">store_all_buttons</a>&nbsp;&nbsp;
-      <a href="#M000077">store_all_fields</a>&nbsp;&nbsp;
-      <a href="#M000076">store_all_links</a>&nbsp;&nbsp;
-      <a href="#M000070">store_attribute</a>&nbsp;&nbsp;
-      <a href="#M000061">store_body_text</a>&nbsp;&nbsp;
-      <a href="#M000065">store_checked</a>&nbsp;&nbsp;
-      <a href="#M000056">store_confirmation</a>&nbsp;&nbsp;
-      <a href="#M000054">store_confirmation_present</a>&nbsp;&nbsp;
-      <a href="#M000074">store_editable</a>&nbsp;&nbsp;
-      <a href="#M000072">store_element_present</a>&nbsp;&nbsp;
-      <a href="#M000064">store_eval</a>&nbsp;&nbsp;
-      <a href="#M000079">store_expression</a>&nbsp;&nbsp;
-      <a href="#M000078">store_html_source</a>&nbsp;&nbsp;
-      <a href="#M000059">store_location</a>&nbsp;&nbsp;
-      <a href="#M000057">store_prompt</a>&nbsp;&nbsp;
-      <a href="#M000053">store_prompt_present</a>&nbsp;&nbsp;
-      <a href="#M000069">store_select_options</a>&nbsp;&nbsp;
-      <a href="#M000067">store_selected</a>&nbsp;&nbsp;
-      <a href="#M000068">store_selected_options</a>&nbsp;&nbsp;
-      <a href="#M000066">store_table</a>&nbsp;&nbsp;
-      <a href="#M000063">store_text</a>&nbsp;&nbsp;
-      <a href="#M000071">store_text_present</a>&nbsp;&nbsp;
-      <a href="#M000060">store_title</a>&nbsp;&nbsp;
-      <a href="#M000062">store_value</a>&nbsp;&nbsp;
-      <a href="#M000073">store_visible</a>&nbsp;&nbsp;
+      <a href="#M000100">store_absolute_location</a>&nbsp;&nbsp;
+      <a href="#M000097">store_alert</a>&nbsp;&nbsp;
+      <a href="#M000091">store_alert_present</a>&nbsp;&nbsp;
+      <a href="#M000134">store_all_buttons</a>&nbsp;&nbsp;
+      <a href="#M000136">store_all_fields</a>&nbsp;&nbsp;
+      <a href="#M000135">store_all_links</a>&nbsp;&nbsp;
+      <a href="#M000088">store_all_window_ids</a>&nbsp;&nbsp;
+      <a href="#M000089">store_all_window_names</a>&nbsp;&nbsp;
+      <a href="#M000090">store_all_window_titles</a>&nbsp;&nbsp;
+      <a href="#M000122">store_attribute</a>&nbsp;&nbsp;
+      <a href="#M000092">store_attribute_from_all_windows</a>&nbsp;&nbsp;
+      <a href="#M000104">store_body_text</a>&nbsp;&nbsp;
+      <a href="#M000108">store_checked</a>&nbsp;&nbsp;
+      <a href="#M000098">store_confirmation</a>&nbsp;&nbsp;
+      <a href="#M000094">store_confirmation_present</a>&nbsp;&nbsp;
+      <a href="#M000095">store_cookie</a>&nbsp;&nbsp;
+      <a href="#M000096">store_cursor_position</a>&nbsp;&nbsp;
+      <a href="#M000133">store_editable</a>&nbsp;&nbsp;
+      <a href="#M000127">store_element_height</a>&nbsp;&nbsp;
+      <a href="#M000128">store_element_index</a>&nbsp;&nbsp;
+      <a href="#M000130">store_element_position_left</a>&nbsp;&nbsp;
+      <a href="#M000131">store_element_position_top</a>&nbsp;&nbsp;
+      <a href="#M000125">store_element_present</a>&nbsp;&nbsp;
+      <a href="#M000129">store_element_width</a>&nbsp;&nbsp;
+      <a href="#M000086">store_error_on_next</a>&nbsp;&nbsp;
+      <a href="#M000107">store_eval</a>&nbsp;&nbsp;
+      <a href="#M000138">store_expression</a>&nbsp;&nbsp;
+      <a href="#M000087">store_failure_on_next</a>&nbsp;&nbsp;
+      <a href="#M000137">store_html_source</a>&nbsp;&nbsp;
+      <a href="#M000101">store_location</a>&nbsp;&nbsp;
+      <a href="#M000132">store_log_messages</a>&nbsp;&nbsp;
+      <a href="#M000102">store_mouse_speed</a>&nbsp;&nbsp;
+      <a href="#M000123">store_ordered</a>&nbsp;&nbsp;
+      <a href="#M000099">store_prompt</a>&nbsp;&nbsp;
+      <a href="#M000093">store_prompt_present</a>&nbsp;&nbsp;
+      <a href="#M000121">store_select_options</a>&nbsp;&nbsp;
+      <a href="#M000110">store_selected</a>&nbsp;&nbsp;
+      <a href="#M000111">store_selected_id</a>&nbsp;&nbsp;
+      <a href="#M000112">store_selected_ids</a>&nbsp;&nbsp;
+      <a href="#M000113">store_selected_index</a>&nbsp;&nbsp;
+      <a href="#M000114">store_selected_indexes</a>&nbsp;&nbsp;
+      <a href="#M000115">store_selected_label</a>&nbsp;&nbsp;
+      <a href="#M000116">store_selected_labels</a>&nbsp;&nbsp;
+      <a href="#M000120">store_selected_options</a>&nbsp;&nbsp;
+      <a href="#M000117">store_selected_value</a>&nbsp;&nbsp;
+      <a href="#M000118">store_selected_values</a>&nbsp;&nbsp;
+      <a href="#M000119">store_something_selected</a>&nbsp;&nbsp;
+      <a href="#M000109">store_table</a>&nbsp;&nbsp;
+      <a href="#M000106">store_text</a>&nbsp;&nbsp;
+      <a href="#M000124">store_text_present</a>&nbsp;&nbsp;
+      <a href="#M000103">store_title</a>&nbsp;&nbsp;
+      <a href="#M000105">store_value</a>&nbsp;&nbsp;
+      <a href="#M000126">store_visible</a>&nbsp;&nbsp;
+      <a href="#M000139">store_whether_this_frame_match_frame_expression</a>&nbsp;&nbsp;
+      <a href="#M000140">store_whether_this_window_match_window_expression</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -141,11 +168,11 @@ For each <tt>store_foo</tt> there&#8217;s <tt>assert_foo</tt>,
     <div id="methods">
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000058" class="method-detail">
-        <a name="M000058"></a>
+      <div id="method-M000100" class="method-detail">
+        <a name="M000100"></a>
 
         <div class="method-heading">
-          <a href="#M000058" class="method-signature">
+          <a href="#M000100" class="method-signature">
           <span class="method-name">store_absolute_location</span><span class="method-args">(variable_name)</span>
           </a>
         </div>
@@ -178,23 +205,23 @@ Related Assertions, automatically generated:
 </li>
 </ul>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000058-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000058-source">
+            onclick="toggleCode('M000100-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000100-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 129</span>
-129:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_absolute_location</span> <span class="ruby-identifier">variable_name</span>
-130:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeAbsoluteLocation'</span>, <span class="ruby-identifier">variable_name</span>
-131:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 246</span>
+246:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_absolute_location</span> <span class="ruby-identifier">variable_name</span>
+247:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeAbsoluteLocation'</span>, <span class="ruby-identifier">variable_name</span>
+248:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000055" class="method-detail">
-        <a name="M000055"></a>
+      <div id="method-M000097" class="method-detail">
+        <a name="M000097"></a>
 
         <div class="method-heading">
-          <a href="#M000055" class="method-signature">
+          <a href="#M000097" class="method-signature">
           <span class="method-name">store_alert</span><span class="method-args">(variable_name)</span>
           </a>
         </div>
@@ -215,7 +242,7 @@ dialog.
 </p>
 <p>
 NOTE: Selenium does NOT support JavaScript alerts that are generated in a
-page&#8217;s <tt>onload()</tt> event handler. In this case a visible dialog
+page&#8216;s <tt>onload()</tt> event handler. In this case a visible dialog
 WILL be generated and Selenium will hang until someone manually clicks OK.
 </p>
 <p>
@@ -242,23 +269,23 @@ Related Assertions, automatically generated:
 </li>
 </ul>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000055-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000055-source">
+            onclick="toggleCode('M000097-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000097-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 66</span>
-66:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_alert</span> <span class="ruby-identifier">variable_name</span>
-67:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeAlert'</span>, <span class="ruby-identifier">variable_name</span>
-68:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 183</span>
+183:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_alert</span> <span class="ruby-identifier">variable_name</span>
+184:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeAlert'</span>, <span class="ruby-identifier">variable_name</span>
+185:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000052" class="method-detail">
-        <a name="M000052"></a>
+      <div id="method-M000091" class="method-detail">
+        <a name="M000091"></a>
 
         <div class="method-heading">
-          <a href="#M000052" class="method-signature">
+          <a href="#M000091" class="method-signature">
           <span class="method-name">store_alert_present</span><span class="method-args">(variable_name)</span>
           </a>
         </div>
@@ -291,23 +318,23 @@ Related Assertions, automatically generated:
 </li>
 </ul>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000052-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000052-source">
+            onclick="toggleCode('M000091-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000091-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 15</span>
-15:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_alert_present</span> <span class="ruby-identifier">variable_name</span>
-16:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeAlertPresent'</span>, <span class="ruby-identifier">variable_name</span>
-17:   <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 89</span>
+89:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_alert_present</span> <span class="ruby-identifier">variable_name</span>
+90:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeAlertPresent'</span>, <span class="ruby-identifier">variable_name</span>
+91:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000075" class="method-detail">
-        <a name="M000075"></a>
+      <div id="method-M000134" class="method-detail">
+        <a name="M000134"></a>
 
         <div class="method-heading">
-          <a href="#M000075" class="method-signature">
+          <a href="#M000134" class="method-signature">
           <span class="method-name">store_all_buttons</span><span class="method-args">(variable_name)</span>
           </a>
         </div>
@@ -351,23 +378,23 @@ Related Assertions, automatically generated:
 </li>
 </ul>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000075-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000075-source">
+            onclick="toggleCode('M000134-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000134-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 400</span>
-400:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_all_buttons</span> <span class="ruby-identifier">variable_name</span>
-401:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeAllButtons'</span>, <span class="ruby-identifier">variable_name</span>
-402:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 754</span>
+754:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_all_buttons</span> <span class="ruby-identifier">variable_name</span>
+755:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeAllButtons'</span>, <span class="ruby-identifier">variable_name</span>
+756:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000077" class="method-detail">
-        <a name="M000077"></a>
+      <div id="method-M000136" class="method-detail">
+        <a name="M000136"></a>
 
         <div class="method-heading">
-          <a href="#M000077" class="method-signature">
+          <a href="#M000136" class="method-signature">
           <span class="method-name">store_all_fields</span><span class="method-args">(variable_name)</span>
           </a>
         </div>
@@ -411,23 +438,23 @@ Related Assertions, automatically generated:
 </li>
 </ul>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000077-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000077-source">
+            onclick="toggleCode('M000136-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000136-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 440</span>
-440:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_all_fields</span> <span class="ruby-identifier">variable_name</span>
-441:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeAllFields'</span>, <span class="ruby-identifier">variable_name</span>
-442:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 794</span>
+794:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_all_fields</span> <span class="ruby-identifier">variable_name</span>
+795:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeAllFields'</span>, <span class="ruby-identifier">variable_name</span>
+796:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000076" class="method-detail">
-        <a name="M000076"></a>
+      <div id="method-M000135" class="method-detail">
+        <a name="M000135"></a>
 
         <div class="method-heading">
-          <a href="#M000076" class="method-signature">
+          <a href="#M000135" class="method-signature">
           <span class="method-name">store_all_links</span><span class="method-args">(variable_name)</span>
           </a>
         </div>
@@ -471,23 +498,170 @@ Related Assertions, automatically generated:
 </li>
 </ul>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000076-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000076-source">
+            onclick="toggleCode('M000135-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000135-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 420</span>
-420:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_all_links</span> <span class="ruby-identifier">variable_name</span>
-421:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeAllLinks'</span>, <span class="ruby-identifier">variable_name</span>
-422:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 774</span>
+774:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_all_links</span> <span class="ruby-identifier">variable_name</span>
+775:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeAllLinks'</span>, <span class="ruby-identifier">variable_name</span>
+776:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000070" class="method-detail">
-        <a name="M000070"></a>
+      <div id="method-M000088" class="method-detail">
+        <a name="M000088"></a>
 
         <div class="method-heading">
-          <a href="#M000070" class="method-signature">
+          <a href="#M000088" class="method-signature">
+          <span class="method-name">store_all_window_ids</span><span class="method-args">(variable_name)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns the IDs of all windows that the browser knows about.
+</p>
+<p>
+Related Assertions, automatically generated:
+</p>
+<ul>
+<li><tt>assertAllWindowIds(pattern)</tt>
+
+</li>
+<li><tt>assertNotAllWindowIds(pattern)</tt>
+
+</li>
+<li><tt>verifyAllWindowIds(pattern)</tt>
+
+</li>
+<li><tt>verifyNotAllWindowIds(pattern)</tt>
+
+</li>
+<li><tt>waitForAllWindowIds(pattern)</tt>
+
+</li>
+<li><tt>waitForNotAllWindowIds(pattern)</tt>
+
+</li>
+</ul>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000088-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000088-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 50</span>
+50:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_all_window_ids</span> <span class="ruby-identifier">variable_name</span>
+51:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeAllWindowIds'</span>, <span class="ruby-identifier">variable_name</span>
+52:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000089" class="method-detail">
+        <a name="M000089"></a>
+
+        <div class="method-heading">
+          <a href="#M000089" class="method-signature">
+          <span class="method-name">store_all_window_names</span><span class="method-args">(variable_name)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns the names of all windows that the browser knows about.
+</p>
+<p>
+Related Assertions, automatically generated:
+</p>
+<ul>
+<li><tt>assertAllWindowNames(pattern)</tt>
+
+</li>
+<li><tt>assertNotAllWindowNames(pattern)</tt>
+
+</li>
+<li><tt>verifyAllWindowNames(pattern)</tt>
+
+</li>
+<li><tt>verifyNotAllWindowNames(pattern)</tt>
+
+</li>
+<li><tt>waitForAllWindowNames(pattern)</tt>
+
+</li>
+<li><tt>waitForNotAllWindowNames(pattern)</tt>
+
+</li>
+</ul>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000089-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000089-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 63</span>
+63:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_all_window_names</span> <span class="ruby-identifier">variable_name</span>
+64:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeAllWindowNames'</span>, <span class="ruby-identifier">variable_name</span>
+65:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000090" class="method-detail">
+        <a name="M000090"></a>
+
+        <div class="method-heading">
+          <a href="#M000090" class="method-signature">
+          <span class="method-name">store_all_window_titles</span><span class="method-args">(variable_name)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns the titles of all windows that the browser knows about.
+</p>
+<p>
+Related Assertions, automatically generated:
+</p>
+<ul>
+<li><tt>assertAllWindowTitles(pattern)</tt>
+
+</li>
+<li><tt>assertNotAllWindowTitles(pattern)</tt>
+
+</li>
+<li><tt>verifyAllWindowTitles(pattern)</tt>
+
+</li>
+<li><tt>verifyNotAllWindowTitles(pattern)</tt>
+
+</li>
+<li><tt>waitForAllWindowTitles(pattern)</tt>
+
+</li>
+<li><tt>waitForNotAllWindowTitles(pattern)</tt>
+
+</li>
+</ul>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000090-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000090-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 76</span>
+76:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_all_window_titles</span> <span class="ruby-identifier">variable_name</span>
+77:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeAllWindowTitles'</span>, <span class="ruby-identifier">variable_name</span>
+78:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000122" class="method-detail">
+        <a name="M000122"></a>
+
+        <div class="method-heading">
+          <a href="#M000122" class="method-signature">
           <span class="method-name">store_attribute</span><span class="method-args">(locator, attribute_name, variable_name)</span>
           </a>
         </div>
@@ -520,23 +694,72 @@ Related Assertions, automatically generated:
 </li>
 </ul>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000070-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000070-source">
+            onclick="toggleCode('M000122-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000122-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 322</span>
-322:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_attribute</span> <span class="ruby-identifier">locator</span>, <span class="ruby-identifier">attribute_name</span>, <span class="ruby-identifier">variable_name</span>
-323:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeAttribute'</span>, <span class="ruby-node">&quot;#{locator}@#{attribute_name}&quot;</span>, <span class="ruby-identifier">variable_name</span>
-324:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 577</span>
+577:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_attribute</span> <span class="ruby-identifier">locator</span>, <span class="ruby-identifier">attribute_name</span>, <span class="ruby-identifier">variable_name</span>
+578:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeAttribute'</span>, <span class="ruby-node">&quot;#{locator}@#{attribute_name}&quot;</span>, <span class="ruby-identifier">variable_name</span>
+579:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000061" class="method-detail">
-        <a name="M000061"></a>
+      <div id="method-M000092" class="method-detail">
+        <a name="M000092"></a>
 
         <div class="method-heading">
-          <a href="#M000061" class="method-signature">
+          <a href="#M000092" class="method-signature">
+          <span class="method-name">store_attribute_from_all_windows</span><span class="method-args">(attribute_name, variable_name)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns every instance of some attribute from all known windows.
+</p>
+<p>
+Related Assertions, automatically generated:
+</p>
+<ul>
+<li><tt>assert_attribute_from_all_windows(attribute_name, pattern)</tt>
+
+</li>
+<li><tt>assert_not_attribute_from_all_windows(attribute_name, pattern)</tt>
+
+</li>
+<li><tt>verify_attribute_from_all_windows(attribute_name, pattern)</tt>
+
+</li>
+<li><tt>verify_not_attribute_from_all_windows(attribute_name, pattern)</tt>
+
+</li>
+<li><tt>wait_for_attribute_from_all_windows(attribute_name, pattern)</tt>
+
+</li>
+<li><tt>wait_for_not_attribute_from_all_windows(attribute_name, pattern)</tt>
+
+</li>
+</ul>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000092-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000092-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 102</span>
+102:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_attribute_from_all_windows</span> <span class="ruby-identifier">attribute_name</span>, <span class="ruby-identifier">variable_name</span>
+103:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeAttributeFromAllWindows'</span>, <span class="ruby-identifier">attribute_name</span>, <span class="ruby-identifier">variable_name</span>
+104:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000104" class="method-detail">
+        <a name="M000104"></a>
+
+        <div class="method-heading">
+          <a href="#M000104" class="method-signature">
           <span class="method-name">store_body_text</span><span class="method-args">(variable_name)</span>
           </a>
         </div>
@@ -569,23 +792,23 @@ Related Assertions, automatically generated:
 </li>
 </ul>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000061-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000061-source">
+            onclick="toggleCode('M000104-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000104-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 169</span>
-169:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_body_text</span> <span class="ruby-identifier">variable_name</span>
-170:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeBodyText'</span>, <span class="ruby-identifier">variable_name</span>
-171:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 300</span>
+300:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_body_text</span> <span class="ruby-identifier">variable_name</span>
+301:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeBodyText'</span>, <span class="ruby-identifier">variable_name</span>
+302:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000065" class="method-detail">
-        <a name="M000065"></a>
+      <div id="method-M000108" class="method-detail">
+        <a name="M000108"></a>
 
         <div class="method-heading">
-          <a href="#M000065" class="method-signature">
+          <a href="#M000108" class="method-signature">
           <span class="method-name">store_checked</span><span class="method-args">(locator, variable_name)</span>
           </a>
         </div>
@@ -593,49 +816,49 @@ Related Assertions, automatically generated:
         <div class="method-description">
           <p>
 Gets whether a toggle-button (checkbox/radio) is checked. Fails if the
-specified element doesn&#8217;t exist or isn&#8217;t a toggle-button.
+specified element doesn&#8216;t exist or isn&#8216;t a toggle-button.
 </p>
 <p>
 Related Assertions, automatically generated:
 </p>
 <ul>
-<li><tt>assert_checked(locator, pattern)</tt>
+<li><tt>assert_checked(locator)</tt>
 
 </li>
-<li><tt>assert_not_checked(locator, pattern)</tt>
+<li><tt>assert_not_checked(locator)</tt>
 
 </li>
-<li><tt>verify_checked_present(locator, pattern)</tt>
+<li><tt>verify_checked_present(locator)</tt>
 
 </li>
-<li><tt>verify_not_checked(locator, pattern)</tt>
+<li><tt>verify_not_checked(locator)</tt>
 
 </li>
-<li><tt>wait_for_checked(locator, pattern)</tt>
+<li><tt>wait_for_checked(locator)</tt>
 
 </li>
-<li><tt>wait_for_not_checked(locator, pattern)</tt>
+<li><tt>wait_for_not_checked(locator)</tt>
 
 </li>
 </ul>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000065-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000065-source">
+            onclick="toggleCode('M000108-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000108-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 239</span>
-239:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_checked</span> <span class="ruby-identifier">locator</span>, <span class="ruby-identifier">variable_name</span>
-240:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeChecked'</span>, <span class="ruby-identifier">locator</span>, <span class="ruby-identifier">variable_name</span>
-241:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 370</span>
+370:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_checked</span> <span class="ruby-identifier">locator</span>, <span class="ruby-identifier">variable_name</span>
+371:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeChecked'</span>, <span class="ruby-identifier">locator</span>, <span class="ruby-identifier">variable_name</span>
+372:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000056" class="method-detail">
-        <a name="M000056"></a>
+      <div id="method-M000098" class="method-detail">
+        <a name="M000098"></a>
 
         <div class="method-heading">
-          <a href="#M000056" class="method-signature">
+          <a href="#M000098" class="method-signature">
           <span class="method-name">store_confirmation</span><span class="method-args">(variable_name)</span>
           </a>
         </div>
@@ -658,7 +881,7 @@ dialog.
 </p>
 <p>
 NOTE: Selenium does NOT support JavaScript confirmations that are generated
-in a page&#8217;s <tt>onload()</tt> event handler. In this case a visible
+in a page&#8216;s <tt>onload()</tt> event handler. In this case a visible
 dialog WILL be generated and Selenium will hang until you manually click
 OK.
 </p>
@@ -686,23 +909,23 @@ Related Assertions, automatically generated:
 </li>
 </ul>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000056-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000056-source">
+            onclick="toggleCode('M000098-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000098-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 92</span>
-92:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_confirmation</span> <span class="ruby-identifier">variable_name</span>
-93:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeConfirmation'</span>, <span class="ruby-identifier">variable_name</span>
-94:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 209</span>
+209:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_confirmation</span> <span class="ruby-identifier">variable_name</span>
+210:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeConfirmation'</span>, <span class="ruby-identifier">variable_name</span>
+211:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000054" class="method-detail">
-        <a name="M000054"></a>
+      <div id="method-M000094" class="method-detail">
+        <a name="M000094"></a>
 
         <div class="method-heading">
-          <a href="#M000054" class="method-signature">
+          <a href="#M000094" class="method-signature">
           <span class="method-name">store_confirmation_present</span><span class="method-args">(variable_name)</span>
           </a>
         </div>
@@ -735,23 +958,126 @@ Related Assertions, automatically generated:
 </li>
 </ul>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000054-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000054-source">
+            onclick="toggleCode('M000094-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000094-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 41</span>
-41:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_confirmation_present</span> <span class="ruby-identifier">variable_name</span>
-42:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeConfirmationPresent'</span>, <span class="ruby-identifier">variable_name</span>
-43:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 128</span>
+128:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_confirmation_present</span> <span class="ruby-identifier">variable_name</span>
+129:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeConfirmationPresent'</span>, <span class="ruby-identifier">variable_name</span>
+130:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000074" class="method-detail">
-        <a name="M000074"></a>
+      <div id="method-M000095" class="method-detail">
+        <a name="M000095"></a>
 
         <div class="method-heading">
-          <a href="#M000074" class="method-signature">
+          <a href="#M000095" class="method-signature">
+          <span class="method-name">store_cookie</span><span class="method-args">(variable_name)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Return all cookies of the current page under test.
+</p>
+<p>
+Related Assertions, automatically generated:
+</p>
+<ul>
+<li><tt>assert_cookie(pattern)</tt>
+
+</li>
+<li><tt>assert_not_cookie(pattern)</tt>
+
+</li>
+<li><tt>verify_cookie(pattern)</tt>
+
+</li>
+<li><tt>verify_not_cookie(pattern)</tt>
+
+</li>
+<li><tt>wait_for_cookie(pattern)</tt>
+
+</li>
+<li><tt>wait_for_not_cookie(pattern)</tt>
+
+</li>
+</ul>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000095-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000095-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 141</span>
+141:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_cookie</span> <span class="ruby-identifier">variable_name</span>
+142:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeCookie'</span>, <span class="ruby-identifier">variable_name</span>
+143:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000096" class="method-detail">
+        <a name="M000096"></a>
+
+        <div class="method-heading">
+          <a href="#M000096" class="method-signature">
+          <span class="method-name">store_cursor_position</span><span class="method-args">(locator, variable_name)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Retrieves the text cursor position in the given input element or textarea;
+beware, this may not work perfectly on all browsers.
+</p>
+<p>
+This method will fail if the specified element isn&#8216;t an input element
+or textarea, or there is no cursor in the element.
+</p>
+<p>
+Related Assertions, automatically generated:
+</p>
+<ul>
+<li><tt>assert_cursor_position(locator, pattern)</tt>
+
+</li>
+<li><tt>assert_not_cursor_position(locator, pattern)</tt>
+
+</li>
+<li><tt>verify_cursor_position(locator, pattern)</tt>
+
+</li>
+<li><tt>verify_not_cursor_position(locator, pattern)</tt>
+
+</li>
+<li><tt>wait_for_cursor_position(locator, pattern)</tt>
+
+</li>
+<li><tt>wait_for_not_cursor_position(locator, pattern)</tt>
+
+</li>
+</ul>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000096-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000096-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 158</span>
+158:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_cursor_position</span> <span class="ruby-identifier">locator</span>, <span class="ruby-identifier">variable_name</span>
+159:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeCursorPosition'</span>, <span class="ruby-identifier">locator</span>, <span class="ruby-identifier">variable_name</span>
+160:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000133" class="method-detail">
+        <a name="M000133"></a>
+
+        <div class="method-heading">
+          <a href="#M000133" class="method-signature">
           <span class="method-name">store_editable</span><span class="method-args">(locator, variable_name)</span>
           </a>
         </div>
@@ -759,8 +1085,8 @@ Related Assertions, automatically generated:
         <div class="method-description">
           <p>
 Determines whether the specified input element is editable, i.e.
-hasn&#8217;t been disabled. This method will fail if the specified element
-isn&#8217;t an input element.
+hasn&#8216;t been disabled. This method will fail if the specified element
+isn&#8216;t an input element.
 </p>
 <p>
 Related Assertions, automatically generated:
@@ -786,23 +1112,223 @@ Related Assertions, automatically generated:
 </li>
 </ul>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000074-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000074-source">
+            onclick="toggleCode('M000133-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000133-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 380</span>
-380:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_editable</span> <span class="ruby-identifier">locator</span>, <span class="ruby-identifier">variable_name</span>
-381:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeEditable'</span>, <span class="ruby-identifier">locator</span>, <span class="ruby-identifier">variable_name</span>
-382:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 734</span>
+734:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_editable</span> <span class="ruby-identifier">locator</span>, <span class="ruby-identifier">variable_name</span>
+735:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeEditable'</span>, <span class="ruby-identifier">locator</span>, <span class="ruby-identifier">variable_name</span>
+736:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000072" class="method-detail">
-        <a name="M000072"></a>
+      <div id="method-M000127" class="method-detail">
+        <a name="M000127"></a>
 
         <div class="method-heading">
-          <a href="#M000072" class="method-signature">
+          <a href="#M000127" class="method-signature">
+          <span class="method-name">store_element_height</span><span class="method-args">(locator, variable_name)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Retrieves the height of an element. This method will fail if the element is
+not present.
+</p>
+<p>
+Related Assertions, automatically generated:
+</p>
+<ul>
+<li><tt>assert_element_height(locator, pattern)</tt>
+
+</li>
+<li><tt>assert_not_element_height(locator, pattern)</tt>
+
+</li>
+<li><tt>verify_element_height(locator, pattern)</tt>
+
+</li>
+<li><tt>verify_not_element_height(locator, pattern)</tt>
+
+</li>
+<li><tt>wait_for_element_height(locator, pattern)</tt>
+
+</li>
+<li><tt>wait_for_not_element_height(locator, pattern)</tt>
+
+</li>
+</ul>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000127-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000127-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 650</span>
+650:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_element_height</span> <span class="ruby-identifier">locator</span>, <span class="ruby-identifier">variable_name</span>
+651:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeElementHeight'</span>, <span class="ruby-identifier">locator</span>, <span class="ruby-identifier">variable_name</span>
+652:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000128" class="method-detail">
+        <a name="M000128"></a>
+
+        <div class="method-heading">
+          <a href="#M000128" class="method-signature">
+          <span class="method-name">store_element_index</span><span class="method-args">(locator, variable_name)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Get the relative index of an element to its parent (starting from 0). The
+comment node and empty text node will be ignored.
+</p>
+<p>
+Related Assertions, automatically generated:
+</p>
+<ul>
+<li><tt>assert_element_index(locator, pattern)</tt>
+
+</li>
+<li><tt>assert_not_element_index(locator, pattern)</tt>
+
+</li>
+<li><tt>verify_element_index(locator, pattern)</tt>
+
+</li>
+<li><tt>verify_not_element_index(locator, pattern)</tt>
+
+</li>
+<li><tt>wait_for_element_index(locator, pattern)</tt>
+
+</li>
+<li><tt>wait_for_not_element_index(locator, pattern)</tt>
+
+</li>
+</ul>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000128-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000128-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 664</span>
+664:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_element_index</span> <span class="ruby-identifier">locator</span>, <span class="ruby-identifier">variable_name</span>
+665:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeElementIndex'</span>, <span class="ruby-identifier">locator</span>, <span class="ruby-identifier">variable_name</span>
+666:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000130" class="method-detail">
+        <a name="M000130"></a>
+
+        <div class="method-heading">
+          <a href="#M000130" class="method-signature">
+          <span class="method-name">store_element_position_left</span><span class="method-args">(locator, variable_name)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Retrieves the horizontal position of an element. This method will fail if
+the element is not present.
+</p>
+<p>
+Related Assertions, automatically generated:
+</p>
+<ul>
+<li><tt>assert_element_position_left(locator, pattern)</tt>
+
+</li>
+<li><tt>assert_not_element_position_left(locator, pattern)</tt>
+
+</li>
+<li><tt>verify_element_position_left(locator, pattern)</tt>
+
+</li>
+<li><tt>verify_not_element_position_left(locator, pattern)</tt>
+
+</li>
+<li><tt>wait_for_element_position_left(locator, pattern)</tt>
+
+</li>
+<li><tt>wait_for_not_element_position_left(locator, pattern)</tt>
+
+</li>
+</ul>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000130-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000130-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 692</span>
+692:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_element_position_left</span> <span class="ruby-identifier">locator</span>, <span class="ruby-identifier">variable_name</span>
+693:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeElementPositionLeft'</span>, <span class="ruby-identifier">locator</span>, <span class="ruby-identifier">variable_name</span>
+694:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000131" class="method-detail">
+        <a name="M000131"></a>
+
+        <div class="method-heading">
+          <a href="#M000131" class="method-signature">
+          <span class="method-name">store_element_position_top</span><span class="method-args">(locator, variable_name)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Retrieves the vertical position of an element. This method will fail if the
+element is not present.
+</p>
+<p>
+Related Assertions, automatically generated:
+</p>
+<ul>
+<li><tt>assert_element_position_top(locator, pattern)</tt>
+
+</li>
+<li><tt>assert_not_element_position_top(locator, pattern)</tt>
+
+</li>
+<li><tt>verify_element_position_top(locator, pattern)</tt>
+
+</li>
+<li><tt>verify_not_element_position_top(locator, pattern)</tt>
+
+</li>
+<li><tt>wait_for_element_position_top(locator, pattern)</tt>
+
+</li>
+<li><tt>wait_for_not_element_position_top(locator, pattern)</tt>
+
+</li>
+</ul>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000131-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000131-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 706</span>
+706:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_element_position_top</span> <span class="ruby-identifier">locator</span>, <span class="ruby-identifier">variable_name</span>
+707:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeElementPositionTop'</span>, <span class="ruby-identifier">locator</span>, <span class="ruby-identifier">variable_name</span>
+708:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000125" class="method-detail">
+        <a name="M000125"></a>
+
+        <div class="method-heading">
+          <a href="#M000125" class="method-signature">
           <span class="method-name">store_element_present</span><span class="method-args">(locator, variable_name)</span>
           </a>
         </div>
@@ -835,23 +1361,128 @@ Related Assertions, automatically generated:
 </li>
 </ul>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000072-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000072-source">
+            onclick="toggleCode('M000125-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000125-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 349</span>
-349:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_element_present</span> <span class="ruby-identifier">locator</span>, <span class="ruby-identifier">variable_name</span>
-350:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeElementPresent'</span>, <span class="ruby-identifier">locator</span>, <span class="ruby-identifier">variable_name</span>
-351:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 620</span>
+620:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_element_present</span> <span class="ruby-identifier">locator</span>, <span class="ruby-identifier">variable_name</span>
+621:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeElementPresent'</span>, <span class="ruby-identifier">locator</span>, <span class="ruby-identifier">variable_name</span>
+622:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000064" class="method-detail">
-        <a name="M000064"></a>
+      <div id="method-M000129" class="method-detail">
+        <a name="M000129"></a>
 
         <div class="method-heading">
-          <a href="#M000064" class="method-signature">
+          <a href="#M000129" class="method-signature">
+          <span class="method-name">store_element_width</span><span class="method-args">(locator, variable_name)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Retrieves the width of an element. This method will fail if the element is
+not present.
+</p>
+<p>
+Related Assertions, automatically generated:
+</p>
+<ul>
+<li><tt>assert_element_width(locator, pattern)</tt>
+
+</li>
+<li><tt>assert_not_element_width(locator, pattern)</tt>
+
+</li>
+<li><tt>verify_element_width(locator, pattern)</tt>
+
+</li>
+<li><tt>verify_not_element_width(locator, pattern)</tt>
+
+</li>
+<li><tt>wait_for_element_width(locator, pattern)</tt>
+
+</li>
+<li><tt>wait_for_not_element_width(locator, pattern)</tt>
+
+</li>
+</ul>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000129-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000129-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 678</span>
+678:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_element_width</span> <span class="ruby-identifier">locator</span>, <span class="ruby-identifier">variable_name</span>
+679:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeElementWidth'</span>, <span class="ruby-identifier">locator</span>, <span class="ruby-identifier">variable_name</span>
+680:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000086" class="method-detail">
+        <a name="M000086"></a>
+
+        <div class="method-heading">
+          <a href="#M000086" class="method-signature">
+          <span class="method-name">store_error_on_next</span><span class="method-args">(message)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Tell Selenium to expect an error on the next command execution.
+</p>
+<p>
+NOTE: <tt><a
+href="TestBuilderAccessors.html#M000086">store_error_on_next</a></tt> is
+currently not supported by Selenium Core and is only added to here as a
+shortcut for generating the related assertions.
+</p>
+<p>
+Related Assertions, automatically generated:
+</p>
+<ul>
+<li><tt>assert_error_on_next(message)</tt>
+
+</li>
+<li><tt>assert_not_error_on_next(message)</tt>
+
+</li>
+<li><tt>verify_error_on_next(message)</tt>
+
+</li>
+<li><tt>verify_not_error_on_next(message)</tt>
+
+</li>
+<li><tt>wait_for_error_on_next(message)</tt>
+
+</li>
+<li><tt>wait_for_not_error_on_next(message)</tt>
+
+</li>
+</ul>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000086-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000086-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 20</span>
+20:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_error_on_next</span> <span class="ruby-identifier">message</span>
+21:     <span class="ruby-identifier">raise</span> <span class="ruby-value str">'Not supported in Selenium Core at the moment'</span>
+22:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000107" class="method-detail">
+        <a name="M000107"></a>
+
+        <div class="method-heading">
+          <a href="#M000107" class="method-signature">
           <span class="method-name">store_eval</span><span class="method-args">(script, variable_name)</span>
           </a>
         </div>
@@ -899,23 +1530,23 @@ Related Assertions, automatically generated:
 </li>
 </ul>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000064-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000064-source">
+            onclick="toggleCode('M000107-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000107-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 225</span>
-225:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_eval</span> <span class="ruby-identifier">script</span>, <span class="ruby-identifier">variable_name</span>
-226:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeEval'</span>, <span class="ruby-identifier">script</span>, <span class="ruby-identifier">variable_name</span>
-227:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 356</span>
+356:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_eval</span> <span class="ruby-identifier">script</span>, <span class="ruby-identifier">variable_name</span>
+357:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeEval'</span>, <span class="ruby-identifier">script</span>, <span class="ruby-identifier">variable_name</span>
+358:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000079" class="method-detail">
-        <a name="M000079"></a>
+      <div id="method-M000138" class="method-detail">
+        <a name="M000138"></a>
 
         <div class="method-heading">
-          <a href="#M000079" class="method-signature">
+          <a href="#M000138" class="method-signature">
           <span class="method-name">store_expression</span><span class="method-args">(expression, variable_name)</span>
           </a>
         </div>
@@ -951,23 +1582,78 @@ Related Assertions, automatically generated:
 </li>
 </ul>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000079-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000079-source">
+            onclick="toggleCode('M000138-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000138-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 468</span>
-468:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_expression</span> <span class="ruby-identifier">expression</span>, <span class="ruby-identifier">variable_name</span>
-469:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeExpression'</span>, <span class="ruby-identifier">expression</span>, <span class="ruby-identifier">variable_name</span>
-470:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 822</span>
+822:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_expression</span> <span class="ruby-identifier">expression</span>, <span class="ruby-identifier">variable_name</span>
+823:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeExpression'</span>, <span class="ruby-identifier">expression</span>, <span class="ruby-identifier">variable_name</span>
+824:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000078" class="method-detail">
-        <a name="M000078"></a>
+      <div id="method-M000087" class="method-detail">
+        <a name="M000087"></a>
 
         <div class="method-heading">
-          <a href="#M000078" class="method-signature">
+          <a href="#M000087" class="method-signature">
+          <span class="method-name">store_failure_on_next</span><span class="method-args">(message)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Tell Selenium to expect a failure on the next command execution.
+</p>
+<p>
+NOTE: <tt><a
+href="TestBuilderAccessors.html#M000087">store_failure_on_next</a></tt> is
+currently not supported by Selenium Core and is only added to here as a
+shortcut for generating the related assertions.
+</p>
+<p>
+Related Assertions, automatically generated:
+</p>
+<ul>
+<li><tt>assert_failure_on_next(message)</tt>
+
+</li>
+<li><tt>assert_not_failure_on_next(message)</tt>
+
+</li>
+<li><tt>verify_failure_on_next(message)</tt>
+
+</li>
+<li><tt>verify_not_failure_on_next(message)</tt>
+
+</li>
+<li><tt>wait_for_failure_on_next(message)</tt>
+
+</li>
+<li><tt>wait_for_not_failure_on_next(message)</tt>
+
+</li>
+</ul>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000087-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000087-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 37</span>
+37:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_failure_on_next</span> <span class="ruby-identifier">message</span>
+38:     <span class="ruby-identifier">raise</span> <span class="ruby-value str">'Not supported in Selenium Core at the moment'</span>
+39:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000137" class="method-detail">
+        <a name="M000137"></a>
+
+        <div class="method-heading">
+          <a href="#M000137" class="method-signature">
           <span class="method-name">store_html_source</span><span class="method-args">(variable_name)</span>
           </a>
         </div>
@@ -1001,23 +1687,23 @@ Related Assertions, automatically generated:
 </li>
 </ul>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000078-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000078-source">
+            onclick="toggleCode('M000137-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000137-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 453</span>
-453:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_html_source</span> <span class="ruby-identifier">variable_name</span>
-454:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeHtmlSource'</span>, <span class="ruby-identifier">variable_name</span>
-455:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 807</span>
+807:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_html_source</span> <span class="ruby-identifier">variable_name</span>
+808:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeHtmlSource'</span>, <span class="ruby-identifier">variable_name</span>
+809:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000059" class="method-detail">
-        <a name="M000059"></a>
+      <div id="method-M000101" class="method-detail">
+        <a name="M000101"></a>
 
         <div class="method-heading">
-          <a href="#M000059" class="method-signature">
+          <a href="#M000101" class="method-signature">
           <span class="method-name">store_location</span><span class="method-args">(expected_location, variable_name)</span>
           </a>
         </div>
@@ -1051,23 +1737,177 @@ Related Assertions, automatically generated:
 </li>
 </ul>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000059-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000059-source">
+            onclick="toggleCode('M000101-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000101-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 143</span>
-143:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_location</span> <span class="ruby-identifier">expected_location</span>, <span class="ruby-identifier">variable_name</span>
-144:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeLocation'</span>, <span class="ruby-identifier">expected_location</span>, <span class="ruby-identifier">variable_name</span>
-145:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 260</span>
+260:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_location</span> <span class="ruby-identifier">expected_location</span>, <span class="ruby-identifier">variable_name</span>
+261:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeLocation'</span>, <span class="ruby-identifier">expected_location</span>, <span class="ruby-identifier">variable_name</span>
+262:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000057" class="method-detail">
-        <a name="M000057"></a>
+      <div id="method-M000132" class="method-detail">
+        <a name="M000132"></a>
 
         <div class="method-heading">
-          <a href="#M000057" class="method-signature">
+          <a href="#M000132" class="method-signature">
+          <span class="method-name">store_log_messages</span><span class="method-args">(variable_name)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Return the contents of the log.
+</p>
+<p>
+Related Assertions, automatically generated:
+</p>
+<ul>
+<li><tt>assert_log_messages(pattern)</tt>
+
+</li>
+<li><tt>assert_not_log_messages(pattern)</tt>
+
+</li>
+<li><tt>verify_log_messages(pattern)</tt>
+
+</li>
+<li><tt>verify_not_log_messages(pattern)</tt>
+
+</li>
+<li><tt>wait_for_log_messages(pattern)</tt>
+
+</li>
+<li><tt>wait_for_not_log_messages(pattern)</tt>
+
+</li>
+</ul>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000132-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000132-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 719</span>
+719:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_log_messages</span> <span class="ruby-identifier">variable_name</span>
+720:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeLogMessages'</span>, <span class="ruby-identifier">variable_name</span>
+721:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000102" class="method-detail">
+        <a name="M000102"></a>
+
+        <div class="method-heading">
+          <a href="#M000102" class="method-signature">
+          <span class="method-name">store_mouse_speed</span><span class="method-args">(variable_name)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns the number of pixels between &quot;mousemove&quot; events during
+drag_and_drop commands (default=10).
+</p>
+<p>
+Related Assertions, automatically generated:
+</p>
+<ul>
+<li><tt>assert_mouse_speed(pattern)</tt>
+
+</li>
+<li><tt>assert_not_mouse_speed(pattern)</tt>
+
+</li>
+<li><tt>verify_mouse_speed(pattern)</tt>
+
+</li>
+<li><tt>verify_not_mouse_speed(pattern)</tt>
+
+</li>
+<li><tt>wait_for_mouse_speed(pattern)</tt>
+
+</li>
+<li><tt>wait_for_not_mouse_speed(pattern)</tt>
+
+</li>
+</ul>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000102-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000102-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 274</span>
+274:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_mouse_speed</span> <span class="ruby-identifier">variable_name</span>
+275:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeMouseSpeed'</span>, <span class="ruby-identifier">variable_name</span>
+276:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000123" class="method-detail">
+        <a name="M000123"></a>
+
+        <div class="method-heading">
+          <a href="#M000123" class="method-signature">
+          <span class="method-name">store_ordered</span><span class="method-args">(locator_1, locator_2, variable_name)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Check if these two elements have same parent and are ordered. Two same
+elements will not be considered ordered.
+</p>
+<p>
+NOTE: <tt><a
+href="TestBuilderAccessors.html#M000123">store_ordered</a></tt> is
+currently not supported by Selenium Core.
+</p>
+<p>
+Related Assertions, automatically generated:
+</p>
+<ul>
+<li><tt>assert_ordered(locator_1, locator_2)</tt>
+
+</li>
+<li><tt>assert_not_ordered(locator_1, locator_2)</tt>
+
+</li>
+<li><tt>verify_ordered(locator_1, locator_2)</tt>
+
+</li>
+<li><tt>verify_not_ordered(locator_1, locator_2)</tt>
+
+</li>
+<li><tt>wait_for_ordered(locator_1, locator_2)</tt>
+
+</li>
+<li><tt>wait_for_not_ordered(locator_1, locator_2)</tt>
+
+</li>
+</ul>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000123-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000123-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 593</span>
+593:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_ordered</span> <span class="ruby-identifier">locator_1</span>, <span class="ruby-identifier">locator_2</span>, <span class="ruby-identifier">variable_name</span>
+594:     <span class="ruby-identifier">raise</span> <span class="ruby-value str">'Not supported in Selenium Core at the moment'</span>
+595:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000099" class="method-detail">
+        <a name="M000099"></a>
+
+        <div class="method-heading">
+          <a href="#M000099" class="method-signature">
           <span class="method-name">store_prompt</span><span class="method-args">(variable_name)</span>
           </a>
         </div>
@@ -1087,7 +1927,7 @@ NOTE: under Selenium, JavaScript prompts will NOT pop up a visible dialog.
 </p>
 <p>
 NOTE: Selenium does NOT support JavaScript prompts that are generated in a
-page&#8217;s <tt>onload()</tt> event handler. In this case a visible dialog
+page&#8216;s <tt>onload()</tt> event handler. In this case a visible dialog
 WILL be generated and Selenium will hang until someone manually clicks OK.
 </p>
 <p>
@@ -1114,23 +1954,23 @@ Related Assertions, automatically generated:
 </li>
 </ul>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000057-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000057-source">
+            onclick="toggleCode('M000099-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000099-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 116</span>
-116:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_prompt</span> <span class="ruby-identifier">variable_name</span>
-117:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storePrompt'</span>, <span class="ruby-identifier">variable_name</span>
-118:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 233</span>
+233:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_prompt</span> <span class="ruby-identifier">variable_name</span>
+234:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storePrompt'</span>, <span class="ruby-identifier">variable_name</span>
+235:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000053" class="method-detail">
-        <a name="M000053"></a>
+      <div id="method-M000093" class="method-detail">
+        <a name="M000093"></a>
 
         <div class="method-heading">
-          <a href="#M000053" class="method-signature">
+          <a href="#M000093" class="method-signature">
           <span class="method-name">store_prompt_present</span><span class="method-args">(variable_name)</span>
           </a>
         </div>
@@ -1163,23 +2003,23 @@ Related Assertions, automatically generated:
 </li>
 </ul>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000053-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000053-source">
+            onclick="toggleCode('M000093-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000093-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 28</span>
-28:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_prompt_present</span> <span class="ruby-identifier">variable_name</span>
-29:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storePromptPresent'</span>, <span class="ruby-identifier">variable_name</span>
-30:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 115</span>
+115:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_prompt_present</span> <span class="ruby-identifier">variable_name</span>
+116:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storePromptPresent'</span>, <span class="ruby-identifier">variable_name</span>
+117:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000069" class="method-detail">
-        <a name="M000069"></a>
+      <div id="method-M000121" class="method-detail">
+        <a name="M000121"></a>
 
         <div class="method-heading">
-          <a href="#M000069" class="method-signature">
+          <a href="#M000121" class="method-signature">
           <span class="method-name">store_select_options</span><span class="method-args">(locator, variable_name)</span>
           </a>
         </div>
@@ -1220,23 +2060,23 @@ Related Assertions, automatically generated:
 </li>
 </ul>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000069-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000069-source">
+            onclick="toggleCode('M000121-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000121-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 309</span>
-309:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_select_options</span> <span class="ruby-identifier">locator</span>, <span class="ruby-identifier">variable_name</span>
-310:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeSelectOptions'</span>, <span class="ruby-identifier">locator</span>, <span class="ruby-identifier">variable_name</span>
-311:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 564</span>
+564:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_select_options</span> <span class="ruby-identifier">locator</span>, <span class="ruby-identifier">variable_name</span>
+565:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeSelectOptions'</span>, <span class="ruby-identifier">locator</span>, <span class="ruby-identifier">variable_name</span>
+566:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000067" class="method-detail">
-        <a name="M000067"></a>
+      <div id="method-M000110" class="method-detail">
+        <a name="M000110"></a>
 
         <div class="method-heading">
-          <a href="#M000067" class="method-signature">
+          <a href="#M000110" class="method-signature">
           <span class="method-name">store_selected</span><span class="method-args">(locator, option_locator, variable_name)</span>
           </a>
         </div>
@@ -1255,7 +2095,7 @@ See the <tt>select</tt> command for more information about option locators.
 </p>
 <p>
 NOTE: <tt><a
-href="TestBuilderAccessors.html#M000067">store_selected</a></tt> is
+href="TestBuilderAccessors.html#M000110">store_selected</a></tt> is
 currently not supported by Selenium Core.
 </p>
 <p>
@@ -1282,23 +2122,322 @@ Related Assertions, automatically generated:
 </li>
 </ul>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000067-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000067-source">
+            onclick="toggleCode('M000110-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000110-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 272</span>
-272:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_selected</span> <span class="ruby-identifier">locator</span>, <span class="ruby-identifier">option_locator</span>, <span class="ruby-identifier">variable_name</span>
-273:     <span class="ruby-identifier">raise</span> <span class="ruby-value str">'Not supported in Selenium Core at the moment'</span>
-274:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 403</span>
+403:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_selected</span> <span class="ruby-identifier">locator</span>, <span class="ruby-identifier">option_locator</span>, <span class="ruby-identifier">variable_name</span>
+404:     <span class="ruby-identifier">raise</span> <span class="ruby-value str">'Not supported in Selenium Core at the moment'</span>
+405:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000068" class="method-detail">
-        <a name="M000068"></a>
+      <div id="method-M000111" class="method-detail">
+        <a name="M000111"></a>
 
         <div class="method-heading">
-          <a href="#M000068" class="method-signature">
+          <a href="#M000111" class="method-signature">
+          <span class="method-name">store_selected_id</span><span class="method-args">(select_locator, variable_name)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Gets option element ID for selected option in the specified select element.
+</p>
+<p>
+Related Assertions, automatically generated:
+</p>
+<ul>
+<li><tt>assert_selected_id(select_locator, pattern)</tt>
+
+</li>
+<li><tt>assert_not_selected_id(select_locator, pattern)</tt>
+
+</li>
+<li><tt>verify_selected_id(select_locator, pattern)</tt>
+
+</li>
+<li><tt>verify_not_selected_id(select_locator, pattern)</tt>
+
+</li>
+<li><tt>wait_for_selected_id(select_locator, pattern)</tt>
+
+</li>
+<li><tt>wait_for_not_selected_id(select_locator, pattern)</tt>
+
+</li>
+</ul>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000111-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000111-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 416</span>
+416:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_selected_id</span> <span class="ruby-identifier">select_locator</span>, <span class="ruby-identifier">variable_name</span>
+417:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeSelectedId'</span>, <span class="ruby-identifier">select_locator</span>, <span class="ruby-identifier">variable_name</span>
+418:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000112" class="method-detail">
+        <a name="M000112"></a>
+
+        <div class="method-heading">
+          <a href="#M000112" class="method-signature">
+          <span class="method-name">store_selected_ids</span><span class="method-args">(select_locator, variable_name)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Gets all option element IDs for selected options in the specified select or
+multi-select element.
+</p>
+<p>
+Related Assertions, automatically generated:
+</p>
+<ul>
+<li><tt>assert_selected_ids(select_locator, pattern)</tt>
+
+</li>
+<li><tt>assert_not_selected_ids(select_locator, pattern)</tt>
+
+</li>
+<li><tt>verify_selected_ids(select_locator, pattern)</tt>
+
+</li>
+<li><tt>verify_not_selected_ids(select_locator, pattern)</tt>
+
+</li>
+<li><tt>wait_for_selected_ids(select_locator, pattern)</tt>
+
+</li>
+<li><tt>wait_for_not_selected_ids(select_locator, pattern)</tt>
+
+</li>
+</ul>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000112-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000112-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 430</span>
+430:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_selected_ids</span> <span class="ruby-identifier">select_locator</span>, <span class="ruby-identifier">variable_name</span>
+431:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeSelectedIds'</span>, <span class="ruby-identifier">select_locator</span>, <span class="ruby-identifier">variable_name</span>
+432:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000113" class="method-detail">
+        <a name="M000113"></a>
+
+        <div class="method-heading">
+          <a href="#M000113" class="method-signature">
+          <span class="method-name">store_selected_index</span><span class="method-args">(select_locator, variable_name)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Gets option index (option number, starting at 0) for selected option in the
+specified select element.
+</p>
+<p>
+Related Assertions, automatically generated:
+</p>
+<ul>
+<li><tt>assert_selected_index(select_locator, pattern)</tt>
+
+</li>
+<li><tt>assert_not_selected_index(select_locator, pattern)</tt>
+
+</li>
+<li><tt>verify_selected_index(select_locator, pattern)</tt>
+
+</li>
+<li><tt>verify_not_selected_index(select_locator, pattern)</tt>
+
+</li>
+<li><tt>wait_for_selected_index(select_locator, pattern)</tt>
+
+</li>
+<li><tt>wait_for_not_selected_index(select_locator, pattern)</tt>
+
+</li>
+</ul>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000113-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000113-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 444</span>
+444:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_selected_index</span> <span class="ruby-identifier">select_locator</span>, <span class="ruby-identifier">variable_name</span>
+445:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeSelectedIndex'</span>, <span class="ruby-identifier">select_locator</span>, <span class="ruby-identifier">variable_name</span>
+446:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000114" class="method-detail">
+        <a name="M000114"></a>
+
+        <div class="method-heading">
+          <a href="#M000114" class="method-signature">
+          <span class="method-name">store_selected_indexes</span><span class="method-args">(select_locator, variable_name)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Gets all option indexes (option number, starting at 0) for selected options
+in the specified select or multi-select element.
+</p>
+<p>
+Related Assertions, automatically generated:
+</p>
+<ul>
+<li><tt>assert_selected_indexes(select_locator, pattern)</tt>
+
+</li>
+<li><tt>assert_not_selected_indexes(select_locator, pattern)</tt>
+
+</li>
+<li><tt>verify_selected_indexes(select_locator, pattern)</tt>
+
+</li>
+<li><tt>verify_not_selected_indexes(select_locator, pattern)</tt>
+
+</li>
+<li><tt>wait_for_selected_indexes(select_locator, pattern)</tt>
+
+</li>
+<li><tt>wait_for_not_selected_indexes(select_locator, pattern)</tt>
+
+</li>
+</ul>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000114-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000114-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 458</span>
+458:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_selected_indexes</span> <span class="ruby-identifier">select_locator</span>, <span class="ruby-identifier">variable_name</span>
+459:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeSelectedIndexes'</span>, <span class="ruby-identifier">select_locator</span>, <span class="ruby-identifier">variable_name</span>
+460:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000115" class="method-detail">
+        <a name="M000115"></a>
+
+        <div class="method-heading">
+          <a href="#M000115" class="method-signature">
+          <span class="method-name">store_selected_label</span><span class="method-args">(select_locator, variable_name)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Gets option label (visible text) for selected option in the specified
+select element.
+</p>
+<p>
+Related Assertions, automatically generated:
+</p>
+<ul>
+<li><tt>assert_selected_label(select_locator, pattern)</tt>
+
+</li>
+<li><tt>assert_not_selected_label(select_locator, pattern)</tt>
+
+</li>
+<li><tt>verify_selected_label(select_locator, pattern)</tt>
+
+</li>
+<li><tt>verify_not_selected_label(select_locator, pattern)</tt>
+
+</li>
+<li><tt>wait_for_selected_label(select_locator, pattern)</tt>
+
+</li>
+<li><tt>wait_for_not_selected_label(select_locator, pattern)</tt>
+
+</li>
+</ul>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000115-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000115-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 472</span>
+472:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_selected_label</span> <span class="ruby-identifier">select_locator</span>, <span class="ruby-identifier">variable_name</span>
+473:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeSelectedLabel'</span>, <span class="ruby-identifier">select_locator</span>, <span class="ruby-identifier">variable_name</span>
+474:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000116" class="method-detail">
+        <a name="M000116"></a>
+
+        <div class="method-heading">
+          <a href="#M000116" class="method-signature">
+          <span class="method-name">store_selected_labels</span><span class="method-args">(select_locator, variable_name)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Gets all option labels (visible text) for selected options in the specified
+select or multi-select element.
+</p>
+<p>
+Related Assertions, automatically generated:
+</p>
+<ul>
+<li><tt>assert_selected_labels(select_locator, pattern)</tt>
+
+</li>
+<li><tt>assert_not_selected_labels(select_locator, pattern)</tt>
+
+</li>
+<li><tt>verify_selected_labels(select_locator, pattern)</tt>
+
+</li>
+<li><tt>verify_not_selected_labels(select_locator, pattern)</tt>
+
+</li>
+<li><tt>wait_for_selected_labels(select_locator, pattern)</tt>
+
+</li>
+<li><tt>wait_for_not_selected_labels(select_locator, pattern)</tt>
+
+</li>
+</ul>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000116-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000116-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 486</span>
+486:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_selected_labels</span> <span class="ruby-identifier">select_locator</span>, <span class="ruby-identifier">variable_name</span>
+487:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeSelectedLabels'</span>, <span class="ruby-identifier">select_locator</span>, <span class="ruby-identifier">variable_name</span>
+488:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000120" class="method-detail">
+        <a name="M000120"></a>
+
+        <div class="method-heading">
+          <a href="#M000120" class="method-signature">
           <span class="method-name">store_selected_options</span><span class="method-args">(locator, variable_name)</span>
           </a>
         </div>
@@ -1340,23 +2479,172 @@ Related Assertions, automatically generated:
 </li>
 </ul>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000068-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000068-source">
+            onclick="toggleCode('M000120-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000120-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 291</span>
-291:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_selected_options</span> <span class="ruby-identifier">locator</span>, <span class="ruby-identifier">variable_name</span>
-292:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeSelectedOptions'</span>, <span class="ruby-identifier">locator</span>, <span class="ruby-identifier">variable_name</span>
-293:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 546</span>
+546:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_selected_options</span> <span class="ruby-identifier">locator</span>, <span class="ruby-identifier">variable_name</span>
+547:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeSelectedOptions'</span>, <span class="ruby-identifier">locator</span>, <span class="ruby-identifier">variable_name</span>
+548:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000066" class="method-detail">
-        <a name="M000066"></a>
+      <div id="method-M000117" class="method-detail">
+        <a name="M000117"></a>
 
         <div class="method-heading">
-          <a href="#M000066" class="method-signature">
+          <a href="#M000117" class="method-signature">
+          <span class="method-name">store_selected_value</span><span class="method-args">(select_locator, variable_name)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Gets option value (value attribute) for selected option in the specified
+select element.
+</p>
+<p>
+Related Assertions, automatically generated:
+</p>
+<ul>
+<li><tt>assert_selected_value(select_locator, pattern)</tt>
+
+</li>
+<li><tt>assert_not_selected_value(select_locator, pattern)</tt>
+
+</li>
+<li><tt>verify_selected_value(select_locator, pattern)</tt>
+
+</li>
+<li><tt>verify_not_selected_value(select_locator, pattern)</tt>
+
+</li>
+<li><tt>wait_for_selected_value(select_locator, pattern)</tt>
+
+</li>
+<li><tt>wait_for_not_selected_value(select_locator, pattern)</tt>
+
+</li>
+</ul>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000117-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000117-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 500</span>
+500:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_selected_value</span> <span class="ruby-identifier">select_locator</span>, <span class="ruby-identifier">variable_name</span>
+501:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeSelectedValue'</span>, <span class="ruby-identifier">select_locator</span>, <span class="ruby-identifier">variable_name</span>
+502:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000118" class="method-detail">
+        <a name="M000118"></a>
+
+        <div class="method-heading">
+          <a href="#M000118" class="method-signature">
+          <span class="method-name">store_selected_values</span><span class="method-args">(select_locator, variable_name)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Gets all option values (value attribute) for selected options in the
+specified select or multi-select element.
+</p>
+<p>
+Related Assertions, automatically generated:
+</p>
+<ul>
+<li><tt>assert_selected_values(select_locator, pattern)</tt>
+
+</li>
+<li><tt>assert_not_selected_values(select_locator, pattern)</tt>
+
+</li>
+<li><tt>verify_selected_values(select_locator, pattern)</tt>
+
+</li>
+<li><tt>verify_not_selected_values(select_locator, pattern)</tt>
+
+</li>
+<li><tt>wait_for_selected_values(select_locator, pattern)</tt>
+
+</li>
+<li><tt>wait_for_not_selected_values(select_locator, pattern)</tt>
+
+</li>
+</ul>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000118-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000118-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 514</span>
+514:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_selected_values</span> <span class="ruby-identifier">select_locator</span>, <span class="ruby-identifier">variable_name</span>
+515:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeSelectedValues'</span>, <span class="ruby-identifier">select_locator</span>, <span class="ruby-identifier">variable_name</span>
+516:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000119" class="method-detail">
+        <a name="M000119"></a>
+
+        <div class="method-heading">
+          <a href="#M000119" class="method-signature">
+          <span class="method-name">store_something_selected</span><span class="method-args">(select_locator, variable_name)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Determines whether some option in a drop-down menu is selected.
+</p>
+<p>
+Related Assertions, automatically generated:
+</p>
+<ul>
+<li><tt>assert_something_selected(select_locator)</tt>
+
+</li>
+<li><tt>assert_not_something_selected(select_locator)</tt>
+
+</li>
+<li><tt>verify_something_selected(select_locator)</tt>
+
+</li>
+<li><tt>verify_not_something_selected(select_locator)</tt>
+
+</li>
+<li><tt>wait_for_something_selected(select_locator)</tt>
+
+</li>
+<li><tt>wait_for_not_something_selected(select_locator)</tt>
+
+</li>
+</ul>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000119-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000119-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 527</span>
+527:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_something_selected</span> <span class="ruby-identifier">select_locator</span>, <span class="ruby-identifier">variable_name</span>
+528:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeSomethingSelected'</span>, <span class="ruby-identifier">select_locator</span>, <span class="ruby-identifier">variable_name</span>
+529:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000109" class="method-detail">
+        <a name="M000109"></a>
+
+        <div class="method-heading">
+          <a href="#M000109" class="method-signature">
           <span class="method-name">store_table</span><span class="method-args">(locator, row, column, variable_name)</span>
           </a>
         </div>
@@ -1389,23 +2677,23 @@ Related Assertions, automatically generated:
 </li>
 </ul>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000066-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000066-source">
+            onclick="toggleCode('M000109-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000109-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 252</span>
-252:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_table</span> <span class="ruby-identifier">locator</span>, <span class="ruby-identifier">row</span>, <span class="ruby-identifier">column</span>, <span class="ruby-identifier">variable_name</span>
-253:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeTable'</span>, <span class="ruby-node">&quot;#{locator}.#{row}.#{column}&quot;</span>, <span class="ruby-identifier">variable_name</span>
-254:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 383</span>
+383:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_table</span> <span class="ruby-identifier">locator</span>, <span class="ruby-identifier">row</span>, <span class="ruby-identifier">column</span>, <span class="ruby-identifier">variable_name</span>
+384:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeTable'</span>, <span class="ruby-node">&quot;#{locator}.#{row}.#{column}&quot;</span>, <span class="ruby-identifier">variable_name</span>
+385:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000063" class="method-detail">
-        <a name="M000063"></a>
+      <div id="method-M000106" class="method-detail">
+        <a name="M000106"></a>
 
         <div class="method-heading">
-          <a href="#M000063" class="method-signature">
+          <a href="#M000106" class="method-signature">
           <span class="method-name">store_text</span><span class="method-args">(locator, variable_name)</span>
           </a>
         </div>
@@ -1441,23 +2729,23 @@ Related Assertions, automatically generated:
 </li>
 </ul>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000063-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000063-source">
+            onclick="toggleCode('M000106-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000106-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 200</span>
-200:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_text</span> <span class="ruby-identifier">locator</span>, <span class="ruby-identifier">variable_name</span>
-201:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeText'</span>, <span class="ruby-identifier">locator</span>, <span class="ruby-identifier">variable_name</span>
-202:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 331</span>
+331:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_text</span> <span class="ruby-identifier">locator</span>, <span class="ruby-identifier">variable_name</span>
+332:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeText'</span>, <span class="ruby-identifier">locator</span>, <span class="ruby-identifier">variable_name</span>
+333:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000071" class="method-detail">
-        <a name="M000071"></a>
+      <div id="method-M000124" class="method-detail">
+        <a name="M000124"></a>
 
         <div class="method-heading">
-          <a href="#M000071" class="method-signature">
+          <a href="#M000124" class="method-signature">
           <span class="method-name">store_text_present</span><span class="method-args">(pattern, variable_name)</span>
           </a>
         </div>
@@ -1491,23 +2779,23 @@ Related Assertions, automatically generated:
 </li>
 </ul>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000071-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000071-source">
+            onclick="toggleCode('M000124-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000124-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 336</span>
-336:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_text_present</span> <span class="ruby-identifier">pattern</span>, <span class="ruby-identifier">variable_name</span>
-337:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeTextPresent'</span>, <span class="ruby-identifier">pattern</span>, <span class="ruby-identifier">variable_name</span>
-338:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 607</span>
+607:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_text_present</span> <span class="ruby-identifier">pattern</span>, <span class="ruby-identifier">variable_name</span>
+608:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeTextPresent'</span>, <span class="ruby-identifier">pattern</span>, <span class="ruby-identifier">variable_name</span>
+609:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000060" class="method-detail">
-        <a name="M000060"></a>
+      <div id="method-M000103" class="method-detail">
+        <a name="M000103"></a>
 
         <div class="method-heading">
-          <a href="#M000060" class="method-signature">
+          <a href="#M000103" class="method-signature">
           <span class="method-name">store_title</span><span class="method-args">(variable_name)</span>
           </a>
         </div>
@@ -1540,23 +2828,23 @@ Related Assertions, automatically generated:
 </li>
 </ul>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000060-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000060-source">
+            onclick="toggleCode('M000103-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000103-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 156</span>
-156:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_title</span> <span class="ruby-identifier">variable_name</span>
-157:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeTitle'</span>, <span class="ruby-identifier">variable_name</span>
-158:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 287</span>
+287:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_title</span> <span class="ruby-identifier">variable_name</span>
+288:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeTitle'</span>, <span class="ruby-identifier">variable_name</span>
+289:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000062" class="method-detail">
-        <a name="M000062"></a>
+      <div id="method-M000105" class="method-detail">
+        <a name="M000105"></a>
 
         <div class="method-heading">
-          <a href="#M000062" class="method-signature">
+          <a href="#M000105" class="method-signature">
           <span class="method-name">store_value</span><span class="method-args">(locator, variable_name)</span>
           </a>
         </div>
@@ -1592,23 +2880,23 @@ Related Assertions, automatically generated:
 </li>
 </ul>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000062-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000062-source">
+            onclick="toggleCode('M000105-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000105-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 184</span>
-184:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_value</span> <span class="ruby-identifier">locator</span>, <span class="ruby-identifier">variable_name</span>
-185:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeValue'</span>, <span class="ruby-identifier">locator</span>, <span class="ruby-identifier">variable_name</span>
-186:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 315</span>
+315:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_value</span> <span class="ruby-identifier">locator</span>, <span class="ruby-identifier">variable_name</span>
+316:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeValue'</span>, <span class="ruby-identifier">locator</span>, <span class="ruby-identifier">variable_name</span>
+317:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000073" class="method-detail">
-        <a name="M000073"></a>
+      <div id="method-M000126" class="method-detail">
+        <a name="M000126"></a>
 
         <div class="method-heading">
-          <a href="#M000073" class="method-signature">
+          <a href="#M000126" class="method-signature">
           <span class="method-name">store_visible</span><span class="method-args">(locator, variable_name)</span>
           </a>
         </div>
@@ -1645,13 +2933,151 @@ Related Assertions, automatically generated:
 </li>
 </ul>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000073-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000073-source">
+            onclick="toggleCode('M000126-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000126-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 365</span>
-365:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_visible</span> <span class="ruby-identifier">locator</span>, <span class="ruby-identifier">variable_name</span>
-366:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeVisible'</span>, <span class="ruby-identifier">locator</span>, <span class="ruby-identifier">variable_name</span>
-367:   <span class="ruby-keyword kw">end</span>
+     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 636</span>
+636:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_visible</span> <span class="ruby-identifier">locator</span>, <span class="ruby-identifier">variable_name</span>
+637:     <span class="ruby-identifier">command</span> <span class="ruby-value str">'storeVisible'</span>, <span class="ruby-identifier">locator</span>, <span class="ruby-identifier">variable_name</span>
+638:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000139" class="method-detail">
+        <a name="M000139"></a>
+
+        <div class="method-heading">
+          <a href="#M000139" class="method-signature">
+          <span class="method-name">store_whether_this_frame_match_frame_expression</span><span class="method-args">(current_frame_string, target, variable_name)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Determine whether current/locator identify the frame containing this
+running code.
+</p>
+<p>
+This is useful in proxy injection mode, where this code runs in every
+browser frame and window, and sometimes the selenium server needs to
+identify the &quot;current&quot; frame. In this case, when the test calls
+select_frame, this routine is called for each frame to figure out which one
+has been selected. The selected frame will return true, while all others
+will return false.
+</p>
+<p>
+NOTE: <tt><a
+href="TestBuilderAccessors.html#M000139">store_whether_this_frame_match_frame_expression</a></tt>
+is currently not supported by Selenium Core.
+</p>
+<p>
+Related Assertions, automatically generated:
+</p>
+<ul>
+<li><tt>assert_whether_this_frame_match_frame_expression(current_frame_string,
+target)</tt>
+
+</li>
+<li><tt>assert_not_whether_this_frame_match_frame_expression(current_frame_string,
+target)</tt>
+
+</li>
+<li><tt>verify_whether_this_frame_match_frame_expression(current_frame_string,
+target)</tt>
+
+</li>
+<li><tt>verify_not_whether_this_frame_match_frame_expression(current_frame_string,
+target)</tt>
+
+</li>
+<li><tt>wait_for_whether_this_frame_match_frame_expression(current_frame_string,
+target)</tt>
+
+</li>
+<li><tt>wait_for_not_whether_this_frame_match_frame_expression(current_frame_string,
+target)</tt>
+
+</li>
+</ul>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000139-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000139-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 846</span>
+846:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_whether_this_frame_match_frame_expression</span> <span class="ruby-identifier">current_frame_string</span>, <span class="ruby-identifier">target</span>, <span class="ruby-identifier">variable_name</span>
+847:     <span class="ruby-identifier">raise</span> <span class="ruby-value str">'Not supported in Selenium Core at the moment'</span>
+848:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000140" class="method-detail">
+        <a name="M000140"></a>
+
+        <div class="method-heading">
+          <a href="#M000140" class="method-signature">
+          <span class="method-name">store_whether_this_window_match_window_expression</span><span class="method-args">(current_window_string, target, variable_name)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Determine whether current_window_string plus target identify the window
+containing this running code.
+</p>
+<p>
+This is useful in proxy injection mode, where this code runs in every
+browser frame and window, and sometimes the selenium server needs to
+identify the &quot;current&quot; window. In this case, when the test calls
+select_window, this routine is called for each window to figure out which
+one has been selected. The selected window will return true, while all
+others will return false.
+</p>
+<p>
+NOTE: <tt><a
+href="TestBuilderAccessors.html#M000140">store_whether_this_window_match_window_expression</a></tt>
+is currently not supported by Selenium Core.
+</p>
+<p>
+Related Assertions, automatically generated:
+</p>
+<ul>
+<li><tt>assert_whether_this_window_match_window_expression(current_window_string,
+target)</tt>
+
+</li>
+<li><tt>assert_not_whether_this_window_match_window_expression(current_window_string,
+target)</tt>
+
+</li>
+<li><tt>verify_whether_this_window_match_window_expression(current_window_string,
+target)</tt>
+
+</li>
+<li><tt>verify_not_whether_this_window_match_window_expression(current_window_string,
+target)</tt>
+
+</li>
+<li><tt>wait_for_whether_this_window_match_window_expression(current_window_string,
+target)</tt>
+
+</li>
+<li><tt>wait_for_not_whether_this_window_match_window_expression(current_window_string,
+target)</tt>
+
+</li>
+</ul>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000140-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000140-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/selenium_on_rails/test_builder_accessors.rb, line 869</span>
+869:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_whether_this_window_match_window_expression</span> <span class="ruby-identifier">current_window_string</span>, <span class="ruby-identifier">target</span>, <span class="ruby-identifier">variable_name</span>
+870:     <span class="ruby-identifier">raise</span> <span class="ruby-value str">'Not supported in Selenium Core at the moment'</span>
+871:   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

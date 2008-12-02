@@ -14,8 +14,9 @@ module ActionController
             :controller => 'selenium', :action => 'record', :requirements => { :logFile => /.*/ }
           map.connect 'selenium/*filename',
             :controller => 'selenium', :action => 'support_file'
-          
-          yield map
+          map.connect 'switch_environment',
+            :controller => 'switch_environment', :action => 'index'  
+          yield map if block_given?
         end
       end
     end
