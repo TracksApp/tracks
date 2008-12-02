@@ -6,7 +6,16 @@
   <div class="description">
     <span class="todo.descr"><%= sanitize(recurring_todo.description) %></span> <%= recurring_todo_tag_list %>
     <span class='recurrence_pattern'>
-      [<%=recurrence_target(recurring_todo)%> <%= recurring_todo.recurrence_pattern %> <%= recurrence_time_span(recurring_todo) %>]
+      <%
+         rt = recurrence_target(recurring_todo)
+         rp = recurring_todo.recurrence_pattern
+         # only add space if recurrence_pattern has content
+         rp = " " + rp if !rp.nil?
+         rts = recurrence_time_span(recurring_todo)
+         # only add space if recurrence_time_span has content
+         rts = " " + rts if !(rts == "")
+      %>
+      [<%=rt%><%=rp%><%=rts%>]
     </span>
   </div>
 </div>
