@@ -692,11 +692,14 @@ div#list-active-projects, div#list-hidden-projects, div#list-completed-projects,
     margin:20px 0px 8px 13px
 }
 
-div.alpha_sort {
+div.menu_sort {
     margin-top:-20px;
     float:right;
 }
 
+div.alpha_sort, div.tasks_sort,span.sort_separator {
+    float:left;
+}
 
 .container td {
     border: none;
@@ -806,6 +809,14 @@ input#go_to_project, input#context_hide {
 
 .edit_todo_form input, .edit_todo_form textarea {
     width:100%;
+}
+
+.edit_todo_form .Date {
+    width:89%;
+}
+
+.edit_todo_form a.date_clear:hover {
+    background: #CCCCCC;
 }
 
 .edit_todo_form .tag_list_label {
@@ -1193,8 +1204,9 @@ body.integrations textarea {
     width:80%;
     background-color:#ddd;
 }
-
-.date_clear
-{
-	float: right;
+.defer-container {
+  float:right;
+}
+.defer-container a:hover {
+  background-color: inherit;
 }

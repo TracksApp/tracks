@@ -129,7 +129,8 @@ div.buttons, div.buttons a, div.buttons a:hover {text-align: right; margin-right
 div#list-active-projects, div#list-hidden-projects, div#list-completed-projects, div#list-contexts, div#projects-empty-nd {clear:right; border: 1px solid #999}
 .project-state-group h2 {margin:20px 0px 8px 13px}
 .search-result-group h2 {margin:20px 0px 8px 13px }
-div.alpha_sort {margin-top:-20px; float:right}
+div.menu_sort {margin-top:-20px; float:right}
+div.alpha_sort, div.tasks_sort,span.sort_separator {float:left}
 .container td {border: none; padding-bottom: 5px}
 .container form {border: none}
 div.project_description {background: #eee; padding: 5px; margin-top: 0px; margin-left: -5px; margin-right: -5px; color: #666; font-style: italic; font-size: 12px; font-weight: normal}
@@ -149,6 +150,8 @@ input#go_to_project, input#context_hide {width: 5%}
 #todo-form-new-action .submit_box, #project_form .submit_box, #context_form .submit_box {height: 25px; padding: 5px 0; text-align: center; clear: right}
 .edit_todo_form .submit_box {height: 25px; padding: 5px 0; text-align: center; clear: right}
 .edit_todo_form input, .edit_todo_form textarea {width:100%}
+.edit_todo_form .Date {width:89%}
+.edit_todo_form a.date_clear:hover {background: #CCCCCC}
 .edit_todo_form .tag_list_label {clear:both}
 .edit_todo_form .due_input, .edit_todo_form .show_from_input, .edit_todo_form .project_input, .edit_todo_form .context_input {width:48%}
 .edit_todo_form .show_from_input, .edit_todo_form .context_input {float: right}
@@ -218,7 +221,8 @@ body.integrations h2 {margin-top:40px; padding-top:20px; margin-bottom:10px; bor
 body.integrations p, body.integrations li {font-size:1.0em}
 body.integrations li {list-style-type: disc; list-style-position: inside; margin-left:30px}
 body.integrations textarea {margin:10px; padding:3px; width:80%; background-color:#ddd}
-.date_clear {float: right}
+.defer-container {float:right}
+.defer-container a:hover {background-color: inherit}
 div.calendar {position: relative}
 .calendar, .calendar table {border: 1px solid #556; font-size: 11px; color: #000; cursor: default; background: #eef; z-index: 110; font-family: tahoma,verdana,sans-serif}
 .calendar .button {text-align: center; padding: 2px}

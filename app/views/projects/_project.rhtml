@@ -1,4 +1,4 @@
-<% @not_done = project.not_done_todos -%>
+<% #@not_done = project.not_done_todos -%>
 
 <div id="p<%= project.id %>" class="container project">
   <h2>
@@ -6,7 +6,9 @@
     <a href="#" class="container_toggle" id="toggle_p<%= project.id %>"><%= image_tag("collapse.png") %></a>
     <% end %>
     <span class="in_place_editor_field" id="project_name_in_place_editor"><%= project.name %></span>
-    <%= in_place_editor 'project_name_in_place_editor', { :url => { :controller => 'projects', :action => 'update', :id => project.id, :field => 'name', :wants_render => false, :escape => false}  , :options=>"{method:'put'}" } %>
+    <%= in_place_editor 'project_name_in_place_editor', { 
+      :url => { :controller => 'projects', :action => 'update', :id => project.id, :field => 'name', :update_project_name => true, :escape => false}  , 
+      :options=>"{method:'put'}", :script => true} %>
   </h2>
   <% unless project.description.blank? -%>
     <div class="project_description"><%= sanitize(project.description) %></div>

@@ -3,7 +3,7 @@ module RecurringTodosHelper
   def recurrence_time_span(rt)
     case rt.ends_on
     when "no_end_date"
-      return ""
+      return rt.start_from.nil? ? "" : "from " + format_date(rt.start_from)
     when "ends_on_number_of_times"
       return "for "+rt.number_of_occurences.to_s + " times"
     when "ends_on_end_date"
@@ -11,7 +11,7 @@ module RecurringTodosHelper
       ends = rt.end_date.nil? ? "" : " until " + format_date(rt.end_date)
       return starts+ends
     else
-      raise Exception.new, "unknown recurrence time span selection (#{self.ends_on})"    
+      raise Exception.new, "unknown recurrence time span selection (#{self.ends_on})"
     end
   end
   
@@ -28,10 +28,10 @@ module RecurringTodosHelper
     
   def recurring_todo_tag_list
     tags_except_starred = @recurring_todo.tags.reject{|t| t.name == Todo::STARRED_TAG_NAME}
-    tag_list = tags_except_starred.collect{|t| "<span class=\"tag #{t.name.gsub(' ','-')}\">" + 
+    tag_list = tags_except_starred.collect{|t| "<span class=\"tag #{t.name.gsub(' ','-')}\">" +
         # link_to(t.name, :controller => "todos", :action => "tag", :id =>
         # t.name) + TODO: tag view for recurring_todos (yet?)
-      t.name + 
+      t.name +
         "</span>"}.join('')
     "<span class='tags'>#{tag_list}</span>"
   end
@@ -44,7 +44,7 @@ module RecurringTodosHelper
     str
   end
   
-  def recurring_todo_remote_star_icon 
+  def recurring_todo_remote_star_icon
     str = link_to( image_tag_for_star(@recurring_todo),
       toggle_star_recurring_todo_path(@recurring_todo),
       :class => "icon star_item", :title => "star the action '#{@recurring_todo.description}'")

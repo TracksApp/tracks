@@ -1,0 +1,10 @@
+page['project_name_in_place_editor'].replace_html @project.name
+
+page['default_project_name_id'].value = @project.name
+page['todo_project_name'].value = @project.name
+
+# renew project auto complete array
+page << "projectAutoCompleter.options.array = #{project_names_for_autocomplete}; projectAutoCompleter.changed = true" 
+
+status_message = "Name of project was changed"
+page.notify :notice, status_message, 5.0

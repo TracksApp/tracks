@@ -48,7 +48,7 @@ module LoginSystem
       session['user_id'] = user.id
       set_current_user(user)
       current_user.remember_me
-      cookies[:auth_token] = { :value => current_user.remember_token , :expires => current_user.remember_token_expires_at }
+      cookies[:auth_token] = { :value => current_user.remember_token , :expires => current_user.remember_token_expires_at, :secure => TRACKS_COOKIES_SECURE }
       flash[:notice] = "Logged in successfully. Welcome back!"
     end
   end  

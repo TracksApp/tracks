@@ -28,6 +28,8 @@
     <li>Refresh interval (in minutes): <span class="highlight"><%= prefs.refresh %></span></li>
     <li>Verbose action descriptors: <span class="highlight"><%= prefs.verbose_action_descriptors %></span></li>
     <li>Actions per page (Mobile View): <span class="highlight"><%= prefs.mobile_todos_per_page %></span></li>
+    <li>From email: <span class="highlight"><%= prefs.sms_email %></span></li>
+    <li>Default email context: <span class="highlight"><%= prefs.sms_context.nil? ? "None" : prefs.sms_context.name  %></span></li>
   </ul>
   <div class="actions">
     <%= link_to "Edit preferences &raquo;", { :controller => 'preferences', :action => 'edit'}, :class => 'edit_link' %>

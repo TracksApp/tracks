@@ -9,12 +9,14 @@ require "redcloth"
 require 'date'
 require 'time'
 
-# Commented the following line because of #744. It prevented rake db:migrate to 
+# Commented the following line because of #744. It prevented rake db:migrate to
 # run because this tag went looking for the taggings table that did not exist
-# when you feshly create a new database
-# Old comment: We need this in development mode, or you get 'method missing' errors
+# when you feshly create a new database Old comment: We need this in development
+# mode, or you get 'method missing' errors
 # 
-# Tag 
+# Tag
+
+class CannotAccessContext < RuntimeError; end
 
 class ApplicationController < ActionController::Base
 
@@ -113,7 +115,7 @@ class ApplicationController < ActionController::Base
   def format_date(date)
     if date
       date_format = prefs.date_format
-      formatted_date = date.strftime("#{date_format}")
+      formatted_date = date.in_time_zone(prefs.time_zone).strftime("#{date_format}")
     else
       formatted_date = ''
     end
@@ -160,7 +162,39 @@ class ApplicationController < ActionController::Base
       response.content_type = 'text/html'
     end
   end
-   
+  
+  def create_todo_from_recurring_todo(rt, date=nil)
+    # create todo and initialize with data from recurring_todo rt
+    todo = current_user.todos.build( { :description => rt.description, :notes => rt.notes, :project_id => rt.project_id, :context_id => rt.context_id})
+    
+    # set dates
+    todo.recurring_todo_id = rt.id
+    todo.due = rt.get_due_date(date)
+    
+    show_from_date = rt.get_show_from_date(date)
+    if show_from_date.nil?
+      todo.show_from=nil
+    else
+      # make sure that show_from is not in the past
+      todo.show_from = show_from_date < Time.zone.now ? nil : show_from_date
+    end
+    
+    saved = todo.save
+    if saved
+      todo.tag_with(rt.tag_list, current_user)
+      todo.tags.reload 
+    end
+
+    # increate number of occurences created from recurring todo
+    rt.inc_occurences
+    
+    # mark recurring todo complete if there are no next actions left
+    checkdate = todo.due.nil? ? todo.show_from : todo.due
+    rt.toggle_completion! unless rt.has_next_todo(checkdate)
+    
+    return saved ? todo : nil
+  end
+     
   protected
   
   def admin_login_required
@@ -192,7 +226,7 @@ class ApplicationController < ActionController::Base
   def openid_enabled?
     self.class.openid_enabled?
   end
-  
+
   private
         
   def parse_date_per_user_prefs( s )
@@ -230,30 +264,6 @@ class ApplicationController < ActionController::Base
   
   def set_time_zone
     Time.zone = current_user.prefs.time_zone if logged_in?
-  end
-
-  def create_todo_from_recurring_todo(rt, date=nil)
-    # create todo and initialize with data from recurring_todo rt
-    todo = current_user.todos.build( { :description => rt.description, :notes => rt.notes, :project_id => rt.project_id, :context_id => rt.context_id})
-    
-    # set dates
-    todo.due = rt.get_due_date(date)
-    todo.show_from = rt.get_show_from_date(date)
-    todo.recurring_todo_id = rt.id
-    saved = todo.save
-    if saved
-      todo.tag_with(rt.tag_list, current_user)
-      todo.tags.reload 
-    end
-
-    # increate number of occurences created from recurring todo
-    rt.inc_occurences
-    
-    # mark recurring todo complete if there are no next actions left
-    checkdate = todo.due.nil? ? todo.show_from : todo.due
-    rt.toggle_completion! unless rt.has_next_todo(checkdate)
-    
-    return saved ? todo : nil
   end
   
 end

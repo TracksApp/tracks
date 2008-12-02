@@ -31,7 +31,7 @@ class ProjectsController < ApplicationController
   end
 
   def projects_and_actions
-    @projects = @projects.select { |p| p.active? }
+    @projects = @projects.active
     respond_to do |format|
       format.text  { 
         render :action => 'index_text_projects_and_actions', :layout => false, :content_type => Mime::TEXT
@@ -43,7 +43,7 @@ class ProjectsController < ApplicationController
     init_data_for_sidebar unless mobile?
     @projects = current_user.projects
     @page_title = "TRACKS::Project: #{@project.name}"
-    @project.todos.send :with_scope, :find => { :include => [:context, :tags] } do
+    @project.todos.send :with_scope, :find => { :include => [:context] } do
       @not_done = @project.not_done_todos(:include_project_hidden_todos => true)
       @deferred = @project.deferred_todos.sort_by { |todo| todo.show_from }
       @done = @project.done_todos
@@ -83,7 +83,7 @@ class ProjectsController < ApplicationController
     @go_to_project = params['go_to_project']
     @saved = @project.save
     @project_not_done_counts = { @project.id => 0 }
-    @active_projects_count = current_user.projects.count(:conditions => "state = 'active'")
+    @active_projects_count = current_user.projects.active.count
     @contexts = current_user.contexts
     respond_to do |format|
       format.js { @down_count = current_user.projects.size }
@@ -124,9 +124,9 @@ class ProjectsController < ApplicationController
           @project_not_done_counts[@project.id] = @project.reload().not_done_todo_count(:include_project_hidden_todos => true)
         end
         @contexts = current_user.contexts
-        @active_projects_count = current_user.projects.count(:conditions => "state = 'active'")
-        @hidden_projects_count = current_user.projects.count(:conditions => "state = 'hidden'")
-        @completed_projects_count = current_user.projects.count(:conditions => "state = 'completed'")
+        @active_projects_count = current_user.projects.active.count
+        @hidden_projects_count = current_user.projects.hidden.count
+        @completed_projects_count = current_user.projects.completed.count
         render :template => 'projects/update.js.rjs'
         return
       elsif boolean_param('update_status')
@@ -135,6 +135,10 @@ class ProjectsController < ApplicationController
       elsif boolean_param('update_default_context')
         @initial_context_name = @project.default_context.name 
         render :template => 'projects/update_default_context.js.rjs'
+        return
+      elsif boolean_param('update_project_name')
+        @projects = current_user.projects
+        render :template => 'projects/update_project_name.js.rjs'
         return
       else
         render :text => success_text || 'Success'
@@ -157,9 +161,9 @@ class ProjectsController < ApplicationController
   
   def destroy
     @project.destroy
-    @active_projects_count = current_user.projects.count(:conditions => "state = 'active'")
-    @hidden_projects_count = current_user.projects.count(:conditions => "state = 'hidden'")
-    @completed_projects_count = current_user.projects.count(:conditions => "state = 'completed'")
+    @active_projects_count = current_user.projects.active.count
+    @hidden_projects_count = current_user.projects.hidden.count
+    @completed_projects_count = current_user.projects.completed.count
     respond_to do |format|
       format.js { @down_count = current_user.projects.size }
       format.xml { render :text => "Deleted project #{@project.name}" }
@@ -182,15 +186,22 @@ class ProjectsController < ApplicationController
     init_not_done_counts(['project'])
   end
   
+  def actionize
+    @state = params['state']
+    @projects = current_user.projects.actionize(current_user.id, :state => @state) if @state
+    @contexts = current_user.contexts
+    init_not_done_counts(['project'])
+  end
+  
   protected
     
   def render_projects_html
     lambda do
       @page_title = "TRACKS::List Projects"
       @count = current_user.projects.size 
-      @active_projects = @projects.select{ |p| p.active? }
-      @hidden_projects = @projects.select{ |p| p.hidden? }
-      @completed_projects = @projects.select{ |p| p.completed? }
+      @active_projects = @projects.active
+      @hidden_projects = @projects.hidden
+      @completed_projects = @projects.completed
       @no_projects = @projects.empty?
       @projects.cache_note_counts
       @new_project = current_user.projects.build
@@ -200,11 +211,11 @@ class ProjectsController < ApplicationController
 
   def render_projects_mobile
     lambda do
-      @active_projects = @projects.select{ |p| p.active? }
-      @hidden_projects = @projects.select{ |p| p.hidden? }
-      @completed_projects = @projects.select{ |p| p.completed? }
+      @active_projects = @projects.active
+      @hidden_projects = @projects.hidden
+      @completed_projects = @projects.completed
       @down_count = @active_projects.size + @hidden_projects.size + @completed_projects.size 
-      cookies[:mobile_url]=request.request_uri
+      cookies[:mobile_url]= {:value => request.request_uri, :secure => TRACKS_COOKIES_SECURE}
       render :action => 'index_mobile'
     end
   end
@@ -217,7 +228,7 @@ class ProjectsController < ApplicationController
         @project_default_context = "The default context for this project is "+
           @project.default_context.name
       end
-      cookies[:mobile_url]=request.request_uri
+      cookies[:mobile_url]= {:value => request.request_uri, :secure => TRACKS_COOKIES_SECURE}
       @mobile_from_project = @project.id
       render :action => 'project_mobile'
     end

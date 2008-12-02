@@ -25,7 +25,7 @@ class ProjectsControllerTest < TodoContainerControllerTestBase
     assert_equal 1, assigns['deferred'].size
 
     t = p.not_done_todos[0]
-    t.show_from = 1.days.from_now.utc.to_date
+    t.show_from = 1.days.from_now.utc
     t.save!
     
     get :show, :id => p.to_param
@@ -217,6 +217,15 @@ class ProjectsControllerTest < TodoContainerControllerTestBase
     login_as nil
     get :index, { :format => "txt", :token => users(:admin_user).token }
     assert_response :ok
+  end
+
+  def test_actionize_sorts_active_projects_by_number_of_tasks
+    login_as :admin_user
+    u = users(:admin_user)
+    post :actionize, :state => "active", :format => 'js'
+    assert_equal 1, projects(:gardenclean).position
+    assert_equal 2, projects(:moremoney).position
+    assert_equal 3, projects(:timemachine).position
   end
   
   def test_alphabetize_sorts_active_projects_alphabetically

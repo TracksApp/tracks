@@ -1,5 +1,6 @@
 if @saved  
   page[@todo].remove
+  page.show "empty_"+@original_item_due_id if @old_due_empty
   if @todo.completed?
 
     # completed todos move from their context to the completed container
@@ -23,10 +24,12 @@ if @saved
         page.insert_html :bottom, item_container_id(@new_recurring_todo), :partial => 'todos/todo', :locals => { :todo => @new_recurring_todo, :parent_container_type => parent_container_type }
         page.visual_effect :highlight, dom_id(@new_recurring_todo, 'line'), {'startcolor' => "'#99ff99'"}      
       else
-        page.notify :notice, "There is no next action after the recurring action you just finished. The recurrence is completed", 6.0 if @new_recurring_todo.nil?
+        if @todo.recurring_todo.todos.active.count == 0
+          page.notify :notice, "There is no next action after the recurring action you just finished. The recurrence is completed", 6.0 if @new_recurring_todo.nil?
+        end
       end
     end
-    
+        
   else
     # todo is activated from completed container
     page.call "todoItems.ensureVisibleWithEffectAppear", item_container_id(@todo)

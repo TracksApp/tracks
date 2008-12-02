@@ -2,7 +2,7 @@
 
 * Homepage: http://www.rousette.org.uk/projects/
 * Author: bsag (http://www.rousette.org.uk/)
-* Contributors: Nicholas Lee, Lolindrath, Jim Ray, Arnaud Limbourg, Timothy Martens, Luke Melia, John Leonard, Jim Strupp, Eric Lesh, Damien Cirotteau, Janet Riley, Reinier Balt, Jacqui Maher, James Kebinger, Jeffrey Gipson
+* Contributors: Nicholas Lee, Lolindrath, Jim Ray, Arnaud Limbourg, Timothy Martens, Luke Melia, John Leonard, Jim Strupp, Eric Lesh, Damien Cirotteau, Janet Riley, Reinier Balt, Jacqui Maher, James Kebinger, Jeffrey Gipson, Eric Allen
 * Version: 1.6
 * Copyright: (cc) 2004-2008 rousette.org.uk
 * License: GNU GPL
@@ -12,6 +12,21 @@ Main project site: http://www.rousette.org.uk/projects/
 Trac (for bug reports and feature requests): http://dev.rousette.org.uk/report/6
 
 Wiki (deprecated - please use Trac): http://www.rousette.org.uk/projects/wiki/
+
+== Version 1.7dev
+
+New features:
+1. Recurring todos
+2. Cleanup of feed page and add feed for starred actions
+3. Initial importer of yaml files (still very EXPERIMENTAL)
+4. New interface to import an email / sms messages into Tracks (needs an email server on the same server as Tracks)
+5. New buttons to quickly defer an action 1 or 7 days
+6. Calendar view to review due actions, includes iCal feed to use in your calendar app (tested with Google Calendar, Evolution, Outlook 2007) 
+7. You can now sort projects on number of active todos
+
+Under the hood:
+1. Move selenium tests to RSpec 
+2. Bugfixes
 
 == Version 1.6
 1. upgrade to rails 2.0.2

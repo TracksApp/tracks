@@ -1,5 +1,6 @@
 if @saved
   page[@todo].remove
+  page.show "empty_"+@original_item_due_id if @old_due_empty
   page['badge_count'].replace_html @down_count
   
   # remove context if empty

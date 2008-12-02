@@ -16,9 +16,6 @@
 <script type="text/javascript">
 window.onload=function(){
   Nifty("div#todo_new_action_container","normal");
-  Nifty("div#project_new_project_container","normal");
-  Nifty("div#context_new_container","normal");
-  Nifty("div#recurring_new_container","normal");
   if ($('flash').visible()) { new Effect.Fade("flash",{duration:5.0}); }
 }
 </script>
@@ -49,7 +46,7 @@ window.onload=function(){
   <li><%= navigation_link("Home", home_path, {:accesskey => "t", :title => "Home"} ) %></li>
   <li><%= navigation_link( "Contexts", contexts_path, {:accesskey=>"c", :title=>"Contexts"} ) %></li>
   <li><%= navigation_link( "Projects", projects_path, {:accesskey=>"p", :title=>"Projects"} ) %></li>
-  <li><%= navigation_link( "Tickler", tickler_path, :title => "Tickler" ) %></li>
+  <li><%= navigation_link( "Tickler", tickler_path, {:accesskey =>"k", :title => "Tickler"} ) %></li>
   <li><%= navigation_link( "Done", done_path, {:accesskey=>"d", :title=>"Completed"} ) %></li>
   <li><%= navigation_link( "Notes", notes_path, {:accesskey => "o", :title => "Show all notes"} ) %></li>
   <li><%= navigation_link( "Preferences", preferences_path, {:accesskey => "u", :title => "Show my preferences"} ) %></li>
@@ -57,6 +54,7 @@ window.onload=function(){
   <% if current_user.is_admin? -%>
     <li><%= navigation_link("Admin", users_path, {:accesskey => "a", :title => "Add or delete users"} ) %></li>
   <% end -%>
+  <li><%= navigation_link(image_tag("x-office-calendar.png", :size => "16X16", :border => 0), calendar_path, :title => "Calendar of due actions" ) %></li>
   <li><%= navigation_link(image_tag("recurring_menu16x16.png", :size => "16X16", :border => 0), {:controller => "recurring_todos", :action => "index"}, :title => "Manage recurring actions" ) %></li>
   <li><%= navigation_link(image_tag("feed-icon.png", :size => "16X16", :border => 0), {:controller => "feedlist", :action => "index"}, :title => "See a list of available feeds" ) %></li>
   <li><%= navigation_link(image_tag("menustar.gif", :size => "16X16", :border => 0), tag_path("starred"), :title => "See your starred actions" ) %></li>

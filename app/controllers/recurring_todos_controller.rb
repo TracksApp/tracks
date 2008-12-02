@@ -6,8 +6,10 @@ class RecurringTodosController < ApplicationController
   append_before_filter :get_recurring_todo_from_param, :only => [:destroy, :toggle_check, :toggle_star, :edit, :update]
 
   def index
-    @recurring_todos = current_user.recurring_todos.find(:all, :conditions => ["state = ?", "active"])
-    @completed_recurring_todos = current_user.recurring_todos.find(:all, :conditions => ["state = ?", "completed"])
+    find_and_inactivate
+
+    @recurring_todos = current_user.recurring_todos.active
+    @completed_recurring_todos = current_user.recurring_todos.completed
     @no_recurring_todos = @recurring_todos.size == 0
     @no_completed_recurring_todos = @completed_recurring_todos.size == 0
     @count = @recurring_todos.size 
@@ -36,8 +38,8 @@ class RecurringTodosController < ApplicationController
     # the form for a new recurring todo and the edit form are on the same page.
     # Same goes for start_from and end_date
     params['recurring_todo']['recurring_period']=params['recurring_edit_todo']['recurring_period']
-    params['recurring_todo']['end_date']=params['recurring_todo_edit_end_date']
-    params['recurring_todo']['start_from']=params['recurring_todo_edit_start_from']
+    params['recurring_todo']['end_date']=parse_date_per_user_prefs(params['recurring_todo_edit_end_date'])
+    params['recurring_todo']['start_from']=parse_date_per_user_prefs(params['recurring_todo_edit_start_from'])
     
     # update project
     if params['recurring_todo']['project_id'].blank? && !params['project_name'].nil?
@@ -84,6 +86,9 @@ class RecurringTodosController < ApplicationController
   
   def create
     p = RecurringTodoCreateParamsHelper.new(params)
+    p.attributes['end_date']=parse_date_per_user_prefs(p.attributes['end_date'])
+    p.attributes['start_from']=parse_date_per_user_prefs(p.attributes['start_from'])
+
     @recurring_todo = current_user.recurring_todos.build(p.selector_attributes)
     @recurring_todo.update_attributes(p.attributes)
 
@@ -113,7 +118,7 @@ class RecurringTodosController < ApplicationController
       else
         @message += " / did not create todo"
       end
-      @count = current_user.recurring_todos.count(:all, :conditions => ["state = ?", "active"])
+      @count = current_user.recurring_todos.active.count
     else
       @message = "Error saving recurring todo"
     end    
@@ -126,7 +131,7 @@ class RecurringTodosController < ApplicationController
   def destroy
     
     # remove all references to this recurring todo
-    @todos = current_user.todos.find(:all, {:conditions => ["recurring_todo_id = ?", params[:id]]})
+    @todos = @recurring_todo.todos
     @number_of_todos = @todos.size
     @todos.each do |t|
       t.recurring_todo_id = nil
@@ -135,7 +140,7 @@ class RecurringTodosController < ApplicationController
     
     # delete the recurring todo
     @saved = @recurring_todo.destroy
-    @remaining = current_user.recurring_todos.count(:all)
+    @remaining = current_user.recurring_todos.count
     
     respond_to do |format|
       
@@ -158,14 +163,15 @@ class RecurringTodosController < ApplicationController
   def toggle_check
     @saved = @recurring_todo.toggle_completion!
 
-    @count = current_user.recurring_todos.count(:all, :conditions => ["state = ?", "active"])
+    @count = current_user.recurring_todos.active.count
     @remaining = @count
 
     if @recurring_todo.active?
-      @remaining = current_user.recurring_todos.count(:all, :conditions => ["state = ?", 'completed']) 
+      @remaining = current_user.recurring_todos.completed.count
       
       # from completed back to active -> check if there is an active todo
-      @active_todos = current_user.todos.count(:all, {:conditions => ["state = ? AND recurring_todo_id = ?", 'active',params[:id]]})
+      # current_user.todos.count(:all, {:conditions => ["state = ? AND recurring_todo_id = ?", 'active',params[:id]]})
+      @active_todos = @recurring_todo.todos.active.count
       # create todo if there is no active todo belonging to the activated
       # recurring_todo
       @new_recurring_todo = create_todo_from_recurring_todo(@recurring_todo) if @active_todos == 0
@@ -251,6 +257,12 @@ class RecurringTodosController < ApplicationController
   
   def get_recurring_todo_from_param
     @recurring_todo = current_user.recurring_todos.find(params[:id])
+  end
+
+  def find_and_inactivate
+    # find active recurring todos without active todos and inactivate them
+    recurring_todos = current_user.recurring_todos.active
+    recurring_todos.each { |rt| rt.toggle_completion! if rt.todos.not_completed.count == 0}
   end
   
 end

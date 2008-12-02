@@ -1,0 +1,68 @@
+<div id="display_box">
+  
+  <div class="container">
+    <h2>Due today</h2>
+    <div id="empty_due_today" <%= "style=\"display:none\"" unless @due_today.empty? %>>
+      No actions due today
+    </div>
+    <div id="due_today">
+      <%= render :partial => "todos/todo", :collection => @due_today %>
+    </div>
+  </div>
+  
+  <div class="container">
+    <h2>Due in rest of this week</h2>
+    <div id="empty_due_this_week" <%= "style=\"display:none\"" unless @due_this_week.empty? %>>
+      No actions due in rest of this week
+    </div>
+    <div id="due_this_week">
+      <%= render :partial => "todos/todo", :collection => @due_this_week %>
+    </div>
+  </div>
+  
+  <div class="container">
+    <h2>Due next week</h2>
+    <div id="empty_due_next_week" <%= "style=\"display:none\"" unless @due_next_week.empty? %>>
+      No actions due in next week
+    </div>
+    <div id="due_next_week">
+      <%= render :partial => "todos/todo", :collection => @due_next_week %>
+    </div>
+  </div>
+  
+  <div class="container">
+    <h2>Due in rest of <%= Time.zone.now.strftime("%B") %> </h2>
+    <div id="empty_due_this_month" <%= "style=\"display:none\"" unless @due_this_month.empty? %>>
+      No actions due in rest of this month
+    </div>
+    <div id="due_this_month">
+      <%= render :partial => "todos/todo", :collection => @due_this_month %>
+    </div>
+  </div>
+  
+  <div class="container">
+    <h2>Due in <%= (Time.zone.now+1.month).strftime("%B") %> and later</h2>
+    <div id="empty_due_after_this_month" <%= "style=\"display:none\"" unless @due_after_this_month.empty? %>>
+      No actions due after this month
+    </div>
+    <div id="due_after_this_month">
+      <%= render :partial => "todos/todo", :collection => @due_after_this_month %>
+    </div>
+  </div>
+  
+</div><!-- End of display_box -->
+<div class="input_box" id="input_box">
+  <!--
+  <input class="hide_tickler" id="hide_tickler" type="checkbox" tabindex="5" name="hide_tickler" checked="true"/>
+  <label for="hide_tickler"> Show actions in tickler</label>
+  <br/><br/>
+    -->
+  <p><%= link_to('<span class="feed">iCal</span>', {:format => 'ics', :token => current_user.token}, :title => "iCal feed" ) %>
+  - Get this calendar in iCal format</p>
+</div>
+
+<%  
+apply_behavior 'input.hide_tickler:click', :prevent_default => true do |page|
+  page << "alert('hiding action in tickler from calendar is not yet implemented');"
+end
+%>

@@ -95,7 +95,7 @@ end
   completed_at: ~
   user_id: 1
 
-7:
+book:
   id: 7
   context_id: 6
   project_id: 3
@@ -230,3 +230,17 @@ end
   completed_at: ~
   show_from: <%= next_week %>
   user_id: 2
+
+18:
+  id: 18
+  user_id: 1
+  context_id: 1
+  project_id: 2
+  description: Call Bill Gates every day
+  notes: ~
+  state: active
+  created_at: <%= last_week %>
+  due: <%= last_week %>
+  completed_at: ~
+  show_from: ~
+  recurring_todo_id: 1

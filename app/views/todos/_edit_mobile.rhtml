@@ -33,8 +33,8 @@ end %>
 <h2><label for="tag_list">Tags (separate with commas)</label></h2>
 <%= text_field_tag "tag_list", @tag_list_text, :size => 30, :tabindex => 6 %> 
 <h2><label for="todo_due">Due</label></h2>
-<%= date_select("todo", "due", :order => [:day, :month, :year],
-                    :start_year => this_year, :include_blank => true) %>
+<%= date_select("todo", "due", {:order => [:day, :month, :year],
+                    :start_year => this_year, :include_blank => true}, :tabindex => 7) %>
 <h2><label for="todo_show_from">Show from</label></h2>
-<%= date_select("todo", "show_from", :order => [:day, :month, :year], 
-                    :start_year => this_year, :include_blank => true) %>
+<%= date_select("todo", "show_from", {:order => [:day, :month, :year], 
+                    :start_year => this_year, :include_blank => true}, :tabindex => 8) %>

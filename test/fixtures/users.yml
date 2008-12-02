@@ -28,3 +28,13 @@ ldap_user:
   first_name: John
   last_name: Deere
   auth_type: ldap
+
+sms_user:
+  id: 4
+  login: sms_user
+  crypted_password: <%= Digest::SHA1.hexdigest("#{Tracks::Config.salt}--sesame--") %>
+  token: <%= Digest::SHA1.hexdigest("sms_userSun Feb 19 14:42:45 GMT 20060.408173979260027") %>
+  is_admin: false
+  first_name: SMS
+  last_name: Tester
+  auth_type: database

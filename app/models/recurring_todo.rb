@@ -4,6 +4,8 @@ class RecurringTodo < ActiveRecord::Base
   belongs_to :project
   belongs_to :user
 
+  has_many :todos
+
   attr_protected :user
 
   acts_as_state_machine :initial => :active, :column => 'state'
@@ -12,13 +14,16 @@ class RecurringTodo < ActiveRecord::Base
     t[:show_from], t.completed_at = nil, nil 
     t.occurences_count = 0
   }
-  state :completed, :enter => Proc.new { |t| t.completed_at = Time.now.utc }, :exit => Proc.new { |t| t.completed_at = nil }
+  state :completed, :enter => Proc.new { |t| t.completed_at = Time.zone.now }, :exit => Proc.new { |t| t.completed_at = nil }
   
   validates_presence_of :description
   validates_length_of :description, :maximum => 100
   validates_length_of :notes, :maximum => 60000, :allow_nil => true 
 
   validates_presence_of :context
+
+  named_scope :active, :conditions => { :state => 'active'}
+  named_scope :completed, :conditions => { :state => 'completed'}
 
   event :complete do
     transitions :to => :completed, :from => [:active]
@@ -29,7 +34,7 @@ class RecurringTodo < ActiveRecord::Base
   end
   
   # the following recurrence patterns can be stored:
-  # 
+  #
   # daily todos - recurrence_period = 'daily'
   #   every nth day - nth stored in every_other1
   #   every work day - only_work_days = true
@@ -243,7 +248,7 @@ class RecurringTodo < ActiveRecord::Base
     if self.recurrence_selector == 0
       return self.every_other2
     else
-      return Time.now.month
+      return Time.zone.now.month
     end
   end
 
@@ -257,7 +262,7 @@ class RecurringTodo < ActiveRecord::Base
     if self.recurrence_selector == 1
       return self.every_other2
     else
-      return Time.now.month
+      return Time.zone.now.month
     end
   end
   
@@ -392,13 +397,21 @@ class RecurringTodo < ActiveRecord::Base
     # previous is the due date of the previous todo or it is the completed_at
     # date when the completed_at date is after due_date (i.e. you did not make
     # the due date in time)
-    # 
+    #
     # assumes self.recurring_period == 'daily'
+  
+    # determine start
     if previous.nil?
-      start = self.start_from.nil? ? Time.now.utc : self.start_from
+      start = self.start_from.nil? ? Time.zone.now : self.start_from
     else
       # use the next day
       start = previous + 1.day
+
+      unless self.start_from.nil?
+        # check if the start_from date is later than previous. If so, use
+        # start_from as start to search for next date
+        start = self.start_from if self.start_from > previous 
+      end
     end
 
     if self.only_work_days
@@ -419,8 +432,9 @@ class RecurringTodo < ActiveRecord::Base
   end
   
   def get_weekly_date(previous)
+    # determine start
     if previous == nil
-      start = self.start_from.nil? ? Time.now.utc : self.start_from
+      start = self.start_from.nil? ? Time.zone.now : self.start_from
     else
       start = previous + 1.day
       if start.wday() == 0 
@@ -428,7 +442,13 @@ class RecurringTodo < ActiveRecord::Base
         # that week
         start += self.every_other1.week
       end
+      unless self.start_from.nil?
+        # check if the start_from date is later than previous. If so, use
+        # start_from as start to search for next date
+        start = self.start_from if self.start_from > previous 
+      end
     end
+    
     # check if there are any days left this week for the next todo
     start.wday().upto 6 do |i|
       return start + (i-start.wday()).days unless self.every_day[i,1] == ' '
@@ -447,29 +467,44 @@ class RecurringTodo < ActiveRecord::Base
   end
   
   def get_monthly_date(previous)
-    if previous.nil?
-      start = self.start_from.nil? ? Time.now.utc : self.start_from
-    else
-      start = previous
-    end
+    
+    start = determine_start(previous)
     day = self.every_other1
     n = self.every_other2
-    
+
     case self.recurrence_selector
     when 0 # specific day of the month
-      if start.mday >= day  
+      if start.mday >= day
         # there is no next day n in this month, search in next month
-        start += n.months
+        #  
+        #  start += n.months
+        # 
+        # The above seems to not work. Fiddle with timezone. Looks like we hit a
+        # bug in rails here where 2008-12-01 +0100 plus 1.month becomes
+        # 2008-12-31 +0100. For now, just calculate in UTC and convert back to
+        # local timezone.
+        #  
+        #  TODO: recheck if future rails versions have this problem too
+        start = Time.utc(start.year, start.month, start.day)+n.months
+        start = Time.zone.local(start.year, start.month, start.day)
+
         # go back to day
       end
-      return Time.utc(start.year, start.month, day)
+      return Time.zone.local(start.year, start.month, day)
       
     when 1 # relative weekday of a month
       the_next = get_xth_day_of_month(self.every_other3, self.every_count, start.month, start.year)
       if the_next.nil? || the_next <= start
         # the nth day is already passed in this month, go to next month and try
         # again
-        the_next = the_next+n.months
+
+        # fiddle with timezone. Looks like we hit a bug in rails here where
+        # 2008-12-01 +0100 plus 1.month becomes 2008-12-31 +0100. For now, just
+        # calculate in UTC and convert back to local timezone.
+        #  TODO: recheck if future rails versions have this problem too
+        the_next = Time.utc(the_next.year, the_next.month, the_next.day)+n.months
+        the_next = Time.zone.local(the_next.year, the_next.month, the_next.day)
+
         # TODO: if there is still no match, start will be set to nil. if we ever
         # support 5th day of the month, we need to handle this case
         the_next = get_xth_day_of_month(self.every_other3, self.every_count, the_next.month, the_next.year)
@@ -483,14 +518,18 @@ class RecurringTodo < ActiveRecord::Base
   
   def get_xth_day_of_month(x, weekday, month, year)
     if x == 5
-      # last -> count backwards
+      # last -> count backwards. use UTC to avoid strange timezone oddities
+      # where last_day -= 1.day seems to shift tz+0100 to tz+0000
       last_day = Time.utc(year, month, Time.days_in_month(month))
       while last_day.wday != weekday
         last_day -= 1.day
       end
-      return last_day
+      # convert back to local timezone
+      return Time.zone.local(last_day.year, last_day.month, last_day.day)
     else
-      # 1-4th -> count upwards
+      # 1-4th -> count upwards last -> count backwards. use UTC to avoid strange
+      # timezone oddities where last_day -= 1.day seems to shift tz+0100 to
+      # tz+0000
       start = Time.utc(year,month,1)
       n = x
       while n > 0
@@ -500,32 +539,31 @@ class RecurringTodo < ActiveRecord::Base
         n -= 1
         start += 1.day unless n==0 
       end
-      return start
+      # convert back to local timezone
+      return Time.zone.local(start.year, start.month, start.day)
     end
   end
   
   def get_yearly_date(previous)
-    if previous.nil?
-      start = self.start_from.nil? ? Time.now.utc : self.start_from
-    else
-      start = previous
-    end
-
+    start = determine_start(previous)
     day = self.every_other1
     month = self.every_other2
     
     case self.recurrence_selector
     when 0 # specific day of a specific month
-      # if there is no next month n in this year, search in next year
-      if start.month >= month
-        start = Time.utc(start.year+1, month, 1) if start.day >= day
-        start = Time.utc(start.year, month, 1) if start.day <= day
+      if start.month > month || (start.month == month && start.day >= day)
+        # if there is no next month n and day m in this year, search in next
+        # year
+        start = Time.zone.local(start.year+1, month, 1) 
+      else
+        # if there is a next month n, stay in this year
+        start = Time.zone.local(start.year, month, 1) 
       end
-      return Time.utc(start.year, month, day)
+      return Time.zone.local(start.year, month, day)
       
     when 1 # relative weekday of a specific month
       # if there is no next month n in this year, search in next year
-      the_next = start.month > month ? Time.utc(start.year+1, month, 1) : start
+      the_next = start.month > month ? Time.zone.local(start.year+1, month, 1) : start
       
       # get the xth day of the month
       the_next = get_xth_day_of_month(self.every_other3, self.every_count, month, the_next.year)
@@ -590,6 +628,21 @@ class RecurringTodo < ActiveRecord::Base
   
   def validate
     errors.add("", "At least one day must be selected in the weekly pattern") if self.every_day == '       '
+  end
+  
+  def determine_start(previous)
+    if previous.nil?
+      start = self.start_from.nil? ? Time.zone.now : self.start_from
+    else
+      start = previous
+
+      unless self.start_from.nil?
+        # check if the start_from date is later than previous. If so, use
+        # start_from as start to search for next date
+        start = self.start_from if self.start_from > previous 
+      end
+    end
+    return start
   end
   
 end

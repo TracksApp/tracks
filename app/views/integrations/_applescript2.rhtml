@@ -8,9 +8,9 @@ the newly created action.
 *)
 
 (* Edit appropriately for your setup *)
-property myUsername to "<%= current_user.login %>"
-property myToken to "<%= current_user.token %>"
-property myContextID to <%= context.id %> (* <%= context.name %> *)
+property myUsername : "<%= current_user.login %>"
+property myToken : "<%= current_user.token %>"
+property myContextID : <%= context.id %> (* <%= context.name %> *)
 
 -- this string is used when the message subject is empty
 property emptySubject : "No Subject Specified"

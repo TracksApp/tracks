@@ -113,3 +113,21 @@ someday_maybe:
   user_id: 1
   created_at: <%= today %>
   updated_at: <%= today %>
+
+inbox:
+  id: 13
+  name: Inbox
+  position: 1
+  hide: false
+  user_id: 4
+  created_at: <%= today %>
+  updated_at: <%= today %>
+
+anothercontext:
+  id: 14
+  name: anothercontext
+  position: 2
+  hide: false
+  user_id: 4
+  created_at: <%= today %>
+  updated_at: <%= today %>
