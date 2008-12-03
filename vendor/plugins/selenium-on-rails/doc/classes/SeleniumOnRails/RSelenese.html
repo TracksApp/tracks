@@ -104,8 +104,8 @@ of available commands.
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000084">new</a>&nbsp;&nbsp;
-      <a href="#M000085">render</a>&nbsp;&nbsp;
+      <a href="#M000145">new</a>&nbsp;&nbsp;
+      <a href="#M000146">render</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -140,23 +140,23 @@ of available commands.
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000084" class="method-detail">
-        <a name="M000084"></a>
+      <div id="method-M000145" class="method-detail">
+        <a name="M000145"></a>
 
         <div class="method-heading">
-          <a href="#M000084" class="method-signature">
+          <a href="#M000145" class="method-signature">
           <span class="method-name">new</span><span class="method-args">(view)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Create a new <a href="RSelenese.html">RSelenese</a> renderer bound to
-<em>view</em>.
+Create a <a href="RSelenese.html#M000145">new</a> <a
+href="RSelenese.html">RSelenese</a> renderer bound to <em>view</em>.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000084-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000084-source">
+            onclick="toggleCode('M000145-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000145-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/selenium_on_rails/rselenese.rb, line 17</span>
 17:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span> <span class="ruby-identifier">view</span>
@@ -170,11 +170,11 @@ Create a new <a href="RSelenese.html">RSelenese</a> renderer bound to
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000085" class="method-detail">
-        <a name="M000085"></a>
+      <div id="method-M000146" class="method-detail">
+        <a name="M000146"></a>
 
         <div class="method-heading">
-          <a href="#M000085" class="method-signature">
+          <a href="#M000146" class="method-signature">
           <span class="method-name">render</span><span class="method-args">(template, local_assigns)</span>
           </a>
         </div>
@@ -184,14 +184,14 @@ Create a new <a href="RSelenese.html">RSelenese</a> renderer bound to
 Render <em>template</em> using <em>local_assigns</em>.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000085-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000085-source">
+            onclick="toggleCode('M000146-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000146-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/selenium_on_rails/rselenese.rb, line 23</span>
 23:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">render</span> <span class="ruby-identifier">template</span>, <span class="ruby-identifier">local_assigns</span>
 24:     <span class="ruby-identifier">title</span> = (<span class="ruby-ivar">@view</span>.<span class="ruby-identifier">assigns</span>[<span class="ruby-value str">'page_title'</span>] <span class="ruby-keyword kw">or</span> <span class="ruby-identifier">local_assigns</span>[<span class="ruby-value str">'page_title'</span>])
 25:     <span class="ruby-identifier">table</span>(<span class="ruby-identifier">title</span>) <span class="ruby-keyword kw">do</span>
-26:       <span class="ruby-identifier">test</span> = <span class="ruby-keyword kw">self</span> <span class="ruby-comment cmt">#to enable test.command</span>
+26:       <span class="ruby-identifier">test</span> = <span class="ruby-keyword kw">self</span> <span class="ruby-comment cmt">#to enable test.command</span>
 27: 
 28:       <span class="ruby-identifier">assign_locals_code</span> = <span class="ruby-value str">''</span>
 29:       <span class="ruby-identifier">local_assigns</span>.<span class="ruby-identifier">each_key</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">key</span><span class="ruby-operator">|</span> <span class="ruby-identifier">assign_locals_code</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;#{key} = local_assigns[#{key.inspect}];&quot;</span>}

@@ -14,11 +14,14 @@ require 'models/job'
 require 'models/subscriber'
 require 'models/subscription'
 require 'models/book'
+require 'models/developer'
+require 'models/project'
 
 class EagerAssociationTest < ActiveRecord::TestCase
-  fixtures :posts, :comments, :authors, :categories, :categories_posts,
+  fixtures :posts, :comments, :authors, :author_addresses, :categories, :categories_posts,
             :companies, :accounts, :tags, :taggings, :people, :readers,
-            :owners, :pets, :author_favorites, :jobs, :references, :subscribers, :subscriptions, :books
+            :owners, :pets, :author_favorites, :jobs, :references, :subscribers, :subscriptions, :books,
+            :developers, :projects, :developers_projects
 
   def test_loading_with_one_association
     posts = Post.find(:all, :include => :comments)
@@ -31,6 +34,12 @@ class EagerAssociationTest < ActiveRecord::TestCase
     assert post.comments.include?(comments(:greetings))
 
     posts = Post.find(:all, :include => :last_comment)
+    post = posts.find { |p| p.id == 1 }
+    assert_equal Post.find(1).last_comment, post.last_comment
+  end
+
+  def test_loading_with_one_association_with_non_preload
+    posts = Post.find(:all, :include => :last_comment, :order => 'comments.id DESC')
     post = posts.find { |p| p.id == 1 }
     assert_equal Post.find(1).last_comment, post.last_comment
   end
@@ -102,9 +111,56 @@ class EagerAssociationTest < ActiveRecord::TestCase
     end
   end
 
+  def test_finding_with_includes_on_has_many_association_with_same_include_includes_only_once
+    author_id = authors(:david).id
+    author = assert_queries(3) { Author.find(author_id, :include => {:posts_with_comments => :comments}) } # find the author, then find the posts, then find the comments
+    author.posts_with_comments.each do |post_with_comments|
+      assert_equal post_with_comments.comments.length, post_with_comments.comments.count
+      assert_equal nil, post_with_comments.comments.uniq!
+    end
+  end
+
+  def test_finding_with_includes_on_has_one_assocation_with_same_include_includes_only_once
+    author = authors(:david)
+    post = author.post_about_thinking_with_last_comment
+    last_comment = post.last_comment
+    author = assert_queries(3) { Author.find(author.id, :include => {:post_about_thinking_with_last_comment => :last_comment})} # find the author, then find the posts, then find the comments
+    assert_no_queries do
+      assert_equal post, author.post_about_thinking_with_last_comment
+      assert_equal last_comment, author.post_about_thinking_with_last_comment.last_comment
+    end
+  end
+
+  def test_finding_with_includes_on_belongs_to_association_with_same_include_includes_only_once
+    post = posts(:welcome)
+    author = post.author
+    author_address = author.author_address
+    post = assert_queries(3) { Post.find(post.id, :include => {:author_with_address => :author_address}) } # find the post, then find the author, then find the address
+    assert_no_queries do
+      assert_equal author, post.author_with_address
+      assert_equal author_address, post.author_with_address.author_address
+    end
+  end
+
+  def test_finding_with_includes_on_null_belongs_to_association_with_same_include_includes_only_once
+    post = posts(:welcome)
+    post.update_attributes!(:author => nil)
+    post = assert_queries(2) { Post.find(post.id, :include => {:author_with_address => :author_address}) } # find the post, then find the author which is null so no query for the address
+    assert_no_queries do
+      assert_equal nil, post.author_with_address
+    end
+  end
+
   def test_loading_from_an_association
     posts = authors(:david).posts.find(:all, :include => :comments, :order => "posts.id")
     assert_equal 2, posts.first.comments.size
+  end
+
+  def test_loading_from_an_association_that_has_a_hash_of_conditions
+    assert_nothing_raised do
+      Author.find(:all, :include => :hello_posts_with_hash_conditions)
+    end
+    assert !Author.find(authors(:david).id, :include => :hello_posts_with_hash_conditions).hello_posts.empty?
   end
 
   def test_loading_with_no_associations
@@ -251,12 +307,21 @@ class EagerAssociationTest < ActiveRecord::TestCase
   end
 
   def test_eager_with_has_many_through
-    posts_with_comments = people(:michael).posts.find(:all, :include => :comments)
-    posts_with_author = people(:michael).posts.find(:all, :include => :author )
-    posts_with_comments_and_author = people(:michael).posts.find(:all, :include => [ :comments, :author ])
+    posts_with_comments = people(:michael).posts.find(:all, :include => :comments, :order => 'posts.id')
+    posts_with_author = people(:michael).posts.find(:all, :include => :author, :order => 'posts.id')
+    posts_with_comments_and_author = people(:michael).posts.find(:all, :include => [ :comments, :author ], :order => 'posts.id')
     assert_equal 2, posts_with_comments.inject(0) { |sum, post| sum += post.comments.size }
     assert_equal authors(:david), assert_no_queries { posts_with_author.first.author }
     assert_equal authors(:david), assert_no_queries { posts_with_comments_and_author.first.author }
+  end
+
+  def test_eager_with_has_many_through_a_belongs_to_association
+    author = authors(:mary)
+    post = Post.create!(:author => author, :title => "TITLE", :body => "BODY")
+    author.author_favorites.create(:favorite_author_id => 1)
+    author.author_favorites.create(:favorite_author_id => 2)
+    posts_with_author_favorites = author.posts.find(:all, :include => :author_favorites)
+    assert_no_queries { posts_with_author_favorites.first.author_favorites.first.author_id }
   end
 
   def test_eager_with_has_many_through_an_sti_join_model
@@ -556,6 +621,13 @@ class EagerAssociationTest < ActiveRecord::TestCase
     assert_nothing_raised { Post.find(:all, :include => 'comments') }
   end
 
+  def test_eager_with_floating_point_numbers
+    assert_queries(2) do
+      # Before changes, the floating point numbers will be interpreted as table names and will cause this to run in one query
+      Comment.find :all, :conditions => "123.456 = 123.456", :include => :post
+    end
+  end
+
   def test_preconfigured_includes_with_belongs_to
     author = posts(:welcome).author_with_posts
     assert_no_queries {assert_equal 5, author.posts.size}
@@ -595,7 +667,7 @@ class EagerAssociationTest < ActiveRecord::TestCase
   end
 
   def test_count_with_include
-    if current_adapter?(:SQLServerAdapter, :SybaseAdapter)
+    if current_adapter?(:SybaseAdapter)
       assert_equal 3, authors(:david).posts_with_comments.count(:conditions => "len(comments.body) > 15")
     elsif current_adapter?(:OpenBaseAdapter)
       assert_equal 3, authors(:david).posts_with_comments.count(:conditions => "length(FETCHBLOB(comments.body)) > 15")
@@ -608,5 +680,13 @@ class EagerAssociationTest < ActiveRecord::TestCase
     assert_queries(2) do #should not do 1 query per subclass
       Comment.find :all, :include => :post
     end
+  end
+
+  def test_conditions_on_join_table_with_include_and_limit
+    assert_equal 3, Developer.find(:all, :include => 'projects', :conditions => 'developers_projects.access_level = 1', :limit => 5).size
+  end
+
+  def test_order_on_join_table_with_include_and_limit
+    assert_equal 5, Developer.find(:all, :include => 'projects', :order => 'developers_projects.joined_on DESC', :limit => 5).size
   end
 end

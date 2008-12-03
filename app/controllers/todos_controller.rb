@@ -76,7 +76,7 @@ class TodosController < ApplicationController
       format.m do
         @return_path=cookies[:mobile_url]
         # todo: use function for this fixed path
-        @return_path='/mobile' if @return_path.nil?
+        @return_path='/m' if @return_path.nil?
         if @saved
           redirect_to @return_path
         else
@@ -399,8 +399,9 @@ class TodosController < ApplicationController
       :limit => max_completed, 
       :conditions => ['taggings.user_id = ? and state = ?', current_user.id, 'completed'], 
       :order => 'todos.completed_at DESC')
-    
-    @contexts = current_user.contexts.find(:all)
+
+    @projects = current_user.projects
+    @contexts = current_user.contexts
     @contexts_to_show = @contexts.reject {|x| x.hide? }
     
     # Set count badge to number of items with this tag

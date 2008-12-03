@@ -1,0 +1,125 @@
+== REVISION 38[http://svn.openqa.org/fisheye/changelog/selenium-on-rails/?cs=38]
+
+=== change made by Flanagan
+
+* SOR-13[http://jira.openqa.org/browse/SOR-13] Corrected an omission of require statements.
+
+== REVISION 37
+
+=== change made by Flanagan
+
+* Undone an unwanted commit of modified Rakefile.
+
+== REVISION 36[http://svn.openqa.org/fisheye/changelog/selenium-on-rails/?cs=36]
+
+=== change made by Flanagan
+
+* SOR-13[http://jira.openqa.org/browse/SOR-13] Added (experimental) support for user-extensions.js.
+
+== REVISION 35[http://svn.openqa.org/fisheye/changelog/selenium-on-rails/?cs=35]
+
+=== all changes made by Jonas
+
+* SOR-12[http://jira.openqa.org/browse/SOR-12] removed all support for selenium gem
+* Selenium Core 0.8.2 is now bundled with Selenium on Rails. If you want to use other version set the 'selenium_path' in config.yml
+* Updated installation instructions for Windows
+
+== REVISION 34[http://svn.openqa.org/fisheye/changelog/selenium-on-rails/?cs=34]
+
+=== all changes made by Flanagan
+
+* SOR-11[http://jira.openqa.org/browse/SOR-11] Fixed related assertions for store_checked to use only locator parameter
+
+Warning: Users must change tests that pass two parameters (locator, pattern) to +verify_checked+, +verify_not_checked+, +assert_checked+, +assert_not_checked+, +wait_for_checked+, or +wait_for_not_checked+.
+
+Test scripts that continue to use two parameters will be broken, only one parameter, the locator, should be passed.
+
+For example, <tt>|verify_checked|my_checkbox|true|</tt> will be interpreted as <tt>|verify_checked|my_checkboxtrue||</tt> so change the test to <tt>|verify_checked|my_checkbox||</tt>
+
+* SOR-9[http://jira.openqa.org/browse/SOR-9] Added Mac OS X browsers to config.yml.example
+* SOR-10[http://jira.openqa.org/browse/SOR-10] Added support for baseUrl to acceptance_test_runner.rb as added to selenium-core 0.8.2
+* Added 'webrick' to SERVER_COMMAND in acceptance_test_runner.rb as parameters do not work with lighttpd
+* Reversed expected query string in test/renderer_testrb to make tests pass
+
+Note: On Mac OS X, at least, clear_tables comes before fixtures in the query string; this may be an environment-specific issue if the test now fails on other OSes.
+
+* Added this CHANGELOG file and amended the rake rdoc task to include it
+
+* Added support in rselenese for a long list of actions and accessors that are included in selenium-core (0.8.2 and possibly earlier) but were previously missing in selenium-on-rails.
+
+Here are the newly supported actions:
+
+Useful for debugging:
+* <tt>brake</tt> (alias for selenium-core's break, a reserved word in Ruby)
+* <tt>echo, :string</tt>
+* <tt>highlight, :locator</tt>
+
+Keyboard events:
+* <tt>alt_key_down</tt>
+* <tt>alt_key_up</tt>
+* <tt>control_key_down</tt>
+* <tt>control_key_up</tt>
+* <tt>meta_key_down</tt>
+* <tt>meta_key_up</tt>
+* <tt>shift_key_down</tt>
+* <tt>shift_key_up</tt>
+* <tt>type_keys, :locator, :string</tt>
+
+Mouse events:
+* <tt>click_at, :locator, :coord_string</tt>
+* <tt>double_click, :locator</tt>
+* <tt>double_click_at, :locator, :coord_string</tt>
+* <tt>drag_and_drop, :locator, :movements_string</tt>
+* <tt>drag_and_drop_to_object, :locator, :locator</tt>
+* <tt>mouse_down_at, :locator, :coord_string</tt>
+* <tt>mouse_move, :locator</tt>
+* <tt>mouse_move_at, :locator, :coord_string</tt>
+* <tt>mouse_out, :locator</tt>
+* <tt>mouse_up, :locator</tt>
+* <tt>mouse_up_at, :locator, :coord_string</tt>
+* <tt>set_mouse_speed, :integer</tt>
+
+Other actions:
+* <tt>create_cookie, :name_value_pair, :options_string</tt>
+* <tt>delete_cookie, :string, :string</tt>
+* <tt>open_window, :url, :integer</tt>
+* <tt>pause, :timeout</tt>
+* <tt>remove_all_selections, :locator</tt>
+* <tt>select_frame, :locator</tt>
+* <tt>set_cursor_position, :locator, :integer</tt>
+* <tt>store, :script, :variable</tt>
+* <tt>window_focus, :window_name</tt>
+* <tt>window_maximize, :window_name</tt>
+
+Here are the newly supported accessors:
+
+The following store_* accessors and their associated assert, verify and wait_for brethren are fully supported:
+* <tt>store_selected_id, :locator, :variable</tt>
+* <tt>store_selected_ids, :locator, :variable</tt>
+* <tt>store_selected_index, :locator, :variable</tt>
+* <tt>store_selected_indexes, :locator, :variable</tt>
+* <tt>store_selected_label, :locator, :variable</tt>
+* <tt>store_selected_labels, :locator, :variable</tt>
+* <tt>store_selected_value, :locator, :variable</tt>
+* <tt>store_selected_values, :locator, :variable</tt>
+* <tt>store_something_selected, :locator, :variable</tt>
+* <tt>store_all_window_ids, :variable</tt>
+* <tt>store_all_window_names, :variable</tt>
+* <tt>store_all_window_titles, :variable</tt>
+* <tt>store_cookie, :variable</tt>
+* <tt>store_log_messages, :variable</tt>
+* <tt>store_mouse_speed, :variable</tt>
+* <tt>store_cursor_position, :locator, :variable</tt>
+* <tt>store_attribute_from_all_windows, :attribute_name, :variable</tt>
+* <tt>store_element_height, :locator, :variable</tt>
+* <tt>store_element_index, :locator, :variable</tt>
+* <tt>store_element_width, :locator, :variable</tt>
+* <tt>store_element_position_left, :locator, :variable</tt>
+* <tt>store_element_position_top, :locator, :variable</tt>
+
+Only the associated assert, verify and wait_for brethren of the following store_* accessors are supported by the selenium-core, so these store_* accessors create exceptions in SOR:
+* <tt>store_ordered, :locator, :locator, :variable</tt>
+* <tt>store_error_on_next, :string</tt>
+* <tt>store_failure_on_next, :string</tt>
+* <tt>store_whether_this_frame_match_frame_expression, :string, :string, :variable</tt>
+* <tt>store_whether_this_window_match_window_expression, :string, :string, :variable</tt>

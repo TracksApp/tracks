@@ -2,7 +2,7 @@ setup :fixtures => :all
 login :as => 'admin'
 
 open '/m'
-wait_for_text 'css=h1 span.count', '10'
+wait_for_text 'css=h1 span.count', '11'
 
 click_and_wait "link=0-Add new action"
 
@@ -15,4 +15,4 @@ select "todo_due_2i", "label=January"
 select "todo_due_1i", "label=2009"
 click_and_wait "//input[@value='Create']"
 
-wait_for_text 'css=h1 span.count', '11'
+wait_for_text 'css=h1 span.count', '12'

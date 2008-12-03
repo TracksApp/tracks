@@ -56,7 +56,7 @@
     </tr>
     <tr class="top-aligned-row">
       <td><strong>Last Update:</strong></td>
-      <td>Fri Dec 08 00:50:30 GMT Standard Time 2006</td>
+      <td>Sat Feb 03 22:54:11 +0100 2007</td>
     </tr>
     </table>
   </div>
@@ -73,14 +73,13 @@
 <h2>Overview</h2>
 <p>
 Selenium on Rails provides an easy way to test Rails application with <a
-href="http://www.openqa.org/selenium-core/">Selenium Core</a>.
+href="http://www.openqa.org/selenium-core/">SeleniumCore</a>.
 </p>
 <p>
 This plugin does four things:
 </p>
 <ol>
-<li>The Selenium Core files don&#8217;t have to pollute <tt>/public</tt>, they
-can stay in the Selenium gem or in <tt>/vendor/selenium</tt>.
+<li>The Selenium Core files don&#8216;t have to pollute <tt>/public</tt>.
 
 </li>
 <li>No need to create suite files, they are generated on the fly &#8212; one
@@ -97,20 +96,19 @@ formats (see <tt>Formats</tt>).
 </ol>
 <h2>Installation</h2>
 <ol>
-<li>Selenium Core needs to be available. It could either be installed as a gem
-(<tt>gem install selenium</tt>) or in <tt>/vendor/selenium/</tt>.
-
-</li>
 <li>Install Selenium on Rails: <tt>script/plugin install <a
-href="http://svn.openqa.org/svn/selenium-on-rails/selenium-on-rails">http://svn.openqa.org/svn/selenium-on-rails/selenium-on-rails</a>/</tt>
+href="http://svn.openqa.org/svn/selenium-on-rails/selenium-on-rails">svn.openqa.org/svn/selenium-on-rails/selenium-on-rails</a></tt>
 
 </li>
-<li><em>If RedCloth is available the Selenese test cases can use it for better
-markup.</em>
+<li>If you&#8216;re on Windows, <tt>gem install win32-open3</tt>
 
 </li>
-<li>Run the Rakefile in the plugin&#8217;s directory to run the tests in order
-to see that everything works. (If RedCloth isn&#8217;t installed a few
+<li><em>If the RedCloth gem is available the Selenese test cases can use it for
+better markup.</em>
+
+</li>
+<li>Run the Rakefile in the plugin&#8216;s directory to run the tests in order
+to see that everything works. (If RedCloth isn&#8216;t installed a few
 tests will fail since they assume RedCloth is installed.)
 
 </li>
@@ -121,45 +119,12 @@ tests will fail since they assume RedCloth is installed.)
 
 </li>
 <li>Point your browser to <tt><a
-href="http://localhost:3000/selenium">http://localhost:3000/selenium</a></tt>
+href="http://localhost:3000/selenium">localhost:3000/selenium</a></tt>
 
 </li>
 <li>If everything works as expected you should see the Selenium test runner.
 The north east frame contains all your test cases (just one for now), and
 the north frame contains your test case.
-
-</li>
-</ol>
-<h3>win32-open3</h3>
-<p>
-<a href="http://raa.ruby-lang.org/project/win32-open3/">win32-open3</a> is
-needed if you&#8217;re on Windows and want to run your tests as a Rake task
-(see <tt>test:acceptance</tt>), i.e. you don&#8217;t have to install it but
-it&#8217;s recommended.
-</p>
-<p>
-You can build it from source or install the binary:
-</p>
-<ol>
-<li>Download the latest version of win32-open3, <a
-href="http://rubyforge.org/frs/download.php/8515/open3-0.2.2.so">open3-0.2.2.so</a>
-at the time of this writing.
-
-</li>
-<li>Open up irb and run this snippet: <tt>require &#8216;rbconfig&#8217;;
-include Config; puts CONFIG[&#8216;sitearchdir&#8217;]</tt>
-
-</li>
-<li>Create a <tt>win32</tt> directory under the directory you got, e.g.
-<tt>c:\ruby\lib\ruby\site_ruby\1.8\i386-msvcrt</tt>
-
-</li>
-<li>Rename the .so file to <tt>open3.so</tt> and put it in the <tt>win32</tt>
-directory.
-
-</li>
-<li>Profit! (unless you get an error when doing <tt>require
-&#8216;win32/open3&#8216;</tt>)
 
 </li>
 </ol>
@@ -181,7 +146,7 @@ commands delimited by | characters.
  |goBack|
 </pre>
 <p>
-If you don&#8217;t want to write Selenese tests by hand you can use <a
+If you don&#8216;t want to write Selenese tests by hand you can use <a
 href="http://www.openqa.org/selenium-ide/">SeleniumIDE</a> which has <a
 href="http://wiki.openqa.org/display/SIDE/SeleniumOnRails">support</a> for
 Selenese.
@@ -206,7 +171,7 @@ for available commands.
 </p>
 <h3>HTML/RHTML</h3>
 <p>
-You can write your tests in HTML/RHTML but that&#8217;s mostly useful if
+You can write your tests in HTML/RHTML but that&#8216;s mostly useful if
 you have existing tests you want to reuse.
 </p>
 <h3>Partial test cases</h3>
@@ -261,12 +226,21 @@ change this by setting <tt>environments</tt>, such as:
    - test
    - development
 </pre>
+<h3>Selenium Core path</h3>
+<p>
+If you don&#8216;t want to use the bundled Selenium Core version you can
+set <tt>selenium_path</tt> to the directory where Selenium Core is stored.
+</p>
+<pre>
+ #config.yml
+ selenium_path: 'c:\selenium'
+</pre>
 <h2><tt>test:acceptance</tt></h2>
 <p>
 You can run all your Selenium tests as a Rake task.
 </p>
 <p>
-First, if you&#8217;re on Windows, you have to make sure win32-open3 is
+First, if you&#8216;re on Windows, you have to make sure win32-open3 is
 installed. Then you have to configure which browsers you want to run, like
 this:
 </p>
@@ -277,7 +251,7 @@ this:
    ie: 'c:\Program Files\Internet Explorer\iexplore.exe'
 </pre>
 <p>
-Now you&#8217;re all set. First start a server:
+Now you&#8216;re all set. First start a server:
 </p>
 <pre>
  script/server -e test
@@ -307,17 +281,27 @@ will be stored as <tt>.html</tt> files in that directory.
 <p>
 This can be useful especially for continous integration.
 </p>
+<h3>user_extension.js</h3>
+<p>
+Selenium has support for <tt>user_extension.js</tt> which is a way to
+extend the functionality of Selenium Core. Selenium on Rails now provides
+the means for you to extend it&#8216;s functionality to match.
+</p>
+<p>
+To get you started, we&#8216;ve included the example files
+<tt>lib/test_builder_user_accessors.rb.example</tt> and
+<tt>lib/test_builder_user_actions.rb.example</tt> that replicate the sample
+extensions in Selenium Core&#8216;s <tt>user-extensions.js.sample</tt>
+</p>
+<p>
+To get these examples running, simply remove the .example and .sample
+extensions from the files and restart your server.
+</p>
 <h2>Todo</h2>
 <h3>Standalone mode</h3>
 <p>
 More work is needed on <tt>test:acceptance</tt> on Windows to be able to
 start the server when needed.
-</p>
-<h3>user_extension.js</h3>
-<p>
-Selenium has support for <tt>user_extension.js</tt> which is a way to
-extend the functionality of Selenium Core. However there is currently no
-easy way to add such a file in Selenium on Rails.
 </p>
 <h3>More setup/teardown support?</h3>
 <p>

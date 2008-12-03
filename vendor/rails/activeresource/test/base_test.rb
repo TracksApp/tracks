@@ -1,5 +1,6 @@
 require 'abstract_unit'
 require "fixtures/person"
+require "fixtures/customer"
 require "fixtures/street_address"
 require "fixtures/beast"
 
@@ -7,7 +8,7 @@ class BaseTest < Test::Unit::TestCase
   def setup
     @matz  = { :id => 1, :name => 'Matz' }.to_xml(:root => 'person')
     @david = { :id => 2, :name => 'David' }.to_xml(:root => 'person')
-    @greg  = { :id => 3, :name => 'Greg' }.to_xml(:root => 'person')    
+    @greg  = { :id => 3, :name => 'Greg' }.to_xml(:root => 'person')
     @addy  = { :id => 1, :street => '12345 Street' }.to_xml(:root => 'address')
     @default_request_headers = { 'Content-Type' => 'application/xml' }
     @rick = { :name => "Rick", :age => 25 }.to_xml(:root => "person")
@@ -15,10 +16,55 @@ class BaseTest < Test::Unit::TestCase
     @people_david = [{ :id => 2, :name => 'David' }].to_xml(:root => 'people')
     @addresses = [{ :id => 1, :street => '12345 Street' }].to_xml(:root => 'addresses')
 
+    # - deep nested resource -
+    # - Luis (Customer)
+    #   - JK (Customer::Friend)
+    #     - Mateo (Customer::Friend::Brother)
+    #       - Edith (Customer::Friend::Brother::Child)
+    #       - Martha (Customer::Friend::Brother::Child)
+    #     - Felipe (Customer::Friend::Brother)
+    #       - Bryan (Customer::Friend::Brother::Child)
+    #       - Luke (Customer::Friend::Brother::Child)
+    #   - Eduardo (Customer::Friend)
+    #     - Sebas (Customer::Friend::Brother)
+    #       - Andres (Customer::Friend::Brother::Child)
+    #       - Jorge (Customer::Friend::Brother::Child)
+    #     - Elsa (Customer::Friend::Brother)
+    #       - Natacha (Customer::Friend::Brother::Child)
+    #     - Milena (Customer::Friend::Brother)
+    #
+    @luis = {:id => 1, :name => 'Luis',
+              :friends => [{:name => 'JK',
+                            :brothers => [{:name => 'Mateo',
+                                           :children => [{:name => 'Edith'},{:name => 'Martha'}]},
+                                          {:name => 'Felipe',
+                                           :children => [{:name => 'Bryan'},{:name => 'Luke'}]}]},
+                           {:name => 'Eduardo',
+                            :brothers => [{:name => 'Sebas',
+                                           :children => [{:name => 'Andres'},{:name => 'Jorge'}]},
+                                          {:name => 'Elsa',
+                                           :children => [{:name => 'Natacha'}]},
+                                          {:name => 'Milena',
+                                           :children => []}]}]}.to_xml(:root => 'customer')
+    # - resource with yaml array of strings; for ActiveRecords using serialize :bar, Array
+    @marty = <<-eof
+      <?xml version=\"1.0\" encoding=\"UTF-8\"?>
+      <person>
+        <id type=\"integer\">5</id>
+        <name>Marty</name>
+        <colors type=\"yaml\">---
+      - \"red\"
+      - \"green\"
+      - \"blue\"
+      </colors>
+      </person>
+    eof
+
     ActiveResource::HttpMock.respond_to do |mock|
       mock.get    "/people/1.xml",                {}, @matz
       mock.get    "/people/2.xml",                {}, @david
-      mock.get    "/people/Greg.xml",             {}, @greg      
+      mock.get    "/people/5.xml",                {}, @marty
+      mock.get    "/people/Greg.xml",             {}, @greg
       mock.get    "/people/4.xml",                {'key' => 'value'}, nil, 404
       mock.put    "/people/1.xml",                {}, nil, 204
       mock.delete "/people/1.xml",                {}, nil, 200
@@ -30,7 +76,7 @@ class BaseTest < Test::Unit::TestCase
       mock.get    "/people/1/addresses/1.xml",    {}, @addy
       mock.get    "/people/1/addresses/2.xml",    {}, nil, 404
       mock.get    "/people/2/addresses/1.xml",    {}, nil, 404
-      mock.get    "/people/Greg/addresses/1.xml", {}, @addy      
+      mock.get    "/people/Greg/addresses/1.xml", {}, @addy
       mock.put    "/people/1/addresses/1.xml",    {}, nil, 204
       mock.delete "/people/1/addresses/1.xml",    {}, nil, 200
       mock.post   "/people/1/addresses.xml",      {}, nil, 201, 'Location' => '/people/1/addresses/5'
@@ -46,6 +92,8 @@ class BaseTest < Test::Unit::TestCase
       mock.head   "/people/1/addresses/2.xml",    {}, nil, 404
       mock.head   "/people/2/addresses/1.xml",    {}, nil, 404
       mock.head   "/people/Greg/addresses/1.xml", {}, nil, 200
+      # customer
+      mock.get    "/customers/1.xml",             {}, @luis
     end
 
     Person.user = nil
@@ -67,13 +115,13 @@ class BaseTest < Test::Unit::TestCase
     assert_equal 'http://foo:bar@beast.caboo.se', Forum.site.to_s
     assert_equal 'http://foo:bar@beast.caboo.se/forums/:forum_id', Topic.site.to_s
   end
-  
+
   def test_site_variable_can_be_reset
-    actor = Class.new(ActiveResource::Base)    
+    actor = Class.new(ActiveResource::Base)
     assert_nil actor.site
     actor.site = 'http://localhost:31337'
     actor.site = nil
-    assert_nil actor.site    
+    assert_nil actor.site
   end
 
   def test_should_accept_setting_user
@@ -160,18 +208,18 @@ class BaseTest < Test::Unit::TestCase
     actor.site = 'http://nomad'
     assert_equal actor.site, jester.site
     assert jester.site.frozen?
-    
-    # Subclasses are always equal to superclass site when not overridden    
+
+    # Subclasses are always equal to superclass site when not overridden
     fruit = Class.new(ActiveResource::Base)
     apple = Class.new(fruit)
-    
+
     fruit.site = 'http://market'
     assert_equal fruit.site, apple.site, 'subclass did not adopt changes from parent class'
-    
+
     fruit.site = 'http://supermarket'
     assert_equal fruit.site, apple.site, 'subclass did not adopt changes from parent class'
   end
-  
+
   def test_user_reader_uses_superclass_user_until_written
     # Superclass is Object so returns nil.
     assert_nil ActiveResource::Base.user
@@ -283,14 +331,14 @@ class BaseTest < Test::Unit::TestCase
   end
 
   def test_updating_baseclass_site_object_wipes_descendent_cached_connection_objects
-    # Subclasses are always equal to superclass site when not overridden    
+    # Subclasses are always equal to superclass site when not overridden
     fruit = Class.new(ActiveResource::Base)
     apple = Class.new(fruit)
-    
+
     fruit.site = 'http://market'
     assert_equal fruit.connection.site, apple.connection.site
     first_connection = apple.connection.object_id
-    
+
     fruit.site = 'http://supermarket'
     assert_equal fruit.connection.site, apple.connection.site
     second_connection = apple.connection.object_id
@@ -359,34 +407,34 @@ class BaseTest < Test::Unit::TestCase
     assert_equal '/people.xml?gender=', Person.collection_path(:gender => nil)
 
     assert_equal '/people.xml?gender=male', Person.collection_path('gender' => 'male')
-    
+
     # Use includes? because ordering of param hash is not guaranteed
     assert Person.collection_path(:gender => 'male', :student => true).include?('/people.xml?')
     assert Person.collection_path(:gender => 'male', :student => true).include?('gender=male')
     assert Person.collection_path(:gender => 'male', :student => true).include?('student=true')
 
     assert_equal '/people.xml?name%5B%5D=bob&name%5B%5D=your+uncle%2Bme&name%5B%5D=&name%5B%5D=false', Person.collection_path(:name => ['bob', 'your uncle+me', nil, false])
-    
+
     assert_equal '/people.xml?struct%5Ba%5D%5B%5D=2&struct%5Ba%5D%5B%5D=1&struct%5Bb%5D=fred', Person.collection_path(:struct => {:a => [2,1], 'b' => 'fred'})
   end
 
   def test_custom_element_path
     assert_equal '/people/1/addresses/1.xml', StreetAddress.element_path(1, :person_id => 1)
     assert_equal '/people/1/addresses/1.xml', StreetAddress.element_path(1, 'person_id' => 1)
-    assert_equal '/people/Greg/addresses/1.xml', StreetAddress.element_path(1, 'person_id' => 'Greg')    
+    assert_equal '/people/Greg/addresses/1.xml', StreetAddress.element_path(1, 'person_id' => 'Greg')
   end
-  
+
   def test_custom_element_path_with_redefined_to_param
     Person.module_eval do
       alias_method :original_to_param_element_path, :to_param
-       def to_param  
+       def to_param
          name
        end
     end
 
     # Class method.
     assert_equal '/people/Greg.xml', Person.element_path('Greg')
-    
+
     # Protected Instance method.
     assert_equal '/people/Greg.xml', Person.find('Greg').send(:element_path)
 
@@ -434,23 +482,32 @@ class BaseTest < Test::Unit::TestCase
 
   def test_prefix
     assert_equal "/", Person.prefix
-    assert_equal Set.new, Person.send!(:prefix_parameters)
+    assert_equal Set.new, Person.__send__(:prefix_parameters)
   end
-  
+
   def test_set_prefix
     SetterTrap.rollback_sets(Person) do |person_class|
       person_class.prefix = "the_prefix"
       assert_equal "the_prefix", person_class.prefix
     end
   end
-  
+
   def test_set_prefix_with_inline_keys
     SetterTrap.rollback_sets(Person) do |person_class|
       person_class.prefix = "the_prefix:the_param"
       assert_equal "the_prefixthe_param_value", person_class.prefix(:the_param => "the_param_value")
     end
   end
-  
+
+  def test_set_prefix_twice_should_clear_params
+    SetterTrap.rollback_sets(Person) do |person_class|
+      person_class.prefix = "the_prefix/:the_param1"
+      assert_equal Set.new([:the_param1]), person_class.prefix_parameters
+      person_class.prefix = "the_prefix/:the_param2"
+      assert_equal Set.new([:the_param2]), person_class.prefix_parameters
+    end
+  end
+
   def test_set_prefix_with_default_value
     SetterTrap.rollback_sets(Person) do |person_class|
       person_class.set_prefix
@@ -461,7 +518,7 @@ class BaseTest < Test::Unit::TestCase
   def test_custom_prefix
     assert_equal '/people//', StreetAddress.prefix
     assert_equal '/people/1/', StreetAddress.prefix(:person_id => 1)
-    assert_equal [:person_id].to_set, StreetAddress.send!(:prefix_parameters)
+    assert_equal [:person_id].to_set, StreetAddress.__send__(:prefix_parameters)
   end
 
   def test_find_by_id
@@ -470,7 +527,7 @@ class BaseTest < Test::Unit::TestCase
     assert_equal "Matz", matz.name
     assert matz.name?
   end
-  
+
   def test_respond_to
     matz = Person.find(1)
     assert matz.respond_to?(:name)
@@ -499,6 +556,12 @@ class BaseTest < Test::Unit::TestCase
     assert_equal "Matz", matz.name
   end
 
+  def test_find_last
+    david = Person.find(:last)
+    assert_kind_of Person, david
+    assert_equal 'David', david.name
+  end
+
   def test_custom_header
     Person.headers['key'] = 'value'
     assert_raises(ActiveResource::ResourceNotFound) { Person.find(4) }
@@ -513,7 +576,7 @@ class BaseTest < Test::Unit::TestCase
 
   def test_find_all_by_from
     ActiveResource::HttpMock.respond_to { |m| m.get "/companies/1/people.xml", {}, @people_david }
-  
+
     people = Person.find(:all, :from => "/companies/1/people.xml")
     assert_equal 1, people.size
     assert_equal "David", people.first.name
@@ -521,7 +584,7 @@ class BaseTest < Test::Unit::TestCase
 
   def test_find_all_by_from_with_options
     ActiveResource::HttpMock.respond_to { |m| m.get "/companies/1/people.xml", {}, @people_david }
-  
+
     people = Person.find(:all, :from => "/companies/1/people.xml")
     assert_equal 1, people.size
     assert_equal "David", people.first.name
@@ -529,7 +592,7 @@ class BaseTest < Test::Unit::TestCase
 
   def test_find_all_by_symbol_from
     ActiveResource::HttpMock.respond_to { |m| m.get "/people/managers.xml", {}, @people_david }
-  
+
     people = Person.find(:all, :from => :managers)
     assert_equal 1, people.size
     assert_equal "David", people.first.name
@@ -558,10 +621,10 @@ class BaseTest < Test::Unit::TestCase
   def test_id_from_response
     p = Person.new
     resp = {'Location' => '/foo/bar/1'}
-    assert_equal '1', p.send!(:id_from_response, resp)
-    
+    assert_equal '1', p.__send__(:id_from_response, resp)
+
     resp['Location'] << '.xml'
-    assert_equal '1', p.send!(:id_from_response, resp)
+    assert_equal '1', p.__send__(:id_from_response, resp)
   end
 
   def test_create_with_custom_prefix
@@ -576,16 +639,16 @@ class BaseTest < Test::Unit::TestCase
     ryan = Person.new(:id => 1, :name => 'Ryan', :address => address)
     assert_equal address.prefix_options, ryan.address.prefix_options
   end
-  
+
   def test_reload_works_with_prefix_options
     address = StreetAddress.find(1, :params => { :person_id => 1 })
     assert_equal address, address.reload
   end
-  
+
   def test_reload_with_redefined_to_param
     Person.module_eval do
       alias_method :original_to_param_reload, :to_param
-       def to_param  
+       def to_param
          name
        end
     end
@@ -600,13 +663,13 @@ class BaseTest < Test::Unit::TestCase
         alias_method :reload_to_param, :to_param
         alias_method :to_param, :original_to_param_reload
       end
-  end  
-  
-  def test_reload_works_without_prefix_options    
+  end
+
+  def test_reload_works_without_prefix_options
     person = Person.find(:first)
     assert_equal person, person.reload
   end
-    
+
 
   def test_create
     rick = Person.create(:name => 'Rick')
@@ -616,11 +679,11 @@ class BaseTest < Test::Unit::TestCase
 
     # test additional attribute returned on create
     assert_equal 25, rick.age
-    
+
     # Test that save exceptions get bubbled up too
     ActiveResource::HttpMock.respond_to do |mock|
       mock.post   "/people.xml", {}, nil, 409
-    end    
+    end
     assert_raises(ActiveResource::ResourceConflict) { Person.create(:name => 'Rick') }
   end
 
@@ -682,7 +745,7 @@ class BaseTest < Test::Unit::TestCase
     assert_equal "54321 Lane", addy.street
     addy.save
   end
-  
+
   def test_update_conflict
     ActiveResource::HttpMock.respond_to do |mock|
       mock.get "/people/2.xml", {}, @david
@@ -714,7 +777,7 @@ class BaseTest < Test::Unit::TestCase
     end
     assert_raises(ActiveResource::ResourceNotFound) { Person.find(1) }
   end
-  
+
   def test_delete_with_custom_prefix
     assert StreetAddress.delete(1, :person_id => 1)
     ActiveResource::HttpMock.respond_to do |mock|
@@ -744,23 +807,23 @@ class BaseTest < Test::Unit::TestCase
     assert !StreetAddress.new({:id => 1, :person_id => 2}).exists?
     assert !StreetAddress.new({:id => 2, :person_id => 1}).exists?
   end
-  
+
   def test_exists_with_redefined_to_param
     Person.module_eval do
       alias_method :original_to_param_exists, :to_param
-       def to_param  
+       def to_param
          name
        end
     end
 
     # Class method.
-    assert Person.exists?('Greg')    
+    assert Person.exists?('Greg')
 
     # Instance method.
-    assert Person.find('Greg').exists?    
+    assert Person.find('Greg').exists?
 
     # Nested class method.
-    assert StreetAddress.exists?(1,  :params => { :person_id => Person.find('Greg').to_param })    
+    assert StreetAddress.exists?(1,  :params => { :person_id => Person.find('Greg').to_param })
 
     # Nested instance method.
     assert StreetAddress.find(1, :params => { :person_id => Person.find('Greg').to_param }).exists?
@@ -772,11 +835,11 @@ class BaseTest < Test::Unit::TestCase
         alias_method :exists_to_param, :to_param
         alias_method :to_param, :original_to_param_exists
       end
-  end  
-  
+  end
+
   def test_to_xml
     matz = Person.find(1)
-    xml = matz.to_xml
+    xml = matz.encode
     assert xml.starts_with?('<?xml version="1.0" encoding="UTF-8"?>')
     assert xml.include?('<name>Matz</name>')
     assert xml.include?('<id type="integer">1</id>')
@@ -787,5 +850,29 @@ class BaseTest < Test::Unit::TestCase
     assert_nil new_person.to_param
     matz = Person.find(1)
     assert_equal '1', matz.to_param
+  end
+
+  def test_parse_deep_nested_resources
+    luis = Customer.find(1)
+    assert_kind_of Customer, luis
+    luis.friends.each do |friend|
+      assert_kind_of Customer::Friend, friend
+      friend.brothers.each do |brother|
+        assert_kind_of Customer::Friend::Brother, brother
+        brother.children.each do |child|
+          assert_kind_of Customer::Friend::Brother::Child, child
+        end
+      end
+    end
+  end
+
+  def test_load_yaml_array
+    assert_nothing_raised do
+      marty = Person.find(5)
+      assert_equal 3, marty.colors.size
+      marty.colors.each do |color|
+        assert_kind_of String, color
+      end
+    end
   end
 end

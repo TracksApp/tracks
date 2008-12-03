@@ -1,0 +1,24 @@
+# Mirrors the actions specified in user-extensions.js from the selenium-core
+module SeleniumOnRails::TestBuilderUserActions
+ 
+ # Types the text twice into a text box.
+ def type_repeated locator, text
+   command 'typeRepeated', locator, text
+ end
+ 
+ private
+   
+ # Generates the corresponding +_and_wait+ for each action.
+ def self.generate_and_wait_actions
+   public_instance_methods.each do |method|
+     define_method method + '_and_wait' do |*args|
+       make_command_waiting do
+         send method, *args
+       end
+     end
+   end
+ end
+
+ generate_and_wait_actions
+ 
+end

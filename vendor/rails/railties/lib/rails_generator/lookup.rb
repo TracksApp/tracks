@@ -108,7 +108,7 @@ module Rails
             sources << PathSource.new(:vendor, "#{::RAILS_ROOT}/vendor/generators")
             Rails.configuration.plugin_paths.each do |path|
               relative_path = Pathname.new(File.expand_path(path)).relative_path_from(Pathname.new(::RAILS_ROOT))
-              sources << PathSource.new(:"plugins (#{relative_path})", "#{path}/**/{,rails_}generators")
+              sources << PathSource.new(:"plugins (#{relative_path})", "#{path}/*/**/{,rails_}generators")
             end
           end
           sources << PathSource.new(:user, "#{Dir.user_home}/.rails/generators")
@@ -208,7 +208,8 @@ module Rails
     class GemGeneratorSource < AbstractGemSource
       # Yield latest versions of generator gems.
       def each
-        Gem::cache.search(/_generator$/).inject({}) { |latest, gem|
+        dependency = Gem::Dependency.new(/_generator$/, Gem::Requirement.default)
+        Gem::cache.search(dependency).inject({}) { |latest, gem|
           hem = latest[gem.name]
           latest[gem.name] = gem if hem.nil? or gem.version > hem.version
           latest

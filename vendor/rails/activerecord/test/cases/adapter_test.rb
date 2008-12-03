@@ -65,6 +65,12 @@ class AdapterTest < ActiveRecord::TestCase
     end
   end
 
+  if current_adapter?(:PostgreSQLAdapter)
+    def test_encoding
+      assert_not_nil @connection.encoding
+    end
+  end
+
   def test_table_alias
     def @connection.test_table_alias_length() 10; end
     class << @connection
@@ -118,7 +124,7 @@ class AdapterTest < ActiveRecord::TestCase
     sql_inject = "1, 7 procedure help()"
     if current_adapter?(:MysqlAdapter)
       assert_equal " LIMIT 1,7", @connection.add_limit_offset!("", :limit=>sql_inject)
-      assert_equal " LIMIT 7, 1", @connection.add_limit_offset!("", :limit=>sql_inject, :offset=>7)
+      assert_equal " LIMIT 7, 1", @connection.add_limit_offset!("", :limit=> '1 ; DROP TABLE USERS', :offset=>7)
     else
       assert_equal " LIMIT 1,7", @connection.add_limit_offset!("", :limit=>sql_inject)
       assert_equal " LIMIT 1,7 OFFSET 7", @connection.add_limit_offset!("", :limit=>sql_inject, :offset=>7)

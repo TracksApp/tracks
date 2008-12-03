@@ -26,7 +26,7 @@ module ResourceFeeder
       use_content_encoded = options[:item].has_key?(:content_encoded)
 
       options[:feed][:title]    ||= klass.name.pluralize
-      options[:feed][:link]     ||= polymorphic_url(new_record, :controller => options[:url_writer])
+      options[:feed][:link]     ||= polymorphic_url(new_record, :controller => options[:url_writer].controller_name)
       options[:feed][:language] ||= "en-us"
       options[:feed][:ttl]      ||= "40"
 
@@ -34,7 +34,7 @@ module ResourceFeeder
       options[:item][:description]     ||= [ :description, :body, :content ]
       options[:item][:pub_date]        ||= [ :updated_at, :updated_on, :created_at, :created_on ]
 
-      resource_link = lambda { |r| polymorphic_url(r, :controller => options[:url_writer]) }
+      resource_link = lambda { |r| polymorphic_url(r, :controller => options[:url_writer].controller_name) }
 
       rss_root_attributes = { :version => 2.0 }
       rss_root_attributes.merge!("xmlns:content" => "http://purl.org/rss/1.0/modules/content/") if use_content_encoded

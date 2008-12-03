@@ -5,7 +5,7 @@ module Spec
   module Runner
     module Formatter
       describe NestedTextFormatter do
-        it_should_behave_like "sandboxed rspec_options"
+        include SandboxedOptions
         attr_reader :io, :options, :formatter, :example_group
         before(:each) do
           @io = StringIO.new
@@ -304,7 +304,7 @@ module Spec
 
           describe "#example_pending" do
             it "should push pending example name and message" do
-              formatter.example_pending(example_group.examples.first, 'reason')
+              formatter.example_pending(example_group.examples.first, 'reason', "#{__FILE__}:#{__LINE__}")
               expected_output = <<-OUT
               ExampleGroup
                 example (PENDING: reason)
@@ -313,7 +313,7 @@ module Spec
             end
 
             it "should dump pending" do
-              formatter.example_pending(example_group.examples.first, 'reason')
+              formatter.example_pending(example_group.examples.first, 'reason', "#{__FILE__}:#{__LINE__}")
               io.rewind
               formatter.dump_pending
               io.string.should =~ /Pending\:\nExampleGroup example \(reason\)\n/

@@ -201,6 +201,9 @@ class ContextsController < ApplicationController
         :conditions => ['todos.state = ? AND (todos.project_id IS ? OR projects.state = ?)', 'active', nil, 'active'], 
         :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC", 
         :include => [:project, :tags])
+
+      @projects = current_user.projects
+
       @count = @not_done_todos.size
       @default_project_context_name_map = build_default_project_context_name_map(@projects).to_json
     end

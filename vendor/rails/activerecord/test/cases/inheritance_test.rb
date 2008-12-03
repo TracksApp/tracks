@@ -59,13 +59,13 @@ class InheritanceTest < ActiveRecord::TestCase
 
   def test_a_bad_type_column
     #SQLServer need to turn Identity Insert On before manually inserting into the Identity column
-    if current_adapter?(:SQLServerAdapter, :SybaseAdapter)
+    if current_adapter?(:SybaseAdapter)
       Company.connection.execute "SET IDENTITY_INSERT companies ON"
     end
     Company.connection.insert "INSERT INTO companies (id, #{QUOTED_TYPE}, name) VALUES(100, 'bad_class!', 'Not happening')"
 
     #We then need to turn it back Off before continuing.
-    if current_adapter?(:SQLServerAdapter, :SybaseAdapter)
+    if current_adapter?(:SybaseAdapter)
       Company.connection.execute "SET IDENTITY_INSERT companies OFF"
     end
     assert_raises(ActiveRecord::SubclassNotFound) { Company.find(100) }
@@ -191,6 +191,13 @@ class InheritanceTest < ActiveRecord::TestCase
     assert_not_nil account.instance_variable_get("@firm"), "nil proves eager load failed"
   end
 
+  def test_eager_load_belongs_to_primary_key_quoting
+    con = Account.connection
+    assert_sql(/\(#{con.quote_table_name('companies')}.#{con.quote_column_name('id')} = 1\)/) do
+      Account.find(1, :include => :firm)
+    end
+  end
+
   def test_alt_eager_loading
     switch_to_alt_inheritance_column
     test_eager_load_belongs_to_something_inherited
@@ -223,11 +230,11 @@ class InheritanceComputeTypeTest < ActiveRecord::TestCase
   fixtures :companies
 
   def setup
-    Dependencies.log_activity = true
+    ActiveSupport::Dependencies.log_activity = true
   end
 
   def teardown
-    Dependencies.log_activity = false
+    ActiveSupport::Dependencies.log_activity = false
     self.class.const_remove :FirmOnTheFly rescue nil
     Firm.const_remove :FirmOnTheFly rescue nil
   end

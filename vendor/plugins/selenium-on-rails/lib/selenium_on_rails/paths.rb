@@ -1,5 +1,9 @@
+require 'selenium_on_rails_config'
+
 module SeleniumOnRails
   module Paths
+    attr_accessor :config
+    
     def selenium_path
       @@selenium_path ||= find_selenium_path
       @@selenium_path
@@ -13,8 +17,11 @@ module SeleniumOnRails
       File.expand_path(File.dirname(__FILE__) + '/../views/' + view)
     end
   
+    # Returns the path to the layout template. The path is relative in relation
+    # to the app/views/ directory since Rails doesn't support absolute paths
+    # to layout templates.
     def layout_path
-      '/layout.rhtml'
+      'layout.rhtml'
     end
     
     def fixtures_path
@@ -32,25 +39,22 @@ module SeleniumOnRails
       false
     end
     
-    private
-      def find_selenium_path
-        sel_dirs = SeleniumOnRailsConfig.get :selenium_path do
-          ds = [File.expand_path(File.join(RAILS_ROOT, 'vendor/selenium')),
-                File.expand_path(File.join(RAILS_ROOT, 'vendor/selenium-core'))]
-          gems = Gem.source_index.find_name 'selenium', nil
-          ds << gems.last.full_gem_path unless gems.empty?
-          ds
-        end
+    private ###############################################
 
-        sel_dirs.to_a.each do |seleniumdir|
-          ['', 'core', 'selenium', 'javascript'].each do |subdir|
-            path = File.join seleniumdir, subdir
-            return path if File.exist?(File.join(path, 'TestRunner.html'))
-          end
-        end
-        
-        raise 'Could not find Selenium Core installation'
+    def find_selenium_path
+      sel_dirs = @config.get :selenium_path do
+        File.expand_path(File.dirname(__FILE__) + '/../../selenium-core')
       end
+
+      sel_dirs.to_a.each do |seleniumdir|
+        ['', 'core', 'selenium', 'javascript'].each do |subdir|
+          path = File.join seleniumdir, subdir
+          return path if File.exist?(File.join(path, 'TestRunner.html'))
+        end
+      end
+      
+      raise 'Could not find Selenium Core installation'
+    end
        
   end
 end

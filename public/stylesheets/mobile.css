@@ -60,10 +60,6 @@ h4.notice {
   color: #007E00;
 }
 
-div.t {
-    padding-left:5px;
-}
-
 span.tag {
   font-size: XX-small;
   background-color: #CCE7FF;
@@ -125,4 +121,8 @@ span.prj, span.ctx{
 
 .errors {
       background: #FFC2C2;
+}
+
+table.c {
+      margin-left: 5px;
 }

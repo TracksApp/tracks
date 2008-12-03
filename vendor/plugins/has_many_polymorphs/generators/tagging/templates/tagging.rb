@@ -10,7 +10,7 @@ class Tagging < ActiveRecord::Base
   # acts_as_list :scope => :taggable
     
   # This callback makes sure that an orphaned <tt>Tag</tt> is deleted if it no longer tags anything.
-  def before_destroy
-    <%= parent_association_name -%>.destroy_without_callbacks if <%= parent_association_name -%> and <%= parent_association_name -%>.taggings.count == 1
+  def after_destroy
+    <%= parent_association_name -%>.destroy_without_callbacks if <%= parent_association_name -%> and <%= parent_association_name -%>.taggings.count == 0
   end    
 end

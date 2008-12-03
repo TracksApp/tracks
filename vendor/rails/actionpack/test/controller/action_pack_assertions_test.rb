@@ -137,6 +137,9 @@ class AssertResponseWithUnexpectedErrorController < ActionController::Base
   end
 end
 
+class UserController < ActionController::Base
+end
+
 module Admin
   class InnerModuleController < ActionController::Base
     def index
@@ -154,27 +157,19 @@ module Admin
     def redirect_to_fellow_controller
       redirect_to :controller => 'user'
     end
-    
+
     def redirect_to_top_level_named_route
       redirect_to top_level_url(:id => "foo")
     end
   end
 end
 
-# ---------------------------------------------------------------------------
-
-
-# tell the controller where to find its templates but start from parent
-# directory of test_request_response to simulate the behaviour of a
-# production environment
-ActionPackAssertionsController.view_paths = [ File.dirname(__FILE__) + "/../fixtures/" ]
-
 # a test case to exercise the new capabilities TestRequest & TestResponse
 class ActionPackAssertionsControllerTest < Test::Unit::TestCase
   # let's get this party started
   def setup
     ActionController::Routing::Routes.reload
-    ActionController::Routing.use_controllers!(%w(action_pack_assertions admin/inner_module content admin/user))
+    ActionController::Routing.use_controllers!(%w(action_pack_assertions admin/inner_module user content admin/user))
     @controller = ActionPackAssertionsController.new
     @request, @response = ActionController::TestRequest.new, ActionController::TestResponse.new
   end
@@ -229,7 +224,6 @@ class ActionPackAssertionsControllerTest < Test::Unit::TestCase
       process :redirect_to_named_route
       assert_redirected_to 'http://test.host/route_one'
       assert_redirected_to route_one_url
-      assert_redirected_to :route_one_url
     end
   end
 
@@ -250,9 +244,6 @@ class ActionPackAssertionsControllerTest < Test::Unit::TestCase
       assert_raise(Test::Unit::AssertionFailedError) do
         assert_redirected_to route_two_url
       end
-      assert_raise(Test::Unit::AssertionFailedError) do
-        assert_redirected_to :route_two_url
-      end
     end
   end
 
@@ -268,7 +259,7 @@ class ActionPackAssertionsControllerTest < Test::Unit::TestCase
       assert_redirected_to admin_inner_module_path
     end
   end
-  
+
   def test_assert_redirected_to_top_level_named_route_from_nested_controller
     with_routing do |set|
       set.draw do |map|
@@ -277,8 +268,22 @@ class ActionPackAssertionsControllerTest < Test::Unit::TestCase
       end
       @controller = Admin::InnerModuleController.new
       process :redirect_to_top_level_named_route
-      # passes -> assert_redirected_to "http://test.host/action_pack_assertions/foo"
+      # assert_redirected_to "http://test.host/action_pack_assertions/foo" would pass because of exact match early return
       assert_redirected_to "/action_pack_assertions/foo"
+    end
+  end
+
+  def test_assert_redirected_to_top_level_named_route_with_same_controller_name_in_both_namespaces
+    with_routing do |set|
+      set.draw do |map|
+        # this controller exists in the admin namespace as well which is the only difference from previous test
+        map.top_level '/user/:id', :controller => 'user', :action => 'index'
+        map.connect   ':controller/:action/:id'
+      end
+      @controller = Admin::InnerModuleController.new
+      process :redirect_to_top_level_named_route
+      # assert_redirected_to top_level_url('foo') would pass because of exact match early return
+      assert_redirected_to top_level_path('foo')
     end
   end
 
@@ -323,11 +328,11 @@ class ActionPackAssertionsControllerTest < Test::Unit::TestCase
   # check if we were rendered by a file-based template?
   def test_rendered_action
     process :nothing
-    assert !@response.rendered_with_file?
+    assert_nil @response.rendered_template
 
     process :hello_world
-    assert @response.rendered_with_file?
-    assert 'hello_world', @response.rendered_file
+    assert @response.rendered_template
+    assert 'hello_world', @response.rendered_template.to_s
   end
 
   # check the redirection location
@@ -402,22 +407,6 @@ class ActionPackAssertionsControllerTest < Test::Unit::TestCase
     assert_equal "Mr. David", @response.body
   end
 
-  def test_follow_redirect
-    process :redirect_to_action
-    assert_redirected_to :action => "flash_me"
-
-    follow_redirect
-    assert_equal 1, @request.parameters["id"].to_i
-
-    assert "Inconceivable!", @response.body
-  end
-
-  def test_follow_redirect_outside_current_action
-    process :redirect_to_controller
-    assert_redirected_to :controller => "elsewhere", :action => "flash_me"
-
-    assert_raises(RuntimeError, "Can't follow redirects outside of current controller (elsewhere)") { follow_redirect }
-  end
 
   def test_assert_redirection_fails_with_incorrect_controller
     process :redirect_to_controller
@@ -431,14 +420,16 @@ class ActionPackAssertionsControllerTest < Test::Unit::TestCase
     assert_redirected_to :controller => 'action_pack_assertions', :action => "flash_me", :id => 1, :params => { :panda => 'fun' }
   end
 
-  def test_redirected_to_url_leadling_slash
+  def test_redirected_to_url_leading_slash
     process :redirect_to_path
     assert_redirected_to '/some/path'
   end
+
   def test_redirected_to_url_no_leadling_slash
     process :redirect_to_path
     assert_redirected_to 'some/path'
   end
+
   def test_redirected_to_url_full_url
     process :redirect_to_path
     assert_redirected_to 'http://test.host/some/path'
@@ -458,7 +449,7 @@ class ActionPackAssertionsControllerTest < Test::Unit::TestCase
   def test_redirected_to_with_nested_controller
     @controller = Admin::InnerModuleController.new
     get :redirect_to_absolute_controller
-    assert_redirected_to :controller => 'content'
+    assert_redirected_to :controller => '/content'
 
     get :redirect_to_fellow_controller
     assert_redirected_to :controller => 'admin/user'
@@ -515,7 +506,6 @@ class ActionPackHeaderTest < Test::Unit::TestCase
     process :hello_xml_world
     assert_equal('application/pdf; charset=utf-8', @response.headers['type'])
   end
-
 
   def test_render_text_with_custom_content_type
     get :render_text_with_custom_content_type
