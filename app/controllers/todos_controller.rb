@@ -399,8 +399,9 @@ class TodosController < ApplicationController
       :limit => max_completed, 
       :conditions => ['taggings.user_id = ? and state = ?', current_user.id, 'completed'], 
       :order => 'todos.completed_at DESC')
-    
-    @contexts = current_user.contexts.find(:all)
+
+    @projects = current_user.projects
+    @contexts = current_user.contexts
     @contexts_to_show = @contexts.reject {|x| x.hide? }
     
     # Set count badge to number of items with this tag

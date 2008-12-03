@@ -242,13 +242,13 @@ module TodosHelper
   end
   
   def project_names_for_autocomplete
-    array_or_string_for_javascript( ['None'] + @projects.select{ |p| p.active? }.collect{|p| escape_javascript(p.name) } )
+    array_or_string_for_javascript( ['None'] + current_user.projects.active.collect{|p| escape_javascript(p.name) } )
   end
   
   def context_names_for_autocomplete
     # #return array_or_string_for_javascript(['Create a new context']) if
     # @contexts.empty?
-    array_or_string_for_javascript( @contexts.collect{|c| escape_javascript(c.name) } )
+    array_or_string_for_javascript( current_user.contexts.collect{|c| escape_javascript(c.name) } )
   end
 
   def format_ical_notes(notes)
