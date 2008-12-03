@@ -6,17 +6,10 @@ if not @not_done.empty?
   # only show a context when there are actions in it
   -%>
 <h2><%=mobile_context.name%></h2>
-<<<<<<< HEAD/app/views/contexts/_mobile_context.rhtml
 <ul class="c">
-=======
 <table cellpadding="0" cellspacing="0" border="0" class="c">
->>>>>>> f3d7fac2a4e602c21c754770903217c0a5035629/app/views/contexts/_mobile_context.rhtml
 <%= render :partial => "todos/mobile_todo", 
            :collection => @not_done, 
            :locals => { :parent_container_type => "context" }-%>
-<<<<<<< HEAD/app/views/contexts/_mobile_context.rhtml
 </ul>
-<% end -%>=======
-</table>
 <% end -%>
->>>>>>> f3d7fac2a4e602c21c754770903217c0a5035629/app/views/contexts/_mobile_context.rhtml

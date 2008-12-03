@@ -117,11 +117,7 @@ module TodosHelper
       "<span class=\"tag\">" + 
         link_to(t.name, {:action => "tag", :controller => "todos", :id => t.name+".m"}) + 
       "</span>"}.join('')
-<<<<<<< HEAD/app/helpers/todos_helper.rb
     if tag_list.empty? then "" else "<span class=\"tags\">#{tag_list}</span>" end
-=======
-    if not tag_list.empty? then "<span class=\"tags\">#{tag_list}</span>" end
->>>>>>> f3d7fac2a4e602c21c754770903217c0a5035629/app/helpers/todos_helper.rb
   end
   
   def deferred_due_date

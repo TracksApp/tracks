@@ -124,7 +124,6 @@ span.prj, span.ctx{
 
 .errors {
       background: #FFC2C2;
-<<<<<<< HEAD/public/stylesheets/mobile.css
 }
 
 ul.c li.star {
@@ -156,10 +155,8 @@ span.r {
 
 #database_auth_form table td {
   width:7em;
-}=======
 }
 
 table.c {
       margin-left: 5px;
 }
->>>>>>> f3d7fac2a4e602c21c754770903217c0a5035629/public/stylesheets/mobile.css
