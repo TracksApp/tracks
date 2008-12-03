@@ -450,7 +450,7 @@ class TodosControllerTest < Test::Rails::TestCase
 
     # check that the new_todo is in the tickler to show next month
     assert !new_todo.show_from.nil?
-    assert_equal Time.utc(today.year, today.month+1, today.day), new_todo.show_from
+    assert_equal Time.utc(today.year, today.month, today.day)+1.month, new_todo.show_from
   end
   
   def test_check_for_next_todo
