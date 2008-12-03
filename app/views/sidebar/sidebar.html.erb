@@ -1,30 +1,30 @@
 <div id="sidebar">
-        <% # show active items before hidden / completed items -%>
+    <% # show active items before hidden / completed items -%>
 
 	<%= render :partial => "sidebar/project_list",
 	           :locals => { :list_name => 'Active Projects',
-	           				:projects => @projects.select{|p| p.active? } } -%>
+	           				:projects => @active_projects } -%>
 	
 	<%= render :partial => "sidebar/context_list",
 	           :locals => { :list_name => 'Active Contexts',
-	           				:contexts => @contexts.reject{|c| c.hide? } } -%>
+	           				:contexts => @active_contexts } -%>
 
 	<% if prefs.show_hidden_projects_in_sidebar -%>
         <%= render :partial => "sidebar/project_list",
                    :locals => { :list_name => 'Hidden Projects',
-			 			  :projects => @projects.select{|p| p.hidden? } } -%>
+			 			  :projects => @hidden_projects } -%>
 	<% end -%>
 
 	<% if prefs.show_completed_projects_in_sidebar -%>
         <%= render :partial => "sidebar/project_list",
                    :locals => { :list_name => 'Completed Projects',
-             			  :projects => @projects.select{|p| p.completed? } } -%>
+             			  :projects => @completed_projects } -%>
 	<% end -%>
 
 	<% if prefs.show_hidden_contexts_in_sidebar -%>
 	<%= render :partial => "sidebar/context_list",
 	           :locals => { :list_name => 'Hidden Contexts',
-	           				:contexts => @contexts.select{|c| c.hide? } } -%>
+	           				:contexts => @hidden_contexts } -%>
 	<% end -%>
 	
 	<div class="integrations-link"><ul>
