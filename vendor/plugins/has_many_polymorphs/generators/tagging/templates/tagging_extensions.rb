@@ -99,8 +99,61 @@ class ActiveRecord::Base #:nodoc:
     end
 
   end
+  
+  module TaggingFinders
+    # Find all the objects tagged with the supplied list of tags
+    # 
+    # Usage : Model.tagged_with("ruby")
+    #         Model.tagged_with("hello", "world")
+    #         Model.tagged_with("hello", "world", :limit => 10)
+    #
+    # XXX This query strategy is not performant, and needs to be rewritten as an inverted join or a series of unions
+    # 
+    def tagged_with(*tag_list)
+      options = tag_list.last.is_a?(Hash) ? tag_list.pop : {}
+      tag_list = parse_tags(tag_list)
+      
+      scope = scope(:find)
+      options[:select] ||= "#{table_name}.*"
+      options[:from] ||= "#{table_name}, tags, taggings"
+      
+      sql  = "SELECT #{(scope && scope[:select]) || options[:select]} "
+      sql << "FROM #{(scope && scope[:from]) || options[:from]} "
+
+      add_joins!(sql, options, scope)
+      
+      sql << "WHERE #{table_name}.#{primary_key} = taggings.taggable_id "
+      sql << "AND taggings.taggable_type = '#{ActiveRecord::Base.send(:class_name_of_active_record_descendant, self).to_s}' "
+      sql << "AND taggings.tag_id = tags.id "
+      
+      tag_list_condition = tag_list.map {|name| "'#{name}'"}.join(", ")
+      
+      sql << "AND (tags.name IN (#{sanitize_sql(tag_list_condition)})) "
+      sql << "AND #{sanitize_sql(options[:conditions])} " if options[:conditions]
+      
+      columns = column_names.map do |column| 
+        "#{table_name}.#{column}"
+      end.join(", ")
+      
+      sql << "GROUP BY #{columns} "
+      sql << "HAVING COUNT(taggings.tag_id) = #{tag_list.size}"
+      
+      add_order!(sql, options[:order], scope)
+      add_limit!(sql, options, scope)
+      add_lock!(sql, options, scope)
+      
+      find_by_sql(sql)
+    end
+    
+    def parse_tags(tags)
+      return [] if tags.blank?
+      tags = Array(tags).first
+      tags = tags.respond_to?(:flatten) ? tags.flatten : tags.split(Tag::DELIMITER)
+      tags.map { |tag| tag.strip.squeeze(" ") }.flatten.compact.map(&:downcase).uniq
+    end
+    
+  end
 
   include TaggingExtensions
-
+  extend  TaggingFinders
 end
-

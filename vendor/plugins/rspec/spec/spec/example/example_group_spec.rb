@@ -65,10 +65,11 @@ module Spec
     end
 
     describe ExampleGroup, "#run" do
-      it_should_behave_like "sandboxed rspec_options"
+      include SandboxedOptions
       attr_reader :example_group, :formatter, :reporter
       before :each do
-        @formatter = mock("formatter", :null_object => true)
+        method_with_three_args = lambda { |arg1, arg2, arg3| }
+        @formatter = mock("formatter", :null_object => true, :example_pending => method_with_three_args)
         options.formatters << formatter
         options.backtrace_tweaker = mock("backtrace_tweaker", :null_object => true)
         @reporter = FakeReporter.new(options)
@@ -233,7 +234,7 @@ module Spec
             options.examples = ["should be run"]
           end
 
-          it "should run only the example, when there in only one" do
+          it "should run only the example, when there is only one" do
             example_group.run
             examples_that_were_run.should == ["should be run"]
           end

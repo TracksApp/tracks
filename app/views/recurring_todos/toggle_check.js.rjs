@@ -4,7 +4,7 @@ if @saved
 
   if @recurring_todo.completed?
     # show completed recurring todo
-    page.insert_html :top, "completed_recurring_todos_container", :partial => 'recurring_todos/recurring_todo'
+    page.insert_html :top, "completed_recurring_todos_container", :partial => 'recurring_todos/recurring_todo', :locals => { :recurring_todo => @recurring_todo }
     page.visual_effect :highlight, dom_id(@recurring_todo), :duration => 3
     
     # set empty messages
@@ -14,7 +14,7 @@ if @saved
     # recurring_todo is activated
 
     # show completed recurring todo
-    page.insert_html :top, "recurring_todos_container", :partial => 'recurring_todos/recurring_todo'
+    page.insert_html :top, "recurring_todos_container", :partial => 'recurring_todos/recurring_todo', :locals => { :recurring_todo => @recurring_todo }
     page.visual_effect :highlight, dom_id(@recurring_todo), :duration => 3
 
     # inform user if a new todo has been created because of the activation

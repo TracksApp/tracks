@@ -47,6 +47,12 @@ module SeleniumOnRails::TestBuilderActions
   def click locator
     command 'click', locator
   end
+  
+  # Clicks on a link, button, checkbox or radio button. If the click action causes 
+  # a new page to load (like a link usually does), call wait_for_page_to_load.
+  def click_at locator, coord_string
+    command 'clickAt', locator, coord_string
+  end
 
   # Explicitly simulate an event (e.g. <tt>"focus"</tt>, <tt>"blur"</tt>), to
   # trigger the corresponding <tt>"on_event_"</tt> handler.
@@ -209,7 +215,230 @@ module SeleniumOnRails::TestBuilderActions
   def close
     command 'close'
   end
-
+  
+  # Simulates the user pressing the alt key and hold it down until do_alt_up()
+  # is called or a new page is loaded.
+  def alt_key_down
+    command 'altKeyDown'
+  end
+  
+  # Simulates the user releasing the alt key.
+  def alt_key_up
+    command 'altKeyUp'
+  end
+  
+  # Halt the currently running test, and wait for the user to press the Continue 
+  # button. This command is useful for debugging, but be careful when using it, 
+  # because it will force automated tests to hang until a user intervenes manually.
+  #
+  # NOTE: <tt>break</tt> is a reserved word in Ruby, so we have to simulate
+  # Selenium core's <tt>break()</tt> with <tt>brake()</tt>
+  def brake
+    command 'break'
+  end
+  
+  # Simulates the user pressing the alt key and hold it down until do_control_up()
+  # is called or a new page is loaded.
+  def control_key_down
+    command 'controlKeyDown'
+  end
+  
+  # Simulates the user releasing the control key.
+  def control_key_up
+    command 'controlKeyUp'
+  end
+  
+  # Create a new cookie whose path and domain are same with those of current page 
+  # under test, unless you specified a path for this cookie explicitly.
+  #
+  # Arguments:
+  # * <tt>name_value_pair</tt> - name and value of the cookie in a format "name=value"
+  # * <tt>options_string</tt> - options for the cookie. Currently supported options 
+  #   include 'path' and 'max_age'. The options_string's format is 
+  #   <tt>"path=/path/, max_age=60"</tt>. The order of options are irrelevant, the 
+  #   unit of the value of 'max_age' is second.
+  def create_cookie name_value_pair, options_string
+    command 'createCookie', name_value_pair, options_string
+  end
+  
+  # Delete a named cookie with specified path.
+  def delete_cookie name, path
+    command 'deleteCookie', name, path
+  end
+  
+  # Double clicks on a link, button, checkbox or radio button. If the double click action 
+  # causes a new page to load (like a link usually does), call <tt>wait_for_page_to_load</tt>.
+  def double_click locator
+    command 'doubleClick', locator
+  end
+  
+  # Doubleclicks on a link, button, checkbox or radio button. If the action causes a new page 
+  # to load (like a link usually does), call <tt>wait_for_page_to_load</tt>.
+  def double_click_at locator, coord_string
+    command 'doubleClickAt', locator, coord_string
+  end
+  
+  # Drags an element a certain distance and then drops it.
+  def drag_and_drop locator, movements_string
+    command 'dragAndDrop', locator, movements_string
+  end
+  
+  # Drags an element and drops it on another element.
+  def drag_and_drop_to_object locator_of_object_to_be_dragged, locator_of_drag_destination_object
+    command 'dragAndDropToObject', locator_of_object_to_be_dragged, locator_of_drag_destination_object
+  end
+  
+  # Prints the specified message into the third table cell in your Selenese
+  # tables. 
+  # Useful for debugging.
+  def echo message
+    command 'echo', message
+  end
+    
+  # Briefly changes the backgroundColor of the specified element yellow.
+  # Useful for debugging.
+  def highlight locator
+    command 'highlight', locator
+  end
+  
+  # Press the meta key and hold it down until <tt>doMetaUp()</tt> is called or
+  # a new page is loaded.
+  def meta_key_down
+    command 'metaKeyDown'
+  end
+  
+  # Release the meta key.
+  def meta_key_up
+    command 'metaKeyUp'
+  end
+  
+  # Simulates a user pressing the mouse button (without releasing it yet) on the specified
+  # element.
+  def mouse_down_at locator, coord_string
+    command 'mouseDownAt', locator, coord_string
+  end
+  
+  # Simulates a user moving the mouse.
+  def mouse_move locator
+    command 'mouseMove', locator
+  end
+  
+  # Simulates a user moving the mouse relative to the specified element.
+  def mouse_move_at locator, coord_string
+    command 'mouseMoveAt', locator, coord_string
+  end
+  
+  # Simulates the user moving the mouse off the specified element.
+  def mouse_out locator
+    command 'mouseOut', locator
+  end
+  
+  # Simulates the user releasing the mouse button on the specified element.
+  def mouse_up locator
+    command 'mouseUp', locator
+  end
+  
+  # Simulates a user pressing the mouse button (without releasing it yet) on the
+  # specified element.
+  def mouse_up_at locator, coord_string
+    command 'mouseUpAt', locator, coord_string
+  end
+  
+  # Opens a popup window (if a window with that ID isn't already open). After opening the
+  # window, you'll need to select it using the <tt>select_window</tt> command.
+  #
+  # This command can also be a useful workaround for bug SEL-339. In some cases, Selenium
+  # will be unable to intercept a call to window.open (if the call occurs during or before
+  # the "onLoad" event, for example). In those cases, you can force Selenium to notice the
+  # open window's name by using the Selenium openWindow command, using an empty (blank) url,
+  # like this: <tt>open_window("", "myFunnyWindow")</tt>.
+  def open_window url, window_id
+    command 'openWindow', url, window_id
+  end
+  
+  # Wait for the specified amount of time (in milliseconds).
+  def pause wait_time
+    command 'pause', wait_time
+  end
+  
+  # Unselects all of the selected options in a multi-select element.
+  def remove_all_selections locator
+    command 'removeAllSelections', locator
+  end
+  
+  # Selects a frame within the current window. (You may invoke this command multiple times
+  # to select nested frames.) To select the parent frame, use "relative=parent" as a
+  # locator; to select the top frame, use "relative=top".
+  #
+  # You may also use a DOM expression to identify the frame you want directly, like this:
+  # <tt>dom=frames["main"].frames["subframe"]</tt>
+  def select_frame locator
+    command 'selectFrame', locator
+  end
+  
+  # Moves the text cursor to the specified position in the given input element or textarea.
+  # This method will fail if the specified element isn't an input element or textarea.
+  def set_cursor_position locator, position
+    command 'setCursorPosition', locator, position
+  end
+  
+  # Configure the number of pixels between "mousemove" events during dragAndDrop commands
+  # (default=10).
+  # Setting this value to 0 means that we'll send a "mousemove" event to every single pixel
+  # in between the start location and the end location; that can be very slow, and may
+  # cause some browsers to force the JavaScript to timeout.
+  #
+  # If the mouse speed is greater than the distance between the two dragged objects, we'll 
+  # just send one "mousemove" at the start location and then one final one at the end location.
+  def set_mouse_speed pixels
+    command 'setMouseSpeed', pixels
+  end
+  
+  # Press the shift key and hold it down until <tt>doShiftUp()</tt> is called or a new page
+  # is loaded.
+  def shift_key_down
+    command 'shiftKeyDown'
+  end
+  
+  # Release the shift key.
+  def shift_key_up
+    command 'shiftKeyUp'
+  end
+  
+  # This command is a synonym for <tt>store_expression</tt>.
+  def store expression, variable_name
+    command 'store', expression, variable_name
+  end
+  
+  # Simulates keystroke events on the specified element, as though you typed the value 
+  # key-by-key.
+  #
+  # This is a convenience method for calling <tt>key_down</tt>, <tt>key_up</tt>, 
+  # <tt>key_press</tt> for every character in the specified string; this is useful for
+  # dynamic UI widgets (like auto-completing combo boxes) that require explicit key events.
+  #
+  # Unlike the simple "type" command, which forces the specified value into the page directly,
+  # this command may or may not have any visible effect, even in cases where typing keys would
+  # normally have a visible effect. For example, if you use "<tt>type_keys</tt>" on a form
+  # element, you may or may not see the results of what you typed in the field.
+  #
+  # In some cases, you may need to use the simple "type" command to set the value of the field
+  # and then the "<tt>type_keys</tt>" command to send the keystroke events corresponding to
+  # what you just typed.
+  def type_keys locator, value
+    command 'typeKeys', locator, value
+  end
+  
+  # Gives focus to a window.
+  def window_focus window_name
+    command 'windowFocus', window_name
+  end
+  
+  # Resize window to take up the entire screen.
+  def window_maximize window_name
+    command 'windowMaximize', window_name
+  end
+  
   # Writes a message to the status bar and adds a note to the browser-side log. 
   #
   # +context+ is the message sent to the browser.

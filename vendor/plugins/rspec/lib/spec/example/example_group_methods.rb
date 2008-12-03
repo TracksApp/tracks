@@ -14,6 +14,7 @@ module Spec
       end
 
       attr_reader :description_text, :description_args, :description_options, :spec_path, :registration_binding_block
+      alias :options :description_options
 
       def inherited(klass)
         super
@@ -38,24 +39,30 @@ module Spec
       def describe(*args, &example_group_block)
         args << {} unless Hash === args.last
         if example_group_block
-          params = args.last
-          params[:spec_path] = eval("caller(0)[1]", example_group_block) unless params[:spec_path]
-          if params[:shared]
-            SharedExampleGroup.new(*args, &example_group_block)
+          options = args.last
+          options[:spec_path] = eval("caller(0)[1]", example_group_block) unless options[:spec_path]
+          if options[:shared]
+            create_shared_example_group(args, example_group_block)
           else
-            self.subclass("Subclass") do
-              describe(*args)
-              module_eval(&example_group_block)
-            end
+            create_nested_example_group(args, example_group_block)
           end
         else
           set_description(*args)
-          before_eval
-          self
         end
       end
       alias :context :describe
-
+      
+      def create_shared_example_group(args, example_group_block)
+        SharedExampleGroup.new(*args, &example_group_block)
+      end
+      
+      def create_nested_example_group(args, example_group_block)
+        self.subclass("Subclass") do
+          describe(*args)
+          module_eval(&example_group_block)
+        end
+      end
+      
       # Use this to pull in examples from shared example groups.
       # See Spec::Runner for information about shared example groups.
       def it_should_behave_like(shared_example_group)
@@ -103,21 +110,24 @@ module Spec
         @predicate_matchers ||= {:an_instance_of => :is_a?}
       end
 
-      # Creates an instance of Spec::Example::Example and adds
-      # it to a collection of examples of the current example group.
-      def it(description=nil, &implementation)
-        e = new(description, &implementation)
+      # Creates an instance of the current example group class and adds it to
+      # a collection of examples of the current example group.
+      def example(description=nil, options={}, &implementation)
+        e = new(description, options, &implementation)
         example_objects << e
         e
       end
 
-      alias_method :specify, :it
+      alias_method :it, :example
+      alias_method :specify, :example
 
       # Use this to temporarily disable an example.
-      def xit(description=nil, opts={}, &block)
+      def xexample(description=nil, opts={}, &block)
         Kernel.warn("Example disabled: #{description}")
       end
-      alias_method :xspecify, :xit
+      
+      alias_method :xit, :xexample
+      alias_method :xspecify, :xexample
 
       def run
         examples = examples_to_run
@@ -171,7 +181,7 @@ module Spec
       def examples #:nodoc:
         examples = example_objects.dup
         add_method_examples(examples)
-        rspec_options.reverse ? examples.reverse : examples
+        Spec::Runner.options.reverse ? examples.reverse : examples
       end
 
       def number_of_examples #:nodoc:
@@ -252,11 +262,11 @@ module Spec
 
       def register(&registration_binding_block)
         @registration_binding_block = registration_binding_block
-        rspec_options.add_example_group self
+        Spec::Runner.options.add_example_group self
       end
 
       def unregister #:nodoc:
-        rspec_options.remove_example_group self
+        Spec::Runner.options.remove_example_group self
       end
 
       def registration_backtrace
@@ -278,8 +288,8 @@ module Spec
     private
       def dry_run(examples)
         examples.each do |example|
-          rspec_options.reporter.example_started(example)
-          rspec_options.reporter.example_finished(example)
+          Spec::Runner.options.reporter.example_started(example)
+          Spec::Runner.options.reporter.example_finished(example)
         end
         return true
       end
@@ -302,7 +312,7 @@ module Spec
 
         after_all_instance_variables = instance_variables
         examples.each do |example_group_instance|
-          success &= example_group_instance.execute(rspec_options, instance_variables)
+          success &= example_group_instance.execute(Spec::Runner.options, instance_variables)
           after_all_instance_variables = example_group_instance.instance_variable_hash
         end
         return [success, after_all_instance_variables]
@@ -335,15 +345,15 @@ module Spec
       end
 
       def specified_examples
-        rspec_options.examples
+        Spec::Runner.options.examples
       end
 
       def reporter
-        rspec_options.reporter
+        Spec::Runner.options.reporter
       end
 
       def dry_run?
-        rspec_options.dry_run
+        Spec::Runner.options.dry_run
       end
 
       def example_objects
@@ -398,7 +408,7 @@ module Spec
         case scope
         when :each; before_each_parts
         when :all; before_all_parts
-        when :suite; rspec_options.before_suite_parts
+        when :suite; Spec::Runner.options.before_suite_parts
         end
       end
 
@@ -406,11 +416,8 @@ module Spec
         case scope
         when :each; after_each_parts
         when :all; after_all_parts
-        when :suite; rspec_options.after_suite_parts
+        when :suite; Spec::Runner.options.after_suite_parts
         end
-      end
-
-      def before_eval
       end
 
       def add_method_examples(examples)

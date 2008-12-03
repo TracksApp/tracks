@@ -4,14 +4,14 @@ login :as => 'admin'
 # open home page
 open '/m'
 wait_for_title "All actions"
-wait_for_text 'css=h1 span.count', '10'
+wait_for_text 'css=h1 span.count', '11'
 
 # open context page
 click_and_wait "link=2-Contexts"
 # verify_title "All actions in context agenda"
 # choose agenda context
 click_and_wait "link=agenda"
-wait_for_text 'css=h1 span.count', '5'
+wait_for_text 'css=h1 span.count', '6'
 
 # click on tag foo to go to tag page
 click_and_wait "link=foo"

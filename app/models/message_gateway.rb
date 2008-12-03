@@ -1,5 +1,7 @@
 class MessageGateway < ActionMailer::Base
   include ActionView::Helpers::SanitizeHelper
+  extend ActionView::Helpers::SanitizeHelper::ClassMethods
+  
   def receive(email)
     user = User.find(:first, :include => [:preference], :conditions => ["preferences.sms_email = ?", email.from[0].strip])
     if user.nil?

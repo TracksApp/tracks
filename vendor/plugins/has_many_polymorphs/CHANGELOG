@@ -1,5 +1,7 @@
 
-v2.11. Rails 1.2.6 tagging generator compatibility; change test suite to use included integration app; include commenting generator (not well tested) [Josh Stephenson].
+v2.12. Improvements to the test suite; bugfixes for STI children (rsl). Remove fancy dependency system in favor of using Dispatcher::to_prepare every time.
+
+v2.11. Rails 1.2.6 tagging generator compatibility; change test suite to use included integration app.
 
 v2.10. Add :parent_conditions option; bugfix for nullified conditions; bugfix for self-referential tagging generator; allow setting of has_many_polymorphs_options hash in Configuration's after_initialize if you need to adjust the autoload behavior; clear error message on missing or improperly namespaced models; fix .build on double-sided relationships; add :namespace key for easier set up of Camping apps or other unusual class structures.
 

@@ -10,8 +10,7 @@ module Spec
     module Runner
       class << self
         def run_options # :nodoc:
-          rspec_options
-          # @run_options ||= ::Spec::Runner::OptionParser.parse(ARGV, $stderr, $stdout)
+          Spec::Runner.options
         end
         
         def story_runner # :nodoc:
@@ -34,7 +33,7 @@ module Spec
         end
         
         def create_story_runner
-          StoryRunner.new(scenario_runner, world_creator)
+          Runner::StoryRunner.new(scenario_runner, world_creator)
         end
         
         # Use this to register a customer output formatter.

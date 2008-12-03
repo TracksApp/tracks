@@ -2,6 +2,7 @@ class Category < ActiveRecord::Base
   has_and_belongs_to_many :posts
   has_and_belongs_to_many :special_posts, :class_name => "Post"
   has_and_belongs_to_many :other_posts, :class_name => "Post"
+  has_and_belongs_to_many :posts_with_authors_sorted_by_author_id, :class_name => "Post", :include => :authors, :order => "authors.id"
 
   has_and_belongs_to_many(:select_testing_posts,
                           :class_name => 'Post',
@@ -12,6 +13,9 @@ class Category < ActiveRecord::Base
   has_and_belongs_to_many :post_with_conditions,
                           :class_name => 'Post',
                           :conditions => { :title => 'Yet Another Testing Title' }
+
+  has_and_belongs_to_many :posts_gruoped_by_title, :class_name => "Post", :group => "title", :select => "title"
+
   def self.what_are_you
     'a category...'
   end

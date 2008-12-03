@@ -56,7 +56,7 @@
     </tr>
     <tr class="top-aligned-row">
       <td><strong>Last Update:</strong></td>
-      <td>Fri Dec 08 00:16:44 GMT Standard Time 2006</td>
+      <td>Sat Feb 03 22:54:06 +0100 2007</td>
     </tr>
     </table>
   </div>
@@ -118,9 +118,19 @@
           <td class="context-item-value">c :start_server, false</td>
         </tr>
         <tr class="top-aligned-row context-row">
+          <td class="context-item-name">HOST</td>
+          <td>=</td>
+          <td class="context-item-value">c :host, 'localhost'</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
           <td class="context-item-name">PORTS</td>
           <td>=</td>
           <td class="context-item-value">c(:port_start, 3000)..c(:port_end, 3005)</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">BASE_URL_PATH</td>
+          <td>=</td>
+          <td class="context-item-value">c :base_url_path, '/'</td>
         </tr>
         <tr class="top-aligned-row context-row">
           <td class="context-item-name">TEST_RUNNER_URL</td>
@@ -133,9 +143,14 @@
           <td class="context-item-value">c :max_browser_duration, 2*60</td>
         </tr>
         <tr class="top-aligned-row context-row">
+          <td class="context-item-name">MULTI_WINDOW</td>
+          <td>=</td>
+          <td class="context-item-value">c :multi_window, false</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
           <td class="context-item-name">SERVER_COMMAND</td>
           <td>=</td>
-          <td class="context-item-value">c_b :server_command do   server_path = File.expand_path(File.dirname(__FILE__) + '/../../../../../script/server')</td>
+          <td class="context-item-value">c_b :server_command do   server_path = File.expand_path(File.dirname(__FILE__) + '/../../../../../script/server')</td>
         </tr>
         </table>
       </div>

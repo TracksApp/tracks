@@ -32,13 +32,13 @@ class ApplicationController < ActionController::Base
   before_filter :set_time_zone
   prepend_before_filter :login_required
   prepend_before_filter :enable_mobile_content_negotiation
-  after_filter :restore_content_type_for_mobile
   after_filter :set_charset
   
 
 
   include ActionView::Helpers::TextHelper
   include ActionView::Helpers::SanitizeHelper
+  extend ActionView::Helpers::SanitizeHelper::ClassMethods
   helper_method :format_date, :markdown
 
   # By default, sets the charset to UTF-8 if it isn't already set
@@ -148,21 +148,15 @@ class ApplicationController < ActionController::Base
   # during the processing and then setting it to 'text/html' in an
   # 'after_filter' -LKM 2007-04-01
   def mobile?
-    return params[:format] == 'm' || response.content_type == MOBILE_CONTENT_TYPE
+    return params[:format] == 'm'
   end
 
   def enable_mobile_content_negotiation
     if mobile?
-      request.accepts.unshift(Mime::Type::lookup(MOBILE_CONTENT_TYPE))
+      request.format = :m
     end
   end
 
-  def restore_content_type_for_mobile
-    if mobile?
-      response.content_type = 'text/html'
-    end
-  end
-  
   def create_todo_from_recurring_todo(rt, date=nil)
     # create todo and initialize with data from recurring_todo rt
     todo = current_user.todos.build( { :description => rt.description, :notes => rt.notes, :project_id => rt.project_id, :context_id => rt.context_id})

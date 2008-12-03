@@ -1,5 +1,3 @@
-require 'set'
-
 module ActiveSupport #:nodoc:
   module CoreExtensions #:nodoc:
     module Hash #:nodoc:
@@ -11,11 +9,18 @@ module ActiveSupport #:nodoc:
       #   end
       #
       #   search(options.slice(:mass, :velocity, :time))
+      #
+      # If you have an array of keys you want to limit to, you should splat them:
+      #
+      #   valid_keys = [:mass, :velocity, :time]
+      #   search(options.slice(*valid_keys))
       module Slice
         # Returns a new hash with only the given keys.
         def slice(*keys)
-          allowed = Set.new(respond_to?(:convert_key) ? keys.map { |key| convert_key(key) } : keys)
-          reject { |key,| !allowed.include?(key) }
+          keys = keys.map! { |key| convert_key(key) } if respond_to?(:convert_key)
+          hash = self.class.new
+          keys.each { |k| hash[k] = self[k] if has_key?(k) }
+          hash
         end
 
         # Replaces the hash with only the given keys.

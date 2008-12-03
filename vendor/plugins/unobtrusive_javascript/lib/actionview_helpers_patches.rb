@@ -15,3 +15,11 @@ class ActionView::Helpers::InstanceTag
     ActionView::Helpers.current_controller
   end
 end
+
+class ActionView::Helpers::DateTimeSelector
+  include UJS::Helpers
+
+  def current_controller
+    ActionView::Helpers.current_controller
+  end
+end

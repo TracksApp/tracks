@@ -1,5 +1,6 @@
 require "cases/helper"
 require 'models/topic'
+require 'models/minimalistic'
 
 class AttributeMethodsTest < ActiveRecord::TestCase
   fixtures :topics
@@ -57,19 +58,19 @@ class AttributeMethodsTest < ActiveRecord::TestCase
 
   def test_kernel_methods_not_implemented_in_activerecord
     %w(test name display y).each do |method|
-      assert_equal false, ActiveRecord::Base.instance_method_already_implemented?(method), "##{method} is defined"
+      assert !ActiveRecord::Base.instance_method_already_implemented?(method), "##{method} is defined"
     end
   end
 
   def test_primary_key_implemented
-    assert_equal true, Class.new(ActiveRecord::Base).instance_method_already_implemented?('id')
+    assert Class.new(ActiveRecord::Base).instance_method_already_implemented?('id')
   end
 
   def test_defined_kernel_methods_implemented_in_model
     %w(test name display y).each do |method|
       klass = Class.new ActiveRecord::Base
       klass.class_eval "def #{method}() 'defined #{method}' end"
-      assert_equal true, klass.instance_method_already_implemented?(method), "##{method} is not defined"
+      assert klass.instance_method_already_implemented?(method), "##{method} is not defined"
     end
   end
 
@@ -79,7 +80,7 @@ class AttributeMethodsTest < ActiveRecord::TestCase
       abstract.class_eval "def #{method}() 'defined #{method}' end"
       abstract.abstract_class = true
       klass = Class.new abstract
-      assert_equal true, klass.instance_method_already_implemented?(method), "##{method} is not defined"
+      assert klass.instance_method_already_implemented?(method), "##{method} is not defined"
     end
   end
 
@@ -137,7 +138,7 @@ class AttributeMethodsTest < ActiveRecord::TestCase
       end
     end
   end
-  
+
   def test_time_attributes_are_retrieved_in_current_time_zone
     in_time_zone "Pacific Time (US & Canada)" do
       utc_time = Time.utc(2008, 1, 1)
@@ -145,7 +146,7 @@ class AttributeMethodsTest < ActiveRecord::TestCase
       record[:written_on] = utc_time
       assert_equal utc_time, record.written_on # record.written on is equal to (i.e., simultaneous with) utc_time
       assert_kind_of ActiveSupport::TimeWithZone, record.written_on # but is a TimeWithZone
-      assert_equal TimeZone["Pacific Time (US & Canada)"], record.written_on.time_zone # and is in the current Time.zone
+      assert_equal ActiveSupport::TimeZone["Pacific Time (US & Canada)"], record.written_on.time_zone # and is in the current Time.zone
       assert_equal Time.utc(2007, 12, 31, 16), record.written_on.time # and represents time values adjusted accordingly
     end
   end
@@ -156,7 +157,7 @@ class AttributeMethodsTest < ActiveRecord::TestCase
       record   = @target.new
       record.written_on = utc_time
       assert_equal utc_time, record.written_on
-      assert_equal TimeZone["Pacific Time (US & Canada)"], record.written_on.time_zone
+      assert_equal ActiveSupport::TimeZone["Pacific Time (US & Canada)"], record.written_on.time_zone
       assert_equal Time.utc(2007, 12, 31, 16), record.written_on.time
     end
   end
@@ -168,7 +169,7 @@ class AttributeMethodsTest < ActiveRecord::TestCase
       record   = @target.new
       record.written_on = cst_time
       assert_equal utc_time, record.written_on
-      assert_equal TimeZone["Pacific Time (US & Canada)"], record.written_on.time_zone
+      assert_equal ActiveSupport::TimeZone["Pacific Time (US & Canada)"], record.written_on.time_zone
       assert_equal Time.utc(2007, 12, 31, 16), record.written_on.time
     end
   end
@@ -181,12 +182,12 @@ class AttributeMethodsTest < ActiveRecord::TestCase
         record   = @target.new
         record.written_on = time_string
         assert_equal Time.zone.parse(time_string), record.written_on
-        assert_equal TimeZone["Pacific Time (US & Canada)"], record.written_on.time_zone
+        assert_equal ActiveSupport::TimeZone["Pacific Time (US & Canada)"], record.written_on.time_zone
         assert_equal Time.utc(2007, 12, 31, 16), record.written_on.time
       end
     end
   end
-  
+
   def test_setting_time_zone_aware_attribute_to_blank_string_returns_nil
     in_time_zone "Pacific Time (US & Canada)" do
       record   = @target.new
@@ -202,7 +203,7 @@ class AttributeMethodsTest < ActiveRecord::TestCase
         record   = @target.new
         record.written_on = time_string
         assert_equal Time.zone.parse(time_string), record.written_on
-        assert_equal TimeZone[timezone_offset], record.written_on.time_zone
+        assert_equal ActiveSupport::TimeZone[timezone_offset], record.written_on.time_zone
         assert_equal Time.utc(2008, 1, 1), record.written_on.time
       end
     end
@@ -214,25 +215,79 @@ class AttributeMethodsTest < ActiveRecord::TestCase
       record   = @target.new
       record.written_on = utc_time.in_time_zone
       assert_equal utc_time, record.written_on
-      assert_equal TimeZone["Pacific Time (US & Canada)"], record.written_on.time_zone
+      assert_equal ActiveSupport::TimeZone["Pacific Time (US & Canada)"], record.written_on.time_zone
       assert_equal Time.utc(2007, 12, 31, 16), record.written_on.time
     end
+  end
+
+  def test_setting_time_zone_conversion_for_attributes_should_write_value_on_class_variable
+    Topic.skip_time_zone_conversion_for_attributes = [:field_a]
+    Minimalistic.skip_time_zone_conversion_for_attributes = [:field_b]
+    
+    assert_equal [:field_a], Topic.skip_time_zone_conversion_for_attributes 
+    assert_equal [:field_b], Minimalistic.skip_time_zone_conversion_for_attributes 
+  end
+
+  def test_read_attributes_respect_access_control
+    privatize("title")
+
+    topic = @target.new(:title => "The pros and cons of programming naked.")
+    assert !topic.respond_to?(:title)
+    exception = assert_raise(NoMethodError) { topic.title }
+    assert_equal "Attempt to call private method", exception.message
+    assert_equal "I'm private", topic.send(:title)
+  end
+
+  def test_write_attributes_respect_access_control
+    privatize("title=(value)")
+
+    topic = @target.new
+    assert !topic.respond_to?(:title=)
+    exception = assert_raise(NoMethodError) { topic.title = "Pants"}
+    assert_equal "Attempt to call private method", exception.message
+    topic.send(:title=, "Very large pants")
+  end
+
+  def test_question_attributes_respect_access_control
+    privatize("title?")
+
+    topic = @target.new(:title => "Isaac Newton's pants")
+    assert !topic.respond_to?(:title?)
+    exception = assert_raise(NoMethodError) { topic.title? }
+    assert_equal "Attempt to call private method", exception.message
+    assert topic.send(:title?)
+  end
+
+  def test_bulk_update_respects_access_control
+    privatize("title=(value)")
+
+    assert_raise(ActiveRecord::UnknownAttributeError) { topic = @target.new(:title => "Rants about pants") }
+    assert_raise(ActiveRecord::UnknownAttributeError) { @target.new.attributes = { :title => "Ants in pants" } }
   end
 
   private
   def time_related_columns_on_topic
     Topic.columns.select{|c| [:time, :date, :datetime, :timestamp].include?(c.type)}.map(&:name)
   end
-  
+
   def in_time_zone(zone)
     old_zone  = Time.zone
     old_tz    = ActiveRecord::Base.time_zone_aware_attributes
 
-    Time.zone = zone ? TimeZone[zone] : nil
+    Time.zone = zone ? ActiveSupport::TimeZone[zone] : nil
     ActiveRecord::Base.time_zone_aware_attributes = !zone.nil?
     yield
   ensure
     Time.zone = old_zone
     ActiveRecord::Base.time_zone_aware_attributes = old_tz
+  end
+
+  def privatize(method_signature)
+    @target.class_eval <<-private_method
+      private
+      def #{method_signature}
+        "I'm private"
+      end
+    private_method
   end
 end

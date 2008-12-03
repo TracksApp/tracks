@@ -51,4 +51,10 @@ module SeleniumOnRails::TestBuilderAccessors
     yield
     wait_for_context_count "${expected_context_count}"
   end
+
+  def click_and_wait clickable
+    click clickable
+    wait_for_page_to_load 3000
+  end
+
 end

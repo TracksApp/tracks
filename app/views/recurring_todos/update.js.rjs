@@ -13,7 +13,7 @@ if @saved
   page << "projectAutoCompleter.options.array = #{project_names_for_autocomplete}; projectAutoCompleter.changed = true" if @new_project_created
 
   # replace old recurring todo with updated todo
-  page.replace dom_id(@recurring_todo), :partial => 'recurring_todos/recurring_todo'
+  page.replace dom_id(@recurring_todo), :partial => 'recurring_todos/recurring_todo', :locals => { :recurring_todo => @recurring_todo }
   page.visual_effect :highlight, dom_id(@recurring_todo), :duration => 3
 
 else

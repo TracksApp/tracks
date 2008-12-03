@@ -67,6 +67,7 @@ class PrototypeHelperExtensionsTest < Test::Unit::TestCase
     def protect_against_forgery?
       false
     end
-        
+    
+    attr_accessor :output_buffer        
 end
 

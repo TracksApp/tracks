@@ -5,7 +5,7 @@ if @saved
 
     # completed todos move from their context to the completed container
     unless @prefs.hide_completed_actions?
-      page.insert_html :top, "completed_containeritems", :partial => 'todos/todo', :locals => { :parent_container_type => "completed" }
+      page.insert_html :top, "completed_containeritems", :partial => 'todos/todo', :locals => { :todo => @todo, :parent_container_type => "completed" }
       page.visual_effect :highlight, dom_id(@todo, 'line'), {'startcolor' => "'#99ff99'"}
       page[empty_container_msg_div_id].show if @down_count == 0 && !empty_container_msg_div_id.nil?
       page.show 'tickler-empty-nd' if source_view_is(:project) && @deferred_count == 0
@@ -33,7 +33,7 @@ if @saved
   else
     # todo is activated from completed container
     page.call "todoItems.ensureVisibleWithEffectAppear", item_container_id(@todo)
-    page.insert_html :bottom, item_container_id(@todo), :partial => 'todos/todo', :locals => { :parent_container_type => parent_container_type }
+    page.insert_html :bottom, item_container_id(@todo), :partial => 'todos/todo', :locals => { :todo => @todo, :parent_container_type => parent_container_type }
     page.visual_effect :highlight, dom_id(@todo, 'line'), {'startcolor' => "'#99ff99'"}
     page.show "empty-d" if @completed_count == 0
     page[empty_container_msg_div_id].hide unless empty_container_msg_div_id.nil? # If we've checked something as undone, incomplete items can't be empty

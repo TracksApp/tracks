@@ -6,7 +6,11 @@ else
   bullet = "<span class=\"r\">&raquo;&nbsp;</span>"
   li_class = ""
 end -%>
+<<<<<<< HEAD/app/views/todos/_mobile_todo.rhtml
 <li id="<%= dom_id(mobile_todo) %>" <%= li_class %>><%= bullet %><% 
+=======
+<tr class="t" id="<%= dom_id(mobile_todo) %>" valign="top"><td><%= bullet %></td><td><% 
+>>>>>>> f3d7fac2a4e602c21c754770903217c0a5035629/app/views/todos/_mobile_todo.rhtml
     if mobile_todo.completed?  
 -%><span class="m_t_d">
 <%  else 
@@ -24,4 +28,7 @@ end -%>
        ")</span>" -%>
 <%  end -%>
  <%= tag_list_mobile -%>
-</span></li>
+<<<<<<< HEAD/app/views/todos/_mobile_todo.rhtml
+</span></li>=======
+</span></td></tr>
+>>>>>>> f3d7fac2a4e602c21c754770903217c0a5035629/app/views/todos/_mobile_todo.rhtml

@@ -1,8 +1,5 @@
 
-require 'rubygems'
-gem 'echoe', '>=2.2'
 require 'echoe'
-require 'lib/has_many_polymorphs/rake_task_redefine_task'
 
 Echoe.new("has_many_polymorphs") do |p|  
   p.project = "fauna"
@@ -12,10 +9,20 @@ Echoe.new("has_many_polymorphs") do |p|
   p.dependencies = ["activerecord"]
   p.rdoc_pattern = /polymorphs\/association|polymorphs\/class_methods|polymorphs\/reflection|polymorphs\/autoload|polymorphs\/configuration|README|CHANGELOG|TODO|LICENSE|templates\/migration\.rb|templates\/tag\.rb|templates\/tagging\.rb|templates\/tagging_extensions\.rb/    
   p.require_signed = true
+  p.clean_pattern += ["**/ruby_sess*", "**/generated_models/**"]
+  p.test_pattern = ["test/unit/*_test.rb", "test/integration/*_test.rb", "test/generator/*_test.rb"]
 end
 
-desc 'Run the test suite.'
-Rake::Task.redefine_task("test") do
-   puts "Warning! Tests must be run with the plugin installed in a functioning Rails\nenvironment."
-   system "ruby -Ibin:lib:test test/unit/polymorph_test.rb #{ENV['METHOD'] ? "--name=#{ENV['METHOD']}" : ""}"
+desc "Run all the tests for every database adapter" 
+task "test_all" do
+  ['mysql', 'postgresql', 'sqlite3'].each do |adapter|
+    ENV['DB'] = adapter
+    ENV['PRODUCTION'] = nil
+    STDERR.puts "#{'='*80}\nDevelopment mode for #{adapter}\n#{'='*80}"
+    system("rake test:multi_rails:all")
+  
+    ENV['PRODUCTION'] = '1'
+    STDERR.puts "#{'='*80}\nProduction mode for #{adapter}\n#{'='*80}"
+    system("rake test:multi_rails:all")    
+  end
 end

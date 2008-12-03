@@ -1,13 +1,14 @@
-
 Has_many_polymorphs
 
 An ActiveRecord plugin for self-referential and double-sided polymorphic associations.
 
 == License
 
-Copyright 2007 Cloudburst, LLC. Licensed under the AFL 3. See the included LICENSE file. 
+Copyright 2006-2008 Cloudburst, LLC. Licensed under the AFL 3. See the included LICENSE file. 
 
-The public certificate for this gem is at http://rubyforge.org/frs/download.php/25331/evan_weaver-original-public_cert.pem.
+The public certificate for the gem is here[http://rubyforge.org/frs/download.php/25331/evan_weaver-original-public_cert.pem]. 
+
+If you use this software, please {make a donation}[http://blog.evanweaver.com/donate/], or {recommend Evan}[http://www.workingwithrails.com/person/7739-evan-weaver] at Working with Rails.
 
 == Description
 
@@ -35,7 +36,7 @@ The plugin also includes a generator for a tagging system, a common use case (se
 == Installation
 
 To install the Rails plugin, run:
-  script/plugin install svn://rubyforge.org/var/svn/fauna/has_many_polymorphs/trunk
+  script/plugin install git://github.com/fauna/has_many_polymorphs.git
 
 There's also a gem version. To install it instead, run: 
   sudo gem install has_many_polymorphs
@@ -61,6 +62,21 @@ One of the child models:
 
   class Dog < ActiveRecord::Base
     # nothing
+  end
+
+For your parent and child models, you don't need any special fields in your migration. For the join model (GuestsKennel), use a migration like so:
+
+  class CreateGuestsKennels < ActiveRecord::Migration
+    def self.up
+      create_table :guests_kennels do |t|
+        t.references :guest, :polymorphic => true
+        t.references :kennel
+      end
+    end
+  
+    def self.down
+      drop_table :guests_kennels
+    end
   end
 
 See ActiveRecord::Associations::PolymorphicClassMethods for more configuration options.
@@ -113,6 +129,21 @@ Now, dogs and cats can eat birds and cats. Birds can't eat anything (they aren't
 
 In this case, each guest/eaten relationship is called a Devouring.
 
+In your migration, you need to declare both sides as polymorphic:
+
+  class CreateDevourings < ActiveRecord::Migration
+    def self.up
+      create_table :devourings do |t|
+        t.references :guest, :polymorphic => true
+        t.references :eaten, :polymorphic => true
+      end
+    end
+  
+    def self.down
+      drop_table :devourings
+    end
+  end
+
 See ActiveRecord::Associations::PolymorphicClassMethods for more.
 
 == Tagging generator
@@ -157,7 +188,7 @@ Note that because of the way Rails reloads model classes, the plugin can sometim
 
 == Reporting problems
 
-* http://rubyforge.org/forum/forum.php?forum_id=16450
+The support forum is here[http://rubyforge.org/forum/forum.php?forum_id=16450].
 
 Patches and contributions are very welcome. Please note that contributors are required to assign copyright for their additions to Cloudburst, LLC.
 
