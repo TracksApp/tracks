@@ -124,7 +124,7 @@ class User < ActiveRecord::Base
 
   #for will_paginate plugin
   cattr_accessor :per_page
-  @@per_page = 1
+  @@per_page = 5
   
   def validate
     unless Tracks::Config.auth_schemes.include?(auth_type)
