@@ -1,10 +1,10 @@
 <% @todo = mobile_todo
 if mobile_todo.starred?
-  bullet = "<span class=star>"+image_tag("menustar_small.gif")+"</span>"
+  li_class = " class=\"star\""
 else
-  bullet = "<span class=r>&raquo;&nbsp;</span>"
+  li_class = ""
 end -%>
-<tr class="t" id="<%= dom_id(mobile_todo) %>" valign="top"><td><%= bullet %></td><td><% 
+<li id="<%= dom_id(mobile_todo) %>" <%= li_class %>><% 
     if mobile_todo.completed?  
 -%><span class="m_t_d">
 <%  else 
@@ -22,4 +22,4 @@ end -%>
        ")</span>" -%>
 <%  end -%>
  <%= tag_list_mobile -%>
-</span></td></tr>
+</span></li>
