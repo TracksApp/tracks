@@ -228,8 +228,13 @@ class ApplicationController < ActionController::Base
   end
     
   def init_data_for_sidebar
-    @projects = @projects || current_user.projects.find(:all, :include => [:default_context ])
-    @contexts = @contexts || current_user.contexts
+    @completed_projects = current_user.projects.completed
+    @hidden_projects = current_user.projects.hidden
+    @active_projects = current_user.projects.active
+
+    @active_contexts = current_user.contexts.active
+    @hidden_contexts = current_user.contexts.hidden
+
     init_not_done_counts
     if prefs.show_hidden_projects_in_sidebar
       init_project_hidden_todo_counts(['project'])
@@ -238,13 +243,13 @@ class ApplicationController < ActionController::Base
   
   def init_not_done_counts(parents = ['project','context'])
     parents.each do |parent|
-      eval("@#{parent}_not_done_counts = @#{parent}_not_done_counts || Todo.count(:conditions => ['user_id = ? and state = ?', current_user.id, 'active'], :group => :#{parent}_id)")
+      eval("@#{parent}_not_done_counts = @#{parent}_not_done_counts || current_user.todos.active.count(:group => :#{parent}_id)")
     end
   end
   
   def init_project_hidden_todo_counts(parents = ['project','context'])
     parents.each do |parent|
-      eval("@#{parent}_project_hidden_todo_counts = @#{parent}_project_hidden_todo_counts || Todo.count(:conditions => ['user_id = ? and (state = ? or state = ?)', current_user.id, 'project_hidden', 'active'], :group => :#{parent}_id)")
+      eval("@#{parent}_project_hidden_todo_counts = @#{parent}_project_hidden_todo_counts || current_user.todos.count(:conditions => ['state = ? or state = ?', 'project_hidden', 'active'], :group => :#{parent}_id)")
     end
   end  
   

@@ -10,5 +10,7 @@
 
 <div id="input_box">
   <%= render :partial => "shared/add_new_item_form" %>
-  <%= render :template => "sidebar/sidebar" %>
+  <%- # TODO: this used to be render :template, but somehow it was not
+      #rendered after the rails2.2.2 upgrade -%>
+  <%= render :file => "sidebar/sidebar.html.erb" %>
 </div><!-- End of input box -->
