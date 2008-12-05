@@ -10,7 +10,7 @@ if parent_container_type == 'show_mobile' -%>
 <h2><label for="todo_description">Description</label></h2>
 <%= text_field( "todo", "description", "tabindex" => 2) %>
 <h2><label for="todo_notes">Notes</label></h2>
-<%= text_area( "todo", "notes", "cols" => 30, "rows" => 5, "tabindex" => 3) %>
+<%= text_area( "todo", "notes", "cols" => 30, "rows" => 2, "tabindex" => 3) %>
 <h2><label for="todo_context_id">Context</label></h2>
 <%= unless @mobile_from_context
   collection_select( "todo", "context_id", @contexts, "id", "name", {}, {"tabindex" => 4} ) 
@@ -22,7 +22,7 @@ end %>
 <h2><label for="todo_project_id">Project</label></h2>
 <%= unless @mobile_from_project
   collection_select( "todo", "project_id", @projects, "id", "name",
-                          {:include_blank => true}, {"tabindex" => 5} )
+                          {:include_blank => '--No project--'}, {"tabindex" => 5} )
 else
   # manually add blank option since :include_blank does not work 
   # with options_from_collection_for_select
@@ -34,7 +34,7 @@ end %>
 <%= text_field_tag "tag_list", @tag_list_text, :size => 30, :tabindex => 6 %> 
 <h2><label for="todo_due">Due</label></h2>
 <%= date_select("todo", "due", {:order => [:day, :month, :year],
-                    :start_year => this_year, :include_blank => true}, :tabindex => 7) %>
+                    :start_year => this_year, :include_blank => '--'}, :tabindex => 7) %>
 <h2><label for="todo_show_from">Show from</label></h2>
 <%= date_select("todo", "show_from", {:order => [:day, :month, :year], 
                     :start_year => this_year, :include_blank => true}, :tabindex => 8) %>
