@@ -1,30 +1,4 @@
 module RecurringTodosHelper
-  
-  def recurrence_time_span(rt)
-    case rt.ends_on
-    when "no_end_date"
-      return rt.start_from.nil? ? "" : "from " + format_date(rt.start_from)
-    when "ends_on_number_of_times"
-      return "for "+rt.number_of_occurences.to_s + " times"
-    when "ends_on_end_date"
-      starts = rt.start_from.nil? ? "" : "from " + format_date(rt.start_from)
-      ends = rt.end_date.nil? ? "" : " until " + format_date(rt.end_date)
-      return starts+ends
-    else
-      raise Exception.new, "unknown recurrence time span selection (#{self.ends_on})"
-    end
-  end
-  
-  def recurrence_target(rt)
-    case rt.target
-    when 'due_date'
-      return "due"
-    when 'show_from_date'
-      return "show"
-    else
-      return "ERROR"
-    end
-  end
     
   def recurring_todo_tag_list
     tags_except_starred = @recurring_todo.tags.reject{|t| t.name == Todo::STARRED_TAG_NAME}

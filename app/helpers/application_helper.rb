@@ -8,7 +8,7 @@ module ApplicationHelper
   
   # Replicates the link_to method but also checks request.request_uri to find
   # current page. If that matches the url, the link is marked id = "current"
-  # 
+  #
   def navigation_link(name, options = {}, html_options = nil, *parameters_for_method_reference)
     if html_options
       html_options = html_options.stringify_keys
@@ -29,7 +29,7 @@ module ApplicationHelper
   
   # Check due date in comparison to today's date Flag up date appropriately with
   # a 'traffic light' colour code
-  # 
+  #
   def due_date(due)
     if due == nil
       return ""
@@ -62,7 +62,7 @@ module ApplicationHelper
 
   # Check due date in comparison to today's date Flag up date appropriately with
   # a 'traffic light' colour code Modified method for mobile screen
-  # 
+  #
   def due_date_mobile(due)
     if due == nil
       return ""
@@ -92,7 +92,7 @@ module ApplicationHelper
   # Returns a count of next actions in the given context or project. The result
   # is count and a string descriptor, correctly pluralised if there are no
   # actions or multiple actions
-  # 
+  #
   def count_undone_todos_phrase(todos_parent, string="actions")
     @controller.count_undone_todos_phrase(todos_parent, string)
   end
@@ -143,5 +143,31 @@ module ApplicationHelper
     page.replace 'flash', "<h4 id='flash' class='alert #{type}'>#{message}</h4>" 
     page.visual_effect :fade, 'flash', :duration => fade_duration
   end
-  
+
+  def recurrence_time_span(rt)
+    case rt.ends_on
+    when "no_end_date"
+      return rt.start_from.nil? ? "" : "from " + format_date(rt.start_from)
+    when "ends_on_number_of_times"
+      return "for "+rt.number_of_occurences.to_s + " times"
+    when "ends_on_end_date"
+      starts = rt.start_from.nil? ? "" : "from " + format_date(rt.start_from)
+      ends = rt.end_date.nil? ? "" : " until " + format_date(rt.end_date)
+      return starts+ends
+    else
+      raise Exception.new, "unknown recurrence time span selection (#{rt.ends_on})"
+    end
+  end
+
+  def recurrence_pattern_as_text(recurring_todo)
+    rt = recurring_todo.recurring_target_as_text
+    rp = recurring_todo.recurrence_pattern
+    # only add space if recurrence_pattern has content
+    rp = " " + rp if !rp.nil?
+    rts = recurrence_time_span(recurring_todo)
+    # only add space if recurrence_time_span has content
+    rts = " " + rts if !(rts == "")
+    return rt+rp+rts
+  end
+
 end
