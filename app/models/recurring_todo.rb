@@ -295,6 +295,17 @@ class RecurringTodo < ActiveRecord::Base
   def recurring_target=(t)
     self.target = t
   end
+
+  def recurring_target_as_text
+    case self.target
+    when 'due_date'
+      return "due"
+    when 'show_from_date'
+      return "show"
+    else
+      raise Exception.new, "unexpected value of recurrence target '#{self.target}'"
+    end
+  end
   
   def recurring_show_days_before=(days)
     self.show_from_delta=days
@@ -361,6 +372,8 @@ class RecurringTodo < ActiveRecord::Base
     when 'show_from'
       # so leave due date empty
       return nil
+    else
+      raise Exception.new, "unexpected value of recurrence target '#{self.target}'"
     end
   end
   
@@ -476,14 +489,14 @@ class RecurringTodo < ActiveRecord::Base
     when 0 # specific day of the month
       if start.mday >= day
         # there is no next day n in this month, search in next month
-        #  
+        #
         #  start += n.months
-        # 
+        #
         # The above seems to not work. Fiddle with timezone. Looks like we hit a
         # bug in rails here where 2008-12-01 +0100 plus 1.month becomes
         # 2008-12-31 +0100. For now, just calculate in UTC and convert back to
         # local timezone.
-        #  
+        #
         #  TODO: recheck if future rails versions have this problem too
         start = Time.utc(start.year, start.month, start.day)+n.months
         start = Time.zone.local(start.year, start.month, start.day)

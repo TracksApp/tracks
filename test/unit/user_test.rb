@@ -326,18 +326,18 @@ class UserTest < Test::Rails::TestCase
     assert_nil users(:other_user).remember_token
   end
   
-  def test_normalizes_open_id_url_on_save
+  def test_normalizes_identity_url_on_save
     ['www.johndoe.com', 'WWW.JOHNDOE.COM', 'http://www.johndoe.com/', 'http://www.johndoe.com'].each do |initial|
-      assert_open_id_url_normalized_on_save initial, 'http://www.johndoe.com'
+      assert_identity_url_normalized_on_save initial, 'http://www.johndoe.com/'
     end
   end
   
-  def test_normalizes_open_id_url_on_find
+  def test_normalizes_identity_url_on_find
      u = users(:other_user)
-     u.open_id_url = 'http://www.johndoe.com'
+     u.identity_url = 'http://www.johndoe.com'
      u.save
-     ['www.johndoe.com', 'WWW.JOHNDOE.COM', 'http://www.johndoe.com/', 'http://www.johndoe.com'].each do |raw_open_id_url|
-       assert_equal u.id, User.find_by_open_id_url(raw_open_id_url).id
+     ['www.johndoe.com', 'WWW.JOHNDOE.COM', 'http://www.johndoe.com/', 'http://www.johndoe.com'].each do |raw_identity_url|
+       assert_equal u.id, User.find_by_identity_url(raw_identity_url).id
      end
   end
   
@@ -348,11 +348,11 @@ class UserTest < Test::Rails::TestCase
       User.create({ :login => 'quire', :password => 'quire', :password_confirmation => 'quire' }.merge(options))
     end
     
-    def assert_open_id_url_normalized_on_save(initial, expected)
+    def assert_identity_url_normalized_on_save(initial, expected)
       u = users(:other_user)
-      u.open_id_url = initial
+      u.identity_url = initial
       u.save
-      assert_equal expected, u.open_id_url
+      assert_equal expected, u.identity_url
     end
     
 end
