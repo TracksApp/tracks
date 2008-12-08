@@ -116,11 +116,11 @@ class User < ActiveRecord::Base
   validates_confirmation_of :password  
   validates_length_of :login, :within => 3..80
   validates_uniqueness_of :login, :on => :create
-  validates_presence_of :open_id_url, :if => :using_openid?
+  validates_presence_of :identity_url, :if => :using_openid?
 
   before_create :crypt_password, :generate_token
   before_update :crypt_password
-  before_save :normalize_open_id_url
+  before_save :normalize_identity_url
 
   #for will_paginate plugin
   cattr_accessor :per_page
@@ -145,9 +145,9 @@ class User < ActiveRecord::Base
     return nil
   end
   
-  def self.find_by_open_id_url(raw_open_id_url)
-    normalized_open_id_url = normalize_open_id_url(raw_open_id_url)
-    find(:first, :conditions => ['open_id_url = ?', normalized_open_id_url])
+  def self.find_by_identity_url(raw_identity_url)
+    normalized_identity_url = OpenIdAuthentication.normalize_url(raw_identity_url)
+    find(:first, :conditions => ['identity_url = ?', normalized_identity_url])
   end
   
   def self.no_users_yet?
@@ -235,15 +235,8 @@ protected
     crypted_password == sha1(pass)
   end
   
-  def normalize_open_id_url
-    return if open_id_url.nil?
-    self.open_id_url = self.class.normalize_open_id_url(open_id_url)
+  def normalize_identity_url
+    return if identity_url.nil?
+    self.identity_url = OpenIdAuthentication.normalize_url(identity_url)
   end
-  
-  def self.normalize_open_id_url(raw_open_id_url)
-    normalized = raw_open_id_url
-    normalized = "http://#{raw_open_id_url}" unless raw_open_id_url =~ /\:\/\//
-    normalized.downcase.chomp('/')
-  end
-    
 end

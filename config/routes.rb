@@ -6,10 +6,6 @@ ActionController::Routing::Routes.draw do |map|
     login.formatted_login 'login.:format', :action => 'login'
     login.logout 'logout', :action => 'logout'
     login.formatted_logout 'logout.:format', :action => 'logout'
-    login.open_id_begin 'begin', :action => 'begin'
-    login.formatted_open_id_begin 'begin.:format', :action => 'begin'
-    login.open_id_complete 'complete', :action => 'complete'
-    login.formatted_open_id_complete 'complete.:format', :action => 'complete'
   end
 
   map.resources :users,
@@ -57,6 +53,7 @@ ActionController::Routing::Routes.draw do |map|
     todos.mobile_abbrev 'm', :action => "index", :format => 'm'
     todos.mobile_abbrev_new 'm/new', :action => "new", :format => 'm'
   end
+  map.root :controller => 'todos' # Make OpenID happy because it needs #root_url defined
   
   map.resources :notes
   map.feeds 'feeds', :controller => 'feedlist', :action => 'index'

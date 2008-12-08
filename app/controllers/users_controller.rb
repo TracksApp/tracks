@@ -1,10 +1,4 @@
 class UsersController < ApplicationController
-
-  if openid_enabled?
-     open_id_consumer
-     before_filter  :begin_open_id_auth,    :only => :update_auth_type
-  end
-
   before_filter :admin_login_required, :only => [ :index, :show, :destroy ]
   skip_before_filter :login_required, :only => [ :new, :create ]
   prepend_before_filter :login_optional, :only => [ :new, :create ]
@@ -153,18 +147,25 @@ class UsersController < ApplicationController
   end
   
   def update_auth_type
-    if (params[:user][:auth_type] == 'open_id') && openid_enabled?
-      case open_id_response.status
-        when OpenID::SUCCESS
-          # The URL was a valid identity URL. Now we just need to send a redirect
-          # to the server using the redirect_url the library created for us.
-          session['openid_url'] = params[:openid_url]
-
-          # redirect to the server
-          redirect_to open_id_response.redirect_url((request.protocol + request.host_with_port + "/"), url_for(:action => 'complete'))
+    if (params[:open_id_complete] || (params[:user][:auth_type] == 'open_id')) && openid_enabled?
+      authenticate_with_open_id do |result, identity_url|
+        if result.successful?
+          # Success means that the transaction completed without
+          # error. If info is nil, it means that the user cancelled
+          # the verification.
+          @user.auth_type = 'open_id'
+          @user.identity_url = identity_url
+          if @user.save
+            notify :notice, "You have successfully verified #{identity_url} as your identity and set your authentication type to Open ID."
+          else
+            debugger
+            notify :warning, "You have successfully verified #{identity_url} as your identity but there was a problem saving your authentication preferences."
+          end
+          redirect_to preferences_path
         else
-          notify :warning, "Unable to find openid server for <q>#{openid_url}</q>"
+          notify :warning, result.message
           redirect_to :action => 'change_auth_type'
+        end
       end
       return
     end
@@ -177,47 +178,6 @@ class UsersController < ApplicationController
       redirect_to :action => 'change_auth_type'
     end
   end
-  
-  def complete
-    return unless openid_enabled?
-    openid_url = session['openid_url']
-    if openid_url.blank?
-      notify :error, "expected an openid_url"
-    end
-    case open_id_response.status
-      when OpenID::FAILURE
-        # In the case of failure, if info is non-nil, it is the
-        # URL that we were verifying. We include it in the error
-        # message to help the user figure out what happened.
-        if open_id_response.identity_url
-          msg = "Verification of #{openid_url}(#{open_id_response.identity_url}) failed. "
-        else
-          msg = "Verification failed. "
-        end
-        notify :error, open_id_response.msg.to_s + msg
-
-      when OpenID::SUCCESS
-        # Success means that the transaction completed without
-        # error. If info is nil, it means that the user cancelled
-        # the verification.
-        @user.auth_type = 'open_id'
-        @user.open_id_url = openid_url
-        if @user.save
-          notify :notice, "You have successfully verified #{openid_url} as your identity and set your authentication type to Open ID."
-        else
-          notify :warning, "You have successfully verified #{openid_url} as your identity but there was a problem saving your authentication preferences."
-        end
-        redirect_to preferences_path
-
-      when OpenID::CANCEL
-        notify :warning, "Verification cancelled."
-
-      else
-        notify :warning, "Unknown response status: #{open_id_response.status}"
-    end
-    redirect_to :action => 'change_auth_type' unless performed?
-  end
-  
   
   def refresh_token
     @user.generate_token
