@@ -96,7 +96,7 @@ class LoginController < ApplicationController
     session['noexpiry'] ||= params['user_noexpiry']
     authenticate_with_open_id do |result, identity_url|
       if result.successful?
-        if @user = User.find_by_identity_url(identity_url)
+        if @user = User.find_by_open_id_url(identity_url)
           session['user_id'] = @user.id
           msg = (should_expire_sessions?) ? "will expire after 1 hour of inactivity." : "will not expire." 
           notify :notice, "Login successful: session #{msg}"
