@@ -1,19 +1,18 @@
 = Tracks: a GTD web application, built with Ruby on Rails
 
-* Homepage: http://www.rousette.org.uk/projects/
-* Author: bsag (http://www.rousette.org.uk/)
-* Contributors: Nicholas Lee, Lolindrath, Jim Ray, Arnaud Limbourg, Timothy Martens, Luke Melia, John Leonard, Jim Strupp, Eric Lesh, Damien Cirotteau, Janet Riley, Reinier Balt, Jacqui Maher, James Kebinger, Jeffrey Gipson, Eric Allen
+* Project homepage: http://www.rousette.org.uk/projects/
+* GitHub: http://github.com/bsag/tracks/
+* Trac (for bug reports and feature requests): http://dev.rousette.org.uk/report/6
+* Wiki (community contributed information): http://www.rousette.org.uk/projects/wiki/
+* Forum: http://www.rousette.org.uk/projects/forums/
+* Mailing list: http://lists.rousette.org.uk/mailman/listinfo/tracks-discuss
+* Original developer: bsag (http://www.rousette.org.uk/)
+* Contributors: http://dev.rousette.org.uk/wiki/Tracks/Contributing/Contributors
 * Version: 1.6
-* Copyright: (cc) 2004-2008 rousette.org.uk
-* License: GNU GPL
+* Copyright: (cc) 2004-2008 rousette.org.uk.
+* License:  GNU GPL
 
-Main project site: http://www.rousette.org.uk/projects/
-
-Trac (for bug reports and feature requests): http://dev.rousette.org.uk/report/6
-
-Wiki (deprecated - please use Trac): http://www.rousette.org.uk/projects/wiki/
-
-== Version 1.7dev
+== Version 1.7RC
 
 New features:
 1. Recurring todos
@@ -25,8 +24,9 @@ New features:
 7. You can now sort projects on number of active todos
 
 Under the hood:
-1. Move selenium tests to RSpec 
-2. Bugfixes
+1. Started to move selenium tests to RSpec 
+2. Upgrade to Rails 2.2.2
+2. Bugfixes, including fixing OpenID
 
 == Version 1.6
 1. upgrade to rails 2.0.2
