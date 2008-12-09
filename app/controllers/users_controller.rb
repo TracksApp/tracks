@@ -154,7 +154,7 @@ class UsersController < ApplicationController
           # error. If info is nil, it means that the user cancelled
           # the verification.
           @user.auth_type = 'open_id'
-          @user.identity_url = identity_url
+          @user.open_id_url = identity_url
           if @user.save
             notify :notice, "You have successfully verified #{identity_url} as your identity and set your authentication type to Open ID."
           else
