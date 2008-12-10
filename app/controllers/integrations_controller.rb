@@ -1,5 +1,7 @@
 class IntegrationsController < ApplicationController
 
+  skip_before_filter :login_required, :only => :search_plugin
+
   def index
     @page_title = 'TRACKS::Integrations'
   end
@@ -22,4 +24,12 @@ class IntegrationsController < ApplicationController
     context = current_user.contexts.find params[:context_id]
     render :partial => 'applescript2', :locals => { :context => context }
   end
+
+  def search_plugin
+	@icon_data = [File.open(RAILS_ROOT + '/public/images/done.png').read].
+	  pack('m').gsub(/\n/, '')
+
+	render :layout => false
+  end
+
 end
