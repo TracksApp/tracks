@@ -1,8 +1,8 @@
-Title:              Tracks 1.6 Manual
+Title:              Tracks 1.7 Manual
 Author:             Tracks Development Team
 Date:               2008-04-07
-Revision:           $Id: manual.markdown 864 2008-06-03 17:01:00Z bsag $
-Version:            1.6
+Revision:           $Id: manual.markdown 864 2008-12-09 09:30:00Z bsag $
+Version:            1.7
 Copyright:			    2008 rousette.org.uk  
 					This work is licensed under a Creative Commons License.  
 					http://creativecommons.org/licenses/by-nc-sa/3.0/
@@ -14,15 +14,13 @@ CSS:                manual.css
 
 <!-- The HTML file manual.html is generated from manual.markdown, so make edits to the *.markdown file -->
 
-# Installing Tracks 1.6 #
+# Installing Tracks 1.7 #
 
 ## Introduction ##
 
-**An important note for version 1.6: OpenID support is broken in this release. The fix isn't trivial because of changes to the `ruby-openid` gem, so we wanted to get this version out now and fix OpenID for the next release. If you depend on OpenID integration, we recommend waiting until the next release.**
+Tracks 1.7 has been thoroughly beta tested by a large number of people, and should be fully stable for everyday use. However, once set up, Tracks will contain the majority of your plans for your work and personal life, so it's only sensible to make sure that you have frequent, reliable backups of your data. Full changenotes on the release can be found in `doc/CHANGELOG`. Full API documentation can be found at `doc/app/index.html`, once you have run `rake appdoc`
 
-Tracks 1.6 has been thoroughly beta tested by a large number of people, and should be fully stable for everyday use. However, once set up, Tracks will contain the majority of your plans for your work and personal life, so it's only sensible to make sure that you have frequent, reliable backups of your data. Full changenotes on the release can be found in `doc/CHANGELOG`. Full API documentation can be found at `doc/app/index.html`, once you have run `rake appdoc`
-
-There are two methods of downloading Tracks 1.6:
+There are two methods of downloading Tracks 1.7:
 
 1. (Recommended for most people) Download the [zipped package](http://www.rousette.org.uk/projects/files/tracks-current.zip), and unzip in your preferred location (e.g. `~/Sites` for Mac OS X users).
 2. If you want to live on the edge, you can get the latest development version from GitHub using git (bear in mind that this may be less stable than the released versions):
@@ -50,7 +48,7 @@ If you'd like an easy way to access Tracks from any internet-connected computer,
 ### What is included with the Tracks package ###
 
 1. Tracks itself
-2. Rails 2.0.2 (installed in the `/vendor/rails` directory, so you do not need to install Rails yourself)
+2. Rails 2.2.2 (installed in the `/vendor/rails` directory, so you do not need to install Rails yourself)
 3. An empty SQLite3 database, set up with the correct database schema
 
 ### What you need to install [whatyouneed] ###
@@ -61,18 +59,18 @@ If you don't want to (or can't) use one of the all in one installations, you'll 
 2. **RubyGems**. The gems needed by Rails to interact with the database have to be compiled on the platform on which they will be run, so we cannot include them with the Tracks package, unlike some other gems. So you will need to [download](http://rubyforge.org/frs/?group_id=126) and install RubyGems (run `ruby setup.rb` after extracting the package). Note that once again, Mac OS X Leopard users get an easy life, because RubyGems and the SQLite3 gem is already installed. Once installed you can use RubyGems to install the gems you need for your database. If you are using SQLite3, run `sudo gem install sqlite3-ruby`, then select the appropriate package for your platform (version 1.2.1 recommended). You can use MySQL without installing a gem, but installing the gem can speed things up a bit: `sudo install gem mysql`. If you're using Leopard, there are a few work-arounds necessary, which are explained on [Mac OS Forge](http://trac.macosforge.org/projects/ruby/wiki/Troubleshooting#IcannotbuildrubymysqlonLeopardwithmysql.combinaries). The ruby-mysql bindings can sometimes be a bit troublesome to install, so to be honest, it's probably not worth the bother unless you are trying to wring maximum speed out of your system. If you are using PostgreSQL, then you can install a postgres gem: `gem install postgres`.
 3. **Database**. The easiest option is to use SQLite3, as the database is included in the package. All you need then is the `sqlite3-ruby` gem, as described in step 2, and the SQLite3 libraries and binary (see [sqlite.org](http://sqlite.org/download.html) for downloads and installation instructions). If you want to use MySQL, download and install a package for your platform from [MySQL.com](http://dev.mysql.com/downloads/mysql/5.0.html). The basic steps for Postgresql should be similar to those for MySQL, but they will not be discussed further here.
 
-If you are using Unix, you might find [this guide](http://www.cooldown.com.ar/2006/12/16/install-tracks-on-ubuntu-or-debian/) by c00i90wn helpful. It was written for Tracks 1.043, but it should work for Tracks 1.6.
+You can find several installation howtos for specific setups [here](http://dev.rousette.org.uk/wiki/Tracks/Install). They were contributed by various Tracks users.
 
 ## Installation ##
 
-This description is intended for people installing Tracks from scratch. If you would like to upgrade an existing installation, please see [Upgrading to Tracks 1.6][upgrading].
+This description is intended for people installing Tracks from scratch. If you would like to upgrade an existing installation, please see [Upgrading to Tracks 1.7][upgrading].
 
 1. [Unzip tracks][unzip_install] and install in a directory
 2. Decide on a [database][database_install] to use
-  1.  SQLite3 - change database.yml to point to SQLite3 database
+  1.  SQLite3 - change database.yml to point to SQLite3 database. Make sure you add the complete path to the database
   2.  MySQL - create new MySQL db and grant all privileges 
 3. [Configure some variables][config_install]
-4. Populate the database with the [Tracks 1.6 schema][rake_install]
+4. Populate the database with the [Tracks 1.7 schema][rake_install]
 5. [Start the server][startserver_install]
 6. [Visit Tracks in a browser][signup_install]
 7. [Customise Tracks][customise_install]
@@ -86,34 +84,34 @@ Unzip the package and move Tracks into the directory you want to run it from. Fo
 Before you go any further, you need to decide which database you will use. See the [What you need to install][whatyouneed] section for details on installing the required components for you choice of database.
 
 1. **SQLite3**. All you need to do is make sure that you point Tracks to the included SQLite3 database in `/db` in the next step, [Configure variables][config_install].
-2. **MySQL**. Once you have MySQL installed, you need to create a database to use with Tracks 1.6. Go into a terminal and issue the following commands:
+2. **MySQL**. Once you have MySQL installed, you need to create a database and database-user to use with Tracks 1.7. For this, you can use MySQL Administrator or go into a terminal and issue the following commands:
 <pre>
 <code>
     mysql -uroot -p
-    mysql> CREATE DATABASE tracks15;
-    mysql> GRANT ALL PRIVILEGES ON tracks15.* TO yourmysqluser@localhost \
+    mysql> CREATE DATABASE tracks16;
+    mysql> GRANT ALL PRIVILEGES ON tracks16.* TO yourmysqluser@localhost \
     IDENTIFIED BY 'password-goes-here' WITH GRANT OPTION;
 </code>
 </pre>
 
 ### Configure variables [config_install] ###
 
-1. If you downloaded Tracks 1.6 via Subversion, you need to duplicate the files `database.yml.tmpl` and `environment.yml.tmpl` and remove the `*.tmpl` extension from the duplicates. Similarly, duplicate `/log.tmpl` and remove the `*.tmpl` extension, then edit the files as described in steps 2 and 3.
+1. If you downloaded Tracks 1.7 via Subversion, you need to duplicate the files `database.yml.tmpl` and `environment.yml.tmpl` and remove the `*.tmpl` extension from the duplicates. Similarly, duplicate `/log.tmpl` and remove the `*.tmpl` extension, then edit the files as described in steps 2 and 3.
 2. Open the file `/config/database.yml` and edit the `production:` section with the details of your database. If you are using MySQL the `adapter:` line should read `adapter: mysql`, `host: localhost` (in the majority of cases), and your username and password should match those you assigned when you created the database. If you are using SQLite3, you should have only two lines under the production section: `adapter: sqlite3` and `database: db/tracks-15-blank.db`. If you downloaded the zipped file, the database.yml file is already configured to use the provided SQLite3 file.
-3. Open the file `/config/environment.rb`, and read through the settings to make sure that they suit your setup. In most cases, all you need to change is the `SALT = "change-me"` line (change the string "change-me" to some other string of your choice), and the time zone setting.
+3. Open the file `/config/environment.rb`, and read through the settings to make sure that they suit your setup. In most cases, all you need to change is the `SALT = "change-me"` line (change the string "change-me" to some other string of your choice), and the time zone setting. For the time zone setting, most people will only want to change the config.time_zone option and leave the timezone to use in your database to :utc
 4. If you are using Windows, you may need to check the 'shebang' lines (`#!/usr/bin/env ruby`) of the `/public/dispatch.*` files and all the files in the `/script` directory. They are set to `#!/usr/bin/env ruby` by default. This should work for all *nix based setups (Linux or Mac OS X), but Windows users will probably have to change it to something like `#c:/ruby/bin/ruby` to point to the Ruby binary on your system.
 
-### Populate your database with the Tracks 1.6 schema [rake_install] ###
+### Populate your database with the Tracks 1.7 schema [rake_install] ###
 
-Open a terminal and change into the root of your Tracks 1.6 directory. Enter the following command:
+Open a terminal and change into the root of your Tracks 1.7 directory. Enter the following command:
 
 `rake db:migrate RAILS_ENV=production`
 
-This will update your database with the required schema for Tracks 1.6. If you are using SQLite3, it is not strictly necessary, because the SQLite3 database included with Tracks already has the schema included in it, but it should not do any harm to run the command (nothing will happen if it is up to date).
+This will update your database with the required schema for Tracks 1.7. If you are using SQLite3, it is not strictly necessary, because the SQLite3 database included with Tracks already has the schema included in it, but it should not do any harm to run the command (nothing will happen if it is up to date).
 
 ### Start the server [startserver_install] ###
 
-While still in the Terminal inside the Tracks 1.6 root directory, issue the following command:
+While still in the Terminal inside the Tracks 1.7 root directory, issue the following command:
 
 `script/server -e production`
 
@@ -127,7 +125,19 @@ Visit `http://0.0.0.0:3000/signup` in a browser (or whatever URL and port was re
 
 Once logged in, add some Contexts and Projects, and then go ahead and add your actions. You might also want to visit the Preferences page to edit various settings to your liking. Have fun!
 
-# Upgrading to Tracks 1.6 [upgrading] #
+# Upgrading to Tracks 1.7 [upgrading] #
+
+## Upgrading from Tracks 1.6 [upgrading_1.6] ##
+
+You will need to upgrade your `config/environment.rb` with the new content from `config/environment.rb.tmpl` included in 1.7, as the format of this file has changed a bit between 1.6 and 1.7. Also, there were some database changes in Tracks 1.7, so you need to migrate to them.
+
+1. [Back up][backup_upgrade] your existing database and installation of Tracks
+2. [Install Tracks 1.7][install_upgrade] in a new directory
+3. [Copy over][config_upgrade] a few configuration files from your Tracks 1.6 directory. If using SQLite3, copy the old database into the new Tracks 1.7 directory.
+4. Rebuild your environment.rb from the updated environment.rb.tmpl
+5. Run `rake db:migrate RAILS_ENV=production` to [update your old database][rake_upgrade] to the new schema -- you did back up your database didn't you?
+6. Run `script/server` inside your Tracks 1.7 directory to [start up Tracks 1.7][startserver_upgrade].
+7. Once you are happy that everything is working well, [delete your old Tracks directory][cleanup_upgrade].
 
 ## Upgrading from Tracks 1.5 [upgrading_1.5] ##
 
@@ -136,9 +146,9 @@ There are no changes to the database between 1.5 and 1.6, but you will need to u
 1. [Back up][backup_upgrade] your existing database and installation of Tracks
 2. [Install Tracks 1.6][install_upgrade] in a new directory
 3. [Copy over][config_upgrade] a few configuration files from your Tracks 1.043 directory. If using SQLite3, copy the old database into the new Tracks 1.6 directory
-4. Run `script/server` inside your Tracks 1.6 directory to [start up Tracks 1.6][startserver_upgrade].
-5. Once you are happy that everything is working well, [delete your old Tracks directory][cleanup_upgrade].
-
+4. Rebuild your environment.rb from the updated environment.rb.tmpl
+5. Run `script/server` inside your Tracks 1.6 directory to [start up Tracks 1.6][startserver_upgrade].
+6. Once you are happy that everything is working well, [delete your old Tracks directory][cleanup_upgrade].
 
 ## Upgrading from Tracks 1.043 [upgrading_1043] ##
 
@@ -157,11 +167,11 @@ It's very important that you **back up your database** before you start the upgr
 
 `mysqldump –-user [user name] –-password=[password] [database name] > [dump file]`
 
-Rename your old Tracks installation (e.g. to 'tracks-old') so that you can install Tracks 1.6 along side it.
+Rename your old Tracks installation (e.g. to 'tracks-old') so that you can install Tracks 1.7 along side it.
 
-### Install Tracks 1.6 [install_upgrade] ###
+### Install Tracks 1.7 [install_upgrade] ###
 
-There are two methods of downloading Tracks 1.6:
+There are two methods of downloading Tracks 1.7:
 
 1. (Recommended for most people) Download the [zipped package](http://www.rousette.org.uk/projects/files/tracks-current.zip), and unzip in your preferred location (e.g. `~/Sites` for Mac OS X users).
 2. If you want to live on the edge, you can get the latest development version from GitHub using git (bear in mind that this may be less stable than the released versions):
@@ -179,14 +189,14 @@ There are two methods of downloading Tracks 1.6:
 There are a few files you need to copy over from your old installation. If you copy them over rather than moving them, you can still run your old version of Tracks if anything goes awry with the installation process.
 
 1. Copy `/config/database.yml` from your old Tracks directory to the same location in the new one. Double check that the information there is still correct.
-2. Duplicate `/config/environment.rb.tmpl` in the Tracks 1.6 directory, and rename the file to `environment.rb`. Open the file and alter the line `SALT = "change-me"` so that it matches what you had in this file in your old installation. You may also want to change the time zone setting as appropriate for your location (`ENV['TZ'] = 'US/Eastern'`). If you have made any other customisations to `environment.rb` in the past, copy those over, but the contents of the file have changed quite a lot since 1.043, so check it carefully.
+2. Duplicate `/config/environment.rb.tmpl` in the Tracks 1.7 directory, and rename the file to `environment.rb`. Open the file and alter the line `SALT = "change-me"` so that it matches what you had in this file in your old installation. You may also want to change the time zone setting as appropriate for your location. If you have made any other customisations to `environment.rb` in the past, copy those over, but the contents of the file have slightly changed since 1.5, so check it carefully.
 3. Copy your `/log` directory over from your old installation to the root of the new one, or just rename `/log.tmpl` to `log` to start afresh.
 4. If you are using SQLite3, copy your database from `/db` in your old Tracks directory to the same location in the new one.
 5. If you are using Windows, you may need to check the 'shebang' lines (`#!/usr/bin/env ruby`)[^env] of the `/public/dispatch.*` files and all the files in the `/script` directory. They are set to `#!/usr/bin/env ruby` by default. Check the format of those lines in your old installation, and change the new ones as necessary.
 
 ### Update your old database to the new format [rake_upgrade] ###
 
-In a terminal, change directories so that you are inside the Tracks 1.6 directory. Then issue the command to update your Tracks 1.043 database to the format required for Tracks 1.6:
+In a terminal, change directories so that you are inside the Tracks 1.7 directory. Then issue the command to update your Tracks 1.6 database to the format required for Tracks 1.7:
 
 `rake db:migrate RAILS_ENV=production`
 
@@ -194,7 +204,7 @@ Watch the output carefully for errors, but it should report at the end of the pr
 
 ### Start the server [startserver_upgrade] ###
 
-If you're still in the Tracks 1.6 root directory in a terminal, enter the following command to start up Tracks in production mode:
+If you're still in the Tracks 1.7 root directory in a terminal, enter the following command to start up Tracks in production mode:
 
 `script/server -e production`
 
@@ -203,7 +213,7 @@ Visit the URL indicated by the output (e.g. `** Mongrel available at 0.0.0.0:300
 
 ### Clean up your old installation [cleanup_upgrade] ###
 
-Once you're certain that your new Tracks 1.6 installation is working perfectly, you can delete your old Tracks directory.
+Once you're certain that your new Tracks 1.7 installation is working perfectly, you can delete your old Tracks directory.
 
 [^env]: The `env` binary helps to locate other binaries, regardless of their location. If you don't have `env` installed, you'll need to change this line to point to the location of your Ruby binary.
 

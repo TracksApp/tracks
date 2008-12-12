@@ -12,8 +12,6 @@ class UpgradeOpenId < ActiveRecord::Migration
       t.string :salt, :null => false
     end
     
-    add_column :users, :identity_url, :string
-    
     drop_table :open_id_associations
     drop_table :open_id_nonces
     drop_table :open_id_settings
@@ -41,7 +39,5 @@ class UpgradeOpenId < ActiveRecord::Migration
       t.string "setting"
       t.binary "value"
     end
-
-    remove_column :users, :identity_url
   end
 end
