@@ -112,12 +112,12 @@
 \usepackage{booktabs}			% Better tables
 \usepackage{tabulary}			% Support longer table cells
 \usepackage[utf8]{inputenc}		% For UTF-8 support
-% \usepackage{xcolor}				% Allow for color (annotations)
-% 
-% %\geometry{landscape}			% Activate for rotated page geometry
-% 
-% \usepackage[parfill]{parskip}	% Activate to begin paragraphs with an empty
-% 								% line rather than an indent
+%\usepackage{xcolor}				% Allow for color (annotations)
+
+%\geometry{landscape}			% Activate for rotated page geometry
+
+%\usepackage[parfill]{parskip}	% Activate to begin paragraphs with an empty
+								% line rather than an indent
 
 
 \def\myauthor{Author}			% In case these were not included in metadata
@@ -130,14 +130,14 @@
 \def\myauthor{Tracks Development Team}
 \def\baseheaderlevel{2}
 \def\mycopyright{2008 rousette.org.uk \\ This work is licensed under a Creative Commons License. \\ http://creativecommons.org/licenses/by-nc-sa/3.0/}
-\date{2008-04-07}
+\date{2008-12-14}
 \def\format{complete}
 \def\latexxslt{memoir-twosided-manual.xslt}
-\def\revision{Revision: \$Id: manual.markdown 864 2008-06-03 17:01:00Z bsag \$}
-\def\mytitle{Tracks 1.6 Manual}
-\def\version{1.6}
-% \usepackage{xmpincl}
-% \includexmp{CCAttributionShareAlike}
+\def\revision{Revision: \$Id: manual.markdown 2008-12-14 11:50:00Z bsag \$}
+\def\mytitle{Tracks 1.7 Manual}
+\def\version{1.7}
+\usepackage{xmpincl}
+\includexmp{CCAttributionShareAlike}
 
 
 %
@@ -254,19 +254,16 @@
 \setlength{\parskip}{\baselineskip/2}
 
 \mainmatter
-\chapter{Installing Tracks 1.6}
-\label{installingtracks1.6}
+\chapter{Installing Tracks 1.7}
+\label{installingtracks1.7}
 
 \section{Introduction}
 \label{introduction}
 
-\textbf{An important note for version 1.6: OpenID support is broken in this release. The fix isn't trivial because of changes to the \texttt{ruby-openid} gem, so we wanted to get this version out now and fix OpenID for the next release. If you depend on OpenID integration, we recommend waiting until the next release.}
+Tracks 1.7 has been thoroughly beta tested by a large number of people, and should be fully stable for everyday use. However, once set up, Tracks will contain the majority of your plans for your work and personal life, so it's only sensible to make sure that you have frequent, reliable backups of your data. Full changenotes on the release can be found in \texttt{doc/CHANGELOG}. Full API documentation can be found at \texttt{doc/app/index.html}, once you have run \texttt{rake appdoc}
 
 
-Tracks 1.6 has been thoroughly beta tested by a large number of people, and should be fully stable for everyday use. However, once set up, Tracks will contain the majority of your plans for your work and personal life, so it's only sensible to make sure that you have frequent, reliable backups of your data. Full changenotes on the release can be found in \texttt{doc/CHANGELOG}. Full API documentation can be found at \texttt{doc/app/index.html}, once you have run \texttt{rake appdoc}
-
-
-There are two methods of downloading Tracks 1.6:
+There are two methods of downloading Tracks 1.7:
 
 
 \begin{enumerate}
@@ -315,7 +312,7 @@ If you'd like an easy way to access Tracks from any internet-connected computer,
 
 \item Tracks itself
 
-\item Rails 2.0.2 (installed in the \texttt{/vendor/rails} directory, so you do not need to install Rails yourself)
+\item Rails 2.2.2 (installed in the \texttt{/vendor/rails} directory, so you do not need to install Rails yourself)
 
 \item An empty SQLite3 database, set up with the correct database schema
 \end{enumerate}
@@ -336,13 +333,13 @@ If you don't want to (or can't) use one of the all in one installations, you'll 
 \item \textbf{Database}. The easiest option is to use SQLite3, as the database is included in the package. All you need then is the \texttt{sqlite3-ruby} gem, as described in step 2, and the SQLite3 libraries and binary (see \href{http://sqlite.org/download.html}{sqlite.org} for downloads and installation instructions). If you want to use MySQL, download and install a package for your platform from \href{http://dev.mysql.com/downloads/mysql/5.0.html}{MySQL.com}. The basic steps for Postgresql should be similar to those for MySQL, but they will not be discussed further here.
 \end{enumerate}
 
-If you are using Unix, you might find \href{http://www.cooldown.com.ar/2006/12/16/install-tracks-on-ubuntu-or-debian/}{this guide} by c00i90wn helpful. It was written for Tracks 1.043, but it should work for Tracks 1.6.
+You can find several installation howtos for specific setups \href{http://dev.rousette.org.uk/wiki/Tracks/Install}{here}. They were contributed by various Tracks users.
 
 
 \section{Installation}
 \label{installation}
 
-This description is intended for people installing Tracks from scratch. If you would like to upgrade an existing installation, please see Upgrading to Tracks 1.6 (\autoref{upgrading}).
+This description is intended for people installing Tracks from scratch. If you would like to upgrade an existing installation, please see Upgrading to Tracks 1.7 (\autoref{upgrading}).
 
 
 \begin{enumerate}
@@ -354,7 +351,7 @@ This description is intended for people installing Tracks from scratch. If you w
 \begin{enumerate}
 
 
-\item SQLite3 - change database.yml to point to SQLite3 database
+\item SQLite3 - change database.yml to point to SQLite3 database. Make sure you add the complete path to the database
 
 \item MySQL - create new MySQL db and grant all privileges 
 \end{enumerate}
@@ -363,7 +360,7 @@ This description is intended for people installing Tracks from scratch. If you w
 
 \item Configure some variables (\autoref{config_install})
 
-\item Populate the database with the Tracks 1.6 schema (\autoref{rake_install})
+\item Populate the database with the Tracks 1.7 schema (\autoref{rake_install})
 
 \item Start the server (\autoref{startserver_install})
 
@@ -389,7 +386,7 @@ Before you go any further, you need to decide which database you will use. See t
 
 \item \textbf{SQLite3}. All you need to do is make sure that you point Tracks to the included SQLite3 database in \texttt{/db} in the next step, Configure variables (\autoref{config_install}).
 
-\item \textbf{MySQL}. Once you have MySQL installed, you need to create a database to use with Tracks 1.6. Go into a terminal and issue the following commands:
+\item \textbf{MySQL}. Once you have MySQL installed, you need to create a database and database-user to use with Tracks 1.7. For this, you can use MySQL Administrator or go into a terminal and issue the following commands:
 \end{enumerate}
 
 \begin{adjustwidth}{2.5em}{2.5em}
@@ -397,8 +394,8 @@ Before you go any further, you need to decide which database you will use. See t
 
 
     mysql -uroot -p
-    mysql> CREATE DATABASE tracks15;
-    mysql> GRANT ALL PRIVILEGES ON tracks15.* TO yourmysqluser@localhost \
+    mysql> CREATE DATABASE tracks16;
+    mysql> GRANT ALL PRIVILEGES ON tracks16.* TO yourmysqluser@localhost \
     IDENTIFIED BY 'password-goes-here' WITH GRANT OPTION;
 
 
@@ -411,31 +408,31 @@ Before you go any further, you need to decide which database you will use. See t
 \begin{enumerate}
 
 
-\item If you downloaded Tracks 1.6 via Subversion, you need to duplicate the files \texttt{database.yml.tmpl} and \texttt{environment.yml.tmpl} and remove the \texttt{*.tmpl} extension from the duplicates. Similarly, duplicate \texttt{/log.tmpl} and remove the \texttt{*.tmpl} extension, then edit the files as described in steps 2 and 3.
+\item If you downloaded Tracks 1.7 via Subversion, you need to duplicate the files \texttt{database.yml.tmpl} and \texttt{environment.yml.tmpl} and remove the \texttt{*.tmpl} extension from the duplicates. Similarly, duplicate \texttt{/log.tmpl} and remove the \texttt{*.tmpl} extension, then edit the files as described in steps 2 and 3.
 
 \item Open the file \texttt{/config/database.yml} and edit the \texttt{production:} section with the details of your database. If you are using MySQL the \texttt{adapter:} line should read \texttt{adapter: mysql}, \texttt{host: localhost} (in the majority of cases), and your username and password should match those you assigned when you created the database. If you are using SQLite3, you should have only two lines under the production section: \texttt{adapter: sqlite3} and \texttt{database: db/tracks-15-blank.db}. If you downloaded the zipped file, the database.yml file is already configured to use the provided SQLite3 file.
 
-\item Open the file \texttt{/config/environment.rb}, and read through the settings to make sure that they suit your setup. In most cases, all you need to change is the \texttt{SALT = "change-me"} line (change the string ``change-me" to some other string of your choice), and the time zone setting.
+\item Open the file \texttt{/config/environment.rb}, and read through the settings to make sure that they suit your setup. In most cases, all you need to change is the \texttt{SALT = "change-me"} line (change the string ``change-me" to some other string of your choice), and the time zone setting. For the time zone setting, most people will only want to change the config.time\_zone option and leave the timezone to use in your database to :utc
 
 \item If you are using Windows, you may need to check the `shebang' lines (\texttt{\#!/usr/bin/env ruby}) of the \texttt{/public/dispatch.*} files and all the files in the \texttt{/script} directory. They are set to \texttt{\#!/usr/bin/env ruby} by default. This should work for all *nix based setups (Linux or Mac OS X), but Windows users will probably have to change it to something like \texttt{\#c:/ruby/bin/ruby} to point to the Ruby binary on your system.
 \end{enumerate}
 
-\subsection{Populate your database with the Tracks 1.6 schema}
+\subsection{Populate your database with the Tracks 1.7 schema}
 \label{rake_install}
 
-Open a terminal and change into the root of your Tracks 1.6 directory. Enter the following command:
+Open a terminal and change into the root of your Tracks 1.7 directory. Enter the following command:
 
 
 \texttt{rake db:migrate RAILS\_ENV=production}
 
 
-This will update your database with the required schema for Tracks 1.6. If you are using SQLite3, it is not strictly necessary, because the SQLite3 database included with Tracks already has the schema included in it, but it should not do any harm to run the command (nothing will happen if it is up to date).
+This will update your database with the required schema for Tracks 1.7. If you are using SQLite3, it is not strictly necessary, because the SQLite3 database included with Tracks already has the schema included in it, but it should not do any harm to run the command (nothing will happen if it is up to date).
 
 
 \subsection{Start the server}
 \label{startserver_install}
 
-While still in the Terminal inside the Tracks 1.6 root directory, issue the following command:
+While still in the Terminal inside the Tracks 1.7 root directory, issue the following command:
 
 
 \texttt{script/server -e production}
@@ -456,8 +453,32 @@ Visit \texttt{http://0.0.0.0:3000/signup} in a browser (or whatever URL and port
 Once logged in, add some Contexts and Projects, and then go ahead and add your actions. You might also want to visit the Preferences page to edit various settings to your liking. Have fun!
 
 
-\chapter{Upgrading to Tracks 1.6}
+\chapter{Upgrading to Tracks 1.7}
 \label{upgrading}
+
+\section{Upgrading from Tracks 1.6}
+\label{upgrading_1.6}
+
+You will need to upgrade your \texttt{config/environment.rb} with the new content from \texttt{config/environment.rb.tmpl} included in 1.7, as the format of this file has changed a bit between 1.6 and 1.7. Also, there were some database changes in Tracks 1.7, so you need to migrate to them.
+
+
+\begin{enumerate}
+
+
+\item Back up (\autoref{backup_upgrade}) your existing database and installation of Tracks
+
+\item Install Tracks 1.7 (\autoref{install_upgrade}) in a new directory
+
+\item Copy over (\autoref{config_upgrade}) a few configuration files from your Tracks 1.6 directory. If using SQLite3, copy the old database into the new Tracks 1.7 directory.
+
+\item Rebuild your environment.rb from the updated environment.rb.tmpl
+
+\item Run \texttt{rake db:migrate RAILS\_ENV=production} to update your old database (\autoref{rake_upgrade}) to the new schema -- you did back up your database didn't you?
+
+\item Run \texttt{script/server} inside your Tracks 1.7 directory to start up Tracks 1.7 (\autoref{startserver_upgrade}).
+
+\item Once you are happy that everything is working well, delete your old Tracks directory (\autoref{cleanup_upgrade}).
+\end{enumerate}
 
 \section{Upgrading from Tracks 1.5}
 \label{upgrading_1.5}
@@ -473,6 +494,8 @@ There are no changes to the database between 1.5 and 1.6, but you will need to u
 \item Install Tracks 1.6 (\autoref{install_upgrade}) in a new directory
 
 \item Copy over (\autoref{config_upgrade}) a few configuration files from your Tracks 1.043 directory. If using SQLite3, copy the old database into the new Tracks 1.6 directory
+
+\item Rebuild your environment.rb from the updated environment.rb.tmpl
 
 \item Run \texttt{script/server} inside your Tracks 1.6 directory to start up Tracks 1.6 (\autoref{startserver_upgrade}).
 
@@ -510,13 +533,13 @@ It's very important that you \textbf{back up your database} before you start the
 \texttt{mysqldump ---user [user name] ---password=[password] [database name] $>$ [dump file]}
 
 
-Rename your old Tracks installation (e.g.\ to `tracks-old') so that you can install Tracks 1.6 along side it.
+Rename your old Tracks installation (e.g.\ to `tracks-old') so that you can install Tracks 1.7 along side it.
 
 
-\subsection{Install Tracks 1.6}
+\subsection{Install Tracks 1.7}
 \label{install_upgrade}
 
-There are two methods of downloading Tracks 1.6:
+There are two methods of downloading Tracks 1.7:
 
 
 \begin{enumerate}
@@ -550,7 +573,7 @@ There are a few files you need to copy over from your old installation. If you c
 
 \item Copy \texttt{/config/database.yml} from your old Tracks directory to the same location in the new one. Double check that the information there is still correct.
 
-\item Duplicate \texttt{/config/environment.rb.tmpl} in the Tracks 1.6 directory, and rename the file to \texttt{environment.rb}. Open the file and alter the line \texttt{SALT = "change-me"} so that it matches what you had in this file in your old installation. You may also want to change the time zone setting as appropriate for your location (\texttt{ENV['TZ'] = 'US/Eastern'}). If you have made any other customisations to \texttt{environment.rb} in the past, copy those over, but the contents of the file have changed quite a lot since 1.043, so check it carefully.
+\item Duplicate \texttt{/config/environment.rb.tmpl} in the Tracks 1.7 directory, and rename the file to \texttt{environment.rb}. Open the file and alter the line \texttt{SALT = "change-me"} so that it matches what you had in this file in your old installation. You may also want to change the time zone setting as appropriate for your location. If you have made any other customisations to \texttt{environment.rb} in the past, copy those over, but the contents of the file have slightly changed since 1.5, so check it carefully.
 
 \item Copy your \texttt{/log} directory over from your old installation to the root of the new one, or just rename \texttt{/log.tmpl} to \texttt{log} to start afresh.
 
@@ -562,7 +585,7 @@ There are a few files you need to copy over from your old installation. If you c
 \subsection{Update your old database to the new format}
 \label{rake_upgrade}
 
-In a terminal, change directories so that you are inside the Tracks 1.6 directory. Then issue the command to update your Tracks 1.043 database to the format required for Tracks 1.6:
+In a terminal, change directories so that you are inside the Tracks 1.7 directory. Then issue the command to update your Tracks 1.6 database to the format required for Tracks 1.7:
 
 
 \texttt{rake db:migrate RAILS\_ENV=production}
@@ -574,7 +597,7 @@ Watch the output carefully for errors, but it should report at the end of the pr
 \subsection{Start the server}
 \label{startserver_upgrade}
 
-If you're still in the Tracks 1.6 root directory in a terminal, enter the following command to start up Tracks in production mode:
+If you're still in the Tracks 1.7 root directory in a terminal, enter the following command to start up Tracks in production mode:
 
 
 \texttt{script/server -e production}
@@ -587,7 +610,7 @@ Visit the URL indicated by the output (e.g.\ \texttt{** Mongrel available at 0.0
 \subsection{Clean up your old installation}
 \label{cleanup_upgrade}
 
-Once you're certain that your new Tracks 1.6 installation is working perfectly, you can delete your old Tracks directory.
+Once you're certain that your new Tracks 1.7 installation is working perfectly, you can delete your old Tracks directory.
 
 
 \section{Upgrading from versions prior to 1.043}

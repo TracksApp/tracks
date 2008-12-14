@@ -48,6 +48,9 @@ module ActionController
     #
     #   # calls post_url(post)
     #   polymorphic_url(post) # => "http://example.com/posts/1"
+    #   polymorphic_url([blog, post]) # => "http://example.com/blogs/1/posts/1"
+    #   polymorphic_url([:admin, blog, post]) # => "http://example.com/admin/blogs/1/posts/1"
+    #   polymorphic_url([user, :blog, post]) # => "http://example.com/users/1/blog/posts/1"
     #
     # ==== Options
     #
@@ -70,7 +73,8 @@ module ActionController
     #
     def polymorphic_url(record_or_hash_or_array, options = {})
       if record_or_hash_or_array.kind_of?(Array)
-        record_or_hash_or_array = record_or_hash_or_array.dup
+        record_or_hash_or_array = record_or_hash_or_array.compact
+        record_or_hash_or_array = record_or_hash_or_array[0] if record_or_hash_or_array.size == 1
       end
 
       record    = extract_record(record_or_hash_or_array)
@@ -83,8 +87,6 @@ module ActionController
         else        [ record_or_hash_or_array ]
       end
 
-      args << format if format
-
       inflection =
         case
         when options[:action].to_s == "new"
@@ -96,9 +98,18 @@ module ActionController
         else
           :singular
         end
+
+      args.delete_if {|arg| arg.is_a?(Symbol) || arg.is_a?(String)}
+      args << format if format
       
       named_route = build_named_route_call(record_or_hash_or_array, namespace, inflection, options)
-      send!(named_route, *args)
+
+      url_options = options.except(:action, :routing_type, :format)
+      unless url_options.empty?
+        args.last.kind_of?(Hash) ? args.last.merge!(url_options) : args << url_options
+      end
+
+      __send__(named_route, *args)
     end
 
     # Returns the path component of a URL for the given record. It uses
@@ -110,19 +121,19 @@ module ActionController
 
     %w(edit new formatted).each do |action|
       module_eval <<-EOT, __FILE__, __LINE__
-        def #{action}_polymorphic_url(record_or_hash)
-          polymorphic_url(record_or_hash, :action => "#{action}")
+        def #{action}_polymorphic_url(record_or_hash, options = {})
+          polymorphic_url(record_or_hash, options.merge(:action => "#{action}"))
         end
 
-        def #{action}_polymorphic_path(record_or_hash)
-          polymorphic_url(record_or_hash, :action => "#{action}", :routing_type => :path)
+        def #{action}_polymorphic_path(record_or_hash, options = {})
+          polymorphic_url(record_or_hash, options.merge(:action => "#{action}", :routing_type => :path))
         end
       EOT
     end
 
     private
       def action_prefix(options)
-        options[:action] ? "#{options[:action]}_" : ""
+        options[:action] ? "#{options[:action]}_" : options[:format] ? "formatted_" : ""
       end
 
       def routing_type(options)
@@ -136,11 +147,19 @@ module ActionController
         else
           record = records.pop
           route = records.inject("") do |string, parent|
-            string << "#{RecordIdentifier.send!("singular_class_name", parent)}_"
+            if parent.is_a?(Symbol) || parent.is_a?(String)
+              string << "#{parent}_"
+            else
+              string << "#{RecordIdentifier.__send__("singular_class_name", parent)}_"
+            end
           end
         end
 
-        route << "#{RecordIdentifier.send!("#{inflection}_class_name", record)}_"
+        if record.is_a?(Symbol) || record.is_a?(String)
+          route << "#{record}_"
+        else
+          route << "#{RecordIdentifier.__send__("#{inflection}_class_name", record)}_"
+        end
 
         action_prefix(options) + namespace + route + routing_type(options).to_s
       end
@@ -163,16 +182,17 @@ module ActionController
         end
       end
       
+      # Remove the first symbols from the array and return the url prefix
+      # implied by those symbols.
       def extract_namespace(record_or_hash_or_array)
-        returning "" do |namespace|
-          if record_or_hash_or_array.is_a?(Array)
-            record_or_hash_or_array.delete_if do |record_or_namespace|
-              if record_or_namespace.is_a?(String) || record_or_namespace.is_a?(Symbol)
-                namespace << "#{record_or_namespace}_"
-              end
-            end
-          end  
+        return "" unless record_or_hash_or_array.is_a?(Array)
+
+        namespace_keys = []
+        while (key = record_or_hash_or_array.first) && key.is_a?(String) || key.is_a?(Symbol)
+          namespace_keys << record_or_hash_or_array.shift
         end
+
+        namespace_keys.map {|k| "#{k}_"}.join
       end
   end
 end

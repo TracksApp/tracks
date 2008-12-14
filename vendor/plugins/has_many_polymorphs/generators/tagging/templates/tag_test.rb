@@ -1,10 +1,15 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class TagTest < Test::Unit::TestCase
-  fixtures :tags, :taggings, <%= taggable_models[0..1].join(", ") -%>
+  fixtures <%= taggable_models[0..1].join(", ") -%>
+  
+  def setup
+    @obj = <%= model_two %>.find(:first)
+    @obj.tag_with "pale imperial"
+  end
 
   def test_to_s
-    assert_equal "delicious sexy", <%= model_two -%>.find(2).tags.to_s
+    assert_equal "imperial pale", <%= model_two -%>.find(:first).tags.to_s
   end
   
 end

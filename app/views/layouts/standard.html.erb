@@ -5,13 +5,23 @@
     <% if @prefs.refresh != 0 -%>
       <meta http-equiv="Refresh" content="<%= @prefs["refresh"].to_i*60 %>;url=<%= request.request_uri %>">
     <% end -%>
-  <%= javascript_include_merged :tracks %>
+  <% bundle do %>
+    <%= javascript_include_tag *%w[
+                                    prototype effects dragdrop controls application
+                                    calendar calendar-en calendar-setup
+                                    accesskey-hints todo-items niftycube
+                                    protoload flashobject lowpro
+                                  ] %>
+    <%= stylesheet_link_tag *%w[ standard calendar-system niftyCorners] %>
+  <% end %>
   <%= javascript_include_tag :unobtrusive %>
-  <%= stylesheet_link_merged :tracks %>
   <%= stylesheet_link_tag "print", :media => "print" %>
   
   <link rel="shortcut icon" href="<%= url_for(:controller => 'favicon.ico') %>" />
   <%= auto_discovery_link_tag(:rss, {:controller => "todos", :action => "index", :format => 'rss', :token => "#{current_user.token}"}, {:title => "RSS feed of next actions"}) %>
+<link rel="search" type="application/opensearchdescription+xml"
+      title="Tracks"
+      href="<%= search_plugin_path %>" />
 
 <script type="text/javascript">
 window.onload=function(){

@@ -13,10 +13,23 @@ class Company < AbstractCompany
   def arbitrary_method
     "I am Jack's profound disappointment"
   end
+
+  private
+
+  def private_method
+    "I am Jack's innermost fears and aspirations"
+  end
 end
 
 module Namespaced
   class Company < ::Company
+  end
+
+  class Firm < ::Company
+    has_many :clients, :class_name => 'Namespaced::Client'
+  end
+
+  class Client < ::Company
   end
 end
 
@@ -26,6 +39,7 @@ class Firm < Company
       "AND (#{QUOTED_TYPE} = 'Client' OR #{QUOTED_TYPE} = 'SpecialClient' OR #{QUOTED_TYPE} = 'VerySpecialClient' )"
   has_many :clients_sorted_desc, :class_name => "Client", :order => "id DESC"
   has_many :clients_of_firm, :foreign_key => "client_of", :class_name => "Client", :order => "id"
+  has_many :unvalidated_clients_of_firm, :foreign_key => "client_of", :class_name => "Client", :validate => false
   has_many :dependent_clients_of_firm, :foreign_key => "client_of", :class_name => "Client", :order => "id", :dependent => :destroy
   has_many :exclusively_dependent_clients_of_firm, :foreign_key => "client_of", :class_name => "Client", :order => "id", :dependent => :delete_all
   has_many :limited_clients, :class_name => "Client", :order => "id", :limit => 1
@@ -45,10 +59,16 @@ class Firm < Company
   has_many :clients_using_finder_sql, :class_name => "Client", :finder_sql => 'SELECT * FROM companies WHERE 1=1'
   has_many :plain_clients, :class_name => 'Client'
   has_many :readonly_clients, :class_name => 'Client', :readonly => true
+  has_many :clients_using_primary_key, :class_name => 'Client',
+           :primary_key => 'name', :foreign_key => 'firm_name'
+  has_many :clients_grouped_by_firm_id, :class_name => "Client", :group => "firm_id", :select => "firm_id"
+  has_many :clients_grouped_by_name, :class_name => "Client", :group => "name", :select => "name"
 
-  has_one :account, :foreign_key => "firm_id", :dependent => :destroy
+  has_one :account, :foreign_key => "firm_id", :dependent => :destroy, :validate => true
+  has_one :unvalidated_account, :foreign_key => "firm_id", :class_name => 'Account', :validate => false
   has_one :account_with_select, :foreign_key => "firm_id", :select => "id, firm_id", :class_name=>'Account'
   has_one :readonly_account, :foreign_key => "firm_id", :class_name => "Account", :readonly => true
+  has_one :account_using_primary_key, :primary_key => "firm_id", :class_name => "Account"
 end
 
 class DependentFirm < Company
@@ -92,6 +112,14 @@ class Client < Company
   def rating?
     query_attribute :rating
   end
+
+  class << self
+    private
+
+    def private_method
+      "darkness"
+    end
+  end
 end
 
 
@@ -115,9 +143,14 @@ class Account < ActiveRecord::Base
     true
   end
 
-
   protected
     def validate
       errors.add_on_empty "credit_limit"
     end
+
+  private
+
+  def private_method
+    "Sir, yes sir!"
+  end
 end

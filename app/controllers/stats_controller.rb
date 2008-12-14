@@ -8,7 +8,7 @@ class StatsController < ApplicationController
     @page_title = 'TRACKS::Statistics'
       
     @unique_tags = @tags.count(:all, {:group=>"tag_id"})
-    @hidden_contexts = @contexts.find(:all, {:conditions => ["hide = ? ", true]})
+    @hidden_contexts = @contexts.hidden
     @first_action = @actions.find(:first, :order => "created_at ASC")
     
     get_stats_actions

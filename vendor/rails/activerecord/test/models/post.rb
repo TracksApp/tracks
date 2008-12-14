@@ -1,6 +1,11 @@
 class Post < ActiveRecord::Base
   named_scope :containing_the_letter_a, :conditions => "body LIKE '%a%'"
-  
+  named_scope :with_authors_at_address, lambda { |address| {
+      :conditions => [ 'authors.author_address_id = ?', address.id ],
+      :joins => 'JOIN authors ON authors.id = posts.author_id'
+    }
+  }
+
   belongs_to :author do
     def greeting
       "hello"
@@ -8,6 +13,7 @@ class Post < ActiveRecord::Base
   end
 
   belongs_to :author_with_posts, :class_name => "Author", :foreign_key => :author_id, :include => :posts
+  belongs_to :author_with_address, :class_name => "Author", :foreign_key => :author_id, :include => :author_address
 
   has_one :last_comment, :class_name => 'Comment', :order => 'id desc'
 
@@ -16,6 +22,8 @@ class Post < ActiveRecord::Base
       find(:first, :order => "id DESC")
     end
   end
+
+  has_many :author_favorites, :through => :author
 
   has_many :comments_with_interpolated_conditions, :class_name => 'Comment',
       :conditions => ['#{"#{aliased_table_name}." rescue ""}body = ?', 'Thank you for the welcome']

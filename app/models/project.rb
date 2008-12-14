@@ -3,6 +3,10 @@ class Project < ActiveRecord::Base
   has_many :notes, :dependent => :delete_all, :order => "created_at DESC"
   belongs_to :default_context, :class_name => "Context", :foreign_key => "default_context_id"
   belongs_to :user
+
+  named_scope :active, :conditions => { :state => 'active' }
+  named_scope :hidden, :conditions => { :state => 'hidden' }
+  named_scope :completed, :conditions => { :state => 'completed'}
   
   validates_presence_of :name, :message => "project must have a name"
   validates_length_of :name, :maximum => 255, :message => "project name must be less than 256 characters"

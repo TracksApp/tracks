@@ -409,4 +409,33 @@ class BelongsToAssociationsTest < ActiveRecord::TestCase
     sponsor.sponsorable = new_member
     assert_equal nil, sponsor.sponsorable_id
   end
+
+  def test_save_fails_for_invalid_belongs_to
+    assert log = AuditLog.create(:developer_id=>0,:message=>"")
+
+    log.developer = Developer.new
+    assert !log.developer.valid?
+    assert !log.valid?
+    assert !log.save
+    assert_equal "is invalid", log.errors.on("developer")
+  end
+
+  def test_save_succeeds_for_invalid_belongs_to_with_validate_false
+    assert log = AuditLog.create(:developer_id=>0,:message=>"")
+
+    log.unvalidated_developer = Developer.new
+    assert !log.unvalidated_developer.valid?
+    assert log.valid?
+    assert log.save
+  end
+
+  def test_belongs_to_proxy_should_not_respond_to_private_methods
+    assert_raises(NoMethodError) { companies(:first_firm).private_method }
+    assert_raises(NoMethodError) { companies(:second_client).firm.private_method }
+  end
+
+  def test_belongs_to_proxy_should_respond_to_private_methods_via_send
+    companies(:first_firm).send(:private_method)
+    companies(:second_client).firm.send(:private_method)
+  end
 end

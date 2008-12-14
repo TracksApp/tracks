@@ -6,7 +6,7 @@
   <div class="description">
     <span class="todo.descr"><%= sanitize(recurring_todo.description) %></span> <%= recurring_todo_tag_list %>
     <span class='recurrence_pattern'>
-      [<%=recurrence_target(recurring_todo)%> <%= recurring_todo.recurrence_pattern %> <%= recurrence_time_span(recurring_todo) %>]
+      [<%=  recurrence_pattern_as_text(@recurring_todo) %>]
     </span>
   </div>
 </div>

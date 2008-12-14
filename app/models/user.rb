@@ -124,7 +124,7 @@ class User < ActiveRecord::Base
 
   #for will_paginate plugin
   cattr_accessor :per_page
-  @@per_page = 1
+  @@per_page = 5
   
   def validate
     unless Tracks::Config.auth_schemes.include?(auth_type)
@@ -145,8 +145,8 @@ class User < ActiveRecord::Base
     return nil
   end
   
-  def self.find_by_open_id_url(raw_open_id_url)
-    normalized_open_id_url = normalize_open_id_url(raw_open_id_url)
+  def self.find_by_open_id_url(raw_identity_url)
+    normalized_open_id_url = OpenIdAuthentication.normalize_url(raw_identity_url)
     find(:first, :conditions => ['open_id_url = ?', normalized_open_id_url])
   end
   
@@ -188,7 +188,7 @@ class User < ActiveRecord::Base
   end
   
   def at_midnight(date)
-    return TimeZone[prefs.time_zone].local(date.year, date.month, date.day, 0, 0, 0)
+    return ActiveSupport::TimeZone[prefs.time_zone].local(date.year, date.month, date.day, 0, 0, 0)
   end
   
   def generate_token
@@ -237,13 +237,6 @@ protected
   
   def normalize_open_id_url
     return if open_id_url.nil?
-    self.open_id_url = self.class.normalize_open_id_url(open_id_url)
+    self.open_id_url = OpenIdAuthentication.normalize_url(open_id_url)
   end
-  
-  def self.normalize_open_id_url(raw_open_id_url)
-    normalized = raw_open_id_url
-    normalized = "http://#{raw_open_id_url}" unless raw_open_id_url =~ /\:\/\//
-    normalized.downcase.chomp('/')
-  end
-    
 end

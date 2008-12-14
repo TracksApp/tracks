@@ -70,7 +70,18 @@ EOF
         #   flash_path "dir/movie.swf" # => /swf/dir/movie.swf
         #   flash_path "/dir/movie" # => /dir/movie.swf
         def flash_path(source)
-          compute_public_path(source, 'swf', 'swf', false)        
+          #BROKEN IN RAILS 2.2 -- code below hacked in pending a refresh of this plugin or change to another --luke@lukemelia.com
+          #compute_public_path(source, 'swf', 'swf', false)
+          dir = "/swf/"
+          if source !~ %r{^/}
+            source = "#{dir}#{source}"
+          end
+
+          relative_url_root = ActionController::Base.relative_url_root
+          if source !~ %r{^#{relative_url_root}/}
+            source = "#{relative_url_root}#{source}"
+          end
+          source
         end
         
       end

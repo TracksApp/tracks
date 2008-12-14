@@ -1,4 +1,5 @@
 $:.unshift(File.dirname(__FILE__) + '/../../lib')
+$:.unshift(File.dirname(__FILE__) + '/../../../activesupport/lib')
 
 require 'config'
 require 'test/unit'
@@ -32,16 +33,30 @@ end
 ActiveRecord::Base.connection.class.class_eval do
   IGNORED_SQL = [/^PRAGMA/, /^SELECT currval/, /^SELECT CAST/, /^SELECT @@IDENTITY/, /^SELECT @@ROWCOUNT/]
 
-  def execute_with_counting(sql, name = nil, &block)
-    $query_count ||= 0
-    $query_count  += 1 unless IGNORED_SQL.any? { |r| sql =~ r }
-    execute_without_counting(sql, name, &block)
+  def execute_with_query_record(sql, name = nil, &block)
+    $queries_executed ||= []
+    $queries_executed << sql unless IGNORED_SQL.any? { |r| sql =~ r }
+    execute_without_query_record(sql, name, &block)
   end
 
-  alias_method_chain :execute, :counting
+  alias_method_chain :execute, :query_record
 end
 
 # Make with_scope public for tests
 class << ActiveRecord::Base
   public :with_scope, :with_exclusive_scope
+end
+
+unless ENV['FIXTURE_DEBUG']
+  module Test #:nodoc:
+    module Unit #:nodoc:
+      class << TestCase #:nodoc:
+        def try_to_load_dependency_with_silence(*args)
+          ActiveRecord::Base.logger.silence { try_to_load_dependency_without_silence(*args)}
+        end
+
+        alias_method_chain :try_to_load_dependency, :silence
+      end
+    end
+  end
 end

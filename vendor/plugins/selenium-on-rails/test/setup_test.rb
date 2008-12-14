@@ -1,8 +1,13 @@
 require File.dirname(__FILE__) + '/test_helper'
+require 'mocha'
+RAILS_ROOT = File.expand_path(File.dirname(__FILE__) + "/")
 
 class SetupTest < Test::Unit::TestCase
   def setup
     @controller = SeleniumController.new
+    SeleniumController.any_instance.stubs(:clear_tables).returns([])
+    SeleniumController.any_instance.stubs(:layout_path).returns(false)
+    ActionController::Routing::Routes.draw
     @request    = ActionController::TestRequest.new
     @response   = ActionController::TestResponse.new
   end
@@ -22,8 +27,4 @@ class SetupTest < Test::Unit::TestCase
     assert_response :success
     assert_no_tag :content => 'The session is wiped clean.'
   end
-  
-  #
-  # Don't have the nerve to test fixtures since this is a plugin
-  #
 end

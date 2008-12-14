@@ -80,13 +80,13 @@
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000042">fixtures_path</a>&nbsp;&nbsp;
-      <a href="#M000041">layout_path</a>&nbsp;&nbsp;
-      <a href="#M000043">log_path</a>&nbsp;&nbsp;
-      <a href="#M000038">selenium_path</a>&nbsp;&nbsp;
-      <a href="#M000039">selenium_tests_path</a>&nbsp;&nbsp;
-      <a href="#M000044">skip_file?</a>&nbsp;&nbsp;
-      <a href="#M000040">view_path</a>&nbsp;&nbsp;
+      <a href="#M000076">fixtures_path</a>&nbsp;&nbsp;
+      <a href="#M000075">layout_path</a>&nbsp;&nbsp;
+      <a href="#M000077">log_path</a>&nbsp;&nbsp;
+      <a href="#M000072">selenium_path</a>&nbsp;&nbsp;
+      <a href="#M000073">selenium_tests_path</a>&nbsp;&nbsp;
+      <a href="#M000078">skip_file?</a>&nbsp;&nbsp;
+      <a href="#M000074">view_path</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -108,19 +108,19 @@
     <div id="methods">
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000042" class="method-detail">
-        <a name="M000042"></a>
+      <div id="method-M000076" class="method-detail">
+        <a name="M000076"></a>
 
         <div class="method-heading">
-          <a href="#M000042" class="method-signature">
+          <a href="#M000076" class="method-signature">
           <span class="method-name">fixtures_path</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000042-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000042-source">
+            onclick="toggleCode('M000076-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000076-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/selenium_on_rails/paths.rb, line 25</span>
 25:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">fixtures_path</span>
@@ -131,11 +131,11 @@
         </div>
       </div>
 
-      <div id="method-M000041" class="method-detail">
-        <a name="M000041"></a>
+      <div id="method-M000075" class="method-detail">
+        <a name="M000075"></a>
 
         <div class="method-heading">
-          <a href="#M000041" class="method-signature">
+          <a href="#M000075" class="method-signature">
           <span class="method-name">layout_path</span><span class="method-args">()</span>
           </a>
         </div>
@@ -143,12 +143,12 @@
         <div class="method-description">
           <p>
 Returns the path to the layout template. The path is relative in relation
-to the app/views/ directory since Rails doesn&#8217;t support absolute
+to the app/views/ directory since Rails doesn&#8216;t support absolute
 paths to layout templates.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000041-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000041-source">
+            onclick="toggleCode('M000075-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000075-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/selenium_on_rails/paths.rb, line 19</span>
 19:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">layout_path</span>
@@ -161,42 +161,42 @@ paths to layout templates.
         </div>
       </div>
 
-      <div id="method-M000043" class="method-detail">
-        <a name="M000043"></a>
+      <div id="method-M000077" class="method-detail">
+        <a name="M000077"></a>
 
         <div class="method-heading">
-          <a href="#M000043" class="method-signature">
+          <a href="#M000077" class="method-signature">
           <span class="method-name">log_path</span><span class="method-args">(log_file)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000043-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000043-source">
+            onclick="toggleCode('M000077-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000077-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/selenium_on_rails/paths.rb, line 29</span>
 29:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">log_path</span> <span class="ruby-identifier">log_file</span>
-30:       <span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-keyword kw">__FILE__</span>) <span class="ruby-operator">+</span> <span class="ruby-value str">'/../../log/'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">log_file</span>)
+30:       <span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-keyword kw">__FILE__</span>) <span class="ruby-operator">+</span> <span class="ruby-value str">'/../../log/'</span> <span class="ruby-operator">+</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">basename</span>(<span class="ruby-identifier">log_file</span>))
 31:     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000038" class="method-detail">
-        <a name="M000038"></a>
+      <div id="method-M000072" class="method-detail">
+        <a name="M000072"></a>
 
         <div class="method-heading">
-          <a href="#M000038" class="method-signature">
+          <a href="#M000072" class="method-signature">
           <span class="method-name">selenium_path</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000038-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000038-source">
+            onclick="toggleCode('M000072-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000072-source">
 <pre>
    <span class="ruby-comment cmt"># File lib/selenium_on_rails/paths.rb, line 3</span>
 3:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">selenium_path</span>
@@ -208,19 +208,19 @@ paths to layout templates.
         </div>
       </div>
 
-      <div id="method-M000039" class="method-detail">
-        <a name="M000039"></a>
+      <div id="method-M000073" class="method-detail">
+        <a name="M000073"></a>
 
         <div class="method-heading">
-          <a href="#M000039" class="method-signature">
+          <a href="#M000073" class="method-signature">
           <span class="method-name">selenium_tests_path</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000039-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000039-source">
+            onclick="toggleCode('M000073-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000073-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/selenium_on_rails/paths.rb, line 8</span>
  8:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">selenium_tests_path</span>
@@ -231,19 +231,19 @@ paths to layout templates.
         </div>
       </div>
 
-      <div id="method-M000044" class="method-detail">
-        <a name="M000044"></a>
+      <div id="method-M000078" class="method-detail">
+        <a name="M000078"></a>
 
         <div class="method-heading">
-          <a href="#M000044" class="method-signature">
+          <a href="#M000078" class="method-signature">
           <span class="method-name">skip_file?</span><span class="method-args">(file)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000044-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000044-source">
+            onclick="toggleCode('M000078-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000078-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/selenium_on_rails/paths.rb, line 33</span>
 33:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">skip_file?</span> <span class="ruby-identifier">file</span>
@@ -257,19 +257,19 @@ paths to layout templates.
         </div>
       </div>
 
-      <div id="method-M000040" class="method-detail">
-        <a name="M000040"></a>
+      <div id="method-M000074" class="method-detail">
+        <a name="M000074"></a>
 
         <div class="method-heading">
-          <a href="#M000040" class="method-signature">
+          <a href="#M000074" class="method-signature">
           <span class="method-name">view_path</span><span class="method-args">(view)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000040-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000040-source">
+            onclick="toggleCode('M000074-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000074-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/selenium_on_rails/paths.rb, line 12</span>
 12:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">view_path</span> <span class="ruby-identifier">view</span>

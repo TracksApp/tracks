@@ -1,7 +1,35 @@
 ENV["RAILS_ENV"] = "test"
-require File.expand_path(File.dirname(__FILE__) + "/../../../../config/environment")
-require 'test_help'
+RAILS_ROOT = "test" unless defined?(RAILS_ROOT)
+$: << File.expand_path(File.dirname(__FILE__) + "/../lib")
+
+require 'rubygems'
+gem 'activesupport'
+require 'active_support'
+
+require 'action_view/template_handler'
+require 'action_view/template_handlers/builder'
+require 'action_view/template_handlers/erb'
+require 'action_view/template_handlers/rjs'
+require 'action_view/base'
+require 'action_view/partials'
+require 'action_view/template_error'
+require 'action_controller'
+
+require 'selenium_on_rails/suite_renderer'
+require 'selenium_on_rails/fixture_loader'
+require 'selenium_helper'
 require 'controllers/selenium_controller'
+require File.expand_path(File.dirname(__FILE__) + "/../routes")
+require 'action_controller/test_process'
+
+SeleniumController.append_view_path File.expand_path(File.dirname(__FILE__))
+
+def setup_controller_test(controller)
+  @controller = controller.new
+  ActionController::Routing::Routes.draw
+  @request    = ActionController::TestRequest.new
+  @response   = ActionController::TestResponse.new
+end
 
 module SeleniumOnRails::Paths
   def selenium_tests_path
@@ -16,13 +44,13 @@ class SeleniumController
     raise e
   end
       
-  def render options = nil, deprecated_status = nil
+  def render options = nil
     if override_layout? options
       options[:layout] = false
-      super options, deprecated_status
+      super options
       return response.body = @layout_override.gsub('@content_for_layout', response.body)
     end
-    super options, deprecated_status
+    super options
   end
   
   private
@@ -51,20 +79,21 @@ end
 class TestView < ActionView::Base
   include SeleniumOnRails::PartialsSupport
   
-  alias_method :render_partial_without_override, :render_partial
-  def render_partial partial_path = default_template_name, object = nil, local_assigns = nil, status = nil
-    if @override
-      partial = render :inline => @override, :type => @override_type, :locals => local_assigns
-      extract_commands_from_partial partial
-    else
-      render_partial_without_override partial_path, object, local_assigns, status
-    end
-  end
+  # alias_method :render_partial_without_override, :render_partial
+  # def render_partial partial_path = default_template_name, object = nil, local_assigns = nil, status = nil
+  #   if @override
+  #     partial = render :inline => @override, :type => @override_type, :locals => local_assigns
+  #     extract_commands_from_partial partial
+  #   else
+  #     render_partial_without_override partial_path, object, local_assigns, status
+  #   end
+  # end
+  # 
+  # def override_partial partial, type
+  #   @override, @override_type = partial, type
+  #   result = yield
+  #   @override, @override_type = nil, nil
+  #   result
+  # end
   
-  def override_partial partial, type
-    @override, @override_type = partial, type
-    result = yield
-    @override, @override_type = nil, nil
-    result
-  end
 end

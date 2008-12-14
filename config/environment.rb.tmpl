@@ -15,6 +15,10 @@ class Rails::Configuration
   attr_accessor :action_web_service
 end
 
+# Leave this alone or set it to one or more of ['database', 'ldap', 'open_id'].
+# If you choose ldap, see the additional configuration options further down.
+AUTHENTICATION_SCHEMES = ['database']
+
 Rails::Initializer.run do |config|
   # Skip frameworks you're not going to use
   # config.frameworks -= [ :action_web_service, :action_mailer ]
@@ -22,6 +26,8 @@ Rails::Initializer.run do |config|
   config.action_web_service = Rails::OrderedOptions.new
   config.load_paths += %W( #{RAILS_ROOT}/app/apis )
 
+  config.action_controller.use_accept_header = true
+  
   # Add additional load paths for your own custom dirs
   # config.load_paths += %W( #{RAILS_ROOT}/app/services )
 
@@ -33,10 +39,10 @@ Rails::Initializer.run do |config|
   # (create the session table with 'rake create_sessions_table')
   config.action_controller.session_store = :active_record_store
   
-  # config.action_controller.session = {
-  #   :session_key => '_tracks_session_id',
-  #   :secret      => SALT * (30.0 / SALT.length).ceil #must be at least 30 characters
-  # }
+  config.action_controller.session = {
+    :session_key => '_tracks_session_id',
+    :secret      => SALT * (30.0 / SALT.length).ceil #must be at least 30 characters
+  }
   
   # Enable page/fragment caching by setting a file-based store
   # (remember to create the caching directory and make it readable to the application)
@@ -70,9 +76,6 @@ end
 
 # Include your application configuration below
 
-# Leave this alone or set it to one or more of ['database', 'ldap', 'open_id'].
-# If you choose ldap, see the additional configuration options further down.
-AUTHENTICATION_SCHEMES = ['database']
 
 require 'name_part_finder'
 require 'tracks/todo_list'
@@ -96,14 +99,11 @@ end
 # setting this to true will make the cookies only available over HTTPS
 TRACKS_COOKIES_SECURE = false  
 
-MOBILE_CONTENT_TYPE = 'tracks/mobile'
-Mime::Type.register(MOBILE_CONTENT_TYPE, :m)
-
-tracks_version='1.7-devel'
+tracks_version='1.7RC'
 
 # comment out next two lines if you do not want (or can not) the date of the 
 # last git commit in the footer
-info=`git log --pretty=format:"%ai" -1`
-tracks_version=tracks_version + ' ('+info+')'
+# info=`git log --pretty=format:"%ai" -1`
+# tracks_version=tracks_version + ' ('+info+')'
 
 TRACKS_VERSION=tracks_version

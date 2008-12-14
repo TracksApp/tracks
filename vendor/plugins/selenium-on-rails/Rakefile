@@ -15,7 +15,7 @@ end
 desc 'Generate documentation for the Selenium on Rails plugin.'
 task :rdoc do
   rm_rf 'doc'
-  RDoc::RDoc.new.document(%w(--line-numbers --inline-source --title SeleniumOnRails README lib))
+  RDoc::RDoc.new.document(%w(--line-numbers --inline-source --title SeleniumOnRails README CHANGELOG lib))
 end
 
 begin

@@ -2,7 +2,7 @@
   @todo = nil
   @initial_context_name = @context.name unless @context.nil?
   @initial_context_name ||= @project.default_context.name unless @project.nil? || @project.default_context.nil? 
-  @initial_context_name ||= @contexts[0].name unless @contexts[0].nil?
+  @initial_context_name ||= current_user.contexts.first.name unless current_user.contexts.first.nil?
   @initial_project_name = @project.name unless @project.nil?
 %>
 <div id="todo_new_action_container">

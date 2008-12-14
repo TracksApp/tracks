@@ -340,11 +340,7 @@ Be aware, however, that <tt>NULL != 'Spot'</tt> returns <tt>false</tt> due to SQ
         options[:parent_extend] = spiked_create_extension_module(association_id, Array(options[:parent_extend]), "Parent") 
         
         # create the reflection object      
-        returning(create_reflection(:has_many_polymorphs, association_id, options, self)) do |reflection|
-          if defined? Dependencies and defined? RAILS_ENV and RAILS_ENV == "development"                    
-            inject_dependencies(association_id, reflection) if Dependencies.mechanism == :load
-          end
-          
+        returning(create_reflection(:has_many_polymorphs, association_id, options, self)) do |reflection|          
           # set up the other related associations      
           create_join_association(association_id, reflection)
           create_has_many_through_associations_for_parent_to_children(association_id, reflection)
@@ -381,16 +377,7 @@ Be aware, however, that <tt>NULL != 'Spot'</tt> returns <tt>false</tt> due to SQ
           "#{table} AS #{_alias}"
         end.sort).join(", ")
       end
-  
-      # model caching         
-      def inject_dependencies(association_id, reflection)
-        _logger_debug "injecting dependencies"
-        requirements = [self, reflection.klass].map{|klass| [klass, klass.base_class]}.flatten.uniq
-        (all_classes_for(association_id, reflection) - requirements).each do |target_klass|
-          Dependencies.inject_dependency(target_klass, *requirements)        
-        end
-      end
-     
+       
       # method sub-builders
    
       def create_join_association(association_id, reflection)

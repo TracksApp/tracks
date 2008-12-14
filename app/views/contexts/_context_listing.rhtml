@@ -1,9 +1,14 @@
-<%  context = context_listing %>
+<%  context = context_listing 
+    suppress_drag_handle ||= false
+    suppress_edit_button ||= false
+%>
 <div id="<%= dom_id(context, "container") %>" class="list">
   <div id="<%= dom_id(context) %>" class="context sortable_row" style="display:'';">
-    <div class="position">
-      <span class="handle">DRAG</span>
-    </div>
+    <% unless suppress_drag_handle -%>
+      <div class="position">
+        <span class="handle">DRAG</span>
+      </div>
+    <% end -%>
     <div class="data">
       <%= link_to_context( context ) %> <%= " (" + count_undone_todos_phrase(context,"actions") + ")" %>
     </div>
@@ -32,5 +37,5 @@
       -%>
     </div>
   </div>
-  <%= render :partial => 'context_form', :object => context %>
+  <%= render :partial => 'contexts/context_form', :object => context %>
 </div>

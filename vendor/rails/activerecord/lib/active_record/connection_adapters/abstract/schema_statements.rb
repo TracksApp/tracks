@@ -31,19 +31,25 @@ module ActiveRecord
       # See the concrete implementation for details on the expected parameter values.
       def columns(table_name, name = nil) end
 
-      # Creates a new table
+      # Creates a new table with the name +table_name+. +table_name+ may either
+      # be a String or a Symbol.
+      #
       # There are two ways to work with +create_table+.  You can use the block
       # form or the regular form, like this:
       #
       # === Block form
-      #  # create_table() yields a TableDefinition instance
+      #  # create_table() passes a TableDefinition object to the block.
+      #  # This form will not only create the table, but also columns for the
+      #  # table.
       #  create_table(:suppliers) do |t|
       #    t.column :name, :string, :limit => 60
       #    # Other fields here
       #  end
       #
       # === Regular form
+      #  # Creates a table called 'suppliers' with no columns.
       #  create_table(:suppliers)
+      #  # Add a column to 'suppliers'.
       #  add_column(:suppliers, :name, :string, {:limit => 60})
       #
       # The +options+ hash can include the following keys:
@@ -331,21 +337,32 @@ module ActiveRecord
       end
 
       def assume_migrated_upto_version(version)
+        version = version.to_i
         sm_table = quote_table_name(ActiveRecord::Migrator.schema_migrations_table_name)
+
         migrated = select_values("SELECT version FROM #{sm_table}").map(&:to_i)
         versions = Dir['db/migrate/[0-9]*_*.rb'].map do |filename|
           filename.split('/').last.split('_').first.to_i
         end
 
-        execute "INSERT INTO #{sm_table} (version) VALUES ('#{version}')" unless migrated.include?(version.to_i)
-        (versions - migrated).select { |v| v < version.to_i }.each do |v|
-          execute "INSERT INTO #{sm_table} (version) VALUES ('#{v}')"
+        unless migrated.include?(version)
+          execute "INSERT INTO #{sm_table} (version) VALUES ('#{version}')"
+        end
+
+        inserted = Set.new
+        (versions - migrated).each do |v|
+          if inserted.include?(v)
+            raise "Duplicate migration #{v}. Please renumber your migrations to resolve the conflict."
+          elsif v < version
+            execute "INSERT INTO #{sm_table} (version) VALUES ('#{v}')"
+            inserted << v
+          end
         end
       end
 
       def type_to_sql(type, limit = nil, precision = nil, scale = nil) #:nodoc:
         if native = native_database_types[type]
-          column_type_sql = native.is_a?(Hash) ? native[:name] : native
+          column_type_sql = (native.is_a?(Hash) ? native[:name] : native).dup
 
           if type == :decimal # ignore limit, use precision and scale
             scale ||= native[:scale]
@@ -360,7 +377,7 @@ module ActiveRecord
               raise ArgumentError, "Error adding decimal column: precision cannot be empty if scale if specified"
             end
 
-          elsif limit ||= native.is_a?(Hash) && native[:limit]
+          elsif (type != :primary_key) && (limit ||= native.is_a?(Hash) && native[:limit])
             column_type_sql << "(#{limit})"
           end
 
@@ -372,13 +389,9 @@ module ActiveRecord
 
       def add_column_options!(sql, options) #:nodoc:
         sql << " DEFAULT #{quote(options[:default], options[:column])}" if options_include_default?(options)
-        # must explcitly check for :null to allow change_column to work on migrations
-        if options.has_key? :null
-          if options[:null] == false
-            sql << " NOT NULL"
-          else
-            sql << " NULL"
-          end
+        # must explicitly check for :null to allow change_column to work on migrations
+        if options[:null] == false
+          sql << " NOT NULL"
         end
       end
 

@@ -25,3 +25,11 @@ module Rake
     end
   end
 end
+
+class Object
+  def silently
+    stderr, stdout, $stderr, $stdout = $stderr, $stdout, StringIO.new, StringIO.new
+    yield
+    $stderr, $stdout = stderr, stdout
+  end
+end

@@ -20,4 +20,4 @@ assert_text 'badge_count', '4'
 
 open '/projects/1'
 assert_text 'badge_count', '4'
-assert_checked 'project_state_hidden', 'ignored'
+assert_checked 'project_state_hidden'

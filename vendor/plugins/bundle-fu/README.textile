@@ -1,0 +1,35 @@
+h1. Bundle fu
+-------------
+
+Each css / js you load causes your site to load slower!  You can speed things up 
+exponentially by simply combining all your css/js files into one file each.  
+
+Bundle_fu makes it easy to do.  It's as easy as 1, 2!
+
+h2. USAGE / INSTALLATION
+------------------------
+
+h3. Step 1
+
+Install this plugin
+
+script/plugin install git://github.com/timcharper/bundle-fu.git
+
+h3. Step 2
+
+Put the following around your stylesheets/javascripts (note it works with any method of including assets!):
+
+<pre><code>
+  <% bundle do %>
+    ...
+    <%= javascript_include_tag "prototype" %>
+    <%= stylesheet_link_tag "basic.css" %>
+    <%= calendar_date_select_includes params[:style] %>
+    <script src="javascripts/application.js" type="text/javascript"></script>
+    ...
+  <% end %>
+</code></pre>
+
+That's it!
+
+"More info":http://code.google.com/p/bundle-fu/

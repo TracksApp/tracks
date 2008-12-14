@@ -36,7 +36,7 @@ if @saved
         page.call "todoItems.expandNextActionListingByContext", "c#{@todo.context_id}items", true
         page[empty_container_msg_div_id].hide unless empty_container_msg_div_id.nil?
         # show all todos in context
-        page.insert_html :bottom, "c#{@todo.context_id}items", :partial => 'todos/todo', :locals => { :parent_container_type => parent_container_type }
+        page.insert_html :bottom, "c#{@todo.context_id}items", :partial => 'todos/todo', :locals => { :todo => @todo, :parent_container_type => parent_container_type }
       end
       
       # update badge count
@@ -52,7 +52,7 @@ if @saved
         end
       end
     else
-      page.replace dom_id(@todo), :partial => 'todos/todo', :locals => { :parent_container_type => parent_container_type }
+      page.replace dom_id(@todo), :partial => 'todos/todo', :locals => { :todo => @todo, :parent_container_type => parent_container_type }
       page.visual_effect :highlight, dom_id(@todo), :duration => 3
     end    
   elsif source_view_is :project
@@ -63,17 +63,17 @@ if @saved
     elsif @todo.deferred? 
       page[@todo].remove
       page.show("p#{@original_item_project_id}empty-nd") if (@remaining_undone_in_project == 0)
-      page.insert_html :bottom, "tickler", :partial => 'todos/todo', :locals => { :parent_container_type => parent_container_type }
+      page.insert_html :bottom, "tickler", :partial => 'todos/todo', :locals => { :todo => @todo, :parent_container_type => parent_container_type }
       page['tickler-empty-nd'].hide
       page.replace_html "badge_count", @down_count
     elsif @todo_was_activated_from_deferred_state
       page[@todo].remove
       page['tickler-empty-nd'].show if (@deferred_count == 0)
-      page.insert_html :bottom, "p#{@todo.project_id}", :partial => 'todos/todo', :locals => { :parent_container_type => parent_container_type }
+      page.insert_html :bottom, "p#{@todo.project_id}", :partial => 'todos/todo', :locals => { :todo => @todo, :parent_container_type => parent_container_type }
       page["p#{@todo.project_id}empty-nd"].hide
       page.replace_html "badge_count", @down_count
     else
-      page.replace dom_id(@todo), :partial => 'todos/todo', :locals => { :parent_container_type => parent_container_type }
+      page.replace dom_id(@todo), :partial => 'todos/todo', :locals => { :todo => @todo, :parent_container_type => parent_container_type }
       page.visual_effect :highlight, dom_id(@todo), :duration => 3
     end
   elsif source_view_is :deferred
@@ -87,7 +87,7 @@ if @saved
       page.call "todoItems.ensureVisibleWithEffectAppear", "c#{@todo.context_id}"
       page.call "todoItems.expandNextActionListingByContext", "c#{@todo.context_id}items", true
       page[empty_container_msg_div_id].hide unless empty_container_msg_div_id.nil?
-      page.insert_html :bottom, "c#{@todo.context_id}items", :partial => 'todos/todo', :locals => { :parent_container_type => parent_container_type }
+      page.insert_html :bottom, "c#{@todo.context_id}items", :partial => 'todos/todo', :locals => { :todo => @todo, :parent_container_type => parent_container_type }
       page.replace_html("badge_count", @down_count)
       page.delay(0.5) do
         page.call "todoItems.ensureContainerHeight", "c#{@original_item_context_id}items"
@@ -95,18 +95,18 @@ if @saved
         page.visual_effect :highlight, dom_id(@todo), :duration => 3
       end
     else
-      page.replace dom_id(@todo), :partial => 'todos/todo', :locals => { :parent_container_type => parent_container_type }
+      page.replace dom_id(@todo), :partial => 'todos/todo', :locals => { :todo => @todo, :parent_container_type => parent_container_type }
       page.visual_effect :highlight, dom_id(@todo), :duration => 3
     end
   elsif source_view_is :stats
-    page.replace dom_id(@todo), :partial => 'todos/todo', :locals => { :parent_container_type => parent_container_type }
+    page.replace dom_id(@todo), :partial => 'todos/todo', :locals => { :todo => @todo, :parent_container_type => parent_container_type }
     page.visual_effect :highlight, dom_id(@todo), :duration => 3    
   elsif source_view_is :calendar
     if @due_date_changed
       page[@todo].remove
       page.show "empty_"+@original_item_due_id if @old_due_empty
       page.hide "empty_"+@new_due_id
-      page.insert_html :bottom, @new_due_id, :partial => 'todos/todo'
+      page.insert_html :bottom, @new_due_id, :partial => 'todos/todo', :locals => {:todo => @todo}
       page.visual_effect :highlight, dom_id(@todo), :duration => 3
     else
       if @todo.due.nil?
@@ -114,7 +114,7 @@ if @saved
         page[@todo].remove
         page.show "empty_"+@original_item_due_id if @old_due_empty
       else
-        page.replace dom_id(@todo), :partial => 'todos/todo', :locals => { :parent_container_type => parent_container_type }
+        page.replace dom_id(@todo), :partial => 'todos/todo', :locals => { :todo => @todo, :parent_container_type => parent_container_type }
         page.visual_effect :highlight, dom_id(@todo), :duration => 3
       end
     end

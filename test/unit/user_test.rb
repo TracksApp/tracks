@@ -328,7 +328,7 @@ class UserTest < Test::Rails::TestCase
   
   def test_normalizes_open_id_url_on_save
     ['www.johndoe.com', 'WWW.JOHNDOE.COM', 'http://www.johndoe.com/', 'http://www.johndoe.com'].each do |initial|
-      assert_open_id_url_normalized_on_save initial, 'http://www.johndoe.com'
+      assert_open_id_url_normalized_on_save initial, 'http://www.johndoe.com/'
     end
   end
   

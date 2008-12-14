@@ -3,9 +3,11 @@ require 'models/club'
 require 'models/member'
 require 'models/membership'
 require 'models/sponsor'
+require 'models/organization'
+require 'models/member_detail'
 
 class HasOneThroughAssociationsTest < ActiveRecord::TestCase
-  fixtures :members, :clubs, :memberships, :sponsors
+  fixtures :members, :clubs, :memberships, :sponsors, :organizations
   
   def setup
     @member = members(:groucho)
@@ -44,19 +46,23 @@ class HasOneThroughAssociationsTest < ActiveRecord::TestCase
   def test_has_one_through_polymorphic
     assert_equal clubs(:moustache_club), @member.sponsor_club
   end
-  
+
   def has_one_through_to_has_many
     assert_equal 2, @member.fellow_members.size
   end
-  
+
   def test_has_one_through_eager_loading
-    members = Member.find(:all, :include => :club, :conditions => ["name = ?", "Groucho Marx"])
+    members = assert_queries(3) do #base table, through table, clubs table
+      Member.find(:all, :include => :club, :conditions => ["name = ?", "Groucho Marx"])
+    end
     assert_equal 1, members.size
     assert_not_nil assert_no_queries {members[0].club}
   end
-  
+
   def test_has_one_through_eager_loading_through_polymorphic
-    members = Member.find(:all, :include => :sponsor_club, :conditions => ["name = ?", "Groucho Marx"])
+    members = assert_queries(3) do #base table, through table, clubs table
+      Member.find(:all, :include => :sponsor_club, :conditions => ["name = ?", "Groucho Marx"])
+    end
     assert_equal 1, members.size
     assert_not_nil assert_no_queries {members[0].sponsor_club}    
   end
@@ -69,6 +75,87 @@ class HasOneThroughAssociationsTest < ActiveRecord::TestCase
     clubs = Club.find(:all, :include => :sponsored_member, :conditions => ["name = ?","Moustache and Eyebrow Fancier Club"])
     # Only the eyebrow fanciers club has a sponsored_member
     assert_not_nil assert_no_queries {clubs[0].sponsored_member}
+  end
+
+  def test_has_one_through_nonpreload_eagerloading
+    members = assert_queries(1) do
+      Member.find(:all, :include => :club, :conditions => ["members.name = ?", "Groucho Marx"], :order => 'clubs.name') #force fallback
+    end
+    assert_equal 1, members.size
+    assert_not_nil assert_no_queries {members[0].club}
+  end
+
+  def test_has_one_through_nonpreload_eager_loading_through_polymorphic
+    members = assert_queries(1) do
+      Member.find(:all, :include => :sponsor_club, :conditions => ["members.name = ?", "Groucho Marx"], :order => 'clubs.name') #force fallback
+    end
+    assert_equal 1, members.size
+    assert_not_nil assert_no_queries {members[0].sponsor_club}
+  end
+
+  def test_has_one_through_nonpreload_eager_loading_through_polymorphic_with_more_than_one_through_record
+    Sponsor.new(:sponsor_club => clubs(:crazy_club), :sponsorable => members(:groucho)).save!
+    members = assert_queries(1) do
+      Member.find(:all, :include => :sponsor_club, :conditions => ["members.name = ?", "Groucho Marx"], :order => 'clubs.name DESC') #force fallback
+    end
+    assert_equal 1, members.size
+    assert_not_nil assert_no_queries { members[0].sponsor_club }
+    assert_equal clubs(:crazy_club), members[0].sponsor_club
+  end
+
+  def test_uninitialized_has_one_through_should_return_nil_for_unsaved_record
+    assert_nil Member.new.club
+  end
+
+  def test_assigning_association_correctly_assigns_target
+    new_member = Member.create(:name => "Chris")
+    new_member.club = new_club = Club.create(:name => "LRUG")
+    assert_equal new_club, new_member.club.target
+  end
+
+  def test_has_one_through_proxy_should_not_respond_to_private_methods
+    assert_raises(NoMethodError) { clubs(:moustache_club).private_method }
+    assert_raises(NoMethodError) { @member.club.private_method }
+  end
+
+  def test_has_one_through_proxy_should_respond_to_private_methods_via_send
+    clubs(:moustache_club).send(:private_method)
+    @member.club.send(:private_method)
+  end
+
+  def test_assigning_to_has_one_through_preserves_decorated_join_record
+    @organization = organizations(:nsa)
+    assert_difference 'MemberDetail.count', 1 do
+      @member_detail = MemberDetail.new(:extra_data => 'Extra')
+      @member.member_detail = @member_detail
+      @member.organization = @organization
+    end
+    assert_equal @organization, @member.organization
+    assert @organization.members.include?(@member)
+    assert_equal 'Extra', @member.member_detail.extra_data
+  end
+
+  def test_reassigning_has_one_through
+    @organization = organizations(:nsa)
+    @new_organization = organizations(:discordians)
+
+    assert_difference 'MemberDetail.count', 1 do
+      @member_detail = MemberDetail.new(:extra_data => 'Extra')
+      @member.member_detail = @member_detail
+      @member.organization = @organization
+    end
+    assert_equal @organization, @member.organization
+    assert_equal 'Extra', @member.member_detail.extra_data
+    assert @organization.members.include?(@member)
+    assert !@new_organization.members.include?(@member)
+
+    assert_no_difference 'MemberDetail.count' do
+      @member.organization = @new_organization
+    end
+    assert_equal @new_organization, @member.organization
+    assert_equal 'Extra', @member.member_detail.extra_data
+    assert !@organization.members.include?(@member)
+    assert @new_organization.members.include?(@member)
   end
 
 end

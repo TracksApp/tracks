@@ -14,7 +14,10 @@
       <% unless @todo.completed? %><span class="defer-container"><%= defer_link(1) %> <%= defer_link(7) %></span><% end %>
       <%= date_span -%>
       <span class="todo.descr"><%= h sanitize(todo.description) %></span>
-      <%= link_to(image_tag("recurring16x16.png"), {:controller => "recurring_todos", :action => "index"}, :class => "recurring_icon") if @todo.from_recurring_todo? %>
+      <%= link_to(
+        image_tag("recurring16x16.png"),
+        {:controller => "recurring_todos", :action => "index"},
+        :class => "recurring_icon", :title => recurrence_pattern_as_text(@todo.recurring_todo)) if @todo.from_recurring_todo? %>
       <%= tag_list %>
       <%= deferred_due_date %>
       <%= project_and_context_links( parent_container_type, :suppress_context => suppress_context, :suppress_project => suppress_project ) %>

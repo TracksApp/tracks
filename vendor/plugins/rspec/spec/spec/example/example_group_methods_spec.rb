@@ -3,10 +3,12 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 module Spec
   module Example
     describe 'ExampleGroupMethods' do
-      it_should_behave_like "sandboxed rspec_options"
+      include SandboxedOptions
       attr_reader :example_group, :result, :reporter
       before(:each) do
-        options.formatters << mock("formatter", :null_object => true)
+        # See http://rspec.lighthouseapp.com/projects/5645-rspec/tickets/525-arity-changed-on-partial-mocks#ticket-525-2
+        method_with_three_args = lambda { |arg1, arg2, arg3| }
+        options.formatters << mock("formatter", :null_object => true, :example_pending => method_with_three_args)
         options.backtrace_tweaker = mock("backtrace_tweaker", :null_object => true)
         @reporter = FakeReporter.new(@options)
         options.reporter = reporter
@@ -25,7 +27,7 @@ module Spec
       end
 
       ["describe","context"].each do |method|
-        describe "#{method}" do
+        describe "##{method}" do
           describe "when creating an ExampleGroup" do
             attr_reader :child_example_group
             before do
@@ -565,6 +567,13 @@ module Spec
           ensure 
             ExampleGroupMethods.matcher_class = ExampleMatcher
           end
+        end
+      end
+
+      describe "#options" do
+        it "should expose the options hash" do
+          group = describe("group", :this => 'hash') {}
+          group.options[:this].should == 'hash'
         end
       end
     end
