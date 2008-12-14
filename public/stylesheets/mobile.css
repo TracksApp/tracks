@@ -127,7 +127,7 @@ span.prj, span.ctx{
 }
 
 ul.c li.star {
-  list-style-image:url(../images/menustar_small.gif)
+list-style-type: circle;
 }
 
 ul.c {
