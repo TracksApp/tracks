@@ -1,7 +1,7 @@
 Title:              Tracks 1.7 Manual
 Author:             Tracks Development Team
-Date:               2008-04-07
-Revision:           $Id: manual.markdown 864 2008-12-09 09:30:00Z bsag $
+Date:               2008-12-14
+Revision:           $Id: manual.markdown 2008-12-14 11:50:00Z bsag $
 Version:            1.7
 Copyright:			    2008 rousette.org.uk  
 					This work is licensed under a Creative Commons License.  
