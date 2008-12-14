@@ -5,7 +5,7 @@
 <%= "<INPUT TYPE=\"hidden\" name=\"_tag_name\" value=\""+ @tag_name+"\">" unless @tag_name.nil? -%>
 
 <label for="<%= dom_id(@todo, 'description') %>">Description</label>
-<%= text_field( "todo", "description", "size" => 30, "tabindex" => 8) %>
+<%= text_field( "todo", "description", "size" => 30, "tabindex" => 8, "maxlength" => 100) %>
 
 <label for="<%= dom_id(@todo, 'notes') %>">Notes</label>
 <%= text_area( "todo", "notes", "cols" => 29, "rows" => 4, "tabindex" => 9) %>
