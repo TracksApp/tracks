@@ -11,7 +11,7 @@
     <div id="recurring_todo_form_container">
       <div id="recurring_todo">
         <label for="recurring_todo_description">Description</label><%= 
-        text_field_tag( "recurring_todo[description]", "", "size" => 30, "tabindex" => 1) -%>
+        text_field_tag( "recurring_todo[description]", "", "size" => 30, "tabindex" => 1, "maxlength" => 100) -%>
         <label for="recurring_todo_notes">Notes</label><%= 
         text_area_tag( "recurring_todo[notes]", nil, {:cols => 29, :rows => 6, :tabindex => 2}) -%>
         <label for="recurring_todo_project_name">Project</label>
@@ -73,7 +73,7 @@
       <div id="recurring_timespan">
         <br/>
         <label for="recurring_todo[start_from]">Starts on </label><%= 
-        text_field(:recurring_todo, :start_from, "size" => 12, "class" => "Date", "onfocus" => "Calendar.setup", "tabindex" => 6, "autocomplete" => "off") %><br/>
+        text_field(:recurring_todo, :start_from, "value" => format_date(Time.today), "size" => 12, "class" => "Date", "onfocus" => "Calendar.setup", "tabindex" => 6, "autocomplete" => "off") %><br/>
         <br/>
         <label for="recurring_todo[ends_on]">Ends on:</label><br/>
         <%= radio_button_tag('recurring_todo[ends_on]', 'no_end_date', true)%> No end date<br/>

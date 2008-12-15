@@ -11,27 +11,25 @@
 		<meta name="Copyright" content="2008 rousette.org.uk  
 This work is licensed under a Creative Commons License.  
 http://creativecommons.org/licenses/by-nc-sa/3.0/" />
-		<meta name="Date" content="2008-04-07" />
+		<meta name="Date" content="2008-12-14" />
 		<meta name="Format" content="complete" />
 		<meta name="LaTeXXSLT" content="memoir-twosided-manual.xslt" />
-		<meta name="Revision" content="$Id: manual.markdown 864 2008-06-03 17:01:00Z bsag $" />
-		<title>Tracks 1.6 Manual</title>
-		<meta name="Version" content="1.6" />
+		<meta name="Revision" content="$Id: manual.markdown 2008-12-14 11:50:00Z bsag $" />
+		<title>Tracks 1.7 Manual</title>
+		<meta name="Version" content="1.7" />
 		<meta name="XMP" content="CCAttributionShareAlike" />
 	</head>
 <body>
 
 <!-- The HTML file manual.html is generated from manual.markdown, so make edits to the *.markdown file -->
 
-<h2 id="installingtracks1.6">Installing Tracks 1.6</h2>
+<h2 id="installingtracks1.7">Installing Tracks 1.7</h2>
 
 <h3 id="introduction">Introduction</h3>
 
-<p><strong>An important note for version 1.6: OpenID support is broken in this release. The fix isn&#8217;t trivial because of changes to the <code>ruby-openid</code> gem, so we wanted to get this version out now and fix OpenID for the next release. If you depend on OpenID integration, we recommend waiting until the next release.</strong></p>
+<p>Tracks 1.7 has been thoroughly beta tested by a large number of people, and should be fully stable for everyday use. However, once set up, Tracks will contain the majority of your plans for your work and personal life, so it&#8217;s only sensible to make sure that you have frequent, reliable backups of your data. Full changenotes on the release can be found in <code>doc/CHANGELOG</code>. Full API documentation can be found at <code>doc/app/index.html</code>, once you have run <code>rake appdoc</code></p>
 
-<p>Tracks 1.6 has been thoroughly beta tested by a large number of people, and should be fully stable for everyday use. However, once set up, Tracks will contain the majority of your plans for your work and personal life, so it&#8217;s only sensible to make sure that you have frequent, reliable backups of your data. Full changenotes on the release can be found in <code>doc/CHANGELOG</code>. Full API documentation can be found at <code>doc/app/index.html</code>, once you have run <code>rake appdoc</code></p>
-
-<p>There are two methods of downloading Tracks 1.6:</p>
+<p>There are two methods of downloading Tracks 1.7:</p>
 
 <ol>
 <li>(Recommended for most people) Download the <a href="http://www.rousette.org.uk/projects/files/tracks-current.zip">zipped package</a>, and unzip in your preferred location (e.g. <code>~/Sites</code> for Mac OS X users).</li>
@@ -62,7 +60,7 @@ http://creativecommons.org/licenses/by-nc-sa/3.0/" />
 
 <ol>
 <li>Tracks itself</li>
-<li>Rails 2.0.2 (installed in the <code>/vendor/rails</code> directory, so you do not need to install Rails yourself)</li>
+<li>Rails 2.2.2 (installed in the <code>/vendor/rails</code> directory, so you do not need to install Rails yourself)</li>
 <li>An empty SQLite3 database, set up with the correct database schema</li>
 </ol>
 
@@ -76,19 +74,19 @@ http://creativecommons.org/licenses/by-nc-sa/3.0/" />
 <li><strong>Database</strong>. The easiest option is to use SQLite3, as the database is included in the package. All you need then is the <code>sqlite3-ruby</code> gem, as described in step 2, and the SQLite3 libraries and binary (see <a href="http://sqlite.org/download.html">sqlite.org</a> for downloads and installation instructions). If you want to use MySQL, download and install a package for your platform from <a href="http://dev.mysql.com/downloads/mysql/5.0.html">MySQL.com</a>. The basic steps for Postgresql should be similar to those for MySQL, but they will not be discussed further here.</li>
 </ol>
 
-<p>If you are using Unix, you might find <a href="http://www.cooldown.com.ar/2006/12/16/install-tracks-on-ubuntu-or-debian/">this guide</a> by c00i90wn helpful. It was written for Tracks 1.043, but it should work for Tracks 1.6.</p>
+<p>You can find several installation howtos for specific setups <a href="http://dev.rousette.org.uk/wiki/Tracks/Install">here</a>. They were contributed by various Tracks users.</p>
 
 <h3 id="installation">Installation</h3>
 
-<p>This description is intended for people installing Tracks from scratch. If you would like to upgrade an existing installation, please see <a href="#upgrading" title="Upgrading to Tracks 1.6">Upgrading to Tracks 1.6</a>.</p>
+<p>This description is intended for people installing Tracks from scratch. If you would like to upgrade an existing installation, please see <a href="#upgrading" title="Upgrading to Tracks 1.7">Upgrading to Tracks 1.7</a>.</p>
 
 <ol>
 <li><a href="#unzip_install" title="Unzip Tracks and install">Unzip tracks</a> and install in a directory</li>
 <li>Decide on a <a href="#database_install" title="Decide on a database">database</a> to use
-<ol><li>SQLite3 - change database.yml to point to SQLite3 database</li>
+<ol><li>SQLite3 - change database.yml to point to SQLite3 database. Make sure you add the complete path to the database</li>
 <li>MySQL - create new MySQL db and grant all privileges </li></ol></li>
 <li><a href="#config_install" title="Configure variables">Configure some variables</a></li>
-<li>Populate the database with the <a href="#rake_install" title="Populate your database with the Tracks 1.6 schema">Tracks 1.6 schema</a></li>
+<li>Populate the database with the <a href="#rake_install" title="Populate your database with the Tracks 1.7 schema">Tracks 1.7 schema</a></li>
 <li><a href="#startserver_install" title="Start the server">Start the server</a></li>
 <li><a href="#signup_install" title="Visit Tracks in a browser">Visit Tracks in a browser</a></li>
 <li><a href="#customise_install" title="Customise Tracks">Customise Tracks</a></li>
@@ -104,14 +102,14 @@ http://creativecommons.org/licenses/by-nc-sa/3.0/" />
 
 <ol>
 <li><strong>SQLite3</strong>. All you need to do is make sure that you point Tracks to the included SQLite3 database in <code>/db</code> in the next step, <a href="#config_install" title="Configure variables">Configure variables</a>.</li>
-<li><strong>MySQL</strong>. Once you have MySQL installed, you need to create a database to use with Tracks 1.6. Go into a terminal and issue the following commands:</li>
+<li><strong>MySQL</strong>. Once you have MySQL installed, you need to create a database and database-user to use with Tracks 1.7. For this, you can use MySQL Administrator or go into a terminal and issue the following commands:</li>
 </ol>
 
 <pre>
 <code>
     mysql -uroot -p
-    mysql> CREATE DATABASE tracks15;
-    mysql> GRANT ALL PRIVILEGES ON tracks15.* TO yourmysqluser@localhost \
+    mysql> CREATE DATABASE tracks16;
+    mysql> GRANT ALL PRIVILEGES ON tracks16.* TO yourmysqluser@localhost \
     IDENTIFIED BY 'password-goes-here' WITH GRANT OPTION;
 </code>
 </pre>
@@ -119,23 +117,23 @@ http://creativecommons.org/licenses/by-nc-sa/3.0/" />
 <h4 id="config_install">Configure variables</h4>
 
 <ol>
-<li>If you downloaded Tracks 1.6 via Subversion, you need to duplicate the files <code>database.yml.tmpl</code> and <code>environment.yml.tmpl</code> and remove the <code>*.tmpl</code> extension from the duplicates. Similarly, duplicate <code>/log.tmpl</code> and remove the <code>*.tmpl</code> extension, then edit the files as described in steps 2 and 3.</li>
+<li>If you downloaded Tracks 1.7 via Subversion, you need to duplicate the files <code>database.yml.tmpl</code> and <code>environment.yml.tmpl</code> and remove the <code>*.tmpl</code> extension from the duplicates. Similarly, duplicate <code>/log.tmpl</code> and remove the <code>*.tmpl</code> extension, then edit the files as described in steps 2 and 3.</li>
 <li>Open the file <code>/config/database.yml</code> and edit the <code>production:</code> section with the details of your database. If you are using MySQL the <code>adapter:</code> line should read <code>adapter: mysql</code>, <code>host: localhost</code> (in the majority of cases), and your username and password should match those you assigned when you created the database. If you are using SQLite3, you should have only two lines under the production section: <code>adapter: sqlite3</code> and <code>database: db/tracks-15-blank.db</code>. If you downloaded the zipped file, the database.yml file is already configured to use the provided SQLite3 file.</li>
-<li>Open the file <code>/config/environment.rb</code>, and read through the settings to make sure that they suit your setup. In most cases, all you need to change is the <code>SALT = "change-me"</code> line (change the string &#8220;change-me&#8221; to some other string of your choice), and the time zone setting.</li>
+<li>Open the file <code>/config/environment.rb</code>, and read through the settings to make sure that they suit your setup. In most cases, all you need to change is the <code>SALT = "change-me"</code> line (change the string &#8220;change-me&#8221; to some other string of your choice), and the time zone setting. For the time zone setting, most people will only want to change the config.time_zone option and leave the timezone to use in your database to :utc</li>
 <li>If you are using Windows, you may need to check the &#8216;shebang&#8217; lines (<code>#!/usr/bin/env ruby</code>) of the <code>/public/dispatch.*</code> files and all the files in the <code>/script</code> directory. They are set to <code>#!/usr/bin/env ruby</code> by default. This should work for all *nix based setups (Linux or Mac OS X), but Windows users will probably have to change it to something like <code>#c:/ruby/bin/ruby</code> to point to the Ruby binary on your system.</li>
 </ol>
 
-<h4 id="rake_install">Populate your database with the Tracks 1.6 schema</h4>
+<h4 id="rake_install">Populate your database with the Tracks 1.7 schema</h4>
 
-<p>Open a terminal and change into the root of your Tracks 1.6 directory. Enter the following command:</p>
+<p>Open a terminal and change into the root of your Tracks 1.7 directory. Enter the following command:</p>
 
 <p><code>rake db:migrate RAILS_ENV=production</code></p>
 
-<p>This will update your database with the required schema for Tracks 1.6. If you are using SQLite3, it is not strictly necessary, because the SQLite3 database included with Tracks already has the schema included in it, but it should not do any harm to run the command (nothing will happen if it is up to date).</p>
+<p>This will update your database with the required schema for Tracks 1.7. If you are using SQLite3, it is not strictly necessary, because the SQLite3 database included with Tracks already has the schema included in it, but it should not do any harm to run the command (nothing will happen if it is up to date).</p>
 
 <h4 id="startserver_install">Start the server</h4>
 
-<p>While still in the Terminal inside the Tracks 1.6 root directory, issue the following command:</p>
+<p>While still in the Terminal inside the Tracks 1.7 root directory, issue the following command:</p>
 
 <p><code>script/server -e production</code></p>
 
@@ -149,7 +147,21 @@ http://creativecommons.org/licenses/by-nc-sa/3.0/" />
 
 <p>Once logged in, add some Contexts and Projects, and then go ahead and add your actions. You might also want to visit the Preferences page to edit various settings to your liking. Have fun!</p>
 
-<h2 id="upgrading">Upgrading to Tracks 1.6</h2>
+<h2 id="upgrading">Upgrading to Tracks 1.7</h2>
+
+<h3 id="upgrading_1.6">Upgrading from Tracks 1.6</h3>
+
+<p>You will need to upgrade your <code>config/environment.rb</code> with the new content from <code>config/environment.rb.tmpl</code> included in 1.7, as the format of this file has changed a bit between 1.6 and 1.7. Also, there were some database changes in Tracks 1.7, so you need to migrate to them.</p>
+
+<ol>
+<li><a href="#backup_upgrade" title="Backing up">Back up</a> your existing database and installation of Tracks</li>
+<li><a href="#install_upgrade" title="Install Tracks 1.7">Install Tracks 1.7</a> in a new directory</li>
+<li><a href="#config_upgrade" title="Copy over old configuration files">Copy over</a> a few configuration files from your Tracks 1.6 directory. If using SQLite3, copy the old database into the new Tracks 1.7 directory.</li>
+<li>Rebuild your environment.rb from the updated environment.rb.tmpl</li>
+<li>Run <code>rake db:migrate RAILS_ENV=production</code> to <a href="#rake_upgrade" title="Update your old database to the new format">update your old database</a> to the new schema &#8211; you did back up your database didn&#8217;t you?</li>
+<li>Run <code>script/server</code> inside your Tracks 1.7 directory to <a href="#startserver_upgrade" title="Start the server">start up Tracks 1.7</a>.</li>
+<li>Once you are happy that everything is working well, <a href="#cleanup_upgrade" title="Clean up your old installation">delete your old Tracks directory</a>.</li>
+</ol>
 
 <h3 id="upgrading_1.5">Upgrading from Tracks 1.5</h3>
 
@@ -157,8 +169,9 @@ http://creativecommons.org/licenses/by-nc-sa/3.0/" />
 
 <ol>
 <li><a href="#backup_upgrade" title="Backing up">Back up</a> your existing database and installation of Tracks</li>
-<li><a href="#install_upgrade" title="Install Tracks 1.6">Install Tracks 1.6</a> in a new directory</li>
+<li><a href="#install_upgrade" title="Install Tracks 1.7">Install Tracks 1.6</a> in a new directory</li>
 <li><a href="#config_upgrade" title="Copy over old configuration files">Copy over</a> a few configuration files from your Tracks 1.043 directory. If using SQLite3, copy the old database into the new Tracks 1.6 directory</li>
+<li>Rebuild your environment.rb from the updated environment.rb.tmpl</li>
 <li>Run <code>script/server</code> inside your Tracks 1.6 directory to <a href="#startserver_upgrade" title="Start the server">start up Tracks 1.6</a>.</li>
 <li>Once you are happy that everything is working well, <a href="#cleanup_upgrade" title="Clean up your old installation">delete your old Tracks directory</a>.</li>
 </ol>
@@ -169,7 +182,7 @@ http://creativecommons.org/licenses/by-nc-sa/3.0/" />
 
 <ol>
 <li><a href="#backup_upgrade" title="Backing up">Back up</a> your existing database and installation of Tracks</li>
-<li><a href="#install_upgrade" title="Install Tracks 1.6">Install Tracks 1.6</a> in a new directory</li>
+<li><a href="#install_upgrade" title="Install Tracks 1.7">Install Tracks 1.6</a> in a new directory</li>
 <li><a href="#config_upgrade" title="Copy over old configuration files">Copy over</a> a few configuration files from your Tracks 1.043 directory. If using SQLite3, copy the old database into the new Tracks 1.6 directory</li>
 <li>Run <code>rake db:migrate RAILS_ENV=production</code> to <a href="#rake_upgrade" title="Update your old database to the new format">update your old database</a> to the new schema &#8211; you did back up your database didn&#8217;t you?</li>
 <li>Run <code>script/server</code> inside your Tracks 1.6 directory to <a href="#startserver_upgrade" title="Start the server">start up Tracks 1.6</a>.</li>
@@ -182,11 +195,11 @@ http://creativecommons.org/licenses/by-nc-sa/3.0/" />
 
 <p><code>mysqldump –-user [user name] –-password=[password] [database name] &gt; [dump file]</code></p>
 
-<p>Rename your old Tracks installation (e.g. to &#8216;tracks-old&#8217;) so that you can install Tracks 1.6 along side it.</p>
+<p>Rename your old Tracks installation (e.g. to &#8216;tracks-old&#8217;) so that you can install Tracks 1.7 along side it.</p>
 
-<h4 id="install_upgrade">Install Tracks 1.6</h4>
+<h4 id="install_upgrade">Install Tracks 1.7</h4>
 
-<p>There are two methods of downloading Tracks 1.6:</p>
+<p>There are two methods of downloading Tracks 1.7:</p>
 
 <ol>
 <li>(Recommended for most people) Download the <a href="http://www.rousette.org.uk/projects/files/tracks-current.zip">zipped package</a>, and unzip in your preferred location (e.g. <code>~/Sites</code> for Mac OS X users).</li>
@@ -208,7 +221,7 @@ http://creativecommons.org/licenses/by-nc-sa/3.0/" />
 
 <ol>
 <li>Copy <code>/config/database.yml</code> from your old Tracks directory to the same location in the new one. Double check that the information there is still correct.</li>
-<li>Duplicate <code>/config/environment.rb.tmpl</code> in the Tracks 1.6 directory, and rename the file to <code>environment.rb</code>. Open the file and alter the line <code>SALT = "change-me"</code> so that it matches what you had in this file in your old installation. You may also want to change the time zone setting as appropriate for your location (<code>ENV['TZ'] = 'US/Eastern'</code>). If you have made any other customisations to <code>environment.rb</code> in the past, copy those over, but the contents of the file have changed quite a lot since 1.043, so check it carefully.</li>
+<li>Duplicate <code>/config/environment.rb.tmpl</code> in the Tracks 1.7 directory, and rename the file to <code>environment.rb</code>. Open the file and alter the line <code>SALT = "change-me"</code> so that it matches what you had in this file in your old installation. You may also want to change the time zone setting as appropriate for your location. If you have made any other customisations to <code>environment.rb</code> in the past, copy those over, but the contents of the file have slightly changed since 1.5, so check it carefully.</li>
 <li>Copy your <code>/log</code> directory over from your old installation to the root of the new one, or just rename <code>/log.tmpl</code> to <code>log</code> to start afresh.</li>
 <li>If you are using SQLite3, copy your database from <code>/db</code> in your old Tracks directory to the same location in the new one.</li>
 <li>If you are using Windows, you may need to check the &#8216;shebang&#8217; lines (<code>#!/usr/bin/env ruby</code>)<a href="#fn:env" id="fnref:env" class="footnote">1</a> of the <code>/public/dispatch.*</code> files and all the files in the <code>/script</code> directory. They are set to <code>#!/usr/bin/env ruby</code> by default. Check the format of those lines in your old installation, and change the new ones as necessary.</li>
@@ -216,7 +229,7 @@ http://creativecommons.org/licenses/by-nc-sa/3.0/" />
 
 <h4 id="rake_upgrade">Update your old database to the new format</h4>
 
-<p>In a terminal, change directories so that you are inside the Tracks 1.6 directory. Then issue the command to update your Tracks 1.043 database to the format required for Tracks 1.6:</p>
+<p>In a terminal, change directories so that you are inside the Tracks 1.7 directory. Then issue the command to update your Tracks 1.6 database to the format required for Tracks 1.7:</p>
 
 <p><code>rake db:migrate RAILS_ENV=production</code></p>
 
@@ -224,7 +237,7 @@ http://creativecommons.org/licenses/by-nc-sa/3.0/" />
 
 <h4 id="startserver_upgrade">Start the server</h4>
 
-<p>If you&#8217;re still in the Tracks 1.6 root directory in a terminal, enter the following command to start up Tracks in production mode:</p>
+<p>If you&#8217;re still in the Tracks 1.7 root directory in a terminal, enter the following command to start up Tracks in production mode:</p>
 
 <p><code>script/server -e production</code></p>
 
@@ -233,7 +246,7 @@ http://creativecommons.org/licenses/by-nc-sa/3.0/" />
 
 <h4 id="cleanup_upgrade">Clean up your old installation</h4>
 
-<p>Once you&#8217;re certain that your new Tracks 1.6 installation is working perfectly, you can delete your old Tracks directory.</p>
+<p>Once you&#8217;re certain that your new Tracks 1.7 installation is working perfectly, you can delete your old Tracks directory.</p>
 
 <h3 id="upgradingfromversionspriorto1.043">Upgrading from versions prior to 1.043</h3>
 

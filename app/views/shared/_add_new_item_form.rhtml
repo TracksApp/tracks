@@ -43,7 +43,7 @@
 <div id="status"><%= error_messages_for("item", :object_name => 'action') %></div>
 
 <label for="todo_description">Description</label>
-<%= text_field( "todo", "description", "size" => 30, "tabindex" => 1) %>
+<%= text_field( "todo", "description", "size" => 30, "tabindex" => 1, "maxlength" => 100) %>
 
 <label for="todo_notes">Notes</label>
 <%= text_area( "todo", "notes", "cols" => 29, "rows" => 6, "tabindex" => 2) %>
