@@ -23,6 +23,7 @@ class ContextsController < ApplicationController
   end
   
   def show
+    @contexts = current_user.contexts(true)
     if (@context.nil?)
       respond_to do |format|
         format.html { render :text => 'Context not found', :status => 404 }
