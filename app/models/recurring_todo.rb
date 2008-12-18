@@ -369,7 +369,7 @@ class RecurringTodo < ActiveRecord::Base
     case self.target
     when 'due_date'
       return get_next_date(previous)
-    when 'show_from'
+    when 'show_from_date'
       # so leave due date empty
       return nil
     else
