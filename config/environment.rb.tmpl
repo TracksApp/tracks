@@ -26,6 +26,8 @@ Rails::Initializer.run do |config|
   config.action_web_service = Rails::OrderedOptions.new
   config.load_paths += %W( #{RAILS_ROOT}/app/apis )
 
+  config.gem "highline"
+
   config.action_controller.use_accept_header = true
   
   # Add additional load paths for your own custom dirs
