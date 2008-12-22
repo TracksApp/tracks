@@ -134,7 +134,7 @@ class Todo < ActiveRecord::Base
   # Rich Todo API
   
   def self.from_rich_message(user, default_context_id, description, notes)
-    fields = description.match /([^>@]*)@?([^>]*)>?(.*)/
+    fields = description.match(/([^>@]*)@?([^>]*)>?(.*)/)
     description = fields[1].strip
     context = fields[2].strip
     project = fields[3].strip
