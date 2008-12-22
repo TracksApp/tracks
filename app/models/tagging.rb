@@ -5,7 +5,7 @@ class Tagging < ActiveRecord::Base
  
   belongs_to :tag
   belongs_to :taggable, :polymorphic => true
-  belongs_to :user
+  # belongs_to :user
   
   # If you also need to use <tt>acts_as_list</tt>, you will have to manage the tagging positions manually by creating decorated join records when you associate Tags with taggables.
   # acts_as_list :scope => :taggable

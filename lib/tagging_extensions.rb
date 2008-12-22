@@ -28,7 +28,7 @@ class ActiveRecord::Base #:nodoc:
       tags.delete(*(tags.select do |tag|
         outgoing.include? tag.name    
       end))
-      end
+    end
 
    # Returns the tags on <tt>self</tt> as a string.
     def tag_list
@@ -68,7 +68,8 @@ class ActiveRecord::Base #:nodoc:
         when Array
           obj.map! do |item|
             case item
-              when /^\d+$/, Fixnum then Tag.find(item).name # This will be slow if you use ids a lot.
+              # removed next line: its prevents adding numbers as tags
+              # when /^\d+$/, Fixnum then Tag.find(item).name # This will be slow if you use ids a lot.
               when Tag then item.name
               when String then item
               else
@@ -77,8 +78,7 @@ class ActiveRecord::Base #:nodoc:
           end              
         when String
           obj = obj.split(Tag::DELIMITER).map do |tag_name| 
-            tag_name.strip.squeeze(" ")
-            puts "tn=#{tag_name.strip.squeeze(" ")}"
+            tag_name.strip.squeeze(" ")            
           end
         else
           raise "Invalid object of class #{obj.class} as tagging method parameter"
