@@ -7,11 +7,11 @@ class ActiveRecord::Base #:nodoc:
     # Add tags to <tt>self</tt>. Accepts a string of tagnames, an array of tagnames, an array of ids, or an array of Tags.
     #
     # We need to avoid name conflicts with the built-in ActiveRecord association methods, thus the underscores.
-    def _add_tags incoming, user
+    def _add_tags incoming
       taggable?(true)
       tag_cast_to_string(incoming).each do |tag_name|
         begin
-          tag = Tag.find_or_create_by_name(tag_name).on(self,user)
+          tag = Tag.find_or_create_by_name(tag_name)
           raise Tag::Error, "tag could not be saved: #{tag_name}" if tag.new_record?
           tag.taggables << self
         rescue ActiveRecord::StatementInvalid => e
@@ -21,7 +21,7 @@ class ActiveRecord::Base #:nodoc:
     end
   
     # Removes tags from <tt>self</tt>. Accepts a string of tagnames, an array of tagnames, an array of ids, or an array of Tags.  
-    def _remove_tags outgoing, user
+    def _remove_tags outgoing
       taggable?(true)
       outgoing = tag_cast_to_string(outgoing)
      
@@ -36,7 +36,7 @@ class ActiveRecord::Base #:nodoc:
     end
   
     # Replace the existing tags on <tt>self</tt>. Accepts a string of tagnames, an array of tagnames, an array of ids, or an array of Tags.
-    def tag_with list, user
+    def tag_with list
       #:stopdoc:
       taggable?(true)
       list = tag_cast_to_string(list)
@@ -44,8 +44,8 @@ class ActiveRecord::Base #:nodoc:
       # Transactions may not be ideal for you here; be aware.
       Tag.transaction do 
         current = tags.map(&:name)
-        _add_tags(list - current, user)
-        _remove_tags(current - list, user)
+        _add_tags(list - current)
+        _remove_tags(current - list)
       end
       
       self
@@ -78,6 +78,7 @@ class ActiveRecord::Base #:nodoc:
         when String
           obj = obj.split(Tag::DELIMITER).map do |tag_name| 
             tag_name.strip.squeeze(" ")
+            puts "tn=#{tag_name.strip.squeeze(" ")}"
           end
         else
           raise "Invalid object of class #{obj.class} as tagging method parameter"

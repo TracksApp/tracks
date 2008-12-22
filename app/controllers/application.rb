@@ -175,7 +175,7 @@ class ApplicationController < ActionController::Base
     
     saved = todo.save
     if saved
-      todo.tag_with(rt.tag_list, current_user)
+      todo.tag_with(rt.tag_list)
       todo.tags.reload 
     end
 

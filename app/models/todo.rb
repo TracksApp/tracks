@@ -118,10 +118,10 @@ class Todo < ActiveRecord::Base
   
   def toggle_star!
     if starred?
-      delete_tags STARRED_TAG_NAME
+      _remove_tags STARRED_TAG_NAME
       tags.reload
     else
-      add_tag STARRED_TAG_NAME
+      _add_tags(STARRED_TAG_NAME)
       tags.reload
     end 
     starred?  

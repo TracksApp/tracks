@@ -67,7 +67,7 @@ class TodosController < ApplicationController
 
     @saved = @todo.save
     unless (@saved == false) || p.tag_list.blank?
-      @todo.tag_with(p.tag_list, current_user)
+      @todo.tag_with(p.tag_list)
       @todo.tags.reload
     end
     
@@ -175,7 +175,7 @@ class TodosController < ApplicationController
   def update
     @source_view = params['_source_view'] || 'todo'
     init_data_for_sidebar unless mobile?
-    @todo.tag_with(params[:tag_list], current_user) if params[:tag_list]
+    @todo.tag_with(params[:tag_list]) if params[:tag_list]
     @original_item_context_id = @todo.context_id
     @original_item_project_id = @todo.project_id
     @original_item_was_deferred = @todo.deferred?

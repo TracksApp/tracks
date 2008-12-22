@@ -251,7 +251,7 @@ class RecurringTodoTest < Test::Rails::TestCase
   end
   
   def test_starred
-    @yearly.tag_with("1, 2, starred", User.find(@yearly.user_id))
+    @yearly.tag_with("1, 2, starred")
     @yearly.tags.reload
 
     assert_equal true, @yearly.starred?
