@@ -12,12 +12,12 @@ end -%>
 <%  end -%>
 <%= date_span -%> <%= link_to mobile_todo.description, formatted_todo_path(mobile_todo, :m) -%>
 <%  if parent_container_type == 'context' or parent_container_type == 'tag' -%>
-<%=    "<span class=prj> (" + 
+<%=    "<span class=\"prj\"> (" +
        link_to(mobile_todo.project.name, formatted_project_path(mobile_todo.project, :m)) + 
        ")</span>" unless mobile_todo.project.nil? -%>
 <%  end
     if parent_container_type == 'project' or parent_container_type == 'tag' -%>
-<%=    "<span class=ctx> (" + 
+<%=    "<span class=\"ctx\"> (" +
        link_to(mobile_todo.context.name, formatted_context_path(mobile_todo.context, :m)) + 
        ")</span>" -%>
 <%  end -%>
