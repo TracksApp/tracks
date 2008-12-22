@@ -118,10 +118,10 @@ class Todo < ActiveRecord::Base
   
   def toggle_star!
     if starred?
-      delete_tags STARRED_TAG_NAME
+      _remove_tags STARRED_TAG_NAME
       tags.reload
     else
-      add_tag STARRED_TAG_NAME
+      _add_tags(STARRED_TAG_NAME)
       tags.reload
     end 
     starred?  
@@ -134,7 +134,7 @@ class Todo < ActiveRecord::Base
   # Rich Todo API
   
   def self.from_rich_message(user, default_context_id, description, notes)
-    fields = description.match /([^>@]*)@?([^>]*)>?(.*)/
+    fields = description.match(/([^>@]*)@?([^>]*)>?(.*)/)
     description = fields[1].strip
     context = fields[2].strip
     project = fields[3].strip

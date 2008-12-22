@@ -30,7 +30,7 @@ class RecurringTodosController < ApplicationController
   end
 
   def update
-    @recurring_todo.tag_with(params[:tag_list], current_user) if params[:tag_list]
+    @recurring_todo.tag_with(params[:tag_list]) if params[:tag_list]
     @original_item_context_id = @recurring_todo.context_id
     @original_item_project_id = @recurring_todo.project_id
 
@@ -106,7 +106,7 @@ class RecurringTodosController < ApplicationController
 
     @recurring_saved = @recurring_todo.save
     unless (@recurring_saved == false) || p.tag_list.blank?
-      @recurring_todo.tag_with(p.tag_list, current_user)
+      @recurring_todo.tag_with(p.tag_list)
       @recurring_todo.tags.reload
     end
 
