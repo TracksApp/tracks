@@ -101,13 +101,14 @@ class ActiveRecord::Base #:nodoc:
   end
   
   module TaggingFinders
-    # 
     # Find all the objects tagged with the supplied list of tags
     # 
     # Usage : Model.tagged_with("ruby")
     #         Model.tagged_with("hello", "world")
     #         Model.tagged_with("hello", "world", :limit => 10)
     #
+    # XXX This query strategy is not performant, and needs to be rewritten as an inverted join or a series of unions
+    # 
     def tagged_with(*tag_list)
       options = tag_list.last.is_a?(Hash) ? tag_list.pop : {}
       tag_list = parse_tags(tag_list)
@@ -119,17 +120,22 @@ class ActiveRecord::Base #:nodoc:
       sql  = "SELECT #{(scope && scope[:select]) || options[:select]} "
       sql << "FROM #{(scope && scope[:from]) || options[:from]} "
 
-      add_joins!(sql, options, scope)
+      add_joins!(sql, options[:joins], scope)
       
       sql << "WHERE #{table_name}.#{primary_key} = taggings.taggable_id "
       sql << "AND taggings.taggable_type = '#{ActiveRecord::Base.send(:class_name_of_active_record_descendant, self).to_s}' "
       sql << "AND taggings.tag_id = tags.id "
       
-      tag_list_condition = tag_list.map {|t| "'#{t}'"}.join(", ")
+      tag_list_condition = tag_list.map {|name| "'#{name}'"}.join(", ")
       
       sql << "AND (tags.name IN (#{sanitize_sql(tag_list_condition)})) "
       sql << "AND #{sanitize_sql(options[:conditions])} " if options[:conditions]
-      sql << "GROUP BY #{table_name}.id "
+      
+      columns = column_names.map do |column| 
+        "#{table_name}.#{column}"
+      end.join(", ")
+      
+      sql << "GROUP BY #{columns} "
       sql << "HAVING COUNT(taggings.tag_id) = #{tag_list.size}"
       
       add_order!(sql, options[:order], scope)
