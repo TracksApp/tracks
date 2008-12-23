@@ -8,7 +8,7 @@ authors:
 autorequire: openid
 bindir: bin
 cert_chain: 
-date: 2008-06-27 00:00:00 -04:00
+date: 2008-06-27 05:00:00 +01:00
 default_executable: 
 dependencies: []
 
@@ -265,6 +265,7 @@ rdoc_options:
 - --main
 - README
 require_paths: 
+- bin
 - lib
 required_ruby_version: !ruby/object:Gem::Requirement 
   requirements: 
@@ -281,7 +282,7 @@ required_rubygems_version: !ruby/object:Gem::Requirement
 requirements: []
 
 rubyforge_project: 
-rubygems_version: 1.2.0
+rubygems_version: 1.0.1
 signing_key: 
 specification_version: 1
 summary: A library for consuming and serving OpenID identities.

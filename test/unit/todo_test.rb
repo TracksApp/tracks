@@ -163,7 +163,7 @@ class TodoTest < Test::Rails::TestCase
   end
   
   def test_todo_is_starred_after_starred_tag_is_added
-    @not_completed1.add_tag('starred')
+    @not_completed1._add_tags('starred')
     assert @not_completed1.starred?
   end
 
