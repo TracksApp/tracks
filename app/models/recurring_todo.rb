@@ -362,14 +362,14 @@ class RecurringTodo < ActiveRecord::Base
   end
   
   def starred?
-    tags.any? {|tag| tag.name == Todo::STARRED_TAG_NAME}
+    tags.any? {|tag| tag.name == Todo::STARRED_TAG_NAME }
   end
   
   def get_due_date(previous)
     case self.target
     when 'due_date'
       return get_next_date(previous)
-    when 'show_from'
+    when 'show_from_date'
       # so leave due date empty
       return nil
     else
@@ -623,10 +623,10 @@ class RecurringTodo < ActiveRecord::Base
   
   def toggle_star!
     if starred?
-      delete_tags Todo::STARRED_TAG_NAME
+      _remove_tags Todo::STARRED_TAG_NAME
       tags.reload
     else
-      add_tag Todo::STARRED_TAG_NAME
+      _add_tags(Todo::STARRED_TAG_NAME)
       tags.reload
     end 
     starred?  

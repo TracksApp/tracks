@@ -258,7 +258,7 @@ module TodosHelper
   
   def formatted_pagination(total)
     s = will_paginate(@todos)
-    (s.gsub /(<\/[^<]+>)/, '\1 ').chomp(' ')
+    (s.gsub(/(<\/[^<]+>)/, '\1 ')).chomp(' ')
   end
 
   def date_field_tag(name, id, value = nil, options = {})

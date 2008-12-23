@@ -360,10 +360,14 @@ Be aware, however, that <tt>NULL != 'Spot'</tt> returns <tt>false</tt> due to SQ
             begin
               table = plural._as_class.table_name
             rescue NameError => e
-              raise PolymorphicError, "Could not find a valid class for #{plural.inspect}. If it's namespaced, be sure to specify it as :\"module/#{plural}\" instead."
+              raise PolymorphicError, "Could not find a valid class for #{plural.inspect} (tried #{plural.to_s._classify}). If it's namespaced, be sure to specify it as :\"module/#{plural}\" instead."
             end
-            plural._as_class.columns.map(&:name).each_with_index do |field, f_index|
-              aliases["#{table}.#{field}"] = "t#{t_index}_r#{f_index}"
+            begin
+              plural._as_class.columns.map(&:name).each_with_index do |field, f_index|
+                aliases["#{table}.#{field}"] = "t#{t_index}_r#{f_index}"
+              end
+            rescue ActiveRecord::StatementInvalid => e
+              _logger_warn "Looks like your table doesn't exist for #{plural.to_s._classify}.\nError #{e}\nSkipping..."
             end
           end
         end
