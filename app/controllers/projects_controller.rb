@@ -40,6 +40,7 @@ class ProjectsController < ApplicationController
   end
 
   def show
+    @contexts = current_user.contexts(true)
     init_data_for_sidebar unless mobile?
     @projects = current_user.projects
     @page_title = "TRACKS::Project: #{@project.name}"

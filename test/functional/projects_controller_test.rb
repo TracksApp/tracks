@@ -223,8 +223,8 @@ class ProjectsControllerTest < TodoContainerControllerTestBase
     login_as :admin_user
     u = users(:admin_user)
     post :actionize, :state => "active", :format => 'js'
-    assert_equal 1, projects(:gardenclean).position
-    assert_equal 2, projects(:moremoney).position
+    assert_equal 1, projects(:moremoney).position
+    assert_equal 2, projects(:gardenclean).position
     assert_equal 3, projects(:timemachine).position
   end
   
