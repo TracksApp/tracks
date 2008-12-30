@@ -1,14 +1,14 @@
 # Tracks: a GTD(TM) web application, built with Ruby on Rails
 
-* Project homepage: http://www.rousette.org.uk/projects/
+* Project homepage: http://getontracks.org/
 * GitHub: http://github.com/bsag/tracks/
-* Trac (for bug reports and feature requests): http://dev.rousette.org.uk/report/6
-* Wiki (community contributed information): http://www.rousette.org.uk/projects/wiki/
-* Forum: http://www.rousette.org.uk/projects/forums/
+* Assembla space (for bug reports and feature requests): http://www.assembla.com/spaces/tracks-tickets/tickets
+* Wiki (community contributed information): http://getontracks.org/wiki/
+* Forum: http://getontracks.org/forums/
 * Mailing list: http://lists.rousette.org.uk/mailman/listinfo/tracks-discuss
 * Original developer: bsag (http://www.rousette.org.uk/)
-* Contributors: http://dev.rousette.org.uk/wiki/Tracks/Contributing/Contributors
-* Version: 1.7RC
+* Contributors: http://getontracks.org/wiki/Tracks/Contributing/Contributors
+* Version: 1.7
 * Copyright: (cc) 2004-2008 rousette.org.uk.
 * License:  GNU GPL
 
