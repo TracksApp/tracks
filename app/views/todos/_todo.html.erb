@@ -23,7 +23,7 @@ parameters += "&_tag_name=#{@tag_name}" if @source_view == 'tag'
     </ul></ul>
     <div class="description<%= staleness_class( todo ) %>">
       <%= date_span -%>
-      <span class="todo.descr"><%= h sanitize(todo.description) %></span>
+      <span class="todo.descr"><%= sanitize(todo.description) %></span>
       <%= image_tag_for_recurring_todo(todo) if @todo.from_recurring_todo? %>
       <%= tag_list %>
       <%= deferred_due_date %>
@@ -37,4 +37,9 @@ parameters += "&_tag_name=#{@tag_name}" if @source_view == 'tag'
       <div class="placeholder"> </div>
     <% end -%>
   </div>
+<<<<<<< HEAD:app/views/todos/_todo.html.erb
 </div>
+=======
+</div>
+<%=  apply_behaviour ".date_clear:click","var selector_x = this.getAttribute('id').replace('_x', ''); $(selector_x).value='';" %>
+>>>>>>> Don't run double sanitation on a string.:app/views/todos/_todo.html.erb
