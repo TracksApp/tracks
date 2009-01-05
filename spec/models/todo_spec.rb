@@ -170,7 +170,7 @@ describe Todo do
   it 'is starred if tag is "starred"' do
     todo = create_todo
     todo.should_not be_starred
-    todo.add_tag('starred')
+    todo._add_tags('starred')
     todo.reload
     todo.should be_starred
   end
@@ -178,7 +178,7 @@ describe Todo do
   describe 'when toggling star flag' do
     it 'toggles to not starred when starred' do
       todo = create_todo
-      todo.add_tag('starred')
+      todo._add_tags('starred')
       todo.should be_starred
       todo.toggle_star!
       todo.reload

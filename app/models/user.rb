@@ -202,7 +202,7 @@ class User < ActiveRecord::Base
   # These create and unset the fields required for remembering users between browser closes
   def remember_me
     self.remember_token_expires_at = 2.weeks.from_now.utc
-    self.remember_token = self.class.sha1("#{login}--#{remember_token_expires_at}")
+    self.remember_token ||= self.class.sha1("#{login}--#{remember_token_expires_at}")
     save(false)
   end
 

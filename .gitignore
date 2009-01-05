@@ -1,6 +1,7 @@
 *.tmproj
 config/database.yml
 config/environment.rb
+config/deploy.rb
 log
 tmp
 db/data.yml
