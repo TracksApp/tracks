@@ -175,7 +175,10 @@ class TodosController < ApplicationController
   def update
     @source_view = params['_source_view'] || 'todo'
     init_data_for_sidebar unless mobile?
-    @todo.tag_with(params[:tag_list]) if params[:tag_list]
+    if params[:tag_list]
+      @todo.tag_with(params[:tag_list])
+      @todo.tags(true) #force a reload for proper rendering
+    end
     @original_item_context_id = @todo.context_id
     @original_item_project_id = @todo.project_id
     @original_item_was_deferred = @todo.deferred?
