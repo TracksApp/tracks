@@ -8,7 +8,7 @@ class StatsController < ApplicationController
     @page_title = 'TRACKS::Statistics'
 
     @tags_count = get_total_number_of_tags_of_user
-    @unique_tags_count = get_unique_tags_of_user.count
+    @unique_tags_count = get_unique_tags_of_user.size
     @hidden_contexts = @contexts.hidden
     @first_action = @actions.find(:first, :order => "created_at ASC")
     
@@ -662,7 +662,7 @@ class StatsController < ApplicationController
           "FROM tags, taggings, todos "+
           "WHERE todos.user_id=? "+
           "AND tags.id = taggings.tag_id " +
-          "AND taggings.taggable_id = todos.id ", current_user.id]).count
+          "AND taggings.taggable_id = todos.id ", current_user.id]).size
   end
 
   def init
