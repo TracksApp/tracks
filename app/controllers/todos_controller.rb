@@ -647,7 +647,7 @@ class TodosController < ApplicationController
           @tag = Tag.new(:name => @tag_name)
         end
         tag_collection = @tag.todos
-        @not_done_todos = tag_collection.find(:all, :conditions => ['taggings.user_id = ? and state = ?', current_user.id, 'active'])
+        @not_done_todos = tag_collection.find(:all, :conditions => ['todos.user_id = ? and state = ?', current_user.id, 'active'])
         @not_done_todos.empty? ? @down_count = 0 : @down_count = @not_done_todos.size
       end
     end
