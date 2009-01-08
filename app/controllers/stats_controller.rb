@@ -6,8 +6,9 @@ class StatsController < ApplicationController
   
   def index
     @page_title = 'TRACKS::Statistics'
-      
-    @unique_tags = @tags.count(:all, {:group=>"tag_id"})
+
+    @tags_count = get_total_number_of_tags_of_user
+    @unique_tags_count = get_unique_tags_of_user.count
     @hidden_contexts = @contexts.hidden
     @first_action = @actions.find(:first, :order => "created_at ASC")
     
@@ -394,7 +395,7 @@ class StatsController < ApplicationController
 
   def context_running_actions_data
     # get incomplete action count per visible context
-    # 
+    #
     # Went from GROUP BY c.id to c.name for compatibility with postgresql. Since
     # the name is forced to be unique, this should work.
     @all_actions_per_context = @contexts.find_by_sql(
@@ -643,11 +644,31 @@ class StatsController < ApplicationController
 
   private
 
+  def get_unique_tags_of_user
+    tag_ids = @actions.find_by_sql([
+        "SELECT DISTINCT tags.id as id "+
+          "FROM tags, taggings, todos "+
+          "WHERE todos.user_id=? "+
+          "AND tags.id = taggings.tag_id " +
+          "AND taggings.taggable_id = todos.id ", current_user.id])
+    tags_ids_s = tag_ids.map(&:id).sort.join(",")
+    return Tag.find(:all, :conditions => "id in (" + tags_ids_s + ")")
+  end
+
+  def get_total_number_of_tags_of_user
+    # same query as get_unique_tags_of_user except for the DISTINCT
+    return @actions.find_by_sql([
+        "SELECT tags.id as id "+
+          "FROM tags, taggings, todos "+
+          "WHERE todos.user_id=? "+
+          "AND tags.id = taggings.tag_id " +
+          "AND taggings.taggable_id = todos.id ", current_user.id]).count
+  end
+
   def init
     @actions = @user.todos
     @projects = @user.projects
     @contexts = @user.contexts
-    @tags = @user.tags
 
     # default chart dimensions
     @chart_width=460
@@ -724,7 +745,7 @@ class StatsController < ApplicationController
 
   def get_stats_contexts
     # get action count per context for TOP 5
-    # 
+    #
     # Went from GROUP BY c.id to c.id, c.name for compatibility with postgresql.
     # Since the name is forced to be unique, this should work.
     @actions_per_context = @contexts.find_by_sql(
@@ -737,7 +758,7 @@ class StatsController < ApplicationController
     )
 
     # get incomplete action count per visible context for TOP 5
-    # 
+    #
     # Went from GROUP BY c.id to c.id, c.name for compatibility with postgresql.
     # Since the name is forced to be unique, this should work.
     @running_actions_per_context = @contexts.find_by_sql(
@@ -752,7 +773,7 @@ class StatsController < ApplicationController
 
   def get_stats_projects
     # get the first 10 projects and their action count (all actions)
-    # 
+    #
     # Went from GROUP BY p.id to p.name for compatibility with postgresql. Since
     # the name is forced to be unique, this should work.
     @projects_and_actions = @projects.find_by_sql(
@@ -812,9 +833,10 @@ class StatsController < ApplicationController
     
     # Get the tag cloud for all tags for actions
     query = "SELECT tags.id, name, count(*) AS count"
-    query << " FROM taggings, tags"
+    query << " FROM taggings, tags, todos"
     query << " WHERE tags.id = tag_id"
-    query << " AND taggings.user_id="+@user.id.to_s+" "
+    query << " AND taggings.taggable_id = todos.id"
+    query << " AND todos.user_id="+current_user.id.to_s+" "
     query << " AND taggings.taggable_type='Todo' "
     query << " GROUP BY tags.id, tags.name"
     query << " ORDER BY count DESC, name"
@@ -833,7 +855,7 @@ class StatsController < ApplicationController
     query = "SELECT tags.id, tags.name AS name, count(*) AS count"
     query << " FROM taggings, tags, todos"
     query << " WHERE tags.id = tag_id"
-    query << " AND taggings.user_id=? "
+    query << " AND todos.user_id=? "
     query << " AND taggings.taggable_type='Todo' "
     query << " AND taggings.taggable_id=todos.id "
     query << " AND (todos.created_at > ? OR "
@@ -842,7 +864,7 @@ class StatsController < ApplicationController
     query << " ORDER BY count DESC, name"
     query << " LIMIT 100"
     @tags_for_cloud_90days = Tag.find_by_sql(
-      [query, @user.id, @cut_off_3months, @cut_off_3months]
+      [query, current_user.id, @cut_off_3months, @cut_off_3months]
     ).sort_by { |tag| tag.name.downcase }
 
     max_90days, @tags_min_90days = 0, 0

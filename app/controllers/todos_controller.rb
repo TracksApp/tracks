@@ -175,10 +175,7 @@ class TodosController < ApplicationController
   def update
     @source_view = params['_source_view'] || 'todo'
     init_data_for_sidebar unless mobile?
-    if params[:tag_list]
-      @todo.tag_with(params[:tag_list])
-      @todo.tags(true) #force a reload for proper rendering
-    end
+    @todo.tag_with(params[:tag_list]) if params[:tag_list]
     @original_item_context_id = @todo.context_id
     @original_item_project_id = @todo.project_id
     @original_item_was_deferred = @todo.deferred?
@@ -385,14 +382,14 @@ class TodosController < ApplicationController
     tag_collection = @tag.todos
     
     @not_done_todos = tag_collection.find(:all, 
-      :conditions => ['taggings.user_id = ? and state = ?', current_user.id, 'active'],
+      :conditions => ['todos.user_id = ? and state = ?', current_user.id, 'active'],
       :order => 'todos.due IS NULL, todos.due ASC, todos.created_at ASC')
     @hidden_todos = current_user.todos.find(:all, 
       :include => [:taggings, :tags, :context], 
       :conditions => ['tags.name = ? AND (todos.state = ? OR (contexts.hide = ? AND todos.state = ?))', @tag_name, 'project_hidden', true, 'active'],
       :order => 'todos.completed_at DESC, todos.created_at DESC')
     @deferred = tag_collection.find(:all, 
-      :conditions => ['taggings.user_id = ? and state = ?', current_user.id, 'deferred'],
+      :conditions => ['todos.user_id = ? and state = ?', current_user.id, 'deferred'],
       :order => 'show_from ASC, todos.created_at DESC')
     
     # If you've set no_completed to zero, the completed items box isn't shown on
@@ -400,7 +397,7 @@ class TodosController < ApplicationController
     max_completed = current_user.prefs.show_number_completed
     @done = tag_collection.find(:all, 
       :limit => max_completed, 
-      :conditions => ['taggings.user_id = ? and state = ?', current_user.id, 'completed'], 
+      :conditions => ['todos.user_id = ? and state = ?', current_user.id, 'completed'],
       :order => 'todos.completed_at DESC')
 
     @projects = current_user.projects

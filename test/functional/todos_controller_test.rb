@@ -170,7 +170,7 @@ class TodosControllerTest < Test::Rails::TestCase
     login_as(:admin_user)
     @user = User.find(@request.session['user_id'])
     tag = Tag.find_by_name('foo').todos
-    @tagged = tag.find(:all, :conditions => ['taggings.user_id = ?', @user.id]).size
+    @tagged = tag.count
     get :tag, :name => 'foo'
     assert_response :success
     assert_equal 3, @tagged
