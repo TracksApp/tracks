@@ -1,5 +1,5 @@
 <h1>REST API Documentation for Developers</h1>
-            
+
 <h2>Introduction</h2>
 
 <p>Tracks is designed to be integrated with scripts, web services, and third-party applications. This page serves as the documentation of our REST API.</p>
@@ -86,7 +86,7 @@ Location: <%= home_url %>projects/65.xml
 <pre>
 <code>
 $ curl -u username:p4ssw0rd -H "Content-Type: text/xml" \
-    -d "&lt;todo&gt;&lt;description&gt;Model treehouse in SketchUp&lt;/description&gt;&lt;context_id&gt;2&lt;/context_id&gt;&lt;project_id&gt;65&lt;project_id&gt;" \
+    -d "&lt;todo&gt;&lt;description&gt;Model treehouse in SketchUp&lt;/description&gt;&lt;context_id&gt;2&lt;/context_id&gt;&lt;project_id&gt;65&lt;/project_id&gt;&lt;/todo&gt;" \
     <%= home_url %>todos.xml -i
 &gt;&gt; HTTP/1.1 201 Created
 Location: <%= home_url %>todos/452.xml
