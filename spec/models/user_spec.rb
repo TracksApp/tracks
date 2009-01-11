@@ -68,14 +68,6 @@ describe User do
         with_dependent(:delete_all)
     end
 
-    it 'has many taggings' do
-      User.should have_many(:taggings)
-    end
-
-    it 'has many tags through taggings' do
-      User.should have_many(:tags).through(:taggings).with_select('DISTINCT tags.*')
-    end
-
     it 'has one preference' do
       User.should have_one(:preference)
     end
