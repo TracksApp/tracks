@@ -43,6 +43,7 @@ class ProjectsController < ApplicationController
     @contexts = current_user.contexts(true)
     init_data_for_sidebar unless mobile?
     @projects = current_user.projects
+    @contexts = current_user.contexts
     @page_title = "TRACKS::Project: #{@project.name}"
     @project.todos.send :with_scope, :find => { :include => [:context] } do
       @not_done = @project.not_done_todos(:include_project_hidden_todos => true)
