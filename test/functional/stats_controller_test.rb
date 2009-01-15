@@ -90,5 +90,21 @@ class StatsControllerTest < Test::Unit::TestCase
     assert_response :success
     assert_template "stats/show_selection_from_chart"
   end
-  
+
+  def test_stats_render_when_tasks_have_no_taggings
+    login_as(:admin_user)
+
+    # using the default fixtures, todos have tags
+    get :index
+    assert_response :success
+
+    # clear taggings table and render again
+    taggings = Tagging.find(:all)
+    taggings.each do |t|
+      t.delete
+    end
+    get :index
+    assert_response :success
+
+  end
 end
