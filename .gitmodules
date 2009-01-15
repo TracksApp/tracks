@@ -1,0 +1,3 @@
+[submodule "doc/manual"]
+	path = doc/manual
+	url = git://github.com/bsag/tracks_manual.git

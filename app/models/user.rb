@@ -104,8 +104,6 @@ class User < ActiveRecord::Base
            end
   has_many :notes, :order => "created_at DESC", :dependent => :delete_all
   has_one :preference, :dependent => :destroy
-  has_many :taggings
-  has_many :tags, :through => :taggings, :select => "DISTINCT tags.*"
   
   attr_protected :is_admin
 
@@ -202,7 +200,7 @@ class User < ActiveRecord::Base
   # These create and unset the fields required for remembering users between browser closes
   def remember_me
     self.remember_token_expires_at = 2.weeks.from_now.utc
-    self.remember_token = self.class.sha1("#{login}--#{remember_token_expires_at}")
+    self.remember_token ||= self.class.sha1("#{login}--#{remember_token_expires_at}")
     save(false)
   end
 

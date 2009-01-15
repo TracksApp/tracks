@@ -16,7 +16,7 @@ deferred actions. </p>
 a total of <%= @actions.count %> actions. 
 <%= @actions.count(:conditions => "NOT completed_at IS NULL") %> of these are completed.
 
-<p>You have <%= @tags.count-%> tags placed on actions. Of those tags, 
-<%= @unique_tags.size -%> are unique.
+<p>You have <%= @tags_count-%> tags placed on actions. Of those tags,
+<%= @unique_tags_count -%> are unique.
 <% end -%>
 

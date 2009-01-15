@@ -27,17 +27,17 @@
     :condition => "!$('todo_new_action_submit').isWaiting() && askIfNewContextProvided()") do -%>
 
 <script type="text/javascript" charset="utf-8">
-	function askIfNewContextProvided() {
-		var contexts = new Array(<%= @contexts.map{|c| '\'' + c.name + '\''}.join(", ") %>);
-		var givenContextName = $('todo_context_name').value;
-		if (givenContextName.length == 0) return true; // show rails validation error
-		for (var i = 0; i < contexts.length; ++i) {
-			if (contexts[i] == givenContextName) {
-				return true;
-			}
-		}
-		return confirm('New context "' + givenContextName + '" will be also created. Are you sure?');
-	}
+  function askIfNewContextProvided() {
+    var contexts = new Array(<%= @contexts.map{|c| '\'' + c.name + '\''}.join(", ") %>);
+    var givenContextName = $('todo_context_name').value;
+    if (givenContextName.length == 0) return true; // show rails validation error
+    for (var i = 0; i < contexts.length; ++i) {
+      if (contexts[i] == givenContextName) {
+        return true;
+      }
+    }
+    return confirm('New context "' + givenContextName + '" will be also created. Are you sure?');
+  }
 </script>
 
 <div id="status"><%= error_messages_for("item", :object_name => 'action') %></div>

@@ -57,8 +57,8 @@ class StatsControllerTest < Test::Unit::TestCase
     assert_equal 3, assigns['projects'].count(:conditions => "state = 'active'")
     assert_equal 10, assigns['contexts'].count
     assert_equal 16, assigns['actions'].count
-    assert_equal 4, assigns['tags'].count
-    assert_equal 2, assigns['unique_tags'].size
+    assert_equal 4, assigns['tags_count']
+    assert_equal 2, assigns['unique_tags_count']
     assert_equal 2.week.ago.utc.beginning_of_day, assigns['first_action'].created_at
   end
   
@@ -90,5 +90,21 @@ class StatsControllerTest < Test::Unit::TestCase
     assert_response :success
     assert_template "stats/show_selection_from_chart"
   end
-  
+
+  def test_stats_render_when_tasks_have_no_taggings
+    login_as(:admin_user)
+
+    # using the default fixtures, todos have tags
+    get :index
+    assert_response :success
+
+    # clear taggings table and render again
+    taggings = Tagging.find(:all)
+    taggings.each do |t|
+      t.delete
+    end
+    get :index
+    assert_response :success
+
+  end
 end
