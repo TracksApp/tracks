@@ -14,7 +14,7 @@
   <div class="add_note_link"><%= link_to_function( "Add a note", "Element.toggle('new-note'); Form.focusFirstElement('form-new-note');", :id=>"add_note_href") %></div>
    <h2>Notes</h2>
    <div id="empty-n" style="display:<%= @project.notes.empty? ? 'block' : 'none'%>;">
-    <%= render :partial => "shared/empty", 
+    <%= render :partial => "shared/empty",
               :locals => { :message => "Currently there are no notes attached to this project"} %>
    </div>
    <%= render :partial => "notes/notes_summary", :collection => @project.notes %>
@@ -56,7 +56,7 @@
     <div id="default_context">
         <h2>Default Context</h2>
         <div>
-            <% form_remote_tag( :url => project_path(@project), :method => :put, 
+            <% form_remote_tag( :url => project_path(@project), :method => :put,
                                 :html=> { :id => 'set-default-context-action',
                                           :name => 'default_context',
                                           :class => 'inline-form' }) do -%>
@@ -74,5 +74,5 @@
 
 <div id="input_box">
   <%= render :partial => "shared/add_new_item_form" %>
-  <%= render :template => "sidebar/sidebar" %>
+  <%= render :file => "sidebar/sidebar.html.erb" %>
 </div><!-- End of input box -->
