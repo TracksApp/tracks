@@ -56,7 +56,17 @@ class Todo < ActiveRecord::Base
       errors.add("show_from", "must be a date in the future")
     end
   end
-  
+
+  before_validation :update_state_from_project
+   
+  def update_state_from_project
+    if state == 'project_hidden' and !project.hidden?
+      self.state = 'active'
+    elsif state == 'active' and project.hidden?
+      self.state = 'project_hidden'
+    end
+  end
+ 
   def toggle_completion!
     saved = false
     if completed?
