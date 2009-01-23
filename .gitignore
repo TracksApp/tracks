@@ -2,8 +2,8 @@
 .dotest
 /.emacs-project
 config/database.yml
+config/site.yml
 config/deploy.rb
-config/environment.rb
 db/*.sqlite3
 db/data.yml
 db/schema.rb

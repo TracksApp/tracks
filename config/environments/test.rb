@@ -38,7 +38,7 @@ end
 # config.transactional_fixtures = true
 # config.instantiated_fixtures = false
 # config.pre_loaded_fixtures = false
-SALT = "change-me" unless defined?( SALT ).nil?
+SITE_CONFIG['salt'] ||= 'change-me'
 
 config.time_zone = 'UTC'
 
