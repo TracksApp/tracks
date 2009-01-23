@@ -5,7 +5,7 @@ require 'feedlist_controller'
 class FeedlistController; def rescue_action(e) raise e end; end
 
 class FeedlistControllerTest < Test::Rails::TestCase
-  fixtures :users, :preferences, :projects, :contexts, :todos, :notes
+  fixtures :users, :preferences, :projects, :contexts, :todos, :recurring_todos, :notes
   
   def setup
     assert_equal "test", ENV['RAILS_ENV']

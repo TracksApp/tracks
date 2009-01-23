@@ -5,7 +5,7 @@ require 'backend_controller'
 class BackendController; def rescue_action(e) raise e end; end
 
 class BackendControllerTest < Test::Rails::TestCase
-  fixtures :users, :projects, :contexts, :todos, :notes
+  fixtures :users, :projects, :contexts, :todos, :recurring_todos, :notes
   
   def setup
     @controller = BackendController.new

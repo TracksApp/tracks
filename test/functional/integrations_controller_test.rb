@@ -5,7 +5,7 @@ require 'integrations_controller'
 class IntegrationsController; def rescue_action(e) raise e end; end
 
 class IntegrationsControllerTest < Test::Unit::TestCase
-  fixtures :users, :preferences, :projects, :contexts, :todos, :tags, :taggings
+  fixtures :users, :preferences, :projects, :contexts, :todos, :recurring_todos, :tags, :taggings
 
   def setup
     @controller = IntegrationsController.new

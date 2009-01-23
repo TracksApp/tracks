@@ -6,7 +6,7 @@ require 'projects_controller'
 class ProjectsController; def rescue_action(e) raise e end; end
 
 class ProjectsControllerTest < TodoContainerControllerTestBase
-  fixtures :users, :todos, :preferences, :projects, :contexts
+  fixtures :users, :todos, :preferences, :projects, :contexts, :recurring_todos
   
   def setup
     perform_setup(Project, ProjectsController)

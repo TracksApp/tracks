@@ -5,7 +5,7 @@ require 'stats_controller'
 class StatsController; def rescue_action(e) raise e end; end
 
 class StatsControllerTest < Test::Unit::TestCase
-  fixtures :users, :preferences, :projects, :contexts, :todos, :tags, :taggings
+  fixtures :users, :preferences, :projects, :contexts, :todos, :recurring_todos, :recurring_todos, :tags, :taggings
   
   def setup
     @controller = StatsController.new

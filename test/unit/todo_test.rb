@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../test_helper'
 require 'date'
 
 class TodoTest < Test::Rails::TestCase
-  fixtures :todos, :users, :contexts, :preferences, :tags, :taggings
+  fixtures :todos, :recurring_todos, :users, :contexts, :preferences, :tags, :taggings
 
   def setup
     @not_completed1 = Todo.find(1).reload

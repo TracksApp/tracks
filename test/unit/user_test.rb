@@ -17,7 +17,7 @@ class SimpleLdapAuthenticator
 end
 
 class UserTest < Test::Rails::TestCase
-  fixtures :users, :preferences, :projects, :contexts, :todos
+  fixtures :users, :preferences, :projects, :contexts, :todos, :recurring_todos
 
   def setup
     assert_equal "test", ENV['RAILS_ENV']
