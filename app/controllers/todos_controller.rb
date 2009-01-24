@@ -65,6 +65,7 @@ class TodosController < ApplicationController
       @todo.context_id = context.id
     end
 
+    @todo.update_state_from_project
     @saved = @todo.save
     unless (@saved == false) || p.tag_list.blank?
       @todo.tag_with(p.tag_list)
@@ -257,7 +258,10 @@ class TodosController < ApplicationController
     end
     
     @project_changed = @original_item_project_id != @todo.project_id
-    if (@project_changed && !@original_item_project_id.nil?) then @remaining_undone_in_project = current_user.projects.find(@original_item_project_id).not_done_todo_count; end
+    if (@project_changed && !@original_item_project_id.nil?) then
+      @todo.update_state_from_project
+      @remaining_undone_in_project = current_user.projects.find(@original_item_project_id).not_done_todo_count
+    end
     determine_down_count
     respond_to do |format|
       format.js

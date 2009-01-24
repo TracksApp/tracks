@@ -106,9 +106,9 @@ class ProjectsController < ApplicationController
   def update
     params['project'] ||= {}
     if params['project']['state']
-      @state_changed = @project.state != params['project']['state']
+      @new_state = params['project']['state']
+      @state_changed = @project.state != @new_state
       logger.info "@state_changed: #{@project.state} == #{params['project']['state']} != #{@state_changed}"
-      @project.transition_to(params['project']['state'])
       params['project'].delete('state')
     end
     success_text = if params['field'] == 'name' && params['value']
@@ -117,6 +117,7 @@ class ProjectsController < ApplicationController
     end
     @project.attributes = params['project']
     if @project.save
+      @project.transition_to(@new_state) if @state_changed
       if boolean_param('wants_render')
         if (@project.hidden?)
           @project_project_hidden_todo_counts = Hash.new

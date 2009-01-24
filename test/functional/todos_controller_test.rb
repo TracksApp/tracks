@@ -94,7 +94,7 @@ class TodosControllerTest < Test::Rails::TestCase
     assert_difference Todo, :count do
       xml = "<todo><description>Call Warren Buffet to find out how much he makes per day</description><project_id>#{projects(:timemachine).id}</project_id><context_id>#{contexts(:agenda).id}</context_id><show-from type=\"datetime\">#{1.week.from_now.xmlschema}</show-from></todo>"
 
-      #p parse_xml_body(xml)
+      # p parse_xml_body(xml)
       post :create, parse_xml_body(xml).update(:format => "xml")
       assert_response :created
     end
@@ -503,6 +503,22 @@ class TodosControllerTest < Test::Rails::TestCase
     assert !next_todo.nil?
     # check that the due date of the new todo is later than tomorrow
     assert next_todo.due > @todo.due
+  end
+
+  def test_removing_hidden_project_activates_todo
+    login_as(:admin_user)
+
+    # get a project and hide it, todos in the project should be hidden
+    p = projects(:timemachine)
+    p.hide!
+    assert p.reload().hidden?
+    todo = p.todos.first
+    assert "project_hidden", todo.state
+
+    # clear project from todo: the todo should be unhidden
+    xhr :post, :update, :id => 1, :_source_view => 'todo', "project_name"=>"None", "todo"=>{}
+    todo.reload()
+    assert "active", todo.state
   end
 
 end
