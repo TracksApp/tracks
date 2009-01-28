@@ -127,6 +127,31 @@ describe Todo do
       end
     end
 
+    describe 'when update_state_from_project is called' do
+      it "should unhide when project is active" do
+        project = mock_model(Project, :hidden? => false)
+        todo = Todo.new(:state => 'project_hidden', :project => project)
+        todo.should be_project_hidden
+        todo.update_state_from_project
+        todo.should be_active
+      end
+   
+      it "should unhide when project is null" do
+        todo = Todo.new(:state => 'project_hidden', :project => nil)
+        todo.should be_project_hidden
+        todo.update_state_from_project
+        todo.should be_active
+      end
+   
+      it "should hide when project is hidden" do
+        project = mock_model(Project, :hidden? => true)
+        todo = Todo.new(:state => 'active', :project => project)
+        todo.should be_active
+        todo.update_state_from_project
+        todo.should be_project_hidden
+      end
+    end
+
     it "is deferrable from `active'" do
       todo = create_todo
       todo.activate!
