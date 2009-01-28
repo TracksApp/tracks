@@ -513,12 +513,12 @@ class TodosControllerTest < Test::Rails::TestCase
     p.hide!
     assert p.reload().hidden?
     todo = p.todos.first
-    assert "project_hidden", todo.state
+    assert_equal "project_hidden", todo.state
 
     # clear project from todo: the todo should be unhidden
     xhr :post, :update, :id => 1, :_source_view => 'todo', "project_name"=>"None", "todo"=>{}
     todo.reload()
-    assert "active", todo.state
+    assert_equal "active", todo.state
   end
 
 end
