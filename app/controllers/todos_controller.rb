@@ -260,6 +260,7 @@ class TodosController < ApplicationController
     @project_changed = @original_item_project_id != @todo.project_id
     if (@project_changed && !@original_item_project_id.nil?) then
       @todo.update_state_from_project
+      @todo.save!
       @remaining_undone_in_project = current_user.projects.find(@original_item_project_id).not_done_todo_count
     end
     determine_down_count
