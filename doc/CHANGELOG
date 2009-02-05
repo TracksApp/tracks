@@ -8,11 +8,11 @@
 * Mailing list: http://lists.rousette.org.uk/mailman/listinfo/tracks-discuss
 * Original developer: bsag (http://www.rousette.org.uk/)
 * Contributors: http://getontracks.org/wiki/Tracks/Contributing/Contributors
-* Version: 1.7
+* Version: 1.7RC2
 * Copyright: (cc) 2004-2008 rousette.org.uk.
 * License:  GNU GPL
 
-== Version 1.7RC
+== Version 1.7RC2
 
 New features:
 1. Recurring todos
@@ -25,9 +25,11 @@ New features:
 8. Support for OpenSearch. This means you can add a Tracks as a search provider in your webbrowser (tested on FF3 and IE7)
 
 Under the hood:
-1. Started to move selenium tests to RSpec 
-2. Upgrade to Rails 2.2.2
-2. Bugfixes, including fixing OpenID
+1. We now allow users again to stay logged in on two devices at the same time
+2. Started to move selenium tests to RSpec
+3. Upgrade to Rails 2.2.2
+4. Move site specific configuration out of environment.rb for easier updating
+5. Bugfixes, including fixing OpenID
 
 == Version 1.6
 1. upgrade to rails 2.0.2
