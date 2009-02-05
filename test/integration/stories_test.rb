@@ -1,7 +1,7 @@
 require "#{File.dirname(__FILE__)}/../test_helper"
 
 class StoriesTest < ActionController::IntegrationTest
-  fixtures :users, :preferences, :projects, :contexts, :todos, :notes
+  fixtures :users, :preferences, :projects, :contexts, :todos, :recurring_todos, :notes
   
   def setup
     assert_test_environment_ok

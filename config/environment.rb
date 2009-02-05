@@ -7,17 +7,12 @@
 # Bootstrap the Rails environment, frameworks, and default configuration
 require File.join(File.dirname(__FILE__), 'boot')
 
-# This is the 'salt' to add to the password before it is encrypted
-# You need to change this to something unique for yourself
-SALT = "change-me"
+require 'yaml'
+SITE_CONFIG = YAML.load_file(File.join(File.dirname(__FILE__), 'site.yml'))
 
 class Rails::Configuration
   attr_accessor :action_web_service
 end
-
-# Leave this alone or set it to one or more of ['database', 'ldap', 'open_id'].
-# If you choose ldap, see the additional configuration options further down.
-AUTHENTICATION_SCHEMES = ['database']
 
 Rails::Initializer.run do |config|
   # Skip frameworks you're not going to use
@@ -29,23 +24,18 @@ Rails::Initializer.run do |config|
   config.gem "highline"
 
   config.action_controller.use_accept_header = true
-  
-  # Add additional load paths for your own custom dirs
-  # config.load_paths += %W( #{RAILS_ROOT}/app/services )
-
-  # Force all environments to use the same logger level 
-  # (by default production uses :info, the others :debug)
-  # config.log_level = :debug
 
   # Use the database for sessions instead of the file system
   # (create the session table with 'rake create_sessions_table')
   config.action_controller.session_store = :active_record_store
-  
+
   config.action_controller.session = {
     :session_key => '_tracks_session_id',
-    :secret      => SALT * (30.0 / SALT.length).ceil #must be at least 30 characters
+    :secret      =>  SITE_CONFIG['salt'] * (30.0 /  SITE_CONFIG['salt'].length).ceil #must be at least 30 characters
   }
-  
+
+  config.action_controller.relative_url_root = SITE_CONFIG['subdir'] if SITE_CONFIG['subdir']
+
   # Enable page/fragment caching by setting a file-based store
   # (remember to create the caching directory and make it readable to the application)
   # config.action_controller.fragment_cache_store = :file_store, "#{RAILS_ROOT}/cache"
@@ -55,11 +45,11 @@ Rails::Initializer.run do |config|
 
   # Make Active Record use UTC-base instead of local time
   config.active_record.default_timezone = :utc
-  
+
   # You''ll probably want to change this to the time zone of the computer where Tracks is running
   # run rake time:zones:local have Rails suggest time zone names on your system
-  config.time_zone = 'UTC'
-  
+  config.time_zone =  SITE_CONFIG['time_zone']
+
   # Use Active Record's schema dumper instead of SQL when creating the test database
   # (enables use of different database adapters for development and test environments)
   config.active_record.schema_format = :ruby
@@ -67,7 +57,7 @@ Rails::Initializer.run do |config|
   # See Rails::Configuration for more options
 end
 
-# Add new inflection rules using the following format 
+# Add new inflection rules using the following format
 # (all these examples are active by default):
 # Inflector.inflections do |inflect|
 #   inflect.plural /^(ox)$/i, '\1en'
@@ -86,26 +76,17 @@ require 'tagging_extensions' # Needed for tagging-specific extensions
 require 'digest/sha1' #Needed to support 'rake db:fixtures:load' on some ruby installs: http://dev.rousette.org.uk/ticket/557
 require 'prototype_helper_extensions'
 
-if (AUTHENTICATION_SCHEMES.include? 'ldap')
+if ( SITE_CONFIG['authentication_schemes'].include? 'ldap')
   require 'net/ldap' #requires ruby-net-ldap gem be installed
   require 'simple_ldap_authenticator'
-  SimpleLdapAuthenticator.ldap_library = 'net/ldap'
-  SimpleLdapAuthenticator.servers = %w'localhost'
-  SimpleLdapAuthenticator.use_ssl = false
-  SimpleLdapAuthenticator.login_format = 'cn=%s,dc=example,dc=com'
+  ldap =  SITE_CONFIG['ldap']
+  SimpleLdapAuthenticator.ldap_library = ldap['library']
+  SimpleLdapAuthenticator.servers = ldap['servers']
+  SimpleLdapAuthenticator.use_ssl = ldap['ssl']
+  SimpleLdapAuthenticator.login_format = ldap['login_format']
 end
-if (AUTHENTICATION_SCHEMES.include? 'open_id')
+if ( SITE_CONFIG['authentication_schemes'].include? 'open_id')
   #requires ruby-openid gem to be installed
 end
 
-# setting this to true will make the cookies only available over HTTPS
-TRACKS_COOKIES_SECURE = false  
-
-tracks_version='1.7'
-
-# comment out next two lines if you do not want (or can not) the date of the 
-# last git commit in the footer
-# info=`git log --pretty=format:"%ai" -1`
-# tracks_version=tracks_version + ' ('+info+')'
-
-TRACKS_VERSION=tracks_version
+TRACKS_VERSION='1.7RC2'

@@ -11,7 +11,13 @@ class SearchController < ApplicationController
     @found_notes = current_user.notes.find(:all, :conditions => ["body LIKE ?", terms])
     @found_contexts = current_user.contexts.find(:all, :conditions => ["name LIKE ?", terms])
     # TODO: limit search to tags on todos
-    @found_tags = current_user.tags.find(:all, :conditions => ["name LIKE ?", terms])
+    @found_tags = Tagging.find_by_sql([
+        "SELECT DISTINCT tags.name as name "+
+          "FROM tags "+
+	  "LEFT JOIN taggings ON tags.id = taggings.tag_id "+
+	  "LEFT JOIN todos ON taggings.taggable_id = todos.id "+
+          "WHERE todos.user_id=? "+
+          "AND tags.name LIKE ? ", current_user.id, terms])
  
     @count = @found_todos.size  + @found_projects.size + @found_notes.size + @found_contexts.size + @found_tags.size
    

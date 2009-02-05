@@ -24,7 +24,7 @@ module ApplicationHelper
   end
   
   def days_from_today(date)
-    date.to_date - user_time.to_date
+    date.in_time_zone.to_date - user_time.to_date
   end
   
   # Check due date in comparison to today's date Flag up date appropriately with

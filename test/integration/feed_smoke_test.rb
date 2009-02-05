@@ -9,7 +9,7 @@ class ContextsController; def rescue_action(e) raise e end; end
 class TodosController; def rescue_action(e) raise e end; end
 
 class FeedSmokeTest < ActionController::IntegrationTest
-  fixtures :users, :preferences, :projects, :contexts, :todos, :notes
+  fixtures :users, :preferences, :projects, :contexts, :todos, :recurring_todos, :notes
 
   def setup
     assert_test_environment_ok

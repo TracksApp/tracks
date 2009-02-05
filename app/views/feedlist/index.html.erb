@@ -57,18 +57,18 @@
       <li>
         <%= rss_formatted_link({:controller => 'todos', :action => 'index', :tag => 'starred'}) %>
         <%= text_formatted_link({:controller => 'todos', :action => 'index', :tag => 'starred'}) %>
-        All starred, active actions 
+        All starred, active actions
       </li>
       <li>
         <%= text_formatted_link({:controller => 'projects', :action => 'index', :projects_and_actions => true}) %>
-        Active projects with their actions                   
+        Active projects with their actions
       </li>
       <li><h4>Feeds for incomplete actions in a specific context:</h4>
         <% if @active_contexts.empty? && @hidden_contexts.empty? -%>
         <ul><li>There need to be at least one context before you can request a feed</li></ul>
         <% else -%>
         <ul>
-          <li>Step 1 - Choose the context you want a feed of: 
+          <li>Step 1 - Choose the context you want a feed of:
             <select name="feed-contexts" id="feed-contexts">
               <%= options_from_collection_for_select(@active_contexts, "id", "name", @active_contexts.first.id) unless @active_projects.empty?-%>
               <%= options_from_collection_for_select(@hidden_contexts, "id", "name") -%>
@@ -78,7 +78,7 @@
               :url => { :controller => "feedlist", :action => "get_feeds_for_context" },
               :before => "$('feeds-for-context').startWaiting()",
               :complete => "$('feeds-for-context').stopWaiting()"
-            -%>            
+            -%>
           </li>
           <li>Step 2 - Select the feed for this context
             <div id="feedicons-context">
@@ -95,7 +95,7 @@
         <ul><li>There need to be at least one project before you can request a feed</li></ul>
         <% else -%>
         <ul>
-          <li>Step 1 - Choose the project you want a feed of: 
+          <li>Step 1 - Choose the project you want a feed of:
             <select name="feed-projects" id="feed-projects">
               <%=  options_from_collection_for_select(@active_projects, "id", "name", @active_projects.first.id) unless @active_projects.empty?-%>
               <%=  options_from_collection_for_select(@hidden_projects, "id", "name") -%>
@@ -106,7 +106,7 @@
               :url => { :controller => "feedlist", :action => "get_feeds_for_project" },
               :before => "$('feeds-for-project').startWaiting()",
               :complete => "$('feeds-for-project').stopWaiting()"
-            -%>            
+            -%>
           </li>
           <li>Step 2 - Select the feed for this project
             <div id="feedicons-project">
@@ -123,7 +123,7 @@
 </div><!-- End of display_box -->
 
 <div id="input_box">
-  <%= render :template => "sidebar/sidebar" %>
+  <%= render :file => "sidebar/sidebar.html.erb" %>
 </div><!-- End of input box -->
 
 <script type="text/javascript">

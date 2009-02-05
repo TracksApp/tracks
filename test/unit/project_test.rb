@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class ProjectTest < Test::Rails::TestCase
-  fixtures :projects, :contexts, :todos, :users, :preferences
+  fixtures :projects, :contexts, :todos, :recurring_todos, :users, :preferences
   
   def setup
     @timemachine = projects(:timemachine)

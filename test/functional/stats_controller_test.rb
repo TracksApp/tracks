@@ -5,7 +5,7 @@ require 'stats_controller'
 class StatsController; def rescue_action(e) raise e end; end
 
 class StatsControllerTest < Test::Unit::TestCase
-  fixtures :users, :preferences, :projects, :contexts, :todos, :tags, :taggings
+  fixtures :users, :preferences, :projects, :contexts, :todos, :recurring_todos, :recurring_todos, :tags, :taggings
   
   def setup
     @controller = StatsController.new
@@ -99,10 +99,7 @@ class StatsControllerTest < Test::Unit::TestCase
     assert_response :success
 
     # clear taggings table and render again
-    taggings = Tagging.find(:all)
-    taggings.each do |t|
-      t.delete
-    end
+    Tagging.delete_all
     get :index
     assert_response :success
 

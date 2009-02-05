@@ -652,7 +652,7 @@ class StatsController < ApplicationController
           "AND tags.id = taggings.tag_id " +
           "AND taggings.taggable_id = todos.id ", current_user.id])
     tags_ids_s = tag_ids.map(&:id).sort.join(",")
-    return {} if tags_ids_s.blank?  # return empty array for .size to work
+    return {} if tags_ids_s.blank?  # return empty hash for .size to work
     return Tag.find(:all, :conditions => "id in (" + tags_ids_s + ")")
   end
 

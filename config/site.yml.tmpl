@@ -1,0 +1,35 @@
+# This is the 'salt' to add to the password before it is encrypted
+# You need to change this to something unique for yourself
+salt: "change-me"
+
+
+# Uncomment ldap or open_id if you want to use those authentication schemes.
+# If you choose ldap, see the additional configuration options further down.
+authentication_schemes:
+  - "database"
+  # - "ldap"
+  # - "open_id"
+
+
+# You''ll probably want to change this to the time zone of the computer where Tracks is running
+# run rake time:zones:local have Rails suggest time zone names on your system
+time_zone: "UTC"
+
+
+# setting this to true will make the cookies only available over HTTPS
+secure_cookies: false
+
+
+# Set this to the subdirectory you're hosting tracks in and uncomment if applicable
+# NOTE: you will also need to set up your web server to deal with the relative
+# URL. Mongrel, for example, has a --prefix option.
+# subdir: "/tracks"
+
+
+# Only needed if ldap is included in authentication_schemes
+# ldap:
+#   library: 'net/ldap'
+#   servers:
+#     - 'localhost'
+#   use_ssl: false
+#   login_format: 'cn=%s,dc=example,dc=com'
