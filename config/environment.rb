@@ -89,4 +89,4 @@ if ( SITE_CONFIG['authentication_schemes'].include? 'open_id')
   #requires ruby-openid gem to be installed
 end
 
-TRACKS_VERSION='1.7'
+TRACKS_VERSION='1.7RC2'
