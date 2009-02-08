@@ -59,7 +59,7 @@ class User < ActiveRecord::Base
                     "SELECT project.id, count(todo.id) as p_count " +
                       "FROM projects as project " +
                       "LEFT OUTER JOIN todos as todo ON todo.project_id = project.id "+
-                      "WHERE project.user_id = ? AND NOT todo.state='completed' " +
+                      "WHERE project.user_id = ? AND NOT (todo.state='completed') " +
                       query_state +
                       " GROUP BY project.id ORDER by p_count DESC",user_id])
                 self.update_positions(projects.map{ |p| p.id })
@@ -91,7 +91,7 @@ class User < ActiveRecord::Base
            end
   has_many :completed_todos,
            :class_name => 'Todo',
-           :conditions => ['todos.state = ? and todos.completed_at is not null', 'completed'],
+           :conditions => ['todos.state = ? AND NOT(todos.completed_at IS NULL)', 'completed'],
            :order => 'todos.completed_at DESC',
            :include => [ :project, :context ] do
              def completed_within( date )
