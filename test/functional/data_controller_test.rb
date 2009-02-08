@@ -18,4 +18,9 @@ class DataControllerTest < Test::Rails::TestCase
     login_as :admin_user
     get :csv_notes
   end
+
+  def test_yml_export_comleted_without_error
+    login_as :admin_user
+    get :yaml_export
+  end
 end

@@ -21,8 +21,22 @@ class DataController < ApplicationController
     all_tables['todos'] = current_user.todos.find(:all)
     all_tables['contexts'] = current_user.contexts.find(:all)
     all_tables['projects'] = current_user.projects.find(:all)
-    all_tables['tags'] = current_user.tags.find(:all)
-    all_tables['taggings'] = current_user.taggings.find(:all)
+
+    tags = Tag.find_by_sql([
+        "SELECT tags.* "+
+          "FROM tags, taggings, todos "+
+          "WHERE todos.user_id=? "+
+          "AND tags.id = taggings.tag_id " +
+          "AND taggings.taggable_id = todos.id ", current_user.id])
+    all_tables['tags'] = tags
+
+    taggings = Tagging.find_by_sql([
+        "SELECT taggings.* "+
+          "FROM taggings, todos "+
+          "WHERE todos.user_id=? "+
+          "AND taggings.taggable_id = todos.id ", current_user.id])
+    all_tables['taggings'] = taggings
+
     all_tables['notes'] = current_user.notes.find(:all)
     all_tables['recurring_todos'] = current_user.recurring_todos.find(:all)
     
