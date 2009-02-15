@@ -9,10 +9,11 @@ class BundleFu
     def bundle_files(filenames=[])
       output = ""
       filenames.each{ |filename|
-        output << "/* --------- #{filename} --------- */ "
+        filename_no_root = filename.sub(/^#{ActionController::Base.relative_url_root}/, '')
+        output << "/* --------- #{filename} - #{filename_no_root} --- ------ */ "
         output << "\n"
         begin
-          content = (File.read(File.join(RAILS_ROOT, "public", filename)))
+          content = (File.read(File.join(RAILS_ROOT, "public", filename_no_root)))
         rescue 
           output << "/* FILE READ ERROR! */"
           next

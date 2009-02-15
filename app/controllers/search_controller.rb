@@ -14,8 +14,8 @@ class SearchController < ApplicationController
     @found_tags = Tagging.find_by_sql([
         "SELECT DISTINCT tags.name as name "+
           "FROM tags "+
-	  "LEFT JOIN taggings ON tags.id = taggings.tag_id "+
-	  "LEFT JOIN todos ON taggings.taggable_id = todos.id "+
+          "LEFT JOIN taggings ON tags.id = taggings.tag_id "+
+          "LEFT JOIN todos ON taggings.taggable_id = todos.id "+
           "WHERE todos.user_id=? "+
           "AND tags.name LIKE ? ", current_user.id, terms])
  

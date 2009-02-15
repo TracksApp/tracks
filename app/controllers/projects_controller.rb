@@ -175,7 +175,7 @@ class ProjectsController < ApplicationController
   
   def order
     project_ids = params["list-active-projects"] || params["list-hidden-projects"] || params["list-completed-projects"]    
-    projects = current_user.projects.update_positions( project_ids )
+    @projects = current_user.projects.update_positions( project_ids )
     render :nothing => true
   rescue
     notify :error, $!

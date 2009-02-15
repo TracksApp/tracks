@@ -30,6 +30,7 @@ class RecurringTodosController < ApplicationController
   end
 
   def update
+    # TODO: write tests for updating
     @recurring_todo.tag_with(params[:tag_list]) if params[:tag_list]
     @original_item_context_id = @recurring_todo.context_id
     @original_item_project_id = @recurring_todo.project_id
@@ -68,14 +69,12 @@ class RecurringTodosController < ApplicationController
       end
       params["recurring_todo"]["context_id"] = context.id
     end
-    
-    params["recurring_todo"]["weekly_return_monday"]=' ' if params["recurring_todo"]["weekly_return_monday"].nil?
-    params["recurring_todo"]["weekly_return_tuesday"]=' ' if params["recurring_todo"]["weekly_return_tuesday"].nil?
-    params["recurring_todo"]["weekly_return_wednesday"]=' ' if params["recurring_todo"]["weekly_return_wednesday"].nil?
-    params["recurring_todo"]["weekly_return_thursday"]=' ' if params["recurring_todo"]["weekly_return_thursday"].nil?
-    params["recurring_todo"]["weekly_return_friday"]=' ' if params["recurring_todo"]["weekly_return_friday"].nil?
-    params["recurring_todo"]["weekly_return_saturday"]=' ' if params["recurring_todo"]["weekly_return_saturday"].nil?
-    params["recurring_todo"]["weekly_return_sunday"]=' ' if params["recurring_todo"]["weekly_return_sunday"].nil?
+
+    # make sure that we set weekly_return_xxx to empty (space) when they are
+    # not checked (and thus not present in params["recurring_todo"])
+    %w{monday tuesday wednesday thursday friday saturday sunday}.each do |day|
+      params["recurring_todo"]["weekly_return_"+day]=' ' if params["recurring_todo"]["weekly_return_"+day].nil?
+    end
     
     @saved = @recurring_todo.update_attributes params["recurring_todo"]
 
