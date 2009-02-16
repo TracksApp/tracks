@@ -817,7 +817,7 @@ class TodosController < ApplicationController
           # for tomorrow.
           date = date_to_check.at_midnight >= Time.zone.now.at_midnight ? date_to_check : Time.zone.now-1.day
 
-          new_recurring_todo = create_todo_from_recurring_todo(recurring_todo, date)
+          new_recurring_todo = create_todo_from_recurring_todo(recurring_todo, date.at_midnight)
         end
       end
     end
