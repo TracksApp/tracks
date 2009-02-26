@@ -8,21 +8,20 @@
 * Mailing list: http://lists.rousette.org.uk/mailman/listinfo/tracks-discuss
 * Original developer: bsag (http://www.rousette.org.uk/)
 * Contributors: http://getontracks.org/wiki/Tracks/Contributing/Contributors
-* Version: 1.7RC2
-* Copyright: (cc) 2004-2008 rousette.org.uk.
+* Version: 1.7
+* Copyright: (cc) 2004-2009 rousette.org.uk.
 * License:  GNU GPL
 
-== Version 1.7RC2
+== Version 1.7
 
 New features:
 1. Recurring todos
 2. Cleanup of feed page and add feed for starred actions
-3. Initial importer of yaml files (still very EXPERIMENTAL)
-4. New interface to import an email / sms messages into Tracks (needs an email server on the same server as Tracks)
-5. New buttons to quickly defer an action 1 or 7 days
-6. Calendar view to review due actions, includes iCal feed to use in your calendar app (tested with Google Calendar, Evolution, Outlook 2007) 
-7. You can now sort projects on number of active todos
-8. Support for OpenSearch. This means you can add a Tracks as a search provider in your webbrowser (tested on FF3 and IE7)
+3. New interface to import an email / sms messages into Tracks (needs an email server on the same server as Tracks)
+4. New buttons to quickly defer an action 1 or 7 days
+5. Calendar view to review due actions, includes iCal feed to use in your calendar app (tested with Google Calendar, Evolution, Outlook 2007)
+6. You can now sort projects on number of active todos
+7. Support for OpenSearch. This means you can add a Tracks as a search provider in your webbrowser (tested on FF3 and IE7)
 
 Under the hood:
 1. We now allow users again to stay logged in on two devices at the same time
