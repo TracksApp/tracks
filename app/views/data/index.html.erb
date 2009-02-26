@@ -1,14 +1,7 @@
 <div id="display_box">
   <div id="feeds">
     <div id="feedlegend">
-      <h3>Importing data</h3>
-      <p>Curently there is a experimental support for importing YAML files. 
-        Beware: all your current data will be destroyed before importing the YAML 
-        file, so if you have access to the database, we strongly recomment backing up 
-        the database right now in case that anything goes wrong.
-      </p>
-      <p><%= link_to "Start import", :controller => 'data', :action => 'yaml_form' %>.</p>
-      <br/><br/><h3>Exporting data</h3>
+      <h3>Exporting data</h3>
       <p>You can choose between the following formats:</p>
       <ul>
         <li><strong>YAML: </strong>Best for exporting data. <br/><i>Please note that  importing YAML files is currently supported only in experimentally. Do not rely on it for backing up critical data.</i></li>
