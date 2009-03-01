@@ -480,6 +480,9 @@ div#project_status > div {
 div#default_context > div{
     padding:10px;
 }
+div#default_tags > div{
+    padding:10px;
+}
 a.footer_link {color: #cc3334; font-style: normal;}
 a.footer_link:hover {color: #fff; background-color: #cc3334 !important;}
 

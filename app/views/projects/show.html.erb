@@ -57,20 +57,41 @@
         <h2>Default Context</h2>
         <div>
             <% form_remote_tag( :url => project_path(@project), :method => :put,
-                                :html=> { :id => 'set-default-context-action',
-                                          :name => 'default_context',
-                                          :class => 'inline-form' }) do -%>
-              <%= hidden_field_tag("update_default_context", true) %>
-              <%= text_field_tag("project[default_context_name]",
-                                 @project.default_context.name,
-                                 { :tabindex => 9,:size => 25 }) %>
-              <%= submit_tag "Set Default Context for this Project", { :tabindex => 10 } %>
-              <%= render :partial => 'default_context_autocomplete' %>
-            <% end -%>
+            :html=> { :id => 'set-default-context-action',
+                :name => 'default_context',
+                :class => 'inline-form' }) do -%>
+                <%= hidden_field_tag("update_default_context", true) %>
+                <%= text_field_tag("project[default_context_name]",
+                @project.default_context.name,
+                { :tabindex => 9,:size => 25 }) %>
+                <%= submit_tag "Set Default Context for this Project", { :tabindex => 10 } %>
+                <%= render :partial => 'default_context_autocomplete' %>
+                <% end -%>
         </div>
     </div>
 </div>
-</div><!-- [end:display_box] -->
+
+<div class="container">
+    <div id="default_tags">
+        <h2>Default Tags</h2>
+        <div>
+            <% form_remote_tag( :url => project_path(@project), :method => :put,
+            :html=> { :id => 'set-default-tags-action',
+                :name => 'default_tags',
+                :class => 'inline-form' }) do -%>
+                <%= hidden_field_tag("update_default_tags", true) %>
+                <%= text_field_tag("project[default_tags]",
+                @project.default_tags,
+                { :tabindex => 11,:size => 25 }) %>
+                <%= submit_tag "Set Default Tags for this Project", { :tabindex => 12 } %>
+                <% end -%>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</div>
 
 <div id="input_box">
   <%= render :partial => "shared/add_new_item_form" %>

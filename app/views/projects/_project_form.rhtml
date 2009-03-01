@@ -19,6 +19,10 @@
   <%= render :partial => 'default_context_autocomplete' %>
   <br/>
 
+  <label for="project[default_tags]">Default Tags</label><br/>
+  <%= text_field_tag("project[default_tags]", project.default_tags, {:tabindex=>2,:size=> 25}) %>
+  <br/>
+
   <input type="hidden" name="wants_render" value="true" />
   <div class="submit_box">
     <div class="widgets" id="<%= dom_id(project, 'widgets') %>">
