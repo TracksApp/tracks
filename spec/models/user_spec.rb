@@ -57,7 +57,7 @@ describe User do
     it 'has many completed todos' do
       User.should have_many(:completed_todos).
         with_order('todos.completed_at DESC').
-        with_conditions('todos.state = ? and todos.completed_at is not null', 'completed').
+        with_conditions('todos.state = ? AND NOT(todos.completed_at IS NULL)', 'completed').
         with_include(:project, :context).
         with_class_name('Todo')
     end

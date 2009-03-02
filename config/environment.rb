@@ -89,4 +89,10 @@ if ( SITE_CONFIG['authentication_schemes'].include? 'open_id')
   #requires ruby-openid gem to be installed
 end
 
-TRACKS_VERSION='1.7RC2'
+tracks_version='1.8devel'
+# comment out next two lines if you do not want (or can not) the date of the
+# last git commit in the footer
+info=`git log --pretty=format:"%ai" -1`
+tracks_version=tracks_version + ' ('+info+')'
+
+TRACKS_VERSION=tracks_version
