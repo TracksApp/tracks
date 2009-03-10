@@ -52,33 +52,56 @@ ul.sf-menu li li li.sfHover ul {
 	top:			0;
 }
 
-/*** DEMO SKIN ***/
+/*** TRACKS SKIN ***/
 .sf-menu {
 	float:			left;
-	margin-bottom:	1em;
+    margin: 0;
+    padding-right: 0px; /* 20 */
 }
 .sf-menu a {
-	border-left:	1px solid #fff;
-	border-top:		1px solid #CFDEFF;
-	padding: 		.75em 1em;
+	margin-right:  10px;
 	text-decoration:none;
+    line-height: 14px;
 }
-.sf-menu a, .sf-menu a:visited  { /* visited pseudo selector so IE6 applies text colour*/
-	color:			#13a;
+.sf-menu a, .sf-menu a:visited, .sf-menu ul li a  { /* visited pseudo selector so IE6 applies text colour*/
+    font-weight: bold;
+    margin-left: 10px;
+    text-decoration: none;
+    color: #eee;
+    border-bottom: 4px solid #000;  /* make sure there is enough room for the solid */
 }
-.sf-menu li {
-	background:		#BDD2FF;
+
+.sf-menu li li, .sf-menu li ul {
+    margin: 0;
+	background:		#000000;
 }
-.sf-menu li li {
-	background:		#AABDE6;
+
+.sf-menu li ul {
+    margin-top: -18px;
+	padding: 0 8px 9px 0;
+	-moz-border-radius-bottomleft: 8px;
+	-moz-border-radius-bottomright: 8px;
+	-webkit-border-bottom-right-radius: 8px;
+	-webkit-border-bottom-left-radius: 8px;
 }
+
+.sf-menu li ul li, .sf-menu li li {
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
 .sf-menu li li li {
-	background:		#9AAEDB;
+	background:		#000000;
 }
+
 .sf-menu li:hover, .sf-menu li.sfHover,
 .sf-menu a:focus, .sf-menu a:hover, .sf-menu a:active {
-	background:		#CFDEFF;
-	outline:		0;
+    color: #CCC;
+}
+
+.sf-menu a:focus, .sf-menu a:hover, .sf-menu a:active {
+    border-bottom: 4px solid #CCC;
+    background: transparent;
 }
 
 /*** arrows **/
@@ -95,7 +118,7 @@ ul.sf-menu li li li.sfHover ul {
 	height:			10px;
 	text-indent: 	-999em;
 	overflow:		hidden;
-	background:		url('../images/arrows-ffffff.png') no-repeat -10px -100px; /* 8-bit indexed alpha png. IE6 gets solid image only */
+	background:		url('/images/arrows-ffffff.png') no-repeat -10px -100px; /* 8-bit indexed alpha png. IE6 gets solid image only */
 }
 a > .sf-sub-indicator {  /* give all except IE6 the correct values */
 	top:			.8em;
@@ -124,7 +147,7 @@ li.sfHover > a > .sf-sub-indicator {
 
 /*** shadows for all but IE6 ***/
 .sf-shadow ul {
-	background:	url('../images/shadow.png') no-repeat bottom right;
+	background:	url('/images/shadow.png') no-repeat bottom right;
 	padding: 0 8px 9px 0;
 	-moz-border-radius-bottomleft: 17px;
 	-moz-border-radius-topright: 17px;
