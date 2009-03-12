@@ -11,6 +11,13 @@ class BackendController < ApplicationController
     item = create_todo(description, context_id, nil, notes)
     item.id
   end
+
+  def new_todo_for_project(username, token, context_id, project_id, description, notes)
+    check_token(username, token)
+    check_context_belongs_to_user(context_id)
+    item = create_todo(description, context_id, project_id, notes)
+    item.id
+  end
   
   def new_rich_todo(username, token, default_context_id, description, notes)
     check_token(username,token)
