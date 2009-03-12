@@ -20,6 +20,11 @@ DESCRIPTION:<%= format_ical_notes(@todo.notes) %>
 <% if @todo.due -%>
 DUE;VALUE=DATE:<%= @todo.due.strftime("%Y%m%d") %>
 <% end -%>
+<% if @todo.project_id -%>
+URL:<%= project_url(@todo.project) %>
+<% else -%>
+URL:<%= context_url(@todo.context) %>
+<% end -%>
 END:VTODO
 <% end -%>
 END:VCALENDAR
