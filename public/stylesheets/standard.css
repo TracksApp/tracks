@@ -370,12 +370,13 @@ a.icon {
 
 input.item-checkbox {
     float: left;
-    margin-left: 10px;
+    margin-left: 3px;
+    margin-right: 3px;
     vertical-align: middle;
 }
 
 .description {
-    margin-left: 85px;
+    margin-left: 50px;
     position:relative
 }
 

@@ -1,17 +1,23 @@
 <%
-  @todo = todo
-  suppress_context ||= false
-  suppress_project ||= false
-  suppress_edit_button ||= false
+@todo = todo
+suppress_context ||= false
+suppress_project ||= false
+suppress_edit_button ||= false
+parameters = "_source_view=#{@source_view}"
+parameters += "&_tag_name=#{@tag_name}" if @source_view == 'tag'
 %>
 <div id="<%= dom_id(todo) %>" class="item-container">
   <div id="<%= dom_id(todo, 'line') %>">
-    <%= remote_delete_icon %>
-    <%= remote_edit_icon unless suppress_edit_button %>
     <%= remote_star_icon %>
     <%= remote_toggle_checkbox unless source_view_is :deferred %>
+    <ul class="sf-menu sf-item-menu"><li>^<ul>
+        <li><%= link_to_remote("Edit", :url => {:controller => 'todos', :action => 'edit', :id => @todo.id}, :method => 'get', :with => "'#{parameters}'") %></li>
+        <li>Delete</li>
+        <li><%= link_to_remote "Defer 1 day", :url => {:controller => 'todos', :action => 'defer', :id => @todo.id, :days => 1, :_source_view => (@source_view.underscore.gsub(/\s+/,'_') rescue "")} %></li>
+        <li><%= link_to_remote "Defer 7 days", :url => {:controller => 'todos', :action => 'defer', :id => @todo.id, :days => 7, :_source_view => (@source_view.underscore.gsub(/\s+/,'_') rescue "")} %></li>
+    </ul></ul>
     <div class="description<%= staleness_class( todo ) %>">
-      <% unless @todo.completed? %><span class="defer-container"><%= defer_link(1) %> <%= defer_link(7) %></span><% end %>
+      <%#  unless @todo.completed? <span class="defer-container"><%= defer_link(1) %> <%  # defer_link(7) </span><% end %>
       <%= date_span -%>
       <span class="todo.descr"><%= h sanitize(todo.description) %></span>
       <%= link_to(
@@ -26,8 +32,8 @@
   </div>
   <div id="<%= dom_id(todo, 'edit') %>" class="edit-form" style="display:none">
     <% form_remote_tag_edit_todo do -%>
-    <% #note: edit form will load here remotely -%>
-    <div class="placeholder"> </div>
+      <% #note: edit form will load here remotely -%>
+      <div class="placeholder"> </div>
     <% end -%>
   </div>
 </div>

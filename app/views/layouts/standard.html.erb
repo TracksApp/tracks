@@ -5,9 +5,10 @@
     <% if @prefs.refresh != 0 -%>
       <meta http-equiv="Refresh" content="<%= @prefs["refresh"].to_i*60 %>;url=<%= request.request_uri %>">
     <% end -%>
+    <%= javascript_include_tag "jquery-1.2.6.min" %>
   <% bundle do %>
     <%= javascript_include_tag *%w[
-                                    jquery-1.2.6.min hoverIntent superfish prototype
+                                    hoverIntent superfish prototype
                                     effects dragdrop controls application
                                     calendar calendar-en calendar-setup
                                     accesskey-hints todo-items niftycube
@@ -33,11 +34,16 @@ jQuery(document).ready(function() {
     dropShadows: false,
     speed: 'fast'
   });
-});
-window.onload=function(){
+  jQuery('ul.sf-item-menu').superfish({
+    delay: 250,
+    animation:   {opacity:'show',height:'show'},
+    autoArrows: false,
+    dropShadows: false,
+    speed: 'fast'
+  });
   Nifty("div#todo_new_action_container","normal");
   if ($('flash').visible()) { new Effect.Fade("flash",{duration:5.0}); }
-}
+});
 </script>
 
 <title><%= @page_title %></title>
