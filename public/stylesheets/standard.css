@@ -227,7 +227,6 @@ body.preferences div#input_box {
 #navlist {
     margin: 0;
     padding: 0 0 20px 5px;
-    /*      border-bottom: 1px solid #000;*/
 }
 
 #navlist ul, #navlist li {
@@ -263,18 +262,11 @@ body.preferences div#input_box {
     margin-bottom: 20px;
     clear: both;
     background-color: #000;
-    filter: alpha(opacity=75);
-    -moz-opacity: .75;
-    opacity: .75;
     color: #eee;
     width: 100%;
     z-index:101;
 }
-body.stats #topbar {
-    filter: alpha(opacity=100);
-    -moz-opacity: 1;
-    opacity: 1;
-}      
+
 #date {
     float: left;
     width: 45%;
@@ -772,9 +764,6 @@ form {
     width: 270px;
     padding: 5px 10px;
     background-color: #000;
-    filter: alpha(opacity=75);
-    -moz-opacity: .75;
-    opacity: .75;
     color: #eee;
 }
 
