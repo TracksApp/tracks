@@ -10,7 +10,7 @@ end
 0.upto @actions_per_context.size()-2 do | i |
     %><%=truncate(@actions_per_context[i]['name'], :length => @truncate_chars, :omission => '...')%>,<%
 end
--%><%=truncate(@actions_per_context[@actions_per_context.size()-1]['name'], :legnth => @truncate_chars, :omission => '...') %>&
+-%><%=truncate(@actions_per_context[@actions_per_context.size()-1]['name'], :length => @truncate_chars, :omission => '...') %>&
 &links=<%
 0.upto @actions_per_context.size()-2 do | i |
     %><%=url_for :controller => "contexts", :action => "show", :id=>@actions_per_context[i]['id']%>,<%
