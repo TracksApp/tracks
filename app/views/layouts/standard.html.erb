@@ -91,7 +91,7 @@ jQuery(document).ready(function() {
       <li><%= navigation_link( "Preferences", preferences_path, {:accesskey => "u", :title => "Show my preferences"} ) %></li>
       <li><%= navigation_link( "Export", {:controller => "data", :action => "index"}, {:accesskey => "i", :title => "Import and export data"} ) %></li>
       <% if current_user.is_admin? -%>
-      <li><%= navigation_link("Admin", users_path, {:accesskey => "a", :title => "Add or delete users"} ) %></li>
+      <li><%= navigation_link("Manage users", users_path, {:accesskey => "a", :title => "Add or delete users"} ) %></li>
       <% end -%>
     </ul></li>
     <li><a href="#">?</a>
