@@ -26,6 +26,7 @@
       href="<%= search_plugin_path %>" />
 
 <script type="text/javascript">
+  var sfLastUL;
 jQuery(document).ready(function() {
   jQuery('ul.sf-menu').superfish({
     delay: 250,
@@ -39,7 +40,10 @@ jQuery(document).ready(function() {
     animation:   {opacity:'show',height:'show'},
     autoArrows: false,
     dropShadows: false,
-    speed: 'fast'
+    speed: 'fast',
+    onShow: function() {
+                sfLastUL = this;                
+        }
   });
   Nifty("div#todo_new_action_container","normal");
   if ($('flash').visible()) { new Effect.Fade("flash",{duration:5.0}); }
