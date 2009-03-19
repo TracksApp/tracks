@@ -357,6 +357,10 @@ div.item-container {
     clear: both;
 }
 
+.sf-item-selected {
+    background: #ddd;
+}
+
 a.recurring_icon {
     vertical-align: middle;
     background-color: transparent;    
@@ -375,13 +379,12 @@ input.item-checkbox {
     vertical-align: middle;
 }
 
-.description {
-    margin-left: 50px;
-    position:relative
+.description, .stale_l1, .stale_l2, .stale_l3 {
+    margin-left: 60px;
+    position:relative;    
 }
 
 .stale_l1, .stale_l2, .stale_l3 {
-    margin-left: 82px;
     padding-left: 3px;
 }
 

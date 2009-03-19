@@ -26,7 +26,6 @@
       href="<%= search_plugin_path %>" />
 
 <script type="text/javascript">
-  var sfLastUL;
 jQuery(document).ready(function() {
   jQuery('ul.sf-menu').superfish({
     delay: 250,
@@ -36,13 +35,16 @@ jQuery(document).ready(function() {
     speed: 'fast'
   });
   jQuery('ul.sf-item-menu').superfish({
-    delay: 250,
+    delay: 100,
     animation:   {opacity:'show',height:'show'},
     autoArrows: false,
     dropShadows: false,
     speed: 'fast',
-    onShow: function() {
-                sfLastUL = this;                
+    onBeforeShow: function() {
+                $(this.parent().parent().parent()).addClass("sf-item-selected");
+        },
+    onHide: function() {
+                $(this.parent().parent().parent()).removeClass("sf-item-selected");
         }
   });
   Nifty("div#todo_new_action_container","normal");

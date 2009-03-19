@@ -30,6 +30,7 @@ class ApplicationController < ActionController::Base
   
   before_filter :set_session_expiration
   before_filter :set_time_zone
+  before_filter :set_zindex_counter
   prepend_before_filter :login_required
   prepend_before_filter :enable_mobile_content_negotiation
   after_filter :set_charset
@@ -261,6 +262,11 @@ class ApplicationController < ActionController::Base
   
   def set_time_zone
     Time.zone = current_user.prefs.time_zone if logged_in?
+  end
+
+  def set_zindex_counter
+    # this counter can be used to handle the IE z-index bug
+    @z_index_counter = 10
   end
   
 end

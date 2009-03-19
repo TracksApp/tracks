@@ -13,16 +13,24 @@
 	top:			-999em;
 	width:			12em; /* left offset of submenus need to match (see below) */
 }
+
+.sf-item-menu ul {
+    width: 8em;
+    z-index: 99;
+}
+
 .sf-menu ul li {
 	width:			100%;
 }
 .sf-menu li:hover {
 	visibility:		inherit; /* fixes IE7 'sticky bug' */
 }
+
 .sf-menu li {
 	float:			left;
 	position:		relative;
 }
+
 .sf-menu a {
 	display:		block;
 	position:		relative;
@@ -63,6 +71,7 @@ ul.sf-menu li li li.sfHover ul {
 	text-decoration:none;
     line-height: 14px;
 }
+
 .sf-menu a, .sf-menu a:visited, .sf-menu ul li a  { /* visited pseudo selector so IE6 applies text colour*/
     font-weight: bold;
     margin-left: 10px;
@@ -71,9 +80,20 @@ ul.sf-menu li li li.sfHover ul {
     border-bottom: 4px solid #000;  /* make sure there is enough room for the solid */
 }
 
+.sf-item-menu a, .sf-item-menu a:visited, .sf-item-menu ul li a {
+    font-weight: normal;
+    line-height: 10px;
+    color: #000;
+    border-bottom: none;
+}
+
 .sf-menu li li, .sf-menu li ul {
     margin: 0;
 	background:		#000000;
+}
+
+.sf-item-menu li li, .sf-item-menu li ul {
+    background: #CCC;
 }
 
 .sf-menu li ul {
@@ -90,12 +110,17 @@ ul.sf-menu li li li.sfHover ul {
 	-moz-border-radius-topright: 8px;
 	-webkit-border-top-right-radius: 8px;
 	-webkit-border-top-left-radius: 8px;
+    border: 2px solid #000;
 }
 
 .sf-menu li ul li, .sf-menu li li {
     margin-bottom: 5px;
     margin-top: 5px;
     font-size: 1em;
+}
+
+.sf-item-menu li ul li, .sf-item-menu li li {
+    font-size: 0.8em;
 }
 
 .sf-menu li li li {
@@ -107,9 +132,19 @@ ul.sf-menu li li li.sfHover ul {
     color: #CCC;
 }
 
+.sf-item-menu li:hover, .sf-item-menu li.sfHover,
+.sf-item-menu a:focus, .sf-item-menu a:hover, .sf-item-menu a:active {
+    color: #000;
+    font-weight: bold;
+}
+
 .sf-menu a:focus, .sf-menu a:hover, .sf-menu a:active {
     border-bottom: 4px solid #CCC;
     background: transparent;
+}
+
+.sf-item-menu a:focus, .sf-item-menu a:hover, .sf-item-menu a:active {
+    border-bottom: none;
 }
 
 /*** arrows **/
