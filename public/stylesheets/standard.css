@@ -109,9 +109,18 @@ a.show_notes:hover, a.link_to_notes:hover {background-image: url(/images/notes_o
 }
 
 #display_box {
-    float: left;
-    width: 55%;
-    margin: 0px 10px 50px 15px;
+    float: none;
+    margin-right: 310px;
+    padding-left: 5px;
+}
+
+body.preferences div#display_box {
+    margin-right:410px;
+}
+
+body.preferences div#input_box {
+    width:390px;
+    right:15px;
 }
 
 #single_box {
@@ -326,8 +335,12 @@ h2 a:hover {
 }
 
 div#input_box {
-    margin: 0px 15px 0px 58%;
-    padding: 0px 15px 0px 0px;
+    position: absolute;
+    width: 265px;
+    margin: 0;
+    padding: 0px 0px 0px 0px;
+    top: 90px;
+    right: 40px;
 }
 
 #input_box h2 {
