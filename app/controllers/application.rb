@@ -266,7 +266,7 @@ class ApplicationController < ActionController::Base
 
   def set_zindex_counter
     # this counter can be used to handle the IE z-index bug
-    @z_index_counter = 10
+    @z_index_counter = 1000
   end
   
 end
