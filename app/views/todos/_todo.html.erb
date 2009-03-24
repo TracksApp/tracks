@@ -2,7 +2,7 @@
 @todo = todo
 suppress_context ||= false
 suppress_project ||= false
-suppress_edit_button ||= false
+suppress_edit_button ||= todo.completed?
 parameters = "_source_view=#{@source_view}"
 parameters += "&_tag_name=#{@tag_name}" if @source_view == 'tag'
 @z_index_counter = @z_index_counter - 1  # for IE z-index bug
@@ -12,10 +12,14 @@ parameters += "&_tag_name=#{@tag_name}" if @source_view == 'tag'
     <%= remote_star_icon %>
     <%= remote_toggle_checkbox unless source_view_is :deferred %>
     <ul class="sf-menu sf-item-menu"><li style="z-index:<%=@z_index_counter%>"><%= image_tag "downarrow.png", :alt=> "" %><ul id="ul<%= dom_id(todo) %>">
-        <li><%= link_to_remote("Edit", :url => {:controller => 'todos', :action => 'edit', :id => @todo.id}, :method => 'get', :with => "'#{parameters}'", :before => "$('ul#{dom_id(todo)}').hide(); itemContainer = $('#{dom_id(todo)}'); itemContainer.startWaiting()", :complete => "itemContainer.stopWaiting();") %></li>
+        <% unless suppress_edit_button %>
+          <li><%= link_to_remote("Edit", :url => {:controller => 'todos', :action => 'edit', :id => @todo.id}, :method => 'get', :with => "'#{parameters}'", :before => "$('ul#{dom_id(todo)}').hide(); itemContainer = $('#{dom_id(todo)}'); itemContainer.startWaiting()", :complete => "itemContainer.stopWaiting();") %></li>
+        <% end %>
         <li><%= link_to_remote "Delete", :url => {:controller => 'todos', :action => 'destroy', :id => @todo.id}, :method => 'delete', :with => "'#{parameters}'", :before => "$('ul#{dom_id(todo)}').hide(); itemContainer = $('#{dom_id(todo)}'); itemContainer.startWaiting()", :complete => "itemContainer.stopWaiting();" %></li>
-        <li><%= link_to_remote "Defer 1 day", :url => {:controller => 'todos', :action => 'defer', :id => @todo.id, :days => 1, :_source_view => (@source_view.underscore.gsub(/\s+/,'_') rescue "")}, :before => "$('ul#{dom_id(todo)}').hide(); itemContainer = $('#{dom_id(todo)}'); itemContainer.startWaiting()", :complete => "itemContainer.stopWaiting();" %></li>
-        <li><%= link_to_remote "Defer 7 days", :url => {:controller => 'todos', :action => 'defer', :id => @todo.id, :days => 7, :_source_view => (@source_view.underscore.gsub(/\s+/,'_') rescue "")}, :before => "$('ul#{dom_id(todo)}').hide(); itemContainer = $('#{dom_id(todo)}'); itemContainer.startWaiting()", :complete => "itemContainer.stopWaiting();" %></li>
+        <% unless todo.completed? || todo.deferred? %>
+          <li><%= link_to_remote "Defer 1 day", :url => {:controller => 'todos', :action => 'defer', :id => @todo.id, :days => 1, :_source_view => (@source_view.underscore.gsub(/\s+/,'_') rescue "")}, :before => "$('ul#{dom_id(todo)}').hide(); itemContainer = $('#{dom_id(todo)}'); itemContainer.startWaiting()", :complete => "itemContainer.stopWaiting();" %></li>
+          <li><%= link_to_remote "Defer 7 days", :url => {:controller => 'todos', :action => 'defer', :id => @todo.id, :days => 7, :_source_view => (@source_view.underscore.gsub(/\s+/,'_') rescue "")}, :before => "$('ul#{dom_id(todo)}').hide(); itemContainer = $('#{dom_id(todo)}'); itemContainer.startWaiting()", :complete => "itemContainer.stopWaiting();" %></li>
+        <% end %>
     </ul></ul>
     <div class="description<%= staleness_class( todo ) %>">
       <%= date_span -%>

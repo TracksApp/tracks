@@ -22,25 +22,6 @@ module TodosHelper
       :prevent_default => true
   end
   
-  def set_behavior_for_delete_icon
-    parameters = "_source_view=#{@source_view}"
-    parameters += "&_tag_name=#{@tag_name}" if @source_view == 'tag'
-    apply_behavior '.item-container a.delete_icon:click', :prevent_default => true do |page|
-      page.confirming "'Are you sure that you want to ' + this.title + '?'" do
-        page << "itemContainer = this.up('.item-container'); itemContainer.startWaiting();"
-        page << remote_to_href(:method => 'delete', :with => "'#{parameters}'", :complete => "itemContainer.stopWaiting();")
-      end    
-    end
-  end
-  
-  def remote_delete_icon
-    str = link_to( image_tag_for_delete,
-      todo_path(@todo), :id => "delete_icon_"+@todo.id.to_s,
-      :class => "icon delete_icon", :title => "delete the action '#{@todo.description}'")
-    set_behavior_for_delete_icon
-    str
-  end
-  
   def set_behavior_for_star_icon
     apply_behavior '.item-container a.star_item:click', 
       remote_to_href(:method => 'put', :with => "{ _source_view : '#{@source_view}' }"),
@@ -52,27 +33,6 @@ module TodosHelper
       toggle_star_todo_path(@todo),
       :class => "icon star_item", :title => "star the action '#{@todo.description}'")
     set_behavior_for_star_icon
-    str
-  end
-  
-  def set_behavior_for_edit_icon
-    parameters = "_source_view=#{@source_view}"
-    parameters += "&_tag_name=#{@tag_name}" if @source_view == 'tag'
-    apply_behavior '.item-container a.edit_icon:click', :prevent_default => true do |page|
-      page << "Effect.Pulsate(this);"
-      page << remote_to_href(:method => 'get', :with => "'#{parameters}'")
-    end
-  end
-  
-  def remote_edit_icon
-    if !@todo.completed?
-      str = link_to( image_tag_for_edit(@todo),
-        edit_todo_path(@todo),
-        :class => "icon edit_icon")
-      set_behavior_for_edit_icon
-    else
-      str = '<a class="icon">' + image_tag("blank.png") + "</a> "
-    end
     str
   end
   
@@ -266,14 +226,6 @@ module TodosHelper
   end
     
   private
-  
-  def image_tag_for_delete
-    image_tag("blank.png", :title =>"Delete action", :class=>"delete_item")
-  end
-  
-  def image_tag_for_edit(todo)
-    image_tag("blank.png", :title =>"Edit action", :class=>"edit_item", :id=> dom_id(todo, 'edit_icon'))
-  end
   
   def image_tag_for_star(todo)
     class_str = todo.starred? ? "starred_todo" : "unstarred_todo"
