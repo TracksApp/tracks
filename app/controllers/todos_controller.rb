@@ -448,7 +448,10 @@ class TodosController < ApplicationController
   def calendar
     @source_view = params['_source_view'] || 'calendar'
     @page_title = "TRACKS::Calendar"
-    
+
+    @projects = current_user.projects.find(:all)
+    @default_project_context_name_map = build_default_project_context_name_map(@projects).to_json
+  
     due_today_date = Time.zone.now
     due_this_week_date = Time.zone.now.end_of_week
     due_next_week_date = due_this_week_date + 7.days

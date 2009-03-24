@@ -1,5 +1,5 @@
 <div id="display_box">
-  
+
   <div class="container">
     <h2>Due today</h2>
     <div id="empty_due_today" <%= "style=\"display:none\"" unless @due_today.empty? %>>
@@ -9,7 +9,7 @@
       <%= render :partial => "todos/todo", :collection => @due_today %>
     </div>
   </div>
-  
+
   <div class="container">
     <h2>Due in rest of this week</h2>
     <div id="empty_due_this_week" <%= "style=\"display:none\"" unless @due_this_week.empty? %>>
@@ -19,7 +19,7 @@
       <%= render :partial => "todos/todo", :collection => @due_this_week %>
     </div>
   </div>
-  
+
   <div class="container">
     <h2>Due next week</h2>
     <div id="empty_due_next_week" <%= "style=\"display:none\"" unless @due_next_week.empty? %>>
@@ -29,7 +29,7 @@
       <%= render :partial => "todos/todo", :collection => @due_next_week %>
     </div>
   </div>
-  
+
   <div class="container">
     <h2>Due in rest of <%= Time.zone.now.strftime("%B") %> </h2>
     <div id="empty_due_this_month" <%= "style=\"display:none\"" unless @due_this_month.empty? %>>
@@ -39,7 +39,7 @@
       <%= render :partial => "todos/todo", :collection => @due_this_month %>
     </div>
   </div>
-  
+
   <div class="container">
     <h2>Due in <%= (Time.zone.now+1.month).strftime("%B") %> and later</h2>
     <div id="empty_due_after_this_month" <%= "style=\"display:none\"" unless @due_after_this_month.empty? %>>
@@ -49,9 +49,14 @@
       <%= render :partial => "todos/todo", :collection => @due_after_this_month %>
     </div>
   </div>
-  
+
 </div><!-- End of display_box -->
 <div class="input_box" id="input_box">
+  <% # hack for #860 Need to refactor this and use another dom element to bind projectDefauiltContextsMap to -%>
+  <input type="hidden" id="todo_context_name" value="hidden">
+  <script type="text/javascript">
+    $('todo_context_name').projectDefaultContextsMap = eval('(' + <%= @default_project_context_name_map %> + ')');
+  </script>
   <!--
   <input class="hide_tickler" id="hide_tickler" type="checkbox" tabindex="5" name="hide_tickler" checked="true"/>
   <label for="hide_tickler"> Show actions in tickler</label>
