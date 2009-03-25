@@ -403,8 +403,12 @@ input.item-checkbox {
     font-size: 85%;
     text-align: center;
     color: #999;
-    margin: 20px 20px 5px 20px;
+    margin: 20px 310px 5px 20px;
     padding: 0px;
+}
+
+body.preferences div#footer {
+    margin-right:410px;
 }
 
 /* The notes which may be attached to an item */      
