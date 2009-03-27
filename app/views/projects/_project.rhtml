@@ -26,9 +26,7 @@
     <%= render :partial => "todos/todo", :collection => @not_done, :locals => { :parent_container_type => "project" } %>
     <% if @not_done.empty? 
       # fix (hack) for #713
-      set_behavior_for_delete_icon
       set_behavior_for_star_icon
-      set_behavior_for_edit_icon
       set_behavior_for_toggle_checkbox
     end
     -%>
