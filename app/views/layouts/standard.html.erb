@@ -1,129 +1,122 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <% if @prefs.refresh != 0 -%>
       <meta http-equiv="Refresh" content="<%= @prefs["refresh"].to_i*60 %>;url=<%= request.request_uri %>">
     <% end -%>
     <%= javascript_include_tag "jquery-1.2.6.min" %>
-  <% bundle do %>
-    <%= javascript_include_tag *%w[
-                                    hoverIntent superfish prototype
-                                    effects dragdrop controls application
-                                    calendar calendar-en calendar-setup
-                                    accesskey-hints todo-items niftycube
-                                    protoload flashobject lowpro
-                                  ] %>
-    <%= stylesheet_link_tag *%w[ standard superfish calendar-system niftyCorners] %>
-  <% end %>
-  <%= javascript_include_tag :unobtrusive %>
-  <%= stylesheet_link_tag "print", :media => "print" %>
-  
-  <link rel="shortcut icon" href="<%= url_for(:controller => 'favicon.ico') %>" />
-  <%= auto_discovery_link_tag(:rss, {:controller => "todos", :action => "index", :format => 'rss', :token => "#{current_user.token}"}, {:title => "RSS feed of next actions"}) %>
-<link rel="search" type="application/opensearchdescription+xml"
-      title="Tracks"
-      href="<%= search_plugin_path %>" />
+    <% bundle do %>
+      <%= javascript_include_tag *%w[
+      hoverIntent superfish prototype
+      effects dragdrop controls application
+      calendar calendar-en calendar-setup
+      accesskey-hints todo-items niftycube
+      protoload flashobject lowpro
+      ] %>
+      <%= stylesheet_link_tag *%w[ standard superfish calendar-system niftyCorners] %>
+    <% end %>
+    <%= javascript_include_tag :unobtrusive %>
+    <%= stylesheet_link_tag "print", :media => "print" %>
+    <link rel="shortcut icon" href="<%= url_for(:controller => 'favicon.ico') %>" />
+    <%= auto_discovery_link_tag(:rss, {:controller => "todos", :action => "index", :format => 'rss', :token => "#{current_user.token}"}, {:title => "RSS feed of next actions"}) %>
+    <link rel="search" type="application/opensearchdescription+xml" title="Tracks" href="<%= search_plugin_path %>" />
 
-<script type="text/javascript">
-jQuery(document).ready(function() {
-  jQuery('ul.sf-menu').superfish({
-    delay: 250,
-    animation:   {opacity:'show',height:'show'},
-    autoArrows: false,
-    dropShadows: false,
-    speed: 'fast'
-  });
-  jQuery('ul.sf-item-menu').superfish({
-    delay: 100,
-    animation:   {opacity:'show',height:'show'},
-    autoArrows: false,
-    dropShadows: false,
-    speed: 'fast',
-    onBeforeShow: function() {
-                $(this.parent().parent().parent()).addClass("sf-item-selected");
-        },
-    onHide: function() {
-                $(this.parent().parent().parent()).removeClass("sf-item-selected");
-        }
-  });
-  Nifty("div#todo_new_action_container","normal");
-  if ($('flash').visible()) { new Effect.Fade("flash",{duration:5.0}); }
-});
-</script>
+    <script type="text/javascript">
+      jQuery(document).ready(function() { /* main menu */
+        jQuery('ul.sf-menu').superfish({
+          delay: 250,
+          animation:   {opacity:'show',height:'show'},
+          autoArrows: false,
+          dropShadows: false,
+          speed: 'fast'
+        });
+        jQuery('ul.sf-item-menu').superfish({ /* context menu */
+          delay: 100,
+          animation:   {opacity:'show',height:'show'},
+          autoArrows: false,
+          dropShadows: false,
+          speed: 'fast',
+          onBeforeShow: function() { /* highlight todo */
+            $(this.parent().parent().parent()).addClass("sf-item-selected");
+          },
+          onHide: function() { /* remove hightlight from todo */
+            $(this.parent().parent().parent()).removeClass("sf-item-selected");
+          }
+        });
+        Nifty("div#todo_new_action_container","normal");
+        if ($('flash').visible()) { new Effect.Fade("flash",{duration:5.0}); }
+      });
+    </script>
+    <title><%= @page_title %></title>
+  </head>
 
-<title><%= @page_title %></title>
+  <body class="<%= @controller.controller_name %>">
+    <div id="topbar">
+      <div id="date">
+        <h1>
+          <% if @count -%>
+            <span id="badge_count" class="badge"><%= @count %></span>
+          <% end -%>
+          <%= user_time.strftime(@prefs.title_date_format) %>
+        </h1>
+      </div>
+      <div id="minilinks">
+        <%= link_to_function("Toggle notes", nil, {:accesskey => "S", :title => "Toggle all notes", :id => "toggle-notes-nav"}) do |page|
+          page.select('body .todo_notes').each { |e| e.toggle }
+        end
+        -%>&nbsp;|&nbsp;
+        <%= link_to "Logout (#{current_user.display_name}) »", logout_path %>
+      </div>
+      <div id="navcontainer">
+        <ul class="sf-menu">
+          <li><%= navigation_link("Home", home_path, {:accesskey => "t", :title => "Home"} ) %></li>
+          <li><%= navigation_link("Starred", tag_path("starred"), :title => "See your starred actions" ) %></li>
+          <li><%= navigation_link("Projects", projects_path, {:accesskey=>"p", :title=>"Projects"} ) %></li>
+          <li><%= navigation_link("Tickler", tickler_path, {:accesskey =>"k", :title => "Tickler"} ) %></li>
+          <li><a href="#">Organize</a>
+            <ul>
+              <li><%= navigation_link( "Contexts", contexts_path, {:accesskey=>"c", :title=>"Contexts"} ) %></li>
+              <li><%= navigation_link( "Notes", notes_path, {:accesskey => "o", :title => "Show all notes"} ) %></li>
+              <li><%= navigation_link( "Repeating todos", {:controller => "recurring_todos", :action => "index"}, :title => "Manage recurring actions" ) %></li>
+          </ul></li>
+          <li><a href="#">View</a>
+          <ul>
+            <li><%= navigation_link( "Calendar", calendar_path, :title => "Calendar of due actions" ) %></li>
+            <li><%= navigation_link( "Done", done_path, {:accesskey=>"d", :title=>"Completed"} ) %></li>
+            <li><%= navigation_link( "Feeds", {:controller => "feedlist", :action => "index"}, :title => "See a list of available feeds" ) %></li>
+            <li><%= navigation_link( "Statistics", {:controller => "stats", :action => "index"}, :title => "See your statistics" ) %></li>
+          </ul>
+          <li><a href="#">Admin</a>
+            <ul>
+              <li><%= navigation_link( "Preferences", preferences_path, {:accesskey => "u", :title => "Show my preferences"} ) %></li>
+              <li><%= navigation_link( "Export", {:controller => "data", :action => "index"}, {:accesskey => "i", :title => "Import and export data"} ) %></li>
+              <% if current_user.is_admin? -%>
+                <li><%= navigation_link("Manage users", users_path, {:accesskey => "a", :title => "Add or delete users"} ) %></li>
+              <% end -%>
+          </ul></li>
+          <li><a href="#">?</a>
+            <ul>
+              <li><%= link_to 'Integrate Tracks', integrations_path %></li>
+              <li><%= link_to 'REST API Docs', url_for(:controller => 'integrations', :action => 'rest_api') %></li>
+          </ul></li>
+          <li><%= navigation_link(image_tag("system-search.png", :size => "16X16", :border => 0), {:controller => "search", :action => "index"}, :title => "Search All Items" ) %></li>
+        </ul>
+      </div>
+      <%= render_flash %>
+    </div>
 
-</head>
-<body class="<%= @controller.controller_name %>">
-<div id="topbar">
-<div id="date">
-  <h1>
-  <% if @count %>
-    <span id="badge_count" class="badge"><%= @count %></span>
-  <% end %>
-  <%= user_time.strftime(@prefs.title_date_format) %>
-  </h1>
-</div>
-<div id="minilinks">
-  <%= link_to_function("Toggle notes", nil, {:accesskey => "S", :title => "Toggle all notes", :id => "toggle-notes-nav"}) do |page|
-    page.select('body .todo_notes').each { |e| e.toggle }
-  end
-      -%>&nbsp;|&nbsp;
-<%= link_to "Logout (#{current_user.display_name}) »", logout_path %>
-</div>
-
-<div id="navcontainer">
-  <ul class="sf-menu">
-    <li><%= navigation_link("Home", home_path, {:accesskey => "t", :title => "Home"} ) %></li>
-    <li><%= navigation_link("Starred", tag_path("starred"), :title => "See your starred actions" ) %></li>
-    <li><%= navigation_link("Projects", projects_path, {:accesskey=>"p", :title=>"Projects"} ) %></li>
-    <li><%= navigation_link("Tickler", tickler_path, {:accesskey =>"k", :title => "Tickler"} ) %></li>
-    <li><a href="#">Organize</a>
-    <ul>
-      <li><%= navigation_link( "Contexts", contexts_path, {:accesskey=>"c", :title=>"Contexts"} ) %></li>
-      <li><%= navigation_link( "Notes", notes_path, {:accesskey => "o", :title => "Show all notes"} ) %></li>
-      <li><%= navigation_link( "Repeating todos", {:controller => "recurring_todos", :action => "index"}, :title => "Manage recurring actions" ) %></li>
-    </ul></li>
-    <li><a href="#">View</a>
-    <ul>
-      <li><%= navigation_link( "Calendar", calendar_path, :title => "Calendar of due actions" ) %></li>
-      <li><%= navigation_link( "Done", done_path, {:accesskey=>"d", :title=>"Completed"} ) %></li>
-      <li><%= navigation_link( "Feeds", {:controller => "feedlist", :action => "index"}, :title => "See a list of available feeds" ) %></li>
-      <li><%= navigation_link( "Statistics", {:controller => "stats", :action => "index"}, :title => "See your statistics" ) %></li>
-    </ul>
-    <li><a href="#">Admin</a>
-    <ul>
-      <li><%= navigation_link( "Preferences", preferences_path, {:accesskey => "u", :title => "Show my preferences"} ) %></li>
-      <li><%= navigation_link( "Export", {:controller => "data", :action => "index"}, {:accesskey => "i", :title => "Import and export data"} ) %></li>
-      <% if current_user.is_admin? -%>
-      <li><%= navigation_link("Manage users", users_path, {:accesskey => "a", :title => "Add or delete users"} ) %></li>
+    <div id="content">
+      <% unless @controller_name == 'feed' or session['noexpiry'] == "on" -%>
+        <%= periodically_call_remote( :url => {:controller => "login", :action => "check_expiry"},
+          :frequency => (5*60)) %>
       <% end -%>
-    </ul></li>
-    <li><a href="#">?</a>
-    <ul>
-      <li><%= link_to 'Integrate Tracks', integrations_path %></li>
-      <li><%= link_to 'REST API Docs', url_for(:controller => 'integrations', :action => 'rest_api') %></li>
-    </ul></li>
-    <li><%= navigation_link(image_tag("system-search.png", :size => "16X16", :border => 0), {:controller => "search", :action => "index"}, :title => "Search All Items" ) %></li>
-  </ul>
-</div>
+      <%= periodically_call_remote( :url => formatted_check_deferred_todos_path(:js),
+        :method => :post,
+        :frequency => (10*60)) %>
+      <%= yield %>
+    </div>
 
-<%= render_flash %>
-</div>
-
-<div id="content">
-
-<% unless @controller_name == 'feed' or session['noexpiry'] == "on" -%>
-<%= periodically_call_remote( :url => {:controller => "login", :action => "check_expiry"},
-                              :frequency => (5*60)) %>
-<% end -%>
-<%= periodically_call_remote( :url => formatted_check_deferred_todos_path(:js),
-                              :method => :post,
-                              :frequency => (10*60)) %>  
-<%= yield %>
-</div>
-
-<%= render :partial => "shared/footer" %>
-</body>
+    <%= render :partial => "shared/footer" %>
+  </body>
 </html>

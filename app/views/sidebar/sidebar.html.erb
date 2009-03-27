@@ -1,35 +1,30 @@
 <div id="sidebar">
-    <% # show active items before hidden / completed items -%>
+  <% # show active items before hidden / completed items -%>
 
-	<%= render :partial => "sidebar/project_list",
-	           :locals => { :list_name => 'Active Projects',
-	           				:projects => @active_projects } -%>
-	
-	<%= render :partial => "sidebar/context_list",
-	           :locals => { :list_name => 'Active Contexts',
-	           				:contexts => @active_contexts } -%>
+  <%= render :partial => "sidebar/project_list",
+    :locals => { :list_name => 'Active Projects',
+    :projects => @active_projects } -%>
 
-	<% if prefs.show_hidden_projects_in_sidebar -%>
-        <%= render :partial => "sidebar/project_list",
-                   :locals => { :list_name => 'Hidden Projects',
-			 			  :projects => @hidden_projects } -%>
-	<% end -%>
+  <%= render :partial => "sidebar/context_list",
+    :locals => { :list_name => 'Active Contexts',
+    :contexts => @active_contexts } -%>
 
-	<% if prefs.show_completed_projects_in_sidebar -%>
-        <%= render :partial => "sidebar/project_list",
-                   :locals => { :list_name => 'Completed Projects',
-             			  :projects => @completed_projects } -%>
-	<% end -%>
+  <% if prefs.show_hidden_projects_in_sidebar -%>
+    <%= render :partial => "sidebar/project_list",
+      :locals => { :list_name => 'Hidden Projects',
+      :projects => @hidden_projects } -%>
+  <% end -%>
 
-	<% if prefs.show_hidden_contexts_in_sidebar -%>
-	<%= render :partial => "sidebar/context_list",
-	           :locals => { :list_name => 'Hidden Contexts',
-	           				:contexts => @hidden_contexts } -%>
-	<% end -%>
-	
-	<div class="integrations-link"><ul>
-	  <li><%= link_to 'Integrate Tracks', integrations_path %></li>
-	  <li><%= link_to 'REST API Docs', url_for(:controller => 'integrations', :action => 'rest_api') %></li>
-	</ul></div>
+  <% if prefs.show_completed_projects_in_sidebar -%>
+    <%= render :partial => "sidebar/project_list",
+      :locals => { :list_name => 'Completed Projects',
+      :projects => @completed_projects } -%>
+  <% end -%>
+
+  <% if prefs.show_hidden_contexts_in_sidebar -%>
+    <%= render :partial => "sidebar/context_list",
+      :locals => { :list_name => 'Hidden Contexts',
+      :contexts => @hidden_contexts } -%>
+  <% end -%>
 
 </div>

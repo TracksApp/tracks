@@ -1,8 +1,8 @@
 <h3><%= list_name %> (<%= contexts.length %>)</h3>
 <ul>
-<% if contexts.empty? -%>
-  <li>None</li>
-<% else -%>
-  <%= render :partial => "sidebar/context", :collection => contexts -%>
-<% end -%>
+  <% if contexts.empty? -%>
+    <li>None</li>
+  <% else -%>
+    <%= render :partial => "sidebar/context", :collection => contexts -%>
+  <% end -%>
 </ul>

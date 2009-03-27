@@ -1,129 +1,121 @@
 <%
-  @todo = nil
-  @initial_context_name = @context.name unless @context.nil?
-  @initial_context_name ||= @project.default_context.name unless @project.nil? || @project.default_context.nil? 
-  @initial_context_name ||= current_user.contexts.first.name unless current_user.contexts.first.nil?
-  @initial_project_name = @project.name unless @project.nil?
-%>
+@todo = nil
+@initial_context_name = @context.name unless @context.nil?
+@initial_context_name ||= @project.default_context.name unless @project.nil? || @project.default_context.nil? 
+@initial_context_name ||= current_user.contexts.first.name unless current_user.contexts.first.nil?
+@initial_project_name = @project.name unless @project.nil?
+-%>
 <div id="todo_new_action_container">
 
   <div id="toggle_action_new" class="hide_form">
     <a title="Hide new action form" accesskey="n" href="#">&laquo; Hide form</a>
     <%  apply_behavior '#toggle_action_new a:click', :prevent_default => true do |page|
-          page << "TracksForm.toggle('toggle_action_new', 'todo_new_action', 'todo-form-new-action',
-                                     '&laquo; Hide form', 'Hide next action form',
-                                     'Add a next action &#187;', 'Add a next action');"
-          end
-    %>
+      page << "TracksForm.toggle('toggle_action_new', 'todo_new_action', 'todo-form-new-action',
+      '&laquo; Hide form', 'Hide next action form',
+      'Add a next action &#187;', 'Add a next action');"
+    end
+    -%>
   </div>
 
-<div id="todo_new_action" style="display:block">
+  <div id="todo_new_action" style="display:block">
+    <% form_remote_tag(
+      :url => todos_path, :method => :post,
+      :html=> { :id=>'todo-form-new-action', :name=>'todo', :class => 'inline-form' },
+      :before => "$('todo_new_action_submit').startWaiting()",
+      :complete => "$('todo_new_action_submit').stopWaiting()",
+      :condition => "!$('todo_new_action_submit').isWaiting() && askIfNewContextProvided()") do -%>
 
-<% form_remote_tag(
-    :url => todos_path, :method => :post,
-    :html=> { :id=>'todo-form-new-action', :name=>'todo', :class => 'inline-form' },
-    :before => "$('todo_new_action_submit').startWaiting()",
-    :complete => "$('todo_new_action_submit').stopWaiting()",
-    :condition => "!$('todo_new_action_submit').isWaiting() && askIfNewContextProvided()") do -%>
+      <div id="status"><%= error_messages_for("item", :object_name => 'action') %></div>
 
-<script type="text/javascript" charset="utf-8">
-  function askIfNewContextProvided() {
-    var contexts = new Array(<%= @contexts.map{|c| '\'' + c.name + '\''}.join(", ") %>);
-    var givenContextName = $('todo_context_name').value;
-    if (givenContextName.length == 0) return true; // show rails validation error
-    for (var i = 0; i < contexts.length; ++i) {
-      if (contexts[i] == givenContextName) {
-        return true;
+      <label for="todo_description">Description</label>
+      <%= text_field( "todo", "description", "size" => 30, "tabindex" => 1, "maxlength" => 100, "autocomplete" => "off") %>
+
+      <label for="todo_notes">Notes</label>
+      <%= text_area( "todo", "notes", "cols" => 29, "rows" => 6, "tabindex" => 2) %>
+
+      <input id="default_project_name_id" name="default_project_name" type="hidden" value="<%=@initial_project_name-%>" />
+      <label for="todo_project_name">Project</label>
+      <input id="todo_project_name" name="project_name" autocomplete="off" tabindex="3" size="30" type="text" value="<%= @initial_project_name %>" />
+      <div class="page_name_auto_complete" id="project_list" style="display:none"></div>
+
+      <input id="default_context_name_id" name="default_context_name" type="hidden" value="<%=@initial_context_name-%>" />
+      <label for="todo_context_name">Context</label>
+      <input id="todo_context_name" name="context_name" autocomplete="off" tabindex="4" size="30" type="text" value="<%= @initial_context_name %>" />
+      <div class="page_name_auto_complete" id="context_list" style="display:none"></div>
+
+      <label for="tag_list">Tags (separate with commas)</label>
+      <%= text_field_tag "tag_list", nil, :size => 30, :tabindex => 5 %>
+
+      <div class="due_input">
+        <label for="todo_due">Due</label>
+        <%= text_field("todo", "due", "size" => 12, "class" => "Date", "onfocus" => "Calendar.setup", "tabindex" => 6, "autocomplete" => "off") %>
+      </div>
+
+      <div class="show_from_input">
+        <label for="todo_show_from">Show from</label>
+        <%= text_field("todo", "show_from", "size" => 12, "class" => "Date", "onfocus" => "Calendar.setup", "tabindex" => 7, "autocomplete" => "off") %>
+      </div>
+
+      <%= source_view_tag( @source_view ) %>
+
+      <div class="submit_box">
+        <div class="widgets">
+          <button type="submit" class="positive" id="todo_new_action_submit" tabindex="8">
+            <%=  image_tag("accept.png", :alt => "") %>Add action
+          </button>
+        </div>
+      </div>
+    <% end -%>
+
+    <script type="text/javascript" charset="utf-8">
+
+      var contextNames = <%= context_names_for_autocomplete %>;
+
+      function askIfNewContextProvided() {
+        var givenContextName = $('todo_context_name').value;
+        if (givenContextName.length == 0) return true; // do nothing and depend on rails validation error
+        for (var i = 0; i < contextNames.length; ++i) {
+          if (contextNames[i] == givenContextName) return true;
+        }
+        return confirm('New context "' + givenContextName + '" will be also created. Are you sure?');
       }
-    }
-    return confirm('New context "' + givenContextName + '" will be also created. Are you sure?');
-  }
-</script>
 
-<div id="status"><%= error_messages_for("item", :object_name => 'action') %></div>
+      var projectAutoCompleter = new Autocompleter.Local('todo_project_name', 'project_list', <%= project_names_for_autocomplete %>, {choices:100,autoSelect:false});
 
-<label for="todo_description">Description</label>
-<%= text_field( "todo", "description", "size" => 30, "tabindex" => 1, "maxlength" => 100, "autocomplete" => "off") %>
+      function selectDefaultContext() {
+        todoContextNameElement = $('todo_context_name');
+        defaultContextName = todoContextNameElement.projectDefaultContextsMap[this.value];
+        if (defaultContextName && !todoContextNameElement.editedByTracksUser) {
+          todoContextNameElement.value = defaultContextName;
+        }
+      }
+      Event.observe($('todo_project_name'), "focus", projectAutoCompleter.activate.bind(projectAutoCompleter));
+      Event.observe($('todo_project_name'), "click", projectAutoCompleter.activate.bind(projectAutoCompleter));
+      Event.observe($('todo_project_name'), "blur", selectDefaultContext.bind($('todo_project_name')));
 
-<label for="todo_notes">Notes</label>
-<%= text_area( "todo", "notes", "cols" => 29, "rows" => 6, "tabindex" => 2) %>
+      var contextAutoCompleter;
+      function initializeNamesForAutoComplete(contextNamesForAutoComplete) {
+        if (contextNamesForAutoComplete.length == 0 || contextNamesForAutoComplete[0].length == 0) {
+          return;
+        }
+        contextAutoCompleter = new Autocompleter.Local('todo_context_name', 'context_list', contextNamesForAutoComplete, {choices:100,autoSelect:false});
+        Event.observe($('todo_context_name'), "focus", function(){ $('todo_context_name').editedByTracksUser = true; });
+        Event.observe($('todo_context_name'), "focus", contextAutoCompleter.activate.bind(contextAutoCompleter));
+        Event.observe($('todo_context_name'), "click", contextAutoCompleter.activate.bind(contextAutoCompleter));
+      }
 
-<input id="default_project_name_id" name="default_project_name" type="hidden" value="<%=@initial_project_name-%>" />
-<label for="todo_project_name">Project</label>
-<input id="todo_project_name" name="project_name" autocomplete="off" tabindex="3" size="30" type="text" value="<%= @initial_project_name %>" />
-<div class="page_name_auto_complete" id="project_list" style="display:none"></div>
+      function updateContextNamesForAutoComplete(contextNamesForAutoComplete) {
+        if (contextAutoCompleter) { // i.e. if we're already initialized
+          contextAutoCompleter.options.array = contextNamesForAutoComplete
+        } else {
+          initializeNamesForAutoComplete(contextNamesForAutoComplete)
+        }
+      }
+      initializeNamesForAutoComplete(contextNames);
+      $('todo_context_name').projectDefaultContextsMap = eval('(' + <%= @default_project_context_name_map %> + ')');
+    </script>
 
-<script type="text/javascript">
-projectAutoCompleter = new Autocompleter.Local('todo_project_name', 'project_list', <%= project_names_for_autocomplete %>, {choices:100,autoSelect:false});
-function selectDefaultContext() {
-  todoContextNameElement = $('todo_context_name');
-  defaultContextName = todoContextNameElement.projectDefaultContextsMap[this.value];
-  if (defaultContextName && !todoContextNameElement.editedByTracksUser) {
-    todoContextNameElement.value = defaultContextName;
-  }
-}
-Event.observe($('todo_project_name'), "focus", projectAutoCompleter.activate.bind(projectAutoCompleter));
-Event.observe($('todo_project_name'), "click", projectAutoCompleter.activate.bind(projectAutoCompleter));
-Event.observe($('todo_project_name'), "blur", selectDefaultContext.bind($('todo_project_name')));
-</script>
-
-<input id="default_context_name_id" name="default_context_name" type="hidden" value="<%=@initial_context_name-%>" />
-<label for="todo_context_name">Context</label>
-<input id="todo_context_name" name="context_name" autocomplete="off" tabindex="4" size="30" type="text" value="<%= @initial_context_name %>" />
-<div class="page_name_auto_complete" id="context_list" style="display:none"></div>
-
-<script type="text/javascript">
-var contextAutoCompleter;
-function initializeNamesForAutoComplete(contextNamesForAutoComplete) {
-	if (contextNamesForAutoComplete.length == 0 || contextNamesForAutoComplete[0].length == 0) {
-		return;
-	}
-	contextAutoCompleter = new Autocompleter.Local('todo_context_name', 'context_list', contextNamesForAutoComplete, {choices:100,autoSelect:false});
-	Event.observe($('todo_context_name'), "focus", function(){ $('todo_context_name').editedByTracksUser = true; });
-	Event.observe($('todo_context_name'), "focus", contextAutoCompleter.activate.bind(contextAutoCompleter));
-	Event.observe($('todo_context_name'), "click", contextAutoCompleter.activate.bind(contextAutoCompleter));	
-}
-function updateContextNamesForAutoComplete(contextNamesForAutoComplete) {
-	if (contextAutoCompleter) // i.e. if we're already initialized
-	{
-		contextAutoCompleter.options.array = contextNamesForAutoComplete
-	}
-	else
-	{
-		initializeNamesForAutoComplete(contextNamesForAutoComplete)		
-	}
-}
-initializeNamesForAutoComplete(<%= context_names_for_autocomplete %>);
-$('todo_context_name').projectDefaultContextsMap = eval('(' + <%= @default_project_context_name_map %> + ')');
-</script>
-
-<label for="tag_list">Tags (separate with commas)</label>
-<%= text_field_tag "tag_list", nil, :size => 30, :tabindex => 5 %> 
-
-<div class="due_input">
-<label for="todo_due">Due</label>
-<%= text_field("todo", "due", "size" => 12, "class" => "Date", "onfocus" => "Calendar.setup", "tabindex" => 6, "autocomplete" => "off") %>
-</div>
-
-<div class="show_from_input">
-<label for="todo_show_from">Show from</label>
-  <%= text_field("todo", "show_from", "size" => 12, "class" => "Date", "onfocus" => "Calendar.setup", "tabindex" => 7, "autocomplete" => "off") %>
-</div>
-
-<%= source_view_tag( @source_view ) %> 
-
-<div class="submit_box">
-  <div class="widgets">
-    <button type="submit" class="positive" id="todo_new_action_submit" tabindex="8">
-        <%=image_tag("accept.png", :alt => "") %>
-        Add action
-    </button>
+    <%= calendar_setup( "todo_due"  ) %>
+    <%= calendar_setup( "todo_show_from"  ) %>
   </div>
-</div>
-<% end -%>
-
-                  
-<%= calendar_setup( "todo_due"  ) %>
-<%= calendar_setup( "todo_show_from"  ) %>
-</div>
 </div>
