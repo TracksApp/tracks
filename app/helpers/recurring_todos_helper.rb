@@ -43,5 +43,36 @@ module RecurringTodosHelper
     set_behavior_for_toggle_checkbox
     str
   end
+
+  private
+
+  def image_tag_for_delete
+    image_tag("blank.png", :title =>"Delete action", :class=>"delete_item")
+  end
+
+  def image_tag_for_edit(todo)
+    image_tag("blank.png", :title =>"Edit action", :class=>"edit_item", :id=> dom_id(todo, 'edit_icon'))
+  end
+
+  def set_behavior_for_delete_icon
+    parameters = "_source_view=#{@source_view}"
+    parameters += "&_tag_name=#{@tag_name}" if @source_view == 'tag'
+    apply_behavior '.item-container a.delete_icon:click', :prevent_default => true do |page|
+      page.confirming "'Are you sure that you want to ' + this.title + '?'" do
+        page << "itemContainer = this.up('.item-container'); itemContainer.startWaiting();"
+        page << remote_to_href(:method => 'delete', :with => "'#{parameters}'", :complete => "itemContainer.stopWaiting();")
+      end
+    end
+  end
+
+  def set_behavior_for_edit_icon
+    parameters = "_source_view=#{@source_view}"
+    parameters += "&_tag_name=#{@tag_name}" if @source_view == 'tag'
+    apply_behavior '.item-container a.edit_icon:click', :prevent_default => true do |page|
+      page << "Effect.Pulsate(this);"
+      page << remote_to_href(:method => 'get', :with => "'#{parameters}'")
+    end
+  end
+
   
 end
