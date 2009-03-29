@@ -3,9 +3,16 @@ class MessageGateway < ActionMailer::Base
   extend ActionView::Helpers::SanitizeHelper::ClassMethods
   
   def receive(email)
-    user = User.find(:first, :include => [:preference], :conditions => ["preferences.sms_email = ?", email.from[0].strip])
+    address = ''
+    if SITE_CONFIG['email_dispatch'] == 'to'
+      address = email.to[0]
+    else
+      address = email.from[0]
+    end
+    
+    user = User.find(:first, :include => [:preference], :conditions => ["preferences.sms_email = ?", address.strip])
     if user.nil?
-      user = User.find(:first, :include => [:preference], :conditions => ["preferences.sms_email = ?", email.from[0].strip[1,100]])
+      user = User.find(:first, :include => [:preference], :conditions => ["preferences.sms_email = ?", address.strip[1,100]])
     end
     return if user.nil?
     context = user.prefs.sms_context
