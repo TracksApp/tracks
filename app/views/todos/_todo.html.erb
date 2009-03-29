@@ -23,7 +23,7 @@ parameters += "&_tag_name=#{@tag_name}" if @source_view == 'tag'
     </ul></ul>
     <div class="description<%= staleness_class( todo ) %>">
       <%= date_span -%>
-      <span class="todo.descr"><%= h sanitize(todo.description) %></span>
+      <span class="todo.descr"><%= sanitize(todo.description) %></span>
       <%= link_to(
         image_tag("recurring16x16.png"),
         {:controller => "recurring_todos", :action => "index"},
