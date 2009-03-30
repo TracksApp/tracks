@@ -21,33 +21,6 @@
     <link rel="shortcut icon" href="<%= url_for(:controller => 'favicon.ico') %>" />
     <%= auto_discovery_link_tag(:rss, {:controller => "todos", :action => "index", :format => 'rss', :token => "#{current_user.token}"}, {:title => "RSS feed of next actions"}) %>
     <link rel="search" type="application/opensearchdescription+xml" title="Tracks" href="<%= search_plugin_path %>" />
-
-    <script type="text/javascript">
-      jQuery(document).ready(function() { /* main menu */
-        jQuery('ul.sf-menu').superfish({
-          delay: 250,
-          animation:   {opacity:'show',height:'show'},
-          autoArrows: false,
-          dropShadows: false,
-          speed: 'fast'
-        });
-        jQuery('ul.sf-item-menu').superfish({ /* context menu */
-          delay: 100,
-          animation:   {opacity:'show',height:'show'},
-          autoArrows: false,
-          dropShadows: false,
-          speed: 'fast',
-          onBeforeShow: function() { /* highlight todo */
-            $(this.parent().parent().parent()).addClass("sf-item-selected");
-          },
-          onHide: function() { /* remove hightlight from todo */
-            $(this.parent().parent().parent()).removeClass("sf-item-selected");
-          }
-        });
-        Nifty("div#todo_new_action_container","normal");
-        if ($('flash').visible()) { new Effect.Fade("flash",{duration:5.0}); }
-      });
-    </script>
     <title><%= @page_title %></title>
   </head>
 
@@ -62,10 +35,8 @@
         </h1>
       </div>
       <div id="minilinks">
-        <%= link_to_function("Toggle notes", nil, {:accesskey => "S", :title => "Toggle all notes", :id => "toggle-notes-nav"}) do |page|
-          page.select('body .todo_notes').each { |e| e.toggle }
-        end
-        -%>&nbsp;|&nbsp;
+        <%= link_to("Toggle notes", "#", {:accesskey => "S", :title => "Toggle all notes", :id => "toggle-notes-nav"}) %>
+        &nbsp;|&nbsp;
         <%= link_to "Logout (#{current_user.display_name}) »", logout_path %>
       </div>
       <div id="navcontainer">
@@ -118,5 +89,36 @@
     </div>
 
     <%= render :partial => "shared/footer" %>
+
+    <script type="text/javascript">
+      jQuery(document).ready(function() { /* main menu */
+        jQuery('ul.sf-menu').superfish({
+          delay: 250,
+          animation:   {opacity:'show',height:'show'},
+          autoArrows: false,
+          dropShadows: false,
+          speed: 'fast'
+        });
+        jQuery('ul.sf-item-menu').superfish({ /* context menu */
+          delay: 100,
+          animation:   {opacity:'show',height:'show'},
+          autoArrows: false,
+          dropShadows: false,
+          speed: 'fast',
+          onBeforeShow: function() { /* highlight todo */
+            $(this.parent().parent().parent()).addClass("sf-item-selected");
+          },
+          onHide: function() { /* remove hightlight from todo */
+            $(this.parent().parent().parent()).removeClass("sf-item-selected");
+          }
+        });
+        /* for toggle notes link in mininav */
+        jQuery("#toggle-notes-nav").click(function () { jQuery(".todo_notes").toggle(); });
+        /* show the notes of a todo */
+        jQuery(".show_notes").click(function () { jQuery(this).next().toggle("fast"); return false; });
+        Nifty("div#todo_new_action_container","normal");
+        if ($('flash').visible()) { new Effect.Fade("flash",{duration:5.0}); }
+      });
+    </script>
   </body>
 </html>

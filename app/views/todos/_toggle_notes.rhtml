@@ -1,7 +1,5 @@
 <%= link_to(image_tag( 'blank.png', :width=>'16', :height=>'16', :border=>'0' ), "#", {:class => 'show_notes', :title => 'Show notes'}) %>
-<% apply_behavior 'a.show_notes:click', :prevent_default => true do |page, element|
-  element.next('.todo_notes').toggle
-end -%>
+
 <div class="todo_notes" id="<%= dom_id(item, 'notes') %>" style="display:none">
   <%= sanitize(markdown( auto_link(item.notes)) ) %>
 </div>
