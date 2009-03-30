@@ -2,7 +2,7 @@ module TodosHelper
 
   # #require 'users_controller' Counts the number of incomplete items in the
   # specified context
-  # 
+  #
   def count_items(context)
     count = Todo.find_all("done=0 AND context_id=#{context.id}").length
   end
@@ -35,7 +35,50 @@ module TodosHelper
     set_behavior_for_star_icon
     str
   end
-  
+
+  def remote_edit_menu_item(parameters, todo)
+    return link_to_remote(
+      image_tag("edit_off.png", :mouseover => "edit_on.png", :alt => "", :align => "absmiddle")+" Edit",
+      :url => {:controller => 'todos', :action => 'edit', :id => todo.id},
+      :method => 'get',
+      :with => "'#{parameters}'",
+      :before => todo_start_waiting_js(todo),
+      :complete => todo_stop_waiting_js)
+  end
+
+  def remote_delete_menu_item(parameters, todo)
+    return link_to_remote(
+      image_tag("delete_off.png", :mouseover => "delete_on.png", :alt => "", :align => "absmiddle")+" Delete",
+      :url => {:controller => 'todos', :action => 'destroy', :id => todo.id},
+      :method => 'delete',
+      :with => "'#{parameters}'",
+      :before => todo_start_waiting_js(todo),
+      :complete => todo_stop_waiting_js)
+  end
+
+  def remote_defer_menu_item(days, todo)
+    return link_to_remote(
+      image_tag("defer_#{days}_off.png", :mouseover => "defer_#{days}.png", :alt => "", :align => "absmiddle")+" Defer #{pluralize(days, "day")}",
+      :url => {:controller => 'todos', :action => 'defer', :id => todo.id, :days => days, :_source_view => (@source_view.underscore.gsub(/\s+/,'_') rescue "")},
+      :before => todo_start_waiting_js(todo),
+      :complete => todo_stop_waiting_js)
+  end
+
+  def todo_start_waiting_js(todo)
+    return "$('ul#{dom_id(todo)}').hide(); itemContainer = $('#{dom_id(todo)}'); itemContainer.startWaiting()"
+  end
+
+  def todo_stop_waiting_js
+    return "itemContainer.stopWaiting();"
+  end
+
+  def image_tag_for_recurring_todo(todo)
+    return link_to(
+      image_tag("recurring16x16.png"),
+      {:controller => "recurring_todos", :action => "index"},
+      :class => "recurring_icon", :title => recurrence_pattern_as_text(todo.recurring_todo))
+  end
+
   def set_behavior_for_toggle_checkbox
     parameters = "_source_view=#{@source_view}"
     parameters += "&_tag_name=#{@tag_name}" if @source_view == 'tag'
@@ -76,7 +119,7 @@ module TodosHelper
     tag_list = tags_except_starred.collect{|t| 
       "<span class=\"tag\">" + 
         link_to(t.name, {:action => "tag", :controller => "todos", :id => t.name+".m"}) + 
-      "</span>"}.join('')
+        "</span>"}.join('')
     if tag_list.empty? then "" else "<span class=\"tags\">#{tag_list}</span>" end
   end
   
@@ -111,7 +154,7 @@ module TodosHelper
   # * l1: created more than 1 x staleness_starts, but < 2 x staleness_starts
   # * l2: created more than 2 x staleness_starts, but < 3 x staleness_starts
   # * l3: created more than 3 x staleness_starts
-  # 
+  #
   def staleness_class(item)
     if item.due || item.completed?
       return ""
@@ -128,7 +171,7 @@ module TodosHelper
 
   # Check show_from date in comparison to today's date Flag up date
   # appropriately with a 'traffic light' colour code
-  # 
+  #
   def show_date(d)
     if d == nil
       return ""
