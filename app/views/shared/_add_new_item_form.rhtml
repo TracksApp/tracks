@@ -70,6 +70,7 @@
     <script type="text/javascript" charset="utf-8">
 
       var contextNames = <%= context_names_for_autocomplete %>;
+      var projectNames = <%= project_names_for_autocomplete %>
 
       function askIfNewContextProvided() {
         var givenContextName = $('todo_context_name').value;
@@ -80,7 +81,7 @@
         return confirm('New context "' + givenContextName + '" will be also created. Are you sure?');
       }
 
-      var projectAutoCompleter = new Autocompleter.Local('todo_project_name', 'project_list', <%= project_names_for_autocomplete %>, {choices:100,autoSelect:false});
+      var projectAutoCompleter = new Autocompleter.Local('todo_project_name', 'project_list', projectNames, {choices:100,autoSelect:false});
 
       function selectDefaultContext() {
         todoContextNameElement = $('todo_context_name');
