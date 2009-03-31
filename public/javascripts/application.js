@@ -6,7 +6,7 @@ var Login = {
         if ($('alternate_auth_database')) $('alternate_auth_database').show();
         if ($('openid_url')) $('openid_url').focus();
         if ($('openid_url')) $('openid_url').select();
-	new CookieManager().setCookie('preferred_auth', 'openid');
+        new CookieManager().setCookie('preferred_auth', 'openid');
     },
 
     showDatabase: function(container) {
@@ -16,9 +16,10 @@ var Login = {
         if ($('alternate_auth_openid')) $('alternate_auth_openid').show();
         if ($('user_login')) $('user_login').focus();
         if ($('user_login')) $('user_login').select();
-	new CookieManager().setCookie('preferred_auth', 'database');
+        new CookieManager().setCookie('preferred_auth', 'database');
     }
 }
+
 var TracksForm = {
     toggle: function(toggleDivId, formContainerId, formId, hideLinkText, hideLinkTitle, showLinkText, showLinkTitle) {
         $(formContainerId).toggle();
@@ -85,6 +86,13 @@ var TracksForm = {
     }
 }
 
+var TodoBehavior = {
+    enableToggleNotes: function() {
+        jQuery(".show_notes").click(function () {
+            jQuery(this).next().toggle("fast"); return false;
+        });
+    }
+}
 // uncomment the next four lines for easier debugging with FireBug
 // Ajax.Responders.register({
 //  onException: function(source, exception) {
@@ -96,7 +104,9 @@ var TracksForm = {
 Event.observe(window, 'load', function() { 
     $A(document.getElementsByClassName('alert')).each(function(o) {
         o.opacity = 100.0
-        Effect.Fade(o, {duration: 8.0})
+        Effect.Fade(o, {
+            duration: 8.0
+        })
     });
 });
 
@@ -106,9 +116,9 @@ Event.observe(window, 'load', function() {
  */
 CookieManager = Class.create();
 CookieManager.prototype =
-    {
+{
     BROWSER_IS_IE:
-        (document.all
+    (document.all
         && window.ActiveXObject
         && navigator.userAgent.toLowerCase().indexOf("msie") > -1
         && navigator.userAgent.toLowerCase().indexOf("opera") == -1),
@@ -118,7 +128,7 @@ CookieManager.prototype =
      * chokes on cookies containing double quotes...
      */
     BROWSER_IS_OPERA:
-        (navigator.userAgent.toLowerCase().indexOf("opera") != -1),
+    (navigator.userAgent.toLowerCase().indexOf("opera") != -1),
 
     initialize: function(options)
     {
@@ -217,7 +227,7 @@ CookieManager.prototype =
         else
         {
             document.cookie =
-                aCookieName + '=;expires=Thu, 01-Jan-1970 00:00:01 GMT; path=/';
+            aCookieName + '=;expires=Thu, 01-Jan-1970 00:00:01 GMT; path=/';
         }
     }
 }

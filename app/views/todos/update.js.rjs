@@ -6,7 +6,8 @@ if @saved
   status_message = 'Added new context / ' + status_message if @new_context_created
   page.notify :notice, status_message, 5.0
   
-  # update auto completer arrays for edit form in right column, only for pages with that form
+  # update auto completer arrays for edit form in right column, only for pages
+  # with that form
   unless source_view_is_one_of(:calendar)
     page << "contextAutoCompleter.options.array = #{context_names_for_autocomplete}; contextAutoCompleter.changed = true" if @new_context_created
     page << "projectAutoCompleter.options.array = #{project_names_for_autocomplete}; projectAutoCompleter.changed = true" if @new_project_created
@@ -123,7 +124,8 @@ if @saved
   else
     logger.error "unexpected source_view '#{params[:_source_view]}'"
   end
-
+  # make sure the behavior of the new/updated todo is enabled
+  page << "TodoBehavior.enableToggleNotes()"
 else
   page.show 'error_status'
   page.replace_html 'error_status', "#{error_messages_for('todo')}"

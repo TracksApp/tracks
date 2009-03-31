@@ -20,6 +20,8 @@ if @saved
       page.visual_effect :highlight, dom_id(@todo), :duration => 3
       page[empty_container_msg_div_id].hide unless empty_container_msg_div_id.nil?
     end
+    # make sure the behavior of the new/updated todo is enabled
+    page << "TodoBehavior.enableToggleNotes()"
     page['tickler-empty-nd'].hide if source_view_is :deferred
   end
 else

@@ -47,3 +47,5 @@ if @saved
 else
   page.replace_html "status", content_tag("div", content_tag("h2", "#{pluralize(@todo.errors.count, "error")} prohibited this action from being saved") + content_tag("p", "There were problems with the following fields:") + content_tag("ul", @todo.errors.each_full { |msg| content_tag("li", msg) }), "id" => "errorExplanation", "class" => "errorExplanation")  
 end
+# make sure the behavior of the new/updated todo is enabled
+page << "TodoBehavior.enableToggleNotes()"
