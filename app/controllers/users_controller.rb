@@ -33,7 +33,7 @@ class UsersController < ApplicationController
       @page_title = "TRACKS::Sign up as the admin user"
       @heading = "Welcome to TRACKS. To get started, please create an admin account:"
       @user = get_new_user
-    elsif @user && @user.is_admin?
+    elsif (@user && @user.is_admin?) || SITE_CONFIG['open_signups']
       @page_title = "TRACKS::Sign up a new user"
       @heading = "Sign up a new user:"
       @user = get_new_user
@@ -60,7 +60,7 @@ class UsersController < ApplicationController
     end
     respond_to do |format|
       format.html do
-        unless User.no_users_yet? || (@user && @user.is_admin?)
+        unless User.no_users_yet? || (@user && @user.is_admin?) || SITE_CONFIG['open_signups']
           @page_title = "No signups"
           @admin_email = User.find_admin.preference.admin_email
           render :action => "nosignup", :layout => "login"
