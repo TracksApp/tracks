@@ -78,7 +78,7 @@
         <label for="recurring_todo[ends_on]">Ends on:</label><br/>
         <%= radio_button_tag('recurring_todo[ends_on]', 'no_end_date', true)%> No end date<br/>
         <%= radio_button_tag('recurring_todo[ends_on]', 'ends_on_number_of_times')%> Ends after <%= text_field( :recurring_todo, :number_of_occurences, "size" => 3, "tabindex" => 7) %> times<br/>
-        <%= radio_button_tag('recurring_todo[ends_on]', 'ends_on_end_date')%> Ends on <%= text_field(:recurring_todo, :end_date, "size" => 12, "class" => "Date", "onfocus" => "Calendar.setup", "tabindex" => 8, "autocomplete" => "off") %><br/>
+        <%= radio_button_tag('recurring_todo[ends_on]', 'ends_on_end_date')%> Ends on <%= text_field(:recurring_todo, :end_date, "size" => 12, "class" => "Date", "onfocus" => "Calendar.setup", "tabindex" => 8, "autocomplete" => "off", "value" => "") %><br/>
     </div></div>
     <div id="recurring_daily" style="display:block">
       <label>Settings for daily recurring actions</label><br/>
