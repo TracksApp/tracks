@@ -155,7 +155,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
       "recurring_period"=>"yearly",
       "recurring_show_days_before"=>"0",
       "recurring_target"=>"due_date",
-      "start_from"=>"",
+      "start_from"=>"1/10/2012",  # adjust after 2012
       "weekly_every_x_week"=>"1",
       "weekly_return_monday"=>"w",
       "yearly_day_of_week"=>"0",
@@ -176,8 +176,8 @@ class RecurringTodosControllerTest < ActionController::TestCase
     new_todo = Todo.find_by_description("new recurring pattern")
     assert !new_todo.nil?
     
-    # the date should be 29 march 2009
-    assert_equal Time.zone.local(2009,3,29), new_todo.due
+    # the date should be 31 march 2013
+    assert_equal Time.zone.local(2013,3,31), new_todo.due
   end
     
 end

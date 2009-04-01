@@ -596,7 +596,7 @@ class RecurringTodo < ActiveRecord::Base
     unless self.number_of_occurences.nil?
       return self.occurences_count < self.number_of_occurences
     else
-      if self.end_date.nil?
+      if self.end_date.nil? || self.ends_on == 'no_end_date'
         return true
       else
         case self.target

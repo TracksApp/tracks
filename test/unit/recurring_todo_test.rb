@@ -81,6 +81,7 @@ class RecurringTodoTest < Test::Rails::TestCase
     assert_equal true, @every_day.has_next_todo(@in_three_days)
     assert_equal true, @every_day.has_next_todo(@in_four_days)
     @every_day.end_date = @in_four_days
+    @every_day.ends_on = 'ends_on_end_date'
     assert_equal false, @every_day.has_next_todo(@in_four_days)
   end
   
