@@ -264,6 +264,8 @@ class TodosController < ApplicationController
       @remaining_undone_in_project = current_user.projects.find(@original_item_project_id).not_done_todo_count
     end
     determine_down_count
+    determine_deferred_tag_count(params['_tag_name']) if @source_view == 'tag'
+
     respond_to do |format|
       format.js
       format.xml { render :xml => @todo.to_xml( :except => :user_id ) }
@@ -436,7 +438,7 @@ class TodosController < ApplicationController
     @original_item_context_id = @todo.context_id
     @todo.show_from = (@todo.show_from || @todo.user.date) + numdays.days
     @saved = @todo.save
-    
+
     determine_down_count
     determine_remaining_in_context_count(@todo.context_id)
     respond_to do |format|
@@ -692,6 +694,13 @@ class TodosController < ApplicationController
         end
       end
     end
+  end
+
+  def determine_deferred_tag_count(tag)
+    tag_collection = Tag.find_by_name(tag).todos
+    @deferred_tag_count = tag_collection.count(:all,
+      :conditions => ['todos.user_id = ? and state = ?', current_user.id, 'deferred'],
+      :order => 'show_from ASC, todos.created_at DESC')
   end
 
   def render_todos_html

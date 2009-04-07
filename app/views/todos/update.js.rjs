@@ -33,13 +33,19 @@ if @saved
           end
         end
       end
-      
+
       if source_view_is_one_of(:todo, :tag) && @todo.active?
         page.call "todoItems.ensureVisibleWithEffectAppear", "c#{@todo.context_id}"
         page.call "todoItems.expandNextActionListingByContext", "c#{@todo.context_id}items", true
         page[empty_container_msg_div_id].hide unless empty_container_msg_div_id.nil?
         # show all todos in context
         page.insert_html :bottom, "c#{@todo.context_id}items", :partial => 'todos/todo', :locals => { :todo => @todo, :parent_container_type => parent_container_type }
+      end
+
+      if source_view_is(:tag) && @todo.deferred?
+        # show todo in deferred container
+        page.insert_html :bottom, "tickleritems", :partial => 'todos/todo', :locals => { :todo => @todo, :parent_container_type => parent_container_type }
+        page[empty_container_msg_div_id].hide unless empty_container_msg_div_id.nil?
       end
       
       # update badge count
@@ -55,9 +61,20 @@ if @saved
         end
       end
     else
-      page.replace dom_id(@todo), :partial => 'todos/todo', :locals => { :todo => @todo, :parent_container_type => parent_container_type }
+      if @original_item_was_deferred && source_view_is(:tag)
+        # we go from the deferred container to a context container in tag view
+        page[@todo].remove
+        page.call "todoItems.ensureVisibleWithEffectAppear", "c#{@todo.context_id}"
+        page.call "todoItems.expandNextActionListingByContext", "c#{@todo.context_id}items", true
+        page[empty_container_msg_div_id].hide unless empty_container_msg_div_id.nil?
+        # show all todos in context
+        page.insert_html :bottom, "c#{@todo.context_id}items", :partial => 'todos/todo', :locals => { :todo => @todo, :parent_container_type => parent_container_type }
+        page['tickler-empty-nd'].show if @deferred_tag_count == 0
+      else
+        page.replace dom_id(@todo), :partial => 'todos/todo', :locals => { :todo => @todo, :parent_container_type => parent_container_type }
+      end
       page.visual_effect :highlight, dom_id(@todo), :duration => 3
-    end    
+    end
   elsif source_view_is :project
     if @project_changed
       page[@todo].remove
