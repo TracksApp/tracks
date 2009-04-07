@@ -441,6 +441,11 @@ class TodosController < ApplicationController
 
     determine_down_count
     determine_remaining_in_context_count(@todo.context_id)
+    if @source_view == 'project'
+      @remaining_undone_in_project = current_user.projects.find(@todo.project_id).not_done_todo_count
+      @original_item_project_id = @todo.project_id
+    end
+
     respond_to do |format|
       format.html { redirect_to :back }
       format.js {render :action => 'update'}
