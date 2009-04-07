@@ -697,7 +697,8 @@ div#list-active-projects, div#list-hidden-projects, div#list-completed-projects,
     clear:right;
     border: 1px solid #999;
 }
-.project-state-group h2 {
+
+.project-state-group h2, .list-stategroup-contexts-container h2 {
     margin:20px 0px 8px 13px;
 }
 

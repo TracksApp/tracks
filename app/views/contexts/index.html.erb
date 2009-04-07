@@ -1,44 +1,38 @@
 <div id="display_box">
-  <div id="list-contexts-container">
-    <div id="contexts-empty-nd" style="<%= @no_contexts ? 'display:block' : 'display:none'%>">
-      <div class="message"><p>Currently there are no contexts</p></div>
-    </div>
-    <div id="list-contexts">
-      <%= render :partial => 'context_listing', :collection => @contexts %>
-    </div>
-  </div>
+  <%= render :partial => 'context_state_group', :object => @active_contexts, :locals => { :state => 'active', :no_contexts => @no_active_contexts} %>
+  <%= render :partial => 'context_state_group', :object => @hidden_contexts, :locals => { :state => 'hidden', :no_contexts => @no_hidden_contexts} %>
 </div>
 
 <div id="input_box">
   <div id="context_new_container">
-    
+
     <div id="toggle_context_new" class="hide_form">
       <a title="Hide new context form" accesskey="n">&laquo; Hide form</a>
       <%  apply_behavior '#toggle_context_new a:click', :prevent_default => true do |page|
-            page << "TracksForm.toggle('toggle_context_new', 'context_new', 'context-form',
-                                       '&laquo; Hide form', 'Hide new context form',
-                                       'Create a new context &#187;', 'Add a context');"
-          end
-      %>
+        page << "TracksForm.toggle('toggle_context_new', 'context_new', 'context-form',
+        '&laquo; Hide form', 'Hide new context form',
+        'Create a new context &#187;', 'Add a context');"
+      end
+    %>
     </div>
-  
+
     <div id="context_new" class="context_new" style="display:block">
       <% form_remote_tag(
-        :url => contexts_path, 
-        :method => :post, 
+        :url => contexts_path,
+        :method => :post,
         :html=> { :id => 'context-form', :name => 'context', :class => 'inline-form'},
         :before => "$('context_new_submit').startWaiting()",
         :complete => "$('context_new_submit').stopWaiting()",
         :condition => "!$('context_new_submit').isWaiting()") do -%>
-      
+
         <div id="status"><%= error_messages_for('context') %></div>
-      
-        <label for="context_name">Context name</label><br />                               
+
+        <label for="context_name">Context name</label><br />
         <%= text_field( "context", "name" ) %><br />
-      
+
         <label for="context_hide">Hide from front page?</label>
         <%= check_box( "context", "hide" ) %><br />
-      
+
         <div class="submit_box">
           <div class="widgets">
             <button type="submit" class="positive" id="context_new_submit">
@@ -46,16 +40,17 @@
             </button>
           </div>
         </div>
-      <br/><br/>
+        <br/><br/>
       <% end -%>
     </div>
   </div>
 </div>
 <%
-sortable_element 'list-contexts', get_listing_sortable_options
+sortable_element 'list-contexts-active', get_listing_sortable_options
+sortable_element 'list-contexts-hidden', get_listing_sortable_options
 -%>
 <script type="text/javascript">
-window.onload=function(){
-  Nifty("div#context_new_container","normal");
-}
+  window.onload=function(){
+    Nifty("div#context_new_container","normal");
+  }
 </script>

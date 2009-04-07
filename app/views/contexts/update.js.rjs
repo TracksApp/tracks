@@ -1,6 +1,12 @@
 status_message = 'Context saved'
 page.notify :notice, status_message, 5.0
-page.replace_html dom_id(@context, 'container'), :partial => 'context_listing', :object => @context
-page.sortable "list-contexts", get_listing_sortable_options
+if @context_state_changed
+  page << "jQuery('##{dom_id(@context, 'edit')}').hide();"
+  page.insert_html :bottom, "list-contexts-#{@new_state}", :partial => 'context_listing', :object => @context
+else
+  page.replace_html dom_id(@context, 'container'), :partial => 'context_listing', :object => @context
+end
+page.sortable "list-contexts-active", get_listing_sortable_options
+page.sortable "list-contexts-hidden", get_listing_sortable_options
 
 page.hide "busy"
