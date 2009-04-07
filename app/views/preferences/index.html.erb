@@ -5,9 +5,9 @@
   <ul id="prefs">
     <li>First name: <span class="highlight"><%= current_user.first_name %></span></li>
     <li>Last name: <span class="highlight"><%= current_user.last_name %></span></li>
-    <li>Date format: <span class="highlight"><%= prefs.date_format %></span> Your current date: <%= format_date(user_time) %></li>
-    <li>Title date format: <span class="highlight"><%= prefs.title_date_format %></span> Your current title date: <%= user_time.strftime(prefs.title_date_format) %></li>
-    <li>Time zone: <span class="highlight"><%= prefs.time_zone %></span> Your current time: <%= user_time.strftime('%I:%M %p') %></li>
+    <li>Date format: <span class="highlight"><%= prefs.date_format %></span> Your current date: <%= format_date(current_user.time) %></li>
+    <li>Title date format: <span class="highlight"><%= prefs.title_date_format %></span> Your current title date: <%= current_user.time.strftime(prefs.title_date_format) %></li>
+    <li>Time zone: <span class="highlight"><%= prefs.time_zone %></span> Your current time: <%= current_user.time.strftime('%I:%M %p') %></li>
     <li>Week starts on: <span class="highlight"><%= Preference.day_number_to_name_map[prefs.week_starts] %></span></li>
     <li>Show the last <span class="highlight"><%= prefs.show_number_completed %></span> completed items</li>
     <li>Show completed projects in sidebar: <span class="highlight"><%= prefs.show_completed_projects_in_sidebar %></span></li>

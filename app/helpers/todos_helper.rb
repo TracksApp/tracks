@@ -161,11 +161,11 @@ module TodosHelper
   def staleness_class(item)
     if item.due || item.completed?
       return ""
-    elsif item.created_at < user_time - (prefs.staleness_starts * 3).days
+    elsif item.created_at < current_user.time - (prefs.staleness_starts * 3).days
       return " stale_l3"
-    elsif item.created_at < user_time - (prefs.staleness_starts * 2).days
+    elsif item.created_at < current_user.time - (prefs.staleness_starts * 2).days
       return " stale_l2"
-    elsif item.created_at < user_time - (prefs.staleness_starts).days
+    elsif item.created_at < current_user.time - (prefs.staleness_starts).days
       return " stale_l1"
     else
       return ""

@@ -2,10 +2,6 @@
 # application.
 module ApplicationHelper
   
-  def user_time
-    Time.zone.now
-  end
-  
   # Replicates the link_to method but also checks request.request_uri to find
   # current page. If that matches the url, the link is marked id = "current"
   #
@@ -24,7 +20,7 @@ module ApplicationHelper
   end
   
   def days_from_today(date)
-    date.in_time_zone.to_date - user_time.to_date
+    date.in_time_zone.to_date - current_user.time.to_date
   end
   
   # Check due date in comparison to today's date Flag up date appropriately with

@@ -3,7 +3,7 @@
 <span class="errors">
 <%= error_messages_for("todo") %>
 </span>
-<% this_year = user_time.to_date.strftime("%Y").to_i
+<% this_year = current_user.time.to_date.strftime("%Y").to_i
 if parent_container_type == 'show_mobile' -%>
 <p><label for="todo_done">Done?</label>&nbsp;<%= check_box_tag("done", 1, @todo && @todo.completed?, "tabindex" => 1) %></p>
 <% end -%>

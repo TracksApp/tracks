@@ -14,7 +14,7 @@
 <% if !(@new_mobile || @edit_mobile)
       if !@prefs.nil? -%>
 <h1><span class="count"><%= @down_count %></span> <%= 
-        user_time.strftime(@prefs.title_date_format) -%></h1>
+        current_user.time.strftime(@prefs.title_date_format) -%></h1>
 <div class="nav">
 <%=     (link_to("0-New action", formatted_new_todo_path(:m, new_todo_params))+" | ") unless @new_mobile -%>
 <%=     (link_to("1-Home", formatted_todos_path(:m))+" | ") unless @home -%>

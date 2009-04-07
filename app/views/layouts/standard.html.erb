@@ -31,7 +31,7 @@
           <% if @count -%>
             <span id="badge_count" class="badge"><%= @count %></span>
           <% end -%>
-          <%= user_time.strftime(@prefs.title_date_format) %>
+          <%= current_user.time.strftime(@prefs.title_date_format) %>
         </h1>
       </div>
       <div id="minilinks">
