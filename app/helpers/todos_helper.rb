@@ -57,9 +57,12 @@ module TodosHelper
   end
 
   def remote_defer_menu_item(days, todo)
+    url = {:controller => 'todos', :action => 'defer', :id => todo.id, :days => days,
+      :_source_view => (@source_view.underscore.gsub(/\s+/,'_') rescue "")}
+    url[:_tag_name] = @tag_name if @source_view == 'tag'
     return link_to_remote(
       image_tag("defer_#{days}_off.png", :mouseover => "defer_#{days}.png", :alt => "", :align => "absmiddle")+" Defer #{pluralize(days, "day")}",
-      :url => {:controller => 'todos', :action => 'defer', :id => todo.id, :days => days, :_source_view => (@source_view.underscore.gsub(/\s+/,'_') rescue "")},
+      :url => url,
       :before => todo_start_waiting_js(todo),
       :complete => todo_stop_waiting_js)
   end
