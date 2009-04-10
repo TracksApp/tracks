@@ -45,3 +45,7 @@ config.time_zone = 'UTC'
 config.after_initialize do
   require File.expand_path(File.dirname(__FILE__) + "/../../test/selenium_helper")
 end
+
+config.gem "flexmock"
+config.gem "ZenTest"
+config.gem "hpricot"
