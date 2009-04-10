@@ -88,7 +88,7 @@ var TracksForm = {
 
 var TodoBehavior = {
     enableToggleNotes: function() {
-        jQuery(".show_notes").click(function () {
+        jQuery(".show_notes").unbind('click').bind('click', function () {
             jQuery(this).next().toggle("fast"); return false;
         });
     }
