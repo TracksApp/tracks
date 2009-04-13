@@ -8,12 +8,11 @@ Of those <%= @contexts.count(:conditions => ["hide = ?", false])%> are visible c
 <%= @contexts.count(:conditions => ["hide = ?", true]) %> are hidden contexts
 
 <% unless @actions.empty? -%>
-<p>You have <%= @actions.count(:conditions => "completed_at IS NULL") %> incomplete actions of which
-<%= @actions.count(:conditions => "completed_at IS NULL AND NOT show_from IS NULL") %> are 
-deferred actions. </p>
+<p>You have <%= @actions.count(:conditions => "completed_at IS NULL") %> incomplete actions 
+of which <%= @actions.count(:conditions => "completed_at IS NULL AND NOT show_from IS NULL") %> are deferred actions. </p>
 
-<p>Since your first action on <%= format_date(@first_action.created_at) %> you have 
-a total of <%= @actions.count %> actions. 
+<p>Since your first action on <%= format_date(@first_action.created_at) %> 
+you have a total of <%= @actions.count %> actions. 
 <%= @actions.count(:conditions => "NOT completed_at IS NULL") %> of these are completed.
 
 <p>You have <%= @tags_count-%> tags placed on actions. Of those tags,

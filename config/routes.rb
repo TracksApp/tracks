@@ -65,6 +65,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.preferences 'preferences', :controller => 'preferences', :action => 'index'
   map.integrations 'integrations', :controller => 'integrations', :action => 'index'
+  map.stats 'stats', :controller => 'stats', :action => 'index'
   map.search_plugin '/integrations/search_plugin.xml', :controller => 'integrations', :action => 'search_plugin', :format => 'xml'
 
   map.resources :recurring_todos,
