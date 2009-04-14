@@ -16,7 +16,13 @@ if @saved
     if @remaining_in_context == 0 && source_view_is(:todo)
       page.visual_effect :fade, item_container_id(@todo), :duration => 0.4
     end
-    
+
+    if @original_item_was_deferred && source_view_is(:tag)
+      # we go from the deferred container to the completed container in tag view
+      # check for empty message
+      page['tickler-empty-nd'].show if @deferred_tag_count == 0
+    end
+
     # show new todo if the completed todo was recurring
     if @todo.from_recurring_todo?
       unless @new_recurring_todo.nil? || @new_recurring_todo.deferred?
