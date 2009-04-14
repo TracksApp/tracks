@@ -19,7 +19,7 @@ class ContextsController < ApplicationController
     respond_to do |format|
       format.html &render_contexts_html
       format.m    &render_contexts_mobile
-      format.xml  { render :xml => @contexts.to_xml( :except => :user_id ) }
+      format.xml  { render :xml => current_user.contexts.to_xml( :except => :user_id ) }
       format.rss  &render_contexts_rss_feed
       format.atom &render_contexts_atom_feed
       format.text { render :action => 'index', :layout => false, :content_type => Mime::TEXT }
@@ -147,8 +147,8 @@ class ContextsController < ApplicationController
   def render_contexts_mobile
     lambda do
       @page_title = "TRACKS::List Contexts"
-      @active_contexts = @contexts.active
-      @hidden_contexts = @contexts.hidden
+      @active_contexts = current_user.contexts.active
+      @hidden_contexts = current_user.contexts.hidden
       @down_count = @active_contexts.size + @hidden_contexts.size 
       cookies[:mobile_url]= {:value => request.request_uri, :secure => SITE_CONFIG['secure_cookies']}
       render :action => 'index_mobile'
@@ -168,14 +168,14 @@ class ContextsController < ApplicationController
 
   def render_contexts_rss_feed
     lambda do
-      render_rss_feed_for @contexts, :feed => feed_options,
+      render_rss_feed_for current_user.contexts, :feed => feed_options,
         :item => { :description => lambda { |c| c.summary(count_undone_todos_phrase(c)) } }
     end
   end
 
   def render_contexts_atom_feed
     lambda do
-      render_atom_feed_for @contexts, :feed => feed_options,
+      render_atom_feed_for current_user.contexts, :feed => feed_options,
         :item => { :description => lambda { |c| c.summary(count_undone_todos_phrase(c)) },
         :author => lambda { |c| nil } }
     end
