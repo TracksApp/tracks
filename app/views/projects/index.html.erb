@@ -44,6 +44,10 @@
             <br />
           <% end -%>
           
+          <label for="default_tags">Default Tags (optional):</label><br />
+          <%= text_field_tag("project[default_tags]", @project.default_tags, :tabindex => 4) %>
+          <br />
+
           <br/>
   
           <div class="submit_box">

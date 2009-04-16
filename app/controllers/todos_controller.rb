@@ -49,6 +49,7 @@ class TodosController < ApplicationController
     @source_view = params['_source_view'] || 'todo'
     p = TodoCreateParamsHelper.new(params, prefs)        
     p.parse_dates() unless mobile?
+    tag_list = p.tag_list
     
     @todo = current_user.todos.build(p.attributes)
     
@@ -56,6 +57,11 @@ class TodosController < ApplicationController
       project = current_user.projects.find_or_create_by_name(p.project_name)
       @new_project_created = project.new_record_before_save?
       @todo.project_id = project.id
+      if tag_list.blank?
+        tag_list = project.default_tags unless project.default_tags.blank?
+      else
+        tag_list += ','+project.default_tags unless project.default_tags.blank?
+      end
     end
     
     if p.context_specified_by_name?
@@ -67,8 +73,8 @@ class TodosController < ApplicationController
 
     @todo.update_state_from_project
     @saved = @todo.save
-    unless (@saved == false) || p.tag_list.blank?
-      @todo.tag_with(p.tag_list)
+    unless (@saved == false) || tag_list.blank?
+      @todo.tag_with(tag_list)
       @todo.tags.reload
     end
     
