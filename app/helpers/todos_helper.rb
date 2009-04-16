@@ -60,11 +60,21 @@ module TodosHelper
     url = {:controller => 'todos', :action => 'defer', :id => todo.id, :days => days,
       :_source_view => (@source_view.underscore.gsub(/\s+/,'_') rescue "")}
     url[:_tag_name] = @tag_name if @source_view == 'tag'
-    return link_to_remote(
-      image_tag("defer_#{days}_off.png", :mouseover => "defer_#{days}.png", :alt => "", :align => "absmiddle")+" Defer #{pluralize(days, "day")}",
-      :url => url,
-      :before => todo_start_waiting_js(todo),
-      :complete => todo_stop_waiting_js)
+    
+    futuredate = (@todo.show_from || @todo.user.date) + days.days
+    puts "DUE: #{@todo.due}, futuredate: #{futuredate}"
+    if @todo.due && futuredate > @todo.due
+      return link_to_function(
+        image_tag("defer_#{days}_off.png", :mouseover => "defer_#{days}.png", :alt => "", :align => "absmiddle")+" Defer #{pluralize(days, "day")}",
+        "alert('Defer date is after due date. Please edit and adjust due date before deferring.')"
+      )
+    else
+      return link_to_remote(
+        image_tag("defer_#{days}_off.png", :mouseover => "defer_#{days}.png", :alt => "", :align => "absmiddle")+" Defer #{pluralize(days, "day")}",
+        :url => url,
+        :before => todo_start_waiting_js(todo),
+        :complete => todo_stop_waiting_js)
+    end
   end
 
   def todo_start_waiting_js(todo)
@@ -276,13 +286,5 @@ module TodosHelper
   def image_tag_for_star(todo)
     class_str = todo.starred? ? "starred_todo" : "unstarred_todo"
     image_tag("blank.png", :title =>"Star action", :class => class_str)
-  end  
-  
-  def defer_link(days)
-    url = {:controller => 'todos', :action => 'defer', :id => @todo.id, :days => days,
-      :_source_view => (@source_view.underscore.gsub(/\s+/,'_') rescue "")}
-    url[:_tag_name] = @tag_name if @source_view == 'tag'
-    link_to_remote image_tag("defer_#{days}.png", :alt => "Defer #{pluralize(days, 'day')}"), :url => url
   end
-
 end
