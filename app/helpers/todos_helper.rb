@@ -62,7 +62,6 @@ module TodosHelper
     url[:_tag_name] = @tag_name if @source_view == 'tag'
     
     futuredate = (@todo.show_from || @todo.user.date) + days.days
-    puts "DUE: #{@todo.due}, futuredate: #{futuredate}"
     if @todo.due && futuredate > @todo.due
       return link_to_function(
         image_tag("defer_#{days}_off.png", :mouseover => "defer_#{days}.png", :alt => "", :align => "absmiddle")+" Defer #{pluralize(days, "day")}",
