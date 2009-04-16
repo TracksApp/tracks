@@ -16,6 +16,16 @@
 
 New features:
 1. Redesign of menus and introduction of a context menu per todo
+2. You can now set the default tags for a project which are added automatically to a new todo in that project if no tags are supplied
+3. The email receiver is now able to receive email from several email adresses. 
+   In site.yml this could be set to the previous behavior (receive from one address per user)
+4. You can enable open signup (like in tracks.tra.in)
+5. Cleanup of context page
+
+Under the hood
+1. With the menus came jQuery. Some js is migrated to jQuery
+2. Cucumber is added for integration testing. And migration of stories to cucumber
+3. Bugfixes
 
 == Version 1.7
 
