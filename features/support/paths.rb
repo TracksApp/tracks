@@ -4,8 +4,14 @@ module NavigationHelpers
     
     when /the homepage/
       root_path
+    when /the home page/
+      root_path
     when /the statistics page/
       stats_path
+    when /the signup page/
+      "/users/new"
+    when /the login page/
+      login_path
     
     # Add more page name => path mappings here
     
