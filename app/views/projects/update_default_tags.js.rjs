@@ -1,0 +1,11 @@
+if @project.default_tags.nil?
+  page.notify :notice, "Removed the default tags", 5.0
+else
+#  if source_view_is :project
+#    page['default_context_name_id'].value = @project.default_context.name
+#    page['todo_context_name'].value = @project.default_context.name
+#  end
+  page.notify :notice, "Set project's default tags to #{@project.default_tags}", 5.0
+end
+page.hide "busy"
+

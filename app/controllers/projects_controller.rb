@@ -139,6 +139,9 @@ class ProjectsController < ApplicationController
         @initial_context_name = @project.default_context.name 
         render :template => 'projects/update_default_context.js.rjs'
         return
+      elsif boolean_param('update_default_tags')
+        render :template => 'projects/update_default_tags.js.rjs'
+        return
       elsif boolean_param('update_project_name')
         @projects = current_user.projects
         render :template => 'projects/update_project_name.js.rjs'
