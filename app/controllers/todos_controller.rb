@@ -269,7 +269,7 @@ class TodosController < ApplicationController
     if (@project_changed && !@original_item_project_id.nil?) then
       @todo.update_state_from_project
       @todo.save!
-      @remaining_undone_in_project = current_user.projects.find(@original_item_project_id).not_done_todo_count
+      @remaining_undone_in_project = current_user.projects.find(@original_item_project_id).not_done_todos.count
     end
     determine_down_count
     determine_deferred_tag_count(params['_tag_name']) if @source_view == 'tag'
@@ -699,11 +699,11 @@ class TodosController < ApplicationController
         @completed_count = Todo.count_by_sql(['SELECT COUNT(*) FROM todos, contexts WHERE todos.context_id = contexts.id and todos.user_id = ? and todos.state = ? and contexts.hide = ?', current_user.id, 'completed', false])
       end
       from.context do
-        @completed_count = current_user.contexts.find(@todo.context_id).done_todo_count
+        @completed_count = current_user.contexts.find(@todo.context_id).done_todos.count
       end
       from.project do
         unless @todo.project_id == nil
-          @completed_count = current_user.projects.find(@todo.project_id).done_todo_count
+          @completed_count = current_user.projects.find(@todo.project_id).done_todos.count
         end
       end
     end

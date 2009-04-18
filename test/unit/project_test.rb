@@ -157,24 +157,24 @@ class ProjectTest < Test::Rails::TestCase
   end
 
   def test_deferred_todo_count
-    assert_equal 1, @timemachine.deferred_todo_count
-    assert_equal 0, @moremoney.deferred_todo_count
+    assert_equal 1, @timemachine.deferred_todos.count
+    assert_equal 0, @moremoney.deferred_todos.count
     @moremoney.todos[0].show_from = next_week
-    assert_equal 1, @moremoney.deferred_todo_count
+    assert_equal 1, @moremoney.deferred_todos.count
   end
 
   def test_done_todo_count
-    assert_equal 0, @timemachine.done_todo_count
-    assert_equal 0, @moremoney.done_todo_count
+    assert_equal 0, @timemachine.done_todos.count
+    assert_equal 0, @moremoney.done_todos.count
     @moremoney.todos[0].complete!
-    assert_equal 1, @moremoney.done_todo_count
+    assert_equal 1, @moremoney.done_todos.count
   end
 
   def test_not_done_todo_count
-    assert_equal 2, @timemachine.not_done_todo_count
-    assert_equal 4, @moremoney.not_done_todo_count
+    assert_equal 2, @timemachine.not_done_todos.count
+    assert_equal 4, @moremoney.not_done_todos.count
     @moremoney.todos[0].complete!
-    assert_equal 3, @moremoney.not_done_todo_count
+    assert_equal 3, @moremoney.not_done_todos.count
   end
   
   def test_default_context_name
