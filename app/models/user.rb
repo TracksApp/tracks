@@ -78,6 +78,8 @@ class User < ActiveRecord::Base
   has_many :todos,
            :order => 'todos.completed_at DESC, todos.created_at DESC',
            :dependent => :delete_all
+  has_many :project_hidden_todos,
+           :conditions => ['(state = ? OR state = ?)', 'project_hidden', 'active']
   has_many :recurring_todos,
            :order => 'recurring_todos.completed_at DESC, recurring_todos.created_at DESC',
            :dependent => :delete_all

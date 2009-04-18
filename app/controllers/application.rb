@@ -13,7 +13,7 @@ require 'time'
 # run because this tag went looking for the taggings table that did not exist
 # when you feshly create a new database Old comment: We need this in development
 # mode, or you get 'method missing' errors
-# 
+#
 # Tag
 
 class CannotAccessContext < RuntimeError; end
@@ -86,7 +86,7 @@ class ApplicationController < ActionController::Base
   # Returns a count of next actions in the given context or project The result
   # is count and a string descriptor, correctly pluralised if there are no
   # actions or multiple actions
-  # 
+  #
   def count_undone_todos_phrase(todos_parent, string="actions")
     count = count_undone_todos(todos_parent)
     if count == 1
@@ -110,7 +110,7 @@ class ApplicationController < ActionController::Base
 
   # Convert a date object to the format specified in the user's preferences in
   # config/settings.yml
-  # 
+  #
   def format_date(date)
     if date
       date_format = prefs.date_format
@@ -124,7 +124,7 @@ class ApplicationController < ActionController::Base
   # Uses RedCloth to transform text using either Textile or Markdown Need to
   # require redcloth above RedCloth 3.0 or greater is needed to use Markdown,
   # otherwise it only handles Textile
-  # 
+  #
   def markdown(text)
     RedCloth.new(text).to_html
   end

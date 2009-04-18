@@ -21,7 +21,6 @@
     </div>
   </div>
 
-
   <div id="new-note" style="display:none;">
     <% form_remote_tag :url => notes_path,
       :method => :post,
@@ -35,66 +34,6 @@
       <input type="submit" value="Add note" name="add-new-note" tabindex="2" />
     <% end -%>
   </div>
-
-  <div class="container">
-    <div id="project_status">
-      <h2>Status</h2>
-      <div>
-        <% ['active', 'hidden', 'completed'].each do | state | %>
-          <% span_class = @project.current_state.to_s == state ? 'active_state' : 'inactive_state' %>
-          <span class="<%= state %>"><%= radio_button(:project, 'state', state) %> <span class="<%= span_class %>"><%= state.titlecase %></span></span>
-        <% end %>
-        <% apply_behavior "#project_status input:click",
-          remote_function(:url => project_path(@project), :method => :put,
-          :with => "'wants_render=false&update_status=true&project[state]='+this.value" )
-      %>
-      </div>
-    </div>
-  </div>
-
-  <div class="container">
-    <div id="default_context">
-      <h2>Default Context</h2>
-      <div>
-        <% form_remote_tag( :url => project_path(@project), :method => :put,
-          :html=> { :id => 'set-default-context-action',
-            :name => 'default_context',
-            :class => 'inline-form' },
-          :before => "$('default_context_submit').startWaiting()",
-          :loaded => "$('default_context_submit').stopWaiting()") do -%>
-          <%= hidden_field_tag("update_default_context", true) %>
-          <%= text_field_tag("project[default_context_name]",
-            @project.default_context.name,
-            { :tabindex => 9,:size => 25 }) %>
-          <%= submit_tag "Set Default Context for this Project", { :tabindex => 10, :id => "default_context_submit" } %>
-          <%= render :partial => 'default_context_autocomplete' %>
-        <% end -%>
-      </div>
-    </div>
-  </div>
-
-  <div class="container">
-    <div id="default_tags">
-      <h2>Default Tags</h2>
-      <div>
-        <% form_remote_tag( :url => project_path(@project), :method => :put,
-          :html=> { :id => 'set-default-tags-action',
-            :name => 'default_tags',
-            :class => 'inline-form' },
-          :before => "$('default_tags_submit').startWaiting()",
-          :loaded => "$('default_tags_submit').stopWaiting()") do -%>
-          <%= hidden_field_tag("update_default_tags", true) %>
-          <%= text_field_tag("project[default_tags]",
-            @project.default_tags,
-            { :tabindex => 11,:size => 25 }) %>
-          <%= submit_tag "Set Default Tags for this Project", { :tabindex => 12, :id => "default_tags_submit"} %>
-        <% end -%>
-      </div>
-    </div>
-  </div>
-</div>
-
-
 </div>
 
 <div id="input_box">

@@ -49,6 +49,7 @@ end
 config.gem "flexmock"
 config.gem "ZenTest"
 config.gem "hpricot"
+config.gem "hoe"
 
 config.gem "rspec", :lib => false, :version => ">=1.2.2"
 config.gem "rspec-rails", :lib => false, :version => ">=1.2.2"

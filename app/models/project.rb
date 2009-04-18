@@ -1,6 +1,18 @@
 class Project < ActiveRecord::Base
-  has_many :todos, :dependent => :delete_all, :include => :context
+  has_many :todos, :dependent => :delete_all, :include => [:context,:tags]
+  has_many :not_done_todos_including_hidden,
+    :include => [:context,:tags,:project],
+    :class_name => 'Todo',
+    :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC",
+    :conditions => ["(todos.state = ? OR todos.state = ?)", 'active', 'project_hidden']
+  has_many :deferred_todos,
+    :include => [:context,:tags,:project],
+    :class_name => 'Todo',
+    :conditions => ["todos.state = ? ", "deferred"],
+    :order => "show_from"
+
   has_many :notes, :dependent => :delete_all, :order => "created_at DESC"
+
   belongs_to :default_context, :class_name => "Context", :foreign_key => "default_context_id"
   belongs_to :user
 
@@ -16,7 +28,7 @@ class Project < ActiveRecord::Base
   acts_as_list :scope => 'user_id = #{user_id} AND state = \'#{state}\''
   acts_as_state_machine :initial => :active, :column => 'state'
   extend NamePartFinder
-  include Tracks::TodoList
+  #include Tracks::TodoList
   
   state :active
   state :hidden, :enter => :hide_todos, :exit => :unhide_todos

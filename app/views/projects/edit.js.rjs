@@ -1,5 +1,4 @@
 page[dom_id(@project, 'edit')].replace_html :partial => 'project_form', :locals => { :project_form => @project }
 page[@project].hide
-page[@project].stop_waiting
 page[dom_id(@project, 'edit')].show
 page[dom_id(@project, 'edit_form')].down('input.project-name').focus

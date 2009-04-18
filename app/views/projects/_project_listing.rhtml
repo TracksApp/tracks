@@ -1,14 +1,14 @@
 <%  project = project_listing
-    suppress_drag_handle ||= false
-    suppress_edit_button ||= false
+suppress_drag_handle ||= false
+suppress_edit_button ||= false
 -%>
 <div id="<%= dom_id(project, "container") %>" class="list">
   <div id="<%= dom_id(project) %>" class="project sortable_row" style="display:''">
     <% unless suppress_drag_handle -%>
       <div class="position">
-      <span class="handle">DRAG</span>
-      </div> 
-    <% end -%> 
+        <span class="handle">DRAG</span>
+      </div>
+    <% end -%>
     <div class="data">
       <%= link_to_project( project ) %><%= " (" + count_undone_todos_and_notes_phrase(project,"actions") + ")" %>
     </div>
@@ -17,22 +17,25 @@
       <a class="delete_project_button"
          href="<%= formatted_project_path(project, :js) %>"
          title="delete the project '<%= project.name %>'"><%= image_tag( "blank.png",
-                                                                         :title => "Delete project",
-                                                                         :class=>"delete_item") %></a>
-     <%= apply_behavior "a.delete_project_button:click", { :prevent_default => true, :external => true } do |page, element|
-           page.confirming "'Are you sure that you want to ' + this.title + '?'" do
-             element.up('.project').start_waiting
-             page << remote_to_href(:method => 'delete')
-           end
-         end -%>
-      <% unless suppress_edit_button -%>
-      <a class="edit_project_button" id="<%= dom_id(project, 'editbutton') %>" href="<%= formatted_edit_project_path(project, :js) %>" title="delete the project '<%= project.name %>'"><%= image_tag( "blank.png", :title => "Edit project", :class=>"edit_item") %></a>
-         <%= apply_behavior 'a.edit_project_button:click', { :prevent_default => true, :external => true } do |page, element|
-              element.up('div.project').start_waiting
-              page << remote_to_href(:method => 'get')
-            end
-         -%>
-      <% end -%>
+          :title => "Delete project",
+          :class=>"delete_item") %></a>
+        <%= apply_behavior "a.delete_project_button:click", { :prevent_default => true, :external => true } do |page, element|
+          page.confirming "'Are you sure that you want to ' + this.title + '?'" do
+            element.up('.project').start_waiting
+            page << remote_to_href(:method => 'delete')
+          end
+        end -%>
+        <% unless suppress_edit_button -%>
+          <%=  link_to_remote(
+            image_tag( "blank.png", :title => "Edit project", :class=>"edit_item"),
+            :url => {:controller => 'projects', :action => 'edit', :id => project.id},
+            :method => 'get',
+            :with => "'_source_view=#{@source_view}'",
+            :before => "$('#{dom_id(project)}').startWaiting();",
+            :complete => "$('#{dom_id(project)}').stopWaiting();"
+            ) %>
+        
+        <% end -%>
     </div>
   </div>
 
@@ -40,7 +43,7 @@
   </div>
 </div>
 <% if controller.action_name == 'create' %>
-<script>
-   new Effect.Appear('<%= dom_id(project) %>');
-</script>
+  <script>
+    new Effect.Appear('<%= dom_id(project) %>');
+  </script>
 <% end %>

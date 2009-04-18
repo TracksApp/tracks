@@ -1,34 +1,27 @@
-<% #@not_done = project.not_done_todos -%>
-
-<div id="p<%= project.id %>" class="container project">
+<div class="container">
   <h2>
-    <% if collapsible %>
-    <a href="#" class="container_toggle" id="toggle_p<%= project.id %>"><%= image_tag("collapse.png") %></a>
-    <% end %>
-    <span class="in_place_editor_field" id="project_name_in_place_editor"><%= project.name %></span>
-    <%= in_place_editor 'project_name_in_place_editor', { 
-      :url => { :controller => 'projects', :action => 'update', :id => project.id, :field => 'name', :update_project_name => true, :escape => false}  , 
-      :options=>"{method:'put'}", :script => true} %>
+    <% if collapsible -%>
+      <a href="#" class="container_toggle" id="toggle_p<%= project.id %>"><%= image_tag("collapse.png") %></a>
+    <% end -%>
+    <%= project.name -%>
   </h2>
-  <% unless project.description.blank? -%>
-    <div class="project_description"><%= sanitize(project.description) %></div>
-  <% end -%>
-  
-  <% if project.completed? -%>
-    <p class="project_completed">Project has been marked as completed</p>
-  <% elsif project.completed? -%>
-    <p class="project_completed">Project has been marked as hidden</p>
-  <% end -%>
+  <div id="<%= dom_id(project, "container")%>">
+    <%= render :partial => "projects/project_settings", :locals => { :project => project, :collapsible => collapsible } %>
+  </div>
+</div>
+
+<div class="container">
+  <h2>Actions in this project</h2>
   <div id="p<%= project.id %>items" class="items toggle_target">
     <div id="p<%= project.id %>empty-nd" style="display:<%= @not_done.empty? ? 'block' : 'none'%>;">
       <div class="message"><p>Currently there are no incomplete actions in this project</p></div>
     </div>
     <%= render :partial => "todos/todo", :collection => @not_done, :locals => { :parent_container_type => "project" } %>
-    <% if @not_done.empty? 
+    <% if @not_done.empty?
       # fix (hack) for #713
       set_behavior_for_star_icon
       set_behavior_for_toggle_checkbox
     end
     -%>
-  </div><!-- [end:items] -->
-</div><!-- [end:p<%= project.id %>] -->
+  </div>
+</div>

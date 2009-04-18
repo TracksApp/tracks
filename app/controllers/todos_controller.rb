@@ -659,8 +659,8 @@ class TodosController < ApplicationController
       end
       from.project do
         unless @todo.project_id == nil
-          @down_count = current_user.projects.find(@todo.project_id).not_done_todo_count(:include_project_hidden_todos => true)
-          @deferred_count = current_user.projects.find(@todo.project_id).deferred_todo_count
+          @down_count = current_user.projects.find(@todo.project_id).not_done_todos_including_hidden.count
+          @deferred_count = current_user.projects.find(@todo.project_id).deferred_todos.count
         end
       end
       from.deferred do
