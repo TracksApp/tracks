@@ -655,7 +655,7 @@ class TodosController < ApplicationController
         # false])
       end
       from.context do
-        @down_count = current_user.contexts.find(@todo.context_id).not_done_todos.count
+        @down_count = current_user.contexts.find(@todo.context_id).not_done_todo_count
       end
       from.project do
         unless @todo.project_id == nil
@@ -687,11 +687,10 @@ class TodosController < ApplicationController
         if tag.nil?
           tag = Tag.new(:name => params['tag'])
         end
-        ## TODO: this code is wrong!!!
         @remaining_in_context = current_user.contexts.find(context_id).not_done_todo_count({:tag => tag.id})
       }
     end
-    @remaining_in_context = current_user.contexts.find(context_id).not_done_todos.count if @remaining_in_context.nil?
+    @remaining_in_context = current_user.contexts.find(context_id).not_done_todo_count if @remaining_in_context.nil?
   end 
     
   def determine_completed_count
@@ -700,7 +699,7 @@ class TodosController < ApplicationController
         @completed_count = Todo.count_by_sql(['SELECT COUNT(*) FROM todos, contexts WHERE todos.context_id = contexts.id and todos.user_id = ? and todos.state = ? and contexts.hide = ?', current_user.id, 'completed', false])
       end
       from.context do
-        @completed_count = current_user.contexts.find(@todo.context_id).done_todos.count
+        @completed_count = current_user.contexts.find(@todo.context_id).done_todo_count
       end
       from.project do
         unless @todo.project_id == nil
