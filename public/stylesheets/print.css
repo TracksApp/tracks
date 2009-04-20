@@ -16,7 +16,7 @@ img {
 	border:0;
 }
 
-#navcontainer, #input_box, #footer, .big-box, .refresh, .badge, h1, .icon, #minilinks, .defer-container { 
+#navcontainer, #input_box, #footer, .big-box, .refresh, .badge, h1, .icon, #minilinks, .defer-container, .menu_sort, .position, .buttons, .sf-item-menu, .container_toggle {
 	display:none; 
 }
 
