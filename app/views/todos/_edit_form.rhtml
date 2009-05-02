@@ -45,6 +45,11 @@
 
 <label class="tag_list_label" for="<%= dom_id(@todo, 'tag_list') %>">Tags (separate with commas)</label>
 <%= text_field_tag 'tag_list', tag_list_text, :id => dom_id(@todo, 'tag_list'), :size => 30, :tabindex => 12 %> 
+<%= content_tag("div", "", :id => dom_id(@todo, 'tag_list')+"_auto_complete", :class => "auto_complete") %>
+<%= auto_complete_field dom_id(@todo, 'tag_list'), {
+  :url => {:controller => 'todos', :action => 'auto_complete_for_tag'},
+  :tokens => [',']
+} %>
 
 <div class="due_input">
   <label for="<%= dom_id(@todo, 'due_label') %>">Due</label>
