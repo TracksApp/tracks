@@ -219,6 +219,7 @@ class ContextsController < ApplicationController
 
       @count = @not_done_todos.size
       @default_project_context_name_map = build_default_project_context_name_map(@projects).to_json
+      @default_project_tags_map = build_default_project_tags_map(@projects).to_json
     end
   end
 

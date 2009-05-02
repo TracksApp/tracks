@@ -133,6 +133,10 @@ class ApplicationController < ActionController::Base
     Hash[*projects.reject{ |p| p.default_context.nil? }.map{ |p| [p.name, p.default_context.name] }.flatten].to_json 
   end
   
+  def build_default_project_tags_map(projects)
+    Hash[*projects.reject{ |p| p.default_tags.nil? }.map{ |p| [p.name, p.default_tags] }.flatten].to_json 
+  end
+  
   # Here's the concept behind this "mobile content negotiation" hack: In
   # addition to the main, AJAXy Web UI, Tracks has a lightweight low-feature
   # 'mobile' version designed to be suitablef or use from a phone or PDA. It

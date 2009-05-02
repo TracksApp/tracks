@@ -75,7 +75,7 @@
     <script type="text/javascript" charset="utf-8">
 
       var contextNames = <%= context_names_for_autocomplete %>;
-      var projectNames = <%= project_names_for_autocomplete %>
+      var projectNames = <%= project_names_for_autocomplete %>;
 
       function askIfNewContextProvided() {
         var givenContextName = $('todo_context_name').value;
@@ -95,9 +95,17 @@
           todoContextNameElement.value = defaultContextName;
         }
       }
+      function selectDefaultTags() {
+        todoTagListElement = $('tag_list');
+        defaultTags = todoTagListElement.projectDefaultTagsMap[this.value];
+        if (defaultTags && !todoTagListElement.editedByTracksUser) {
+          todoTagListElement.value = defaultTags;
+        }
+      }
       Event.observe($('todo_project_name'), "focus", projectAutoCompleter.activate.bind(projectAutoCompleter));
       Event.observe($('todo_project_name'), "click", projectAutoCompleter.activate.bind(projectAutoCompleter));
       Event.observe($('todo_project_name'), "blur", selectDefaultContext.bind($('todo_project_name')));
+      Event.observe($('todo_project_name'), "blur", selectDefaultTags.bind($('todo_project_name')));
 
       var contextAutoCompleter;
       function initializeNamesForAutoComplete(contextNamesForAutoComplete) {
@@ -106,6 +114,7 @@
         }
         contextAutoCompleter = new Autocompleter.Local('todo_context_name', 'context_list', contextNamesForAutoComplete, {choices:100,autoSelect:false});
         Event.observe($('todo_context_name'), "focus", function(){ $('todo_context_name').editedByTracksUser = true; });
+        Event.observe($('tag_list'), "focus", function(){ $('tag_list').editedByTracksUser = true; });
         Event.observe($('todo_context_name'), "focus", contextAutoCompleter.activate.bind(contextAutoCompleter));
         Event.observe($('todo_context_name'), "click", contextAutoCompleter.activate.bind(contextAutoCompleter));
       }
@@ -119,6 +128,7 @@
       }
       initializeNamesForAutoComplete(contextNames);
       $('todo_context_name').projectDefaultContextsMap = eval('(' + <%= @default_project_context_name_map %> + ')');
+      $('tag_list').projectDefaultTagsMap = eval('(' + <%= @default_project_tags_map %> + ')');
     </script>
 
     <%= calendar_setup( "todo_due"  ) %>

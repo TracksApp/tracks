@@ -24,9 +24,17 @@
       todoContextNameElement.value = defaultContextName;
     }
   }
+  function selectDefaultTags() {
+      todoTagListElement = $('<%= dom_id(@todo, 'tag_list') %>');
+      defaultTagList = $('tag_list').projectDefaultTagsMap[this.value];
+      if (defaultTagList && !todoTagListElement.editedByTracksUser) {
+          todoTagListElement.value = defaultTagList;
+      }
+  }
   Event.observe($('<%= dom_id(@todo, 'project_name') %>'), "focus", <%= dom_id(@todo, 'project_autocompleter') %>.activate.bind(<%= dom_id(@todo, 'project_autocompleter') %>));
   Event.observe($('<%= dom_id(@todo, 'project_name') %>'), "click", <%= dom_id(@todo, 'project_autocompleter') %>.activate.bind(<%= dom_id(@todo, 'project_autocompleter') %>));
   Event.observe($('<%= dom_id(@todo, 'project_name') %>'), "blur", selectDefaultContext.bind($('<%= dom_id(@todo, 'project_name') %>')));
+  Event.observe($('<%= dom_id(@todo, 'project_name') %>'), "blur", selectDefaultTags.bind($('<%= dom_id(@todo, 'project_name') %>')));
   </script>
 </div>
 
@@ -38,6 +46,7 @@
   <script type="text/javascript">
   <%= dom_id(@todo, 'context_autocompleter') %> = new Autocompleter.Local('<%= dom_id(@todo, 'context_name') %>', '<%= dom_id(@todo, 'context_list') %>', contextNames, {choices:100,autoSelect:false});
   Event.observe($('<%= dom_id(@todo, 'context_name') %>'), "focus", function(){ $('<%= dom_id(@todo, 'context_name') %>').editedByTracksUser = true; });
+  Event.observe($('<%= dom_id(@todo, 'tag_list') %>'), "focus", function(){ $('<%= dom_id(@todo, 'tag_list') %>').editedByTracksUser = true; });
   Event.observe($('<%= dom_id(@todo, 'context_name') %>'), "focus", <%= dom_id(@todo, 'context_autocompleter') %>.activate.bind(<%= dom_id(@todo, 'context_autocompleter') %>));
   Event.observe($('<%= dom_id(@todo, 'context_name') %>'), "click", <%= dom_id(@todo, 'context_autocompleter') %>.activate.bind(<%= dom_id(@todo, 'context_autocompleter') %>));
   </script>

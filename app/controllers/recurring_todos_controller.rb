@@ -31,7 +31,7 @@ class RecurringTodosController < ApplicationController
 
   def update
     # TODO: write tests for updating
-    @recurring_todo.tag_with(params[:tag_list]) if params[:tag_list]
+    @recurring_todo.tag_with(params[:edit_recurring_todo_tag_list]) if params[:edit_recurring_todo_tag_list]
     @original_item_context_id = @recurring_todo.context_id
     @original_item_project_id = @recurring_todo.project_id
 
@@ -252,6 +252,7 @@ class RecurringTodosController < ApplicationController
     @projects = current_user.projects.find(:all, :include => [:default_context])
     @contexts = current_user.contexts.find(:all)
     @default_project_context_name_map = build_default_project_context_name_map(@projects).to_json
+    @default_project_tags_map = build_default_project_tags_map(@projects).to_json
   end
   
   def get_recurring_todo_from_param

@@ -54,6 +54,7 @@ class ProjectsController < ApplicationController
     @next_project = current_user.projects.next_from(@project)
     @previous_project = current_user.projects.previous_from(@project)
     @default_project_context_name_map = build_default_project_context_name_map(current_user.projects).to_json
+    @default_project_tags_map = build_default_project_tags_map(current_user.projects).to_json
     respond_to do |format|
       format.html
       format.m     &render_project_mobile

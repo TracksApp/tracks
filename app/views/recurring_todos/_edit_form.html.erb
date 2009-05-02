@@ -29,9 +29,17 @@
                     todoContextNameElement.value = defaultContextName;
                 }
             }
+            function selectDefaultTags() {
+                todoTagListElement = $('edit_recurring_todo_tag_list');
+                defaultTagList = todoTagListElement.projectDefaultTagsMap[this.value];
+                if (defaultTagList && !todoTagListElement.editedByTracksUser) {
+                    todoTagListElement.value = defaultTagList;
+                }
+            }
             Event.observe($('edit_recurring_todo_project_name'), "focus", projectAutoCompleter.activate.bind(projectAutoCompleter));
             Event.observe($('edit_recurring_todo_project_name'), "click", projectAutoCompleter.activate.bind(projectAutoCompleter));
             Event.observe($('edit_recurring_todo_project_name'), "blur", selectDefaultContext.bind($('edit_recurring_todo_project_name')));
+            Event.observe($('edit_recurring_todo_project_name'), "blur", selectDefaultTags.bind($('edit_recurring_todo_project_name')));
         </script>
       
         <label for="edit_recurring_todo_context_name">Context</label>
@@ -59,9 +67,13 @@
             $('edit_recurring_todo_context_name').projectDefaultContextsMap = eval('(' + <%= @default_project_context_name_map %> + ')');
         </script>
       
-        <label for="tag_list">Tags (separate with commas)</label><%= 
-        text_field_tag "tag_list", @recurring_todo.tag_list, :size => 30, :tabindex => 5 -%> 
-      </div>        
+        <label for="edit_recurring_todo_tag_list">Tags (separate with commas)</label>
+        <%= text_field_tag "edit_recurring_todo_tag_list", @recurring_todo.tag_list, :size => 30, :tabindex => 5 -%>
+        <script type="text/javascript">
+        $('edit_recurring_todo_tag_list').projectDefaultTagsMap = eval('(' + <%= @default_project_tags_map %> + ')');
+        Event.observe($('edit_recurring_todo_tag_list'), "focus", function(){ $('edit_recurring_todo_tag_list').editedByTracksUser = true; });
+        </script>
+      </div>
     </div>
     <div id="recurring_edit_period_id">
       <div id="recurring_edit_period">
