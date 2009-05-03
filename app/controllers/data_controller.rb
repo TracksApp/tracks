@@ -18,25 +18,27 @@ class DataController < ApplicationController
   def yaml_export
     all_tables = {}
     
-    all_tables['todos'] = current_user.todos.find(:all)
+    all_tables['todos'] = current_user.todos.find(:all, :include => [:tags])
     all_tables['contexts'] = current_user.contexts.find(:all)
     all_tables['projects'] = current_user.projects.find(:all)
 
-    tags = Tag.find_by_sql([
-        "SELECT tags.* "+
+    todo_tag_ids = Tag.find_by_sql([
+        "SELECT DISTINCT tags.id "+
           "FROM tags, taggings, todos "+
           "WHERE todos.user_id=? "+
           "AND tags.id = taggings.tag_id " +
           "AND taggings.taggable_id = todos.id ", current_user.id])
+    rec_todo_tag_ids = Tag.find_by_sql([
+        "SELECT DISTINCT tags.id "+
+          "FROM tags, taggings, recurring_todos "+
+          "WHERE recurring_todos.user_id=? "+
+          "AND tags.id = taggings.tag_id " +
+          "AND taggings.taggable_id = recurring_todos.id ", current_user.id])
+    tags = Tag.find(:all, :conditions => ["id IN (?) OR id IN (?)", todo_tag_ids, rec_todo_tag_ids])
+    taggings = Tagging.find(:all, :conditions => ["tag_id IN (?) OR tag_id IN(?)", todo_tag_ids, rec_todo_tag_ids])
+
     all_tables['tags'] = tags
-
-    taggings = Tagging.find_by_sql([
-        "SELECT taggings.* "+
-          "FROM taggings, todos "+
-          "WHERE todos.user_id=? "+
-          "AND taggings.taggable_id = todos.id ", current_user.id])
     all_tables['taggings'] = taggings
-
     all_tables['notes'] = current_user.notes.find(:all)
     all_tables['recurring_todos'] = current_user.recurring_todos.find(:all)
     
@@ -51,7 +53,7 @@ class DataController < ApplicationController
       csv << ["id", "Context", "Project", "Description", "Notes", "Tags",
         "Created at", "Due", "Completed at", "User ID", "Show from",
         "state"]
-      current_user.todos.find(:all, :include => [:context, :project]).each do |todo|
+      current_user.todos.find(:all, :include => [:context, :project, :tags]).each do |todo|
         # Format dates in ISO format for easy sorting in spreadsheet Print
         # context and project names for easy viewing
         csv << [todo.id, todo.context.name, 
@@ -90,15 +92,31 @@ class DataController < ApplicationController
   end
   
   def xml_export
-    result = ""
-    result << current_user.todos.find(:all).to_xml
+    todo_tag_ids = Tag.find_by_sql([
+        "SELECT DISTINCT tags.id "+
+          "FROM tags, taggings, todos "+
+          "WHERE todos.user_id=? "+
+          "AND tags.id = taggings.tag_id " +
+          "AND taggings.taggable_id = todos.id ", current_user.id])
+    rec_todo_tag_ids = Tag.find_by_sql([
+        "SELECT DISTINCT tags.id "+
+          "FROM tags, taggings, recurring_todos "+
+          "WHERE recurring_todos.user_id=? "+
+          "AND tags.id = taggings.tag_id " +
+          "AND taggings.taggable_id = recurring_todos.id ", current_user.id])
+    tags = Tag.find(:all, :conditions => ["id IN (?) OR id IN (?)", todo_tag_ids, rec_todo_tag_ids])
+    taggings = Tagging.find(:all, :conditions => ["tag_id IN (?) OR tag_id IN(?)", todo_tag_ids, rec_todo_tag_ids])
+
+    result = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><tracks_data>"
+    result << current_user.todos.find(:all).to_xml(:skip_instruct => true)
     result << current_user.contexts.find(:all).to_xml(:skip_instruct => true)
     result << current_user.projects.find(:all).to_xml(:skip_instruct => true)
-    result << current_user.tags.find(:all).to_xml(:skip_instruct => true)
-    result << current_user.taggings.find(:all).to_xml(:skip_instruct => true)
+    result << tags.to_xml(:skip_instruct => true)
+    result << taggings.to_xml(:skip_instruct => true)
     result << current_user.notes.find(:all).to_xml(:skip_instruct => true)
     result << current_user.recurring_todos.find(:all).to_xml(:skip_instruct => true)
-    send_data(result, :filename => "tracks_backup.xml", :type => 'text/xml')
+    result << "</tracks_data>"
+    send_data(result, :filename => "tracks_data.xml", :type => 'text/xml')
   end
   
   def yaml_form
