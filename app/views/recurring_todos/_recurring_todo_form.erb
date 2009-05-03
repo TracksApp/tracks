@@ -85,7 +85,7 @@
       <div id="recurring_timespan">
         <br/>
         <label for="recurring_todo[start_from]">Starts on </label><%= 
-        text_field(:recurring_todo, :start_from, "value" => format_date(Time.today), "size" => 12, "class" => "Date", "onfocus" => "Calendar.setup", "tabindex" => 6, "autocomplete" => "off") %><br/>
+        text_field(:recurring_todo, :start_from, "value" => format_date(user_time), "size" => 12, "class" => "Date", "onfocus" => "Calendar.setup", "tabindex" => 6, "autocomplete" => "off") %><br/>
         <br/>
         <label for="recurring_todo[ends_on]">Ends on:</label><br/>
         <%= radio_button_tag('recurring_todo[ends_on]', 'no_end_date', true)%> No end date<br/>
