@@ -6,6 +6,7 @@ describe "/todos/_toggle_notes.rhtml" do
   before :each do
     @item = mock_model(Todo, :notes => "this is a note")
     @controller.template.stub!(:apply_behavior)
+    @controller.template.stub!(:set_default_external!)
   end
   
   it "should render" do

@@ -1,29 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe <%= controller_class_name %>Controller do
-  def valid_attributes(args = {})
-    {
-<% if attributes.empty? -%>
-      # Add valid attributes for the your params[:<%= singular_name %>] here!
-<% else -%>
-  <%- attributes.each_with_index do |attribute, index| -%>
-    <%- case attribute.type -%>
-      <%- when :string, :text -%>
-      "<%= attribute.name %>" => "foo"<%= index < attributes.size - 1 ? "," : "" %>
-      <%- when :integer, :float, :decimal -%>
-      "<%= attribute.name %>" => 815<%= index < attributes.size - 1 ? "," : "" %>
-      <%- when :boolean -%>
-      "<%= attribute.name %>" => false<%= index < attributes.size - 1 ? "," : "" %>
-      <%- when :date, :datetime, :time, :timestamp -%>
-      "<%= attribute.name %>" => 1.week.ago<%= index < attributes.size - 1 ? "," : "" %>
-      <%- else -%>
-      "<%= attribute.name %>" => nil<%= index < attributes.size - 1 ? "," : "" %> # Could not determine valid attribute
-    <%- end -%>
-  <%- end -%>
-<% end -%>
-    }.merge(args)
-  end
-  
   describe "GET :index" do
     before(:each) do
       @<%= plural_name %> = stub_index(<%= class_name %>)

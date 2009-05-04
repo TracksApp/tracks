@@ -27,9 +27,9 @@ module LuckySneaks
     alias do_request eval_request
 
     def try_shared_request_definition
-      shared_request
-    rescue NameError
-      if @implicit_request
+      if defined?(shared_request) == "method"
+        shared_request
+      elsif @implicit_request
         try_implicit_request
       else
         error_message = "Could not determine request definition for 'describe' context. "

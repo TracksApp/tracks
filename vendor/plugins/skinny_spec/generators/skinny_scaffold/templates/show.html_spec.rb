@@ -7,8 +7,7 @@ describe "<%= File.join(controller_class_path, controller_singular_name) %>/show
 <% else -%>
     @<%= singular_name %> = mock_and_assign(<%= model_name %>, :stub => {
   <%- attributes.each_with_index do |attribute, index| -%>
-    <%- case attribute.type -%>
-      <%- when :string, :text -%>
+    <%- case attribute.type when :string, :text -%>
       :<%= attribute.name %> => "foo"<%= index < attributes.size - 1 ? "," : "" %>
       <%- when :integer, :float, :decimal -%>
       :<%= attribute.name %> => 815<%= index < attributes.size - 1 ? "," : "" %>

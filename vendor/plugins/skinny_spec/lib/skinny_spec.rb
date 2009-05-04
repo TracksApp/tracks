@@ -1,10 +1,10 @@
 # Let's make sure everyone else is loaded
-require File.expand_path(File.dirname(__FILE__) + "/../../../../config/environment")
+require File.expand_path(RAILS_ROOT + "/config/environment")
 require 'spec'
 require 'spec/rails'
 begin
   require 'ruby2ruby'
-rescue
+rescue LoadError
   puts "-----"
   puts "Attention: skinny_spec requires ruby2ruby for nicer route descriptions"
   puts "It is highly recommended that you install it: sudo gem install ruby2ruby"

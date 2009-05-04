@@ -6,9 +6,10 @@ module LuckySneaks
   # to make your view specs less brittle and more DRY. You might also be interested 
   # in checking out the example block [read: "describe"] level versions in of these
   # methods which can DRY things up even more:
-  # LuckySneaks::ViewSpecHelpers::ExampleGroupLevelMethods
+  # LuckySneaks::ViewSpecHelpers::ExampleGroupLevelMethods.
   module ViewSpecHelpers
     include LuckySneaks::CommonSpecHelpers
+    include LuckySneaks::ViewStubHelpers
     include ActionController::PolymorphicRoutes
     
     def self.included(base) # :nodoc:
@@ -21,7 +22,7 @@ module LuckySneaks
       have_tag("form[action=#{path}]")
     end
     
-    # Wraps a matcher that checks is the receiver contains any of several form elements
+    # Wraps a matcher that checks if the receiver contains any of several form elements
     # that would return sufficient named parameters to allow editing of the specified
     # attribute on the specified instance. Example:
     # 
@@ -36,7 +37,8 @@ module LuckySneaks
     #   <textarea name="foo[bar]"></textarea>
     def allow_editing(instance, attribute)
       instance_name = instance.class.name.underscore.downcase
-      if instance.send(attribute).is_a?(Time)
+      column = instance.column_for_attribute(attribute)
+      if column && [Date, Time].include?(column.klass)
         have_tag(
           "input[name='#{instance_name}[#{attribute}]'],
           select[name=?]", /#{instance_name}\[#{attribute}\(.*\)\]/
@@ -48,9 +50,19 @@ module LuckySneaks
           select[name='#{instance_name}[#{attribute}]'],
           textarea[name='#{instance_name}[#{attribute}]'],
           input[type='checkbox'][name='#{instance_name}[#{attribute}]'],
-          input[type='checkbox'][name='#{instance_name}[#{attribute.to_s.tableize.singularize}_ids][]']"
+          input[type='checkbox'][name='#{instance_name}[#{attribute.to_s.tableize.singularize}_ids][]'],
+          input[type='radio'][name='#{instance_name}[#{attribute}]']"
         )
       end
+    end
+    
+    # Wraps a matcher that checks if the receiver contains a <tt>FORM</tt> element
+    # whose <tt>enctype</tt> attribute is set to <tt>"multipart/form-data"<tt>
+    # and contains an <tt>INPUT</tt> element whose <tt>name</tt> attribute correlates
+    # with the provided instance and attribute.
+    def allow_uploading(instance, attribute)
+      instance_name = instance.class.name.underscore.downcase
+      have_tag("form[enctype='multipart/form-data'] input[type='file'][name='#{instance_name}[#{attribute}]']")
     end
 
     # Wraps a matcher that checks if the receiver contains an <tt>A</tt> element (link) 
@@ -78,7 +90,14 @@ module LuckySneaks
     # Wraps <tt>have_link_or_button_to polymorphic_path(instance)<tt> which
     # corresponds with the <tt>show</tt> method of the controller.
     def have_link_or_button_to_show(instance)
-      have_link_or_button_to polymorphic_path(instance)
+      path = polymorphic_path(instance)
+      have_tag(
+        "a[href='#{path}'],
+        form[action='#{path}'][method='get'] input,
+        form[action='#{path}'][method='get'] button,
+        form[action='#{path}'] input[name='_method'][value='get'] + input,
+        form[action='#{path}'] input[name='_method'][value='get'] + button"
+      )
     end
     alias have_link_to_show have_link_or_button_to_show
     alias have_button_to_show have_link_or_button_to_show
@@ -99,7 +118,8 @@ module LuckySneaks
       path = polymorphic_path(instance)
       have_tag(
         "form[action='#{path}'] input[name='_method'][value='delete'] + input,
-        form[action='#{path}'] input[name='_method'][value='delete'] + button"
+        form[action='#{path}'] input[name='_method'][value='delete'] + button,
+        a[href=\"#{path}\"][onclick*=\"f.method = 'POST'\"][onclick*=\"m.setAttribute('name', '_method'); m.setAttribute('value', 'delete')\"]"
       )
     end
     
@@ -121,9 +141,9 @@ module LuckySneaks
     def mock_and_assign(klass, *args)
       options = args.extract_options!
       mocked = if options[:stub]
-        mock_model(klass, options[:stub])
+        self.respond_to?(:stub_model) ? stub_model(klass, options[:stub]) : mock_model(klass, options[:stub])
       else
-        mock_model(klass)
+        self.respond_to?(:stub_model) ? stub_model(klass) : mock_model(klass)
       end
       yield mocked if block_given?
       self.assigns[args.first || "#{klass}".underscore] = mocked
@@ -133,12 +153,12 @@ module LuckySneaks
     # <tt>mock_and_assign</tt>. Accepts <tt>option[:size]</tt> which sets the size
     # of the array (default is 3).
     def mock_and_assign_collection(klass, *args)
-      options = args.dup.extract_options!
+      options = args.extract_options!
       return_me = Array.new(options[:size] || 3) do
         mocked = if options[:stub]
-          mock_model(klass, options[:stub])
+          self.respond_to?(:stub_model) ? stub_model(klass, options[:stub]) : mock_model(klass, options[:stub])
         else
-          mock_model(klass)
+          self.respond_to?(:stub_model) ? stub_model(klass) : mock_model(klass)
         end
         yield mocked if block_given?
         mocked
@@ -150,8 +170,8 @@ module LuckySneaks
     def do_render
       if @the_template
         render @the_template
-      elsif File.exists?(File.join(RAILS_ROOT, "app/views", self.class.description_text))
-        render self.class.description_text
+      elsif File.exists?(File.join(RAILS_ROOT, "app/views", class_description_text))
+        render class_description_text
       else
         error_message = "Cannot determine template for render. "
         error_message << "Please define @the_template in the before block "
@@ -182,6 +202,18 @@ module LuckySneaks
         end
       end
       
+      # Negative version of <tt>it_should_submit_to</tt>. See that method for more
+      # details.
+      def it_should_not_submit_to(hint = nil, &route)
+        if hint.nil? && route.respond_to?(:to_ruby)
+          hint = route.to_ruby.gsub(/(^proc \{)|(\}$)/, '').strip
+        end
+        it "should not submit to #{(hint || route)}" do
+          do_render
+          response.should_not submit_to(instance_eval(&route))
+        end
+      end
+      
       # Creates an expectation that the template uses Rails' <tt>form_for</tt> to generate
       # the proper form action and method to create or update the specified object.
       # 
@@ -190,41 +222,85 @@ module LuckySneaks
       # not an instance variable, which would be nil in the scope of the example block.
       # If you use namespacing for your <tt>form_for</tt>, you'll have to manually write out
       # a similar spec.
-      def it_should_have_form_for(name)
+      def it_should_have_form_for(name, options = {})
         it "should have a form_for(@#{name})" do
-          template.should_receive(:form_for).with(instance_for(name))
+          if options.empty?
+            template.should_receive(:form_for).with(instance_for(name))
+          else
+            template.should_receive(:form_for).with(instance_for(name), hash_including(options))
+          end
           do_render
         end
       end
       
       # Negative version of <tt>it_should_have_form_for</tt>. See that method for more
       # details.
-      def it_should_not_have_form_for(name)
+      def it_should_not_have_form_for(name, options = {})
         it "should not have a form_for(@#{name})" do
-          template.should_not_receive(:form_for).with(instance_for(name))
+          if options.empty?
+            template.should_not_receive(:form_for).with(instance_for(name))
+          else
+            template.should_not_receive(:form_for).with(instance_for(name), hash_including(options))
+          end
           do_render
         end
       end
 
-      # Creates an expectation which calls <tt>allow_editing</tt> on the response
-      # from rendering the template. See that method for more details.
+      # Creates an expectation which calls <tt>allow_editing</tt> on the rendered
+      # template for each attribute specified. See the docs for <tt>allow_editing</tt>
+      # for more details.
       # 
       # <b>Note:</b> This method takes a string or symbol representing the instance
       # variable's name to send to <tt>allow_editing</tt>
       # not an instance variable, which would be nil in the scope of the example block.
-      def it_should_allow_editing(name, method)
-        it "should allow editing of @#{name}##{method}" do
-          do_render
-          response.should allow_editing(instance_for(name), method)
+      def it_should_allow_editing(instance_name, *attributes)
+        attributes.flatten!
+        attributes.each do |attribute|
+          it "should allow editing of @#{instance_name}##{attribute}" do
+            do_render
+            response.should allow_editing(instance_for(instance_name), attribute)
+          end
         end
       end
       
       # Negative version of <tt>it_should_allow_editing</tt>. See that method for more
       # details.
-      def it_should_not_allow_editing(name, method)
-        it "should not allow editing of @#{name}##{method}" do
-          do_render
-          response.should_not allow_editing(instance_for(name), method)
+      def it_should_not_allow_editing(instance_name, *attributes)
+        attributes.flatten!
+        attributes.each do |attribute|
+          it "should not allow editing of @#{instance_name}##{attribute}" do
+            do_render
+            response.should_not allow_editing(instance_for(instance_name), attribute)
+          end
+        end
+      end
+      
+      # Creates an expectation which calls <tt>allow_uploading</tt> on the rendered
+      # template for each attribute specified. See the docs for <tt>allow_uploading</tt>
+      # for more details.
+      # 
+      # <b>Note:</b> This method takes a string or symbol representing the instance
+      # variable's name to send to <tt>allow_uploading</tt>
+      # not an instance variable, which would be nil in the scope of the example block.
+      def it_should_allow_uploading(instance_name, *attributes)
+        attributes.flatten!
+        attributes.each do |attribute|
+          it "should allow editing of @#{instance_name}##{attribute}" do
+            do_render
+            response.should allow_uploading(instance_for(instance_name), attribute)
+          end
+        end
+      end
+      
+      # Negative version of <tt>it_should_allow_uploading</tt>. See that method for more
+      # details.
+      def it_should_not_allow_uploading(instance_name, *attributes)
+        attributes.flatten!
+        attributes.each do |attribute|
+          it "should not allow editing of @#{instance_name}##{attribute}" do
+            do_render
+            response.should_not allow_uploading(instance_for(instance_name), attribute)
+          end
         end
       end
       
@@ -455,6 +531,47 @@ module LuckySneaks
       alias it_should_have_link_to_delete_each it_should_link_to_delete_each
       alias it_should_have_button_to_delete_each it_should_link_to_delete_each
       alias it_should_have_button_or_link_to_delete_each it_should_link_to_delete_each
+      
+      # Creates an expectation that the template should call <tt>render :partial</tt>
+      # with the specified template.
+      def it_should_render_partial(name)
+        it "should render :partial => '#{name}'" do
+          template.should_receive(:render).with(hash_including(:partial => name))
+          do_render
+        end
+      end
+      
+      # Negative version of <tt>it_should_render_partial</tt>. See that method
+      # for more details.
+      def it_should_not_render_partial(name)
+        it "should not render :partial => '#{name}'" do
+          template.should_not_receive(:render).with(hash_including(:partial => name))
+          do_render
+        end
+      end
+      
+      # Sets <tt>@the_template</tt> (for use in <tt>do_render</tt>) using the current 
+      # example group description. Example:
+      # 
+      # describe "users/index.haml.erb" do
+      #   use_describe_for_template!
+      #   # ...
+      # end
+      # 
+      # This is equivalent to setting <tt>@the_template = "users/index.haml.erb"</tt>
+      # in a before block.
+      def use_describe_for_template!
+        template = self_description_text
+        if File.exists?(File.join(RAILS_ROOT, "app/views", template))
+          before(:each) do
+            @the_template = template
+          end
+        else
+          error_message = "You called use_describe_for_template! "
+          error_message << "but 'app/views/#{template}' does not exist. "
+          raise NameError, error_message
+        end
+      end
     end
   end
 end
