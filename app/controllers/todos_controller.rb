@@ -506,7 +506,6 @@ class TodosController < ApplicationController
   end
 
   def auto_complete_for_tag
-    puts params.inspect
     @items = Tag.find(:all,
     :conditions => [ "name LIKE ?", '%' + params['tag_list'] + '%' ],
     :order => "name ASC",

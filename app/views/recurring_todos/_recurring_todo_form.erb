@@ -56,7 +56,7 @@
             $('recurring_todo_context_name').projectDefaultContextsMap = eval('(' + <%= @default_project_context_name_map %> + ')');
         </script>
       
-        <label for="tag_list">Tags ZZZZZ (separate with commas)</label>
+        <label for="tag_list">Tags (separate with commas)</label>
         <%= text_field_tag "tag_list", nil, :size => 30, :tabindex => 5 -%> 
         <script type="text/javascript">
         $('tag_list').projectDefaultTagsMap = eval('(' + <%= @default_project_tags_map %> + ')');
