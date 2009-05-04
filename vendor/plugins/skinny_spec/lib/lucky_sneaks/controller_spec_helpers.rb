@@ -41,28 +41,23 @@ module LuckySneaks
   private
     def create_ar_class_expectation(name, method, argument = nil, options = {})
       args = []
-      if [:create, :update].include?(@controller_method)
-        args << (argument.nil? ? valid_attributes : argument)
-      else
+      unless options.delete(:only_method)
         args << argument unless argument.nil?
+        args << hash_including(options) unless options.empty?
       end
-      args << options unless options.empty?
+      method = options.delete(:find_method) if options[:find_method]
       if args.empty?
-        return_value = class_for(name).send(method)
-        class_for(name).should_receive(method).and_return(return_value)
+        class_for(name).should_receive(method).and_return(instance_for(name))
       else
-        return_value = class_for(name).send(method, *args)
-        class_for(name).should_receive(method).with(*args).and_return(return_value)
+        class_for(name).should_receive(method).with(*args).and_return(instance_for(name))
       end
     end
     
     def create_positive_ar_instance_expectation(name, method, *args)
       instance = instance_for(name)
       if args.empty?
-        return_value = instance.send(method)
         instance.should_receive(method).and_return(true)
       else
-        return_value = instance.send(method, *args)
         instance.should_receive(method).with(*args).and_return(true)
       end
     end
@@ -73,12 +68,14 @@ module LuckySneaks
       # Creates an expectation that the controller method calls <tt>ActiveRecord::Base.find</tt>.
       # Examples:
       # 
-      #   it_should_find :foos                                 # => Foo.should_receive(:find).with(:all)
-      #   it_should_find :foos, :all                           # An explicit version of the above
-      #   it_should_find :foos, :conditions => {:foo => "bar"} # => Foo.should_receive(:find).with(:all, :conditions => {"foo" => "bar"}
-      #   it_should_find :foo                                  # => Foo.should_recieve(:find).with(@foo.id.to_s)
-      #   it_should_find :foo, :params => "id"                 # => Foo.should_receive(:find).with(params[:id].to_s)
-      #   it_should_find :foo, 2                               # => Foo.should_receive(:find).with("2")
+      #   it_should_find :foos                                      # => Foo.should_receive(:find).with(:all)
+      #   it_should_find :foos, :all                                # An explicit version of the above
+      #   it_should_find :foos, :conditions => {:foo => "bar"}      # => Foo.should_receive(:find).with(:all, :conditions => {"foo" => "bar"}
+      #   it_should_find :foos, "joe", :method => :find_all_by_name # Foo.should_receive(:find_all_by_name).with("joe")
+      #   it_should_find :foo                                       # => Foo.should_recieve(:find).with(@foo.id.to_s)
+      #   it_should_find :foo, :params => "id"                      # => Foo.should_receive(:find).with(params[:id].to_s)
+      #   it_should_find :foo, 2                                    # => Foo.should_receive(:find).with("2")
+      #   it_should_find :foo, "joe", :method => :find_by_name      # => Foo.should_recieve(:find_by_name).with("joe")
       # 
       # <b>Note:</b> All params (key and value) will be strings if they come from a form element and are handled
       # internally with this expectation.
@@ -103,7 +100,27 @@ module LuckySneaks
               :all
             end
           end
-          create_ar_class_expectation name, :find, argument, options
+          find_method = options.delete(:method) || :find
+          create_ar_class_expectation name, find_method, argument, options
+          eval_request
+        end
+      end
+      
+      # Negative version of <tt>it_should_find</tt>. This creates an expectation that
+      # the class never receives <tt>find</tt> at all.
+      def it_should_not_find(name)
+        name_string = name.to_s
+        name_message = if name_string == name_string.singularize
+          "a #{name}"
+        else
+          name
+        end
+        it "should not find #{name_message}" do
+          if name_string == name_string.singularize
+            class_for(name).should_not_receive(:find)
+          else
+            class_for(name).should_not_receive(:find).with(:all)
+          end
           eval_request
         end
       end
@@ -117,6 +134,15 @@ module LuckySneaks
       def it_should_initialize(name, options = {})
         it "should initialize a #{name}" do
           create_ar_class_expectation name, :new, params[options.delete(:params)], options
+          eval_request
+        end
+      end
+      
+      # Negative version of <tt>it_should_initialize</tt>. This creates an expectation
+      # that the class never recieves <tt>new</tt> at all.
+      def it_should_not_initialize(name)
+        it "should initialize a #{name}" do
+          class_for(name).should_not_receive(:new)
           eval_request
         end
       end
@@ -136,6 +162,15 @@ module LuckySneaks
         end
       end
       
+      # Negative version of <tt>it_should_update</tt>. This creates an expectation
+      # that the instance never receives <tt>save</tt> at all.
+      def it_should_not_save(name)
+        it "should not save the #{name}" do
+          instance_for(name).should_not_receive(:save)
+          eval_request
+        end
+      end
+      
       # Creates an expectation that the controller method calls <tt>ActiveRecord::Base#update_attributes</tt>
       # on the named instance. Takes optional argument for <tt>params</tt> to specify in the
       # expectation. Examples:
@@ -148,7 +183,16 @@ module LuckySneaks
       # for the inevitable re-rendering of the form template.
       def it_should_update(name, options = {})
         it "should update the #{name}" do
-          create_positive_ar_instance_expectation name, :update_attributes, params[options[:params]]
+          create_positive_ar_instance_expectation name, :update_attributes, params[name]
+          eval_request
+        end
+      end
+      
+      # Negative version of <tt>it_should_update</tt>. This creates an expectation
+      # that the instance never receives <tt>update_attributes</tt> at all.
+      def it_should_not_update(name)
+        it "should not update the #{name}" do
+          instance_for(name).should_not_receive(:update_attributes)
           eval_request
         end
       end
@@ -164,6 +208,15 @@ module LuckySneaks
       def it_should_destroy(name, options = {})
         it "should delete the #{name}" do
           create_positive_ar_instance_expectation name, :destroy
+          eval_request
+        end
+      end
+      
+      # Negative version of <tt>it_should_destroy</tt>. This creates an expectation
+      # that the instance never receives <tt>destroy</tt> at all.
+      def it_should_not_destroy(name)
+        it "should not destroy the #{name}" do
+          instance_for(name).should_not_receive(:destroy)
           eval_request
         end
       end
@@ -192,13 +245,33 @@ module LuckySneaks
         end
       end
       
+      # Essentially shorthand for <tt>it_should_assign name => :nil</tt>. This method can take multiple
+      # instance variable names, creating this shorthand for each name. See the docs for
+      # <tt>it_should_assign</tt> for more information.
+      def it_should_not_assign(*names)
+        names.each do |name|
+          # Assuming name is a symbol
+          it_should_assign name => :nil
+        end
+      end
+      
       # Wraps the separate expectations <tt>it_should_find</tt> and <tt>it_should_assign</tt>
       # for simple cases. If you need more control over the parameters of the find, this
       # isn't the right helper method and you should write out the two expectations separately.
       def it_should_find_and_assign(*names)
         names.each do |name|
-          it_should_find name
+          it_should_find name, :only_method => true
           it_should_assign name
+        end
+      end
+      
+      # Negative version of <tt>it_should_find_and_assign</tt>. This creates an
+      # expectation that the class never receives <tt>find</tt> at all and that 
+      # no matching instance variable is ever created.
+      def it_should_not_find_and_assign(*names)
+        names.each do |name|
+          it_should_not_find name
+          it_should_assign name => :nil
         end
       end
       
@@ -212,8 +285,18 @@ module LuckySneaks
       # please use <tt>it_should_initialize_and_save</tt>.
       def it_should_initialize_and_assign(*names)
         names.each do |name|
-          it_should_initialize name
+          it_should_initialize name, :only_method => true
           it_should_assign name
+        end
+      end
+      
+      # Negative version of <tt>it_should_initialize_and_assign</tt>. This creates an
+      # expectation that the class never receives <tt>new</tt> at all and that 
+      # no matching instance variable is ever created.
+      def it_should_not_initialize_and_assign(*names)
+        names.each do |name|
+          it_should_not_initialize name
+          it_should_assign name => :nil
         end
       end
       
@@ -226,7 +309,7 @@ module LuckySneaks
       # but not saved, just use <tt>it_should_initialize_and_assign</tt>.
       def it_should_initialize_and_save(*names)
         names.each do |name|
-          it_should_initialize name
+          it_should_initialize name, :only_method => true
           it_should_save name
         end
       end
@@ -240,7 +323,7 @@ module LuckySneaks
       # instance is found but not saved, just use <tt>it_should_find_and_assign</tt>.
       def it_should_find_and_update(*names)
         names.each do |name|
-          it_should_find name
+          it_should_find name, :only_method => true
           it_should_update name
         end
       end
@@ -250,16 +333,16 @@ module LuckySneaks
       # isn't the right helper method and you should write out the two expectations separately.
       def it_should_find_and_destroy(*names)
         names.each do |name|
-          it_should_find name
+          it_should_find name, :only_method => true
           it_should_destroy name
         end
       end
 
-      # Creates an expectation that the specified collection (<tt>flash</tt> or <tt>session</tt>)
-      # contains the specified key and value. To specify that the collection should be set
-      # to <tt>nil</tt>, specify the value as :nil instead.
+      # Creates an expectation that the specified collection (<tt>flash</tt>, <tt>session</tt>,
+      # <tt>params</tt>, <tt>cookies</tt>) contains the specified key and value. To specify that
+      # the collection should be set to <tt>nil</tt>, specify the value as :nil instead.
       def it_should_set(collection, key, value = nil, &block)
-        it "should set #{collection}[:#{key}]" do
+        it "should set #{collection}[:#{key}]#{' with ' + value.inspect if value}" do
           # Allow flash.now[:foo] to remain in the flash
           flash.stub!(:sweep) if collection == :flash
           eval_request
@@ -270,7 +353,7 @@ module LuckySneaks
               self.send(collection)[key].should == value
             end
           elsif block_given?
-            self.send(collection)[key].should == block.call
+            self.send(collection)[key].should == instance_eval(&block)
           else
             self.send(collection)[key].should_not be_nil
           end
@@ -282,11 +365,43 @@ module LuckySneaks
       def it_should_set_flash(name, value = nil, &block)
         it_should_set :flash, name, value, &block
       end
+      
+      # Wraps <tt>it_should_set :flash, :nil</tt>.
+      def it_should_not_set_flash(name)
+        it_should_set :flash, name, :nil
+      end
 
       # Wraps <tt>it_should_set :session</tt>. To specify that the collection should be set
       # to <tt>nil</tt>, specify the value as :nil instead.
       def it_should_set_session(name, value = nil, &block)
         it_should_set :session, name, value, &block
+      end
+      
+      # Wraps <tt>it_should_set :session, :nil</tt>.
+      def it_should_not_set_session(name)
+        it_should_set :session, name, :nil
+      end
+      
+      # Wraps <tt>it_should_set :params</tt>. To specify that the collection should be set
+      # to <tt>nil</tt>, specify the value as :nil instead.
+      def it_should_set_params(name, value = nil, &block)
+        it_should_set :params, name, value, &block
+      end
+      
+      # Wraps <tt>it_should_set :params, :nil</tt>.
+      def it_should_not_set_params(name)
+        it_should_set :params, name, :nil
+      end
+      
+      # Wraps <tt>it_should_set :cookies</tt>. To specify that the collection should be set
+      # to <tt>nil</tt>, specify the value as :nil instead.
+      def it_should_set_cookies(name, value = nil, &block)
+        it_should_set :cookies, name, value, &block
+      end
+      
+      # Wraps <tt>it_should_set :cookies, :nil</tt>.
+      def it_should_not_set_cookies(name)
+        it_should_set :cookies, name, :nil
       end
       
       # Wraps the various <tt>it_should_render_<i>foo</i></tt> methods:
@@ -406,6 +521,27 @@ module LuckySneaks
           response.should redirect_to(instance_eval(&route))
         end
       end
+      
+      # Negative version of <tt>it_should_redirect_to</tt>.
+      def it_should_not_redirect_to(hint = nil, &route)
+        if hint.nil? && route.respond_to?(:to_ruby)
+          hint = route.to_ruby.gsub(/(^proc \{)|(\}$)/, '').strip
+        end
+        it "should not redirect to #{(hint || route)}" do
+          eval_request
+          response.should_not redirect_to(instance_eval(&route))
+        end
+      end
+      
+      # Creates an expectation that the controller method redirects back to the previous page
+      def it_should_redirect_to_referer
+        it "should redirect to the referring page" do
+          request.env["HTTP_REFERER"] = "http://test.host/referer"
+          eval_request
+          response.should redirect_to("http://test.host/referer")
+        end
+      end
+      alias it_should_redirect_to_referrer it_should_redirect_to_referer
       
     private
       def it_should_assign_instance_variable(name, value)

@@ -39,12 +39,6 @@ specs) to see what's new and different with Skinny Spec.
 Let's look at the controller specs.
 
   describe UsersController do
-    def valid_attributes(args = {})
-      {
-        # Add valid attributes for the your params[:user] here!
-      }.merge(args)
-    end
-
     describe "GET :index" do
       before(:each) do
         @users = stub_index(User)
@@ -68,12 +62,7 @@ Let's look at the controller specs.
     
     # ...
 
-First thing you should see is a method definition for 
-<tt>valid_attributes</tt>. This will be used later by the <tt>create</tt> and <tt>update</tt>
-specs to more accurately represent how the controller works in actual practice by supplying
-somewhat real data for the <tt>params</tt> coming from the HTML forms.
-
-Next we find an example group for <tt>GET :index</tt>. That <tt>stub_index</tt> method there
+First thing you should see is an example group for <tt>GET :index</tt>. That <tt>stub_index</tt> method there
 does a lot of work behind the curtain. I'll leave it up to you to check the documentation for it
 (and its brothers and sister methods like <tt>stub_new</tt>) but I will point out that the
 methods named <tt>stub_<i>controller_method</i></tt> should only be used for stubbing and
@@ -82,8 +71,16 @@ use <tt>stub_find_all</tt>, <tt>stub_find_one</tt>, and <tt>stub_initialize</tt>
 for this is because the former methods actually save us a step by defining an implicit 
 controller method request. If you add a new method to your resource routing, you'll want to
 use the helper method <tt>define_request</tt> in those example groups to define an explicit
-request. You can also define a method called <tt>shared_request</tt> to "share a
-<tt>define_request</tt>" across shared describe blocks, like so:
+request, like so:
+
+  describe "PUT :demote" do
+    define_request { put :demote }
+    
+    # ...
+  end
+
+You can also define a method called <tt>shared_request</tt> to "share" a
+<tt>define_request</tt> across nested describe blocks, like so:
 
   describe "POST :create" do
     def shared_request
@@ -100,15 +97,21 @@ request. You can also define a method called <tt>shared_request</tt> to "share a
   end
   
 Note: When you're adding longer, more complicated controller specs you can still leverage
-implicit and shared requests by calling <tt>do_request</tt> in your spec as in the following
+implicit and explicit requests by calling <tt>do_request</tt> in your spec as in the following
 example:
 
-  # Let's assume this controller is _not_ CategoriesController
+  # Note this controller is UsersController and _not_ CategoriesController
   # and that loading the categories isn't part of the default actions
-  describe "GET :index" do
+  # and cannot use the <tt>stub_<i>controller_method</i></tt> helpers
+  # [which create implicit requests based on the controller method in the name]
+  # but uses <tt>stub_find_all</tt> instead
+  describe "GET :new" do
     before(:each) do
+      @user = stub_new(User)
       @categories = stub_find_all(Category)
     end
+    
+    # ...
     
     it "should preload categories" do
       Category.should_receive(:find).with(:all)
@@ -264,4 +267,4 @@ rspec_on_rails_on_crack[http://github.com/technoweenie/rspec_on_rails_on_crack/t
 Also thanks and props to Hampton Catlin and Nathan Weizenbaum for the lovely and imminently useable
 Haml and make_resourceful. Also also praises and glory to David Chelimsky and the Rspec crew.
 
-Also thanks to Don Petersen for his suggestions and fixes.
+Also thanks to Don Petersen, Nicolas Mérouze, Mikkel Malmberg, and Brandan Lennox for their suggestions and fixes.

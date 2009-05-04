@@ -8,8 +8,7 @@ describe "<%= File.join(controller_class_path, controller_singular_name) %>/_<%=
       # :name => "Foo", :created_at => 1.week.ago, :updated_at => nil
 <% else -%>
   <%- attributes.each_with_index do |attribute, index| -%>
-    <%- case attribute.type -%>
-      <%- when :string, :text -%>
+    <%- case attribute.type when :string, :text -%>
       :<%= attribute.name %> => "foo"<%= index < attributes.size - 1 ? "," : "" %>
       <%- when :integer, :float, :decimal -%>
       :<%= attribute.name %> => 815<%= index < attributes.size - 1 ? "," : "" %>

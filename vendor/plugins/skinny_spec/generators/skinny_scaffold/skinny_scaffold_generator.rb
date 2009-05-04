@@ -6,6 +6,8 @@ class SkinnyScaffoldGenerator < Rails::Generator::NamedBase
   alias_method :controller_singular_name, :controller_file_name
   alias_method :controller_table_name, :controller_plural_name
   
+  default_options :skip_migration => false
+  
   def initialize(runtime_args, runtime_options = {})
     super
     
@@ -85,6 +87,13 @@ class SkinnyScaffoldGenerator < Rails::Generator::NamedBase
 protected
   def banner
     "Usage: #{$0} skinny_scaffold ModelName [field:type, field:type]"
+  end
+  
+  def add_options!(opt)
+    opt.separator ''
+    opt.separator 'Options:'
+    opt.on("--skip-migration", 
+           "Don't generate a migration file for this model") { |v| options[:skip_migration] = v }
   end
 
   def model_name 

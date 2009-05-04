@@ -33,7 +33,7 @@ def button_to(name, options = {}, html_options = {})
 
   html_options.merge!("type" => "submit", "value" => name)
 
-  "<form method=\"#{form_method}\" action=\"#{escape_once url}\" class=\"button_to\"><div>" +
+  "<form method=\"#{form_method}\" action=\"#{escape_once url}\" class=\"button-to\"><div>" +
     method_tag + content_tag("button", name, html_options) + request_token_tag + "</div></form>"
 end
 

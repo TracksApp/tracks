@@ -6,26 +6,13 @@ module LuckySneaks # :nodoc:
   # file even more. You are encouraged to use these methods to setup the basic calls for your
   # resources and only resort to the other methods when mocking and stubbing secondary objects
   # and calls.
-  # 
-  # Both <tt>stub_create</tt> and <tt>stub_update</tt> benefit from having a <tt>valid_attributes</tt>
-  # method defined at the top level of your example groups, ie the top-most "describe" block
-  # of the spec file. If you did not generate your specs with <tt>skinny_scaffold</tt> or
-  # <tt>skinny_resourceful</tt> generators, you can simply write a method like the following
-  # for yourself:
-  # 
-  #   def valid_attributes
-  #     {
-  #       "foo" => "bar",
-  #       "baz" => "quux"
-  #     }
-  #   end
-  # 
-  # Note this method employs strings as both the key and values to best replicate the way
-  # they are used in actual controllers where the params will come from a form.
   module ControllerStubHelpers
     # Stubs out <tt>find :all</tt> and returns a collection of <tt>mock_model</tt>
     # instances of that class. Accepts the following options:
     # 
+    # <b>:find_method</b>:: Method to use as finder call. Default is <tt>:find</tt>.
+    #                  <b>Note:</b> When specifying the method, the call is stubbed
+    #                  to accept any arguments. Caveat programmer.
     # <b>:format</b>:: Format of the request. Used to only add <tt>to_xml</tt> and 
     #                  <tt>to_json</tt> when actually needed.
     # <b>:size</b>::   Number of instances to return in the result. Default is 3.
@@ -40,10 +27,13 @@ module LuckySneaks # :nodoc:
           stub_formatted collection, format
           params[:format] = format
         end
-        if options.empty?
-          klass.stub!(:find).with(:all).and_return(collection)
+        if find_method = options[:find_method]
+          # Not stubbing specific arguments here
+          # If you need more specificity, write a custom example
+          klass.stub!(find_method).and_return(collection)
         else
-          klass.stub!(:find).with(:all, options).and_return(collection)
+          klass.stub!(:find).with(:all).and_return(collection)
+          klass.stub!(:find).with(:all, hash_including(options)).and_return(collection)
         end
       end
     end
@@ -71,9 +61,11 @@ module LuckySneaks # :nodoc:
           params[:format] = format
         end
         klass.stub!(:new).and_return(member)
+        if options[:params]
+          klass.stub!(:new).with(hash_including(options[:params])).and_return(member)
+        end
         if options[:stub_save]
           stub_ar_method member, :save, options[:return]
-          klass.stub!(:new).with(params[options[:params]]).and_return(member)
         else
           member.stub!(:new_record?).and_return(true)
           member.stub!(:id).and_return(nil)
@@ -89,32 +81,25 @@ module LuckySneaks # :nodoc:
     
     # Alias for <tt>stub_initialize</tt> which additionally defines an implicit request <tt>post :create</tt>.
     # 
-    # <b>Note:</b> If <tt>stub_create<tt> is provided an optional <tt>:params</tt> hash
-    # or the method <tt>valid_attributes</tt> is defined within its scope,
-    # those params will be added to the example's <tt>params</tt> object. If <i>neither</i>
-    # are provided an <tt>ArgumentError</tt> will be raised.
+    # <b>Note:</b> If <tt>stub_create<tt> is provided an optional <tt>:params</tt> hash,
+    # those params will be added to the example's <tt>params</tt> object.
     def stub_create(klass, options = {})
       define_implicit_request :create
-      if options[:params].nil?
-        if self.respond_to?(:valid_attributes)
-          params[klass.name.underscore.to_sym] = valid_attributes
-          options[:params] = valid_attributes
-        else
-          error_message = "Params for creating #{klass} could not be determined. "
-          error_message << "Please define valid_attributes method in the base 'describe' block "
-          error_message << "or manually set params in the before block."
-          raise ArgumentError, error_message
-        end
-      end
+      class_name = klass.name.underscore
+      options[:params] ||= params[class_name]
       stub_initialize klass, options.merge(:stub_save => true)
     end
     
     # Stubs out <tt>find</tt> and returns a single <tt>mock_model</tt>
     # instances of that class. Accepts the following options:
     # 
-    # <b>:format</b>::  Format of the request. Used to only add <tt>to_xml</tt> and 
-    #                   <tt>to_json</tt> when actually needed.
-    # <b>:stub</b>::    Additional methods to stub on the instances
+    # <b>:find_method</b>:: Method to use as finder call. Default is <tt>:find</tt>.
+    # <b>:format</b>:: Format of the request. Used to only add <tt>to_xml</tt> and 
+    #                  <tt>to_json</tt> when actually needed.
+    # <b>:stub</b>::   Additional methods to stub on the instances
+    # <b>:current_object</b>:: If set to true, <tt>find</tt> will set <tt>params[:id]</tt>
+    #                          using the <tt>id</tt> of the <tt>mock_model</tt> instance
+    #                          and use that value as an argument when stubbing <tt>find</tt>
     # 
     # Any additional options will be passed as arguments to <tt>find</tt>.You will want
     # to make sure to pass those arguments to the <tt>it_should_find</tt> spec as well.
@@ -125,17 +110,55 @@ module LuckySneaks # :nodoc:
     def stub_find_one(klass, options = {})
       returning mock_model(klass) do |member|
         stub_out member, options.delete(:stub)
-        if options[:format]
-          stub_formatted member, options[:format]
-          params[:format] = options[:format]
+        if format = options.delete(:format)
+          stub_formatted member, format
+          params[:format] = format
         end
-        if options[:current_object]
+        if options.delete(:current_object)
           params[:id] = member.id
-          if options[:stub_ar]
-            stub_ar_method member, options[:stub_ar], options[:return]
+          if ar_stub = options.delete(:stub_ar)
+            stub_ar_method member, ar_stub, options.delete(:return), options.delete(:update_params)
           end
         end
-        klass.stub!(:find).with(member.id.to_s).and_return(member)
+        if find_method = options.delete(:find_method)
+          klass.stub!(find_method).and_return(member)
+        else
+          # Stubbing string and non-string just to be safe
+          klass.stub!(:find).with(member.id).and_return(member)
+          klass.stub!(:find).with(member.id.to_s).and_return(member)
+          unless options.empty?
+            klass.stub!(:find).with(member.id, hash_including(options)).and_return(member)
+            klass.stub!(:find).with(member.id.to_s, hash_including(options)).and_return(member)
+          end
+        end
+      end
+    end
+    
+    # <b>Note:</b> Use of this method with :child options (to mock
+    # association) is deprecated. Please use <tt>stub_association</tt>.
+    # 
+    # Same as <tt>stub_find_one</tt> but setups the instance as the parent
+    # of the specified association. Example:
+    # 
+    #   stub_parent(Document, :child => :comments)
+    # 
+    # This stubs <tt>Document.find</tt>, <tt>@document.comments</tt> (which
+    # will return <tt>Comment</tt> class), as well as <tt>params[:document_id]</tt>.
+    # This method is meant to be used in the controller for the specified child
+    # (<tt>CommentsController</tt> in this instance) in situations like:
+    # 
+    #   def index
+    #     @document = Document.find(params[:document_id])
+    #     @comments = @document.comments.find(:all)
+    #   end
+    def stub_parent(klass, options = {})
+      returning stub_find_one(klass, options) do |member|
+        params[klass.name.foreign_key] = member.id
+        if offspring = options.delete(:child)
+          puts "stub_parent with :child option has been marked for deprecation"
+          puts "please use stub_association to create the mock instead"
+          member.stub!(offspring).and_return(class_for(offspring))
+        end
       end
     end
     
@@ -154,10 +177,8 @@ module LuckySneaks # :nodoc:
     # Alias for <tt>stub_find_one</tt> which additionally defines an implicit request <tt>put :update</tt>
     # and stubs out the <tt>update_attribute</tt> method on the instance as well.
     # 
-    # <b>Note:</b> If <tt>stub_update<tt> is provided an optional <tt>:params</tt> hash
-    # or the method <tt>valid_attributes</tt> is defined within its scope,
-    # those params will be added to the example's <tt>params</tt> object. If <i>neither</i>
-    # are provided an <tt>ArgumentError</tt> will be raised.
+    # <b>Note:</b> If <tt>stub_update<tt> is provided an optional <tt>:params</tt> hash,
+    # those params will be added to the example's <tt>params</tt> object.
     def stub_update(klass, options = {})
       define_implicit_request :update
       stub_find_one klass, options.merge(:current_object => true, :stub_ar => :update_attributes)
@@ -176,6 +197,20 @@ module LuckySneaks # :nodoc:
       object.stub!("to_#{format}").and_return("#{object.class} formatted as #{format}")
     end
     
+    # Creates a mock object representing an association proxy, stubs the appropriate 
+    # method on the parent object and returns that association proxy.
+    # Accepts the following option:
+    # 
+    # <b>:stub</b>::   Additional methods to stub on the mock proxy object
+    def stub_association(object, association, options = {})
+      # I know options isn't implemented anywhere
+      object_name = instance_variables.select{|name| instance_variable_get(name) == object}
+      returning mock("Association proxy for #{object_name}.#{association}") do |proxy|
+        stub_out proxy, options[:stub] if options[:stub]
+        object.stub!(association).and_return(proxy)
+      end
+    end
+    
   private
     # Stubs out multiple methods. You shouldn't be calling this yourself and if you do
     # you should be able to understand the code yourself, right?
@@ -192,8 +227,12 @@ module LuckySneaks # :nodoc:
     
     # Stubs out ActiveRecord::Base methods like #save, #update_attributes, etc
     # that may be called on a found or instantiated mock_model instance.
-    def stub_ar_method(object, method, return_value)
-      object.stub!(method).and_return(return_value ? false : true)
+    def stub_ar_method(object, method, return_value, params = {})
+      if params.blank?
+        object.stub!(method).and_return(return_value ? false : true)
+      else
+        object.stub!(method).with(hash_including(params)).and_return(return_value ? false : true)
+      end
     end
   end
 end
