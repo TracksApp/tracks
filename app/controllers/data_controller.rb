@@ -53,23 +53,22 @@ class DataController < ApplicationController
       csv << ["id", "Context", "Project", "Description", "Notes", "Tags",
         "Created at", "Due", "Completed at", "User ID", "Show from",
         "state"]
-      current_user.todos.find(:all, :include => [:context, :project, :tags]).each do |todo|
-        # Format dates in ISO format for easy sorting in spreadsheet Print
-        # context and project names for easy viewing
-        csv << [todo.id, todo.context.name, 
-          todo.project_id = todo.project_id.nil? ? "" : todo.project.name,
-          todo.description, 
+      current_user.todos.find(:all, :include => [:context, :project]).each do |todo|
+        csv << [todo.id, todo.context.name,
+          todo.project_id.nil? ? "" : todo.project.name,
+          todo.description,
           todo.notes, todo.tags.collect{|t| t.name}.join(', '),
           todo.created_at.to_formatted_s(:db),
-          todo.due = todo.due? ? todo.due.to_formatted_s(:db) : "",
-          todo.completed_at = todo.completed_at? ? todo.completed_at.to_formatted_s(:db) : "", 
-          todo.user_id, 
-          todo.show_from = todo.show_from? ? todo.show_from.to_formatted_s(:db) : "",
-          todo.state] 
+          todo.due? ? todo.due.to_formatted_s(:db) : "",
+          todo.completed_at? ? todo.completed_at.to_formatted_s(:db) : "",
+          todo.user_id,
+          todo.show_from? ? todo.show_from.to_formatted_s(:db) : "",
+          todo.state]
       end
     end
     send_data(result, :filename => "todos.csv", :type => content_type)
   end
+
   
   def csv_notes
     content_type = 'text/csv'
