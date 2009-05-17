@@ -13,10 +13,7 @@ table {
 fieldset,img { 
     border:0;
 }
-address,caption,cite,code,dfn,em,strong,th,var {
-    font-style:normal;
-    font-weight:normal;
-}
+
 ol,ul {
     list-style:none;
 }
@@ -414,26 +411,46 @@ body.preferences div#footer {
 /* The notes which may be attached to an item */      
 .todo_notes {
     margin: 5px;
-    padding: 3px;
+    padding: 5px;
     border: 1px solid #F5ED59;
     background: #FAF6AE;
     color: #666666;
 }
 
-.todo_notes p, .todo_notes li {
-    padding: 1px;
-    margin: 0px;
-    font-size: 12px;
+.todo_notes p, .todo_notes ul, .todo_notes ol,
+.project_notes p, .project_notes ul, .project_notes ol {
+    margin: 10px 0px;
+    font-size: 1em;
 }
 
-.todo_notes ul, .note_wrapper ul {
+.todo_notes ul, .note_wrapper ul,
+.project_notes ul, .project_notes ul {
     list-style-type: disc;
-    margin-left:20px;
+    margin-left: 15px;
 }
 
-.todo_notes ol {
+.todo_notes ol, .project_notes ol {
     list-style-type: decimal;
-    margin-left:20px;
+    margin-left: 15px;
+}
+
+.todo_notes ol li, .todo_notes ul li,
+.project_notes ol li, .project_notes ul li {
+  margin-left: 20px;
+}
+
+.todo_notes h1, .project_notes h1 {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin: 10px 0px;
+}
+
+.todo_notes h2, .project_notes h2 {
+  font-size: 1.2em;
+  font-style: italic;
+  margin: 10px 0px !important;
+  padding: 0px !important;
+  background-color: transparent !important;
 }
 
 /* The notes for the project */
@@ -460,6 +477,11 @@ div.note_footer a, div.note_footer a:hover {
     padding-top: 0px;
     vertical-align: middle;
     background-color: transparent;
+}
+
+/* For the detailed notes view */
+.project_notes {
+  padding: 5px;
 }
 
 div.add_note_link {
