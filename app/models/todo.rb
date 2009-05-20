@@ -9,6 +9,8 @@ class Todo < ActiveRecord::Base
   has_many :successor_dependencies,   :foreign_key => 'successor_id',   :class_name => 'Dependency'
   has_many :predecessors, :through => :successor_dependencies
   has_many :successors,   :through => :predecessor_dependencies
+  has_many :uncompleted_predecessors, :through => :successor_dependencies,
+           :source => :predecessor, :conditions => ['NOT (state = ?)', 'completed']
 
   named_scope :active, :conditions => { :state => 'active' }
   named_scope :not_completed, :conditions =>  ['NOT (state = ? )', 'completed']
