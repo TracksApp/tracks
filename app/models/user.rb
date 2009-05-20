@@ -98,6 +98,10 @@ class User < ActiveRecord::Base
                 find(:all, :conditions => ['show_from <= ?', Time.zone.now ]).collect { |t| t.activate! }
               end
            end
+  has_many :pending_todos,
+           :class_name => 'Todo',
+           :conditions => [ 'state = ?', 'pending' ],
+           :order => 'show_from ASC, todos.created_at DESC'
   has_many :completed_todos,
            :class_name => 'Todo',
            :conditions => ['todos.state = ? AND NOT(todos.completed_at IS NULL)', 'completed'],
