@@ -142,6 +142,24 @@ class TodosController < ApplicationController
     # check if this todo has a related recurring_todo. If so, create next todo
     @new_recurring_todo = check_for_next_todo(@todo) if @saved
     
+    if @todo.completed?
+      logger.debug "completed #{@todo.description}"
+      # A todo was completed - check for pending todos
+      @todo.successors.each do |t|
+        if t.uncompleted_predecessors.empty? # Activate pending todos
+          logger.debug "activated #{t.description}"
+          t.activate!
+        end
+      end
+    else
+      # Block todos for undone actions - (it does no harm if they are already pending)
+      logger.debug "undid #{@todo.description}"
+      @todo.successors.each do |t|
+        logger.debug "blocked #{t.description}"
+        t.block!
+      end
+    end
+    
     respond_to do |format|
       format.js do
         if @saved
