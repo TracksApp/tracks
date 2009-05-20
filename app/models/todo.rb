@@ -4,6 +4,11 @@ class Todo < ActiveRecord::Base
   belongs_to :project
   belongs_to :user
   belongs_to :recurring_todo
+  
+  has_many :predecessor_dependencies, :foreign_key => 'predecessor_id', :class_name => 'Dependency'
+  has_many :successor_dependencies,   :foreign_key => 'successor_id',   :class_name => 'Dependency'
+  has_many :predecessors, :through => :successor_dependencies
+  has_many :successors,   :through => :predecessor_dependencies
 
   named_scope :active, :conditions => { :state => 'active' }
   named_scope :not_completed, :conditions =>  ['NOT (state = ? )', 'completed']
@@ -19,6 +24,7 @@ class Todo < ActiveRecord::Base
   state :project_hidden
   state :completed, :enter => Proc.new { |t| t.completed_at = Time.zone.now }, :exit => Proc.new { |t| t.completed_at = nil }
   state :deferred
+  state :pending
 
   event :defer do
     transitions :to => :deferred, :from => [:active]
@@ -30,6 +36,9 @@ class Todo < ActiveRecord::Base
   
   event :activate do
     transitions :to => :active, :from => [:project_hidden, :completed, :deferred]
+    transitions :to => :active, :from => [:pending], 
+      :guard => Proc.new{|t| t.show_from.blank? or t.show_from > user.date}
+    transitions :to => :deferred, :from => [:pending]
   end
     
   event :hide do
@@ -39,6 +48,10 @@ class Todo < ActiveRecord::Base
   event :unhide do
     transitions :to => :deferred, :from => [:project_hidden], :guard => Proc.new{|t| !t.show_from.blank? }
     transitions :to => :active, :from => [:project_hidden]
+  end
+  
+  event :block do
+    transitions :to => :pending, :from => [:active]
   end
     
   attr_protected :user
@@ -92,7 +105,7 @@ class Todo < ActiveRecord::Base
   def project
     original_project.nil? ? Project.null_object : original_project
   end
-  
+
   alias_method :original_set_initial_state, :set_initial_state
   
   def set_initial_state
