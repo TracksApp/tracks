@@ -147,7 +147,7 @@ class TodosController < ApplicationController
         if @saved
           determine_remaining_in_context_count(@todo.context_id)
           determine_down_count
-          determine_completed_count if @todo.completed?
+          determine_completed_count 
           determine_deferred_tag_count(params['_tag_name']) if @source_view == 'tag'
           if source_view_is :calendar
             @original_item_due_id = get_due_id_for_calendar(@original_item_due)
