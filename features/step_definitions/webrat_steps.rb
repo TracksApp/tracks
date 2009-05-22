@@ -98,6 +98,14 @@ Then /^I should not see "([^\"]*)"$/ do |text|
   response.should_not contain(text)
 end
 
+Then /^the "([^\"]*)" field should contain "([^\"]*)"$/ do |field, value|
+      field_labeled(field).value.should =~ /#{value}/
+  end
+
+Then /^the "([^\"]*)" field should not contain "([^\"]*)"$/ do |field, value|
+      field_labeled(field).value.should_not =~ /#{value}/
+  end
+    
 Then /^the "([^\"]*)" checkbox should be checked$/ do |label|
   field_labeled(label).should be_checked
 end
