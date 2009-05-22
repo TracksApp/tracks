@@ -8,7 +8,13 @@
     :locals => { :collapsible => true } %>
 
   <% unless @deferred.nil? -%>
-    <%= render :partial => "todos/deferred", :locals => { :deferred => @deferred, :collapsible => true, :append_descriptor => "tagged with &lsquo;#{@tag_name}&rsquo;", :parent_container_type => 'tag' } %>
+    <%= render :partial => "todos/deferred", :locals => { 
+                                               :deferred => @deferred, 
+                                               :pending => @pending,
+                                               :collapsible => true, 
+                                               :append_descriptor => "tagged with &lsquo;#{@tag_name}&rsquo;", 
+                                               :parent_container_type => 'tag' 
+                                              } %>
   <% end -%>
 
   <% unless @hidden_todos.nil? -%>

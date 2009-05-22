@@ -433,6 +433,9 @@ class TodosController < ApplicationController
     @deferred = tag_collection.find(:all, 
       :conditions => ['todos.user_id = ? and state = ?', current_user.id, 'deferred'],
       :order => 'show_from ASC, todos.created_at DESC')
+    @pending = tag_collection.find(:all, 
+      :conditions => ['todos.user_id = ? and state = ?', current_user.id, 'pending'],
+      :order => 'show_from ASC, todos.created_at DESC')
     
     # If you've set no_completed to zero, the completed items box isn't shown on
     # the tag page
