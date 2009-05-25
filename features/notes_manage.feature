@@ -16,7 +16,6 @@ Feature: View, add, remove notes
     Then 2 notes should be visible
     And the badge should show 2
 
-  @focus
   Scenario: Add a new note
     Given I have logged in as "testuser" with password "secret"
     And I have one project "Pass Final Exam" with no notes
@@ -25,6 +24,7 @@ Feature: View, add, remove notes
     And I should see note "My Note A" on the notes page
     Then the badge should show 1
 
+  @needsjs
   Scenario: Delete note from notes page
     Given I have logged in as "testuser" with password "secret"
     And I have a project "Pass Final Exam" with 2 notes
@@ -33,16 +33,18 @@ Feature: View, add, remove notes
     Then the first note should disappear
     Then the badge should show 1
 
+  @needsjs
   Scenario: Link to note
     Given I have logged in as "testuser" with password "secret"
-    And I have one project "Pass Final Exam" with 1 note
-    When I visit the "Pass Final Exam" project page
+    And I have a project "Pass Final Exam" with 1 note
+    When I visit the "Pass Final Exam" project
     And I click the icon next to the note
     Then I should see the note text
     
+  @needsjs
   Scenario: Toggle notes 
     Given I have logged in as "testuser" with password "secret"
     And I have two projects with one note each
     When I go to the notes page
     And I click Toggle Notes
-    Then the body of the notes should be shown
+    Then I should see the body of the notes
