@@ -12,6 +12,8 @@ module NavigationHelpers
       "/users/new"
     when /the login page/
       login_path
+    when /the notes page/
+      notes_path
     
     # Add more page name => path mappings here
     
