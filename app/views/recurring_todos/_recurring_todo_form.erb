@@ -132,10 +132,12 @@
     </div>
     <div id="recurring_target">
       <label>Set recurrence on</label><br/>
-      <%= radio_button_tag('recurring_todo[recurring_target]', 'due_date', true)%> the date that the todo is due.
-      Show the todo <%=
-      text_field_tag( 'recurring_todo[recurring_show_days_before]', "0", {"size" => 3, "tabindex" => 12}) %>
-      days before the todo is due (0=show always)<br/>
+      <%= radio_button_tag('recurring_todo[recurring_target]', 'due_date', true)%> the date that the todo is due. Show the todo:
+        <%= radio_button_tag('recurring_todo[recurring_show_always]', '1', true)%> always
+        <%= radio_button_tag('recurring_todo[recurring_show_always]', '0', false)%>
+          <%= text_field_tag( 'recurring_todo[recurring_show_days_before]', "0", {"size" => 3, "tabindex" => 12}) %>
+          days before the todo is due
+          <br/>
       <%= radio_button_tag('recurring_todo[recurring_target]', 'show_from_date', false)%> the date todo comes from tickler (no due date set)<br/>
       <br/>
     </div>

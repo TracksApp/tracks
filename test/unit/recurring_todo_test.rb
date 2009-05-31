@@ -67,11 +67,21 @@ class RecurringTodoTest < Test::Rails::TestCase
     assert_equal @today+1.day, @every_day.get_show_from_date(@today)
     
     @every_day.target='due_date'
-    # when target on due_date, show_from is relative to due date unless delta=0
+    # when target on due_date, show_from is relative to due date unless show_always is true
+    @every_day.show_always = true
     assert_equal nil, @every_day.get_show_from_date(@today-1.days)
 
+    @every_day.show_always = false
     @every_day.show_from_delta=10
     assert_equal @today, @every_day.get_show_from_date(@today+9.days) #today+1+9-10
+    
+    # when show_from is 0, show_from is the same day it's due
+    @every_day.show_from_delta=0
+    assert_equal @every_day.get_due_date(@today+9.days), @every_day.get_show_from_date(@today+9.days)
+    
+    # when show_from is nil, show always (happend in tests)
+    @every_day.show_from_delta=nil
+    assert_equal nil, @every_day.get_show_from_date(@today+9.days)
     
     # TODO: show_from has no use case for daily pattern. Need to test on
     # weekly/monthly/yearly

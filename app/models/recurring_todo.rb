@@ -311,6 +311,10 @@ class RecurringTodo < ActiveRecord::Base
     self.show_from_delta=days
   end
   
+  def recurring_show_always=(value)
+    self.show_always=value
+  end
+  
   def recurrence_pattern
     case recurring_period
     when 'daily'
@@ -380,9 +384,12 @@ class RecurringTodo < ActiveRecord::Base
   def get_show_from_date(previous)
     case self.target 
     when 'due_date'
-      # so set show from date relative to due date unless show_from_delta is
-      # zero / nil
-      return (self.show_from_delta == 0 || self.show_from_delta.nil?) ? nil : get_due_date(previous) - self.show_from_delta.days
+      # so set show from date relative to due date unless show_always is true or show_from_delta is nil  
+      if self.show_always? or self.show_from_delta.nil?
+        nil
+      else
+        get_due_date(previous) - self.show_from_delta.days
+      end
     when 'show_from_date'
       # Leave due date empty
       return get_next_date(previous)
