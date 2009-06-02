@@ -36,7 +36,7 @@ class TodosController < ApplicationController
     respond_to do |format|
       format.m {
         @new_mobile = true
-        @return_path=cookies[:mobile_url]
+        @return_path=cookies[:mobile_url] ? cookies[:mobile_url] : mobile_path
         @mobile_from_context = current_user.contexts.find_by_id(params[:from_context]) if params[:from_context]
         @mobile_from_project = current_user.projects.find_by_id(params[:from_project]) if params[:from_project]
         if params[:from_project] && !params[:from_context]
@@ -79,9 +79,7 @@ class TodosController < ApplicationController
     respond_to do |format|
       format.html { redirect_to :action => "index" }
       format.m do
-        @return_path=cookies[:mobile_url]
-        # todo: use function for this fixed path
-        @return_path='/m' if @return_path.nil?
+        @return_path=cookies[:mobile_url] ? cookies[:mobile_url] : mobile_path
         if @saved
           redirect_to @return_path
         else
@@ -124,7 +122,7 @@ class TodosController < ApplicationController
         @projects = current_user.projects.active
         @contexts = current_user.contexts.find(:all)
         @edit_mobile = true
-        @return_path=cookies[:mobile_url]
+        @return_path=cookies[:mobile_url] ? cookies[:mobile_url] : mobile_path
         render :action => 'show'
       end
       format.xml { render :xml => @todo.to_xml( :root => 'todo', :except => :user_id ) }
@@ -278,8 +276,9 @@ class TodosController < ApplicationController
       format.m do
         if @saved
           if cookies[:mobile_url]
+            old_path = cookies[:mobile_url]
             cookies[:mobile_url] = {:value => nil, :secure => SITE_CONFIG['secure_cookies']}
-            redirect_to cookies[:mobile_url]
+            redirect_to old_path
           else
             redirect_to formatted_todos_path(:m)
           end
