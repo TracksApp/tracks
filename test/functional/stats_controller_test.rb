@@ -4,7 +4,7 @@ require 'stats_controller'
 # Re-raise errors caught by the controller.
 class StatsController; def rescue_action(e) raise e end; end
 
-class StatsControllerTest < Test::Unit::TestCase
+class StatsControllerTest < ActionController::TestCase
   fixtures :users, :preferences, :projects, :contexts, :todos, :recurring_todos, :recurring_todos, :tags, :taggings
   
   def setup
@@ -59,7 +59,7 @@ class StatsControllerTest < Test::Unit::TestCase
     assert_equal 16, assigns['actions'].count
     assert_equal 4, assigns['tags_count']
     assert_equal 2, assigns['unique_tags_count']
-    assert_equal 2.week.ago.utc.beginning_of_day, assigns['first_action'].created_at
+    assert_equal 2.week.ago.at_midnight, assigns['first_action'].created_at.at_midnight
   end
   
   def test_downdrill

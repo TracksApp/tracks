@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../test_helper'
 require 'todos_controller'
 
-class TodoCreateParamsHelperTest < Test::Rails::TestCase
+class TodoCreateParamsHelperTest < ActiveSupport::TestCase
 
   def test_works_with_request_as_root_hash_entry
     params = {'request' => { 'todo' => { 'description' => 'foo'}}}

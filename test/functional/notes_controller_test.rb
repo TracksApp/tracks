@@ -4,7 +4,7 @@ require 'notes_controller'
 # Re-raise errors caught by the controller.
 class NotesController; def rescue_action(e) raise e end; end
 
-class NotesControllerTest < Test::Rails::TestCase
+class NotesControllerTest < ActionController::TestCase
   def setup
     @controller = NotesController.new
     request    = ActionController::TestRequest.new

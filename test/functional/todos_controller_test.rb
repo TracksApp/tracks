@@ -4,7 +4,7 @@ require 'todos_controller'
 # Re-raise errors caught by the controller.
 class TodosController; def rescue_action(e) raise e end; end
 
-class TodosControllerTest < Test::Rails::TestCase
+class TodosControllerTest < ActionController::TestCase
   fixtures :users, :preferences, :projects, :contexts, :todos, :tags, :taggings, :recurring_todos
 
   def setup

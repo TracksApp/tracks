@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-class ContextTest < Test::Rails::TestCase
+class ContextTest < ActiveSupport::TestCase
   fixtures :contexts, :todos, :recurring_todos, :users, :preferences
 
   def setup

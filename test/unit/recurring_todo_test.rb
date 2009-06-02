@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-class RecurringTodoTest < Test::Rails::TestCase
+class RecurringTodoTest < ActiveSupport::TestCase
   fixtures :todos, :users, :contexts, :preferences, :tags, :taggings, :recurring_todos
 
   def setup

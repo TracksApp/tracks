@@ -4,7 +4,7 @@ require 'data_controller'
 # Re-raise errors caught by the controller.
 class DataController; def rescue_action(e) raise e end; end
 
-class DataControllerTest < Test::Rails::TestCase
+class DataControllerTest < ActionController::TestCase
   fixtures :users, :preferences, :projects, :notes
 
   def setup

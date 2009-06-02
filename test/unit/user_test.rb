@@ -16,7 +16,7 @@ class SimpleLdapAuthenticator
   end
 end
 
-class UserTest < Test::Rails::TestCase
+class UserTest < ActiveSupport::TestCase
   fixtures :users, :preferences, :projects, :contexts, :todos, :recurring_todos
 
   def setup

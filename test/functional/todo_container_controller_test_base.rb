@@ -1,4 +1,9 @@
-class TodoContainerControllerTestBase < Test::Rails::TestCase
+class TodoContainerControllerTestBase < ActionController::TestCase
+
+  def setup_controller_request_and_response
+    # ## override with empty
+    # TODO: remove these ugly hacks
+  end
 
   def perform_setup(container_class, controller_class)
     @controller = controller_class.new

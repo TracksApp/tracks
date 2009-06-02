@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-class MessageGatewayTest < Test::Rails::TestCase
+class MessageGatewayTest < ActiveSupport::TestCase
   fixtures :users, :contexts
 
   def setup

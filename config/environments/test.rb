@@ -47,7 +47,7 @@ config.after_initialize do
 end
 
 config.gem "flexmock"
-config.gem "ZenTest", :lib => "zentest"
+config.gem "ZenTest", :lib => "zentest", :version => ">=4.0.0"
 config.gem "hpricot"
 config.gem "hoe"
 

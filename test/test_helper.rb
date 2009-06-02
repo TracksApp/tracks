@@ -1,7 +1,7 @@
 ENV["RAILS_ENV"] = "test"
 require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
 require File.expand_path(File.dirname(__FILE__) + "/../app/controllers/application")
-require 'test/rails' #you need the zentest gem installed
+require 'autotest/rails' #you need the zentest gem installed
 require 'test_help'
 require 'flexmock/test_unit' #and the flexmock gem, too!
 require 'action_web_service/test_invoke'
@@ -41,21 +41,8 @@ class Test::Unit::TestCase
 
 end
 
-class Test::Rails::HelperTestCase
-
-  self.use_transactional_fixtures = false
-  self.use_instantiated_fixtures  = false
-
-end
-
-class Test::Rails::TestCase < Test::Unit::TestCase
-    
-  # Turn off transactional fixtures if you're working with MyISAM tables in MySQL
-  self.use_transactional_fixtures = true
-  
-  # Instantiated fixtures are slow, but give you @david where you otherwise would need people(:david)
-  self.use_instantiated_fixtures  = false
-    
+class ActiveSupport::TestCase
+   
   # Generates a random string of ascii characters (a-z, "1 0")
   # of a given length for testing assignment to fields
   # for validation purposes
