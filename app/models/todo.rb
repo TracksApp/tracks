@@ -5,12 +5,15 @@ class Todo < ActiveRecord::Base
   belongs_to :user
   belongs_to :recurring_todo
   
-  has_many :predecessor_dependencies, :foreign_key => 'predecessor_id', :class_name => 'Dependency'
-  has_many :successor_dependencies,   :foreign_key => 'successor_id',   :class_name => 'Dependency'
-  has_many :predecessors, :through => :successor_dependencies
-  has_many :successors,   :through => :predecessor_dependencies
+  has_many :predecessor_dependencies, :foreign_key => 'predecessor_id', :class_name => 'Dependency', :dependent => :destroy
+  has_many :successor_dependencies,   :foreign_key => 'successor_id',   :class_name => 'Dependency', :dependent => :destroy
+  has_many :predecessors, :through => :successor_dependencies, :dependent => :destroy
+  has_many :successors,   :through => :predecessor_dependencies, :dependent => :destroy
   has_many :uncompleted_predecessors, :through => :successor_dependencies,
-           :source => :predecessor, :conditions => ['NOT (state = ?)', 'completed']
+           :source => :predecessor, :conditions => ['NOT (state = ?)', 'completed'], :dependent => :destroy
+  has_many :pending_successors, :through => :predecessor_dependencies,
+           :source => :successor, :conditions => ['state = ?', 'pending'], :dependent => :destroy
+  
 
   named_scope :active, :conditions => { :state => 'active' }
   named_scope :not_completed, :conditions =>  ['NOT (state = ? )', 'completed']
