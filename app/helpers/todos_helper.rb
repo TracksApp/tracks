@@ -99,11 +99,10 @@ module TodosHelper
   end
   
   def successors_span
-    unless @todo.successors.empty?
-      successors_count = @todo.successors.length
-      title = "Has #{pluralize(successors_count, 'pending action')}: #{@todo.successors.map(&:description).join(', ')}"
-      link_to(image_tag( 'blank.png', :width=>'10', :height=>'16', :border=>'0' ), 
-              '#', {:class => 'show_successors', :title => title})
+    unless @todo.pending_successors.empty?
+      pending_count = @todo.pending_successors.length
+      title = "Has #{pluralize(pending_count, 'pending action')}: #{@todo.pending_successors.map(&:description).join(', ')}"
+      image_tag( 'successor_off.png', :width=>'10', :height=>'16', :border=>'0', :title => title )
     end
   end
   
