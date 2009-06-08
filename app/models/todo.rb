@@ -42,7 +42,7 @@ class Todo < ActiveRecord::Base
   event :activate do
     transitions :to => :active, :from => [:project_hidden, :completed, :deferred]
     transitions :to => :active, :from => [:pending], 
-      :guard => Proc.new{|t| t.show_from.blank? or t.show_from > user.date}
+      :guard => Proc.new{|t| t.show_from.blank? or t.show_from > Time.zone.now}
     transitions :to => :deferred, :from => [:pending]
   end
     
