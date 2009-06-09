@@ -381,11 +381,7 @@ input.item-checkbox {
 
 .description, .stale_l1, .stale_l2, .stale_l3 {
     margin-left: 60px;
-    position:relative;    
-}
-
-.stale_l1, .stale_l2, .stale_l3 {
-    padding-left: 3px;
+    position:relative;
 }
 
 .stale_l1 {
@@ -937,6 +933,10 @@ div.message {
     text-align: center;
     font-size: 1em;
     color: #666;
+}
+
+.grip {
+    cursor: move;
 }
 
 /* Error message styles */

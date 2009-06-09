@@ -106,6 +106,14 @@ module TodosHelper
     end
   end
   
+  def grip_span
+    unless @todo.completed?
+      image_tag('grip.png', :width => '7', :height => '16', :border => '0', 
+        :title => 'Drag onto another action to make it depend on this action',
+        :class => 'grip')
+    end
+  end
+  
   def tag_list_text
     @todo.tags.collect{|t| t.name}.join(', ')
   end

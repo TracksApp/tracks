@@ -22,6 +22,7 @@ parameters += "&_tag_name=#{@tag_name}" if @source_view == 'tag'
         <% end %>
     </ul></ul>
     <div class="description<%= staleness_class( todo ) %>">
+      <%= grip_span %>
       <%= date_span -%>
       <span class="todo.descr"><%= h sanitize(todo.description) %></span>
       <%= successors_span %>
@@ -39,3 +40,13 @@ parameters += "&_tag_name=#{@tag_name}" if @source_view == 'tag'
     <% end -%>
   </div>
 </div>
+<%= 
+draggable_element(dom_id(todo), :revert => "'failure'", :handle =>  "'grip'", :onDrop => "''") 
+%>
+<%=
+drop_receiving_element(dom_id(todo), 
+  :url => {:controller => "todos", :action => "add_predecessor"},
+  :with => "'successor=' + encodeURIComponent(element.id.split('_').last()) + '&predecessor=' + encodeURIComponent(#{todo.id})"
+)
+%>
+

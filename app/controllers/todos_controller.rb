@@ -140,6 +140,15 @@ class TodosController < ApplicationController
       format.xml { render :xml => @todo.to_xml( :root => 'todo', :except => :user_id ) }
     end
   end
+  
+  def add_predecessor
+    logger.debug "add_predecessor"
+    @predecessor = Todo.find(params['predecessor'])
+    @successor = Todo.find(params['successor'])
+    respond_to do |format|
+      format.js
+    end
+  end
 
   # Toggles the 'done' status of the action
   #
