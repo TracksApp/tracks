@@ -7,12 +7,12 @@ class Todo < ActiveRecord::Base
   
   has_many :predecessor_dependencies, :foreign_key => 'predecessor_id', :class_name => 'Dependency', :dependent => :destroy
   has_many :successor_dependencies,   :foreign_key => 'successor_id',   :class_name => 'Dependency', :dependent => :destroy
-  has_many :predecessors, :through => :successor_dependencies, :dependent => :destroy
-  has_many :successors,   :through => :predecessor_dependencies, :dependent => :destroy
+  has_many :predecessors, :through => :successor_dependencies
+  has_many :successors,   :through => :predecessor_dependencies
   has_many :uncompleted_predecessors, :through => :successor_dependencies,
-           :source => :predecessor, :conditions => ['NOT (state = ?)', 'completed'], :dependent => :destroy
+           :source => :predecessor, :conditions => ['NOT (state = ?)', 'completed']
   has_many :pending_successors, :through => :predecessor_dependencies,
-           :source => :successor, :conditions => ['state = ?', 'pending'], :dependent => :destroy
+           :source => :successor, :conditions => ['state = ?', 'pending']
   
 
   named_scope :active, :conditions => { :state => 'active' }

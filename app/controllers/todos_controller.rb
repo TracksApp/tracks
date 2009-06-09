@@ -77,7 +77,8 @@ class TodosController < ApplicationController
       @todo.tag_with(tag_list)
       @todo.tags.reload
     end
-    
+
+    # TODO: Check if we can reload cache here instead of saving twice    
     unless predecessor_list.blank?
       @todo.add_predecessor_list(predecessor_list)
       unless @todo.uncompleted_predecessors.empty? || @todo.state == 'project_hidden'
@@ -348,16 +349,30 @@ class TodosController < ApplicationController
     @context_id = @todo.context_id
     @project_id = @todo.project_id
    
+    # activate successors if they only depend on this todo
+    activated_successor_count = 0
+    @todo.pending_successors.each do |successor|
+      successor.uncompleted_predecessors.delete(@todo)
+      if successor.uncompleted_predecessors.empty?
+        successor.activate!
+        activated_successor_count += 1
+      end
+    end
+
     @saved = @todo.destroy
 
     # check if this todo has a related recurring_todo. If so, create next todo
     @new_recurring_todo = check_for_next_todo(@todo) if @saved
-    
+        
     respond_to do |format|
       
       format.html do
         if @saved
-          notify :notice, "Successfully deleted next action", 2.0
+          message = "Successfully deleted next action"
+          if activated_successor_count > 0
+            message += " activated #{pluralize(activated_successor_count, 'pending action')}"
+          end
+          notify :notice, message, 2.0
           redirect_to :action => 'index'
         else
           notify :error, "Failed to delete the action", 2.0
