@@ -5,8 +5,14 @@
     <% if @prefs.refresh != 0 -%>
       <meta http-equiv="Refresh" content="<%= @prefs["refresh"].to_i*60 %>;url=<%= request.request_uri %>">
     <% end -%>
-    <%= javascript_include_tag "jquery-1.2.6.min" %>
-    <% bundle do %>
+    <% bundle :name => "tracks_css" do %>
+      <%= stylesheet_link_tag *%w[ standard superfish calendar-system niftyCorners] %>
+    <% end %>
+    <%= stylesheet_link_tag "print", :media => "print" %>
+    <% bundle :name => "jquery" do %>
+      <%= javascript_include_tag "jquery-1.2.6.min" %>
+    <% end %>
+    <% bundle :name => "tracks_js" do %>
       <%= javascript_include_tag *%w[
       hoverIntent superfish prototype
       effects dragdrop controls application
@@ -14,10 +20,8 @@
       accesskey-hints todo-items niftycube
       protoload flashobject lowpro
       ] %>
-      <%= stylesheet_link_tag *%w[ standard superfish calendar-system niftyCorners] %>
     <% end %>
     <%= javascript_include_tag :unobtrusive %>
-    <%= stylesheet_link_tag "print", :media => "print" %>
     <link rel="shortcut icon" href="<%= url_for(:controller => 'favicon.ico') %>" />
     <%= auto_discovery_link_tag(:rss, {:controller => "todos", :action => "index", :format => 'rss', :token => "#{current_user.token}"}, {:title => "RSS feed of next actions"}) %>
     <link rel="search" type="application/opensearchdescription+xml" title="Tracks" href="<%= search_plugin_path %>" />
