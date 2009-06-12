@@ -41,7 +41,7 @@ parameters += "&_tag_name=#{@tag_name}" if @source_view == 'tag'
   </div>
 </div>
 <%= 
-draggable_element(dom_id(todo), :revert => "'failure'", :handle =>  "'grip'", :onDrop => "''") 
+draggable_element(dom_id(todo), :revert => "'true'", :handle =>  "'grip'", :onDrop => "''") 
 %>
 <%=
 drop_receiving_element(dom_id(todo), 

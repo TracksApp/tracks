@@ -142,9 +142,13 @@ class TodosController < ApplicationController
   end
   
   def add_predecessor
-    logger.debug "add_predecessor"
     @predecessor = Todo.find(params['predecessor'])
-    @successor = Todo.find(params['successor'])
+    @todo = Todo.find(params['successor'])
+    @original_state = @todo.state
+    # Add predecessor
+    @todo.predecessors << @predecessor
+    @todo.state = 'pending'
+    @saved = @todo.save
     respond_to do |format|
       format.js
     end

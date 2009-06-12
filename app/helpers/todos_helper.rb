@@ -90,7 +90,7 @@ module TodosHelper
     if @todo.completed?
       "<span class=\"grey\">#{format_date( @todo.completed_at )}</span>"
     elsif @todo.pending?
-      "<a title='Depends on: #{@todo.predecessors.map(&:description).join(', ')}'><span class=\"orange\">Pending</span></a> "
+      "<a title='Depends on: #{@todo.uncompleted_predecessors.map(&:description).join(', ')}'><span class=\"orange\">Pending</span></a> "
     elsif @todo.deferred?
       show_date( @todo.show_from )
     else
@@ -109,7 +109,7 @@ module TodosHelper
   def grip_span
     unless @todo.completed?
       image_tag('grip.png', :width => '7', :height => '16', :border => '0', 
-        :title => 'Drag onto another action to make it depend on this action',
+        :title => 'Drag onto another action to make it depend on that action',
         :class => 'grip')
     end
   end

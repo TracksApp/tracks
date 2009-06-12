@@ -1,0 +1,14 @@
+if @saved
+  # show update message
+  status_message = "Added #{@predecessor.description} as dependency."
+  unless @original_state == 'pending'
+    status_message += " #{@todo.description} set to pending"
+    page[@todo].remove
+    page['tickler-empty-nd'].hide
+    page.insert_html :bottom, item_container_id(@todo), :partial => 'todos/todo', :locals => { :todo => @todo, :parent_container_type => parent_container_type }
+  end
+  page.notify :notice, status_message, 5.0
+else
+  page.replace_html "status", content_tag("div", content_tag("h2", "Unable to add dependency"), "id" => "errorExplanation", "class" => "errorExplanation")  
+end
+
