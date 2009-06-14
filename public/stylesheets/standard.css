@@ -939,6 +939,11 @@ div.message {
     cursor: move;
 }
 
+.hover {
+    background: #EAEAEA;
+    font-weight: bold;
+}
+
 /* Error message styles */
 .fieldWithErrors {
     padding: 2px;
