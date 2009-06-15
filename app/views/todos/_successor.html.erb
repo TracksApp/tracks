@@ -1,0 +1,20 @@
+<%
+suppress_context ||= false
+suppress_project ||= false
+suppress_dependencies ||= false
+parameters = "_source_view=#{@source_view}"
+parameters += "&_tag_name=#{@tag_name}" if @source_view == 'tag'
+@z_index_counter = @z_index_counter - 1  # for IE z-index bug
+%>
+<div id="<%= dom_id(successor, 'successor') %>" class="item-container">
+  <div id="<%= dom_id(successor, 'successor_line') %>">
+    <div class="description<%= staleness_class( successor ) %>" style="margin-left: 10px">
+      <%= link_to(image_tag( 'blank.png', :width=>'16', :height=>'16', :border=>'0', :class => 'delete_item' ), "#", 
+          { :class => 'remove_successor', :title => 'Remove successor', :style => "background: transparent;"}) %>
+      <span class="todo.descr"><%= h sanitize(successor.description) %></span>
+      <% #= successors_span %>
+      <%= render(:partial => "todos/toggle_successors", :locals => { :item => successor }) unless successor.pending_successors.empty? %>
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,9 @@
+<%= link_to(image_tag( 'blank.png', :width=>'16', :height=>'16', :border=>'0' ), "#", {:class => 'show_successors', :title => 'Show successors'}) %>
+
+<div class="todo_successors" id="<%= dom_id(item, 'successors') %>" style="display:none">
+  <%= render :partial => "todos/successor",
+             :collection => item.pending_successors,
+             :locals => { :parent_container_type => parent_container_type, 
+                          :suppress_dependencies => true }
+  %>
+</div>
