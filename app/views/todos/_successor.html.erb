@@ -8,12 +8,9 @@ parameters += "&_tag_name=#{@tag_name}" if @source_view == 'tag'
 %>
 <div id="<%= dom_id(successor, 'successor') %>" class="item-container">
   <div id="<%= dom_id(successor, 'successor_line') %>">
-    <div class="description<%= staleness_class( successor ) %>" style="margin-left: 10px">
-      <%= link_to(image_tag( 'blank.png', :width=>'16', :height=>'16', :border=>'0', :class => 'delete_item' ), "#", 
-          { :class => 'remove_successor', :title => 'Remove successor', :style => "background: transparent;"}) %>
+    <div class="description<%= staleness_class( successor ) %>" style="margin-left: 20px">
       <span class="todo.descr"><%= h sanitize(successor.description) %></span>
-      <% #= successors_span %>
-      <%= render(:partial => "todos/toggle_successors", :locals => { :item => successor }) unless successor.pending_successors.empty? %>
+      <%= render(:partial => "todos/toggle_successors", :locals => { :item => successor, :suppress_button => true }) unless successor.pending_successors.empty? %>
     </div>
   </div>
 </div>
