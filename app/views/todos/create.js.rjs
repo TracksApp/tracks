@@ -16,7 +16,7 @@ if @saved
       page.insert_html :top, 'display_box', :partial => 'contexts/context', :locals => { :context => @todo.context, :collapsible => true }
     else
       page.call "todoItems.ensureVisibleWithEffectAppear", "c#{@todo.context_id}" if source_view_is_one_of(:todo, :deferred)
-      page.insert_html :bottom, item_container_id(@todo) + 'items', :partial => 'todos/todo', :locals => { :todo => @todo, :parent_container_type => parent_container_type, :source_view => @source_view }
+      page.insert_html :bottom, item_container_id(@todo), :partial => 'todos/todo', :locals => { :todo => @todo, :parent_container_type => parent_container_type, :source_view => @source_view }
       page.visual_effect :highlight, dom_id(@todo), :duration => 3
       page[empty_container_msg_div_id].hide unless empty_container_msg_div_id.nil?
     end
