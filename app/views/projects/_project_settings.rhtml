@@ -1,8 +1,5 @@
 <div id="<%= dom_id(project) %>" class="project">
-  <% unless project.description.blank? -%>
-    <div class="project_description"><%= sanitize(project.description) %></div>
-  <% end -%>
-  <p>This project
+  <div class="project_settings">This project
     <% if project.completed? -%>has been marked as completed
     <% elsif project.hidden? -%>has been marked as hidden
     <% else -%>is active
@@ -25,7 +22,10 @@
       :before => "$('#{dom_id(project)}').startWaiting();",
       :complete => "$('#{dom_id(project)}').stopWaiting();"
     ) %>
-  </p>
+  </div>
+  <% unless project.description.blank? -%>
+    <div class="project_description"><%= sanitize(project.description) %></div>
+  <% end -%>
 </div>
 <div id="<%= dom_id(project, 'edit') %>" class="edit-form" style="display:none;">
 </div>

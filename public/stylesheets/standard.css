@@ -749,7 +749,7 @@ div.alpha_sort, div.tasks_sort,span.sort_separator {
     border: none;
 }
 
-div.project_description {
+div.project_settings {
     background: #eee;
     padding: 5px;
     margin-top: 0px;
@@ -757,11 +757,8 @@ div.project_description {
     margin-right: -5px;
     color: #666;
     font-style: italic;
-    font-size: 12px;
+    font-size: 10px;
     font-weight: normal;
-    /* Uncomment line below if you want the description to have
-    shadowed text */
-    /* text-shadow: rgba(0,0,0,.4) 0px 2px 5px; */
 }
 #project-next-prev {
     text-align:right;
