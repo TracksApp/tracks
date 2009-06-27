@@ -10,6 +10,11 @@ parameters += "&_tag_name=#{@tag_name}" if @source_view == 'tag'
   <div id="<%= dom_id(successor, 'successor_line') %>">
     <div class="description<%= staleness_class( successor ) %>" style="margin-left: 20px">
       <span class="todo.descr"><%= h sanitize(successor.description) %></span>
+      <a class="remove_successor" style="background: transparent;"
+         href="#"
+         title="remove the successor '<%= successor.description %>'"><%= image_tag( "blank.png",
+          :title => "Remove the successor",
+          :class=>"delete_item") %></a>
       <%= render(:partial => "todos/toggle_successors", :locals => { :item => successor, :suppress_button => true }) unless successor.pending_successors.empty? %>
     </div>
   </div>
