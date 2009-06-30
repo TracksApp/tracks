@@ -2,34 +2,38 @@
 
 <p>You have a total of <span id="user_count"><%= @total_users %></span> users</p>
 
-  <table class="users_table"> 
+<table class="users_table"> 
   <tr> 
-  <th>Login</th> 
-  <th>Full name</th>
-  <th>Authorization type</th>
-  <th>Open ID URL</th>
-  <th>Total actions</th>
-  <th>Total contexts</th>
-  <th>Total projects</th>
-  <th>Total notes</th>
-  <th>&nbsp;</th>
+    <th>Login</th>
+    <th>Full name</th>
+    <th>Authorization type</th>
+    <th>Open ID URL</th>
+    <th>Total actions</th>
+    <th>Total contexts</th>
+    <th>Total projects</th>
+    <th>Total notes</th>
+    <th>&nbsp;</th>
   </tr> 
   <% for user in @users %>
-    <tr <%= "class=\"highlight\"" if user.is_admin? %> id="user-<%= user.id %>"> 
-    <td><%=h user.login %></td>
-    <td><%=h user.last_name? ? user.display_name : '-' %></td>
-    <td><%= h user.auth_type %></td>
-    <td><%= h user.open_id_url || '-' %></td>
-    <td><%= h user.todos.size %></td>
-    <td><%= h user.contexts.size %></td>
-    <td><%= h user.projects.size %></td>
-    <td><%= h user.notes.size %></td>
-    <td><%= !user.is_admin? ? link_to_remote(  image_tag("blank.png", :title =>"Destroy user", :class=>"delete_item"), {:url => user_path(user), :method => :delete, :confirm => "Warning: this will delete user \'#{user.login}\', all their actions, contexts, project and notes. Are you sure that you want to continue?" }, { :class => "icon" } ) : "&nbsp;" %></td> 
-    </tr> 
-  <% end %> 
-  </table>
-  <p>
-    <%= will_paginate @users %>
-  </p>
- 
-  <p><%= link_to 'Signup new user', signup_path %></p>
+    <tr <%= "class=\"highlight\"" if user.is_admin? %> id="user-<%= user.id %>">
+      <td><%=h user.login %></td>
+      <td><%=h user.last_name? ? user.display_name : '-' %></td>
+      <td><%= h user.auth_type %></td>
+      <td><%= h user.open_id_url || '-' %></td>
+      <td><%= h user.todos.size %></td>
+      <td><%= h user.contexts.size %></td>
+      <td><%= h user.projects.size %></td>
+      <td><%= h user.notes.size %></td>
+      <td><%= !user.is_admin? ? link_to_remote(
+          image_tag("blank.png", :title =>"Destroy user", :class=>"delete_item"),
+          { :url => user_path(user.id), :method => :delete,
+            :confirm => "Warning: this will delete user \'#{user.login}\', all their actions, contexts, project and notes. Are you sure that you want to continue?" },
+          { :class => "icon" } ) : "&nbsp;" %></td>
+    </tr>
+  <% end %>
+</table>
+<p>
+  <%= will_paginate @users %>
+</p>
+
+<p><%= link_to 'Signup new user', signup_path %></p>
