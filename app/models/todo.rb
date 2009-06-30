@@ -80,13 +80,15 @@ class Todo < ActiveRecord::Base
     if !show_from.blank? && show_from < user.date
       errors.add("show_from", "must be a date in the future")
     end
-    # Validate predecessors array
-    @predecessor_array.each do |description|
-      t = Todo.find_by_description(description)
-      if t.nil?
-        errors.add("Depends on:", "Could not find action '#{description}'")
-      else
-        errors.add("Depends on:", "Adding '#{description}' would create a circular dependency") if is_successor?(t)
+    unless @predecessor_array.nil?
+      # Validate predecessors array    
+      @predecessor_array.each do |description|
+        t = Todo.find_by_description(description)
+        if t.nil?
+          errors.add("Depends on:", "Could not find action '#{description}'")
+        else
+          errors.add("Depends on:", "Adding '#{description}' would create a circular dependency") if is_successor?(t)
+        end
       end
     end
   end
@@ -223,6 +225,11 @@ class Todo < ActiveRecord::Base
     @predecessor_array = predecessor_list.split(',').map do |description| 
       description.strip.squeeze(" ")            
     end
+  end
+  
+  def add_predecessor(t)
+    @predecessor_array = predecessors.map(&:description)
+    @predecessor_array << t.description
   end
   
   # Rich Todo API

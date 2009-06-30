@@ -145,7 +145,7 @@ class TodosController < ApplicationController
     @todo = Todo.find(params['successor'])
     @original_state = @todo.state
     # Add predecessor
-    @todo.predecessors << @predecessor
+    @todo.add_predecessor(@predecessor)
     @todo.state = 'pending'
     @saved = @todo.save
     respond_to do |format|
