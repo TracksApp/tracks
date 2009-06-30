@@ -14,6 +14,7 @@ class Todo < ActiveRecord::Base
   has_many :pending_successors, :through => :predecessor_dependencies,
            :source => :successor, :conditions => ['state = ?', 'pending']
   
+  after_save :save_predecessors
 
   named_scope :active, :conditions => { :state => 'active' }
   named_scope :not_completed, :conditions =>  ['NOT (state = ? )', 'completed']
@@ -69,10 +70,63 @@ class Todo < ActiveRecord::Base
   validates_presence_of :show_from, :if => :deferred?
   validates_presence_of :context
   
+  def initialize(*args)
+    super(*args)
+    @predecessor_array = [] # Used for deferred save of predecessors
+  end
+  
+  # TODO: Handle duplicate descriptions
   def validate
     if !show_from.blank? && show_from < user.date
       errors.add("show_from", "must be a date in the future")
     end
+    # Validate predecessors array
+    @predecessor_array.each do |description|
+      t = Todo.find_by_description(description)
+      if t.nil?
+        errors.add("Depends on:", "Could not find action '#{description}'")
+      else
+        errors.add("Depends on:", "Adding '#{description}' would create a circular dependency") if is_successor?(t)
+      end
+    end
+  end
+  
+  def save_predecessors
+    current_array = predecessors.map(&:description)
+    @predecessor_array = [] if @predecessor_array.nil?
+    remove_array = current_array - @predecessor_array
+    add_array = @predecessor_array - current_array
+    
+    # This is probably a bit naive code...
+    remove_array.each do |description|
+      t = Todo.find_by_description(description)
+      self.predecessors.delete(t)
+    end
+    # ... as is this?
+    add_array.each do |description|
+      t = Todo.find_by_description(description)
+      unless t.nil?
+        self.predecessors << t unless self.predecessors.include?(t)
+      else
+        logger.error "Could not find #{description}" # Unexpected since validation passed
+      end
+    end
+  end
+  
+  # Returns true if t is equal to self or a successor of self
+  def is_successor?(t)
+    if self == t
+      return true
+    elsif self.successors.empty?
+      return false
+    else
+      self.successors.each do |item|
+        if item.is_successor?(t)
+          return true
+        end
+      end
+    end
+    return false
   end
 
   def update_state_from_project
@@ -162,36 +216,13 @@ class Todo < ActiveRecord::Base
   end
   
   # TODO: DELIMITER
-  # TODO: Todo::Error
   # TODO: Handle todos with the same description
+  # TODO: Should possibly handle state changes also?
   def add_predecessor_list(predecessor_list)
-    logger.debug "add_predecessor_list #{predecessor_list}"
     raise "Can't handle other types than string for now" unless predecessor_list.kind_of? String
-    list = predecessor_list.split(',').map do |description| 
+    @predecessor_array = predecessor_list.split(',').map do |description| 
       description.strip.squeeze(" ")            
     end
-    current = self.predecessors.map(&:description)
-    remove_list = current - list
-    # This is probably a bit naive code...
-    remove_list.each do |description|
-      t = Todo.find_by_description(description)
-      logger.debug "Removing #{t.description} from #{self.description} as predecessor"
-      self.predecessors.delete(t)
-    end
-    add_list = list - current
-    # ... as is this?
-    add_list.each do |description|
-      t = Todo.find_by_description(description)
-      #raise Todo::Error, "predecessor could not be found: #{description}" if t.nil?
-      # Create dependency record
-      unless t.nil?
-        self.predecessors << t unless self.predecessors.include?(t)
-      else
-        logger.error "Could not find #{description}"
-      end
-    end
-#    debugger
-    
   end
   
   # Rich Todo API

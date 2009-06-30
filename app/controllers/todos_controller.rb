@@ -71,6 +71,7 @@ class TodosController < ApplicationController
       @todo.context_id = context.id
     end
 
+    @todo.add_predecessor_list(predecessor_list)
     @todo.update_state_from_project
     @saved = @todo.save
     unless (@saved == false) || tag_list.blank?
@@ -78,13 +79,11 @@ class TodosController < ApplicationController
       @todo.tags.reload
     end
 
-    # TODO: Check if we can reload cache here instead of saving twice    
-    unless predecessor_list.blank?
-      @todo.add_predecessor_list(predecessor_list)
+    unless (@aved == false)
       unless @todo.uncompleted_predecessors.empty? || @todo.state == 'project_hidden'
         @todo.state = 'pending'
       end
-      @saved = @todo.save
+      @todo.save!
     end
 
     respond_to do |format|
@@ -239,23 +238,6 @@ class TodosController < ApplicationController
     @original_item_due = @todo.due
     @original_item_due_id = get_due_id_for_calendar(@todo.due)
     @original_item_predecessor_list = @todo.predecessors.collect{|t| t.description}.join(', ')
-    if params[:predecessor_list]
-      logger.debug "---old #{@original_item_predecessor_list}"
-      logger.debug "---new #{params[:predecessor_list]}"
-      @todo.add_predecessor_list(params[:predecessor_list])
-      if @original_item_predecessor_list != params[:predecessor_list]
-        # Recalculate dependencies for this todo
-        if @todo.uncompleted_predecessors.empty?
-          if @todo.state == 'pending'
-            @todo.activate! # Activate pending if no uncompleted predecessors
-          end
-        else
-          if @todo.state == 'active'
-            @todo.block! # Block active if we got uncompleted predecessors
-          end
-        end
-      end
-    end
     
     if params['todo']['project_id'].blank? && !params['project_name'].nil?
       if params['project_name'] == 'None'
@@ -304,7 +286,26 @@ class TodosController < ApplicationController
     end
     
     @todo.attributes = params["todo"]
+
+    @todo.add_predecessor_list(params[:predecessor_list])
     @saved = @todo.save
+    if @saved && params[:predecessor_list]
+      if @original_item_predecessor_list != params[:predecessor_list]
+        # Possible state change with new dependencies
+        if @todo.uncompleted_predecessors.empty?
+          if @todo.state == 'pending'
+            @todo.activate! # Activate pending if no uncompleted predecessors
+          end
+        else
+          if @todo.state == 'active'
+            @todo.block! # Block active if we got uncompleted predecessors
+          end
+        end
+      end
+      @todo.save!
+    end
+
+
 
     @context_changed = @original_item_context_id != @todo.context_id
     @todo_was_activated_from_deferred_state = @original_item_was_deferred && @todo.active?
