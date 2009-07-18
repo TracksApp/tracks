@@ -221,9 +221,10 @@ class Todo < ActiveRecord::Base
   # TODO: Handle todos with the same description
   # TODO: Should possibly handle state changes also?
   def add_predecessor_list(predecessor_list)
-    raise "Can't handle other types than string for now" unless predecessor_list.kind_of? String
-    @predecessor_array = predecessor_list.split(',').map do |description| 
-      description.strip.squeeze(" ")            
+    if predecessor_list.kind_of? String
+      @predecessor_array = predecessor_list.split(',').map do |description| 
+        description.strip.squeeze(" ")            
+      end
     end
   end
   
