@@ -11,7 +11,11 @@ if @saved
     # show in tickler box in project view
     if source_view_is_one_of :project, :tag
       page['tickler-empty-nd'].hide
-      page.insert_html :bottom, "tickler", :partial => 'todos/todo', :locals => { :todo => @todo, :parent_container_type => parent_container_type }
+      page.replace "tickler", :partial => 'todos/deferred', :locals =>  { :deferred => @todo.project.deferred_todos, 
+                                                                          :collapsible => false, 
+                                                                          :append_descriptor => "in this project", 
+                                                                          :parent_container_type => 'project', 
+                                                                          :pending => @todo.project.pending_todos }
     end
 
     page << "TodoBehavior.enableToggleNotes();"
