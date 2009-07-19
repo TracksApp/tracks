@@ -47,7 +47,7 @@ draggable_element(dom_id(todo), :revert => "'true'", :handle =>  "'grip'", :onDr
 <%=
 drop_receiving_element(dom_id(todo), 
   :url => {:controller => "todos", :action => "add_predecessor"},
-  :with => "'successor=' + encodeURIComponent(element.id.split('_').last()) + '&predecessor=' + encodeURIComponent(#{todo.id})",
+  :with => "'#{parameters}&successor=' + encodeURIComponent(element.id.split('_').last()) + '&predecessor=' + encodeURIComponent(#{todo.id})",
   :hoverclass => 'hover'
 )
 %>

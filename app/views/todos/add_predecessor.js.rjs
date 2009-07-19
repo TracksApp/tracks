@@ -3,9 +3,19 @@ if @saved
   status_message = "Added #{@predecessor.description} as dependency."
   unless @original_state == 'pending'
     status_message += " #{@todo.description} set to pending"
+    # remove successor from page
     page[@todo].remove
-    page['tickler-empty-nd'].hide
-    page.insert_html :bottom, item_container_id(@todo), :partial => 'todos/todo', :locals => { :todo => @todo, :parent_container_type => parent_container_type }
+    # regenerate predecessor to add arrow
+    page[@predecessor].replace_html :partial => 'todos/todo', :locals => { :todo => @predecessor, :parent_container_type => parent_container_type }
+
+    # show in tickler box in project view
+    if source_view_is_one_of :project, :tag
+      page['tickler-empty-nd'].hide
+      page.insert_html :bottom, "tickler", :partial => 'todos/todo', :locals => { :todo => @todo, :parent_container_type => parent_container_type }
+    end
+
+    page << "TodoBehavior.enableToggleNotes();"
+    page << "TodoBehavior.enableToggleSuccessors();"
   end
   page.notify :notice, status_message, 5.0
 else

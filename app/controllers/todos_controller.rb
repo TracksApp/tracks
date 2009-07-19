@@ -141,6 +141,7 @@ class TodosController < ApplicationController
   end
   
   def add_predecessor
+    @source_view = params['_source_view'] || 'todo'
     @predecessor = Todo.find(params['predecessor'])
     @todo = Todo.find(params['successor'])
     @original_state = @todo.state
