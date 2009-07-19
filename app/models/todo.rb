@@ -72,7 +72,7 @@ class Todo < ActiveRecord::Base
   
   def initialize(*args)
     super(*args)
-    @predecessor_array = [] # Used for deferred save of predecessors
+    @predecessor_array = nil # Used for deferred save of predecessors
   end
   
   # TODO: Handle duplicate descriptions
@@ -80,8 +80,7 @@ class Todo < ActiveRecord::Base
     if !show_from.blank? && show_from < user.date
       errors.add("show_from", "must be a date in the future")
     end
-    unless @predecessor_array.nil?
-      # Validate predecessors array    
+    unless @predecessor_array.nil? # Only validate predecessors if they changed
       @predecessor_array.each do |description|
         t = Todo.find_by_description(description)
         if t.nil?
@@ -94,23 +93,24 @@ class Todo < ActiveRecord::Base
   end
   
   def save_predecessors
-    current_array = predecessors.map(&:description)
-    @predecessor_array = [] if @predecessor_array.nil?
-    remove_array = current_array - @predecessor_array
-    add_array = @predecessor_array - current_array
-    
-    # This is probably a bit naive code...
-    remove_array.each do |description|
-      t = Todo.find_by_description(description)
-      self.predecessors.delete(t)
-    end
-    # ... as is this?
-    add_array.each do |description|
-      t = Todo.find_by_description(description)
-      unless t.nil?
-        self.predecessors << t unless self.predecessors.include?(t)
-      else
-        logger.error "Could not find #{description}" # Unexpected since validation passed
+    unless @predecessor_array.nil?  # Only save predecessors if they changed
+      current_array = predecessors.map(&:description)
+      remove_array = current_array - @predecessor_array
+      add_array = @predecessor_array - current_array
+      
+      # This is probably a bit naive code...
+      remove_array.each do |description|
+        t = Todo.find_by_description(description)
+        self.predecessors.delete(t)
+      end
+      # ... as is this?
+      add_array.each do |description|
+        t = Todo.find_by_description(description)
+        unless t.nil?
+          self.predecessors << t unless self.predecessors.include?(t)
+        else
+          logger.error "Could not find #{description}" # Unexpected since validation passed
+        end
       end
     end
   end
