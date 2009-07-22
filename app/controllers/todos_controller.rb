@@ -83,7 +83,7 @@ class TodosController < ApplicationController
       unless @todo.uncompleted_predecessors.empty? || @todo.state == 'project_hidden'
         @todo.state = 'pending'
       end
-      @todo.save!
+      @todo.save
     end
 
     respond_to do |format|
