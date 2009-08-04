@@ -1217,21 +1217,26 @@ button.positive, .widgets a.positive{
     margin-top:15px;
     margin-bottom:15px;
 }
-body.integrations h2 {
+div.integrations h2 {
     margin-top:40px;
     padding-top:20px;
     margin-bottom:10px;
     border-top:1px solid #ccc;
 }
-body.integrations p, body.integrations li {
+div.integrations p, div.integrations li {
     font-size:1.0em;
 }
-body.integrations li {
+
+div.integrations pre {
+    font-size:1.1em;
+}
+
+div.integrations li {
     list-style-type: disc;
     list-style-position: inside;
     margin-left:30px;	
 }
-body.integrations textarea {
+div.integrations textarea {
     margin:10px;
     padding:3px;
     width:80%;

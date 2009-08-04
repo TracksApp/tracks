@@ -32,4 +32,8 @@ class IntegrationsController < ApplicationController
 	render :layout => false
   end
 
+  def google_gadget
+    render :layout => false, :content_type => Mime::XML
+  end
+
 end
