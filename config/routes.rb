@@ -65,8 +65,9 @@ ActionController::Routing::Routes.draw do |map|
 
   map.preferences 'preferences', :controller => 'preferences', :action => 'index'
   map.integrations 'integrations', :controller => 'integrations', :action => 'index'
-  map.stats 'stats', :controller => 'stats', :action => 'index'
   map.search_plugin '/integrations/search_plugin.xml', :controller => 'integrations', :action => 'search_plugin', :format => 'xml'
+  map.google_gadget '/integrations/google_gadget.xml', :controller => 'integrations', :action => 'google_gadget', :format => 'xml'
+  map.stats 'stats', :controller => 'stats', :action => 'index'
 
   map.resources :recurring_todos,
     :member => {:toggle_check => :put, :toggle_star => :put}

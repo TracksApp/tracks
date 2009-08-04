@@ -1,6 +1,6 @@
 class IntegrationsController < ApplicationController
 
-  skip_before_filter :login_required, :only => :search_plugin
+  skip_before_filter :login_required, :only => [:search_plugin, :google_gadget]
 
   def index
     @page_title = 'TRACKS::Integrations'
