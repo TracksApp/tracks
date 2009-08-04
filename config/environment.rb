@@ -58,6 +58,11 @@ Rails::Initializer.run do |config|
   # (enables use of different database adapters for development and test environments)
   config.active_record.schema_format = :ruby
 
+  # allow other protocols in urls for sanitzer. Add to your liking, for example
+  # config.action_view.sanitized_allowed_protocols = 'onenote', 'blah', 'proto'
+  # to enable "link":onenote://... or "link":blah://... hyperlinks
+  config.action_view.sanitized_allowed_protocols = 'onenote'
+
   # See Rails::Configuration for more options
 end
 
