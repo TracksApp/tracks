@@ -50,6 +50,7 @@ class TodosController < ApplicationController
   
   def create
     @source_view = params['_source_view'] || 'todo'
+    @tag_name = params['_tag_name'] 
     p = TodoCreateParamsHelper.new(params, prefs)        
     p.parse_dates() unless mobile?
     tag_list = p.tag_list
@@ -506,9 +507,9 @@ class TodosController < ApplicationController
 
   def auto_complete_for_tag
     @items = Tag.find(:all,
-    :conditions => [ "name LIKE ?", '%' + params['tag_list'] + '%' ],
-    :order => "name ASC",
-    :limit => 10)
+      :conditions => [ "name LIKE ?", '%' + params['tag_list'] + '%' ],
+      :order => "name ASC",
+      :limit => 10)
     render :inline => "<%= auto_complete_result(@items, :name) %>"
   end
   
@@ -718,10 +719,15 @@ class TodosController < ApplicationController
   end
 
   def determine_deferred_tag_count(tag)
-    tag_collection = Tag.find_by_name(tag).todos
-    @deferred_tag_count = tag_collection.count(:all,
-      :conditions => ['todos.user_id = ? and state = ?', current_user.id, 'deferred'],
-      :order => 'show_from ASC, todos.created_at DESC')
+    tags = Tag.find_by_name(tag)
+    if tags.nil?
+      # should normally not happen, but is a workaround for #929
+      @deferred_tag_count = 0
+    else
+      @deferred_tag_count = tags.todos.count(:all,
+        :conditions => ['todos.user_id = ? and state = ?', current_user.id, 'deferred'],
+        :order => 'show_from ASC, todos.created_at DESC')
+    end
   end
 
   def render_todos_html

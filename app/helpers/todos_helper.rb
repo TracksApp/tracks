@@ -229,7 +229,7 @@ module TodosHelper
 
   def should_show_new_item
 
-    if @todo.project.nil? == false
+    unless @todo.project.nil?
       # do not show new actions that were added to hidden or completed projects
       # on home page and context page
       return false if source_view_is(:todo) && (@todo.project.hidden? || @todo.project.completed?)

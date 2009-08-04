@@ -62,6 +62,7 @@
       </div>
 
       <%= source_view_tag( @source_view ) %>
+      <%= hidden_field_tag :_tag_name, @tag_name.underscore.gsub(/\s+/,'_') if source_view_is :tag %>
 
       <div class="submit_box">
         <div class="widgets">
