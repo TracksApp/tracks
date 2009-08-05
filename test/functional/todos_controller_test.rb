@@ -4,7 +4,7 @@ require 'todos_controller'
 # Re-raise errors caught by the controller.
 class TodosController; def rescue_action(e) raise e end; end
 
-class TodosControllerTest < Test::Rails::TestCase
+class TodosControllerTest < ActionController::TestCase
   fixtures :users, :preferences, :projects, :contexts, :todos, :tags, :taggings, :recurring_todos
 
   def setup
@@ -358,7 +358,7 @@ class TodosControllerTest < Test::Rails::TestCase
         "show_from(1i)"=>"", "show_from(2i)"=>"", "show_from(3i)"=>"",
         "project_id"=>"1",
         "notes"=>"test notes", "description"=>"test_mobile_create_action", "state"=>"0"}}
-    assert_redirected_to '/m'
+    assert_redirected_to '/mobile'
   end
 
   def test_mobile_create_action_renders_new_template_when_save_fails

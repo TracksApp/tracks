@@ -22,7 +22,7 @@ end
 
 %>
 
-1:
+call_bill_gates_every_day:
   id: 1
   user_id: 1
   context_id: 1
@@ -48,7 +48,7 @@ end
   created_at: <%= last_week %>
   completed_at: ~
 
-2:
+call_bill_gates_every_workday:
   id: 2
   user_id: 1
   context_id: 1
@@ -74,7 +74,7 @@ end
   created_at: <%= last_week %>
   completed_at: ~
 
-3:
+call_bill_gates_every_week:
   id: 3
   user_id: 1
   context_id: 1
@@ -100,7 +100,7 @@ end
   created_at: <%= last_week %>
   completed_at: ~
 
-4:
+check_with_bill_every_last_friday_of_month:
   id: 4
   user_id: 1
   context_id: 1
@@ -126,7 +126,7 @@ end
   created_at: <%= last_week %>
   completed_at: ~
 
-5:
+birthday_reinier:
   id: 5
   user_id: 1
   context_id: 1

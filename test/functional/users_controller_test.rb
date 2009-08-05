@@ -4,7 +4,7 @@ require 'users_controller'
 # Re-raise errors caught by the controller.
 class UsersController; def rescue_action(e) raise e end; end
 
-class UsersControllerTest < Test::Rails::TestCase
+class UsersControllerTest < ActionController::TestCase
   fixtures :preferences, :users
   
   def setup
@@ -51,10 +51,10 @@ class UsersControllerTest < Test::Rails::TestCase
   
   def test_destroy_user
     login_as :admin_user
-    @no_users_before = User.find(:all).size
-    xhr :post, :destroy, :id => users(:ldap_user).to_param
+    nr_users_before = User.find(:all).size
+    xhr :post, :destroy, :id => users(:ldap_user).id.to_param
     assert_rjs :page, "user-3", :remove
-    assert_equal @no_users_before-1, User.find(:all).size
+    assert_equal nr_users_before-1, User.find(:all).size
   end
   
   def test_update_password_successful

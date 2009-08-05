@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../test_helper'
 require 'date'
 
-class TodoTest < Test::Rails::TestCase
+class TodoTest < ActiveSupport::TestCase
   fixtures :todos, :recurring_todos, :users, :contexts, :preferences, :tags, :taggings
 
   def setup

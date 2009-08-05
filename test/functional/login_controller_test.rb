@@ -5,7 +5,7 @@ require_dependency "login_system"
 # Re-raise errors caught by the controller.
 class LoginController; def rescue_action(e) raise e end; end
 
-class LoginControllerTest < Test::Rails::TestCase
+class LoginControllerTest < ActionController::TestCase
   fixtures :preferences, :users
   
   def setup

@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../test_helper'
 require File.dirname(__FILE__) + '/../../lib/prototype_helper_extensions'
 
-class PrototypeHelperExtensionsTest < Test::Unit::TestCase
+class PrototypeHelperExtensionsTest < ActiveSupport::TestCase
   include ActionView::Helpers::JavaScriptHelper
   include ActionView::Helpers::PrototypeHelper
   include ActionView::Helpers::ScriptaculousHelper

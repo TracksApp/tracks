@@ -23,7 +23,7 @@ end
 
 %>
 
-1:
+call_bill:
   id: 1
   context_id: 1
   project_id: 2
@@ -35,7 +35,7 @@ end
   completed_at: ~
   user_id: 1
 
-2:
+call_dino_ext:
   id: 2
   context_id: 2
   project_id: 3
@@ -47,7 +47,7 @@ end
   completed_at: ~
   user_id: 1
 
-3:
+buy_milk:
   id: 3
   context_id: 4
   project_id: ~
@@ -59,7 +59,7 @@ end
   completed_at: <%= today %>
   user_id: 1
 
-4:
+buy_bread:
   id: 4
   context_id: 4
   project_id: ~
@@ -71,7 +71,7 @@ end
   completed_at: <%= today %>
   user_id: 1
 
-5:
+construct_dilation_device:
   id: 5
   context_id: 5
   project_id: 1
@@ -83,7 +83,7 @@ end
   completed_at: ~
   user_id: 1
 
-6:
+phone_grandfather:
   id: 6
   context_id: 2
   project_id: 1
@@ -107,7 +107,7 @@ book:
   completed_at: ~
   user_id: 1
 
-8:
+upgrade_rails:
   id: 8
   context_id: 4
   project_id: ~
@@ -119,7 +119,7 @@ book:
   completed_at: <%= today %>
   user_id: 1
 
-9:
+due_today:
   id: 9
   context_id: 1
   project_id: ~
@@ -131,7 +131,7 @@ book:
   completed_at: ~
   user_id: 1
 
-10:
+foo:
   id: 10
   context_id: 1
   project_id: ~
@@ -143,7 +143,7 @@ book:
   completed_at: <%= last_week %>
   user_id: 1
 
-11:
+buy_shares:
   id: 11
   context_id: 1
   project_id: 2
@@ -155,7 +155,7 @@ book:
   completed_at: ~
   user_id: 1
 
-12:
+buy_stego_bait:
   id: 12
   context_id: 1
   project_id: 3
@@ -167,7 +167,7 @@ book:
   completed_at: ~
   user_id: 1
 
-13:
+new_action_in_context:
   id: 13
   context_id: 1
   project_id: 3
@@ -179,7 +179,7 @@ book:
   completed_at: ~
   user_id: 1
 
-14:
+call_stock_broker:
   id: 14
   context_id: 2
   project_id: 2
@@ -191,7 +191,7 @@ book:
   completed_at: ~
   user_id: 1
   
-15:
+select_delorean_model:
   id: 15
   context_id: 6
   project_id: 1
@@ -204,7 +204,7 @@ book:
   show_from: <%= next_week %>
   user_id: 1
 
-16:
+buy_tix:
   id: 16
   context_id: 10
   project_id: 4
@@ -218,7 +218,7 @@ book:
   user_id: 2
 
 
-17:
+pal_confirmation:
   id: 17
   context_id: 11
   project_id: 4
@@ -231,7 +231,7 @@ book:
   show_from: <%= next_week %>
   user_id: 2
 
-18:
+call_bill_gates_every_day:
   id: 18
   user_id: 1
   context_id: 1

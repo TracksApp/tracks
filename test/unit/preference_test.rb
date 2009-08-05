@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-class PreferenceTest < Test::Rails::TestCase
+class PreferenceTest < ActiveSupport::TestCase
   fixtures :users, :preferences
 
   def setup

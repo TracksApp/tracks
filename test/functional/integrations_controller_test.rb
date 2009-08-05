@@ -4,7 +4,7 @@ require 'integrations_controller'
 # Re-raise errors caught by the controller.
 class IntegrationsController; def rescue_action(e) raise e end; end
 
-class IntegrationsControllerTest < Test::Unit::TestCase
+class IntegrationsControllerTest < ActionController::TestCase
   fixtures :users, :preferences, :projects, :contexts, :todos, :recurring_todos, :tags, :taggings
 
   def setup

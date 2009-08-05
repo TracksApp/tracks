@@ -4,7 +4,7 @@ require 'backend_controller'
 # Re-raise errors caught by the controller.
 class BackendController; def rescue_action(e) raise e end; end
 
-class BackendControllerTest < Test::Rails::TestCase
+class BackendControllerTest < ActionController::TestCase
   fixtures :users, :projects, :contexts, :todos, :recurring_todos, :notes
   
   def setup
