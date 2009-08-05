@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class MessageGatewayTest < ActiveSupport::TestCase
-  fixtures :users, :contexts
+  fixtures :users, :contexts, :todos
 
   def setup
     @user = users(:sms_user)

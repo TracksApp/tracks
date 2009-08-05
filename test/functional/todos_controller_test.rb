@@ -358,7 +358,7 @@ class TodosControllerTest < ActionController::TestCase
         "show_from(1i)"=>"", "show_from(2i)"=>"", "show_from(3i)"=>"",
         "project_id"=>"1",
         "notes"=>"test notes", "description"=>"test_mobile_create_action", "state"=>"0"}}
-    assert_redirected_to '/m'
+    assert_redirected_to '/mobile'
   end
 
   def test_mobile_create_action_renders_new_template_when_save_fails

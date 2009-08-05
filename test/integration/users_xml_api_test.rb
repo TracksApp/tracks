@@ -84,7 +84,7 @@ class UsersXmlApiTest < ActionController::IntegrationTest
   end
 
   def test_get_user_as_xml
-    get "/users/#{users(:other_user).login}.xml", {}, basic_auth_headers()
+    get "/users/#{users(:other_user).id}.xml", {}, basic_auth_headers()
     assert_response :success
     assert_tag :tag => "user"
     assert_no_tag :tag => "password"
