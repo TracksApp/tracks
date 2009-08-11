@@ -92,7 +92,7 @@ class ProjectsController < ApplicationController
         elsif @project.new_record?
           render_failure @project.errors.full_messages.join(', ')
         else
-          head :created, :location => project_url(@project)
+          head :created, :location => project_url(@project), :text => @project.id
         end
       end
     end
