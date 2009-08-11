@@ -6,8 +6,8 @@ class TodosController < ApplicationController
   prepend_before_filter :login_or_feed_token_required, :only => [:index, :calendar]
   append_before_filter :init, :except => [ :destroy, :completed,
     :completed_archive, :check_deferred, :toggle_check, :toggle_star,
-    :edit, :update, :create, :calendar, :auto_complete_for_tag]
-  append_before_filter :get_todo_from_params, :only => [ :edit, :toggle_check, :toggle_star, :show, :update, :destroy ]
+    :edit, :update, :create, :calendar, :auto_complete_for_tag, :auto_complete_for_predecessor, :remove_predecessor, :add_predecessor]
+  append_before_filter :get_todo_from_params, :only => [ :edit, :toggle_check, :toggle_star, :show, :update, :destroy, :remove_predecessor]
   protect_from_forgery :except => [:auto_complete_for_tag, :auto_complete_for_predecessor]
 
   session :off, :only => :index, :if => Proc.new { |req| is_feed_request(req) }
@@ -149,6 +149,16 @@ class TodosController < ApplicationController
     @todo.add_predecessor(@predecessor)
     @todo.state = 'pending'
     @saved = @todo.save
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  def remove_predecessor
+    @source_view = params['_source_view'] || 'todo'
+    @predecessor = Todo.find(params['predecessor'])
+    @successor = @todo
+    @removed = @successor.remove_predecessor(@predecessor)
     respond_to do |format|
       format.js
     end
@@ -594,6 +604,7 @@ class TodosController < ApplicationController
       get_todo_from_params
       # Begin matching todos in current project
       @items = current_user.todos.find(:all, 
+        :select => :description,
         :conditions => [ '(todos.state = ? OR todos.state = ?) AND ' +
                          'NOT (id = ?) AND lower(description) LIKE ? AND project_id = ?', 
                          'active', 'pending',
@@ -605,6 +616,7 @@ class TodosController < ApplicationController
       )
       if @items.empty? # Match todos in other projects
         @items = current_user.todos.find(:all, 
+          :select => :description,
           :conditions => [ '(todos.state = ? OR todos.state = ?) AND ' +
                            'NOT (id = ?) AND lower(description) LIKE ?', 
                            'active', 'pending',
@@ -616,6 +628,7 @@ class TodosController < ApplicationController
     else
       # New todo - TODO: Filter on project
       @items = current_user.todos.find(:all, 
+        :select => :description,
         :conditions => [ '(todos.state = ? OR todos.state = ?) AND lower(description) LIKE ?', 
                          'active', 'pending',
                          '%' + params[:predecessor_list].downcase + '%' ],
