@@ -16,6 +16,7 @@ if @saved
       logger.debug "#300: Removing #{t.description} from pending block and adding it to active"
       page[t].remove if source_view_is(:project) or source_view_is(:tag)
       page.insert_html :bottom, item_container_id(t), :partial => 'todos/todo', :locals => { :todo => t, :parent_container_type => parent_container_type }
+      page.visual_effect :highlight, dom_id(t, 'line'), {'startcolor' => "'#99ff99'"}
     end
     
     # remove container if empty
