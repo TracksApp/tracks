@@ -12,12 +12,13 @@ parameters += "&_tag_name=#{@tag_name}" if @source_view == 'tag'
       <span class="todo.descr"><%= h sanitize(successor.description) %></span>
       
       <%= link_to_remote(
-        image_tag("delete_off.png", :mouseover => "delete_on.png", :alt => "Remove the dependency", :align => "absmiddle"),
-        :url => {:controller => 'todos', :action => 'remove_predecessor', :id => successor.id},
-      :method => 'delete',
-      :with => "'#{parameters}&predecessor=#{predecessor.id}'",
-      :before => todo_start_waiting_js(dom_id(successor, 'successor')),
-      :complete => todo_stop_waiting_js) %>
+        image_tag("blank.png", :title => "Remove dependency (does not delete the action)", :align => "absmiddle", :class => "delete_item"),
+        {:url => {:controller => 'todos', :action => 'remove_predecessor', :id => successor.id},
+         :method => 'delete',
+         :with => "'#{parameters}&predecessor=#{predecessor.id}'",
+         :before => todo_start_waiting_js(dom_id(successor, 'successor')),
+         :complete => todo_stop_waiting_js},
+        {:style => "background: transparent;"}) %>
       
       <%= render(:partial => "todos/toggle_successors", :locals => { :item => successor, :suppress_button => true }) unless successor.pending_successors.empty? %>
     </div>
