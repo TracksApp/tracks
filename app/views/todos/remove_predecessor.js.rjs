@@ -7,11 +7,17 @@ if @removed
     :todo => @predecessor, :parent_container_type => parent_container_type }
  
   # update display if pending->active
-  if @successor.state == 'active'
+  if @successor.active?
       page[@successor].remove unless source_view_is_one_of(:todo, :context)
       page.insert_html :bottom, item_container_id(@successor), :partial => 'todos/todo', :locals => { 
         :todo => @successor, :parent_container_type => parent_container_type }
       page.visual_effect :highlight, dom_id(@successor, 'line'), {'startcolor' => "'#99ff99'"}
+  end
+  
+  # update display if pending->deferred
+  if @successor.deferred?
+      page.replace dom_id(@successor), :partial => 'todos/todo', :locals => { 
+        :todo => @successor, :parent_container_type => parent_container_type }
   end
 
   page << "TodoBehavior.enableToggleNotes()"
