@@ -42,10 +42,8 @@ class Todo < ActiveRecord::Base
   
   event :activate do
     transitions :to => :active, :from => [:project_hidden, :completed, :deferred]
-    transitions :to => :active, :from => [:pending], 
-      :guard => Proc.new{|t| t.show_from.blank? or Time.zone.now > t.show_from and t.uncompleted_predecessors.empty?}
-    transitions :to => :deferred, :from => [:pending],
-      :guard => Proc.new{|t| t.uncompleted_predecessors.empty?}
+    transitions :to => :active, :from => [:pending], :guard => :no_uncompleted_predecessors_or_deferral? 
+    transitions :to => :deferred, :from => [:pending], :guard => :no_uncompleted_predecessors?
   end
     
   event :hide do
@@ -58,7 +56,7 @@ class Todo < ActiveRecord::Base
   end
   
   event :block do
-    transitions :to => :pending, :from => [:active]
+    transitions :to => :pending, :from => [:active, :deferred]
   end
     
   attr_protected :user
@@ -74,6 +72,18 @@ class Todo < ActiveRecord::Base
   def initialize(*args)
     super(*args)
     @predecessor_array = nil # Used for deferred save of predecessors
+  end
+  
+  def no_uncompleted_predecessors_or_deferral?
+    value = (show_from.blank? or Time.zone.now > show_from and uncompleted_predecessors.empty?)
+    logger.debug "=== no_uncompleted_predecessors_or_deferral #{value}"
+    return value
+  end
+  
+  def no_uncompleted_predecessors?
+    value = self.uncompleted_predecessors.empty?
+    logger.debug "=== no_uncompleted_predecessor #{value}"
+    return value
   end
   
   # TODO: Handle duplicate descriptions
@@ -247,7 +257,7 @@ class Todo < ActiveRecord::Base
   
   # Return todos that should be blocked if the current todo is undone
   def active_to_block
-    return successors.find_all {|t| t.active?}
+    return successors.find_all {|t| t.active? or t.deferred?}
   end
   
   # Rich Todo API
