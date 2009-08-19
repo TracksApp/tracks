@@ -1270,6 +1270,7 @@ div.auto_complete ul {
   list-style-type:none;
 }
 div.auto_complete ul li {
+  font-size: 1.0em;
   margin:0;
   padding:3px;
   list-style-type: none;

@@ -134,20 +134,10 @@ module TodosHelper
     if tag_list.empty? then "" else "<span class=\"tags\">#{tag_list}</span>" end
   end
   
-  # TODO: Use DELIMITER
   def predecessor_list_text
-    @todo.predecessors.collect{|t| t.description}.join(', ')
+    @todo.predecessors.map{|t| t.specification}.join(', ')
   end
-  
-  def predecessor_list
-    predecessor_list = @todo.predecessors.collect{|t| 
-      '<span class="predecessor #{t.description}">' + 
-      link_to(t.name, :controller => "todos", :action => "tag", :id => t.name) + 
-      "</span>"
-    }.join('')
-    '<span class="predecessors">#{predecessor_list}</span>'
-  end
-  
+
   def deferred_due_date
     if @todo.deferred? && @todo.due
       "(action due on #{format_date(@todo.due)})"
@@ -316,4 +306,14 @@ module TodosHelper
     class_str = todo.starred? ? "starred_todo" : "unstarred_todo"
     image_tag("blank.png", :title =>"Star action", :class => class_str)
   end
+  
+  def auto_complete_result2(entries, phrase = nil)
+    return unless entries
+    items = entries.map do |entry|
+      item = entry.specification()
+      content_tag("li", phrase ? highlight(h(item), phrase) : h(item))
+    end
+    content_tag("ul", items.uniq)
+  end
+  
 end

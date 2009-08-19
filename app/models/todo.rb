@@ -75,52 +75,72 @@ class Todo < ActiveRecord::Base
   end
   
   def no_uncompleted_predecessors_or_deferral?
-    value = (show_from.blank? or Time.zone.now > show_from and uncompleted_predecessors.empty?)
-    logger.debug "=== no_uncompleted_predecessors_or_deferral #{value}"
-    return value
+    return (show_from.blank? or Time.zone.now > show_from and uncompleted_predecessors.empty?)
   end
   
   def no_uncompleted_predecessors?
-    value = self.uncompleted_predecessors.empty?
-    logger.debug "=== no_uncompleted_predecessor #{value}"
-    return value
+    return uncompleted_predecessors.empty?
   end
   
-  # TODO: Handle duplicate descriptions
+ 
+  def todo_from_string(specification)
+    # Split specification into parts: description <project, context>
+    parts = specification.split(%r{\ \<|; |\>})
+    return nil unless parts.length == 3
+    todos = Todo.all(:joins => [:project, :context],
+                    :include => [:context, :project],
+                    :conditions => {:description => parts[0],
+                                    :contexts => {:name => parts[2]}})
+    return nil if todos.empty?
+    # todos now contains all todos with matching description and context
+    # TODO: Is this possible to do with a single query?
+    todos.each do |todo|
+      project_name = todo.project.is_a?(NullProject) ? "(none)" : todo.project.name
+      return todo if project_name == parts[1]
+    end
+    return nil
+  end
+  
   def validate
     if !show_from.blank? && show_from < user.date
       errors.add("show_from", "must be a date in the future")
     end
     unless @predecessor_array.nil? # Only validate predecessors if they changed
-      @predecessor_array.each do |description|
-        t = Todo.find_by_description(description)
+      @predecessor_array.each do |specification|
+        t = todo_from_string(specification)
         if t.nil?
-          errors.add("Depends on:", "Could not find action '#{description}'")
+          errors.add("Depends on:", "Could not find action '#{h(specification)}'")
         else
-          errors.add("Depends on:", "Adding '#{description}' would create a circular dependency") if is_successor?(t)
+          errors.add("Depends on:", "Adding '#{h(specification)}' would create a circular dependency") if is_successor?(t)
         end
       end
     end
   end
   
+  # Returns a string with description, project and context
+  def specification
+    project_name = project.is_a?(NullProject) ? "(none)" : project.name
+    return "#{description} <#{project_name}; #{context.title}>"
+  end
+  
   def save_predecessors
     unless @predecessor_array.nil?  # Only save predecessors if they changed
-      current_array = predecessors.map(&:description)
+      current_array = predecessors.map{|p| p.specification}
       remove_array = current_array - @predecessor_array
       add_array = @predecessor_array - current_array
       
       # This is probably a bit naive code...
-      remove_array.each do |description|
-        t = Todo.find_by_description(description)
-        self.predecessors.delete(t)
+      remove_array.each do |specification|
+        t = todo_from_string(specification)
+        self.predecessors.delete(t) unless t.nil?
       end
       # ... as is this?
-      add_array.each do |description|
-        t = Todo.find_by_description(description)
+      add_array.each do |specification|
+        t = todo_from_string(specification)
         unless t.nil?
           self.predecessors << t unless self.predecessors.include?(t)
         else
-          logger.error "Could not find #{description}" # Unexpected since validation passed
+          logger.error "Could not find #{specification}" # Unexpected since validation passed
         end
       end
     end
@@ -235,7 +255,6 @@ class Todo < ActiveRecord::Base
   end
   
   # TODO: DELIMITER
-  # TODO: Handle todos with the same description
   # TODO: Should possibly handle state changes also?
   def add_predecessor_list(predecessor_list)
     if predecessor_list.kind_of? String

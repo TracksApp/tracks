@@ -236,7 +236,7 @@ class TodosController < ApplicationController
     @original_item_was_deferred = @todo.deferred?
     @original_item_due = @todo.due
     @original_item_due_id = get_due_id_for_calendar(@todo.due)
-    @original_item_predecessor_list = @todo.predecessors.collect{|t| t.description}.join(', ')
+    @original_item_predecessor_list = @todo.predecessors.map{|t| t.specification}.join(', ')
     
     if params['todo']['project_id'].blank? && !params['project_name'].nil?
       if params['project_name'] == 'None'
@@ -604,7 +604,7 @@ class TodosController < ApplicationController
       get_todo_from_params
       # Begin matching todos in current project
       @items = current_user.todos.find(:all, 
-        :select => :description,
+        :select => 'description, project_id, context_id, created_at',
         :conditions => [ '(todos.state = ? OR todos.state = ?) AND ' +
                          'NOT (id = ?) AND lower(description) LIKE ? AND project_id = ?', 
                          'active', 'pending',
@@ -616,7 +616,7 @@ class TodosController < ApplicationController
       )
       if @items.empty? # Match todos in other projects
         @items = current_user.todos.find(:all, 
-          :select => :description,
+        :select => 'description, project_id, context_id, created_at',
           :conditions => [ '(todos.state = ? OR todos.state = ?) AND ' +
                            'NOT (id = ?) AND lower(description) LIKE ?', 
                            'active', 'pending',
@@ -628,7 +628,7 @@ class TodosController < ApplicationController
     else
       # New todo - TODO: Filter on project
       @items = current_user.todos.find(:all, 
-        :select => :description,
+        :select => 'description, project_id, context_id, created_at',
         :conditions => [ '(todos.state = ? OR todos.state = ?) AND lower(description) LIKE ?', 
                          'active', 'pending',
                          '%' + params[:predecessor_list].downcase + '%' ],
@@ -636,7 +636,7 @@ class TodosController < ApplicationController
         :limit => 10
       )
     end
-    render :inline => "<%= auto_complete_result(@items, :description) %>"
+    render :inline => "<%= auto_complete_result2(@items) %>"
   end
   
   private
