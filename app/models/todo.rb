@@ -265,8 +265,8 @@ class Todo < ActiveRecord::Base
   end
   
   def add_predecessor(t)
-    @predecessor_array = predecessors.map(&:description)
-    @predecessor_array << t.description
+    @predecessor_array = predecessors.map{|p| p.specification}
+    @predecessor_array << t.specification
   end
   
   # Return todos that should be activated if the current todo is completed
