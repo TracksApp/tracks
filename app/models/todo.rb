@@ -93,10 +93,13 @@ class Todo < ActiveRecord::Base
     # Split specification into parts: description <context, project>
     parts = specification.split(%r{\ \<|; |\>})
     return nil unless parts.length == 3
-    todos = Todo.all(:joins => [:project, :context],
-                    :include => [:context, :project],
-                    :conditions => {:description => parts[0],
-                                    :contexts => {:name => parts[1]}})
+    todos = Todo.all(
+      :joins => [:project, :context],
+      :conditions => {
+        :description => parts[0],
+        :contexts => {:name => parts[1]}
+      }
+    )
     return nil if todos.empty?
     # todos now contains all todos with matching description and context
     # TODO: Is this possible to do with a single query?
