@@ -84,19 +84,19 @@ class Todo < ActiveRecord::Base
   
  
   def todo_from_string(specification)
-    # Split specification into parts: description <project, context>
+    # Split specification into parts: description <context, project>
     parts = specification.split(%r{\ \<|; |\>})
     return nil unless parts.length == 3
     todos = Todo.all(:joins => [:project, :context],
                     :include => [:context, :project],
                     :conditions => {:description => parts[0],
-                                    :contexts => {:name => parts[2]}})
+                                    :contexts => {:name => parts[1]}})
     return nil if todos.empty?
     # todos now contains all todos with matching description and context
     # TODO: Is this possible to do with a single query?
     todos.each do |todo|
       project_name = todo.project.is_a?(NullProject) ? "(none)" : todo.project.name
-      return todo if project_name == parts[1]
+      return todo if project_name == parts[2]
     end
     return nil
   end
@@ -120,7 +120,7 @@ class Todo < ActiveRecord::Base
   # Returns a string with description, project and context
   def specification
     project_name = project.is_a?(NullProject) ? "(none)" : project.name
-    return "#{description} <#{project_name}; #{context.title}>"
+    return "#{description} <#{context.title}; #{project_name}>"
   end
   
   def save_predecessors
