@@ -83,7 +83,13 @@ class Todo < ActiveRecord::Base
   end
   
  
-  def todo_from_string(specification)
+  # Returns a string with description <context, project>
+  def specification
+    project_name = project.is_a?(NullProject) ? "(none)" : project.name
+    return "#{description} <#{context.title}; #{project_name}>"
+  end
+  
+  def todo_from_specification(specification)
     # Split specification into parts: description <context, project>
     parts = specification.split(%r{\ \<|; |\>})
     return nil unless parts.length == 3
@@ -107,7 +113,7 @@ class Todo < ActiveRecord::Base
     end
     unless @predecessor_array.nil? # Only validate predecessors if they changed
       @predecessor_array.each do |specification|
-        t = todo_from_string(specification)
+        t = todo_from_specification(specification)
         if t.nil?
           errors.add("Depends on:", "Could not find action '#{h(specification)}'")
         else
@@ -115,12 +121,6 @@ class Todo < ActiveRecord::Base
         end
       end
     end
-  end
-  
-  # Returns a string with description, project and context
-  def specification
-    project_name = project.is_a?(NullProject) ? "(none)" : project.name
-    return "#{description} <#{context.title}; #{project_name}>"
   end
   
   def save_predecessors
@@ -131,12 +131,12 @@ class Todo < ActiveRecord::Base
       
       # This is probably a bit naive code...
       remove_array.each do |specification|
-        t = todo_from_string(specification)
+        t = todo_from_specification(specification)
         self.predecessors.delete(t) unless t.nil?
       end
       # ... as is this?
       add_array.each do |specification|
-        t = todo_from_string(specification)
+        t = todo_from_specification(specification)
         unless t.nil?
           self.predecessors << t unless self.predecessors.include?(t)
         else
@@ -253,8 +253,7 @@ class Todo < ActiveRecord::Base
   def from_recurring_todo?
     return self.recurring_todo_id != nil
   end
-  
-  # TODO: DELIMITER
+
   # TODO: Should possibly handle state changes also?
   def add_predecessor_list(predecessor_list)
     if predecessor_list.kind_of? String
