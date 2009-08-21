@@ -101,7 +101,7 @@ class Todo < ActiveRecord::Base
     todo_description = parts[0][0]
     context_name = parts[0][1]
     todos = Todo.all(
-      :joins => [:project, :context],
+      :joins => :context,
       :conditions => {
         :description => todo_description,
         :contexts => {:name => context_name}
