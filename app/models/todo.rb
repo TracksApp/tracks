@@ -21,6 +21,9 @@ class Todo < ActiveRecord::Base
   named_scope :are_due, :conditions => ['NOT (todos.due IS NULL)']
 
   STARRED_TAG_NAME = "starred"
+  RE_TODO = '[^"]+'
+  RE_PROJECT = '\\(?\\w[\\w\\s]*\\)?'
+  RE_CONTEXT = '\\w[\\w\\s]*'
   
   acts_as_state_machine :initial => :active, :column => 'state'
   
@@ -86,18 +89,22 @@ class Todo < ActiveRecord::Base
   # Returns a string with description <context, project>
   def specification
     project_name = project.is_a?(NullProject) ? "(none)" : project.name
-    return "#{description} <#{context.title}; #{project_name}>"
+    return "\"#{description}\" <#{context.title}; #{project_name}>"
   end
   
   def todo_from_specification(specification)
     # Split specification into parts: description <context, project>
-    parts = specification.split(%r{\ \<|; |\>})
-    return nil unless parts.length == 3
+    re_parts = Regexp.compile("\"(#{RE_TODO})\"\\s<(#{RE_CONTEXT});\\s(#{RE_PROJECT})>")
+    parts = specification.scan(re_parts)
+    return nil unless parts.length == 1
+    return nil unless parts[0].length == 3
+    todo_description = parts[0][0]
+    context_name = parts[0][1]
     todos = Todo.all(
       :joins => [:project, :context],
       :conditions => {
-        :description => parts[0],
-        :contexts => {:name => parts[1]}
+        :description => todo_description,
+        :contexts => {:name => context_name}
       }
     )
     return nil if todos.empty?
@@ -105,7 +112,7 @@ class Todo < ActiveRecord::Base
     # TODO: Is this possible to do with a single query?
     todos.each do |todo|
       project_name = todo.project.is_a?(NullProject) ? "(none)" : todo.project.name
-      return todo if project_name == parts[2]
+      return todo if project_name == parts[0][2]
     end
     return nil
   end
@@ -257,13 +264,11 @@ class Todo < ActiveRecord::Base
     return self.recurring_todo_id != nil
   end
 
-  # TODO: Should possibly handle state changes also?
   def add_predecessor_list(predecessor_list)
-    if predecessor_list.kind_of? String
-      @predecessor_array = predecessor_list.split(',').map do |description| 
-        description.strip.squeeze(" ")            
-      end
-    end
+    return unless predecessor_list.kind_of? String
+    # Split into list
+    re_specification = Regexp.compile("\"#{RE_TODO}\"\\s<#{RE_CONTEXT};\\s#{RE_PROJECT}>")
+    @predecessor_array = predecessor_list.scan(re_specification)
   end
   
   def add_predecessor(t)
