@@ -21,9 +21,9 @@ class Todo < ActiveRecord::Base
   named_scope :are_due, :conditions => ['NOT (todos.due IS NULL)']
 
   STARRED_TAG_NAME = "starred"
-  RE_TODO = '[^"]+'
-  RE_PROJECT = '\\(?\\w[\\w\\s]*\\)?'
-  RE_CONTEXT = '\\w[\\w\\s]*'
+  RE_TODO = /[^"]+/
+  RE_CONTEXT = /[^"]+/
+  RE_PROJECT = /[^"]+/
   
   acts_as_state_machine :initial => :active, :column => 'state'
   
@@ -89,12 +89,12 @@ class Todo < ActiveRecord::Base
   # Returns a string with description <context, project>
   def specification
     project_name = project.is_a?(NullProject) ? "(none)" : project.name
-    return "\"#{description}\" <#{context.title}; #{project_name}>"
+    return "\"#{description}\" <\"#{context.title}\"; \"#{project_name}\">"
   end
   
   def todo_from_specification(specification)
     # Split specification into parts: description <context, project>
-    re_parts = Regexp.compile("\"(#{RE_TODO})\"\\s<(#{RE_CONTEXT});\\s(#{RE_PROJECT})>")
+    re_parts = /"(#{RE_TODO})"\s<"(#{RE_CONTEXT})";\s"(#{RE_PROJECT})">/
     parts = specification.scan(re_parts)
     return nil unless parts.length == 1
     return nil unless parts[0].length == 3
@@ -268,7 +268,7 @@ class Todo < ActiveRecord::Base
   def add_predecessor_list(predecessor_list)
     return unless predecessor_list.kind_of? String
     # Split into list
-    re_specification = Regexp.compile("\"#{RE_TODO}\"\\s<#{RE_CONTEXT};\\s#{RE_PROJECT}>")
+    re_specification = /"#{RE_TODO}"\s<"#{RE_CONTEXT}";\s"#{RE_PROJECT}">/
     @predecessor_array = predecessor_list.scan(re_specification)
   end
   
