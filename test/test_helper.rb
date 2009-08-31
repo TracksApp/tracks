@@ -1,7 +1,6 @@
 ENV["RAILS_ENV"] = "test"
 require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
 require File.expand_path(File.dirname(__FILE__) + "/../app/controllers/application")
-require 'autotest/rails' #you need the zentest gem installed
 require 'test_help'
 require 'flexmock/test_unit' #and the flexmock gem, too!
 require 'action_web_service/test_invoke'
