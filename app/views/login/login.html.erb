@@ -61,7 +61,7 @@
 
 <script type="text/javascript">
 function showPreferredAuth() {
-  var preferredAuth = new CookieManager().getCookie('preferred_auth');
+  var preferredAuth = $.cookie('preferred_auth');
   var databaseEnabled = <%= show_database_form ? 'true' : 'false' %>;
   var openidEnabled = <%= show_openid_form ? 'true' : 'false' %>;
 	if (preferredAuth && preferredAuth == 'openid' && openidEnabled) {

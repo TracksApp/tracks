@@ -15,7 +15,6 @@ ToDoItems.prototype = {
         /* keep track of last effect so you can check if the animation has finised */
         this.lastEffect= null;
         this.initialized = true;
-        this.contextCollapseCookieManager = new CookieManager();
         this.toggleItemsMap = {};
         this.toggleContainerMap = {};
         this.containerItemsMap = {};
@@ -41,7 +40,7 @@ ToDoItems.prototype = {
         {
             toggleElem = this.containerToggles[i];
             containerElem = this.toggleContainerMap[toggleElem.id];
-            collapsedCookie = this.contextCollapseCookieManager.getCookie(this.buildCookieName(containerElem));
+            collapsedCookie = $.cookie(this.buildCookieName(containerElem));
             itemsElem = this.toggleItemsMap[toggleElem.id];
             isExpanded = Element.visible(itemsElem);
             if (collapsedCookie && isExpanded)
@@ -93,12 +92,12 @@ ToDoItems.prototype = {
         if (Element.visible(itemsElem))
         {
             this.collapseNextActionListing(toggleElem, itemsElem);
-            this.contextCollapseCookieManager.setCookie(this.buildCookieName(containerElem), true)
+            $.cookie(this.buildCookieName(containerElem), true);
         }
         else
         {
             this.expandNextActionListing(toggleElem, itemsElem);
-            this.contextCollapseCookieManager.clearCookie(this.buildCookieName(containerElem))
+            $.cookie(this.buildCookieName(containerElem), null);
         }
     },
     findToggleElemForContext : function(contextElem)
@@ -148,7 +147,7 @@ ToDoItems.prototype = {
     },
     buildCookieName: function(containerElem)
     {
-   	tracks_login = this.contextCollapseCookieManager.getCookie('tracks_login');
+   	tracks_login = $.cookie('tracks_login');
         return 'tracks_'+tracks_login+'_context_' + containerElem.id + '_collapsed';
     },
 

@@ -11,12 +11,12 @@
         if (Element.visible(toggleTarget))
         {
         todoItems.collapseNextActionListing(this, toggleTarget);
-        todoItems.contextCollapseCookieManager.setCookie(todoItems.buildCookieName(containerElem), true)
+        $.cookie(todoItems.buildCookieName(containerElem), true);
         }
         else
         {
         todoItems.expandNextActionListing(this, toggleTarget);
-        todoItems.contextCollapseCookieManager.clearCookie(todoItems.buildCookieName(containerElem))
+        $.cookie(todoItems.buildCookieName(containerElem), null);
         }
         }
         "

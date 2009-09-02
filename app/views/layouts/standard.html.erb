@@ -11,6 +11,7 @@
     <%= stylesheet_link_tag "print", :media => "print" %>
     <% bundle :name => "jquery" do %>
       <%= javascript_include_tag :defaults %>
+      <%= javascript_include_tag 'jquery.cookie' %>
     <% end %>
     <% bundle :name => "tracks_js" do %>
       <%= javascript_include_tag *%w[
