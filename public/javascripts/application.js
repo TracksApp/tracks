@@ -1,21 +1,21 @@
 var Login = {
     showOpenid: function() {
-        if ($('database_auth_form')) $('database_auth_form').hide();
-        if ($('openid_auth_form')) $('openid_auth_form').show();
-        if ($('alternate_auth_openid')) $('alternate_auth_openid').hide();
-        if ($('alternate_auth_database')) $('alternate_auth_database').show();
-        if ($('openid_url')) $('openid_url').focus();
-        if ($('openid_url')) $('openid_url').select();
+        $('#database_auth_form').hide();
+        $('#openid_auth_form').show();
+        $('#alternate_auth_openid').hide();
+        $('#alternate_auth_database').show();
+        $('#openid_url').focus();
+        $('#openid_url').select();
         $.cookie('preferred_auth', 'openid');
     },
 
     showDatabase: function(container) {
-        if ($('openid_auth_form')) $('openid_auth_form').hide();
-        if ($('database_auth_form')) $('database_auth_form').show();
-        if ($('alternate_auth_database')) $('alternate_auth_database').hide();
-        if ($('alternate_auth_openid')) $('alternate_auth_openid').show();
-        if ($('user_login')) $('user_login').focus();
-        if ($('user_login')) $('user_login').select();
+        $('#openid_auth_form').hide();
+        $('#database_auth_form').show();
+        $('#alternate_auth_database').hide();
+        $('#alternate_auth_openid').show();
+        $('#user_login').focus();
+        $('#user_login').select();
         $.cookie('preferred_auth', 'database');
     }
 }
