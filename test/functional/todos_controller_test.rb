@@ -433,7 +433,7 @@ class TodosControllerTest < ActionController::TestCase
     # link todo_1 and recurring_todo_1
     recurring_todo_1 = RecurringTodo.find(1)
     todo_1 = Todo.find_by_recurring_todo_id(1)
-    today = Time.now.utc.at_midnight
+    today = Time.now.at_midnight
 
     # change recurrence pattern to monthly and set show_from to today
     recurring_todo_1.target = 'show_from_date'
