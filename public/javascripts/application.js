@@ -101,12 +101,7 @@ var TodoBehavior = {
 // });
 
 /* fade flashes automatically */
-Event.observe(window, 'load', function() { 
-    $A(document.getElementsByClassName('alert')).each(function(o) {
-        o.opacity = 100.0
-        Effect.Fade(o, {
-            duration: 8.0
-        })
-    });
+$(document).ready(function() {
+    $(".alert").fadeIn(8000);
 });
 
