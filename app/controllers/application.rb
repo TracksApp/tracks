@@ -27,6 +27,7 @@ class ApplicationController < ActionController::Base
   helper_method :current_user, :prefs
 
   layout proc{ |controller| controller.mobile? ? "mobile" : "standard" }
+  exempt_from_layout /\.js\.erb$/
   
   before_filter :set_session_expiration
   before_filter :set_time_zone

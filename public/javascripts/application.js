@@ -93,15 +93,63 @@ var TodoBehavior = {
         });
     }
 }
-// uncomment the next four lines for easier debugging with FireBug
-// Ajax.Responders.register({
-//  onException: function(source, exception) {
-//    console.error(exception);
-//  }
-// });
 
-/* fade flashes automatically */
-$(document).ready(function() {
-    $(".alert").fadeIn(8000);
+/****************************************
+ * Unobtrusive jQuery written by Eric Allen
+ ****************************************/
+
+/* Set up authenticity token proplery */
+$(document).ajaxSend(function(event, request, settings) {
+  if ( settings.type == 'POST' ) {
+    settings.data = (settings.data ? settings.data + "&" : "")
+      + "authenticity_token=" + encodeURIComponent( AUTH_TOKEN ) + "&"
+      + "_source_view=" + encodeURIComponent( SOURCE_VIEW );
+    request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+  }
+  request.setRequestHeader("Accept", "text/javascript");
 });
 
+function toggle_star_remote(ev){
+  ev.preventDefault();
+  $.post(this.href, {_method: 'put'}, null, 'script');
+}
+
+function toggle_checkbox_remote(ev){
+  params = {_method: 'put'};
+  if(typeof(TAG_NAME) !== 'undefined')
+    params._tag_name = TAG_NAME;
+  $.post(this.value, params, null, 'script');
+}
+
+function set_behavior_for_tag_edit_todo(){
+  /*
+    apply_behavior 'form.edit_todo_form', make_remote_form(
+      :method => :put, 
+      :before => "todoSpinner = this.down('button.positive'); todoSpinner.startWaiting()",
+      :loaded => "todoSpinner.stopWaiting()",
+      :condition => "!(this.down('button.positive').isWaiting())"),
+      :prevent_default => true
+      */
+}
+
+function setup_container_toggles(){
+  // bind handlers
+  // set to cookied state
+}
+
+/* Unobtrusive jQuery behavior */
+
+$(document).ready(function() {
+  /* fade flashes automatically */
+  $(".alert").fadeIn(8000);
+
+  /* set behavior for star icon */
+  $(".item-container a.star_item").
+    live('click', toggle_star_remote);
+
+  /* set behavior for toggle checkboxes */
+  $(".item-container input.item-checkbox").
+    live('click', toggle_checkbox_remote);
+
+  setup_container_toggles();
+});

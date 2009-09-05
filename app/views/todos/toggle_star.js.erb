@@ -1,0 +1,3 @@
+<% if @saved -%>
+  $('div#line_todo_<%= @todo.id %> a.star_item img').toggleClass('starred_todo').toggleClass('unstarred_todo');
+<% end -%>

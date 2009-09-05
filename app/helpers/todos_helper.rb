@@ -14,26 +14,12 @@ module TodosHelper
         :id => dom_id(@todo, 'form'), 
         :class => dom_id(@todo, 'form') + " inline-form edit_todo_form" }, 
       &block )
-    apply_behavior 'form.edit_todo_form', make_remote_form(
-      :method => :put, 
-      :before => "todoSpinner = this.down('button.positive'); todoSpinner.startWaiting()",
-      :loaded => "todoSpinner.stopWaiting()",
-      :condition => "!(this.down('button.positive').isWaiting())"),
-      :prevent_default => true
   end
-  
-  def set_behavior_for_star_icon
-    apply_behavior '.item-container a.star_item:click', 
-      remote_to_href(:method => 'put', :with => "{ _source_view : '#{@source_view}' }"),
-      :prevent_default => true
-  end    
 
   def remote_star_icon 
-    str = link_to( image_tag_for_star(@todo),
+    link_to( image_tag_for_star(@todo),
       toggle_star_todo_path(@todo),
       :class => "icon star_item", :title => "star the action '#{@todo.description}'")
-    set_behavior_for_star_icon
-    str
   end
 
   def remote_edit_menu_item(parameters, todo)
@@ -91,18 +77,9 @@ module TodosHelper
       :class => "recurring_icon", :title => recurrence_pattern_as_text(todo.recurring_todo))
   end
 
-  def set_behavior_for_toggle_checkbox
-    parameters = "_source_view=#{@source_view}"
-    parameters += "&_tag_name=#{@tag_name}" if @source_view == 'tag'
-    apply_behavior '.item-container input.item-checkbox:click',
-      remote_function(:url => javascript_variable('this.value'), :method => 'put',
-      :with => "'#{parameters}'")    
-  end
   
   def remote_toggle_checkbox
-    str = check_box_tag('item_id', toggle_check_todo_path(@todo), @todo.completed?, :class => 'item-checkbox')
-    set_behavior_for_toggle_checkbox
-    str
+    check_box_tag('item_id', toggle_check_todo_path(@todo), @todo.completed?, :class => 'item-checkbox')
   end
   
   def date_span
