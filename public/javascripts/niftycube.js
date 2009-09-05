@@ -18,8 +18,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 var niftyOk=(document.getElementById && document.createElement && Array.prototype.push);
 
-String.prototype.find=function(what){
-return(this.indexOf(what)>=0 ? true : false);
+function strFind(str, what){
+  return(str.indexOf(what)>=0 ? true : false);
 }
 
 var oldonload=window.onload;
@@ -31,12 +31,12 @@ else window.onload=function(){NiftyLoad()};
 function Nifty(selector,options){
 if(niftyOk==false) return;
 var i,v=selector.split(","),h=0;
-if(options==null) options="";
-if(options.find("fixed-height"))
+if(options==undefined) options="";
+if(strFind(options,"fixed-height"))
     h=getElementsBySelector(v[0])[0].offsetHeight;
 for(i=0;i<v.length;i++)
     Rounded(v[i],options);
-if(options.find("height")) SameHeight(selector,h);
+if(strFind(options,"height")) SameHeight(selector,h);
 }
 
 function Rounded(selector,options){
@@ -47,18 +47,18 @@ if(options!=""){
     options=options.replace("top","tr tl");
     options=options.replace("bottom","br bl");
     options=options.replace("transparent","alias");
-    if(options.find("tl")){
+    if(strFind(options,"tl")){
         top="both";
-        if(!options.find("tr")) top="left";
+        if(!strFind(options,"tr")) top="left";
         }
-    else if(options.find("tr")) top="right";
-    if(options.find("bl")){
+    else if(strFind(options,"tr")) top="right";
+    if(strFind(options,"bl")){
         bottom="both";
-        if(!options.find("br")) bottom="left";
+        if(!strFind(options,"br")) bottom="left";
         }
-    else if(options.find("br")) bottom="right";
+    else if(strFind(options,"br")) bottom="right";
     }
-if(top=="" && bottom=="" && !options.find("none")){top="both";bottom="both";}
+if(top=="" && bottom=="" && !strFind(options,"none")){top="both";bottom="both";}
 v=getElementsBySelector(selector);
 for(i=0;i<v.length;i++){
     FixIE(v[i]);
@@ -71,7 +71,7 @@ function AddTop(el,side,options){
 var d=CreateEl("b"),lim=4,border="",p,i,btype="r",bk,color;
 d.style.marginLeft="-"+getPadding(el,"Left")+"px";
 d.style.marginRight="-"+getPadding(el,"Right")+"px";
-if(options.find("alias") || (color=getBk(el))=="transparent"){
+if(strFind(options,"alias") || (color=getBk(el))=="transparent"){
     color="transparent";bk="transparent"; border=getParentBk(el);btype="t";
     }
 else{
@@ -80,11 +80,11 @@ else{
 d.style.background=bk;
 d.className="niftycorners";
 p=getPadding(el,"Top");
-if(options.find("small")){
+if(strFind(options,"small")){
     d.style.marginBottom=(p-2)+"px";
     btype+="s"; lim=2;
     }
-else if(options.find("big")){
+else if(strFind(options,"big")){
     d.style.marginBottom=(p-10)+"px";
     btype+="b"; lim=8;
     }
@@ -99,7 +99,7 @@ function AddBottom(el,side,options){
 var d=CreateEl("b"),lim=4,border="",p,i,btype="r",bk,color;
 d.style.marginLeft="-"+getPadding(el,"Left")+"px";
 d.style.marginRight="-"+getPadding(el,"Right")+"px";
-if(options.find("alias") || (color=getBk(el))=="transparent"){
+if(strFind(options,"alias") || (color=getBk(el))=="transparent"){
     color="transparent";bk="transparent"; border=getParentBk(el);btype="t";
     }
 else{
@@ -108,11 +108,11 @@ else{
 d.style.background=bk;
 d.className="niftycorners";
 p=getPadding(el,"Bottom");
-if(options.find("small")){
+if(strFind(options,"small")){
     d.style.marginTop=(p-2)+"px";
     btype+="s"; lim=2;
     }
-else if(options.find("big")){
+else if(strFind(options,"big")){
     d.style.marginTop=(p-10)+"px";
     btype+="b"; lim=8;
     }
@@ -172,8 +172,8 @@ for(i=0;i<els.length;i++){
 
 function getElementsBySelector(selector){
 var i,j,selid="",selclass="",tag=selector,tag2="",v2,k,f,a,s=[],objlist=[],c;
-if(selector.find("#")){ //id selector like "tag#id"
-    if(selector.find(" ")){  //descendant selector like "tag#id tag"
+if(strFind(selector,"#")){ //id selector like "tag#id"
+    if(strFind(selector," ")){  //descendant selector like "tag#id tag"
         s=selector.split(" ");
         var fs=s[0].split("#");
         if(fs.length==1) return(objlist);
@@ -195,11 +195,11 @@ if(selector.find("#")){ //id selector like "tag#id"
             }
         }
     }
-if(selector.find(".")){      //class selector like "tag.class"
+if(strFind(selector,".")){      //class selector like "tag.class"
     s=selector.split(".");
     tag=s[0];
     selclass=s[1];
-    if(selclass.find(" ")){   //descendant selector like tag1.classname tag2
+    if(strFind(selclass, " ")){   //descendant selector like tag1.classname tag2
         s=selclass.split(" ");
         selclass=s[0];
         tag2=s[1];
@@ -235,15 +235,15 @@ return(c);
 
 function getBk(x){
 var c=getStyleProp(x,"backgroundColor");
-if(c==null || c=="transparent" || c.find("rgba(0, 0, 0, 0)"))
+if(c==null || c=="transparent" || strFind(c,"rgba(0, 0, 0, 0)"))
     return("transparent");
-if(c.find("rgb")) c=rgb2hex(c);
+if(strFind(c,"rgb")) c=rgb2hex(c);
 return(c);
 }
 
 function getPadding(x,side){
 var p=getStyleProp(x,"padding"+side);
-if(p==null || !p.find("px")) return(0);
+if(p==null || !strFind(p, "px")) return(0);
 return(parseInt(p));
 }
 

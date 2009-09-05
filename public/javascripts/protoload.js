@@ -75,8 +75,3 @@ Protoload = {
 	_zIndex: 1000000*/
 };
 
-if (Prototype) {
-	Element.addMethods(Protoload);
-	Object.extend(Element, Protoload);
-}
-/* */
