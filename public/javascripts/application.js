@@ -132,9 +132,78 @@ function set_behavior_for_tag_edit_todo(){
       */
 }
 
+todoItems = {
+  // public
+  ensureVisibleWithEffectAppear: function(elemId){
+    $('#'+elemId).fadeIn(400);
+  },
+  expandNextActionListing: function(itemsElem, skipAnimation) {
+    itemsElem = $(itemsElem);
+    if(skipAnimation == true) {
+      itemsElem.show();
+    }
+    else {
+      itemsElem.show('blind', 400);
+    }
+    todoItems.showContainer(itemsElem.parentNode);
+  },
+  collapseNextActionListing: function(itemsElem, skipAnimation) {
+    itemsElem = $(itemsElem);
+    if(skipAnimation == true) {
+      itemsElem.hide();
+    }
+    else {
+      itemsElem.hide('blind', 400);
+    }
+    todoItems.hideContainer(itemsElem.parentNode);
+  },
+  ensureContainerHeight: function(itemsElem) {
+    $(itemsElem).css({height: '', overflow: ''});
+  },
+  expandNextActionListingByContext: function(itemsElemId, skipAnimation){
+    todoItems.expandNextActionListing($('#'+itemsElem).get(), skipAnimation);
+  },
+
+  // private
+  buildCookieName: function(containerElem) {
+    tracks_login = $.cookie('tracks_login');
+    return 'tracks_'+tracks_login+'_context_' + containerElem.id + '_collapsed';
+  },
+  showContainer: function(containerElem) {
+    imgSrc = $(containerElem).find('.container_toggle img').attr('src');
+    $(containerElem).find('.container_toggle img').attr('src', imgSrc.replace('expand', 'collapse'));
+  },
+  hideContainer: function (containerElem) {
+    imgSrc = $(containerElem).find('.container_toggle img').attr('src');
+    $(containerElem).find('.container_toggle img').attr('src', imgSrc.replace('collapse', 'expand'));
+  }
+}
+
 function setup_container_toggles(){
   // bind handlers
+  $('.container_toggle').click(function(evt){
+      toggle_target = $(this.parentNode.parentNode).find('.toggle_target');
+      if(toggle_target.is(':visible')){
+        // hide it
+        imgSrc = $(this).find('img').attr('src');
+        $(this).find('img').attr('src', imgSrc.replace('collapse', 'expand'));
+        $.cookie(todoItems.buildCookieName(this.parentNode.parentNode), true);
+      } else {
+        // show it
+        imgSrc = $(this).find('img').attr('src');
+        $(this).find('img').attr('src', imgSrc.replace('expand', 'collapse'));
+        $.cookie(todoItems.buildCookieName(this.parentNode.parentNode), null);
+      }
+      toggle_target.toggle('blind');
+      });
   // set to cookied state
+  $('.container.context').each(function(){
+      if($.cookie(todoItems.buildCookieName(this))){
+        imgSrc = $(this).find('.container_toggle img').attr('src');
+        $(this).find('.container_toggle img').attr('src', imgSrc.replace('collapse', 'expand'));
+        $(this).find('.toggle_target').hide();
+        }
+      });
 }
 
 /* Unobtrusive jQuery behavior */

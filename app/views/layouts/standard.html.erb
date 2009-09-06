@@ -10,13 +10,14 @@
     <% end %>
     <%= stylesheet_link_tag "print", :media => "print" %>
     <% bundle :name => "jquery" do %>
-      <%= javascript_include_tag :defaults %>
+      <%= javascript_include_tag 'jquery' %>
+      <%= javascript_include_tag 'jquery-ui' %>
       <%= javascript_include_tag 'jquery.cookie' %>
     <% end %>
     <% bundle :name => "tracks_js" do %>
       <%= javascript_include_tag *%w[
       hoverIntent superfish application
-      accesskey-hints todo-items niftycube
+      accesskey-hints niftycube
       protoload flashobject ] %>
     <% end %>
     <%= javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? %>

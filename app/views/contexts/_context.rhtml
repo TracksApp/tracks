@@ -10,12 +10,12 @@
         toggleTarget = containerElem.down('.toggle_target')
         if (Element.visible(toggleTarget))
         {
-        todoItems.collapseNextActionListing(this, toggleTarget);
+        todoItems.collapseNextActionListing(toggleTarget);
         $.cookie(todoItems.buildCookieName(containerElem), true);
         }
         else
         {
-        todoItems.expandNextActionListing(this, toggleTarget);
+        todoItems.expandNextActionListing(toggleTarget);
         $.cookie(todoItems.buildCookieName(containerElem), null);
         }
         }
