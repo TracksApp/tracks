@@ -190,10 +190,11 @@ module TodosHelper
   end
   
   def calendar_setup( input_field )
-    str = "Calendar.setup({ ifFormat:\"#{prefs.date_format}\""
-    str << ",firstDay:#{prefs.week_starts},showOthers:true,range:[2004, 2010]"
-    str << ",step:1,inputField:\"" + input_field + "\",cache:true,align:\"TR\" })\n"
-    javascript_tag str
+    # TODO:jQuery
+    #str = "Calendar.setup({ ifFormat:\"#{prefs.date_format}\""
+    #str << ",firstDay:#{prefs.week_starts},showOthers:true,range:[2004, 2010]"
+    #str << ",step:1,inputField:\"" + input_field + "\",cache:true,align:\"TR\" })\n"
+    #javascript_tag str
   end
   
   def item_container_id (todo)

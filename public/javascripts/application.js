@@ -221,4 +221,6 @@ $(document).ready(function() {
     live('click', toggle_checkbox_remote);
 
   setup_container_toggles();
+
+  $('input.Date').datepicker();
 });

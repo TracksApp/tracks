@@ -6,7 +6,7 @@
       <meta http-equiv="Refresh" content="<%= @prefs["refresh"].to_i*60 %>;url=<%= request.request_uri %>">
     <% end -%>
     <% bundle :name => "tracks_css" do %>
-      <%= stylesheet_link_tag *%w[ standard superfish calendar-system niftyCorners] %>
+      <%= stylesheet_link_tag *%w[ standard superfish niftyCorners jquery-ui] %>
     <% end %>
     <%= stylesheet_link_tag "print", :media => "print" %>
     <% bundle :name => "jquery" do %>
