@@ -1,0 +1,3 @@
+<% if @saved -%>
+  $('div#recurring_todo_<%= @recurring_todo.id %> a.star_item img').toggleClass('starred_todo').toggleClass('unstarred_todo');
+<% end -%>

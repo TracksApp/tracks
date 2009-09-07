@@ -94,6 +94,20 @@ var TodoBehavior = {
     }
 }
 
+$.fn.clearForm = function() {
+  return this.each(function() {
+    var type = this.type, tag = this.tagName.toLowerCase();
+    if (tag == 'form')
+      return $(':input',this).clearForm();
+    if (type == 'text' || type == 'password' || tag == 'textarea')
+      this.value = '';
+    else if (type == 'checkbox' || type == 'radio')
+      this.checked = false;
+    else if (tag == 'select')
+      this.selectedIndex = -1;
+  });
+};
+
 /****************************************
  * Unobtrusive jQuery written by Eric Allen
  ****************************************/
@@ -209,8 +223,11 @@ function setup_container_toggles(){
 /* Unobtrusive jQuery behavior */
 
 $(document).ready(function() {
+  /* Nifty corners */
+  Nifty("div#recurring_new_container","normal");
+
   /* fade flashes and alerts in automatically */
-  $(".alert").fadeOut(5000);
+  $(".alert").fadeOut(8000);
 
   /* set behavior for star icon */
   $(".item-container a.star_item").
@@ -238,5 +255,59 @@ $(document).ready(function() {
   $(".date_clear").live('click', function() {
       /* add behavior to clear the date both buttons for show_from and due */
       $(this).prev().val('');
-    })
+    });
+
+  /* recurring todo behavior */
+
+  /* behavior for delete icon */
+  $('.item-container a.delete_icon').live('click', function(evt){
+      evt.preventDefault();
+      params = {};
+      if(typeof(TAG_NAME) !== 'undefined'){
+        params._tag_name = TAG_NAME;
+      }
+      if(confirm("Are you sure that you want to "+this.title+"?")){
+        itemContainer = $(this).parents(".item-container");
+        itemContainer.block({message: null});
+        params._method = 'delete';
+        $.post(this.href, params, function(){
+          itemContainer.unblock();
+          }, 'script');
+      }
+    });
+
+  /* behavior for edit icon */
+  $('.item-container a.edit_icon').live('click', function(evt){
+      evt.preventDefault();
+      params = {};
+      if(typeof(TAG_NAME) !== 'undefined'){
+        params._tag_name = TAG_NAME;
+      }
+      itemContainer = $(this).parents(".item-container");
+      $(this).effect('pulsate', {times: 1}, 800);
+      $.get(this.href, params, function(){
+        }, 'script');
+    });
+
+  $("#recurring_todo_new_action_cancel").click(function(){
+      $('#recurring-todo-form-new-action').clearForm();
+      $('#recurring-todo-form-new-action input:first').focus();
+      TracksForm.hide_all_recurring();
+      $('#recurring_daily').show();
+      TracksForm.toggle_overlay();
+  });
+
+  $("#recurring_todo_edit_action_cancel").live('click', function(){
+      $('#recurring-todo-form-edit-action').clearForm();
+      $('#recurring-todo-form-edit-action input:first').focus();
+      TracksForm.hide_all_recurring();
+      $('#recurring_daily').show();
+      TracksForm.toggle_overlay();
+  });
+  $("#recurring_edit_period input").live('click', function(){
+      $.each(['daily', 'weekly', 'monthly', 'yearly'], function(){
+        $('#recurring_edit_'+this).hide();
+        });
+      $('#recurring_edit_'+this.id.split('_')[5]).show();
+    });
 });
