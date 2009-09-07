@@ -209,8 +209,9 @@ function setup_container_toggles(){
 /* Unobtrusive jQuery behavior */
 
 $(document).ready(function() {
-  /* fade flashes automatically */
+  /* fade flashes and alerts in automatically */
   $(".alert").fadeIn(8000);
+  $('#flash:visible').fadeIn(5000);
 
   /* set behavior for star icon */
   $(".item-container a.star_item").
