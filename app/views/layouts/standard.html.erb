@@ -13,12 +13,12 @@
       <%= javascript_include_tag 'jquery' %>
       <%= javascript_include_tag 'jquery-ui' %>
       <%= javascript_include_tag 'jquery.cookie' %>
+      <%= javascript_include_tag 'jquery.blockUI' %>
     <% end %>
     <% bundle :name => "tracks_js" do %>
       <%= javascript_include_tag *%w[
       hoverIntent superfish application
-      accesskey-hints niftycube
-      protoload flashobject ] %>
+      accesskey-hints niftycube flashobject ] %>
     <% end %>
     <%= javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? %>
     <%= javascript_tag "var SOURCE_VIEW = '#{@source_view}';" %>

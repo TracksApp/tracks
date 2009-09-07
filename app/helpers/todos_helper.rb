@@ -8,8 +8,9 @@ module TodosHelper
   end
 
   def form_remote_tag_edit_todo( &block )
-    form_tag( 
-      todo_path(@todo), {
+    form_remote_tag(
+      :url => todo_path(@todo),
+      :html => {
         :method => :put, 
         :id => dom_id(@todo, 'form'), 
         :class => dom_id(@todo, 'form') + " inline-form edit_todo_form" }, 
@@ -29,7 +30,7 @@ module TodosHelper
       :method => 'get',
       :with => "'#{parameters}'",
       :before => todo_start_waiting_js(todo),
-      :complete => todo_stop_waiting_js)
+      :complete => todo_stop_waiting_js(todo))
   end
 
   def remote_delete_menu_item(parameters, todo)
@@ -39,7 +40,7 @@ module TodosHelper
       :method => 'delete',
       :with => "'#{parameters}'",
       :before => todo_start_waiting_js(todo),
-      :complete => todo_stop_waiting_js)
+      :complete => todo_stop_waiting_js(todo))
   end
 
   def remote_defer_menu_item(days, todo)
@@ -58,16 +59,16 @@ module TodosHelper
         image_tag("defer_#{days}_off.png", :mouseover => "defer_#{days}.png", :alt => "", :align => "absmiddle")+" Defer #{pluralize(days, "day")}",
         :url => url,
         :before => todo_start_waiting_js(todo),
-        :complete => todo_stop_waiting_js)
+        :complete => todo_stop_waiting_js(todo))
     end
   end
 
   def todo_start_waiting_js(todo)
-    return "$('ul#{dom_id(todo)}').hide(); itemContainer = $('#{dom_id(todo)}'); itemContainer.startWaiting()"
+    return "$('#ul#{dom_id(todo)}').css('visibility', 'hidden'); $('##{dom_id(todo)}').block({message: null})"
   end
 
-  def todo_stop_waiting_js
-    return "itemContainer.stopWaiting();"
+  def todo_stop_waiting_js(todo)
+    return "$('##{dom_id(todo)}').unblock();"
   end
 
   def image_tag_for_recurring_todo(todo)

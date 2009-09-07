@@ -210,8 +210,7 @@ function setup_container_toggles(){
 
 $(document).ready(function() {
   /* fade flashes and alerts in automatically */
-  $(".alert").fadeIn(8000);
-  $('#flash:visible').fadeIn(5000);
+  $(".alert").fadeOut(5000);
 
   /* set behavior for star icon */
   $(".item-container a.star_item").
@@ -224,4 +223,20 @@ $(document).ready(function() {
   setup_container_toggles();
 
   $('input.Date').datepicker();
+
+  $('#toggle_action_new').click(function(){
+    TracksForm.toggle('toggle_action_new', 'todo_new_action', 'todo-form-new-action',
+      '&laquo; Hide form', 'Hide next action form',
+      'Add a next action &#187;', 'Add a next action');
+    });
+
+  $('.edit-form a.negative').live('click', function(){
+      $(this).parents('.container').find('.item-show').show();
+      $(this).parents('.edit-form').hide();
+      });
+  
+  $(".date_clear").live('click', function() {
+      /* add behavior to clear the date both buttons for show_from and due */
+      $(this).prev().val('');
+    })
 });

@@ -1178,7 +1178,7 @@ button.positive, .widgets a.positive{
     border:1px solid #d12f19;
     color:#fff;
 }
-.tracks__waiting {
+.blockUI.blockOverlay {
     background-image:url('/images/waiting.gif');
     background-repeat:no-repeat;
     background-position:center center;
