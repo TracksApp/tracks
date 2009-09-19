@@ -422,6 +422,12 @@ class TodosController < ApplicationController
     @projects = current_user.projects
     @contexts = current_user.contexts
     @contexts_to_show = @contexts.reject {|x| x.hide? }
+
+    # Set defaults for new_action
+    @initial_tag_name = @tag_name
+    unless @not_done_todos.empty?
+      @context = current_user.contexts.find_by_id(@not_done_todos[0].context_id)
+    end
     
     # Set count badge to number of items with this tag
     @not_done_todos.empty? ? @count = 0 : @count = @not_done_todos.size

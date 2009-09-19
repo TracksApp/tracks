@@ -44,7 +44,7 @@
       <div class="page_name_auto_complete" id="context_list" style="display:none"></div>
 
       <label for="tag_list">Tags (separate with commas)</label>
-      <%= text_field_tag "tag_list", nil, :size => 30, :tabindex => 5 %>
+      <%= text_field_tag "tag_list", @initial_tag_name, :size => 30, :tabindex => 5 %>
       <%= content_tag("div", "", :id => "tag_list_auto_complete", :class => "auto_complete") %>
       <%= auto_complete_field 'tag_list', {
         :url => {:controller => 'todos', :action => 'auto_complete_for_tag'},
