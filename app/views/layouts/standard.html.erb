@@ -23,6 +23,9 @@
     <%= javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? %>
     <%= javascript_tag "var SOURCE_VIEW = '#{@source_view}';" %>
     <%= javascript_tag "var TAG_NAME = '#{@tag_name}';" if @tag_name %>
+    <script type="text/javascript">
+      var contextNames = <%= context_names_for_autocomplete %>;
+    </script>
     <link rel="shortcut icon" href="<%= url_for(:controller => 'favicon.ico') %>" />
     <%= auto_discovery_link_tag(:rss, {:controller => "todos", :action => "index", :format => 'rss', :token => "#{current_user.token}"}, {:title => "RSS feed of next actions"}) %>
     <link rel="search" type="application/opensearchdescription+xml" title="Tracks" href="<%= search_plugin_path %>" />

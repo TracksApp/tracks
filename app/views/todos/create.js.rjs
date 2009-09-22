@@ -6,11 +6,11 @@ if @saved
   status_message = 'Added new context / ' + status_message if @new_context_created
   page.notify :notice, status_message, 5.0
   page['badge_count'].replace_html @down_count
-  page.send :record, "Form.reset('todo-form-new-action');Form.focusFirstElement('todo-form-new-action')"
+  page.send :record, "$('#todo-form-new-action').clearForm();$('#todo-form-new-action input:first').focus();"
   page['todo_context_name'].value = @initial_context_name
   page['todo_project_name'].value = @initial_project_name
-  page << "updateContextNamesForAutoComplete(#{context_names_for_autocomplete})" if @new_context_created
-  page << "projectAutoCompleter.options.array = #{project_names_for_autocomplete}" if @new_project_created
+  #page << "updateContextNamesForAutoComplete(#{context_names_for_autocomplete})" if @new_context_created
+  #page << "projectAutoCompleter.options.array = #{project_names_for_autocomplete}" if @new_project_created
   if should_show_new_item()
     if @new_context_created
       page.insert_html :top, 'display_box', :partial => 'contexts/context', :locals => { :context => @todo.context, :collapsible => true }

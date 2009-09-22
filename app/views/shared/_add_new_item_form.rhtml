@@ -15,9 +15,9 @@
     <% form_remote_tag(
       :url => todos_path, :method => :post,
       :html=> { :id=>'todo-form-new-action', :name=>'todo', :class => 'inline-form' },
-      :before => "$('todo_new_action_submit').startWaiting()",
-      :complete => "$('todo_new_action_submit').stopWaiting()",
-      :condition => "!$('todo_new_action_submit').isWaiting() && askIfNewContextProvided()") do -%>
+      :before => "$('todo_new_action_submit').block({message:null})",
+      :complete => "$('todo_new_action_submit').unblock()",
+      :condition => "askIfNewContextProvided()") do -%>
 
       <div id="status"><%= error_messages_for("item", :object_name => 'action') %></div>
 
@@ -40,10 +40,6 @@
       <label for="tag_list">Tags (separate with commas)</label>
       <%= text_field_tag "tag_list", nil, :size => 30, :tabindex => 5 %>
       <%= content_tag("div", "", :id => "tag_list_auto_complete", :class => "auto_complete") %>
-      <%= auto_complete_field 'tag_list', {
-        :url => {:controller => 'todos', :action => 'auto_complete_for_tag'},
-        :tokens => [',']
-      } %>
 
       <div class="due_input">
         <label for="todo_due">Due</label>
@@ -66,67 +62,5 @@
         </div>
       </div>
     <% end -%>
-
-    <script type="text/javascript" charset="utf-8">
-
-      var contextNames = <%= context_names_for_autocomplete %>;
-      var projectNames = <%= project_names_for_autocomplete %>;
-
-      function askIfNewContextProvided() {
-        var givenContextName = $('todo_context_name').value;
-        if (givenContextName.length == 0) return true; // do nothing and depend on rails validation error
-        for (var i = 0; i < contextNames.length; ++i) {
-          if (contextNames[i] == givenContextName) return true;
-        }
-        return confirm('New context "' + givenContextName + '" will be also created. Are you sure?');
-      }
-
-      var projectAutoCompleter = new Autocompleter.Local('todo_project_name', 'project_list', projectNames, {choices:100,autoSelect:false});
-
-      function selectDefaultContext() {
-        todoContextNameElement = $('todo_context_name');
-        defaultContextName = todoContextNameElement.projectDefaultContextsMap[this.value];
-        if (defaultContextName && !todoContextNameElement.editedByTracksUser) {
-          todoContextNameElement.value = defaultContextName;
-        }
-      }
-      function selectDefaultTags() {
-        todoTagListElement = $('tag_list');
-        defaultTags = todoTagListElement.projectDefaultTagsMap[this.value];
-        if (defaultTags && !todoTagListElement.editedByTracksUser) {
-          todoTagListElement.value = defaultTags;
-        }
-      }
-      Event.observe($('todo_project_name'), "focus", projectAutoCompleter.activate.bind(projectAutoCompleter));
-      Event.observe($('todo_project_name'), "click", projectAutoCompleter.activate.bind(projectAutoCompleter));
-      Event.observe($('todo_project_name'), "blur", selectDefaultContext.bind($('todo_project_name')));
-      Event.observe($('todo_project_name'), "blur", selectDefaultTags.bind($('todo_project_name')));
-
-      var contextAutoCompleter;
-      function initializeNamesForAutoComplete(contextNamesForAutoComplete) {
-        if (contextNamesForAutoComplete.length == 0 || contextNamesForAutoComplete[0].length == 0) {
-          return;
-        }
-        contextAutoCompleter = new Autocompleter.Local('todo_context_name', 'context_list', contextNamesForAutoComplete, {choices:100,autoSelect:false});
-        Event.observe($('todo_context_name'), "focus", function(){ $('todo_context_name').editedByTracksUser = true; });
-        Event.observe($('tag_list'), "focus", function(){ $('tag_list').editedByTracksUser = true; });
-        Event.observe($('todo_context_name'), "focus", contextAutoCompleter.activate.bind(contextAutoCompleter));
-        Event.observe($('todo_context_name'), "click", contextAutoCompleter.activate.bind(contextAutoCompleter));
-      }
-
-      function updateContextNamesForAutoComplete(contextNamesForAutoComplete) {
-        if (contextAutoCompleter) { // i.e. if we're already initialized
-          contextAutoCompleter.options.array = contextNamesForAutoComplete
-        } else {
-          initializeNamesForAutoComplete(contextNamesForAutoComplete)
-        }
-      }
-      initializeNamesForAutoComplete(contextNames);
-      $('todo_context_name').projectDefaultContextsMap = eval('(' + <%= @default_project_context_name_map %> + ')');
-      $('tag_list').projectDefaultTagsMap = eval('(' + <%= @default_project_tags_map %> + ')');
-    </script>
-
-    <%= calendar_setup( "todo_due"  ) %>
-    <%= calendar_setup( "todo_show_from"  ) %>
   </div>
 </div>

@@ -220,6 +220,15 @@ function setup_container_toggles(){
       });
 }
 
+function askIfNewContextProvided() {
+  var givenContextName = $('#todo_context_name').val();
+  if (givenContextName.length == 0) return true; // do nothing and depend on rails validation error
+  for (var i = 0; i < contextNames.length; ++i) {
+    if (contextNames[i] == givenContextName) return true;
+  }
+  return confirm('New context "' + givenContextName + '" will be also created. Are you sure?');
+}
+
 /* Unobtrusive jQuery behavior */
 
 $(document).ready(function() {
