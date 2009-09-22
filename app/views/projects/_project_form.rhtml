@@ -1,7 +1,8 @@
 <%
 project = project_form
 %>
-<% form_tag project_path(project), { :id => dom_id(project, 'edit_form'), :class => "inline-form "+dom_id(project, 'edit_form')+"-edit-project-form", :method => :put } do -%>
+
+<% form_remote_tag(:url => project_path(project), :html => { :id => dom_id(project, 'edit_form'), :class => "inline-form "+dom_id(project, 'edit_form')+"-edit-project-form", :method => :put }) do -%>
 
   <%= source_view_tag( @source_view ) -%>
 
@@ -18,7 +19,6 @@ project = project_form
 
   <label for="project[default_context_name]">Default Context</label><br/>
   <%= text_field_tag("project[default_context_name]", project.default_context.name, {:tabindex=>1,:size=> 25}) %>
-  <%= render :partial => 'default_context_autocomplete' %>
   <br/>
 
   <label for="project[default_tags]">Default Tags</label><br/>
@@ -32,7 +32,7 @@ project = project_form
         <%=image_tag("accept.png", :alt => "") %>
         Update
       </button>
-      <a href="javascript:void(0);" id="<%= dom_id(project, 'cancel') %>" onclick="Element.toggle('<%= dom_id(project) %>');Element.toggle('<%= dom_id(project, 'edit') %>');" class="negative">
+      <a href="#" id="<%= dom_id(project, 'cancel') %>" class="negative">
         <%=image_tag("cancel.png", :alt => "") %>
         Cancel
       </a>
@@ -42,7 +42,3 @@ project = project_form
 
 <% end -%>
 
-<%= apply_behavior "."+dom_id(project, 'edit_form')+"-edit-project-form", make_remote_form(
-  :before => "$('"+dom_id(project, 'submit')+"').startWaiting();",
-  :condition => "!$('"+dom_id(project, 'submit')+"').isWaiting()",
-  :external => false) %>

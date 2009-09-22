@@ -22,17 +22,17 @@ var Login = {
 
 var TracksForm = {
     toggle: function(toggleDivId, formContainerId, formId, hideLinkText, hideLinkTitle, showLinkText, showLinkTitle) {
-        $(formContainerId).toggle();
-        toggleDiv = $(toggleDivId);
-        toggleLink = toggleDiv.down('a');
-        if (toggleDiv.hasClassName('hide_form')) {
-            toggleLink.update(showLinkText).setAttribute('title', showLinkTitle);
+        $('#'+formContainerId).toggle();
+        toggleDiv = $('#'+toggleDivId);
+        toggleLink = toggleDiv.find('a');
+        if (toggleDiv.hasClass('hide_form')) {
+            toggleLink.text(showLinkText).attr('title', showLinkTitle);
         }
         else {
-            toggleLink.update(hideLinkText).setAttribute('title', hideLinkTitle);
-            Form.focusFirstElement(formId);
+            toggleLink.text(hideLinkText).attr('title', hideLinkTitle);
+            $('#'+formId+' input:first').focus();
         }
-        toggleDiv.toggleClassName('hide_form');
+        toggleDiv.toggleClass('hide_form');
     }, 
     get_period: function() {
         if ($('recurring_todo_recurring_period_daily').checked) {
@@ -252,11 +252,11 @@ $(document).ready(function() {
 
   $('#toggle_action_new').click(function(){
     TracksForm.toggle('toggle_action_new', 'todo_new_action', 'todo-form-new-action',
-      '&laquo; Hide form', 'Hide next action form',
-      'Add a next action &#187;', 'Add a next action');
+      '« Hide form', 'Hide next action form',
+      'Add a next action »', 'Add a next action');
     });
 
-  $('.edit-form a.negative').live('click', function(){
+  $('.item-container .edit-form a.negative').live('click', function(){
       $(this).parents('.container').find('.item-show').show();
       $(this).parents('.edit-form').hide();
       });
@@ -319,4 +319,61 @@ $(document).ready(function() {
         });
       $('#recurring_edit_'+this.id.split('_')[5]).show();
     });
+
+  /* Projects behavior */
+  $('.alphabetize_link').click(function(evt){
+      evt.preventDefault();
+      if(confirm('Are you sure that you want to sort these projects alphabetically? This will replace the existing sort order.')){
+        alphaSort = $(this).parents('.alpha_sort');
+        alphaSort.block({message:null});
+        $.post(this.href, {}, function(){alphaSort.unblock()}, 'script');
+      }
+    });
+
+  $('.actionize_link').click(function(evt){
+      evt.preventDefault();
+      if(confirm('Are you sure that you want to sort these projects by the number of tasks? This will replace the existing sort order.')){
+        taskSort = $(this).parents('.tasks_sort');
+        taskSort.block({message:null});
+        $.post(this.href, {}, function(){taskSort.unblock()}, 'script');
+      }
+    });
+
+  $('a.delete_project_button').live('click', function(evt){
+      evt.preventDefault();
+      if(confirm("Are you sure that you want to "+this.title+"?")){
+        $(this).parents('.project').block({message: null});
+        params = {_method: 'delete'};
+        $.post(this.href, params, null, 'script');
+      }
+      });
+
+  $('#toggle_project_new').click(function(evt){
+      TracksForm.toggle('toggle_project_new', 'project_new', 'project-form',
+        '« Hide form', 'Hide new project form',
+        'Create a new project »', 'Add a project');
+      });
+
+  $(".project-list .edit-form a.negative").live('click', function(evt){
+      evt.preventDefault();
+      $(this).parents('.list').find('.project').show();
+      $(this).parents('.edit-form').hide();
+      $(this).parents('.edit-form').find('form').clearForm();
+  });
+
+  $("#list-active-projects").sortable({handle: '.handle',
+      /*
+"#list-active-projects": function(event) {
+Sortable.create("list-active-projects", {handle:'handle', onUpdate:function(){new Ajax.Request('/projects/order', {asynchronous:true, evalScripts:true, onComplete:function(request){new Effect.Highlight("list-active-projects",{});}, parameters:Sortable.serialize("list-active-projects") + '&authenticity_token=' + encodeURIComponent('1e046f4f2a85aa09451c6e17f902bf9a254868c6')})}, tag:'div'})
+},
+"#list-hidden-projects": function(event) {
+Sortable.create("list-hidden-projects", {handle:'handle', onUpdate:function(){new Ajax.Request('/projects/order', {asynchronous:true, evalScripts:true, onComplete:function(request){new Effect.Highlight("list-hidden-projects",{});}, parameters:Sortable.serialize("list-hidden-projects") + '&authenticity_token=' + encodeURIComponent('1e046f4f2a85aa09451c6e17f902bf9a254868c6')})}, tag:'div'})
+},
+"#list-completed-projects": function(event) {
+Sortable.create("list-completed-projects", {handle:'handle', onUpdate:function(){new Ajax.Request('/projects/order', {asynchronous:true, evalScripts:true, onComplete:function(request){new Effect.Highlight("list-completed-projects",{});}, parameters:Sortable.serialize("list-completed-projects") + '&authenticity_token=' + encodeURIComponent('1e046f4f2a85aa09451c6e17f902bf9a254868c6')})}, tag:'div'})
+},
+       */
+      update: function(event, ui){
+        console.log(ui);
+      }});
 });
