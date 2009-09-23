@@ -175,7 +175,7 @@ todoItems = {
     $(itemsElem).css({height: '', overflow: ''});
   },
   expandNextActionListingByContext: function(itemsElemId, skipAnimation){
-    todoItems.expandNextActionListing($('#'+itemsElem).get(), skipAnimation);
+    todoItems.expandNextActionListing($('#'+itemsElemId).get(), skipAnimation);
   },
 
   // private
