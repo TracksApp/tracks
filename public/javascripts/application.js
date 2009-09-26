@@ -229,6 +229,15 @@ function askIfNewContextProvided() {
   return confirm('New context "' + givenContextName + '" will be also created. Are you sure?');
 }
 
+function update_project_order(event, ui){
+        container = $(ui.item).parent();
+        project_display = $(ui.item).children('.project');
+        $.post('/projects/order',
+            container.sortable("serialize"),
+            function(){project_display.effect('highlight', {}, 1000)},
+            'script');
+}
+
 /* Unobtrusive jQuery behavior */
 
 $(document).ready(function() {
@@ -361,19 +370,7 @@ $(document).ready(function() {
       $(this).parents('.edit-form').find('form').clearForm();
   });
 
-  $("#list-active-projects").sortable({handle: '.handle',
-      /*
-"#list-active-projects": function(event) {
-Sortable.create("list-active-projects", {handle:'handle', onUpdate:function(){new Ajax.Request('/projects/order', {asynchronous:true, evalScripts:true, onComplete:function(request){new Effect.Highlight("list-active-projects",{});}, parameters:Sortable.serialize("list-active-projects") + '&authenticity_token=' + encodeURIComponent('1e046f4f2a85aa09451c6e17f902bf9a254868c6')})}, tag:'div'})
-},
-"#list-hidden-projects": function(event) {
-Sortable.create("list-hidden-projects", {handle:'handle', onUpdate:function(){new Ajax.Request('/projects/order', {asynchronous:true, evalScripts:true, onComplete:function(request){new Effect.Highlight("list-hidden-projects",{});}, parameters:Sortable.serialize("list-hidden-projects") + '&authenticity_token=' + encodeURIComponent('1e046f4f2a85aa09451c6e17f902bf9a254868c6')})}, tag:'div'})
-},
-"#list-completed-projects": function(event) {
-Sortable.create("list-completed-projects", {handle:'handle', onUpdate:function(){new Ajax.Request('/projects/order', {asynchronous:true, evalScripts:true, onComplete:function(request){new Effect.Highlight("list-completed-projects",{});}, parameters:Sortable.serialize("list-completed-projects") + '&authenticity_token=' + encodeURIComponent('1e046f4f2a85aa09451c6e17f902bf9a254868c6')})}, tag:'div'})
-},
-       */
-      update: function(event, ui){
-        console.log(ui);
-      }});
+  $("#list-active-projects").sortable({handle: '.handle', update: update_project_order});
+  $("#list-hidden-projects").sortable({handle: '.handle', update: update_project_order});
+  $("#list-completed-projects").sortable({handle: '.handle', update: update_project_order});
 });

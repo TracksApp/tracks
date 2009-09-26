@@ -173,7 +173,7 @@ class ProjectsController < ApplicationController
   end
   
   def order
-    project_ids = params["list-active-projects"] || params["list-hidden-projects"] || params["list-completed-projects"]    
+    project_ids = params["container_project"]
     @projects = current_user.projects.update_positions( project_ids )
     render :nothing => true
   rescue
@@ -186,6 +186,7 @@ class ProjectsController < ApplicationController
     @projects = current_user.projects.alphabetize(:state => @state) if @state
     @contexts = current_user.contexts
     init_not_done_counts(['project'])
+    init_project_hidden_todo_counts(['project']) if @state == 'hidden'
   end
   
   def actionize
@@ -193,6 +194,7 @@ class ProjectsController < ApplicationController
     @projects = current_user.projects.actionize(current_user.id, :state => @state) if @state
     @contexts = current_user.contexts
     init_not_done_counts(['project'])
+    init_project_hidden_todo_counts(['project']) if @state == 'hidden'
   end
   
   protected
