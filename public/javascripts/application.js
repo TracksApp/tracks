@@ -329,6 +329,15 @@ $(document).ready(function() {
       $('#recurring_edit_'+this.id.split('_')[5]).show();
     });
 
+  $('div.context span#context_name').editable(function(value, settings){
+      context_id = $(this).parents('.container.context').get(0).id.split('c')[1];
+      highlight = function(){
+        $('div.context span#context_name').effect('highlight', {}, 500);
+      };
+      $.post('/contexts/update/'+context_id, {'context[name]': value}, highlight);
+      return(value);
+      }, {style: 'padding:0px'});
+
   /* Projects behavior */
   $('.alphabetize_link').click(function(evt){
       evt.preventDefault();
