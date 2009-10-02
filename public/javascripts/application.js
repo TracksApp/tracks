@@ -271,8 +271,9 @@ $(document).ready(function() {
       'Add a next action »', 'Add a next action');
     });
 
-  $('.item-container .edit-form a.negative').live('click', function(){
+  $('.edit-form a.negative').live('click', function(){
       $(this).parents('.container').find('.item-show').show();
+      $(this).parents('.container').find('.project').show();
       $(this).parents('.edit-form').hide();
       });
   
@@ -388,6 +389,7 @@ $(document).ready(function() {
   $("#list-active-projects").sortable({handle: '.handle', update: update_project_order});
   $("#list-hidden-projects").sortable({handle: '.handle', update: update_project_order});
   $("#list-completed-projects").sortable({handle: '.handle', update: update_project_order});
-  
+
+  /* Gets called from some AJAX callbacks, too */
   enable_rich_interaction();
 });

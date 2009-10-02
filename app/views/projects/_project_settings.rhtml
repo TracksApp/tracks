@@ -19,8 +19,8 @@
       :url => {:controller => 'projects', :action => 'edit', :id => project.id},
       :method => 'get',
       :with => "'_source_view=#{@source_view}'",
-      :before => "$('#{dom_id(project)}').startWaiting();",
-      :complete => "$('#{dom_id(project)}').stopWaiting();"
+      :before => "$('#{dom_id(project)}').block({message: null});",
+      :complete => "$('#{dom_id(project)}').unblock();"
     ) %>
   </div>
   <% unless project.description.blank? -%>
