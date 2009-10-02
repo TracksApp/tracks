@@ -115,9 +115,14 @@ $.fn.clearForm = function() {
 /* Set up authenticity token proplery */
 $(document).ajaxSend(function(event, request, settings) {
   if ( settings.type == 'POST' ) {
-    settings.data = (settings.data ? settings.data + "&" : "")
-      + "authenticity_token=" + encodeURIComponent( AUTH_TOKEN ) + "&"
-      + "_source_view=" + encodeURIComponent( SOURCE_VIEW );
+    if(typeof(AUTH_TOKEN) != 'undefined'){
+      settings.data = (settings.data ? settings.data + "&" : "")
+        + "authenticity_token=" + encodeURIComponent( AUTH_TOKEN ) + "&"
+        + "_source_view=" + encodeURIComponent( SOURCE_VIEW );
+    } else {
+      settings.data = (settings.data ? settings.data + "&" : "")
+        + "_source_view=" + encodeURIComponent( SOURCE_VIEW );
+    }
     request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
   }
   request.setRequestHeader("Accept", "text/javascript");
@@ -370,7 +375,7 @@ $(document).ready(function() {
       };
       $.post('/contexts/update/'+context_id, {'context[name]': value}, highlight);
       return(value);
-      }, {style: 'padding:0px'});
+      }, {style: 'padding:0px', submit: "OK"});
 
   /* Projects behavior */
   $('.alphabetize_link').click(function(evt){
