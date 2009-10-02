@@ -6,7 +6,7 @@
       <meta http-equiv="Refresh" content="<%= @prefs["refresh"].to_i*60 %>;url=<%= request.request_uri %>">
     <% end -%>
     <% bundle :name => "tracks_css" do %>
-      <%= stylesheet_link_tag *%w[ standard superfish niftyCorners jquery-ui] %>
+      <%= stylesheet_link_tag *%w[ standard superfish niftyCorners jquery-ui jquery.autocomplete] %>
     <% end %>
     <%= stylesheet_link_tag "print", :media => "print" %>
     <% bundle :name => "jquery" do %>
@@ -15,6 +15,7 @@
       <%= javascript_include_tag 'jquery.cookie' %>
       <%= javascript_include_tag 'jquery.blockUI' %>
       <%= javascript_include_tag 'jquery.jeditable' %>
+      <%= javascript_include_tag 'jquery.autocomplete' %>
     <% end %>
     <% bundle :name => "tracks_js" do %>
       <%= javascript_include_tag *%w[
@@ -26,6 +27,7 @@
     <%= javascript_tag "var TAG_NAME = '#{@tag_name}';" if @tag_name %>
     <script type="text/javascript">
       var contextNames = <%= context_names_for_autocomplete %>;
+      var projectNames = <%= project_names_for_autocomplete %>;
     </script>
     <link rel="shortcut icon" href="<%= url_for(:controller => 'favicon.ico') %>" />
     <%= auto_discovery_link_tag(:rss, {:controller => "todos", :action => "index", :format => 'rss', :token => "#{current_user.token}"}, {:title => "RSS feed of next actions"}) %>

@@ -68,7 +68,7 @@ module TodosHelper
   end
 
   def todo_stop_waiting_js(todo)
-    return "$('##{dom_id(todo)}').unblock();$('input.Date').datepicker();"
+    return "$('##{dom_id(todo)}').unblock();enable_rich_interaction();"
   end
 
   def image_tag_for_recurring_todo(todo)

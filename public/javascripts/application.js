@@ -240,6 +240,13 @@ function update_project_order(event, ui){
 
 /* Unobtrusive jQuery behavior */
 
+function enable_rich_interaction(){
+  $('input.Date').datepicker();
+  /* Autocomplete */
+  $('input[name=context_name]').autocomplete(contextNames);
+  $('input[name=project_name]').autocomplete(projectNames);
+}
+
 $(document).ready(function() {
   /* Nifty corners */
   Nifty("div#recurring_new_container","normal");
@@ -257,7 +264,6 @@ $(document).ready(function() {
 
   setup_container_toggles();
 
-  $('input.Date').datepicker();
 
   $('#toggle_action_new').click(function(){
     TracksForm.toggle('toggle_action_new', 'todo_new_action', 'todo-form-new-action',
@@ -382,4 +388,6 @@ $(document).ready(function() {
   $("#list-active-projects").sortable({handle: '.handle', update: update_project_order});
   $("#list-hidden-projects").sortable({handle: '.handle', update: update_project_order});
   $("#list-completed-projects").sortable({handle: '.handle', update: update_project_order});
+  
+  enable_rich_interaction();
 });
