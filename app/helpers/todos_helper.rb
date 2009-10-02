@@ -203,7 +203,7 @@ module TodosHelper
       return "p#{todo.project_id}items" if todo.active?
       return "tickler" if todo.deferred?
     end
-    return "c#{todo.context_id}"
+    return "c#{todo.context_id}items"
   end
 
   def should_show_new_item
