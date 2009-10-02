@@ -244,6 +244,16 @@ module TodosHelper
     # @contexts.empty?
     array_or_string_for_javascript( current_user.contexts.collect{|c| escape_javascript(c.name) } )
   end
+  
+  def default_contexts_for_autocomplete
+    projects = current_user.projects.find(:all, :conditions => ['default_context_id is not null'])
+    Hash[*projects.map{ |p| [p.name, p.default_context.name] }.flatten].to_json
+  end
+  
+  def default_tags_for_autocomplete
+    projects = current_user.projects.find(:all, :conditions => ['default_tags != ""'])
+    Hash[*projects.map{ |p| [p.name, p.default_tags] }.flatten].to_json
+  end
 
   def format_ical_notes(notes)
     split_notes = notes.split(/\n/)

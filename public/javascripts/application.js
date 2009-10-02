@@ -240,11 +240,38 @@ function update_project_order(event, ui){
 
 /* Unobtrusive jQuery behavior */
 
+function project_defaults(){
+  if(defaultContexts[$(this).val()] !== undefined) {
+    context_name = $(this).parents('form').find('input[name=context_name]');
+    if(context_name.attr('edited') === undefined){
+      context_name.val(defaultContexts[$(this).val()]);
+    }
+  }
+  if(defaultTags[$(this).val()] !== undefined) {
+    tag_list = $(this).parents('form').find('input[name=tag_list]');
+    if(tag_list.attr('edited') === undefined){
+      tag_list.val(defaultTags[$(this).val()]);
+    }
+  }
+}
+
 function enable_rich_interaction(){
   $('input.Date').datepicker();
   /* Autocomplete */
   $('input[name=context_name]').autocomplete(contextNames);
   $('input[name=project_name]').autocomplete(projectNames);
+
+  /* have to bind on keypress because of limitataions of live() */
+  $('input[name=project_name]').live('keypress', function(){
+      $(this).bind('blur', project_defaults);
+  });
+
+  $('input[name=context_name]').live('keypress', function(){
+      $(this).attr('edited', 'true');
+  });
+  $('input[name=tag_list]').live('keypress', function(){
+      $(this).attr('edited', 'true');
+  });
 }
 
 $(document).ready(function() {
