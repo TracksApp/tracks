@@ -10,6 +10,13 @@ class User < ActiveRecord::Base
              def find_by_params(params)
                find(params['id'] || params['context_id']) || nil
              end
+             def update_positions(context_ids)
+                context_ids.each_with_index do |id, position|
+                  context = self.detect { |c| c.id == id.to_i }
+                  raise "Context id #{id} not associated with user id #{@user.id}." if context.nil?
+                  context.update_attribute(:position, position + 1)
+                end
+              end
            end
   has_many :projects,
            :order => 'projects.position ASC',

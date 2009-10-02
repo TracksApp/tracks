@@ -37,8 +37,3 @@ suppress_edit_button ||= false
   <div id="<%= dom_id(project, 'edit') %>" class="edit-form" style="display:none;">
   </div>
 </div>
-<% if controller.action_name == 'create' %>
-  <script>
-    new Effect.Appear('<%= dom_id(project) %>');
-  </script>
-<% end %>

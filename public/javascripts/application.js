@@ -140,17 +140,6 @@ function toggle_checkbox_remote(ev){
   $.post(this.value, params, null, 'script');
 }
 
-function set_behavior_for_tag_edit_todo(){
-  /*
-    apply_behavior 'form.edit_todo_form', make_remote_form(
-      :method => :put, 
-      :before => "todoSpinner = this.down('button.positive'); todoSpinner.startWaiting()",
-      :loaded => "todoSpinner.stopWaiting()",
-      :condition => "!(this.down('button.positive').isWaiting())"),
-      :prevent_default => true
-      */
-}
-
 todoItems = {
   // public
   ensureVisibleWithEffectAppear: function(elemId){
@@ -234,12 +223,22 @@ function askIfNewContextProvided() {
   return confirm('New context "' + givenContextName + '" will be also created. Are you sure?');
 }
 
-function update_project_order(event, ui){
+function update_order(event, ui){
         container = $(ui.item).parent();
-        project_display = $(ui.item).children('.project');
-        $.post('/projects/order',
+        row = $(ui.item).children('.sortable_row');
+        
+        url = '';
+        if(row.hasClass('context'))
+            url = '/contexts/order';
+        else if(row.hasClass('project'))
+            url = '/projects/order';
+        else {
+          console.log("Bad sortable list");
+          return;
+        }
+        $.post(url,
             container.sortable("serialize"),
-            function(){project_display.effect('highlight', {}, 1000)},
+            function(){row.effect('highlight', {}, 1000)},
             'script');
 }
 
@@ -403,7 +402,7 @@ $(document).ready(function() {
         params = {_method: 'delete'};
         $.post(this.href, params, null, 'script');
       }
-      });
+  });
 
   $('#toggle_project_new').click(function(evt){
       TracksForm.toggle('toggle_project_new', 'project_new', 'project-form',
@@ -418,10 +417,36 @@ $(document).ready(function() {
       $(this).parents('.edit-form').find('form').clearForm();
   });
 
-  $("#list-active-projects").sortable({handle: '.handle', update: update_project_order});
-  $("#list-hidden-projects").sortable({handle: '.handle', update: update_project_order});
-  $("#list-completed-projects").sortable({handle: '.handle', update: update_project_order});
+  $("#list-active-projects").sortable({handle: '.handle', update: update_order});
+  $("#list-hidden-projects").sortable({handle: '.handle', update: update_order});
+  $("#list-completed-projects").sortable({handle: '.handle', update: update_order});
 
+  /* Contexts behavior */
+  $('#toggle_context_new').click(function(evt){
+      TracksForm.toggle('toggle_context_new', 'context_new', 'context-form',
+        '« Hide form', 'Hide new context form',
+        'Create a new context »', 'Add a context');
+  });
+  $('a.delete_project_button').live('click', function(evt){
+      evt.preventDefault();
+      if(confirm("Are you sure that you want to "+this.title+"?")){
+        $(this).parents('.context').block({message: null});
+        params = {_method: 'delete'};
+        $.post(this.href, params, null, 'script');
+      }
+  });
+  $("#list-contexts-active").sortable({handle: '.handle', update: update_order});
+  $("#list-contexts-hidden").sortable({handle: '.handle', update: update_order});
+  /*
+      <%= apply_behavior 'a.edit_context_button:click', :prevent_default => true do |page, element|
+               element.up('.context').toggle 
+               editform = element.up('.list').down('.edit-form')
+               editform.toggle 
+               editform.visual_effect(:appear) 
+               editform.down('input').focus
+         end
+      -%>
+      */
   /* Gets called from some AJAX callbacks, too */
   enable_rich_interaction();
 });

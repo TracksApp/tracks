@@ -8,12 +8,6 @@
 
     <div id="toggle_context_new" class="hide_form">
       <a title="Hide new context form" accesskey="n">&laquo; Hide form</a>
-      <%  apply_behavior '#toggle_context_new a:click', :prevent_default => true do |page|
-        page << "TracksForm.toggle('toggle_context_new', 'context_new', 'context-form',
-        '&laquo; Hide form', 'Hide new context form',
-        'Create a new context &#187;', 'Add a context');"
-      end
-    %>
     </div>
 
     <div id="context_new" class="context_new" style="display:block">
