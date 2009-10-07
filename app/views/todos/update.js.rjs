@@ -6,13 +6,6 @@ if @saved
   status_message = 'Added new context / ' + status_message if @new_context_created
   page.notify :notice, status_message, 5.0
   
-  # update auto completer arrays for edit form in right column, only for pages
-  # with that form
-  unless source_view_is_one_of(:calendar)
-    page << "contextAutoCompleter.options.array = #{context_names_for_autocomplete}; contextAutoCompleter.changed = true" if @new_context_created
-    page << "projectAutoCompleter.options.array = #{project_names_for_autocomplete}; projectAutoCompleter.changed = true" if @new_project_created
-  end
-  
   if source_view_is_one_of(:todo, :context, :tag)
     if @context_changed || @todo.deferred?
       page[@todo].remove 
