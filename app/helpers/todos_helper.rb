@@ -25,7 +25,7 @@ module TodosHelper
 
   def remote_edit_menu_item(parameters, todo)
     return link_to_remote(
-      image_tag("edit_off.png", :mouseover => "edit_on.png", :alt => "", :align => "absmiddle")+" Edit",
+      image_tag("edit_off.png", :mouseover => "edit_on.png", :alt => "", :align => "absmiddle", :id => 'edit_icon_todo_'+todo.id.to_s)+" Edit",
       :url => {:controller => 'todos', :action => 'edit', :id => todo.id},
       :method => 'get',
       :with => "'#{parameters}'",

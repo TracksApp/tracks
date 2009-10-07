@@ -3,7 +3,10 @@ login :as => 'admin'
 
 # set project to hidden state
 open "/projects/2"
+click 'css=.project_settings a'
+wait_for_visible "project_state_hidden"
 click 'project_state_hidden'
+click 'submit_project_2'
 # wait for flash before navigating away from project page to make sure that
 # the changes have been saved
 wait_for_visible "flash"
