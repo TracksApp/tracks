@@ -51,12 +51,12 @@ module TodosHelper
     futuredate = (@todo.show_from || @todo.user.date) + days.days
     if @todo.due && futuredate > @todo.due
       return link_to_function(
-        image_tag("defer_#{days}_off.png", :mouseover => "defer_#{days}.png", :alt => "", :align => "absmiddle")+" Defer #{pluralize(days, "day")}",
+        image_tag("defer_#{days}_off.png", :mouseover => "defer_#{days}.png", :alt => "Defer #{pluralize(days, "day")}", :align => "absmiddle")+" Defer #{pluralize(days, "day")}",
         "alert('Defer date is after due date. Please edit and adjust due date before deferring.')"
       )
     else
       return link_to_remote(
-        image_tag("defer_#{days}_off.png", :mouseover => "defer_#{days}.png", :alt => "", :align => "absmiddle")+" Defer #{pluralize(days, "day")}",
+        image_tag("defer_#{days}_off.png", :mouseover => "defer_#{days}.png", :alt => "Defer #{pluralize(days, "day")}", :align => "absmiddle")+" Defer #{pluralize(days, "day")}",
         :url => url,
         :before => todo_start_waiting_js(todo),
         :complete => todo_stop_waiting_js(todo))
