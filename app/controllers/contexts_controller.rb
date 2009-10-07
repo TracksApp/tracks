@@ -92,8 +92,7 @@ class ContextsController < ApplicationController
 
     if @context.save
       if boolean_param('wants_render')
-        @context_state_changed = ((@orgininal_context_hidden || false) != @context.hidden?)
-        puts "CHANGED: #{@original_context_hidden}, #{@context.hidden?}, #{(@orgininal_context_hidden == @context.hidden?)}"
+        @context_state_changed = (@original_context_hidden != @context.hidden?)
         @new_state = (@context.hidden? ? "hidden" : "active") if @context_state_changed
         respond_to do |format|
           format.js
