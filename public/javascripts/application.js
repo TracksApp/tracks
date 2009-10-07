@@ -263,6 +263,7 @@ function enable_rich_interaction(){
   $('input.Date').datepicker();
   /* Autocomplete */
   $('input[name=context_name]').autocomplete(contextNames);
+  $('input[name=project[default_context_name]]').autocomplete(contextNames);
   $('input[name=project_name]').autocomplete(projectNames);
 
   /* have to bind on keypress because of limitataions of live() */
