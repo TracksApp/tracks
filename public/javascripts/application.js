@@ -378,6 +378,15 @@ $(document).ready(function() {
       }, {style: 'padding:0px', submit: "OK"});
 
   /* Projects behavior */
+  $('h2#project_name').editable(function(value, settings){
+      project_id = $(this).parents('.container').children('div').get(0).id.split('_')[2];
+      highlight = function(){
+        $('h2#project_name').effect('highlight', {}, 500);
+      };
+      $.post('/projects/update/'+project_id, {'project[name]': value, 'update_project_name': 'true'}, highlight, 'script');
+      return(value);
+      }, {style: 'padding:0px', submit: "OK"});
+
   $('.alphabetize_link').click(function(evt){
       evt.preventDefault();
       if(confirm('Are you sure that you want to sort these projects alphabetically? This will replace the existing sort order.')){
@@ -428,14 +437,7 @@ $(document).ready(function() {
         '« Hide form', 'Hide new context form',
         'Create a new context »', 'Add a context');
   });
-  $('a.delete_project_button').live('click', function(evt){
-      evt.preventDefault();
-      if(confirm("Are you sure that you want to "+this.title+"?")){
-        $(this).parents('.context').block({message: null});
-        params = {_method: 'delete'};
-        $.post(this.href, params, null, 'script');
-      }
-  });
+
   $("#list-contexts-active").sortable({handle: '.handle', update: update_order});
   $("#list-contexts-hidden").sortable({handle: '.handle', update: update_order});
   /*

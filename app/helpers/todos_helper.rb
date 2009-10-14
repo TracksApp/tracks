@@ -25,7 +25,7 @@ module TodosHelper
 
   def remote_edit_menu_item(parameters, todo)
     return link_to_remote(
-      image_tag("edit_off.png", :mouseover => "edit_on.png", :alt => "", :align => "absmiddle", :id => 'edit_icon_todo_'+todo.id.to_s)+" Edit",
+      image_tag("edit_off.png", :mouseover => "edit_on.png", :alt => "Edit", :align => "absmiddle", :id => 'edit_icon_todo_'+todo.id.to_s)+" Edit",
       :url => {:controller => 'todos', :action => 'edit', :id => todo.id},
       :method => 'get',
       :with => "'#{parameters}'",
@@ -35,12 +35,13 @@ module TodosHelper
 
   def remote_delete_menu_item(parameters, todo)
     return link_to_remote(
-      image_tag("delete_off.png", :mouseover => "delete_on.png", :alt => "", :align => "absmiddle")+" Delete",
+      image_tag("delete_off.png", :mouseover => "delete_on.png", :alt => "Delete", :align => "absmiddle")+" Delete",
       :url => {:controller => 'todos', :action => 'destroy', :id => todo.id},
       :method => 'delete',
       :with => "'#{parameters}'",
       :before => todo_start_waiting_js(todo),
-      :complete => todo_stop_waiting_js(todo))
+      :complete => todo_stop_waiting_js(todo),
+      :confirm => "Are you sure that you want to delete the action '#{todo.description}'?")
   end
 
   def remote_defer_menu_item(days, todo)

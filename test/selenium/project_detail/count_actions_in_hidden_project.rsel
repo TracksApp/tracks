@@ -2,9 +2,11 @@ setup :fixtures => :all
 login :as => 'admin'
 open '/projects/1'
 assert_text 'badge_count', '2'
+click 'css=.project_settings a'
+wait_for_visible "project[default_context_name]"
 click 'project_state_hidden'
-wait_for_attribute 'css=#project_status .active span', 'class', 'inactive_state'
-wait_for_attribute 'css=#project_status .hidden span', 'class', 'active_state'
+click 'css=.positive'
+wait_for_text_present 'marked as hidden'
 assert_text 'badge_count', '2'
 
 type "todo_description", "add one to hidden project 1"
@@ -20,4 +22,4 @@ assert_text 'badge_count', '4'
 
 open '/projects/1'
 assert_text 'badge_count', '4'
-assert_checked 'project_state_hidden'
+assert_text_present 'marked as hidden'
