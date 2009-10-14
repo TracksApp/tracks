@@ -426,6 +426,7 @@ class TodosControllerTest < ActionController::TestCase
 
     # link todo_1 and recurring_todo_1
     recurring_todo_1 = RecurringTodo.find(1)
+    set_user_to_current_time_zone(recurring_todo_1.user)
     todo_1 = Todo.find_by_recurring_todo_id(1)
     today = Time.now.at_midnight
 
