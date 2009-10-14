@@ -21,14 +21,6 @@ class ContextsControllerTest < TodoContainerControllerTestBase
     assert_ajax_create_increments_count '@newcontext'
   end
 
-  def test_create_context_with_ajax_success_rjs
-    ajax_create '@newcontext'
-    assert_rjs :insert_html, :bottom, "list-contexts"
-    assert_rjs :sortable, 'list-contexts', { :tag => 'div', :handle => 'handle', :complete => visual_effect(:highlight, 'list-contexts'), :url => order_contexts_path }
-    # not yet sure how to write the following properly...
-    assert_rjs :call, "Form.reset", "context-form"
-    assert_rjs :call, "Form.focusFirstElement", "context-form"
-  end
 
   def test_create_via_ajax_with_comma_in_name_does_not_increment_number_of_contexts
     assert_ajax_create_does_not_increment_count 'foo,bar'
