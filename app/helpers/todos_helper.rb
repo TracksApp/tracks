@@ -246,6 +246,10 @@ module TodosHelper
     # @contexts.empty?
     array_or_string_for_javascript( current_user.contexts.collect{|c| escape_javascript(c.name) } )
   end
+
+  def tag_names_for_autocomplete
+    array_or_string_for_javascript( Tag.all.collect{|c| escape_javascript(c.name) } )
+  end
   
   def default_contexts_for_autocomplete
     projects = current_user.projects.find(:all, :conditions => ['default_context_id is not null'])
