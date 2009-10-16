@@ -10,6 +10,7 @@ module TodosHelper
   def form_remote_tag_edit_todo( &block )
     form_remote_tag(
       :url => todo_path(@todo),
+      :loading => "$('#submit_todo_#{@todo.id}').block({message: null})",
       :html => {
         :method => :put, 
         :id => dom_id(@todo, 'form'), 
