@@ -427,6 +427,12 @@ $(document).ready(function() {
       $(this).parents('.edit-form').find('form').clearForm();
   });
 
+  $(".add_note_link a").live('click', function(){
+      $('#new-note').show();
+      $('#new-note form').clearForm();
+      $('#new-note form input:first').focus();
+    });
+
   $("#list-active-projects").sortable({handle: '.handle', update: update_order});
   $("#list-hidden-projects").sortable({handle: '.handle', update: update_order});
   $("#list-completed-projects").sortable({handle: '.handle', update: update_order});

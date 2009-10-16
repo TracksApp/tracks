@@ -11,7 +11,7 @@
 
   <div class="container">
     <div id="notes">
-      <div class="add_note_link"><%= link_to_function( "Add a note", "Element.toggle('new-note'); Form.focusFirstElement('form-new-note');", :id=>"add_note_href") %></div>
+    <div class="add_note_link"><%= link_to 'Add a note', '#' %> </div>
       <h2>Notes</h2>
       <div id="empty-n" style="display:<%= @project.notes.empty? ? 'block' : 'none'%>;">
         <%= render :partial => "shared/empty",
@@ -26,7 +26,7 @@
       :method => :post,
       :update => "notes",
       :position => "bottom",
-      :complete => "new Effect.Highlight('notes');$('empty-n').hide();Form.reset('form-new-note');",
+      :complete => "$('#notes').effect('highlight', 1000);$('#empty-n').hide();$('#new-note form').clearForm();",
       :html => {:id=>'form-new-note', :class => 'inline-form'} do %>
       <%= hidden_field( "new_note", "project_id", "value" => "#{@project.id}" ) %>
       <%= text_area( "new_note", "body", "cols" => 50, "rows" => 3, "tabindex" => 1 ) %>
