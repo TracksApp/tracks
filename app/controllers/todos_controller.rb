@@ -95,6 +95,7 @@ class TodosController < ApplicationController
         @projects = current_user.projects.find(:all) if @new_project_created
         @initial_context_name = params['default_context_name']
         @initial_project_name = params['default_project_name']
+        @default_tags = @todo.project.default_tags unless @todo.project.nil?
         render :action => 'create'
       end
       format.xml do

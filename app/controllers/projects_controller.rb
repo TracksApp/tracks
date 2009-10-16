@@ -53,6 +53,7 @@ class ProjectsController < ApplicationController
     @down_count = @count + @deferred.size 
     @next_project = current_user.projects.next_from(@project)
     @previous_project = current_user.projects.previous_from(@project)
+    @default_tags = @project.default_tags
     respond_to do |format|
       format.html
       format.m     &render_project_mobile
