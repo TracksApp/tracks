@@ -86,14 +86,6 @@ var TracksForm = {
     }
 }
 
-var TodoBehavior = {
-    enableToggleNotes: function() {
-        $(".show_notes").unbind('click').bind('click', function () {
-            $(this).next().toggle("fast"); return false;
-        });
-    }
-}
-
 $.fn.clearForm = function() {
   return this.each(function() {
     var type = this.type, tag = this.tagName.toLowerCase();
@@ -316,8 +308,11 @@ $(document).ready(function() {
 
   /* for toggle notes link in mininav */
   $("#toggle-notes-nav").click(function () { jQuery(".todo_notes").toggle(); });
+  
   /* show the notes of a todo */
-  TodoBehavior.enableToggleNotes();
+  $(".show_notes").live('click', function () {
+    $(this).next().toggle("fast"); return false;
+  });
 
   /* fade flashes and alerts in automatically */
   $(".alert").fadeOut(8000);

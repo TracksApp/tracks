@@ -135,8 +135,6 @@ if @saved
   else
     logger.error "unexpected source_view '#{params[:_source_view]}'"
   end
-  # make sure the behavior of the new/updated todo is enabled
-  page << "TodoBehavior.enableToggleNotes()"
 else
   page.show 'error_status'
   page.replace_html 'error_status', "#{error_messages_for('todo')}"
