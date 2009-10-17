@@ -105,35 +105,5 @@
     </div>
 
     <%= render :partial => "shared/footer" %>
-
-    <script type="text/javascript">
-      jQuery(document).ready(function() { /* main menu */
-        jQuery('ul.sf-menu').superfish({
-          delay: 250,
-          animation:   {opacity:'show',height:'show'},
-          autoArrows: false,
-          dropShadows: false,
-          speed: 'fast'
-        });
-        jQuery('ul.sf-item-menu').superfish({ /* context menu */
-          delay: 100,
-          animation:   {opacity:'show',height:'show'},
-          autoArrows: false,
-          dropShadows: false,
-          speed: 'fast',
-          onBeforeShow: function() { /* highlight todo */
-            $(this.parent().parent().parent()).addClass("sf-item-selected");
-          },
-          onHide: function() { /* remove hightlight from todo */
-            $(this.parent().parent().parent()).removeClass("sf-item-selected");
-          }
-        });
-        /* for toggle notes link in mininav */
-        jQuery("#toggle-notes-nav").click(function () { jQuery(".todo_notes").toggle(); });
-        /* show the notes of a todo */
-        TodoBehavior.enableToggleNotes();
-        Nifty("div#todo_new_action_container","normal");
-      });
-    </script>
   </body>
 </html>

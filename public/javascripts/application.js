@@ -88,8 +88,8 @@ var TracksForm = {
 
 var TodoBehavior = {
     enableToggleNotes: function() {
-        jQuery(".show_notes").unbind('click').bind('click', function () {
-            jQuery(this).next().toggle("fast"); return false;
+        $(".show_notes").unbind('click').bind('click', function () {
+            $(this).next().toggle("fast"); return false;
         });
     }
 }
@@ -281,8 +281,43 @@ function enable_rich_interaction(){
 }
 
 $(document).ready(function() {
+  $('#search-form #search').focus();
+
   /* Nifty corners */
   Nifty("div#recurring_new_container","normal");
+  Nifty("div#context_new_container","normal");
+  Nifty("div#feedlegend","normal");
+  Nifty("div#feedicons-project","normal");
+  Nifty("div#feedicons-context","normal");
+  Nifty("div#todo_new_action_container","normal");
+
+  /* Moved from standard.html.erb layout */
+  $('ul.sf-menu').superfish({
+    delay: 250,
+    animation:   {opacity:'show',height:'show'},
+    autoArrows: false,
+    dropShadows: false,
+    speed: 'fast'
+  });
+
+  $('ul.sf-item-menu').superfish({ /* context menu */
+    delay: 100,
+    animation:   {opacity:'show',height:'show'},
+    autoArrows: false,
+    dropShadows: false,
+    speed: 'fast',
+    onBeforeShow: function() { /* highlight todo */
+      $(this.parent().parent().parent()).addClass("sf-item-selected");
+    },
+    onHide: function() { /* remove hightlight from todo */
+      $(this.parent().parent().parent()).removeClass("sf-item-selected");
+    }
+  });
+
+  /* for toggle notes link in mininav */
+  $("#toggle-notes-nav").click(function () { jQuery(".todo_notes").toggle(); });
+  /* show the notes of a todo */
+  TodoBehavior.enableToggleNotes();
 
   /* fade flashes and alerts in automatically */
   $(".alert").fadeOut(8000);
