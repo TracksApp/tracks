@@ -1,25 +1,3 @@
-var Login = {
-    showOpenid: function() {
-        $('#database_auth_form').hide();
-        $('#openid_auth_form').show();
-        $('#alternate_auth_openid').hide();
-        $('#alternate_auth_database').show();
-        $('#openid_url').focus();
-        $('#openid_url').select();
-        $.cookie('preferred_auth', 'openid');
-    },
-
-    showDatabase: function(container) {
-        $('#openid_auth_form').hide();
-        $('#database_auth_form').show();
-        $('#alternate_auth_database').hide();
-        $('#alternate_auth_openid').show();
-        $('#user_login').focus();
-        $('#user_login').select();
-        $.cookie('preferred_auth', 'database');
-    }
-}
-
 var TracksForm = {
     toggle: function(toggleDivId, formContainerId, formId, hideLinkText, hideLinkTitle, showLinkText, showLinkTitle) {
         $('#'+formContainerId).toggle();
