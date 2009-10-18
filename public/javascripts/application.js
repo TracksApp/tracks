@@ -13,16 +13,16 @@ var TracksForm = {
         toggleDiv.toggleClass('hide_form');
     }, 
     get_period: function() {
-        if ($('recurring_todo_recurring_period_daily').checked) {
+        if ($('#recurring_todo_recurring_period_daily').checked) {
             return 'daily';
         } 
-        else if ($('recurring_todo_recurring_period_weekly').checked) {
+        else if ($('#recurring_todo_recurring_period_weekly').checked) {
             return 'weekly';
         }
-        else if ($('recurring_todo_recurring_period_monthly').checked) {
+        else if ($('#recurring_todo_recurring_period_monthly').checked) {
             return 'monthly';
         }
-        else if ($('recurring_todo_recurring_period_yearly').checked) {
+        else if ($('#recurring_todo_recurring_period_yearly').checked) {
             return 'yearly';
         }
         else {
@@ -30,16 +30,16 @@ var TracksForm = {
         }
     },
     get_edit_period: function() {
-        if ($('recurring_edit_todo_recurring_period_daily').checked) {
+        if ($('#recurring_edit_todo_recurring_period_daily').checked) {
             return 'daily';
         } 
-        else if ($('recurring_edit_todo_recurring_period_weekly').checked) {
+        else if ($('#recurring_edit_todo_recurring_period_weekly').checked) {
             return 'weekly';
         }
-        else if ($('recurring_edit_todo_recurring_period_monthly').checked) {
+        else if ($('#recurring_edit_todo_recurring_period_monthly').checked) {
             return 'monthly';
         }
-        else if ($('recurring_edit_todo_recurring_period_yearly').checked) {
+        else if ($('#recurring_edit_todo_recurring_period_yearly').checked) {
             return 'yearly';
         }
         else {
@@ -47,16 +47,16 @@ var TracksForm = {
         }
     },
     hide_all_recurring: function () {
-        $('recurring_daily').hide();
-        $('recurring_weekly').hide();
-        $('recurring_monthly').hide();
-        $('recurring_yearly').hide();
+        $('#recurring_daily').hide();
+        $('#recurring_weekly').hide();
+        $('#recurring_monthly').hide();
+        $('#recurring_yearly').hide();
     },
     hide_all_edit_recurring: function () {
-        $('recurring_edit_daily').hide();
-        $('recurring_edit_weekly').hide();
-        $('recurring_edit_monthly').hide();
-        $('recurring_edit_yearly').hide();
+        $('#recurring_edit_daily').hide();
+        $('#recurring_edit_weekly').hide();
+        $('#recurring_edit_monthly').hide();
+        $('#recurring_edit_yearly').hide();
     },
     toggle_overlay: function () {
         el = document.getElementById("overlay");
