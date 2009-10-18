@@ -1,5 +1,6 @@
 var TracksForm = {
-    toggle: function(toggleDivId, formContainerId, formId, hideLinkText, hideLinkTitle, showLinkText, showLinkTitle) {
+    toggle: function(toggleDivId, formContainerId, formId, hideLinkText,
+                hideLinkTitle, showLinkText, showLinkTitle) {
         $('#'+formContainerId).toggle();
         toggleDiv = $('#'+toggleDivId);
         toggleLink = toggleDiv.find('a');
@@ -12,40 +13,6 @@ var TracksForm = {
         }
         toggleDiv.toggleClass('hide_form');
     }, 
-    get_period: function() {
-        if ($('#recurring_todo_recurring_period_daily').checked) {
-            return 'daily';
-        } 
-        else if ($('#recurring_todo_recurring_period_weekly').checked) {
-            return 'weekly';
-        }
-        else if ($('#recurring_todo_recurring_period_monthly').checked) {
-            return 'monthly';
-        }
-        else if ($('#recurring_todo_recurring_period_yearly').checked) {
-            return 'yearly';
-        }
-        else {
-            return 'no period'
-        }
-    },
-    get_edit_period: function() {
-        if ($('#recurring_edit_todo_recurring_period_daily').checked) {
-            return 'daily';
-        } 
-        else if ($('#recurring_edit_todo_recurring_period_weekly').checked) {
-            return 'weekly';
-        }
-        else if ($('#recurring_edit_todo_recurring_period_monthly').checked) {
-            return 'monthly';
-        }
-        else if ($('#recurring_edit_todo_recurring_period_yearly').checked) {
-            return 'yearly';
-        }
-        else {
-            return 'no period'
-        }
-    },
     hide_all_recurring: function () {
         $('#recurring_daily').hide();
         $('#recurring_weekly').hide();
@@ -97,18 +64,6 @@ $(document).ajaxSend(function(event, request, settings) {
   }
   request.setRequestHeader("Accept", "text/javascript");
 });
-
-function toggle_star_remote(ev){
-  ev.preventDefault();
-  $.post(this.href, {_method: 'put'}, null, 'script');
-}
-
-function toggle_checkbox_remote(ev){
-  params = {_method: 'put'};
-  if(typeof(TAG_NAME) !== 'undefined')
-    params._tag_name = TAG_NAME;
-  $.post(this.value, params, null, 'script');
-}
 
 todoItems = {
   // public
@@ -180,8 +135,8 @@ function setup_container_toggles(){
         imgSrc = $(this).find('.container_toggle img').attr('src');
         $(this).find('.container_toggle img').attr('src', imgSrc.replace('collapse', 'expand'));
         $(this).find('.toggle_target').hide();
-        }
-      });
+      }
+  });
 }
 
 function askIfNewContextProvided() {
@@ -194,22 +149,22 @@ function askIfNewContextProvided() {
 }
 
 function update_order(event, ui){
-        container = $(ui.item).parent();
-        row = $(ui.item).children('.sortable_row');
-        
-        url = '';
-        if(row.hasClass('context'))
-            url = '/contexts/order';
-        else if(row.hasClass('project'))
-            url = '/projects/order';
-        else {
-          console.log("Bad sortable list");
-          return;
-        }
-        $.post(url,
-            container.sortable("serialize"),
-            function(){row.effect('highlight', {}, 1000)},
-            'script');
+  container = $(ui.item).parent();
+  row = $(ui.item).children('.sortable_row');
+
+  url = '';
+  if(row.hasClass('context'))
+    url = '/contexts/order';
+  else if(row.hasClass('project'))
+    url = '/projects/order';
+  else {
+    console.log("Bad sortable list");
+    return;
+  }
+  $.post(url,
+      container.sortable("serialize"),
+      function(){row.effect('highlight', {}, 1000)},
+      'script');
 }
 
 /* Unobtrusive jQuery behavior */
@@ -285,7 +240,7 @@ $(document).ready(function() {
   });
 
   /* for toggle notes link in mininav */
-  $("#toggle-notes-nav").click(function () { jQuery(".todo_notes").toggle(); });
+  $("#toggle-notes-nav").click(function () { $(".todo_notes").toggle(); });
   
   /* show the notes of a todo */
   $(".show_notes").live('click', function () {
@@ -296,15 +251,20 @@ $(document).ready(function() {
   $(".alert").fadeOut(8000);
 
   /* set behavior for star icon */
-  $(".item-container a.star_item").
-    live('click', toggle_star_remote);
+  $(".item-container a.star_item").live('click', function (ev){
+    $.post(this.href, {_method: 'put'}, null, 'script');
+    return false;
+  });
 
   /* set behavior for toggle checkboxes */
-  $(".item-container input.item-checkbox").
-    live('click', toggle_checkbox_remote);
+  $(".item-container input.item-checkbox").live('click', function(ev){
+    params = {_method: 'put'};
+    if(typeof(TAG_NAME) !== 'undefined')
+      params._tag_name = TAG_NAME;
+    $.post(this.value, params, null, 'script');
+  });
 
   setup_container_toggles();
-
 
   $('#toggle_action_new').click(function(){
     TracksForm.toggle('toggle_action_new', 'todo_new_action', 'todo-form-new-action',
@@ -318,8 +278,8 @@ $(document).ready(function() {
       $(this).parents('.edit-form').hide();
       });
   
+  /* add behavior to clear the date both buttons for show_from and due */
   $(".date_clear").live('click', function() {
-      /* add behavior to clear the date both buttons for show_from and due */
       $(this).prev().val('');
     });
 
@@ -387,14 +347,17 @@ $(document).ready(function() {
       }, {style: 'padding:0px', submit: "OK"});
 
   /* Projects behavior */
-  $('h2#project_name').editable(function(value, settings){
+
+  save_project_name = function(value, settings){
       project_id = $(this).parents('.container').children('div').get(0).id.split('_')[2];
       highlight = function(){
         $('h2#project_name').effect('highlight', {}, 500);
       };
       $.post('/projects/update/'+project_id, {'project[name]': value, 'update_project_name': 'true'}, highlight, 'script');
       return(value);
-      }, {style: 'padding:0px', submit: "OK"});
+  };
+
+  $('h2#project_name').editable(save_project_name, {style: 'padding:0px', submit: "OK"});
 
   $('.alphabetize_link').click(function(evt){
       evt.preventDefault();
@@ -455,16 +418,7 @@ $(document).ready(function() {
 
   $("#list-contexts-active").sortable({handle: '.handle', update: update_order});
   $("#list-contexts-hidden").sortable({handle: '.handle', update: update_order});
-  /*
-      <%= apply_behavior 'a.edit_context_button:click', :prevent_default => true do |page, element|
-               element.up('.context').toggle 
-               editform = element.up('.list').down('.edit-form')
-               editform.toggle 
-               editform.visual_effect(:appear) 
-               editform.down('input').focus
-         end
-      -%>
-      */
+
   /* Gets called from some AJAX callbacks, too */
   enable_rich_interaction();
 });
