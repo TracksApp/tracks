@@ -126,6 +126,7 @@ class ProjectsController < ApplicationController
         @active_projects_count = current_user.projects.active.count
         @hidden_projects_count = current_user.projects.hidden.count
         @completed_projects_count = current_user.projects.completed.count
+        init_data_for_sidebar
         render :template => 'projects/update.js.rjs'
         return
       elsif boolean_param('update_status')
