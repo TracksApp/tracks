@@ -6,7 +6,7 @@ if @saved
   status_message = 'Added new context / ' + status_message if @new_context_created
   page.notify :notice, status_message, 5.0
   page['badge_count'].replace_html @down_count
-  page.send :record, "$('#todo-form-new-action').clearForm();$('#todo-form-new-action input:first').focus();"
+  page.send :record, "$('#todo-form-new-action').clearForm();$('#todo-form-new-action input:text:first').focus();"
   page['todo_context_name'].value = @initial_context_name
   page['todo_project_name'].value = @initial_project_name
   page['tag_list'].value = @default_tags

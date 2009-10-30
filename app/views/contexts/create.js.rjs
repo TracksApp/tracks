@@ -5,7 +5,7 @@ if @saved
   page.hide 'status'
   page['badge_count'].replace_html @down_count
   page << '$("#context-form").clearForm();'
-  page << '$("#context-form input:first").focus();'
+  page << '$("#context-form input:text:first").focus();'
 else
   page.show 'status'
   page.replace_html 'status', "#{error_messages_for('context')}"

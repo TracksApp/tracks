@@ -9,7 +9,7 @@ var TracksForm = {
         }
         else {
             toggleLink.text(hideLinkText).attr('title', hideLinkTitle);
-            $('#'+formId+' input:first').focus();
+            $('#'+formId+' input:text:first').focus();
         }
         toggleDiv.toggleClass('hide_form');
     }, 
@@ -317,7 +317,7 @@ $(document).ready(function() {
 
   $("#recurring_todo_new_action_cancel").click(function(){
       $('#recurring-todo-form-new-action').clearForm();
-      $('#recurring-todo-form-new-action input:first').focus();
+      $('#recurring-todo-form-new-action input:text:first').focus();
       TracksForm.hide_all_recurring();
       $('#recurring_daily').show();
       TracksForm.toggle_overlay();
@@ -325,7 +325,7 @@ $(document).ready(function() {
 
   $("#recurring_todo_edit_action_cancel").live('click', function(){
       $('#recurring-todo-form-edit-action').clearForm();
-      $('#recurring-todo-form-edit-action input:first').focus();
+      $('#recurring-todo-form-edit-action input:text:first').focus();
       TracksForm.hide_all_recurring();
       $('#recurring_daily').show();
       TracksForm.toggle_overlay();
@@ -402,7 +402,7 @@ $(document).ready(function() {
   $(".add_note_link a").live('click', function(){
       $('#new-note').show();
       $('#new-note form').clearForm();
-      $('#new-note form input:first').focus();
+      $('#new-note form input:text:first').focus();
     });
 
   $("#list-active-projects").sortable({handle: '.handle', update: update_order});
