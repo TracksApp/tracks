@@ -4,7 +4,7 @@ if @saved
   page['badge_count'].replace_html @down_count
   
   # remove context if empty
-  page.visual_effect :fade, item_container_id(@todo), :duration => 0.4 if source_view_is_one_of(:todo, :deferred) && @remaining_in_context == 0
+  page.visual_effect(:fade, "c#{@todo.context_id}", :duration => 0.4) if (@remaining_in_context == 0)
   
   # show message if there are no actions
   page[empty_container_msg_div_id].show if !empty_container_msg_div_id.nil? && @down_count == 0
