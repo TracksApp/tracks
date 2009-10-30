@@ -166,4 +166,17 @@ module ApplicationHelper
     return rt+rp+rts
   end
 
+  def date_format_for_date_picker()
+    standard_format = current_user.prefs.date_format
+    translations = [
+      ['%m', 'mm'],
+      ['%d', 'dd'],
+      ['%Y', 'yy'],
+      ['%y', 'y']
+    ]
+    translations.inject(standard_format) do |str, translation|
+      str.gsub(*translation)
+    end
+  end
+
 end

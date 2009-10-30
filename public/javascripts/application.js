@@ -185,7 +185,7 @@ function project_defaults(){
 }
 
 function enable_rich_interaction(){
-  $('input.Date').datepicker();
+  $('input.Date').datepicker({'dateFormat': dateFormat});
   /* Autocomplete */
   $('input[name=context_name]').autocomplete(contextNames);
   $('input[name=project[default_context_name]]').autocomplete(contextNames);
