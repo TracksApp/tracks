@@ -59,17 +59,6 @@
     var projectNames = <%= project_names_for_autocomplete %>;
     $('todo_context_name').projectDefaultContextsMap = eval('(' + <%= @default_project_context_name_map %> + ')');
   </script>
-  <!--
-  <input class="hide_tickler" id="hide_tickler" type="checkbox" tabindex="5" name="hide_tickler" checked="true"/>
-  <label for="hide_tickler"> Show actions in tickler</label>
-  <br/><br/>
-    -->
   <p><%= link_to('<span class="feed">iCal</span>', {:format => 'ics', :token => current_user.token}, :title => "iCal feed" ) %>
   - Get this calendar in iCal format</p>
 </div>
-
-<%  
-apply_behavior 'input.hide_tickler:click', :prevent_default => true do |page|
-  page << "alert('hiding action in tickler from calendar is not yet implemented');"
-end
-%>

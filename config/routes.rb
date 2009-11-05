@@ -1,6 +1,4 @@
 ActionController::Routing::Routes.draw do |map|
-  UJS::routes
-  
   map.with_options :controller => 'login' do |login|
     login.login 'login', :action => 'login'
     login.formatted_login 'login.:format', :action => 'login'

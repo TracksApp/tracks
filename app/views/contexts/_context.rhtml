@@ -3,31 +3,9 @@
   <h2>
     <% if collapsible -%>
       <a href="#" class="container_toggle" id="toggle_c<%= context.id %>"><%= image_tag("collapse.png") %></a>
-      <% apply_behavior '.container_toggle:click', :prevent_default => true do |page|
-        page << " /* only handle the click if a previous click had finished its animation */
-        if (todoItems.lastEffect == null  || todoItems.lastEffect.state=='finished') {
-        containerElem = this.up('.container')
-        toggleTarget = containerElem.down('.toggle_target')
-        if (Element.visible(toggleTarget))
-        {
-        todoItems.collapseNextActionListing(this, toggleTarget);
-        todoItems.contextCollapseCookieManager.setCookie(todoItems.buildCookieName(containerElem), true)
-        }
-        else
-        {
-        todoItems.expandNextActionListing(this, toggleTarget);
-        todoItems.contextCollapseCookieManager.clearCookie(todoItems.buildCookieName(containerElem))
-        }
-        }
-        "
-      end
-    -%>
     <% end -%>
     <% if source_view_is :context %>
-      <span class="in_place_editor_field" id="context_name_in_place_editor"><%= context.name %></span>
-      <%= in_place_editor 'context_name_in_place_editor', {
-        :url => { :controller => 'contexts', :action => 'update', :id => context.id, :field => 'name', :update_context_name => true, :escape => false},
-        :options=>"{method:'put'}", :script => true } %>
+      <span id="context_name"><%= context.name %></span>
     <% else %>
       <%= link_to_context( context )  %>
     <% end %>
@@ -37,11 +15,5 @@
       <div class="message"><p>Currently there are no incomplete actions in this context</p></div>
     </div>
     <%= render :partial => "todos/todo", :collection => @not_done, :locals => { :parent_container_type => "context" } %>
-    <% if @not_done.empty?
-      # fix (hack) for #713
-      set_behavior_for_star_icon
-      set_behavior_for_toggle_checkbox
-    end
-    -%>
   </div><!-- [end:items] -->
 </div><!-- [end:c<%= context.id %>] -->

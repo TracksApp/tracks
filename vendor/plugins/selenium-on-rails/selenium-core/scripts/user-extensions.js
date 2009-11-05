@@ -2,5 +2,5 @@
 // store, assert, assertNot, verify, verifyNot, waitFor, and waitForNot commands.
 // Will result in support for storeContextCount, assertContextCount, etc.
 Selenium.prototype.getContextCount = function() {
-	return this.browserbot.getCurrentWindow().$$('.context').length;
+	return this.browserbot.getCurrentWindow().$('.context').size();
 };

@@ -14,7 +14,7 @@ if @saved
     
     # remove container if empty
     if @remaining_in_context == 0 && source_view_is(:todo)
-      page.visual_effect :fade, item_container_id(@todo), :duration => 0.4
+      page.visual_effect :fade, "c"+@todo.context.id.to_s, :duration => 0.4
     end
 
     if @original_item_was_deferred && source_view_is(:tag)
@@ -42,6 +42,7 @@ if @saved
     page.insert_html :bottom, item_container_id(@todo), :partial => 'todos/todo', :locals => { :todo => @todo, :parent_container_type => parent_container_type }
     page.visual_effect :highlight, dom_id(@todo, 'line'), {'startcolor' => "'#99ff99'"}
     page.show "empty-d" if @completed_count == 0
+    page.show "c"+@todo.context.id.to_s
     page[empty_container_msg_div_id].hide unless empty_container_msg_div_id.nil? # If we've checked something as undone, incomplete items can't be empty
   end
   
@@ -53,5 +54,3 @@ if @saved
 else
   page.replace_html "status", content_tag("div", content_tag("h2", "#{pluralize(@todo.errors.count, "error")} prohibited this action from being saved") + content_tag("p", "There were problems with the following fields:") + content_tag("ul", @todo.errors.each_full { |msg| content_tag("li", msg) }), "id" => "errorExplanation", "class" => "errorExplanation")  
 end
-# make sure the behavior of the new/updated todo is enabled
-page << "TodoBehavior.enableToggleNotes()"

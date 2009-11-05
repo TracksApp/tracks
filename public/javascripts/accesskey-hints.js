@@ -19,7 +19,7 @@ var accessKeyHintsAdder = {
 	  var elemTypes = new Array('a','area','button','input','label','legend','textarea');
 	  for(var i = 0; i < elemTypes.length; i++)
 	  {
-	    this.addHint(document.getElementsByTagName(elemTypes[i]));
+	    accessKeyHintsAdder.addHint(document.getElementsByTagName(elemTypes[i]));
 	  }
 	},
 	
@@ -66,4 +66,4 @@ var accessKeyHintsAdder = {
 	
 }
 
-Event.observe(window, "load", accessKeyHintsAdder.run.bindAsEventListener(accessKeyHintsAdder));
+$(accessKeyHintsAdder.run);

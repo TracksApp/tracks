@@ -251,8 +251,6 @@ class RecurringTodosController < ApplicationController
     @xth_day = [['first',1],['second',2],['third',3],['fourth',4],['last',5]]    
     @projects = current_user.projects.find(:all, :include => [:default_context])
     @contexts = current_user.contexts.find(:all)
-    @default_project_context_name_map = build_default_project_context_name_map(@projects).to_json
-    @default_project_tags_map = build_default_project_tags_map(@projects).to_json
   end
   
   def get_recurring_todo_from_param

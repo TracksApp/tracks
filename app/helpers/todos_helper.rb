@@ -8,52 +8,41 @@ module TodosHelper
   end
 
   def form_remote_tag_edit_todo( &block )
-    form_tag( 
-      todo_path(@todo), {
+    form_remote_tag(
+      :url => todo_path(@todo),
+      :loading => "$('#submit_todo_#{@todo.id}').block({message: null})",
+      :html => {
         :method => :put, 
         :id => dom_id(@todo, 'form'), 
         :class => dom_id(@todo, 'form') + " inline-form edit_todo_form" }, 
       &block )
-    apply_behavior 'form.edit_todo_form', make_remote_form(
-      :method => :put, 
-      :before => "todoSpinner = this.down('button.positive'); todoSpinner.startWaiting()",
-      :loaded => "todoSpinner.stopWaiting()",
-      :condition => "!(this.down('button.positive').isWaiting())"),
-      :prevent_default => true
   end
-  
-  def set_behavior_for_star_icon
-    apply_behavior '.item-container a.star_item:click', 
-      remote_to_href(:method => 'put', :with => "{ _source_view : '#{@source_view}' }"),
-      :prevent_default => true
-  end    
 
   def remote_star_icon 
-    str = link_to( image_tag_for_star(@todo),
+    link_to( image_tag_for_star(@todo),
       toggle_star_todo_path(@todo),
       :class => "icon star_item", :title => "star the action '#{@todo.description}'")
-    set_behavior_for_star_icon
-    str
   end
 
   def remote_edit_menu_item(parameters, todo)
     return link_to_remote(
-      image_tag("edit_off.png", :mouseover => "edit_on.png", :alt => "", :align => "absmiddle")+" Edit",
+      image_tag("edit_off.png", :mouseover => "edit_on.png", :alt => "Edit", :align => "absmiddle", :id => 'edit_icon_todo_'+todo.id.to_s)+" Edit",
       :url => {:controller => 'todos', :action => 'edit', :id => todo.id},
       :method => 'get',
       :with => "'#{parameters}'",
       :before => todo_start_waiting_js(todo),
-      :complete => todo_stop_waiting_js)
+      :complete => todo_stop_waiting_js(todo))
   end
 
   def remote_delete_menu_item(parameters, todo)
     return link_to_remote(
-      image_tag("delete_off.png", :mouseover => "delete_on.png", :alt => "", :align => "absmiddle")+" Delete",
+      image_tag("delete_off.png", :mouseover => "delete_on.png", :alt => "Delete", :align => "absmiddle")+" Delete",
       :url => {:controller => 'todos', :action => 'destroy', :id => todo.id},
       :method => 'delete',
       :with => "'#{parameters}'",
       :before => todo_start_waiting_js(todo),
-      :complete => todo_stop_waiting_js)
+      :complete => todo_stop_waiting_js(todo),
+      :confirm => "Are you sure that you want to delete the action '#{todo.description}'?")
   end
 
   def remote_defer_menu_item(days, todo)
@@ -64,24 +53,24 @@ module TodosHelper
     futuredate = (@todo.show_from || @todo.user.date) + days.days
     if @todo.due && futuredate > @todo.due
       return link_to_function(
-        image_tag("defer_#{days}_off.png", :mouseover => "defer_#{days}.png", :alt => "", :align => "absmiddle")+" Defer #{pluralize(days, "day")}",
+        image_tag("defer_#{days}_off.png", :mouseover => "defer_#{days}.png", :alt => "Defer #{pluralize(days, "day")}", :align => "absmiddle")+" Defer #{pluralize(days, "day")}",
         "alert('Defer date is after due date. Please edit and adjust due date before deferring.')"
       )
     else
       return link_to_remote(
-        image_tag("defer_#{days}_off.png", :mouseover => "defer_#{days}.png", :alt => "", :align => "absmiddle")+" Defer #{pluralize(days, "day")}",
+        image_tag("defer_#{days}_off.png", :mouseover => "defer_#{days}.png", :alt => "Defer #{pluralize(days, "day")}", :align => "absmiddle")+" Defer #{pluralize(days, "day")}",
         :url => url,
         :before => todo_start_waiting_js(todo),
-        :complete => todo_stop_waiting_js)
+        :complete => todo_stop_waiting_js(todo))
     end
   end
 
   def todo_start_waiting_js(todo)
-    return "$('ul#{dom_id(todo)}').hide(); itemContainer = $('#{dom_id(todo)}'); itemContainer.startWaiting()"
+    return "$('#ul#{dom_id(todo)}').css('visibility', 'hidden'); $('##{dom_id(todo)}').block({message: null})"
   end
 
-  def todo_stop_waiting_js
-    return "itemContainer.stopWaiting();"
+  def todo_stop_waiting_js(todo)
+    return "$('##{dom_id(todo)}').unblock();enable_rich_interaction();"
   end
 
   def image_tag_for_recurring_todo(todo)
@@ -91,18 +80,9 @@ module TodosHelper
       :class => "recurring_icon", :title => recurrence_pattern_as_text(todo.recurring_todo))
   end
 
-  def set_behavior_for_toggle_checkbox
-    parameters = "_source_view=#{@source_view}"
-    parameters += "&_tag_name=#{@tag_name}" if @source_view == 'tag'
-    apply_behavior '.item-container input.item-checkbox:click',
-      remote_function(:url => javascript_variable('this.value'), :method => 'put',
-      :with => "'#{parameters}'")    
-  end
   
   def remote_toggle_checkbox
-    str = check_box_tag('item_id', toggle_check_todo_path(@todo), @todo.completed?, :class => 'item-checkbox')
-    set_behavior_for_toggle_checkbox
-    str
+    check_box_tag('item_id', toggle_check_todo_path(@todo), @todo.completed?, :class => 'item-checkbox')
   end
   
   def date_span
@@ -213,10 +193,11 @@ module TodosHelper
   end
   
   def calendar_setup( input_field )
-    str = "Calendar.setup({ ifFormat:\"#{prefs.date_format}\""
-    str << ",firstDay:#{prefs.week_starts},showOthers:true,range:[2004, 2010]"
-    str << ",step:1,inputField:\"" + input_field + "\",cache:true,align:\"TR\" })\n"
-    javascript_tag str
+    # TODO:jQuery
+    #str = "Calendar.setup({ ifFormat:\"#{prefs.date_format}\""
+    #str << ",firstDay:#{prefs.week_starts},showOthers:true,range:[2004, 2010]"
+    #str << ",step:1,inputField:\"" + input_field + "\",cache:true,align:\"TR\" })\n"
+    #javascript_tag str
   end
   
   def item_container_id (todo)
@@ -224,7 +205,7 @@ module TodosHelper
       return "p#{todo.project_id}items" if todo.active?
       return "tickler" if todo.deferred?
     end
-    return "c#{todo.context_id}"
+    return "c#{todo.context_id}items"
   end
 
   def should_show_new_item
@@ -264,6 +245,20 @@ module TodosHelper
     # #return array_or_string_for_javascript(['Create a new context']) if
     # @contexts.empty?
     array_or_string_for_javascript( current_user.contexts.collect{|c| escape_javascript(c.name) } )
+  end
+
+  def tag_names_for_autocomplete
+    array_or_string_for_javascript( Tag.all.collect{|c| escape_javascript(c.name) } )
+  end
+  
+  def default_contexts_for_autocomplete
+    projects = current_user.projects.find(:all, :conditions => ['default_context_id is not null'])
+    Hash[*projects.map{ |p| [p.name, p.default_context.name] }.flatten].to_json
+  end
+  
+  def default_tags_for_autocomplete
+    projects = current_user.projects.find(:all, :conditions => ['default_tags != ""'])
+    Hash[*projects.map{ |p| [p.name, p.default_tags] }.flatten].to_json
   end
 
   def format_ical_notes(notes)

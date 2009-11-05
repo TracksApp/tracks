@@ -61,7 +61,7 @@
 
 <script type="text/javascript">
 function showPreferredAuth() {
-  var preferredAuth = new CookieManager().getCookie('preferred_auth');
+  var preferredAuth = $.cookie('preferred_auth');
   var databaseEnabled = <%= show_database_form ? 'true' : 'false' %>;
   var openidEnabled = <%= show_openid_form ? 'true' : 'false' %>;
 	if (preferredAuth && preferredAuth == 'openid' && openidEnabled) {
@@ -74,5 +74,28 @@ function showPreferredAuth() {
 	  Login.showOpenid();
 	}
 }
-Event.observe(window, 'load', showPreferredAuth);
+$(document).ready(showPreferredAuth);
+
+var Login = {
+    showOpenid: function() {
+        $('#database_auth_form').hide();
+        $('#openid_auth_form').show();
+        $('#alternate_auth_openid').hide();
+        $('#alternate_auth_database').show();
+        $('#openid_url').focus();
+        $('#openid_url').select();
+        $.cookie('preferred_auth', 'openid');
+    },
+
+    showDatabase: function(container) {
+        $('#openid_auth_form').hide();
+        $('#database_auth_form').show();
+        $('#alternate_auth_database').hide();
+        $('#alternate_auth_openid').show();
+        $('#user_login').focus();
+        $('#user_login').select();
+        $.cookie('preferred_auth', 'database');
+    }
+}
+
 </script>

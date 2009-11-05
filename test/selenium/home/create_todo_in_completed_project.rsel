@@ -7,7 +7,10 @@ assert_text 'badge_count', '11'
 
 # set project to hidden state
 open "/projects/2"
+click 'css=.project_settings a'
+wait_for_visible "project_state_completed"
 click 'project_state_completed'
+click 'submit_project_2'
 # wait for flash before navigating away from project page
 wait_for_visible "flash"
 

@@ -1,3 +1,0 @@
-if @saved
-  page[@todo].down('a.star_item').down('img').toggleClassName('starred_todo').toggleClassName('unstarred_todo')
-end

@@ -95,6 +95,7 @@ class TodosController < ApplicationController
         @projects = current_user.projects.find(:all) if @new_project_created
         @initial_context_name = params['default_context_name']
         @initial_project_name = params['default_project_name']
+        @default_tags = @todo.project.default_tags unless @todo.project.nil?
         render :action => 'create'
       end
       format.xml do
@@ -358,8 +359,6 @@ class TodosController < ApplicationController
     @not_done_todos = current_user.deferred_todos
     @count = @not_done_todos.size
     @down_count = @count
-    @default_project_context_name_map = build_default_project_context_name_map(@projects).to_json
-    @default_project_tags_map = build_default_project_tags_map(@projects).to_json
     
     respond_to do |format|
       format.html
@@ -434,10 +433,7 @@ class TodosController < ApplicationController
     @down_count = @count 
 
     respond_to do |format|
-      format.html {
-        @default_project_context_name_map = build_default_project_context_name_map(@projects).to_json
-        @default_project_tags_map = build_default_project_tags_map(@projects).to_json
-      }
+      format.html
       format.m { 
         cookies[:mobile_url]= {:value => request.request_uri, :secure => SITE_CONFIG['secure_cookies']}
         render :action => "mobile_tag"         
@@ -471,8 +467,6 @@ class TodosController < ApplicationController
     @page_title = "TRACKS::Calendar"
 
     @projects = current_user.projects.find(:all)
-    @default_project_context_name_map = build_default_project_context_name_map(@projects).to_json
-    @default_project_tags_map = build_default_project_tags_map(@projects).to_json
   
     due_today_date = Time.zone.now
     due_this_week_date = Time.zone.now.end_of_week
@@ -756,9 +750,6 @@ class TodosController < ApplicationController
           end
         end
       end
-       
-      @default_project_context_name_map = build_default_project_context_name_map(@projects).to_json
-      @default_project_tags_map = build_default_project_tags_map(@projects).to_json
        
       render
     end

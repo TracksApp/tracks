@@ -371,12 +371,6 @@ class TodosControllerTest < ActionController::TestCase
     assert_template 'todos/new'
   end
 
-  def test_index_html_assigns_default_project_name_map
-    login_as(:admin_user)
-    get :index, {"format"=>"html"}
-    assert_equal '"{\\"Build a working time machine\\": \\"lab\\"}"', assigns(:default_project_context_name_map)
-  end
-
   def test_toggle_check_on_recurring_todo
     login_as(:admin_user)
 
@@ -432,6 +426,7 @@ class TodosControllerTest < ActionController::TestCase
 
     # link todo_1 and recurring_todo_1
     recurring_todo_1 = RecurringTodo.find(1)
+    set_user_to_current_time_zone(recurring_todo_1.user)
     todo_1 = Todo.find_by_recurring_todo_id(1)
     today = Time.now.at_midnight
 
