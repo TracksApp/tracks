@@ -24,12 +24,12 @@ parameters += "&_tag_name=#{@tag_name}" if @source_view == 'tag'
     <div class="description<%= staleness_class( todo ) %>">
       <%= date_span -%>
       <span class="todo.descr"><%= h sanitize(todo.description) %></span>
+      <%= successors_span %>
       <%= image_tag_for_recurring_todo(todo) if @todo.from_recurring_todo? %>
       <%= tag_list %>
       <%= deferred_due_date %>
       <%= project_and_context_links( parent_container_type, :suppress_context => suppress_context, :suppress_project => suppress_project ) %>
       <%= render(:partial => "todos/toggle_notes", :locals => { :item => todo }) if todo.notes? %>
-      <%= render(:partial => "todos/toggle_dependencies", :locals => { :item => todo }) if todo.uncompleted_predecessors.empty? or !todo.successors.empty? %>
     </div>
   </div>
   <div id="<%= dom_id(todo, 'edit') %>" class="edit-form" style="display:none">

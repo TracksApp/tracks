@@ -83,16 +83,27 @@ module TodosHelper
   
   def remote_toggle_checkbox
     check_box_tag('item_id', toggle_check_todo_path(@todo), @todo.completed?, :class => 'item-checkbox',
-                  :disabled => @todo.pending?)
+                  :title => @todo.pending? ? 'Blocked by ' + @todo.uncompleted_predecessors.map(&:description).join(', ') : "", :readonly => @todo.pending?)
   end
   
   def date_span
     if @todo.completed?
       "<span class=\"grey\">#{format_date( @todo.completed_at )}</span>"
+    elsif @todo.pending?
+      "<a title='Depends on: #{@todo.predecessors.map(&:description).join(', ')}'><span class=\"orange\">Pending</span></a> "
     elsif @todo.deferred?
       show_date( @todo.show_from )
     else
       due_date( @todo.due )
+    end
+  end
+  
+  def successors_span
+    unless @todo.successors.empty?
+      successors_count = @todo.successors.length
+      title = "Has #{pluralize(successors_count, 'pending action')}: #{@todo.successors.map(&:description).join(', ')}"
+      link_to(image_tag( 'blank.png', :width=>'10', :height=>'16', :border=>'0' ), 
+              '#', {:class => 'show_successors', :title => title})
     end
   end
   

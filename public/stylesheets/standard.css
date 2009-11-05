@@ -99,8 +99,8 @@ a.to_bottom:hover {background: transparent url(/images/bottom_on.png) no-repeat;
 a.show_notes, a.link_to_notes {background-image: url(/images/notes_off.png); background-repeat: no-repeat; padding: 1px; background-color: transparent;}
 a.show_notes:hover, a.link_to_notes:hover {background-image: url(/images/notes_on.png); background-repeat: no-repeat; padding: 1px; background-color: transparent;}
 
-a.show_dependencies, a.link_to_dependencies {background-image: url(/images/notes_off.png); background-repeat: no-repeat; padding: 1px; background-color: transparent;}
-a.show_dependencies:hover, a.link_to_dependencies:hover {background-image: url(/images/notes_on.png); background-repeat: no-repeat; padding: 1px; background-color: transparent;}
+a.show_successors, a.link_to_successors {background-image: url(/images/successor_off.png); background-repeat: no-repeat; padding: 1px; background-color: transparent;}
+a.show_successors:hover, a.link_to_successors:hover {background-image: url(/images/successor_on.png); background-repeat: no-repeat; padding: 1px; background-color: transparent;}
 
 /* Structural divs */
 

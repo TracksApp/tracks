@@ -247,7 +247,7 @@ $(document).ready(function() {
     $(this).next().toggle("fast"); return false;
   });
 
-  $(".show_dependencies").live('click', function () {
+  $(".show_successors").live('click', function () {
     $(this).next().toggle("fast"); return false;
   });
 
