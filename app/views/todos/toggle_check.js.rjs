@@ -14,7 +14,7 @@ if @saved
     # Activate pending todos that are successors of the completed
     @pending_to_activate.each do |t|
       logger.debug "#300: Removing #{t.description} from pending block and adding it to active"
-      page[t].remove if source_view_is(:project) # Remove todo from pending block (if it exists)
+      page[t].remove if source_view_is(:project) or source_view_is(:tag)
       page.insert_html :bottom, item_container_id(t), :partial => 'todos/todo', :locals => { :todo => t, :parent_container_type => parent_container_type }
     end
     
@@ -54,8 +54,8 @@ if @saved
     @active_to_block.each do |t|
       logger.debug "#300: Block #{t.description} that are a successor of #{@todo.description}"
       page[t].remove # Remove it from active
-      if source_view_is(:project) # Insert it in deferred/pending block if existing
-        logger.debug "Insert #{t.description} in deferred/pending block"
+      if source_view_is(:project) or source_view_is(:tag) # Insert it in deferred/pending block if existing
+        logger.debug "Insert #{t.description} in #{item_container_id(t)} block"
         page.insert_html :bottom, item_container_id(t), :partial => 'todos/todo', :locals => { :todo => t, :parent_container_type => parent_container_type }
       end
     end
