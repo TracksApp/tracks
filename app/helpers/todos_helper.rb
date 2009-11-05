@@ -203,7 +203,7 @@ module TodosHelper
   def item_container_id (todo)
     if source_view_is :project
       return "p#{todo.project_id}items" if todo.active?
-      return "tickler" if todo.deferred?
+      return "tickler" if todo.deferred? or todo.pending?
     end
     return "c#{todo.context_id}items"
   end

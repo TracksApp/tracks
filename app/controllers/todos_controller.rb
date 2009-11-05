@@ -144,19 +144,25 @@ class TodosController < ApplicationController
     
     if @todo.completed?
       logger.debug "completed #{@todo.description}"
-      # A todo was completed - check for pending todos
+      # A todo was completed - check for pending todos to activate
+      @pending_to_activate = []
       @todo.successors.each do |t|
         if t.uncompleted_predecessors.empty? # Activate pending todos
           logger.debug "activated #{t.description}"
           t.activate!
+          @pending_to_activate << t
         end
       end
     else
-      # Block todos for undone actions - (it does no harm if they are already pending)
+      # Block active successors for undone action
+      @active_to_block = []
       logger.debug "undid #{@todo.description}"
       @todo.successors.each do |t|
-        logger.debug "blocked #{t.description}"
-        t.block!
+        if t.state == 'active'
+          logger.debug "blocked #{t.description}"
+          t.block!
+          @active_to_block << t
+        end
       end
     end
     
