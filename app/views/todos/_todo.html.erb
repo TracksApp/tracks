@@ -29,6 +29,7 @@ parameters += "&_tag_name=#{@tag_name}" if @source_view == 'tag'
       <%= deferred_due_date %>
       <%= project_and_context_links( parent_container_type, :suppress_context => suppress_context, :suppress_project => suppress_project ) %>
       <%= render(:partial => "todos/toggle_notes", :locals => { :item => todo }) if todo.notes? %>
+      <%= render(:partial => "todos/toggle_dependencies", :locals => { :item => todo }) if todo.uncompleted_predecessors.empty? or !todo.successors.empty? %>
     </div>
   </div>
   <div id="<%= dom_id(todo, 'edit') %>" class="edit-form" style="display:none">
