@@ -54,6 +54,7 @@ class TodosController < ApplicationController
     p = TodoCreateParamsHelper.new(params, prefs)        
     p.parse_dates() unless mobile?
     tag_list = p.tag_list
+    predecessor_list = p.predecessor_list
     
     @todo = current_user.todos.build(p.attributes)
     
@@ -77,6 +78,14 @@ class TodosController < ApplicationController
       @todo.tags.reload
     end
     
+    unless predecessor_list.blank?
+      @todo.add_predecessor_list(predecessor_list)
+      unless @todo.uncompleted_predecessors.empty? || @todo.state == 'project_hidden'
+        @todo.state = 'pending'
+      end
+      @saved = @todo.save
+    end
+
     respond_to do |format|
       format.html { redirect_to :action => "index" }
       format.m do
@@ -559,20 +568,29 @@ class TodosController < ApplicationController
   end
   
   def auto_complete_for_predecessor
-    get_todo_from_params
-    # Begin matching todos in current project
-    @items = current_user.todos.find(:all, 
-      :conditions => [ 'NOT (id = ?) AND description LIKE ? AND project_id = ?', 
-                        @todo.id, 
-                        '%' + params[:predecessor_list] + '%',
-                        @todo.project_id ],
-      :order => 'description ASC',
-      :limit => 10
-    )
-    if @items.empty? # Match todos in other projects
+    unless params['id'].nil?
+      get_todo_from_params
+      # Begin matching todos in current project
       @items = current_user.todos.find(:all, 
-        :conditions => [ 'NOT (id = ?) AND description LIKE ?', 
-                          params[:id], '%' + params[:predecessor_list] + '%' ],
+        :conditions => [ 'NOT (id = ?) AND description LIKE ? AND project_id = ?', 
+                          @todo.id, 
+                          '%' + params[:predecessor_list] + '%',
+                          @todo.project_id ],
+        :order => 'description ASC',
+        :limit => 10
+      )
+      if @items.empty? # Match todos in other projects
+        @items = current_user.todos.find(:all, 
+          :conditions => [ 'NOT (id = ?) AND description LIKE ?', 
+                            params[:id], '%' + params[:predecessor_list] + '%' ],
+          :order => 'description ASC',
+          :limit => 10
+        )
+      end
+    else
+      # New todo - TODO: Filter on project
+      @items = current_user.todos.find(:all, 
+        :conditions => [ 'description LIKE ?', '%' + params[:predecessor_list] + '%' ],
         :order => 'description ASC',
         :limit => 10
       )
@@ -1022,6 +1040,10 @@ class TodosController < ApplicationController
       
     def tag_list
       @params['tag_list']
+    end
+    
+    def predecessor_list
+      @params['predecessor_list']
     end
       
     def parse_dates()

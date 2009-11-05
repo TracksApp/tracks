@@ -74,7 +74,11 @@ class Todo < ActiveRecord::Base
 
   def update_state_from_project
     if state == 'project_hidden' and !project.hidden?
-      self.state = 'active'
+      if self.uncompleted_predecessors.empty?
+        self.state = 'pending'
+      else
+        self.state = 'active'
+      end
     elsif state == 'active' and project.hidden?
       self.state = 'project_hidden'
     end
@@ -154,10 +158,6 @@ class Todo < ActiveRecord::Base
     return self.recurring_todo_id != nil
   end
   
-  def add_predecessor(predecessor)
-    logger.debug "add_predecessor #{predecessor.description}"
-  end
-  
   # TODO: DELIMITER
   # TODO: Todo::Error
   # TODO: Handle todos with the same description
@@ -181,7 +181,11 @@ class Todo < ActiveRecord::Base
       t = Todo.find_by_description(description)
       #raise Todo::Error, "predecessor could not be found: #{description}" if t.nil?
       # Create dependency record
-      self.predecessors << t unless self.predecessors.include?(t)
+      unless t.nil?
+        self.predecessors << t unless self.predecessors.include?(t)
+      else
+        logger.error "Could not find #{description}"
+      end
     end
 #    debugger
     
