@@ -8,7 +8,7 @@ class TodosController < ApplicationController
     :completed_archive, :check_deferred, :toggle_check, :toggle_star,
     :edit, :update, :create, :calendar, :auto_complete_for_tag]
   append_before_filter :get_todo_from_params, :only => [ :edit, :toggle_check, :toggle_star, :show, :update, :destroy ]
-  protect_from_forgery :except => [:auto_complete_for_tag]
+  protect_from_forgery :except => [:auto_complete_for_tag, :auto_complete_for_predecessor]
 
   session :off, :only => :index, :if => Proc.new { |req| is_feed_request(req) }
 
@@ -214,7 +214,25 @@ class TodosController < ApplicationController
     @original_item_project_id = @todo.project_id
     @original_item_was_deferred = @todo.deferred?
     @original_item_due = @todo.due
-    @original_item_due_id = get_due_id_for_calendar(@todo.due) 
+    @original_item_due_id = get_due_id_for_calendar(@todo.due)
+    @original_item_predecessor_list = @todo.predecessors.collect{|t| t.description}.join(', ')
+    if params[:predecessor_list]
+      logger.debug "---old #{@original_item_predecessor_list}"
+      logger.debug "---new #{params[:predecessor_list]}"
+      @todo.add_predecessor_list(params[:predecessor_list])
+      if @original_item_predecessor_list != params[:predecessor_list]
+        # Recalculate dependencies for this todo
+        if @todo.uncompleted_predecessors.empty?
+          if @todo.state == 'pending'
+            @todo.activate! # Activate pending if no uncompleted predecessors
+          end
+        else
+          if @todo.state == 'active'
+            @todo.block! # Block active if we got uncompleted predecessors
+          end
+        end
+      end
+    end
     
     if params['todo']['project_id'].blank? && !params['project_name'].nil?
       if params['project_name'] == 'None'
@@ -538,6 +556,28 @@ class TodosController < ApplicationController
       :order => "name ASC",
       :limit => 10)
     render :inline => "<%= auto_complete_result(@items, :name) %>"
+  end
+  
+  def auto_complete_for_predecessor
+    get_todo_from_params
+    # Begin matching todos in current project
+    @items = current_user.todos.find(:all, 
+      :conditions => [ 'NOT (id = ?) AND description LIKE ? AND project_id = ?', 
+                        @todo.id, 
+                        '%' + params[:predecessor_list] + '%',
+                        @todo.project_id ],
+      :order => 'description ASC',
+      :limit => 10
+    )
+    if @items.empty? # Match todos in other projects
+      @items = current_user.todos.find(:all, 
+        :conditions => [ 'NOT (id = ?) AND description LIKE ?', 
+                          params[:id], '%' + params[:predecessor_list] + '%' ],
+        :order => 'description ASC',
+        :limit => 10
+      )
+    end
+    render :inline => "<%= auto_complete_result(@items, :description) %>"
   end
   
   private
