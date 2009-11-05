@@ -82,7 +82,8 @@ module TodosHelper
 
   
   def remote_toggle_checkbox
-    check_box_tag('item_id', toggle_check_todo_path(@todo), @todo.completed?, :class => 'item-checkbox')
+    check_box_tag('item_id', toggle_check_todo_path(@todo), @todo.completed?, :class => 'item-checkbox',
+                  :disabled => @todo.pending?)
   end
   
   def date_span
