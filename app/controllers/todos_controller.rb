@@ -305,8 +305,6 @@ class TodosController < ApplicationController
       @todo.save!
     end
 
-
-
     @context_changed = @original_item_context_id != @todo.context_id
     @todo_was_activated_from_deferred_state = @original_item_was_deferred && @todo.active?
     
@@ -601,17 +599,21 @@ class TodosController < ApplicationController
       get_todo_from_params
       # Begin matching todos in current project
       @items = current_user.todos.find(:all, 
-        :conditions => [ 'NOT (id = ?) AND description LIKE ? AND project_id = ?', 
-                          @todo.id, 
-                          '%' + params[:predecessor_list] + '%',
-                          @todo.project_id ],
+        :conditions => [ '(todos.state = ? OR todos.state = ?) AND ' +
+                         'NOT (id = ?) AND lower(description) LIKE ? AND project_id = ?', 
+                         'active', 'pending',
+                         @todo.id, 
+                         '%' + params[:predecessor_list].downcase + '%',
+                         @todo.project_id ],
         :order => 'description ASC',
         :limit => 10
       )
       if @items.empty? # Match todos in other projects
         @items = current_user.todos.find(:all, 
-          :conditions => [ 'NOT (id = ?) AND description LIKE ?', 
-                            params[:id], '%' + params[:predecessor_list] + '%' ],
+          :conditions => [ '(todos.state = ? OR todos.state = ?) AND ' +
+                           'NOT (id = ?) AND lower(description) LIKE ?', 
+                           'active', 'pending',
+                            params[:id], '%' + params[:predecessor_list].downcase + '%' ],
           :order => 'description ASC',
           :limit => 10
         )
@@ -619,7 +621,9 @@ class TodosController < ApplicationController
     else
       # New todo - TODO: Filter on project
       @items = current_user.todos.find(:all, 
-        :conditions => [ 'description LIKE ?', '%' + params[:predecessor_list] + '%' ],
+        :conditions => [ '(todos.state = ? OR todos.state = ?) AND lower(description) LIKE ?', 
+                         'active', 'pending',
+                         '%' + params[:predecessor_list].downcase + '%' ],
         :order => 'description ASC',
         :limit => 10
       )
