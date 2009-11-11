@@ -8,7 +8,8 @@ suppress_button ||= false
              :collection => item.pending_successors,
              :locals => { :todo => item,
                           :parent_container_type => parent_container_type, 
-                          :suppress_dependencies => true }
+                          :suppress_dependencies => true,
+                          :predecessor => item }
   %>
 </div>
 

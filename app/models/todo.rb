@@ -115,6 +115,12 @@ class Todo < ActiveRecord::Base
     end
   end
   
+  def remove_predecessor(predecessor)
+    # remove predecessor and activate myself
+    predecessors.delete(predecessor)
+    self.activate!
+  end
+  
   # Returns true if t is equal to self or a successor of self
   def is_successor?(t)
     if self == t

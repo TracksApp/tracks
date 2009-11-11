@@ -1,0 +1,21 @@
+if @removed
+  status_message = "Removed #{@successor.description} as dependency from #{@predecessor.description}."
+  page.notify :notice, status_message, 5.0
+  
+  # replace old predecessor with one without the successor
+  page.replace dom_id(@predecessor), :partial => 'todos/todo', :locals => { 
+    :todo => @predecessor, :parent_container_type => parent_container_type }
+ 
+  # if possible, remove successor from pending block
+  # TODO: do not remove when multiple dependencies
+  page[@successor].remove unless source_view_is :context
+
+  # if possible, add successor
+  container = "c#{@successor.context_id}items" 
+  container = "p#{@successor.project_id}items" if source_view_is :project
+  page.insert_html :bottom, container, :partial => 'todos/todo', :locals => { 
+    :todo => @successor, :parent_container_type => parent_container_type }
+  page << "TodoBehavior.enableToggleSuccessors()"
+else
+  page.notify :error, "There was an error removing the dependency", 8.0
+end

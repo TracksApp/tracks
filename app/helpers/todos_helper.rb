@@ -64,7 +64,7 @@ module TodosHelper
         :complete => todo_stop_waiting_js(todo))
     end
   end
-
+  
   def todo_start_waiting_js(todo)
     return "$('#ul#{dom_id(todo)}').css('visibility', 'hidden'); $('##{dom_id(todo)}').block({message: null})"
   end
