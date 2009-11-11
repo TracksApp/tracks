@@ -228,7 +228,7 @@ module TodosHelper
   
   def item_container_id (todo)
     if todo.deferred? or todo.pending?
-      return "tickler"
+      return "tickleritems"
     elsif source_view_is :project
       return "p#{todo.project_id}items"
     end
@@ -248,6 +248,7 @@ module TodosHelper
     return true if source_view_is(:project) && @todo.project.hidden? && @todo.project_hidden?
     return true if source_view_is(:project) && @todo.deferred?
     return true if !source_view_is(:deferred) && @todo.active?
+    return true if source_view_is(:project) && @todo.pending?
     return false
   end
   
