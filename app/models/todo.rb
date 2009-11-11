@@ -233,6 +233,16 @@ class Todo < ActiveRecord::Base
     @predecessor_array << t.description
   end
   
+  # Return todos that should be activated if the current todo is completed
+  def pending_to_activate
+    return successors.find_all {|t| t.uncompleted_predecessors.empty?}
+  end
+  
+  # Return todos that should be blocked if the current todo is undone
+  def active_to_block
+    return successors.find_all {|t| t.active?}
+  end
+  
   # Rich Todo API
   
   def self.from_rich_message(user, default_context_id, description, notes)

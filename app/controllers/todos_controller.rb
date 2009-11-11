@@ -166,26 +166,14 @@ class TodosController < ApplicationController
     @new_recurring_todo = check_for_next_todo(@todo) if @saved
     
     if @todo.completed?
-      logger.debug "completed #{@todo.description}"
-      # A todo was completed - check for pending todos to activate
-      @pending_to_activate = []
-      @todo.successors.each do |t|
-        if t.uncompleted_predecessors.empty? # Activate pending todos
-          logger.debug "activated #{t.description}"
+      @pending_to_activate = @todo.pending_to_activate
+      @pending_to_activate.each do |t|
           t.activate!
-          @pending_to_activate << t
-        end
       end
     else
-      # Block active successors for undone action
-      @active_to_block = []
-      logger.debug "undid #{@todo.description}"
-      @todo.successors.each do |t|
-        if t.state == 'active'
-          logger.debug "blocked #{t.description}"
+      @active_to_block = @todo.active_to_block
+      @active_to_block.each do |t|
           t.block!
-          @active_to_block << t
-        end
       end
     end
     
@@ -279,11 +267,17 @@ class TodosController < ApplicationController
     
     if params['done'] == '1' && !@todo.completed?
       @todo.complete!
+      @todo.pending_to_activate.each do |t|
+          t.activate!
+      end
     end
     # strange. if checkbox is not checked, there is no 'done' in params.
     # Therefore I've used the negation
     if !(params['done'] == '1') && @todo.completed?
       @todo.activate!
+      @todo.active_to_block.each do |t|
+          t.block!
+      end
     end
     
     @todo.attributes = params["todo"]
