@@ -22,7 +22,9 @@ if @saved
       page[empty_container_msg_div_id].hide unless empty_container_msg_div_id.nil?
     end
     # make sure the behavior of the new/updated todo is enabled
-    page['tickler-empty-nd'].hide if source_view_is :deferred
+    if (source_view_is :project and @todo.pending?) or (source_view_is :deferred)
+        page['tickler-empty-nd'].hide # For some reason this does not work: page['tickler-empty-nd'].hide if (@todo.pending? or (source_view_is :deferred))
+    end
   end
 else
   page.show 'status'
