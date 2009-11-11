@@ -246,6 +246,7 @@ module TodosHelper
     return true if source_view_is(:project) && @todo.deferred?
     return true if !source_view_is(:deferred) && @todo.active?
     return true if source_view_is(:project) && @todo.pending?
+    return true if source_view_is(:tag) && @todo.pending?
     return false
   end
   

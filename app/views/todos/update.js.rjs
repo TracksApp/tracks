@@ -7,7 +7,7 @@ if @saved
   page.notify :notice, status_message, 5.0
   
   if source_view_is_one_of(:todo, :context, :tag)
-    if @context_changed || @todo.deferred?
+    if @context_changed || @todo.deferred? || @todo.pending?
       page[@todo].remove 
       
       if (@remaining_in_context == 0)
@@ -141,6 +141,13 @@ if @saved
     end
   else
     logger.error "unexpected source_view '#{params[:_source_view]}'"
+  end
+  # Update predecessors (if they exist and are visible)
+  @todo.uncompleted_predecessors.each do |p|
+    page << "if ($(\'#{item_container_id(p)}\')) {"
+    page[p].replace_html :partial => 'todos/todo',
+    :locals => { :todo => p, :parent_container_type => parent_container_type }
+    page << "}"
   end
 else
   page.show 'error_status'
