@@ -519,5 +519,17 @@ class TodosControllerTest < ActionController::TestCase
     todo.reload()
     assert_equal "active", todo.state
   end
+  
+  def test_url_with_slash_in_query_string_are_parsed_correctly
+    # See http://blog.swivel.com/code/2009/06/rails-auto_link-and-certain-query-strings.html
+    login_as(:admin_user)
+    user = users(:admin_user)
+    todo = user.todos.first
+    url = "http://example.com/foo?bar=/baz"
+    todo.notes = "foo #{url} bar"
+    todo.save!
+    get :index
+    assert_select("a[href=#{url}]")
+  end
 
 end
