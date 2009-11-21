@@ -11,5 +11,9 @@ module Tracks
     def self.openid_enabled?
       auth_schemes.include?('open_id')
     end
+
+    def self.cas_enabled?
+      auth_schemes.include?('cas')
+    end
   end
 end

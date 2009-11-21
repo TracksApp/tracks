@@ -10,6 +10,8 @@ class LoginController < ApplicationController
   def login
     if openid_enabled? && using_open_id?
       login_openid
+    elsif cas_enabled?
+      login_cas
     else
       @page_title = "TRACKS::Login"
       case request.method
@@ -49,6 +51,9 @@ class LoginController < ApplicationController
     @user.forget_me if logged_in?
     cookies.delete :auth_token
     session['user_id'] = nil
+    if ( SITE_CONFIG['authentication_schemes'].include? 'cas')
+      CASClient::Frameworks::Rails::Filter.logout(self)
+    end
     reset_session
     notify :notice, "You have been logged out of Tracks."
     redirect_to_login
@@ -112,6 +117,29 @@ class LoginController < ApplicationController
       else
         notify :warning, result.message
       end
+    end
+  end
+
+  def login_cas
+    # If checkbox on login page checked, we don't expire the session after 1 hour
+    # of inactivity and we remember this user for future browser sessions
+    session['noexpiry'] ||= params['user_noexpiry']
+    if session[:cas_user]
+      if @user = User.find_by_login(session[:cas_user])
+        session['user_id'] = @user.id
+        msg = (should_expire_sessions?) ? "will expire after 1 hour of inactivity." : "will not expire."
+        notify :notice, "Login successful: session #{msg}"
+        cookies[:tracks_login] = { :value => @user.login, :expires => Time.now + 1.year, :secure => SITE_CONFIG['secure_cookies'] }
+        unless should_expire_sessions?
+          @user.remember_me
+          cookies[:auth_token] = { :value => @user.remember_token, :expires => @user.remember_token_expires_at, :secure => SITE_CONFIG['secure_cookies'] }
+        end
+        redirect_back_or_home
+      else
+        notify :warning, "Sorry, no user by that identity URL exists (#{identity_url})"
+      end
+    else
+      notify :warning, result.message
     end
   end
 end

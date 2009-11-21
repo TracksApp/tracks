@@ -98,6 +98,11 @@ if ( SITE_CONFIG['authentication_schemes'].include? 'open_id')
   OpenID::Util.logger = RAILS_DEFAULT_LOGGER
 end
 
+if ( SITE_CONFIG['authentication_schemes'].include? 'open_id')
+  #requires ruby-openid gem to be installed
+  OpenID::Util.logger = RAILS_DEFAULT_LOGGER
+end
+
 tracks_version='1.8devel'
 # comment out next two lines if you do not want (or can not) the date of the
 # last git commit in the footer

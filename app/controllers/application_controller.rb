@@ -28,7 +28,10 @@ class ApplicationController < ActionController::Base
 
   layout proc{ |controller| controller.mobile? ? "mobile" : "standard" }
   exempt_from_layout /\.js\.erb$/
-  
+
+  if ( SITE_CONFIG['authentication_schemes'].include? 'cas')
+    before_filter CASClient::Frameworks::Rails::Filter
+  end
   before_filter :set_session_expiration
   before_filter :set_time_zone
   before_filter :set_zindex_counter
@@ -215,6 +218,14 @@ class ApplicationController < ActionController::Base
   
   def openid_enabled?
     self.class.openid_enabled?
+  end
+
+  def self.cas_enabled?
+    Tracks::Config.cas_enabled?
+  end
+
+  def cas_enabled?
+    self.class.cas_enabled?
   end
 
   private
