@@ -1,6 +1,7 @@
 <% auth_schemes = Tracks::Config.auth_schemes
    show_database_form = auth_schemes.include?('database')
    show_openid_form = auth_schemes.include?('open_id')
+   show_cas_form = auth_schemes.include?('cas')
 -%>
 
 <div title="Account login" id="loginform" class="form">
@@ -52,6 +53,22 @@
         </tr>
       </table>
     <% end %>
+  </div>
+ <% end %>
+
+<% if show_cas_form %>
+  <div id="cas_auth_form" style="display:block">
+      <table>
+        <tr>
+          <td>
+			<% if @username %>
+			  <p>Hello, <%= @username %>! You are authenticated.</p>
+			<% else %>
+			  <p>You are not yet authenticated. <%= link_to("Login", @login_url) %>
+			<% end %>
+			</td>
+        </tr>
+      </table>
   </div>
  <% end %>
  

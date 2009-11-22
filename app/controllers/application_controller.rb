@@ -30,7 +30,13 @@ class ApplicationController < ActionController::Base
   exempt_from_layout /\.js\.erb$/
 
   if ( SITE_CONFIG['authentication_schemes'].include? 'cas')
-    before_filter CASClient::Frameworks::Rails::Filter
+    # This will allow the user to view the index page without authentication
+    # but will process CAS authentication data if the user already
+    # has an SSO session open.
+    before_filter CASClient::Frameworks::Rails::GatewayFilter, :only => :login
+
+    # This requires the user to be authenticated for viewing allother pages.
+    before_filter CASClient::Frameworks::Rails::Filter, :except => :login
   end
   before_filter :set_session_expiration
   before_filter :set_time_zone

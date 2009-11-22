@@ -6,11 +6,15 @@ class LoginController < ApplicationController
   skip_before_filter :login_required
   before_filter :login_optional
   before_filter :get_current_user
-  
+
   def login
+    if cas_enabled?
+      @username = session[:cas_user]
+      @login_url = CASClient::Frameworks::Rails::Filter.login_url(self)
+    end
     if openid_enabled? && using_open_id?
       login_openid
-    elsif cas_enabled?
+    elsif cas_enabled? && session[:cas_user]
       login_cas
     else
       @page_title = "TRACKS::Login"
@@ -136,7 +140,7 @@ class LoginController < ApplicationController
         end
         redirect_back_or_home
       else
-        notify :warning, "Sorry, no user by that identity URL exists (#{identity_url})"
+        notify :warning, "Sorry, no user by that CAS username exists (#{session[:cas_user]})"
       end
     else
       notify :warning, result.message
