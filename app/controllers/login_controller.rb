@@ -55,12 +55,13 @@ class LoginController < ApplicationController
     @user.forget_me if logged_in?
     cookies.delete :auth_token
     session['user_id'] = nil
+    reset_session
     if ( SITE_CONFIG['authentication_schemes'].include? 'cas')
       CASClient::Frameworks::Rails::Filter.logout(self)
+    else
+      notify :notice, "You have been logged out of Tracks."
+      redirect_to_login
     end
-    reset_session
-    notify :notice, "You have been logged out of Tracks."
-    redirect_to_login
   end
   
   def check_expiry

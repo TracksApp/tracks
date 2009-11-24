@@ -60,9 +60,15 @@
   <div id="cas_auth_form" style="display:block">
       <table>
         <tr>
-          <td>
-			<% if @username %>
+          <td>	
+			<% if @username && @user%>
 			  <p>Hello, <%= @username %>! You are authenticated.</p>
+			<% elsif @username %>
+			  <p>Hello, <%= @username %>! You do not have an account on Tracks.
+                <%if SITE_CONFIG['open_signups']%>
+                   If you like to request on please go here to <%= link_to "Request Account" , signup_url %>
+                <%end%>
+              </p>
 			<% else %>
 			  <p>You are not yet authenticated. <%= link_to("Login", @login_url) %>
 			<% end %>

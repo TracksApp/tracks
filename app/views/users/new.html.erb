@@ -8,20 +8,21 @@
   <h3><%= @heading -%></h3>
 
   <table>
-    <tr>
-      <td><label for="user_login">Desired login:</label></td>
-      <td> <%= text_field "user", "login", :size => 20 %></td>
-    </tr>
 	<%if Tracks::Config.auth_schemes.include?('cas')%>
-    <tr style="display:none">
-      <td><label for="user_password">Choose password:</label></td>
-      <td><%= password_field "user", "password", :size => 20 , :value => "fakebecauseweusecas" %></td>
+        <tr>
+      <td><label for="user_login">With your CAS username:</label></td>
+      <td> "<%= session[:cas_user]%>"  </td>
     </tr>
     <tr style="display:none">
-      <td><label for="user_password_confirmation">Confirm password:</label></td>
+      <td><%= session[:cas_user]%>" <%= text_field "user", "login", :size => 20, :value => "fakebecauseweusecas" , :readonly => true %> </td>
+      <td><%= password_field "user", "password", :size => 20 , :value => "fakebecauseweusecas" %></td>
       <td><%= password_field "user", "password_confirmation", :size => 20, :value => "fakebecauseweusecas"  %></td>
     </tr>
 	<%else%>
+        <tr>
+      <td><label for="user_login">Desired login:</label></td>
+      <td> <%= text_field "user", "login", :size => 20 %></td>
+    </tr>
 	<tr>
       <td><label for="user_password">Choose password:</label></td>
       <td><%= password_field "user", "password", :size => 20 %></td>

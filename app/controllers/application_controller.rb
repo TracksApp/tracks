@@ -35,7 +35,7 @@ class ApplicationController < ActionController::Base
     # has an SSO session open.
     before_filter CASClient::Frameworks::Rails::GatewayFilter, :only => :login
 
-    # This requires the user to be authenticated for viewing allother pages.
+    # This requires the user to be authenticated for viewing all other pages.
     before_filter CASClient::Frameworks::Rails::Filter, :except => :login
   end
   before_filter :set_session_expiration
