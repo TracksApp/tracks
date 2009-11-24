@@ -74,6 +74,11 @@ class UsersController < ApplicationController
 
         first_user_signing_up = User.no_users_yet?
         user.is_admin = true if first_user_signing_up
+
+        if Tracks::Config.auth_schemes.include?('cas')
+          user.auth_type = "cas" #since CAS will be doing all the auth we may as well set it for everyone when CAS in enabled
+        end
+
         if user.save
           @user = User.authenticate(user.login, params['user']['password'])
           @user.create_preference

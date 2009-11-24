@@ -153,6 +153,9 @@ class User < ActiveRecord::Base
     if Tracks::Config.auth_schemes.include?('ldap')
       return candidate if candidate.auth_type == 'ldap' && SimpleLdapAuthenticator.valid?(login, pass)
     end
+    if Tracks::Config.auth_schemes.include?('cas')
+      return candidate #because we can not auth them with out thier real password we have to settle for this
+    end
     return nil
   end
   
