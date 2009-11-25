@@ -187,10 +187,10 @@ function project_defaults(){
 function enable_rich_interaction(){
   $('input.Date').datepicker({'dateFormat': dateFormat});
   /* Autocomplete */
-  $('input[name=context_name]').autocomplete(contextNames);
-  $('input[name=project[default_context_name]]').autocomplete(contextNames);
-  $('input[name=project_name]').autocomplete(projectNames);
-  $('input[name=tag_list]').autocomplete(tagNames, {multiple: true,multipleSeparator:','});
+  $('input[name=context_name]').autocomplete(contextNames, {matchContains: true});
+  $('input[name=project[default_context_name]]').autocomplete(contextNames, {matchContains: true});
+  $('input[name=project_name]').autocomplete(projectNames, {matchContains: true});
+  $('input[name=tag_list]').autocomplete(tagNames, {multiple: true,multipleSeparator:',',matchContains:true});
 
   /* have to bind on keypress because of limitataions of live() */
   $('input[name=project_name]').live('keypress', function(){
