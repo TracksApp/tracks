@@ -257,7 +257,7 @@ module TodosHelper
   end
   
   def default_tags_for_autocomplete
-    projects = current_user.projects.find(:all, :conditions => ['default_tags != ""'])
+    projects = current_user.projects.find(:all, :conditions => ["default_tags != ''"])
     Hash[*projects.map{ |p| [p.name, p.default_tags] }.flatten].to_json
   end
 
