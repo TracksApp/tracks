@@ -337,6 +337,13 @@ $(document).ready(function() {
       $('#recurring_edit_'+this.id.split('_')[5]).show();
     });
 
+  $("#recurring_period input").live('click', function(){
+      $.each(['daily', 'weekly', 'monthly', 'yearly', 'target'], function(){
+        $('#recurring_'+this).hide();
+        });
+      $('#recurring_'+this.id.split('_')[4]).show();
+    });
+
   $('div.context span#context_name').editable(function(value, settings){
       context_id = $(this).parents('.container.context').get(0).id.split('c')[1];
       highlight = function(){
