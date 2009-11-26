@@ -64,7 +64,7 @@ module TodosHelper
         :complete => todo_stop_waiting_js(todo))
     end
   end
-
+  
   def todo_start_waiting_js(todo)
     return "$('#ul#{dom_id(todo)}').css('visibility', 'hidden'); $('##{dom_id(todo)}').block({message: null})"
   end
@@ -82,16 +82,35 @@ module TodosHelper
 
   
   def remote_toggle_checkbox
-    check_box_tag('item_id', toggle_check_todo_path(@todo), @todo.completed?, :class => 'item-checkbox')
+    check_box_tag('item_id', toggle_check_todo_path(@todo), @todo.completed?, :class => 'item-checkbox',
+                  :title => @todo.pending? ? 'Blocked by ' + @todo.uncompleted_predecessors.map(&:description).join(', ') : "", :readonly => @todo.pending?)
   end
   
   def date_span
     if @todo.completed?
       "<span class=\"grey\">#{format_date( @todo.completed_at )}</span>"
+    elsif @todo.pending?
+      "<a title='Depends on: #{@todo.uncompleted_predecessors.map(&:description).join(', ')}'><span class=\"orange\">Pending</span></a> "
     elsif @todo.deferred?
       show_date( @todo.show_from )
     else
       due_date( @todo.due )
+    end
+  end
+  
+  def successors_span
+    unless @todo.pending_successors.empty?
+      pending_count = @todo.pending_successors.length
+      title = "Has #{pluralize(pending_count, 'pending action')}: #{@todo.pending_successors.map(&:description).join(', ')}"
+      image_tag( 'successor_off.png', :width=>'10', :height=>'16', :border=>'0', :title => title )
+    end
+  end
+  
+  def grip_span
+    unless @todo.completed?
+      image_tag('grip.png', :width => '7', :height => '16', :border => '0', 
+        :title => 'Drag onto another action to make it depend on that action',
+        :class => 'grip')
     end
   end
   
@@ -115,6 +134,10 @@ module TodosHelper
     if tag_list.empty? then "" else "<span class=\"tags\">#{tag_list}</span>" end
   end
   
+  def predecessor_list_text
+    @todo.predecessors.map{|t| t.specification}.join(', ')
+  end
+
   def deferred_due_date
     if @todo.deferred? && @todo.due
       "(action due on #{format_date(@todo.due)})"
@@ -201,9 +224,10 @@ module TodosHelper
   end
   
   def item_container_id (todo)
-    if source_view_is :project
-      return "p#{todo.project_id}items" if todo.active?
-      return "tickler" if todo.deferred?
+    if todo.deferred? or todo.pending?
+      return "tickleritems"
+    elsif source_view_is :project
+      return "p#{todo.project_id}items"
     end
     return "c#{todo.context_id}items"
   end
@@ -221,6 +245,8 @@ module TodosHelper
     return true if source_view_is(:project) && @todo.project.hidden? && @todo.project_hidden?
     return true if source_view_is(:project) && @todo.deferred?
     return true if !source_view_is(:deferred) && @todo.active?
+    return true if source_view_is(:project) && @todo.pending?
+    return true if source_view_is(:tag) && @todo.pending?
     return false
   end
   
@@ -281,4 +307,14 @@ module TodosHelper
     class_str = todo.starred? ? "starred_todo" : "unstarred_todo"
     image_tag("blank.png", :title =>"Star action", :class => class_str)
   end
+  
+  def auto_complete_result2(entries, phrase = nil)
+    return unless entries
+    items = entries.map do |entry|
+      item = entry.specification()
+      content_tag("li", phrase ? highlight(h(item), phrase) : h(item))
+    end
+    content_tag("ul", items.uniq)
+  end
+  
 end

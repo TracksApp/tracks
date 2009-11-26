@@ -51,6 +51,14 @@
         <%= text_field("todo", "show_from", "size" => 12, "class" => "Date", "tabindex" => 7, "autocomplete" => "off") %>
       </div>
 
+      <label for="predecessor_list">Depends on</label>
+      <%= text_field_tag "predecessor_list", nil, :size => 30, :tabindex => 8 %>
+      <%= content_tag("div", "", :id => "predecessor_list_auto_complete", :class => "auto_complete") %>
+      <%= auto_complete_field 'predecessor_list', {
+        :url => {:controller => 'todos', :action => 'auto_complete_for_predecessor', :id => nil},
+        :tokens => [',']
+      } %>
+
       <%= source_view_tag( @source_view ) %>
       <%= hidden_field_tag :_tag_name, @tag_name.underscore.gsub(/\s+/,'_') if source_view_is :tag %>
 

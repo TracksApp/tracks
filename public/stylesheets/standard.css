@@ -99,6 +99,9 @@ a.to_bottom:hover {background: transparent url(/images/bottom_on.png) no-repeat;
 a.show_notes, a.link_to_notes {background-image: url(/images/notes_off.png); background-repeat: no-repeat; padding: 1px; background-color: transparent;}
 a.show_notes:hover, a.link_to_notes:hover {background-image: url(/images/notes_on.png); background-repeat: no-repeat; padding: 1px; background-color: transparent;}
 
+a.show_successors, a.link_to_successors {background-image: url(/images/successor_off.png); background-repeat: no-repeat; padding: 1px; background-color: transparent;}
+a.show_successors:hover, a.link_to_successors:hover {background-image: url(/images/successor_on.png); background-repeat: no-repeat; padding: 1px; background-color: transparent;}
+
 /* Structural divs */
 
 #content {
@@ -378,11 +381,7 @@ input.item-checkbox {
 
 .description, .stale_l1, .stale_l2, .stale_l3 {
     margin-left: 60px;
-    position:relative;    
-}
-
-.stale_l1, .stale_l2, .stale_l3 {
-    padding-left: 3px;
+    position:relative;
 }
 
 .stale_l1 {
@@ -936,6 +935,15 @@ div.message {
     color: #666;
 }
 
+.grip {
+    cursor: move;
+}
+
+.hover {
+    background: #EAEAEA;
+    font-weight: bold;
+}
+
 /* Error message styles */
 .fieldWithErrors {
     padding: 2px;
@@ -1262,6 +1270,7 @@ div.auto_complete ul {
   list-style-type:none;
 }
 div.auto_complete ul li {
+  font-size: 1.0em;
   margin:0;
   padding:3px;
   list-style-type: none;

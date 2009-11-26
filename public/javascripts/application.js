@@ -247,6 +247,10 @@ $(document).ready(function() {
     $(this).next().toggle("fast"); return false;
   });
 
+  $(".show_successors").live('click', function () {
+    $(this).next().toggle("fast"); return false;
+  });
+
   /* fade flashes and alerts in automatically */
   $(".alert").fadeOut(8000);
 

@@ -20,6 +20,11 @@ class Project < ActiveRecord::Base
     :class_name => 'Todo',
     :conditions => ["todos.state = ? ", "deferred"],
     :order => "show_from"
+  has_many :pending_todos,
+    :include => [:context,:tags,:project],
+    :class_name => 'Todo',
+    :conditions => ["todos.state = ? ", "pending"],
+    :order => "show_from"
 
   has_many :notes, :dependent => :delete_all, :order => "created_at DESC"
 

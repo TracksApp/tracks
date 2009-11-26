@@ -4,12 +4,26 @@ class Todo < ActiveRecord::Base
   belongs_to :project
   belongs_to :user
   belongs_to :recurring_todo
+  
+  has_many :predecessor_dependencies, :foreign_key => 'predecessor_id', :class_name => 'Dependency', :dependent => :destroy
+  has_many :successor_dependencies,   :foreign_key => 'successor_id',   :class_name => 'Dependency', :dependent => :destroy
+  has_many :predecessors, :through => :successor_dependencies
+  has_many :successors,   :through => :predecessor_dependencies
+  has_many :uncompleted_predecessors, :through => :successor_dependencies,
+           :source => :predecessor, :conditions => ['NOT (state = ?)', 'completed']
+  has_many :pending_successors, :through => :predecessor_dependencies,
+           :source => :successor, :conditions => ['state = ?', 'pending']
+  
+  after_save :save_predecessors
 
   named_scope :active, :conditions => { :state => 'active' }
   named_scope :not_completed, :conditions =>  ['NOT (state = ? )', 'completed']
   named_scope :are_due, :conditions => ['NOT (todos.due IS NULL)']
 
   STARRED_TAG_NAME = "starred"
+  RE_TODO = /[^"]+/
+  RE_CONTEXT = /[^"]+/
+  RE_PROJECT = /[^"]+/
   
   acts_as_state_machine :initial => :active, :column => 'state'
   
@@ -19,6 +33,7 @@ class Todo < ActiveRecord::Base
   state :project_hidden
   state :completed, :enter => Proc.new { |t| t.completed_at = Time.zone.now }, :exit => Proc.new { |t| t.completed_at = nil }
   state :deferred
+  state :pending
 
   event :defer do
     transitions :to => :deferred, :from => [:active]
@@ -30,6 +45,8 @@ class Todo < ActiveRecord::Base
   
   event :activate do
     transitions :to => :active, :from => [:project_hidden, :completed, :deferred]
+    transitions :to => :active, :from => [:pending], :guard => :no_uncompleted_predecessors_or_deferral? 
+    transitions :to => :deferred, :from => [:pending], :guard => :no_uncompleted_predecessors?
   end
     
   event :hide do
@@ -39,6 +56,10 @@ class Todo < ActiveRecord::Base
   event :unhide do
     transitions :to => :deferred, :from => [:project_hidden], :guard => Proc.new{|t| !t.show_from.blank? }
     transitions :to => :active, :from => [:project_hidden]
+  end
+  
+  event :block do
+    transitions :to => :pending, :from => [:active, :deferred]
   end
     
   attr_protected :user
@@ -51,15 +72,120 @@ class Todo < ActiveRecord::Base
   validates_presence_of :show_from, :if => :deferred?
   validates_presence_of :context
   
+  def initialize(*args)
+    super(*args)
+    @predecessor_array = nil # Used for deferred save of predecessors
+  end
+  
+  def no_uncompleted_predecessors_or_deferral?
+    return (show_from.blank? or Time.zone.now > show_from and uncompleted_predecessors.empty?)
+  end
+  
+  def no_uncompleted_predecessors?
+    return uncompleted_predecessors.empty?
+  end
+  
+ 
+  # Returns a string with description <context, project>
+  def specification
+    project_name = project.is_a?(NullProject) ? "(none)" : project.name
+    return "\"#{description}\" <\"#{context.title}\"; \"#{project_name}\">"
+  end
+  
+  def todo_from_specification(specification)
+    # Split specification into parts: description <context, project>
+    re_parts = /"(#{RE_TODO})"\s<"(#{RE_CONTEXT})";\s"(#{RE_PROJECT})">/
+    parts = specification.scan(re_parts)
+    return nil unless parts.length == 1
+    return nil unless parts[0].length == 3
+    todo_description = parts[0][0]
+    context_name = parts[0][1]
+    todos = Todo.all(
+      :joins => :context,
+      :conditions => {
+        :description => todo_description,
+        :contexts => {:name => context_name}
+      }
+    )
+    return nil if todos.empty?
+    # todos now contains all todos with matching description and context
+    # TODO: Is this possible to do with a single query?
+    todos.each do |todo|
+      project_name = todo.project.is_a?(NullProject) ? "(none)" : todo.project.name
+      return todo if project_name == parts[0][2]
+    end
+    return nil
+  end
+  
   def validate
     if !show_from.blank? && show_from < user.date
       errors.add("show_from", "must be a date in the future")
     end
+    errors.add(:description, "may not contain \" characters") if /\"/.match(description)
+    unless @predecessor_array.nil? # Only validate predecessors if they changed
+      @predecessor_array.each do |specification|
+        t = todo_from_specification(specification)
+        if t.nil?
+          errors.add("Depends on:", "Could not find action '#{h(specification)}'")
+        else
+          errors.add("Depends on:", "Adding '#{h(specification)}' would create a circular dependency") if is_successor?(t)
+        end
+      end
+    end
+  end
+  
+  def save_predecessors
+    unless @predecessor_array.nil?  # Only save predecessors if they changed
+      current_array = predecessors.map{|p| p.specification}
+      remove_array = current_array - @predecessor_array
+      add_array = @predecessor_array - current_array
+      
+      # This is probably a bit naive code...
+      remove_array.each do |specification|
+        t = todo_from_specification(specification)
+        self.predecessors.delete(t) unless t.nil?
+      end
+      # ... as is this?
+      add_array.each do |specification|
+        t = todo_from_specification(specification)
+        unless t.nil?
+          self.predecessors << t unless self.predecessors.include?(t)
+        else
+          logger.error "Could not find #{specification}" # Unexpected since validation passed
+        end
+      end
+    end
+  end
+  
+  def remove_predecessor(predecessor)
+    # remove predecessor and activate myself
+    predecessors.delete(predecessor)
+    self.activate!
+  end
+  
+  # Returns true if t is equal to self or a successor of self
+  def is_successor?(t)
+    if self == t
+      return true
+    elsif self.successors.empty?
+      return false
+    else
+      self.successors.each do |item|
+        if item.is_successor?(t)
+          return true
+        end
+      end
+    end
+    return false
   end
 
   def update_state_from_project
     if state == 'project_hidden' and !project.hidden?
-      self.state = 'active'
+      if self.uncompleted_predecessors.empty?
+        self.state = 'active'
+      else
+        self.state = 'pending'
+      end
     elsif state == 'active' and project.hidden?
       self.state = 'project_hidden'
     end
@@ -92,7 +218,7 @@ class Todo < ActiveRecord::Base
   def project
     original_project.nil? ? Project.null_object : original_project
   end
-  
+
   alias_method :original_set_initial_state, :set_initial_state
   
   def set_initial_state
@@ -137,6 +263,28 @@ class Todo < ActiveRecord::Base
 
   def from_recurring_todo?
     return self.recurring_todo_id != nil
+  end
+
+  def add_predecessor_list(predecessor_list)
+    return unless predecessor_list.kind_of? String
+    # Split into list
+    re_specification = /"#{RE_TODO}"\s<"#{RE_CONTEXT}";\s"#{RE_PROJECT}">/
+    @predecessor_array = predecessor_list.scan(re_specification)
+  end
+  
+  def add_predecessor(t)
+    @predecessor_array = predecessors.map{|p| p.specification}
+    @predecessor_array << t.specification
+  end
+  
+  # Return todos that should be activated if the current todo is completed
+  def pending_to_activate
+    return successors.find_all {|t| t.uncompleted_predecessors.empty?}
+  end
+  
+  # Return todos that should be blocked if the current todo is undone
+  def active_to_block
+    return successors.find_all {|t| t.active? or t.deferred?}
   end
   
   # Rich Todo API
