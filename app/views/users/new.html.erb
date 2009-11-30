@@ -14,7 +14,7 @@
       <td> "<%= session[:cas_user]%>"  </td>
     </tr>
     <tr style="display:none">
-      <td><%= session[:cas_user]%>" <%= text_field "user", "login", :size => 20, :value => "fakebecauseweusecas" , :readonly => true %> </td>
+      <td><%= session[:cas_user]%>" <%= text_field "user", "login", :size => 20, :value => session[:cas_user], :readonly => true %> </td>
       <td><%= password_field "user", "password", :size => 20 , :value => "fakebecauseweusecas" %></td>
       <td><%= password_field "user", "password_confirmation", :size => 20, :value => "fakebecauseweusecas"  %></td>
     </tr>
