@@ -36,7 +36,7 @@ class ApplicationController < ActionController::Base
     before_filter CASClient::Frameworks::Rails::GatewayFilter, :only => :login
 
     # This requires the user to be authenticated for viewing all other pages.
-    before_filter CASClient::Frameworks::Rails::Filter, :except => :login
+    before_filter CASClient::Frameworks::Rails::Filter, :except => [:login , :calendar]
   end
   before_filter :set_session_expiration
   before_filter :set_time_zone
