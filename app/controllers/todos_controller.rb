@@ -620,7 +620,7 @@ class TodosController < ApplicationController
           :conditions => [ '(todos.state = ? OR todos.state = ?) AND ' +
                            'NOT (id = ?) AND lower(description) LIKE ?', 
                            'active', 'pending',
-                            params[:id], '%' + params[:predecessor_list].downcase + '%' ],
+                            params[:id], '%' + params[:q].downcase + '%' ],
           :order => 'description ASC',
           :limit => 10
         )
@@ -631,7 +631,7 @@ class TodosController < ApplicationController
         :select => 'description, project_id, context_id, created_at',
         :conditions => [ '(todos.state = ? OR todos.state = ?) AND lower(description) LIKE ?', 
                          'active', 'pending',
-                         '%' + params[:predecessor_list].downcase + '%' ],
+                         '%' + params[:q].downcase + '%' ],
         :order => 'description ASC',
         :limit => 10
       )

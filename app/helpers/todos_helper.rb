@@ -313,12 +313,7 @@ module TodosHelper
   end
   
   def auto_complete_result2(entries, phrase = nil)
-    return unless entries
-    items = entries.map do |entry|
-      item = entry.specification()
-      content_tag("li", phrase ? highlight(h(item), phrase) : h(item))
-    end
-    content_tag("ul", items.uniq)
+    return entries.map{|e| e.specification()}.join("\n") rescue ''
   end
   
 end

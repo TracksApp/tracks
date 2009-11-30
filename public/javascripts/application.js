@@ -191,6 +191,8 @@ function enable_rich_interaction(){
   $('input[name=project[default_context_name]]').autocomplete(contextNames, {matchContains: true});
   $('input[name=project_name]').autocomplete(projectNames, {matchContains: true});
   $('input[name=tag_list]').autocomplete(tagNames, {multiple: true,multipleSeparator:',',matchContains:true});
+  $('input[name=predecessor_list]').autocomplete('/todos/auto_complete_for_predecessor',
+      {multiple: true,multipleSeparator:','});
 
   /* have to bind on keypress because of limitataions of live() */
   $('input[name=project_name]').live('keypress', function(){
