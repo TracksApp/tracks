@@ -19,8 +19,6 @@ if @saved
                                                                         :pending => @todo.project.pending_todos }
   end
 
-  page << "TodoBehavior.enableToggleNotes();"
-  page << "TodoBehavior.enableToggleSuccessors();"
   page.notify :notice, status_message, 5.0
 else
   page.replace_html "status", content_tag("div", content_tag("h2", "Unable to add dependency"), "id" => "errorExplanation", "class" => "errorExplanation")  

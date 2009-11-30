@@ -203,6 +203,23 @@ function enable_rich_interaction(){
   $('input[name=tag_list]').live('keypress', function(){
       $(this).attr('edited', 'true');
   });
+
+  /* Drag & Drop for successor/predecessor */
+  function drop_todo(evt, ui) {
+    dragged_todo = ui.draggable[0].id.split('_')[2];
+    dropped_todo = this.id.split('_')[2];
+    ui.draggable.hide();
+    $(this).block({message: null});
+    $.post('/todos/add_predecessor',
+        {successor: dragged_todo, predecessor: dropped_todo},
+        null, 'script');
+  }
+
+  $('.item-show').draggable({handle: '.grip', revert: 'invalid'});
+  $('.item-show').droppable({
+        drop: drop_todo,
+        hoverClass: 'hover'
+      });
 }
 
 $(document).ready(function() {

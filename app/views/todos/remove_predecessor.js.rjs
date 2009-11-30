@@ -19,9 +19,7 @@ if @removed
       page.replace dom_id(@successor), :partial => 'todos/todo', :locals => { 
         :todo => @successor, :parent_container_type => parent_container_type }
   end
-
-  page << "TodoBehavior.enableToggleNotes()"
-  page << "TodoBehavior.enableToggleSuccessors()"
+  page << "enable_rich_interaction();"
 else
   page.notify :error, "There was an error removing the dependency", 8.0
 end

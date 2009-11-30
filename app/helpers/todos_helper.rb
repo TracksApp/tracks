@@ -69,6 +69,10 @@ module TodosHelper
     return "$('#ul#{dom_id(todo)}').css('visibility', 'hidden'); $('##{dom_id(todo)}').block({message: null})"
   end
 
+  def successor_start_waiting_js(successor)
+    return "$('##{dom_id(successor, "successor")}').block({message: null})"
+  end
+
   def todo_stop_waiting_js(todo)
     return "$('##{dom_id(todo)}').unblock();enable_rich_interaction();"
   end

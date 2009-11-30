@@ -34,8 +34,7 @@ if @saved
     page << "}"
   end
   # make sure the behavior of the new/updated todo is enabled
-  page << "TodoBehavior.enableToggleNotes()"
-  page << "TodoBehavior.enableToggleSuccessors()"
+  page << "enable_rich_interaction();"
 else
   page.show 'status'
   page.replace_html 'status', "#{error_messages_for('todo', :object_name => 'action')}"
