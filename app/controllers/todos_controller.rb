@@ -368,10 +368,12 @@ class TodosController < ApplicationController
    
     # activate successors if they only depend on this todo
     activated_successor_count = 0
+    @pending_to_activate = []
     @todo.pending_successors.each do |successor|
       successor.uncompleted_predecessors.delete(@todo)
       if successor.uncompleted_predecessors.empty?
         successor.activate!
+        @pending_to_activate << successor
         activated_successor_count += 1
       end
     end
