@@ -33,10 +33,14 @@ class ApplicationController < ActionController::Base
     # This will allow the user to view the index page without authentication
     # but will process CAS authentication data if the user already
     # has an SSO session open.
-    before_filter CASClient::Frameworks::Rails::GatewayFilter, :only => :login
+    if (CASClient rescue nil)
+      # Only require sub-library if gem is installed and loaded
+      require 'casclient/frameworks/rails/filter'
+      before_filter CASClient::Frameworks::Rails::GatewayFilter, :only => :login
 
-    # This requires the user to be authenticated for viewing all other pages.
-    before_filter CASClient::Frameworks::Rails::Filter, :except => [:login , :calendar]
+      # This requires the user to be authenticated for viewing all other pages.
+      before_filter CASClient::Frameworks::Rails::Filter, :except => [:login , :calendar]
+    end
   end
   before_filter :set_session_expiration
   before_filter :set_time_zone

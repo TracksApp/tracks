@@ -65,9 +65,7 @@ Rails::Initializer.run do |config|
   # See Rails::Configuration for more options
   if ( SITE_CONFIG['authentication_schemes'].include? 'cas')
     #requires rubycas-client gem to be installed
-    config.gem "rubycas-client"
-    require 'casclient'
-    require 'casclient/frameworks/rails/filter'
+    config.gem "rubycas-client", :lib => 'casclient'
   end
 end
 
@@ -106,10 +104,13 @@ end
 
 if ( SITE_CONFIG['authentication_schemes'].include? 'cas')
   #requires rubycas-client gem to be installed
-  CASClient::Frameworks::Rails::Filter.configure(
-      :cas_base_url => SITE_CONFIG['cas_server'] ,
-      :cas_server_logout => SITE_CONFIG['cas_server_logout']
-    )
+  if (CASClient rescue nil)
+    require 'casclient/frameworks/rails/filter'
+    CASClient::Frameworks::Rails::Filter.configure(
+        :cas_base_url => SITE_CONFIG['cas_server'] ,
+        :cas_server_logout => SITE_CONFIG['cas_server_logout']
+      )
+  end
 end
 
 tracks_version='1.8devel'
