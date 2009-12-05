@@ -47,10 +47,11 @@ class ProjectsController < ApplicationController
     
     @not_done = @project.not_done_todos_including_hidden
     @deferred = @project.deferred_todos
+    @pending = @project.pending_todos
     @done = @project.todos.find_in_state(:all, :completed, :order => "todos.completed_at DESC", :limit => current_user.prefs.show_number_completed, :include => [:context])
 
     @count = @not_done.size
-    @down_count = @count + @deferred.size 
+    @down_count = @count + @deferred.size + @pending.size
     @next_project = current_user.projects.next_from(@project)
     @previous_project = current_user.projects.previous_from(@project)
     @default_tags = @project.default_tags

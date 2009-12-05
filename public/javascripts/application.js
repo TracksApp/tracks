@@ -191,6 +191,8 @@ function enable_rich_interaction(){
   $('input[name=project[default_context_name]]').autocomplete(contextNames, {matchContains: true});
   $('input[name=project_name]').autocomplete(projectNames, {matchContains: true});
   $('input[name=tag_list]').autocomplete(tagNames, {multiple: true,multipleSeparator:',',matchContains:true});
+  $('input[name=predecessor_list]').autocomplete('/todos/auto_complete_for_predecessor',
+      {multiple: true,multipleSeparator:','});
 
   /* have to bind on keypress because of limitataions of live() */
   $('input[name=project_name]').live('keypress', function(){
@@ -203,6 +205,23 @@ function enable_rich_interaction(){
   $('input[name=tag_list]').live('keypress', function(){
       $(this).attr('edited', 'true');
   });
+
+  /* Drag & Drop for successor/predecessor */
+  function drop_todo(evt, ui) {
+    dragged_todo = ui.draggable[0].id.split('_')[2];
+    dropped_todo = this.id.split('_')[2];
+    ui.draggable.hide();
+    $(this).block({message: null});
+    $.post('/todos/add_predecessor',
+        {successor: dragged_todo, predecessor: dropped_todo},
+        null, 'script');
+  }
+
+  $('.item-show').draggable({handle: '.grip', revert: 'invalid'});
+  $('.item-show').droppable({
+        drop: drop_todo,
+        hoverClass: 'hover'
+      });
 }
 
 $(document).ready(function() {
@@ -244,6 +263,10 @@ $(document).ready(function() {
   
   /* show the notes of a todo */
   $(".show_notes").live('click', function () {
+    $(this).next().toggle("fast"); return false;
+  });
+
+  $(".show_successors").live('click', function () {
     $(this).next().toggle("fast"); return false;
   });
 

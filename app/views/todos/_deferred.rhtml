@@ -3,15 +3,16 @@
       <% if collapsible %>
       <a href="#" class="container_toggle" id="toggle_deferred"><%= image_tag("collapse.png") %></a>
       <% end %>
-      Deferred actions <%= append_descriptor ? append_descriptor : '' %>
+      Deferred/pending actions <%= append_descriptor ? append_descriptor : '' %>
   </h2>
 
   <div id="tickleritems" class="items toggle_target">
-    <div id="tickler-empty-nd" style="display:<%= deferred.empty? ? 'block' : 'none'%>;">
-      <div class="message"><p>Currently there are no deferred actions</p></div>
+    <div id="tickler-empty-nd" style="display:<%= deferred.empty? && pending.empty? ? 'block' : 'none'%>;">
+      <div class="message"><p>Currently there are no deferred or pending actions</p></div>
     </div>
 
     <%= render :partial => "todos/todo", :collection => deferred, :locals => { :parent_container_type => parent_container_type } %>
+    <%= render :partial => "todos/todo", :collection => pending, :locals => { :parent_container_type => parent_container_type } %>
 
   </div><!-- [end:items] -->
 </div><!-- [end:tickler] -->

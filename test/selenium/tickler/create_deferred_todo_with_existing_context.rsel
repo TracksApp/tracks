@@ -10,4 +10,4 @@ assert_context_count_incremented do
   assert_confirmation "New context \"errands\" will be also created. Are you sure?"
 end
 wait_for_not_visible "tickler-empty-nd"
-wait_for_element_present "xpath=//div[@class='item-container'] //a[@title='01/01/2030']"
+wait_for_element_present "css=div.item-container a[title=01/01/2030]"

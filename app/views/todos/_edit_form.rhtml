@@ -46,13 +46,21 @@
   </a>
 </div>
 
+<label class="predecessor_list_label" for="<%= dom_id(@todo, 'predecessor_list') %>">Depends on (separate with commas)</label>
+<%= text_field_tag 'predecessor_list', predecessor_list_text, :id => dom_id(@todo, 'predecessor_list'), :size => 30, :tabindex => 15 %> 
+<%= content_tag("div", "", :id => dom_id(@todo, 'predecessor_list')+"_auto_complete", :class => "auto_complete") %>
+<%= auto_complete_field dom_id(@todo, 'predecessor_list'), {
+  :url => {:controller => 'todos', :action => 'auto_complete_for_predecessor', :id => @todo.id},
+  :tokens => [',']
+} %>
+
 <% if controller.controller_name == "project" || @todo.deferred? -%>
   <input type="hidden" name="on_project_page" value="true" />
 <% end -%>
 
 <div class="submit_box">
   <div class="widgets">
-    <button type="submit" class="positive" id="<%= dom_id(@todo, 'submit') %>" tabindex="15">
+    <button type="submit" class="positive" id="<%= dom_id(@todo, 'submit') %>" tabindex="16">
       <%=image_tag("accept.png", :alt => "") %>
       Update
     </button>
