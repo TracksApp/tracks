@@ -11,6 +11,7 @@ X-WR-CALNAME:Tracks
     due_date = Time.zone.now
     overdue_text = "Overdue: "
   end
+  modified = todo.updated_at || todo.created_at
 %>BEGIN:VEVENT
 DTSTART;VALUE=DATE:<%= due_date.strftime("%Y%m%d") %>
 DTEND;VALUE=DATE:<%= (due_date+1.day).strftime("%Y%m%d") %>
@@ -20,7 +21,7 @@ CLASS:PUBLIC
 CATEGORIES:Tracks
 CREATED:<%= todo.created_at.strftime("%Y%m%dT%H%M%SZ") %>
 DESCRIPTION:<%= format_ical_notes(todo.notes) %>
-LAST-MODIFIED:<%= todo.updated_at.strftime("%Y%m%dT%H%M%SZ") %>
+LAST-MODIFIED:<%= modified.strftime("%Y%m%dT%H%M%SZ") %>
 LOCATION:
 SEQUENCE:0
 STATUS:CONFIRMED

@@ -19,23 +19,25 @@
       <% else %>
         <span class="grey">VISIBLE</span>
       <% end %>
-      <a class="delete_context_button" href="<%= formatted_context_path(context, :js) %>" title="delete the context '<%= context.name %>'"><%= image_tag( "blank.png", :title => "Delete context", :class=>"delete_item") %></a>
-      <%= apply_behavior "a.delete_context_button:click", { :prevent_default => true, :external => true} do |page, element|
-               page.confirming "'Are you sure that you want to ' + this.title + '?'" do
-                 element.up('.context').start_waiting
-                 page << remote_to_href(:method => 'delete')
-               end
-         end -%>
-      <a class="edit_context_button" href="#"><%= image_tag( "blank.png", :title => "Edit context", :class=>"edit_item") %></a>
-      <%= apply_behavior 'a.edit_context_button:click', :prevent_default => true do |page, element|
-               element.up('.context').toggle 
-               editform = element.up('.list').down('.edit-form')
-               editform.toggle 
-               editform.visual_effect(:appear) 
-               editform.down('input').focus
-         end
-      -%>
+      <%=  link_to_remote(
+        image_tag( "blank.png", :title => "Delete context", :class=>"delete_item"),
+        :url => {:controller => 'contexts', :action => 'destroy', :id => context.id},
+        :method => 'delete',
+        :with => "'_source_view=#{@source_view}'",
+        :before => "$('#{dom_id(context)}').block({message:null});",
+        :complete => "$('#{dom_id(context)}').unblock();",
+        :confirm => "Are you sure that you want to delete the context '#{context.name}'?"
+        ) %>
+      <%=  link_to_remote(
+        image_tag( "blank.png", :title => "Edit context", :class=>"edit_item"),
+        :url => {:controller => 'contexts', :action => 'edit', :id => context.id},
+        :method => 'get',
+        :with => "'_source_view=#{@source_view}'",
+        :before => "$('#{dom_id(context)}').block({message:null});",
+        :complete => "$('#{dom_id(context)}').unblock();"
+        ) %>
     </div>
   </div>
-  <%= render :partial => 'contexts/context_form', :object => context %>
+  <div id="<%= dom_id(context, 'edit') %>" class="edit-form" style="display:none;">
+  </div>
 </div>

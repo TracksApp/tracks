@@ -10,6 +10,13 @@ class User < ActiveRecord::Base
              def find_by_params(params)
                find(params['id'] || params['context_id']) || nil
              end
+             def update_positions(context_ids)
+                context_ids.each_with_index do |id, position|
+                  context = self.detect { |c| c.id == id.to_i }
+                  raise "Context id #{id} not associated with user id #{@user.id}." if context.nil?
+                  context.update_attribute(:position, position + 1)
+                end
+              end
            end
   has_many :projects,
            :order => 'projects.position ASC',
@@ -91,6 +98,10 @@ class User < ActiveRecord::Base
                 find(:all, :conditions => ['show_from <= ?', Time.zone.now ]).collect { |t| t.activate! }
               end
            end
+  has_many :pending_todos,
+           :class_name => 'Todo',
+           :conditions => [ 'state = ?', 'pending' ],
+           :order => 'show_from ASC, todos.created_at DESC'
   has_many :completed_todos,
            :class_name => 'Todo',
            :conditions => ['todos.state = ? AND NOT(todos.completed_at IS NULL)', 'completed'],

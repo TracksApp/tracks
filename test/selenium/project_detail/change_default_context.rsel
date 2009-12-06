@@ -2,9 +2,12 @@ setup :fixtures => :all
 login :as => 'admin'
 open "/projects/2"
 
+click 'css=.project_settings a'
+wait_for_visible "project[default_context_name]"
+
 # change default context
 type "project[default_context_name]", "errand"
-click "commit"
+click "css=.positive"
 
 wait_for_visible "flash"
 

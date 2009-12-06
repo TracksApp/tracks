@@ -358,7 +358,7 @@ class TodosControllerTest < ActionController::TestCase
         "show_from(1i)"=>"", "show_from(2i)"=>"", "show_from(3i)"=>"",
         "project_id"=>"1",
         "notes"=>"test notes", "description"=>"test_mobile_create_action", "state"=>"0"}}
-    assert_redirected_to '/m'
+    assert_redirected_to '/mobile'
   end
 
   def test_mobile_create_action_renders_new_template_when_save_fails
@@ -369,12 +369,6 @@ class TodosControllerTest < ActionController::TestCase
         "project_id"=>"1",
         "notes"=>"test notes", "state"=>"0"}, "tag_list"=>"test, test2"}
     assert_template 'todos/new'
-  end
-
-  def test_index_html_assigns_default_project_name_map
-    login_as(:admin_user)
-    get :index, {"format"=>"html"}
-    assert_equal '"{\\"Build a working time machine\\": \\"lab\\"}"', assigns(:default_project_context_name_map)
   end
 
   def test_toggle_check_on_recurring_todo
@@ -432,8 +426,9 @@ class TodosControllerTest < ActionController::TestCase
 
     # link todo_1 and recurring_todo_1
     recurring_todo_1 = RecurringTodo.find(1)
+    set_user_to_current_time_zone(recurring_todo_1.user)
     todo_1 = Todo.find_by_recurring_todo_id(1)
-    today = Time.now.utc.at_midnight
+    today = Time.now.at_midnight
 
     # change recurrence pattern to monthly and set show_from to today
     recurring_todo_1.target = 'show_from_date'
@@ -523,6 +518,18 @@ class TodosControllerTest < ActionController::TestCase
     xhr :post, :update, :id => 5, :_source_view => 'todo', "project_name"=>"None", "todo"=>{}
     todo.reload()
     assert_equal "active", todo.state
+  end
+  
+  def test_url_with_slash_in_query_string_are_parsed_correctly
+    # See http://blog.swivel.com/code/2009/06/rails-auto_link-and-certain-query-strings.html
+    login_as(:admin_user)
+    user = users(:admin_user)
+    todo = user.todos.first
+    url = "http://example.com/foo?bar=/baz"
+    todo.notes = "foo #{url} bar"
+    todo.save!
+    get :index
+    assert_select("a[href=#{url}]")
   end
 
 end

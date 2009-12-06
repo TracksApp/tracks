@@ -33,16 +33,4 @@
   <div id="edit-recurring-todo" class="edit-form"  style="display:none">
     <div class='placeholder'>This should not be visible</div>
   </div>
-</div><% 
-
-# need to add behaviour for edit form here. Behaviour defined in partials are 
-# not generated for
-apply_behaviour "#recurring_edit_period:click", 
-  "TracksForm.hide_all_edit_recurring(); $('recurring_edit_'+TracksForm.get_edit_period()).show();" 
--%>
-
-<script type="text/javascript">
-    window.onload=function(){
-        Nifty("div#recurring_new_container","normal");
-    }
-</script>
+</div>

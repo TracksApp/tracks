@@ -27,6 +27,7 @@ class ApplicationController < ActionController::Base
   helper_method :current_user, :prefs
 
   layout proc{ |controller| controller.mobile? ? "mobile" : "standard" }
+  exempt_from_layout /\.js\.erb$/
   
   before_filter :set_session_expiration
   before_filter :set_time_zone
@@ -127,14 +128,6 @@ class ApplicationController < ActionController::Base
   #
   def markdown(text)
     RedCloth.new(text).to_html
-  end
-  
-  def build_default_project_context_name_map(projects)
-    Hash[*projects.reject{ |p| p.default_context.nil? }.map{ |p| [p.name, p.default_context.name] }.flatten].to_json 
-  end
-  
-  def build_default_project_tags_map(projects)
-    Hash[*projects.reject{ |p| p.default_tags.nil? }.map{ |p| [p.name, p.default_tags] }.flatten].to_json 
   end
   
   # Here's the concept behind this "mobile content negotiation" hack: In

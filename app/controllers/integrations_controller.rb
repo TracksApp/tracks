@@ -1,6 +1,6 @@
 class IntegrationsController < ApplicationController
 
-  skip_before_filter :login_required, :only => :search_plugin
+  skip_before_filter :login_required, :only => [:search_plugin, :google_gadget]
 
   def index
     @page_title = 'TRACKS::Integrations'
@@ -30,6 +30,10 @@ class IntegrationsController < ApplicationController
 	  pack('m').gsub(/\n/, '')
 
 	render :layout => false
+  end
+
+  def google_gadget
+    render :layout => false, :content_type => Mime::XML
   end
 
 end

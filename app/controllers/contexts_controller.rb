@@ -92,7 +92,7 @@ class ContextsController < ApplicationController
 
     if @context.save
       if boolean_param('wants_render')
-        @context_state_changed = (@orgininal_context_hidden != @context.hidden?)
+        @context_state_changed = (@original_context_hidden != @context.hidden?)
         @new_state = (@context.hidden? ? "hidden" : "active") if @context_state_changed
         respond_to do |format|
           format.js
@@ -110,6 +110,13 @@ class ContextsController < ApplicationController
     end
   end
 
+  def edit
+    @context = Context.find(params[:id])
+    respond_to do |format|
+      format.js
+    end
+  end
+
   # Fairly self-explanatory; deletes the context If the context contains
   # actions, you'll get a warning dialogue. If you choose to go ahead, any
   # actions in the context will also be deleted.
@@ -124,11 +131,12 @@ class ContextsController < ApplicationController
   # Methods for changing the sort order of the contexts in the list
   #
   def order
-    list = params["list-contexts-hidden"] || params["list-contexts-active"]
-    list.each_with_index do |id, position|
-      current_user.contexts.update(id, :position => position + 1)
-    end
+    context_ids = params["container_context"]
+    @projects = current_user.contexts.update_positions( context_ids )
     render :nothing => true
+  rescue
+    notify :error, $!
+    redirect_to :action => 'index'
   end
   
   protected
@@ -218,8 +226,6 @@ class ContextsController < ApplicationController
       @projects = current_user.projects
 
       @count = @not_done_todos.size
-      @default_project_context_name_map = build_default_project_context_name_map(@projects).to_json
-      @default_project_tags_map = build_default_project_tags_map(@projects).to_json
     end
   end
 

@@ -3,8 +3,7 @@ class UsersController < ApplicationController
   skip_before_filter :login_required, :only => [ :new, :create ]
   prepend_before_filter :login_optional, :only => [ :new, :create ]
   
-  # GET /users
-  # GET /users.xml
+  # GET /users GET /users.xml
   def index
     @users  = User.find(:all, :order => 'login')
     respond_to do |format|
@@ -12,18 +11,17 @@ class UsersController < ApplicationController
         @page_title = "TRACKS::Manage Users"
         @users = User.paginate :page => params[:page], :order => 'login ASC'
         @total_users = User.count
-        # When we call users/signup from the admin page
-        # we store the URL so that we get returned here when signup is successful
+        # When we call users/signup from the admin page we store the URL so that
+        # we get returned here when signup is successful
         store_location
       end
       format.xml { render :xml => @users.to_xml(:except => [ :password ]) }
     end
   end
   
-  # GET /users/somelogin
-  # GET /users/somelogin.xml
+  # GET /users/id GET /users/id.xml
   def show
-    @user = User.find_by_login(params[:id])
+    @user = User.find_by_id(params[:id])
     render :xml => @user.to_xml(:except => [ :password ])
   end
 
@@ -46,13 +44,13 @@ class UsersController < ApplicationController
     render :layout => "login"
   end
   
-  # Example usage: curl -H 'Accept: application/xml' -H 'Content-Type: application/xml'
+  # Example usage: curl -H 'Accept: application/xml' -H 'Content-Type:
+  # application/xml'
   #               -u admin:up2n0g00d
   #               -d '<request><login>username</login><password>abc123</password></request>'
   #               http://our.tracks.host/users
   #
-  # POST /users
-  # POST /users.xml
+  # POST /users POST /users.xml
   def create
     if params['exception']
       render_failure "Expected post format is valid xml like so: <request><login>username</login><password>abc123</password></request>."
@@ -107,10 +105,9 @@ class UsersController < ApplicationController
     end
   end  
   
-  # DELETE /users/somelogin
-  # DELETE /users/somelogin.xml
+  # DELETE /users/id DELETE /users/id.xml
   def destroy
-    @deleted_user = User.find_by_login(params[:id])
+    @deleted_user = User.find_by_id(params[:id])
     @saved = @deleted_user.destroy
     @total_users = User.find(:all).size
     
@@ -150,9 +147,8 @@ class UsersController < ApplicationController
     if (params[:open_id_complete] || (params[:user][:auth_type] == 'open_id')) && openid_enabled?
       authenticate_with_open_id do |result, identity_url|
         if result.successful?
-          # Success means that the transaction completed without
-          # error. If info is nil, it means that the user cancelled
-          # the verification.
+          # Success means that the transaction completed without error. If info
+          # is nil, it means that the user cancelled the verification.
           @user.auth_type = 'open_id'
           @user.open_id_url = identity_url
           if @user.save
@@ -206,6 +202,5 @@ class UsersController < ApplicationController
     return false if params[:request][:password].empty?
     return true
   end
-  
   
 end

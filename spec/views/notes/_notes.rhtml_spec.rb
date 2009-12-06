@@ -5,7 +5,6 @@ describe "/notes/_notes.rhtml" do
     @project = mock_model(Project, :name => "a project")
     @note = mock_model(Note, :body => "this is a note", :project => @project, :project_id => @project.id, 
       :created_at => Time.now, :updated_at? => false)
-    # @controller.template.stub!(:apply_behavior)
     @controller.template.stub!(:format_date)
     # @controller.template.stub!(:render)
     # @controller.template.stub!(:form_remote_tag)

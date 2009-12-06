@@ -1,0 +1,12 @@
+setup :fixtures => :users, :clear_tables => [:projects, :contexts, :todos]
+login :as => 'admin'
+open "/recurring_todos"
+click "css=#recurring_new_container a"
+click "recurring_todo_recurring_period_daily"
+assert_visible "recurring_daily"
+click "recurring_todo_recurring_period_weekly"
+assert_visible "recurring_weekly"
+click "recurring_todo_recurring_period_monthly"
+assert_visible "recurring_monthly"
+click "recurring_todo_recurring_period_yearly"
+assert_visible "recurring_yearly"

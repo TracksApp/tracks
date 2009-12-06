@@ -58,6 +58,11 @@ Rails::Initializer.run do |config|
   # (enables use of different database adapters for development and test environments)
   config.active_record.schema_format = :ruby
 
+  # allow other protocols in urls for sanitzer. Add to your liking, for example
+  # config.action_view.sanitized_allowed_protocols = 'onenote', 'blah', 'proto'
+  # to enable "link":onenote://... or "link":blah://... hyperlinks
+  config.action_view.sanitized_allowed_protocols = 'onenote'
+
   # See Rails::Configuration for more options
 end
 
@@ -78,7 +83,6 @@ require 'tracks/todo_list'
 require 'tracks/config'
 require 'tagging_extensions' # Needed for tagging-specific extensions
 require 'digest/sha1' #Needed to support 'rake db:fixtures:load' on some ruby installs: http://dev.rousette.org.uk/ticket/557
-require 'prototype_helper_extensions'
 
 if ( SITE_CONFIG['authentication_schemes'].include? 'ldap')
   require 'net/ldap' #requires ruby-net-ldap gem be installed

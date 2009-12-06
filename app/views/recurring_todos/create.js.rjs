@@ -4,9 +4,8 @@ page.replace_html 'new_status', "#{error_messages_for('recurring_todo')}"
 page.notify :notice, @message, 5.0
 if @recurring_saved
   # reset form
-  page << "TracksForm.hide_all_recurring(); $('recurring_daily').show();"
-  page << "Form.reset('recurring-todo-form-new-action');"
-  page << "Form.focusFirstElement('recurring-todo-form-new-action');"
+  page << "TracksForm.hide_all_recurring(); $('#recurring_daily').show();"
+  page << "$('#recurring_todo_new_action_submit').unblock();$('#recurring-todo-form-new-action').clearForm();"
   # hide overlayed edit form
   page << "TracksForm.toggle_overlay();"
   # insert new recurring todo

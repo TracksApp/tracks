@@ -48,15 +48,6 @@ class ProjectsControllerTest < TodoContainerControllerTestBase
     assert_ajax_create_increments_count 'My New Project'
   end
 
-  def test_create_project_with_ajax_success_rjs
-    ajax_create 'My New Project'
-    assert_rjs :insert_html, :bottom, "list-active-projects"
-    assert_rjs :sortable, 'list-active-projects', { :tag => 'div', :handle => 'handle', :complete => visual_effect(:highlight, 'list-active-projects'), :url => order_projects_path }
-    # not yet sure how to write the following properly...
-    assert_rjs :call, "Form.reset", "project-form"
-    assert_rjs :call, "Form.focusFirstElement", "project-form"
-  end
-  
   def test_create_project_and_go_to_project_page
     num_projects = Project.count
     xhr :post, :create, { :project => {:name => 'Immediate Project Planning Required'}, :go_to_project => 1}

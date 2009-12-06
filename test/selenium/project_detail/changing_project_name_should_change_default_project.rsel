@@ -3,11 +3,11 @@ login :as => 'admin'
 open "/projects/1"
 
 # change project name
-click "project_name_in_place_editor"
-wait_for_element_present "css=#project_name_in_place_editor-inplaceeditor input.editor_field"
-type "css=#project_name_in_place_editor-inplaceeditor input.editor_field", "Test Foo"
-click "css=#project_name_in_place_editor-inplaceeditor input.editor_ok_button"
-wait_for_text "project_name_in_place_editor", "Test Foo"
+click "project_name"
+wait_for_element_present "css=#project_name form input"
+type "css=#project_name form input", "Test Foo"
+click "css=#project_name form button"
+wait_for_text "project_name", "Test Foo"
 
 # check that the default project name is changed too
-assert_value "todo_project_name", "Test Foo"
+wait_for_value "todo_project_name", "Test Foo"

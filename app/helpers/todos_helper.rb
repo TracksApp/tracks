@@ -8,52 +8,41 @@ module TodosHelper
   end
 
   def form_remote_tag_edit_todo( &block )
-    form_tag( 
-      todo_path(@todo), {
+    form_remote_tag(
+      :url => todo_path(@todo),
+      :loading => "$('#submit_todo_#{@todo.id}').block({message: null})",
+      :html => {
         :method => :put, 
         :id => dom_id(@todo, 'form'), 
         :class => dom_id(@todo, 'form') + " inline-form edit_todo_form" }, 
       &block )
-    apply_behavior 'form.edit_todo_form', make_remote_form(
-      :method => :put, 
-      :before => "todoSpinner = this.down('button.positive'); todoSpinner.startWaiting()",
-      :loaded => "todoSpinner.stopWaiting()",
-      :condition => "!(this.down('button.positive').isWaiting())"),
-      :prevent_default => true
   end
-  
-  def set_behavior_for_star_icon
-    apply_behavior '.item-container a.star_item:click', 
-      remote_to_href(:method => 'put', :with => "{ _source_view : '#{@source_view}' }"),
-      :prevent_default => true
-  end    
 
   def remote_star_icon 
-    str = link_to( image_tag_for_star(@todo),
+    link_to( image_tag_for_star(@todo),
       toggle_star_todo_path(@todo),
       :class => "icon star_item", :title => "star the action '#{@todo.description}'")
-    set_behavior_for_star_icon
-    str
   end
 
   def remote_edit_menu_item(parameters, todo)
     return link_to_remote(
-      image_tag("edit_off.png", :mouseover => "edit_on.png", :alt => "", :align => "absmiddle")+" Edit",
+      image_tag("edit_off.png", :mouseover => "edit_on.png", :alt => "Edit", :align => "absmiddle", :id => 'edit_icon_todo_'+todo.id.to_s)+" Edit",
       :url => {:controller => 'todos', :action => 'edit', :id => todo.id},
       :method => 'get',
       :with => "'#{parameters}'",
       :before => todo_start_waiting_js(todo),
-      :complete => todo_stop_waiting_js)
+      :complete => todo_stop_waiting_js(todo))
   end
 
   def remote_delete_menu_item(parameters, todo)
     return link_to_remote(
-      image_tag("delete_off.png", :mouseover => "delete_on.png", :alt => "", :align => "absmiddle")+" Delete",
+      image_tag("delete_off.png", :mouseover => "delete_on.png", :alt => "Delete", :align => "absmiddle")+" Delete",
       :url => {:controller => 'todos', :action => 'destroy', :id => todo.id},
       :method => 'delete',
       :with => "'#{parameters}'",
       :before => todo_start_waiting_js(todo),
-      :complete => todo_stop_waiting_js)
+      :complete => todo_stop_waiting_js(todo),
+      :confirm => "Are you sure that you want to delete the action '#{todo.description}'?")
   end
 
   def remote_defer_menu_item(days, todo)
@@ -64,24 +53,28 @@ module TodosHelper
     futuredate = (@todo.show_from || @todo.user.date) + days.days
     if @todo.due && futuredate > @todo.due
       return link_to_function(
-        image_tag("defer_#{days}_off.png", :mouseover => "defer_#{days}.png", :alt => "", :align => "absmiddle")+" Defer #{pluralize(days, "day")}",
+        image_tag("defer_#{days}_off.png", :mouseover => "defer_#{days}.png", :alt => "Defer #{pluralize(days, "day")}", :align => "absmiddle")+" Defer #{pluralize(days, "day")}",
         "alert('Defer date is after due date. Please edit and adjust due date before deferring.')"
       )
     else
       return link_to_remote(
-        image_tag("defer_#{days}_off.png", :mouseover => "defer_#{days}.png", :alt => "", :align => "absmiddle")+" Defer #{pluralize(days, "day")}",
+        image_tag("defer_#{days}_off.png", :mouseover => "defer_#{days}.png", :alt => "Defer #{pluralize(days, "day")}", :align => "absmiddle")+" Defer #{pluralize(days, "day")}",
         :url => url,
         :before => todo_start_waiting_js(todo),
-        :complete => todo_stop_waiting_js)
+        :complete => todo_stop_waiting_js(todo))
     end
   end
-
+  
   def todo_start_waiting_js(todo)
-    return "$('ul#{dom_id(todo)}').hide(); itemContainer = $('#{dom_id(todo)}'); itemContainer.startWaiting()"
+    return "$('#ul#{dom_id(todo)}').css('visibility', 'hidden'); $('##{dom_id(todo)}').block({message: null})"
   end
 
-  def todo_stop_waiting_js
-    return "itemContainer.stopWaiting();"
+  def successor_start_waiting_js(successor)
+    return "$('##{dom_id(successor, "successor")}').block({message: null})"
+  end
+
+  def todo_stop_waiting_js(todo)
+    return "$('##{dom_id(todo)}').unblock();enable_rich_interaction();"
   end
 
   def image_tag_for_recurring_todo(todo)
@@ -91,27 +84,37 @@ module TodosHelper
       :class => "recurring_icon", :title => recurrence_pattern_as_text(todo.recurring_todo))
   end
 
-  def set_behavior_for_toggle_checkbox
-    parameters = "_source_view=#{@source_view}"
-    parameters += "&_tag_name=#{@tag_name}" if @source_view == 'tag'
-    apply_behavior '.item-container input.item-checkbox:click',
-      remote_function(:url => javascript_variable('this.value'), :method => 'put',
-      :with => "'#{parameters}'")    
-  end
   
   def remote_toggle_checkbox
-    str = check_box_tag('item_id', toggle_check_todo_path(@todo), @todo.completed?, :class => 'item-checkbox')
-    set_behavior_for_toggle_checkbox
-    str
+    check_box_tag('item_id', toggle_check_todo_path(@todo), @todo.completed?, :class => 'item-checkbox',
+                  :title => @todo.pending? ? 'Blocked by ' + @todo.uncompleted_predecessors.map(&:description).join(', ') : "", :readonly => @todo.pending?)
   end
   
   def date_span
     if @todo.completed?
       "<span class=\"grey\">#{format_date( @todo.completed_at )}</span>"
+    elsif @todo.pending?
+      "<a title='Depends on: #{@todo.uncompleted_predecessors.map(&:description).join(', ')}'><span class=\"orange\">Pending</span></a> "
     elsif @todo.deferred?
       show_date( @todo.show_from )
     else
       due_date( @todo.due )
+    end
+  end
+  
+  def successors_span
+    unless @todo.pending_successors.empty?
+      pending_count = @todo.pending_successors.length
+      title = "Has #{pluralize(pending_count, 'pending action')}: #{@todo.pending_successors.map(&:description).join(', ')}"
+      image_tag( 'successor_off.png', :width=>'10', :height=>'16', :border=>'0', :title => title )
+    end
+  end
+  
+  def grip_span
+    unless @todo.completed?
+      image_tag('grip.png', :width => '7', :height => '16', :border => '0', 
+        :title => 'Drag onto another action to make it depend on that action',
+        :class => 'grip')
     end
   end
   
@@ -135,6 +138,10 @@ module TodosHelper
     if tag_list.empty? then "" else "<span class=\"tags\">#{tag_list}</span>" end
   end
   
+  def predecessor_list_text
+    @todo.predecessors.map{|t| t.specification}.join(', ')
+  end
+
   def deferred_due_date
     if @todo.deferred? && @todo.due
       "(action due on #{format_date(@todo.due)})"
@@ -213,23 +220,25 @@ module TodosHelper
   end
   
   def calendar_setup( input_field )
-    str = "Calendar.setup({ ifFormat:\"#{prefs.date_format}\""
-    str << ",firstDay:#{prefs.week_starts},showOthers:true,range:[2004, 2010]"
-    str << ",step:1,inputField:\"" + input_field + "\",cache:true,align:\"TR\" })\n"
-    javascript_tag str
+    # TODO:jQuery
+    #str = "Calendar.setup({ ifFormat:\"#{prefs.date_format}\""
+    #str << ",firstDay:#{prefs.week_starts},showOthers:true,range:[2004, 2010]"
+    #str << ",step:1,inputField:\"" + input_field + "\",cache:true,align:\"TR\" })\n"
+    #javascript_tag str
   end
   
   def item_container_id (todo)
-    if source_view_is :project
-      return "p#{todo.project_id}items" if todo.active?
-      return "tickler" if todo.deferred?
+    if todo.deferred? or todo.pending?
+      return "tickleritems"
+    elsif source_view_is :project
+      return "p#{todo.project_id}items"
     end
-    return "c#{todo.context_id}"
+    return "c#{todo.context_id}items"
   end
 
   def should_show_new_item
 
-    if @todo.project.nil? == false
+    unless @todo.project.nil?
       # do not show new actions that were added to hidden or completed projects
       # on home page and context page
       return false if source_view_is(:todo) && (@todo.project.hidden? || @todo.project.completed?)
@@ -240,6 +249,8 @@ module TodosHelper
     return true if source_view_is(:project) && @todo.project.hidden? && @todo.project_hidden?
     return true if source_view_is(:project) && @todo.deferred?
     return true if !source_view_is(:deferred) && @todo.active?
+    return true if source_view_is(:project) && @todo.pending?
+    return true if source_view_is(:tag) && @todo.pending?
     return false
   end
   
@@ -266,6 +277,20 @@ module TodosHelper
     array_or_string_for_javascript( current_user.contexts.collect{|c| escape_javascript(c.name) } )
   end
 
+  def tag_names_for_autocomplete
+    array_or_string_for_javascript( Tag.all.collect{|c| escape_javascript(c.name) } )
+  end
+  
+  def default_contexts_for_autocomplete
+    projects = current_user.projects.find(:all, :conditions => ['default_context_id is not null'])
+    Hash[*projects.map{ |p| [p.name, p.default_context.name] }.flatten].to_json
+  end
+  
+  def default_tags_for_autocomplete
+    projects = current_user.projects.find(:all, :conditions => ["default_tags != ''"])
+    Hash[*projects.map{ |p| [p.name, p.default_tags] }.flatten].to_json
+  end
+
   def format_ical_notes(notes)
     split_notes = notes.split(/\n/)
     joined_notes = split_notes.join("\\n")
@@ -286,4 +311,9 @@ module TodosHelper
     class_str = todo.starred? ? "starred_todo" : "unstarred_todo"
     image_tag("blank.png", :title =>"Star action", :class => class_str)
   end
+  
+  def auto_complete_result2(entries, phrase = nil)
+    return entries.map{|e| e.specification()}.join("\n") rescue ''
+  end
+  
 end

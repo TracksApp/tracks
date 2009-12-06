@@ -47,14 +47,14 @@ class ProjectsController < ApplicationController
     
     @not_done = @project.not_done_todos_including_hidden
     @deferred = @project.deferred_todos
+    @pending = @project.pending_todos
     @done = @project.todos.find_in_state(:all, :completed, :order => "todos.completed_at DESC", :limit => current_user.prefs.show_number_completed, :include => [:context])
 
     @count = @not_done.size
-    @down_count = @count + @deferred.size 
+    @down_count = @count + @deferred.size + @pending.size
     @next_project = current_user.projects.next_from(@project)
     @previous_project = current_user.projects.previous_from(@project)
-    @default_project_context_name_map = build_default_project_context_name_map(current_user.projects).to_json
-    @default_project_tags_map = build_default_project_tags_map(current_user.projects).to_json
+    @default_tags = @project.default_tags
     respond_to do |format|
       format.html
       format.m     &render_project_mobile
@@ -92,7 +92,7 @@ class ProjectsController < ApplicationController
         elsif @project.new_record?
           render_failure @project.errors.full_messages.join(', ')
         else
-          head :created, :location => project_url(@project)
+          head :created, :location => project_url(@project), :text => @project.id
         end
       end
     end
@@ -127,6 +127,7 @@ class ProjectsController < ApplicationController
         @active_projects_count = current_user.projects.active.count
         @hidden_projects_count = current_user.projects.hidden.count
         @completed_projects_count = current_user.projects.completed.count
+        init_data_for_sidebar
         render :template => 'projects/update.js.rjs'
         return
       elsif boolean_param('update_status')
@@ -173,7 +174,7 @@ class ProjectsController < ApplicationController
   end
   
   def order
-    project_ids = params["list-active-projects"] || params["list-hidden-projects"] || params["list-completed-projects"]    
+    project_ids = params["container_project"]
     @projects = current_user.projects.update_positions( project_ids )
     render :nothing => true
   rescue
@@ -186,6 +187,7 @@ class ProjectsController < ApplicationController
     @projects = current_user.projects.alphabetize(:state => @state) if @state
     @contexts = current_user.contexts
     init_not_done_counts(['project'])
+    init_project_hidden_todo_counts(['project']) if @state == 'hidden'
   end
   
   def actionize
@@ -193,6 +195,7 @@ class ProjectsController < ApplicationController
     @projects = current_user.projects.actionize(current_user.id, :state => @state) if @state
     @contexts = current_user.contexts
     init_not_done_counts(['project'])
+    init_project_hidden_todo_counts(['project']) if @state == 'hidden'
   end
   
   protected

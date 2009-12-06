@@ -14,20 +14,13 @@
       
       <div id="toggle_project_new" class="hide_form">
         <a title="Hide new project form" accesskey="n">&laquo; Hide form</a>
-        <%  apply_behavior '#toggle_project_new a:click', :prevent_default => true do |page|
-              page << "TracksForm.toggle('toggle_project_new', 'project_new', 'project-form',
-                                         '&laquo; Hide form', 'Hide new project form',
-                                         'Create a new project &#187;', 'Add a project');"
-            end
-        %>
       </div>
 
       <div id="project_new" class="project_new" style="display:block">
         <% form_remote_tag(:url => projects_path, :method => :post,
           :html=> { :id=>'project-form', :name=>'project', :class => 'inline-form'},
-          :before => "$('project_new_project_submit').startWaiting()",
-          :complete => "$('project_new_project_submit').stopWaiting()",
-          :condition => "!$('project_new_project_submit').isWaiting()") do -%>
+          :before => "$('#project_new_project_submit').block({message:null})",
+          :complete => "$('#project_new_project_submit').unblock()") do -%>
         
           <div id="status"><%= error_messages_for('project') %></div>
         
@@ -40,7 +33,6 @@
           <% unless @contexts.empty? -%>
             <label for="default_context_name">Default Context (optional):</label><br />
             <%= text_field_tag("project[default_context_name]", @project.default_context.name, :tabindex => 3) %>
-            <%= render :partial => 'default_context_autocomplete' %>
             <br />
           <% end -%>
           
