@@ -24,7 +24,7 @@ config.action_controller.allow_forgery_protection    = false
 # See http://groups.google.com/group/rubyonrails-talk/browse_thread/thread/5519ca7fd4dde3c1
 class ActionController::RackRequest
   DEFAULT_SESSION_OPTIONS = {
-    :database_manager => CGI::Session::MemoryStore, # store data in memory
+    #:database_manager => CGI::Session::MemoryStore, # store data in memory
     :prefix           => "ruby_sess.",    # prefix session file names
     :session_path     => "/",             # available to all paths in app
     :session_key      => "_session_id",
