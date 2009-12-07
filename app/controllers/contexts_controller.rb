@@ -7,7 +7,6 @@ class ContextsController < ApplicationController
   before_filter :set_context_from_params, :only => [:update, :destroy]
   skip_before_filter :login_required, :only => [:index]
   prepend_before_filter :login_or_feed_token_required, :only => [:index]
-  session :off, :only => :index, :if => Proc.new { |req| ['rss','atom','txt'].include?(req.parameters[:format]) }
 
   def index
     # #true is passed here to force an immediate load so that size and empty?

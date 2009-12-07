@@ -10,8 +10,6 @@ class TodosController < ApplicationController
   append_before_filter :get_todo_from_params, :only => [ :edit, :toggle_check, :toggle_star, :show, :update, :destroy, :remove_predecessor]
   protect_from_forgery :except => [:auto_complete_for_tag, :auto_complete_for_predecessor]
 
-  session :off, :only => :index, :if => Proc.new { |req| is_feed_request(req) }
-
   def index
     current_user.deferred_todos.find_and_activate_ready
     @projects = current_user.projects.find(:all, :include => [:default_context])
