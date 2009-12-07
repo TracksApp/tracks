@@ -17,8 +17,6 @@ end
 Rails::Initializer.run do |config|
   # Skip frameworks you're not going to use
   # config.frameworks -= [ :action_web_service, :action_mailer ]
-  config.frameworks += [ :action_web_service]
-  config.action_web_service = Rails::OrderedOptions.new
   config.load_paths += %W( #{RAILS_ROOT}/app/apis )
 
   config.gem "highline"
@@ -26,6 +24,7 @@ Rails::Initializer.run do |config|
   # Need to do rspec here and not in test.rb. Needed for rake to work which loads
   # the rspec.task file
   config.gem "rspec", :lib => false, :version => ">=1.2.2"
+  config.gem 'datanoise-actionwebservice', :lib => 'actionwebservice'
 
   config.action_controller.use_accept_header = true
 
