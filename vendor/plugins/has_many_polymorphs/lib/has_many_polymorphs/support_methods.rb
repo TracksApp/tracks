@@ -45,9 +45,13 @@ class Hash
 
   # An implementation of select that returns a Hash.
   def _select
-    Hash[*self.select do |key, value|
-      yield key, value
-    end._flatten_once]
+    if RUBY_VERSION >= "1.9"
+      Hash[*self.select {|k, v| yield k, v }.flatten]
+    else
+      Hash[*self.select do |key, value|
+        yield key, value
+      end._flatten_once]
+    end
   end
 end
 

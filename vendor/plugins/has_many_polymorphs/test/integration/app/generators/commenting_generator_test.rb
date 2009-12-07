@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../test_helper'
 require 'fileutils'
 
-class CommentingGeneratorTest < Test::Unit::TestCase
+class CommentingGeneratorTest < ActiveSupport::TestCase
 
   def test_ensure_comments_dont_exist
     # make sure the comments are already defined

@@ -1,3 +1,6 @@
+v2.2. Various fixes.
+
+v2.13. Merge various fixes for Rails 2.2.2.
 
 v2.12. Improvements to the test suite; bugfixes for STI children (rsl). Remove fancy dependency system in favor of using Dispatcher::to_prepare every time.
 

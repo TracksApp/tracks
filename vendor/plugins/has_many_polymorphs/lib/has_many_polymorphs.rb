@@ -14,7 +14,7 @@ class ActiveRecord::Base
   extend ActiveRecord::Associations::PolymorphicClassMethods 
 end
 
-if ENV['HMP_DEBUG'] or ENV['RAILS_ENV'] =~ /development|test/ and ENV['USER'] == 'eweaver'
+if ENV['HMP_DEBUG'] || ENV['RAILS_ENV'] =~ /development|test/ && ENV['USER'] == 'eweaver'
   require 'has_many_polymorphs/debugging_tools' 
 end
 

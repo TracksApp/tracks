@@ -1,7 +1,7 @@
 require 'fileutils'
 require File.dirname(__FILE__) + '/../test_helper'
 
-class TaggingGeneratorTest < Test::Unit::TestCase
+class TaggingGeneratorTest < ActiveSupport::TestCase
   
   def setup
     Dir.chdir RAILS_ROOT do

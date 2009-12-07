@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-class TagTest < Test::Unit::TestCase
+class TagTest < ActiveSupport::TestCase
   fixtures <%= taggable_models[0..1].join(", ") -%>
   
   def setup
