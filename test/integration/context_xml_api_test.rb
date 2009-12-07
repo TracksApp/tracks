@@ -56,7 +56,7 @@ class ContextXmlApiTest < ActionController::IntegrationTest
   end
     
   def test_creates_new_context
-    assert_difference Context, :count do
+    assert_difference 'Context.count' do
       authenticated_post_xml_to_context_create
       assert_response 201
     end

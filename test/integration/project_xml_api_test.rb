@@ -50,7 +50,7 @@ class ProjectXmlApiTest < ActionController::IntegrationTest
   end
     
   def test_creates_new_project
-    assert_difference Project, :count do
+    assert_difference 'Project.count' do
       authenticated_post_xml_to_project_create
       assert_response :created
     end

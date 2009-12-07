@@ -74,7 +74,7 @@ class TodosControllerTest < ActionController::TestCase
   end
 
   def test_create_todo
-    assert_difference Todo, :count do
+    assert_difference 'Todo.count' do
       login_as(:admin_user)
       put :create, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{"notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>"foo bar"
     end
@@ -82,7 +82,7 @@ class TodosControllerTest < ActionController::TestCase
 
   def test_create_todo_via_xml
     login_as(:admin_user)
-    assert_difference Todo, :count do
+    assert_difference 'Todo.count' do
       put :create, :format => "xml", "request" => { "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{"notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>"foo bar" }
       assert_response 201
     end
@@ -91,7 +91,7 @@ class TodosControllerTest < ActionController::TestCase
   def test_create_todo_via_xml_show_from
     login_as(:admin_user)
 
-    assert_difference Todo, :count do
+    assert_difference 'Todo.count' do
       xml = "<todo><description>Call Warren Buffet to find out how much he makes per day</description><project_id>#{projects(:timemachine).id}</project_id><context_id>#{contexts(:agenda).id}</context_id><show-from type=\"datetime\">#{1.week.from_now.xmlschema}</show-from></todo>"
 
       # p parse_xml_body(xml)
