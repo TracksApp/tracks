@@ -112,7 +112,7 @@ module ApplicationHelper
   end
   
   def link_to_project_mobile(project, accesskey, descriptor = sanitize(project.name))
-    link_to( descriptor, formatted_project_path(project, :m), {:title => "View project: #{project.name}", :accesskey => accesskey} )
+    link_to( descriptor, project_path(project, :format => 'm'), {:title => "View project: #{project.name}", :accesskey => accesskey} )
   end
   
   def item_link_to_context(item)

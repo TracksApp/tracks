@@ -349,7 +349,7 @@ class TodosController < ApplicationController
             cookies[:mobile_url] = {:value => nil, :secure => SITE_CONFIG['secure_cookies']}
             redirect_to old_path
           else
-            redirect_to formatted_todos_path(:m)
+            redirect_to todos_path(:format => 'm')
           end
         else
           render :action => "edit", :format => :m
@@ -461,12 +461,12 @@ class TodosController < ApplicationController
   
   def filter_to_context
     context = current_user.contexts.find(params['context']['id'])
-    redirect_to formatted_context_todos_path(context, :m)
+    redirect_to context_todos_path(context, :format => 'm')
   end
   
   def filter_to_project
     project = current_user.projects.find(params['project']['id'])
-    redirect_to formatted_project_todos_path(project, :m)
+    redirect_to project_todos_path(project, :format => 'm')
   end
   
   # /todos/tag/[tag_name] shows all the actions tagged with tag_name

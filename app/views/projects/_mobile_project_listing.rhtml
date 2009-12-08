@@ -1,4 +1,4 @@
 <% project = mobile_project_listing -%>
 <div id="pjr"><%= 
-    link_to(project.name, formatted_project_path(project)) +
+  link_to(project.name, project_path(project, :format => 'm')) +
     " (" + count_undone_todos_and_notes_phrase(project,"actions") + ")" %></div>

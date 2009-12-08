@@ -11,7 +11,7 @@
 
 <% if show_database_form %>
   <div id="database_auth_form">
-      <% form_tag formatted_login_path(:format => 'm') do %>
+      <% form_tag login_path(:format => 'm') do %>
         <table>
           <tr>
             <td><label for="user_login">Login:</label></td>
@@ -39,7 +39,7 @@
   <h4>...or login with an Open ID:</h4>
 
   <div id="openid_auth_form">
-    <% form_tag formatted_login_path(:format => 'm') do %>
+    <% form_tag login_path(:format => 'm') do %>
       <table>
         <tr>
           <td width="100px"><label for="openid_url">Identity URL:</label></td>
