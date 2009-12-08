@@ -5,7 +5,6 @@ require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
 require 'spec'
 require 'spec/rails'
 require 'skinny_spec'
-require 'scenarios'
 
 module LuckySneaks
   module ModelSpecHelpers
