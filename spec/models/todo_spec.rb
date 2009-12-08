@@ -4,7 +4,7 @@ describe Todo do
   def valid_attributes(attributes={})
     {
       :description => "don't forget the milk",
-      :context     => mock_model(Context, :name => 'errands')
+      :context     => mock_model(Context, :name => 'errands', :destroyed? => false)
     }.merge(attributes)
   end
 
