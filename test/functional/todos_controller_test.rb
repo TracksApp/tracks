@@ -88,26 +88,6 @@ class TodosControllerTest < ActionController::TestCase
     end
   end
 
-  def test_create_todo_via_xml_show_from
-    login_as(:admin_user)
-
-    assert_difference 'Todo.count' do
-      xml = "<todo><description>Call Warren Buffet to find out how much he makes per day</description><project_id>#{projects(:timemachine).id}</project_id><context_id>#{contexts(:agenda).id}</context_id><show-from type=\"datetime\">#{1.week.from_now.xmlschema}</show-from></todo>"
-
-      # p parse_xml_body(xml)
-      post :create, parse_xml_body(xml).update(:format => "xml")
-      assert_response :created
-    end
-  end
-
-  def parse_xml_body(body)
-    env = { 'rack.input' => StringIO.new(body),
-      'HTTP_X_POST_DATA_FORMAT' => 'xml',
-      'CONTENT_LENGTH'          => body.size.to_s }
-    ActionController::RackRequest.new(env).request_parameters
-  end
-
-
   def test_fail_to_create_todo_via_xml
     login_as(:admin_user)
     # #try to create with no context, which is not valid
