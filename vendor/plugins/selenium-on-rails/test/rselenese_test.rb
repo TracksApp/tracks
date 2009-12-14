@@ -9,8 +9,8 @@ class RSeleneseTest < Test::Unit::TestCase
     create_rsel_file_from(input, "html.rsel")
     
     @view = TestView.new
+    @view.extend(SeleniumOnRails::PathsTestHelper)
     @sel = SeleniumOnRails::RSelenese.new(@view) 
-    
     @sel.render ActionView::Template.new(test_path_for("html.rsel")), {'page_title' => page_title}
   end
   
@@ -49,6 +49,21 @@ END
     args_str  = args.map {|a| a.inspect }.join(',')
     input = "#{name}(#{args_str})"
     assert_rselenese expected_html, 'Selenese Commands', input
+  end
+  
+  def test_render_rselenese_without_locals
+    expected_html = <<END
+<table>
+<tr><th colspan="3"></th></tr>
+</table>
+END
+    create_rsel_file_from('', "html.rsel")
+    
+    @view = TestView.new
+    @view.extend(SeleniumOnRails::PathsTestHelper)
+    @sel = SeleniumOnRails::RSelenese.new(@view)
+    
+    assert_text_equal expected_html, @sel.render(ActionView::Template.new(test_path_for("html.rsel")))
   end
  
   def test_element_locators

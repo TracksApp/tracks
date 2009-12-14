@@ -1,0 +1,37 @@
+# Please read as our directions have changed:
+# Move this file to your rails apps config directory and rename it to selenium.yml in order to configure the plugin
+
+#
+# General settings
+#
+
+environments:
+  - test
+#  - development # Uncomment this line to enable in development environment. N.B. your development database will likely be altered/destroyed/abducted
+
+#selenium_path: 'c:\selenium' #path to selenium installation. only needed if you for some reason don't want to use the bundled version of selenium core
+
+#
+# rake test:acceptance settings
+#
+
+browsers:
+  # Windows
+  firefox: 'c:\Program Files\Mozilla Firefox\firefox.exe'
+  ie: 'c:\Program Files\Internet Explorer\iexplore.exe'
+
+  # Mac OS X
+  #firefox: '/Applications/Firefox.app/Contents/MacOS/firefox-bin'
+  #safari: '/Applications/Safari.app/Contents/MacOS/Safari'
+
+#host: 'localhost'
+#port_start: 3000
+#port_end: 3005
+#base_url_path: '/'
+#max_browser_duration: 120
+#multi_window: false
+  
+#result_dir: 'c:\result' # the directory where the results will be stored after a test:acceptance run
+
+#fixtures_path: <%= "#{RAILS_ROOT}/spec/fixtures" %>
+#selenium_tests_path: <%= "#{RAILS_ROOT}/spec/selenium" %>

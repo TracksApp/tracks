@@ -79,7 +79,7 @@ TestLoop.prototype = {
             this.continueTestWhenConditionIsTrue();
         } catch (e) {
             if (!this._handleCommandError(e)) {
-                this._testComplete();
+                this.testComplete();
             } else {
                 this.continueTest();
             }
@@ -119,10 +119,8 @@ TestLoop.prototype = {
     _handleCommandError : function(e) {
         if (!e.isSeleniumError) {
             LOG.exception(e);
-            var msg = "Selenium failure. Please report to selenium-dev@openqa.org, with error details from the log window.";
-            if (e.message) {
-                msg += "  The error message is: " + e.message;
-            }
+            var msg = "Command execution failure. Please search the forum at http://clearspace.openqa.org for error details from the log window.";
+            msg += "  The error message is: " + extractExceptionMessage(e);
             return this.commandError(msg);
         } else {
             LOG.error(e.message);

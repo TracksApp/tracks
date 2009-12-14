@@ -1,0 +1,27 @@
+# Move this file to your rails apps config directory and rename it to selenium.yml in order to configure the plugin
+
+#
+# General settings
+#
+
+environments:
+  - test_cache
+#  - development # Uncomment this line to enable in development environment. N.B. your development database will likely be altered/destroyed/abducted
+
+#selenium_path: 'c:\selenium' #path to selenium installation. only needed if you for some reason don't want to use the bundled version of selenium core
+
+#
+# rake test:acceptance settings
+#
+
+browsers:
+  firefox: 'script/openfirefox'
+  # safari: '/Applications/Safari.app/Contents/MacOS/Safari'
+
+port_start: 4000
+port_end: 4001
+#base_url_path: '/'
+#max_browser_duration: 120
+#multi_window: false
+  
+#result_dir: 'c:\result' # the directory where the results will be stored after a test:acceptance run

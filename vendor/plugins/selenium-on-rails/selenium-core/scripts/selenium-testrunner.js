@@ -45,6 +45,10 @@ objectExtend(HtmlTestRunner.prototype, {
     },
 
     loadSuiteFrame: function() {
+        var logLevel = this.controlPanel.getDefaultLogLevel();
+        if (logLevel) {
+            LOG.setLogLevelThreshold(logLevel);
+        }
         if (selenium == null) {
             var appWindow = this._getApplicationWindow();
             try { appWindow.location; }
@@ -76,7 +80,7 @@ objectExtend(HtmlTestRunner.prototype, {
         if (this.controlPanel.isMultiWindowMode()) {
             return this._getSeparateApplicationWindow();
         }
-        return $('myiframe').contentWindow;
+        return sel$('selenium_myiframe').contentWindow;
     },
 
     _getSeparateApplicationWindow: function () {
@@ -87,6 +91,7 @@ objectExtend(HtmlTestRunner.prototype, {
     },
 
     _onloadTestSuite:function () {
+        suiteFrame = new HtmlTestSuiteFrame(getSuiteFrame());
         if (! this.getTestSuite().isAvailable()) {
             return;
         }
@@ -97,7 +102,12 @@ objectExtend(HtmlTestRunner.prototype, {
             addLoadListener(this._getApplicationWindow(), fnBind(this._startSingleTest, this));
             this._getApplicationWindow().src = this.controlPanel.getAutoUrl();
         } else {
-            this.getTestSuite().getSuiteRows()[0].loadTestCase();
+            var testCaseLoaded = fnBind(function(){this.testCaseLoaded=true;},this);
+            var testNumber = 0;
+            if (this.controlPanel.getTestNumber() != null){
+                var testNumber = this.controlPanel.getTestNumber() - 1; 
+            }
+            this.getTestSuite().getSuiteRows()[testNumber].loadTestCase(testCaseLoaded);
         }
     },
 
@@ -134,6 +144,8 @@ objectExtend(HtmlTestRunner.prototype, {
         //todo: move testFailed and storedVars to TestCase
         this.testFailed = false;
         storedVars = new Object();
+        storedVars.nbsp = String.fromCharCode(160);
+        storedVars.space = ' ';
         this.currentTest = new HtmlRunnerTestLoop(testFrame.getCurrentTestCase(), this.metrics, this.commandFactory);
         currentTest = this.currentTest;
         this.currentTest.start();
@@ -157,6 +169,10 @@ objectExtend(SeleniumFrame.prototype, {
         addLoadListener(this.frame, fnBind(this._handleLoad, this));
     },
 
+    getWindow : function() {
+        return this.frame.contentWindow;
+    },
+
     getDocument : function() {
         return this.frame.contentWindow.document;
     },
@@ -166,7 +182,6 @@ objectExtend(SeleniumFrame.prototype, {
         this._onLoad();
         if (this.loadCallback) {
             this.loadCallback();
-            this.loadCallback = null;
         }
     },
 
@@ -187,10 +202,12 @@ objectExtend(SeleniumFrame.prototype, {
             // this works in every browser (except Firefox in chrome mode)
             var styleSheetPath = window.location.pathname.replace(/[^\/\\]+$/, "selenium-test.css");
             if (browserVersion.isIE && window.location.protocol == "file:") {
-                styleSheetPath = "file://" + styleSheetPath;
+                styleSheetPath = "file:///" + styleSheetPath;
             }
             styleLink.href = styleSheetPath;
         }
+        // DGF You're only going to see this log message if you set defaultLogLevel=debug
+        LOG.debug("styleLink.href="+styleLink.href);
         head.appendChild(styleLink);
     },
 
@@ -205,7 +222,8 @@ objectExtend(SeleniumFrame.prototype, {
         var isChrome = browserVersion.isChrome || false;
         var isHTA = browserVersion.isHTA || false;
         // DGF TODO multiWindow
-        location += "?thisIsChrome=" + isChrome + "&thisIsHTA=" + isHTA;
+        location += (location.indexOf("?") == -1 ? "?" : "&");
+        location += "thisIsChrome=" + isChrome + "&thisIsHTA=" + isHTA; 
         if (browserVersion.isSafari) {
             // safari doesn't reload the page when the location equals to current location.
             // hence, set the location to blank so that the page will reload automatically.
@@ -246,7 +264,7 @@ objectExtend(HtmlTestFrame.prototype, SeleniumFrame.prototype);
 objectExtend(HtmlTestFrame.prototype, {
 
     _onLoad: function() {
-        this.currentTestCase = new HtmlTestCase(this.getDocument(), htmlTestRunner.getTestSuite().getCurrentRow());
+        this.currentTestCase = new HtmlTestCase(this.getWindow(), htmlTestRunner.getTestSuite().getCurrentRow());
     },
 
     getCurrentTestCase: function() {
@@ -265,19 +283,19 @@ var suiteFrame;
 var testFrame;
 
 function getSuiteFrame() {
-    var f = $('testSuiteFrame');
+    var f = sel$('testSuiteFrame');
     if (f == null) {
         f = top;
-        // proxyInjection mode does not set myiframe
+        // proxyInjection mode does not set selenium_myiframe
     }
     return f;
 }
 
 function getTestFrame() {
-    var f = $('testFrame');
+    var f = sel$('testFrame');
     if (f == null) {
         f = top;
-        // proxyInjection mode does not set myiframe
+        // proxyInjection mode does not set selenium_myiframe
     }
     return f;
 }
@@ -290,9 +308,9 @@ objectExtend(HtmlTestRunnerControlPanel.prototype, {
 
         this.runInterval = 0;
 
-        this.highlightOption = $('highlightOption');
-        this.pauseButton = $('pauseTest');
-        this.stepButton = $('stepTest');
+        this.highlightOption = sel$('highlightOption');
+        this.pauseButton = sel$('pauseTest');
+        this.stepButton = sel$('stepTest');
 
         this.highlightOption.onclick = fnBindAsEventListener((function() {
             this.setHighlightOption();
@@ -342,7 +360,7 @@ objectExtend(HtmlTestRunnerControlPanel.prototype, {
     },
 
     reset: function() {
-        // this.runInterval = this.speedController.value;
+        this.runInterval = this.speedController.value;
         this._switchContinueButtonToPause();
     },
 
@@ -352,7 +370,7 @@ objectExtend(HtmlTestRunnerControlPanel.prototype, {
     },
 
     _switchPauseButtonToContinue: function() {
-        $('stepTest').disabled = false;
+        sel$('stepTest').disabled = false;
         this.pauseButton.className = "cssContinueTest";
         this.pauseButton.onclick = fnBindAsEventListener(this.continueCurrentTest, this);
     },
@@ -378,12 +396,20 @@ objectExtend(HtmlTestRunnerControlPanel.prototype, {
         return this._getQueryParameter("test");
     },
 
+    getTestNumber: function() {
+        return this._getQueryParameter("testNumber");
+    },
+
     getSingleTestName: function() {
         return this._getQueryParameter("singletest");
     },
 
     getAutoUrl: function() {
         return this._getQueryParameter("autoURL");
+    },
+    
+    getDefaultLogLevel: function() {
+        return this._getQueryParameter("defaultLogLevel");
     },
 
     getResultsUrl: function() {
@@ -574,7 +600,9 @@ objectExtend(HtmlTestSuite.prototype, {
     initialize: function(suiteDocument) {
         this.suiteDocument = suiteDocument;
         this.suiteRows = this._collectSuiteRows();
-        this.titleRow = new TitleRow(this.getTestTable().rows[0]);
+        var testTable = this.getTestTable();
+        if (!testTable) return;
+        this.titleRow = new TitleRow(testTable.rows[0]);
         this.reset();
     },
 
@@ -593,7 +621,7 @@ objectExtend(HtmlTestSuite.prototype, {
     },
 
     getTestTable: function() {
-        var tables = $A(this.suiteDocument.getElementsByTagName("table"));
+        var tables = sel$A(this.suiteDocument.getElementsByTagName("table"));
         return tables[0];
     },
 
@@ -603,15 +631,16 @@ objectExtend(HtmlTestSuite.prototype, {
 
     _collectSuiteRows: function () {
         var result = [];
-        var tables = $A(this.suiteDocument.getElementsByTagName("table"));
+        var tables = sel$A(this.suiteDocument.getElementsByTagName("table"));
         var testTable = tables[0];
+        if (!testTable) return;
         for (rowNum = 1; rowNum < testTable.rows.length; rowNum++) {
             var rowElement = testTable.rows[rowNum];
             result.push(new HtmlTestSuiteRow(rowElement, testFrame, this));
         }
         
         // process the unsuited rows as well
-        for (var tableNum = 1; tableNum < $A(this.suiteDocument.getElementsByTagName("table")).length; tableNum++) {
+        for (var tableNum = 1; tableNum < sel$A(this.suiteDocument.getElementsByTagName("table")).length; tableNum++) {
             testTable = tables[tableNum];
             for (rowNum = 1; rowNum < testTable.rows.length; rowNum++) {
                 var rowElement = testTable.rows[rowNum];
@@ -652,7 +681,7 @@ objectExtend(HtmlTestSuite.prototype, {
 
     _onTestSuiteComplete: function() {
         this.markDone();
-        new TestResult(this.failed, this.getTestTable()).post();
+        new SeleniumTestResult(this.failed, this.getTestTable()).post();
     },
 
     updateSuiteWithResultOfPreviousTest: function() {
@@ -676,8 +705,8 @@ objectExtend(HtmlTestSuite.prototype, {
 
 });
 
-var TestResult = classCreate();
-objectExtend(TestResult.prototype, {
+var SeleniumTestResult = classCreate();
+objectExtend(SeleniumTestResult.prototype, {
 
 // Post the results to a servlet, CGI-script, etc.  The URL of the
 // results-handler defaults to "/postResults", but an alternative location
@@ -713,7 +742,7 @@ objectExtend(TestResult.prototype, {
 
         form.id = "resultsForm";
         form.method = "post";
-        form.target = "myiframe";
+        form.target = "selenium_myiframe";
 
         var resultsUrl = this.controlPanel.getResultsUrl();
         if (!resultsUrl) {
@@ -766,10 +795,21 @@ objectExtend(TestResult.prototype, {
             }
         }
 
-        form.createHiddenField("numTestTotal", rowNum);
+        form.createHiddenField("numTestTotal", rowNum-1);
 
         // Add HTML for the suite itself
         form.createHiddenField("suite", this.suiteTable.parentNode.innerHTML);
+
+        var logMessages = [];
+        while (LOG.pendingMessages.length > 0) {
+            var msg = LOG.pendingMessages.shift();
+            logMessages.push(msg.type);
+            logMessages.push(": ");
+            logMessages.push(msg.msg);
+            logMessages.push('\n');
+        }
+        var logOutput = logMessages.join("");
+        form.createHiddenField("log", logOutput);
 
         if (this.controlPanel.shouldSaveResultsToFile()) {
             this._saveToFile(resultsUrl, form);
@@ -788,22 +828,50 @@ objectExtend(TestResult.prototype, {
         for (var i = 0; i < form.elements.length; i++) {
             inputs[form.elements[i].name] = form.elements[i].value;
         }
+        
         var objFSO = new ActiveXObject("Scripting.FileSystemObject")
+        
+        // DGF get CSS
+        var styles = "";
+        try {
+            var styleSheetPath = window.location.pathname.replace(/[^\/\\]+$/, "selenium-test.css");
+            if (window.location.protocol == "file:") {
+                var stylesFile = objFSO.OpenTextFile(styleSheetPath, 1);
+                styles = stylesFile.ReadAll();
+            } else {
+                var xhr = XmlHttp.create();
+                xhr.open("GET", styleSheetPath, false);
+                xhr.send("");
+                styles = xhr.responseText;
+            }
+        } catch (e) {}
+        
         var scriptFile = objFSO.CreateTextFile(fileName);
-        scriptFile.WriteLine("<html><body>\n<h1>Test suite results </h1>" +
-                             "\n\n<table>\n<tr>\n<td>result:</td>\n<td>" + inputs["result"] + "</td>\n" +
-                             "</tr>\n<tr>\n<td>totalTime:</td>\n<td>" + inputs["totalTime"] + "</td>\n</tr>\n" +
-                             "<tr>\n<td>numTestPasses:</td>\n<td>" + inputs["numTestPasses"] + "</td>\n</tr>\n" +
-                             "<tr>\n<td>numTestFailures:</td>\n<td>" + inputs["numTestFailures"] + "</td>\n</tr>\n" +
-                             "<tr>\n<td>numCommandPasses:</td>\n<td>" + inputs["numCommandPasses"] + "</td>\n</tr>\n" +
-                             "<tr>\n<td>numCommandFailures:</td>\n<td>" + inputs["numCommandFailures"] + "</td>\n</tr>\n" +
-                             "<tr>\n<td>numCommandErrors:</td>\n<td>" + inputs["numCommandErrors"] + "</td>\n</tr>\n" +
-                             "<tr>\n<td>" + inputs["suite"] + "</td>\n<td>&nbsp;</td>\n</tr>");
+        
+        
+        scriptFile.WriteLine("<html><head><title>Test suite results</title><style>");
+        scriptFile.WriteLine(styles);
+        scriptFile.WriteLine("</style>");
+        scriptFile.WriteLine("<body>\n<h1>Test suite results</h1>" +
+             "\n\n<table>\n<tr>\n<td>result:</td>\n<td>" + inputs["result"] + "</td>\n" +
+             "</tr>\n<tr>\n<td>totalTime:</td>\n<td>" + inputs["totalTime"] + "</td>\n</tr>\n" +
+             "<tr>\n<td>numTestTotal:</td>\n<td>" + inputs["numTestTotal"] + "</td>\n</tr>\n" +
+             "<tr>\n<td>numTestPasses:</td>\n<td>" + inputs["numTestPasses"] + "</td>\n</tr>\n" +
+             "<tr>\n<td>numTestFailures:</td>\n<td>" + inputs["numTestFailures"] + "</td>\n</tr>\n" +
+             "<tr>\n<td>numCommandPasses:</td>\n<td>" + inputs["numCommandPasses"] + "</td>\n</tr>\n" +
+             "<tr>\n<td>numCommandFailures:</td>\n<td>" + inputs["numCommandFailures"] + "</td>\n</tr>\n" +
+             "<tr>\n<td>numCommandErrors:</td>\n<td>" + inputs["numCommandErrors"] + "</td>\n</tr>\n" +
+             "<tr>\n<td>" + inputs["suite"] + "</td>\n<td>&nbsp;</td>\n</tr></table><table>");
         var testNum = inputs["numTestTotal"];
-        for (var rowNum = 1; rowNum < testNum; rowNum++) {
+        
+        for (var rowNum = 1; rowNum <= testNum; rowNum++) {
             scriptFile.WriteLine("<tr>\n<td>" + inputs["testTable." + rowNum] + "</td>\n<td>&nbsp;</td>\n</tr>");
         }
-        scriptFile.WriteLine("</table></body></html>");
+        scriptFile.WriteLine("</table><pre>");
+        var log = inputs["log"];
+        log=log.replace(/&/gm,"&amp;").replace(/</gm,"&lt;").replace(/>/gm,"&gt;").replace(/"/gm,"&quot;").replace(/'/gm,"&apos;");
+        scriptFile.WriteLine(log);
+        scriptFile.WriteLine("</pre></body></html>");
         scriptFile.Close();
     }
 });
@@ -812,14 +880,22 @@ objectExtend(TestResult.prototype, {
 var HtmlTestCase = classCreate();
 objectExtend(HtmlTestCase.prototype, {
 
-    initialize: function(testDocument, htmlTestSuiteRow) {
-        if (testDocument == null) {
-            throw "testDocument should not be null";
+    initialize: function(testWindow, htmlTestSuiteRow) {
+        if (testWindow == null) {
+            throw "testWindow should not be null";
         }
         if (htmlTestSuiteRow == null) {
             throw "htmlTestSuiteRow should not be null";
         }
-        this.testDocument = testDocument;
+        this.testWindow = testWindow;
+        this.testDocument = testWindow.document;
+        this.pathname = "'unknown'";
+        try {
+            if (this.testWindow.location) {
+                this.pathname = this.testWindow.location.pathname;
+            }
+        } catch (e) {}
+            
         this.htmlTestSuiteRow = htmlTestSuiteRow;
         this.headerRow = new TitleRow(this.testDocument.getElementsByTagName("tr")[0]);
         this.commandRows = this._collectCommandRows();
@@ -829,11 +905,11 @@ objectExtend(HtmlTestCase.prototype, {
 
     _collectCommandRows: function () {
         var commandRows = [];
-        var tables = $A(this.testDocument.getElementsByTagName("table"));
+        var tables = sel$A(this.testDocument.getElementsByTagName("table"));
         var self = this;
         for (var i = 0; i < tables.length; i++) {
             var table = tables[i];
-            var tableRows = $A(table.rows);
+            var tableRows = sel$A(table.rows);
             for (var j = 0; j < tableRows.length; j++) {
                 var candidateRow = tableRows[j];
                 if (self.isCommandRow(candidateRow)) {
@@ -959,11 +1035,11 @@ objectExtend(Metrics.prototype, {
     },
 
     printMetrics: function() {
-        setText($('commandPasses'), this.numCommandPasses);
-        setText($('commandFailures'), this.numCommandFailures);
-        setText($('commandErrors'), this.numCommandErrors);
-        setText($('testRuns'), this.numTestPasses + this.numTestFailures);
-        setText($('testFailures'), this.numTestFailures);
+        setText(sel$('commandPasses'), this.numCommandPasses);
+        setText(sel$('commandFailures'), this.numCommandFailures);
+        setText(sel$('commandErrors'), this.numCommandErrors);
+        setText(sel$('testRuns'), this.numTestPasses + this.numTestFailures);
+        setText(sel$('testFailures'), this.numTestFailures);
 
         this.currentTime = new Date().getTime();
 
@@ -973,7 +1049,7 @@ objectExtend(Metrics.prototype, {
         var minutes = Math.floor(totalSecs / 60);
         var seconds = totalSecs % 60;
 
-        setText($('elapsedTime'), this._pad(minutes) + ":" + this._pad(seconds));
+        setText(sel$('elapsedTime'), this._pad(minutes) + ":" + this._pad(seconds));
     },
 
 // Puts a leading 0 on num if it is less than 10
@@ -1020,9 +1096,7 @@ objectExtend(HtmlRunnerTestLoop.prototype, {
         this.metrics = metrics;
 
         this.htmlTestCase = htmlTestCase;
-
-        se = selenium;
-        global.se = selenium;
+        LOG.info("Starting test " + htmlTestCase.pathname);
 
         this.currentRow = null;
         this.currentRowIndex = 0;
@@ -1034,17 +1108,6 @@ objectExtend(HtmlRunnerTestLoop.prototype, {
         this.expectedFailureType = null;
 
         this.htmlTestCase.reset();
-
-        this.sejsElement = this.htmlTestCase.testDocument.getElementById('sejs');
-        if (this.sejsElement) {
-            var fname = 'Selenium JavaScript';
-            parse_result = parse(this.sejsElement.innerHTML, fname, 0);
-
-            var x2 = new ExecutionContext(GLOBAL_CODE);
-            ExecutionContext.current = x2;
-
-            execute(parse_result, x2)
-        }
     },
 
     _advanceToNextRow: function() {
@@ -1069,7 +1132,7 @@ objectExtend(HtmlRunnerTestLoop.prototype, {
     },
 
     commandStarted : function() {
-        $('pauseTest').disabled = false;
+        sel$('pauseTest').disabled = false;
         this.currentRow.select();
         this.metrics.printMetrics();
     },
@@ -1141,8 +1204,8 @@ objectExtend(HtmlRunnerTestLoop.prototype, {
     },
 
     testComplete : function() {
-        $('pauseTest').disabled = true;
-        $('stepTest').disabled = true;
+        sel$('pauseTest').disabled = true;
+        sel$('stepTest').disabled = true;
         if (htmlTestRunner.testFailed) {
             this.htmlTestCase.markFailed();
             this.metrics.numTestFailures += 1;
@@ -1230,6 +1293,24 @@ Selenium.prototype.doEcho = function(message) {
      */
     currentTest.currentRow.setMessage(message);
 }
+
+/*
+ * doSetSpeed and getSpeed are already defined in selenium-api.js,
+ * so we're defining these functions in a tricky way so that doc.js doesn't
+ * try to read API doc from the function definitions here.
+ */
+Selenium.prototype._doSetSpeed = function(value) {
+    var milliseconds = parseInt(value);
+    if (milliseconds < 0) milliseconds = 0;
+    htmlTestRunner.controlPanel.speedController.setValue(milliseconds);
+    htmlTestRunner.controlPanel.setRunInterval(milliseconds);
+}
+Selenium.prototype.doSetSpeed = Selenium.prototype._doSetSpeed;
+
+Selenium.prototype._getSpeed = function() {
+    return htmlTestRunner.controlPanel.runInterval;
+}
+Selenium.prototype.getSpeed = Selenium.prototype._getSpeed;
 
 Selenium.prototype.assertSelected = function(selectLocator, optionLocator) {
     /**

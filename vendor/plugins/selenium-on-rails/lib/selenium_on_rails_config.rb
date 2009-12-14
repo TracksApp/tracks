@@ -1,26 +1,30 @@
 require 'yaml'
+require 'erb'
 
 class SeleniumOnRailsConfig
-  attr_accessor :configs
-  
-  def initialize
-    @defaults = {:environments => ['test']}
-    initialize_configs
-  end
-  
-  def get var, default = nil
-    value = @configs[var.to_s]
-    value ||= @defaults[var]
+  @@defaults = {:environments => ['test']}
+  def self.get var, default = nil
+    value = configs[var.to_s]
+    value ||= @@defaults[var]
     value ||= default
     value ||= yield if block_given?
     value
   end
-  
-  def initialize_configs
-    @configs = {}
-    files = [File.expand_path(File.dirname(__FILE__) + '/../config.yml')]
-    files << File.join(RAILS_ROOT, 'config', 'selenium.yml')
-    files.each { |file| @configs = YAML.load_file(file) if File.exist?(file) }
-  end
+
+  private
+    def self.configs
+      @@configs ||= nil
+      unless @@configs
+        files = [File.join(RAILS_ROOT, 'config', 'selenium.yml'), File.expand_path(File.dirname(__FILE__) + '/../config.yml')]
+        files.each do |file|
+          if File.exist?(file)
+            @@configs = YAML.load(ERB.new(IO.read(file)).result)
+            break
+          end
+        end
+        @@configs ||= {}
+      end
+      @@configs
+    end
 
 end

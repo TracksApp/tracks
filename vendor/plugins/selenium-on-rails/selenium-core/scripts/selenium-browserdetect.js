@@ -24,6 +24,14 @@
 var BrowserVersion = function() {
     this.name = navigator.appName;
 
+    if (navigator.userAgent.indexOf('Mac OS X') != -1) {
+        this.isOSX = true;
+    }
+
+    if (navigator.userAgent.indexOf('Windows NT 6') != -1) {
+        this.isVista = true;
+    }
+
     if (window.opera != null) {
         this.browser = BrowserVersion.OPERA;
         this.isOpera = true;
@@ -85,9 +93,12 @@ var BrowserVersion = function() {
                 self.isHTA = false;
             }
         }
+        if (navigator.appVersion.match(/MSIE 6.0/)) {
+        	this.isIE6 = true;
+        }
         if ("0" == navigator.appMinorVersion) {
             this.preSV1 = true;
-            if (navigator.appVersion.match(/MSIE 6.0/)) {
+            if (this.isIE6) {
             	this.appearsToBeBrokenInitialIE6 = true;
             }
         }

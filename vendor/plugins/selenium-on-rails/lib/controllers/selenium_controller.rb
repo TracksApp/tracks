@@ -5,12 +5,12 @@ class SeleniumController < ActionController::Base
   include SeleniumOnRails::Renderer
   
   def initialize
-    @config = SeleniumOnRailsConfig.new
+    @result_dir = SeleniumOnRailsConfig.get(:result_dir)
   end
   
   def setup
     unless params.has_key? :keep_session
-      reset_session
+      reset_session #  IS THIS WORKING!  NO THINK SO
       @session_wiped = true
     end
     @cleared_tables = clear_tables params[:clear_tables].to_s
@@ -65,9 +65,9 @@ class SeleniumController < ActionController::Base
   end
 
   def record_table
-    return nil unless result_dir = @config.get(:result_dir)
+    return nil unless @result_dir
 
-    cur_result_dir = File.join(result_dir, (params[:logFile] || "default").sub(/\.yml$/, ''))
+    cur_result_dir = File.join(@result_dir, (params[:logFile] || "default").sub(/\.yml$/, ''))
     FileUtils.mkdir_p(cur_result_dir)
     File.open("#{cur_result_dir}/index.html", "wb") do |f|
       f.write <<EOS
