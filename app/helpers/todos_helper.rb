@@ -262,9 +262,10 @@ module TodosHelper
   end
   
   def empty_container_msg_div_id
-    return "tickler-empty-nd" if source_view_is_one_of(:project, :tag) && @todo.deferred?
-    return "p#{@todo.project_id}empty-nd" if source_view_is :project
-    return "c#{@todo.context_id}empty-nd"
+    todo = @todo || @successor
+    return "tickler-empty-nd" if source_view_is_one_of(:project, :tag) && todo.deferred?
+    return "p#{todo.project_id}empty-nd" if source_view_is :project
+    return "c#{todo.context_id}empty-nd"
   end
   
   def project_names_for_autocomplete

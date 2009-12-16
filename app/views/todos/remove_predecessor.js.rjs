@@ -9,6 +9,8 @@ if @removed
   # update display if pending->active
   if @successor.active?
       page[@successor].remove unless source_view_is_one_of(:todo, :context)
+      page[empty_container_msg_div_id].hide unless empty_container_msg_div_id.nil?
+      page.call "todoItems.ensureVisibleWithEffectAppear", "c#{@successor.context_id}"
       page.insert_html :bottom, item_container_id(@successor), :partial => 'todos/todo', :locals => { 
         :todo => @successor, :parent_container_type => parent_container_type }
       page.visual_effect :highlight, dom_id(@successor, 'line'), {'startcolor' => "'#99ff99'"}

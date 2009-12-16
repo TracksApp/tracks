@@ -31,5 +31,5 @@ wait_for_text 'css=h1 span.count', '2'
 
 # just test the navigation. 
 click_and_wait "link=Tickler"
-wait_for_text 'css=h1 span.count', '0'
+wait_for_text 'css=h1 span.count', '1'
 click_and_wait "link=Feeds"

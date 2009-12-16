@@ -1,0 +1,3 @@
+buy_stock_then_email_broker:
+  successor_id: 19
+  predecessor_id: 11
