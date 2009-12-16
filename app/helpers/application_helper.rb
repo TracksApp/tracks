@@ -170,9 +170,13 @@ module ApplicationHelper
     standard_format = current_user.prefs.date_format
     translations = [
       ['%m', 'mm'],
+      ['%b', 'M'],
+      ['%B', 'MM'],
       ['%d', 'dd'],
-      ['%Y', 'yy'],
-      ['%y', 'y']
+      ['%a', 'D'],
+      ['%A', 'DD'],
+      ['%y', 'y'],
+      ['%Y', 'yy']
     ]
     translations.inject(standard_format) do |str, translation|
       str.gsub(*translation)
