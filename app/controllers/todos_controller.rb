@@ -605,9 +605,9 @@ class TodosController < ApplicationController
       # Begin matching todos in current project
       @items = current_user.todos.find(:all, 
         :select => 'description, project_id, context_id, created_at',
-        :conditions => [ '(todos.state = ? OR todos.state = ?) AND ' +
+        :conditions => [ '(todos.state = ? OR todos.state = ? OR todos.state = ?) AND ' +
                          'NOT (id = ?) AND lower(description) LIKE ? AND project_id = ?', 
-                         'active', 'pending',
+                         'active', 'pending', 'deferred',
                          @todo.id, 
                          '%' + params[:predecessor_list].downcase + '%',
                          @todo.project_id ],
@@ -617,9 +617,9 @@ class TodosController < ApplicationController
       if @items.empty? # Match todos in other projects
         @items = current_user.todos.find(:all, 
         :select => 'description, project_id, context_id, created_at',
-          :conditions => [ '(todos.state = ? OR todos.state = ?) AND ' +
+          :conditions => [ '(todos.state = ? OR todos.state = ? OR todos.state = ?) AND ' +
                            'NOT (id = ?) AND lower(description) LIKE ?', 
-                           'active', 'pending',
+                           'active', 'pending', 'deferred',
                             params[:id], '%' + params[:q].downcase + '%' ],
           :order => 'description ASC',
           :limit => 10
@@ -629,8 +629,8 @@ class TodosController < ApplicationController
       # New todo - TODO: Filter on project
       @items = current_user.todos.find(:all, 
         :select => 'description, project_id, context_id, created_at',
-        :conditions => [ '(todos.state = ? OR todos.state = ?) AND lower(description) LIKE ?', 
-                         'active', 'pending',
+        :conditions => [ '(todos.state = ? OR todos.state = ? OR todos.state = ?) AND lower(description) LIKE ?', 
+                         'active', 'pending', 'deferred',
                          '%' + params[:q].downcase + '%' ],
         :order => 'description ASC',
         :limit => 10
