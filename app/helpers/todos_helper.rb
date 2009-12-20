@@ -64,6 +64,14 @@ module TodosHelper
         :complete => todo_stop_waiting_js(todo))
     end
   end
+
+  def remote_promote_to_project_menu_item(todo)
+    url = {:controller => 'todos', :action => 'convert_to_project', :id => todo.id,
+      :_source_view => (@source_view.underscore.gsub(/\s+/,'_') rescue "")}
+    url[:_tag_name] = @tag_name if @source_view == 'tag'
+
+    return link_to("Promote to project", url)
+  end
   
   def todo_start_waiting_js(todo)
     return "$('#ul#{dom_id(todo)}').css('visibility', 'hidden'); $('##{dom_id(todo)}').block({message: null})"

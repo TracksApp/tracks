@@ -638,6 +638,15 @@ class TodosController < ApplicationController
     end
     render :inline => "<%= auto_complete_result2(@items) %>"
   end
+
+  def convert_to_project
+    @todo = Todo.find(params[:id])
+    @project = Project.new(:name => @todo.description, :description => @todo.notes,
+                           :default_context => @todo.context)
+    @todo.destroy
+    @project.save!
+    redirect_to project_url(@project)
+  end
   
   private
   
