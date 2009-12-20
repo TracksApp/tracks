@@ -20,7 +20,7 @@ if @saved
     end
     
     # remove container if empty
-    if @remaining_in_context == 0 && source_view_is(:todo)
+    if @remaining_in_context == 0 && source_view_is_one_of(:todo, :tag)
       page.visual_effect :fade, "c"+@todo.context.id.to_s, :duration => 0.4
     end
 
