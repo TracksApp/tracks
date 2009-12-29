@@ -6,6 +6,19 @@ class LoginController < ApplicationController
   skip_before_filter :login_required
   before_filter :login_optional
   before_filter :get_current_user
+  if ( SITE_CONFIG['authentication_schemes'].include? 'cas')
+    # This will allow the user to view the index page without authentication
+    # but will process CAS authentication data if the user already
+    # has an SSO session open.
+    if (CASClient rescue nil)
+      # Only require sub-library if gem is installed and loaded
+      require 'casclient/frameworks/rails/filter'
+      before_filter CASClient::Frameworks::Rails::GatewayFilter, :only => :login_cas
+
+      # This requires the user to be authenticated for viewing all other pages.
+      before_filter CASClient::Frameworks::Rails::Filter, :only => [:login_cas ]
+    end
+  end
 
   def login
     if cas_enabled?
@@ -18,6 +31,7 @@ class LoginController < ApplicationController
       login_cas
     else
       @page_title = "TRACKS::Login"
+      cookies[:preferred_auth] = prefered_auth? unless cookies[:preferred_auth]
       case request.method
         when :post
           if @user = User.authenticate(params['user_login'], params['user_password'])
@@ -55,10 +69,10 @@ class LoginController < ApplicationController
     @user.forget_me if logged_in?
     cookies.delete :auth_token
     session['user_id'] = nil
-    reset_session
-    if ( SITE_CONFIG['authentication_schemes'].include? 'cas')
+    if ( SITE_CONFIG['authentication_schemes'].include? 'cas')  && session[:cas_user]
       CASClient::Frameworks::Rails::Filter.logout(self)
     else
+      reset_session
       notify :notice, "You have been logged out of Tracks."
       redirect_to_login
     end
@@ -83,6 +97,33 @@ class LoginController < ApplicationController
     respond_to do |format|
       format.js
     end
+  end
+
+    def login_cas
+    # If checkbox on login page checked, we don't expire the session after 1 hour
+    # of inactivity and we remember this user for future browser sessions
+
+    session['noexpiry'] ||= params['user_noexpiry']
+    if session[:cas_user]
+      if @user = User.find_by_login(session[:cas_user])
+        session['user_id'] = @user.id
+        msg = (should_expire_sessions?) ? "will expire after 1 hour of inactivity." : "will not expire."
+        notify :notice, "Login successful: session #{msg}"
+        cookies[:tracks_login] = { :value => @user.login, :expires => Time.now + 1.year, :secure => SITE_CONFIG['secure_cookies'] }
+        unless should_expire_sessions?
+          @user.remember_me
+          cookies[:auth_token] = { :value => @user.remember_token, :expires => @user.remember_token_expires_at, :secure => SITE_CONFIG['secure_cookies'] }
+        end
+        #redirect_back_or_home
+      else
+        notify :warning, "Sorry, no user by that CAS username exists (#{session[:cas_user]})"
+        redirect_to signup_url ; return
+      end
+    else
+      notify :warning, result.message
+    end
+    redirect_back_or_home 
+
   end
   
   private
@@ -125,26 +166,5 @@ class LoginController < ApplicationController
     end
   end
 
-  def login_cas
-    # If checkbox on login page checked, we don't expire the session after 1 hour
-    # of inactivity and we remember this user for future browser sessions
-    session['noexpiry'] ||= params['user_noexpiry']
-    if session[:cas_user]
-      if @user = User.find_by_login(session[:cas_user])
-        session['user_id'] = @user.id
-        msg = (should_expire_sessions?) ? "will expire after 1 hour of inactivity." : "will not expire."
-        notify :notice, "Login successful: session #{msg}"
-        cookies[:tracks_login] = { :value => @user.login, :expires => Time.now + 1.year, :secure => SITE_CONFIG['secure_cookies'] }
-        unless should_expire_sessions?
-          @user.remember_me
-          cookies[:auth_token] = { :value => @user.remember_token, :expires => @user.remember_token_expires_at, :secure => SITE_CONFIG['secure_cookies'] }
-        end
-        redirect_back_or_home
-      else
-        notify :warning, "Sorry, no user by that CAS username exists (#{session[:cas_user]})"
-      end
-    else
-      notify :warning, result.message
-    end
-  end
+
 end

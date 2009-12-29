@@ -9,9 +9,10 @@
   <%= render_flash %>
 
   <h3>Please log in to use Tracks:</h3>
-
+  <p>auth method <%=cookies[:preferred_auth]%></p></p>
+  <p>cas user<%=session[:cas_user]%></p></p>
 <% if show_database_form %>
-  <div id="database_auth_form" style="display:block">
+  <div id="database_auth_form" style="display:<%=(@prefered_auth.eql?('database')) ? "block" : "none"%>">
       <% form_tag :action=> 'login' do %>
         <table>
           <tr>
@@ -36,7 +37,7 @@
 <% end %>
 
 <% if show_openid_form %>
-  <div id="openid_auth_form" style="display:none">
+  <div id="openid_auth_form" style="display:<%=(@prefered_auth.eql?('openid')) ? "block" : "none"%>">
     <% form_tag :action=> 'login' do %>
       <table>
         <tr>
@@ -57,7 +58,7 @@
  <% end %>
 
 <% if show_cas_form %>
-  <div id="cas_auth_form" style="display:block">
+  <div id="cas_auth_form" style="display:<%=(@prefered_auth.eql?('cas')) ? "block" : "none"%>">
       <table>
         <tr>
           <td>	
@@ -70,7 +71,7 @@
                 <%end%>
               </p>
 			<% else %>
-			  <p>You are not yet authenticated. <%= link_to("Login", @login_url) %>
+			  <p><%= link_to("CAS Login", login_cas_url) %>  </p>
 			<% end %>
 			</td>
         </tr>
@@ -81,20 +82,22 @@
 </div>
 <% if show_openid_form %><p id="alternate_auth_openid" class="alternate_auth">or, <a href="#" onclick="Login.showOpenid();return false;">login with an OpenId</a></p><% end %>
 <% if show_database_form %><p id="alternate_auth_database" class="alternate_auth">or, <a href="#" onclick="Login.showDatabase();return false;">go back to the standard login</a></p><% end %>
+<% if show_cas_form %><p id="alternate_auth_cas" class="alternate_auth">or, <a href="#" onclick="Login.showCAS();return false;">go to the CAS</a></p><% end %>
 
 <script type="text/javascript">
 function showPreferredAuth() {
   var preferredAuth = $.cookie('preferred_auth');
+  var casEnabled = <%= show_cas_form ? 'true' : 'false' %>;
   var databaseEnabled = <%= show_database_form ? 'true' : 'false' %>;
   var openidEnabled = <%= show_openid_form ? 'true' : 'false' %>;
 	if (preferredAuth && preferredAuth == 'openid' && openidEnabled) {
 	  Login.showOpenid();
 	}
-	else if (databaseEnabled)  {
+	else if (preferredAuth && preferredAuth == 'database' && databaseEnabled)  {
 	  Login.showDatabase();
 	}
-	else if (openidEnabled)  {
-	  Login.showOpenid();
+	else if (preferredAuth && preferredAuth == 'cas' && casEnabled)  {
+	  Login.showCAS();
 	}
 }
 $(document).ready(showPreferredAuth);
@@ -104,7 +107,8 @@ var Login = {
         $('#database_auth_form').hide();
         $('#openid_auth_form').show();
         $('#alternate_auth_openid').hide();
-        $('#alternate_auth_database').show();
+        $('#alternate_auth_database').show();  ;
+        $('#alternate_auth_cas').show();
         $('#openid_url').focus();
         $('#openid_url').select();
         $.cookie('preferred_auth', 'openid');
@@ -115,10 +119,21 @@ var Login = {
         $('#database_auth_form').show();
         $('#alternate_auth_database').hide();
         $('#alternate_auth_openid').show();
+        $('#alternate_auth_cas').show();
         $('#user_login').focus();
         $('#user_login').select();
         $.cookie('preferred_auth', 'database');
+    },
+    showCAS: function(container) {
+        $('#database_auth_form').hide();
+        $('#openid_auth_form').hide();
+        $('#cas_auth_form').show();
+        $('#alternate_auth_cas').hide();
+        $('#alternate_auth_openid').show();
+        $('#alternate_auth_database').show();
+        $.cookie('preferred_auth', 'cas');
     }
+
 }
 
 </script>

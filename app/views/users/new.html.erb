@@ -8,7 +8,8 @@
   <h3><%= @heading -%></h3>
 
   <table>
-	<%if Tracks::Config.auth_schemes.include?('cas')%>
+  <table>
+	<%if Tracks::Config.auth_schemes.include?('cas') && session[:cas_user]%>
         <tr>
       <td><label for="user_login">With your CAS username:</label></td>
       <td> "<%= session[:cas_user]%>"  </td>
@@ -19,7 +20,7 @@
       <td><%= password_field "user", "password_confirmation", :size => 20, :value => "fakebecauseweusecas"  %></td>
     </tr>
 	<%else%>
-        <tr>
+    <tr>
       <td><label for="user_login">Desired login:</label></td>
       <td> <%= text_field "user", "login", :size => 20 %></td>
     </tr>
@@ -30,6 +31,10 @@
     <tr>
       <td><label for="user_password_confirmation">Confirm password:</label></td>
       <td><%= password_field "user", "password_confirmation", :size => 20 %></td>
+    </tr>
+    <tr>
+      <td><label for="user_auth_type">Authentication Type:</label></td>
+      <td><%=  select("user", "auth_type", @auth_types, { :include_blank => false })%></td>
     </tr>
     <%end%>
     <tr>

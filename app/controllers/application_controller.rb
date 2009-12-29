@@ -29,19 +29,7 @@ class ApplicationController < ActionController::Base
   layout proc{ |controller| controller.mobile? ? "mobile" : "standard" }
   exempt_from_layout /\.js\.erb$/
 
-  if ( SITE_CONFIG['authentication_schemes'].include? 'cas')
-    # This will allow the user to view the index page without authentication
-    # but will process CAS authentication data if the user already
-    # has an SSO session open.
-    if (CASClient rescue nil)
-      # Only require sub-library if gem is installed and loaded
-      require 'casclient/frameworks/rails/filter'
-      before_filter CASClient::Frameworks::Rails::GatewayFilter, :only => :login
-
-      # This requires the user to be authenticated for viewing all other pages.
-      before_filter CASClient::Frameworks::Rails::Filter, :except => [:login , :calendar]
-    end
-  end
+  
   before_filter :set_session_expiration
   before_filter :set_time_zone
   before_filter :set_zindex_counter
@@ -238,6 +226,14 @@ class ApplicationController < ActionController::Base
     self.class.cas_enabled?
   end
 
+  def self.prefered_auth?
+    Tracks::Config.prefered_auth?
+  end
+
+  def prefered_auth?
+    self.class.prefered_auth?
+  end
+
   private
         
   def parse_date_per_user_prefs( s )
@@ -280,6 +276,8 @@ class ApplicationController < ActionController::Base
   
   def set_time_zone
     Time.zone = current_user.prefs.time_zone if logged_in?
+    locale = params[:locale] || 'en-US'
+    I18n.locale = locale
   end
 
   def set_zindex_counter

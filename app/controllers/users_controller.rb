@@ -27,6 +27,13 @@ class UsersController < ApplicationController
 
   # GET /users/new
   def new
+    @auth_types = []
+    unless session[:cas_user]
+      Tracks::Config.auth_schemes.each {|auth| @auth_types << [auth,auth]}
+    else
+      @auth_types << ['cas','cas']
+    end
+
     if User.no_users_yet?
       @page_title = "TRACKS::Sign up as the admin user"
       @heading = "Welcome to TRACKS. To get started, please create an admin account:"
@@ -68,7 +75,9 @@ class UsersController < ApplicationController
         user = User.new(params['user'])
 
         if Tracks::Config.auth_schemes.include?('cas')
-          user.auth_type = "cas" #since CAS will be doing all the auth we may as well set it for everyone when CAS in enabled
+          if user.auth_type.eql? "cas"
+             user.crypted_password = "cas"
+          end
         end
 
         unless user.valid?
@@ -79,9 +88,6 @@ class UsersController < ApplicationController
 
         first_user_signing_up = User.no_users_yet?
         user.is_admin = true if first_user_signing_up
-        if Tracks::Config.auth_schemes.include?('cas')
-          user.auth_type = "cas" #since CAS will be doing all the auth we may as well set it for everyone when CAS in enabled
-        end
         if user.save
           @user = User.authenticate(user.login, params['user']['password'])
           @user.create_preference
@@ -102,8 +108,8 @@ class UsersController < ApplicationController
           return
         end
         user = User.new(params[:request])
-        if Tracks::Config.auth_schemes.include?('cas')
-          user.auth_type = "cas" #since CAS will be doing all the auth we may as well set it for everyone when CAS in enabled
+        if Tracks::Config.auth_schemes.include?('cas')   && session[:cas_user]
+          user.auth_type = "cas" #if they area  cas user
         end
         user.password_confirmation = params[:request][:password]
         if user.save
