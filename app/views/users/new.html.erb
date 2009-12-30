@@ -1,23 +1,22 @@
 <div title="Account signup" id="signupform" class="form">
 <% form_tag :action=> "create" do %>
 
-  <%= error_messages_for 'user' %><br/>
+  <%#= error_messages_for 'user' %><br/>
 
   <%= render_flash %>
 	
   <h3><%= @heading -%></h3>
 
   <table>
-  <table>
 	<%if Tracks::Config.auth_schemes.include?('cas') && session[:cas_user]%>
         <tr>
       <td><label for="user_login">With your CAS username:</label></td>
       <td> "<%= session[:cas_user]%>"  </td>
-    </tr>
-    <tr style="display:none">
-      <td><%= session[:cas_user]%>" <%= text_field "user", "login", :size => 20, :value => session[:cas_user], :readonly => true %> </td>
-      <td><%= password_field "user", "password", :size => 20 , :value => "fakebecauseweusecas" %></td>
-      <td><%= password_field "user", "password_confirmation", :size => 20, :value => "fakebecauseweusecas"  %></td>
+      <td>
+        <%= hidden_field "user", "login",                   :value => session[:cas_user] %>
+        <%= hidden_field "user", "password",                :value => session[:cas_user] %>
+        <%= hidden_field "user", "password_confirmation",   :value => session[:cas_user] %>
+        <%= hidden_field"user", "auth_type",                :value => "cas" %></td>
     </tr>
 	<%else%>
     <tr>

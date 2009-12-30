@@ -9,8 +9,6 @@
   <%= render_flash %>
 
   <h3>Please log in to use Tracks:</h3>
-  <p>auth method <%=cookies[:preferred_auth]%></p></p>
-  <p>cas user<%=session[:cas_user]%></p></p>
 <% if show_database_form %>
   <div id="database_auth_form" style="display:<%=(@prefered_auth.eql?('database')) ? "block" : "none"%>">
       <% form_tag :action=> 'login' do %>
