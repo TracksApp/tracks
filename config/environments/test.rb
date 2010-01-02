@@ -50,9 +50,7 @@ config.gem "flexmock"
 config.gem "ZenTest", :lib => "zentest", :version => ">=4.0.0"
 config.gem "hpricot"
 config.gem "hoe"
-
-# config.gem for rspec is in environment.rb. Needed for rake to work which loads
-# the rspec.task file
+config.gem "rspec", :lib => false, :version => ">= 1.2.2"
 config.gem "rspec-rails", :lib => false, :version => ">=1.2.2"
 config.gem "webrat", :lib => false, :version => ">=0.4.3"
 config.gem "cucumber", :lib => false, :version => ">=0.3.0"

@@ -1,36 +1,14 @@
 # This file is copied to ~/spec when you run 'ruby script/generate rspec'
 # from the project root directory.
-ENV["RAILS_ENV"] = "test"
-require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
-require 'spec'
+ENV["RAILS_ENV"] ||= 'test'
+require File.expand_path(File.join(File.dirname(__FILE__),'..','config','environment'))
+require 'spec/autorun'
 require 'spec/rails'
 require 'skinny_spec'
 
-module LuckySneaks
-  module ModelSpecHelpers
-    module ExampleGroupLevelMethods
-      def it_should_validate_length_of(attribute, options={})
-        maximum = options[:maximum] || (options[:within] || []).last   || false
-        minimum = options[:minimum] || (options[:within] || []).first  || false
-        raise ArgumentError unless maximum || minimum
-
-        it "should not be valid if #{attribute} length is more than #{maximum}" do
-          instance.send "#{attribute}=", 'x'*(maximum+1)
-          instance.errors_on(attribute).should include(
-            options[:message_too_long] || I18n.t('activerecord.errors.messages.too_long', :count => maximum)
-          )
-        end if maximum
-
-        it "should not be valid if #{attribute} length is less than #{minimum}" do
-          instance.send "#{attribute}=", 'x'*(minimum-1)
-          instance.errors_on(attribute).should include(
-            options[:message_to_short] || I18n.t('activerecord.errors.messages.too_short', :count => minimum)
-          )
-        end if minimum
-      end
-    end
-  end
-end
+# Requires supporting files with custom matchers and macros, etc,
+# in ./support/ and its subdirectories.
+Dir[File.expand_path(File.join(File.dirname(__FILE__),'support','**','*.rb'))].each {|f| require f}
 
 Spec::Runner.configure do |config|
   # If you're not using ActiveRecord you should remove these
@@ -69,6 +47,6 @@ Spec::Runner.configure do |config|
   # config.mock_with :rr
   #
   # == Notes
-  # 
-  # For more information take a look at Spec::Example::Configuration and Spec::Runner
+  #
+  # For more information take a look at Spec::Runner::Configuration and Spec::Runner
 end
