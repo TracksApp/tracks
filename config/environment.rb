@@ -58,7 +58,7 @@ Rails::Initializer.run do |config|
   # allow other protocols in urls for sanitzer. Add to your liking, for example
   # config.action_view.sanitized_allowed_protocols = 'onenote', 'blah', 'proto'
   # to enable "link":onenote://... or "link":blah://... hyperlinks
-  config.action_view.sanitized_allowed_protocols = 'onenote'
+  config.action_view.sanitized_allowed_protocols = 'onenote', 'message'
 
   # See Rails::Configuration for more options
 end
