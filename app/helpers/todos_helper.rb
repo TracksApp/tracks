@@ -325,6 +325,4 @@ module TodosHelper
     return entries.map{|e| e.specification()}.join("\n") rescue ''
   end
 
-  AUTO_LINK_MESSAGE_RE = %r{message://<[^>]+>} unless const_defined?(:AUTO_LINK_MESSAGE_RE)
-
 end
