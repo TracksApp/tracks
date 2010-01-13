@@ -42,8 +42,6 @@ class ApplicationController < ActionController::Base
   extend ActionView::Helpers::SanitizeHelper::ClassMethods
   helper_method :format_date, :markdown
 
-    I18n.locale = Tracks::Config.locale
-
   # By default, sets the charset to UTF-8 if it isn't already set
   def set_charset
     headers["Content-Type"] ||= "text/html; charset=UTF-8" 
@@ -278,7 +276,8 @@ class ApplicationController < ActionController::Base
   
   def set_time_zone
     Time.zone = current_user.prefs.time_zone if logged_in?
-    I18n.locale = Tracks::Config.locale
+    locale = params[:locale] || 'en-US'
+    I18n.locale = locale
   end
 
   def set_zindex_counter

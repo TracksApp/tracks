@@ -23,10 +23,5 @@ module Tracks
         auth_schemes.first
       end
     end
-
-    def self.locale
-       SITE_CONFIG['locale'] || 'en-US'
-    end
-
   end
 end
