@@ -14,3 +14,4 @@ public/javascripts/cache
 public/stylesheets/cache
 tmp
 vendor/plugins/query_trace/
+rerun.txt
