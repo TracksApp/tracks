@@ -104,7 +104,7 @@ end
 
 if ( SITE_CONFIG['authentication_schemes'].include? 'cas')
   #requires rubycas-client gem to be installed
-  if (CASClient rescue nil)
+  if defined? CASClient
     require 'casclient/frameworks/rails/filter'
     CASClient::Frameworks::Rails::Filter.configure(
         :cas_base_url => SITE_CONFIG['cas_server'] ,

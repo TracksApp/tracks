@@ -10,7 +10,7 @@ class LoginController < ApplicationController
     # This will allow the user to view the index page without authentication
     # but will process CAS authentication data if the user already
     # has an SSO session open.
-    if (CASClient rescue nil)
+    if defined? CASClient
       # Only require sub-library if gem is installed and loaded
       require 'casclient/frameworks/rails/filter'
       before_filter CASClient::Frameworks::Rails::GatewayFilter, :only => :login_cas
