@@ -447,7 +447,7 @@ class TodosControllerTest < ActionController::TestCase
     assert !new_todo.show_from.nil?
 
     next_month = today + 1.month
-    assert_equal next_month.to_date.to_s(:db), new_todo.show_from.to_date.to_s(:db)
+    assert_equal next_month.utc.to_date.to_s(:db), new_todo.show_from.utc.to_date.to_s(:db)
   end
 
   def test_check_for_next_todo
@@ -549,5 +549,16 @@ class TodosControllerTest < ActionController::TestCase
     assert_select("div#notes_todo_#{todo.id}", 'A Mail.app message://&lt;ABCDEF-GHADB-123455-FOO-BAR@example.com&gt; link')
     assert_select("div#notes_todo_#{todo.id} a", 'message://&lt;ABCDEF-GHADB-123455-FOO-BAR@example.com&gt;')
     assert_select("div#notes_todo_#{todo.id} a[href=message://&lt;ABCDEF-GHADB-123455-FOO-BAR@example.com&gt;]", 'message://&lt;ABCDEF-GHADB-123455-FOO-BAR@example.com&gt;')
+  end
+
+  def test_format_note_link_onenote
+    login_as(:admin_user)
+    todo = users(:admin_user).todos.first
+    todo.notes = ' "link me to onenote":onenote:///E:\OneNote\dir\notes.one#PAGE&section-id={FD597D3A-3793-495F-8345-23D34A00DD3B}&page-id={1C95A1C7-6408-4804-B3B5-96C28426022B}&end'
+    todo.save!
+    get :index
+    assert_select("div#notes_todo_#{todo.id}", 'link me to onenote')
+    assert_select("div#notes_todo_#{todo.id} a", 'link me to onenote')
+    assert_select("div#notes_todo_#{todo.id} a[href=onenote:///E:\\OneNote\\dir\\notes.one#PAGE&amp;section-id={FD597D3A-3793-495F-8345-23D34A00DD3B}&amp;page-id={1C95A1C7-6408-4804-B3B5-96C28426022B}&amp;end]", 'link me to onenote')
   end
 end
