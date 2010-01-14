@@ -38,3 +38,13 @@ sms_user:
   first_name: SMS
   last_name: Tester
   auth_type: database
+
+ldap_user:
+  id: 5
+  login: john
+  crypted_password: test
+  token: <%= Digest::SHA1.hexdigest("internationalSun Feb 19 14:42:45 GMT 20060.408173979260027") %>
+  is_admin: false
+  first_name: International
+  last_name: Harvester
+  auth_type: CAS

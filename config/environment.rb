@@ -61,6 +61,10 @@ Rails::Initializer.run do |config|
   config.action_view.sanitized_allowed_protocols = 'onenote', 'message'
 
   # See Rails::Configuration for more options
+  if ( SITE_CONFIG['authentication_schemes'].include? 'cas')
+    #requires rubycas-client gem to be installed
+    config.gem "rubycas-client", :lib => 'casclient'
+  end
 end
 
 # Add new inflection rules using the following format
@@ -94,6 +98,17 @@ end
 if ( SITE_CONFIG['authentication_schemes'].include? 'open_id')
   #requires ruby-openid gem to be installed
   OpenID::Util.logger = RAILS_DEFAULT_LOGGER
+end
+
+if ( SITE_CONFIG['authentication_schemes'].include? 'cas')
+  #requires rubycas-client gem to be installed
+  if defined? CASClient
+    require 'casclient/frameworks/rails/filter'
+    CASClient::Frameworks::Rails::Filter.configure(
+        :cas_base_url => SITE_CONFIG['cas_server'] ,
+        :cas_server_logout => SITE_CONFIG['cas_server_logout']
+      )
+  end
 end
 
 tracks_version='1.8devel'

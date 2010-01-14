@@ -27,6 +27,13 @@ class UsersController < ApplicationController
 
   # GET /users/new
   def new
+    @auth_types = []
+    unless session[:cas_user]
+      Tracks::Config.auth_schemes.each {|auth| @auth_types << [auth,auth]}
+    else
+      @auth_types << ['cas','cas']
+    end
+
     if User.no_users_yet?
       @page_title = "TRACKS::Sign up as the admin user"
       @heading = "Welcome to TRACKS. To get started, please create an admin account:"
@@ -66,6 +73,13 @@ class UsersController < ApplicationController
         end
         
         user = User.new(params['user'])
+
+        if Tracks::Config.auth_schemes.include?('cas')
+          if user.auth_type.eql? "cas"
+             user.crypted_password = "cas"
+          end
+        end
+
         unless user.valid?
           session['new_user'] = user
           redirect_to :action => 'new'
@@ -94,6 +108,9 @@ class UsersController < ApplicationController
           return
         end
         user = User.new(params[:request])
+        if Tracks::Config.auth_schemes.include?('cas')   && session[:cas_user]
+          user.auth_type = "cas" #if they area  cas user
+        end
         user.password_confirmation = params[:request][:password]
         if user.save
           render :text => "User created.", :status => 200

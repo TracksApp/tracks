@@ -28,6 +28,7 @@ class ApplicationController < ActionController::Base
 
   layout proc{ |controller| controller.mobile? ? "mobile" : "standard" }
   exempt_from_layout /\.js\.erb$/
+
   
   before_filter :set_session_expiration
   before_filter :set_time_zone
@@ -217,6 +218,22 @@ class ApplicationController < ActionController::Base
     self.class.openid_enabled?
   end
 
+  def self.cas_enabled?
+    Tracks::Config.cas_enabled?
+  end
+
+  def cas_enabled?
+    self.class.cas_enabled?
+  end
+
+  def self.prefered_auth?
+    Tracks::Config.prefered_auth?
+  end
+
+  def prefered_auth?
+    self.class.prefered_auth?
+  end
+
   private
         
   def parse_date_per_user_prefs( s )
@@ -259,6 +276,8 @@ class ApplicationController < ActionController::Base
   
   def set_time_zone
     Time.zone = current_user.prefs.time_zone if logged_in?
+    locale = params[:locale] || 'en-US'
+    I18n.locale = locale
   end
 
   def set_zindex_counter
