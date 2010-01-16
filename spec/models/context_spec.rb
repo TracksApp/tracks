@@ -51,37 +51,37 @@ describe Context do
   end
 
   describe 'when finding by namepart' do
-    scenario :todos
+    fixtures :todos, :contexts
 
     it 'finds with exact match' do
-      Context.find_by_namepart('errand').should == contexts(:errand)
+      Context.find_by_namepart('agenda').should == contexts(:agenda)
     end
 
     it 'finds with partial match' do
-      Context.find_by_namepart('err').should == contexts(:errand)
+      Context.find_by_namepart('age').should == contexts(:agenda)
     end
 
     it 'deletes todos within context when context deleted' do
-      contexts(:call).should have(2).todos
-      call_todos = contexts(:call).todos
-      contexts(:call).destroy
+      contexts(:agenda).should have(3).todos
+      call_todos = contexts(:agenda).todos
+      contexts(:agenda).destroy
       Todo.find(:all).should_not include(call_todos)
     end
   end
 
   describe 'when counting todos' do
-    scenario :todos
+    fixtures :todos, :contexts, :users, :preferences
 
     it 'returns correct number of completed todos' do
-      contexts(:call).should_not have(:any).done_todos
+      contexts(:call).done_todos.should_not have(:any).items
       contexts(:call).todos.first.complete!
-      contexts(:call).should have(1).done_todos
+      Context.find(contexts(:call).id).done_todos.should have(1).items
     end
 
     it 'returns correct number of not done todos' do
-      contexts(:call).should have(2).not_done_todos
-      contexts(:call).todos.last.complete!
-      contexts(:call).should have(1).not_done_todos
+      contexts(:agenda).todos.not_completed.should have(2).items
+      contexts(:agenda).todos.last.complete!
+      contexts(:agenda).todos.not_completed.should have(1).items
     end
   end
 end

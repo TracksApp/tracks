@@ -3,6 +3,7 @@ require File.dirname(__FILE__) + '/test_helper'
 class SuiteRendererTest < Test::Unit::TestCase
   def setup
     @controller = SeleniumController.new
+    @controller.extend(SeleniumOnRails::PathsTestHelper)
     ActionController::Routing::Routes.draw
     @request    = ActionController::TestRequest.new
     @response   = ActionController::TestResponse.new

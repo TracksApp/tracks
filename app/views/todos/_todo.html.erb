@@ -22,6 +22,7 @@ parameters += "&_tag_name=#{@tag_name}" if @source_view == 'tag'
             <li><%= remote_defer_menu_item(1, todo) %></li>
             <li><%= remote_defer_menu_item(7, todo) %></li>
           <% end %>
+          <li><%= remote_promote_to_project_menu_item(todo) %></li>
         </ul>
       </li>
     </ul>

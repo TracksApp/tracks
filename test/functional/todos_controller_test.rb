@@ -74,7 +74,7 @@ class TodosControllerTest < ActionController::TestCase
   end
 
   def test_create_todo
-    assert_difference Todo, :count do
+    assert_difference 'Todo.count' do
       login_as(:admin_user)
       put :create, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{"notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>"foo bar"
     end
@@ -82,31 +82,11 @@ class TodosControllerTest < ActionController::TestCase
 
   def test_create_todo_via_xml
     login_as(:admin_user)
-    assert_difference Todo, :count do
+    assert_difference 'Todo.count' do
       put :create, :format => "xml", "request" => { "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{"notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>"foo bar" }
       assert_response 201
     end
   end
-
-  def test_create_todo_via_xml_show_from
-    login_as(:admin_user)
-
-    assert_difference Todo, :count do
-      xml = "<todo><description>Call Warren Buffet to find out how much he makes per day</description><project_id>#{projects(:timemachine).id}</project_id><context_id>#{contexts(:agenda).id}</context_id><show-from type=\"datetime\">#{1.week.from_now.xmlschema}</show-from></todo>"
-
-      # p parse_xml_body(xml)
-      post :create, parse_xml_body(xml).update(:format => "xml")
-      assert_response :created
-    end
-  end
-
-  def parse_xml_body(body)
-    env = { 'rack.input' => StringIO.new(body),
-      'HTTP_X_POST_DATA_FORMAT' => 'xml',
-      'CONTENT_LENGTH'          => body.size.to_s }
-    ActionController::RackRequest.new(env).request_parameters
-  end
-
 
   def test_fail_to_create_todo_via_xml
     login_as(:admin_user)
@@ -466,10 +446,8 @@ class TodosControllerTest < ActionController::TestCase
     # check that the new_todo is in the tickler to show next month
     assert !new_todo.show_from.nil?
 
-    # use Time.zone.local and not today+1.month because the latter messes up
-    # the timezone. 
-    next_month = Time.zone.local(today.year, today.month+1, today.day)
-    assert_equal next_month.to_s(:db), new_todo.show_from.to_s(:db)
+    next_month = today + 1.month
+    assert_equal next_month.utc.to_date.to_s(:db), new_todo.show_from.utc.to_date.to_s(:db)
   end
 
   def test_check_for_next_todo
@@ -532,4 +510,55 @@ class TodosControllerTest < ActionController::TestCase
     assert_select("a[href=#{url}]")
   end
 
+  def test_format_note_normal
+    login_as(:admin_user)
+    todo = users(:admin_user).todos.first
+    todo.notes = "A normal description."
+    todo.save!
+    get :index
+    assert_select("div#notes_todo_#{todo.id}", "A normal description.")
+  end
+
+  def test_format_note_markdown
+    login_as(:admin_user)
+    todo = users(:admin_user).todos.first
+    todo.notes = "A *bold description*."
+    todo.save!
+    get :index
+    assert_select("div#notes_todo_#{todo.id}", "A bold description.")
+    assert_select("div#notes_todo_#{todo.id} strong", "bold description")
+  end
+
+  def test_format_note_link
+    login_as(:admin_user)
+    todo = users(:admin_user).todos.first
+    todo.notes = "A link to http://github.com/."
+    todo.save!
+    get :index
+    assert_select("div#notes_todo_#{todo.id}", 'A link to http://github.com/.')
+    assert_select("div#notes_todo_#{todo.id} a[href=http://github.com/]", 'http://github.com/')
+  end
+
+  def test_format_note_link_message
+    login_as(:admin_user)
+    todo = users(:admin_user).todos.first
+    todo.notes = "A Mail.app message://<ABCDEF-GHADB-123455-FOO-BAR@example.com> link"
+    todo.save!
+    get :index
+    # puts css_select("div#notes_todo_#{todo.id}")
+    assert_select("div#notes_todo_#{todo.id}", 'A Mail.app message://&lt;ABCDEF-GHADB-123455-FOO-BAR@example.com&gt; link')
+    assert_select("div#notes_todo_#{todo.id} a", 'message://&lt;ABCDEF-GHADB-123455-FOO-BAR@example.com&gt;')
+    assert_select("div#notes_todo_#{todo.id} a[href=message://&lt;ABCDEF-GHADB-123455-FOO-BAR@example.com&gt;]", 'message://&lt;ABCDEF-GHADB-123455-FOO-BAR@example.com&gt;')
+  end
+
+  def test_format_note_link_onenote
+    login_as(:admin_user)
+    todo = users(:admin_user).todos.first
+    todo.notes = ' "link me to onenote":onenote:///E:\OneNote\dir\notes.one#PAGE&section-id={FD597D3A-3793-495F-8345-23D34A00DD3B}&page-id={1C95A1C7-6408-4804-B3B5-96C28426022B}&end'
+    todo.save!
+    get :index
+    assert_select("div#notes_todo_#{todo.id}", 'link me to onenote')
+    assert_select("div#notes_todo_#{todo.id} a", 'link me to onenote')
+    assert_select("div#notes_todo_#{todo.id} a[href=onenote:///E:\\OneNote\\dir\\notes.one#PAGE&amp;section-id={FD597D3A-3793-495F-8345-23D34A00DD3B}&amp;page-id={1C95A1C7-6408-4804-B3B5-96C28426022B}&amp;end]", 'link me to onenote')
+  end
 end

@@ -2,8 +2,8 @@
 <div id="<%= dom_id(note, 'container') %>">
   <h2><%= link_to("Note #{note.id}", note_path(note), :title => "Show note #{note.id}" ) %></h2>
   <div class="project_notes" id="<%= dom_id(note) %>">
-    <%= sanitize(markdown(auto_link(note.body))) %>
-       
+    <%= format_note(note.body) %>
+
     <div class="note_footer">
       <%= link_to_remote( 
         image_tag("blank.png", 

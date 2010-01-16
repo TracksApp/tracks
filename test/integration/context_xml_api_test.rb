@@ -13,12 +13,7 @@ class ContextXmlApiTest < ActionController::IntegrationTest
   def setup
     assert_test_environment_ok
   end
-  
-  def test_fails_with_401_if_not_authorized_user
-    authenticated_post_xml_to_context_create @@valid_postdata, 'nobody', 'nohow'
-    assert_401_unauthorized
-  end
-  
+
  def test_fails_with_invalid_xml_format
    # Fails too hard for test to catch 
    # authenticated_post_xml_to_context_create "<foo></bar>"
@@ -56,7 +51,7 @@ class ContextXmlApiTest < ActionController::IntegrationTest
   end
     
   def test_creates_new_context
-    assert_difference Context, :count do
+    assert_difference 'Context.count' do
       authenticated_post_xml_to_context_create
       assert_response 201
     end

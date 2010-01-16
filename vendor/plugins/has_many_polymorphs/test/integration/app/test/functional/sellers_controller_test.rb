@@ -4,7 +4,7 @@ require 'sellers_controller'
 # Re-raise errors caught by the controller.
 class SellersController; def rescue_action(e) raise e end; end
 
-class SellersControllerTest < Test::Unit::TestCase
+class SellersControllerTest < ActiveSupport::TestCase
   fixtures :sellers
 
   def setup

@@ -1,9 +1,10 @@
-require File.dirname(__FILE__) + '/test_helper'
+  require File.dirname(__FILE__) + '/test_helper'
 
 class SeleneseTest < Test::Unit::TestCase
   
   def setup
     @view = TestView.new
+    @view.extend(SeleniumOnRails::PathsTestHelper)
     @sel = SeleniumOnRails::Selenese.new(@view) 
   end
   
@@ -57,7 +58,6 @@ END
 </table>
 END
     input = <<END
- 
 Comment *1*
  
 Comment 2

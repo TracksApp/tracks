@@ -10,8 +10,6 @@ class TodosController < ApplicationController
   append_before_filter :get_todo_from_params, :only => [ :edit, :toggle_check, :toggle_star, :show, :update, :destroy, :remove_predecessor]
   protect_from_forgery :except => [:auto_complete_for_tag, :auto_complete_for_predecessor]
 
-  session :off, :only => :index, :if => Proc.new { |req| is_feed_request(req) }
-
   def index
     current_user.deferred_todos.find_and_activate_ready
     @projects = current_user.projects.find(:all, :include => [:default_context])
@@ -351,7 +349,7 @@ class TodosController < ApplicationController
             cookies[:mobile_url] = {:value => nil, :secure => SITE_CONFIG['secure_cookies']}
             redirect_to old_path
           else
-            redirect_to formatted_todos_path(:m)
+            redirect_to todos_path(:format => 'm')
           end
         else
           render :action => "edit", :format => :m
@@ -463,12 +461,12 @@ class TodosController < ApplicationController
   
   def filter_to_context
     context = current_user.contexts.find(params['context']['id'])
-    redirect_to formatted_context_todos_path(context, :m)
+    redirect_to context_todos_path(context, :format => 'm')
   end
   
   def filter_to_project
     project = current_user.projects.find(params['project']['id'])
-    redirect_to formatted_project_todos_path(project, :m)
+    redirect_to project_todos_path(project, :format => 'm')
   end
   
   # /todos/tag/[tag_name] shows all the actions tagged with tag_name
@@ -607,9 +605,9 @@ class TodosController < ApplicationController
       # Begin matching todos in current project
       @items = current_user.todos.find(:all, 
         :select => 'description, project_id, context_id, created_at',
-        :conditions => [ '(todos.state = ? OR todos.state = ?) AND ' +
+        :conditions => [ '(todos.state = ? OR todos.state = ? OR todos.state = ?) AND ' +
                          'NOT (id = ?) AND lower(description) LIKE ? AND project_id = ?', 
-                         'active', 'pending',
+                         'active', 'pending', 'deferred',
                          @todo.id, 
                          '%' + params[:predecessor_list].downcase + '%',
                          @todo.project_id ],
@@ -619,9 +617,9 @@ class TodosController < ApplicationController
       if @items.empty? # Match todos in other projects
         @items = current_user.todos.find(:all, 
         :select => 'description, project_id, context_id, created_at',
-          :conditions => [ '(todos.state = ? OR todos.state = ?) AND ' +
+          :conditions => [ '(todos.state = ? OR todos.state = ? OR todos.state = ?) AND ' +
                            'NOT (id = ?) AND lower(description) LIKE ?', 
-                           'active', 'pending',
+                           'active', 'pending', 'deferred',
                             params[:id], '%' + params[:q].downcase + '%' ],
           :order => 'description ASC',
           :limit => 10
@@ -631,14 +629,23 @@ class TodosController < ApplicationController
       # New todo - TODO: Filter on project
       @items = current_user.todos.find(:all, 
         :select => 'description, project_id, context_id, created_at',
-        :conditions => [ '(todos.state = ? OR todos.state = ?) AND lower(description) LIKE ?', 
-                         'active', 'pending',
+        :conditions => [ '(todos.state = ? OR todos.state = ? OR todos.state = ?) AND lower(description) LIKE ?', 
+                         'active', 'pending', 'deferred',
                          '%' + params[:q].downcase + '%' ],
         :order => 'description ASC',
         :limit => 10
       )
     end
     render :inline => "<%= auto_complete_result2(@items) %>"
+  end
+
+  def convert_to_project
+    @todo = Todo.find(params[:id])
+    @project = Project.new(:name => @todo.description, :description => @todo.notes,
+                           :default_context => @todo.context)
+    @todo.destroy
+    @project.save!
+    redirect_to project_url(@project)
   end
   
   private

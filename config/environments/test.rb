@@ -24,7 +24,7 @@ config.action_controller.allow_forgery_protection    = false
 # See http://groups.google.com/group/rubyonrails-talk/browse_thread/thread/5519ca7fd4dde3c1
 class ActionController::RackRequest
   DEFAULT_SESSION_OPTIONS = {
-    :database_manager => CGI::Session::MemoryStore, # store data in memory
+    #:database_manager => CGI::Session::MemoryStore, # store data in memory
     :prefix           => "ruby_sess.",    # prefix session file names
     :session_path     => "/",             # available to all paths in app
     :session_key      => "_session_id",
@@ -50,10 +50,7 @@ config.gem "flexmock"
 config.gem "ZenTest", :lib => "zentest", :version => ">=4.0.0"
 config.gem "hpricot"
 config.gem "hoe"
-
-# config.gem for rspec is in environment.rb. Needed for rake to work which loads
-# the rspec.task file
+config.gem "rspec", :lib => false, :version => ">= 1.2.2"
 config.gem "rspec-rails", :lib => false, :version => ">=1.2.2"
 config.gem "webrat", :lib => false, :version => ">=0.4.3"
-config.gem "cucumber", :lib => false, :version => ">=0.3.0"
 config.gem "thoughtbot-factory_girl", :lib => "factory_girl", :source => "http://gems.github.com"

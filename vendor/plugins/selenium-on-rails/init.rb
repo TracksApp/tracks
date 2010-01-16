@@ -1,5 +1,5 @@
 require 'selenium_on_rails_config'
-envs = SeleniumOnRailsConfig.new.get :environments
+envs = SeleniumOnRailsConfig.get :environments
 
 if envs.include? RAILS_ENV
   #initialize the plugin

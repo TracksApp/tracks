@@ -1,3 +1,3 @@
 <% note = mobile_notes_summary -%>
-<div class="note"><%= link_to( truncated_note(note), formatted_note_path(note, :m)) %></div>
+<div class="note"><%= link_to( truncated_note(note), note_path(note, :format => 'm')) %></div>
 <% note = nil -%>

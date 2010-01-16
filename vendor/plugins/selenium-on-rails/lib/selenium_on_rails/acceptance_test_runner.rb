@@ -5,8 +5,8 @@ require 'net/http'
 require 'tempfile'
 
 
-def c(var, default = nil) SeleniumOnRailsConfig.new.get var, default end
-def c_b(var, default = nil) SeleniumOnRailsConfig.new.get(var, default) { yield } end
+def c(var, default = nil) SeleniumOnRailsConfig.get var, default end
+def c_b(var, default = nil) SeleniumOnRailsConfig.get(var, default) { yield } end
 
 BROWSERS =              c :browsers, {}
 REUSE_EXISTING_SERVER = c :reuse_existing_server, true

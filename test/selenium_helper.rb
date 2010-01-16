@@ -44,6 +44,13 @@ module SeleniumOnRails::TestBuilderAccessors
        command command_name, expected_count
     end
   end
+
+  def drag_todo_to(id1, id2)
+    mouse_down_at "css=#line_todo_#{id1} img.grip", "4,4"
+    mouse_move_at "line_todo_#{id2}", '20,3'
+    mouse_over "line_todo_#{id2}"
+    mouse_up_at "line_todo_#{id2}", '20,3'
+  end
   
   def assert_context_count_incremented(&block)
     store_context_count 'initial_context_count'

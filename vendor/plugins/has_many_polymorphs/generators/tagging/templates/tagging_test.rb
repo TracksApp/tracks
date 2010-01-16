@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-class TaggingTest < Test::Unit::TestCase
+class TaggingTest < ActiveSupport::TestCase
   fixtures :tags, :taggings, <%= taggable_models[0..1].join(", ") -%>
 
   def setup
@@ -45,15 +45,15 @@ class TaggingTest < Test::Unit::TestCase
 <% if options[:self_referential] -%>  
   def test_self_referential_tag_with
     @tag1.tag_with [1, 2]
-    assert @tag1.tags.include?(@tag1)
-    assert !@tag2.tags.include?(@tag1)
+    assert @tag1.tags.any? {|obj| obj == @tag1}
+    assert !@tag2.tags.any? {|obj| obj == @tag1}
   end
 
 <% end -%>
   def test__add_tags
     @obj1._add_tags "porter longneck"
-    assert Tag.find_by_name("porter").taggables.include?(@obj1)
-    assert Tag.find_by_name("longneck").taggables.include?(@obj1)
+    assert Tag.find_by_name("porter").taggables.any? {|obj| obj == @obj1}
+    assert Tag.find_by_name("longneck").taggables.any? {|obj| obj == @obj1}
     assert_equal "longneck pale porter", @obj1.tag_list    
     
     @obj1._add_tags [2]

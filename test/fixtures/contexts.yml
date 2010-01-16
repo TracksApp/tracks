@@ -131,3 +131,21 @@ anothercontext:
   user_id: 4
   created_at: <%= today %>
   updated_at: <%= today %>
+
+inbox:
+    id: 15
+    name: Inbox
+    position: 1
+    hide: false
+    user_id: 5
+    created_at: <%= today %>
+    updated_at: <%= today %>
+
+anothercontext:
+    id: 16
+    name: anothercontext
+    position: 2
+    hide: false
+    user_id: 5
+    created_at: <%= today %>
+    updated_at: <%= today %>
