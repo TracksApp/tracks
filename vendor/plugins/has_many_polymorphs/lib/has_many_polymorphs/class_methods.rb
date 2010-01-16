@@ -398,7 +398,7 @@ Be aware, however, that <tt>NULL != 'Spot'</tt> returns <tt>false</tt> due to SQ
           }
           
         if reflection.options[:foreign_type_key]         
-          type_check = "#{reflection.options[:foreign_type_key]} = #{quote_value(self.base_class.name)}"
+          type_check = "#{reflection.options[:join_class_name].constantize.quoted_table_name}.#{reflection.options[:foreign_type_key]} = #{quote_value(self.base_class.name)}"
           conjunction = options[:conditions] ? " AND " : nil
           options[:conditions] = "#{options[:conditions]}#{conjunction}#{type_check}"
           options[:as] = reflection.options[:as]

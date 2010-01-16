@@ -244,3 +244,12 @@ call_bill_gates_every_day:
   completed_at: ~
   show_from: ~
   recurring_todo_id: 1
+
+email_broker:
+  id: 19
+  user_id: 1
+  context_id: 3
+  description: Ask about better stocks
+  notes: ~
+  state: pending
+  

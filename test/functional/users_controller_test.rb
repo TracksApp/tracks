@@ -123,7 +123,7 @@ class UsersControllerTest < ActionController::TestCase
   
   def test_create_adds_a_user
     login_as :admin_user
-    assert_difference(User, :count) do
+    assert_difference 'User.count' do
       post :create, :user => {:login => 'newbie', :password => 'newbiepass', :password_confirmation => 'newbiepass'}
     end
   end
@@ -132,7 +132,7 @@ class UsersControllerTest < ActionController::TestCase
   # 
   def test_create_by_non_admin
     login_as :other_user
-    assert_no_difference(User, :count) do
+    assert_no_difference 'User.count' do
       post :create, :user => {:login => 'newbie2', :password => 'newbiepass2', :password_confirmation => 'newbiepass2'}
     end
     assert_response :success
@@ -145,7 +145,7 @@ class UsersControllerTest < ActionController::TestCase
   
   def test_create_with_invalid_password_does_not_add_a_new_user
     login_as :admin_user
-    assert_no_difference(User, :count) do
+    assert_no_difference 'User.count' do
       post :create, :user => {:login => 'newbie', :password => '', :password_confirmation => ''}
     end
   end
@@ -170,7 +170,7 @@ class UsersControllerTest < ActionController::TestCase
   
   def test_create_with_duplicate_login_does_not_add_a_new_user
     login_as :admin_user
-    assert_no_difference(User, :count) do
+    assert_no_difference 'User.count' do
       post :create, :user => {:login => 'jane', :password => 'newbiepass', :password_confirmation => 'newbiepass'}
     end
   end

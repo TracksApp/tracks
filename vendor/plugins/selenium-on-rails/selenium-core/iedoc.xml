@@ -18,14 +18,14 @@ We support the following strategies for locating elements:
 
 <ul>
 <li><strong>identifier</strong>=<em>id</em>: 
-Select the element with the specified &#64;id attribute. If no match is
-found, select the first element whose &#64;name attribute is <em>id</em>.
+Select the element with the specified &#064;id attribute. If no match is
+found, select the first element whose &#064;name attribute is <em>id</em>.
 (This is normally the default; see below.)</li>
 <li><strong>id</strong>=<em>id</em>:
-Select the element with the specified &#64;id attribute.</li>
+Select the element with the specified &#064;id attribute.</li>
 
 <li><strong>name</strong>=<em>name</em>:
-Select the first element with the specified &#64;name attribute.
+Select the first element with the specified &#064;name attribute.
 <ul class="first last simple">
 <li>username</li>
 <li>name=username</li>
@@ -52,12 +52,12 @@ Model using JavaScript.  Note that you must not return a value in this string; s
 <li><strong>xpath</strong>=<em>xpathExpression</em>: 
 Locate an element using an XPath expression.
 <ul class="first last simple">
-<li>xpath=//img[&#64;alt='The image alt text']</li>
-<li>xpath=//table[&#64;id='table1']//tr[4]/td[2]</li>
-<li>xpath=//a[contains(&#64;href,'#id1')]</li>
-<li>xpath=//a[contains(&#64;href,'#id1')]/&#64;class</li>
-<li>xpath=(//table[&#64;class='stylee'])//th[text()='theHeaderText']/../td</li>
-<li>xpath=//input[&#64;name='name2' and &#64;value='yes']</li>
+<li>xpath=//img[&#064;alt='The image alt text']</li>
+<li>xpath=//table[&#064;id='table1']//tr[4]/td[2]</li>
+<li>xpath=//a[contains(&#064;href,'#id1')]</li>
+<li>xpath=//a[contains(&#064;href,'#id1')]/&#064;class</li>
+<li>xpath=(//table[&#064;class='stylee'])//th[text()='theHeaderText']/../td</li>
+<li>xpath=//input[&#064;name='name2' and &#064;value='yes']</li>
 <li>xpath=//*[text()="right"]</li>
 
 </ul>
@@ -79,6 +79,16 @@ Select the element using css selectors. Please refer to <a href="http://www.w3.o
 </ul>
 <p>Currently the css selector locator supports all css1, css2 and css3 selectors except namespace in css3, some pseudo classes(:nth-of-type, :nth-last-of-type, :first-of-type, :last-of-type, :only-of-type, :visited, :hover, :active, :focus, :indeterminate) and pseudo elements(::first-line, ::first-letter, ::selection, ::before, ::after). </p>
 </li>
+
+<li><strong>ui</strong>=<em>uiSpecifierString</em>:
+Locate an element by resolving the UI specifier string to another locator, and evaluating it. See the <a href="http://svn.openqa.org/fisheye/browse/~raw,r=trunk/selenium/trunk/src/main/resources/core/scripts/ui-doc.html">Selenium UI-Element Reference</a> for more details.
+<ul class="first last simple">
+<li>ui=loginPages::loginButton()</li>
+<li>ui=settingsPages::toggle(label=Hide Email)</li>
+<li>ui=forumPages::postBody(index=2)//a[2]</li>
+</ul>
+</li>
+
 </ul>
 
 <p>
@@ -123,6 +133,8 @@ string.</li>
 <li><strong>regexp:</strong><em>regexp</em>:
 Match a string using a regular-expression. The full power of JavaScript
 regular-expressions is available.</li>
+<li><strong>regexpi:</strong><em>regexpi</em>:
+Match a string using a case-insensitive regular-expression.</li>
 <li><strong>exact:</strong><em>string</em>:
 
 Match a string exactly, verbatim, without any of that fancy wildcard
@@ -130,6 +142,14 @@ stuff.</li>
 </ul>
 <p>
 If no pattern prefix is specified, Selenium assumes that it's a "glob"
+pattern.
+</p>
+<p>
+For commands that return multiple values (such as verifySelectOptions),
+the string being matched is a comma-separated list of the return values,
+where both commas and backslashes in the values are backslash-escaped.
+When providing a pattern, the optional matching syntax (i.e. glob,
+regexp, etc.) is specified once, as usual, at the beginning of the
 pattern.
 </p></top>
 
@@ -150,6 +170,14 @@ waitForPageToLoad.</comment>
 <comment>Double clicks on a link, button, checkbox or radio button. If the double click action
 causes a new page to load (like a link usually does), call
 waitForPageToLoad.</comment>
+
+</function>
+
+<function name="contextMenu">
+
+<param name="locator">an element locator</param>
+
+<comment>Simulates opening the context menu for the specified element (as might happen if the user "right-clicked" on the element).</comment>
 
 </function>
 
@@ -177,6 +205,16 @@ waitForPageToLoad.</comment>
 
 </function>
 
+<function name="contextMenuAt">
+
+<param name="locator">an element locator</param>
+
+<param name="coordString">specifies the x,y position (i.e. - 10,20) of the mouse      event relative to the element returned by the locator.</param>
+
+<comment>Simulates opening the context menu for the specified element (as might happen if the user "right-clicked" on the element).</comment>
+
+</function>
+
 <function name="fireEvent">
 
 <param name="locator">an <a href="#locators">element locator</a></param>
@@ -185,6 +223,14 @@ waitForPageToLoad.</comment>
 
 <comment>Explicitly simulate an event, to trigger the corresponding &quot;on<em>event</em>&quot;
 handler.</comment>
+
+</function>
+
+<function name="focus">
+
+<param name="locator">an <a href="#locators">element locator</a></param>
+
+<comment>Move the focus to the specified element; for example, if the element is an input field, move the cursor to that field.</comment>
 
 </function>
 
@@ -286,7 +332,16 @@ handler.</comment>
 
 <param name="locator">an <a href="#locators">element locator</a></param>
 
-<comment>Simulates a user pressing the mouse button (without releasing it yet) on
+<comment>Simulates a user pressing the left mouse button (without releasing it yet) on
+the specified element.</comment>
+
+</function>
+
+<function name="mouseDownRight">
+
+<param name="locator">an <a href="#locators">element locator</a></param>
+
+<comment>Simulates a user pressing the right mouse button (without releasing it yet) on
 the specified element.</comment>
 
 </function>
@@ -297,8 +352,19 @@ the specified element.</comment>
 
 <param name="coordString">specifies the x,y position (i.e. - 10,20) of the mouse      event relative to the element returned by the locator.</param>
 
-<comment>Simulates a user pressing the mouse button (without releasing it yet) on
-the specified element.</comment>
+<comment>Simulates a user pressing the left mouse button (without releasing it yet) at
+the specified location.</comment>
+
+</function>
+
+<function name="mouseDownRightAt">
+
+<param name="locator">an <a href="#locators">element locator</a></param>
+
+<param name="coordString">specifies the x,y position (i.e. - 10,20) of the mouse      event relative to the element returned by the locator.</param>
+
+<comment>Simulates a user pressing the right mouse button (without releasing it yet) at
+the specified location.</comment>
 
 </function>
 
@@ -306,8 +372,17 @@ the specified element.</comment>
 
 <param name="locator">an <a href="#locators">element locator</a></param>
 
-<comment>Simulates a user pressing the mouse button (without releasing it yet) on
-the specified element.</comment>
+<comment>Simulates the event that occurs when the user releases the mouse button (i.e., stops
+holding the button down) on the specified element.</comment>
+
+</function>
+
+<function name="mouseUpRight">
+
+<param name="locator">an <a href="#locators">element locator</a></param>
+
+<comment>Simulates the event that occurs when the user releases the right mouse button (i.e., stops
+holding the button down) on the specified element.</comment>
 
 </function>
 
@@ -317,8 +392,19 @@ the specified element.</comment>
 
 <param name="coordString">specifies the x,y position (i.e. - 10,20) of the mouse      event relative to the element returned by the locator.</param>
 
-<comment>Simulates a user pressing the mouse button (without releasing it yet) on
-the specified element.</comment>
+<comment>Simulates the event that occurs when the user releases the mouse button (i.e., stops
+holding the button down) at the specified location.</comment>
+
+</function>
+
+<function name="mouseUpRightAt">
+
+<param name="locator">an <a href="#locators">element locator</a></param>
+
+<param name="coordString">specifies the x,y position (i.e. - 10,20) of the mouse      event relative to the element returned by the locator.</param>
+
+<comment>Simulates the event that occurs when the user releases the right mouse button (i.e., stops
+holding the button down) at the specified location.</comment>
 
 </function>
 
@@ -385,6 +471,8 @@ the delay is 0 milliseconds.</comment>
 </function>
 
 <function name="getSpeed">
+
+<return type="string">the execution speed in milliseconds.</return>
 
 <comment>Get execution speed (i.e., get the millisecond length of the delay following each selenium operation).  By default, there is no such delay, i.e.,
 the delay is 0 milliseconds.
@@ -538,21 +626,43 @@ an empty (blank) url, like this: openWindow("", "myFunnyWindow").</p></comment>
 
 <param name="windowID">the JavaScript window ID of the window to select</param>
 
-<comment>Selects a popup window; once a popup window has been selected, all
+<comment>Selects a popup window using a window locator; once a popup window has been selected, all
 commands go to that window. To select the main window again, use null
 as the target.
 
-<p>Selenium has several strategies for finding the window object referred to by the "windowID" parameter.</p>
+<p>
 
-<p>1.) if windowID is null, then it is assumed the user is referring to the original window instantiated by the browser).</p>
+Window locators provide different ways of specifying the window object:
+by title, by internal JavaScript "name," or by JavaScript variable.
+</p>
+<ul>
+<li><strong>title</strong>=<em>My Special Window</em>:
+Finds the window using the text that appears in the title bar.  Be careful;
+two windows can share the same title.  If that happens, this locator will
+just pick one.
+</li>
+<li><strong>name</strong>=<em>myWindow</em>:
+Finds the window using its internal JavaScript "name" property.  This is the second 
+parameter "windowName" passed to the JavaScript method window.open(url, windowName, windowFeatures, replaceFlag)
+(which Selenium intercepts).
+</li>
+<li><strong>var</strong>=<em>variableName</em>:
+Some pop-up windows are unnamed (anonymous), but are associated with a JavaScript variable name in the current
+application window, e.g. "window.foo = window.open(url);".  In those cases, you can open the window using
+"var=foo".
+</li>
+</ul>
+<p>
+If no window locator prefix is provided, we'll try to guess what you mean like this:</p>
+<p>1.) if windowID is null, (or the string "null") then it is assumed the user is referring to the original window instantiated by the browser).</p>
 <p>2.) if the value of the "windowID" parameter is a JavaScript variable name in the current application window, then it is assumed
 that this variable contains the return value from a call to the JavaScript window.open() method.</p>
-<p>3.) Otherwise, selenium looks in a hash it maintains that maps string names to window objects.  Each of these string 
-names matches the second parameter "windowName" past to the JavaScript method  window.open(url, windowName, windowFeatures, replaceFlag)
-(which selenium intercepts).</p>
+<p>3.) Otherwise, selenium looks in a hash it maintains that maps string names to window "names".</p>
+<p>4.) If <em>that</em> fails, we'll try looping over all of the known windows to try to find the appropriate "title".
+Since "title" is not necessarily unique, this may have unexpected behavior.</p>
 
-<p>If you're having trouble figuring out what is the name of a window that you want to manipulate, look at the selenium log messages
-which identify the names of windows created via window.open (and therefore intercepted by selenium).  You will see messages
+<p>If you're having trouble figuring out the name of a window that you want to manipulate, look at the Selenium log messages
+which identify the names of windows created via window.open (and therefore intercepted by Selenium).  You will see messages
 like the following for each window as it is opened:</p>
 
 <p><code>debug: window.open call intercepted; window ID (which you can use with selectWindow()) is "myNewWindow"</code></p>
@@ -570,26 +680,11 @@ an empty (blank) url, like this: openWindow("", "myFunnyWindow").</p></comment>
 <comment>Selects a frame within the current window.  (You may invoke this command
 multiple times to select nested frames.)  To select the parent frame, use
 "relative=parent" as a locator; to select the top frame, use "relative=top".
+You can also select a frame by its 0-based index number; select the first frame with
+"index=0", or the third frame with "index=2".
 
 <p>You may also use a DOM expression to identify the frame you want directly,
 like this: <code>dom=frames["main"].frames["subframe"]</code></p></comment>
-
-</function>
-
-<function name="getLogMessages">
-
-<return type="string">all log messages seen since the last call to this API</return>
-
-<comment>Return the contents of the log.
-
-<p>This is a placeholder intended to make the code generator make this API
-available to clients.  The selenium server will intercept this call, however,
-and return its recordkeeping of log messages since the last call to this API.
-Thus this code in JavaScript will never be called.</p>
-
-<p>The reason I opted for a servercentric solution is to be able to support
-multiple frames served from different domains, which would break a
-centralized JavaScript logging mechanism under some conditions.</p></comment>
 
 </function>
 
@@ -631,7 +726,7 @@ The selected window will return true, while all others will return false.</p></c
 
 <function name="waitForPopUp">
 
-<param name="windowID">the JavaScript window ID of the window that will appear</param>
+<param name="windowID">the JavaScript window "name" of the window that will appear (not the text of the title bar)</param>
 
 <param name="timeout">a timeout in milliseconds, after which the action will return with an error</param>
 
@@ -641,10 +736,40 @@ The selected window will return true, while all others will return false.</p></c
 
 <function name="chooseCancelOnNextConfirmation">
 
-<comment>By default, Selenium's overridden window.confirm() function will
-return true, as if the user had manually clicked OK.  After running
+<comment><p>
+By default, Selenium's overridden window.confirm() function will
+return true, as if the user had manually clicked OK; after running
 this command, the next call to confirm() will return false, as if
-the user had clicked Cancel.</comment>
+the user had clicked Cancel.  Selenium will then resume using the
+default behavior for future confirmations, automatically returning 
+true (OK) unless/until you explicitly call this command for each
+confirmation.
+</p>
+<p>
+Take note - every time a confirmation comes up, you must
+consume it with a corresponding getConfirmation, or else
+the next selenium operation will fail.
+</p></comment>
+
+</function>
+
+<function name="chooseOkOnNextConfirmation">
+
+<comment><p>
+Undo the effect of calling chooseCancelOnNextConfirmation.  Note
+that Selenium's overridden window.confirm() function will normally automatically
+return true, as if the user had manually clicked OK, so you shouldn't
+need to use this command unless for some reason you need to change
+your mind prior to the next confirmation.  After any confirmation, Selenium will resume using the
+default behavior for future confirmations, automatically returning 
+true (OK) unless/until you explicitly call chooseCancelOnNextConfirmation for each
+confirmation.
+</p>
+<p>
+Take note - every time a confirmation comes up, you must
+consume it with a corresponding getConfirmation, or else
+the next selenium operation will fail.
+</p></comment>
 
 </function>
 
@@ -719,13 +844,13 @@ This function never throws an exception
 <comment>Retrieves the message of a JavaScript alert generated during the previous action, or fail if there were no alerts.
 
 <p>Getting an alert has the same effect as manually clicking OK. If an
-alert is generated but you do not get/verify it, the next Selenium action
+alert is generated but you do not consume it with getAlert, the next Selenium action
 will fail.</p>
 
-<p>NOTE: under Selenium, JavaScript alerts will NOT pop up a visible alert
+<p>Under Selenium, JavaScript alerts will NOT pop up a visible alert
 dialog.</p>
 
-<p>NOTE: Selenium does NOT support JavaScript alerts that are generated in a
+<p>Selenium does NOT support JavaScript alerts that are generated in a
 page's onload() event handler. In this case a visible dialog WILL be
 generated and Selenium will hang until someone manually clicks OK.</p></comment>
 
@@ -741,8 +866,11 @@ the previous action.
 <p>
 By default, the confirm function will return true, having the same effect
 as manually clicking OK. This can be changed by prior execution of the
-chooseCancelOnNextConfirmation command. If an confirmation is generated
-but you do not get/verify it, the next Selenium action will fail.
+chooseCancelOnNextConfirmation command. 
+</p>
+<p>
+If an confirmation is generated but you do not consume it with getConfirmation,
+the next Selenium action will fail.
 </p>
 
 <p>
@@ -846,13 +974,12 @@ text shown to the user.</comment>
 have multiple lines, but only the result of the last line will be returned.
 
 <p>Note that, by default, the snippet will run in the context of the "selenium"
-object itself, so <code>this</code> will refer to the Selenium object, and <code>window</code> will
-refer to the top-level runner test window, not the window of your application.</p>
+object itself, so <code>this</code> will refer to the Selenium object.  Use <code>window</code> to
+refer to the window of your application, e.g. <code>window.document.getElementById('foo')</code></p>
 
-<p>If you need a reference to the window of your application, you can refer
-to <code>this.browserbot.getCurrentWindow()</code> and if you need to use
+<p>If you need to use
 a locator to refer to a single element in your application page, you can
-use <code>this.browserbot.findElement("foo")</code> where "foo" is your locator.</p></comment>
+use <code>this.browserbot.findElement("id=foo")</code> where "id=foo" is your locator.</p></comment>
 
 </function>
 
@@ -981,9 +1108,11 @@ tableLocator.row.column, where row and column start at 0.</comment>
 
 <return type="string">the value of the specified attribute</return>
 
-<param name="attributeLocator">an element locator followed by an</param>
+<param name="attributeLocator">an element locator followed by an &#064; sign and then the name of the attribute, e.g. "foo&#064;bar"</param>
 
-<comment>Gets the value of an element attribute.</comment>
+<comment>Gets the value of an element attribute. The value of the attribute may
+differ across browsers (this is the case for the "style" attribute, for
+example).</comment>
 
 </function>
 
@@ -1126,17 +1255,13 @@ just send one "mousemove" at the start location and then one final one at the en
 
 <function name="windowFocus">
 
-<param name="windowName">name of the window to be given focus</param>
-
-<comment>Gives focus to a window</comment>
+<comment>Gives focus to the currently selected window</comment>
 
 </function>
 
 <function name="windowMaximize">
 
-<param name="windowName">name of the window to be enlarged</param>
-
-<comment>Resize window to take up the entire screen</comment>
+<comment>Resize currently selected window to take up the entire screen</comment>
 
 </function>
 
@@ -1197,13 +1322,13 @@ will be ignored.</comment>
 
 <function name="isOrdered">
 
-<return type="boolean">true if two elements are ordered and have same parent, false otherwise</return>
+<return type="boolean">true if element1 is the previous sibling of element2, false otherwise</return>
 
 <param name="locator1">an <a href="#locators">element locator</a> pointing to the first element</param>
 
 <param name="locator2">an <a href="#locators">element locator</a> pointing to the second element</param>
 
-<comment>Check if these two elements have same parent and are ordered. Two same elements will
+<comment>Check if these two elements have same parent and are ordered siblings in the DOM. Two same elements will
 not be considered ordered.</comment>
 
 </function>
@@ -1262,23 +1387,6 @@ This method will fail if the specified element isn't an input element or textare
 
 </function>
 
-<function name="setContext">
-
-<param name="context">the message to be sent to the browser</param>
-
-<param name="logLevelThreshold">one of "debug", "info", "warn", "error", sets the threshold for browser-side logging</param>
-
-<comment>Writes a message to the status bar and adds a note to the browser-side
-log.
-
-<p>If logLevelThreshold is specified, set the threshold for logging
-to that level (debug, info, warn, error).</p>
-
-<p>(Note that the browser-side logs will <i>not</i> be sent back to the
-server, and are invisible to the Client Driver.)</p></comment>
-
-</function>
-
 <function name="getExpression">
 
 <return type="string">the value passed in</return>
@@ -1289,6 +1397,58 @@ server, and are invisible to the Client Driver.)</p></comment>
 
 <p>This is useful because of JavaScript preprocessing.
 It is used to generate commands like assertExpression and waitForExpression.</p></comment>
+
+</function>
+
+<function name="getXpathCount">
+
+<return type="number">the number of nodes that match the specified xpath</return>
+
+<param name="xpath">the xpath expression to evaluate. do NOT wrap this expression in a 'count()' function; we will do that for you.</param>
+
+<comment>Returns the number of nodes that match the specified xpath, eg. "//table" would give
+the number of tables.</comment>
+
+</function>
+
+<function name="assignId">
+
+<param name="locator">an <a href="#locators">element locator</a> pointing to an element</param>
+
+<param name="identifier">a string to be used as the ID of the specified element</param>
+
+<comment>Temporarily sets the "id" attribute of the specified element, so you can locate it in the future
+using its ID rather than a slow/complicated XPath.  This ID will disappear once the page is
+reloaded.</comment>
+
+</function>
+
+<function name="allowNativeXpath">
+
+<param name="allow">boolean, true means we'll prefer to use native XPath; false means we'll only use JS XPath</param>
+
+<comment>Specifies whether Selenium should use the native in-browser implementation
+of XPath (if any native version is available); if you pass "false" to
+this function, we will always use our pure-JavaScript xpath library.
+Using the pure-JS xpath library can improve the consistency of xpath
+element locators between different browser vendors, but the pure-JS
+version is much slower than the native implementations.</comment>
+
+</function>
+
+<function name="ignoreAttributesWithoutValue">
+
+<param name="ignore">boolean, true means we'll ignore attributes without value                        at the expense of xpath "correctness"; false means                        we'll sacrifice speed for correctness.</param>
+
+<comment>Specifies whether Selenium will ignore xpath attributes that have no
+value, i.e. are the empty string, when using the non-native xpath
+evaluation engine. You'd want to do this for performance reasons in IE.
+However, this could break certain xpaths, for example an xpath that looks
+for an attribute whose value is NOT the empty string.
+
+The hope is that such xpaths are relatively rare, but the user should
+have the option of using them. Note that this only influences xpath
+evaluation when using the ajaxslt engine (i.e. not "javascript-xpath").</comment>
 
 </function>
 
@@ -1336,6 +1496,21 @@ wait immediately after a Selenium command that caused a page-load.</p></comment>
 
 </function>
 
+<function name="waitForFrameToLoad">
+
+<param name="frameAddress">FrameAddress from the server side</param>
+
+<param name="timeout">a timeout in milliseconds, after which this command will return with an error</param>
+
+<comment>Waits for a new frame to load.
+
+<p>Selenium constantly keeps track of new pages and frames loading, 
+and sets a "newPageLoaded" flag when it first notices a page load.</p>
+
+See waitForPageToLoad for more information.</comment>
+
+</function>
+
 <function name="getCookie">
 
 <return type="string">all cookies of the current page under test</return>
@@ -1344,11 +1519,31 @@ wait immediately after a Selenium command that caused a page-load.</p></comment>
 
 </function>
 
+<function name="getCookieByName">
+
+<return type="string">the value of the cookie</return>
+
+<param name="name">the name of the cookie</param>
+
+<comment>Returns the value of the cookie with the specified name, or throws an error if the cookie is not present.</comment>
+
+</function>
+
+<function name="isCookiePresent">
+
+<return type="boolean">true if a cookie with the specified name is present, or false otherwise.</return>
+
+<param name="name">the name of the cookie</param>
+
+<comment>Returns true if a cookie with the specified name is present, or false otherwise.</comment>
+
+</function>
+
 <function name="createCookie">
 
 <param name="nameValuePair">name and value of the cookie in a format "name=value"</param>
 
-<param name="optionsString">options for the cookie. Currently supported options include 'path' and 'max_age'.      the optionsString's format is "path=/path/, max_age=60". The order of options are irrelevant, the unit      of the value of 'max_age' is second.</param>
+<param name="optionsString">options for the cookie. Currently supported options include 'path', 'max_age' and 'domain'.      the optionsString's format is "path=/path/, max_age=60, domain=.foo.com". The order of options are irrelevant, the unit      of the value of 'max_age' is second.  Note that specifying a domain that isn't a subset of the current domain will      usually fail.</param>
 
 <comment>Create a new cookie whose path and domain are same with those of current page
 under test, unless you specified a path for this cookie explicitly.</comment>
@@ -1359,9 +1554,246 @@ under test, unless you specified a path for this cookie explicitly.</comment>
 
 <param name="name">the name of the cookie to be deleted</param>
 
-<param name="path">the path property of the cookie to be deleted</param>
+<param name="optionsString">options for the cookie. Currently supported options include 'path', 'domain'      and 'recurse.' The optionsString's format is "path=/path/, domain=.foo.com, recurse=true".      The order of options are irrelevant. Note that specifying a domain that isn't a subset of      the current domain will usually fail.</param>
 
-<comment>Delete a named cookie with specified path.</comment>
+<comment>Delete a named cookie with specified path and domain.  Be careful; to delete a cookie, you
+need to delete it using the exact same path and domain that were used to create the cookie.
+If the path is wrong, or the domain is wrong, the cookie simply won't be deleted.  Also
+note that specifying a domain that isn't a subset of the current domain will usually fail.
+
+Since there's no way to discover at runtime the original path and domain of a given cookie,
+we've added an option called 'recurse' to try all sub-domains of the current domain with
+all paths that are a subset of the current path.  Beware; this option can be slow.  In
+big-O notation, it operates in O(n*m) time, where n is the number of dots in the domain
+name and m is the number of slashes in the path.</comment>
+
+</function>
+
+<function name="deleteAllVisibleCookies">
+
+<comment>Calls deleteCookie with recurse=true on all cookies visible to the current page.
+As noted on the documentation for deleteCookie, recurse=true can be much slower
+than simply deleting the cookies using a known domain/path.</comment>
+
+</function>
+
+<function name="setBrowserLogLevel">
+
+<param name="logLevel">one of the following: "debug", "info", "warn", "error" or "off"</param>
+
+<comment>Sets the threshold for browser-side logging messages; log messages beneath this threshold will be discarded.
+Valid logLevel strings are: "debug", "info", "warn", "error" or "off".
+To see the browser logs, you need to
+either show the log window in GUI mode, or enable browser-side logging in Selenium RC.</comment>
+
+</function>
+
+<function name="runScript">
+
+<param name="script">the JavaScript snippet to run</param>
+
+<comment>Creates a new "script" tag in the body of the current test window, and 
+adds the specified text into the body of the command.  Scripts run in
+this way can often be debugged more easily than scripts executed using
+Selenium's "getEval" command.  Beware that JS exceptions thrown in these script
+tags aren't managed by Selenium, so you should probably wrap your script
+in try/catch blocks if there is any chance that the script will throw
+an exception.</comment>
+
+</function>
+
+<function name="addLocationStrategy">
+
+<param name="strategyName">the name of the strategy to define; this should use only   letters [a-zA-Z] with no spaces or other punctuation.</param>
+
+<param name="functionDefinition">a string defining the body of a function in JavaScript.   For example: <code>return inDocument.getElementById(locator);</code></param>
+
+<comment>Defines a new function for Selenium to locate elements on the page.
+For example,
+if you define the strategy "foo", and someone runs click("foo=blah"), we'll
+run your function, passing you the string "blah", and click on the element 
+that your function
+returns, or throw an "Element not found" error if your function returns null.
+
+We'll pass three arguments to your function:
+<ul>
+<li>locator: the string the user passed in</li>
+<li>inWindow: the currently selected window</li>
+<li>inDocument: the currently selected document</li>
+</ul>
+The function must return null if the element can't be found.</comment>
+
+</function>
+
+<function name="captureEntirePageScreenshot">
+
+<param name="filename">the path to the file to persist the screenshot as. No                  filename extension will be appended by default.                  Directories will not be created if they do not exist,                    and an exception will be thrown, possibly by native                  code.</param>
+
+<param name="kwargs">a kwargs string that modifies the way the screenshot                  is captured. Example: "background=#CCFFDD" .                  Currently valid options:                  <dl>                   <dt>background</dt>                     <dd>the background CSS for the HTML document. This                     may be useful to set for capturing screenshots of                     less-than-ideal layouts, for example where absolute                     positioning causes the calculation of the canvas                     dimension to fail and a black background is exposed                     (possibly obscuring black text).</dd>                  </dl></param>
+
+<comment>Saves the entire contents of the current window canvas to a PNG file.
+Contrast this with the captureScreenshot command, which captures the
+contents of the OS viewport (i.e. whatever is currently being displayed
+on the monitor), and is implemented in the RC only. Currently this only
+works in Firefox when running in chrome mode, and in IE non-HTA using
+the EXPERIMENTAL "Snapsie" utility. The Firefox implementation is mostly
+borrowed from the Screengrab! Firefox extension. Please see
+http://www.screengrab.org and http://snapsie.sourceforge.net/ for
+details.</comment>
+
+</function>
+
+<function name="rollup">
+
+<param name="rollupName">the name of the rollup command</param>
+
+<param name="kwargs">keyword arguments string that influences how the                    rollup expands into commands</param>
+
+<comment>Executes a command rollup, which is a series of commands with a unique
+name, and optionally arguments that control the generation of the set of
+commands. If any one of the rolled-up commands fails, the rollup is
+considered to have failed. Rollups may also contain nested rollups.</comment>
+
+</function>
+
+<function name="addScript">
+
+<param name="scriptContent">the Javascript content of the script to add</param>
+
+<param name="scriptTagId">(optional) the id of the new script tag. If                       specified, and an element with this id already                       exists, this operation will fail.</param>
+
+<comment>Loads script content into a new script tag in the Selenium document. This
+differs from the runScript command in that runScript adds the script tag
+to the document of the AUT, not the Selenium document. The following
+entities in the script content are replaced by the characters they
+represent:
+
+    &lt;
+    &gt;
+    &amp;
+
+The corresponding remove command is removeScript.</comment>
+
+</function>
+
+<function name="removeScript">
+
+<param name="scriptTagId">the id of the script element to remove.</param>
+
+<comment>Removes a script tag from the Selenium document identified by the given
+id. Does nothing if the referenced tag doesn't exist.</comment>
+
+</function>
+
+<function name="useXpathLibrary">
+
+<param name="libraryName">name of the desired library Only the following three can be chosen:   ajaxslt - Google's library   javascript - Cybozu Labs' faster library   default - The default library.  Currently the default library is ajaxslt. If libraryName isn't one of these three, then  no change will be made.</param>
+
+<comment>Allows choice of one of the available libraries.</comment>
+
+</function>
+
+<function name="setContext">
+
+<param name="context">the message to be sent to the browser</param>
+
+<comment>Writes a message to the status bar and adds a note to the browser-side
+log.</comment>
+
+</function>
+
+<function name="attachFile">
+
+<param name="fieldLocator">an <a href="#locators">element locator</a></param>
+
+<param name="fileLocator">a URL pointing to the specified file. Before the file  can be set in the input field (fieldLocator), Selenium RC may need to transfer the file    to the local machine before attaching the file in a web page form. This is common in selenium  grid configurations where the RC server driving the browser is not the same  machine that started the test.   Supported Browsers: Firefox ("*chrome") only.</param>
+
+<comment>Sets a file input (upload) field to the file listed in fileLocator</comment>
+
+</function>
+
+<function name="captureScreenshot">
+
+<param name="filename">the absolute path to the file to be written, e.g. "c:\blah\screenshot.png"</param>
+
+<comment>Captures a PNG screenshot to the specified file.</comment>
+
+</function>
+
+<function name="captureScreenshotToString">
+
+<return type="string">The base 64 encoded string of the screen shot (PNG file)</return>
+
+<comment>Capture a PNG screenshot.  It then returns the file as a base 64 encoded string.</comment>
+
+</function>
+
+<function name="captureEntirePageScreenshotToString">
+
+<return type="string">The base 64 encoded string of the page screenshot (PNG file)</return>
+
+<param name="kwargs">A kwargs string that modifies the way the screenshot is captured. Example: "background=#CCFFDD". This may be useful to set for capturing screenshots of less-than-ideal layouts, for example where absolute positioning causes the calculation of the canvas dimension to fail and a black background is exposed  (possibly obscuring black text).</param>
+
+<comment>Downloads a screenshot of the browser current window canvas to a 
+based 64 encoded PNG file. The <em>entire</em> windows canvas is captured,
+including parts rendered outside of the current view port.
+
+Currently this only works in Mozilla and when running in chrome mode.</comment>
+
+</function>
+
+<function name="shutDownSeleniumServer">
+
+<comment>Kills the running Selenium Server and all browser sessions.  After you run this command, you will no longer be able to send
+commands to the server; you can't remotely start the server once it has been stopped.  Normally
+you should prefer to run the "stop" command, which terminates the current browser session, rather than 
+shutting down the entire server.</comment>
+
+</function>
+
+<function name="retrieveLastRemoteControlLogs">
+
+<return type="string">The last N log messages as a multi-line string.</return>
+
+<comment>Retrieve the last messages logged on a specific remote control. Useful for error reports, especially
+when running multiple remote controls in a distributed environment. The maximum number of log messages
+that can be retrieve is configured on remote control startup.</comment>
+
+</function>
+
+<function name="keyDownNative">
+
+<param name="keycode">an integer keycode number corresponding to a java.awt.event.KeyEvent; note that Java keycodes are NOT the same thing as JavaScript keycodes!</param>
+
+<comment>Simulates a user pressing a key (without releasing it yet) by sending a native operating system keystroke.
+This function uses the java.awt.Robot class to send a keystroke; this more accurately simulates typing
+a key on the keyboard.  It does not honor settings from the shiftKeyDown, controlKeyDown, altKeyDown and
+metaKeyDown commands, and does not target any particular HTML element.  To send a keystroke to a particular
+element, focus on the element first before running this command.</comment>
+
+</function>
+
+<function name="keyUpNative">
+
+<param name="keycode">an integer keycode number corresponding to a java.awt.event.KeyEvent; note that Java keycodes are NOT the same thing as JavaScript keycodes!</param>
+
+<comment>Simulates a user releasing a key by sending a native operating system keystroke.
+This function uses the java.awt.Robot class to send a keystroke; this more accurately simulates typing
+a key on the keyboard.  It does not honor settings from the shiftKeyDown, controlKeyDown, altKeyDown and
+metaKeyDown commands, and does not target any particular HTML element.  To send a keystroke to a particular
+element, focus on the element first before running this command.</comment>
+
+</function>
+
+<function name="keyPressNative">
+
+<param name="keycode">an integer keycode number corresponding to a java.awt.event.KeyEvent; note that Java keycodes are NOT the same thing as JavaScript keycodes!</param>
+
+<comment>Simulates a user pressing and releasing a key by sending a native operating system keystroke.
+This function uses the java.awt.Robot class to send a keystroke; this more accurately simulates typing
+a key on the keyboard.  It does not honor settings from the shiftKeyDown, controlKeyDown, altKeyDown and
+metaKeyDown commands, and does not target any particular HTML element.  To send a keystroke to a particular
+element, focus on the element first before running this command.</comment>
 
 </function>
 

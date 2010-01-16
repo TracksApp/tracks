@@ -55,3 +55,14 @@ buymilk:
   due: ~
   completed_at: <%= today %>
   user: admin_user
+
+callmom:
+  id: 5
+  context_id: 3 # call
+  project_id: ~
+  description: Call mom
+  notes: Remember her birthday
+  state: active
+  due: ~
+  completed_at: ~
+  user: admin_user

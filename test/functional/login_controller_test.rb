@@ -90,7 +90,7 @@ class LoginControllerTest < ActionController::TestCase
   def test_should_delete_token_on_logout
     login_as :other_user
     get :logout
-    assert_equal @response.cookies["auth_token"], []
+    assert_nil @response.cookies["auth_token"]
   end
 
   def test_should_login_with_cookie
@@ -110,7 +110,7 @@ class LoginControllerTest < ActionController::TestCase
 
   def test_should_fail_cookie_login
     users(:other_user).remember_me
-    @request.cookies["auth_token"] = CGI::Cookie.new('name' => 'auth_token', 'value' => 'invalid_auth_token')
+    @request.cookies["auth_token"] = 'invalid_auth_token'
     get :login
     assert !@controller.send(:logged_in?)
   end
@@ -139,7 +139,7 @@ class LoginControllerTest < ActionController::TestCase
   private
         
   def auth_token_cookie_for(user)
-    CGI::Cookie.new('name' => 'auth_token', 'value' => users(user).remember_token)
+    users(user).remember_token
   end
   
     

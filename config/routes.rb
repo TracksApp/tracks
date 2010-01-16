@@ -1,6 +1,7 @@
 ActionController::Routing::Routes.draw do |map|
   map.with_options :controller => 'login' do |login|
     login.login 'login', :action => 'login'
+    login.login_cas 'login_cas', :action => 'login_cas'
     login.formatted_login 'login.:format', :action => 'login'
     login.logout 'logout', :action => 'logout'
     login.formatted_logout 'logout.:format', :action => 'logout'

@@ -153,11 +153,14 @@ class User < ActiveRecord::Base
     if Tracks::Config.auth_schemes.include?('ldap')
       return candidate if candidate.auth_type == 'ldap' && SimpleLdapAuthenticator.valid?(login, pass)
     end
+    if Tracks::Config.auth_schemes.include?('cas') && candidate.auth_type.eql?("cas")
+      return candidate #because we can not auth them with out thier real password we have to settle for this
+    end
     return nil
   end
   
   def self.find_by_open_id_url(raw_identity_url)
-    normalized_open_id_url = OpenIdAuthentication.normalize_url(raw_identity_url)
+    normalized_open_id_url = OpenIdAuthentication.normalize_identifier(raw_identity_url)
     find(:first, :conditions => ['open_id_url = ?', normalized_open_id_url])
   end
   
@@ -248,6 +251,6 @@ protected
   
   def normalize_open_id_url
     return if open_id_url.nil?
-    self.open_id_url = OpenIdAuthentication.normalize_url(open_id_url)
+    self.open_id_url = OpenIdAuthentication.normalize_identifier(open_id_url)
   end
 end

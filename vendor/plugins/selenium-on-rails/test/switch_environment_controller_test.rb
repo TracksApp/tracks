@@ -10,11 +10,8 @@ class SwitchEnvironmentControllerTest < Test::Unit::TestCase
   end
   
   def test_index
-    SeleniumOnRailsConfig.expects(:new).returns(@config)
-    @config.expects(:get).with(:environments).returns("hello dolly")
-    
+    SeleniumOnRailsConfig.expects(:get).with(:environments).returns("hello dolly")
     get :index
-    
     assert @response.body.include?('hello dolly')
   end
 end

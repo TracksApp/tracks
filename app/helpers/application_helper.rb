@@ -112,7 +112,7 @@ module ApplicationHelper
   end
   
   def link_to_project_mobile(project, accesskey, descriptor = sanitize(project.name))
-    link_to( descriptor, formatted_project_path(project, :m), {:title => "View project: #{project.name}", :accesskey => accesskey} )
+    link_to( descriptor, project_path(project, :format => 'm'), {:title => "View project: #{project.name}", :accesskey => accesskey} )
   end
   
   def item_link_to_context(item)
@@ -170,13 +170,41 @@ module ApplicationHelper
     standard_format = current_user.prefs.date_format
     translations = [
       ['%m', 'mm'],
+      ['%b', 'M'],
+      ['%B', 'MM'],
       ['%d', 'dd'],
-      ['%Y', 'yy'],
-      ['%y', 'y']
+      ['%a', 'D'],
+      ['%A', 'DD'],
+      ['%y', 'y'],
+      ['%Y', 'yy']
     ]
     translations.inject(standard_format) do |str, translation|
       str.gsub(*translation)
     end
   end
 
+  AUTO_LINK_MESSAGE_RE = %r{message://<[^>]+>} unless const_defined?(:AUTO_LINK_MESSAGE_RE)
+
+  # Converts message:// links to href. This URL scheme is used on Mac OS X
+  # to link to a mail message in Mail.app.
+  def auto_link_message(text)
+    text.gsub(AUTO_LINK_MESSAGE_RE) do
+      href = $&
+      left, right = $`, $'
+      # detect already linked URLs and URLs in the middle of a tag
+      if left =~ /<[^>]+$/ && right =~ /^[^>]*>/
+        # do not change string; URL is alreay linked
+        href
+      else
+        content_tag(:a, h(href), :href => h(href))
+      end
+    end
+  end
+
+  def format_note(note)
+    note = auto_link_message(note)
+    note = auto_link(note)
+    note = markdown(note)
+    note = sanitize(note)
+  end
 end

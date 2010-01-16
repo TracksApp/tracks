@@ -17,7 +17,7 @@ class Todo < ActiveRecord::Base
   after_save :save_predecessors
 
   named_scope :active, :conditions => { :state => 'active' }
-  named_scope :not_completed, :conditions =>  ['NOT (state = ? )', 'completed']
+  named_scope :not_completed, :conditions =>  ['NOT (todos.state = ? )', 'completed']
   named_scope :are_due, :conditions => ['NOT (todos.due IS NULL)']
 
   STARRED_TAG_NAME = "starred"

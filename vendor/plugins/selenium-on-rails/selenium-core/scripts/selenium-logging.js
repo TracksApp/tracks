@@ -19,11 +19,24 @@ var Logger = function() {
 }
 Logger.prototype = {
 
+    logLevels: {
+        debug: 0,
+        info: 1,
+        warn: 2,
+        error: 3,
+        off: 999
+    },
+
     pendingMessages: new Array(),
+    
+    threshold: "info",
 
     setLogLevelThreshold: function(logLevel) {
-        this.pendingLogLevelThreshold = logLevel;
-        this.show();
+        this.threshold = logLevel;
+        var logWindow = this.getLogWindow()
+        if (logWindow && logWindow.setThresholdLevel) {
+            logWindow.setThresholdLevel(logLevel);
+        }
         // NOTE: log messages will be discarded until the log window is
         // fully loaded.
     },
@@ -32,23 +45,12 @@ Logger.prototype = {
         if (this.logWindow && this.logWindow.closed) {
             this.logWindow = null;
         }
-        if (this.logWindow && this.pendingLogLevelThreshold && this.logWindow.setThresholdLevel) {
-            this.logWindow.setThresholdLevel(this.pendingLogLevelThreshold);
-            
-            // can't just directly log because that action would loop back
-            // to this code infinitely
-            var pendingMessage = new LogMessage("info", "Log level programmatically set to " + this.pendingLogLevelThreshold + " (presumably by driven-mode test code)");
-            this.pendingMessages.push(pendingMessage);
-            
-            this.pendingLogLevelThreshold = null;    // let's only go this way one time
-        }
-
         return this.logWindow;
     },
     
     openLogWindow: function() {
         this.logWindow = window.open(
-            getDocumentBase(document) + "SeleniumLog.html", "SeleniumLog",
+            getDocumentBase(document) + "SeleniumLog.html?startingThreshold="+this.threshold, "SeleniumLog",
             "width=600,height=1000,bottom=0,right=0,status,scrollbars,resizable"
         );
         this.logWindow.moveTo(window.screenX + 1210, window.screenY + window.outerHeight - 1400);
@@ -66,33 +68,39 @@ Logger.prototype = {
         if (! this.getLogWindow()) {
             this.openLogWindow();
         }
-        setTimeout(function(){LOG.info("Log window displayed");}, 500);
+        setTimeout(function(){LOG.error("Log window displayed.  Logging events will now be recorded to this window.");}, 500);
     },
 
-    logHook: function(className, message) {
+    logHook: function(logLevel, message) {
     },
 
-    log: function(className, message) {
+    log: function(logLevel, message) {
+        if (this.logLevels[logLevel] < this.logLevels[this.threshold]) {
+            return;
+        }
+        this.logHook(logLevel, message);
         var logWindow = this.getLogWindow();
-        this.logHook(className, message);
         if (logWindow) {
             if (logWindow.append) {
+                if (logWindow.disabled) {
+                    logWindow.callBack = fnBind(this.setLogLevelThreshold, this);
+                    logWindow.enableButtons();
+                }
                 if (this.pendingMessages.length > 0) {
-                    logWindow.append("info: Appending missed logging messages", "info");
+                    logWindow.append("info("+(new Date().getTime())+"): Appending missed logging messages", "info");
                     while (this.pendingMessages.length > 0) {
                         var msg = this.pendingMessages.shift();
-                        logWindow.append(msg.type + ": " + msg.msg, msg.type);
+                        logWindow.append(msg.type + "("+msg.timestamp+"): " + msg.msg, msg.type);
                     }
-                    logWindow.append("info: Done appending missed logging messages", "info");
+                    logWindow.append("info("+(new Date().getTime())+"): Done appending missed logging messages", "info");
                 }
-                logWindow.append(className + ": " + message, className);
+                logWindow.append(logLevel + "("+(new Date().getTime())+"): " + message, logLevel);
             }
         } else {
-            // uncomment this to turn on background logging
-            /* these logging messages are never flushed, which creates 
-               an enormous array of strings that never stops growing.  Only
-               turn this on if you need it for debugging! */
-            //this.pendingMessages.push(new LogMessage(className, message));
+            // TODO these logging messages are never flushed, which creates 
+            //   an enormous array of strings that never stops growing.
+            //   there should at least be a way to clear the messages!
+            this.pendingMessages.push(new LogMessage(logLevel, message));
         }
     },
 
@@ -136,4 +144,5 @@ var LOG = new Logger();
 var LogMessage = function(type, msg) {
     this.type = type;
     this.msg = msg;
+    this.timestamp = (new Date().getTime());
 }

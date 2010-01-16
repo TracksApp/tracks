@@ -55,54 +55,54 @@ class UserTest < ActiveSupport::TestCase
   # Test a password shorter than 5 characters
   #
   def test_validate_short_password
-    assert_no_difference User, :count do
+    assert_no_difference 'User.count' do
       u = create_user :password => generate_random_string(4)
       assert_error_on u, :password, "is too short (minimum is 5 characters)"
     end
   end
 
   def test_validate_long_password
-    assert_no_difference User, :count do
+    assert_no_difference 'User.count' do
       u = create_user :password => generate_random_string(41)
       assert_error_on u, :password, "is too long (maximum is 40 characters)"
     end
   end
 
   def test_validate_correct_length_password
-    assert_difference User, :count do
+    assert_difference 'User.count' do
       create_user :password => generate_random_string(6)
     end
   end
 
   def test_validate_missing_password
-    assert_no_difference User, :count do
+    assert_no_difference 'User.count' do
       u = create_user :password => ''
       assert_errors_on u, :password, ["can't be blank", "is too short (minimum is 5 characters)"]
     end
   end
 
   def test_validate_short_login
-    assert_no_difference User, :count do
+    assert_no_difference 'User.count' do
       u = create_user :login => 'ba'
       assert_error_on u, :login, "is too short (minimum is 3 characters)"
     end
   end
 
   def test_validate_long_login
-    assert_no_difference User, :count do
+    assert_no_difference 'User.count' do
       u = create_user :login => generate_random_string(81)
       assert_error_on u, :login, "is too long (maximum is 80 characters)"
     end    
   end
   
   def test_validate_correct_length_login
-    assert_difference User, :count do
+    assert_difference 'User.count' do
       create_user :login => generate_random_string(6)
     end
   end
 
   def test_validate_missing_login
-    assert_no_difference User, :count do
+    assert_no_difference 'User.count' do
       u = create_user :login => ''
       assert_errors_on u, :login, ["can't be blank", "is too short (minimum is 3 characters)"]
     end
@@ -272,28 +272,28 @@ class UserTest < ActiveSupport::TestCase
   end
 
   def test_should_create_user
-    assert_difference User, :count do
+    assert_difference 'User.count' do
       user = create_user
       assert !user.new_record?, "#{user.errors.full_messages.to_sentence}"
     end
   end
 
   def test_should_require_login
-    assert_no_difference User, :count do
+    assert_no_difference 'User.count' do
       u = create_user(:login => nil)
       assert u.errors.on(:login)
     end
   end
 
   def test_should_require_password
-    assert_no_difference User, :count do
+    assert_no_difference 'User.count' do
       u = create_user(:password => nil)
       assert u.errors.on(:password)
     end
   end
 
   def test_should_require_password_confirmation
-    assert_no_difference User, :count do
+    assert_no_difference 'User.count' do
       u = create_user(:password_confirmation => nil)
       assert u.errors.on(:password_confirmation)
     end

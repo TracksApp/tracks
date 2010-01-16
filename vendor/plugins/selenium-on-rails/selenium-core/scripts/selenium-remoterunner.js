@@ -22,16 +22,23 @@ workingColor = "#DEE7EC";
 doneColor = "#FFFFCC";
 
 var injectedSessionId;
-var cmd1 = document.createElement("div");
-var cmd2 = document.createElement("div");
-var cmd3 = document.createElement("div");
-var cmd4 = document.createElement("div");
 
 var postResult = "START";
 var debugMode = false;
 var relayToRC = null;
 var proxyInjectionMode = false;
 var uniqueId = 'sel_' + Math.round(100000 * Math.random());
+var seleniumSequenceNumber = 0;
+var cmd8 = "";
+var cmd7 = "";
+var cmd6 = "";
+var cmd5 = "";
+var cmd4 = "";
+var cmd3 = "";
+var cmd2 = "";
+var cmd1 = "";
+var lastCmd = "";
+var lastCmdTime = new Date();
 
 var RemoteRunnerOptions = classCreate();
 objectExtend(RemoteRunnerOptions.prototype, URLConfiguration.prototype);
@@ -51,8 +58,12 @@ objectExtend(RemoteRunnerOptions.prototype, {
         return this._getQueryParameter("driverUrl");
     },
 
+    // requires per-session extension Javascript as soon as this Selenium
+    // instance becomes aware of the session identifier
     getSessionId: function() {
-        return this._getQueryParameter("sessionId");
+        var sessionId = this._getQueryParameter("sessionId");
+        requireExtensionJs(sessionId);
+        return sessionId;
     },
 
     _acquireQueryString: function () {
@@ -62,7 +73,7 @@ objectExtend(RemoteRunnerOptions.prototype, {
             if (args.length < 2) return null;
             this.queryString = args[1];
         } else if (proxyInjectionMode) {
-            this.queryString = selenium.browserbot.getCurrentWindow().location.search.substr(1);
+            this.queryString = window.location.search.substr(1);
         } else {
             this.queryString = top.location.search.substr(1);
         }
@@ -77,8 +88,8 @@ function runSeleniumTest() {
 
     if (runOptions.isMultiWindowMode()) {
         testAppWindow = openSeparateApplicationWindow('Blank.html', true);
-    } else if ($('myiframe') != null) {
-        var myiframe = $('myiframe');
+    } else if (sel$('selenium_myiframe') != null) {
+        var myiframe = sel$('selenium_myiframe');
         if (myiframe) {
             testAppWindow = myiframe.contentWindow;
         }
@@ -95,7 +106,7 @@ function runSeleniumTest() {
         debugMode = runOptions.isDebugMode();
     }
     if (proxyInjectionMode) {
-        LOG.log = logToRc;
+        LOG.logHook = logToRc;
         selenium.browserbot._modifyWindow(testAppWindow);
     }
     else if (debugMode) {
@@ -107,13 +118,6 @@ function runSeleniumTest() {
     commandFactory.registerAll(selenium);
 
     currentTest = new RemoteRunner(commandFactory);
-
-    if (document.getElementById("commandList") != null) {
-        document.getElementById("commandList").appendChild(cmd4);
-        document.getElementById("commandList").appendChild(cmd3);
-        document.getElementById("commandList").appendChild(cmd2);
-        document.getElementById("commandList").appendChild(cmd1);
-    }
 
     var doContinue = runOptions.getContinue();
     if (doContinue != null) postResult = "OK";
@@ -130,19 +134,16 @@ function buildDriverUrl() {
     var slashPairOffset = s.indexOf("//") + "//".length
     var pathSlashOffset = s.substring(slashPairOffset).indexOf("/")
     return s.substring(0, slashPairOffset + pathSlashOffset) + "/selenium-server/driver/";
+    //return "http://localhost" + uniqueId + "/selenium-server/driver/";
 }
 
 function logToRc(logLevel, message) {
-    if (logLevel == null) {
-        logLevel = "debug";
-    }
     if (debugMode) {
-        sendToRC("logLevel=" + logLevel + ":" + message.replace(/[\n\r\015]/g, " ") + "\n", "logging=true");
+        if (logLevel == null) {
+            logLevel = "debug";
+        }
+        sendToRCAndForget("logLevel=" + logLevel + ":" + message.replace(/[\n\r\015]/g, " ") + "\n", "logging=true");
     }
-}
-
-function isArray(x) {
-    return ((typeof x) == "object") && (x["length"] != null);
 }
 
 function serializeString(name, s) {
@@ -176,7 +177,7 @@ function serializeObject(name, x)
 function relayBotToRC(s) {
 }
 
-// seems like no one uses this, but in fact it is called using eval from server-side PI mode code; however, 
+// seems like no one uses this, but in fact it is called using eval from server-side PI mode code; however,
 // because multiple names can map to the same popup, assigning a single name confuses matters sometimes;
 // thus, I'm disabling this for now.  -Nelson 10/21/06
 function setSeleniumWindowName(seleniumWindowName) {
@@ -204,33 +205,44 @@ objectExtend(RemoteRunner.prototype, {
 
     commandStarted : function(command) {
         this.commandNode = document.createElement("div");
-        var innerHTML = command.command + '(';
+        var cmdText = command.command + '(';
         if (command.target != null && command.target != "") {
-            innerHTML += command.target;
+            cmdText += command.target;
             if (command.value != null && command.value != "") {
-                innerHTML += ', ' + command.value;
+                cmdText += ', ' + command.value;
             }
         }
-        innerHTML += ")";
-        if (innerHTML.length >40) {
-            innerHTML = innerHTML.substring(0,40);
-            innerHTML += "...";
+        if (cmdText.length > 70) {
+            cmdText = cmdText.substring(0, 70) + "...\n";
+        } else {
+            cmdText += ")\n";
         }
-        this.commandNode.innerHTML = innerHTML;
-        this.commandNode.style.backgroundColor = workingColor;
-        if (document.getElementById("commandList") != null) {
-            document.getElementById("commandList").removeChild(cmd1);
-            document.getElementById("commandList").removeChild(cmd2);
-            document.getElementById("commandList").removeChild(cmd3);
-            document.getElementById("commandList").removeChild(cmd4);
+
+        if (cmdText == lastCmd) {
+	        var rightNow = new Date();
+	        var msSinceStart = rightNow.getTime() - lastCmdTime.getTime();
+	        var sinceStart = msSinceStart + "ms";
+	        if (msSinceStart > 1000) {
+		        sinceStart = Math.round(msSinceStart / 1000) + "s";
+		    }
+            cmd1 = "Same command (" + sinceStart + "): " + lastCmd;
+        } else {
+	        lastCmdTime = new Date();
+            cmd8 = cmd7;
+            cmd7 = cmd6;
+            cmd6 = cmd5;
+            cmd5 = cmd4;
             cmd4 = cmd3;
             cmd3 = cmd2;
             cmd2 = cmd1;
-            cmd1 = this.commandNode;
-            document.getElementById("commandList").appendChild(cmd4);
-            document.getElementById("commandList").appendChild(cmd3);
-            document.getElementById("commandList").appendChild(cmd2);
-            document.getElementById("commandList").appendChild(cmd1);
+            cmd1 = cmdText;
+        }
+        lastCmd = cmdText;
+        
+        if (! proxyInjectionMode) {
+            var commandList = document.commands.commandList;
+            commandList.value = cmd8 + cmd7 + cmd6 + cmd5 + cmd4 + cmd3 + cmd2 + cmd1;
+            commandList.scrollTop = commandList.scrollHeight;
         }
     },
 
@@ -250,7 +262,9 @@ objectExtend(RemoteRunner.prototype, {
             if (result.result == null) {
                 postResult = "OK";
             } else {
-                postResult = "OK," + result.result;
+                var actualResult = result.result;
+                actualResult = selArrayToString(actualResult);
+                postResult = "OK," + actualResult;
             }
             this.commandNode.style.backgroundColor = doneColor;
         }
@@ -259,7 +273,7 @@ objectExtend(RemoteRunner.prototype, {
     commandError : function(message) {
         postResult = "ERROR: " + message;
         this.commandNode.style.backgroundColor = errorColor;
-        this.commandNode.title = message;
+        this.commandNode.titcle = message;
     },
 
     testComplete : function() {
@@ -270,16 +284,26 @@ objectExtend(RemoteRunner.prototype, {
     },
 
     _HandleHttpResponse : function() {
+        // When request is completed
         if (this.xmlHttpForCommandsAndResults.readyState == 4) {
+            // OK
             if (this.xmlHttpForCommandsAndResults.status == 200) {
             	if (this.xmlHttpForCommandsAndResults.responseText=="") {
                     LOG.error("saw blank string xmlHttpForCommandsAndResults.responseText");
                     return;
                 }
                 var command = this._extractCommand(this.xmlHttpForCommandsAndResults);
-                this.currentCommand = command;
-                this.continueTestAtCurrentCommand();
-            } else {
+                if (command.command == 'retryLast') {
+                    setTimeout(fnBind(function() {
+                        sendToRC("RETRY", "retry=true", fnBind(this._HandleHttpResponse, this), this.xmlHttpForCommandsAndResults, true);
+                    }, this), 1000);
+                } else {
+                    this.currentCommand = command;
+                    this.continueTestAtCurrentCommand();
+                }
+            }
+            // Not OK 
+            else {
                 var s = 'xmlHttp returned: ' + this.xmlHttpForCommandsAndResults.status + ": " + this.xmlHttpForCommandsAndResults.statusText;
                 LOG.error(s);
                 this.currentCommand = null;
@@ -290,7 +314,15 @@ objectExtend(RemoteRunner.prototype, {
     },
 
     _extractCommand : function(xmlHttp) {
-        var command;
+        var command, text, json;
+        text = command = xmlHttp.responseText;
+        if (/^json=/.test(text)) {
+            eval(text);
+            if (json.rest) {
+                eval(json.rest);
+            }
+            return json;
+        }
         try {
             var re = new RegExp("^(.*?)\n((.|[\r\n])*)");
             if (re.exec(xmlHttp.responseText)) {
@@ -364,19 +396,66 @@ function sendToRC(dataToBePosted, urlParms, callback, xmlHttpObject, async) {
     if (urlParms) {
         url += urlParms;
     }
-    url += "&localFrameAddress=" + (proxyInjectionMode ? makeAddressToAUTFrame() : "top");
-    url += getSeleniumWindowNameURLparameters();
-    url += "&uniqueId=" + uniqueId;
+    url = addUrlParams(url);
+    url += "&sequenceNumber=" + seleniumSequenceNumber++;
+    
+    var postedData = "postedData=" + encodeURIComponent(dataToBePosted);
 
-    if (callback == null) {
-        callback = function() {
-        };
-    }
-    url += buildDriverParams() + preventBrowserCaching();
+    //xmlHttpObject.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xmlHttpObject.open("POST", url, async);
-    xmlHttpObject.onreadystatechange = callback;
-    xmlHttpObject.send(dataToBePosted);
+    if (callback) xmlHttpObject.onreadystatechange = callback;
+    xmlHttpObject.send(postedData);
     return null;
+}
+
+function addUrlParams(url) {
+    return url + "&localFrameAddress=" + (proxyInjectionMode ? makeAddressToAUTFrame() : "top")
+    + getSeleniumWindowNameURLparameters()
+    + "&uniqueId=" + uniqueId
+    + buildDriverParams() + preventBrowserCaching()
+}
+
+function sendToRCAndForget(dataToBePosted, urlParams) {
+    var url;
+    if (!(browserVersion.isChrome || browserVersion.isHTA)) { 
+        // DGF we're behind a proxy, so we can send our logging message to literally any host, to avoid 2-connection limit
+        var protocol = "http:";
+        if (window.location.protocol == "https:") {
+            // DGF if we're in HTTPS, use another HTTPS url to avoid security warning
+            protocol = "https:";
+        }
+        // we don't choose a super large random value, but rather 1 - 16, because this matches with the pre-computed
+        // tunnels waiting on the Selenium Server side. This gives us higher throughput than the two-connection-per-host
+        // limitation, but doesn't require we generate an extremely large ammount of fake SSL certs either.
+        url = protocol + "//" + Math.floor(Math.random()* 16 + 1) + ".selenium.doesnotexist/selenium-server/driver/?" + urlParams;
+    } else {
+        url = buildDriverUrl() + "?" + urlParams;
+    }
+    url = addUrlParams(url);
+    
+    var method = "GET";
+    if (method == "POST") {
+        // DGF submit a request using an iframe; we can't see the response, but we don't need to
+        // TODO not using this mechanism because it screws up back-button
+        var loggingForm = document.createElement("form");
+        loggingForm.method = "POST";
+        loggingForm.action = url;
+        loggingForm.target = "seleniumLoggingFrame";
+        var postedDataInput = document.createElement("input");
+        postedDataInput.type = "hidden";
+        postedDataInput.name = "postedData";
+        postedDataInput.value = dataToBePosted;
+        loggingForm.appendChild(postedDataInput);
+        document.body.appendChild(loggingForm);
+        loggingForm.submit();
+        document.body.removeChild(loggingForm);
+    } else {
+        var postedData = "&postedData=" + encodeURIComponent(dataToBePosted);
+        var scriptTag = document.createElement("script");
+        scriptTag.src = url + postedData;
+        document.body.appendChild(scriptTag);
+        document.body.removeChild(scriptTag);
+    }
 }
 
 function buildDriverParams() {
@@ -402,7 +481,7 @@ function preventBrowserCaching() {
 //
 // In selenium, the main (i.e., first) window's name is a blank string.
 //
-// Additional pop-ups are associated with either 1.) the name given by the 2nd parameter to window.open, or 2.) the name of a 
+// Additional pop-ups are associated with either 1.) the name given by the 2nd parameter to window.open, or 2.) the name of a
 // property on the opening window which points at the window.
 //
 // An example of #2: if window X contains JavaScript as follows:
@@ -420,11 +499,13 @@ function getSeleniumWindowNameURLparameters() {
         return s;
     }
     if (w["seleniumWindowName"] == null) {
-    	s +=  'generatedSeleniumWindowName_' + Math.round(100000 * Math.random());
+        if (w.name) {
+            w["seleniumWindowName"] = w.name;
+        } else {
+    	    w["seleniumWindowName"] = 'generatedSeleniumWindowName_' + Math.round(100000 * Math.random());
+    	}
     }
-    else {
-    	s += w["seleniumWindowName"];
-    }
+    s += w["seleniumWindowName"];
     var windowOpener = w.opener;
     for (key in windowOpener) {
         var val = null;
@@ -432,7 +513,7 @@ function getSeleniumWindowNameURLparameters() {
     	    val = windowOpener[key];
         }
         catch(e) {
-        }        
+        }
         if (val==w) {
 	    s += "&jsWindowNameVar=" + key;			// found a js variable in the opener referring to this window
         }
@@ -464,3 +545,151 @@ function makeAddressToAUTFrame(w, frameNavigationalJSexpression)
     }
     return null;
 }
+
+Selenium.prototype.doSetContext = function(context) {
+    /**
+   * Writes a message to the status bar and adds a note to the browser-side
+   * log.
+   *
+   * @param context
+   *            the message to be sent to the browser
+   */
+    //set the current test title
+    var ctx = document.getElementById("context");
+    if (ctx != null) {
+        ctx.innerHTML = context;
+    }
+};
+
+/**
+ * Adds a script tag referencing a specially-named user extensions "file". The
+ * resource handler for this special file (which won't actually exist) will use
+ * the session ID embedded in its name to retrieve per-session specified user
+ * extension javascript.
+ *
+ * @param sessionId
+ */
+function requireExtensionJs(sessionId) {
+    var src = 'scripts/user-extensions.js[' + sessionId + ']';
+    if (document.getElementById(src) == null) {
+        var scriptTag = document.createElement('script');
+        scriptTag.language = 'JavaScript';
+        scriptTag.type = 'text/javascript';
+        scriptTag.src = src;
+        scriptTag.id = src;
+        var headTag = document.getElementsByTagName('head')[0];
+        headTag.appendChild(scriptTag);
+    }
+}
+
+Selenium.prototype.doAttachFile = function(fieldLocator,fileLocator) {
+   /**
+   * Sets a file input (upload) field to the file listed in fileLocator
+   *
+   *  @param fieldLocator an <a href="#locators">element locator</a>
+   *  @param fileLocator a URL pointing to the specified file. Before the file
+   *  can be set in the input field (fieldLocator), Selenium RC may need to transfer the file  
+   *  to the local machine before attaching the file in a web page form. This is common in selenium
+   *  grid configurations where the RC server driving the browser is not the same
+   *  machine that started the test.
+   *
+   *  Supported Browsers: Firefox ("*chrome") only.
+   *   
+   */
+   // This doesn't really do anything on the JS side; we let the Selenium Server take care of this for us! 
+};
+
+Selenium.prototype.doCaptureScreenshot = function(filename) {
+    /**
+    * Captures a PNG screenshot to the specified file.
+    *
+    * @param filename the absolute path to the file to be written, e.g. "c:\blah\screenshot.png"
+    */
+    // This doesn't really do anything on the JS side; we let the Selenium Server take care of this for us!
+};
+
+Selenium.prototype.doCaptureScreenshotToString = function() {
+    /**
+    * Capture a PNG screenshot.  It then returns the file as a base 64 encoded string. 
+    * 
+    * @return string The base 64 encoded string of the screen shot (PNG file)
+    */
+    // This doesn't really do anything on the JS side; we let the Selenium Server take care of this for us!
+};
+
+Selenium.prototype.doCaptureEntirePageScreenshotToString = function(kwargs) {
+    /**
+    * Downloads a screenshot of the browser current window canvas to a 
+    * based 64 encoded PNG file. The <em>entire</em> windows canvas is captured,
+    * including parts rendered outside of the current view port.
+    *
+	* Currently this only works in Mozilla and when running in chrome mode. 
+    * 
+    * @param kwargs  A kwargs string that modifies the way the screenshot is captured. Example: "background=#CCFFDD". This may be useful to set for capturing screenshots of less-than-ideal layouts, for example where absolute positioning causes the calculation of the canvas dimension to fail and a black background is exposed  (possibly obscuring black text).
+    *
+    * @return string The base 64 encoded string of the page screenshot (PNG file)
+    */
+    // This doesn't really do anything on the JS side; we let the Selenium Server take care of this for us!
+};
+
+Selenium.prototype.doShutDownSeleniumServer = function(keycode) {
+    /**
+    * Kills the running Selenium Server and all browser sessions.  After you run this command, you will no longer be able to send
+    * commands to the server; you can't remotely start the server once it has been stopped.  Normally
+    * you should prefer to run the "stop" command, which terminates the current browser session, rather than 
+    * shutting down the entire server.
+    *
+    */
+    // This doesn't really do anything on the JS side; we let the Selenium Server take care of this for us!
+};
+
+Selenium.prototype.doRetrieveLastRemoteControlLogs = function() {
+    /**
+    * Retrieve the last messages logged on a specific remote control. Useful for error reports, especially
+    * when running multiple remote controls in a distributed environment. The maximum number of log messages
+    * that can be retrieve is configured on remote control startup.
+    *
+    * @return string The last N log messages as a multi-line string.
+    */
+    // This doesn't really do anything on the JS side; we let the Selenium Server take care of this for us!
+};
+
+Selenium.prototype.doKeyDownNative = function(keycode) {
+    /**
+    * Simulates a user pressing a key (without releasing it yet) by sending a native operating system keystroke.
+    * This function uses the java.awt.Robot class to send a keystroke; this more accurately simulates typing
+    * a key on the keyboard.  It does not honor settings from the shiftKeyDown, controlKeyDown, altKeyDown and
+    * metaKeyDown commands, and does not target any particular HTML element.  To send a keystroke to a particular
+    * element, focus on the element first before running this command.
+    *
+    * @param keycode an integer keycode number corresponding to a java.awt.event.KeyEvent; note that Java keycodes are NOT the same thing as JavaScript keycodes!
+    */
+    // This doesn't really do anything on the JS side; we let the Selenium Server take care of this for us!
+};
+
+Selenium.prototype.doKeyUpNative = function(keycode) {
+    /**
+    * Simulates a user releasing a key by sending a native operating system keystroke.
+    * This function uses the java.awt.Robot class to send a keystroke; this more accurately simulates typing
+    * a key on the keyboard.  It does not honor settings from the shiftKeyDown, controlKeyDown, altKeyDown and
+    * metaKeyDown commands, and does not target any particular HTML element.  To send a keystroke to a particular
+    * element, focus on the element first before running this command.
+    *
+    * @param keycode an integer keycode number corresponding to a java.awt.event.KeyEvent; note that Java keycodes are NOT the same thing as JavaScript keycodes!
+    */
+    // This doesn't really do anything on the JS side; we let the Selenium Server take care of this for us!
+};
+
+Selenium.prototype.doKeyPressNative = function(keycode) {
+    /**
+    * Simulates a user pressing and releasing a key by sending a native operating system keystroke.
+    * This function uses the java.awt.Robot class to send a keystroke; this more accurately simulates typing
+    * a key on the keyboard.  It does not honor settings from the shiftKeyDown, controlKeyDown, altKeyDown and
+    * metaKeyDown commands, and does not target any particular HTML element.  To send a keystroke to a particular
+    * element, focus on the element first before running this command.
+    *
+    * @param keycode an integer keycode number corresponding to a java.awt.event.KeyEvent; note that Java keycodes are NOT the same thing as JavaScript keycodes!
+    */
+    // This doesn't really do anything on the JS side; we let the Selenium Server take care of this for us!
+};
+

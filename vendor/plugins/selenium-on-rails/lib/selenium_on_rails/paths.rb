@@ -2,7 +2,6 @@ require 'selenium_on_rails_config'
 
 module SeleniumOnRails
   module Paths
-    attr_accessor :config
     
     def selenium_path
       @@selenium_path ||= find_selenium_path
@@ -10,6 +9,7 @@ module SeleniumOnRails
     end
     
     def selenium_tests_path
+      return SeleniumOnRailsConfig.get("selenium_tests_path") if SeleniumOnRailsConfig.get("selenium_tests_path")
       File.expand_path(File.join(RAILS_ROOT, 'test/selenium'))
     end
     
@@ -25,6 +25,7 @@ module SeleniumOnRails
     end
     
     def fixtures_path
+      return SeleniumOnRailsConfig.get("fixtures_path") if SeleniumOnRailsConfig.get("fixtures_path")
       File.expand_path File.join(RAILS_ROOT, 'test/fixtures')
     end
     
@@ -42,7 +43,7 @@ module SeleniumOnRails
     private ###############################################
 
     def find_selenium_path
-      sel_dirs = @config.get :selenium_path do
+      sel_dirs = SeleniumOnRailsConfig.get :selenium_path do
         File.expand_path(File.dirname(__FILE__) + '/../../selenium-core')
       end
 

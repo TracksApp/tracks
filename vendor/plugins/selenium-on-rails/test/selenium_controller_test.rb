@@ -5,6 +5,7 @@ class SeleniumControllerTest < Test::Unit::TestCase
 
   def setup
     @controller = SeleniumController.new
+    @controller.extend(SeleniumOnRails::PathsTestHelper)
     ActionController::Routing::Routes.draw
     SeleniumController.any_instance.stubs(:layout_path).returns(false)
     @request    = ActionController::TestRequest.new
@@ -26,7 +27,7 @@ EOS
   end
   
   def test_record_with_result
-    @controller.config.configs["result_dir"] = @result_dir
+    @controller.instance_variable_set(:@result_dir, @result_dir)
     
     post :record, :suite => @suite, "testTable.1" => "<table></table>", "testTable.2" => "<table></table>"
     

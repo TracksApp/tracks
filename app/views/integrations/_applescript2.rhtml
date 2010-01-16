@@ -35,6 +35,7 @@ on importMessage(theMessage)
 			set theSender to the sender of theMessage
 			set theSubject to subject of theMessage
 			if theSubject is equal to "" then set theSubject to emptySubject
+			set theMessageId to message id of theMessage
 			
 			-- Construct the description string from the email info
 			set myDesc to "Email " & theSender & " about " & theSubject
@@ -42,13 +43,15 @@ on importMessage(theMessage)
 			if length of myDesc > 100 then
 				set myDesc to characters 1 thru 100 of myDesc
 			end if
+			
+			set myNote to "message://<" & theMessageId & ">"
 		end try
 	end tell
 	
 	-- Now send all that info to Tracks
 	-- Edit the URL of your Tracks installation if necessary"
 	tell application "<%= home_url %>backend/api"
-		set returnValue to call xmlrpc {method name:"NewTodo", parameters:{myUsername, myToken, myContextID, myDesc}}
+		set returnValue to call xmlrpc {method name:"NewTodo", parameters:{myUsername, myToken, myContextID, myDesc, myNote}}
 	end tell
 	
 	(* Growl support - comment out or delete this section if 

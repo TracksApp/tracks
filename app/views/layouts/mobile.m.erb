@@ -16,10 +16,10 @@
 <h1><span class="count"><%= @down_count %></span> <%= 
         current_user.time.strftime(@prefs.title_date_format) -%></h1>
 <div class="nav">
-<%=     (link_to("0-New action", formatted_new_todo_path(:m, new_todo_params))+" | ") unless @new_mobile -%>
-<%=     (link_to("1-Home", formatted_todos_path(:m))+" | ") unless @home -%>
-<%=     (link_to("2-Contexts", formatted_contexts_path(:m))+" | ") -%>
-<%=     (link_to("3-Projects", formatted_projects_path(:m))+" | ") -%>
+<%=     (link_to("0-New action", new_todo_path(new_todo_params, :format => 'm'))+" | ") unless @new_mobile -%>
+<%=     (link_to("1-Home", todos_path(:format => 'm'))+" | ") unless @home -%>
+<%=     (link_to("2-Contexts", contexts_path(:format => 'm'))+" | ") -%>
+<%=     (link_to("3-Projects", projects_path(:format => 'm'))+" | ") -%>
 <%=     (link_to("4-Starred", {:action => "tag", :controller => "todos", :id => "starred.m"})) -%>
 <%    end
   end -%><%= render_flash -%>
@@ -27,11 +27,11 @@
 <%=  yield -%>
 <hr/><% if !@prefs.nil? -%>
 <div class="nav">
-<%= (link_to("Logout", formatted_logout_path(:format => 'm')) +" | ") -%>
-<%= (link_to("0-New action", formatted_new_todo_path(:m), {:accesskey => "0"})+" | ") unless @new_mobile -%>
-<%= (link_to("1-Home", formatted_todos_path(:m), {:accesskey => "1"})+" | ") unless @home -%>
-<%= (link_to("2-Contexts", formatted_contexts_path(:m), {:accesskey => "2"})+" | ") -%>
-<%= (link_to("3-Projects", formatted_projects_path(:m), {:accesskey => "3"})+" | ") -%>
+<%= (link_to("Logout", logout_path(:format => 'm')) +" | ") -%>
+<%= (link_to("0-New action", new_todo_path(:format => 'm'), {:accesskey => "0"})+" | ") unless @new_mobile -%>
+<%= (link_to("1-Home", todos_path(:format => 'm'), {:accesskey => "1"})+" | ") unless @home -%>
+<%= (link_to("2-Contexts", contexts_path(:format => 'm'), {:accesskey => "2"})+" | ") -%>
+<%= (link_to("3-Projects", projects_path(:format => 'm'), {:accesskey => "3"})+" | ") -%>
 <%= (link_to("4-Starred", {:action => "tag", :controller => "todos", :id => "starred.m"}, {:accesskey => "4"})+" | ") -%> 
 <%= (link_to("Tickler", {:action => "index", :controller => "tickler.m"})+" | ") -%>
 <%= (link_to("Feeds", {:action => "index", :controller => "feeds.m"})) -%>

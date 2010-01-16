@@ -1,5 +1,5 @@
 <%= link_to(image_tag( 'blank.png', :width=>'16', :height=>'16', :border=>'0' ), "#", {:class => 'show_notes', :title => 'Show notes'}) %>
 
 <div class="todo_notes" id="<%= dom_id(item, 'notes') %>" style="display:none">
-  <%= sanitize(markdown( auto_link(item.notes)) ) %>
+  <%= format_note(item.notes) %>
 </div>

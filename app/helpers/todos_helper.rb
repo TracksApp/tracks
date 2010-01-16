@@ -64,6 +64,14 @@ module TodosHelper
         :complete => todo_stop_waiting_js(todo))
     end
   end
+
+  def remote_promote_to_project_menu_item(todo)
+    url = {:controller => 'todos', :action => 'convert_to_project', :id => todo.id,
+      :_source_view => (@source_view.underscore.gsub(/\s+/,'_') rescue "")}
+    url[:_tag_name] = @tag_name if @source_view == 'tag'
+
+    return link_to("Promote to project", url)
+  end
   
   def todo_start_waiting_js(todo)
     return "$('#ul#{dom_id(todo)}').css('visibility', 'hidden'); $('##{dom_id(todo)}').block({message: null})"
@@ -262,9 +270,10 @@ module TodosHelper
   end
   
   def empty_container_msg_div_id
-    return "tickler-empty-nd" if source_view_is_one_of(:project, :tag) && @todo.deferred?
-    return "p#{@todo.project_id}empty-nd" if source_view_is :project
-    return "c#{@todo.context_id}empty-nd"
+    todo = @todo || @successor
+    return "tickler-empty-nd" if source_view_is_one_of(:project, :tag) && todo.deferred?
+    return "p#{todo.project_id}empty-nd" if source_view_is :project
+    return "c#{todo.context_id}empty-nd"
   end
   
   def project_names_for_autocomplete
@@ -315,5 +324,5 @@ module TodosHelper
   def auto_complete_result2(entries, phrase = nil)
     return entries.map{|e| e.specification()}.join("\n") rescue ''
   end
-  
+
 end

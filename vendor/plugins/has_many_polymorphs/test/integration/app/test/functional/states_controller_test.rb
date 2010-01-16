@@ -4,7 +4,7 @@ require 'states_controller'
 # Re-raise errors caught by the controller.
 class StatesController; def rescue_action(e) raise e end; end
 
-class StatesControllerTest < Test::Unit::TestCase
+class StatesControllerTest < ActiveSupport::TestCase
   fixtures :states
 
   def setup
