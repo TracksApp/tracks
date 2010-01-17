@@ -222,6 +222,26 @@ function enable_rich_interaction(){
         drop: drop_todo,
         hoverClass: 'hover'
       });
+
+  /* Reset auto updater */
+  field_touched = false;
+}
+
+/* Auto-refresh */
+
+function setup_auto_refresh(interval){
+  field_touched = false;
+  function refresh_page() {
+    if(!field_touched){
+      window.location.reload();
+    }
+  }
+  setTimeout(refresh_page, interval);
+  $(function(){
+      $("input").live('keydown', function(){
+        field_touched = true;
+        });
+      });
 }
 
 $(document).ready(function() {

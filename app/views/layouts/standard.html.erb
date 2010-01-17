@@ -2,9 +2,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <% if @prefs.refresh != 0 -%>
-      <meta http-equiv="Refresh" content="<%= @prefs["refresh"].to_i*60 %>;url=<%= request.request_uri %>">
-    <% end -%>
     <% bundle :name => "tracks_css" do %>
       <%= stylesheet_link_tag *%w[ standard superfish niftyCorners jquery-ui jquery.autocomplete] %>
     <% end %>
@@ -33,6 +30,9 @@
       var defaultTags = <%= default_tags_for_autocomplete %>;
       var tagNames = <%= tag_names_for_autocomplete %>;
       var dateFormat = '<%= date_format_for_date_picker %>';
+      <% end -%>
+      <% if @prefs.refresh != 0 -%>
+        setup_auto_refresh(<%= @prefs["refresh"].to_i*60000 %>);
       <% end -%>
     </script>
     <link rel="shortcut icon" href="<%= url_for(:controller => 'favicon.ico') %>" />
