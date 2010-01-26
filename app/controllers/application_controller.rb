@@ -276,8 +276,6 @@ class ApplicationController < ActionController::Base
   
   def set_time_zone
     Time.zone = current_user.prefs.time_zone if logged_in?
-    locale = params[:locale] || 'en-US'
-    I18n.locale = locale
   end
 
   def set_zindex_counter
