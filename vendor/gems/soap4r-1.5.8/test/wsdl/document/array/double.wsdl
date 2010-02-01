@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="double"
+  targetNamespace="http://tempuri.org/"
+  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+  xmlns:s="http://www.w3.org/2001/XMLSchema"
+  xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+  xmlns:tns="http://tempuri.org/"
+  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+
+      <s:element name="ArrayOfRecord">
+        <s:complexType>
+          <s:sequence>
+            <s:element maxOccurs="unbounded" name="record" type="tns:report-record"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="report-record">
+        <s:attribute name="a" type="s:string" />
+        <s:attribute name="b" type="s:string" />
+        <s:attribute name="c" type="s:string" />
+      </s:complexType>
+
+      <s:complexType name="ArrayOfDouble">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="double"
+            type="s:double"/>
+        </s:sequence>
+      </s:complexType>
+
+      <s:element name="echo">
+        <s:complexType>
+          <s:sequence>
+            <s:element nillable="true" maxOccurs="1" name="ary" type="tns:ArrayOfDouble"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="echoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element nillable="true" maxOccurs="1" name="ary" type="tns:ArrayOfDouble"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+
+      <s:element name="ArrayOfDouble" nillable="true" type="tns:ArrayOfDouble"/>
+
+      <s:element name="echo2">
+        <s:complexType>
+          <s:sequence>
+            <s:element name="arg" type="tns:ArrayOfComplex"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+
+      <s:element name="echo2Response">
+        <s:complexType>
+          <s:sequence>
+            <s:element name="arg" type="tns:ArrayOfComplex"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+
+      <s:element name="ArrayOfComplex">
+        <s:complexType>
+          <s:sequence>
+            <s:element ref="tns:Complex" maxOccurs="3"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+
+      <s:element name="Complex">
+        <s:complexType>
+          <s:sequence>
+            <s:element name="string" type="s:string"/>
+            <s:element name="double" type="s:double"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+
+  <wsdl:message name="echoIn">
+    <wsdl:part name="parameters" element="tns:echo"/>
+  </wsdl:message>
+  <wsdl:message name="echoOut">
+    <wsdl:part name="parameters" element="tns:echoResponse"/>
+  </wsdl:message>
+  <wsdl:message name="echo2In">
+    <wsdl:part name="parameters" element="tns:echo2"/>
+  </wsdl:message>
+  <wsdl:message name="echo2Out">
+    <wsdl:part name="parameters" element="tns:echo2Response"/>
+  </wsdl:message>
+  <wsdl:message name="echo3In">
+    <wsdl:part name="parameters" element="tns:ArrayOfRecord"/>
+  </wsdl:message>
+  <wsdl:message name="echo3Out">
+    <wsdl:part name="parameters" element="tns:ArrayOfRecord"/>
+  </wsdl:message>
+
+  <wsdl:portType name="pricerSoap">
+    <wsdl:operation name="echo">
+      <wsdl:input message="tns:echoIn"/>
+      <wsdl:output message="tns:echoOut"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="echo2">
+      <wsdl:input message="tns:echo2In"/>
+      <wsdl:output message="tns:echo2Out"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="echo3">
+      <wsdl:input message="tns:echo3In"/>
+      <wsdl:output message="tns:echo3Out"/>
+    </wsdl:operation>
+  </wsdl:portType>
+
+  <wsdl:binding name="pricerSoap" type="tns:pricerSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http"
+      style="document"/>
+
+    <wsdl:operation name="echo">
+      <soap:operation soapAction="http://tempuri.org/echo" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="echo2">
+      <soap:operation soapAction="http://tempuri.org/echo2" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="echo3">
+      <soap:operation soapAction="http://tempuri.org/echo3" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+
+  <wsdl:service name="pricer">
+    <documentation xmlns="http://schemas.xmlsoap.org/wsdl/"/>
+    <wsdl:port name="pricerSoap" binding="tns:pricerSoap">
+      <soap:address location="http://localhost:17171"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

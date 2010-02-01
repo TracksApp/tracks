@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions
+  name="abstract"
+  targetNamespace="urn:www.example.org:abstract"
+  xmlns="http://schemas.xmlsoap.org/wsdl/"
+  xmlns:tns="urn:www.example.org:abstract"
+  xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+  xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+  <wsdl:types>
+    <schema targetNamespace="urn:www.example.org:abstract"
+      xmlns="http://www.w3.org/2001/XMLSchema">
+
+      <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+
+      <complexType name="Book">
+        <sequence>
+          <element name="name" type="xsd:string"/>
+          <element name="author" type="tns:Author"/>
+        </sequence>
+      </complexType>
+
+      <element name="Author" type="tns:Author"/>
+      <complexType abstract="true" name="Author">
+        <sequence>
+          <element name="firstname" type="xsd:string"/>
+          <element name="lastname" type="xsd:string"/>
+        </sequence>
+      </complexType>
+
+      <complexType name="UserAuthor">
+        <complexContent>
+          <extension base="tns:Author">
+            <sequence>
+              <element name="userid" type="xsd:string"/>
+            </sequence>
+          </extension>
+        </complexContent>
+      </complexType>
+
+      <complexType name="NonUserAuthor">
+        <complexContent>
+          <extension base="tns:Author">
+            <sequence>
+              <element name="nonuserid" type="xsd:string"/>
+            </sequence>
+          </extension>
+        </complexContent>
+      </complexType>
+
+      <complexType name="BaseClass">
+        <sequence>
+          <element name="id" type="xsd:unsignedInt" minOccurs="1"
+            maxOccurs="1"/>
+        </sequence>
+      </complexType>
+
+      <complexType name="DerivedClass1">
+        <complexContent>
+          <extension base="tns:BaseClass">
+            <sequence>
+              <element name="someVar1" type="xsd:string"
+                minOccurs="0" maxOccurs="unbounded"/>
+            </sequence>
+          </extension>
+        </complexContent>
+      </complexType>
+
+      <complexType name="DerivedClass2">
+        <complexContent>
+          <extension base="tns:BaseClass">
+            <sequence>
+              <element name="someVar2" type="xsd:string"
+                minOccurs="0" maxOccurs="unbounded"/>
+            </sequence>
+          </extension>
+        </complexContent>
+      </complexType>
+    </schema>
+  </wsdl:types>
+
+  <wsdl:message name="echoRequest">
+    <wsdl:part name="name" type="xsd:string"/>
+    <wsdl:part name="author" type="tns:Author"/>
+  </wsdl:message>
+
+  <wsdl:message name="echoResponse">
+    <wsdl:part name="return" type="tns:Book"/>
+  </wsdl:message>
+
+  <wsdl:message name="echoLiteralRequest">
+    <wsdl:part name="author" element="tns:Author"/>
+  </wsdl:message>
+
+  <wsdl:message name="echoLiteralResponse">
+    <wsdl:part name="return" element="tns:Author"/>
+  </wsdl:message>
+
+  <wsdl:message name="echoDerivedRequest">
+    <wsdl:part name="parameter" type="tns:BaseClass"/>
+  </wsdl:message>
+
+  <wsdl:message name="echoDerivedResponse">
+    <wsdl:part name="return" type="tns:BaseClass"/>
+  </wsdl:message>
+
+  <wsdl:portType name="AbstractService">
+    <wsdl:operation name="echo" parameterOrder="obj typename">
+      <wsdl:input message="tns:echoRequest" name="echoRequest"/>
+      <wsdl:output message="tns:echoResponse" name="echoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="echoLiteral">
+      <wsdl:input message="tns:echoLiteralRequest"/>
+      <wsdl:output message="tns:echoLiteralResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="echoDerived">
+      <wsdl:input message="tns:echoDerivedRequest" name="echoDerivedRequest"/>
+      <wsdl:output message="tns:echoDerivedResponse" name="echoDerivedResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+
+  <wsdl:binding name="AbstractServiceSoapBinding"
+    type="tns:AbstractService">
+
+    <wsdlsoap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+
+    <wsdl:operation name="echo">
+      <wsdlsoap:operation style="rpc" soapAction=""/>
+      <wsdl:input name="echoRequest">
+        <wsdlsoap:body
+          encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+          namespace="urn:www.example.org:abstract" use="encoded"/>
+      </wsdl:input>
+      <wsdl:output name="echoResponse">
+        <wsdlsoap:body
+          encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+          namespace="urn:www.example.org:abstract" use="encoded"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="echoLiteral">
+      <wsdlsoap:operation style="document" soapAction=""/>
+      <wsdl:input name="echoLiteralRequest">
+        <wsdlsoap:body namespace="urn:www.example.org:abstract" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="echoLiteralResponse">
+        <wsdlsoap:body namespace="urn:www.example.org:abstract" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="echoDerived">
+      <wsdlsoap:operation style="rpc" soapAction=""/>
+      <wsdl:input name="echoDerivedRequest">
+        <wsdlsoap:body
+          encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+          namespace="urn:www.example.org:abstract" use="encoded"/>
+      </wsdl:input>
+      <wsdl:output name="echoDerivedResponse">
+        <wsdlsoap:body
+          encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+          namespace="urn:www.example.org:abstract" use="encoded"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+
+  <wsdl:service name="AbstractServiceService">
+    <wsdl:port name="AbstractService"
+      binding="tns:AbstractServiceSoapBinding">
+      <wsdlsoap:address location="http://localhost:8080/"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

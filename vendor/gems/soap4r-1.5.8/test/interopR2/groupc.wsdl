@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<definitions name="InteropTest"
+    targetNamespace="http://soapinterop.org/"
+    xmlns="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:tns="http://soapinterop.org/">
+
+  <import location="InteropTestC.wsdl"
+      namespace="http://soapinterop.org/"/>
+
+  <service name="SOAP4R_SOAPBuildersInteropTest_R2GroupC">
+    <port name="InteropEchoHeaderService"
+        binding="tns:InteropEchoHeaderBinding">
+      <soap:address location="http://dev.ctor.org/soapsrv"/>
+    </port>
+  </service>
+</definitions>

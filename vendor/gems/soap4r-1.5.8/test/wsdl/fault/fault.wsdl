@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="Add"
+  targetNamespace="http://fault.test/Faulttest"
+  xmlns:tns="http://fault.test/Faulttest"
+  xmlns="http://schemas.xmlsoap.org/wsdl/"
+  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+
+<types>
+  <schema targetNamespace="http://fault.test/Faulttest"
+          xmlns="http://www.w3.org/2001/XMLSchema">
+
+    <element name="Add">
+      <complexType>
+        <sequence>
+          <element name="value" type="int"/>
+        </sequence>
+      </complexType>
+    </element>
+    <element name="AddResponse">
+      <complexType>
+        <sequence>
+          <element name="sum" type="int"/>
+        </sequence>
+      </complexType>
+    </element>
+
+    <element name="AddFault">
+      <complexType>
+        <sequence>
+          <element name="Reason" type="string"/>
+          <element name="Severity" type="string"/>
+        </sequence>
+      </complexType>
+    </element>
+
+  </schema>
+</types>
+
+<message name="AddMessage">
+  <part name="request" element="tns:Add"/>
+</message>
+<message name="AddResponseMessage">
+  <part name="response" element="tns:AddResponse"/>
+</message>
+<message name="AddFaultMessage">
+  <part name="fault" element="tns:AddFault"/>
+</message>
+
+<portType name="AddPortType">
+  <operation name="Add">
+    <input  name="Add" message="tns:AddMessage"/>
+    <output name="AddResponse" message="tns:AddResponseMessage"/>
+    <fault  name="AddFault" message="tns:AddFaultMessage"/>
+  </operation>
+</portType>
+
+  <binding name="AddSOAPBinding" type="tns:AddPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="Add">
+      <soap:operation soapAction="Add"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="AddFault">
+        <soap:fault name="AddFault"/>
+      </fault>
+    </operation>
+  </binding>
+
+  <service name="AddService">
+    <port name="AddPort" binding="tns:AddSOAPBinding">
+      <soap:address location="http://localhost:8080/"/>
+    </port>
+  </service>
+
+</definitions>

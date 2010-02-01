@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definitions
+    name="echo"
+    targetNamespace="urn:group"
+    xmlns:tns="urn:group"
+    xmlns:txd="urn:grouptype"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns="http://schemas.xmlsoap.org/wsdl/">
+    <types>
+      <xsd:schema elementFormDefault="unqualified" targetNamespace="urn:grouptype">
+
+        <xsd:element name="comment" type="xsd:string"/>
+
+        <xsd:simpleType name="attr_type">
+          <xsd:restriction base="xsd:decimal">
+            <xsd:maxInclusive value="-50"/>
+            <xsd:minInclusive value="50"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+
+        <xsd:group name="common">
+          <xsd:sequence>
+            <xsd:element ref="txd:comment" minOccurs="0"/>
+            <xsd:any namespace="##any" minOccurs="0"/>
+          </xsd:sequence>
+        </xsd:group>
+
+        <xsd:attributeGroup name="common_attr">
+          <xsd:attribute name="attr_min" type="txd:attr_type" default="0"/>
+          <xsd:attribute name="attr_max" type="txd:attr_type" default="0"/>
+        </xsd:attributeGroup>
+
+        <xsd:group name="common_element">
+          <xsd:sequence>
+            <xsd:group ref="txd:common"/>
+            <xsd:choice>
+              <xsd:element name="element" type="xsd:string"/>
+              <xsd:element name="eletype" type="xsd:string"/>
+            </xsd:choice>
+          </xsd:sequence>
+        </xsd:group>
+
+        <xsd:complexType name="groupele_type">
+          <xsd:sequence>
+            <xsd:group ref="txd:common_element"/>
+            <xsd:element name="var" type="xsd:string"/>
+          </xsd:sequence>
+          <xsd:attributeGroup ref="txd:common_attr"/>
+        </xsd:complexType>
+
+        <xsd:element name="groupele" type="txd:groupele_type"/>
+      </xsd:schema>
+    </types>
+
+  <message name="echo_in">
+    <part name="parameters" element="txd:groupele" />
+  </message>
+  <message name="echo_out">
+    <part name="parameters" element="txd:groupele" />
+  </message>
+
+  <portType name="group_porttype">
+    <operation name="echo">
+      <input message="tns:echo_in" />
+      <output message="tns:echo_out" />
+    </operation>
+  </portType>
+
+  <binding name="group_binding" type="tns:group_porttype">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document" />
+    <operation name="echo">
+      <soap:operation soapAction="urn:group:echo" style="document" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+  </binding>
+
+  <service name="group_service">
+    <port name="docprc_service_port" binding="tns:group_binding">
+      <soap:address location="http://localhost:17171/" />
+    </port>
+  </service>
+</definitions>

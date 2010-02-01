@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definitions name="echo"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:tns="urn:soaptype"
+    xmlns:txd="urn:soaptype-type"
+    targetNamespace="urn:soaptype"
+    xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <types>
+    <xsd:schema targetNamespace="urn:soaptype-type">
+      <xsd:complexType name="wrapper">
+	<xsd:all>
+	  <xsd:element name="short" type="xsd:short" />
+	  <xsd:element name="long" type="xsd:long" />
+	  <xsd:element name="double" type="xsd:double" />
+	</xsd:all>
+      </xsd:complexType>
+    </xsd:schema>
+  </types>
+
+  <message name="echo_in">
+    <part name="arg" type="txd:wrapper"/>
+  </message>
+
+  <message name="echo_out">
+    <part name="return" type="txd:wrapper"/>
+  </message>
+
+  <portType name="echo_port_type">
+    <operation name="echo_soaptype">
+      <input message="tns:echo_in"/>
+      <output message="tns:echo_out"/>
+    </operation>
+
+    <operation name="echo_err">
+      <input message="tns:echo_in"/>
+      <output message="tns:echo_out"/>
+    </operation>
+  </portType>
+
+  <binding name="echo_binding" type="tns:echo_port_type">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="rpc"/>
+    <operation name="echo_soaptype">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="encoded" namespace="urn:soaptype"
+	    encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </input>
+      <output>
+        <soap:body use="encoded" namespace="urn:soaptype"
+	    encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </output>
+    </operation>
+  </binding>
+
+  <service name="echo_service">
+    <port name="echo_port" binding="tns:echo_binding">
+      <soap:address location="http://localhost:10080"/>
+    </port>
+  </service>
+</definitions>

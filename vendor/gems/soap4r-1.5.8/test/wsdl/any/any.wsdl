@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definitions name="echo"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:tns="urn:example.com:echo"
+    xmlns:txd="urn:example.com:echo-type"
+    targetNamespace="urn:example.com:echo"
+    xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <types>
+    <xsd:schema targetNamespace="urn:example.com:echo-type">
+      <xsd:complexType name="foo.bar">
+        <xsd:sequence>
+          <xsd:element name="before" type="xsd:string"/>
+          <xsd:any/>
+          <xsd:element name="after" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:element name="foo.bar" type="txd:foo.bar"/>
+
+      <!-- from #323 -->
+      <xsd:element name="setOutputAndCompleteRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="taskId" type="xsd:string"/>
+            <xsd:element name="data">
+              <xsd:complexType>
+                <xsd:sequence>
+                  <xsd:any maxOccurs="unbounded" minOccurs="0" />
+                </xsd:sequence>
+              </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="participantToken" type="xsd:string">
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+  </types>
+
+  <message name="msg_echoitem">
+    <part name="parameters" type="txd:foo.bar"/>
+  </message>
+
+  <message name="msg_echoany_request">
+  </message>
+
+  <message name="msg_echoany_response">
+    <part name="echoany_return" type="xsd:anyType"/>
+  </message>
+
+  <message name="setOutputAndCompleteRequest">
+    <part name="parameters" element="txd:setOutputAndCompleteRequest"/>
+  </message>
+
+  <message name="okResponse">
+    <part name="parameters" element="txd:setOutputAndCompleteRequest"/>
+  </message>
+
+  <portType name="echo_port_type">
+    <operation name="echo">
+      <input message="tns:msg_echoitem"/>
+      <output message="tns:msg_echoitem"/>
+    </operation>
+
+    <operation name="echoAny">
+      <input message="tns:msg_echoany_request"/>
+      <output message="tns:msg_echoany_response"/>
+    </operation>
+
+    <operation name="setOutputAndComplete">
+      <input message="tns:setOutputAndCompleteRequest"/>
+      <output message="tns:okResponse"/>
+    </operation>
+  </portType>
+
+  <binding name="echo_binding" type="tns:echo_port_type">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+    <operation name="echo">
+      <soap:operation soapAction="urn:example.com:echo"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+
+    <operation name="echoAny">
+      <soap:operation style="rpc" soapAction="urn:example.com:echoAny"/>
+      <input>
+        <soap:body use="encoded"/>
+      </input>
+      <output>
+        <soap:body use="encoded"/>
+      </output>
+    </operation>
+
+    <operation name="setOutputAndComplete">
+      <soap:operation soapAction="urn:example.com:echo"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+
+  <service name="echo_service">
+    <port name="echo_port" binding="tns:echo_binding">
+      <soap:address location="http://localhost:10080"/>
+    </port>
+  </service>
+</definitions>

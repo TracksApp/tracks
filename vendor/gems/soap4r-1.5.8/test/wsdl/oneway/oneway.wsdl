@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="oneway" targetNamespace="http://www.example.com/oneway" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://www.example.com/oneway" xmlns:plnk="http://schemas.xmlsoap.org/ws/2003/05/partner-link/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:client="http://www.example.com/oneway">
+  <types>
+    <schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://www.example.com/oneway" xmlns="http://www.w3.org/2001/XMLSchema">
+      <element name="onewayProcessRequest">
+        <complexType>
+          <sequence>
+            <element name="msg" type="string" nillable="true" />
+          </sequence>
+        </complexType>
+      </element>
+    </schema>
+  </types>
+  <message name="onewayRequestMessage">
+    <part name="payload" element="tns:onewayProcessRequest"/>
+  </message>
+  <portType name="onewayPort">
+    <operation name="initiate">
+      <input message="tns:onewayRequestMessage"/>
+    </operation>
+  </portType>
+  <binding name="onewayBinding" type="tns:onewayPort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="initiate">
+      <soap:operation style="document" soapAction="initiate"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+    </operation>
+  </binding>
+  <service name="onewayService">
+    <port name="onewayPort" binding="tns:onewayBinding">
+      <soap:address location="http://localhost:1234/soap"/>
+    </port>
+  </service>
+</definitions>
