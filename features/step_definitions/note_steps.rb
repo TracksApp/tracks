@@ -45,6 +45,7 @@ end
 
 When /^I delete the first note$/ do
   click_link "delete note"
+  selenium.get_confirmation.should == "Are you sure that you want to delete the note '1'?"
 end
 
 Then /^the first note should disappear$/ do

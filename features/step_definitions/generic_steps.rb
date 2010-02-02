@@ -1,4 +1,5 @@
 Then /the badge should show (.*)/ do |number|
+  # puts response.body.inspect
   badge = -1
   response.should have_xpath("//span[@id='badge_count']") do |node|
     badge = node.first.content.to_i
