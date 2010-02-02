@@ -16,7 +16,7 @@
         :url => note_path(note),
         :method => :delete,
         :confirm => "Are you sure that you want to delete the note \'#{note.id.to_s}\'?" },
-        { :class => 'delete_note' }) -%>&nbsp;
+        { :class => 'delete_note', :title => "delete note" }) -%>&nbsp;
       <%= link_to_function(image_tag( "blank.png", :title => "Edit item", :class=>"edit_item"),
         "$('##{dom_id(note)}').toggle(); $('##{dom_id(note, 'edit')}').show(); $('##{dom_id(note, 'edit_form')} textarea').focus();" ) + " | " %>
       <%= link_to("In: " + note.project.name, project_path(note.project), :class=>"footer_link" ) %>&nbsp;|&nbsp;

@@ -31,7 +31,7 @@ Feature: View, add, remove notes
     When I go to the notes page
     And I delete the first note
     Then the first note should disappear
-    Then the badge should show 1
+    And the badge should show 1
 
   @selenium
   Scenario: Link to note

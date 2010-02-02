@@ -38,14 +38,18 @@ end
 
 Given /^I have a project "([^\"]*)" with (.*) notes?$/ do |project_name, num|
   project = @current_user.projects.create!(:name => project_name)
-  num.to_i.downto 0 do |i|
-    project.notes.create!(:user_id => @current_user.id, :body => "A note #{i}")
+  0.upto num.to_i do |i|
+    project.notes.create!(:user_id => @current_user.id, :body => "A note #{i+1}")
   end
 end
 
 When /^I delete the first note$/ do
-  # need selenium for this to check on the js
-  pending
+  click_link "delete note"
+end
+
+Then /^the first note should disappear$/ do
+   # the first note contains "A note 1" 
+   Then "I should not see \"A note 1\""
 end
 
 Given /^I have one project "([^\"]*)" with 1 note$/ do |arg1|
@@ -98,12 +102,6 @@ Then "Luis should see the note on the notes page" do
 visits '/notes'
 should_see "new exam note"
 end
-
-Then "the first note should disappear" do
-wait_for_ajax_and_effects
-should_not_see 'exam note 1'
-end
-
 
 Then "he should see the note text" do
 should_see 'exam note 1'

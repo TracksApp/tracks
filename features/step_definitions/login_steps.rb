@@ -1,9 +1,9 @@
 Given /^I have logged in as "(.*)" with password "(.*)"$/ do |username, password|
   visit login_path
-  fill_in "login", :with => username
-  fill_in "password", :with => password
-  click_button "Sign in"
-  response.body.should =~ /Login successful/m
+  fill_in "Login", :with => username
+  fill_in "Password", :with => password
+  click_button
+  response.should contain(/Login successful/)
   @current_user = User.find_by_login(username)
 end
 

@@ -49,7 +49,7 @@ $.fn.clearForm = function() {
  * Unobtrusive jQuery written by Eric Allen
  ****************************************/
 
-/* Set up authenticity token proplery */
+/* Set up authenticity token properly */
 $(document).ajaxSend(function(event, request, settings) {
   if ( settings.type == 'POST' ) {
     if(typeof(AUTH_TOKEN) != 'undefined'){
