@@ -640,8 +640,8 @@ class TodosController < ApplicationController
   end
 
   def convert_to_project
-    @todo = Todo.find(params[:id])
-    @project = Project.new(:name => @todo.description, :description => @todo.notes,
+    @todo = current_user.todos.find(params[:id])
+    @project = current_user.projects.new(:name => @todo.description, :description => @todo.notes,
                            :default_context => @todo.context)
     @todo.destroy
     @project.save!
