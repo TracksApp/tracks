@@ -37,10 +37,3 @@ Feature: View, add, remove notes
     When I visit the "Pass Final Exam" project
     And I click the icon next to the note
     Then I should see the note text
-    
-  @selenium
-  Scenario: Toggle notes 
-    Given I have two projects with one note each
-    When I go to the notes page
-    And I click Toggle Notes
-    Then I should see the body of the notes
