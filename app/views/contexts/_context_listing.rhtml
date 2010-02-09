@@ -26,7 +26,8 @@
         :with => "'_source_view=#{@source_view}'",
         :before => "$('#{dom_id(context)}').block({message:null});",
         :complete => "$('#{dom_id(context)}').unblock();",
-        :confirm => "Are you sure that you want to delete the context '#{context.name}'?"
+        :confirm => "Are you sure that you want to delete the context '#{context.name}'?",
+        :html => { :id => dom_id(context, 'delete') }
         ) %>
       <%=  link_to_remote(
         image_tag( "blank.png", :title => "Edit context", :class=>"edit_item"),
@@ -34,7 +35,8 @@
         :method => 'get',
         :with => "'_source_view=#{@source_view}'",
         :before => "$('#{dom_id(context)}').block({message:null});",
-        :complete => "$('#{dom_id(context)}').unblock();"
+        :complete => "$('#{dom_id(context)}').unblock();",
+        :html => { :id => dom_id(context, 'edit') }
         ) %>
     </div>
   </div>
