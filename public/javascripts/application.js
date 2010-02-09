@@ -394,7 +394,7 @@ $(document).ready(function() {
       };
       $.post('/contexts/update/'+context_id, {'context[name]': value}, highlight);
       return(value);
-      }, {style: 'padding:0px', submit: "OK"});
+      }, {style: 'padding:0px', submit: "OK", cancel: "CANCEL"});
 
   /* Projects behavior */
 
