@@ -468,6 +468,14 @@ $(document).ready(function() {
 
   $("#list-contexts-active").sortable({handle: '.handle', update: update_order});
   $("#list-contexts-hidden").sortable({handle: '.handle', update: update_order});
+  
+  /* Feeds page */
+  $("#feed-contexts").change(function(){
+      $("#feeds-for-context").load('/feedlist/get_feeds_for_context?context_id='+this.value);
+  });
+  $("#feed-projects").change(function(){
+      $("#feeds-for-project").load('/feedlist/get_feeds_for_project?project_id='+this.value);
+  });
 
   /* Gets called from some AJAX callbacks, too */
   enable_rich_interaction();
