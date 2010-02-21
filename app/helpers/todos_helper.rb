@@ -70,7 +70,7 @@ module TodosHelper
       :_source_view => (@source_view.underscore.gsub(/\s+/,'_') rescue "")}
     url[:_tag_name] = @tag_name if @source_view == 'tag'
 
-    return link_to("Promote to project", url)
+    return link_to(image_tag("to_project_off.png", :align => "absmiddle")+" Make project", url)
   end
   
   def todo_start_waiting_js(todo)
