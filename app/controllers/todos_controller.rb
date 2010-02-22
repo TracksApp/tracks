@@ -77,7 +77,7 @@ class TodosController < ApplicationController
       @todo.tags.reload
     end
 
-    unless (@aved == false)
+    unless (@saved == false)
       unless @todo.uncompleted_predecessors.empty? || @todo.state == 'project_hidden'
         @todo.state = 'pending'
       end
