@@ -38,7 +38,19 @@ When /^I drag "(.*)" to "(.*)"$/ do |dragged, target|
   drop_id = Todo.find_by_description(target).id
   drag_name = "xpath=//div[@id='line_todo_#{drag_id}']//img[@class='grip']"
   drop_name = "xpath=//div[@id='line_todo_#{drop_id}']//div[@class='description']"
+  
   selenium.drag_and_drop_to_object(drag_name, drop_name)
+
+  arrow = "xpath=//div[@id='line_todo_#{drop_id}']/div/a[@class='show_successors']/img"
+  selenium.wait_for_element(arrow)
+end
+
+When /^I expand the dependencies of "([^\"]*)"$/ do |todo_name|
+  todo = Todo.find_by_description(todo_name)
+  todo.should_not be_nil
+
+  expand_img_locator = "xpath=//div[@id='line_todo_#{todo.id}']/div/a[@class='show_successors']/img"
+  selenium.click(expand_img_locator)
 end
 
 Then /^I should see ([0-9]+) todos$/ do |count|
@@ -47,7 +59,25 @@ Then /^I should see ([0-9]+) todos$/ do |count|
   end
 end
 
-Then /^the dependencies of "(.*)" should include "(.*)"$/ do |parent_name, child_name|
-   parent_id = Todo.find_by_description(parent_name).id
-   assert_contain(parent_name)
+Then /^the dependencies of "(.*)" should include "(.*)"$/ do |child_name, parent_name|
+  parent = @current_user.todos.find_by_description(parent_name)
+  parent.should_not be_nil
+  
+  child = parent.pending_successors.find_by_description(child_name)
+  child.should_not be_nil
+end
+
+Then /^I should see "([^\"]*)" within the dependencies of "([^\"]*)"$/ do |successor_description, todo_description|
+  todo = @current_user.todos.find_by_description(todo_description)
+  todo.should_not be_nil
+  successor = @current_user.todos.find_by_description(successor_description)
+  successor.should_not be_nil
+
+  # argh, webrat on selenium does not support within, so this won't work
+  # xpath = "//div[@id='line_todo_#{todo.id}'"
+  # Then "I should see \"#{successor_description}\" within \"xpath=#{xpath}\""
+
+  # let selenium look for the presence of the successor
+  xpath = "xpath=//div[@id='line_todo_#{todo.id}']//div[@id='successor_line_todo_#{successor.id}']//span"
+  selenium.wait_for_element(xpath)
 end

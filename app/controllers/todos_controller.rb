@@ -140,8 +140,8 @@ class TodosController < ApplicationController
   
   def add_predecessor
     @source_view = params['_source_view'] || 'todo'
-    @predecessor = Todo.find(params['predecessor'])
-    @todo = Todo.find(params['successor'])
+    @predecessor = current_user.todos.find(params['predecessor'])
+    @todo = current_user.todos.find(params['successor'])
     @original_state = @todo.state
     # Add predecessor
     @todo.add_predecessor(@predecessor)
@@ -154,7 +154,7 @@ class TodosController < ApplicationController
 
   def remove_predecessor
     @source_view = params['_source_view'] || 'todo'
-    @predecessor = Todo.find(params['predecessor'])
+    @predecessor = current_user.todos.find(params['predecessor'])
     @successor = @todo
     @removed = @successor.remove_predecessor(@predecessor)
     respond_to do |format|
