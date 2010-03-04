@@ -185,7 +185,7 @@ function project_defaults(){
 }
 
 function enable_rich_interaction(){
-  $('input.Date').datepicker({'dateFormat': dateFormat});
+  $('input.Date').datepicker({'dateFormat': dateFormat, 'firstDay': weekStart});
   /* Autocomplete */
   $('input[name=context_name]').autocomplete(contextNames, {matchContains: true});
   $('input[name=project[default_context_name]]').autocomplete(contextNames, {matchContains: true});
