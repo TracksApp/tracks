@@ -359,7 +359,6 @@ $(document).ready(function() {
     });
 
   $("#recurring_todo_new_action_cancel").click(function(){
-      $('#recurring-todo-form-new-action').clearForm();
       $('#recurring-todo-form-new-action input:text:first').focus();
       TracksForm.hide_all_recurring();
       $('#recurring_daily').show();
@@ -367,7 +366,6 @@ $(document).ready(function() {
   });
 
   $("#recurring_todo_edit_action_cancel").live('click', function(){
-      $('#recurring-todo-form-edit-action').clearForm();
       $('#recurring-todo-form-edit-action input:text:first').focus();
       TracksForm.hide_all_recurring();
       $('#recurring_daily').show();
