@@ -209,7 +209,7 @@ function enable_rich_interaction(){
   /* Drag & Drop for successor/predecessor */
   function drop_todo(evt, ui) {
     dragged_todo = ui.draggable[0].id.split('_')[2];
-    dropped_todo = this.id.split('_')[2];
+    dropped_todo = $(this).parents('.item-show').get(0).id.split('_')[2];
     ui.draggable.hide();
     $(this).block({message: null});
     $.post('/todos/add_predecessor',
@@ -217,11 +217,14 @@ function enable_rich_interaction(){
         null, 'script');
   }
 
-  $('.item-show').draggable({handle: '.grip', revert: 'invalid'});
-  $('.item-show').droppable({
-        drop: drop_todo,
-        hoverClass: 'hover'
-      });
+  $('.item-show').draggable({handle: '.grip',
+      revert: 'invalid',
+      start: function() {$('.successor_target').show();},
+      stop: function() {$('.successor_target').hide();}});
+
+  $('.successor_target').droppable({drop: drop_todo,
+      tolerance: 'pointer',
+      hoverClass: 'hover'});
 
   /* Reset auto updater */
   field_touched = false;
