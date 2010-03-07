@@ -310,6 +310,17 @@ $(document).ready(function() {
     $.post(this.value, params, null, 'script');
   });
 
+  /* set behavior for edit icon */
+  $(".item-container a.edit_item").live('click', function (ev){
+    itemContainer = $(this).parents(".item-container");
+    $.ajax({
+            url: this.href,
+            beforeSend: function() { itemContainer.block({message: null});},
+            complete: function() { itemContainer.unblock();},
+            dataType: 'script'});
+    return false;
+  });
+
   setup_container_toggles();
 
   $('#toggle_action_new').click(function(){
