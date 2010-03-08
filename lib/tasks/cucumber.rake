@@ -26,6 +26,13 @@ unless ARGV.any? {|a| a =~ /^gems/} # Don't load anything when running the gems:
         t.profile = 'wip'
       end
 
+      Cucumber::Rake::Task.new({:selenium => 'db:test:prepare'}, 'Run features that require selenium') do |t|
+        t.binary = vendored_cucumber_bin
+        t.fork = true # You may get faster startup if you set this to false
+        t.profile = 'selenium'
+        ENV['RAILS_ENV'] = "selenium" # switch to selenium environment
+      end
+
       desc 'Run all features'
       task :all => [:ok, :wip]
     end
