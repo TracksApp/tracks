@@ -939,9 +939,17 @@ div.message {
     cursor: move;
 }
 
-.hover {
-    background: #EAEAEA;
-    font-weight: bold;
+.successor_target {
+  background-image:url("../images/add_successor_off.png");
+  background-repeat: no-repeat;
+  background-position: center right;
+  display: none;
+}
+
+.successor_target.hover {
+  background-image:url("../images/add_successor_on.png");
+  background-repeat: no-repeat;
+  background-position: center right;
 }
 
 /* Error message styles */

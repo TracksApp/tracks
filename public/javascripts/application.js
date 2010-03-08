@@ -185,7 +185,7 @@ function project_defaults(){
 }
 
 function enable_rich_interaction(){
-  $('input.Date').datepicker({'dateFormat': dateFormat});
+  $('input.Date').datepicker({'dateFormat': dateFormat, 'firstDay': weekStart});
   /* Autocomplete */
   $('input[name=context_name]').autocomplete(contextNames, {matchContains: true});
   $('input[name=project[default_context_name]]').autocomplete(contextNames, {matchContains: true});
@@ -209,7 +209,7 @@ function enable_rich_interaction(){
   /* Drag & Drop for successor/predecessor */
   function drop_todo(evt, ui) {
     dragged_todo = ui.draggable[0].id.split('_')[2];
-    dropped_todo = this.id.split('_')[2];
+    dropped_todo = $(this).parents('.item-show').get(0).id.split('_')[2];
     ui.draggable.hide();
     $(this).block({message: null});
     $.post('/todos/add_predecessor',
@@ -217,11 +217,14 @@ function enable_rich_interaction(){
         null, 'script');
   }
 
-  $('.item-show').draggable({handle: '.grip', revert: 'invalid'});
-  $('.item-show').droppable({
-        drop: drop_todo,
-        hoverClass: 'hover'
-      });
+  $('.item-show').draggable({handle: '.grip',
+      revert: 'invalid',
+      start: function() {$('.successor_target').show();},
+      stop: function() {$('.successor_target').hide();}});
+
+  $('.successor_target').droppable({drop: drop_todo,
+      tolerance: 'pointer',
+      hoverClass: 'hover'});
 
   /* Reset auto updater */
   field_touched = false;
@@ -307,6 +310,17 @@ $(document).ready(function() {
     $.post(this.value, params, null, 'script');
   });
 
+  /* set behavior for edit icon */
+  $(".item-container a.edit_item").live('click', function (ev){
+    itemContainer = $(this).parents(".item-container");
+    $.ajax({
+            url: this.href,
+            beforeSend: function() { itemContainer.block({message: null});},
+            complete: function() { itemContainer.unblock();},
+            dataType: 'script'});
+    return false;
+  });
+
   setup_container_toggles();
 
   $('#toggle_action_new').click(function(){
@@ -359,7 +373,6 @@ $(document).ready(function() {
     });
 
   $("#recurring_todo_new_action_cancel").click(function(){
-      $('#recurring-todo-form-new-action').clearForm();
       $('#recurring-todo-form-new-action input:text:first').focus();
       TracksForm.hide_all_recurring();
       $('#recurring_daily').show();
@@ -367,7 +380,6 @@ $(document).ready(function() {
   });
 
   $("#recurring_todo_edit_action_cancel").live('click', function(){
-      $('#recurring-todo-form-edit-action').clearForm();
       $('#recurring-todo-form-edit-action input:text:first').focus();
       TracksForm.hide_all_recurring();
       $('#recurring_daily').show();

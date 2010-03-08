@@ -5,6 +5,13 @@ if @removed
   # replace old predecessor with one without the successor
   page.replace dom_id(@predecessor), :partial => 'todos/todo', :locals => { 
     :todo => @predecessor, :parent_container_type => parent_container_type }
+
+  # regenerate predecessors of predecessor
+  parents = @predecessor.predecessors
+  parents.each do |parent|
+    puts parent.description
+    page[parent].replace_html :partial => 'todos/todo', :locals => { :todo => parent, :parent_container_type => parent_container_type }
+  end
  
   # update display if pending->active
   if @successor.active?
