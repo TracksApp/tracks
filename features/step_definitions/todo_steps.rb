@@ -79,5 +79,5 @@ Then /^I should see "([^\"]*)" within the dependencies of "([^\"]*)"$/ do |succe
 
   # let selenium look for the presence of the successor
   xpath = "xpath=//div[@id='line_todo_#{todo.id}']//div[@id='successor_line_todo_#{successor.id}']//span"
-  selenium.wait_for_element(xpath)
+  selenium.wait_for_element(xpath, :timeout_in_seconds => 5)
 end
