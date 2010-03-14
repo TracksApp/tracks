@@ -6,9 +6,9 @@ class TodosController < ApplicationController
   prepend_before_filter :login_or_feed_token_required, :only => [:index, :calendar]
   append_before_filter :init, :except => [ :destroy, :completed,
     :completed_archive, :check_deferred, :toggle_check, :toggle_star,
-    :edit, :update, :create, :calendar, :auto_complete_for_tag, :auto_complete_for_predecessor, :remove_predecessor, :add_predecessor]
+    :edit, :update, :create, :calendar, :auto_complete_for_predecessor, :remove_predecessor, :add_predecessor]
   append_before_filter :get_todo_from_params, :only => [ :edit, :toggle_check, :toggle_star, :show, :update, :destroy, :remove_predecessor]
-  protect_from_forgery :except => [:auto_complete_for_tag, :auto_complete_for_predecessor]
+  protect_from_forgery :except => [:auto_complete_for_predecessor]
 
   def index
     current_user.deferred_todos.find_and_activate_ready
@@ -589,14 +589,6 @@ class TodosController < ApplicationController
         render :action => 'calendar', :layout => false, :content_type => Mime::ICS
       }
     end
-  end
-
-  def auto_complete_for_tag
-    @items = Tag.find(:all,
-      :conditions => [ "name LIKE ?", '%' + params['tag_list'] + '%' ],
-      :order => "name ASC",
-      :limit => 10)
-    render :inline => "<%= auto_complete_result(@items, :name) %>"
   end
   
   def auto_complete_for_predecessor
