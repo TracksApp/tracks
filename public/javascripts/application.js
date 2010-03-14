@@ -154,9 +154,9 @@ function update_order(event, ui){
 
   url = '';
   if(row.hasClass('context'))
-    url = '/contexts/order';
+    url = relative_to_root('contexts/order');
   else if(row.hasClass('project'))
-    url = '/projects/order';
+    url = relative_to_root('projects/order');
   else {
     console.log("Bad sortable list");
     return;
@@ -212,7 +212,7 @@ function enable_rich_interaction(){
     dropped_todo = $(this).parents('.item-show').get(0).id.split('_')[2];
     ui.draggable.hide();
     $(this).block({message: null});
-    $.post('/todos/add_predecessor',
+    $.post(relative_to_root('todos/add_predecessor'),
         {successor: dragged_todo, predecessor: dropped_todo},
         null, 'script');
   }
@@ -404,7 +404,7 @@ $(document).ready(function() {
       highlight = function(){
         $('div.context span#context_name').effect('highlight', {}, 500);
       };
-      $.post('/contexts/update/'+context_id, {'context[name]': value}, highlight);
+      $.post(relative_to_root('contexts/update/'+context_id), {'context[name]': value}, highlight);
       return(value);
       }, {style: 'padding:0px', submit: "OK", cancel: "CANCEL"});
 
@@ -415,7 +415,7 @@ $(document).ready(function() {
       highlight = function(){
         $('h2#project_name').effect('highlight', {}, 500);
       };
-      $.post('/projects/update/'+project_id, {'project[name]': value, 'update_project_name': 'true'}, highlight, 'script');
+      $.post(relative_to_root('projects/update/'+project_id), {'project[name]': value, 'update_project_name': 'true'}, highlight, 'script');
       return(value);
   };
 
