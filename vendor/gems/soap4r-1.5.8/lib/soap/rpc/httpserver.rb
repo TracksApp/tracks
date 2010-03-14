@@ -7,6 +7,7 @@
 
 
 require 'logger'
+require 'soap/attrproxy'
 require 'soap/rpc/soaplet'
 require 'soap/streamHandler'
 require 'webrick'
@@ -17,46 +18,15 @@ module RPC
 
 
 class HTTPServer < Logger::Application
+  include AttrProxy
+
   attr_reader :server
   attr_accessor :default_namespace
 
-  class << self
-    if RUBY_VERSION >= "1.7.0"
-      def __attr_proxy(symbol, assignable = false)
-        name = symbol.to_s
-        define_method(name) {
-          @router.__send__(name)
-        }
-        if assignable
-          aname = name + '='
-          define_method(aname) { |rhs|
-            @router.__send__(aname, rhs)
-          }
-        end
-      end
-    else
-      def __attr_proxy(symbol, assignable = false)
-        name = symbol.to_s
-        module_eval <<-EOS
-          def #{name}
-            @router.#{name}
-          end
-        EOS
-        if assignable
-          module_eval <<-EOS
-            def #{name}=(value)
-              @router.#{name} = value
-            end
-          EOS
-        end
-      end
-    end
-  end
-
-  __attr_proxy :mapping_registry, true
-  __attr_proxy :literal_mapping_registry, true
-  __attr_proxy :generate_explicit_type, true
-  __attr_proxy :use_default_namespace, true
+  attr_proxy :mapping_registry, true
+  attr_proxy :literal_mapping_registry, true
+  attr_proxy :generate_explicit_type, true
+  attr_proxy :use_default_namespace, true
 
   def initialize(config)
     actor = config[:SOAPHTTPServerApplicationName] || self.class.name
@@ -74,7 +44,6 @@ class HTTPServer < Logger::Application
     if wsdldir = config[:WSDLDocumentDirectory]
       @server.mount('/wsdl', WEBrick::HTTPServlet::FileHandler, wsdldir)
     end
-    # for backward compatibility
     @server.mount('/', @soaplet)
   end
 
@@ -107,7 +76,7 @@ class HTTPServer < Logger::Application
   def add_rpc_servant(obj, namespace = @default_namespace)
     @router.add_rpc_servant(obj, namespace)
   end
-
+  
   def add_request_headerhandler(factory)
     @router.add_request_headerhandler(factory)
   end
@@ -158,6 +127,10 @@ class HTTPServer < Logger::Application
   end
 
 private
+
+  def attrproxy
+    @router
+  end
 
   def run
     @server.start

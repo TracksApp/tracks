@@ -10,7 +10,7 @@ require 'xsd/qname'
 require 'xsd/charset'
 require 'soap/nestedexception'
 require 'uri'
-
+require 'date'
 
 ###
 ## XMLSchamaDatatypes general definitions.
@@ -342,9 +342,9 @@ private
       # Float("-1.4E") might fail on some system.
       str << '0' if /e$/i =~ str
       begin
-	return narrow32bit(Float(str))
+  	return narrow32bit(Float(str))
       rescue ArgumentError
-	raise ValueSpaceError.new("#{ type }: cannot accept '#{ str }'.", $!)
+  	raise ValueSpaceError.new("#{ type }: cannot accept '#{ str }'.", $!)
       end
     end
   end
@@ -569,7 +569,7 @@ module XSDDateTimeImpl
       'Z'
     else
       ((diffmin < 0) ? '-' : '+') << format('%02d:%02d',
-	(diffmin.abs / 60.0).to_i, (diffmin.abs % 60.0).to_i)
+    	(diffmin.abs / 60.0).to_i, (diffmin.abs % 60.0).to_i)
     end
   end
 
@@ -652,7 +652,7 @@ private
       year, @data.mon, @data.mday, @data.hour, @data.min, @data.sec)
     if @data.sec_fraction.nonzero?
       if @secfrac
-	s << ".#{ @secfrac }"
+  	s << ".#{ @secfrac }"
       else
 	s << sprintf("%.16f",
           (@data.sec_fraction * DayInSec).to_f).sub(/^0/, '').sub(/0*$/, '')
@@ -702,7 +702,7 @@ private
     s = format('%02d:%02d:%02d', @data.hour, @data.min, @data.sec)
     if @data.sec_fraction.nonzero?
       if @secfrac
-	s << ".#{ @secfrac }"
+  	s << ".#{ @secfrac }"
       else
 	s << sprintf("%.16f",
           (@data.sec_fraction * DayInSec).to_f).sub(/^0/, '').sub(/0*$/, '')
@@ -816,7 +816,7 @@ class XSDGMonthDay < XSDAnySimpleType
 private
 
   def screen_data_str(t)
-    /^(\d\d)-(\d\d)(Z|(?:[+\-]\d\d:\d\d)?)?$/ =~ t.to_s.strip
+    /^--(\d\d)-(\d\d)(Z|(?:[+\-]\d\d:\d\d)?)?$/ =~ t.to_s.strip
     unless Regexp.last_match
       raise ValueSpaceError.new("#{ type }: cannot accept '#{ t }'.")
     end
@@ -827,7 +827,7 @@ private
   end
 
   def _to_s
-    s = format('%02d-%02d', @data.mon, @data.mday)
+    s = format('--%02d-%02d', @data.mon, @data.mday)
     add_tz(s)
   end
 end
@@ -843,7 +843,7 @@ class XSDGDay < XSDAnySimpleType
 private
 
   def screen_data_str(t)
-    /^(\d\d)(Z|(?:[+\-]\d\d:\d\d)?)?$/ =~ t.to_s.strip
+    /^---(\d\d)(Z|(?:[+\-]\d\d:\d\d)?)?$/ =~ t.to_s.strip
     unless Regexp.last_match
       raise ValueSpaceError.new("#{ type }: cannot accept '#{ t }'.")
     end
@@ -853,7 +853,7 @@ private
   end
 
   def _to_s
-    s = format('%02d', @data.mday)
+    s = format('---%02d', @data.mday)
     add_tz(s)
   end
 end
@@ -869,7 +869,7 @@ class XSDGMonth < XSDAnySimpleType
 private
 
   def screen_data_str(t)
-    /^(\d\d)(Z|(?:[+\-]\d\d:\d\d)?)?$/ =~ t.to_s.strip
+    /^--(\d\d)(Z|(?:[+\-]\d\d:\d\d)?)?$/ =~ t.to_s.strip
     unless Regexp.last_match
       raise ValueSpaceError.new("#{ type }: cannot accept '#{ t }'.")
     end
@@ -879,7 +879,7 @@ private
   end
 
   def _to_s
-    s = format('%02d', @data.mon)
+    s = format('--%02d', @data.mon)
     add_tz(s)
   end
 end

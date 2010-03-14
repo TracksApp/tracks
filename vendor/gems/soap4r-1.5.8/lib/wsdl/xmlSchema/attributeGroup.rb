@@ -7,6 +7,7 @@
 
 
 require 'wsdl/info'
+require 'wsdl/xmlSchema/ref'
 
 
 module WSDL
@@ -14,26 +15,7 @@ module XMLSchema
 
 
 class AttributeGroup < Info
-  class << self
-    if RUBY_VERSION > "1.7.0"
-      def attr_reader_ref(symbol)
-        name = symbol.to_s
-        define_method(name) {
-          instance_variable_get("@#{name}") ||
-            (refelement ? refelement.__send__(name) : nil)
-        }
-      end
-    else
-      def attr_reader_ref(symbol)
-        name = symbol.to_s
-        module_eval <<-EOS
-          def #{name}
-            @#{name} || (refelement ? refelement.#{name} : nil)
-          end
-        EOS
-      end
-    end
-  end
+  include Ref
 
   attr_writer :name	# required
   attr_writer :attributes
@@ -41,18 +23,12 @@ class AttributeGroup < Info
   attr_reader_ref :name
   attr_reader_ref :attributes
 
-  attr_accessor :ref
-
   def initialize
     super
     @name = nil
     @attributes = nil
     @ref = nil
     @refelement = nil
-  end
-
-  def refelement
-    @refelement ||= root.collect_attributegroups[@ref]
   end
 
   def targetnamespace
@@ -78,6 +54,12 @@ class AttributeGroup < Info
     else
       nil
     end
+  end
+
+private
+
+  def refelement
+    @refelement ||= root.collect_attributegroups[@ref]
   end
 end
 

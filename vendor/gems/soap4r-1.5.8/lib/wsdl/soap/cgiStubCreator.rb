@@ -49,8 +49,7 @@ private
   def dump_porttype(porttype)
     class_name = mapped_class_name(porttype.name, @modulepath)
     defined_const = {}
-    result = MethodDefCreator.new(@definitions, @name_creator, @modulepath, defined_const).dump(porttype.name)
-    methoddef = result[:methoddef]
+    methoddef = MethodDefCreator.new(@definitions, @name_creator, @modulepath, defined_const).dump(porttype.name)
     wsdl_name = @definitions.name ? @definitions.name.name : 'default'
     mrname = safeconstname(wsdl_name + 'MappingRegistry')
     c1 = XSD::CodeGen::ClassDef.new(class_name)

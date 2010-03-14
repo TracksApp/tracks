@@ -48,6 +48,7 @@ module SOAPType
   attr_accessor :position
   attr_reader :extraattr
   attr_accessor :definedtype
+  attr_accessor :force_typed
 
   def initialize(*arg)
     super
@@ -60,6 +61,7 @@ module SOAPType
     @position = nil
     @definedtype = nil
     @extraattr = {}
+    @force_typed = false
   end
 
   def inspect
@@ -1020,7 +1022,7 @@ private
       if rank < @rank and data[idx]
 	traverse_data(data[idx], rank + 1) do |*v|
 	  v[1, 0] = idx
-	  yield(*v)
+       	  yield(*v)
 	end
       else
 	yield(data[idx], idx)
@@ -1077,7 +1079,7 @@ private
     "#{typename}[" << ',' * (rank - 1) << ']'
   end
 
-  TypeParseRegexp = Regexp.new('^(.+)\[([\d,]*)\]$', nil, 'NONE')
+  TypeParseRegexp = Regexp.new('^(.+)\[([\d,]*)\]$')
 
   def self.parse_type(string)
     TypeParseRegexp =~ string

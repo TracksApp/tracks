@@ -337,7 +337,7 @@ private
       return base2soap(obj, type)
     end
     cause = nil
-    begin
+    begin 
       if definition = schema_definition_from_class(obj.class)
         return stubobj2soap(obj, definition)
       end
@@ -390,7 +390,7 @@ private
         cause = $!
       end
     end
-    raise MappingError.new("Cannot map #{ node.type.name } to Ruby object.", cause)
+    raise MappingError.new("Cannot map #{ node.type } to Ruby object.", cause)
   end
 
   def addiv2obj(obj, attr)
@@ -402,21 +402,10 @@ private
     Mapping.set_attributes(obj, vars)
   end
 
-  if RUBY_VERSION >= '1.8.0'
-    def addextend2obj(obj, attr)
-      return unless attr
-      attr.split(/ /).reverse_each do |mstr|
-	obj.extend(Mapping.module_from_name(mstr))
-      end
-    end
-  else
-    # (class < false; self; end).ancestors includes "TrueClass" under 1.6...
-    def addextend2obj(obj, attr)
-      return unless attr
-      attr.split(/ /).reverse_each do |mstr|
-	m = Mapping.module_from_name(mstr)
-	obj.extend(m)
-      end
+  def addextend2obj(obj, attr)
+    return unless attr
+    attr.split(/ /).reverse_each do |mstr|
+      obj.extend(Mapping.module_from_name(mstr))
     end
   end
 
@@ -427,8 +416,8 @@ private
       node.extraattr[RubyExtendName] = list.collect { |c|
         name = c.name
 	if name.nil? or name.empty?
-	  raise TypeError.new("singleton can't be dumped #{ obj }")
-	end
+  	  raise TypeError.new("singleton can't be dumped #{ obj }")
+   	end
 	name
       }.join(" ")
     end

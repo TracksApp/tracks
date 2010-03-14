@@ -111,10 +111,10 @@ private
     elename = ns.parse(name)
     if !parent
       if elename == SchemaName
-	o = Schema.parse_element(elename)
+	      o = Schema.parse_element(elename)
         o.location = @location
       else
-	raise UnknownElementError.new("unknown element: #{elename}")
+	      raise UnknownElementError.new("unknown element: #{elename}")
       end
       o.root = @originalroot if @originalroot   # o.root = o otherwise
     else
@@ -129,7 +129,7 @@ private
           warn("ignored element: #{elename} of #{parent.class}")
           @ignored[elename] = elename
         end
-	o = Documentation.new	# which accepts any element.
+	      o = Documentation.new	# which accepts any element.
       end
       # node could be a pseudo element.  pseudo element has its own parent.
       o.root = parent.root
@@ -140,7 +140,7 @@ private
       value_ele = ns.parse(value, false)
       value_ele.source = value  # for recovery; value may not be a QName
       if attr_ele == IdAttrName
-	o.id = value_ele
+	      o.id = value_ele
       else
         if o.parse_attr(attr_ele, value_ele).nil?
           unless @ignored.key?(attr_ele)

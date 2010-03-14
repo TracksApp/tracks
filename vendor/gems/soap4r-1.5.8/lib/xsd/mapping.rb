@@ -30,6 +30,7 @@ module Mapping
   class Mapper
     MAPPING_OPT = {
       :default_encodingstyle => SOAP::LiteralNamespace,
+      :generate_explicit_type => false,
       :root_type_hint => true
     }.freeze
 

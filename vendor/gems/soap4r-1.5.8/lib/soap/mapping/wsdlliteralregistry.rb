@@ -110,6 +110,11 @@ private
       else
         ele = complexobj2soap(obj, type)
       end
+      ele.type = type.name
+      if type.base or Mapping.root_type_hint
+        Mapping.reset_root_type_hint
+        ele.force_typed = true
+      end
       add_definedattributes2soap(obj, ele, type)
     end
     ele

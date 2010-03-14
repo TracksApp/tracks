@@ -23,8 +23,8 @@ class SimpleRestriction < Info
   attr_reader :enumeration
   attr_accessor :whitespace
   attr_accessor :maxinclusive
-  attr_accessor :maxexlusive
-  attr_accessor :minexlusive
+  attr_accessor :maxexclusive
+  attr_accessor :minexclusive
   attr_accessor :mininclusive
   attr_accessor :totaldigits
   attr_accessor :fractiondigits
@@ -42,7 +42,7 @@ class SimpleRestriction < Info
     @fixed = {}
     @attributes = XSD::NamedElements.new
   end
-
+  
   def valid?(value)
     return false unless check_restriction(value)
     return false unless check_length(value)
@@ -73,9 +73,9 @@ class SimpleRestriction < Info
     when MaxInclusiveName
       MaxInclusive.new
     when MaxExclusiveName
-      MaxExlusive.new
+      MaxExclusive.new
     when MinExclusiveName
-      MinExlusive.new
+      MinExclusive.new
     when MinInclusiveName
       MinInclusive.new
     when TotalDigitsName

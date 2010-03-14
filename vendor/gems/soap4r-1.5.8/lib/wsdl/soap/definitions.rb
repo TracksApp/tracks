@@ -41,10 +41,10 @@ class Definitions < Info
 =begin
 <xs:complexType name="Fault" final="extension">
   <xs:sequence>
-    <xs:element name="faultcode" type="xs:QName" />
-    <xs:element name="faultstring" type="xs:string" />
-    <xs:element name="faultactor" type="xs:anyURI" minOccurs="0" />
-    <xs:element name="detail" type="tns:detail" minOccurs="0" />
+    <xs:element name="faultcode" type="xs:QName" /> 
+    <xs:element name="faultstring" type="xs:string" /> 
+    <xs:element name="faultactor" type="xs:anyURI" minOccurs="0" /> 
+    <xs:element name="detail" type="tns:detail" minOccurs="0" /> 
   </xs:sequence>
 </xs:complexType>
 =end
@@ -85,7 +85,7 @@ class Definitions < Info
 	raise RuntimeError.new("Expecting fault message \"#{name}\" to have ONE part")
       end
       fault_part = faultparts[0]
-      # WS-I Basic Profile Version 1.1 (R2205) requires fault message parts
+      # WS-I Basic Profile Version 1.1 (R2205) requires fault message parts 
       # to refer to elements rather than types
       faulttype = fault_part.element
       if not faulttype
@@ -129,7 +129,7 @@ private
           # Make sure that portType fault has a corresponding soap:fault
           # definition in binding section.
           if not op_binding_declares_fault(op_binding, fault.name)
-            warn("Operation \"#{operation.name}\", fault \"#{fault.name}\": no corresponding wsdl:fault binding found with a matching \"name\" attribute")
+            warn("Operation \"#{operation.name}\", fault \"#{fault.name}\": no corresponding wsdl:fault binding found with a matching \"name\" attribute")          
             next
           end
           fault_binding = get_fault_binding(op_binding, fault.name)
@@ -142,10 +142,10 @@ private
             next
           end
           # According to WS-I (R2723): if in a wsdl:binding the use attribute
-          # on a contained soapbind:fault element is present, its value MUST
-          # be "literal".
+          # on a contained soapbind:fault element is present, its value MUST 
+          # be "literal".          
           if fault_binding.soapfault.use and fault_binding.soapfault.use != "literal"
-            warn("Operation \"#{operation.name}\", fault \"#{fault.name}\": soap:fault \"use\" attribute must be \"literal\"")
+            warn("Operation \"#{operation.name}\", fault \"#{fault.name}\": soap:fault \"use\" attribute must be \"literal\"")          
           end
 	  if result.index(fault.message).nil?
 	    result << fault.message

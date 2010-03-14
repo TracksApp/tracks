@@ -50,16 +50,6 @@ public
     @config = {}
   end
 
-  # for backward compatibility
-  def app_scope_router
-    @router
-  end
-
-  # for backward compatibility
-  def add_servant(obj, namespace)
-    @router.add_rpc_servant(obj, namespace)
-  end
-
   def allow_content_encoding_gzip=(allow)
     @options[:allow_content_encoding_gzip] = allow
   end

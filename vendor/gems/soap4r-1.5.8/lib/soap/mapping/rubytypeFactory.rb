@@ -5,6 +5,7 @@
 # redistribute it and/or modify it under the same terms of Ruby's license;
 # either the dual license version in 2003, or any later version.
 
+#require 'continuation'
 
 module SOAP
 module Mapping
@@ -124,30 +125,7 @@ class RubytypeFactory < Factory
         param.extraattr[RubyTypeName] = obj.class.name
       end
       param.add('source', SOAPBase64.new(obj.source))
-      if obj.respond_to?('options')
-        # Regexp#options is from Ruby/1.7
-        options = obj.options
-      else
-        options = 0
-        obj.inspect.sub(/^.*\//, '').each_byte do |c|
-          options += case c
-            when ?i
-              1
-            when ?x
-              2
-            when ?m
-              4
-            when ?n
-              16
-            when ?e
-              32
-            when ?s
-              48
-            when ?u
-              64
-            end
-        end
-      end
+      options = obj.options
       param.add('options', SOAPInt.new(options))
       addiv2soapattr(param, obj, map)
     when ::Range
@@ -216,8 +194,8 @@ class RubytypeFactory < Factory
         addiv2soapattr(param, obj, map)
       end
     when ::IO, ::Binding, ::Continuation, ::Data, ::Dir, ::File::Stat,
-        ::MatchData, Method, ::Proc, ::Thread, ::ThreadGroup
-        # from 1.8: Process::Status, UnboundMethod
+        ::MatchData, Method, ::Proc, ::Process::Status, ::Thread,
+        ::ThreadGroup, ::UnboundMethod
       return nil
     when ::SOAP::Mapping::Object
       param = SOAPStruct.new(XSD::AnyTypeName)
@@ -266,7 +244,7 @@ private
       raise TypeError.new("can't dump anonymous class #{obj}")
     end
     singleton_class = class << obj; self; end
-    if !singleton_methods_true(obj).empty? or
+    if !obj.singleton_methods(true).empty? or
 	!singleton_class.instance_variables.empty?
       raise TypeError.new("singleton can't be dumped #{obj}")
     end
@@ -280,16 +258,6 @@ private
     mark_marshalled_obj(obj, param)
     setiv2soap(param, obj, map)
     param
-  end
-
-  if RUBY_VERSION >= '1.8.0'
-    def singleton_methods_true(obj)
-      obj.singleton_methods(true)
-    end
-  else
-    def singleton_methods_true(obj)
-      obj.singleton_methods
-    end
   end
 
   def rubytype2obj(node, info, map, rubytype)

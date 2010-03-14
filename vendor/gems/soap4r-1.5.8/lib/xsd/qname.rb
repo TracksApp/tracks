@@ -56,7 +56,7 @@ class QName
   def hash
     @namespace.hash ^ @name.hash
   end
-
+  
   def to_s
     "{#{ namespace }}#{ name }"
   end

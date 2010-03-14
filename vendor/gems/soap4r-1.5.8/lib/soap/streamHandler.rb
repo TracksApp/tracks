@@ -130,10 +130,10 @@ class HTTPStreamHandler < StreamHandler
   end
 
 public
-
+  
   attr_reader :client
   attr_accessor :wiredump_file_base
-
+  
   MAX_RETRY_COUNT = 10       	# [times]
 
   def self.create(options)
@@ -167,8 +167,7 @@ public
     "#<#{self.class}>"
   end
 
-  def send(url, conn_data, soapaction = nil, charset = @charset)
-    conn_data.soapaction ||= soapaction # for backward conpatibility
+  def send(url, conn_data, charset = @charset)
     conn_data = send_post(url, conn_data, charset)
     @client.save_cookie_store if @cookie_store
     conn_data

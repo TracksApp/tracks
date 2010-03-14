@@ -69,7 +69,7 @@ class ComplexExtension < Info
       basetype.check_type
     end
   end
-
+  
   def parse_element(element)
     case element
     when AllName

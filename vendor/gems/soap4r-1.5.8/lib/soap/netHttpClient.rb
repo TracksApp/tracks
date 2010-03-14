@@ -43,7 +43,7 @@ class NetHttpClient
     @no_proxy = @ssl_config = @protocol_version = nil
     @connect_timeout = @send_timeout = @receive_timeout = nil
   end
-
+  
   def proxy=(proxy)
     if proxy.nil?
       @proxy = nil
@@ -137,10 +137,10 @@ private
       http.post(url.request_uri, req_body, extra)
     }
     case res
-    when Net::HTTPRedirection
+    when Net::HTTPRedirection 
       if redirect_count > 0
         post_redirect(res['location'], req_body, header,
-          redirect_count - 1)
+          redirect_count - 1) 
       else
        raise ArgumentError.new("Too many redirects")
       end
@@ -176,13 +176,13 @@ private
     http.open_timeout = @connect_timeout if @connect_timeout
     http.read_timeout = @receive_timeout if @receive_timeout
     case url
-    when URI::HTTPS
+    when URI::HTTPS then
       if SSLEnabled
-	http.use_ssl = true
+	      http.use_ssl = true
       else
-	raise RuntimeError.new("Cannot connect to #{url} (OpenSSL is not installed.)")
+	      raise RuntimeError.new("Cannot connect to #{url} (OpenSSL is not installed.)")
       end
-    when URI::HTTP
+    when URI::HTTP then
       # OK
     else
       raise RuntimeError.new("Cannot connect to #{url} (Not HTTP.)")

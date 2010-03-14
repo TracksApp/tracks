@@ -7,6 +7,7 @@
 
 
 require 'soap/soap'
+require 'soap/attrproxy'
 require 'soap/mapping'
 require 'soap/rpc/rpc'
 require 'soap/rpc/proxy'
@@ -21,52 +22,21 @@ module RPC
 
 
 class Driver
-  class << self
-    if RUBY_VERSION >= "1.7.0"
-      def __attr_proxy(symbol, assignable = false)
-        name = symbol.to_s
-        define_method(name) {
-          @proxy.__send__(name)
-        }
-        if assignable
-          aname = name + '='
-          define_method(aname) { |rhs|
-            @proxy.__send__(aname, rhs)
-          }
-        end
-      end
-    else
-      def __attr_proxy(symbol, assignable = false)
-        name = symbol.to_s
-        module_eval <<-EOS
-          def #{name}
-            @proxy.#{name}
-          end
-        EOS
-        if assignable
-          module_eval <<-EOS
-            def #{name}=(value)
-              @proxy.#{name} = value
-            end
-          EOS
-        end
-      end
-    end
-  end
+  include AttrProxy
 
-  __attr_proxy :endpoint_url, true
-  __attr_proxy :mapping_registry, true
-  __attr_proxy :literal_mapping_registry, true
-  __attr_proxy :allow_unqualified_element, true
-  __attr_proxy :default_encodingstyle, true
-  __attr_proxy :generate_explicit_type, true
-  __attr_proxy :use_default_namespace, true
-  __attr_proxy :return_response_as_xml, true
-  __attr_proxy :headerhandler
-  __attr_proxy :filterchain
-  __attr_proxy :streamhandler
-  __attr_proxy :test_loopback_response
-  __attr_proxy :reset_stream
+  attr_proxy :endpoint_url, true
+  attr_proxy :mapping_registry, true
+  attr_proxy :literal_mapping_registry, true
+  attr_proxy :allow_unqualified_element, true
+  attr_proxy :default_encodingstyle, true
+  attr_proxy :generate_explicit_type, true
+  attr_proxy :use_default_namespace, true
+  attr_proxy :return_response_as_xml, true
+  attr_proxy :headerhandler
+  attr_proxy :filterchain
+  attr_proxy :streamhandler
+  attr_proxy :test_loopback_response
+  attr_proxy :reset_stream
 
   attr_reader :proxy
   attr_reader :options
@@ -182,6 +152,10 @@ class Driver
   end
 
 private
+
+  def attrproxy
+    @proxy
+  end
 
   def set_wiredump_file_base(name)
     if @wiredump_file_base

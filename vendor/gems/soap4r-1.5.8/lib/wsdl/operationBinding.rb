@@ -19,6 +19,62 @@ class OperationBinding < Info
   attr_reader :fault
   attr_reader :soapoperation
 
+  class OperationInfo
+    attr_reader :boundid
+    attr_reader :qname
+    attr_reader :style
+    attr_accessor :inputuse
+    attr_accessor :outputuse
+    attr_reader :parts
+    attr_reader :faults
+
+    def initialize(boundid, qname, style, inputuse, outputuse)
+      @boundid = boundid
+      @qname = qname
+      @style = style
+      @inputuse = inputuse
+      @outputuse = outputuse
+      @parts = []
+      @faults = {}
+    end
+  end
+
+  class Part
+    attr_reader :io_type
+    attr_reader :name
+    attr_reader :type
+    attr_reader :element
+
+    def initialize(io_type, name, type, element)
+      @io_type = io_type
+      @name = name
+      @type = type
+      @element = element
+    end
+  end
+
+  class BoundId
+    attr_reader :name
+    attr_reader :soapaction
+
+    def initialize(name, soapaction)
+      @name = name
+      @soapaction = soapaction
+    end
+
+    def ==(rhs)
+      !rhs.nil? and @name == rhs.name and @soapaction == rhs.soapaction
+    end
+
+    def eql?(rhs)
+      (self == rhs)
+    end
+
+    def hash
+      @name.hash ^ @soapaction.hash
+    end
+  end
+
   def initialize
     super
     @name = nil
@@ -28,12 +84,42 @@ class OperationBinding < Info
     @soapoperation = nil
   end
 
+  def operation_info
+    qname = soapoperation_name()
+    style = soapoperation_style()
+    use_input = soapbody_use(@input)
+    use_output = soapbody_use(@output)
+    info = OperationInfo.new(boundid, qname, style, use_input, use_output)
+    op = find_operation()
+    if style == :rpc
+      info.parts.concat(collect_rpcparameter(op))
+    else
+      info.parts.concat(collect_documentparameter(op))
+    end
+    @fault.each do |fault|
+      op_fault = {}
+      soapfault = fault.soapfault
+      next if soapfault.nil?
+      op_fault[:ns] = fault.name.namespace
+      op_fault[:name] = fault.name.name
+      op_fault[:namespace] = soapfault.namespace
+      op_fault[:use] = soapfault.use || "literal"
+      op_fault[:encodingstyle] = soapfault.encodingstyle || "document"
+      info.faults[fault.name] = op_fault
+    end
+    info
+  end
+
   def targetnamespace
     parent.targetnamespace
   end
 
   def porttype
     root.porttype(parent.type)
+  end
+
+  def boundid
+    BoundId.new(name, soapaction)
   end
 
   def find_operation
@@ -66,14 +152,6 @@ class OperationBinding < Info
       raise TypeError.new("operation style definition not found")
     end
     style || :document
-  end
-
-  def soapbody_use_input
-    soapbody_use(@input)
-  end
-
-  def soapbody_use_output
-    soapbody_use(@output)
   end
 
   def soapaction
@@ -123,6 +201,38 @@ private
 
   def soapbody_use(param)
     param ? param.soapbody_use : nil
+  end
+
+  def collect_rpcparameter(operation)
+    result = operation.inputparts.collect { |part|
+      Part.new(:in, part.name, part.type, part.element)
+    }
+    outparts = operation.outputparts
+    if outparts.size > 0
+      retval = outparts[0]
+      result << Part.new(:retval, retval.name, retval.type, retval.element)
+      cdr(outparts).each { |part|
+	result << Part.new(:out, part.name, part.type, part.element)
+      }
+    end
+    result
+  end
+
+  def collect_documentparameter(operation)
+    param = []
+    operation.inputparts.each do |input|
+      param << Part.new(:in, input.name, input.type, input.element)
+    end
+    operation.outputparts.each do |output|
+      param << Part.new(:out, output.name, output.type, output.element)
+    end
+    param
+  end
+
+  def cdr(ary)
+    result = ary.dup
+    result.shift
+    result
   end
 end
 

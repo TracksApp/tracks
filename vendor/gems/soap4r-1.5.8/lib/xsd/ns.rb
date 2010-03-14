@@ -123,7 +123,7 @@ public
   end
 
   # $1 and $2 are necessary.
-  ParseRegexp = Regexp.new('\A([^:]+)(?::(.+))?\z', nil, 'NONE')
+  ParseRegexp = Regexp.new('\A([^:]+)(?::(.+))?\z')
 
   def parse(str, local = false)
     if ParseRegexp =~ str

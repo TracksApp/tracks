@@ -73,9 +73,9 @@ class ComplexType < Info
     case compoundtype
     when :TYPE_STRUCT, :TYPE_MAP
       unless ele = find_element(name)
-	if name.namespace.nil?
-	  ele = find_element_by_name(name.name)
-	end
+       	if name.namespace.nil?
+  	  ele = find_element_by_name(name.name)
+   	end
       end
     when :TYPE_ARRAY
       e = elements
@@ -106,6 +106,7 @@ class ComplexType < Info
         end
       end
     end
+    nil
   end
 
   def find_arytype
@@ -137,7 +138,7 @@ private
     case element
     when XMLSchema::Element
       if element.type
-        element.type
+        element.type 
       elsif element.local_simpletype
         element.local_simpletype.base
       else

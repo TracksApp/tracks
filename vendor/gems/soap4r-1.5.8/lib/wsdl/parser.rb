@@ -113,10 +113,10 @@ private
     elename = ns.parse(name)
     if !parent
       if elename == DefinitionsName
-	o = Definitions.parse_element(elename)
+	      o = Definitions.parse_element(elename)
         o.location = @location
       else
-	raise UnknownElementError.new("unknown element: #{elename}")
+	      raise UnknownElementError.new("unknown element: #{elename}")
       end
       o.root = @originalroot if @originalroot   # o.root = o otherwise
     else
@@ -128,10 +128,10 @@ private
       end
       if o.nil?
         unless @ignored.key?(elename)
-          warn("ignored element: #{elename}")
+          warn("ignored element: #{elename} : #{parent.inspect}")
           @ignored[elename] = elename
         end
-	o = Documentation.new	# which accepts any element.
+	      o = Documentation.new	# which accepts any element.
       end
       # node could be a pseudo element.  pseudo element has its own parent.
       o.root = parent.root

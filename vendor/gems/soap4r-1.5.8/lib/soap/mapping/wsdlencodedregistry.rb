@@ -123,8 +123,8 @@ private
   end
 
   def simpleobj2soap(obj, type)
+    return SOAPNil.new unless obj
     type.check_lexical_format(obj)
-    return SOAPNil.new if obj.nil?      # TODO: check nillable.
     if type.base
       ele = base2soap(obj, TypeMap[type.base])
       ele.type = type.name

@@ -5,7 +5,7 @@
 # redistribute it and/or modify it under the same terms of Ruby's license;
 # either the dual license version in 2003, or any later version.
 
-
+require 'soap/ruby18ext'
 require 'xsd/qname'
 require 'xsd/charset'
 require 'soap/nestedexception'
@@ -14,7 +14,7 @@ require 'soap/nestedexception'
 module SOAP
 
 
-VERSION = Version = '1.5.8'
+VERSION = Version = '1.6.1-SNAPSHOT'
 PropertyName = 'soap/property'
 
 EnvelopeNamespace = 'http://schemas.xmlsoap.org/soap/envelope/'

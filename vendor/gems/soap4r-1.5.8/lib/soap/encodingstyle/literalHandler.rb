@@ -29,8 +29,11 @@ class LiteralHandler < Handler
   def encode_data(generator, ns, data, parent)
     attrs = {}
     name = generator.encode_name(ns, data, attrs)
+    if data.type and data.type.name and
+        (@generate_explicit_type or data.force_typed)
+      data.extraattr[XSD::AttrTypeName] = data.type
+    end
     data.extraattr.each do |key, value|
-      next if !@generate_explicit_type and key == XSD::AttrTypeName
       keytag = key
       if key.is_a?(XSD::QName)
         keytag = encode_attr_key(attrs, ns, key)

@@ -67,7 +67,7 @@ class MIMEMessage
 
     def parse_line(line)
       if /^\A([^\: \t]+):\s*(.+)\z/ =~ line
-	header = parse_rhs($2.strip)
+    	header = parse_rhs($2.strip)
 	header.key = $1.strip
 	self[header.key.downcase] = header
       else
@@ -120,7 +120,7 @@ class MIMEMessage
     end
 
     def parse(str)
-      headers, body = str.split(/\r\n\r\n/s, 2)
+      headers, body = str.split(/\r\n\r\n/, 2)
       if headers != nil and body != nil
 	@headers = Headers.parse(headers)
 	@body = body.sub(/\r\n\z/, '')

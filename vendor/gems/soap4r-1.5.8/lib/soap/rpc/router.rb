@@ -217,10 +217,10 @@ class Router
 private
 
   def first_input_part_qname(param_def)
-    param_def.each do |inout, paramname, typeinfo|
-      if inout == SOAPMethod::IN
-        klass, nsdef, namedef = typeinfo
-        return XSD::QName.new(nsdef, namedef)
+    param_def.each do |param|
+      param = MethodDef.to_param(param)
+      if param.io_type == SOAPMethod::IN
+        return param.qname
       end
     end
     nil
@@ -423,22 +423,17 @@ private
         @rpc_response_qname = opt[:response_qname]
       else
         @doc_request_qnames = []
-        @doc_request_qualified = []
         @doc_response_qnames = []
-        @doc_response_qualified = []
-        param_def.each do |inout, paramname, typeinfo, eleinfo|
-          klass, nsdef, namedef = typeinfo
-          qualified = eleinfo
-          case inout
+        param_def.each do |param|
+          param = MethodDef.to_param(param)
+          case param.io_type
           when SOAPMethod::IN
-            @doc_request_qnames << XSD::QName.new(nsdef, namedef)
-            @doc_request_qualified << qualified
+            @doc_request_qnames << param.qname
           when SOAPMethod::OUT
-            @doc_response_qnames << XSD::QName.new(nsdef, namedef)
-            @doc_response_qualified << qualified
+            @doc_response_qnames << param.qname
           else
             raise ArgumentError.new(
-              "illegal inout definition for document style: #{inout}")
+              "illegal inout definition for document style: #{param.io_type}")
           end
         end
       end
@@ -605,7 +600,6 @@ private
       (0...result.size).collect { |idx|
         ele = Mapping.obj2soap(result[idx], mapping_registry, nil, opt)
         ele.elename = @doc_response_qnames[idx]
-        ele.qualified = @doc_response_qualified[idx]
         ele
       }
     end
@@ -615,7 +609,6 @@ private
         ele = Mapping.obj2soap(result[idx], mapping_registry,
           @doc_response_qnames[idx])
         ele.encodingstyle = LiteralNamespace
-        ele.qualified = @doc_response_qualified[idx]
         ele
       }
     end

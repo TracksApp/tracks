@@ -58,7 +58,7 @@ class ComplexRestriction < Info
       basetype.check_type if basetype
     end
   end
-
+  
   def parse_element(element)
     case element
     when AllName

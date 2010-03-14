@@ -36,24 +36,6 @@ class Port < Info
     root.binding(@binding) or raise RuntimeError.new("#{@binding} not found")
   end
 
-  def inputoperation_map
-    result = {}
-    find_binding.operations.each do |op_bind|
-      op_info = op_bind.soapoperation.input_info
-      result[op_info.op_name] = op_info
-    end
-    result
-  end
-
-  def outputoperation_map
-    result = {}
-    find_binding.operations.each do |op_bind|
-      op_info = op_bind.soapoperation.output_info
-      result[op_info.op_name] = op_info
-    end
-    result
-  end
-
   def parse_element(element)
     case element
     when SOAPAddressName

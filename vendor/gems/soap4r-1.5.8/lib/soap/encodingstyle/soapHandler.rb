@@ -284,7 +284,7 @@ private
       if data.is_a?(SOAPArray)
 	if data.arytype.namespace
           Generator.assign_ns(attrs, ns, data.arytype.namespace)
-	end
+   	end
 	Generator.assign_ns(attrs, ns, EncodingNamespace)
 	attrs[ns.name(AttrArrayTypeName)] = ns.name(create_arytype(ns, data))
 	if data.type.name
@@ -542,7 +542,7 @@ private
 	  false
 	elsif o = ref.rootnode.external_content[ref.refid]
 	  ref.__setobj__(o)
-	  false
+      	  false
 	else
 	  raise EncodingStyleError.new("unresolved reference: #{ref.refid}")
 	end
