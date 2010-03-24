@@ -23,6 +23,26 @@ end
 
 When /^I edit the project description to "([^\"]*)"$/ do |new_description|
   click_link "link_edit_project_#{@project.id}"
-  fill_in "project[description]", new_description
+  fill_in "project[description]", :with => new_description
   click_button "submit_project_#{@project.id}"
+end
+
+Then /^I should see the bold text "([^\"]*)" in the project description$/ do |bold|
+  xpath="//div[@class='project_description']/p/strong"
+
+  response.should have_xpath(xpath)
+  bold_text = response.selenium.get_text("xpath=#{xpath}")
+  
+  puts "bt=#{bold_text}"
+  bold_text.should =~ /#{bold}/
+end
+
+Then /^I should see the italic text "([^\"]*)" in the project description$/ do |italic|
+  xpath="//div[@class='project_description']/p/em"
+
+  response.should have_xpath(xpath)
+  italic_text = response.selenium.get_text("xpath=#{xpath}")
+
+  puts "it=#{italic_text}"
+  italic_text.should =~ /#{italic}/
 end

@@ -15,5 +15,5 @@ Feature: Manage a project
   Scenario: I can describe the project using markup
     When I visit the "manage me" project
     And I edit the project description to "_successfull outcome_: project is *done*"
-    Then I should see "<i>successfull outcome<i>"
-    And I should see " <b>done</b>"
+    Then I should see the italic text "successfull outcome" in the project description
+    And I should see the bold text "done" in the project description
