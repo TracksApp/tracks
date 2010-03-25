@@ -52,13 +52,6 @@
 
 </div><!-- End of display_box -->
 <div class="input_box" id="input_box">
-  <% # hack for #860 Need to refactor this and use another dom element to bind projectDefauiltContextsMap to -%>
-  <input type="hidden" id="todo_context_name" value="hidden">
-  <script type="text/javascript">
-    var contextNames = <%= context_names_for_autocomplete %>;
-    var projectNames = <%= project_names_for_autocomplete %>;
-    $('todo_context_name').projectDefaultContextsMap = eval('(' + <%= @default_project_context_name_map %> + ')');
-  </script>
   <p><%= link_to('<span class="feed">iCal</span>', {:format => 'ics', :token => current_user.token}, :title => "iCal feed" ) %>
   - Get this calendar in iCal format</p>
 </div>
