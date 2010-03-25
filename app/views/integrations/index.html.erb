@@ -27,12 +27,6 @@
 <% if has_contexts -%>
   <ol>
     <li>Choose the context you want to add actions to: <select name="applescript1-contexts" id="applescript1-contexts"><%= options_from_collection_for_select(current_user.contexts, "id", "name", current_user.contexts.first.id) %></select>
-      <%= observe_field "applescript1-contexts", :update => "applescript1",
-        :with => 'context_id',
-        :url => { :controller => "integrations", :action => "get_applescript1" },
-        :before => "$('applescript1').startWaiting()",
-        :complete => "$('applescript1').stopWaiting()"
-    %>
     </li>
     <li>Copy the Applescript below to the clipboard.<br />
 
@@ -52,12 +46,6 @@
 <% if has_contexts -%>
   <ol>
     <li>Choose the context you want to add actions to: <select name="applescript2-contexts" id="applescript2-contexts"><%= options_from_collection_for_select(current_user.contexts, "id", "name", current_user.contexts.first.id) %></select>
-      <%= observe_field "applescript2-contexts", :update => "applescript2",
-        :with => 'context_id',
-        :url => { :controller => "integrations", :action => "get_applescript2" },
-        :before => "$('applescript2').startWaiting()",
-        :complete => "$('applescript2').stopWaiting()"
-    %>
     </li>
     <li>Copy the Applescript below to the clipboard.<br />
 
@@ -79,12 +67,6 @@
 <% if has_contexts -%>
   <ol>
     <li>Choose the context you want to add actions to: <select name="quicksilver-contexts" id="quicksilver-contexts"><%= options_from_collection_for_select(current_user.contexts, "id", "name", current_user.contexts.first.id) %></select>
-      <%= observe_field "quicksilver-contexts", :update => "quicksilver",
-        :with => 'context_id',
-        :url => { :controller => "integrations", :action => "get_quicksilver_applescript" },
-        :before => "$('quicksilver').startWaiting()",
-        :complete => "$('quicksilver').stopWaiting()"
-    %>
     </li>
     <li>Copy the Applescript below to the clipboard.<br />
 
