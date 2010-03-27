@@ -28,8 +28,8 @@
       :position => "bottom",
       :complete => "$('#notes').effect('highlight', 1000);$('#empty-n').hide();$('#new-note form').clearForm();",
       :html => {:id=>'form-new-note', :class => 'inline-form'} do %>
-      <%= hidden_field( "new_note", "project_id", "value" => "#{@project.id}" ) %>
-      <%= text_area( "new_note", "body", "cols" => 50, "rows" => 3, "tabindex" => 1 ) %>
+      <%= hidden_field( "note", "project_id", "value" => "#{@project.id}" ) %>
+      <%= text_area( "note", "body", "cols" => 50, "rows" => 3, "tabindex" => 1 ) %>
       <br /><br />
       <input type="submit" value="Add note" name="add-new-note" tabindex="2" />
     <% end -%>

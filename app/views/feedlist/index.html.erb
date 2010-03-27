@@ -73,12 +73,6 @@
               <%= options_from_collection_for_select(@active_contexts, "id", "name", @active_contexts.first.id) unless @active_projects.empty?-%>
               <%= options_from_collection_for_select(@hidden_contexts, "id", "name") -%>
             </select>
-            <%= observe_field "feed-contexts", :update => "feeds-for-context",
-              :with => 'context_id',
-              :url => { :controller => "feedlist", :action => "get_feeds_for_context" },
-              :before => "$('feeds-for-context').startWaiting()",
-              :complete => "$('feeds-for-context').stopWaiting()"
-            -%>
           </li>
           <li>Step 2 - Select the feed for this context
             <div id="feedicons-context">
@@ -101,12 +95,6 @@
               <%=  options_from_collection_for_select(@hidden_projects, "id", "name") -%>
               <%=  options_from_collection_for_select(@completed_projects, "id", "name") -%>
             </select>
-            <%= observe_field "feed-projects", :update => "feeds-for-project",
-              :with => 'project_id',
-              :url => { :controller => "feedlist", :action => "get_feeds_for_project" },
-              :before => "$('feeds-for-project').startWaiting()",
-              :complete => "$('feeds-for-project').stopWaiting()"
-            -%>
           </li>
           <li>Step 2 - Select the feed for this project
             <div id="feedicons-project">

@@ -3,6 +3,7 @@ page['todo_project_name'].value = @project.name
 
 # renew project auto complete array
 page << "var projectNames = #{project_names_for_autocomplete};"
+page << "enable_rich_interaction();"
 
 status_message = "Name of project was changed"
 page.notify :notice, status_message, 5.0

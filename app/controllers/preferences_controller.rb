@@ -7,7 +7,6 @@ class PreferencesController < ApplicationController
 
   def edit
     @page_title = "TRACKS::Edit Preferences"
-    render :object => prefs
   end
   
   def update

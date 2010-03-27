@@ -9,6 +9,14 @@ if @saved
   # regenerate predecessor to add arrow
   page[@predecessor].replace_html :partial => 'todos/todo', :locals => { :todo => @predecessor, :parent_container_type => parent_container_type }
 
+  # regenerate predecessor family
+  parents = @predecessor.predecessors
+  until parents.empty?
+    parent = parents.pop
+    parents += parent.predecessors
+    page[parent].replace_html :partial => 'todos/todo', :locals => { :todo => parent, :parent_container_type => parent_container_type }
+  end
+
   # show in tickler box in project view
   if source_view_is_one_of :project, :tag
     page['tickler-empty-nd'].hide

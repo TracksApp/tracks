@@ -49,7 +49,7 @@ $.fn.clearForm = function() {
  * Unobtrusive jQuery written by Eric Allen
  ****************************************/
 
-/* Set up authenticity token proplery */
+/* Set up authenticity token properly */
 $(document).ajaxSend(function(event, request, settings) {
   if ( settings.type == 'POST' ) {
     if(typeof(AUTH_TOKEN) != 'undefined'){
@@ -154,9 +154,9 @@ function update_order(event, ui){
 
   url = '';
   if(row.hasClass('context'))
-    url = '/contexts/order';
+    url = relative_to_root('contexts/order');
   else if(row.hasClass('project'))
-    url = '/projects/order';
+    url = relative_to_root('projects/order');
   else {
     console.log("Bad sortable list");
     return;
@@ -185,11 +185,11 @@ function project_defaults(){
 }
 
 function enable_rich_interaction(){
-  $('input.Date').datepicker({'dateFormat': dateFormat});
+  $('input.Date').datepicker({'dateFormat': dateFormat, 'firstDay': weekStart});
   /* Autocomplete */
-  $('input[name=context_name]:not(.ac_input)').autocomplete(contextNames, {matchContains: true});
-  $('input[name=project[default_context_name]]:not(.ac_input)').autocomplete(contextNames, {matchContains: true});
-  $('input[name=project_name]:not(.ac_input)').autocomplete(projectNames, {matchContains: true});
+  $('input[name=context_name]').autocomplete(contextNames, {matchContains: true});
+  $('input[name=project[default_context_name]]').autocomplete(contextNames, {matchContains: true});
+  $('input[name=project_name]').autocomplete(projectNames, {matchContains: true});
   $('input[name=tag_list]:not(.ac_input)').autocomplete(tagNames, {multiple: true,multipleSeparator:',',matchContains:true});
   $('input[name=predecessor_list]:not(.ac_input)').autocomplete('/todos/auto_complete_for_predecessor',
       {multiple: true,multipleSeparator:','});
@@ -209,18 +209,41 @@ function enable_rich_interaction(){
   /* Drag & Drop for successor/predecessor */
   function drop_todo(evt, ui) {
     dragged_todo = ui.draggable[0].id.split('_')[2];
-    dropped_todo = this.id.split('_')[2];
+    dropped_todo = $(this).parents('.item-show').get(0).id.split('_')[2];
     ui.draggable.hide();
     $(this).block({message: null});
-    $.post('/todos/add_predecessor',
+    $.post(relative_to_root('todos/add_predecessor'),
         {successor: dragged_todo, predecessor: dropped_todo},
         null, 'script');
   }
 
-  $('.item-show').draggable({handle: '.grip', revert: 'invalid'});
-  $('.item-show').droppable({
-        drop: drop_todo,
-        hoverClass: 'hover'
+  $('.item-show').draggable({handle: '.grip',
+      revert: 'invalid',
+      start: function() {$('.successor_target').show();},
+      stop: function() {$('.successor_target').hide();}});
+
+  $('.successor_target').droppable({drop: drop_todo,
+      tolerance: 'pointer',
+      hoverClass: 'hover'});
+
+  /* Reset auto updater */
+  field_touched = false;
+}
+
+/* Auto-refresh */
+
+function setup_auto_refresh(interval){
+  field_touched = false;
+  function refresh_page() {
+    if(!field_touched){
+      window.location.reload();
+    }
+  }
+  setTimeout(refresh_page, interval);
+  $(function(){
+      $("input").live('keydown', function(){
+        field_touched = true;
+        });
       });
 }
 
@@ -287,6 +310,17 @@ $(document).ready(function() {
     $.post(this.value, params, null, 'script');
   });
 
+  /* set behavior for edit icon */
+  $(".item-container a.edit_item").live('click', function (ev){
+    itemContainer = $(this).parents(".item-container");
+    $.ajax({
+            url: this.href,
+            beforeSend: function() { itemContainer.block({message: null});},
+            complete: function() { itemContainer.unblock();},
+            dataType: 'script'});
+    return false;
+  });
+
   setup_container_toggles();
 
   $('#toggle_action_new').click(function(){
@@ -339,7 +373,6 @@ $(document).ready(function() {
     });
 
   $("#recurring_todo_new_action_cancel").click(function(){
-      $('#recurring-todo-form-new-action').clearForm();
       $('#recurring-todo-form-new-action input:text:first').focus();
       TracksForm.hide_all_recurring();
       $('#recurring_daily').show();
@@ -347,7 +380,6 @@ $(document).ready(function() {
   });
 
   $("#recurring_todo_edit_action_cancel").live('click', function(){
-      $('#recurring-todo-form-edit-action').clearForm();
       $('#recurring-todo-form-edit-action input:text:first').focus();
       TracksForm.hide_all_recurring();
       $('#recurring_daily').show();
@@ -372,9 +404,9 @@ $(document).ready(function() {
       highlight = function(){
         $('div.context span#context_name').effect('highlight', {}, 500);
       };
-      $.post('/contexts/update/'+context_id, {'context[name]': value}, highlight);
+      $.post(relative_to_root('contexts/update/'+context_id), {'context[name]': value}, highlight);
       return(value);
-      }, {style: 'padding:0px', submit: "OK"});
+      }, {style: 'padding:0px', submit: "OK", cancel: "CANCEL"});
 
   /* Projects behavior */
 
@@ -383,7 +415,7 @@ $(document).ready(function() {
       highlight = function(){
         $('h2#project_name').effect('highlight', {}, 500);
       };
-      $.post('/projects/update/'+project_id, {'project[name]': value, 'update_project_name': 'true'}, highlight, 'script');
+      $.post(relative_to_root('projects/update/'+project_id), {'project[name]': value, 'update_project_name': 'true'}, highlight, 'script');
       return(value);
   };
 
@@ -448,6 +480,51 @@ $(document).ready(function() {
 
   $("#list-contexts-active").sortable({handle: '.handle', update: update_order});
   $("#list-contexts-hidden").sortable({handle: '.handle', update: update_order});
+  
+  /* Feeds page */
+  $("#feed-contexts").change(function(){
+      $("#feeds-for-context").load('/feedlist/get_feeds_for_context?context_id='+this.value);
+  });
+  $("#feed-projects").change(function(){
+      $("#feeds-for-project").load('/feedlist/get_feeds_for_project?project_id='+this.value);
+  });
+
+  /* Integrations page */
+  /*
+    <%= observe_field "applescript1-contexts", :update => "applescript1",
+      :with => 'context_id',
+      :url => { :controller => "integrations", :action => "get_applescript1" },
+      :before => "$('applescript1').startWaiting()",
+      :complete => "$('applescript1').stopWaiting()"
+  %>
+  */
+  $('#applescript1-contexts').live('change', function(){
+      $("#applescript1").load(relative_to_root('integrations/get_applescript1?context_id='+this.value));
+  });
+
+  /*
+    <%= observe_field "applescript2-contexts", :update => "applescript2",
+      :with => 'context_id',
+      :url => { :controller => "integrations", :action => "get_applescript2" },
+      :before => "$('applescript2').startWaiting()",
+      :complete => "$('applescript2').stopWaiting()"
+  %>
+  */
+  $('#applescript2-contexts').live('change', function(){
+      $("#applescript2").load(relative_to_root('integrations/get_applescript2?context_id='+this.value));
+  });
+
+  /*
+    <%= observe_field "quicksilver-contexts", :update => "quicksilver",
+      :with => 'context_id',
+      :url => { :controller => "integrations", :action => "get_quicksilver_applescript" },
+      :before => "$('quicksilver').startWaiting()",
+      :complete => "$('quicksilver').stopWaiting()"
+  %>
+  */
+  $('#quicksilver-contexts').live('change', function(){
+      $("#quicksilver").load(relative_to_root('integrations/get_quicksilver_applescript?context_id='+this.value));
+  });
 
   /* Gets called from some AJAX callbacks, too */
   enable_rich_interaction();

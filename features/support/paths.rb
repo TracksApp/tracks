@@ -14,6 +14,8 @@ module NavigationHelpers
       login_path
     when /the notes page/
       notes_path
+    when /the contexts page/
+      contexts_path
     
     # Add more page name => path mappings here
     

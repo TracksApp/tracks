@@ -27,12 +27,28 @@ class NotesController < ApplicationController
 
   def create
     note = current_user.notes.build
-    note.attributes = params["new_note"]
+    note.attributes = params["note"]
 
-    if note.save
-      render :partial => 'notes_summary', :object => note
-    else
-      render :text => ''
+    saved = note.save
+
+    respond_to do |format|
+      format.js do
+        if note.save
+          render :partial => 'notes_summary', :object => note
+        else
+          render :text => ''
+        end
+      end
+      format.xml do
+        if saved
+          head :created, :location => note_url(note), :text => "new note with id #{note.id}"
+        else
+	  render_failure note.errors.full_messages.join(', ')
+        end
+      end
+      format.html do
+        render :text => 'unexpected request for html rendering'
+      end
     end
   end
 

@@ -24,14 +24,12 @@ module TodosHelper
       :class => "icon star_item", :title => "star the action '#{@todo.description}'")
   end
 
-  def remote_edit_menu_item(parameters, todo)
-    return link_to_remote(
-      image_tag("edit_off.png", :mouseover => "edit_on.png", :alt => "Edit", :align => "absmiddle", :id => 'edit_icon_todo_'+todo.id.to_s)+" Edit",
-      :url => {:controller => 'todos', :action => 'edit', :id => todo.id},
-      :method => 'get',
-      :with => "'#{parameters}'",
-      :before => todo_start_waiting_js(todo),
-      :complete => todo_stop_waiting_js(todo))
+  def remote_edit_button
+    link_to(
+      image_tag("blank.png", :alt => "Edit", :align => "absmiddle", :id => 'edit_icon_todo_'+@todo.id.to_s, :class => 'edit_item'),
+      {:controller => 'todos', :action => 'edit', :id => @todo.id},
+      :class => "icon edit_item",
+      :title => "Edit the action '#{@todo.description}'")
   end
 
   def remote_delete_menu_item(parameters, todo)
@@ -70,7 +68,7 @@ module TodosHelper
       :_source_view => (@source_view.underscore.gsub(/\s+/,'_') rescue "")}
     url[:_tag_name] = @tag_name if @source_view == 'tag'
 
-    return link_to("Promote to project", url)
+    return link_to(image_tag("to_project_off.png", :align => "absmiddle")+" Make project", url)
   end
   
   def todo_start_waiting_js(todo)
@@ -121,8 +119,10 @@ module TodosHelper
   def grip_span
     unless @todo.completed?
       image_tag('grip.png', :width => '7', :height => '16', :border => '0', 
-        :title => 'Drag onto another action to make it depend on that action',
-        :class => 'grip')
+                :title => 'Drag onto another action to make it depend on that action',
+                :class => 'grip') +
+      image_tag('blank.png', :width => 16, :height => 16, :border => 0,
+                :title => "Drop an action to make it depend on this action", :class => 'successor_target')
     end
   end
   

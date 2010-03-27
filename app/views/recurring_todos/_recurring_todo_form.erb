@@ -2,8 +2,7 @@
   <% form_remote_tag(
     :url => recurring_todos_path, :method => :post,
     :html=> { :id=>'recurring-todo-form-new-action', :name=>'recurring_todo', :class => 'inline-form' },
-    :before => "$('#recurring_todo_new_action_submit').block({message: null})",
-    :complete => "$('#recurring_todo_new_action_submit').unblock();$('#recurring-todo-form-new-action').clearForm();") do 
+    :before => "$('#recurring_todo_new_action_submit').block({message: null})") do
     -%>
     <div id="new_status"><%= error_messages_for("item", :object_name => 'action') %></div>
   
@@ -18,7 +17,7 @@
         <div class="page_name_auto_complete" id="project_list" style="display:none"></div>
       
         <label for="recurring_todo_context_name">Context</label>
-        <input id="recurring_todo_context_name" name="context_name" autocomplete="off" tabindex="4" size="30" type="text" value="" />
+        <input id="recurring_todo_context_name" name="context_name" autocomplete="off" tabindex="4" size="30" type="text" value="<%= current_user.contexts.first.name unless current_user.contexts.first.nil?%>" />
         <div class="page_name_auto_complete" id="context_list" style="display:none"></div>  
         <label for="tag_list">Tags (separate with commas)</label>
         <%= text_field_tag "tag_list", nil, :size => 30, :tabindex => 5 -%> 

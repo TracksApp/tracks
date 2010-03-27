@@ -1,5 +1,3 @@
-page['context_name_in_place_editor'].replace_html @context.name
-
 page['default_context_name_id'].value = @context.name
 page['todo_context_name'].value = @context.name
 

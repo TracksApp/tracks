@@ -2,37 +2,27 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <% if @prefs.refresh != 0 -%>
-      <meta http-equiv="Refresh" content="<%= @prefs["refresh"].to_i*60 %>;url=<%= request.request_uri %>">
-    <% end -%>
-    <% bundle :name => "tracks_css" do %>
-      <%= stylesheet_link_tag *%w[ standard superfish niftyCorners jquery-ui jquery.autocomplete] %>
-    <% end %>
+    <%= stylesheet_link_tag 'standard','superfish','niftyCorners','jquery-ui',
+      'jquery.autocomplete', :cache => true %>
     <%= stylesheet_link_tag "print", :media => "print" %>
-    <% bundle :name => "jquery" do %>
-      <%= javascript_include_tag 'jquery' %>
-      <%= javascript_include_tag 'jquery-ui' %>
-      <%= javascript_include_tag 'jquery.cookie' %>
-      <%= javascript_include_tag 'jquery.blockUI' %>
-      <%= javascript_include_tag 'jquery.jeditable' %>
-      <%= javascript_include_tag 'jquery.autocomplete' %>
-    <% end %>
-    <% bundle :name => "tracks_js" do %>
-      <%= javascript_include_tag *%w[
-      hoverIntent superfish application
-      accesskey-hints niftycube flashobject ] %>
-    <% end %>
+    <%= javascript_include_tag 'jquery','jquery-ui','jquery.cookie',
+      'jquery.blockUI','jquery.jeditable','jquery.autocomplete', :cache => 'jquery-all' %>
+    <%= javascript_include_tag 'hoverIntent','superfish','application',
+      'accesskey-hints','niftycube','flashobject', :cache => 'tracks' %>
     <%= javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? %>
     <%= javascript_tag "var SOURCE_VIEW = '#{@source_view}';" %>
     <%= javascript_tag "var TAG_NAME = '#{@tag_name}';" if @tag_name %>
     <script type="text/javascript">
-      <% if defined? context_names_for_autocomplete -%>
-      var contextNames = <%= context_names_for_autocomplete %>;
-      var projectNames = <%= project_names_for_autocomplete %>;
-      var defaultContexts = <%= default_contexts_for_autocomplete %>;
-      var defaultTags = <%= default_tags_for_autocomplete %>;
-      var tagNames = <%= tag_names_for_autocomplete %>;
+      var contextNames = <%= context_names_for_autocomplete rescue '[]' %>;
+      var projectNames = <%= project_names_for_autocomplete rescue '[]' %>;
+      var defaultContexts = <%= default_contexts_for_autocomplete rescue '{}' %>;
+      var defaultTags = <%= default_tags_for_autocomplete rescue '{}' %>;
+      var tagNames = <%= tag_names_for_autocomplete rescue '[]' %>;
       var dateFormat = '<%= date_format_for_date_picker %>';
+      var weekStart = '<%= current_user.prefs.week_starts %>';
+      function relative_to_root(path) { return '<%= root_url %>'+path; };
+      <% if @prefs.refresh != 0 -%>
+        setup_auto_refresh(<%= @prefs["refresh"].to_i*60000 %>);
       <% end -%>
     </script>
     <link rel="shortcut icon" href="<%= url_for(:controller => 'favicon.ico') %>" />

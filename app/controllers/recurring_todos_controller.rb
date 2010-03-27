@@ -2,7 +2,7 @@ class RecurringTodosController < ApplicationController
 
   helper :todos, :recurring_todos
 
-  append_before_filter :init, :only => [:index, :new, :edit]
+  append_before_filter :init, :only => [:index, :new, :edit, :create]
   append_before_filter :get_recurring_todo_from_param, :only => [:destroy, :toggle_check, :toggle_star, :edit, :update]
 
   def index
@@ -243,7 +243,7 @@ class RecurringTodosController < ApplicationController
 
   private
   
-  def init 
+  def init
     @days_of_week = [ ['Sunday',0], ['Monday',1], ['Tuesday', 2], ['Wednesday',3], ['Thursday',4], ['Friday',5], ['Saturday',6]]
     @months_of_year = [ 
       ['January',1], ['Februari',2], ['March', 3], ['April',4], ['May',5], ['June',6], 

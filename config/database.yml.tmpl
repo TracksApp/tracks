@@ -5,7 +5,7 @@ development:
   username: root
   password: 
 
-test:
+test: &TEST
     adapter: sqlite3
     database: ":memory:"
 
@@ -15,3 +15,9 @@ production:
   host: localhost
   username: root
   password: 
+
+cucumber:
+  <<: *TEST
+
+selenium:
+  <<: *TEST

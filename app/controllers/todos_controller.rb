@@ -6,9 +6,9 @@ class TodosController < ApplicationController
   prepend_before_filter :login_or_feed_token_required, :only => [:index, :calendar]
   append_before_filter :init, :except => [ :destroy, :completed,
     :completed_archive, :check_deferred, :toggle_check, :toggle_star,
-    :edit, :update, :create, :calendar, :auto_complete_for_tag, :auto_complete_for_predecessor, :remove_predecessor, :add_predecessor]
+    :edit, :update, :create, :calendar, :auto_complete_for_predecessor, :remove_predecessor, :add_predecessor]
   append_before_filter :get_todo_from_params, :only => [ :edit, :toggle_check, :toggle_star, :show, :update, :destroy, :remove_predecessor]
-  protect_from_forgery :except => [:auto_complete_for_tag, :auto_complete_for_predecessor]
+  protect_from_forgery :except => [:auto_complete_for_predecessor]
 
   def index
     current_user.deferred_todos.find_and_activate_ready
@@ -77,7 +77,7 @@ class TodosController < ApplicationController
       @todo.tags.reload
     end
 
-    unless (@aved == false)
+    unless (@saved == false)
       unless @todo.uncompleted_predecessors.empty? || @todo.state == 'project_hidden'
         @todo.state = 'pending'
       end
@@ -140,8 +140,8 @@ class TodosController < ApplicationController
   
   def add_predecessor
     @source_view = params['_source_view'] || 'todo'
-    @predecessor = Todo.find(params['predecessor'])
-    @todo = Todo.find(params['successor'])
+    @predecessor = current_user.todos.find(params['predecessor'])
+    @todo = current_user.todos.find(params['successor'])
     @original_state = @todo.state
     # Add predecessor
     @todo.add_predecessor(@predecessor)
@@ -154,7 +154,7 @@ class TodosController < ApplicationController
 
   def remove_predecessor
     @source_view = params['_source_view'] || 'todo'
-    @predecessor = Todo.find(params['predecessor'])
+    @predecessor = current_user.todos.find(params['predecessor'])
     @successor = @todo
     @removed = @successor.remove_predecessor(@predecessor)
     respond_to do |format|
@@ -590,14 +590,6 @@ class TodosController < ApplicationController
       }
     end
   end
-
-  def auto_complete_for_tag
-    @items = Tag.find(:all,
-      :conditions => [ "name LIKE ?", '%' + params['tag_list'] + '%' ],
-      :order => "name ASC",
-      :limit => 10)
-    render :inline => "<%= auto_complete_result(@items, :name) %>"
-  end
   
   def auto_complete_for_predecessor
     unless params['id'].nil?
@@ -640,8 +632,8 @@ class TodosController < ApplicationController
   end
 
   def convert_to_project
-    @todo = Todo.find(params[:id])
-    @project = Project.new(:name => @todo.description, :description => @todo.notes,
+    @todo = current_user.todos.find(params[:id])
+    @project = current_user.projects.new(:name => @todo.description, :description => @todo.notes,
                            :default_context => @todo.context)
     @todo.destroy
     @project.save!

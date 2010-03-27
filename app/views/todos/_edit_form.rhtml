@@ -13,22 +13,15 @@
 <div class="project_input">
   <label for="<%= dom_id(@todo, 'project_name') %>">Project</label>
   <input id="<%= dom_id(@todo, 'project_name') %>" name="project_name" autocomplete="off" tabindex="10" size="30" type="text" value="<%= @todo.project.nil? ? 'None' : @todo.project.name.gsub(/"/,"&quot;") %>" />
-  <div class="page_name_auto_complete" id="<%= dom_id(@todo, 'project_list') %>" style="display:none"></div>
 </div>
 
 <div class="context_input">
   <label for="<%= dom_id(@todo, 'context_name') %>">Context</label>
   <input id="<%= dom_id(@todo, 'context_name') %>" name="context_name" autocomplete="off" tabindex="11" size="30" type="text" value="<%= @todo.context.name %>" />
-  <div class="page_name_auto_complete" id="<%= dom_id(@todo, 'context_list') %>" style="display:none"></div>
 </div>
 
 <label class="tag_list_label" for="<%= dom_id(@todo, 'tag_list') %>">Tags (separate with commas)</label>
 <%= text_field_tag 'tag_list', tag_list_text, :id => dom_id(@todo, 'tag_list'), :size => 30, :tabindex => 12 %> 
-<%= content_tag("div", "", :id => dom_id(@todo, 'tag_list')+"_auto_complete", :class => "auto_complete") %>
-<%= auto_complete_field dom_id(@todo, 'tag_list'), {
-  :url => {:controller => 'todos', :action => 'auto_complete_for_tag'},
-  :tokens => [',']
-} %>
 
 <div class="due_input">
   <label for="<%= dom_id(@todo, 'due_label') %>">Due</label>
@@ -48,11 +41,6 @@
 
 <label class="predecessor_list_label" for="<%= dom_id(@todo, 'predecessor_list') %>">Depends on (separate with commas)</label>
 <%= text_field_tag 'predecessor_list', predecessor_list_text, :id => dom_id(@todo, 'predecessor_list'), :size => 30, :tabindex => 15 %> 
-<%= content_tag("div", "", :id => dom_id(@todo, 'predecessor_list')+"_auto_complete", :class => "auto_complete") %>
-<%= auto_complete_field dom_id(@todo, 'predecessor_list'), {
-  :url => {:controller => 'todos', :action => 'auto_complete_for_predecessor', :id => @todo.id},
-  :tokens => [',']
-} %>
 
 <% if controller.controller_name == "project" || @todo.deferred? -%>
   <input type="hidden" name="on_project_page" value="true" />
