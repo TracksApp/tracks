@@ -170,10 +170,16 @@ function update_order(event, ui){
 /* Unobtrusive jQuery behavior */
 
 function project_defaults(){
-  if(defaultContexts[$(this).val()] !== undefined) {
-    context_name = $(this).parents('form').find('input[name=context_name]');
-    if(context_name.attr('edited') === undefined){
-      context_name.val(defaultContexts[$(this).val()]);
+  if($('body').hasClass('contexts')){
+    // don't change the context
+    // see ticket #934
+  }
+  else {
+    if(defaultContexts[$(this).val()] !== undefined) {
+      context_name = $(this).parents('form').find('input[name=context_name]');
+      if(context_name.attr('edited') === undefined){
+        context_name.val(defaultContexts[$(this).val()]);
+      }
     }
   }
   if(defaultTags[$(this).val()] !== undefined) {
