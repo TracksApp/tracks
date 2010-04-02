@@ -202,9 +202,11 @@ module ApplicationHelper
   end
 
   def format_note(note)
+    note.gsub!(/</, '&lt;') # eliminate tags
+    note.gsub!(/>/, '&gt;')
+    note = markdown(note)
     note = auto_link_message(note)
     note = auto_link(note)
-    note = markdown(note)
-    note = sanitize(note)
+    return note
   end
 end
