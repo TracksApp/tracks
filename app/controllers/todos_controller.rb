@@ -530,7 +530,7 @@ class TodosController < ApplicationController
   def tags
     @tags = Tag.all
     respond_to do |format|
-      format.autocomplete { render :text => for_autocomplete(@tags) }
+      format.autocomplete { render :text => for_autocomplete(@tags, params[:q]) }
     end
   end
   
