@@ -6,7 +6,8 @@
       'jquery.autocomplete', :cache => true %>
     <%= stylesheet_link_tag "print", :media => "print" %>
     <%= javascript_include_tag 'jquery','jquery-ui','jquery.cookie',
-      'jquery.blockUI','jquery.jeditable','jquery.autocomplete', :cache => 'jquery-all' %>
+      'jquery.blockUI','jquery.jeditable','jquery.autocomplete',
+      'jquery.truncator', :cache => 'jquery-all' %>
     <%= javascript_include_tag 'hoverIntent','superfish','application',
       'accesskey-hints','niftycube','flashobject', :cache => 'tracks' %>
     <%= javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? %>

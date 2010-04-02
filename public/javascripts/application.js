@@ -289,6 +289,8 @@ $(document).ready(function() {
     $(this).next().toggle("fast"); return false;
   });
 
+  $('.note_wrapper').truncate({max_length: 90, more: '', less: ''});
+
   $(".show_successors").live('click', function () {
     $(this).next().toggle("fast"); return false;
   });
