@@ -364,7 +364,7 @@ $.Autocompleter = function(input, options) {
 				// limit abortion to this input
 				port: "autocomplete" + input.name,
 				dataType: options.dataType,
-        type: 'POST',
+        type: 'GET',
 				url: options.url,
 				data: $.extend({
 					q: lastWord(term),

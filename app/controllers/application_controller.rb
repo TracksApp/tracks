@@ -123,6 +123,11 @@ class ApplicationController < ActionController::Base
     formatted_date
   end
 
+
+  def for_autocomplete(coll)
+    coll.map {|item| "#{item.name}|#{item.id}"}.join("\n")
+  end
+
   # Uses RedCloth to transform text using either Textile or Markdown Need to
   # require redcloth above RedCloth 3.0 or greater is needed to use Markdown,
   # otherwise it only handles Textile

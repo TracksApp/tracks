@@ -2,3 +2,4 @@
 # Mime::Type.register "text/richtext", :rtf
 # Mime::Type.register "application/x-mobile", :mobile
 Mime::Type.register_alias "text/html", :m
+Mime::Type.register_alias "text/plain", :autocomplete

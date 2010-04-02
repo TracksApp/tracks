@@ -187,11 +187,16 @@ function project_defaults(){
 function enable_rich_interaction(){
   $('input.Date').datepicker({'dateFormat': dateFormat, 'firstDay': weekStart});
   /* Autocomplete */
-  $('input[name=context_name]').autocomplete(contextNames, {matchContains: true});
-  $('input[name=project[default_context_name]]').autocomplete(contextNames, {matchContains: true});
-  $('input[name=project_name]').autocomplete(projectNames, {matchContains: true});
-  $('input[name=tag_list]:not(.ac_input)').autocomplete(tagNames, {multiple: true,multipleSeparator:',',matchContains:true});
-  $('input[name=predecessor_list]:not(.ac_input)').autocomplete('/todos/auto_complete_for_predecessor',
+  $('input[name=context_name]').autocomplete(
+    relative_to_root('contexts.autocomplete'), {matchContains: true});
+  $('input[name=project[default_context_name]]').autocomplete(
+    relative_to_root('contexts.autocomplete'), {matchContains: true});
+  $('input[name=project_name]').autocomplete(
+    relative_to_root('projects.autocomplete'), {matchContains: true});
+  $('input[name=tag_list]:not(.ac_input)').autocomplete(
+    relative_to_root('tags.autocomplete'), {multiple: true,multipleSeparator:',',matchContains:true});
+  $('input[name=predecessor_list]:not(.ac_input)').autocomplete(
+      relative_to_root('auto_complete_for_predecessor'),
       {multiple: true,multipleSeparator:','});
 
   /* have to bind on keypress because of limitataions of live() */
