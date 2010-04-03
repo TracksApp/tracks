@@ -5,7 +5,7 @@
 		var cfg = {
 			sensitivity: 7,
 			interval: 100,
-			timeout: 0
+			timeout: 400
 		};
 		// override configuration options with user supplied object
 		cfg = $.extend(cfg, g ? { over: f, out: g } : f );

@@ -526,6 +526,13 @@ class TodosController < ApplicationController
       }
     end
   end
+
+  def tags
+    @tags = Tag.all
+    respond_to do |format|
+      format.autocomplete { render :text => for_autocomplete(@tags, params[:q]) }
+    end
+  end
   
   def defer
     @source_view = params['_source_view'] || 'todo'

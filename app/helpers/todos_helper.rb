@@ -276,20 +276,6 @@ module TodosHelper
     return "c#{todo.context_id}empty-nd"
   end
   
-  def project_names_for_autocomplete
-    array_or_string_for_javascript( ['None'] + current_user.projects.active.collect{|p| escape_javascript(p.name) } )
-  end
-  
-  def context_names_for_autocomplete
-    # #return array_or_string_for_javascript(['Create a new context']) if
-    # @contexts.empty?
-    array_or_string_for_javascript( current_user.contexts.collect{|c| escape_javascript(c.name) } )
-  end
-
-  def tag_names_for_autocomplete
-    array_or_string_for_javascript( Tag.all.collect{|c| escape_javascript(c.name) } )
-  end
-  
   def default_contexts_for_autocomplete
     projects = current_user.projects.find(:all, :conditions => ['default_context_id is not null'])
     Hash[*projects.map{ |p| [p.name, p.default_context.name] }.flatten].to_json
