@@ -639,6 +639,11 @@ class RecurringTodo < ActiveRecord::Base
     starred?  
   end
   
+  def remove_from_project!
+    self.project = nil
+    self.save
+  end
+
   def inc_occurences
     self.occurences_count += 1
     self.save

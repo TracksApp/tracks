@@ -1,6 +1,7 @@
 class Context < ActiveRecord::Base
 
   has_many :todos, :dependent => :delete_all, :include => :project, :order => "todos.completed_at DESC"
+  has_many :recurring_todos, :dependent => :delete_all
   belongs_to :user
 
   named_scope :active, :conditions => { :hide => false }
