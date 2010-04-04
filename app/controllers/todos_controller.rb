@@ -47,11 +47,21 @@ class TodosController < ApplicationController
   
   def create
     @source_view = params['_source_view'] || 'todo'
-    @tag_name = params['_tag_name'] 
-    p = TodoCreateParamsHelper.new(params, prefs)        
-    p.parse_dates() unless mobile?
+    @tag_name = params['_tag_name']
+
+    p = TodoCreateParamsHelper.new(params, prefs)
+
+    date_error = false
+    begin
+      p.parse_dates() unless mobile?
+    rescue Exception => e
+      date_error = true
+    end
     
     @todo = current_user.todos.build(p.attributes)
+    if date_error
+      @todo.errors.add :show_from, "date or due date is invalid"
+    end
     
     if p.project_specified_by_name?
       project = current_user.projects.find_or_create_by_name(p.project_name)
@@ -67,10 +77,13 @@ class TodosController < ApplicationController
     end
 
     @todo.update_state_from_project
-    @saved = @todo.save
-    unless (@saved == false) || p.tag_list.blank?
-      @todo.tag_with(p.tag_list)
-      @todo.tags.reload
+
+    if @todo.errors.empty?
+      @saved = @todo.save
+      unless (@saved == false) || p.tag_list.blank?
+        @todo.tag_with(p.tag_list)
+        @todo.tags.reload
+      end
     end
     
     respond_to do |format|
@@ -213,15 +226,28 @@ class TodosController < ApplicationController
       end
       params["todo"]["context_id"] = context.id
     end
-    
+
+    due_date_valid = true
+    show_from_date_valid = true
+
     if params["todo"].has_key?("due")
-      params["todo"]["due"] = parse_date_per_user_prefs(params["todo"]["due"])
+      begin
+        params["todo"]["due"] = parse_date_per_user_prefs(params["todo"]["due"])
+      rescue Exception
+        due_date_valid = false
+        params["todo"]["due"] = ""
+      end
     else
       params["todo"]["due"] = ""
     end
     
     if params['todo']['show_from']
-      params['todo']['show_from'] = parse_date_per_user_prefs(params['todo']['show_from'])
+      begin
+        params['todo']['show_from'] = parse_date_per_user_prefs(params['todo']['show_from'])
+      rescue Exception
+        show_from_date_valid = false
+        params["todo"]["show_from"] = ""
+      end
     end
     
     if params['done'] == '1' && !@todo.completed?
@@ -234,7 +260,13 @@ class TodosController < ApplicationController
     end
     
     @todo.attributes = params["todo"]
-    @saved = @todo.save
+
+    @todo.errors.add :show_from, "date is invalid" unless show_from_date_valid
+    @todo.errors.add :due, "date is invalid" unless due_date_valid
+
+    if @todo.errors.empty?
+      @saved = @todo.save
+    end
 
     @context_changed = @original_item_context_id != @todo.context_id
     @todo_was_activated_from_deferred_state = @original_item_was_deferred && @todo.active?
@@ -307,7 +339,7 @@ class TodosController < ApplicationController
           notify :error, "Failed to delete the action", 2.0
           redirect_to :action => 'index'
         end
-      end  
+      end
       
       format.js do
         if @saved
@@ -315,7 +347,7 @@ class TodosController < ApplicationController
           if source_view_is_one_of(:todo, :deferred)
             determine_remaining_in_context_count(@context_id)
           elsif source_view_is :calendar
-            @original_item_due_id = get_due_id_for_calendar(@original_item_due) 
+            @original_item_due_id = get_due_id_for_calendar(@original_item_due)
             @old_due_empty = is_old_due_empty(@original_item_due_id)
           end
         end
@@ -395,22 +427,22 @@ class TodosController < ApplicationController
     @tag = Tag.new(:name => @tag_name) if @tag.nil?
     tag_collection = @tag.todos
     
-    @not_done_todos = tag_collection.find(:all, 
+    @not_done_todos = tag_collection.find(:all,
       :conditions => ['todos.user_id = ? and state = ?', current_user.id, 'active'],
       :order => 'todos.due IS NULL, todos.due ASC, todos.created_at ASC')
-    @hidden_todos = current_user.todos.find(:all, 
-      :include => [:taggings, :tags, :context], 
+    @hidden_todos = current_user.todos.find(:all,
+      :include => [:taggings, :tags, :context],
       :conditions => ['tags.name = ? AND (todos.state = ? OR (contexts.hide = ? AND todos.state = ?))', @tag_name, 'project_hidden', true, 'active'],
       :order => 'todos.completed_at DESC, todos.created_at DESC')
-    @deferred = tag_collection.find(:all, 
+    @deferred = tag_collection.find(:all,
       :conditions => ['todos.user_id = ? and state = ?', current_user.id, 'deferred'],
       :order => 'show_from ASC, todos.created_at DESC')
     
     # If you've set no_completed to zero, the completed items box isn't shown on
     # the tag page
     max_completed = current_user.prefs.show_number_completed
-    @done = tag_collection.find(:all, 
-      :limit => max_completed, 
+    @done = tag_collection.find(:all,
+      :limit => max_completed,
       :conditions => ['todos.user_id = ? and state = ?', current_user.id, 'completed'],
       :order => 'todos.completed_at DESC')
 
@@ -420,15 +452,15 @@ class TodosController < ApplicationController
     
     # Set count badge to number of items with this tag
     @not_done_todos.empty? ? @count = 0 : @count = @not_done_todos.size
-    @down_count = @count 
+    @down_count = @count
 
     respond_to do |format|
       format.html {
         @default_project_context_name_map = build_default_project_context_name_map(@projects).to_json
       }
-      format.m { 
+      format.m {
         cookies[:mobile_url]= {:value => request.request_uri, :secure => SITE_CONFIG['secure_cookies']}
-        render :action => "mobile_tag"         
+        render :action => "mobile_tag"
       }
     end
   end
@@ -466,23 +498,23 @@ class TodosController < ApplicationController
     due_this_month_date = Time.zone.now.end_of_month
     
     @due_today = current_user.todos.not_completed.find(:all,
-      :include => [:taggings, :tags], 
+      :include => [:taggings, :tags],
       :conditions => ['todos.due <= ?', due_today_date],
       :order => "due")
     @due_this_week = current_user.todos.not_completed.find(:all,
-      :include => [:taggings, :tags], 
+      :include => [:taggings, :tags],
       :conditions => ['todos.due > ? AND todos.due <= ?', due_today_date, due_this_week_date],
       :order => "due")
     @due_next_week = current_user.todos.not_completed.find(:all,
-      :include => [:taggings, :tags], 
+      :include => [:taggings, :tags],
       :conditions => ['todos.due > ? AND todos.due <= ?', due_this_week_date, due_next_week_date],
       :order => "due")
     @due_this_month = current_user.todos.not_completed.find(:all,
-      :include => [:taggings, :tags], 
+      :include => [:taggings, :tags],
       :conditions => ['todos.due > ? AND todos.due <= ?', due_next_week_date, due_this_month_date],
       :order => "due")
     @due_after_this_month = current_user.todos.not_completed.find(:all,
-      :include => [:taggings, :tags], 
+      :include => [:taggings, :tags],
       :conditions => ['todos.due > ?', due_this_month_date],
       :order => "due")
 
@@ -495,7 +527,7 @@ class TodosController < ApplicationController
         render :action => 'calendar', :layout => false, :content_type => Mime::ICS
       }
     end
-  end  
+  end
   
   private
   
@@ -506,7 +538,7 @@ class TodosController < ApplicationController
   def init
     @source_view = params['_source_view'] || 'todo'
     init_data_for_sidebar unless mobile?
-    init_todos      
+    init_todos
   end
 
   def with_feed_query_scope(&block)
@@ -575,7 +607,7 @@ class TodosController < ApplicationController
       end
     else
       yield
-    end      
+    end
   end
 
   def with_limit_scope(&block)
@@ -601,7 +633,7 @@ class TodosController < ApplicationController
         with_limit_scope do
             
           if mobile?
-            init_todos_for_mobile_view              
+            init_todos_for_mobile_view
           else
             
             # Note: these next two finds were previously using
@@ -611,10 +643,10 @@ class TodosController < ApplicationController
             @todos = Todo.find(:all, :conditions => ['todos.user_id = ?', current_user.id], :include => [ :project, :context, :tags ])
 
             # Exclude hidden projects from the home page
-            @not_done_todos = Todo.find(:all, 
-              :conditions => ['todos.user_id = ? AND contexts.hide = ? AND (projects.state = ? OR todos.project_id IS NULL)', 
-                current_user.id, false, 'active'], 
-              :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC", 
+            @not_done_todos = Todo.find(:all,
+              :conditions => ['todos.user_id = ? AND contexts.hide = ? AND (projects.state = ? OR todos.project_id IS NULL)',
+                current_user.id, false, 'active'],
+              :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC",
               :include => [ :project, :context, :tags ])
           end
 
@@ -628,10 +660,10 @@ class TodosController < ApplicationController
     # but that broke with_scope for :limit
     
     # Exclude hidden projects from the home page
-    @not_done_todos = Todo.find(:all, 
-      :conditions => ['todos.user_id = ? AND todos.state = ? AND contexts.hide = ? AND (projects.state = ? OR todos.project_id IS NULL)', 
-        current_user.id, 'active', false, 'active'], 
-      :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC", 
+    @not_done_todos = Todo.find(:all,
+      :conditions => ['todos.user_id = ? AND todos.state = ? AND contexts.hide = ? AND (projects.state = ? OR todos.project_id IS NULL)',
+        current_user.id, 'active', false, 'active'],
+      :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC",
       :include => [ :project, :context, :tags ])
   end
     
@@ -639,8 +671,8 @@ class TodosController < ApplicationController
     source_view do |from|
       from.todo do
         @down_count = Todo.count(
-          :all, 
-          :conditions => ['todos.user_id = ? and todos.state = ? and contexts.hide = ? AND (projects.state = ? OR todos.project_id IS NULL)', current_user.id, 'active', false, 'active'], 
+          :all,
+          :conditions => ['todos.user_id = ? and todos.state = ? and contexts.hide = ? AND (projects.state = ? OR todos.project_id IS NULL)', current_user.id, 'active', false, 'active'],
           :include => [ :project, :context ])
         # #@down_count = Todo.count_by_sql(['SELECT COUNT(*) FROM todos,
         # contexts WHERE todos.context_id = contexts.id and todos.user_id = ?
@@ -670,12 +702,12 @@ class TodosController < ApplicationController
         @not_done_todos.empty? ? @down_count = 0 : @down_count = @not_done_todos.size
       end
     end
-  end 
+  end
     
   def determine_remaining_in_context_count(context_id = @todo.context_id)
     source_view do |from|
       from.deferred { @remaining_in_context = current_user.contexts.find(context_id).deferred_todo_count }
-      from.tag      { 
+      from.tag      {
         tag = Tag.find_by_name(params['_tag_name'])
         if tag.nil?
           tag = Tag.new(:name => params['tag'])
@@ -684,7 +716,7 @@ class TodosController < ApplicationController
       }
     end
     @remaining_in_context = current_user.contexts.find(context_id).not_done_todo_count if @remaining_in_context.nil?
-  end 
+  end
     
   def determine_completed_count
     source_view do |from|
@@ -845,7 +877,7 @@ class TodosController < ApplicationController
         end
       end
     end
-    return new_recurring_todo    
+    return new_recurring_todo
   end
   
   def get_due_id_for_calendar(due)
@@ -886,11 +918,11 @@ class TodosController < ApplicationController
     when "due_this_month"
       return 0 == current_user.todos.not_completed.count(:all,
         :conditions => ['todos.due > ? AND todos.due <= ?', due_next_week_date, due_this_month_date])
-    when "due_after_this_month"      
+    when "due_after_this_month"
       return 0 == current_user.todos.not_completed.count(:all,
         :conditions => ['todos.due > ?', due_this_month_date])
     else
-      raise Exception.new, "unknown due id for calendar: '#{id}'"      
+      raise Exception.new, "unknown due id for calendar: '#{id}'"
     end
   end
 
