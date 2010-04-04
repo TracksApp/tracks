@@ -163,6 +163,7 @@ class ProjectsController < ApplicationController
   end
   
   def destroy
+    @project.recurring_todos.each {|rt| rt.remove_from_project!}
     @project.destroy
     @active_projects_count = current_user.projects.active.count
     @hidden_projects_count = current_user.projects.hidden.count
