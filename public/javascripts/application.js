@@ -141,6 +141,17 @@ function setup_container_toggles(){
 
 function askIfNewContextProvided() {
   var givenContextName = $('#todo_context_name').val();
+  var contextNames = [];
+  var contextNamesRequest = $.ajax({url: relative_to_root('contexts.autocomplete'),
+                             async: false,
+                             dataType: "text",
+                             data: "q="+givenContextName,
+                             success: function(result){
+                               lines = result.split("\n");
+                               for(var i = 0; i < lines.length; i++){
+                                 contextNames.push(lines[i].split("|")[0]);
+                               }
+                             }});
   if (givenContextName.length == 0) return true; // do nothing and depend on rails validation error
   for (var i = 0; i < contextNames.length; ++i) {
     if (contextNames[i] == givenContextName) return true;
