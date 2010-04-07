@@ -202,11 +202,15 @@ module ApplicationHelper
   end
 
   def format_note(note)
-    note.gsub!(/</, '&lt;') # eliminate tags
-    note.gsub!(/>/, '&gt;')
     note = markdown(note)
     note = auto_link_message(note)
     note = auto_link(note)
+
+    # add onenote and message protocols
+    Sanitize::Config::RELAXED[:protocols]['a']['href'] << 'onenote'
+    Sanitize::Config::RELAXED[:protocols]['a']['href'] << 'message'
+
+    note = Sanitize.clean(note, Sanitize::Config::RELAXED)
     return note
   end
 end

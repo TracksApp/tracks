@@ -286,7 +286,15 @@ class Todo < ActiveRecord::Base
   def active_to_block
     return successors.find_all {|t| t.active? or t.deferred?}
   end
-  
+
+  def notes=(value)
+    super(value.gsub(/</, '&lt;').gsub(/>/, '&gt;'))
+  end
+
+  def raw_notes=(value)
+    self[:notes] = value
+  end
+
   # Rich Todo API
   
   def self.from_rich_message(user, default_context_id, description, notes)
@@ -324,7 +332,7 @@ class Todo < ActiveRecord::Base
     
     todo = user.todos.build
     todo.description = description
-    todo.notes = notes
+    todo.raw_notes = notes
     todo.context_id = context_id
     todo.project_id = project_id unless project_id.nil?
     return todo
