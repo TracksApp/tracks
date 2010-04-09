@@ -288,7 +288,7 @@ class Todo < ActiveRecord::Base
   end
 
   def notes=(value)
-    super(value.gsub(/</, '&lt;').gsub(/>/, '&gt;'))
+    super(value.try(:gsub, /</, '&lt;').try(:gsub, />/, '&gt;'))
   end
 
   def raw_notes=(value)
