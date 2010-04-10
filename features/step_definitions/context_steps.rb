@@ -23,7 +23,7 @@ Then /^he should see that a context named "([^\"]*)" is present$/ do |context_na
 end
 
 Then /^he should see that a context named "([^\"]*)" is not present$/ do |context_name|
-  Then "I should not see \"#{context_name}\""
+  Then "I should not see \"#{context_name} (\""
 end
 
 Given /^I have a context "([^\"]*)" with (.*) actions$/ do |context_name, number_of_actions|
@@ -38,10 +38,16 @@ When /^I delete the context "([^\"]*)"$/ do |context_name|
   context.should_not be_nil
   click_link "delete_context_#{context.id}"
   selenium.get_confirmation.should == "Are you sure that you want to delete the context '#{context_name}'?"
+  wait_for do
+    !selenium.is_element_present("delete_context_#{context.id}")
+  end
 end
 
 When /^I edit the context to rename it to "([^\"]*)"$/ do |new_name|
   click_link "edit_context_#{@context.id}"
   fill_in "context_name", :with => new_name
   click_button "submit_context_#{@context.id}"
+  wait_for do
+    selenium.is_visible("flash")
+  end
 end
