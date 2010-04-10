@@ -939,17 +939,29 @@ div.message {
     cursor: move;
 }
 
+.drop_target {
+  display:none;
+}
+
 .successor_target {
   background-image:url("../images/add_successor_off.png");
   background-repeat: no-repeat;
   background-position: center right;
-  display: none;
 }
 
 .successor_target.hover {
   background-image:url("../images/add_successor_on.png");
   background-repeat: no-repeat;
   background-position: center right;
+}
+
+.context_target {
+  height: 15px;
+  margin: 4px;
+  border: thick dotted #CCC;
+}
+
+.context_target.hover {
 }
 
 /* Error message styles */

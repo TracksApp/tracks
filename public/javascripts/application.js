@@ -232,21 +232,46 @@ function enable_rich_interaction(){
   function drop_todo(evt, ui) {
     dragged_todo = ui.draggable[0].id.split('_')[2];
     dropped_todo = $(this).parents('.item-show').get(0).id.split('_')[2];
-    ui.draggable.hide();
+    ui.draggable.remove();
     $(this).block({message: null});
     $.post(relative_to_root('todos/add_predecessor'),
         {successor: dragged_todo, predecessor: dropped_todo},
         null, 'script');
   }
 
+  function drag_todo(){
+    $('.drop_target').show();
+    $(this).parents(".container").find(".context_target").hide();
+  }
+
   $('.item-show').draggable({handle: '.grip',
       revert: 'invalid',
-      start: function() {$('.successor_target').show();},
-      stop: function() {$('.successor_target').hide();}});
+      start: drag_todo,
+      stop: function() {$('.drop_target').hide();}});
 
   $('.successor_target').droppable({drop: drop_todo,
       tolerance: 'pointer',
       hoverClass: 'hover'});
+  
+  /* Drag & drop for changing contexts */
+  function drop_todo_on_context(evt, ui) {
+    target = $(this);
+    dragged_todo = ui.draggable[0].id.split('_')[2];
+    context_id = this.id.split('_')[1];
+    ui.draggable.remove();
+    target.block({message: null});
+    setTimeout(function() {target.show()}, 0);
+    $.post(relative_to_root('todos/update'),
+        {id: dragged_todo,
+         "todo[id]": dragged_todo,
+         "todo[context_id]": context_id},
+        function(){target.unblock(); target.hide();}, 'script');
+  }
+
+  $('.context_target').droppable({
+    drop: drop_todo_on_context,
+    tolerance: 'pointer',
+    hoverClass: 'hover'});
 
   /* Reset auto updater */
   field_touched = false;

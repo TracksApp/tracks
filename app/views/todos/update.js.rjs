@@ -153,3 +153,5 @@ else
   page.show 'error_status'
   page.replace_html 'error_status', "#{error_messages_for('todo')}"
 end
+
+page << "enable_rich_interaction();"

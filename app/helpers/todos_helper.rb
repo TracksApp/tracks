@@ -122,7 +122,7 @@ module TodosHelper
                 :title => 'Drag onto another action to make it depend on that action',
                 :class => 'grip') +
       image_tag('blank.png', :width => 16, :height => 16, :border => 0,
-                :title => "Drop an action to make it depend on this action", :class => 'successor_target')
+                :title => "Drop an action to make it depend on this action", :class => 'successor_target drop_target')
     end
   end
   
