@@ -33,7 +33,6 @@ Then /^I should see the bold text "([^\"]*)" in the project description$/ do |bo
   response.should have_xpath(xpath)
   bold_text = response.selenium.get_text("xpath=#{xpath}")
   
-  puts "bt=#{bold_text}"
   bold_text.should =~ /#{bold}/
 end
 
@@ -43,6 +42,5 @@ Then /^I should see the italic text "([^\"]*)" in the project description$/ do |
   response.should have_xpath(xpath)
   italic_text = response.selenium.get_text("xpath=#{xpath}")
 
-  puts "it=#{italic_text}"
   italic_text.should =~ /#{italic}/
 end
