@@ -8,9 +8,27 @@
 * Mailing list: http://lists.rousette.org.uk/mailman/listinfo/tracks-discuss
 * Original developer: bsag (http://www.rousette.org.uk/)
 * Contributors: http://getontracks.org/wiki/Tracks/Contributing/Contributors
-* Version: 1.7
-* Copyright: (cc) 2004-2009 rousette.org.uk.
+* Version: 1.7.1
+* Copyright: (cc) 2004-2010 rousette.org.uk.
 * License:  GNU GPL
+
+== Version 1.7.1
+
+This is a bugfix release. New feature development is done on the 2.0 development tree.
+
+New features in 1.7.1:
+1. you can now add a new todo from the calendar view
+2. user naems can now contain dots (.)
+3. support onenote urls (hyperlinks to Microsoft OneNote elements)
+
+Under the hood:
+1. Several fixes for timezone support
+2. Export to xml works again
+3. Make sure tracks works on current rubygems
+4. notes are styled better
+5. Recurring todo fixes
+
+And lots of other fixes....
 
 == Version 1.7
 
