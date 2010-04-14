@@ -21,6 +21,7 @@ class RecurringTodo < ActiveRecord::Base
   validates_length_of :notes, :maximum => 60000, :allow_nil => true 
 
   validates_presence_of :context
+  validates_presence_of :every_other1, :message => ": every other nth day/month must be filled in"
 
   named_scope :active, :conditions => { :state => 'active'}
   named_scope :completed, :conditions => { :state => 'completed'}
@@ -318,6 +319,7 @@ class RecurringTodo < ActiveRecord::Base
   def recurrence_pattern
     case recurring_period
     when 'daily'
+      return "invalid repeat pattern" if every_other1.nil?
       if only_work_days
         return "on work days"
       else
@@ -328,18 +330,21 @@ class RecurringTodo < ActiveRecord::Base
         end
       end
     when 'weekly'
+      return "invalid repeat pattern" if every_other1.nil?
       if every_other1 > 1
         return "every #{every_other1} weeks"
       else
         return 'weekly'
       end
     when 'monthly'
+      return "invalid repeat pattern" if every_other1.nil?
       if self.recurrence_selector == 0
         return "every #{self.every_other2} month#{self.every_other2>1?'s':''} on day #{self.every_other1}"
       else
         return "every #{self.xth} #{self.day_of_week} of every #{self.every_other2} month#{self.every_other2>1?'s':''}"
       end
     when 'yearly'
+      return "invalid repeat pattern" if every_other1.nil?
       if self.recurrence_selector == 0
         return "every year on #{self.month_of_year} #{self.every_other1}"
       else
