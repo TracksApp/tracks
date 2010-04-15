@@ -71,8 +71,16 @@ class UsersController < ApplicationController
           render :action => "nosignup", :layout => "login"
           return
         end
-        
+
         user = User.new(params['user'])
+
+        if Tracks::Config.auth_schemes.include?('ldap') &&
+            user.auth_type == 'ldap' &&
+            !SimpleLdapAuthenticator.valid?(user.login, params['user']['password'])
+          notify :warning, "Incorrect password"
+          redirect_to :action => 'new'
+          return
+        end
 
         if Tracks::Config.auth_schemes.include?('cas')
           if user.auth_type.eql? "cas"
