@@ -1,5 +1,5 @@
 <% auth_schemes = Tracks::Config.auth_schemes
-   show_database_form = auth_schemes.include?('database')
+   show_database_form = auth_schemes.include?('database') || auth_schemes.include?('ldap')
    show_openid_form = auth_schemes.include?('open_id')
    show_cas_form = auth_schemes.include?('cas')
 -%>
