@@ -337,7 +337,7 @@ class RecurringTodo < ActiveRecord::Base
         return 'weekly'
       end
     when 'monthly'
-      return "invalid repeat pattern" if every_other1.nil?
+      return "invalid repeat pattern" if every_other1.nil? || every_other2.nil?
       if self.recurrence_selector == 0
         return "every #{self.every_other2} month#{self.every_other2>1?'s':''} on day #{self.every_other1}"
       else
