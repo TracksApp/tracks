@@ -14,16 +14,14 @@ var TracksForm = {
         toggleDiv.toggleClass('hide_form');
     }, 
     hide_all_recurring: function () {
-        $('#recurring_daily').hide();
-        $('#recurring_weekly').hide();
-        $('#recurring_monthly').hide();
-        $('#recurring_yearly').hide();
+        $.each(['daily', 'weekly', 'monthly', 'yearly'], function(){
+          $('#recurring_'+this).hide();
+        });
     },
     hide_all_edit_recurring: function () {
-        $('#recurring_edit_daily').hide();
-        $('#recurring_edit_weekly').hide();
-        $('#recurring_edit_monthly').hide();
-        $('#recurring_edit_yearly').hide();
+        $.each(['daily', 'weekly', 'monthly', 'yearly'], function(){
+          $('#recurring_edit_'+this).hide();
+        });
     },
     toggle_overlay: function () {
         el = document.getElementById("overlay");
@@ -435,16 +433,12 @@ $(document).ready(function() {
       TracksForm.toggle_overlay();
   });
   $("#recurring_edit_period input").live('click', function(){
-      $.each(['daily', 'weekly', 'monthly', 'yearly'], function(){
-        $('#recurring_edit_'+this).hide();
-        });
+      TracksForm.hide_all_edit_recurring();
       $('#recurring_edit_'+this.id.split('_')[5]).show();
     });
 
   $("#recurring_period input").live('click', function(){
-      $.each(['daily', 'weekly', 'monthly', 'yearly', 'target'], function(){
-        $('#recurring_'+this).hide();
-        });
+      TracksForm.hide_all_recurring();
       $('#recurring_'+this.id.split('_')[4]).show();
     });
 

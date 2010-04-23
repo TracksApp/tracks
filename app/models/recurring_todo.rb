@@ -47,8 +47,7 @@ class RecurringTodo < ActiveRecord::Base
   end
 
   def validate_daily
-    errors.add_to_base("Please choose a recurrence setting") if daily_selector.nil? || daily_selector.blank?
-    if (daily_selector == "daily_every_x_day") && (daily_every_x_days.nil? || daily_every_x_days.blank?)
+    if (!only_work_days) && (daily_every_x_days.nil? || daily_every_x_days.blank?)
       errors.add_to_base("Every other nth day may not be empty for recurrence setting")
     end
   end
