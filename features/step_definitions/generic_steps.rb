@@ -3,7 +3,7 @@ Then /the badge should show (.*)/ do |number|
   badge = -1
   xpath= "//span[@id='badge_count']"
 
-  if Rails.env == 'selenium'
+  if response.respond_to? :selenium
     response.should have_xpath(xpath) 
     badge = response.selenium.get_text("xpath=#{xpath}").to_i
   else

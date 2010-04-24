@@ -542,10 +542,9 @@ class TodosControllerTest < ActionController::TestCase
   def test_format_note_link_message
     login_as(:admin_user)
     todo = users(:admin_user).todos.first
-    todo.notes = "A Mail.app message://<ABCDEF-GHADB-123455-FOO-BAR@example.com> link"
+    todo.raw_notes = "A Mail.app message://<ABCDEF-GHADB-123455-FOO-BAR@example.com> link"
     todo.save!
     get :index
-    # puts css_select("div#notes_todo_#{todo.id}")
     assert_select("div#notes_todo_#{todo.id}", 'A Mail.app message://&lt;ABCDEF-GHADB-123455-FOO-BAR@example.com&gt; link')
     assert_select("div#notes_todo_#{todo.id} a", 'message://&lt;ABCDEF-GHADB-123455-FOO-BAR@example.com&gt;')
     assert_select("div#notes_todo_#{todo.id} a[href=message://&lt;ABCDEF-GHADB-123455-FOO-BAR@example.com&gt;]", 'message://&lt;ABCDEF-GHADB-123455-FOO-BAR@example.com&gt;')

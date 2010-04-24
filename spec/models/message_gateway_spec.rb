@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe MessageGateway do
   before :each do
-    todo = mock_model(Todo, :description= => nil, :notes= => nil, :context_id= => nil, :save! => nil)
+    todo = mock_model(Todo, :description= => nil, :raw_notes= => nil, :context_id= => nil, :save! => nil)
     
     @user = mock_model(User, 
       :prefs => mock_model(Preference, :sms_context => mock_model(Context)),

@@ -23,6 +23,7 @@ Rails::Initializer.run do |config|
   config.gem "RedCloth"
   config.gem "soap4r", :lib => false
   config.gem 'datanoise-actionwebservice', :lib => 'actionwebservice'
+  config.gem 'sanitize'
 
   config.action_controller.use_accept_header = true
 

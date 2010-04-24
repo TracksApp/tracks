@@ -35,7 +35,8 @@
         :method => 'get',
         :with => "'_source_view=#{@source_view}'",
         :before => "$('#{dom_id(context)}').block({message:null});",
-        :complete => "$('#{dom_id(context)}').unblock();"
+        :complete => "$('#{dom_id(context)}').unblock();",
+        :html => {:id => "edit_context_#{context.id}_link"}
         ) %>
     </div>
   </div>

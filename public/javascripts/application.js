@@ -14,16 +14,14 @@ var TracksForm = {
         toggleDiv.toggleClass('hide_form');
     }, 
     hide_all_recurring: function () {
-        $('#recurring_daily').hide();
-        $('#recurring_weekly').hide();
-        $('#recurring_monthly').hide();
-        $('#recurring_yearly').hide();
+        $.each(['daily', 'weekly', 'monthly', 'yearly'], function(){
+          $('#recurring_'+this).hide();
+        });
     },
     hide_all_edit_recurring: function () {
-        $('#recurring_edit_daily').hide();
-        $('#recurring_edit_weekly').hide();
-        $('#recurring_edit_monthly').hide();
-        $('#recurring_edit_yearly').hide();
+        $.each(['daily', 'weekly', 'monthly', 'yearly'], function(){
+          $('#recurring_edit_'+this).hide();
+        });
     },
     toggle_overlay: function () {
         el = document.getElementById("overlay");
@@ -141,6 +139,17 @@ function setup_container_toggles(){
 
 function askIfNewContextProvided() {
   var givenContextName = $('#todo_context_name').val();
+  var contextNames = [];
+  var contextNamesRequest = $.ajax({url: relative_to_root('contexts.autocomplete'),
+                             async: false,
+                             dataType: "text",
+                             data: "q="+givenContextName,
+                             success: function(result){
+                               lines = result.split("\n");
+                               for(var i = 0; i < lines.length; i++){
+                                 contextNames.push(lines[i].split("|")[0]);
+                               }
+                             }});
   if (givenContextName.length == 0) return true; // do nothing and depend on rails validation error
   for (var i = 0; i < contextNames.length; ++i) {
     if (contextNames[i] == givenContextName) return true;
@@ -221,21 +230,46 @@ function enable_rich_interaction(){
   function drop_todo(evt, ui) {
     dragged_todo = ui.draggable[0].id.split('_')[2];
     dropped_todo = $(this).parents('.item-show').get(0).id.split('_')[2];
-    ui.draggable.hide();
+    ui.draggable.remove();
     $(this).block({message: null});
     $.post(relative_to_root('todos/add_predecessor'),
         {successor: dragged_todo, predecessor: dropped_todo},
         null, 'script');
   }
 
+  function drag_todo(){
+    $('.drop_target').show();
+    $(this).parents(".container").find(".context_target").hide();
+  }
+
   $('.item-show').draggable({handle: '.grip',
       revert: 'invalid',
-      start: function() {$('.successor_target').show();},
-      stop: function() {$('.successor_target').hide();}});
+      start: drag_todo,
+      stop: function() {$('.drop_target').hide();}});
 
   $('.successor_target').droppable({drop: drop_todo,
       tolerance: 'pointer',
       hoverClass: 'hover'});
+  
+  /* Drag & drop for changing contexts */
+  function drop_todo_on_context(evt, ui) {
+    target = $(this);
+    dragged_todo = ui.draggable[0].id.split('_')[2];
+    context_id = this.id.split('_')[1];
+    ui.draggable.remove();
+    target.block({message: null});
+    setTimeout(function() {target.show()}, 0);
+    $.post(relative_to_root('todos/update'),
+        {id: dragged_todo,
+         "todo[id]": dragged_todo,
+         "todo[context_id]": context_id},
+        function(){target.unblock(); target.hide();}, 'script');
+  }
+
+  $('.context_target').droppable({
+    drop: drop_todo_on_context,
+    tolerance: 'pointer',
+    hoverClass: 'hover'});
 
   /* Reset auto updater */
   field_touched = false;
@@ -399,16 +433,12 @@ $(document).ready(function() {
       TracksForm.toggle_overlay();
   });
   $("#recurring_edit_period input").live('click', function(){
-      $.each(['daily', 'weekly', 'monthly', 'yearly'], function(){
-        $('#recurring_edit_'+this).hide();
-        });
+      TracksForm.hide_all_edit_recurring();
       $('#recurring_edit_'+this.id.split('_')[5]).show();
     });
 
   $("#recurring_period input").live('click', function(){
-      $.each(['daily', 'weekly', 'monthly', 'yearly', 'target'], function(){
-        $('#recurring_'+this).hide();
-        });
+      TracksForm.hide_all_recurring();
       $('#recurring_'+this.id.split('_')[4]).show();
     });
 
