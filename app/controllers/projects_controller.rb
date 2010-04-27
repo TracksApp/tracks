@@ -26,7 +26,7 @@ class ProjectsController < ApplicationController
         format.rss   &render_rss_feed
         format.atom  &render_atom_feed
         format.text  &render_text_feed
-        format.autocomplete { render :text => for_autocomplete(@projects, params[:q]) }
+        format.autocomplete { render :text => for_autocomplete(@projects.reject(&:completed?), params[:q]) }
       end
     end
   end
