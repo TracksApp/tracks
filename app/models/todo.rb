@@ -287,10 +287,6 @@ class Todo < ActiveRecord::Base
     return successors.find_all {|t| t.active? or t.deferred?}
   end
 
-  def notes=(value)
-    super(value.try(:gsub, /</, '&lt;').try(:gsub, />/, '&gt;'))
-  end
-
   def raw_notes=(value)
     self[:notes] = value
   end
