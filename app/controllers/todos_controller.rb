@@ -4,6 +4,7 @@ class TodosController < ApplicationController
 
   skip_before_filter :login_required, :only => [:index, :calendar]
   prepend_before_filter :login_or_feed_token_required, :only => [:index, :calendar]
+  append_before_filter :find_and_activate_ready, :only => [:index, :list_deferred]
   append_before_filter :init, :except => [ :destroy, :completed,
     :completed_archive, :check_deferred, :toggle_check, :toggle_star,
     :edit, :update, :create, :calendar, :auto_complete_for_predecessor, :remove_predecessor, :add_predecessor]
@@ -11,7 +12,6 @@ class TodosController < ApplicationController
   protect_from_forgery :except => [:auto_complete_for_predecessor]
 
   def index
-    current_user.deferred_todos.find_and_activate_ready
     @projects = current_user.projects.find(:all, :include => [:default_context])
     @contexts = current_user.contexts.find(:all)
 
@@ -438,7 +438,6 @@ class TodosController < ApplicationController
     @projects = current_user.projects.find(:all, :include => [ :todos, :default_context ])
     @contexts_to_show = @contexts = current_user.contexts.find(:all, :include => [ :todos ])
     
-    current_user.deferred_todos.find_and_activate_ready
     @not_done_todos = current_user.deferred_todos + current_user.pending_todos
     @count = @not_done_todos.size
     @down_count = @count
@@ -652,11 +651,15 @@ class TodosController < ApplicationController
   def get_todo_from_params
     @todo = current_user.todos.find(params['id'])
   end
+  
+  def find_and_activate_ready
+    current_user.deferred_todos.find_and_activate_ready
+  end
 
   def init
     @source_view = params['_source_view'] || 'todo'
     init_data_for_sidebar unless mobile?
-    init_todos      
+    init_todos
   end
 
   def with_feed_query_scope(&block)
