@@ -58,8 +58,8 @@ ActionController::Routing::Routes.draw do |map|
   map.root :controller => 'todos' # Make OpenID happy because it needs #root_url defined
   
   map.resources :notes
-  map.feeds 'feeds', :controller => 'feedlist', :action => 'index'
   map.feeds 'feeds.m', :controller => 'feedlist', :action => 'index', :format => 'm'
+  map.feeds 'feeds', :controller => 'feedlist', :action => 'index'
   
   if Rails.env == 'test'
     map.connect '/selenium_helper/login', :controller => 'selenium_helper', :action => 'login'
