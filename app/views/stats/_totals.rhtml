@@ -1,19 +1,21 @@
 <p>You have <%= @projects.count%> projects. 
-  Of those <%= @projects.count(:conditions => "state = 'active'")%> are active projects, 
-  <%= @projects.count(:conditions => "state = 'hidden'")%> hidden projects and 
-<%= @projects.count(:conditions => "state = 'completed'")%> completed projects</p>
+  Of those <%= @projects.active.count%> are active projects,
+  <%= @projects.hidden.count%> hidden projects and
+<%= @projects.completed.count%> completed projects</p>
 
 <p>You have <%= @contexts.count%> contexts. 
-Of those <%= @contexts.count(:conditions => ["hide = ?", false])%> are visible contexts and 
-<%= @contexts.count(:conditions => ["hide = ?", true]) %> are hidden contexts
+Of those <%= @contexts.active.count%> are visible contexts and
+<%= @contexts.hidden.count%> are hidden contexts
 
 <% unless @actions.empty? -%>
-<p>You have <%= @actions.count(:conditions => "completed_at IS NULL") %> incomplete actions 
-of which <%= @actions.count(:conditions => "completed_at IS NULL AND NOT show_from IS NULL") %> are deferred actions. </p>
+<p>Since your first action on <%= format_date(@first_action.created_at) %>
+you have a total of <%= @actions.count %> actions.
+<%= @actions.completed.count %> of these are completed.
 
-<p>Since your first action on <%= format_date(@first_action.created_at) %> 
-you have a total of <%= @actions.count %> actions. 
-<%= @actions.count(:conditions => "NOT completed_at IS NULL") %> of these are completed.
+<p>You have <%= @actions.not_completed.count %> incomplete actions
+of which <%= @actions.deferred.count %> are deferred actions
+in the tickler and <%= @actions.blocked.count %> are dependent on the completion of other actions.
+. </p>
 
 <p>You have <%= @tags_count-%> tags placed on actions. Of those tags,
 <%= @unique_tags_count -%> are unique.

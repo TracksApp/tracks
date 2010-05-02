@@ -319,6 +319,7 @@ class StatsController < ApplicationController
     # - actions not part of a hidden project
     # - actions not part of a hidden context
     # - actions not deferred (show_from must be null)
+    # - actions not pending/blocked
     
     @actions_running_time = @actions.find_by_sql([
         "SELECT t.created_at "+
@@ -326,7 +327,7 @@ class StatsController < ApplicationController
           "WHERE t.user_id=? "+
           "AND t.completed_at IS NULL " +
           "AND t.show_from IS NULL " +
-          "AND NOT (p.state='hidden' OR c.hide=?) " +
+          "AND NOT (p.state='hidden' OR p.state='pending' OR c.hide=?) " +
           "ORDER BY t.created_at ASC", @user.id, true]
     )
     
