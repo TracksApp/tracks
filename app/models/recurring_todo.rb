@@ -29,13 +29,17 @@ class RecurringTodo < ActiveRecord::Base
   
   validates_presence_of :description
   validates_presence_of :recurring_period
+  validates_presence_of :target
+  validates_presence_of :recurring_period
+  validates_presence_of :ends_on
+  validates_presence_of :context
+
   validates_length_of :description, :maximum => 100
   validates_length_of :notes, :maximum => 60000, :allow_nil => true 
 
-  validates_presence_of :context
-
   validate :period_specific_validations
   validate :starts_and_ends_on_validations
+  validate :set_recurrence_on_validations
   
   def period_specific_validations
     periods = %W[daily weekly monthly yearly]
@@ -59,7 +63,6 @@ class RecurringTodo < ActiveRecord::Base
     something_set = false
     %w{sunday monday tuesday wednesday thursday friday}.each do |day|
       something_set ||= self.send("on_#{day}")
-
     end
     errors.add_to_base("You must specify at least one day on which the todo recurs") if !something_set
   end
@@ -102,6 +105,21 @@ class RecurringTodo < ActiveRecord::Base
       errors.add_to_base("The end date needs to be filled in for 'Ends on'") if end_date.nil? || end_date.blank?
     else
       errors.add_to_base("The end of the recurrence is not selected") unless ends_on == "no_end_date"
+    end
+  end
+
+  def set_recurrence_on_validations
+    # show always or x days before due date. x not null
+    case self.target
+    when 'show_from_date'
+      # no validations
+    when 'due_date'
+      errors.add_to_base("Please select when to show the action") if show_always.nil?
+      unless show_always
+        errors.add_to_base("Please fill in the number of days to show the todo before the due date") if show_from_delta.nil? || show_from_delta.blank?
+      end
+    else
+      raise Exception.new, "unexpected value of recurrence target selector '#{self.recurrence_target}'"
     end
   end
   
@@ -726,11 +744,7 @@ class RecurringTodo < ActiveRecord::Base
   end
   
   protected
-  
-  def validate
-    errors.add("", "At least one day must be selected in the weekly pattern") if self.every_day == '       '
-  end
-  
+    
   def determine_start(previous)
     if previous.nil?
       start = self.start_from.nil? ? Time.zone.now : self.start_from
