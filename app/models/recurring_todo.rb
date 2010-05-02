@@ -61,7 +61,7 @@ class RecurringTodo < ActiveRecord::Base
       errors.add_to_base("Every other nth week may not be empty for recurrence setting")
     end
     something_set = false
-    %w{sunday monday tuesday wednesday thursday friday}.each do |day|
+    %w{sunday monday tuesday wednesday thursday friday saturday}.each do |day|
       something_set ||= self.send("on_#{day}")
     end
     errors.add_to_base("You must specify at least one day on which the todo recurs") if !something_set
@@ -406,9 +406,9 @@ class RecurringTodo < ActiveRecord::Base
   end
   
   def recurrence_pattern
+    return "invalid repeat pattern" if every_other1.nil?
     case recurring_period
     when 'daily'
-      return "invalid repeat pattern" if every_other1.nil?
       if only_work_days
         return "on work days"
       else
@@ -419,21 +419,19 @@ class RecurringTodo < ActiveRecord::Base
         end
       end
     when 'weekly'
-      return "invalid repeat pattern" if every_other1.nil?
       if every_other1 > 1
         return "every #{every_other1} weeks"
       else
         return 'weekly'
       end
     when 'monthly'
-      return "invalid repeat pattern" if every_other1.nil? || every_other2.nil?
+      return "invalid repeat pattern" if every_other2.nil?
       if self.recurrence_selector == 0
         return "every #{self.every_other2} month#{self.every_other2>1?'s':''} on day #{self.every_other1}"
       else
         return "every #{self.xth} #{self.day_of_week} of every #{self.every_other2} month#{self.every_other2>1?'s':''}"
       end
     when 'yearly'
-      return "invalid repeat pattern" if every_other1.nil?
       if self.recurrence_selector == 0
         return "every year on #{self.month_of_year} #{self.every_other1}"
       else
@@ -553,8 +551,8 @@ class RecurringTodo < ActiveRecord::Base
       start = previous + 1.day
       if start.wday() == 0
         # we went to a new week , go to the nth next week and find first match
-        # that week
-        start += self.every_other1.week
+        # that week. Note that we already went into the next week, so -1
+        start += (self.every_other1-1).week
       end
       unless self.start_from.nil?
         # check if the start_from date is later than previous. If so, use
