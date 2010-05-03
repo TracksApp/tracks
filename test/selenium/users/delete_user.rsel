@@ -1,7 +1,0 @@
-setup :fixtures => :all
-login :as => 'admin'
-open '/users'
-assert_text_present "John Deere"
-click "//tr[@id='user-3']//img"
-assert_confirmation "Warning: this will delete user 'john', all their actions, contexts, project and notes. Are you sure that you want to continue?"
-wait_for_text_not_present "John Deere"
