@@ -20,6 +20,8 @@ module NavigationHelpers
       users_path
     when /the repeating todos page/
       recurring_todos_path
+    when /the integrations page/
+      integrations_path
     
     # Add more page name => path mappings here
     
