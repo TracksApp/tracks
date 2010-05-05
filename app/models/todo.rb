@@ -18,7 +18,10 @@ class Todo < ActiveRecord::Base
 
   named_scope :active, :conditions => { :state => 'active' }
   named_scope :not_completed, :conditions =>  ['NOT (todos.state = ? )', 'completed']
+  named_scope :completed, :conditions =>  ["NOT completed_at IS NULL"]
   named_scope :are_due, :conditions => ['NOT (todos.due IS NULL)']
+  named_scope :deferred, :conditions => ["completed_at IS NULL AND NOT show_from IS NULL"]
+  named_scope :blocked, :conditions => ['todos.state = ?', 'pending']
 
   STARRED_TAG_NAME = "starred"
   RE_TODO = /[^"]+/

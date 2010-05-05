@@ -54,7 +54,7 @@ class LoginController < ApplicationController
           end
         when :get
           if User.no_users_yet?
-            redirect_to :controller => 'users', :action => 'new'
+            redirect_to signup_path
             return
           end
       end
