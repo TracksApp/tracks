@@ -90,7 +90,7 @@ class UsersController < ApplicationController
 
         unless user.valid?
           session['new_user'] = user
-          redirect_to :action => 'new'
+          redirect_to signup_path
           return
         end
 
