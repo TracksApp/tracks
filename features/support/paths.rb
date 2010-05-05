@@ -18,6 +18,8 @@ module NavigationHelpers
       contexts_path
     when /the manage users page/
       users_path
+    when /the repeating todos page/
+      recurring_todos_path
     
     # Add more page name => path mappings here
     
