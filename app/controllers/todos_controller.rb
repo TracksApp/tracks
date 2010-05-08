@@ -55,7 +55,7 @@ class TodosController < ApplicationController
     predecessor_list = p.predecessor_list
     
     @todo = current_user.todos.build(p.attributes)
-    
+
     if p.project_specified_by_name?
       project = current_user.projects.find_or_create_by_name(p.project_name)
       @new_project_created = project.new_record_before_save?
@@ -70,8 +70,16 @@ class TodosController < ApplicationController
     end
 
     @todo.add_predecessor_list(predecessor_list)
+
+    # Fix for #977 because AASM overrides @state on creation
+    specified_state = @todo.state
+
     @todo.update_state_from_project
     @saved = @todo.save
+
+    # Fix for #977 because AASM overrides @state on creation
+    @todo.update_attribute('state', specified_state) unless specified_state == "immediate"
+
     unless (@saved == false) || tag_list.blank?
       @todo.tag_with(tag_list)
       @todo.tags.reload
