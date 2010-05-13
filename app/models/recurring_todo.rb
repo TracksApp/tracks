@@ -30,7 +30,6 @@ class RecurringTodo < ActiveRecord::Base
   validates_presence_of :description
   validates_presence_of :recurring_period
   validates_presence_of :target
-  validates_presence_of :recurring_period
   validates_presence_of :ends_on
   validates_presence_of :context
 

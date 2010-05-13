@@ -37,15 +37,8 @@ When /^I drag "(.*)" to "(.*)"$/ do |dragged, target|
   drag_id = Todo.find_by_description(dragged).id
   drop_id = Todo.find_by_description(target).id
   drag_name = "xpath=//div[@id='line_todo_#{drag_id}']//img[@class='grip']"
-  # xpath does not seem to work here... reverting to css
-  # xpath=//div[@id='line_todo_#{drop_id}']//img[@class='successor_target']
-  drop_name = "css=div#line_todo_#{drop_id} img.successor_target"
-
-  # HACK: the target img is hidden until drag starts. We need to show the img or the
-  # xpath will not find it
-  js="$('div#line_todo_#{drop_id} img.successor_target').show();"
-  selenium.get_eval "(function() {with(this) {#{js}}}).call(selenium.browserbot.getCurrentWindow());"
-
+  drop_name = "xpath=//div[@id='line_todo_#{drop_id}']//div[@class='description']"
+  
   selenium.drag_and_drop_to_object(drag_name, drop_name)
 
   arrow = "xpath=//div[@id='line_todo_#{drop_id}']/div/a[@class='show_successors']/img"

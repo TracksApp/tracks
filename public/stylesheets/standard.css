@@ -943,16 +943,9 @@ div.message {
   display:none;
 }
 
-.successor_target {
-  background-image:url("../images/add_successor_off.png");
-  background-repeat: no-repeat;
-  background-position: center right;
-}
-
-.successor_target.hover {
-  background-image:url("../images/add_successor_on.png");
-  background-repeat: no-repeat;
-  background-position: center right;
+.hover {
+    background: #EAEAEA;
+    font-weight: bold;
 }
 
 .context_target {

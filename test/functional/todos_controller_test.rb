@@ -376,12 +376,16 @@ class TodosControllerTest < ActionController::TestCase
     # change recurrence pattern to monthly and set show_from 2 days before due
     # date this forces the next todo to be put in the tickler
     recurring_todo_1.show_from_delta = 2
+    recurring_todo_1.show_always = 0
+    recurring_todo_1.target = 'due_date'
     recurring_todo_1.recurring_period = 'monthly'
     recurring_todo_1.recurrence_selector = 0
     recurring_todo_1.every_other1 = 1
     recurring_todo_1.every_other2 = 2
     recurring_todo_1.every_other3 = 5
-    recurring_todo_1.save
+    # use assert to catch validation errors if present. we need to replace
+    # this with a good factory implementation
+    assert recurring_todo_1.save
 
     # mark next_todo as complete by toggle_check
     xhr :post, :toggle_check, :id => next_todo.id, :_source_view => 'todo'
@@ -416,7 +420,7 @@ class TodosControllerTest < ActionController::TestCase
     recurring_todo_1.recurrence_selector = 0
     recurring_todo_1.every_other1 = today.day
     recurring_todo_1.every_other2 = 1
-    recurring_todo_1.save
+    assert recurring_todo_1.save
 
     # mark todo_1 as complete by toggle_check, this gets rid of todo_1 that was
     # not correctly created from the adjusted recurring pattern we defined

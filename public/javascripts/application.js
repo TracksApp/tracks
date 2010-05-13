@@ -229,7 +229,7 @@ function enable_rich_interaction(){
   /* Drag & Drop for successor/predecessor */
   function drop_todo(evt, ui) {
     dragged_todo = ui.draggable[0].id.split('_')[2];
-    dropped_todo = $(this).parents('.item-show').get(0).id.split('_')[2];
+    dropped_todo = this.id.split('_')[2];
     ui.draggable.remove();
     $(this).block({message: null});
     $.post(relative_to_root('todos/add_predecessor'),
@@ -247,7 +247,7 @@ function enable_rich_interaction(){
       start: drag_todo,
       stop: function() {$('.drop_target').hide();}});
 
-  $('.successor_target').droppable({drop: drop_todo,
+  $('.item-show').droppable({drop: drop_todo,
       tolerance: 'pointer',
       hoverClass: 'hover'});
   
