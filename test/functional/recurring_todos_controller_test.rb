@@ -50,6 +50,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
       "recurring_period"=>"yearly",
       "recurring_show_days_before"=>"10",
       "recurring_target"=>"due_date",
+      "recurring_show_always" => "1",
       "start_from"=>"18/08/2008",
       "weekly_every_x_week"=>"1",
       "weekly_return_monday"=>"m",
@@ -110,6 +111,9 @@ class RecurringTodosControllerTest < ActionController::TestCase
     @yearly.every_other1 = target_date.day
     @yearly.every_other2 = target_date.month
     @yearly.show_from_delta = 10
+#    unless @yearly.valid?
+#      @yearly.errors.each {|obj, error| puts error}
+#    end
     assert @yearly.save
     
     # toggle twice to force generation of new todo
@@ -155,6 +159,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
       "recurring_period"=>"yearly",
       "recurring_show_days_before"=>"0",
       "recurring_target"=>"due_date",
+      "recurring_show_always" => "1",
       "start_from"=>"1/10/2012",  # adjust after 2012
       "weekly_every_x_week"=>"1",
       "weekly_return_monday"=>"w",
