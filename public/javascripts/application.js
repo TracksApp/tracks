@@ -259,9 +259,8 @@ function enable_rich_interaction(){
     ui.draggable.remove();
     target.block({message: null});
     setTimeout(function() {target.show()}, 0);
-    $.post(relative_to_root('todos/update'),
-        {id: dragged_todo,
-         "todo[id]": dragged_todo,
+    $.post(relative_to_root('todos/change_context'),
+        {"todo[id]": dragged_todo,
          "todo[context_id]": context_id},
         function(){target.unblock(); target.hide();}, 'script');
   }

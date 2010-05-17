@@ -230,6 +230,23 @@ class TodosController < ApplicationController
     end
   end
 
+  def change_context
+    @todo = Todo.find(params[:todo][:id])
+    @original_item_context_id = @todo.context_id
+    @context = Context.find(params[:todo][:context_id])
+    @todo.context = @context
+    @saved = @todo.save
+
+    @context_changed = true
+    @message = "Context changed to #{@context.name}"
+    determine_remaining_in_context_count(@original_item_context_id)
+
+    respond_to do |format|
+      format.js {render :action => :update }
+      format.xml { render :xml => @todo.to_xml( :except => :user_id ) }
+    end
+  end
+
   def update
     @source_view = params['_source_view'] || 'todo'
     init_data_for_sidebar unless mobile?

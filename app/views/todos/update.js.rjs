@@ -4,6 +4,7 @@ if @saved
   status_message += ' to tickler' if @todo.deferred?
   status_message = 'Added new project / ' + status_message if @new_project_created
   status_message = 'Added new context / ' + status_message if @new_context_created
+  status_message = @message || status_message
   page.notify :notice, status_message, 5.0
   
   if source_view_is_one_of(:todo, :context, :tag)
@@ -46,11 +47,17 @@ if @saved
       page.replace_html("badge_count", @down_count) if source_view_is :todo
       
       # show todo in context
-      page.delay(0.5) do
+      page.delay(0.3) do
         page.call "todoItems.ensureContainerHeight", "c#{@original_item_context_id}items"
         if source_view_is_one_of(:todo, :tag) && @todo.active?
           page.call "todoItems.ensureContainerHeight", "c#{@todo.context_id}items"
           page.visual_effect :highlight, dom_id(@todo), :duration => 3
+        end
+        if @context_changed
+          source_view do |from|
+            from.todo {page << "$('#c#{@todo.context_id} h2').effect('highlight', {}, 3000)" }
+            from.tag {page << "$('#c#{@todo.context_id} h2').effect('highlight')" }
+          end
         end
       end
     else

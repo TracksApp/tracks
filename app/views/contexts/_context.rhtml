@@ -10,11 +10,11 @@
       <%= link_to_context( context )  %>
     <% end %>
   </h2>
+  <div id="c_<%=context.id%>_target" class="context_target drop_target"></div>
   <div id="c<%= context.id %>items" class="items toggle_target">
     <div id="c<%= context.id %>empty-nd" style="display:<%= @not_done.empty? ? 'block' : 'none'%>;">
       <div class="message"><p>Currently there are no incomplete actions in this context</p></div>
     </div>
     <%= render :partial => "todos/todo", :collection => @not_done, :locals => { :parent_container_type => "context" } %>
   </div><!-- [end:items] -->
-  <div id="c_<%=context.id%>_target" class="context_target drop_target"></div>
 </div><!-- [end:c<%= context.id %>] -->

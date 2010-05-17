@@ -951,7 +951,7 @@ div.message {
 .context_target {
   height: 15px;
   margin: 4px;
-  border: thick dotted #CCC;
+  border: 4px dotted #999;
 }
 
 .context_target.hover {
