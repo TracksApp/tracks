@@ -231,6 +231,7 @@ function enable_rich_interaction(){
     dragged_todo = ui.draggable[0].id.split('_')[2];
     dropped_todo = this.id.split('_')[2];
     ui.draggable.remove();
+    $('.drop_target').hide(); // IE8 doesn't call stop() in this situation
     $(this).block({message: null});
     $.post(relative_to_root('todos/add_predecessor'),
         {successor: dragged_todo, predecessor: dropped_todo},
