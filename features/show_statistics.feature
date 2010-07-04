@@ -1,4 +1,4 @@
-Feature Show statistics
+Feature: Show statistics
   In order to see what I have got done
   As an user
   I want see my statistics
