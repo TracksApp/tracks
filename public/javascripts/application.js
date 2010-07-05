@@ -49,7 +49,7 @@ $.fn.clearForm = function() {
 
 /* Set up authenticity token properly */
 $(document).ajaxSend(function(event, request, settings) {
-  if ( settings.type == 'POST' ) {
+  if ( settings.type == 'POST' || settings.type == 'post' ) {
     if(typeof(AUTH_TOKEN) != 'undefined'){
       settings.data = (settings.data ? settings.data + "&" : "")
         + "authenticity_token=" + encodeURIComponent( AUTH_TOKEN ) + "&"
