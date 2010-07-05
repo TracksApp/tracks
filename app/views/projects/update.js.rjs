@@ -28,5 +28,9 @@ else
   page << "defaultTags = #{default_tags_for_autocomplete};"
 end
 
-page.replace_html "sidebar", :file => 'sidebar/sidebar.html.erb'
+page['default_project_name_id'].value = @project.name
+page['todo_project_name'].value = @project.name
+page.replace_html "project_name", @project.name
 
+page.replace_html "sidebar", :file => 'sidebar/sidebar.html.erb'
+page << "enable_rich_interaction();"

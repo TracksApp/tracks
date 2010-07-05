@@ -30,7 +30,10 @@ end
 When /^I edit the project name to "([^\"]*)"$/ do |new_title|
   click_link "link_edit_project_#{@project.id}"
   fill_in "project[name]", :with => new_title
-  click_button "submit_project_#{@project.id}"
+  selenium.click "submit_project_#{@project.id}",
+    :wait_for => :text,
+    :element => "flash",
+    :text => "Project saved"
 end
 
 Then /^I should see the bold text "([^\"]*)" in the project description$/ do |bold|
