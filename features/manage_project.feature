@@ -26,3 +26,11 @@ Feature: Manage a project
     And I change the project_name field of "Todo 1" to "bar"
     Then I should not see the todo "Todo 1"
     And I should see the todo "Todo 2"
+
+  # Ticket #1041
+  @selenium
+  Scenario: I can change the name of the project using the Edit Project Settings form
+    Given I have a project "bananas" with 1 todos
+    When I visit the "bananas" project
+    And I edit the project name to "cherries"
+    Then the project title should be "cherries"

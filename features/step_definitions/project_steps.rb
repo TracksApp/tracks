@@ -27,6 +27,12 @@ When /^I edit the project description to "([^\"]*)"$/ do |new_description|
   click_button "submit_project_#{@project.id}"
 end
 
+When /^I edit the project name to "([^\"]*)"$/ do |new_title|
+  click_link "link_edit_project_#{@project.id}"
+  fill_in "project[name]", :with => new_title
+  click_button "submit_project_#{@project.id}"
+end
+
 Then /^I should see the bold text "([^\"]*)" in the project description$/ do |bold|
   xpath="//div[@class='project_description']/p/strong"
 
@@ -43,4 +49,8 @@ Then /^I should see the italic text "([^\"]*)" in the project description$/ do |
   italic_text = response.selenium.get_text("xpath=#{xpath}")
 
   italic_text.should =~ /#{italic}/
+end
+
+Then /^the project title should be "(.*)"$/ do |title|
+  selenium.get_text("css=h2#project_name").should == title
 end
