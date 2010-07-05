@@ -59,6 +59,13 @@ Then /^I should see ([0-9]+) todos$/ do |count|
   end
 end
 
+When /I change the (.*) field of "([^\"]*)" to "([^\"]*)"$/ do |field, todo_name, new_value|
+  selenium.click("//span[@class=\"todo.descr\"][.=\"#{todo_name}\"]/../../a[@class=\"icon edit_item\"]", :wait_for => :ajax, :javascript_framework => :jquery)
+  selenium.type("css=form.edit_todo_form input[name=#{field}]", new_value)
+  selenium.click("css=button.positive", :wait_for => :ajax, :javascript_framework => :jquery)
+  sleep(5)
+end
+
 Then /^the dependencies of "(.*)" should include "(.*)"$/ do |child_name, parent_name|
   parent = @current_user.todos.find_by_description(parent_name)
   parent.should_not be_nil
@@ -80,4 +87,12 @@ Then /^I should see "([^\"]*)" within the dependencies of "([^\"]*)"$/ do |succe
   # let selenium look for the presence of the successor
   xpath = "xpath=//div[@id='line_todo_#{todo.id}']//div[@id='successor_line_todo_#{successor.id}']//span"
   selenium.wait_for_element(xpath, :timeout_in_seconds => 5)
+end
+
+Then /^I should see the todo "([^\"]*)"$/ do |todo_description|
+  selenium.is_element_present("//span[.=\"#{todo_description}\"]").should be_true
+end
+
+Then /^I should not see the todo "([^\"]*)"$/ do |todo_description|
+  selenium.is_element_present("//span[.=\"#{todo_description}\"]").should be_false
 end

@@ -17,3 +17,12 @@ Feature: Manage a project
     And I edit the project description to "_successfull outcome_: project is *done*"
     Then I should see the italic text "successfull outcome" in the project description
     And I should see the bold text "done" in the project description
+
+  # Ticket #1043
+  @selenium
+  Scenario: I can move a todo out of the current project
+    Given I have a project "foo" with 2 todos
+    When I visit the "foo" project
+    And I change the project_name field of "Todo 1" to "bar"
+    Then I should not see the todo "Todo 1"
+    And I should see the todo "Todo 2"
