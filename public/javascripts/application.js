@@ -11,7 +11,7 @@ var TracksForm = {
             toggleLink.text(hideLinkText).attr('title', hideLinkTitle);
             $('#'+formId+' input:text:first').focus();
         }
-        toggleLink.parent.toggleClass('hide_form');
+        toggleLink.parent().toggleClass('hide_form');
     }, 
     hide_all_recurring: function () {
         $.each(['daily', 'weekly', 'monthly', 'yearly'], function(){
@@ -137,8 +137,8 @@ function setup_container_toggles(){
   });
 }
 
-function askIfNewContextProvided() {
-  var givenContextName = $('#todo_context_name').val();
+function askIfNewContextProvided(source) {
+  var givenContextName = $('#'+source+'todo_context_name').val();
   var contextNames = [];
   var contextNamesRequest = $.ajax({url: relative_to_root('contexts.autocomplete'),
                              async: false,
