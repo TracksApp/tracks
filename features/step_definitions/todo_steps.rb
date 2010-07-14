@@ -66,6 +66,16 @@ When /I change the (.*) field of "([^\"]*)" to "([^\"]*)"$/ do |field, todo_name
   sleep(5)
 end
 
+When /^I submit a new action with description "([^"]*)"$/ do |description|
+  fill_in "todo[description]", :with => description
+  selenium.click("xpath=//form[@id='todo-form-new-action']//button[@id='todo_new_action_submit']", :wait_for => :ajax, :javascript_framework => :jquery)
+end
+
+When /^I submit multiple actions with using$/ do |multiple_actions|
+  fill_in "todo[multiple_todos]", :with => multiple_actions
+  selenium.click("xpath=//form[@id='todo-form-multi-new-action']//button[@id='todo_multi_new_action_submit']", :wait_for => :ajax, :javascript_framework => :jquery)
+end
+
 Then /^the dependencies of "(.*)" should include "(.*)"$/ do |child_name, parent_name|
   parent = @current_user.todos.find_by_description(parent_name)
   parent.should_not be_nil
@@ -95,4 +105,8 @@ end
 
 Then /^I should not see the todo "([^\"]*)"$/ do |todo_description|
   selenium.is_element_present("//span[.=\"#{todo_description}\"]").should be_false
+end
+
+Then /^the number of actions should be (\d+)$/ do |count|
+  @current_user.todos.count.should == count.to_i
 end

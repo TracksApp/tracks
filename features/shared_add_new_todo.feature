@@ -9,8 +9,8 @@ Feature: Add new next action from every page
       | login    | password | is_admin |
       | testuser | secret   | false    |
     And I have logged in as "testuser" with password "secret"
-    And I have a context called "test"
-    And I have a project "test" with 1 todos
+    And I have a context called "test context"
+    And I have a project "test project" with 1 todos
 
   @selenium
   Scenario Outline: I can hide the input form for single next action on a page
@@ -20,12 +20,12 @@ Feature: Add new next action from every page
     Then the single action form should not be visible
 
       Scenarios:
-      | action | page                   |
-      | go to  | home page              |
-      | go to  | tickler page           |
-      | visit  | project page for "test"|
-      | visit  | context page for "test"|
-      | visit  | tag page for "starred" |
+      | action | page                           |
+      | go to  | home page                      |
+      | go to  | tickler page                   |
+      | visit  | project page for "test project"|
+      | visit  | context page for "test context"|
+      | visit  | tag page for "starred"         |
 
   @selenium
   Scenario Outline: I can hide the input form for multiple next actions
@@ -38,12 +38,12 @@ Feature: Add new next action from every page
     And the multiple action form should not be visible
 
       Scenarios:
-      | action | page                   |
-      | go to  | home page              |
-      | go to  | tickler page           |
-      | visit  | project page for "test"|
-      | visit  | context page for "test"|
-      | visit  | tag page for "starred" |
+      | action | page                           |
+      | go to  | home page                      |
+      | go to  | tickler page                   |
+      | visit  | project page for "test project"|
+      | visit  | context page for "test context"|
+      | visit  | tag page for "starred"         |
 
   @selenium
   Scenario Outline: I can hide the input form and then choose both input forms
@@ -58,12 +58,12 @@ Feature: Add new next action from every page
     And the multiple action form should not be visible
 
       Scenarios:
-      | action | page                   |
-      | go to  | home page              |
-      | go to  | tickler page           |
-      | visit  | project page for "test"|
-      | visit  | context page for "test"|
-      | visit  | tag page for "starred" |
+      | action | page                           |
+      | go to  | home page                      |
+      | go to  | tickler page                   |
+      | visit  | project page for "test project"|
+      | visit  | context page for "test context"|
+      | visit  | tag page for "starred"         |
 
   @selenium
   Scenario Outline: I can switch forms for single next action to multiple next actions
@@ -77,9 +77,45 @@ Feature: Add new next action from every page
     And the multiple action form should not be visible
 
       Scenarios:
-      | action | page                   |
-      | go to  | home page              |
-      | go to  | tickler page           |
-      | visit  | project page for "test"|
-      | visit  | context page for "test"|
-      | visit  | tag page for "starred" |
+      | action | page                           |
+      | go to  | home page                      |
+      | go to  | tickler page                   |
+      | visit  | project page for "test project"|
+      | visit  | context page for "test context"|
+      | visit  | tag page for "starred"         |
+
+  @selenium
+  Scenario Outline: I can add a todo from several pages 
+     When I <action> the <page>
+     And I submit a new action with description "a new next action"
+     Then I should <see> "a new next action"
+
+      Scenarios:
+      | action | page                           | see    |
+      | go to  | home page                      | see    |
+      | go to  | tickler page                   | not see|
+      | visit  | project page for "test project"| see    |
+      | visit  | context page for "test context"| see    |
+      | visit  | tag page for "starred"         | not see|
+
+  @selenium
+  Scenario Outline: I can add multiple todos from several pages
+     When I <action> the <page>
+     And I follow "Add multiple next actions"
+     And I submit multiple actions with using
+     """
+     one new next action
+     another new next action
+     """
+     Then I should <see> "one new next action"
+     And I should <see> "another new next action"
+     And the badge should show <badge>
+     And the number of actions should be <count>
+
+      Scenarios:
+      | action | page                           | see    | badge | count |
+      | go to  | home page                      | see    | 3     | 3     |
+      | go to  | tickler page                   | not see| 0     | 3     |
+      | visit  | project page for "test project"| see    | 3     | 3     |
+      | visit  | context page for "test context"| see    | 2     | 3     |
+      | visit  | tag page for "starred"         | not see| 0     | 3     |

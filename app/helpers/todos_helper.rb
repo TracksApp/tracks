@@ -251,11 +251,14 @@ module TodosHelper
       return false if source_view_is(:context) && (@todo.project.hidden? || @todo.project.completed?)      
     end
 
+    return false if (source_view_is(:tag) && !@todo.tags.include?(@tag_name))
+
     return true if source_view_is(:deferred) && @todo.deferred?
     return true if source_view_is(:project) && @todo.project.hidden? && @todo.project_hidden?
     return true if source_view_is(:project) && @todo.deferred?
     return true if !source_view_is(:deferred) && @todo.active?
     return true if source_view_is(:project) && @todo.pending?
+
     return true if source_view_is(:tag) && @todo.pending?
     return false
   end
