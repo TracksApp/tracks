@@ -20,7 +20,7 @@ Given /^I have a context "([^\"]*)" with (.*) actions$/ do |context_name, number
   end
 end
 
-When /^I visits the context page for "([^\"]*)"$/ do |context_name|
+When /^I visit the context page for "([^\"]*)"$/ do |context_name|
   context = @current_user.contexts.find_by_name(context_name)
   context.should_not be_nil
   visit "/contexts/#{context.id}" 

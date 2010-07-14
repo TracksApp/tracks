@@ -21,6 +21,11 @@ When /^I visit the "([^\"]*)" project$/ do |project_name|
   visit project_path(@project)
 end
 
+When /^I visit the project page for "([^"]*)"$/ do |project_name|
+  When "I visit the \"#{project_name}\" project"
+end
+
+
 When /^I edit the project description to "([^\"]*)"$/ do |new_description|
   click_link "link_edit_project_#{@project.id}"
   fill_in "project[description]", :with => new_description

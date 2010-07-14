@@ -26,12 +26,14 @@ module NavigationHelpers
       recurring_todos_path
     when /the integrations page/
       integrations_path
+    when /the tickler page/
+      tickler_path
 
-    # Add more mappings here.
-    # Here is an example that pulls values out of the Regexp:
-    #
-    #   when /^(.*)'s profile page$/i
-    #     user_profile_path(User.find_by_login($1))
+      # Add more mappings here.
+      # Here is an example that pulls values out of the Regexp:
+      #
+      #   when /^(.*)'s profile page$/i
+      #     user_profile_path(User.find_by_login($1))
 
     else
       begin
