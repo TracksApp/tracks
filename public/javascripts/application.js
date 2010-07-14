@@ -1,17 +1,17 @@
 var TracksForm = {
-    toggle: function(toggleDivId, formContainerId, formId, hideLinkText,
+    toggle: function(toggleLinkId, formContainerId, formId, hideLinkText,
                 hideLinkTitle, showLinkText, showLinkTitle) {
-        $('#'+formContainerId).toggle();
-        toggleDiv = $('#'+toggleDivId);
-        toggleLink = toggleDiv.find('a');
-        if (toggleDiv.hasClass('hide_form')) {
+        form=$('#'+formContainerId)
+        form.toggle();
+        toggleLink = $('#'+toggleLinkId);
+        if (!form.is(':visible')) {
             toggleLink.text(showLinkText).attr('title', showLinkTitle);
         }
         else {
             toggleLink.text(hideLinkText).attr('title', hideLinkTitle);
             $('#'+formId+' input:text:first').focus();
         }
-        toggleDiv.toggleClass('hide_form');
+        toggleLink.parent.toggleClass('hide_form');
     }, 
     hide_all_recurring: function () {
         $.each(['daily', 'weekly', 'monthly', 'yearly'], function(){
@@ -373,10 +373,29 @@ $(document).ready(function() {
   setup_container_toggles();
 
   $('#toggle_action_new').click(function(){
+    if ($("#todo_multi_add").is(':visible')) { /* hide multi next action form first */
+      $('#todo_new_action').show();
+      $('#todo_multi_add').hide();
+      $('a#toggle_multi').text("Add multiple next actions");
+    }
+    
     TracksForm.toggle('toggle_action_new', 'todo_new_action', 'todo-form-new-action',
       '« Hide form', 'Hide next action form',
       'Add a next action »', 'Add a next action');
     });
+
+  $('#toggle_multi').click(function(){
+    if ($("#todo_multi_add").is(':visible')) {
+      $('#todo_new_action').show();
+      $('#todo_multi_add').hide();
+      $('a#toggle_multi').text("Add multiple next actions");
+    } else {
+      $('#todo_new_action').hide();
+      $('#todo_multi_add').show();
+      $('a#toggle_multi').text("Add single next action");
+      $('a#toggle_action_new').text('« Hide form');
+    }
+  });
 
   $('.edit-form a.negative').live('click', function(){
       $(this).parents('.container').find('.item-show').show();

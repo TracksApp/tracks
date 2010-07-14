@@ -825,7 +825,7 @@ input#go_to_project, input#context_hide {
     float: right;
 }
 
-#todo-form-new-action .submit_box, #project_form .submit_box, #context_form .submit_box {
+#todo-form-new-action .submit_box, #project_form .submit_box, #context_form .submit_box, #todo-form-multi-new-acion .submit_box {
     height: 25px;
     padding: 5px 0;
     text-align: center;
