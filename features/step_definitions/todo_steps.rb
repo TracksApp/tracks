@@ -68,12 +68,12 @@ end
 
 When /^I submit a new action with description "([^"]*)"$/ do |description|
   fill_in "todo[description]", :with => description
-  selenium.click("xpath=//form[@id='todo-form-new-action']//button[@id='todo_new_action_submit']", :wait_for => :ajax, :javascript_framework => :jquery)
+  submit_next_action_form
 end
 
 When /^I submit multiple actions with using$/ do |multiple_actions|
   fill_in "todo[multiple_todos]", :with => multiple_actions
-  selenium.click("xpath=//form[@id='todo-form-multi-new-action']//button[@id='todo_multi_new_action_submit']", :wait_for => :ajax, :javascript_framework => :jquery)
+  submit_multiple_next_action_form
 end
 
 When /^I fill the multiple actions form with "([^"]*)", "([^"]*)", "([^"]*)", "([^"]*)"$/ do |descriptions, project_name, context_name, tags|
@@ -85,15 +85,13 @@ end
 
 When /^I submit the new multiple actions form with "([^"]*)", "([^"]*)", "([^"]*)", "([^"]*)"$/ do |descriptions, project_name, context_name, tags|
   When "I fill the multiple actions form with \"#{descriptions}\", \"#{project_name}\", \"#{context_name}\", \"#{tags}\""
-  selenium.click("xpath=//form[@id='todo-form-multi-new-action']//button[@id='todo_multi_new_action_submit']", :wait_for => :ajax, :javascript_framework => :jquery)
+  submit_multiple_next_action_form
 end
 
 When /^I submit the new multiple actions form with$/ do |multi_line_descriptions|
   fill_in "todo[multiple_todos]", :with => multi_line_descriptions
-  selenium.click("xpath=//form[@id='todo-form-multi-new-action']//button[@id='todo_multi_new_action_submit']", :wait_for => :ajax, :javascript_framework => :jquery)
+  submit_multiple_next_action_form
 end
-
-
 
 Then /^the dependencies of "(.*)" should include "(.*)"$/ do |child_name, parent_name|
   parent = @current_user.todos.find_by_description(parent_name)
