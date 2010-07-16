@@ -169,7 +169,13 @@ class TodosController < ApplicationController
         @projects = current_user.projects.find(:all) if @new_project_created
         @initial_context_name = params['default_context_name']
         @initial_project_name = params['default_project_name']
-        @default_tags = @todos[0].project.default_tags unless @todos[0].project.nil?
+        if @todos.size > 0
+          @default_tags = @todos[0].project.default_tags unless @todos[0].project.nil?
+        else
+          @multiple_error = "You need to submit at least one next action"
+          @saved = false;
+          @default_tags = current_user.projects.find_by_name(@initial_project_name).default_tags unless @initial_project_name.blank?
+        end
         render :action => 'create_multiple'
       end
       format.xml do

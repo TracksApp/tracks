@@ -119,3 +119,19 @@ Feature: Add new next action from every page
       | visit  | project page for "test project"| see    | 3     | 3     |
       | visit  | context page for "test context"| see    | 2     | 3     |
       | visit  | tag page for "starred"         | not see| 0     | 3     |
+
+  @selenium
+  Scenario: I need to fill in at least one description and a context
+    When I go to the home page
+    And I follow "Add multiple next actions"
+    And I submit the new multiple actions form with "", "", "", ""
+    Then I should see "You need to submit at least one next action"
+    When I submit the new multiple actions form with "one", "", "", ""
+    Then I should see "Context can't be blank"
+    When I fill the multiple actions form with "", "a project", "a context", "tag"
+    And I submit the new multiple actions form with
+    """
+
+    
+    """ 
+    Then I should see "You need to submit at least one next action"

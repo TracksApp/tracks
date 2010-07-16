@@ -78,6 +78,8 @@
       :complete => "$('#todo_multi_new_action_submit').unblock()",
       :condition => "askIfNewContextProvided('multi_')") do -%>
 
+      <div id="multiple_status"><%= error_messages_for("item", :object_name => 'action') %></div>
+
       <label for="todo_notes">Multiple next actions (one on each line)</label>
       <%= text_area( "todo", "multiple_todos", "cols" => 29, "rows" => 6, "tabindex" => 2) %>
 
