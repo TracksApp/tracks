@@ -44,10 +44,20 @@ end
 
 When /^I edit the context to rename it to "([^\"]*)"$/ do |new_name|
   click_link "edit_context_#{@context.id}"
-  fill_in "context_name", :with => new_name
-  click_button "submit_context_#{@context.id}"
+
   wait_for do
-    selenium.is_visible("flash")
+    selenium.is_element_present("submit_context_#{@context.id}")
+  end
+
+  fill_in "context_name", :with => new_name
+
+  selenium.click "submit_context_#{@context.id}",
+    :wait_for => :text,
+    :element => "flash",
+    :text => "Context saved"
+  
+  wait_for do
+    selenium.is_element_present("edit_context_#{@context.id}")
   end
 end
 
