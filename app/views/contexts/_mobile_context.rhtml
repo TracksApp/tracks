@@ -5,7 +5,7 @@
 if not @not_done.empty? 
   # only show a context when there are actions in it
   -%>
-<h2><%=mobile_context.name%></h2>
+<h2><%= link_to mobile_context.name, context_path(mobile_context, :format => 'm') %></h2>
 <ul class="c">
 <%= render :partial => "todos/mobile_todo", 
            :collection => @not_done, 
