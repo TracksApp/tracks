@@ -1,5 +1,5 @@
 <%
-    new_todo_params = {}
+    new_todo_params = {:format => :m}
     new_todo_params[:from_project] = @mobile_from_project if @mobile_from_project
     new_todo_params[:from_context] = @mobile_from_context if @mobile_from_context
 -%><?xml version="1.0"?>
@@ -16,7 +16,7 @@
 <h1><span class="count"><%= @down_count %></span> <%= 
         current_user.time.strftime(@prefs.title_date_format) -%></h1>
 <div class="nav">
-<%=     (link_to("0-New action", new_todo_path(new_todo_params, :format => 'm'))+" | ") unless @new_mobile -%>
+<%=     (link_to("0-New action", new_todo_path(new_todo_params))+" | ") unless @new_mobile -%>
 <%=     (link_to("1-Home", todos_path(:format => 'm'))+" | ") unless @home -%>
 <%=     (link_to("2-Contexts", contexts_path(:format => 'm'))+" | ") -%>
 <%=     (link_to("3-Projects", projects_path(:format => 'm'))+" | ") -%>
@@ -28,7 +28,7 @@
 <hr/><% if !@prefs.nil? -%>
 <div class="nav">
 <%= (link_to("Logout", logout_path(:format => 'm')) +" | ") -%>
-<%= (link_to("0-New action", new_todo_path(:format => 'm'), {:accesskey => "0"})+" | ") unless @new_mobile -%>
+<%= (link_to("0-New action", new_todo_path(new_todo_params), {:accesskey => "0"})+" | ") unless @new_mobile -%>
 <%= (link_to("1-Home", todos_path(:format => 'm'), {:accesskey => "1"})+" | ") unless @home -%>
 <%= (link_to("2-Contexts", contexts_path(:format => 'm'), {:accesskey => "2"})+" | ") -%>
 <%= (link_to("3-Projects", projects_path(:format => 'm'), {:accesskey => "3"})+" | ") -%>
