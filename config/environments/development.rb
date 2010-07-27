@@ -14,4 +14,4 @@ config.action_controller.perform_caching             = false
 config.action_mailer.raise_delivery_errors = false
 
 # Unique cookies
-ActionController::CgiRequest::DEFAULT_SESSION_OPTIONS[:session_key] = "TrackDev"
+config.action_controller.session = { :key => 'TracksDev' }
