@@ -50,7 +50,8 @@ class TodosController < ApplicationController
     @source_view = params['_source_view'] || 'todo'
     @tag_name = params['_tag_name']
 
-    unless params[:todo][:multiple_todos].nil?
+    is_multiple = params[:todo] && params[:todo][:multiple_todos] && !params[:todo][:multiple_todos].nil?
+    if is_multiple
       create_multiple
     else
       p = TodoCreateParamsHelper.new(params, prefs)
