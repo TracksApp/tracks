@@ -1,22 +1,26 @@
-
+<%
 def today
-  Time.zone.now.beginning_of_day.to_s(:db)
+    Time.zone.now.beginning_of_day.to_s(:db)
 end
 
 def next_week
-  1.week.from_now.beginning_of_day.to_s(:db)
+    1.week.from_now.beginning_of_day.to_s(:db)
 end
 
 def last_week
-  1.week.ago.beginning_of_day.to_s(:db)
+    1.week.ago.beginning_of_day.to_s(:db)
 end
 
 def two_weeks_ago
-  2.weeks.ago.beginning_of_day.to_s(:db)
+    2.weeks.ago.beginning_of_day.to_s(:db)
 end
 
 def two_weeks_hence
-  2.weeks.from_now.beginning_of_day.to_s(:db)
+    2.weeks.from_now.beginning_of_day.to_s(:db)
+end
+
+def way_back
+  Time.zone.local(2008,1,1)
 end
 
 %>
@@ -29,7 +33,7 @@ call_bill_gates_every_day:
   description: Call Bill Gates every day
   notes: ~
   state: active
-  start_from: <%= last_week %>
+  start_from: <%= way_back %>
   ends_on: no_end_date
   end_date: ~
   number_of_occurences: ~
@@ -83,7 +87,7 @@ call_bill_gates_every_week:
   description: Call Bill Gates every week
   notes: ~
   state: active
-  start_from: <%= today %>
+  start_from: <%= way_back %>
   ends_on: no_end_date
   end_date: ~
   number_of_occurences: ~
@@ -110,7 +114,7 @@ check_with_bill_every_last_friday_of_month:
   description: Check with Bill every last friday of the month
   notes: ~
   state: active
-  start_from: <%= today %>
+  start_from: <%= way_back %>
   ends_on: no_end_date
   end_date: ~
   number_of_occurences: ~
@@ -137,7 +141,7 @@ birthday_reinier:
   description: Congratulate Reinier on his birthday
   notes: ~
   state: active
-  start_from: <%= today %>
+  start_from: <%= way_back %>
   ends_on: no_end_date
   end_date: ~
   number_of_occurences: ~

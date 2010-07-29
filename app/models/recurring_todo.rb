@@ -511,30 +511,12 @@ class RecurringTodo < ActiveRecord::Base
     #
     # assumes self.recurring_period == 'daily'
   
-    # determine start
-    if previous.nil?
-      start = self.start_from.nil? ? Time.zone.now : self.start_from
-    else
-      # use the next day
-      start = previous + 1.day
-
-      unless self.start_from.nil?
-        # check if the start_from date is later than previous. If so, use
-        # start_from as start to search for next date
-        start = self.start_from if self.start_from > previous
-      end
-    end
+    start = determine_start(previous, 1.day)
 
     if self.only_work_days
-      if start.wday() >= 1 && start.wday() <= 5  # 1=monday; 5=friday
-        return start
-      else
-        if start.wday() == 0 # sunday
-          return start + 1.day
-        else # saturday
-          return start + 2.day
-        end
-      end
+      return start + 2.day if start.wday() == 6 # saturday
+      return start + 1.day if start.wday() == 0 # sunday
+      return start
     else # every nth day; n = every_other1
       # if there was no previous todo, do not add n: the first todo starts on
       # today or on start_from
@@ -742,11 +724,15 @@ class RecurringTodo < ActiveRecord::Base
   
   protected
     
-  def determine_start(previous)
+  def determine_start(previous, offset=0.day)
+    # offset needs to be 1.day for daily patterns
+    
     if previous.nil?
       start = self.start_from.nil? ? Time.zone.now : self.start_from
+      # skip to present
+      start = Time.zone.now if Time.zone.now > start
     else
-      start = previous
+      start = previous + offset
 
       unless self.start_from.nil?
         # check if the start_from date is later than previous. If so, use
