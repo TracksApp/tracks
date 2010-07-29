@@ -48,3 +48,23 @@ Feature: Manage contexts
     And he should see that a context named "@laptop" is not present
     And he should see that a context named "@ipad" is present
     And the badge should show 1
+
+  @selenium, @wip
+  Scenario: Add new context
+    Given I have the following contexts
+      | name  | hide   |
+      | @ipad | true   |
+      | @home | false  |
+    When I go to the contexts page
+    And I add a new context "@phone"
+    Then I should see the context "@phone" under "active"
+
+  @selenium, @wip
+  Scenario: Add new hidden context
+    Given I have the following contexts
+      | name  | hide   |
+      | @ipad | true   |
+      | @home | false  |
+    When I go to the contexts page
+    And I add a new hidden context "@hidden"
+    Then I should see the context "@hidden" under "hidden"
