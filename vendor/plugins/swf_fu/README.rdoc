@@ -1,0 +1,91 @@
+= +swf_fu+
+
+With the +swf_fu+ plugin, rails treats your swf files like any other asset (images, javascripts, etc...).
+
++swf_fu+ (pronounced "swif-fu", bonus joke for french speakers) uses SWFObject 2.2 to embed swf objects in HTML and supports all its options.
+SWFObject 2 is such a nice library that Adobe now uses it as the official way to embed swf!
+SWFObject's project can be found at http://code.google.com/p/swfobject
+
++swf_fu+ has been tested with rails v2.0 up to v3.0b and has decent test coverage so <tt>rake test:plugins</tt> should reveal any incompatibility. Comments and pull requests welcome: http://github.com/marcandre/swf_fu
+
+== Install
+
+Assuming you have git[http://git-scm.com/] installed (check with <tt>git version</tt>), it is easy to install from your applications directory:
+
+  rails plugin install git://github.com/marcandre/swf_fu.git   # rails 3
+
+  script/plugin install git://github.com/marcandre/swf_fu.git  # rails 2 (starting at 2.0.2)
+
+For older versions of +rails+ or without +git+, you can always download
++swf_fu+ from github[http://github.com/marcandre/swf_fu/archives/master] and then install it manually:
+
+  rails plugin install ~/Download/swf_fu    # rails 3
+
+  script/plugin install ~/Downloads/swf_fu  # rails 2.x
+
+== Usage
+
+=== Embedding in HTML
+
+To embed a swf file, use +swf_tag+:
+  <%= swf_tag "i_like_flashing" %>
+
+Exactly like images and javascripts, +swf_tag+ will use +swf_path+
+to determine the path of the swf file; it will assume it is in <tt>/public/swfs/</tt>
+unless specified otherwise and it will add the ".swf" extension automatically.
+
+You can specify alternate content either with the options <tt>:alt => "Get Flash!"</tt> or you can use +swf_tag+ as a block:
+
+  <% swf_tag "i_like_flashing" do %>
+    Get Flash
+  <% end %>
+
+=== Options
+
+* <tt>:id</tt> - the DOM +id+ of the flash +object+ element that is used to contain the Flash object; defaults to the name of the swf in +source+
+* <tt>:width, :height</tt> - the width & height of the Flash object. Defaults to "100%". These could also specified using :size
+* <tt>:size</tt> - the size of the Flash object, in the form "400x300".
+* <tt>:mode</tt> - Either :dynamic (default) or :static. Refer to SWFObject's doc[http://code.google.com/p/swfobject/wiki/documentation#Should_I_use_the_static_or_dynamic_publishing_method?]
+* <tt>:flashvars</tt> - a Hash of variables that are passed to the swf. Can also be a string like <tt>"foo=bar&hello=world"</tt>. Defaults to <tt>{:id => the DOM id}</tt>
+* <tt>:parameters</tt> - a Hash of configuration parameters for the swf. See Adobe's doc[http://kb.adobe.com/selfservice/viewContent.do?externalId=tn_12701#optional]
+* <tt>:alt</tt> - HTML text that is displayed when the Flash player is not available. Defaults to a "Get Flash" image pointing to Adobe Flash's installation page. This can also be specified as a block (see embedding section). In Rails 3, this text is _assumed_ to be HTML, so there is no need to call +html_safe+ on it.
+* <tt>:flash_version</tt> - the version of the Flash player that is required (e.g. "7" (default) or "8.1.0")
+* <tt>:auto_install</tt> - a swf file that will upgrade flash player if needed (defaults to "expressInstall" which was installed by +swf_fu+)
+* <tt>:javascript_class</tt> - specify a javascript class (e.g. "MyFlash") for your flash object. If it exists, the initialize method will be called.
+* <tt>:initialize</tt> - arguments to pass to the initialization method of your javascript class.
+* <tt>:div_id</tt> - the DOM +id+ of the containing div itself. Defaults to <tt>"#{option[:id]}_div"</tt>
+* <tt>:switch_off_auto_hide_show</tt> - switch off SWFObject's default hide/show behavior. SWFObject temporarily hides your SWF or alternative content until the library has decided which content to display. Defaults to nil.
+
+You can override these default options with a global setting:
+
+  ActionView::Base.swf_default_options = {:mode => :static}   # All swf_tag will use the static mode by default
+
+Any of these options can be a +Proc+, in which case it will be called each time swf_tag is called.
+
+For example, the following will generate unique IDs:
+
+  my_swf_counter = 0
+  ActionView::Base.swf_default_options[:id] = Proc.new{"swf_unique_id_#{my_swf_counter+=1}"}
+
+=== Javascript
+
++swf_fu+ will add 'swfobject' to the list of default javascript files. If you don't include
+the default javascripts, a simple <tt>javascript_include "swfobject"</tt> is needed.
+
+=== swf_path
+
++swf_tag+ implements and relies on +swf_path+ which behaves in a similar fashion to +image_path+, +javascript_path+, etc...:
+
+  swf_path("example")                            => "/swfs/example.swf"
+  swf_path("example.swf")                        => "/swfs/example.swf"
+  swf_path("fonts/optima")                       => "/swfs/fonts/optima.swf"
+  swf_path("/fonts/optima")                      => "/fonts/optima.swf"
+  swf_path("http://www.example.com/game.swf")    => "http://www.example.com/game.swf"
+
+It takes into account the global setting +asset_host+, like any other asset:
+
+  ActionController::Base.asset_host = "http://assets.example.com"
+  image_path("logo.jpg")                         => "http://assets.example.com/images/logo.jpg"
+  swf_path("fonts/optima")                       => "http://assets.example.com/swfs/fonts/optima.swf""
+
+Copyright (c) 2010 Marc-André Lafortune, released under the BSD license
