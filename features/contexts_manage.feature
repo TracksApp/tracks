@@ -49,7 +49,7 @@ Feature: Manage contexts
     And he should see that a context named "@ipad" is present
     And the badge should show 1
 
-  @selenium, @wip
+  @selenium
   Scenario: Add new context
     Given I have the following contexts
       | name  | hide   |
@@ -59,7 +59,7 @@ Feature: Manage contexts
     And I add a new context "@phone"
     Then I should see the context "@phone" under "active"
 
-  @selenium, @wip
+  @selenium
   Scenario: Add new hidden context
     Given I have the following contexts
       | name  | hide   |
