@@ -128,7 +128,7 @@ Feature: Add new next action from every page
     Then I should see "You need to submit at least one next action"
     When I submit the new multiple actions form with "one", "", "", ""
     Then I should see "Context can't be blank"
-    When I fill the multiple actions form with "", "a project", "a context", "tag"
+    When I fill the multiple actions form with "", "a project", "test context", "tag"
     And I submit the new multiple actions form with
     """
 

@@ -11,7 +11,7 @@ Feature: Manage a project
     And I have logged in as "testuser" with password "secret"
     And there exists a project "manage me" for user "testuser"
 
-  @selenium, @wip
+  @selenium
   Scenario: I can describe the project using markup
     When I visit the "manage me" project
     And I edit the project description to "_successfull outcome_: project is *done*"
