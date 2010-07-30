@@ -77,7 +77,7 @@
           <li><a href="#">?</a>
             <ul>
               <li><%= link_to 'Integrate Tracks', integrations_path %></li>
-              <li><%= link_to 'REST API Docs', url_for(:controller => 'integrations', :action => 'rest_api') %></li>
+              <li><%= link_to 'REST API Docs', rest_api_docs_path %></li>
             </ul>
           </li>
           <li><%= navigation_link(image_tag("system-search.png", :size => "16X16", :border => 0), {:controller => "search", :action => "index"}, :title => "Search All Items" ) %></li>

@@ -3,8 +3,14 @@ Given /^I have no contexts$/ do
   Context.delete_all
 end
 
+Given /^there exists a context called "([^"]*)" for user "([^"]*)"$/ do |context_name, login|
+  user = User.find_by_login(login)
+  user.should_not be_nil
+  @context = user.contexts.create!(:name => context_name)
+end
+
 Given /^I have a context called "([^\"]*)"$/ do |context_name|
-  @context = @current_user.contexts.create!(:name => context_name)
+  Given "there exists a context called \"#{context_name}\" for user \"#{@current_user.login}\""
 end
 
 Given /^I have the following contexts:$/ do |table|

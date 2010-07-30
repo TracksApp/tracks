@@ -28,6 +28,22 @@ module NavigationHelpers
       integrations_path
     when /the tickler page/
       tickler_path
+    when /the export page/
+      data_path
+    when /the preference page/
+      preferences_path
+    when /the rest api docs page/
+      rest_api_docs_path
+    when /the search page/
+      search_path
+    when /the starred page/
+      tag_path("starred")
+    when /the feeds page/
+      feeds_path
+    when /the context page for "([^\"]*)" for user "([^\"]*)"/i
+      context_path(User.find_by_login($2).contexts.find_by_name($1))
+    when /the "([^\"]*)" project for user "([^\"]*)"/i
+      project_path(User.find_by_login($2).projects.find_by_name($1))
 
       # Add more mappings here.
       # Here is an example that pulls values out of the Regexp:

@@ -1,16 +1,8 @@
 ActionController::Routing::Routes.draw do |map|
-  map.with_options :controller => 'login' do |login|
-    login.login 'login', :action => 'login'
-    login.login_cas 'login_cas', :action => 'login_cas'
-    login.formatted_login 'login.:format', :action => 'login'
-    login.logout 'logout', :action => 'logout'
-    login.formatted_logout 'logout.:format', :action => 'logout'
-  end
-
   map.resources :users,
-                :member => {:change_password => :get, :update_password => :post,
-                             :change_auth_type => :get, :update_auth_type => :post, :complete => :get,
-                             :refresh_token => :post }
+    :member => {:change_password => :get, :update_password => :post,
+    :change_auth_type => :get, :update_auth_type => :post, :complete => :get,
+    :refresh_token => :post }
   map.with_options :controller => "users" do |users|
     users.signup 'signup', :action => "new"
   end
@@ -27,9 +19,11 @@ ActionController::Routing::Routes.draw do |map|
     projects.resources :todos, :name_prefix => "project_"
   end
 
+  map.resources :notes
+
   map.resources :todos,
-                :member => {:toggle_check => :put, :toggle_star => :put},
-                :collection => {:check_deferred => :post, :filter_to_context => :post, :filter_to_project => :post}
+    :member => {:toggle_check => :put, :toggle_star => :put},
+    :collection => {:check_deferred => :post, :filter_to_context => :post, :filter_to_project => :post}
   map.with_options :controller => "todos" do |todos|
     todos.home '', :action => "index"
     todos.tickler 'tickler', :action => "list_deferred"
@@ -56,24 +50,39 @@ ActionController::Routing::Routes.draw do |map|
     todos.mobile_abbrev_new 'm/new', :action => "new", :format => 'm'
   end
   map.root :controller => 'todos' # Make OpenID happy because it needs #root_url defined
-  
-  map.resources :notes
-  map.feeds 'feeds.m', :controller => 'feedlist', :action => 'index', :format => 'm'
-  map.feeds 'feeds', :controller => 'feedlist', :action => 'index'
-  
-  if Rails.env == 'test'
-    map.connect '/selenium_helper/login', :controller => 'selenium_helper', :action => 'login'
-  end
-
-  map.preferences 'preferences', :controller => 'preferences', :action => 'index'
-  map.integrations 'integrations', :controller => 'integrations', :action => 'index'
-  map.search_plugin '/integrations/search_plugin.xml', :controller => 'integrations', :action => 'search_plugin', :format => 'xml'
-  map.google_gadget '/integrations/google_gadget.xml', :controller => 'integrations', :action => 'google_gadget', :format => 'xml'
-  map.stats 'stats', :controller => 'stats', :action => 'index'
 
   map.resources :recurring_todos,
     :member => {:toggle_check => :put, :toggle_star => :put}
   map.recurring_todos 'recurring_todos', :controller => 'recurring_todos', :action => 'index'
+
+  map.with_options :controller => 'login' do |login|
+    login.login 'login', :action => 'login'
+    login.login_cas 'login_cas', :action => 'login_cas'
+    login.formatted_login 'login.:format', :action => 'login'
+    login.logout 'logout', :action => 'logout'
+    login.formatted_logout 'logout.:format', :action => 'logout'
+  end
+
+  map.with_options :controller => "feedlist" do |fl|
+    fl.mobile_feeds 'feeds.m', :action => 'index', :format => 'm'
+    fl.feeds        'feeds',   :action => 'index'
+  end
+  
+  map.with_options :controller => "integrations" do |i|
+    i.integrations  'integrations', :action => 'index'
+    i.rest_api_docs 'integrations/rest_api', :action => "rest_api"
+    i.search_plugin 'integrations/search_plugin.xml', :controller => 'integrations', :action => 'search_plugin', :format => 'xml'
+    i.google_gadget 'integrations/google_gadget.xml', :controller => 'integrations', :action => 'google_gadget', :format => 'xml'
+  end
+
+  map.preferences 'preferences', :controller => 'preferences', :action => 'index'
+  map.stats 'stats', :controller => 'stats', :action => 'index'
+  map.search 'search', :controller => 'search', :action => 'index'
+  map.data 'data', :controller => 'data', :action => 'index'
+
+  if Rails.env == 'test'
+    map.connect '/selenium_helper/login', :controller => 'selenium_helper', :action => 'login'
+  end
 
   # Install the default route as the lowest priority.
   map.connect ':controller/:action/:id'

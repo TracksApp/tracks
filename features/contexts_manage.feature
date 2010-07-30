@@ -21,7 +21,7 @@ Feature: Manage contexts
     And he should see that a context named "OutAndAbout" is present
 
   @selenium
-  Scenario: Delete context from context page
+  Scenario: Delete context from context page should update badge
     Given I have a context called "@computer"
     When I go to the contexts page
     Then the badge should show 1
