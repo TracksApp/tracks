@@ -200,6 +200,10 @@ function project_defaults(){
 }
 
 function enable_rich_interaction(){
+  /* fix for #1036 where closing a edit form before the autocomplete was filled
+   * resulted in a dropdown box that could not be removed. We remove all
+   * autocomplete boxes the hard way */
+  $('.ac_results').remove();
   $('input.Date').datepicker({'dateFormat': dateFormat, 'firstDay': weekStart});
   /* Autocomplete */
   $('input[name=context_name]').autocomplete(
