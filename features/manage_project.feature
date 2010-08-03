@@ -34,3 +34,22 @@ Feature: Manage a project
     When I visit the "bananas" project
     And I edit the project name to "cherries"
     Then the project title should be "cherries"
+
+  # Ticket #1042
+  @selenium
+  Scenario: I cannot change the name of a project in the project view to the name of another existing project
+    Given I have a project "test" with 1 todos
+    When I go to the projects page
+    Then the badge should show 2   # "manage me" and "test"
+    When I visit the "manage me" project
+    And I edit the project name to "test"
+    Then I should see "Name already exists"
+
+  # Ticket #1042
+  @selenium
+  Scenario: I cannot change the name of a project in the project list view to the name of another existing project
+    Given I have a project "test" with 1 todos
+    When I go to the projects page
+    Then the badge should show 2   # "manage me" and "test"
+    When I edit the project name of "manage me" to "test"
+    Then I should see "Name already exists"

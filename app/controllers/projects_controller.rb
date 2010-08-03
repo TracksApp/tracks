@@ -105,7 +105,6 @@ class ProjectsController < ApplicationController
     if params['project']['state']
       @new_state = params['project']['state']
       @state_changed = @project.state != @new_state
-      logger.info "@state_changed: #{@project.state} == #{params['project']['state']} != #{@state_changed}"
       params['project'].delete('state')
     end
     success_text = if params['field'] == 'name' && params['value']
@@ -113,7 +112,8 @@ class ProjectsController < ApplicationController
       params['project']['name'] = params['value'] 
     end
     @project.attributes = params['project']
-    if @project.save
+    @saved = @project.save
+    if @saved
       @project.transition_to(@new_state) if @state_changed
       if boolean_param('wants_render')
         if (@project.hidden?)
@@ -149,8 +149,8 @@ class ProjectsController < ApplicationController
         return
       end
     else
-      notify :warning, "Couldn't update project"
-      render :text => ''
+      init_data_for_sidebar
+      render :template => 'projects/update.js.rjs'
       return
     end
     render :template => 'projects/update.js.rjs'

@@ -43,10 +43,20 @@ end
 When /^I edit the project name to "([^\"]*)"$/ do |new_title|
   click_link "link_edit_project_#{@project.id}"
   fill_in "project[name]", :with => new_title
+
+  # changed to make sure selenium waits until the saving has a result either
+  # positive or negative. Was: :element=>"flash", :text=>"Project saved"
+  # we may need to change it back if you really need a positive outcome, i.e.
+  # this step needs to fail if the project was not saved succesfully
   selenium.click "submit_project_#{@project.id}",
     :wait_for => :text,
-    :element => "flash",
-    :text => "Project saved"
+    :text => /(Project saved|1 error prohibited this project from being saved)/
+end
+
+When /^I edit the project name of "([^"]*)" to "([^"]*)"$/ do |project_current_name, project_new_name|
+  @project = @current_user.projects.find_by_name(project_current_name)
+  @project.should_not be_nil
+  When "I edit the project name to \"#{project_new_name}\""
 end
 
 Then /^I should see the bold text "([^\"]*)" in the project description$/ do |bold|
