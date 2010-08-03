@@ -95,12 +95,13 @@ if @saved
       page.replace_html "badge_count", @down_count
     else
       page.replace_html "p#{@todo.project_id}items", :partial => 'todos/todo', :collection => @todo.project.not_done_todos, 
-                                                                          :locals => { :parent_container_type => parent_container_type }
-      page.replace "tickler", :partial => 'todos/deferred', :locals =>  { :deferred => @todo.project.deferred_todos, 
-                                                                          :collapsible => false, 
-                                                                          :append_descriptor => "in this project", 
-                                                                          :parent_container_type => 'project', 
-                                                                          :pending => @todo.project.pending_todos }
+        :locals => { :parent_container_type => parent_container_type }
+      page.replace "tickler", :partial => 'todos/deferred', :locals =>  {
+        :deferred => @todo.project.deferred_todos,
+        :collapsible => false,
+        :append_descriptor => "in this project",
+        :parent_container_type => 'project',
+        :pending => @todo.project.pending_todos }
       page['tickler-empty-nd'].show if (@deferred_count == 0 and @pending_count == 0)
       page.visual_effect :highlight, dom_id(@todo), :duration => 3
     end
@@ -153,7 +154,7 @@ if @saved
   @todo.uncompleted_predecessors.each do |p|
     page << "if ($(\'#{item_container_id(p)}\')) {"
     page[p].replace_html :partial => 'todos/todo',
-    :locals => { :todo => p, :parent_container_type => parent_container_type }
+      :locals => { :todo => p, :parent_container_type => parent_container_type }
     page << "}"
   end
 else

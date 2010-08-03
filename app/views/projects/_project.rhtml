@@ -1,9 +1,9 @@
 <div class="container">
   <h2 id="project_name">
-  <% if collapsible -%>
-  <a href="#" class="container_toggle" id="toggle_p<%= project.id %>"><%= image_tag("collapse.png") %></a>
-  <% end -%>
-  <%= project.name -%></h2>
+    <% if collapsible -%>
+      <a href="#" class="container_toggle" id="toggle_p<%= project.id %>"><%= image_tag("collapse.png") %></a>
+    <% end -%>
+    <%= project.name -%></h2>
   <div id="<%= dom_id(project, "container")%>">
     <%= render :partial => "projects/project_settings", :locals => { :project => project, :collapsible => collapsible } %>
   </div>
