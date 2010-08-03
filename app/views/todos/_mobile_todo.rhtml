@@ -13,6 +13,7 @@ end -%>
 -%><span class="m_t">
 <%  end -%>
 <%= date_span -%> <%= link_to mobile_todo.description, todo_path(mobile_todo, :format => 'm') -%>
+<%= link_to(image_tag("mobile_notes.png", :border => "0"), mobile_todo_show_notes_path(mobile_todo, :format => 'm')) -%>
 <%  if parent_container_type == 'context' or parent_container_type == 'tag' -%>
 <%=    "<span class=\"prj\"> (" +
   link_to(mobile_todo.project.name, project_path(mobile_todo.project, :format => 'm')) + 

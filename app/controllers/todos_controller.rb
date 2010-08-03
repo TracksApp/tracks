@@ -8,7 +8,7 @@ class TodosController < ApplicationController
   append_before_filter :init, :except => [ :destroy, :completed,
     :completed_archive, :check_deferred, :toggle_check, :toggle_star,
     :edit, :update, :create, :calendar, :auto_complete_for_predecessor, :remove_predecessor, :add_predecessor]
-  append_before_filter :get_todo_from_params, :only => [ :edit, :toggle_check, :toggle_star, :show, :update, :destroy, :remove_predecessor]
+  append_before_filter :get_todo_from_params, :only => [ :edit, :toggle_check, :toggle_star, :show, :update, :destroy, :remove_predecessor, :show_notes]
   protect_from_forgery :except => [:auto_complete_for_predecessor]
 
   def index
@@ -736,7 +736,19 @@ class TodosController < ApplicationController
     @project.save!
     redirect_to project_url(@project)
   end
-  
+
+  def show_notes
+    @return_path=cookies[:mobile_url] ? cookies[:mobile_url] : mobile_path
+    respond_to do |format|
+      format.html {
+        redirect_to home_path, "Viewing note of todo is not implemented"
+      }
+      format.m   {
+        render:action => "mobile_show_notes"
+      }
+    end
+  end
+
   private
   
   def get_todo_from_params
