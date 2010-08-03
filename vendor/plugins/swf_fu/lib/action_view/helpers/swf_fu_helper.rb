@@ -94,7 +94,6 @@ module ActionView #:nodoc:
         
       private
         CONCAT = ActiveSupport.const_defined?(:SafeBuffer) ? :safe_concat : :concat
-        puts CONCAT
         def convert_to_hash(s)
           case s
             when Hash
