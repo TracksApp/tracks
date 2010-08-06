@@ -127,6 +127,20 @@ class TodoTest < ActiveSupport::TestCase
     assert t.active?
   end
 
+  def test_activate_also_clears_show_from
+    # setup test case
+    t = @not_completed1
+    t.show_from = 1.week.from_now
+    t.save!
+    assert t.deferred?
+    t.reload
+
+    # activate and check show_from
+    t.activate!
+    assert t.active?
+    assert t.show_from.nil?
+  end
+
   def test_project_returns_null_object_when_nil
     t = @not_completed1
     assert !t.project.is_a?(NullProject)
