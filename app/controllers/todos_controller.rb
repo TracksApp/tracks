@@ -526,12 +526,10 @@ class TodosController < ApplicationController
     @source_view = 'deferred'
     @page_title = "TRACKS::Tickler"
     
-    @projects = current_user.projects.find(:all, :include => [ :todos, :default_context ])
-    @contexts_to_show = @contexts = current_user.contexts.find(:all, :include => [ :todos ])
+    @contexts_to_show = @contexts = current_user.contexts.find(:all)
     
-    @not_done_todos = current_user.deferred_todos + current_user.pending_todos
-    @count = @not_done_todos.size
-    @down_count = @count
+    @not_done_todos = current_user.deferred_todos(:include => [:tags, :taggings, :projects]) + current_user.pending_todos(:include => [:tags, :taggings, :projects])
+    @down_count = @count = @not_done_todos.size
     
     respond_to do |format|
       format.html
