@@ -10,7 +10,7 @@
     <%= link_to t.name, 
     {:controller => "todos", :action => "tag", :id => t.name}, 
     {:style => "font-size: " + (9 + 2*(t.count.to_i-@tags_min)/@tags_divisor).to_s + "pt",
-    :title => t.count+" actions"}
+    :title => t.count.to_s+" actions"}
     -%> <%
     end 
     end-%>
@@ -29,7 +29,7 @@
     <%= link_to t.name, 
     {:controller => "todos", :action => "tag", :id => t.name}, 
     {:style => "font-size: " + (9 + 2*(t.count.to_i-@tags_min_90days)/@tags_divisor_90days).to_s + "pt",
-    :title => t.count+" actions"}
+    :title => t.count.to_s+" actions"}
     -%> <%
     end 
     end-%>
