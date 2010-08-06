@@ -111,6 +111,7 @@ class ProjectsController < ApplicationController
       params['project']['id'] = params['id'] 
       params['project']['name'] = params['value'] 
     end
+
     @project.attributes = params['project']
     @saved = @project.save
     if @saved
@@ -283,7 +284,7 @@ class ProjectsController < ApplicationController
     p.delete('default_context_name')
 
     unless default_context_name.blank?
-      default_context = Context.find_or_create_by_name(default_context_name)
+      default_context = current_user.contexts.find_or_create_by_name(default_context_name)
       p['default_context_id'] = default_context.id
     end
   end
