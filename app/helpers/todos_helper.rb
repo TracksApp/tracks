@@ -199,7 +199,7 @@ module TodosHelper
   
   def calendar_setup( input_field )
     str = "Calendar.setup({ ifFormat:\"#{prefs.date_format}\""
-    str << ",firstDay:#{prefs.week_starts},showOthers:true,range:[2004, 2010]"
+    str << ",firstDay:#{prefs.week_starts},showOthers:true,range:[2004, 2015]"
     str << ",step:1,inputField:\"" + input_field + "\",cache:true,align:\"TR\" })\n"
     javascript_tag str
   end
