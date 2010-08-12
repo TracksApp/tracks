@@ -33,6 +33,19 @@ Given /^"(.*)" depends on "(.*)"$/ do |successor_name, predecessor_name|
   successor.save!
 end
 
+Given /^I have a project "([^"]*)" that has the following todos$/ do |project_name, todos|
+  Given "I have a project called \"#{project_name}\""
+  @project.should_not be_nil
+  todos.hashes.each do |todo|
+    context_id = @current_user.contexts.find_by_name(todo[:context])
+    context_id.should_not be_nil
+    @current_user.todos.create!(
+      :description => todo[:description],
+      :context_id => context_id,
+      :project_id=>@project.id)
+  end
+end
+
 When /^I drag "(.*)" to "(.*)"$/ do |dragged, target|
   drag_id = Todo.find_by_description(dragged).id
   drop_id = Todo.find_by_description(target).id
@@ -92,6 +105,23 @@ When /^I submit the new multiple actions form with$/ do |multi_line_descriptions
   fill_in "todo[multiple_todos]", :with => multi_line_descriptions
   submit_multiple_next_action_form
 end
+
+When /^I edit the dependency of "([^"]*)" to '([^'']*)'$/ do |todo_name, deps|
+  todo = @dep_todo = @current_user.todos.find_by_description(todo_name)
+  todo.should_not be_nil
+  # click edit
+  selenium.click("//div[@id='line_todo_#{todo.id}']//img[@id='edit_icon_todo_#{todo.id}']", :wait_for => :ajax, :javascript_framework => :jquery)
+  fill_in "predecessor_list_todo_#{todo.id}", :with => deps
+  # submit form
+  selenium.click("//div[@id='edit_todo_#{todo.id}']//button[@id='submit_todo_#{todo.id}']", :wait_for => :ajax, :javascript_framework => :jquery)
+  
+end
+
+Then /^there should not be an error$/ do
+  # form should be gone and thus not errors visible
+  selenium.is_visible("edit_todo_#{@dep_todo.id}").should == false
+end
+
 
 Then /^the dependencies of "(.*)" should include "(.*)"$/ do |child_name, parent_name|
   parent = @current_user.todos.find_by_description(parent_name)

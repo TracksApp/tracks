@@ -24,9 +24,13 @@ class Todo < ActiveRecord::Base
   named_scope :blocked, :conditions => ['todos.state = ?', 'pending']
 
   STARRED_TAG_NAME = "starred"
+
+  # regular expressions for dependencies
   RE_TODO = /[^"]+/
   RE_CONTEXT = /[^"]+/
   RE_PROJECT = /[^"]+/
+  RE_PARTS = /"(#{RE_TODO})"\s<"(#{RE_CONTEXT})";\s"(#{RE_PROJECT})">/ # results in array
+  RE_SPEC = /"#{RE_TODO}"\s<"#{RE_CONTEXT}";\s"#{RE_PROJECT}">/ # results in string
   
   acts_as_state_machine :initial => :active, :column => 'state'
   
@@ -97,27 +101,36 @@ class Todo < ActiveRecord::Base
   
   def todo_from_specification(specification)
     # Split specification into parts: description <context, project>
-    re_parts = /"(#{RE_TODO})"\s<"(#{RE_CONTEXT})";\s"(#{RE_PROJECT})">/
-    parts = specification.scan(re_parts)
+    parts = specification.scan(RE_PARTS)
     return nil unless parts.length == 1
     return nil unless parts[0].length == 3
     todo_description = parts[0][0]
     context_name = parts[0][1]
+    project_name = parts[0][2]
+    
+    # find the project
+    project_id = nil;
+    unless project_name == "(none)"
+      project = Project.first(:conditions => {
+        :user_id => self.user.id,
+        :name => project_name
+      })
+      project_id = project.id unless project.nil?
+    end
+
     todos = Todo.all(
       :joins => :context,
       :conditions => {
         :description => todo_description,
-        :contexts => {:name => context_name}
+        :user_id => self.user.id,
+        :contexts => {:name => context_name},
+        :project_id => project_id
       }
     )
     return nil if todos.empty?
-    # todos now contains all todos with matching description and context
-    # TODO: Is this possible to do with a single query?
-    todos.each do |todo|
-      project_name = todo.project.is_a?(NullProject) ? "(none)" : todo.project.name
-      return todo if project_name == parts[0][2]
-    end
-    return nil
+
+    # TODO: what todo if there are more than one todo that fit the specification
+    return todos[0]
   end
   
   def validate
@@ -270,9 +283,8 @@ class Todo < ActiveRecord::Base
 
   def add_predecessor_list(predecessor_list)
     return unless predecessor_list.kind_of? String
-    # Split into list
-    re_specification = /"#{RE_TODO}"\s<"#{RE_CONTEXT}";\s"#{RE_PROJECT}">/
-    @predecessor_array = predecessor_list.scan(re_specification)
+    @predecessor_array = predecessor_list.scan(RE_SPEC)
+    return @predecessor_array
   end
   
   def add_predecessor(t)

@@ -12,7 +12,7 @@ end
 Given /^there exists a project "([^\"]*)" for user "([^\"]*)"$/ do |project_name, user_name|
   user = User.find_by_login(user_name)
   user.should_not be_nil
-  user.projects.create!(:name => project_name)
+  @project = user.projects.create!(:name => project_name)
 end
 
 Given /^there exists a project called "([^"]*)" for user "([^"]*)"$/ do |project_name, login|
