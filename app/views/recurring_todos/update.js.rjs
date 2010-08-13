@@ -8,10 +8,6 @@ if @saved
   status_message = 'Added new context / ' + status_message if @new_context_created
   page.notify :notice, status_message, 5.0
   
-  # update auto completer arrays for context and project
-  page << "contextAutoCompleter.options.array = #{context_names_for_autocomplete}; contextAutoCompleter.changed = true" if @new_context_created
-  page << "projectAutoCompleter.options.array = #{project_names_for_autocomplete}; projectAutoCompleter.changed = true" if @new_project_created
-
   # replace old recurring todo with updated todo
   page.replace dom_id(@recurring_todo), :partial => 'recurring_todos/recurring_todo', :locals => { :recurring_todo => @recurring_todo }
   page.visual_effect :highlight, dom_id(@recurring_todo), :duration => 3

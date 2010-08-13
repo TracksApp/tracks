@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../test_helper'
 require 'date'
 
 class TodoTest < ActiveSupport::TestCase
-  fixtures :todos, :recurring_todos, :users, :contexts, :preferences, :tags, :taggings
+  fixtures :todos, :recurring_todos, :users, :contexts, :preferences, :tags, :taggings, :projects
 
   def setup
     @not_completed1 = Todo.find(1).reload
@@ -127,6 +127,20 @@ class TodoTest < ActiveSupport::TestCase
     assert t.active?
   end
 
+  def test_activate_also_clears_show_from
+    # setup test case
+    t = @not_completed1
+    t.show_from = 1.week.from_now
+    t.save!
+    assert t.deferred?
+    t.reload
+
+    # activate and check show_from
+    t.activate!
+    assert t.active?
+    assert t.show_from.nil?
+  end
+
   def test_project_returns_null_object_when_nil
     t = @not_completed1
     assert !t.project.is_a?(NullProject)
@@ -177,5 +191,74 @@ class TodoTest < ActiveSupport::TestCase
     @not_completed1.toggle_star!
     assert !@not_completed1.starred?
   end
-  
+
+  def test_todo_specification_handles_null_project
+    # @not_completed1 has a project
+    todo_desc = @not_completed1.description
+    assert_equal "\"#{todo_desc}\" <\"agenda\"; \"Make more money than Billy Gates\">", @not_completed1.specification
+
+    # now check on null
+    @not_completed1.project = nil
+    @not_completed1.save
+    assert_equal "\"#{todo_desc}\" <\"agenda\"; \"(none)\">", @not_completed1.specification
+  end
+
+  def test_todo_from_specification_should_return_todo
+    todo = Todo.new
+
+    assert_equal @not_completed1, todo.todo_from_specification(@not_completed1.specification)
+
+    # should handle comma's in description (#975)
+    @not_completed1.description = "test,1,2,3"
+    @not_completed1.save
+    assert_equal @not_completed1, todo.todo_from_specification(@not_completed1.specification)
+  end
+
+  def test_todo_from_specification_should_return_nil_on_invalid_input
+    todo = Todo.new
+    todo_desc = @not_completed1.description
+    project_name = @not_completed1.project.name
+    context_name = @not_completed1.context.name
+
+    assert todo.todo_from_specification("").nil?
+    assert todo.todo_from_specification("bla, bla , bla").nil?
+    assert todo.todo_from_specification("#{todo_desc} <#{context_name}; #{project_name}>").nil?  # missing \"
+  end
+
+  def test_add_predecessor_list
+    todo = Todo.new
+
+    single = @not_completed1.specification
+    multi = single + "," + @not_completed2.specification
+
+    @predecessor_array = todo.add_predecessor_list(single)
+    assert_not_nil @predecessor_array
+    assert_equal 1, @predecessor_array.size
+
+    @predecessor_array = todo.add_predecessor_list(multi)
+    assert_not_nil @predecessor_array
+    assert_equal 2, @predecessor_array.size
+  end
+
+  def test_add_predecessor_list_with_comma
+    # test for #975
+    todo = Todo.new
+
+    @not_completed1.description = "test,1,2,3"
+    @not_completed1.save
+    @not_completed2.description = "test,4,5,6"
+    @not_completed2.save
+
+    single = @not_completed1.specification
+    multi = single + "," + @not_completed2.specification
+
+    @predecessor_array = todo.add_predecessor_list(single)
+    assert_not_nil @predecessor_array
+    assert_equal 1, @predecessor_array.size
+
+    @predecessor_array = todo.add_predecessor_list(multi)
+    assert_not_nil @predecessor_array
+    assert_equal 2, @predecessor_array.size
+  end
+
 end

@@ -4,6 +4,7 @@ if @saved
   status_message += ' to tickler' if @todo.deferred?
   status_message = 'Added new project / ' + status_message if @new_project_created
   status_message = 'Added new context / ' + status_message if @new_context_created
+  status_message = @message || status_message
   page.notify :notice, status_message, 5.0
   
   if source_view_is_one_of(:todo, :context, :tag)
@@ -46,11 +47,17 @@ if @saved
       page.replace_html("badge_count", @down_count) if source_view_is :todo
       
       # show todo in context
-      page.delay(0.5) do
+      page.delay(0.3) do
         page.call "todoItems.ensureContainerHeight", "c#{@original_item_context_id}items"
         if source_view_is_one_of(:todo, :tag) && @todo.active?
           page.call "todoItems.ensureContainerHeight", "c#{@todo.context_id}items"
           page.visual_effect :highlight, dom_id(@todo), :duration => 3
+        end
+        if @context_changed
+          source_view do |from|
+            from.todo {page << "$('#c#{@todo.context_id} h2').effect('highlight', {}, 3000)" }
+            from.tag {page << "$('#c#{@todo.context_id} h2').effect('highlight')" }
+          end
         end
       end
     else
@@ -88,12 +95,13 @@ if @saved
       page.replace_html "badge_count", @down_count
     else
       page.replace_html "p#{@todo.project_id}items", :partial => 'todos/todo', :collection => @todo.project.not_done_todos, 
-                                                                          :locals => { :parent_container_type => parent_container_type }
-      page.replace "tickler", :partial => 'todos/deferred', :locals =>  { :deferred => @todo.project.deferred_todos, 
-                                                                          :collapsible => false, 
-                                                                          :append_descriptor => "in this project", 
-                                                                          :parent_container_type => 'project', 
-                                                                          :pending => @todo.project.pending_todos }
+        :locals => { :parent_container_type => parent_container_type }
+      page.replace "tickler", :partial => 'todos/deferred', :locals =>  {
+        :deferred => @todo.project.deferred_todos,
+        :collapsible => false,
+        :append_descriptor => "in this project",
+        :parent_container_type => 'project',
+        :pending => @todo.project.pending_todos }
       page['tickler-empty-nd'].show if (@deferred_count == 0 and @pending_count == 0)
       page.visual_effect :highlight, dom_id(@todo), :duration => 3
     end
@@ -146,7 +154,7 @@ if @saved
   @todo.uncompleted_predecessors.each do |p|
     page << "if ($(\'#{item_container_id(p)}\')) {"
     page[p].replace_html :partial => 'todos/todo',
-    :locals => { :todo => p, :parent_container_type => parent_container_type }
+      :locals => { :todo => p, :parent_container_type => parent_container_type }
     page << "}"
   end
 else

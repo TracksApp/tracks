@@ -119,10 +119,8 @@ module TodosHelper
   def grip_span
     unless @todo.completed?
       image_tag('grip.png', :width => '7', :height => '16', :border => '0', 
-                :title => 'Drag onto another action to make it depend on that action',
-                :class => 'grip') +
-      image_tag('blank.png', :width => 16, :height => 16, :border => 0,
-                :title => "Drop an action to make it depend on this action", :class => 'successor_target drop_target')
+        :title => 'Drag onto another action to make it depend on that action',
+        :class => 'grip')
     end
   end
   
@@ -227,14 +225,6 @@ module TodosHelper
     end
   end
   
-  def calendar_setup( input_field )
-    # TODO:jQuery
-    #str = "Calendar.setup({ ifFormat:\"#{prefs.date_format}\""
-    #str << ",firstDay:#{prefs.week_starts},showOthers:true,range:[2004, 2010]"
-    #str << ",step:1,inputField:\"" + input_field + "\",cache:true,align:\"TR\" })\n"
-    #javascript_tag str
-  end
-  
   def item_container_id (todo)
     if todo.deferred? or todo.pending?
       return "tickleritems"
@@ -253,11 +243,14 @@ module TodosHelper
       return false if source_view_is(:context) && (@todo.project.hidden? || @todo.project.completed?)      
     end
 
+    return false if (source_view_is(:tag) && !@todo.tags.include?(@tag_name))
+
     return true if source_view_is(:deferred) && @todo.deferred?
     return true if source_view_is(:project) && @todo.project.hidden? && @todo.project_hidden?
     return true if source_view_is(:project) && @todo.deferred?
     return true if !source_view_is(:deferred) && @todo.active?
     return true if source_view_is(:project) && @todo.pending?
+
     return true if source_view_is(:tag) && @todo.pending?
     return false
   end

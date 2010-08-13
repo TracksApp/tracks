@@ -13,7 +13,7 @@ Feature: Manage contexts
   @selenium
   Scenario: In place edit of context name
     Given I have a context called "Errands"
-    When I visits the context page for "Errands"
+    When I visit the context page for "Errands"
     And I edit the context name in place to be "OutAndAbout"
     Then I should see the context name is "OutAndAbout"
     When I go to the contexts page
@@ -21,7 +21,7 @@ Feature: Manage contexts
     And he should see that a context named "OutAndAbout" is present
 
   @selenium
-  Scenario: Delete context from context page
+  Scenario: Delete context from context page should update badge
     Given I have a context called "@computer"
     When I go to the contexts page
     Then the badge should show 1
@@ -48,3 +48,23 @@ Feature: Manage contexts
     And he should see that a context named "@laptop" is not present
     And he should see that a context named "@ipad" is present
     And the badge should show 1
+
+  @selenium
+  Scenario: Add new context
+    Given I have the following contexts
+      | name  | hide   |
+      | @ipad | true   |
+      | @home | false  |
+    When I go to the contexts page
+    And I add a new context "@phone"
+    Then I should see the context "@phone" under "active"
+
+  @selenium
+  Scenario: Add new hidden context
+    Given I have the following contexts
+      | name  | hide   |
+      | @ipad | true   |
+      | @home | false  |
+    When I go to the contexts page
+    And I add a new hidden context "@hidden"
+    Then I should see the context "@hidden" under "hidden"

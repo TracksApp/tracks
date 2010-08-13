@@ -23,3 +23,16 @@ Feature: dependencies
   And I should see "Todo 3" within the dependencies of "Todo 1"
   When I expand the dependencies of "Todo 2"
   Then I should see "Todo 3" within the dependencies of "Todo 2"
+
+  @selenium, @wip
+  Scenario: Adding dependency with comma to todo   # for #975
+  Given I have a context called "@pc"
+  And I have a project "dependencies" that has the following todos
+    | description | context |
+    | test,1, 2,3 | @pc     |
+    | test me     | @pc     |
+  When I visit the "dependencies" project
+  And I drag "test me" to "test,1, 2,3"
+  Then the dependencies of "test me" should include "test,1, 2,3"
+  When I edit the dependency of "test me" to '"test,1, 2,3" <"@pc"; "dependencies">,"test,1, 2,3" <"@pc"; "dependencies">'
+  Then there should not be an error 

@@ -154,19 +154,19 @@ class UsersControllerTest < ActionController::TestCase
   def test_create_with_invalid_password_redirects_to_new_user_page
     login_as :admin_user
     post :create, :user => {:login => 'newbie', :password => '', :password_confirmation => ''}
-    assert_redirected_to :controller => 'users', :action => 'new'    
+    assert_redirected_to signup_path
   end
   
   def test_create_with_invalid_login_does_not_add_a_new_user
     login_as :admin_user
     post :create, :user => {:login => 'n', :password => 'newbiepass', :password_confirmation => 'newbiepass'}
-    assert_redirected_to :controller => 'users', :action => 'new'    
+    assert_redirected_to signup_path
   end
   
   def test_create_with_invalid_login_redirects_to_new_user_page
     login_as :admin_user
     post :create, :user => {:login => 'n', :password => 'newbiepass', :password_confirmation => 'newbiepass'}
-    assert_redirected_to :controller => 'users', :action => 'new'    
+    assert_redirected_to signup_path
   end
   
   def test_create_with_duplicate_login_does_not_add_a_new_user
@@ -179,7 +179,7 @@ class UsersControllerTest < ActionController::TestCase
   def test_create_with_duplicate_login_redirects_to_new_user_page
     login_as :admin_user
     post :create, :user => {:login => 'jane', :password => 'newbiepass', :password_confirmation => 'newbiepass'}
-    assert_redirected_to :controller => 'users', :action => 'new'    
+    assert_redirected_to signup_path
   end
   
 end

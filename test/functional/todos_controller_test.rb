@@ -320,7 +320,7 @@ class TodosControllerTest < ActionController::TestCase
         "due(1i)"=>"2007", "due(2i)"=>"1", "due(3i)"=>"2",
         "show_from(1i)"=>"", "show_from(2i)"=>"", "show_from(3i)"=>"",
         "project_id"=>"1",
-        "notes"=>"test notes", "description"=>"test_mobile_create_action", "state"=>"0"}}
+        "notes"=>"test notes", "description"=>"test_mobile_create_action"}}
     t = Todo.find_by_description("test_mobile_create_action")
     assert_not_nil t
     assert_equal 2, t.context_id
@@ -347,7 +347,7 @@ class TodosControllerTest < ActionController::TestCase
         "due(1i)"=>"2007", "due(2i)"=>"1", "due(3i)"=>"2",
         "show_from(1i)"=>"", "show_from(2i)"=>"", "show_from(3i)"=>"",
         "project_id"=>"1",
-        "notes"=>"test notes", "state"=>"0"}, "tag_list"=>"test, test2"}
+        "notes"=>"test notes"}, "tag_list"=>"test, test2"}
     assert_template 'todos/new'
   end
 
@@ -376,12 +376,16 @@ class TodosControllerTest < ActionController::TestCase
     # change recurrence pattern to monthly and set show_from 2 days before due
     # date this forces the next todo to be put in the tickler
     recurring_todo_1.show_from_delta = 2
+    recurring_todo_1.show_always = 0
+    recurring_todo_1.target = 'due_date'
     recurring_todo_1.recurring_period = 'monthly'
     recurring_todo_1.recurrence_selector = 0
     recurring_todo_1.every_other1 = 1
     recurring_todo_1.every_other2 = 2
     recurring_todo_1.every_other3 = 5
-    recurring_todo_1.save
+    # use assert to catch validation errors if present. we need to replace
+    # this with a good factory implementation
+    assert recurring_todo_1.save
 
     # mark next_todo as complete by toggle_check
     xhr :post, :toggle_check, :id => next_todo.id, :_source_view => 'todo'
@@ -416,7 +420,7 @@ class TodosControllerTest < ActionController::TestCase
     recurring_todo_1.recurrence_selector = 0
     recurring_todo_1.every_other1 = today.day
     recurring_todo_1.every_other2 = 1
-    recurring_todo_1.save
+    assert recurring_todo_1.save
 
     # mark todo_1 as complete by toggle_check, this gets rid of todo_1 that was
     # not correctly created from the adjusted recurring pattern we defined

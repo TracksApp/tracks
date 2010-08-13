@@ -6,9 +6,9 @@ Feature: Existing user logging in
 
   Background:
     Given the following user records
-      | login    | password | is_admin |
-      | testuser | secret   | false    |
-      | admin    | secret   | true     |
+      | login    | password | is_admin | first_name | last_name |
+      | testuser | secret   | false    | Test       | User      |
+      | admin    | secret   | true     | Admin      | User      |
 
   Scenario Outline: Succesfull and unsuccesfull login
     When I go to the login page
@@ -21,6 +21,32 @@ Feature: Existing user logging in
     | admin | secret   | redirected to the home page | Login successful   |
     | admin | wrong    | on the login page           | Login unsuccessful |
 
-  Scenario: Accessing a secured page when not logged in
-    When I go to the home page
-    Then I should be redirected to the login page    
+  Scenario Outline: Unauthorized users cannot access Tracks and need to log in first
+    Given there exists a project called "top secret" for user "testuser"
+    And there exists a context called "@secret location" for user "testuser"
+    When I go to the <page>
+    Then I should be redirected to the login page
+    When I submit the login form as user "testuser" with password "secret"
+    Then I should be redirected to the <next page>
+    And I should see "<logout>"
+
+    Examples:
+    | page                                                    | next page                                                | logout             |
+    | home page                                               | home page                                                | Logout (Test User) |
+    | contexts page                                           | contexts page                                            | Logout (Test User) |
+    | projects page                                           | projects page                                            | Logout (Test User) |
+    | notes page                                              | notes page                                               | Logout (Test User) |
+    | repeating todos page                                    | repeating todos page                                     | Logout (Test User) |
+    | statistics page                                         | statistics page                                          | Logout (Test User) |
+    | manage users page                                       | manage users page                                        | 401 Unauthorized   |
+    | integrations page                                       | integrations page                                        | Logout (Test User) |
+    | starred page                                            | starred page                                             | Logout (Test User) |
+    | tickler page                                            | tickler page                                             | Logout (Test User) |
+    | calendar page                                           | calendar page                                            | Logout (Test User) |
+    | feeds page                                              | feeds page                                               | Logout (Test User) |
+    | preference page                                         | preference page                                          | Logout (Test User) |
+    | export page                                             | export page                                              | Logout (Test User) |
+    | rest api docs page                                      | rest api docs page                                       | Logout (Test User) |
+    | search page                                             | search page                                              | Logout (Test User) |
+    | "top secret" project for user "testuser"                | "top secret" project for user "testuser"                 | Logout (Test User) |
+    | context page for "@secret location" for user "testuser" | context page for "@secret location" for user "testuser"  | Logout (Test User) |

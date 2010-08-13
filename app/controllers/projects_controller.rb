@@ -26,7 +26,7 @@ class ProjectsController < ApplicationController
         format.rss   &render_rss_feed
         format.atom  &render_atom_feed
         format.text  &render_text_feed
-        format.autocomplete { render :text => for_autocomplete(@projects, params[:q]) }
+        format.autocomplete { render :text => for_autocomplete(@projects.reject(&:completed?), params[:q]) }
       end
     end
   end
@@ -105,15 +105,16 @@ class ProjectsController < ApplicationController
     if params['project']['state']
       @new_state = params['project']['state']
       @state_changed = @project.state != @new_state
-      logger.info "@state_changed: #{@project.state} == #{params['project']['state']} != #{@state_changed}"
       params['project'].delete('state')
     end
     success_text = if params['field'] == 'name' && params['value']
       params['project']['id'] = params['id'] 
       params['project']['name'] = params['value'] 
     end
+
     @project.attributes = params['project']
-    if @project.save
+    @saved = @project.save
+    if @saved
       @project.transition_to(@new_state) if @state_changed
       if boolean_param('wants_render')
         if (@project.hidden?)
@@ -149,8 +150,8 @@ class ProjectsController < ApplicationController
         return
       end
     else
-      notify :warning, "Couldn't update project"
-      render :text => ''
+      init_data_for_sidebar
+      render :template => 'projects/update.js.rjs'
       return
     end
     render :template => 'projects/update.js.rjs'
@@ -283,7 +284,7 @@ class ProjectsController < ApplicationController
     p.delete('default_context_name')
 
     unless default_context_name.blank?
-      default_context = Context.find_or_create_by_name(default_context_name)
+      default_context = current_user.contexts.find_or_create_by_name(default_context_name)
       p['default_context_id'] = default_context.id
     end
   end

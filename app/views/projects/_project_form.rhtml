@@ -3,7 +3,7 @@ project = project_form
 %>
 
 <% form_remote_tag(:url => project_path(project), :html => { :id => dom_id(project, 'edit_form'), :class => "inline-form "+dom_id(project, 'edit_form')+"-edit-project-form", :method => :put }) do -%>
-
+  <div id="error_status"><%= error_messages_for("project") %></div>
   <%= source_view_tag( @source_view ) -%>
 
   <label for="project_name">Name:</label><br/>

@@ -9,7 +9,7 @@
       'jquery.blockUI','jquery.jeditable','jquery.autocomplete',
       'jquery.truncator', :cache => 'jquery-all' %>
     <%= javascript_include_tag 'hoverIntent','superfish','application',
-      'accesskey-hints','niftycube','flashobject', :cache => 'tracks' %>
+      'accesskey-hints','niftycube','swfobject', :cache => 'tracks' %>
     <%= javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? %>
     <%= javascript_tag "var SOURCE_VIEW = '#{@source_view}';" %>
     <%= javascript_tag "var TAG_NAME = '#{@tag_name}';" if @tag_name %>
@@ -42,7 +42,7 @@
       <div id="minilinks">
         <%= link_to("Toggle notes", "#", {:accesskey => "S", :title => "Toggle all notes", :id => "toggle-notes-nav"}) %>
         &nbsp;|&nbsp;
-        <%= link_to "Logout (#{current_user.display_name}) »", logout_path %> <p>
+        <%= link_to "Logout (#{current_user.display_name}) »", logout_path %>
       </div>
       <div id="navcontainer">
         <ul class="sf-menu">
@@ -77,7 +77,7 @@
           <li><a href="#">?</a>
             <ul>
               <li><%= link_to 'Integrate Tracks', integrations_path %></li>
-              <li><%= link_to 'REST API Docs', url_for(:controller => 'integrations', :action => 'rest_api') %></li>
+              <li><%= link_to 'REST API Docs', rest_api_docs_path %></li>
             </ul>
           </li>
           <li><%= navigation_link(image_tag("system-search.png", :size => "16X16", :border => 0), {:controller => "search", :action => "index"}, :title => "Search All Items" ) %></li>

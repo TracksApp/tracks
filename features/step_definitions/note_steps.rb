@@ -62,7 +62,6 @@ Then /^the first note should disappear$/ do
   end
 end
 
-
 Then /^I should see the note text$/ do
   Then "I should see \"after 50 characters\""
 end

@@ -1,17 +1,17 @@
 var TracksForm = {
-    toggle: function(toggleDivId, formContainerId, formId, hideLinkText,
+    toggle: function(toggleLinkId, formContainerId, formId, hideLinkText,
                 hideLinkTitle, showLinkText, showLinkTitle) {
-        $('#'+formContainerId).toggle();
-        toggleDiv = $('#'+toggleDivId);
-        toggleLink = toggleDiv.find('a');
-        if (toggleDiv.hasClass('hide_form')) {
+        form=$('#'+formContainerId)
+        form.toggle();
+        toggleLink = $('#'+toggleLinkId);
+        if (!form.is(':visible')) {
             toggleLink.text(showLinkText).attr('title', showLinkTitle);
         }
         else {
             toggleLink.text(hideLinkText).attr('title', hideLinkTitle);
             $('#'+formId+' input:text:first').focus();
         }
-        toggleDiv.toggleClass('hide_form');
+        toggleLink.parent().toggleClass('hide_form');
     }, 
     hide_all_recurring: function () {
         $.each(['daily', 'weekly', 'monthly', 'yearly'], function(){
@@ -49,7 +49,7 @@ $.fn.clearForm = function() {
 
 /* Set up authenticity token properly */
 $(document).ajaxSend(function(event, request, settings) {
-  if ( settings.type == 'POST' ) {
+  if ( settings.type == 'POST' || settings.type == 'post' ) {
     if(typeof(AUTH_TOKEN) != 'undefined'){
       settings.data = (settings.data ? settings.data + "&" : "")
         + "authenticity_token=" + encodeURIComponent( AUTH_TOKEN ) + "&"
@@ -137,8 +137,8 @@ function setup_container_toggles(){
   });
 }
 
-function askIfNewContextProvided() {
-  var givenContextName = $('#todo_context_name').val();
+function askIfNewContextProvided(source) {
+  var givenContextName = $('#'+source+'todo_context_name').val();
   var contextNames = [];
   var contextNamesRequest = $.ajax({url: relative_to_root('contexts.autocomplete'),
                              async: false,
@@ -200,6 +200,10 @@ function project_defaults(){
 }
 
 function enable_rich_interaction(){
+  /* fix for #1036 where closing a edit form before the autocomplete was filled
+   * resulted in a dropdown box that could not be removed. We remove all
+   * autocomplete boxes the hard way */
+  $('.ac_results').remove();
   $('input.Date').datepicker({'dateFormat': dateFormat, 'firstDay': weekStart});
   /* Autocomplete */
   $('input[name=context_name]').autocomplete(
@@ -229,8 +233,9 @@ function enable_rich_interaction(){
   /* Drag & Drop for successor/predecessor */
   function drop_todo(evt, ui) {
     dragged_todo = ui.draggable[0].id.split('_')[2];
-    dropped_todo = $(this).parents('.item-show').get(0).id.split('_')[2];
+    dropped_todo = this.id.split('_')[2];
     ui.draggable.remove();
+    $('.drop_target').hide(); // IE8 doesn't call stop() in this situation
     $(this).block({message: null});
     $.post(relative_to_root('todos/add_predecessor'),
         {successor: dragged_todo, predecessor: dropped_todo},
@@ -247,7 +252,7 @@ function enable_rich_interaction(){
       start: drag_todo,
       stop: function() {$('.drop_target').hide();}});
 
-  $('.successor_target').droppable({drop: drop_todo,
+  $('.item-show').droppable({drop: drop_todo,
       tolerance: 'pointer',
       hoverClass: 'hover'});
   
@@ -259,9 +264,8 @@ function enable_rich_interaction(){
     ui.draggable.remove();
     target.block({message: null});
     setTimeout(function() {target.show()}, 0);
-    $.post(relative_to_root('todos/update'),
-        {id: dragged_todo,
-         "todo[id]": dragged_todo,
+    $.post(relative_to_root('todos/change_context'),
+        {"todo[id]": dragged_todo,
          "todo[context_id]": context_id},
         function(){target.unblock(); target.hide();}, 'script');
   }
@@ -273,6 +277,8 @@ function enable_rich_interaction(){
 
   /* Reset auto updater */
   field_touched = false;
+
+  $('h2#project_name').editable(save_project_name, {style: 'padding:0px', submit: "OK"});
 }
 
 /* Auto-refresh */
@@ -371,10 +377,29 @@ $(document).ready(function() {
   setup_container_toggles();
 
   $('#toggle_action_new').click(function(){
+    if ($("#todo_multi_add").is(':visible')) { /* hide multi next action form first */
+      $('#todo_new_action').show();
+      $('#todo_multi_add').hide();
+      $('a#toggle_multi').text("Add multiple next actions");
+    }
+    
     TracksForm.toggle('toggle_action_new', 'todo_new_action', 'todo-form-new-action',
       '« Hide form', 'Hide next action form',
       'Add a next action »', 'Add a next action');
     });
+
+  $('#toggle_multi').click(function(){
+    if ($("#todo_multi_add").is(':visible')) {
+      $('#todo_new_action').show();
+      $('#todo_multi_add').hide();
+      $('a#toggle_multi').text("Add multiple next actions");
+    } else {
+      $('#todo_new_action').hide();
+      $('#todo_multi_add').show();
+      $('a#toggle_multi').text("Add single next action");
+      $('a#toggle_action_new').text('« Hide form');
+    }
+  });
 
   $('.edit-form a.negative').live('click', function(){
       $(this).parents('.container').find('.item-show').show();
@@ -461,8 +486,6 @@ $(document).ready(function() {
       $.post(relative_to_root('projects/update/'+project_id), {'project[name]': value, 'update_project_name': 'true'}, highlight, 'script');
       return(value);
   };
-
-  $('h2#project_name').editable(save_project_name, {style: 'padding:0px', submit: "OK"});
 
   $('.alphabetize_link').click(function(evt){
       evt.preventDefault();

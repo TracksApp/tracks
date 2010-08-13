@@ -124,7 +124,9 @@ class RecurringTodoTest < ActiveSupport::TestCase
     due_date = @weekly_every_day.get_due_date(@sunday)
     assert_equal @monday, due_date
     
-    # saturday is last day in week, so the next date should be sunday + n_weeks
+    # saturday is last day in week, so the next date should be sunday + n-1 weeks
+    # n-1 because sunday is already in the next week
+    @weekly_every_day.every_other1 = 3
     due_date = @weekly_every_day.get_due_date(@saturday)
     assert_equal @sunday + 2.weeks, due_date
 
@@ -141,6 +143,10 @@ class RecurringTodoTest < ActiveSupport::TestCase
     assert_equal @wednesday, due_date    
     due_date = @weekly_every_day.get_due_date(@wednesday)
     assert_equal @tuesday+1.week, due_date    
+
+    @weekly_every_day.every_day = '      s'
+    due_date = @weekly_every_day.get_due_date(@sunday)
+    assert_equal @saturday+1.week, due_date
   end
   
   def test_monthly_pattern
@@ -201,9 +207,25 @@ class RecurringTodoTest < ActiveSupport::TestCase
     # same month, after second wednesday
     due_date = @yearly.get_due_date(Time.zone.local(2008,6,12)) # june 7th
     assert_equal Time.zone.local(2009,6,10), due_date # june 10th
-    
-    # test handling of nil
+  end
+
+  def test_next_todo_without_previous_todo
+    # test handling of nil as previous
+    #
+    # start_from is way_back
     due_date1 = @yearly.get_due_date(nil) 
+    due_date2 = @yearly.get_due_date(Time.now.utc + 1.day)
+    assert_equal due_date1, due_date2
+
+    # start_from is in the future
+    @yearly.start_from = Time.now.utc + 1.week
+    due_date1 = @yearly.get_due_date(nil)
+    due_date2 = @yearly.get_due_date(Time.now.utc + 1.day)
+    assert_equal due_date1, due_date2
+
+    # start_from is nil
+    @yearly.start_from = nil
+    due_date1 = @yearly.get_due_date(nil)
     due_date2 = @yearly.get_due_date(Time.now.utc + 1.day)
     assert_equal due_date1, due_date2
   end

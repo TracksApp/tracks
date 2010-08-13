@@ -32,8 +32,8 @@ Rails::Initializer.run do |config|
   config.action_controller.session_store = :active_record_store
 
   config.action_controller.session = {
-    :session_key => '_tracks_session_id',
-    :secret      =>  SITE_CONFIG['salt'] * (30.0 /  SITE_CONFIG['salt'].length).ceil #must be at least 30 characters
+    :key    => '_tracks_session_id',
+    :secret =>  SITE_CONFIG['salt'] * (30.0 /  SITE_CONFIG['salt'].length).ceil #must be at least 30 characters
   }
 
   config.action_controller.relative_url_root = SITE_CONFIG['subdir'] if SITE_CONFIG['subdir']

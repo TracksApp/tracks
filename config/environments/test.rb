@@ -19,19 +19,8 @@ config.action_mailer.delivery_method = :test
 # Disable request forgery protection in test environment
 config.action_controller.allow_forgery_protection    = false
 
-# We store more than 4K of data in the session during some tests.
-# Override the hard-coded cookie session store to use a memory store for tests.
-# See http://groups.google.com/group/rubyonrails-talk/browse_thread/thread/5519ca7fd4dde3c1
-class ActionController::RackRequest
-  DEFAULT_SESSION_OPTIONS = {
-    #:database_manager => CGI::Session::MemoryStore, # store data in memory
-    :prefix           => "ruby_sess.",    # prefix session file names
-    :session_path     => "/",             # available to all paths in app
-    :session_key      => "_session_id",
-    :cookie_only      => false,
-    :session_http_only=> true
-  }
-end
+# Unique cookies
+config.action_controller.session = { :key => 'TracksTest' }
 
 # Overwrite the default settings for fixtures in tests. See Fixtures 
 # for more details about these settings.
@@ -50,7 +39,7 @@ config.gem "flexmock"
 config.gem "ZenTest", :lib => "zentest", :version => ">=4.0.0"
 config.gem "hpricot"
 config.gem "hoe"
-config.gem "rspec", :lib => false, :version => ">= 1.2.2"
-config.gem "rspec-rails", :lib => false, :version => ">=1.2.2"
-config.gem "webrat", :lib => false, :version => ">=0.4.3"
+config.gem 'webrat',           :lib => false, :version => '>=0.7.0' unless File.directory?(File.join(Rails.root, 'vendor/plugins/webrat'))
+config.gem 'rspec',            :lib => false, :version => '>=1.3.0' unless File.directory?(File.join(Rails.root, 'vendor/plugins/rspec'))
+config.gem 'rspec-rails',      :lib => false, :version => '>=1.3.2' unless File.directory?(File.join(Rails.root, 'vendor/plugins/rspec-rails'))
 config.gem "thoughtbot-factory_girl", :lib => "factory_girl", :source => "http://gems.github.com"

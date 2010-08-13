@@ -1,0 +1,5 @@
+<h2>Next action description (<%= link_to "Go back", @return_path %>)</h2>
+<%= link_to @todo.description, todo_path(@todo, :format => 'm') -%></h2>
+<h2>Notes</h2>
+<%= format_note(@todo.notes)  %>
+<%= link_to "Back", @return_path %>

@@ -825,7 +825,7 @@ input#go_to_project, input#context_hide {
     float: right;
 }
 
-#todo-form-new-action .submit_box, #project_form .submit_box, #context_form .submit_box {
+#todo-form-new-action .submit_box, #project_form .submit_box, #context_form .submit_box, #todo-form-multi-new-action .submit_box {
     height: 25px;
     padding: 5px 0;
     text-align: center;
@@ -943,22 +943,15 @@ div.message {
   display:none;
 }
 
-.successor_target {
-  background-image:url("../images/add_successor_off.png");
-  background-repeat: no-repeat;
-  background-position: center right;
-}
-
-.successor_target.hover {
-  background-image:url("../images/add_successor_on.png");
-  background-repeat: no-repeat;
-  background-position: center right;
+.hover {
+    background: #EAEAEA;
+    font-weight: bold;
 }
 
 .context_target {
   height: 15px;
   margin: 4px;
-  border: thick dotted #CCC;
+  border: 4px dotted #999;
 }
 
 .context_target.hover {

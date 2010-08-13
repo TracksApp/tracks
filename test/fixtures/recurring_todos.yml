@@ -1,23 +1,26 @@
 <%
-
 def today
-  Time.zone.now.beginning_of_day.to_s(:db)
+    Time.zone.now.beginning_of_day.to_s(:db)
 end
 
 def next_week
-  1.week.from_now.beginning_of_day.to_s(:db)
+    1.week.from_now.beginning_of_day.to_s(:db)
 end
 
 def last_week
-  1.week.ago.beginning_of_day.to_s(:db)
+    1.week.ago.beginning_of_day.to_s(:db)
 end
 
 def two_weeks_ago
-  2.weeks.ago.beginning_of_day.to_s(:db)
+    2.weeks.ago.beginning_of_day.to_s(:db)
 end
 
 def two_weeks_hence
-  2.weeks.from_now.beginning_of_day.to_s(:db)
+    2.weeks.from_now.beginning_of_day.to_s(:db)
+end
+
+def way_back
+  Time.zone.local(2008,1,1)
 end
 
 %>
@@ -30,7 +33,7 @@ call_bill_gates_every_day:
   description: Call Bill Gates every day
   notes: ~
   state: active
-  start_from: ~
+  start_from: <%= way_back %>
   ends_on: no_end_date
   end_date: ~
   number_of_occurences: ~
@@ -38,6 +41,7 @@ call_bill_gates_every_day:
   show_from_delta: ~
   recurring_period: daily
   recurrence_selector: ~
+  show_always: 0
   every_other1: 1
   every_other2: ~
   every_other3: ~
@@ -62,9 +66,10 @@ call_bill_gates_every_workday:
   number_of_occurences: ~
   target: due_date
   show_from_delta: ~
+  show_always: 0
   recurring_period: daily
   recurrence_selector: ~
-  every_other1: ~
+  every_other1: 1
   every_other2: ~
   every_other3: ~
   every_day: ~
@@ -82,7 +87,7 @@ call_bill_gates_every_week:
   description: Call Bill Gates every week
   notes: ~
   state: active
-  start_from: ~
+  start_from: <%= way_back %>
   ends_on: no_end_date
   end_date: ~
   number_of_occurences: ~
@@ -90,6 +95,7 @@ call_bill_gates_every_week:
   show_from_delta: ~
   recurring_period: weekly
   recurrence_selector: ~
+  show_always: 0
   every_other1: 2
   every_other2: ~
   every_other3: ~
@@ -108,7 +114,7 @@ check_with_bill_every_last_friday_of_month:
   description: Check with Bill every last friday of the month
   notes: ~
   state: active
-  start_from: ~
+  start_from: <%= way_back %>
   ends_on: no_end_date
   end_date: ~
   number_of_occurences: ~
@@ -116,6 +122,7 @@ check_with_bill_every_last_friday_of_month:
   show_from_delta: 5
   recurring_period: monthly
   recurrence_selector: 1
+  show_always: 0
   every_other1: 1
   every_other2: 2
   every_other3: 5
@@ -134,12 +141,13 @@ birthday_reinier:
   description: Congratulate Reinier on his birthday
   notes: ~
   state: active
-  start_from: ~
+  start_from: <%= way_back %>
   ends_on: no_end_date
   end_date: ~
   number_of_occurences: ~
   target: due_date
   show_from_delta: 5
+  show_always: 0
   recurring_period: yearly
   recurrence_selector: 0
   every_other1: 8

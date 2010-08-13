@@ -15,22 +15,23 @@ suppress_edit_button ||= false
     <div class="buttons">
       <span class="grey"><%= project.current_state.to_s.upcase %></span>
       <a class="delete_project_button"
-        href="<%= project_path(project, :format => 'js') %>"
+         href="<%= project_path(project, :format => 'js') %>"
          title="delete the project '<%= project.name %>'"><%= image_tag( "blank.png",
-          :title => "Delete project",
+             :title => "Delete project",
           :class=>"delete_item") %></a>
 
-        <% unless suppress_edit_button -%>
-          <%=  link_to_remote(
-            image_tag( "blank.png", :title => "Edit project", :class=>"edit_item"),
-            :url => {:controller => 'projects', :action => 'edit', :id => project.id},
-            :method => 'get',
-            :with => "'_source_view=#{@source_view}'",
-            :before => "$('#{dom_id(project)}').block({message:null});",
-            :complete => "$('#{dom_id(project)}').unblock();enable_rich_interaction();"
-            ) %>
-        
-        <% end -%>
+      <% unless suppress_edit_button -%>
+        <%=  link_to_remote(
+          image_tag( "blank.png", :title => "Edit project", :class=>"edit_item"),
+          :url => {:controller => 'projects', :action => 'edit', :id => project.id},
+          :method => 'get',
+          :with => "'_source_view=#{@source_view}'",
+          :before => "$('#{dom_id(project)}').block({message:null});",
+          :complete => "$('#{dom_id(project)}').unblock();enable_rich_interaction();",
+          :html => {:id => "link_edit_#{dom_id(project)}"}
+        ) %>
+
+      <% end -%>
     </div>
   </div>
 

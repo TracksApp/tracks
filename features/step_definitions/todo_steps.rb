@@ -33,19 +33,25 @@ Given /^"(.*)" depends on "(.*)"$/ do |successor_name, predecessor_name|
   successor.save!
 end
 
+Given /^I have a project "([^"]*)" that has the following todos$/ do |project_name, todos|
+  Given "I have a project called \"#{project_name}\""
+  @project.should_not be_nil
+  todos.hashes.each do |todo|
+    context_id = @current_user.contexts.find_by_name(todo[:context])
+    context_id.should_not be_nil
+    @current_user.todos.create!(
+      :description => todo[:description],
+      :context_id => context_id,
+      :project_id=>@project.id)
+  end
+end
+
 When /^I drag "(.*)" to "(.*)"$/ do |dragged, target|
   drag_id = Todo.find_by_description(dragged).id
   drop_id = Todo.find_by_description(target).id
   drag_name = "xpath=//div[@id='line_todo_#{drag_id}']//img[@class='grip']"
-  # xpath does not seem to work here... reverting to css
-  # xpath=//div[@id='line_todo_#{drop_id}']//img[@class='successor_target']
-  drop_name = "css=div#line_todo_#{drop_id} img.successor_target"
-
-  # HACK: the target img is hidden until drag starts. We need to show the img or the
-  # xpath will not find it
-  js="$('div#line_todo_#{drop_id} img.successor_target').show();"
-  selenium.get_eval "(function() {with(this) {#{js}}}).call(selenium.browserbot.getCurrentWindow());"
-
+  drop_name = "xpath=//div[@id='line_todo_#{drop_id}']//div[@class='description']"
+  
   selenium.drag_and_drop_to_object(drag_name, drop_name)
 
   arrow = "xpath=//div[@id='line_todo_#{drop_id}']/div/a[@class='show_successors']/img"
@@ -65,6 +71,57 @@ Then /^I should see ([0-9]+) todos$/ do |count|
     match_xpath "div["
   end
 end
+
+When /I change the (.*) field of "([^\"]*)" to "([^\"]*)"$/ do |field, todo_name, new_value|
+  selenium.click("//span[@class=\"todo.descr\"][.=\"#{todo_name}\"]/../../a[@class=\"icon edit_item\"]", :wait_for => :ajax, :javascript_framework => :jquery)
+  selenium.type("css=form.edit_todo_form input[name=#{field}]", new_value)
+  selenium.click("css=button.positive", :wait_for => :ajax, :javascript_framework => :jquery)
+  sleep(5)
+end
+
+When /^I submit a new action with description "([^"]*)"$/ do |description|
+  fill_in "todo[description]", :with => description
+  submit_next_action_form
+end
+
+When /^I submit multiple actions with using$/ do |multiple_actions|
+  fill_in "todo[multiple_todos]", :with => multiple_actions
+  submit_multiple_next_action_form
+end
+
+When /^I fill the multiple actions form with "([^"]*)", "([^"]*)", "([^"]*)", "([^"]*)"$/ do |descriptions, project_name, context_name, tags|
+  fill_in "todo[multiple_todos]", :with => descriptions
+  fill_in "multi_todo_project_name", :with => project_name
+  fill_in "multi_todo_context_name", :with => context_name
+  fill_in "multi_tag_list", :with => tags
+end
+
+When /^I submit the new multiple actions form with "([^"]*)", "([^"]*)", "([^"]*)", "([^"]*)"$/ do |descriptions, project_name, context_name, tags|
+  When "I fill the multiple actions form with \"#{descriptions}\", \"#{project_name}\", \"#{context_name}\", \"#{tags}\""
+  submit_multiple_next_action_form
+end
+
+When /^I submit the new multiple actions form with$/ do |multi_line_descriptions|
+  fill_in "todo[multiple_todos]", :with => multi_line_descriptions
+  submit_multiple_next_action_form
+end
+
+When /^I edit the dependency of "([^"]*)" to '([^'']*)'$/ do |todo_name, deps|
+  todo = @dep_todo = @current_user.todos.find_by_description(todo_name)
+  todo.should_not be_nil
+  # click edit
+  selenium.click("//div[@id='line_todo_#{todo.id}']//img[@id='edit_icon_todo_#{todo.id}']", :wait_for => :ajax, :javascript_framework => :jquery)
+  fill_in "predecessor_list_todo_#{todo.id}", :with => deps
+  # submit form
+  selenium.click("//div[@id='edit_todo_#{todo.id}']//button[@id='submit_todo_#{todo.id}']", :wait_for => :ajax, :javascript_framework => :jquery)
+  
+end
+
+Then /^there should not be an error$/ do
+  # form should be gone and thus not errors visible
+  selenium.is_visible("edit_todo_#{@dep_todo.id}").should == false
+end
+
 
 Then /^the dependencies of "(.*)" should include "(.*)"$/ do |child_name, parent_name|
   parent = @current_user.todos.find_by_description(parent_name)
@@ -87,4 +144,16 @@ Then /^I should see "([^\"]*)" within the dependencies of "([^\"]*)"$/ do |succe
   # let selenium look for the presence of the successor
   xpath = "xpath=//div[@id='line_todo_#{todo.id}']//div[@id='successor_line_todo_#{successor.id}']//span"
   selenium.wait_for_element(xpath, :timeout_in_seconds => 5)
+end
+
+Then /^I should see the todo "([^\"]*)"$/ do |todo_description|
+  selenium.is_element_present("//span[.=\"#{todo_description}\"]").should be_true
+end
+
+Then /^I should not see the todo "([^\"]*)"$/ do |todo_description|
+  selenium.is_element_present("//span[.=\"#{todo_description}\"]").should be_false
+end
+
+Then /^the number of actions should be (\d+)$/ do |count|
+  @current_user.todos.count.should == count.to_i
 end
