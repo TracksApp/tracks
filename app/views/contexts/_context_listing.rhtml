@@ -26,7 +26,7 @@
         :with => "'_source_view=#{@source_view}'",
         :before => "$('#{dom_id(context)}').block({message:null});",
         :complete => "$('#{dom_id(context)}').unblock();",
-        :confirm => "Are you sure that you want to delete the context '#{context.name}'? Be aware that this will also delete all actions in this context!",
+        :confirm => "Are you sure that you want to delete the context '#{context.name}'? Be aware that this will also delete all (repeating) actions in this context!",
         :html => { :id => dom_id(context, 'delete') }
         ) %>
       <%=  link_to_remote(
