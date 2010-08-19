@@ -21,7 +21,7 @@
       <% end %>
       <a class="delete_context_button" href="<%= formatted_context_path(context, :js) %>" title="delete the context '<%= context.name %>'"><%= image_tag( "blank.png", :title => "Delete context", :class=>"delete_item") %></a>
       <%= apply_behavior "a.delete_context_button:click", { :prevent_default => true, :external => true} do |page, element|
-               page.confirming "'Are you sure that you want to ' + this.title + '?'" do
+               page.confirming "'Are you sure that you want to delete the context '#{context.name}'? Be aware that this will also delete all (repeating) actions in this context!'" do
                  element.up('.context').start_waiting
                  page << remote_to_href(:method => 'delete')
                end
