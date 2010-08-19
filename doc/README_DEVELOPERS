@@ -1,8 +1,28 @@
-1. Wiki
+1. Resources
+
+Tracks is using
+* github to host the git repository.
+* Assembla to manage bugs and enhancement request.
+* the mailing list to discuss features and development
+* the forum to discuss with users
+
+See README for links to the respective sites
+
+2. Dependencies
+
+The dependencies are maintained by Tracks. For development we try not to vendor them
+
+Install them using
+
+  rake gems:install RAILS_ENV=development
+  rake gems:install RAILS_ENV=test
+  rake gems:install RAILS_ENV=selenium
+
+3. Wiki
 
 There are some pointers for setting up your Tracks copy for testing at http://www.getontracks.org/wiki/Testing/
 
-2. SQLITE3 FOR TESTING
+4. SQLITE3 FOR TESTING
 
 By default, tests are configured to run using sqlite3 in memory mode to increase speed. You will need the sqlite3-ruby gem for this.
 
@@ -12,39 +32,24 @@ To avoid showing the migrations as tests are run, add the following to your data
 
 If you want to run tests using another database, that's fine, too. Just change your database.yml accordingly.
 
-3. SELENIUM TESTS (Selenium on Rails)
+5. SELENIUM TESTS (Selenium on Rails)
 
-This testing style is deprecated and are being moved over to Selenium via RSpec stories by lukemelia (See #4 below for the new style).
- 
-To run selenium tests, start Tracks in test mode using
+This testing style is deprecated and are being moved over to Selenium via Cucumber.
 
-  script/server -e test
- 
-Then open a browser to
+See the wiki for more information to run the tests that are not yet migrated
 
-  http://localhost:3000/selenium/
-  
-and interact with the test runner.
+6. RSPEC tests
 
-For more information about Selenium on Rails, see vendor/plugins/selenium-on-rails/README
+To run the RSpec tests run
 
-4. RSPEC STORY RUNNER TESTS
+  rake spec
 
-To run the stories, which are browser tests using selenium, start Tracks in test mode using
+7. Cucumber tests
 
-  rake db:test:prepare
-  script/server -e test
- 
-Then start Selenium by running
+To run the cucumber test run
 
-  selenium
- 
-which is a script installed with the Selenium gem (sudo gem install Selenium)
+  rake cucumber
 
-Once the site and selenium server are running, then run all stories with
+and for those using javascript/ajax use
 
-  script/story
-
-or a specific set with
-
-  script/story stories/login/*.story
+  rake cucumber:selenium
