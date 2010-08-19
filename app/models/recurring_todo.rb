@@ -717,6 +717,15 @@ class RecurringTodo < ActiveRecord::Base
     self.save
   end
 
+  def clear_todos_association
+    unless todos.nil?
+      self.todos.each do |t|
+        t.recurring_todo = nil
+        t.save
+      end
+    end
+  end
+  
   def inc_occurences
     self.occurences_count += 1
     self.save
