@@ -7,10 +7,14 @@
 * Forum: http://getontracks.org/forums/
 * Mailing list: http://lists.rousette.org.uk/mailman/listinfo/tracks-discuss
 * Original developer: bsag (http://www.rousette.org.uk/)
-* Contributors: http://getontracks.org/wiki/Tracks/Contributing/Contributors
-* Version: 1.7.1
+* Contributors: http://getontracks.org/wiki/Contributors/
+* Version: 1.7.2
 * Copyright: (cc) 2004-2010 rousette.org.uk.
 * License:  GNU GPL
+
+== Version 1.7.2
+
+This is a bugfix release. New feature development is done on the 2.0 development tree.
 
 == Version 1.7.1
 
@@ -18,7 +22,7 @@ This is a bugfix release. New feature development is done on the 2.0 development
 
 New features in 1.7.1:
 1. you can now add a new todo from the calendar view
-2. user naems can now contain dots (.)
+2. user names can now contain dots (.)
 3. support onenote urls (hyperlinks to Microsoft OneNote elements)
 
 Under the hood:
