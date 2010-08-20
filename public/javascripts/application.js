@@ -87,6 +87,21 @@ var TracksForm = {
                 submit_with_ajax_and_block_element('form#todo-form-multi-new-action', $(this));
             return false;
         });
+
+        $('input[class=predecessor_add_button]').live('click', function(){
+            var text = $('input[name=predecessor]').val();
+            if (text.length > 0) {
+                $('ul#predecessor_ul').show();
+                if (text.length > 35) {
+                    text = text.substring(0,35)+"...";
+                }
+                var html = $('ul#predecessor_ul').html();
+                var new_li = "<li><input class=\"pred_remove_button\" type=\"button\" value=\"x\"/> "+ text + "</li>";
+                $('ul#predecessor_ul').html(html + new_li);
+                $('input[name=predecessor]').val('');
+                $('input[name=predecessor]').focus();
+            }
+        });
     }
 }
 

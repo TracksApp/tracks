@@ -36,6 +36,16 @@
 
     <label for="predecessor_list"><%= Todo.human_attribute_name('predecessors')%></label>
     <%= text_field_tag "predecessor_list", nil, :size => 30, :tabindex => 8 %>
+
+    <div class="predecessor_add_button_box">
+      <input class="predecessor_add_button" type="button" value="Add"/>
+    </div>
+
+    <div class="selected_predecessors">
+      <ul id="predecessor_ul" style="display:none">
+      </ul>
+    </div>
+
     <%= source_view_tag( @source_view ) %>
     <%= hidden_field_tag :_tag_name, @tag_name.underscore.gsub(/\s+/,'_') if source_view_is :tag %>
 

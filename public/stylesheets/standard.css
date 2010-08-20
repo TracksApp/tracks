@@ -342,8 +342,26 @@ div#input_box {
 
 #input_box ul {list-style-type: circle; font-size: 0.9em;}
 
-.show_from_input, .due_input, .project_input, .context_input {
+#input_box ul#predecessor_ul {
+    list-style-type: none;
+    color: 0;
+}
+
+.show_from_input, .due_input, .project_input, .context_input,
+.predecessor_input {
     float:left;
+}
+
+.predecessor_add_button_box {
+    float:right;
+}
+
+#input_box input.pred_remove_button {
+    width:1.3em;
+}
+
+.selected_predecessors {
+    clear:right;
 }
 
 .box {
