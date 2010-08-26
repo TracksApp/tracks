@@ -12,7 +12,7 @@ select "todo_context_id", "label=call"
 select "todo_project_id", "label=Make more money than Billy Gates"
 select "todo_due_3i", "label=1"
 select "todo_due_2i", "label=January"
-select "todo_due_1i", "label=2009"
+select "todo_due_1i", "label=2011"
 click_and_wait "//input[@value='Create']"
 
 wait_for_text 'css=h1 span.count', '12'
