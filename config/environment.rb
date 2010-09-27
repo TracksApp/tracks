@@ -96,4 +96,4 @@ if ( SITE_CONFIG['authentication_schemes'].include? 'open_id')
   OpenID::Util.logger = RAILS_DEFAULT_LOGGER
 end
     
-TRACKS_VERSION='1.7.1'
+TRACKS_VERSION='1.7.2'
