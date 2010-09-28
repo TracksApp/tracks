@@ -19,8 +19,9 @@ config.action_mailer.delivery_method = :test
 # Disable request forgery protection in test environment
 config.action_controller.allow_forgery_protection    = false
 
-# Unique cookies
-config.action_controller.session = { :key => 'TracksTest' }
+# Unique cookies and use cookies for session
+config.action_controller.session_store = :cookie_store
+config.action_controller.session = { :key => 'TracksTest', :secret => SITE_CONFIG['salt'] * (30.0 /  SITE_CONFIG['salt'].length).ceil }
 
 # Overwrite the default settings for fixtures in tests. See Fixtures 
 # for more details about these settings.
