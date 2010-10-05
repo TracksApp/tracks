@@ -22,7 +22,7 @@ class ContextsController < ApplicationController
       format.rss  &render_contexts_rss_feed
       format.atom &render_contexts_atom_feed
       format.text { render :action => 'index', :layout => false, :content_type => Mime::TEXT }
-      format.autocomplete { render :text => for_autocomplete(@active_contexts + @hidden_contexts, params[:q])}
+      format.autocomplete { render :text => for_autocomplete(@active_contexts + @hidden_contexts, params[:term])}
     end
   end
   

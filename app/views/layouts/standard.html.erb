@@ -4,7 +4,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <%= stylesheet_link_tag 'standard','superfish','niftyCorners', 'jquery-ui-1.8.5.custom', :cache => true %>
     <%= stylesheet_link_tag "print", :media => "print" %>
-    <%= javascript_include_tag 'jquery-1.4.2.min', 'jquery-ui-1.8.5.custom.min', 'jquery.truncator', 'jquery.jeditable.mini', 'jquery.cookie', :cache => 'jquery-all' %>
+    <%= javascript_include_tag 'jquery-1.4.2.min', 'jquery-ui-1.8.5.custom.min', 'jquery.truncator', 
+      'jquery.jeditable.mini', 'jquery.cookie', 'jquery.blockUI', :cache => 'jquery-all' %>
     <%= javascript_include_tag 'hoverIntent','superfish','application',
       'accesskey-hints','niftycube','swfobject', :cache => 'tracks' %>
     <%= javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? %>
@@ -19,6 +20,10 @@
       <% if @prefs.refresh != 0 -%>
         setup_auto_refresh(<%= @prefs["refresh"].to_i*60000 %>);
       <% end -%>
+      <% unless @controller_name == 'feed' or session['noexpiry'] == "on" -%>
+        setup_periodic_check("<%=url_for(:controller => "login", :action => "check_expiry")%>", 5*60);
+      <% end -%>
+      setup_periodic_check("<%=check_deferred_todos_path(:format => 'js')%>", 10*60, 'POST');
     </script>
     <link rel="shortcut icon" href="<%= url_for(:controller => 'favicon.ico') %>" />
     <%= auto_discovery_link_tag(:rss, {:controller => "todos", :action => "index", :format => 'rss', :token => "#{current_user.token}"}, {:title => t('layouts.next_actions_rss_feed')}) %>
@@ -84,13 +89,6 @@
     </div>
 
     <div id="content" class="<%= @controller.controller_name %>">
-      <% unless @controller_name == 'feed' or session['noexpiry'] == "on" -%>
-        <%= periodically_call_remote( :url => {:controller => "login", :action => "check_expiry"},
-          :frequency => (5*60)) %>
-      <% end -%>
-      <%= periodically_call_remote( :url => check_deferred_todos_path(:format => 'js'),
-        :method => :post,
-        :frequency => (10*60)) %>
       <%= yield %>
     </div>
 

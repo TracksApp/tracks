@@ -14,8 +14,9 @@
     <% else -%>
       '<%= project.default_tags -%>' as the default tags.
     <% end -%>
-    <%=  link_to_remote(
-      "Edit Project Settings",
+      <a class ="project_edit_settings" id="link_edit_<%=dom_id(project)-%>" href="<%=url_for(:controller => 'projects', :action => 'edit', :id => project.id)%>">Edit Project Settings</a>
+    <%#=  link_to_remote(
+      "",
       :url => {:controller => 'projects', :action => 'edit', :id => project.id},
       :method => 'get',
       :with => "'_source_view=#{@source_view}'",

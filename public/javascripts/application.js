@@ -129,10 +129,12 @@ function setup_container_toggles(){
       });
   // set to cookied state
   $('.container.context').each(function(){
-      if($.cookie(todoItems.buildCookieName(this))){
+      if($.cookie(todoItems.buildCookieName(this))=="true"){
         imgSrc = $(this).find('.container_toggle img').attr('src');
-        $(this).find('.container_toggle img').attr('src', imgSrc.replace('collapse', 'expand'));
-        $(this).find('.toggle_target').hide();
+        if (imgSrc) {
+          $(this).find('.container_toggle img').attr('src', imgSrc.replace('collapse', 'expand'));
+          $(this).find('.toggle_target').hide();
+        }
       }
   });
 }
@@ -204,11 +206,11 @@ function enable_rich_interaction(){
    * resulted in a dropdown box that could not be removed. We remove all
    * autocomplete boxes the hard way */
   $('.ac_results').remove();
-  $('input.Date').datepicker({'dateFormat': dateFormat, 'firstDay': weekStart});
+  $('input.Date').datepicker({'dateFormat': dateFormat, 'firstDay': weekStart, 'showAnim': 'fold'});
   /* Autocomplete */
-  $('input[name=context_name]').autocomplete(
-    relative_to_root('contexts.autocomplete'), {matchContains: true});
-  $('input[name=project[default_context_name]]').autocomplete(
+  $('input[name=context_name]').autocomplete({
+    source: relative_to_root('contexts.autocomplete') });
+  /* $('input[name=project[default_context_name]]').autocomplete(
     relative_to_root('contexts.autocomplete'), {matchContains: true});
   $('input[name=project_name]').autocomplete(
     relative_to_root('projects.autocomplete'), {matchContains: true});
@@ -298,6 +300,20 @@ function setup_auto_refresh(interval){
       });
 }
 
+function setup_periodic_check(url_for_check, interval_in_sec, method) {
+  ajaxMethod = "GET"
+  if (method) { ajaxMethod = method; }
+
+  function check_remote() {
+      $.ajax({
+          type: ajaxMethod,
+          url: url_for_check,
+          dataType: 'script'
+      });
+  }
+  setInterval(check_remote, interval_in_sec*100);
+}
+
 $(document).ready(function() {
   $('#search-form #search').focus();
 
@@ -372,6 +388,19 @@ $(document).ready(function() {
             complete: function() { itemContainer.unblock();},
             dataType: 'script'});
     return false;
+  });
+
+  /* set behavior for edit project settings link */
+  $("a.project_edit_settings").live('click', function (ev) {
+     $.ajax({
+         url: this.href,
+         async: false,
+         project_dom_id: 'project_'+this.id,
+         dataType: 'script',
+         beforeSend: function() {$(this.project_dom_id).block({message: null});},
+         complete:function() {$(this.project_dom_id).unblock();; enable_rich_interaction();}
+         });
+     return false;
   });
 
   setup_container_toggles();
