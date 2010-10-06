@@ -20,6 +20,8 @@ module NavigationHelpers
       notes_path
     when /the contexts page/
       contexts_path
+    when /the projects page/
+      projects_path
     when /the manage users page/
       users_path
     when /the repeating todos page/
@@ -44,6 +46,8 @@ module NavigationHelpers
       context_path(User.find_by_login($2).contexts.find_by_name($1))
     when /the "([^\"]*)" project for user "([^\"]*)"/i
       project_path(User.find_by_login($2).projects.find_by_name($1))
+    when /the "([^\"]*)" project/i
+      project_path(@current_user.projects.find_by_name($1))
 
       # Add more mappings here.
       # Here is an example that pulls values out of the Regexp:

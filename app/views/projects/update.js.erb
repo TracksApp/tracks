@@ -2,7 +2,7 @@
   pageNotify('notice', '<%=t('projects.project_saved_status')%>', 5);
   <% if source_view_is :project_list -%>
     <% if @state_changed -%>
-    <% else -%>
+    <% else # TODO!!!-%>
     <% end -%>
   <% else # source_view must be :project %>
     $('#<%=dom_id(@project, 'edit')%>').hide();

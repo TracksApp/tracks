@@ -1,4 +1,4 @@
-Feature: Manage a project
+Feature: Edit a project
 
   In order to reach a goal by doing several related todos
   As a Tracks user
