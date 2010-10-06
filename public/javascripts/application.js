@@ -281,6 +281,20 @@ function enable_rich_interaction(){
   field_touched = false;
 
   $('h2#project_name').editable(save_project_name, {style: 'padding:0px', submit: "OK"});
+
+    /* set behavior for edit project settings link */
+  $("a.project_edit_settings").live('click', function (ev) {
+     $.ajax({
+         url: this.href,
+         project_dom_id: 'project_'+this.id,
+         dataType: 'script',
+         beforeSend: function() {$(this.project_dom_id).block({message: null});},
+         complete:function() {$(this.project_dom_id).unblock(); enable_rich_interaction();}
+         });
+     return false;
+  });
+
+  $("form.edit-project-form button.positive").live('click', function (ev) { $('form.edit-project-form').ajaxSubmit({type: 'POST', async: false}); return false; });
 }
 
 /* Auto-refresh */
@@ -298,6 +312,14 @@ function setup_auto_refresh(interval){
         field_touched = true;
         });
       });
+}
+
+function pageNotify(type, message, fade_duration_in_sec) {
+  flash = $('h4#flash');
+  flash.html("<h4 id=\'flash\' class=\'alert "+type+"\'>"+message+"</h4>");
+  flash = $('h4#flash');
+  flash.show();
+  flash.fadeOut(fade_duration_in_sec*1000);
 }
 
 function setup_periodic_check(url_for_check, interval_in_sec, method) {
@@ -388,19 +410,6 @@ $(document).ready(function() {
             complete: function() { itemContainer.unblock();},
             dataType: 'script'});
     return false;
-  });
-
-  /* set behavior for edit project settings link */
-  $("a.project_edit_settings").live('click', function (ev) {
-     $.ajax({
-         url: this.href,
-         async: false,
-         project_dom_id: 'project_'+this.id,
-         dataType: 'script',
-         beforeSend: function() {$(this.project_dom_id).block({message: null});},
-         complete:function() {$(this.project_dom_id).unblock();; enable_rich_interaction();}
-         });
-     return false;
   });
 
   setup_container_toggles();

@@ -5,7 +5,7 @@
     <%= stylesheet_link_tag 'standard','superfish','niftyCorners', 'jquery-ui-1.8.5.custom', :cache => true %>
     <%= stylesheet_link_tag "print", :media => "print" %>
     <%= javascript_include_tag 'jquery-1.4.2.min', 'jquery-ui-1.8.5.custom.min', 'jquery.truncator', 
-      'jquery.jeditable.mini', 'jquery.cookie', 'jquery.blockUI', :cache => 'jquery-all' %>
+      'jquery.jeditable.mini', 'jquery.cookie', 'jquery.blockUI', 'jquery.form', :cache => 'jquery-all' %>
     <%= javascript_include_tag 'hoverIntent','superfish','application',
       'accesskey-hints','niftycube','swfobject', :cache => 'tracks' %>
     <%= javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? %>

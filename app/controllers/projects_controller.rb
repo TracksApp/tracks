@@ -129,7 +129,7 @@ class ProjectsController < ApplicationController
         @hidden_projects_count = current_user.projects.hidden.count
         @completed_projects_count = current_user.projects.completed.count
         init_data_for_sidebar
-        render :template => 'projects/update.js.rjs'
+        render :template => 'projects/update.js.erb'
         return
       elsif boolean_param('update_status')
         render :template => 'projects/update_status.js.rjs'
@@ -151,10 +151,10 @@ class ProjectsController < ApplicationController
       end
     else
       init_data_for_sidebar
-      render :template => 'projects/update.js.rjs'
+      render :template => 'projects/update.js.erb'
       return
     end
-    render :template => 'projects/update.js.rjs'
+    render :template => 'projects/update.js.erb'
   end
   
   def edit
