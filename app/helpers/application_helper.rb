@@ -130,15 +130,6 @@ module ApplicationHelper
   def render_flash
     render :partial => 'shared/flash', :locals => { :flash => flash }
   end
-  
-  # Display a flash message in RJS templates Usage: page.notify :warning, "This
-  # is the message", 5.0 Puts the message into a flash of type 'warning', fades
-  # over 5 secs
-  def notify(type, message, fade_duration)
-    type = type.to_s  # symbol to string
-    page.replace 'flash', "<h4 id='flash' class='alert #{type}'>#{message}</h4>" 
-    page.visual_effect :fade, 'flash', :duration => fade_duration
-  end
 
   def recurrence_time_span(rt)
     case rt.ends_on
