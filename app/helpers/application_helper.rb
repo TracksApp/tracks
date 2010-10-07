@@ -117,6 +117,14 @@ module ApplicationHelper
       {:id => "link_edit_#{dom_id(project)}", :class => "project_edit_settings"})
   end
   
+  def link_to_delete_project(project, descriptor = sanitize(project.name))
+    link_to(
+      descriptor,
+      project_path(project, :format => 'js'),
+      {:id => "delete_project_#{project.id}", :class => "delete_project_button", :title => "#{t('projects.delete_project_title')} '#{project.name}'"}
+    )
+  end
+  
   def link_to_project_mobile(project, accesskey, descriptor = sanitize(project.name))
     link_to( descriptor, project_path(project, :format => 'm'), {:title => "View project: #{project.name}", :accesskey => accesskey} )
   end

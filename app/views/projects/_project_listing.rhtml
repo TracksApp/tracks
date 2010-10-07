@@ -14,11 +14,8 @@ suppress_edit_button ||= false
     </div>
     <div class="buttons">
       <span class="grey"><%= project.current_state.to_s.upcase %></span>
-
-      <a class="delete_project_button" id="delete_project_<%= project.id%> " href="<%= project_path(project, :format => 'js') %>"
-         title="<%= t('projects.delete_project_title') %> '<%= project.name %>'">
-           <%= image_tag( "blank.png", :title => t('projects.delete_project'), :class=>"delete_item") %>
-      </a>
+      
+      <%= link_to_delete_project(project, image_tag( "blank.png", :title => t('projects.delete_project'), :class=>"delete_item")) %>
 
       <% unless suppress_edit_button -%>
         <%= link_to_edit_project(project, image_tag( "blank.png", :title => t('projects.edit_project_title'), :class=>"edit_item")) %>
