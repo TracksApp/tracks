@@ -1,69 +1,101 @@
 <% if @saved -%>
+
   pageNotify('notice', '<%=t('projects.project_saved_status')%>', 5);
+
   <% if source_view_is :project_list -%>
+
     <% if @state_changed -%>
-    <% else # TODO!!!-%>
+      remove_project();
+      add_project();
+    <% else -%>
+      replace_project();
     <% end -%>
-  <% else # source_view must be :project %>
-    $('#<%=dom_id(@project, 'edit')%>').hide();
-    $('#<%=dom_id(@project, 'container')%>').html("<%= escape_javascript(render(:partial => 'project_settings', :locals => { :project => @project })) %> ");
-    $('#<%=dom_id(@project)%>').show();
-    $('input#todo_project_name').val("<%= escape_javascript(@project.name)%>");
+
+    update_sortable();
+    ProjectListPage.update_state_count(<%=@active_projects_count%>, <%=@hidden_projects_count%>, <%=@completed_projects_count%>)
+    ProjectListPage.show_or_hide_state_container(<%= @show_active_projects %>, <%= @show_hidden_projects %>, <%= @show_completed_projects %>);
+
+  <% else # assume source_view :project %>
+
+    remove_project_edit_form();
+    update_and_show_project_settings();
+
+    TracksForm.set_project_name("<%= escape_javascript(@project.name)%>");
     <% if @project.default_context %>
-      $('input#todo_context_name').val("<%= escape_javascript(@project.default_context.name)%>");
-      $('input[name=default_context_name]').val('<%= escape_javascript(@project.default_context.name)%>');
+      TracksForm.set_context_name_and_default_context_name("<%= escape_javascript(@project.default_context.name)%>");
     <% end %>
     <% if @project.default_tags %>
-      $('input#tag_list').val("<%= escape_javascript(@project.default_tags)%>");
+      TracksForm.set_tag_list("<%= escape_javascript(@project.default_tags)%>");
     <% end %>
+
+    update_sidebar();
+
   <% end %>
-  $('#default_project_name_id').val('<%= escape_javascript(@project.name)%>');
-  $('input#todo_project_name').val("<%= escape_javascript(@project.name)%>");
-  $('#project_name').html("<%= escape_javascript(@project.name)%>");
-  $('#sidebar').html("<%= escape_javascript(render(:file => 'sidebar/sidebar.html.erb')) %>");
+
+  TracksForm.set_project_name_and_default_project_name("<%= escape_javascript(@project.name)%>");
+
 <% else -%>
-  $('div#error_status').html("<%= escape_javascript(error_messages_for('project')) %>");
-  $('div#error_status').show();
+  show_errors();
 <% end %>
+
 enable_rich_interaction();
 
-<%# *page << "console.log(\"hello\");"%>
-<%# *if @saved%>
-<%# *status_message = 'Project saved'%>
-<%# *page.notify :notice, status_message, 5.0%>
-<%# *if source_view_is :project_list%>
-<%# *if @state_changed%>
-<%#*page[dom_id(@project, 'container')].remove%>
-<%#*page.insert_html :bottom, "list-#{@project.state}-projects", :partial => 'project_listing', :object => @project%>
-<%# *else%>
-<%#*page.replace_html dom_id(@project, 'container'), :partial => 'project_listing', :object => @project%>
-<%# *end%>
-<%#*page.sortable "list-#{@project.state}-projects", get_listing_sortable_options("list-#{@project.state}-projects")%>
-<%#*page.replace_html "active-projects-count", @active_projects_count%>
-<%#*page.replace_html "hidden-projects-count", @hidden_projects_count%>
-<%#*page.replace_html "completed-projects-count", @completed_projects_count%>
+function show_errors() {
+  $('div#error_status').html(html_for_error_messages());
+  $('div#error_status').show();
+}
 
-<%#*page.set_element_visible("list-hidden-projects-container", @hidden_projects_count > 0)%>
-<%#*page.set_element_visible("list-active-projects-container", @active_projects_count > 0)%>
-<%#*page.set_element_visible("list-completed-projects-container", @completed_projects_count > 0)%>
-<%# *else%>
-<%# *page[dom_id(@project, 'edit')].hide%>
-<%# *page.replace_html dom_id(@project, 'container'), :partial => 'project_settings', :locals => { :project => @project }%>
-<%# *page[dom_id(@project)].show%>
+function remove_project_edit_form() {
+  $('#<%=dom_id(@project, 'edit')%>').hide(500);
+}
 
-<%# *page['todo_context_name'].value = @project.default_context.name if @project.default_context%>
-<%# *page['#todo_project_name'].value = @project.name%>
-<%# *page['tag_list'].value = @project.default_tags if @project.default_tags%>
-<%# *page << "$('input[name=default_context_name]').val('#{@project.default_context.name}');" if @project.default_context%>
-<%# *end%>
+function update_and_show_project_settings() {
+  $('#<%=dom_id(@project, 'container')%>').html(html_for_project_settings());
+  $('#<%=dom_id(@project)%>').show();
+}
 
-<%# *page['default_project_name_id'].value = @project.name%>
-<%# *page['todo_project_name'].value = @project.name%>
-<%# *page.replace_html "project_name", @project.name%>
+function update_sidebar() {
+  $('#sidebar').html();
+}
 
-<%# *page.replace_html "sidebar", :file => 'sidebar/sidebar.html.erb'%>
-<%# *else%>
-<%# *page.show 'error_status'%>
-<%# *page.replace_html 'error_status', "#{error_messages_for('project')}"%>
-<%# *end%>
-<%# *page << "enable_rich_interaction();"%>
+function update_sortable() {
+  <%#* page.sortable "list-#{@project.state}-projects", get_listing_sortable_options("list-#{@project.state}-projects")%>
+  console.log("Pending: update_sortable() on update project");
+}
+
+function replace_project() {
+  $('#<%=dom_id(@project, 'container')%>').fadeOut(500, function() {
+    $('#<%=dom_id(@project, 'container')%>').html(html_for_project_listing());
+    $('#<%=dom_id(@project, 'container')%>').fadeIn(500);
+  });
+}
+
+function remove_project() {
+  $('#<%=dom_id(@project, 'container')%>').slideUp(500, function() {
+    $('#<%=dom_id(@project, 'container')%>').remove();});
+}
+
+function add_project() {
+  $('#list-<%=@project.state%>-projects').append(html_for_project_listing);
+}
+
+<%
+# the following functions return empty string if rendering the partial is not
+# necessary, for example the sidebar is not on the project list page, so do not
+# render it into the function. 
+-%>
+function html_for_project_listing() {
+  return "<%= source_view_is(:project_list) ? escape_javascript(render(:partial => 'project_listing', :locals => { :project_listing => @project })) : "" %>";
+}
+
+function html_for_sidebar() {
+  return "<%= source_view_is(:project) ? escape_javascript(render(:file => 'sidebar/sidebar.html.erb')) : "" %>";
+}
+
+function html_for_project_settings() {
+  return "<%= source_view_is(:project) ? escape_javascript(render(:partial => 'project_settings', :locals => { :project => @project })) : "" %>";
+}
+
+function html_for_error_messages() {
+  return "<%= escape_javascript(error_messages_for('project')) %>";
+}

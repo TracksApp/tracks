@@ -110,6 +110,12 @@ module ApplicationHelper
   def link_to_project(project, descriptor = sanitize(project.name))
     link_to( descriptor, project_path(project), :title => "View project: #{project.name}" )
   end
+
+  def link_to_edit_project (project, descriptor = sanitize(project.name))
+    link_to(descriptor,
+      url_for({:controller => 'projects', :action => 'edit', :id => project.id}),
+      {:id => "link_edit_#{dom_id(project)}", :class => "project_edit_settings"})
+  end
   
   def link_to_project_mobile(project, accesskey, descriptor = sanitize(project.name))
     link_to( descriptor, project_path(project, :format => 'm'), {:title => "View project: #{project.name}", :accesskey => accesskey} )

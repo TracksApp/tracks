@@ -125,9 +125,7 @@ class ProjectsController < ApplicationController
           @project_not_done_counts[@project.id] = @project.reload().not_done_todos_including_hidden.count
         end
         @contexts = current_user.contexts
-        @active_projects_count = current_user.projects.active.count
-        @hidden_projects_count = current_user.projects.hidden.count
-        @completed_projects_count = current_user.projects.completed.count
+        update_state_counts
         init_data_for_sidebar
         render :template => 'projects/update.js.erb'
         return
@@ -166,11 +164,12 @@ class ProjectsController < ApplicationController
   def destroy
     @project.recurring_todos.each {|rt| rt.remove_from_project!}
     @project.destroy
-    @active_projects_count = current_user.projects.active.count
-    @hidden_projects_count = current_user.projects.hidden.count
-    @completed_projects_count = current_user.projects.completed.count
+
     respond_to do |format|
-      format.js { @down_count = current_user.projects.size }
+      format.js {
+        @down_count = current_user.projects.size
+        update_state_counts
+      }
       format.xml { render :text => "Deleted project #{@project.name}" }
     end
   end
@@ -201,7 +200,16 @@ class ProjectsController < ApplicationController
   end
   
   protected
-    
+
+  def update_state_counts
+    @active_projects_count = current_user.projects.active.count
+    @hidden_projects_count = current_user.projects.hidden.count
+    @completed_projects_count = current_user.projects.completed.count
+    @show_active_projects = @active_projects_count > 0
+    @show_hidden_projects = @hidden_projects_count > 0
+    @show_completed_projects = @completed_projects_count > 0
+  end
+
   def render_projects_html
     lambda do
       @page_title = t('projects.list_projects')

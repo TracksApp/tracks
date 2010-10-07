@@ -26,6 +26,37 @@ var TracksForm = {
     toggle_overlay: function () {
         el = document.getElementById("overlay");
         el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
+    },
+    set_project_name: function (name) {
+        $('input#todo_project_name').val(name);
+    },
+    set_context_name_and_default_context_name: function (name) {
+        $('input#todo_context_name').val(name);
+        $('input[name=default_context_name]').val(name);
+    },
+    set_project_name_and_default_project_name: function (name) {
+      $('#default_project_name_id').val(name);
+      $('input#todo_project_name').val();
+      $('#project_name').html(name);
+    },
+    set_tag_list: function (name) {
+        $('input#tag_list').val(name);
+    }
+}
+
+var ProjectListPage = {
+    update_state_count: function (active, hidden, completed) {
+      $('#active-projects-count').html(active);
+      $('#hidden-projects-count').html(hidden);
+      $('#completed-projects-count').html(completed);
+    },
+    show_or_hide_state_container: function (show_active, show_hidden, show_completed) {
+      active = $('#list-active-projects-container');
+      hidden = $('#list-hidden-projects-container');
+      completed = $('#list-completed-projects-container');
+      if (show_active) { active.show(); } else { active.hide(); }
+      if (show_hidden) { hidden.show(); } else { hidden.hide(); }
+      if (show_completed) { completed.show(); } else { completed.hide(); }
     }
 }
 
@@ -282,10 +313,11 @@ function enable_rich_interaction(){
 
   $('h2#project_name').editable(save_project_name, {style: 'padding:0px', submit: "OK"});
 
-    /* set behavior for edit project settings link */
+  /* set behavior for edit project settings link */
   $("a.project_edit_settings").live('click', function (ev) {
      $.ajax({
          url: this.href,
+         async: true,
          project_dom_id: 'project_'+this.id,
          dataType: 'script',
          beforeSend: function() {$(this.project_dom_id).block({message: null});},
@@ -314,12 +346,16 @@ function setup_auto_refresh(interval){
       });
 }
 
-function pageNotify(type, message, fade_duration_in_sec) {
+function page_notify(type, message, fade_duration_in_sec) {
   flash = $('h4#flash');
   flash.html("<h4 id=\'flash\' class=\'alert "+type+"\'>"+message+"</h4>");
   flash = $('h4#flash');
   flash.show();
   flash.fadeOut(fade_duration_in_sec*1000);
+}
+
+function set_page_badge(count) {
+    $('#badge_count').html(count);
 }
 
 function setup_periodic_check(url_for_check, interval_in_sec, method) {

@@ -1,5 +1,5 @@
 newHtml = "<%= escape_javascript(render(:partial => 'project_form', :locals => { :project_form => @project })) %>"
 $('div#<%=dom_id(@project, 'edit')%>').html(newHtml);
 $('div#<%=dom_id(@project)%>').hide();
-$('div#<%=dom_id(@project, 'edit')%>').show();
+$('div#<%=dom_id(@project, 'edit')%>').show(500);
 $('input.project-name').focus();

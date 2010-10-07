@@ -13,24 +13,15 @@ suppress_edit_button ||= false
       <%= link_to_project( project ) %><%= " (" + count_undone_todos_and_notes_phrase(project,"actions") + ")" %>
     </div>
     <div class="buttons">
-      <span class="grey"><%= t('states.' + project.current_state.to_s).upcase %></span>
-      <a class="delete_project_button"
-         href="<%= project_path(project, :format => 'js') %>"
-         title="<%= t('projects.delete_project_title') %> '<%= project.name %>'"><%= image_tag( "blank.png",
-             :title => t('projects.delete_project'),
-          :class=>"delete_item") %></a>
+      <span class="grey"><%= project.current_state.to_s.upcase %></span>
+
+      <a class="delete_project_button" id="delete_project_<%= project.id%> " href="<%= project_path(project, :format => 'js') %>"
+         title="<%= t('projects.delete_project_title') %> '<%= project.name %>'">
+           <%= image_tag( "blank.png", :title => t('projects.delete_project'), :class=>"delete_item") %>
+      </a>
 
       <% unless suppress_edit_button -%>
-        <%=  link_to_remote(
-          image_tag( "blank.png", :title => t('projects.edit_project_title'), :class=>"edit_item"),
-          :url => {:controller => 'projects', :action => 'edit', :id => project.id},
-          :method => 'get',
-          :with => "'_source_view=#{@source_view}'",
-          :before => "$('#{dom_id(project)}').block({message:null});",
-          :complete => "$('#{dom_id(project)}').unblock();enable_rich_interaction();",
-          :html => {:id => "link_edit_#{dom_id(project)}"}
-        ) %>
-
+        <%= link_to_edit_project(project, image_tag( "blank.png", :title => t('projects.edit_project_title'), :class=>"edit_item")) %>
       <% end -%>
     </div>
   </div>
