@@ -8,8 +8,8 @@ Feature: Edit a project
     Given the following user record
       | login    | password | is_admin |
       | testuser | secret   | false    |
-    And I have logged in as "testuser" with password "secret"
     And there exists a project "manage me" for user "testuser"
+    And I have logged in as "testuser" with password "secret"
 
   @selenium
   Scenario: I can describe the project using markup

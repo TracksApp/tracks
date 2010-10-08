@@ -42,8 +42,8 @@ end
 
 When /^I edit the project name to "([^\"]*)"$/ do |new_title|
   click_link "link_edit_project_#{@project.id}"
-
-  # no need to wait for the form because the AJAX loading should not be async!
+  selenium.wait_for_element("xpath=//div[@id='edit_project_#{@project.id}']/form//button[@id='submit_project_#{@project.id}']")
+  
   fill_in "project[name]", :with => new_title
 
   # changed to make sure selenium waits until the saving has a result either
@@ -59,6 +59,28 @@ When /^I edit the project name of "([^"]*)" to "([^"]*)"$/ do |project_current_n
   @project = @current_user.projects.find_by_name(project_current_name)
   @project.should_not be_nil
   When "I edit the project name to \"#{project_new_name}\""
+end
+
+
+When /^I edit the project state of "([^"]*)" to "([^"]*)"$/ do |project_name, state_name|
+  project = @current_user.projects.find_by_name(project_name)
+  project.should_not be_nil
+
+  click_link "link_edit_project_#{project.id}"
+  selenium.wait_for_element("xpath=//div[@id='edit_project_#{project.id}']/form//button[@id='submit_project_#{project.id}']")
+
+  choose "project_state_#{state_name}"
+
+  # changed to make sure selenium waits until the saving has a result either
+  # positive or negative. Was: :element=>"flash", :text=>"Project saved"
+  # we may need to change it back if you really need a positive outcome, i.e.
+  # this step needs to fail if the project was not saved successfully
+  selenium.click "submit_project_#{project.id}",
+    :wait_for => :text,
+    :text => /(Project saved|1 error prohibited this project from being saved)/
+
+  selenium.wait_for_element("list-#{state_name}-projects-container")
+
 end
 
 Then /^I should see the bold text "([^\"]*)" in the project description$/ do |bold|

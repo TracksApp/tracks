@@ -8,7 +8,7 @@
       remove_project();
       add_project();
     <% else -%>
-      replace_project();
+      replace_project_form_with_updated_project();
     <% end -%>
 
     update_sortable();
@@ -59,12 +59,12 @@ function update_sidebar() {
 }
 
 function update_sortable() {
-  <%#* page.sortable "list-#{@project.state}-projects", get_listing_sortable_options("list-#{@project.state}-projects")%>
+  <%#* page.sortable "list-#{@project.state}-projects", get_listing_sortable_options("list-#{@project.state}-projects")-%>
   console.log("Pending: update_sortable() on update project");
 }
 
-function replace_project() {
-  $('#<%=dom_id(@project, 'container')%>').fadeOut(500, function() {
+function replace_project_form_with_updated_project() {
+  $('#<%=dom_id(@project, 'container')%>').fadeOut(250, function() {
     $('#<%=dom_id(@project, 'container')%>').html(html_for_project_listing());
     $('#<%=dom_id(@project, 'container')%>').fadeIn(500);
   });

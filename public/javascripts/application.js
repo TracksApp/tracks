@@ -312,21 +312,6 @@ function enable_rich_interaction(){
   field_touched = false;
 
   $('h2#project_name').editable(save_project_name, {style: 'padding:0px', submit: "OK"});
-
-  /* set behavior for edit project settings link */
-  $("a.project_edit_settings").live('click', function (ev) {
-     $.ajax({
-         url: this.href,
-         async: true,
-         project_dom_id: 'project_'+this.id,
-         dataType: 'script',
-         beforeSend: function() {$(this.project_dom_id).block({message: null});},
-         complete:function() {$(this.project_dom_id).unblock(); enable_rich_interaction();}
-         });
-     return false;
-  });
-
-  $("form.edit-project-form button.positive").live('click', function (ev) { $('form.edit-project-form').ajaxSubmit({type: 'POST', async: false}); return false; });
 }
 
 /* Auto-refresh */
@@ -475,11 +460,12 @@ $(document).ready(function() {
     }
   });
 
-  $('.edit-form a.negative').live('click', function(){
-      $(this).parents('.container').find('.item-show').show();
-      $(this).parents('.container').find('.project').show();
-      $(this).parents('.edit-form').hide();
-      });
+  /* for edit project form and edit todo form */
+  $('.edit-form a.negative').live('click', function(){      
+      $(this).parents('.edit-form').fadeOut(200, function () {
+      $(this).parents('.list').find('.project').fadeIn(500);
+      $(this).parents('.container').find('.item-show').fadeIn(500);
+  })});
   
   /* add behavior to clear the date both buttons for show_from and due */
   $(".date_clear").live('click', function() {
@@ -588,18 +574,35 @@ $(document).ready(function() {
       }
   });
 
+  /* set behavior for edit project settings link in projects list page and project page */
+  $("a.project_edit_settings").live('click', function (ev) {
+     $.ajax({
+         url: this.href,
+         async: true,
+         project_dom_elem: $(this).parent().parent(),
+         dataType: 'script',
+         beforeSend: function() {this.project_dom_elem.block({message: null});},
+         complete:function() {this.project_dom_elem.unblock(); enable_rich_interaction();}
+         });
+     return false;
+  });
+
+  $("form.edit-project-form button.positive").live('click', function (ev) {
+      $('form.edit-project-form').ajaxSubmit({
+          type: 'POST',
+          async: true,
+          buttons_dom_elem: $(this),
+          beforeSend: function() {
+              this.buttons_dom_elem.block({message: null});}
+      });
+      return false;
+  });
+
   $('#toggle_project_new').click(function(evt){
       TracksForm.toggle('toggle_project_new', 'project_new', 'project-form',
         '« Hide form', 'Hide new project form',
         'Create a new project »', 'Add a project');
       });
-
-  $(".project-list .edit-form a.negative").live('click', function(evt){
-      evt.preventDefault();
-      $(this).parents('.list').find('.project').show();
-      $(this).parents('.edit-form').hide();
-      $(this).parents('.edit-form').find('form').clearForm();
-  });
 
   $(".add_note_link a").live('click', function(){
       $('#new-note').show();

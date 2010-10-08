@@ -8,10 +8,10 @@ Feature: Manage the list of projects
     Given the following user record
       | login    | password | is_admin |
       | testuser | secret   | false    |
-    And I have logged in as "testuser" with password "secret"
     And there exists a project "manage me" for user "testuser"
     And there exists a project "upgrade jquery" for user "testuser"
     And there exists a project "a project name starting with a" for user "testuser"
+    And I have logged in as "testuser" with password "secret"
 
   Scenario: The list of project contain all projects
     When I go to the projects page
@@ -38,13 +38,16 @@ Feature: Manage the list of projects
     And the badge should show 2
     And the project list badge for "active" projects should show 2
 
-  @selenium
+  @selenium, @wip
   Scenario: Changing project state will move project to other state list
     When I go to the projects page
     Then the project "manage me" should be in state list "active"
+    And the project list badge for "active" projects should show 3
     When I edit the project state of "manage me" to "hidden"
     Then the project "manage me" should not be in state list "active"
     And the project "manage me" should be in state list "hidden"
+    And the project list badge for "active" projects should show 2
+    And the project list badge for "hidden" projects should show 1
 
   Scenario: Dragging a project to change list order of projects
   Scenario: Adding a new project
