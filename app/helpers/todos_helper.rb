@@ -280,8 +280,11 @@ module TodosHelper
   end
 
   def format_ical_notes(notes)
-    split_notes = notes.split(/\n/)
-    joined_notes = split_notes.join("\\n")
+    unless notes.blank?
+      split_notes = notes.split(/\n/)
+      joined_notes = split_notes.join("\\n")
+    end
+    joined_notes || ""
   end
   
   def formatted_pagination(total)
