@@ -56,8 +56,16 @@ Feature: Manage the list of projects
     When I drag the project "manage me" below "upgrade jquery"
     Then the project "upgrade jquery" should be above the project "manage me"
 
+  @selenium, @wip
+  Scenario: Hiding and unhiding the new project form
+    When I go to the projects page
+    Then the new project form should be visible
+    When I follow "« Hide form"
+    Then the new project form should not be visible
+    When I follow "Create a new project »"
+    Then the new project form should be visible
+
   Scenario: Adding a new project
   Scenario: Adding a new project and take me to the project page
-  Scenario: Hiding and unhiding the new project form
   Scenario: Sorting the project alphabetically
   Scenario: Sorting the project by number of task

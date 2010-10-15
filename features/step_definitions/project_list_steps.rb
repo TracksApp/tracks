@@ -51,3 +51,11 @@ end
 Then /^the project list badge for "([^"]*)" projects should show (\d+)$/ do |state_name, count|
   selenium.get_text("xpath=//span[@id='#{state_name}-projects-count']").should == count
 end
+
+Then /^the new project form should be visible$/ do 
+  selenium.is_visible("project_new").should == true
+end
+
+Then /^the new project form should not be visible$/ do 
+  selenium.is_visible("project_new").should == false
+end
