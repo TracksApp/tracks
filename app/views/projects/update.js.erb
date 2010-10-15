@@ -57,14 +57,16 @@ function update_sidebar() {
   $('#sidebar').html();
 }
 
-function update_sortable() {
-  <%#* page.sortable "list-#{@project.state}-projects", get_listing_sortable_options("list-#{@project.state}-projects")-%>
-  /*console.log("Pending: update_sortable() on update project");*/
-}
-
 function replace_project_form_with_updated_project() {
   $('#<%=dom_id(@project, 'container')%>').fadeOut(250, function() {
-    $('#<%=dom_id(@project, 'container')%>').html(html_for_project_listing());
+<%
+    # first add the updated project after the old one, then remove old one
+    # using html() does not work, because it will replace the _content_ of
+    # the container instead of the container itself, i.e. you will get
+    # a container within a container which will break drag-and-drop sorting
+-%>
+    $('#<%=dom_id(@project, 'container')%>').after(html_for_project_listing());
+    $('#<%=dom_id(@project, 'container')%>').remove();
     $('#<%=dom_id(@project, 'container')%>').fadeIn(500);
   });
 }
