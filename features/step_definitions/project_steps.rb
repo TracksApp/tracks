@@ -79,8 +79,9 @@ When /^I edit the project state of "([^"]*)" to "([^"]*)"$/ do |project_name, st
     :wait_for => :text,
     :text => /(Project saved|1 error prohibited this project from being saved)/
 
-  selenium.wait_for_element("list-#{state_name}-projects-container")
-
+  wait_for do # wait for the form to go away
+    !selenium.is_element_present("submit_project_#{project.id}")
+  end
 end
 
 Then /^I should see the bold text "([^\"]*)" in the project description$/ do |bold|

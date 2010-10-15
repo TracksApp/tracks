@@ -1,5 +1,4 @@
 Then /the badge should show (.*)/ do |number|
-  # puts response.body.inspect
   badge = -1
   xpath= "//span[@id='badge_count']"
 

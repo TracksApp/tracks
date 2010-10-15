@@ -51,12 +51,18 @@ var ProjectListPage = {
       $('#completed-projects-count').html(completed);
     },
     show_or_hide_state_container: function (show_active, show_hidden, show_completed) {
-      active = $('#list-active-projects-container');
-      hidden = $('#list-hidden-projects-container');
-      completed = $('#list-completed-projects-container');
-      if (show_active) { active.show(); } else { active.hide(); }
-      if (show_hidden) { hidden.show(); } else { hidden.hide(); }
-      if (show_completed) { completed.show(); } else { completed.hide(); }
+        $(["active", "hidden", "completed"]).each(function() {
+            container = $('#list-'+this+'-projects-container');
+            set_state_container_visibility(container, eval('show_'+this));
+        });
+
+      function set_state_container_visibility (container, set_visible) {
+        if (set_visible) {
+            container.slideDown("fast");
+        } else {
+            container.slideUp("fast"); 
+        }
+      }
     }
 }
 

@@ -5,8 +5,7 @@
   <% if source_view_is :project_list -%>
 
     <% if @state_changed -%>
-      remove_project();
-      add_project();
+      remove_and_re_add_project();
     <% else -%>
       replace_project_form_with_updated_project();
     <% end -%>
@@ -46,7 +45,7 @@ function show_errors() {
 }
 
 function remove_project_edit_form() {
-  $('#<%=dom_id(@project, 'edit')%>').hide(500);
+  $('#<%=dom_id(@project, 'edit')%>').hide(500, function() {$('#<%=dom_id(@project, 'edit')%>').remove();} );
 }
 
 function update_and_show_project_settings() {
@@ -60,7 +59,7 @@ function update_sidebar() {
 
 function update_sortable() {
   <%#* page.sortable "list-#{@project.state}-projects", get_listing_sortable_options("list-#{@project.state}-projects")-%>
-  console.log("Pending: update_sortable() on update project");
+  /*console.log("Pending: update_sortable() on update project");*/
 }
 
 function replace_project_form_with_updated_project() {
@@ -70,13 +69,11 @@ function replace_project_form_with_updated_project() {
   });
 }
 
-function remove_project() {
+function remove_and_re_add_project() {
   $('#<%=dom_id(@project, 'container')%>').slideUp(500, function() {
-    $('#<%=dom_id(@project, 'container')%>').remove();});
-}
-
-function add_project() {
-  $('#list-<%=@project.state%>-projects').append(html_for_project_listing);
+    $('#<%=dom_id(@project, 'container')%>').remove();
+    $('#list-<%=@project.state%>-projects').append(html_for_project_listing);
+    });
 }
 
 <%

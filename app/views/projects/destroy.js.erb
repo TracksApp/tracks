@@ -7,6 +7,6 @@ set_page_badge(<%=@down_count%>);
 function remove_deleted_project() {
   $('div#<%=dom_id(@project, "container")%>').slideUp(1000,
     function() {
-      $('div#<%=dom_id(@project, "container")%>').remove()
+      $('div#<%=dom_id(@project, "container")%>').remove();
     });
 }

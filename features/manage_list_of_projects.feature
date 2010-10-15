@@ -38,7 +38,7 @@ Feature: Manage the list of projects
     And the badge should show 2
     And the project list badge for "active" projects should show 2
 
-  @selenium, @wip
+  @selenium
   Scenario: Changing project state will move project to other state list
     When I go to the projects page
     Then the project "manage me" should be in state list "active"
@@ -49,7 +49,13 @@ Feature: Manage the list of projects
     And the project list badge for "active" projects should show 2
     And the project list badge for "hidden" projects should show 1
 
+  @selenium
   Scenario: Dragging a project to change list order of projects
+    When I go to the projects page
+    Then the project "manage me" should be above the project "upgrade jquery"
+    When I drag the project "manage me" below "upgrade jquery"
+    Then the project "upgrade jquery" should be above the project "manage me"
+
   Scenario: Adding a new project
   Scenario: Adding a new project and take me to the project page
   Scenario: Hiding and unhiding the new project form
