@@ -65,14 +65,19 @@ Feature: Manage the list of projects
     When I follow "Create a new project »"
     Then the new project form should be visible
 
-  @selenium, @wip
+  @selenium
   Scenario: Adding a new project
     When I go to the projects page
-    And I submit a new project with name "finish cucumber tests for project"
-    Then I should see "finish cucumber tests for project"
+    And I submit a new project with name "finish cucumber tests"
+    Then I should see "finish cucumber tests"
     And the badge should show 4
     And the project list badge for "active" projects should show 4
 
+  @selenium
   Scenario: Adding a new project and take me to the project page
+    When I go to the projects page
+    And I submit a new project with name "finish cucumber tests" and select take me to the project
+    Then I should be on the "finish cucumber tests" project page
+
   Scenario: Sorting the project alphabetically
   Scenario: Sorting the project by number of task

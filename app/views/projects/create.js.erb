@@ -1,13 +1,14 @@
 <% if @saved -%>
-  <% if @go_to_project %>
-    redirect_to ("<%= project_path(@project) %>")
-  <% end %>
+  <% if @go_to_project -%>
+    redirect_to ("<%= project_path(@project) -%>")
+  <% else -%>
   hide_errors();
   hide_empty_msg();
   set_page_badge(<%= @down_count %>);
   update_active_projects_container();
   add_project();
   clear_form();
+  <% end -%>
 <% else -%>
   show_errors();
 <% end -%>

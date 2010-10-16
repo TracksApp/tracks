@@ -31,6 +31,13 @@ When /^I submit a new project with name "([^"]*)"$/ do |project_name|
   submit_new_project_form
 end
 
+When /^I submit a new project with name "([^"]*)" and select take me to the project$/ do |project_name|
+  fill_in "project[name]", :with => project_name
+  check "go_to_project"
+  submit_new_project_form
+  selenium.wait_for_page_to_load(5000) # follow the redirect
+end
+
 Then /^the project "([^"]*)" should be above the project "([^"]*)"$/ do |project_high, project_low|
   high_id = @current_user.projects.find_by_name(project_high).id
   low_id = @current_user.projects.find_by_name(project_low).id

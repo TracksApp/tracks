@@ -145,7 +145,7 @@ todoItems = {
 }
 
 function redirect_to(path) {
-  $(window.location).attr('href', path);
+  window.location.href = path;
 }
 
 function setup_container_toggles(){
