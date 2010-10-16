@@ -10,6 +10,7 @@ class ProjectsController < ApplicationController
   def index
     @source_view = params['_source_view'] || 'project_list'
     @projects = current_user.projects
+    @new_project = current_user.projects.build
     if params[:projects_and_actions]
       projects_and_actions
     else      
@@ -73,6 +74,7 @@ class ProjectsController < ApplicationController
       render_failure "Expected post format is valid xml like so: <request><project><name>project name</name></project></request>."
       return
     end
+
     @project = current_user.projects.build
     params_are_invalid = true
     if (params['project'] || (params['request'] && params['request']['project']))
@@ -81,9 +83,11 @@ class ProjectsController < ApplicationController
     end
     @go_to_project = params['go_to_project']
     @saved = @project.save
+
     @project_not_done_counts = { @project.id => 0 }
     @active_projects_count = current_user.projects.active.count
     @contexts = current_user.contexts
+
     respond_to do |format|
       format.js { @down_count = current_user.projects.size }
       format.xml do
@@ -95,6 +99,7 @@ class ProjectsController < ApplicationController
           head :created, :location => project_url(@project), :text => @project.id
         end
       end
+      format.html {redirect_to :action => 'index'}
     end
   end
 

@@ -10,9 +10,8 @@
       replace_project_form_with_updated_project();
     <% end -%>
 
-    update_sortable();
-    ProjectListPage.update_state_count(<%=@active_projects_count%>, <%=@hidden_projects_count%>, <%=@completed_projects_count%>)
-    ProjectListPage.show_or_hide_state_container(<%= @show_active_projects %>, <%= @show_hidden_projects %>, <%= @show_completed_projects %>);
+    ProjectListPage.update_all_states_count(<%=@active_projects_count%>, <%=@hidden_projects_count%>, <%=@completed_projects_count%>)
+    ProjectListPage.show_or_hide_all_state_containers(<%= @show_active_projects %>, <%= @show_hidden_projects %>, <%= @show_completed_projects %>);
 
   <% else # assume source_view :project %>
 

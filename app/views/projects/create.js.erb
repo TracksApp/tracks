@@ -1,0 +1,48 @@
+<% if @saved -%>
+  <% if @go_to_project %>
+    redirect_to ("<%= project_path(@project) %>")
+  <% end %>
+  hide_errors();
+  hide_empty_msg();
+  set_page_badge(<%= @down_count %>);
+  update_active_projects_container();
+  add_project();
+  clear_form();
+<% else -%>
+  show_errors();
+<% end -%>
+
+function show_errors() {
+  $('div#error_status').html(html_for_error_messages());
+  $('div#error_status').show();
+}
+
+function hide_errors() {
+  $('div#error_status').hide();
+}
+
+function hide_empty_msg() {
+  $('projects-empty-nd').hide();
+}
+
+function add_project() {
+  $('#list-active-projects').append(html_for_project_listing);
+}
+
+function clear_form() {
+  $('#project_form').clearForm();
+  $('#project_form input:text:first').focus();
+}
+
+function update_active_projects_container() {
+  ProjectListPage.set_state_container_visibility('active', true);
+  ProjectListPage.update_state_count('active', <%=@active_projects_count%>);
+}
+
+function html_for_error_messages() {
+  return "<%= escape_javascript(error_messages_for('project')) %>";
+}
+
+function html_for_project_listing() {
+  return "<%= @saved ? escape_javascript(render(:partial => 'project_listing', :locals => { :project_listing => @project })) : "" %>";
+}

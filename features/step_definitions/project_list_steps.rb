@@ -26,6 +26,11 @@ When /^I drag the project "([^"]*)" below "([^"]*)"$/ do |project_drag, project_
   selenium.mouse_up_at(drop_project_container_xpath,coord_string)
 end
 
+When /^I submit a new project with name "([^"]*)"$/ do |project_name|
+  fill_in "project[name]", :with => project_name
+  submit_new_project_form
+end
+
 Then /^the project "([^"]*)" should be above the project "([^"]*)"$/ do |project_high, project_low|
   high_id = @current_user.projects.find_by_name(project_high).id
   low_id = @current_user.projects.find_by_name(project_low).id

@@ -45,26 +45,23 @@ var TracksForm = {
 }
 
 var ProjectListPage = {
-    update_state_count: function (active, hidden, completed) {
-      $('#active-projects-count').html(active);
-      $('#hidden-projects-count').html(hidden);
-      $('#completed-projects-count').html(completed);
+    update_state_count: function(state, count) {
+      $('#'+state+'-projects-count').html(count);
     },
-    show_or_hide_state_container: function (show_active, show_hidden, show_completed) {
-        $(["active", "hidden", "completed"]).each(function() {
-            container = $('#list-'+this+'-projects-container');
-            set_state_container_visibility(container, eval('show_'+this));
-        });
-
-      function set_state_container_visibility (container, set_visible) {
+    update_all_states_count: function (active_count, hidden_count, completed_count) {
+      $(["active", "hidden", "completed"]).each(function() { ProjectListPage.update_state_count(this, eval(this+'_count')); });
+    },
+    show_or_hide_all_state_containers: function (show_active, show_hidden, show_completed) {
+      $(["active", "hidden", "completed"]).each(function() { ProjectListPage.set_state_container_visibility(this, eval('show_'+this)); });
+    },
+    set_state_container_visibility: function (state, set_visible) {
         if (set_visible) {
-            container.slideDown("fast");
+            $('#list-'+state+'-projects-container').slideDown("fast");
         } else {
-            container.slideUp("fast"); 
+            $('#list-'+state+'-projects-container').slideUp("fast");
         }
-      }
     }
-}
+  }
 
 $.fn.clearForm = function() {
   return this.each(function() {
@@ -145,6 +142,10 @@ todoItems = {
     imgSrc = $(containerElem).find('.container_toggle img').attr('src');
     $(containerElem).find('.container_toggle img').attr('src', imgSrc.replace('collapse', 'expand'));
   }
+}
+
+function redirect_to(path) {
+  $(window.location).attr('href', path);
 }
 
 function setup_container_toggles(){
@@ -373,7 +374,8 @@ $(document).ready(function() {
   Nifty("div#feedicons-project","normal");
   Nifty("div#feedicons-context","normal");
   Nifty("div#todo_new_action_container","normal");
-
+  Nifty("div#project_new_project_container","normal");
+  
   /* Moved from standard.html.erb layout */
   $('ul.sf-menu').superfish({
     delay: 250,
@@ -600,6 +602,17 @@ $(document).ready(function() {
           buttons_dom_elem: $(this),
           beforeSend: function() {
               this.buttons_dom_elem.block({message: null});}
+      });
+      return false;
+  });
+
+  $("form#project_form button.positive").live('click', function (ev) {
+      $('form.#project_form').ajaxSubmit({
+          type: 'POST',
+          async: true,
+          buttons_dom_elem: $(this),
+          beforeSend: function() {this.buttons_dom_elem.block({message: null});},
+          complete: function() {this.buttons_dom_elem.unblock();}
       });
       return false;
   });

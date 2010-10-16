@@ -56,7 +56,7 @@ Feature: Manage the list of projects
     When I drag the project "manage me" below "upgrade jquery"
     Then the project "upgrade jquery" should be above the project "manage me"
 
-  @selenium, @wip
+  @selenium
   Scenario: Hiding and unhiding the new project form
     When I go to the projects page
     Then the new project form should be visible
@@ -65,7 +65,14 @@ Feature: Manage the list of projects
     When I follow "Create a new project »"
     Then the new project form should be visible
 
+  @selenium, @wip
   Scenario: Adding a new project
+    When I go to the projects page
+    And I submit a new project with name "finish cucumber tests for project"
+    Then I should see "finish cucumber tests for project"
+    And the badge should show 4
+    And the project list badge for "active" projects should show 4
+
   Scenario: Adding a new project and take me to the project page
   Scenario: Sorting the project alphabetically
   Scenario: Sorting the project by number of task
