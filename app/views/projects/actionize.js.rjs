@@ -1,6 +1,0 @@
-list_id = "list-#{@state}-projects"
-page.replace_html list_id,
-                  :partial => 'project_listing',
-                  :collection => @projects
-page.sortable list_id, get_listing_sortable_options(list_id)
-                  

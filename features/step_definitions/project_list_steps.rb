@@ -22,7 +22,7 @@ When /^I drag the project "([^"]*)" below "([^"]*)"$/ do |project_drag, project_
 
   selenium.mouse_down_at(drag_project_handle_xpath,"2,2")
   selenium.mouse_move_at(drop_project_container_xpath,coord_string)
-  # selenium.mouse_over(drop_project_container_xpath)
+  # no need to simulate mouse_over for this test
   selenium.mouse_up_at(drop_project_container_xpath,coord_string)
 end
 
@@ -36,6 +36,17 @@ When /^I submit a new project with name "([^"]*)" and select take me to the proj
   check "go_to_project"
   submit_new_project_form
   selenium.wait_for_page_to_load(5000) # follow the redirect
+end
+
+When /^I sort the list alphabetically$/ do
+  click_link "Alphabetically"
+  selenium.get_confirmation.should == "Are you sure that you want to sort these projects alphabetically? This will replace the existing sort order."
+  
+end
+
+When /^I sort the list by number of tasks$/ do
+  click_link "By number of tasks"
+  selenium.get_confirmation.should == "Are you sure that you want to sort these projects by the number of tasks? This will replace the existing sort order."
 end
 
 Then /^the project "([^"]*)" should be above the project "([^"]*)"$/ do |project_high, project_low|

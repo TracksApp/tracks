@@ -560,7 +560,7 @@ $(document).ready(function() {
       if(confirm('Are you sure that you want to sort these projects alphabetically? This will replace the existing sort order.')){
         alphaSort = $(this).parents('.alpha_sort');
         alphaSort.block({message:null});
-        $.post(this.href, {}, function(){alphaSort.unblock()}, 'script');
+        $.post(this.href, {async: true}, function(){alphaSort.unblock()}, 'script');
       }
     });
 

@@ -2,7 +2,7 @@ Feature: Manage the list of projects
 
   In order to keep tracks and manage of all my projects
   As a Tracks user
-  I want to manage the list of projects
+  I want to manage my list of projects
 
   Background:
     Given the following user record
@@ -79,5 +79,17 @@ Feature: Manage the list of projects
     And I submit a new project with name "finish cucumber tests" and select take me to the project
     Then I should be on the "finish cucumber tests" project page
 
+  @selenium, @wip
   Scenario: Sorting the project alphabetically
+    When I go to the projects page
+    Then the project "manage me" should be above the project "a project name starting with a"
+    When I sort the list alphabetically
+    Then the project "a project name starting with a" should be above the project "manage me"
+
+  @selenium, @wip
   Scenario: Sorting the project by number of task
+    Given I have a project "test" with 2 todos
+    When I go to the projects page
+    Then the project "manage me" should be above the project "test"
+    When I sort the list by number of tasks
+    Then the project "test" should be above the project "manage me"
