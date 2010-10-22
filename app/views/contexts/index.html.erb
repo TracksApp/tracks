@@ -4,41 +4,5 @@
 </div>
 
 <div id="input_box">
-  <div id="context_new_container">
-
-    <div id="toggle_context_new" class="hide_form">
-      <a title="<%= t('contexts.hide_form_link_title') %>" accesskey="n">&laquo; <%= t('contexts.hide_form') %></a>
-    </div>
-
-    <div id="context_new" class="context_new" style="display:block">
-      <% form_remote_tag(
-        :url => contexts_path,
-        :method => :post,
-        :html=> { :id => 'context-form', :name => 'context', :class => 'inline-form'},
-        :before => "$('#context_new_submit').block({message: null})",
-        :complete => "$('#context_new_submit').unblock()") do -%>
-
-        <div id="status"><%= error_messages_for('context') %></div>
-
-        <label for="context_name"><%= t 'contexts.context_name' %></label><br />
-        <%= text_field( "context", "name" ) %><br />
-
-        <label for="context_hide"><%= t 'contexts.context_hide' %></label>
-        <%= check_box( "context", "hide" ) %><br />
-
-        <div class="submit_box">
-          <div class="widgets">
-            <button type="submit" class="positive" id="context_new_submit">
-              <%= image_tag("accept.png", :alt => "") + t('contexts.add_context') %>
-            </button>
-          </div>
-        </div>
-        <br/><br/>
-      <% end -%>
-    </div>
-  </div>
+    <%= render :partial => 'new_context_form' %>
 </div>
-<%
-sortable_element 'list-contexts-active', get_listing_sortable_options
-sortable_element 'list-contexts-hidden', get_listing_sortable_options
--%>

@@ -33,6 +33,7 @@ Given /^I have the following contexts$/ do |table|
   end
 end
 
+# TODO: refactor this to paths.rb
 When /^I visit the context page for "([^\"]*)"$/ do |context_name|
   context = @current_user.contexts.find_by_name(context_name)
   context.should_not be_nil
@@ -41,7 +42,7 @@ end
 
 When /^I edit the context name in place to be "([^\"]*)"$/ do |new_context_name|
   selenium.click "context_name"
-  fill_in "value", :with => "OutAndAbout"
+  fill_in "value", :with => new_context_name
   click_button "OK"
 end
 
@@ -95,9 +96,4 @@ end
 
 Then /^he should see that a context named "([^\"]*)" is not present$/ do |context_name|
   Then "I should not see \"#{context_name} (\""
-end
-
-Then /^I should see the context "([^"]*)" under "([^"]*)"$/ do |context_name, state|
-  context = Context.find_by_name(context_name)
-  response.should have_xpath("//div[@id='list-contexts-#{state}']//div[@id='context_#{context.id}']")
 end

@@ -41,6 +41,13 @@ var TracksForm = {
     },
     set_tag_list: function (name) {
         $('input#tag_list').val(name);
+    },
+    show_errors: function (html) {
+      $('div#error_status').html(html);
+      $('div#error_status').show();
+    },
+    hide_errors: function () {
+      $('div#error_status').hide();
     }
 }
 
@@ -608,6 +615,17 @@ $(document).ready(function() {
 
   $("form#project_form button.positive").live('click', function (ev) {
       $('form.#project_form').ajaxSubmit({
+          type: 'POST',
+          async: true,
+          buttons_dom_elem: $(this),
+          beforeSend: function() {this.buttons_dom_elem.block({message: null});},
+          complete: function() {this.buttons_dom_elem.unblock();}
+      });
+      return false;
+  });
+
+   $("form#context-form button.positive").live('click', function (ev) {
+      $('form.#context-form').ajaxSubmit({
           type: 'POST',
           async: true,
           buttons_dom_elem: $(this),

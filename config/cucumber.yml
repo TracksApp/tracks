@@ -5,5 +5,5 @@ std_opts = "--format #{ENV['CUCUMBER_FORMAT'] || 'progress'} --strict --tags ~@w
 %>
 default: <%= std_opts %> features --tags ~@selenium
 selenium: <%= std_opts %> features --tags @selenium
-wip: --tags @wip:3 --wip features
+wip: --tags @wip:10 --wip features
 rerun: <%= rerun_opts %> --format rerun --out rerun.txt --strict --tags ~@wip

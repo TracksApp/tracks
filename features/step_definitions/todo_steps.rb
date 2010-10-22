@@ -55,7 +55,7 @@ When /^I drag "(.*)" to "(.*)"$/ do |dragged, target|
   selenium.drag_and_drop_to_object(drag_name, drop_name)
 
   arrow = "xpath=//div[@id='line_todo_#{drop_id}']/div/a[@class='show_successors']/img"
-  selenium.wait_for_element(arrow)
+  selenium.wait_for_element(arrow, :timeout_in_seconds => 5)
 end
 
 When /^I expand the dependencies of "([^\"]*)"$/ do |todo_name|

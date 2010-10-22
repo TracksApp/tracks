@@ -14,6 +14,7 @@ class ContextsController < ApplicationController
     @active_contexts = current_user.contexts.active(true) 
     @hidden_contexts = current_user.contexts.hidden(true)
     @count = @active_contexts.size + @hidden_contexts.size
+    @new_context = current_user.contexts.build
     init_not_done_counts(['context'])
     respond_to do |format|
       format.html &render_contexts_html
