@@ -8,7 +8,7 @@ click "css=.add_note_link a"
 
 assert_visible "new-note"
 
-type "new_note_body", "this is a note"
+type "note_body", "this is a note"
 click 'css=#new-note input[type=submit]'
 
 wait_for_text_present "this is a note"

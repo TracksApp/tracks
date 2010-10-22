@@ -1,31 +1,42 @@
 = Tracks: a GTD web application, built with Ruby on Rails
 
 * Project homepage: http://getontracks.org/
-* GitHub: http://github.com/bsag/tracks/
+* Manual: http://bsag.github.com/tracks/
+* Source at GitHub: http://github.com/bsag/tracks/
 * Assembla space (for bug reports and feature requests): http://www.assembla.com/spaces/tracks-tickets/tickets
 * Wiki (community contributed information): http://getontracks.org/wiki/
 * Forum: http://getontracks.org/forums/
 * Mailing list: http://lists.rousette.org.uk/mailman/listinfo/tracks-discuss
 * Original developer: bsag (http://www.rousette.org.uk/)
-* Contributors: http://getontracks.org/wiki/Tracks/Contributing/Contributors
-* Version: 1.8devel
-* Copyright: (cc) 2004-2009 rousette.org.uk.
+* Contributors: http://getontracks.org/wiki/Contributors
+* Version: 2.0RC1
+* Copyright: (cc) 2004-2010 rousette.org.uk.
 * License:  GNU GPL
 
-== Version 1.7devel
+== Version 2.0 (RC)
 
 New features:
 1. Redesign of menus and introduction of a context menu per todo
 2. You can now set the default tags for a project which are added automatically to a new todo in that project if no tags are supplied
-3. The email receiver is now able to receive email from several email adresses. 
+3. Tracks now includes support of dependencies. Making an action dependent on another action will hide it until the dependency is completed
+4. you can now drag an action from one context to another
+5. Support for entering multiple actions in one form
+6. You can now promote an action to a project
+7. It is easier to view notes on the mobile interface and other interface fixes
+8. The project description supports markup
+9. support for Mail.app (message://) and OneNote (onenote://) links in notes
+10.The email receiver is now able to receive email from several email adresses.
    In site.yml this could be set to the previous behavior (receive from one address per user)
-4. You can enable open signup (like in tracks.tra.in)
-5. Cleanup of context page
+11.You can enable open signup (like in tracks.tra.in)
+12.Cleanup of context page
+13.Support for CAS for login
+14.Support for adding Tracks as a GMail Widget with instructions on the Integrations page
 
 Under the hood
-1. With the menus came jQuery. Some js is migrated to jQuery
-2. Cucumber is added for integration testing. And migration of stories to cucumber
-3. Bugfixes
+1. All js is migrated to jQuery and most ui-widgets are migrated to jQuery-UI
+2. Cucumber is added for integration testing. The RSpec stories are migrated to cucumber
+3. Upgraded to rails 2.3.5 (newer versions unfortunately conflict with cucumber)
+3. Bugfixes (lots of them)
 
 == Version 1.7
 
