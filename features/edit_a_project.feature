@@ -19,7 +19,7 @@ Feature: Edit a project
     And I should see the bold text "done" in the project description
 
   # Ticket #1043
-  @selenium
+  @selenium, @wip
   Scenario: I can move a todo out of the current project
     Given I have a project "foo" with 2 todos
     When I visit the "foo" project

@@ -218,7 +218,7 @@ class ProjectsController < ApplicationController
   def render_projects_html
     lambda do
       @page_title = t('projects.list_projects')
-      @count = current_user.projects.size 
+      @count = current_user.projects.count
       @active_projects = current_user.projects.active
       @hidden_projects = current_user.projects.hidden
       @completed_projects = current_user.projects.completed

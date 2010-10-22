@@ -73,7 +73,10 @@ Then /^I should see ([0-9]+) todos$/ do |count|
 end
 
 When /I change the (.*) field of "([^\"]*)" to "([^\"]*)"$/ do |field, todo_name, new_value|
-  selenium.click("//span[@class=\"todo.descr\"][.=\"#{todo_name}\"]/../../a[@class=\"icon edit_item\"]", :wait_for => :ajax, :javascript_framework => :jquery)
+  todo = @current_user.todos.find_by_description(todo_name)
+  todo.should_not be_nil
+
+  selenium.click("//img[@id='edit_icon_todo_#{todo.id}']", :wait_for => :ajax, :javascript_framework => :jquery)
   selenium.type("css=form.edit_todo_form input[name=#{field}]", new_value)
   selenium.click("css=button.positive", :wait_for => :ajax, :javascript_framework => :jquery)
   sleep(5)

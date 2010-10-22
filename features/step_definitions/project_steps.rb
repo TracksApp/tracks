@@ -1,5 +1,5 @@
 Given /^I have a project "([^\"]*)" with (.*) todos$/ do |project_name, num_todos|
-  context = @current_user.contexts.create!(:name => "Context A")
+  context = @current_user.contexts.find_or_create_by_name("Context A")
   project = @current_user.projects.create!(:name => project_name)
   1.upto num_todos.to_i do |i|
     @current_user.todos.create!(

@@ -1,5 +1,4 @@
 When /^I delete project "([^"]*)"$/ do |project_name|
-  # from the project list page
   project = @current_user.projects.find_by_name(project_name)
   project.should_not be_nil
   click_link "delete_project_#{project.id}"
@@ -38,10 +37,10 @@ When /^I submit a new project with name "([^"]*)" and select take me to the proj
   selenium.wait_for_page_to_load(5000) # follow the redirect
 end
 
-When /^I sort the list alphabetically$/ do
+When /^I sort the active list alphabetically$/ do
   click_link "Alphabetically"
+  selenium.wait_for :wait_for => :ajax, :javascript_framework => :jquery
   selenium.get_confirmation.should == "Are you sure that you want to sort these projects alphabetically? This will replace the existing sort order."
-  
 end
 
 When /^I sort the list by number of tasks$/ do

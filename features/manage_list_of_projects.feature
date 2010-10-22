@@ -79,17 +79,18 @@ Feature: Manage the list of projects
     And I submit a new project with name "finish cucumber tests" and select take me to the project
     Then I should be on the "finish cucumber tests" project page
 
-  @selenium, @wip
+  @selenium
   Scenario: Sorting the project alphabetically
     When I go to the projects page
     Then the project "manage me" should be above the project "a project name starting with a"
-    When I sort the list alphabetically
+    When I sort the active list alphabetically
     Then the project "a project name starting with a" should be above the project "manage me"
 
-  @selenium, @wip
+  @selenium
   Scenario: Sorting the project by number of task
     Given I have a project "test" with 2 todos
+    And I have a project "very busy" with 10 todos
     When I go to the projects page
-    Then the project "manage me" should be above the project "test"
+    Then the project "test" should be above the project "very busy"
     When I sort the list by number of tasks
-    Then the project "test" should be above the project "manage me"
+    Then the project "very busy" should be above the project "test"
