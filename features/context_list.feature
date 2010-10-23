@@ -27,6 +27,8 @@ Feature: Manage the list of contexts
     Given I have a context called "@computer"
     And I have a hidden context called "@ipad"
     When I go to the contexts page
+    And I should see that the context container for active contexts is present
+    And I should see that the context container for hidden contexts is present
     When I delete the context "@computer"
     Then I should see that a context named "@computer" is not present
     And I should see that the context container for active contexts is not present

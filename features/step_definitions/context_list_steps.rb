@@ -47,8 +47,11 @@ Then /^I should see that a context named "([^"]*)" is not present$/ do |context_
 end
 
 Then /^I should see that the context container for (.*) contexts is not present$/ do |state|
-  present = selenium.is_element_present("list-contexts-#{state}'")
-  present.should_not be_true
+  selenium.is_visible("list-#{state}-contexts-container").should_not be_true
+end
+
+Then /^I should see that the context container for (.*) contexts is present$/ do |state|
+  selenium.is_visible("list-#{state}-contexts-container").should be_true
 end
 
 Then /^I should see the context "([^"]*)" under "([^"]*)"$/ do |context_name, state|
