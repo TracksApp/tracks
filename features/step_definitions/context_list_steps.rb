@@ -36,14 +36,27 @@ When /^I add a new active context "([^"]*)"$/ do |context_name|
   When "I add a new context \"#{context_name}\""
 end
 
-
 When /^I add a new hidden context "([^"]*)"$/ do |context_name|
   fill_in "context[name]", :with => context_name
   check "context_hide"
   submit_new_context_form
 end
 
+Then /^I should see that a context named "([^"]*)" is not present$/ do |context_name|
+  Then "I should not see \"#{context_name}\""
+end
+
+Then /^I should see that the context container for (.*) contexts is not present$/ do |state|
+  present = selenium.is_element_present("list-contexts-#{state}'")
+  present.should_not be_true
+end
+
 Then /^I should see the context "([^"]*)" under "([^"]*)"$/ do |context_name, state|
   context = Context.find_by_name(context_name)
+  context.should_not be_nil
   response.should have_xpath("//div[@id='list-contexts-#{state}']//div[@id='context_#{context.id}']")
+end
+
+Then /^the context list badge for ([^"]*) contexts should show (\d+)$/ do |state_name, count|
+  selenium.get_text("xpath=//span[@id='#{state_name}-contexts-count']").should == count
 end

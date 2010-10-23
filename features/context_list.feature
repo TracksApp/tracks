@@ -10,14 +10,29 @@ Feature: Manage the list of contexts
       | testuser | secret   | false    |
     And I have logged in as "testuser" with password "secret"
   
-  @selenium, @wip
+  @selenium
   Scenario: Delete context from context page should update badge
     Given I have a context called "@computer"
+    And I have a context called "@ipad"
     When I go to the contexts page
-    Then the badge should show 1
+    Then the badge should show 2 
+    And the context list badge for active contexts should show 2
     When I delete the context "@computer"
     Then he should see that a context named "@computer" is not present
-    And the badge should show 0
+    And the badge should show 1
+    And the context list badge for active contexts should show 1
+
+  @selenium, @wip
+  Scenario: Delete last context from context page should remove the contexts container for hidden or active contexts
+    Given I have a context called "@computer"
+    And I have a hidden context called "@ipad"
+    When I go to the contexts page
+    When I delete the context "@computer"
+    Then I should see that a context named "@computer" is not present
+    And I should see that the context container for active contexts is not present
+    When I delete the context "@ipad"
+    Then I should see that a context named "@ipad" is not present
+    And I should see that the context container for hidden contexts is not present
 
   @selenium, @wip
   Scenario: Delete context from context page right after an edit

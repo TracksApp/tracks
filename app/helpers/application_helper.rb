@@ -124,7 +124,15 @@ module ApplicationHelper
       {:id => "delete_project_#{project.id}", :class => "delete_project_button", :title => "#{t('projects.delete_project_title')} '#{project.name}'"}
     )
   end
-  
+
+  def link_to_delete_context(context, descriptor = sanitize(context.name))
+    link_to(
+      descriptor,
+      context_path(context, :format => 'js'),
+      {:id => "delete_context_#{context.id}", :class => "delete_context_button", :title => t('contexts.delete_context_confirmation', :name => context.name)}
+    )
+  end
+
   def link_to_project_mobile(project, accesskey, descriptor = sanitize(project.name))
     link_to( descriptor, project_path(project, :format => 'm'), {:title => "View project: #{project.name}", :accesskey => accesskey} )
   end

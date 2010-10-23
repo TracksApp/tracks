@@ -51,6 +51,7 @@ var TracksForm = {
     }
 }
 
+/* TODO, refactor the following two objects into three without obvious duplication */
 var ProjectListPage = {
     update_state_count: function(state, count) {
       $('#'+state+'-projects-count').html(count);
@@ -69,6 +70,26 @@ var ProjectListPage = {
         }
     }
   }
+
+var ContextListPage = {
+    update_state_count: function(state, count) {
+      $('#'+state+'-contexts-count').html(count);
+    },
+    update_all_states_count: function (active_count, hidden_count, completed_count) {
+      $(["active", "hidden"]).each(function() { ContextListPage.update_state_count(this, eval(this+'_count')); });
+    },
+    show_or_hide_all_state_containers: function (show_active, show_hidden, show_completed) {
+      $(["active", "hidden"]).each(function() { ContextListPage.set_state_container_visibility(this, eval('show_'+this)); });
+    },
+    set_state_container_visibility: function (state, set_visible) {
+        if (set_visible) {
+            $('#list-'+state+'-contexts-container').slideDown("fast");
+        } else {
+            $('#list-'+state+'-contexts-container').slideUp("fast");
+        }
+    }
+  }
+
 
 $.fn.clearForm = function() {
   return this.each(function() {
@@ -623,6 +644,16 @@ $(document).ready(function() {
       });
       return false;
   });
+
+  $('a.delete_context_button').live('click', function(evt){
+      evt.preventDefault();
+      if(confirm("Are you sure that you want to "+this.title+"? Be aware that this will also delete all (repeating) actions in this context!")){
+        $(this).parents('.project').block({message: null});
+        params = {_method: 'delete'};
+        $.post(this.href, params, null, 'script');
+      }
+  });
+
 
    $("form#context-form button.positive").live('click', function (ev) {
       $('form.#context-form').ajaxSubmit({

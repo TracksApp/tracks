@@ -127,7 +127,10 @@ class ContextsController < ApplicationController
     
     @context.destroy
     respond_to do |format|
-      format.js { @down_count = current_user.contexts.size }
+      format.js do
+        @down_count = current_user.contexts.size
+        update_state_counts
+      end
       format.xml { render :text => "Deleted context #{@context.name}" }
     end
   end
@@ -144,6 +147,13 @@ class ContextsController < ApplicationController
   end
   
   protected
+
+  def update_state_counts
+    @active_contexts_count = current_user.contexts.active.count
+    @hidden_contexts_count = current_user.contexts.hidden.count
+    @show_active_contexts = @active_contexts_count > 0
+    @show_hidden_contexts = @hidden_contexts_count > 0
+  end
 
   def render_contexts_html
     lambda do
