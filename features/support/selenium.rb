@@ -11,7 +11,7 @@ if ENV["RAILS_ENV"] == "selenium"
     config.selenium_browser_startup_timeout = 30
     # use only if you run a separate selenium server instance and do not
     # want webrat to start one for you
-    config.selenium_server_address = "localhost"
+    # config.selenium_server_address = "localhost"
     # config.selenium_server_port = "4444"
   end
 

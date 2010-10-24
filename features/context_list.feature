@@ -22,7 +22,7 @@ Feature: Manage the list of contexts
     And the badge should show 1
     And the context list badge for active contexts should show 1
 
-  @selenium, @wip
+  @selenium
   Scenario: Delete last context from context page should remove the contexts container for hidden or active contexts
     Given I have a context called "@computer"
     And I have a hidden context called "@ipad"
@@ -36,7 +36,7 @@ Feature: Manage the list of contexts
     Then I should see that a context named "@ipad" is not present
     And I should see that the context container for hidden contexts is not present
 
-  @selenium, @wip
+  @selenium
   Scenario: Delete context from context page right after an edit
     Given I have a context called "@computer"
     When I go to the contexts page
@@ -45,7 +45,7 @@ Feature: Manage the list of contexts
     Then he should see that a context named "@laptop" is not present
     And the badge should show 0
 
-  @selenium, @wip
+  @selenium
   Scenario: Edit context from context twice
     Given I have a context called "@computer"
     When I go to the contexts page

@@ -9,6 +9,11 @@ Given /^there exists an active context called "([^"]*)" for user "([^"]*)"$/ do 
   @context = user.contexts.create!(:name => context_name, :hide => false)
 end
 
+Given /^there exists a context called "([^"]*)" for user "([^"]*)"$/ do |context_name, login|
+   Given "there exists an active context called \"#{context_name}\" for user \"#{login}\""
+end
+
+
 Given /^there exists a hidden context called "([^"]*)" for user "([^"]*)"$/ do |context_name, login|
   user = User.find_by_login(login)
   user.should_not be_nil
