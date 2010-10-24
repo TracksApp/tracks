@@ -134,6 +134,9 @@ class ProjectsController < ApplicationController
         init_data_for_sidebar
         render :template => 'projects/update.js.erb'
         return
+
+      # TODO: are these params ever set? or is this dead code?
+
       elsif boolean_param('update_status')
         render :template => 'projects/update_status.js.rjs'
         return

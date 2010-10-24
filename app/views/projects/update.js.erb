@@ -39,8 +39,8 @@
 enable_rich_interaction();
 
 function show_errors() {
-  $('div#error_status').html(html_for_error_messages());
-  $('div#error_status').show();
+  $('div#edit_error_status').html(html_for_error_messages());
+  $('div#edit_error_status').show();
 }
 
 function remove_project_edit_form() {
@@ -73,7 +73,7 @@ function replace_project_form_with_updated_project() {
 function remove_and_re_add_project() {
   $('#<%=dom_id(@project, 'container')%>').slideUp(500, function() {
     $('#<%=dom_id(@project, 'container')%>').remove();
-    $('#list-<%=@project.state%>-projects').append(html_for_project_listing);
+    $('#list-<%=@project.state%>-projects').append(html_for_project_listing());
     });
 }
 

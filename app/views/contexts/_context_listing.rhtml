@@ -21,16 +21,20 @@ suppress_edit_button ||= false
       <% end %>
 
       <%= link_to_delete_context(context, image_tag( "blank.png", :title => t('contexts.delete_context'), :class=>"delete_item")) %>
+      <%= suppress_edit_button ? "" : link_to_edit_context(context, image_tag( "blank.png", :title => t('contexts.edit_context'), :class=>"edit_item")) %>
 
-      <%=  link_to_remote(
-        image_tag( "blank.png", :title => t('contexts.edit_context'), :class=>"edit_item"),
-        :url => {:controller => 'contexts', :action => 'edit', :id => context.id},
-        :method => 'get',
-        :with => "'_source_view=#{@source_view}'",
-        :before => "$('#{dom_id(context)}').block({message:null});",
-        :complete => "$('#{dom_id(context)}').unblock();",
-        :html => {:id => "edit_context_#{context.id}_link"}
-      ) %>
+      <% # = # link_to_remote(
+      #image_tag( "blank.png", :title => "Delete context", :class=>"delete_item"),
+      #:url => {:controller => 'contexts', :action => 'destroy', :id => context.id},
+      #:method => 'delete',
+      #:with => "'_source_view=#{@source_view}'",
+      #:before => "$('#{dom_id(context)}').block({message:null});",
+      #:complete => "$('#{dom_id(context)}').unblock();",
+      #:confirm => "Are you sure that you want to delete the context '#{context.name}'? Be aware that this will also delete all (repeating) actions in this context!",
+      #:html => { :id => dom_id(context, 'delete') }
+      #)
+      %>
+
     </div>
   </div>
   <div id="<%= dom_id(context, 'edit') %>" class="edit-form" style="display:none;">

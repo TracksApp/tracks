@@ -116,6 +116,12 @@ module ApplicationHelper
       url_for({:controller => 'projects', :action => 'edit', :id => project.id}),
       {:id => "link_edit_#{dom_id(project)}", :class => "project_edit_settings"})
   end
+
+  def link_to_edit_context (context, descriptor = sanitize(context.name))
+    link_to(descriptor,
+      url_for({:controller => 'contexts', :action => 'edit', :id => context.id}),
+      {:id => "link_edit_#{dom_id(context)}", :class => "context_edit_settings"})
+  end
   
   def link_to_delete_project(project, descriptor = sanitize(project.name))
     link_to(

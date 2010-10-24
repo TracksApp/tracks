@@ -91,13 +91,18 @@ class ContextsController < ApplicationController
     @original_context_hidden = @context.hidden?
     @context.attributes = params["context"]
 
-    if @context.save
+    @saved = @context.save
+
+    if @saved
       if boolean_param('wants_render')
-        @context_state_changed = (@original_context_hidden != @context.hidden?)
-        @new_state = (@context.hidden? ? "hidden" : "active") if @context_state_changed
+        @state_changed = (@original_context_hidden != @context.hidden?)
+        @new_state = (@context.hidden? ? "hidden" : "active") if @state_changed
         respond_to do |format|
           format.js
         end
+
+        # TODO is this param ever used? is this dead code?
+        
       elsif boolean_param('update_context_name')
         @contexts = current_user.projects
         render :template => 'contexts/update_context_name.js.rjs'
@@ -106,8 +111,9 @@ class ContextsController < ApplicationController
         render :text => success_text || 'Success'
       end
     else
-      notify :warning, "Couldn't update new context"
-      render :text => ""
+      respond_to do |format|
+        format.js
+      end
     end
   end
 

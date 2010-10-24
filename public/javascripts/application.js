@@ -629,7 +629,8 @@ $(document).ready(function() {
           async: true,
           buttons_dom_elem: $(this),
           beforeSend: function() {
-              this.buttons_dom_elem.block({message: null});}
+              this.buttons_dom_elem.block({message: null});},
+          complete: function() {this.buttons_dom_elem.unblock();}
       });
       return false;
   });
@@ -654,6 +655,31 @@ $(document).ready(function() {
       }
   });
 
+  /* set behavior for edit context settings link in projects list page and project page
+   * TODO: refactor this and the edit for project because the function looks the same */
+  $("a.context_edit_settings").live('click', function (ev) {
+     $.ajax({
+         url: this.href,
+         async: true,
+         context_dom_elem: $(this).parent().parent(),
+         dataType: 'script',
+         beforeSend: function() {this.context_dom_elem.block({message: null});},
+         complete:function() {this.context_dom_elem.unblock(); enable_rich_interaction();}
+         });
+     return false;
+  });
+
+  $("form.edit-context-form button.positive").live('click', function (ev) {
+      $('form.edit-context-form').ajaxSubmit({
+          type: 'POST',
+          async: true,
+          buttons_dom_elem: $(this),
+          beforeSend: function() {
+              this.buttons_dom_elem.block({message: null});},
+          complete: function() {this.buttons_dom_elem.unblock();}
+      });
+      return false;
+  });
 
    $("form#context-form button.positive").live('click', function (ev) {
       $('form.#context-form').ajaxSubmit({

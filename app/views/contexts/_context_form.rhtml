@@ -1,14 +1,22 @@
 <% context = context_form 
-   @context = context-%>
-<% form_remote_tag(:url => context_path(context), :html => {:id => dom_id(context, 'edit_form'), :class => "inline-form "+dom_id(context, 'edit_form')+"-edit-context-form edit-context-form", :method => :put}) do -%>
-            <%= error_messages_for 'context' %>
+@context = context
+-%>
+
+<% form_for(context, :html => {
+    :id => dom_id(context, 'edit_form'),
+    :class => "inline-form edit-project-form",
+    :method => :put }) do
+  -%>
+
+  <div id="edit_error_status"><%= error_messages_for("project") %></div>
+
 
   <label for="context_name">Context name</label><br/>
   <%= text_field('context', 'name', :class => 'context-name') %><br/>
 
-  <label for="context_hide">Hide from front page?</label>    
+  <label for="context_hide">Hide from front page?</label>
   <%= check_box('context', 'hide', :class => 'context-hide') %>
-  <input type="hidden" name="wants_render" value="true" /> 
+  <input type="hidden" name="wants_render" value="true" />
 
   <div class="submit_box">
     <div class="widgets">
@@ -24,5 +32,5 @@
   </div>
   <br/><br/>
 
-  <% end %>
+<% end %>
 
