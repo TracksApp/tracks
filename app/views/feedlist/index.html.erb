@@ -70,7 +70,7 @@
         <ul>
           <li>Step 1 - Choose the context you want a feed of:
             <select name="feed-contexts" id="feed-contexts">
-              <%= options_from_collection_for_select(@active_contexts, "id", "name", @active_contexts.first.id) unless @active_projects.empty?-%>
+              <%= options_from_collection_for_select(@active_contexts, "id", "name", @active_contexts.first.id) unless @active_contexts.empty?-%>
               <%= options_from_collection_for_select(@hidden_contexts, "id", "name") -%>
             </select>
           </li>
