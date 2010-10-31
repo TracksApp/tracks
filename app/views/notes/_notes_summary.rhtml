@@ -1,6 +1,6 @@
 <% note = notes_summary -%>
 <div class="note_wrapper" id="<%= dom_id(note) %>">
-<%= link_to( image_tag("blank.png", :border => 0), note_path(note), :title => "Show note", :class => "link_to_notes icon") %>&nbsp;
+<%= link_to( image_tag("blank.png", :border => 0), note_path(note), :title => t('notes.show_note_title'), :class => "link_to_notes icon") %>&nbsp;
 <%= rendered_note(note) %>
 </div>
 <% note = nil -%>

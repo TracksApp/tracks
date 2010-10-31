@@ -1,5 +1,5 @@
 if @saved
-  status_message = 'Project saved'
+  status_message = t('projects.project_saved_status')
   page.notify :notice, status_message, 5.0
   if source_view_is :project_list
     if @state_changed

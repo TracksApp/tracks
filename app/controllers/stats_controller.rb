@@ -376,7 +376,7 @@ class StatsController < ApplicationController
     end
 
     if size==pie_cutoff
-      @actions_per_context[size-1]['name']='(others)'
+      @actions_per_context[size-1]['name']=t('stats.other_actions_label')
       @actions_per_context[size-1]['total']=0
       @actions_per_context[size-1]['id']=-1
       (size-1).upto @all_actions_per_context.size()-1 do |i|
@@ -417,7 +417,7 @@ class StatsController < ApplicationController
     end
 
     if size==pie_cutoff
-      @actions_per_context[size-1]['name']='(others)'
+      @actions_per_context[size-1]['name']=t('stats.other_actions_label')
       @actions_per_context[size-1]['total']=0
       @actions_per_context[size-1]['id']=-1
       (size-1).upto @all_actions_per_context.size()-1 do |i|
@@ -565,7 +565,7 @@ class StatsController < ApplicationController
   end
   
   def show_selected_actions_from_chart
-    @page_title = "TRACKS::Action selection"
+    @page_title = t('stats.action_selection_title')
     @count = 99
 
     @source_view = 'stats'
@@ -582,10 +582,10 @@ class StatsController < ApplicationController
       week_to = week_from+1
       
       @chart_name = "actions_visible_running_time_data"
-      @page_title = "Actions selected from week "
+      @page_title = t('stats.actions_selected_from_week')
       @further = false
       if params['id'] == 'avrt_end'
-        @page_title += week_from.to_s + " and further"
+        @page_title += week_from.to_s + t('stats.actions_further')
         @further = true
       else
         @page_title += week_from.to_s + " - " + week_to.to_s + ""

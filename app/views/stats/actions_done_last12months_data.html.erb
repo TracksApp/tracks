@@ -1,13 +1,13 @@
-&title=Actions in the last 12 months,{font-size:16},&
-&y_legend=Number of actions,12,0x736AFF&
-&x_legend=Months ago,12,0x736AFF&
+&title=<%= t('stats.actions_lastyear_title') %>,{font-size:16},&
+&y_legend=<%= t('stats.legend.number_of_actions') %>,12,0x736AFF&
+&x_legend=<%= t('stats.legend.months_ago') %>,12,0x736AFF&
 &y_ticks=5,10,5&
-&filled_bar=50,0x9933CC,0x8010A0,Created,9&
-&filled_bar_2=50,0x0066CC,0x0066CC,Completed,9&
-&line_3=2,0x00FF00, Avg Created, 9&
-&line_4=2,0xFF0000, Avg Completed, 9&
-&line_5=2,0x007700, 3 Month Avg Created, 9&
-&line_6=2,0xAA0000, 3 Month Avg Completed, 9&
+&filled_bar=50,0x9933CC,0x8010A0,<%= t('stats.labels.created')%>,9&
+&filled_bar_2=50,0x0066CC,0x0066CC,<%= t('stats.labels.completed') %>,9&
+&line_3=2,0x00FF00, <%= t('stats.labels.avg_created') %>, 9&
+&line_4=2,0xFF0000, <%= t('stats.labels.avg_completed') %>, 9&
+&line_5=2,0x007700, <%= t('stats.labels.month_avg_created', :months => 3) %>, 9&
+&line_6=2,0xAA0000, <%= t('stats.labels.month_avg_completed', :months => 3) %>, 9&
 &line_7=1,0xAA0000&
 &line_8=1,0x007700&
 &values=<% 0.upto 11 do |i| -%><%= @actions_created_last12months_hash[i]%>,<% end -%><%= @actions_created_last12months_hash[12]%>&

@@ -13,7 +13,7 @@ class User < ActiveRecord::Base
              def update_positions(context_ids)
                 context_ids.each_with_index do |id, position|
                   context = self.detect { |c| c.id == id.to_i }
-                  raise "Context id #{id} not associated with user id #{@user.id}." if context.nil?
+                  raise I18n.t('models.user.error_context_not_associated', :context => id, :user => @user.id) if context.nil?
                   context.update_attribute(:position, position + 1)
                 end
               end
@@ -27,7 +27,7 @@ class User < ActiveRecord::Base
               def update_positions(project_ids)
                 project_ids.each_with_index do |id, position|
                   project = self.detect { |p| p.id == id.to_i }
-                  raise "Project id #{id} not associated with user id #{@user.id}." if project.nil?
+                  raise I18n.t('models.user.error_project_not_associated', :project => id, :user => @user.id) if project.nil?
                   project.update_attribute(:position, position + 1)
                 end
               end

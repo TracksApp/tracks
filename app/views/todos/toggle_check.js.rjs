@@ -38,7 +38,7 @@ if @saved
         page.visual_effect :highlight, dom_id(@new_recurring_todo, 'line'), {'startcolor' => "'#99ff99'"}      
       else
         if @todo.recurring_todo.todos.active.count == 0
-          page.notify :notice, "There is no next action after the recurring action you just finished. The recurrence is completed", 6.0 if @new_recurring_todo.nil?
+          page.notify :notice, t('todos.recurrence_completed'), 6.0 if @new_recurring_todo.nil?
         end
       end
     end
@@ -68,5 +68,5 @@ if @saved
     page.redirect_to project_path(@todo.project_id)
   end
 else
-  page.replace_html "status", content_tag("div", content_tag("h2", "#{pluralize(@todo.errors.count, "error")} prohibited this action from being saved") + content_tag("p", "There were problems with the following fields:") + content_tag("ul", @todo.errors.each_full { |msg| content_tag("li", msg) }), "id" => "errorExplanation", "class" => "errorExplanation")  
+  page.replace_html "status", content_tag("div", content_tag("h2", t(:todo_errors, :count => @todo.errors.count)) + content_tag("p", t('common.errors_with_fields')) + content_tag("ul", @todo.errors.each_full { |msg| content_tag("li", msg) }), "id" => "errorExplanation", "class" => "errorExplanation")
 end

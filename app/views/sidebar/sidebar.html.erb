@@ -2,28 +2,28 @@
   <% # show active items before hidden / completed items -%>
 
   <%= render :partial => "sidebar/project_list",
-    :locals => { :list_name => 'Active Projects',
+    :locals => { :list_name => t('sidebar.list_name_active_projects'),
     :projects => @active_projects } -%>
 
   <%= render :partial => "sidebar/context_list",
-    :locals => { :list_name => 'Active Contexts',
+    :locals => { :list_name => t('sidebar.list_name_active_contexts'),
     :contexts => @active_contexts } -%>
 
   <% if prefs.show_hidden_projects_in_sidebar -%>
     <%= render :partial => "sidebar/project_list",
-      :locals => { :list_name => 'Hidden Projects',
+      :locals => { :list_name => t('sidebar.list_name_hidden_projects'),
       :projects => @hidden_projects } -%>
   <% end -%>
 
   <% if prefs.show_completed_projects_in_sidebar -%>
     <%= render :partial => "sidebar/project_list",
-      :locals => { :list_name => 'Completed Projects',
+      :locals => { :list_name => t('sidebar.list_name_completed_projects'),
       :projects => @completed_projects } -%>
   <% end -%>
 
   <% if prefs.show_hidden_contexts_in_sidebar -%>
     <%= render :partial => "sidebar/context_list",
-      :locals => { :list_name => 'Hidden Contexts',
+      :locals => { :list_name => t('sidebar.list_name_hidden_contexts'),
       :contexts => @hidden_contexts } -%>
   <% end -%>
 

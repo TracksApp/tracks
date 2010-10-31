@@ -1,25 +1,25 @@
 <div id="display_box">
 <% if @not_done_todos.empty? -%>
 <div class="container context">
-<h2>No actions found</h2>
-<div class="message">Currently there are no incomplete actions with the tag '<%= @tag_name %>'</div>
+<h2><%= t('todos.no_actions_found') %></h2>
+<div class="message"><%= t('todos.no_actions_with', :tag_name => @tag_name) %></div>
 </div>
 <% end -%>
 <%= render :partial => "contexts/mobile_context", :collection => @contexts_to_show -%>
-<h2>Deferred actions with the tag <%= @tag_name %></h2>
+<h2><%= t('todos.deferred_actions_with', :tag_name=> @tag_name) %></h2>
 <% unless (@deferred.nil? or @deferred.size == 0)  -%>
 <table cellpadding="0" cellspacing="0" border="0">
 <%= render :partial => "todos/mobile_todo", :collection => @deferred, :locals => { :parent_container_type => "tag" } -%>
 </table>  
 <% else -%>
-No deferred actions with the tag <%= @tag_name %>
+<%= t('todos.no_deferred_actions_with', :tag_name => @tag_name) %>
 <% end -%>
-<h2>Completed actions with the tag <%= @tag_name %></h2>
+<h2><%= t('todos.completed_actions_with', :tag_name => @tag_name) %></h2>
 <% unless (@done.nil? or @done.size == 0) -%>
 <table cellpadding="0" cellspacing="0" border="0">
 <%= render :partial => "todos/mobile_todo", :collection => @done, :locals => { :parent_container_type => "tag" } %>
 </table>
 <% else -%>
-No completed actions with the tag <%= @tag_name %>
+<%= t('todos.no_completed_actions_with', :tag_name => @tag_name) %>
 <% end -%>
 </div>

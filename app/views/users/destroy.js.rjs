@@ -1,7 +1,7 @@
 if @saved
   page["user-#{@deleted_user.id}"].remove
   page['user_count'].replace_html @total_users.to_s
-  page.notify :notice, "User #{@deleted_user.login} was successfully destroyed", 2.0
+  page.notify :notice, t('users.destroy_successful', :login => @deleted_user.login), 2.0
 else
-  page.notify :error, "There was an error deleting the user #{@deleted_user.login}", 8.0
+  page.notify :error, t('users.destroy_error', :login => @deleted_user.login), 8.0
 end

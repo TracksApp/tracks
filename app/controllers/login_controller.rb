@@ -50,7 +50,7 @@ class LoginController < ApplicationController
             return
           else
             @login = params['user_login']
-            notify :warning, "Login unsuccessful"
+            notify :warning, t('login.unsuccessful')
           end
         when :get
           if User.no_users_yet?
@@ -73,7 +73,7 @@ class LoginController < ApplicationController
       CASClient::Frameworks::Rails::Filter.logout(self)
     else
       reset_session
-      notify :notice, "You have been logged out of Tracks."
+      notify :notice, t('login.logged_out')
       redirect_to_login
     end
   end
@@ -88,7 +88,7 @@ class LoginController < ApplicationController
         expiry_time = session['expiry_time'] || Time.now + 10
         @time_left = expiry_time - Time.now
         if @time_left < (10*60) # Session will time out before the next check
-          @msg = "Session has timed out. Please "
+          @msg = 'login.session_time_out'
         else
           @msg = ""
         end
@@ -107,8 +107,8 @@ class LoginController < ApplicationController
     if session[:cas_user]
       if @user = User.find_by_login(session[:cas_user])
         session['user_id'] = @user.id
-        msg = (should_expire_sessions?) ? "will expire after 1 hour of inactivity." : "will not expire."
-        notify :notice, "Login successful: session #{msg}"
+        msg = (should_expire_sessions?) ? t('login.session_will_expire', :hours => 1) : t('login.session_will_not_expire')
+        notify :notice, (t('login.successful_with_session_info') + msg)
         cookies[:tracks_login] = { :value => @user.login, :expires => Time.now + 1.year, :secure => SITE_CONFIG['secure_cookies'] }
         unless should_expire_sessions?
           @user.remember_me
@@ -116,7 +116,7 @@ class LoginController < ApplicationController
         end
         #redirect_back_or_home
       else
-        notify :warning, "Sorry, no user by that CAS username exists (#{session[:cas_user]})"
+        notify :warning, t('login.cas_username_not_found', :username => session[:cas_user])
         redirect_to signup_url ; return
       end
     else
@@ -149,8 +149,8 @@ class LoginController < ApplicationController
       if result.successful?
         if @user = User.find_by_open_id_url(identity_url)
           session['user_id'] = @user.id
-          msg = (should_expire_sessions?) ? "will expire after 1 hour of inactivity." : "will not expire." 
-          notify :notice, "Login successful: session #{msg}"
+          msg = (should_expire_sessions?) ? t('login.session_will_expire', :hours => 1) : t('login.session_will_not_expire')
+          notify :notice, (t('login.successful_with_session_info') + msg)
           cookies[:tracks_login] = { :value => @user.login, :expires => Time.now + 1.year, :secure => SITE_CONFIG['secure_cookies'] }
           unless should_expire_sessions?
             @user.remember_me
@@ -158,7 +158,7 @@ class LoginController < ApplicationController
           end
           redirect_back_or_home
         else
-          notify :warning, "Sorry, no user by that identity URL exists (#{identity_url})"
+          notify :warning, t('login.openid_identity_url_not_found', :identity_url => identity_url)
         end
       else
         notify :warning, result.message

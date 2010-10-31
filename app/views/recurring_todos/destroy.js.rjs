@@ -2,11 +2,10 @@ if @saved
   if @remaining == 0
     page.show 'recurring-todos-empty-nd'
   end
-  page.notify :notice, "The recurring action was deleted succesfully. " +
-    "The recurrence pattern is removed from " + 
-    pluralize(@number_of_todos, "todo"), 5.0
+  page.notify :notice, t('todos.recurring_deleted_success') +
+    t(:todo_removed, :count => @number_of_todos), 5.0
   page[@recurring_todo].remove
   page.visual_effect :fade, dom_id(@recurring_todo), :duration => 0.4
 else
-  page.notify :error, "There was an error deleting the recurring todo #{@recurring_todo.description}", 8.0
+  page.notify :error, t('todos.error_deleting_recurring', :description => @recurring_todo.description), 8.0
 end

@@ -1,17 +1,15 @@
 <%= render :partial => 'chart', :locals => {:width => @chart_width, :height => @chart_height, :data => url_for(:action => @chart_name)} -%>
 <br/>
-<p>Click on a bar in the chart to update the actions below. Click <%=link_to "here", {:controller => "stats", :action => "index"} %> to return to the statistics page. <%
-    unless @further -%> <%= 
-      "Click " + 
-        link_to("here", {:controller => "stats", :action => "show_selected_actions_from_chart", :id=>"#{params[:id]}_end", :index => params[:index]})+
-        " to show the actions from week " + params[:index] + " and further." -%>
+<p><%= t('stats.click_to_update_actions') %> <%= t('stats.click_to_return', :link => link_to(t('stats.click_to_return_link'), {:controller => "stats", :action => "index"})) %> <%
+    unless @further -%> <%=
+    t('stats.click_to_show_actions_from_week', :link => link_to("here", {:controller => "stats", :action => "show_selected_actions_from_chart", :id=>"#{params[:id]}_end", :index => params[:index]}), :week => params[:index]) -%>
     <% end %></p>
 <br/>
 <div class="container tickler" id="tickler_container">
   <h2><%= @page_title -%></h2>
   <div id="tickler" class="items toggle_target">
     <div id="tickler-empty-nd" style="display:<%= @selected_actions.empty? ? 'block' : 'none'%>;">
-      <div class="message"><p>There are no actions selected</p></div>
+      <div class="message"><p><%= t('stats.no_actions_selected') %></p></div>
     </div>
         <%= render :partial => "todos/todo", :collection => @selected_actions, :locals => { :parent_container_type => 'stats' } %>
   </div>

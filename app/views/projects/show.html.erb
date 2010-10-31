@@ -4,18 +4,18 @@
   </div>
 
   <%= render :partial => "projects/project", :locals => { :project => @project, :collapsible => false } %>
-  <%= render :partial => "todos/deferred", :locals => { :deferred => @deferred, :collapsible => false, :append_descriptor => "in this project", :parent_container_type => 'project', :pending => @pending } %>
+  <%= render :partial => "todos/deferred", :locals => { :deferred => @deferred, :collapsible => false, :append_descriptor => t('projects.todos_append'), :parent_container_type => 'project', :pending => @pending } %>
   <% unless @max_completed==0 -%>
-    <%= render :partial => "todos/completed", :locals => { :done => @done, :collapsible => false, :suppress_project => true, :append_descriptor => "in this project" } %>
+    <%= render :partial => "todos/completed", :locals => { :done => @done, :collapsible => false, :suppress_project => true, :append_descriptor => t('projects.todos_append') } %>
   <% end -%>
 
   <div class="container">
     <div id="notes">
-    <div class="add_note_link"><%= link_to 'Add a note', '#' %> </div>
+    <div class="add_note_link"><%= link_to t('projects.add_note'), '#' %> </div>
       <h2>Notes</h2>
       <div id="empty-n" style="display:<%= @project.notes.empty? ? 'block' : 'none'%>;">
         <%= render :partial => "shared/empty",
-          :locals => { :message => "Currently there are no notes attached to this project"} %>
+          :locals => { :message => t('projects.no_notes_attached')} %>
       </div>
       <%= render :partial => "notes/notes_summary", :collection => @project.notes %>
     </div>
@@ -31,7 +31,7 @@
       <%= hidden_field( "note", "project_id", "value" => "#{@project.id}" ) %>
       <%= text_area( "note", "body", "cols" => 50, "rows" => 3, "tabindex" => 1 ) %>
       <br /><br />
-      <input type="submit" value="Add note" name="add-new-note" tabindex="2" />
+      <input type="submit" value="<%= t('projects.add_note_submit') %>" name="add-new-note" tabindex="2" />
     <% end -%>
   </div>
 </div>

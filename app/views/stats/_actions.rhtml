@@ -1,11 +1,11 @@
-<p>Of all your completed actions, the average time to complete is <%= (@actions_avg_ttc*10).round/10.0 %> days. 
-The Max-/minimum days to complete is <%= (@actions_max_ttc*10).round/10.0%>/<%= (@actions_min_ttc*10).round/10.0 %>. 
-The minimum time to complete is <%= @actions_min_ttc_sec %></p>
+<p><%= t('stats.actions_avg_completion_time', :count => (@actions_avg_ttc*10).round/10.0) %>
+<%= t('stats.actions_min_max_completion_days', :min=> (@actions_max_ttc*10).round/10.0, :max => (@actions_min_ttc*10).round/10.0) %>
+<%= t('stats.actions_min_completion_time', :time => @actions_min_ttc_sec) %></p>
 
-<p>In the last 30 days you created on average <%=(@sum_actions_created_last30days*10.0/30.0).round/10.0 %> actions 
-and completed on average <%=(@sum_actions_done_last30days*10.0/30.0).round/10.0%> actions per day. 
-In the last 12 months you created on average <%=(@sum_actions_created_last12months*10.0/12.0).round/10.0 %> actions 
-and completed on average <%= (@sum_actions_done_last12months*10.0/12.0).round/10.0%> actions per month.</p>
+<p><%= t('stats.actions_actions_avg_created_30days', :count => (@sum_actions_created_last30days*10.0/30.0).round/10.0 )%>
+<%= t('stats.actions_avg_completed_30days', :count => (@sum_actions_done_last30days*10.0/30.0).round/10.0 )%>
+<%= t('stats.actions_avg_created', :count => (@sum_actions_created_last12months*10.0/12.0).round/10.0 )%>
+<%= t('stats.actions_avg_completed', :count => (@sum_actions_done_last12months*10.0/12.0).round/10.0 )%></p>
 
 <% %w{ actions_done_last30days_data
 	   actions_done_last12months_data

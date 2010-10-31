@@ -1,0 +1,130 @@
+<% has_contexts = !current_user.contexts.empty? -%>
+<h1>Integration</h1>
+<p>Tracks kann mit verschiedenen Werkzeugen zusammenarbeiten...
+  was immer Sie brauchen, um Ihre Aufgaben zu erledigen!
+  Auf dieser Seite finden Sie Informationen, um einige dieser Werkzeuge einzurichten.
+  Diese Beispiele sind nicht unbedingt auf Ihre Umgebung anwendbar oder bed&uuml;rfen mehr
+  technisches Wissen als andere.
+  Weitere Informationen finden Sie in der <%= link_to "Entwickler Documentation der Tracks' REST API", url_for(:action => 'rest_api') %> (englisch).</p>
+<br/><p>Inhalt:</p>
+<ul>
+  <li><a href="#applescript1-section">Eine Aktion mit Applescript hinzuf&uuml;gen</a></li>
+  <li><a href="#applescript2-section">Eine Aktion anhand der aktuell in Mail.app selektierten Nachricht erstellen</a></li>
+  <li><a href="#quicksilver-applescript-section">Aktionen mit Quicksilver und Applescript erstellen</a></li>
+  <li><a href="#email-cron-section">Anstehende Aufgaben automatisch sich via E-Mail zusenden lassen</a></li>
+  <li><a href="#message_gateway">Tracks mit einem Mail-Server integrieren, um Aufgaben via E-Mail zu erstellen</a></li>
+  <li><a href="#google_gadget">Tracks zu Ihrer Google Gmail Seite hinzuf&uuml;gen</a></li>
+</ul><br/>
+<p>Sie haben weitere Beispiele?
+  <a href="http://www.getontracks.org/forums/viewforum/10/" title="Tracks | Tips and Tricks">Berichten Sie uns
+    in unserem Tipps&amp;Tricks Forum</a>, damit wir es f&uuml;r die n&auml;chsten Versionen ber&uuml;cksichtigen k&ouml;nnen.
+</p>
+
+<a name="applescript1-section"> </a>
+<h2>Eine Aktion mit Applescript hinzuf&uuml;gen</h2>
+<p>Dieses Beispiel-Script zeigt einen Dialog, welcher nach einer Beschreibung fragt und die Aufgabe in einem festen Kontext anlegt.</p>
+
+<% if has_contexts -%>
+  <ol>
+    <li>W&auml;hlen Sie den Kontext, f&uuml;r welchen die Aktion erstellt werden soll: <select name="applescript1-contexts" id="applescript1-contexts"><%= options_from_collection_for_select(current_user.contexts, "id", "name", current_user.contexts.first.id) %></select>
+    </li>
+    <li>Kopieren Sie das AppleScript in die Zwischenablage.<br />
+
+      <textarea id="applescript1" name="applescript1" rows="15"><%= render :partial => 'applescript1', :locals => { :context => current_user.contexts.first } %></textarea>
+    </li>
+    <li>&Ouml;ffnen Sie den Script Editor und f&uuml;gen die Daten in ein neues Script ein.</li>
+    <li>Kompilieren und speichern Sie das Script, um es bei Bedarf einzusetzen.</li>
+  </ol>
+<% else %>
+  <br/><p id="no_context_msg"><i>Sie haben noch keinen Kontext angelegt. Dieses Script ist automatisch verf&uuml;gbar, sobald Sie Ihren ersten Kontext angelegt haben.</i></p>
+<% end %>
+
+<a name="applescript2-section"> </a>
+<h2>Add an Action with Applescript based on the currently selected Email in Mail.app</h2>
+<p>This script takes the sender and subject of the selected email(s) in Mail and creates a new action for each one, with the description, "Email [sender] about [subject]". The description gets truncated to 100 characters (the validation limit for the field) if it is longer than that. It also has Growl notifications if you have Growl installed.</p>
+
+<% if has_contexts -%>
+  <ol>
+    <li>Choose the context you want to add actions to: <select name="applescript2-contexts" id="applescript2-contexts"><%= options_from_collection_for_select(current_user.contexts, "id", "name", current_user.contexts.first.id) %></select>
+    </li>
+    <li>Copy the Applescript below to the clipboard.<br />
+
+      <textarea id="applescript2" name="applescript2" rows="15"><%= render :partial => 'applescript2', :locals => { :context => current_user.contexts.first } %></textarea>
+    </li>
+    <li>Open Script Editor and paste the script into a new document.</li>
+    <li>Compile and save the script to the ~/Library/Scriipts/Mail Scripts directory.</li>
+    <li>For more information on using AppleScript with Mail.app, see <a href="http://www.apple.com/applescript/mail/" title="Scriptable Applications: Mail">this overview</a>.
+  </ol>
+<% else %>
+  <br/><p><i>You do not have any context yet. The script will be available after you add your first context</i></p>
+<% end %>
+
+<a name="quicksilver-applescript-section"></a>
+<h2>Add Actions with Quicksilver and Applescript</h2>
+
+<p>This integration will allow you to add actions to Tracks via <a href="http://quicksilver.blacktree.com/">Quicksilver</a>.</p>
+
+<% if has_contexts -%>
+  <ol>
+    <li>Choose the context you want to add actions to: <select name="quicksilver-contexts" id="quicksilver-contexts"><%= options_from_collection_for_select(current_user.contexts, "id", "name", current_user.contexts.first.id) %></select>
+    </li>
+    <li>Copy the Applescript below to the clipboard.<br />
+
+      <textarea id="quicksilver" name="quicksilver" rows="15"><%= render :partial => 'quicksilver_applescript', :locals => { :context => current_user.contexts.first } %></textarea>
+    </li>
+    <li>Open Script Editor and paste the script into a new document.</li>
+    <li>Compile and save the script as "Add to Tracks.scpt" in ~/Library/Application Support/Quicksilver/Actions/ (you may need to create the Actions directory)</li>
+    <li>Restart Quicksilver</li>
+    <li>Activate Quicksilver (Ctrl+Space by default)</li>
+    <li>Press "." to put quicksilver into text mode</li>
+    <li>Type the description of the next action you want to add</li>
+    <li>Press tab to switch to the action pane.</li>
+    <li>By typing or scrolling, choose the "Add to Tracks" action.</li>
+  </ol>
+<% else %>
+  <br/><p><i>You do not have any context yet. The script will be available after you add your first context</i></p>
+<% end %>
+
+<a name="email-cron-section"> </a>
+<h2>Automatically Email Yourself Upcoming Actions</h2>
+
+<p>If you enter the following entry to your crontab, you will receive email every day around 5 AM with a list of the upcoming actions which are due within the next 7 days.</p>
+
+<textarea id="cron" name="cron">0 5 * * * /usr/bin/curl -0 "<%= home_url %>todos.txt?due=6&token=<%= current_user.token %>" | /usr/bin/mail -e -s 'Tracks actions due in the next 7 days' youremail@yourdomain.com</textarea>
+
+<p>You can of course use other text <%= link_to 'feeds provided by Tracks', feeds_path %> -- why not email a list of next actions in a particular project to a group of colleagues who are working on the project?</p>
+
+<a name="message_gateway"> </a>
+<h2>Integrated email/SMS receiver</h2>
+<p>
+  If Tracks is running on the same server as your mail server, you can use the integrated mail handler built into tracks. Steps to set it up:
+<ul>
+  <li>Go to <%= link_to "Preferences", preferences_url %> and set your "From email" and "default email context" for todos sent in via email (which could come from an SMS message)</li>
+  <li>In sendmail/qmail/postfix/whatever, set up an email address alias to pipe messages to <pre >/PATH/TO/RUBY/ruby /PATH/TO/TRACKS/script/runner -e production 'MessageGateway.receive(STDIN.read)'</pre></li>
+  <li>Send an email to your newly configured address!</li>
+</ul>
+<p>You can also use the Rich Todo API to send in tasks like "do laundry @ Home"
+  or "Call Bill > project X". The subject of the message will fill description,
+  context, and project, while the body will populate the tasks's note.
+</p>
+
+<a name="google_gadget"> </a>
+<h2>Add Tracks as a Google Gmail gadget</h2>
+<p>
+  You can now manage your projects/actions inside Gmail using Tracks Gmail Gadget.
+  Add Tracks Gmail gadget to the sidebar of Gmail and track your next actions
+  or add new action without explicitly open new browser tab for Tracks. Steps to set it up:
+</p>
+<ul>
+  <li>Sign in to Gmail and click Settings in the top right of your Gmail page. In Gmail setting page, click Labs tab</li>
+  <li>Enable the "Add any gadget by URL" feature. You will find it at bottom of the list. Select Enable radio button and click Save Changes button.</li>
+  <li>Now you can see Gadgets tab added to Gmail Settings. Go to the Gadgets tab</li>
+  <li>Paste following link to the Add a gadget by its URL: and then click Add button:<br/>
+    <pre><%= integrations_url + "/google_gadget" %></pre></li>
+</ul>
+
+<Module>
+<ModulePrefs title="GTDify" directory_title="GTDify" description="Official gadget for GTDify service." author="GTDify" author_email="support@gtdify.com" author_affiliation="GTDify" author_location="NJ, USA" title_url="http://www.gtdify.com/" screenshot="http://www.gtdify.com/modules/gmail/ss.png" thumbnail="http://www.gtdify.com/modules/gmail/tn.png" category="communication" category2="tools" height="300">
+  </ModulePrefs>
+<Content type="url" href="http://my.gtdify.com/mobile/"/>
+</Module>

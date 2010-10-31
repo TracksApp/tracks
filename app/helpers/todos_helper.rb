@@ -21,26 +21,26 @@ module TodosHelper
   def remote_star_icon 
     link_to( image_tag_for_star(@todo),
       toggle_star_todo_path(@todo),
-      :class => "icon star_item", :title => "star the action '#{@todo.description}'")
+      :class => "icon star_item", :title => t('todos.star_action_with_description', :description => @todo.description))
   end
 
   def remote_edit_button
     link_to(
-      image_tag("blank.png", :alt => "Edit", :align => "absmiddle", :id => 'edit_icon_todo_'+@todo.id.to_s, :class => 'edit_item'),
+      image_tag("blank.png", :alt => t('todos.edit'), :align => "absmiddle", :id => 'edit_icon_todo_'+@todo.id.to_s, :class => 'edit_item'),
       {:controller => 'todos', :action => 'edit', :id => @todo.id},
       :class => "icon edit_item",
-      :title => "Edit the action '#{@todo.description}'")
+      :title => t('todos.edit_action_with_description', :description => @todo.description))
   end
 
   def remote_delete_menu_item(parameters, todo)
     return link_to_remote(
-      image_tag("delete_off.png", :mouseover => "delete_on.png", :alt => "Delete", :align => "absmiddle")+" Delete",
+      image_tag("delete_off.png", :mouseover => "delete_on.png", :alt => t('todos.delete'), :align => "absmiddle")+" "+t('todos.delete'),
       :url => {:controller => 'todos', :action => 'destroy', :id => todo.id},
       :method => 'delete',
       :with => "'#{parameters}'",
       :before => todo_start_waiting_js(todo),
       :complete => todo_stop_waiting_js(todo),
-      :confirm => "Are you sure that you want to delete the action '#{todo.description}'?")
+      :confirm => t('todos.confirm_delete', :description => todo.description))
   end
 
   def remote_defer_menu_item(days, todo)
@@ -51,12 +51,12 @@ module TodosHelper
     futuredate = (@todo.show_from || @todo.user.date) + days.days
     if @todo.due && futuredate > @todo.due
       return link_to_function(
-        image_tag("defer_#{days}_off.png", :mouseover => "defer_#{days}.png", :alt => "Defer #{pluralize(days, "day")}", :align => "absmiddle")+" Defer #{pluralize(days, "day")}",
-        "alert('Defer date is after due date. Please edit and adjust due date before deferring.')"
+        image_tag("defer_#{days}_off.png", :mouseover => "defer_#{days}.png", :alt => t('todos.defer_x_days', :count => days), :align => "absmiddle")+" "+t('todos.defer_x_days', :count => days),
+        "alert('#{t('todos.defer_date_after_due_date')}')"
       )
     else
       return link_to_remote(
-        image_tag("defer_#{days}_off.png", :mouseover => "defer_#{days}.png", :alt => "Defer #{pluralize(days, "day")}", :align => "absmiddle")+" Defer #{pluralize(days, "day")}",
+        image_tag("defer_#{days}_off.png", :mouseover => "defer_#{days}.png", :alt => t('todos.defer_x_days', :count => days), :align => "absmiddle")+" "+t('todos.defer_x_days', :count => days),
         :url => url,
         :before => todo_start_waiting_js(todo),
         :complete => todo_stop_waiting_js(todo))
@@ -68,7 +68,7 @@ module TodosHelper
       :_source_view => (@source_view.underscore.gsub(/\s+/,'_') rescue "")}
     url[:_tag_name] = @tag_name if @source_view == 'tag'
 
-    return link_to(image_tag("to_project_off.png", :align => "absmiddle")+" Make project", url)
+    return link_to(image_tag("to_project_off.png", :align => "absmiddle")+" " + t('todos.convert_to_project'), url)
   end
   
   def todo_start_waiting_js(todo)
@@ -93,14 +93,14 @@ module TodosHelper
   
   def remote_toggle_checkbox
     check_box_tag('item_id', toggle_check_todo_path(@todo), @todo.completed?, :class => 'item-checkbox',
-                  :title => @todo.pending? ? 'Blocked by ' + @todo.uncompleted_predecessors.map(&:description).join(', ') : "", :readonly => @todo.pending?)
+                  :title => @todo.pending? ? t('todos.blocked_by', :predecessors => @todo.uncompleted_predecessors.map(&:description).join(', ')) : "", :readonly => @todo.pending?)
   end
   
   def date_span
     if @todo.completed?
       "<span class=\"grey\">#{format_date( @todo.completed_at )}</span>"
     elsif @todo.pending?
-      "<a title='Depends on: #{@todo.uncompleted_predecessors.map(&:description).join(', ')}'><span class=\"orange\">Pending</span></a> "
+      "<a title='#{t('todos.depends_on')}: #{@todo.uncompleted_predecessors.map(&:description).join(', ')}'><span class=\"orange\">#{t('todos.pending')}</span></a> "
     elsif @todo.deferred?
       show_date( @todo.show_from )
     else
@@ -111,7 +111,7 @@ module TodosHelper
   def successors_span
     unless @todo.pending_successors.empty?
       pending_count = @todo.pending_successors.length
-      title = "Has #{pluralize(pending_count, 'pending action')}: #{@todo.pending_successors.map(&:description).join(', ')}"
+      title = "#{t('todos.has_x_pending', :count => pending_count)}: #{@todo.pending_successors.map(&:description).join(', ')}"
       image_tag( 'successor_off.png', :width=>'10', :height=>'16', :border=>'0', :title => title )
     end
   end
@@ -119,7 +119,7 @@ module TodosHelper
   def grip_span
     unless @todo.completed?
       image_tag('grip.png', :width => '7', :height => '16', :border => '0', 
-        :title => 'Drag onto another action to make it depend on that action',
+        :title => t('todos.drag_action_title'),
         :class => 'grip')
     end
   end
@@ -150,7 +150,7 @@ module TodosHelper
 
   def deferred_due_date
     if @todo.deferred? && @todo.due
-      "(action due on #{format_date(@todo.due)})"
+      t('todos.action_due_on', :date => format_date(@todo.due))
     end
   end
   
@@ -207,21 +207,21 @@ module TodosHelper
     case days
       # overdue or due very soon! sound the alarm!
     when -1000..-1
-      "<a title=\"" + format_date(d) + "\"><span class=\"red\">Scheduled to show " + (days * -1).to_s + " days ago</span></a> "
+      "<a title=\"" + format_date(d) + "\"><span class=\"red\">#{t('todos.scheduled_overdue', :days => (days * -1).to_s)}</span></a> "
     when 0
-      "<a title=\"" + format_date(d) + "\"><span class=\"amber\">Show Today</span></a> "
+      "<a title=\"" + format_date(d) + "\"><span class=\"amber\">#{t('todos.show_today')}</span></a> "
     when 1
-      "<a title=\"" + format_date(d) + "\"><span class=\"amber\">Show Tomorrow</span></a> "
+      "<a title=\"" + format_date(d) + "\"><span class=\"amber\">#{t('todos.show_tomorrow')}</span></a> "
       # due 2-7 days away
     when 2..7
       if prefs.due_style == Preference.due_styles[:due_on]
-        "<a title=\"" + format_date(d) + "\"><span class=\"orange\">Show on " + d.strftime("%A") + "</span></a> "
+        "<a title=\"" + format_date(d) + "\"><span class=\"orange\">#{t('todos.show_on_date', :date => d.strftime("%A"))}</span></a> "
       else
-        "<a title=\"" + format_date(d) + "\"><span class=\"orange\">Show in " + days.to_s + " days</span></a> "
+        "<a title=\"" + format_date(d) + "\"><span class=\"orange\">#{t('todos.show_in_days', :days => days.to_s)}</span></a> "
       end
       # more than a week away - relax
     else
-      "<a title=\"" + format_date(d) + "\"><span class=\"green\">Show in " + days.to_s + " days</span></a> "
+      "<a title=\"" + format_date(d) + "\"><span class=\"green\">#{t('todos.show_in_days', :days => days.to_s)}</span></a> "
     end
   end
   
@@ -300,7 +300,7 @@ module TodosHelper
   
   def image_tag_for_star(todo)
     class_str = todo.starred? ? "starred_todo" : "unstarred_todo"
-    image_tag("blank.png", :title =>"Star action", :class => class_str)
+    image_tag("blank.png", :title =>t('todos.star_action'), :class => class_str)
   end
   
   def auto_complete_result2(entries, phrase = nil)

@@ -1,5 +1,5 @@
 if @removed
-  status_message = "Removed #{@successor.description} as dependency from #{@predecessor.description}."
+  status_message = t('todos.removed_predecessor', :successor => @successor.description, :predecessor => @predecessor.description)
   page.notify :notice, status_message, 5.0
   
   # replace old predecessor with one without the successor
@@ -31,5 +31,5 @@ if @removed
   end
   page << "enable_rich_interaction();"
 else
-  page.notify :error, "There was an error removing the dependency", 8.0
+  page.notify :error, t('todos.error_removing_dependency'), 8.0
 end

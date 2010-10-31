@@ -49,7 +49,7 @@ module LoginSystem
       set_current_user(user)
       current_user.remember_me
       cookies[:auth_token] = { :value => current_user.remember_token , :expires => current_user.remember_token_expires_at, :secure => SITE_CONFIG['secure_cookies'] }
-      flash[:notice] = "Logged in successfully. Welcome back!"
+      flash[:notice] = t('login.successful')
     end
   end  
   
@@ -191,7 +191,7 @@ module LoginSystem
   def basic_auth_denied
       response.headers["Status"] = "401 Unauthorized"
       response.headers["WWW-Authenticate"] = "Basic realm=\"'Tracks Login Required'\""
-      render :text => "401 Unauthorized: You are not authorized to interact with Tracks.", :status => 401
+      render :text => t('login.unsuccessful'), :status => 401
   end
 
 end

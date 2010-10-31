@@ -3,5 +3,5 @@ page['todo_project_name'].value = @project.name
 
 page << "enable_rich_interaction();"
 
-status_message = "Name of project was changed"
+status_message = t('projects.status_project_name_changed')
 page.notify :notice, status_message, 5.0

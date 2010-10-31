@@ -1,4 +1,4 @@
-status_message = 'Context saved'
+status_message = t('contexts.save_status_message')
 page.notify :notice, status_message, 5.0
 if @context_state_changed
   page.remove dom_id(@context, 'container')

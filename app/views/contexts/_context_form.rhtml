@@ -14,11 +14,11 @@
     <div class="widgets">
       <button type="submit" class="positive" id="<%= dom_id(context, 'submit') %>" tabindex="15">
         <%=image_tag("accept.png", :alt => "") %>
-        Update
+        <%= t 'common.update' %>
       </button>
       <a href="" onclick="" class="negative">
         <%=image_tag("cancel.png", :alt => "") %>
-        Cancel
+        <%= t 'common.cancel' %>
       </a>
     </div>
   </div>

@@ -1,7 +1,7 @@
 <div id="display_box">
   <div class="container context" <%= "style=\"display:none\"" unless @not_done_todos.empty? %> >
-       <h2>No actions found</h2>
-    <div class="message"><p>Currently there are no incomplete actions with the tag '<%= @tag_name %>'</p></div>
+       <h2><%= t('todos.no_actions_found')%></h2>
+    <div class="message"><p><%= t('todos.no_actions_with', :tag_name=>@tag_name) %></p></div>
   </div>
 
   <%= render :partial => "contexts/context", :collection => @contexts_to_show,
@@ -12,18 +12,18 @@
                                                :deferred => @deferred, 
                                                :pending => @pending,
                                                :collapsible => true, 
-                                               :append_descriptor => "tagged with &lsquo;#{@tag_name}&rsquo;", 
+                                               :append_descriptor => t('todos.tagged_with', :tag_name => @tag_name),
                                                :parent_container_type => 'tag' 
                                               } %>
   <% end -%>
 
   <% unless @hidden_todos.nil? -%>
-    <%= render :partial => "todos/hidden", :locals => { :hidden => @hidden_todos, :collapsible => true, :append_descriptor => "tagged with &lsquo;#{@tag_name}&rsquo;" } %>
+    <%= render :partial => "todos/hidden", :locals => { :hidden => @hidden_todos, :collapsible => true, :append_descriptor => t('todos.tagged_with', :tag_name => @tag_name) } %>
   <% end -%>
 
   <% unless @done.nil? -%>
     <%= render :partial => "todos/completed",
-      :locals => { :done => @done, :collapsible => true, :append_descriptor => "tagged with &lsquo;#{@tag_name}&rsquo;" } %>
+      :locals => { :done => @done, :collapsible => true, :append_descriptor => t('todos.tagged_with', :tag_name => @tag_name) } %>
   <% end -%>
 </div><!-- End of display_box -->
 

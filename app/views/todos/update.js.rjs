@@ -1,9 +1,8 @@
 if @saved
   # show update message
-  status_message = 'Action saved'
-  status_message += ' to tickler' if @todo.deferred?
-  status_message = 'Added new project / ' + status_message if @new_project_created
-  status_message = 'Added new context / ' + status_message if @new_context_created
+  status_message = @todo.deferred? ? t('todos.action_saved_to_tickler') : t('todos.action_saved')
+  status_message = t('todos.added_new_project') + ' / ' + status_message if @new_project_created
+  status_message = t('todos.added_new_context') + ' / ' + status_message if @new_context_created
   status_message = @message || status_message
   page.notify :notice, status_message, 5.0
   

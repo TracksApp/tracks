@@ -1,23 +1,23 @@
-<h1>Manage users</h1> 
+<h1><%= t('users.manage_users') %></h1>
 
-<p>You have a total of <span id="user_count"><%= @total_users %></span> users</p>
+<p><%= t('users.total_users_count', :count => "<span id=\"user_count\">#{@total_users}</span>") %></p>
 
 <table class="users_table"> 
   <tr> 
-    <th>Login</th>
-    <th>Full name</th>
-    <th>Authorization type</th>
-    <th>Open ID URL</th>
-    <th>Total actions</th>
-    <th>Total contexts</th>
-    <th>Total projects</th>
-    <th>Total notes</th>
+    <th><%= User.human_attribute_name('login') %></th>
+    <th><%= User.human_attribute_name('display_name') %></th>
+    <th><%= User.human_attribute_name('auth_type') %></th>
+    <th><%= User.human_attribute_name('open_id_url') %></th>
+    <th><%= t('users.total_actions') %></th>
+    <th><%= t('users.total_contexts') %></th>
+    <th><%= t('users.total_projects') %></th>
+    <th><%= t('users.total_notes') %></th>
     <th>&nbsp;</th>
   </tr> 
   <% for user in @users %>
     <tr <%= "class=\"highlight\"" if user.is_admin? %> id="user-<%= user.id %>">
       <td><%=h user.login %></td>
-      <td><%=h user.last_name? ? user.display_name : '-' %></td>
+      <td><%=h user.display_name %></td>
       <td><%= h user.auth_type %></td>
       <td><%= h user.open_id_url || '-' %></td>
       <td><%= h user.todos.size %></td>
@@ -25,9 +25,9 @@
       <td><%= h user.projects.size %></td>
       <td><%= h user.notes.size %></td>
       <td><%= !user.is_admin? ? link_to_remote(
-          image_tag("blank.png", :title =>"Destroy user", :class=>"delete_item"),
+          image_tag("blank.png", :title =>t('users.destroy_user'), :class=>"delete_item"),
           { :url => user_path(user.id), :method => :delete,
-            :confirm => "Warning: this will delete user \'#{user.login}\', all their actions, contexts, project and notes. Are you sure that you want to continue?" },
+            :confirm => t('users.destroy_confirmation', :login => user.login) },
           { :class => "icon" } ) : "&nbsp;" %></td>
     </tr>
   <% end %>
@@ -36,4 +36,4 @@
   <%= will_paginate @users %>
 </p>
 
-<p><%= link_to 'Signup new user', signup_path %></p>
+<p><%= link_to t('users.signup_new_user'), signup_path %></p>

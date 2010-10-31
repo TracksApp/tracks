@@ -18,7 +18,7 @@ if @saved
     page.visual_effect :highlight, dom_id(@recurring_todo), :duration => 3
 
     # inform user if a new todo has been created because of the activation
-    page.notify :notice, "A new todo was added which belongs to this recurring todo", 3.0 unless @new_recurring_todo.nil?
+    page.notify :notice, t('todos.new_related_todo_created'), 3.0 unless @new_recurring_todo.nil?
     
     # set empty messages
     page.show 'completed-empty-nd' if @remaining == 0
@@ -26,5 +26,5 @@ if @saved
   end
   
 else
-  page.notify :error, "There was an error completing / activating the recurring todo #{@recurring_todo.description}", 8.0
+  page.notify :error, t('todos.error_completing_todo', :description => @recurring_todo.description), 8.0
 end

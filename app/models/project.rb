@@ -36,10 +36,10 @@ class Project < ActiveRecord::Base
   named_scope :hidden, :conditions => { :state => 'hidden' }
   named_scope :completed, :conditions => { :state => 'completed'}
   
-  validates_presence_of :name, :message => "project must have a name"
-  validates_length_of :name, :maximum => 255, :message => "project name must be less than 256 characters"
-  validates_uniqueness_of :name, :message => "already exists", :scope =>"user_id"
-  validates_does_not_contain :name, :string => ',', :message => "cannot contain the comma (',') character"
+  validates_presence_of :name
+  validates_length_of :name, :maximum => 255
+  validates_uniqueness_of :name, :scope =>"user_id"
+  validates_does_not_contain :name, :string => ','
 
   acts_as_list :scope => 'user_id = #{user_id} AND state = \'#{state}\''
   acts_as_state_machine :initial => :active, :column => 'state'
@@ -71,8 +71,8 @@ class Project < ActiveRecord::Base
   
   def self.feed_options(user)
     {
-      :title => 'Tracks Projects',
-      :description => "Lists all the projects for #{user.display_name}"
+      :title => t('models.project.feed_title'),
+      :description => t('models.project.feed_description', :username => user.display_name)
     }
   end
       

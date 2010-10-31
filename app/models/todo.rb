@@ -135,7 +135,7 @@ class Todo < ActiveRecord::Base
   
   def validate
     if !show_from.blank? && show_from < user.date
-      errors.add("show_from", "must be a date in the future")
+      errors.add("show_from", t('models.todo.error_date_must_be_future'))
     end
     errors.add(:description, "may not contain \" characters") if /\"/.match(description)
     unless @predecessor_array.nil? # Only validate predecessors if they changed

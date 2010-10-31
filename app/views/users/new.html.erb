@@ -1,4 +1,4 @@
-<div title="Account signup" id="signupform" class="form">
+<div title="<%= t('users.account_signup') %>" id="signupform" class="form">
 <% form_tag :action=> "create" do %>
 
   <%= error_messages_for 'user' %><br/>
@@ -10,7 +10,7 @@
   <table>
 	<%if Tracks::Config.auth_schemes.include?('cas') && session[:cas_user]%>
         <tr>
-      <td><label for="user_login">With your CAS username:</label></td>
+      <td><label for="user_login"><%= t('users.register_with_cas') %>:</label></td>
       <td> "<%= session[:cas_user]%>"  </td>
       <td>
         <%= hidden_field "user", "login",                   :value => session[:cas_user] %>
@@ -20,25 +20,25 @@
     </tr>
 	<%else%>
     <tr>
-      <td><label for="user_login">Desired login:</label></td>
+      <td><label for="user_login"><%= t('users.desired_login') %>:</label></td>
       <td> <%= text_field "user", "login", :size => 20 %></td>
     </tr>
 	<tr>
-      <td><label for="user_password">Choose password:</label></td>
+      <td><label for="user_password"><%= t('users.choose_password') %>:</label></td>
       <td><%= password_field "user", "password", :size => 20 %></td>
     </tr>
     <tr>
-      <td><label for="user_password_confirmation">Confirm password:</label></td>
+      <td><label for="user_password_confirmation"><%= t('users.confirm_password') %>:</label></td>
       <td><%= password_field "user", "password_confirmation", :size => 20 %></td>
     </tr>
     <tr>
-      <td><label for="user_auth_type">Authentication Type:</label></td>
+      <td><label for="user_auth_type"><%= User.human_attribute_name('auth_type') %>:</label></td>
       <td><%=  select("user", "auth_type", @auth_types, { :include_blank => false })%></td>
     </tr>
     <%end%>
     <tr>
       <td></td>
-      <td><input type="submit" id="signup" value="Signup &#187;" class="primary" /></td>
+      <td><input type="submit" id="signup" value="<%= t('users.signup') %> &#187;" class="primary" /></td>
     </tr>
   </table>
   

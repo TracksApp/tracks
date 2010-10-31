@@ -3,4 +3,4 @@ page.delay(0.5) do
   page[dom_id(@context, "container")].remove
 end
 page['badge_count'].replace_html @down_count
-page.notify :notice, "Deleted context '#{@context.name}'", 5.0
+page.notify :notice, t('contexts.context_deleted', :name=>@context.name), 5.0

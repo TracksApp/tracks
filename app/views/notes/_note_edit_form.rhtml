@@ -2,5 +2,5 @@
 <%= hidden_field( "note", "project_id" ) %>
 <%= text_area( "note", "body", "cols" => 70, "rows" => 15, "tabindex" => 1 ) %>
 <br /><br />
-<input type="submit" value="Update" tabindex="2" />
+<input type="submit" value="<%= t('common.update') %>" tabindex="2" />
 <% @note = nil %>

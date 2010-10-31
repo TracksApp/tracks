@@ -1,19 +1,19 @@
 <div id="display_box">
   <div class="container recurring_todos">
-    <h2>Recurring todos</h2>
+    <h2><%= t('todos.recurring_todos') %></h2>
     <div id="recurring_todos_container">
       <div id="recurring-todos-empty-nd" style="<%= @no_recurring_todos ? 'display:block' : 'display:none'%>">
-        <div class="message"><p>Currently there are no recurring todos</p></div>
+        <div class="message"><p><%= t('todos.no_recurring_todos') %></p></div>
       </div>
       <%= render :partial => "recurring_todo", :collection => @recurring_todos %>
     </div>
   </div>
   
   <div class="container recurring_todos_done">
-    <h2>Recurring todos that are completed</h2>
+    <h2><%= t('todos.completed_recurring') %></h2>
     <div id="completed_recurring_todos_container">
       <div id="completed-empty-nd" style="<%= @no_completed_recurring_todos ? 'display:block' : 'display:none'%>">
-        <div class="message"><p>Currently there are no completed recurring todos</p></div>
+        <div class="message"><p><%= t('todos.no_completed_recurring') %></p></div>
       </div>
       <%= render :partial => "recurring_todo", :collection => @completed_recurring_todos %>
     </div>
@@ -21,13 +21,13 @@
 </div>
 <div id="input_box">
   <div id="recurring_new_container">
-    <a href='#' onclick="$('new-recurring-todo').show();$('edit-recurring-todo').hide();TracksForm.toggle_overlay()"><%= image_tag("add.png", {:alt => "[ADD]"})-%>Add a new recurring action</a> 
+    <a href='#' onclick="$('new-recurring-todo').show();$('edit-recurring-todo').hide();TracksForm.toggle_overlay()"><%= image_tag("add.png", {:alt => "[ADD]"})-%><%= t('todos.add_new_recurring') %></a>
   </div>
 </div>
 
 <div id="overlay">
   <div id="new-recurring-todo" class="new-form">
-    <label>Add new recurring action</label><br/>
+    <label><%= t('todos.add_new_recurring') %></label><br/>
     <%= render :partial => "recurring_todo_form" %>
   </div>
   <div id="edit-recurring-todo" class="edit-form"  style="display:none">

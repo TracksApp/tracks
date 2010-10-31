@@ -24,7 +24,7 @@
       <% end -%>
     </script>
     <link rel="shortcut icon" href="<%= url_for(:controller => 'favicon.ico') %>" />
-    <%= auto_discovery_link_tag(:rss, {:controller => "todos", :action => "index", :format => 'rss', :token => "#{current_user.token}"}, {:title => "RSS feed of next actions"}) %>
+    <%= auto_discovery_link_tag(:rss, {:controller => "todos", :action => "index", :format => 'rss', :token => "#{current_user.token}"}, {:title => t('layouts.next_actions_rss_feed')}) %>
     <link rel="search" type="application/opensearchdescription+xml" title="Tracks" href="<%= search_plugin_path %>" />
     <title><%= @page_title %></title>
   </head>
@@ -40,47 +40,47 @@
         </h1>
       </div>
       <div id="minilinks">
-        <%= link_to("Toggle notes", "#", {:accesskey => "S", :title => "Toggle all notes", :id => "toggle-notes-nav"}) %>
+        <%= link_to(t('layouts.toggle_notes'), "#", {:accesskey => "S", :title => t('layouts.toggle_notes_title'), :id => "toggle-notes-nav"}) %>
         &nbsp;|&nbsp;
-        <%= link_to "Logout (#{current_user.display_name}) »", logout_path %>
+        <%= link_to( t('common.logout') + " (#{current_user.display_name}) »", logout_path) %>
       </div>
       <div id="navcontainer">
         <ul class="sf-menu">
-          <li><%= navigation_link("Home", home_path, {:accesskey => "t", :title => "Home"} ) %></li>
-          <li><%= navigation_link("Starred", tag_path("starred"), :title => "See your starred actions" ) %></li>
-          <li><%= navigation_link("Projects", projects_path, {:accesskey=>"p", :title=>"Projects"} ) %></li>
-          <li><%= navigation_link("Tickler", tickler_path, {:accesskey =>"k", :title => "Tickler"} ) %></li>
-          <li><a href="#">Organize</a>
+          <li><%= navigation_link(t('layouts.navigation.home'), home_path, {:accesskey => "t", :title => t('layouts.navigation.home_title')} ) %></li>
+          <li><%= navigation_link(t('layouts.navigation.starred'), tag_path("starred"), :title => t('layouts.navigation.starred_title')) %></li>
+          <li><%= navigation_link(t('layouts.navigation.projects'), projects_path, {:accesskey=>"p", :title=>t('layouts.navigation.projects_title')} ) %></li>
+          <li><%= navigation_link(t('layouts.navigation.tickler'), tickler_path, {:accesskey =>"k", :title => t('layouts.navigation.tickler_title')} ) %></li>
+          <li><a href="#"><%= t('layouts.navigation.organize') %></a>
             <ul>
-              <li><%= navigation_link( "Contexts", contexts_path, {:accesskey=>"c", :title=>"Contexts"} ) %></li>
-              <li><%= navigation_link( "Notes", notes_path, {:accesskey => "o", :title => "Show all notes"} ) %></li>
-              <li><%= navigation_link( "Repeating todos", {:controller => "recurring_todos", :action => "index"}, :title => "Manage recurring actions" ) %></li>
+              <li><%= navigation_link( t('layouts.navigation.contexts'), contexts_path, {:accesskey=>"c", :title=>t('layouts.navigation.contexts_title')} ) %></li>
+              <li><%= navigation_link( t('layouts.navigation.notes'), notes_path, {:accesskey => "o", :title => t('layouts.navigation.notes_title')} ) %></li>
+              <li><%= navigation_link( t('layouts.navigation.recurring_todos'), {:controller => "recurring_todos", :action => "index"}, :title => t('layouts.navigation.recurring_todos_title')) %></li>
             </ul>
           </li>
-          <li><a href="#">View</a>
+          <li><a href="#"><%= t('layouts.navigation.view') %></a>
             <ul>
-              <li><%= navigation_link( "Calendar", calendar_path, :title => "Calendar of due actions" ) %></li>
-              <li><%= navigation_link( "Done", done_path, {:accesskey=>"d", :title=>"Completed"} ) %></li>
-              <li><%= navigation_link( "Feeds", {:controller => "feedlist", :action => "index"}, :title => "See a list of available feeds" ) %></li>
-              <li><%= navigation_link( "Statistics", {:controller => "stats", :action => "index"}, :title => "See your statistics" ) %></li>
+              <li><%= navigation_link( t('layouts.navigation.calendar'), calendar_path, :title => t('layouts.navigation.calendar_title')) %></li>
+              <li><%= navigation_link( t('layouts.navigation.completed_tasks'), done_path, {:accesskey=>"d", :title=>t('layouts.navigation.completed_tasks_title')} ) %></li>
+              <li><%= navigation_link( t('layouts.navigation.feeds'), {:controller => "feedlist", :action => "index"}, :title => t('layouts.navigation.feeds_title')) %></li>
+              <li><%= navigation_link( t('layouts.navigation.stats'), {:controller => "stats", :action => "index"}, :title => t('layouts.navigation.stats_title')) %></li>
             </ul>
           </li>
           <li><a href="#">Admin</a>
             <ul>
-              <li><%= navigation_link( "Preferences", preferences_path, {:accesskey => "u", :title => "Show my preferences"} ) %></li>
-              <li><%= navigation_link( "Export", {:controller => "data", :action => "index"}, {:accesskey => "i", :title => "Import and export data"} ) %></li>
+              <li><%= navigation_link( t('layouts.navigation.preferences'), preferences_path, {:accesskey => "u", :title => t('layouts.navigation.preferences_title')} ) %></li>
+              <li><%= navigation_link( t('layouts.navigation.export'), {:controller => "data", :action => "index"}, {:accesskey => "i", :title => t('layouts.navigation.export_title')} ) %></li>
               <% if current_user.is_admin? -%>
-                <li><%= navigation_link("Manage users", users_path, {:accesskey => "a", :title => "Add or delete users"} ) %></li>
+                <li><%= navigation_link(t('layouts.navigation.manage_users'), users_path, {:accesskey => "a", :title => t('layouts.navigation.manage_users_title')} ) %></li>
               <% end -%>
             </ul>
           </li>
           <li><a href="#">?</a>
             <ul>
-              <li><%= link_to 'Integrate Tracks', integrations_path %></li>
-              <li><%= link_to 'REST API Docs', rest_api_docs_path %></li>
+              <li><%= link_to t('layouts.navigation.integrations_'), integrations_path %></li>
+              <li><%= link_to t('layouts.navigation.api_docs'), rest_api_docs_path %></li>
             </ul>
           </li>
-          <li><%= navigation_link(image_tag("system-search.png", :size => "16X16", :border => 0), {:controller => "search", :action => "index"}, :title => "Search All Items" ) %></li>
+          <li><%= navigation_link(image_tag("system-search.png", :size => "16X16", :border => 0), {:controller => "search", :action => "index"}, :title => t('layouts.navigation.search')) %></li>
         </ul>
       </div>
       <%= render_flash %>

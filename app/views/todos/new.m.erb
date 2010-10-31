@@ -1,5 +1,5 @@
 <% form_tag todos_path(:format => 'm'), :method => :post do %>
   <%= render :partial => 'edit_mobile' %>
-  <p><input type="submit" value="Create" tabindex="12" accesskey="#" /></p>
+  <p><input type="submit" value="<%= t('common.create') %>" tabindex="12" accesskey="#" /></p>
 <% end -%>
-<%= link_to "Back", @return_path %>
+<%= link_to t('common.back'), @return_path %>

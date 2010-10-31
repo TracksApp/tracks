@@ -5,23 +5,23 @@
 <div class="project_description"><%= sanitize(@project.description) %></div>
 <% end -%>
 <%= render :partial => "todos/mobile_todo", :collection => @not_done, :locals => { :parent_container_type => "project" }%>
-<h2>Deferred actions for this project</h2>
+<h2><%= t('projects.deferred_actions')%></h2>
 <% if @deferred.empty? -%>
-There are no deferred actions for this project
+<%= t('projects.deferred_actions_empty') %>
 <% else -%>
 <%= render :partial => "todos/mobile_todo", :collection => @deferred, :locals => { :parent_container_type => "project" }%>
 <% end 
 -%>
-<h2>Completed actions for this project</h2>
+<h2><%= t('projects.completed_actions')%></h2>
 <% if @done.empty? -%>
-There are no completed actions for this project
+<%= t('projects.completed_actions_empty') %>
 <% else -%>
 <%= render :partial => "todos/mobile_todo", :collection => @done, :locals => { :parent_container_type => "project" }%>
 <% end %>
-<h2>Notes</h2>
+<h2><%= t('projects.notes') %></h2>
 <% if @project.notes.empty? -%>
-There are no notes for this project
+<%= t('projects.notes_empty') %>
 <% else -%><%= render :partial => "notes/mobile_notes_summary", :collection => @project.notes %>
 <% end -%>
-<h2>Settings</h2>
-This project is <%= project.current_state.to_s %>. <%= @project_default_context %>
+<h2><%= t('projects.settings') %></h2>
+<%= t('projects.state', :state => project.current_state.to_s) %>. <%= @project_default_context %>

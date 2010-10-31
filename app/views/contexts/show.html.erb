@@ -1,7 +1,7 @@
 <div id="display_box">
 <%= render :partial => "contexts/context", :locals => { :context => @context, :collapsible => false } %>
 <% unless @max_completed==0 -%>
-  <%= render :partial => "todos/completed", :locals => { :done => @done, :suppress_context => true, :collapsible => false, :append_descriptor => "in this context (last #{prefs.show_number_completed})" } %>
+  <%= render :partial => "todos/completed", :locals => { :done => @done, :suppress_context => true, :collapsible => false, :append_descriptor => t('contexts.last_completed_in_context', :number=>prefs.show_number_completed) } %>
 <% end -%>
 
 </div><!-- [end:display_box] -->

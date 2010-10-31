@@ -7,7 +7,7 @@
   <div id="context_new_container">
 
     <div id="toggle_context_new" class="hide_form">
-      <a title="Hide new context form" accesskey="n">&laquo; Hide form</a>
+      <a title="<%= t('contexts.hide_form_link_title') %>" accesskey="n">&laquo; <%= t('contexts.hide_form') %></a>
     </div>
 
     <div id="context_new" class="context_new" style="display:block">
@@ -20,16 +20,16 @@
 
         <div id="status"><%= error_messages_for('context') %></div>
 
-        <label for="context_name">Context name</label><br />
+        <label for="context_name"><%= t 'contexts.context_name' %></label><br />
         <%= text_field( "context", "name" ) %><br />
 
-        <label for="context_hide">Hide from front page?</label>
+        <label for="context_hide"><%= t 'contexts.context_hide' %></label>
         <%= check_box( "context", "hide" ) %><br />
 
         <div class="submit_box">
           <div class="widgets">
             <button type="submit" class="positive" id="context_new_submit">
-              <%= image_tag("accept.png", :alt => "") + 'Add Context' %>
+              <%= image_tag("accept.png", :alt => "") + t('contexts.add_context') %>
             </button>
           </div>
         </div>

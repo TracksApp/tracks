@@ -14,7 +14,7 @@ class RecurringTodosController < ApplicationController
     @no_completed_recurring_todos = @completed_recurring_todos.size == 0
     @count = @recurring_todos.size 
     
-    @page_title = "TRACKS::Recurring Actions"
+    @page_title = t('todos.recurring_actions_title')
   end
 
   def new
