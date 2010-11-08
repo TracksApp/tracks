@@ -17,12 +17,18 @@ begin
       t.profile = 'selenium'
     end
 
+    Cucumber::Rake::Task.new({:selenium_wip => :env_to_selenium}, 'Run unfinished features that require selenium') do |t|
+      t.binary = vendored_cucumber_bin
+      t.fork = true # You may get faster startup if you set this to false
+      t.profile = 'selenium_wip'
+    end
+
     task :env_to_selenium => 'db:test:prepare' do
       ENV['RAILS_ENV'] = 'selenium'
     end
 
     desc 'Run all features'
-    task :all => [:ok, :wip, :selenium]
+    task :all => [:ok, :wip, :selenium, :selenium_wip]
   end
 rescue LoadError
   desc 'cucumber rake task not available (cucumber not installed)'

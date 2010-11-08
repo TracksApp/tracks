@@ -19,13 +19,23 @@ Feature: Edit a project
     And I should see the bold text "done" in the project description
 
   # Ticket #1043
-  @selenium, @wip
+  @selenium @wip
   Scenario: I can move a todo out of the current project
     Given I have a project "foo" with 2 todos
     When I visit the "foo" project
     And I change the project_name field of "Todo 1" to "bar"
     Then I should not see the todo "Todo 1"
     And I should see the todo "Todo 2"
+
+  @selenium
+  Scenario: I can edit the project name in place
+    Given I have a project "release tracks 1.8" with 1 todos
+    When I visit the project page for "release tracks 1.8"
+    And I edit the project name in place to be "release tracks 2.0"
+    Then I should see the project name is "release tracks 2.0"
+    When I go to the projects page
+    Then I should see that a project named "release tracks 1.8" is not present
+    And I should see that a project named "release tracks 2.0" is present
 
   # Ticket #1041
   @selenium
@@ -53,3 +63,6 @@ Feature: Edit a project
     Then the badge should show 2   # "manage me" and "test"
     When I edit the project name of "manage me" to "test"
     Then I should see "Name already exists"
+
+  # No scenario is needed for adding a todo to the project. This is covered in
+  # shared_add_new_todo.feature "I can add a todo from several pages"

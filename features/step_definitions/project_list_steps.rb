@@ -48,6 +48,14 @@ When /^I sort the list by number of tasks$/ do
   selenium.get_confirmation.should == "Are you sure that you want to sort these projects by the number of tasks? This will replace the existing sort order."
 end
 
+Then /^I should see that a project named "([^"]*)" is not present$/ do |project_name|
+  Then "I should not see \"#{project_name}\""
+end
+
+Then /^I should see that a project named "([^"]*)" is present$/ do |project_name|
+  Then "I should see \"#{project_name}\""
+end
+
 Then /^the project "([^"]*)" should be above the project "([^"]*)"$/ do |project_high, project_low|
   high_id = @current_user.projects.find_by_name(project_high).id
   low_id = @current_user.projects.find_by_name(project_low).id

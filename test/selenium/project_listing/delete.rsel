@@ -1,6 +1,0 @@
-setup :fixtures => :all
-login :as => 'admin'
-open "/projects"
-click "css=#project_2 .buttons img.delete_item"
-assert_confirmation "Are you sure that you want to delete the project 'Make more money than Billy Gates'?"
-wait_for_element_not_present "project_2"

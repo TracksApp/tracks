@@ -61,6 +61,11 @@ When /^I edit the project name of "([^"]*)" to "([^"]*)"$/ do |project_current_n
   When "I edit the project name to \"#{project_new_name}\""
 end
 
+When /^I edit the project name in place to be "([^"]*)"$/ do |new_project_name|
+  selenium.click "project_name"
+  fill_in "value", :with => new_project_name
+  click_button "OK"
+end
 
 When /^I edit the project state of "([^"]*)" to "([^"]*)"$/ do |project_name, state_name|
   project = @current_user.projects.find_by_name(project_name)
@@ -104,4 +109,8 @@ end
 
 Then /^the project title should be "(.*)"$/ do |title|
   selenium.get_text("css=h2#project_name").should == title
+end
+
+Then /^I should see the project name is "([^"]*)"$/ do |project_name|
+  Then "the project title should be \"#{project_name}\""
 end

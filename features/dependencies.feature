@@ -24,7 +24,7 @@ Feature: dependencies
   When I expand the dependencies of "Todo 2"
   Then I should see "Todo 3" within the dependencies of "Todo 2"
 
-  @selenium, @wip
+  @selenium @wip
   Scenario: Adding dependency with comma to todo   # for #975
   Given I have a context called "@pc"
   And I have a project "dependencies" that has the following todos

@@ -39,6 +39,19 @@ Feature: Manage the list of projects
     And the project list badge for "active" projects should show 2
 
   @selenium
+  Scenario: Deleting a project after a edit will remove it from the list
+    # make sure the js is enabled after an edit and another edit
+    When I go to the projects page
+    And I edit the project name of "manage me" to "manage him"
+    Then I should see "manage him"
+    When I edit the project name of "manage him" to "manage her"
+    Then I should see "manage her"
+    When I delete project "manage her"
+    Then I should not see "manage her"
+    And the badge should show 2
+    And the project list badge for "active" projects should show 2
+
+  @selenium
   Scenario: Changing project state will move project to other state list
     When I go to the projects page
     Then the project "manage me" should be in state list "active"
@@ -94,3 +107,4 @@ Feature: Manage the list of projects
     Then the project "test" should be above the project "very busy"
     When I sort the list by number of tasks
     Then the project "very busy" should be above the project "test"
+
