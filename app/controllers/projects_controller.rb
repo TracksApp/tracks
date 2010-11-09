@@ -9,12 +9,12 @@ class ProjectsController < ApplicationController
 
   def index
     @source_view = params['_source_view'] || 'project_list'
-    @projects = current_user.projects
+    @projects = current_user.projects.all
     @new_project = current_user.projects.build
     if params[:projects_and_actions]
       projects_and_actions
     else      
-      @contexts = current_user.contexts
+      @contexts = current_user.contexts.all
       init_not_done_counts(['project'])
       if params[:only_active_with_no_next_actions]
         @projects = current_user.projects.active.select { |p| count_undone_todos(p) == 0 }
@@ -258,7 +258,7 @@ class ProjectsController < ApplicationController
 
   def render_rss_feed
     lambda do
-      render_rss_feed_for current_user.projects, :feed => feed_options,
+      render_rss_feed_for @projects, :feed => feed_options,
         :title => :name,
         :item => { :description => lambda { |p| summary(p) } }
     end
@@ -266,7 +266,7 @@ class ProjectsController < ApplicationController
 
   def render_atom_feed
     lambda do
-      render_atom_feed_for current_user.projects, :feed => feed_options,
+      render_atom_feed_for @projects, :feed => feed_options,
         :item => { :description => lambda { |p| summary(p) },
         :title => :name,
         :author => lambda { |p| nil } }

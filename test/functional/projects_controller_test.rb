@@ -48,13 +48,6 @@ class ProjectsControllerTest < TodoContainerControllerTestBase
     assert_ajax_create_increments_count 'My New Project'
   end
 
-  def test_create_project_and_go_to_project_page
-    num_projects = Project.count
-    xhr :post, :create, { :project => {:name => 'Immediate Project Planning Required'}, :go_to_project => 1}
-    assert_js_redirected_to %r{/?projects/\d+}
-    assert_equal num_projects + 1, Project.count
-  end
-
   def test_create_with_comma_in_name_does_not_increment_number_of_projects
     assert_ajax_create_does_not_increment_count 'foo,bar'
   end

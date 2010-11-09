@@ -22,7 +22,10 @@ class ContextsController < ApplicationController
       format.xml  { render :xml => current_user.contexts.to_xml( :except => :user_id ) }
       format.rss  &render_contexts_rss_feed
       format.atom &render_contexts_atom_feed
-      format.text { render :action => 'index', :layout => false, :content_type => Mime::TEXT }
+      format.text do
+        @all_contexts = current_user.contexts.all
+        render :action => 'index', :layout => false, :content_type => Mime::TEXT
+      end
       format.autocomplete { render :text => for_autocomplete(@active_contexts + @hidden_contexts, params[:term])}
     end
   end
@@ -196,14 +199,14 @@ class ContextsController < ApplicationController
 
   def render_contexts_rss_feed
     lambda do
-      render_rss_feed_for current_user.contexts, :feed => feed_options,
+      render_rss_feed_for current_user.contexts.all, :feed => feed_options,
         :item => { :description => lambda { |c| c.summary(count_undone_todos_phrase(c)) } }
     end
   end
 
   def render_contexts_atom_feed
     lambda do
-      render_atom_feed_for current_user.contexts, :feed => feed_options,
+      render_atom_feed_for current_user.contexts.all, :feed => feed_options,
         :item => { :description => lambda { |c| c.summary(count_undone_todos_phrase(c)) },
         :author => lambda { |c| nil } }
     end

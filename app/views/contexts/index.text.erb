@@ -1,4 +1,4 @@
-<% current_user.contexts.each do |c| -%>
+<% @all_contexts.each do |c| -%>
 
 <%= c.name.upcase %>
 <%= count_undone_todos_phrase_text(c)%>. <%= c.hidden? ? t('contexts.status_hidden') : t('contexts.status_active') %>.
