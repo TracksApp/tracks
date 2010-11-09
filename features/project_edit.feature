@@ -52,7 +52,7 @@ Feature: Edit a project
     When I go to the projects page
     Then the badge should show 2   # "manage me" and "test"
     When I visit the "manage me" project
-    And I edit the project name to "test"
+    And I try to edit the project name to "test"
     Then I should see "Name already exists"
 
   # Ticket #1042
@@ -61,7 +61,7 @@ Feature: Edit a project
     Given I have a project "test" with 1 todos
     When I go to the projects page
     Then the badge should show 2   # "manage me" and "test"
-    When I edit the project name of "manage me" to "test"
+    When I try to edit the project name of "manage me" to "test"
     Then I should see "Name already exists"
 
   # No scenario is needed for adding a todo to the project. This is covered in

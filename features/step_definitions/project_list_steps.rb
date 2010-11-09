@@ -45,6 +45,7 @@ end
 
 When /^I sort the list by number of tasks$/ do
   click_link "By number of tasks"
+  selenium.wait_for :wait_for => :ajax, :javascript_framework => :jquery
   selenium.get_confirmation.should == "Are you sure that you want to sort these projects by the number of tasks? This will replace the existing sort order."
 end
 

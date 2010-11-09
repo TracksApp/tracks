@@ -23,7 +23,7 @@ When /^I edit the context to rename it to "([^\"]*)"$/ do |new_name|
     :timeout => 5
 
   wait_for do
-    selenium.is_element_present("edit_context_#{@context.id}")
+    !selenium.is_element_present("submit_context_#{@context.id}")
   end
 end
 

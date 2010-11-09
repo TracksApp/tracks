@@ -42,17 +42,36 @@ end
 
 When /^I edit the project name to "([^\"]*)"$/ do |new_title|
   click_link "link_edit_project_#{@project.id}"
-  selenium.wait_for_element("xpath=//div[@id='edit_project_#{@project.id}']/form//button[@id='submit_project_#{@project.id}']")
+
+  wait_for do
+    selenium.is_element_present("submit_project_#{@project.id}")
+  end
   
   fill_in "project[name]", :with => new_title
 
-  # changed to make sure selenium waits until the saving has a result either
-  # positive or negative. Was: :element=>"flash", :text=>"Project saved"
-  # we may need to change it back if you really need a positive outcome, i.e.
-  # this step needs to fail if the project was not saved successfully
   selenium.click "submit_project_#{@project.id}",
     :wait_for => :text,
-    :text => /(Project saved|1 error prohibited this project from being saved)/
+    :text => "Project saved",
+    :timeout => 5
+
+  wait_for do
+    !selenium.is_element_present("submit_context_#{@project.id}")
+  end
+end
+
+When /^I try to edit the project name to "([^\"]*)"$/ do |new_title|
+  click_link "link_edit_project_#{@project.id}"
+
+  wait_for do
+    selenium.is_element_present("submit_project_#{@project.id}")
+  end
+
+  fill_in "project[name]", :with => new_title
+
+  selenium.click "submit_project_#{@project.id}",
+    :wait_for => :text,
+    :text => "There were problems with the following fields:",
+    :timeout => 5
 end
 
 When /^I edit the project name of "([^"]*)" to "([^"]*)"$/ do |project_current_name, project_new_name|
@@ -60,6 +79,13 @@ When /^I edit the project name of "([^"]*)" to "([^"]*)"$/ do |project_current_n
   @project.should_not be_nil
   When "I edit the project name to \"#{project_new_name}\""
 end
+
+When /^I try to edit the project name of "([^"]*)" to "([^"]*)"$/ do |project_current_name, project_new_name|
+  @project = @current_user.projects.find_by_name(project_current_name)
+  @project.should_not be_nil
+  When "I try to edit the project name to \"#{project_new_name}\""
+end
+
 
 When /^I edit the project name in place to be "([^"]*)"$/ do |new_project_name|
   selenium.click "project_name"

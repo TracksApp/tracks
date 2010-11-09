@@ -1,6 +1,6 @@
 <% if @saved -%>
 
-  pageNotify('notice', '<%=t('projects.project_saved_status')%>', 5);
+  page_notify('notice', '<%=t('projects.project_saved_status')%>', 5);
 
   <% if source_view_is :project_list -%>
 
@@ -10,10 +10,11 @@
       replace_project_form_with_updated_project();
     <% end -%>
 
-    ProjectListPage.update_all_states_count(<%=@active_projects_count%>, <%=@hidden_projects_count%>, <%=@completed_projects_count%>)
+    ProjectListPage.update_all_states_count(<%=@active_projects_count%>, <%=@hidden_projects_count%>, <%=@completed_projects_count%>);
     ProjectListPage.show_or_hide_all_state_containers(<%= @show_active_projects %>, <%= @show_hidden_projects %>, <%= @show_completed_projects %>);
 
-  <% else # assume source_view :project %>
+  <% else # assume source_view :project
+  -%>
 
     remove_project_edit_form();
     update_and_show_project_settings();
@@ -53,7 +54,7 @@ function update_and_show_project_settings() {
 }
 
 function update_sidebar() {
-  $('#sidebar').html();
+  $('#sidebar').html(html_for_sidebar());
 }
 
 function replace_project_form_with_updated_project() {
