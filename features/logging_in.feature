@@ -21,6 +21,7 @@ Feature: Existing user logging in
     | admin | secret   | redirected to the home page | Login successful   |
     | admin | wrong    | on the login page           | Login unsuccessful |
 
+  @wip
   Scenario Outline: Unauthorized users cannot access Tracks and need to log in first
     Given there exists a project called "top secret" for user "testuser"
     And there exists a context called "@secret location" for user "testuser"

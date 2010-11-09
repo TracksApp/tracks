@@ -49,7 +49,7 @@ When /^I delete the context "([^\"]*)"$/ do |context_name|
   context = @current_user.contexts.find_by_name(context_name)
   context.should_not be_nil
   click_link "delete_context_#{context.id}"
-  selenium.get_confirmation.should == "Are you sure that you want to delete the context '#{context_name}'? Be aware that this will also delete all actions in this context!"
+  selenium.get_confirmation.should == "Are you sure that you want to delete the context '#{context_name}'? Be aware that this will also delete all (repeating) actions in this context!"
   wait_for do
     !selenium.is_element_present("delete_context_#{context.id}")
   end

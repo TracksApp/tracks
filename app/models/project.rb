@@ -71,8 +71,8 @@ class Project < ActiveRecord::Base
   
   def self.feed_options(user)
     {
-      :title => t('models.project.feed_title'),
-      :description => t('models.project.feed_description', :username => user.display_name)
+      :title => I18n.t('models.project.feed_title'),
+      :description => I18n.t('models.project.feed_description', :username => user.display_name)
     }
   end
       

@@ -61,6 +61,10 @@ Rails::Initializer.run do |config|
   # to enable "link":onenote://... or "link":blah://... hyperlinks
   config.action_view.sanitized_allowed_protocols = 'onenote', 'message'
 
+  # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
+  # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
+  # config.i18n.default_locale = :de
+
   # See Rails::Configuration for more options
   if ( SITE_CONFIG['authentication_schemes'].include? 'cas')
     #requires rubycas-client gem to be installed
