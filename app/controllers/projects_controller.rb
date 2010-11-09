@@ -258,14 +258,15 @@ class ProjectsController < ApplicationController
 
   def render_rss_feed
     lambda do
-      render_rss_feed_for @projects, :feed => feed_options,
-        :item => { :title => :name, :description => lambda { |p| summary(p) } }
+      render_rss_feed_for current_user.projects, :feed => feed_options,
+        :title => :name,
+        :item => { :description => lambda { |p| summary(p) } }
     end
   end
 
   def render_atom_feed
     lambda do
-      render_atom_feed_for @projects, :feed => feed_options,
+      render_atom_feed_for current_user.projects, :feed => feed_options,
         :item => { :description => lambda { |p| summary(p) },
         :title => :name,
         :author => lambda { |p| nil } }

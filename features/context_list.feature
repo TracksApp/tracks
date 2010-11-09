@@ -70,3 +70,9 @@ Feature: Manage the list of contexts
     | state  | name   |
     | active | @phone |
     | hidden | @hidden|
+
+  @selenium @wip
+  Scenario: Cannot add a context with comma in the name
+    When I go to the contexts page
+    And I add a new active context "foo, bar"
+    Then I should see "Name cannot contain the comma"

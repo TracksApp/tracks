@@ -86,17 +86,8 @@ class LoginController < ApplicationController
         return unless should_expire_sessions?
         # Get expiry time (allow ten seconds window for the case where we have none)
         expiry_time = session['expiry_time'] || Time.now + 10
-<<<<<<< HEAD
-        @time_left = expiry_time - Time.now
-        if @time_left < (10*60) # Session will time out before the next check
-          @msg = 'login.session_time_out'
-        else
-          @msg = ""
-        end
-=======
         time_left = expiry_time - Time.now
         @session_expired = ( time_left < (10*60) ) # Session will time out before the next check
->>>>>>> replace old prototype/jrails code for periodic checks and start work on autocomplete and edit projects
       end
     end
     respond_to do |format|

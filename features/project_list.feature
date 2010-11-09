@@ -108,3 +108,8 @@ Feature: Manage the list of projects
     When I sort the list by number of tasks
     Then the project "very busy" should be above the project "test"
 
+  @selenium @wip
+  Scenario: Cannot add a project with comma in the name
+    When I go to the projects page
+    And I submit a new project with name "foo,bar"
+    Then I should see "Name cannot contain the comma"
