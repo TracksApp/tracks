@@ -38,7 +38,7 @@ class Project < ActiveRecord::Base
   
   validates_presence_of :name
   validates_length_of :name, :maximum => 255
-  validates_uniqueness_of :name, :scope =>"user_id"
+  validates_uniqueness_of :name, :scope => "user_id"
   validates_does_not_contain :name, :string => ','
 
   acts_as_list :scope => 'user_id = #{user_id} AND state = \'#{state}\''

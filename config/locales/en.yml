@@ -3,11 +3,13 @@ en:
     errors:
       models:
         project:
-          name:
-            blank: "project must have a name"
-            too_long: "project name must be less than 256 characters"
-            taken: "already exists"
-            invalid: "cannot contain the comma (',') character"
+          attributes:
+            name:
+              blank: "project must have a name"
+              too_long: "project name must be less than 256 characters"
+              taken: "already exists"
+      messages:
+        invalid: "cannot contain the comma (',') character"
     attributes:
       user:
         first_name: "First name"
