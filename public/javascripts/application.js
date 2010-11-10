@@ -90,6 +90,19 @@ var ContextListPage = {
     }
   }
 
+var IntegrationsPage = {
+  setup_behavior: function () {
+    $('#applescript1-contexts').live('change', function(){
+        $("#applescript1").load(relative_to_root('integrations/get_applescript1?context_id='+this.value));
+    });
+    $('#applescript2-contexts').live('change', function(){
+      $("#applescript2").load(relative_to_root('integrations/get_applescript2?context_id='+this.value));
+    });
+    $('#quicksilver-contexts').live('change', function(){
+      $("#quicksilver").load(relative_to_root('integrations/get_quicksilver_applescript?context_id='+this.value));
+    });
+  }
+}
 
 $.fn.clearForm = function() {
   return this.each(function() {
@@ -726,42 +739,7 @@ $(document).ready(function() {
       $("#feeds-for-project").load('/feedlist/get_feeds_for_project?project_id='+this.value);
   });
 
-  /* Integrations page */
-  /*
-    <%= observe_field "applescript1-contexts", :update => "applescript1",
-      :with => 'context_id',
-      :url => { :controller => "integrations", :action => "get_applescript1" },
-      :before => "$('applescript1').startWaiting()",
-      :complete => "$('applescript1').stopWaiting()"
-  %>
-  */
-  $('#applescript1-contexts').live('change', function(){
-      $("#applescript1").load(relative_to_root('integrations/get_applescript1?context_id='+this.value));
-  });
-
-  /*
-    <%= observe_field "applescript2-contexts", :update => "applescript2",
-      :with => 'context_id',
-      :url => { :controller => "integrations", :action => "get_applescript2" },
-      :before => "$('applescript2').startWaiting()",
-      :complete => "$('applescript2').stopWaiting()"
-  %>
-  */
-  $('#applescript2-contexts').live('change', function(){
-      $("#applescript2").load(relative_to_root('integrations/get_applescript2?context_id='+this.value));
-  });
-
-  /*
-    <%= observe_field "quicksilver-contexts", :update => "quicksilver",
-      :with => 'context_id',
-      :url => { :controller => "integrations", :action => "get_quicksilver_applescript" },
-      :before => "$('quicksilver').startWaiting()",
-      :complete => "$('quicksilver').stopWaiting()"
-  %>
-  */
-  $('#quicksilver-contexts').live('change', function(){
-      $("#quicksilver").load(relative_to_root('integrations/get_quicksilver_applescript?context_id='+this.value));
-  });
+  IntegrationsPage.setup_behavior();
 
   /* Gets called from some AJAX callbacks, too */
   enable_rich_interaction();

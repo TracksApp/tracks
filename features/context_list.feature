@@ -71,7 +71,7 @@ Feature: Manage the list of contexts
     | active | @phone |
     | hidden | @hidden|
 
-  @selenium @wip
+  @selenium
   Scenario: Cannot add a context with comma in the name
     When I go to the contexts page
     And I add a new active context "foo, bar"
