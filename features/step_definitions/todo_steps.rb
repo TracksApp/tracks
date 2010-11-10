@@ -79,6 +79,7 @@ When /I change the (.*) field of "([^\"]*)" to "([^\"]*)"$/ do |field, todo_name
   selenium.click("//img[@id='edit_icon_todo_#{todo.id}']", :wait_for => :ajax, :javascript_framework => :jquery)
   selenium.type("css=form.edit_todo_form input[name=#{field}]", new_value)
   selenium.click("css=button.positive", :wait_for => :ajax, :javascript_framework => :jquery)
+  # TODO: change to a wait_for
   sleep(5)
 end
 
