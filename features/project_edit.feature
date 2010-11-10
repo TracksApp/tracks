@@ -1,5 +1,4 @@
 Feature: Edit a project
-
   In order to reach a goal by doing several related todos
   As a Tracks user
   I want to manage these todos in a project
@@ -63,6 +62,3 @@ Feature: Edit a project
     Then the badge should show 2   # "manage me" and "test"
     When I try to edit the project name of "manage me" to "test"
     Then I should see "Name already exists"
-
-  # No scenario is needed for adding a todo to the project. This is covered in
-  # shared_add_new_todo.feature "I can add a todo from several pages"

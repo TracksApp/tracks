@@ -1,5 +1,4 @@
 Feature: Manage recurring todos
-
   In order to manage repeating todos
   As a Tracks user
   I want to view, edit, add, or remove recurrence patterns of repeating todos

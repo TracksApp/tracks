@@ -1,0 +1,9 @@
+<%  if @session_expired
+  theHtml = content_tag(
+    :div,
+    t('login.session_time_out', :link => link_to(t('login.log_in_again'), :controller => "login", :action => "login")),
+    :"class" => "warning")
+  -%>
+  $('div#navcontainer').remove();
+  $('div#content').html('<%=theHtml%>');
+<%  end -%>

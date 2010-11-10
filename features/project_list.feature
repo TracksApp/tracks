@@ -1,5 +1,4 @@
 Feature: Manage the list of projects
-
   In order to keep track and manage of all my projects
   As a Tracks user
   I want to manage my list of projects

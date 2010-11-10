@@ -1,5 +1,4 @@
 Feature: Manage users
-
   In order to be able to manage the users able to use Tracks
   As the administrator of this installed Tracks
   I want to add and delete accounts of users

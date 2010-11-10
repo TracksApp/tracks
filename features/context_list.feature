@@ -1,5 +1,4 @@
 Feature: Manage the list of contexts
-
   In order to keep track and manage all of my contexts
   As a Tracks user
   I want to manage my list of contexts
@@ -9,13 +8,13 @@ Feature: Manage the list of contexts
       | login    | password | is_admin |
       | testuser | secret   | false    |
     And I have logged in as "testuser" with password "secret"
-  
+
   @selenium
   Scenario: Delete context from context page should update badge
     Given I have a context called "@computer"
     And I have a context called "@ipad"
     When I go to the contexts page
-    Then the badge should show 2 
+    Then the badge should show 2
     And the context list badge for active contexts should show 2
     When I delete the context "@computer"
     Then he should see that a context named "@computer" is not present
@@ -59,17 +58,17 @@ Feature: Manage the list of contexts
   @selenium
   Scenario Outline: Add a new context with state
     Given I have the following contexts
-      | name  | hide   |
-      | @ipad | true   |
-      | @home | false  |
+      | name  | hide  |
+      | @ipad | true  |
+      | @home | false |
     When I go to the contexts page
     And I add a new <state> context "<name>"
     Then I should see the context "<name>" under "<state>"
 
     Examples:
-    | state  | name   |
-    | active | @phone |
-    | hidden | @hidden|
+      | state  | name    |
+      | active | @phone  |
+      | hidden | @hidden |
 
   @selenium
   Scenario: Cannot add a context with comma in the name

@@ -1,5 +1,4 @@
 Feature: View, add, remove notes
-
   In order to manage my notes
   As a Tracks user
   I want to view, add, and remove notes

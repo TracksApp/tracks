@@ -1,5 +1,4 @@
 Feature: Edit a context
-
   In order to work on todos in a context
   As a Tracks user
   I want to manage todos in a context

@@ -1,5 +1,4 @@
 Feature: Integrate Tracks in various ways
-
   In order to use tracks with other software
   As a Tracks user
   I want to be informed about the various ways to integrate tracks
@@ -40,7 +39,7 @@ Feature: Integrate Tracks in various ways
     Then I should see a script "<script>" for "<context2>"
 
     Examples:
-    | context1 | context2 | context-list          | script       |
-    | @home    | @boss    | applescript1-contexts | applescript1 |
-    | @shops   | @home    | applescript2-contexts | applescript2 |
-    | @boss    | @shops   | quicksilver-contexts  | quicksilver  |
+      | context1 | context2 | context-list          | script       |
+      | @home    | @boss    | applescript1-contexts | applescript1 |
+      | @shops   | @home    | applescript2-contexts | applescript2 |
+      | @boss    | @shops   | quicksilver-contexts  | quicksilver  |
