@@ -28,7 +28,7 @@ end
 When /^I delete the first note$/ do
   title = selenium.get_text("css=div.container h2")
   id = title.split(' ').last
-  click_link "delete note"
+  click_link "delete_note_#{id}"
   selenium.get_confirmation.should == "Are you sure that you want to delete the note '#{id}'?"
 end
 
@@ -58,7 +58,7 @@ Then /^the first note should disappear$/ do
   title = selenium.get_text("css=div.container h2")
   id = title.split(' ').last
   wait_for :timeout => 15 do
-    !selenium.is_visible("note_#{id}")
+    !selenium.is_element_present("note_#{id}")
   end
 end
 

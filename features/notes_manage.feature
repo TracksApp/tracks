@@ -22,7 +22,7 @@ Feature: View, add, remove notes
     And I should see note "My Note A" on the notes page
     Then the badge should show 1
 
-  @selenium
+  @selenium @wip
   Scenario: Delete note from notes page
     Given I have a project "Pass Final Exam" with 2 notes
     When I go to the notes page
@@ -36,3 +36,10 @@ Feature: View, add, remove notes
     When I visit the "Pass Final Exam" project
     And I click the icon next to the note
     Then I should see the note text
+
+  @selenium @wip
+  Scenario: Edit a note
+    Given I have a project "Pass Final Exam" with 2 notes
+    When I go to the notes page
+    And I edit the note to "edited note"
+    Then I should see "edited note"

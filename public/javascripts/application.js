@@ -104,6 +104,19 @@ var IntegrationsPage = {
   }
 }
 
+var NotesPage = {
+  setup_behavior: function() {
+    $('a.delete_note_button').live('click', function(evt){
+      evt.preventDefault();
+      if(confirm("Are you sure that you want to "+this.title+"?")){
+        $(this).parents('.project').block({message: null});
+        params = {_method: 'delete'};
+        $.post(this.href, params, null, 'script');
+      }
+  });
+  }
+}
+
 $.fn.clearForm = function() {
   return this.each(function() {
     var type = this.type, tag = this.tagName.toLowerCase();
@@ -740,6 +753,7 @@ $(document).ready(function() {
   });
 
   IntegrationsPage.setup_behavior();
+  NotesPage.setup_behavior();
 
   /* Gets called from some AJAX callbacks, too */
   enable_rich_interaction();

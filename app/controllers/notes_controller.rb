@@ -1,7 +1,7 @@
 class NotesController < ApplicationController
 
   def index
-    @all_notes = current_user.notes
+    @all_notes = current_user.notes.all
     @count = @all_notes.size
     @page_title = "TRACKS::All notes"
     respond_to do |format|
@@ -43,7 +43,7 @@ class NotesController < ApplicationController
         if saved
           head :created, :location => note_url(note), :text => "new note with id #{note.id}"
         else
-	  render_failure note.errors.full_messages.join(', ')
+          render_failure note.errors.full_messages.join(', ')
         end
       end
       format.html do
@@ -54,23 +54,12 @@ class NotesController < ApplicationController
 
   def destroy
     @note = current_user.notes.find(params['id'])
-
     @note.destroy
     
     respond_to do |format|
       format.html
-      format.js do
-        @count = current_user.notes.size
-        render
-      end
+      format.js { @down_count = current_user.notes.size }
     end
-      
-    #    if note.destroy
-    #      render :text => ''
-    #    else
-    #      notify :warning, "Couldn't delete note \"#{note.id}\""
-    #      render :text => ''
-    #    end
   end
 
   def update

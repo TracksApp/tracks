@@ -191,6 +191,7 @@ en:
     delete_note_title: "Delete this note"
     delete_confirmation: "Are you sure that you want to delete the note '{{id}}'?"
     edit_item_title: "Edit item"
+    delete_item_title: "Delete item"
     show_note_title: "Show note"
     deleted_note: "Deleted note '{{id}}'"
     no_notes_available: "Currently there are no notes: add notes to projects from individual project pages."

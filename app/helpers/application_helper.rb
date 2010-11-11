@@ -122,6 +122,12 @@ module ApplicationHelper
       url_for({:controller => 'contexts', :action => 'edit', :id => context.id}),
       {:id => "link_edit_#{dom_id(context)}", :class => "context_edit_settings"})
   end
+
+  def link_to_edit_note (note, descriptor = sanitize(note.id.to_s))
+    link_to(descriptor,
+      url_for({:controller => 'notes', :action => 'edit', :id => note.id}),
+      {:id => "link_edit_#{dom_id(note)}", :class => "note_edit_settings"})
+  end
   
   def link_to_delete_project(project, descriptor = sanitize(project.name))
     link_to(
@@ -136,6 +142,14 @@ module ApplicationHelper
       descriptor,
       context_path(context, :format => 'js'),
       {:id => "delete_context_#{context.id}", :class => "delete_context_button", :title => t('contexts.delete_context_confirmation', :name => context.name)}
+    )
+  end
+
+  def link_to_delete_note(note, descriptor = sanitize(note.id.to_s))
+    link_to(
+      descriptor,
+      note_path(note, :format => 'js'),
+      {:id => "delete_note_#{note.id}", :class => "delete_note_button", :title => "delete the note '#{note.id}'"}
     )
   end
 
