@@ -37,9 +37,9 @@ Feature: View, add, remove notes
     And I click the icon next to the note
     Then I should see the note text
 
-  @selenium @wip
+  @selenium
   Scenario: Edit a note
     Given I have a project "Pass Final Exam" with 2 notes
     When I go to the notes page
-    And I edit the note to "edited note"
+    And I edit the first note to "edited note"
     Then I should see "edited note"

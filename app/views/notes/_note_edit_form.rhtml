@@ -1,21 +1,13 @@
-<%
-#form_remote_tag  :url => note_path(note),
-#:method => :put,
-#:html => { :id => dom_id(note, 'edit_form'), :class => "inline-form" },
-#:update => dom_id(note, 'container'),
-#:complete => visual_effect(:appear, dom_id(note, 'container')) do
--%>
-
 <% form_for(note_edit_form, :html => {
     :id => dom_id(note_edit_form, 'edit_form'),
     :class => "inline-form edit-note-form",
-    :method => :put }) do
+    :method => :put }) do |f|
   -%>
 
-  <%= hidden_field( "note", "project_id" ) %>
-  <%= text_area( "note", "body", "cols" => 70, "rows" => 15, "tabindex" => 1 ) %>
-  <br /><br />
-  <input type="submit" value="<%= t('common.update') %>" tabindex="2" />
+  <div id="error_status"><%= error_messages_for("note") %></div>
+
+  <%= f.hidden_field( "project_id" ) %>
+  <%= f.text_area( "body", "cols" => 70, "rows" => 15, "tabindex" => 1 ) %>
 
   <div class="submit_box">
     <div class="widgets">
@@ -23,11 +15,13 @@
         <%=image_tag("accept.png", :alt => "") %>
         <%= t 'common.update' %>
       </button>
-      <a href="" onclick="" class="negative">
+      <a href="" class="negative" id="neg_<%=dom_id(note_edit_form, 'edit_form')%>">
         <%=image_tag("cancel.png", :alt => "") %>
         <%= t 'common.cancel' %>
       </a>
     </div>
   </div>
+
+  <br/><br/>
 
 <% end -%>

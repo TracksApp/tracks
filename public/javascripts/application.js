@@ -106,6 +106,7 @@ var IntegrationsPage = {
 
 var NotesPage = {
   setup_behavior: function() {
+    /* delete button for note */
     $('a.delete_note_button').live('click', function(evt){
       evt.preventDefault();
       if(confirm("Are you sure that you want to "+this.title+"?")){
@@ -113,7 +114,34 @@ var NotesPage = {
         params = {_method: 'delete'};
         $.post(this.href, params, null, 'script');
       }
-  });
+    });
+
+    /* edit button for note */
+    $('a.note_edit_settings').live('click', function(evt){
+      evt.preventDefault();
+      dom_id = this.id.substr(10);
+      $('#'+dom_id).toggle(); $('#edit_'+dom_id).show(); $('#edit_form_'+dom_id+' textarea').focus();
+    });
+
+    /* cancel button when editing a note */
+    $('.edit-note-form a.negative').live('click', function(){
+      dom_id = this.id.substr(14);
+      $('#'+dom_id).toggle(); $('#edit_'+dom_id).hide();
+      return false;
+    });
+
+    /* update button when editing a note */
+    $("form.edit-note-form button.positive").live('click', function (ev) {
+      $('form.edit-note-form').ajaxSubmit({
+          type: 'POST',
+          async: true,
+          buttons_dom_elem: $(this),
+          beforeSend: function() {
+              this.buttons_dom_elem.block({message: null});},
+          complete: function() {this.buttons_dom_elem.unblock();}
+      });
+      return false;
+    });
   }
 }
 
@@ -523,11 +551,12 @@ $(document).ready(function() {
   });
 
   /* for edit project form and edit todo form */
-  $('.edit-form a.negative').live('click', function(){      
+  $('.edit-form a.negative').live('click', function(){
       $(this).parents('.edit-form').fadeOut(200, function () {
       $(this).parents('.list').find('.project').fadeIn(500);
       $(this).parents('.container').find('.item-show').fadeIn(500);
-  })});
+    })
+  });
   
   /* add behavior to clear the date both buttons for show_from and due */
   $(".date_clear").live('click', function() {

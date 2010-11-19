@@ -62,3 +62,27 @@ Feature: Edit a project
     Then the badge should show 2   # "manage me" and "test"
     When I try to edit the project name of "manage me" to "test"
     Then I should see "Name already exists"
+
+  @selenium @wip
+  Scenario: I can go to the note of a project
+    Given I have a project "test" with 2 note
+    When I visit the "test" project
+    Then I should see 2 notes
+    When I click on the first note icon
+    Then I should go to that note page
+
+  @selenium @wip
+  Scenario: I can add a note to the project
+    Given I have a project "test"
+    When I visit the "test" project
+    And I add a note "hello I'm testing"
+    Then I should see one note
+
+  @selenium @wip
+  Scenario: Long notes in a project are shown cut off
+    Given I have a project "test"
+    When I visit the "test" project
+    And I add a note "test 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234 TOO LONG"
+    Then I should not see "test 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234 TOO LONG"
+    And I should see "test 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234"
+

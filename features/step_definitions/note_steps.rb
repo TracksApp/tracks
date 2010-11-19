@@ -36,8 +36,12 @@ When /^I click the icon next to the note$/ do
   click_link "Show note"
 end
 
-When /^I edit the note to "([^"]*)"$/ do |note_content|
-  pending # express the regexp above with the code you wish you had
+When /^I edit the first note to "([^"]*)"$/ do |note_body|
+  title = selenium.get_text("css=div.container h2")
+  id = title.split(' ').last
+  click_link "link_edit_note_#{id}"
+  fill_in "note[body]", :with => note_body
+  click_button "submit_note_#{id}"
 end
 
 Then /^(.*) notes should be visible$/ do |number|

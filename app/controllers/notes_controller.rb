@@ -63,13 +63,12 @@ class NotesController < ApplicationController
   end
 
   def update
-    note = current_user.notes.find(params['id'])
-    note.attributes = params["note"]
-    if note.save
-      render :partial => 'notes', :object => note
-    else
-      notify :warning, "Couldn't update note \"#{note.id}\""
-      render :text => ''
+    @note = current_user.notes.find(params['id'])
+    @note.attributes = params["note"]
+    @saved = @note.save
+    respond_to do |format|
+      format.html
+      format.js
     end
   end
 
