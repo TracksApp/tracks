@@ -1,6 +1,6 @@
 ﻿/*!
  * jQuery blockUI plugin
- * Version 2.35 (23-SEP-2010)
+ * Version 2.36 (16-NOV-2010)
  * @requires jQuery v1.2.3 or later
  *
  * Examples at: http://malsup.com/jquery/block/
@@ -232,13 +232,13 @@ function install(el, opts) {
 	var lyr3, s;
 	if (opts.theme && full) {
 		s = '<div class="blockUI ' + opts.blockMsgClass + ' blockPage ui-dialog ui-widget ui-corner-all" style="z-index:'+z+';display:none;position:fixed">' +
-				'<div class="ui-widget-header ui-dialog-titlebar blockTitle">'+(opts.title || '&nbsp;')+'</div>' +
+				'<div class="ui-widget-header ui-dialog-titlebar ui-corner-all blockTitle">'+(opts.title || '&nbsp;')+'</div>' +
 				'<div class="ui-widget-content ui-dialog-content"></div>' +
 			'</div>';
 	}
 	else if (opts.theme) {
 		s = '<div class="blockUI ' + opts.blockMsgClass + ' blockElement ui-dialog ui-widget ui-corner-all" style="z-index:'+z+';display:none;position:absolute">' +
-				'<div class="ui-widget-header ui-dialog-titlebar blockTitle">'+(opts.title || '&nbsp;')+'</div>' +
+				'<div class="ui-widget-header ui-dialog-titlebar ui-corner-all blockTitle">'+(opts.title || '&nbsp;')+'</div>' +
 				'<div class="ui-widget-content ui-dialog-content"></div>' +
 			'</div>';
 	}
@@ -450,8 +450,8 @@ function handler(e) {
 	if (e.keyCode && e.keyCode == 9) {
 		if (pageBlock && e.data.constrainTabKey) {
 			var els = pageBlockEls;
-			var fwd = !e.shiftKey && e.target == els[els.length-1];
-			var back = e.shiftKey && e.target == els[0];
+			var fwd = !e.shiftKey && e.target === els[els.length-1];
+			var back = e.shiftKey && e.target === els[0];
 			if (fwd || back) {
 				setTimeout(function(){focus(back)},10);
 				return false;

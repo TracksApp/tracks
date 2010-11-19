@@ -36,6 +36,10 @@ When /^I click the icon next to the note$/ do
   click_link "Show note"
 end
 
+When /^I edit the note to "([^"]*)"$/ do |note_content|
+  pending # express the regexp above with the code you wish you had
+end
+
 Then /^(.*) notes should be visible$/ do |number|
   # count number of project_notes
   count = 0

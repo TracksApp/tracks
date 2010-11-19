@@ -22,7 +22,7 @@ Feature: View, add, remove notes
     And I should see note "My Note A" on the notes page
     Then the badge should show 1
 
-  @selenium @wip
+  @selenium
   Scenario: Delete note from notes page
     Given I have a project "Pass Final Exam" with 2 notes
     When I go to the notes page
