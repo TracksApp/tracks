@@ -47,7 +47,8 @@ module NavigationHelpers
     when /the "([^\"]*)" project for user "([^\"]*)"/i
       project_path(User.find_by_login($2).projects.find_by_name($1))
     when /the "([^\"]*)" project/i
-      project_path(@current_user.projects.find_by_name($1))
+      @project = @current_user.projects.find_by_name($1)
+      project_path(@project)
 
       # Add more mappings here.
       # Here is an example that pulls values out of the Regexp:

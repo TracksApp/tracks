@@ -26,24 +26,18 @@ class NotesController < ApplicationController
   end
 
   def create
-    note = current_user.notes.build
-    note.attributes = params["note"]
+    @note = current_user.notes.build
+    @note.attributes = params["note"]
 
-    saved = note.save
+    @saved = @note.save
 
     respond_to do |format|
-      format.js do
-        if note.save
-          render :partial => 'notes_summary', :object => note
-        else
-          render :text => ''
-        end
-      end
+      format.js 
       format.xml do
-        if saved
-          head :created, :location => note_url(note), :text => "new note with id #{note.id}"
+        if @saved
+          head :created, :location => note_url(@note), :text => "new note with id #{@note.id}"
         else
-          render_failure note.errors.full_messages.join(', ')
+          render_failure @note.errors.full_messages.join(', ')
         end
       end
       format.html do

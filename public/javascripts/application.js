@@ -106,6 +106,13 @@ var IntegrationsPage = {
 
 var NotesPage = {
   setup_behavior: function() {
+    /* Add note */
+    $(".add_note_link a").live('click', function(){
+      $('#new-note').show();
+      $('textarea#note_body').val('');
+      $('textarea#note_body').focus();
+    });
+
     /* delete button for note */
     $('a.delete_note_button').live('click', function(evt){
       evt.preventDefault();
@@ -126,7 +133,13 @@ var NotesPage = {
     /* cancel button when editing a note */
     $('.edit-note-form a.negative').live('click', function(){
       dom_id = this.id.substr(14);
-      $('#'+dom_id).toggle(); $('#edit_'+dom_id).hide();
+      /* dom_id == 'note_XX' on notes page and just 'note' on project page */
+      if (dom_id == 'note') {
+        $('#new-note').hide();
+      } else {
+        $('#'+dom_id).toggle();
+        $('#edit_'+dom_id).hide();
+      }
       return false;
     });
 
@@ -752,12 +765,6 @@ $(document).ready(function() {
         '« Hide form', 'Hide new project form',
         'Create a new project »', 'Add a project');
       });
-
-  $(".add_note_link a").live('click', function(){
-      $('#new-note').show();
-      $('#new-note form').clearForm();
-      $('#new-note form input:text:first').focus();
-    });
 
   $("#list-active-projects").sortable({handle: '.handle', update: update_order});
   $("#list-hidden-projects").sortable({handle: '.handle', update: update_order});

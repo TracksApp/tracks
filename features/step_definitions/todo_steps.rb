@@ -118,14 +118,12 @@ When /^I edit the dependency of "([^"]*)" to '([^'']*)'$/ do |todo_name, deps|
   fill_in "predecessor_list_todo_#{todo.id}", :with => deps
   # submit form
   selenium.click("//div[@id='edit_todo_#{todo.id}']//button[@id='submit_todo_#{todo.id}']", :wait_for => :ajax, :javascript_framework => :jquery)
-  
 end
 
 Then /^there should not be an error$/ do
   # form should be gone and thus not errors visible
   selenium.is_visible("edit_todo_#{@dep_todo.id}").should == false
 end
-
 
 Then /^the dependencies of "(.*)" should include "(.*)"$/ do |child_name, parent_name|
   parent = @current_user.todos.find_by_description(parent_name)

@@ -1,7 +1,8 @@
+<% submit_text ||= t('common.update') -%>
 <% form_for(note_edit_form, :html => {
     :id => dom_id(note_edit_form, 'edit_form'),
     :class => "inline-form edit-note-form",
-    :method => :put }) do |f|
+    :method => :post }) do |f|
   -%>
 
   <div id="error_status"><%= error_messages_for("note") %></div>
@@ -13,7 +14,7 @@
     <div class="widgets">
       <button type="submit" class="positive" id="<%= dom_id(note_edit_form, 'submit') %>" tabindex="15">
         <%=image_tag("accept.png", :alt => "") %>
-        <%= t 'common.update' %>
+        <%= submit_text %>
       </button>
       <a href="" class="negative" id="neg_<%=dom_id(note_edit_form, 'edit_form')%>">
         <%=image_tag("cancel.png", :alt => "") %>

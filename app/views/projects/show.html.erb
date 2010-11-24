@@ -11,7 +11,7 @@
 
   <div class="container">
     <div id="notes">
-    <div class="add_note_link"><%= link_to t('projects.add_note'), '#' %> </div>
+      <div class="add_note_link"><%= link_to t('projects.add_note'), '#' %> </div>
       <h2>Notes</h2>
       <div id="empty-n" style="display:<%= @project.notes.empty? ? 'block' : 'none'%>;">
         <%= render :partial => "shared/empty",
@@ -22,18 +22,9 @@
   </div>
 
   <div id="new-note" style="display:none;">
-    <% form_remote_tag :url => notes_path,
-      :method => :post,
-      :update => "notes",
-      :position => "bottom",
-      :complete => "$('#notes').effect('highlight', 1000);$('#empty-n').hide();$('#new-note form').clearForm();",
-      :html => {:id=>'form-new-note', :class => 'inline-form'} do %>
-      <%= hidden_field( "note", "project_id", "value" => "#{@project.id}" ) %>
-      <%= text_area( "note", "body", "cols" => 50, "rows" => 3, "tabindex" => 1 ) %>
-      <br /><br />
-      <input type="submit" value="<%= t('projects.add_note_submit') %>" name="add-new-note" tabindex="2" />
-    <% end -%>
+    <%= render :partial => "notes/note_edit_form", :object => @new_note, :locals => {:submit_text => t('projects.add_note_submit')} %>
   </div>
+
 </div>
 
 <div id="input_box">

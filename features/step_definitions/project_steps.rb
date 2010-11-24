@@ -86,7 +86,6 @@ When /^I try to edit the project name of "([^"]*)" to "([^"]*)"$/ do |project_cu
   When "I try to edit the project name to \"#{project_new_name}\""
 end
 
-
 When /^I edit the project name in place to be "([^"]*)"$/ do |new_project_name|
   selenium.click "project_name"
   fill_in "value", :with => new_project_name
@@ -113,6 +112,42 @@ When /^I edit the project state of "([^"]*)" to "([^"]*)"$/ do |project_name, st
   wait_for do # wait for the form to go away
     !selenium.is_element_present("submit_project_#{project.id}")
   end
+end
+
+When /^I add a note "([^"]*)" to the project$/ do |note_body|
+  click_link "Add a note"
+  fill_in "note[body]", :with => note_body
+  click_button "Add note"
+end
+
+When /^I click on the first note icon$/ do
+  @project.should_not be_nil
+  @note = @project.notes.first # assume first note is also first on screen
+  @note.should_not be_nil
+
+  click_link "link_note_#{@note.id}"
+end
+
+When /^I cancel adding a note to the project$/ do
+  click_link "Add a note"
+  fill_in "note[body]", :with => "will not save this"
+  click_link "neg_edit_form_note"
+end
+
+Then /^the form for adding a note should not be visible$/ do
+  wait_for do # wait for the form to go away
+    !selenium.is_visible("edit_form_note")
+  end
+end
+
+Then /^I should go to that note page$/ do
+  current_path = URI.parse(current_url).path
+  note_path = note_path(@note)
+  current_path.should == note_path
+end
+
+Then /^I should see one note in the project$/ do
+  selenium.wait_for_element("xpath=//div[@class='note_wrapper']")
 end
 
 Then /^I should see the bold text "([^\"]*)" in the project description$/ do |bold|

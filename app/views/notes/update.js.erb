@@ -4,13 +4,8 @@
   replace_note_form_with_updated_note();
 
 <% else -%>
-  show_errors();
+  TracksForm.show_errors(html_for_error_messages());
 <% end %>
-
-function show_errors() {
-  $('div#edit_error_status').html(html_for_error_messages());
-  $('div#edit_error_status').show();
-}
 
 function replace_note_form_with_updated_note() {
   $('#<%= dom_id(@note, 'edit')%>').fadeOut(250, function() {
