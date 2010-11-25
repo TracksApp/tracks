@@ -21,7 +21,6 @@ Feature: Integrate Tracks in various ways
     Then I should see a message that you need a context to see scripts
 
   Scenario: I can see scripts when I have one or more contexts
-    Given I have a context called "@pc"
     When I go to the integrations page
     Then I should see scripts
 

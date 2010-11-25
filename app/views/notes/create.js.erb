@@ -1,9 +1,9 @@
 <% if @saved -%>
-  TracksForm.hide_errors();
+  TracksPages.hide_errors();
   add_note();
   clear_form();
 <% else -%>
-  TracksForm.show_errors(html_for_error_messages());
+  TracksPages.show_errors(html_for_error_messages());
 <% end -%>
 
 function add_note() {

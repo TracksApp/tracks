@@ -2,7 +2,7 @@
 <% form_for(note_edit_form, :html => {
     :id => dom_id(note_edit_form, 'edit_form'),
     :class => "inline-form edit-note-form",
-    :method => :post }) do |f|
+    :method => :put }) do |f|
   -%>
 
   <div id="error_status"><%= error_messages_for("note") %></div>

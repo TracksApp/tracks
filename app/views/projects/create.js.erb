@@ -2,7 +2,7 @@
   <% if @go_to_project -%>
     redirect_to ("<%= project_path(@project) -%>")
   <% else -%>
-  TracksForm.hide_errors();
+  TracksPages.hide_errors();
   hide_empty_message();
   set_page_badge(<%= @down_count %>);
   update_active_projects_container();
@@ -10,7 +10,7 @@
   clear_form();
   <% end -%>
 <% else -%>
-  TracksForm.show_errors(html_for_error_messages());
+  TracksPages.show_errors(html_for_error_messages());
 <% end -%>
 
 function hide_empty_message() {

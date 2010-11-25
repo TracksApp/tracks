@@ -11,11 +11,7 @@ ActionController::Routing::Routes.draw do |map|
     contexts.resources :todos, :name_prefix => "context_"
   end
 
-  map.resources :projects, :collection => {:order => :post, :alphabetize => :post} do |projects|
-    projects.resources :todos, :name_prefix => "project_"
-  end
-
-  map.resources :projects, :collection => {:order => :post, :actionize => :post} do |projects|
+  map.resources :projects, :collection => {:order => :post, :alphabetize => :post, :actionize => :post} do |projects|
     projects.resources :todos, :name_prefix => "project_"
   end
 

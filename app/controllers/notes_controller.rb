@@ -1,9 +1,12 @@
 class NotesController < ApplicationController
 
+  before_filter :set_source_view
+
   def index
     @all_notes = current_user.notes.all
     @count = @all_notes.size
     @page_title = "TRACKS::All notes"
+    @source_view = 'note_list'
     respond_to do |format|
       format.html
       format.xml { render :xml => @all_notes.to_xml( :except => :user_id )  }
@@ -65,5 +68,12 @@ class NotesController < ApplicationController
       format.js
     end
   end
+
+  protected
+
+  def set_source_view
+    @source_view = params['_source_view'] || 'note'
+  end
+
 
 end

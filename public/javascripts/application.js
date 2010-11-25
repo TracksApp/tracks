@@ -13,20 +13,6 @@ var TracksForm = {
         }
         toggleLink.parent().toggleClass('hide_form');
     }, 
-    hide_all_recurring: function () {
-        $.each(['daily', 'weekly', 'monthly', 'yearly'], function(){
-            $('#recurring_'+this).hide();
-        });
-    },
-    hide_all_edit_recurring: function () {
-        $.each(['daily', 'weekly', 'monthly', 'yearly'], function(){
-            $('#recurring_edit_'+this).hide();
-        });
-    },
-    toggle_overlay: function () {
-        el = document.getElementById("overlay");
-        el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
-    },
     set_project_name: function (name) {
         $('input#todo_project_name').val(name);
     },
@@ -42,16 +28,260 @@ var TracksForm = {
     set_tag_list: function (name) {
         $('input#tag_list').val(name);
     },
+    setup_behavior: function() {
+        /* toggle new todo form for single todo */
+        $('#toggle_action_new').click(function(){
+            if ($("#todo_multi_add").is(':visible')) { /* hide multi next action form first */
+                $('#todo_new_action').show();
+                $('#todo_multi_add').hide();
+                $('a#toggle_multi').text("Add multiple next actions");
+            }
+
+            TracksForm.toggle('toggle_action_new', 'todo_new_action', 'todo-form-new-action',
+                '« Hide form', 'Hide next action form',
+                'Add a next action »', 'Add a next action');
+        });
+
+        /* toggle new todo form for multi edit */
+        $('#toggle_multi').click(function(){
+            if ($("#todo_multi_add").is(':visible')) {
+                $('#todo_new_action').show();
+                $('#todo_multi_add').hide();
+                $('a#toggle_multi').text("Add multiple next actions");
+            } else {
+                $('#todo_new_action').hide();
+                $('#todo_multi_add').show();
+                $('a#toggle_multi').text("Add single next action");
+                $('a#toggle_action_new').text('« Hide form');
+            }
+        });
+
+        /* add behavior to clear the date both buttons for show_from and due */
+        $(".date_clear").live('click', function() {
+            $(this).prev().val('');
+        });
+
+        /* behavior for delete icon */
+        $('.item-container a.delete_icon').live('click', function(evt){
+            evt.preventDefault();
+            params = {};
+            if(typeof(TAG_NAME) !== 'undefined'){
+                params._tag_name = TAG_NAME;
+            }
+            if(confirm("Are you sure that you want to "+this.title+"?")){
+                itemContainer = $(this).parents(".item-container");
+                itemContainer.block({
+                    message: null
+                });
+                params._method = 'delete';
+                $.post(this.href, params, function(){
+                    itemContainer.unblock();
+                }, 'script');
+            }
+        });
+
+        /* behavior for edit icon */
+        $('.item-container a.edit_icon').live('click', function(evt){
+            evt.preventDefault();
+            params = {};
+            if(typeof(TAG_NAME) !== 'undefined'){
+                params._tag_name = TAG_NAME;
+            }
+            itemContainer = $(this).parents(".item-container");
+            $(this).effect('pulsate', {
+                times: 1
+            }, 800);
+            $.get(this.href, params, function(){
+                }, 'script');
+        });
+    }
+}
+
+var TracksPages = {
     show_errors: function (html) {
         $('div#error_status').html(html);
         $('div#error_status').show();
     },
-    hide_errors: function () {
+    hide_errors: function() {
         $('div#error_status').hide();
+    },
+    setup_nifty_corners: function() {
+        Nifty("div#recurring_new_container","normal");
+        Nifty("div#context_new_container","normal");
+        Nifty("div#feedlegend","normal");
+        Nifty("div#feedicons-project","normal");
+        Nifty("div#feedicons-context","normal");
+        Nifty("div#todo_new_action_container","normal");
+        Nifty("div#project_new_project_container","normal");
+    },
+    setup_behavior: function () {
+        /* main menu */
+        $('ul.sf-menu').superfish({
+            delay: 250,
+            animation:   {
+                opacity:'show',
+                height:'show'
+            },
+            autoArrows: false,
+            dropShadows: false,
+            speed: 'fast'
+        });
+
+        /* context menu */
+        $('ul.sf-item-menu').superfish({
+            delay: 100,
+            animation:   {
+                opacity:'show',
+                height:'show'
+            },
+            autoArrows: false,
+            dropShadows: false,
+            speed: 'fast',
+            onBeforeShow: function() { /* highlight todo */
+                $(this.parent().parent().parent()).addClass("sf-item-selected");
+            },
+            onHide: function() { /* remove hightlight from todo */
+                $(this.parent().parent().parent()).removeClass("sf-item-selected");
+            }
+        });
+
+        /* for toggle notes link in mininav */
+        $("#toggle-notes-nav").click(function () {
+            $(".todo_notes").toggle();
+        });
+
+        /* fade flashes and alerts in automatically */
+        $(".alert").fadeOut(8000);
+
+        /* for edit project form and edit todo form
+         * TODO: refactor to separate calls from project and todo */
+        $('.edit-form a.negative').live('click', function(){
+            $(this).parents('.edit-form').fadeOut(200, function () {
+                $(this).parents('.list').find('.project').fadeIn(500);
+                $(this).parents('.container').find('.item-show').fadeIn(500);
+            })
+        });
+
     }
 }
 
-/* TODO, refactor the following two objects into three without obvious duplication */
+var TodoItemsContainer = {
+    // public
+    ensureVisibleWithEffectAppear: function(elemId){
+        $('#'+elemId).fadeIn(400);
+    },
+    expandNextActionListing: function(itemsElem, skipAnimation) {
+        itemsElem = $(itemsElem);
+        if(skipAnimation == true) {
+            itemsElem.show();
+        }
+        else {
+            itemsElem.show('blind', 400);
+        }
+        TodoItems.showContainer(itemsElem.parentNode);
+    },
+    collapseNextActionListing: function(itemsElem, skipAnimation) {
+        itemsElem = $(itemsElem);
+        if(skipAnimation == true) {
+            itemsElem.hide();
+        }
+        else {
+            itemsElem.hide('blind', 400);
+        }
+        TodoItems.hideContainer(itemsElem.parentNode);
+    },
+    ensureContainerHeight: function(itemsElem) {
+        $(itemsElem).css({
+            height: '',
+            overflow: ''
+        });
+    },
+    expandNextActionListingByContext: function(itemsElemId, skipAnimation){
+        TodoItems.expandNextActionListing($('#'+itemsElemId).get(), skipAnimation);
+    },
+    setup_container_toggles: function(){
+        // bind handlers
+        $('.container_toggle').click(function(evt){
+            toggle_target = $(this.parentNode.parentNode).find('.toggle_target');
+            if(toggle_target.is(':visible')){
+                // hide it
+                imgSrc = $(this).find('img').attr('src');
+                $(this).find('img').attr('src', imgSrc.replace('collapse', 'expand'));
+                $.cookie(TodoItemsContainer.buildCookieName(this.parentNode.parentNode), true);
+            } else {
+                // show it
+                imgSrc = $(this).find('img').attr('src');
+                $(this).find('img').attr('src', imgSrc.replace('expand', 'collapse'));
+                $.cookie(TodoItemsContainer.buildCookieName(this.parentNode.parentNode), null);
+            }
+            toggle_target.toggle('blind');
+        });
+        // set to cookied state
+        $('.container.context').each(function(){
+            if($.cookie(TodoItemsContainer.buildCookieName(this))=="true"){
+                imgSrc = $(this).find('.container_toggle img').attr('src');
+                if (imgSrc) {
+                    $(this).find('.container_toggle img').attr('src', imgSrc.replace('collapse', 'expand'));
+                    $(this).find('.toggle_target').hide();
+                }
+            }
+        });
+    },
+
+    // private
+    buildCookieName: function(containerElem) {
+        tracks_login = $.cookie('tracks_login');
+        return 'tracks_'+tracks_login+'_context_' + containerElem.id + '_collapsed';
+    },
+    showContainer: function(containerElem) {
+        imgSrc = $(containerElem).find('.container_toggle img').attr('src');
+        $(containerElem).find('.container_toggle img').attr('src', imgSrc.replace('expand', 'collapse'));
+    },
+    hideContainer: function (containerElem) {
+        imgSrc = $(containerElem).find('.container_toggle img').attr('src');
+        $(containerElem).find('.container_toggle img').attr('src', imgSrc.replace('collapse', 'expand'));
+    }
+}
+
+var TodoItems = {
+    setup_behavior: function() {
+        /* show the notes of a todo */
+        $(".show_notes").live('click', function () {
+            $(this).next().toggle("fast");
+            return false;
+        });
+
+        $(".show_successors").live('click', function () {
+            $(this).next().toggle("fast");
+            return false;
+        });
+
+        /* set behavior for star icon */
+        $(".item-container a.star_item").live('click', function (ev){
+            $.post(this.href, {
+                _method: 'put'
+            }, null, 'script');
+            return false;
+        });
+
+        /* set behavior for toggle checkboxes */
+        $(".item-container input.item-checkbox").live('click', function(ev){
+            params = {
+                _method: 'put'
+            };
+            if(typeof(TAG_NAME) !== 'undefined')
+                params._tag_name = TAG_NAME;
+            $.post(this.value, params, null, 'script');
+        });
+
+        /* set behavior for edit icon */
+        $(".item-container a.edit_item").live('click', function (ev){
+            get_with_ajax_and_block_element(this.href, $(this).parents(".item-container"));
+            return false;
+        });
+    }
+}
+
 var ProjectListPage = {
     update_state_count: function(state, count) {
         $('#'+state+'-projects-count').html(count);
@@ -72,6 +302,90 @@ var ProjectListPage = {
         } else {
             $('#list-'+state+'-projects-container').slideUp("fast");
         }
+    },
+    save_project_name: function(value, settings){
+        project_id = $(this).parents('.container').children('div').get(0).id.split('_')[2];
+        highlight = function(){
+            $('h2#project_name').effect('highlight', {}, 500);
+        };
+        $.post(relative_to_root('projects/update/'+project_id), {
+            'project[name]': value,
+            'update_project_name': 'true'
+        }, highlight, 'script');
+        return(value);
+    },
+    setup_behavior: function() {
+
+        /* in-place edit of project name */
+        $('h2#project_name').editable(ProjectListPage.save_project_name, {
+            style: 'padding:0px',
+            submit: "OK",
+            cancel: "CANCEL"
+        });
+
+        /* alphabetize project list */
+        $('.alphabetize_link').live('click', function(evt){
+            if(confirm('Are you sure that you want to sort these projects alphabetically? This will replace the existing sort order.')){
+                post_with_ajax_and_block_element(this.href, $(this).parents('.alpha_sort'));
+            }
+            return false;
+        });
+
+        /* sort by number of actions */
+        $('.actionize_link').click(function(evt){
+            if(confirm('Are you sure that you want to sort these projects by the number of tasks? This will replace the existing sort order.')){
+                post_with_ajax_and_block_element(this.href, $(this).parents('.tasks_sort'));
+            }
+            return false;
+        });
+
+        /* delete button to delete a project from the list */
+        $('a.delete_project_button').live('click', function(evt){
+            if(confirm("Are you sure that you want to "+this.title+"?")){
+                delete_with_ajax_and_block_element(this.href, $(this).parents('.project'));
+            }
+            return false;
+        });
+
+        /* set behavior for edit project settings link in both projects list page and project page */
+        $("a.project_edit_settings").live('click', function (evt) {
+            get_with_ajax_and_block_element(this.href, $(this).parent().parent());
+            return false;
+        });
+
+        /* submit project form after edit */
+        $("form.edit-project-form button.positive").live('click', function (ev) {
+            submit_with_ajax_and_block_element('form.edit-project-form', $(this));
+            return false;
+        });
+
+        /* submit project form after entering new project */
+        $("form#project_form button.positive").live('click', function (ev) {
+            submit_with_ajax_and_block_element('form.#project_form', $(this));
+            return false;
+        });
+
+        /* toggle new project form */
+        $('#toggle_project_new').click(function(evt){
+            TracksForm.toggle('toggle_project_new', 'project_new', 'project-form',
+                '« Hide form', 'Hide new project form',
+                'Create a new project »', 'Add a project');
+        });
+
+        /* make the three lists of project sortable */
+        $(['active', 'hidden', 'completed']).each(function() {
+            $("#list-"+this+"-projects").sortable({
+                handle: '.handle',
+                update: update_order
+            });
+        });
+
+        /* shrink the notes on the project pages */
+        $('.note_wrapper').truncate({
+            max_length: 90,
+            more: '',
+            less: ''
+        });
     }
 }
 
@@ -95,20 +409,100 @@ var ContextListPage = {
         } else {
             $('#list-'+state+'-contexts-container').slideUp("fast");
         }
+    },
+    save_context_name: function(value, settings) {
+        context_id = $(this).parents('.container.context').get(0).id.split('c')[1];
+        highlight = function(){
+            $('div.context span#context_name').effect('highlight', {}, 500);
+        };
+        $.post(relative_to_root('contexts/update/'+context_id), {
+            'context[name]': value
+        }, highlight);
+        return value;
+    },
+    setup_behavior: function() {
+        /* in place edit of context name */
+        $('div.context span#context_name').editable(ContextListPage.save_context_name, {
+            style: 'padding:0px',
+            submit: "OK",
+            cancel: "CANCEL"
+        });
+
+        /* delete a context using the x button */
+        $('a.delete_context_button').live('click', function(evt){
+            if(confirm("Are you sure that you want to "+this.title+"? Be aware that this will also delete all (repeating) actions in this context!")){
+                delete_with_ajax_and_block_element(this.href, $(this).parents('.context'));
+            }
+            return false;
+        });
+
+        /* set behavior for edit context settings link in projects list page and project page */
+        $("a.context_edit_settings").live('click', function (ev) {
+            get_with_ajax_and_block_element(this.href, $(this).parent().parent());
+            return false;
+        });
+
+        /* submit form when editing a context */
+        $("form.edit-context-form button.positive").live('click', function (ev) {
+            submit_with_ajax_and_block_element('form.edit-context-form', $(this));
+            return false;
+        });
+
+        /* submit form for new context in sidebar */
+        $("form#context-form button.positive").live('click', function (ev) {
+            submit_with_ajax_and_block_element('form.#context-form', $(this));
+            return false;
+        });
+
+        /* Contexts behavior */
+        $('#toggle_context_new').click(function(evt){
+            TracksForm.toggle('toggle_context_new', 'context_new', 'context-form',
+                '« Hide form', 'Hide new context form',
+                'Create a new context »', 'Add a context');
+        });
+
+        /* make the two state lists of context sortable */
+        $(['active', 'hidden']).each(function() {
+            $("#list-contexts-"+this).sortable({
+                handle: '.handle',
+                update: update_order
+            })
+        });
     }
 }
 
 var IntegrationsPage = {
-    setup_behavior: function () {
+    setup_behavior: function() {
         $('#applescript1-contexts').live('change', function(){
-            $("#applescript1").load(relative_to_root('integrations/get_applescript1?context_id='+this.value));
+            IntegrationsPage.get_script_for_context("#applescript1", "get_applescript1", this.value);
         });
         $('#applescript2-contexts').live('change', function(){
-            $("#applescript2").load(relative_to_root('integrations/get_applescript2?context_id='+this.value));
+            IntegrationsPage.get_script_for_context("#applescript2", "get_applescript2", this.value);
         });
         $('#quicksilver-contexts').live('change', function(){
-            $("#quicksilver").load(relative_to_root('integrations/get_quicksilver_applescript?context_id='+this.value));
+            IntegrationsPage.get_script_for_context("#quicksilver", "get_quicksilver_applescript", this.value)
         });
+    },
+    get_script_for_context: function(element, getter, context){
+        generic_get_script_for_list(element, "integrations/"+getter, "context_id="+context);
+    }
+}
+
+var FeedsPage = {
+    setup_behavior: function() {
+        /* TODO: blocking of dropdown */
+        $("#feed-contexts").change(function(){
+            FeedsPage.get_script_for_context("#feeds-for-context", "get_feeds_for_context", this.value );
+        });
+        $("#feed-projects").change(function(){
+            FeedsPage.get_script_for_project("#feeds-for-project", "get_feeds_for_project", this.value );
+        });
+    },
+    get_script_for_context: function(element, getter, param){
+        generic_get_script_for_list(element, "feedlist/"+getter, "context_id="+context);
+    },
+    get_script_for_project: function(element, getter, param){
+        generic_get_script_for_list(element, "feedlist/"+getter, "project_id="+project);
     }
 }
 
@@ -122,26 +516,20 @@ var NotesPage = {
         });
 
         /* delete button for note */
-        $('a.delete_note_button').live('click', function(evt){
-            evt.preventDefault();
+        $('a.delete_note_button').live('click', function(){
             if(confirm("Are you sure that you want to "+this.title+"?")){
-                $(this).parents('.project').block({
-                    message: null
-                });
-                params = {
-                    _method: 'delete'
-                };
-                $.post(this.href, params, null, 'script');
+                delete_with_ajax_and_block_element(this.href, $(this).parents('.project_notes'));
             }
+            return false;
         });
 
         /* edit button for note */
-        $('a.note_edit_settings').live('click', function(evt){
-            evt.preventDefault();
+        $('a.note_edit_settings').live('click', function(){
             dom_id = this.id.substr(10);
             $('#'+dom_id).toggle();
             $('#edit_'+dom_id).show();
             $('#edit_form_'+dom_id+' textarea').focus();
+            return false;
         });
 
         /* cancel button when editing a note */
@@ -159,37 +547,107 @@ var NotesPage = {
 
         /* update button when editing a note */
         $("form.edit-note-form button.positive").live('click', function (ev) {
-            $('form.edit-note-form').ajaxSubmit({
-                type: 'POST',
-                async: true,
-                buttons_dom_elem: $(this),
-                beforeSend: function() {
-                    this.buttons_dom_elem.block({
-                        message: null
-                    });
-                },
-                complete: function() {
-                    this.buttons_dom_elem.unblock();
-                }
-            });
+            submit_with_ajax_and_block_element('form.edit-note-form', $(this));
             return false;
         });
     }
 }
 
-$.fn.clearForm = function() {
-    return this.each(function() {
-        var type = this.type, tag = this.tagName.toLowerCase();
-        if (tag == 'form')
-            return $(':input',this).clearForm();
-        if (type == 'text' || type == 'password' || tag == 'textarea')
-            this.value = '';
-        else if (type == 'checkbox' || type == 'radio')
-            this.checked = false;
-        else if (tag == 'select')
-            this.selectedIndex = -1;
+var RecurringTodosPage = {
+    hide_all_recurring: function () {
+        $.each(['daily', 'weekly', 'monthly', 'yearly'], function(){
+            $('#recurring_'+this).hide();
+        });
+    },
+    hide_all_edit_recurring: function () {
+        $.each(['daily', 'weekly', 'monthly', 'yearly'], function(){
+            $('#recurring_edit_'+this).hide();
+        });
+    },
+    toggle_overlay: function () {
+        el = document.getElementById("overlay");
+        el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
+    },
+    setup_behavior: function() {
+        $("#recurring_todo_new_action_cancel").click(function(){
+            $('#recurring-todo-form-new-action input:text:first').focus();
+            RecurringTodosPage.hide_all_recurring();
+            $('#recurring_daily').show();
+            RecurringTodosPage.toggle_overlay();
+        });
+        $("#recurring_todo_edit_action_cancel").live('click', function(){
+            $('#recurring-todo-form-edit-action input:text:first').focus();
+            RecurringTodosPage.hide_all_recurring();
+            $('#recurring_daily').show();
+            RecurringTodosPage.toggle_overlay();
+        });
+        $("#recurring_edit_period input").live('click', function(){
+            RecurringTodosPage.hide_all_edit_recurring();
+            $('#recurring_edit_'+this.id.split('_')[5]).show();
+        });
+        $("#recurring_period input").live('click', function(){
+            RecurringTodosPage.hide_all_recurring();
+            $('#recurring_'+this.id.split('_')[4]).show();
+        });
+    }
+}
+
+var SearchPage = {
+    setup_behavior: function() {
+        $('#search-form #search').focus();
+    }
+}
+
+function generic_get_script_for_list(element, getter, param){
+    $(element).load(relative_to_root(getter+'?'+param));
+}
+
+function default_ajax_options(ajax_type, the_url, element_to_block) {
+    return {
+        url: the_url,
+        type: ajax_type,
+        async: true,
+        blocked_elem: element_to_block,
+        dataType: 'script',
+        beforeSend: function() {
+            this.blocked_elem.block({
+                message: null
+            });
+        },
+        complete:function() {
+            this.blocked_elem.unblock();
+            enable_rich_interaction();
+        }
+    }
+}
+
+function submit_with_ajax_and_block_element(form, element_to_block) {
+    $(form).ajaxSubmit({
+        type: 'POST',
+        async: true,
+        blocked_elem: element_to_block,
+        beforeSend: function() {
+            this.blocked_elem.block({
+                message: null
+            });
+        },
+        complete: function() {
+            this.blocked_elem.unblock();
+        }
     });
-};
+}
+
+function get_with_ajax_and_block_element(the_url, element_to_block) {
+    $.ajax(default_ajax_options('GET', the_url, element_to_block));
+}
+
+function post_with_ajax_and_block_element(the_url, element_to_block) {
+    $.ajax(default_ajax_options('POST', the_url, element_to_block));
+}
+
+function delete_with_ajax_and_block_element(the_url, element_to_block) {
+    $.ajax(default_ajax_options('DELETE', the_url, element_to_block));
+}
 
 /****************************************
  * Unobtrusive jQuery written by Eric Allen
@@ -211,87 +669,22 @@ $(document).ajaxSend(function(event, request, settings) {
     request.setRequestHeader("Accept", "text/javascript");
 });
 
-todoItems = {
-    // public
-    ensureVisibleWithEffectAppear: function(elemId){
-        $('#'+elemId).fadeIn(400);
-    },
-    expandNextActionListing: function(itemsElem, skipAnimation) {
-        itemsElem = $(itemsElem);
-        if(skipAnimation == true) {
-            itemsElem.show();
-        }
-        else {
-            itemsElem.show('blind', 400);
-        }
-        todoItems.showContainer(itemsElem.parentNode);
-    },
-    collapseNextActionListing: function(itemsElem, skipAnimation) {
-        itemsElem = $(itemsElem);
-        if(skipAnimation == true) {
-            itemsElem.hide();
-        }
-        else {
-            itemsElem.hide('blind', 400);
-        }
-        todoItems.hideContainer(itemsElem.parentNode);
-    },
-    ensureContainerHeight: function(itemsElem) {
-        $(itemsElem).css({
-            height: '',
-            overflow: ''
-        });
-    },
-    expandNextActionListingByContext: function(itemsElemId, skipAnimation){
-        todoItems.expandNextActionListing($('#'+itemsElemId).get(), skipAnimation);
-    },
-
-    // private
-    buildCookieName: function(containerElem) {
-        tracks_login = $.cookie('tracks_login');
-        return 'tracks_'+tracks_login+'_context_' + containerElem.id + '_collapsed';
-    },
-    showContainer: function(containerElem) {
-        imgSrc = $(containerElem).find('.container_toggle img').attr('src');
-        $(containerElem).find('.container_toggle img').attr('src', imgSrc.replace('expand', 'collapse'));
-    },
-    hideContainer: function (containerElem) {
-        imgSrc = $(containerElem).find('.container_toggle img').attr('src');
-        $(containerElem).find('.container_toggle img').attr('src', imgSrc.replace('collapse', 'expand'));
-    }
-}
+$.fn.clearForm = function() {
+    return this.each(function() {
+        var type = this.type, tag = this.tagName.toLowerCase();
+        if (tag == 'form')
+            return $(':input',this).clearForm();
+        if (type == 'text' || type == 'password' || tag == 'textarea')
+            this.value = '';
+        else if (type == 'checkbox' || type == 'radio')
+            this.checked = false;
+        else if (tag == 'select')
+            this.selectedIndex = -1;
+    });
+};
 
 function redirect_to(path) {
     window.location.href = path;
-}
-
-function setup_container_toggles(){
-    // bind handlers
-    $('.container_toggle').click(function(evt){
-        toggle_target = $(this.parentNode.parentNode).find('.toggle_target');
-        if(toggle_target.is(':visible')){
-            // hide it
-            imgSrc = $(this).find('img').attr('src');
-            $(this).find('img').attr('src', imgSrc.replace('collapse', 'expand'));
-            $.cookie(todoItems.buildCookieName(this.parentNode.parentNode), true);
-        } else {
-            // show it
-            imgSrc = $(this).find('img').attr('src');
-            $(this).find('img').attr('src', imgSrc.replace('expand', 'collapse'));
-            $.cookie(todoItems.buildCookieName(this.parentNode.parentNode), null);
-        }
-        toggle_target.toggle('blind');
-    });
-    // set to cookied state
-    $('.container.context').each(function(){
-        if($.cookie(todoItems.buildCookieName(this))=="true"){
-            imgSrc = $(this).find('.container_toggle img').attr('src');
-            if (imgSrc) {
-                $(this).find('.container_toggle img').attr('src', imgSrc.replace('collapse', 'expand'));
-                $(this).find('.toggle_target').hide();
-            }
-        }
-    });
 }
 
 function askIfNewContextProvided(source) {
@@ -309,11 +702,11 @@ function askIfNewContextProvided(source) {
             }
         }
     });
-if (givenContextName.length == 0) return true; // do nothing and depend on rails validation error
-for (var i = 0; i < contextNames.length; ++i) {
-    if (contextNames[i] == givenContextName) return true;
-}
-return confirm('New context "' + givenContextName + '" will be also created. Are you sure?');
+    if (givenContextName.length == 0) return true; // do nothing and depend on rails validation error
+    for (var i = 0; i < contextNames.length; ++i) {
+        if (contextNames[i] == givenContextName) return true;
+    }
+    return confirm('New context "' + givenContextName + '" will be also created. Are you sure?');
 }
 
 function update_order(event, ui){
@@ -333,7 +726,7 @@ function update_order(event, ui){
         container.sortable("serialize"),
         function(){
             row.effect('highlight', {}, 1000)
-            },
+        },
         'script');
 }
 
@@ -343,8 +736,7 @@ function project_defaults(){
     if($('body').hasClass('contexts')){
     // don't change the context
     // see ticket #934
-    }
-    else {
+    } else {
         if(defaultContexts[$(this).val()] !== undefined) {
             context_name = $(this).parents('form').find('input[name=context_name]');
             if(context_name.attr('edited') === undefined){
@@ -362,9 +754,10 @@ function project_defaults(){
 
 function enable_rich_interaction(){
     /* fix for #1036 where closing a edit form before the autocomplete was filled
-   * resulted in a dropdown box that could not be removed. We remove all
-   * autocomplete boxes the hard way */
+     * resulted in a dropdown box that could not be removed. We remove all
+     * autocomplete boxes the hard way */
     $('.ac_results').remove();
+
     $('input.Date').datepicker({
         'dateFormat': dateFormat,
         'firstDay': weekStart,
@@ -427,48 +820,43 @@ function enable_rich_interaction(){
         }
     });
 
-$('.item-show').droppable({
-    drop: drop_todo,
-    tolerance: 'pointer',
-    hoverClass: 'hover'
-});
-  
-/* Drag & drop for changing contexts */
-function drop_todo_on_context(evt, ui) {
-    target = $(this);
-    dragged_todo = ui.draggable[0].id.split('_')[2];
-    context_id = this.id.split('_')[1];
-    ui.draggable.remove();
-    target.block({
-        message: null
+    $('.item-show').droppable({
+        drop: drop_todo,
+        tolerance: 'pointer',
+        hoverClass: 'hover'
     });
-    setTimeout(function() {
-        target.show()
+  
+    /* Drag & drop for changing contexts */
+    function drop_todo_on_context(evt, ui) {
+        target = $(this);
+        dragged_todo = ui.draggable[0].id.split('_')[2];
+        context_id = this.id.split('_')[1];
+        ui.draggable.remove();
+        target.block({
+            message: null
+        });
+        setTimeout(function() {
+            target.show()
         }, 0);
-    $.post(relative_to_root('todos/change_context'),
-    {
-        "todo[id]": dragged_todo,
-        "todo[context_id]": context_id
-    },
-    function(){
-        target.unblock();
-        target.hide();
-    }, 'script');
-}
+        $.post(relative_to_root('todos/change_context'),
+        {
+            "todo[id]": dragged_todo,
+            "todo[context_id]": context_id
+        },
+        function(){
+            target.unblock();
+            target.hide();
+        }, 'script');
+    }
 
-$('.context_target').droppable({
-    drop: drop_todo_on_context,
-    tolerance: 'pointer',
-    hoverClass: 'hover'
-});
+    $('.context_target').droppable({
+        drop: drop_todo_on_context,
+        tolerance: 'pointer',
+        hoverClass: 'hover'
+    });
 
-/* Reset auto updater */
-field_touched = false;
-
-$('h2#project_name').editable(save_project_name, {
-    style: 'padding:0px',
-    submit: "OK"
-});
+    /* Reset auto updater */
+    field_touched = false;
 }
 
 /* Auto-refresh */
@@ -517,443 +905,16 @@ function setup_periodic_check(url_for_check, interval_in_sec, method) {
 }
 
 $(document).ready(function() {
-    $('#search-form #search').focus();
+    TracksPages.setup_nifty_corners();
 
-    /* Nifty corners */
-    Nifty("div#recurring_new_container","normal");
-    Nifty("div#context_new_container","normal");
-    Nifty("div#feedlegend","normal");
-    Nifty("div#feedicons-project","normal");
-    Nifty("div#feedicons-context","normal");
-    Nifty("div#todo_new_action_container","normal");
-    Nifty("div#project_new_project_container","normal");
-  
-    /* Moved from standard.html.erb layout */
-    $('ul.sf-menu').superfish({
-        delay: 250,
-        animation:   {
-            opacity:'show',
-            height:'show'
-        },
-        autoArrows: false,
-        dropShadows: false,
-        speed: 'fast'
-    });
+    TodoItemsContainer.setup_container_toggles();
 
-    $('ul.sf-item-menu').superfish({ /* context menu */
-        delay: 100,
-        animation:   {
-            opacity:'show',
-            height:'show'
-        },
-        autoArrows: false,
-        dropShadows: false,
-        speed: 'fast',
-        onBeforeShow: function() { /* highlight todo */
-            $(this.parent().parent().parent()).addClass("sf-item-selected");
-        },
-        onHide: function() { /* remove hightlight from todo */
-            $(this.parent().parent().parent()).removeClass("sf-item-selected");
-        }
+    /* enable page specific behavior */
+    $([ 'IntegrationsPage', 'NotesPage', 'ProjectListPage', 'ContextListPage',
+        'FeedsPage', 'RecurringTodosPage', 'TodoItems', 'TracksPages',
+        'TracksForm', 'SearchPage' ]).each(function() {
+        eval(this+'.setup_behavior();');
     });
-
-    /* for toggle notes link in mininav */
-    $("#toggle-notes-nav").click(function () {
-        $(".todo_notes").toggle();
-    });
-  
-    /* show the notes of a todo */
-    $(".show_notes").live('click', function () {
-        $(this).next().toggle("fast");
-        return false;
-    });
-
-    $('.note_wrapper').truncate({
-        max_length: 90,
-        more: '',
-        less: ''
-    });
-
-    $(".show_successors").live('click', function () {
-        $(this).next().toggle("fast");
-        return false;
-    });
-
-    /* fade flashes and alerts in automatically */
-    $(".alert").fadeOut(8000);
-
-    /* set behavior for star icon */
-    $(".item-container a.star_item").live('click', function (ev){
-        $.post(this.href, {
-            _method: 'put'
-        }, null, 'script');
-        return false;
-    });
-
-    /* set behavior for toggle checkboxes */
-    $(".item-container input.item-checkbox").live('click', function(ev){
-        params = {
-            _method: 'put'
-        };
-        if(typeof(TAG_NAME) !== 'undefined')
-            params._tag_name = TAG_NAME;
-        $.post(this.value, params, null, 'script');
-    });
-
-    /* set behavior for edit icon */
-    $(".item-container a.edit_item").live('click', function (ev){
-        itemContainer = $(this).parents(".item-container");
-        $.ajax({
-            url: this.href,
-            beforeSend: function() {
-                itemContainer.block({
-                    message: null
-                });
-            },
-            complete: function() {
-                itemContainer.unblock();
-            },
-            dataType: 'script'
-        });
-        return false;
-    });
-
-    setup_container_toggles();
-
-    $('#toggle_action_new').click(function(){
-        if ($("#todo_multi_add").is(':visible')) { /* hide multi next action form first */
-            $('#todo_new_action').show();
-            $('#todo_multi_add').hide();
-            $('a#toggle_multi').text("Add multiple next actions");
-        }
-    
-        TracksForm.toggle('toggle_action_new', 'todo_new_action', 'todo-form-new-action',
-            '« Hide form', 'Hide next action form',
-            'Add a next action »', 'Add a next action');
-    });
-
-    $('#toggle_multi').click(function(){
-        if ($("#todo_multi_add").is(':visible')) {
-            $('#todo_new_action').show();
-            $('#todo_multi_add').hide();
-            $('a#toggle_multi').text("Add multiple next actions");
-        } else {
-            $('#todo_new_action').hide();
-            $('#todo_multi_add').show();
-            $('a#toggle_multi').text("Add single next action");
-            $('a#toggle_action_new').text('« Hide form');
-        }
-    });
-
-    /* for edit project form and edit todo form */
-    $('.edit-form a.negative').live('click', function(){
-        $(this).parents('.edit-form').fadeOut(200, function () {
-            $(this).parents('.list').find('.project').fadeIn(500);
-            $(this).parents('.container').find('.item-show').fadeIn(500);
-        })
-    });
-  
-    /* add behavior to clear the date both buttons for show_from and due */
-    $(".date_clear").live('click', function() {
-        $(this).prev().val('');
-    });
-
-    /* recurring todo behavior */
-
-    /* behavior for delete icon */
-    $('.item-container a.delete_icon').live('click', function(evt){
-        evt.preventDefault();
-        params = {};
-        if(typeof(TAG_NAME) !== 'undefined'){
-            params._tag_name = TAG_NAME;
-        }
-        if(confirm("Are you sure that you want to "+this.title+"?")){
-            itemContainer = $(this).parents(".item-container");
-            itemContainer.block({
-                message: null
-            });
-            params._method = 'delete';
-            $.post(this.href, params, function(){
-                itemContainer.unblock();
-            }, 'script');
-        }
-    });
-
-    /* behavior for edit icon */
-    $('.item-container a.edit_icon').live('click', function(evt){
-        evt.preventDefault();
-        params = {};
-        if(typeof(TAG_NAME) !== 'undefined'){
-            params._tag_name = TAG_NAME;
-        }
-        itemContainer = $(this).parents(".item-container");
-        $(this).effect('pulsate', {
-            times: 1
-        }, 800);
-        $.get(this.href, params, function(){
-            }, 'script');
-    });
-
-    $("#recurring_todo_new_action_cancel").click(function(){
-        $('#recurring-todo-form-new-action input:text:first').focus();
-        TracksForm.hide_all_recurring();
-        $('#recurring_daily').show();
-        TracksForm.toggle_overlay();
-    });
-
-    $("#recurring_todo_edit_action_cancel").live('click', function(){
-        $('#recurring-todo-form-edit-action input:text:first').focus();
-        TracksForm.hide_all_recurring();
-        $('#recurring_daily').show();
-        TracksForm.toggle_overlay();
-    });
-    $("#recurring_edit_period input").live('click', function(){
-        TracksForm.hide_all_edit_recurring();
-        $('#recurring_edit_'+this.id.split('_')[5]).show();
-    });
-
-    $("#recurring_period input").live('click', function(){
-        TracksForm.hide_all_recurring();
-        $('#recurring_'+this.id.split('_')[4]).show();
-    });
-
-    $('div.context span#context_name').editable(function(value, settings){
-        context_id = $(this).parents('.container.context').get(0).id.split('c')[1];
-        highlight = function(){
-            $('div.context span#context_name').effect('highlight', {}, 500);
-        };
-        $.post(relative_to_root('contexts/update/'+context_id), {
-            'context[name]': value
-        }, highlight);
-        return(value);
-    }, {
-        style: 'padding:0px',
-        submit: "OK",
-        cancel: "CANCEL"
-    });
-
-    /* Projects behavior */
-
-    save_project_name = function(value, settings){
-        project_id = $(this).parents('.container').children('div').get(0).id.split('_')[2];
-        highlight = function(){
-            $('h2#project_name').effect('highlight', {}, 500);
-        };
-        $.post(relative_to_root('projects/update/'+project_id), {
-            'project[name]': value,
-            'update_project_name': 'true'
-        }, highlight, 'script');
-        return(value);
-    };
-
-    $('.alphabetize_link').click(function(evt){
-        evt.preventDefault();
-        if(confirm('Are you sure that you want to sort these projects alphabetically? This will replace the existing sort order.')){
-            alphaSort = $(this).parents('.alpha_sort');
-            alphaSort.block({
-                message:null
-            });
-            $.post(this.href, {
-                async: true
-            }, function(){
-                alphaSort.unblock()
-                }, 'script');
-        }
-    });
-
-    $('.actionize_link').click(function(evt){
-        evt.preventDefault();
-        if(confirm('Are you sure that you want to sort these projects by the number of tasks? This will replace the existing sort order.')){
-            taskSort = $(this).parents('.tasks_sort');
-            taskSort.block({
-                message:null
-            });
-            $.post(this.href, {}, function(){
-                taskSort.unblock()
-                }, 'script');
-        }
-    });
-
-    $('a.delete_project_button').live('click', function(evt){
-        evt.preventDefault();
-        if(confirm("Are you sure that you want to "+this.title+"?")){
-            $(this).parents('.project').block({
-                message: null
-            });
-            params = {
-                _method: 'delete'
-            };
-            $.post(this.href, params, null, 'script');
-        }
-    });
-
-    /* set behavior for edit project settings link in projects list page and project page */
-    $("a.project_edit_settings").live('click', function (ev) {
-        $.ajax({
-            url: this.href,
-            async: true,
-            project_dom_elem: $(this).parent().parent(),
-            dataType: 'script',
-            beforeSend: function() {
-                this.project_dom_elem.block({
-                    message: null
-                });
-            },
-            complete:function() {
-                this.project_dom_elem.unblock();
-                enable_rich_interaction();
-            }
-        });
-        return false;
-    });
-
-    $("form.edit-project-form button.positive").live('click', function (ev) {
-        $('form.edit-project-form').ajaxSubmit({
-            type: 'POST',
-            async: true,
-            buttons_dom_elem: $(this),
-            beforeSend: function() {
-                this.buttons_dom_elem.block({
-                    message: null
-                });
-            },
-            complete: function() {
-                this.buttons_dom_elem.unblock();
-            }
-        });
-        return false;
-    });
-
-    $("form#project_form button.positive").live('click', function (ev) {
-        $('form.#project_form').ajaxSubmit({
-            type: 'POST',
-            async: true,
-            buttons_dom_elem: $(this),
-            beforeSend: function() {
-                this.buttons_dom_elem.block({
-                    message: null
-                });
-            },
-            complete: function() {
-                this.buttons_dom_elem.unblock();
-            }
-        });
-        return false;
-    });
-
-    $('a.delete_context_button').live('click', function(evt){
-        evt.preventDefault();
-        if(confirm("Are you sure that you want to "+this.title+"? Be aware that this will also delete all (repeating) actions in this context!")){
-            $(this).parents('.project').block({
-                message: null
-            });
-            params = {
-                _method: 'delete'
-            };
-            $.post(this.href, params, null, 'script');
-        }
-    });
-
-    /* set behavior for edit context settings link in projects list page and project page
-   * TODO: refactor this and the edit for project because the function looks the same */
-    $("a.context_edit_settings").live('click', function (ev) {
-        $.ajax({
-            url: this.href,
-            async: true,
-            context_dom_elem: $(this).parent().parent(),
-            dataType: 'script',
-            beforeSend: function() {
-                this.context_dom_elem.block({
-                    message: null
-                });
-            },
-            complete:function() {
-                this.context_dom_elem.unblock();
-                enable_rich_interaction();
-            }
-        });
-        return false;
-    });
-
-    $("form.edit-context-form button.positive").live('click', function (ev) {
-        $('form.edit-context-form').ajaxSubmit({
-            type: 'POST',
-            async: true,
-            buttons_dom_elem: $(this),
-            beforeSend: function() {
-                this.buttons_dom_elem.block({
-                    message: null
-                });
-            },
-            complete: function() {
-                this.buttons_dom_elem.unblock();
-            }
-        });
-        return false;
-    });
-
-    $("form#context-form button.positive").live('click', function (ev) {
-        $('form.#context-form').ajaxSubmit({
-            type: 'POST',
-            async: true,
-            buttons_dom_elem: $(this),
-            beforeSend: function() {
-                this.buttons_dom_elem.block({
-                    message: null
-                });
-            },
-            complete: function() {
-                this.buttons_dom_elem.unblock();
-            }
-        });
-        return false;
-    });
-
-    $('#toggle_project_new').click(function(evt){
-        TracksForm.toggle('toggle_project_new', 'project_new', 'project-form',
-            '« Hide form', 'Hide new project form',
-            'Create a new project »', 'Add a project');
-    });
-
-    $("#list-active-projects").sortable({
-        handle: '.handle',
-        update: update_order
-    });
-    $("#list-hidden-projects").sortable({
-        handle: '.handle',
-        update: update_order
-    });
-    $("#list-completed-projects").sortable({
-        handle: '.handle',
-        update: update_order
-    });
-
-    /* Contexts behavior */
-    $('#toggle_context_new').click(function(evt){
-        TracksForm.toggle('toggle_context_new', 'context_new', 'context-form',
-            '« Hide form', 'Hide new context form',
-            'Create a new context »', 'Add a context');
-    });
-
-    $("#list-contexts-active").sortable({
-        handle: '.handle',
-        update: update_order
-    });
-    $("#list-contexts-hidden").sortable({
-        handle: '.handle',
-        update: update_order
-    });
-  
-    /* Feeds page */
-    $("#feed-contexts").change(function(){
-        $("#feeds-for-context").load('/feedlist/get_feeds_for_context?context_id='+this.value);
-    });
-    $("#feed-projects").change(function(){
-        $("#feeds-for-project").load('/feedlist/get_feeds_for_project?project_id='+this.value);
-    });
-
-    IntegrationsPage.setup_behavior();
-    NotesPage.setup_behavior();
 
     /* Gets called from some AJAX callbacks, too */
     enable_rich_interaction();
