@@ -379,13 +379,6 @@ var ProjectListPage = {
                 update: update_order
             });
         });
-
-        /* shrink the notes on the project pages */
-        $('.note_wrapper').truncate({
-            max_length: 90,
-            more: '',
-            less: ''
-        });
     }
 }
 
@@ -633,6 +626,7 @@ function submit_with_ajax_and_block_element(form, element_to_block) {
         },
         complete: function() {
             this.blocked_elem.unblock();
+            enable_rich_interaction();
         }
     });
 }
@@ -857,6 +851,14 @@ function enable_rich_interaction(){
 
     /* Reset auto updater */
     field_touched = false;
+
+    /* shrink the notes on the project pages. This is not live(), so this needs
+     * to be run after ajax adding of a new note */
+    $('.note_wrapper').truncate({
+        max_length: 90,
+        more: '',
+        less: ''
+    });
 }
 
 /* Auto-refresh */

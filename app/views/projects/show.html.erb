@@ -22,7 +22,7 @@
   </div>
 
   <div id="new-note" style="display:none;">
-    <%= render :partial => "notes/note_edit_form", :object => @new_note, :locals => {:submit_text => t('projects.add_note_submit')} %>
+    <%= render :partial => "notes/note_edit_form", :object => @new_note, :locals => {:submit_text => t('projects.add_note_submit'), :form_method => :post} %>
   </div>
 
 </div>

@@ -10,6 +10,12 @@ Feature: Edit a project
     And there exists a project "manage me" for user "testuser"
     And I have logged in as "testuser" with password "secret"
 
+  Scenario: I can go to the note of a project
+    Given I have a project "test" with 2 notes
+    When I visit the "test" project
+    When I click on the first note icon
+    Then I should go to that note page
+
   @selenium
   Scenario: I can describe the project using markup
     When I visit the "manage me" project
@@ -62,14 +68,7 @@ Feature: Edit a project
     Then the badge should show 2   # "manage me" and "test"
     When I try to edit the project name of "manage me" to "test"
     Then I should see "Name already exists"
-
-  @selenium
-  Scenario: I can go to the note of a project
-    Given I have a project "test" with 2 notes
-    When I visit the "test" project
-    When I click on the first note icon
-    Then I should go to that note page
-
+  
   @selenium
   Scenario: I can add a note to the project
     Given I have a project called "test"
@@ -77,17 +76,17 @@ Feature: Edit a project
     And I add a note "hello I'm testing" to the project
     Then I should see one note in the project
 
-  @selenium @focus
+  @selenium
   Scenario: Cancelling adding a note to the project will remove form
     Given I have a project called "test"
     When I visit the "test" project
     And I cancel adding a note to the project
     Then the form for adding a note should not be visible
 
-  @selenium 
+  @selenium @wip
   Scenario: Long notes in a project are shown cut off
     Given I have a project called "test"
     When I visit the "test" project
-    And I add a note "test 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234 TOO LONG" to the project
-    Then I should not see "test 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234 TOO LONG"
-    And I should see "test 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 1234"
+    And I add a note "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890TOO LONG" to the project
+    Then I should not see "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890TOO LONG"
+    And I should see "12345678901234567890123456789012345678901234567890123456789012345678901234567890123456"

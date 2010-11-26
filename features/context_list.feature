@@ -75,3 +75,8 @@ Feature: Manage the list of contexts
     When I go to the contexts page
     And I add a new active context "foo, bar"
     Then I should see "Name cannot contain the comma"
+
+  @selenium @wip
+  Scenario: I can drag and drop to order the contexts
+    # TODO: pending scenario
+    Given this is a pending scenario

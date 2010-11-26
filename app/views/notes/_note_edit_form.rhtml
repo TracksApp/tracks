@@ -1,8 +1,12 @@
-<% submit_text ||= t('common.update') -%>
-<% form_for(note_edit_form, :html => {
+<%
+submit_text ||= t('common.update')
+# :put for edit note and :post for new note
+form_method ||= :put
+
+form_for(note_edit_form, :html => {
     :id => dom_id(note_edit_form, 'edit_form'),
     :class => "inline-form edit-note-form",
-    :method => :put }) do |f|
+    :method => form_method }) do |f|
   -%>
 
   <div id="error_status"><%= error_messages_for("note") %></div>
