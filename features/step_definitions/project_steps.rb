@@ -24,6 +24,16 @@ Given /^I have a project called "([^"]*)"$/ do |project_name|
   Given "there exists a project \"#{project_name}\" for user \"#{@current_user.login}\""
 end
 
+Given /^I have the following projects:$/ do |table|
+  table.hashes.each do |project|
+    Given 'I have a project called "'+project[:project_name]+'"'
+  end
+end
+
+Given /^I have no projects$/ do
+  Project.delete_all
+end
+
 When /^I visit the "([^\"]*)" project$/ do |project_name|
   @project = Project.find_by_name(project_name)
   @project.should_not be_nil

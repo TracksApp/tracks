@@ -491,10 +491,10 @@ var FeedsPage = {
             FeedsPage.get_script_for_project("#feeds-for-project", "get_feeds_for_project", this.value );
         });
     },
-    get_script_for_context: function(element, getter, param){
+    get_script_for_context: function(element, getter, context){
         generic_get_script_for_list(element, "feedlist/"+getter, "context_id="+context);
     },
-    get_script_for_project: function(element, getter, param){
+    get_script_for_project: function(element, getter, project){
         generic_get_script_for_list(element, "feedlist/"+getter, "project_id="+project);
     }
 }

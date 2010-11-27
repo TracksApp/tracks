@@ -90,7 +90,7 @@ en:
     rss_feed: "RSS Feed"
     plain_text_feed: "Plain Text Feed"
     ical_feed: "iCal feed"
-    notice_incomplete_only: "Note: All feeds show only actions that have not been marked as done."
+    notice_incomplete_only: "Note: All feeds show only actions that have not been marked as done, unless stated otherwise."
     last_fixed_number: "Last {{number}} actions"
     all_actions: "All actions"
     actions_due_today: "Actions due today or earlier"

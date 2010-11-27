@@ -1,6 +1,25 @@
-<li>
-  <%= rss_formatted_link({ :controller=> 'todos', :action => 'index', :context_id => context.to_param }) %>
-  <%= text_formatted_link({ :controller=> 'todos', :action => 'index', :context_id => context.to_param }) %>
-  <%= ical_formatted_link({ :controller=> 'todos', :action => 'index', :context_id => context.to_param }) %>
-  <strong><%=h context.name %></strong>
-</li>
+<% context = @active_contexts.empty? ? @hidden_contexts.first : @active_contexts.first
+-%>
+
+<h4><%= t('feedlist.context_centric_actions') %>:</h4>
+<% if @active_contexts.empty? && @hidden_contexts.empty? -%>
+  <ul><li><%= t('feedlist.context_needed') %></li></ul>
+<% else -%>
+  <ul>
+    <li><%= t('common.numbered_step', :number => 1) %> - <%= t('feedlist.choose_context') %>:
+      <select name="feed-contexts" id="feed-contexts">
+        <%= options_from_collection_for_select(@active_contexts, "id", "name", @active_contexts.first.id) unless @active_contexts.empty?-%>
+        <%= options_from_collection_for_select(@hidden_contexts, "id", "name") -%>
+      </select>
+    </li>
+    <li><%= t('common.numbered_step', :number => 2) %> - <%= t('feedlist.select_feed_for_context') %>
+      <div id="feedicons-context">
+        <div id="feeds-for-context">
+          <li><%= all_feed_links_for_context(context) %></li>
+        </div>
+      </div>
+    </li>
+  </ul>
+<% end -%>
+
+

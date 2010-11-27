@@ -1,0 +1,14 @@
+<div id="feedlegend">
+  <h3><%= t('feedlist.legend') %></h3>
+  <dl>
+    <dt><%= image_tag("feed-icon.png", :size => "16X16", :border => 0)%></dt>
+    <dd><%= t('feedlist.rss_feed') %></dd>
+
+    <dt><span class="feed">TXT</span></dt>
+    <dd><%= t('feedlist.plain_text_feed') %></dd>
+
+    <dt><span class="feed">iCal</span></dt>
+    <dd><%= t('feedlist.ical_feed') %></dd>
+  </dl>
+  <p><%= t('feedlist.notice_incomplete_only') %></p>
+</div>

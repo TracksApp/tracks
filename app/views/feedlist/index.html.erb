@@ -1,115 +1,23 @@
 <div id="display_box">
   <div id="feeds">
-    <div id="feedlegend">
-      <h3><%= t('feedlist.legend') %></h3>
-      <dl>
-        <dt><%= image_tag("feed-icon.png", :size => "16X16", :border => 0)%></dt><dd><%= t('feedlist.rss_feed') %></dd>
-        <dt><span class="feed">TXT</span></dt><dd><%= t('feedlist.plain_text_feed') %></dd>
-        <dt><span class="feed">iCal</span></dt><dd><%= t('feedlist.ical_feed') %></dd>
-      </dl>
-      <p><%= t('feedlist.notice_incomplete_only') %></p>
-    </div>
+    <%= render :partial => 'legend' %>
     <ul>
-      <li>
-        <%= rss_formatted_link({ :controller => 'todos', :action => 'index', :limit => 15 }) %>
-        <%= text_formatted_link({ :controller => 'todos', :action => 'index', :limit => 15 }) %>
-        <%= ical_formatted_link({ :controller => 'todos', :action => 'index', :limit => 15 }) %>
-        <%= t('feedlist.last_fixed_number', :number=>15) %>
-      </li>
-      <li>
-        <%= rss_formatted_link( { :controller => 'todos', :action => 'index' } ) %>
-        <%= text_formatted_link( { :controller => 'todos', :action => 'index' } ) %>
-        <%= ical_formatted_link( { :controller => 'todos', :action => 'index' } ) %>
-        <%= t('feedlist.all_actions') %>
-      </li>
-      <li>
-        <%= rss_formatted_link({ :controller => 'todos', :action => 'index', :due => 0 }) %>
-        <%= text_formatted_link({ :controller => 'todos', :action => 'index', :due => 0 }) %>
-        <%= ical_formatted_link({ :controller => 'todos', :action => 'index', :due => 0 }) %>
-        <%= t('feedlist.actions_due_today') %>
-      </li>
-      <li>
-        <%= rss_formatted_link({ :controller => 'todos', :action => 'index', :due => 6 }) %>
-        <%= text_formatted_link({ :controller => 'todos', :action => 'index', :due => 6 }) %>
-        <%= ical_formatted_link({ :controller => 'todos', :action => 'index', :due => 6 }) %>
-        <%= t('feedlist.actions_due_next_week') %>
-      </li>
-      <li>
-        <%= rss_formatted_link({ :controller => 'todos', :action => 'index', :done => 7 }) %>
-        <%= text_formatted_link({ :controller => 'todos', :action => 'index', :done => 7 }) %>
-        <%= t('feedlist.actions_completed_last_week') %>
-      </li>
-      <li>
-        <%= rss_formatted_link({:controller => 'contexts', :action => 'index'}) %>
-        <%= text_formatted_link({:controller => 'contexts', :action => 'index'}) %>
-        <%= t('feedlist.all_contexts') %>
-      </li>
-      <li>
-        <%= rss_formatted_link({:controller => 'projects', :action => 'index'}) %>
-        <%= text_formatted_link({:controller => 'projects', :action => 'index'}) %>
-        <%= t('feedlist.all_projects') %>
-      </li>
-      <li>
-        <%= rss_formatted_link({:controller => 'projects', :action => 'index', :only_active_with_no_next_actions => true}) %>
-        <%= text_formatted_link({:controller => 'projects', :action => 'index', :only_active_with_no_next_actions => true}) %>
-        <%= t('feedlist.active_projects_wo_next') %>
-      </li>
-      <li>
-        <%= rss_formatted_link({:controller => 'todos', :action => 'index', :tag => 'starred'}) %>
-        <%= text_formatted_link({:controller => 'todos', :action => 'index', :tag => 'starred'}) %>
-        <%= t('feedlist.active_starred_actions') %>
-      </li>
-      <li>
-        <%= text_formatted_link({:controller => 'projects', :action => 'index', :projects_and_actions => true}) %>
-        <%= t('feedlist.projects_and_actions') %>
-      </li>
-      <li><h4><%= t('feedlist.context_centric_actions') %>:</h4>
-        <% if @active_contexts.empty? && @hidden_contexts.empty? -%>
-        <ul><li><%= t('feedlist.context_needed') %></li></ul>
-        <% else -%>
-        <ul>
-          <li><%= t('common.numbered_step', :number => 1) %> - <%= t('feedlist.choose_context') %>:
-            <select name="feed-contexts" id="feed-contexts">
-              <%= options_from_collection_for_select(@active_contexts, "id", "name", @active_contexts.first.id) unless @active_contexts.empty?-%>
-              <%= options_from_collection_for_select(@hidden_contexts, "id", "name") -%>
-            </select>
-          </li>
-          <li><%= t('common.numbered_step', :number => 2) %> - <%= t('feedlist.select_feed_for_context') %>
-            <div id="feedicons-context">
-              <div id="feeds-for-context">
-                <%= render :partial => 'feed_for_context', :locals => { :context => @active_contexts.empty? ? @hidden_contexts.first : @active_contexts.first } %>
-              </div>
-            </div>
-          </li>
-        </ul>
-        <% end -%>
-      </li>
-      <li><h4><%= t('feedlist.project_centric') %>:</h4>
-        <% if @active_projects.empty? && @hidden_projects.empty? -%>
-        <ul><li><%= t('feedlist.project_needed') %></li></ul>
-        <% else -%>
-        <ul>
-          <li><%= t('common.numbered_step', :number => 1) %> - <%= t('feedlist.choose_project') %>:
-            <select name="feed-projects" id="feed-projects">
-              <%=  options_from_collection_for_select(@active_projects, "id", "name", @active_projects.first.id) unless @active_projects.empty?-%>
-              <%=  options_from_collection_for_select(@hidden_projects, "id", "name") -%>
-              <%=  options_from_collection_for_select(@completed_projects, "id", "name") -%>
-            </select>
-          </li>
-          <li><%= t('common.numbered_step', :number => 2) %> - <%= t('feedlist.select_feed_for_project') %>
-            <div id="feedicons-project">
-              <div id="feeds-for-project">
-                <%= render :partial => 'feed_for_project', :locals => { :project => @active_projects.empty? ? @hidden_projects.first : @active_projects.first } %>
-              </div>
-            </div>
-          </li>
-        </ul>
-        <% end -%>
-      </li>
+      <li><%= feed_links([:rss, :txt, :ical], { :controller => 'todos', :action => 'index', :limit => 15 }, t('feedlist.last_fixed_number', :number=>15)) %></li>
+      <li><%= feed_links([:rss, :txt, :ical], { :controller => 'todos', :action => 'index' }, t('feedlist.all_actions')) %></li>
+      <li><%= feed_links([:rss, :txt, :ical], { :controller => 'todos', :action => 'index', :due => 0 }, t('feedlist.actions_due_today')) %></li>
+      <li><%= feed_links([:rss, :txt, :ical], { :controller => 'todos', :action => 'index', :due => 6 }, t('feedlist.actions_due_next_week')) %></li>
+      <li><%= feed_links([:rss, :txt], { :controller => 'todos', :action => 'index', :done => 7 }, t('feedlist.actions_completed_last_week')) %></li>
+      <li><%= feed_links([:rss, :txt], { :controller => 'contexts', :action => 'index' }, t('feedlist.all_contexts')) %></li>
+      <li><%= feed_links([:rss, :txt], { :controller => 'projects', :action => 'index' }, t('feedlist.all_projects')) %></li>
+      <li><%= feed_links([:rss, :txt], { :controller => 'projects', :action => 'index', :only_active_with_no_next_actions => true }, t('feedlist.active_projects_wo_next')) %></li>
+      <li><%= feed_links([:rss, :txt], { :controller => 'todos', :action => 'index', :tag => 'starred' }, t('feedlist.active_starred_actions')) %></li>
+      <li><%= feed_links([:txt], {:controller => 'projects', :action => 'index', :projects_and_actions => true}, t('feedlist.projects_and_actions')) %></li>
+      <li><%= render :partial => 'feed_for_context' %></li>
+      <li><%= render :partial => 'feed_for_project' %></li>
     </ul>
   </div>
-</div><!-- End of display_box -->
+</div>
 
 <div id="input_box">
   <%= render :file => "sidebar/sidebar.html.erb" %>
-</div><!-- End of input box -->
+</div>
