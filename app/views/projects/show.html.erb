@@ -3,7 +3,7 @@
     <%= project_next_prev %>
   </div>
 
-  <%= render :partial => "projects/project", :locals => { :project => @project, :collapsible => false } %>
+  <%= render :partial => @project, :locals => {:collapsible => false } %>
   <%= render :partial => "todos/deferred", :locals => { :deferred => @deferred, :collapsible => false, :append_descriptor => t('projects.todos_append'), :parent_container_type => 'project', :pending => @pending } %>
   <% unless @max_completed==0 -%>
     <%= render :partial => "todos/completed", :locals => { :done => @done, :collapsible => false, :suppress_project => true, :append_descriptor => t('projects.todos_append') } %>
@@ -22,7 +22,7 @@
   </div>
 
   <div id="new-note" style="display:none;">
-    <%= render :partial => "notes/note_edit_form", :object => @new_note, :locals => {:submit_text => t('projects.add_note_submit'), :form_method => :post} %>
+    <%= render :partial => "notes/note_edit_form", :object => @new_note, :locals => {:submit_text => t('projects.add_note_submit')} %>
   </div>
 
 </div>

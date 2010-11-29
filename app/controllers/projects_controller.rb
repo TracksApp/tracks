@@ -56,7 +56,7 @@ class ProjectsController < ApplicationController
     @next_project = current_user.projects.next_from(@project)
     @previous_project = current_user.projects.previous_from(@project)
     @default_tags = @project.default_tags
-    @new_note = current_user.notes.build
+    @new_note = current_user.notes.new
     @new_note.project_id = @project.id
     respond_to do |format|
       format.html

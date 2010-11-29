@@ -5,7 +5,7 @@
       <div id="recurring-todos-empty-nd" style="<%= @no_recurring_todos ? 'display:block' : 'display:none'%>">
         <div class="message"><p><%= t('todos.no_recurring_todos') %></p></div>
       </div>
-      <%= render :partial => "recurring_todo", :collection => @recurring_todos %>
+      <%= render :partial => @recurring_todos %>
     </div>
   </div>
   
@@ -15,7 +15,7 @@
       <div id="completed-empty-nd" style="<%= @no_completed_recurring_todos ? 'display:block' : 'display:none'%>">
         <div class="message"><p><%= t('todos.no_completed_recurring') %></p></div>
       </div>
-      <%= render :partial => "recurring_todo", :collection => @completed_recurring_todos %>
+      <%= render :partial => @completed_recurring_todos %>
     </div>
   </div>
 </div>

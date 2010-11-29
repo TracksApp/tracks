@@ -18,13 +18,7 @@ class NotesController < ApplicationController
     @page_title = "TRACKS::Note " + @note.id.to_s
     respond_to do |format|
       format.html
-      format.m &render_note_mobile
-    end
-  end
-
-  def render_note_mobile
-    lambda do
-      render :action => 'note_mobile'
+      format.m { render :action => 'note_mobile' }
     end
   end
 
@@ -49,16 +43,6 @@ class NotesController < ApplicationController
     end
   end
 
-  def destroy
-    @note = current_user.notes.find(params['id'])
-    @note.destroy
-    
-    respond_to do |format|
-      format.html
-      format.js { @down_count = current_user.notes.size }
-    end
-  end
-
   def update
     @note = current_user.notes.find(params['id'])
     @note.attributes = params["note"]
@@ -69,11 +53,20 @@ class NotesController < ApplicationController
     end
   end
 
+  def destroy
+    @note = current_user.notes.find(params['id'])
+    @note.destroy
+    
+    respond_to do |format|
+      format.html
+      format.js { @down_count = current_user.notes.size }
+    end
+  end
+
   protected
 
   def set_source_view
     @source_view = params['_source_view'] || 'note'
   end
-
 
 end

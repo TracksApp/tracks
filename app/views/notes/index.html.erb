@@ -2,6 +2,6 @@
   <% if @all_notes.empty? -%>
     <div class="message"><p><%= t('notes.no_notes_available') %></p></div>
   <% else -%>
-    <%= render :partial => 'note', :collection => @all_notes %>
+    <%= render :partial => @all_notes %>
   <% end -%>
 </div>

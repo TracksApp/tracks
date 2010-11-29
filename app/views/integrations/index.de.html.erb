@@ -53,7 +53,7 @@
     </li>
     <li>Open Script Editor and paste the script into a new document.</li>
     <li>Compile and save the script to the ~/Library/Scriipts/Mail Scripts directory.</li>
-    <li>For more information on using AppleScript with Mail.app, see <a href="http://www.apple.com/applescript/mail/" title="Scriptable Applications: Mail">this overview</a>.
+    <li>For more information on using AppleScript with Mail.app, see <a href="http://www.apple.com/applescript/mail/" title="Scriptable Applications: Mail">this overview</a>.</li>
   </ol>
 <% else %>
   <br/><p><i>You do not have any context yet. The script will be available after you add your first context</i></p>
@@ -98,6 +98,7 @@
 <h2>Integrated email/SMS receiver</h2>
 <p>
   If Tracks is running on the same server as your mail server, you can use the integrated mail handler built into tracks. Steps to set it up:
+</p>
 <ul>
   <li>Go to <%= link_to "Preferences", preferences_url %> and set your "From email" and "default email context" for todos sent in via email (which could come from an SMS message)</li>
   <li>In sendmail/qmail/postfix/whatever, set up an email address alias to pipe messages to <pre >/PATH/TO/RUBY/ruby /PATH/TO/TRACKS/script/runner -e production 'MessageGateway.receive(STDIN.read)'</pre></li>
@@ -122,9 +123,3 @@
   <li>Paste following link to the Add a gadget by its URL: and then click Add button:<br/>
     <pre><%= integrations_url + "/google_gadget" %></pre></li>
 </ul>
-
-<Module>
-<ModulePrefs title="GTDify" directory_title="GTDify" description="Official gadget for GTDify service." author="GTDify" author_email="support@gtdify.com" author_affiliation="GTDify" author_location="NJ, USA" title_url="http://www.gtdify.com/" screenshot="http://www.gtdify.com/modules/gmail/ss.png" thumbnail="http://www.gtdify.com/modules/gmail/tn.png" category="communication" category2="tools" height="300">
-  </ModulePrefs>
-<Content type="url" href="http://my.gtdify.com/mobile/"/>
-</Module>
