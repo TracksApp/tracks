@@ -102,8 +102,15 @@ var TracksPages = {
         $('div#error_status').html(html);
         $('div#error_status').show();
     },
+    show_edit_errors: function(html) {
+        $('div#edit_error_status').html(html);
+        $('div#edit_error_status').show();
+    },
     hide_errors: function() {
         $('div#error_status').hide();
+    },
+    update_sidebar: function(html) {
+        $('#sidebar').html(html);
     },
     setup_nifty_corners: function() {
         Nifty("div#recurring_new_container","normal");
@@ -113,6 +120,16 @@ var TracksPages = {
         Nifty("div#feedicons-context","normal");
         Nifty("div#todo_new_action_container","normal");
         Nifty("div#project_new_project_container","normal");
+    },
+    page_notify: function(type, message, fade_duration_in_sec) {
+        flash = $('h4#flash');
+        flash.html("<h4 id=\'flash\' class=\'alert "+type+"\'>"+message+"</h4>");
+        flash = $('h4#flash');
+        flash.show();
+        flash.fadeOut(fade_duration_in_sec*1000);
+    },
+    set_page_badge: function(count) {
+        $('#badge_count').html(count);
     },
     setup_behavior: function () {
         /* main menu */
@@ -244,6 +261,27 @@ var TodoItemsContainer = {
 }
 
 var TodoItems = {
+    askIfNewContextProvided: function(source) {
+        var givenContextName = $('#'+source+'todo_context_name').val();
+        var contextNames = [];
+        var contextNamesRequest = $.ajax({
+            url: relative_to_root('contexts.autocomplete'),
+            async: false,
+            dataType: "text",
+            data: "q="+givenContextName,
+            success: function(result){
+                lines = result.split("\n");
+                for(var i = 0; i < lines.length; i++){
+                    contextNames.push(lines[i].split("|")[0]);
+                }
+            }
+        });
+        if (givenContextName.length == 0) return true; // do nothing and depend on rails validation error
+        for (var i = 0; i < contextNames.length; ++i) {
+            if (contextNames[i] == givenContextName) return true;
+        }
+        return confirm('New context "' + givenContextName + '" will be also created. Are you sure?');
+    },
     setup_behavior: function() {
         /* show the notes of a todo */
         $(".show_notes").live('click', function () {
@@ -264,14 +302,9 @@ var TodoItems = {
             return false;
         });
 
-        /* set behavior for toggle checkboxes */
+        /* set behavior for toggle checkboxes for Recurring Todos */
         $(".item-container input.item-checkbox").live('click', function(ev){
-            params = {
-                _method: 'put'
-            };
-            if(typeof(TAG_NAME) !== 'undefined')
-                params._tag_name = TAG_NAME;
-            $.post(this.value, params, null, 'script');
+            put_with_ajax_and_block_element(this.value, $(this));
         });
 
         /* set behavior for edit icon */
@@ -562,26 +595,47 @@ var RecurringTodosPage = {
         el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
     },
     setup_behavior: function() {
-        $("#recurring_todo_new_action_cancel").click(function(){
+        /* cancel button on new recurring todo form */
+        $("#recurring_todo_new_action_cancel").live('click', function(){
             $('#recurring-todo-form-new-action input:text:first').focus();
             RecurringTodosPage.hide_all_recurring();
             $('#recurring_daily').show();
             RecurringTodosPage.toggle_overlay();
         });
+        /* cancel button on edit recurring todo form */
         $("#recurring_todo_edit_action_cancel").live('click', function(){
             $('#recurring-todo-form-edit-action input:text:first').focus();
             RecurringTodosPage.hide_all_recurring();
             $('#recurring_daily').show();
             RecurringTodosPage.toggle_overlay();
         });
+        /* change recurring period radio input on edit form */
         $("#recurring_edit_period input").live('click', function(){
             RecurringTodosPage.hide_all_edit_recurring();
             $('#recurring_edit_'+this.id.split('_')[5]).show();
         });
+        /* change recurring period radio input on new form */
         $("#recurring_period input").live('click', function(){
             RecurringTodosPage.hide_all_recurring();
             $('#recurring_'+this.id.split('_')[4]).show();
         });
+        /* add new recurring todo plus-button in sidebar */
+        $("#add-new-recurring-todo").live('click', function(){
+            $('#new-recurring-todo').show();
+            $('#edit-recurring-todo').hide();
+            RecurringTodosPage.toggle_overlay();
+        });
+        /* submit form when editing a recurring todo */
+        $("#recurring_todo_edit_action_submit").live('click', function (ev) {
+            submit_with_ajax_and_block_element('form#recurring-todo-form-edit-action', $(this));
+            return false;
+        });
+        /* submit form for new recurring todo */
+        $("#recurring_todo_new_action_submit").live('click', function (ev) {
+            submit_with_ajax_and_block_element('form.#recurring-todo-form-new-action', $(this));
+            return false;
+        });
+
     }
 }
 
@@ -590,6 +644,47 @@ var SearchPage = {
         $('#search-form #search').focus();
     }
 }
+
+/**************************************/
+/* generic Tracks functions           */
+/**************************************/
+
+function redirect_to(path) {
+    window.location.href = path;
+}
+
+function setup_auto_refresh(interval){
+    field_touched = false;
+    function refresh_page() {
+        if(!field_touched){
+            window.location.reload();
+        }
+    }
+    setTimeout(refresh_page, interval);
+    $(function(){
+        $("input").live('keydown', function(){
+            field_touched = true;
+        });
+    });
+}
+
+$.fn.clearForm = function() {
+    return this.each(function() {
+        var type = this.type, tag = this.tagName.toLowerCase();
+        if (tag == 'form')
+            return $(':input',this).clearForm();
+        if (type == 'text' || type == 'password' || tag == 'textarea')
+            this.value = '';
+        else if (type == 'checkbox' || type == 'radio')
+            this.checked = false;
+        else if (tag == 'select')
+            this.selectedIndex = -1;
+    });
+};
+
+/**************************************/
+/* Tracks AJAX functions              */
+/**************************************/
 
 function generic_get_script_for_list(element, getter, param){
     $(element).load(relative_to_root(getter+'?'+param));
@@ -639,16 +734,20 @@ function post_with_ajax_and_block_element(the_url, element_to_block) {
     $.ajax(default_ajax_options('POST', the_url, element_to_block));
 }
 
+function put_with_ajax_and_block_element(the_url, element_to_block) {
+    options = default_ajax_options('POST', the_url, element_to_block);
+    options.data = '_method=put';
+    if(typeof(TAG_NAME) !== 'undefined')
+        options.data += "&_tag_name="+ encodeURIComponent (TAG_NAME);
+    $.ajax(options);
+}
+
 function delete_with_ajax_and_block_element(the_url, element_to_block) {
     $.ajax(default_ajax_options('DELETE', the_url, element_to_block));
 }
 
-/****************************************
- * Unobtrusive jQuery written by Eric Allen
- ****************************************/
-
-/* Set up authenticity token properly */
 $(document).ajaxSend(function(event, request, settings) {
+    /* Set up authenticity token properly */
     if ( settings.type == 'POST' || settings.type == 'post' ) {
         if(typeof(AUTH_TOKEN) != 'undefined'){
             settings.data = (settings.data ? settings.data + "&" : "")
@@ -663,44 +762,20 @@ $(document).ajaxSend(function(event, request, settings) {
     request.setRequestHeader("Accept", "text/javascript");
 });
 
-$.fn.clearForm = function() {
-    return this.each(function() {
-        var type = this.type, tag = this.tagName.toLowerCase();
-        if (tag == 'form')
-            return $(':input',this).clearForm();
-        if (type == 'text' || type == 'password' || tag == 'textarea')
-            this.value = '';
-        else if (type == 'checkbox' || type == 'radio')
-            this.checked = false;
-        else if (tag == 'select')
-            this.selectedIndex = -1;
-    });
-};
-
-function redirect_to(path) {
-    window.location.href = path;
-}
-
-function askIfNewContextProvided(source) {
-    var givenContextName = $('#'+source+'todo_context_name').val();
-    var contextNames = [];
-    var contextNamesRequest = $.ajax({
-        url: relative_to_root('contexts.autocomplete'),
-        async: false,
-        dataType: "text",
-        data: "q="+givenContextName,
-        success: function(result){
-            lines = result.split("\n");
-            for(var i = 0; i < lines.length; i++){
-                contextNames.push(lines[i].split("|")[0]);
-            }
-        }
-    });
-    if (givenContextName.length == 0) return true; // do nothing and depend on rails validation error
-    for (var i = 0; i < contextNames.length; ++i) {
-        if (contextNames[i] == givenContextName) return true;
+function setup_periodic_check(url_for_check, interval_in_sec, method) {
+    ajaxMethod = "GET"
+    if (method) {
+        ajaxMethod = method;
     }
-    return confirm('New context "' + givenContextName + '" will be also created. Are you sure?');
+
+    function check_remote() {
+        $.ajax({
+            type: ajaxMethod,
+            url: url_for_check,
+            dataType: 'script'
+        });
+    }
+    setInterval(check_remote, interval_in_sec*1000);
 }
 
 function update_order(event, ui){
@@ -724,8 +799,6 @@ function update_order(event, ui){
         'script');
 }
 
-/* Unobtrusive jQuery behavior */
-
 function project_defaults(){
     if($('body').hasClass('contexts')){
     // don't change the context
@@ -747,6 +820,8 @@ function project_defaults(){
 }
 
 function enable_rich_interaction(){
+    /* called after completion of all AJAX calls */
+
     /* fix for #1036 where closing a edit form before the autocomplete was filled
      * resulted in a dropdown box that could not be removed. We remove all
      * autocomplete boxes the hard way */
@@ -757,6 +832,7 @@ function enable_rich_interaction(){
         'firstDay': weekStart,
         'showAnim': 'fold'
     });
+
     /* Autocomplete */
     $('input[name=context_name]').autocomplete({
         source: relative_to_root('contexts.autocomplete')
@@ -771,7 +847,7 @@ function enable_rich_interaction(){
       relative_to_root('auto_complete_for_predecessor'),
       {multiple: true,multipleSeparator:','});
 
-  /* have to bind on keypress because of limitataions of live() */
+  /* have to bind on keypress because of limitations of live() */
     $('input[name=project_name]').live('keypress', function(){
         $(this).bind('blur', project_defaults);
     });
@@ -861,51 +937,6 @@ function enable_rich_interaction(){
     });
 }
 
-/* Auto-refresh */
-
-function setup_auto_refresh(interval){
-    field_touched = false;
-    function refresh_page() {
-        if(!field_touched){
-            window.location.reload();
-        }
-    }
-    setTimeout(refresh_page, interval);
-    $(function(){
-        $("input").live('keydown', function(){
-            field_touched = true;
-        });
-    });
-}
-
-function page_notify(type, message, fade_duration_in_sec) {
-    flash = $('h4#flash');
-    flash.html("<h4 id=\'flash\' class=\'alert "+type+"\'>"+message+"</h4>");
-    flash = $('h4#flash');
-    flash.show();
-    flash.fadeOut(fade_duration_in_sec*1000);
-}
-
-function set_page_badge(count) {
-    $('#badge_count').html(count);
-}
-
-function setup_periodic_check(url_for_check, interval_in_sec, method) {
-    ajaxMethod = "GET"
-    if (method) {
-        ajaxMethod = method;
-    }
-
-    function check_remote() {
-        $.ajax({
-            type: ajaxMethod,
-            url: url_for_check,
-            dataType: 'script'
-        });
-    }
-    setInterval(check_remote, interval_in_sec*100);
-}
-
 $(document).ready(function() {
     TracksPages.setup_nifty_corners();
 
@@ -918,6 +949,6 @@ $(document).ready(function() {
         eval(this+'.setup_behavior();');
     });
 
-    /* Gets called from some AJAX callbacks, too */
+    /* Gets called from all AJAX callbacks, too */
     enable_rich_interaction();
 });

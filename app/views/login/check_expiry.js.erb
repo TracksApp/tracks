@@ -1,9 +1,7 @@
 <%  if @session_expired
-  theHtml = escape_javascript(content_tag(
-    :div,
-    t('login.session_time_out', :link => link_to(t('login.log_in_again'), :controller => "login", :action => "login")),
-    :"class" => "warning"))
-  logger.debug("theHtml='#{theHtml}'")
+  theLink = link_to(t('login.log_in_again'), :controller => "login", :action => "login")
+  message = I18n.t('login.session_time_out', :link => theLink)
+  theHtml = escape_javascript(content_tag(:div, message, :"class" => "warning"))
   -%>
   $('div#navcontainer').hide();
   $('div#content').html('<%=theHtml%>');

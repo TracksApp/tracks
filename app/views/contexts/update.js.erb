@@ -1,6 +1,6 @@
 <% if @saved -%>
 
-  page_notify('notice', '<%= t('contexts.save_status_message') %>', 5);
+  TracksPages.page_notify('notice', '<%= t('contexts.save_status_message') %>', 5);
 
   <% if @state_changed -%>
     remove_and_re_add_context();
@@ -9,7 +9,7 @@
   <% end -%>
 
 <% else -%>
-  show_errors();
+  TracksPages.show_edit_errors(html_for_error_messages());
 <% end -%>
 
 function remove_and_re_add_context() {
@@ -31,11 +31,6 @@ function replace_context_form_with_updated_context() {
     $('#<%=dom_id(@context, 'container')%>').remove();
     $('#<%=dom_id(@context, 'container')%>').fadeIn(500);
   });
-}
-
-function show_errors() {
-  $('div#edit_error_status').html(html_for_error_messages());
-  $('div#edit_error_status').show();
 }
 
 function html_for_error_messages() {

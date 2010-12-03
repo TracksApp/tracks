@@ -1,6 +1,6 @@
 <% if @saved -%>
 
-  page_notify('notice', '<%=t('projects.project_saved_status')%>', 5);
+  TracksPages.page_notify('notice', '<%=t('projects.project_saved_status')%>', 5);
 
   <% if source_view_is :project_list -%>
 
@@ -27,22 +27,15 @@
       TracksForm.set_tag_list("<%= escape_javascript(@project.default_tags)%>");
     <% end %>
 
-    update_sidebar();
+    TracksPages.update_sidebar(html_for_sidebar());
 
   <% end %>
 
   TracksForm.set_project_name_and_default_project_name("<%= escape_javascript(@project.name)%>");
 
 <% else -%>
-  show_errors();
+  TracksPages.show_edit_errors(html_for_error_messages());
 <% end %>
-
-enable_rich_interaction();
-
-function show_errors() {
-  $('div#edit_error_status').html(html_for_error_messages());
-  $('div#edit_error_status').show();
-}
 
 function remove_project_edit_form() {
   $('#<%=dom_id(@project, 'edit')%>').hide(500, function() {$('#<%=dom_id(@project, 'edit')%>').remove();} );
@@ -51,10 +44,6 @@ function remove_project_edit_form() {
 function update_and_show_project_settings() {
   $('#<%=dom_id(@project, 'container')%>').html(html_for_project_settings());
   $('#<%=dom_id(@project)%>').show();
-}
-
-function update_sidebar() {
-  $('#sidebar').html(html_for_sidebar());
 }
 
 function replace_project_form_with_updated_project() {

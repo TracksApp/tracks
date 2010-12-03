@@ -18,7 +18,7 @@
       :html=> { :id=>'todo-form-new-action', :name=>'todo', :class => 'inline-form' },
       :before => "$('#todo_new_action_submit').block({message:null})",
       :complete => "$('#todo_new_action_submit').unblock()",
-      :condition => "askIfNewContextProvided('')") do -%>
+      :condition => "TodoItems.askIfNewContextProvided('')") do -%>
 
       <div id="status"><%= error_messages_for("item", :object_name => 'action') %></div>
 
@@ -75,7 +75,7 @@
       :html=> { :id=>'todo-form-multi-new-action', :name=>'todo', :class => 'inline-form' },
       :before => "$('#todo_multi_new_action_submit').block({message:null})",
       :complete => "$('#todo_multi_new_action_submit').unblock()",
-      :condition => "askIfNewContextProvided('multi_')") do -%>
+      :condition => "TodoItems.askIfNewContextProvided('multi_')") do -%>
 
       <div id="multiple_status"><%= error_messages_for("item", :object_name => 'action') %></div>
 

@@ -1,5 +1,0 @@
-page << "TracksForm.toggle_overlay();"
-page['new-recurring-todo'].hide
-page['edit-recurring-todo'].replace_html :partial => 'recurring_todos/edit_form'
-page['edit-recurring-todo'].show
-page << "enable_rich_interaction();"

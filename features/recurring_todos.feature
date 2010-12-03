@@ -22,3 +22,19 @@ Feature: Manage recurring todos
     Then I should see the form for "Yearly" recurrence pattern
     When I select "Daily" recurrence pattern
     Then I should see the form for "Daily" recurrence pattern
+
+  @selenium
+  Scenario: I can mark a repeat pattern as starred
+    Given this scenario is pending
+
+  @selenium
+  Scenario: I can edit a repeat pattern
+    Given this scenario is pending
+
+  @selenium
+  Scenario: I can delete a repeat pattern
+    Given this scenario is pending
+
+  @selenium
+  Scenario: I can mark a repeat pattern as done
+    Given this scenario is pending

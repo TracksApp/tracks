@@ -1,0 +1,22 @@
+<%- if @saved -%>
+  show_empty_messages();
+  TracksPages.page_notify('notice', '<%=  escape_javascript(t('todos.recurring_deleted_success') + t(:todo_removed, :count => @number_of_todos)) %>', 5);
+  remove_recurring_todo_from_page();
+<%- else -%>
+  TracksPages.page_notify('error', '<%= t('todos.error_deleting_recurring', :description => @recurring_todo.description) %>', 8);
+<%- end -%>
+
+function show_empty_messages() {
+  <%- if @active_remaining == 0 -%>
+    $('#recurring-todos-empty-nd').show();
+  <%- end -%>
+  <%- if @completed_remaining == 0 -%>
+    $('#completed-empty-nd').show();
+  <%- end -%>
+}
+
+function remove_recurring_todo_from_page() {
+  $('#<%=dom_id(@recurring_todo)%>').slideUp(1000, function() {
+    $('#<%=dom_id(@recurring_todo)%>').remove();
+  });
+}

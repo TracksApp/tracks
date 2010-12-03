@@ -1,10 +1,12 @@
 <div class="recurring_container">
-  <% form_remote_tag(
-    :url => recurring_todos_path, :method => :post,
-    :html=> { :id=>'recurring-todo-form-new-action', :name=>'recurring_todo', :class => 'inline-form' },
-    :before => "$('#recurring_todo_new_action_submit').block({message: null})") do
+  <% 
+  form_for(@new_recurring_todo, :html=> { :id=>'recurring-todo-form-new-action', :name=>'recurring_todo', :class => 'inline-form' }) do
+  #form_remote_tag(
+  #  :url => recurring_todos_path, :method => :post,
+  #  :html=> { :id=>'recurring-todo-form-new-action', :name=>'recurring_todo', :class => 'inline-form' },
+  #  :before => "$('#recurring_todo_new_action_submit').block({message: null})") do
     -%>
-    <div id="new_status"><%= error_messages_for("item", :object_name => 'action') %></div>
+    <div id="error_status"><%= error_messages_for("item", :object_name => 'action') %></div>
   
     <div id="recurring_todo_form_container">
       <div id="recurring_todo">

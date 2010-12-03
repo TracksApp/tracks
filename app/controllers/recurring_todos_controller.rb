@@ -6,15 +6,17 @@ class RecurringTodosController < ApplicationController
   append_before_filter :get_recurring_todo_from_param, :only => [:destroy, :toggle_check, :toggle_star, :edit, :update]
 
   def index
-    find_and_inactivate
+    @page_title = t('todos.recurring_actions_title')
 
+    find_and_inactivate
     @recurring_todos = current_user.recurring_todos.active
     @completed_recurring_todos = current_user.recurring_todos.completed
+
     @no_recurring_todos = @recurring_todos.size == 0
     @no_completed_recurring_todos = @completed_recurring_todos.size == 0
-    @count = @recurring_todos.size 
-    
-    @page_title = t('todos.recurring_actions_title')
+    @count = @recurring_todos.size
+
+    @new_recurring_todo = RecurringTodo.new
   end
 
   def new
@@ -103,13 +105,13 @@ class RecurringTodosController < ApplicationController
       @recurring_todo.context_id = context.id
     end
 
-    @recurring_saved = @recurring_todo.save
-    unless (@recurring_saved == false) || p.tag_list.blank?
+    @saved = @recurring_todo.save
+    unless (@saved == false) || p.tag_list.blank?
       @recurring_todo.tag_with(p.tag_list)
       @recurring_todo.tags.reload
     end
 
-    if @recurring_saved
+    if @saved
       @message = "The recurring todo was saved"
       @todo_saved = create_todo_from_recurring_todo(@recurring_todo).nil? == false
       if @todo_saved
@@ -117,7 +119,8 @@ class RecurringTodosController < ApplicationController
       else
         @message += " / did not create todo"
       end
-      @count = current_user.recurring_todos.active.count
+      @down_count = current_user.recurring_todos.active.count
+      @new_recurring_todo = RecurringTodo.new
     else
       @message = "Error saving recurring todo"
     end    
@@ -139,7 +142,10 @@ class RecurringTodosController < ApplicationController
     
     # delete the recurring todo
     @saved = @recurring_todo.destroy
-    @remaining = current_user.recurring_todos.count
+
+    # count remaining recurring todos
+    @active_remaining = current_user.recurring_todos.active.count
+    @completed_remaining = current_user.recurring_todos.completed.count
     
     respond_to do |format|
       
@@ -162,11 +168,12 @@ class RecurringTodosController < ApplicationController
   def toggle_check
     @saved = @recurring_todo.toggle_completion!
 
-    @count = current_user.recurring_todos.active.count
-    @remaining = @count
+    @down_count = current_user.recurring_todos.active.count
+    @active_remaining = @down_count
+    @completed_remaining = 0
 
     if @recurring_todo.active?
-      @remaining = current_user.recurring_todos.completed.count
+      @completed_remaining = current_user.recurring_todos.completed.count
       
       # from completed back to active -> check if there is an active todo
       # current_user.todos.count(:all, {:conditions => ["state = ? AND recurring_todo_id = ?", 'active',params[:id]]})

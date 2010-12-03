@@ -1,7 +1,7 @@
 <% if @saved -%>
 
   TracksPages.hide_errors();
-  page_notify('notice', 'Note <%=@note.id %> saved', 5);
+  TracksPages.page_notify('notice', 'Note <%=@note.id %> saved', 5);
   replace_note_form_with_updated_note();
 
 <% else -%>
