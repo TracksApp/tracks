@@ -18,7 +18,7 @@ module RecurringTodosHelper
   
   def recurring_todo_remote_star_icon
     link_to( image_tag_for_star(@recurring_todo),
-      toggle_star_recurring_todo_path(@recurring_todo),
+      toggle_star_recurring_todo_path(@recurring_todo), :id => "star_icon_"+@recurring_todo.id.to_s,
       :class => "icon star_item", :title => t('todos.star_action'))
   end
   
@@ -26,7 +26,7 @@ module RecurringTodosHelper
     if !@recurring_todo.completed?
       str = link_to( image_tag_for_edit(@recurring_todo),
         edit_recurring_todo_path(@recurring_todo),
-        :class => "icon edit_icon")
+        :class => "icon edit_icon", :id => "link_edit_recurring_todo_#{@recurring_todo.id}")
     else
       str = '<a class="icon">' + image_tag("blank.png") + "</a> "
     end
@@ -34,8 +34,7 @@ module RecurringTodosHelper
   end
   
   def recurring_todo_remote_toggle_checkbox
-    str = check_box_tag('item_id', toggle_check_recurring_todo_path(@recurring_todo), @recurring_todo.completed?, :class => 'item-checkbox')
-    str
+    return check_box_tag("check_#{@recurring_todo.id}", toggle_check_recurring_todo_path(@recurring_todo), @recurring_todo.completed?, :class => 'item-checkbox')
   end
 
   private

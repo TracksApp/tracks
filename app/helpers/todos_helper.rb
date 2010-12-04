@@ -300,7 +300,7 @@ module TodosHelper
   
   def image_tag_for_star(todo)
     class_str = todo.starred? ? "starred_todo" : "unstarred_todo"
-    image_tag("blank.png", :title =>t('todos.star_action'), :class => class_str)
+    image_tag("blank.png", :title =>t('todos.star_action'), :class => class_str, :id => "star_img_"+todo.id.to_s)
   end
   
   def auto_complete_result2(entries, phrase = nil)

@@ -12,7 +12,7 @@
   <div id="recurring_todo_form_container">
     <div id="recurring_todo">
       <label for="recurring_todo_description">Description</label><%=
-      text_field_tag( "recurring_todo[description]", @recurring_todo.description, "size" => 30, "tabindex" => 1, "maxlength" => 100) -%>
+      text_field_tag( "recurring_todo[description]", @recurring_todo.description, "size" => 30, "tabindex" => 1, "maxlength" => 100, :id => "edit_recurring_todo_description") -%>
 
       <label for="recurring_todo_notes">Notes</label><%=
       text_area_tag( "recurring_todo[notes]", @recurring_todo.notes, {:cols => 29, :rows => 6, :tabindex => 2}) -%>
