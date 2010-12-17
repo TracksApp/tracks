@@ -1,0 +1,77 @@
+<% if @saved -%>
+  set_notification();
+  hide_empty_message();
+  TracksPages.hide_errors();
+  TracksPages.set_page_badge(<%= @down_count %>);
+  <% if should_show_new_item -%>
+    <% if @new_context_created -%>
+      insert_new_context_with_new_todo();
+    <% else -%>
+      add_todo_to_existing_context();
+    <% end -%>
+  <% end -%>
+  update_predecessors();
+  clear_form();
+<% else -%>
+  TracksPages.show_errors(html_for_error_messages());
+<% end -%>
+
+function set_notification() {
+  <%-
+  status_message = 'Added new next action'
+  status_message += ' to tickler' if @todo.deferred?
+  status_message += ' in pending state' if @todo.pending?
+  status_message = 'Added new project / ' + status_message if @new_project_created
+  status_message = 'Added new context / ' + status_message if @new_context_created
+  -%>
+ TracksPages.page_notify('notice', "<%=status_message%>", 5);
+}
+
+function hide_empty_message() {
+  <% if @todo %>
+    $('#<%=empty_container_msg_div_id%>').hide();
+    <% if (source_view_is :project and @todo.pending?) or (source_view_is :deferred) -%>
+      $('#tickler-empty-nd').hide();
+    <% end -%>
+  <% end -%>
+}
+
+function clear_form() {
+  $('#todo-form-new-action').clearForm();
+  TracksForm.set_context_name('<%=@initial_context_name%>');
+  TracksForm.set_project_name('<%=@initial_project_name%>');
+  TracksForm.set_tag_list('<%=@default_tags%>');
+  $('#todo-form-new-action input:text:first').focus();
+}
+
+function insert_new_context_with_new_todo() {
+  $('#display_box').prepend(html_for_new_context());
+}
+
+function add_todo_to_existing_context() {
+  <% if source_view_is_one_of(:todo, :deferred, :tag) -%>
+    TodoItemsContainer.ensureVisibleWithEffectAppear("c<%=@todo.context_id%>");
+  <% end -%>
+  $('#<%=item_container_id(@todo)%>').append(html_for_new_todo());
+  $('#<%= dom_id(@todo)%>').effect('highlight', {}, 2000 );
+}
+
+function update_predecessors() {
+  <%  @todo.uncompleted_predecessors.each do |p| -%>
+    if ($('<%=item_container_id(p)%>')) {
+      $('#<%=dom_id(p)%>').html('<%= escape_javascript(render(:partial => 'todos/todo', :locals => { :todo => p, :parent_container_type => parent_container_type, :source_view => @source_view }))%>');
+    }
+  <% end -%>
+}
+
+function html_for_error_messages() {
+  return "<%= escape_javascript(error_messages_for('todo', :object_name => 'action')) %>";
+}
+
+function html_for_new_context() {
+  return "<%= @saved && @new_context_created ? escape_javascript(render(:partial => 'contexts/context', :locals => { :context => @todo.context, :collapsible => true })) : "" %>";
+}
+
+function html_for_new_todo() {
+  return "<%= @saved ? escape_javascript(render(:partial => 'todos/todo', :locals => { :todo => @todo, :parent_container_type => parent_container_type, :source_view => @source_view })) : "" %>";
+}

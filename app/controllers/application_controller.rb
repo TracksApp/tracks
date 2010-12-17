@@ -136,7 +136,8 @@ class ApplicationController < ActionController::Base
 
   def for_autocomplete(coll, substr)
     filtered = coll.find_all{|item| item.name.downcase.include? substr.downcase}
-    return "[{" + filtered.map {|item| "\"value\"=\"#{item.name}\", \"id\"=\"#{item.id}\""}.join("},{") + "}]"
+    json_elems = "[{" + filtered.map {|item| "\"value\" : \"#{item.name}\", \"id\" : \"#{item.id}\""}.join("},{") + "}]"
+    return json_elems == "[{}]" ? "" : json_elems
   end
 
   # Uses RedCloth to transform text using either Textile or Markdown Need to

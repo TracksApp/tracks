@@ -83,7 +83,7 @@ Feature: Edit a project
     And I cancel adding a note to the project
     Then the form for adding a note should not be visible
 
-  @selenium @wip
+  @selenium
   Scenario: Long notes in a project are shown cut off
     Given I have a project called "test"
     When I visit the "test" project

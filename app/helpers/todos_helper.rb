@@ -93,7 +93,7 @@ module TodosHelper
   
   def remote_toggle_checkbox
     check_box_tag('item_id', toggle_check_todo_path(@todo), @todo.completed?, :class => 'item-checkbox',
-                  :title => @todo.pending? ? t('todos.blocked_by', :predecessors => @todo.uncompleted_predecessors.map(&:description).join(', ')) : "", :readonly => @todo.pending?)
+      :title => @todo.pending? ? t('todos.blocked_by', :predecessors => @todo.uncompleted_predecessors.map(&:description).join(', ')) : "", :readonly => @todo.pending?)
   end
   
   def date_span
@@ -226,11 +226,9 @@ module TodosHelper
   end
   
   def item_container_id (todo)
-    if todo.deferred? or todo.pending?
-      return "tickleritems"
-    elsif source_view_is :project
-      return "p#{todo.project_id}items"
-    end
+    return "c#{todo.context_id}items" if source_view_is :tickler
+    return "tickleritems"             if todo.deferred? or todo.pending?
+    return "p#{todo.project_id}items" if source_view_is :project
     return "c#{todo.context_id}items"
   end
 
@@ -244,6 +242,7 @@ module TodosHelper
     end
 
     return false if (source_view_is(:tag) && !@todo.tags.include?(@tag_name))
+    return false if (source_view_is(:context) && !(@todo.context_id==@default_context.id) )
 
     return true if source_view_is(:deferred) && @todo.deferred?
     return true if source_view_is(:project) && @todo.project.hidden? && @todo.project_hidden?
@@ -264,6 +263,7 @@ module TodosHelper
   
   def empty_container_msg_div_id
     todo = @todo || @successor
+    return "" unless todo # empty id if no todo  or successor given
     return "tickler-empty-nd" if source_view_is_one_of(:project, :tag) && todo.deferred?
     return "p#{todo.project_id}empty-nd" if source_view_is :project
     return "c#{todo.context_id}empty-nd"

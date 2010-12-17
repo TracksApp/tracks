@@ -250,6 +250,7 @@ class ContextsController < ApplicationController
 
       @count = @not_done_todos.size
     end
+
   end
 
 end

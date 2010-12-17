@@ -48,6 +48,8 @@ class TodosController < ApplicationController
   
   def create
     @source_view = params['_source_view'] || 'todo'
+    @default_context = current_user.contexts.find_by_name(params['default_context_name'])
+    
     @tag_name = params['_tag_name']
 
     is_multiple = params[:todo] && params[:todo][:multiple_todos] && !params[:todo][:multiple_todos].nil?
@@ -862,12 +864,11 @@ class TodosController < ApplicationController
             # current_users.todos.find but that broke with_scope for :limit
 
             # Exclude hidden projects from count on home page
-            @todos = Todo.find(:all, :conditions => ['todos.user_id = ?', current_user.id], :include => [ :project, :context, :tags ])
+            @todos = current_user.todos.find(:all, :include => [ :project, :context, :tags ])
 
             # Exclude hidden projects from the home page
-            @not_done_todos = Todo.find(:all,
-              :conditions => ['todos.user_id = ? AND contexts.hide = ? AND (projects.state = ? OR todos.project_id IS NULL)',
-                current_user.id, false, 'active'],
+            @not_done_todos = current_user.todos.find(:all,
+              :conditions => ['contexts.hide = ? AND (projects.state = ? OR todos.project_id IS NULL)', false, 'active'],
               :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC",
               :include => [ :project, :context, :tags ])
           end
@@ -882,9 +883,8 @@ class TodosController < ApplicationController
     # but that broke with_scope for :limit
     
     # Exclude hidden projects from the home page
-    @not_done_todos = Todo.find(:all,
-      :conditions => ['todos.user_id = ? AND todos.state = ? AND contexts.hide = ? AND (projects.state = ? OR todos.project_id IS NULL)',
-        current_user.id, 'active', false, 'active'],
+    @not_done_todos = current_user.todos.find(:all,
+      :conditions => ['todos.state = ? AND contexts.hide = ? AND (projects.state = ? OR todos.project_id IS NULL)', 'active', false, 'active'],
       :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC",
       :include => [ :project, :context, :tags ])
   end
@@ -892,14 +892,10 @@ class TodosController < ApplicationController
   def determine_down_count
     source_view do |from|
       from.todo do
-        @down_count = Todo.count(
+        @down_count = current_user.todos.count(
           :all,
-          :conditions => ['todos.user_id = ? and todos.state = ? and contexts.hide = ? AND (projects.state = ? OR todos.project_id IS NULL)', current_user.id, 'active', false, 'active'],
+          :conditions => ['todos.state = ? and contexts.hide = ? AND (projects.state = ? OR todos.project_id IS NULL)', 'active', false, 'active'],
           :include => [ :project, :context ])
-        # #@down_count = Todo.count_by_sql(['SELECT COUNT(*) FROM todos,
-        # contexts WHERE todos.context_id = contexts.id and todos.user_id = ?
-        # and todos.state = ? and contexts.hide = ?', current_user.id, 'active',
-        # false])
       end
       from.context do
         @down_count = current_user.contexts.find(@todo.context_id).not_done_todo_count

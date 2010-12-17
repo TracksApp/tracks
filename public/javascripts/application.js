@@ -8,7 +8,7 @@ var TracksForm = {
             toggleLink.text(showLinkText).attr('title', showLinkTitle);
         }
         else {
-            toggleLink.text(hideLinkText).attr('title', hideLinkTitle);
+            toggleLidefault_ajax_optionsnk.text(hideLinkText).attr('title', hideLinkTitle);
             $('#'+formId+' input:text:first').focus();
         }
         toggleLink.parent().toggleClass('hide_form');
@@ -16,17 +16,29 @@ var TracksForm = {
     set_project_name: function (name) {
         $('input#todo_project_name').val(name);
     },
-    set_context_name_and_default_context_name: function (name) {
+    set_project_name_for_multi_add: function (name) {
+        $('#multi_todo_project_name').val(name);
+    },
+    set_context_name: function (name) {
         $('input#todo_context_name').val(name);
+    },
+    set_context_name_for_multi_add: function (name) {
+        $('#multi_todo_context_name').val(name);
+    },
+    set_context_name_and_default_context_name: function (name) {
+        TracksForm.set_context_name(name);
         $('input[name=default_context_name]').val(name);
     },
     set_project_name_and_default_project_name: function (name) {
+        TracksForm.set_project_name('');
         $('#default_project_name_id').val(name);
-        $('input#todo_project_name').val();
         $('#project_name').html(name);
     },
     set_tag_list: function (name) {
         $('input#tag_list').val(name);
+    },
+    set_tag_list_for_multi_add: function (name) {
+        $('#multi_tag_list').val(name);
     },
     setup_behavior: function() {
         /* toggle new todo form for single todo */
@@ -94,6 +106,20 @@ var TracksForm = {
             $.get(this.href, params, function(){
                 }, 'script');
         });
+
+        /* submit todo form after entering new todo */
+        $("button#todo_new_action_submit").live('click', function (ev) {
+            if (TodoItems.askIfNewContextProvided('', this))
+                submit_with_ajax_and_block_element('form#todo-form-new-action', $(this));
+            return false;
+        });
+
+        /* submit multi-todo form after entering multiple new todos */
+        $("button#todo_multi_new_action_submit").live('click', function (ev) {
+            if (TodoItems.askIfNewContextProvided('multi_', this))
+                submit_with_ajax_and_block_element('form#todo-form-multi-new-action', $(this));
+            return false;
+        });
     }
 }
 
@@ -106,8 +132,14 @@ var TracksPages = {
         $('div#edit_error_status').html(html);
         $('div#edit_error_status').show();
     },
+    show_errors_for_multi_add: function(html) {
+        $('div#multiple_error_status').html(html);
+        $('div#multiple_error_status').show();
+    },
     hide_errors: function() {
         $('div#error_status').hide();
+        $('div#edit_error_status').hide();
+        $('div#multiple_error_status').hide();
     },
     update_sidebar: function(html) {
         $('#sidebar').html(html);
@@ -171,7 +203,7 @@ var TracksPages = {
         $(".alert").fadeOut(8000);
 
         /* for edit project form and edit todo form
-         * TODO: refactor to separate calls from project and todo */
+     * TODO: refactor to separate calls from project and todo */
         $('.edit-form a.negative').live('click', function(){
             $(this).parents('.edit-form').fadeOut(200, function () {
                 $(this).parents('.list').find('.project').fadeIn(500);
@@ -261,24 +293,27 @@ var TodoItemsContainer = {
 }
 
 var TodoItems = {
-    askIfNewContextProvided: function(source) {
+    getContextsForAutocomplete: function (term, element_to_block) {
+        var allContexts = null;
+        params = default_ajax_options_for_scripts('GET', relative_to_root('contexts.autocomplete'), element_to_block);
+        params.data = "term="+term;
+        params.dataType = "json";
+        params.async = false;
+        params.success = function(result){
+            allContexts = result;
+        }
+        $.ajax(params);
+        return allContexts;
+    },
+    askIfNewContextProvided: function(source, element_to_block) {
         var givenContextName = $('#'+source+'todo_context_name').val();
-        var contextNames = [];
-        var contextNamesRequest = $.ajax({
-            url: relative_to_root('contexts.autocomplete'),
-            async: false,
-            dataType: "text",
-            data: "q="+givenContextName,
-            success: function(result){
-                lines = result.split("\n");
-                for(var i = 0; i < lines.length; i++){
-                    contextNames.push(lines[i].split("|")[0]);
-                }
-            }
-        });
         if (givenContextName.length == 0) return true; // do nothing and depend on rails validation error
-        for (var i = 0; i < contextNames.length; ++i) {
-            if (contextNames[i] == givenContextName) return true;
+
+        contexts = TodoItems.getContextsForAutocomplete(givenContextName, element_to_block);
+
+        if (contexts) {
+            for (i=0; i<contexts.length; i++)
+                if (contexts[i].value == givenContextName) return true;
         }
         return confirm('New context "' + givenContextName + '" will be also created. Are you sure?');
     },
@@ -690,52 +725,47 @@ function generic_get_script_for_list(element, getter, param){
     $(element).load(relative_to_root(getter+'?'+param));
 }
 
-function default_ajax_options(ajax_type, the_url, element_to_block) {
+function default_ajax_options_for_submit(ajax_type, element_to_block) {
     return {
-        url: the_url,
         type: ajax_type,
         async: true,
-        blocked_elem: element_to_block,
-        dataType: 'script',
+        context: element_to_block,
         beforeSend: function() {
-            this.blocked_elem.block({
+            $(this).block({
                 message: null
             });
         },
         complete:function() {
-            this.blocked_elem.unblock();
+            $(this).unblock();
             enable_rich_interaction();
+        },
+        error: function(req, status) {
+            TracksPages.page_notify('error', 'There was an error retrieving from server: '+status, 8);
         }
     }
 }
 
+function default_ajax_options_for_scripts(ajax_type, the_url, element_to_block) {
+    options = default_ajax_options_for_submit(ajax_type, element_to_block);
+    options.url = the_url;
+    options.dataType = 'script';
+    return options;
+}
+
 function submit_with_ajax_and_block_element(form, element_to_block) {
-    $(form).ajaxSubmit({
-        type: 'POST',
-        async: true,
-        blocked_elem: element_to_block,
-        beforeSend: function() {
-            this.blocked_elem.block({
-                message: null
-            });
-        },
-        complete: function() {
-            this.blocked_elem.unblock();
-            enable_rich_interaction();
-        }
-    });
+    $(form).ajaxSubmit(default_ajax_options_for_submit('POST', element_to_block));
 }
 
 function get_with_ajax_and_block_element(the_url, element_to_block) {
-    $.ajax(default_ajax_options('GET', the_url, element_to_block));
+    $.ajax(default_ajax_options_for_scripts('GET', the_url, element_to_block));
 }
 
 function post_with_ajax_and_block_element(the_url, element_to_block) {
-    $.ajax(default_ajax_options('POST', the_url, element_to_block));
+    $.ajax(default_ajax_options_for_scripts('POST', the_url, element_to_block));
 }
 
 function put_with_ajax_and_block_element(the_url, element_to_block) {
-    options = default_ajax_options('POST', the_url, element_to_block);
+    options = default_ajax_options_for_scripts('POST', the_url, element_to_block);
     options.data = '_method=put';
     if(typeof(TAG_NAME) !== 'undefined')
         options.data += "&_tag_name="+ encodeURIComponent (TAG_NAME);
@@ -743,7 +773,7 @@ function put_with_ajax_and_block_element(the_url, element_to_block) {
 }
 
 function delete_with_ajax_and_block_element(the_url, element_to_block) {
-    $.ajax(default_ajax_options('DELETE', the_url, element_to_block));
+    $.ajax(default_ajax_options_for_scripts('DELETE', the_url, element_to_block));
 }
 
 $(document).ajaxSend(function(event, request, settings) {
@@ -823,8 +853,8 @@ function enable_rich_interaction(){
     /* called after completion of all AJAX calls */
 
     /* fix for #1036 where closing a edit form before the autocomplete was filled
-     * resulted in a dropdown box that could not be removed. We remove all
-     * autocomplete boxes the hard way */
+ * resulted in a dropdown box that could not be removed. We remove all
+ * autocomplete boxes the hard way */
     $('.ac_results').remove();
 
     $('input.Date').datepicker({
@@ -929,7 +959,7 @@ function enable_rich_interaction(){
     field_touched = false;
 
     /* shrink the notes on the project pages. This is not live(), so this needs
-     * to be run after ajax adding of a new note */
+ * to be run after ajax adding of a new note */
     $('.note_wrapper').truncate({
         max_length: 90,
         more: '',
