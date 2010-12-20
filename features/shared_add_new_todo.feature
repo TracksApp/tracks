@@ -119,6 +119,24 @@ Feature: Add new next action from every page
       | visit  | context page for "test context" | see     | 2     | 3     |
       | visit  | tag page for "starred"          | not see | 0     | 3     |
 
+  Scenario: Adding a todo to another project does not show the todo
+    Given this is a pending scenario
+
+  Scenario: Adding a todo to a hidden project does not show the todo
+    Given this is a pending scenario
+
+  Scenario: Adding a todo with a new context shows the new context
+    Given this is a pending scenario
+
+  Scenario: Adding a todo to a hidden context does not show the todo
+    Given this is a pending scenario
+
+  Scenario: Adding a todo to an empty container hides the empty message
+    Given this is a pending scenario
+
+  Scenario: Adding a dependency to a todo updated the successor
+    Given this is a pending scenario
+
   @selenium
   Scenario: I need to fill in at least one description and a context
     When I go to the home page

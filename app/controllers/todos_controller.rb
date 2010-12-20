@@ -118,6 +118,11 @@ class TodosController < ApplicationController
           @initial_context_name = params['default_context_name']
           @initial_project_name = params['default_project_name']
           @default_tags = @todo.project.default_tags unless @todo.project.nil?
+          @status_message = 'Added new next action'
+          @status_message += ' to tickler' if @todo.deferred?
+          @status_message += ' in pending state' if @todo.pending?
+          @status_message = 'Added new project / ' + status_message if @new_project_created
+          @status_message = 'Added new context / ' + status_message if @new_context_created
           render :action => 'create'
         end
         format.xml do
@@ -295,6 +300,7 @@ class TodosController < ApplicationController
     respond_to do |format|
       format.js
       format.xml { render :xml => @todo.to_xml( :except => :user_id ) }
+      format.html { redirect_to request.referrer}
     end
   end
 
@@ -452,6 +458,7 @@ class TodosController < ApplicationController
   end
     
   def destroy
+    @source_view = params['_source_view'] || 'todo'
     @todo = get_todo_from_params
     @original_item_due = @todo.due
     @context_id = @todo.context_id

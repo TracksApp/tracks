@@ -68,7 +68,7 @@ Feature: Edit a project
     Then the badge should show 2   # "manage me" and "test"
     When I try to edit the project name of "manage me" to "test"
     Then I should see "Name already exists"
-  
+
   @selenium
   Scenario: I can add a note to the project
     Given I have a project called "test"
@@ -90,3 +90,6 @@ Feature: Edit a project
     And I add a note "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890TOO LONG" to the project
     Then I should not see "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890TOO LONG"
     And I should see "12345678901234567890123456789012345678901234567890123456789012345678901234567890123456"
+
+  Scenario: Cancelling editing a project will restore project settings
+    Given this scenario is pending

@@ -9,7 +9,7 @@ Feature: dependencies
       | testuser | secret   | false    |
     And I have logged in as "testuser" with password "secret"
 
-  @selenium
+  @selenium @wip
   Scenario: Adding dependency to dependency
     Given I have a project "dependencies" with 3 todos
     And "Todo 2" depends on "Todo 1"
@@ -35,3 +35,6 @@ Feature: dependencies
     Then the dependencies of "test me" should include "test,1, 2,3"
     When I edit the dependency of "test me" to '"test,1, 2,3" <"@pc"; "dependencies">,"test,1, 2,3" <"@pc"; "dependencies">'
     Then there should not be an error
+
+  Scenario: Deleting a predecessor will activate successors
+    Given this scenario is pending

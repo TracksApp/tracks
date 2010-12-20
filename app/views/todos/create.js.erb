@@ -1,5 +1,5 @@
 <% if @saved -%>
-  set_notification();
+  TracksPages.page_notify('notice', "<%=@status_message%>", 5);
   hide_empty_message();
   TracksPages.hide_errors();
   TracksPages.set_page_badge(<%= @down_count %>);
@@ -15,17 +15,6 @@
 <% else -%>
   TracksPages.show_errors(html_for_error_messages());
 <% end -%>
-
-function set_notification() {
-  <%-
-  status_message = 'Added new next action'
-  status_message += ' to tickler' if @todo.deferred?
-  status_message += ' in pending state' if @todo.pending?
-  status_message = 'Added new project / ' + status_message if @new_project_created
-  status_message = 'Added new context / ' + status_message if @new_context_created
-  -%>
- TracksPages.page_notify('notice', "<%=status_message%>", 5);
-}
 
 function hide_empty_message() {
   <% if @todo %>

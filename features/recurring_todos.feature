@@ -25,7 +25,7 @@ Feature: Manage recurring todos
     When I select "Daily" recurrence pattern
     Then I should see the form for "Daily" recurrence pattern
 
-  @selenium 
+  @selenium
   Scenario: I can mark a repeat pattern as starred
     When I go to the repeating todos page
     And I star the pattern "run tests"
@@ -54,10 +54,19 @@ Feature: Manage recurring todos
     And the state list "active" should be empty
 
   @selenium
-  Scenario: I can reactivate a repeat pattern 
+  Scenario: I can reactivate a repeat pattern
     Given I have a completed repeat pattern "I'm done"
     When I go to the repeating todos page
     Then the pattern "I'm done" should be in the state list "completed"
     When I mark the pattern "I'm done" as active
     Then the pattern "I'm done" should be in the state list "active"
     And the state list "completed" should be empty
+
+  Scenario: Following the recurring todo link of a todo takes me to the recurring todos page
+    Given this is a pending scenario
+
+  Scenario: Deleting a recurring todo with ending pattern will show message
+    Given this is a pending scenario
+
+  Scenario: Deleting a recurring todo with active pattern will show new todo
+    Given this is a pending scenario

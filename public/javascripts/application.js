@@ -203,7 +203,7 @@ var TracksPages = {
         $(".alert").fadeOut(8000);
 
         /* for edit project form and edit todo form
-     * TODO: refactor to separate calls from project and todo */
+         * TODO: refactor to separate calls from project and todo */
         $('.edit-form a.negative').live('click', function(){
             $(this).parents('.edit-form').fadeOut(200, function () {
                 $(this).parents('.list').find('.project').fadeIn(500);
@@ -331,20 +331,28 @@ var TodoItems = {
 
         /* set behavior for star icon */
         $(".item-container a.star_item").live('click', function (ev){
-            $.post(this.href, {
-                _method: 'put'
-            }, null, 'script');
+            put_with_ajax_and_block_element(this.href, $(this));
             return false;
         });
 
         /* set behavior for toggle checkboxes for Recurring Todos */
         $(".item-container input.item-checkbox").live('click', function(ev){
             put_with_ajax_and_block_element(this.value, $(this));
+            return false;
         });
 
         /* set behavior for edit icon */
         $(".item-container a.edit_item").live('click', function (ev){
             get_with_ajax_and_block_element(this.href, $(this).parents(".item-container"));
+            return false;
+        });
+
+        /* delete button to delete a project from the list
+         *       :with => "'#{parameters}'",*/
+        $('.item-container a.icon_delete_item').live('click', function(evt){
+            if(confirm(this.title)){
+                delete_with_ajax_and_block_element(this.href, $(this).parents('.project'));
+            }
             return false;
         });
     }
@@ -383,7 +391,6 @@ var ProjectListPage = {
         return(value);
     },
     setup_behavior: function() {
-
         /* in-place edit of project name */
         $('h2#project_name').editable(ProjectListPage.save_project_name, {
             style: 'padding:0px',
@@ -726,10 +733,11 @@ function generic_get_script_for_list(element, getter, param){
 }
 
 function default_ajax_options_for_submit(ajax_type, element_to_block) {
-    return {
+    options = {
         type: ajax_type,
         async: true,
         context: element_to_block,
+        data: "_source_view=" + encodeURIComponent( SOURCE_VIEW ),
         beforeSend: function() {
             $(this).block({
                 message: null
@@ -743,6 +751,9 @@ function default_ajax_options_for_submit(ajax_type, element_to_block) {
             TracksPages.page_notify('error', 'There was an error retrieving from server: '+status, 8);
         }
     }
+    if(typeof(TAG_NAME) !== 'undefined')
+        options.data += "&_tag_name="+ encodeURIComponent (TAG_NAME);
+    return options;
 }
 
 function default_ajax_options_for_scripts(ajax_type, the_url, element_to_block) {
@@ -766,9 +777,7 @@ function post_with_ajax_and_block_element(the_url, element_to_block) {
 
 function put_with_ajax_and_block_element(the_url, element_to_block) {
     options = default_ajax_options_for_scripts('POST', the_url, element_to_block);
-    options.data = '_method=put';
-    if(typeof(TAG_NAME) !== 'undefined')
-        options.data += "&_tag_name="+ encodeURIComponent (TAG_NAME);
+    options.data += '&_method=put';
     $.ajax(options);
 }
 
@@ -793,10 +802,7 @@ $(document).ajaxSend(function(event, request, settings) {
 });
 
 function setup_periodic_check(url_for_check, interval_in_sec, method) {
-    ajaxMethod = "GET"
-    if (method) {
-        ajaxMethod = method;
-    }
+    ajaxMethod = (method ? method : "GET");
 
     function check_remote() {
         $.ajax({

@@ -1,3 +1,5 @@
 <% if @saved -%>
   $('div#line_todo_<%= @todo.id %> a.star_item img').toggleClass('starred_todo').toggleClass('unstarred_todo');
+<% else -%>
+  TracksPages.page_notify('error', "Could not toggle the star of this todo", 5);
 <% end -%>

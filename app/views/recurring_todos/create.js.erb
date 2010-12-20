@@ -1,4 +1,5 @@
 <% if @saved -%>
+  TracksPages.page_notify('notice', "<%=@status_message%>", 5);
   RecurringTodosPage.toggle_overlay();
   add_recurring_todo_to_active_container();
   replace_form_with_empty_form();

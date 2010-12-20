@@ -1,9 +1,6 @@
-<%
-suppress_button ||= false
-%>
-<%= link_to(image_tag( 'blank.png', :width=>'16', :height=>'16', :border=>'0' ), "#", {:class => 'show_successors', :title => 'Show successors'}) unless suppress_button %>
+<%= link_to(image_tag( 'blank.png', :width=>'16', :height=>'16', :border=>'0' ), "#", {:class => 'show_successors', :title => 'Show successors'}) %>
 
-<div class="todo_successors" id="<%= dom_id(item, 'successors') %>" style=<%= suppress_button ? "display:display" : "display:none" %> >
+<div class="todo_successors" id="<%= dom_id(item, 'successors') %>">
   <%= render :partial => "todos/successor",
              :collection => item.pending_successors,
              :locals => { :todo => item,

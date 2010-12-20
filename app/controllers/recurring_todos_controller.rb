@@ -112,17 +112,17 @@ class RecurringTodosController < ApplicationController
     end
 
     if @saved
-      @message = "The recurring todo was saved"
+      @status_message = "The recurring todo was saved"
       @todo_saved = create_todo_from_recurring_todo(@recurring_todo).nil? == false
       if @todo_saved
-        @message += " / created a new todo"
+        @status_message += " / created a new todo"
       else
-        @message += " / did not create todo"
+        @status_message += " / did not create todo"
       end
       @down_count = current_user.recurring_todos.active.count
       @new_recurring_todo = RecurringTodo.new
     else
-      @message = "Error saving recurring todo"
+      @status_message = "Error saving recurring todo"
     end    
     
     respond_to do |format|

@@ -32,15 +32,13 @@ module TodosHelper
       :title => t('todos.edit_action_with_description', :description => @todo.description))
   end
 
-  def remote_delete_menu_item(parameters, todo)
-    return link_to_remote(
+  def remote_delete_menu_item(todo)
+    return link_to(
       image_tag("delete_off.png", :mouseover => "delete_on.png", :alt => t('todos.delete'), :align => "absmiddle")+" "+t('todos.delete'),
-      :url => {:controller => 'todos', :action => 'destroy', :id => todo.id},
-      :method => 'delete',
-      :with => "'#{parameters}'",
-      :before => todo_start_waiting_js(todo),
-      :complete => todo_stop_waiting_js(todo),
-      :confirm => t('todos.confirm_delete', :description => todo.description))
+      {:controller => 'todos', :action => 'destroy', :id => todo.id}, 
+      :class => "icon_delete_item",
+      :id => "delete_#{dom_id(todo)}",
+      :title => t('todos.confirm_delete', :description => todo.description));
   end
 
   def remote_defer_menu_item(days, todo)
@@ -264,9 +262,15 @@ module TodosHelper
   def empty_container_msg_div_id
     todo = @todo || @successor
     return "" unless todo # empty id if no todo  or successor given
-    return "tickler-empty-nd" if source_view_is_one_of(:project, :tag) && todo.deferred?
+    return "tickler-empty-nd" if source_view_is_one_of(:project, :tag, :deferred) && todo.deferred?
     return "p#{todo.project_id}empty-nd" if source_view_is :project
     return "c#{todo.context_id}empty-nd"
+  end
+
+  def todo_container_is_empty
+    default_container_empty = ( @down_count == 0 )
+    deferred_container_empty = ( @todo.deferred? && @deferred_count == 0)
+    return default_container_empty || deferred_container_empty
   end
   
   def default_contexts_for_autocomplete
