@@ -27,6 +27,9 @@ Feature: Edit a next action from every page
   Scenario: I can mark a completed todo active
     Given this is a pending scenario
 
+  Scenario: I can edit a todo to change its description
+    Given this is a pending scenario
+
   Scenario: I can edit a todo to move it to another context
     Given this is a pending scenario
 
@@ -53,3 +56,9 @@ Feature: Edit a next action from every page
 
   Scenario: I can edit the tags of a todo
     Given this is a pending scenario
+
+  Scenario: Editing the context of a todo to a new context will show new context
+    Given this scenario is pending # for home and tickler and tag
+
+  Scenario: Making an error when editing a todo will show error message
+    Given this scenario is pending

@@ -8,6 +8,7 @@
   update_active_projects_container();
   add_project();
   clear_form();
+  TracksPages.page_notify('notice', "Created new project '<%= @project.name%>'", 5);
   <% end -%>
 <% else -%>
   TracksPages.show_errors(html_for_error_messages());

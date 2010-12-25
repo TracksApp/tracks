@@ -1,164 +1,136 @@
-if @saved
-  # show update message
-  status_message = @todo.deferred? ? t('todos.action_saved_to_tickler') : t('todos.action_saved')
-  status_message = t('todos.added_new_project') + ' / ' + status_message if @new_project_created
-  status_message = t('todos.added_new_context') + ' / ' + status_message if @new_context_created
-  status_message = @message || status_message
-  page.notify :notice, status_message, 5.0
-  
-  if source_view_is_one_of(:todo, :context, :tag)
-    if @context_changed || @todo.deferred? || @todo.pending?
-      page[@todo].remove 
-      
-      if (@remaining_in_context == 0)
-        # remove context container from page if empty
-        if @context_changed
-          source_view do |from|
-            from.todo { page.visual_effect :fade, "c#{@original_item_context_id}", :duration => 0.4 }
-            from.tag { page.visual_effect :fade, "c#{@original_item_context_id}", :duration => 0.4 }
-            from.context { page.show "c#{@original_item_context_id}empty-nd" }
-          end
-        else
-          source_view do |from|
-            from.todo { page.visual_effect :fade, "c#{@todo.context.id}", :duration => 0.4 }
-            from.tag { page.visual_effect :fade, "c#{@todo.context.id}", :duration => 0.4 }
-            from.context { page.show "c#{@original_item_context_id}empty-nd" }
-          end
-        end
-      end
+<% if !@saved -%>
+  TracksPages.show_edit_errors(html_for_error_messages());
+<% else
 
-      if source_view_is_one_of(:todo, :tag) && @todo.active?
-        page.call "todoItems.ensureVisibleWithEffectAppear", "c#{@todo.context_id}"
-        page.call "todoItems.expandNextActionListingByContext", "c#{@todo.context_id}items", true
-        page[empty_container_msg_div_id].hide unless empty_container_msg_div_id.nil?
-        # show all todos in context
-        page.insert_html :bottom, "c#{@todo.context_id}items", :partial => 'todos/todo', :locals => { :todo => @todo, :parent_container_type => parent_container_type }
-      end
+  # jquery animations are async, so first collect all animation steps,
+  # then execute them sequential. All steps are functions which are passed a function
+  # with the next animation steps
 
-      if source_view_is(:tag) && @todo.deferred?
-        # show todo in deferred container
-        page.insert_html :bottom, "tickleritems", :partial => 'todos/todo', :locals => { :todo => @todo, :parent_container_type => parent_container_type }
-        page[empty_container_msg_div_id].hide unless empty_container_msg_div_id.nil?
-      end
-      
-      # update badge count
-      page.replace_html("badge_count", @remaining_in_context) if source_view_is :context
-      page.replace_html("badge_count", @down_count) if source_view_is :todo
-      
-      # show todo in context
-      page.delay(0.3) do
-        page.call "todoItems.ensureContainerHeight", "c#{@original_item_context_id}items"
-        if source_view_is_one_of(:todo, :tag) && @todo.active?
-          page.call "todoItems.ensureContainerHeight", "c#{@todo.context_id}items"
-          page.visual_effect :highlight, dom_id(@todo), :duration => 3
-        end
-        if @context_changed
-          source_view do |from|
-            from.todo {page << "$('#c#{@todo.context_id} h2').effect('highlight', {}, 3000)" }
-            from.tag {page << "$('#c#{@todo.context_id} h2').effect('highlight')" }
-          end
-        end
-      end
-    else
-      if @original_item_was_deferred && source_view_is(:tag)
-        # we go from the deferred container to a context container in tag view
-        page[@todo].remove
-        page.call "todoItems.ensureVisibleWithEffectAppear", "c#{@todo.context_id}"
-        page.call "todoItems.expandNextActionListingByContext", "c#{@todo.context_id}items", true
-        page[empty_container_msg_div_id].hide unless empty_container_msg_div_id.nil?
-        # show all todos in context
-        page.insert_html :bottom, "c#{@todo.context_id}items", :partial => 'todos/todo', :locals => { :todo => @todo, :parent_container_type => parent_container_type }
-        page['tickler-empty-nd'].show if @deferred_tag_count == 0
-      else
-        page.replace dom_id(@todo), :partial => 'todos/todo', :locals => { :todo => @todo, :parent_container_type => parent_container_type }
-      end
-      page.visual_effect :highlight, dom_id(@todo), :duration => 3
-    end
-  elsif source_view_is :project
-    if @project_changed
-      page[@todo].remove
-      page.show("p#{@original_item_project_id}empty-nd") if (@remaining_undone_in_project == 0)
-      page.replace_html "badge_count", @remaining_undone_in_project
-    elsif @todo.deferred? 
-      page[@todo].remove
-      page.show("p#{@original_item_project_id}empty-nd") if (@remaining_undone_in_project == 0)
-      page.insert_html :bottom, "tickler", :partial => 'todos/todo', :locals => { :todo => @todo, :parent_container_type => parent_container_type }
-      page['tickler-empty-nd'].hide
-      page.replace_html "badge_count", @down_count
-    elsif @todo_was_activated_from_deferred_state
-      page[@todo].remove
-      page['tickler-empty-nd'].show if (@deferred_count == 0)
-      page.insert_html :bottom, "p#{@todo.project_id}items", :partial => 'todos/todo', :locals => { :todo => @todo, :parent_container_type => parent_container_type }
-      page.visual_effect :highlight, dom_id(@todo), :duration => 3
-      page["p#{@todo.project_id}empty-nd"].hide
-      page.replace_html "badge_count", @down_count
-    else
-      page.replace_html "p#{@todo.project_id}items", :partial => 'todos/todo', :collection => @todo.project.not_done_todos, 
-        :locals => { :parent_container_type => parent_container_type }
-      page.replace "tickler", :partial => 'todos/deferred', :locals =>  {
-        :deferred => @todo.project.deferred_todos,
-        :collapsible => false,
-        :append_descriptor => "in this project",
-        :parent_container_type => 'project',
-        :pending => @todo.project.pending_todos }
-      page['tickler-empty-nd'].show if (@deferred_count == 0 and @pending_count == 0)
-      page.visual_effect :highlight, dom_id(@todo), :duration => 3
-    end
-  elsif source_view_is :deferred
-    if !@todo.deferred?
-      page[@todo].remove
-      page.show(empty_container_msg_div_id) if (@down_count == 0)
-      page.replace_html "badge_count", @down_count
-    elsif @context_changed
-      page[@todo].remove
-      page.visual_effect(:fade, "c#{@original_item_context_id}", :duration => 0.4) if (@remaining_in_context == 0)
-      page.call "todoItems.ensureVisibleWithEffectAppear", "c#{@todo.context_id}"
-      page.call "todoItems.expandNextActionListingByContext", "c#{@todo.context_id}items", true
-      page[empty_container_msg_div_id].hide unless empty_container_msg_div_id.nil?
-      page.insert_html :bottom, "c#{@todo.context_id}items", :partial => 'todos/todo', :locals => { :todo => @todo, :parent_container_type => parent_container_type }
-      page.replace_html("badge_count", @down_count)
-      page.delay(0.5) do
-        page.call "todoItems.ensureContainerHeight", "c#{@original_item_context_id}items"
-        page.call "todoItems.ensureContainerHeight", "c#{@todo.context_id}items"
-        page.visual_effect :highlight, dom_id(@todo), :duration => 3
-      end
-    else
-      page.replace dom_id(@todo), :partial => 'todos/todo', :locals => { :todo => @todo, :parent_container_type => parent_container_type }
-      page.visual_effect :highlight, dom_id(@todo), :duration => 3
-    end
-  elsif source_view_is :stats
-    page.replace dom_id(@todo), :partial => 'todos/todo', :locals => { :todo => @todo, :parent_container_type => parent_container_type }
-    page.visual_effect :highlight, dom_id(@todo), :duration => 3    
-  elsif source_view_is :calendar
-    if @due_date_changed
-      page[@todo].remove
-      page.show "empty_"+@original_item_due_id if @old_due_empty
-      page.hide "empty_"+@new_due_id
-      page.insert_html :bottom, @new_due_id, :partial => 'todos/todo', :locals => {:todo => @todo}
-      page.visual_effect :highlight, dom_id(@todo), :duration => 3
-    else
-      if @todo.due.nil?
-        # due date removed
-        page[@todo].remove
-        page.show "empty_"+@original_item_due_id if @old_due_empty
-      else
-        page.replace dom_id(@todo), :partial => 'todos/todo', :locals => { :todo => @todo, :parent_container_type => parent_container_type }
-        page.visual_effect :highlight, dom_id(@todo), :duration => 3
-      end
-    end
-  else
-    logger.error "unexpected source_view '#{params[:_source_view]}'"
+  animation = []
+  animation << "remove_todo" if update_needs_to_remove_todo_from_container
+  if replace_with_updated_todo
+    animation << "replace_todo"
+  elsif append_updated_todo
+    animation << (@new_context_created ? "insert_new_context_with_updated_todo" : "add_to_existing_container")
   end
-  # Update predecessors (if they exist and are visible)
-  @todo.uncompleted_predecessors.each do |p|
-    page << "if ($(\'#{item_container_id(p)}\')) {"
-    page[p].replace_html :partial => 'todos/todo',
-      :locals => { :todo => p, :parent_container_type => parent_container_type }
-    page << "}"
-  end
-else
-  page.show 'error_status'
-  page.replace_html 'error_status', "#{error_messages_for('todo')}"
-end
+  animation << "hide_context" if update_needs_to_hide_context
 
-page << "enable_rich_interaction();"
+  # update relevant empty messaged
+  source_view do |page|
+     page.context { 
+       animation << "show_empty_message_source_container" if (@remaining_in_context == 0)
+     }
+     page.project {
+       animation << "show_empty_message_project" if (@down_count == 0)
+       if @todo_was_activated_from_deferred_state
+         animation << "show_empty_message_tickler" if @deferred_count == 0
+         animation << "hide_empty_message_project"
+       end
+       animation << "hide_empty_message_tickler" if @todo_was_deferred && (@deferred_count == 1)
+     }
+     page.deferred {
+       animation << "show_empty_message_source_container" if (@remaining_in_context == 0)
+       animation << "hide_empty_message_target_container" if (@context_changed && @target_context_count==1)
+     }
+     page.calendar {
+       animation << "show_empty_message_source_container" if @old_due_empty
+       animation << "hide_empty_message_target_container" if @todo.due
+     }
+  end
+  animation << "highlight_updated_todo"
+%>
+
+  <%= render_animation(animation) %>
+  TracksPages.page_notify('notice', '<%=@status_message%>', 5);
+  update_badge_count();
+<% end %>
+
+function remove_todo(next_steps) {
+  $('#<%= dom_id(@todo) %>').fadeOut(400, function() {
+    $('#<%= dom_id(@todo) %>').remove();
+    next_steps.go();
+  });
+}
+
+function replace_todo(next_steps) {
+  $('#<%= dom_id(@todo) %>').html(html_for_todo());
+  next_steps.go();
+}
+
+function hide_context(next_steps) {
+  <% context_id = @context_changed ? @original_item_context_id : @todo.context_id -%>
+  $('#c<%=  context_id %>').fadeOut(400, function(){ next_steps.go(); });
+}
+
+function highlight_updated_todo(next_steps) {
+  $('#<%= dom_id(@todo)%>').effect('highlight', {}, 2000, function(){ next_steps.go(); });
+}
+
+function add_to_existing_container(next_steps) {
+  $('#<%= item_container_id(@todo) %>').append(html_for_todo());
+  <% if source_view_is_one_of(:project,:calendar) -%>
+    next_steps.go();
+  <% else -%>
+    $('#c<%= @todo.context_id %>').fadeIn(500, function() { next_steps.go(); });
+  <% end -%>
+}
+
+function update_badge_count() {
+  <%
+    count = source_view_is(:context) ? @remaining_in_context : @down_count
+    count = @project_changed ? @remaining_undone_in_project : count
+  -%>
+  TracksPages.set_page_badge(<%= count %>);
+}
+
+function show_empty_message_source_container(next_steps) {
+  <% container_id = source_view_is(:calendar) ? "empty_#{@original_item_due_id}" : "c#{@original_item_context_id}empty-nd" -%>
+  $("#<%= container_id%>").slideDown(100, function() { next_steps.go(); });
+}
+
+function hide_empty_message_target_container(next_steps) {
+  <% container_id = source_view_is(:calendar) ? "empty_#{@new_due_id}" : "c#{@todo.context_id}empty-nd" -%>
+  $("#<%=container_id%>").slideUp(100, function() { next_steps.go(); });
+}
+
+function show_empty_message_project(next_steps) {<%
+  id = updated_todo_changed_deferred_state ? "p#{@todo.project_id}empty-nd" : empty_container_msg_div_id %>
+  $('#<%= id %>').slideDown(100, function() { next_steps.go(); });
+}
+
+function hide_empty_message_project(next_steps) {
+  $('#<%= empty_container_msg_div_id %>').slideUp(100, function() { next_steps.go(); });
+}
+
+function show_empty_message_tickler(next_steps) {
+  $('#tickler-empty-nd').slideDown(100, function() { next_steps.go(); });
+}
+
+function hide_empty_message_tickler(next_steps) {
+  $('#tickler-empty-nd').slideUp(100, function(){ next_steps.go(); });
+}
+
+function insert_new_context_with_updated_todo(next_steps) {
+  $('#display_box').prepend(html_for_new_context());
+  $('#c<%= @todo.context_id %>').fadeIn(500, function() { next_steps.go(); });
+}
+
+function html_for_todo() {
+  return "<%= @saved ? escape_javascript(render(:partial => 'todos/todo', :locals => { :todo => @todo, :parent_container_type => parent_container_type })) : "" %>";
+}
+
+function html_for_new_context() {
+  return "<%= @saved && @new_context_created ? escape_javascript(render(:partial => 'contexts/context', :locals => { :context => @new_context, :collapsible => true })) : "" %>";
+}
+
+function html_for_error_messages() {
+  return "<%= escape_javascript(error_messages_for('todo')) %>";
+}
+
+function update_predecessors() {
+  <% @todo.uncompleted_predecessors.each do |p| -%>
+    if ($('#<%=item_container_id(p)%>')) {
+      $('#<%=dom_id(p)%>').html('<%=escape_javascript(render(:partial => 'todos/todo', :locals => { :todo => p, :parent_container_type => parent_container_type }))%>');
+    }
+  <% end -%>
+}

@@ -18,3 +18,12 @@ Feature: Edit a context
     When I go to the contexts page
     Then he should see that a context named "Errands" is not present
     And he should see that a context named "OutAndAbout" is present
+
+  Scenario: Editing the context of a todo will remove the todo
+    Given this scenario is pending
+
+  Scenario: Editing the description of a a todo will update that todo
+    Given this scenario is pending
+
+  Scenario: Editing the context of the last todo will remove the todo and show empty message
+    Given this scenario is pending

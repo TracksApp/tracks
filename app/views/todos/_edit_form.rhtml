@@ -1,60 +1,61 @@
-<div id="error_status"><%= error_messages_for("todo", :object_name => 'action') %></div>
+<%
+todo = edit_form
+form_for(todo, :html=> { :name=>'todo', :id => dom_id(@todo, 'form'), :class => 'inline-form edit_todo_form' }) do |t|%>
+  <div id="error_status"><%= error_messages_for("todo", :object_name => 'action') %></div>
 
-<%= hidden_field( "todo", "id" ) -%>
-<%= source_view_tag( @source_view ) -%>
-<%= "<INPUT TYPE=\"hidden\" name=\"_tag_name\" value=\""+ @tag_name+"\">" unless @tag_name.nil? -%>
+  <%= t.hidden_field( "id" ) -%>
+  <%= source_view_tag( @source_view ) -%>
+  <%= content_tag(:input, "", :type=>"hidden", :name=>"_tag_name", :value=>"#{@tag_name}") if @tag_name -%>
 
-<label for="<%= dom_id(@todo, 'description') %>"><%= t('common.description') %></label>
-<%= text_field( "todo", "description", "size" => 30, "tabindex" => 8, "maxlength" => 100) %>
+  <label for="<%= dom_id(@todo, 'description') %>"><%= t('common.description') %></label>
+  <%= t.text_field( "description", "size" => 30, "tabindex" => 8, "maxlength" => 100) %>
 
-<label for="<%= dom_id(@todo, 'notes') %>"><%= t('common.notes') %></label>
-<%= text_area( "todo", "notes", "cols" => 29, "rows" => 4, "tabindex" => 9) %>
+  <label for="<%= dom_id(@todo, 'notes') %>"><%= t('common.notes') %></label>
+  <%= t.text_area( "notes", "cols" => 29, "rows" => 4, "tabindex" => 9) %>
 
-<div class="project_input">
-  <label for="<%= dom_id(@todo, 'project_name') %>"><%= t('common.project') %></label>
-  <input id="<%= dom_id(@todo, 'project_name') %>" name="project_name" autocomplete="off" tabindex="10" size="30" type="text" value="<%= @todo.project.nil? ? 'None' : @todo.project.name.gsub(/"/,"&quot;") %>" />
-</div>
+  <div class="project_input">
+    <label for="<%= dom_id(@todo, 'project_name') %>"><%= t('common.project') %></label>
+    <input id="<%= dom_id(@todo, 'project_name') %>" name="project_name" autocomplete="off" tabindex="10" size="30" type="text" value="<%= @todo.project.nil? ? 'None' : @todo.project.name.gsub(/"/,"&quot;") %>" />
+  </div>
 
-<div class="context_input">
-  <label for="<%= dom_id(@todo, 'context_name') %>"><%= t('common.context')  %></label>
-  <input id="<%= dom_id(@todo, 'context_name') %>" name="context_name" autocomplete="off" tabindex="11" size="30" type="text" value="<%= @todo.context.name %>" />
-</div>
+  <div class="context_input">
+    <label for="<%= dom_id(@todo, 'context_name') %>"><%= t('common.context')  %></label>
+    <input id="<%= dom_id(@todo, 'context_name') %>" name="context_name" autocomplete="off" tabindex="11" size="30" type="text" value="<%= @todo.context.name %>" />
+  </div>
 
-<label class="tag_list_label" for="<%= dom_id(@todo, 'tag_list') %>"><%= t('todos.tags') %></label>
-<%= text_field_tag 'tag_list', tag_list_text, :id => dom_id(@todo, 'tag_list'), :size => 30, :tabindex => 12 %> 
+  <label class="tag_list_label" for="<%= dom_id(@todo, 'tag_list') %>"><%= t('todos.tags') %></label>
+  <%= text_field_tag 'tag_list', tag_list_text, :id => dom_id(@todo, 'tag_list'), :size => 30, :tabindex => 12 %>
 
-<div class="due_input">
-  <label for="<%= dom_id(@todo, 'due_label') %>">Due</label>
-  <%= date_field_tag("todo[due]", dom_id(@todo, 'due'), format_date(@todo.due), "tabindex" => 13) %>
-  <a href="#" id="<%= dom_id(@todo, 'due_x') %>" class="date_clear" title="<%= t('todos.clear_due_date') %>">
-    <%= image_tag("delete_off.png", :alt => t('todos.clear_due_date') ) %>
-  </a>
-</div>
-
-<div class="show_from_input">
-  <label for="<%= dom_id(@todo, 'show_from') %>"><%= t('todos.show_from') %></label>
-  <%= date_field_tag("todo[show_from]", dom_id(@todo, 'show_from'), format_date(@todo.show_from), "tabindex" => 14) %>
-  <a href="#" id="<%= dom_id(@todo, 'show_from_x') %>" class="date_clear" title="<%= t('todos.clear_show_from_date') %>">
-    <%= image_tag("delete_off.png", :alt => t('todos.clear_show_from_date') ) %>
-  </a>
-</div>
-
-<label class="predecessor_list_label" for="<%= dom_id(@todo, 'predecessor_list') %>"><%= t('todos.depends_on_separate_with_commas') %></label>
-<%= text_field_tag 'predecessor_list', predecessor_list_text, :id => dom_id(@todo, 'predecessor_list'), :size => 30, :tabindex => 15 %> 
-
-<% if controller.controller_name == "project" || @todo.deferred? -%>
-  <input type="hidden" name="on_project_page" value="true" />
-<% end -%>
-
-<div class="submit_box">
-  <div class="widgets">
-    <button type="submit" class="positive" id="<%= dom_id(@todo, 'submit') %>" tabindex="16">
-      <%= image_tag("accept.png", :alt => "") %>
-      <%= t('common.update') %>
-    </button>
-    <a href="#" class="negative">
-      <%= image_tag("cancel.png", :alt => "") %>
-      <%= t('common.cancel') %>
+  <div class="due_input">
+    <label for="<%= dom_id(@todo, 'due_label') %>">Due</label>
+    <%= date_field_tag("todo[due]", dom_id(@todo, 'due'), format_date(@todo.due), "tabindex" => 13) %>
+    <a href="#" id="<%= dom_id(@todo, 'due_x') %>" class="date_clear" title="<%= t('todos.clear_due_date') %>">
+      <%= image_tag("delete_off.png", :alt => "Clear due date") %>
     </a>
   </div>
-</div>
+
+  <div class="show_from_input">
+    <label for="<%= dom_id(@todo, 'show_from') %>"><%= t('todos.show_from') %></label>
+    <%= date_field_tag("todo[show_from]", dom_id(@todo, 'show_from'), format_date(@todo.show_from), "tabindex" => 14) %>
+    <a href="#" id="<%= dom_id(@todo, 'show_from_x') %>" class="date_clear" title="<%= t('todos.clear_show_from_date') %>">
+      <%= image_tag("delete_off.png", :alt => "Clear show from date") %>
+    </a>
+  </div>
+
+  <label class="predecessor_list_label" for="<%= dom_id(@todo, 'predecessor_list') %>"><%= t('todos.depends_on_separate_with_commas') %></label>
+  <%= text_field_tag 'predecessor_list', predecessor_list_text, :id => dom_id(@todo, 'predecessor_list'), :size => 30, :tabindex => 15 %>
+
+  <div class="submit_box">
+    <div class="widgets">
+      <button type="submit" class="positive" id="<%= dom_id(@todo, 'submit') %>" tabindex="16">
+        <%=image_tag("accept.png", :alt => "") %>
+        Update
+      </button>
+      <a href="#" class="negative">
+        <%=image_tag("cancel.png", :alt => "") %>
+        Cancel
+      </a>
+    </div>
+  </div>
+
+<% end %>

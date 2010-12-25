@@ -40,6 +40,7 @@ function insert_new_context_with_new_todo() {
 function add_todo_to_existing_context() {
   <% if source_view_is_one_of(:todo, :deferred, :tag) -%>
     TodoItemsContainer.ensureVisibleWithEffectAppear("c<%=@todo.context_id%>");
+    $('#<%=empty_container_msg_div_id%>').hide();
   <% end -%>
   $('#<%=item_container_id(@todo)%>').append(html_for_new_todo());
   $('#<%= dom_id(@todo)%>').effect('highlight', {}, 2000 );

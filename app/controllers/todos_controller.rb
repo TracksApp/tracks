@@ -324,122 +324,33 @@ class TodosController < ApplicationController
   def update
     @source_view = params['_source_view'] || 'todo'
     init_data_for_sidebar unless mobile?
-    if params[:tag_list]
-      @todo.tag_with(params[:tag_list])
-      @todo.tags(true) #force a reload for proper rendering
-    end
-    @original_item_context_id = @todo.context_id
-    @original_item_project_id = @todo.project_id
-    @original_item_was_deferred = @todo.deferred?
-    @original_item_due = @todo.due
-    @original_item_due_id = get_due_id_for_calendar(@todo.due)
-    @original_item_predecessor_list = @todo.predecessors.map{|t| t.specification}.join(', ')
-    
-    if params['todo']['project_id'].blank? && !params['project_name'].nil?
-      if params['project_name'] == 'None'
-        project = Project.null_object
-      else
-        project = current_user.projects.find_by_name(params['project_name'].strip)
-        unless project
-          project = current_user.projects.build
-          project.name = params['project_name'].strip
-          project.save
-          @new_project_created = true
-        end
-      end
-      params["todo"]["project_id"] = project.id
-    end
-    
-    if params['todo']['context_id'].blank? && !params['context_name'].blank?
-      context = current_user.contexts.find_by_name(params['context_name'].strip)
-      unless context
-        context = current_user.contexts.build
-        context.name = params['context_name'].strip
-        context.save
-        @new_context_created = true
-        @not_done_todos = [@todo]
-      end
-      params["todo"]["context_id"] = context.id
-    end
-    
-    if params["todo"].has_key?("due")
-      params["todo"]["due"] = parse_date_per_user_prefs(params["todo"]["due"])
-    else
-      params["todo"]["due"] = ""
-    end
-    
-    if params['todo']['show_from']
-      params['todo']['show_from'] = parse_date_per_user_prefs(params['todo']['show_from'])
-    end
-    
-    if params['done'] == '1' && !@todo.completed?
-      @todo.complete!
-      @todo.pending_to_activate.each do |t|
-        t.activate!
-      end
-    end
-    # strange. if checkbox is not checked, there is no 'done' in params.
-    # Therefore I've used the negation
-    if !(params['done'] == '1') && @todo.completed?
-      @todo.activate!
-      @todo.active_to_block.each do |t|
-        t.block!
-      end
-    end
+
+    cache_attributes_from_before_update
+
+    update_tags
+    update_project if params['todo']['project_id'].blank? && !params['project_name'].nil?
+    update_context if params['todo']['context_id'].blank? && !params['context_name'].blank?
+    update_due_and_show_from_dates
+    update_completed_state
     
     @todo.attributes = params["todo"]
+    @saved = @todo.save
 
     @todo.add_predecessor_list(params[:predecessor_list])
-    @saved = @todo.save
-    if @saved && params[:predecessor_list]
-      if @original_item_predecessor_list != params[:predecessor_list]
-        # Possible state change with new dependencies
-        if @todo.uncompleted_predecessors.empty?
-          if @todo.state == 'pending'
-            @todo.activate! # Activate pending if no uncompleted predecessors
-          end
-        else
-          if @todo.state == 'active'
-            @todo.block! # Block active if we got uncompleted predecessors
-          end
-        end
-      end
-      @todo.save!
-    end
+    update_pending_state if @saved && params[:predecessor_list]
 
-    @context_changed = @original_item_context_id != @todo.context_id
-    @todo_was_activated_from_deferred_state = @original_item_was_deferred && @todo.active?
-    
-    if source_view_is :calendar
-      @due_date_changed = @original_item_due != @todo.due
-      if @due_date_changed
-        @old_due_empty = is_old_due_empty(@original_item_due_id)
-        if @todo.due.nil?
-          # do not act further on date change when date is changed to nil
-          @due_date_changed = false
-        else
-          @new_due_id = get_due_id_for_calendar(@todo.due)
-        end
-      end
-    end
-    
-    if @context_changed
-      determine_remaining_in_context_count(@original_item_context_id)
-    else
-      determine_remaining_in_context_count(@todo.context_id)
-    end
-    
-    @project_changed = @original_item_project_id != @todo.project_id
-    if (@project_changed && !@original_item_project_id.nil?) then
-      @todo.update_state_from_project
-      @todo.save!
-      @remaining_undone_in_project = current_user.projects.find(@original_item_project_id).not_done_todos.count
-    end
+    determine_changes_by_this_update
+    determine_remaining_in_context_count(@context_changed ? @original_item_context_id : @todo.context_id)
+    update_todo_state_if_project_changed
     determine_down_count
     determine_deferred_tag_count(params['_tag_name']) if @source_view == 'tag'
 
     respond_to do |format|
-      format.js
+      format.js {
+        @status_message = @todo.deferred? ? t('todos.action_saved_to_tickler') : t('todos.action_saved')
+        @status_message = t('todos.added_new_project') + ' / ' + @status_message if @new_project_created
+        @status_message = t('todos.added_new_context') + ' / ' + @status_message if @new_context_created
+      }
       format.xml { render :xml => @todo.to_xml( :except => :user_id ) }
       format.m do
         if @saved
@@ -899,13 +810,12 @@ class TodosController < ApplicationController
   def determine_down_count
     source_view do |from|
       from.todo do
-        @down_count = current_user.todos.count(
+        @down_count = current_user.todos.active.count(
           :all,
-          :conditions => ['todos.state = ? and contexts.hide = ? AND (projects.state = ? OR todos.project_id IS NULL)', 'active', false, 'active'],
-          :include => [ :project, :context ])
+          :conditions => ['contexts.hide = ? AND (projects.state = ? OR todos.project_id IS NULL)', false, 'active'], :include => [:project,:context])
       end
       from.context do
-        @down_count = current_user.contexts.find(@todo.context_id).not_done_todo_count
+        @down_count = current_user.contexts.find(@todo.context_id).todos.not_completed.count(:all)
       end
       from.project do
         unless @todo.project_id == nil
@@ -915,7 +825,7 @@ class TodosController < ApplicationController
         end
       end
       from.deferred do
-        @down_count = current_user.todos.count_in_state(:deferred)
+        @down_count = current_user.todos.deferred_or_blocked.count(:all)
       end
       from.tag do
         @tag_name = params['_tag_name']
@@ -932,7 +842,11 @@ class TodosController < ApplicationController
     
   def determine_remaining_in_context_count(context_id = @todo.context_id)
     source_view do |from|
-      from.deferred { @remaining_in_context = current_user.contexts.find(context_id).deferred_todo_count }
+      from.deferred {
+        # force reload to todos to get correct count and not a cached one
+        @remaining_in_context = current_user.contexts.find(context_id).todos(true).deferred_or_blocked.count(:all)
+        @target_context_count = current_user.contexts.find(@todo.context_id).todos(true).deferred_or_blocked.count(:all)
+      }
       from.tag      {
         tag = Tag.find_by_name(params['_tag_name'])
         if tag.nil?
@@ -1225,6 +1139,116 @@ class TodosController < ApplicationController
   end
 
   private
+
+  def cache_attributes_from_before_update
+    @original_item_context_id = @todo.context_id
+    @original_item_project_id = @todo.project_id
+    @original_item_was_deferred = @todo.deferred?
+    @original_item_due = @todo.due
+    @original_item_due_id = get_due_id_for_calendar(@todo.due)
+    @original_item_predecessor_list = @todo.predecessors.map{|t| t.specification}.join(', ')
+  end
+
+  def update_project
+    if params['project_name'] == 'None'
+      project = Project.null_object
+    else
+      project = current_user.projects.find_by_name(params['project_name'].strip)
+      unless project
+        project = current_user.projects.build
+        project.name = params['project_name'].strip
+        project.save
+        @new_project_created = true
+      end
+    end
+    params["todo"]["project_id"] = project.id
+  end
+
+  def update_todo_state_if_project_changed
+    if (@project_changed && !@original_item_project_id.nil?) then
+      @todo.update_state_from_project
+      @todo.save!
+      @remaining_undone_in_project = current_user.projects.find(@original_item_project_id).not_done_todos.count
+    end
+  end
+
+  def update_context
+    context = current_user.contexts.find_by_name(params['context_name'].strip)
+    unless context
+      @new_context = current_user.contexts.build
+      @new_context.name = params['context_name'].strip
+      @new_context.save
+      @new_context_created = true
+      @not_done_todos = [@todo]
+      context = @new_context
+    end
+    params["todo"]["context_id"] = context.id
+  end
+
+  def update_tags
+    if params[:tag_list]
+      @todo.tag_with(params[:tag_list])
+      @todo.tags(true) #force a reload for proper rendering
+    end
+  end
+
+  def update_due_and_show_from_dates
+    if params["todo"].has_key?("due")
+      params["todo"]["due"] = parse_date_per_user_prefs(params["todo"]["due"])
+    else
+      params["todo"]["due"] = ""
+    end
+    if params['todo']['show_from']
+      params['todo']['show_from'] = parse_date_per_user_prefs(params['todo']['show_from'])
+    end
+  end
+
+  def update_completed_state
+    if params['done'] == '1' && !@todo.completed?
+      @todo.complete!
+      @todo.pending_to_activate.each do |t|
+        t.activate!
+      end
+    end
+    # strange. if checkbox is not checked, there is no 'done' in params.
+    # Therefore I've used the negation
+    if !(params['done'] == '1') && @todo.completed?
+      @todo.activate!
+      @todo.active_to_block.each do |t|
+        t.block!
+      end
+    end
+  end
+
+  def update_pending_state
+    if @original_item_predecessor_list != params[:predecessor_list]
+      # Possible state change with new dependencies
+      if @todo.uncompleted_predecessors.empty?
+        if @todo.state == 'pending'
+          @todo.activate! # Activate pending if no uncompleted predecessors
+        end
+      else
+        if @todo.state == 'active'
+          @todo.block! # Block active if we got uncompleted predecessors
+        end
+      end
+    end
+    @todo.save!
+  end
+
+  def determine_changes_by_this_update
+    @context_changed = @original_item_context_id != @todo.context_id
+    @todo_was_activated_from_deferred_state = @original_item_was_deferred && @todo.active?
+    @todo_was_deferred = !@original_item_was_deferred && @todo.deferred?
+
+    if source_view_is :calendar
+      @due_date_changed = ((@original_item_due != @todo.due) && @todo.due) || !@todo.due
+      @old_due_empty = is_old_due_empty(@original_item_due_id)
+      @new_due_id = get_due_id_for_calendar(@todo.due) if @due_date_changed
+    end
+
+    @project_changed = @original_item_project_id != @todo.project_id
+  end
 
   def project_specified_by_name(project_name)
     return false unless params['project_id'].blank?

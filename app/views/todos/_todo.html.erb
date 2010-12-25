@@ -37,9 +37,7 @@ parameters += "&_tag_name=#{@tag_name}" if @source_view == 'tag'
     </div>
   </div>
   <div id="<%= dom_id(todo, 'edit') %>" class="edit-form" style="display:none">
-    <% form_remote_tag_edit_todo do -%>
-      <% #note: edit form will load here remotely -%>
-      <div class="placeholder"> </div>
-    <% end -%>
+    <% #note: edit form will load here remotely -%>
+    <div class="placeholder"> </div>
   </div>
 </div>

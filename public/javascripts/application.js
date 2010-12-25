@@ -217,7 +217,7 @@ var TracksPages = {
 var TodoItemsContainer = {
     // public
     ensureVisibleWithEffectAppear: function(elemId){
-        $('#'+elemId).fadeIn(400);
+        $('#'+elemId).fadeIn(500);
     },
     expandNextActionListing: function(itemsElem, skipAnimation) {
         itemsElem = $(itemsElem);
@@ -347,14 +347,20 @@ var TodoItems = {
             return false;
         });
 
-        /* delete button to delete a project from the list
-         *       :with => "'#{parameters}'",*/
+        /* delete button to delete a project from the list */
         $('.item-container a.icon_delete_item').live('click', function(evt){
             if(confirm(this.title)){
                 delete_with_ajax_and_block_element(this.href, $(this).parents('.project'));
             }
             return false;
         });
+
+        /* submit todo form after edit */
+        $("form.edit_todo_form button.positive").live('click', function (ev) {
+            submit_with_ajax_and_block_element('form.edit_todo_form', $(this));
+            return false;
+        });
+
     }
 }
 

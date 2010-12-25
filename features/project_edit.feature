@@ -23,15 +23,6 @@ Feature: Edit a project
     Then I should see the italic text "successfull outcome" in the project description
     And I should see the bold text "done" in the project description
 
-  # Ticket #1043
-  @selenium @wip
-  Scenario: I can move a todo out of the current project
-    Given I have a project "foo" with 2 todos
-    When I visit the "foo" project
-    And I change the project_name field of "Todo 1" to "bar"
-    Then I should not see the todo "Todo 1"
-    And I should see the todo "Todo 2"
-
   @selenium
   Scenario: I can edit the project name in place
     Given I have a project "release tracks 1.8" with 1 todos
@@ -93,3 +84,21 @@ Feature: Edit a project
 
   Scenario: Cancelling editing a project will restore project settings
     Given this scenario is pending
+
+  Scenario: Editing the description of a todo will update todo
+    Given this scenario is pending
+
+  Scenario: Moving the todo to the tickler will move todo to tickler container
+    Given this scenario is pending
+
+  Scenario: Moving the todo out of the tickler will move todo to active container
+    Given this scenario is pending
+
+  # Ticket #1043
+  @selenium @wip
+  Scenario: I can move a todo out of the current project
+    Given I have a project "foo" with 2 todos
+    When I visit the "foo" project
+    And I change the project_name field of "Todo 1" to "bar"
+    Then I should not see the todo "Todo 1"
+    And I should see the todo "Todo 2"

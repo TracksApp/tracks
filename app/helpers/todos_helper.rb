@@ -1,23 +1,5 @@
 module TodosHelper
 
-  # #require 'users_controller' Counts the number of incomplete items in the
-  # specified context
-  #
-  def count_items(context)
-    count = Todo.find_all("done=0 AND context_id=#{context.id}").length
-  end
-
-  def form_remote_tag_edit_todo( &block )
-    form_remote_tag(
-      :url => todo_path(@todo),
-      :loading => "$('#submit_todo_#{@todo.id}').block({message: null})",
-      :html => {
-        :method => :put, 
-        :id => dom_id(@todo, 'form'), 
-        :class => dom_id(@todo, 'form') + " inline-form edit_todo_form" }, 
-      &block )
-  end
-
   def remote_star_icon 
     link_to( image_tag_for_star(@todo),
       toggle_star_todo_path(@todo),
@@ -68,7 +50,8 @@ module TodosHelper
 
     return link_to(image_tag("to_project_off.png", :align => "absmiddle")+" " + t('todos.convert_to_project'), url)
   end
-  
+
+  # waiting stuff can be deleted after migration of defer
   def todo_start_waiting_js(todo)
     return "$('#ul#{dom_id(todo)}').css('visibility', 'hidden'); $('##{dom_id(todo)}').block({message: null})"
   end
@@ -87,7 +70,6 @@ module TodosHelper
       {:controller => "recurring_todos", :action => "index"},
       :class => "recurring_icon", :title => recurrence_pattern_as_text(todo.recurring_todo))
   end
-
   
   def remote_toggle_checkbox
     check_box_tag('item_id', toggle_check_todo_path(@todo), @todo.completed?, :class => 'item-checkbox',
@@ -224,9 +206,10 @@ module TodosHelper
   end
   
   def item_container_id (todo)
-    return "c#{todo.context_id}items" if source_view_is :tickler
+    return "c#{todo.context_id}items" if source_view_is :deferred
     return "tickleritems"             if todo.deferred? or todo.pending?
     return "p#{todo.project_id}items" if source_view_is :project
+    return @new_due_id                if source_view_is :calendar
     return "c#{todo.context_id}items"
   end
 
@@ -262,7 +245,7 @@ module TodosHelper
   def empty_container_msg_div_id
     todo = @todo || @successor
     return "" unless todo # empty id if no todo  or successor given
-    return "tickler-empty-nd" if source_view_is_one_of(:project, :tag, :deferred) && todo.deferred?
+    return "tickler-empty-nd" if source_view_is_one_of(:project, :tag) && todo.deferred?
     return "p#{todo.project_id}empty-nd" if source_view_is :project
     return "c#{todo.context_id}empty-nd"
   end
@@ -299,7 +282,56 @@ module TodosHelper
   def date_field_tag(name, id, value = nil, options = {})
     text_field_tag name, value, {"size" => 12, "id" => id, "class" => "Date", "onfocus" => "Calendar.setup", "autocomplete" => "off"}.update(options.stringify_keys)
   end
-    
+
+  def update_needs_to_hide_context
+    return (@remaining_in_context == 0) && !source_view_is(:context)
+  end
+
+  def update_needs_to_remove_todo_from_container
+    source_view do |page|
+      page.context { return @context_changed || @todo.deferred? || @todo.pending?}
+      page.project { return updated_todo_changed_deferred_state }
+      page.deferred { return @context_changed || !(@todo.deferred? || @todo.pending?) }
+      page.calendar { return @due_date_changed || !@todo.due }
+    end
+    return false
+  end
+
+  def replace_with_updated_todo
+    source_view do |page|
+      page.context  { return !update_needs_to_remove_todo_from_container }
+      page.project  { return !updated_todo_changed_deferred_state}
+      page.deferred { return !@context_changed && (@todo.deferred? || @todo.pending?) }
+      page.calendar { return !@due_date_changed && @todo.due }
+    end
+  end
+
+  def append_updated_todo
+    source_view do |page|
+      page.context { return false }
+      page.project { return updated_todo_changed_deferred_state }
+      page.deferred { return @context_changed && (@todo.deferred? || @todo.pending?) }
+      page.calendar { return @due_date_changed && @todo.due }
+    end
+    return false
+  end
+
+  def updated_todo_changed_deferred_state
+    return (@todo.deferred? && !@original_item_was_deferred) || @todo_was_activated_from_deferred_state
+  end
+
+  def render_animation(animation)
+    html = ""
+    animation.each do |step|
+      puts "step='#{step}'"
+      unless step.blank?
+        html += step + "({ go: function() {\r\n"
+      end
+    end
+    html += "}})" * animation.count
+    return html
+  end
+
   private
   
   def image_tag_for_star(todo)
