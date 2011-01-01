@@ -27,3 +27,9 @@ Feature: Edit a context
 
   Scenario: Editing the context of the last todo will remove the todo and show empty message
     Given this scenario is pending
+
+  Scenario: Adding a todo to a hidden project will not show the todo
+    Given this scenario is pending
+
+  Scenario: Adding a todo to a hidden context will show that todo
+    Given this scenario is pending

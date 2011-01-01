@@ -124,15 +124,8 @@ class ApplicationController < ActionController::Base
   # config/settings.yml
   #
   def format_date(date)
-    if date
-      date_format = prefs.date_format
-      formatted_date = date.in_time_zone(prefs.time_zone).strftime("#{date_format}")
-    else
-      formatted_date = ''
-    end
-    formatted_date
+    return date ? date.in_time_zone(prefs.time_zone).strftime("#{prefs.date_format}") : ''
   end
-
 
   def for_autocomplete(coll, substr)
     filtered = coll.find_all{|item| item.name.downcase.include? substr.downcase}

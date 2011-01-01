@@ -743,7 +743,7 @@ function default_ajax_options_for_submit(ajax_type, element_to_block) {
         type: ajax_type,
         async: true,
         context: element_to_block,
-        data: "_source_view=" + encodeURIComponent( SOURCE_VIEW ),
+        data: "_source_view=" + SOURCE_VIEW,
         beforeSend: function() {
             $(this).block({
                 message: null
@@ -758,7 +758,7 @@ function default_ajax_options_for_submit(ajax_type, element_to_block) {
         }
     }
     if(typeof(TAG_NAME) !== 'undefined')
-        options.data += "&_tag_name="+ encodeURIComponent (TAG_NAME);
+        options.data += "&_tag_name="+ TAG_NAME;
     return options;
 }
 
@@ -865,8 +865,8 @@ function enable_rich_interaction(){
     /* called after completion of all AJAX calls */
 
     /* fix for #1036 where closing a edit form before the autocomplete was filled
- * resulted in a dropdown box that could not be removed. We remove all
- * autocomplete boxes the hard way */
+     * resulted in a dropdown box that could not be removed. We remove all
+     * autocomplete boxes the hard way */
     $('.ac_results').remove();
 
     $('input.Date').datepicker({
@@ -879,10 +879,12 @@ function enable_rich_interaction(){
     $('input[name=context_name]').autocomplete({
         source: relative_to_root('contexts.autocomplete')
     });
+    $('input[name=project_name]').autocomplete({
+        source: relative_to_root('projects.autocomplete')
+    });
+
     /* $('input[name=project[default_context_name]]').autocomplete(
     relative_to_root('contexts.autocomplete'), {matchContains: true});
-  $('input[name=project_name]').autocomplete(
-    relative_to_root('projects.autocomplete'), {matchContains: true});
   $('input[name=tag_list]:not(.ac_input)').autocomplete(
     relative_to_root('tags.autocomplete'), {multiple: true,multipleSeparator:',',matchContains:true});
   $('input[name=predecessor_list]:not(.ac_input)').autocomplete(
@@ -971,7 +973,7 @@ function enable_rich_interaction(){
     field_touched = false;
 
     /* shrink the notes on the project pages. This is not live(), so this needs
- * to be run after ajax adding of a new note */
+     * to be run after ajax adding of a new note */
     $('.note_wrapper').truncate({
         max_length: 90,
         more: '',

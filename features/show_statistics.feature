@@ -62,3 +62,9 @@ Feature: Show statistics
     And I should see 5 todos
     And I should see "to return to the statistics page"
     And I should see "to show the actions from week 0 and further"
+
+  Scenario: I can edit the todos selected from a chart
+    Given this scenario is pending
+
+  Scenario: Marking a todo selected from a chart as complete will remove it from the page
+    Given this scenario is pending

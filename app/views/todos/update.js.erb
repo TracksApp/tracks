@@ -14,29 +14,6 @@
     animation << (@new_context_created ? "insert_new_context_with_updated_todo" : "add_to_existing_container")
   end
   animation << "hide_context" if update_needs_to_hide_context
-
-  # update relevant empty messaged
-  source_view do |page|
-     page.context { 
-       animation << "show_empty_message_source_container" if (@remaining_in_context == 0)
-     }
-     page.project {
-       animation << "show_empty_message_project" if (@down_count == 0)
-       if @todo_was_activated_from_deferred_state
-         animation << "show_empty_message_tickler" if @deferred_count == 0
-         animation << "hide_empty_message_project"
-       end
-       animation << "hide_empty_message_tickler" if @todo_was_deferred && (@deferred_count == 1)
-     }
-     page.deferred {
-       animation << "show_empty_message_source_container" if (@remaining_in_context == 0)
-       animation << "hide_empty_message_target_container" if (@context_changed && @target_context_count==1)
-     }
-     page.calendar {
-       animation << "show_empty_message_source_container" if @old_due_empty
-       animation << "hide_empty_message_target_container" if @todo.due
-     }
-  end
   animation << "highlight_updated_todo"
 %>
 
@@ -48,8 +25,52 @@
 function remove_todo(next_steps) {
   $('#<%= dom_id(@todo) %>').fadeOut(400, function() {
     $('#<%= dom_id(@todo) %>').remove();
+
+  <% # TODO: to helper function: show_empty_message_source_container
+     container_id = ""
+     source_view do |page|
+       page.project  {
+         container_id = "p#{@original_item_project_id}empty-nd" if @remaining_in_context == 0
+         container_id = "tickler-empty-nd" if @todo_was_activated_from_deferred_state && @remaining_deferred_or_pending_count == 0
+         }
+       page.deferred { container_id = "c#{@original_item_context_id}empty-nd" if @remaining_in_context == 0 }
+       page.calendar { container_id = "empty_#{@original_item_due_id}" if @old_due_empty }
+       page.tag      {
+         container_id = "hidden-empty-nd" if !@todo.hidden? && @todo_hidden_state_changed && @remaining_hidden_count == 0
+         container_id = "tickler-empty-nd" if @todo_was_activated_from_deferred_state && @remaining_deferred_or_pending_count == 0
+         }
+       page.context  { container_id = "c#{@original_item_context_id}empty-nd" if @remaining_in_context == 0 }
+     end
+     unless container_id.blank?
+  -%>
+      $("#<%= container_id%>").slideDown(100);
+  <% end -%>
     next_steps.go();
   });
+}
+
+function add_to_existing_container(next_steps) {
+  $('#<%= item_container_id(@todo) %>').append(html_for_todo());
+  <% if source_view_is_one_of(:project,:calendar) -%>
+    next_steps.go();
+    <% if (@target_context_count==1) || (@todo.deferred? && @remaining_deferred_or_pending_count == 1) -%>
+      $("#<%=  empty_container_msg_div_id %>").slideUp(100);
+    <% end -%>
+  <% else -%>
+    <% unless (@todo_hidden_state_changed && @todo.hidden?) || @todo_was_deferred_from_active_state -%>
+      $('#c<%= @todo.context_id %>').fadeIn(500, function() { 
+        next_steps.go();
+        <% if @target_context_count==1 -%>
+          $("#<%=  empty_container_msg_div_id %>").slideUp(100);
+        <% end -%>
+      });
+    <% else -%>
+      next_steps.go();
+      <% if (@target_context_count==1) || (@todo.deferred? && @remaining_deferred_or_pending_count == 1) -%>
+        $("#<%=  empty_container_msg_div_id %>").slideUp(100);
+      <% end -%>
+    <% end -%>
+  <% end -%>
 }
 
 function replace_todo(next_steps) {
@@ -66,48 +87,12 @@ function highlight_updated_todo(next_steps) {
   $('#<%= dom_id(@todo)%>').effect('highlight', {}, 2000, function(){ next_steps.go(); });
 }
 
-function add_to_existing_container(next_steps) {
-  $('#<%= item_container_id(@todo) %>').append(html_for_todo());
-  <% if source_view_is_one_of(:project,:calendar) -%>
-    next_steps.go();
-  <% else -%>
-    $('#c<%= @todo.context_id %>').fadeIn(500, function() { next_steps.go(); });
-  <% end -%>
-}
-
 function update_badge_count() {
   <%
     count = source_view_is(:context) ? @remaining_in_context : @down_count
     count = @project_changed ? @remaining_undone_in_project : count
   -%>
   TracksPages.set_page_badge(<%= count %>);
-}
-
-function show_empty_message_source_container(next_steps) {
-  <% container_id = source_view_is(:calendar) ? "empty_#{@original_item_due_id}" : "c#{@original_item_context_id}empty-nd" -%>
-  $("#<%= container_id%>").slideDown(100, function() { next_steps.go(); });
-}
-
-function hide_empty_message_target_container(next_steps) {
-  <% container_id = source_view_is(:calendar) ? "empty_#{@new_due_id}" : "c#{@todo.context_id}empty-nd" -%>
-  $("#<%=container_id%>").slideUp(100, function() { next_steps.go(); });
-}
-
-function show_empty_message_project(next_steps) {<%
-  id = updated_todo_changed_deferred_state ? "p#{@todo.project_id}empty-nd" : empty_container_msg_div_id %>
-  $('#<%= id %>').slideDown(100, function() { next_steps.go(); });
-}
-
-function hide_empty_message_project(next_steps) {
-  $('#<%= empty_container_msg_div_id %>').slideUp(100, function() { next_steps.go(); });
-}
-
-function show_empty_message_tickler(next_steps) {
-  $('#tickler-empty-nd').slideDown(100, function() { next_steps.go(); });
-}
-
-function hide_empty_message_tickler(next_steps) {
-  $('#tickler-empty-nd').slideUp(100, function(){ next_steps.go(); });
 }
 
 function insert_new_context_with_updated_todo(next_steps) {

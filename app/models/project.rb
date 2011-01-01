@@ -1,5 +1,7 @@
 class Project < ActiveRecord::Base
   has_many :todos, :dependent => :delete_all, :include => [:context,:tags]
+
+  # TODO: remove these scopes. Can be replaced by the named scopes on the todo relation
   has_many :not_done_todos,
     :include => [:context,:tags,:project],
     :class_name => 'Todo',
@@ -35,6 +37,7 @@ class Project < ActiveRecord::Base
   named_scope :active, :conditions => { :state => 'active' }
   named_scope :hidden, :conditions => { :state => 'hidden' }
   named_scope :completed, :conditions => { :state => 'completed'}
+  named_scope :uncompleted, :conditions => ["NOT state = ?", 'completed']
   
   validates_presence_of :name
   validates_length_of :name, :maximum => 255

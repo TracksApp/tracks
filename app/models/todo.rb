@@ -23,6 +23,16 @@ class Todo < ActiveRecord::Base
   named_scope :deferred, :conditions => ["todos.completed_at IS NULL AND NOT todos.show_from IS NULL"]
   named_scope :blocked, :conditions => ['todos.state = ?', 'pending']
   named_scope :deferred_or_blocked, :conditions => ["(todos.completed_at IS NULL AND NOT todos.show_from IS NULL) OR (todos.state = ?)", "pending"]
+  named_scope :not_deferred_or_blocked, :conditions => ["todos.completed_at IS NULL AND todos.show_from IS NULL AND NOT todos.state = ?", "pending"]
+  named_scope :with_tag, lambda { |tag| {:joins => :taggings, :conditions => ["taggings.tag_id = ? ", tag.id] } }
+  named_scope :of_user, lambda { |user_id| {:conditions => ["todos.user_id = ? ", user_id] } }
+  named_scope :hidden, 
+    :joins => :context,
+    :conditions => ["todos.state = ? OR (contexts.hide = ? AND (todos.state = ? OR todos.state = ?))",
+    'project_hidden', true, 'active', 'deferred']
+  named_scope :not_hidden,
+    :joins => [:context, :project],
+    :conditions => ['contexts.hide = ? AND (projects.state = ? OR todos.project_id IS NULL)', false, 'active']
 
   STARRED_TAG_NAME = "starred"
 
@@ -92,7 +102,6 @@ class Todo < ActiveRecord::Base
   def no_uncompleted_predecessors?
     return uncompleted_predecessors.empty?
   end
-  
  
   # Returns a string with description <context, project>
   def specification
@@ -196,14 +205,24 @@ class Todo < ActiveRecord::Base
     return false
   end
 
+  def has_tag?(tag)
+    return self.tags.select{|t| t.name==tag }.size > 0
+  end
+
+  def hidden?
+    puts "hidden => state = #{self.state} context(#{self.context.name}).hidden=#{self.context.hidden?}"
+    return self.state == 'project_hidden' || ( self.context.hidden? && (self.state == 'active' || self.state == 'deferred'))
+  end
+
   def update_state_from_project
-    if state == 'project_hidden' and !project.hidden?
+    puts "state was #{self.state}; project.hidden?=#{self.project.hidden?}"
+    if state == 'project_hidden' and !self.project.hidden?
       if self.uncompleted_predecessors.empty?
         self.state = 'active'
       else
         self.state = 'pending'
       end
-    elsif state == 'active' and project.hidden?
+    elsif self.state == 'active' and self.project.hidden?
       self.state = 'project_hidden'
     end
   end

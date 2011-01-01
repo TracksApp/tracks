@@ -124,7 +124,7 @@ module LoginSystem
   
   def get_current_user
     if @user.nil? && session['user_id']
-      @user = User.find session['user_id'], :include => :preference
+      @user = User.find(session['user_id'], :include => [:preference])
     end
     @prefs = @user.prefs unless @user.nil?
     @user

@@ -205,22 +205,9 @@ module TodosHelper
     end
   end
   
-  def item_container_id (todo)
-    return "c#{todo.context_id}items" if source_view_is :deferred
-    return "tickleritems"             if todo.deferred? or todo.pending?
-    return "p#{todo.project_id}items" if source_view_is :project
-    return @new_due_id                if source_view_is :calendar
-    return "c#{todo.context_id}items"
-  end
-
   def should_show_new_item
-
-    unless @todo.project.nil?
-      # do not show new actions that were added to hidden or completed projects
-      # on home page and context page
-      return false if source_view_is(:todo) && (@todo.project.hidden? || @todo.project.completed?)
-      return false if source_view_is(:context) && (@todo.project.hidden? || @todo.project.completed?)      
-    end
+    return false if source_view_is(:todo) && @todo.hidden?
+    return false if source_view_is(:context) && @todo.hidden? && !@todo.context.hidden?
 
     return false if (source_view_is(:tag) && !@todo.tags.include?(@tag_name))
     return false if (source_view_is(:context) && !(@todo.context_id==@default_context.id) )
@@ -228,8 +215,8 @@ module TodosHelper
     return true if source_view_is(:deferred) && @todo.deferred?
     return true if source_view_is(:project) && @todo.project.hidden? && @todo.project_hidden?
     return true if source_view_is(:project) && @todo.deferred?
-    return true if !source_view_is(:deferred) && @todo.active?
     return true if source_view_is(:project) && @todo.pending?
+    return true if !source_view_is(:deferred) && @todo.active?
 
     return true if source_view_is(:tag) && @todo.pending?
     return false
@@ -239,20 +226,13 @@ module TodosHelper
     return 'tickler' if source_view_is :deferred
     return 'project' if source_view_is :project
     return 'stats' if source_view_is :stats
+    return 'tag' if source_view_is :tag
     return 'context'
   end
   
-  def empty_container_msg_div_id
-    todo = @todo || @successor
-    return "" unless todo # empty id if no todo  or successor given
-    return "tickler-empty-nd" if source_view_is_one_of(:project, :tag) && todo.deferred?
-    return "p#{todo.project_id}empty-nd" if source_view_is :project
-    return "c#{todo.context_id}empty-nd"
-  end
-
   def todo_container_is_empty
     default_container_empty = ( @down_count == 0 )
-    deferred_container_empty = ( @todo.deferred? && @deferred_count == 0)
+    deferred_container_empty = ( @todo.deferred? && @remaining_deferred_count == 0)
     return default_container_empty || deferred_container_empty
   end
   
@@ -284,15 +264,18 @@ module TodosHelper
   end
 
   def update_needs_to_hide_context
+    return false if source_view_is(:tag) && (@remaining_in_context == 0) && (@todo_hidden_state_changed && !@todo.hidden?)
     return (@remaining_in_context == 0) && !source_view_is(:context)
   end
 
   def update_needs_to_remove_todo_from_container
     source_view do |page|
-      page.context { return @context_changed || @todo.deferred? || @todo.pending?}
-      page.project { return updated_todo_changed_deferred_state }
+      page.context  { return @context_changed || @todo.deferred? || @todo.pending?}
+      page.project  { return @todo_deferred_state_changed }
       page.deferred { return @context_changed || !(@todo.deferred? || @todo.pending?) }
       page.calendar { return @due_date_changed || !@todo.due }
+      page.stats    { return @todo.completed? }
+      page.tag      { return (@context_changed && !@todo.hidden?) || @tag_was_removed || @todo_hidden_state_changed || @todo_deferred_state_changed }
     end
     return false
   end
@@ -300,35 +283,67 @@ module TodosHelper
   def replace_with_updated_todo
     source_view do |page|
       page.context  { return !update_needs_to_remove_todo_from_container }
-      page.project  { return !updated_todo_changed_deferred_state}
+      page.project  { return !@todo_deferred_state_changed}
       page.deferred { return !@context_changed && (@todo.deferred? || @todo.pending?) }
       page.calendar { return !@due_date_changed && @todo.due }
-    end
-  end
-
-  def append_updated_todo
-    source_view do |page|
-      page.context { return false }
-      page.project { return updated_todo_changed_deferred_state }
-      page.deferred { return @context_changed && (@todo.deferred? || @todo.pending?) }
-      page.calendar { return @due_date_changed && @todo.due }
+      page.stats    { return !@todo.completed? }
+      page.tag      { return !update_needs_to_remove_todo_from_container && !@tag_was_removed }
     end
     return false
   end
 
-  def updated_todo_changed_deferred_state
-    return (@todo.deferred? && !@original_item_was_deferred) || @todo_was_activated_from_deferred_state
+  def append_updated_todo
+    source_view do |page|
+      page.context  { return false }
+      page.project  { return @todo_deferred_state_changed }
+      page.deferred { return @context_changed && (@todo.deferred? || @todo.pending?) }
+      page.calendar { return @due_date_changed && @todo.due }
+      page.stats    { return false }
+      page.tag      { return update_needs_to_remove_todo_from_container && !@tag_was_removed}
+    end
+    return false
+  end
+
+  def item_container_id (todo)
+    puts "todo.hidden?=#{todo.hidden?} en source_view=#{@source_view}"
+    return "hiddenitems"              if source_view_is(:tag) && todo.hidden?
+    return "c#{todo.context_id}items" if source_view_is :deferred
+    return @new_due_id                if source_view_is :calendar
+    return "tickleritems"             if todo.deferred? || todo.pending?
+    return "p#{todo.project_id}items" if source_view_is :project
+    return "c#{todo.context_id}items"
+  end
+
+
+  def empty_container_msg_div_id(todo = @todo || @successor)
+    raise Exception.new, "no @todo or @successor set" if !todo
+
+    source_view do |page|
+      page.project  {
+        return "tickler-empty-nd" if @todo_was_deferred_from_active_state
+        return "p#{todo.project_id}empty-nd"
+      }
+      page.tag {
+        return "tickler-empty-nd" if @todo_was_deferred_from_active_state
+        return "hidden-empty-nd" if @todo.hidden?
+        return "c#{todo.context_id}empty-nd"
+      }
+      page.calendar {
+        return "empty_#{@new_due_id}"
+      }
+    end
+
+    return "c#{todo.context_id}empty-nd"
   end
 
   def render_animation(animation)
     html = ""
     animation.each do |step|
-      puts "step='#{step}'"
       unless step.blank?
         html += step + "({ go: function() {\r\n"
       end
     end
-    html += "}})" * animation.count
+    html += "}}) " * animation.count
     return html
   end
 

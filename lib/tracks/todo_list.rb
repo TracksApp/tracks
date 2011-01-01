@@ -1,5 +1,6 @@
 module Tracks
   module TodoList
+    # TODO: this module should be deprecated. This could mostly (all?) be replaced by named scopes)
         
     def not_done_todos(opts={})
       @not_done_todos ||= self.find_not_done_todos(opts)
