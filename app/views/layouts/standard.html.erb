@@ -15,8 +15,8 @@
       var dateFormat = '<%= date_format_for_date_picker %>';
       var weekStart = '<%= current_user.prefs.week_starts %>';
       function relative_to_root(path) { return '<%= root_url %>'+path; };
-      <% if @prefs.refresh != 0 -%>
-        setup_auto_refresh(<%= @prefs["refresh"].to_i*60000 %>);
+      <% if current_user.prefs.refresh != 0 -%>
+        setup_auto_refresh(<%= current_user.prefs["refresh"].to_i*60000 %>);
       <% end -%>
       <% unless @controller_name == 'feed' or session['noexpiry'] == "on" -%>
         setup_periodic_check("<%=url_for(:controller => "login", :action => "check_expiry")%>", 5*60);
@@ -36,7 +36,7 @@
           <% if @count -%>
             <span id="badge_count" class="badge"><%= @count %></span>
           <% end -%>
-          <%= l(Date.today, :format => @prefs.title_date_format) %>
+          <%= l(Date.today, :format => current_user.prefs.title_date_format) %>
         </h1>
       </div>
       <div id="minilinks">

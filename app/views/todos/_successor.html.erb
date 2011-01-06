@@ -19,7 +19,7 @@ parameters += "&_tag_name=#{@tag_name}" if @source_view == 'tag'
          :before => successor_start_waiting_js(successor)},
         {:style => "background: transparent;"}) %>
       
-      <%= render(:partial => "todos/toggle_successors", :locals => { :item => successor, :suppress_button => true }) unless successor.pending_successors.empty? %>
+      <%= render(:partial => "todos/toggle_successors", :object => successor, :locals => { :suppress_button => true }) unless successor.pending_successors.empty? %>
     </div>
   </div>
 </div>

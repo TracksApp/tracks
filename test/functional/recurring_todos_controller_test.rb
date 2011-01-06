@@ -16,7 +16,6 @@ class RecurringTodosControllerTest < ActionController::TestCase
   def test_destroy_recurring_todo
     login_as(:admin_user)
     xhr :post, :destroy, :id => 1, :_source_view => 'todo'
-    assert_rjs :page, "recurring_todo_1", :remove
     begin 
       rc = RecurringTodo.find(1)
     rescue

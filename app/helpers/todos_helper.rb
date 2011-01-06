@@ -27,20 +27,15 @@ module TodosHelper
     url = {:controller => 'todos', :action => 'defer', :id => todo.id, :days => days,
       :_source_view => (@source_view.underscore.gsub(/\s+/,'_') rescue "")}
     url[:_tag_name] = @tag_name if @source_view == 'tag'
-    
+
     futuredate = (@todo.show_from || @todo.user.date) + days.days
+    options = {:x_defer_alert => false, :class => "icon_defer_item" }
     if @todo.due && futuredate > @todo.due
-      return link_to_function(
-        image_tag("defer_#{days}_off.png", :mouseover => "defer_#{days}.png", :alt => t('todos.defer_x_days', :count => days), :align => "absmiddle")+" "+t('todos.defer_x_days', :count => days),
-        "alert('#{t('todos.defer_date_after_due_date')}')"
-      )
-    else
-      return link_to_remote(
-        image_tag("defer_#{days}_off.png", :mouseover => "defer_#{days}.png", :alt => t('todos.defer_x_days', :count => days), :align => "absmiddle")+" "+t('todos.defer_x_days', :count => days),
-        :url => url,
-        :before => todo_start_waiting_js(todo),
-        :complete => todo_stop_waiting_js(todo))
+      options[:x_defer_alert] = true
+      options[:x_defer_date_after_due_date] = t('todos.defer_date_after_due_date')
     end
+
+    return link_to(image_tag_for_defer(days), url, options)
   end
 
   def remote_promote_to_project_menu_item(todo)
@@ -49,6 +44,10 @@ module TodosHelper
     url[:_tag_name] = @tag_name if @source_view == 'tag'
 
     return link_to(image_tag("to_project_off.png", :align => "absmiddle")+" " + t('todos.convert_to_project'), url)
+  end
+
+  def image_tag_for_defer(days)
+    image_tag("defer_#{days}_off.png", :mouseover => "defer_#{days}.png", :alt => t('todos.defer_x_days', :count => days), :align => "absmiddle")+" "+t('todos.defer_x_days', :count => days)
   end
 
   # waiting stuff can be deleted after migration of defer
@@ -264,7 +263,9 @@ module TodosHelper
   end
 
   def update_needs_to_hide_context
-    return false if source_view_is(:tag) && (@remaining_in_context == 0) && (@todo_hidden_state_changed && !@todo.hidden?)
+    return (@remaining_in_context == 0 && (@todo_hidden_state_changed && @todo.hidden?)) ||
+      (@remaining_in_context == 0 && @todo_was_deferred_from_active_state) if source_view_is(:tag)
+    
     return (@remaining_in_context == 0) && !source_view_is(:context)
   end
 
@@ -312,6 +313,7 @@ module TodosHelper
     return "c#{todo.context_id}items" if source_view_is :deferred
     return @new_due_id                if source_view_is :calendar
     return "tickleritems"             if !source_view_is(:todo) && (todo.deferred? || todo.pending?)
+    return "completed_containeritems" if todo.completed?
     return "p#{todo.project_id}items" if source_view_is :project
     return "c#{todo.context_id}items"
   end
@@ -348,7 +350,9 @@ module TodosHelper
       page.calendar { container_id = "empty_#{@original_item_due_id}" if @old_due_empty }
       page.tag      {
         container_id = "hidden-empty-nd" if !@todo.hidden? && @todo_hidden_state_changed && @remaining_hidden_count == 0
-        container_id = "tickler-empty-nd" if @todo_was_activated_from_deferred_state && @remaining_deferred_or_pending_count == 0
+        container_id = "tickler-empty-nd" if (@todo_was_activated_from_deferred_state && @remaining_deferred_or_pending_count == 0) ||
+          (@original_item_was_deferred && @deferred_tag_count == 0 && @todo.completed?)
+        container_id = "empty-d" if @completed_count && @completed_count == 0 && !@todo.completed?
       }
       page.context  { container_id = "c#{@original_item_context_id}empty-nd" if @remaining_in_context == 0 }
       page.todo     { container_id = "c#{@original_item_context_id}empty-nd" if @remaining_in_context == 0 }

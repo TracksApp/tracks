@@ -170,7 +170,7 @@ module ApplicationHelper
   end
   
   def render_flash
-    render :partial => 'shared/flash', :locals => { :flash => flash }
+    render :partial => 'shared/flash', :object => flash 
   end
 
   def recurrence_time_span(rt)

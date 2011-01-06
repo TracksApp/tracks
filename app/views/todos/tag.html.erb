@@ -1,5 +1,5 @@
 <div id="display_box">
-  <div class="container context" <%= "style=\"display:none\"" unless @not_done_todos.empty? %> >
+  <div id="no_todos_in_tag_view" class="container context" <%= "style=\"display:none\"" unless @not_done_todos.empty? %> >
        <h2><%= t('todos.no_actions_found')%></h2>
     <div class="message"><p><%= t('todos.no_actions_with', :tag_name=>@tag_name) %></p></div>
   </div>
@@ -18,12 +18,12 @@
   <% end -%>
 
   <% unless @hidden_todos.nil? -%>
-    <%= render :partial => "todos/hidden", :locals => { :hidden => @hidden_todos, :collapsible => true, :append_descriptor => t('todos.tagged_with', :tag_name => @tag_name) } %>
+    <%= render :partial => "todos/hidden", :object => @hidden_todos, :locals => { :collapsible => true, :append_descriptor => t('todos.tagged_with', :tag_name => @tag_name) } %>
   <% end -%>
 
   <% unless @done.nil? -%>
-    <%= render :partial => "todos/completed",
-      :locals => { :done => @done, :collapsible => true, :append_descriptor => t('todos.tagged_with', :tag_name => @tag_name) } %>
+    <%= render :partial => "todos/completed", :object => @done,
+      :locals => { :collapsible => true, :append_descriptor => t('todos.tagged_with', :tag_name => @tag_name) } %>
   <% end -%>
 </div><!-- End of display_box -->
 

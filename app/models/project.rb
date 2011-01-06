@@ -1,5 +1,5 @@
 class Project < ActiveRecord::Base
-  has_many :todos, :dependent => :delete_all, :include => [:context,:tags]
+  has_many :todos, :dependent => :delete_all
 
   # TODO: remove these scopes. Can be replaced by the named scopes on the todo relation
   has_many :not_done_todos,
@@ -7,11 +7,6 @@ class Project < ActiveRecord::Base
     :class_name => 'Todo',
     :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC",
     :conditions => ["todos.state = ?", 'active']
-  has_many :not_done_todos_including_hidden,
-    :include => [:context,:tags,:project],
-    :class_name => 'Todo',
-    :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC",
-    :conditions => ["(todos.state = ? OR todos.state = ?)", 'active', 'project_hidden']
   has_many :done_todos,
     :include => [:context,:tags,:project],
     :class_name => 'Todo',

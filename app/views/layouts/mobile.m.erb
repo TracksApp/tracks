@@ -12,9 +12,9 @@
 <title><%= @page_title %></title>
 </head><body>
 <% if !(@new_mobile || @edit_mobile)
-      if !@prefs.nil? -%>
-<h1><span class="count"><%= @down_count %></span> <%=
-        l(Date.today, :format => @prefs.title_date_format) -%></h1>
+      if !current_user.prefs.nil? -%>
+<h1><span class="count"><%= @down_count %></span> <%= 
+        l(Date.today, :format => current_user.prefs.title_date_format) -%></h1>
 <div class="nav">
 <%=     (link_to(t('layouts.mobile_navigation.new_action'), new_todo_path(new_todo_params))+" | ") unless @new_mobile -%>
 <%=     (link_to(t('layouts.mobile_navigation.home'), todos_path(:format => 'm'))+" | ") unless @home -%>
@@ -25,7 +25,7 @@
   end -%><%= render_flash -%>
 </div>
 <%=  yield -%>
-<hr/><% if !@prefs.nil? -%>
+<hr/><% if !current_user.prefs.nil? -%>
 <div class="nav">
 <%= (link_to(t('layouts.mobile_navigation.logout'), logout_path(:format => 'm')) +" | ") -%>
 <%= (link_to(t('layouts.mobile_navigation.new_action'), new_todo_path(new_todo_params), {:accesskey => "0"})+" | ") unless @new_mobile -%>

@@ -17,6 +17,7 @@ class Todo < ActiveRecord::Base
   after_save :save_predecessors
 
   named_scope :active, :conditions => { :state => 'active' }
+  named_scope :active_or_hidden, :conditions => ["todos.state = ? OR todos.state = ?", 'active', 'project_hidden']
   named_scope :not_completed, :conditions =>  ['NOT (todos.state = ? )', 'completed']
   named_scope :completed, :conditions =>  ["NOT todos.completed_at IS NULL"]
   named_scope :are_due, :conditions => ['NOT (todos.due IS NULL)']
@@ -215,7 +216,7 @@ class Todo < ActiveRecord::Base
   end
 
   def update_state_from_project
-    if state == 'project_hidden' and !self.project.hidden?
+    if self.state == 'project_hidden' and !self.project.hidden?
       if self.uncompleted_predecessors.empty?
         self.state = 'active'
       else
@@ -224,6 +225,7 @@ class Todo < ActiveRecord::Base
     elsif self.state == 'active' and self.project.hidden?
       self.state = 'project_hidden'
     end
+    self.save!
   end
  
   def toggle_completion!

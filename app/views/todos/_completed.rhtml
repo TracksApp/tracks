@@ -11,10 +11,10 @@
   </h2>
   <div id="completed_containeritems" class="items toggle_target">
 
-    <div id="empty-d" style="display:<%= @done.empty? ? 'block' : 'none' %>">
+    <div id="empty-d" style="display:<%= completed.empty? ? 'block' : 'none' %>">
       <div class="message"><p><%= t('todos.no_completed_actions') %></p></div>
     </div>
 
-      <%= render :partial => "todos/todo", :collection => done, :locals => { :parent_container_type => "completed", :suppress_context => suppress_context, :suppress_project => suppress_project } %>
+      <%= render :partial => "todos/todo", :collection => completed, :locals => { :parent_container_type => "completed", :suppress_context => suppress_context, :suppress_project => suppress_project } %>
   </div>
 </div><!-- [end:next_actions] -->

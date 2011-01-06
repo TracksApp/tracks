@@ -1,6 +1,6 @@
 <% if @saved -%>
   <% if @go_to_project -%>
-    redirect_to ("<%= project_path(@project) -%>")
+    redirect_to("<%= project_path(@project) -%>")
   <% else -%>
   TracksPages.hide_errors();
   hide_empty_message();

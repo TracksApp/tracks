@@ -6,10 +6,11 @@
   <% unless @done.nil? -%>
     <%= render(
       :partial => "todos/completed",
-      :locals => { :done => @done, :collapsible => true, :append_descriptor => nil }) -%>
+      :object => @done,
+      :locals => { :collapsible => true, :append_descriptor => nil }) -%>
   <% end -%>
 </div><!-- End of display_box -->
 <div id="input_box">
   <%= render :partial => "shared/add_new_item_form" %>
-  <%= render :template => "sidebar/sidebar.html.erb" %>
+  <%= render :file => "sidebar/sidebar.html.erb" %>
 </div><!-- End of input box -->

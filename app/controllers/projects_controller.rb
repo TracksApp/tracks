@@ -48,7 +48,7 @@ class ProjectsController < ApplicationController
     init_data_for_sidebar unless mobile?
     @page_title = t('projects.page_title', :project => @project.name)
     
-    @not_done = @project.not_done_todos_including_hidden
+    @not_done = @project.todos.active_or_hidden
     @deferred = @project.deferred_todos
     @pending = @project.pending_todos
     @done = @project.todos.find_in_state(:all, :completed, :order => "todos.completed_at DESC", :limit => current_user.prefs.show_number_completed, :include => [:context])
@@ -128,10 +128,10 @@ class ProjectsController < ApplicationController
       if boolean_param('wants_render')
         if (@project.hidden?)
           @project_project_hidden_todo_counts = Hash.new
-          @project_project_hidden_todo_counts[@project.id] = @project.reload().not_done_todos_including_hidden.count
+          @project_project_hidden_todo_counts[@project.id] = @project.reload().todos.active_or_hidden.count
         else
           @project_not_done_counts = Hash.new
-          @project_not_done_counts[@project.id] = @project.reload().not_done_todos_including_hidden.count
+          @project_not_done_counts[@project.id] = @project.reload().todos.active_or_hidden.count
         end
         @contexts = current_user.contexts
         update_state_counts

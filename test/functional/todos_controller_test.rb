@@ -61,16 +61,16 @@ class TodosControllerTest < ActionController::TestCase
   def test_deferred_count_for_project_source_view
     login_as(:admin_user)
     xhr :post, :toggle_check, :id => 5, :_source_view => 'project'
-    assert_equal 1, assigns['deferred_count']
+    assert_equal 1, assigns['remaining_deferred_or_pending_count']
     xhr :post, :toggle_check, :id => 15, :_source_view => 'project'
-    assert_equal 0, assigns['deferred_count']
+    assert_equal 0, assigns['remaining_deferred_or_pending_count']
   end
 
   def test_destroy_todo
     login_as(:admin_user)
     xhr :post, :destroy, :id => 1, :_source_view => 'todo'
-    assert_rjs :page, "todo_1", :remove
-    # #assert_rjs :replace_html, "badge-count", '9'
+    todo = Todo.find_by_id(1)
+    assert_nil todo
   end
 
   def test_create_todo
@@ -91,7 +91,9 @@ class TodosControllerTest < ActionController::TestCase
   def test_fail_to_create_todo_via_xml
     login_as(:admin_user)
     # #try to create with no context, which is not valid
-    put :create, :format => "xml", "request" => { "project_name"=>"Build a working time machine", "todo"=>{"notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>"foo bar" }
+    put :create, :format => "xml", "request" => { 
+      "project_name"=>"Build a working time machine",
+      "todo"=>{"notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>"foo bar" }
     assert_response 422
     assert_xml_select "errors" do
       assert_xml_select "error", "Context can't be blank"
@@ -124,9 +126,9 @@ class TodosControllerTest < ActionController::TestCase
   def test_update_todo_to_deferred_is_reflected_in_badge_count
     login_as(:admin_user)
     get :index
-    assert_equal 11, assigns['count']
+    assert_equal 10, assigns['count']
     xhr :post, :update, :id => 1, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Make more money than Billy Gates", "todo"=>{"id"=>"1", "notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006", "show_from"=>"30/11/2030"}, "tag_list"=>"foo bar"
-    assert_equal 10, assigns['down_count']
+    assert_equal 9, assigns['down_count']
   end
 
   def test_update_todo
@@ -311,7 +313,7 @@ class TodosControllerTest < ActionController::TestCase
   def test_mobile_index_assigns_down_count
     login_as(:admin_user)
     get :index, { :format => "m" }
-    assert_equal 11, assigns['down_count']
+    assert_equal 10, assigns['down_count']
   end
 
   def test_mobile_create_action_creates_a_new_todo

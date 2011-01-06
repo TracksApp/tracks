@@ -361,6 +361,14 @@ var TodoItems = {
             return false;
         });
 
+        $(".item-container a.icon_defer_item").live('click', function(ev){
+            if ($(this).attr("x_defer_alert") == "true")
+                alert ($(this).attr("x_defer_date_after_due_date"));
+            else
+                put_with_ajax_and_block_element(this.href, $(this));
+            return false;
+        });
+
     }
 }
 

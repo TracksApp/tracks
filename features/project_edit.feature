@@ -94,6 +94,9 @@ Feature: Edit a project
   Scenario: Moving the todo out of the tickler will move todo to active container
     Given this scenario is pending
 
+  Scenario: Making all todos inactive will show empty message
+    Given this scenario is pending # empty message is in separate container
+
   # Ticket #1043
   @selenium @wip
   Scenario: I can move a todo out of the current project
