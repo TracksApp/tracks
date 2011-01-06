@@ -2,9 +2,9 @@
   TracksPages.show_edit_errors(html_for_error_messages());
 <% else
 
-  # jquery animations are async, so first collect all animation steps,
-  # then execute them sequential. All steps are functions which are passed a function
-  # with the next animation steps
+  # jquery animations are async, so first collect all animation steps that need
+  # to be run sequential,then execute them. All steps are functions which are
+  # passed a function as parameter that will execute the next animation steps
 
   animation = []
   animation << "remove_todo" if update_needs_to_remove_todo_from_container
@@ -25,26 +25,7 @@
 function remove_todo(next_steps) {
   $('#<%= dom_id(@todo) %>').fadeOut(400, function() {
     $('#<%= dom_id(@todo) %>').remove();
-
-  <% # TODO: to helper function: show_empty_message_source_container
-     container_id = ""
-     source_view do |page|
-       page.project  {
-         container_id = "p#{@original_item_project_id}empty-nd" if @remaining_in_context == 0
-         container_id = "tickler-empty-nd" if @todo_was_activated_from_deferred_state && @remaining_deferred_or_pending_count == 0
-         }
-       page.deferred { container_id = "c#{@original_item_context_id}empty-nd" if @remaining_in_context == 0 }
-       page.calendar { container_id = "empty_#{@original_item_due_id}" if @old_due_empty }
-       page.tag      {
-         container_id = "hidden-empty-nd" if !@todo.hidden? && @todo_hidden_state_changed && @remaining_hidden_count == 0
-         container_id = "tickler-empty-nd" if @todo_was_activated_from_deferred_state && @remaining_deferred_or_pending_count == 0
-         }
-       page.context  { container_id = "c#{@original_item_context_id}empty-nd" if @remaining_in_context == 0 }
-     end
-     unless container_id.blank?
-  -%>
-      $("#<%= container_id%>").slideDown(100);
-  <% end -%>
+    <%= show_empty_message_in_source_container -%>
     next_steps.go();
   });
 }

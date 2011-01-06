@@ -161,9 +161,7 @@ class TodosController < ApplicationController
         :description => line)
       @todo.project_id = @project_id
       @todo.context_id = @context_id
-      puts "TODO: #{@todo.description}, #{@todo.project_id}, #{@todo.context_id}"
       @saved = @todo.save
-      puts "NOT SAVED" unless @saved
       unless (@saved == false) || tag_list.blank?
         @todo.tag_with(tag_list)
         @todo.tags.reload
@@ -837,8 +835,8 @@ class TodosController < ApplicationController
     source_view do |from|
       from.deferred {
         # force reload to todos to get correct count and not a cached one
-        @remaining_in_context = current_user.contexts.find(context_id).todos(true).deferred_or_blocked.count
-        @target_context_count = current_user.contexts.find(@todo.context_id).todos(true).deferred_or_blocked.count
+        @remaining_in_context = current_user.contexts.find(context_id).todos.deferred_or_blocked.count
+        @target_context_count = current_user.contexts.find(@todo.context_id).todos.deferred_or_blocked.count
       }
       from.tag {
         tag = Tag.find_by_name(params['_tag_name'])
@@ -860,12 +858,8 @@ class TodosController < ApplicationController
         @target_context_count = count_old_due_empty(@new_due_id)
         }
     end
-    @remaining_in_context = current_user.contexts.find(context_id).not_done_todo_count if !@remaining_in_context
-    @target_context_count = current_user.contexts.find(@todo.context_id).not_done_todo_count if !@target_context_count
-    puts "@remaining_in_context = #{@remaining_in_context}"
-    puts "@target_context_count = #{@target_context_count}"
-    puts "@remaining_hidden_count = #{@remaining_hidden_count}"
-    puts "@remaining_deferred_or_pending_count = #{@remaining_deferred_or_pending_count}"
+    @remaining_in_context = current_user.contexts.find(context_id).todos(true).not_hidden.count if !@remaining_in_context
+    @target_context_count = current_user.contexts.find(@todo.context_id).todos(true).not_hidden.count if !@target_context_count
   end
     
   def determine_completed_count
@@ -1156,7 +1150,6 @@ class TodosController < ApplicationController
     @original_item_due = @todo.due
     @original_item_due_id = get_due_id_for_calendar(@todo.due)
     @original_item_predecessor_list = @todo.predecessors.map{|t| t.specification}.join(', ')
-    puts "wh = #{@original_item_was_hidden}"
   end
 
   def update_project
@@ -1198,7 +1191,6 @@ class TodosController < ApplicationController
       params["todo"]["context_id"] = context.id
     end
     @context_changed = @original_item_context_id != params["todo"]["context_id"] = context.id
-    puts "context changed into '#{context.name}'"
   end
 
   def update_tags
@@ -1259,13 +1251,6 @@ class TodosController < ApplicationController
     @due_date_changed = @original_item_due != @todo.due
     @todo_hidden_state_changed = @original_item_was_hidden != @todo.hidden?
 
-    puts "@context_changed = #{@context_changed}"
-    puts "@project_changed = #{@project_changed}"
-    puts "@todo_was_activated_from_deferred_state #{@todo_was_activated_from_deferred_state}"
-    puts "@todo_was_deferred_from_active_state = #{@todo_was_deferred_from_active_state}"
-    puts "@due_date_changed = #{@due_date_changed}"
-    puts "@todo_hidden_state_changed = #{@todo_hidden_state_changed} @todo.hidden?=#{@todo.hidden?}"
-
     source_view do |page|
       page.calendar do
         @old_due_empty = is_old_due_empty(@original_item_due_id)
@@ -1274,7 +1259,6 @@ class TodosController < ApplicationController
       page.tag do
         @tag_name = params['_tag_name']
         @tag_was_removed = !@todo.has_tag?(@tag_name)
-        puts "@tag_was_removed = #{@tag_was_removed}"
       end
     end
   end

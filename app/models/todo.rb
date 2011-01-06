@@ -10,9 +10,9 @@ class Todo < ActiveRecord::Base
   has_many :predecessors, :through => :successor_dependencies
   has_many :successors,   :through => :predecessor_dependencies
   has_many :uncompleted_predecessors, :through => :successor_dependencies,
-           :source => :predecessor, :conditions => ['NOT (state = ?)', 'completed']
+    :source => :predecessor, :conditions => ['NOT (state = ?)', 'completed']
   has_many :pending_successors, :through => :predecessor_dependencies,
-           :source => :successor, :conditions => ['state = ?', 'pending']
+    :source => :successor, :conditions => ['state = ?', 'pending']
   
   after_save :save_predecessors
 
@@ -28,11 +28,12 @@ class Todo < ActiveRecord::Base
   named_scope :of_user, lambda { |user_id| {:conditions => ["todos.user_id = ? ", user_id] } }
   named_scope :hidden, 
     :joins => :context,
-    :conditions => ["todos.state = ? OR (contexts.hide = ? AND (todos.state = ? OR todos.state = ?))",
-    'project_hidden', true, 'active', 'deferred']
+    :conditions => ["todos.state = ? OR (contexts.hide = ? AND (todos.state = ? OR todos.state = ? OR todos.state = ?))",
+    'project_hidden', true, 'active', 'deferred', 'pending']
   named_scope :not_hidden,
     :joins => [:context, :project],
-    :conditions => ['contexts.hide = ? AND (projects.state = ? OR todos.project_id IS NULL)', false, 'active']
+    :conditions => ['NOT(todos.state = ? OR (contexts.hide = ? AND (todos.state = ? OR todos.state = ? OR todos.state = ?)))',
+    'project_hidden', true, 'active', 'deferred', 'pending']
 
   STARRED_TAG_NAME = "starred"
 
@@ -122,9 +123,9 @@ class Todo < ActiveRecord::Base
     project_id = nil;
     unless project_name == "(none)"
       project = Project.first(:conditions => {
-        :user_id => self.user.id,
-        :name => project_name
-      })
+          :user_id => self.user.id,
+          :name => project_name
+        })
       project_id = project.id unless project.nil?
     end
 
@@ -210,12 +211,10 @@ class Todo < ActiveRecord::Base
   end
 
   def hidden?
-    puts "hidden => state = #{self.state} context(#{self.context.name}).hidden=#{self.context.hidden?}"
     return self.state == 'project_hidden' || ( self.context.hidden? && (self.state == 'active' || self.state == 'deferred'))
   end
 
   def update_state_from_project
-    puts "state was #{self.state}; project.hidden?=#{self.project.hidden?}"
     if state == 'project_hidden' and !self.project.hidden?
       if self.uncompleted_predecessors.empty?
         self.state = 'active'
