@@ -55,14 +55,14 @@ function add_todo_to_existing_context() {
   <% end
      show = should_show_new_item # to hide html if not necessary
      @todos.each do |todo|
-       html = show ? escape_javascript(render(:partial => 'todos/todo', :locals => { :todo => todo, :parent_container_type => parent_container_type, :source_view => @source_view })) : "" -%>
+       html = show ? escape_javascript(render(:partial => todo, :locals => { :parent_container_type => parent_container_type, :source_view => @source_view })) : "" -%>
        $('#<%=item_container_id(todo)%>').append('<%= html %>');
        $('#<%= dom_id(todo)%>').effect('highlight', {}, 3000);
   <% end %>
 }
 
 function html_for_new_context() {
-  return "<%= @saved && @new_context_created ? escape_javascript(render(:partial => 'contexts/context', :locals => { :context => @todo.context, :collapsible => true })) : "" %>";
+  return "<%= @saved && @new_context_created ? escape_javascript(render(:partial => @todo.context, :locals => { :collapsible => true })) : "" %>";
 }
 
 <% else # if @saved -%>

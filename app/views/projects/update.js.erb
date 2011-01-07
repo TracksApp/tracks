@@ -71,7 +71,7 @@ function remove_and_re_add_project() {
 # render it into the function. 
 -%>
 function html_for_project_listing() {
-  return "<%= source_view_is(:project_list) ? escape_javascript(render(:partial => 'project_listing', :locals => { :project_listing => @project })) : "" %>";
+  return "<%= source_view_is(:project_list) ? escape_javascript(render(:partial => 'project_listing', :object => @project )) : "" %>";
 }
 
 function html_for_sidebar() {
@@ -79,7 +79,7 @@ function html_for_sidebar() {
 }
 
 function html_for_project_settings() {
-  return "<%= source_view_is(:project) ? escape_javascript(render(:partial => 'project_settings', :locals => { :project => @project })) : "" %>";
+  return "<%= source_view_is(:project) ? escape_javascript(render(:partial => 'project_settings', :object => @project )) : "" %>";
 }
 
 function html_for_error_messages() {

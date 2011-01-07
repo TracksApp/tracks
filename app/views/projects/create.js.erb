@@ -41,5 +41,5 @@ function html_for_error_messages() {
 }
 
 function html_for_project_listing() {
-  return "<%= @saved ? escape_javascript(render(:partial => 'project_listing', :locals => { :project_listing => @project })) : "" %>";
+  return "<%= @saved ? escape_javascript(render(:partial => 'project_listing', :object => @project)) : "" %>";
 }

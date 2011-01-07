@@ -17,5 +17,5 @@ function set_focus() {
 }
 
 function html_for_edit_form() {
-  return "<%= escape_javascript(render(:partial => 'project_form', :locals => { :project_form => @project })) %>"
+  return "<%= escape_javascript(render(:partial => 'project_form', :object => @project)) %>"
 }

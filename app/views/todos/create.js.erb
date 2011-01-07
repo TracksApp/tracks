@@ -49,7 +49,7 @@ function add_todo_to_existing_context() {
 function update_predecessors() {
   <%  @todo.uncompleted_predecessors.each do |p| -%>
     if ($('<%=item_container_id(p)%>')) {
-      $('#<%=dom_id(p)%>').html('<%= escape_javascript(render(:partial => 'todos/todo', :locals => { :todo => p, :parent_container_type => parent_container_type, :source_view => @source_view }))%>');
+      $('#<%=dom_id(p)%>').html('<%= escape_javascript(render(:partial =>  p, :locals => { :parent_container_type => parent_container_type, :source_view => @source_view }))%>');
     }
   <% end -%>
 }
@@ -59,9 +59,9 @@ function html_for_error_messages() {
 }
 
 function html_for_new_context() {
-  return "<%= @saved && @new_context_created ? escape_javascript(render(:partial => 'contexts/context', :locals => { :context => @todo.context, :collapsible => true })) : "" %>";
+  return "<%= @saved && @new_context_created ? escape_javascript(render(:partial => @todo.context, :locals => { :collapsible => true })) : "" %>";
 }
 
 function html_for_new_todo() {
-  return "<%= @saved ? escape_javascript(render(:partial => 'todos/todo', :locals => { :todo => @todo, :parent_container_type => parent_container_type, :source_view => @source_view })) : "" %>";
+  return "<%= @saved ? escape_javascript(render(:partial => @todo, :locals => { :parent_container_type => parent_container_type, :source_view => @source_view })) : "" %>";
 }
