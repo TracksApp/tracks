@@ -20,6 +20,17 @@ module TracksStepHelper
     return date ? date.in_time_zone(@current_user.prefs.time_zone).strftime("#{@current_user.prefs.date_format}") : ''
   end
 
+  def execute_javascript(js)
+    selenium.get_eval "(function() {with(this) {#{js}}}).call(selenium.browserbot.getCurrentWindow());"
+  end
+
+  def clear_context_name_from_next_action_form
+    execute_javascript("$('#todo_context_name').val('');")
+  end
+
+  def clear_project_name_from_next_action_form
+    execute_javascript("$('#todo_project_name').val('');")
+  end
 
 end
 

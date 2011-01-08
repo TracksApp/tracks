@@ -34,6 +34,11 @@ Given /^I have no projects$/ do
   Project.delete_all
 end
 
+Given /^I have a hidden project called "([^"]*)"$/ do |project_name|
+  @project = @current_user.projects.create!(:name => project_name)
+  @project.hide!
+end
+
 When /^I visit the "([^\"]*)" project$/ do |project_name|
   @project = Project.find_by_name(project_name)
   @project.should_not be_nil

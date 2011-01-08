@@ -205,21 +205,23 @@ module TodosHelper
   end
   
   def should_show_new_item
-    return false if source_view_is(:todo) && @todo.hidden?
-    return false if source_view_is(:context) && @todo.hidden? && !@todo.context.hidden?
-
-    return true if source_view_is(:tag) && (
-      (@todo.pending? && @todo.tags.include?(@tag_name)) ||
-        @todo.tags.include?(@tag_name) || 
-        (@todo.starred? && @tag_name == Todo::STARRED_TAG_NAME))
-    
-    return false if (source_view_is(:context) && !(@todo.context_id==@default_context.id) )
-
-    return true if source_view_is(:deferred) && @todo.deferred?
-    return true if source_view_is(:project) && @todo.project.hidden? && @todo.project_hidden?
-    return true if source_view_is(:project) && @todo.deferred?
-    return true if source_view_is(:project) && @todo.pending?
-    return true if !source_view_is(:deferred) && @todo.active?
+    source_view do |page|
+      page.todo { return !@todo.hidden? }
+      page.deferred { return @todo.deferred? || @todo.pending? }
+      page.context {
+        return @todo.context_id==@default_context.id && (!@todo.hidden? && !@todo.context.hidden?)
+      }
+      page.tag {
+        return ( (@todo.pending? && @todo.has_tag?(@tag_name)) ||
+            (@todo.has_tag?(@tag_name)) ||
+            (@todo.starred? && @tag_name == Todo::STARRED_TAG_NAME)
+        )
+      }
+      page.project {
+        return (@todo.active? && @todo.project && @todo.project.id == @default_project.id) ||
+          (@todo.project.hidden? && @todo.project_hidden?) || @todo.deferred? || @todo.pending?
+      }
+    end
 
     return false
   end

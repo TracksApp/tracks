@@ -51,6 +51,7 @@ class TodosController < ApplicationController
   def create
     @source_view = params['_source_view'] || 'todo'
     @default_context = current_user.contexts.find_by_name(params['default_context_name'])
+    @default_project = current_user.projects.find_by_name(params['default_project_name'])
     
     @tag_name = params['_tag_name']
 

@@ -24,7 +24,7 @@ Feature: Add new next action from every page
       | go to  | tickler page                    |
       | visit  | project page for "test project" |
       | visit  | context page for "test context" |
-      | visit  | tag page for "starred"          |
+      | go to  | tag page for "starred"          |
 
   @selenium
   Scenario Outline: I can hide the input form for multiple next actions
@@ -42,7 +42,7 @@ Feature: Add new next action from every page
       | go to  | tickler page                    |
       | visit  | project page for "test project" |
       | visit  | context page for "test context" |
-      | visit  | tag page for "starred"          |
+      | go to  | tag page for "starred"          |
 
   @selenium
   Scenario Outline: I can hide the input form and then choose both input forms
@@ -62,7 +62,7 @@ Feature: Add new next action from every page
       | go to  | tickler page                    |
       | visit  | project page for "test project" |
       | visit  | context page for "test context" |
-      | visit  | tag page for "starred"          |
+      | go to  | tag page for "starred"          |
 
   @selenium
   Scenario Outline: I can switch forms for single next action to multiple next actions
@@ -81,7 +81,7 @@ Feature: Add new next action from every page
       | go to  | tickler page                    |
       | visit  | project page for "test project" |
       | visit  | context page for "test context" |
-      | visit  | tag page for "starred"          |
+      | go to  | tag page for "starred"          |
 
   @selenium
   Scenario Outline: I can add a todo from several pages
@@ -95,7 +95,7 @@ Feature: Add new next action from every page
       | go to  | tickler page                    | not see |
       | visit  | project page for "test project" | see     |
       | visit  | context page for "test context" | see     |
-      | visit  | tag page for "starred"          | not see |
+      | go to  | tag page for "starred"          | not see |
 
   @selenium
   Scenario Outline: I can add multiple todos from several pages
@@ -117,7 +117,7 @@ Feature: Add new next action from every page
       | go to  | tickler page                    | not see | 0     | 3     |
       | visit  | project page for "test project" | see     | 3     | 3     |
       | visit  | context page for "test context" | see     | 2     | 3     |
-      | visit  | tag page for "starred"          | not see | 0     | 3     |
+      | go to  | tag page for "starred"          | not see | 0     | 3     |
 
   Scenario: Adding a todo to another project does not show the todo
     Given this is a pending scenario
@@ -125,7 +125,7 @@ Feature: Add new next action from every page
   Scenario: Adding a todo to a hidden project does not show the todo
     Given this is a pending scenario
 
-  @selenium @wip
+  @selenium
   Scenario Outline: Adding a todo with a new context shows the new context
     When I <action> the <page>
     And I submit a new <todo> with description "do at new context" and the tags "starred" in the context "New"
@@ -139,13 +139,49 @@ Feature: Add new next action from every page
       | go to  | tickler page                    | deferred action | 1     | be visible     |
       | visit  | project page for "test project" | action          | 2     | not be visible |
       | visit  | context page for "test context" | action          | 1     | not be visible |
-      | visit  | tag page for "starred"          | action          | 1     | be visible     |
+      | go to  | tag page for "starred"          | action          | 1     | be visible     |
 
-  Scenario: Adding a todo to a hidden context does not show the todo
-    Given this is a pending scenario
+  @selenium @wip
+  Scenario Outline: Adding a todo to a hidden project does not show the todo
+    Given I have a hidden project called "hidden project"
+    And I have a project called "visible project"
+    And I have a context called "visible context"
+    And I have a context called "other context"
+    When I go to the <page>
+    And I submit a new action with description "hidden todo" to project "hidden project" with tags "test" in the context "visible context"
+    Then I should <see_hidden> "hidden todo"
+    When I submit a new action with description "visible todo" to project "visible project" with tags "test" in the context "visible context"
+    Then I should <see_visible> "visible todo"
 
-  Scenario: Adding a todo to an empty container hides the empty message
-    Given this is a pending scenario
+    Scenarios:
+      | page                               | see_hidden | see_visible |
+      | home page                          | not see    | see         |
+      | tickler page                       | not see    | not see     |
+      | "visible project" project          | not see    | see         |
+      | "hidden project" project           | see        | not see     |
+      | context page for "visible context" | not see    | see         |
+      | context page for "other context"   | not see    | not see     |
+      | tag page for "starred"             | not see    | not see     |
+      | tag page for "test"                | see        | see         |
+
+  @selenium
+  Scenario: Adding a todo to a hidden context does not show the todo 
+    Given I have a context called "visible context"
+    And I have a hidden context called "hidden context"
+    When I go to the home page
+    And I submit a new action with description "a new todo" in the context "visible context"
+    Then I should see "a new todo"
+    When I submit a new action with description "another new todo" in the context "hidden context"
+    Then I should not see "another new todo"
+
+  @selenium
+  Scenario: Adding a todo to an empty container hides the empty message # TODO: make outline
+    And I have a context called "visible context"
+    When I go to the tag page for "test"
+    Then I should see "Currently there are no incomplete actions with the tag 'test'"
+    When I submit a new action with description "a new todo" and the tags "test" in the context "visible context"
+    Then I should see "a new todo"
+    And I should not see "Currently there are no incomplete actions with the tag 'bla'"
 
   Scenario: Adding a dependency to a todo updated the successor
     Given this is a pending scenario
