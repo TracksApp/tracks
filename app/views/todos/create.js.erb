@@ -1,10 +1,9 @@
 <% if @saved -%>
   TracksPages.page_notify('notice', "<%=@status_message%>", 5);
-  hide_empty_message();
   TracksPages.hide_errors();
   TracksPages.set_page_badge(<%= @down_count %>);
   <% if should_show_new_item -%>
-    <% if @new_context_created -%>
+    <% if should_add_new_context -%>
       insert_new_context_with_new_todo();
     <% else -%>
       add_todo_to_existing_context();
@@ -16,15 +15,6 @@
   TracksPages.show_errors(html_for_error_messages());
 <% end -%>
 
-function hide_empty_message() {
-  <% if @todo %>
-    $('#<%=empty_container_msg_div_id%>').hide();
-    <% if (source_view_is :project and @todo.pending?) or (source_view_is :deferred) -%>
-      $('#tickler-empty-nd').hide();
-    <% end -%>
-  <% end -%>
-}
-
 function clear_form() {
   $('#todo-form-new-action').clearForm();
   TracksForm.set_context_name('<%=@initial_context_name%>');
@@ -34,14 +24,15 @@ function clear_form() {
 }
 
 function insert_new_context_with_new_todo() {
+  $('#no_todos_in_tag_view').slideUp(100);
   $('#display_box').prepend(html_for_new_context());
 }
 
 function add_todo_to_existing_context() {
   <% if source_view_is_one_of(:todo, :deferred, :tag) -%>
     TodoItemsContainer.ensureVisibleWithEffectAppear("c<%=@todo.context_id%>");
-    $('#<%=empty_container_msg_div_id%>').hide();
   <% end -%>
+  $('#<%=empty_container_msg_div_id%>').hide();
   $('#<%=item_container_id(@todo)%>').append(html_for_new_todo());
   $('#<%= dom_id(@todo)%>').effect('highlight', {}, 2000 );
 }

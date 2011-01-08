@@ -58,7 +58,7 @@ Feature: Edit a next action from every page
     Given this is a pending scenario
 
   Scenario: Editing the context of a todo to a new context will show new context
-    Given this scenario is pending # for home and tickler and tag
+    Given this is a pending scenario # for home and tickler and tag
 
   Scenario: Making an error when editing a todo will show error message
-    Given this scenario is pending
+    Given this is a pending scenario

@@ -11,10 +11,17 @@ Feature: Manage deferred todos
     And I have logged in as "testuser" with password "secret"
 
   Scenario: Editing the description of a todo updated the todo
-    Given this scenario is pending
+    Given this is a pending scenario
 
   Scenario: Editing the context of a todo moves it to the new context
-    Given this scenario is pending
+    Given this is a pending scenario
 
   Scenario: Removing the show from date from a todo removes it from the tickler
-    Given this scenario is pending
+    Given this is a pending scenario
+
+  Scenario: Opening the tickler page shows me all deferred todos
+    Given I have a deferred todo "not yet now"
+    And I have a todo "now is a good time"
+    When I go to the tickler page
+    Then I should see "not yet now"
+    And I should not see "now is a good time"

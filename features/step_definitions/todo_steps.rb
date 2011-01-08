@@ -2,6 +2,11 @@ Given /^I have no todos$/ do
   Todo.delete_all
 end
 
+Given /^I have a todo "(.*)"$/ do |description|
+  context = @current_user.contexts.create!(:name => "context A")
+  @current_user.todos.create!(:context_id => context.id, :description => description)
+end
+
 Given /^I have ([0-9]+) todos$/ do |count|
   context = @current_user.contexts.create!(:name => "context A")
   count.to_i.downto 1 do |i|
@@ -14,6 +19,11 @@ Given /^I have ([0-9]+) deferred todos$/ do |count|
   count.to_i.downto 1 do |i|
     @current_user.todos.create!(:context_id => context.id, :description => "todo #{i}", :show_from => @current_user.time + 1.week)
   end
+end
+
+Given /^I have a deferred todo "(.*)"$/ do |description|
+  context = @current_user.contexts.create!(:name => "context B")
+  @current_user.todos.create!(:context_id => context.id, :description => description, :show_from => @current_user.time + 1.week)
 end
 
 Given /^I have ([0-9]+) completed todos$/ do |count|
@@ -66,12 +76,6 @@ When /^I expand the dependencies of "([^\"]*)"$/ do |todo_name|
   selenium.click(expand_img_locator)
 end
 
-Then /^I should see ([0-9]+) todos$/ do |count|
-  count.to_i.downto 1 do |i|
-    match_xpath "div["
-  end
-end
-
 When /I change the (.*) field of "([^\"]*)" to "([^\"]*)"$/ do |field, todo_name, new_value|
   todo = @current_user.todos.find_by_description(todo_name)
   todo.should_not be_nil
@@ -85,6 +89,24 @@ end
 
 When /^I submit a new action with description "([^"]*)"$/ do |description|
   fill_in "todo[description]", :with => description
+  submit_next_action_form
+end
+
+When /^I submit a new action with description "([^"]*)" and the tags "([^"]*)" in the context "([^"]*)"$/ do |description, tags, context_name|
+  fill_in "todo[description]", :with => description
+  fill_in "tag_list", :with => tags
+
+  js="$('#todo_context_name').val('');"
+  selenium.get_eval "(function() {with(this) {#{js}}}).call(selenium.browserbot.getCurrentWindow());"
+  fill_in "todo_context_name", :with => context_name
+  submit_next_action_form
+end
+
+When /^I submit a new deferred action with description "([^"]*)" and the tags "([^"]*)" in the context "([^"]*)"$/ do |description, tags, context_name|
+  fill_in "todo[description]", :with => description
+  fill_in "context_name", :with => context_name
+  fill_in "tag_list", :with => tags
+  fill_in "todo[show_from]", :with => format_date(@current_user.time + 1.week)
   submit_next_action_form
 end
 
@@ -118,6 +140,12 @@ When /^I edit the dependency of "([^"]*)" to '([^'']*)'$/ do |todo_name, deps|
   fill_in "predecessor_list_todo_#{todo.id}", :with => deps
   # submit form
   selenium.click("//div[@id='edit_todo_#{todo.id}']//button[@id='submit_todo_#{todo.id}']", :wait_for => :ajax, :javascript_framework => :jquery)
+end
+
+Then /^I should see ([0-9]+) todos$/ do |count|
+  count.to_i.downto 1 do |i|
+    match_xpath "div["
+  end
 end
 
 Then /^there should not be an error$/ do
@@ -158,4 +186,24 @@ end
 
 Then /^the number of actions should be (\d+)$/ do |count|
   @current_user.todos.count.should == count.to_i
+end
+
+Then /^the container for the context "([^"]*)" should be visible$/ do |context_name|
+  context = @current_user.contexts.find_by_name(context_name)
+  context.should_not be_nil
+  xpath = "xpath=//div[@id=\"c#{context.id}\"]"
+  selenium.wait_for_element(xpath, :timeout_in_seconds => 5)
+  selenium.is_visible(xpath).should be_true
+end
+
+Then /^the container for the context "([^"]*)" should not be visible$/ do |context_name|
+  context = @current_user.contexts.find_by_name(context_name)
+  context.should_not be_nil
+  xpath = "xpath=//div[@id=\"c#{context.id}\"]"
+  selenium.wait_for :wait_for => :ajax, :javascript_framework => :jquery
+  selenium.is_element_present(xpath).should be_false
+end
+
+Then /^a confirmation for adding a new context "([^"]*)" should be asked$/ do |context_name|
+  selenium.get_confirmation.should == "New context \"#{context_name}\" will be also created. Are you sure?"
 end

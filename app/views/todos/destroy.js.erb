@@ -21,6 +21,10 @@ function show_empty_messages() {
   <% if empty_container_msg_div_id && todo_container_is_empty -%>
     $('#<%=empty_container_msg_div_id%>').slideDown(1000);
   <% end -%>
+
+  <% if source_view_is(:deferred) && @down_count==0 -%>
+    $('#tickler-empty-nd').slideDown(100);
+  <% end -%>
 }
 
 function remove_todo_from_page() {

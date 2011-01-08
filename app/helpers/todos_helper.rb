@@ -208,7 +208,11 @@ module TodosHelper
     return false if source_view_is(:todo) && @todo.hidden?
     return false if source_view_is(:context) && @todo.hidden? && !@todo.context.hidden?
 
-    return false if (source_view_is(:tag) && !@todo.tags.include?(@tag_name))
+    return true if source_view_is(:tag) && (
+      (@todo.pending? && @todo.tags.include?(@tag_name)) ||
+        @todo.tags.include?(@tag_name) || 
+        (@todo.starred? && @tag_name == Todo::STARRED_TAG_NAME))
+    
     return false if (source_view_is(:context) && !(@todo.context_id==@default_context.id) )
 
     return true if source_view_is(:deferred) && @todo.deferred?
@@ -217,8 +221,11 @@ module TodosHelper
     return true if source_view_is(:project) && @todo.pending?
     return true if !source_view_is(:deferred) && @todo.active?
 
-    return true if source_view_is(:tag) && @todo.pending?
     return false
+  end
+
+  def should_add_new_context
+    return @new_context_created && !source_view_is(:project)
   end
   
   def parent_container_type

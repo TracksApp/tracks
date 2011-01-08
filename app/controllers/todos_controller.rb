@@ -116,18 +116,20 @@ class TodosController < ApplicationController
           end
         end
         format.js do
-          determine_down_count if @saved
-          @contexts = current_user.contexts.find(:all) if @new_context_created
-          @projects = current_user.projects.find(:all) if @new_project_created
-          @initial_context_name = params['default_context_name']
-          @initial_project_name = params['default_project_name']
-          @default_tags = @todo.project.default_tags unless @todo.project.nil?
-          @status_message = 'Added new next action'
-          @status_message += ' to tickler' if @todo.deferred?
-          @status_message += ' in pending state' if @todo.pending?
-          @status_message += ' in hidden state' if @todo.hidden?
-          @status_message = 'Added new project / ' + status_message if @new_project_created
-          @status_message = 'Added new context / ' + status_message if @new_context_created
+          if @saved
+            determine_down_count
+            @contexts = current_user.contexts.find(:all) if @new_context_created
+            @projects = current_user.projects.find(:all) if @new_project_created
+            @initial_context_name = params['default_context_name']
+            @initial_project_name = params['default_project_name']
+            @default_tags = @todo.project.default_tags unless @todo.project.nil?
+            @status_message = 'Added new next action'
+            @status_message += ' to tickler' if @todo.deferred?
+            @status_message += ' in pending state' if @todo.pending?
+            @status_message += ' in hidden state' if @todo.hidden?
+            @status_message = 'Added new project / ' + @status_message if @new_project_created
+            @status_message = 'Added new context / ' + @status_message if @new_context_created
+          end
           render :action => 'create'
         end
         format.xml do
@@ -830,7 +832,7 @@ class TodosController < ApplicationController
   def determine_down_count
     source_view do |from|
       from.todo do
-        @down_count = current_user.todos.active.not_hidden.count(:all)
+        @down_count = current_user.todos.active.not_hidden.count
       end
       from.context do
         @down_count = current_user.contexts.find(@todo.context_id).todos.not_completed.count(:all)

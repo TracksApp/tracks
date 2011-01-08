@@ -37,4 +37,4 @@ Feature: dependencies
     Then there should not be an error
 
   Scenario: Deleting a predecessor will activate successors
-    Given this scenario is pending
+    Given this is a pending scenario

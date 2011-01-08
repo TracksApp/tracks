@@ -125,8 +125,21 @@ Feature: Add new next action from every page
   Scenario: Adding a todo to a hidden project does not show the todo
     Given this is a pending scenario
 
-  Scenario: Adding a todo with a new context shows the new context
-    Given this is a pending scenario
+  @selenium @wip
+  Scenario Outline: Adding a todo with a new context shows the new context
+    When I <action> the <page>
+    And I submit a new <todo> with description "do at new context" and the tags "starred" in the context "New"
+    Then a confirmation for adding a new context "New" should be asked
+    And the container for the context "New" should <visible>
+    And the badge should show <badge>
+
+    Scenarios:
+      | action | page                            | todo            | badge | visible        |
+      | go to  | home page                       | action          | 2     | be visible     |
+      | go to  | tickler page                    | deferred action | 1     | be visible     |
+      | visit  | project page for "test project" | action          | 2     | not be visible |
+      | visit  | context page for "test context" | action          | 1     | not be visible |
+      | visit  | tag page for "starred"          | action          | 1     | be visible     |
 
   Scenario: Adding a todo to a hidden context does not show the todo
     Given this is a pending scenario

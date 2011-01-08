@@ -83,19 +83,19 @@ Feature: Edit a project
     And I should see "12345678901234567890123456789012345678901234567890123456789012345678901234567890123456"
 
   Scenario: Cancelling editing a project will restore project settings
-    Given this scenario is pending
+    Given this is a pending scenario
 
   Scenario: Editing the description of a todo will update todo
-    Given this scenario is pending
+    Given this is a pending scenario
 
   Scenario: Moving the todo to the tickler will move todo to tickler container
-    Given this scenario is pending
+    Given this is a pending scenario
 
   Scenario: Moving the todo out of the tickler will move todo to active container
-    Given this scenario is pending
+    Given this is a pending scenario
 
   Scenario: Making all todos inactive will show empty message
-    Given this scenario is pending # empty message is in separate container
+    Given this is a pending scenario  # empty message is in separate container
 
   # Ticket #1043
   @selenium @wip

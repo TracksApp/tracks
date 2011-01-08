@@ -32,7 +32,7 @@ class Todo < ActiveRecord::Base
     :conditions => ["todos.state = ? OR (contexts.hide = ? AND (todos.state = ? OR todos.state = ? OR todos.state = ?))",
     'project_hidden', true, 'active', 'deferred', 'pending']
   named_scope :not_hidden,
-    :joins => [:context, :project],
+    :joins => [:context],
     :conditions => ['NOT(todos.state = ? OR (contexts.hide = ? AND (todos.state = ? OR todos.state = ? OR todos.state = ?)))',
     'project_hidden', true, 'active', 'deferred', 'pending']
 

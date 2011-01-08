@@ -20,16 +20,16 @@ Feature: Edit a context
     And he should see that a context named "OutAndAbout" is present
 
   Scenario: Editing the context of a todo will remove the todo
-    Given this scenario is pending
+    Given this is a pending scenario
 
   Scenario: Editing the description of a a todo will update that todo
-    Given this scenario is pending
+    Given this is a pending scenario
 
   Scenario: Editing the context of the last todo will remove the todo and show empty message
-    Given this scenario is pending
+    Given this is a pending scenario
 
   Scenario: Adding a todo to a hidden project will not show the todo
-    Given this scenario is pending
+    Given this is a pending scenario
 
   Scenario: Adding a todo to a hidden context will show that todo
-    Given this scenario is pending
+    Given this is a pending scenario
