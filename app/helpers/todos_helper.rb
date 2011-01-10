@@ -50,17 +50,24 @@ module TodosHelper
     image_tag("defer_#{days}_off.png", :mouseover => "defer_#{days}.png", :alt => t('todos.defer_x_days', :count => days), :align => "absmiddle")+" "+t('todos.defer_x_days', :count => days)
   end
 
-  # waiting stuff can be deleted after migration of defer
-  def todo_start_waiting_js(todo)
-    return "$('#ul#{dom_id(todo)}').css('visibility', 'hidden'); $('##{dom_id(todo)}').block({message: null})"
-  end
-
+  # waiting stuff can be deleted after migration of defer and dependencies
   def successor_start_waiting_js(successor)
     return "$('##{dom_id(successor, "successor")}').block({message: null})"
   end
 
-  def todo_stop_waiting_js(todo)
-    return "$('##{dom_id(todo)}').unblock();enable_rich_interaction();"
+  def collapsed_notes_image(todo)
+    link = link_to(image_tag( 'blank.png', :width=>'16', :height=>'16', :border=>'0' ), "#", {:class => 'show_notes', :title => 'Show notes'})
+    notes = content_tag(:div, {:class => "todo_notes", :id => dom_id(todo, 'notes'), :style => "display:none"}) { format_note(todo.notes) }
+    return link+notes
+  end
+
+  def collapsed_successors_image(todo)
+    link = link_to(image_tag( 'blank.png', :width=>'16', :height=>'16', :border=>'0' ), "#", {:class => 'show_successors', :title => 'Show successors'})
+    successors = content_tag(:div, {:class => "todo_successors", :id => dom_id(todo, 'successors'), :style => "display:none"}) do
+      render :partial => "todos/successor", :collection => todo.pending_successors,
+        :locals => { :parent_container_type => parent_container_type, :suppress_dependencies => true, :predecessor => todo }
+    end
+    return link+successors
   end
 
   def image_tag_for_recurring_todo(todo)

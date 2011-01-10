@@ -10,6 +10,15 @@ Feature: Manage deferred todos
     And there exists a project "manage me" for user "testuser"
     And I have logged in as "testuser" with password "secret"
 
+  @selenium @wip
+  Scenario: I can add a deferred todo and it will show in the tickler
+    # also adding the first deferred todo will hide the empty message
+    When I go to the tickler
+    Then I should see the empty tickler message
+    When I submit a deferred new action with description "a new next action"
+    Then I should see "a new next action"
+    And I should not see the empty tickler message
+
   Scenario: Editing the description of a todo updated the todo
     Given this is a pending scenario
 
