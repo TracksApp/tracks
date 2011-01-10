@@ -15,10 +15,10 @@ Feature: Edit a next action from every page
   Scenario: I can delete a todo
     Given this is a pending scenario
 
-  Scenario: Deleting the last todo in context will hide context
+  Scenario: Removing the last todo in context will hide context # delete, edit
     Given this is a pending scenario
 
-  Scenario: Deleting the last todo in container will show empty message
+  Scenario: Deleting the last todo in container will show empty message # only project, context, tag, not todo
     Given this is a pending scenario
 
   Scenario: I can mark a todo complete

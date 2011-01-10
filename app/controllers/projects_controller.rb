@@ -9,7 +9,6 @@ class ProjectsController < ApplicationController
 
   def index
     @source_view = params['_source_view'] || 'project_list'
-    @projects = current_user.projects.all
     @new_project = current_user.projects.build
     if params[:projects_and_actions]
       projects_and_actions
@@ -18,6 +17,8 @@ class ProjectsController < ApplicationController
       init_not_done_counts(['project'])
       if params[:only_active_with_no_next_actions]
         @projects = current_user.projects.active.select { |p| count_undone_todos(p) == 0 }
+      else
+        @projects = current_user.projects.all
       end
       init_project_hidden_todo_counts(['project'])
       respond_to do |format|
@@ -27,9 +28,7 @@ class ProjectsController < ApplicationController
         format.rss   &render_rss_feed
         format.atom  &render_atom_feed
         format.text  &render_text_feed
-        format.autocomplete {
-          uncompleted_projects = current_user.projects.uncompleted(true)
-          render :text => for_autocomplete(uncompleted_projects, params[:term]) }
+        format.autocomplete { render :text => for_autocomplete(current_user.projects.uncompleted, params[:term]) }
       end
     end
   end
@@ -139,7 +138,7 @@ class ProjectsController < ApplicationController
         render :template => 'projects/update.js.erb'
         return
 
-      # TODO: are these params ever set? or is this dead code?
+        # TODO: are these params ever set? or is this dead code?
 
       elsif boolean_param('update_status')
         render :template => 'projects/update_status.js.rjs'
