@@ -60,7 +60,8 @@ var TracksForm = {
                 $('#todo_new_action').show();
                 $('#todo_multi_add').hide();
                 $('a#toggle_multi').text("Add multiple next actions");
-            } else {
+            }
+            else {
                 $('#todo_new_action').hide();
                 $('#todo_multi_add').show();
                 $('a#toggle_multi').text("Add single next action");
@@ -890,16 +891,60 @@ function enable_rich_interaction(){
     $('input[name=project_name]').autocomplete({
         source: relative_to_root('projects.autocomplete')
     });
+    $('input[name=project[default_context_name]]').autocomplete({
+        source: relative_to_root('contexts.autocomplete')
+    });
 
-    /* $('input[name=project[default_context_name]]').autocomplete(
-    relative_to_root('contexts.autocomplete'), {matchContains: true});
-  $('input[name=tag_list]:not(.ac_input)').autocomplete(
-    relative_to_root('tags.autocomplete'), {multiple: true,multipleSeparator:',',matchContains:true});
-  $('input[name=predecessor_list]:not(.ac_input)').autocomplete(
-      relative_to_root('auto_complete_for_predecessor'),
-      {multiple: true,multipleSeparator:','});
+    $('input[name=tag_list]:not(.ac_input)')
+    .bind( "keydown", function( event ) { // don't navigate away from the field on tab when selecting an item
+        if ( event.keyCode === $.ui.keyCode.TAB &&
+            $( this ).data( "autocomplete" ).menu.active ) {
+            event.preventDefault();
+        }
+    })
+    .autocomplete({
+        minLength: 0,
+        source: function( request, response ) {
+            last_term = extractLast( request.term );
+            if (last_term != "" && last_term != " ")
+                $.getJSON( relative_to_root('tags.autocomplete'), {
+                    term: last_term
+                }, response );
+        },
+        focus: function() {
+            // prevent value inserted on focus
+            return false;
+        },
+        select: function( event, ui ) {
+            var terms = split( this.value );
+            // remove the current input
+            terms.pop();
+            // add the selected item
+            terms.push( ui.item.value );
+            // add placeholder to get the comma-and-space at the end
+            //terms.push( "" );
+            this.value = terms.join( ", " );
+            return false;
+        }
+    });
 
-  /* have to bind on keypress because of limitations of live() */
+
+    function split( val ) {
+        return val.split( /,\s*/ );
+    }
+    function extractLast( term ) {
+        return split( term ).pop();
+    }
+
+
+    /* multiple: true,
+        multipleSeparator:',' */
+
+    $('input[name=predecessor_list]:not(.ac_input)').autocomplete({
+        source: relative_to_root('auto_complete_for_predecessor')
+    });
+
+    /* have to bind on keypress because of limitations of live() */
     $('input[name=project_name]').live('keypress', function(){
         $(this).bind('blur', project_defaults);
     });

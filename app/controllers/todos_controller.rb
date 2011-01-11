@@ -7,7 +7,7 @@ class TodosController < ApplicationController
   append_before_filter :find_and_activate_ready, :only => [:index, :list_deferred]
 
   # TODO: replace :except with :only
-  append_before_filter :init, :except => [ :tag, :destroy, :completed,
+  append_before_filter :init, :except => [ :tag, :tags, :destroy, :completed,
     :completed_archive, :check_deferred, :toggle_check, :toggle_star,
     :edit, :update, :defer, :create, :calendar, :auto_complete_for_predecessor, :remove_predecessor, :add_predecessor]
 
@@ -546,7 +546,7 @@ class TodosController < ApplicationController
   end
 
   def tags
-    @tags = Tag.all
+    @tags = Tag.find(:all, :conditions =>['name like ?', '%'+params[:term]+'%'])
     respond_to do |format|
       format.autocomplete { render :text => for_autocomplete(@tags, params[:term]) }
     end

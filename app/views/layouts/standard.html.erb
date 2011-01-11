@@ -2,9 +2,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <%= stylesheet_link_tag 'standard','superfish','niftyCorners', 'jquery-ui-1.8.6.custom', :cache => true %>
+    <%= stylesheet_link_tag 'standard','superfish','niftyCorners', 'jquery-ui-1.8.7.custom', :cache => true %>
     <%= stylesheet_link_tag "print", :media => "print" %>
-    <%= javascript_include_tag 'jquery-1.4.4.min', 'jquery-ui-1.8.6.custom.min', 'jquery.truncator',
+    <%= javascript_include_tag 'jquery-1.4.4.min', 'jquery-ui-1.8.7.custom.min', 'jquery.truncator',
       'jquery.jeditable.mini', 'jquery.cookie', 'jquery.blockUI', 'jquery.form', :cache => 'jquery-all' %>
     <%= javascript_include_tag 'hoverIntent','superfish','application',
       'accesskey-hints','niftycube','swfobject', :cache => 'tracks' %>
@@ -12,6 +12,8 @@
     <%= javascript_tag "var SOURCE_VIEW = '#{@source_view}';" %>
     <%= javascript_tag "var TAG_NAME = '#{@tag_name}';" if @tag_name %>
     <script type="text/javascript">
+      var defaultContexts = <%= default_contexts_for_autocomplete rescue '{}' %>;
+      var defaultTags = <%= default_tags_for_autocomplete rescue '{}' %>;
       var dateFormat = '<%= date_format_for_date_picker %>';
       var weekStart = '<%= current_user.prefs.week_starts %>';
       function relative_to_root(path) { return '<%= root_url %>'+path; };
