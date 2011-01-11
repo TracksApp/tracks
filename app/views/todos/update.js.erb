@@ -48,7 +48,7 @@ function add_to_existing_container(next_steps) {
       });
     <% else -%>
       next_steps.go();
-      <% if (@target_context_count==1) || (@todo.deferred? && @remaining_deferred_or_pending_count == 1) -%>
+      <% if (@target_context_count==1) || (@todo.deferred? && @remaining_deferred_or_pending_count == 1) || (@todo.hidden? && @remaining_hidden_count == 1) -%>
         $("#<%=  empty_container_msg_div_id %>").slideUp(100);
       <% end -%>
     <% end -%>

@@ -233,6 +233,10 @@ module TodosHelper
     return false
   end
 
+  def should_make_context_visible
+    return @todo.active? && (!@todo.hidden? && !source_view_is(:project) )
+  end
+
   def should_add_new_context
     return @new_context_created && !source_view_is(:project)
   end
@@ -280,8 +284,11 @@ module TodosHelper
 
   def update_needs_to_hide_context
     return (@remaining_in_context == 0 && (@todo_hidden_state_changed && @todo.hidden?)) ||
-      (@remaining_in_context == 0 && @todo_was_deferred_from_active_state) if source_view_is(:tag)
-    
+      (@remaining_in_context == 0 && @todo_was_deferred_from_active_state) ||
+      (@remaining_in_context == 0 && @todo.completed? && !(@original_item_was_deferred || @original_item_was_hidden)) if source_view_is(:tag)
+
+    return false if source_view_is(:project)
+
     return (@remaining_in_context == 0) && !source_view_is(:context)
   end
 
@@ -360,14 +367,17 @@ module TodosHelper
     source_view do |page|
       page.project  {
         container_id = "p#{@original_item_project_id}empty-nd" if @remaining_in_context == 0
-        container_id = "tickler-empty-nd" if @todo_was_activated_from_deferred_state && @remaining_deferred_or_pending_count == 0
+        container_id = "tickler-empty-nd" if (@todo_was_activated_from_deferred_state && @remaining_deferred_or_pending_count == 0) ||
+          (@original_item_was_deferred && @remaining_deferred_or_pending_count == 0 && @todo.completed?)
+        container_id = "empty-d" if @completed_count && @completed_count == 0 && !@todo.completed?
       }
       page.deferred { container_id = "c#{@original_item_context_id}empty-nd" if @remaining_in_context == 0 }
       page.calendar { container_id = "empty_#{@original_item_due_id}" if @old_due_empty }
       page.tag      {
-        container_id = "hidden-empty-nd" if !@todo.hidden? && @todo_hidden_state_changed && @remaining_hidden_count == 0
+        container_id = "hidden-empty-nd" if (@remaining_hidden_count == 0 && !@todo.hidden? && @todo_hidden_state_changed) ||
+          (@remaining_hidden_count == 0 && @todo.completed? && @original_item_was_hidden)
         container_id = "tickler-empty-nd" if (@todo_was_activated_from_deferred_state && @remaining_deferred_or_pending_count == 0) ||
-          (@original_item_was_deferred && @deferred_tag_count == 0 && @todo.completed?)
+          (@original_item_was_deferred && @remaining_deferred_or_pending_count == 0 && @todo.completed?)
         container_id = "empty-d" if @completed_count && @completed_count == 0 && !@todo.completed?
       }
       page.context  { container_id = "c#{@original_item_context_id}empty-nd" if @remaining_in_context == 0 }

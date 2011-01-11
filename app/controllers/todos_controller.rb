@@ -257,6 +257,9 @@ class TodosController < ApplicationController
     @source_view = params['_source_view'] || 'todo'
     @original_item_due = @todo.due
     @original_item_was_deferred = @todo.deferred?
+    @original_item_was_hidden = @todo.hidden?
+    @original_item_context_id = @todo.context_id
+    @original_item_project_id = @todo.project_id
     @saved = @todo.toggle_completion!
   
     # check if this todo has a related recurring_todo. If so, create next todo
@@ -871,9 +874,7 @@ class TodosController < ApplicationController
         end
         @remaining_in_context = current_user.contexts.find(context_id).todos.active.not_hidden.with_tag(tag).count
         @target_context_count = current_user.contexts.find(@todo.context_id).todos.active.not_hidden.with_tag(tag).count
-        if !@todo.hidden? && @todo_hidden_state_changed
-          @remaining_hidden_count = current_user.todos.hidden.with_tag(tag).count
-        end
+        @remaining_hidden_count = current_user.todos.hidden.with_tag(tag).count
       }
       from.project {
         @remaining_deferred_or_pending_count = current_user.projects.find(@todo.project_id).todos.deferred_or_blocked.count
@@ -891,15 +892,22 @@ class TodosController < ApplicationController
   def determine_completed_count
     source_view do |from|
       from.todo do
-        @completed_count = Todo.count_by_sql(['SELECT COUNT(*) FROM todos, contexts WHERE todos.context_id = contexts.id and todos.user_id = ? and todos.state = ? and contexts.hide = ?', current_user.id, 'completed', false])
+        @completed_count = current_user.todos.not_hidden.completed.count
       end
       from.context do
-        @completed_count = current_user.contexts.find(@todo.context_id).done_todo_count
+        todos = current_user.contexts.find(@todo.context_id).todos.completed
+        todos = todos.not_hidden if !@todo.context.hidden?
+        @completed_count = todos.count
       end
       from.project do
         unless @todo.project_id == nil
-          @completed_count = current_user.projects.find(@todo.project_id).done_todos.count
+          todos = current_user.projects.find(@todo.project_id).todos.completed
+          todos = todos.not_hidden if !@todo.project.hidden?
+          @completed_count = todos.count
         end
+      end
+      from.tag do
+        @completed_count = current_user.todos.with_tag(@tag).completed.count
       end
     end
   end
