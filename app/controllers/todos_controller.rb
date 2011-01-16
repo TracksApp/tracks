@@ -813,7 +813,7 @@ class TodosController < ApplicationController
   end
 
   def with_parent_resource_scope(&block)
-    @feed_title = t('todos.feed_title')
+    @feed_title = t('common.actions')
     if (params[:context_id])
       @context = current_user.contexts.find_by_params(params)
       @feed_title = @feed_title + t('todos.feed_title_in_context', :context => @context.name)

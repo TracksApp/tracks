@@ -1,3 +1,4 @@
+en:
   activerecord:
     errors:
       models:
@@ -473,7 +474,6 @@
       due_date: "with a due date {{due_date}} or earlier"
       completed: "in the last {{count}} days"
     feed_title_in_context: "in context '{{context}}'"
-    feed_title: "Actions"
     feed_title_in_project: "in project '{{project}}'"
     list_incomplete_next_actions_with_limit: "Lists the last {{count}} incomplete next actions"
     list_incomplete_next_actions: "Lists incomplete next actions"
