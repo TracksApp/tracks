@@ -1,5 +1,5 @@
 <% if @not_done_todos.empty? -%>
-<p>There are no incomplete actions</p>
+<p><%= t('todos.no_incomplete_actions') %></p>
 <% else -%>
 <%= render :partial => "contexts/mobile_context", :collection => @contexts_to_show -%>
 <% end -%>

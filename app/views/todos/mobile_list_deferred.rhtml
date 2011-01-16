@@ -1,5 +1,5 @@
 <% if @count == 0 -%>
-<div class="message"><p>Currently there are no deferred actions.</p></div>
+<div class="message"><p><%= t('todos.no_deferred_actions') %></p></div>
 <% end -%>
 <%= render :partial => "contexts/mobile_context", :collection => @contexts, 
             :locals => { :collapsible => true } -%>

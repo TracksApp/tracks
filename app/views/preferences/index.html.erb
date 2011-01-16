@@ -6,6 +6,7 @@
     <li><%= User.human_attribute_name('first_name') %>: <span class="highlight"><%= current_user.first_name %></span></li>
     <li><%= User.human_attribute_name('last_name') %>: <span class="highlight"><%= current_user.last_name %></span></li>
     <li><%= Preference.human_attribute_name('date_format') %>: <span class="highlight"><%= prefs.date_format %></span> Your current date: <%= format_date(current_user.time) %></li>
+    <li><%= Preference.human_attribute_name('locale') %>: <span class="highlight"><%= prefs.locale %></span></li>
     <li><%= Preference.human_attribute_name('title_date_format') %>: <span class="highlight"><%= prefs.title_date_format %></span> Your current title date: <%= current_user.time.strftime(prefs.title_date_format) %></li>
     <li><%= Preference.human_attribute_name('time_zone') %>: <span class="highlight"><%= prefs.time_zone %></span> Your current time: <%= current_user.time.strftime('%I:%M %p') %></li>
     <li><%= Preference.human_attribute_name('week_starts') %>: <span class="highlight"><%= t('date.day_names')[prefs.week_starts] %></span></li>

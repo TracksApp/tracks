@@ -6,17 +6,17 @@
   <% form_tag :action => 'update' do %>
 	  <table>
 	    <tr>
-	      <td><label><%= Preference.human_attribute_name('first_name') %></label></td>
+	      <td><label><%= User.human_attribute_name('first_name') %></label></td>
 	      <td><%= text_field 'user', 'first_name' %></td>
 	    </tr>
 	    <tr>
-	      <td><label><%= Preference.human_attribute_name('last_name') %></label></td>
+	      <td><label><%= User.human_attribute_name('last_name') %></label></td>
 	      <td><%= text_field 'user', 'last_name' %></td>
 	    </tr>
 	  <%
 	    def table_row(pref_name, nowrap_label = false, &block)
 	      nowrap_attribute = nowrap_label ? ' nowrap="nowrap"' : '' 
-	      s = %Q|<tr>\n<td#{nowrap_attribute}><label>#{pref_name.gsub(/_/,' ')}:</label></td>\n<td>\n|
+	      s = %Q|<tr>\n<td#{nowrap_attribute}><label>#{Preference.human_attribute_name(pref_name)}:</label></td>\n<td>\n|
 	      s << yield
 	      s << "\n</td></tr>"
 	      s
@@ -30,6 +30,7 @@
 	      table_row(pref_name, nowrap_label) { text_field('prefs', pref_name) }
 	    end
 	  %>
+          <%= row_with_select_field('locale', I18n.available_locales) %>
 	  <%= row_with_text_field('date_format') %>
 	  <%= row_with_text_field('title_date_format') %>
     <%= table_row('time_zone', false) { time_zone_select('prefs','time_zone') } %>

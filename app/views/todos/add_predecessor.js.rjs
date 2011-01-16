@@ -1,8 +1,8 @@
 if @saved
   # show update message
-  status_message = "Added #{@predecessor.description} as dependency."
+  status_message = t('todos.added_dependency', :dependency => @predecessor.description)
   unless @original_state == 'pending'
-    status_message += " #{@todo.description} set to pending"
+    status_message += t('todos.set_to_pending', :task => @todo.description)
   end
   # remove successor from page
   page[@todo].remove
@@ -22,7 +22,7 @@ if @saved
     page['tickler-empty-nd'].hide
     page.replace "tickler", :partial => 'todos/deferred', :locals =>  { :deferred => @todo.project.deferred_todos, 
                                                                         :collapsible => false, 
-                                                                        :append_descriptor => "in this project", 
+                                                                        :append_descriptor => t('todos.append_in_this_project'), 
                                                                         :parent_container_type => 'project', 
                                                                         :pending => @todo.project.pending_todos }
   end
@@ -30,6 +30,6 @@ if @saved
   page << 'enable_rich_interaction();'
   page.notify :notice, status_message, 5.0
 else
-  page.replace_html "status", content_tag("div", content_tag("h2", "Unable to add dependency"), "id" => "errorExplanation", "class" => "errorExplanation")  
+  page.replace_html "status", content_tag("div", content_tag("h2", t('todos.unable_to_add_dependency')), "id" => "errorExplanation", "class" => "errorExplanation")  
 end
 

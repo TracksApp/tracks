@@ -36,7 +36,7 @@ class ApplicationController < ActionController::Base
   before_filter :set_locale
   prepend_before_filter :login_required
   prepend_before_filter :enable_mobile_content_negotiation
-  after_filter :set_locale
+#  after_filter :set_locale
   after_filter :set_charset
   
   include ActionView::Helpers::TextHelper
@@ -50,9 +50,10 @@ class ApplicationController < ActionController::Base
   end
   
   def set_locale
-    locale = params[:locale] 
+    locale = params[:locale] # specifying a locale in the request takes precedence
+    locale = locale || prefs.locale unless current_user.nil? # otherwise, the locale of the currently logged in user takes over
     locale = locale || request.env['HTTP_ACCEPT_LANGUAGE'].scan(/^[a-z]{2}/).first if request.env['HTTP_ACCEPT_LANGUAGE']
-    I18n.locale = I18n::available_locales.include?(locale) ? locale : I18n.default_locale
+    I18n.locale = I18n::available_locales.include?(locale.to_sym) ? locale : I18n.default_locale
     logger.debug("Selected '#{I18n.locale}' as locale")
   end
   

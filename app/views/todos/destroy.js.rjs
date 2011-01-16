@@ -16,10 +16,10 @@ if @saved
       page.call "todoItems.ensureVisibleWithEffectAppear", item_container_id(@new_recurring_todo)
       page.insert_html :bottom, item_container_id(@new_recurring_todo), :partial => 'todos/todo', :locals => { :todo => @new_recurring_todo, :parent_container_type => parent_container_type }
       page.visual_effect :highlight, dom_id(@new_recurring_todo, 'line'), {'startcolor' => "'#99ff99'"}      
-      page.notify :notice, "Action was deleted. Because this action is recurring, a new action was added", 6.0
+      page.notify :notice, t('todos.recurring_action_deleted'), 6.0
     else
       if @todo.recurring_todo.todos.active.count == 0
-        page.notify :notice, "There is no next action after the recurring action you just deleted. The recurrence is completed", 6.0 if @new_recurring_todo.nil?
+        page.notify :notice, t('todos.completed_recurrence_completed'), 6.0 if @new_recurring_todo.nil?
       end
     end
   end
@@ -32,5 +32,5 @@ if @saved
       page.visual_effect :highlight, dom_id(t, 'line'), {'startcolor' => "'#99ff99'", :duration => 2}
     end
 else
-  page.notify :error, "There was an error deleting the item #{@todo.description}", 8.0
+  page.notify :error, t('todos.error_deleting_item', :description => @todo.description), 8.0
 end

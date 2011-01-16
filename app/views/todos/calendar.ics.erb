@@ -9,7 +9,7 @@ X-WR-CALNAME:Tracks
   overdue_text = ""
   if due_date.at_midnight < Time.zone.now.at_midnight
     due_date = Time.zone.now
-    overdue_text = "Overdue: "
+    overdue_text = t('todos.overdue') +": "
   end
   modified = todo.updated_at || todo.created_at
 %>BEGIN:VEVENT

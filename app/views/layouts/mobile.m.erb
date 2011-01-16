@@ -13,8 +13,8 @@
 </head><body>
 <% if !(@new_mobile || @edit_mobile)
       if !@prefs.nil? -%>
-<h1><span class="count"><%= @down_count %></span> <%= 
-        current_user.time.strftime(@prefs.title_date_format) -%></h1>
+<h1><span class="count"><%= @down_count %></span> <%=
+        l(Date.today, :format => @prefs.title_date_format) -%></h1>
 <div class="nav">
 <%=     (link_to(t('layouts.mobile_navigation.new_action'), new_todo_path(new_todo_params))+" | ") unless @new_mobile -%>
 <%=     (link_to(t('layouts.mobile_navigation.home'), todos_path(:format => 'm'))+" | ") unless @home -%>

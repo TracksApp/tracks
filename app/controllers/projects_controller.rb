@@ -43,7 +43,7 @@ class ProjectsController < ApplicationController
   def show
     @max_completed = current_user.prefs.show_number_completed
     init_data_for_sidebar unless mobile?
-    @page_title = "TRACKS::Project: #{@project.name}"
+    @page_title = t('projects.page_title', :project => @project.name)
     
     @not_done = @project.not_done_todos_including_hidden
     @deferred = @project.deferred_todos
@@ -204,7 +204,7 @@ class ProjectsController < ApplicationController
     
   def render_projects_html
     lambda do
-      @page_title = "TRACKS::List Projects"
+      @page_title = t('projects.list_projects')
       @count = current_user.projects.size 
       @active_projects = current_user.projects.active
       @hidden_projects = current_user.projects.hidden
@@ -230,10 +230,9 @@ class ProjectsController < ApplicationController
   def render_project_mobile
     lambda do
       if @project.default_context.nil?
-        @project_default_context = "This project does not have a default context"
+        @project_default_context = t('projects.no_default_context')
       else
-        @project_default_context = "The default context for this project is "+
-          @project.default_context.name
+        @project_default_context = t('projects.default_context', :context => @project.default_context.name)
       end
       cookies[:mobile_url]= {:value => request.request_uri, :secure => SITE_CONFIG['secure_cookies']}
       @mobile_from_project = @project.id
@@ -293,7 +292,7 @@ class ProjectsController < ApplicationController
     project_description = ''
     project_description += sanitize(markdown( project.description )) unless project.description.blank?
     project_description += "<p>#{count_undone_todos_phrase(p)}. "
-    project_description += "Project is #{project.state}."
+    project_description += t('projects.project_state', :state => project.state)
     project_description += "</p>"
     project_description
   end

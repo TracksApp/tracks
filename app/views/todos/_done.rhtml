@@ -11,7 +11,7 @@
   <% end %>
 
   <% if done.due %>
-    <%= " - was due on " + format_date( done.due ) %>
+    <%= " - " + t('todos.was_due_on_date', :date => format_date( done.due )) %>
   <% end %>
 
   <% if done.notes? -%>

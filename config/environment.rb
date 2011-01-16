@@ -14,6 +14,8 @@ class Rails::Configuration
   attr_accessor :action_web_service
 end
 
+Encoding.default_external = Encoding::UTF_8 if RUBY_VERSION > "1.9"
+
 Rails::Initializer.run do |config|
   # Skip frameworks you're not going to use
   # config.frameworks -= [ :action_web_service, :action_mailer ]

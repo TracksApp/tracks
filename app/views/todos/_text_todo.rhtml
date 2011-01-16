@@ -8,11 +8,11 @@ else
 end
 
 if (todo.completed?) && todo.completed_at
-  result_string << "[Completed: " + format_date(todo.completed_at) + "] "
+  result_string << "["+ t('todos.completed') +": " + format_date(todo.completed_at) + "] "
 end
 
 if todo.due
-  result_string << "[Due: " + format_date(todo.due) + "] "
+  result_string << "[" + t('todos.due') + ": " + format_date(todo.due) + "] "
   result_string << todo.description + " "
 else
   result_string << todo.description + " "

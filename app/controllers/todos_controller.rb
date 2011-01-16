@@ -173,7 +173,7 @@ class TodosController < ApplicationController
         if @todos.size > 0
           @default_tags = @todos[0].project.default_tags unless @todos[0].project.nil?
         else
-          @multiple_error = "You need to submit at least one next action"
+          @multiple_error = t('todos.next_action_needed')
           @saved = false;
           @default_tags = current_user.projects.find_by_name(@initial_project_name).default_tags unless @initial_project_name.blank?
         end
@@ -277,10 +277,10 @@ class TodosController < ApplicationController
       format.html do
         if @saved
           # TODO: I think this will work, but can't figure out how to test it
-          notify :notice, "The action <strong>'#{@todo.description}'</strong> was marked as <strong>#{@todo.completed? ? 'complete' : 'incomplete' }</strong>"
+          notify(:notice, t("todos.action_marked_complete", :description => @todo.description, :completed => @todo.completed? ? 'complete' : 'incomplete'))
           redirect_to :action => "index"
         else
-          notify :notice, "The action <strong>'#{@todo.description}'</strong> was NOT marked as <strong>#{@todo.completed? ? 'complete' : 'incomplete' } due to an error on the server.</strong>", "index"
+          notify(:notice, t("todos.action_marked_complete_error", :description => @todo.description, :completed => @todo.completed? ? 'complete' : 'incomplete'), "index")
           redirect_to :action =>  "index"
         end
       end
@@ -304,7 +304,7 @@ class TodosController < ApplicationController
     @saved = @todo.save
 
     @context_changed = true
-    @message = "Context changed to #{@context.name}"
+    @message = t('todos.context_changed', :name => @context.name)
     determine_remaining_in_context_count(@original_item_context_id)
 
     respond_to do |format|
@@ -476,14 +476,14 @@ class TodosController < ApplicationController
       
       format.html do
         if @saved
-          message = "Successfully deleted next action"
+          message = t('todos.action_deleted_success')
           if activated_successor_count > 0
             message += " activated #{pluralize(activated_successor_count, 'pending action')}"
           end
           notify :notice, message, 2.0
           redirect_to :action => 'index'
         else
-          notify :error, "Failed to delete the action", 2.0
+          notify :error, t('todos.action_deleted_error'), 2.0
           redirect_to :action => 'index'
         end
       end
@@ -507,7 +507,7 @@ class TodosController < ApplicationController
   end
 
   def completed
-    @page_title = "TRACKS::Completed tasks"
+    @page_title = t('todos.completed_tasks_title')
     @done = current_user.completed_todos
     @done_today = @done.completed_within Time.zone.now - 1.day
     @done_this_week = @done.completed_within Time.zone.now - 1.week
@@ -516,7 +516,7 @@ class TodosController < ApplicationController
   end
 
   def completed_archive
-    @page_title = "TRACKS::Archived completed tasks"
+    @page_title = t('todos.archived_tasks_title')
     @done = current_user.completed_todos
     @count = @done.size
     @done_archive = @done.completed_more_than Time.zone.now - 28.days
@@ -524,7 +524,7 @@ class TodosController < ApplicationController
   
   def list_deferred
     @source_view = 'deferred'
-    @page_title = "TRACKS::Tickler"
+    @page_title = t('todos.deferred_tasks_title')
     
     @contexts_to_show = @contexts = current_user.contexts.find(:all)
     
@@ -561,7 +561,7 @@ class TodosController < ApplicationController
   def tag
     @source_view = params['_source_view'] || 'tag'
     @tag_name = params[:name]
-    @page_title = "TRACKS::Tagged with \'#{@tag_name}\'"
+    @page_title = t('todos.tagged_page_title', :tag_name => @tag_name)
     
     # mobile tags are routed with :name ending on .m. So we need to chomp it
     @tag_name = @tag_name.chomp('.m') if mobile?
@@ -645,7 +645,7 @@ class TodosController < ApplicationController
 
   def calendar
     @source_view = params['_source_view'] || 'calendar'
-    @page_title = "TRACKS::Calendar"
+    @page_title = t('todos.calendar_page_title')
 
     @projects = current_user.projects.find(:all)
   
@@ -778,24 +778,24 @@ class TodosController < ApplicationController
       condition_builder.add 'todos.state = ?', 'active'
     end
 
-    @title = "Tracks - Next Actions"
-    @description = "Filter: "
+    @title = t('todos.next_actions_title')
+    @description = t('todos.next_actions_description')
 
     if params.key?('due')
       due_within = params['due'].to_i
       due_within_when = Time.zone.now + due_within.days
       condition_builder.add('todos.due <= ?', due_within_when)
       due_within_date_s = due_within_when.strftime("%Y-%m-%d")
-      @title << " due today" if (due_within == 0)
-      @title << " due within a week" if (due_within == 6)
-      @description << " with a due date #{due_within_date_s} or earlier"
+      @title << t('todos.next_actions_title_additions.due_today') if (due_within == 0)
+      @title << t('todos.next_actions_title_additions.due_within_a_week') if (due_within == 6)
+      @description << t('todos.next_actions_description_additions.due_date', :due_date => due_within_date_s)
     end
 
     if params.key?('done')
       done_in_last = params['done'].to_i
       condition_builder.add('todos.completed_at >= ?', Time.zone.now - done_in_last.days)
-      @title << " actions completed"
-      @description << " in the last #{done_in_last.to_s} days"
+      @title << t('todos.next_actions_title_additions.completed')
+      @description << t('todos.next_actions_description_additions.completed', :count => done_in_last.to_s)
     end
     
     if params.key?('tag')
@@ -813,16 +813,16 @@ class TodosController < ApplicationController
   end
 
   def with_parent_resource_scope(&block)
-    @feed_title = "Actions "
+    @feed_title = t('todos.feed_title')
     if (params[:context_id])
       @context = current_user.contexts.find_by_params(params)
-      @feed_title = @feed_title + "in context '#{@context.name}'"
+      @feed_title = @feed_title + t('todos.feed_title_in_context', :context => @context.name)
       Todo.send :with_scope, :find => {:conditions => ['todos.context_id = ?', @context.id]} do
         yield
       end
     elsif (params[:project_id])
       @project = current_user.projects.find_by_params(params)
-      @feed_title = @feed_title + "in project '#{@project.name}'"
+      @feed_title = @feed_title + t('todos.feed_title_in_project', :project => @project.name)
       @project_feed = true
       Todo.send :with_scope, :find => {:conditions => ['todos.project_id = ?', @project.id]} do
         yield
@@ -839,9 +839,9 @@ class TodosController < ApplicationController
       end
       if TodosController.is_feed_request(request) && @description
         if params.key?('limit')
-          @description << "Lists the last #{params['limit']} incomplete next actions"
+          @description << t('todos.list_incomplete_next_actions_with_limit', :count => params['limit'])
         else
-          @description << "Lists incomplete next actions"
+          @description << t('todos.list_incomplete_next_actions')
         end
       end
     else
@@ -971,7 +971,7 @@ class TodosController < ApplicationController
 
   def render_todos_html
     lambda do
-      @page_title = "TRACKS::List tasks"
+      @page_title = t('todos.task_list_title')
 
       # If you've set no_completed to zero, the completed items box isn't shown
       # on the home page
@@ -996,7 +996,7 @@ class TodosController < ApplicationController
 
   def render_todos_mobile
     lambda do
-      @page_title = "All actions"
+      @page_title = t('todos.mobile_todos_page_title')
       @home = true
       cookies[:mobile_url]= { :value => request.request_uri, :secure => SITE_CONFIG['secure_cookies']}
       determine_down_count
@@ -1026,15 +1026,15 @@ class TodosController < ApplicationController
   def todo_feed_content
     lambda do |i|
       item_notes = sanitize(markdown( i.notes )) if i.notes?
-      due = "<div>Due: #{format_date(i.due)}</div>\n" if i.due?
-      done = "<div>Completed: #{format_date(i.completed_at)}</div>\n" if i.completed?
+      due = "<div>#{t('todos.feeds.due', :date => format_date(i.due))}</div>\n" if i.due?
+      done = "<div>#{t('todos.feeds.completed', :date => format_date(i.completed_at))}</div>\n" if i.completed?
       context_link = "<a href=\"#{ context_url(i.context) }\">#{ i.context.name }</a>"
       if i.project_id?
         project_link = "<a href=\"#{ project_url(i.project) }\">#{ i.project.name }</a>"
       else
-        project_link = "<em>none</em>"
+        project_link = "<em>#{t('common.none')}</em>"
       end
-      "#{done||''}#{due||''}#{item_notes||''}\n<div>Project:  #{project_link}</div>\n<div>Context:  #{context_link}</div>"
+      "#{done||''}#{due||''}#{item_notes||''}\n<div>#{t('common.project')}:  #{project_link}</div>\n<div>#{t('common.context')}:  #{context_link}</div>"
     end
   end
 
