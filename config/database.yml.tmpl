@@ -1,6 +1,9 @@
 development:
   adapter: mysql
   database: tracks
+  # set this if you are storing utf8 in your mysql database to handle strings
+  # like "Réné".Not needed for sqlite. For PostgreSQL use encoding: unicode
+  # encoding: utf8
   host: localhost
   username: root
   password: 
@@ -12,6 +15,9 @@ test: &TEST
 production:
   adapter: mysql
   database: tracks
+  # set this if you are storing utf8 in your mysql database to handle strings
+  # like "Réné".Not needed for sqlite. For PostgreSQL use encoding: unicode
+  # encoding: utf8
   host: localhost
   username: root
   password: 
