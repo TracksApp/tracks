@@ -9,32 +9,37 @@
 
   <table>
 	<%if Tracks::Config.auth_schemes.include?('cas') && session[:cas_user]%>
-        <tr>
-      <td><label for="user_login"><%= t('users.register_with_cas') %>:</label></td>
-      <td> "<%= session[:cas_user]%>"  </td>
-      <td>
-        <%= hidden_field "user", "login",                   :value => session[:cas_user] %>
-        <%= hidden_field "user", "password",                :value => session[:cas_user] %>
-        <%= hidden_field "user", "password_confirmation",   :value => session[:cas_user] %>
-        <%= hidden_field"user", "auth_type",                :value => "cas" %></td>
-    </tr>
+	   <tr>
+	     <td><label for="user_login"><%= t('users.register_with_cas') %>:</label></td>
+	     <td> "<%= session[:cas_user]%>"  </td>
+	     <td>
+	       <%= hidden_field "user", "login",                   :value => session[:cas_user] %>
+	       <%= hidden_field "user", "password",                :value => session[:cas_user] %>
+	       <%= hidden_field "user", "password_confirmation",   :value => session[:cas_user] %>
+	       <%= hidden_field"user", "auth_type",                :value => "cas" %></td>
+	   </tr>
 	<%else%>
-    <tr>
-      <td><label for="user_login"><%= t('users.desired_login') %>:</label></td>
-      <td> <%= text_field "user", "login", :size => 20 %></td>
-    </tr>
-	<tr>
-      <td><label for="user_password"><%= t('users.choose_password') %>:</label></td>
-      <td><%= password_field "user", "password", :size => 20 %></td>
-    </tr>
-    <tr>
-      <td><label for="user_password_confirmation"><%= t('users.confirm_password') %>:</label></td>
-      <td><%= password_field "user", "password_confirmation", :size => 20 %></td>
-    </tr>
-    <tr>
-      <td><label for="user_auth_type"><%= User.human_attribute_name('auth_type') %>:</label></td>
-      <td><%=  select("user", "auth_type", @auth_types, { :include_blank => false })%></td>
-    </tr>
+	    <tr>
+	      <td><label for="user_login"><%= t('users.desired_login') %>:</label></td>
+	      <td> <%= text_field "user", "login", :size => 20 %></td>
+	    </tr>
+		<tr>
+	      <td><label for="user_password"><%= t('users.choose_password') %>:</label></td>
+	      <td><%= password_field "user", "password", :size => 20 %></td>
+	    </tr>
+	    <tr>
+	      <td><label for="user_password_confirmation"><%= t('users.confirm_password') %>:</label></td>
+	      <td><%= password_field "user", "password_confirmation", :size => 20 %></td>
+	    </tr>
+		<tr id="open_id" style="display:<%= @user.auth_type == 'open_id' ? 'table-row' : 'none' %>">
+			<td><label for="openid_url"><%= t('users.identity_url') %>:</label></td>
+			<td><%= text_field "user", "open_id_url", :class => "open_id" %></td>
+		</tr>
+	    <tr>
+	      <td><label for="user_auth_type"><%= User.human_attribute_name('auth_type') %>:</label></td>
+	      <td><%= select("user", "auth_type", @auth_types, { :include_blank => false })%></td>
+	    </tr>
+		<%= observe_field( :user_auth_type, :function => "$('#open_id')[0].style.display = value == 'open_id' ? 'table-row' : 'none'") %>
     <%end%>
     <tr>
       <td></td>

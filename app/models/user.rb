@@ -150,13 +150,25 @@ class User < ActiveRecord::Base
     return nil if login.blank?
     candidate = find(:first, :conditions => ["login = ?", login])
     return nil if candidate.nil?
-    return candidate if candidate.auth_type == 'database' && candidate.crypted_password == sha1(pass)
+
+    if Tracks::Config.auth_schemes.include?('database')
+      return candidate if candidate.auth_type == 'database' && candidate.crypted_password == sha1(pass)
+    end
+    
     if Tracks::Config.auth_schemes.include?('ldap')
       return candidate if candidate.auth_type == 'ldap' && SimpleLdapAuthenticator.valid?(login, pass)
     end
-    if Tracks::Config.auth_schemes.include?('cas') && candidate.auth_type.eql?("cas")
-      return candidate #because we can not auth them with out thier real password we have to settle for this
+    
+    if Tracks::Config.auth_schemes.include?('cas')
+      # because we can not auth them with out thier real password we have to settle for this
+      return candidate if candidate.auth_type.eql?("cas")
     end
+    
+    if Tracks::Config.auth_schemes.include?('open_id')
+      # hope the user enters the correct data
+      return candidate
+    end
+    
     return nil
   end
   
