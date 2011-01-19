@@ -26,7 +26,7 @@ Feature: Show statistics
     And I should see "you have a total of 9 actions"
     And I should see "2 of these are completed"
     Then I should see "Totals"
-    And I should see "Actions"
+    And I should see "actions"
     And I should see "Contexts"
     And I should see "Projects"
     And I should see "Tags"

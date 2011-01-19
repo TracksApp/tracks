@@ -75,8 +75,3 @@ end
 Then /^he should see that a context named "([^\"]*)" is not present$/ do |context_name|
   Then "I should not see \"#{context_name} (\""
 end
-
-Then /^I should see feeds for "([^"]*)" in list of "([^"]*)"$/ do |name, list_type|
-  xpath= "//div[@id='feeds-for-#{list_type}']//strong"
-  name.should == response.selenium.get_text("xpath=#{xpath}")
-end

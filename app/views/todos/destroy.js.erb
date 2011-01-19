@@ -49,10 +49,10 @@ function show_new_todo_if_todo_was_recurring() {
       TodoItemsContainer.ensureVisibleWithEffectAppear("<%=item_container_id(@new_recurring_todo)%>");
       $('#<%=item_container_id(@new_recurring_todo)%>').append(html_for_new_recurring_todo());
       $('#<%= dom_id(@new_recurring_todo, 'line')%>').effect('highlight', {}, 2000 );
-      TracksPages.page_notify('notice', "Action was deleted. Because this action is recurring, a new action was added", 5);
+      TracksPages.page_notify('notice', "<%=t('todos.recurring_action_deleted')%>", 5);
     <% else -%>
       <% if @todo.recurring_todo.todos.active.count == 0 && @new_recurring_todo.nil? -%>
-        TracksPages.page_notify('notice', "There is no next action after the recurring action you just deleted. The recurrence is completed", 5);
+        TracksPages.page_notify('notice', "<%=t('todos.completed_recurrence_completed')%>", 5);
       <% end -%>
     <% end -%>
   <% end -%>
@@ -76,4 +76,3 @@ function html_for_new_recurring_todo() {
 <% end 
   # if @saved
 -%>
->>>>>>> get destroying of actions working

@@ -513,7 +513,8 @@ var ContextListPage = {
 
         /* delete a context using the x button */
         $('a.delete_context_button').live('click', function(evt){
-            if(confirm("Are you sure that you want to "+this.title+"? Be aware that this will also delete all (repeating) actions in this context!")){
+            /* TODO: move from this.title to this.x-messsage or something similar */
+            if(confirm(this.title)){
                 delete_with_ajax_and_block_element(this.href, $(this).parents('.context'));
             }
             return false;

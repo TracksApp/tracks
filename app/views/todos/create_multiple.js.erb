@@ -21,13 +21,7 @@
 -%>
 
 function set_notification() {
-  <%-
-  status_message = 'Added new next action'
-  status_message += 's' if @todos.size > 1
-  status_message = 'Added new project / ' + status_message if @new_project_created
-  status_message = 'Added new context / ' + status_message if @new_context_created
-  -%>
- TracksPages.page_notify('notice', "<%=status_message%>", 5);
+ TracksPages.page_notify('notice', "<%=@status_message%>", 5);
 }
 
 function clear_form() {

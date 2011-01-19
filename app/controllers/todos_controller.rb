@@ -124,12 +124,12 @@ class TodosController < ApplicationController
             @initial_context_name = params['default_context_name']
             @initial_project_name = params['default_project_name']
             @default_tags = @todo.project.default_tags unless @todo.project.nil?
-            @status_message = 'Added new next action'
-            @status_message += ' to tickler' if @todo.deferred?
-            @status_message += ' in pending state' if @todo.pending?
-            @status_message += ' in hidden state' if @todo.hidden?
-            @status_message = 'Added new project / ' + @status_message if @new_project_created
-            @status_message = 'Added new context / ' + @status_message if @new_context_created
+            @status_message = t('todos.added_new_next_action')
+            @status_message += ' ' + t('todos.to_tickler') if @todo.deferred?
+            @status_message += ' ' + t('todos.in_pending_state') if @todo.pending?
+            @status_message += ' ' + t('todos.in_hidden_state') if @todo.hidden?
+            @status_message = t('todos.added_new_project') + ' / ' + @status_message if @new_project_created
+            @status_message = t('todos.added_new_context') + ' / ' + @status_message if @new_context_created
           end
           render :action => 'create'
         end
@@ -190,6 +190,11 @@ class TodosController < ApplicationController
           @saved = false;
           @default_tags = current_user.projects.find_by_name(@initial_project_name).default_tags unless @initial_project_name.blank?
         end
+
+        @status_message = @todos.size > 1 ? t('todos.added_new_next_action_plural') : t('todos.added_new_next_action_singular')
+        @status_message = t('todos.added_new_project') + ' / ' + @status_message if @new_project_created
+        @status_message = t('todos.added_new_context') + ' / ' + @status_message if @new_context_created
+
         render :action => 'create_multiple'
       end
       format.xml do

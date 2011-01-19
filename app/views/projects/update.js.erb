@@ -11,6 +11,10 @@
   TracksPages.show_edit_errors(html_for_error_messages());
 <% end %>
 
+<% if @saved
+   # only add these js functions if the project is saved
+-%>
+
 function update_project_list_page() {
   <% if @state_changed -%>
     remove_and_re_add_project();
@@ -81,6 +85,9 @@ function html_for_sidebar() {
 function html_for_project_settings() {
   return "<%= source_view_is(:project) ? escape_javascript(render(:partial => 'project_settings', :object => @project )) : "" %>";
 }
+
+<% end # if @saved
+-%>
 
 function html_for_error_messages() {
   return "<%= escape_javascript(error_messages_for('project')) %>";

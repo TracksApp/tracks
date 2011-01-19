@@ -13,4 +13,3 @@ end
 Then /^the multiple action form should not be visible$/ do
   selenium.is_visible("todo_multi_add").should == false
 end
-
