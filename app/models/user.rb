@@ -166,7 +166,7 @@ class User < ActiveRecord::Base
     
     if Tracks::Config.auth_schemes.include?('open_id')
       # hope the user enters the correct data
-      return candidate
+      return candidate if candidate.auth_type.eql?("open_id")
     end
     
     return nil
