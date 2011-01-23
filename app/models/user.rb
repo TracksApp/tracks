@@ -264,6 +264,13 @@ protected
   
   def normalize_open_id_url
     return if open_id_url.nil?
+    
+    # fixup empty url value
+    if open_id_url.empty?
+      self.open_id_url = nil
+      return
+    end
+    
     self.open_id_url = OpenIdAuthentication.normalize_identifier(open_id_url)
   end
 end
