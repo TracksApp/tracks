@@ -162,17 +162,19 @@ class TodosController < ApplicationController
 
     @todos = []
     params[:todo][:multiple_todos].split("\n").map do |line|
-      @todo = current_user.todos.build(
-        :description => line)
-      @todo.project_id = @project_id
-      @todo.context_id = @context_id
-      @saved = @todo.save
-      unless (@saved == false) || tag_list.blank?
-        @todo.tag_with(tag_list)
-        @todo.tags.reload
+      unless line.blank?
+        @todo = current_user.todos.build(
+          :description => line)
+        @todo.project_id = @project_id
+        @todo.context_id = @context_id
+        @saved = @todo.save
+        unless (@saved == false) || tag_list.blank?
+          @todo.tag_with(tag_list)
+          @todo.tags.reload
+        end
+        @todos << @todo
+        @not_done_todos << @todo if @new_context_created
       end
-      @todos << @todo
-      @not_done_todos << @todo if @new_context_created
     end
 
     respond_to do |format|

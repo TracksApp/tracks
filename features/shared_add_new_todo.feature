@@ -165,7 +165,7 @@ Feature: Add new next action from every page
       | tag page for "test"                | see        | see         |
 
   @selenium
-  Scenario: Adding a todo to a hidden context does not show the todo 
+  Scenario: Adding a todo to a hidden context does not show the todo
     Given I have a context called "visible context"
     And I have a hidden context called "hidden context"
     When I go to the home page
@@ -185,6 +185,25 @@ Feature: Add new next action from every page
 
   Scenario: Adding a dependency to a todo updated the successor
     Given this is a pending scenario
+
+  @selenium
+  Scenario: I can add multiple todos in a new project and a new context
+    When I go to the home page
+    And I follow "Add multiple next actions"
+    And I fill the multiple actions form with "", "a next project", "@anywhere", "new tag"
+    And I submit the new multiple actions form with 
+      """
+
+      a
+      b
+      c
+
+
+      """
+    Then I should see "@anywhere"
+    And I should see "a"
+    And I should see "b"
+    And I should see "c"
 
   @selenium
   Scenario: I need to fill in at least one description and a context
