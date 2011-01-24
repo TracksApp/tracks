@@ -240,7 +240,10 @@ class TodosController < ApplicationController
     @todo.state = 'pending'
     @saved = @todo.save
     respond_to do |format|
-      format.js
+      format.js {
+        @status_message = t('todos.added_dependency', :dependency => @predecessor.description)
+        @status_message += t('todos.set_to_pending', :task => @todo.description) unless @original_state == 'pending'
+      }
     end
   end
 

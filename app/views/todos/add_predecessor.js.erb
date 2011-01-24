@@ -1,35 +1,49 @@
-if @saved
-  # show update message
-  status_message = t('todos.added_dependency', :dependency => @predecessor.description)
-  unless @original_state == 'pending'
-    status_message += t('todos.set_to_pending', :task => @todo.description)
-  end
-  # remove successor from page
-  page[@todo].remove
-  # regenerate predecessor to add arrow
-  page[@predecessor].replace_html :partial => 'todos/todo', :locals => { :todo => @predecessor, :parent_container_type => parent_container_type }
+<% if !@saved -%>
+  TracksPages.page_notify('error', "<%= t('todos.unable_to_add_dependency') %>", 8);
+<% else -%>
+  remove_successor_from_page();
+  replace_updated_predecessor();
+  regenerate_predecessor_family();
+  <%= "show_in_tickler_box();" if source_view_is_one_of :project, :tag %>
+  TracksPages.page_notify('notice', "<%= @status_message %>", 5);
 
-  # regenerate predecessor family
+function remove_successor_from_page() {
+  <% # TODO: last todo in context --> remove context??
+  -%>
+  $('#<%=dom_id(@todo)%>').remove();
+}
+
+function replace_updated_predecessor() {
+  $('#<%= dom_id(@predecessor) %>').html( html_for_predecessor() );
+}
+
+function show_in_tickler_box() {
+  $("#tickler-empty-nd").hide();
+  $('#tickler').html( html_for_deferred_todos() );
+}
+
+function regenerate_predecessor_family() {
+<%
   parents = @predecessor.predecessors
   until parents.empty?
     parent = parents.pop
-    parents += parent.predecessors
-    page[parent].replace_html :partial => 'todos/todo', :locals => { :todo => parent, :parent_container_type => parent_container_type }
-  end
+    parents += parent.predecessors -%>
+    $('#<%= dom_id(parent) %>').html("<%= escape_javascript(render(:partial => parent, :locals => { :parent_container_type => parent_container_type })) %>");
+<%end
+-%>
+}
 
-  # show in tickler box in project view
-  if source_view_is_one_of :project, :tag
-    page['tickler-empty-nd'].hide
-    page.replace "tickler", :partial => 'todos/deferred', :locals =>  { :deferred => @todo.project.deferred_todos, 
-                                                                        :collapsible => false, 
-                                                                        :append_descriptor => t('todos.append_in_this_project'), 
-                                                                        :parent_container_type => 'project', 
-                                                                        :pending => @todo.project.pending_todos }
-  end
+function html_for_predecessor() {
+  return "<%= escape_javascript(render(:partial => @predecessor, :locals => { :parent_container_type => parent_container_type })) %>";
+}
 
-  page << 'enable_rich_interaction();'
-  page.notify :notice, status_message, 5.0
-else
-  page.replace_html "status", content_tag("div", content_tag("h2", t('todos.unable_to_add_dependency')), "id" => "errorExplanation", "class" => "errorExplanation")  
-end
+function html_for_deferred_todos() {
+  return "<%= escape_javascript(render(:partial => 'todos/deferred', :locals =>  { :deferred => @todo.project.deferred_todos,
+                                                                        :collapsible => false,
+                                                                        :append_descriptor => t('todos.append_in_this_project'),
+                                                                        :parent_container_type => 'project',
+                                                                        :pending => @todo.project.pending_todos })) %>";
+}
 
+<% end # if !@saved
+%>
