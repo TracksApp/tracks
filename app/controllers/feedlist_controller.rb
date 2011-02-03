@@ -28,7 +28,7 @@ class FeedlistController < ApplicationController
   def get_feeds_for_context
     @context = current_user.contexts.find params[:context_id]
     respond_to do |format|
-      format.html { render :text => "This page should not be called directly"}
+      format.html { render :file => 'feedlist/get_feeds_for_context'}
       format.js
     end
   end
@@ -36,7 +36,7 @@ class FeedlistController < ApplicationController
   def get_feeds_for_project
     @project = current_user.projects.find params[:project_id]
     respond_to do |format|
-      format.html { render :text => "This page should not be called directly"}
+      format.html { render :file => "feedlist/get_feeds_for_project"}
       format.js
     end
   end

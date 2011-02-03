@@ -49,7 +49,7 @@ class NotesController < ApplicationController
     @saved = @note.save
     respond_to do |format|
       format.html
-      format.js
+      format.js { render }
     end
   end
 

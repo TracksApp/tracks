@@ -803,7 +803,9 @@ function default_ajax_options_for_scripts(ajax_type, the_url, element_to_block) 
 }
 
 function submit_with_ajax_and_block_element(form, element_to_block) {
-    $(form).ajaxSubmit(default_ajax_options_for_submit('POST', element_to_block));
+    options = default_ajax_options_for_submit('POST', element_to_block);
+    options.dataType = 'script';
+    $(form).ajaxSubmit(options);
 }
 
 function get_with_ajax_and_block_element(the_url, element_to_block) {
@@ -915,7 +917,7 @@ function enable_rich_interaction(){
     $('input[name=project_name]').autocomplete({
         source: relative_to_root('projects.autocomplete')
     });
-    $('input[name=project[default_context_name]]').autocomplete({
+    $('input[name="project[default_context_name]"]').autocomplete({
         source: relative_to_root('contexts.autocomplete')
     });
 
