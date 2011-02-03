@@ -162,14 +162,15 @@ When /^I submit the new multiple actions form with$/ do |multi_line_descriptions
   submit_multiple_next_action_form
 end
 
-When /^I edit the dependency of "([^"]*)" to '([^'']*)'$/ do |todo_name, deps|
+When /^I edit the dependency of "([^"]*)" to "([^"]*)"$/ do |todo_name, deps|
   todo = @dep_todo = @current_user.todos.find_by_description(todo_name)
   todo.should_not be_nil
   # click edit
   selenium.click("//div[@id='line_todo_#{todo.id}']//img[@id='edit_icon_todo_#{todo.id}']", :wait_for => :ajax, :javascript_framework => :jquery)
   fill_in "predecessor_list_todo_#{todo.id}", :with => deps
-  # submit form
-  selenium.click("//div[@id='edit_todo_#{todo.id}']//button[@id='submit_todo_#{todo.id}']", :wait_for => :ajax, :javascript_framework => :jquery)
+  
+  submit_edit_todo_form(todo)
+  sleep(1) # TODO: replace with some wait_for
 end
 
 Then /^I should see ([0-9]+) todos$/ do |count|
@@ -179,11 +180,12 @@ Then /^I should see ([0-9]+) todos$/ do |count|
 end
 
 Then /^there should not be an error$/ do
-  # form should be gone and thus not errors visible
+  sleep(5)
+  # form should be gone and thus no errors visible
   selenium.is_visible("edit_todo_#{@dep_todo.id}").should == false
 end
 
-Then /^the dependencies of "(.*)" should include "(.*)"$/ do |child_name, parent_name|
+Then /^the successors of "(.*)" should include "(.*)"$/ do |parent_name, child_name|
   parent = @current_user.todos.find_by_description(parent_name)
   parent.should_not be_nil
   
@@ -205,6 +207,17 @@ Then /^I should see "([^\"]*)" within the dependencies of "([^\"]*)"$/ do |succe
   xpath = "xpath=//div[@id='line_todo_#{todo.id}']//div[@id='successor_line_todo_#{successor.id}']//span"
   selenium.wait_for_element(xpath, :timeout_in_seconds => 5)
 end
+
+Then /^I should not see "([^"]*)" within the dependencies of "([^"]*)"$/ do |successor_description, todo_description|
+  todo = @current_user.todos.find_by_description(todo_description)
+  todo.should_not be_nil
+  successor = @current_user.todos.find_by_description(successor_description)
+  successor.should_not be_nil
+  # let selenium look for the presence of the successor
+  xpath = "xpath=//div[@id='line_todo_#{todo.id}']//div[@id='successor_line_todo_#{successor.id}']//span"
+  selenium.is_element_present(xpath).should be_false
+end
+
 
 Then /^I should see the todo "([^\"]*)"$/ do |todo_description|
   selenium.is_element_present("//span[.=\"#{todo_description}\"]").should be_true
@@ -236,4 +249,22 @@ end
 
 Then /^a confirmation for adding a new context "([^"]*)" should be asked$/ do |context_name|
   selenium.get_confirmation.should == "New context \"#{context_name}\" will be also created. Are you sure?"
+end
+
+Then /^I should see "([^"]*)" in the deferred container$/ do |todo_description|
+  todo = @current_user.todos.find_by_description(todo_description)
+  todo.should_not be_nil
+
+  xpath = "//div[@id='tickler']//div[@id='line_todo_#{todo.id}']"
+
+  selenium.is_element_present(xpath).should be_true
+end
+
+Then /^I should not see "([^"]*)" in the deferred container$/ do |todo_description|
+  todo = @current_user.todos.find_by_description(todo_description)
+  todo.should_not be_nil
+
+  xpath = "//div[@id='tickler']//div[@id='line_todo_#{todo.id}']"
+
+  selenium.is_element_present(xpath).should be_false
 end

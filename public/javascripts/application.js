@@ -338,7 +338,7 @@ var TodoItems = {
 
         /* set behavior for toggle checkboxes for Recurring Todos */
         $(".item-container input.item-checkbox").live('click', function(ev){
-            put_with_ajax_and_block_element(this.value, $(this));
+            put_with_ajax_and_block_element(this.value, $(this).parents(".item-container"));
             return false;
         });
 
@@ -362,14 +362,23 @@ var TodoItems = {
             return false;
         });
 
+        // defer a todo
         $(".item-container a.icon_defer_item").live('click', function(ev){
             if ($(this).attr("x_defer_alert") == "true")
                 alert ($(this).attr("x_defer_date_after_due_date"));
             else
-                put_with_ajax_and_block_element(this.href, $(this));
+                put_with_ajax_and_block_element(this.href, $(this).parents(".item-container"));
             return false;
         });
 
+        /* delete button to delete a project from the list */
+        $('.item-container a.delete_dependency_button').live('click', function(evt){
+            predecessor_id=$(this).attr("x_predecessors_id");
+            ajax_options = default_ajax_options_for_scripts('DELETE', this.href, $(this).parents('.item-container'));
+            ajax_options.data += "&predecessor="+predecessor_id
+            $.ajax(ajax_options);
+            return false;
+        });
     }
 }
 
@@ -941,8 +950,37 @@ function enable_rich_interaction(){
     /* multiple: true,
         multipleSeparator:',' */
 
-    $('input[name=predecessor_list]:not(.ac_input)').autocomplete({
-        source: relative_to_root('auto_complete_for_predecessor')
+    $('input[name=predecessor_list]:not(.ac_input)')
+    .bind( "keydown", function( event ) { // don't navigate away from the field on tab when selecting an item
+        if ( event.keyCode === $.ui.keyCode.TAB &&
+            $( this ).data( "autocomplete" ).menu.active ) {
+            event.preventDefault();
+        }
+    })
+    .autocomplete({
+        minLength: 0,
+        source: function( request, response ) {
+            last_term = extractLast( request.term );
+            if (last_term != "" && last_term != " ")
+                $.getJSON( relative_to_root('auto_complete_for_predecessor'), {
+                    term: last_term
+                }, response );
+        },
+        focus: function() {
+            // prevent value inserted on focus
+            return false;
+        },
+        select: function( event, ui ) {
+            var terms = split( this.value );
+            // remove the current input
+            terms.pop();
+            // add the selected item
+            terms.push( ui.item.value );
+            // add placeholder to get the comma-and-space at the end
+            //terms.push( "" );
+            this.value = terms.join( ", " );
+            return false;
+        }
     });
 
     /* have to bind on keypress because of limitations of live() */

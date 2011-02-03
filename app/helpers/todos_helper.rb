@@ -1,17 +1,17 @@
 module TodosHelper
 
-  def remote_star_icon 
-    link_to( image_tag_for_star(@todo),
-      toggle_star_todo_path(@todo),
-      :class => "icon star_item", :title => t('todos.star_action_with_description', :description => @todo.description))
+  def remote_star_icon(todo=@todo)
+    link_to( image_tag_for_star(todo),
+      toggle_star_todo_path(todo),
+      :class => "icon star_item", :title => t('todos.star_action_with_description', :description => todo.description))
   end
 
-  def remote_edit_button
+  def remote_edit_button(todo=@todo)
     link_to(
-      image_tag("blank.png", :alt => t('todos.edit'), :align => "absmiddle", :id => 'edit_icon_todo_'+@todo.id.to_s, :class => 'edit_item'),
-      {:controller => 'todos', :action => 'edit', :id => @todo.id},
+      image_tag("blank.png", :alt => t('todos.edit'), :align => "absmiddle", :id => 'edit_icon_todo_'+todo.id.to_s, :class => 'edit_item'),
+      {:controller => 'todos', :action => 'edit', :id => todo.id},
       :class => "icon edit_item",
-      :title => t('todos.edit_action_with_description', :description => @todo.description))
+      :title => t('todos.edit_action_with_description', :description => todo.description))
   end
 
   def remote_delete_menu_item(todo)
@@ -28,14 +28,22 @@ module TodosHelper
       :_source_view => (@source_view.underscore.gsub(/\s+/,'_') rescue "")}
     url[:_tag_name] = @tag_name if @source_view == 'tag'
 
-    futuredate = (@todo.show_from || @todo.user.date) + days.days
+    futuredate = (todo.show_from || todo.user.date) + days.days
     options = {:x_defer_alert => false, :class => "icon_defer_item" }
-    if @todo.due && futuredate > @todo.due
+    if todo.due && futuredate > todo.due
       options[:x_defer_alert] = true
       options[:x_defer_date_after_due_date] = t('todos.defer_date_after_due_date')
     end
 
     return link_to(image_tag_for_defer(days), url, options)
+  end
+
+  def remote_delete_dependency(todo, predecessor)
+    link_to(
+      image_tag("blank.png", :title => t('todos.remove_dependency'), :align => "absmiddle", :class => "delete_item"),
+      url_for({:controller => 'todos', :action => 'remove_predecessor', :id => todo.id}),
+      {:class => "delete_dependency_button", :x_predecessors_id => predecessor.id}
+    )
   end
 
   def remote_promote_to_project_menu_item(todo)
@@ -77,51 +85,51 @@ module TodosHelper
       :class => "recurring_icon", :title => recurrence_pattern_as_text(todo.recurring_todo))
   end
   
-  def remote_toggle_checkbox
-    check_box_tag('item_id', toggle_check_todo_path(@todo), @todo.completed?, :class => 'item-checkbox',
-      :title => @todo.pending? ? t('todos.blocked_by', :predecessors => @todo.uncompleted_predecessors.map(&:description).join(', ')) : "", :readonly => @todo.pending?)
+  def remote_toggle_checkbox(todo=@todo)
+    check_box_tag('item_id', toggle_check_todo_path(todo), todo.completed?, :class => 'item-checkbox',
+      :title => todo.pending? ? t('todos.blocked_by', :predecessors => todo.uncompleted_predecessors.map(&:description).join(', ')) : "", :readonly => todo.pending?)
   end
   
-  def date_span
-    if @todo.completed?
-      "<span class=\"grey\">#{format_date( @todo.completed_at )}</span>"
-    elsif @todo.pending?
-      "<a title='#{t('todos.depends_on')}: #{@todo.uncompleted_predecessors.map(&:description).join(', ')}'><span class=\"orange\">#{t('todos.pending')}</span></a> "
-    elsif @todo.deferred?
-      show_date( @todo.show_from )
+  def date_span(todo=@todo)
+    if todo.completed?
+      "<span class=\"grey\">#{format_date( todo.completed_at )}</span>"
+    elsif todo.pending?
+      "<a title='#{t('todos.depends_on')}: #{todo.uncompleted_predecessors.map(&:description).join(', ')}'><span class=\"orange\">#{t('todos.pending')}</span></a> "
+    elsif todo.deferred?
+      show_date( todo.show_from )
     else
-      due_date( @todo.due )
+      due_date( todo.due )
     end
   end
   
-  def successors_span
-    unless @todo.pending_successors.empty?
-      pending_count = @todo.pending_successors.length
-      title = "#{t('todos.has_x_pending', :count => pending_count)}: #{@todo.pending_successors.map(&:description).join(', ')}"
+  def successors_span(todo=@todo)
+    unless todo.pending_successors.empty?
+      pending_count = todo.pending_successors.length
+      title = "#{t('todos.has_x_pending', :count => pending_count)}: #{todo.pending_successors.map(&:description).join(', ')}"
       image_tag( 'successor_off.png', :width=>'10', :height=>'16', :border=>'0', :title => title )
     end
   end
   
-  def grip_span
-    unless @todo.completed?
+  def grip_span(todo=@todo)
+    unless todo.completed?
       image_tag('grip.png', :width => '7', :height => '16', :border => '0', 
         :title => t('todos.drag_action_title'),
         :class => 'grip')
     end
   end
   
-  def tag_list_text
-    @todo.tags.collect{|t| t.name}.join(', ')
+  def tag_list_text(todo=@todo)
+    todo.tags.collect{|t| t.name}.join(', ')
   end
   
-  def tag_list
-    tags_except_starred = @todo.tags.reject{|t| t.name == Todo::STARRED_TAG_NAME}
+  def tag_list(todo=@todo)
+    tags_except_starred = todo.tags.reject{|t| t.name == Todo::STARRED_TAG_NAME}
     tag_list = tags_except_starred.collect{|t| "<span class=\"tag #{t.name.gsub(' ','-')}\">" + link_to(t.name, :controller => "todos", :action => "tag", :id => t.name) + "</span>"}.join('')
     "<span class='tags'>#{tag_list}</span>"
   end
   
-  def tag_list_mobile
-    tags_except_starred = @todo.tags.reject{|t| t.name == Todo::STARRED_TAG_NAME}
+  def tag_list_mobile(todo=@todo)
+    tags_except_starred = todo.tags.reject{|t| t.name == Todo::STARRED_TAG_NAME}
     # removed the link. TODO: add link to mobile view of tagged actions
     tag_list = tags_except_starred.collect{|t| 
       "<span class=\"tag\">" + 
@@ -130,30 +138,30 @@ module TodosHelper
     if tag_list.empty? then "" else "<span class=\"tags\">#{tag_list}</span>" end
   end
   
-  def predecessor_list_text
-    @todo.predecessors.map{|t| t.specification}.join(', ')
+  def predecessor_list_text(todo=@todo)
+    todo.predecessors.map{|t| t.specification}.join(', ')
   end
 
-  def deferred_due_date
-    if @todo.deferred? && @todo.due
-      t('todos.action_due_on', :date => format_date(@todo.due))
+  def deferred_due_date(todo=@todo)
+    if todo.deferred? && todo.due
+      t('todos.action_due_on', :date => format_date(todo.due))
     end
   end
   
-  def project_and_context_links(parent_container_type, opts = {})
+  def project_and_context_links(todo, parent_container_type, opts = {})
     str = ''
-    if @todo.completed?
-      str += @todo.context.name unless opts[:suppress_context]
-      should_suppress_project = opts[:suppress_project] || @todo.project.nil?
+    if todo.completed?
+      str += todo.context.name unless opts[:suppress_context]
+      should_suppress_project = opts[:suppress_project] || todo.project.nil?
       str += ", " unless str.blank? || should_suppress_project
-      str += @todo.project.name unless should_suppress_project
+      str += todo.project.name unless should_suppress_project
       str = "(#{str})" unless str.blank?
     else
       if (['project', 'tag', 'stats', 'search'].include?(parent_container_type))
-        str << item_link_to_context( @todo )
+        str << item_link_to_context( todo )
       end
       if (['context', 'tickler', 'tag', 'stats', 'search'].include?(parent_container_type)) && @todo.project_id
-        str << item_link_to_project( @todo )
+        str << item_link_to_project( todo )
       end
     end
     return str
@@ -295,7 +303,7 @@ module TodosHelper
   def update_needs_to_remove_todo_from_container
     source_view do |page|
       page.context  { return @context_changed || @todo.deferred? || @todo.pending? }
-      page.project  { return @todo_deferred_state_changed }
+      page.project  { return @todo_deferred_state_changed || @todo_pending_state_changed }
       page.deferred { return @context_changed || !(@todo.deferred? || @todo.pending?) }
       page.calendar { return @due_date_changed || !@todo.due }
       page.stats    { return @todo.completed? }
@@ -308,7 +316,7 @@ module TodosHelper
   def replace_with_updated_todo
     source_view do |page|
       page.context  { return !update_needs_to_remove_todo_from_container }
-      page.project  { return !@todo_deferred_state_changed}
+      page.project  { return !update_needs_to_remove_todo_from_container }
       page.deferred { return !@context_changed && (@todo.deferred? || @todo.pending?) }
       page.calendar { return !@due_date_changed && @todo.due }
       page.stats    { return !@todo.completed? }
@@ -321,7 +329,7 @@ module TodosHelper
   def append_updated_todo
     source_view do |page|
       page.context  { return false }
-      page.project  { return @todo_deferred_state_changed }
+      page.project  { return @todo_deferred_state_changed || @todo_pending_state_changed }
       page.deferred { return @context_changed && (@todo.deferred? || @todo.pending?) }
       page.calendar { return @due_date_changed && @todo.due }
       page.stats    { return false }
@@ -346,7 +354,7 @@ module TodosHelper
 
     source_view do |page|
       page.project  {
-        return "tickler-empty-nd" if @todo_was_deferred_from_active_state
+        return "tickler-empty-nd" if @todo_was_deferred_from_active_state || @todo_was_blocked_from_active_state
         return "p#{todo.project_id}empty-nd"
       }
       page.tag {
@@ -367,8 +375,9 @@ module TodosHelper
     source_view do |page|
       page.project  {
         container_id = "p#{@original_item_project_id}empty-nd" if @remaining_in_context == 0
-        container_id = "tickler-empty-nd" if (@todo_was_activated_from_deferred_state && @remaining_deferred_or_pending_count == 0) ||
-          (@original_item_was_deferred && @remaining_deferred_or_pending_count == 0 && @todo.completed?)
+        container_id = "tickler-empty-nd" if ( 
+          ( (@todo_was_activated_from_deferred_state || @todo_was_activated_from_pending_state) && @remaining_deferred_or_pending_count == 0) ||
+          (@original_item_was_deferred && @remaining_deferred_or_pending_count == 0 && @todo.completed?) )
         container_id = "empty-d" if @completed_count && @completed_count == 0 && !@todo.completed?
       }
       page.deferred { container_id = "c#{@original_item_context_id}empty-nd" if @remaining_in_context == 0 }
@@ -404,8 +413,4 @@ module TodosHelper
     image_tag("blank.png", :title =>t('todos.star_action'), :class => class_str, :id => "star_img_"+todo.id.to_s)
   end
   
-  def auto_complete_result2(entries, phrase = nil)
-    return entries.map{|e| e.specification()}.join("\n") rescue ''
-  end
-
 end

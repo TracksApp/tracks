@@ -36,7 +36,7 @@ class ApplicationController < ActionController::Base
   before_filter :set_locale
   prepend_before_filter :login_required
   prepend_before_filter :enable_mobile_content_negotiation
-#  after_filter :set_locale
+  #  after_filter :set_locale
   after_filter :set_charset
   
   include ActionView::Helpers::TextHelper
@@ -136,6 +136,12 @@ class ApplicationController < ActionController::Base
       return ""
     end
   end
+
+  def auto_complete_result2(entries, phrase = nil)
+    json_elems = "[{" + entries.map {|item| "\"id\" : \"#{item.id}\", \"value\" : \"#{item.specification()}\""}.join("},{") + "}]"
+    return json_elems == "[{}]" ? "" : json_elems
+  end
+
 
   # Uses RedCloth to transform text using either Textile or Markdown Need to
   # require redcloth above RedCloth 3.0 or greater is needed to use Markdown,

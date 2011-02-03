@@ -15,6 +15,10 @@ module TracksStepHelper
     selenium.click("xpath=//form[@id='project_form']//button[@id='project_new_project_submit']", :wait_for => :ajax, :javascript_framework => :jquery)
   end
 
+  def submit_edit_todo_form (todo)
+    selenium.click("//div[@id='edit_todo_#{todo.id}']//button[@id='submit_todo_#{todo.id}']", :wait_for => :ajax, :javascript_framework => :jquery)
+  end
+  
   def format_date(date)
     # copy-and-past from ApplicationController::format_date
     return date ? date.in_time_zone(@current_user.prefs.time_zone).strftime("#{@current_user.prefs.date_format}") : ''

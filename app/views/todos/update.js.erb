@@ -16,6 +16,7 @@
   animation << "hide_context" if update_needs_to_hide_context
   animation << "highlight_updated_todo"
   animation << "update_empty_tag_container" if source_view_is(:tag)
+  animation << "update_predecessors"
 %>
 
   <%= render_animation(animation) %>
@@ -35,7 +36,7 @@ function add_to_existing_container(next_steps) {
   $('#<%= item_container_id(@todo) %>').append(html_for_todo());
   <% if source_view_is_one_of(:project,:calendar) -%>
     next_steps.go();
-    <% if (@target_context_count==1) || (@todo.deferred? && @remaining_deferred_or_pending_count == 1) -%>
+    <% if (@target_context_count==1) || ( (@todo.deferred? || @todo.pending?) && @remaining_deferred_or_pending_count == 1) -%>
       $("#<%=  empty_container_msg_div_id %>").slideUp(100);
     <% end -%>
   <% else -%>
@@ -105,6 +106,11 @@ function html_for_error_messages() {
 
 function update_predecessors() {
   <% @todo.uncompleted_predecessors.each do |p| -%>
+    if ($('#<%=item_container_id(p)%>')) {
+      $('#<%=dom_id(p)%>').html('<%=escape_javascript(render(:partial => p, :locals => { :parent_container_type => parent_container_type }))%>');
+    }
+  <% end -%>
+  <% @removed_predecessors.each do |p| -%>
     if ($('#<%=item_container_id(p)%>')) {
       $('#<%=dom_id(p)%>').html('<%=escape_javascript(render(:partial => p, :locals => { :parent_container_type => parent_container_type }))%>');
     }

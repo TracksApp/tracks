@@ -250,11 +250,12 @@ class TodosController < ApplicationController
   end
 
   def remove_predecessor
-    @todo = current_user.todos.find(params['id'])
     @source_view = params['_source_view'] || 'todo'
+    @todo = current_user.todos.find(params['id'])
     @predecessor = current_user.todos.find(params['predecessor'])
     @successor = @todo
     @removed = @successor.remove_predecessor(@predecessor)
+    determine_remaining_in_context_count
     respond_to do |format|
       format.js
     end
@@ -361,8 +362,13 @@ class TodosController < ApplicationController
     update_attributes_of_todo
     
     @saved = @todo.save
+
+    # this is set after save and cleared after reload, so save it here
+    @removed_predecessors = @todo.removed_predecessors
+    
     @todo.reload # refresh context and project object too (not only their id's)
 
+    update_dependency_state
     update_todo_state_if_project_changed
 
     determine_changes_by_this_update
@@ -660,7 +666,7 @@ class TodosController < ApplicationController
           :conditions => [ '(todos.state = ? OR todos.state = ? OR todos.state = ?) AND ' +
               'NOT (id = ?) AND lower(description) LIKE ?',
             'active', 'pending', 'deferred',
-            params[:id], '%' + params[:q].downcase + '%' ],
+            params[:id], '%' + params[:term].downcase + '%' ],
           :order => 'description ASC',
           :limit => 10
         )
@@ -671,12 +677,12 @@ class TodosController < ApplicationController
         :select => 'description, project_id, context_id, created_at',
         :conditions => [ '(todos.state = ? OR todos.state = ? OR todos.state = ?) AND lower(description) LIKE ?',
           'active', 'pending', 'deferred',
-          '%' + params[:q].downcase + '%' ],
+          '%' + params[:term].downcase + '%' ],
         :order => 'description ASC',
         :limit => 10
       )
     end
-    render :inline => "<%= auto_complete_result2(@items) %>"
+    render :inline => auto_complete_result2(@items)
   end
 
   def convert_to_project
@@ -1106,6 +1112,7 @@ class TodosController < ApplicationController
     @original_item_project_id = @todo.project_id
     @original_item_was_deferred = @todo.deferred?
     @original_item_was_hidden = @todo.hidden?
+    @original_item_was_pending = @todo.pending?
     @original_item_due = @todo.due
     @original_item_due_id = get_due_id_for_calendar(@todo.due)
     @original_item_predecessor_list = @todo.predecessors.map{|t| t.specification}.join(', ')
@@ -1191,6 +1198,10 @@ class TodosController < ApplicationController
 
   def update_dependencies
     @todo.add_predecessor_list(params[:predecessor_list])
+  end
+
+  def update_dependency_state
+    # assumes @todo.save was called so that the predecessor_list is persistent
     if @original_item_predecessor_list != params[:predecessor_list]
       # Possible state change with new dependencies
       if @todo.uncompleted_predecessors.empty?
@@ -1206,11 +1217,16 @@ class TodosController < ApplicationController
   end
 
   def determine_changes_by_this_update
-    @todo_was_activated_from_deferred_state = @original_item_was_deferred && @todo.active?
+    @todo_was_activated_from_deferred_state = @todo.active? && @original_item_was_deferred
+    @todo_was_activated_from_pending_state = @todo.active? && @original_item_was_pending
     @todo_was_deferred_from_active_state = @todo.deferred? && !@original_item_was_deferred
-    @todo_deferred_state_changed = @todo_was_deferred_from_active_state || @todo_was_activated_from_deferred_state
-    @due_date_changed = @original_item_due != @todo.due
+    @todo_was_blocked_from_active_state = @todo.pending? && !@original_item_was_pending
+
+    @todo_deferred_state_changed = @original_item_was_deferred != @todo.deferred?
+    @todo_pending_state_changed = @original_item_was_pending != @todo.pending?
     @todo_hidden_state_changed = @original_item_was_hidden != @todo.hidden?
+
+    @due_date_changed = @original_item_due != @todo.due
 
     source_view do |page|
       page.calendar do

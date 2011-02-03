@@ -39,11 +39,11 @@ class Todo < ActiveRecord::Base
   STARRED_TAG_NAME = "starred"
 
   # regular expressions for dependencies
-  RE_TODO = /[^"]+/
-  RE_CONTEXT = /[^"]+/
-  RE_PROJECT = /[^"]+/
-  RE_PARTS = /"(#{RE_TODO})"\s<"(#{RE_CONTEXT})";\s"(#{RE_PROJECT})">/ # results in array
-  RE_SPEC = /"#{RE_TODO}"\s<"#{RE_CONTEXT}";\s"#{RE_PROJECT}">/ # results in string
+  RE_TODO = /[^']+/
+  RE_CONTEXT = /[^']+/
+  RE_PROJECT = /[^']+/
+  RE_PARTS = /'(#{RE_TODO})'\s<'(#{RE_CONTEXT})';\s'(#{RE_PROJECT})'>/ # results in array
+  RE_SPEC = /'#{RE_TODO}'\s<'#{RE_CONTEXT}';\s'#{RE_PROJECT}'>/ # results in string
   
   acts_as_state_machine :initial => :active, :column => 'state'
   
@@ -95,6 +95,7 @@ class Todo < ActiveRecord::Base
   def initialize(*args)
     super(*args)
     @predecessor_array = nil # Used for deferred save of predecessors
+    @removed_predecessors = nil
   end
   
   def no_uncompleted_predecessors_or_deferral?
@@ -108,7 +109,7 @@ class Todo < ActiveRecord::Base
   # Returns a string with description <context, project>
   def specification
     project_name = project.is_a?(NullProject) ? "(none)" : project.name
-    return "\"#{description}\" <\"#{context.title}\"; \"#{project_name}\">"
+    return "\'#{description}\' <\'#{context.title}\'; \'#{project_name}\'>"
   end
   
   def todo_from_specification(specification)
@@ -139,6 +140,7 @@ class Todo < ActiveRecord::Base
         :project_id => project_id
       }
     )
+
     return nil if todos.empty?
 
     # TODO: what todo if there are more than one todo that fit the specification
@@ -167,11 +169,15 @@ class Todo < ActiveRecord::Base
       current_array = predecessors.map{|p| p.specification}
       remove_array = current_array - @predecessor_array
       add_array = @predecessor_array - current_array
-      
+
+      @removed_predecessors = []
       # This is probably a bit naive code...
       remove_array.each do |specification|
         t = todo_from_specification(specification)
-        self.predecessors.delete(t) unless t.nil?
+        unless t.nil?
+          @removed_predecessors << t
+          self.predecessors.delete(t)
+        end
       end
       # ... as is this?
       add_array.each do |specification|
@@ -182,7 +188,11 @@ class Todo < ActiveRecord::Base
           logger.error "Could not find #{specification}" # Unexpected since validation passed
         end
       end
-    end
+    end    
+  end
+
+  def removed_predecessors
+    return @removed_predecessors
   end
   
   def remove_predecessor(predecessor)
