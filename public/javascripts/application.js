@@ -382,6 +382,20 @@ var TodoItems = {
     }
 }
 
+var UsersPage = {
+    setup_behavior: function() {
+        /* delete button to delete a usedr from the list */
+        $('a.delete_user_button').live('click', function(evt){
+            confirm_message = $(this).attr("x_confirm_message")
+            if(confirm(confirm_message)){
+                delete_with_ajax_and_block_element(this.href, $(this).parents('.project'));
+            }
+            return false;
+        });
+
+    }
+}
+
 var ProjectListPage = {
     update_state_count: function(state, count) {
         $('#'+state+'-projects-count').html(count);
@@ -1081,7 +1095,7 @@ $(document).ready(function() {
     /* enable page specific behavior */
     $([ 'IntegrationsPage', 'NotesPage', 'ProjectListPage', 'ContextListPage',
         'FeedsPage', 'RecurringTodosPage', 'TodoItems', 'TracksPages',
-        'TracksForm', 'SearchPage' ]).each(function() {
+        'TracksForm', 'SearchPage', 'UsersPage' ]).each(function() {
         eval(this+'.setup_behavior();');
     });
 
