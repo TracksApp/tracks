@@ -54,7 +54,6 @@ class UsersControllerTest < ActionController::TestCase
     @no_users_before = User.find(:all).size
     user_id = users(:ldap_user).id
     xhr :post, :destroy, :id => user_id.to_param
-    assert_rjs :page, "user-#{user_id}", :remove
     assert_equal @no_users_before-1, User.find(:all).size
   end
   

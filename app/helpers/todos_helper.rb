@@ -160,7 +160,7 @@ module TodosHelper
       if (['project', 'tag', 'stats', 'search'].include?(parent_container_type))
         str << item_link_to_context( todo )
       end
-      if (['context', 'tickler', 'tag', 'stats', 'search'].include?(parent_container_type)) && @todo.project_id
+      if (['context', 'tickler', 'tag', 'stats', 'search'].include?(parent_container_type)) && todo.project_id
         str << item_link_to_project( todo )
       end
     end

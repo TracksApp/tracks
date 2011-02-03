@@ -195,12 +195,12 @@ class TodoTest < ActiveSupport::TestCase
   def test_todo_specification_handles_null_project
     # @not_completed1 has a project
     todo_desc = @not_completed1.description
-    assert_equal "\"#{todo_desc}\" <\"agenda\"; \"Make more money than Billy Gates\">", @not_completed1.specification
+    assert_equal "'#{todo_desc}' <'agenda'; 'Make more money than Billy Gates'>", @not_completed1.specification
 
     # now check on null
     @not_completed1.project = nil
     @not_completed1.save
-    assert_equal "\"#{todo_desc}\" <\"agenda\"; \"(none)\">", @not_completed1.specification
+    assert_equal "'#{todo_desc}' <'agenda'; '(none)'>", @not_completed1.specification
   end
 
   def test_todo_from_specification_should_return_todo

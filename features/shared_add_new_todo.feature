@@ -200,6 +200,7 @@ Feature: Add new next action from every page
 
 
       """
+    Then a confirmation for adding a new context "@anywhere" should be asked
     Then I should see "@anywhere"
     And I should see "a"
     And I should see "b"

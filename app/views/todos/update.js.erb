@@ -110,9 +110,11 @@ function update_predecessors() {
       $('#<%=dom_id(p)%>').html('<%=escape_javascript(render(:partial => p, :locals => { :parent_container_type => parent_container_type }))%>');
     }
   <% end -%>
-  <% @removed_predecessors.each do |p| -%>
-    if ($('#<%=item_container_id(p)%>')) {
-      $('#<%=dom_id(p)%>').html('<%=escape_javascript(render(:partial => p, :locals => { :parent_container_type => parent_container_type }))%>');
-    }
+  <% if @removed_predecessors
+    @removed_predecessors.each do |p| -%>
+      if ($('#<%=item_container_id(p)%>')) {
+        $('#<%=dom_id(p)%>').html('<%=escape_javascript(render(:partial => p, :locals => { :parent_container_type => parent_container_type }))%>');
+      }
+    <% end -%>
   <% end -%>
 }
