@@ -10,9 +10,9 @@ class Todo < ActiveRecord::Base
   has_many :predecessors, :through => :successor_dependencies
   has_many :successors,   :through => :predecessor_dependencies
   has_many :uncompleted_predecessors, :through => :successor_dependencies,
-    :source => :predecessor, :conditions => ['NOT (state = ?)', 'completed']
+    :source => :predecessor, :conditions => ['NOT (todos.state = ?)', 'completed']
   has_many :pending_successors, :through => :predecessor_dependencies,
-    :source => :successor, :conditions => ['state = ?', 'pending']
+    :source => :successor, :conditions => ['todos.state = ?', 'pending']
   
   after_save :save_predecessors
 
