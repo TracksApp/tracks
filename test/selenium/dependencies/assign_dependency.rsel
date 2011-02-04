@@ -1,8 +1,0 @@
-setup :fixtures => :all
-login :as => 'admin'
-open "/"
-drag_todo_to 18, 9
-wait_for_visible 'css=#todo_9 a.show_successors img'
-click 'css=#todo_9 a.show_successors img'
-assert_visible 'successors_todo_9'
-assert_visible 'css=#successors_todo_9 #successor_todo_18'

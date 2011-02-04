@@ -1,8 +1,0 @@
-# Test for issue #964
-setup :fixtures => :all
-login :as => 'admin'
-Todo.create(:context => Context.find(3), :description => 'foo')
-open "/"
-click "css=#successor_todo_19 img.delete_item"
-wait_for_visible 'flash'
-assert_visible 'c3'
