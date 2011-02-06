@@ -82,7 +82,7 @@ Feature: Edit a next action from every page
       | context page for "visible context" | Currently there are no deferred or pending actions |
       | project page for "visible project" | Currently there are no deferred or pending actions |
 
-  Scenario: I can edit a todo to change its description
+  Scenario: I can edit a todo to change its description # do for more pages, see #1094
     Given this is a pending scenario
 
   Scenario: I can edit a todo to move it to another context

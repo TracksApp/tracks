@@ -1231,7 +1231,7 @@ class TodosController < ApplicationController
     source_view do |page|
       page.calendar do
         @old_due_empty = is_old_due_empty(@original_item_due_id)
-        @new_due_id = get_due_id_for_calendar(@todo.due) if @due_date_changed
+        @new_due_id = get_due_id_for_calendar(@todo.due) 
       end
       page.tag do
         @tag_name = params['_tag_name']
