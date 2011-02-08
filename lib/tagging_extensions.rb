@@ -9,12 +9,15 @@ class ActiveRecord::Base #:nodoc:
     def _add_tags incoming
       taggable?(true)
       tag_cast_to_string(incoming).each do |tag_name|
-        begin
-          tag = Tag.find_or_create_by_name(tag_name)
-          raise Tag::Error, "tag could not be saved: #{tag_name}" if tag.new_record?
-          tags << tag
-        rescue ActiveRecord::StatementInvalid => e
-          raise unless e.to_s =~ /duplicate/i
+        # added following check to prevent empty tags from being saved (which will fail)
+        unless tag_name.blank?
+          begin
+            tag = Tag.find_or_create_by_name(tag_name)
+            raise Tag::Error, "tag could not be saved: #{tag_name}" if tag.new_record?
+            tags << tag
+          rescue ActiveRecord::StatementInvalid => e
+            raise unless e.to_s =~ /duplicate/i
+          end
         end
       end
     end
@@ -24,11 +27,11 @@ class ActiveRecord::Base #:nodoc:
       taggable?(true)
       outgoing = tag_cast_to_string(outgoing)
       tags.delete(*(tags.select do |tag|
-        outgoing.include? tag.name    
-      end))
+            outgoing.include? tag.name
+          end))
     end
 
-   # Returns the tags on <tt>self</tt> as a string.
+    # Returns the tags on <tt>self</tt> as a string.
     def tag_list
       # Redefined later to avoid an RDoc parse error.
     end
@@ -50,7 +53,7 @@ class ActiveRecord::Base #:nodoc:
       #:startdoc:
     end
 
-   # Returns the tags on <tt>self</tt> as a string.
+    # Returns the tags on <tt>self</tt> as a string.
     def tag_list #:nodoc:
       #:stopdoc:
       taggable?(true)
@@ -60,29 +63,30 @@ class ActiveRecord::Base #:nodoc:
     end
 
     def tag_list=(value)
-        tag_with(value)
+      tag_with(value)
     end    
 
     private 
     
     def tag_cast_to_string obj #:nodoc:
       case obj
-        when Array
-          obj.map! do |item|
-            case item
-              when /^\d+$/, Fixnum then Tag.find(item).name # This will be slow if you use ids a lot.
-              when Tag then item.name
-              when String then item
-              else
-                raise "Invalid type"
-            end
-          end              
-        when String
-          obj = obj.split(Tag::DELIMITER).map do |tag_name| 
-            tag_name.strip.squeeze(" ")
+      when Array
+        obj.map! do |item|
+          case item
+            # removed next line as it prevents using numbers as tags
+            # when /^\d+$/, Fixnum then Tag.find(item).name # This will be slow if you use ids a lot.
+          when Tag then item.name
+          when String then item
+          else
+            raise "Invalid type"
           end
-        else
-          raise "Invalid object of class #{obj.class} as tagging method parameter"
+        end
+      when String
+        obj = obj.split(Tag::DELIMITER).map do |tag_name|
+          tag_name.strip.squeeze(" ")
+        end
+      else
+        raise "Invalid object of class #{obj.class} as tagging method parameter"
       end.flatten.compact.map(&:downcase).uniq
     end 
   
@@ -141,46 +145,46 @@ class ActiveRecord::Base #:nodoc:
       find_by_sql(sql)
     end
    
-   def self.tagged_with_any(*tag_list)
-     options = tag_list.last.is_a?(Hash) ? tag_list.pop : {}
-     tag_list = parse_tags(tag_list)
+    def self.tagged_with_any(*tag_list)
+      options = tag_list.last.is_a?(Hash) ? tag_list.pop : {}
+      tag_list = parse_tags(tag_list)
    
-     scope = scope(:find)
-     options[:select] ||= "#{table_name}.*"
-     options[:from] ||= "#{table_name}, meta_tags, taggings"
+      scope = scope(:find)
+      options[:select] ||= "#{table_name}.*"
+      options[:from] ||= "#{table_name}, meta_tags, taggings"
    
-     sql  = "SELECT #{(scope && scope[:select]) || options[:select]} "
-     sql << "FROM #{(scope && scope[:from]) || options[:from]} "
+      sql  = "SELECT #{(scope && scope[:select]) || options[:select]} "
+      sql << "FROM #{(scope && scope[:from]) || options[:from]} "
 
-     add_joins!(sql, options, scope)
+      add_joins!(sql, options, scope)
    
-     sql << "WHERE #{table_name}.#{primary_key} = taggings.taggable_id "
-     sql << "AND taggings.taggable_type = '#{ActiveRecord::Base.send(:class_name_of_active_record_descendant, self).to_s}' "
-     sql << "AND taggings.meta_tag_id = meta_tags.id "
+      sql << "WHERE #{table_name}.#{primary_key} = taggings.taggable_id "
+      sql << "AND taggings.taggable_type = '#{ActiveRecord::Base.send(:class_name_of_active_record_descendant, self).to_s}' "
+      sql << "AND taggings.meta_tag_id = meta_tags.id "
      
-     sql << "AND ("
-     or_options = []
-     tag_list.each do |name|
-       or_options << "meta_tags.name = '#{name}'"
-     end
-     or_options_joined = or_options.join(" OR ")
-     sql << "#{or_options_joined}) "
+      sql << "AND ("
+      or_options = []
+      tag_list.each do |name|
+        or_options << "meta_tags.name = '#{name}'"
+      end
+      or_options_joined = or_options.join(" OR ")
+      sql << "#{or_options_joined}) "
      
      
-     sql << "AND #{sanitize_sql(options[:conditions])} " if options[:conditions]
+      sql << "AND #{sanitize_sql(options[:conditions])} " if options[:conditions]
       
-     columns = column_names.map do |column| 
-       "#{table_name}.#{column}"
-     end.join(", ")
+      columns = column_names.map do |column|
+        "#{table_name}.#{column}"
+      end.join(", ")
       
-     sql << "GROUP BY #{columns} "
+      sql << "GROUP BY #{columns} "
    
-     add_order!(sql, options[:order], scope)
-     add_limit!(sql, options, scope)
-     add_lock!(sql, options, scope)
+      add_order!(sql, options[:order], scope)
+      add_limit!(sql, options, scope)
+      add_lock!(sql, options, scope)
    
-     find_by_sql(sql)
-   end
+      find_by_sql(sql)
+    end
     
     def parse_tags(tags)
       return [] if tags.blank?

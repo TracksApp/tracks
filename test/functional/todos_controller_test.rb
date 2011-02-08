@@ -34,6 +34,35 @@ class TodosControllerTest < ActionController::TestCase
     assert !t.starred?
   end
 
+  def test_tagging_changes_to_tag_with_numbers
+    # by default has_many_polymorph searches for tags with given id if the tag is a number. we do not want that
+    login_as(:admin_user)
+    assert_difference 'Todo.count' do
+      put :create, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{
+        "notes"=>"", "description"=>"test tags", "due"=>"30/11/2006"},
+        "tag_list"=>"1234,5667,9876"
+      # default has_many_polymorphs will fail on these high numbers as tags with those id's do not exist
+    end
+    t = assigns['todo']
+    assert_equal t.description, "test tags"
+    assert_equal 3, t.tags.count
+  end
+
+  def test_tagging_changes_to_handle_empty_tags
+    # by default has_many_polymorph searches for tags with given id if the tag is a number. we do not want that
+    login_as(:admin_user)
+    assert_difference 'Todo.count' do
+      put :create, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{
+        "notes"=>"", "description"=>"test tags", "due"=>"30/11/2006"},
+        "tag_list"=>"a,,b"
+      # default has_many_polymorphs will fail on the empty tag
+    end
+    t = assigns['todo']
+    assert_equal t.description, "test tags"
+    assert_equal 2, t.tags.count
+  end
+
+
   def test_not_done_counts_after_hiding_project
     p = Project.find(1)
     p.hide!
