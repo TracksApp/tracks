@@ -914,13 +914,16 @@ function enable_rich_interaction(){
 
     /* Autocomplete */
     $('input[name=context_name]').autocomplete({
-        source: relative_to_root('contexts.autocomplete')
+        source: relative_to_root('contexts.autocomplete'),
+        selectFirst: true
     });
     $('input[name=project_name]').autocomplete({
-        source: relative_to_root('projects.autocomplete')
+        source: relative_to_root('projects.autocomplete'),
+        selectFirst: true
     });
     $('input[name="project[default_context_name]"]').autocomplete({
-        source: relative_to_root('contexts.autocomplete')
+        source: relative_to_root('contexts.autocomplete'),
+        selectFirst: true
     });
 
     $('input[name=tag_list]:not(.ac_input)')
