@@ -141,7 +141,7 @@ Feature: Add new next action from every page
       | visit  | context page for "test context" | action          | 1     | not be visible |
       | go to  | tag page for "starred"          | action          | 1     | be visible     |
 
-  @selenium @wip
+  @selenium 
   Scenario Outline: Adding a todo to a hidden project does not show the todo
     Given I have a hidden project called "hidden project"
     And I have a project called "visible project"
@@ -165,7 +165,7 @@ Feature: Add new next action from every page
       | tag page for "test"                | see        | see         |
 
   @selenium
-  Scenario: Adding a todo to a hidden context does not show the todo
+  Scenario: Adding a todo to a hidden context from home page does not show the todo
     Given I have a context called "visible context"
     And I have a hidden context called "hidden context"
     When I go to the home page
@@ -173,6 +173,17 @@ Feature: Add new next action from every page
     Then I should see "a new todo"
     When I submit a new action with description "another new todo" in the context "hidden context"
     Then I should not see "another new todo"
+
+  @selenium 
+  Scenario: Adding a todo to a context show the todo in that context page
+    Given I have a context called "visible context"
+    And I have a hidden context called "hidden context"
+    When I go to the context page for "visible context"
+    And I submit a new action with description "a new todo" in the context "visible context"
+    Then I should see "a new todo"
+    When I go to the context page for "hidden context"
+    And I submit a new action with description "another new todo" in the context "hidden context"
+    Then I should see "another new todo"
 
   @selenium
   Scenario: Adding a todo to an empty container hides the empty message # TODO: make outline
@@ -191,7 +202,7 @@ Feature: Add new next action from every page
     When I go to the home page
     And I follow "Add multiple next actions"
     And I fill the multiple actions form with "", "a next project", "@anywhere", "new tag"
-    And I submit the new multiple actions form with 
+    And I submit the new multiple actions form with
       """
 
       a

@@ -224,7 +224,8 @@ module TodosHelper
       page.todo { return !@todo.hidden? }
       page.deferred { return @todo.deferred? || @todo.pending? }
       page.context {
-        return @todo.context_id==@default_context.id && (!@todo.hidden? && !@todo.context.hidden?)
+        logger.debug "ci=#{@todo.context_id} dci=#{@default_context.id} th=#{@todo.hidden?} tch=#{@todo.context.hidden?}"
+        return @todo.context_id==@default_context.id && ( (@todo.hidden? && @todo.context.hidden?) || (!@todo.hidden?) )
       }
       page.tag {
         return ( (@todo.pending? && @todo.has_tag?(@tag_name)) ||
