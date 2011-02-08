@@ -19,7 +19,7 @@ else
     @contexts, "id", "name", @mobile_from_context.id), 
     {"id" => :todo_context_id, :tabindex => 4} )
 end %>
-<h2><label for="todo_project_id"><%= t('common.context')  %></label></h2>
+<h2><label for="todo_project_id"><%= t('common.project')  %></label></h2>
 <%= unless @mobile_from_project
   collection_select( "todo", "project_id", @projects, "id", "name",
                           {:include_blank => t('todos.no_project')}, {"tabindex" => 5} )
