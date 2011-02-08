@@ -275,7 +275,7 @@ module TodosHelper
   end
 
   def format_ical_notes(notes)
-    unless notes.blank?
+    unless notes.nil? || notes.blank?
       split_notes = notes.split(/\n/)
       joined_notes = split_notes.join("\\n")
     end
