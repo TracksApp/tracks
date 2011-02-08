@@ -258,13 +258,15 @@ var TodoItemsContainer = {
                 imgSrc = $(this).find('img').attr('src');
                 $(this).find('img').attr('src', imgSrc.replace('collapse', 'expand'));
                 $.cookie(TodoItemsContainer.buildCookieName(this.parentNode.parentNode), true);
+                toggle_target.slideUp(500);
             } else {
                 // show it
                 imgSrc = $(this).find('img').attr('src');
                 $(this).find('img').attr('src', imgSrc.replace('expand', 'collapse'));
                 $.cookie(TodoItemsContainer.buildCookieName(this.parentNode.parentNode), null);
+                toggle_target.slideDown(500);
             }
-            toggle_target.toggle('blind');
+            return false;
         });
         // set to cookied state
         $('.container.context').each(function(){
