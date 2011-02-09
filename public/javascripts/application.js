@@ -962,7 +962,8 @@ function enable_rich_interaction(){
             //terms.push( "" );
             this.value = terms.join( ", " );
             return false;
-        }
+        },
+        selectFirst: true
     });
 
 
