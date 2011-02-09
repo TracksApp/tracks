@@ -8,7 +8,7 @@ var TracksForm = {
             toggleLink.text(showLinkText).attr('title', showLinkTitle);
         }
         else {
-            toggleLidefault_ajax_optionsnk.text(hideLinkText).attr('title', hideLinkTitle);
+            toggleLink.text(hideLinkText).attr('title', hideLinkTitle);
             $('#'+formId+' input:text:first').focus();
         }
         toggleLink.parent().toggleClass('hide_form');
@@ -46,12 +46,12 @@ var TracksForm = {
             if ($("#todo_multi_add").is(':visible')) { /* hide multi next action form first */
                 $('#todo_new_action').show();
                 $('#todo_multi_add').hide();
-                $('a#toggle_multi').text("Add multiple next actions");
+                $('a#toggle_multi').text(i18n['shared.toggle_multi']);
             }
 
             TracksForm.toggle('toggle_action_new', 'todo_new_action', 'todo-form-new-action',
-                '« Hide form', 'Hide next action form',
-                'Add a next action »', 'Add a next action');
+                i18n['shared.hide_form'], i18n['shared.hide_action_form_title'],
+                i18n['shared.toggle_single'], i18n['shared.toggle_single_title']);
         });
 
         /* toggle new todo form for multi edit */
@@ -59,13 +59,13 @@ var TracksForm = {
             if ($("#todo_multi_add").is(':visible')) {
                 $('#todo_new_action').show();
                 $('#todo_multi_add').hide();
-                $('a#toggle_multi').text("Add multiple next actions");
+                $('a#toggle_multi').text(i18n['shared.toggle_multi']);
             }
             else {
                 $('#todo_new_action').hide();
                 $('#todo_multi_add').show();
-                $('a#toggle_multi').text("Add single next action");
-                $('a#toggle_action_new').text('« Hide form');
+                $('a#toggle_multi').text(i18n['shared.toggle_single']);
+                $('a#toggle_action_new').text(i18n['shared.hide_form']);
             }
         });
 
@@ -74,14 +74,15 @@ var TracksForm = {
             $(this).prev().val('');
         });
 
-        /* behavior for delete icon */
+        /* behavior for delete icon. DEAD CODE??? */
         $('.item-container a.delete_icon').live('click', function(evt){
             evt.preventDefault();
             params = {};
             if(typeof(TAG_NAME) !== 'undefined'){
                 params._tag_name = TAG_NAME;
             }
-            if(confirm("Are you sure that you want to "+this.title+"?")){
+            confirm_message = $(this).attr("x_confirm_message")
+            if(confirm(confirm_message)){
                 itemContainer = $(this).parents(".item-container");
                 itemContainer.block({
                     message: null
@@ -93,7 +94,7 @@ var TracksForm = {
             }
         });
 
-        /* behavior for edit icon */
+        /* behavior for edit icon DEAD CODE???*/
         $('.item-container a.edit_icon').live('click', function(evt){
             evt.preventDefault();
             params = {};
@@ -318,7 +319,7 @@ var TodoItems = {
             for (i=0; i<contexts.length; i++)
                 if (contexts[i].value == givenContextName) return true;
         }
-        return confirm('New context "' + givenContextName + '" will be also created. Are you sure?');
+        return confirm(i18n['contexts.new_context_pre'] + givenContextName + i18n['contexts.new_context_post']);
     },
     setup_behavior: function() {
         /* show the notes of a todo */
@@ -350,9 +351,10 @@ var TodoItems = {
             return false;
         });
 
-        /* delete button to delete a project from the list */
+        /* delete button to delete a todo or recurring_todo from the list */
         $('.item-container a.icon_delete_item').live('click', function(evt){
-            if(confirm(this.title)){
+            confirm_message = $(this).attr("x_confirm_message")
+            if(confirm(confirm_message)){
                 delete_with_ajax_and_block_element(this.href, $(this).parents('.project'));
             }
             return false;
@@ -434,13 +436,14 @@ var ProjectListPage = {
         /* in-place edit of project name */
         $('h2#project_name').editable(ProjectListPage.save_project_name, {
             style: 'padding:0px',
-            submit: "OK",
-            cancel: "CANCEL"
+            submit: i18n['common.ok'],
+            cancel: i18n['common.cancel']
         });
 
         /* alphabetize project list */
         $('.alphabetize_link').live('click', function(evt){
-            if(confirm('Are you sure that you want to sort these projects alphabetically? This will replace the existing sort order.')){
+            confirm_message = $(this).attr("x_confirm_message")
+            if(confirm(confirm_message)){
                 post_with_ajax_and_block_element(this.href, $(this).parents('.alpha_sort'));
             }
             return false;
@@ -448,7 +451,8 @@ var ProjectListPage = {
 
         /* sort by number of actions */
         $('.actionize_link').click(function(evt){
-            if(confirm('Are you sure that you want to sort these projects by the number of tasks? This will replace the existing sort order.')){
+            confirm_message = $(this).attr("x_confirm_message")
+            if(confirm(confirm_message)){
                 post_with_ajax_and_block_element(this.href, $(this).parents('.tasks_sort'));
             }
             return false;
@@ -456,7 +460,8 @@ var ProjectListPage = {
 
         /* delete button to delete a project from the list */
         $('a.delete_project_button').live('click', function(evt){
-            if(confirm("Are you sure that you want to "+this.title+"?")){
+            confirm_message = $(this).attr("x_confirm_message")
+            if(confirm(confirm_message)){
                 delete_with_ajax_and_block_element(this.href, $(this).parents('.project'));
             }
             return false;
@@ -483,8 +488,8 @@ var ProjectListPage = {
         /* toggle new project form */
         $('#toggle_project_new').click(function(evt){
             TracksForm.toggle('toggle_project_new', 'project_new', 'project-form',
-                '« Hide form', 'Hide new project form',
-                'Create a new project »', 'Add a project');
+                i18n['projects.hide_form'], i18n['projects.hide_form_title'],
+                i18n['projects.show_form'], i18n['projects.show_form_title']);
         });
 
         /* make the three lists of project sortable */
@@ -532,14 +537,14 @@ var ContextListPage = {
         /* in place edit of context name */
         $('div.context span#context_name').editable(ContextListPage.save_context_name, {
             style: 'padding:0px',
-            submit: "OK",
-            cancel: "CANCEL"
+            submit: i18n['common.ok'],
+            cancel: i18n['common.cancel']
         });
 
         /* delete a context using the x button */
         $('a.delete_context_button').live('click', function(evt){
-            /* TODO: move from this.title to this.x-messsage or something similar */
-            if(confirm(this.title)){
+            confirm_message = $(this).attr("x_confirm_message")
+            if(confirm(confirm_message)){
                 delete_with_ajax_and_block_element(this.href, $(this).parents('.context'));
             }
             return false;
@@ -566,8 +571,8 @@ var ContextListPage = {
         /* Contexts behavior */
         $('#toggle_context_new').click(function(evt){
             TracksForm.toggle('toggle_context_new', 'context_new', 'context-form',
-                '« Hide form', 'Hide new context form',
-                'Create a new context »', 'Add a context');
+                i18n['contexts.hide_form'], i18n['contexts.hide_form_title'],
+                i18n['contexts.show_form'], i18n['contexts.show_form_title']);
         });
 
         /* make the two state lists of context sortable */
@@ -626,7 +631,8 @@ var NotesPage = {
 
         /* delete button for note */
         $('a.delete_note_button').live('click', function(){
-            if(confirm("Are you sure that you want to "+this.title+"?")){
+            confirm_message = $(this).attr("x_confirm_message")
+            if(confirm(confirm_message)){
                 delete_with_ajax_and_block_element(this.href, $(this).parents('.project_notes'));
             }
             return false;
@@ -789,7 +795,7 @@ function default_ajax_options_for_submit(ajax_type, element_to_block) {
             enable_rich_interaction();
         },
         error: function(req, status) {
-            TracksPages.page_notify('error', 'There was an error retrieving from server: '+status, 8);
+            TracksPages.page_notify('error', i18n['common.ajaxError']+': '+status, 8);
         }
     }
     if(typeof(TAG_NAME) !== 'undefined')

@@ -104,7 +104,7 @@ end
 When /^I edit the project name in place to be "([^"]*)"$/ do |new_project_name|
   selenium.click "project_name"
   fill_in "value", :with => new_project_name
-  click_button "OK"
+  click_button "Ok"
 end
 
 When /^I edit the project state of "([^"]*)" to "([^"]*)"$/ do |project_name, state_name|

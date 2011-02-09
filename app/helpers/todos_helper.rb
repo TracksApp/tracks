@@ -20,7 +20,8 @@ module TodosHelper
       {:controller => 'todos', :action => 'destroy', :id => todo.id}, 
       :class => "icon_delete_item",
       :id => "delete_#{dom_id(todo)}",
-      :title => t('todos.confirm_delete', :description => todo.description));
+      :x_confirm_message => t('todos.confirm_delete', :description => todo.description),
+      :title => t('todos.delete_action'));
   end
 
   def remote_defer_menu_item(days, todo)

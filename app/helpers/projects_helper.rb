@@ -44,5 +44,18 @@ module ProjectsHelper
     end
     html
   end
+
+  def link_to_delete_project(project, descriptor = sanitize(project.name))
+    link_to(
+      descriptor,
+      project_path(project, :format => 'js'),
+      {
+        :id => "delete_project_#{project.id}",
+        :class => "delete_project_button",
+        :x_confirm_message => t('projects.delete_project_confirmation', :name => project.name),
+        :title => t('projects.delete_project_title')
+      }
+    )
+  end
   
 end

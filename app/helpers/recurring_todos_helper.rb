@@ -13,7 +13,7 @@ module RecurringTodosHelper
   def recurring_todo_remote_delete_icon
     link_to( image_tag_for_delete,
       recurring_todo_path(@recurring_todo), :id => "delete_icon_"+@recurring_todo.id.to_s,
-      :class => "icon delete_icon", :title => t('todos.delete_recurring_action', :description => @recurring_todo.description))
+      :class => "icon delete_icon", :title => t('todos.delete_recurring_action_title'), :x_confirm_message => t('todos.delete_recurring_action_confirm', :description => @recurring_todo.description))
   end
   
   def recurring_todo_remote_star_icon

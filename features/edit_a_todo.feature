@@ -12,8 +12,13 @@ Feature: Edit a next action from every page
   Scenario: I can toggle the star of a todo
     Given this is a pending scenario
 
+  @selenium @wip
   Scenario: I can delete a todo
-    Given this is a pending scenario
+    Given I have a todo with description "delete me" in the context "@home"
+    When I go to the home page
+    Then I should see "delete me"
+    And I delete the todo
+    Then I should not see "delete me"
 
   Scenario: Removing the last todo in context will hide context # delete, edit
     Given this is a pending scenario

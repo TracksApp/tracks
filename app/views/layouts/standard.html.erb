@@ -27,6 +27,7 @@
         setup_periodic_check("<%=url_for(:controller => "login", :action => "check_expiry")%>", 5*60);
       <% end -%>
       setup_periodic_check("<%=check_deferred_todos_path(:format => 'js')%>", 10*60, 'POST');
+      <%= generate_i18n_strings %>
     </script>
     <link rel="shortcut icon" href="<%= url_for(:controller => 'favicon.ico') %>" />
     <%= auto_discovery_link_tag(:rss, {:controller => "todos", :action => "index", :format => 'rss', :token => "#{current_user.token}"}, {:title => t('layouts.next_actions_rss_feed')}) %>

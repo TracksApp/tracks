@@ -80,3 +80,12 @@ Feature: Manage the list of contexts
   Scenario: I can drag and drop to order the contexts
     # TODO: pending scenario
     Given this is a pending scenario
+
+  @selenium @wip
+  Scenario: Hiding and unhiding the new project form
+    When I go to the contexts page
+    Then the new context form should be visible
+    When I follow "Hide form"
+    Then the new context form should not be visible
+    When I follow "Create a new context"
+    Then the new context form should be visible

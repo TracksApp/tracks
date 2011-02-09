@@ -243,7 +243,7 @@ Then /^the container for the context "([^"]*)" should not be visible$/ do |conte
 end
 
 Then /^a confirmation for adding a new context "([^"]*)" should be asked$/ do |context_name|
-  selenium.get_confirmation.should == "New context \"#{context_name}\" will be also created. Are you sure?"
+  selenium.get_confirmation.should == "New context '#{context_name}' will be also created. Are you sure?"
 end
 
 Then /^I should see "([^"]*)" in the deferred container$/ do |todo_description|

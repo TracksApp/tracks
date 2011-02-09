@@ -72,9 +72,9 @@ Feature: Manage the list of projects
   Scenario: Hiding and unhiding the new project form
     When I go to the projects page
     Then the new project form should be visible
-    When I follow "« Hide form"
+    When I follow "Hide form"
     Then the new project form should not be visible
-    When I follow "Create a new project »"
+    When I follow "Create a new project"
     Then the new project form should be visible
 
   @selenium

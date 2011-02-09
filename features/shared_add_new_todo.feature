@@ -15,7 +15,7 @@ Feature: Add new next action from every page
   Scenario Outline: I can hide the input form for single next action on a page
     When I <action> the <page>
     Then the single action form should be visible
-    When I follow "« Hide form"
+    When I follow "Hide form"
     Then the single action form should not be visible
 
     Scenarios:
@@ -32,7 +32,7 @@ Feature: Add new next action from every page
     Then the single action form should be visible
     When I follow "Add multiple next actions"
     Then the multiple action form should be visible
-    When I follow "« Hide form"
+    When I follow "Hide form"
     Then the single action form should not be visible
     And the multiple action form should not be visible
 
@@ -48,11 +48,11 @@ Feature: Add new next action from every page
   Scenario Outline: I can hide the input form and then choose both input forms
     When I <action> the <page>
     Then the single action form should be visible
-    When I follow "« Hide form"
+    When I follow "Hide form"
     Then the single action form should not be visible
     When I follow "Add multiple next actions"
     Then the multiple action form should be visible
-    When I follow "« Hide form"
+    When I follow "Hide form"
     Then the single action form should not be visible
     And the multiple action form should not be visible
 
@@ -71,7 +71,7 @@ Feature: Add new next action from every page
     When I follow "Add multiple next actions"
     Then the single action form should not be visible
     And the multiple action form should be visible
-    When I follow "Add single next action"
+    When I follow "Add a next action"
     Then the single action form should be visible
     And the multiple action form should not be visible
 

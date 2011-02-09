@@ -129,30 +129,6 @@ module ApplicationHelper
       {:id => "link_edit_#{dom_id(note)}", :class => "note_edit_settings"})
   end
   
-  def link_to_delete_project(project, descriptor = sanitize(project.name))
-    link_to(
-      descriptor,
-      project_path(project, :format => 'js'),
-      {:id => "delete_project_#{project.id}", :class => "delete_project_button", :title => "#{t('projects.delete_project_title')} '#{project.name}'"}
-    )
-  end
-
-  def link_to_delete_context(context, descriptor = sanitize(context.name))
-    link_to(
-      descriptor,
-      context_path(context, :format => 'js'),
-      {:id => "delete_context_#{context.id}", :class => "delete_context_button", :title => t('contexts.delete_context_confirmation', :name => context.name)}
-    )
-  end
-
-  def link_to_delete_note(note, descriptor = sanitize(note.id.to_s))
-    link_to(
-      descriptor,
-      note_path(note, :format => 'js'),
-      {:id => "delete_note_#{note.id}", :class => "delete_note_button", :title => "delete the note '#{note.id}'"}
-    )
-  end
-
   def link_to_project_mobile(project, accesskey, descriptor = sanitize(project.name))
     link_to( descriptor, project_path(project, :format => 'm'), {:title => "View project: #{project.name}", :accesskey => accesskey} )
   end
@@ -261,6 +237,26 @@ module ApplicationHelper
         html << content_tag(:li, link + " (" + count_undone_todos_phrase(item,"actions")+")")
       end
     end
+  end
+
+  def generate_i18n_strings
+    js = ""
+    js << "i18n = new Array();\n"
+    %w{
+    shared.toggle_multi       shared.toggle_multi_title
+    shared.hide_form          shared.hide_action_form_title
+    shared.toggle_single      shared.toggle_single_title
+    projects.hide_form        projects.hide_form_title
+    projects.show_form        projects.show_form_title
+    contexts.hide_form        contexts.hide_form_title
+    contexts.show_form        contexts.show_form_title
+    contexts.new_context_pre  contexts.new_context_post
+    common.cancel             common.ok
+    common.ajaxError
+    }.each do |s|
+      js << "i18n['#{s}'] = \"#{t(s)}\";\n"
+    end
+    return js
   end
 
 end

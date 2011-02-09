@@ -3,10 +3,10 @@
   <div class="menu_sort"><span class="sort_separator"><%= t('common.sort.sort') %>&nbsp;</span>
     <div class="alpha_sort">
       <%= link_to("Alphabetically", alphabetize_projects_path(:state => state),
-        :id => "#{state}_alphabetize_link", :class => "alphabetize_link", :title => t('common.sort.alphabetically_title')) %>
+        :id => "#{state}_alphabetize_link", :class => "alphabetize_link", :title => t('common.sort.alphabetically_title'), :x_confirm_message => t('common.sort.alphabetically_confirm')) %>
     </div><span class="sort_separator">&nbsp;|&nbsp;</span><div class="tasks_sort">
       <%= link_to("By number of tasks", actionize_projects_path(:state => state),
-        :id => "#{state}_actionize_link", :class => "actionize_link", :title => t('common.sort.by_task_count_title')) %>
+        :id => "#{state}_actionize_link", :class => "actionize_link", :title => t('common.sort.by_task_count_title'), :x_confirm_message => t('common.sort.by_task_count_title_confirm')) %>
     </div>
   </div>
 

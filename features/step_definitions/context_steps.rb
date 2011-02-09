@@ -61,7 +61,7 @@ end
 When /^I edit the context name in place to be "([^\"]*)"$/ do |new_context_name|
   selenium.click "context_name"
   fill_in "value", :with => new_context_name
-  click_button "OK"
+  click_button "Ok"
 end
 
 Then /^I should see the context name is "([^\"]*)"$/ do |context_name|
