@@ -13,13 +13,18 @@ class ContextsController < ApplicationController
     # checks later don't result in separate SQL queries
     @active_contexts = current_user.contexts.active(true) 
     @hidden_contexts = current_user.contexts.hidden(true)
-    @count = @active_contexts.size + @hidden_contexts.size
     @new_context = current_user.contexts.build
+
+    # save all contexts here as @new_context will add an empty one to current_user.contexts
+    @all_contexts = @active_contexts + @hidden_contexts
+    @count = @all_contexts.size
+
+
     init_not_done_counts(['context'])
     respond_to do |format|
       format.html &render_contexts_html
       format.m    &render_contexts_mobile
-      format.xml  { render :xml => current_user.contexts.to_xml( :except => :user_id ) }
+      format.xml  { render :xml => @all_contexts.to_xml( :except => :user_id ) }
       format.rss  &render_contexts_rss_feed
       format.atom &render_contexts_atom_feed
       format.text do
