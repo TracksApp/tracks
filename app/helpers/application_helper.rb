@@ -254,7 +254,7 @@ module ApplicationHelper
     common.cancel             common.ok
     common.ajaxError
     }.each do |s|
-      js << "i18n['#{s}'] = \"#{t(s)}\";\n"
+      js << "i18n['#{s}'] = '#{t(s)}';\n"
     end
     return js
   end
