@@ -353,15 +353,14 @@ module ActiveRecord
                 if @target.is_a?(Array) && @target.any?
                   @target = find_target.map do |f|
                     i = @target.index(f)
-                    if i
-                      @target.delete_at(i).tap do |t|
-                        keys = ["id"] + t.changes.keys + (f.attribute_names - t.attribute_names)
-                        t.attributes = f.attributes.except(*keys)
-                      end
+                    t = @target.delete_at(i) if i
+                    if t && t.changed?
+                      t
                     else
+                      f.mark_for_destruction if t && t.marked_for_destruction?
                       f
                     end
-                  end + @target
+                  end + @target.find_all {|t| t.new_record?}
                 else
                   @target = find_target
                 end
@@ -375,16 +374,17 @@ module ActiveRecord
           target
         end
         
-        def method_missing(method, *args)
+        def method_missing(method, *args, &block)
           case method.to_s
           when 'find_or_create'
             return find(:first, :conditions => args.first) || create(args.first)
           when /^find_or_create_by_(.*)$/
             rest = $1
-            return  send("find_by_#{rest}", *args) ||
-                    method_missing("create_by_#{rest}", *args)
+            find_args = pull_finder_args_from(DynamicFinderMatch.match(method).attribute_names, *args)
+            return  send("find_by_#{rest}", find_args) ||
+                    method_missing("create_by_#{rest}", *args, &block)
           when /^create_by_(.*)$/
-            return create($1.split('_and_').zip(args).inject({}) { |h,kv| k,v=kv ; h[k] = v ; h })
+            return create($1.split('_and_').zip(args).inject({}) { |h,kv| k,v=kv ; h[k] = v ; h }, &block)
           end
 
           if @target.respond_to?(method) || (!@reflection.klass.respond_to?(method) && Class.respond_to?(method))
@@ -434,20 +434,32 @@ module ActiveRecord
           callback(:before_add, record)
           yield(record) if block_given?
           @target ||= [] unless loaded?
-          index = @target.index(record)
-          unless @reflection.options[:uniq] && index
-            if index
-              @target[index] = record
-            else
-             @target << record
-            end
-          end 
+          @target << record unless @reflection.options[:uniq] && @target.include?(record)
           callback(:after_add, record)
           set_inverse_instance(record, @owner)
           record
         end
 
       private
+        # Separate the "finder" args from the "create" args given to a
+        # find_or_create_by_ call.  Returns an array with the
+        # parameter values in the same order as the keys in the
+        # "names" array.  This code was based on code in base.rb's
+        # method_missing method.
+        def pull_finder_args_from(names, *args)
+          attributes = names.collect { |name| name.intern }
+          attribute_hash = {}
+          args.each_with_index do |arg, i|
+            if arg.is_a?(Hash)
+              attribute_hash.merge! arg
+            else
+              attribute_hash[attributes[i]] = arg
+            end
+          end
+          attribute_hash = attribute_hash.with_indifferent_access
+          attributes.collect { |attr| attribute_hash[attr] }
+        end
+
         def create_record(attrs)
           attrs.update(@reflection.options[:conditions]) if @reflection.options[:conditions].is_a?(Hash)
           ensure_owner_is_not_new

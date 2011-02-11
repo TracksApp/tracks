@@ -65,6 +65,29 @@ class HasManyAssociationsTest < ActiveRecord::TestCase
     assert_equal person, person.readers.first.person
   end
 
+  def test_find_or_create_by_with_additional_parameters
+    post = Post.create! :title => 'test_find_or_create_by_with_additional_parameters', :body => 'this is the body'
+    comment = post.comments.create! :body => 'test comment body', :type => 'test'
+
+    assert_equal comment, post.comments.find_or_create_by_body('test comment body')
+
+    post.comments.find_or_create_by_body(:body => 'other test comment body', :type => 'test')
+    assert_equal 2, post.comments.count
+    assert_equal 2, post.comments.length
+    post.comments.find_or_create_by_body('other other test comment body', :type => 'test')
+    assert_equal 3, post.comments.count
+    assert_equal 3, post.comments.length
+    post.comments.find_or_create_by_body_and_type('3rd test comment body', 'test')
+    assert_equal 4, post.comments.count
+    assert_equal 4, post.comments.length
+  end
+
+  def test_find_or_create_by_with_block
+    post = Post.create! :title => 'test_find_or_create_by_with_additional_parameters', :body => 'this is the body'
+    comment = post.comments.find_or_create_by_body('other test comment body') { |comment| comment.type = 'test' }
+    assert_equal 'test', comment.type
+  end
+
   def test_find_or_create
     person = Person.create! :first_name => 'tenderlove'
     post   = Post.find :first
@@ -841,6 +864,17 @@ class HasManyAssociationsTest < ActiveRecord::TestCase
     assert destroyed.all? { |client| client.frozen? }, "destroyed clients should be frozen"
     assert companies(:first_firm).clients_of_firm.empty?, "37signals has no clients after destroy all"
     assert companies(:first_firm).clients_of_firm(true).empty?, "37signals has no clients after destroy all and refresh"
+  end
+
+  def test_destroy_all_with_creates_and_scope_that_doesnt_match_created_records
+    company = companies(:first_firm)
+    unloaded_client_matching_scope = companies(:second_client)
+    created_client_matching_scope = company.clients_of_firm.create!(:name => "Somesoft")
+    created_client_not_matching_scope = company.clients_of_firm.create!(:name => "OtherCo")
+    destroyed = company.clients_of_firm.with_oft_in_name.destroy_all
+    assert destroyed.include?(unloaded_client_matching_scope), "unloaded clients matching the scope destroy_all on should have been destroyed"
+    assert destroyed.include?(created_client_matching_scope), "loaded clients matching the scope destroy_all on should have been destroyed"
+    assert !destroyed.include?(created_client_not_matching_scope), "loaded clients not matching the scope destroy_all on should not have been destroyed"
   end
 
   def test_dependence
