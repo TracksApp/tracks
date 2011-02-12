@@ -786,12 +786,16 @@ function default_ajax_options_for_submit(ajax_type, element_to_block) {
         context: element_to_block,
         data: "_source_view=" + SOURCE_VIEW,
         beforeSend: function() {
-            $(this).block({
-                message: null
-            });
+            if (this.context) {
+                $(this.context).block({
+                    message: null
+                });
+            }
         },
         complete:function() {
-            $(this).unblock();
+            if (this.context) {
+                $(this.context).unblock();
+            }
             enable_rich_interaction();
         },
         error: function(req, status) {
@@ -855,11 +859,7 @@ function setup_periodic_check(url_for_check, interval_in_sec, method) {
     ajaxMethod = (method ? method : "GET");
 
     function check_remote() {
-        $.ajax({
-            type: ajaxMethod,
-            url: url_for_check,
-            dataType: 'script'
-        });
+        $.ajax(default_ajax_options_for_scripts(ajaxMethod, url_for_check, null));
     }
     setInterval(check_remote, interval_in_sec*1000);
 }
