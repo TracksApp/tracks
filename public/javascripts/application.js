@@ -335,7 +335,7 @@ var TodoItems = {
         $('.item-container a.icon_delete_item').live('click', function(evt){
             var confirm_message = $(this).attr("x_confirm_message")
             if(confirm(confirm_message)){
-                delete_with_ajax_and_block_element(this.href, $(this).parents('.project'));
+                delete_with_ajax_and_block_element(this.href, $(this).parents('.item-container'));
             }
             return false;
         });
@@ -1074,15 +1074,10 @@ function enable_rich_interaction(){
         var dropped_todo = this.id.split('_')[2];
         ui.draggable.remove();
         $('.drop_target').hide(); // IE8 doesn't call stop() in this situation
-        $(this).block({
-            message: null
-        });
-        $.post(relative_to_root('todos/add_predecessor'),
-        {
-            successor: dragged_todo,
-            predecessor: dropped_todo
-        },
-        null, 'script');
+
+        ajax_options = default_ajax_options_for_scripts('POST', relative_to_root('todos/add_predecessor'), $(this));
+        ajax_options.data += "&predecessor="+dropped_todo + "&successor="+dragged_todo
+        $.ajax(ajax_options);
     }
 
     function drag_todo(){
