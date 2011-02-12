@@ -11,8 +11,6 @@ class TodosController < ApplicationController
     :completed_archive, :check_deferred, :toggle_check, :toggle_star,
     :edit, :update, :defer, :create, :calendar, :auto_complete_for_predecessor, :remove_predecessor, :add_predecessor]
 
-  protect_from_forgery :except => [:auto_complete_for_predecessor]
-
   def index
     @projects = current_user.projects.find(:all, :include => [:default_context])
     @contexts = current_user.contexts.find(:all)

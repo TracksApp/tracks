@@ -847,6 +847,7 @@ $(document).ajaxSend(function(event, request, settings) {
         }
         request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     }
+    request.setRequestHeader("X-CSRF-Token", $('meta[name=csrf-token]').attr('content'));
     request.setRequestHeader("Accept", "text/javascript");
 });
 
