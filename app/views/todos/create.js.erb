@@ -17,6 +17,7 @@
 
 function clear_form() {
   $('#todo-form-new-action').clearForm();
+  $('#todo-form-new-action').clearDeps();
   TracksForm.set_context_name('<%=@initial_context_name%>');
   TracksForm.set_project_name('<%=@initial_project_name%>');
   TracksForm.set_tag_list('<%=@default_tags%>');

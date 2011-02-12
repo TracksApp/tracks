@@ -764,6 +764,12 @@ $.fn.clearForm = function() {
     });
 };
 
+$.fn.clearDeps = function() {
+    $('ul#predecessor_ul', this).hide();
+    $('ul#predecessor_ul', this).html("");
+    $('input[name=predecessor_list]').val("");
+}
+
 /**************************************/
 /* Tracks AJAX functions              */
 /**************************************/
