@@ -108,84 +108,41 @@ class Todo < ActiveRecord::Base
  
   # Returns a string with description <context, project>
   def specification
-    project_name = project.is_a?(NullProject) ? "(none)" : project.name
-    return "\'#{description}\' <\'#{context.title}\'; \'#{project_name}\'>"
+    project_name = self.project.is_a?(NullProject) ? "(none)" : self.project.name
+    return "\'#{self.description}\' <\'#{self.context.title}\'; \'#{project_name}\'>"
   end
-  
-  def todo_from_specification(specification)
-    # Split specification into parts: description <context, project>
-    parts = specification.scan(RE_PARTS)
-    return nil unless parts.length == 1
-    return nil unless parts[0].length == 3
-    todo_description = parts[0][0]
-    context_name = parts[0][1]
-    project_name = parts[0][2]
-    
-    # find the project
-    project_id = nil;
-    unless project_name == "(none)"
-      project = Project.first(:conditions => {
-          :user_id => self.user.id,
-          :name => project_name
-        })
-      project_id = project.id unless project.nil?
-    end
-
-    todos = Todo.all(
-      :joins => :context,
-      :conditions => {
-        :description => todo_description,
-        :user_id => self.user.id,
-        :contexts => {:name => context_name},
-        :project_id => project_id
-      }
-    )
-
-    return nil if todos.empty?
-
-    # TODO: what todo if there are more than one todo that fit the specification
-    return todos[0]
-  end
-  
+   
   def validate
     if !show_from.blank? && show_from < user.date
       errors.add("show_from", I18n.t('models.todo.error_date_must_be_future'))
     end
-    errors.add(:description, "may not contain \" characters") if /\"/.match(description)
+    errors.add(:description, "may not contain \" characters") if /\"/.match(self.description)
     unless @predecessor_array.nil? # Only validate predecessors if they changed
-      @predecessor_array.each do |specification|
-        t = todo_from_specification(specification)
-        if t.nil?
-          errors.add("Depends on:", "Could not find action '#{h(specification)}'")
-        else
-          errors.add("Depends on:", "Adding '#{h(specification)}' would create a circular dependency") if is_successor?(t)
-        end
+      @predecessor_array.each do |todo|
+        errors.add("Depends on:", "Adding '#{h(todo.specification)}' would create a circular dependency") if is_successor?(todo)
       end
     end
   end
   
   def save_predecessors
     unless @predecessor_array.nil?  # Only save predecessors if they changed
-      current_array = predecessors.map{|p| p.specification}
+      current_array = self.predecessors
       remove_array = current_array - @predecessor_array
       add_array = @predecessor_array - current_array
 
       @removed_predecessors = []
-      # This is probably a bit naive code...
-      remove_array.each do |specification|
-        t = todo_from_specification(specification)
-        unless t.nil?
-          @removed_predecessors << t
-          self.predecessors.delete(t)
+      remove_array.each do |todo|
+        unless todo.nil?
+          @removed_predecessors << todo
+          self.predecessors.delete(todo)
         end
       end
-      # ... as is this?
-      add_array.each do |specification|
-        t = todo_from_specification(specification)
-        unless t.nil?
-          self.predecessors << t unless self.predecessors.include?(t)
+
+      add_array.each do |todo|
+        unless todo.nil?
+          self.predecessors << todo unless self.predecessors.include?(todo)
         else
-          logger.error "Could not find #{specification}" # Unexpected since validation passed
+          logger.error "Could not find #{todo.description}" # Unexpected since validation passed
         end
       end
     end    
@@ -196,20 +153,22 @@ class Todo < ActiveRecord::Base
   end
   
   def remove_predecessor(predecessor)
+    puts "@@@ before delete"
     # remove predecessor and activate myself
-    predecessors.delete(predecessor)
+    self.predecessors.delete(predecessor)
+    puts "@@@ before activate"
     self.activate!
   end
   
   # Returns true if t is equal to self or a successor of self
-  def is_successor?(t)
-    if self == t
+  def is_successor?(todo)
+    if self == todo
       return true
     elsif self.successors.empty?
       return false
     else
       self.successors.each do |item|
-        if item.is_successor?(t)
+        if item.is_successor?(todo)
           return true
         end
       end
@@ -314,12 +273,20 @@ class Todo < ActiveRecord::Base
 
   def add_predecessor_list(predecessor_list)
     return unless predecessor_list.kind_of? String
-    @predecessor_array = predecessor_list.scan(RE_SPEC)
+
+    @predecessor_array=[]
+
+    predecessor_ids_array = predecessor_list.split(", ")
+    predecessor_ids_array.each do |todo_id|
+      predecessor = self.user.todos.find_by_id( todo_id.to_i ) unless todo_id.blank?
+      @predecessor_array << predecessor unless predecessor.nil?
+    end
+
     return @predecessor_array
   end
   
   def add_predecessor(t)
-    @predecessor_array = predecessors.map{|p| p.specification}
+    @predecessor_array = predecessors
     @predecessor_array << t.specification
   end
   

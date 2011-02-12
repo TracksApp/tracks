@@ -225,7 +225,6 @@ module TodosHelper
       page.todo { return !@todo.hidden? }
       page.deferred { return @todo.deferred? || @todo.pending? }
       page.context {
-        logger.debug "ci=#{@todo.context_id} dci=#{@default_context.id} th=#{@todo.hidden?} tch=#{@todo.context.hidden?}"
         return @todo.context_id==@default_context.id && ( (@todo.hidden? && @todo.context.hidden?) || (!@todo.hidden?) )
       }
       page.tag {
@@ -266,7 +265,7 @@ module TodosHelper
   end
   
   def default_contexts_for_autocomplete
-    projects = current_user.projects.find(:all, :conditions => ['default_context_id is not null'])
+    projects = current_user.projects.find(:all, :include => [:context], :conditions => ['default_context_id is not null'])
     Hash[*projects.map{ |p| [p.name, p.default_context.name] }.flatten].to_json
   end
   

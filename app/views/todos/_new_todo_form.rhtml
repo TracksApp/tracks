@@ -34,17 +34,13 @@
       <%= t.text_field("show_from", "size" => 12, "class" => "Date", "tabindex" => 7, "autocomplete" => "off") %>
     </div>
 
-    <label for="predecessor_list"><%= Todo.human_attribute_name('predecessors')%></label>
-    <%= text_field_tag "predecessor_list", nil, :size => 30, :tabindex => 8 %>
-
-    <div class="predecessor_add_button_box">
-      <input class="predecessor_add_button" type="button" value="Add"/>
-    </div>
-
+    <label for="predecessor_input"><%= Todo.human_attribute_name('predecessors')%></label>
     <div class="selected_predecessors">
       <ul id="predecessor_ul" style="display:none">
       </ul>
     </div>
+    <%= t('common.add')%>: <%= text_field_tag "predecessor_input", nil, :size => 30, :tabindex => 8 %>
+    <%= hidden_field_tag "predecessor_list", ""%>
 
     <%= source_view_tag( @source_view ) %>
     <%= hidden_field_tag :_tag_name, @tag_name.underscore.gsub(/\s+/,'_') if source_view_is :tag %>

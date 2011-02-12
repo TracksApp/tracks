@@ -89,7 +89,7 @@ var TracksForm = {
         });
 
         $('input[class=predecessor_add_button]').live('click', function(){
-            var text = $('input[name=predecessor]').val();
+            var text = $('input[name=predecessor_list]').val();
             if (text.length > 0) {
                 $('ul#predecessor_ul').show();
                 if (text.length > 35) {
@@ -844,7 +844,7 @@ $(document).ajaxSend(function(event, request, settings) {
         }
         request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     }
-    request.setRequestHeader("X-CSRF-Token", $('meta[name=csrf-token]').attr('content'));
+    request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
     request.setRequestHeader("Accept", "text/javascript");
 });
 
@@ -992,10 +992,10 @@ function enable_rich_interaction(){
     .autocomplete({
         minLength: 0,
         source: function( request, response ) {
-            var last_term = extractLast( request.term );
-            if (last_term != "" && last_term != " ")
+            term = request.term;
+            if (term != "" && term != " ")
                 $.getJSON( relative_to_root('auto_complete_for_predecessor'), {
-                    term: last_term
+                    term: term
                 }, response );
         },
         focus: function() {
@@ -1003,17 +1003,52 @@ function enable_rich_interaction(){
             return false;
         },
         select: function( event, ui ) {
-            var terms = split( this.value );
-            // remove the current input
-            terms.pop();
-            // add the selected item
-            terms.push( ui.item.value );
-            // add placeholder to get the comma-and-space at the end
-            //terms.push( "" );
-            this.value = terms.join( ", " );
+            // retrieve values from input fields
+            todo_spec = ui.item.label
+            todo_id = ui.item.value
+            predecessor_list = $('input[name=predecessor_list]')
+            id_list = split( predecessor_list.val() );
+
+            // add the dependency to id list
+            id_list.push( todo_id );
+            predecessor_list.val( id_list.join( ", " ) );
+
+            // show the html for the list of deps
+            $('ul#predecessor_ul').show();
+            if (todo_spec.length > 35) { // cut off string
+                todo_spec = todo_spec.substring(0,35)+"...";
+            }
+            // show the new dep in list
+            var html = $('ul#predecessor_ul').html();
+            var new_li = "<li style=\"display:none\" id=\"pred_"+todo_id+"\"><input class=\"pred_remove_button\" id=\""+todo_id+"\" type=\"button\" value=\"x\"/> "+ todo_spec + "</li>";
+            $('ul#predecessor_ul').html(html + new_li);
+            $('li#pred_'+todo_id).slideDown(500);
+
+            $('input[name=predecessor_input]').val('');
+            $('input[name=predecessor_input]').focus();
             return false;
         }
     });
+
+    $('input[class=pred_remove_button]').live('click', function() {
+        predecessor_list = $('input[name=predecessor_list]');
+        id_list = split( predecessor_list.val() );
+        $("li#pred_"+this.id).slideUp(500).remove(); // remove from ul
+
+        // remove from array
+        new_list = new Array();
+        while (id_list.length > 0) {
+            elem = id_list.pop();
+            if (elem != this.id && elem != '' && elem != ' ') {
+                new_list.push ( elem );
+            }
+        }
+
+        // update id list
+        predecessor_list.val( new_list.join(", ") );
+        
+        return false; // prevent submit
+    })
 
     /* have to bind on keypress because of limitations of live() */
     $('input[name=project_name]').live('keypress', function(){

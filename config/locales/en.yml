@@ -39,6 +39,7 @@ en:
     logout: "Logout"
     cancel: "Cancel"
     ok: "Ok"
+    add: "Add"
     project: "Project"
     projects: "Projects"
     context: "Context"

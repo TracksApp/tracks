@@ -49,7 +49,7 @@ class TodosController < ApplicationController
   def create
     @source_view = params['_source_view'] || 'todo'
     @default_context = current_user.contexts.find_by_name(params['default_context_name'])
-    @default_project = current_user.projects.find_by_name(params['default_project_name'])
+    @default_project = current_user.projects.find_by_name(params['default_project_name']) unless params['default_project_name'].blank?
     
     @tag_name = params['_tag_name']
 
@@ -248,6 +248,7 @@ class TodosController < ApplicationController
   end
 
   def remove_predecessor
+    puts "@@@ start remove_predecessor"
     @source_view = params['_source_view'] || 'todo'
     @todo = current_user.todos.find(params['id'])
     @predecessor = current_user.todos.find(params['predecessor'])
@@ -648,7 +649,7 @@ class TodosController < ApplicationController
       get_todo_from_params
       # Begin matching todos in current project
       @items = current_user.todos.find(:all,
-        :select => 'description, project_id, context_id, created_at',
+        :include => [:context, :project],
         :conditions => [ '(todos.state = ? OR todos.state = ? OR todos.state = ?) AND ' +
             'NOT (id = ?) AND lower(description) LIKE ? AND project_id = ?',
           'active', 'pending', 'deferred',
@@ -660,7 +661,7 @@ class TodosController < ApplicationController
       )
       if @items.empty? # Match todos in other projects
         @items = current_user.todos.find(:all,
-          :select => 'description, project_id, context_id, created_at',
+          :include => [:context, :project],
           :conditions => [ '(todos.state = ? OR todos.state = ? OR todos.state = ?) AND ' +
               'NOT (id = ?) AND lower(description) LIKE ?',
             'active', 'pending', 'deferred',
@@ -672,7 +673,7 @@ class TodosController < ApplicationController
     else
       # New todo - TODO: Filter on project
       @items = current_user.todos.find(:all,
-        :select => 'description, project_id, context_id, created_at',
+        :include => [:context, :project],
         :conditions => [ '(todos.state = ? OR todos.state = ? OR todos.state = ?) AND lower(description) LIKE ?',
           'active', 'pending', 'deferred',
           '%' + params[:term].downcase + '%' ],
@@ -680,7 +681,7 @@ class TodosController < ApplicationController
         :limit => 10
       )
     end
-    render :inline => auto_complete_result2(@items)
+    render :inline => format_dependencies_as_json_for_auto_complete(@items)
   end
 
   def convert_to_project

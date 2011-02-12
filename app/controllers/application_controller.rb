@@ -36,7 +36,6 @@ class ApplicationController < ActionController::Base
   before_filter :set_locale
   prepend_before_filter :login_required
   prepend_before_filter :enable_mobile_content_negotiation
-  #  after_filter :set_locale
   after_filter :set_charset
   
   include ActionView::Helpers::TextHelper
@@ -137,8 +136,8 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def auto_complete_result2(entries, phrase = nil)
-    json_elems = "[{" + entries.map {|item| "\"id\" : \"#{item.id}\", \"value\" : \"#{item.specification()}\""}.join("},{") + "}]"
+  def format_dependencies_as_json_for_auto_complete(entries)
+    json_elems = "[{" + entries.map {|item| "\"value\" : \"#{item.id}\", \"label\" : \"#{item.specification()}\""}.join("},{") + "}]"
     return json_elems == "[{}]" ? "" : json_elems
   end
 
