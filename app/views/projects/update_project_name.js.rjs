@@ -1,3 +1,4 @@
+#TODO: is this dead code?
 page['default_project_name_id'].value = @project.name
 page['todo_project_name'].value = @project.name
 

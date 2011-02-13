@@ -1,3 +1,4 @@
+# TODO: is this dead code?
 page.select('#project_status .active span').each do |element|
   element.className = @project.current_state == :active ? 'active_state' : 'inactive_state'
 end

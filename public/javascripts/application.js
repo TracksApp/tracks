@@ -1,9 +1,9 @@
 var TracksForm = {
     toggle: function(toggleLinkId, formContainerId, formId, hideLinkText,
         hideLinkTitle, showLinkText, showLinkTitle) {
-        form=$('#'+formContainerId)
+        var form=$('#'+formContainerId)
         form.toggle();
-        toggleLink = $('#'+toggleLinkId);
+        var toggleLink = $('#'+toggleLinkId);
         if (!form.is(':visible')) {
             toggleLink.text(showLinkText).attr('title', showLinkTitle);
         }
@@ -74,41 +74,6 @@ var TracksForm = {
             $(this).prev().val('');
         });
 
-        /* behavior for delete icon. DEAD CODE??? */
-        $('.item-container a.delete_icon').live('click', function(evt){
-            evt.preventDefault();
-            params = {};
-            if(typeof(TAG_NAME) !== 'undefined'){
-                params._tag_name = TAG_NAME;
-            }
-            confirm_message = $(this).attr("x_confirm_message")
-            if(confirm(confirm_message)){
-                itemContainer = $(this).parents(".item-container");
-                itemContainer.block({
-                    message: null
-                });
-                params._method = 'delete';
-                $.post(this.href, params, function(){
-                    itemContainer.unblock();
-                }, 'script');
-            }
-        });
-
-        /* behavior for edit icon DEAD CODE???*/
-        $('.item-container a.edit_icon').live('click', function(evt){
-            evt.preventDefault();
-            params = {};
-            if(typeof(TAG_NAME) !== 'undefined'){
-                params._tag_name = TAG_NAME;
-            }
-            itemContainer = $(this).parents(".item-container");
-            $(this).effect('pulsate', {
-                times: 1
-            }, 800);
-            $.get(this.href, params, function(){
-                }, 'script');
-        });
-
         /* submit todo form after entering new todo */
         $("button#todo_new_action_submit").live('click', function (ev) {
             if (TodoItems.askIfNewContextProvided('', this))
@@ -156,7 +121,7 @@ var TracksPages = {
         Nifty("div#project_new_project_container","normal");
     },
     page_notify: function(type, message, fade_duration_in_sec) {
-        flash = $('h4#flash');
+        var flash = $('h4#flash');
         flash.html("<h4 id=\'flash\' class=\'alert "+type+"\'>"+message+"</h4>");
         flash = $('h4#flash');
         flash.show();
@@ -205,7 +170,7 @@ var TracksPages = {
         $(".alert").fadeOut(8000);
 
         /* for edit project form and edit todo form
-         * TODO: refactor to separate calls from project and todo */
+* TODO: refactor to separate calls from project and todo */
         $('.edit-form a.negative').live('click', function(){
             $(this).parents('.edit-form').fadeOut(200, function () {
                 $(this).parents('.list').find('.project').fadeIn(500);
@@ -253,10 +218,10 @@ var TodoItemsContainer = {
     setup_container_toggles: function(){
         // bind handlers
         $('.container_toggle').click(function(evt){
-            toggle_target = $(this.parentNode.parentNode).find('.toggle_target');
+            var toggle_target = $(this.parentNode.parentNode).find('.toggle_target');
             if(toggle_target.is(':visible')){
                 // hide it
-                imgSrc = $(this).find('img').attr('src');
+                var imgSrc = $(this).find('img').attr('src');
                 $(this).find('img').attr('src', imgSrc.replace('collapse', 'expand'));
                 $.cookie(TodoItemsContainer.buildCookieName(this.parentNode.parentNode), true);
                 toggle_target.slideUp(500);
@@ -272,7 +237,7 @@ var TodoItemsContainer = {
         // set to cookied state
         $('.container.context').each(function(){
             if($.cookie(TodoItemsContainer.buildCookieName(this))=="true"){
-                imgSrc = $(this).find('.container_toggle img').attr('src');
+                var imgSrc = $(this).find('.container_toggle img').attr('src');
                 if (imgSrc) {
                     $(this).find('.container_toggle img').attr('src', imgSrc.replace('collapse', 'expand'));
                     $(this).find('.toggle_target').hide();
@@ -283,15 +248,15 @@ var TodoItemsContainer = {
 
     // private
     buildCookieName: function(containerElem) {
-        tracks_login = $.cookie('tracks_login');
+        var tracks_login = $.cookie('tracks_login');
         return 'tracks_'+tracks_login+'_context_' + containerElem.id + '_collapsed';
     },
     showContainer: function(containerElem) {
-        imgSrc = $(containerElem).find('.container_toggle img').attr('src');
+        var imgSrc = $(containerElem).find('.container_toggle img').attr('src');
         $(containerElem).find('.container_toggle img').attr('src', imgSrc.replace('expand', 'collapse'));
     },
     hideContainer: function (containerElem) {
-        imgSrc = $(containerElem).find('.container_toggle img').attr('src');
+        var imgSrc = $(containerElem).find('.container_toggle img').attr('src');
         $(containerElem).find('.container_toggle img').attr('src', imgSrc.replace('collapse', 'expand'));
     }
 }
@@ -299,7 +264,7 @@ var TodoItemsContainer = {
 var TodoItems = {
     getContextsForAutocomplete: function (term, element_to_block) {
         var allContexts = null;
-        params = default_ajax_options_for_scripts('GET', relative_to_root('contexts.autocomplete'), element_to_block);
+        var params = default_ajax_options_for_scripts('GET', relative_to_root('contexts.autocomplete'), element_to_block);
         params.data = "term="+term;
         params.dataType = "json";
         params.async = false;
@@ -313,10 +278,10 @@ var TodoItems = {
         var givenContextName = $('#'+source+'todo_context_name').val();
         if (givenContextName.length == 0) return true; // do nothing and depend on rails validation error
 
-        contexts = TodoItems.getContextsForAutocomplete(givenContextName, element_to_block);
+        var contexts = TodoItems.getContextsForAutocomplete(givenContextName, element_to_block);
 
         if (contexts) {
-            for (i=0; i<contexts.length; i++)
+            for (var i=0; i<contexts.length; i++)
                 if (contexts[i].value == givenContextName) return true;
         }
         return confirm(i18n['contexts.new_context_pre'] + givenContextName + i18n['contexts.new_context_post']);
@@ -351,9 +316,9 @@ var TodoItems = {
             return false;
         });
 
-        /* delete button to delete a todo or recurring_todo from the list */
+        /* delete button to delete a todo from the list */
         $('.item-container a.icon_delete_item').live('click', function(evt){
-            confirm_message = $(this).attr("x_confirm_message")
+            var confirm_message = $(this).attr("x_confirm_message")
             if(confirm(confirm_message)){
                 delete_with_ajax_and_block_element(this.href, $(this).parents('.project'));
             }
@@ -377,8 +342,8 @@ var TodoItems = {
 
         /* delete button to delete a project from the list */
         $('.item-container a.delete_dependency_button').live('click', function(evt){
-            predecessor_id=$(this).attr("x_predecessors_id");
-            ajax_options = default_ajax_options_for_scripts('DELETE', this.href, $(this).parents('.item-container'));
+            var predecessor_id=$(this).attr("x_predecessors_id");
+            var ajax_options = default_ajax_options_for_scripts('DELETE', this.href, $(this).parents('.item-container'));
             ajax_options.data += "&predecessor="+predecessor_id
             $.ajax(ajax_options);
             return false;
@@ -390,7 +355,7 @@ var UsersPage = {
     setup_behavior: function() {
         /* delete button to delete a usedr from the list */
         $('a.delete_user_button').live('click', function(evt){
-            confirm_message = $(this).attr("x_confirm_message")
+            var confirm_message = $(this).attr("x_confirm_message")
             if(confirm(confirm_message)){
                 delete_with_ajax_and_block_element(this.href, $(this).parents('.project'));
             }
@@ -422,8 +387,8 @@ var ProjectListPage = {
         }
     },
     save_project_name: function(value, settings){
-        project_id = $(this).parents('.container').children('div').get(0).id.split('_')[2];
-        highlight = function(){
+        var project_id = $(this).parents('.container').children('div').get(0).id.split('_')[2];
+        var highlight = function(){
             $('h2#project_name').effect('highlight', {}, 500);
         };
         $.post(relative_to_root('projects/update/'+project_id), {
@@ -442,7 +407,7 @@ var ProjectListPage = {
 
         /* alphabetize project list */
         $('.alphabetize_link').live('click', function(evt){
-            confirm_message = $(this).attr("x_confirm_message")
+            var confirm_message = $(this).attr("x_confirm_message")
             if(confirm(confirm_message)){
                 post_with_ajax_and_block_element(this.href, $(this).parents('.alpha_sort'));
             }
@@ -451,7 +416,7 @@ var ProjectListPage = {
 
         /* sort by number of actions */
         $('.actionize_link').click(function(evt){
-            confirm_message = $(this).attr("x_confirm_message")
+            var confirm_message = $(this).attr("x_confirm_message")
             if(confirm(confirm_message)){
                 post_with_ajax_and_block_element(this.href, $(this).parents('.tasks_sort'));
             }
@@ -460,7 +425,7 @@ var ProjectListPage = {
 
         /* delete button to delete a project from the list */
         $('a.delete_project_button').live('click', function(evt){
-            confirm_message = $(this).attr("x_confirm_message")
+            var confirm_message = $(this).attr("x_confirm_message")
             if(confirm(confirm_message)){
                 delete_with_ajax_and_block_element(this.href, $(this).parents('.project'));
             }
@@ -524,8 +489,8 @@ var ContextListPage = {
         }
     },
     save_context_name: function(value, settings) {
-        context_id = $(this).parents('.container.context').get(0).id.split('c')[1];
-        highlight = function(){
+        var context_id = $(this).parents('.container.context').get(0).id.split('c')[1];
+        var highlight = function(){
             $('div.context span#context_name').effect('highlight', {}, 500);
         };
         $.post(relative_to_root('contexts/update/'+context_id), {
@@ -543,7 +508,7 @@ var ContextListPage = {
 
         /* delete a context using the x button */
         $('a.delete_context_button').live('click', function(evt){
-            confirm_message = $(this).attr("x_confirm_message")
+            var confirm_message = $(this).attr("x_confirm_message")
             if(confirm(confirm_message)){
                 delete_with_ajax_and_block_element(this.href, $(this).parents('.context'));
             }
@@ -631,7 +596,7 @@ var NotesPage = {
 
         /* delete button for note */
         $('a.delete_note_button').live('click', function(){
-            confirm_message = $(this).attr("x_confirm_message")
+            var confirm_message = $(this).attr("x_confirm_message")
             if(confirm(confirm_message)){
                 delete_with_ajax_and_block_element(this.href, $(this).parents('.project_notes'));
             }
@@ -640,7 +605,7 @@ var NotesPage = {
 
         /* edit button for note */
         $('a.note_edit_settings').live('click', function(){
-            dom_id = this.id.substr(10);
+            var dom_id = this.id.substr(10);
             $('#'+dom_id).toggle();
             $('#edit_'+dom_id).show();
             $('#edit_form_'+dom_id+' textarea').focus();
@@ -649,7 +614,7 @@ var NotesPage = {
 
         /* cancel button when editing a note */
         $('.edit-note-form a.negative').live('click', function(){
-            dom_id = this.id.substr(14);
+            var dom_id = this.id.substr(14);
             /* dom_id == 'note_XX' on notes page and just 'note' on project page */
             if (dom_id == 'note') {
                 $('#new-note').hide();
@@ -680,8 +645,8 @@ var RecurringTodosPage = {
         });
     },
     toggle_overlay: function () {
-        el = document.getElementById("overlay");
-        el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
+        var overlay_element = document.getElementById("overlay");
+        overlay_element.style.visibility = (overlay_element.style.visibility == "visible") ? "hidden" : "visible";
     },
     setup_behavior: function() {
         /* cancel button on new recurring todo form */
@@ -722,6 +687,19 @@ var RecurringTodosPage = {
         /* submit form for new recurring todo */
         $("#recurring_todo_new_action_submit").live('click', function (ev) {
             submit_with_ajax_and_block_element('form.#recurring-todo-form-new-action', $(this));
+            return false;
+        });
+        /* set behavior for edit recurring todo */
+        $(".item-container a.edit_icon").live('click', function (ev){
+            get_with_ajax_and_block_element(this.href, $(this).parents(".item-container"));
+            return false;
+        });
+        /* delete button to delete a todo from the list */
+        $('.item-container a.delete_icon').live('click', function(evt){
+            var confirm_message = $(this).attr("x_confirm_message")
+            if(confirm(confirm_message)){
+                delete_with_ajax_and_block_element(this.href, $(this).parents('.project'));
+            }
             return false;
         });
 
@@ -780,7 +758,7 @@ function generic_get_script_for_list(element, getter, param){
 }
 
 function default_ajax_options_for_submit(ajax_type, element_to_block) {
-    options = {
+    var options = {
         type: ajax_type,
         async: true,
         context: element_to_block,
@@ -808,14 +786,14 @@ function default_ajax_options_for_submit(ajax_type, element_to_block) {
 }
 
 function default_ajax_options_for_scripts(ajax_type, the_url, element_to_block) {
-    options = default_ajax_options_for_submit(ajax_type, element_to_block);
+    var options = default_ajax_options_for_submit(ajax_type, element_to_block);
     options.url = the_url;
     options.dataType = 'script';
     return options;
 }
 
 function submit_with_ajax_and_block_element(form, element_to_block) {
-    options = default_ajax_options_for_submit('POST', element_to_block);
+    var options = default_ajax_options_for_submit('POST', element_to_block);
     options.dataType = 'script';
     $(form).ajaxSubmit(options);
 }
@@ -829,7 +807,7 @@ function post_with_ajax_and_block_element(the_url, element_to_block) {
 }
 
 function put_with_ajax_and_block_element(the_url, element_to_block) {
-    options = default_ajax_options_for_scripts('POST', the_url, element_to_block);
+    var options = default_ajax_options_for_scripts('POST', the_url, element_to_block);
     options.data += '&_method=put';
     $.ajax(options);
 }
@@ -856,7 +834,7 @@ $(document).ajaxSend(function(event, request, settings) {
 });
 
 function setup_periodic_check(url_for_check, interval_in_sec, method) {
-    ajaxMethod = (method ? method : "GET");
+    var ajaxMethod = (method ? method : "GET");
 
     function check_remote() {
         $.ajax(default_ajax_options_for_scripts(ajaxMethod, url_for_check, null));
@@ -865,10 +843,10 @@ function setup_periodic_check(url_for_check, interval_in_sec, method) {
 }
 
 function update_order(event, ui){
-    container = $(ui.item).parent();
-    row = $(ui.item).children('.sortable_row');
+    var container = $(ui.item).parent();
+    var row = $(ui.item).children('.sortable_row');
 
-    url = '';
+    var url = '';
     if(row.hasClass('context'))
         url = relative_to_root('contexts/order');
     else if(row.hasClass('project'))
@@ -891,14 +869,14 @@ function project_defaults(){
     // see ticket #934
     } else {
         if(defaultContexts[$(this).val()] !== undefined) {
-            context_name = $(this).parents('form').find('input[name=context_name]');
+            var context_name = $(this).parents('form').find('input[name=context_name]');
             if(context_name.attr('edited') === undefined){
                 context_name.val(defaultContexts[$(this).val()]);
             }
         }
     }
     if(defaultTags[$(this).val()] !== undefined) {
-        tag_list = $(this).parents('form').find('input[name=tag_list]');
+        var tag_list = $(this).parents('form').find('input[name=tag_list]');
         if(tag_list.attr('edited') === undefined){
             tag_list.val(defaultTags[$(this).val()]);
         }
@@ -906,11 +884,11 @@ function project_defaults(){
 }
 
 function enable_rich_interaction(){
-    /* called after completion of all AJAX calls */
+    // called after completion of all AJAX calls
 
-    /* fix for #1036 where closing a edit form before the autocomplete was filled
-     * resulted in a dropdown box that could not be removed. We remove all
-     * autocomplete boxes the hard way */
+    //fix for #1036 where closing a edit form before the autocomplete was filled
+    //resulted in a dropdown box that could not be removed. We remove all
+    //autocomplete boxes the hard way
     $('.ac_results').remove();
 
     $('input.Date').datepicker({
@@ -943,11 +921,24 @@ function enable_rich_interaction(){
     .autocomplete({
         minLength: 0,
         source: function( request, response ) {
-            last_term = extractLast( request.term );
+            var last_term = extractLast( request.term );
             if (last_term != "" && last_term != " ")
-                $.getJSON( relative_to_root('tags.autocomplete'), {
-                    term: last_term
-                }, response );
+                $.ajax( {
+                    url: relative_to_root('tags.autocomplete'),
+                    dataType: 'json',
+                    data: {
+                        term: last_term
+                    },
+                    success: function(data, textStatus, jqXHR) {
+                        // remove spinner as removing the class is not always done by response
+                        $('input[name=tag_list]').removeClass('ui-autocomplete-loading');
+                        response(data, textStatus, jqXHR); // call jquery callback to handle data
+                    }
+                })
+            else {
+                // remove spinner as typing will always add the spinner
+                $('input[name=tag_list]').removeClass('ui-autocomplete-loading');
+            }
         },
         focus: function() {
             // prevent value inserted on focus
@@ -976,9 +967,6 @@ function enable_rich_interaction(){
     }
 
 
-    /* multiple: true,
-        multipleSeparator:',' */
-
     $('input[name=predecessor_list]:not(.ac_input)')
     .bind( "keydown", function( event ) { // don't navigate away from the field on tab when selecting an item
         if ( event.keyCode === $.ui.keyCode.TAB &&
@@ -989,7 +977,7 @@ function enable_rich_interaction(){
     .autocomplete({
         minLength: 0,
         source: function( request, response ) {
-            last_term = extractLast( request.term );
+            var last_term = extractLast( request.term );
             if (last_term != "" && last_term != " ")
                 $.getJSON( relative_to_root('auto_complete_for_predecessor'), {
                     term: last_term
@@ -1026,8 +1014,8 @@ function enable_rich_interaction(){
 
     /* Drag & Drop for successor/predecessor */
     function drop_todo(evt, ui) {
-        dragged_todo = ui.draggable[0].id.split('_')[2];
-        dropped_todo = this.id.split('_')[2];
+        var dragged_todo = ui.draggable[0].id.split('_')[2];
+        var dropped_todo = this.id.split('_')[2];
         ui.draggable.remove();
         $('.drop_target').hide(); // IE8 doesn't call stop() in this situation
         $(this).block({
@@ -1063,9 +1051,9 @@ function enable_rich_interaction(){
   
     /* Drag & drop for changing contexts */
     function drop_todo_on_context(evt, ui) {
-        target = $(this);
-        dragged_todo = ui.draggable[0].id.split('_')[2];
-        context_id = this.id.split('_')[1];
+        var target = $(this);
+        var dragged_todo = ui.draggable[0].id.split('_')[2];
+        var context_id = this.id.split('_')[1];
         ui.draggable.remove();
         target.block({
             message: null
@@ -1094,7 +1082,7 @@ function enable_rich_interaction(){
     field_touched = false;
 
     /* shrink the notes on the project pages. This is not live(), so this needs
-     * to be run after ajax adding of a new note */
+* to be run after ajax adding of a new note */
     $('.note_wrapper').truncate({
         max_length: 90,
         more: '',

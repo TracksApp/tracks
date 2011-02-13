@@ -1304,3 +1304,4 @@ div.auto_complete ul strong.highlight {
 .ui-datepicker { 
   z-index: 1000; 
 }
+.ui-autocomplete-loading { background: white url('/images/ui-anim_basic_16x16.gif') right center no-repeat; }

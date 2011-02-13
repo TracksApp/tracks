@@ -1,3 +1,4 @@
+# TODO: is this dead code?
 if @project.default_tags.nil?
   page.notify :notice, t('projects.default_tags_removed_notice'), 5.0
 else

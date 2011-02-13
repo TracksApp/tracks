@@ -1,3 +1,5 @@
+# TODO: is this DEAD code?
+
 if @project.default_context.nil?
   page.notify :notice, t('projects.default_context_removed'), 5.0
 else
