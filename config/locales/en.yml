@@ -537,13 +537,19 @@ en:
       get_in_ical_format: "Get this calendar in iCal format"
     no_actions_due_this_week: "No actions due in rest of this week"
     overdue: "Overdue"
-    tickler_items_due: "%{count} tickler items are now due - refresh the page to see them."
-    completed_today: "You have completed %{count} actions so far today."
+    tickler_items_due:
+      one: "One tickler item is now due - refresh the page to see it."
+      other: "%{count} tickler items are now due - refresh the page to see them."
+    completed_today:
+      one: "You have completed one action so far today."
+      other: "You have completed %{count} actions so far today."
     completed_last_day: "Completed in the last 24 hours"
     completed_last_x_days: "Completed in last %{count} days"
     older_completed_items: "Older completed items"
     older_than_days: "Older than %{count} days"
-    completed_in_archive: "There are %{count} completed actions in the archive."
+    completed_in_archive:
+      one: "There is one completed action in the archive."
+      other: "There are %{count} completed actions in the archive."
     completed_more_than_x_days_ago: "Completed more than %{count} days ago"
     added_new_next_action: "Added new next action"
     added_new_next_action_singular: "Added new next action"
