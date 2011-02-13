@@ -79,9 +79,8 @@ ActionController::Routing::Routes.draw do |map|
   map.search 'search', :controller => 'search', :action => 'index'
   map.data 'data', :controller => 'data', :action => 'index'
 
-  if Rails.env == 'test'
-    map.connect '/selenium_helper/login', :controller => 'selenium_helper', :action => 'login'
-  end
+  map.connect '/selenium_helper/login', :controller => 'selenium_helper', :action => 'login' if Rails.env == 'test'
+  Translate::Routes.translation_ui(map) if Rails.env != "production"
 
   # Install the default route as the lowest priority.
   map.connect ':controller/:action/:id'
