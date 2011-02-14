@@ -2,11 +2,12 @@ class PreferencesController < ApplicationController
     
   def index
     @page_title = t('preferences.page_title')
-    @prefs = prefs
+    @prefs = current_user.prefs
   end
 
   def edit
     @page_title = t('preferences.page_title_edit')
+    @prefs = current_user.prefs
   end
   
   def update
