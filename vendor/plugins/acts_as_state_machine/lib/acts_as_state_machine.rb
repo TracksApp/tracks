@@ -57,8 +57,11 @@ module ScottBarron                   #:nodoc:
             old_state = states[record.current_state]
           
             next_state.entering(record) unless loopback
-          
-            record.update_attribute(record.class.state_column, to.to_s)
+            if record.new_record?
+              record.send(record.class.state_column.to_s + '=', to.to_s)
+            else
+              record.update_attribute(record.class.state_column, to.to_s)
+            end
           
             next_state.entered(record) unless loopback
             old_state.exited(record) unless loopback
