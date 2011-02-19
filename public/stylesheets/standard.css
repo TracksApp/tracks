@@ -379,8 +379,8 @@ input.item-checkbox {
     vertical-align: middle;
 }
 
-.rec_description, .description, .stale_l1, .stale_l2, .stale_l3 {
-    margin-left: 60px;
+.rec_description, .description {
+    margin-left: 80px;
     position:relative;
 }
 
@@ -941,6 +941,7 @@ div.message {
 
 .grip {
     cursor: move;
+    float: left;
 }
 
 .drop_target {
