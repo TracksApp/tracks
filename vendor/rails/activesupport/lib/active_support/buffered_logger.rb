@@ -1,3 +1,5 @@
+require 'thread'
+
 module ActiveSupport
   # Inspired by the buffered logger idea by Ezra
   class BufferedLogger
@@ -67,7 +69,7 @@ module ActiveSupport
     end
 
     for severity in Severity.constants
-      class_eval <<-EOT, __FILE__, __LINE__
+      class_eval <<-EOT, __FILE__, __LINE__ + 1
         def #{severity.downcase}(message = nil, progname = nil, &block)  # def debug(message = nil, progname = nil, &block)
           add(#{severity}, message, progname, &block)                    #   add(DEBUG, message, progname, &block)
         end                                                              # end

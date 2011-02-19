@@ -1,3 +1,5 @@
-<% if @saved -%>
+<%- if @saved -%>
   $('div#recurring_todo_<%= @recurring_todo.id %> a.star_item img').toggleClass('starred_todo').toggleClass('unstarred_todo');
-<% end -%>
+<%- else -%>
+  TracksPages.page_notify('error', '<%= t('todos.error_starring_recurring', :description => @recurring_todo.description) %>', 8);
+<%- end -%>

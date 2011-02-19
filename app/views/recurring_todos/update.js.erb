@@ -1,0 +1,38 @@
+<%- if @saved -%>
+  RecurringTodosPage.toggle_overlay();
+  TracksPages.page_notify('notice', text_for_status_message(), 5);
+  replace_old_recurring_todo_with_updated();
+<%-  else -%>
+  TracksPages.show_edit_errors(html_for_error_messages());
+<%-  end -%>
+
+function replace_old_recurring_todo_with_updated() {
+  $('#<%=dom_id(@recurring_todo)%>').fadeOut(250, function() {
+<%-
+    # first add the updated recurring todo after the old one, then remove old one
+    # using html() does not work, because it will replace the _content_ of
+    # the container instead of the container itself, i.e. you will get
+    # a container within a container which will break drag-and-drop sorting (when/if implemented)
+-%>
+    $('#<%=dom_id(@recurring_todo)%>').after(html_for_updated_recurring_todo());
+    $('#<%=dom_id(@recurring_todo)%>').remove();
+    $('#<%=dom_id(@recurring_todo)%>').fadeIn(500);
+  });
+}
+
+function html_for_updated_recurring_todo() {
+  return "<%= escape_javascript(render(:partial => @recurring_todo))%>";
+}
+
+function text_for_status_message() {
+  <%-
+  status_message = t('todos.recurring_action_saved')
+  status_message = t('todos.added_new_project') + ' / ' + status_message if @new_project_created
+  status_message = t('todos.added_new_context') + ' / ' + status_message if @new_context_created
+  -%>
+  return "<%= status_message%>";
+}
+
+function html_for_error_messages() {
+  return "<%= escape_javascript(error_messages_for('recurring_todo')) %>";
+}

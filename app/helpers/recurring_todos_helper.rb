@@ -13,20 +13,20 @@ module RecurringTodosHelper
   def recurring_todo_remote_delete_icon
     link_to( image_tag_for_delete,
       recurring_todo_path(@recurring_todo), :id => "delete_icon_"+@recurring_todo.id.to_s,
-      :class => "icon delete_icon", :title => "delete the recurring action '#{@recurring_todo.description}'")
+      :class => "icon delete_icon", :title => t('todos.delete_recurring_action_title'), :x_confirm_message => t('todos.delete_recurring_action_confirm', :description => @recurring_todo.description))
   end
   
   def recurring_todo_remote_star_icon
     link_to( image_tag_for_star(@recurring_todo),
-      toggle_star_recurring_todo_path(@recurring_todo),
-      :class => "icon star_item", :title => "star the action '#{@recurring_todo.description}'")
+      toggle_star_recurring_todo_path(@recurring_todo), :id => "star_icon_"+@recurring_todo.id.to_s,
+      :class => "icon star_item", :title => t('todos.star_action'))
   end
   
   def recurring_todo_remote_edit_icon
     if !@recurring_todo.completed?
       str = link_to( image_tag_for_edit(@recurring_todo),
         edit_recurring_todo_path(@recurring_todo),
-        :class => "icon edit_icon")
+        :class => "icon edit_icon", :id => "link_edit_recurring_todo_#{@recurring_todo.id}")
     else
       str = '<a class="icon">' + image_tag("blank.png") + "</a> "
     end
@@ -34,17 +34,16 @@ module RecurringTodosHelper
   end
   
   def recurring_todo_remote_toggle_checkbox
-    str = check_box_tag('item_id', toggle_check_recurring_todo_path(@recurring_todo), @recurring_todo.completed?, :class => 'item-checkbox')
-    str
+    return check_box_tag("check_#{@recurring_todo.id}", toggle_check_recurring_todo_path(@recurring_todo), @recurring_todo.completed?, :class => 'item-checkbox')
   end
 
   private
 
   def image_tag_for_delete
-    image_tag("blank.png", :title =>"Delete action", :class=>"delete_item")
+    image_tag("blank.png", :title =>t('todos.delete_action'), :class=>"delete_item")
   end
 
   def image_tag_for_edit(todo)
-    image_tag("blank.png", :title =>"Edit action", :class=>"edit_item", :id=> dom_id(todo, 'edit_icon'))
+    image_tag("blank.png", :title =>t('todos.edit_action'), :class=>"edit_item", :id=> dom_id(todo, 'edit_icon'))
   end
 end

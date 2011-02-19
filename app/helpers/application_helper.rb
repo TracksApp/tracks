@@ -104,11 +104,29 @@ module ApplicationHelper
   end
   
   def link_to_context(context, descriptor = sanitize(context.name))
-    link_to( descriptor, context_path(context), :title => "View context: #{context.name}" )
+    link_to( descriptor, context, :title => "View context: #{context.name}" )
   end
   
   def link_to_project(project, descriptor = sanitize(project.name))
-    link_to( descriptor, project_path(project), :title => "View project: #{project.name}" )
+    link_to( descriptor, project, :title => "View project: #{project.name}" )
+  end
+
+  def link_to_edit_project (project, descriptor = sanitize(project.name))
+    link_to(descriptor,
+      url_for({:controller => 'projects', :action => 'edit', :id => project.id}),
+      {:id => "link_edit_#{dom_id(project)}", :class => "project_edit_settings"})
+  end
+
+  def link_to_edit_context (context, descriptor = sanitize(context.name))
+    link_to(descriptor,
+      url_for({:controller => 'contexts', :action => 'edit', :id => context.id}),
+      {:id => "link_edit_#{dom_id(context)}", :class => "context_edit_settings"})
+  end
+
+  def link_to_edit_note (note, descriptor = sanitize(note.id.to_s))
+    link_to(descriptor,
+      url_for({:controller => 'notes', :action => 'edit', :id => note.id}),
+      {:id => "link_edit_#{dom_id(note)}", :class => "note_edit_settings"})
   end
   
   def link_to_project_mobile(project, accesskey, descriptor = sanitize(project.name))
@@ -128,16 +146,7 @@ module ApplicationHelper
   end
   
   def render_flash
-    render :partial => 'shared/flash', :locals => { :flash => flash }
-  end
-  
-  # Display a flash message in RJS templates Usage: page.notify :warning, "This
-  # is the message", 5.0 Puts the message into a flash of type 'warning', fades
-  # over 5 secs
-  def notify(type, message, fade_duration)
-    type = type.to_s  # symbol to string
-    page.replace 'flash', "<h4 id='flash' class='alert #{type}'>#{message}</h4>" 
-    page.visual_effect :fade, 'flash', :duration => fade_duration
+    render :partial => 'shared/flash', :object => flash 
   end
 
   def recurrence_time_span(rt)
@@ -213,4 +222,41 @@ module ApplicationHelper
     note = Sanitize.clean(note, Sanitize::Config::RELAXED)
     return note
   end
+
+  def sidebar_html_for_titled_list (list, title)
+    return content_tag(:h3, title+" (#{list.length})") +
+      content_tag(:ul, sidebar_html_for_list(list))
+  end
+
+  def sidebar_html_for_list(list)
+    if list.empty?
+      return content_tag(:li, t('sidebar.list_empty'))
+    else
+      return list.inject("") do |html, item|
+        link = (item.class == "Project") ? link_to_project( item ) : link_to_context(item)
+        html << content_tag(:li, link + " (" + count_undone_todos_phrase(item,"actions")+")")
+      end
+    end
+  end
+
+  def generate_i18n_strings
+    js = ""
+    js << "i18n = new Array();\n"
+    %w{
+    shared.toggle_multi       shared.toggle_multi_title
+    shared.hide_form          shared.hide_action_form_title
+    shared.toggle_single      shared.toggle_single_title
+    projects.hide_form        projects.hide_form_title
+    projects.show_form        projects.show_form_title
+    contexts.hide_form        contexts.hide_form_title
+    contexts.show_form        contexts.show_form_title
+    contexts.new_context_pre  contexts.new_context_post
+    common.cancel             common.ok
+    common.ajaxError
+    }.each do |s|
+      js << "i18n['#{s}'] = '#{ t(s).gsub(/'/, "\\\\'") }';\n"
+    end
+    return js
+  end
+
 end

@@ -1,5 +1,8 @@
+Given /this is a pending scenario/ do
+  pending
+end
+
 Then /the badge should show (.*)/ do |number|
-  # puts response.body.inspect
   badge = -1
   xpath= "//span[@id='badge_count']"
 

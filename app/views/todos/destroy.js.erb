@@ -1,0 +1,78 @@
+<%- if @saved -%>
+  TracksPages.page_notify('notice', '<%=  escape_javascript("The action was deleted succesfully") %>', 5);
+  TracksPages.set_page_badge(<%=@down_count%>);
+  remove_todo_from_page();
+  show_new_todo_if_todo_was_recurring();
+  activate_pending_todos();
+  show_empty_messages();
+<%- else -%>
+  TracksPages.page_notify('error', "<%= t('todos.error_deleting_item', :description => @todo.description) %>", 8);
+<%- end -%>
+
+<% if @saved 
+  # do not send the js in case of an error
+-%>
+
+function show_empty_messages() {
+  <% if @old_due_empty -%>
+    $('#empty_<%=@original_item_due_id%>').slideDown(1000);
+  <% end -%>
+
+  <% if empty_container_msg_div_id && todo_container_is_empty -%>
+    $('#<%=empty_container_msg_div_id%>').slideDown(1000);
+  <% end -%>
+
+  <% if source_view_is(:deferred) && @down_count==0 -%>
+    $('#tickler-empty-nd').slideDown(100);
+  <% end -%>
+}
+
+function remove_todo_from_page() {
+  <% if (@remaining_in_context == 0)
+    # remove context with deleted todo
+  -%>
+    $('#c<%=@todo.context_id%>').fadeOut(1000, function() {
+      $('#<%=dom_id(@todo)%>').remove();
+    });
+  <% else 
+    # remove only the todo
+  -%>
+    $('#<%=dom_id(@todo)%>').slideUp(1000, function() {
+      $('#<%=dom_id(@todo)%>').remove();
+    });
+  <% end -%>
+}
+
+function show_new_todo_if_todo_was_recurring() {
+  <% if @todo.from_recurring_todo? -%>
+    <%  unless @new_recurring_todo.nil? || @new_recurring_todo.deferred? -%>
+      TodoItemsContainer.ensureVisibleWithEffectAppear("<%=item_container_id(@new_recurring_todo)%>");
+      $('#<%=item_container_id(@new_recurring_todo)%>').append(html_for_new_recurring_todo());
+      $('#<%= dom_id(@new_recurring_todo, 'line')%>').effect('highlight', {}, 2000 );
+      TracksPages.page_notify('notice', "<%=t('todos.recurring_action_deleted')%>", 5);
+    <% else -%>
+      <% if @todo.recurring_todo.todos.active.count == 0 && @new_recurring_todo.nil? -%>
+        TracksPages.page_notify('notice', "<%=t('todos.completed_recurrence_completed')%>", 5);
+      <% end -%>
+    <% end -%>
+  <% end -%>
+}
+
+function activate_pending_todos() {
+  <% # Activate pending todos that are successors of the deleted -%>
+  <% @pending_to_activate.each do |t| -%>
+    <% if source_view_is(:project) or source_view_is(:tag) %>
+      $('#<%=dom_id(t)%>').remove();
+    <% end -%>
+    $('#<%=item_container_id(t)%>').append("<%=escape_javascript(render(:partial => t, :locals => { :parent_container_type => parent_container_type }))%>");
+    $('#<%= dom_id(t, 'line')%>').effect('highlight', {}, 2000 );
+  <% end -%>
+}
+
+function html_for_new_recurring_todo() {
+  return "<%= @saved && @new_recurring_todo ? escape_javascript(render(:partial => @new_recurring_todo, :locals => { :parent_container_type => parent_container_type })) : "" %>";
+}
+
+<% end 
+  # if @saved
+-%>

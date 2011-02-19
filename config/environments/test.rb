@@ -19,8 +19,9 @@ config.action_mailer.delivery_method = :test
 # Disable request forgery protection in test environment
 config.action_controller.allow_forgery_protection    = false
 
-# Unique cookies
-config.action_controller.session = { :key => 'TracksTest' }
+# Unique cookies and use cookies for session
+config.action_controller.session_store = :cookie_store
+config.action_controller.session = { :key => 'TracksTest', :secret => SITE_CONFIG['salt'] * (30.0 /  SITE_CONFIG['salt'].length).ceil }
 
 # Overwrite the default settings for fixtures in tests. See Fixtures 
 # for more details about these settings.
@@ -40,6 +41,5 @@ config.gem "ZenTest", :lib => "zentest", :version => ">=4.0.0"
 config.gem "hpricot"
 config.gem "hoe"
 config.gem 'webrat',           :lib => false, :version => '>=0.7.0' unless File.directory?(File.join(Rails.root, 'vendor/plugins/webrat'))
-config.gem 'rspec',            :lib => false, :version => '>=1.3.0' unless File.directory?(File.join(Rails.root, 'vendor/plugins/rspec'))
-config.gem 'rspec-rails',      :lib => false, :version => '>=1.3.2' unless File.directory?(File.join(Rails.root, 'vendor/plugins/rspec-rails'))
+config.gem 'rspec-rails',      :lib => false, :version => '<2.1.0' unless File.directory?(File.join(Rails.root, 'vendor/plugins/rspec-rails'))
 config.gem "thoughtbot-factory_girl", :lib => "factory_girl", :source => "http://gems.github.com"

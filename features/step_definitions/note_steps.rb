@@ -28,12 +28,20 @@ end
 When /^I delete the first note$/ do
   title = selenium.get_text("css=div.container h2")
   id = title.split(' ').last
-  click_link "delete note"
+  click_link "delete_note_#{id}"
   selenium.get_confirmation.should == "Are you sure that you want to delete the note '#{id}'?"
 end
 
 When /^I click the icon next to the note$/ do
   click_link "Show note"
+end
+
+When /^I edit the first note to "([^"]*)"$/ do |note_body|
+  title = selenium.get_text("css=div.container h2")
+  id = title.split(' ').last
+  click_link "link_edit_note_#{id}"
+  fill_in "note[body]", :with => note_body
+  click_button "submit_note_#{id}"
 end
 
 Then /^(.*) notes should be visible$/ do |number|
@@ -58,7 +66,7 @@ Then /^the first note should disappear$/ do
   title = selenium.get_text("css=div.container h2")
   id = title.split(' ').last
   wait_for :timeout => 15 do
-    !selenium.is_visible("note_#{id}")
+    !selenium.is_element_present("note_#{id}")
   end
 end
 

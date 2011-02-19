@@ -1,0 +1,59 @@
+<% if @saved -%>
+  TracksPages.page_notify('notice', "<%=@status_message%>", 5);
+  TracksPages.hide_errors();
+  TracksPages.set_page_badge(<%= @down_count %>);
+  <% if should_show_new_item -%>
+    <% if should_add_new_context -%>
+      insert_new_context_with_new_todo();
+    <% else -%>
+      add_todo_to_existing_context();
+    <% end -%>
+  <% end -%>
+  update_predecessors();
+  clear_form();
+<% else -%>
+  TracksPages.show_errors(html_for_error_messages());
+<% end -%>
+
+function clear_form() {
+  $('#todo-form-new-action').clearForm();
+  TracksForm.set_context_name('<%=@initial_context_name%>');
+  TracksForm.set_project_name('<%=@initial_project_name%>');
+  TracksForm.set_tag_list('<%=@default_tags%>');
+  $('#todo-form-new-action input:text:first').focus();
+}
+
+function insert_new_context_with_new_todo() {
+  $('#no_todos_in_tag_view').slideUp(100);
+  $('#display_box').prepend(html_for_new_context());
+}
+
+function add_todo_to_existing_context() {
+  <% if source_view_is_one_of(:todo, :deferred, :tag) -%>
+    $('#c<%= @todo.context_id %>').fadeIn(500, function() {});
+    $('#no_todos_in_tag_view').slideUp(100);
+  <% end -%>
+  $('#<%=empty_container_msg_div_id%>').hide();
+  $('#<%=item_container_id(@todo)%>').append(html_for_new_todo());
+  $('#<%= dom_id(@todo)%>').effect('highlight', {}, 2000 );
+}
+
+function update_predecessors() {
+  <%  @todo.uncompleted_predecessors.each do |p| -%>
+    if ($('<%=item_container_id(p)%>')) {
+      $('#<%=dom_id(p)%>').html('<%= escape_javascript(render(:partial =>  p, :locals => { :parent_container_type => parent_container_type, :source_view => @source_view }))%>');
+    }
+  <% end -%>
+}
+
+function html_for_error_messages() {
+  return "<%= escape_javascript(error_messages_for('todo', :object_name => 'action')) %>";
+}
+
+function html_for_new_context() {
+  return "<%= @saved && @new_context_created ? escape_javascript(render(:partial => @todo.context, :locals => { :collapsible => true })) : "" %>";
+}
+
+function html_for_new_todo() {
+  return "<%= @saved ? escape_javascript(render(:partial => @todo, :locals => { :parent_container_type => parent_container_type, :source_view => @source_view })) : "" %>";
+}

@@ -33,10 +33,12 @@ class ApplicationController < ActionController::Base
   before_filter :set_session_expiration
   before_filter :set_time_zone
   before_filter :set_zindex_counter
+  before_filter :set_locale
   prepend_before_filter :login_required
   prepend_before_filter :enable_mobile_content_negotiation
+  #  after_filter :set_locale
   after_filter :set_charset
-
+  
   include ActionView::Helpers::TextHelper
   include ActionView::Helpers::SanitizeHelper
   extend ActionView::Helpers::SanitizeHelper::ClassMethods
@@ -45,6 +47,14 @@ class ApplicationController < ActionController::Base
   # By default, sets the charset to UTF-8 if it isn't already set
   def set_charset
     headers["Content-Type"] ||= "text/html; charset=UTF-8" 
+  end
+  
+  def set_locale
+    locale = params[:locale] # specifying a locale in the request takes precedence
+    locale = locale || prefs.locale unless current_user.nil? # otherwise, the locale of the currently logged in user takes over
+    locale = locale || request.env['HTTP_ACCEPT_LANGUAGE'].scan(/^[a-z]{2}/).first if request.env['HTTP_ACCEPT_LANGUAGE']
+    I18n.locale = locale.nil? ? I18n.default_locale : (I18n::available_locales.include?(locale.to_sym) ? locale : I18n.default_locale)
+    logger.debug("Selected '#{I18n.locale}' as locale")
   end
   
   def set_session_expiration
@@ -114,20 +124,24 @@ class ApplicationController < ActionController::Base
   # config/settings.yml
   #
   def format_date(date)
-    if date
-      date_format = prefs.date_format
-      formatted_date = date.in_time_zone(prefs.time_zone).strftime("#{date_format}")
-    else
-      formatted_date = ''
-    end
-    formatted_date
+    return date ? date.in_time_zone(prefs.time_zone).strftime("#{prefs.date_format}") : ''
   end
-
 
   def for_autocomplete(coll, substr)
-    filtered = coll.find_all{|item| item.name.downcase.include? substr.downcase}
-    return filtered.map {|item| "#{item.name}|#{item.id}"}.join("\n")
+    if substr # protect agains empty request
+      filtered = coll.find_all{|item| item.name.downcase.include? substr.downcase}
+      json_elems = "[{" + filtered.map {|item| "\"value\" : \"#{item.name}\", \"id\" : \"#{item.id}\""}.join("},{") + "}]"
+      return json_elems == "[{}]" ? "" : json_elems
+    else
+      return ""
+    end
   end
+
+  def auto_complete_result2(entries, phrase = nil)
+    json_elems = "[{" + entries.map {|item| "\"id\" : \"#{item.id}\", \"value\" : \"#{item.specification()}\""}.join("},{") + "}]"
+    return json_elems == "[{}]" ? "" : json_elems
+  end
+
 
   # Uses RedCloth to transform text using either Textile or Markdown Need to
   # require redcloth above RedCloth 3.0 or greater is needed to use Markdown,
@@ -196,7 +210,7 @@ class ApplicationController < ActionController::Base
   
   def admin_login_required
     unless User.find_by_id_and_is_admin(session['user_id'], true)
-      render :text => "401 Unauthorized: Only admin users are allowed access to this function.", :status => 401
+      render :text => t('errors.user_unauthorized'), :status => 401
       return false
     end
   end

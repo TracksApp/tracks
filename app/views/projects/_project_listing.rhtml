@@ -1,40 +1,27 @@
-<%  project = project_listing
+<%
+project = project_listing
 suppress_drag_handle ||= false
 suppress_edit_button ||= false
 -%>
 <div id="<%= dom_id(project, "container") %>" class="list">
-  <div id="<%= dom_id(project) %>" class="project sortable_row" style="display:''">
+  <div id="<%= dom_id(project) %>" class="project sortable_row" style="display:block">
+
     <% unless suppress_drag_handle -%>
       <div class="position">
-        <span class="handle">DRAG</span>
+        <span class="handle"><%= t('common.drag_handle') %></span>
       </div>
     <% end -%>
+
     <div class="data">
       <%= link_to_project( project ) %><%= " (" + count_undone_todos_and_notes_phrase(project,"actions") + ")" %>
     </div>
+
     <div class="buttons">
       <span class="grey"><%= project.current_state.to_s.upcase %></span>
-      <a class="delete_project_button"
-         href="<%= project_path(project, :format => 'js') %>"
-         title="delete the project '<%= project.name %>'"><%= image_tag( "blank.png",
-             :title => "Delete project",
-          :class=>"delete_item") %></a>
-
-      <% unless suppress_edit_button -%>
-        <%=  link_to_remote(
-          image_tag( "blank.png", :title => "Edit project", :class=>"edit_item"),
-          :url => {:controller => 'projects', :action => 'edit', :id => project.id},
-          :method => 'get',
-          :with => "'_source_view=#{@source_view}'",
-          :before => "$('#{dom_id(project)}').block({message:null});",
-          :complete => "$('#{dom_id(project)}').unblock();enable_rich_interaction();",
-          :html => {:id => "link_edit_#{dom_id(project)}"}
-        ) %>
-
-      <% end -%>
+      <%= link_to_delete_project(project, image_tag( "blank.png", :title => t('projects.delete_project_title'), :class=>"delete_item")) %>
+      <%= suppress_edit_button ? "" : link_to_edit_project(project, image_tag( "blank.png", :title => t('projects.edit_project_title'), :class=>"edit_item")) %>
     </div>
-  </div>
 
-  <div id="<%= dom_id(project, 'edit') %>" class="edit-form" style="display:none;">
   </div>
+  <div id="<%= dom_id(project, 'edit') %>" class="edit-form" style="display:none;"></div>
 </div>

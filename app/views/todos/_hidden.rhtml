@@ -3,12 +3,12 @@
       <% if collapsible %>
       <a href="#" class="container_toggle" id="toggle_deferred"><%= image_tag("collapse.png") %></a>
       <% end %>
-      Hidden actions <%= append_descriptor ? append_descriptor : '' %>
+      <%= t('todos.hidden_actions') %> <%= append_descriptor ? append_descriptor : '' %>
   </h2>
 
   <div id="hiddenitems" class="items toggle_target">
     <div id="hidden-empty-nd" style="display:<%= hidden.empty? ? 'block' : 'none'%>;">
-      <div class="message"><p>Currently there are no hidden actions found</p></div>
+      <div class="message"><p><%= t('todos.no_hidden_actions') %></p></div>
     </div>
 
     <%= render :partial => "todos/todo", :collection => hidden, :locals => { :parent_container_type => 'tag' } %>

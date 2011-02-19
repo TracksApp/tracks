@@ -1,0 +1,78 @@
+<% if @saved -%>
+  set_notification();
+  hide_empty_message();
+  TracksPages.hide_errors();
+  TracksPages.set_page_badge(<%= @down_count %>);
+  <% if should_show_new_item -%>
+    <% if @new_context_created -%>
+      insert_new_context_with_new_todo();
+    <% else -%>
+      add_todo_to_existing_context();
+    <% end -%>
+  <% end -%>
+  clear_form();
+<% else -%>
+  TracksPages.show_errors_for_multi_add(html_for_error_messages());
+<% end -%>
+
+<% if @saved 
+   # the following functions assume a todo is saved or at least not nil,
+   # so leave them out in case of an error
+-%>
+
+function set_notification() {
+ TracksPages.page_notify('notice', "<%=@status_message%>", 5);
+}
+
+function clear_form() {
+  $('#todo-form-multi-new-action').clearForm();
+  TracksForm.set_context_name_for_multi_add('<%=@initial_context_name%>');
+  TracksForm.set_project_name_for_multi_add('<%=@initial_project_name%>');
+  TracksForm.set_tag_list_for_multi_add('<%=@default_tags%>');
+  $('#todo-form-multi-new-action input:text:first').focus();
+}
+
+function insert_new_context_with_new_todo() {
+  $('#display_box').prepend(html_for_new_context());
+}
+
+function hide_empty_message() {
+  $('#<%=empty_container_msg_div_id%>').hide();
+  <% if (source_view_is :project and @todo.pending?) or (source_view_is :deferred) -%>
+    $('#tickler-empty-nd').hide();
+  <% end -%>
+}
+
+function add_todo_to_existing_context() {
+  <% if source_view_is_one_of(:todo, :deferred, :tag) -%>
+    TodoItemsContainer.ensureVisibleWithEffectAppear("c<%=@todo.context_id%>");
+  <% end
+     show = should_show_new_item # to hide html if not necessary
+     @todos.each do |todo|
+       html = show ? escape_javascript(render(:partial => todo, :locals => { :parent_container_type => parent_container_type, :source_view => @source_view })) : "" -%>
+       $('#<%=item_container_id(todo)%>').append('<%= html %>');
+       $('#<%= dom_id(todo)%>').effect('highlight', {}, 3000);
+  <% end %>
+}
+
+function html_for_new_context() {
+  return "<%= @saved && @new_context_created ? escape_javascript(render(:partial => @todo.context, :locals => { :collapsible => true })) : "" %>";
+}
+
+<% else # if @saved -%>
+
+function html_for_error_messages() {
+  <%
+  # add error about missing todo description that is not available in @todos
+  @multiple_error = content_tag(:div, content_tag(:p, @multiple_error), {:class => 'errorExplanation', :id => 'errorExplanation'}) unless @multiple_error.blank?
+  error_messages = @multiple_error || ""
+  # add errors of individual @todos
+  @todos.each do |todo|
+    @todo_i = todo
+    error_messages += error_messages_for('todo_i', :object_name => 'action')
+  end
+  -%>
+  return "<%= escape_javascript(error_messages)%>";
+}
+
+<% end # if @saved -%>

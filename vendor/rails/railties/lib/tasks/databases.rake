@@ -46,14 +46,14 @@ namespace :db do
             $stderr.puts "Couldn't create database for #{config.inspect}"
           end
         end
-        return # Skip the else clause of begin/rescue    
+        return # Skip the else clause of begin/rescue
       else
         ActiveRecord::Base.establish_connection(config)
         ActiveRecord::Base.connection
       end
     rescue
       case config['adapter']
-      when 'mysql'
+      when /^mysql/
         @charset   = ENV['CHARSET']   || 'utf8'
         @collation = ENV['COLLATION'] || 'utf8_unicode_ci'
         begin
@@ -94,11 +94,7 @@ namespace :db do
   desc 'Drops the database for the current RAILS_ENV'
   task :drop => :load_config do
     config = ActiveRecord::Base.configurations[RAILS_ENV || 'development']
-    begin
-      drop_database(config)
-    rescue Exception => e
-      puts "Couldn't drop #{config['database']} : #{e.inspect}"
-    end
+    drop_database(config)
   end
 
   def local_database?(config, &block)
@@ -163,7 +159,7 @@ namespace :db do
   task :charset => :environment do
     config = ActiveRecord::Base.configurations[RAILS_ENV || 'development']
     case config['adapter']
-    when 'mysql'
+    when /^mysql/
       ActiveRecord::Base.establish_connection(config)
       puts ActiveRecord::Base.connection.charset
     when 'postgresql'
@@ -178,7 +174,7 @@ namespace :db do
   task :collation => :environment do
     config = ActiveRecord::Base.configurations[RAILS_ENV || 'development']
     case config['adapter']
-    when 'mysql'
+    when /^mysql/
       ActiveRecord::Base.establish_connection(config)
       puts ActiveRecord::Base.connection.collation
     else
@@ -278,7 +274,7 @@ namespace :db do
     task :dump => :environment do
       abcs = ActiveRecord::Base.configurations
       case abcs[RAILS_ENV]["adapter"]
-      when "mysql", "oci", "oracle"
+      when /^mysql/, "oci", "oracle"
         ActiveRecord::Base.establish_connection(abcs[RAILS_ENV])
         File.open("#{RAILS_ROOT}/db/#{RAILS_ENV}_structure.sql", "w+") { |f| f << ActiveRecord::Base.connection.structure_dump }
       when "postgresql"
@@ -324,7 +320,7 @@ namespace :db do
     task :clone_structure => [ "db:structure:dump", "db:test:purge" ] do
       abcs = ActiveRecord::Base.configurations
       case abcs["test"]["adapter"]
-      when "mysql"
+      when /^mysql/
         ActiveRecord::Base.establish_connection(:test)
         ActiveRecord::Base.connection.execute('SET foreign_key_checks = 0')
         IO.readlines("#{RAILS_ROOT}/db/#{RAILS_ENV}_structure.sql").join.split("\n\n").each do |table|
@@ -358,14 +354,14 @@ namespace :db do
     task :purge => :environment do
       abcs = ActiveRecord::Base.configurations
       case abcs["test"]["adapter"]
-      when "mysql"
+      when /^mysql/
         ActiveRecord::Base.establish_connection(:test)
         ActiveRecord::Base.connection.recreate_database(abcs["test"]["database"], abcs["test"])
       when "postgresql"
         ActiveRecord::Base.clear_active_connections!
         drop_database(abcs['test'])
         create_database(abcs['test'])
-      when "sqlite","sqlite3"
+      when "sqlite", "sqlite3"
         dbfile = abcs["test"]["database"] || abcs["test"]["dbfile"]
         File.delete(dbfile) if File.exist?(dbfile)
       when "sqlserver"
@@ -410,15 +406,19 @@ namespace :db do
 end
 
 def drop_database(config)
-  case config['adapter']
-  when 'mysql'
-    ActiveRecord::Base.establish_connection(config)
-    ActiveRecord::Base.connection.drop_database config['database']
-  when /^sqlite/
-    FileUtils.rm(File.join(RAILS_ROOT, config['database']))
-  when 'postgresql'
-    ActiveRecord::Base.establish_connection(config.merge('database' => 'postgres', 'schema_search_path' => 'public'))
-    ActiveRecord::Base.connection.drop_database config['database']
+  begin
+    case config['adapter']
+    when /^mysql/
+      ActiveRecord::Base.establish_connection(config)
+      ActiveRecord::Base.connection.drop_database config['database']
+    when /^sqlite/
+      FileUtils.rm(File.join(RAILS_ROOT, config['database']))
+    when 'postgresql'
+      ActiveRecord::Base.establish_connection(config.merge('database' => 'postgres', 'schema_search_path' => 'public'))
+      ActiveRecord::Base.connection.drop_database config['database']
+    end
+  rescue Exception => e
+    puts "Couldn't drop #{config['database']} : #{e.inspect}"
   end
 end
 

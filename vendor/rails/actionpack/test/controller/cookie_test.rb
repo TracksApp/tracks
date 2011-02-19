@@ -2,6 +2,8 @@ require 'abstract_unit'
 
 class CookieTest < ActionController::TestCase
   class TestController < ActionController::Base
+    self.cookie_verifier_secret = "thisISverySECRET123"
+    
     def authenticate
       cookies["user_name"] = "david"
     end
@@ -38,6 +40,22 @@ class CookieTest < ActionController::TestCase
 
     def authenticate_with_http_only
       cookies["user_name"] = { :value => "david", :httponly => true }
+    end
+    
+    def authenticate_with_secure
+      cookies["user_name"] = { :value => "david", :secure => true }
+    end
+    
+    def set_permanent_cookie
+      cookies.permanent[:user_name] = "Jamie"
+    end
+
+    def set_signed_cookie
+      cookies.signed[:user_id] = 45
+    end
+    
+    def set_permanent_signed_cookie
+      cookies.permanent.signed[:remember_me] = 100
     end
 
     def rescue_action(e)
@@ -79,6 +97,27 @@ class CookieTest < ActionController::TestCase
     get :authenticate_with_http_only
     assert_equal ["user_name=david; path=/; HttpOnly"], @response.headers["Set-Cookie"]
     assert_equal({"user_name" => "david"}, @response.cookies)
+  end
+  
+  def test_setting_cookie_with_secure
+    @request.env["HTTPS"] = "on"
+    get :authenticate_with_secure
+    assert_equal ["user_name=david; path=/; secure"], @response.headers["Set-Cookie"]
+    assert_equal({"user_name" => "david"}, @response.cookies)
+  end
+
+  def test_setting_cookie_with_secure_in_development
+    with_environment(:development) do
+      get :authenticate_with_secure
+      assert_equal ["user_name=david; path=/; secure"], @response.headers["Set-Cookie"]
+      assert_equal({"user_name" => "david"}, @response.cookies)
+    end
+  end
+
+  def test_not_setting_cookie_with_secure
+    get :authenticate_with_secure
+    assert_not_equal ["user_name=david; path=/; secure"], @response.headers["Set-Cookie"]
+    assert_not_equal({"user_name" => "david"}, @response.cookies)
   end
 
   def test_multiple_cookies
@@ -131,4 +170,39 @@ class CookieTest < ActionController::TestCase
     cookies = @controller.send(:cookies)
     assert_equal 'david', cookies['user_name']
   end
+  
+  def test_permanent_cookie
+    get :set_permanent_cookie
+    assert_match /Jamie/, @response.headers["Set-Cookie"].first
+    assert_match %r(#{20.years.from_now.year}), @response.headers["Set-Cookie"].first
+  end
+  
+  def test_signed_cookie
+    get :set_signed_cookie
+    assert_equal 45, @controller.send(:cookies).signed[:user_id]
+  end
+  
+  def test_accessing_nonexistant_signed_cookie_should_not_raise_an_invalid_signature
+    get :set_signed_cookie
+    assert_nil @controller.send(:cookies).signed[:non_existant_attribute]
+  end
+  
+  def test_permanent_signed_cookie
+    get :set_permanent_signed_cookie
+    assert_match %r(#{20.years.from_now.year}), @response.headers["Set-Cookie"].first
+    assert_equal 100, @controller.send(:cookies).signed[:remember_me]
+  end
+
+  private
+    def with_environment(enviroment)
+      old_rails = Object.const_get(:Rails) rescue nil
+      mod = Object.const_set(:Rails, Module.new)
+      (class << mod; self; end).instance_eval do
+        define_method(:env) { @_env ||= ActiveSupport::StringInquirer.new(enviroment.to_s) }
+      end
+      yield
+    ensure
+      Object.module_eval { remove_const(:Rails) } if defined?(Rails)
+      Object.const_set(:Rails, old_rails) if old_rails
+    end
 end

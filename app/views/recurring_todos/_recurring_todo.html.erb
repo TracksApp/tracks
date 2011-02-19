@@ -3,7 +3,7 @@
   <%= recurring_todo_remote_delete_icon %> <%= recurring_todo_remote_edit_icon -%> 
 
   <%= recurring_todo_remote_star_icon %> <%= recurring_todo_remote_toggle_checkbox -%>
-  <div class="description">
+  <div class="rec_description">
     <span class="todo.descr"><%= sanitize(recurring_todo.description) %></span> <%= recurring_todo_tag_list %>
     <span class='recurrence_pattern'>
       [<%=  recurrence_pattern_as_text(@recurring_todo) %>]

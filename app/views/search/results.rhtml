@@ -1,48 +1,28 @@
-<div id="display_box_results">
 <% if @count == 0 -%>
-  <div class="message"><p>Your search yielded no results.</p></div>
+  <div class="message"><p><%= t('search.no_results') %></p></div>
 <% else -%>
-  <% unless @found_todos.empty? -%>
-    <div id="found-todos-container" class="container">
-      <h2><span id="found-todos-count" class="badge"><%= @found_todos.size %></span>Todos matching query</h2>
-      <%= render :partial => "todos/todo", :collection => @found_todos, :locals => { :parent_container_type => 'search', :suppress_context => false, :suppress_project => false, :suppress_edit_button => true } %>
-    </div>
+
+  <% render :layout => 'show_results_collection', :object => @found_todos, :locals => { :collection_name => "found-todos", :collection_title => t('search.todos_matching_query')} do %>
+    <%= render :partial => "todos/todo", :collection => @found_todos, :locals => { :parent_container_type => 'search', :suppress_context => false, :suppress_project => false, :suppress_edit_button => true } %>
   <% end -%>
 
-  <% unless @found_projects.empty? -%>
-    <div id="found-projects-container" class="container">
-      <h2><span id="found-projects-count" class="badge"><%= @found_projects.size %></span>Projects matching query</h2>
-      <%= render :partial => "projects/project_listing", :collection => @found_projects, :locals => { :suppress_drag_handle => true, :suppress_edit_button => true } %>
-    </div>
+  <% render :layout => 'show_results_collection', :object => @found_projects, :locals => { :collection_name => "found-project", :collection_title => t('search.projects_matching_query')} do %>
+    <%= render :partial => "projects/project_listing", :collection => @found_projects, :locals => { :suppress_drag_handle => true, :suppress_edit_button => true } %>
   <% end -%>
 
-  <% unless @found_notes.empty? -%>
-    <div id="found-notes-container" class="container">
-      <h2><span id="found-notes-count" class="badge"><%= @found_notes.size %></span>Notes matching query</h2>
-      <% for notes in @found_notes -%>
-        <div class="container" id="note-<%= notes.id %>-wrapper">
-          <%= render :partial => "notes/notes_summary", :object => notes %>
-        </div>
-      <% end -%>
-    </div>
+  <% render :layout => 'show_results_collection', :object => @found_notes, :locals => { :collection_name => "found-notes", :collection_title => t('search.notes_matching_query')} do %>
+    <%= render :partial => "notes/notes_summary", :collection=> @found_notes %>
   <% end -%>
 
-  <% unless @found_contexts.empty? -%>
-    <div id="found-contexts-container" class="container">
-      <h2><span id="found-contexts-count" class="badge"><%= @found_contexts.size %></span>Contexts matching query</h2>
-      <%= render :partial => "contexts/context_listing", :collection => @found_contexts, :locals => { :suppress_drag_handle => true, :suppress_edit_button => true } %>
-    </div>
+  <% render :layout => 'show_results_collection', :object => @found_contexts, :locals => { :collection_name => "found-contexts", :collection_title => t('search.contexts_matching_query')} do %>
+    <%= render :partial => "contexts/context_listing", :collection => @found_contexts, :locals => { :suppress_drag_handle => true, :suppress_edit_button => true } %>
   <% end -%>
 
-  <% unless @found_tags.empty? -%>
-    <div id="found-tags-container" class="container">
-    <h2><span id="found-tags-count" class="badge"><%= @found_tags.size %></span>Tags matching query</h2>
+  <% render :layout => 'show_results_collection', :object => @found_tags, :locals => { :collection_name => "found-tags", :collection_title => t('search.tags_matching_query')} do %>
     <span class="tags"><%  @found_tags.each do |tag| -%>
         <span class="tag"><%= link_to tag.name, {:controller => "todos", :action => "tag", :id => tag.name} -%></span>
       <% end %>
-    </span>
-    <br/>
-    </div>
-  <% end %>
+    </span><br/><br/>
+  <% end -%>
+
 <% end -%>
-</div>

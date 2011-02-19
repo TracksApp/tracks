@@ -7,7 +7,7 @@ set myToken to "<%= current_user.token %>"
 set myContextID to <%= context.id %> (* <%= context.name %> *)
 
 -- Display dialog to enter your description 
-display dialog "Description of next action:" default answer ""
+display dialog "<%= t('integrations.applescript_next_action_prompt') %>" default answer ""
 set myDesc to text returned of the result
 
 -- Now send all that info to Tracks
@@ -17,4 +17,4 @@ tell application "<%= home_url %>backend/api"
 end tell
 
 -- Show the ID of the newly created next action
-display dialog "New next action with id " & returnValue & " created"
+display dialog "<%= t('integrations.applescript_success_before_id') %> " & returnValue & " <%= t('integrations.applescript_success_after_id') %>"

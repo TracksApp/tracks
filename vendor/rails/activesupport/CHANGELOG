@@ -1,16 +1,69 @@
+*2.3.11 (February 9, 2011)*
+
+*2.3.10 (October 15, 2010)*
+
+
+*2.3.9 (September 4, 2010)*
+
+* i18n: bundle i18n 0.4.1 for forward compatibility with Rails 3. Deprecates {{foo}} interpolation syntax in favor of 1.9-native %{foo}.
+
+* Deprecate Kernel#returning in favor of Object#tap since it's included in Ruby 1.8.7 and later. [Santiago Pastorino]
+
+* Deprecates ActiveSupport::Dependencies.load_(once_)paths, renamed to autoload_(once_)paths. [fxn]
+
+* Deprecates Array#random_element, renamed to sample to match Ruby 1.9, thanks to Marc-Andre Lafortune. [fxn]
+
+
+*2.3.8 (May 24, 2010)*
+
+* Version bump.
+
+
+*2.3.7 (May 24, 2010)*
+
+* HTML safety: fix compatibility with the optional rails_xss plugin.  [Nathan Weizenbaum, Santiago Pastorino]
+
+
+*2.3.6 (May 23, 2010)*
+
+* 1.9 compat: deprecated last_(month|year) in favor of prev_(month|year). [fxn]
+
+* Deprecated Array#rand in favor of Array#random_element. [Santiago Pastorino, Rizwan Reza]
+
+* Added Object#presence that returns the object if it's #present? otherwise returns nil [DHH/Colin Kelley]
+
+* New assertions assert_blank and assert_present.  #4299 [Juanjo Bazan]
+
+* Use Object#singleton_class instead of #metaclass. Prefer Ruby's choice.  [Jeremy Kemper]
+
+* JSON backend for YAJL. Preferred if available.  #2666 [Brian Lopez]
+
+* Introduce String#html_safe for rails_xss plugin and forward-compatibility with Rails 3.  [Michael Koziarski, Santiago Pastorino, José Ignacio Costa]
+
+* Time#- with a DateTime argument behaves the same as with a Time argument, i.e. returns the difference between self and arg as a Float #3476 [Geoff Buesing]
+
+* YAML serialization for OrderedHash.  #3608 [Gregor Schmidt]
+
+* Add Enumerable#exclude? to bring parity to Enumerable#include? and avoid if !x.include?/else calls [DHH]
+
+
 *2.3.5 (November 25, 2009)*
 
 * Minor Bug Fixes and deprecation warnings
 
+* Update Edinburgh TimeZone to use "Europe/London" instead of "Europe/Dublin" #3310 [Phil Ross]
+
 * Fixes for the Nokogiri backend for XmlMini
 
 * Ruby 1.9 Compatibility
+
 
 *2.3.4 (September 4, 2009)*
 
 * Introduce ActiveSupport::Multibyte.clean to clean invalid multibyte strings.
 
 * Bug fixes
+
 
 *2.3.3 (July 12, 2009)*
 

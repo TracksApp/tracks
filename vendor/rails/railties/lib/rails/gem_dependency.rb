@@ -31,8 +31,10 @@ module Rails
 
     def self.from_directory_name(directory_name, load_spec=true)
       directory_name_parts = File.basename(directory_name).split('-')
-      name    = directory_name_parts[0..-2].join('-')
-      version = directory_name_parts.last
+      
+      version = directory_name_parts.find { |s| s.match(/^\d(\.\d|\.\w+)*$/) }
+      name    = directory_name_parts[0..directory_name_parts.index(version)-1].join('-') if version
+      
       result = self.new(name, :version => version)
       spec_filename = File.join(directory_name, '.specification')
       if load_spec
@@ -83,7 +85,7 @@ module Rails
       specification.dependencies.reject do |dependency|
         dependency.type == :development
       end.map do |dependency|
-        GemDependency.new(dependency.name, :requirement => dependency.version_requirements)
+        GemDependency.new(dependency.name, :requirement => (dependency.respond_to?(:requirement) ? dependency.requirement : dependency.version_requirements))
       end
     end
 
@@ -115,9 +117,16 @@ module Rails
       @spec = s
     end
 
-    def requirement
-      r = version_requirements
-      (r == Gem::Requirement.default) ? nil : r
+    if method_defined?(:requirement)
+      def requirement
+        req = super
+        req unless req == Gem::Requirement.default
+      end
+    else
+      def requirement
+        req = version_requirements
+        req unless req == Gem::Requirement.default
+      end
     end
 
     def built?

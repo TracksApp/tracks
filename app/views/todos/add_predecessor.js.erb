@@ -1,0 +1,45 @@
+<% if !@saved -%>
+  TracksPages.page_notify('error', "<%= t('todos.unable_to_add_dependency') %>", 8);
+<% else -%>
+  remove_successor_from_page();
+  replace_updated_predecessor();
+  regenerate_predecessor_family();
+  <%= "show_in_tickler_box();" if source_view_is_one_of :project, :tag %>
+  TracksPages.page_notify('notice', "<%= @status_message %>", 5);
+
+function remove_successor_from_page() {
+  <% # TODO: last todo in context --> remove context??
+  -%>
+  $('#<%=dom_id(@todo)%>').remove();
+}
+
+function replace_updated_predecessor() {
+  $('#<%= dom_id(@predecessor) %>').html( html_for_predecessor() );
+}
+
+function show_in_tickler_box() {
+  $("#tickler-empty-nd").hide();
+  $('#tickler').append( html_for_deferred_todo() );
+}
+
+function regenerate_predecessor_family() {
+<%
+  parents = @predecessor.predecessors
+  until parents.empty?
+    parent = parents.pop
+    parents += parent.predecessors -%>
+    $('#<%= dom_id(parent) %>').html("<%= escape_javascript(render(:partial => parent, :locals => { :parent_container_type => parent_container_type })) %>");
+<%end
+-%>
+}
+
+function html_for_predecessor() {
+  return "<%= escape_javascript(render(:partial => @predecessor, :locals => { :parent_container_type => parent_container_type })) %>";
+}
+
+function html_for_deferred_todo() {
+  return "<%= escape_javascript(render(:partial => @todo, :locals => { :parent_container_type => parent_container_type })) %>";
+}
+
+<% end # if !@saved
+%>

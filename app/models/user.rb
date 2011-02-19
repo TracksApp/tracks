@@ -3,6 +3,7 @@ require 'digest/sha1'
 class User < ActiveRecord::Base
   # Virtual attribute for the unencrypted password
   attr_accessor :password
+  attr_protected :is_admin # don't allow mass-assignment for this
 
   has_many :contexts,
            :order => 'position ASC',
@@ -11,11 +12,11 @@ class User < ActiveRecord::Base
                find(params['id'] || params['context_id']) || nil
              end
              def update_positions(context_ids)
-                context_ids.each_with_index do |id, position|
+                context_ids.each_with_index {|id, position|
                   context = self.detect { |c| c.id == id.to_i }
-                  raise "Context id #{id} not associated with user id #{@user.id}." if context.nil?
+                  raise I18n.t('models.user.error_context_not_associated', :context => id, :user => @user.id) if context.nil?
                   context.update_attribute(:position, position + 1)
-                end
+                }
               end
            end
   has_many :projects,
@@ -25,11 +26,11 @@ class User < ActiveRecord::Base
                 find(params['id'] || params['project_id'])
               end
               def update_positions(project_ids)
-                project_ids.each_with_index do |id, position|
+                project_ids.each_with_index {|id, position|
                   project = self.detect { |p| p.id == id.to_i }
-                  raise "Project id #{id} not associated with user id #{@user.id}." if project.nil?
+                  raise I18n.t('models.user.error_project_not_associated', :project => id, :user => @user.id) if project.nil?
                   project.update_attribute(:position, position + 1)
-                end
+                }
               end
               def projects_in_state_by_position(state)
                   self.sort{ |a,b| a.position <=> b.position }.select{ |p| p.state == state }
@@ -149,13 +150,25 @@ class User < ActiveRecord::Base
     return nil if login.blank?
     candidate = find(:first, :conditions => ["login = ?", login])
     return nil if candidate.nil?
-    return candidate if candidate.auth_type == 'database' && candidate.crypted_password == sha1(pass)
+
+    if Tracks::Config.auth_schemes.include?('database')
+      return candidate if candidate.auth_type == 'database' && candidate.crypted_password == sha1(pass)
+    end
+    
     if Tracks::Config.auth_schemes.include?('ldap')
       return candidate if candidate.auth_type == 'ldap' && SimpleLdapAuthenticator.valid?(login, pass)
     end
-    if Tracks::Config.auth_schemes.include?('cas') && candidate.auth_type.eql?("cas")
-      return candidate #because we can not auth them with out thier real password we have to settle for this
+    
+    if Tracks::Config.auth_schemes.include?('cas')
+      # because we can not auth them with out thier real password we have to settle for this
+      return candidate if candidate.auth_type.eql?("cas")
     end
+    
+    if Tracks::Config.auth_schemes.include?('open_id')
+      # hope the user enters the correct data
+      return candidate if candidate.auth_type.eql?("open_id")
+    end
+    
     return nil
   end
   
@@ -251,6 +264,13 @@ protected
   
   def normalize_open_id_url
     return if open_id_url.nil?
+    
+    # fixup empty url value
+    if open_id_url.empty?
+      self.open_id_url = nil
+      return
+    end
+    
     self.open_id_url = OpenIdAuthentication.normalize_identifier(open_id_url)
   end
 end

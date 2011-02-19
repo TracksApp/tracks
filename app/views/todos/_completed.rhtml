@@ -7,14 +7,14 @@
       <% if collapsible %>
       <a href="#" class="container_toggle" id="toggle_completed"><%= image_tag("collapse.png") %></a>
       <% end %>
-      Completed actions <%= suffix %>
+      <%= t('todos.completed_actions') %> <%= suffix %>
   </h2>
   <div id="completed_containeritems" class="items toggle_target">
 
-    <div id="empty-d" style="display:<%= @done.empty? ? 'block' : 'none' %>">
-      <div class="message"><p>Currently there are no completed actions.</p></div>
+    <div id="empty-d" style="display:<%= completed.empty? ? 'block' : 'none' %>">
+      <div class="message"><p><%= t('todos.no_completed_actions') %></p></div>
     </div>
 
-      <%= render :partial => "todos/todo", :collection => done, :locals => { :parent_container_type => "completed", :suppress_context => suppress_context, :suppress_project => suppress_project } %>
+      <%= render :partial => "todos/todo", :collection => completed, :locals => { :parent_container_type => "completed", :suppress_context => suppress_context, :suppress_project => suppress_project } %>
   </div>
 </div><!-- [end:next_actions] -->

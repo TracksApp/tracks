@@ -27,42 +27,6 @@ module ActiveRecordValidationsI18nTestHelper
   end
 end
 
-# DEPRECATIONS
-
-class ActiveRecordValidationsI18nDeprecationsTests < ActiveSupport::TestCase
-  test "default_error_messages is deprecated and can be removed in Rails 3 / ActiveModel" do
-    assert_deprecated('ActiveRecord::Errors.default_error_messages') do
-      ActiveRecord::Errors.default_error_messages
-    end
-  end
-
-  test "%s interpolation syntax in error messages still works" do
-    ActiveSupport::Deprecation.silence do
-      result = I18n.t :does_not_exist, :default => "%s interpolation syntax is deprecated", :value => 'this'
-      assert_equal result, "this interpolation syntax is deprecated"
-    end
-  end
-
-  test "%s interpolation syntax in error messages is deprecated" do
-    assert_deprecated('using %s in messages') do
-      I18n.t :does_not_exist, :default => "%s interpolation syntax is deprected", :value => 'this'
-    end
-  end
-
-  test "%d interpolation syntax in error messages still works" do
-    ActiveSupport::Deprecation.silence do
-      result = I18n.t :does_not_exist, :default => "%d interpolation syntaxes are deprecated", :count => 2
-      assert_equal result, "2 interpolation syntaxes are deprecated"
-    end
-  end
-
-  test "%d interpolation syntax in error messages is deprecated" do
-    assert_deprecated('using %d in messages') do
-      I18n.t :does_not_exist, :default => "%d interpolation syntaxes are deprected", :count => 2
-    end
-  end
-end
-
 
 # ACTIVERECORD VALIDATIONS
 #
@@ -521,15 +485,21 @@ class ActiveRecordErrorI18nTests < ActiveSupport::TestCase
     assert_equal message, ActiveRecord::Error.new(@reply, *args).full_message
   end
 
+  test ":default is only given to message if a symbol is supplied" do
+    store_translations(:errors => { :messages => { :"foo bar" => "You fooed: %{value}." } })
+    @reply.errors.add(:title, :inexistent, :default => "foo bar")
+    assert_equal "foo bar", @reply.errors[:title]
+  end
+
   test "#generate_message passes the model attribute value for interpolation" do
-    store_translations(:errors => { :messages => { :foo => "You fooed: {{value}}." } })
+    store_translations(:errors => { :messages => { :foo => "You fooed: %{value}." } })
     @reply.title = "da title"
     assert_error_message 'You fooed: da title.', :title, :foo
   end
 
   test "#generate_message passes the human_name of the model for interpolation" do
     store_translations(
-      :errors => { :messages => { :foo => "You fooed: {{model}}." } },
+      :errors => { :messages => { :foo => "You fooed: %{model}." } },
       :models => { :topic => 'da topic' }
     )
     assert_error_message 'You fooed: da topic.', :title, :foo
@@ -537,7 +507,7 @@ class ActiveRecordErrorI18nTests < ActiveSupport::TestCase
 
   test "#generate_message passes the human_name of the attribute for interpolation" do
     store_translations(
-      :errors => { :messages => { :foo => "You fooed: {{attribute}}." } },
+      :errors => { :messages => { :foo => "You fooed: %{attribute}." } },
       :attributes => { :topic => { :title => 'da topic title' } }
     )
     assert_error_message 'You fooed: da topic title.', :title, :foo
@@ -637,17 +607,17 @@ class ActiveRecordErrorI18nTests < ActiveSupport::TestCase
   end
 
   test "#full_message with a format present" do
-    store_translations(:errors => { :messages => { :kaputt => 'is kaputt' }, :full_messages => { :format => '{{attribute}}: {{message}}' } })
+    store_translations(:errors => { :messages => { :kaputt => 'is kaputt' }, :full_messages => { :format => '%{attribute}: %{message}' } })
     assert_full_message 'Title: is kaputt', :title, :kaputt
   end
 
   test "#full_message with a type specific format present" do
-    store_translations(:errors => { :messages => { :kaputt => 'is kaputt' }, :full_messages => { :kaputt => '{{attribute}} {{message}}!' } })
+    store_translations(:errors => { :messages => { :kaputt => 'is kaputt' }, :full_messages => { :kaputt => '%{attribute} %{message}!' } })
     assert_full_message 'Title is kaputt!', :title, :kaputt
   end
 
   test "#full_message with class-level specified custom message" do
-    store_translations(:errors => { :messages => { :broken => 'is kaputt' }, :full_messages => { :broken => '{{attribute}} {{message}}?!' } })
+    store_translations(:errors => { :messages => { :broken => 'is kaputt' }, :full_messages => { :broken => '%{attribute} %{message}?!' } })
     assert_full_message 'Title is kaputt?!', :title, :kaputt, :message => :broken
   end
 
@@ -655,7 +625,7 @@ class ActiveRecordErrorI18nTests < ActiveSupport::TestCase
     store_translations(:my_errors => { :messages => { :kaputt => 'is kaputt' } })
     assert_full_message 'Title is kaputt', :title, :kaputt, :scope => [:activerecord, :my_errors]
 
-    store_translations(:my_errors => { :full_messages => { :kaputt => '{{attribute}} {{message}}!' } })
+    store_translations(:my_errors => { :full_messages => { :kaputt => '%{attribute} %{message}!' } })
     assert_full_message 'Title is kaputt!', :title, :kaputt, :scope => [:activerecord, :my_errors]
   end
 
@@ -793,7 +763,7 @@ class ActiveRecordDefaultErrorMessagesI18nTests < ActiveSupport::TestCase
   end
 
   test "custom message string interpolation" do
-    assert_equal 'custom message title', error_message(:invalid, :default => 'custom message {{value}}', :value => 'title')
+    assert_equal 'custom message title', error_message(:invalid, :default => 'custom message %{value}', :value => 'title')
   end
 end
 
@@ -927,14 +897,14 @@ class ActiveRecordValidationsI18nFullMessagesFullStackTests < ActiveSupport::Tes
 
   test "full_message format stored per custom error message key" do
     assert_full_message("Name is broken!") do
-      store_translations :errors => { :messages => { :broken => 'is broken' }, :full_messages => { :broken => '{{attribute}} {{message}}!' } }
+      store_translations :errors => { :messages => { :broken => 'is broken' }, :full_messages => { :broken => '%{attribute} %{message}!' } }
       I18nPerson.validates_presence_of :name, :message => :broken
     end
   end
 
   test "full_message format stored per error type" do
     assert_full_message("Name can't be blank!") do
-      store_translations :errors => { :full_messages => { :blank => '{{attribute}} {{message}}!' } }
+      store_translations :errors => { :full_messages => { :blank => '%{attribute} %{message}!' } }
       I18nPerson.validates_presence_of :name
     end
   end
@@ -942,7 +912,7 @@ class ActiveRecordValidationsI18nFullMessagesFullStackTests < ActiveSupport::Tes
 
   test "full_message format stored as default" do
     assert_full_message("Name: can't be blank") do
-      store_translations :errors => { :full_messages => { :format => '{{attribute}}: {{message}}' } }
+      store_translations :errors => { :full_messages => { :format => '%{attribute}: %{message}' } }
       I18nPerson.validates_presence_of :name
     end
   end

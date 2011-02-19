@@ -4,30 +4,30 @@
    show_cas_form = auth_schemes.include?('cas')
 -%>
 
-<div title="Account login" id="loginform" class="form">
+<div title="<%= t('login.account_login') %>" id="loginform" class="form">
 
   <%= render_flash %>
 
-  <h3>Please log in to use Tracks:</h3>
+  <h3><%= t('login.please_login') %>:</h3>
 <% if show_database_form %>
   <div id="database_auth_form" style="display:<%=(@prefered_auth.eql?('database')) ? "block" : "none"%>">
       <% form_tag :action=> 'login' do %>
         <table>
           <tr>
-            <td><label for="user_login">Login:</label></td>
+            <td><label for="user_login"><%= User.human_attribute_name('login') %>:</label></td>
             <td><input type="text" name="user_login" id="user_login" value="" class="login_text" /></td>
           </tr>
           <tr> 
-            <td><label for="user_password">Password:</label></td>
+            <td><label for="user_password"><%= User.human_attribute_name('password') %>:</label></td>
             <td><input type="password" name="user_password" id="user_password" class="login_text" /></td>
           </tr>
          <tr> 
-            <td><label for="user_noexpiry">Stay logged in:</label></td>
+            <td><label for="user_noexpiry"><%= t('login.user_no_expiry') %>:</label></td>
             <td><input type="checkbox" name="user_noexpiry" id="user_noexpiry" checked  /></td>
           </tr>
           <tr> 
             <td></td>
-            <td><input type="submit" name="login" value="Sign In &#187;" class="primary" /></td>
+            <td><input type="submit" name="login" value="<%= t('login.sign_in') %> &#187;" class="primary" /></td>
           </tr>
         </table>
       <% end %>
@@ -39,16 +39,16 @@
     <% form_tag :action=> 'login' do %>
       <table>
         <tr>
-          <td><label for="openid_url">Identity URL:</label></td>
+          <td><label for="openid_url"><%= User.human_attribute_name('open_id_url') %>:</label></td>
           <td><input type="text" name="openid_url" id="openid_url" value="<%= @openid_url %>" class="login_text open_id" /></td>
         </tr>
        <tr> 
-          <td><label for="user_noexpiry">Stay logged in:</label></td>
+          <td><label for="user_noexpiry"><%= t('login.user_no_expiry') %>:</label></td>
           <td><input type="checkbox" name="user_noexpiry" id="user_noexpiry" checked  /></td>
         </tr>
         <tr> 
           <td></td>
-          <td><input type="submit" name="login" value="Sign In &#187;" class="primary" /></td>
+          <td><input type="submit" name="login" value="<%= t('login.sign_in') %> &#187;" class="primary" /></td>
         </tr>
       </table>
     <% end %>
@@ -61,15 +61,15 @@
         <tr>
           <td>	
 			<% if @username && @user%>
-			  <p>Hello, <%= @username %>! You are authenticated.</p>
+			  <p><%= t('login.cas_logged_in_greeting', :username => @username) %></p>
 			<% elsif @username %>
-			  <p>Hello, <%= @username %>! You do not have an account on Tracks.
+			  <p><%= t('login.cas_no_user_found', :username => @username) %>
                 <%if SITE_CONFIG['open_signups']%>
-                   If you like to request on please go here to <%= link_to "Request Account" , signup_url %>
+                   <%= t('login.cas_create_account', :signup_link => link_to(t('login.cas_signup_link'), signup_url)) %>
                 <%end%>
               </p>
 			<% else %>
-			  <p><%= link_to("CAS Login", login_cas_url) %>  </p>
+			  <p><%= link_to(t('login.cas_login'), login_cas_url) %>  </p>
 			<% end %>
 			</td>
         </tr>
@@ -78,9 +78,9 @@
  <% end %>
  
 </div>
-<% if show_openid_form %><p id="alternate_auth_openid" class="alternate_auth">or, <a href="#" onclick="Login.showOpenid();return false;">login with an OpenId</a></p><% end %>
-<% if show_database_form %><p id="alternate_auth_database" class="alternate_auth">or, <a href="#" onclick="Login.showDatabase();return false;">go back to the standard login</a></p><% end %>
-<% if show_cas_form %><p id="alternate_auth_cas" class="alternate_auth">or, <a href="#" onclick="Login.showCAS();return false;">go to the CAS</a></p><% end %>
+<% if show_openid_form %><p id="alternate_auth_openid" class="alternate_auth"><%= t('login.option_separator') %> <a href="#" onclick="Login.showOpenid();return false;"><%= t('login.login_with_openid') %></a></p><% end %>
+<% if show_database_form %><p id="alternate_auth_database" class="alternate_auth"><%= t('login.option_separator') %> <a href="#" onclick="Login.showDatabase();return false;"><%= t('login.login_standard') %></a></p><% end %>
+<% if show_cas_form %><p id="alternate_auth_cas" class="alternate_auth"><%= t('login.option_separator') %> <a href="#" onclick="Login.showCAS();return false;"><%= t('login.login_cas')%></a></p><% end %>
 
 <script type="text/javascript">
 function showPreferredAuth() {

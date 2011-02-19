@@ -1,2 +1,2 @@
 <%= render :partial => 'chart', :locals => {:width => @chart_width, :height => @chart_height, :data => url_for(:action => :actions_done_lastyears_data)} -%>
-Click <%=link_to "here", {:controller => "stats", :action => "index"} %> to return to the statistics page.
+<%= t('stats.click_to_return', :link => link_to(t('stats.click_to_return_link'), {:controller => "stats", :action => "index"})) %>

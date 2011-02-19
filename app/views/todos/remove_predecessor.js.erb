@@ -1,0 +1,63 @@
+<% # TODO: lots of overlap with add_predecessor --> helpers?
+  if @removed -%>
+  TracksPages.page_notify('notice', "<%= t('todos.removed_predecessor', :successor => @successor.description, :predecessor => @predecessor.description) %>", 8);
+  
+  replace_updated_predecessor();
+  regenerate_predecessor_family();
+  update_successor();
+<% else -%>
+  TracksPages.page_notify('error', "<%=t('todos.error_removing_dependency')%>", 8);
+<% end -%>
+
+function replace_updated_predecessor() {
+  $('#<%= dom_id(@predecessor) %>').html( html_for_predecessor() );
+}
+
+function regenerate_predecessor_family() {
+<%
+  parents = @predecessor.predecessors
+  until parents.empty?
+    parent = parents.pop
+    parents += parent.predecessors -%>
+    $('#<%= dom_id(parent) %>').html("<%= escape_javascript(render(:partial => parent, :locals => { :parent_container_type => parent_container_type })) %>");
+<%end -%>
+}
+
+function update_successor() {
+  <%
+  if @successor.active? -%>
+    <%= "remove_successor();" unless source_view_is_one_of(:todo, :context) %>
+    <%= "hide_empty_message();" unless empty_container_msg_div_id.nil? %>
+    <%= "show_empty_deferred_message(); " if @remaining_deferred_or_pending_count == 0 %>
+    <% if source_view_is_one_of(:todo, :deferred, :tag) -%>
+      $('#c<%= @successor.context_id %>').fadeIn(500, function() {});
+      $('#no_todos_in_tag_view').slideUp(100);
+    <% end -%>
+    $('#<%=item_container_id(@successor)%>').append(html_for_new_successor());
+    $('#<%= dom_id(@successor, 'line')%>').effect('highlight', {}, 2000 ); <%
+  elsif @successor.deferred? -%>
+    $('#<%= dom_id(@successor)%>').html(html_for_new_successor()); <%
+  end
+  %>
+}
+
+function hide_empty_message() {
+  $('#<%=empty_container_msg_div_id%>').hide();
+}
+
+function show_empty_deferred_message() {
+  $('#tickler-empty-nd').slideDown(100);
+}
+function remove_successor() {
+  <% # TODO: last todo in context --> remove context??
+  -%>
+  $('#<%=dom_id(@successor)%>').remove();
+}
+
+function html_for_predecessor() {
+  return "<%= @removed ? escape_javascript(render(:partial => @predecessor, :locals => { :parent_container_type => parent_container_type })) : "" %>";
+}
+
+function html_for_new_successor() {
+  return "<%= @removed ? escape_javascript(render(:partial => @successor, :locals => { :parent_container_type => parent_container_type })) : "" %>";
+}

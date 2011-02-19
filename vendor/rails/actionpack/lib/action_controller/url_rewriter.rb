@@ -1,3 +1,5 @@
+require 'uri'
+
 module ActionController
   # In <b>routes.rb</b> one defines URL-to-controller mappings, but the reverse
   # is also possible: an URL can be generated from one of your routing definitions.
@@ -92,6 +94,14 @@ module ActionController
   #     end
   #   end
   module UrlWriter
+    RESERVED_PCHAR = ':@&=+$,;%'
+    SAFE_PCHAR = "#{URI::REGEXP::PATTERN::UNRESERVED}#{RESERVED_PCHAR}"
+    if RUBY_VERSION >= '1.9'
+      UNSAFE_PCHAR = Regexp.new("[^#{SAFE_PCHAR}]", false).freeze
+    else
+      UNSAFE_PCHAR = Regexp.new("[^#{SAFE_PCHAR}]", false, 'N').freeze
+    end
+
     def self.included(base) #:nodoc:
       ActionController::Routing::Routes.install_helpers(base)
       base.mattr_accessor :default_url_options
@@ -142,7 +152,7 @@ module ActionController
       end
       trailing_slash = options.delete(:trailing_slash) if options.key?(:trailing_slash)
       url << ActionController::Base.relative_url_root.to_s unless options[:skip_relative_url_root]
-      anchor = "##{CGI.escape options.delete(:anchor).to_param.to_s}" if options[:anchor]
+      anchor = "##{URI.escape(options.delete(:anchor).to_param.to_s, UNSAFE_PCHAR)}" if options[:anchor]
       generated = Routing::Routes.generate(options, {})
       url << (trailing_slash ? generated.sub(/\?|\z/) { "/" + $& } : generated)
       url << anchor if anchor
@@ -159,6 +169,9 @@ module ActionController
     end
 
     def rewrite(options = {})
+      if options.include?(:overwrite_params)
+        ActiveSupport::Deprecation.warn 'The :overwrite_params option is deprecated. Specify all the necessary parameters instead', caller
+      end
       rewrite_url(options)
     end
 
@@ -194,7 +207,7 @@ module ActionController
         options = options.symbolize_keys
         options.update(options[:params].symbolize_keys) if options[:params]
 
-        if (overwrite = options.delete(:overwrite_params))
+        if overwrite = options.delete(:overwrite_params)
           options.update(@parameters.symbolize_keys)
           options.update(overwrite.symbolize_keys)
         end

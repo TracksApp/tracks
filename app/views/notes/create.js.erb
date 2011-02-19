@@ -1,0 +1,25 @@
+<% if @saved -%>
+  TracksPages.hide_errors();
+  add_note();
+  clear_form();
+<% else -%>
+  TracksPages.show_errors(html_for_error_messages());
+<% end -%>
+
+function add_note() {
+  $('div#notes').append(html_for_note_summary());
+  $('#empty-n').hide();
+}
+
+function clear_form() {
+  $('#new-note').hide();
+  $('#edit-note-form').clearForm();
+}
+
+function html_for_error_messages() {
+  return "<%= escape_javascript(error_messages_for('project')) %>";
+}
+
+function html_for_note_summary() {
+  return "<%= @saved ? escape_javascript(render(:partial => 'notes_summary', :object => @note)) : "" %>";
+}

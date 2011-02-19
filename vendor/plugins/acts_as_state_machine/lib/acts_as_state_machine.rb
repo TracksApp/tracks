@@ -143,7 +143,12 @@ module ScottBarron                   #:nodoc:
       
         # Returns the current state the object is in, as a Ruby symbol.
         def current_state
-          self.send(self.class.state_column).to_sym
+          x = self.send(self.class.state_column)
+          return x.to_sym if not x.nil?
+          
+          # if current state is not yet set, set it
+          self.set_initial_state
+          return self.current_state
         end
       
         # Returns what the next state for a given event would be, as a Ruby symbol.

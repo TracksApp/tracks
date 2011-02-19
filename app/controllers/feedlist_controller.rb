@@ -26,13 +26,19 @@ class FeedlistController < ApplicationController
   end
   
   def get_feeds_for_context
-    context = current_user.contexts.find params[:context_id]
-    render :partial => 'feed_for_context', :locals => { :context => context }
+    @context = current_user.contexts.find params[:context_id]
+    respond_to do |format|
+      format.html { render :file => 'feedlist/get_feeds_for_context'}
+      format.js
+    end
   end
 
   def get_feeds_for_project
-    project = current_user.projects.find params[:project_id]
-    render :partial => 'feed_for_project', :locals => { :project => project }
+    @project = current_user.projects.find params[:project_id]
+    respond_to do |format|
+      format.html { render :file => "feedlist/get_feeds_for_project"}
+      format.js
+    end
   end
 
 end

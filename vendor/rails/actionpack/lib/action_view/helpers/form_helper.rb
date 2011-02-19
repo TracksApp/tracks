@@ -280,7 +280,7 @@ module ActionView
 
         concat(form_tag(options.delete(:url) || {}, options.delete(:html) || {}))
         fields_for(object_name, *(args << options), &proc)
-        concat('</form>'.html_safe!)
+        concat('</form>'.html_safe)
       end
 
       def apply_form_for_options!(object_or_array, options) #:nodoc:
@@ -391,7 +391,7 @@ module ActionView
       #     accepts_nested_attributes_for :address, :allow_destroy => true
       #   end
       #
-      # Now, when you use a form element with the <tt>_delete</tt> parameter,
+      # Now, when you use a form element with the <tt>_destroy</tt> parameter,
       # with a value that evaluates to +true+, you will destroy the associated
       # model (eg. 1, '1', true, or 'true'):
       #
@@ -399,7 +399,7 @@ module ActionView
       #     ...
       #     <% person_form.fields_for :address do |address_fields| %>
       #       ...
-      #       Delete: <%= address_fields.check_box :_delete %>
+      #       Delete: <%= address_fields.check_box :_destroy %>
       #     <% end %>
       #   <% end %>
       #
@@ -472,14 +472,14 @@ module ActionView
       #   end
       #
       # This will allow you to specify which models to destroy in the
-      # attributes hash by adding a form element for the <tt>_delete</tt>
+      # attributes hash by adding a form element for the <tt>_destroy</tt>
       # parameter with a value that evaluates to +true+
       # (eg. 1, '1', true, or 'true'):
       #
       #   <% form_for @person, :url => { :action => "update" } do |person_form| %>
       #     ...
       #     <% person_form.fields_for :projects do |project_fields| %>
-      #       Delete: <%= project_fields.check_box :_delete %>
+      #       Delete: <%= project_fields.check_box :_destroy %>
       #     <% end %>
       #   <% end %>
       def fields_for(record_or_name_or_array, *args, &block)
@@ -500,14 +500,38 @@ module ActionView
       end
 
       # Returns a label tag tailored for labelling an input field for a specified attribute (identified by +method+) on an object
-      # assigned to the template (identified by +object+). The text of label will default to the attribute name unless you specify
-      # it explicitly. Additional options on the label tag can be passed as a hash with +options+. These options will be tagged
+      # assigned to the template (identified by +object+). The text of label will default to the attribute name unless a translation
+      # is found in the current I18n locale (through views.labels.<modelname>.<attribute>) or you specify it explicitly. 
+      # Additional options on the label tag can be passed as a hash with +options+. These options will be tagged
       # onto the HTML as an HTML element attribute as in the example shown, except for the <tt>:value</tt> option, which is designed to
       # target labels for radio_button tags (where the value is used in the ID of the input tag).
       #
       # ==== Examples
       #   label(:post, :title)
       #   # => <label for="post_title">Title</label>
+      #
+      #   You can localize your labels based on model and attribute names.
+      #   For example you can define the following in your locale (e.g. en.yml)
+      #
+      #   views:
+      #     labels:
+      #       post:
+      #         body: "Write your entire text here"
+      #
+      #   Which then will result in
+      #
+      #   label(:post, :body)
+      #   # => <label for="post_body">Write your entire text here</label>
+      #
+      #   Localization can also be based purely on the translation of the attribute-name like this:
+      #
+      #   activerecord:
+      #     attribute:
+      #       post:
+      #         cost: "Total cost"
+      #
+      #   label(:post, :cost)
+      #   # => <label for="post_cost">Total cost</label>
       #
       #   label(:post, :title, "A short title")
       #   # => <label for="post_title">A short title</label>
@@ -641,7 +665,7 @@ module ActionView
       #
       # The HTML specification says unchecked check boxes are not successful, and
       # thus web browsers do not send them. Unfortunately this introduces a gotcha:
-      # if an Invoice model has a +paid+ flag, and in the form that edits a paid
+      # if an +Invoice+ model has a +paid+ flag, and in the form that edits a paid
       # invoice the user unchecks its check box, no +paid+ parameter is sent. So,
       # any mass-assignment idiom like
       #
@@ -649,12 +673,15 @@ module ActionView
       #
       # wouldn't update the flag.
       #
-      # To prevent this the helper generates a hidden field with the same name as
-      # the checkbox after the very check box. So, the client either sends only the
-      # hidden field (representing the check box is unchecked), or both fields.
-      # Since the HTML specification says key/value pairs have to be sent in the
-      # same order they appear in the form and Rails parameters extraction always
-      # gets the first occurrence of any given key, that works in ordinary forms.
+      # To prevent this the helper generates an auxiliary hidden field before
+      # the very check box. The hidden field has the same name and its
+      # attributes mimick an unchecked check box.
+      #
+      # This way, the client either sends only the hidden field (representing
+      # the check box is unchecked), or both fields. Since the HTML specification
+      # says key/value pairs have to be sent in the same order they appear in the
+      # form, and parameters extraction gets the last occurrence of any repeated
+      # key in the query string, that works for ordinary forms.
       #
       # Unfortunately that workaround does not work when the check box goes
       # within an array-like parameter, as in
@@ -665,22 +692,26 @@ module ActionView
       #   <% end %>
       #
       # because parameter name repetition is precisely what Rails seeks to distinguish
-      # the elements of the array.
+      # the elements of the array. For each item with a checked check box you
+      # get an extra ghost item with only that attribute, assigned to "0".
+      #
+      # In that case it is preferable to either use +check_box_tag+ or to use
+      # hashes instead of arrays.
       #
       # ==== Examples
       #   # Let's say that @post.validated? is 1:
       #   check_box("post", "validated")
-      #   # => <input type="checkbox" id="post_validated" name="post[validated]" value="1" />
-      #   #    <input name="post[validated]" type="hidden" value="0" />
+      #   # => <input name="post[validated]" type="hidden" value="0" />
+      #   #    <input type="checkbox" id="post_validated" name="post[validated]" value="1" />
       #
       #   # Let's say that @puppy.gooddog is "no":
       #   check_box("puppy", "gooddog", {}, "yes", "no")
-      #   # => <input type="checkbox" id="puppy_gooddog" name="puppy[gooddog]" value="yes" />
-      #   #    <input name="puppy[gooddog]" type="hidden" value="no" />
+      #   # => <input name="puppy[gooddog]" type="hidden" value="no" />
+      #   #    <input type="checkbox" id="puppy_gooddog" name="puppy[gooddog]" value="yes" />
       #
       #   check_box("eula", "accepted", { :class => 'eula_check' }, "yes", "no")
-      #   # => <input type="checkbox" class="eula_check" id="eula_accepted" name="eula[accepted]" value="yes" />
-      #   #    <input name="eula[accepted]" type="hidden" value="no" />
+      #   # => <input name="eula[accepted]" type="hidden" value="no" />
+      #   #    <input type="checkbox" class="eula_check" id="eula_accepted" name="eula[accepted]" value="yes" />
       #
       def check_box(object_name, method, options = {}, checked_value = "1", unchecked_value = "0")
         InstanceTag.new(object_name, method, self, options.delete(:object)).to_check_box_tag(options, checked_value, unchecked_value)
@@ -739,7 +770,20 @@ module ActionView
         add_default_name_and_id_for_value(tag_value, name_and_id)
         options.delete("index")
         options["for"] ||= name_and_id["id"]
-        content = (text.blank? ? nil : text.to_s) || method_name.humanize
+
+        content = if text.blank?
+          i18n_label = I18n.t("helpers.label.#{object_name}.#{method_name}", :default => "")
+          i18n_label if i18n_label.present?
+        else
+          text.to_s
+        end
+
+        content ||= if object && object.class.respond_to?(:human_attribute_name)
+          object.class.human_attribute_name(method_name)
+        end
+
+        content ||= method_name.humanize
+
         label_tag(name_and_id["id"], content, options)
       end
 
@@ -797,7 +841,7 @@ module ActionView
         add_default_name_and_id(options)
         hidden = tag("input", "name" => options["name"], "type" => "hidden", "value" => options['disabled'] && checked ? checked_value : unchecked_value)
         checkbox = tag("input", options)
-        (hidden + checkbox).html_safe!
+        (hidden + checkbox).html_safe
       end
 
       def to_boolean_select_tag(options = {})
@@ -940,7 +984,7 @@ module ActionView
       end
 
       (field_helpers - %w(label check_box radio_button fields_for hidden_field)).each do |selector|
-        src = <<-end_src
+        src, line = <<-end_src, __LINE__ + 1
           def #{selector}(method, options = {})  # def text_field(method, options = {})
             @template.send(                      #   @template.send(
               #{selector.inspect},               #     "text_field",
@@ -949,7 +993,7 @@ module ActionView
               objectify_options(options))        #     objectify_options(options))
           end                                    # end
         end_src
-        class_eval src, __FILE__, __LINE__
+        class_eval src, __FILE__, line
       end
 
       def fields_for(record_or_name_or_array, *args, &block)
@@ -1005,7 +1049,7 @@ module ActionView
       end
 
       def error_message_on(method, *args)
-        @template.error_message_on(@object, method, *args)
+        @template.error_message_on(@object || @object_name, method, *args)
       end
 
       def error_messages(options = {})

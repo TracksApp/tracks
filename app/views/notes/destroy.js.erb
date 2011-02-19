@@ -1,0 +1,10 @@
+remove_deleted_note();
+TracksPages.set_page_badge(<%=@down_count%>);
+TracksPages.page_notify('notice', "<%=  t('notes.deleted_note', :id => @note.id)%>", 5);
+
+function remove_deleted_note() {
+  $('div#note-<%=@note.id%>-wrapper').slideUp(1000,
+    function() {
+      $('div#note-<%=@note.id%>-wrapper').remove();
+    });
+}

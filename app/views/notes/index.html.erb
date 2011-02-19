@@ -1,11 +1,7 @@
 <div id="display_box_projects">
   <% if @all_notes.empty? -%>
-    <div class="message"><p>Currently there are no notes: add notes to projects from individual project pages.</p></div>
+    <div class="message"><p><%= t('notes.no_notes_available') %></p></div>
   <% else -%>
-    <% for notes in @all_notes -%>
-      <div class="container" id="note-<%= notes.id %>-wrapper">
-        <%= render :partial => 'notes', :object => notes %>
-      </div>
-    <% end -%>
+    <%= render :partial => @all_notes %>
   <% end -%>
 </div>

@@ -1,0 +1,19 @@
+hide_todo();
+replace_placeholder_with_form();
+enable_rich_interaction();
+
+function hide_todo() {
+  $('#<%= dom_id(@todo, 'line') %>').hide();
+}
+
+function replace_placeholder_with_form() {
+  $('#<%=dom_id(@todo, 'edit')%>').html(html_for_edit_form());
+  $('#<%=dom_id(@todo, 'edit')%>').show();
+  $('#<%=dom_id(@todo, 'form')%> input#todo_description').focus();
+}
+
+function html_for_edit_form() {
+  return "<%= escape_javascript(render(:partial => 'todos/edit_form', :object => @todo)) %>"
+}
+
+

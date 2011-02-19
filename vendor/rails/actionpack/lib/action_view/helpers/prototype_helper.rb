@@ -393,7 +393,7 @@ module ActionView
 
         concat(form_remote_tag(options))
         fields_for(object_name, *(args << options), &proc)
-        concat('</form>'.html_safe!)
+        concat('</form>'.html_safe)
       end
       alias_method :form_remote_for, :remote_form_for
 
@@ -653,7 +653,7 @@ module ActionView
         # <script> tag.
         module GeneratorMethods
           def to_s #:nodoc:
-            returning javascript = @lines * $/ do
+            (@lines * $/).tap do |javascript|
               if ActionView::Base.debug_rjs
                 source = javascript.dup
                 javascript.replace "try {\n#{source}\n} catch (e) "
@@ -981,8 +981,8 @@ module ActionView
             end
 
             def record(line)
-              returning line = "#{line.to_s.chomp.gsub(/\;\z/, '')};" do
-                self << line
+              "#{line.to_s.chomp.gsub(/\;\z/, '')};".tap do |_line|
+                self << _line
               end
             end
 
@@ -1026,7 +1026,7 @@ module ActionView
       #     page.hide 'spinner'
       #   end
       def update_page(&block)
-        JavaScriptGenerator.new(@template, &block).to_s
+        JavaScriptGenerator.new(@template, &block).to_s.html_safe
       end
 
       # Works like update_page but wraps the generated JavaScript in a <script>

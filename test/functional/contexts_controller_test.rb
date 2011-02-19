@@ -26,13 +26,6 @@ class ContextsControllerTest < TodoContainerControllerTestBase
     assert_ajax_create_does_not_increment_count 'foo,bar'
   end
   
-  def test_create_with_comma_in_name_fails_with_rjs
-    ajax_create 'foo,bar'
-    assert_rjs :show, 'status'
-# Not working with Rails 2.0 upgrade
-#    assert_rjs :update, 'status', "<div class=\"ErrorExplanation\" id=\"ErrorExplanation\"><h2>1 error prohibited this record from being saved</h2><p>There were problems with the following fields:</p><ul>Name cannot contain the comma (',') character</ul></div>"
-  end
-
   def test_rss_feed_content
     login_as :admin_user
     get :index, { :format => "rss" }

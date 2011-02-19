@@ -1,4 +1,0 @@
-page[dom_id(@context, 'edit')].replace_html :partial => 'context_form', :locals => { :context_form => @context }
-page[@context].hide
-page[dom_id(@context, 'edit')].show
-page[dom_id(@context, 'edit_form')].find('input.context-name').focus

@@ -1,0 +1,51 @@
+<%- if @saved -%>
+  TracksPages.set_page_badge(<%= @down_count %>);
+  remove_old_and_add_updated_recurring_todo();
+  inform_if_new_todo_created();
+<%- else -%>
+  TracksPages.page_notify('error', '<%=  t('todos.error_completing_todo', :description => @recurring_todo.description) %>', 8);
+<%- end -%>
+
+function inform_if_new_todo_created() {
+    <%- unless @new_recurring_todo.nil? -%>
+      TracksPages.page_notify('notice', '<%=  t('todos.new_related_todo_created') %>', 5);
+    <%- end -%>
+}
+
+function remove_old_and_add_updated_recurring_todo() {
+  $('#<%=dom_id(@recurring_todo)%>').slideUp(1000, function() {
+    $('#<%=dom_id(@recurring_todo)%>').remove();
+    show_empty_messages();
+    
+    <%- if @recurring_todo.completed? -%>
+      add_recurring_todo_to_completed_container();
+    <%- else -%>
+      add_recurring_todo_to_active_container();
+    <%- end -%>
+  });
+}
+
+function add_recurring_todo_to_completed_container() {
+    $('#completed_recurring_todos_container').append(html_for_recurring_todo());
+    $('#<%= dom_id(@recurring_todo)%>').effect('highlight', {}, 2000 );
+    $('#completed-empty-nd').hide();
+}
+
+function add_recurring_todo_to_active_container() {
+    $('#recurring_todos_container').append(html_for_recurring_todo());
+    $('#<%= dom_id(@recurring_todo)%>').effect('highlight', {}, 2000 );
+    $('#recurring-todos-empty-nd').hide();
+}
+
+function show_empty_messages() {
+  <%- if @active_remaining == 0 -%>
+    $('#recurring-todos-empty-nd').show();
+  <%- end -%>
+  <%- if @completed_remaining == 0 -%>
+    $('#completed-empty-nd').show();
+  <%- end -%>
+}
+
+function html_for_recurring_todo() {
+  return "<%= @saved ? escape_javascript(render(:partial => @recurring_todo)) : "" %>";
+}

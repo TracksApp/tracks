@@ -1,0 +1,11 @@
+<% if @saved -%>
+  remove_user_from_page();
+  TracksPages.set_page_badge(<%= @total_users %>);
+  TracksPages.page_notify('notice', '<%=  t('users.destroy_successful', :login => @deleted_user.login) %>', 5);
+<% else -%>
+  TracksPages.page_notify('error', '<%=  t('users.destroy_error', :login => @deleted_user.login) %>', 8);
+<% end -%>
+
+function remove_user_from_page() {
+  $("#user-<%= @deleted_user.id%>").remove();
+}

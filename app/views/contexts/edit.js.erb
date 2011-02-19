@@ -1,0 +1,21 @@
+replace_context_with_edit_form();
+
+function replace_context_with_edit_form() {
+  $('div#<%=dom_id(@context)%>').fadeOut(250, function() {
+    show_edit_form();
+    set_focus();
+  });
+}
+
+function show_edit_form() {
+  $('div#<%=dom_id(@context, 'edit')%>').html(html_for_edit_form());
+  $('div#<%=dom_id(@context, 'edit')%>').fadeIn(500);
+}
+
+function set_focus() {
+  $('input.context-name').focus();
+}
+
+function html_for_edit_form() {
+  return "<%= escape_javascript(render(:partial => 'context_form', :object => @context)) %>"
+}

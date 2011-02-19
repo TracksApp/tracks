@@ -9,25 +9,25 @@ describe "/todos/_toggle_notes.rhtml" do
   end
   
   it "should render" do
-    render :partial => "/todos/toggle_notes", :locals => {:item => @item}
+    render :partial => "/todos/toggle_notes", :object => @item
     response.should have_tag("div.todo_notes")
   end
   
   it "should auto-link URLs" do
     @item.stub!(:notes).and_return("http://www.google.com/")
-    render :partial => "/todos/toggle_notes", :locals => {:item => @item}
+    render :partial => "/todos/toggle_notes", :object => @item
     response.should have_tag("a[href=\"http://www.google.com/\"]")
   end
   
   it "should auto-link embedded URLs" do
     @item.stub!(:notes).and_return("this is cool: http://www.google.com/")
-    render :partial => "/todos/toggle_notes", :locals => {:item => @item}
+    render :partial => "/todos/toggle_notes", :object => @item
     response.should have_tag("a[href=\"http://www.google.com/\"]")
   end
   
   it "should parse Textile URLs correctly" do
     @item.stub!(:notes).and_return("\"link\":http://www.google.com/")
-    render :partial => "/todos/toggle_notes", :locals => {:item => @item}
+    render :partial => "/todos/toggle_notes", :object => @item
     response.should have_tag("a[href=\"http://www.google.com/\"]")
   end
 end

@@ -281,15 +281,20 @@ class RescueControllerTest < ActionController::TestCase
   end
 
   def test_local_request_when_remote_addr_is_localhost
-    @controller.expects(:request).returns(@request).at_least_once
-    with_remote_addr '127.0.0.1' do
-      assert @controller.send(:local_request?)
+    @controller.expects(:request).returns(@request).at_least(10)
+    ['127.0.0.1', '127.0.0.127', '::1', '0:0:0:0:0:0:0:1', '0:0:0:0:0:0:0:1%0'].each do |ip_address|
+      with_remote_addr ip_address do
+        assert @controller.send(:local_request?)
+      end
     end
   end
 
   def test_local_request_when_remote_addr_isnt_locahost
-    @controller.expects(:request).returns(@request)
+    @controller.expects(:request).returns(@request).at_least(4)
     with_remote_addr '1.2.3.4' do
+      assert !@controller.send(:local_request?)
+    end
+    with_remote_addr '2002::102:304' do
       assert !@controller.send(:local_request?)
     end
   end

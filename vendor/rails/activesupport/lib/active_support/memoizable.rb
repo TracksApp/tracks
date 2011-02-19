@@ -58,7 +58,7 @@ module ActiveSupport
         original_method = :"_unmemoized_#{symbol}"
         memoized_ivar = ActiveSupport::Memoizable.memoized_ivar_for(symbol)
 
-        class_eval <<-EOS, __FILE__, __LINE__
+        class_eval <<-EOS, __FILE__, __LINE__ + 1
           include InstanceMethods                                                  # include InstanceMethods
                                                                                    #
           if method_defined?(:#{original_method})                                  # if method_defined?(:_unmemoized_mime_type)
@@ -92,6 +92,8 @@ module ActiveSupport
                                                                                    #
           if private_method_defined?(#{original_method.inspect})                   # if private_method_defined?(:_unmemoized_mime_type)
             private #{symbol.inspect}                                              #   private :mime_type
+          elsif protected_method_defined?(#{original_method.inspect})              # elsif protected_method_defined?(:_unmemoized_mime_type)
+            protected #{symbol.inspect}                                            #   protected :mime_type
           end                                                                      # end
         EOS
       end

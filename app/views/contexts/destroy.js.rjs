@@ -1,6 +1,0 @@
-page.visual_effect :fade, dom_id(@context, "container"), :duration => 0.5
-page.delay(0.5) do
-  page[dom_id(@context, "container")].remove
-end
-page['badge_count'].replace_html @down_count
-page.notify :notice, "Deleted context '#{@context.name}'", 5.0

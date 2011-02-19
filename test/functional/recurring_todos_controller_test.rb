@@ -16,7 +16,6 @@ class RecurringTodosControllerTest < ActionController::TestCase
   def test_destroy_recurring_todo
     login_as(:admin_user)
     xhr :post, :destroy, :id => 1, :_source_view => 'todo'
-    assert_rjs :page, "recurring_todo_1", :remove
     begin 
       rc = RecurringTodo.find(1)
     rescue
@@ -111,9 +110,9 @@ class RecurringTodosControllerTest < ActionController::TestCase
     @yearly.every_other1 = target_date.day
     @yearly.every_other2 = target_date.month
     @yearly.show_from_delta = 10
-#    unless @yearly.valid?
-#      @yearly.errors.each {|obj, error| puts error}
-#    end
+    #    unless @yearly.valid?
+    #      @yearly.errors.each {|obj, error| puts error}
+    #    end
     assert @yearly.save
     
     # toggle twice to force generation of new todo
@@ -237,4 +236,5 @@ class RecurringTodosControllerTest < ActionController::TestCase
     assert_equal "due_date", recurring_todo.target
     assert_equal true, recurring_todo.show_always?
   end
+
 end

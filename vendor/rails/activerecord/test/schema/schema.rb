@@ -58,6 +58,7 @@ ActiveRecord::Schema.define do
 
   create_table :birds, :force => true do |t|
     t.string :name
+    t.string :color
     t.integer :pirate_id
   end
 
@@ -174,6 +175,12 @@ ActiveRecord::Schema.define do
 
   create_table :events, :force => true do |t|
     t.string :title, :limit => 5
+    t.datetime :ends_on
+  end
+
+  create_table :event_authors, :force => true do |t|
+    t.integer :event_id
+    t.integer :author_id
   end
 
   create_table :funny_jokes, :force => true do |t|
@@ -183,6 +190,11 @@ ActiveRecord::Schema.define do
   create_table :goofy_string_id, :force => true, :id => false do |t|
     t.string :id, :null => false
     t.string :info
+  end
+
+  create_table :invoices, :force => true do |t|
+    t.integer :balance
+    t.datetime :updated_at
   end
 
   create_table :items, :force => true do |t|
@@ -208,6 +220,11 @@ ActiveRecord::Schema.define do
   create_table :legacy_things, :force => true do |t|
     t.integer :tps_report_number
     t.integer :version, :null => false, :default => 0
+  end
+
+  create_table :line_items, :force => true do |t|
+    t.integer :invoice_id
+    t.integer :amount
   end
 
   create_table :lock_without_defaults, :force => true do |t|
@@ -350,6 +367,16 @@ ActiveRecord::Schema.define do
     t.column :updated_on, :datetime
   end
 
+  create_table :polymorphic_designs, :force => true do |t|
+    t.integer :designable_id
+    t.string  :designable_type
+  end
+
+  create_table :polymorphic_prices, :force => true do |t|
+    t.integer :sellable_id
+    t.string  :sellable_type
+  end
+
   create_table :posts, :force => true do |t|
     t.integer :author_id
     t.string  :title, :null => false
@@ -373,6 +400,7 @@ ActiveRecord::Schema.define do
   create_table :readers, :force => true do |t|
     t.integer :post_id, :null => false
     t.integer :person_id, :null => false
+    t.boolean :skimmer, :default => false
   end
 
   create_table :shape_expressions, :force => true do |t|
@@ -418,6 +446,8 @@ ActiveRecord::Schema.define do
     t.datetime :ending
   end
 
+  create_table :ties, :force => true
+
   create_table :topics, :force => true do |t|
     t.string   :title
     t.string   :author_name
@@ -431,6 +461,7 @@ ActiveRecord::Schema.define do
     t.integer  :parent_id
     t.string   :parent_title
     t.string   :type
+    t.string   :group
   end
 
   create_table :taggings, :force => true do |t|
@@ -444,6 +475,8 @@ ActiveRecord::Schema.define do
     t.column :name, :string
     t.column :taggings_count, :integer, :default => 0
   end
+
+  create_table :tees, :force => true
 
   create_table :toys, :primary_key => :toy_id ,:force => true do |t|
     t.string :name
@@ -477,6 +510,30 @@ ActiveRecord::Schema.define do
     (1..8).each do |i|
       t.integer :"c_int_#{i}", :limit => i
     end
+  end
+
+  # NOTE - the following 4 tables are used by models that have :inverse_of options on the associations
+  create_table :men, :force => true do |t|
+    t.string  :name
+  end
+
+  create_table :faces, :force => true do |t|
+    t.string  :description
+    t.integer :man_id
+    t.integer :polymorphic_man_id
+    t.string :polymorphic_man_type
+  end
+
+  create_table :interests, :force => true do |t|
+    t.string :topic
+    t.integer :man_id
+    t.integer :polymorphic_man_id
+    t.string :polymorphic_man_type
+    t.integer :zine_id
+  end
+
+  create_table :zines, :force => true do |t|
+    t.string :title
   end
 
   except 'SQLite' do

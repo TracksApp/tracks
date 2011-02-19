@@ -1,0 +1,22 @@
+  <h2>Help on preferences</h2>
+    <ul>
+      <li><strong>first name and last name:</strong> Used for display purposes if set</li>
+      <li><strong>date format:</strong> the format in which you'd like dates to be shown. For example, for the date 31st January 2006, %d/%m/%Y will show 31/01/2006, %b-%e-%y will show Jan-31-06. See the <a href="http://uk2.php.net/strftime" title="PHP strftime manual">strftime manual</a> for more formatting options for the date.</li>
+      <li><strong>title date format:</strong> same as above, but for the big date at the top of each page.</li>
+      <li><strong>time zone:</strong> your local time zone</li>
+      <li><strong>week starts:</strong> day of the week shown as the start of the week on the popup calendar.</li>
+      <li><strong>due style:</strong> style in which due dates are shown, e.g.  "Due in 3 days",  "Due on Wednesday"</li>
+      <li><strong>show completed projects in sidebar:</strong> whether or not projects marked as complete are shown in the sidebar on the home page and elsewhere</li>
+      <li><strong>show hidden contexts in sidebar:</strong> whether or not contexts marked as hidden are shown in the sidebar on the home page and elsewhere</li>
+      <li><strong>show project on todo done:</strong> whether or not to redirect to the project page when an action associated with a project is marked complete</li>
+      <% if current_user.is_admin? %>
+        <li><strong>admin email:</strong> email address for the admin user of Tracks (displayed on the signup page for users to contact to obtain an account)</li>
+      <% end %>
+      <li><strong>staleness starts:</strong> the number of days before items with no due date get marked as stale (with a yellow highlight)</li>
+      <li><strong>show number completed:</strong> number of completed actions to show on the page. If you set this to zero, the completed actions box will not be shown on the home page or on the individual context or project pages. You can still see all your completed items by clicking the 'Done' link in the navigation bar at the top of each page.</li>
+      <li><strong>refresh:</strong> automatic refresh interval for each of the pages (in minutes)</li>
+      <li><strong>verbose action descriptor:</strong> when true, show project/context name in action listing; when false show [P]/[C] with tool tips</li>
+      <li><strong>mobile todos per page:</strong> the maximum number of actions to show on a single page in the mobile view</li>
+      <li><strong>From email:</strong> the email address you use for sending todos as email or SMS messages to your Tracks account</li>
+      <li><strong>Default email context:</strong> the context to which tasks sent in via email or SMS should be added</li>
+    </ul>

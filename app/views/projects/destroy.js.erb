@@ -1,0 +1,13 @@
+remove_deleted_project();
+ProjectListPage.update_all_states_count(<%=@active_projects_count%>, <%=@hidden_projects_count%>, <%=@completed_projects_count%>)
+ProjectListPage.show_or_hide_all_state_containers(<%= @show_active_projects %>, <%= @show_hidden_projects %>, <%= @show_completed_projects %>);
+TracksPages.page_notify('notice', "Deleted project '<%= @project.name%>'", 5);
+TracksPages.set_page_badge(<%=@down_count%>);
+
+/* TODO: refactor and move function to application.js */
+function remove_deleted_project() {
+  $('div#<%=dom_id(@project, "container")%>').slideUp(1000,
+    function() {
+      $('div#<%=dom_id(@project, "container")%>').remove();
+    });
+}

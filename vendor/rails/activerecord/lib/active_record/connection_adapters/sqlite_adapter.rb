@@ -220,20 +220,20 @@ module ActiveRecord
         SQL
 
         execute(sql, name).map do |row|
-          row[0]
+          row['name']
         end
       end
 
       def columns(table_name, name = nil) #:nodoc:
         table_structure(table_name).map do |field|
-          SQLiteColumn.new(field['name'], field['dflt_value'], field['type'], field['notnull'] == "0")
+          SQLiteColumn.new(field['name'], field['dflt_value'], field['type'], field['notnull'].to_i == 0)
         end
       end
 
       def indexes(table_name, name = nil) #:nodoc:
         execute("PRAGMA index_list(#{quote_table_name(table_name)})", name).map do |row|
           index = IndexDefinition.new(table_name, row['name'])
-          index.unique = row['unique'] != '0'
+          index.unique = row['unique'].to_i != 0
           index.columns = execute("PRAGMA index_info('#{index.name}')").map { |col| col['name'] }
           index
         end
@@ -244,8 +244,8 @@ module ActiveRecord
         column ? column['name'] : nil
       end
 
-      def remove_index(table_name, options={}) #:nodoc:
-        execute "DROP INDEX #{quote_column_name(index_name(table_name, options))}"
+      def remove_index!(table_name, index_name) #:nodoc:
+        execute "DROP INDEX #{quote_column_name(index_name)}"
       end
 
       def rename_table(name, new_name)
@@ -269,6 +269,7 @@ module ActiveRecord
       end
 
       def remove_column(table_name, *column_names) #:nodoc:
+        raise ArgumentError.new("You must specify at least one column name.  Example: remove_column(:people, :first_name)") if column_names.empty?
         column_names.flatten.each do |column_name|
           alter_table(table_name) do |definition|
             definition.columns.delete(definition[column_name])
@@ -329,7 +330,7 @@ module ActiveRecord
         end
 
         def table_structure(table_name)
-          returning structure = execute("PRAGMA table_info(#{quote_table_name(table_name)})") do
+          execute("PRAGMA table_info(#{quote_table_name(table_name)})").tap do |structure|
             raise(ActiveRecord::StatementInvalid, "Could not find table '#{table_name}'") if structure.empty?
           end
         end

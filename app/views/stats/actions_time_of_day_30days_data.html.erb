@@ -1,9 +1,9 @@
-&title=Time of day (last 30 days),{font-size:16},&
-&y_legend=Number of actions,12,0x736AFF&
-&x_legend=Time of Day,12,0x736AFF&
+&title=<%= t('stats.tod30') %>,{font-size:16},&
+&y_legend=<%= t('stats.tod30_legend.number_of_actions') %>,12,0x736AFF&
+&x_legend=<%= t('stats.tod30_legend.time_of_day') %>,12,0x736AFF&
 &y_ticks=5,10,5&
-&filled_bar=50,0x9933CC,0x8010A0,Created,8&
-&filled_bar_2=50,0x0066CC,0x0066CC,Completed,8&
+&filled_bar=50,0x9933CC,0x8010A0,<%= t('stats.labels.created') %>,8&
+&filled_bar_2=50,0x0066CC,0x0066CC,<%= t('stats.labels.completed') %>,8&
 &values=<% 
 0.upto 22 do |i| -%>
   <%=@actions_creation_hour_array[i] -%>,

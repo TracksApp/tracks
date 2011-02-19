@@ -1,0 +1,45 @@
+<% if @saved -%>
+  <% if @go_to_project -%>
+    redirect_to("<%= project_path(@project) -%>")
+  <% else -%>
+  TracksPages.hide_errors();
+  hide_empty_message();
+  TracksPages.set_page_badge(<%= @down_count %>);
+  update_active_projects_container();
+  add_project();
+  clear_form();
+  TracksPages.page_notify('notice', "Created new project '<%= @project.name%>'", 5);
+  <% end -%>
+<% else -%>
+  TracksPages.show_errors(html_for_error_messages());
+<% end -%>
+
+/* TODO: make this generic for all pages with lists */
+function hide_empty_message() {
+  $('projects-empty-nd').hide();
+}
+
+/* TODO: refactor and move this to application.js */
+function add_project() {
+  $('#list-active-projects').append(html_for_project_listing());
+}
+
+/* TODO: refactor and move this to application.js */
+function clear_form() {
+  $('#project_form').clearForm();
+  $('#project_form input:text:first').focus();
+}
+
+/* TODO: refactor and move this to application.js */
+function update_active_projects_container() {
+  ProjectListPage.set_state_container_visibility('active', true);
+  ProjectListPage.update_state_count('active', <%=@active_projects_count%>);
+}
+
+function html_for_error_messages() {
+  return "<%= escape_javascript(error_messages_for('project')) %>";
+}
+
+function html_for_project_listing() {
+  return "<%= @saved ? escape_javascript(render(:partial => 'project_listing', :object => @project)) : "" %>";
+}

@@ -1,0 +1,2 @@
+new_html = "<%= escape_javascript(render(:partial => 'project_listing', :collection => @projects)) %>";
+$("#list-<%=@state%>-projects").html(new_html);

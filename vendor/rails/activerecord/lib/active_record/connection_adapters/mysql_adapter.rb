@@ -315,6 +315,7 @@ module ActiveRecord
         rows = []
         result.each { |row| rows << row }
         result.free
+        @connection.more_results && @connection.next_result    # invoking stored procedures with CLIENT_MULTI_RESULTS requires this to tidy up else connection will be dropped
         rows
       end
 
@@ -454,10 +455,11 @@ module ActiveRecord
           if current_index != row[2]
             next if row[2] == "PRIMARY" # skip the primary key
             current_index = row[2]
-            indexes << IndexDefinition.new(row[0], row[2], row[1] == "0", [])
+            indexes << IndexDefinition.new(row[0], row[2], row[1] == "0", [], [])
           end
 
           indexes.last.columns << row[4]
+          indexes.last.lengths << row[7]
         end
         result.free
         indexes
@@ -478,6 +480,13 @@ module ActiveRecord
 
       def rename_table(table_name, new_name)
         execute "RENAME TABLE #{quote_table_name(table_name)} TO #{quote_table_name(new_name)}"
+      end
+
+      def add_column(table_name, column_name, type, options = {})
+        add_column_sql = "ALTER TABLE #{quote_table_name(table_name)} ADD #{quote_column_name(column_name)} #{type_to_sql(type, options[:limit], options[:precision], options[:scale])}"
+        add_column_options!(add_column_sql, options)
+        add_column_position!(add_column_sql, options)
+        execute(add_column_sql)
       end
 
       def change_column_default(table_name, column_name, default) #:nodoc:
@@ -508,6 +517,7 @@ module ActiveRecord
 
         change_column_sql = "ALTER TABLE #{quote_table_name(table_name)} CHANGE #{quote_column_name(column_name)} #{quote_column_name(column_name)} #{type_to_sql(type, options[:limit], options[:precision], options[:scale])}"
         add_column_options!(change_column_sql, options)
+        add_column_position!(change_column_sql, options)
         execute(change_column_sql)
       end
 
@@ -539,6 +549,13 @@ module ActiveRecord
         end
       end
 
+      def add_column_position!(sql, options)
+        if options[:first]
+          sql << " FIRST"
+        elsif options[:after]
+          sql << " AFTER #{quote_column_name(options[:after])}"
+        end
+      end
 
       # SHOW VARIABLES LIKE 'name'
       def show_variable(name)
@@ -570,6 +587,20 @@ module ActiveRecord
       def limited_update_conditions(where_sql, quoted_table_name, quoted_primary_key)
         where_sql
       end
+
+      protected
+        def quoted_columns_for_index(column_names, options = {})
+          length = options[:length] if options.is_a?(Hash)
+
+          quoted_column_names = case length
+          when Hash
+            column_names.map {|name| length[name] ? "#{quote_column_name(name)}(#{length[name]})" : quote_column_name(name) }
+          when Fixnum
+            column_names.map {|name| "#{quote_column_name(name)}(#{length})"}
+          else
+            column_names.map {|name| quote_column_name(name) }
+          end
+        end
 
       private
         def connect
@@ -608,6 +639,7 @@ module ActiveRecord
           result = execute(sql, name)
           rows = result.all_hashes
           result.free
+          @connection.more_results && @connection.next_result    # invoking stored procedures with CLIENT_MULTI_RESULTS requires this to tidy up else connection will be dropped
           rows
         end
 

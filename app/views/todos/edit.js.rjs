@@ -1,5 +1,0 @@
-page[dom_id(@todo, 'form')].find('.placeholder').show().replace_html :partial => 'todos/edit_form'
-page[dom_id(@todo, 'edit')].show
-page[dom_id(@todo, 'line')].hide
-page[dom_id(@todo, 'form')].find('input#todo_description').show().focus
-page << "enable_rich_interaction();"

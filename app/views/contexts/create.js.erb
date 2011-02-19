@@ -1,0 +1,30 @@
+<% if @saved -%>
+  hide_empty_message();
+  TracksPages.hide_errors();
+  TracksPages.set_page_badge(<%= @down_count %>);
+  add_context("<%=@context.hidden? ? 'hidden' : 'active'%>");
+  clear_form();
+<% else -%>
+  TracksPages.show_errors(html_for_error_messages());
+<% end -%>
+
+function hide_empty_message() {
+  $('contexts-empty-nd').hide();
+}
+
+function add_context(state) {
+  $('#list-contexts-'+state).append(html_for_context_listing());
+}
+
+function clear_form() {
+  $('#context-form').clearForm();
+  $('#context-form input:text:first').focus();
+}
+
+function html_for_context_listing() {
+  return "<%= @saved ? escape_javascript(render(:partial => 'context_listing', :object => @context )) : "" %>";
+}
+
+function html_for_error_messages() {
+  return "<%= escape_javascript(error_messages_for('context')) %>";
+}

@@ -1,6 +1,22 @@
-<li>
-  <%= rss_formatted_link({ :controller=> 'todos', :action => 'index', :project_id => project.to_param }) %>
-  <%= text_formatted_link({ :controller=> 'todos', :action => 'index', :project_id => project.to_param }) %>
-  <%= ical_formatted_link({ :controller=> 'todos', :action => 'index', :project_id => project.to_param }) %>
-  <strong><%=h project.name %></strong>
-</li>
+<%  project = @active_projects.empty? ? @hidden_projects.first : @active_projects.first -%>
+<h4><%= t('feedlist.project_centric') %>:</h4>
+<ul>
+  <% if @active_projects.empty? && @hidden_projects.empty? -%>
+    <li><%= t('feedlist.project_needed') %></li>
+  <% else -%>
+    <li><%= t('common.numbered_step', :number => 1) %> - <%= t('feedlist.choose_project') %>:
+      <select name="feed-projects" id="feed-projects">
+        <%=  options_from_collection_for_select(@active_projects, "id", "name", @active_projects.first.id) unless @active_projects.empty?-%>
+        <%=  options_from_collection_for_select(@hidden_projects, "id", "name") -%>
+        <%=  options_from_collection_for_select(@completed_projects, "id", "name") -%>
+      </select>
+    </li>
+    <li><%= t('common.numbered_step', :number => 2) %> - <%= t('feedlist.select_feed_for_project') %>
+      <div id="feedicons-project">
+        <div id="feeds-for-project">
+          <li><%= all_feed_links_for_project(project) %></li>
+        </div>
+      </div>
+    </li>
+  <% end -%>
+</ul>

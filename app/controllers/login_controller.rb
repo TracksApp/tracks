@@ -33,30 +33,30 @@ class LoginController < ApplicationController
       @page_title = "TRACKS::Login"
       cookies[:preferred_auth] = prefered_auth? unless cookies[:preferred_auth]
       case request.method
-        when :post
-          if @user = User.authenticate(params['user_login'], params['user_password'])
-            session['user_id'] = @user.id
-            # If checkbox on login page checked, we don't expire the session after 1 hour
-            # of inactivity and we remember this user for future browser sessions
-            session['noexpiry'] = params['user_noexpiry']
-            msg = (should_expire_sessions?) ? "will expire after 1 hour of inactivity." : "will not expire." 
-            notify :notice, "Login successful: session #{msg}"
-            cookies[:tracks_login] = { :value => @user.login, :expires => Time.now + 1.year, :secure => SITE_CONFIG['secure_cookies'] }
-            unless should_expire_sessions?
-              @user.remember_me
-              cookies[:auth_token] = { :value => @user.remember_token , :expires => @user.remember_token_expires_at, :secure => SITE_CONFIG['secure_cookies'] }
-            end
-            redirect_back_or_home
-            return
-          else
-            @login = params['user_login']
-            notify :warning, "Login unsuccessful"
+      when :post
+        if @user = User.authenticate(params['user_login'], params['user_password'])
+          session['user_id'] = @user.id
+          # If checkbox on login page checked, we don't expire the session after 1 hour
+          # of inactivity and we remember this user for future browser sessions
+          session['noexpiry'] = params['user_noexpiry']
+          msg = (should_expire_sessions?) ? "will expire after 1 hour of inactivity." : "will not expire."
+          notify :notice, "Login successful: session #{msg}"
+          cookies[:tracks_login] = { :value => @user.login, :expires => Time.now + 1.year, :secure => SITE_CONFIG['secure_cookies'] }
+          unless should_expire_sessions?
+            @user.remember_me
+            cookies[:auth_token] = { :value => @user.remember_token , :expires => @user.remember_token_expires_at, :secure => SITE_CONFIG['secure_cookies'] }
           end
-        when :get
-          if User.no_users_yet?
-            redirect_to signup_path
-            return
-          end
+          redirect_back_or_home
+          return
+        else
+          @login = params['user_login']
+          notify :warning, t('login.unsuccessful')
+        end
+      when :get
+        if User.no_users_yet?
+          redirect_to signup_path
+          return
+        end
       end
       respond_to do |format|
         format.html
@@ -73,25 +73,38 @@ class LoginController < ApplicationController
       CASClient::Frameworks::Rails::Filter.logout(self)
     else
       reset_session
-      notify :notice, "You have been logged out of Tracks."
+      notify :notice, t('login.logged_out')
       redirect_to_login
+    end
+  end
+
+  def expire_session
+    # this is a hack to enable cucumber to expire a session by calling this
+    # method. The method will be unavailable for production environment
+    unless Rails.env.production?
+      session['expiry_time'] = Time.now
+      respond_to do |format|
+        format.html { render :text => "Session expired for test purposes"}
+        format.js { render :text => "" }
+      end
+    else
+      respond_to do |format|
+        format.html { render :text => "Not available for production use"}
+        format.js { render :text => "" }
+      end
     end
   end
   
   def check_expiry
-    # Gets called by periodically_call_remote to check whether 
+    # Gets called by periodically_call_remote to check whether
     # the session has timed out yet
     unless session == nil
       if session
         return unless should_expire_sessions?
         # Get expiry time (allow ten seconds window for the case where we have none)
         expiry_time = session['expiry_time'] || Time.now + 10
-        @time_left = expiry_time - Time.now
-        if @time_left < (10*60) # Session will time out before the next check
-          @msg = "Session has timed out. Please "
-        else
-          @msg = ""
-        end
+        time_left = expiry_time - Time.now
+        @session_expired = ( time_left < (10*60) ) # Session will time out before the next check
       end
     end
     respond_to do |format|
@@ -99,7 +112,7 @@ class LoginController < ApplicationController
     end
   end
 
-    def login_cas
+  def login_cas
     # If checkbox on login page checked, we don't expire the session after 1 hour
     # of inactivity and we remember this user for future browser sessions
 
@@ -107,22 +120,21 @@ class LoginController < ApplicationController
     if session[:cas_user]
       if @user = User.find_by_login(session[:cas_user])
         session['user_id'] = @user.id
-        msg = (should_expire_sessions?) ? "will expire after 1 hour of inactivity." : "will not expire."
-        notify :notice, "Login successful: session #{msg}"
+        msg = (should_expire_sessions?) ? t('login.session_will_expire', :hours => 1) : t('login.session_will_not_expire')
+        notify :notice, (t('login.successful_with_session_info') + msg)
         cookies[:tracks_login] = { :value => @user.login, :expires => Time.now + 1.year, :secure => SITE_CONFIG['secure_cookies'] }
         unless should_expire_sessions?
           @user.remember_me
           cookies[:auth_token] = { :value => @user.remember_token, :expires => @user.remember_token_expires_at, :secure => SITE_CONFIG['secure_cookies'] }
         end
-        #redirect_back_or_home
       else
-        notify :warning, "Sorry, no user by that CAS username exists (#{session[:cas_user]})"
+        notify :warning, t('login.cas_username_not_found', :username => session[:cas_user])
         redirect_to signup_url ; return
       end
     else
       notify :warning, result.message
     end
-    redirect_back_or_home 
+    redirect_back_or_home
 
   end
   
@@ -149,8 +161,8 @@ class LoginController < ApplicationController
       if result.successful?
         if @user = User.find_by_open_id_url(identity_url)
           session['user_id'] = @user.id
-          msg = (should_expire_sessions?) ? "will expire after 1 hour of inactivity." : "will not expire." 
-          notify :notice, "Login successful: session #{msg}"
+          msg = (should_expire_sessions?) ? t('login.session_will_expire', :hours => 1) : t('login.session_will_not_expire')
+          notify :notice, (t('login.successful_with_session_info') + msg)
           cookies[:tracks_login] = { :value => @user.login, :expires => Time.now + 1.year, :secure => SITE_CONFIG['secure_cookies'] }
           unless should_expire_sessions?
             @user.remember_me
@@ -158,7 +170,7 @@ class LoginController < ApplicationController
           end
           redirect_back_or_home
         else
-          notify :warning, "Sorry, no user by that identity URL exists (#{identity_url})"
+          notify :warning, t('login.openid_identity_url_not_found', :identity_url => identity_url)
         end
       else
         notify :warning, result.message

@@ -1,17 +1,17 @@
 <div id="single_box" class="container context authtype_container">
 	
-  <h2>Change authentication type</h2>
+  <h2><%= t('users.change_authentication_type') %></h2>
 
   <%= error_messages_for 'user' %>
 
-  <p>Select your new authentication type and click 'Change Authentication Type' to replace your current settings.</p>
+  <p><%= t('users.select_authentication_type') %></p>
 
   <% form_tag :action => 'update_auth_type' do %>
-	  <div><label for="user_auth_type">Authentication type:</label> <%=   select('user', 'auth_type', Tracks::Config.auth_schemes.collect {|p| [ p, p ] }) %></div>
-	  <div id="open_id" style="display:<%= current_user.auth_type == 'open_id' ? 'block' : 'none' %>"><label for="user_open_id_url">Identity URL:</label> <input type="text" name="openid_url" value="<%= current_user.open_id_url %>" class="open_id" /></div>
-		<div class="actions"><%= submit_tag 'Change Authentication Type' %> <%= link_to 'Cancel', preferences_path %></div>
+	  <div><label for="user_auth_type"><%= t('users.label_auth_type') %>:</label> <%=   select('user', 'auth_type', Tracks::Config.auth_schemes.collect {|p| [ p, p ] }) %></div>
+	  <div id="open_id" style="display:<%= current_user.auth_type == 'open_id' ? 'block' : 'none' %>"><label for="openid_url"><%= t('users.identity_url') %>:</label> <input type="text" name="openid_url" value="<%= current_user.open_id_url %>" class="open_id" /></div>
+		<div class="actions"><%= submit_tag t('users.auth_change_submit') %> <%= link_to t('common.cancel'), preferences_path %></div>
 
-		<%= observe_field( :user_auth_type, :function => "$('open_id').style.display = value == 'open_id' ? 'block' : 'none'") %>
+		<%= observe_field( :user_auth_type, :function => "$('#open_id')[0].style.display = value == 'open_id' ? 'block' : 'none'") %>
 	
   <% end %>
 

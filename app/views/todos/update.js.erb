@@ -1,0 +1,120 @@
+<% if !@saved -%>
+  TracksPages.show_edit_errors(html_for_error_messages());
+<% else
+
+  # jquery animations are async, so first collect all animation steps that need
+  # to be run sequential,then execute them. All steps are functions which are
+  # passed a function as parameter that will execute the next animation steps
+
+  animation = []
+  animation << "remove_todo" if update_needs_to_remove_todo_from_container
+  if replace_with_updated_todo
+    animation << "replace_todo"
+  elsif append_updated_todo
+    animation << (@new_context_created ? "insert_new_context_with_updated_todo" : "add_to_existing_container")
+  end
+  animation << "hide_context" if update_needs_to_hide_context
+  animation << "highlight_updated_todo"
+  animation << "update_empty_tag_container" if source_view_is(:tag)
+  animation << "update_predecessors"
+%>
+
+  <%= render_animation(animation) %>
+  TracksPages.page_notify('notice', '<%=@status_message%>', 5);
+  TracksPages.set_page_badge(<%= @down_count %>);
+<% end %>
+
+function remove_todo(next_steps) {
+  $('#<%= dom_id(@todo) %>').fadeOut(400, function() {
+    $('#<%= dom_id(@todo) %>').remove();
+    <%= show_empty_message_in_source_container -%>
+    next_steps.go();
+  });
+}
+
+function add_to_existing_container(next_steps) {
+  $('#<%= item_container_id(@todo) %>').append(html_for_todo());
+  <% if source_view_is_one_of(:project,:calendar) -%>
+    next_steps.go();
+    <% if (@target_context_count==1) || ( (@todo.deferred? || @todo.pending?) && @remaining_deferred_or_pending_count == 1) -%>
+      $("#<%=  empty_container_msg_div_id %>").slideUp(100);
+    <% end -%>
+  <% else -%>
+    <% unless (@todo_hidden_state_changed && @todo.hidden?) || @todo_was_deferred_from_active_state -%>
+      $('#c<%= @todo.context_id %>').fadeIn(500, function() { 
+        next_steps.go();
+        <% if @target_context_count==1 -%>
+          $("#<%=  empty_container_msg_div_id %>").slideUp(100);
+        <% end -%>
+      });
+    <% else -%>
+      next_steps.go();
+      <% if (@target_context_count==1) || (@todo.deferred? && @remaining_deferred_or_pending_count == 1) || (@todo.hidden? && @remaining_hidden_count == 1) -%>
+        $("#<%=  empty_container_msg_div_id %>").slideUp(100);
+      <% end -%>
+    <% end -%>
+  <% end -%>
+}
+
+function replace_todo(next_steps) {
+  $('#<%= dom_id(@todo) %>').html(html_for_todo());
+  next_steps.go();
+}
+
+function hide_context(next_steps) {
+  <% context_id = @context_changed ? @original_item_context_id : @todo.context_id -%>
+  $('#c<%=  context_id %>').fadeOut(400, function(){ next_steps.go(); });
+}
+
+function highlight_updated_todo(next_steps) {
+  $('#<%= dom_id(@todo)%>').effect('highlight', {}, 2000, function(){ });
+  next_steps.go();
+}
+
+function update_empty_tag_container(next_steps) {
+  <% if @down_count==0 -%>
+    $('#no_todos_in_tag_view').slideDown(400, function(){ next_steps.go(); });
+  <% else -%>
+    $('#no_todos_in_tag_view').fadeOut(100, function(){ next_steps.go(); });
+  <% end -%>
+}
+
+function update_badge_count() {
+  <%
+    count = source_view_is(:context) ? @remaining_in_context : @down_count
+    count = @project_changed ? @remaining_undone_in_project : count
+  -%>
+  TracksPages.set_page_badge(<%= count %>);
+}
+
+function insert_new_context_with_updated_todo(next_steps) {
+  $('#display_box').prepend(html_for_new_context());
+  $('#c<%= @todo.context_id %>').fadeIn(500, function() { next_steps.go(); });
+}
+
+function html_for_todo() {
+  return "<%= @saved ? escape_javascript(render(:partial => @todo, :locals => { :parent_container_type => parent_container_type })) : "" %>";
+}
+
+function html_for_new_context() {
+  return "<%= @saved && @new_context_created ? escape_javascript(render(:partial => @new_context, :locals => { :collapsible => true })) : "" %>";
+}
+
+function html_for_error_messages() {
+  return "<%= escape_javascript(error_messages_for('todo')) %>";
+}
+
+function update_predecessors() {
+  <% @todo.uncompleted_predecessors.each do |p| -%>
+    if ($('#<%=item_container_id(p)%>')) {
+      $('#<%=dom_id(p)%>').html('<%=escape_javascript(render(:partial => p, :locals => { :parent_container_type => parent_container_type }))%>');
+    }
+  <% end -%>
+  <% if @removed_predecessors
+    @removed_predecessors.each do |p| -%>
+      if ($('#<%=item_container_id(p)%>')) {
+        $('#<%=dom_id(p)%>').html('<%=escape_javascript(render(:partial => p, :locals => { :parent_container_type => parent_container_type }))%>');
+      }
+    <% end -%>
+  <% end -%>
+}

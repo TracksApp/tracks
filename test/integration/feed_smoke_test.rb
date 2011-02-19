@@ -115,6 +115,10 @@ class FeedSmokeTest < ActionController::IntegrationTest
     assert_success "/projects.txt?token=#{ users(:admin_user).token }"
   end
 
+  def test_calendar_ics
+    assert_success "/calendar.ics?token=#{ users(:admin_user).token }"
+  end
+
   def test_all_projects_txt_with_hidden_project
     p = projects(:timemachine)
     p.hide!

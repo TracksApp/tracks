@@ -5,11 +5,11 @@ class TodosController < ApplicationController
   skip_before_filter :login_required, :only => [:index, :calendar]
   prepend_before_filter :login_or_feed_token_required, :only => [:index, :calendar]
   append_before_filter :find_and_activate_ready, :only => [:index, :list_deferred]
-  append_before_filter :init, :except => [ :destroy, :completed,
+
+  # TODO: replace :except with :only
+  append_before_filter :init, :except => [ :tag, :tags, :destroy, :completed,
     :completed_archive, :check_deferred, :toggle_check, :toggle_star,
-    :edit, :update, :create, :calendar, :auto_complete_for_predecessor, :remove_predecessor, :add_predecessor]
-  append_before_filter :get_todo_from_params, :only => [ :edit, :toggle_check, :toggle_star, :show, :update, :destroy, :remove_predecessor, :show_notes]
-  protect_from_forgery :except => [:auto_complete_for_predecessor]
+    :edit, :update, :defer, :create, :calendar, :auto_complete_for_predecessor, :remove_predecessor, :add_predecessor]
 
   def index
     @projects = current_user.projects.find(:all, :include => [:default_context])
@@ -48,6 +48,9 @@ class TodosController < ApplicationController
   
   def create
     @source_view = params['_source_view'] || 'todo'
+    @default_context = current_user.contexts.find_by_name(params['default_context_name'])
+    @default_project = current_user.projects.find_by_name(params['default_project_name'])
+    
     @tag_name = params['_tag_name']
 
     is_multiple = params[:todo] && params[:todo][:multiple_todos] && !params[:todo][:multiple_todos].nil?
@@ -78,24 +81,26 @@ class TodosController < ApplicationController
 
       # Fix for #977 because AASM overrides @state on creation
       specified_state = @todo.state
-
-      @todo.update_state_from_project
       @saved = @todo.save
 
       # Fix for #977 because AASM overrides @state on creation
       @todo.update_attribute('state', specified_state) unless specified_state == "immediate"
+      @saved = @todo.save
+      @todo.update_state_from_project if @saved
 
       unless (@saved == false) || tag_list.blank?
         @todo.tag_with(tag_list)
         @todo.tags.reload
       end
 
-      unless (@saved == false)
+      if @saved
         unless @todo.uncompleted_predecessors.empty? || @todo.state == 'project_hidden'
           @todo.state = 'pending'
         end
         @todo.save
       end
+
+      @todo.reload if @saved
 
       respond_to do |format|
         format.html { redirect_to :action => "index" }
@@ -110,12 +115,20 @@ class TodosController < ApplicationController
           end
         end
         format.js do
-          determine_down_count if @saved
-          @contexts = current_user.contexts.find(:all) if @new_context_created
-          @projects = current_user.projects.find(:all) if @new_project_created
-          @initial_context_name = params['default_context_name']
-          @initial_project_name = params['default_project_name']
-          @default_tags = @todo.project.default_tags unless @todo.project.nil?
+          if @saved
+            determine_down_count
+            @contexts = current_user.contexts.find(:all) if @new_context_created
+            @projects = current_user.projects.find(:all) if @new_project_created
+            @initial_context_name = params['default_context_name']
+            @initial_project_name = params['default_project_name']
+            @default_tags = @todo.project.default_tags unless @todo.project.nil?
+            @status_message = t('todos.added_new_next_action')
+            @status_message += ' ' + t('todos.to_tickler') if @todo.deferred?
+            @status_message += ' ' + t('todos.in_pending_state') if @todo.pending?
+            @status_message += ' ' + t('todos.in_hidden_state') if @todo.hidden?
+            @status_message = t('todos.added_new_project') + ' / ' + @status_message if @new_project_created
+            @status_message = t('todos.added_new_context') + ' / ' + @status_message if @new_context_created
+          end
           render :action => 'create'
         end
         format.xml do
@@ -147,19 +160,19 @@ class TodosController < ApplicationController
 
     @todos = []
     params[:todo][:multiple_todos].split("\n").map do |line|
-      @todo = current_user.todos.build(
-        :description => line)
-      @todo.project_id = @project_id
-      @todo.context_id = @context_id
-      puts "TODO: #{@todo.description}, #{@todo.project_id}, #{@todo.context_id}"
-      @saved = @todo.save
-      puts "NOT SAVED" unless @saved
-      unless (@saved == false) || tag_list.blank?
-        @todo.tag_with(tag_list)
-        @todo.tags.reload
+      unless line.blank?
+        @todo = current_user.todos.build(
+          :description => line)
+        @todo.project_id = @project_id
+        @todo.context_id = @context_id
+        @saved = @todo.save
+        unless (@saved == false) || tag_list.blank?
+          @todo.tag_with(tag_list)
+          @todo.tags.reload
+        end
+        @todos << @todo
+        @not_done_todos << @todo if @new_context_created
       end
-      @todos << @todo
-      @not_done_todos << @todo if @new_context_created
     end
 
     respond_to do |format|
@@ -173,10 +186,15 @@ class TodosController < ApplicationController
         if @todos.size > 0
           @default_tags = @todos[0].project.default_tags unless @todos[0].project.nil?
         else
-          @multiple_error = "You need to submit at least one next action"
+          @multiple_error = t('todos.next_action_needed')
           @saved = false;
           @default_tags = current_user.projects.find_by_name(@initial_project_name).default_tags unless @initial_project_name.blank?
         end
+
+        @status_message = @todos.size > 1 ? t('todos.added_new_next_action_plural') : t('todos.added_new_next_action_singular')
+        @status_message = t('todos.added_new_project') + ' / ' + @status_message if @new_project_created
+        @status_message = t('todos.added_new_context') + ' / ' + @status_message if @new_context_created
+
         render :action => 'create_multiple'
       end
       format.xml do
@@ -190,8 +208,7 @@ class TodosController < ApplicationController
   end
   
   def edit
-    @projects = current_user.projects.find(:all)
-    @contexts = current_user.contexts.find(:all)
+    @todo = current_user.todos.find(params['id'], :include => [:project, :context, :tags, :taggings, :predecessors])
     @source_view = params['_source_view'] || 'todo'
     @tag_name = params['_tag_name']
     respond_to do |format|
@@ -200,6 +217,7 @@ class TodosController < ApplicationController
   end
   
   def show
+    @todo = current_user.todos.find(params['id'])
     respond_to do |format|
       format.m do
         @projects = current_user.projects.active
@@ -222,15 +240,20 @@ class TodosController < ApplicationController
     @todo.state = 'pending'
     @saved = @todo.save
     respond_to do |format|
-      format.js
+      format.js {
+        @status_message = t('todos.added_dependency', :dependency => @predecessor.description)
+        @status_message += t('todos.set_to_pending', :task => @todo.description) unless @original_state == 'pending'
+      }
     end
   end
 
   def remove_predecessor
     @source_view = params['_source_view'] || 'todo'
+    @todo = current_user.todos.find(params['id'])
     @predecessor = current_user.todos.find(params['predecessor'])
     @successor = @todo
     @removed = @successor.remove_predecessor(@predecessor)
+    determine_remaining_in_context_count
     respond_to do |format|
       format.js
     end
@@ -239,9 +262,13 @@ class TodosController < ApplicationController
   # Toggles the 'done' status of the action
   #
   def toggle_check
+    @todo = current_user.todos.find(params['id'])
     @source_view = params['_source_view'] || 'todo'
     @original_item_due = @todo.due
     @original_item_was_deferred = @todo.deferred?
+    @original_item_was_hidden = @todo.hidden?
+    @original_item_context_id = @todo.context_id
+    @original_item_project_id = @todo.project_id
     @saved = @todo.toggle_completion!
   
     # check if this todo has a related recurring_todo. If so, create next todo
@@ -265,7 +292,8 @@ class TodosController < ApplicationController
           determine_remaining_in_context_count(@todo.context_id)
           determine_down_count
           determine_completed_count
-          determine_deferred_tag_count(params['_tag_name']) if @source_view == 'tag'
+          determine_deferred_tag_count(params['_tag_name']) if source_view_is(:tag)
+          @wants_redirect_after_complete = @todo.completed?  && !@todo.project_id.nil? && current_user.prefs.show_project_on_todo_done && !source_view_is(:project)
           if source_view_is :calendar
             @original_item_due_id = get_due_id_for_calendar(@original_item_due)
             @old_due_empty = is_old_due_empty(@original_item_due_id)
@@ -277,10 +305,10 @@ class TodosController < ApplicationController
       format.html do
         if @saved
           # TODO: I think this will work, but can't figure out how to test it
-          notify :notice, "The action <strong>'#{@todo.description}'</strong> was marked as <strong>#{@todo.completed? ? 'complete' : 'incomplete' }</strong>"
+          notify(:notice, t("todos.action_marked_complete", :description => @todo.description, :completed => @todo.completed? ? 'complete' : 'incomplete'))
           redirect_to :action => "index"
         else
-          notify :notice, "The action <strong>'#{@todo.description}'</strong> was NOT marked as <strong>#{@todo.completed? ? 'complete' : 'incomplete' } due to an error on the server.</strong>", "index"
+          notify(:notice, t("todos.action_marked_complete_error", :description => @todo.description, :completed => @todo.completed? ? 'complete' : 'incomplete'), "index")
           redirect_to :action =>  "index"
         end
       end
@@ -288,15 +316,18 @@ class TodosController < ApplicationController
   end
   
   def toggle_star
+    @todo = current_user.todos.find(params['id'], :include => [:taggings, :tags])
     @todo.toggle_star!
-    @saved = @todo.save!
+    @saved = true # cannot determine error
     respond_to do |format|
       format.js
       format.xml { render :xml => @todo.to_xml( :except => :user_id ) }
+      format.html { redirect_to request.referrer}
     end
   end
 
   def change_context
+    # TODO: is this method used?
     @todo = Todo.find(params[:todo][:id])
     @original_item_context_id = @todo.context_id
     @context = Context.find(params[:todo][:context_id])
@@ -304,7 +335,7 @@ class TodosController < ApplicationController
     @saved = @todo.save
 
     @context_changed = true
-    @message = "Context changed to #{@context.name}"
+    @message = t('todos.context_changed', :name => @context.name)
     determine_remaining_in_context_count(@original_item_context_id)
 
     respond_to do |format|
@@ -314,124 +345,41 @@ class TodosController < ApplicationController
   end
 
   def update
+    @todo = current_user.todos.find(params['id'])
     @source_view = params['_source_view'] || 'todo'
     init_data_for_sidebar unless mobile?
-    if params[:tag_list]
-      @todo.tag_with(params[:tag_list])
-      @todo.tags(true) #force a reload for proper rendering
-    end
-    @original_item_context_id = @todo.context_id
-    @original_item_project_id = @todo.project_id
-    @original_item_was_deferred = @todo.deferred?
-    @original_item_due = @todo.due
-    @original_item_due_id = get_due_id_for_calendar(@todo.due)
-    @original_item_predecessor_list = @todo.predecessors.map{|t| t.specification}.join(', ')
-    
-    if params['todo']['project_id'].blank? && !params['project_name'].nil?
-      if params['project_name'] == 'None'
-        project = Project.null_object
-      else
-        project = current_user.projects.find_by_name(params['project_name'].strip)
-        unless project
-          project = current_user.projects.build
-          project.name = params['project_name'].strip
-          project.save
-          @new_project_created = true
-        end
-      end
-      params["todo"]["project_id"] = project.id
-    end
-    
-    if params['todo']['context_id'].blank? && !params['context_name'].blank?
-      context = current_user.contexts.find_by_name(params['context_name'].strip)
-      unless context
-        context = current_user.contexts.build
-        context.name = params['context_name'].strip
-        context.save
-        @new_context_created = true
-        @not_done_todos = [@todo]
-      end
-      params["todo"]["context_id"] = context.id
-    end
-    
-    if params["todo"].has_key?("due")
-      params["todo"]["due"] = parse_date_per_user_prefs(params["todo"]["due"])
-    else
-      params["todo"]["due"] = ""
-    end
-    
-    if params['todo']['show_from']
-      params['todo']['show_from'] = parse_date_per_user_prefs(params['todo']['show_from'])
-    end
-    
-    if params['done'] == '1' && !@todo.completed?
-      @todo.complete!
-      @todo.pending_to_activate.each do |t|
-        t.activate!
-      end
-    end
-    # strange. if checkbox is not checked, there is no 'done' in params.
-    # Therefore I've used the negation
-    if !(params['done'] == '1') && @todo.completed?
-      @todo.activate!
-      @todo.active_to_block.each do |t|
-        t.block!
-      end
-    end
-    
-    @todo.attributes = params["todo"]
 
-    @todo.add_predecessor_list(params[:predecessor_list])
+    cache_attributes_from_before_update
+
+    update_tags
+    update_project 
+    update_context 
+    update_due_and_show_from_dates
+    update_completed_state
+    update_dependencies
+    update_attributes_of_todo
+    
     @saved = @todo.save
-    if @saved && params[:predecessor_list]
-      if @original_item_predecessor_list != params[:predecessor_list]
-        # Possible state change with new dependencies
-        if @todo.uncompleted_predecessors.empty?
-          if @todo.state == 'pending'
-            @todo.activate! # Activate pending if no uncompleted predecessors
-          end
-        else
-          if @todo.state == 'active'
-            @todo.block! # Block active if we got uncompleted predecessors
-          end
-        end
-      end
-      @todo.save!
-    end
 
-    @context_changed = @original_item_context_id != @todo.context_id
-    @todo_was_activated_from_deferred_state = @original_item_was_deferred && @todo.active?
+    # this is set after save and cleared after reload, so save it here
+    @removed_predecessors = @todo.removed_predecessors
     
-    if source_view_is :calendar
-      @due_date_changed = @original_item_due != @todo.due
-      if @due_date_changed
-        @old_due_empty = is_old_due_empty(@original_item_due_id)
-        if @todo.due.nil?
-          # do not act further on date change when date is changed to nil
-          @due_date_changed = false
-        else
-          @new_due_id = get_due_id_for_calendar(@todo.due)
-        end
-      end
-    end
-    
-    if @context_changed
-      determine_remaining_in_context_count(@original_item_context_id)
-    else
-      determine_remaining_in_context_count(@todo.context_id)
-    end
-    
-    @project_changed = @original_item_project_id != @todo.project_id
-    if (@project_changed && !@original_item_project_id.nil?) then
-      @todo.update_state_from_project
-      @todo.save!
-      @remaining_undone_in_project = current_user.projects.find(@original_item_project_id).not_done_todos.count
-    end
+    @todo.reload # refresh context and project object too (not only their id's)
+
+    update_dependency_state
+    update_todo_state_if_project_changed
+
+    determine_changes_by_this_update
+    determine_remaining_in_context_count(@context_changed ? @original_item_context_id : @todo.context_id)
     determine_down_count
-    determine_deferred_tag_count(params['_tag_name']) if @source_view == 'tag'
+    determine_deferred_tag_count(params['_tag_name']) if source_view_is(:tag)
 
     respond_to do |format|
-      format.js
+      format.js {
+        @status_message = @todo.deferred? ? t('todos.action_saved_to_tickler') : t('todos.action_saved')
+        @status_message = t('todos.added_new_project') + ' / ' + @status_message if @new_project_created
+        @status_message = t('todos.added_new_context') + ' / ' + @status_message if @new_context_created
+      }
       format.xml { render :xml => @todo.to_xml( :except => :user_id ) }
       format.m do
         if @saved
@@ -450,7 +398,8 @@ class TodosController < ApplicationController
   end
     
   def destroy
-    @todo = get_todo_from_params
+    @source_view = params['_source_view'] || 'todo'
+    @todo = current_user.todos.find(params['id'], :include => [:pending_successors, :uncompleted_predecessors, :taggings, :tags, :project, :context])
     @original_item_due = @todo.due
     @context_id = @todo.context_id
     @project_id = @todo.project_id
@@ -476,14 +425,14 @@ class TodosController < ApplicationController
       
       format.html do
         if @saved
-          message = "Successfully deleted next action"
+          message = t('todos.action_deleted_success')
           if activated_successor_count > 0
             message += " activated #{pluralize(activated_successor_count, 'pending action')}"
           end
           notify :notice, message, 2.0
           redirect_to :action => 'index'
         else
-          notify :error, "Failed to delete the action", 2.0
+          notify :error, t('todos.action_deleted_error'), 2.0
           redirect_to :action => 'index'
         end
       end
@@ -507,7 +456,7 @@ class TodosController < ApplicationController
   end
 
   def completed
-    @page_title = "TRACKS::Completed tasks"
+    @page_title = t('todos.completed_tasks_title')
     @done = current_user.completed_todos
     @done_today = @done.completed_within Time.zone.now - 1.day
     @done_this_week = @done.completed_within Time.zone.now - 1.week
@@ -516,7 +465,7 @@ class TodosController < ApplicationController
   end
 
   def completed_archive
-    @page_title = "TRACKS::Archived completed tasks"
+    @page_title = t('todos.archived_tasks_title')
     @done = current_user.completed_todos
     @count = @done.size
     @done_archive = @done.completed_more_than Time.zone.now - 28.days
@@ -524,7 +473,7 @@ class TodosController < ApplicationController
   
   def list_deferred
     @source_view = 'deferred'
-    @page_title = "TRACKS::Tickler"
+    @page_title = t('todos.deferred_tasks_title')
     
     @contexts_to_show = @contexts = current_user.contexts.find(:all)
     
@@ -559,37 +508,32 @@ class TodosController < ApplicationController
   
   # /todos/tag/[tag_name] shows all the actions tagged with tag_name
   def tag
+    init_data_for_sidebar unless mobile?
     @source_view = params['_source_view'] || 'tag'
     @tag_name = params[:name]
-    @page_title = "TRACKS::Tagged with \'#{@tag_name}\'"
+    @page_title = t('todos.tagged_page_title', :tag_name => @tag_name)
     
     # mobile tags are routed with :name ending on .m. So we need to chomp it
     @tag_name = @tag_name.chomp('.m') if mobile?
     
     @tag = Tag.find_by_name(@tag_name)
     @tag = Tag.new(:name => @tag_name) if @tag.nil?
-    tag_collection = @tag.todos
     
-    @not_done_todos = tag_collection.find(:all,
-      :conditions => ['todos.user_id = ? and state = ?', current_user.id, 'active'],
-      :order => 'todos.due IS NULL, todos.due ASC, todos.created_at ASC')
-    @hidden_todos = current_user.todos.find(:all,
+    @not_done_todos = current_user.todos.with_tag(@tag).active.not_hidden.find(:all,
+      :order => 'todos.due IS NULL, todos.due ASC, todos.created_at ASC', :include => [:context])
+    @hidden_todos = current_user.todos.with_tag(@tag).hidden.find(:all,
       :include => [:taggings, :tags, :context],
-      :conditions => ['tags.name = ? AND (todos.state = ? OR (contexts.hide = ? AND todos.state = ?))', @tag_name, 'project_hidden', true, 'active'],
       :order => 'todos.completed_at DESC, todos.created_at DESC')
-    @deferred = tag_collection.find(:all,
-      :conditions => ['todos.user_id = ? and state = ?', current_user.id, 'deferred'],
-      :order => 'show_from ASC, todos.created_at DESC')
-    @pending = tag_collection.find(:all,
-      :conditions => ['todos.user_id = ? and state = ?', current_user.id, 'pending'],
-      :order => 'show_from ASC, todos.created_at DESC')
+    @deferred = current_user.todos.with_tag(@tag).deferred.find(:all,
+      :order => 'show_from ASC, todos.created_at DESC', :include => [:context])
+    @pending = current_user.todos.with_tag(@tag).blocked.find(:all,
+      :order => 'show_from ASC, todos.created_at DESC', :include => [:context])
     
     # If you've set no_completed to zero, the completed items box isn't shown on
     # the tag page
     max_completed = current_user.prefs.show_number_completed
-    @done = tag_collection.find(:all,
+    @done = current_user.todos.with_tag(@tag).completed.find(:all,
       :limit => max_completed,
-      :conditions => ['todos.user_id = ? and state = ?', current_user.id, 'completed'],
       :order => 'todos.completed_at DESC')
 
     @projects = current_user.projects
@@ -616,25 +560,38 @@ class TodosController < ApplicationController
   end
 
   def tags
-    @tags = Tag.all
+    @tags = Tag.find(:all, :conditions =>['name like ?', '%'+params[:term]+'%'])
     respond_to do |format|
-      format.autocomplete { render :text => for_autocomplete(@tags, params[:q]) }
+      format.autocomplete { render :text => for_autocomplete(@tags, params[:term]) }
     end
   end
   
   def defer
     @source_view = params['_source_view'] || 'todo'
     numdays = params['days'].to_i
-    @todo = Todo.find(params[:id])
+
+    @todo = current_user.todos.find(params[:id], :include => [:taggings, :tags, :uncompleted_predecessors, :pending_successors])
     @original_item_context_id = @todo.context_id
+    @todo_deferred_state_changed = true
+    @new_context_created = false
+    @due_date_changed = false
+    @tag_was_removed = false
+    @todo_hidden_state_changed = false
+    @todo_was_deferred_from_active_state = @todo.show_from.nil?
+
     @todo.show_from = (@todo.show_from || @todo.user.date) + numdays.days
     @saved = @todo.save
 
     determine_down_count
     determine_remaining_in_context_count(@todo.context_id)
-    if @source_view == 'project'
-      @remaining_undone_in_project = current_user.projects.find(@todo.project_id).not_done_todos.count
-      @original_item_project_id = @todo.project_id
+    source_view do |page|
+      page.project {
+        @remaining_undone_in_project = current_user.projects.find(@todo.project_id).todos.not_completed.count
+        @original_item_project_id = @todo.project_id
+      }
+      page.tag {
+        determine_deferred_tag_count(params['_tag_name'])
+      }
     end
 
     respond_to do |format|
@@ -645,7 +602,7 @@ class TodosController < ApplicationController
 
   def calendar
     @source_view = params['_source_view'] || 'calendar'
-    @page_title = "TRACKS::Calendar"
+    @page_title = t('todos.calendar_page_title')
 
     @projects = current_user.projects.find(:all)
   
@@ -707,7 +664,7 @@ class TodosController < ApplicationController
           :conditions => [ '(todos.state = ? OR todos.state = ? OR todos.state = ?) AND ' +
               'NOT (id = ?) AND lower(description) LIKE ?',
             'active', 'pending', 'deferred',
-            params[:id], '%' + params[:q].downcase + '%' ],
+            params[:id], '%' + params[:term].downcase + '%' ],
           :order => 'description ASC',
           :limit => 10
         )
@@ -718,12 +675,12 @@ class TodosController < ApplicationController
         :select => 'description, project_id, context_id, created_at',
         :conditions => [ '(todos.state = ? OR todos.state = ? OR todos.state = ?) AND lower(description) LIKE ?',
           'active', 'pending', 'deferred',
-          '%' + params[:q].downcase + '%' ],
+          '%' + params[:term].downcase + '%' ],
         :order => 'description ASC',
         :limit => 10
       )
     end
-    render :inline => "<%= auto_complete_result2(@items) %>"
+    render :inline => auto_complete_result2(@items)
   end
 
   def convert_to_project
@@ -736,6 +693,7 @@ class TodosController < ApplicationController
   end
 
   def show_notes
+    @todo = current_user.todos.find(params['id'])
     @return_path=cookies[:mobile_url] ? cookies[:mobile_url] : mobile_path
     respond_to do |format|
       format.html {
@@ -750,6 +708,8 @@ class TodosController < ApplicationController
   private
   
   def get_todo_from_params
+    # TODO: this was a :append_before but was removed to tune performance per
+    # method. Reconsider re-enabling it
     @todo = current_user.todos.find(params['id'])
   end
   
@@ -778,24 +738,24 @@ class TodosController < ApplicationController
       condition_builder.add 'todos.state = ?', 'active'
     end
 
-    @title = "Tracks - Next Actions"
-    @description = "Filter: "
+    @title = t('todos.next_actions_title')
+    @description = t('todos.next_actions_description')
 
     if params.key?('due')
       due_within = params['due'].to_i
       due_within_when = Time.zone.now + due_within.days
       condition_builder.add('todos.due <= ?', due_within_when)
       due_within_date_s = due_within_when.strftime("%Y-%m-%d")
-      @title << " due today" if (due_within == 0)
-      @title << " due within a week" if (due_within == 6)
-      @description << " with a due date #{due_within_date_s} or earlier"
+      @title << t('todos.next_actions_title_additions.due_today') if (due_within == 0)
+      @title << t('todos.next_actions_title_additions.due_within_a_week') if (due_within == 6)
+      @description << t('todos.next_actions_description_additions.due_date', :due_date => due_within_date_s)
     end
 
     if params.key?('done')
       done_in_last = params['done'].to_i
       condition_builder.add('todos.completed_at >= ?', Time.zone.now - done_in_last.days)
-      @title << " actions completed"
-      @description << " in the last #{done_in_last.to_s} days"
+      @title << t('todos.next_actions_title_additions.completed')
+      @description << t('todos.next_actions_description_additions.completed', :count => done_in_last.to_s)
     end
     
     if params.key?('tag')
@@ -813,16 +773,16 @@ class TodosController < ApplicationController
   end
 
   def with_parent_resource_scope(&block)
-    @feed_title = "Actions "
+    @feed_title = t('common.actions')
     if (params[:context_id])
       @context = current_user.contexts.find_by_params(params)
-      @feed_title = @feed_title + "in context '#{@context.name}'"
+      @feed_title = @feed_title + t('todos.feed_title_in_context', :context => @context.name)
       Todo.send :with_scope, :find => {:conditions => ['todos.context_id = ?', @context.id]} do
         yield
       end
     elsif (params[:project_id])
       @project = current_user.projects.find_by_params(params)
-      @feed_title = @feed_title + "in project '#{@project.name}'"
+      @feed_title = @feed_title + t('todos.feed_title_in_project', :project => @project.name)
       @project_feed = true
       Todo.send :with_scope, :find => {:conditions => ['todos.project_id = ?', @project.id]} do
         yield
@@ -839,9 +799,9 @@ class TodosController < ApplicationController
       end
       if TodosController.is_feed_request(request) && @description
         if params.key?('limit')
-          @description << "Lists the last #{params['limit']} incomplete next actions"
+          @description << t('todos.list_incomplete_next_actions_with_limit', :count => params['limit'])
         else
-          @description << "Lists incomplete next actions"
+          @description << t('todos.list_incomplete_next_actions')
         end
       end
     else
@@ -862,12 +822,11 @@ class TodosController < ApplicationController
             # current_users.todos.find but that broke with_scope for :limit
 
             # Exclude hidden projects from count on home page
-            @todos = Todo.find(:all, :conditions => ['todos.user_id = ?', current_user.id], :include => [ :project, :context, :tags ])
+            @todos = current_user.todos.find(:all, :include => [ :project, :context, :tags ])
 
             # Exclude hidden projects from the home page
-            @not_done_todos = Todo.find(:all,
-              :conditions => ['todos.user_id = ? AND contexts.hide = ? AND (projects.state = ? OR todos.project_id IS NULL)',
-                current_user.id, false, 'active'],
+            @not_done_todos = current_user.todos.find(:all,
+              :conditions => ['contexts.hide = ? AND (projects.state = ? OR todos.project_id IS NULL)', false, 'active'],
               :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC",
               :include => [ :project, :context, :tags ])
           end
@@ -882,9 +841,8 @@ class TodosController < ApplicationController
     # but that broke with_scope for :limit
     
     # Exclude hidden projects from the home page
-    @not_done_todos = Todo.find(:all,
-      :conditions => ['todos.user_id = ? AND todos.state = ? AND contexts.hide = ? AND (projects.state = ? OR todos.project_id IS NULL)',
-        current_user.id, 'active', false, 'active'],
+    @not_done_todos = current_user.todos.find(:all,
+      :conditions => ['todos.state = ? AND contexts.hide = ? AND (projects.state = ? OR todos.project_id IS NULL)', 'active', false, 'active'],
       :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC",
       :include => [ :project, :context, :tags ])
   end
@@ -892,27 +850,18 @@ class TodosController < ApplicationController
   def determine_down_count
     source_view do |from|
       from.todo do
-        @down_count = Todo.count(
-          :all,
-          :conditions => ['todos.user_id = ? and todos.state = ? and contexts.hide = ? AND (projects.state = ? OR todos.project_id IS NULL)', current_user.id, 'active', false, 'active'],
-          :include => [ :project, :context ])
-        # #@down_count = Todo.count_by_sql(['SELECT COUNT(*) FROM todos,
-        # contexts WHERE todos.context_id = contexts.id and todos.user_id = ?
-        # and todos.state = ? and contexts.hide = ?', current_user.id, 'active',
-        # false])
+        @down_count = current_user.todos.active.not_hidden.count
       end
       from.context do
-        @down_count = current_user.contexts.find(@todo.context_id).not_done_todo_count
+        @down_count = current_user.contexts.find(@todo.context_id).todos.not_completed.count(:all)
       end
       from.project do
         unless @todo.project_id == nil
-          @down_count = current_user.projects.find(@todo.project_id).not_done_todos_including_hidden.count
-          @deferred_count = current_user.projects.find(@todo.project_id).deferred_todos.count
-          @pending_count = current_user.projects.find(@todo.project_id).pending_todos.count
+          @down_count = current_user.projects.find(@todo.project_id).todos.active_or_hidden.count
         end
       end
       from.deferred do
-        @down_count = current_user.todos.count_in_state(:deferred)
+        @down_count = current_user.todos.deferred_or_blocked.count(:all)
       end
       from.tag do
         @tag_name = params['_tag_name']
@@ -920,58 +869,72 @@ class TodosController < ApplicationController
         if @tag.nil?
           @tag = Tag.new(:name => @tag_name)
         end
-        tag_collection = @tag.todos
-        @not_done_todos = tag_collection.find(:all, :conditions => ['todos.user_id = ? and state = ?', current_user.id, 'active'])
-        @not_done_todos.empty? ? @down_count = 0 : @down_count = @not_done_todos.size
+        @down_count = current_user.todos.with_tag(@tag).active.not_hidden.count
       end
     end
   end
     
   def determine_remaining_in_context_count(context_id = @todo.context_id)
     source_view do |from|
-      from.deferred { @remaining_in_context = current_user.contexts.find(context_id).deferred_todo_count }
-      from.tag      {
+      from.deferred {
+        # force reload to todos to get correct count and not a cached one
+        @remaining_in_context = current_user.contexts.find(context_id).todos.deferred_or_blocked.count
+        @target_context_count = current_user.contexts.find(@todo.context_id).todos.deferred_or_blocked.count
+      }
+      from.tag {
         tag = Tag.find_by_name(params['_tag_name'])
         if tag.nil?
           tag = Tag.new(:name => params['tag'])
         end
-        @remaining_in_context = current_user.contexts.find(context_id).not_done_todo_count({:tag => tag.id})
+        @remaining_in_context = current_user.contexts.find(context_id).todos.active.not_hidden.with_tag(tag).count
+        @target_context_count = current_user.contexts.find(@todo.context_id).todos.active.not_hidden.with_tag(tag).count
+        @remaining_hidden_count = current_user.todos.hidden.with_tag(tag).count
+      }
+      from.project {
+        @remaining_deferred_or_pending_count = current_user.projects.find(@todo.project_id).todos.deferred_or_blocked.count
+        @remaining_in_context = current_user.projects.find(@todo.project_id).todos.active.count
+        @target_context_count = current_user.projects.find(@todo.project_id).todos.active.count
+      }
+      from.calendar {
+        @target_context_count = count_old_due_empty(@new_due_id)
       }
     end
-    @remaining_in_context = current_user.contexts.find(context_id).not_done_todo_count if @remaining_in_context.nil?
+    @remaining_in_context = current_user.contexts.find(context_id).todos(true).active.not_hidden.count if !@remaining_in_context
+    @target_context_count = current_user.contexts.find(@todo.context_id).todos(true).active.not_hidden.count if !@target_context_count
   end
     
   def determine_completed_count
     source_view do |from|
       from.todo do
-        @completed_count = Todo.count_by_sql(['SELECT COUNT(*) FROM todos, contexts WHERE todos.context_id = contexts.id and todos.user_id = ? and todos.state = ? and contexts.hide = ?', current_user.id, 'completed', false])
+        @completed_count = current_user.todos.not_hidden.completed.count
       end
       from.context do
-        @completed_count = current_user.contexts.find(@todo.context_id).done_todo_count
+        todos = current_user.contexts.find(@todo.context_id).todos.completed
+        todos = todos.not_hidden if !@todo.context.hidden?
+        @completed_count = todos.count
       end
       from.project do
         unless @todo.project_id == nil
-          @completed_count = current_user.projects.find(@todo.project_id).done_todos.count
+          todos = current_user.projects.find(@todo.project_id).todos.completed
+          todos = todos.not_hidden if !@todo.project.hidden?
+          @completed_count = todos.count
         end
+      end
+      from.tag do
+        @completed_count = current_user.todos.with_tag(@tag).completed.count
       end
     end
   end
 
-  def determine_deferred_tag_count(tag)
-    tags = Tag.find_by_name(tag)
-    if tags.nil?
-      # should normally not happen, but is a workaround for #929
-      @deferred_tag_count = 0
-    else
-      @deferred_tag_count = tags.todos.count(:all,
-        :conditions => ['todos.user_id = ? and state = ?', current_user.id, 'deferred'],
-        :order => 'show_from ASC, todos.created_at DESC')
-    end
+  def determine_deferred_tag_count(tag_name)
+    tag = Tag.find_by_name(tag_name)
+    # tag.nil? should normally not happen, but is a workaround for #929
+    @remaining_deferred_or_pending_count = tag.nil? ? 0 : current_user.todos.deferred.with_tag(tag).count
   end
 
   def render_todos_html
     lambda do
-      @page_title = "TRACKS::List tasks"
+      @page_title = t('todos.task_list_title')
 
       # If you've set no_completed to zero, the completed items box isn't shown
       # on the home page
@@ -979,16 +942,7 @@ class TodosController < ApplicationController
       @done = current_user.completed_todos.find(:all, :limit => max_completed, :include => [ :context, :project, :tags ]) unless max_completed == 0
 
       # Set count badge to number of not-done, not hidden context items
-      @count = 0
-      @todos.each do |x|
-        if x.active?
-          if x.project.nil?
-            @count += 1 if !x.context.hide?
-          else
-            @count += 1 if x.project.active?  && !x.context.hide?
-          end
-        end
-      end
+      @count = current_user.todos.active.not_hidden.count(:all)
        
       render
     end
@@ -996,7 +950,7 @@ class TodosController < ApplicationController
 
   def render_todos_mobile
     lambda do
-      @page_title = "All actions"
+      @page_title = t('todos.mobile_todos_page_title')
       @home = true
       cookies[:mobile_url]= { :value => request.request_uri, :secure => SITE_CONFIG['secure_cookies']}
       determine_down_count
@@ -1026,15 +980,15 @@ class TodosController < ApplicationController
   def todo_feed_content
     lambda do |i|
       item_notes = sanitize(markdown( i.notes )) if i.notes?
-      due = "<div>Due: #{format_date(i.due)}</div>\n" if i.due?
-      done = "<div>Completed: #{format_date(i.completed_at)}</div>\n" if i.completed?
+      due = "<div>#{t('todos.feeds.due', :date => format_date(i.due))}</div>\n" if i.due?
+      done = "<div>#{t('todos.feeds.completed', :date => format_date(i.completed_at))}</div>\n" if i.completed?
       context_link = "<a href=\"#{ context_url(i.context) }\">#{ i.context.name }</a>"
       if i.project_id?
         project_link = "<a href=\"#{ project_url(i.project) }\">#{ i.project.name }</a>"
       else
-        project_link = "<em>none</em>"
+        project_link = "<em>#{t('common.none')}</em>"
       end
-      "#{done||''}#{due||''}#{item_notes||''}\n<div>Project:  #{project_link}</div>\n<div>Context:  #{context_link}</div>"
+      "#{done||''}#{due||''}#{item_notes||''}\n<div>#{t('common.project')}:  #{project_link}</div>\n<div>#{t('common.context')}:  #{context_link}</div>"
     end
   end
 
@@ -1122,29 +1076,179 @@ class TodosController < ApplicationController
   end
   
   def is_old_due_empty(id)
+    return 0 == count_old_due_empty(id)
+  end
+
+  def count_old_due_empty(id)
     due_today_date = Time.zone.now
     due_this_week_date = Time.zone.now.end_of_week
     due_next_week_date = due_this_week_date + 7.days
     due_this_month_date = Time.zone.now.end_of_month
     case id
     when "due_today"
-      return 0 == current_user.todos.not_completed.count(:all,
+      return current_user.todos.not_completed.count(:all,
         :conditions => ['todos.due <= ?', due_today_date])
     when "due_this_week"
-      return 0 == current_user.todos.not_completed.count(:all,
+      return current_user.todos.not_completed.count(:all,
         :conditions => ['todos.due > ? AND todos.due <= ?', due_today_date, due_this_week_date])
     when "due_next_week"
-      return 0 == current_user.todos.not_completed.count(:all,
+      return current_user.todos.not_completed.count(:all,
         :conditions => ['todos.due > ? AND todos.due <= ?', due_this_week_date, due_next_week_date])
     when "due_this_month"
-      return 0 == current_user.todos.not_completed.count(:all,
+      return current_user.todos.not_completed.count(:all,
         :conditions => ['todos.due > ? AND todos.due <= ?', due_next_week_date, due_this_month_date])
     when "due_after_this_month"
-      return 0 == current_user.todos.not_completed.count(:all,
+      return current_user.todos.not_completed.count(:all,
         :conditions => ['todos.due > ?', due_this_month_date])
     else
       raise Exception.new, "unknown due id for calendar: '#{id}'"
     end
+  end
+
+  def cache_attributes_from_before_update
+    @original_item_context_id = @todo.context_id
+    @original_item_project_id = @todo.project_id
+    @original_item_was_deferred = @todo.deferred?
+    @original_item_was_hidden = @todo.hidden?
+    @original_item_was_pending = @todo.pending?
+    @original_item_due = @todo.due
+    @original_item_due_id = get_due_id_for_calendar(@todo.due)
+    @original_item_predecessor_list = @todo.predecessors.map{|t| t.specification}.join(', ')
+  end
+
+  def update_project
+    @project_changed = false;
+    if params['todo']['project_id'].blank? && !params['project_name'].nil?
+      if params['project_name'] == 'None'
+        project = Project.null_object
+      else
+        project = current_user.projects.find_by_name(params['project_name'].strip)
+        unless project
+          project = current_user.projects.build
+          project.name = params['project_name'].strip
+          project.save
+          @new_project_created = true
+        end
+      end
+      params["todo"]["project_id"] = project.id
+      @project_changed = @original_item_project_id != params["todo"]["project_id"] = project.id
+    end
+  end
+
+  def update_todo_state_if_project_changed
+    if ( @project_changed ) then
+      @todo.update_state_from_project
+      @remaining_undone_in_project = current_user.projects.find(@original_item_project_id).todos.active.count if source_view_is :project
+    end
+  end
+
+  def update_context
+    @context_changed = false
+    if params['todo']['context_id'].blank? && !params['context_name'].blank?
+      context = current_user.contexts.find_by_name(params['context_name'].strip)
+      unless context
+        @new_context = current_user.contexts.build
+        @new_context.name = params['context_name'].strip
+        @new_context.save
+        @new_context_created = true
+        @not_done_todos = [@todo]
+        context = @new_context
+      end
+      params["todo"]["context_id"] = context.id
+      @context_changed = @original_item_context_id != params["todo"]["context_id"] = context.id
+    end
+  end
+
+  def update_tags
+    if params[:tag_list]
+      @todo.tag_with(params[:tag_list])
+      @todo.tags(true) #force a reload for proper rendering
+    end
+  end
+
+  def update_due_and_show_from_dates
+    if params["todo"].has_key?("due")
+      params["todo"]["due"] = parse_date_per_user_prefs(params["todo"]["due"])
+    else
+      params["todo"]["due"] = ""
+    end
+    if params['todo']['show_from']
+      params['todo']['show_from'] = parse_date_per_user_prefs(params['todo']['show_from'])
+    end
+  end
+
+  def update_completed_state
+    if params['done'] == '1' && !@todo.completed?
+      @todo.complete!
+      @todo.pending_to_activate.each do |t|
+        t.activate!
+      end
+    end
+    # strange. if checkbox is not checked, there is no 'done' in params.
+    # Therefore I've used the negation
+    if !(params['done'] == '1') && @todo.completed?
+      @todo.activate!
+      @todo.active_to_block.each do |t|
+        t.block!
+      end
+    end
+  end
+
+  def update_dependencies
+    @todo.add_predecessor_list(params[:predecessor_list])
+  end
+
+  def update_dependency_state
+    # assumes @todo.save was called so that the predecessor_list is persistent
+    if @original_item_predecessor_list != params[:predecessor_list]
+      # Possible state change with new dependencies
+      if @todo.uncompleted_predecessors.empty?
+        @todo.activate! if @todo.state == 'pending' # Activate pending if no uncompleted predecessors
+      else
+        @todo.block! if @todo.state == 'active' # Block active if we got uncompleted predecessors
+      end
+    end
+  end
+
+  def update_attributes_of_todo
+    @todo.attributes = params["todo"]
+  end
+
+  def determine_changes_by_this_update
+    @todo_was_activated_from_deferred_state = @todo.active? && @original_item_was_deferred
+    @todo_was_activated_from_pending_state = @todo.active? && @original_item_was_pending
+    @todo_was_deferred_from_active_state = @todo.deferred? && !@original_item_was_deferred
+    @todo_was_blocked_from_active_state = @todo.pending? && !@original_item_was_pending
+
+    @todo_deferred_state_changed = @original_item_was_deferred != @todo.deferred?
+    @todo_pending_state_changed = @original_item_was_pending != @todo.pending?
+    @todo_hidden_state_changed = @original_item_was_hidden != @todo.hidden?
+
+    @due_date_changed = @original_item_due != @todo.due
+
+    source_view do |page|
+      page.calendar do
+        @old_due_empty = is_old_due_empty(@original_item_due_id)
+        @new_due_id = get_due_id_for_calendar(@todo.due) 
+      end
+      page.tag do
+        @tag_name = params['_tag_name']
+        @tag_was_removed = !@todo.has_tag?(@tag_name)
+      end
+    end
+  end
+
+  def project_specified_by_name(project_name)
+    return false unless params['project_id'].blank?
+    return false if project_name.blank?
+    return false if project_name == 'None'
+    true
+  end
+
+  def context_specified_by_name(context_name)
+    return false unless params['context_id'].blank?
+    return false if context_name.blank?
+    true
   end
 
   class FindConditionBuilder
@@ -1219,21 +1323,6 @@ class TodosController < ApplicationController
       true
     end
           
-  end
-
-  private
-
-  def project_specified_by_name(project_name)
-    return false unless params['project_id'].blank?
-    return false if project_name.blank?
-    return false if project_name == 'None'
-    true
-  end
-
-  def context_specified_by_name(context_name)
-    return false unless params['context_id'].blank?
-    return false if context_name.blank?
-    true
   end
 
 end

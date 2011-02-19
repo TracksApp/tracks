@@ -1,8 +1,0 @@
-<h3><%= list_name %> (<%= projects.length %>)</h3>
-<ul>
-  <% if projects.empty? %>
-    <li>None</li>
-  <% else %>
-    <%= render :partial => "sidebar/project", :collection => projects %>
-  <% end %>
-</ul>

@@ -23,8 +23,7 @@ class CalculationsTest < ActiveRecord::TestCase
 
   def test_should_average_field
     value = Account.average(:credit_limit)
-    assert_kind_of BigDecimal, value
-    assert_equal BigDecimal.new('53.0'), value
+    assert_equal 53.0, value
   end
 
   def test_should_return_nil_as_average
@@ -57,6 +56,19 @@ class CalculationsTest < ActiveRecord::TestCase
   def test_should_group_by_field
     c = Account.sum(:credit_limit, :group => :firm_id)
     [1,6,2].each { |firm_id| assert c.keys.include?(firm_id) }
+  end
+
+  def test_should_group_by_multiple_fields
+    c = Account.count(:all, :group => ['firm_id', :credit_limit])
+    [ [nil, 50], [1, 50], [6, 50], [6, 55], [9, 53], [2, 60] ].each { |firm_and_limit| assert c.keys.include?(firm_and_limit) }
+  end
+
+  def test_should_group_by_multiple_fields_having_functions
+    c = Topic.count(:all, :group => [:author_name, 'COALESCE(type, title)'])
+    assert_equal 1, c[["Nick", "The Third Topic of the day"]]
+    assert_equal 1, c[["Mary", "Reply"]]
+    assert_equal 1, c[["David", "The First Topic"]]
+    assert_equal 1, c[["Carl", "Reply"]]
   end
 
   def test_should_group_by_summed_field
@@ -298,7 +310,7 @@ class CalculationsTest < ActiveRecord::TestCase
   end
 
   def test_should_sum_expression
-    assert_equal '636', Account.sum("2 * credit_limit")
+    assert_equal 636, Account.sum("2 * credit_limit").to_i
   end
 
   def test_count_with_from_option

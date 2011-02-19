@@ -1,10 +1,10 @@
 <div class="stats_module">
-<h3>Tag Cloud for all actions</h3>
-<p>This tag cloud includes tags of all actions (completed, not completed, visible and/or hidden)</p>
+<h3><%= t('stats.tag_cloud_title') %></h3>
+<p><%= t('stats.tag_cloud_description') %></p>
 
   <p>
     <% if @tags_for_cloud.size < 1
-    %> no tags available <%
+    t('stats.no_tags_available')
     else
     @tags_for_cloud.each do |t| %>
     <%= link_to t.name, 
@@ -18,12 +18,11 @@
 </div>
 
 <div class="stats_module">
-<h3>Tag Cloud actions in past 90 days</h3>
-<p>This tag cloud includes tags of actions that were created or completed in 
-  the past 90 days.</p>
+<h3><%= t('stats.tag_cloud_90days_title') %></h3>
+<p><%= t('stats.tag_cloud_90days_description') %></p>
   <p>
     <% if @tags_for_cloud_90days.size < 1
-    %> no tags available <%
+    t('stats.no_tags_available')
     else
     @tags_for_cloud_90days.each do |t| %>
     <%= link_to t.name, 

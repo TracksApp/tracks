@@ -1,0 +1,11 @@
+<%
+collection = show_results_collection
+collection_name ||= 'unknown'
+collection_title ||= 'unknown object'
+unless collection.empty?
+-%>
+  <div id="<%=collection_name%>-container" class="container">
+    <h2><span id="<%=collection_name%>" class="badge"><%= collection.size %></span><%= collection_title %></h2>
+    <%= yield %>
+  </div>
+<% end -%>

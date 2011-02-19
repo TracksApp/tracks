@@ -30,7 +30,7 @@ class StoriesTest < ActionController::IntegrationTest
       attr_reader :user
 
       def logs_in_as(user,plain_pass)
-        @user = users(user)
+        @user = user
         post "/login", :user_login => @user.login, 
                       :user_password => plain_pass, 
                       :user_noexpiry => 'n'
@@ -72,7 +72,7 @@ class StoriesTest < ActionController::IntegrationTest
       open_session do |sess|
         sess.extend(CustomAssertions)
         sess.goes_to_login
-        sess.logs_in_as(user,plainpass)
+        sess.logs_in_as(users(user),plainpass)
         yield sess if block_given?
       end
     end

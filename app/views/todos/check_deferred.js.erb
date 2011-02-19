@@ -1,0 +1,3 @@
+<% unless @due_tickles.empty? -%>
+  TracksPages.page_notify('notice', "<%=t('todos.tickler_items_due', :count => @due_tickles.length)%>", 5);
+<% end -%>

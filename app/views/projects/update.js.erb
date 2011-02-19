@@ -1,0 +1,94 @@
+<% if @saved -%>
+  TracksPages.page_notify('notice', '<%=t('projects.project_saved_status')%>', 5);
+  <% if source_view_is :project_list -%>
+    update_project_list_page();
+  <% else # assume source_view :project
+  -%>
+    update_project_page();
+  <% end %>
+  TracksForm.set_project_name_and_default_project_name("<%= escape_javascript(@project.name)%>");
+<% else -%>
+  TracksPages.show_edit_errors(html_for_error_messages());
+<% end %>
+
+<% if @saved
+   # only add these js functions if the project is saved
+-%>
+
+function update_project_list_page() {
+  <% if @state_changed -%>
+    remove_and_re_add_project();
+  <% else -%>
+    replace_project_form_with_updated_project();
+  <% end -%>
+
+  ProjectListPage.update_all_states_count(<%=@active_projects_count%>, <%=@hidden_projects_count%>, <%=@completed_projects_count%>);
+  ProjectListPage.show_or_hide_all_state_containers(<%= @show_active_projects %>, <%= @show_hidden_projects %>, <%= @show_completed_projects %>);
+}
+
+function update_project_page() {
+  remove_project_edit_form();
+  update_and_show_project_settings();
+  TracksForm.set_project_name("<%= escape_javascript(@project.name)%>");
+  <% if @project.default_context %>
+    TracksForm.set_context_name_and_default_context_name("<%= escape_javascript(@project.default_context.name)%>");
+  <% end %>
+  <% if @project.default_tags %>
+    TracksForm.set_tag_list("<%= escape_javascript(@project.default_tags)%>");
+  <% end %>
+  TracksPages.update_sidebar(html_for_sidebar());
+}
+
+function remove_project_edit_form() {
+  $('#<%=dom_id(@project, 'edit')%>').hide(500, function() {$('#<%=dom_id(@project, 'edit')%>').remove();} );
+}
+
+function update_and_show_project_settings() {
+  $('#<%=dom_id(@project, 'container')%>').html(html_for_project_settings());
+  $('#<%=dom_id(@project)%>').show();
+}
+
+function replace_project_form_with_updated_project() {
+  $('#<%=dom_id(@project, 'container')%>').fadeOut(250, function() {
+<%
+    # first add the updated project after the old one, then remove old one
+    # using html() does not work, because it will replace the _content_ of
+    # the container instead of the container itself, i.e. you will get
+    # a container within a container which will break drag-and-drop sorting
+-%>
+    $('#<%=dom_id(@project, 'container')%>').after(html_for_project_listing());
+    $('#<%=dom_id(@project, 'container')%>').remove();
+    $('#<%=dom_id(@project, 'container')%>').fadeIn(500);
+  });
+}
+
+function remove_and_re_add_project() {
+  $('#<%=dom_id(@project, 'container')%>').slideUp(500, function() {
+    $('#<%=dom_id(@project, 'container')%>').remove();
+    $('#list-<%=@project.state%>-projects').append(html_for_project_listing());
+    });
+}
+
+<%
+# the following functions return empty string if rendering the partial is not
+# necessary, for example the sidebar is not on the project list page, so do not
+# render it into the function. 
+-%>
+function html_for_project_listing() {
+  return "<%= source_view_is(:project_list) ? escape_javascript(render(:partial => 'project_listing', :object => @project )) : "" %>";
+}
+
+function html_for_sidebar() {
+  return "<%= source_view_is(:project) ? escape_javascript(render(:file => 'sidebar/sidebar.html.erb')) : "" %>";
+}
+
+function html_for_project_settings() {
+  return "<%= source_view_is(:project) ? escape_javascript(render(:partial => 'project_settings', :object => @project )) : "" %>";
+}
+
+<% end # if @saved
+-%>
+
+function html_for_error_messages() {
+  return "<%= escape_javascript(error_messages_for('project')) %>";
+}

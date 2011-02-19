@@ -1,0 +1,36 @@
+<div id="display_box">
+  <div id="feeds">
+    <div id="feedlegend">
+      <h3>Daten exportieren</h3>
+      <p>Sie k&ouml;nnen zwischen den folgenden Formaten w&auml;hlen:</p>
+      <ul>
+        <li><strong>YAML: </strong>F&uuml;r den Daten-Import bevorzugt.<br/><i>Bitte beachten Sie, dass der YAML-Import zur Zeit noch experimentelle Funktionalit&auml;t darstellt. Nutzen Sie diese Option also nicht. um kritische Daten zu sichern.</i></li>
+        <li><strong>CSV: </strong>Am besten f&uuml;r den Export in eine Tabellen-Kalkulation oder &auml;hnliche Auswertungs-Software geeignet</li>
+        <li><strong>XML: </strong>Am besten f&uuml;r den Daten-Import oder automatische Weiterverarbeitung</li>
+      </ul>
+    </div>
+    <br/><br/>
+    <table class="export_table">
+      <tr>
+        <th>Beschreibung</th>
+        <th>Download link</th>
+      </tr>
+      <tr>
+        <td>YAML-Datei mit all Ihren Aktionen, Umgebungen, Projekten, Tags und Notizen</td>
+        <td><%= link_to "YAML Datei", :controller => 'data', :action => 'yaml_export' %></td>
+      </tr>
+      <tr>
+        <td>CSV-Datei mit all Ihren Aktionen, benannten Umgebungen und Projekten</td>
+        <td><%= link_to "CSV Dile (Aktionen, Umgebungen und Projekte)", :controller => 'data', :action => 'csv_actions' %></td>
+      </tr>
+      <tr>
+        <td>CSV-Datei mit all Ihren Notizen</td>
+        <td><%= link_to "CSV Datei (nur Notizen)", :controller => 'data', :action => 'csv_notes' %></td>
+      </tr>
+      <tr>
+        <td>XML-Datei mit all Ihren Aktionen, Umgebungen, Projekten, Tags und Notizen</td>
+        <td><%= link_to "XML file (actions only)", :controller => 'data', :action => 'xml_export' %></td>
+      </tr>
+    </table>  
+  </div><!-- End of feeds -->
+</div>

@@ -1,0 +1,29 @@
+<% if @saved -%>
+
+  TracksPages.hide_errors();
+  TracksPages.page_notify('notice', 'Note <%=@note.id %> saved', 5);
+  replace_note_form_with_updated_note();
+
+<% else -%>
+  TracksPages.show_errors(html_for_error_messages());
+<% end %>
+
+function replace_note_form_with_updated_note() {
+  $('#<%= dom_id(@note, 'edit')%>').fadeOut(250, function() {
+    $('#<%= dom_id(@note, 'edit')%>').html(html_for_updated_note_form());
+    $('div.project_notes#<%= dom_id(@note)%>').html(html_for_updated_note_details());
+    $('#<%= dom_id(@note)%>').fadeIn(500);
+  });
+}
+
+function html_for_error_messages() {
+  return "<%= escape_javascript(error_messages_for('note')) %>";
+}
+
+function html_for_updated_note_form(){
+  return "<%= escape_javascript(render(:partial => 'note_edit_form', :object => @note)) %>";
+}
+
+function html_for_updated_note_details(){
+  return "<%= escape_javascript(render(:partial => 'note_details', :object => @note)) %>";
+}

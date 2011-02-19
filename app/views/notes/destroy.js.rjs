@@ -1,3 +1,0 @@
-page.notify :notice, "Deleted note '#{@note.id}'", 5.0
-page['badge_count'].replace_html @count
-page.hide "busy"

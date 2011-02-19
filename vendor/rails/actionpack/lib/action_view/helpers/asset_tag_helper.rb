@@ -1,6 +1,7 @@
 require 'cgi'
 require 'action_view/helpers/url_helper'
 require 'action_view/helpers/tag_helper'
+require 'thread'
 
 module ActionView
   module Helpers #:nodoc:
@@ -285,7 +286,7 @@ module ActionView
           end
           javascript_src_tag(joined_javascript_name, options)
         else
-          expand_javascript_sources(sources, recursive).collect { |source| javascript_src_tag(source, options) }.join("\n").html_safe!
+          expand_javascript_sources(sources, recursive).collect { |source| javascript_src_tag(source, options) }.join("\n").html_safe
         end
       end
 
@@ -434,7 +435,7 @@ module ActionView
           end
           stylesheet_tag(joined_stylesheet_name, options)
         else
-          expand_stylesheet_sources(sources, recursive).collect { |source| stylesheet_tag(source, options) }.join("\n").html_safe!
+          expand_stylesheet_sources(sources, recursive).collect { |source| stylesheet_tag(source, options) }.join("\n").html_safe
         end
       end
 

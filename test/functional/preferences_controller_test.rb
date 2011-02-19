@@ -33,7 +33,6 @@ class PreferencesControllerTest < ActionController::TestCase
     get :edit
     assert_response :success
     assert_equal assigns['page_title'], "TRACKS::Edit Preferences"
-    assert_not_nil assigns['prefs']
     assert_template 'preferences/edit'
   end
   

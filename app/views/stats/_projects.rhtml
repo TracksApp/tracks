@@ -1,5 +1,5 @@
 <div class="stats_module">
-  <h3>Top 10 projects</h3>
+  <h3><%= t('stats.top10_projects') %></h3>
   <% i=0
   @projects_and_actions.each do |p| 
     i+=1 -%>
@@ -14,7 +14,7 @@
 </div>
 
 <div class="stats_module">
-  <h3>Top 10 project in past 30 days</h3>
+  <h3><%= t('stats.top10_projects_30days') %></h3>
   <% i=0
   @projects_and_actions_last30days.each do |p| 
     i+=1 -%>
@@ -29,7 +29,7 @@
 </div>
 
 <div class="stats_module">
-  <h3>Top 10 longest running projects</h3>
+  <h3><%= t('stats.top10_longrunning') %></h3>
   <% i=0
   @projects_and_runtime.each do |id, name, days| 
     i+=1 -%>

@@ -1,22 +1,20 @@
 <tr>
-<% if done.completed_at %>
-  <td valign="top"><%= image_tag( "done.png", :width=>"16", :height=>"16", :border=>"0") %></td>
-  <td valign="top"><span class="grey"><%= format_date( done.completed_at ) %></span></td>
-  <td valign="top"><%= " " + sanitize(done.description) + " "%>
+  <% if done.completed_at %>
+    <td valign="top"><%= image_tag( "done.png", :width=>"16", :height=>"16", :border=>"0") %></td>
+    <td valign="top"><span class="grey"><%= format_date( done.completed_at ) %></span></td>
+    <td valign="top"><%= " " + sanitize(done.description) + " "%>
 
-  <% if done.project_id %>
-    <%= "(" + done.context['name'] + ", " + done.project['name'] + ")" %>
-  <% else %>
-    <%= "(" + done.context['name'] + ")" %>
+      <% if done.project_id %>
+        <%= "(" + done.context['name'] + ", " + done.project['name'] + ")" %>
+      <% else %>
+        <%= "(" + done.context['name'] + ")" %>
+      <% end %>
+
+      <% if done.due %>
+        <%= " - " + t('todos.was_due_on_date', :date => format_date( done.due )) %>
+      <% end %>
+
+      <%= collapsed_notes_image(done) if done.notes? %>
+    </td>
   <% end %>
-
-  <% if done.due %>
-    <%= " - was due on " + format_date( done.due ) %>
-  <% end %>
-
-  <% if done.notes? -%>
-    <%= render :partial => "todos/toggle_notes", :locals => { :item => done } %>
-  <% end -%>
-  </td>
-<% end %>
 </tr>

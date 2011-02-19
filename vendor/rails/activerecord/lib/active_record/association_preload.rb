@@ -126,6 +126,7 @@ module ActiveRecord
           association_proxy = parent_record.send(reflection_name)
           association_proxy.loaded
           association_proxy.target.push(*[associated_record].flatten)
+          association_proxy.__send__(:set_inverse_instance, associated_record, parent_record)
         end
       end
 
@@ -152,8 +153,14 @@ module ActiveRecord
           seen_keys[associated_record[key].to_s] = true
           mapped_records = id_to_record_map[associated_record[key].to_s]
           mapped_records.each do |mapped_record|
-            mapped_record.send("set_#{reflection_name}_target", associated_record)
+            association_proxy = mapped_record.send("set_#{reflection_name}_target", associated_record)
+            association_proxy.__send__(:set_inverse_instance, associated_record, mapped_record)
           end
+        end
+
+        id_to_record_map.each do |id, records|
+          next if seen_keys.include?(id.to_s)
+          records.each {|record| record.send("set_#{reflection_name}_target", nil) }            
         end
       end
 
@@ -275,7 +282,11 @@ module ActiveRecord
           end
           through_records.flatten!
         else
-          records.first.class.preload_associations(records, through_association)
+          options = {}
+          options[:include] = reflection.options[:include] || reflection.options[:source] if reflection.options[:conditions] || reflection.options[:order]
+          options[:order] = reflection.options[:order]
+          options[:conditions] = reflection.options[:conditions]
+          records.first.class.preload_associations(records, through_association, options)
           through_records = records.map {|record| record.send(through_association)}.flatten
         end
         through_records.compact!
@@ -321,7 +332,7 @@ module ActiveRecord
           klass = klass_name.constantize
 
           table_name = klass.quoted_table_name
-          primary_key = klass.primary_key
+          primary_key = reflection.options[:primary_key] || klass.primary_key
           column_type = klass.columns.detect{|c| c.name == primary_key}.type
           ids = id_map.keys.map do |id|
             if column_type == :integer
@@ -350,7 +361,13 @@ module ActiveRecord
         table_name = reflection.klass.quoted_table_name
 
         if interface = reflection.options[:as]
-          conditions = "#{reflection.klass.quoted_table_name}.#{connection.quote_column_name "#{interface}_id"} #{in_or_equals_for_ids(ids)} and #{reflection.klass.quoted_table_name}.#{connection.quote_column_name "#{interface}_type"} = '#{self.base_class.sti_name}'"
+          parent_type = if reflection.active_record.abstract_class?
+            self.base_class.sti_name
+          else
+            reflection.active_record.sti_name
+          end
+
+          conditions = "#{reflection.klass.quoted_table_name}.#{connection.quote_column_name "#{interface}_id"} #{in_or_equals_for_ids(ids)} and #{reflection.klass.quoted_table_name}.#{connection.quote_column_name "#{interface}_type"} = '#{parent_type}'"
         else
           foreign_key = reflection.primary_key_name
           conditions = "#{reflection.klass.quoted_table_name}.#{foreign_key} #{in_or_equals_for_ids(ids)}"

@@ -10,27 +10,40 @@ class Todo < ActiveRecord::Base
   has_many :predecessors, :through => :successor_dependencies
   has_many :successors,   :through => :predecessor_dependencies
   has_many :uncompleted_predecessors, :through => :successor_dependencies,
-           :source => :predecessor, :conditions => ['NOT (state = ?)', 'completed']
+    :source => :predecessor, :conditions => ['NOT (todos.state = ?)', 'completed']
   has_many :pending_successors, :through => :predecessor_dependencies,
-           :source => :successor, :conditions => ['state = ?', 'pending']
+    :source => :successor, :conditions => ['todos.state = ?', 'pending']
   
   after_save :save_predecessors
 
   named_scope :active, :conditions => { :state => 'active' }
+  named_scope :active_or_hidden, :conditions => ["todos.state = ? OR todos.state = ?", 'active', 'project_hidden']
   named_scope :not_completed, :conditions =>  ['NOT (todos.state = ? )', 'completed']
-  named_scope :completed, :conditions =>  ["NOT completed_at IS NULL"]
+  named_scope :completed, :conditions =>  ["NOT todos.completed_at IS NULL"]
   named_scope :are_due, :conditions => ['NOT (todos.due IS NULL)']
-  named_scope :deferred, :conditions => ["completed_at IS NULL AND NOT show_from IS NULL"]
+  named_scope :deferred, :conditions => ["todos.completed_at IS NULL AND NOT todos.show_from IS NULL"]
   named_scope :blocked, :conditions => ['todos.state = ?', 'pending']
+  named_scope :deferred_or_blocked, :conditions => ["(todos.completed_at IS NULL AND NOT todos.show_from IS NULL) OR (todos.state = ?)", "pending"]
+  named_scope :not_deferred_or_blocked, :conditions => ["todos.completed_at IS NULL AND todos.show_from IS NULL AND NOT todos.state = ?", "pending"]
+  named_scope :with_tag, lambda { |tag| {:joins => :taggings, :conditions => ["taggings.tag_id = ? ", tag.id] } }
+  named_scope :of_user, lambda { |user_id| {:conditions => ["todos.user_id = ? ", user_id] } }
+  named_scope :hidden, 
+    :joins => :context,
+    :conditions => ["todos.state = ? OR (contexts.hide = ? AND (todos.state = ? OR todos.state = ? OR todos.state = ?))",
+    'project_hidden', true, 'active', 'deferred', 'pending']
+  named_scope :not_hidden,
+    :joins => [:context],
+    :conditions => ['NOT(todos.state = ? OR (contexts.hide = ? AND (todos.state = ? OR todos.state = ? OR todos.state = ?)))',
+    'project_hidden', true, 'active', 'deferred', 'pending']
 
   STARRED_TAG_NAME = "starred"
 
   # regular expressions for dependencies
-  RE_TODO = /[^"]+/
-  RE_CONTEXT = /[^"]+/
-  RE_PROJECT = /[^"]+/
-  RE_PARTS = /"(#{RE_TODO})"\s<"(#{RE_CONTEXT})";\s"(#{RE_PROJECT})">/ # results in array
-  RE_SPEC = /"#{RE_TODO}"\s<"#{RE_CONTEXT}";\s"#{RE_PROJECT}">/ # results in string
+  RE_TODO = /[^']+/
+  RE_CONTEXT = /[^']+/
+  RE_PROJECT = /[^']+/
+  RE_PARTS = /'(#{RE_TODO})'\s<'(#{RE_CONTEXT})';\s'(#{RE_PROJECT})'>/ # results in array
+  RE_SPEC = /'#{RE_TODO}'\s<'#{RE_CONTEXT}';\s'#{RE_PROJECT}'>/ # results in string
   
   acts_as_state_machine :initial => :active, :column => 'state'
   
@@ -82,6 +95,7 @@ class Todo < ActiveRecord::Base
   def initialize(*args)
     super(*args)
     @predecessor_array = nil # Used for deferred save of predecessors
+    @removed_predecessors = nil
   end
   
   def no_uncompleted_predecessors_or_deferral?
@@ -91,12 +105,11 @@ class Todo < ActiveRecord::Base
   def no_uncompleted_predecessors?
     return uncompleted_predecessors.empty?
   end
-  
  
   # Returns a string with description <context, project>
   def specification
     project_name = project.is_a?(NullProject) ? "(none)" : project.name
-    return "\"#{description}\" <\"#{context.title}\"; \"#{project_name}\">"
+    return "\'#{description}\' <\'#{context.title}\'; \'#{project_name}\'>"
   end
   
   def todo_from_specification(specification)
@@ -112,9 +125,9 @@ class Todo < ActiveRecord::Base
     project_id = nil;
     unless project_name == "(none)"
       project = Project.first(:conditions => {
-        :user_id => self.user.id,
-        :name => project_name
-      })
+          :user_id => self.user.id,
+          :name => project_name
+        })
       project_id = project.id unless project.nil?
     end
 
@@ -127,6 +140,7 @@ class Todo < ActiveRecord::Base
         :project_id => project_id
       }
     )
+
     return nil if todos.empty?
 
     # TODO: what todo if there are more than one todo that fit the specification
@@ -135,7 +149,7 @@ class Todo < ActiveRecord::Base
   
   def validate
     if !show_from.blank? && show_from < user.date
-      errors.add("show_from", "must be a date in the future")
+      errors.add("show_from", I18n.t('models.todo.error_date_must_be_future'))
     end
     errors.add(:description, "may not contain \" characters") if /\"/.match(description)
     unless @predecessor_array.nil? # Only validate predecessors if they changed
@@ -155,11 +169,15 @@ class Todo < ActiveRecord::Base
       current_array = predecessors.map{|p| p.specification}
       remove_array = current_array - @predecessor_array
       add_array = @predecessor_array - current_array
-      
+
+      @removed_predecessors = []
       # This is probably a bit naive code...
       remove_array.each do |specification|
         t = todo_from_specification(specification)
-        self.predecessors.delete(t) unless t.nil?
+        unless t.nil?
+          @removed_predecessors << t
+          self.predecessors.delete(t)
+        end
       end
       # ... as is this?
       add_array.each do |specification|
@@ -170,7 +188,11 @@ class Todo < ActiveRecord::Base
           logger.error "Could not find #{specification}" # Unexpected since validation passed
         end
       end
-    end
+    end    
+  end
+
+  def removed_predecessors
+    return @removed_predecessors
   end
   
   def remove_predecessor(predecessor)
@@ -195,16 +217,25 @@ class Todo < ActiveRecord::Base
     return false
   end
 
+  def has_tag?(tag)
+    return self.tags.select{|t| t.name==tag }.size > 0
+  end
+
+  def hidden?
+    return self.state == 'project_hidden' || ( self.context.hidden? && (self.state == 'active' || self.state == 'deferred'))
+  end
+
   def update_state_from_project
-    if state == 'project_hidden' and !project.hidden?
+    if self.state == 'project_hidden' and !self.project.hidden?
       if self.uncompleted_predecessors.empty?
         self.state = 'active'
       else
         self.state = 'pending'
       end
-    elsif state == 'active' and project.hidden?
+    elsif self.state == 'active' and self.project.hidden?
       self.state = 'project_hidden'
     end
+    self.save!
   end
  
   def toggle_completion!

@@ -1,0 +1,14 @@
+remove_deleted_context();
+
+ContextListPage.update_all_states_count(<%=@active_contexts_count%>, <%=@hidden_contexts_count%>)
+ContextListPage.show_or_hide_all_state_containers(<%= @show_active_contexts %>, <%= @show_hidden_contexts %>);
+
+TracksPages.set_page_badge(<%=@down_count%>);
+TracksPages.page_notify('notice', "<%=  t('contexts.context_deleted', :name=>@context.name)%>", 5);
+
+/* TODO: refactor and move function to application.js */
+function remove_deleted_context() {
+  $('div#<%=dom_id(@context, "container")%>').slideUp(1000, function() {
+      $('div#<%=dom_id(@context, "container")%>').remove();
+  });
+}

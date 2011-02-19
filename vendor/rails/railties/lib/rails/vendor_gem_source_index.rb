@@ -37,7 +37,7 @@ module Rails
       # handle vendor Rails gems - they are identified by having loaded_from set to ""
       # we add them manually to the list, so that other gems can find them via dependencies
       Gem.loaded_specs.each do |n, s|
-        next unless s.loaded_from.empty?
+        next unless s.loaded_from.to_s.empty?
         vendor_gems[s.full_name] = s
       end
 
@@ -101,8 +101,8 @@ module Rails
     end
 
     def version_for_dir(d)
-      matches = /-([^-]+)$/.match(d)
-      Gem::Version.new(matches[1]) if matches
+      version = d.split('-').find { |s| s.match(/^\d(\.\d|\.\w+)*$/) }
+      Gem::Version.new(version)
     end
 
     def load_specification(gem_dir)

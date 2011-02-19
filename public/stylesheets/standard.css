@@ -379,9 +379,13 @@ input.item-checkbox {
     vertical-align: middle;
 }
 
-.description, .stale_l1, .stale_l2, .stale_l3 {
+.rec_description, .description, .stale_l1, .stale_l2, .stale_l3 {
     margin-left: 60px;
     position:relative;
+}
+
+.rec_description {
+    margin-left: 80px;
 }
 
 .stale_l1 {
@@ -1300,3 +1304,4 @@ div.auto_complete ul strong.highlight {
 .ui-datepicker { 
   z-index: 1000; 
 }
+.ui-autocomplete-loading { background: white url('/images/ui-anim_basic_16x16.gif') right center no-repeat; }

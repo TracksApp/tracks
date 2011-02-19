@@ -1,6 +1,6 @@
 require "cases/helper"
 require 'models/post'
-require 'models/author'
+require 'models/event_author'
 require 'models/topic'
 require 'models/reply'
 require 'models/category'
@@ -587,17 +587,25 @@ class BasicsTest < ActiveRecord::TestCase
   end
 
   def test_destroy_all
-    original_count = Topic.count
-    topics_by_mary = Topic.count(:conditions => mary = "author_name = 'Mary'")
+    conditions = "author_name = 'Mary'"
+    topics_by_mary = Topic.all(:conditions => conditions, :order => 'id')
+    assert ! topics_by_mary.empty?
 
-    Topic.destroy_all mary
-    assert_equal original_count - topics_by_mary, Topic.count
+    assert_difference('Topic.count', -topics_by_mary.size) do
+      destroyed = Topic.destroy_all(conditions).sort_by(&:id)
+      assert_equal topics_by_mary, destroyed
+      assert destroyed.all? { |topic| topic.frozen? }
+    end
   end
 
   def test_destroy_many
-    assert_equal 3, Client.count
-    Client.destroy([2, 3])
-    assert_equal 1, Client.count
+    clients = Client.find([2, 3], :order => 'id')
+
+    assert_difference('Client.count', -2) do
+      destroyed = Client.destroy([2, 3]).sort_by(&:id)
+      assert_equal clients, destroyed
+      assert destroyed.all? { |client| client.frozen? }
+    end
   end
 
   def test_delete_many
@@ -609,45 +617,6 @@ class BasicsTest < ActiveRecord::TestCase
   def test_boolean_attributes
     assert ! Topic.find(1).approved?
     assert Topic.find(2).approved?
-  end
-
-  def test_increment_counter
-    Topic.increment_counter("replies_count", 1)
-    assert_equal 2, Topic.find(1).replies_count
-
-    Topic.increment_counter("replies_count", 1)
-    assert_equal 3, Topic.find(1).replies_count
-  end
-
-  def test_decrement_counter
-    Topic.decrement_counter("replies_count", 2)
-    assert_equal -1, Topic.find(2).replies_count
-
-    Topic.decrement_counter("replies_count", 2)
-    assert_equal -2, Topic.find(2).replies_count
-  end
-
-  def test_update_counter
-    category = categories(:general)
-    assert_nil category.categorizations_count
-    assert_equal 2, category.categorizations.count
-
-    Category.update_counters(category.id, "categorizations_count" => category.categorizations.count)
-    category.reload
-    assert_not_nil category.categorizations_count
-    assert_equal 2, category.categorizations_count
-
-    Category.update_counters(category.id, "categorizations_count" => category.categorizations.count)
-    category.reload
-    assert_not_nil category.categorizations_count
-    assert_equal 4, category.categorizations_count
-
-    category_2 = categories(:technology)
-    count_1, count_2 = (category.categorizations_count || 0), (category_2.categorizations_count || 0)
-    Category.update_counters([category.id, category_2.id], "categorizations_count" => 2)
-    category.reload; category_2.reload
-    assert_equal count_1 + 2, category.categorizations_count
-    assert_equal count_2 + 2, category_2.categorizations_count
   end
 
   def test_update_all
@@ -738,22 +707,24 @@ class BasicsTest < ActiveRecord::TestCase
   end
 
   def test_class_name
-    assert_equal "Firm", ActiveRecord::Base.class_name("firms")
-    assert_equal "Category", ActiveRecord::Base.class_name("categories")
-    assert_equal "AccountHolder", ActiveRecord::Base.class_name("account_holder")
+    ActiveSupport::Deprecation.silence do
+      assert_equal "Firm", ActiveRecord::Base.class_name("firms")
+      assert_equal "Category", ActiveRecord::Base.class_name("categories")
+      assert_equal "AccountHolder", ActiveRecord::Base.class_name("account_holder")
 
-    ActiveRecord::Base.pluralize_table_names = false
-    assert_equal "Firms", ActiveRecord::Base.class_name( "firms" )
-    ActiveRecord::Base.pluralize_table_names = true
+      ActiveRecord::Base.pluralize_table_names = false
+      assert_equal "Firms", ActiveRecord::Base.class_name( "firms" )
+      ActiveRecord::Base.pluralize_table_names = true
 
-    ActiveRecord::Base.table_name_prefix = "test_"
-    assert_equal "Firm", ActiveRecord::Base.class_name( "test_firms" )
-    ActiveRecord::Base.table_name_suffix = "_tests"
-    assert_equal "Firm", ActiveRecord::Base.class_name( "test_firms_tests" )
-    ActiveRecord::Base.table_name_prefix = ""
-    assert_equal "Firm", ActiveRecord::Base.class_name( "firms_tests" )
-    ActiveRecord::Base.table_name_suffix = ""
-    assert_equal "Firm", ActiveRecord::Base.class_name( "firms" )
+      ActiveRecord::Base.table_name_prefix = "test_"
+      assert_equal "Firm", ActiveRecord::Base.class_name( "test_firms" )
+      ActiveRecord::Base.table_name_suffix = "_tests"
+      assert_equal "Firm", ActiveRecord::Base.class_name( "test_firms_tests" )
+      ActiveRecord::Base.table_name_prefix = ""
+      assert_equal "Firm", ActiveRecord::Base.class_name( "firms_tests" )
+      ActiveRecord::Base.table_name_suffix = ""
+      assert_equal "Firm", ActiveRecord::Base.class_name( "firms" )
+    end
   end
 
   def test_null_fields
@@ -1003,6 +974,18 @@ class BasicsTest < ActiveRecord::TestCase
     post.reload
     assert_equal "cannot change this", post.title
     assert_equal "changed", post.body
+  end
+
+  def test_multiparameter_attribute_assignment_via_association_proxy
+    multiparameter_date_attribute = {
+      "ends_on(1i)" => "2004", "ends_on(2i)" => "6", "ends_on(3i)" => "24",
+      "ends_on(4i)" => "16", "ends_on(5i)" => "24", "ends_on(6i)" => "00"
+    }
+
+    author = Author.create(:name => "dhh")
+    event  = author.events.create(multiparameter_date_attribute)
+    
+    assert_equal Time.local(2004,6,24,16,24,0),event.ends_on
   end
 
   def test_multiparameter_attributes_on_date
@@ -1622,6 +1605,12 @@ class BasicsTest < ActiveRecord::TestCase
     assert_equal t1.title, t2.title
   end
 
+  def test_reload_with_exclusive_scope
+    dev = DeveloperCalledDavid.first
+    dev.update_attributes!( :name => "NotDavid" )
+    assert_equal dev, dev.reload
+  end
+
   def test_define_attr_method_with_value
     k = Class.new( ActiveRecord::Base )
     k.send(:define_attr_method, :table_name, "foo")
@@ -2061,7 +2050,7 @@ class BasicsTest < ActiveRecord::TestCase
 
   def test_inspect_instance
     topic = topics(:first)
-    assert_equal %(#<Topic id: 1, title: "The First Topic", author_name: "David", author_email_address: "david@loudthinking.com", written_on: "#{topic.written_on.to_s(:db)}", bonus_time: "#{topic.bonus_time.to_s(:db)}", last_read: "#{topic.last_read.to_s(:db)}", content: "Have a nice day", approved: false, replies_count: 1, parent_id: nil, parent_title: nil, type: nil>), topic.inspect
+    assert_equal %(#<Topic id: 1, title: "The First Topic", author_name: "David", author_email_address: "david@loudthinking.com", written_on: "#{topic.written_on.to_s(:db)}", bonus_time: "#{topic.bonus_time.to_s(:db)}", last_read: "#{topic.last_read.to_s(:db)}", content: "Have a nice day", approved: false, replies_count: 1, parent_id: nil, parent_title: nil, type: nil, group: nil>), topic.inspect
   end
 
   def test_inspect_new_instance

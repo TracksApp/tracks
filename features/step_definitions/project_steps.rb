@@ -1,5 +1,5 @@
 Given /^I have a project "([^\"]*)" with (.*) todos$/ do |project_name, num_todos|
-  context = @current_user.contexts.create!(:name => "Context A")
+  context = @current_user.contexts.find_or_create_by_name("Context A")
   project = @current_user.projects.create!(:name => project_name)
   1.upto num_todos.to_i do |i|
     @current_user.todos.create!(
@@ -24,6 +24,21 @@ Given /^I have a project called "([^"]*)"$/ do |project_name|
   Given "there exists a project \"#{project_name}\" for user \"#{@current_user.login}\""
 end
 
+Given /^I have the following projects:$/ do |table|
+  table.hashes.each do |project|
+    Given 'I have a project called "'+project[:project_name]+'"'
+  end
+end
+
+Given /^I have no projects$/ do
+  Project.delete_all
+end
+
+Given /^I have a hidden project called "([^"]*)"$/ do |project_name|
+  @project = @current_user.projects.create!(:name => project_name)
+  @project.hide!
+end
+
 When /^I visit the "([^\"]*)" project$/ do |project_name|
   @project = Project.find_by_name(project_name)
   @project.should_not be_nil
@@ -42,21 +57,112 @@ end
 
 When /^I edit the project name to "([^\"]*)"$/ do |new_title|
   click_link "link_edit_project_#{@project.id}"
+
+  wait_for do
+    selenium.is_element_present("submit_project_#{@project.id}")
+  end
+  
   fill_in "project[name]", :with => new_title
 
-  # changed to make sure selenium waits until the saving has a result either
-  # positive or negative. Was: :element=>"flash", :text=>"Project saved"
-  # we may need to change it back if you really need a positive outcome, i.e.
-  # this step needs to fail if the project was not saved succesfully
   selenium.click "submit_project_#{@project.id}",
     :wait_for => :text,
-    :text => /(Project saved|1 error prohibited this project from being saved)/
+    :text => "Project saved",
+    :timeout => 5
+
+  wait_for do
+    !selenium.is_element_present("submit_context_#{@project.id}")
+  end
+end
+
+When /^I try to edit the project name to "([^\"]*)"$/ do |new_title|
+  click_link "link_edit_project_#{@project.id}"
+
+  wait_for do
+    selenium.is_element_present("submit_project_#{@project.id}")
+  end
+
+  fill_in "project[name]", :with => new_title
+
+  selenium.click "submit_project_#{@project.id}",
+    :wait_for => :text,
+    :text => "There were problems with the following fields:",
+    :timeout => 5
 end
 
 When /^I edit the project name of "([^"]*)" to "([^"]*)"$/ do |project_current_name, project_new_name|
   @project = @current_user.projects.find_by_name(project_current_name)
   @project.should_not be_nil
   When "I edit the project name to \"#{project_new_name}\""
+end
+
+When /^I try to edit the project name of "([^"]*)" to "([^"]*)"$/ do |project_current_name, project_new_name|
+  @project = @current_user.projects.find_by_name(project_current_name)
+  @project.should_not be_nil
+  When "I try to edit the project name to \"#{project_new_name}\""
+end
+
+When /^I edit the project name in place to be "([^"]*)"$/ do |new_project_name|
+  selenium.click "project_name"
+  fill_in "value", :with => new_project_name
+  click_button "Ok"
+end
+
+When /^I edit the project state of "([^"]*)" to "([^"]*)"$/ do |project_name, state_name|
+  project = @current_user.projects.find_by_name(project_name)
+  project.should_not be_nil
+
+  click_link "link_edit_project_#{project.id}"
+  selenium.wait_for_element("xpath=//div[@id='edit_project_#{project.id}']/form//button[@id='submit_project_#{project.id}']")
+
+  choose "project_state_#{state_name}"
+
+  # changed to make sure selenium waits until the saving has a result either
+  # positive or negative. Was: :element=>"flash", :text=>"Project saved"
+  # we may need to change it back if you really need a positive outcome, i.e.
+  # this step needs to fail if the project was not saved successfully
+  selenium.click "submit_project_#{project.id}",
+    :wait_for => :text,
+    :text => /(Project saved|1 error prohibited this project from being saved)/
+
+  wait_for do # wait for the form to go away
+    !selenium.is_element_present("submit_project_#{project.id}")
+  end
+end
+
+When /^I add a note "([^"]*)" to the project$/ do |note_body|
+  click_link "Add a note"
+  fill_in "note[body]", :with => note_body
+  click_button "Add note"
+end
+
+When /^I click on the first note icon$/ do
+  @project.should_not be_nil
+  @note = @project.notes.first # assume first note is also first on screen
+  @note.should_not be_nil
+
+  click_link "link_note_#{@note.id}"
+end
+
+When /^I cancel adding a note to the project$/ do
+  click_link "Add a note"
+  fill_in "note[body]", :with => "will not save this"
+  click_link "neg_edit_form_note"
+end
+
+Then /^the form for adding a note should not be visible$/ do
+  wait_for do # wait for the form to go away
+    !selenium.is_visible("edit_form_note")
+  end
+end
+
+Then /^I should go to that note page$/ do
+  current_path = URI.parse(current_url).path
+  note_path = note_path(@note)
+  current_path.should == note_path
+end
+
+Then /^I should see one note in the project$/ do
+  selenium.wait_for_element("xpath=//div[@class='note_wrapper']")
 end
 
 Then /^I should see the bold text "([^\"]*)" in the project description$/ do |bold|
@@ -79,4 +185,8 @@ end
 
 Then /^the project title should be "(.*)"$/ do |title|
   selenium.get_text("css=h2#project_name").should == title
+end
+
+Then /^I should see the project name is "([^"]*)"$/ do |project_name|
+  Then "the project title should be \"#{project_name}\""
 end

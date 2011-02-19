@@ -13,16 +13,25 @@ class ContextsController < ApplicationController
     # checks later don't result in separate SQL queries
     @active_contexts = current_user.contexts.active(true) 
     @hidden_contexts = current_user.contexts.hidden(true)
-    @count = @active_contexts.size + @hidden_contexts.size
+    @new_context = current_user.contexts.build
+
+    # save all contexts here as @new_context will add an empty one to current_user.contexts
+    @all_contexts = @active_contexts + @hidden_contexts
+    @count = @all_contexts.size
+
+
     init_not_done_counts(['context'])
     respond_to do |format|
       format.html &render_contexts_html
       format.m    &render_contexts_mobile
-      format.xml  { render :xml => current_user.contexts.to_xml( :except => :user_id ) }
+      format.xml  { render :xml => @all_contexts.to_xml( :except => :user_id ) }
       format.rss  &render_contexts_rss_feed
       format.atom &render_contexts_atom_feed
-      format.text { render :action => 'index', :layout => false, :content_type => Mime::TEXT }
-      format.autocomplete { render :text => for_autocomplete(@active_contexts + @hidden_contexts, params[:q])}
+      format.text do
+        @all_contexts = current_user.contexts.all
+        render :action => 'index', :layout => false, :content_type => Mime::TEXT
+      end
+      format.autocomplete { render :text => for_autocomplete(@active_contexts + @hidden_contexts, params[:term])}
     end
   end
   
@@ -90,13 +99,18 @@ class ContextsController < ApplicationController
     @original_context_hidden = @context.hidden?
     @context.attributes = params["context"]
 
-    if @context.save
+    @saved = @context.save
+
+    if @saved
       if boolean_param('wants_render')
-        @context_state_changed = (@original_context_hidden != @context.hidden?)
-        @new_state = (@context.hidden? ? "hidden" : "active") if @context_state_changed
+        @state_changed = (@original_context_hidden != @context.hidden?)
+        @new_state = (@context.hidden? ? "hidden" : "active") if @state_changed
         respond_to do |format|
           format.js
         end
+
+        # TODO is this param ever used? is this dead code?
+        
       elsif boolean_param('update_context_name')
         @contexts = current_user.projects
         render :template => 'contexts/update_context_name.js.rjs'
@@ -105,8 +119,9 @@ class ContextsController < ApplicationController
         render :text => success_text || 'Success'
       end
     else
-      notify :warning, "Couldn't update new context"
-      render :text => ""
+      respond_to do |format|
+        format.js
+      end
     end
   end
 
@@ -126,7 +141,10 @@ class ContextsController < ApplicationController
     
     @context.destroy
     respond_to do |format|
-      format.js { @down_count = current_user.contexts.size }
+      format.js do
+        @down_count = current_user.contexts.size
+        update_state_counts
+      end
       format.xml { render :text => "Deleted context #{@context.name}" }
     end
   end
@@ -143,6 +161,13 @@ class ContextsController < ApplicationController
   end
   
   protected
+
+  def update_state_counts
+    @active_contexts_count = current_user.contexts.active.count
+    @hidden_contexts_count = current_user.contexts.hidden.count
+    @show_active_contexts = @active_contexts_count > 0
+    @show_hidden_contexts = @hidden_contexts_count > 0
+  end
 
   def render_contexts_html
     lambda do
@@ -179,14 +204,14 @@ class ContextsController < ApplicationController
 
   def render_contexts_rss_feed
     lambda do
-      render_rss_feed_for current_user.contexts, :feed => feed_options,
+      render_rss_feed_for current_user.contexts.all, :feed => feed_options,
         :item => { :description => lambda { |c| c.summary(count_undone_todos_phrase(c)) } }
     end
   end
 
   def render_contexts_atom_feed
     lambda do
-      render_atom_feed_for current_user.contexts, :feed => feed_options,
+      render_atom_feed_for current_user.contexts.all, :feed => feed_options,
         :item => { :description => lambda { |c| c.summary(count_undone_todos_phrase(c)) },
         :author => lambda { |c| nil } }
     end
@@ -230,6 +255,7 @@ class ContextsController < ApplicationController
 
       @count = @not_done_todos.size
     end
+
   end
 
 end

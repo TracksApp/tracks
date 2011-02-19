@@ -38,7 +38,7 @@ module Rails
       def freeze_edge_version
         if File.exist?(rails_vendor_root)
           begin
-            Dir[File.join(rails_vendor_root, 'REVISION_*')].first.scan(/_(\d+)$/).first.first
+            File.readlines(File.join(rails_vendor_root,'REVISION')).first.strip
           rescue
             Dir[File.join(rails_vendor_root, 'TAG_*')].first.scan(/_(.+)$/).first.first rescue 'unknown'
           end
@@ -55,7 +55,7 @@ module Rails
       alias inspect to_s
 
       def to_html
-        returning table = '<table>' do
+        '<table>'.tap do |table|
           properties.each do |(name, value)|
             table << %(<tr><td class="name">#{CGI.escapeHTML(name.to_s)}</td>)
             table << %(<td class="value">#{CGI.escapeHTML(value.to_s)}</td></tr>)

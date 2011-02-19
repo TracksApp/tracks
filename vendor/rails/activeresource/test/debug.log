@@ -9700,3 +9700,1483 @@ I, [2009-10-15T17:27:45.431576 #85221]  INFO -- : POST http://37s.sunrise.i:3000
 I, [2009-10-15T17:27:45.431716 #85221]  INFO -- : --> 201 201 (123 0ms)
 I, [2009-10-15T17:27:45.435104 #85221]  INFO -- : POST http://37s.sunrise.i:3000/projects.xml
 I, [2009-10-15T17:27:45.435230 #85221]  INFO -- : --> 201 201 (123 0ms)
+I, [2010-07-27T14:25:16.147997 #72319]  INFO -- : DELETE http://localhost:80/people/2.xml
+I, [2010-07-27T14:25:16.167678 #72319]  INFO -- : --> 200 200 0 (0.1ms)
+I, [2010-07-27T14:25:16.169284 #72319]  INFO -- : DELETE http://localhost:80/people/2.xml
+I, [2010-07-27T14:25:16.169398 #72319]  INFO -- : --> 401 401 0 (0.1ms)
+I, [2010-07-27T14:25:16.169792 #72319]  INFO -- : DELETE http://localhost:80/people/2.xml
+I, [2010-07-27T14:25:16.169867 #72319]  INFO -- : --> 200 200 0 (0.1ms)
+I, [2010-07-27T14:25:16.171081 #72319]  INFO -- : GET http://localhost:80/people/2.xml
+I, [2010-07-27T14:25:16.171169 #72319]  INFO -- : --> 200 200 107 (0.0ms)
+I, [2010-07-27T14:25:16.338483 #72319]  INFO -- : GET http://localhost:80/people/2.xml
+I, [2010-07-27T14:25:16.338624 #72319]  INFO -- : --> 401 401 0 (0.1ms)
+I, [2010-07-27T14:25:16.338948 #72319]  INFO -- : GET http://localhost:80/people/2.xml
+I, [2010-07-27T14:25:16.339023 #72319]  INFO -- : --> 200 200 107 (0.0ms)
+I, [2010-07-27T14:25:16.341980 #72319]  INFO -- : GET http://localhost:80/people/1.xml
+I, [2010-07-27T14:25:16.342087 #72319]  INFO -- : --> 200 200 106 (0.1ms)
+I, [2010-07-27T14:25:16.345731 #72319]  INFO -- : GET http://localhost:80/people/2.xml
+I, [2010-07-27T14:25:16.345848 #72319]  INFO -- : --> 401 401 0 (0.0ms)
+I, [2010-07-27T14:25:16.346157 #72319]  INFO -- : GET http://localhost:80/people/2.xml
+I, [2010-07-27T14:25:16.346229 #72319]  INFO -- : --> 200 200 107 (0.0ms)
+I, [2010-07-27T14:25:16.350134 #72319]  INFO -- : HEAD http://localhost:80/people/2.xml
+I, [2010-07-27T14:25:16.350263 #72319]  INFO -- : --> 200 200 0 (0.0ms)
+I, [2010-07-27T14:25:16.351431 #72319]  INFO -- : HEAD http://localhost:80/people/2.xml
+I, [2010-07-27T14:25:16.351528 #72319]  INFO -- : --> 401 401 0 (0.1ms)
+I, [2010-07-27T14:25:16.351853 #72319]  INFO -- : HEAD http://localhost:80/people/2.xml
+I, [2010-07-27T14:25:16.351934 #72319]  INFO -- : --> 200 200 0 (0.1ms)
+I, [2010-07-27T14:25:16.353144 #72319]  INFO -- : POST http://localhost:80/people/2/addresses.xml
+I, [2010-07-27T14:25:16.353240 #72319]  INFO -- : --> 201 201 0 (0.0ms)
+I, [2010-07-27T14:25:16.354436 #72319]  INFO -- : POST http://localhost:80/people/2/addresses.xml
+I, [2010-07-27T14:25:16.354526 #72319]  INFO -- : --> 401 401 0 (0.0ms)
+I, [2010-07-27T14:25:16.354857 #72319]  INFO -- : POST http://localhost:80/people/2/addresses.xml
+I, [2010-07-27T14:25:16.354931 #72319]  INFO -- : --> 201 201 0 (0.1ms)
+I, [2010-07-27T14:25:16.356175 #72319]  INFO -- : PUT http://localhost:80/people/2.xml
+I, [2010-07-27T14:25:16.356270 #72319]  INFO -- : --> 204 204 0 (0.0ms)
+I, [2010-07-27T14:25:16.357457 #72319]  INFO -- : PUT http://localhost:80/people/2.xml
+I, [2010-07-27T14:25:16.357550 #72319]  INFO -- : --> 401 401 0 (0.0ms)
+I, [2010-07-27T14:25:16.357858 #72319]  INFO -- : PUT http://localhost:80/people/2.xml
+I, [2010-07-27T14:25:16.357931 #72319]  INFO -- : --> 204 204 0 (0.1ms)
+I, [2010-07-27T14:25:16.359296 #72319]  INFO -- : GET http://localhost:80/people/2.xml
+E, [2010-07-27T14:25:16.359444 #72319] ERROR -- : Could not log "request.active_resource" event. NoMethodError: undefined method `code' for nil:NilClass
+I, [2010-07-27T14:25:16.359760 #72319]  INFO -- : POST http://localhost:80/people/2/addresses.xml
+E, [2010-07-27T14:25:16.359873 #72319] ERROR -- : Could not log "request.active_resource" event. NoMethodError: undefined method `code' for nil:NilClass
+I, [2010-07-27T14:25:16.360175 #72319]  INFO -- : PUT http://localhost:80/people/2.xml
+E, [2010-07-27T14:25:16.360281 #72319] ERROR -- : Could not log "request.active_resource" event. NoMethodError: undefined method `code' for nil:NilClass
+I, [2010-07-27T14:25:16.360576 #72319]  INFO -- : DELETE http://localhost:80/people/2.xml
+E, [2010-07-27T14:25:16.360681 #72319] ERROR -- : Could not log "request.active_resource" event. NoMethodError: undefined method `code' for nil:NilClass
+I, [2010-07-27T14:25:16.360997 #72319]  INFO -- : HEAD http://localhost:80/people/2.xml
+E, [2010-07-27T14:25:16.361103 #72319] ERROR -- : Could not log "request.active_resource" event. NoMethodError: undefined method `code' for nil:NilClass
+I, [2010-07-27T14:25:16.362473 #72319]  INFO -- : GET http://localhost:80/people/2.xml
+E, [2010-07-27T14:25:16.362617 #72319] ERROR -- : Could not log "request.active_resource" event. NoMethodError: undefined method `code' for nil:NilClass
+I, [2010-07-27T14:25:16.362914 #72319]  INFO -- : POST http://localhost:80/people/2/addresses.xml
+E, [2010-07-27T14:25:16.363019 #72319] ERROR -- : Could not log "request.active_resource" event. NoMethodError: undefined method `code' for nil:NilClass
+I, [2010-07-27T14:25:16.363356 #72319]  INFO -- : PUT http://localhost:80/people/2.xml
+E, [2010-07-27T14:25:16.363461 #72319] ERROR -- : Could not log "request.active_resource" event. NoMethodError: undefined method `code' for nil:NilClass
+I, [2010-07-27T14:25:16.363750 #72319]  INFO -- : DELETE http://localhost:80/people/2.xml
+E, [2010-07-27T14:25:16.363855 #72319] ERROR -- : Could not log "request.active_resource" event. NoMethodError: undefined method `code' for nil:NilClass
+I, [2010-07-27T14:25:16.364141 #72319]  INFO -- : HEAD http://localhost:80/people/2.xml
+E, [2010-07-27T14:25:16.364244 #72319] ERROR -- : Could not log "request.active_resource" event. NoMethodError: undefined method `code' for nil:NilClass
+I, [2010-07-27T14:25:16.365339 #72319]  INFO -- : GET http://localhost:80/people/1.xml
+I, [2010-07-27T14:25:16.365428 #72319]  INFO -- : --> 401 401 0 (0.0ms)
+I, [2010-07-27T14:25:16.370254 #72319]  INFO -- : POST http://37s.sunrise.i:3000/people.json
+I, [2010-07-27T14:25:16.370381 #72319]  INFO -- : --> 422 422 118 (0.0ms)
+I, [2010-07-27T14:25:16.401620 #72319]  INFO -- : POST http://37s.sunrise.i:3000/people.xml
+I, [2010-07-27T14:25:16.401769 #72319]  INFO -- : --> 422 422 209 (0.0ms)
+I, [2010-07-27T14:25:16.407434 #72319]  INFO -- : POST http://37s.sunrise.i:3000/people.json
+I, [2010-07-27T14:25:16.407563 #72319]  INFO -- : --> 422 422 118 (0.0ms)
+I, [2010-07-27T14:25:16.408546 #72319]  INFO -- : POST http://37s.sunrise.i:3000/people.xml
+I, [2010-07-27T14:25:16.408638 #72319]  INFO -- : --> 422 422 209 (0.0ms)
+I, [2010-07-27T14:25:16.412396 #72319]  INFO -- : POST http://37s.sunrise.i:3000/people.json
+I, [2010-07-27T14:25:16.412523 #72319]  INFO -- : --> 422 422 118 (0.0ms)
+I, [2010-07-27T14:25:16.414862 #72319]  INFO -- : POST http://37s.sunrise.i:3000/people.xml
+I, [2010-07-27T14:25:16.414959 #72319]  INFO -- : --> 422 422 209 (0.0ms)
+I, [2010-07-27T14:25:16.419963 #72319]  INFO -- : POST http://37s.sunrise.i:3000/people.json
+I, [2010-07-27T14:25:16.420088 #72319]  INFO -- : --> 422 422 118 (0.0ms)
+I, [2010-07-27T14:25:16.421086 #72319]  INFO -- : POST http://37s.sunrise.i:3000/people.xml
+I, [2010-07-27T14:25:16.421170 #72319]  INFO -- : --> 422 422 209 (0.0ms)
+I, [2010-07-27T14:25:16.428406 #72319]  INFO -- : POST http://37s.sunrise.i:3000/people.json
+I, [2010-07-27T14:25:16.428537 #72319]  INFO -- : --> 422 422 118 (0.0ms)
+I, [2010-07-27T14:25:16.429678 #72319]  INFO -- : POST http://37s.sunrise.i:3000/people.xml
+I, [2010-07-27T14:25:16.429776 #72319]  INFO -- : --> 422 422 209 (0.0ms)
+I, [2010-07-27T14:25:16.436801 #72319]  INFO -- : POST http://37s.sunrise.i:3000/people.json
+I, [2010-07-27T14:25:16.436931 #72319]  INFO -- : --> 422 422 118 (0.0ms)
+I, [2010-07-27T14:25:16.437862 #72319]  INFO -- : POST http://37s.sunrise.i:3000/people.xml
+I, [2010-07-27T14:25:16.437943 #72319]  INFO -- : --> 422 422 209 (0.0ms)
+I, [2010-07-27T14:25:16.442123 #72319]  INFO -- : POST http://37s.sunrise.i:3000/people.json
+I, [2010-07-27T14:25:16.442254 #72319]  INFO -- : --> 422 422 118 (0.0ms)
+I, [2010-07-27T14:25:16.443246 #72319]  INFO -- : POST http://37s.sunrise.i:3000/people.xml
+I, [2010-07-27T14:25:16.443329 #72319]  INFO -- : --> 422 422 209 (0.0ms)
+I, [2010-07-27T14:25:16.447046 #72319]  INFO -- : POST http://37s.sunrise.i:3000/people.json
+I, [2010-07-27T14:25:16.447162 #72319]  INFO -- : --> 422 422 2 (0.0ms)
+I, [2010-07-27T14:25:16.465915 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/1.xml
+I, [2010-07-27T14:25:16.466060 #72319]  INFO -- : --> 200 200 106 (0.0ms)
+I, [2010-07-27T14:25:16.521780 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/1.xml
+I, [2010-07-27T14:25:16.521925 #72319]  INFO -- : --> 200 200 106 (0.0ms)
+I, [2010-07-27T14:25:16.525737 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+I, [2010-07-27T14:25:16.525864 #72319]  INFO -- : --> 200 200 151 (0.0ms)
+I, [2010-07-27T14:25:16.537714 #72319]  INFO -- : POST http://37s.sunrise.i:3000/people.xml
+I, [2010-07-27T14:25:16.537862 #72319]  INFO -- : --> 201 201 109 (0.0ms)
+I, [2010-07-27T14:25:16.541934 #72319]  INFO -- : POST http://37s.sunrise.i:3000/people.xml
+I, [2010-07-27T14:25:16.542068 #72319]  INFO -- : --> 409 409 0 (0.0ms)
+I, [2010-07-27T14:25:16.552074 #72319]  INFO -- : POST http://37s.sunrise.i:3000/people/1/addresses.xml
+I, [2010-07-27T14:25:16.552217 #72319]  INFO -- : --> 201 201 0 (0.0ms)
+I, [2010-07-27T14:25:16.560782 #72319]  INFO -- : POST http://37s.sunrise.i:3000/people.xml
+I, [2010-07-27T14:25:16.560916 #72319]  INFO -- : --> 201 201 0 (0.0ms)
+I, [2010-07-27T14:25:16.730007 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/Greg.xml
+I, [2010-07-27T14:25:16.730151 #72319]  INFO -- : --> 200 200 106 (0.0ms)
+I, [2010-07-27T14:25:16.741142 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/4.xml
+I, [2010-07-27T14:25:16.741290 #72319]  INFO -- : --> 404 404 0 (0.0ms)
+I, [2010-07-27T14:25:16.757287 #72319]  INFO -- : DELETE http://37s.sunrise.i:3000/people/1.xml
+I, [2010-07-27T14:25:16.757426 #72319]  INFO -- : --> 200 200 0 (0.0ms)
+I, [2010-07-27T14:25:16.757765 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/1.xml
+I, [2010-07-27T14:25:16.757840 #72319]  INFO -- : --> 404 404 0 (0.0ms)
+I, [2010-07-27T14:25:16.767261 #72319]  INFO -- : DELETE http://37s.sunrise.i:3000/people/1.xml
+I, [2010-07-27T14:25:16.767397 #72319]  INFO -- : --> 200 200 0 (0.0ms)
+I, [2010-07-27T14:25:16.767761 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/1.xml
+I, [2010-07-27T14:25:16.767839 #72319]  INFO -- : --> 410 410 0 (0.0ms)
+I, [2010-07-27T14:25:16.776011 #72319]  INFO -- : DELETE http://37s.sunrise.i:3000/people/1/addresses/1.xml
+I, [2010-07-27T14:25:16.776146 #72319]  INFO -- : --> 200 200 0 (0.0ms)
+I, [2010-07-27T14:25:16.776496 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+I, [2010-07-27T14:25:16.776571 #72319]  INFO -- : --> 404 404 0 (0.0ms)
+I, [2010-07-27T14:25:16.784238 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/1.xml
+I, [2010-07-27T14:25:16.784382 #72319]  INFO -- : --> 200 200 106 (0.0ms)
+I, [2010-07-27T14:25:16.787724 #72319]  INFO -- : DELETE http://37s.sunrise.i:3000/people/1.xml
+I, [2010-07-27T14:25:16.787850 #72319]  INFO -- : --> 200 200 0 (0.0ms)
+I, [2010-07-27T14:25:16.788211 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/1.xml
+I, [2010-07-27T14:25:16.788291 #72319]  INFO -- : --> 404 404 0 (0.0ms)
+I, [2010-07-27T14:25:16.796232 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/1.xml
+I, [2010-07-27T14:25:16.796394 #72319]  INFO -- : --> 200 200 106 (0.0ms)
+I, [2010-07-27T14:25:16.799916 #72319]  INFO -- : DELETE http://37s.sunrise.i:3000/people/1.xml
+I, [2010-07-27T14:25:16.800042 #72319]  INFO -- : --> 200 200 0 (0.0ms)
+I, [2010-07-27T14:25:16.800385 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/1.xml
+I, [2010-07-27T14:25:16.800460 #72319]  INFO -- : --> 410 410 0 (0.0ms)
+I, [2010-07-27T14:25:16.808123 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+I, [2010-07-27T14:25:16.808246 #72319]  INFO -- : --> 200 200 151 (0.0ms)
+I, [2010-07-27T14:25:16.812691 #72319]  INFO -- : DELETE http://37s.sunrise.i:3000/people/1/addresses/1.xml
+I, [2010-07-27T14:25:16.812821 #72319]  INFO -- : --> 200 200 0 (0.1ms)
+I, [2010-07-27T14:25:16.813591 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+I, [2010-07-27T14:25:16.813680 #72319]  INFO -- : --> 404 404 0 (0.0ms)
+I, [2010-07-27T14:25:16.823091 #72319]  INFO -- : HEAD http://37s.sunrise.i:3000/people/1.xml
+I, [2010-07-27T14:25:16.823244 #72319]  INFO -- : --> 200 200 0 (0.1ms)
+I, [2010-07-27T14:25:16.823563 #72319]  INFO -- : HEAD http://37s.sunrise.i:3000/people/99.xml
+I, [2010-07-27T14:25:16.823657 #72319]  INFO -- : --> 404 404 0 (0.0ms)
+I, [2010-07-27T14:25:16.824193 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/1.xml
+I, [2010-07-27T14:25:16.824289 #72319]  INFO -- : --> 200 200 106 (0.1ms)
+I, [2010-07-27T14:25:16.827501 #72319]  INFO -- : HEAD http://37s.sunrise.i:3000/people/1.xml
+I, [2010-07-27T14:25:16.827619 #72319]  INFO -- : --> 200 200 0 (0.1ms)
+I, [2010-07-27T14:25:16.828007 #72319]  INFO -- : HEAD http://37s.sunrise.i:3000/people/99.xml
+I, [2010-07-27T14:25:16.828081 #72319]  INFO -- : --> 404 404 0 (0.0ms)
+I, [2010-07-27T14:25:16.828406 #72319]  INFO -- : HEAD http://37s.sunrise.i:3000/people/1/addresses/1.xml
+I, [2010-07-27T14:25:16.828480 #72319]  INFO -- : --> 200 200 0 (0.0ms)
+I, [2010-07-27T14:25:16.828754 #72319]  INFO -- : HEAD http://37s.sunrise.i:3000/people/2/addresses/1.xml
+I, [2010-07-27T14:25:16.828827 #72319]  INFO -- : --> 404 404 0 (0.0ms)
+I, [2010-07-27T14:25:16.829133 #72319]  INFO -- : HEAD http://37s.sunrise.i:3000/people/1/addresses/2.xml
+I, [2010-07-27T14:25:16.829206 #72319]  INFO -- : --> 404 404 0 (0.0ms)
+I, [2010-07-27T14:25:16.829508 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+I, [2010-07-27T14:25:16.829581 #72319]  INFO -- : --> 200 200 151 (0.0ms)
+I, [2010-07-27T14:25:16.832954 #72319]  INFO -- : HEAD http://37s.sunrise.i:3000/people/1/addresses/1.xml
+I, [2010-07-27T14:25:16.833075 #72319]  INFO -- : --> 200 200 0 (0.1ms)
+I, [2010-07-27T14:25:16.833445 #72319]  INFO -- : HEAD http://37s.sunrise.i:3000/people/2/addresses/1.xml
+I, [2010-07-27T14:25:16.833519 #72319]  INFO -- : --> 404 404 0 (0.0ms)
+I, [2010-07-27T14:25:16.833901 #72319]  INFO -- : HEAD http://37s.sunrise.i:3000/people/1/addresses/2.xml
+I, [2010-07-27T14:25:16.833974 #72319]  INFO -- : --> 404 404 0 (0.0ms)
+I, [2010-07-27T14:25:16.842198 #72319]  INFO -- : HEAD http://37s.sunrise.i:3000/people/1.xml
+I, [2010-07-27T14:25:16.842333 #72319]  INFO -- : --> 410 410 0 (0.0ms)
+I, [2010-07-27T14:25:16.850596 #72319]  INFO -- : HEAD http://37s.sunrise.i:3000/people/Greg.xml
+I, [2010-07-27T14:25:16.850740 #72319]  INFO -- : --> 200 200 0 (0.1ms)
+I, [2010-07-27T14:25:16.851043 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/Greg.xml
+I, [2010-07-27T14:25:16.851119 #72319]  INFO -- : --> 200 200 106 (0.0ms)
+I, [2010-07-27T14:25:16.854202 #72319]  INFO -- : HEAD http://37s.sunrise.i:3000/people/Greg.xml
+I, [2010-07-27T14:25:16.854303 #72319]  INFO -- : --> 200 200 0 (0.1ms)
+I, [2010-07-27T14:25:16.854566 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/Greg.xml
+I, [2010-07-27T14:25:16.854639 #72319]  INFO -- : --> 200 200 106 (0.0ms)
+I, [2010-07-27T14:25:16.857499 #72319]  INFO -- : HEAD http://37s.sunrise.i:3000/people/Greg/addresses/1.xml
+I, [2010-07-27T14:25:16.857598 #72319]  INFO -- : --> 200 200 0 (0.1ms)
+I, [2010-07-27T14:25:16.857864 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/Greg.xml
+I, [2010-07-27T14:25:16.857936 #72319]  INFO -- : --> 200 200 106 (0.0ms)
+I, [2010-07-27T14:25:16.861382 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/Greg/addresses/1.xml
+I, [2010-07-27T14:25:16.861517 #72319]  INFO -- : --> 200 200 151 (0.0ms)
+I, [2010-07-27T14:25:16.864882 #72319]  INFO -- : HEAD http://37s.sunrise.i:3000/people/Greg/addresses/1.xml
+I, [2010-07-27T14:25:16.864998 #72319]  INFO -- : --> 200 200 0 (0.1ms)
+I, [2010-07-27T14:25:16.875499 #72319]  INFO -- : HEAD http://37s.sunrise.i:3000/people/not-mocked.xml
+I, [2010-07-27T14:25:16.875635 #72319]  INFO -- : --> 200 200 0 (0.1ms)
+I, [2010-07-27T14:25:16.898968 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+I, [2010-07-27T14:25:16.899120 #72319]  INFO -- : --> 200 200 151 (0.0ms)
+I, [2010-07-27T14:25:16.910157 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/5.xml
+I, [2010-07-27T14:25:16.910458 #72319]  INFO -- : --> 200 200 223 (0.0ms)
+I, [2010-07-27T14:25:16.931385 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+I, [2010-07-27T14:25:16.931528 #72319]  INFO -- : --> 200 200 151 (0.0ms)
+I, [2010-07-27T14:25:16.943536 #72319]  INFO -- : GET http://37s.sunrise.i:3000/customers/1.xml
+I, [2010-07-27T14:25:16.943680 #72319]  INFO -- : --> 200 200 1458 (0.1ms)
+I, [2010-07-27T14:25:17.106570 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/Greg.xml
+I, [2010-07-27T14:25:17.106708 #72319]  INFO -- : --> 200 200 106 (0.0ms)
+I, [2010-07-27T14:25:17.109901 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/Greg.xml
+I, [2010-07-27T14:25:17.110061 #72319]  INFO -- : --> 200 200 106 (0.0ms)
+I, [2010-07-27T14:25:17.122927 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+I, [2010-07-27T14:25:17.123074 #72319]  INFO -- : --> 200 200 151 (0.0ms)
+I, [2010-07-27T14:25:17.126883 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+I, [2010-07-27T14:25:17.127011 #72319]  INFO -- : --> 200 200 151 (0.1ms)
+I, [2010-07-27T14:25:17.138802 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people.xml
+I, [2010-07-27T14:25:17.138947 #72319]  INFO -- : --> 200 200 222 (0.0ms)
+I, [2010-07-27T14:25:17.143646 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/1.xml
+I, [2010-07-27T14:25:17.143811 #72319]  INFO -- : --> 200 200 106 (0.0ms)
+I, [2010-07-27T14:25:17.154391 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/1.xml
+I, [2010-07-27T14:25:17.154526 #72319]  INFO -- : --> 200 200 106 (0.0ms)
+I, [2010-07-27T14:25:17.165647 #72319]  INFO -- : POST http://37s.sunrise.i:3000/people.xml
+I, [2010-07-27T14:25:17.165806 #72319]  INFO -- : --> 201 201 109 (0.0ms)
+I, [2010-07-27T14:25:17.177123 #72319]  INFO -- : POST http://37s.sunrise.i:3000/people.xml
+I, [2010-07-27T14:25:17.177263 #72319]  INFO -- : --> 201 201 109 (0.0ms)
+I, [2010-07-27T14:25:17.338608 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/6.json
+I, [2010-07-27T14:25:17.338760 #72319]  INFO -- : --> 200 200 32 (0.0ms)
+I, [2010-07-27T14:25:17.347885 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/6.json
+I, [2010-07-27T14:25:17.348043 #72319]  INFO -- : --> 200 200 32 (0.0ms)
+I, [2010-07-27T14:25:17.439965 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/1.xml
+I, [2010-07-27T14:25:17.440113 #72319]  INFO -- : --> 200 200 106 (0.0ms)
+I, [2010-07-27T14:25:17.451653 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/1.xml
+I, [2010-07-27T14:25:17.451794 #72319]  INFO -- : --> 200 200 106 (0.0ms)
+I, [2010-07-27T14:25:17.462265 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/1.xml
+I, [2010-07-27T14:25:17.462400 #72319]  INFO -- : --> 200 200 106 (0.0ms)
+I, [2010-07-27T14:25:17.474339 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/1.xml
+I, [2010-07-27T14:25:17.474481 #72319]  INFO -- : --> 200 200 106 (0.0ms)
+I, [2010-07-27T14:25:17.486772 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people.xml
+I, [2010-07-27T14:25:17.486915 #72319]  INFO -- : --> 200 200 222 (0.0ms)
+I, [2010-07-27T14:25:17.491991 #72319]  INFO -- : PUT http://37s.sunrise.i:3000/people/1.xml
+I, [2010-07-27T14:25:17.492125 #72319]  INFO -- : --> 204 204 0 (0.0ms)
+I, [2010-07-27T14:25:17.500443 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people.xml
+I, [2010-07-27T14:25:17.500578 #72319]  INFO -- : --> 200 200 222 (0.0ms)
+I, [2010-07-27T14:25:17.512548 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people.xml
+I, [2010-07-27T14:25:17.551280 #72319]  INFO -- : --> 200 200 222 (0.0ms)
+I, [2010-07-27T14:25:17.577724 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/1/addresses.xml
+I, [2010-07-27T14:25:17.578134 #72319]  INFO -- : --> 200 200 199 (0.0ms)
+I, [2010-07-27T14:25:17.591073 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/1/addresses.xml
+I, [2010-07-27T14:25:17.591215 #72319]  INFO -- : --> 200 200 199 (0.0ms)
+I, [2010-07-27T14:25:17.603254 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/2.xml
+I, [2010-07-27T14:25:17.603407 #72319]  INFO -- : --> 200 200 107 (0.0ms)
+I, [2010-07-27T14:25:17.607045 #72319]  INFO -- : PUT http://37s.sunrise.i:3000/people/2.xml
+I, [2010-07-27T14:25:17.607179 #72319]  INFO -- : --> 409 409 0 (0.0ms)
+I, [2010-07-27T14:25:17.616032 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+I, [2010-07-27T14:25:17.616219 #72319]  INFO -- : --> 200 200 151 (0.1ms)
+I, [2010-07-27T14:25:17.620435 #72319]  INFO -- : PUT http://37s.sunrise.i:3000/people/1/addresses/1.xml
+I, [2010-07-27T14:25:17.620564 #72319]  INFO -- : --> 204 204 0 (0.0ms)
+I, [2010-07-27T14:25:17.628978 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/1/addresses.xml
+I, [2010-07-27T14:25:17.651594 #72319]  INFO -- : --> 200 200 199 (0.0ms)
+I, [2010-07-27T14:25:17.655994 #72319]  INFO -- : PUT http://37s.sunrise.i:3000/people/1/addresses/1.xml
+I, [2010-07-27T14:25:17.656115 #72319]  INFO -- : --> 204 204 0 (0.1ms)
+I, [2010-07-27T14:25:17.707169 #72319]  INFO -- : GET http://localhost:80/people/1.xml
+I, [2010-07-27T14:25:17.707304 #72319]  INFO -- : --> 200 200 106 (0.1ms)
+I, [2010-07-27T14:25:17.718327 #72319]  INFO -- : DELETE http://localhost:80/people/1.xml
+I, [2010-07-27T14:25:17.718465 #72319]  INFO -- : --> 200 200 0 (0.0ms)
+I, [2010-07-27T14:25:17.721420 #72319]  INFO -- : DELETE http://localhost:80/people/2.xml
+I, [2010-07-27T14:25:17.721548 #72319]  INFO -- : --> 200 200 0 (0.0ms)
+I, [2010-07-27T14:25:17.723876 #72319]  INFO -- : GET http://localhost:80/people/1.xml
+I, [2010-07-27T14:25:17.723984 #72319]  INFO -- : --> 200 200 106 (0.0ms)
+I, [2010-07-27T14:25:17.729574 #72319]  INFO -- : GET http://localhost:80/people.xml
+I, [2010-07-27T14:25:17.729717 #72319]  INFO -- : --> 200 200 222 (0.0ms)
+I, [2010-07-27T14:25:17.735933 #72319]  INFO -- : GET http://localhost:80/people_empty_elements.xml
+I, [2010-07-27T14:25:17.736061 #72319]  INFO -- : --> 200 200 77 (0.0ms)
+I, [2010-07-27T14:25:17.740721 #72319]  INFO -- : GET http://localhost:80/people_single_elements.xml
+I, [2010-07-27T14:25:17.740852 #72319]  INFO -- : --> 200 200 208 (0.0ms)
+I, [2010-07-27T14:25:17.746201 #72319]  INFO -- : GET http://localhost:80/people/2.xml
+I, [2010-07-27T14:25:17.746328 #72319]  INFO -- : --> 200 200 107 (0.0ms)
+I, [2010-07-27T14:25:17.756053 #72319]  INFO -- : HEAD http://localhost:80/people/1.xml
+I, [2010-07-27T14:25:17.756183 #72319]  INFO -- : --> 200 200 0 (0.0ms)
+I, [2010-07-27T14:25:17.760196 #72319]  INFO -- : POST http://localhost:80/people.xml
+I, [2010-07-27T14:25:17.760316 #72319]  INFO -- : --> 201 201 0 (0.0ms)
+I, [2010-07-27T14:25:17.762484 #72319]  INFO -- : POST http://localhost:80/members.xml
+I, [2010-07-27T14:25:17.762583 #72319]  INFO -- : --> 201 201 8 (0.0ms)
+I, [2010-07-27T14:25:17.766862 #72319]  INFO -- : PUT http://localhost:80/people/1.xml
+I, [2010-07-27T14:25:17.766985 #72319]  INFO -- : --> 204 204 0 (0.0ms)
+I, [2010-07-27T14:25:17.769533 #72319]  INFO -- : PUT http://localhost:80/people/2.xml
+I, [2010-07-27T14:25:17.769720 #72319]  INFO -- : --> 204 204 0 (0.0ms)
+I, [2010-07-27T14:25:17.862153 #72319]  INFO -- : GET http://localhost:80/people/1.xml
+E, [2010-07-27T14:25:17.862405 #72319] ERROR -- : Could not log "request.active_resource" event. NoMethodError: undefined method `code' for nil:NilClass
+I, [2010-07-27T14:25:17.868206 #72319]  INFO -- : GET http://localhost:80/people_timeout.xml
+E, [2010-07-27T14:25:17.868382 #72319] ERROR -- : Could not log "request.active_resource" event. NoMethodError: undefined method `code' for nil:NilClass
+I, [2010-07-27T14:25:17.873509 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/retrieve.xml?name=Matz
+I, [2010-07-27T14:25:17.873642 #72319]  INFO -- : --> 200 200 146 (0.0ms)
+I, [2010-07-27T14:25:17.877559 #72319]  INFO -- : POST http://37s.sunrise.i:3000/people/hire.xml?name=Matz
+I, [2010-07-27T14:25:17.877697 #72319]  INFO -- : --> 201 201 0 (0.0ms)
+I, [2010-07-27T14:25:17.878033 #72319]  INFO -- : PUT http://37s.sunrise.i:3000/people/promote.xml?name=Matz
+I, [2010-07-27T14:25:17.878116 #72319]  INFO -- : --> 204 204 0 (0.0ms)
+I, [2010-07-27T14:25:17.878395 #72319]  INFO -- : PUT http://37s.sunrise.i:3000/people/sort.xml?by=name
+I, [2010-07-27T14:25:17.878469 #72319]  INFO -- : --> 204 204 0 (0.0ms)
+I, [2010-07-27T14:25:17.878744 #72319]  INFO -- : DELETE http://37s.sunrise.i:3000/people/deactivate.xml?name=Matz
+I, [2010-07-27T14:25:17.878817 #72319]  INFO -- : --> 200 200 0 (0.0ms)
+I, [2010-07-27T14:25:17.879117 #72319]  INFO -- : PUT http://37s.sunrise.i:3000/people/1/addresses/sort.xml?by=name
+I, [2010-07-27T14:25:17.879191 #72319]  INFO -- : --> 204 204 0 (0.0ms)
+I, [2010-07-27T14:25:17.881665 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/1.xml
+I, [2010-07-27T14:25:17.881766 #72319]  INFO -- : --> 200 200 106 (0.0ms)
+I, [2010-07-27T14:25:17.947769 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/1/shallow.xml
+I, [2010-07-27T14:25:17.947896 #72319]  INFO -- : --> 200 200 106 (0.0ms)
+I, [2010-07-27T14:25:17.951029 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/1.xml
+I, [2010-07-27T14:25:17.951151 #72319]  INFO -- : --> 200 200 106 (0.0ms)
+I, [2010-07-27T14:25:17.955639 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/1/deep.xml
+I, [2010-07-27T14:25:17.955770 #72319]  INFO -- : --> 200 200 129 (0.0ms)
+I, [2010-07-27T14:25:17.958761 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/1.xml
+I, [2010-07-27T14:25:17.958870 #72319]  INFO -- : --> 200 200 106 (0.0ms)
+I, [2010-07-27T14:25:17.961689 #72319]  INFO -- : PUT http://37s.sunrise.i:3000/people/1/promote.xml?position=Manager
+I, [2010-07-27T14:25:17.961787 #72319]  INFO -- : --> 204 204 0 (0.0ms)
+I, [2010-07-27T14:25:17.962077 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/1.xml
+I, [2010-07-27T14:25:17.962154 #72319]  INFO -- : --> 200 200 106 (0.0ms)
+I, [2010-07-27T14:25:17.964979 #72319]  INFO -- : DELETE http://37s.sunrise.i:3000/people/1/deactivate.xml
+I, [2010-07-27T14:25:17.965095 #72319]  INFO -- : --> 200 200 0 (0.0ms)
+I, [2010-07-27T14:25:17.965430 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+I, [2010-07-27T14:25:17.965514 #72319]  INFO -- : --> 200 200 120 (0.0ms)
+I, [2010-07-27T14:25:17.968604 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/1/addresses/1/deep.xml
+I, [2010-07-27T14:25:17.968719 #72319]  INFO -- : --> 200 200 139 (0.0ms)
+I, [2010-07-27T14:25:17.971872 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+I, [2010-07-27T14:25:17.971987 #72319]  INFO -- : --> 200 200 120 (0.0ms)
+I, [2010-07-27T14:25:17.975306 #72319]  INFO -- : PUT http://37s.sunrise.i:3000/people/1/addresses/1/normalize_phone.xml?locale=US
+I, [2010-07-27T14:25:17.975426 #72319]  INFO -- : --> 204 204 0 (0.0ms)
+I, [2010-07-27T14:25:17.978735 #72319]  INFO -- : POST http://37s.sunrise.i:3000/people/new/register.xml
+I, [2010-07-27T14:25:17.978860 #72319]  INFO -- : --> 201 201 78 (0.0ms)
+I, [2010-07-27T14:25:17.979621 #72319]  INFO -- : POST http://37s.sunrise.i:3000/people/1/addresses/new/link.xml
+I, [2010-07-27T14:25:17.979698 #72319]  INFO -- : --> 201 201 92 (0.0ms)
+I, [2010-07-27T14:25:17.980335 #72319]  INFO -- : POST http://37s.sunrise.i:3000/people/1/register.xml
+I, [2010-07-27T14:25:17.980412 #72319]  INFO -- : --> 201 201 106 (0.0ms)
+I, [2010-07-27T14:25:17.982740 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/managers.xml
+I, [2010-07-27T14:25:17.982829 #72319]  INFO -- : --> 200 200 146 (0.0ms)
+I, [2010-07-27T14:25:17.993462 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people.xml
+I, [2010-07-27T14:25:17.993606 #72319]  INFO -- : --> 200 200 222 (0.0ms)
+I, [2010-07-27T14:25:18.005513 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/1/addresses.xml
+I, [2010-07-27T14:25:18.005654 #72319]  INFO -- : --> 200 200 166 (0.0ms)
+I, [2010-07-27T14:25:18.017042 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people.xml
+I, [2010-07-27T14:25:18.017189 #72319]  INFO -- : --> 200 200 222 (0.0ms)
+I, [2010-07-27T14:25:18.029347 #72319]  INFO -- : GET http://37s.sunrise.i:3000/companies/1/people.xml
+I, [2010-07-27T14:25:18.029488 #72319]  INFO -- : --> 200 200 147 (0.0ms)
+I, [2010-07-27T14:25:18.040314 #72319]  INFO -- : GET http://37s.sunrise.i:3000/companies/1/people.xml
+I, [2010-07-27T14:25:18.040451 #72319]  INFO -- : --> 200 200 147 (0.0ms)
+I, [2010-07-27T14:25:18.051786 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/managers.xml
+I, [2010-07-27T14:25:18.051931 #72319]  INFO -- : --> 200 200 147 (0.0ms)
+I, [2010-07-27T14:25:18.064154 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/1/addresses.xml
+I, [2010-07-27T14:25:18.064324 #72319]  INFO -- : --> 200 200 166 (0.1ms)
+I, [2010-07-27T14:25:18.075926 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/2/addresses.xml
+I, [2010-07-27T14:25:18.076066 #72319]  INFO -- : --> 404 404 0 (0.0ms)
+I, [2010-07-27T14:25:18.083981 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/1.xml
+I, [2010-07-27T14:25:18.084166 #72319]  INFO -- : --> 200 200 106 (0.0ms)
+I, [2010-07-27T14:25:18.095061 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/99.xml
+I, [2010-07-27T14:25:18.095216 #72319]  INFO -- : --> 404 404 0 (0.0ms)
+I, [2010-07-27T14:25:18.095629 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people//addresses/1.xml
+I, [2010-07-27T14:25:18.095710 #72319]  INFO -- : --> 404 404 0 (0.0ms)
+I, [2010-07-27T14:25:18.104222 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+I, [2010-07-27T14:25:18.104365 #72319]  INFO -- : --> 200 200 120 (0.0ms)
+I, [2010-07-27T14:25:18.114626 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people.xml
+I, [2010-07-27T14:25:18.114760 #72319]  INFO -- : --> 200 200 222 (0.0ms)
+I, [2010-07-27T14:25:18.127809 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people.xml
+I, [2010-07-27T14:25:18.127955 #72319]  INFO -- : --> 200 200 222 (0.0ms)
+I, [2010-07-27T14:25:18.140039 #72319]  INFO -- : GET http://37s.sunrise.i:3000/companies/1/manager.xml
+I, [2010-07-27T14:25:18.140179 #72319]  INFO -- : --> 200 200 107 (0.1ms)
+I, [2010-07-27T14:25:18.151038 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/leader.xml
+I, [2010-07-27T14:25:18.151178 #72319]  INFO -- : --> 200 200 107 (0.0ms)
+I, [2010-07-27T14:25:18.162013 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people.xml
+I, [2010-07-27T14:25:18.162149 #72319]  INFO -- : --> 200 200 222 (0.0ms)
+I, [2010-07-27T14:25:18.173867 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/1/addresses.xml
+I, [2010-07-27T14:25:18.174010 #72319]  INFO -- : --> 200 200 166 (0.0ms)
+I, [2010-07-27T14:25:18.185452 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people.xml
+I, [2010-07-27T14:25:18.185598 #72319]  INFO -- : --> 200 200 222 (0.0ms)
+I, [2010-07-27T14:25:18.279817 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/1/addresses.xml
+I, [2010-07-27T14:25:18.279971 #72319]  INFO -- : --> 200 200 166 (0.0ms)
+I, [2010-07-27T14:25:18.284087 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people.json
+I, [2010-07-27T14:25:18.284217 #72319]  INFO -- : --> 200 200 48 (0.0ms)
+I, [2010-07-27T14:25:18.285471 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people.xml
+I, [2010-07-27T14:25:18.285557 #72319]  INFO -- : --> 200 200 224 (0.0ms)
+I, [2010-07-27T14:25:18.290345 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/retrieve.json?name=David
+I, [2010-07-27T14:25:18.290467 #72319]  INFO -- : --> 200 200 25 (0.0ms)
+I, [2010-07-27T14:25:18.291336 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/retrieve.xml?name=David
+I, [2010-07-27T14:25:18.291415 #72319]  INFO -- : --> 200 200 149 (0.0ms)
+I, [2010-07-27T14:25:18.295286 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/2.json
+I, [2010-07-27T14:25:18.295410 #72319]  INFO -- : --> 200 200 23 (0.0ms)
+I, [2010-07-27T14:25:18.295788 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/2/shallow.json
+I, [2010-07-27T14:25:18.295946 #72319]  INFO -- : --> 200 200 23 (0.0ms)
+I, [2010-07-27T14:25:18.297009 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/2.xml
+I, [2010-07-27T14:25:18.297102 #72319]  INFO -- : --> 200 200 103 (0.0ms)
+I, [2010-07-27T14:25:18.300537 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/2/shallow.xml
+I, [2010-07-27T14:25:18.300659 #72319]  INFO -- : --> 200 200 103 (0.0ms)
+I, [2010-07-27T14:25:18.303894 #72319]  INFO -- : POST http://37s.sunrise.i:3000/people.json
+I, [2010-07-27T14:25:18.304011 #72319]  INFO -- : --> 201 201 15 (0.0ms)
+I, [2010-07-27T14:25:18.304542 #72319]  INFO -- : POST http://37s.sunrise.i:3000/people/new/register.json
+I, [2010-07-27T14:25:18.304626 #72319]  INFO -- : --> 201 201 15 (0.0ms)
+I, [2010-07-27T14:25:18.305437 #72319]  INFO -- : POST http://37s.sunrise.i:3000/people.xml
+I, [2010-07-27T14:25:18.305523 #72319]  INFO -- : --> 201 201 74 (0.0ms)
+I, [2010-07-27T14:25:18.308623 #72319]  INFO -- : POST http://37s.sunrise.i:3000/people/new/register.xml
+I, [2010-07-27T14:25:18.308742 #72319]  INFO -- : --> 201 201 74 (0.0ms)
+I, [2010-07-27T14:25:18.309325 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/1.json
+I, [2010-07-27T14:25:18.309411 #72319]  INFO -- : --> 200 200 23 (0.0ms)
+I, [2010-07-27T14:25:18.310192 #72319]  INFO -- : GET http://37s.sunrise.i:3000/people/1.xml
+I, [2010-07-27T14:25:18.310283 #72319]  INFO -- : --> 200 200 103 (0.0ms)
+I, [2010-07-27T14:25:18.314379 #72319]  INFO -- : POST http://37s.sunrise.i:3000/people.json
+I, [2010-07-27T14:25:18.314537 #72319]  INFO -- : --> 201 201 50 (0.0ms)
+I, [2010-07-27T14:25:18.315983 #72319]  INFO -- : POST http://37s.sunrise.i:3000/people.xml
+I, [2010-07-27T14:25:18.316092 #72319]  INFO -- : --> 201 201 132 (0.0ms)
+DELETE http://localhost:80/people/2.xml
+--> 200 200 (0 0ms)
+GET http://localhost:80/people/2.xml
+--> 200 200 (107 0ms)
+POST http://localhost:80/people/2/addresses.xml
+--> 201 201 (0 0ms)
+PUT http://localhost:80/people/2.xml
+--> 204 204 (0 0ms)
+POST http://localhost:80/people/2.xml
+POST http://localhost:80/people/2/addresses.xml
+PUT http://localhost:80/people/2.xml
+DELETE http://localhost:80/people/2.xml
+POST http://37s.sunrise.i:3000/people.xml
+--> 422 422 (209 0ms)
+POST http://37s.sunrise.i:3000/people.json
+--> 422 422 (118 0ms)
+POST http://37s.sunrise.i:3000/people.xml
+--> 422 422 (209 0ms)
+POST http://37s.sunrise.i:3000/people.xml
+--> 422 422 (209 0ms)
+POST http://37s.sunrise.i:3000/people.json
+--> 422 422 (118 0ms)
+POST http://37s.sunrise.i:3000/people.xml
+--> 422 422 (209 0ms)
+POST http://37s.sunrise.i:3000/people.xml
+--> 422 422 (209 0ms)
+POST http://37s.sunrise.i:3000/people.json
+--> 422 422 (118 0ms)
+POST http://37s.sunrise.i:3000/people.xml
+--> 422 422 (209 0ms)
+POST http://37s.sunrise.i:3000/people.xml
+--> 422 422 (209 0ms)
+POST http://37s.sunrise.i:3000/people.json
+--> 422 422 (118 0ms)
+POST http://37s.sunrise.i:3000/people.xml
+--> 422 422 (209 0ms)
+POST http://37s.sunrise.i:3000/people.xml
+--> 422 422 (209 0ms)
+POST http://37s.sunrise.i:3000/people.json
+--> 422 422 (118 0ms)
+POST http://37s.sunrise.i:3000/people.xml
+--> 422 422 (209 0ms)
+POST http://37s.sunrise.i:3000/people.xml
+--> 422 422 (209 0ms)
+POST http://37s.sunrise.i:3000/people.json
+--> 422 422 (118 0ms)
+POST http://37s.sunrise.i:3000/people.xml
+--> 422 422 (209 0ms)
+POST http://37s.sunrise.i:3000/people.xml
+--> 422 422 (209 0ms)
+POST http://37s.sunrise.i:3000/people.json
+--> 422 422 (118 0ms)
+POST http://37s.sunrise.i:3000/people.xml
+--> 422 422 (209 0ms)
+GET http://37s.sunrise.i:3000/people/1.xml
+--> 200 200 (106 0ms)
+GET http://37s.sunrise.i:3000/people/1.xml
+--> 200 200 (106 0ms)
+GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+--> 200 200 (120 0ms)
+POST http://37s.sunrise.i:3000/people.xml
+--> 201 201 (109 0ms)
+POST http://37s.sunrise.i:3000/people.xml
+--> 409 409 (0 0ms)
+POST http://37s.sunrise.i:3000/people/1/addresses.xml
+--> 201 201 (0 0ms)
+POST http://37s.sunrise.i:3000/people.xml
+--> 201 201 (0 0ms)
+GET http://37s.sunrise.i:3000/people/Greg.xml
+--> 200 200 (106 0ms)
+GET http://37s.sunrise.i:3000/people/4.xml
+--> 404 404 (0 0ms)
+DELETE http://37s.sunrise.i:3000/people/1.xml
+--> 200 200 (0 0ms)
+GET http://37s.sunrise.i:3000/people/1.xml
+--> 404 404 (0 0ms)
+DELETE http://37s.sunrise.i:3000/people/1.xml
+--> 200 200 (0 0ms)
+GET http://37s.sunrise.i:3000/people/1.xml
+--> 410 410 (0 0ms)
+DELETE http://37s.sunrise.i:3000/people/1/addresses/1.xml
+--> 200 200 (0 0ms)
+GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+--> 404 404 (0 0ms)
+GET http://37s.sunrise.i:3000/people/1.xml
+--> 200 200 (106 0ms)
+DELETE http://37s.sunrise.i:3000/people/1.xml
+--> 200 200 (0 0ms)
+GET http://37s.sunrise.i:3000/people/1.xml
+--> 404 404 (0 0ms)
+GET http://37s.sunrise.i:3000/people/1.xml
+--> 200 200 (106 0ms)
+DELETE http://37s.sunrise.i:3000/people/1.xml
+--> 200 200 (0 0ms)
+GET http://37s.sunrise.i:3000/people/1.xml
+--> 410 410 (0 0ms)
+GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+--> 200 200 (120 0ms)
+DELETE http://37s.sunrise.i:3000/people/1/addresses/1.xml
+--> 200 200 (0 0ms)
+GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+--> 404 404 (0 0ms)
+HEAD http://37s.sunrise.i:3000/people/1.xml
+--> 200 200 (0 0ms)
+HEAD http://37s.sunrise.i:3000/people/99.xml
+--> 404 404 (0 0ms)
+GET http://37s.sunrise.i:3000/people/1.xml
+--> 200 200 (106 0ms)
+HEAD http://37s.sunrise.i:3000/people/1.xml
+--> 200 200 (0 0ms)
+HEAD http://37s.sunrise.i:3000/people/99.xml
+--> 404 404 (0 0ms)
+HEAD http://37s.sunrise.i:3000/people/1/addresses/1.xml
+--> 200 200 (0 0ms)
+HEAD http://37s.sunrise.i:3000/people/2/addresses/1.xml
+--> 404 404 (0 0ms)
+HEAD http://37s.sunrise.i:3000/people/1/addresses/2.xml
+--> 404 404 (0 0ms)
+GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+--> 200 200 (120 0ms)
+HEAD http://37s.sunrise.i:3000/people/1/addresses/1.xml
+--> 200 200 (0 0ms)
+HEAD http://37s.sunrise.i:3000/people/2/addresses/1.xml
+--> 404 404 (0 0ms)
+HEAD http://37s.sunrise.i:3000/people/1/addresses/2.xml
+--> 404 404 (0 0ms)
+HEAD http://37s.sunrise.i:3000/people/1.xml
+--> 410 410 (0 0ms)
+HEAD http://37s.sunrise.i:3000/people/Greg.xml
+--> 200 200 (0 0ms)
+GET http://37s.sunrise.i:3000/people/Greg.xml
+--> 200 200 (106 0ms)
+HEAD http://37s.sunrise.i:3000/people/Greg.xml
+--> 200 200 (0 0ms)
+GET http://37s.sunrise.i:3000/people/Greg.xml
+--> 200 200 (106 0ms)
+HEAD http://37s.sunrise.i:3000/people/Greg/addresses/1.xml
+--> 200 200 (0 0ms)
+GET http://37s.sunrise.i:3000/people/Greg.xml
+--> 200 200 (106 0ms)
+GET http://37s.sunrise.i:3000/people/Greg/addresses/1.xml
+--> 200 200 (120 0ms)
+HEAD http://37s.sunrise.i:3000/people/Greg/addresses/1.xml
+--> 200 200 (0 0ms)
+HEAD http://37s.sunrise.i:3000/people/not-mocked.xml
+--> 200 200 (0 0ms)
+GET http://37s.sunrise.i:3000/people.xml
+--> 200 200 (222 0ms)
+GET http://37s.sunrise.i:3000/companies/1/people.xml
+--> 200 200 (147 0ms)
+GET http://37s.sunrise.i:3000/companies/1/people.xml
+--> 200 200 (147 0ms)
+GET http://37s.sunrise.i:3000/people/managers.xml
+--> 200 200 (147 0ms)
+GET http://37s.sunrise.i:3000/people/1.xml
+--> 200 200 (106 0ms)
+GET http://37s.sunrise.i:3000/people/99.xml
+--> 404 404 (0 0ms)
+GET http://37s.sunrise.i:3000/people//addresses/1.xml
+--> 404 404 (0 0ms)
+GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+--> 200 200 (120 0ms)
+GET http://37s.sunrise.i:3000/people.xml
+--> 200 200 (222 0ms)
+GET http://37s.sunrise.i:3000/people.xml
+--> 200 200 (222 0ms)
+GET http://37s.sunrise.i:3000/companies/1/manager.xml
+--> 200 200 (107 0ms)
+GET http://37s.sunrise.i:3000/people/leader.xml
+--> 200 200 (107 0ms)
+GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+--> 200 200 (120 0ms)
+GET http://37s.sunrise.i:3000/people/5.xml
+--> 200 200 (223 0ms)
+GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+--> 200 200 (120 0ms)
+GET http://37s.sunrise.i:3000/customers/1.xml
+--> 200 200 (1458 0ms)
+GET http://37s.sunrise.i:3000/people/Greg.xml
+--> 200 200 (106 0ms)
+GET http://37s.sunrise.i:3000/people/Greg.xml
+--> 200 200 (106 0ms)
+GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+--> 200 200 (120 0ms)
+GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+--> 200 200 (120 0ms)
+GET http://37s.sunrise.i:3000/people.xml
+--> 200 200 (222 0ms)
+GET http://37s.sunrise.i:3000/people/1.xml
+--> 200 200 (106 0ms)
+GET http://37s.sunrise.i:3000/people/1.xml
+--> 200 200 (106 0ms)
+POST http://37s.sunrise.i:3000/people.xml
+--> 201 201 (109 0ms)
+GET http://somewhere.else:80/people/6.json
+--> 200 200 (32 0ms)
+GET http://somewhere.else:80/people/6.json
+--> 200 200 (32 0ms)
+GET http://somewhere.else:80/people/1.xml
+--> 200 200 (106 0ms)
+GET http://somewhere.else:80/people/1.xml
+--> 200 200 (106 0ms)
+GET http://somewhere.else:80/people/1.xml
+--> 200 200 (106 0ms)
+GET http://somewhere.else:80/people.xml
+--> 200 200 (222 0ms)
+PUT http://somewhere.else:80/people/1.xml
+--> 204 204 (0 0ms)
+GET http://somewhere.else:80/people/2.xml
+--> 200 200 (107 0ms)
+PUT http://somewhere.else:80/people/2.xml
+--> 409 409 (0 0ms)
+GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+--> 200 200 (120 0ms)
+PUT http://37s.sunrise.i:3000/people/1/addresses/1.xml
+--> 204 204 (0 0ms)
+GET http://37s.sunrise.i:3000/people/1/addresses.xml
+--> 200 200 (166 0ms)
+PUT http://37s.sunrise.i:3000/people/1/addresses/1.xml
+--> 204 204 (0 0ms)
+GET http://localhost:80/people/1.xml
+--> 200 200 (106 0ms)
+DELETE http://localhost:80/people/1.xml
+--> 200 200 (0 0ms)
+DELETE http://localhost:80/people/2.xml
+--> 200 200 (0 0ms)
+GET http://localhost:80/people/1.xml
+--> 200 200 (106 0ms)
+GET http://localhost:80/people.xml
+--> 200 200 (222 0ms)
+GET http://localhost:80/people_empty_elements.xml
+--> 200 200 (77 0ms)
+GET http://localhost:80/people_single_elements.xml
+--> 200 200 (208 0ms)
+GET http://localhost:80/people/2.xml
+--> 200 200 (107 0ms)
+HEAD http://localhost:80/people/1.xml
+--> 200 200 (0 0ms)
+POST http://localhost:80/people.xml
+--> 201 201 (0 0ms)
+POST http://localhost:80/members.xml
+--> 201 201 (1 0ms)
+PUT http://localhost:80/people/1.xml
+--> 204 204 (0 0ms)
+PUT http://localhost:80/people/2.xml
+--> 204 204 (0 0ms)
+GET http://localhost:80/people/1.xml
+GET http://localhost:80/people_timeout.xml
+GET http://somewhere.else:80/people/retrieve.xml?name=Matz
+--> 200 200 (146 0ms)
+POST http://somewhere.else:80/people/hire.xml?name=Matz
+--> 201 201 (0 0ms)
+PUT http://somewhere.else:80/people/promote.xml?name=Matz
+--> 204 204 (0 0ms)
+PUT http://somewhere.else:80/people/sort.xml?by=name
+--> 204 204 (0 0ms)
+DELETE http://somewhere.else:80/people/deactivate.xml?name=Matz
+--> 200 200 (0 0ms)
+PUT http://37s.sunrise.i:3000/people/1/addresses/sort.xml?by=name
+--> 204 204 (0 0ms)
+GET http://somewhere.else:80/people/1.xml
+--> 200 200 (106 0ms)
+GET http://somewhere.else:80/people/1/shallow.xml
+--> 200 200 (106 0ms)
+GET http://somewhere.else:80/people/1.xml
+--> 200 200 (106 0ms)
+GET http://somewhere.else:80/people/1/deep.xml
+--> 200 200 (129 0ms)
+GET http://somewhere.else:80/people/1.xml
+--> 200 200 (106 0ms)
+PUT http://somewhere.else:80/people/1/promote.xml?position=Manager
+--> 204 204 (0 0ms)
+GET http://somewhere.else:80/people/1.xml
+--> 200 200 (106 0ms)
+DELETE http://somewhere.else:80/people/1/deactivate.xml
+--> 200 200 (0 0ms)
+GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+--> 200 200 (120 0ms)
+GET http://37s.sunrise.i:3000/people/1/addresses/1/deep.xml
+--> 200 200 (139 0ms)
+GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+--> 200 200 (120 0ms)
+PUT http://37s.sunrise.i:3000/people/1/addresses/1/normalize_phone.xml?locale=US
+--> 204 204 (0 0ms)
+POST http://somewhere.else:80/people/new/register.xml
+--> 201 201 (78 0ms)
+POST http://37s.sunrise.i:3000/people/1/addresses/new/link.xml
+--> 201 201 (92 0ms)
+POST http://somewhere.else:80/people/1/register.xml
+--> 201 201 (106 0ms)
+GET http://somewhere.else:80/people/managers.xml
+--> 200 200 (146 0ms)
+GET http://somewhere.else:80/people.json
+--> 200 200 (48 0ms)
+GET http://somewhere.else:80/people.xml
+--> 200 200 (224 0ms)
+GET http://somewhere.else:80/people/retrieve.json?name=David
+--> 200 200 (25 0ms)
+GET http://somewhere.else:80/people/retrieve.xml?name=David
+--> 200 200 (149 0ms)
+GET http://somewhere.else:80/people/2.json
+--> 200 200 (23 0ms)
+GET http://somewhere.else:80/people/2/shallow.json
+--> 200 200 (23 0ms)
+GET http://somewhere.else:80/people/2.xml
+--> 200 200 (103 0ms)
+GET http://somewhere.else:80/people/2/shallow.xml
+--> 200 200 (103 0ms)
+POST http://somewhere.else:80/people.json
+--> 201 201 (15 0ms)
+POST http://somewhere.else:80/people/new/register.json
+--> 201 201 (15 0ms)
+POST http://somewhere.else:80/people.xml
+--> 201 201 (74 0ms)
+POST http://somewhere.else:80/people/new/register.xml
+--> 201 201 (74 0ms)
+GET http://somewhere.else:80/people/1.json
+--> 200 200 (23 0ms)
+GET http://somewhere.else:80/people/1.xml
+--> 200 200 (103 0ms)
+POST http://somewhere.else:80/people.json
+--> 201 201 (50 0ms)
+POST http://somewhere.else:80/people.xml
+--> 201 201 (132 0ms)
+I, [2010-08-12T16:09:06.387101 #67812]  INFO -- : DELETE http://localhost:80/people/2.xml
+I, [2010-08-12T16:09:06.404342 #67812]  INFO -- : --> 200 200 0 (0.1ms)
+I, [2010-08-12T16:09:06.405965 #67812]  INFO -- : DELETE http://localhost:80/people/2.xml
+I, [2010-08-12T16:09:06.406182 #67812]  INFO -- : --> 401 401 0 (0.1ms)
+I, [2010-08-12T16:09:06.406557 #67812]  INFO -- : DELETE http://localhost:80/people/2.xml
+I, [2010-08-12T16:09:06.406649 #67812]  INFO -- : --> 200 200 0 (0.1ms)
+I, [2010-08-12T16:09:06.407913 #67812]  INFO -- : GET http://localhost:80/people/2.xml
+I, [2010-08-12T16:09:06.408008 #67812]  INFO -- : --> 200 200 107 (0.0ms)
+I, [2010-08-12T16:09:06.565679 #67812]  INFO -- : GET http://localhost:80/people/2.xml
+I, [2010-08-12T16:09:06.565818 #67812]  INFO -- : --> 401 401 0 (0.1ms)
+I, [2010-08-12T16:09:06.566160 #67812]  INFO -- : GET http://localhost:80/people/2.xml
+I, [2010-08-12T16:09:06.566240 #67812]  INFO -- : --> 200 200 107 (0.1ms)
+I, [2010-08-12T16:09:06.569391 #67812]  INFO -- : GET http://localhost:80/people/1.xml
+I, [2010-08-12T16:09:06.569523 #67812]  INFO -- : --> 200 200 106 (0.1ms)
+I, [2010-08-12T16:09:06.573816 #67812]  INFO -- : GET http://localhost:80/people/2.xml
+I, [2010-08-12T16:09:06.573954 #67812]  INFO -- : --> 401 401 0 (0.0ms)
+I, [2010-08-12T16:09:06.574310 #67812]  INFO -- : GET http://localhost:80/people/2.xml
+I, [2010-08-12T16:09:06.574385 #67812]  INFO -- : --> 200 200 107 (0.0ms)
+I, [2010-08-12T16:09:06.578495 #67812]  INFO -- : HEAD http://localhost:80/people/2.xml
+I, [2010-08-12T16:09:06.578619 #67812]  INFO -- : --> 200 200 0 (0.0ms)
+I, [2010-08-12T16:09:06.579938 #67812]  INFO -- : HEAD http://localhost:80/people/2.xml
+I, [2010-08-12T16:09:06.580034 #67812]  INFO -- : --> 401 401 0 (0.0ms)
+I, [2010-08-12T16:09:06.580358 #67812]  INFO -- : HEAD http://localhost:80/people/2.xml
+I, [2010-08-12T16:09:06.580431 #67812]  INFO -- : --> 200 200 0 (0.1ms)
+I, [2010-08-12T16:09:06.581629 #67812]  INFO -- : POST http://localhost:80/people/2/addresses.xml
+I, [2010-08-12T16:09:06.581726 #67812]  INFO -- : --> 201 201 0 (0.0ms)
+I, [2010-08-12T16:09:06.582925 #67812]  INFO -- : POST http://localhost:80/people/2/addresses.xml
+I, [2010-08-12T16:09:06.583012 #67812]  INFO -- : --> 401 401 0 (0.0ms)
+I, [2010-08-12T16:09:06.583335 #67812]  INFO -- : POST http://localhost:80/people/2/addresses.xml
+I, [2010-08-12T16:09:06.583415 #67812]  INFO -- : --> 201 201 0 (0.1ms)
+I, [2010-08-12T16:09:06.584529 #67812]  INFO -- : PUT http://localhost:80/people/2.xml
+I, [2010-08-12T16:09:06.584619 #67812]  INFO -- : --> 204 204 0 (0.0ms)
+I, [2010-08-12T16:09:06.585950 #67812]  INFO -- : PUT http://localhost:80/people/2.xml
+I, [2010-08-12T16:09:06.586061 #67812]  INFO -- : --> 401 401 0 (0.1ms)
+I, [2010-08-12T16:09:06.586383 #67812]  INFO -- : PUT http://localhost:80/people/2.xml
+I, [2010-08-12T16:09:06.586457 #67812]  INFO -- : --> 204 204 0 (0.1ms)
+I, [2010-08-12T16:09:06.587769 #67812]  INFO -- : GET http://localhost:80/people/2.xml
+E, [2010-08-12T16:09:06.587914 #67812] ERROR -- : Could not log "request.active_resource" event. NoMethodError: undefined method `code' for nil:NilClass
+I, [2010-08-12T16:09:06.588235 #67812]  INFO -- : POST http://localhost:80/people/2/addresses.xml
+E, [2010-08-12T16:09:06.588347 #67812] ERROR -- : Could not log "request.active_resource" event. NoMethodError: undefined method `code' for nil:NilClass
+I, [2010-08-12T16:09:06.588659 #67812]  INFO -- : PUT http://localhost:80/people/2.xml
+E, [2010-08-12T16:09:06.588771 #67812] ERROR -- : Could not log "request.active_resource" event. NoMethodError: undefined method `code' for nil:NilClass
+I, [2010-08-12T16:09:06.589078 #67812]  INFO -- : DELETE http://localhost:80/people/2.xml
+E, [2010-08-12T16:09:06.589187 #67812] ERROR -- : Could not log "request.active_resource" event. NoMethodError: undefined method `code' for nil:NilClass
+I, [2010-08-12T16:09:06.589497 #67812]  INFO -- : HEAD http://localhost:80/people/2.xml
+E, [2010-08-12T16:09:06.589606 #67812] ERROR -- : Could not log "request.active_resource" event. NoMethodError: undefined method `code' for nil:NilClass
+I, [2010-08-12T16:09:06.590890 #67812]  INFO -- : GET http://localhost:80/people/2.xml
+E, [2010-08-12T16:09:06.591028 #67812] ERROR -- : Could not log "request.active_resource" event. NoMethodError: undefined method `code' for nil:NilClass
+I, [2010-08-12T16:09:06.591351 #67812]  INFO -- : POST http://localhost:80/people/2/addresses.xml
+E, [2010-08-12T16:09:06.591463 #67812] ERROR -- : Could not log "request.active_resource" event. NoMethodError: undefined method `code' for nil:NilClass
+I, [2010-08-12T16:09:06.591817 #67812]  INFO -- : PUT http://localhost:80/people/2.xml
+E, [2010-08-12T16:09:06.591932 #67812] ERROR -- : Could not log "request.active_resource" event. NoMethodError: undefined method `code' for nil:NilClass
+I, [2010-08-12T16:09:06.592245 #67812]  INFO -- : DELETE http://localhost:80/people/2.xml
+E, [2010-08-12T16:09:06.592364 #67812] ERROR -- : Could not log "request.active_resource" event. NoMethodError: undefined method `code' for nil:NilClass
+I, [2010-08-12T16:09:06.592696 #67812]  INFO -- : HEAD http://localhost:80/people/2.xml
+E, [2010-08-12T16:09:06.592820 #67812] ERROR -- : Could not log "request.active_resource" event. NoMethodError: undefined method `code' for nil:NilClass
+I, [2010-08-12T16:09:06.594077 #67812]  INFO -- : GET http://localhost:80/people/1.xml
+I, [2010-08-12T16:09:06.594175 #67812]  INFO -- : --> 401 401 0 (0.0ms)
+I, [2010-08-12T16:09:06.613418 #67812]  INFO -- : POST http://37s.sunrise.i:3000/people.json
+I, [2010-08-12T16:09:06.613587 #67812]  INFO -- : --> 422 422 118 (0.0ms)
+I, [2010-08-12T16:09:06.627575 #67812]  INFO -- : POST http://37s.sunrise.i:3000/people.xml
+I, [2010-08-12T16:09:06.627732 #67812]  INFO -- : --> 422 422 209 (0.0ms)
+I, [2010-08-12T16:09:06.691824 #67812]  INFO -- : POST http://37s.sunrise.i:3000/people.json
+I, [2010-08-12T16:09:06.691965 #67812]  INFO -- : --> 422 422 118 (0.0ms)
+I, [2010-08-12T16:09:06.692910 #67812]  INFO -- : POST http://37s.sunrise.i:3000/people.xml
+I, [2010-08-12T16:09:06.693017 #67812]  INFO -- : --> 422 422 209 (0.0ms)
+I, [2010-08-12T16:09:06.696890 #67812]  INFO -- : POST http://37s.sunrise.i:3000/people.json
+I, [2010-08-12T16:09:06.697024 #67812]  INFO -- : --> 422 422 118 (0.0ms)
+I, [2010-08-12T16:09:06.699219 #67812]  INFO -- : POST http://37s.sunrise.i:3000/people.xml
+I, [2010-08-12T16:09:06.699335 #67812]  INFO -- : --> 422 422 209 (0.0ms)
+I, [2010-08-12T16:09:06.704624 #67812]  INFO -- : POST http://37s.sunrise.i:3000/people.json
+I, [2010-08-12T16:09:06.704759 #67812]  INFO -- : --> 422 422 118 (0.0ms)
+I, [2010-08-12T16:09:06.705748 #67812]  INFO -- : POST http://37s.sunrise.i:3000/people.xml
+I, [2010-08-12T16:09:06.705836 #67812]  INFO -- : --> 422 422 209 (0.0ms)
+I, [2010-08-12T16:09:06.712293 #67812]  INFO -- : POST http://37s.sunrise.i:3000/people.json
+I, [2010-08-12T16:09:06.712430 #67812]  INFO -- : --> 422 422 118 (0.0ms)
+I, [2010-08-12T16:09:06.713447 #67812]  INFO -- : POST http://37s.sunrise.i:3000/people.xml
+I, [2010-08-12T16:09:06.713544 #67812]  INFO -- : --> 422 422 209 (0.0ms)
+I, [2010-08-12T16:09:06.720010 #67812]  INFO -- : POST http://37s.sunrise.i:3000/people.json
+I, [2010-08-12T16:09:06.720147 #67812]  INFO -- : --> 422 422 118 (0.0ms)
+I, [2010-08-12T16:09:06.721070 #67812]  INFO -- : POST http://37s.sunrise.i:3000/people.xml
+I, [2010-08-12T16:09:06.721156 #67812]  INFO -- : --> 422 422 209 (0.0ms)
+I, [2010-08-12T16:09:06.724807 #67812]  INFO -- : POST http://37s.sunrise.i:3000/people.json
+I, [2010-08-12T16:09:06.724942 #67812]  INFO -- : --> 422 422 118 (0.0ms)
+I, [2010-08-12T16:09:06.726008 #67812]  INFO -- : POST http://37s.sunrise.i:3000/people.xml
+I, [2010-08-12T16:09:06.726141 #67812]  INFO -- : --> 422 422 209 (0.0ms)
+I, [2010-08-12T16:09:06.729939 #67812]  INFO -- : POST http://37s.sunrise.i:3000/people.json
+I, [2010-08-12T16:09:06.730077 #67812]  INFO -- : --> 422 422 2 (0.0ms)
+I, [2010-08-12T16:09:06.749299 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/1.xml
+I, [2010-08-12T16:09:06.749447 #67812]  INFO -- : --> 200 200 106 (0.0ms)
+I, [2010-08-12T16:09:06.799429 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/1.xml
+I, [2010-08-12T16:09:06.799586 #67812]  INFO -- : --> 200 200 106 (0.0ms)
+I, [2010-08-12T16:09:06.802895 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+I, [2010-08-12T16:09:06.803044 #67812]  INFO -- : --> 200 200 151 (0.1ms)
+I, [2010-08-12T16:09:06.814158 #67812]  INFO -- : POST http://37s.sunrise.i:3000/people.xml
+I, [2010-08-12T16:09:06.814299 #67812]  INFO -- : --> 201 201 109 (0.0ms)
+I, [2010-08-12T16:09:06.818199 #67812]  INFO -- : POST http://37s.sunrise.i:3000/people.xml
+I, [2010-08-12T16:09:06.818340 #67812]  INFO -- : --> 409 409 0 (0.0ms)
+I, [2010-08-12T16:09:06.826677 #67812]  INFO -- : POST http://37s.sunrise.i:3000/people/1/addresses.xml
+I, [2010-08-12T16:09:06.826824 #67812]  INFO -- : --> 201 201 0 (0.0ms)
+I, [2010-08-12T16:09:06.835139 #67812]  INFO -- : POST http://37s.sunrise.i:3000/people.xml
+I, [2010-08-12T16:09:06.835280 #67812]  INFO -- : --> 201 201 0 (0.0ms)
+I, [2010-08-12T16:09:06.916615 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/Greg.xml
+I, [2010-08-12T16:09:06.916759 #67812]  INFO -- : --> 200 200 106 (0.0ms)
+I, [2010-08-12T16:09:06.929307 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/4.xml
+I, [2010-08-12T16:09:06.929451 #67812]  INFO -- : --> 404 404 0 (0.0ms)
+I, [2010-08-12T16:09:06.945577 #67812]  INFO -- : DELETE http://37s.sunrise.i:3000/people/1.xml
+I, [2010-08-12T16:09:06.945740 #67812]  INFO -- : --> 200 200 0 (0.0ms)
+I, [2010-08-12T16:09:06.946085 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/1.xml
+I, [2010-08-12T16:09:06.946159 #67812]  INFO -- : --> 404 404 0 (0.0ms)
+I, [2010-08-12T16:09:06.954669 #67812]  INFO -- : DELETE http://37s.sunrise.i:3000/people/1.xml
+I, [2010-08-12T16:09:06.954821 #67812]  INFO -- : --> 200 200 0 (0.0ms)
+I, [2010-08-12T16:09:06.955203 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/1.xml
+I, [2010-08-12T16:09:06.955292 #67812]  INFO -- : --> 410 410 0 (0.0ms)
+I, [2010-08-12T16:09:06.964422 #67812]  INFO -- : DELETE http://37s.sunrise.i:3000/people/1/addresses/1.xml
+I, [2010-08-12T16:09:06.964574 #67812]  INFO -- : --> 200 200 0 (0.0ms)
+I, [2010-08-12T16:09:06.964942 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+I, [2010-08-12T16:09:06.965018 #67812]  INFO -- : --> 404 404 0 (0.0ms)
+I, [2010-08-12T16:09:06.973621 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/1.xml
+I, [2010-08-12T16:09:06.973778 #67812]  INFO -- : --> 200 200 106 (0.0ms)
+I, [2010-08-12T16:09:06.977189 #67812]  INFO -- : DELETE http://37s.sunrise.i:3000/people/1.xml
+I, [2010-08-12T16:09:06.977309 #67812]  INFO -- : --> 200 200 0 (0.0ms)
+I, [2010-08-12T16:09:06.977649 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/1.xml
+I, [2010-08-12T16:09:06.977729 #67812]  INFO -- : --> 404 404 0 (0.0ms)
+I, [2010-08-12T16:09:06.986409 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/1.xml
+I, [2010-08-12T16:09:06.986565 #67812]  INFO -- : --> 200 200 106 (0.0ms)
+I, [2010-08-12T16:09:06.989962 #67812]  INFO -- : DELETE http://37s.sunrise.i:3000/people/1.xml
+I, [2010-08-12T16:09:06.990081 #67812]  INFO -- : --> 200 200 0 (0.0ms)
+I, [2010-08-12T16:09:06.990430 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/1.xml
+I, [2010-08-12T16:09:06.990506 #67812]  INFO -- : --> 410 410 0 (0.0ms)
+I, [2010-08-12T16:09:07.080925 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+I, [2010-08-12T16:09:07.081094 #67812]  INFO -- : --> 200 200 151 (0.0ms)
+I, [2010-08-12T16:09:07.084725 #67812]  INFO -- : DELETE http://37s.sunrise.i:3000/people/1/addresses/1.xml
+I, [2010-08-12T16:09:07.084870 #67812]  INFO -- : --> 200 200 0 (0.1ms)
+I, [2010-08-12T16:09:07.085286 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+I, [2010-08-12T16:09:07.085375 #67812]  INFO -- : --> 404 404 0 (0.0ms)
+I, [2010-08-12T16:09:07.093379 #67812]  INFO -- : HEAD http://37s.sunrise.i:3000/people/1.xml
+I, [2010-08-12T16:09:07.093518 #67812]  INFO -- : --> 200 200 0 (0.1ms)
+I, [2010-08-12T16:09:07.093784 #67812]  INFO -- : HEAD http://37s.sunrise.i:3000/people/99.xml
+I, [2010-08-12T16:09:07.093856 #67812]  INFO -- : --> 404 404 0 (0.0ms)
+I, [2010-08-12T16:09:07.094205 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/1.xml
+I, [2010-08-12T16:09:07.094280 #67812]  INFO -- : --> 200 200 106 (0.0ms)
+I, [2010-08-12T16:09:07.097291 #67812]  INFO -- : HEAD http://37s.sunrise.i:3000/people/1.xml
+I, [2010-08-12T16:09:07.097394 #67812]  INFO -- : --> 200 200 0 (0.1ms)
+I, [2010-08-12T16:09:07.097738 #67812]  INFO -- : HEAD http://37s.sunrise.i:3000/people/99.xml
+I, [2010-08-12T16:09:07.097856 #67812]  INFO -- : --> 404 404 0 (0.0ms)
+I, [2010-08-12T16:09:07.098190 #67812]  INFO -- : HEAD http://37s.sunrise.i:3000/people/1/addresses/1.xml
+I, [2010-08-12T16:09:07.098265 #67812]  INFO -- : --> 200 200 0 (0.0ms)
+I, [2010-08-12T16:09:07.098539 #67812]  INFO -- : HEAD http://37s.sunrise.i:3000/people/2/addresses/1.xml
+I, [2010-08-12T16:09:07.098612 #67812]  INFO -- : --> 404 404 0 (0.0ms)
+I, [2010-08-12T16:09:07.098914 #67812]  INFO -- : HEAD http://37s.sunrise.i:3000/people/1/addresses/2.xml
+I, [2010-08-12T16:09:07.098988 #67812]  INFO -- : --> 404 404 0 (0.0ms)
+I, [2010-08-12T16:09:07.099286 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+I, [2010-08-12T16:09:07.099360 #67812]  INFO -- : --> 200 200 151 (0.0ms)
+I, [2010-08-12T16:09:07.102574 #67812]  INFO -- : HEAD http://37s.sunrise.i:3000/people/1/addresses/1.xml
+I, [2010-08-12T16:09:07.102699 #67812]  INFO -- : --> 200 200 0 (0.1ms)
+I, [2010-08-12T16:09:07.103076 #67812]  INFO -- : HEAD http://37s.sunrise.i:3000/people/2/addresses/1.xml
+I, [2010-08-12T16:09:07.103158 #67812]  INFO -- : --> 404 404 0 (0.0ms)
+I, [2010-08-12T16:09:07.103574 #67812]  INFO -- : HEAD http://37s.sunrise.i:3000/people/1/addresses/2.xml
+I, [2010-08-12T16:09:07.103659 #67812]  INFO -- : --> 404 404 0 (0.0ms)
+I, [2010-08-12T16:09:07.111395 #67812]  INFO -- : HEAD http://37s.sunrise.i:3000/people/1.xml
+I, [2010-08-12T16:09:07.111527 #67812]  INFO -- : --> 410 410 0 (0.0ms)
+I, [2010-08-12T16:09:07.119248 #67812]  INFO -- : HEAD http://37s.sunrise.i:3000/people/Greg.xml
+I, [2010-08-12T16:09:07.119397 #67812]  INFO -- : --> 200 200 0 (0.1ms)
+I, [2010-08-12T16:09:07.119711 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/Greg.xml
+I, [2010-08-12T16:09:07.119799 #67812]  INFO -- : --> 200 200 106 (0.0ms)
+I, [2010-08-12T16:09:07.123298 #67812]  INFO -- : HEAD http://37s.sunrise.i:3000/people/Greg.xml
+I, [2010-08-12T16:09:07.123438 #67812]  INFO -- : --> 200 200 0 (0.1ms)
+I, [2010-08-12T16:09:07.123719 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/Greg.xml
+I, [2010-08-12T16:09:07.123799 #67812]  INFO -- : --> 200 200 106 (0.0ms)
+I, [2010-08-12T16:09:07.127017 #67812]  INFO -- : HEAD http://37s.sunrise.i:3000/people/Greg/addresses/1.xml
+I, [2010-08-12T16:09:07.127137 #67812]  INFO -- : --> 200 200 0 (0.1ms)
+I, [2010-08-12T16:09:07.127424 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/Greg.xml
+I, [2010-08-12T16:09:07.127500 #67812]  INFO -- : --> 200 200 106 (0.0ms)
+I, [2010-08-12T16:09:07.130550 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/Greg/addresses/1.xml
+I, [2010-08-12T16:09:07.130656 #67812]  INFO -- : --> 200 200 151 (0.0ms)
+I, [2010-08-12T16:09:07.133773 #67812]  INFO -- : HEAD http://37s.sunrise.i:3000/people/Greg/addresses/1.xml
+I, [2010-08-12T16:09:07.133874 #67812]  INFO -- : --> 200 200 0 (0.1ms)
+I, [2010-08-12T16:09:07.142196 #67812]  INFO -- : HEAD http://37s.sunrise.i:3000/people/not-mocked.xml
+I, [2010-08-12T16:09:07.142337 #67812]  INFO -- : --> 200 200 0 (0.1ms)
+I, [2010-08-12T16:09:07.164572 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+I, [2010-08-12T16:09:07.164711 #67812]  INFO -- : --> 200 200 151 (0.0ms)
+I, [2010-08-12T16:09:07.175602 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/5.xml
+I, [2010-08-12T16:09:07.175746 #67812]  INFO -- : --> 200 200 223 (0.0ms)
+I, [2010-08-12T16:09:07.195155 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+I, [2010-08-12T16:09:07.195303 #67812]  INFO -- : --> 200 200 151 (0.0ms)
+I, [2010-08-12T16:09:07.206382 #67812]  INFO -- : GET http://37s.sunrise.i:3000/customers/1.xml
+I, [2010-08-12T16:09:07.206543 #67812]  INFO -- : --> 200 200 1458 (0.1ms)
+I, [2010-08-12T16:09:07.275026 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/Greg.xml
+I, [2010-08-12T16:09:07.275178 #67812]  INFO -- : --> 200 200 106 (0.0ms)
+I, [2010-08-12T16:09:07.278196 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/Greg.xml
+I, [2010-08-12T16:09:07.278303 #67812]  INFO -- : --> 200 200 106 (0.0ms)
+I, [2010-08-12T16:09:07.288533 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+I, [2010-08-12T16:09:07.288682 #67812]  INFO -- : --> 200 200 151 (0.0ms)
+I, [2010-08-12T16:09:07.292305 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+I, [2010-08-12T16:09:07.292430 #67812]  INFO -- : --> 200 200 151 (0.0ms)
+I, [2010-08-12T16:09:07.303603 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people.xml
+I, [2010-08-12T16:09:07.303750 #67812]  INFO -- : --> 200 200 222 (0.0ms)
+I, [2010-08-12T16:09:07.307795 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/1.xml
+I, [2010-08-12T16:09:07.307923 #67812]  INFO -- : --> 200 200 106 (0.0ms)
+I, [2010-08-12T16:09:07.318633 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/1.xml
+I, [2010-08-12T16:09:07.318800 #67812]  INFO -- : --> 200 200 106 (0.0ms)
+I, [2010-08-12T16:09:07.330171 #67812]  INFO -- : POST http://37s.sunrise.i:3000/people.xml
+I, [2010-08-12T16:09:07.330332 #67812]  INFO -- : --> 201 201 109 (0.1ms)
+I, [2010-08-12T16:09:07.341797 #67812]  INFO -- : POST http://37s.sunrise.i:3000/people.xml
+I, [2010-08-12T16:09:07.341942 #67812]  INFO -- : --> 201 201 109 (0.0ms)
+I, [2010-08-12T16:09:07.572197 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/6.json
+I, [2010-08-12T16:09:07.572337 #67812]  INFO -- : --> 200 200 32 (0.0ms)
+I, [2010-08-12T16:09:07.580780 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/6.json
+I, [2010-08-12T16:09:07.580920 #67812]  INFO -- : --> 200 200 32 (0.0ms)
+I, [2010-08-12T16:09:07.589351 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/1.xml
+I, [2010-08-12T16:09:07.589500 #67812]  INFO -- : --> 200 200 106 (0.0ms)
+I, [2010-08-12T16:09:07.600008 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/1.xml
+I, [2010-08-12T16:09:07.600152 #67812]  INFO -- : --> 200 200 106 (0.0ms)
+I, [2010-08-12T16:09:07.610635 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/1.xml
+I, [2010-08-12T16:09:07.610779 #67812]  INFO -- : --> 200 200 106 (0.0ms)
+I, [2010-08-12T16:09:07.621784 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/1.xml
+I, [2010-08-12T16:09:07.621930 #67812]  INFO -- : --> 200 200 106 (0.0ms)
+I, [2010-08-12T16:09:07.633549 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people.xml
+I, [2010-08-12T16:09:07.633723 #67812]  INFO -- : --> 200 200 222 (0.0ms)
+I, [2010-08-12T16:09:07.638837 #67812]  INFO -- : PUT http://37s.sunrise.i:3000/people/1.xml
+I, [2010-08-12T16:09:07.638994 #67812]  INFO -- : --> 204 204 0 (0.0ms)
+I, [2010-08-12T16:09:07.646762 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people.xml
+I, [2010-08-12T16:09:07.646916 #67812]  INFO -- : --> 200 200 222 (0.0ms)
+I, [2010-08-12T16:09:07.659178 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people.xml
+I, [2010-08-12T16:09:07.659370 #67812]  INFO -- : --> 200 200 222 (0.1ms)
+I, [2010-08-12T16:09:07.672382 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/1/addresses.xml
+I, [2010-08-12T16:09:07.672542 #67812]  INFO -- : --> 200 200 199 (0.0ms)
+I, [2010-08-12T16:09:07.684553 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/1/addresses.xml
+I, [2010-08-12T16:09:07.684725 #67812]  INFO -- : --> 200 200 199 (0.0ms)
+I, [2010-08-12T16:09:07.696597 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/2.xml
+I, [2010-08-12T16:09:07.696777 #67812]  INFO -- : --> 200 200 107 (0.0ms)
+I, [2010-08-12T16:09:07.700475 #67812]  INFO -- : PUT http://37s.sunrise.i:3000/people/2.xml
+I, [2010-08-12T16:09:07.700600 #67812]  INFO -- : --> 409 409 0 (0.0ms)
+I, [2010-08-12T16:09:07.708697 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+I, [2010-08-12T16:09:07.708840 #67812]  INFO -- : --> 200 200 151 (0.0ms)
+I, [2010-08-12T16:09:07.713197 #67812]  INFO -- : PUT http://37s.sunrise.i:3000/people/1/addresses/1.xml
+I, [2010-08-12T16:09:07.713341 #67812]  INFO -- : --> 204 204 0 (0.1ms)
+I, [2010-08-12T16:09:07.805240 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/1/addresses.xml
+I, [2010-08-12T16:09:07.805390 #67812]  INFO -- : --> 200 200 199 (0.0ms)
+I, [2010-08-12T16:09:07.809779 #67812]  INFO -- : PUT http://37s.sunrise.i:3000/people/1/addresses/1.xml
+I, [2010-08-12T16:09:07.809915 #67812]  INFO -- : --> 204 204 0 (0.1ms)
+I, [2010-08-12T16:09:07.859114 #67812]  INFO -- : GET http://localhost:80/people/1.xml
+I, [2010-08-12T16:09:07.859254 #67812]  INFO -- : --> 200 200 106 (0.1ms)
+I, [2010-08-12T16:09:07.869687 #67812]  INFO -- : DELETE http://localhost:80/people/1.xml
+I, [2010-08-12T16:09:07.869835 #67812]  INFO -- : --> 200 200 0 (0.0ms)
+I, [2010-08-12T16:09:07.871878 #67812]  INFO -- : DELETE http://localhost:80/people/2.xml
+I, [2010-08-12T16:09:07.871969 #67812]  INFO -- : --> 200 200 0 (0.0ms)
+I, [2010-08-12T16:09:07.873979 #67812]  INFO -- : GET http://localhost:80/people/1.xml
+I, [2010-08-12T16:09:07.874077 #67812]  INFO -- : --> 200 200 106 (0.0ms)
+I, [2010-08-12T16:09:07.878869 #67812]  INFO -- : GET http://localhost:80/people.xml
+I, [2010-08-12T16:09:07.879000 #67812]  INFO -- : --> 200 200 222 (0.0ms)
+I, [2010-08-12T16:09:07.885138 #67812]  INFO -- : GET http://localhost:80/people_empty_elements.xml
+I, [2010-08-12T16:09:07.885299 #67812]  INFO -- : --> 200 200 77 (0.0ms)
+I, [2010-08-12T16:09:07.889974 #67812]  INFO -- : GET http://localhost:80/people_single_elements.xml
+I, [2010-08-12T16:09:07.890105 #67812]  INFO -- : --> 200 200 208 (0.0ms)
+I, [2010-08-12T16:09:07.895089 #67812]  INFO -- : GET http://localhost:80/people/2.xml
+I, [2010-08-12T16:09:07.895218 #67812]  INFO -- : --> 200 200 107 (0.0ms)
+I, [2010-08-12T16:09:07.903285 #67812]  INFO -- : HEAD http://localhost:80/people/1.xml
+I, [2010-08-12T16:09:07.903419 #67812]  INFO -- : --> 200 200 0 (0.0ms)
+I, [2010-08-12T16:09:07.907333 #67812]  INFO -- : POST http://localhost:80/people.xml
+I, [2010-08-12T16:09:07.907443 #67812]  INFO -- : --> 201 201 0 (0.0ms)
+I, [2010-08-12T16:09:07.909469 #67812]  INFO -- : POST http://localhost:80/members.xml
+I, [2010-08-12T16:09:07.909562 #67812]  INFO -- : --> 201 201 8 (0.0ms)
+I, [2010-08-12T16:09:07.913497 #67812]  INFO -- : PUT http://localhost:80/people/1.xml
+I, [2010-08-12T16:09:07.913593 #67812]  INFO -- : --> 204 204 0 (0.0ms)
+I, [2010-08-12T16:09:07.915613 #67812]  INFO -- : PUT http://localhost:80/people/2.xml
+I, [2010-08-12T16:09:07.915714 #67812]  INFO -- : --> 204 204 0 (0.0ms)
+I, [2010-08-12T16:09:07.924963 #67812]  INFO -- : GET http://localhost:80/people/1.xml
+E, [2010-08-12T16:09:07.925144 #67812] ERROR -- : Could not log "request.active_resource" event. NoMethodError: undefined method `code' for nil:NilClass
+I, [2010-08-12T16:09:07.968383 #67812]  INFO -- : GET http://localhost:80/people_timeout.xml
+E, [2010-08-12T16:09:07.968571 #67812] ERROR -- : Could not log "request.active_resource" event. NoMethodError: undefined method `code' for nil:NilClass
+I, [2010-08-12T16:09:07.973202 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/retrieve.xml?name=Matz
+I, [2010-08-12T16:09:07.973329 #67812]  INFO -- : --> 200 200 146 (0.0ms)
+I, [2010-08-12T16:09:07.976581 #67812]  INFO -- : POST http://37s.sunrise.i:3000/people/hire.xml?name=Matz
+I, [2010-08-12T16:09:07.976687 #67812]  INFO -- : --> 201 201 0 (0.0ms)
+I, [2010-08-12T16:09:07.977074 #67812]  INFO -- : PUT http://37s.sunrise.i:3000/people/promote.xml?name=Matz
+I, [2010-08-12T16:09:07.977150 #67812]  INFO -- : --> 204 204 0 (0.0ms)
+I, [2010-08-12T16:09:07.977418 #67812]  INFO -- : PUT http://37s.sunrise.i:3000/people/sort.xml?by=name
+I, [2010-08-12T16:09:07.977495 #67812]  INFO -- : --> 204 204 0 (0.0ms)
+I, [2010-08-12T16:09:07.977756 #67812]  INFO -- : DELETE http://37s.sunrise.i:3000/people/deactivate.xml?name=Matz
+I, [2010-08-12T16:09:07.977829 #67812]  INFO -- : --> 200 200 0 (0.0ms)
+I, [2010-08-12T16:09:07.978131 #67812]  INFO -- : PUT http://37s.sunrise.i:3000/people/1/addresses/sort.xml?by=name
+I, [2010-08-12T16:09:07.978205 #67812]  INFO -- : --> 204 204 0 (0.0ms)
+I, [2010-08-12T16:09:07.980712 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/1.xml
+I, [2010-08-12T16:09:07.980830 #67812]  INFO -- : --> 200 200 106 (0.0ms)
+I, [2010-08-12T16:09:07.983896 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/1/shallow.xml
+I, [2010-08-12T16:09:07.984059 #67812]  INFO -- : --> 200 200 106 (0.0ms)
+I, [2010-08-12T16:09:07.987047 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/1.xml
+I, [2010-08-12T16:09:07.987182 #67812]  INFO -- : --> 200 200 106 (0.0ms)
+I, [2010-08-12T16:09:07.989930 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/1/deep.xml
+I, [2010-08-12T16:09:07.990027 #67812]  INFO -- : --> 200 200 129 (0.0ms)
+I, [2010-08-12T16:09:07.992800 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/1.xml
+I, [2010-08-12T16:09:07.992897 #67812]  INFO -- : --> 200 200 106 (0.0ms)
+I, [2010-08-12T16:09:07.995680 #67812]  INFO -- : PUT http://37s.sunrise.i:3000/people/1/promote.xml?position=Manager
+I, [2010-08-12T16:09:07.995792 #67812]  INFO -- : --> 204 204 0 (0.0ms)
+I, [2010-08-12T16:09:07.996064 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/1.xml
+I, [2010-08-12T16:09:07.996136 #67812]  INFO -- : --> 200 200 106 (0.0ms)
+I, [2010-08-12T16:09:07.999099 #67812]  INFO -- : DELETE http://37s.sunrise.i:3000/people/1/deactivate.xml
+I, [2010-08-12T16:09:07.999212 #67812]  INFO -- : --> 200 200 0 (0.0ms)
+I, [2010-08-12T16:09:07.999544 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+I, [2010-08-12T16:09:07.999626 #67812]  INFO -- : --> 200 200 120 (0.0ms)
+I, [2010-08-12T16:09:08.002954 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/1/addresses/1/deep.xml
+I, [2010-08-12T16:09:08.003105 #67812]  INFO -- : --> 200 200 139 (0.1ms)
+I, [2010-08-12T16:09:08.006360 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+I, [2010-08-12T16:09:08.006491 #67812]  INFO -- : --> 200 200 120 (0.0ms)
+I, [2010-08-12T16:09:08.009343 #67812]  INFO -- : PUT http://37s.sunrise.i:3000/people/1/addresses/1/normalize_phone.xml?locale=US
+I, [2010-08-12T16:09:08.009452 #67812]  INFO -- : --> 204 204 0 (0.0ms)
+I, [2010-08-12T16:09:08.012174 #67812]  INFO -- : POST http://37s.sunrise.i:3000/people/new/register.xml
+I, [2010-08-12T16:09:08.012283 #67812]  INFO -- : --> 201 201 78 (0.0ms)
+I, [2010-08-12T16:09:08.013028 #67812]  INFO -- : POST http://37s.sunrise.i:3000/people/1/addresses/new/link.xml
+I, [2010-08-12T16:09:08.013104 #67812]  INFO -- : --> 201 201 92 (0.0ms)
+I, [2010-08-12T16:09:08.013725 #67812]  INFO -- : POST http://37s.sunrise.i:3000/people/1/register.xml
+I, [2010-08-12T16:09:08.013800 #67812]  INFO -- : --> 201 201 106 (0.0ms)
+I, [2010-08-12T16:09:08.016087 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/managers.xml
+I, [2010-08-12T16:09:08.016183 #67812]  INFO -- : --> 200 200 146 (0.0ms)
+I, [2010-08-12T16:09:08.026871 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people.xml
+I, [2010-08-12T16:09:08.027019 #67812]  INFO -- : --> 200 200 222 (0.0ms)
+I, [2010-08-12T16:09:08.038333 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/1/addresses.xml
+I, [2010-08-12T16:09:08.038478 #67812]  INFO -- : --> 200 200 166 (0.0ms)
+I, [2010-08-12T16:09:08.049017 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people.xml
+I, [2010-08-12T16:09:08.049161 #67812]  INFO -- : --> 200 200 222 (0.0ms)
+I, [2010-08-12T16:09:08.060937 #67812]  INFO -- : GET http://37s.sunrise.i:3000/companies/1/people.xml
+I, [2010-08-12T16:09:08.061086 #67812]  INFO -- : --> 200 200 147 (0.0ms)
+I, [2010-08-12T16:09:08.071729 #67812]  INFO -- : GET http://37s.sunrise.i:3000/companies/1/people.xml
+I, [2010-08-12T16:09:08.071871 #67812]  INFO -- : --> 200 200 147 (0.0ms)
+I, [2010-08-12T16:09:08.082631 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/managers.xml
+I, [2010-08-12T16:09:08.082781 #67812]  INFO -- : --> 200 200 147 (0.0ms)
+I, [2010-08-12T16:09:08.093738 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/1/addresses.xml
+I, [2010-08-12T16:09:08.093898 #67812]  INFO -- : --> 200 200 166 (0.0ms)
+I, [2010-08-12T16:09:08.105448 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/2/addresses.xml
+I, [2010-08-12T16:09:08.105594 #67812]  INFO -- : --> 404 404 0 (0.0ms)
+I, [2010-08-12T16:09:08.113229 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/1.xml
+I, [2010-08-12T16:09:08.113408 #67812]  INFO -- : --> 200 200 106 (0.0ms)
+I, [2010-08-12T16:09:08.207201 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/99.xml
+I, [2010-08-12T16:09:08.207355 #67812]  INFO -- : --> 404 404 0 (0.0ms)
+I, [2010-08-12T16:09:08.207771 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people//addresses/1.xml
+I, [2010-08-12T16:09:08.207851 #67812]  INFO -- : --> 404 404 0 (0.0ms)
+I, [2010-08-12T16:09:08.215471 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+I, [2010-08-12T16:09:08.215613 #67812]  INFO -- : --> 200 200 120 (0.0ms)
+I, [2010-08-12T16:09:08.225930 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people.xml
+I, [2010-08-12T16:09:08.226085 #67812]  INFO -- : --> 200 200 222 (0.0ms)
+I, [2010-08-12T16:09:08.237727 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people.xml
+I, [2010-08-12T16:09:08.238104 #67812]  INFO -- : --> 200 200 222 (0.1ms)
+I, [2010-08-12T16:09:08.251237 #67812]  INFO -- : GET http://37s.sunrise.i:3000/companies/1/manager.xml
+I, [2010-08-12T16:09:08.251399 #67812]  INFO -- : --> 200 200 107 (0.0ms)
+I, [2010-08-12T16:09:08.262290 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/leader.xml
+I, [2010-08-12T16:09:08.262437 #67812]  INFO -- : --> 200 200 107 (0.0ms)
+I, [2010-08-12T16:09:08.272795 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people.xml
+I, [2010-08-12T16:09:08.272938 #67812]  INFO -- : --> 200 200 222 (0.0ms)
+I, [2010-08-12T16:09:08.284373 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/1/addresses.xml
+I, [2010-08-12T16:09:08.284518 #67812]  INFO -- : --> 200 200 166 (0.0ms)
+I, [2010-08-12T16:09:08.295608 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people.xml
+I, [2010-08-12T16:09:08.295754 #67812]  INFO -- : --> 200 200 222 (0.0ms)
+I, [2010-08-12T16:09:08.307305 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/1/addresses.xml
+I, [2010-08-12T16:09:08.307461 #67812]  INFO -- : --> 200 200 166 (0.0ms)
+I, [2010-08-12T16:09:08.311302 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people.json
+I, [2010-08-12T16:09:08.311426 #67812]  INFO -- : --> 200 200 48 (0.0ms)
+I, [2010-08-12T16:09:08.312606 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people.xml
+I, [2010-08-12T16:09:08.312688 #67812]  INFO -- : --> 200 200 224 (0.0ms)
+I, [2010-08-12T16:09:08.317274 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/retrieve.json?name=David
+I, [2010-08-12T16:09:08.317396 #67812]  INFO -- : --> 200 200 25 (0.0ms)
+I, [2010-08-12T16:09:08.318338 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/retrieve.xml?name=David
+I, [2010-08-12T16:09:08.318445 #67812]  INFO -- : --> 200 200 149 (0.0ms)
+I, [2010-08-12T16:09:08.322152 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/2.json
+I, [2010-08-12T16:09:08.322286 #67812]  INFO -- : --> 200 200 23 (0.0ms)
+I, [2010-08-12T16:09:08.322712 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/2/shallow.json
+I, [2010-08-12T16:09:08.322811 #67812]  INFO -- : --> 200 200 23 (0.0ms)
+I, [2010-08-12T16:09:08.323828 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/2.xml
+I, [2010-08-12T16:09:08.323945 #67812]  INFO -- : --> 200 200 103 (0.0ms)
+I, [2010-08-12T16:09:08.326945 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/2/shallow.xml
+I, [2010-08-12T16:09:08.327053 #67812]  INFO -- : --> 200 200 103 (0.0ms)
+I, [2010-08-12T16:09:08.330403 #67812]  INFO -- : POST http://37s.sunrise.i:3000/people.json
+I, [2010-08-12T16:09:08.330533 #67812]  INFO -- : --> 201 201 15 (0.0ms)
+I, [2010-08-12T16:09:08.330991 #67812]  INFO -- : POST http://37s.sunrise.i:3000/people/new/register.json
+I, [2010-08-12T16:09:08.331077 #67812]  INFO -- : --> 201 201 15 (0.0ms)
+I, [2010-08-12T16:09:08.331878 #67812]  INFO -- : POST http://37s.sunrise.i:3000/people.xml
+I, [2010-08-12T16:09:08.331958 #67812]  INFO -- : --> 201 201 74 (0.0ms)
+I, [2010-08-12T16:09:08.334876 #67812]  INFO -- : POST http://37s.sunrise.i:3000/people/new/register.xml
+I, [2010-08-12T16:09:08.334986 #67812]  INFO -- : --> 201 201 74 (0.0ms)
+I, [2010-08-12T16:09:08.335526 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/1.json
+I, [2010-08-12T16:09:08.335673 #67812]  INFO -- : --> 200 200 23 (0.0ms)
+I, [2010-08-12T16:09:08.336608 #67812]  INFO -- : GET http://37s.sunrise.i:3000/people/1.xml
+I, [2010-08-12T16:09:08.336764 #67812]  INFO -- : --> 200 200 103 (0.0ms)
+I, [2010-08-12T16:09:08.341032 #67812]  INFO -- : POST http://37s.sunrise.i:3000/people.json
+I, [2010-08-12T16:09:08.341162 #67812]  INFO -- : --> 201 201 50 (0.0ms)
+I, [2010-08-12T16:09:08.342613 #67812]  INFO -- : POST http://37s.sunrise.i:3000/people.xml
+I, [2010-08-12T16:09:08.342700 #67812]  INFO -- : --> 201 201 132 (0.0ms)
+DELETE http://localhost:80/people/2.xml
+--> 200 200 (0 0ms)
+GET http://localhost:80/people/2.xml
+--> 200 200 (107 0ms)
+POST http://localhost:80/people/2/addresses.xml
+--> 201 201 (0 0ms)
+PUT http://localhost:80/people/2.xml
+--> 204 204 (0 0ms)
+POST http://localhost:80/people/2.xml
+POST http://localhost:80/people/2/addresses.xml
+PUT http://localhost:80/people/2.xml
+DELETE http://localhost:80/people/2.xml
+POST http://37s.sunrise.i:3000/people.xml
+--> 422 422 (209 0ms)
+POST http://37s.sunrise.i:3000/people.json
+--> 422 422 (118 0ms)
+POST http://37s.sunrise.i:3000/people.xml
+--> 422 422 (209 0ms)
+POST http://37s.sunrise.i:3000/people.xml
+--> 422 422 (209 0ms)
+POST http://37s.sunrise.i:3000/people.json
+--> 422 422 (118 0ms)
+POST http://37s.sunrise.i:3000/people.xml
+--> 422 422 (209 0ms)
+POST http://37s.sunrise.i:3000/people.xml
+--> 422 422 (209 0ms)
+POST http://37s.sunrise.i:3000/people.json
+--> 422 422 (118 0ms)
+POST http://37s.sunrise.i:3000/people.xml
+--> 422 422 (209 0ms)
+POST http://37s.sunrise.i:3000/people.xml
+--> 422 422 (209 0ms)
+POST http://37s.sunrise.i:3000/people.json
+--> 422 422 (118 0ms)
+POST http://37s.sunrise.i:3000/people.xml
+--> 422 422 (209 0ms)
+POST http://37s.sunrise.i:3000/people.xml
+--> 422 422 (209 0ms)
+POST http://37s.sunrise.i:3000/people.json
+--> 422 422 (118 0ms)
+POST http://37s.sunrise.i:3000/people.xml
+--> 422 422 (209 0ms)
+POST http://37s.sunrise.i:3000/people.xml
+--> 422 422 (209 0ms)
+POST http://37s.sunrise.i:3000/people.json
+--> 422 422 (118 0ms)
+POST http://37s.sunrise.i:3000/people.xml
+--> 422 422 (209 0ms)
+POST http://37s.sunrise.i:3000/people.xml
+--> 422 422 (209 0ms)
+POST http://37s.sunrise.i:3000/people.json
+--> 422 422 (118 0ms)
+POST http://37s.sunrise.i:3000/people.xml
+--> 422 422 (209 0ms)
+GET http://37s.sunrise.i:3000/people/1.xml
+--> 200 200 (106 0ms)
+GET http://37s.sunrise.i:3000/people/1.xml
+--> 200 200 (106 0ms)
+GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+--> 200 200 (120 0ms)
+POST http://37s.sunrise.i:3000/people.xml
+--> 201 201 (109 0ms)
+POST http://37s.sunrise.i:3000/people.xml
+--> 409 409 (0 0ms)
+POST http://37s.sunrise.i:3000/people/1/addresses.xml
+--> 201 201 (0 0ms)
+POST http://37s.sunrise.i:3000/people.xml
+--> 201 201 (0 0ms)
+GET http://37s.sunrise.i:3000/people/Greg.xml
+--> 200 200 (106 0ms)
+GET http://37s.sunrise.i:3000/people/4.xml
+--> 404 404 (0 0ms)
+DELETE http://37s.sunrise.i:3000/people/1.xml
+--> 200 200 (0 0ms)
+GET http://37s.sunrise.i:3000/people/1.xml
+--> 404 404 (0 0ms)
+DELETE http://37s.sunrise.i:3000/people/1.xml
+--> 200 200 (0 0ms)
+GET http://37s.sunrise.i:3000/people/1.xml
+--> 410 410 (0 0ms)
+DELETE http://37s.sunrise.i:3000/people/1/addresses/1.xml
+--> 200 200 (0 0ms)
+GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+--> 404 404 (0 0ms)
+GET http://37s.sunrise.i:3000/people/1.xml
+--> 200 200 (106 0ms)
+DELETE http://37s.sunrise.i:3000/people/1.xml
+--> 200 200 (0 0ms)
+GET http://37s.sunrise.i:3000/people/1.xml
+--> 404 404 (0 0ms)
+GET http://37s.sunrise.i:3000/people/1.xml
+--> 200 200 (106 0ms)
+DELETE http://37s.sunrise.i:3000/people/1.xml
+--> 200 200 (0 0ms)
+GET http://37s.sunrise.i:3000/people/1.xml
+--> 410 410 (0 0ms)
+GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+--> 200 200 (120 0ms)
+DELETE http://37s.sunrise.i:3000/people/1/addresses/1.xml
+--> 200 200 (0 0ms)
+GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+--> 404 404 (0 0ms)
+HEAD http://37s.sunrise.i:3000/people/1.xml
+--> 200 200 (0 0ms)
+HEAD http://37s.sunrise.i:3000/people/99.xml
+--> 404 404 (0 0ms)
+GET http://37s.sunrise.i:3000/people/1.xml
+--> 200 200 (106 0ms)
+HEAD http://37s.sunrise.i:3000/people/1.xml
+--> 200 200 (0 0ms)
+HEAD http://37s.sunrise.i:3000/people/99.xml
+--> 404 404 (0 0ms)
+HEAD http://37s.sunrise.i:3000/people/1/addresses/1.xml
+--> 200 200 (0 0ms)
+HEAD http://37s.sunrise.i:3000/people/2/addresses/1.xml
+--> 404 404 (0 0ms)
+HEAD http://37s.sunrise.i:3000/people/1/addresses/2.xml
+--> 404 404 (0 0ms)
+GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+--> 200 200 (120 0ms)
+HEAD http://37s.sunrise.i:3000/people/1/addresses/1.xml
+--> 200 200 (0 0ms)
+HEAD http://37s.sunrise.i:3000/people/2/addresses/1.xml
+--> 404 404 (0 0ms)
+HEAD http://37s.sunrise.i:3000/people/1/addresses/2.xml
+--> 404 404 (0 0ms)
+HEAD http://37s.sunrise.i:3000/people/1.xml
+--> 410 410 (0 0ms)
+HEAD http://37s.sunrise.i:3000/people/Greg.xml
+--> 200 200 (0 0ms)
+GET http://37s.sunrise.i:3000/people/Greg.xml
+--> 200 200 (106 0ms)
+HEAD http://37s.sunrise.i:3000/people/Greg.xml
+--> 200 200 (0 0ms)
+GET http://37s.sunrise.i:3000/people/Greg.xml
+--> 200 200 (106 0ms)
+HEAD http://37s.sunrise.i:3000/people/Greg/addresses/1.xml
+--> 200 200 (0 0ms)
+GET http://37s.sunrise.i:3000/people/Greg.xml
+--> 200 200 (106 0ms)
+GET http://37s.sunrise.i:3000/people/Greg/addresses/1.xml
+--> 200 200 (120 0ms)
+HEAD http://37s.sunrise.i:3000/people/Greg/addresses/1.xml
+--> 200 200 (0 0ms)
+HEAD http://37s.sunrise.i:3000/people/not-mocked.xml
+--> 200 200 (0 0ms)
+GET http://37s.sunrise.i:3000/people.xml
+--> 200 200 (222 0ms)
+GET http://37s.sunrise.i:3000/companies/1/people.xml
+--> 200 200 (147 0ms)
+GET http://37s.sunrise.i:3000/companies/1/people.xml
+--> 200 200 (147 0ms)
+GET http://37s.sunrise.i:3000/people/managers.xml
+--> 200 200 (147 0ms)
+GET http://37s.sunrise.i:3000/people/1.xml
+--> 200 200 (106 0ms)
+GET http://37s.sunrise.i:3000/people/99.xml
+--> 404 404 (0 0ms)
+GET http://37s.sunrise.i:3000/people//addresses/1.xml
+--> 404 404 (0 0ms)
+GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+--> 200 200 (120 0ms)
+GET http://37s.sunrise.i:3000/people.xml
+--> 200 200 (222 0ms)
+GET http://37s.sunrise.i:3000/people.xml
+--> 200 200 (222 0ms)
+GET http://37s.sunrise.i:3000/companies/1/manager.xml
+--> 200 200 (107 0ms)
+GET http://37s.sunrise.i:3000/people/leader.xml
+--> 200 200 (107 0ms)
+GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+--> 200 200 (120 0ms)
+GET http://37s.sunrise.i:3000/people/5.xml
+--> 200 200 (223 0ms)
+GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+--> 200 200 (120 0ms)
+GET http://37s.sunrise.i:3000/customers/1.xml
+--> 200 200 (1458 0ms)
+GET http://37s.sunrise.i:3000/people/Greg.xml
+--> 200 200 (106 0ms)
+GET http://37s.sunrise.i:3000/people/Greg.xml
+--> 200 200 (106 0ms)
+GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+--> 200 200 (120 0ms)
+GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+--> 200 200 (120 0ms)
+GET http://37s.sunrise.i:3000/people.xml
+--> 200 200 (222 0ms)
+GET http://37s.sunrise.i:3000/people/1.xml
+--> 200 200 (106 0ms)
+GET http://37s.sunrise.i:3000/people/1.xml
+--> 200 200 (106 0ms)
+POST http://37s.sunrise.i:3000/people.xml
+--> 201 201 (109 0ms)
+GET http://somewhere.else:80/people/6.json
+--> 200 200 (32 0ms)
+GET http://somewhere.else:80/people/6.json
+--> 200 200 (32 0ms)
+GET http://somewhere.else:80/people/1.xml
+--> 200 200 (106 0ms)
+GET http://somewhere.else:80/people/1.xml
+--> 200 200 (106 0ms)
+GET http://somewhere.else:80/people/1.xml
+--> 200 200 (106 0ms)
+GET http://somewhere.else:80/people.xml
+--> 200 200 (222 0ms)
+PUT http://somewhere.else:80/people/1.xml
+--> 204 204 (0 0ms)
+GET http://somewhere.else:80/people/2.xml
+--> 200 200 (107 0ms)
+PUT http://somewhere.else:80/people/2.xml
+--> 409 409 (0 0ms)
+GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+--> 200 200 (120 0ms)
+PUT http://37s.sunrise.i:3000/people/1/addresses/1.xml
+--> 204 204 (0 0ms)
+GET http://37s.sunrise.i:3000/people/1/addresses.xml
+--> 200 200 (166 0ms)
+PUT http://37s.sunrise.i:3000/people/1/addresses/1.xml
+--> 204 204 (0 0ms)
+GET http://localhost:80/people/1.xml
+--> 200 200 (106 0ms)
+DELETE http://localhost:80/people/1.xml
+--> 200 200 (0 0ms)
+DELETE http://localhost:80/people/2.xml
+--> 200 200 (0 0ms)
+GET http://localhost:80/people/1.xml
+--> 200 200 (106 0ms)
+GET http://localhost:80/people.xml
+--> 200 200 (222 0ms)
+GET http://localhost:80/people_empty_elements.xml
+--> 200 200 (77 0ms)
+GET http://localhost:80/people_single_elements.xml
+--> 200 200 (208 0ms)
+GET http://localhost:80/people/2.xml
+--> 200 200 (107 0ms)
+HEAD http://localhost:80/people/1.xml
+--> 200 200 (0 0ms)
+POST http://localhost:80/people.xml
+--> 201 201 (0 0ms)
+POST http://localhost:80/members.xml
+--> 201 201 (1 0ms)
+PUT http://localhost:80/people/1.xml
+--> 204 204 (0 0ms)
+PUT http://localhost:80/people/2.xml
+--> 204 204 (0 0ms)
+GET http://localhost:80/people/1.xml
+GET http://localhost:80/people_timeout.xml
+GET http://somewhere.else:80/people/retrieve.xml?name=Matz
+--> 200 200 (146 0ms)
+POST http://somewhere.else:80/people/hire.xml?name=Matz
+--> 201 201 (0 0ms)
+PUT http://somewhere.else:80/people/promote.xml?name=Matz
+--> 204 204 (0 0ms)
+PUT http://somewhere.else:80/people/sort.xml?by=name
+--> 204 204 (0 0ms)
+DELETE http://somewhere.else:80/people/deactivate.xml?name=Matz
+--> 200 200 (0 0ms)
+PUT http://37s.sunrise.i:3000/people/1/addresses/sort.xml?by=name
+--> 204 204 (0 0ms)
+GET http://somewhere.else:80/people/1.xml
+--> 200 200 (106 0ms)
+GET http://somewhere.else:80/people/1/shallow.xml
+--> 200 200 (106 0ms)
+GET http://somewhere.else:80/people/1.xml
+--> 200 200 (106 0ms)
+GET http://somewhere.else:80/people/1/deep.xml
+--> 200 200 (129 0ms)
+GET http://somewhere.else:80/people/1.xml
+--> 200 200 (106 0ms)
+PUT http://somewhere.else:80/people/1/promote.xml?position=Manager
+--> 204 204 (0 0ms)
+GET http://somewhere.else:80/people/1.xml
+--> 200 200 (106 0ms)
+DELETE http://somewhere.else:80/people/1/deactivate.xml
+--> 200 200 (0 0ms)
+GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+--> 200 200 (120 0ms)
+GET http://37s.sunrise.i:3000/people/1/addresses/1/deep.xml
+--> 200 200 (139 0ms)
+GET http://37s.sunrise.i:3000/people/1/addresses/1.xml
+--> 200 200 (120 0ms)
+PUT http://37s.sunrise.i:3000/people/1/addresses/1/normalize_phone.xml?locale=US
+--> 204 204 (0 0ms)
+POST http://somewhere.else:80/people/new/register.xml
+--> 201 201 (78 0ms)
+POST http://37s.sunrise.i:3000/people/1/addresses/new/link.xml
+--> 201 201 (92 0ms)
+POST http://somewhere.else:80/people/1/register.xml
+--> 201 201 (106 0ms)
+GET http://somewhere.else:80/people/managers.xml
+--> 200 200 (146 0ms)
+GET http://somewhere.else:80/people.json
+--> 200 200 (48 0ms)
+GET http://somewhere.else:80/people.xml
+--> 200 200 (224 0ms)
+GET http://somewhere.else:80/people/retrieve.json?name=David
+--> 200 200 (25 0ms)
+GET http://somewhere.else:80/people/retrieve.xml?name=David
+--> 200 200 (149 0ms)
+GET http://somewhere.else:80/people/2.json
+--> 200 200 (23 0ms)
+GET http://somewhere.else:80/people/2/shallow.json
+--> 200 200 (23 0ms)
+GET http://somewhere.else:80/people/2.xml
+--> 200 200 (103 0ms)
+GET http://somewhere.else:80/people/2/shallow.xml
+--> 200 200 (103 0ms)
+POST http://somewhere.else:80/people.json
+--> 201 201 (15 0ms)
+POST http://somewhere.else:80/people/new/register.json
+--> 201 201 (15 0ms)
+POST http://somewhere.else:80/people.xml
+--> 201 201 (74 0ms)
+POST http://somewhere.else:80/people/new/register.xml
+--> 201 201 (74 0ms)
+GET http://somewhere.else:80/people/1.json
+--> 200 200 (23 0ms)
+GET http://somewhere.else:80/people/1.xml
+--> 200 200 (103 0ms)
+POST http://somewhere.else:80/people.json
+--> 201 201 (50 0ms)
+POST http://somewhere.else:80/people.xml
+--> 201 201 (132 0ms)
+DELETE http://localhost:80/people/2.xml
+--> 200 200 (0 0ms)
+GET http://localhost:80/people/2.xml
+--> 200 200 (107 0ms)
+POST http://localhost:80/people/2/addresses.xml
+--> 201 201 (0 0ms)
+PUT http://localhost:80/people/2.xml
+--> 204 204 (0 0ms)
+POST http://localhost:80/people/2.xml
+POST http://localhost:80/people/2/addresses.xml
+PUT http://localhost:80/people/2.xml
+DELETE http://localhost:80/people/2.xml
+POST http://37s.sunrise.i:3000/people.xml
+--> 422 422 (209 0ms)
+POST http://37s.sunrise.i:3000/people.json
+--> 422 422 (118 0ms)
+POST http://37s.sunrise.i:3000/people.xml
+--> 422 422 (209 0ms)
+POST http://37s.sunrise.i:3000/people.xml
+--> 422 422 (209 0ms)
+POST http://37s.sunrise.i:3000/people.json
+--> 422 422 (118 0ms)
+POST http://37s.sunrise.i:3000/people.xml
+--> 422 422 (209 0ms)
+POST http://37s.sunrise.i:3000/people.xml
+--> 422 422 (209 0ms)
+POST http://37s.sunrise.i:3000/people.json
+--> 422 422 (118 0ms)
+POST http://37s.sunrise.i:3000/people.xml
+--> 422 422 (209 0ms)
+POST http://37s.sunrise.i:3000/people.xml
+--> 422 422 (209 0ms)
+POST http://37s.sunrise.i:3000/people.json
+--> 422 422 (118 0ms)
+POST http://37s.sunrise.i:3000/people.xml
+--> 422 422 (209 0ms)
+POST http://37s.sunrise.i:3000/people.xml
+--> 422 422 (209 0ms)
+POST http://37s.sunrise.i:3000/people.json
+--> 422 422 (118 0ms)
+POST http://37s.sunrise.i:3000/people.xml
+--> 422 422 (209 0ms)
+POST http://37s.sunrise.i:3000/people.xml
+--> 422 422 (209 0ms)
+POST http://37s.sunrise.i:3000/people.json
+--> 422 422 (118 0ms)
+POST http://37s.sunrise.i:3000/people.xml
+--> 422 422 (209 0ms)
+POST http://37s.sunrise.i:3000/people.xml
+--> 422 422 (209 0ms)
+POST http://37s.sunrise.i:3000/people.json
+--> 422 422 (118 0ms)
+POST http://37s.sunrise.i:3000/people.xml
+--> 422 422 (209 0ms)
+GET http://37s.sunrise.i:3000/people/1.xml
+--> 200 200 (106 0ms)

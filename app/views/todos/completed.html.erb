@@ -1,25 +1,25 @@
 <div id="display_box_projects">
-<p>You have completed <%= pluralize @done_today.length, 'action' %> so far today.</p>
+<p><%= t('todos.completed_today', :count => @due_tickles.nil? ? 0 : @due_tickles.length) %></p>
 <div class="container">
-  <h2>Completed in the last 24 hours</h2>
+  <h2><%= t('todos.completed_last_day') %></h2>
   <table class="next_actions" border="0">
     <%= render :partial => "done", :collection => @done_today %>
   </table>
 </div>
 
 <div class="container">
-  <h2>Completed in last 7 days</h2>
+  <h2><%= t('todos.completed_last_x_days', :count => 7) %></h2>
   <table class="next_actions" border="0">
     <%= render :partial => "done", :collection => @done_this_week %>
   </table>
 </div>
 
 <div class="container">
-  <h2>Completed in the last 28 days</h2>
+  <h2><%= t('todos.completed_last_x_days', :count => 28) %></h2>
   <table class="next_actions" border="0">
     <%= render :partial => "done", :collection => @done_this_month %>
   </table>
 </div>
 
-<p>Older completed items: <%= link_to( "Older than 31 days", done_archive_path ) %></p>
+<p><%= t('todos.older_completed_items') %>: <%= link_to( t('todos.older_than_days', :count => 31), done_archive_path ) %></p>
 </div><!-- End of display_box -->

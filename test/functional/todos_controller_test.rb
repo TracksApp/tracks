@@ -34,6 +34,35 @@ class TodosControllerTest < ActionController::TestCase
     assert !t.starred?
   end
 
+  def test_tagging_changes_to_tag_with_numbers
+    # by default has_many_polymorph searches for tags with given id if the tag is a number. we do not want that
+    login_as(:admin_user)
+    assert_difference 'Todo.count' do
+      put :create, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{
+        "notes"=>"", "description"=>"test tags", "due"=>"30/11/2006"},
+        "tag_list"=>"1234,5667,9876"
+      # default has_many_polymorphs will fail on these high numbers as tags with those id's do not exist
+    end
+    t = assigns['todo']
+    assert_equal t.description, "test tags"
+    assert_equal 3, t.tags.count
+  end
+
+  def test_tagging_changes_to_handle_empty_tags
+    # by default has_many_polymorph searches for tags with given id if the tag is a number. we do not want that
+    login_as(:admin_user)
+    assert_difference 'Todo.count' do
+      put :create, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{
+        "notes"=>"", "description"=>"test tags", "due"=>"30/11/2006"},
+        "tag_list"=>"a,,b"
+      # default has_many_polymorphs will fail on the empty tag
+    end
+    t = assigns['todo']
+    assert_equal t.description, "test tags"
+    assert_equal 2, t.tags.count
+  end
+
+
   def test_not_done_counts_after_hiding_project
     p = Project.find(1)
     p.hide!
@@ -61,16 +90,16 @@ class TodosControllerTest < ActionController::TestCase
   def test_deferred_count_for_project_source_view
     login_as(:admin_user)
     xhr :post, :toggle_check, :id => 5, :_source_view => 'project'
-    assert_equal 1, assigns['deferred_count']
+    assert_equal 1, assigns['remaining_deferred_or_pending_count']
     xhr :post, :toggle_check, :id => 15, :_source_view => 'project'
-    assert_equal 0, assigns['deferred_count']
+    assert_equal 0, assigns['remaining_deferred_or_pending_count']
   end
 
   def test_destroy_todo
     login_as(:admin_user)
     xhr :post, :destroy, :id => 1, :_source_view => 'todo'
-    assert_rjs :page, "todo_1", :remove
-    # #assert_rjs :replace_html, "badge-count", '9'
+    todo = Todo.find_by_id(1)
+    assert_nil todo
   end
 
   def test_create_todo
@@ -91,7 +120,9 @@ class TodosControllerTest < ActionController::TestCase
   def test_fail_to_create_todo_via_xml
     login_as(:admin_user)
     # #try to create with no context, which is not valid
-    put :create, :format => "xml", "request" => { "project_name"=>"Build a working time machine", "todo"=>{"notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>"foo bar" }
+    put :create, :format => "xml", "request" => { 
+      "project_name"=>"Build a working time machine",
+      "todo"=>{"notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>"foo bar" }
     assert_response 422
     assert_xml_select "errors" do
       assert_xml_select "error", "Context can't be blank"

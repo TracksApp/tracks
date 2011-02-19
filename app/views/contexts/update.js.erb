@@ -1,0 +1,42 @@
+<% if @saved -%>
+
+  TracksPages.page_notify('notice', '<%= t('contexts.save_status_message') %>', 5);
+
+  <% if @state_changed -%>
+    remove_and_re_add_context();
+  <% else -%>
+    replace_context_form_with_updated_context();
+  <% end -%>
+
+<% else -%>
+  TracksPages.show_edit_errors(html_for_error_messages());
+<% end -%>
+
+function remove_and_re_add_context() {
+  $('#<%=dom_id(@context, 'container')%>').slideUp(500, function() {
+    $('#<%=dom_id(@context, 'container')%>').remove();
+    $('#list-contexts-<%=@new_state%>').append(html_for_context_listing());
+  });
+}
+
+function replace_context_form_with_updated_context() {
+  $('#<%=dom_id(@context, 'container')%>').fadeOut(250, function() {
+<%
+    # first add the updated context after the old one, then remove old one
+    # using html() does not work, because it will replace the _content_ of
+    # the container instead of the container itself, i.e. you will get
+    # a container within a container which will break drag-and-drop sorting
+-%>
+    $('#<%=dom_id(@context, 'container')%>').after(html_for_context_listing());
+    $('#<%=dom_id(@context, 'container')%>').remove();
+    $('#<%=dom_id(@context, 'container')%>').fadeIn(500);
+  });
+}
+
+function html_for_error_messages() {
+  return "<%= escape_javascript(error_messages_for('context')) %>";
+}
+
+function html_for_context_listing() {
+  return "<%= escape_javascript(render(:partial => 'context_listing', :object => @context))%>";
+}

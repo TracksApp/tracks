@@ -1,5 +1,4 @@
 Feature: Manage users
-
   In order to be able to manage the users able to use Tracks
   As the administrator of this installed Tracks
   I want to add and delete accounts of users
@@ -18,7 +17,7 @@ Feature: Manage users
 
   Scenario: Add new account
     When I go to the manage users page
-    And I follow "Signup new user"
+    And I follow "Sign up new user"
     Then I should be on the signup page
     When I submit the signup form with username "new.user", password "secret123" and confirm with "secret123"
     Then I should be on the manage users page

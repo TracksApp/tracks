@@ -11,6 +11,7 @@ require 'active_record/connection_adapters/abstract/quoting'
 require 'active_record/connection_adapters/abstract/connection_pool'
 require 'active_record/connection_adapters/abstract/connection_specification'
 require 'active_record/connection_adapters/abstract/query_cache'
+require 'active_record/connection_adapters/abstract/database_limits'
 
 module ActiveRecord
   module ConnectionAdapters # :nodoc:
@@ -29,6 +30,7 @@ module ActiveRecord
     # notably, the instance methods provided by SchemaStatement are very useful.
     class AbstractAdapter
       include Quoting, DatabaseStatements, SchemaStatements
+      include DatabaseLimits
       include QueryCache
       include ActiveSupport::Callbacks
       define_callbacks :checkout, :checkin
@@ -209,6 +211,12 @@ module ActiveRecord
             log_info(sql, name, 0)
             nil
           end
+        rescue SystemExit, SignalException, NoMemoryError => e
+          # Don't re-wrap these exceptions. They are probably not being caused by invalid
+          # sql, but rather some external stimulus beyond the responsibilty of this code.
+          # Additionaly, wrapping these exceptions with StatementInvalid would lead to
+          #  meaningful loss of data, such as losing SystemExit#status.
+          raise e
         rescue Exception => e
           # Log message and raise exception.
           # Set last_verification to 0, so that connection gets verified

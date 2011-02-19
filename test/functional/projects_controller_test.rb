@@ -48,22 +48,8 @@ class ProjectsControllerTest < TodoContainerControllerTestBase
     assert_ajax_create_increments_count 'My New Project'
   end
 
-  def test_create_project_and_go_to_project_page
-    num_projects = Project.count
-    xhr :post, :create, { :project => {:name => 'Immediate Project Planning Required'}, :go_to_project => 1}
-    assert_js_redirected_to %r{/?projects/\d+}
-    assert_equal num_projects + 1, Project.count
-  end
-
   def test_create_with_comma_in_name_does_not_increment_number_of_projects
     assert_ajax_create_does_not_increment_count 'foo,bar'
-  end
-  
-  def test_create_with_comma_in_name_fails_with_rjs
-    ajax_create 'foo,bar'
-    assert_rjs :show, 'status'
-    # Not working with Rails 2.0 upgrade
-    #    assert_rjs :update, 'status', "<div class=\"ErrorExplanation\" id=\"ErrorExplanation\"><h2>1 error prohibited this record from being saved</h2><p>There were problems with the following fields:</p><ul>Name cannot contain the comma (',') character</ul></div>"
   end
   
   def test_todo_state_is_project_hidden_after_hiding_project
@@ -214,8 +200,8 @@ class ProjectsControllerTest < TodoContainerControllerTestBase
     login_as :admin_user
     u = users(:admin_user)
     post :actionize, :state => "active", :format => 'js'
-    assert_equal 1, projects(:moremoney).position
-    assert_equal 2, projects(:gardenclean).position
+    assert_equal 1, projects(:gardenclean).position
+    assert_equal 2, projects(:moremoney).position
     assert_equal 3, projects(:timemachine).position
   end
   

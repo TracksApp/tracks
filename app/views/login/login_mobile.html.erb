@@ -3,31 +3,31 @@
    show_openid_form = auth_schemes.include?('open_id')
 -%>
 
-<div title="Account login" id="loginform" class="form">
+<div title="<%= t('login.account_login') %>" id="loginform" class="form">
 
   <%= render_flash %>
 
-  <h3>Please log in to use Tracks:</h3>
+  <h3><%= t('login.please_login') %>:</h3>
 
 <% if show_database_form %>
   <div id="database_auth_form">
       <% form_tag login_path(:format => 'm') do %>
         <table>
           <tr>
-            <td><label for="user_login">Login:</label></td>
+            <td><label for="user_login"><%= User.human_attribute_name('login') %>:</label></td>
             <td><input type="text" name="user_login" id="user_login" value="" class="login_text" /></td>
           </tr>
           <tr> 
-            <td><label for="user_password">Password:</label></td>
+            <td><label for="user_password"><%= User.human_attribute_name('password') %>:</label></td>
             <td><input type="password" name="user_password" id="user_password" class="login_text" /></td>
           </tr>
          <tr> 
-            <td><label for="user_noexpiry">Stay logged in:</label></td>
+            <td><label for="user_noexpiry"><%= t('login.user_no_expiry') %>:</label></td>
             <td><input type="checkbox" name="user_noexpiry" id="user_noexpiry" checked="checked" /></td>
           </tr>
           <tr> 
             <td>&nbsp;</td>
-            <td><input type="submit" name="login" value="Sign In &#187;" class="primary" /></td>
+            <td><input type="submit" name="login" value="<%= t('login.sign_in') %> &#187;" class="primary" /></td>
           </tr>
         </table>
       <% end %>
@@ -36,22 +36,22 @@
 
 <% if show_openid_form %>
 
-  <h4>...or login with an Open ID:</h4>
+  <h4><%= t('login.mobile_use_openid') %>:</h4>
 
   <div id="openid_auth_form">
     <% form_tag login_path(:format => 'm') do %>
       <table>
         <tr>
-          <td width="100px"><label for="openid_url">Identity URL:</label></td>
+          <td width="100px"><label for="openid_url"><%= User.human_attribute_name('open_id_url') %>:</label></td>
           <td width="100px"><input type="text" name="openid_url" id="openid_url" value="<%= @openid_url %>" class="login_text open_id" /></td>
         </tr>
        <tr> 
-          <td width="100px"><label for="user_noexpiry">Stay logged in:</label></td>
+          <td width="100px"><label for="user_noexpiry"><%= t('login.user_no_expiry') %>:</label></td>
           <td width="100px"><input type="checkbox" name="user_noexpiry" id="user_noexpiry" checked  /></td>
         </tr>
         <tr> 
           <td width="100px"></td>
-          <td><input type="submit" name="login" value="Sign In &#187;" class="primary" /></td>
+          <td><input type="submit" name="login" value="<%= t('login.sign_in') %> &#187;" class="primary" /></td>
         </tr>
       </table>
     <% end %>
