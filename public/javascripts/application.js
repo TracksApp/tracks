@@ -90,16 +90,16 @@ var TracksForm = {
     },
     enable_dependency_delete: function() {
         $('a[class=icon_delete_dep]').live('click', function() {
-            predecessor_list = $('input[name=predecessor_list]');
-            id_list = split( predecessor_list.val() );
+            var predecessor_list = $('input[name=predecessor_list]');
+            var id_list = split( predecessor_list.val() );
 
             // remove from ul
             $("li#pred_"+this.id).slideUp(500).remove();
 
             // remove from array
-            new_list = new Array();
+            var new_list = new Array();
             while (id_list.length > 0) {
-                elem = id_list.pop();
+                var elem = id_list.pop();
                 if (elem != this.id && elem != '' && elem != ' ') {
                     new_list.push ( elem );
                 }
@@ -116,8 +116,24 @@ var TracksForm = {
             return false; // prevent submit/follow link
         })
     },
-    generate_dependency_list: function(item) {
-        alert("nyi");
+    generate_dependency_list: function(todo_id) {
+        // find edit form
+        var form_selector = "#form_todo_"+todo_id;
+        var form = $(form_selector);
+
+        var predecessor_list = form.find('input[name=predecessor_list]');
+        var id_list = split( predecessor_list.val() );
+
+        var label = form.find("label#label_for_predecessor_input").first();
+        label.show();
+
+        while (id_list.length > 0) {
+            var elem = id_list.pop();
+            var new_li = TodoItems.generate_predecessor(elem, spec_of_todo[elem]);
+            var ul = form.find('ul#predecessor_ul');
+            ul.html(ul.html() + new_li);
+            form.find('li#pred_'+elem).show();
+        }
     }
 }
 
@@ -349,8 +365,12 @@ var TodoItems = {
 
         /* set behavior for edit icon */
         $(".item-container a.edit_item").live('click', function (ev){
-            get_with_ajax_and_block_element(this.href, $(this).parents(".item-container"));
-            TracksForm.generate_dependency_list($(this).parents(".item-container"));
+            var ajax_options = default_ajax_options_for_scripts('GET', this.href, $(this).parents('.item-container'));
+            var id = this.id.substr(15);
+            ajax_options.complete.push( function(){
+                TracksForm.generate_dependency_list(id);
+            });
+            $.ajax(ajax_options);
             return false;
         });
 
@@ -812,6 +832,8 @@ function generic_get_script_for_list(element, getter, param){
 }
 
 function default_ajax_options_for_submit(ajax_type, element_to_block) {
+    // the complete is not a function but an array so you can push other
+    // functions that will be executed after the ajax call completes
     var options = {
         type: ajax_type,
         async: true,
@@ -824,12 +846,12 @@ function default_ajax_options_for_submit(ajax_type, element_to_block) {
                 });
             }
         },
-        complete:function() {
+        complete: [function() {
             if (this.context) {
                 $(this.context).unblock();
             }
             enable_rich_interaction();
-        },
+        }],
         error: function(req, status) {
             TracksPages.page_notify('error', i18n['common.ajaxError']+': '+status, 8);
         }

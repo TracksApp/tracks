@@ -1,5 +1,6 @@
 hide_todo();
 replace_placeholder_with_form();
+fill_dependency_array();
 enable_rich_interaction();
 
 function hide_todo() {
@@ -10,6 +11,14 @@ function replace_placeholder_with_form() {
   $('#<%=dom_id(@todo, 'edit')%>').html(html_for_edit_form());
   $('#<%=dom_id(@todo, 'edit')%>').show();
   $('#<%=dom_id(@todo, 'form')%> input#todo_description').focus();
+}
+
+function fill_dependency_array() {
+  spec_of_todo = new Array();
+<%
+@todo.predecessors.each do |dep| -%>
+  spec_of_todo['<%=dep.id%>'] = "<%= escape_javascript(dep.specification)%>";
+<% end -%>
 }
 
 function html_for_edit_form() {

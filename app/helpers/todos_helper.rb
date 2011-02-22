@@ -11,6 +11,7 @@ module TodosHelper
       image_tag("blank.png", :alt => t('todos.edit'), :align => "absmiddle", :id => 'edit_icon_todo_'+todo.id.to_s, :class => 'edit_item'),
       {:controller => 'todos', :action => 'edit', :id => todo.id},
       :class => "icon edit_item",
+      :id => "icon_edit_todo_#{todo.id}",
       :title => t('todos.edit_action_with_description', :description => todo.description))
   end
 
