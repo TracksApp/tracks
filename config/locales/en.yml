@@ -411,6 +411,7 @@ en:
     no_actions_found: "No actions found"
     no_actions_with: "Currently there are no incomplete actions with the tag '%{tag_name}'"
     removed_predecessor: "Removed %{successor} as dependency from %{predecessor}."
+    add_another_dependency: "Add another dependency"
     error_removing_dependency: "There was an error removing the dependency"
     deferred_actions_with: "Deferred actions with the tag '%{tag_name}'"
     no_deferred_actions_with: "No deferred actions with the tag '%{tag_name}'"

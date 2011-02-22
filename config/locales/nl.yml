@@ -17,8 +17,8 @@ nl:
     project: Project
     contribute: Bijdragen
     ok: Ok
-    numbered_step: Stap %{number}
     website: Website
+    numbered_step: Stap %{number}
     context: Context
     sort: 
       by_task_count_title: Sorteer op aantal acties
@@ -30,8 +30,8 @@ nl:
       by_task_count: Bij aantal acties
     create: Maken
     description: Beschrijving
-    contexts: Contexten
     errors_with_fields: Er waren problemen met de volgende velden
+    contexts: Contexten
     drag_handle: SLEEP
     update: Bijwerken
     bugs: Fouten
@@ -39,29 +39,6 @@ nl:
     ajaxError: Er is een fout opgetreden bij het ophalen van gegevens van de server
     email: E-mail
     search: Zoeken
-  number: 
-    format: 
-      separator: ","
-      delimiter: .
-    human: 
-      storage_units: 
-        format: "%n %u"
-        units: 
-          kb: KB
-          tb: TB
-          gb: GB
-          byte: 
-            one: Byte
-            other: Bytes
-          mb: MB
-    currency: 
-      format: 
-        format: "%u %n"
-        unit: !binary |
-          4oKs
-
-        separator: ","
-        delimiter: .
   layouts: 
     toggle_notes: Toggle notities
     next_actions_rss_feed: RSS-feed van de acties
@@ -100,12 +77,35 @@ nl:
       view: Bekijk
       completed_tasks_title: Afgerond
       export: Export
-      contexts_title: Contexten
       home: Start
+      contexts_title: Contexten
       projects_title: Projecten
       preferences_title: Toon mijn voorkeuren
       calendar: Agenda
       search: Zoeken in alle items
+  number: 
+    format: 
+      separator: ","
+      delimiter: .
+    human: 
+      storage_units: 
+        format: "%n %u"
+        units: 
+          kb: KB
+          tb: TB
+          gb: GB
+          byte: 
+            one: Byte
+            other: Bytes
+          mb: MB
+    currency: 
+      format: 
+        format: "%u %n"
+        unit: !binary |
+          4oKs
+
+        separator: ","
+        delimiter: .
   integrations: 
     opensearch_description: Zoek in Tracks
     gmail_description: Gadget om Tracks toe te voegen aan Gmail als een gadget
@@ -140,7 +140,7 @@ nl:
         description: Beschrijving
       todo: 
         show_from: Tonen vanaf
-        predecessors: Is afhankelijk van
+        predecessors: Afhankelijkheden
         notes: Notities
         project: Project
         context: Context
@@ -155,15 +155,15 @@ nl:
         show_hidden_contexts_in_sidebar: Toon verborgen contexten in sidebar
         mobile_todos_per_page: Acties per pagina (mobiel)
         staleness_starts: Begin van markeren openstaande actie
-        sms_context: Standaard context voor email
         verbose_action_descriptors: Context en project uitschrijven in actielijst
+        sms_context: Standaard context voor email
         title_date_format: Datum formaat in titel
         show_number_completed: Aantal te tonen afgeronde acties
         refresh: Ververs interval (in minuten)
         week_starts: Week start op
         time_zone: Tijdzone
-        due_style: Deadline stijl
         locale: Taal
+        due_style: Deadline stijl
         show_project_on_todo_done: Ga naar project pagina wanneer actie gereed is
         sms_email: Van email
         show_completed_projects_in_sidebar: Toon afgeronde projecten in sidebar
@@ -177,8 +177,8 @@ nl:
         exclusion: is gereserveerd
         invalid: mag niet een komma (',') karakter bevatten
         odd: moet oneven zijn
-        empty: mag niet leeg zijn
         wrong_length: heeft de verkeerde lengte (moet %{count} karakters lang zijn)
+        empty: mag niet leeg zijn
         even: moet even zijn
         too_short: is te kort (minimum is %{count} karakters)
         less_than: moet kleiner zijn dan %{count}
@@ -217,18 +217,18 @@ nl:
     top10_longrunning: Top 10 langstlopende projecten
     actions_dow_30days_title: Dag van de week (laatste 30 dagen)
     current_running_time_of_incomplete_visible_actions: Huidige looptijd van onvolledige zichtbare acties
-    running_time_legend: 
-      actions: Acties
-      percentage: Percentage
-      weeks: Looptijd van een actie (weken). Klik op een balk voor meer info
     legend: 
-      number_of_days: Aantal dagen geleden
       actions: Acties
+      number_of_days: Aantal dagen geleden
       number_of_actions: Aantal acties
       day_of_week: Dag van de week
       running_time: Looptijd van een actie (weken)
       percentage: Percentage
       months_ago: Maanden geleden
+    running_time_legend: 
+      actions: Acties
+      percentage: Percentage
+      weeks: Looptijd van een actie (weken). Klik op een balk voor meer info
     totals_action_count: u heeft een totaal van %{count} acties
     totals_unique_tags: Van deze tags zijn %{count} uniek.
     actions_avg_completed_30days: en voltooide een gemiddelde van %{count} acties per dag.
@@ -244,8 +244,8 @@ nl:
     totals_project_count: U heeft %{count} projecten.
     actions_min_max_completion_days: De max-/minimum dagen tot voltooiing is %{min}/%{max}.
     actions_min_completion_time: De minimale tijd tot afronding is %{time}.
-    no_tags_available: geen tags beschikbaar
     tags: Tags
+    no_tags_available: geen tags beschikbaar
     actions_day_of_week_title: Dag van de week (alle acties)
     more_stats_will_appear: Meer statistieken zullen hier verschijnen zodra u acties hebt toegevoegd.
     top5_visible_contexts_with_incomplete_actions: Top 5 zichtbare contexten met onvolledige acties
@@ -305,7 +305,7 @@ nl:
     defer_date_after_due_date: Uitsteldatum is na de vervaldag. Gelieve vervaldag bewerken alvorens uitstedatuml aan te passen.
     unable_to_add_dependency: Niet in staat om de afhankelijkheid toe te voegen
     done: Voltooid?
-    star_action_with_description: markeer de actie'%{description}' met een ster
+    star_action_with_description: markeer de actie '%{description}' met een ster
     tagged_with: gelabeld met &lsquo;%{tag_name}&rsquo;
     completed: Afgerond
     no_deferred_actions_with: Geen uitgestelde acties met de tag '%{tag_name}'
@@ -318,10 +318,11 @@ nl:
     action_deleted_success: Actie succesvol verwijderd
     tags: Tags (gescheiden door komma's)
     new_related_todo_created: Een nieuwe actie is toegevoegd, die behoort bij deze terugkerende todo
-    context_changed: Context veranderd in %{name}
+    context_changed: Context veranderd in '%{name}'
     mobile_todos_page_title: Alle acties
+    add_another_dependency: Nog een afhankelijkheid toevoegen
     delete_recurring_action_title: Verwijder de terugkerende actie
-    removed_predecessor: "%{succesor} is verwijderd als afhankelijkheid van %{predecessor}."
+    removed_predecessor: "'%{successor}' is verwijderd als afhankelijkheid van '%{predecessor}'."
     recurring_actions_title: TRACKS::Terugkerende acties
     next_action_needed: U dient ten minste een actie in te vullen
     action_saved: Actie opgeslagen
@@ -331,7 +332,7 @@ nl:
     added_new_context: Nieuwe context toegevoegd
     next_actions_description: "Filter:"
     list_incomplete_next_actions_with_limit: Toont de laatste %{count} onvoltooide acties
-    set_to_pending: "%{task} als wachtend ingesteld"
+    set_to_pending: "'%{task}' als wachtend ingesteld"
     added_new_project: Nieuw project toegevoegd
     next_actions_title_additions: 
       completed: acties voltooid
@@ -479,6 +480,14 @@ nl:
     delete_note_confirm: Weet u zeker dat u de notitie  '%{id}' wilt verwijderen?
   errors: 
     user_unauthorized: "401 Unauthorized: Alleen administratieve gebruikers mogen deze functie gebruiken."
+  time: 
+    am: ochtend
+    formats: 
+      default: "%A, %d %B %Y %H:%M:%S %z"
+      time: "%H:%M"
+      short: "%d %B %H:%M"
+      long: "%A, %d. %B %Y, %H:%M"
+    pm: middag
   states: 
     hidden_plural: Verborgen
     completed: Afgerond
@@ -488,14 +497,6 @@ nl:
     visible: Zichtbaar
     active: Actief
     hidden: Verborgen
-  time: 
-    am: ochtend
-    formats: 
-      default: "%A, %d %B %Y %H:%M:%S %z"
-      time: "%H:%M"
-      short: "%d %B %H:%M"
-      long: "%A, %d. %B %Y, %H:%M"
-    pm: middag
   preferences: 
     change_identity_url: Verander uw Identity URL
     open_id_url: Uw OpenID URL is
@@ -526,8 +527,8 @@ nl:
     deferred_actions_empty: Er zijn geen uitgestelde acties voor dit project
     project_state: Project is %{state}.
     show_form_title: Maak een nieuw project
-    notes: Notities
     todos_append: in dit project
+    notes: Notities
     notes_empty: Er zijn geen notities voor dit project
     no_projects: Momenteel zijn er geen projecten
     hide_form_title: Verberg nieuw project formulier
@@ -549,8 +550,8 @@ nl:
     completed_actions: Afgeronde acties voor dit project
     default_context: De standaard context voor dit project is %{context}
     status_project_name_changed: Naam van het project werd gewijzigd
-    no_default_context: Dit project heeft geen standaard context
     active_projects: Actieve projecten
+    no_default_context: Dit project heeft geen standaard context
     state: Dit project is %{state}
   date: 
     month_names: 
@@ -673,8 +674,8 @@ nl:
     user_created: Gebruiker aangemaakt.
     change_password_submit: Wachtwoord wijzigen
     account_signup: Aanmelden voor een account
-    manage_users: Beheren gebruikers
     password_updated: Wachtwoord bijgewerkt.
+    manage_users: Beheren gebruikers
     signup: Aanmelden
     confirm_password: Bevestig wachtwoord
     new_user_heading: "Registreer een nieuwe gebruiker:"
@@ -797,8 +798,8 @@ nl:
       half_a_minute: halve minuut
   login: 
     user_no_expiry: Blijf ingelogd
-    sign_in: Meld aan
     login_cas: Ga naar het CAS
+    sign_in: Meld aan
     openid_identity_url_not_found: Sorry, geen gebruiker met die identiteit URL bestaat (% {identity_url})
     successful_with_session_info: "Login succesvol:"
     please_login: Log in om Tracks te gebruiken

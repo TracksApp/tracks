@@ -87,21 +87,37 @@ var TracksForm = {
                 submit_with_ajax_and_block_element('form#todo-form-multi-new-action', $(this));
             return false;
         });
+    },
+    enable_dependency_delete: function() {
+        $('a[class=icon_delete_dep]').live('click', function() {
+            predecessor_list = $('input[name=predecessor_list]');
+            id_list = split( predecessor_list.val() );
 
-        $('input[class=predecessor_add_button]').live('click', function(){
-            var text = $('input[name=predecessor_list]').val();
-            if (text.length > 0) {
-                $('ul#predecessor_ul').show();
-                if (text.length > 35) {
-                    text = text.substring(0,35)+"...";
+            // remove from ul
+            $("li#pred_"+this.id).slideUp(500).remove();
+
+            // remove from array
+            new_list = new Array();
+            while (id_list.length > 0) {
+                elem = id_list.pop();
+                if (elem != this.id && elem != '' && elem != ' ') {
+                    new_list.push ( elem );
                 }
-                var html = $('ul#predecessor_ul').html();
-                var new_li = "<li><input class=\"pred_remove_button\" type=\"button\" value=\"x\"/> "+ text + "</li>";
-                $('ul#predecessor_ul').html(html + new_li);
-                $('input[name=predecessor]').val('');
-                $('input[name=predecessor]').focus();
             }
-        });
+
+            // update id list
+            predecessor_list.val( new_list.join(", ") );
+
+            if (new_list.length == 0) {
+                $("label#label_for_predecessor_input").hide();
+                $("ul#predecessor_ul").hide();
+            }
+
+            return false; // prevent submit/follow link
+        })
+    },
+    generate_dependency_list: function(item) {
+        alert("nyi");
     }
 }
 
@@ -184,8 +200,8 @@ var TracksPages = {
         /* fade flashes and alerts in automatically */
         $(".alert").fadeOut(8000);
 
-        /* for edit project form and edit todo form
-* TODO: refactor to separate calls from project and todo */
+        // for edit project form and edit todo form
+        // TODO: refactor to separate calls from project and todo 
         $('.edit-form a.negative').live('click', function(){
             $(this).parents('.edit-form').fadeOut(200, function () {
                 $(this).parents('.list').find('.project').fadeIn(500);
@@ -301,6 +317,12 @@ var TodoItems = {
         }
         return confirm(i18n['contexts.new_context_pre'] + givenContextName + i18n['contexts.new_context_post']);
     },
+    generate_predecessor: function(todo_id, todo_spec) {
+        var img = "<img id=\"delete_dep_"+todo_id+"\" class=\"icon_delete_dep\" src=\""+ relative_to_root('images/blank.png') + "\">";
+        var anchor = "<a class=\"icon_delete_dep\" id=\""+todo_id+"\" href=\"#\">" + img + "</a>";
+        var li = "<li style=\"display:none\" id=\"pred_"+todo_id+"\">"+ anchor +" "+ todo_spec + "</li>";
+        return li;
+    },
     setup_behavior: function() {
         /* show the notes of a todo */
         $(".show_notes").live('click', function () {
@@ -328,6 +350,7 @@ var TodoItems = {
         /* set behavior for edit icon */
         $(".item-container a.edit_item").live('click', function (ev){
             get_with_ajax_and_block_element(this.href, $(this).parents(".item-container"));
+            TracksForm.generate_dependency_list($(this).parents(".item-container"));
             return false;
         });
 
@@ -363,6 +386,8 @@ var TodoItems = {
             $.ajax(ajax_options);
             return false;
         });
+
+        TracksForm.enable_dependency_delete();
     }
 }
 
@@ -750,6 +775,13 @@ function setup_auto_refresh(interval){
     });
 }
 
+function split( val ) {
+    return val.split( /,\s*/ );
+}
+function extractLast( term ) {
+    return split( term ).pop();
+}
+
 $.fn.clearForm = function() {
     return this.each(function() {
         var type = this.type, tag = this.tagName.toLowerCase();
@@ -766,6 +798,7 @@ $.fn.clearForm = function() {
 
 $.fn.clearDeps = function() {
     $('ul#predecessor_ul', this).hide();
+    $("label#label_for_predecessor_input").hide();
     $('ul#predecessor_ul', this).html("");
     $('input[name=predecessor_list]').val("");
 }
@@ -979,16 +1012,7 @@ function enable_rich_interaction(){
         selectFirst: true
     });
 
-
-    function split( val ) {
-        return val.split( /,\s*/ );
-    }
-    function extractLast( term ) {
-        return split( term ).pop();
-    }
-
-
-    $('input[name=predecessor_list]:not(.ac_input)')
+    $('input[name=predecessor_input]:not(.ac_input)')
     .bind( "keydown", function( event ) { // don't navigate away from the field on tab when selecting an item
         if ( event.keyCode === $.ui.keyCode.TAB &&
             $( this ).data( "autocomplete" ).menu.active ) {
@@ -1021,40 +1045,22 @@ function enable_rich_interaction(){
 
             // show the html for the list of deps
             $('ul#predecessor_ul').show();
+            $("label#label_for_predecessor_input").show();
             if (todo_spec.length > 35) { // cut off string
-                todo_spec = todo_spec.substring(0,35)+"...";
+                todo_spec = todo_spec.substring(0,40)+"...";
             }
             // show the new dep in list
             var html = $('ul#predecessor_ul').html();
-            var new_li = "<li style=\"display:none\" id=\"pred_"+todo_id+"\"><input class=\"pred_remove_button\" id=\""+todo_id+"\" type=\"button\" value=\"x\"/> "+ todo_spec + "</li>";
+            var new_li = TodoItems.generate_predecessor(todo_id, todo_spec);
             $('ul#predecessor_ul').html(html + new_li);
             $('li#pred_'+todo_id).slideDown(500);
+            TracksForm.enable_dependency_delete();
 
             $('input[name=predecessor_input]').val('');
             $('input[name=predecessor_input]').focus();
             return false;
         }
     });
-
-    $('input[class=pred_remove_button]').live('click', function() {
-        predecessor_list = $('input[name=predecessor_list]');
-        id_list = split( predecessor_list.val() );
-        $("li#pred_"+this.id).slideUp(500).remove(); // remove from ul
-
-        // remove from array
-        new_list = new Array();
-        while (id_list.length > 0) {
-            elem = id_list.pop();
-            if (elem != this.id && elem != '' && elem != ' ') {
-                new_list.push ( elem );
-            }
-        }
-
-        // update id list
-        predecessor_list.val( new_list.join(", ") );
-        
-        return false; // prevent submit
-    })
 
     /* have to bind on keypress because of limitations of live() */
     $('input[name=project_name]').live('keypress', function(){

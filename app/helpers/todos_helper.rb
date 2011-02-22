@@ -139,10 +139,6 @@ module TodosHelper
     if tag_list.empty? then "" else "<span class=\"tags\">#{tag_list}</span>" end
   end
   
-  def predecessor_list_text(todo=@todo)
-    todo.predecessors.map{|t| t.specification}.join(', ')
-  end
-
   def deferred_due_date(todo=@todo)
     if todo.deferred? && todo.due
       t('todos.action_due_on', :date => format_date(todo.due))

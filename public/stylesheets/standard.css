@@ -2,7 +2,7 @@
 
 /* @override http://0.0.0.0:3000/stylesheets/standard.css?1180885851 */
 
-body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td { 
+div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td { 
     margin:0;
     padding:0;
 }
@@ -352,10 +352,6 @@ div#input_box {
     float:left;
 }
 
-.predecessor_add_button_box {
-    float:right;
-}
-
 #input_box input.pred_remove_button {
     width:1.3em;
 }
@@ -363,6 +359,21 @@ div#input_box {
 .selected_predecessors {
     clear:right;
 }
+
+ul.predecessor_list {
+    color: #999;
+    font-size: 0.8em;
+    padding: 0 0 5pt 0;
+}
+
+ul.predecessor_list li {
+    padding: 0 0;
+}
+
+img.icon_delete_dep {width: 10px; background-image: url(../images/icon_delete.png); background-repeat: no-repeat; background-position: -9px 0; border: none; color:black;}
+a:hover img.icon_delete_dep {width: 10px; background-image: url(../images/icon_delete.png); background-repeat: no-repeat; background-position: 0 0; border: none; color:black; background-color: black;}
+a.icon_delete_dep:hover {width: 10px; background-color: black;}
+a.delete_dependency_button:hover {background-color: white;}
 
 .box {
     float: left;
