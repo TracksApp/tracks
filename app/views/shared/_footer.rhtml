@@ -1,3 +1,8 @@
 <div id="footer">
-  <p>Send feedback on <%= TRACKS_VERSION %>: <a href="http://www.assembla.com/spaces/tracks-tickets/tickets">Bugs</a> | <a href="http://www.getontracks.org/forums/">Forum</a> | <a href="http://www.getontracks.org/wiki/">Wiki</a> | <a href="mailto:butshesagirl@rousette.org.uk?subject=Tracks feedback">Email</a> | <a href="http://www.getontracks.org/">Website</a> | <a href="http://getontracks.org/tracks/contribute">Contribute</a></p>
+  <p><%= t('footer.send_feedback', :version => TRACKS_VERSION) %>: <a href="http://www.assembla.com/spaces/tracks-tickets/tickets"><%= t('common.bugs')%></a> | 
+    <a href="http://www.getontracks.org/forums/"><%= t('common.forum')%></a> |
+    <a href="http://www.getontracks.org/wiki/"><%= t('common.wiki')%></a> |
+    <a href="mailto:butshesagirl@rousette.org.uk?subject=Tracks feedback"><%= t('common.email')%></a> |
+    <a href="http://www.getontracks.org/"><%= t('common.website')%></a> |
+    <a href="http://getontracks.org/tracks/contribute"><%= t('common.contribute')%></a></p>
 </div>

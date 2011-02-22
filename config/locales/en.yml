@@ -65,7 +65,17 @@ en:
       by_task_count: "By number of tasks"
       by_task_count_title: "Sort by number of tasks"
       by_task_count_title_confirm: "Are you sure that you want to sort these projects by the number of tasks? This will replace the existing sort order."
-    drag_handle: "DRAG"
+    drag_handle: DRAG
+    bugs: Bugs
+    forum: Forum
+    wiki: Wiki
+    email: Email
+    website: Website
+    contribute: Contribute
+  errors:
+    user_unauthorized: "401 Unauthorized: Only administrative users are allowed access to this function."
+  footer:
+    send_feedback: Send feedback on %{version}
   contexts:
     status_hidden: "Context is hidden"
     status_active: "Context is active"
@@ -604,5 +614,3 @@ en:
     auth_type_updated: "Authentication type updated."
     auth_type_update_error: "There was a problem updating your authentication type: %{error_messages}"
     new_token_generated: "New token successfully generated"
-  errors:
-    user_unauthorized: "401 Unauthorized: Only administrative users are allowed access to this function."
