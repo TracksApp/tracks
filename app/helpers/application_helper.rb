@@ -240,7 +240,7 @@ module ApplicationHelper
   end
 
   def generate_i18n_strings
-    js = ""
+    js = "i18n_locale='#{I18n.locale}';\n"
     js << "i18n = new Array();\n"
     %w{
     shared.toggle_multi       shared.toggle_multi_title
@@ -257,6 +257,12 @@ module ApplicationHelper
       js << "i18n['#{s}'] = '#{ t(s).gsub(/'/, "\\\\'") }';\n"
     end
     return js
+  end
+
+  def javascript_tag_for_i18n_datepicker
+    # do not include en as locale since this the available by default
+    locales_without_en = I18n::available_locales.find_all{|locale| !(locale.to_s == 'en') }
+    return javascript_include_tag(locales_without_en.map{|locale| "i18n/jquery.ui.datepicker-#{locale}.js"})
   end
 
 end

@@ -973,6 +973,12 @@ function enable_rich_interaction(){
     $('input.Date').datepicker({
         'dateFormat': dateFormat,
         'firstDay': weekStart,
+        'showButtonPanel': true,
+        'showWeek': true,
+        'changeMonth': true,
+        'changeYear': true,
+        'maxDate': '+5y',
+        'minDate': '-1y',
         'showAnim': 'fold'
     });
 
@@ -1177,6 +1183,8 @@ $(document).ready(function() {
     TracksPages.setup_nifty_corners();
 
     TodoItemsContainer.setup_container_toggles();
+
+    $.datepicker.setDefaults($.datepicker.regional[i18n_locale]);
 
     /* enable page specific behavior */
     $([ 'IntegrationsPage', 'NotesPage', 'ProjectListPage', 'ContextListPage',
