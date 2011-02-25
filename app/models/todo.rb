@@ -276,7 +276,7 @@ class Todo < ActiveRecord::Base
 
     @predecessor_array=[]
 
-    predecessor_ids_array = predecessor_list.split(", ")
+    predecessor_ids_array = predecessor_list.split(",")
     predecessor_ids_array.each do |todo_id|
       predecessor = self.user.todos.find_by_id( todo_id.to_i ) unless todo_id.blank?
       @predecessor_array << predecessor unless predecessor.nil?

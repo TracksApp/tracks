@@ -23,7 +23,7 @@ Feature: dependencies
     When I expand the dependencies of "Todo 2"
     Then I should see "Todo 3" within the dependencies of "Todo 2"
 
-  @selenium
+  @selenium @wip
   Scenario: Adding dependency with comma to todo   # for #975
     Given I have a context called "@pc"
     And I have a project "dependencies" that has the following todos
@@ -39,7 +39,7 @@ Feature: dependencies
   Scenario: Deleting a predecessor will activate successors
     Given this is a pending scenario
 
-  @selenium
+  @selenium @wip
   Scenario: I can edit a todo to add the todo as a dependency to another
     Given I have a context called "@pc"
     And I have a project "dependencies" that has the following todos
@@ -59,7 +59,7 @@ Feature: dependencies
     Then I should see "test 1" within the dependencies of "test 3"
     Then I should see "test 2" within the dependencies of "test 3"
 
-  @selenium
+  @selenium @wip
   Scenario: I can remove a dependency by editing the todo
     Given I have a context called "@pc"
     And I have a project "dependencies" that has the following todos
