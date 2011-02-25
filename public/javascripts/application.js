@@ -843,6 +843,7 @@ function default_ajax_options_for_submit(ajax_type, element_to_block) {
         context: element_to_block,
         data: "_source_view=" + SOURCE_VIEW,
         beforeSend: function() {
+            // console.debug('data: '+this.data);
             if (this.context) {
                 $(this.context).block({
                     message: null
@@ -913,12 +914,16 @@ $(document).ajaxSend(function(event, request, settings) {
 });
 
 function setup_periodic_check(url_for_check, interval_in_sec, method) {
-    var ajaxMethod = (method ? method : "GET");
-
-    function check_remote() {
-        $.ajax(default_ajax_options_for_scripts(ajaxMethod, url_for_check, null));
-    }
-    setInterval(check_remote, interval_in_sec*1000);
+    setInterval(
+        function(){
+            var settings = default_ajax_options_for_scripts( method ? method : "GET", url_for_check, null);
+            if(typeof(AUTH_TOKEN) != 'undefined'){
+                settings.data += "&authenticity_token=" + encodeURIComponent( AUTH_TOKEN )                
+            }
+            $.ajax(settings);
+        },
+        interval_in_sec*1000
+    );
 }
 
 function update_order(event, ui){
