@@ -135,10 +135,7 @@ de:
   activerecord: 
     attributes: 
       project: 
-        name: 
-          blank: Das Projekt muss benannt sein
-          taken: ist bereits vergeben
-          too_long: Der Projekt-Name muss k&uuml;rzer als 256 Zeichen sein
+        name: Name
         default_tags: Standard Tags
         default_context_name: Standard Kontext
         description: Beschreibung

@@ -131,10 +131,7 @@ nl:
   activerecord: 
     attributes: 
       project: 
-        name: 
-          blank: Het project moet moet een naam hebben
-          taken: bestaat al
-          too_long: De naam van het project moet korter zijn dan 256 tekens
+        name: Naam
         default_tags: Standaard Tags
         default_context_name: Standaard context
         description: Beschrijving
@@ -200,7 +197,7 @@ nl:
         body: Er waren problemen met de volgende velden
         header: 
           one: 1 fout voorkomt het kunnen bewaren van deze %{model}
-          other: "%{count} fout voorkomen dat dit %{model} bewaard kan worden"
+          other: "%{count} fouten voorkomen dat dit %{model} bewaard kan worden"
       full_messages: 
         format: "%{attribute} %{message}"
   stats: 
@@ -534,9 +531,9 @@ nl:
     hide_form_title: Verberg nieuw project formulier
     completed_actions_empty: Er zijn nog geen afgeronde acties voor dit project
     delete_project: Project verwijderen
-    delete_project_confirmation: Weet u zeker dat u wilt het project '%{naam} wilt verwijderen?
+    delete_project_confirmation: Weet u zeker dat u wilt het project '%{name} wilt verwijderen?
     show_form: Toevoegen van een project
-    list_projects: "TRACKS:: Overizcht van projecten"
+    list_projects: "TRACKS:: Overzicht van projecten"
     add_project: Voeg project toe
     set_default_tags_notice: Stel project standaard tags in op %{default_tags}
     add_note: Een notitie toevoegen

@@ -360,20 +360,33 @@ div#input_box {
     clear:right;
 }
 
-ul.predecessor_list {
+form.new_todo_form ul.predecessor_list,
+form.edit_todo_form ul.predecessor_list {
     color: #999;
     font-size: 0.8em;
     padding: 0 0 5pt 0;
+}
+
+form.edit_todo_form ul.predecessor_list {
+    color: black;
 }
 
 ul.predecessor_list li {
     padding: 0 0;
 }
 
+/* deleting dependency from new form of a todo */
 img.icon_delete_dep {width: 10px; background-image: url(../images/icon_delete.png); background-repeat: no-repeat; background-position: -9px 0; border: none; color:black;}
 a:hover img.icon_delete_dep {width: 10px; background-image: url(../images/icon_delete.png); background-repeat: no-repeat; background-position: 0 0; border: none; color:black; background-color: black;}
 a.icon_delete_dep:hover {width: 10px; background-color: black;}
+
+/* deleting dependency from edit form of a todo */
+form.edit_todo_form a.icon_delete_dep:hover { background-color: #cccccc;}
+form.edit_todo_form a:hover img.icon_delete_dep { background-color: #cccccc; }
+
+/* delete button for deleting a dep from the tree of a todo */
 a.delete_dependency_button:hover {background-color: white;}
+
 
 .box {
     float: left;

@@ -90,11 +90,12 @@ var TracksForm = {
     },
     enable_dependency_delete: function() {
         $('a[class=icon_delete_dep]').live('click', function() {
-            var predecessor_list = $('input[name=predecessor_list]');
+            var form = $(this).parents('form').get(0);
+            var predecessor_list = $(form).find('input[name=predecessor_list]');
             var id_list = split( predecessor_list.val() );
 
             // remove from ul
-            $("li#pred_"+this.id).slideUp(500).remove();
+            $(form).find("li#pred_"+this.id).slideUp(500).remove();
 
             // remove from array
             var new_list = new Array();
@@ -109,30 +110,32 @@ var TracksForm = {
             predecessor_list.val( new_list.join(", ") );
 
             if (new_list.length == 0) {
-                $("label#label_for_predecessor_input").hide();
-                $("ul#predecessor_ul").hide();
+                $(form).find("label#label_for_predecessor_input").hide();
+                $(form).find("ul#predecessor_ul").hide();
             }
 
             return false; // prevent submit/follow link
         })
     },
     generate_dependency_list: function(todo_id) {
-        // find edit form
-        var form_selector = "#form_todo_"+todo_id;
-        var form = $(form_selector);
+        if (spec_of_todo.length > 0) {
+            // find edit form
+            var form_selector = "#form_todo_"+todo_id;
+            var form = $(form_selector);
 
-        var predecessor_list = form.find('input[name=predecessor_list]');
-        var id_list = split( predecessor_list.val() );
+            var predecessor_list = form.find('input[name=predecessor_list]');
+            var id_list = split( predecessor_list.val() );
 
-        var label = form.find("label#label_for_predecessor_input").first();
-        label.show();
+            var label = form.find("label#label_for_predecessor_input").first();
+            label.show();
 
-        while (id_list.length > 0) {
-            var elem = id_list.pop();
-            var new_li = TodoItems.generate_predecessor(elem, spec_of_todo[elem]);
-            var ul = form.find('ul#predecessor_ul');
-            ul.html(ul.html() + new_li);
-            form.find('li#pred_'+elem).show();
+            while (id_list.length > 0) {
+                var elem = id_list.pop();
+                var new_li = TodoItems.generate_predecessor(elem, spec_of_todo[elem]);
+                var ul = form.find('ul#predecessor_ul');
+                ul.html(ul.html() + new_li);
+                form.find('li#pred_'+elem).show();
+            }
         }
     }
 }
@@ -1044,7 +1047,7 @@ function enable_rich_interaction(){
     .autocomplete({
         minLength: 0,
         source: function( request, response ) {
-            term = request.term;
+            var term = request.term;
             if (term != "" && term != " ")
                 $.getJSON( relative_to_root('auto_complete_for_predecessor'), {
                     term: term
@@ -1056,30 +1059,31 @@ function enable_rich_interaction(){
         },
         select: function( event, ui ) {
             // retrieve values from input fields
-            todo_spec = ui.item.label
-            todo_id = ui.item.value
-            predecessor_list = $('input[name=predecessor_list]')
-            id_list = split( predecessor_list.val() );
+            var todo_spec = ui.item.label
+            var todo_id = ui.item.value
+            var form = $(this).parents('form').get(0);
+            var predecessor_list = $(form).find('input[name=predecessor_list]')
+            var id_list = split( predecessor_list.val() );
 
             // add the dependency to id list
             id_list.push( todo_id );
             predecessor_list.val( id_list.join( ", " ) );
 
             // show the html for the list of deps
-            $('ul#predecessor_ul').show();
-            $("label#label_for_predecessor_input").show();
-            if (todo_spec.length > 35) { // cut off string
+            $(form).find('ul#predecessor_ul').show();
+            $(form).find("label#label_for_predecessor_input").show();
+            if (todo_spec.length > 35 && form.id == "todo-form-new-action") {
+                // cut off string only in new-todo-form
                 todo_spec = todo_spec.substring(0,40)+"...";
             }
             // show the new dep in list
-            var html = $('ul#predecessor_ul').html();
+            var html = $(form).find('ul#predecessor_ul').html();
             var new_li = TodoItems.generate_predecessor(todo_id, todo_spec);
-            $('ul#predecessor_ul').html(html + new_li);
-            $('li#pred_'+todo_id).slideDown(500);
-            TracksForm.enable_dependency_delete();
+            $(form).find('ul#predecessor_ul').html(html + new_li);
+            $(form).find('li#pred_'+todo_id).slideDown(500);
 
-            $('input[name=predecessor_input]').val('');
-            $('input[name=predecessor_input]').focus();
+            $(form).find('input[name=predecessor_input]').val('');
+            $(form).find('input[name=predecessor_input]').focus();
             return false;
         }
     });
@@ -1161,7 +1165,7 @@ function enable_rich_interaction(){
     field_touched = false;
 
     /* shrink the notes on the project pages. This is not live(), so this needs
-* to be run after ajax adding of a new note */
+     * to be run after ajax adding of a new note */
     $('.note_wrapper').truncate({
         max_length: 90,
         more: '',
