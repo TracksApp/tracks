@@ -299,7 +299,7 @@ nl:
     added_new_next_action: Nieuwe actie toegevoegd
     star_action: Markeer deze actie met een ster
     completed_recurrence_completed: Er is geen actie na de terugkerende actie die u new verwijderd heeft. De herhaling is voltooid
-    defer_date_after_due_date: Uitsteldatum is na de vervaldag. Gelieve vervaldag bewerken alvorens uitstedatuml aan te passen.
+    defer_date_after_due_date: Uitsteldatum is na de vervaldag. Gelieve vervaldag bewerken alvorens uitsteldatum aan te passen.
     unable_to_add_dependency: Niet in staat om de afhankelijkheid toe te voegen
     done: Voltooid?
     star_action_with_description: markeer de actie '%{description}' met een ster

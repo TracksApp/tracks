@@ -30,11 +30,13 @@ module TodosHelper
       :_source_view => (@source_view.underscore.gsub(/\s+/,'_') rescue "")}
     url[:_tag_name] = @tag_name if @source_view == 'tag'
 
-    futuredate = (todo.show_from || todo.user.date) + days.days
     options = {:x_defer_alert => false, :class => "icon_defer_item" }
-    if todo.due && futuredate > todo.due
-      options[:x_defer_alert] = true
-      options[:x_defer_date_after_due_date] = t('todos.defer_date_after_due_date')
+    if todo.due
+      futuredate = (todo.show_from || todo.user.date) + days.days
+      if futuredate > todo.due
+        options[:x_defer_alert] = true
+        options[:x_defer_date_after_due_date] = t('todos.defer_date_after_due_date')
+      end
     end
 
     return link_to(image_tag_for_defer(days), url, options)
@@ -375,7 +377,7 @@ module TodosHelper
         container_id = "p#{@original_item_project_id}empty-nd" if @remaining_in_context == 0
         container_id = "tickler-empty-nd" if ( 
           ( (@todo_was_activated_from_deferred_state || @todo_was_activated_from_pending_state) && @remaining_deferred_or_pending_count == 0) ||
-          (@original_item_was_deferred && @remaining_deferred_or_pending_count == 0 && @todo.completed?) )
+            (@original_item_was_deferred && @remaining_deferred_or_pending_count == 0 && @todo.completed?) )
         container_id = "empty-d" if @completed_count && @completed_count == 0 && !@todo.completed?
       }
       page.deferred { container_id = "c#{@original_item_context_id}empty-nd" if @remaining_in_context == 0 }

@@ -59,7 +59,7 @@ class ApplicationController < ActionController::Base
   def set_session_expiration
     # http://wiki.rubyonrails.com/rails/show/HowtoChangeSessionOptions
     unless session == nil
-      return if @controller_name == 'feed' or session['noexpiry'] == "on"
+      return if self.controller_name == 'feed' or session['noexpiry'] == "on"
       # If the method is called by the feed controller (which we don't have
       # under session control) or if we checked the box to keep logged in on
       # login don't set the session expiry time.

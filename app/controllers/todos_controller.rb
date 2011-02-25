@@ -11,6 +11,8 @@ class TodosController < ApplicationController
     :completed_archive, :check_deferred, :toggle_check, :toggle_star,
     :edit, :update, :defer, :create, :calendar, :auto_complete_for_predecessor, :remove_predecessor, :add_predecessor]
 
+  protect_from_forgery :except => :check_deferred
+
   def index
     @projects = current_user.projects.find(:all, :include => [:default_context])
     @contexts = current_user.contexts.find(:all)
@@ -823,13 +825,13 @@ class TodosController < ApplicationController
             # current_users.todos.find but that broke with_scope for :limit
 
             # Exclude hidden projects from count on home page
-            @todos = current_user.todos.find(:all, :include => [ :project, :context, :tags ])
+            @todos = current_user.todos.find(:all, :include => [ :project, :context, :tags, :pending_successors, :recurring_todo ])
 
             # Exclude hidden projects from the home page
             @not_done_todos = current_user.todos.find(:all,
               :conditions => ['contexts.hide = ? AND (projects.state = ? OR todos.project_id IS NULL)', false, 'active'],
               :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC",
-              :include => [ :project, :context, :tags ])
+              :include => [ :project, :context, :tags, :pending_successors, :recurring_todo ])
           end
 
         end
