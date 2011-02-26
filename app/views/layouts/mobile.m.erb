@@ -13,7 +13,7 @@
 </head><body>
 <% if !(@new_mobile || @edit_mobile)
       if current_user && !current_user.prefs.nil? -%>
-<h1><span class="count"><%= @down_count %></span> <%= 
+<h1><span class="count" id="badge_count"><%= @down_count %></span> <%=
         l(Date.today, :format => current_user.prefs.title_date_format) -%></h1>
 <div class="nav">
 <%=     (link_to(t('layouts.mobile_navigation.new_action'), new_todo_path(new_todo_params))+" | ") unless @new_mobile -%>
