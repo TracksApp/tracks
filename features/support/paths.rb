@@ -6,53 +6,54 @@ module NavigationHelpers
   # step definition in web_steps.rb
   #
   def path_to(page_name)
+    options = @mobile_interface ? {:format => :m} : {}
     case page_name
 
     when /the home\s?page/
-      root_path
+      root_path(options)
     when /the statistics page/
-      stats_path
+      stats_path(options)
     when /the signup page/
-      signup_path
+      signup_path(options)
     when /the login page/
-      login_path
+      login_path(options)
     when /the notes page/
-      notes_path
+      notes_path(options)
     when /the contexts page/
-      contexts_path
+      contexts_path(options)
     when /the projects page/
-      projects_path
+      projects_path(options)
     when /the manage users page/
-      users_path
+      users_path(options)
     when /the repeating todos page/
-      recurring_todos_path
+      recurring_todos_path(options)
     when /the integrations page/
-      integrations_path
+      integrations_path(options)
     when /the tickler page/
-      tickler_path
+      tickler_path(options)
     when /the export page/
-      data_path
+      data_path(options)
     when /the preference page/
-      preferences_path
+      preferences_path(options)
     when /the rest api docs page/
-      rest_api_docs_path
+      rest_api_docs_path(options)
     when /the search page/
-      search_path
+      search_path(options)
     when /the starred page/
-      tag_path("starred")
+      tag_path("starred", options)
     when /the feeds page/
-      feeds_path
+      feeds_path(options)
     when /the context page for "([^\"]*)" for user "([^\"]*)"/i
-      context_path(User.find_by_login($2).contexts.find_by_name($1))
+      context_path(User.find_by_login($2).contexts.find_by_name($1), options)
     when /the context page for "([^\"]*)"/i
-      context_path(@current_user.contexts.find_by_name($1))
+      context_path(@current_user.contexts.find_by_name($1), options)
     when /the "([^\"]*)" project for user "([^\"]*)"/i
-      project_path(User.find_by_login($2).projects.find_by_name($1))
+      project_path(User.find_by_login($2).projects.find_by_name($1), options)
     when /the "([^\"]*)" project/i
       @project = @current_user.projects.find_by_name($1)
-      project_path(@project)
+      project_path(@project, options)
     when /the tag page for "([^"]*)"/i
-      tag_path($1)
+      tag_path($1, options)
 
       # Add more mappings here.
       # Here is an example that pulls values out of the Regexp:

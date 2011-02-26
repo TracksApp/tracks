@@ -271,3 +271,13 @@ Then /^I should not see "([^"]*)" in the deferred container$/ do |todo_descripti
 
   selenium.is_element_present(xpath).should be_false
 end
+
+Then /^the selected project should be "([^"]*)"$/ do |content|
+  # Works for mobile. TODO: make it work for both mobile and non-mobile
+  field_labeled("Project").element.search(".//option[@selected = 'selected']").inner_html.should =~ /#{content}/
+end
+
+Then /^the selected context should be "([^"]*)"$/ do |content|
+  # Works for mobile. TODO: make it work for both mobile and non-mobile
+  field_labeled("Context").element.search(".//option[@selected = 'selected']").inner_html.should =~ /#{content}/
+end

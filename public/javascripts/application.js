@@ -315,7 +315,7 @@ var TodoItems = {
     getContextsForAutocomplete: function (term, element_to_block) {
         var allContexts = null;
         var params = default_ajax_options_for_scripts('GET', relative_to_root('contexts.autocomplete'), element_to_block);
-        params.data = "term="+term;
+        params.data += "&term="+term;
         params.dataType = "json";
         params.async = false;
         params.success = function(result){

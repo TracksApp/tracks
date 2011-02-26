@@ -24,6 +24,13 @@ Given /^I have a project called "([^"]*)"$/ do |project_name|
   Given "there exists a project \"#{project_name}\" for user \"#{@current_user.login}\""
 end
 
+Given /^I have a project "([^"]*)" with a default context of "([^"]*)"$/ do |project_name, context_name|
+  Given "there exists a project \"#{project_name}\" for user \"#{@current_user.login}\""
+  context = @current_user.contexts.create!(:name => context_name)
+  @project.default_context = context
+  @project.save!
+end
+
 Given /^I have the following projects:$/ do |table|
   table.hashes.each do |project|
     Given 'I have a project called "'+project[:project_name]+'"'

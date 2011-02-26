@@ -17,3 +17,7 @@ Then /the badge should show (.*)/ do |number|
 
   badge.should == number.to_i
 end
+
+Given /^I am working on the mobile interface$/ do
+  @mobile_interface = true
+end
