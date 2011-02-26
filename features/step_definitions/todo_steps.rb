@@ -174,12 +174,26 @@ end
 When /^I edit the dependency of "([^"]*)" to "([^"]*)"$/ do |todo_name, deps|
   todo = @dep_todo = @current_user.todos.find_by_description(todo_name)
   todo.should_not be_nil
-  # click edit
-  selenium.click("//div[@id='line_todo_#{todo.id}']//img[@id='edit_icon_todo_#{todo.id}']", :wait_for => :ajax, :javascript_framework => :jquery)
+
+  open_edit_form_for(todo)
   fill_in "predecessor_list_todo_#{todo.id}", :with => deps
-  
   submit_edit_todo_form(todo)
-  sleep(1) # TODO: replace with some wait_for
+end
+
+When /^I edit the due date of "([^"]*)" to tomorrow$/ do |action_description|
+  todo = @current_user.todos.find_by_description(action_description)
+  todo.should_not be_nil
+  open_edit_form_for(todo)
+  fill_in "due_todo_#{todo.id}", :with => format_date(todo.created_at + 1.day)
+  submit_edit_todo_form(todo)
+end
+
+When /^I clear the due date of "([^"]*)"$/ do |action_description|
+  todo = @current_user.todos.find_by_description(action_description)
+  todo.should_not be_nil
+  open_edit_form_for(todo)
+  selenium.click("//div[@id='edit_todo_#{todo.id}']//a[@id='due_x_todo_#{todo_id}']/img", :wait_for => :ajax, :javascript_framework => :jquery)
+  submit_edit_todo_form(todo)
 end
 
 Then /^I should see ([0-9]+) todos$/ do |count|
