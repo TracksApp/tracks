@@ -2,15 +2,18 @@ Given /^I have no todos$/ do
   Todo.delete_all
 end
 
-Given /^I have a todo "(.*)"$/ do |description|
-  context = @current_user.contexts.create!(:name => "context A")
+Given /^I have a todo "([^"]*)" in the context "([^"]*)"$/ do |description, context_name|
+  context = @current_user.contexts.find_or_create(:name => context_name)
   @current_user.todos.create!(:context_id => context.id, :description => description)
 end
 
+Given /^I have a todo "([^"]*)"$/ do |description|
+  Given "I have a todo \"#{description}\" in the context \"Context A\""
+end
+
 Given /^I have ([0-9]+) todos$/ do |count|
-  context = @current_user.contexts.create!(:name => "context A")
   count.to_i.downto 1 do |i|
-    @current_user.todos.create!(:context_id => context.id, :description => "todo #{i}")
+    Given "I have a todo \"todo #{i}\" in the context \"Context A\""
   end
 end
 
@@ -55,12 +58,15 @@ Given /^I have a project "([^"]*)" that has the following todos$/ do |project_na
   Given "I have a project called \"#{project_name}\""
   @project.should_not be_nil
   todos.hashes.each do |todo|
-    context_id = @current_user.contexts.find_by_name(todo[:context])
-    context_id.should_not be_nil
-    @current_user.todos.create!(
+    context = @current_user.contexts.find_by_name(todo[:context])
+    context.should_not be_nil
+    new_todo = @current_user.todos.create!(
       :description => todo[:description],
-      :context_id => context_id,
+      :context_id => context.id,
       :project_id=>@project.id)
+    unless todo[:tags].nil?
+      new_todo.tag_with(todo[:tags])
+    end
   end
 end
 

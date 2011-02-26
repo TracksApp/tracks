@@ -19,9 +19,18 @@ Feature: Add new next action from mobile page
     And the selected context should be "<context>"
 
     Scenarios: # empty means no selected, i.e. first in list is shown
-      | page                            | project          | context         |
-      | home page                       |                  |                 |
-      | tickler page                    |                  |                 |
-      | "test project" project          | test project     |                 |
-      | context page for "test context" |                  | test context    |
-      | tag page for "starred"          |                  |                 |
+      | page                            | project      | context      |
+      | home page                       |              |              |
+      | tickler page                    |              |              |
+      | "test project" project          | test project |              |
+      | context page for "test context" |              | test context |
+      | tag page for "starred"          |              |              |
+
+  Scenario: I can add a new todo using the mobile interface
+    Given I am on the home page
+    Then the badge should show 0
+    When I follow "0-New action"
+    And I fill in "Description" with "test me"
+    And I press "Create"
+    Then I should see "test me"
+    And the badge should show 1
