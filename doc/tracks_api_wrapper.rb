@@ -1,5 +1,7 @@
 require 'activeresource'
 
+# WARNING: this is not really maintained or tested...
+
 # Install the ActiveResource gem if you don't already have it:
 #
 # sudo gem install activeresource --source http://gems.rubyonrails.org --include-dependencies
