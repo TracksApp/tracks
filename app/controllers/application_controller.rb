@@ -4,19 +4,6 @@
 
 require_dependency "login_system"
 require_dependency "tracks/source_view"
-require "redcloth"
-
-require 'date'
-require 'time'
-
-# Commented the following line because of #744. It prevented rake db:migrate to
-# run because this tag went looking for the taggings table that did not exist
-# when you feshly create a new database Old comment: We need this in development
-# mode, or you get 'method missing' errors
-#
-# Tag
-
-class CannotAccessContext < RuntimeError; end
 
 class ApplicationController < ActionController::Base
 
@@ -24,12 +11,11 @@ class ApplicationController < ActionController::Base
 
   helper :application
   include LoginSystem
-  helper_method :current_user, :prefs
+  helper_method :current_user, :prefs, :format_date, :markdown
 
   layout proc{ |controller| controller.mobile? ? "mobile" : "standard" }
   exempt_from_layout /\.js\.erb$/
-
-  
+ 
   before_filter :set_session_expiration
   before_filter :set_time_zone
   before_filter :set_zindex_counter
@@ -38,11 +24,6 @@ class ApplicationController < ActionController::Base
   prepend_before_filter :enable_mobile_content_negotiation
   after_filter :set_charset
   
-  include ActionView::Helpers::TextHelper
-  include ActionView::Helpers::SanitizeHelper
-  extend ActionView::Helpers::SanitizeHelper::ClassMethods
-  helper_method :format_date, :markdown
-
   # By default, sets the charset to UTF-8 if it isn't already set
   def set_charset
     headers["Content-Type"] ||= "text/html; charset=UTF-8" 
@@ -149,7 +130,7 @@ class ApplicationController < ActionController::Base
   def markdown(text)
     RedCloth.new(text).to_html
   end
-  
+
   # Here's the concept behind this "mobile content negotiation" hack: In
   # addition to the main, AJAXy Web UI, Tracks has a lightweight low-feature
   # 'mobile' version designed to be suitablef or use from a phone or PDA. It

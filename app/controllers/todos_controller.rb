@@ -13,6 +13,10 @@ class TodosController < ApplicationController
 
   protect_from_forgery :except => :check_deferred
 
+  # these are needed for todo_feed_content. TODO: remove this view stuff from controller
+  include ActionView::Helpers::SanitizeHelper
+  extend ActionView::Helpers::SanitizeHelper::ClassMethods
+
   def index
     @projects = current_user.projects.find(:all, :include => [:default_context])
     @contexts = current_user.contexts.find(:all)
@@ -981,6 +985,7 @@ class TodosController < ApplicationController
   end
 
   def todo_feed_content
+    # TODO: move view stuff into view, also the includes at the top
     lambda do |i|
       item_notes = sanitize(markdown( i.notes )) if i.notes?
       due = "<div>#{t('todos.feeds.due', :date => format_date(i.due))}</div>\n" if i.due?
