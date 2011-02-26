@@ -36,6 +36,11 @@ module TracksStepHelper
     execute_javascript("$('#todo_project_name').val('');")
   end
 
+  def open_edit_form_for(todo)
+    # click edit
+    selenium.click("//div[@id='line_todo_#{todo.id}']//img[@id='edit_icon_todo_#{todo.id}']", :wait_for => :ajax, :javascript_framework => :jquery)
+  end
+  
 end
 
 World(TracksStepHelper)
