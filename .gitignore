@@ -20,3 +20,6 @@ public/javascripts/tracks-cached.js
 public/stylesheets/tracks-cached.css
 .idea
 .rvmrc
+public/javascripts/jquery-all.js
+public/javascripts/tracks.js
+public/stylesheets/all.css
