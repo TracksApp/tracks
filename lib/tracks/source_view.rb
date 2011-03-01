@@ -12,6 +12,10 @@ module Tracks
       def nil?
         yield if @source_view.nil? && block_given?
       end
+
+      def context
+        yield if :context == @source_view && block_given?
+      end
       
       def method_missing(check_source_view,*args)
         yield if check_source_view == @source_view && block_given?
