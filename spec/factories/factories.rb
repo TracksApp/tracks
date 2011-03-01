@@ -10,3 +10,12 @@ Factory.define :context do |c|
   c.hide false
   c.created_at Time.now.utc
 end
+
+Factory.define :project do |p|
+  p.sequence(:name) { |n| "testproject#{n}" }
+end
+
+Factory.define :todo do |t|
+  t.sequence(:description) { |n| "testtodo#{n}" }
+  t.association :context
+end

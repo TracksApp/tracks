@@ -129,23 +129,27 @@ describe Todo do
 
     describe 'when update_state_from_project is called' do
       it "should unhide when project is active" do
-        project = mock_model(Project, :hidden? => false)
-        todo = Todo.new(:state => 'project_hidden', :project => project)
+        project = Factory.create(:project)
+        todo = Factory.create(:todo, :project => project, :state => 'project_hidden')
+        todo.hide!
         todo.should be_project_hidden
         todo.update_state_from_project
         todo.should be_active
       end
    
       it "should unhide when project is null" do
-        todo = Todo.new(:state => 'project_hidden', :project => nil)
+        todo = Factory.create(:todo, :project => nil)
+        todo.hide!
         todo.should be_project_hidden
         todo.update_state_from_project
         todo.should be_active
       end
    
       it "should hide when project is hidden" do
-        project = mock_model(Project, :hidden? => true)
-        todo = Todo.new(:state => 'active', :project => project)
+        project = Factory.create(:project)
+        project.hide!
+        todo = Factory.create(:todo, :project => project)
+
         todo.should be_active
         todo.update_state_from_project
         todo.should be_project_hidden
