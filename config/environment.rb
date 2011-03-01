@@ -25,7 +25,7 @@ Rails::Initializer.run do |config|
   config.gem "RedCloth"
   config.gem "soap4r", :lib => false
   config.gem 'datanoise-actionwebservice', :lib => 'actionwebservice'
-  config.gem 'sanitize'
+  config.gem 'sanitize', :version => '~> 1.2.1'
   config.gem 'rack', :version => '1.1.0'
   config.gem 'will_paginate', :version => '~> 2.3.15'
   config.gem 'has_many_polymorphs'
