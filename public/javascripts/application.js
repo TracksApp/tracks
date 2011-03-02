@@ -1096,7 +1096,8 @@ function enable_rich_interaction(){
             $(form).find('input[name=predecessor_input]').val('');
             $(form).find('input[name=predecessor_input]').focus();
             return false;
-        }
+        },
+        selectFirst: true
     });
 
     /* have to bind on keypress because of limitations of live() */
