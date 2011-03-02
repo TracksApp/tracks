@@ -94,11 +94,14 @@ When /I change the (.*) field of "([^\"]*)" to "([^\"]*)"$/ do |field, todo_name
   todo = @current_user.todos.find_by_description(todo_name)
   todo.should_not be_nil
 
-  selenium.click("//img[@id='edit_icon_todo_#{todo.id}']", :wait_for => :ajax, :javascript_framework => :jquery)
+  #selenium.click("//img[@id='edit_icon_todo_#{todo.id}']", :wait_for => :ajax, :javascript_framework => :jquery)
+  open_edit_form_for(todo)
   selenium.type("css=form.edit_todo_form input[name=#{field}]", new_value)
-  selenium.click("css=button.positive", :wait_for => :ajax, :javascript_framework => :jquery)
+  #selenium.click("css=button.positive", :wait_for => :ajax, :javascript_framework => :jquery)
+  submit_edit_todo_form(todo)
+
   # TODO: change to a wait_for
-  sleep(5)
+  sleep(1)
 end
 
 When /^I submit a new action with description "([^"]*)"$/ do |description|
@@ -192,7 +195,7 @@ When /^I clear the due date of "([^"]*)"$/ do |action_description|
   todo = @current_user.todos.find_by_description(action_description)
   todo.should_not be_nil
   open_edit_form_for(todo)
-  selenium.click("//div[@id='edit_todo_#{todo.id}']//a[@id='due_x_todo_#{todo_id}']/img", :wait_for => :ajax, :javascript_framework => :jquery)
+  selenium.click("//div[@id='edit_todo_#{todo.id}']//a[@id='due_x_todo_#{todo.id}']/img", :wait_for => :ajax, :javascript_framework => :jquery)
   submit_edit_todo_form(todo)
 end
 

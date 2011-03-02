@@ -24,7 +24,8 @@ Feature: Show all due actions in a calendar view
 
   @selenium @wip
   Scenario: Clearing the due date of a todo will remove it from the calendar
-    When I submit a new action with description "a new next action" in the context "@calendar"
+    When I go to the home page
+    And I submit a new action with description "a new next action" in the context "@calendar"
     And I edit the due date of "a new next action" to tomorrow
     And I go to the calendar page
     Then I should see "a new next action"

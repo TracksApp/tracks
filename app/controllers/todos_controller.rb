@@ -903,7 +903,7 @@ class TodosController < ApplicationController
         @target_context_count = current_user.projects.find(@todo.project_id).todos.active.count
       }
       from.calendar {
-        @target_context_count = count_old_due_empty(@new_due_id)
+        @target_context_count = @new_due_id.blank? ? 0 : count_old_due_empty(@new_due_id)
       }
     end
     @remaining_in_context = current_user.contexts.find(context_id).todos(true).active.not_hidden.count if !@remaining_in_context
