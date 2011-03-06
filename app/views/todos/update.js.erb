@@ -20,7 +20,7 @@
 %>
 
   <%= render_animation(animation) %>
-  TracksPages.page_notify('notice', '<%=@status_message%>', 5);
+  TracksPages.page_notify('notice', '<%=escape_javascript @status_message%>', 5);
   TracksPages.set_page_badge(<%= @down_count %>);
 <% end %>
 
