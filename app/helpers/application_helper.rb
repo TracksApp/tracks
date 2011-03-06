@@ -260,9 +260,11 @@ module ApplicationHelper
   end
 
   def javascript_tag_for_i18n_datepicker
+    locale = I18n.locale
     # do not include en as locale since this the available by default
-    locales_without_en = I18n::available_locales.find_all{|locale| !(locale.to_s == 'en') }
-    return javascript_include_tag(locales_without_en.map{|locale| "i18n/jquery.ui.datepicker-#{locale}.js"})
+    if locale and locale != :en
+      javascript_include_tag("i18n/jquery.ui.datepicker-#{locale}.js")
+    end
   end
 
 end
