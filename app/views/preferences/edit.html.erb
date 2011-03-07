@@ -30,7 +30,7 @@
 	      table_row(pref_name, nowrap_label) { text_field('prefs', pref_name) }
 	    end
 	  %>
-          <%= row_with_select_field('locale', I18n.available_locales) %>
+          <%= row_with_select_field('locale', I18n.available_locales.map {|l| l.to_s}) %>
 	  <%= row_with_text_field('date_format') %>
 	  <%= row_with_text_field('title_date_format') %>
     <%= table_row('time_zone', false) { time_zone_select('prefs','time_zone') } %>
