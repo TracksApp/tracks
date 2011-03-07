@@ -1190,8 +1190,6 @@ $(document).ready(function() {
 
     TodoItemsContainer.setup_container_toggles();
 
-    $.datepicker.setDefaults($.datepicker.regional[i18n_locale]);
-
     /* enable page specific behavior */
     $([ 'IntegrationsPage', 'NotesPage', 'ProjectListPage', 'ContextListPage',
         'FeedsPage', 'RecurringTodosPage', 'TodoItems', 'TracksPages',
