@@ -18,7 +18,7 @@
     <input id="multi_todo_context_name" name="context_name" autocomplete="off" tabindex="4" size="30" type="text" value="<%= @initial_context_name %>" />
     <div class="page_name_auto_complete" id="context_list" style="display:none"></div>
 
-    <label for="tag_list"><%= t('shared.tags_for_all_actions') + ' (' + t('shared.separate_tags_with_commas') +')' %></label>
+    <label for="tag_list"><%= t('shared.tags_for_all_actions') %></label>
     <%= text_field_tag "multi_tag_list", @default_tags, :name=>:tag_list, :size => 30, :tabindex => 5 %>
     <%= content_tag("div", "", :id => "tag_list_auto_complete", :class => "auto_complete") %>
 
