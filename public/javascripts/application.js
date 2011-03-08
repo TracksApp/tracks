@@ -342,6 +342,9 @@ var TodoItems = {
         var li = "<li style=\"display:none\" id=\"pred_"+todo_id+"\">"+ anchor +" "+ todo_spec + "</li>";
         return li;
     },
+    highlight_todo: function(id) {
+        $(id).effect('highlight', {}, 2000, function(){ });
+    },
     setup_behavior: function() {
         /* show the notes of a todo */
         $(".show_notes").live('click', function () {

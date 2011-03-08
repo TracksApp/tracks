@@ -45,15 +45,6 @@ Given /^I have ([0-9]+) completed todos with a note$/ do |count|
   end
 end
 
-Given /^"(.*)" depends on "(.*)"$/ do |successor_name, predecessor_name|
-  successor = Todo.find_by_description(successor_name)
-  predecessor = Todo.find_by_description(predecessor_name)
-  
-  successor.add_predecessor(predecessor)
-  successor.state = "pending"
-  successor.save!
-end
-
 Given /^I have a project "([^"]*)" that has the following todos$/ do |project_name, todos|
   Given "I have a project called \"#{project_name}\""
   @project.should_not be_nil
@@ -68,26 +59,6 @@ Given /^I have a project "([^"]*)" that has the following todos$/ do |project_na
       new_todo.tag_with(todo[:tags])
     end
   end
-end
-
-When /^I drag "(.*)" to "(.*)"$/ do |dragged, target|
-  drag_id = Todo.find_by_description(dragged).id
-  drop_id = Todo.find_by_description(target).id
-  drag_name = "xpath=//div[@id='line_todo_#{drag_id}']//img[@class='grip']"
-  drop_name = "xpath=//div[@id='line_todo_#{drop_id}']//div[@class='description']"
-  
-  selenium.drag_and_drop_to_object(drag_name, drop_name)
-
-  arrow = "xpath=//div[@id='line_todo_#{drop_id}']/div/a[@class='show_successors']/img"
-  selenium.wait_for_element(arrow, :timeout_in_seconds => 5)
-end
-
-When /^I expand the dependencies of "([^\"]*)"$/ do |todo_name|
-  todo = Todo.find_by_description(todo_name)
-  todo.should_not be_nil
-
-  expand_img_locator = "xpath=//div[@id='line_todo_#{todo.id}']/div/a[@class='show_successors']/img"
-  selenium.click(expand_img_locator)
 end
 
 When /I change the (.*) field of "([^\"]*)" to "([^\"]*)"$/ do |field, todo_name, new_value|
@@ -174,15 +145,6 @@ When /^I submit the new multiple actions form with$/ do |multi_line_descriptions
   submit_multiple_next_action_form
 end
 
-When /^I edit the dependency of "([^"]*)" to "([^"]*)"$/ do |todo_name, deps|
-  todo = @dep_todo = @current_user.todos.find_by_description(todo_name)
-  todo.should_not be_nil
-
-  open_edit_form_for(todo)
-  fill_in "predecessor_list_todo_#{todo.id}", :with => deps
-  submit_edit_todo_form(todo)
-end
-
 When /^I edit the due date of "([^"]*)" to tomorrow$/ do |action_description|
   todo = @current_user.todos.find_by_description(action_description)
   todo.should_not be_nil
@@ -199,6 +161,30 @@ When /^I clear the due date of "([^"]*)"$/ do |action_description|
   submit_edit_todo_form(todo)
 end
 
+When /^I mark "([^"]*)" as complete$/ do |action_description|
+  # TODO: generalize. this currently only works for projects wrt xpath
+  todo = @current_user.todos.find_by_description(action_description)
+  todo.should_not be_nil
+  check "mark_complete_#{todo.id}"
+  wait_for :timeout => 5 do
+    !selenium.is_element_present("//div[@id='p#{todo.project.id}items']//div[@id='line_todo_#{todo.id}']")
+  end
+  # note that animations could be running after finishing this
+end
+
+When /^I delete the action "([^"]*)"$/ do |action_description|
+  todo = @current_user.todos.find_by_description(action_description)
+  todo.should_not be_nil
+
+  delete_todo_button = "xpath=//a[@id='delete_todo_#{todo.id}']/img"
+  selenium.click delete_todo_button
+  selenium.get_confirmation.should == "Are you sure that you want to delete the action '#{todo.description}'?"
+
+  wait_for :timeout => 5 do
+    !selenium.is_element_present("//div[@id='line_todo_#{todo.id}']")
+  end
+end
+
 Then /^I should see ([0-9]+) todos$/ do |count|
   count.to_i.downto 1 do |i|
     match_xpath "div["
@@ -208,42 +194,10 @@ end
 Then /^there should not be an error$/ do
   sleep(5)
   # form should be gone and thus no errors visible
-  selenium.is_visible("edit_todo_#{@dep_todo.id}").should == false
+  wait_for :timeout => 5 do
+    !selenium.is_visible("edit_todo_#{@dep_todo.id}")
+  end
 end
-
-Then /^the successors of "(.*)" should include "(.*)"$/ do |parent_name, child_name|
-  parent = @current_user.todos.find_by_description(parent_name)
-  parent.should_not be_nil
-  
-  child = parent.pending_successors.find_by_description(child_name)
-  child.should_not be_nil
-end
-
-Then /^I should see "([^\"]*)" within the dependencies of "([^\"]*)"$/ do |successor_description, todo_description|
-  todo = @current_user.todos.find_by_description(todo_description)
-  todo.should_not be_nil
-  successor = @current_user.todos.find_by_description(successor_description)
-  successor.should_not be_nil
-
-  # argh, webrat on selenium does not support within, so this won't work
-  # xpath = "//div[@id='line_todo_#{todo.id}'"
-  # Then "I should see \"#{successor_description}\" within \"xpath=#{xpath}\""
-
-  # let selenium look for the presence of the successor
-  xpath = "xpath=//div[@id='line_todo_#{todo.id}']//div[@id='successor_line_todo_#{successor.id}']//span"
-  selenium.wait_for_element(xpath, :timeout_in_seconds => 5)
-end
-
-Then /^I should not see "([^"]*)" within the dependencies of "([^"]*)"$/ do |successor_description, todo_description|
-  todo = @current_user.todos.find_by_description(todo_description)
-  todo.should_not be_nil
-  successor = @current_user.todos.find_by_description(successor_description)
-  successor.should_not be_nil
-  # let selenium look for the presence of the successor
-  xpath = "xpath=//div[@id='line_todo_#{todo.id}']//div[@id='successor_line_todo_#{successor.id}']//span"
-  selenium.is_element_present(xpath).should be_false
-end
-
 
 Then /^I should see the todo "([^\"]*)"$/ do |todo_description|
   selenium.is_element_present("//span[.=\"#{todo_description}\"]").should be_true
@@ -269,8 +223,7 @@ Then /^the container for the context "([^"]*)" should not be visible$/ do |conte
   context = @current_user.contexts.find_by_name(context_name)
   context.should_not be_nil
   xpath = "xpath=//div[@id=\"c#{context.id}\"]"
-  selenium.wait_for :wait_for => :ajax, :javascript_framework => :jquery
-  selenium.is_element_present(xpath).should be_false
+  wait_for_ajax  selenium.is_element_present(xpath).should be_false
 end
 
 Then /^a confirmation for adding a new context "([^"]*)" should be asked$/ do |context_name|
@@ -283,7 +236,31 @@ Then /^I should see "([^"]*)" in the deferred container$/ do |todo_description|
 
   xpath = "//div[@id='tickler']//div[@id='line_todo_#{todo.id}']"
 
-  selenium.is_element_present(xpath).should be_true
+  wait_for :timeout => 5 do
+    selenium.is_element_present(xpath)
+  end
+end
+
+Then /^I should see "([^"]*)" in the action container$/ do |todo_description|
+  todo = @current_user.todos.find_by_description(todo_description)
+  todo.should_not be_nil
+
+  xpath = "//div[@id='p#{todo.project.id}items']//div[@id='line_todo_#{todo.id}']"
+
+  wait_for :timeout => 5 do
+    selenium.is_element_present(xpath)
+  end
+end
+
+Then /^I should see "([^"]*)" in the completed container$/ do |todo_description|
+  todo = @current_user.todos.find_by_description(todo_description)
+  todo.should_not be_nil
+
+  xpath = "//div[@id='completed_container']//div[@id='line_todo_#{todo.id}']"
+
+  wait_for :timeout => 5 do
+    selenium.is_element_present(xpath)
+  end
 end
 
 Then /^I should not see "([^"]*)" in the deferred container$/ do |todo_description|
@@ -292,7 +269,9 @@ Then /^I should not see "([^"]*)" in the deferred container$/ do |todo_descripti
 
   xpath = "//div[@id='tickler']//div[@id='line_todo_#{todo.id}']"
 
-  selenium.is_element_present(xpath).should be_false
+  wait_for :timeout => 5 do
+    !selenium.is_element_present(xpath)
+  end
 end
 
 Then /^the selected project should be "([^"]*)"$/ do |content|

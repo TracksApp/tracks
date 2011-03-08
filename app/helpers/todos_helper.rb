@@ -90,7 +90,7 @@ module TodosHelper
   end
   
   def remote_toggle_checkbox(todo=@todo)
-    check_box_tag('item_id', toggle_check_todo_path(todo), todo.completed?, :class => 'item-checkbox',
+    check_box_tag("mark_complete_#{todo.id}", toggle_check_todo_path(todo), todo.completed?, :class => 'item-checkbox',
       :title => todo.pending? ? t('todos.blocked_by', :predecessors => todo.uncompleted_predecessors.map(&:description).join(', ')) : "", :readonly => todo.pending?)
   end
   

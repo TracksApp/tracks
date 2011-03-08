@@ -31,7 +31,7 @@ Then /^I should see "([^"]*)" as the selected context$/ do |context_name|
 end
 
 Then /^I should see feeds for "([^"]*)" in list of "([^"]*)"$/ do |name, list_type|
-  selenium.wait_for :wait_for => :ajax, :javascript_framework => :jquery
+  wait_for_ajax
   xpath= "//div[@id='feeds-for-#{list_type}']//strong"
   name.should == response.selenium.get_text("xpath=#{xpath}")
 end

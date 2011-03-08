@@ -447,7 +447,7 @@ class TodosController < ApplicationController
       format.js do
         if @saved
           determine_down_count
-          if source_view_is_one_of(:todo, :deferred)
+          if source_view_is_one_of(:todo, :deferred, :project)
             determine_remaining_in_context_count(@context_id)
           elsif source_view_is :calendar
             @original_item_due_id = get_due_id_for_calendar(@original_item_due)

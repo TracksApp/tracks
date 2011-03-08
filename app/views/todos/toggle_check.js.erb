@@ -95,18 +95,14 @@ function update_empty_tag_container(next_steps) {
 
 <% if @new_recurring_todo # hide js if @new_recurring_todo is not there-%>
 function highlight_updated_recurring_todo(next_steps) {
-  highlight_todo('#<%= dom_id(@new_recurring_todo)%>');
+  TodoItems.highlight_todo('#<%= dom_id(@new_recurring_todo)%>');
   next_steps.go();
 }
 <% end -%>
 
 function highlight_updated_todo(next_steps) {
-  highlight_todo('#<%= dom_id(@todo)%>');
+  TodoItems.highlight_todo('#<%= dom_id(@todo)%>');
   next_steps.go();
-}
-
-function highlight_todo(id) {
-  $(id).effect('highlight', {}, 2000, function(){ });
 }
 
 function activate_pending_todos(next_steps) {
@@ -114,13 +110,18 @@ function activate_pending_todos(next_steps) {
     if @saved && @pending_to_activate 
       # do not render the js in case of an error or if no todos to activate
       @pending_to_activate.each do |t|
+        html = escape_javascript(render(:partial => t, :locals => { :parent_container_type => parent_container_type }))
+        # only project and tag view have a deferred/blocked container
         if source_view_is_one_of(:project,:tag) -%>
           $('#<%= dom_id(t) %>').fadeOut(400, function() {
             $('#<%= dom_id(t) %>').remove();
+            $('#<%= item_container_id(t) %>').append("<%= html  %>");
+            <%= "$('#tickler-empty-nd').show();" if @remaining_deferred_or_pending_count==0 -%>
           });
- <%     end -%>
-        $('#<%= item_container_id(t) %>').append("<%= escape_javascript(render(:partial => t, :locals => { :parent_container_type => parent_container_type }))%>");
-        highlight_todo('#<%= dom_id(t)%>');
+ <%     else -%>
+          $('#<%= item_container_id(t) %>').append("<%= html%>");
+ <%     end -%>       
+        TodoItems.highlight_todo('#<%= dom_id(t)%>');
  <%   end -%>
  <% end -%>
   next_steps.go();
@@ -135,7 +136,7 @@ function block_predecessors(next_steps) {
           $('#<%= dom_id(t) %>').remove();
  <%       if source_view_is(:project) or source_view_is(:tag) # Insert it in deferred/pending block if existing -%>
             $('#<%= item_container_id(t) %>').append("<%= escape_javascript(render(:partial => t, :locals => { :parent_container_type => parent_container_type }))%>");
-            highlight_todo('#<%= dom_id(t)%>');
+            TodoItems.highlight_todo('#<%= dom_id(t)%>');
  <%       end -%>
         });
  <%   end -%>

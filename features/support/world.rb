@@ -44,6 +44,10 @@ module TracksStepHelper
     # click edit
     selenium.click("//div[@id='line_todo_#{todo.id}']//img[@id='edit_icon_todo_#{todo.id}']", :wait_for => :ajax, :javascript_framework => :jquery)
   end
+
+  def wait_for_ajax
+    selenium.wait_for :wait_for => :ajax, :javascript_framework => :jquery
+  end
   
 end
 

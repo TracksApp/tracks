@@ -1,5 +1,5 @@
 <%- if @saved -%>
-  TracksPages.page_notify('notice', '<%=  escape_javascript("The action was deleted succesfully") %>', 5);
+  TracksPages.page_notify('notice', '<%=  escape_javascript(t('todos.deleted_success')) %>', 5);
   TracksPages.set_page_badge(<%=@down_count%>);
   remove_todo_from_page();
   show_new_todo_if_todo_was_recurring();
@@ -59,14 +59,24 @@ function show_new_todo_if_todo_was_recurring() {
 }
 
 function activate_pending_todos() {
-  <% # Activate pending todos that are successors of the deleted -%>
-  <% @pending_to_activate.each do |t| -%>
-    <% if source_view_is(:project) or source_view_is(:tag) %>
-      $('#<%=dom_id(t)%>').remove();
-    <% end -%>
-    $('#<%=item_container_id(t)%>').append("<%=escape_javascript(render(:partial => t, :locals => { :parent_container_type => parent_container_type }))%>");
-    $('#<%= dom_id(t, 'line')%>').effect('highlight', {}, 2000 );
-  <% end -%>
+ <% # Activate pending todos that are successors of the completed
+    if @saved && @pending_to_activate
+      # do not render the js in case of an error or if no todos to activate
+      @pending_to_activate.each do |t|
+        html = escape_javascript(render(:partial => t, :locals => { :parent_container_type => parent_container_type }))
+        # only project and tag view have a deferred/blocked container
+        if source_view_is_one_of(:project,:tag) -%>
+          $('#<%= dom_id(t) %>').fadeOut(400, function() {
+            $('#<%= dom_id(t) %>').remove();
+            $('#<%= item_container_id(t) %>').append("<%= html  %>");
+            <%= "$('#tickler-empty-nd').show();" if @remaining_deferred_or_pending_count==0 -%>
+          });
+ <%     else -%>
+          $('#<%= item_container_id(t) %>').append("<%= html%>");
+ <%     end -%>
+        TodoItems.highlight_todo('#<%= dom_id(t, 'line')%>');
+ <%   end -%>
+ <% end -%>
 }
 
 function html_for_new_recurring_todo() {

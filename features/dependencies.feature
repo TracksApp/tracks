@@ -23,23 +23,7 @@ Feature: dependencies
     When I expand the dependencies of "Todo 2"
     Then I should see "Todo 3" within the dependencies of "Todo 2"
 
-  @selenium @wip
-  Scenario: Adding dependency with comma to todo   # for #975
-    Given I have a context called "@pc"
-    And I have a project "dependencies" that has the following todos
-      | description | context |
-      | test,1, 2,3 | @pc     |
-      | test me     | @pc     |
-    When I visit the "dependencies" project
-    And I drag "test me" to "test,1, 2,3"
-    Then the successors of "test,1, 2,3" should include "test me"
-    When I edit the dependency of "test me" to "'test,1, 2,3' <'@pc'; 'dependencies'>,'test,1, 2,3' <'@pc'; 'dependencies'>"
-    Then there should not be an error
-
-  Scenario: Deleting a predecessor will activate successors
-    Given this is a pending scenario
-
-  @selenium @wip
+  @selenium
   Scenario: I can edit a todo to add the todo as a dependency to another
     Given I have a context called "@pc"
     And I have a project "dependencies" that has the following todos
@@ -48,18 +32,18 @@ Feature: dependencies
       | test 2      | @pc     |
       | test 3      | @pc     |
     When I visit the "dependencies" project
-    When I edit the dependency of "test 1" to "'test 2' <'@pc'; 'dependencies'>"
+    When I edit the dependency of "test 1" to add "test 2" as predecessor
     Then I should see "test 1" within the dependencies of "test 2"
     And I should see "test 1" in the deferred container
-    When I edit the dependency of "test 1" to "'test 2' <'@pc'; 'dependencies'>, 'test 3' <'@pc'; 'dependencies'>"
+    When I edit the dependency of "test 1" to add "test 3" as predecessor
     Then I should see "test 1" within the dependencies of "test 2"
     Then I should see "test 1" within the dependencies of "test 3"
-    When I edit the dependency of "test 1" to "'test 2' <'@pc'; 'dependencies'>"
-    And I edit the dependency of "test 2" to "'test 3' <'@pc'; 'dependencies'>"
+    When I edit the dependency of "test 1" to remove "test 3" as predecessor
+    And I edit the dependency of "test 2" to add "test 3" as predecessor
     Then I should see "test 1" within the dependencies of "test 3"
     Then I should see "test 2" within the dependencies of "test 3"
 
-  @selenium @wip
+  @selenium
   Scenario: I can remove a dependency by editing the todo
     Given I have a context called "@pc"
     And I have a project "dependencies" that has the following todos
@@ -69,12 +53,44 @@ Feature: dependencies
     And "test 1" depends on "test 2"
     When I visit the "dependencies" project
     Then I should see "test 1" in the deferred container
-    When I edit the dependency of "test 1" to ""
+    When I edit the dependency of "test 1" to remove "test 2" as predecessor
     Then I should not see "test 1" within the dependencies of "test 2"
     And I should not see "test 1" in the deferred container
 
+  @selenium
+  Scenario: Completing a predecessor will activate successors
+    Given I have a context called "@pc"
+    And I have a project "dependencies" that has the following todos
+      | description | context |
+      | test 1      | @pc     |
+      | test 2      | @pc     |
+      | test 3      | @pc     |
+    And "test 2" depends on "test 1"
+    When I visit the "dependencies" project
+    Then I should see "test 2" in the deferred container
+    And I should see "test 1" in the action container
+    When I mark "test 1" as complete
+    Then I should see "test 1" in the completed container
+    And I should see "test 2" in the action container
+    And I should not see "test 2" in the deferred container
+    And I should see the empty message in the deferred container
+
+  @selenium
   Scenario: Deleting a predecessor will activate successors
-    Given this is a pending scenario
+    Given I have a context called "@pc"
+    And I have a project "dependencies" that has the following todos
+      | description | context |
+      | test 1      | @pc     |
+      | test 2      | @pc     |
+      | test 3      | @pc     |
+    And "test 2" depends on "test 1"
+    When I visit the "dependencies" project
+    Then I should see "test 2" in the deferred container
+    And I should see "test 1" in the action container
+    When I delete the action "test 1"
+    And I should see "test 2" in the action container
+    And I should not see "test 2" in the deferred container
+    And I should see the empty message in the deferred container
 
   Scenario: Deleting a successor will update predecessor
     Given this is a pending scenario
