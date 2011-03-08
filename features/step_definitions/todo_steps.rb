@@ -222,8 +222,11 @@ end
 Then /^the container for the context "([^"]*)" should not be visible$/ do |context_name|
   context = @current_user.contexts.find_by_name(context_name)
   context.should_not be_nil
+
+  wait_for_ajax
+
   xpath = "xpath=//div[@id=\"c#{context.id}\"]"
-  wait_for_ajax  selenium.is_element_present(xpath).should be_false
+  selenium.is_element_present(xpath).should be_false
 end
 
 Then /^a confirmation for adding a new context "([^"]*)" should be asked$/ do |context_name|
