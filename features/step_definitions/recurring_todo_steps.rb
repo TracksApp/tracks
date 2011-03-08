@@ -35,7 +35,7 @@ When /^I edit the name of the pattern "([^\"]*)" to "([^\"]*)"$/ do |pattern_nam
   pattern.should_not be_nil
   click_link "link_edit_recurring_todo_#{pattern.id}"
 
-  selenium.wait_for :wait_for => :ajax, :javascript_framework => :jquery
+  wait_for_ajax
 
   fill_in "edit_recurring_todo_description", :with => new_name
   selenium.click "recurring_todo_edit_action_submit"
@@ -49,7 +49,7 @@ When /^I star the pattern "([^\"]*)"$/ do |pattern_name|
   pattern = @current_user.recurring_todos.find_by_description(pattern_name)
   pattern.should_not be_nil
   click_link "star_icon_#{pattern.id}"
-  selenium.wait_for :wait_for => :ajax, :javascript_framework => :jquery
+  wait_for_ajax
 end
 
 When /^I delete the pattern "([^"]*)"$/ do |pattern_name|
@@ -67,7 +67,7 @@ When /^I mark the pattern "([^"]*)" as complete$/ do |pattern_name|
   pattern.should_not be_nil
   pattern.completed?.should be_false
   selenium.click "check_#{pattern.id}"
-  selenium.wait_for :wait_for => :ajax, :javascript_framework => :jquery
+  wait_for_ajax
 end
 
 When /^I mark the pattern "([^"]*)" as active$/ do |pattern_name|
@@ -75,7 +75,7 @@ When /^I mark the pattern "([^"]*)" as active$/ do |pattern_name|
   pattern.should_not be_nil
   pattern.completed?.should be_true
   selenium.click "check_#{pattern.id}"
-  selenium.wait_for :wait_for => :ajax, :javascript_framework => :jquery
+  wait_for_ajax
 end
 
 Then /^the state list "([^"]*)" should be empty$/ do |state|
