@@ -31,7 +31,7 @@ function update_successor() {
     <%= "show_empty_deferred_message(); " if @remaining_deferred_or_pending_count == 0 %>
     <% if source_view_is_one_of(:todo, :deferred, :tag) -%>
       $('#c<%= @successor.context_id %>').fadeIn(500, function() {});
-      $('#no_todos_in_tag_view').slideUp(100);
+      $('#no_todos_in_view').slideUp(100);
     <% end -%>
     $('#<%=item_container_id(@successor)%>').append(html_for_new_successor());
     $('#<%= dom_id(@successor, 'line')%>').effect('highlight', {}, 2000 ); <%

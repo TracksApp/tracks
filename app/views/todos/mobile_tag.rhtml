@@ -1,7 +1,7 @@
 <div id="display_box">
 <% if @not_done_todos.empty? -%>
 <div class="container context">
-<h2><%= t('todos.no_actions_found') %></h2>
+<h2><%= t('todos.no_actions_found_title') %></h2>
 <div class="message"><%= t('todos.no_actions_with', :tag_name => @tag_name) %></div>
 </div>
 <% end -%>

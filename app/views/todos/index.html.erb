@@ -1,4 +1,8 @@
 <div id="display_box">
+  <div id="no_todos_in_view" class="container context" <%= "style=\"display:none\"" unless @not_done_todos.empty? %> >
+       <h2><%= t('todos.no_actions_found_title')%></h2>
+    <div class="message"><p><%= t('todos.no_actions_found') %></p></div>
+  </div>
   <%= render(
     :partial => "contexts/context",
     :collection => @contexts_to_show,

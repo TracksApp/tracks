@@ -15,7 +15,7 @@
   end
   animation << "hide_context" if update_needs_to_hide_context
   animation << "highlight_updated_todo"
-  animation << "update_empty_tag_container" if source_view_is(:tag)
+  animation << "update_empty_container" if source_view_is_one_of(:tag, :todo)
   animation << "update_predecessors"
 %>
 
@@ -71,11 +71,11 @@ function highlight_updated_todo(next_steps) {
   next_steps.go();
 }
 
-function update_empty_tag_container(next_steps) {
+function update_empty_container(next_steps) {
   <% if @down_count==0 -%>
-    $('#no_todos_in_tag_view').slideDown(400, function(){ next_steps.go(); });
+    $('#no_todos_in_view').slideDown(400, function(){ next_steps.go(); });
   <% else -%>
-    $('#no_todos_in_tag_view').fadeOut(100, function(){ next_steps.go(); });
+    $('#no_todos_in_view').fadeOut(100, function(){ next_steps.go(); });
   <% end -%>
 }
 

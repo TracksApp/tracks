@@ -27,3 +27,10 @@ Then /^I should see the empty message in the deferred container$/ do
     selenium.is_visible("xpath=//div[@id='tickler']//div[@id='tickler-empty-nd']")
   end
 end
+
+Then /^I should not see the context "([^"]*)"$/ do |context_name|
+  context = @current_user.contexts.find_by_name(context_name)
+  wait_for :timeout => 5 do
+    !selenium.is_visible("xpath=//div[@id='c#{context.id}']")
+  end
+end
