@@ -180,6 +180,54 @@ var TracksPages = {
     set_page_badge: function(count) {
         $('#badge_count').html(count);
     },
+    setup_autocomplete_for_tag_list: function(id) {
+        $(id+':not(.ac_input)')
+        .bind( "keydown", function( event ) { // don't navigate away from the field on tab when selecting an item
+            if ( event.keyCode === $.ui.keyCode.TAB &&
+                $( this ).data( "autocomplete" ).menu.active ) {
+                event.preventDefault();
+            }
+        })
+        .autocomplete({
+            minLength: 0,
+            source: function( request, response ) {
+                var last_term = extractLast( request.term );
+                if (last_term != "" && last_term != " ")
+                    $.ajax( {
+                        url: relative_to_root('tags.autocomplete'),
+                        dataType: 'json',
+                        data: {
+                            term: last_term
+                        },
+                        success: function(data, textStatus, jqXHR) {
+                            // remove spinner as removing the class is not always done by response
+                            $(id).removeClass('ui-autocomplete-loading');
+                            response(data, textStatus, jqXHR); // call jquery callback to handle data
+                        }
+                    })
+                else {
+                    // remove spinner as typing will always add the spinner
+                    $(id).removeClass('ui-autocomplete-loading');
+                }
+            },
+            focus: function() {
+                // prevent value inserted on focus
+                return false;
+            },
+            select: function( event, ui ) {
+                var terms = split( this.value );
+                // remove the current input
+                terms.pop();
+                // add the selected item
+                terms.push( ui.item.value );
+                // add placeholder to get the comma-and-space at the end
+                //terms.push( "" );
+                this.value = terms.join( ", " );
+                return false;
+            },
+            selectFirst: true
+        });
+    },
     setup_behavior: function () {
         /* main menu */
         $('ul.sf-menu').superfish({
@@ -218,16 +266,6 @@ var TracksPages = {
 
         /* fade flashes and alerts in automatically */
         $(".alert").fadeOut(8000);
-
-        // for edit project form and edit todo form
-        // TODO: refactor to separate calls from project and todo 
-        $('.edit-form a.negative').live('click', function(){
-            $(this).parents('.edit-form').fadeOut(200, function () {
-                $(this).parents('.list').find('.project').fadeIn(500);
-                $(this).parents('.container').find('.item-show').fadeIn(500);
-            })
-        });
-
     }
 }
 
@@ -345,6 +383,59 @@ var TodoItems = {
     highlight_todo: function(id) {
         $(id).effect('highlight', {}, 2000, function(){ });
     },
+    setup_autocomplete_for_predecessor: function() {
+        $('input[name=predecessor_input]:not(.ac_input)')
+        .bind( "keydown", function( event ) { // don't navigate away from the field on tab when selecting an item
+            if ( event.keyCode === $.ui.keyCode.TAB &&
+                $( this ).data( "autocomplete" ).menu.active ) {
+                event.preventDefault();
+            }
+        })
+        .autocomplete({
+            minLength: 0,
+            source: function( request, response ) {
+                var term = request.term;
+                if (term != "" && term != " ")
+                    $.getJSON( relative_to_root('auto_complete_for_predecessor'), {
+                        term: term
+                    }, response );
+            },
+            focus: function() {
+                // prevent value inserted on focus
+                return false;
+            },
+            select: function( event, ui ) {
+                // retrieve values from input fields
+                var todo_spec = ui.item.label
+                var todo_id = ui.item.value
+                var form = $(this).parents('form').get(0);
+                var predecessor_list = $(form).find('input[name=predecessor_list]')
+                var id_list = split( predecessor_list.val() );
+
+                // add the dependency to id list
+                id_list.push( todo_id );
+                predecessor_list.val( id_list.join( ", " ) );
+
+                // show the html for the list of deps
+                $(form).find('ul#predecessor_ul').show();
+                $(form).find("label#label_for_predecessor_input").show();
+                if (todo_spec.length > 35 && form.id == "todo-form-new-action") {
+                    // cut off string only in new-todo-form
+                    todo_spec = todo_spec.substring(0,40)+"...";
+                }
+                // show the new dep in list
+                var html = $(form).find('ul#predecessor_ul').html();
+                var new_li = TodoItems.generate_predecessor(todo_id, todo_spec);
+                $(form).find('ul#predecessor_ul').html(html + new_li);
+                $(form).find('li#pred_'+todo_id).slideDown(500);
+
+                $(form).find('input[name=predecessor_input]').val('');
+                $(form).find('input[name=predecessor_input]').focus();
+                return false;
+            },
+            selectFirst: true
+        });
+    },
     setup_behavior: function() {
         /* show the notes of a todo */
         $(".show_notes").live('click', function () {
@@ -395,6 +486,14 @@ var TodoItems = {
             return false;
         });
 
+        // for cancelling edit todo form
+        $('form.edit_todo_form a.negative').live('click', function(){
+            $(this).parents('.edit-form').fadeOut(200, function () {
+                $(this).parents('.list').find('.project').fadeIn(500);
+                $(this).parents('.container').find('.item-show').fadeIn(500);
+            })
+        });
+
         // defer a todo
         $(".item-container a.icon_defer_item").live('click', function(ev){
             if ($(this).attr("x_defer_alert") == "true")
@@ -414,6 +513,24 @@ var TodoItems = {
         });
 
         TracksForm.enable_dependency_delete();
+    }
+}
+
+var ContextItems = {
+    setup_autocomplete_for_contexts: function(id) {
+        $(id).autocomplete({
+            source: relative_to_root('contexts.autocomplete'),
+            selectFirst: true
+        });
+    }
+}
+
+var ProjectItems = {
+    setup_autocomplete_for_projects: function(id) {
+        $(id).autocomplete({
+            source: relative_to_root('projects.autocomplete'),
+            selectFirst: true
+        });
     }
 }
 
@@ -508,6 +625,14 @@ var ProjectListPage = {
         $("form.edit-project-form button.positive").live('click', function (ev) {
             submit_with_ajax_and_block_element('form.edit-project-form', $(this));
             return false;
+        });
+
+        /* cancel edit project form */
+        $('form.edit-project-form a.negative').live('click', function(){
+            $(this).parents('.edit-form').fadeOut(200, function () {
+                $(this).parents('.list').find('.project').fadeIn(500);
+                $(this).parents('.container').find('.item-show').fadeIn(500);
+            })
         });
 
         /* submit project form after entering new project */
@@ -921,7 +1046,7 @@ function setup_periodic_check(url_for_check, interval_in_sec, method) {
         function(){
             var settings = default_ajax_options_for_scripts( method ? method : "GET", url_for_check, null);
             if(typeof(AUTH_TOKEN) != 'undefined'){
-                settings.data += "&authenticity_token=" + encodeURIComponent( AUTH_TOKEN )                
+                settings.data += "&authenticity_token=" + encodeURIComponent( AUTH_TOKEN )
             }
             $.ajax(settings);
         },
@@ -991,123 +1116,17 @@ function enable_rich_interaction(){
     });
 
     /* Autocomplete */
-    $('input[name=context_name]').autocomplete({
-        source: relative_to_root('contexts.autocomplete'),
-        selectFirst: true
-    });
-    $('input[name=project_name]').autocomplete({
-        source: relative_to_root('projects.autocomplete'),
-        selectFirst: true
-    });
-    $('input[name="project[default_context_name]"]').autocomplete({
-        source: relative_to_root('contexts.autocomplete'),
-        selectFirst: true
-    });
-
-    $('input[name=tag_list]:not(.ac_input)')
-    .bind( "keydown", function( event ) { // don't navigate away from the field on tab when selecting an item
-        if ( event.keyCode === $.ui.keyCode.TAB &&
-            $( this ).data( "autocomplete" ).menu.active ) {
-            event.preventDefault();
-        }
-    })
-    .autocomplete({
-        minLength: 0,
-        source: function( request, response ) {
-            var last_term = extractLast( request.term );
-            if (last_term != "" && last_term != " ")
-                $.ajax( {
-                    url: relative_to_root('tags.autocomplete'),
-                    dataType: 'json',
-                    data: {
-                        term: last_term
-                    },
-                    success: function(data, textStatus, jqXHR) {
-                        // remove spinner as removing the class is not always done by response
-                        $('input[name=tag_list]').removeClass('ui-autocomplete-loading');
-                        response(data, textStatus, jqXHR); // call jquery callback to handle data
-                    }
-                })
-            else {
-                // remove spinner as typing will always add the spinner
-                $('input[name=tag_list]').removeClass('ui-autocomplete-loading');
-            }
-        },
-        focus: function() {
-            // prevent value inserted on focus
-            return false;
-        },
-        select: function( event, ui ) {
-            var terms = split( this.value );
-            // remove the current input
-            terms.pop();
-            // add the selected item
-            terms.push( ui.item.value );
-            // add placeholder to get the comma-and-space at the end
-            //terms.push( "" );
-            this.value = terms.join( ", " );
-            return false;
-        },
-        selectFirst: true
-    });
-
-    $('input[name=predecessor_input]:not(.ac_input)')
-    .bind( "keydown", function( event ) { // don't navigate away from the field on tab when selecting an item
-        if ( event.keyCode === $.ui.keyCode.TAB &&
-            $( this ).data( "autocomplete" ).menu.active ) {
-            event.preventDefault();
-        }
-    })
-    .autocomplete({
-        minLength: 0,
-        source: function( request, response ) {
-            var term = request.term;
-            if (term != "" && term != " ")
-                $.getJSON( relative_to_root('auto_complete_for_predecessor'), {
-                    term: term
-                }, response );
-        },
-        focus: function() {
-            // prevent value inserted on focus
-            return false;
-        },
-        select: function( event, ui ) {
-            // retrieve values from input fields
-            var todo_spec = ui.item.label
-            var todo_id = ui.item.value
-            var form = $(this).parents('form').get(0);
-            var predecessor_list = $(form).find('input[name=predecessor_list]')
-            var id_list = split( predecessor_list.val() );
-
-            // add the dependency to id list
-            id_list.push( todo_id );
-            predecessor_list.val( id_list.join( ", " ) );
-
-            // show the html for the list of deps
-            $(form).find('ul#predecessor_ul').show();
-            $(form).find("label#label_for_predecessor_input").show();
-            if (todo_spec.length > 35 && form.id == "todo-form-new-action") {
-                // cut off string only in new-todo-form
-                todo_spec = todo_spec.substring(0,40)+"...";
-            }
-            // show the new dep in list
-            var html = $(form).find('ul#predecessor_ul').html();
-            var new_li = TodoItems.generate_predecessor(todo_id, todo_spec);
-            $(form).find('ul#predecessor_ul').html(html + new_li);
-            $(form).find('li#pred_'+todo_id).slideDown(500);
-
-            $(form).find('input[name=predecessor_input]').val('');
-            $(form).find('input[name=predecessor_input]').focus();
-            return false;
-        },
-        selectFirst: true
-    });
+    ProjectItems.setup_autocomplete_for_projects('input[name=project_name]');
+    ContextItems.setup_autocomplete_for_contexts('input[name=context_name]');
+    ContextItems.setup_autocomplete_for_contexts('input[id="project_default_context_name"]');
+    TracksPages.setup_autocomplete_for_tag_list('input[name=tag_list]');
+    TracksPages.setup_autocomplete_for_tag_list('input[id="project_default_tags"]');
+    TodoItems.setup_autocomplete_for_predecessor();
 
     /* have to bind on keypress because of limitations of live() */
     $('input[name=project_name]').live('keypress', function(){
         $(this).bind('blur', project_defaults);
     });
-
     $('input[name=context_name]').live('keypress', function(){
         $(this).attr('edited', 'true');
     });
@@ -1180,7 +1199,7 @@ function enable_rich_interaction(){
     field_touched = false;
 
     /* shrink the notes on the project pages. This is not live(), so this needs
-     * to be run after ajax adding of a new note */
+ * to be run after ajax adding of a new note */
     $('.note_wrapper').truncate({
         max_length: 90,
         more: '',
