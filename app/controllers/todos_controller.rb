@@ -898,9 +898,10 @@ class TodosController < ApplicationController
         @remaining_hidden_count = current_user.todos.hidden.with_tag(tag).count
       }
       from.project {
-        @remaining_deferred_or_pending_count = current_user.projects.find(@todo.project_id).todos.deferred_or_blocked.count
-        @remaining_in_context = current_user.projects.find(@todo.project_id).todos.active.count
-        @target_context_count = current_user.projects.find(@todo.project_id).todos.active.count
+        project_id = @project_changed ? @original_item_project_id : @todo.project_id
+        @remaining_deferred_or_pending_count = current_user.projects.find(project_id).todos.deferred_or_blocked.count
+        @remaining_in_context = current_user.projects.find(project_id).todos.active.count
+        @target_context_count = current_user.projects.find(project_id).todos.active.count
       }
       from.calendar {
         @target_context_count = @new_due_id.blank? ? 0 : count_old_due_empty(@new_due_id)
