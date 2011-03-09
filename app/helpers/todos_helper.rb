@@ -303,7 +303,7 @@ module TodosHelper
   def update_needs_to_remove_todo_from_container
     source_view do |page|
       page.context  { return @context_changed || @todo.deferred? || @todo.pending? }
-      page.project  { return @todo_deferred_state_changed || @todo_pending_state_changed }
+      page.project  { return @todo_deferred_state_changed || @todo_pending_state_changed || @project_changed}
       page.deferred { return @context_changed || !(@todo.deferred? || @todo.pending?) }
       page.calendar { return @due_date_changed || !@todo.due }
       page.stats    { return @todo.completed? }
@@ -378,7 +378,7 @@ module TodosHelper
         container_id = "tickler-empty-nd" if ( 
           ( (@todo_was_activated_from_deferred_state || @todo_was_activated_from_pending_state) && @remaining_deferred_or_pending_count == 0) ||
             (@original_item_was_deferred && @remaining_deferred_or_pending_count == 0 && @todo.completed?) )
-        container_id = "empty-d" if @completed_count && @completed_count == 0 && !@todo.completed?
+        container_id = "empty-d" if @completed_count && @completed_count == 0 && !@todo.completed? 
       }
       page.deferred { container_id = "c#{@original_item_context_id}empty-nd" if @remaining_in_context == 0 }
       page.calendar { container_id = "empty_#{@original_item_due_id}" if @old_due_empty }
