@@ -61,18 +61,13 @@ Given /^I have a project "([^"]*)" that has the following todos$/ do |project_na
   end
 end
 
-When /I change the (.*) field of "([^\"]*)" to "([^\"]*)"$/ do |field, todo_name, new_value|
+When /I change the (.*) field of "([^\"]*)" to "([^\"]*)"$/ do |field_name, todo_name, new_value|
   todo = @current_user.todos.find_by_description(todo_name)
   todo.should_not be_nil
 
-  #selenium.click("//img[@id='edit_icon_todo_#{todo.id}']", :wait_for => :ajax, :javascript_framework => :jquery)
   open_edit_form_for(todo)
-  selenium.type("css=form.edit_todo_form input[name=#{field}]", new_value)
-  #selenium.click("css=button.positive", :wait_for => :ajax, :javascript_framework => :jquery)
+  selenium.type("css=form.edit_todo_form input[name=#{field_name}]", new_value)
   submit_edit_todo_form(todo)
-
-  # TODO: change to a wait_for
-  sleep(1)
 end
 
 When /^I submit a new action with description "([^"]*)"$/ do |description|

@@ -101,7 +101,8 @@ Feature: Edit a project
   @selenium @wip
   Scenario: I can move a todo out of the current project
     Given I have a project "foo" with 2 todos
+    And I have a project called "bar"
     When I go to the "foo" project
     And I change the project_name field of "Todo 1" to "bar"
-    Then I should not see the todo "Todo 1"
-    And I should see the todo "Todo 2"
+    Then I should not see "Todo 1"
+    And I should see "Todo 2"
