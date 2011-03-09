@@ -25,14 +25,14 @@ function clear_form() {
 }
 
 function insert_new_context_with_new_todo() {
-  $('#no_todos_in_tag_view').slideUp(100);
+  $('#no_todos_in_view').slideUp(100);
   $('#display_box').prepend(html_for_new_context());
 }
 
 function add_todo_to_existing_context() {
   <% if source_view_is_one_of(:todo, :deferred, :tag) -%>
     $('#c<%= @todo.context_id %>').fadeIn(500, function() {});
-    $('#no_todos_in_tag_view').slideUp(100);
+    $('#no_todos_in_view').slideUp(100);
   <% end -%>
   $('#<%=empty_container_msg_div_id%>').hide();
   $('#<%=item_container_id(@todo)%>').append(html_for_new_todo());

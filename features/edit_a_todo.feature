@@ -12,12 +12,12 @@ Feature: Edit a next action from every page
   Scenario: I can toggle the star of a todo
     Given this is a pending scenario
 
-  @selenium @wip
+  @selenium
   Scenario: I can delete a todo
-    Given I have a todo with description "delete me" in the context "@home"
+    Given I have a todo "delete me" in the context "@home"
     When I go to the home page
     Then I should see "delete me"
-    And I delete the todo
+    When I delete the action "delete me"
     Then I should not see "delete me"
 
   Scenario: Removing the last todo in context will hide context # delete, edit
@@ -26,24 +26,25 @@ Feature: Edit a next action from every page
   Scenario: Deleting the last todo in container will show empty message # only project, context, tag, not todo
     Given this is a pending scenario
 
-  @selenium @wip
+  @selenium
   Scenario Outline: I can mark an active todo complete and it will update empty messages
+    Given I have a context called "visible context"
+    And I have a project called "visible project"
     When I go to the <page>
     Then I should see "<empty message>"
-    When I submit a new action with description "visible todo" to project "visible project" with tags "test" in the context "visible context"
+    When I submit a new action with description "visible todo" to project "visible project" with tags "starred" in the context "visible context"
     Then I should see "visible todo"
     And I should not see "<empty message>"
-    When I mark the todo complete
-    Then I should not see "visible context"
+    When I mark "visible todo" as complete
     And I should see "<empty message>"
-    And I should see "visible todo" in the completed todos container
+    And I should see "visible todo" in the completed container
 
     Scenarios:
-      | page                               | empty message                                      |
-      | tag page for "starred"             | No actions found                                   |
-      | home page                          | No actions found                                   |
-      | context page for "visible context" | Currently there are no deferred or pending actions |
-      | project page for "visible project" | Currently there are no deferred or pending actions |
+      | page                               | empty message                                             |
+      | "visible project" project          | Currently there are no incomplete actions in this project |
+      | home page                          | Currently there are no incomplete actions                 |
+      | tag page for "starred"             | No actions found                                          |
+      | context page for "visible context" | Currently there are no incomplete actions in this context |
 
   @selenium @wip
   Scenario Outline: I can mark a deferred todo complete and it will update empty messages
@@ -52,7 +53,7 @@ Feature: Edit a next action from every page
     When I submit a new deferred action with description "visible todo" to project "visible project" with tags "test" in the context "visible context"
     Then I should see "visible todo"
     And I should not see "<empty message>"
-    When I mark the todo complete
+    When I mark "visible todo" complete
     Then I should not see "visible context"
     And I should see "<empty message>"
     And I should see "visible todo" in the completed todos container
@@ -62,10 +63,6 @@ Feature: Edit a next action from every page
       | tag page for "starred"             | Currently there are no deferred or pending actions |
       | context page for "visible context" | Currently there are no deferred or pending actions |
       | project page for "visible project" | Currently there are no deferred or pending actions |
-
-  @selenium @wip
-  Scenario: I can mark a deferred todo complete and it will update empty messages
-    Given this is a pending scenario
 
   @selenium @wip
   Scenario Outline: I can mark a completed todo active and it will update empty messages
