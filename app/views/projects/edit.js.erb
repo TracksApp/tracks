@@ -4,6 +4,7 @@ function replace_project_with_edit_form() {
   $('div#<%=dom_id(@project)%>').fadeOut(250, function() {
     show_edit_form();
     set_focus();
+    enable_rich_interaction();
   });
 }
 

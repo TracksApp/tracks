@@ -40,7 +40,10 @@ function update_project_page() {
 }
 
 function remove_project_edit_form() {
-  $('#<%=dom_id(@project, 'edit')%>').hide(500, function() {$('#<%=dom_id(@project, 'edit')%>').remove();} );
+<%-
+    # do not remove() edit form as this will remove the DIV that is needed to replace with the new form, so only empty the DIV
+-%>
+  $('#<%=dom_id(@project, 'edit')%>').hide(500, function() {$('#<%=dom_id(@project, 'edit')%>').html("<!- empty ->");} );
 }
 
 function update_and_show_project_settings() {
