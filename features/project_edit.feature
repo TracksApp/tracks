@@ -98,7 +98,7 @@ Feature: Edit a project
     Given this is a pending scenario  # empty message is in separate container
 
   # Ticket #1043
-  @selenium @wip
+  @selenium
   Scenario: I can move a todo out of the current project
     Given I have a project "foo" with 2 todos
     And I have a project called "bar"
