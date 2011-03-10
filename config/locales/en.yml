@@ -73,6 +73,11 @@ en:
     email: Email
     website: Website
     contribute: Contribute
+    first: First
+    second: Second
+    third: Third
+    fourth: Fourth
+    last: Last
   errors:
     user_unauthorized: "401 Unauthorized: Only administrative users are allowed access to this function."
   footer:
@@ -431,6 +436,8 @@ en:
     no_completed_actions_with: "No completed actions with the tag '%{tag_name}'"
     next_action_description: "Next action description"
     new_related_todo_created: "A new todo was added which belongs to this recurring todo"
+    new_related_todo_created_short: "created a new todo"
+    new_related_todo_not_created_short: "did not create todo"
     error_completing_todo: "There was an error completing / activating the recurring todo %{description}"
     recurring_todos: "Recurring todos"
     no_recurring_todos: "Currently there are no recurring todos"
@@ -440,6 +447,7 @@ en:
     recurring_deleted_success: "The recurring action was deleted succesfully."
     deleted_success: "The action was deleted succesfully."
     error_deleting_recurring: "There was an error deleting the recurring todo \'%{description}\'"
+    error_saving_recurring: "There was an error saving the recurring todo \'%{description}\'"
     error_starring_recurring: "Could not toggle the star of recurring todo \'%{description}\'"
     recurrence_period: "Recurrence period"
     action_marked_complete: "The action <strong>'%{description}'</strong> was marked as <strong>%{completed}</strong>"

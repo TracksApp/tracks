@@ -1,10 +1,6 @@
 <div class="recurring_container">
   <% 
   form_for(@new_recurring_todo, :html=> { :id=>'recurring-todo-form-new-action', :name=>'recurring_todo', :class => 'inline-form' }) do
-  #form_remote_tag(
-  #  :url => recurring_todos_path, :method => :post,
-  #  :html=> { :id=>'recurring-todo-form-new-action', :name=>'recurring_todo', :class => 'inline-form' },
-  #  :before => "$('#recurring_todo_new_action_submit').block({message: null})") do
     -%>
     <div id="error_status"><%= error_messages_for("item", :object_name => 'action') %></div>
   
@@ -76,7 +72,7 @@
       <%= radio_button_tag('recurring_todo[yearly_selector]', 'yearly_every_x_day', true)%> <%= t('todos.recurrence.yearly_every_x_day',
             :month => select_tag('recurring_todo[yearly_month_of_year]', options_for_select(@months_of_year, Time.zone.now.month), {}),
             :day => text_field_tag('recurring_todo[yearly_every_x_day]', Time.zone.now.day, "size" => 3, "tabindex" => 9)) %><br/>
-      <%= radio_button_tag('recurring_todo[yearly_selector]', 'yearly_every_xth_day')%><%= t('todos.recurrence.yearly_every_xth_day',
+      <%= radio_button_tag('recurring_todo[yearly_selector]', 'yearly_every_xth_day')%> <%= t('todos.recurrence.yearly_every_xth_day',
             :day => select_tag('recurring_todo[yearly_every_xth_day]', options_for_select(@xth_day), {}),
             :day_of_week => select_tag('recurring_todo[yearly_day_of_week]', options_for_select(@days_of_week, Time.zone.now.wday), {}),
             :month => select_tag('recurring_todo[yearly_month_of_year2]', options_for_select(@months_of_year, Time.zone.now.month), {})) %><br/>
