@@ -5,7 +5,7 @@
 </span>
 <% this_year = current_user.time.to_date.strftime("%Y").to_i
 if parent_container_type == 'show_mobile' -%>
-<p><label for="todo_done"><%= t('todos.done') %></label>&nbsp;<%= check_box_tag("done", 1, @todo && @todo.completed?, "tabindex" => 1) %></p>
+<p><label for="todo_done"><%= t('todos.done') %></label>&nbsp;<%= check_box_tag("done", 1, @todo && @todo.completed?, "tabindex" => 1, "onClick" => "document.mobileEdit.submit()") %></p>
 <% end -%>
 <h2><label for="todo_description"><%= t('common.description') %></label></h2>
 <%= text_field( "todo", "description", "tabindex" => 2, "maxlength" => 100, "size" => 50) %>
