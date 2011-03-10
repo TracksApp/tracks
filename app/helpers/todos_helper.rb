@@ -287,7 +287,7 @@ module TodosHelper
   end
 
   def date_field_tag(name, id, value = nil, options = {})
-    text_field_tag name, value, {"size" => 12, "id" => id, "class" => "Date", "onfocus" => "Calendar.setup", "autocomplete" => "off"}.update(options.stringify_keys)
+    text_field_tag name, value, {"size" => 12, "id" => id, "class" => "Date", "autocomplete" => "off"}.update(options.stringify_keys)
   end
 
   def update_needs_to_hide_context
@@ -295,7 +295,7 @@ module TodosHelper
       (@remaining_in_context == 0 && @todo_was_deferred_from_active_state) ||
       (@remaining_in_context == 0 && @todo.completed? && !(@original_item_was_deferred || @original_item_was_hidden)) if source_view_is(:tag)
 
-    return false if source_view_is(:project)
+    return false if source_view_is_one_of(:project, :calendar)
 
     return (@remaining_in_context == 0) && !source_view_is(:context)
   end
@@ -403,7 +403,7 @@ module TodosHelper
       end
     end
     html += "}}) " * animation.count
-    return html
+    return html + ";"
   end
 
   private

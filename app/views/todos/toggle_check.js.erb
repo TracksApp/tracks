@@ -7,7 +7,7 @@
     animation = []
     animation << "remove_todo"
     if @todo.completed?
-      animation << "add_to_completed_container"
+      animation << "add_to_completed_container" unless source_view_is(:calendar)
       animation << "add_new_recurring_todo"
       animation << "activate_pending_todos"
       animation << "remove_source_container"
@@ -22,7 +22,8 @@
 <% end -%>
 
 function redirect_after_complete() {
-  redirect_to("<%= project_path(@todo.project) -%>");
+  var path = "<%= @todo.project_id.nil? ? "/" : project_path(@todo.project) -%>";
+  redirect_to(path);
 }
 
 function remove_todo(next_steps) {

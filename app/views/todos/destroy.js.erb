@@ -19,7 +19,10 @@ function show_empty_messages() {
   <% end -%>
 
   <% if empty_container_msg_div_id && todo_container_is_empty -%>
-    $('#<%=empty_container_msg_div_id%>').slideDown(1000);
+      $('#<%=empty_container_msg_div_id%>').slideDown(1000);
+      <% if @down_count == 0 -%>
+        $('#no_todos_in_view').slideDown(1000);
+      <% end -%>
   <% end -%>
 
   <% if source_view_is(:deferred) && @down_count==0 -%>
