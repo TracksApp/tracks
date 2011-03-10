@@ -41,8 +41,13 @@ module TracksStepHelper
   end
 
   def open_edit_form_for(todo)
-    # click edit
-    selenium.click("//div[@id='line_todo_#{todo.id}']//img[@id='edit_icon_todo_#{todo.id}']", :wait_for => :ajax, :javascript_framework => :jquery)
+    edit_button = "xpath=//div[@id='line_todo_#{todo.id}']//img[@id='edit_icon_todo_#{todo.id}']"
+
+    wait_for :timeout => 5 do
+      selenium.is_element_present(edit_button)
+    end
+   
+    selenium.click(edit_button, :wait_for => :ajax, :javascript_framework => :jquery)
   end
 
   def wait_for_ajax

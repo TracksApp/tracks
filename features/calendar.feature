@@ -22,7 +22,7 @@ Feature: Show all due actions in a calendar view
     Then the badge should show 1
     And I should see "a new next action"
 
-  @selenium @wip
+  @selenium
   Scenario: Clearing the due date of a todo will remove it from the calendar
     When I go to the home page
     And I submit a new action with description "a new next action" in the context "@calendar"
@@ -32,5 +32,26 @@ Feature: Show all due actions in a calendar view
     When I clear the due date of "a new next action"
     Then I should not see "a new next action"
 
+  @selenium
+  Scenario: Marking a todo complete will remove it from the calendar
+    Given I have a todo "a new next action" in the context "@calendar" which is due tomorrow
+    When I go to the calendar page
+    Then I should see "a new next action"
+    When I clear the due date of "a new next action"
+    Then I should not see "a new next action"
+
+  @selenium
+  Scenario: Deleting a todo complete will remove it from the calendar
+    Given I have a todo "a new next action" in the context "@calendar" which is due tomorrow
+    When I go to the calendar page
+    Then I should see "a new next action"
+    When I delete the action "a new next action"
+    Then I should not see "a new next action"
+
+  @selenium
   Scenario: Changing due date of a todo will move it in the calendar
-    Given this is a pending scenario
+    Given I have a todo "a new next action" in the context "@calendar" which is due tomorrow
+    When I go to the calendar page
+    Then I should see "a new next action"
+    When I edit the due date of "a new next action" to next month
+    Then I should see "a new next action" in the due next month container

@@ -7,6 +7,13 @@ Given /^I have a todo "([^"]*)" in the context "([^"]*)"$/ do |description, cont
   @current_user.todos.create!(:context_id => context.id, :description => description)
 end
 
+Given /^I have a todo "([^"]*)" in the context "([^"]*)" which is due tomorrow$/ do |description, context_name|
+  context = @current_user.contexts.find_or_create(:name => context_name)
+  @todo = @current_user.todos.create!(:context_id => context.id, :description => description)
+  @todo.due = @todo.created_at + 1.day
+  @todo.save!
+end
+
 Given /^I have a todo "([^"]*)"$/ do |description|
   Given "I have a todo \"#{description}\" in the context \"Context A\""
 end
@@ -148,6 +155,14 @@ When /^I edit the due date of "([^"]*)" to tomorrow$/ do |action_description|
   submit_edit_todo_form(todo)
 end
 
+When /^I edit the due date of "([^"]*)" to next month$/ do  |action_description|
+  todo = @current_user.todos.find_by_description(action_description)
+  todo.should_not be_nil
+  open_edit_form_for(todo)
+  fill_in "due_todo_#{todo.id}", :with => format_date(todo.created_at + 1.month)
+  submit_edit_todo_form(todo)
+end
+
 When /^I clear the due date of "([^"]*)"$/ do |action_description|
   todo = @current_user.todos.find_by_description(action_description)
   todo.should_not be_nil
@@ -266,6 +281,17 @@ Then /^I should not see "([^"]*)" in the deferred container$/ do |todo_descripti
   todo.should_not be_nil
 
   xpath = "//div[@id='tickler']//div[@id='line_todo_#{todo.id}']"
+
+  wait_for :timeout => 5 do
+    !selenium.is_element_present(xpath)
+  end
+end
+
+Then /^I should see "([^"]*)" in the due next month container$/ do |todo_description|
+  todo = @current_user.todos.find_by_description(todo_description)
+  todo.should_not be_nil
+
+  xpath = "xpath=//div[@id='due_after_this_month']//div[@id='line_todo_#{todo.id}']"
 
   wait_for :timeout => 5 do
     !selenium.is_element_present(xpath)
