@@ -241,15 +241,19 @@ class TodosController < ApplicationController
     @predecessor = current_user.todos.find(params['predecessor'])
     @todo = current_user.todos.find(params['successor'])
     @original_state = @todo.state
-    # Add predecessor
-    @todo.add_predecessor(@predecessor)
-    @todo.state = 'pending'
-    @saved = @todo.save
+    unless @predecessor.completed?
+      # Add predecessor
+      @todo.add_predecessor(@predecessor)
+      @todo.state = 'pending'
+      @saved = @todo.save
+
+      @status_message = t('todos.added_dependency', :dependency => @predecessor.description)
+      @status_message += t('todos.set_to_pending', :task => @todo.description) unless @original_state == 'pending'
+    else
+      @saved = false
+    end
     respond_to do |format|
-      format.js {
-        @status_message = t('todos.added_dependency', :dependency => @predecessor.description)
-        @status_message += t('todos.set_to_pending', :task => @todo.description) unless @original_state == 'pending'
-      }
+      format.js 
     end
   end
 
@@ -342,7 +346,8 @@ class TodosController < ApplicationController
     @saved = @todo.save
 
     @context_changed = true
-    @message = t('todos.context_changed', :name => @context.name)
+    @status_message = t('todos.context_changed', :name => @context.name)
+    determine_down_count
     determine_remaining_in_context_count(@original_item_context_id)
 
     respond_to do |format|

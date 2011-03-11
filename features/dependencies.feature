@@ -1,6 +1,6 @@
 Feature: dependencies
   As a Tracks user
-  In order to keep track of complex todos
+  In order to keep track of complex todos that are dependent on each other
   I want to assign and manage todo dependencies
 
   Background:
@@ -94,3 +94,16 @@ Feature: dependencies
 
   Scenario: Deleting a successor will update predecessor
     Given this is a pending scenario
+
+  @selenium @wip
+  Scenario: Dragging an action to a completed action will not add it as a dependency
+    Given I have a context called "@pc"
+    And I have a project "dependencies" that has the following todos
+      | description | context | completed |
+      | test 1      | @pc     | no        |
+      | test 2      | @pc     | no        |
+      | test 3      | @pc     | yes       |
+    When I visit the "dependencies" project
+    And I drag "test 1" to "test 3"
+    Then I should see an error flash message saying "Cannot add this action as a dependency to a completed action!"
+    And I should see "test 1" in project container for "dependencies"
