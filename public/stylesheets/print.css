@@ -16,8 +16,15 @@ img {
 	border:0;
 }
 
-#navcontainer, #input_box, #footer, .big-box, .refresh, .badge, h1, .icon, #minilinks, .defer-container, .menu_sort, .position, .buttons, .sf-item-menu, .container_toggle, .grip, .show_notes, .recurring_icon {
+#navcontainer, #input_box, #footer, .big-box, .refresh, .badge, h1, .icon,
+#minilinks, .defer-container, .menu_sort, .position, .buttons, .sf-item-menu,
+.container_toggle, .grip, .show_notes, .recurring_icon, #project-next-prev,
+.project_settings, .add_note_link {
 	display:none; 
+}
+
+.tag {
+    margin-left: 3pt;
 }
 
 .contexts {
@@ -34,6 +41,7 @@ h2 {
 	font-size: 1.4em;
 	font-weight: bold;
 	margin-bottom: .3em;
+        margin-top: 5pt;
 	padding: .2em 0;
 	border-bottom: 1pt dotted #000;
 }
