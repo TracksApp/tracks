@@ -426,7 +426,7 @@ en:
     completed_last_x_days: Completed in the last %{count} days
     no_actions_with: Currently there are no incomplete actions with the tag '%{tag_name}'
     defer_x_days:
-      one: Defer one day
+      one: Defer 1 day
       other: Defer %{count} days
     added_new_next_action_singular: Added new next action
     no_completed_actions: Currently there are no completed actions.
