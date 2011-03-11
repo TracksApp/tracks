@@ -110,18 +110,17 @@ class ApplicationController < ActionController::Base
   def for_autocomplete(coll, substr)
     if substr # protect agains empty request
       filtered = coll.find_all{|item| item.name.downcase.include? substr.downcase}
-      json_elems = "[{" + filtered.map {|item| "\"value\" : \"#{item.name}\", \"id\" : \"#{item.id}\""}.join("},{") + "}]"
-      return json_elems == "[{}]" ? "" : json_elems
+      json_elems = Array[*filtered.map{ |e| {:id => e.id.to_s, :value => e.name} }].to_json
+      return json_elems
     else
       return ""
     end
   end
 
   def format_dependencies_as_json_for_auto_complete(entries)
-    json_elems = "[{" + entries.map {|item| "\"value\" : \"#{item.id}\", \"label\" : \"#{item.specification()}\""}.join("},{") + "}]"
-    return json_elems == "[{}]" ? "" : json_elems
+    json_elems = Array[*entries.map{ |e| {:value => e.id.to_s, :label => e.specification} }].to_json
+    return json_elems
   end
-
 
   # Uses RedCloth to transform text using either Textile or Markdown Need to
   # require redcloth above RedCloth 3.0 or greater is needed to use Markdown,
