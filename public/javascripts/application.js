@@ -171,7 +171,7 @@ var TracksPages = {
         Nifty("div#project_new_project_container","normal");
     },
     page_notify: function(type, message, fade_duration_in_sec) {
-        var flash = $('h4#flash');
+        var flash = $('div#message_holder');
         flash.html("<h4 id=\'flash\' class=\'alert "+type+"\'>"+message+"</h4>");
         flash = $('h4#flash');
         flash.show();
@@ -226,6 +226,33 @@ var TracksPages = {
                 return false;
             },
             selectFirst: true
+        });
+    },
+    setup_all_autocompleters: function() {
+        //fix for #1036 where closing a edit form before the autocomplete was filled
+        //resulted in a dropdown box that could not be removed. We remove all
+        //autocomplete boxes the hard way
+        $('.ac_results').remove();
+
+        // initialize autocompleters
+        ProjectItems.setup_autocomplete_for_projects('input[name=project_name]');
+        ContextItems.setup_autocomplete_for_contexts('input[name=context_name]');
+        ContextItems.setup_autocomplete_for_contexts('input[id="project_default_context_name"]');
+        TracksPages.setup_autocomplete_for_tag_list('input[name=tag_list]');
+        TracksPages.setup_autocomplete_for_tag_list('input[id="project_default_tags"]');
+        TodoItems.setup_autocomplete_for_predecessor();
+    },
+    setup_datepicker: function() {
+        $('input.Date').datepicker({
+            'dateFormat': dateFormat,
+            'firstDay': weekStart,
+            'showButtonPanel': true,
+            'showWeek': true,
+            'changeMonth': true,
+            'changeYear': true,
+            'maxDate': '+5y',
+            'minDate': '-1y',
+            'showAnim': '' /* leave empty, see #1117 */
         });
     },
     setup_behavior: function () {
@@ -434,6 +461,53 @@ var TodoItems = {
                 return false;
             },
             selectFirst: true
+        });
+    },
+    drag_todo: function() {
+        $('.drop_target').show();
+        $(this).parents(".container").find(".context_target").hide();
+    },
+    drop_todo: function(evt, ui) {
+        /* Drag & Drop for successor/predecessor */
+        var dragged_todo = ui.draggable[0].id.split('_')[2];
+        var dropped_todo = this.id.split('_')[2];
+        ui.draggable.remove();
+        $('.drop_target').hide(); // IE8 doesn't call stop() in this situation
+
+        ajax_options = default_ajax_options_for_scripts('POST', relative_to_root('todos/add_predecessor'), $(this));
+        ajax_options.data += "&predecessor="+dropped_todo + "&successor="+dragged_todo
+        $.ajax(ajax_options);
+    },
+    drop_todo_on_context: function(evt, ui) {
+        /* Drag & drop for changing contexts */
+        var target = $(this).parent().get();
+        var dragged_todo = ui.draggable[0].id.split('_')[2];
+        var context_id = this.id.split('_')[1];
+        ui.draggable.remove();
+        $('.drop_target').hide();
+
+        ajax_options = default_ajax_options_for_scripts('POST', relative_to_root('todos/change_context'), target);
+        ajax_options.data += "&todo[id]="+dragged_todo + "&todo[context_id]="+context_id
+        $.ajax(ajax_options);
+    },
+    setup_drag_and_drop: function() {
+        $('.item-show').draggable({
+            handle: '.grip',
+            revert: 'invalid',
+            start: TodoItems.drag_todo,
+            stop: function() {
+                $('.drop_target').hide();
+            }
+        });
+        $('.item-show').droppable({
+            drop: TodoItems.drop_todo,
+            tolerance: 'pointer',
+            hoverClass: 'hover'
+        });
+        $('.context_target').droppable({
+            drop: TodoItems.drop_todo_on_context,
+            tolerance: 'pointer',
+            hoverClass: 'hover'
         });
     },
     setup_behavior: function() {
@@ -968,21 +1042,21 @@ function default_ajax_options_for_submit(ajax_type, element_to_block) {
     var options = {
         type: ajax_type,
         async: true,
-        context: element_to_block,
+        block_element: element_to_block,
         data: "_source_view=" + SOURCE_VIEW,
         beforeSend: function() {
-            // console.debug('data: '+this.data);
-            if (this.context) {
-                $(this.context).block({
+            if (this.block_element) {
+                $(this.block_element).block({
                     message: null
                 });
             }
         },
         complete: [function() {
-            if (this.context) {
-                $(this.context).unblock();
+            if (this.block_element) {
+                $(this.block_element).unblock();
             }
-            enable_rich_interaction();
+            // delay a bit to wait for animations to finish
+            setTimeout(function(){enable_rich_interaction();}, 500);
         }],
         error: function(req, status) {
             TracksPages.page_notify('error', i18n['common.ajaxError']+': '+status, 8);
@@ -1098,30 +1172,9 @@ function project_defaults(){
 function enable_rich_interaction(){
     // called after completion of all AJAX calls
 
-    //fix for #1036 where closing a edit form before the autocomplete was filled
-    //resulted in a dropdown box that could not be removed. We remove all
-    //autocomplete boxes the hard way
-    $('.ac_results').remove();
-
-    $('input.Date').datepicker({
-        'dateFormat': dateFormat,
-        'firstDay': weekStart,
-        'showButtonPanel': true,
-        'showWeek': true,
-        'changeMonth': true,
-        'changeYear': true,
-        'maxDate': '+5y',
-        'minDate': '-1y',
-        'showAnim': '' /* leave empty, see #1117 */
-    });
-
-    /* Autocomplete */
-    ProjectItems.setup_autocomplete_for_projects('input[name=project_name]');
-    ContextItems.setup_autocomplete_for_contexts('input[name=context_name]');
-    ContextItems.setup_autocomplete_for_contexts('input[id="project_default_context_name"]');
-    TracksPages.setup_autocomplete_for_tag_list('input[name=tag_list]');
-    TracksPages.setup_autocomplete_for_tag_list('input[id="project_default_tags"]');
-    TodoItems.setup_autocomplete_for_predecessor();
+    TracksPages.setup_datepicker();
+    TracksPages.setup_all_autocompleters();
+    TodoItems.setup_drag_and_drop();
 
     /* have to bind on keypress because of limitations of live() */
     $('input[name=project_name]').live('keypress', function(){
@@ -1134,72 +1187,11 @@ function enable_rich_interaction(){
         $(this).attr('edited', 'true');
     });
 
-    /* Drag & Drop for successor/predecessor */
-    function drop_todo(evt, ui) {
-        var dragged_todo = ui.draggable[0].id.split('_')[2];
-        var dropped_todo = this.id.split('_')[2];
-        ui.draggable.remove();
-        $('.drop_target').hide(); // IE8 doesn't call stop() in this situation
-
-        ajax_options = default_ajax_options_for_scripts('POST', relative_to_root('todos/add_predecessor'), $(this));
-        ajax_options.data += "&predecessor="+dropped_todo + "&successor="+dragged_todo
-        $.ajax(ajax_options);
-    }
-
-    function drag_todo(){
-        $('.drop_target').show();
-        $(this).parents(".container").find(".context_target").hide();
-    }
-
-    $('.item-show').draggable({
-        handle: '.grip',
-        revert: 'invalid',
-        start: drag_todo,
-        stop: function() {
-            $('.drop_target').hide();
-        }
-    });
-
-    $('.item-show').droppable({
-        drop: drop_todo,
-        tolerance: 'pointer',
-        hoverClass: 'hover'
-    });
-  
-    /* Drag & drop for changing contexts */
-    function drop_todo_on_context(evt, ui) {
-        var target = $(this);
-        var dragged_todo = ui.draggable[0].id.split('_')[2];
-        var context_id = this.id.split('_')[1];
-        ui.draggable.remove();
-        target.block({
-            message: null
-        });
-        setTimeout(function() {
-            target.show()
-        }, 0);
-        $.post(relative_to_root('todos/change_context'),
-        {
-            "todo[id]": dragged_todo,
-            "todo[context_id]": context_id
-        },
-        function(){
-            target.unblock();
-            target.hide();
-        }, 'script');
-    }
-
-    $('.context_target').droppable({
-        drop: drop_todo_on_context,
-        tolerance: 'pointer',
-        hoverClass: 'hover'
-    });
-
     /* Reset auto updater */
     field_touched = false;
 
     /* shrink the notes on the project pages. This is not live(), so this needs
- * to be run after ajax adding of a new note */
+     * to be run after ajax adding of a new note */
     $('.note_wrapper').truncate({
         max_length: 90,
         more: '',

@@ -65,6 +65,9 @@ Given /^I have a project "([^"]*)" that has the following todos$/ do |project_na
     unless todo[:tags].nil?
       new_todo.tag_with(todo[:tags])
     end
+    unless todo[:completed].nil?
+      new_todo.complete! if todo[:completed] == 'yes'
+    end
   end
 end
 
