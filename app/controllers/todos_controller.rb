@@ -517,7 +517,7 @@ class TodosController < ApplicationController
   def tag
     init_data_for_sidebar unless mobile?
     @source_view = params['_source_view'] || 'tag'
-    @tag_name = params[:name]
+    @tag_name = sanitize(params[:name]) # sanitize to prevent XSS vunerability!
     @page_title = t('todos.tagged_page_title', :tag_name => @tag_name)
     
     # mobile tags are routed with :name ending on .m. So we need to chomp it
