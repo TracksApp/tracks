@@ -8,9 +8,13 @@
 * Mailing list: http://lists.rousette.org.uk/mailman/listinfo/tracks-discuss
 * Original developer: bsag (http://www.rousette.org.uk/)
 * Contributors: http://getontracks.org/wiki/Contributors/
-* Version: 1.7.2
-* Copyright: (cc) 2004-2010 rousette.org.uk.
+* Version: 1.7.3
+* Copyright: (cc) 2004-2011 rousette.org.uk.
 * License:  GNU GPL
+
+== Version 1.7.3
+
+This is a security/bugfix release. Please upgrade if you are running 1.7.2.
 
 == Version 1.7.2
 
