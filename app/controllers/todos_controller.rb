@@ -417,7 +417,7 @@ class TodosController < ApplicationController
   # /todos/tag/[tag_name] shows all the actions tagged with tag_name
   def tag
     @source_view = params['_source_view'] || 'tag'
-    @tag_name = params[:name]
+    @tag_name = sanitize(params[:name])
     @page_title = "TRACKS::Tagged with \'#{@tag_name}\'"
     
     # mobile tags are routed with :name ending on .m. So we need to chomp it
