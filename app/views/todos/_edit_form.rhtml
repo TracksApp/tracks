@@ -15,12 +15,12 @@ form_for(todo, :html=> { :name=>'todo', :id => dom_id(@todo, 'form'), :class => 
 
   <div class="project_input">
     <label for="<%= dom_id(@todo, 'project_name') %>"><%= t('common.project') %></label>
-    <input id="<%= dom_id(@todo, 'project_name') %>" name="project_name" autocomplete="off" tabindex="10" size="30" type="text" value="<%= @todo.project.nil? ? 'None' : @todo.project.name.gsub(/"/,"&quot;") %>" />
+    <input id="<%= dom_id(@todo, 'project_name') %>" name="project_name" autocomplete="off" tabindex="10" size="30" type="text" value="<%= @todo.project.nil? ? 'None' : h(@todo.project.name) %>" />
   </div>
 
   <div class="context_input">
     <label for="<%= dom_id(@todo, 'context_name') %>"><%= t('common.context')  %></label>
-    <input id="<%= dom_id(@todo, 'context_name') %>" name="context_name" autocomplete="off" tabindex="11" size="30" type="text" value="<%= @todo.context.name %>" />
+    <input id="<%= dom_id(@todo, 'context_name') %>" name="context_name" autocomplete="off" tabindex="11" size="30" type="text" value="<%= h @todo.context.name %>" />
   </div>
 
   <label class="tag_list_label" for="<%= dom_id(@todo, 'tag_list') %>"><%= t('todos.tags') %></label>
