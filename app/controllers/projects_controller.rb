@@ -47,10 +47,11 @@ class ProjectsController < ApplicationController
     init_data_for_sidebar unless mobile?
     @page_title = t('projects.page_title', :project => @project.name)
     
-    @not_done = @project.todos.active_or_hidden
-    @deferred = @project.deferred_todos
-    @pending = @project.pending_todos
-    @done = @project.todos.find_in_state(:all, :completed, :order => "todos.completed_at DESC", :limit => current_user.prefs.show_number_completed, :include => [:context])
+    @not_done = @project.todos.active_or_hidden(:include => [:tags, :context, :predecessors])
+    @deferred = @project.deferred_todos(:include => [:tags, :context, :predecessors])
+    @pending = @project.pending_todos(:include => [:tags, :context, :predecessors])
+    @done = @project.todos.find_in_state(:all, :completed,
+      :order => "todos.completed_at DESC", :limit => current_user.prefs.show_number_completed, :include => [:context, :tags, :predecessors])
 
     @count = @not_done.size
     @down_count = @count + @deferred.size + @pending.size
@@ -59,6 +60,7 @@ class ProjectsController < ApplicationController
     @default_tags = @project.default_tags
     @new_note = current_user.notes.new
     @new_note.project_id = @project.id
+    @contexts = current_user.contexts
     respond_to do |format|
       format.html
       format.m     &render_project_mobile
@@ -237,9 +239,9 @@ class ProjectsController < ApplicationController
 
   def render_projects_mobile
     lambda do
-      @active_projects = @projects.active
-      @hidden_projects = @projects.hidden
-      @completed_projects = @projects.completed
+      @active_projects = current_user.projects.active
+      @hidden_projects = current_user.projects.hidden
+      @completed_projects = current_user.projects.completed
       @down_count = @active_projects.size + @hidden_projects.size + @completed_projects.size 
       cookies[:mobile_url]= {:value => request.request_uri, :secure => SITE_CONFIG['secure_cookies']}
       render :action => 'index_mobile'

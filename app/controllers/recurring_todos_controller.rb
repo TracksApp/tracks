@@ -112,17 +112,17 @@ class RecurringTodosController < ApplicationController
     end
 
     if @saved
-      @status_message = "The recurring todo was saved"
+      @status_message = t('todos.recurring_action_saved')
       @todo_saved = create_todo_from_recurring_todo(@recurring_todo).nil? == false
       if @todo_saved
-        @status_message += " / created a new todo"
+        @status_message += " / " + t('todos.new_related_todo_created_short')
       else
-        @status_message += " / did not create todo"
+        @status_message += " / " + t('todos.new_related_todo_not_created_short')
       end
       @down_count = current_user.recurring_todos.active.count
       @new_recurring_todo = RecurringTodo.new
     else
-      @status_message = "Error saving recurring todo"
+      @status_message = t('todos.error_saving_recurring')
     end    
     
     respond_to do |format|
@@ -151,10 +151,10 @@ class RecurringTodosController < ApplicationController
       
       format.html do
         if @saved
-          notify :notice, "Successfully deleted recurring action", 2.0
+          notify :notice, t('todos.recurring_deleted_success'), 2.0
           redirect_to :action => 'index'
         else
-          notify :error, "Failed to delete the recurring action", 2.0
+          notify :error, t('todos.error_deleting_recurring', :description => @recurring_todo.description), 2.0
           redirect_to :action => 'index'
         end
       end
@@ -251,11 +251,17 @@ class RecurringTodosController < ApplicationController
   private
   
   def init
-    @days_of_week = [ ['Sunday',0], ['Monday',1], ['Tuesday', 2], ['Wednesday',3], ['Thursday',4], ['Friday',5], ['Saturday',6]]
-    @months_of_year = [ 
-      ['January',1], ['Februari',2], ['March', 3], ['April',4], ['May',5], ['June',6], 
-      ['July',7], ['August',8], ['September',9], ['October', 10], ['November', 11], ['December',12]]
-    @xth_day = [['first',1],['second',2],['third',3],['fourth',4],['last',5]]    
+    @days_of_week = []
+    0.upto 6 do |i| 
+      @days_of_week << [t('date.day_names')[i], i]
+    end
+
+    @months_of_year = []
+    1.upto 12 do |i|
+      @months_of_year << [t('date.month_names')[i], i]
+    end
+
+    @xth_day = [[t('common.first'),1],[t('common.second'),2],[t('common.third'),3],[t('common.fourth'),4],[t('common.last'),5]]
     @projects = current_user.projects.find(:all, :include => [:default_context])
     @contexts = current_user.contexts.find(:all)
   end

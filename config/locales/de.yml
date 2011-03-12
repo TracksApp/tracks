@@ -135,10 +135,7 @@ de:
   activerecord: 
     attributes: 
       project: 
-        name: 
-          blank: Das Projekt muss benannt sein
-          taken: ist bereits vergeben
-          too_long: Der Projekt-Name muss k&uuml;rzer als 256 Zeichen sein
+        name: Name
         default_tags: Standard Tags
         default_context_name: Standard Kontext
         description: Beschreibung
@@ -441,7 +438,7 @@ de:
     added_dependency: "%{dependency} als Abh&auml;ngigkeit hinzugef&uuml;gt."
     no_deferred_actions: Zur Zeit sind keine zur&uuml;ckgestellten Aktionen vorhanden.
     recurrence_completed: Nach dieser wiederkehrenden Aktion, die du gerade abgeschlossen hast, folgt keine mehr. Die Wiederholung endet hiermit
-    no_actions_found: Keine Aktionen gefunden
+    no_actions_found_title: Keine Aktionen gefunden
     in_pending_state: und als ausstehend markiert
     due: F&auml;llig
     action_marked_complete_error: Die Aktion <strong>'%{description}'</strong> wurde aufgrund eines Fehlers NICHT als <strong>%{completed}</strong> markiert.

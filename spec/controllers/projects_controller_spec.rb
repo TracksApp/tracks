@@ -7,7 +7,7 @@ describe ProjectsController do
     projects = mock(:project_list, :build => project,
       :active => mock(:meh, :count => 0), :size => 0)
 
-    user = mock_model(User, :projects => projects, :prefs => {},
+    user = mock_model(User, :projects => projects, :prefs => mock(:locale => :en),
       :contexts => mock(:context_list, :find => []))
     controller.stub!(:current_user).and_return(user)
     controller.stub!(:login_required).and_return(true)

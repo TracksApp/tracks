@@ -203,33 +203,11 @@ class TodoTest < ActiveSupport::TestCase
     assert_equal "'#{todo_desc}' <'agenda'; '(none)'>", @not_completed1.specification
   end
 
-  def test_todo_from_specification_should_return_todo
-    todo = Todo.new
-
-    assert_equal @not_completed1, todo.todo_from_specification(@not_completed1.specification)
-
-    # should handle comma's in description (#975)
-    @not_completed1.description = "test,1,2,3"
-    @not_completed1.save
-    assert_equal @not_completed1, todo.todo_from_specification(@not_completed1.specification)
-  end
-
-  def test_todo_from_specification_should_return_nil_on_invalid_input
-    todo = Todo.new
-    todo_desc = @not_completed1.description
-    project_name = @not_completed1.project.name
-    context_name = @not_completed1.context.name
-
-    assert todo.todo_from_specification("").nil?
-    assert todo.todo_from_specification("bla, bla , bla").nil?
-    assert todo.todo_from_specification("#{todo_desc} <#{context_name}; #{project_name}>").nil?  # missing \"
-  end
-
   def test_add_predecessor_list
     todo = Todo.new
 
-    single = @not_completed1.specification
-    multi = single + "," + @not_completed2.specification
+    single = @not_completed1.id.to_s
+    multi = single + ", " + @not_completed2.id.to_s # note one space after comma
 
     @predecessor_array = todo.add_predecessor_list(single)
     assert_not_nil @predecessor_array
@@ -249,8 +227,8 @@ class TodoTest < ActiveSupport::TestCase
     @not_completed2.description = "test,4,5,6"
     @not_completed2.save
 
-    single = @not_completed1.specification
-    multi = single + "," + @not_completed2.specification
+    single = @not_completed1.id.to_s
+    multi = single + "," + @not_completed2.id.to_s  # note no space after comma
 
     @predecessor_array = todo.add_predecessor_list(single)
     assert_not_nil @predecessor_array

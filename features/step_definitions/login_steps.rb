@@ -1,5 +1,5 @@
 Given /^I have logged in as "(.*)" with password "(.*)"$/ do |username, password|
-  visit login_path
+  When "I go to the login page"
   fill_in "Login", :with => username
   fill_in "Password", :with => password
   uncheck "Stay logged in:"
@@ -7,7 +7,8 @@ Given /^I have logged in as "(.*)" with password "(.*)"$/ do |username, password
   if response.respond_to? :selenium
     selenium.wait_for_page_to_load(5000)
   end
-  response.should contain(/Logout \(#{username}\)/)
+  logout_regexp = @mobile_interface ? "Logout" : "Logout \(#{username}\)"
+  response.should contain(logout_regexp)
   @current_user = User.find_by_login(username)
 end
 

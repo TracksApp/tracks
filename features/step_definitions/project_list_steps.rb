@@ -39,13 +39,13 @@ end
 
 When /^I sort the active list alphabetically$/ do
   click_link "Alphabetically"
-  selenium.wait_for :wait_for => :ajax, :javascript_framework => :jquery
+  wait_for_ajax
   selenium.get_confirmation.should == "Are you sure that you want to sort these projects alphabetically? This will replace the existing sort order."
 end
 
 When /^I sort the list by number of tasks$/ do
   click_link "By number of tasks"
-  selenium.wait_for :wait_for => :ajax, :javascript_framework => :jquery
+  wait_for_ajax
   selenium.get_confirmation.should == "Are you sure that you want to sort these projects by the number of tasks? This will replace the existing sort order."
 end
 

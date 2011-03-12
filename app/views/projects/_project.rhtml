@@ -4,16 +4,16 @@
       <a href="#" class="container_toggle" id="toggle_p<%= project.id %>"><%= image_tag("collapse.png") %></a>
     <% end -%>
     <%= project.name -%></h2>
-  <div id="<%= dom_id(project, "container")%>">
+  <div id="<%= dom_id(project, "container")%>" class="list"><%-# list needs to be here for edit form to work -%>
     <%= render :partial => "projects/project_settings", :object => project, :locals => { :collapsible => collapsible } %>
   </div>
 </div>
 
 <div class="container">
-  <h2>Actions in this project</h2>
+  <h2><%= t('projects.actions_in_project_title') %></h2>
   <div id="p<%= project.id %>items" class="items toggle_target">
     <div id="p<%= project.id %>empty-nd" style="display:<%= @not_done.empty? ? 'block' : 'none'%>;">
-      <div class="message"><p>Currently there are no incomplete actions in this project</p></div>
+      <div class="message"><p><%= t('projects.no_actions_in_project') %></p></div>
     </div>
     <%= render :partial => "todos/todo", :collection => @not_done, :locals => { :parent_container_type => "project" } %>
   </div>

@@ -6,6 +6,9 @@ class LoginController < ApplicationController
   skip_before_filter :login_required
   before_filter :login_optional
   before_filter :get_current_user
+
+  protect_from_forgery :except => :check_expiry
+
   if ( SITE_CONFIG['authentication_schemes'].include? 'cas')
     # This will allow the user to view the index page without authentication
     # but will process CAS authentication data if the user already

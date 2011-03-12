@@ -1,3 +1,5 @@
+class CannotAccessContext < RuntimeError; end
+
 class BackendController < ApplicationController
   wsdl_service_name 'Backend'
   web_service_api TodoApi

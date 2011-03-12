@@ -1,25 +1,26 @@
 <% project = project_settings -%>
 <div id="<%= dom_id(project) %>" class="project">
-  <div class="project_settings">This project
-    <% if project.completed? -%>has been marked as completed
-    <% elsif project.hidden? -%>has been marked as hidden
-    <% else -%>is active
+  <div class="project_settings"><%= t('projects.this_project') %>
+    <% if project.completed? -%><%= t('projects.was_marked_complete') %>
+    <% elsif project.hidden? -%><%= t('projects.was_marked_hidden') %>
+    <% else -%><%= t('projects.is_active') %>
     <% end -%>
-    with <% if project.default_context.nil? -%>
-      no default context
+    <% if project.default_context.nil? -%>
+      <%= t('projects.with_no_default_context') %>
     <% else -%>
-      a default context of <%= project.default_context.name -%>
+      <%= t('projects.with_default_context', :context_name => project.default_context.name) %>
     <% end -%>
-    and with <% if project.default_tags.nil? || project.default_tags.blank? -%>
-      no default tags.
+    <% if project.default_tags.nil? || project.default_tags.blank? -%>
+      <%= t('projects.with_no_default_tags') %>.
     <% else -%>
-      '<%= project.default_tags -%>' as the default tags.
+      <%= t('projects.with_default_tags', :tags => project.default_tags) %>.
     <% end -%>
-    <%= link_to_edit_project(project, "Edit Project Settings") %>
+    <%= link_to_edit_project(project, t('projects.edit_project_settings')) %>
   </div>
   <% unless project.description.blank? -%>
     <div class="project_description"><%= format_note(project.description) %></div>
   <% end -%>
 </div>
 <div id="<%= dom_id(project, 'edit') %>" class="edit-form" style="display:none;">
+   <div class="placeholder"> </div>
 </div>

@@ -87,6 +87,56 @@ var TracksForm = {
                 submit_with_ajax_and_block_element('form#todo-form-multi-new-action', $(this));
             return false;
         });
+    },
+    enable_dependency_delete: function() {
+        $('a[class=icon_delete_dep]').live('click', function() {
+            var form = $(this).parents('form').get(0);
+            var predecessor_list = $(form).find('input[name=predecessor_list]');
+            var id_list = split( predecessor_list.val() );
+
+            // remove from ul
+            $(form).find("li#pred_"+this.id).slideUp(500).remove();
+
+            // remove from array
+            var new_list = new Array();
+            while (id_list.length > 0) {
+                var elem = id_list.pop();
+                if (elem != this.id && elem != '' && elem != ' ') {
+                    new_list.push ( elem );
+                }
+            }
+
+            // update id list
+            predecessor_list.val( new_list.join(", ") );
+
+            if (new_list.length == 0) {
+                $(form).find("label#label_for_predecessor_input").hide();
+                $(form).find("ul#predecessor_ul").hide();
+            }
+
+            return false; // prevent submit/follow link
+        })
+    },
+    generate_dependency_list: function(todo_id) {
+        if (spec_of_todo.length > 0) {
+            // find edit form
+            var form_selector = "#form_todo_"+todo_id;
+            var form = $(form_selector);
+
+            var predecessor_list = form.find('input[name=predecessor_list]');
+            var id_list = split( predecessor_list.val() );
+
+            var label = form.find("label#label_for_predecessor_input").first();
+            label.show();
+
+            while (id_list.length > 0) {
+                var elem = id_list.pop();
+                var new_li = TodoItems.generate_predecessor(elem, spec_of_todo[elem]);
+                var ul = form.find('ul#predecessor_ul');
+                ul.html(ul.html() + new_li);
+                form.find('li#pred_'+elem).show();
+            }
+        }
     }
 }
 
@@ -130,6 +180,54 @@ var TracksPages = {
     set_page_badge: function(count) {
         $('#badge_count').html(count);
     },
+    setup_autocomplete_for_tag_list: function(id) {
+        $(id+':not(.ac_input)')
+        .bind( "keydown", function( event ) { // don't navigate away from the field on tab when selecting an item
+            if ( event.keyCode === $.ui.keyCode.TAB &&
+                $( this ).data( "autocomplete" ).menu.active ) {
+                event.preventDefault();
+            }
+        })
+        .autocomplete({
+            minLength: 0,
+            source: function( request, response ) {
+                var last_term = extractLast( request.term );
+                if (last_term != "" && last_term != " ")
+                    $.ajax( {
+                        url: relative_to_root('tags.autocomplete'),
+                        dataType: 'json',
+                        data: {
+                            term: last_term
+                        },
+                        success: function(data, textStatus, jqXHR) {
+                            // remove spinner as removing the class is not always done by response
+                            $(id).removeClass('ui-autocomplete-loading');
+                            response(data, textStatus, jqXHR); // call jquery callback to handle data
+                        }
+                    })
+                else {
+                    // remove spinner as typing will always add the spinner
+                    $(id).removeClass('ui-autocomplete-loading');
+                }
+            },
+            focus: function() {
+                // prevent value inserted on focus
+                return false;
+            },
+            select: function( event, ui ) {
+                var terms = split( this.value );
+                // remove the current input
+                terms.pop();
+                // add the selected item
+                terms.push( ui.item.value );
+                // add placeholder to get the comma-and-space at the end
+                //terms.push( "" );
+                this.value = terms.join( ", " );
+                return false;
+            },
+            selectFirst: true
+        });
+    },
     setup_behavior: function () {
         /* main menu */
         $('ul.sf-menu').superfish({
@@ -168,16 +266,6 @@ var TracksPages = {
 
         /* fade flashes and alerts in automatically */
         $(".alert").fadeOut(8000);
-
-        /* for edit project form and edit todo form
-* TODO: refactor to separate calls from project and todo */
-        $('.edit-form a.negative').live('click', function(){
-            $(this).parents('.edit-form').fadeOut(200, function () {
-                $(this).parents('.list').find('.project').fadeIn(500);
-                $(this).parents('.container').find('.item-show').fadeIn(500);
-            })
-        });
-
     }
 }
 
@@ -265,7 +353,7 @@ var TodoItems = {
     getContextsForAutocomplete: function (term, element_to_block) {
         var allContexts = null;
         var params = default_ajax_options_for_scripts('GET', relative_to_root('contexts.autocomplete'), element_to_block);
-        params.data = "term="+term;
+        params.data += "&term="+term;
         params.dataType = "json";
         params.async = false;
         params.success = function(result){
@@ -285,6 +373,68 @@ var TodoItems = {
                 if (contexts[i].value == givenContextName) return true;
         }
         return confirm(i18n['contexts.new_context_pre'] + givenContextName + i18n['contexts.new_context_post']);
+    },
+    generate_predecessor: function(todo_id, todo_spec) {
+        var img = "<img id=\"delete_dep_"+todo_id+"\" class=\"icon_delete_dep\" src=\""+ relative_to_root('images/blank.png') + "\">";
+        var anchor = "<a class=\"icon_delete_dep\" id=\""+todo_id+"\" href=\"#\">" + img + "</a>";
+        var li = "<li style=\"display:none\" id=\"pred_"+todo_id+"\">"+ anchor +" "+ todo_spec + "</li>";
+        return li;
+    },
+    highlight_todo: function(id) {
+        $(id).effect('highlight', {}, 2000, function(){ });
+    },
+    setup_autocomplete_for_predecessor: function() {
+        $('input[name=predecessor_input]:not(.ac_input)')
+        .bind( "keydown", function( event ) { // don't navigate away from the field on tab when selecting an item
+            if ( event.keyCode === $.ui.keyCode.TAB &&
+                $( this ).data( "autocomplete" ).menu.active ) {
+                event.preventDefault();
+            }
+        })
+        .autocomplete({
+            minLength: 0,
+            source: function( request, response ) {
+                var term = request.term;
+                if (term != "" && term != " ")
+                    $.getJSON( relative_to_root('auto_complete_for_predecessor'), {
+                        term: term
+                    }, response );
+            },
+            focus: function() {
+                // prevent value inserted on focus
+                return false;
+            },
+            select: function( event, ui ) {
+                // retrieve values from input fields
+                var todo_spec = ui.item.label
+                var todo_id = ui.item.value
+                var form = $(this).parents('form').get(0);
+                var predecessor_list = $(form).find('input[name=predecessor_list]')
+                var id_list = split( predecessor_list.val() );
+
+                // add the dependency to id list
+                id_list.push( todo_id );
+                predecessor_list.val( id_list.join( ", " ) );
+
+                // show the html for the list of deps
+                $(form).find('ul#predecessor_ul').show();
+                $(form).find("label#label_for_predecessor_input").show();
+                if (todo_spec.length > 35 && form.id == "todo-form-new-action") {
+                    // cut off string only in new-todo-form
+                    todo_spec = todo_spec.substring(0,40)+"...";
+                }
+                // show the new dep in list
+                var html = $(form).find('ul#predecessor_ul').html();
+                var new_li = TodoItems.generate_predecessor(todo_id, todo_spec);
+                $(form).find('ul#predecessor_ul').html(html + new_li);
+                $(form).find('li#pred_'+todo_id).slideDown(500);
+
+                $(form).find('input[name=predecessor_input]').val('');
+                $(form).find('input[name=predecessor_input]').focus();
+                return false;
+            },
+            selectFirst: true
+        });
     },
     setup_behavior: function() {
         /* show the notes of a todo */
@@ -312,7 +462,12 @@ var TodoItems = {
 
         /* set behavior for edit icon */
         $(".item-container a.edit_item").live('click', function (ev){
-            get_with_ajax_and_block_element(this.href, $(this).parents(".item-container"));
+            var ajax_options = default_ajax_options_for_scripts('GET', this.href, $(this).parents('.item-container'));
+            var id = this.id.substr(15);
+            ajax_options.complete.push( function(){
+                TracksForm.generate_dependency_list(id);
+            });
+            $.ajax(ajax_options);
             return false;
         });
 
@@ -320,7 +475,7 @@ var TodoItems = {
         $('.item-container a.icon_delete_item').live('click', function(evt){
             var confirm_message = $(this).attr("x_confirm_message")
             if(confirm(confirm_message)){
-                delete_with_ajax_and_block_element(this.href, $(this).parents('.project'));
+                delete_with_ajax_and_block_element(this.href, $(this).parents('.item-container'));
             }
             return false;
         });
@@ -329,6 +484,14 @@ var TodoItems = {
         $("form.edit_todo_form button.positive").live('click', function (ev) {
             submit_with_ajax_and_block_element('form.edit_todo_form', $(this));
             return false;
+        });
+
+        // for cancelling edit todo form
+        $('form.edit_todo_form a.negative').live('click', function(){
+            $(this).parents('.edit-form').fadeOut(200, function () {
+                $(this).parents('.list').find('.project').fadeIn(500);
+                $(this).parents('.container').find('.item-show').fadeIn(500);
+            })
         });
 
         // defer a todo
@@ -347,6 +510,26 @@ var TodoItems = {
             ajax_options.data += "&predecessor="+predecessor_id
             $.ajax(ajax_options);
             return false;
+        });
+
+        TracksForm.enable_dependency_delete();
+    }
+}
+
+var ContextItems = {
+    setup_autocomplete_for_contexts: function(id) {
+        $(id).autocomplete({
+            source: relative_to_root('contexts.autocomplete'),
+            selectFirst: true
+        });
+    }
+}
+
+var ProjectItems = {
+    setup_autocomplete_for_projects: function(id) {
+        $(id).autocomplete({
+            source: relative_to_root('projects.autocomplete'),
+            selectFirst: true
         });
     }
 }
@@ -442,6 +625,14 @@ var ProjectListPage = {
         $("form.edit-project-form button.positive").live('click', function (ev) {
             submit_with_ajax_and_block_element('form.edit-project-form', $(this));
             return false;
+        });
+
+        /* cancel edit project form */
+        $('form.edit-project-form a.negative').live('click', function(){
+            $(this).parents('.edit-form').fadeOut(200, function () {
+                $(this).parents('.list').find('.project').fadeIn(500);
+                $(this).parents('.container').find('.item-show').fadeIn(500);
+            })
         });
 
         /* submit project form after entering new project */
@@ -735,6 +926,13 @@ function setup_auto_refresh(interval){
     });
 }
 
+function split( val ) {
+    return val.split( /,\s*/ );
+}
+function extractLast( term ) {
+    return split( term ).pop();
+}
+
 $.fn.clearForm = function() {
     return this.each(function() {
         var type = this.type, tag = this.tagName.toLowerCase();
@@ -749,6 +947,13 @@ $.fn.clearForm = function() {
     });
 };
 
+$.fn.clearDeps = function() {
+    $('ul#predecessor_ul', this).hide();
+    $("label#label_for_predecessor_input").hide();
+    $('ul#predecessor_ul', this).html("");
+    $('input[name=predecessor_list]').val("");
+}
+
 /**************************************/
 /* Tracks AJAX functions              */
 /**************************************/
@@ -758,24 +963,27 @@ function generic_get_script_for_list(element, getter, param){
 }
 
 function default_ajax_options_for_submit(ajax_type, element_to_block) {
+    // the complete is not a function but an array so you can push other
+    // functions that will be executed after the ajax call completes
     var options = {
         type: ajax_type,
         async: true,
         context: element_to_block,
         data: "_source_view=" + SOURCE_VIEW,
         beforeSend: function() {
+            // console.debug('data: '+this.data);
             if (this.context) {
                 $(this.context).block({
                     message: null
                 });
             }
         },
-        complete:function() {
+        complete: [function() {
             if (this.context) {
                 $(this.context).unblock();
             }
             enable_rich_interaction();
-        },
+        }],
         error: function(req, status) {
             TracksPages.page_notify('error', i18n['common.ajaxError']+': '+status, 8);
         }
@@ -829,17 +1037,21 @@ $(document).ajaxSend(function(event, request, settings) {
         }
         request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     }
-    request.setRequestHeader("X-CSRF-Token", $('meta[name=csrf-token]').attr('content'));
+    request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
     request.setRequestHeader("Accept", "text/javascript");
 });
 
 function setup_periodic_check(url_for_check, interval_in_sec, method) {
-    var ajaxMethod = (method ? method : "GET");
-
-    function check_remote() {
-        $.ajax(default_ajax_options_for_scripts(ajaxMethod, url_for_check, null));
-    }
-    setInterval(check_remote, interval_in_sec*1000);
+    setInterval(
+        function(){
+            var settings = default_ajax_options_for_scripts( method ? method : "GET", url_for_check, null);
+            if(typeof(AUTH_TOKEN) != 'undefined'){
+                settings.data += "&authenticity_token=" + encodeURIComponent( AUTH_TOKEN )
+            }
+            $.ajax(settings);
+        },
+        interval_in_sec*1000
+        );
 }
 
 function update_order(event, ui){
@@ -894,117 +1106,27 @@ function enable_rich_interaction(){
     $('input.Date').datepicker({
         'dateFormat': dateFormat,
         'firstDay': weekStart,
-        'showAnim': 'fold'
+        'showButtonPanel': true,
+        'showWeek': true,
+        'changeMonth': true,
+        'changeYear': true,
+        'maxDate': '+5y',
+        'minDate': '-1y',
+        'showAnim': '' /* leave empty, see #1117 */
     });
 
     /* Autocomplete */
-    $('input[name=context_name]').autocomplete({
-        source: relative_to_root('contexts.autocomplete'),
-        selectFirst: true
-    });
-    $('input[name=project_name]').autocomplete({
-        source: relative_to_root('projects.autocomplete'),
-        selectFirst: true
-    });
-    $('input[name="project[default_context_name]"]').autocomplete({
-        source: relative_to_root('contexts.autocomplete'),
-        selectFirst: true
-    });
-
-    $('input[name=tag_list]:not(.ac_input)')
-    .bind( "keydown", function( event ) { // don't navigate away from the field on tab when selecting an item
-        if ( event.keyCode === $.ui.keyCode.TAB &&
-            $( this ).data( "autocomplete" ).menu.active ) {
-            event.preventDefault();
-        }
-    })
-    .autocomplete({
-        minLength: 0,
-        source: function( request, response ) {
-            var last_term = extractLast( request.term );
-            if (last_term != "" && last_term != " ")
-                $.ajax( {
-                    url: relative_to_root('tags.autocomplete'),
-                    dataType: 'json',
-                    data: {
-                        term: last_term
-                    },
-                    success: function(data, textStatus, jqXHR) {
-                        // remove spinner as removing the class is not always done by response
-                        $('input[name=tag_list]').removeClass('ui-autocomplete-loading');
-                        response(data, textStatus, jqXHR); // call jquery callback to handle data
-                    }
-                })
-            else {
-                // remove spinner as typing will always add the spinner
-                $('input[name=tag_list]').removeClass('ui-autocomplete-loading');
-            }
-        },
-        focus: function() {
-            // prevent value inserted on focus
-            return false;
-        },
-        select: function( event, ui ) {
-            var terms = split( this.value );
-            // remove the current input
-            terms.pop();
-            // add the selected item
-            terms.push( ui.item.value );
-            // add placeholder to get the comma-and-space at the end
-            //terms.push( "" );
-            this.value = terms.join( ", " );
-            return false;
-        },
-        selectFirst: true
-    });
-
-
-    function split( val ) {
-        return val.split( /,\s*/ );
-    }
-    function extractLast( term ) {
-        return split( term ).pop();
-    }
-
-
-    $('input[name=predecessor_list]:not(.ac_input)')
-    .bind( "keydown", function( event ) { // don't navigate away from the field on tab when selecting an item
-        if ( event.keyCode === $.ui.keyCode.TAB &&
-            $( this ).data( "autocomplete" ).menu.active ) {
-            event.preventDefault();
-        }
-    })
-    .autocomplete({
-        minLength: 0,
-        source: function( request, response ) {
-            var last_term = extractLast( request.term );
-            if (last_term != "" && last_term != " ")
-                $.getJSON( relative_to_root('auto_complete_for_predecessor'), {
-                    term: last_term
-                }, response );
-        },
-        focus: function() {
-            // prevent value inserted on focus
-            return false;
-        },
-        select: function( event, ui ) {
-            var terms = split( this.value );
-            // remove the current input
-            terms.pop();
-            // add the selected item
-            terms.push( ui.item.value );
-            // add placeholder to get the comma-and-space at the end
-            //terms.push( "" );
-            this.value = terms.join( ", " );
-            return false;
-        }
-    });
+    ProjectItems.setup_autocomplete_for_projects('input[name=project_name]');
+    ContextItems.setup_autocomplete_for_contexts('input[name=context_name]');
+    ContextItems.setup_autocomplete_for_contexts('input[id="project_default_context_name"]');
+    TracksPages.setup_autocomplete_for_tag_list('input[name=tag_list]');
+    TracksPages.setup_autocomplete_for_tag_list('input[id="project_default_tags"]');
+    TodoItems.setup_autocomplete_for_predecessor();
 
     /* have to bind on keypress because of limitations of live() */
     $('input[name=project_name]').live('keypress', function(){
         $(this).bind('blur', project_defaults);
     });
-
     $('input[name=context_name]').live('keypress', function(){
         $(this).attr('edited', 'true');
     });
@@ -1018,15 +1140,10 @@ function enable_rich_interaction(){
         var dropped_todo = this.id.split('_')[2];
         ui.draggable.remove();
         $('.drop_target').hide(); // IE8 doesn't call stop() in this situation
-        $(this).block({
-            message: null
-        });
-        $.post(relative_to_root('todos/add_predecessor'),
-        {
-            successor: dragged_todo,
-            predecessor: dropped_todo
-        },
-        null, 'script');
+
+        ajax_options = default_ajax_options_for_scripts('POST', relative_to_root('todos/add_predecessor'), $(this));
+        ajax_options.data += "&predecessor="+dropped_todo + "&successor="+dragged_todo
+        $.ajax(ajax_options);
     }
 
     function drag_todo(){
@@ -1082,7 +1199,7 @@ function enable_rich_interaction(){
     field_touched = false;
 
     /* shrink the notes on the project pages. This is not live(), so this needs
-* to be run after ajax adding of a new note */
+ * to be run after ajax adding of a new note */
     $('.note_wrapper').truncate({
         max_length: 90,
         more: '',

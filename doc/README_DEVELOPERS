@@ -36,7 +36,7 @@ If you want to run tests using another database, that's fine, too. Just change y
 
 This testing style is deprecated and are being moved over to Selenium via Cucumber.
 
-See the wiki for more information to run the tests that are not yet migrated
+See the wiki for more information to run the tests that are not yet migrated: http://www.getontracks.org/wiki/Testing
 
 6. RSPEC tests
 

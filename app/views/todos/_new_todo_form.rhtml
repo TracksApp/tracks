@@ -1,7 +1,7 @@
 <%- todo = new_todo_form -%>
 
 <div id="todo_new_action">
-  <% form_for(todo, :html=> { :id=>'todo-form-new-action', :name=>'todo', :class => 'inline-form' }) do |t|%>
+  <% form_for(todo, :html=> { :id=>'todo-form-new-action', :name=>'todo', :class => 'inline-form new_todo_form' }) do |t|%>
     <input id="default_project_name_id" name="default_project_name" type="hidden" value="<%=@initial_project_name-%>" />
     <input id="default_context_name_id" name="default_context_name" type="hidden" value="<%=@initial_context_name-%>" />
 
@@ -34,8 +34,17 @@
       <%= t.text_field("show_from", "size" => 12, "class" => "Date", "tabindex" => 7, "autocomplete" => "off") %>
     </div>
 
-    <label for="predecessor_list"><%= Todo.human_attribute_name('predecessors')%></label>
-    <%= text_field_tag "predecessor_list", nil, :size => 30, :tabindex => 8 %>
+    <div class="depends_on">
+      <label for="predecessor_ul"><%= Todo.human_attribute_name('predecessors')%></label>
+      <div class="selected_predecessors">
+        <ul class="predecessor_list" id="predecessor_ul" style="display:none">
+        </ul>
+      </div>
+      <label id="label_for_predecessor_input" for="predecessor_input" style="display:none"><%= t('todos.add_another_dependency')%></label>
+      <%= text_field_tag "predecessor_input", nil, :size => 30, :tabindex => 8 %>
+      <%= hidden_field_tag "predecessor_list", ""%>
+    </div>
+
     <%= source_view_tag( @source_view ) %>
     <%= hidden_field_tag :_tag_name, @tag_name.underscore.gsub(/\s+/,'_') if source_view_is :tag %>
 

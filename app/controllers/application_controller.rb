@@ -4,19 +4,6 @@
 
 require_dependency "login_system"
 require_dependency "tracks/source_view"
-require "redcloth"
-
-require 'date'
-require 'time'
-
-# Commented the following line because of #744. It prevented rake db:migrate to
-# run because this tag went looking for the taggings table that did not exist
-# when you feshly create a new database Old comment: We need this in development
-# mode, or you get 'method missing' errors
-#
-# Tag
-
-class CannotAccessContext < RuntimeError; end
 
 class ApplicationController < ActionController::Base
 
@@ -24,26 +11,19 @@ class ApplicationController < ActionController::Base
 
   helper :application
   include LoginSystem
-  helper_method :current_user, :prefs
+  helper_method :current_user, :prefs, :format_date, :markdown
 
   layout proc{ |controller| controller.mobile? ? "mobile" : "standard" }
   exempt_from_layout /\.js\.erb$/
-
-  
+ 
   before_filter :set_session_expiration
   before_filter :set_time_zone
   before_filter :set_zindex_counter
   before_filter :set_locale
   prepend_before_filter :login_required
   prepend_before_filter :enable_mobile_content_negotiation
-  #  after_filter :set_locale
   after_filter :set_charset
   
-  include ActionView::Helpers::TextHelper
-  include ActionView::Helpers::SanitizeHelper
-  extend ActionView::Helpers::SanitizeHelper::ClassMethods
-  helper_method :format_date, :markdown
-
   # By default, sets the charset to UTF-8 if it isn't already set
   def set_charset
     headers["Content-Type"] ||= "text/html; charset=UTF-8" 
@@ -60,7 +40,7 @@ class ApplicationController < ActionController::Base
   def set_session_expiration
     # http://wiki.rubyonrails.com/rails/show/HowtoChangeSessionOptions
     unless session == nil
-      return if @controller_name == 'feed' or session['noexpiry'] == "on"
+      return if self.controller_name == 'feed' or session['noexpiry'] == "on"
       # If the method is called by the feed controller (which we don't have
       # under session control) or if we checked the box to keep logged in on
       # login don't set the session expiry time.
@@ -137,8 +117,8 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def auto_complete_result2(entries, phrase = nil)
-    json_elems = "[{" + entries.map {|item| "\"id\" : \"#{item.id}\", \"value\" : \"#{item.specification()}\""}.join("},{") + "}]"
+  def format_dependencies_as_json_for_auto_complete(entries)
+    json_elems = "[{" + entries.map {|item| "\"value\" : \"#{item.id}\", \"label\" : \"#{item.specification()}\""}.join("},{") + "}]"
     return json_elems == "[{}]" ? "" : json_elems
   end
 
@@ -150,7 +130,7 @@ class ApplicationController < ActionController::Base
   def markdown(text)
     RedCloth.new(text).to_html
   end
-  
+
   # Here's the concept behind this "mobile content negotiation" hack: In
   # addition to the main, AJAXy Web UI, Tracks has a lightweight low-feature
   # 'mobile' version designed to be suitablef or use from a phone or PDA. It

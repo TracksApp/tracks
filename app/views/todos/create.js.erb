@@ -1,5 +1,5 @@
 <% if @saved -%>
-  TracksPages.page_notify('notice', "<%=@status_message%>", 5);
+  TracksPages.page_notify('notice', "<%=escape_javascript @status_message%>", 5);
   TracksPages.hide_errors();
   TracksPages.set_page_badge(<%= @down_count %>);
   <% if should_show_new_item -%>
@@ -17,21 +17,22 @@
 
 function clear_form() {
   $('#todo-form-new-action').clearForm();
-  TracksForm.set_context_name('<%=@initial_context_name%>');
-  TracksForm.set_project_name('<%=@initial_project_name%>');
-  TracksForm.set_tag_list('<%=@default_tags%>');
+  $('#todo-form-new-action').clearDeps();
+  TracksForm.set_context_name('<%=escape_javascript @initial_context_name%>');
+  TracksForm.set_project_name('<%=escape_javascript @initial_project_name%>');
+  TracksForm.set_tag_list('<%=escape_javascript @default_tags%>');
   $('#todo-form-new-action input:text:first').focus();
 }
 
 function insert_new_context_with_new_todo() {
-  $('#no_todos_in_tag_view').slideUp(100);
+  $('#no_todos_in_view').slideUp(100);
   $('#display_box').prepend(html_for_new_context());
 }
 
 function add_todo_to_existing_context() {
   <% if source_view_is_one_of(:todo, :deferred, :tag) -%>
     $('#c<%= @todo.context_id %>').fadeIn(500, function() {});
-    $('#no_todos_in_tag_view').slideUp(100);
+    $('#no_todos_in_view').slideUp(100);
   <% end -%>
   $('#<%=empty_container_msg_div_id%>').hide();
   $('#<%=item_container_id(@todo)%>').append(html_for_new_todo());

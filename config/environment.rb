@@ -25,7 +25,7 @@ Rails::Initializer.run do |config|
   config.gem "RedCloth"
   config.gem "soap4r", :lib => false
   config.gem 'datanoise-actionwebservice', :lib => 'actionwebservice'
-  config.gem 'sanitize'
+  config.gem 'sanitize', :version => '~> 1.2.1'
   config.gem 'rack', :version => '1.1.0'
   config.gem 'will_paginate', :version => '~> 2.3.15'
   config.gem 'has_many_polymorphs'
@@ -121,7 +121,7 @@ if ( SITE_CONFIG['authentication_schemes'].include? 'cas')
   end
 end
 
-tracks_version='1.8devel'
+tracks_version='2.0devel'
 # comment out next two lines if you do not want (or can not) the date of the
 # last git commit in the footer
 info=`git log --pretty=format:"%ai" -1`

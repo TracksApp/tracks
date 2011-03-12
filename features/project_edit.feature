@@ -12,13 +12,13 @@ Feature: Edit a project
 
   Scenario: I can go to the note of a project
     Given I have a project "test" with 2 notes
-    When I visit the "test" project
+    When I go to the "test" project
     When I click on the first note icon
     Then I should go to that note page
 
   @selenium
   Scenario: I can describe the project using markup
-    When I visit the "manage me" project
+    When I go to the "manage me" project
     And I edit the project description to "_successfull outcome_: project is *done*"
     Then I should see the italic text "successfull outcome" in the project description
     And I should see the bold text "done" in the project description
@@ -26,7 +26,7 @@ Feature: Edit a project
   @selenium
   Scenario: I can edit the project name in place
     Given I have a project "release tracks 1.8" with 1 todos
-    When I visit the project page for "release tracks 1.8"
+    When I go to the "release tracks 1.8" project
     And I edit the project name in place to be "release tracks 2.0"
     Then I should see the project name is "release tracks 2.0"
     When I go to the projects page
@@ -37,7 +37,7 @@ Feature: Edit a project
   @selenium
   Scenario: I can change the name of the project using the Edit Project Settings form
     Given I have a project "bananas" with 1 todos
-    When I visit the "bananas" project
+    When I go to the "bananas" project
     And I edit the project name to "cherries"
     Then the project title should be "cherries"
 
@@ -63,21 +63,21 @@ Feature: Edit a project
   @selenium
   Scenario: I can add a note to the project
     Given I have a project called "test"
-    When I visit the "test" project
+    When I go to the "test" project
     And I add a note "hello I'm testing" to the project
     Then I should see one note in the project
 
   @selenium
   Scenario: Cancelling adding a note to the project will remove form
     Given I have a project called "test"
-    When I visit the "test" project
+    When I go to the "test" project
     And I cancel adding a note to the project
     Then the form for adding a note should not be visible
 
   @selenium
   Scenario: Long notes in a project are shown cut off
     Given I have a project called "test"
-    When I visit the "test" project
+    When I go to the "test" project
     And I add a note "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890TOO LONG" to the project
     Then I should not see "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890TOO LONG"
     And I should see "12345678901234567890123456789012345678901234567890123456789012345678901234567890123456"
@@ -98,10 +98,11 @@ Feature: Edit a project
     Given this is a pending scenario  # empty message is in separate container
 
   # Ticket #1043
-  @selenium @wip
+  @selenium
   Scenario: I can move a todo out of the current project
     Given I have a project "foo" with 2 todos
-    When I visit the "foo" project
+    And I have a project called "bar"
+    When I go to the "foo" project
     And I change the project_name field of "Todo 1" to "bar"
-    Then I should not see the todo "Todo 1"
-    And I should see the todo "Todo 2"
+    Then I should not see "Todo 1"
+    And I should see "Todo 2"

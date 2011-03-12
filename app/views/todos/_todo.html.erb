@@ -23,8 +23,8 @@ parameters += "&_tag_name=#{@tag_name}" if @source_view == 'tag'
         </ul>
       </li>
     </ul>
+    <%= grip_span(todo) %>
     <div class="description<%= staleness_class( todo ) %>">
-      <%= grip_span(todo) %>
       <%= date_span(todo) -%>
       <span class="todo.descr"><%= h todo.description %></span>
       <%= image_tag_for_recurring_todo(todo) if todo.from_recurring_todo? %>

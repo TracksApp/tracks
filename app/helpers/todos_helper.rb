@@ -11,6 +11,7 @@ module TodosHelper
       image_tag("blank.png", :alt => t('todos.edit'), :align => "absmiddle", :id => 'edit_icon_todo_'+todo.id.to_s, :class => 'edit_item'),
       {:controller => 'todos', :action => 'edit', :id => todo.id},
       :class => "icon edit_item",
+      :id => "icon_edit_todo_#{todo.id}",
       :title => t('todos.edit_action_with_description', :description => todo.description))
   end
 
@@ -29,11 +30,13 @@ module TodosHelper
       :_source_view => (@source_view.underscore.gsub(/\s+/,'_') rescue "")}
     url[:_tag_name] = @tag_name if @source_view == 'tag'
 
-    futuredate = (todo.show_from || todo.user.date) + days.days
     options = {:x_defer_alert => false, :class => "icon_defer_item" }
-    if todo.due && futuredate > todo.due
-      options[:x_defer_alert] = true
-      options[:x_defer_date_after_due_date] = t('todos.defer_date_after_due_date')
+    if todo.due
+      futuredate = (todo.show_from || todo.user.date) + days.days
+      if futuredate > todo.due
+        options[:x_defer_alert] = true
+        options[:x_defer_date_after_due_date] = t('todos.defer_date_after_due_date')
+      end
     end
 
     return link_to(image_tag_for_defer(days), url, options)
@@ -87,7 +90,7 @@ module TodosHelper
   end
   
   def remote_toggle_checkbox(todo=@todo)
-    check_box_tag('item_id', toggle_check_todo_path(todo), todo.completed?, :class => 'item-checkbox',
+    check_box_tag("mark_complete_#{todo.id}", toggle_check_todo_path(todo), todo.completed?, :class => 'item-checkbox',
       :title => todo.pending? ? t('todos.blocked_by', :predecessors => todo.uncompleted_predecessors.map(&:description).join(', ')) : "", :readonly => todo.pending?)
   end
   
@@ -139,10 +142,6 @@ module TodosHelper
     if tag_list.empty? then "" else "<span class=\"tags\">#{tag_list}</span>" end
   end
   
-  def predecessor_list_text(todo=@todo)
-    todo.predecessors.map{|t| t.specification}.join(', ')
-  end
-
   def deferred_due_date(todo=@todo)
     if todo.deferred? && todo.due
       t('todos.action_due_on', :date => format_date(todo.due))
@@ -225,7 +224,6 @@ module TodosHelper
       page.todo { return !@todo.hidden? }
       page.deferred { return @todo.deferred? || @todo.pending? }
       page.context {
-        logger.debug "ci=#{@todo.context_id} dci=#{@default_context.id} th=#{@todo.hidden?} tch=#{@todo.context.hidden?}"
         return @todo.context_id==@default_context.id && ( (@todo.hidden? && @todo.context.hidden?) || (!@todo.hidden?) )
       }
       page.tag {
@@ -266,7 +264,7 @@ module TodosHelper
   end
   
   def default_contexts_for_autocomplete
-    projects = current_user.projects.find(:all, :conditions => ['default_context_id is not null'])
+    projects = current_user.projects.find(:all, :include => [:context], :conditions => ['default_context_id is not null'])
     Hash[*projects.map{ |p| [p.name, p.default_context.name] }.flatten].to_json
   end
   
@@ -289,7 +287,7 @@ module TodosHelper
   end
 
   def date_field_tag(name, id, value = nil, options = {})
-    text_field_tag name, value, {"size" => 12, "id" => id, "class" => "Date", "onfocus" => "Calendar.setup", "autocomplete" => "off"}.update(options.stringify_keys)
+    text_field_tag name, value, {"size" => 12, "id" => id, "class" => "Date", "autocomplete" => "off"}.update(options.stringify_keys)
   end
 
   def update_needs_to_hide_context
@@ -297,7 +295,7 @@ module TodosHelper
       (@remaining_in_context == 0 && @todo_was_deferred_from_active_state) ||
       (@remaining_in_context == 0 && @todo.completed? && !(@original_item_was_deferred || @original_item_was_hidden)) if source_view_is(:tag)
 
-    return false if source_view_is(:project)
+    return false if source_view_is_one_of(:project, :calendar)
 
     return (@remaining_in_context == 0) && !source_view_is(:context)
   end
@@ -305,7 +303,7 @@ module TodosHelper
   def update_needs_to_remove_todo_from_container
     source_view do |page|
       page.context  { return @context_changed || @todo.deferred? || @todo.pending? }
-      page.project  { return @todo_deferred_state_changed || @todo_pending_state_changed }
+      page.project  { return @todo_deferred_state_changed || @todo_pending_state_changed || @project_changed}
       page.deferred { return @context_changed || !(@todo.deferred? || @todo.pending?) }
       page.calendar { return @due_date_changed || !@todo.due }
       page.stats    { return @todo.completed? }
@@ -379,8 +377,8 @@ module TodosHelper
         container_id = "p#{@original_item_project_id}empty-nd" if @remaining_in_context == 0
         container_id = "tickler-empty-nd" if ( 
           ( (@todo_was_activated_from_deferred_state || @todo_was_activated_from_pending_state) && @remaining_deferred_or_pending_count == 0) ||
-          (@original_item_was_deferred && @remaining_deferred_or_pending_count == 0 && @todo.completed?) )
-        container_id = "empty-d" if @completed_count && @completed_count == 0 && !@todo.completed?
+            (@original_item_was_deferred && @remaining_deferred_or_pending_count == 0 && @todo.completed?) )
+        container_id = "empty-d" if @completed_count && @completed_count == 0 && !@todo.completed? 
       }
       page.deferred { container_id = "c#{@original_item_context_id}empty-nd" if @remaining_in_context == 0 }
       page.calendar { container_id = "empty_#{@original_item_due_id}" if @old_due_empty }
@@ -405,7 +403,7 @@ module TodosHelper
       end
     end
     html += "}}) " * animation.count
-    return html
+    return html + ";"
   end
 
   private

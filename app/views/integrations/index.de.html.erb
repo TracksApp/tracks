@@ -100,8 +100,12 @@
   If Tracks is running on the same server as your mail server, you can use the integrated mail handler built into tracks. Steps to set it up:
 </p>
 <ul>
-  <li>Go to <%= link_to "Preferences", preferences_url %> and set your "From email" and "default email context" for todos sent in via email (which could come from an SMS message)</li>
-  <li>In sendmail/qmail/postfix/whatever, set up an email address alias to pipe messages to <pre >/PATH/TO/RUBY/ruby /PATH/TO/TRACKS/script/runner -e production 'MessageGateway.receive(STDIN.read)'</pre></li>
+  <li>Go to <%= link_to t('layouts.navigation.preferences'), preferences_url %> 
+    and set your "<%= Preference.human_attribute_name('sms_email') %>" and
+    "<%= Preference.human_attribute_name('sms_context') %>" for todos sent in
+    via email (which could come from an SMS message)</li>
+  <li>In sendmail/qmail/postfix/whatever, set up an email address alias
+    to pipe messages to <pre>/PATH/TO/RUBY/ruby /PATH/TO/TRACKS/script/runner -e production 'MessageGateway.receive(STDIN.read)'</pre></li>
   <li>Send an email to your newly configured address!</li>
 </ul>
 <p>You can also use the Rich Todo API to send in tasks like "do laundry @ Home"
