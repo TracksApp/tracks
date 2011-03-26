@@ -264,7 +264,7 @@ body.preferences div#input_box {
     background-color: #000;
     color: #eee;
     width: 100%;
-    z-index:101;
+    z-index:501;
 }
 
 #date {
@@ -579,7 +579,7 @@ span.tag a:hover {
 
 div#message_holder {
     position: absolute;
-    z-index: 100;
+    z-index: 502;
     left: 60%;
     top: 30px;
     right: 0px;
