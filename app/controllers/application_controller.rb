@@ -184,7 +184,13 @@ class ApplicationController < ActionController::Base
     
     return saved ? todo : nil
   end
-     
+
+  def handle_unverified_request
+    unless request.format=="application/xml"
+      super # handle xml http auth via our own login code
+    end
+  end
+
   protected
   
   def admin_login_required
