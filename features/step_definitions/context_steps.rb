@@ -47,7 +47,11 @@ end
 Given /^I have the following contexts$/ do |table|
   Context.delete_all
   table.hashes.each do |hash|
-    context = Factory(:context, hash)
+    context = @current_user.contexts.create!(:name => hash[:name])
+    unless hash[:hide].blank?
+      context.hide = hash[:hide] == true
+      context.save!
+    end
   end
 end
 
