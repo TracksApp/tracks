@@ -1,5 +1,5 @@
 <% if !@saved -%>
-  TracksPages.page_notify('error', "Could not mark this todo complete", 5);
+  TracksPages.page_notify('error', "<%= t('todos.error_toggle_complete') %>", 5);
 <% else -%>
   <% if @wants_redirect_after_complete && @todo.completed? -%>
     redirect_after_complete();

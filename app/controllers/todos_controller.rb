@@ -593,6 +593,7 @@ class TodosController < ApplicationController
 
     @todo.show_from = (@todo.show_from || @todo.user.date) + numdays.days
     @saved = @todo.save
+    @status_message = t('todos.action_saved_to_tickler')
 
     determine_down_count
     determine_remaining_in_context_count(@todo.context_id)
@@ -910,6 +911,17 @@ class TodosController < ApplicationController
       }
       from.calendar {
         @target_context_count = @new_due_id.blank? ? 0 : count_old_due_empty(@new_due_id)
+      }
+      from.context {
+        context = current_user.contexts.find(context_id)
+
+        remaining_actions_in_context = context.todos(true).active
+        remaining_actions_in_context = remaining_actions_in_context.not_hidden if !context.hide?
+        @remaining_in_context = remaining_actions_in_context.count
+
+        actions_in_target = current_user.contexts.find(@todo.context_id).todos(true).active
+        actions_in_target = actions_in_target.not_hidden if !context.hide?
+        @target_context_count = actions_in_target.count
       }
     end
     @remaining_in_context = current_user.contexts.find(context_id).todos(true).active.not_hidden.count if !@remaining_in_context

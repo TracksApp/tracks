@@ -425,6 +425,7 @@ en:
     added_new_project: "Added new project"
     added_new_context: "Added new context"
     error_starring: "Could not toggle the star of this todo \'%{description}\'"
+    error_toggle_complete: "Could not mark this todo complete"
     recurrence_completed: "There is no next action after the recurring action you just finished. The recurrence is completed"
     tagged_with: "tagged with &lsquo;%{tag_name}&rsquo;"
     no_actions_found_title: "No actions found"
