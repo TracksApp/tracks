@@ -386,7 +386,7 @@ module TodosHelper
         container_id = "hidden-empty-nd" if (@remaining_hidden_count == 0 && !@todo.hidden? && @todo_hidden_state_changed) ||
           (@remaining_hidden_count == 0 && @todo.completed? && @original_item_was_hidden)
         container_id = "tickler-empty-nd" if (@todo_was_activated_from_deferred_state && @remaining_deferred_or_pending_count == 0) ||
-          (@original_item_was_deferred && @remaining_deferred_or_pending_count == 0 && @todo.completed?)
+          (@original_item_was_deferred && @remaining_deferred_or_pending_count == 0 && (@todo.completed? || @tag_was_removed))
         container_id = "empty-d" if @completed_count && @completed_count == 0 && !@todo.completed?
       }
       page.context  { container_id = "c#{@original_item_context_id}empty-nd" if @remaining_in_context == 0 }
