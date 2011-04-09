@@ -2,7 +2,7 @@ module ActionWebService
   module VERSION #:nodoc:
     MAJOR = 2
     MINOR = 3
-    TINY  = 2
+    TINY  = 11
 
     STRING = [MAJOR, MINOR, TINY].join('.')
   end
