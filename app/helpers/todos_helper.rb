@@ -264,13 +264,13 @@ module TodosHelper
   end
   
   def default_contexts_for_autocomplete
-    projects = current_user.projects.find(:all, :include => [:context], :conditions => ['default_context_id is not null'])
-    Hash[*projects.map{ |p| [p.name, p.default_context.name] }.flatten].to_json
+    projects = current_user.uncompleted.projects.find(:all, :include => [:context], :conditions => ['default_context_id is not null'])
+    Hash[*projects.map{ |p| [escape_javascript(p.name), escape_javascript(p.default_context.name)] }.flatten].to_json
   end
   
   def default_tags_for_autocomplete
-    projects = current_user.projects.find(:all, :conditions => ["default_tags != ''"])
-    Hash[*projects.map{ |p| [p.name, p.default_tags] }.flatten].to_json
+    projects = current_user.projects.uncompleted.find(:all, :conditions => ["default_tags != ''"])
+    Hash[*projects.map{ |p| [escape_javascript(p.name), p.default_tags] }.flatten].to_json
   end
 
   def format_ical_notes(notes)
@@ -386,7 +386,7 @@ module TodosHelper
         container_id = "hidden-empty-nd" if (@remaining_hidden_count == 0 && !@todo.hidden? && @todo_hidden_state_changed) ||
           (@remaining_hidden_count == 0 && @todo.completed? && @original_item_was_hidden)
         container_id = "tickler-empty-nd" if (@todo_was_activated_from_deferred_state && @remaining_deferred_or_pending_count == 0) ||
-          (@original_item_was_deferred && @remaining_deferred_or_pending_count == 0 && @todo.completed?)
+          (@original_item_was_deferred && @remaining_deferred_or_pending_count == 0 && (@todo.completed? || @tag_was_removed))
         container_id = "empty-d" if @completed_count && @completed_count == 0 && !@todo.completed?
       }
       page.context  { container_id = "c#{@original_item_context_id}empty-nd" if @remaining_in_context == 0 }

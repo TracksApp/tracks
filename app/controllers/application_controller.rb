@@ -110,18 +110,17 @@ class ApplicationController < ActionController::Base
   def for_autocomplete(coll, substr)
     if substr # protect agains empty request
       filtered = coll.find_all{|item| item.name.downcase.include? substr.downcase}
-      json_elems = "[{" + filtered.map {|item| "\"value\" : \"#{item.name}\", \"id\" : \"#{item.id}\""}.join("},{") + "}]"
-      return json_elems == "[{}]" ? "" : json_elems
+      json_elems = Array[*filtered.map{ |e| {:id => e.id.to_s, :value => e.name} }].to_json
+      return json_elems
     else
       return ""
     end
   end
 
   def format_dependencies_as_json_for_auto_complete(entries)
-    json_elems = "[{" + entries.map {|item| "\"value\" : \"#{item.id}\", \"label\" : \"#{item.specification()}\""}.join("},{") + "}]"
-    return json_elems == "[{}]" ? "" : json_elems
+    json_elems = Array[*entries.map{ |e| {:value => e.id.to_s, :label => e.specification} }].to_json
+    return json_elems
   end
-
 
   # Uses RedCloth to transform text using either Textile or Markdown Need to
   # require redcloth above RedCloth 3.0 or greater is needed to use Markdown,
@@ -185,7 +184,13 @@ class ApplicationController < ActionController::Base
     
     return saved ? todo : nil
   end
-     
+
+  def handle_unverified_request
+    unless request.format=="application/xml"
+      super # handle xml http auth via our own login code
+    end
+  end
+
   protected
   
   def admin_login_required
@@ -280,7 +285,7 @@ class ApplicationController < ActionController::Base
 
   def set_zindex_counter
     # this counter can be used to handle the IE z-index bug
-    @z_index_counter = 1000
+    @z_index_counter = 500
   end
   
 end

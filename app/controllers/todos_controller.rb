@@ -241,15 +241,19 @@ class TodosController < ApplicationController
     @predecessor = current_user.todos.find(params['predecessor'])
     @todo = current_user.todos.find(params['successor'])
     @original_state = @todo.state
-    # Add predecessor
-    @todo.add_predecessor(@predecessor)
-    @todo.state = 'pending'
-    @saved = @todo.save
+    unless @predecessor.completed?
+      # Add predecessor
+      @todo.add_predecessor(@predecessor)
+      @todo.state = 'pending'
+      @saved = @todo.save
+
+      @status_message = t('todos.added_dependency', :dependency => @predecessor.description)
+      @status_message += t('todos.set_to_pending', :task => @todo.description) unless @original_state == 'pending'
+    else
+      @saved = false
+    end
     respond_to do |format|
-      format.js {
-        @status_message = t('todos.added_dependency', :dependency => @predecessor.description)
-        @status_message += t('todos.set_to_pending', :task => @todo.description) unless @original_state == 'pending'
-      }
+      format.js 
     end
   end
 
@@ -342,7 +346,8 @@ class TodosController < ApplicationController
     @saved = @todo.save
 
     @context_changed = true
-    @message = t('todos.context_changed', :name => @context.name)
+    @status_message = t('todos.context_changed', :name => @context.name)
+    determine_down_count
     determine_remaining_in_context_count(@original_item_context_id)
 
     respond_to do |format|
@@ -588,6 +593,7 @@ class TodosController < ApplicationController
 
     @todo.show_from = (@todo.show_from || @todo.user.date) + numdays.days
     @saved = @todo.save
+    @status_message = t('todos.action_saved_to_tickler')
 
     determine_down_count
     determine_remaining_in_context_count(@todo.context_id)
@@ -905,6 +911,17 @@ class TodosController < ApplicationController
       }
       from.calendar {
         @target_context_count = @new_due_id.blank? ? 0 : count_old_due_empty(@new_due_id)
+      }
+      from.context {
+        context = current_user.contexts.find(context_id)
+
+        remaining_actions_in_context = context.todos(true).active
+        remaining_actions_in_context = remaining_actions_in_context.not_hidden if !context.hide?
+        @remaining_in_context = remaining_actions_in_context.count
+
+        actions_in_target = current_user.contexts.find(@todo.context_id).todos(true).active
+        actions_in_target = actions_in_target.not_hidden if !context.hide?
+        @target_context_count = actions_in_target.count
       }
     end
     @remaining_in_context = current_user.contexts.find(context_id).todos(true).active.not_hidden.count if !@remaining_in_context

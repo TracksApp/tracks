@@ -415,6 +415,9 @@ en:
     actions_day_of_week_title: "Day of week (all actions)"
     actions_dow_30days_title: "Day of week (past 30 days)"
     action_completion_time_title: "Completion time (all completed actions)"
+    actions: Actions
+    contexts: Contexts
+    projects: Projects
   todos:
     action_saved: "Action saved"
     recurring_action_saved: "Recurring action saved"
@@ -422,6 +425,7 @@ en:
     added_new_project: "Added new project"
     added_new_context: "Added new context"
     error_starring: "Could not toggle the star of this todo \'%{description}\'"
+    error_toggle_complete: "Could not mark this todo complete"
     recurrence_completed: "There is no next action after the recurring action you just finished. The recurrence is completed"
     tagged_with: "tagged with &lsquo;%{tag_name}&rsquo;"
     no_actions_found_title: "No actions found"
@@ -557,6 +561,7 @@ en:
     set_to_pending: "%{task} set to pending"
     append_in_this_project: "in this project"
     unable_to_add_dependency: "Unable to add dependency"
+    cannot_add_dependency_to_completed_todo : "Cannot add this action as a dependency to a completed action!"
     calendar:
       due_today: "Due today"
       no_actions_due_today: "No actions due today"

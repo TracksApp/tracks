@@ -65,6 +65,9 @@ Given /^I have a project "([^"]*)" that has the following todos$/ do |project_na
     unless todo[:tags].nil?
       new_todo.tag_with(todo[:tags])
     end
+    unless todo[:completed].nil?
+      new_todo.complete! if todo[:completed] == 'yes'
+    end
   end
 end
 
@@ -291,10 +294,10 @@ Then /^I should see "([^"]*)" in the due next month container$/ do |todo_descrip
   todo = @current_user.todos.find_by_description(todo_description)
   todo.should_not be_nil
 
-  xpath = "xpath=//div[@id='due_after_this_month']//div[@id='line_todo_#{todo.id}']"
+  xpath = "//div[@id='due_after_this_month']//div[@id='line_todo_#{todo.id}']"
 
   wait_for :timeout => 5 do
-    !selenium.is_element_present(xpath)
+    selenium.is_element_present(xpath)
   end
 end
 

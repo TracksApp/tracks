@@ -9,6 +9,24 @@ Feature: Manage the list of contexts
       | testuser | secret   | false    |
     And I have logged in as "testuser" with password "secret"
 
+  Scenario: The list of contexts contain all contexts
+    Given I have the following contexts
+      | name  | hide  |
+      | @ipad | false |
+      | @home | false |
+      | @boss | false |
+    When I go to the contexts page
+    Then I should see "@ipad"
+    And I should see "@home"
+    And I should see "@boss"
+    And the badge should show 3
+
+  Scenario: Clicking on a project takes me to the context page
+    Given I have a context called "@computer"
+    When I go to the contexts page
+    And I follow "@computer"
+    Then I should be on the context page for "@computer" 
+
   @selenium
   Scenario: Delete context from context page should update badge
     Given I have a context called "@computer"
@@ -76,13 +94,20 @@ Feature: Manage the list of contexts
     And I add a new active context "foo, bar"
     Then I should see "Name cannot contain the comma"
 
-  @selenium @wip
+  @selenium
   Scenario: I can drag and drop to order the contexts
-    # TODO: pending scenario
-    Given this is a pending scenario
+    Given I have the following contexts
+      | name  |
+      | @ipad |
+      | @home |
+      | @boss |
+    When I go to the contexts page
+    Then context "@ipad" should be above context "@home"
+    When I drag context "@ipad" below context "@home"
+    Then context "@home" should be above context "@ipad"
 
-  @selenium @wip
-  Scenario: Hiding and unhiding the new project form
+  @selenium
+  Scenario: Hiding and unhiding the new context form
     When I go to the contexts page
     Then the new context form should be visible
     When I follow "Hide form"

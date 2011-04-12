@@ -12,10 +12,11 @@ Feature: Manage the list of projects
     And there exists a project "a project name starting with a" for user "testuser"
     And I have logged in as "testuser" with password "secret"
 
-  Scenario: The list of project contain all projects
+  Scenario: The list of projects contain all projects
     When I go to the projects page
     Then I should see "manage me"
     And I should see "upgrade jquery"
+    And I should see "a project name starting with a"
     And the badge should show 3
 
   Scenario: Clicking on a project takes me to the project page
