@@ -158,7 +158,11 @@ function remove_source_container(next_steps) {
 }
 
 function html_for_todo() {
-  return "<%= @saved ? escape_javascript(render(:partial => @todo, :locals => { :parent_container_type => "completed" })) : "" %>";
+  return "<%= @saved ? escape_javascript(render(:partial => @todo, :locals => {
+      :parent_container_type => parent_container_type,
+      :suppress_project => source_view_is(:project),
+      :suppress_context => source_view_is(:context)
+    })) : "" %>";
 }
 
 function html_for_recurring_todo() {

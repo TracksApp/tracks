@@ -389,7 +389,10 @@ module TodosHelper
           (@original_item_was_deferred && @remaining_deferred_or_pending_count == 0 && (@todo.completed? || @tag_was_removed))
         container_id = "empty-d" if @completed_count && @completed_count == 0 && !@todo.completed?
       }
-      page.context  { container_id = "c#{@original_item_context_id}empty-nd" if @remaining_in_context == 0 }
+      page.context  {
+        container_id = "c#{@original_item_context_id}empty-nd" if @remaining_in_context == 0
+        container_id = "empty-d" if @completed_count && @completed_count == 0 && !@todo.completed?
+      }
       page.todo     { container_id = "c#{@original_item_context_id}empty-nd" if @remaining_in_context == 0 }
     end
     return container_id.blank? ? "" : "$(\"##{container_id}\").slideDown(100);"
