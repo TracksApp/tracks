@@ -115,12 +115,16 @@ a.show_successors:hover, a.link_to_successors:hover {background-image: url(../im
 }
 
 body.preferences div#display_box {
-    margin-right:410px;
+    margin-right:510px;
 }
 
 body.preferences div#input_box {
-    width:390px;
+    width:490px;
     right:15px;
+}
+
+body.preferences select#prefs_time_zone, body.preferences select#prefs_sms_context_id {
+    width: 250px;
 }
 
 #single_box {

@@ -22,7 +22,7 @@
 	      s
 	    end
     
-	    def row_with_select_field(pref_name, collection = [true,false], nowrap_label = false)
+	    def row_with_select_field(pref_name, collection = [ [t('preferences.is_true'),true], [t('preferences.is_false'), false] ], nowrap_label = false)
 	      table_row(pref_name, nowrap_label) { select('prefs', pref_name, collection) }
 	    end
 
@@ -43,7 +43,7 @@
 	  <%= row_with_select_field("show_project_on_todo_done") %>
 
 	  <% if current_user.is_admin? %> <%= row_with_text_field('admin_email') %> <% end %>
-	  <%= row_with_text_field('staleness_starts', true) %>
+	  <%= row_with_text_field('staleness_starts', false) %>
 	  <%= row_with_text_field('show_number_completed') %>
 	  <%= row_with_text_field('refresh') %>
 	  <%= row_with_select_field("verbose_action_descriptors") %>
