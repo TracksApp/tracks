@@ -71,116 +71,35 @@ Given /^I have a project "([^"]*)" that has the following todos$/ do |project_na
   end
 end
 
-When /I change the (.*) field of "([^\"]*)" to "([^\"]*)"$/ do |field_name, todo_name, new_value|
-  todo = @current_user.todos.find_by_description(todo_name)
-  todo.should_not be_nil
-
-  open_edit_form_for(todo)
-  selenium.type("css=form.edit_todo_form input[name=#{field_name}]", new_value)
-  submit_edit_todo_form(todo)
-end
-
-When /^I submit a new action with description "([^"]*)"$/ do |description|
-  fill_in "todo[description]", :with => description
-  submit_next_action_form
-end
-
-When /^I submit a new action with description "([^"]*)" and the tags "([^"]*)" in the context "([^"]*)"$/ do |description, tags, context_name|
-  fill_in "todo[description]", :with => description
-  fill_in "tag_list", :with => tags
-
-  # fill_in does not seem to work when the field is prefilled with something. Empty the field first
-  clear_context_name_from_next_action_form
-  fill_in "todo_context_name", :with => context_name
-  submit_next_action_form
-end
-
-When /^I submit a new deferred action with description "([^"]*)" and the tags "([^"]*)" in the context "([^"]*)"$/ do |description, tags, context_name|
-  fill_in "todo[description]", :with => description
-
-  clear_context_name_from_next_action_form
-  fill_in "todo_context_name", :with => context_name
-
-  fill_in "tag_list", :with => tags
-  fill_in "todo[show_from]", :with => format_date(@current_user.time + 1.week)
-  submit_next_action_form
-end
-
-When /^I submit a new action with description "([^"]*)" to project "([^"]*)" with tags "([^"]*)" in the context "([^"]*)"$/ do |description, project_name, tags, context_name|
-  fill_in "todo[description]", :with => description
-
-  clear_project_name_from_next_action_form
-  clear_context_name_from_next_action_form
-
-  fill_in "todo_project_name", :with => project_name
-  fill_in "todo_context_name", :with => context_name
-  fill_in "tag_list", :with => tags
-
-  submit_next_action_form
-end
-
-When /^I submit a new action with description "([^"]*)" in the context "([^"]*)"$/ do |description, context_name|
-  fill_in "todo[description]", :with => description
-
-  clear_context_name_from_next_action_form
-  fill_in "todo_context_name", :with => context_name
-  
-  submit_next_action_form
-end
-
-When /^I submit multiple actions with using$/ do |multiple_actions|
-  fill_in "todo[multiple_todos]", :with => multiple_actions
-  submit_multiple_next_action_form
-end
-
-When /^I fill the multiple actions form with "([^"]*)", "([^"]*)", "([^"]*)", "([^"]*)"$/ do |descriptions, project_name, context_name, tags|
-  fill_in "todo[multiple_todos]", :with => descriptions
-  fill_in "multi_todo_project_name", :with => project_name
-  fill_in "multi_todo_context_name", :with => context_name
-  fill_in "multi_tag_list", :with => tags
-end
-
-When /^I submit the new multiple actions form with "([^"]*)", "([^"]*)", "([^"]*)", "([^"]*)"$/ do |descriptions, project_name, context_name, tags|
-  When "I fill the multiple actions form with \"#{descriptions}\", \"#{project_name}\", \"#{context_name}\", \"#{tags}\""
-  submit_multiple_next_action_form
-end
-
-When /^I submit the new multiple actions form with$/ do |multi_line_descriptions|
-  fill_in "todo[multiple_todos]", :with => multi_line_descriptions
-  submit_multiple_next_action_form
-end
-
-When /^I edit the due date of "([^"]*)" to tomorrow$/ do |action_description|
-  todo = @current_user.todos.find_by_description(action_description)
-  todo.should_not be_nil
-  open_edit_form_for(todo)
-  fill_in "due_todo_#{todo.id}", :with => format_date(todo.created_at + 1.day)
-  submit_edit_todo_form(todo)
-end
-
-When /^I edit the due date of "([^"]*)" to next month$/ do  |action_description|
-  todo = @current_user.todos.find_by_description(action_description)
-  todo.should_not be_nil
-  open_edit_form_for(todo)
-  fill_in "due_todo_#{todo.id}", :with => format_date(todo.created_at + 1.month)
-  submit_edit_todo_form(todo)
-end
-
-When /^I clear the due date of "([^"]*)"$/ do |action_description|
-  todo = @current_user.todos.find_by_description(action_description)
-  todo.should_not be_nil
-  open_edit_form_for(todo)
-  selenium.click("//div[@id='edit_todo_#{todo.id}']//a[@id='due_x_todo_#{todo.id}']/img", :wait_for => :ajax, :javascript_framework => :jquery)
-  submit_edit_todo_form(todo)
-end
-
 When /^I mark "([^"]*)" as complete$/ do |action_description|
-  # TODO: generalize. this currently only works for projects wrt xpath
   todo = @current_user.todos.find_by_description(action_description)
   todo.should_not be_nil
+
   check "mark_complete_#{todo.id}"
+
+  todo_container = "fail"  # fail this test if @source_view is wrong
+  todo_container = "p#{todo.project_id}items" if @source_view=="project"
+  todo_container = "c#{todo.context_id}items" if @source_view=="context" || @source_view=="todos" || @source_view=="tag"
+
+  # container should be there
+  selenium.is_element_present("//div[@id='#{todo_container}']").should be_true
+
   wait_for :timeout => 5 do
-    !selenium.is_element_present("//div[@id='p#{todo.project.id}items']//div[@id='line_todo_#{todo.id}']")
+    !selenium.is_element_present("//div[@id='#{todo_container}']//div[@id='line_todo_#{todo.id}']")
+  end
+  # note that animations could be running after finishing this
+end
+
+When /^I mark "([^"]*)" as uncompleted$/ do |action_description|
+  # TODO: generalize. this currently only works for context wrt xpath
+  todo = @current_user.todos.find_by_description(action_description)
+  todo.should_not be_nil
+
+  check "mark_complete_#{todo.id}"
+
+  xpath="//div[@id='c#{todo.context_id}items']//div[@id='line_todo_#{todo.id}']"
+  wait_for :timeout => 5 do
+    selenium.is_element_present(xpath)
   end
   # note that animations could be running after finishing this
 end
@@ -196,6 +115,10 @@ When /^I delete the action "([^"]*)"$/ do |action_description|
   wait_for :timeout => 5 do
     !selenium.is_element_present("//div[@id='line_todo_#{todo.id}']")
   end
+end
+
+When /^I delete the todo "([^"]*)"$/ do |action_description|
+  When "I delete the action \"#{action_description}\""
 end
 
 Then /^I should see ([0-9]+) todos$/ do |count|
@@ -222,24 +145,6 @@ end
 
 Then /^the number of actions should be (\d+)$/ do |count|
   @current_user.todos.count.should == count.to_i
-end
-
-Then /^the container for the context "([^"]*)" should be visible$/ do |context_name|
-  context = @current_user.contexts.find_by_name(context_name)
-  context.should_not be_nil
-  xpath = "xpath=//div[@id=\"c#{context.id}\"]"
-  selenium.wait_for_element(xpath, :timeout_in_seconds => 5)
-  selenium.is_visible(xpath).should be_true
-end
-
-Then /^the container for the context "([^"]*)" should not be visible$/ do |context_name|
-  context = @current_user.contexts.find_by_name(context_name)
-  context.should_not be_nil
-
-  wait_for_ajax
-
-  xpath = "xpath=//div[@id=\"c#{context.id}\"]"
-  selenium.is_element_present(xpath).should be_false
 end
 
 Then /^a confirmation for adding a new context "([^"]*)" should be asked$/ do |context_name|
