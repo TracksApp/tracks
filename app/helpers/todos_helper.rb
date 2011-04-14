@@ -354,11 +354,11 @@ module TodosHelper
 
     source_view do |page|
       page.project  {
-        return "tickler-empty-nd" if @todo_was_deferred_from_active_state || @todo_was_blocked_from_active_state
+        return "tickler-empty-nd" if @todo_was_deferred_from_active_state || @todo_was_blocked_from_active_state || @todo_was_destroyed_from_deferred_state || @todo_was_created_deferred
         return "p#{todo.project_id}empty-nd"
       }
       page.tag {
-        return "tickler-empty-nd" if @todo_was_deferred_from_active_state
+        return "tickler-empty-nd" if @todo_was_deferred_from_active_state || @todo_was_destroyed_from_deferred_state || @todo_was_created_deferred
         return "hidden-empty-nd" if @todo.hidden?
         return "c#{todo.context_id}empty-nd"
       }

@@ -107,6 +107,7 @@ class TodosController < ApplicationController
       end
 
       @todo.reload if @saved
+      @todo_was_created_deferred = @todo.deferred?
 
       respond_to do |format|
         format.html { redirect_to :action => "index" }
@@ -415,7 +416,8 @@ class TodosController < ApplicationController
     @original_item_due = @todo.due
     @context_id = @todo.context_id
     @project_id = @todo.project_id
-   
+    @todo_was_destroyed_from_deferred_state = @todo.deferred?
+
     # activate successors if they only depend on this todo
     activated_successor_count = 0
     @pending_to_activate = []

@@ -31,18 +31,20 @@ function show_empty_messages() {
 }
 
 function remove_todo_from_page() {
-  <% if (@remaining_in_context == 0)
+  <% if (@remaining_in_context == 0) && update_needs_to_hide_context
     # remove context with deleted todo
   -%>
-    $('#c<%=@todo.context_id%>').fadeOut(1000, function() {
+    $('#c<%=@todo.context_id%>').fadeOut(400, function() {
       $('#<%=dom_id(@todo)%>').remove();
     });
-  <% else 
+    <%= show_empty_message_in_source_container -%>
+  <% else
     # remove only the todo
   -%>
-    $('#<%=dom_id(@todo)%>').slideUp(1000, function() {
+    <%= show_empty_message_in_source_container %>
+    $('#<%=dom_id(@todo)%>').slideUp(400, function() {
       $('#<%=dom_id(@todo)%>').remove();
-    });
+  });
   <% end -%>
 }
 
