@@ -189,7 +189,9 @@ var TracksPages = {
             }
         })
         .autocomplete({
-            minLength: 0,
+            minLength: 2,
+            autoFocus: true,
+            delay: 400, /* increase a bit over dthe default of 300 */
             source: function( request, response ) {
                 var last_term = extractLast( request.term );
                 if (last_term != "" && last_term != " ")
@@ -224,8 +226,7 @@ var TracksPages = {
                 //terms.push( "" );
                 this.value = terms.join( ", " );
                 return false;
-            },
-            selectFirst: true
+            }
         });
     },
     setup_all_autocompleters: function() {
@@ -419,7 +420,9 @@ var TodoItems = {
             }
         })
         .autocomplete({
-            minLength: 0,
+            minLength: 2,
+            autoFocus: true,
+            delay: 400, /* delay a bit more than the default of 300 */
             source: function( request, response ) {
                 var term = request.term;
                 if (term != "" && term != " ")
@@ -459,8 +462,7 @@ var TodoItems = {
                 $(form).find('input[name=predecessor_input]').val('');
                 $(form).find('input[name=predecessor_input]').focus();
                 return false;
-            },
-            selectFirst: true
+            }
         });
     },
     drag_todo: function() {
@@ -594,7 +596,9 @@ var ContextItems = {
     setup_autocomplete_for_contexts: function(id) {
         $(id).autocomplete({
             source: relative_to_root('contexts.autocomplete'),
-            selectFirst: true
+            autoFocus: true,
+            minLength: 1,
+            delay: 400 /* increase a bit. default was 300 */
         });
     }
 }
@@ -603,7 +607,9 @@ var ProjectItems = {
     setup_autocomplete_for_projects: function(id) {
         $(id).autocomplete({
             source: relative_to_root('projects.autocomplete'),
-            selectFirst: true
+            autoFocus: true,
+            minLength: 1,
+            delay: 400 /* increase a bit. default was 300 */
         });
     }
 }
@@ -1056,7 +1062,9 @@ function default_ajax_options_for_submit(ajax_type, element_to_block) {
                 $(this.block_element).unblock();
             }
             // delay a bit to wait for animations to finish
-            setTimeout(function(){enable_rich_interaction();}, 500);
+            setTimeout(function(){
+                enable_rich_interaction();
+            }, 500);
         }],
         error: function(req, status) {
             TracksPages.page_notify('error', i18n['common.ajaxError']+': '+status, 8);
