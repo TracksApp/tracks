@@ -1,8 +1,13 @@
 Then /^I should not see the context "([^"]*)"$/ do |context_name|
   context = @current_user.contexts.find_by_name(context_name)
   context.should_not be_nil
-  wait_for :timeout => 5 do
-    !selenium.is_visible("xpath=//div[@id='c#{context.id}']")
+
+  xpath = "//div[@id='c#{context.id}']"
+
+  if selenium.is_element_present(xpath) # only check visibility if it is present
+    wait_for :timeout => 5 do
+      !selenium.is_visible("xpath=#{xpath}")
+    end
   end
 end
 

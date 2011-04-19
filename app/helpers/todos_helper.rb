@@ -405,7 +405,7 @@ module TodosHelper
         html += step + "({ go: function() {\r\n"
       end
     end
-    html += "}}) " * animation.length
+    html += "}}) " * animation.size
     return html + ";"
   end
 

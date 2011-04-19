@@ -12,7 +12,7 @@ Feature: Edit a context
   @selenium
   Scenario: In place edit of context name
     Given I have a context called "Errands"
-    When I visit the context page for "Errands"
+    When I go to the context page for "Errands"
     And I edit the context name in place to be "OutAndAbout"
     Then I should see the context name is "OutAndAbout"
     When I go to the contexts page

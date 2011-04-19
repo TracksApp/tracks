@@ -24,7 +24,7 @@ Feature: View, add, remove notes
 
   Scenario: Link to note
     Given I have a project "Pass Final Exam" with 1 note
-    When I visit the "Pass Final Exam" project
+    When I go to the "Pass Final Exam" project
     And I click the icon next to the note
     Then I should see the note text
 
