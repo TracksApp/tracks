@@ -76,7 +76,7 @@ function add_new_recurring_todo(next_steps) {
         highlight_updated_recurring_todo(next_steps);
       });
    <% else
-        if @todo.recurring_todo.todos.active.count == 0 && @new_recurring_todo.nil? -%>
+        if @todo.recurring_todo.todos.active.count(:all) == 0 && @new_recurring_todo.nil? -%>
           TracksPages.page_notify('notice', "<%=t('todos.recurrence_completed')%>", 6);
    <%   end -%>
         next_steps.go();
