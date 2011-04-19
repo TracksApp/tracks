@@ -55,13 +55,6 @@ Given /^I have the following contexts$/ do |table|
   end
 end
 
-# TODO: refactor this to paths.rb
-When /^I visit the context page for "([^\"]*)"$/ do |context_name|
-  context = @current_user.contexts.find_by_name(context_name)
-  context.should_not be_nil
-  visit "/contexts/#{context.id}" 
-end
-
 When /^I edit the context name in place to be "([^\"]*)"$/ do |new_context_name|
   selenium.click "context_name"
   fill_in "value", :with => new_context_name

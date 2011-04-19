@@ -83,7 +83,7 @@ Feature: Edit a next action from every page
   Scenario Outline: I can mark a deferred todo complete and it will update empty messages
     Given I have a context called "visible context"
     And I have a project called "visible project"
-    When I go to the <page> # not for home page or context because it does not show deferred todos
+    When I go to the <page> 
     Then I should see "<empty message>"
     When I submit a new deferred action with description "visible todo" to project "visible project" with tags "starred" in the context "visible context"
     Then I should see "visible todo"

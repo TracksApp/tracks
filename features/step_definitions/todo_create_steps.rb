@@ -51,6 +51,11 @@ When /^I submit a new action with description "([^"]*)" to project "([^"]*)" wit
   submit_next_action_form
 end
 
+When /^I submit a new action with description "([^"]*)" to project "([^"]*)" in the context "([^"]*)"$/ do |description, project_name, context_name|
+  When "I submit a new action with description \"#{description}\" to project \"#{project_name}\" with tags \"\" in the context \"#{context_name}\""
+end
+
+
 When /^I submit a new action with description "([^"]*)" in the context "([^"]*)"$/ do |description, context_name|
   fill_in "todo[description]", :with => description
 

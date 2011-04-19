@@ -13,22 +13,22 @@ Feature: Add new next action from every page
 
   @selenium
   Scenario Outline: I can hide the input form for single next action on a page
-    When I <action> the <page>
+    When I go to the <page>
     Then the single action form should be visible
     When I follow "Hide form"
     Then the single action form should not be visible
 
     Scenarios:
-      | action | page                            |
-      | go to  | home page                       |
-      | go to  | tickler page                    |
-      | visit  | project page for "test project" |
-      | visit  | context page for "test context" |
-      | go to  | tag page for "starred"          |
+      | page                            |
+      | home page                       |
+      | tickler page                    |
+      | "test project" project          |
+      | context page for "test context" |
+      | tag page for "starred"          |
 
   @selenium
   Scenario Outline: I can hide the input form for multiple next actions
-    When I <action> the <page>
+    When I go to the <page>
     Then the single action form should be visible
     When I follow "Add multiple next actions"
     Then the multiple action form should be visible
@@ -37,16 +37,16 @@ Feature: Add new next action from every page
     And the multiple action form should not be visible
 
     Scenarios:
-      | action | page                            |
-      | go to  | home page                       |
-      | go to  | tickler page                    |
-      | visit  | project page for "test project" |
-      | visit  | context page for "test context" |
-      | go to  | tag page for "starred"          |
+      | page                            |
+      | home page                       |
+      | tickler page                    |
+      | "test project" project          |
+      | context page for "test context" |
+      | tag page for "starred"          |
 
   @selenium
   Scenario Outline: I can hide the input form and then choose both input forms
-    When I <action> the <page>
+    When I go to the <page>
     Then the single action form should be visible
     When I follow "Hide form"
     Then the single action form should not be visible
@@ -57,16 +57,16 @@ Feature: Add new next action from every page
     And the multiple action form should not be visible
 
     Scenarios:
-      | action | page                            |
-      | go to  | home page                       |
-      | go to  | tickler page                    |
-      | visit  | project page for "test project" |
-      | visit  | context page for "test context" |
-      | go to  | tag page for "starred"          |
+      | page                            |
+      | home page                       |
+      | tickler page                    |
+      | "test project" project          |
+      | context page for "test context" |
+      | tag page for "starred"          |
 
   @selenium
   Scenario Outline: I can switch forms for single next action to multiple next actions
-    When I <action> the <page>
+    When I go to the <page>
     Then the single action form should be visible
     When I follow "Add multiple next actions"
     Then the single action form should not be visible
@@ -76,30 +76,30 @@ Feature: Add new next action from every page
     And the multiple action form should not be visible
 
     Scenarios:
-      | action | page                            |
-      | go to  | home page                       |
-      | go to  | tickler page                    |
-      | visit  | project page for "test project" |
-      | visit  | context page for "test context" |
-      | go to  | tag page for "starred"          |
+      | page                            |
+      | home page                       |
+      | tickler page                    |
+      | "test project" project          |
+      | context page for "test context" |
+      | tag page for "starred"          |
 
   @selenium
   Scenario Outline: I can add a todo from several pages
-    When I <action> the <page>
+    When I go to the <page>
     And I submit a new action with description "a new next action"
     Then I should <see> "a new next action"
 
     Scenarios:
-      | action | page                            | see     |
-      | go to  | home page                       | see     |
-      | go to  | tickler page                    | not see |
-      | visit  | project page for "test project" | see     |
-      | visit  | context page for "test context" | see     |
-      | go to  | tag page for "starred"          | not see |
+      | page                            | see     |
+      | home page                       | see     |
+      | tickler page                    | not see |
+      | "test project" project          | see     |
+      | context page for "test context" | see     |
+      | tag page for "starred"          | not see |
 
   @selenium
   Scenario Outline: I can add multiple todos from several pages
-    When I <action> the <page>
+    When I go to the <page>
     And I follow "Add multiple next actions"
     And I submit multiple actions with using
       """
@@ -112,36 +112,39 @@ Feature: Add new next action from every page
     And the number of actions should be <count>
 
     Scenarios:
-      | action | page                            | see     | badge | count |
-      | go to  | home page                       | see     | 3     | 3     |
-      | go to  | tickler page                    | not see | 0     | 3     |
-      | visit  | project page for "test project" | see     | 3     | 3     |
-      | visit  | context page for "test context" | see     | 2     | 3     |
-      | go to  | tag page for "starred"          | not see | 0     | 3     |
+      | page                            | see     | badge | count |
+      | home page                       | see     | 3     | 3     |
+      | tickler page                    | not see | 0     | 3     |
+      | "test project" project          | see     | 3     | 3     |
+      | context page for "test context" | see     | 2     | 3     |
+      | tag page for "starred"          | not see | 0     | 3     |
 
+  @selenium
   Scenario: Adding a todo to another project does not show the todo
-    Given this is a pending scenario
-
-  Scenario: Adding a todo to a hidden project does not show the todo
-    Given this is a pending scenario
+    Given I have a project called "another project"
+    When I go to the "test project" project
+    And I submit a new action with description "can you see me?" to project "another project" in the context "test context"
+    Then I should not see "can you see me?"
+    When I go to the "another project" project
+    Then I should see "can you see me?"
 
   @selenium
   Scenario Outline: Adding a todo with a new context shows the new context
-    When I <action> the <page>
+    When I go to the <page>
     And I submit a new <todo> with description "do at new context" and the tags "starred" in the context "New"
     Then a confirmation for adding a new context "New" should be asked
     And the container for the context "New" should <visible>
     And the badge should show <badge>
 
     Scenarios:
-      | action | page                            | todo            | badge | visible        |
-      | go to  | home page                       | action          | 2     | be visible     |
-      | go to  | tickler page                    | deferred action | 1     | be visible     |
-      | visit  | project page for "test project" | action          | 2     | not be visible |
-      | visit  | context page for "test context" | action          | 1     | not be visible |
-      | go to  | tag page for "starred"          | action          | 1     | be visible     |
+      | page                            | todo            | badge | visible        |
+      | home page                       | action          | 2     | be visible     |
+      | tickler page                    | deferred action | 1     | be visible     |
+      | "test project" project          | action          | 2     | not be visible |
+      | context page for "test context" | action          | 1     | not be visible |
+      | tag page for "starred"          | action          | 1     | be visible     |
 
-  @selenium 
+  @selenium
   Scenario Outline: Adding a todo to a hidden project does not show the todo
     Given I have a hidden project called "hidden project"
     And I have a project called "visible project"
@@ -174,7 +177,7 @@ Feature: Add new next action from every page
     When I submit a new action with description "another new todo" in the context "hidden context"
     Then I should not see "another new todo"
 
-  @selenium 
+  @selenium
   Scenario: Adding a todo to a context show the todo in that context page
     Given I have a context called "visible context"
     And I have a hidden context called "hidden context"
