@@ -56,7 +56,7 @@ function show_new_todo_if_todo_was_recurring() {
       $('#<%= dom_id(@new_recurring_todo, 'line')%>').effect('highlight', {}, 2000 );
       TracksPages.page_notify('notice', "<%=t('todos.recurring_action_deleted')%>", 5);
     <% else -%>
-      <% if @todo.recurring_todo.todos.active.count == 0 && @new_recurring_todo.nil? -%>
+      <% if @todo.recurring_todo.todos.active.count(:all) == 0 && @new_recurring_todo.nil? -%>
         TracksPages.page_notify('notice', "<%=t('todos.completed_recurrence_completed')%>", 5);
       <% end -%>
     <% end -%>
