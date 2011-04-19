@@ -129,6 +129,16 @@ Feature: Add new next action from every page
     Then I should see "can you see me?"
 
   @selenium
+  Scenario: Adding a deferred todo to another project does not show the todo
+    # scenario for #1146
+    Given I have a project called "another project"
+    When I go to the "test project" project
+    And I submit a deferred new action with description "a new next action" to project "another project" in the context "test context"
+    Then I should not see "a new next action"
+    And I submit a deferred new action with description "another new next action" to project "test project" in the context "test context"
+    Then I should see "another new next action"
+
+  @selenium
   Scenario Outline: Adding a todo with a new context shows the new context
     When I go to the <page>
     And I submit a new <todo> with description "do at new context" and the tags "starred" in the context "New"

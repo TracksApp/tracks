@@ -234,7 +234,9 @@ module TodosHelper
       }
       page.project {
         return (@todo.active? && @todo.project && @todo.project.id == @default_project.id) ||
-          (@todo.project.hidden? && @todo.project_hidden?) || @todo.deferred? || @todo.pending?
+          (@todo.project.hidden? && @todo.project_hidden?) ||
+          ( @todo.deferred? && (@todo.project.id == @default_project.id) ) ||
+          @todo.pending?
       }
     end
 
