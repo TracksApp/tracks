@@ -234,7 +234,9 @@ module TodosHelper
       }
       page.project {
         return (@todo.active? && @todo.project && @todo.project.id == @default_project.id) ||
-          (@todo.project.hidden? && @todo.project_hidden?) || @todo.deferred? || @todo.pending?
+          (@todo.project.hidden? && @todo.project_hidden?) ||
+          ( @todo.deferred? && (@todo.project.id == @default_project.id) ) ||
+          @todo.pending?
       }
     end
 
@@ -354,11 +356,11 @@ module TodosHelper
 
     source_view do |page|
       page.project  {
-        return "tickler-empty-nd" if @todo_was_deferred_from_active_state || @todo_was_blocked_from_active_state
+        return "tickler-empty-nd" if @todo_was_deferred_from_active_state || @todo_was_blocked_from_active_state || @todo_was_destroyed_from_deferred_state || @todo_was_created_deferred
         return "p#{todo.project_id}empty-nd"
       }
       page.tag {
-        return "tickler-empty-nd" if @todo_was_deferred_from_active_state
+        return "tickler-empty-nd" if @todo_was_deferred_from_active_state || @todo_was_destroyed_from_deferred_state || @todo_was_created_deferred
         return "hidden-empty-nd" if @todo.hidden?
         return "c#{todo.context_id}empty-nd"
       }
@@ -389,7 +391,10 @@ module TodosHelper
           (@original_item_was_deferred && @remaining_deferred_or_pending_count == 0 && (@todo.completed? || @tag_was_removed))
         container_id = "empty-d" if @completed_count && @completed_count == 0 && !@todo.completed?
       }
-      page.context  { container_id = "c#{@original_item_context_id}empty-nd" if @remaining_in_context == 0 }
+      page.context  {
+        container_id = "c#{@original_item_context_id}empty-nd" if @remaining_in_context == 0
+        container_id = "empty-d" if @completed_count && @completed_count == 0 && !@todo.completed?
+      }
       page.todo     { container_id = "c#{@original_item_context_id}empty-nd" if @remaining_in_context == 0 }
     end
     return container_id.blank? ? "" : "$(\"##{container_id}\").slideDown(100);"
@@ -402,7 +407,7 @@ module TodosHelper
         html += step + "({ go: function() {\r\n"
       end
     end
-    html += "}}) " * animation.count
+    html += "}}) " * animation.size
     return html + ";"
   end
 

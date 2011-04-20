@@ -7,11 +7,14 @@ module NavigationHelpers
   #
   def path_to(page_name)
     options = @mobile_interface ? {:format => :m} : {}
+    @source_view = nil
     case page_name
 
     when /the home\s?page/
+      @source_view = "todos"
       root_path(options)
     when /the statistics page/
+      @source_view = "stats"
       stats_path(options)
     when /the signup page/
       signup_path(options)
@@ -20,8 +23,10 @@ module NavigationHelpers
     when /the notes page/
       notes_path(options)
     when /the contexts page/
+      @source_view = "contexts"
       contexts_path(options)
     when /the projects page/
+      @source_view = "projects"
       projects_path(options)
     when /the manage users page/
       users_path(options)
@@ -44,15 +49,20 @@ module NavigationHelpers
     when /the feeds page/
       feeds_path(options)
     when /the context page for "([^\"]*)" for user "([^\"]*)"/i
+      @source_view = "context"
       context_path(User.find_by_login($2).contexts.find_by_name($1), options)
     when /the context page for "([^\"]*)"/i
+      @source_view = "context"
       context_path(@current_user.contexts.find_by_name($1), options)
     when /the "([^\"]*)" project for user "([^\"]*)"/i
+      @source_view = "project"
       project_path(User.find_by_login($2).projects.find_by_name($1), options)
     when /the "([^\"]*)" project/i
+      @source_view = "project"
       @project = @current_user.projects.find_by_name($1)
       project_path(@project, options)
     when /the tag page for "([^"]*)"/i
+      @source_view = "tag"
       tag_path($1, options)
 
       # Add more mappings here.

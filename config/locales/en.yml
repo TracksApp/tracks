@@ -240,6 +240,8 @@ en:
     change_identity_url: "Change Your Identity URL"
     page_title: "TRACKS::Preferences"
     page_title_edit: "TRACKS::Edit Preferences"
+    is_true: "true"
+    is_false: "false"
   projects:
     status_project_name_changed: "Name of project was changed"
     default_tags_removed_notice: "Removed the default tags"

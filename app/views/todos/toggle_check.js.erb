@@ -48,7 +48,7 @@ function remove_todo(next_steps) {
 
 function add_to_completed_container(next_steps) {
   <% unless current_user.prefs.hide_completed_actions? -%>
-    $('#<%= item_container_id(@todo) %>').append(html_for_todo());
+    $('#<%= item_container_id(@todo) %>').prepend(html_for_todo());
     $("#empty-d").slideUp(100);
     highlight_updated_todo(next_steps);
   <% end -%>
@@ -76,7 +76,7 @@ function add_new_recurring_todo(next_steps) {
         highlight_updated_recurring_todo(next_steps);
       });
    <% else
-        if @todo.recurring_todo.todos.active.count == 0 && @new_recurring_todo.nil? -%>
+        if @todo.recurring_todo.todos.active.count(:all) == 0 && @new_recurring_todo.nil? -%>
           TracksPages.page_notify('notice', "<%=t('todos.recurrence_completed')%>", 6);
    <%   end -%>
         next_steps.go();
@@ -158,7 +158,11 @@ function remove_source_container(next_steps) {
 }
 
 function html_for_todo() {
-  return "<%= @saved ? escape_javascript(render(:partial => @todo, :locals => { :parent_container_type => "completed" })) : "" %>";
+  return "<%= @saved ? escape_javascript(render(:partial => @todo, :locals => {
+      :parent_container_type => parent_container_type,
+      :suppress_project => source_view_is(:project),
+      :suppress_context => source_view_is(:context)
+    })) : "" %>";
 }
 
 function html_for_recurring_todo() {

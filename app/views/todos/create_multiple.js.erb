@@ -26,9 +26,9 @@ function set_notification() {
 
 function clear_form() {
   $('#todo-form-multi-new-action').clearForm();
-  TracksForm.set_context_name_for_multi_add('<%=@initial_context_name%>');
-  TracksForm.set_project_name_for_multi_add('<%=@initial_project_name%>');
-  TracksForm.set_tag_list_for_multi_add('<%=@default_tags%>');
+  TracksForm.set_context_name_for_multi_add('<%=escape_javascript @initial_context_name%>');
+  TracksForm.set_project_name_for_multi_add('<%=escape_javascript @initial_project_name%>');
+  TracksForm.set_tag_list_for_multi_add('<%=escape_javascript @default_tags%>');
   $('#todo-form-multi-new-action input:text:first').focus();
 }
 

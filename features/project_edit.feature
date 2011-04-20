@@ -47,7 +47,7 @@ Feature: Edit a project
     Given I have a project "test" with 1 todos
     When I go to the projects page
     Then the badge should show 2   # "manage me" and "test"
-    When I visit the "manage me" project
+    When I go to the "manage me" project
     And I try to edit the project name to "test"
     Then I should see "Name already exists"
 
