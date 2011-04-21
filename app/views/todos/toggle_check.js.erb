@@ -65,6 +65,9 @@ function add_todo_to_context(next_steps) {
     $("#<%=  empty_container_msg_div_id(@todo) %>").slideUp(100);
     highlight_updated_todo(next_steps);
   <% end -%>
+  <% if @completed_count == 0 -%>
+    $("#empty-d").slideDown(100);
+  <% end -%>
 }
 
 function add_new_recurring_todo(next_steps) {

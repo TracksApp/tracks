@@ -22,6 +22,8 @@ module NavigationHelpers
       login_path(options)
     when /the notes page/
       notes_path(options)
+    when /the calendar page/
+      calendar_path(options)
     when /the contexts page/
       @source_view = "contexts"
       contexts_path(options)
