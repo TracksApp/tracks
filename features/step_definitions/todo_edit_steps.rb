@@ -11,6 +11,14 @@ When /^I edit the context of "([^"]*)" to "([^"]*)"$/ do |context_old_name, cont
   When "I change the context_name field of \"#{context_old_name}\" to \"#{context_new_name}\""
 end
 
+When /^I edit the description of "([^"]*)" to "([^"]*)"$/ do |action_description, new_description|
+  todo = @current_user.todos.find_by_description(action_description)
+  todo.should_not be_nil
+  open_edit_form_for(todo)
+  fill_in "todo_description", :with => new_description
+  submit_edit_todo_form(todo)
+end
+
 When /^I edit the due date of "([^"]*)" to tomorrow$/ do |action_description|
   todo = @current_user.todos.find_by_description(action_description)
   todo.should_not be_nil

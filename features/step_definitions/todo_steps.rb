@@ -52,6 +52,25 @@ Given /^I have ([0-9]+) completed todos with a note$/ do |count|
   end
 end
 
+Given /^I have a todo with description "([^"]*)" in project "([^"]*)" with tags "([^"]*)" in the context "([^"]*)"$/ do |action_description, project_name, tags, context_name|
+  context = @current_user.contexts.find_or_create(:name => context_name)
+  project = @current_user.projects.find_or_create(:name => project_name)
+  @todo = @current_user.todos.create!(:context_id => context.id, :project_id => project.id, :description => action_description)
+  @todo.tag_with(tags)
+  @todo.save
+end
+
+Given /^I have a todo with description "([^"]*)" in project "([^"]*)" with tags "([^"]*)" in the context "([^"]*)" that is due next week$/ do |action_description, project_name, tags, context_name|
+  Given "I have a todo with description \"#{action_description}\" in project \"#{project_name}\" with tags \"#{tags}\" in the context \"#{context_name}\""
+  @todo.due = @current_user.time + 1.week
+  @todo.save!
+end
+
+Given /^I have a completed todo with description "([^"]*)" in project "([^"]*)" with tags "([^"]*)" in the context "([^"]*)"$/ do |action_description, project_name, tags, context_name|
+  Given "I have a todo with description \"#{action_description}\" in project \"#{project_name}\" with tags \"#{tags}\" in the context \"#{context_name}\""
+  @todo.complete!
+end
+
 Given /^I have a project "([^"]*)" that has the following todos$/ do |project_name, todos|
   Given "I have a project called \"#{project_name}\""
   @project.should_not be_nil
@@ -87,21 +106,54 @@ When /^I mark "([^"]*)" as complete$/ do |action_description|
   wait_for :timeout => 5 do
     !selenium.is_element_present("//div[@id='#{todo_container}']//div[@id='line_todo_#{todo.id}']")
   end
-  # note that animations could be running after finishing this
 end
 
 When /^I mark "([^"]*)" as uncompleted$/ do |action_description|
-  # TODO: generalize. this currently only works for context wrt xpath
   todo = @current_user.todos.find_by_description(action_description)
   todo.should_not be_nil
 
   check "mark_complete_#{todo.id}"
 
-  xpath="//div[@id='c#{todo.context_id}items']//div[@id='line_todo_#{todo.id}']"
+  todo_container = "fail"  # fail this test if @source_view is wrong
+  todo_container = "p#{todo.project_id}items" if @source_view=="project"
+  todo_container = "c#{todo.context_id}items" if @source_view=="context" || @source_view=="todos" || @source_view=="tag"
+
+  todo_container.should_not == "fail"
+
   wait_for :timeout => 5 do
-    selenium.is_element_present(xpath)
+    selenium.is_element_present("//div[@id='#{todo_container}']//div[@id='line_todo_#{todo.id}']")
   end
-  # note that animations could be running after finishing this
+end
+
+When /^I mark the complete todo "([^"]*)" active$/ do |action_description|
+  When "I mark \"#{action_description}\" as uncompleted"
+end
+
+
+When /^I star the action "([^"]*)"$/ do |action_description|
+  todo = @current_user.todos.find_by_description(action_description)
+  todo.should_not be_nil
+
+  xpath_unstarred = "//div[@id='line_todo_#{todo.id}']//img[@class='unstarred_todo']"
+  xpath_starred = "//div[@id='line_todo_#{todo.id}']//img[@class='starred_todo']"
+
+  selenium.is_element_present(xpath_unstarred).should be_true
+
+  star_img = "//img[@id='star_img_#{todo.id}']"
+  selenium.click(star_img, :wait_for => :ajax, :javascript_framework => :jquery)
+
+  wait_for :timeout => 5 do
+    selenium.is_element_present(xpath_starred)
+  end
+end
+
+Then /^I should see a starred "([^"]*)"$/ do |action_description|
+  todo = @current_user.todos.find_by_description(action_description)
+  todo.should_not be_nil
+
+  xpath_starred = "//div[@id='line_todo_#{todo.id}']//img[@class='starred_todo']"
+
+  selenium.is_element_present(xpath_starred).should be_true
 end
 
 When /^I delete the action "([^"]*)"$/ do |action_description|
