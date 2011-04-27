@@ -348,7 +348,7 @@ div#input_box {
 
 #input_box ul#predecessor_ul {
     list-style-type: none;
-    color: 0;
+    color: black;
 }
 
 .show_from_input, .due_input, .project_input, .context_input,
@@ -1245,16 +1245,19 @@ button.positive, .widgets a.positive{
     border:1px solid #fbc2c4;
     color:#d12f19;
 }
+
 .widgets a.negative:active{
     background-color:#d12f19;
     border:1px solid #d12f19;
     color:#fff;
 }
+
 .blockUI.blockOverlay {
     background-image:url('../images/waiting.gif');
     background-repeat:no-repeat;
     background-position:center center;
     background-color:white;
+    opacity: 1;
 }
 
 .bigWaiting {
