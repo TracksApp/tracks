@@ -1208,6 +1208,15 @@ function enable_rich_interaction(){
 }
 
 $(document).ready(function() {
+
+    // fix for IE8. Without this checkboxes don't work AJAXy. See #1152
+    if($.browser.msie && ($.browser.version.substring(0, 2) == "8.")) {
+        alert("detected msie8");
+        $('body').bind('change', function() {
+            return true;
+        });
+    }
+
     TracksPages.setup_nifty_corners();
 
     TodoItemsContainer.setup_container_toggles();
