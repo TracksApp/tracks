@@ -898,7 +898,7 @@ var NotesPage = {
 
         /* update button when editing a note */
         $("form.edit-note-form button.positive").live('click', function (ev) {
-            submit_with_ajax_and_block_element('form.edit-note-form', $(this));
+            submit_with_ajax_and_block_element($(this).parents('form.edit-note-form'), $(this));
             return false;
         });
     }
