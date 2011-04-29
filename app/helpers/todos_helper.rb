@@ -96,9 +96,10 @@ module TodosHelper
   
   def date_span(todo=@todo)
     if todo.completed?
-      "<span class=\"grey\">#{format_date( todo.completed_at )}</span>"
+      content_tag(:span, {:class => :grey}) { format_date( todo.completed_at ) }
     elsif todo.pending?
-      "<a title='#{t('todos.depends_on')}: #{todo.uncompleted_predecessors.map(&:description).join(', ')}'><span class=\"orange\">#{t('todos.pending')}</span></a> "
+      title = t('todos.depends_on')+ ": " + todo.uncompleted_predecessors.map(&:description).join(', ')
+      content_tag(:a, {:title => title}) { content_tag(:span, {:class => :orange}) { t('todos.pending') } }
     elsif todo.deferred?
       show_date( todo.show_from )
     else
@@ -116,7 +117,7 @@ module TodosHelper
   
   def grip_span(todo=@todo)
     unless todo.completed?
-      image_tag('grip.png', :width => '7', :height => '16', :border => '0', 
+      image_tag('grip.png', :width => '7', :height => '16', :border => '0',
         :title => t('todos.drag_action_title'),
         :class => 'grip')
     end
@@ -135,9 +136,9 @@ module TodosHelper
   def tag_list_mobile(todo=@todo)
     tags_except_starred = todo.tags.reject{|t| t.name == Todo::STARRED_TAG_NAME}
     # removed the link. TODO: add link to mobile view of tagged actions
-    tag_list = tags_except_starred.collect{|t| 
-      "<span class=\"tag\">" + 
-        link_to(t.name, {:action => "tag", :controller => "todos", :id => t.name+".m"}) + 
+    tag_list = tags_except_starred.collect{|t|
+      "<span class=\"tag\">" +
+        link_to(t.name, {:action => "tag", :controller => "todos", :id => t.name+".m"}) +
         "</span>"}.join('')
     if tag_list.empty? then "" else "<span class=\"tags\">#{tag_list}</span>" end
   end
@@ -377,10 +378,10 @@ module TodosHelper
     source_view do |page|
       page.project  {
         container_id = "p#{@original_item_project_id}empty-nd" if @remaining_in_context == 0
-        container_id = "tickler-empty-nd" if ( 
+        container_id = "tickler-empty-nd" if (
           ( (@todo_was_activated_from_deferred_state || @todo_was_activated_from_pending_state) && @remaining_deferred_or_pending_count == 0) ||
             (@original_item_was_deferred && @remaining_deferred_or_pending_count == 0 && @todo.completed?) )
-        container_id = "empty-d" if @completed_count && @completed_count == 0 && !@todo.completed? 
+        container_id = "empty-d" if @completed_count && @completed_count == 0 && !@todo.completed?
       }
       page.deferred { container_id = "c#{@original_item_context_id}empty-nd" if @remaining_in_context == 0 }
       page.calendar { container_id = "empty_#{@original_item_due_id}" if @old_due_empty }
