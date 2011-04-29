@@ -26,12 +26,12 @@ nl:
     drag_handle: SLEEP
     sort: 
       by_task_count_title: Sorteer op aantal acties
-      by_task_count_title_confirm: Weet u zeker dat u deze projecten alphabetisch wilt sorteren? Dat zal de huidige sorteervolgorde aanpassen.
-      alphabetically: Alphabetisch
+      by_task_count_title_confirm: Weet u zeker dat u deze op aantal acties wilt sorteren? Dat zal de huidige sorteervolgorde aanpassen.
+      alphabetically: Alfabetisch
       sort: Sorteer
-      alphabetically_title: Sorteer projecten alphabetisch
-      alphabetically_confirm: Weet u zeker dat u deze projecten alphabetisch wilt sorteren? Dat zal de huidige sorteervolgorde aanpassen.
-      by_task_count: Bij aantal acties
+      alphabetically_title: Sorteer projecten alfabetisch
+      alphabetically_confirm: Weet u zeker dat u deze projecten alfabetisch wilt sorteren? Dat zal de huidige sorteervolgorde aanpassen.
+      by_task_count: Op aantal acties
     create: Maken
     contexts: Contexten
     fourth: Vierde
