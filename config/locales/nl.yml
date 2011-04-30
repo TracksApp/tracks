@@ -327,7 +327,7 @@ nl:
     show_tomorrow: Toon morgen
     calendar: 
       get_in_ical_format: Ontvang deze agenda in iCal-formaat
-      due_next_week: Deadline deze week
+      due_next_week: Deadline volgende week
       due_this_week: Deadline in rest van deze week
       no_actions_due_next_week: Geen acties met deadline in volgende week
       due_today: Deadline vandaag
