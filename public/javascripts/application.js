@@ -76,6 +76,9 @@ var TracksForm = {
 
         /* submit todo form after entering new todo */
         $("button#todo_new_action_submit").live('click', function (ev) {
+            if ($('input#predecessor_input').val() != "") 
+              if (!confirm(i18n['todos.unresolved_dependency']))
+                return false;
             if (TodoItems.askIfNewContextProvided('', this))
                 submit_with_ajax_and_block_element('form#todo-form-new-action', $(this));
             return false;
