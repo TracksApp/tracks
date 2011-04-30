@@ -13,11 +13,7 @@
 * Copyright: (cc) 2004-2011 rousette.org.uk.
 * License:  GNU GPL
 
-== Version 2.0 (RC)
-
-(RC1 was never release, but was mentioned in the DOCS for while. People are
- referencing RC1 with bug report. So for the release we've bumped the version
- to RC2)
+== Version 2.0
 
 New features:
 1. Redesign of menus and introduction of a context menu per todo
