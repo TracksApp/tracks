@@ -27,6 +27,11 @@
 function remove_todo(next_steps) {
   $('#<%= dom_id(@todo) %>').fadeOut(400, function() {
     $('#<%= dom_id(@todo) %>').remove();
+    <% if source_view_is :calendar 
+         # in calendar view it is possible to have a todo twice on the page 
+    -%>
+         $('#<%= dom_id(@todo) %>').remove();
+    <% end %>
     <%= show_empty_message_in_source_container -%>
     next_steps.go();
   });

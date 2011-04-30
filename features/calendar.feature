@@ -22,7 +22,7 @@ Feature: Show all due actions in a calendar view
     Then the badge should show 1
     And I should see "a new next action"
 
-  @selenium 
+  @selenium
   Scenario: Clearing the due date of a todo will remove it from the calendar
     When I go to the home page
     And I submit a new action with description "a new next action" in the context "@calendar"
@@ -32,7 +32,7 @@ Feature: Show all due actions in a calendar view
     When I clear the due date of "a new next action"
     Then I should not see "a new next action"
 
-  @selenium 
+  @selenium
   Scenario: Marking a todo complete will remove it from the calendar
     Given I have a todo "a new next action" in the context "@calendar" which is due tomorrow
     When I go to the calendar page

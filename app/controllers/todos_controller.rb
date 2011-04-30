@@ -625,7 +625,7 @@ class TodosController < ApplicationController
     due_this_week_date = Time.zone.now.end_of_week
     due_next_week_date = due_this_week_date + 7.days
     due_this_month_date = Time.zone.now.end_of_month
-    
+        
     @due_today = current_user.todos.not_completed.find(:all,
       :include => [:taggings, :tags],
       :conditions => ['todos.due <= ?', due_today_date],
@@ -646,7 +646,7 @@ class TodosController < ApplicationController
       :include => [:taggings, :tags],
       :conditions => ['todos.due > ?', due_this_month_date],
       :order => "due")
-
+      
     @count = current_user.todos.not_completed.are_due.count
 
     respond_to do |format|
@@ -1277,6 +1277,16 @@ class TodosController < ApplicationController
     return false unless params['context_id'].blank?
     return false if context_name.blank?
     true
+  end
+  
+  def determine_non_uniq_todo
+    # for calendar view. TODO: unused
+    all_list_uniq_ids = (@due_today.map(&:id) + @due_this_week.map(&:id) +
+      @due_next_week.map(&:id) + @due_this_month.map(&:id) + @due_after_this_month.map(&:id)).uniq
+    all_list_count = @due_today.count + @due_this_week.count +
+      @due_next_week.count + @due_this_month.count + @due_after_this_month.count
+    
+    return !( all_list_uniq_ids.length == all_list_count )
   end
 
   class FindConditionBuilder
