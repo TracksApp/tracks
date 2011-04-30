@@ -421,6 +421,7 @@ en:
     contexts: Contexts
     projects: Projects
   todos:
+    unresolved_dependency: "The value you entered in the dependency field did not resolve to an existing action. This value will not be saved with the rest of the action. Continue?"
     action_saved: "Action saved"
     recurring_action_saved: "Recurring action saved"
     action_saved_to_tickler: "Action saved to tickler"

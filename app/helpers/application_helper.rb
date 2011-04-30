@@ -252,7 +252,7 @@ module ApplicationHelper
     contexts.show_form        contexts.show_form_title
     contexts.new_context_pre  contexts.new_context_post
     common.cancel             common.ok
-    common.ajaxError
+    common.ajaxError          todos.unresolved_dependency
     }.each do |s|
       js << "i18n['#{s}'] = '#{ t(s).gsub(/'/, "\\\\'") }';\n"
     end
