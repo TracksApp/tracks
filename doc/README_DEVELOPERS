@@ -34,7 +34,7 @@ If you want to run tests using another database, that's fine, too. Just change y
 
 5. SELENIUM TESTS (Selenium on Rails)
 
-This testing style is deprecated and are being moved over to Selenium via Cucumber.
+This testing style is deprecated and tests are being moved over to Selenium via Cucumber.
 
 See the wiki for more information to run the tests that are not yet migrated: http://www.getontracks.org/wiki/Testing
 
@@ -53,3 +53,5 @@ To run the cucumber test run
 and for those using javascript/ajax use
 
   rake cucumber:selenium
+  
+See the wiki for more information on testing: http://www.getontracks.org/wiki/Testing
