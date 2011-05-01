@@ -57,6 +57,7 @@ de:
     first: Erste
     website: Website
     numbered_step: Schritt %{number}
+    fourth: Vierte
     sort: 
       by_task_count_title: Nach Anzahl der Aufgaben sortieren
       by_task_count_title_confirm: Sollen diese Projekte wirklich nach Anzahl der Aufgaben sortiert werden? Die bisherige Sortier-Reihenfolge wird damit &uuml;berschrieben.
@@ -65,27 +66,32 @@ de:
       alphabetically_confirm: Sollen diese Projekte wirklich alphabetisch sortiert werden? Die bisherige Sortier-Reihenfolge wird damit &uuml;berschrieben.
       alphabetically_title: Projekte alphabetisch sortieren
       by_task_count: Nach Anzahl der Aufgaben
-    fourth: Vierte
-    drag_handle: Verschieben
     create: Erstellen
-    errors_with_fields: "Mit folgenden Feldern sind Probleme aufgetreten:"
+    drag_handle: Verschieben
     context: Kontext
+    errors_with_fields: "Mit folgenden Feldern sind Probleme aufgetreten:"
     description: Beschreibung
     contexts: Kontexte
-    update: Aktualisieren
     wiki: Wiki
+    update: Aktualisieren
     bugs: Bugs
     ajaxError: Fehler beim Empfangen vom Server
-    email: E-Mail
     search: Suchen
+    email: E-Mail
+  integrations: 
+    opensearch_description: In Tracks suchen
+    gmail_description: "Gadget, um Tracks als Gadget zu Googlemail hinzuzuf\xC3\xBCgen"
+    applescript_next_action_prompt: "Beschreibung der n\xC3\xA4chsten Aufgabe:"
+    applescript_success_after_id: erstellt
+    applescript_success_before_id: "N\xC3\xA4chste neue Aufgabe mit ID"
   layouts: 
     toggle_notes: Notizen umschalten
     next_actions_rss_feed: RSS-Feed kommende Aufgaben
     toggle_notes_title: Alle Notizen umschalten
     mobile_navigation: 
       logout: Abmelden
-      feeds: Feeds
       new_action: 0-Neue Aufgabe
+      feeds: Feeds
       starred: 4-Markiert
       projects: 3-Projekte
       tickler: Notizbuch
@@ -110,8 +116,8 @@ de:
       starred_title: Markierte Aufgaben betrachten
       recurring_todos_title: Sich wiederholende To-Dos verwalten
       completed_tasks: Erledigt
-      stats_title: Statistiken anzeigen
       tickler: Notizbuch
+      stats_title: Statistiken anzeigen
       organize: Organisieren
       view: Betrachten
       completed_tasks_title: "Vollst\xC3\xA4ndig"
@@ -119,15 +125,9 @@ de:
       home: Start
       contexts_title: Kontexte
       preferences_title: Meine Einstellungen
-      calendar: Kalender
       projects_title: Projekte
+      calendar: Kalender
       search: "Alle Eintr\xC3\xA4ge durchsuchen"
-  integrations: 
-    opensearch_description: In Tracks suchen
-    gmail_description: "Gadget, um Tracks als Gadget zu Googlemail hinzuzuf\xC3\xBCgen"
-    applescript_next_action_prompt: "Beschreibung der n\xC3\xA4chsten Aufgabe:"
-    applescript_success_after_id: erstellt
-    applescript_success_before_id: "N\xC3\xA4chste neue Aufgabe mit ID"
   data: 
     import_successful: Import war erfolgreich.
     import_errors: Beim Import sind Fehler aufgetreten.
@@ -138,6 +138,8 @@ de:
     todo: 
       error_date_must_be_future: muss ein Datum in der Zukunft sein
     preference: 
+      due_on: "F\xC3\xA4llig auf %{date}"
+      due_in: "F\xC3\xA4llig in %{days} Tagen"
       due_styles: 
       - "F\xC3\xA4llig in ___ Tagen"
       - "F\xC3\xA4llig am _______"
@@ -198,8 +200,8 @@ de:
         exclusion: "ist nicht verf\xC3\xBCgbar"
         odd: muss ungerade sein
         too_short: ist zu kurz (nicht weniger als %{count} Zeichen)
-        wrong_length: "hat die falsche L\xC3\xA4nge (muss genau %{count} Zeichen haben)"
         empty: "muss ausgef\xC3\xBCllt werden"
+        wrong_length: "hat die falsche L\xC3\xA4nge (muss genau %{count} Zeichen haben)"
         even: muss gerade sein
         less_than: muss kleiner als %{count} sein
         greater_than: "muss gr\xC3\xB6\xC3\x9Fer als %{count} sein"
@@ -251,13 +253,13 @@ de:
     actions_avg_completed_30days: und %{count} durchschnittlich davon erledigt.
     top5_contexts: Top 5 aller Kontexte
     action_completion_time_title: Fertigstellungszeit (alle abgeschlossenen Aktionen)
-    projects: Projekte
     actions_last_year: Aktionen im letzten Jahr
+    projects: Projekte
     totals_context_count: Du hast %{count} Kontexte.
     totals_visible_context_count: Von diesen sind %{count} sichtbare Kontexte
     totals_blocked_actions: "%{count} h\xC3\xA4ngen vom Abschluss anderer Aktionen ab."
-    actions_min_max_completion_days: "Das Minimum/Maximum an Tagen einer Vervollst\xC3\xA4ndigung ist %{min}/%{max}."
     tags: Tags
+    actions_min_max_completion_days: "Das Minimum/Maximum an Tagen einer Vervollst\xC3\xA4ndigung ist %{min}/%{max}."
     actions_min_completion_time: "Die minimale Zeit betr\xC3\xA4gt %{time}."
     no_tags_available: "keine Tags verf\xC3\xBCgbar"
     actions_day_of_week_title: Wochentag (alle Aktionen)
@@ -288,8 +290,8 @@ de:
     click_to_return_link: hier
     totals_hidden_context_count: und %{count} sind versteckte Kontexte.
     actions_avg_completed: und %{count} durchschnittlich davon monatlich erledigt
-    totals: Ingesamt
     contexts: Kontexte
+    totals: Ingesamt
     no_actions_selected: "Es sind keine Aufgaben ausgew\xC3\xA4hlt."
     running_time_all_legend: 
       actions: Aktionen
@@ -397,6 +399,11 @@ de:
     unresolved_dependency: "Der Wert, den Sie in die Abh\xC3\xA4ngigkeit Feld eingegeben nicht zu einer bestehenden Aktion zu l\xC3\xB6sen. Dieser Wert wird nicht mit dem Rest der Aktion gerettet werden. Weiter gehen?"
     show_today: Heute anzeigen
     no_actions_found_title: Keine Aktionen gefunden
+    next_actions_due_date: 
+      overdue_by: "\xC3\x9Cberf\xC3\xA4llig mit %{days}"
+      due_today: "Heute f\xC3\xA4llig"
+      due_in_x_days: "F\xC3\xA4llig in %{days} Tagen"
+      due_tomorrow: "F\xC3\xA4llig morgen"
     completed_last_x_days: In den letzten %{count} Tagen erledigt
     no_actions_with: "Im Augenblick gibt es keine unvollst\xC3\xA4ndigen Aktionen mit dem Tag '%{tag_name}'"
     defer_x_days: 
@@ -456,8 +463,8 @@ de:
       yearly_every_x_day: "Jeden %{day}. %{month} "
       recurrence_on_options: Setze Wiederholung auf
       daily_every_number_day: Alle %{number} Tage
-      ends_on: Endet am
       weekly_every_number_week: Kehrt jede %{number}. Woche wieder am
+      ends_on: Endet am
       show_options: To-Do anzeigen
       no_end_date: Kein Enddatum
       day_x_on_every_x_month: Tag %{day} in jedem %{month}. Monat
@@ -472,8 +479,8 @@ de:
     added_dependency: "%{dependency} als Abh&auml;ngigkeit hinzugef&uuml;gt."
     no_deferred_actions: Zur Zeit sind keine zur&uuml;ckgestellten Aktionen vorhanden.
     recurrence_completed: Nach dieser wiederkehrenden Aktion, die du gerade abgeschlossen hast, folgt keine mehr. Die Wiederholung endet hiermit
-    no_actions_found: "Momentan gibt es keine unvollst\xC3\xA4ndigen Aktionen."
     in_pending_state: und als ausstehend markiert
+    no_actions_found: "Momentan gibt es keine unvollst\xC3\xA4ndigen Aktionen."
     error_toggle_complete: "K\xC3\xB6nnte nicht diese Marke todo komplett"
     due: F&auml;llig
     action_marked_complete_error: Die Aktion <strong>'%{description}'</strong> wurde aufgrund eines Fehlers NICHT als <strong>%{completed}</strong> markiert.
@@ -509,8 +516,8 @@ de:
     was_marked_hidden: wurde als verborgen markiert
     edit_project_title: Projekt bearbeiten
     default_tags_removed_notice: Standard-Tags entfernt
-    hide_form: Fomular verstecken
     page_title: "TRACKS::Projekt: %{project}"
+    hide_form: Fomular verstecken
     this_project: Dieses Projekt
     project_state: Projekt ist %{state}
     show_form_title: Neues Projekt anlegen
@@ -544,13 +551,22 @@ de:
     completed_actions: "Erledigte Aufgaben f\xC3\xBCr dieses Projekt"
     default_context_removed: Standard-Kontext entfernt
     add_note_submit: "Notiz hinzuf\xC3\xBCgen"
-    active_projects: Aktive Projekte
     status_project_name_changed: "Projektname ge\xC3\xA4ndert"
+    active_projects: Aktive Projekte
     no_default_context: Dieses Projekt hat keinen Standard-Kontext
     with_no_default_tags: und hat keinen Standardwert Tags
     default_context: Der Standard-Kontext dieses Projektes ist %{context}
     state: Dieses Projekt ist %{state}
     edit_project_settings: Edit Project Settings
+  states: 
+    hidden_plural: Versteckte
+    completed: Erledigt
+    completed_plural: Erledigte
+    visible_plural: Sichtbare
+    active_plural: Aktive
+    visible: Sichtbar
+    hidden: Versteckt
+    active: Aktiv
   time: 
     am: vormittags
     formats: 
@@ -559,15 +575,8 @@ de:
       short: "%d. %B, %H:%M Uhr"
       long: "%A, %d. %B %Y, %H:%M Uhr"
     pm: nachmittags
-  states: 
-    hidden_plural: Versteckte
-    completed: Erledigt
-    completed_plural: Erledigte
-    visible_plural: Sichtbare
-    active_plural: Aktive
-    visible: Sichtbar
-    active: Aktiv
-    hidden: Versteckt
+  errors: 
+    user_unauthorized: "401 Unauthorized: Nur administrative Benutzer d\xC3\xBCrfen auf diese Funktion zugreifen."
   preferences: 
     change_identity_url: "\xC3\x84ndere deine Identit\xC3\xA4ts-URL"
     open_id_url: "Deine OpenID-URL lautet:"
@@ -585,11 +594,9 @@ de:
     generate_new_token: Neues Token generieren
     token_header: Dein Token
     change_authentication_type: "Authentifzierungsart \xC3\xA4ndern"
-    current_authentication_type: Dein Authentifizierungsart ist %{auth_type}
     authentication_header: Deine Authentifizierung
+    current_authentication_type: Dein Authentifizierungsart ist %{auth_type}
     generate_new_token_confirm: "Bist du sicher? Wenn du ein neues Token generierst, wird dies das alte Token ersetzen und jegliche externe Nutzung st\xC3\xB6ren, die das alte Token verwendet."
-  errors: 
-    user_unauthorized: "401 Unauthorized: Nur administrative Benutzer d\xC3\xBCrfen auf diese Funktion zugreifen."
   date: 
     month_names: 
     - 
@@ -734,8 +741,8 @@ de:
     signup_new_user: Neuen Benutzer anlegen
     change_authentication_type: "Authentifizierungsart \xC3\xA4ndern"
     auth_change_submit: "Authentifizierungsart \xC3\xA4ndern"
-    identity_url: Identity-URL
     openid_ok_pref_failed: Die URL %{url} wurde erfolgreich als Identit&auml;t verifiziert, beim Speichern der Einstellungen trat jedoch ein Fehler auf.
+    identity_url: Identity-URL
     total_notes: Alle Notizen
     select_authentication_type: "W\xC3\xA4hle deine neue Authentifizierungsart und klicke 'Authentifizierungsart \xC3\xA4ndern' an, um deine aktuellen Einstellungen zu \xC3\xBCberschreiben."
   sidebar: 

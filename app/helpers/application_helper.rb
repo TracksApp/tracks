@@ -32,28 +32,36 @@ module ApplicationHelper
     end
 
     days = days_from_today(due)
-       
-    case days
-    when 0
-      "<a title='#{format_date(due)}'><span class=\"amber\">Due Today</span></a> "
-    when 1
-      "<a title='#{format_date(due)}'><span class=\"amber\">Due Tomorrow</span></a> "
-      # due 2-7 days away
-    when 2..7
-      if prefs.due_style == Preference.due_styles[:due_on]
-        "<a title='#{format_date(due)}'><span class=\"orange\">Due on #{due.strftime("%A")}</span></a> "
-      else
-        "<a title='#{format_date(due)}'><span class=\"orange\">Due in #{pluralize(days, 'day')}</span></a> "
-      end
-    else
-      # overdue or due very soon! sound the alarm!
-      if days < 0
-        "<a title='#{format_date(due)}'><span class=\"red\">Overdue by #{pluralize(days * -1, 'day')}</span></a> "
-      else
-        # more than a week away - relax
-        "<a title='#{format_date(due)}'><span class=\"green\">Due in #{pluralize(days, 'day')}</span></a> "
-      end
-    end
+
+    colors = ['amber','amber','orange','orange','orange','orange','orange','orange']
+    color = :red if days < 0
+    color = :green if days > 7
+    color = colors[days] if color.nil?
+    
+    return content_tag(:a, {:title => format_date(due)}) {
+      content_tag(:span, {:class => color}) {
+        case days
+        when 0
+          t('todos.next_actions_due_date.due_today')
+        when 1
+          t('todos.next_actions_due_date.due_tomorrow')
+        when 2..7
+          if prefs.due_style == Preference.due_styles[:due_on]
+            t('models.preference.due_on', due.strftime("%A"))
+          else
+            t('models.preference.due_in', :days => days)
+          end
+        else
+          # overdue or due very soon! sound the alarm!
+          if days < 0
+            t('todos.next_actions_due_date.overdue_by', :days => pluralize(days * -1, 'day'))
+          else
+            # more than a week away - relax
+            t('todos.next_actions_due_date.due_in', :days => pluralize(days, 'day'))
+          end
+        end
+      }
+    }
   end
 
   # Check due date in comparison to today's date Flag up date appropriately with
