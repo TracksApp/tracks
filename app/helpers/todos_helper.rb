@@ -379,7 +379,7 @@ module TodosHelper
       page.project  {
         container_id = "p#{@original_item_project_id}empty-nd" if @remaining_in_context == 0
         container_id = "tickler-empty-nd" if (
-          ( (@todo_was_activated_from_deferred_state || @todo_was_activated_from_pending_state) && @remaining_deferred_or_pending_count == 0) ||
+          ( (@todo_was_activated_from_deferred_state || @todo_was_activated_from_pending_state || @todo_was_destroyed_from_deferred_or_pending_state) && @remaining_deferred_or_pending_count == 0) ||
             (@original_item_was_deferred && @remaining_deferred_or_pending_count == 0 && @todo.completed?) )
         container_id = "empty-d" if @completed_count && @completed_count == 0 && !@todo.completed?
       }
