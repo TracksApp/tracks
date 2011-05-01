@@ -1,5 +1,5 @@
 <% if @saved -%>
-  TracksPages.page_notify('notice', "<%=escape_javascript @status_message%>", 5);
+  TracksPages.page_notify('notice', "<%=escape_javascript @status_message%>", 8);
   TracksPages.hide_errors();
   TracksPages.set_page_badge(<%= @down_count %>);
   <% if should_show_new_item -%>
