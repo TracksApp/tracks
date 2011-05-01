@@ -23,6 +23,23 @@ en:
         mobile_todos_per_page: "Actions per page (Mobile View)"
         sms_email: "From email"
         sms_context: "Default email context"
+        show_hidden_projects_in_sidebar: "Show hidden projects in sidebar"
+        show_hidden_contexts_in_sidebar: "Show hidden contexts in sidebar"
+        date_format: Date format
+        staleness_starts: "Start of staleness"
+        sms_context: Default email context
+        verbose_action_descriptors: "Verbose action descriptors"
+        mobile_todos_per_page: Actions per page (Mobile View)
+        show_number_completed: "Show number of completed actions"
+        title_date_format: "Title date format"
+        refresh: Refresh interval (in minutes)
+        week_starts: Week starts on
+        due_style: "Due style"
+        time_zone: "Time zone"
+        locale: Locale
+        sms_email: From email
+        show_project_on_todo_done: Go to project page on completing todo
+        show_completed_projects_in_sidebar: "Show completed projects in sidebar"
   models:
     project:
       feed_title: "Tracks Projects"

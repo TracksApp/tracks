@@ -27,7 +27,7 @@ form_for(todo, :html=> { :name=>'todo', :id => dom_id(@todo, 'form'), :class => 
   <%= text_field_tag 'tag_list', tag_list_text, :id => dom_id(@todo, 'tag_list'), :size => 30, :tabindex => 12 %>
 
   <div class="due_input">
-    <label for="<%= dom_id(@todo, 'due_label') %>">Due</label>
+    <label for="<%= dom_id(@todo, 'due_label') %>"><%= Todo.human_attribute_name('due') %></label>
     <%= date_field_tag("todo[due]", dom_id(@todo, 'due'), format_date(@todo.due), "tabindex" => 13) %>
     <a href="#" id="<%= dom_id(@todo, 'due_x') %>" class="date_clear" title="<%= t('todos.clear_due_date') %>">
       <%= image_tag("delete_off.png", :alt => "Clear due date") %>
