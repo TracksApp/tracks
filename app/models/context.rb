@@ -19,6 +19,7 @@ class Context < ActiveRecord::Base
   validates_does_not_contain :name, :string => ',', :message => "cannot contain the comma (',') character"
 
   def self.feed_options(user)
+    # TODO: move to view or helper
     {
       :title => 'Tracks Contexts',
       :description => "Lists all the contexts for #{user.display_name}"
@@ -36,14 +37,7 @@ class Context < ActiveRecord::Base
   def title
     name
   end
-  
-  def summary(undone_todo_count)
-    s = "<p>#{undone_todo_count}. "
-    s += "Context is #{hidden? ? 'Hidden' : 'Active'}."
-    s += "</p>"
-    s
-  end
-  
+    
   def new_record_before_save?
     @new_record_before_save
   end  

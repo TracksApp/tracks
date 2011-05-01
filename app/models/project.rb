@@ -1,28 +1,5 @@
 class Project < ActiveRecord::Base
   has_many :todos, :dependent => :delete_all
-
-  # TODO: remove these scopes. Can be replaced by the named scopes on the todo relation
-  has_many :not_done_todos,
-    :include => [:context,:tags,:project],
-    :class_name => 'Todo',
-    :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC",
-    :conditions => ["todos.state = ?", 'active']
-  has_many :done_todos,
-    :include => [:context,:tags,:project],
-    :class_name => 'Todo',
-    :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC",
-    :conditions => ["todos.state = ?", 'completed']
-  has_many :deferred_todos,
-    :include => [:context,:tags,:project],
-    :class_name => 'Todo',
-    :conditions => ["todos.state = ? ", "deferred"],
-    :order => "show_from"
-  has_many :pending_todos,
-    :include => [:context,:tags,:project],
-    :class_name => 'Todo',
-    :conditions => ["todos.state = ? ", "pending"],
-    :order => "show_from"
-
   has_many :notes, :dependent => :delete_all, :order => "created_at DESC"
   has_many :recurring_todos
 

@@ -7,9 +7,9 @@ class TodosController < ApplicationController
   append_before_filter :find_and_activate_ready, :only => [:index, :list_deferred]
 
   # TODO: replace :except with :only
-  append_before_filter :init, :except => [ :tag, :tags, :destroy, :completed,
-    :completed_archive, :check_deferred, :toggle_check, :toggle_star,
-    :edit, :update, :defer, :create, :calendar, :auto_complete_for_predecessor, :remove_predecessor, :add_predecessor]
+  append_before_filter :init, :except => [ :tag, :tags, :destroy, :done,
+    :check_deferred, :toggle_check, :toggle_star, :edit, :update, :defer, :create,
+    :calendar, :auto_complete_for_predecessor, :remove_predecessor, :add_predecessor]
 
   protect_from_forgery :except => :check_deferred
 
@@ -349,7 +349,7 @@ class TodosController < ApplicationController
     determine_remaining_in_context_count(@original_item_context_id)
 
     respond_to do |format|
-      format.js {render :action => :update }
+      format.js  { render :action => :update }
       format.xml { render :xml => @todo.to_xml( :except => :user_id ) }
     end
   end
@@ -468,20 +468,15 @@ class TodosController < ApplicationController
     end
   end
 
-  def completed
+  def done
+    @source_view = 'done'
     @page_title = t('todos.completed_tasks_title')
-    @done = current_user.completed_todos
-    @done_today = @done.completed_within Time.zone.now - 1.day
-    @done_this_week = @done.completed_within Time.zone.now - 1.week
-    @done_this_month = @done.completed_within Time.zone.now - 4.week
+    completed_todos = current_user.todos.completed
+    @done_today = completed_todos.completed_after(Time.zone.now.beginning_of_day)
+    @done_this_week = completed_todos.completed_after(Time.zone.now.beginning_of_week)-@done_today
+    @done_this_month = completed_todos.completed_after(Time.zone.now.beginning_of_month)-@done_this_week
+    @done_previous_month = completed_todos.completed_after( (Time.zone.now.beginning_of_month - 1.day).beginning_of_month)-@done_this_month
     @count = @done_today.size + @done_this_week.size + @done_this_month.size
-  end
-
-  def completed_archive
-    @page_title = t('todos.archived_tasks_title')
-    @done = current_user.completed_todos
-    @count = @done.size
-    @done_archive = @done.completed_more_than Time.zone.now - 28.days
   end
   
   def list_deferred
@@ -490,7 +485,7 @@ class TodosController < ApplicationController
     
     @contexts_to_show = @contexts = current_user.contexts.find(:all)
     
-    @not_done_todos = current_user.deferred_todos(:include => [:tags, :taggings, :projects]) + current_user.pending_todos(:include => [:tags, :taggings, :projects])
+    @not_done_todos = current_user.todos.deferred(:include => [:tags, :taggings, :projects]) + current_user.todos.pending(:include => [:tags, :taggings, :projects])
     @down_count = @count = @not_done_todos.size
     
     respond_to do |format|

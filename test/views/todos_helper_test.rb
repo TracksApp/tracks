@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-class TodosHelperTest < Test::Rails::HelperTestCase
+class TodosHelperTest < ActiveSupport::HelperTestCase
   fixtures :users
 
   def setup

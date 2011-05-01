@@ -79,19 +79,9 @@ class User < ActiveRecord::Base
                 return find(:all, :conditions => scope_conditions)
               end
             end
-  has_many :active_projects,
-           :class_name => 'Project',
-           :order => 'projects.position ASC',
-           :conditions => [ 'state = ?', 'active' ]
-  has_many :active_contexts,
-           :class_name => 'Context',
-           :order => 'position ASC',
-           :conditions => [ 'hide = ?', false ]
   has_many :todos,
            :order => 'todos.completed_at DESC, todos.created_at DESC',
            :dependent => :delete_all
-  has_many :project_hidden_todos,
-           :conditions => ['(state = ? OR state = ?)', 'project_hidden', 'active']
   has_many :recurring_todos,
            :order => 'recurring_todos.completed_at DESC, recurring_todos.created_at DESC',
            :dependent => :delete_all
@@ -102,23 +92,6 @@ class User < ActiveRecord::Base
               def find_and_activate_ready
                 find(:all, :conditions => ['show_from <= ?', Time.zone.now ]).collect { |t| t.activate! }
               end
-           end
-  has_many :pending_todos,
-           :class_name => 'Todo',
-           :conditions => [ 'state = ?', 'pending' ],
-           :order => 'show_from ASC, todos.created_at DESC'
-  has_many :completed_todos,
-           :class_name => 'Todo',
-           :conditions => ['todos.state = ? AND NOT(todos.completed_at IS NULL)', 'completed'],
-           :order => 'todos.completed_at DESC',
-           :include => [ :project, :context ] do
-             def completed_within( date )
-               reject { |x| x.completed_at < date }
-             end
-
-             def completed_more_than( date )
-               reject { |x| x.completed_at > date }
-             end
            end
   has_many :notes, :order => "created_at DESC", :dependent => :delete_all
   has_one :preference, :dependent => :destroy

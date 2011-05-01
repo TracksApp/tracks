@@ -1,5 +1,8 @@
 class Todo < ActiveRecord::Base
 
+  after_save :save_predecessors
+
+  # relations
   belongs_to :context
   belongs_to :project
   belongs_to :user
@@ -13,20 +16,17 @@ class Todo < ActiveRecord::Base
     :source => :predecessor, :conditions => ['NOT (todos.state = ?)', 'completed']
   has_many :pending_successors, :through => :predecessor_dependencies,
     :source => :successor, :conditions => ['todos.state = ?', 'pending']
-  
-  after_save :save_predecessors
 
+  # scopes for states of this todo
   named_scope :active, :conditions => { :state => 'active' }
   named_scope :active_or_hidden, :conditions => ["todos.state = ? OR todos.state = ?", 'active', 'project_hidden']
-  named_scope :not_completed, :conditions =>  ['NOT (todos.state = ? )', 'completed']
-  named_scope :completed, :conditions =>  ["NOT(todos.completed_at IS NULL)"]
-  named_scope :are_due, :conditions => ['NOT (todos.due IS NULL)']
-  named_scope :deferred, :conditions => ["todos.completed_at IS NULL AND NOT(todos.show_from IS NULL)"]
+  named_scope :not_completed, :conditions =>  ['NOT (todos.state = ?)', 'completed']
+  named_scope :completed, :conditions =>  ["NOT (todos.completed_at IS NULL)"]
+  named_scope :deferred, :conditions => ["todos.completed_at IS NULL AND NOT (todos.show_from IS NULL)"]
   named_scope :blocked, :conditions => ['todos.state = ?', 'pending']
+  named_scope :pending, :conditions => ['todos.state = ?', 'pending']
   named_scope :deferred_or_blocked, :conditions => ["(todos.completed_at IS NULL AND NOT(todos.show_from IS NULL)) OR (todos.state = ?)", "pending"]
   named_scope :not_deferred_or_blocked, :conditions => ["todos.completed_at IS NULL AND todos.show_from IS NULL AND NOT(todos.state = ?)", "pending"]
-  named_scope :with_tag, lambda { |tag| {:joins => :taggings, :conditions => ["taggings.tag_id = ? ", tag.id] } }
-  named_scope :of_user, lambda { |user_id| {:conditions => ["todos.user_id = ? ", user_id] } }
   named_scope :hidden, 
     :joins => :context,
     :conditions => ["todos.state = ? OR (contexts.hide = ? AND (todos.state = ? OR todos.state = ? OR todos.state = ?))",
@@ -35,6 +35,13 @@ class Todo < ActiveRecord::Base
     :joins => [:context],
     :conditions => ['NOT(todos.state = ? OR (contexts.hide = ? AND (todos.state = ? OR todos.state = ? OR todos.state = ?)))',
     'project_hidden', true, 'active', 'deferred', 'pending']
+
+  # other scopes
+  named_scope :are_due, :conditions => ['NOT (todos.due IS NULL)']
+  named_scope :with_tag, lambda { |tag| {:joins => :taggings, :conditions => ["taggings.tag_id = ? ", tag.id] } }
+  named_scope :of_user, lambda { |user_id| {:conditions => ["todos.user_id = ? ", user_id] } }
+  named_scope :completed_after, lambda { |date| {:conditions => ["todos.completed_at > ? ", date] } }
+  named_scope :completed_before, lambda { |date| {:conditions => ["todos.completed_at < ? ", date] } }  
 
   STARRED_TAG_NAME = "starred"
 
@@ -302,7 +309,7 @@ class Todo < ActiveRecord::Base
 
     context_id = default_context_id
     unless(context.nil?)
-      found_context = user.active_contexts.find_by_namepart(context)
+      found_context = user.contexts.active.find_by_namepart(context)
       found_context = user.contexts.find_by_namepart(context) if found_context.nil?
       context_id = found_context.id unless found_context.nil?
     end
@@ -318,7 +325,7 @@ class Todo < ActiveRecord::Base
         found_project.name = project[4..255+4].strip
         found_project.save!
       else
-        found_project = user.active_projects.find_by_namepart(project)
+        found_project = user.projects.active.find_by_namepart(project)
         found_project = user.projects.find_by_namepart(project) if found_project.nil?
       end
       project_id = found_project.id unless found_project.nil?

@@ -48,8 +48,8 @@ class ProjectsController < ApplicationController
     @page_title = t('projects.page_title', :project => @project.name)
     
     @not_done = @project.todos.active_or_hidden(:include => [:tags, :context, :predecessors])
-    @deferred = @project.deferred_todos(:include => [:tags, :context, :predecessors])
-    @pending = @project.pending_todos(:include => [:tags, :context, :predecessors])
+    @deferred = @project.todos.deferred(:include => [:tags, :context, :predecessors])
+    @pending = @project.todos.pending(:include => [:tags, :context, :predecessors])
     @done = @project.todos.find_in_state(:all, :completed,
       :order => "todos.completed_at DESC", :limit => current_user.prefs.show_number_completed, :include => [:context, :tags, :predecessors])
 
@@ -274,14 +274,14 @@ class ProjectsController < ApplicationController
     lambda do
       render_rss_feed_for @projects, :feed => feed_options,
         :title => :name,
-        :item => { :description => lambda { |p| summary(p) } }
+        :item => { :description => lambda { |p| @template.summary(p) } }
     end
   end
 
   def render_atom_feed
     lambda do
       render_atom_feed_for @projects, :feed => feed_options,
-        :item => { :description => lambda { |p| summary(p) },
+        :item => { :description => lambda { |p| @template.summary(p) },
         :title => :name,
         :author => lambda { |p| nil } }
     end
@@ -317,15 +317,6 @@ class ProjectsController < ApplicationController
       default_context = current_user.contexts.find_or_create_by_name(default_context_name)
       p['default_context_id'] = default_context.id
     end
-  end
-
-  def summary(project)
-    project_description = ''
-    project_description += sanitize(markdown( project.description )) unless project.description.blank?
-    project_description += "<p>#{count_undone_todos_phrase(p)}. "
-    project_description += t('projects.project_state', :state => project.state)
-    project_description += "</p>"
-    project_description
   end
 
 end

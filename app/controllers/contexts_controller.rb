@@ -212,14 +212,14 @@ class ContextsController < ApplicationController
   def render_contexts_rss_feed
     lambda do
       render_rss_feed_for current_user.contexts.all, :feed => feed_options,
-        :item => { :description => lambda { |c| c.summary(count_undone_todos_phrase(c)) } }
+        :item => { :description => lambda { |c| @template.summary(c, count_undone_todos_phrase(c)) } }
     end
   end
 
   def render_contexts_atom_feed
     lambda do
       render_atom_feed_for current_user.contexts.all, :feed => feed_options,
-        :item => { :description => lambda { |c| c.summary(count_undone_todos_phrase(c)) },
+        :item => { :description => lambda { |c| @template.summary(c, count_undone_todos_phrase(c)) },
         :author => lambda { |c| nil } }
     end
   end

@@ -24,7 +24,7 @@ class ProjectsControllerTest < TodoContainerControllerTestBase
     assert_not_nil assigns['deferred']
     assert_equal 1, assigns['deferred'].size
 
-    t = p.not_done_todos[0]
+    t = p.todos.not_completed[0]
     t.show_from = 1.days.from_now.utc
     t.save!
     

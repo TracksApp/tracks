@@ -3,7 +3,8 @@ ActionController::Routing::Routes.draw do |map|
     :member => {:change_password => :get, :update_password => :post,
     :change_auth_type => :get, :update_auth_type => :post, :complete => :get,
     :refresh_token => :post }
-  map.with_options :controller => "users" do |users|
+    
+  map.with_options :controller => :users do |users|
     users.signup 'signup', :action => "new"
   end
 
@@ -11,21 +12,28 @@ ActionController::Routing::Routes.draw do |map|
     contexts.resources :todos, :name_prefix => "context_"
   end
 
+  map.with_options :controller => :contexts do |contexts|
+    contexts.done 'contexts/done', :action => 'completed'
+  end
+
   map.resources :projects, :collection => {:order => :post, :alphabetize => :post, :actionize => :post} do |projects|
     projects.resources :todos, :name_prefix => "project_"
+  end
+  
+  map.with_options :controller => :projects do |projects|
+    projects.done 'projects/done', :action => 'completed'
   end
 
   map.resources :notes
 
   map.resources :todos,
     :member => {:toggle_check => :put, :toggle_star => :put},
-    :collection => {:check_deferred => :post, :filter_to_context => :post, :filter_to_project => :post}
-  map.with_options :controller => "todos" do |todos|
+    :collection => {:check_deferred => :post, :filter_to_context => :post, :filter_to_project => :post, :done => :get}
+
+  map.with_options :controller => :todos do |todos|
     todos.home '', :action => "index"
     todos.tickler 'tickler', :action => "list_deferred"
     todos.mobile_tickler 'tickler.m', :action => "list_deferred", :format => 'm'
-    todos.done 'done', :action => "completed"
-    todos.done_archive 'done/archive', :action => "completed_archive"
     
     # This route works for tags with dots like /todos/tag/version1.5
     # please note that this pattern consumes everything after /todos/tag
@@ -78,6 +86,7 @@ ActionController::Routing::Routes.draw do |map|
   map.stats 'stats', :controller => 'stats', :action => 'index'
   map.search 'search', :controller => 'search', :action => 'index'
   map.data 'data', :controller => 'data', :action => 'index'
+  map.done 'done', :controller => 'todos', :action => 'completed_overview'
 
   map.connect '/selenium_helper/login', :controller => 'selenium_helper', :action => 'login' if Rails.env == 'test'
   Translate::Routes.translation_ui(map) if Rails.env != "production"

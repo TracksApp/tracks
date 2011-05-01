@@ -1,0 +1,39 @@
+<div id="display_box_projects">
+  <div class="container">
+    <h2><%= t('todos.completed_today') %></h2>
+    <% if @done_today.empty? -%>
+      <div class="message"><p><%= t('todos.no_completed_actions') %></p></div>
+    <% else -%>
+      <%= render :partial => "todos/todo", :collection => @done_today, :locals => { :parent_container_type => "completed", :suppress_context => false, :suppress_project => false } %>
+    <% end -%>
+  </div>
+  
+  <div class="container">
+    <h2><%= t('todos.completed_rest_of_week') %></h2>
+    <% if @done_this_week.empty? -%>
+      <div class="message"><p><%= t('todos.no_completed_actions') %></p></div>
+    <% else -%>
+      <%= render :partial => "todos/todo", :collection => @done_this_week, :locals => { :parent_container_type => "completed", :suppress_context => false, :suppress_project => false } %>
+    <% end -%>
+  </div>
+  
+  <div class="container">
+    <h2><%= t('todos.completed_rest_of_month', :month_name => 'TODO') %></h2>
+    <% if @done_this_month.empty? -%>
+      <div class="message"><p><%= t('todos.no_completed_actions') %></p></div>
+    <% else -%>
+      <%= render :partial => "todos/todo", :collection => @done_this_month, :locals => { :parent_container_type => "completed", :suppress_context => false, :suppress_project => false } %>
+    <% end -%>
+  </div>
+
+  <div class="container">
+    <h2><%= t('todos.completed_rest_of_previous_month', :month_name => 'TODO2') %></h2>
+    <% if @done_previous_month.empty? -%>
+      <div class="message"><p><%= t('todos.no_completed_actions') %></p></div>
+    <% else -%>
+      <%= render :partial => "todos/todo", :collection => @done_previous_month, :locals => { :parent_container_type => "completed", :suppress_context => false, :suppress_project => false } %>
+    <% end -%>
+  </div>
+
+
+</div><!-- End of display_box -->
