@@ -417,6 +417,8 @@ class TodosController < ApplicationController
     @context_id = @todo.context_id
     @project_id = @todo.project_id
     @todo_was_destroyed_from_deferred_state = @todo.deferred?
+    @todo_was_destroyed_from_pending_state = @todo.pending?
+    @todo_was_destroyed_from_deferred_or_pending_state = @todo_was_destroyed_from_deferred_state || @todo_was_destroyed_from_pending_state
 
     # activate successors if they only depend on this todo
     activated_successor_count = 0
