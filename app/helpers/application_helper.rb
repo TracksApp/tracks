@@ -27,9 +27,7 @@ module ApplicationHelper
   # a 'traffic light' colour code
   #
   def due_date(due)
-    if due == nil
-      return ""
-    end
+    return "" if due.nil?
 
     days = days_from_today(due)
 
@@ -47,7 +45,8 @@ module ApplicationHelper
           t('todos.next_actions_due_date.due_tomorrow')
         when 2..7
           if prefs.due_style == Preference.due_styles[:due_on]
-            t('models.preference.due_on', due.strftime("%A"))
+            # TODO: internationalize strftime here
+            t('models.preference.due_on', :date => due.strftime("%A"))
           else
             t('models.preference.due_in', :days => days)
           end
