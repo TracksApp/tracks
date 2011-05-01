@@ -46,6 +46,8 @@ en:
       feed_description: "Lists all the projects for %{username}"
     preference:
       due_styles: ['Due in ___ days', 'Due on _______']
+      due_on: "Due on %{date}"
+      due_in: "Due in %{days} days"
     user:
       error_context_not_associated: "Context id %{context} not associated with user id %{user}."
       error_project_not_associated: "Project id %{project} not associated with user id %{user}."
@@ -543,6 +545,11 @@ en:
     calendar_page_title: "TRACKS::Calendar"
     next_actions_title: "Tracks - Next Actions"
     next_actions_description: "Filter:"
+    next_actions_due_date:
+      due_today: Due Today
+      due_tomorrow: Due Tomorrow
+      due_in_x_days: "Due in %{days} days"
+      overdue_by: "Overdue by %{days}"
     next_actions_title_additions:
       due_today: "due today"
       due_within_a_week: "due within a week"

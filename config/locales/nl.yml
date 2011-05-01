@@ -46,7 +46,6 @@ nl:
     first: Eerste
     website: Website
     numbered_step: Stap %{number}
-    fourth: Vierde
     sort: 
       by_task_count_title: Sorteer op aantal acties
       by_task_count_title_confirm: Weet u zeker dat u deze op aantal acties wilt sorteren? Dat zal de huidige sorteervolgorde aanpassen.
@@ -55,26 +54,33 @@ nl:
       alphabetically_confirm: Weet u zeker dat u deze projecten alfabetisch wilt sorteren? Dat zal de huidige sorteervolgorde aanpassen.
       alphabetically_title: Sorteer projecten alfabetisch
       by_task_count: Op aantal acties
-    drag_handle: SLEEP
+    fourth: Vierde
     create: Maken
-    errors_with_fields: Er waren problemen met de volgende velden
+    drag_handle: SLEEP
     context: Context
+    errors_with_fields: Er waren problemen met de volgende velden
     description: Beschrijving
     contexts: Contexten
-    wiki: Wiki
     update: Bijwerken
+    wiki: Wiki
     bugs: Fouten
     ajaxError: Er is een fout opgetreden bij het ophalen van gegevens van de server
-    search: Zoeken
     email: E-mail
+    search: Zoeken
+  integrations: 
+    opensearch_description: Zoek in Tracks
+    gmail_description: Gadget om Tracks toe te voegen aan Gmail als een gadget
+    applescript_next_action_prompt: "Omschrijving van de actie:"
+    applescript_success_after_id: gemaakt
+    applescript_success_before_id: Nieuwe actie met ID
   layouts: 
     toggle_notes: Toggle notities
     next_actions_rss_feed: RSS-feed van de acties
     toggle_notes_title: Toggle alle notities
     mobile_navigation: 
       logout: Afmelden
-      new_action: 0-Nieuwe actie
       feeds: Feeds
+      new_action: 0-Nieuwe actie
       starred: 4-Ster
       projects: 3-Projecten
       tickler: Tickler
@@ -99,8 +105,8 @@ nl:
       starred_title: Zie je ster acties
       recurring_todos_title: Beheren terugkerende acties
       completed_tasks: Gereed
-      tickler: Tickler
       stats_title: Zie je statistieken
+      tickler: Tickler
       organize: Organiseer
       view: Bekijk
       completed_tasks_title: Afgerond
@@ -108,15 +114,9 @@ nl:
       home: Start
       contexts_title: Contexten
       preferences_title: Toon mijn voorkeuren
-      calendar: Agenda
       projects_title: Projecten
+      calendar: Agenda
       search: Zoeken in alle items
-  integrations: 
-    opensearch_description: Zoek in Tracks
-    gmail_description: Gadget om Tracks toe te voegen aan Gmail als een gadget
-    applescript_next_action_prompt: "Omschrijving van de actie:"
-    applescript_success_after_id: gemaakt
-    applescript_success_before_id: Nieuwe actie met ID
   data: 
     import_successful: De import was succesvol
     import_errors: Er hebben zich fouten voorgedaan bij de import
@@ -127,6 +127,8 @@ nl:
     todo: 
       error_date_must_be_future: moet een datum in de toekomst zijn
     preference: 
+      due_on: Deadline op %{date}
+      due_in: Deadline over %{days} dagen
       due_styles: 
       - Deadline over ____ dagen
       - Deadline op ____
@@ -187,8 +189,8 @@ nl:
         exclusion: is gereserveerd
         odd: moet oneven zijn
         too_short: is te kort (minimum is %{count} karakters)
-        wrong_length: heeft de verkeerde lengte (moet %{count} karakters lang zijn)
         empty: mag niet leeg zijn
+        wrong_length: heeft de verkeerde lengte (moet %{count} karakters lang zijn)
         even: moet even zijn
         less_than: moet kleiner zijn dan %{count}
         greater_than: moet groter zijn dan %{count}
@@ -240,13 +242,13 @@ nl:
     actions_avg_completed_30days: en voltooide een gemiddelde van %{count} acties per dag.
     top5_contexts: Top 5 contexten
     action_completion_time_title: Doorlooptijd (alle voltooide acties)
-    actions_last_year: Acties in de afgelopen jaren
     projects: Projecten
+    actions_last_year: Acties in de afgelopen jaren
     totals_context_count: U heeft %{count} contexten.
     totals_visible_context_count: Van deze zijn %{count} zichtbare contexten
     totals_blocked_actions: "%{count} zijn afhankelijk van de voltooiing van hun acties."
-    actions_min_max_completion_days: De max-/minimum dagen tot voltooiing is %{min}/%{max}.
     tags: Tags
+    actions_min_max_completion_days: De max-/minimum dagen tot voltooiing is %{min}/%{max}.
     actions_min_completion_time: De minimale tijd tot afronding is %{time}.
     no_tags_available: geen tags beschikbaar
     actions_day_of_week_title: Dag van de week (alle acties)
@@ -277,8 +279,8 @@ nl:
     click_to_return_link: hier
     totals_hidden_context_count: en %{count} zijn verborgen contexten.
     actions_avg_completed: en voltooide een gemiddelde van %{count} acties per maand.
-    contexts: Contexten
     totals: Totalen
+    contexts: Contexten
     no_actions_selected: Er zijn geen acties geselecteerd.
     running_time_all_legend: 
       actions: Acties
@@ -386,6 +388,11 @@ nl:
     unresolved_dependency: De waarde die u ingevoerd heeft in het afhankelijkheden veld is niet herleidbaar naar een bestaande actie. Deze waarde wordt niet bewaard met de rest van de actie. Doorgaan?
     show_today: Toon vandaag
     no_actions_found_title: Geen acties gevonden
+    next_actions_due_date: 
+      overdue_by: Over deadline met %{days}
+      due_today: Deadline vandaag
+      due_in_x_days: Deadline over %{days} dagen
+      due_tomorrow: Deadline morgen
     completed_last_x_days: Voltooid in de laatste %{count} dagen
     no_actions_with: Momenteel zijn er geen onvoltooide acties met de tag '%{tag_name}'
     defer_x_days: 
@@ -445,8 +452,8 @@ nl:
       yearly_every_x_day: Elke %{month} %{day}
       recurrence_on_options: Stel herhaling in op
       daily_every_number_day: Elke %{number} dag(en)
-      ends_on: Eindigt op
       weekly_every_number_week: Herhaalt elke %{number} weken op
+      ends_on: Eindigt op
       show_options: Toon de actie
       no_end_date: Geen einddatum
       day_x_on_every_x_month: Dag %{day} op elke %{month} maand
@@ -461,8 +468,8 @@ nl:
     added_dependency: "%{dependency} als afhankelijkheid toegevoegd."
     no_deferred_actions: Momenteel zijn er geen uitgestelde acties.
     recurrence_completed: Er is geen volgende actie na de terugkerende actie die u zojuist hebt voltooid. De herhaling is voltooid
-    no_actions_found: Momenteel zijn er geen onafgeronde acties.
     in_pending_state: in wachtende toestand
+    no_actions_found: Momenteel zijn er geen onafgeronde acties.
     error_toggle_complete: Kon deze actie niet als afgerond markeren
     due: Deadline
     action_marked_complete_error: De actie <strong>'%{description}'</strong> is niet gemarkeerd als <strong>%{completed} vanwege een fout op de server.</strong>
@@ -498,8 +505,8 @@ nl:
     was_marked_hidden: is gemarkeerd als verborgen
     edit_project_title: Bewerk project
     default_tags_removed_notice: De standaard tags zijn verwijderd
-    page_title: "TRACKS:: Project: %{project}"
     hide_form: Verberg formulier
+    page_title: "TRACKS:: Project: %{project}"
     this_project: Dit project
     project_state: Project is %{state}.
     show_form_title: Maak een nieuw project
@@ -533,22 +540,13 @@ nl:
     completed_actions: Afgeronde acties voor dit project
     default_context_removed: Standaard context verwijderd
     add_note_submit: Notitie toevoegen
-    status_project_name_changed: Naam van het project werd gewijzigd
     active_projects: Actieve projecten
+    status_project_name_changed: Naam van het project werd gewijzigd
     no_default_context: Dit project heeft geen standaard context
     with_no_default_tags: en zonder standaard tags
     default_context: De standaard context voor dit project is %{context}
     state: Dit project is %{state}
     edit_project_settings: Bewerk project instellingen
-  states: 
-    hidden_plural: Verborgen
-    completed: Afgerond
-    completed_plural: Afgeronde
-    visible_plural: Zichtbare
-    active_plural: Actieve
-    visible: Zichtbaar
-    hidden: Verborgen
-    active: Actief
   time: 
     am: ochtend
     formats: 
@@ -557,8 +555,15 @@ nl:
       short: "%d %B %H:%M"
       long: "%A, %d. %B %Y, %H:%M"
     pm: middag
-  errors: 
-    user_unauthorized: "401 Unauthorized: Alleen administratieve gebruikers mogen deze functie gebruiken."
+  states: 
+    hidden_plural: Verborgen
+    completed: Afgerond
+    completed_plural: Afgeronde
+    visible_plural: Zichtbare
+    active_plural: Actieve
+    visible: Zichtbaar
+    active: Actief
+    hidden: Verborgen
   preferences: 
     change_identity_url: Verander uw Identity URL
     open_id_url: Uw OpenID URL is
@@ -576,9 +581,11 @@ nl:
     generate_new_token: Genereer een nieuwe token
     token_header: Uw token
     change_authentication_type: Verander uw authenticatietype
-    authentication_header: Uw authenticatie
     current_authentication_type: Uw authenticatietype is %{auth_type}
+    authentication_header: Uw authenticatie
     generate_new_token_confirm: Weet u dit zeker? Het genereren van een nieuw token zal de bestaande te vervangen en dit zal het extern gebruiken van de oude token laten mislukken.
+  errors: 
+    user_unauthorized: "401 Unauthorized: Alleen administratieve gebruikers mogen deze functie gebruiken."
   date: 
     month_names: 
     - 
@@ -741,8 +748,8 @@ nl:
     signup_new_user: Registreer nieuwe gebruiker
     change_authentication_type: Wijzigen authenticatietype
     auth_change_submit: Wijzigen authenticatietype
-    openid_ok_pref_failed: Je hebt succesvol de %{url} geverifieerd als je identiteit, maar er was een probleem met het opslaan van uw authenticatie voorkeuren.
     identity_url: Identiteit URL
+    openid_ok_pref_failed: Je hebt succesvol de %{url} geverifieerd als je identiteit, maar er was een probleem met het opslaan van uw authenticatie voorkeuren.
     total_notes: Totaal aantal notities
     select_authentication_type: Selecteer uw nieuwe authenticatie type en klik op 'Wijzigen authenticatietype' om uw huidige instellingen te vervangen.
   sidebar: 
