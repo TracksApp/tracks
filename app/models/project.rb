@@ -32,7 +32,7 @@ class Project < ActiveRecord::Base
   named_scope :active, :conditions => { :state => 'active' }
   named_scope :hidden, :conditions => { :state => 'hidden' }
   named_scope :completed, :conditions => { :state => 'completed'}
-  named_scope :uncompleted, :conditions => ["NOT state = ?", 'completed']
+  named_scope :uncompleted, :conditions => ["NOT(state = ?)", 'completed']
   
   validates_presence_of :name
   validates_length_of :name, :maximum => 255

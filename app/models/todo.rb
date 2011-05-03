@@ -19,12 +19,12 @@ class Todo < ActiveRecord::Base
   named_scope :active, :conditions => { :state => 'active' }
   named_scope :active_or_hidden, :conditions => ["todos.state = ? OR todos.state = ?", 'active', 'project_hidden']
   named_scope :not_completed, :conditions =>  ['NOT (todos.state = ? )', 'completed']
-  named_scope :completed, :conditions =>  ["NOT todos.completed_at IS NULL"]
+  named_scope :completed, :conditions =>  ["NOT(todos.completed_at IS NULL)"]
   named_scope :are_due, :conditions => ['NOT (todos.due IS NULL)']
-  named_scope :deferred, :conditions => ["todos.completed_at IS NULL AND NOT todos.show_from IS NULL"]
+  named_scope :deferred, :conditions => ["todos.completed_at IS NULL AND NOT(todos.show_from IS NULL)"]
   named_scope :blocked, :conditions => ['todos.state = ?', 'pending']
-  named_scope :deferred_or_blocked, :conditions => ["(todos.completed_at IS NULL AND NOT todos.show_from IS NULL) OR (todos.state = ?)", "pending"]
-  named_scope :not_deferred_or_blocked, :conditions => ["todos.completed_at IS NULL AND todos.show_from IS NULL AND NOT todos.state = ?", "pending"]
+  named_scope :deferred_or_blocked, :conditions => ["(todos.completed_at IS NULL AND NOT(todos.show_from IS NULL)) OR (todos.state = ?)", "pending"]
+  named_scope :not_deferred_or_blocked, :conditions => ["todos.completed_at IS NULL AND todos.show_from IS NULL AND NOT(todos.state = ?)", "pending"]
   named_scope :with_tag, lambda { |tag| {:joins => :taggings, :conditions => ["taggings.tag_id = ? ", tag.id] } }
   named_scope :of_user, lambda { |user_id| {:conditions => ["todos.user_id = ? ", user_id] } }
   named_scope :hidden, 
