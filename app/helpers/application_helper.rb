@@ -56,7 +56,7 @@ module ApplicationHelper
             t('todos.next_actions_due_date.overdue_by', :days => pluralize(days * -1, 'day'))
           else
             # more than a week away - relax
-            t('todos.next_actions_due_date.due_in', :days => pluralize(days, 'day'))
+            t('models.preference.due_in', :days => days)
           end
         end
       }
