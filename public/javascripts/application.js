@@ -177,8 +177,13 @@ var TracksPages = {
         var flash = $('div#message_holder');
         flash.html("<h4 id=\'flash\' class=\'alert "+type+"\'>"+message+"</h4>");
         flash = $('h4#flash');
-        flash.show();
-        flash.fadeOut(fade_duration_in_sec*1000);
+        
+        fadein_duration = 1500;
+        fadeout_duration = 1500;
+        show_duration = fade_duration_in_sec*1000 - fadein_duration - fadeout_duration
+        if (show_duration < 0)
+          show_duration = 1000;          
+        flash.fadeIn(fadein_duration).delay(show_duration).fadeOut(fadeout_duration);
     },
     set_page_badge: function(count) {
         $('#badge_count').html(count);
