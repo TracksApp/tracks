@@ -52,8 +52,10 @@ module ApplicationHelper
           end
         else
           # overdue or due very soon! sound the alarm!
-          if days < 0
-            t('todos.next_actions_due_date.overdue_by', :days => pluralize(days * -1, 'day'))
+          if days == -1
+            t('todos.next_actions_due_date.overdue_by', :days => days * -1)            
+          elsif days < -1
+            t('todos.next_actions_due_date.overdue_by_plural', :days => days * -1)
           else
             # more than a week away - relax
             t('models.preference.due_in', :days => days)
