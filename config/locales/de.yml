@@ -400,7 +400,8 @@ de:
     show_today: Heute anzeigen
     no_actions_found_title: Keine Aktionen gefunden
     next_actions_due_date: 
-      overdue_by: "\xC3\x9Cberf\xC3\xA4llig mit %{days}"
+      overdue_by: "\xC3\x9Cberf\xC3\xA4llig mit %{days} Tag"
+      overdue_by_plural: "\xC3\x9Cberf\xC3\xA4llig mit %{days} Tagen"
       due_today: "Heute f\xC3\xA4llig"
       due_in_x_days: "F\xC3\xA4llig in %{days} Tagen"
       due_tomorrow: "F\xC3\xA4llig morgen"

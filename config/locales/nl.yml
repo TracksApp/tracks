@@ -389,7 +389,8 @@ nl:
     show_today: Toon vandaag
     no_actions_found_title: Geen acties gevonden
     next_actions_due_date: 
-      overdue_by: Over deadline met %{days}
+      overdue_by: Over deadline met %{days} dag
+      overdue_by_plural: Over deadline met %{days} dagen
       due_today: Deadline vandaag
       due_in_x_days: Deadline over %{days} dagen
       due_tomorrow: Deadline morgen
