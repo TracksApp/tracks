@@ -471,12 +471,28 @@ class TodosController < ApplicationController
   def done
     @source_view = 'done'
     @page_title = t('todos.completed_tasks_title')
+    
     completed_todos = current_user.todos.completed
-    @done_today = completed_todos.completed_after(Time.zone.now.beginning_of_day)
-    @done_this_week = completed_todos.completed_after(Time.zone.now.beginning_of_week)-@done_today
-    @done_this_month = completed_todos.completed_after(Time.zone.now.beginning_of_month)-@done_this_week
-    @done_previous_month = completed_todos.completed_after( (Time.zone.now.beginning_of_month - 1.day).beginning_of_month)-@done_this_month
+    start_of_this_day = Time.zone.now.beginning_of_day
+    start_of_this_week = Time.zone.now.beginning_of_week
+    start_of_this_month = Time.zone.now.beginning_of_month
+    start_of_previous_month = (Time.zone.now.beginning_of_month - 1.day).beginning_of_month
+    includes = {:include => [:context, :project, :tags, :taggings, :successors, :predecessors]}
+
+    @done_today = completed_todos.completed_after(start_of_this_day).all(includes)
+    @done_this_week = completed_todos.completed_after(start_of_this_week).completed_before(start_of_this_day).all(includes)
+    @done_this_month = completed_todos.completed_after(start_of_this_month).completed_before(start_of_this_week).all(includes)
     @count = @done_today.size + @done_this_week.size + @done_this_month.size
+  end
+  
+  def all_done
+    @source_view = 'done'
+    @page_title = t('todos.completed_tasks_title')
+
+    includes = [:context, :project, :tags, :taggings, :successors, :predecessors]
+    
+    @done = current_user.todos.completed.paginate :page => params[:page], :per_page => 20, :order => 'completed_at DESC', :include => includes
+    @count = @done.size
   end
   
   def list_deferred
@@ -961,7 +977,7 @@ class TodosController < ApplicationController
       # If you've set no_completed to zero, the completed items box isn't shown
       # on the home page
       max_completed = current_user.prefs.show_number_completed
-      @done = current_user.completed_todos.find(:all, :limit => max_completed, :include => [ :context, :project, :tags ]) unless max_completed == 0
+      @done = current_user.todos.completed.find(:all, :limit => max_completed, :include => [ :context, :project, :tags ]) unless max_completed == 0
 
       # Set count badge to number of not-done, not hidden context items
       @count = current_user.todos.active.not_hidden.count(:all)

@@ -81,23 +81,19 @@ class ApplicationController < ActionController::Base
   #
   def count_undone_todos_phrase(todos_parent, string="actions")
     count = count_undone_todos(todos_parent)
-    if count == 1
-      word = string.singularize
-    else
-      word = string.pluralize
-    end
+    word = count == 1 ? string.singularize : string.pluralize
     return count.to_s + "&nbsp;" + word
   end
   
   def count_undone_todos(todos_parent)
-    if todos_parent.nil?
-      count = 0
-    elsif (todos_parent.is_a?(Project) && todos_parent.hidden?)
+    return 0 if todos_parent.nil?
+
+    if (todos_parent.is_a?(Project) && todos_parent.hidden?)
       count = eval "@project_project_hidden_todo_counts[#{todos_parent.id}]"
     else
       count = eval "@#{todos_parent.class.to_s.downcase}_not_done_counts[#{todos_parent.id}]"
     end
-    count || 0
+
   end
 
   # Convert a date object to the format specified in the user's preferences in

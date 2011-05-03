@@ -1,0 +1,22 @@
+<%
+  paginate_options = {
+    :class => :add_note_link, 
+    :previous_label => '&laquo; '+ t('common.previous'),
+    :next_label     => t('common.next')+' &raquo;',
+    :inner_window   => 2
+  }
+%>
+<div id="display_box_projects">
+  <div class="container">
+    <%= will_paginate @done, paginate_options %>
+    <h2><%= t('todos.all_completed') %></h2>
+    <% if @done.empty? -%>
+      <div class="message"><p><%= t('todos.no_completed_actions') %></p></div>
+    <% else -%>
+      <%= render :partial => "todos/todo", :collection => @done, :locals => { :parent_container_type => "completed", :suppress_context => false, :suppress_project => false } %>
+    <% end -%>
+  </div>
+  
+  <%= will_paginate @done, paginate_options %>
+  
+</div><!-- End of display_box -->

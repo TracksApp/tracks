@@ -16,7 +16,7 @@ ActionController::Routing::Routes.draw do |map|
     contexts.done 'contexts/done', :action => 'completed'
   end
 
-  map.resources :projects, :collection => {:order => :post, :alphabetize => :post, :actionize => :post} do |projects|
+  map.resources :projects, :collection => {:order => :post, :alphabetize => :post, :actionize => :post, :done => :get} do |projects|
     projects.resources :todos, :name_prefix => "project_"
   end
   
@@ -28,7 +28,8 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :todos,
     :member => {:toggle_check => :put, :toggle_star => :put},
-    :collection => {:check_deferred => :post, :filter_to_context => :post, :filter_to_project => :post, :done => :get}
+    :collection => {:check_deferred => :post, :filter_to_context => :post, :filter_to_project => :post, 
+      :done => :get, :all_done => :get}
 
   map.with_options :controller => :todos do |todos|
     todos.home '', :action => "index"
@@ -83,7 +84,12 @@ ActionController::Routing::Routes.draw do |map|
   end
 
   map.preferences 'preferences', :controller => 'preferences', :action => 'index'
-  map.stats 'stats', :controller => 'stats', :action => 'index'
+  
+  map.with_options :controller => :stats do |stats|
+    stats.stats_page 'stats',  :action => 'index'
+    stats.done_overview 'done', :action => 'done'
+  end
+  
   map.search 'search', :controller => 'search', :action => 'index'
   map.data 'data', :controller => 'data', :action => 'index'
   map.done 'done', :controller => 'todos', :action => 'completed_overview'

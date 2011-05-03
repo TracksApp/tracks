@@ -721,12 +721,12 @@ li {
     padding-top:10px;
     font-size: 0.8em;
 }
+
 .sortable_row {
     background: #fff;
     _background: transparent; /* the underscore is only used by ie6 and below */
     padding: 4px 4px 4px 8px;
     margin: 2px 2px;
-    border: 1px solid #ccc;
 }
 
 .edit-form {
@@ -769,7 +769,6 @@ div.buttons, div.buttons a, div.buttons a:hover {
 
 div#list-active-projects, div#list-hidden-projects, div#list-completed-projects, div#list-contexts, div#projects-empty-nd {
     clear:right;
-    border: 1px solid #999;
 }
 
 .project-state-group h2, .list-stategroup-contexts-container h2 {

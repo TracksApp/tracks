@@ -5,7 +5,6 @@ class UsersController < ApplicationController
   
   # GET /users GET /users.xml
   def index
-    @users  = User.find(:all, :order => 'login')
     respond_to do |format|
       format.html do
         @page_title = "TRACKS::Manage Users"
@@ -15,7 +14,10 @@ class UsersController < ApplicationController
         # we get returned here when signup is successful
         store_location
       end
-      format.xml { render :xml => @users.to_xml(:except => [ :password ]) }
+      format.xml do
+        @users  = User.find(:all, :order => 'login')
+        render :xml => @users.to_xml(:except => [ :password ])
+      end
     end
   end
   
