@@ -101,10 +101,10 @@ en:
     forth: Forth
     fourth: Fourth
     last: Last
-    month: Month
-    months: Months
-    week: Week
-    weeks: Weeks
+    month: month
+    months: months
+    week: week
+    weeks: weeks
   errors:
     user_unauthorized: "401 Unauthorized: Only administrative users are allowed access to this function."
   footer:
@@ -539,7 +539,7 @@ en:
         - tuesday
         - wednesday
         - thursday
-        - vriday
+        - friday
         - saturday
         month_names: 
         - 

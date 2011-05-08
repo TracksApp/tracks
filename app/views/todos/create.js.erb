@@ -25,7 +25,11 @@ function clear_form() {
 }
 
 function insert_new_context_with_new_todo() {
-  $('#no_todos_in_view').slideUp(100);
+  <%-
+    empty_id = '#no_todos_in_view'
+    empty_id = '#tickler-empty-nd' if source_view_is :tickler
+  -%>
+  $('<%=empty_id%>').slideUp(100);
   $('#display_box').prepend(html_for_new_context());
 }
 
@@ -34,6 +38,7 @@ function add_todo_to_existing_context() {
     <% unless source_view_is_one_of(:todo, :tag) && @todo.deferred? -%>
       $('#c<%= @todo.context_id %>').fadeIn(500, function() {});
       $('#no_todos_in_view').slideUp(100);
+      <%= "$('#tickler-empty-nd').slideUp(100);" if source_view_is(:deferred) && @todo.deferred? %>
     <% end -%>
   <% end -%>
   $('#<%=empty_container_msg_div_id%>').hide();

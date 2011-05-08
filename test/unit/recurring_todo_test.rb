@@ -27,8 +27,8 @@ class RecurringTodoTest < ActiveSupport::TestCase
   def test_pattern_text
     assert_equal "every day", @every_day.recurrence_pattern
     assert_equal "on work days", @every_workday.recurrence_pattern
-    assert_equal "every last Friday of every 2 months", @monthly_every_last_friday.recurrence_pattern
-    assert_equal "every year on June 8", @yearly.recurrence_pattern
+    assert_equal "every last friday of every 2 months", @monthly_every_last_friday.recurrence_pattern
+    assert_equal "every year on June 08", @yearly.recurrence_pattern
   end
  
   def test_daily_every_day
