@@ -56,4 +56,4 @@ Feature: Existing user logging in
     And I submit the login form as user "testuser" with password "secret" 
     Then I should be on the login page
     When my session expires
-    Then I should see "Session has timed out"
+    Then I should be on the login page
