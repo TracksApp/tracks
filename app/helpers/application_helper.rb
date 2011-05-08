@@ -161,12 +161,12 @@ module ApplicationHelper
   def recurrence_time_span(rt)
     case rt.ends_on
     when "no_end_date"
-      return rt.start_from.nil? ? "" : "from " + format_date(rt.start_from)
+      return rt.start_from.nil? ? "" : I18n.t("todos.recurrence.pattern.from") + " " + format_date(rt.start_from)
     when "ends_on_number_of_times"
-      return "for "+rt.number_of_occurences.to_s + " times"
+      return I18n.t("todos.recurrence.pattern.times", :number => rt.number_of_occurences)
     when "ends_on_end_date"
-      starts = rt.start_from.nil? ? "" : "from " + format_date(rt.start_from)
-      ends = rt.end_date.nil? ? "" : " until " + format_date(rt.end_date)
+      starts = rt.start_from.nil? ? "" : I18n.t("todos.recurrence.pattern.from") + " " + format_date(rt.start_from)
+      ends = rt.end_date.nil? ? "" : " " + I18n.t("todos.recurrence.pattern.until") + " " + format_date(rt.end_date)
       return starts+ends
     else
       raise Exception.new, "unknown recurrence time span selection (#{rt.ends_on})"

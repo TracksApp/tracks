@@ -40,6 +40,9 @@ en:
         sms_email: From email
         show_project_on_todo_done: Go to project page on completing todo
         show_completed_projects_in_sidebar: "Show completed projects in sidebar"
+  time:
+    formats:
+      month_day: "%B %d"
   models:
     project:
       feed_title: "Tracks Projects"
@@ -95,8 +98,13 @@ en:
     first: First
     second: Second
     third: Third
+    forth: Forth
     fourth: Fourth
     last: Last
+    month: Month
+    months: Months
+    week: Week
+    weeks: Weeks
   errors:
     user_unauthorized: "401 Unauthorized: Only administrative users are allowed access to this function."
   footer:
@@ -505,6 +513,48 @@ en:
       show_option_always: "always"
       show_days_before: "%{days} days before the todo is due"
       from_tickler: "the date todo comes from tickler (no due date set)"
+      pattern:
+        due: due
+        show: show
+        on_work_days: on work days
+        weekly: weekly
+        every_n: every %{n}
+        every_day: every day
+        every_month: every month
+        on_day_n: on day  %{n}
+        every_year_on: every year on %{date}
+        the_xth_day_of_month: the %{x} %{day} of %{month}
+        every_xth_day_of_every_n_months: every %{x} %{day} of every %{n_months}
+        first: first
+        second: second
+        third: third
+        fourth: fourth
+        last: last
+        from: from
+        until: until
+        times: for %{number} times
+        day_names: 
+        - sunday
+        - monday
+        - tuesday
+        - wednesday
+        - thursday
+        - vriday
+        - saturday
+        month_names: 
+        - 
+        - January
+        - February
+        - Match
+        - April
+        - May
+        - June
+        - July
+        - August
+        - September
+        - October
+        - November
+        - December
     delete_recurring_action_confirm: "Are you sure that you want to delete the recurring action '%{description}'?"
     delete_recurring_action_title: "Delete the recurring action"
     star_action_with_description: "star the action '%{description}'"

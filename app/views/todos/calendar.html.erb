@@ -31,7 +31,7 @@
   </div>
 
   <div class="container">
-    <h2><%= t('todos.calendar.due_this_month', :month => Time.zone.now.strftime("%B")) %></h2>
+    <h2><%= t('todos.calendar.due_this_month', :month => l(Time.zone.now, :format => "%B")) %></h2>
     <div id="empty_due_this_month" <%= "style=\"display:none\"" unless @due_this_month.empty? %>>
       <%= t('todos.calendar.no_actions_due_this_month') %>
     </div>
@@ -41,7 +41,7 @@
   </div>
 
   <div class="container">
-    <h2><%= t('todos.calendar.due_next_month_and_later', :month => (Time.zone.now+1.month).strftime("%B")) %></h2>
+    <h2><%= t('todos.calendar.due_next_month_and_later', :month => l(Time.zone.now+1.month, :format => "%B")) %></h2>
     <div id="empty_due_after_this_month" <%= "style=\"display:none\"" unless @due_after_this_month.empty? %>>
       <%= t('todos.calendar.no_actions_due_after_this_month') %>
     </div>
