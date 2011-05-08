@@ -42,3 +42,13 @@ When /^I clear the due date of "([^"]*)"$/ do |action_description|
   selenium.click("//div[@id='edit_todo_#{todo.id}']//a[@id='due_x_todo_#{todo.id}']/img", :wait_for => :ajax, :javascript_framework => :jquery)
   submit_edit_todo_form(todo)
 end
+
+When /^I remove the show from date from "([^"]*)"$/ do |action_description|
+  todo = @current_user.todos.find_by_description(action_description)
+  todo.should_not be_nil
+  
+  open_edit_form_for(todo)
+  selenium.click("//div[@id='edit_todo_#{todo.id}']//a[@id='show_from_x_todo_#{todo.id}']/img", :wait_for => :ajax, :javascript_framework => :jquery)
+  
+  submit_edit_todo_form(todo)
+end

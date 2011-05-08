@@ -69,6 +69,7 @@ function replace_todo(next_steps) {
 function hide_context(next_steps) {
   <% context_id = @context_changed ? @original_item_context_id : @todo.context_id -%>
   $('#c<%=  context_id %>').fadeOut(400, function(){ next_steps.go(); });
+  <%= "$('#tickler-empty-nd').slideDown(400);" if source_view_is(:deferred) && @down_count == 0 %>
 }
 
 function highlight_updated_todo(next_steps) {

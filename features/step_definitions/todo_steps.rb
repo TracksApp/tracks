@@ -31,8 +31,12 @@ Given /^I have ([0-9]+) deferred todos$/ do |count|
   end
 end
 
-Given /^I have a deferred todo "(.*)"$/ do |description|
-  context = @current_user.contexts.create!(:name => "context B")
+Given /^I have a deferred todo "([^"]*)"$/ do |description|
+  Given "I have a deferred todo \"#{description}\" in the context \"context B\""
+end
+
+Given /^I have a deferred todo "([^"]*)" in the context "([^"]*)"$/ do |description, context_name|
+  context = @current_user.contexts.find_or_create(:name => context_name)
   @current_user.todos.create!(:context_id => context.id, :description => description, :show_from => @current_user.time + 1.week)
 end
 

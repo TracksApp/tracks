@@ -42,6 +42,12 @@ When /^I submit a deferred new action with description "([^"]*)" to project "([^
   When "I submit a new deferred action with description \"#{description}\" to project \"#{project_name}\" with tags \"\" in the context \"#{context_name}\""
 end
 
+When /^I submit a new deferred action with description "([^"]*)"$/ do |description|
+  fill_in "todo[description]", :with => description
+  fill_in "todo[show_from]", :with => format_date(@current_user.time + 1.week)
+  submit_next_action_form
+end
+
 When /^I submit a new action with description "([^"]*)" to project "([^"]*)" with tags "([^"]*)" in the context "([^"]*)"$/ do |description, project_name, tags, context_name|
   fill_in "todo[description]", :with => description
 

@@ -44,6 +44,23 @@ Then /^I should see "([^"]*)" in the context container for "([^"]*)"$/ do |todo_
   selenium.is_visible(xpath).should be_true
 end
 
+Then /^I should not see "([^"]*)" in the context container for "([^"]*)"$/ do |todo_description, context_name|
+  context = @current_user.contexts.find_by_name(context_name)
+  context.should_not be_nil
+  todo = @current_user.todos.find_by_description(todo_description)
+  todo.should_not be_nil
+
+  xpath = "xpath=//div[@id=\"c#{context.id}\"]//div[@id='line_todo_#{todo.id}']"
+  
+  if selenium.is_element_present(xpath)
+    # give jquery some time to finish
+    wait_for :timeout_in_seconds => 5 do
+      !selenium.is_visible(xpath)
+    end
+  end
+end
+
+
 Then /^I should see "([^"]*)" in project container for "([^"]*)"$/ do |todo_description, project_name|
   todo = @current_user.todos.find_by_description(todo_description)
   todo.should_not be_nil
