@@ -1,3 +1,4 @@
+<%- reset_tab_index %>
 <div id="context_new_container">
 
   <div id="toggle_context_link" class="hide_form">
@@ -10,10 +11,10 @@
       <div id="error_status"><%= error_messages_for('context') %></div>
 
       <label for="context_name"><%= t 'contexts.context_name' %></label><br />
-      <%= text_field( "context", "name" ) %><br />
+      <%= text_field( "context", "name", :tabindex => next_tab_index ) %><br />
 
       <label for="context_hide"><%= t 'contexts.context_hide' %></label>
-      <%= check_box( "context", "hide" ) %><br />
+      <%= check_box( "context", "hide", {:tabindex => next_tab_index} ) %><br />
 
       <div class="submit_box">
         <div class="widgets">

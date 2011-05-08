@@ -411,7 +411,16 @@ module TodosHelper
     html += "}}) " * animation.size
     return html + ";"
   end
-
+  
+  def reset_tab_index
+    $tracks_tab_index = 0 
+  end
+  
+  def next_tab_index
+    $tracks_tab_index = $tracks_tab_index + 1
+    return $tracks_tab_index
+  end
+  
   private
   
   def image_tag_for_star(todo)

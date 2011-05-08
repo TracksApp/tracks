@@ -12,15 +12,15 @@
 
 
   <label for="context_name">Context name</label><br/>
-  <%= text_field('context', 'name', :class => 'context-name') %><br/>
+  <%= text_field('context', 'name', :class => 'context-name', :tabindex => next_tab_index) %><br/>
 
   <label for="context_hide">Hide from front page?</label>
-  <%= check_box('context', 'hide', :class => 'context-hide') %>
+  <%= check_box('context', 'hide', {:class => 'context-hide', :tabindex => next_tab_index}) %>
   <input type="hidden" name="wants_render" value="true" />
 
   <div class="submit_box">
     <div class="widgets">
-      <button type="submit" class="positive" id="<%= dom_id(context, 'submit') %>" tabindex="15">
+      <button type="submit" class="positive" id="<%= dom_id(context, 'submit') %>" tabindex="<%=next_tab_index%>">
         <%=image_tag("accept.png", :alt => "") %>
         <%= t 'common.update' %>
       </button>
