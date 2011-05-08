@@ -627,25 +627,26 @@ class TodosController < ApplicationController
     due_this_week_date = Time.zone.now.end_of_week
     due_next_week_date = due_this_week_date + 7.days
     due_this_month_date = Time.zone.now.end_of_month
+    included_tables = [:taggings, :tags, :recurring_todo]
         
     @due_today = current_user.todos.not_completed.find(:all,
-      :include => [:taggings, :tags],
+      :include => included_tables,
       :conditions => ['todos.due <= ?', due_today_date],
       :order => "due")
     @due_this_week = current_user.todos.not_completed.find(:all,
-      :include => [:taggings, :tags],
+      :include => included_tables,
       :conditions => ['todos.due > ? AND todos.due <= ?', due_today_date, due_this_week_date],
       :order => "due")
     @due_next_week = current_user.todos.not_completed.find(:all,
-      :include => [:taggings, :tags],
+      :include => included_tables,
       :conditions => ['todos.due > ? AND todos.due <= ?', due_this_week_date, due_next_week_date],
       :order => "due")
     @due_this_month = current_user.todos.not_completed.find(:all,
-      :include => [:taggings, :tags],
+      :include => included_tables,
       :conditions => ['todos.due > ? AND todos.due <= ?', due_next_week_date, due_this_month_date],
       :order => "due")
     @due_after_this_month = current_user.todos.not_completed.find(:all,
-      :include => [:taggings, :tags],
+      :include => included_tables,
       :conditions => ['todos.due > ?', due_this_month_date],
       :order => "due")
       

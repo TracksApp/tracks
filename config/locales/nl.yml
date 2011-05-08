@@ -67,6 +67,10 @@ nl:
     ajaxError: Er is een fout opgetreden bij het ophalen van gegevens van de server
     email: E-mail
     search: Zoeken
+    month: maand
+    months: maanden
+    weeks: weken
+    forth: Vierde
   integrations: 
     opensearch_description: Zoek in Tracks
     gmail_description: Gadget om Tracks toe te voegen aan Gmail als een gadget
@@ -185,7 +189,7 @@ nl:
         confirmation: komt niet overeen met de configuratie
         less_than_or_equal_to: moet kleiner of gelijk zijn aan %{count}
         blank: mag niet leeg zijn
-        invalid: mag niet een komma (',') karakter bevatten
+        invalid: "mag niet een komma (',') karakter bevatten"
         exclusion: is gereserveerd
         odd: moet oneven zijn
         too_short: is te kort (minimum is %{count} karakters)
@@ -301,7 +305,7 @@ nl:
     actions_actions_avg_created_30days: In de afgelopen 30 dagen heeft u gemiddeld %{count} acties gemaakt
   todos: 
     show_from: Toon vanaf
-    error_starring_recurring: Kon niet de ster van deze terugkerende actie niet omgezetten \'%{description}\'
+    error_starring_recurring: "Kon niet de ster van deze terugkerende actie niet omgezetten \'%{description}\'"
     recurring_action_deleted: Actie werd verwijderd. Omdat deze actie herhalend is. werd een nieuwe actie toegevoegd
     completed_actions: Voltooide acties
     completed_recurring: Afgesloten terugkerende todos
@@ -435,7 +439,7 @@ nl:
       no_actions_due_after_this_month: Geen acties met deadline na deze maand
       due_this_month: Deadline in rest van %{month}
       no_actions_due_this_month: Geen acties met deadline in de rest van deze maand
-    error_starring: Kon niet de ster van deze actie niet omzetten \'%{description}\'
+    error_starring: "Kon niet de ster van deze actie niet omzetten \'%{description}\'"
     show_tomorrow: Toon morgen
     recurrence: 
       ends_on_date: Eindigt op %{date}
@@ -464,7 +468,49 @@ nl:
       from_tickler: de datum dat de actie uit de tickler komt (geen deadline ingesteld)
       yearly: Jaarlijks
       monthly_every_xth_day: De %{day} %{day_of_week} van elke %{month} maand
-    tagged_page_title: TRACKS::Tagged met '%{tag_name}'
+      pattern:
+        due: Deadline
+        show: Tonen
+        on_work_days: op werkdagen
+        weekly: wekelijks
+        every_n: elke %{n}
+        every_day: elke dag
+        every_month: elke maand
+        on_day_n: op dag %{n}
+        every_year_on: elk jaar op %{date}
+        the_xth_day_of_month: de %{x} %{day} van %{month}
+        every_xth_day_of_every_n_months: elke %{x} %{day} van elke %{n_months}
+        first: eerste
+        second: tweede
+        third: derde
+        fourth: vierde
+        last: laatste
+        from: vanaf
+        until: tot
+        times: voor %{number} keer
+        day_names: 
+        - zondag
+        - maandag
+        - dinsdag
+        - woensdag
+        - donderdag
+        - vrijdag
+        - zaterdag
+        month_names: 
+        - 
+        - januari
+        - februari
+        - maart
+        - april
+        - mei
+        - juni
+        - juli
+        - augustus
+        - september
+        - oktober
+        - november
+        - december        
+    tagged_page_title: "TRACKS::Tagged met '%{tag_name}'"
     no_completed_recurring: Momenteel zijn er geen voltooide terugkerende acties
     added_dependency: "%{dependency} als afhankelijkheid toegevoegd."
     no_deferred_actions: Momenteel zijn er geen uitgestelde acties.
@@ -473,7 +519,7 @@ nl:
     no_actions_found: Momenteel zijn er geen onafgeronde acties.
     error_toggle_complete: Kon deze actie niet als afgerond markeren
     due: Deadline
-    action_marked_complete_error: De actie <strong>'%{description}'</strong> is niet gemarkeerd als <strong>%{completed} vanwege een fout op de server.</strong>
+    action_marked_complete_error: "De actie <strong>'%{description}'</strong> is niet gemarkeerd als <strong>%{completed} vanwege een fout op de server.</strong>"
     add_new_recurring: Voeg een nieuwe terugkerende actie toe
     recurring_action_saved: Terugkerende actie opgeslagen
     action_saved_to_tickler: Actie opgeslagen in tickler
@@ -555,6 +601,7 @@ nl:
       time: "%H:%M"
       short: "%d %B %H:%M"
       long: "%A, %d. %B %Y, %H:%M"
+      month_day: "%d %B"
     pm: middag
   states: 
     hidden_plural: Verborgen
@@ -619,6 +666,7 @@ nl:
       default: "%d-%m-%Y"
       short: "%e %b"
       long: "%e %B %Y"
+      month_day: "%B %d"
     day_names: 
     - Zondag
     - Maandag
