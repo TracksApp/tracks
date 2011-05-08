@@ -999,6 +999,10 @@ function redirect_to(path) {
     window.location.href = path;
 }
 
+function refresh_page() {
+    location.reload(true);
+}
+
 function setup_auto_refresh(interval){
     field_touched = false;
     function refresh_page() {
