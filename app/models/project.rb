@@ -40,23 +40,27 @@ class Project < ActiveRecord::Base
   validates_does_not_contain :name, :string => ','
 
   acts_as_list :scope => 'user_id = #{user_id} AND state = \'#{state}\''
-  acts_as_state_machine :initial => :active, :column => 'state'
+  
+  include AASM
+  aasm_column :state
+  aasm_initial_state :active
+  
   extend NamePartFinder
   #include Tracks::TodoList
   
-  state :active
-  state :hidden, :enter => :hide_todos, :exit => :unhide_todos
-  state :completed, :enter => Proc.new { |p| p.completed_at = Time.zone.now }, :exit => Proc.new { |p| p.completed_at = nil }
+  aasm_state :active
+  aasm_state :hidden, :enter => :hide_todos, :exit => :unhide_todos
+  aasm_state :completed, :enter => Proc.new { |p| p.completed_at = Time.zone.now }, :exit => Proc.new { |p| p.completed_at = nil }
 
-  event :activate do
-    transitions :to => :active,   :from => [:hidden, :completed]
+  aasm_event :activate do
+    transitions :to => :active,   :from => [:active, :hidden, :completed]
   end
   
-  event :hide do
+  aasm_event :hide do
     transitions :to => :hidden,   :from => [:active, :completed]
   end
   
-  event :complete do
+  aasm_event :complete do
     transitions :to => :completed, :from => [:active, :hidden]
   end
   
@@ -106,7 +110,7 @@ class Project < ActiveRecord::Base
   # as a result of acts_as_state_machine calling state=() to update the attribute
   def transition_to(candidate_state)
     case candidate_state.to_sym
-      when current_state
+      when aasm_current_state
         return
       when :hidden
         hide!

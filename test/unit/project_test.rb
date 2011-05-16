@@ -53,26 +53,26 @@ class ProjectTest < ActiveSupport::TestCase
   end
   
   def test_project_initial_state_is_active
-    assert_equal :active, @timemachine.current_state
+    assert_equal :active, @timemachine.aasm_current_state
     assert @timemachine.active?
   end
   
   def test_hide_project
     @timemachine.hide!
-    assert_equal :hidden, @timemachine.current_state
+    assert_equal :hidden, @timemachine.aasm_current_state
     assert @timemachine.hidden?
   end
   
   def test_activate_project
     @timemachine.activate!
-    assert_equal :active, @timemachine.current_state
+    assert_equal :active, @timemachine.aasm_current_state
     assert @timemachine.active?
   end
   
   def test_complete_project
     assert_nil @timemachine.completed_at
     @timemachine.complete!
-    assert_equal :completed, @timemachine.current_state
+    assert_equal :completed, @timemachine.aasm_current_state
     assert @timemachine.completed?
     assert_not_nil @timemachine.completed_at, "completed_at not expected to be nil"
     assert_in_delta Time.now, @timemachine.completed_at, 1
@@ -141,25 +141,27 @@ class ProjectTest < ActiveSupport::TestCase
   end
 
   def test_transition_to_another_state
-    assert_equal :active, @timemachine.current_state
+    assert_equal :active, @timemachine.aasm_current_state
     @timemachine.transition_to(:hidden)
-    assert_equal :hidden, @timemachine.current_state
+    assert_equal :hidden, @timemachine.aasm_current_state
     @timemachine.transition_to(:completed)
-    assert_equal :completed, @timemachine.current_state
+    assert_equal :completed, @timemachine.aasm_current_state
     @timemachine.transition_to(:active)
-    assert_equal :active, @timemachine.current_state
+    assert_equal :active, @timemachine.aasm_current_state
   end
 
   def test_transition_to_same_state
-    assert_equal :active, @timemachine.current_state
+    assert_equal :active, @timemachine.aasm_current_state
     @timemachine.transition_to(:active)
-    assert_equal :active, @timemachine.current_state
+    assert_equal :active, @timemachine.aasm_current_state
   end
 
   def test_deferred_todo_count
     assert_equal 1, @timemachine.deferred_todos.count
     assert_equal 0, @moremoney.deferred_todos.count
     @moremoney.todos[0].show_from = next_week
+    @moremoney.todos[0].save
+    assert_equal :deferred, @moremoney.todos[0].aasm_current_state
     assert_equal 1, @moremoney.deferred_todos.count
   end
 

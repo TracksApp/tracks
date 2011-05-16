@@ -276,11 +276,11 @@ class RecurringTodoTest < ActiveSupport::TestCase
   
   def test_toggle_completion
     t = @yearly
-    assert_equal :active, t.current_state
+    assert_equal :active, t.aasm_current_state
     t.toggle_completion!
-    assert_equal :completed, t.current_state
+    assert_equal :completed, t.aasm_current_state
     t.toggle_completion!
-    assert_equal :active, t.current_state
+    assert_equal :active, t.aasm_current_state
   end
   
   def test_starred

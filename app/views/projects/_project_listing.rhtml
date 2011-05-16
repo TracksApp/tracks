@@ -17,7 +17,7 @@ suppress_edit_button ||= false
     </div>
 
     <div class="buttons">
-      <span class="grey"><%= project.current_state.to_s.upcase %></span>
+      <span class="grey"><%= project.aasm_current_state.to_s.upcase %></span>
       <%= link_to_delete_project(project, image_tag( "blank.png", :title => t('projects.delete_project_title'), :class=>"delete_item")) %>
       <%= suppress_edit_button ? "" : link_to_edit_project(project, image_tag( "blank.png", :title => t('projects.edit_project_title'), :class=>"edit_item")) %>
     </div>

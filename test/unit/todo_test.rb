@@ -77,10 +77,10 @@ class TodoTest < ActiveSupport::TestCase
   
   def test_defer_an_existing_todo
     @not_completed2
-    assert_equal :active, @not_completed2.current_state
+    assert_equal :active, @not_completed2.aasm_current_state
     @not_completed2.show_from = next_week
     assert @not_completed2.save, "should have saved successfully" + @not_completed2.errors.to_xml
-    assert_equal :deferred, @not_completed2.current_state
+    assert_equal :deferred, @not_completed2.aasm_current_state
   end
   
   def test_create_a_new_deferred_todo
@@ -88,16 +88,16 @@ class TodoTest < ActiveSupport::TestCase
     todo = user.todos.build
     todo.show_from = next_week
     todo.context_id = 1
-    todo.description = 'foo'
+    todo.description = 'foo'    
     assert todo.save, "should have saved successfully" + todo.errors.to_xml
-    assert_equal :deferred, todo.current_state
+    assert_equal :deferred, todo.aasm_current_state
   end
 
   def test_create_a_new_deferred_todo_by_passing_attributes
     user = users(:other_user)
-    todo = user.todos.build(:show_from => next_week, :context_id => 1, :description => 'foo')
+    todo = user.todos.build(:show_from => next_week, :context_id => 1, :description => 'foo')    
     assert todo.save, "should have saved successfully" + todo.errors.to_xml
-    assert_equal :deferred, todo.current_state
+    assert_equal :deferred, todo.aasm_current_state
   end
 
   def test_feed_options
@@ -108,11 +108,11 @@ class TodoTest < ActiveSupport::TestCase
 
   def test_toggle_completion
     t = @not_completed1
-    assert_equal :active, t.current_state
+    assert_equal :active, t.aasm_current_state
     t.toggle_completion!
-    assert_equal :completed, t.current_state
+    assert_equal :completed, t.aasm_current_state
     t.toggle_completion!
-    assert_equal :active, t.current_state
+    assert_equal :active, t.aasm_current_state
   end
 
   def test_activate_also_saves
@@ -154,7 +154,7 @@ class TodoTest < ActiveSupport::TestCase
     t.context_id = 1
     t.save!
     t.reload
-    assert_equal :active, t.current_state
+    assert_equal :active, t.aasm_current_state
   end
 
   def test_initial_state_is_deferred_when_show_from_in_future
@@ -165,7 +165,7 @@ class TodoTest < ActiveSupport::TestCase
     t.show_from = 1.week.from_now.to_date
     t.save!
     t.reload
-    assert_equal :deferred, t.current_state
+    assert_equal :deferred, t.aasm_current_state
   end
   
   def test_todo_is_not_starred

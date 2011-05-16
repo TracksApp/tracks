@@ -45,40 +45,42 @@ class Todo < ActiveRecord::Base
   RE_PARTS = /'(#{RE_TODO})'\s<'(#{RE_CONTEXT})';\s'(#{RE_PROJECT})'>/ # results in array
   RE_SPEC = /'#{RE_TODO}'\s<'#{RE_CONTEXT}';\s'#{RE_PROJECT}'>/ # results in string
   
-  acts_as_state_machine :initial => :active, :column => 'state'
+  include AASM
+  aasm_column :state
+  aasm_initial_state Proc.new { |todo| (todo.show_from && (todo.show_from > todo.user.date)) ? :deferred : :active}
   
   # when entering active state, also remove completed_at date. Looks like :exit
   # of state completed is not run, see #679
-  state :active, :enter => Proc.new { |t| t[:show_from], t.completed_at = nil, nil }
-  state :project_hidden
-  state :completed, :enter => Proc.new { |t| t.completed_at = Time.zone.now }, :exit => Proc.new { |t| t.completed_at = nil }
-  state :deferred
-  state :pending
+  aasm_state :active, :enter => Proc.new { |t| t[:show_from], t.completed_at = nil, nil }
+  aasm_state :project_hidden, :enter => Proc.new { |t| t.completed_at = Time.zone.now }, :exit => Proc.new { |t| t.completed_at = nil }
+  aasm_state :completed
+  aasm_state :deferred
+  aasm_state :pending
 
-  event :defer do
+  aasm_event :defer do
     transitions :to => :deferred, :from => [:active]
   end
   
-  event :complete do
+  aasm_event :complete do
     transitions :to => :completed, :from => [:active, :project_hidden, :deferred]
   end
   
-  event :activate do
+  aasm_event :activate do
     transitions :to => :active, :from => [:project_hidden, :completed, :deferred]
     transitions :to => :active, :from => [:pending], :guard => :no_uncompleted_predecessors_or_deferral? 
     transitions :to => :deferred, :from => [:pending], :guard => :no_uncompleted_predecessors?
   end
     
-  event :hide do
+  aasm_event :hide do
     transitions :to => :project_hidden, :from => [:active, :deferred]
   end
   
-  event :unhide do
+  aasm_event :unhide do
     transitions :to => :deferred, :from => [:project_hidden], :guard => Proc.new{|t| !t.show_from.blank? }
     transitions :to => :active, :from => [:project_hidden]
   end
   
-  event :block do
+  aasm_event :block do
     transitions :to => :pending, :from => [:active, :deferred]
   end
     
@@ -216,6 +218,7 @@ class Todo < ActiveRecord::Base
     date = user.at_midnight(date) if (date.is_a? Date)
     activate! if deferred? && date.blank?
     defer! if active? && !date.blank? && date > user.date
+    
     self[:show_from] = date 
   end
 
@@ -224,27 +227,7 @@ class Todo < ActiveRecord::Base
   def project
     original_project.nil? ? Project.null_object : original_project
   end
-
-  alias_method :original_set_initial_state, :set_initial_state
   
-  def set_initial_state
-    if show_from && (show_from > user.date)
-      write_attribute self.class.state_column, 'deferred'
-    else
-      original_set_initial_state
-    end
-  end
-  
-  alias_method :original_run_initial_state_actions, :run_initial_state_actions
-  
-  def run_initial_state_actions
-    # only run the initial state actions if the standard initial state hasn't
-    # been changed
-    if self.class.initial_state.to_sym == current_state
-      original_run_initial_state_actions
-    end
-  end
-
   def self.feed_options(user)
     {
       :title => 'Tracks Actions',

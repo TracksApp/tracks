@@ -10,20 +10,22 @@ class RecurringTodo < ActiveRecord::Base
   named_scope :completed, :conditions => { :state => 'completed'}
 
   attr_protected :user
-
-  acts_as_state_machine :initial => :active, :column => 'state'
   
-  state :active, :enter => Proc.new { |t| 
+  include AASM
+  aasm_column :state
+  aasm_initial_state :active
+  
+  aasm_state :active, :enter => Proc.new { |t| 
     t[:show_from], t.completed_at = nil, nil 
     t.occurences_count = 0
   }
-  state :completed, :enter => Proc.new { |t| t.completed_at = Time.zone.now }, :exit => Proc.new { |t| t.completed_at = nil }
+  aasm_state :completed, :enter => Proc.new { |t| t.completed_at = Time.zone.now }, :exit => Proc.new { |t| t.completed_at = nil }
 
-  event :complete do
+  aasm_event :complete do
     transitions :to => :completed, :from => [:active]
   end
 
-  event :activate do
+  aasm_event :activate do
     transitions :to => :active, :from => [:completed]
   end
   
