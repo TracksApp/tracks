@@ -417,6 +417,9 @@ module TodosHelper
   end
   
   def next_tab_index
+    # make sure it exists if reset was not called. Set to 20 to avoid clashes with existing form in sidebar
+    $tracks_tab_index ||= 20  
+    
     $tracks_tab_index = $tracks_tab_index + 1
     return $tracks_tab_index
   end
