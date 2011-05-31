@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../test_helper'
+require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
 class RecurringTodoTest < ActiveSupport::TestCase
   fixtures :todos, :users, :contexts, :preferences, :tags, :taggings, :recurring_todos

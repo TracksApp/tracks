@@ -1,4 +1,5 @@
 ENV["RAILS_ENV"] = "test"
+require 'thread'
 require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
 require File.expand_path(File.dirname(__FILE__) + "/../app/controllers/application_controller")
 require 'test_help'
