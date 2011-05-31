@@ -58,11 +58,11 @@ form_for(todo, :html=> { :name=>'todo', :id => dom_id(@todo, 'form'), :class => 
     <div class="widgets">
       <button type="submit" class="positive" id="<%= dom_id(@todo, 'submit') %>" tabindex="<%= next_tab_index %>">
         <%=image_tag("accept.png", :alt => "") %>
-        Update
+        <%= t('common.update') %>
       </button>
       <a href="#" class="negative">
         <%=image_tag("cancel.png", :alt => "") %>
-        Cancel
+        <%= t('common.cancel') %>
       </a>
     </div>
   </div>
