@@ -22,7 +22,7 @@ Rails::Initializer.run do |config|
   config.autoload_paths += %W( #{RAILS_ROOT}/app/apis )
 
   config.gem "highline"
-  config.gem "RedCloth"
+  config.gem "RedCloth", :lib => 'redcloth'
   config.gem "soap4r", :lib => false
   config.gem 'datanoise-actionwebservice', :lib => 'actionwebservice', :source => "http://gems.github.com"
   config.gem 'sanitize', :version => '~> 1.2.1'
