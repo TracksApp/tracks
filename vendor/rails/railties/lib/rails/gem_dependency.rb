@@ -38,7 +38,7 @@ module Rails
       result = self.new(name, :version => version)
       spec_filename = File.join(directory_name, '.specification')
       if load_spec
-        raise "Missing specification file in #{File.dirname(spec_filename)}. Perhaps you need to do a 'rake gems:refresh_specs'?" unless File.exists?(spec_filename)
+        raise "Missing specification file in #{File.dirname(spec_filename)}. Perhaps you need to do a 'rake gems:refresh_specs'\?" unless File.exists?(spec_filename)
         spec = YAML::load_file(spec_filename)
         result.specification = spec
       end
@@ -72,7 +72,15 @@ module Rails
         @load_paths_added = @loaded = @frozen = true
         return
       end
-      gem self
+
+      begin
+        dep = Gem::Dependency.new(name, requirement)
+        spec = Gem.source_index.find { |_,s| s.satisfies_requirement?(dep) }.last
+        spec.activate           # a way that exists
+      rescue
+        gem self.name, self.requirement # <  1.8 unhappy way
+      end
+
       @spec = Gem.loaded_specs[name]
       @frozen = @spec.loaded_from.include?(self.class.unpacked_path) if @spec
       @load_paths_added = true
@@ -115,18 +123,6 @@ module Rails
 
     def specification=(s)
       @spec = s
-    end
-
-    if method_defined?(:requirement)
-      def requirement
-        req = super
-        req unless req == Gem::Requirement.default
-      end
-    else
-      def requirement
-        req = version_requirements
-        req unless req == Gem::Requirement.default
-      end
     end
 
     def built?
@@ -274,9 +270,10 @@ module Rails
     end
 
     def ==(other)
-      self.name == other.name && self.requirement == other.requirement
+      Gem::Dependency === other.class &&
+        self.name == other.name && self.requirement == other.requirement
     end
-    alias_method :"eql?", :"=="
+    alias_method :eql?, :"=="
 
     private
 
