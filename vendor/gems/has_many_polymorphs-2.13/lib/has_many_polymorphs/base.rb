@@ -35,7 +35,7 @@ module ActiveRecord
           end.flatten]
                     
           # allocate and assign values
-          returning(klass.allocate) do |obj|
+          klass.allocate.tap do |obj|
             obj.instance_variable_set("@attributes", record)
             obj.instance_variable_set("@attributes_cache", Hash.new)
             
