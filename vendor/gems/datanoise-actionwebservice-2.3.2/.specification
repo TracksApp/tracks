@@ -29,8 +29,8 @@ dependencies:
         segments: 
         - 2
         - 3
-        - 11
-        version: 2.3.11
+        - 12
+        version: 2.3.12
   type: :runtime
   version_requirements: *id001
 - !ruby/object:Gem::Dependency 
@@ -45,8 +45,8 @@ dependencies:
         segments: 
         - 2
         - 3
-        - 11
-        version: 2.3.11
+        - 12
+        version: 2.3.12
   type: :runtime
   version_requirements: *id002
 description: Adds WSDL/SOAP and XML-RPC web service support to Action Pack

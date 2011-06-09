@@ -340,7 +340,7 @@ Be aware, however, that <tt>NULL != 'Spot'</tt> returns <tt>false</tt> due to SQ
         options[:parent_extend] = spiked_create_extension_module(association_id, Array(options[:parent_extend]), "Parent") 
         
         # create the reflection object      
-        returning(create_reflection(:has_many_polymorphs, association_id, options, self)) do |reflection|          
+        create_reflection(:has_many_polymorphs, association_id, options, self).tap do |reflection|          
           # set up the other related associations      
           create_join_association(association_id, reflection)
           create_has_many_through_associations_for_parent_to_children(association_id, reflection)
@@ -355,7 +355,7 @@ Be aware, however, that <tt>NULL != 'Spot'</tt> returns <tt>false</tt> due to SQ
       
       def build_table_aliases(from)
         # for the targets
-        returning({}) do |aliases|
+        {}.tap do |aliases|
           from.map(&:to_s).sort.map(&:to_sym).each_with_index do |plural, t_index|
             begin
               table = plural._as_class.table_name
