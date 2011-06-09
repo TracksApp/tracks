@@ -1,6 +1,6 @@
 # adapted from https://gist.github.com/471663 and https://rails.lighthouseapp.com/projects/8994/tickets/4690-mongrel-doesnt-work-with-rails-238
 
-if Rails.version == '2.3.11' && Gem.available?('mongrel', '~>1.1.5') && self.class.const_defined?(:Mongrel)
+if Rails.version == '2.3.12' && Gem.available?('mongrel', '~>1.1.5') && self.class.const_defined?(:Mongrel)
 
   # Pulled right from latest rack. Old looked like this in 1.1.0 version.
   #
