@@ -111,6 +111,8 @@ class ProjectsController < ApplicationController
   # Edit the details of the project
   #
   def update
+    template = ""
+
     params['project'] ||= {}
     if params['project']['state']
       @new_state = params['project']['state']
@@ -137,35 +139,42 @@ class ProjectsController < ApplicationController
         @contexts = current_user.contexts
         update_state_counts
         init_data_for_sidebar
-        render :template => 'projects/update.js.erb'
-        return
+
+        template = 'projects/update.js.erb'
 
         # TODO: are these params ever set? or is this dead code?
 
       elsif boolean_param('update_status')
-        render :template => 'projects/update_status.js.rjs'
-        return
+        template = 'projects/update_status.js.rjs'
       elsif boolean_param('update_default_context')
         @initial_context_name = @project.default_context.name 
-        render :template => 'projects/update_default_context.js.rjs'
-        return
+        template = 'projects/update_default_context.js.rjs'
       elsif boolean_param('update_default_tags')
-        render :template => 'projects/update_default_tags.js.rjs'
-        return
+        template = 'projects/update_default_tags.js.rjs'
       elsif boolean_param('update_project_name')
         @projects = current_user.projects
-        render :template => 'projects/update_project_name.js.rjs'
-        return
+        template = 'projects/update_project_name.js.rjs'
       else
         render :text => success_text || 'Success'
         return
       end
     else
       init_data_for_sidebar
-      render :template => 'projects/update.js.erb'
-      return
+      template = 'projects/update.js.erb'
     end
-    render :template => 'projects/update.js.erb'
+
+    respond_to do |format|
+      format.js { render :template => template }
+      format.html { redirect_to :action => 'index'}
+      format.xml { 
+        if @saved
+          render :xml => @project.to_xml( :except => :user_id ) 
+        else
+          render :text => "Error on update: #{@project.errors.full_messages.inject("") {|v, e| v + e + " " }}", :status => 409
+        end
+      }
+    end
+    
   end
   
   def edit

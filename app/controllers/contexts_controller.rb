@@ -120,7 +120,14 @@ class ContextsController < ApplicationController
       end
     else
       respond_to do |format|
-        format.js
+        format.js 
+        format.xml {
+          if @saved
+            render :xml => @context.to_xml( :except => :user_id ) 
+          else
+            render :text => "Error on update: #{@context.errors.full_messages.inject("") {|v, e| v + e + " " }}", :status => 409
+          end
+        }
       end
     end
   end
