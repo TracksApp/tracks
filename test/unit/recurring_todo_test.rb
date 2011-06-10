@@ -275,25 +275,31 @@ class RecurringTodoTest < ActiveSupport::TestCase
   end
   
   def test_toggle_completion
-    t = @yearly
-    assert_equal :active, t.aasm_current_state
-    t.toggle_completion!
-    assert_equal :completed, t.aasm_current_state
-    t.toggle_completion!
-    assert_equal :active, t.aasm_current_state
+    assert @yearly.active?
+    assert @yearly.toggle_completion!
+    assert @yearly.completed?
+
+    # entering completed state should set completed_at
+    assert !@yearly.completed_at.nil?
+
+    assert @yearly.toggle_completion!
+    assert @yearly.active?
+    
+    # re-entering active state should clear completed_at
+    assert @yearly.completed_at.nil?
   end
   
   def test_starred
     @yearly.tag_with("1, 2, starred")
     @yearly.tags.reload
 
-    assert_equal true, @yearly.starred?
-    assert_equal false, @weekly_every_day.starred?
+    assert @yearly.starred?
+    assert !@weekly_every_day.starred?
     
     @yearly.toggle_star!
-    assert_equal false, @yearly.starred?
+    assert !@yearly.starred?
     @yearly.toggle_star!
-    assert_equal true, @yearly.starred?
+    assert @yearly.starred?
   end
   
   def test_occurence_count
@@ -307,8 +313,9 @@ class RecurringTodoTest < ActiveSupport::TestCase
     # after completion, when you reactivate the recurring todo, the occurences
     # count should be reset
     assert_equal 2, @every_day.occurences_count
-    @every_day.toggle_completion!
-    @every_day.toggle_completion!
+    assert @every_day.toggle_completion!
+    assert @every_day.toggle_completion!
+    
     assert_equal true, @every_day.has_next_todo(@in_three_days)
     assert_equal 0, @every_day.occurences_count
   end

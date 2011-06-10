@@ -50,7 +50,7 @@ class Project < ActiveRecord::Base
   
   aasm_state :active
   aasm_state :hidden, :enter => :hide_todos, :exit => :unhide_todos
-  aasm_state :completed, :enter => Proc.new { |p| p.completed_at = Time.zone.now }, :exit => Proc.new { |p| p.completed_at = nil }
+  aasm_state :completed, :enter => :set_completed_at_date, :exit => :clear_completed_at_date
 
   aasm_event :activate do
     transitions :to => :active,   :from => [:active, :hidden, :completed]
@@ -94,6 +94,14 @@ class Project < ActiveRecord::Base
         t.save
       end
     end
+  end
+  
+  def set_completed_at_date
+    self.completed_at = Time.zone.now
+  end
+  
+  def clear_completed_at_date
+    self.completed_at = nil
   end
   
   def note_count

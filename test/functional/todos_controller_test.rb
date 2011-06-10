@@ -62,7 +62,6 @@ class TodosControllerTest < ActionController::TestCase
     assert_equal 2, t.tags.count
   end
 
-
   def test_not_done_counts_after_hiding_project
     p = Project.find(1)
     p.hide!

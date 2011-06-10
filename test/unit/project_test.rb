@@ -160,7 +160,6 @@ class ProjectTest < ActiveSupport::TestCase
     assert_equal 1, @timemachine.deferred_todos.count
     assert_equal 0, @moremoney.deferred_todos.count
     @moremoney.todos[0].show_from = next_week
-    @moremoney.todos[0].save
     assert_equal :deferred, @moremoney.todos[0].aasm_current_state
     assert_equal 1, @moremoney.deferred_todos.count
   end

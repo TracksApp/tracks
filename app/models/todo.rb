@@ -51,11 +51,11 @@ class Todo < ActiveRecord::Base
   
   # when entering active state, also remove completed_at date. Looks like :exit
   # of state completed is not run, see #679
-  aasm_state :active, :enter => Proc.new { |t| t[:show_from], t.completed_at = nil, nil }
+  aasm_state :active
   aasm_state :project_hidden, :enter => Proc.new { |t| t.completed_at = Time.zone.now }, :exit => Proc.new { |t| t.completed_at = nil }
-  aasm_state :completed
-  aasm_state :deferred
-  aasm_state :pending
+  aasm_state :completed, :exit => Proc.new { |t| t.completed_at = nil }
+  aasm_state :deferred, :exit => Proc.new { |t| t[:show_from] = nil }
+  aasm_state :pending 
 
   aasm_event :defer do
     transitions :to => :deferred, :from => [:active]
@@ -99,7 +99,7 @@ class Todo < ActiveRecord::Base
     @predecessor_array = nil # Used for deferred save of predecessors
     @removed_predecessors = nil
   end
-  
+    
   def no_uncompleted_predecessors_or_deferral?
     return (show_from.blank? or Time.zone.now > show_from and uncompleted_predecessors.empty?)
   end
@@ -155,10 +155,8 @@ class Todo < ActiveRecord::Base
   end
   
   def remove_predecessor(predecessor)
-    puts "@@@ before delete"
     # remove predecessor and activate myself
     self.predecessors.delete(predecessor)
-    puts "@@@ before activate"
     self.activate!
   end
   
@@ -216,10 +214,14 @@ class Todo < ActiveRecord::Base
   def show_from=(date)
     # parse Date objects into the proper timezone
     date = user.at_midnight(date) if (date.is_a? Date)
+    
+    # show_from needs to be set before state_change because of "bug" in aasm. 
+    # If show_From is not set, the todo will not validate and thus aasm will not save
+    # (see http://stackoverflow.com/questions/682920/persisting-the-state-column-on-transition-using-rubyist-aasm-acts-as-state-machi)
+    self[:show_from] = date 
+
     activate! if deferred? && date.blank?
     defer! if active? && !date.blank? && date > user.date
-    
-    self[:show_from] = date 
   end
 
   alias_method :original_project, :project

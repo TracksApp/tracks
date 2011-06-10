@@ -15,10 +15,7 @@ class RecurringTodo < ActiveRecord::Base
   aasm_column :state
   aasm_initial_state :active
   
-  aasm_state :active, :enter => Proc.new { |t| 
-    t[:show_from], t.completed_at = nil, nil 
-    t.occurences_count = 0
-  }
+  aasm_state :active, :enter => Proc.new { |t| t.occurences_count = 0 }
   aasm_state :completed, :enter => Proc.new { |t| t.completed_at = Time.zone.now }, :exit => Proc.new { |t| t.completed_at = nil }
 
   aasm_event :complete do
@@ -43,8 +40,7 @@ class RecurringTodo < ActiveRecord::Base
   validate :set_recurrence_on_validations
   
   def period_specific_validations
-    periods = %W[daily weekly monthly yearly]
-    if periods.include?(recurring_period)
+    if %W[daily weekly monthly yearly].include?(recurring_period)
       self.send("validate_#{recurring_period}")
     else
       errors.add(:recurring_period, "is an unknown recurrence pattern: '#{self.recurring_period}'")
@@ -95,7 +91,6 @@ class RecurringTodo < ActiveRecord::Base
       raise Exception.new, "unexpected value of recurrence selector '#{self.recurrence_selector}'"
     end
   end
-
 
   def starts_and_ends_on_validations
     errors.add_to_base("The start date needs to be filled in") if start_from.nil? || start_from.blank?

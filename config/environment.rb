@@ -29,6 +29,7 @@ Rails::Initializer.run do |config|
   config.gem 'rack', :version => '1.1.0'
   config.gem 'will_paginate', :version => '~> 2.3.15'
   config.gem 'has_many_polymorphs'
+  config.gem 'aasm', :version => '2.2.0'
 
   config.action_controller.use_accept_header = true
 
