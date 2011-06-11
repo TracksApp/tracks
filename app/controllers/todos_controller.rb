@@ -89,9 +89,6 @@ class TodosController < ApplicationController
       specified_state = @todo.state
       @saved = @todo.save
 
-      # Fix for #977 because AASM overrides @state on creation
-      @todo.update_attribute('state', specified_state) unless specified_state == "immediate" || specified_state.nil? || !@saved
-      @saved = @todo.save
       @todo.update_state_from_project if @saved
 
       unless (@saved == false) || tag_list.blank?
