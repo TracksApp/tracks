@@ -52,8 +52,8 @@ class Todo < ActiveRecord::Base
   # when entering active state, also remove completed_at date. Looks like :exit
   # of state completed is not run, see #679
   aasm_state :active
-  aasm_state :project_hidden, :enter => Proc.new { |t| t.completed_at = Time.zone.now }, :exit => Proc.new { |t| t.completed_at = nil }
-  aasm_state :completed, :exit => Proc.new { |t| t.completed_at = nil }
+  aasm_state :project_hidden
+  aasm_state :completed, :enter => Proc.new { |t| t.completed_at = Time.zone.now }, :exit => Proc.new { |t| t.completed_at = nil }
   aasm_state :deferred, :exit => Proc.new { |t| t[:show_from] = nil }
   aasm_state :pending 
 
