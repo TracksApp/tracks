@@ -82,6 +82,8 @@ class Project < ActiveRecord::Base
   end
   
   def note_count
+    # TODO: test this for eager and not eager loading!!!
+    return 0 if notes.size == 0
     cached_note_count || notes.count
   end
   

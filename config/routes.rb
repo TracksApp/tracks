@@ -13,15 +13,15 @@ ActionController::Routing::Routes.draw do |map|
   end
 
   map.with_options :controller => :contexts do |contexts|
-    contexts.done 'contexts/done', :action => 'completed'
+    contexts.done_contexts 'contexts/done', :action => 'done'
   end
 
-  map.resources :projects, :collection => {:order => :post, :alphabetize => :post, :actionize => :post, :done => :get} do |projects|
+  map.resources :projects, :collection => {:order => :post, :alphabetize => :post, :actionize => :post} do |projects|
     projects.resources :todos, :name_prefix => "project_"
   end
   
   map.with_options :controller => :projects do |projects|
-    projects.done 'projects/done', :action => 'completed'
+    projects.done_projects 'projects/done', :action => 'done'
   end
 
   map.resources :notes
@@ -29,7 +29,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :todos,
     :member => {:toggle_check => :put, :toggle_star => :put},
     :collection => {:check_deferred => :post, :filter_to_context => :post, :filter_to_project => :post, 
-      :done => :get, :all_done => :get}
+  }
 
   map.with_options :controller => :todos do |todos|
     todos.home '', :action => "index"
@@ -56,14 +56,19 @@ ActionController::Routing::Routes.draw do |map|
 
     todos.mobile_todo_show_notes 'todos/notes/:id.m', :action => "show_notes", :format => 'm'
     todos.todo_show_notes 'todos/notes/:id', :action => "show_notes"
+    todos.done_todos 'todos/done', :action => :done
+    todos.all_done_todos 'todos/all_done', :action => :all_done
   end
   map.root :controller => 'todos' # Make OpenID happy because it needs #root_url defined
 
   map.resources :recurring_todos,
     :member => {:toggle_check => :put, :toggle_star => :put}
-  map.recurring_todos 'recurring_todos', :controller => 'recurring_todos', :action => 'index'
+  map.with_options :controller => :recurring_todos do |rt|
+    rt.recurring_todos 'recurring_todos', :action => 'index'
+    rt.done_recurring_todos 'recurring_todos/done', :action => 'done'
+  end
 
-  map.with_options :controller => 'login' do |login|
+  map.with_options :controller => :login do |login|
     login.login 'login', :action => 'login'
     login.login_cas 'login_cas', :action => 'login_cas'
     login.formatted_login 'login.:format', :action => 'login'
@@ -71,12 +76,12 @@ ActionController::Routing::Routes.draw do |map|
     login.formatted_logout 'logout.:format', :action => 'logout'
   end
 
-  map.with_options :controller => "feedlist" do |fl|
+  map.with_options :controller => :feedlist do |fl|
     fl.mobile_feeds 'feeds.m', :action => 'index', :format => 'm'
     fl.feeds        'feeds',   :action => 'index'
   end
   
-  map.with_options :controller => "integrations" do |i|
+  map.with_options :controller => :integrations do |i|
     i.integrations  'integrations', :action => 'index'
     i.rest_api_docs 'integrations/rest_api', :action => "rest_api"
     i.search_plugin 'integrations/search_plugin.xml', :controller => 'integrations', :action => 'search_plugin', :format => 'xml'
@@ -92,7 +97,6 @@ ActionController::Routing::Routes.draw do |map|
   
   map.search 'search', :controller => 'search', :action => 'index'
   map.data 'data', :controller => 'data', :action => 'index'
-  map.done 'done', :controller => 'todos', :action => 'completed_overview'
 
   map.connect '/selenium_helper/login', :controller => 'selenium_helper', :action => 'login' if Rails.env == 'test'
   Translate::Routes.translation_ui(map) if Rails.env != "production"

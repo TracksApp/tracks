@@ -29,16 +29,17 @@
   </div>
 
   <div class="container">
-    <div class=add_note_link><%= link_to "Show all", done_contexts_path%></div>
+    <div class=add_note_link><%= link_to "Show all", done_recurring_todos_path%></div>
     <h2>      
-      <%= t('common.last') %> <%= t('states.completed_plural' )%> <%= t('common.contexts') %>
+      <%= t('common.last') %> <%= t('states.completed_plural' )%> <%= t('common.recurring_todos') %>
     </h2>  
-    <% if @last_completed_contexts.empty? -%>
-      <div class="message"><p><%= t('projects.no_last_completed_contexts') %></p></div>
+    <% if @last_completed_recurring_todos.empty? -%>
+      <div class="message"><p><%= t('projects.no_last_completed_recurring_todos') %></p></div>
     <% else -%>
-      TODO
+      <%= render :partial => '/recurring_todos/recurring_todo', :collection => @last_completed_recurring_todos %>
     <% end -%>
   </div>
+
 
 
 </div><!-- End of display_box -->

@@ -68,7 +68,7 @@
           <li><a href="#"><%= t('layouts.navigation.view') %></a>
             <ul>
               <li><%= navigation_link( t('layouts.navigation.calendar'), calendar_path, :title => t('layouts.navigation.calendar_title')) %></li>
-              <li><%= navigation_link( t('layouts.navigation.completed_tasks'), done_path, {:accesskey=>"d", :title=>t('layouts.navigation.completed_tasks_title')} ) %></li>
+              <li><%= navigation_link( t('layouts.navigation.completed_tasks'), done_overview_path, {:accesskey=>"d", :title=>t('layouts.navigation.completed_tasks_title')} ) %></li>
               <li><%= navigation_link( t('layouts.navigation.feeds'), {:controller => "feedlist", :action => "index"}, :title => t('layouts.navigation.feeds_title')) %></li>
               <li><%= navigation_link( t('layouts.navigation.stats'), {:controller => "stats", :action => "index"}, :title => t('layouts.navigation.stats_title')) %></li>
             </ul>

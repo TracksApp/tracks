@@ -1,6 +1,6 @@
 class StatsController < ApplicationController
 
-  helper :todos, :projects
+  helper :todos, :projects, :recurring_todos
 
   append_before_filter :init, :exclude => []
   
@@ -646,13 +646,11 @@ class StatsController < ApplicationController
   def done 
     @source_view = 'done'
     
-    @done_recently = current_user.todos.completed.all(:limit => 10, :order => 'completed_at DESC')
-    
-    init_not_done_counts(['project'])
-    @last_completed_projects = current_user.projects.completed.all(:limit => 10, :order => 'completed_at DESC')
-    
+    @done_recently = current_user.todos.completed.all(:limit => 10, :order => 'completed_at DESC', :include => [:project, :context, :tags, :taggings])
+    @last_completed_projects = current_user.projects.completed.all(:limit => 10, :order => 'completed_at DESC', :include => [:todos, :notes])
     @last_completed_contexts = []
-    #@last_completed_contexts = current_user.contexts.completed.all(:limit => 10, :order => 'completed_at DESC')
+    @last_completed_recurring_todos = current_user.recurring_todos.completed.all(:limit => 10, :order => 'completed_at DESC')
+    #TODO: @last_completed_contexts = current_user.contexts.completed.all(:limit => 10, :order => 'completed_at DESC')
   end
 
   private
