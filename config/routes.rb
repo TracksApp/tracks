@@ -86,7 +86,7 @@ ActionController::Routing::Routes.draw do |map|
   map.preferences 'preferences', :controller => 'preferences', :action => 'index'
   
   map.with_options :controller => :stats do |stats|
-    stats.stats_page 'stats',  :action => 'index'
+    stats.stats 'stats',  :action => 'index'
     stats.done_overview 'done', :action => 'done'
   end
   
