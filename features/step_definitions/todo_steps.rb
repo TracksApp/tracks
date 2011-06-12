@@ -27,7 +27,9 @@ end
 Given /^I have ([0-9]+) deferred todos$/ do |count|
   context = @current_user.contexts.create!(:name => "context B")
   count.to_i.downto 1 do |i|
-    @current_user.todos.create!(:context_id => context.id, :description => "todo #{i}", :show_from => @current_user.time + 1.week)
+    todo = @current_user.todos.create!(:context_id => context.id, :description => "todo #{i}")
+    todo.show_from = @current_user.time + 1.week
+    todo.save!
   end
 end
 
@@ -37,7 +39,9 @@ end
 
 Given /^I have a deferred todo "([^"]*)" in the context "([^"]*)"$/ do |description, context_name|
   context = @current_user.contexts.find_or_create(:name => context_name)
-  @current_user.todos.create!(:context_id => context.id, :description => description, :show_from => @current_user.time + 1.week)
+  todo = @current_user.todos.create!(:context_id => context.id, :description => description)
+  todo.show_from = @current_user.time + 1.week
+  todo.save!
 end
 
 Given /^I have ([0-9]+) completed todos$/ do |count|
