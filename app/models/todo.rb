@@ -54,7 +54,7 @@ class Todo < ActiveRecord::Base
   
   include AASM
   aasm_column :state
-  aasm_initial_state Proc.new { |todo| (todo.show_from && (todo.show_from > todo.user.date)) ? :deferred : :active}
+  aasm_initial_state Proc.new { |t| (t.show_from && t.user && (t.show_from > t.user.date)) ? :deferred : :active}
   
   # when entering active state, also remove completed_at date. Looks like :exit
   # of state completed is not run, see #679
@@ -221,9 +221,9 @@ class Todo < ActiveRecord::Base
   def show_from=(date)
     # parse Date objects into the proper timezone
     date = user.at_midnight(date) if (date.is_a? Date)
-    
+
     # show_from needs to be set before state_change because of "bug" in aasm. 
-    # If show_From is not set, the todo will not validate and thus aasm will not save
+    # If show_from is not set, the todo will not validate and thus aasm will not save
     # (see http://stackoverflow.com/questions/682920/persisting-the-state-column-on-transition-using-rubyist-aasm-acts-as-state-machi)
     self[:show_from] = date 
 
@@ -338,4 +338,5 @@ class Todo < ActiveRecord::Base
     todo.project_id = project_id unless project_id.nil?
     return todo
   end
+    
 end

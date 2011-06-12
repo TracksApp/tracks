@@ -20,9 +20,9 @@ class TodosControllerTest < ActionController::TestCase
   def test_not_done_counts
     login_as(:admin_user)
     get :index
-    assert_equal 2, assigns['project_not_done_counts'][projects(:timemachine).id]
-    assert_equal 3, assigns['context_not_done_counts'][contexts(:call).id]
-    assert_equal 1, assigns['context_not_done_counts'][contexts(:lab).id]
+    assert_equal 2, projects(:timemachine).todos.active.count
+    assert_equal 3, contexts(:call).todos.not_completed.count
+    assert_equal 1, contexts(:lab).todos.not_completed.count
   end
 
   def test_tag_is_retrieved_properly
@@ -68,9 +68,9 @@ class TodosControllerTest < ActionController::TestCase
     p.save!
     login_as(:admin_user)
     get :index
-    assert_equal nil, assigns['project_not_done_counts'][projects(:timemachine).id]
-    assert_equal 2, assigns['context_not_done_counts'][contexts(:call).id]
-    assert_equal nil, assigns['context_not_done_counts'][contexts(:lab).id]
+    assert_equal 0, projects(:timemachine).todos.active.count
+    assert_equal 2, contexts(:call).todos.active.count
+    assert_equal 0, contexts(:lab).todos.active.count
   end
 
   def test_not_done_counts_after_hiding_and_unhiding_project
@@ -81,9 +81,9 @@ class TodosControllerTest < ActionController::TestCase
     p.save!
     login_as(:admin_user)
     get :index
-    assert_equal 2, assigns['project_not_done_counts'][projects(:timemachine).id]
-    assert_equal 3, assigns['context_not_done_counts'][contexts(:call).id]
-    assert_equal 1, assigns['context_not_done_counts'][contexts(:lab).id]
+    assert_equal 2, projects(:timemachine).todos.active.count
+    assert_equal 3, contexts(:call).todos.not_completed.count
+    assert_equal 1, contexts(:lab).todos.not_completed.count
   end
 
   def test_deferred_count_for_project_source_view

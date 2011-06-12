@@ -242,16 +242,6 @@ class UserTest < ActiveSupport::TestCase
     @admin_user.deferred_todos.reload
     assert_equal 0, @admin_user.deferred_todos.count
   end
-
-  def test_completed_todos_completed_within
-    todos = @admin_user.completed_todos.completed_within(@admin_user.time - 1.day)
-    assert_equal 3, todos.length
-  end
-
-  def test_completed_todos_complete_more_than
-    todos = @admin_user.completed_todos.completed_more_than(@admin_user.time - 1.day)
-    assert_equal 1, todos.length
-  end
   
   def test_sort_active_projects_alphabetically
     u = users(:admin_user)

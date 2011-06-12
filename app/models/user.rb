@@ -59,22 +59,16 @@ class User < ActiveRecord::Base
                 self.update_positions(projects.map{ |p| p.id })
                 return projects
               end
-              def actionize(user_id, scope_conditions = {})
-                query_state = scope_conditions[:state] ? "AND projects.state = '#{scope_conditions[:state]}' " : ""
-                projects_with_active_todos = Project.find_by_sql([
-                    "SELECT projects.id, count(todos.id) as p_count " +
-                      "FROM projects " +
-                      "LEFT OUTER JOIN todos ON todos.project_id = projects.id "+
-                      "WHERE projects.user_id = ? AND " +
-                      "NOT (todos.state='completed' OR todos.state='deferred' OR todos.state='pending') " +
-                      query_state +
-                      " GROUP BY projects.id ORDER by p_count DESC",user_id])
-                all_project_ids = Project.find_by_sql([
-                    "SELECT id FROM projects WHERE projects.user_id = ? " + query_state, user_id
-                  ])
-                ids_in_new_positions = projects_with_active_todos.map{|p| p.id}
-                ids_of_unselected_projects = all_project_ids.map{|p| p.id} - ids_in_new_positions
-                self.update_positions(ids_in_new_positions + ids_of_unselected_projects)
+              def actionize(scope_conditions = {})
+                todos_in_project = find(:all, :conditions => scope_conditions, :include => [:todos])
+                todos_in_project.sort!{ |x, y| -(x.todos.active.count <=> y.todos.active.count) }
+                todos_in_project.reject{ |p| p.todos.active.count > 0 }
+                sorted_project_ids = todos_in_project.map {|p| p.id}
+                
+                all_project_ids = find(:all).map {|p| p.id}
+                other_project_ids = all_project_ids - sorted_project_ids
+                
+                update_positions(sorted_project_ids + other_project_ids)
 
                 return find(:all, :conditions => scope_conditions)
               end

@@ -19,8 +19,6 @@ class ContextsController < ApplicationController
     @all_contexts = @active_contexts + @hidden_contexts
     @count = @all_contexts.size
 
-
-    init_not_done_counts(['context'])
     respond_to do |format|
       format.html &render_contexts_html
       format.m    &render_contexts_mobile

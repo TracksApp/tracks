@@ -80,22 +80,12 @@ class ApplicationController < ActionController::Base
   # actions or multiple actions
   #
   def count_undone_todos_phrase(todos_parent, string="actions")
-    count = count_undone_todos(todos_parent)
+    count = todos_parent.nil? ? 0 : todos_parent.todos.not_completed.count
+    # count_undone_todos(todos_parent)
     word = count == 1 ? string.singularize : string.pluralize
     return count.to_s + "&nbsp;" + word
   end
   
-  def count_undone_todos(todos_parent)
-    return 0 if todos_parent.nil?
-
-    if (todos_parent.is_a?(Project) && todos_parent.hidden?)
-      count = eval "@project_project_hidden_todo_counts[#{todos_parent.id}]"
-    else
-      count = eval "@#{todos_parent.class.to_s.downcase}_not_done_counts[#{todos_parent.id}]"
-    end
-
-  end
-
   # Convert a date object to the format specified in the user's preferences in
   # config/settings.yml
   #
@@ -248,25 +238,8 @@ class ApplicationController < ActionController::Base
 
     @active_contexts = current_user.contexts.active
     @hidden_contexts = current_user.contexts.hidden
-
-    init_not_done_counts
-    if prefs.show_hidden_projects_in_sidebar
-      init_project_hidden_todo_counts(['project'])
-    end
   end
-  
-  def init_not_done_counts(parents = ['project','context'])
-    parents.each do |parent|
-      eval("@#{parent}_not_done_counts = @#{parent}_not_done_counts || current_user.todos.active.count(:group => :#{parent}_id)")
-    end
-  end
-  
-  def init_project_hidden_todo_counts(parents = ['project','context'])
-    parents.each do |parent|
-      eval("@#{parent}_project_hidden_todo_counts = @#{parent}_project_hidden_todo_counts || current_user.todos.count(:conditions => ['state = ? or state = ?', 'project_hidden', 'active'], :group => :#{parent}_id)")
-    end
-  end  
-  
+    
   # Set the contents of the flash message from a controller Usage: notify
   # :warning, "This is the message" Sets the flash of type 'warning' to "This is
   # the message"

@@ -164,8 +164,7 @@ class ProjectsControllerTest < TodoContainerControllerTestBase
     login_as :admin_user
     get :index, { :format => "txt" }
     assert_equal 'text/plain', @response.content_type
-    assert !(/&nbsp;/.match(@response.body)) 
-    #puts @response.body
+    assert !(/&nbsp;/.match(@response.body))
   end
   
   def test_text_feed_content_for_projects_with_no_actions
@@ -200,6 +199,7 @@ class ProjectsControllerTest < TodoContainerControllerTestBase
     login_as :admin_user
     u = users(:admin_user)
     post :actionize, :state => "active", :format => 'js'
+    
     assert_equal 1, projects(:gardenclean).position
     assert_equal 2, projects(:moremoney).position
     assert_equal 3, projects(:timemachine).position
