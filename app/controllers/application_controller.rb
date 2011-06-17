@@ -224,6 +224,24 @@ class ApplicationController < ActionController::Base
   def prefered_auth?
     self.class.prefered_auth?
   end
+  
+  def get_done_today(completed_todos, includes = {:include => Todo::DEFAULT_INCLUDES})
+    start_of_this_day = Time.zone.now.beginning_of_day
+    completed_todos.completed_after(start_of_this_day).all(includes)
+  end
+    
+  def get_done_this_week(completed_todos, includes = {:include => Todo::DEFAULT_INCLUDES})
+    start_of_this_week = Time.zone.now.beginning_of_week
+    start_of_this_day = Time.zone.now.beginning_of_day
+    completed_todos.completed_after(start_of_this_week).completed_before(start_of_this_day).all(includes)
+  end
+  
+  def get_done_this_month(completed_todos, includes = {:include => Todo::DEFAULT_INCLUDES})
+    start_of_this_month = Time.zone.now.beginning_of_month
+    start_of_this_week = Time.zone.now.beginning_of_week
+    completed_todos.completed_after(start_of_this_month).completed_before(start_of_this_week).all(includes)
+  end
+
 
   private
         

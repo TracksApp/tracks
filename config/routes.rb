@@ -8,7 +8,7 @@ ActionController::Routing::Routes.draw do |map|
     users.signup 'signup', :action => "new"
   end
 
-  map.resources :contexts, :collection => {:order => :post} do |contexts|
+  map.resources :contexts, :collection => {:order => :post}, :member => {:done_todos => :get, :all_done_todos => :get} do |contexts|
     contexts.resources :todos, :name_prefix => "context_"
   end
 
@@ -16,7 +16,8 @@ ActionController::Routing::Routes.draw do |map|
     contexts.done_contexts 'contexts/done', :action => 'done'
   end
 
-  map.resources :projects, :collection => {:order => :post, :alphabetize => :post, :actionize => :post} do |projects|
+  map.resources :projects, :collection => {:order => :post, :alphabetize => :post, :actionize => :post}, 
+  :member => {:done_todos => :get, :all_done_todos => :get} do |projects|
     projects.resources :todos, :name_prefix => "project_"
   end
   

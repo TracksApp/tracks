@@ -275,5 +275,27 @@ module ApplicationHelper
       javascript_include_tag("i18n/jquery.ui.datepicker-#{locale}.js")
     end
   end
+  
+  def determine_done_path
+    case @controller.controller_name
+    when "contexts"
+      done_todos_context_path(@context)
+    when "projects"
+      done_todos_project_path(@project)
+    else
+      done_todos_path
+    end
+  end
+  
+  def determine_all_done_path
+    case @controller.controller_name
+    when "contexts"
+      all_done_todos_context_path(@context)
+    when "projects"
+      all_done_todos_project_path(@project)
+    else
+      all_done_todos_path
+    end
+  end
 
 end

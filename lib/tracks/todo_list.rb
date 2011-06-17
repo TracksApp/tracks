@@ -54,6 +54,6 @@ module Tracks
     def deferred_todo_count
       self.todos.count_in_state(:deferred)
     end
-  
+      
   end
 end

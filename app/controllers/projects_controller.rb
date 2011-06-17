@@ -215,6 +215,29 @@ class ProjectsController < ApplicationController
     @contexts = current_user.contexts
   end
   
+  def done_todos
+    @source_view = 'project'
+    @page_title = t('project.completed_tasks_title')
+    
+    completed_todos = current_user.projects.find(params[:id]).todos.completed
+
+    @done_today = get_done_today(completed_todos)
+    @done_this_week = get_done_this_week(completed_todos)
+    @done_this_month = get_done_this_month(completed_todos)
+    @count = @done_today.size + @done_this_week.size + @done_this_month.size
+    
+    render :template => 'todos/done'
+  end
+  
+  def all_done_todos
+    @source_view = 'project'
+    @page_title = t('project.completed_tasks_title')
+
+    @done = current_user.projects.find(params[:id]).todos.completed.paginate :page => params[:page], :per_page => 20, :order => 'completed_at DESC', :include => Todo::DEFAULT_INCLUDES
+    @count = @done.size
+    render :template => 'todos/all_done'
+  end
+  
   protected
 
   def update_state_counts

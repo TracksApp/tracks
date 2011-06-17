@@ -44,7 +44,7 @@ class Todo < ActiveRecord::Base
   named_scope :completed_before, lambda { |date| {:conditions => ["todos.completed_at < ? ", date] } }  
 
   STARRED_TAG_NAME = "starred"
-  DEFAULT_INCLUDES = [ :project, :context, :tags, :taggings, :pending_successors, :successors, :predecessors, :recurring_todo ]
+  DEFAULT_INCLUDES = [ :project, :context, :tags, :taggings, :recurring_todo ]
 
   # regular expressions for dependencies
   RE_TODO = /[^']+/

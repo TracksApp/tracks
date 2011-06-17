@@ -472,15 +472,10 @@ class TodosController < ApplicationController
     @page_title = t('todos.completed_tasks_title')
     
     completed_todos = current_user.todos.completed
-    start_of_this_day = Time.zone.now.beginning_of_day
-    start_of_this_week = Time.zone.now.beginning_of_week
-    start_of_this_month = Time.zone.now.beginning_of_month
-    start_of_previous_month = (Time.zone.now.beginning_of_month - 1.day).beginning_of_month
-    includes = {:include => Todo::DEFAULT_INCLUDES}
 
-    @done_today = completed_todos.completed_after(start_of_this_day).all(includes)
-    @done_this_week = completed_todos.completed_after(start_of_this_week).completed_before(start_of_this_day).all(includes)
-    @done_this_month = completed_todos.completed_after(start_of_this_month).completed_before(start_of_this_week).all(includes)
+    @done_today = get_done_today(completed_todos)
+    @done_this_week = get_done_this_week(completed_todos)
+    @done_this_month = get_done_this_month(completed_todos)
     @count = @done_today.size + @done_this_week.size + @done_this_month.size
   end
   
