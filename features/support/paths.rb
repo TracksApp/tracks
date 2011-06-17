@@ -13,6 +13,18 @@ module NavigationHelpers
     when /the home\s?page/
       @source_view = "todos"
       root_path(options)
+    when /the done page/
+      done_overview_path(options)
+    when /the done actions page for context "([^"]*)"/i
+      context = @current_user.contexts.find_by_name($1)
+      done_todos_context_path(context)
+    when /the done actions page for project "([^"]*)"/i
+      project = @current_user.projects.find_by_name($1)
+      done_todos_project_path(project)
+    when /the done actions page/
+      done_todos_path(options)
+    when /the all done actions page/
+      all_done_todos_path(options)
     when /the statistics page/
       @source_view = "stats"
       stats_path(options)

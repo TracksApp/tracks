@@ -44,16 +44,35 @@ Given /^I have a deferred todo "([^"]*)" in the context "([^"]*)"$/ do |descript
   todo.save!
 end
 
-Given /^I have ([0-9]+) completed todos$/ do |count|
-  context = @current_user.contexts.create!(:name => "context C")
+Given /^I have ([0-9]+) completed todos in project "([^"]*)" in context "([^"]*)"$/ do |count, project_name, context_name|
+  context = @current_user.contexts.find_by_name(context_name)
+  context.should_not be_nil
+  
+  project = @current_user.projects.find_by_name(project_name)
+  project.should_not be_nil
+  
+  count.to_i.downto 1 do |i|
+    todo = @current_user.todos.create!(:context_id => context.id, :description => "todo #{i}", :project_id => project.id)
+    todo.complete!
+  end
+end
+
+Given /^I have ([0-9]+) completed todos in context "([^"]*)"$/ do |count, context_name|
+  context = @current_user.contexts.find_by_name(context_name)
+  context.should_not be_nil
+  
   count.to_i.downto 1 do |i|
     todo = @current_user.todos.create!(:context_id => context.id, :description => "todo #{i}")
     todo.complete!
   end
 end
 
+Given /^I have ([0-9]+) completed todos$/ do |count|
+  Given "I have #{count} completed todos in the context \"context D\""
+end
+
 Given /^I have ([0-9]+) completed todos with a note$/ do |count|
-  context = @current_user.contexts.create!(:name => "context D")
+  context = @current_user.contexts.find_or_create(:name => "context D")
   count.to_i.downto 1 do |i|
     todo = @current_user.todos.create!(:context_id => context.id, :description => "todo #{i}", :notes => "note #{i}")
     todo.complete!
@@ -274,4 +293,19 @@ end
 Then /^the selected context should be "([^"]*)"$/ do |content|
   # Works for mobile. TODO: make it work for both mobile and non-mobile
   field_labeled("Context").element.search(".//option[@selected = 'selected']").inner_html.should =~ /#{content}/
+end
+
+
+Then /^I should see the page selector$/ do
+  page_selector_xpath = ".//a[@class='next_page']"
+  response.body.should have_xpath(page_selector_xpath)
+end
+
+Then /^the page should be "([^"]*)"$/ do |page_number|
+  page_number_found = -1
+  page_number_xpath = ".//span[@class='current']"
+  response.should have_xpath(page_number_xpath) do |node|
+    page_number_found = node.first.content.to_i
+  end
+  page_number_found.should == page_number.to_i
 end

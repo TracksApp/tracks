@@ -108,6 +108,7 @@ en:
     months: months
     week: week
     weeks: weeks
+    recurring_todos: Repeating Actions
   errors:
     user_unauthorized: "401 Unauthorized: Only administrative users are allowed access to this function."
   footer:

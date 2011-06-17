@@ -60,7 +60,6 @@ Then /^I should not see "([^"]*)" in the context container for "([^"]*)"$/ do |t
   end
 end
 
-
 Then /^I should see "([^"]*)" in project container for "([^"]*)"$/ do |todo_description, project_name|
   todo = @current_user.todos.find_by_description(todo_description)
   todo.should_not be_nil

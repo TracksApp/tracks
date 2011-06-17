@@ -14,8 +14,10 @@ class ProjectsController < ApplicationController
       projects_and_actions
     else      
       @contexts = current_user.contexts.all
+      init_not_done_counts(['project'])
+      init_project_hidden_todo_counts(['project'])
       if params[:only_active_with_no_next_actions]
-        @projects = current_user.projects.active.select { |p| p.todos.count == 0  }
+        @projects = current_user.projects.active.select { |p| count_undone_todos(p) == 0  }
       else
         @projects = current_user.projects.all
       end
@@ -207,12 +209,14 @@ class ProjectsController < ApplicationController
     @state = params['state']
     @projects = current_user.projects.alphabetize(:state => @state) if @state
     @contexts = current_user.contexts
+    init_not_done_counts(['project'])
   end
   
   def actionize
     @state = params['state']
     @projects = current_user.projects.actionize(:state => @state) if @state
     @contexts = current_user.contexts
+    init_not_done_counts(['project'])
   end
   
   def done_todos
