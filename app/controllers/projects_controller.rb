@@ -45,11 +45,11 @@ class ProjectsController < ApplicationController
     init_data_for_sidebar unless mobile?
     @page_title = t('projects.page_title', :project => @project.name)
     
-    @not_done = @project.todos.active_or_hidden(:include => [:tags, :context, :predecessors])
-    @deferred = @project.todos.deferred(:include => [:tags, :context, :predecessors])
-    @pending = @project.todos.pending(:include => [:tags, :context, :predecessors])
+    @not_done = @project.todos.active_or_hidden(:include => Todo::DEFAULT_INCLUDES)
+    @deferred = @project.todos.deferred(:include => Todo::DEFAULT_INCLUDES)
+    @pending = @project.todos.pending(:include => Todo::DEFAULT_INCLUDES)
     @done = @project.todos.find_in_state(:all, :completed,
-      :order => "todos.completed_at DESC", :limit => current_user.prefs.show_number_completed, :include => [:context, :tags, :predecessors])
+      :order => "todos.completed_at DESC", :limit => current_user.prefs.show_number_completed, :include => Todo::DEFAULT_INCLUDES)
 
     @count = @not_done.size
     @down_count = @count + @deferred.size + @pending.size

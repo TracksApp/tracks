@@ -263,7 +263,7 @@ class ContextsController < ApplicationController
   def init_todos
     set_context_from_params
     unless @context.nil?
-      @context.todos.send :with_scope, :find => { :include => [:project, :tags, :successors, :predecessors, :recurring_todo] } do
+      @context.todos.send :with_scope, :find => { :include => Todo::DEFAULT_INCLUDES } do
         @done = @context.done_todos
       end
 
@@ -275,7 +275,7 @@ class ContextsController < ApplicationController
       # projects from context.
       @not_done_todos = @context.todos.active(
         :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC", 
-        :include => [:project, :tags, :successors, :predecessors, :recurring_todo])
+        :include => Todo::DEFAULT_INCLUDES)
 
       @projects = current_user.projects
 

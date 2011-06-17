@@ -44,7 +44,7 @@ class Todo < ActiveRecord::Base
   named_scope :completed_before, lambda { |date| {:conditions => ["todos.completed_at < ? ", date] } }  
 
   STARRED_TAG_NAME = "starred"
-  DEFAULT_INCLUDES = [ :project, :context, :tags, :taggings, :recurring_todo ]
+  DEFAULT_INCLUDES = [ :project, :context, :tags, :taggings, :pending_successors, :uncompleted_predecessors, :recurring_todo ]
 
   # regular expressions for dependencies
   RE_TODO = /[^']+/
@@ -185,13 +185,7 @@ class Todo < ActiveRecord::Base
   end
   
   def has_pending_successors
-    #  has_many :pending_successors, :through => :predecessor_dependencies,
-    #           :source => :successor, :conditions => ['todos.state = ?', 'pending']
-
-    successors = predecessor_dependencies.all(:include => [:successor])
-    pending = successors.reject { |d| !( d.successor.state=='pending') }
-    return !pending.empty?
-    #return !pending_successors.empty?
+    return !pending_successors.empty?
   end
   
   def has_tag?(tag)
