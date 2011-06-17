@@ -25,6 +25,25 @@ class TodosControllerTest < ActionController::TestCase
     assert_equal 1, contexts(:lab).todos.not_completed.count
   end
 
+  def test_cached_not_done_counts
+    login_as(:admin_user)
+    get :index
+    assert_equal 2, assigns['project_not_done_counts'][projects(:timemachine).id]
+    assert_equal 3, assigns['context_not_done_counts'][contexts(:call).id]
+    assert_equal 1, assigns['context_not_done_counts'][contexts(:lab).id]
+  end
+  
+   def test_cached_not_done_counts_after_hiding_project
+    p = Project.find(1)
+    p.hide!
+    p.save!
+    login_as(:admin_user)
+    get :index
+    assert_equal nil, assigns['project_not_done_counts'][projects(:timemachine).id]
+    assert_equal 2, assigns['context_not_done_counts'][contexts(:call).id]
+    assert_equal nil, assigns['context_not_done_counts'][contexts(:lab).id]
+  end
+
   def test_tag_is_retrieved_properly
     login_as(:admin_user)
     get :index
