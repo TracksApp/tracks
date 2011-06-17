@@ -212,7 +212,7 @@ class TodosController < ApplicationController
   end
   
   def edit
-    @todo = current_user.todos.find(params['id'], :include => [:project, :context, :tags, :taggings, :predecessors])
+    @todo = current_user.todos.find(params['id'], :include => Todo::DEFAULT_INCLUDES)
     @source_view = params['_source_view'] || 'todo'
     @tag_name = params['_tag_name']
     respond_to do |format|
@@ -237,7 +237,7 @@ class TodosController < ApplicationController
   def add_predecessor
     @source_view = params['_source_view'] || 'todo'
     @predecessor = current_user.todos.find(params['predecessor'])
-    @todo = current_user.todos.find(params['successor'])
+    @todo = current_user.todos.find(params['successor'], :include => Todo::DEFAULT_INCLUDES)
     @original_state = @todo.state
     unless @predecessor.completed?
       # Add predecessor
@@ -256,9 +256,8 @@ class TodosController < ApplicationController
   end
 
   def remove_predecessor
-    puts "@@@ start remove_predecessor"
     @source_view = params['_source_view'] || 'todo'
-    @todo = current_user.todos.find(params['id'])
+    @todo = current_user.todos.find(params['id'], :include => Todo::DEFAULT_INCLUDES)
     @predecessor = current_user.todos.find(params['predecessor'])
     @successor = @todo
     @removed = @successor.remove_predecessor(@predecessor)
@@ -325,7 +324,7 @@ class TodosController < ApplicationController
   end
   
   def toggle_star
-    @todo = current_user.todos.find(params['id'], :include => [:taggings, :tags])
+    @todo = current_user.todos.find(params['id'])
     @todo.toggle_star!
     @saved = true # cannot determine error
     respond_to do |format|
@@ -409,7 +408,7 @@ class TodosController < ApplicationController
     
   def destroy
     @source_view = params['_source_view'] || 'todo'
-    @todo = current_user.todos.find(params['id'], :include => [:pending_successors, :uncompleted_predecessors, :taggings, :tags, :project, :context])
+    @todo = current_user.todos.find(params['id'])
     @original_item_due = @todo.due
     @context_id = @todo.context_id
     @project_id = @todo.project_id
@@ -477,7 +476,7 @@ class TodosController < ApplicationController
     start_of_this_week = Time.zone.now.beginning_of_week
     start_of_this_month = Time.zone.now.beginning_of_month
     start_of_previous_month = (Time.zone.now.beginning_of_month - 1.day).beginning_of_month
-    includes = {:include => [:context, :project, :tags, :taggings, :successors, :predecessors]}
+    includes = {:include => Todo::DEFAULT_INCLUDES}
 
     @done_today = completed_todos.completed_after(start_of_this_day).all(includes)
     @done_this_week = completed_todos.completed_after(start_of_this_week).completed_before(start_of_this_day).all(includes)
@@ -489,9 +488,7 @@ class TodosController < ApplicationController
     @source_view = 'done'
     @page_title = t('todos.completed_tasks_title')
 
-    includes = [:context, :project, :tags, :taggings, :successors, :predecessors]
-    
-    @done = current_user.todos.completed.paginate :page => params[:page], :per_page => 20, :order => 'completed_at DESC', :include => includes
+    @done = current_user.todos.completed.paginate :page => params[:page], :per_page => 20, :order => 'completed_at DESC', :include => Todo::DEFAULT_INCLUDES
     @count = @done.size
   end
   
@@ -501,12 +498,15 @@ class TodosController < ApplicationController
     
     @contexts_to_show = @contexts = current_user.contexts.find(:all)
     
-    @not_done_todos = current_user.todos.deferred(:include => [:tags, :taggings, :projects]) + current_user.todos.pending(:include => [:tags, :taggings, :projects])
+    includes = params[:format]=='xml' ? [:context, :project] : Todo::DEFAULT_INCLUDES
+    
+    @not_done_todos = current_user.todos.deferred(:include => includes) + current_user.todos.pending(:include => includes)
     @down_count = @count = @not_done_todos.size
     
     respond_to do |format|
       format.html
       format.m { render :action => 'mobile_list_deferred' }
+      format.xml { render :xml => @not_done_todos.to_xml( :except => :user_id ) }
     end
   end
   
@@ -594,7 +594,7 @@ class TodosController < ApplicationController
     @source_view = params['_source_view'] || 'todo'
     numdays = params['days'].to_i
 
-    @todo = current_user.todos.find(params[:id], :include => [:taggings, :tags, :uncompleted_predecessors, :pending_successors])
+    @todo = current_user.todos.find(params[:id])
     @original_item_context_id = @todo.context_id
     @todo_deferred_state_changed = true
     @new_context_created = false
@@ -635,7 +635,7 @@ class TodosController < ApplicationController
     due_this_week_date = Time.zone.now.end_of_week
     due_next_week_date = due_this_week_date + 7.days
     due_this_month_date = Time.zone.now.end_of_month
-    included_tables = [:taggings, :tags, :recurring_todo]
+    included_tables = Todo::DEFAULT_INCLUDES
         
     @due_today = current_user.todos.not_completed.find(:all,
       :include => included_tables,
@@ -848,13 +848,13 @@ class TodosController < ApplicationController
             # current_users.todos.find but that broke with_scope for :limit
 
             # Exclude hidden projects from count on home page
-            @todos = current_user.todos.find(:all, :include => [ :project, :context, :tags, :pending_successors, :recurring_todo ])
+            @todos = current_user.todos.find(:all, :include => Todo::DEFAULT_INCLUDES)
 
             # Exclude hidden projects from the home page
             @not_done_todos = current_user.todos.find(:all,
               :conditions => ['contexts.hide = ? AND (projects.state = ? OR todos.project_id IS NULL)', false, 'active'],
               :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC",
-              :include => [ :project, :context, :tags, :pending_successors, :recurring_todo ])
+              :include => Todo::DEFAULT_INCLUDES)
           end
 
         end
@@ -977,7 +977,7 @@ class TodosController < ApplicationController
       # If you've set no_completed to zero, the completed items box isn't shown
       # on the home page
       max_completed = current_user.prefs.show_number_completed
-      @done = current_user.todos.completed.find(:all, :limit => max_completed, :include => [ :context, :project, :tags ]) unless max_completed == 0
+      @done = current_user.todos.completed.find(:all, :limit => max_completed, :include => Todo::DEFAULT_INCLUDES) unless max_completed == 0
 
       # Set count badge to number of not-done, not hidden context items
       @count = current_user.todos.active.not_hidden.count(:all)

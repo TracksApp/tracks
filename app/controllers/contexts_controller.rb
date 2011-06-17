@@ -35,7 +35,7 @@ class ContextsController < ApplicationController
   
   def show
     @contexts = current_user.contexts(true)
-    if (@context.nil?)
+    if @context.nil?
       respond_to do |format|
         format.html { render :text => 'Context not found', :status => 404 }
         format.xml  { render :xml => '<error>Context not found</error>', :status => 404 }
@@ -240,7 +240,7 @@ class ContextsController < ApplicationController
   def init_todos
     set_context_from_params
     unless @context.nil?
-      @context.todos.send :with_scope, :find => { :include => [:project, :tags] } do
+      @context.todos.send :with_scope, :find => { :include => [:project, :tags, :successors, :predecessors, :recurring_todo] } do
         @done = @context.done_todos
       end
 
@@ -250,11 +250,9 @@ class ContextsController < ApplicationController
       # search manually until I can work out a way to do the same thing using
       # not_done_todos acts_as_todo_container method Hides actions in hidden
       # projects from context.
-      @not_done_todos = @context.todos.find(
-        :all, 
-        :conditions => ['todos.state = ? AND (todos.project_id IS ? OR projects.state = ?)', 'active', nil, 'active'], 
+      @not_done_todos = @context.todos.active(
         :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC", 
-        :include => [:project, :tags])
+        :include => [:project, :tags, :successors, :predecessors, :recurring_todo])
 
       @projects = current_user.projects
 

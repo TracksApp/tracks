@@ -28,12 +28,12 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :todos,
     :member => {:toggle_check => :put, :toggle_star => :put},
-    :collection => {:check_deferred => :post, :filter_to_context => :post, :filter_to_project => :post, 
+    :collection => {:check_deferred => :post, :filter_to_context => :post, :filter_to_project => :post, :done => :get, :all_done => :get
   }
 
   map.with_options :controller => :todos do |todos|
     todos.home '', :action => "index"
-    todos.tickler 'tickler', :action => "list_deferred"
+    todos.tickler 'tickler.:format', :action => "list_deferred"
     todos.mobile_tickler 'tickler.m', :action => "list_deferred", :format => 'm'
     
     # This route works for tags with dots like /todos/tag/version1.5

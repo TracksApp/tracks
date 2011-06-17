@@ -15,8 +15,8 @@ class TodoApi < ActionWebService::API::Base
              :expects => [{:username => :string}, {:token => :string}],
              :returns => [[Context]]
 
- api_method :list_projects,
-            :expects => [{:username => :string}, {:token => :string}],
-            :returns => [[Project]]
+  api_method :list_projects,
+             :expects => [{:username => :string}, {:token => :string}],
+             :returns => [[Project]]
 
 end

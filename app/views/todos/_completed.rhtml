@@ -3,6 +3,7 @@
    suppress_project ||= false
 -%>
 <div class="container completed" id="completed_container">
+  <div class=add_note_link><%= link_to "Show all", done_todos_path%></div>
   <h2>
       <% if collapsible %>
       <a href="#" class="container_toggle" id="toggle_completed"><%= image_tag("collapse.png") %></a>
