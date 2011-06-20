@@ -8,23 +8,15 @@ ActionController::Routing::Routes.draw do |map|
     users.signup 'signup', :action => "new"
   end
 
-  map.resources :contexts, :collection => {:order => :post}, :member => {:done_todos => :get, :all_done_todos => :get} do |contexts|
+  map.resources :contexts, :collection => {:order => :post, :done => :get}, :member => {:done_todos => :get, :all_done_todos => :get} do |contexts|
     contexts.resources :todos, :name_prefix => "context_"
   end
 
-  map.with_options :controller => :contexts do |contexts|
-    contexts.done_contexts 'contexts/done', :action => 'done'
-  end
-
-  map.resources :projects, :collection => {:order => :post, :alphabetize => :post, :actionize => :post}, 
+  map.resources :projects, :collection => {:order => :post, :alphabetize => :post, :actionize => :post, :done => :get}, 
   :member => {:done_todos => :get, :all_done_todos => :get} do |projects|
     projects.resources :todos, :name_prefix => "project_"
   end
   
-  map.with_options :controller => :projects do |projects|
-    projects.done_projects 'projects/done', :action => 'done'
-  end
-
   map.resources :notes
 
   map.resources :todos,
@@ -62,11 +54,10 @@ ActionController::Routing::Routes.draw do |map|
   end
   map.root :controller => 'todos' # Make OpenID happy because it needs #root_url defined
 
-  map.resources :recurring_todos,
+  map.resources :recurring_todos, :collection => {:done => :get},
     :member => {:toggle_check => :put, :toggle_star => :put}
   map.with_options :controller => :recurring_todos do |rt|
     rt.recurring_todos 'recurring_todos', :action => 'index'
-    rt.done_recurring_todos 'recurring_todos/done', :action => 'done'
   end
 
   map.with_options :controller => :login do |login|

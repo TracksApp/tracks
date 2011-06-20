@@ -32,6 +32,24 @@ class ProjectsController < ApplicationController
       end
     end
   end
+  
+  def done
+    @source_view = params['_source_view'] || 'project_list'
+    @page_title = t('projects.list_completed_projects')
+    
+    page = params[:page] || 1
+    projects_per_page = 20
+    @projects = current_user.projects.completed.paginate :page => page, :per_page => projects_per_page
+    @count = @projects.count
+    @total = current_user.projects.completed.count
+    @no_projects = @projects.empty?
+    
+    @range_low = (page.to_i-1) * projects_per_page + 1
+    @range_high = @range_low + @projects.size - 1
+
+    init_not_done_counts(['project'])
+    render
+  end
 
   def projects_and_actions
     @projects = current_user.projects.active
@@ -259,7 +277,8 @@ class ProjectsController < ApplicationController
       @count = current_user.projects.count
       @active_projects = current_user.projects.active
       @hidden_projects = current_user.projects.hidden
-      @completed_projects = current_user.projects.completed
+      @completed_projects = current_user.projects.completed.find(:all, :limit => 10)
+      @completed_count = current_user.projects.completed.count
       @no_projects = current_user.projects.empty?
       current_user.projects.cache_note_counts
       @new_project = current_user.projects.build

@@ -37,6 +37,19 @@ Given /^I have the following projects:$/ do |table|
   end
 end
 
+Given /^I have a completed project called "([^"]*)"$/ do |project_name|
+  Given "I have a project called \"#{project_name}\""
+  @project.complete!
+  @project.reload
+  assert @project.completed?
+end
+
+Given /^I have (\d+) completed projects$/ do |number_of_projects|
+  1.upto number_of_projects.to_i do |i|
+    Given "I have a completed project called \"Project #{i}\""
+  end
+end
+
 Given /^I have no projects$/ do
   Project.delete_all
 end

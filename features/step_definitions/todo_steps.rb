@@ -68,7 +68,8 @@ Given /^I have ([0-9]+) completed todos in context "([^"]*)"$/ do |count, contex
 end
 
 Given /^I have ([0-9]+) completed todos$/ do |count|
-  Given "I have #{count} completed todos in the context \"context D\""
+  Given "I have a context called \"context D\""
+  Given "I have #{count} completed todos in context \"context D\""
 end
 
 Given /^I have ([0-9]+) completed todos with a note$/ do |count|

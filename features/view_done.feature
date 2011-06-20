@@ -71,3 +71,42 @@ Feature: Show done
     And I should see "Show all"
     When I follow "Show all"
     Then I should be on the done actions page for project "test"
+
+  Scenario: The projects page shows a link to all completed projects
+    Given I have a completed project called "finished"
+    When I go to the projects page
+    Then I should see "finished" 
+    And I should see "Show all"
+    When I follow "Show all"
+    Then I should be on the done projects page
+    And I should see "finished"
+    
+  Scenario: I can browse all completed projects by page
+    Given I have 40 completed projects
+    When I go to the projects page
+    Then I should see "10 / 40"
+    When I follow "Show all"
+    Then I should see the page selector
+    And I should see "40 (1-20)"
+    When I follow "2"
+    Then I should be on the done projects page
+    And the page should be "2"
+
+  Scenario: The recurring todos page shows a link to all completed recurring todos
+    Given I have a completed repeat pattern "finished"
+    When I go to the recurring todos page
+    Then I should see "finished" 
+    And I should see "Show all"
+    When I follow "Show all"
+    Then I should be on the done recurring todos page
+    And I should see "finished"
+   
+  Scenario: I can browse all completed recurring todos by page
+    Given I have 40 completed repeat patterns
+    When I go to the recurring todos page
+    And I follow "Show all"
+    Then I should see the page selector
+    And I should see "40 (1-20)"
+    When I follow "2"
+    Then I should be on the done recurring todos page
+    And the page should be "2"

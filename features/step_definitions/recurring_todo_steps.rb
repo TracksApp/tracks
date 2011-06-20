@@ -26,6 +26,12 @@ Given /^I have a completed repeat pattern "([^"]*)"$/ do |pattern_name|
   @recurring_todo.completed?.should be_true
 end
 
+Given /^I have (\d+) completed repeat patterns$/ do |number_of_patterns|
+  1.upto number_of_patterns.to_i do |i|
+    Given "I have a completed repeat pattern \"Repeating Todo #{i}\""
+  end
+end
+
 When /^I select "([^\"]*)" recurrence pattern$/ do |recurrence_period|
   selenium.click("recurring_todo_recurring_period_#{recurrence_period.downcase}")
 end
