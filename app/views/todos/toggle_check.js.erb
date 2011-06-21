@@ -12,7 +12,7 @@
       animation << "activate_pending_todos"
       animation << "remove_source_container"
     else
-      animation << "add_todo_to_context"
+      animation << "add_todo_to_context" unless source_view_is(:done)
       animation << "block_predecessors"
     end 
     animation << "update_empty_container" if source_view_is_one_of(:tag, :todo) -%>
@@ -161,7 +161,7 @@ function remove_source_container(next_steps) {
 }
 
 function html_for_todo() {
-  return "<%= @saved ? escape_javascript(render(:partial => @todo, :locals => {
+  return "<%= @saved && !source_view_is(:done) ? escape_javascript(render(:partial => @todo, :locals => {
       :parent_container_type => parent_container_type,
       :suppress_project => source_view_is(:project),
       :suppress_context => source_view_is(:context)

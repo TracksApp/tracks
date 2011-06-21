@@ -70,6 +70,7 @@ en:
     context: "Context"
     action: "Action"
     actions: "Actions"
+    todo: 'todo'
     server_error: "An error occurred on the server."
     contexts: "Contexts"
     numbered_step: "Step %{number}"
@@ -485,6 +486,7 @@ en:
     no_completed_recurring: "Currently there are no completed recurring todos"
     add_new_recurring: "Add a new recurring action"
     recurring_deleted_success: "The recurring action was deleted succesfully."
+    recurring_pattern_removed: "The recurrence pattern is removed from %{count}"
     deleted_success: "The action was deleted succesfully."
     error_deleting_recurring: "There was an error deleting the recurring todo \'%{description}\'"
     error_saving_recurring: "There was an error saving the recurring todo \'%{description}\'"

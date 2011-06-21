@@ -72,3 +72,22 @@ Then /^I should see "([^"]*)" in project container for "([^"]*)"$/ do |todo_desc
   selenium.wait_for_element("xpath=#{xpath}", :timeout_in_seconds => 5)
   selenium.is_visible(xpath).should be_true
 end
+
+Then /^I should see "([^"]*)" in the active recurring todos container$/ do |repeat_pattern|
+  repeat = @current_user.recurring_todos.find_by_description(repeat_pattern)
+  repeat.should_not be_nil
+  
+  xpath = "//div[@id='active_recurring_todos_container']//div[@id='recurring_todo_#{repeat.id}']"
+  selenium.wait_for_element("xpath=#{xpath}", :timeout_in_seconds => 5)
+  selenium.is_visible(xpath).should be_true
+end
+
+Then /^I should not see "([^"]*)" in the completed recurring todos container$/ do |repeat_pattern|
+  repeat = @current_user.recurring_todos.find_by_description(repeat_pattern)
+  repeat.should_not be_nil
+  
+  xpath = "//div[@id='completed_recurring_todos_container']//div[@id='recurring_todo_#{repeat.id}']"
+  selenium.wait_for_element("xpath=#{xpath}", :timeout_in_seconds => 5)
+  selenium.is_visible(xpath).should be_true
+end
+

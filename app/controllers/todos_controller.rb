@@ -282,15 +282,11 @@ class TodosController < ApplicationController
     # check if this todo has a related recurring_todo. If so, create next todo
     @new_recurring_todo = check_for_next_todo(@todo) if @saved
     
-    if @todo.completed?
-      @pending_to_activate = @todo.pending_to_activate
-      @pending_to_activate.each do |t|
-        t.activate!
-      end
-    else
-      @active_to_block = @todo.active_to_block
-      @active_to_block.each do |t|
-        t.block!
+    if @saved
+      if @todo.completed?
+        @pending_to_activate = @todo.activate_pending_todos 
+      else
+        @active_to_block = @todo.block_successors
       end
     end
     
@@ -1214,17 +1210,13 @@ class TodosController < ApplicationController
   def update_completed_state
     if params['done'] == '1' && !@todo.completed?
       @todo.complete!
-      @todo.pending_to_activate.each do |t|
-        t.activate!
-      end
+      @todo.activate_pending_todos
     end
     # strange. if checkbox is not checked, there is no 'done' in params.
     # Therefore I've used the negation
     if !(params['done'] == '1') && @todo.completed?
       @todo.activate!
-      @todo.active_to_block.each do |t|
-        t.block!
-      end
+      @todo.block_successors
     end
   end
 

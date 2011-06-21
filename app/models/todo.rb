@@ -210,13 +210,7 @@ class Todo < ActiveRecord::Base
   end
  
   def toggle_completion!
-    saved = false
-    if completed?
-      saved = activate!
-    else
-      saved = complete!
-    end
-    return saved
+    return completed? ? activate! : complete!
   end
   
   def show_from
@@ -287,14 +281,18 @@ class Todo < ActiveRecord::Base
     @predecessor_array << t
   end
   
-  # Return todos that should be activated if the current todo is completed
-  def pending_to_activate
-    return successors.find_all {|t| t.uncompleted_predecessors.empty?}
+  # activate todos that should be activated if the current todo is completed
+  def activate_pending_todos
+    pending_todos = successors.find_all {|t| t.uncompleted_predecessors.empty?}
+    pending_todos.each {|t| t.activate! }
+    return pending_todos
   end
   
   # Return todos that should be blocked if the current todo is undone
-  def active_to_block
-    return successors.find_all {|t| t.active? or t.deferred?}
+  def block_successors
+    active_successors = successors.find_all {|t| t.active? or t.deferred?}
+    active_successors.each {|t| t.block!}
+    return active_successors
   end
 
   def raw_notes=(value)

@@ -110,3 +110,31 @@ Feature: Show done
     When I follow "2"
     Then I should be on the done recurring todos page
     And the page should be "2"
+    
+  @selenium
+  Scenario: I can toggle a done recurring todo active from done page
+    Given I have a completed repeat pattern "test"
+    When I go to the done recurring todos page
+    Then I should see "test"
+    When I mark the pattern "test" as active
+    Then I should not see "test" in the completed recurring todos container
+    When I go to the recurring todos page
+    Then I should see "test" in the active recurring todos container
+
+  Scenario: I can delete a recurring todo from the done page
+    Given this scenario is pending
+    
+  Scenario: I can toggle a todo active from the done page
+    Given this scenario is pending
+
+  Scenario: I can toggle a todo active from the all done page
+    Given this scenario is pending
+    
+  Scenario: I can toggle a todo active from the project done page
+    Given this scenario is pending
+
+  Scenario: I can toggle a todo active from the context done page
+    Given this scenario is pending
+
+  Scenario: I can edit a project to active from the project done page
+    Given this scenario is pending

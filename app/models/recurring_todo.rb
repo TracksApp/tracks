@@ -702,13 +702,7 @@ class RecurringTodo < ActiveRecord::Base
   end
   
   def toggle_completion!
-    saved = false
-    if completed?
-      saved = activate!
-    else
-      saved = complete!
-    end
-    return saved
+    return completed? ? activate! : complete!
   end
   
   def toggle_star!
