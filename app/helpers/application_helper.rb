@@ -282,6 +282,12 @@ module ApplicationHelper
       done_todos_context_path(@context)
     when "projects"
       done_todos_project_path(@project)
+    when "todos"
+      if source_view_is(:tag)
+        done_tag_path(@tag_name)
+      else
+        done_todos_path
+      end      
     else
       done_todos_path
     end
@@ -293,6 +299,12 @@ module ApplicationHelper
       all_done_todos_context_path(@context)
     when "projects"
       all_done_todos_project_path(@project)
+    when "todos"
+      if source_view_is(:tag)
+        all_done_tag_path(@tag_name)
+      else
+        all_done_todos_path
+      end
     else
       all_done_todos_path
     end

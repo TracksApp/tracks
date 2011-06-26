@@ -2,6 +2,10 @@ Given /this is a pending scenario/ do
   pending
 end
 
+Given /^I set the locale to "([^"]*)"$/ do |locale|
+  @locale = locale
+end
+
 Given /^I am working on the mobile interface$/ do
   @mobile_interface = true
 end
@@ -11,7 +15,7 @@ Then /the badge should show (.*)/ do |number|
   xpath= "//span[@id='badge_count']"
 
   if response.respond_to? :selenium
-    response.should have_xpath(xpath) 
+    response.should have_xpath(xpath)
     badge = response.selenium.get_text("xpath=#{xpath}").to_i
   else
     response.should have_xpath(xpath) do |node|

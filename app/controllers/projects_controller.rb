@@ -12,7 +12,7 @@ class ProjectsController < ApplicationController
     @new_project = current_user.projects.build
     if params[:projects_and_actions]
       projects_and_actions
-    else      
+    else
       @contexts = current_user.contexts.all
       init_not_done_counts(['project'])
       init_project_hidden_todo_counts(['project'])
@@ -32,18 +32,18 @@ class ProjectsController < ApplicationController
       end
     end
   end
-  
+
   def done
     @source_view = params['_source_view'] || 'project_list'
     @page_title = t('projects.list_completed_projects')
-    
+
     page = params[:page] || 1
     projects_per_page = 20
     @projects = current_user.projects.completed.paginate :page => page, :per_page => projects_per_page
     @count = @projects.count
     @total = current_user.projects.completed.count
     @no_projects = @projects.empty?
-    
+
     @range_low = (page.to_i-1) * projects_per_page + 1
     @range_high = @range_low + @projects.size - 1
 
@@ -54,7 +54,7 @@ class ProjectsController < ApplicationController
   def projects_and_actions
     @projects = current_user.projects.active
     respond_to do |format|
-      format.text  { 
+      format.text  {
         render :action => 'index_text_projects_and_actions', :layout => false, :content_type => Mime::TEXT
       }
     end
@@ -64,7 +64,7 @@ class ProjectsController < ApplicationController
     @max_completed = current_user.prefs.show_number_completed
     init_data_for_sidebar unless mobile?
     @page_title = t('projects.page_title', :project => @project.name)
-    
+
     @not_done = @project.todos.active_or_hidden(:include => Todo::DEFAULT_INCLUDES)
     @deferred = @project.todos.deferred(:include => Todo::DEFAULT_INCLUDES)
     @pending = @project.todos.pending(:include => Todo::DEFAULT_INCLUDES)
@@ -85,7 +85,7 @@ class ProjectsController < ApplicationController
       format.xml   { render :xml => @project.to_xml( :except => :user_id )  }
     end
   end
-  
+
   # Example XML usage: curl -H 'Accept: application/xml' -H 'Content-Type:
   # application/xml'
   #                    -u username:password
@@ -138,8 +138,8 @@ class ProjectsController < ApplicationController
       params['project'].delete('state')
     end
     success_text = if params['field'] == 'name' && params['value']
-      params['project']['id'] = params['id'] 
-      params['project']['name'] = params['value'] 
+      params['project']['id'] = params['id']
+      params['project']['name'] = params['value']
     end
 
     @project.attributes = params['project']
@@ -165,7 +165,7 @@ class ProjectsController < ApplicationController
       elsif boolean_param('update_status')
         template = 'projects/update_status.js.rjs'
       elsif boolean_param('update_default_context')
-        @initial_context_name = @project.default_context.name 
+        @initial_context_name = @project.default_context.name
         template = 'projects/update_default_context.js.rjs'
       elsif boolean_param('update_default_tags')
         template = 'projects/update_default_tags.js.rjs'
@@ -184,23 +184,23 @@ class ProjectsController < ApplicationController
     respond_to do |format|
       format.js { render :template => template }
       format.html { redirect_to :action => 'index'}
-      format.xml { 
+      format.xml {
         if @saved
-          render :xml => @project.to_xml( :except => :user_id ) 
+          render :xml => @project.to_xml( :except => :user_id )
         else
           render :text => "Error on update: #{@project.errors.full_messages.inject("") {|v, e| v + e + " " }}", :status => 409
         end
       }
     end
-    
+
   end
-  
+
   def edit
     respond_to do |format|
       format.js
     end
   end
-  
+
   def destroy
     @project.recurring_todos.each {|rt| rt.remove_from_project!}
     @project.destroy
@@ -213,7 +213,7 @@ class ProjectsController < ApplicationController
       format.xml { render :text => "Deleted project #{@project.name}" }
     end
   end
-  
+
   def order
     project_ids = params["container_project"]
     @projects = current_user.projects.update_positions( project_ids )
@@ -222,44 +222,46 @@ class ProjectsController < ApplicationController
     notify :error, $!
     redirect_to :action => 'index'
   end
-  
+
   def alphabetize
     @state = params['state']
     @projects = current_user.projects.alphabetize(:state => @state) if @state
     @contexts = current_user.contexts
     init_not_done_counts(['project'])
   end
-  
+
   def actionize
     @state = params['state']
     @projects = current_user.projects.actionize(:state => @state) if @state
     @contexts = current_user.contexts
     init_not_done_counts(['project'])
   end
-  
+
   def done_todos
     @source_view = 'project'
-    @page_title = t('project.completed_tasks_title')
-    
-    completed_todos = current_user.projects.find(params[:id]).todos.completed
+    @project = current_user.projects.find(params[:id])
+    @page_title = t('projects.completed_tasks_title', :project_name => @project.name)
+
+    completed_todos = @project.todos.completed
 
     @done_today = get_done_today(completed_todos)
     @done_this_week = get_done_this_week(completed_todos)
     @done_this_month = get_done_this_month(completed_todos)
     @count = @done_today.size + @done_this_week.size + @done_this_month.size
-    
+
     render :template => 'todos/done'
   end
-  
+
   def all_done_todos
     @source_view = 'project'
-    @page_title = t('project.completed_tasks_title')
+    @project = current_user.projects.find(params[:id])
+    @page_title = t('projects.all_completed_tasks_title', :project_name => @project.name)
 
-    @done = current_user.projects.find(params[:id]).todos.completed.paginate :page => params[:page], :per_page => 20, :order => 'completed_at DESC', :include => Todo::DEFAULT_INCLUDES
+    @done = @project.todos.completed.paginate :page => params[:page], :per_page => 20, :order => 'completed_at DESC', :include => Todo::DEFAULT_INCLUDES
     @count = @done.size
     render :template => 'todos/all_done'
   end
-  
+
   protected
 
   def update_state_counts
@@ -291,12 +293,12 @@ class ProjectsController < ApplicationController
       @active_projects = current_user.projects.active
       @hidden_projects = current_user.projects.hidden
       @completed_projects = current_user.projects.completed
-      @down_count = @active_projects.size + @hidden_projects.size + @completed_projects.size 
+      @down_count = @active_projects.size + @hidden_projects.size + @completed_projects.size
       cookies[:mobile_url]= {:value => request.request_uri, :secure => SITE_CONFIG['secure_cookies']}
       render :action => 'index_mobile'
     end
   end
-    
+
   def render_project_mobile
     lambda do
       if @project.default_context.nil?
@@ -326,7 +328,7 @@ class ProjectsController < ApplicationController
         :author => lambda { |p| nil } }
     end
   end
-    
+
   def feed_options
     Project.feed_options(current_user)
   end
@@ -336,15 +338,15 @@ class ProjectsController < ApplicationController
       render :action => 'index', :layout => false, :content_type => Mime::TEXT
     end
   end
-        
+
   def set_project_from_params
     @project = current_user.projects.find_by_params(params)
   end
-    
+
   def set_source_view
     @source_view = params['_source_view'] || 'project'
   end
-    
+
   def default_context_filter
     p = params['project']
     p = params['request']['project'] if p.nil? && params['request']

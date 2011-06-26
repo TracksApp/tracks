@@ -36,6 +36,8 @@ ActionController::Routing::Routes.draw do |map|
     # routed to mobile view of tags.
     todos.tag 'todos/tag/:name.m', :action => "tag", :format => 'm'
     todos.tag 'todos/tag/:name', :action => "tag", :name => /.*/
+    todos.done_tag 'todos/done/tag/:name', :action => "done_tag"
+    todos.all_done_tag 'todos/all_done/tag/:name', :action => "all_done_tag"
 
     todos.tags 'tags.autocomplete', :action => "tags", :format => 'autocomplete'
     todos.auto_complete_for_predecessor 'auto_complete_for_predecessor', :action => 'auto_complete_for_predecessor'

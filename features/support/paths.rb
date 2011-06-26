@@ -7,24 +7,47 @@ module NavigationHelpers
   #
   def path_to(page_name)
     options = @mobile_interface ? {:format => :m} : {}
+    options.merge({:locale => @locale}) unless @locale.blank?
+    puts "@@@ l=#{@locale} sv = #{@source_view}- #{options}"
     @source_view = nil
     case page_name
 
     when /the home\s?page/
       @source_view = "todos"
       root_path(options)
+
     when /the done page/
+      @source_view = "done"
       done_overview_path(options)
     when /the done actions page for context "([^"]*)"/i
+      @source_view = "done"
       context = @current_user.contexts.find_by_name($1)
-      done_todos_context_path(context)
+      done_todos_context_path(context, options)
     when /the done actions page for project "([^"]*)"/i
+      @source_view = "done"
       project = @current_user.projects.find_by_name($1)
-      done_todos_project_path(project)
+      done_todos_project_path(project, options)
+    when /the done actions page for tag "([^"]*)"/i
+      @source_view = "done"
+      done_tag_path($1, options)
     when /the done actions page/
+      @source_view = "done"
       done_todos_path(options)
+    when /the all done actions page for context "([^"]*)"/i
+      @source_view = "done"
+      context = @current_user.contexts.find_by_name($1)
+      all_done_todos_context_path(context, options)
+    when /the all done actions page for project "([^"]*)"/i
+      @source_view = "done"
+      project = @current_user.projects.find_by_name($1)
+      all_done_todos_project_path(project, options)
+    when /the all done actions page for tag "([^"]*)"/i
+      @source_view = "done"
+      all_done_tag_path($1, options)
     when /the all done actions page/
+      @source_view = "done"
       all_done_todos_path(options)
+
     when /the statistics page/
       @source_view = "stats"
       stats_path(options)

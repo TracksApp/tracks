@@ -139,6 +139,8 @@ en:
     new_context_pre: "New context '"
     new_context_post: "' will be also created. Are you sure?"
     edit_context: "Edit context"
+    completed_tasks_title: "TRACKS::Completed actions in the context '%{context_name}'"
+    all_completed_tasks_title: "TRACKS::All Completed actions in the context '%{context_name}'"
   data:
     import_errors: "Some errors occurred during import"
     import_successful: "Import was successful."
@@ -310,6 +312,9 @@ en:
     edit_project_settings: "Edit Project Settings"
     page_title: "TRACKS::Project: %{project}"
     list_projects: "TRACKS::List Projects"
+    list_completed_projects: "TRACKS::List Completed Projects"
+    completed_tasks_title: "TRACKS::List Completed Actions in Project '%{project_name}'"
+    all_completed_tasks_title: "TRACKS::List All Completed Actions in Project '%{project_name}'"
     no_default_context: "This project does not have a default context"
     default_context: "The default context for this project is %{context}"
     project_state: "Project is %{state}."
@@ -541,7 +546,7 @@ en:
         from: from
         until: until
         times: for %{number} times
-        day_names: 
+        day_names:
         - sunday
         - monday
         - tuesday
@@ -549,8 +554,8 @@ en:
         - thursday
         - friday
         - saturday
-        month_names: 
-        - 
+        month_names:
+        -
         - January
         - February
         - Match
@@ -597,6 +602,8 @@ en:
     action_deleted_success: "Successfully deleted next action"
     action_deleted_error: "Failed to delete the action"
     completed_tasks_title: "TRACKS::Completed tasks"
+    completed_tagged_page_title: "TRACKS::Completed tasks with tag %{tag_name}"
+    all_completed_tagged_page_title: "TRACKS::All completed tasks with tag %{tag_name}"
     archived_tasks_title: "TRACKS::Archived completed tasks"
     deferred_tasks_title: "TRACKS::Tickler"
     tagged_page_title: "TRACKS::Tagged with '%{tag_name}'"

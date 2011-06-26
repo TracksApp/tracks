@@ -60,6 +60,61 @@ Then /^I should not see "([^"]*)" in the context container for "([^"]*)"$/ do |t
   end
 end
 
+Then /^I should see "([^"]*)" in the deferred container$/ do |todo_description|
+  todo = @current_user.todos.find_by_description(todo_description)
+  todo.should_not be_nil
+
+  xpath = "//div[@id='tickler']//div[@id='line_todo_#{todo.id}']"
+
+  wait_for :timeout => 5 do
+    selenium.is_element_present(xpath)
+  end
+end
+
+Then /^I should see "([^"]*)" in the action container$/ do |todo_description|
+  todo = @current_user.todos.find_by_description(todo_description)
+  todo.should_not be_nil
+
+  xpath = "//div[@id='p#{todo.project.id}items']//div[@id='line_todo_#{todo.id}']"
+
+  wait_for :timeout => 5 do
+    selenium.is_element_present(xpath)
+  end
+end
+
+Then /^I should see "([^"]*)" in the completed container$/ do |todo_description|
+  todo = @current_user.todos.find_by_description(todo_description)
+  todo.should_not be_nil
+
+  xpath = "//div[@id='completed_container']//div[@id='line_todo_#{todo.id}']"
+
+  wait_for :timeout => 5 do
+    selenium.is_element_present(xpath)
+  end
+end
+
+Then /^I should not see "([^"]*)" in the deferred container$/ do |todo_description|
+  todo = @current_user.todos.find_by_description(todo_description)
+  todo.should_not be_nil
+
+  xpath = "//div[@id='tickler']//div[@id='line_todo_#{todo.id}']"
+
+  wait_for :timeout => 5 do
+    !selenium.is_element_present(xpath)
+  end
+end
+
+Then /^I should see "([^"]*)" in the due next month container$/ do |todo_description|
+  todo = @current_user.todos.find_by_description(todo_description)
+  todo.should_not be_nil
+
+  xpath = "//div[@id='due_after_this_month']//div[@id='line_todo_#{todo.id}']"
+
+  wait_for :timeout => 5 do
+    selenium.is_element_present(xpath)
+  end
+end
+
 Then /^I should see "([^"]*)" in project container for "([^"]*)"$/ do |todo_description, project_name|
   todo = @current_user.todos.find_by_description(todo_description)
   todo.should_not be_nil
@@ -75,19 +130,25 @@ end
 
 Then /^I should see "([^"]*)" in the active recurring todos container$/ do |repeat_pattern|
   repeat = @current_user.recurring_todos.find_by_description(repeat_pattern)
-  repeat.should_not be_nil
   
-  xpath = "//div[@id='active_recurring_todos_container']//div[@id='recurring_todo_#{repeat.id}']"
-  selenium.wait_for_element("xpath=#{xpath}", :timeout_in_seconds => 5)
-  selenium.is_visible(xpath).should be_true
+  unless repeat.nil?
+    xpath = "//div[@id='active_recurring_todos_container']//div[@id='recurring_todo_#{repeat.id}']"
+    selenium.wait_for_element("xpath=#{xpath}", :timeout_in_seconds => 5)
+    selenium.is_visible(xpath).should be_true
+  else
+    Then "I should not see \"#{repeat_pattern}\""
+  end
 end
 
 Then /^I should not see "([^"]*)" in the completed recurring todos container$/ do |repeat_pattern|
   repeat = @current_user.recurring_todos.find_by_description(repeat_pattern)
-  repeat.should_not be_nil
-  
-  xpath = "//div[@id='completed_recurring_todos_container']//div[@id='recurring_todo_#{repeat.id}']"
-  selenium.wait_for_element("xpath=#{xpath}", :timeout_in_seconds => 5)
-  selenium.is_visible(xpath).should be_true
+
+  unless repeat.nil?
+    xpath = "//div[@id='completed_recurring_todos_container']//div[@id='recurring_todo_#{repeat.id}']"
+    selenium.wait_for_element("xpath=#{xpath}", :timeout_in_seconds => 5)
+    selenium.is_visible(xpath).should be_true
+  else
+    Then "I should not see \"#{repeat_pattern}\""
+  end
 end
 
