@@ -230,7 +230,7 @@ class TodosController < ApplicationController
         @return_path=cookies[:mobile_url] ? cookies[:mobile_url] : mobile_path
         render :action => 'show'
       end
-      format.xml { render :xml => @todo.to_xml( :root => 'todo', :except => :user_id ) }
+      format.xml { render :xml => @todo.to_xml( :root => 'todo', :except => :user_id, :include => [:tags] ) }
     end
   end
 
