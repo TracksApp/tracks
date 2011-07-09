@@ -140,18 +140,18 @@ Feature: Show done
     When I mark the complete todo "todo 1" active
     Then I should not see "todo 1"
     When I go to the <next page>
-    Then I should see "todo 1" in the context container for "@pc"
+    Then I should see "todo 1" <where>
 
     Scenarios:
-    | page                                            | next page               |
-    | done actions page                               | home page               |
-    | all done actions page                           | home page               |
-    | done actions page for context "@pc"             | context page for "@pc"  |
-    | done actions page for project "test project"    | "test project" project  |
-    | done actions page for tag "starred"             | home page               |
-    | all done actions page for context "@pc"         | context page for "@pc"  |
-    | all done actions page for project "test project"| "test project" project  |
-    | all done actions page for tag "starred"         | home page               |
+    | page                                            | next page               | where                               |
+    | done actions page                               | home page               | in the context container for "@pc"  |
+    | all done actions page                           | home page               | in the context container for "@pc"  |
+    | done actions page for context "@pc"             | context page for "@pc"  |                                     |
+    | done actions page for project "test project"    | "test project" project  |                                     |
+    | done actions page for tag "starred"             | home page               | in the context container for "@pc"  |
+    | all done actions page for context "@pc"         | context page for "@pc"  |                                     |
+    | all done actions page for project "test project"| "test project" project  |                                     |
+    | all done actions page for tag "starred"         | home page               | in the context container for "@pc"  |
 
   @selenium
   Scenario Outline: I can toggle the star of a todo from the done pages
@@ -175,7 +175,6 @@ Feature: Show done
   Scenario: I can edit a project to active from the project done page
     Given this scenario is pending
 
-  @wip
   Scenario Outline: All pages are internationalized
     Given I set the locale to "<locale>"
     When I go to the <page>

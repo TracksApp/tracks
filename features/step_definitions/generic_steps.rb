@@ -49,3 +49,8 @@ Then /^I should see an error flash message saying "([^"]*)"$/ do |message|
   text = response.selenium.get_text("xpath=#{xpath}")
   text.should == message
 end
+
+Then /^I should see "([^"]*)" $/ do |text|
+  Then "I should see \"#{text}\""
+end
+

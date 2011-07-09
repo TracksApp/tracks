@@ -7,9 +7,9 @@ module NavigationHelpers
   #
   def path_to(page_name)
     options = @mobile_interface ? {:format => :m} : {}
-    options.merge({:locale => @locale}) unless @locale.blank?
-    puts "@@@ l=#{@locale} sv = #{@source_view}- #{options}"
+    options = {:locale => @locale}.merge(options) if @locale
     @source_view = nil
+
     case page_name
 
     when /the home\s?page/
