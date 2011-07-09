@@ -3,7 +3,7 @@ ActionController::Routing::Routes.draw do |map|
     :member => {:change_password => :get, :update_password => :post,
     :change_auth_type => :get, :update_auth_type => :post, :complete => :get,
     :refresh_token => :post }
-    
+
   map.with_options :controller => :users do |users|
     users.signup 'signup', :action => "new"
   end
@@ -12,11 +12,11 @@ ActionController::Routing::Routes.draw do |map|
     contexts.resources :todos, :name_prefix => "context_"
   end
 
-  map.resources :projects, :collection => {:order => :post, :alphabetize => :post, :actionize => :post, :done => :get}, 
+  map.resources :projects, :collection => {:order => :post, :alphabetize => :post, :actionize => :post, :done => :get},
   :member => {:done_todos => :get, :all_done_todos => :get} do |projects|
     projects.resources :todos, :name_prefix => "project_"
   end
-  
+
   map.resources :notes
 
   map.resources :todos,
@@ -28,7 +28,7 @@ ActionController::Routing::Routes.draw do |map|
     todos.home '', :action => "index"
     todos.tickler 'tickler.:format', :action => "list_deferred"
     todos.mobile_tickler 'tickler.m', :action => "list_deferred", :format => 'm'
-    
+
     # This route works for tags with dots like /todos/tag/version1.5
     # please note that this pattern consumes everything after /todos/tag
     # so /todos/tag/version1.5.xml will result in :name => 'version1.5.xml'
@@ -41,10 +41,13 @@ ActionController::Routing::Routes.draw do |map|
 
     todos.tags 'tags.autocomplete', :action => "tags", :format => 'autocomplete'
     todos.auto_complete_for_predecessor 'auto_complete_for_predecessor', :action => 'auto_complete_for_predecessor'
-    
+
     todos.calendar 'calendar.ics', :action => "calendar", :format => 'ics'
+    todos.calendar 'calendar.xml', :action => "calendar", :format => 'xml'
     todos.calendar 'calendar', :action => "calendar"
-    
+
+    todos.hidden 'hidden.xml', :action => "list_hidden", :format => 'xml'
+
     todos.mobile 'mobile', :action => "index", :format => 'm'
     todos.mobile_abbrev 'm', :action => "index", :format => 'm'
     todos.mobile_abbrev_new 'm/new', :action => "new", :format => 'm'
@@ -74,7 +77,7 @@ ActionController::Routing::Routes.draw do |map|
     fl.mobile_feeds 'feeds.m', :action => 'index', :format => 'm'
     fl.feeds        'feeds',   :action => 'index'
   end
-  
+
   map.with_options :controller => :integrations do |i|
     i.integrations  'integrations', :action => 'index'
     i.rest_api_docs 'integrations/rest_api', :action => "rest_api"
@@ -83,12 +86,12 @@ ActionController::Routing::Routes.draw do |map|
   end
 
   map.preferences 'preferences', :controller => 'preferences', :action => 'index'
-  
+
   map.with_options :controller => :stats do |stats|
     stats.stats 'stats',  :action => 'index'
     stats.done_overview 'done', :action => 'done'
   end
-  
+
   map.search 'search', :controller => 'search', :action => 'index'
   map.data 'data', :controller => 'data', :action => 'index'
 

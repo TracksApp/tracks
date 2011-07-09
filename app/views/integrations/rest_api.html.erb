@@ -56,6 +56,10 @@
 <ul>
   <li>/todos.xml</li>
   <li>/todos/<code>ID</code>.xml</li>
+  <li>/tickler.xml</li>
+  <li>/done.xml</li>
+  <li>/hidden.xml</li>
+  <li>/calendar.xml</li>
   <li>/contexts.xml</li>
   <li>/contexts/<code>ID</code>.xml</li>
   <li>/contexts/<code>ID</code>/todos.xml</li>
@@ -63,6 +67,17 @@
   <li>/projects/<code>ID</code>.xml</li>
   <li>/projects/<code>ID</code>/todos.xml</li>
 </ul>
+
+<p>For the todo resources (todos, tickler, done, hidden and calendar) you can limit the returned
+field to <code>ID, created_at, modified_at, completed_at</code> by adding the parameter
+<code>limit_fields</code> and setting it to <code>index</code>. For example:</p>
+
+<pre>
+<code>
+  $ curl -u username:p4ssw0rd -H "Content-Type: text/xml" \
+  <%= home_url %>tickler.xml?limit_fields=index
+</code>
+</pre>
 
 <h2>Writing to the API</h2>
 
@@ -173,17 +188,17 @@ $ curl -u username:p4ssw0rd -H "Content-Type: text/xml" \
 
 <pre>
 <code>
-$ script/console 
+$ script/console
 Loading development environment (Rails 1.2.4)
 &gt;&gt; class Context &lt; ActiveResource::Base; end
 =&gt; nil
 &gt;&gt; Context.site = "<%= home_url %>"
-=&gt; "<%= home_url %>" 
-&gt;&gt; Context.site.user = "username" 
-=&gt; "username" 
+=&gt; "<%= home_url %>"
+&gt;&gt; Context.site.user = "username"
+=&gt; "username"
 
-&gt;&gt; Context.site.password = CGI.escape "p4ssw0rd" 
-=&gt; "p4ssw0rd" 
+&gt;&gt; Context.site.password = CGI.escape "p4ssw0rd"
+=&gt; "p4ssw0rd"
 &gt;&gt; Context.find :first
 =&gt; #&lt;Context:0x262396c @prefix_options={}, @attributes={...}&gt;
 &gt;&gt; &gt;&gt; Context.find :all
@@ -201,7 +216,7 @@ $ SITE="http://username:p4ssw0rd@<%= request.host_with_port %>" irb \
 
 irb(main):001:0&gt; inbox = Tracks::Context.find :first
 irb(main):002:0&gt; inbox.name
-=&gt; "@inbox" 
+=&gt; "@inbox"
 irb(main):003:0&gt;
 </code>
 </pre>

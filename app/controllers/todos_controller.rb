@@ -26,7 +26,7 @@ class TodosController < ApplicationController
     respond_to do |format|
       format.html  &render_todos_html
       format.m     &render_todos_mobile
-      format.xml   { render :xml => @todos.to_xml( :except => :user_id ) }
+      format.xml   { render :xml => @todos.to_xml( *to_xml_params ) }
       format.rss   &render_rss_feed
       format.atom  &render_atom_feed
       format.text  &render_text_feed
@@ -230,7 +230,7 @@ class TodosController < ApplicationController
         @return_path=cookies[:mobile_url] ? cookies[:mobile_url] : mobile_path
         render :action => 'show'
       end
-      format.xml { render :xml => @todo.to_xml( :root => 'todo', :except => :user_id, :include => [:tags] ) }
+      format.xml { render :xml => @todo.to_xml( *to_xml_params ) }
     end
   end
 
@@ -305,7 +305,7 @@ class TodosController < ApplicationController
         end
         render
       end
-      format.xml { render :xml => @todo.to_xml( :except => :user_id ) }
+      format.xml { render :xml => @todo.to_xml( *to_xml_params ) }
       format.html do
         if @saved
           # TODO: I think this will work, but can't figure out how to test it
@@ -325,7 +325,7 @@ class TodosController < ApplicationController
     @saved = true # cannot determine error
     respond_to do |format|
       format.js
-      format.xml { render :xml => @todo.to_xml( :except => :user_id ) }
+      format.xml { render :xml => @todo.to_xml( *to_xml_params ) }
       format.html { redirect_to request.referrer}
     end
   end
@@ -345,7 +345,7 @@ class TodosController < ApplicationController
 
     respond_to do |format|
       format.js  { render :action => :update }
-      format.xml { render :xml => @todo.to_xml( :except => :user_id ) }
+      format.xml { render :xml => @todo.to_xml( *to_xml_params ) }
     end
   end
 
@@ -385,7 +385,7 @@ class TodosController < ApplicationController
         @status_message = t('todos.added_new_project') + ' / ' + @status_message if @new_project_created
         @status_message = t('todos.added_new_context') + ' / ' + @status_message if @new_context_created
       }
-      format.xml { render :xml => @todo.to_xml( :except => :user_id ) }
+      format.xml { render :xml => @todo.to_xml( *to_xml_params ) }
       format.m do
         if @saved
           if cookies[:mobile_url]
@@ -473,6 +473,11 @@ class TodosController < ApplicationController
     @done_this_week = get_done_this_week(completed_todos)
     @done_this_month = get_done_this_month(completed_todos)
     @count = @done_today.size + @done_this_week.size + @done_this_month.size
+
+    respond_to do |format|
+      format.html
+      format.xml { render :xml => completed_todos.to_xml( *to_xml_params ) }
+    end
   end
 
   def all_done
@@ -497,7 +502,7 @@ class TodosController < ApplicationController
     respond_to do |format|
       format.html
       format.m { render :action => 'mobile_list_deferred' }
-      format.xml { render :xml => @not_done_todos.to_xml( :except => :user_id ) }
+      format.xml { render :xml => @not_done_todos.to_xml( *to_xml_params ) }
     end
   end
 
@@ -687,6 +692,19 @@ class TodosController < ApplicationController
         @due_all = current_user.todos.not_completed.are_due.find(:all, :order => "due")
         render :action => 'calendar', :layout => false, :content_type => Mime::ICS
       }
+      format.xml {
+        @due_all = current_user.todos.not_completed.are_due.find(:all, :order => "due")
+        render :xml => @due_all.to_xml( *to_xml_params )
+      }
+    end
+  end
+
+  def list_hidden
+    @hidden = current_user.todos.hidden
+    respond_to do |format|
+      format.xml {
+        render :xml => @hidden.to_xml( *to_xml_params )
+      }
     end
   end
 
@@ -753,6 +771,14 @@ class TodosController < ApplicationController
   end
 
   private
+
+  def to_xml_params
+    if params[:limit_fields] == 'index'
+      return [:only => [:id, :created_at, :updated_at, :completed_at] ]
+    else
+      return [:except => :user_id, :include => [:tags] ]
+    end
+  end
 
   def get_todo_from_params
     # TODO: this was a :append_before but was removed to tune performance per
