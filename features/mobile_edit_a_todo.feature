@@ -17,13 +17,17 @@ Feature: Edit a next action from the mobile view
   Scenario: I can edit an action on the mobile page
     When I am on the home page
     Then the badge should show 1
-    Then I should see "test action"
+    And I should see "test action"
     When I follow "test action"
+    Then I should see "Actions"
+    When I press "Edit this action"
+    Then I should see "Description"
     And I fill in "Description" with "changed action"
     And I press "Update"
     Then I should see "changed action"
     And I should not see "test action"
     When I follow "changed action"
+    And I press "Edit this action"
     And I check "done"
     And I press "Update"
     Then I should not see "changed action"
@@ -36,3 +40,13 @@ Feature: Edit a next action from the mobile view
     Then the badge should show 0
     When I follow "Feeds"
     Then I should see "Last 15 actions"
+
+  Scenario: I can defer an action on the mobile page
+    When I am on the home page
+    Then the badge should show 1
+    And I should see "test action"
+    When I follow "test action"
+    And I press "Defer 1 day"
+    Then I should see "There are no incomplete actions"
+    When I follow "Tickler"
+    Then I should see "test action"

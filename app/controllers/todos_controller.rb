@@ -217,19 +217,20 @@ class TodosController < ApplicationController
     @tag_name = params['_tag_name']
     respond_to do |format|
       format.js
+      format.m {
+        @projects = current_user.projects.active
+        @contexts = current_user.contexts.find(:all)
+        @edit_mobile = true
+        @return_path=cookies[:mobile_url] ? cookies[:mobile_url] : mobile_path
+        render :template => "/todos/edit_mobile.html.erb"
+      }
     end
   end
 
   def show
     @todo = current_user.todos.find(params['id'])
     respond_to do |format|
-      format.m do
-        @projects = current_user.projects.active
-        @contexts = current_user.contexts.find(:all)
-        @edit_mobile = true
-        @return_path=cookies[:mobile_url] ? cookies[:mobile_url] : mobile_path
-        render :action => 'show'
-      end
+      format.m { render :action => 'show' }
       format.xml { render :xml => @todo.to_xml( *to_xml_params ) }
     end
   end
@@ -316,6 +317,17 @@ class TodosController < ApplicationController
           redirect_to :action =>  "index"
         end
       end
+      format.m {
+        if cookies[:mobile_url]
+          old_path = cookies[:mobile_url]
+          cookies[:mobile_url] = {:value => nil, :secure => SITE_CONFIG['secure_cookies']}
+          notify(:notice, t("todos.action_marked_complete", :description => @todo.description, :completed => @todo.completed? ? 'complete' : 'incomplete'))
+          redirect_to old_path
+        else
+          notify(:notice, t("todos.action_marked_complete", :description => @todo.description, :completed => @todo.completed? ? 'complete' : 'incomplete'))
+          redirect_to todos_path(:format => 'm')
+        end
+      }
     end
   end
 
@@ -327,6 +339,17 @@ class TodosController < ApplicationController
       format.js
       format.xml { render :xml => @todo.to_xml( *to_xml_params ) }
       format.html { redirect_to request.referrer}
+      format.m {
+        if cookies[:mobile_url]
+          old_path = cookies[:mobile_url]
+          cookies[:mobile_url] = {:value => nil, :secure => SITE_CONFIG['secure_cookies']}
+          notify(:notice, "Star toggled")
+          redirect_to old_path
+        else
+          notify(:notice, "Star toggled")
+          redirect_to todos_path(:format => 'm')
+        end
+      }
     end
   end
 
@@ -648,6 +671,16 @@ class TodosController < ApplicationController
     respond_to do |format|
       format.html { redirect_to :back }
       format.js {render :action => 'update'}
+      format.m {
+      notify(:notice, t("todos.action_deferred", :description => @todo.description))
+        if cookies[:mobile_url]
+          old_path = cookies[:mobile_url]
+          cookies[:mobile_url] = {:value => nil, :secure => SITE_CONFIG['secure_cookies']}
+          redirect_to old_path
+        else
+          redirect_to todos_path(:format => 'm')
+        end
+      }
     end
   end
 
