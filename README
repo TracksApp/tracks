@@ -1,5 +1,11 @@
 # Tracks: a GTD(TM) web application, built with Ruby on Rails
 
+**IMPORTANT: Tracks is moving to a GitHub Organization to make it easier to continue administering the project. Development will soon cease at bsag/tracks and move to TracksApp/tracks. If you are currently pulling from bsag/tracks, please pull from TracksApp instead.**
+
+`git clone git://github.com/TracksApp/tracks.git`
+
+**The new home for Tracks is https://github.com/TracksApp/tracks**
+
 * Project homepage: http://getontracks.org/
 * Manual: http://bsag.github.com/tracks/
 * Source at GitHub: http://github.com/bsag/tracks/
