@@ -126,14 +126,14 @@ span.prj, span.ctx{
       background: #FFC2C2;
 }
 
-ul.c li.star {
-list-style-type: circle;
+ul.c li {
+list-style-type: none;
 }
 
 ul.c {
   padding: 0;
   margin: 0;
-  padding-left: 1.1em;
+  padding-left: 0.1em;
 }
 
 ul.c li {
@@ -159,4 +159,7 @@ span.r {
 
 table.c {
       margin-left: 5px;
+}
+.mobile-done {
+  display:inline;
 }

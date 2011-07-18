@@ -89,6 +89,12 @@ module TodosHelper
       :title => todo.pending? ? t('todos.blocked_by', :predecessors => todo.uncompleted_predecessors.map(&:description).join(', ')) : "", :readonly => todo.pending?)
   end
 
+  def remote_mobile_checkbox(todo=@todo)
+    form_tag mobile_done_todo_path(@todo, :format => 'm'), :method => :put, :class => "mobile-done", :name => "mobile_complete_#{@todo.id}" do
+      check_box_tag('_source_view', 'todo', @todo && @todo.completed?, "onClick" => "document.mobile_complete_#{@todo.id}.submit()")
+    end 
+  end
+
   def date_span(todo=@todo)
     if todo.completed?
       content_tag(:span, {:class => :grey}) { format_date( todo.completed_at ) }

@@ -3,3 +3,7 @@
 <% else -%>
 <%= render :partial => "contexts/mobile_context", :collection => @contexts_to_show -%>
 <% end -%>
+<% unless @done.nil? -%>
+<h2><%= t('todos.completed_actions') %></h2>
+<%= render :partial => "todos/mobile_todo", :collection => @done %>
+<% end %>
