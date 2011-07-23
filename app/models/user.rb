@@ -123,7 +123,8 @@ class User < ActiveRecord::Base
     return nil if candidate.nil?
 
     if Tracks::Config.auth_schemes.include?('database')
-      return candidate if candidate.auth_type == 'database' && candidate.crypted_password == sha1(pass)
+      return candidate if candidate.auth_type == 'database' &&
+        BCrypt::Password.new(candidate.crypted_password) == salted(pass)
     end
     
     if Tracks::Config.auth_schemes.include?('ldap')
@@ -190,7 +191,7 @@ class User < ActiveRecord::Base
   end
   
   def generate_token
-    self.token = Digest::SHA1.hexdigest "#{Time.now.to_i}#{rand}"
+    self.token = self.class.sha1 "#{Time.now.to_i}#{rand}"
   end
   
   def remember_token?
@@ -212,13 +213,21 @@ class User < ActiveRecord::Base
 
 protected
 
+  def self.salted(s)
+    "#{Tracks::Config.salt}--#{s}--"
+  end
+
   def self.sha1(s)
-    Digest::SHA1.hexdigest("#{Tracks::Config.salt}--#{s}--")
+    Digest::SHA1.hexdigest salted s
+  end
+
+  def self.hash(s)
+    BCrypt::Password.create salted s
   end
   
   def crypt_password
     return if password.blank?
-    write_attribute("crypted_password", self.class.sha1(password)) if password == password_confirmation
+    write_attribute("crypted_password", self.class.hash(password)) if password == password_confirmation
   end
   
   def password_required?
@@ -227,10 +236,6 @@ protected
   
   def using_openid?
     auth_type == 'open_id'
-  end
-  
-  def password_matches?(pass)
-    crypted_password == sha1(pass)
   end
   
   def normalize_open_id_url

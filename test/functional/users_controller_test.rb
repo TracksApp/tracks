@@ -68,7 +68,7 @@ class UsersControllerTest < ActionController::TestCase
     post :update_password, :updateuser => {:password => 'newpassword', :password_confirmation => 'newpassword'}
     assert_redirected_to preferences_path
     @updated_user = User.find(users(:admin_user).id)
-    assert_equal @updated_user.crypted_password, Digest::SHA1.hexdigest("#{Tracks::Config.salt}--newpassword--")
+    assert_not_nil User.authenticate(@updated_user.login, 'newpassword')
     assert_equal "Password updated.", flash[:notice]
   end
   

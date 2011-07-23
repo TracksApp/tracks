@@ -24,6 +24,7 @@ GEM
     activeresource (2.3.14)
       activesupport (= 2.3.14)
     activesupport (2.3.14)
+    bcrypt-ruby (2.1.4)
     builder (3.0.0)
     cgi_multipart_eof_fix (2.5.0)
     cucumber (1.0.2)
@@ -96,6 +97,7 @@ DEPENDENCIES
   ZenTest (>= 4.0.0)
   aasm (= 2.2.0)
   actionwebservice!
+  bcrypt-ruby (~> 2.1.4)
   cucumber-rails (~> 0.3.0)
   database_cleaner (>= 0.5.0)
   flexmock

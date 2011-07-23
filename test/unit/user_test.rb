@@ -33,7 +33,7 @@ class UserTest < ActiveSupport::TestCase
     assert_kind_of User, @admin_user
     assert_equal 1, @admin_user.id
     assert_equal "admin", @admin_user.login
-    assert_equal "#{Digest::SHA1.hexdigest("#{Tracks::Config.salt}--abracadabra--")}", @admin_user.crypted_password
+    assert_not_nil @admin_user.crypted_password
     assert_not_nil @admin_user.token
     assert @admin_user.is_admin
   end
@@ -43,7 +43,7 @@ class UserTest < ActiveSupport::TestCase
     assert_kind_of User, @other_user
     assert_equal 2, @other_user.id
     assert_equal "jane", @other_user.login
-    assert_equal "#{Digest::SHA1.hexdigest("#{Tracks::Config.salt}--sesame--")}", @other_user.crypted_password
+    assert_not_nil @other_user.crypted_password
     assert_not_nil @other_user.token
     assert @other_user.is_admin == false || @other_user.is_admin == 0
   end
