@@ -1,0 +1,68 @@
+<div id="single_box" class="container context prefscontainer">
+
+  <h2><%= t('preferences.title') %></h2>
+
+  <ul id="prefs">
+    <li><%= User.human_attribute_name('first_name') %>: <span class="highlight"><%= current_user.first_name %></span></li>
+    <li><%= User.human_attribute_name('last_name') %>: <span class="highlight"><%= current_user.last_name %></span></li>
+    <li><%= Preference.human_attribute_name('date_format') %>: <span class="highlight"><%= current_user.prefs.date_format %></span> Your current date: <%= format_date(current_user.time) %></li>
+    <li><%= Preference.human_attribute_name('locale') %>: <span class="highlight"><%= current_user.prefs.locale %></span></li>
+    <li><%= Preference.human_attribute_name('title_date_format') %>: <span class="highlight"><%= current_user.prefs.title_date_format %></span> Your current title date: <%= current_user.time.strftime(current_user.prefs.title_date_format) %></li>
+    <li><%= Preference.human_attribute_name('time_zone') %>: <span class="highlight"><%= current_user.prefs.time_zone %></span> Your current time: <%= current_user.time.strftime('%I:%M %p') %></li>
+    <li><%= Preference.human_attribute_name('week_starts') %>: <span class="highlight"><%= t('date.day_names')[current_user.prefs.week_starts] %></span></li>
+    <li><%= t('preferences.show_number_completed', :number=> "<span class=\"highlight\">#{current_user.prefs.show_number_completed}</span>")%></li>
+    <li><%= Preference.human_attribute_name('show_completed_projects_in_sidebar') %>: <span class="highlight"><%= current_user.prefs.show_completed_projects_in_sidebar %></span></li>
+    <li><%= Preference.human_attribute_name('show_hidden_projects_in_sidebar') %>: <span class="highlight"><%= current_user.prefs.show_hidden_projects_in_sidebar %></span></li>
+    <li><%= Preference.human_attribute_name('show_hidden_contexts_in_sidebar') %>: <span class="highlight"><%= current_user.prefs.show_hidden_contexts_in_sidebar %></span></li>
+    <li><%= Preference.human_attribute_name('show_project_on_todo_done') %>: <span class="highlight"><%= current_user.prefs.show_project_on_todo_done %></span></li>
+    <li><%= t('preferences.staleness_starts_after', :days => "<span class=\"highlight\">#{current_user.prefs.staleness_starts}</span>") %></li>
+    <li><%= Preference.human_attribute_name('due_style') %>: <span class="highlight">
+  	<% if prefs.due_style == Preference.due_styles[:due_in_n_days] %>
+  		<%= t('models.preference.due_styles')[0] %>
+  	<% else %>
+  		<%= t('models.preference.due_styles')[1] %>
+  	<% end %>
+  		 </span></li>
+    <% if current_user.is_admin? %>
+      <li><%= Preference.human_attribute_name('admin_email') %>: <span class="highlight"><%= current_user.prefs.admin_email %></span></li>
+    <% end %>
+    <li><%= Preference.human_attribute_name('refresh') %>: <span class="highlight"><%= current_user.prefs.refresh %></span></li>
+    <li><%= Preference.human_attribute_name('verbose_action_descriptors') %>: <span class="highlight"><%= current_user.prefs.verbose_action_descriptors %></span></li>
+    <li><%= Preference.human_attribute_name('mobile_todos_per_page') %>: <span class="highlight"><%= current_user.prefs.mobile_todos_per_page %></span></li>
+    <li><%= Preference.human_attribute_name('sms_email') %>: <span class="highlight"><%= current_user.prefs.sms_email %></span></li>
+    <li><%= Preference.human_attribute_name('sms_context') %>: <span class="highlight"><%= current_user.prefs.sms_context.nil? ? t('preferences.sms_context_none') : current_user.prefs.sms_context.name  %></span></li>
+  </ul>
+  <div class="actions">
+    <%= link_to t('preferences.edit_preferences') + " &raquo;", { :controller => 'preferences', :action => 'edit'}, :class => 'edit_link' %>
+  </div>
+
+  <h2><%= t('preferences.token_header') %></h2>
+  <div id="token_area">
+    <div class="description"><%= t('preferences.token_description') %>:</div>
+    <div id="token"><span class="highlight"><%= current_user.token %></span></div>
+    <div class="token_regenerate">
+      <%= button_to t('preferences.generate_new_token'), refresh_token_user_path(current_user),
+          :confirm => t('preferences.generate_new_token_confirm') %>
+    </div>
+  </div>
+  <h2><%= t('preferences.authentication_header') %></h2>
+  <div id="authentication_area">
+	<% if Tracks::Config.auth_schemes.length > 1 %>
+	<p><%= t('preferences.current_authentication_type', :auth_type => "<span class=\"highlight\">#{current_user.auth_type}</span>") %>.</p>
+	<div class="actions">
+    	<%= link_to(t('preferences.change_authentication_type') + " &raquo;", change_auth_type_user_path(current_user), :class => 'edit_link') %>
+  	</div>
+	<% end %>
+	<% if current_user.auth_type == 'database' %>
+	<div class="actions">
+    	<%= link_to(t('preferences.change_password') + ' &raquo;', change_password_user_path(current_user)) %>
+  	</div>
+	<% end %>
+	<% if current_user.auth_type == 'open_id' %>
+	<p><%= t('preferences.open_id_url') %> <span class="highlight"><%= current_user.open_id_url %></span>.</p>
+	<div class="actions">
+      <%= link_to(t('preferences.change_identity_url') + ' &raquo;', change_auth_type_user_path(current_user)) %>
+	</div>
+  	<% end %>
+  </div>
+</div>

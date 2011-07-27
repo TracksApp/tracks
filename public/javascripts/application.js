@@ -641,6 +641,12 @@ var UsersPage = {
     }
 }
 
+var PreferencesPage = {
+    setup_behavior: function() {
+      $( "#tabs" ).tabs();
+    }
+}
+
 var ProjectListPage = {
     update_state_count: function(state, count) {
         $('#'+state+'-projects-count').html(count);
@@ -1238,7 +1244,7 @@ $(document).ready(function() {
     TodoItemsContainer.setup_container_toggles();
 
     /* enable page specific behavior */
-    $([ 'IntegrationsPage', 'NotesPage', 'ProjectListPage', 'ContextListPage',
+    $([ 'PreferencesPage', 'IntegrationsPage', 'NotesPage', 'ProjectListPage', 'ContextListPage',
         'FeedsPage', 'RecurringTodosPage', 'TodoItems', 'TracksPages',
         'TracksForm', 'SearchPage', 'UsersPage' ]).each(function() {
         eval(this+'.setup_behavior();');
