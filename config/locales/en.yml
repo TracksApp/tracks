@@ -296,6 +296,7 @@ en:
     notes: "Notes"
     notes_empty: "There are no notes for this project"
     no_last_completed_projects: "No completed projects found"
+    no_last_completed_recurring_todos: "No completed recurring todos found"
     settings: "Settings"
     state: "This project is %{state}"
     this_project: "This project"
