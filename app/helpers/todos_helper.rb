@@ -427,8 +427,7 @@ module TodosHelper
   private
   
   def image_tag_for_star(todo)
-    class_str = todo.starred? ? "starred_todo" : "unstarred_todo"
-    image_tag("blank.png", :title =>t('todos.star_action'), :class => class_str, :id => "star_img_"+todo.id.to_s)
+    image_tag("blank.png", :title =>t('todos.star_action'), :class => "todo_star"+(todo.starred? ? " starred":""), :id => "star_img_"+todo.id.to_s)
   end
   
 end

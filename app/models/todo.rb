@@ -248,14 +248,16 @@ class Todo < ActiveRecord::Base
   end
   
   def toggle_star!
-    if starred?
-      _remove_tags STARRED_TAG_NAME
-      tags.reload
-    else
+    starred=!starred?
+  end
+
+  def starred=(starred)
+    if starred
       _add_tags(STARRED_TAG_NAME)
-      tags.reload
-    end 
-    starred?  
+    else
+      _remove_tags STARRED_TAG_NAME
+    end
+    starred
   end
 
   def from_recurring_todo?
