@@ -22,6 +22,8 @@ function clear_form() {
   TracksForm.set_project_name('<%=escape_javascript @initial_project_name%>');
   TracksForm.set_tag_list('<%=escape_javascript @default_tags%>');
   $('#todo-form-new-action input:text:first').focus();
+  $('#new_todo_starred_link .todo_star').removeClass('starred');
+  $('#new_todo_starred').val('false');
 }
 
 function insert_new_context_with_new_todo() {

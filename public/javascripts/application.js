@@ -74,6 +74,10 @@ var TracksForm = {
             $(this).prev().val('');
         });
 
+        $("#new_todo_starred_link").click(function() {
+          $("#new_todo_starred").val($(this).children(".todo_star").toggleClass("starred").hasClass("starred"));
+        });
+
         /* submit todo form after entering new todo */
         $("button#todo_new_action_submit").live('click', function (ev) {
             if ($('input#predecessor_input').val() != "") 

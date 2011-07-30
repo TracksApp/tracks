@@ -4,10 +4,12 @@
   <% form_for(todo, :html=> { :id=>'todo-form-new-action', :name=>'todo', :class => 'inline-form new_todo_form' }) do |t|%>
     <input id="default_project_name_id" name="default_project_name" type="hidden" value="<%= h(@initial_project_name)-%>" />
     <input id="default_context_name_id" name="default_context_name" type="hidden" value="<%= h(@initial_context_name)-%>" />
+    <input type="hidden" id="new_todo_starred" name="new_todo_starred" value="false" />
 
     <div id="error_status"><%= error_messages_for("item", :object_name => 'action') %></div>
 
-    <label for="todo_description"><%= Todo.human_attribute_name('description') %></label>
+    <label for="todo_description" style="float:left"><%= Todo.human_attribute_name('description') %></label>
+    <a href="#" id="new_todo_starred_link" class="undecorated_link" ><%= image_tag("blank.png", :title =>t('todos.star_action'), :class => "todo_star", :style=> "float: right")%></a>
     <%= t.text_field("description", "size" => 30, "tabindex" => next_tab_index, "maxlength" => 100, "autocomplete" => "off", :autofocus => 1) %>
 
     <label for="todo_notes"><%= Todo.human_attribute_name('notes') %></label>
