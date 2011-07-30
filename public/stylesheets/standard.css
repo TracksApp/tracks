@@ -79,10 +79,11 @@ a:hover img.edit_item {background-image: url(../images/edit_on.png); background-
 img.delete_item {background-image: url(../images/delete_off.png); background-repeat: no-repeat; border: none;}
 a:hover img.delete_item {background-image: url(../images/delete_on.png);background-color: transparent;background-repeat: no-repeat; border: none;}
 
-img.starred_todo {background-image: url(../images/staricons.png); background-repeat: no-repeat; border:none; background-position: 0px 0px;}
-a:hover img.starred_todo {background-image: url(../images/staricons.png); background-repeat: no-repeat; border:none; background-position: -16px 0px;}
-img.unstarred_todo {background-image: url(../images/staricons.png); background-repeat: no-repeat; border:none; background-position: -32px 0px;}
-a:hover img.unstarred_todo {background-image: url(../images/staricons.png); background-repeat: no-repeat; border:none; background-position: -48px 0px;}
+a.undecorated_link {background-color:transparent;color:transparent;}
+img.todo_star {background-image: url(../images/staricons.png); background-repeat: no-repeat; border:none; background-position: -32px 0px;}
+img.todo_star.starred{ background-position: 0px 0px; }
+a:hover img.todo_star { background-position: -48px 0px;}
+a:hover img.todo_star.starred { background-position: -16px 0px; }
 
 a.to_top {background: transparent url(../images/top_off.png) no-repeat;}
 a.to_top:hover {background: transparent url(../images/top_on.png) no-repeat;}
