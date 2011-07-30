@@ -606,6 +606,7 @@ de:
     deferred_actions_empty: "Es gibt keine aufgeschobenen Aufgaben f\xC3\xBCr dieses Projekt"
     project_state: Projekt ist %{state}
     no_last_completed_projects: Keine abgeschlossene Projekte gefunden
+    no_last_completed_recurring_todos: "Keine abgeschlossene sich wiederholende To-Dos gefunden"
     todos_append: an dieses Projekt
     notes: Notizen
     notes_empty: "Es gibt keine Notizen f\xC3\xBCr dieses Projekt"
