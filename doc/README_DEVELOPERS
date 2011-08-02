@@ -20,7 +20,7 @@ Install them using
 
 3. Wiki
 
-There are some pointers for setting up your Tracks copy for testing at https://github.com/tracksapp/tracks/wiki/Testing/
+There are some pointers for setting up your Tracks copy for testing at https://github.com/TracksApp/tracks/wiki/Testing/
 
 4. SQLITE3 FOR TESTING
 
@@ -36,7 +36,7 @@ If you want to run tests using another database, that's fine, too. Just change y
 
 This testing style is deprecated and tests are being moved over to Selenium via Cucumber.
 
-See the wiki for more information to run the tests that are not yet migrated: https://github.com/tracksapp/tracks/wiki/Testing
+See the wiki for more information to run the tests that are not yet migrated: https://github.com/TracksApp/tracks/wiki/Testing
 
 6. RSPEC tests
 
@@ -54,4 +54,4 @@ and for those using javascript/ajax use
 
   rake cucumber:selenium
 
-See the wiki for more information on testing: https://github.com/tracksapp/tracks/wiki/Testing
+See the wiki for more information on testing: https://github.com/TracksApp/tracks/wiki/Testing
