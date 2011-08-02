@@ -1,0 +1,6 @@
+<%= pref_with_text_field 'user', 'first_name' %>
+<%= pref_with_text_field 'user', 'last_name' %>
+<%= pref_with_select_field('prefs', 'locale', I18n.available_locales.map {|l| l.to_s}) %>
+<% if current_user.is_admin? %>
+  <%= pref_with_text_field('prefs', 'admin_email') %>
+<% end %>

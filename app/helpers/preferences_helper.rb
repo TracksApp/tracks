@@ -11,7 +11,7 @@ module PreferencesHelper
     pref(model, pref_name) { select(model, pref_name, collection) }
   end
 
-  def pref_with_text_field(model, pref_name, nowrap_label = false)
+  def pref_with_text_field(model, pref_name)
     pref(model, pref_name) { text_field(model, pref_name) }
   end
 

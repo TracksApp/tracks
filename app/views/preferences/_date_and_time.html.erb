@@ -1,0 +1,7 @@
+
+<%= pref_with_text_field('prefs', 'date_format') %>
+<%= pref_with_text_field('prefs', 'title_date_format') %>
+<%= pref('prefs', 'time_zone') { time_zone_select('prefs','time_zone') } %>
+
+<%= pref_with_select_field('prefs', "week_starts", (0..6).to_a.map {|num| [t('date.day_names')[num], num] }) %>
+

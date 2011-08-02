@@ -1,79 +1,29 @@
-<div id="tabs">
-	<ul>
-		<li><a href="#tabs-1">Profile</a></li>
-		<li><a href="#tabs-2">Authentication</a></li>
-		<li><a href="#tabs-3">Date and time</a></li>
-		<li><a href="#tabs-4">Tracks behavior</a></li>
-	</ul>
-	<div id="tabs-1">
-    <h2>Profile</h2>
-    <% form_tag :action => 'update' do %>
-      <%= pref_with_text_field 'user', 'first_name' %>
-	    <%= pref_with_text_field 'user', 'last_name' %>
-      <%= pref_with_select_field('prefs', 'locale', I18n.available_locales.map {|l| l.to_s}) %>
-  	  <% if current_user.is_admin? %> <%= pref_with_text_field('prefs', 'admin_email') %> <% end %>
-    <% end %>
-	</div>
-	<div id="tabs-2">
-    <h2>Authentication</h2>
-
-    <br/>
-
-    <label><%= t('preferences.token_header') %></label><br/>
-    <%= t('preferences.token_description') %>: <span class="highlight"><%= current_user.token %></span>
-    <%= button_to t('preferences.generate_new_token'), refresh_token_user_path(current_user),
-    :confirm => t('preferences.generate_new_token_confirm') %>
-
-    <br/>
-
-    <label><%= t('preferences.authentication_header') %></label><br/>
-    <% if Tracks::Config.auth_schemes.length > 1 %>
-      <% form_tag :action => 'update_auth_type' do %>
-
-        <label for="user_auth_type"><%= t('users.label_auth_type') %>:</label><br/>
-        <% Tracks::Config.auth_schemes.each do |scheme| %>
-          <%= radio_button_tag('user[auth_type]', scheme, current_user.auth_type == scheme) %><%=scheme%> <br/>
-        <% end %>
-
-        <div id="open_id" style="display:<%= current_user.auth_type == 'open_id' ? 'block' : 'none' %>">
-          <label for="openid_url"><%= t('users.identity_url') %>:</label><br/>
-          <input type="text" name="openid_url" value="<%= current_user.open_id_url %>" class="open_id" />
-        </div>
-        <%= submit_tag t('users.auth_change_submit') %> <%= link_to t('common.cancel'), preferences_path %>
-        <%= observe_field( :user_auth_type, :function => "$('#open_id')[0].style.display = value == 'open_id' ? 'block' : 'none'") %>
-      <% end %>
-    <% end %>
-
-    <% if current_user.auth_type == 'database' %>
-      <%= link_to(t('preferences.change_password') + ' &raquo;', change_password_user_path(current_user)) %>
-    <% end %>
-    <% if current_user.auth_type == 'open_id' %>
-      <p><%= t('preferences.open_id_url') %> <span class="highlight"><%= current_user.open_id_url %></span>.</p>
-      <%= link_to(t('preferences.change_identity_url') + ' &raquo;', change_auth_type_user_path(current_user)) %>
-    <% end %>
+<div id="display_box">
+  <% form_tag :action => 'update' do %>
+  <div id="tabs">
+  	<ul>
+      <li><a href="#tabs-1"><%= t('preferences.tabs.profile')%></a></li>
+      <li><a href="#tabs-2"><%= t('preferences.tabs.authentication')%></a></li>
+      <li><a href="#tabs-3"><%= t('preferences.tabs.date_and_time')%></a></li>
+      <li><a href="#tabs-4"><%= t('preferences.tabs.tracks_behavior')%></a></li>
+    </ul>
+  	<div id="tabs-1">
+      <%= render :partial => 'profile'%>
+    </div>
+  	<div id="tabs-2">
+      <%= render :partial => 'authentication'%>
+    </div>
+  	<div id="tabs-3">
+      <%= render :partial => 'date_and_time'%>
+    </div>
+  	<div id="tabs-4">
+      <%= render :partial => 'tracks_behavior'%>
+    </div>
   </div>
-	<div id="tabs-3">
-    <h2>Date and time</h2>
-	  <%= pref_with_text_field('prefs', 'date_format') %>
-	  <%= pref_with_text_field('prefs', 'title_date_format') %>
-    <%= pref('prefs', 'time_zone') { time_zone_select('prefs','time_zone') } %>
 
-	  <%= pref_with_select_field('prefs', "week_starts", (0..6).to_a.map {|num| [t('date.day_names')[num], num] }) %>
+  <br/>
 
-	</div>
-	<div id="tabs-4">
-    <h2>Tracks behavior</h2>
-	  <%= pref_with_select_field('prefs', "due_style", [[t('models.preference.due_styles')[0],Preference.due_styles[:due_in_n_days]],[t('models.preference.due_styles')[1],Preference.due_styles[:due_on]]]) %>
-	  <%= pref_with_select_field('prefs', "show_completed_projects_in_sidebar") %>
-	  <%= pref_with_select_field('prefs', "show_hidden_projects_in_sidebar") %>
-	  <%= pref_with_select_field('prefs', "show_hidden_contexts_in_sidebar") %>
-	  <%= pref_with_select_field('prefs', "show_project_on_todo_done") %>
-	  <%= pref_with_text_field('prefs', 'staleness_starts') %>
-	  <%= pref_with_text_field('prefs', 'show_number_completed') %>
-	  <%= pref_with_text_field('prefs', 'refresh') %>
-	  <%= pref_with_select_field('prefs', "verbose_action_descriptors") %>
-	  <%= pref_with_text_field('prefs', "mobile_todos_per_page") %>
-	  <%= pref_with_text_field('prefs', "sms_email") %>
-	  <%= pref('prefs', "sms_context") { select('prefs', 'sms_context_id', current_user.contexts.map{|c| [c.name, c.id]}) } %>
-	</div>
+  <button type="submit" id="prefs_submit"><%= t('common.update') %></button>
+
+  <% end %>
 </div>

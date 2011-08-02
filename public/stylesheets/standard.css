@@ -1,33 +1,36 @@
-/* @override http://0.0.0.0:3000/stylesheets/standard.css?1181841150 */
-
-/* @override http://0.0.0.0:3000/stylesheets/standard.css?1180885851 */
-
-div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td { 
+div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td {
     margin:0;
     padding:0;
 }
+
 table {
     border-collapse:collapse;
     border-spacing:0;
 }
-fieldset,img { 
+
+fieldset,img {
     border:0;
 }
 
 ol,ul {
     list-style:none;
 }
+
 caption,th {
     text-align:left;
 }
+
 h1,h2,h3,h4,h5,h6 {
     font-size:100%;
     font-weight:normal;
 }
+
 q:before,q:after {
     content:'';
 }
-abbr,acronym { border:0;
+
+abbr,acronym {
+  border:0;
 }
 
 body {
@@ -54,7 +57,7 @@ a, a:link, a:active, a:visited {
 a:hover {
     color: #fff;
     background-color: #cc3334;
-} 
+}
 
 h1 {
     font-size: 304%;
@@ -115,19 +118,6 @@ a.show_successors:hover, a.link_to_successors:hover {background-image: url(../im
     padding-left: 5px;
 }
 
-body.preferences div#display_box {
-    margin-right:510px;
-}
-
-body.preferences div#input_box {
-    width:490px;
-    right:15px;
-}
-
-body.preferences select#prefs_time_zone, body.preferences select#prefs_sms_context_id {
-    width: 250px;
-}
-
 #single_box {
     width: 60%;
     margin: 80px auto;
@@ -144,6 +134,8 @@ body.preferences select#prefs_time_zone, body.preferences select#prefs_sms_conte
     width: 95%;
     margin: 0px 15px 90px 15px;
 }
+
+/* recurring todos */
 
 #recurring_timespan, #recurring_target {
     border: none;
@@ -206,10 +198,10 @@ body.preferences select#prefs_time_zone, body.preferences select#prefs_sms_conte
 }
 
 .recurring_container {
-    padding: 0px 5px 0px 5px; 
+    padding: 0px 5px 0px 5px;
     border: 1px solid #999;
     margin: 0px 0px 0px 0px;
-    background: #fff; 
+    background: #fff;
     text-align: left;
 }
 
@@ -219,7 +211,7 @@ body.preferences select#prefs_time_zone, body.preferences select#prefs_sms_conte
     text-align: center;
     clear: both;
     border: none;
-}      
+}
 
 /* Navigation links at the top */
 
@@ -278,7 +270,7 @@ body.preferences select#prefs_time_zone, body.preferences select#prefs_sms_conte
     padding-left: 15px;
     margin-top: 15px;
     margin-bottom: 5px;
-    white-space: nowrap; /* added 2006-05-17 for safari display, timfm */ 
+    white-space: nowrap; /* added 2006-05-17 for safari display, timfm */
 }
 #date h1 {
     font-size: 152%;
@@ -293,14 +285,14 @@ body.preferences select#prefs_time_zone, body.preferences select#prefs_sms_conte
 }
 
 .container {
-    padding: 0px 5px 0px 5px; 
+    padding: 0px 5px 0px 5px;
     border: 1px solid #999;
     margin: 0px 0px 15px 0px;
-    background: #fff; 
+    background: #fff;
 }
 
 .completed {
-    background: #eee; 	
+    background: #eee;
 }
 
 .container h2 {
@@ -309,9 +301,9 @@ body.preferences select#prefs_time_zone, body.preferences select#prefs_sms_conte
     margin-top: 0px;
     margin-left: -5px;
     margin-right: -5px;
-    margin-bottom: 0px;      
+    margin-bottom: 0px;
     color: #666;
-    position:static;  
+    position:static;
 }
 
 .container_toggle img {
@@ -342,7 +334,7 @@ div#input_box {
 
 #input_box h2 {
     color: #999;
-    
+
 }
 
 #input_box ul {list-style-type: circle; font-size: 0.9em;}
@@ -410,7 +402,7 @@ div.item-container {
 
 a.recurring_icon {
     vertical-align: middle;
-    background-color: transparent;    
+    background-color: transparent;
 }
 
 a.icon {
@@ -454,11 +446,39 @@ input.item-checkbox {
     padding: 0px;
 }
 
+a.footer_link {color: #cc3334; font-style: normal;}
+a.footer_link:hover {color: #fff; background-color: #cc3334 !important;}
+
+/* preferences */
+
+body.preferences div#display_box {
+    margin-right:510px;
+}
+
+body.preferences div#input_box {
+    width:490px;
+    right:15px;
+}
+
+body.preferences select#prefs_time_zone, body.preferences select#prefs_sms_context_id {
+    width: 250px;
+}
+
 body.preferences div#footer {
     margin-right:410px;
 }
 
-/* The notes which may be attached to an item */      
+/* override jquery css to match tracks defaults better */
+
+body.preferences div.ui-widget {
+  font-size: 1em;
+}
+
+body.preferences div.ui-tabs li a {
+  padding: 0.1em 1em;
+}
+
+/* The notes which may be attached to an item */
 .todo_notes {
     margin: 5px;
     padding: 5px;
@@ -538,13 +558,16 @@ div.add_note_link {
     margin-top:12px;
     float: right;
 }
+
 div#project_status > div {
     padding: 10px;
 }
+
 #project_status span {
     margin-right:5px;
     background-color:white;
 }
+
 #project_status .active_state {
     font-weight:bold;
 }
@@ -555,8 +578,6 @@ div#default_context > div{
 div#default_tags > div{
     padding:10px;
 }
-a.footer_link {color: #cc3334; font-style: normal;}
-a.footer_link:hover {color: #fff; background-color: #cc3334 !important;}
 
 /* Tag formatting */
 
@@ -568,9 +589,9 @@ span.tag {
     margin-right: 2px;
 }
 
-span.tag a, 
-span.tag a:link, 
-span.tag a:active, 
+span.tag a,
+span.tag a:link,
+span.tag a:active,
 span.tag a:visited {
     color: #000;
 }
@@ -599,16 +620,16 @@ h4.alert  {
 }
 
 h4.warning  {
-    border: 1px solid #ED2E38; 
+    border: 1px solid #ED2E38;
     background-color: #F6979C;
     color: #000;
 }
 h4.error  {
-    color:#fff; 
+    color:#fff;
     background:#c00;
 }
 h4.notice {
-    border: 1px solid #007E00; 
+    border: 1px solid #007E00;
     background-color: #c2ffc2;
     color: #007E00;
 }
@@ -616,14 +637,14 @@ h4.notice {
 /* *****/
 
 .project_completed {
-    border: 1px solid #007E00; 
+    border: 1px solid #007E00;
     background-color: #c2ffc2;
     padding: 5px;
     color: #007E00;
     text-align: center;
 }
 
-/*   Draw attention to some text 
+/*   Draw attention to some text
 Same format as traffic lights */
 .red {
     color: #fff;
@@ -671,7 +692,7 @@ Same format as traffic lights */
 .highlight {
     background: #ffC;
     padding: 2px;
-} 
+}
 
 /*  Backgrounds marking out 'staleness' of a task based on age of creation date
 The colour of the background gets progressively yellower with age */
@@ -809,6 +830,7 @@ div.project_settings {
     font-size: 10px;
     font-weight: normal;
 }
+
 #project-next-prev {
     text-align:right;
 }
@@ -830,7 +852,7 @@ form {
 
 /* expand form contents to fill the whole form */
 .inline-form table,
-.inline-form textarea#item_notes, 
+.inline-form textarea#item_notes,
 .inline-form input#item_description {
     width: 100%;
 }
@@ -839,6 +861,7 @@ form {
 .inline-form table td.label {
     width: 13ex;
 }
+
 #todo_new_action_container, #project_new_project_container, #context_new_container, #recurring_new_container {
     background: #ddd;
     width: 270px;
@@ -855,8 +878,8 @@ form {
     padding-top: 50px;
 }
 
-#todo_new_action_container input, 
-#todo_new_action_container textarea, 
+#todo_new_action_container input,
+#todo_new_action_container textarea,
 #project_new_project_container input,
 #project_new_project_container textarea,
 #context_new_container input  {
@@ -918,6 +941,7 @@ input#go_to_project, input#context_hide {
 .hide_form {
     text-align:right;
 }
+
 #todo-form-new-action label, .edit_todo_form label {
     display: block;
     padding-bottom: 3px;
@@ -946,15 +970,15 @@ input, select, textarea {
 }
 
 .feed {
-    font-family: verdana, sans-serif; 
-    font-size: 10px; 
-    font-weight:bold; 
-    text-decoration:none; 
-    color: white; 
-    background-color: #F60; 
-    border:1px solid; 
-    border-color: #FC9 #630 #330 #F96; 
-    padding:0px 3px 0px 3px; 
+    font-family: verdana, sans-serif;
+    font-size: 10px;
+    font-weight:bold;
+    text-decoration:none;
+    color: white;
+    background-color: #F60;
+    border:1px solid;
+    border-color: #FC9 #630 #330 #F96;
+    padding:0px 3px 0px 3px;
     margin:0px;
 }
 
@@ -972,7 +996,7 @@ input, select, textarea {
 }
 
 div.message {
-    margin: 5px 0px; 
+    margin: 5px 0px;
     background: #FAF4B5;
     padding: 2px;
 }
@@ -1003,9 +1027,6 @@ div.message {
   height: 15px;
   margin: 4px;
   border: 4px dotted #999;
-}
-
-.context_target.hover {
 }
 
 /* Error message styles */
@@ -1045,7 +1066,7 @@ div.message {
     list-style-type: disc;
     list-style-position: inside;
     margin-left:7px;
-    color: #333; 
+    color: #333;
 }
 
 ul#prefs {list-style-type: disc; margin-left: 15px;}
@@ -1054,21 +1075,26 @@ ul#prefs {list-style-type: disc; margin-left: 15px;}
     margin-top:20px;
     margin-bottom:10px;
 }
-#token_area .description{ 
+
+#token_area .description{
     font-weight:bold;
 }
+
 #token_area form {
     width:100%;
     text-align:center;
 }
+
 .prefscontainer .actions {
     text-align:center;
     margin-bottom:20px;
 }
+
 .authtype_container .actions {
     margin-top:20px;
-    margin-bottom:20px;	
+    margin-bottom:20px;
 }
+
 #feedlegend {
     padding: 2px;
     background-color: #D2D3D6;
@@ -1076,39 +1102,48 @@ ul#prefs {list-style-type: disc; margin-left: 15px;}
     padding: 5px 20px;
     text-align: left;
 }
+
 #feedlegend h3, #feedlegend dl, #feedlegend dt, #feedlegend dd {
     display: inline;
 }
+
 #feedlegend dt {
     margin-left: 15px;
 }
+
 #feedlegend dd {
     margin-left: 3px;
 }
+
 #feedlegend p {
     margin-bottom: 0px;
 }
+
 #feeds img.rss-icon {
     margin-bottom: -4px;
 }
+
 #feeds li {
     font-size:13px;
     font-family: "Lucida Grande", Verdana, Geneva, Arial, sans-serif;
 }
+
 #feeds li h4 {
     margin-top: 12px;
     margin-bottom: 4px;
     font-weight: normal;
     font-style:oblique;
 }
+
 input.open_id {
-    background: url(../images/open-id-login-bg.gif) no-repeat; 
-    background-color: #fff; 
+    background: url(../images/open-id-login-bg.gif) no-repeat;
+    background-color: #fff;
     background-position: 0 50%;
     color: #000;
     padding-left: 18px;
     width:182px;
 }
+
 div.page_name_auto_complete {
     width: 100%;
     background: #fff;
@@ -1132,12 +1167,12 @@ div.page_name_auto_complete ul li {
     color: #000;
 }
 
-div.page_name_auto_complete ul li.selected { 
-    background-color: #ffb; 
+div.page_name_auto_complete ul li.selected {
+    background-color: #ffb;
 }
 
-div.page_name_auto_complete ul strong.highlight { 
-    color: #800; 
+div.page_name_auto_complete ul strong.highlight {
+    color: #800;
     margin: 0;
     padding: 0;
 }
@@ -1160,7 +1195,7 @@ table.users_table {
 table.export_table {
     border: 1px solid #666;
     background-color: #fff;
-    border-spacing: 0px;    
+    border-spacing: 0px;
 }
 
 .export_table th {color: #fff; background-color: #000;}
@@ -1177,7 +1212,7 @@ http://particletree.com/features/rediscovering-the-button-element/ */
     border:1px solid #dedede;
     border-top:1px solid #eee;
     border-left:1px solid #eee;
-    
+
     font-family:"Lucida Grande", Verdana, Geneva, Arial, sans-serif;
     font-size:80%;
     line-height:100%;
@@ -1280,24 +1315,28 @@ button.positive, .widgets a.positive{
     background-position:center center;
     background-color:black;
 }
+
 .stats_content .open-flash-chart, .stats_content .stats_module {
     float: left;
     width: 450px;
     margin-right:20px;
     padding-bottom:20px;
 }
+
 .stats_content h2
 {
     clear:both;
     margin-top:15px;
     margin-bottom:15px;
 }
+
 div.integrations h2 {
     margin-top:40px;
     padding-top:20px;
     margin-bottom:10px;
     border-top:1px solid #ccc;
 }
+
 div.integrations p, div.integrations li {
     font-size:1.0em;
 }
@@ -1309,17 +1348,20 @@ div.integrations pre {
 div.integrations li {
     list-style-type: disc;
     list-style-position: inside;
-    margin-left:30px;	
+    margin-left:30px;
 }
+
 div.integrations textarea {
     margin:10px;
     padding:3px;
     width:80%;
     background-color:#ddd;
 }
+
 .defer-container {
   float:right;
 }
+
 .defer-container a:hover {
   background-color: inherit;
 }
@@ -1329,6 +1371,7 @@ div.auto_complete {
   background: #fff;
   color: #000;
 }
+
 div.auto_complete ul {
   border:1px solid #888;
   margin:0;
@@ -1336,22 +1379,29 @@ div.auto_complete ul {
   width:100%;
   list-style-type:none;
 }
+
 div.auto_complete ul li {
   font-size: 1.0em;
   margin:0;
   padding:3px;
   list-style-type: none;
 }
+
 div.auto_complete ul li.selected {
   background-color: #ffb;
   font-weight:bold;
 }
+
 div.auto_complete ul strong.highlight {
   color: #800;
   margin:0;
   padding:0;
 }
-.ui-datepicker { 
-  z-index: 1000; 
+
+.ui-datepicker {
+  z-index: 1000;
 }
-.ui-autocomplete-loading { background: white url('/images/ui-anim_basic_16x16.gif') right center no-repeat; }
+
+.ui-autocomplete-loading {
+  background: white url('/images/ui-anim_basic_16x16.gif') right center no-repeat;
+}

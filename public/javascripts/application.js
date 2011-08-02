@@ -644,6 +644,14 @@ var UsersPage = {
 var PreferencesPage = {
     setup_behavior: function() {
       $( "#tabs" ).tabs();
+
+      $( "button#prefs_submit" ).button();
+
+      $('input[name="user[auth_type]"]').change(function() {
+        var value = $('input[name="user[auth_type]"]:checked').val();
+        $('#open_id')[0].style.display = value == 'open_id' ? 'block' : 'none'
+        $('#database')[0].style.display = value == 'database' ? 'block' : 'none'
+      });
     }
 }
 

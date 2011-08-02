@@ -1,0 +1,26 @@
+<label><%= t('preferences.token_header') %></label><br/><br/>
+<%= t('preferences.token_description') %>: <span class="highlight"><%= current_user.token %></span>
+<% # TODO: make remote AJAX call for new token %>
+<%= button_to t('preferences.generate_new_token'), refresh_token_user_path(current_user),
+    :confirm => t('preferences.generate_new_token_confirm') %>
+<br/>
+
+<% if Tracks::Config.auth_schemes.length > 1 %>
+  <label for="user_auth_type"><%= t('users.label_auth_type') %>:</label><br/>
+  <% Tracks::Config.auth_schemes.each do |scheme| %>
+    <%= radio_button_tag('user[auth_type]', scheme, current_user.auth_type == scheme) %><%=scheme%> <br/>
+  <% end %>
+
+  <br/>
+
+  <div id="open_id" style="display:<%= current_user.auth_type == 'open_id' ? 'block' : 'none' %>">
+    <label for="openid_url"><%= t('users.identity_url') %>:</label><br/>
+    <input type="text" name="user[open_id_url]" value="<%= current_user.open_id_url %>" class="open_id" />
+  </div>
+
+  <div id="database" style="display:<%= current_user.auth_type == 'database' ? 'block' : 'none' %>">
+    <%= render :partial => 'users/update_password' %>
+  </div>
+
+<% end %>
+
