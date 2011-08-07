@@ -63,7 +63,7 @@ class TodosHelperTest < ActiveSupport::HelperTestCase
   def test_remote_star_icon_unstarred
     @todo = flexmock(:id => 1, :to_param => 1, :description => 'Get gas', :starred? => false)
     # added dot (.) to regexp because somehouw the extra dot is added in the tests while its not in the rendered html
-    assert_remote_star_icon_helper_matches %r{<a href="/todos/1/toggle_star" class="icon star_item" title="star the action 'Get gas'"><img alt="Blank" class="unstarred_todo" src="/images/blank.png[.?0-9]*" title="Star action" /></a>}
+    assert_remote_star_icon_helper_matches %r{<a href="/todos/1/toggle_star" class="icon star_item" title="star the action 'Get gas'"><img alt="Blank" class="todo_star" src="/images/blank.png[.?0-9]*" title="Star action" /></a>}
     assert_behavior_registered
   end
 

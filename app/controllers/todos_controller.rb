@@ -83,7 +83,7 @@ class TodosController < ApplicationController
         @todo.context_id = context.id
       end
 
-      @todo.starred= params[:new_todo_starred].include? "true"
+      @todo.starred= (params[:new_todo_starred]||"").include? "true"
 
       @todo.add_predecessor_list(predecessor_list)
 
