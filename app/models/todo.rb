@@ -248,12 +248,12 @@ class Todo < ActiveRecord::Base
   end
   
   def toggle_star!
-    starred=!starred?
+    self.starred= !starred?
   end
 
   def starred=(starred)
     if starred
-      _add_tags(STARRED_TAG_NAME)
+      _add_tags STARRED_TAG_NAME unless starred?
     else
       _remove_tags STARRED_TAG_NAME
     end
