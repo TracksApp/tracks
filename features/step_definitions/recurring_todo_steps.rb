@@ -93,7 +93,7 @@ end
 Then /^the pattern "([^\"]*)" should be starred$/ do |pattern_name|
   pattern = @current_user.recurring_todos.find_by_description(pattern_name)
   pattern.should_not be_nil
-  xpath = "//div[@id='recurring_todo_#{pattern.id}']//img[@class='starred_todo']"
+  xpath = "//div[@id='recurring_todo_#{pattern.id}']//img[@class='todo_star starred']"
   response.should have_xpath(xpath)
 end
 

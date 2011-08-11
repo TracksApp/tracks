@@ -180,8 +180,8 @@ When /^I star the action "([^"]*)"$/ do |action_description|
   todo = @current_user.todos.find_by_description(action_description)
   todo.should_not be_nil
 
-  xpath_unstarred = "//div[@id='line_todo_#{todo.id}']//img[@class='unstarred_todo']"
-  xpath_starred = "//div[@id='line_todo_#{todo.id}']//img[@class='starred_todo']"
+  xpath_unstarred = "//div[@id='line_todo_#{todo.id}']//img[@class='todo_star']"
+  xpath_starred = "//div[@id='line_todo_#{todo.id}']//img[@class='todo_star starred']"
 
   selenium.is_element_present(xpath_unstarred).should be_true
 
@@ -197,8 +197,8 @@ When /^I unstar the action "([^"]*)"$/ do |action_description|
   todo = @current_user.todos.find_by_description(action_description)
   todo.should_not be_nil
 
-  xpath_unstarred = "//div[@id='line_todo_#{todo.id}']//img[@class='unstarred_todo']"
-  xpath_starred = "//div[@id='line_todo_#{todo.id}']//img[@class='starred_todo']"
+  xpath_unstarred = "//div[@id='line_todo_#{todo.id}']//img[@class='todo_star']"
+  xpath_starred = "//div[@id='line_todo_#{todo.id}']//img[@class='todo_star starred']"
 
   selenium.is_element_present(xpath_starred).should be_true
 
@@ -215,7 +215,7 @@ Then /^I should see a starred "([^"]*)"$/ do |action_description|
   todo = @current_user.todos.find_by_description(action_description)
   todo.should_not be_nil
 
-  xpath_starred = "//div[@id='line_todo_#{todo.id}']//img[@class='starred_todo']"
+  xpath_starred = "//div[@id='line_todo_#{todo.id}']//img[@class='todo_star starred']"
 
   selenium.is_element_present(xpath_starred).should be_true
 end
@@ -224,7 +224,7 @@ Then /^I should see an unstarred "([^"]*)"$/ do |action_description|
   todo = @current_user.todos.find_by_description(action_description)
   todo.should_not be_nil
 
-  xpath_starred = "//div[@id='line_todo_#{todo.id}']//img[@class='unstarred_todo']"
+  xpath_starred = "//div[@id='line_todo_#{todo.id}']//img[@class='todo_star']"
 
   wait_for :timeout => 5 do
     selenium.is_element_present(xpath_starred)
