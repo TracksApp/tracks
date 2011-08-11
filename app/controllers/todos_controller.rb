@@ -437,6 +437,11 @@ class TodosController < ApplicationController
     @todo_was_destroyed_from_pending_state = @todo.pending?
     @todo_was_destroyed_from_deferred_or_pending_state = @todo_was_destroyed_from_deferred_state || @todo_was_destroyed_from_pending_state
 
+    @uncompleted_predecessors = []
+    @todo.uncompleted_predecessors.each do |predecessor|
+      @uncompleted_predecessors << predecessor
+    end
+
     # activate successors if they only depend on this todo
     activated_successor_count = 0
     @pending_to_activate = []
@@ -961,7 +966,16 @@ class TodosController < ApplicationController
         @down_count = current_user.todos.active.not_hidden.count
       end
       from.context do
-        @down_count = current_user.contexts.find(@todo.context_id).todos.not_completed.count(:all)
+        context_id = @original_item_context_id || @todo.context_id
+        todos = current_user.contexts.find(context_id).todos.not_completed
+
+        if @todo.context.hide?
+          # include hidden todos
+          @down_count = todos.count(:all)
+        else
+          # exclude hidden_todos
+          @down_count = todos.not_hidden.count(:all)
+        end
       end
       from.project do
         unless @todo.project_id == nil
@@ -1351,6 +1365,9 @@ class TodosController < ApplicationController
       page.tag do
         @tag_name = params['_tag_name']
         @tag_was_removed = !@todo.has_tag?(@tag_name)
+      end
+      page.context do
+        @todo_should_be_hidden = @todo_hidden_state_changed && @todo.hidden?
       end
     end
   end

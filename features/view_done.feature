@@ -133,7 +133,7 @@ Feature: Show done
     When I go to the recurring todos page
     Then I should see "test pattern" in the active recurring todos container
 
-  @selenium @wip
+  @selenium
   Scenario Outline: I can toggle a todo active from the done pages
     When I go to the <page>
     Then I should see "todo 1"
@@ -173,7 +173,14 @@ Feature: Show done
 
   @selenium
   Scenario: I can edit a project to active from the project done page
-    Given this scenario is pending
+    Given I have a completed project called "completed project"
+    When I go to the done projects page
+    Then I should see "completed project"
+    When I edit the project state of "completed project" to "active"
+    Then I should not see "completed project"
+    When I go to the projects page
+    Then I should see "completed project"
+
 
   Scenario Outline: All pages are internationalized
     Given I set the locale to "<locale>"
@@ -206,3 +213,20 @@ Feature: Show done
     | all done actions page for context "@pc"         | de      |
     | all done actions page for project "test project"| de      |
     | all done actions page for tag "starred"         | de      |
+    | done actions page                               | es      |
+    | all done actions page                           | es      |
+    | done actions page for context "@pc"             | es      |
+    | done actions page for project "test project"    | es      |
+    | done actions page for tag "starred"             | es      |
+    | all done actions page for context "@pc"         | es      |
+    | all done actions page for project "test project"| es      |
+    | all done actions page for tag "starred"         | es      |
+# fr locale needs changes from preference branch
+#    | done actions page                               | fr      |
+#    | all done actions page                           | fr      |
+#    | done actions page for context "@pc"             | fr      |
+#    | done actions page for project "test project"    | fr      |
+#    | done actions page for tag "starred"             | fr      |
+#    | all done actions page for context "@pc"         | fr      |
+#    | all done actions page for project "test project"| fr      |
+#    | all done actions page for tag "starred"         | fr      |

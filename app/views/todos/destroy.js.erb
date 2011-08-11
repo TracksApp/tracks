@@ -4,12 +4,13 @@
   remove_todo_from_page();
   show_new_todo_if_todo_was_recurring();
   activate_pending_todos();
+  update_predecessors();
   show_empty_messages();
 <%- else -%>
   TracksPages.page_notify('error', "<%= t('todos.error_deleting_item', :description => @todo.description) %>", 8);
 <%- end -%>
 
-<% if @saved 
+<% if @saved
   # do not send the js in case of an error
 -%>
 
@@ -44,12 +45,12 @@ function remove_todo_from_page() {
        <%= show_empty_message_in_source_container %>
        $('#<%=dom_id(@todo)%>').slideUp(400, function() {
          $('#<%=dom_id(@todo)%>').remove();
-         <% if source_view_is :calendar 
-              # in calendar view it is possible to have a todo twice on the page 
+         <% if source_view_is :calendar
+              # in calendar view it is possible to have a todo twice on the page
          -%>
               $('#<%=dom_id(@todo)%>').remove();
          <% end %>
-       });      
+       });
   <% end -%>
 }
 
@@ -69,7 +70,7 @@ function show_new_todo_if_todo_was_recurring() {
 }
 
 function activate_pending_todos() {
- <% # Activate pending todos that are successors of the completed
+ <% # Activate pending todos that are successors of the deleted
     if @saved && @pending_to_activate
       # do not render the js in case of an error or if no todos to activate
       @pending_to_activate.each do |t|
@@ -89,10 +90,22 @@ function activate_pending_todos() {
  <% end -%>
 }
 
+function update_predecessors() {
+<%
+  if @todo_was_destroyed_from_pending_state
+    @uncompleted_predecessors.each do |p| -%>
+    if ($('#<%=item_container_id(p)%>')) {
+      $('#<%=dom_id(p)%>').html('<%=escape_javascript(render(:partial => p, :locals => { :parent_container_type => parent_container_type }))%>');
+    }
+<%  end
+  end
+%>
+}
+
 function html_for_new_recurring_todo() {
   return "<%= @saved && @new_recurring_todo ? escape_javascript(render(:partial => @new_recurring_todo, :locals => { :parent_container_type => parent_container_type })) : "" %>";
 }
 
-<% end 
+<% end
   # if @saved
 -%>

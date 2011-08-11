@@ -65,7 +65,7 @@ When /^I edit the dependency of "([^"]*)" to remove "([^"]*)" as predecessor$/ d
   wait_for :timeout=>5 do
     !selenium.is_element_present(delete_dep_button)
   end
-  
+
   submit_edit_todo_form(todo)
   # note that animations will be running after the ajax is completed
 end
@@ -109,6 +109,7 @@ Then /^I should not see "([^"]*)" within the dependencies of "([^"]*)"$/ do |suc
   successor.should_not be_nil
   # let selenium look for the presence of the successor
   xpath = "xpath=//div[@id='line_todo_#{todo.id}']//div[@id='successor_line_todo_#{successor.id}']//span"
+
   wait_for :timeout => 5 do
     !selenium.is_element_present(xpath)
   end

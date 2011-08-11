@@ -7,8 +7,12 @@ When /I change the (.*) field of "([^\"]*)" to "([^\"]*)"$/ do |field_name, todo
   submit_edit_todo_form(todo)
 end
 
-When /^I edit the context of "([^"]*)" to "([^"]*)"$/ do |context_old_name, context_new_name|
-  When "I change the context_name field of \"#{context_old_name}\" to \"#{context_new_name}\""
+When /^I edit the context of "([^"]*)" to "([^"]*)"$/ do |todo_name, context_new_name|
+  When "I change the context_name field of \"#{todo_name}\" to \"#{context_new_name}\""
+end
+
+When /^I edit the project of "([^"]*)" to "([^"]*)"$/ do |todo_name, project_new_name|
+  When "I change the project_name field of \"#{todo_name}\" to \"#{project_new_name}\""
 end
 
 When /^I edit the description of "([^"]*)" to "([^"]*)"$/ do |action_description, new_description|
@@ -46,9 +50,9 @@ end
 When /^I remove the show from date from "([^"]*)"$/ do |action_description|
   todo = @current_user.todos.find_by_description(action_description)
   todo.should_not be_nil
-  
+
   open_edit_form_for(todo)
   selenium.click("//div[@id='edit_todo_#{todo.id}']//a[@id='show_from_x_todo_#{todo.id}']/img", :wait_for => :ajax, :javascript_framework => :jquery)
-  
+
   submit_edit_todo_form(todo)
 end

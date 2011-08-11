@@ -3,6 +3,30 @@ When /^I submit a new action with description "([^"]*)"$/ do |description|
   submit_next_action_form
 end
 
+When /^I submit a new action with description "([^"]*)" with a dependency on "([^"]*)"$/ do |todo_description, predecessor_description|
+  predecessor = @current_user.todos.find_by_description(predecessor_description)
+  predecessor.should_not be_nil
+
+  fill_in "todo[description]", :with => todo_description
+
+  input = "xpath=//form[@id='todo-form-new-action']//input[@id='predecessor_input']"
+  selenium.focus(input)
+  selenium.type_keys input, predecessor_description
+
+  # wait for auto complete
+  autocomplete = "xpath=//a[@id='ui-active-menuitem']"
+  selenium.wait_for_element(autocomplete, :timeout_in_seconds => 5)
+
+  # click first line
+  first_elem = "xpath=//ul/li[1]/a[@id='ui-active-menuitem']"
+  selenium.click(first_elem)
+
+  new_dependency_line = "xpath=//li[@id='pred_#{predecessor.id}']"
+  selenium.wait_for_element(new_dependency_line, :timeout_in_seconds => 5)
+
+  submit_next_action_form
+end
+
 When /^I submit a new action with description "([^"]*)" and the tags "([^"]*)" in the context "([^"]*)"$/ do |description, tags, context_name|
   fill_in "todo[description]", :with => description
   fill_in "tag_list", :with => tags

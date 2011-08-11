@@ -153,9 +153,38 @@ Feature: Edit a next action from every page
       | tag page for "starred"             |
       | calendar page                      |
 
-  Scenario: I can edit a todo to move it to another context
-    # for home and tickler and tag
-    Given this is a pending scenario
+  @selenium
+  Scenario Outline: I can edit a todo to move it to another context
+    Given I have a context called "@pc"
+    And I have a context called "@laptop"
+    And I have a project "my project" that has the following todos
+      | context | description   | tags |
+      | @pc     | first action  | bla  |
+      | @laptop | second action | bla  |
+    When I go to the <page>
+    Then I should see "first action" in the context container for "@pc"
+    When I edit the context of "first action" to "@laptop"
+    Then I should not see "first action" in the context container for "@pc"
+    Then I should see "first action" in the context container for "@laptop"
+
+    Scenarios:
+    | page               |
+    | home page          |
+    | tag page for "bla" |
+
+  @selenium
+  Scenario: I can edit a todo to move it to another context in tickler page
+    Given I have a context called "@pc"
+    And I have a context called "@laptop"
+    And I have a project "my project" that has the following deferred todos
+      | context | description   |
+      | @pc     | first action  |
+      | @laptop | second action |
+    When I go to the tickler page
+    Then I should see "first action" in the context container for "@pc"
+    When I edit the context of "first action" to "@laptop"
+    Then I should not see "first action" in the context container for "@pc"
+    Then I should see "first action" in the context container for "@laptop"
 
   Scenario: I can edit a todo to move it to another project
     Given this is a pending scenario

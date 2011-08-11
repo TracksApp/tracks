@@ -1,11 +1,11 @@
 Given /^I have a project "([^\"]*)" with (.*) todos$/ do |project_name, num_todos|
-  context = @current_user.contexts.find_or_create_by_name("Context A")
-  project = @current_user.projects.create!(:name => project_name)
+  @context = @current_user.contexts.find_or_create_by_name("Context A")
+  @project = @current_user.projects.create!(:name => project_name)
   1.upto num_todos.to_i do |i|
     @current_user.todos.create!(
-      :project_id => project.id,
-      :context_id => context.id,
-      :description => "Todo #{i}")
+      :project_id => @project.id,
+      :context_id => @context.id,
+      :description => "todo #{i}")
   end
 end
 
@@ -71,7 +71,7 @@ When /^I edit the project name to "([^\"]*)"$/ do |new_title|
   wait_for do
     selenium.is_element_present("submit_project_#{@project.id}")
   end
-  
+
   fill_in "project[name]", :with => new_title
 
   selenium.click "submit_project_#{@project.id}",
@@ -180,7 +180,7 @@ Then /^I should see the bold text "([^\"]*)" in the project description$/ do |bo
 
   response.should have_xpath(xpath)
   bold_text = response.selenium.get_text("xpath=#{xpath}")
-  
+
   bold_text.should =~ /#{bold}/
 end
 

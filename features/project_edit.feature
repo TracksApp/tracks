@@ -103,6 +103,6 @@ Feature: Edit a project
     Given I have a project "foo" with 2 todos
     And I have a project called "bar"
     When I go to the "foo" project
-    And I change the project_name field of "Todo 1" to "bar"
-    Then I should not see "Todo 1"
-    And I should see "Todo 2"
+    And I change the project_name field of "todo 1" to "bar"
+    Then I should not see "todo 1"
+    And I should see "todo 2"

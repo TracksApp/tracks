@@ -92,8 +92,24 @@ Feature: dependencies
     And I should not see "test 2" in the deferred container
     And I should see the empty message in the deferred container
 
+  @selenium
   Scenario: Deleting a successor will update predecessor
-    Given this is a pending scenario
+    Given I have a context called "@pc"
+    And I have a project "dependencies" that has the following todos
+      | description | context |
+      | test 1      | @pc     |
+      | test 2      | @pc     |
+      | test 3      | @pc     |
+    And "test 2" depends on "test 1"
+    And "test 3" depends on "test 1"
+    When I go to the "dependencies" project
+    And I expand the dependencies of "test 1"
+    Then I should see "test 2" within the dependencies of "test 1"
+    And I should see "test 3" within the dependencies of "test 1"
+    When I delete the action "test 2"
+    And I expand the dependencies of "test 1"
+    Then I should see "test 3" within the dependencies of "test 1"
+    And I should not see "test 2"
 
   @selenium
   Scenario: Dragging an action to a completed action will not add it as a dependency

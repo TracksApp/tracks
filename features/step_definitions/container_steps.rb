@@ -51,7 +51,7 @@ Then /^I should not see "([^"]*)" in the context container for "([^"]*)"$/ do |t
   todo.should_not be_nil
 
   xpath = "xpath=//div[@id=\"c#{context.id}\"]//div[@id='line_todo_#{todo.id}']"
-  
+
   if selenium.is_element_present(xpath)
     # give jquery some time to finish
     wait_for :timeout_in_seconds => 5 do
@@ -81,6 +81,23 @@ Then /^I should see "([^"]*)" in the action container$/ do |todo_description|
     selenium.is_element_present(xpath)
   end
 end
+
+Then /^I should not see "([^"]*)" in the project container of "([^"]*)"$/ do |todo_description, project_name|
+  todo = @current_user.todos.find_by_description(todo_description)
+  todo.should_not be_nil
+
+  project = @current_user.projects.find_by_name(project_name)
+  project.should_not be_nil
+
+  xpath = "//div[@id='p#{todo.project.id}items']//div[@id='line_todo_#{todo.id}']"
+
+  if selenium.is_element_present(xpath)
+    wait_for :timeout => 5 do
+        !selenium.is_element_present(xpath)
+    end
+  end
+end
+
 
 Then /^I should see "([^"]*)" in the completed container$/ do |todo_description|
   todo = @current_user.todos.find_by_description(todo_description)
@@ -130,7 +147,7 @@ end
 
 Then /^I should see "([^"]*)" in the active recurring todos container$/ do |repeat_pattern|
   repeat = @current_user.recurring_todos.find_by_description(repeat_pattern)
-  
+
   unless repeat.nil?
     xpath = "//div[@id='active_recurring_todos_container']//div[@id='recurring_todo_#{repeat.id}']"
     selenium.wait_for_element("xpath=#{xpath}", :timeout_in_seconds => 5)

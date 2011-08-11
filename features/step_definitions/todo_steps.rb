@@ -4,7 +4,7 @@ end
 
 Given /^I have a todo "([^"]*)" in the context "([^"]*)"$/ do |description, context_name|
   context = @current_user.contexts.find_or_create(:name => context_name)
-  @current_user.todos.create!(:context_id => context.id, :description => description)
+  @todo = @current_user.todos.create!(:context_id => context.id, :description => description)
 end
 
 Given /^I have a todo "([^"]*)" in the context "([^"]*)" which is due tomorrow$/ do |description, context_name|
@@ -12,6 +12,22 @@ Given /^I have a todo "([^"]*)" in the context "([^"]*)" which is due tomorrow$/
   @todo = @current_user.todos.create!(:context_id => context.id, :description => description)
   @todo.due = @todo.created_at + 1.day
   @todo.save!
+end
+
+Given /^I have (\d+) todos in project "([^"]*)" in context "([^"]*)" with tags "([^"]*)"$/ do |number_of_todos, project_name, context_name, tag_names|
+  @context = @current_user.contexts.find_by_name(context_name)
+  @context.should_not be_nil
+
+  @project = @current_user.projects.find_by_name(project_name)
+  @project.should_not be_nil
+
+  @todos = []
+  number_of_todos.to_i.downto 1 do |i|
+    todo = @current_user.todos.create!(:context_id => @context.id, :description => "todo #{i}", :project_id => @project.id)
+    todo.tag_with(tag_names)
+    todo.save!
+    @todos << todo
+  end
 end
 
 Given /^I have a todo "([^"]*)"$/ do |description|
@@ -124,6 +140,26 @@ Given /^I have a project "([^"]*)" that has the following todos$/ do |project_na
       :description => todo[:description],
       :context_id => context.id,
       :project_id=>@project.id)
+    unless todo[:tags].nil?
+      new_todo.tag_with(todo[:tags])
+    end
+    unless todo[:completed].nil?
+      new_todo.complete! if todo[:completed] == 'yes'
+    end
+  end
+end
+
+Given /^I have a project "([^"]*)" that has the following deferred todos$/ do |project_name, todos|
+  Given "I have a project called \"#{project_name}\""
+  @project.should_not be_nil
+  todos.hashes.each do |todo|
+    context = @current_user.contexts.find_by_name(todo[:context])
+    context.should_not be_nil
+    new_todo = @current_user.todos.create!(
+      :description => todo[:description],
+      :context_id => context.id,
+      :project_id=>@project.id,
+      :show_from=>Time.zone.now+1.week)
     unless todo[:tags].nil?
       new_todo.tag_with(todo[:tags])
     end
