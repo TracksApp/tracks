@@ -39,6 +39,14 @@ When /^I edit the due date of "([^"]*)" to next month$/ do  |action_description|
   submit_edit_todo_form(todo)
 end
 
+When /^I edit the show from date of "([^"]*)" to next month$/ do  |action_description|
+  todo = @current_user.todos.find_by_description(action_description)
+  todo.should_not be_nil
+  open_edit_form_for(todo)
+  fill_in "show_from_todo_#{todo.id}", :with => format_date(todo.created_at + 1.month)
+  submit_edit_todo_form(todo)
+end
+
 When /^I clear the due date of "([^"]*)"$/ do |action_description|
   todo = @current_user.todos.find_by_description(action_description)
   todo.should_not be_nil
@@ -56,3 +64,28 @@ When /^I remove the show from date from "([^"]*)"$/ do |action_description|
 
   submit_edit_todo_form(todo)
 end
+
+When /^I defer "([^"]*)" for 1 day$/ do |action_description|
+  todo = @current_user.todos.find_by_description(action_description)
+  todo.should_not be_nil
+
+  defer_todo_1day_button = "xpath=//a[@id='defer_1_todo_#{todo.id}']/img"
+  selenium.click defer_todo_1day_button
+
+  wait_for :timeout => 5 do
+    !selenium.is_element_present("//div[@id='line_todo_#{todo.id}']")
+  end
+end
+
+When /^I make a project of "([^"]*)"$/ do |action_description|
+  todo = @current_user.todos.find_by_description(action_description)
+  todo.should_not be_nil
+
+  make_project_button = "xpath=//a[@id='to_project_todo_#{todo.id}']/img"
+  selenium.click make_project_button
+
+  wait_for :timeout => 5 do
+    !selenium.is_element_present("//div[@id='line_todo_#{todo.id}']")
+  end
+end
+

@@ -7,6 +7,12 @@ Given /^I have a todo "([^"]*)" in the context "([^"]*)"$/ do |description, cont
   @todo = @current_user.todos.create!(:context_id => context.id, :description => description)
 end
 
+Given /^I have a todo "([^"]*)" in context "([^"]*)" with tags "([^"]*)"$/ do |description, context_name, tag_names|
+  Given "I have a todo \"#{description}\" in the context \"#{context_name}\""
+  @todo.tag_with(tag_names)
+  @todo.save!
+end
+
 Given /^I have a todo "([^"]*)" in the context "([^"]*)" which is due tomorrow$/ do |description, context_name|
   context = @current_user.contexts.find_or_create(:name => context_name)
   @todo = @current_user.todos.create!(:context_id => context.id, :description => description)

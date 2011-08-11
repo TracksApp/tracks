@@ -8,6 +8,7 @@ Feature: Edit a next action from every page
       | login    | password | is_admin |
       | testuser | secret   | false    |
     And I have logged in as "testuser" with password "secret"
+    And I have a context called "@pc"
 
   @selenium
   Scenario: I can toggle the star of a todo
@@ -186,17 +187,43 @@ Feature: Edit a next action from every page
     Then I should not see "first action" in the context container for "@pc"
     Then I should see "first action" in the context container for "@laptop"
 
+  @selenium
   Scenario: I can edit a todo to move it to another project
-    Given this is a pending scenario
+    Given I have a project called "project one"
+    And I have a project "project two" with 1 todos
+    When I go to the "project two" project
+    And I edit the project of "todo 1" to "project one"
+    Then I should not see "todo 1"
+    When I go to the "project one" project
+    Then I should see "todo 1"
 
+  @selenium
   Scenario: I can edit a todo to move it to the tickler
-    Given this is a pending scenario
+    When I go to the home page
+    And I submit a new action with description "start later" in the context "@pc"
+    And I edit the show from date of "start later" to next month
+    Then I should not see "start later"
+    When I go to the tickler page
+    Then I should see "start later"
 
+  @selenium
   Scenario: I can defer a todo
-    Given this is a pending scenario
+    When I go to the home page
+    And I submit a new action with description "start later" in the context "@pc"
+    And I defer "start later" for 1 day
+    Then I should not see "start later"
+    When I go to the tickler page
+    Then I should see "start later"
 
+  @selenium
   Scenario: I can make a project from a todo
-    Given this is a pending scenario
+    When I go to the home page
+    And I submit a new action with description "buy mediacenter" in the context "@pc"
+    And I make a project of "buy mediacenter"
+    #sidebar does not update
+    Then I should be on the "buy mediacenter" project
+    When I go to the projects page
+    Then I should see "buy mediacenter"
 
   Scenario: I can show the notes of a todo
     Given this is a pending scenario
@@ -205,13 +232,19 @@ Feature: Edit a next action from every page
     Given this is a pending scenario
 
   Scenario: Clicking a tag of a todo will go to that tag page
-    Given this is a pending scenario
+    Given I have a todo "tag you are it" in context "@tags" with tags "taga, tagb"
+    When I go to the home page
+    Then I should see "tag you are it"
+    And I should see "taga"
+    When I follow "taga"
+    Then I should be on the tag page for "taga"
 
   Scenario: I can edit the tags of a todo
     Given this is a pending scenario
 
   Scenario: Editing the context of a todo to a new context will show new context
-    Given this is a pending scenario # for home and tickler and tag
+    # for home and tickler and tag
+    Given this is a pending scenario
 
   Scenario: Making an error when editing a todo will show error message
     Given this is a pending scenario
