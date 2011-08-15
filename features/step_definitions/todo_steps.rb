@@ -40,11 +40,33 @@ Given /^I have a todo "([^"]*)"$/ do |description|
   Given "I have a todo \"#{description}\" in the context \"Context A\""
 end
 
+Given /^I have a todo "([^"]*)" with notes "([^"]*)"$/ do |description, notes|
+  Given "I have a todo \"#{description}\" in the context \"Context A\""
+  @todo.notes = notes
+  @todo.save!
+end
+
 Given /^I have ([0-9]+) todos$/ do |count|
   count.to_i.downto 1 do |i|
     Given "I have a todo \"todo #{i}\" in the context \"Context A\""
   end
 end
+
+Given /^I have a todo with description "([^"]*)" in project "([^"]*)" with tags "([^"]*)" in the context "([^"]*)"$/ do |action_description, project_name, tags, context_name|
+  context = @current_user.contexts.find_or_create(:name => context_name)
+  project = @current_user.projects.find_or_create(:name => project_name)
+  @todo = @current_user.todos.create!(:context_id => context.id, :project_id => project.id, :description => action_description)
+  @todo.tag_with(tags)
+  @todo.save
+end
+
+Given /^I have a todo with description "([^"]*)" in project "([^"]*)" with tags "([^"]*)" in the context "([^"]*)" that is due next week$/ do |action_description, project_name, tags, context_name|
+  Given "I have a todo with description \"#{action_description}\" in project \"#{project_name}\" with tags \"#{tags}\" in the context \"#{context_name}\""
+  @todo.due = @current_user.time + 1.week
+  @todo.save!
+end
+
+###### DEFERRED TODOS #######
 
 Given /^I have ([0-9]+) deferred todos$/ do |count|
   context = @current_user.contexts.create!(:name => "context B")
@@ -65,6 +87,14 @@ end
 Given /^I have a deferred todo "([^"]*)"$/ do |description|
   Given "I have a deferred todo \"#{description}\" in the context \"context B\""
 end
+
+Given /^I have a deferred todo "([^"]*)" in context "([^"]*)" with tags "([^"]*)"$/ do |action_description, context_name, tag_list|
+  Given "I have a todo \"#{action_description}\" in context \"#{context_name}\" with tags \"#{tag_list}\""
+  @todo.show_from = @current_user.time + 1.week
+  @todo.save!
+end
+
+####### COMPLETED TODOS #######
 
 Given /^I have ([0-9]+) completed todos in project "([^"]*)" in context "([^"]*)"$/ do |count, project_name, context_name|
   @context = @current_user.contexts.find_by_name(context_name)
@@ -117,24 +147,12 @@ Given /^I have ([0-9]+) completed todos with a note in project "([^"]*)" in cont
   @todos.each { |t| t.notes = "note #{t.id}"; t.save! }
 end
 
-Given /^I have a todo with description "([^"]*)" in project "([^"]*)" with tags "([^"]*)" in the context "([^"]*)"$/ do |action_description, project_name, tags, context_name|
-  context = @current_user.contexts.find_or_create(:name => context_name)
-  project = @current_user.projects.find_or_create(:name => project_name)
-  @todo = @current_user.todos.create!(:context_id => context.id, :project_id => project.id, :description => action_description)
-  @todo.tag_with(tags)
-  @todo.save
-end
-
-Given /^I have a todo with description "([^"]*)" in project "([^"]*)" with tags "([^"]*)" in the context "([^"]*)" that is due next week$/ do |action_description, project_name, tags, context_name|
-  Given "I have a todo with description \"#{action_description}\" in project \"#{project_name}\" with tags \"#{tags}\" in the context \"#{context_name}\""
-  @todo.due = @current_user.time + 1.week
-  @todo.save!
-end
-
 Given /^I have a completed todo with description "([^"]*)" in project "([^"]*)" with tags "([^"]*)" in the context "([^"]*)"$/ do |action_description, project_name, tags, context_name|
   Given "I have a todo with description \"#{action_description}\" in project \"#{project_name}\" with tags \"#{tags}\" in the context \"#{context_name}\""
   @todo.complete!
 end
+
+####### PROJECT WITH TODOS ######
 
 Given /^I have a project "([^"]*)" that has the following todos$/ do |project_name, todos|
   Given "I have a project called \"#{project_name}\""
@@ -273,7 +291,6 @@ Then /^I should see an unstarred "([^"]*)"$/ do |action_description|
   end
 end
 
-
 When /^I delete the action "([^"]*)"$/ do |action_description|
   todo = @current_user.todos.find_by_description(action_description)
   todo.should_not be_nil
@@ -289,6 +306,18 @@ end
 
 When /^I delete the todo "([^"]*)"$/ do |action_description|
   When "I delete the action \"#{action_description}\""
+end
+
+When /^I open the notes of "([^"]*)"$/ do |action_description|
+  todo = @current_user.todos.find_by_description(action_description)
+  todo.should_not be_nil
+
+  show_notes_img = "xpath=//div[@id='line_todo_#{todo.id}']/div/a/img"
+  selenium.click show_notes_img
+
+  wait_for :timeout => 5 do
+    selenium.is_visible "//div[@id='notes_todo_#{todo.id}']"
+  end
 end
 
 Then /^I should see ([0-9]+) todos$/ do |count|

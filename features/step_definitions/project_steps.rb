@@ -59,10 +59,32 @@ Given /^I have a hidden project called "([^"]*)"$/ do |project_name|
   @project.hide!
 end
 
+When /^I open the project edit form$/ do
+  click_link "link_edit_project_#{@project.id}"
+
+  wait_for do
+    selenium.is_element_present("submit_project_#{@project.id}")
+  end
+end
+
+When /^I cancel the project edit form$/ do
+  click_link "cancel_project_#{@project.id}"
+
+  if selenium.is_visible("submit_project_#{@project.id}")
+    wait_for do
+      !selenium.is_visible("submit_project_#{@project.id}")
+    end
+  end
+end
+
 When /^I edit the project description to "([^\"]*)"$/ do |new_description|
   click_link "link_edit_project_#{@project.id}"
   fill_in "project[description]", :with => new_description
   click_button "submit_project_#{@project.id}"
+
+  wait_for do
+    !selenium.is_element_present("submit_project_#{@project.id}")
+  end
 end
 
 When /^I edit the project name to "([^\"]*)"$/ do |new_title|
@@ -80,7 +102,7 @@ When /^I edit the project name to "([^\"]*)"$/ do |new_title|
     :timeout => 5
 
   wait_for do
-    !selenium.is_element_present("submit_context_#{@project.id}")
+    !selenium.is_element_present("submit_project_#{@project.id}")
   end
 end
 

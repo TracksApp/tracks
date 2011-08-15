@@ -12,7 +12,7 @@ var TracksForm = {
             $('#'+formId+' input:text:first').focus();
         }
         toggleLink.parent().toggleClass('hide_form');
-    }, 
+    },
     set_project_name: function (name) {
         $('input#todo_project_name').val(name);
     },
@@ -35,7 +35,7 @@ var TracksForm = {
         $('#project_name').html(name);
     },
     set_tag_list: function (name) {
-        $('input#tag_list').val(name);
+        $('input#todo_tag_list').val(name);
     },
     set_tag_list_for_multi_add: function (name) {
         $('#multi_tag_list').val(name);
@@ -80,7 +80,7 @@ var TracksForm = {
 
         /* submit todo form after entering new todo */
         $("button#todo_new_action_submit").live('click', function (ev) {
-            if ($('input#predecessor_input').val() != "") 
+            if ($('input#predecessor_input').val() != "")
               if (!confirm(i18n['todos.unresolved_dependency']))
                 return false;
             if (TodoItems.askIfNewContextProvided('', this))
@@ -181,12 +181,12 @@ var TracksPages = {
         var flash = $('div#message_holder');
         flash.html("<h4 id=\'flash\' class=\'alert "+type+"\'>"+message+"</h4>");
         flash = $('h4#flash');
-        
+
         fadein_duration = 1500;
         fadeout_duration = 1500;
         show_duration = fade_duration_in_sec*1000 - fadein_duration - fadeout_duration
         if (show_duration < 0)
-          show_duration = 1000;          
+          show_duration = 1000;
         flash.fadeIn(fadein_duration).delay(show_duration).fadeOut(fadeout_duration);
     },
     set_page_badge: function(count) {
@@ -251,7 +251,8 @@ var TracksPages = {
         ProjectItems.setup_autocomplete_for_projects('input[name=project_name]');
         ContextItems.setup_autocomplete_for_contexts('input[name=context_name]');
         ContextItems.setup_autocomplete_for_contexts('input[id="project_default_context_name"]');
-        TracksPages.setup_autocomplete_for_tag_list('input[name=tag_list]');
+        TracksPages.setup_autocomplete_for_tag_list('input[name=tag_list]'); // todo edit form
+        TracksPages.setup_autocomplete_for_tag_list('input[name=todo_tag_list]'); // new todo form
         TracksPages.setup_autocomplete_for_tag_list('input[id="project_default_tags"]');
         TodoItems.setup_autocomplete_for_predecessor();
     },

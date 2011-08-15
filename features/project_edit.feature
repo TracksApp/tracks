@@ -82,20 +82,38 @@ Feature: Edit a project
     Then I should not see "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890TOO LONG"
     And I should see "12345678901234567890123456789012345678901234567890123456789012345678901234567890123456"
 
+  @selenium
   Scenario: Cancelling editing a project will restore project settings
-    Given this is a pending scenario
+    Given I have a project called "test"
+    When I go to the "test" project
+    Then I should see "This project is active with no default context and with no default tags"
+    When I open the project edit form
+    Then I should not see "This project is active with no default context and with no default tags"
+    When I cancel the project edit form
+    Then I should see "This project is active with no default context and with no default tags"
 
-  Scenario: Editing the description of a todo will update todo
-    Given this is a pending scenario
-
+  @selenium
   Scenario: Moving the todo to the tickler will move todo to tickler container
-    Given this is a pending scenario
+    Given I have a project "test" with 1 todos
+    When I go to the "test" project
+    Then I should see "todo 1" in the action container
+    When I defer "todo 1" for 1 day
+    Then I should see "todo 1" in the deferred container
 
+  @selenium
   Scenario: Moving the todo out of the tickler will move todo to active container
-    Given this is a pending scenario
+    Given I have a project "test" with 1 todos
+    When I go to the "test" project
+    Then I should see "todo 1" in the action container
+    When I defer "todo 1" for 1 day
+    Then I should see "todo 1" in the deferred container
 
+  @selenium
   Scenario: Making all todos inactive will show empty message
-    Given this is a pending scenario  # empty message is in separate container
+    Given I have a project "test" with 1 todos
+    When I go to the "test" project
+    And I mark "todo 1" as complete
+    Then I should see "Currently there are no incomplete actions in this project"
 
   # Ticket #1043
   @selenium

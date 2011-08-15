@@ -1303,12 +1303,20 @@ class TodosController < ApplicationController
 
   def update_due_and_show_from_dates
     if params["todo"].has_key?("due")
-      params["todo"]["due"] = parse_date_per_user_prefs(params["todo"]["due"])
+      begin
+        params["todo"]["due"] = parse_date_per_user_prefs(params["todo"]["due"])
+      rescue
+        @todo.errors.add_to_base("Invalid due date")
+      end
     else
       params["todo"]["due"] = ""
     end
     if params['todo']['show_from']
-      params['todo']['show_from'] = parse_date_per_user_prefs(params['todo']['show_from'])
+      begin
+        params['todo']['show_from'] = parse_date_per_user_prefs(params['todo']['show_from'])
+      rescue
+        @todo.errors.add_to_base("Invalid show from date")
+      end
     end
   end
 
@@ -1441,7 +1449,7 @@ class TodosController < ApplicationController
     end
 
     def tag_list
-      @params['tag_list']
+      @params['todo_tag_list']
     end
 
     def predecessor_list

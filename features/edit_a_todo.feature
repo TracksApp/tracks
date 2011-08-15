@@ -30,7 +30,6 @@ Feature: Edit a next action from every page
   @selenium
   Scenario: Removing the last todo in context will hide context
     Given I have a todo "delete me" in the context "@home"
-    And I have a context called "@pc"
     When I go to the home page
     Then I should see the container for context "@home"
     And I should see "delete me" in the context container for "@home"
@@ -156,8 +155,7 @@ Feature: Edit a next action from every page
 
   @selenium
   Scenario Outline: I can edit a todo to move it to another context
-    Given I have a context called "@pc"
-    And I have a context called "@laptop"
+    Given I have a context called "@laptop"
     And I have a project "my project" that has the following todos
       | context | description   | tags |
       | @pc     | first action  | bla  |
@@ -175,8 +173,7 @@ Feature: Edit a next action from every page
 
   @selenium
   Scenario: I can edit a todo to move it to another context in tickler page
-    Given I have a context called "@pc"
-    And I have a context called "@laptop"
+    Given I have a context called "@laptop"
     And I have a project "my project" that has the following deferred todos
       | context | description   |
       | @pc     | first action  |
@@ -225,11 +222,22 @@ Feature: Edit a next action from every page
     When I go to the projects page
     Then I should see "buy mediacenter"
 
+  @selenium
   Scenario: I can show the notes of a todo
-    Given this is a pending scenario
+    Given I have a todo "read the notes" with notes "several things to read"
+    When I go to the home page
+    Then I should see "read the notes"
+    And I should not see "several things to read"
+    When I open the notes of "read the notes"
+    Then I should see "several things to read"
 
+  @selenium
   Scenario: I can tag a todo
-    Given this is a pending scenario
+    Given I have a todo "tag me"
+    When I go to the home page
+    And I edit the tags of "tag me" to "bla, bli"
+    Then I should see "bla"
+    And I should see "bli"
 
   Scenario: Clicking a tag of a todo will go to that tag page
     Given I have a todo "tag you are it" in context "@tags" with tags "taga, tagb"
@@ -239,12 +247,38 @@ Feature: Edit a next action from every page
     When I follow "taga"
     Then I should be on the tag page for "taga"
 
+  @selenium
   Scenario: I can edit the tags of a todo
-    Given this is a pending scenario
+    Given I have a todo "tag you are it" in context "@tags" with tags "taga, tagb"
+    When I go to the home page
+    Then I should see "tag you are it"
+    When I edit the tags of "tag you are it" to "tagb, tagc"
+    Then I should not see "taga"
+    And I should see "tagb"
+    And I should see "tagc"
 
-  Scenario: Editing the context of a todo to a new context will show new context
-    # for home and tickler and tag
-    Given this is a pending scenario
+  @selenium
+  Scenario Outline: Editing the context of a todo to a new context will show new context
+    Given I have a todo "moving" in context "@pc" with tags "tag"
+    When I go to the <page>
+    And I edit the context of "moving" to "@new"
+    And I should see the container for context "@new"
 
+    Scenarios:
+    | page                |
+    | home page           |
+    | tag page for "tag"  |
+
+  @selenium
+  Scenario: Editing the context of a todo in the tickler to a new context will show new context
+    Given I have a deferred todo "moving" in context "@pc" with tags "tag"
+    When I go to the tickler page
+    And I edit the context of "moving" to "@new"
+    And I should see the container for context "@new"
+
+  @selenium
   Scenario: Making an error when editing a todo will show error message
-    Given this is a pending scenario
+    Given I have a todo "test"
+    When I go to the home page
+    And I try to edit the description of "test" to ""
+    Then I should see an error message

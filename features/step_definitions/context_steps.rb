@@ -6,7 +6,7 @@ end
 Given /^there exists an active context called "([^"]*)" for user "([^"]*)"$/ do |context_name, login|
   user = User.find_by_login(login)
   user.should_not be_nil
-  @context = user.contexts.create!(:name => context_name, :hide => false)
+  @context = user.contexts.find_or_create(:name => context_name, :hide => false)
 end
 
 Given /^there exists a context called "([^"]*)" for user "([^"]*)"$/ do |context_name, login|
