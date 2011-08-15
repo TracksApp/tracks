@@ -37,7 +37,7 @@ function insert_new_context_with_new_todo() {
 
 function add_todo_to_existing_context() {
   <% if source_view_is_one_of(:todo, :deferred, :tag) -%>
-    <% unless source_view_is_one_of(:todo, :tag) && @todo.deferred? -%>
+    <% unless source_view_is_one_of(:todo, :tag) && (@todo.deferred?||@todo.hidden?) -%>
       $('#c<%= @todo.context_id %>').fadeIn(500, function() {});
       $('#no_todos_in_view').slideUp(100);
       <%= "$('#tickler-empty-nd').slideUp(100);" if source_view_is(:deferred) && @todo.deferred? %>

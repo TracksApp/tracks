@@ -121,6 +121,17 @@ Then /^I should not see "([^"]*)" in the deferred container$/ do |todo_descripti
   end
 end
 
+Then /^I should see "([^"]*)" in the hidden container$/ do |todo_description|
+  todo = @current_user.todos.find_by_description(todo_description)
+  todo.should_not be_nil
+
+  xpath = "//div[@id='hidden']//div[@id='line_todo_#{todo.id}']"
+
+  wait_for :timeout => 5 do
+    selenium.is_element_present(xpath)
+  end
+end
+
 Then /^I should see "([^"]*)" in the due next month container$/ do |todo_description|
   todo = @current_user.todos.find_by_description(todo_description)
   todo.should_not be_nil
