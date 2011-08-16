@@ -41,7 +41,7 @@ Feature: Tagging todos
     Then I should not see "prepare release" in the context container for "@pc"
     And I should see "prepare release" in the hidden container
 
-  @selenium @wip
+  @selenium
   Scenario: I can move a tagged todo in tag view to a hidden context and it will move the todo on the page to the hidden container
     Given I have a hidden context called "@secret"
     When I go to the tag page for "tracks"

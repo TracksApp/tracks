@@ -32,7 +32,7 @@ class TodosControllerTest < ActionController::TestCase
     assert_equal 3, assigns['context_not_done_counts'][contexts(:call).id]
     assert_equal 1, assigns['context_not_done_counts'][contexts(:lab).id]
   end
-  
+
    def test_cached_not_done_counts_after_hiding_project
     p = Project.find(1)
     p.hide!
@@ -59,7 +59,7 @@ class TodosControllerTest < ActionController::TestCase
     assert_difference 'Todo.count' do
       put :create, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{
         "notes"=>"", "description"=>"test tags", "due"=>"30/11/2006"},
-        "tag_list"=>"1234,5667,9876"
+        "todo_tag_list"=>"1234,5667,9876"
       # default has_many_polymorphs will fail on these high numbers as tags with those id's do not exist
     end
     t = assigns['todo']
@@ -73,7 +73,7 @@ class TodosControllerTest < ActionController::TestCase
     assert_difference 'Todo.count' do
       put :create, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{
         "notes"=>"", "description"=>"test tags", "due"=>"30/11/2006"},
-        "tag_list"=>"a,,b"
+        "todo_tag_list"=>"a,,b"
       # default has_many_polymorphs will fail on the empty tag
     end
     t = assigns['todo']
@@ -138,7 +138,7 @@ class TodosControllerTest < ActionController::TestCase
   def test_fail_to_create_todo_via_xml
     login_as(:admin_user)
     # #try to create with no context, which is not valid
-    put :create, :format => "xml", "request" => { 
+    put :create, :format => "xml", "request" => {
       "project_name"=>"Build a working time machine",
       "todo"=>{"notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>"foo bar" }
     assert_response 422
@@ -550,7 +550,7 @@ class TodosControllerTest < ActionController::TestCase
     todo.reload()
     assert_equal "active", todo.state
   end
-  
+
   def test_url_with_slash_in_query_string_are_parsed_correctly
     # See http://blog.swivel.com/code/2009/06/rails-auto_link-and-certain-query-strings.html
     login_as(:admin_user)
