@@ -642,6 +642,18 @@ var UsersPage = {
 }
 
 var PreferencesPage = {
+    get_date_format: function(tag_name) {
+        var value = $('input[name="prefs['+tag_name+']"]').val();
+        var element = 'span[id="prefs.'+tag_name+'"]';
+        var url = 'preferences/render_date_format';
+        var param = "date_format="+encodeURIComponent( value );
+        generic_get_script_for_list(element, url, param);
+      },
+    setup_getter_for_date_format: function(tag_name) {
+      $('input[name="prefs['+tag_name+']"]').change(function() {
+        PreferencesPage.get_date_format(tag_name);
+      });
+    },
     setup_behavior: function() {
       $( "#tabs" ).tabs();
 
@@ -652,6 +664,21 @@ var PreferencesPage = {
         $('#open_id')[0].style.display = value == 'open_id' ? 'block' : 'none'
         $('#database')[0].style.display = value == 'database' ? 'block' : 'none'
       });
+
+      $('input[name="date_picker1"]').change(function() {
+        var value = $('input[name="date_picker1"]:checked').val();
+        $('input[name="prefs[date_format]"]').val(value);
+        PreferencesPage.get_date_format('date_format');
+      });
+
+      $('input[name="date_picker2"]').change(function() {
+        var value = $('input[name="date_picker2"]:checked').val();
+        $('input[name="prefs[title_date_format]"]').val(value);
+        PreferencesPage.get_date_format('title_date_format');
+      });
+
+      PreferencesPage.setup_getter_for_date_format('date_format');
+      PreferencesPage.setup_getter_for_date_format('title_date_format');
     }
 }
 
