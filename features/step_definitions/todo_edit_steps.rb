@@ -9,6 +9,7 @@ When /^I mark "([^"]*)" as complete$/ do |action_description|
   todo_container = "fail"  # fail this test if @source_view is wrong
   todo_container = "p#{todo.project_id}items" if @source_view=="project"
   todo_container = "c#{todo.context_id}items" if @source_view=="context" || @source_view=="todos" || @source_view=="tag"
+  todo_container = "tickler_container" if @source_view=="stats"
 
   # container should be there
   selenium.is_element_present("//div[@id='#{todo_container}']").should be_true

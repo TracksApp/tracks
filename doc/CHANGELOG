@@ -15,13 +15,26 @@
 
 == Version 2.1devel
 
+NOTE: to use this version you need to migrate your database. Not migrating will
+cause new actions not to appear!
+
 This version of tracks has moved to a new place on github. Also the wiki moved
-to github, see the changed URLs above
+to github, see the changed URLs above.
 
 New features:
 1. redesign of the completed todos: a new overview page. Also all context and
    project pages have a link to their completed actions
 2. New locales (es and fr) and updated locales (de, nl)
+3. You can star an action right from the form to add a new action
+
+Under the hood:
+1. Upgraded rails to 2.3.12, jquery to 1.6.1 and jquery-ui to 1.8.13
+2. fixed several issues with the REST API
+3. upgraded the act_as_statemachine plugin. This change requires a
+   migration, see note above!
+
+See https://github.com/tracksapp/tracks/compare/v2.0...master for all
+detailled changes
 
 == Version 2.0
 
