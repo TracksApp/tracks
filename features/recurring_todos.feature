@@ -62,11 +62,26 @@ Feature: Manage recurring todos
     Then the pattern "I'm done" should be in the state list "active"
     And the state list "completed" should be empty
 
+  @selenium @wip
   Scenario: Following the recurring todo link of a todo takes me to the recurring todos page
-    Given this is a pending scenario
+    When I go to the home page
+    Then I should see the todo "run tests"
+    When I follow the recurring todo link of "run tests"
+    Then I should be on the repeating todos page
 
+  @selenium @wip
   Scenario: Deleting a recurring todo with ending pattern will show message
-    Given this is a pending scenario
+    When I go to the repeating todos page
+    And I mark the pattern "run tests" as complete
+    And I go to the home page
+    Then I should see "run tests"
+    When I delete the action "run tests"
+    Then I should see "@@message@@"
 
+  @selenium @wip
   Scenario: Deleting a recurring todo with active pattern will show new todo
-    Given this is a pending scenario
+    When I go to the home page
+    Then I should see "run tests"
+    When I delete the action "run tests"
+    Then I should see "@@message@@"
+    And I should see "run tests" in the context container for "test context"

@@ -8,6 +8,8 @@ Tracks is using
 
 See README for links to the respective sites
 
+Also see the Development pages on the wiki for details on installing, upgrading, etc.
+
 2. Dependencies
 
 The dependencies are maintained by Tracks. For development we try not to vendor them

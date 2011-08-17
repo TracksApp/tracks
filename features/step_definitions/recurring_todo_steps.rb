@@ -84,6 +84,14 @@ When /^I mark the pattern "([^"]*)" as active$/ do |pattern_name|
   wait_for_ajax
 end
 
+When /^I follow the recurring todo link of "([^"]*)"$/ do |action_description|
+  todo = @current_user.todos.find_by_description(action_description)
+  todo.should_not be_nil
+
+  recurring_todo_link = "div.todo_#{todo.id} div a.recurring_icon"
+  click_link recurring_todo_link
+end
+
 Then /^the state list "([^"]*)" should be empty$/ do |state|
   empty_id = "recurring-todos-empty-nd" if state.downcase == "active"
   empty_id = "completed-empty-nd" if state.downcase == "completed"
