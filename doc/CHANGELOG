@@ -28,7 +28,7 @@ New features:
 3. You can star an action right from the form to add a new action
 
 Under the hood:
-1. Upgraded rails to 2.3.12, jquery to 1.6.1 and jquery-ui to 1.8.13
+1. Upgraded rails to 2.3.12, jquery to 1.6.2 and jquery-ui to 1.8.14
 2. fixed several issues with the REST API
 3. upgraded the act_as_statemachine plugin. This change requires a
    migration, see note above!

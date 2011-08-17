@@ -88,8 +88,9 @@ When /^I follow the recurring todo link of "([^"]*)"$/ do |action_description|
   todo = @current_user.todos.find_by_description(action_description)
   todo.should_not be_nil
 
-  recurring_todo_link = "div.todo_#{todo.id} div a.recurring_icon"
-  click_link recurring_todo_link
+  recurring_todo_link = "xpath=//div[@id='todo_#{todo.id}']//a[@class='recurring_icon']/img"
+  selenium.click( recurring_todo_link )
+  selenium.wait_for_page_to_load(5000)
 end
 
 Then /^the state list "([^"]*)" should be empty$/ do |state|
