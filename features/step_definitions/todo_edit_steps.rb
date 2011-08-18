@@ -119,18 +119,19 @@ end
 When /^I edit the due date of "([^"]*)" to "([^"]*)"$/ do |action_description, date|
   todo = @current_user.todos.find_by_description(action_description)
   todo.should_not be_nil
+
   open_edit_form_for(todo)
   fill_in "due_todo_#{todo.id}", :with => date
   submit_edit_todo_form(todo)
 end
 
 When /^I edit the due date of "([^"]*)" to tomorrow$/ do |action_description|
-  date = format_date(todo.created_at + 1.day)
+  date = format_date(Time.zone.now + 1.day)
   When "I edit the due date of \"#{action_description}\" to \"#{date}\""
 end
 
 When /^I edit the due date of "([^"]*)" to next month$/ do  |action_description|
-  date = format_date(todo.created_at + 1.month)
+  date = format_date(Time.zone.now + 1.month)
   When "I edit the due date of \"#{action_description}\" to \"#{date}\""
 end
 

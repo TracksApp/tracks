@@ -70,7 +70,7 @@ Feature: Show statistics
     Then I should not see the todo "todo 1"
     And I should see the todo "foo bar"
 
-  @selenium @wip
+  @selenium
   Scenario: Marking a todo selected from a chart as complete will remove it from the page
     Given I have 5 todos
     When I go to the statistics page

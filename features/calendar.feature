@@ -41,7 +41,7 @@ Feature: Show all due actions in a calendar view
     Then I should not see "a new next action"
 
   @selenium
-  Scenario: Deleting a todo complete will remove it from the calendar
+  Scenario: Deleting a todo will remove it from the calendar
     Given I have a todo "a new next action" in the context "@calendar" which is due tomorrow
     When I go to the calendar page
     Then I should see "a new next action"
