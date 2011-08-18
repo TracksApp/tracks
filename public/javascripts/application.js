@@ -629,7 +629,7 @@ var ProjectItems = {
 
 var UsersPage = {
     setup_behavior: function() {
-        /* delete button to delete a usedr from the list */
+        /* delete button to delete a user from the list */
         $('a.delete_user_button').live('click', function(evt){
             var confirm_message = $(this).attr("x_confirm_message")
             if(confirm(confirm_message)){
@@ -638,6 +638,47 @@ var UsersPage = {
             return false;
         });
 
+    }
+}
+
+var PreferencesPage = {
+    get_date_format: function(tag_name) {
+        var value = $('input[name="prefs['+tag_name+']"]').val();
+        var element = 'span[id="prefs.'+tag_name+'"]';
+        var url = 'preferences/render_date_format';
+        var param = "date_format="+encodeURIComponent( value );
+        generic_get_script_for_list(element, url, param);
+      },
+    setup_getter_for_date_format: function(tag_name) {
+      $('input[name="prefs['+tag_name+']"]').change(function() {
+        PreferencesPage.get_date_format(tag_name);
+      });
+    },
+    setup_behavior: function() {
+      $( "#tabs" ).tabs();
+
+      $( "button#prefs_submit" ).button();
+
+      $('input[name="user[auth_type]"]').change(function() {
+        var value = $('input[name="user[auth_type]"]:checked').val();
+        $('#open_id')[0].style.display = value == 'open_id' ? 'block' : 'none'
+        $('#database')[0].style.display = value == 'database' ? 'block' : 'none'
+      });
+
+      $('input[name="date_picker1"]').change(function() {
+        var value = $('input[name="date_picker1"]:checked').val();
+        $('input[name="prefs[date_format]"]').val(value);
+        PreferencesPage.get_date_format('date_format');
+      });
+
+      $('input[name="date_picker2"]').change(function() {
+        var value = $('input[name="date_picker2"]:checked').val();
+        $('input[name="prefs[title_date_format]"]').val(value);
+        PreferencesPage.get_date_format('title_date_format');
+      });
+
+      PreferencesPage.setup_getter_for_date_format('date_format');
+      PreferencesPage.setup_getter_for_date_format('title_date_format');
     }
 }
 
@@ -1238,7 +1279,7 @@ $(document).ready(function() {
     TodoItemsContainer.setup_container_toggles();
 
     /* enable page specific behavior */
-    $([ 'IntegrationsPage', 'NotesPage', 'ProjectListPage', 'ContextListPage',
+    $([ 'PreferencesPage', 'IntegrationsPage', 'NotesPage', 'ProjectListPage', 'ContextListPage',
         'FeedsPage', 'RecurringTodosPage', 'TodoItems', 'TracksPages',
         'TracksForm', 'SearchPage', 'UsersPage' ]).each(function() {
         eval(this+'.setup_behavior();');

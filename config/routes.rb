@@ -85,7 +85,10 @@ ActionController::Routing::Routes.draw do |map|
     i.google_gadget 'integrations/google_gadget.xml', :controller => 'integrations', :action => 'google_gadget', :format => 'xml'
   end
 
-  map.preferences 'preferences', :controller => 'preferences', :action => 'index'
+  map.with_options :controller => :preferences do |p|
+    p.preferences 'preferences', :action => 'index'
+    p.preferences_date_format 'preferences/render_date_format', :action => 'render_date_format'
+  end
 
   map.with_options :controller => :stats do |stats|
     stats.stats 'stats',  :action => 'index'
