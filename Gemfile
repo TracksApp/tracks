@@ -13,7 +13,7 @@ gem "has_many_polymorphs"
 gem "aasm", "2.2.0"
 gem "actionwebservice", :git => "git://github.com/dejan/actionwebservice.git"
 gem "rubycas-client"
-gem "ruby-openid"
+gem "ruby-openid", :require => "openid"
 gem "sqlite3"
 
 
