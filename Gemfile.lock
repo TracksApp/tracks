@@ -1,3 +1,11 @@
+GIT
+  remote: git://github.com/dejan/actionwebservice.git
+  revision: f0d48a4f747a998cc431615d69a0bdf089b18be3
+  specs:
+    actionwebservice (2.3.2.1705)
+      actionpack (>= 2.3.2)
+      activerecord (>= 2.3.2)
+
 GEM
   remote: http://rubygems.org/
   remote: http://rubygems.org/
@@ -11,10 +19,6 @@ GEM
     actionpack (2.3.14)
       activesupport (= 2.3.14)
       rack (~> 1.1.0)
-    actionwebservice (0.6.0)
-      actionpack (>= 1.5.1)
-      activerecord (>= 1.8.0)
-      activesupport (>= 1.0.1)
     activerecord (2.3.14)
       activesupport (= 2.3.14)
     activeresource (2.3.14)
@@ -93,7 +97,7 @@ DEPENDENCIES
   RedCloth (= 4.2.3)
   ZenTest (>= 4.0.0)
   aasm (= 2.2.0)
-  actionwebservice
+  actionwebservice!
   cucumber-rails (~> 0.4.1)
   database_cleaner (>= 0.5.0)
   flexmock
