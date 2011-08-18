@@ -2,7 +2,7 @@ Given /^the following user records?$/ do |table|
   User.delete_all
   table.hashes.each do |hash|
     user = Factory(:user, hash)
-    user.create_preference
+    user.create_preference({:locale => 'en'})
   end
 end
 

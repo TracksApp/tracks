@@ -1,8 +1,19 @@
 <label><%= t('preferences.token_header') %></label><br/><br/>
 <%= t('preferences.token_description') %>: <span class="highlight"><%= current_user.token %></span>
+<br/><br/>
+
+<div class="pref_new_token">
+
 <% # TODO: make remote AJAX call for new token %>
-<%= button_to t('preferences.generate_new_token'), refresh_token_user_path(current_user),
-    :confirm => t('preferences.generate_new_token_confirm') %>
+
+<%= link_to(
+  t('preferences.generate_new_token'),
+  refresh_token_user_path( current_user ),
+  :method => :post,
+  :confirm => t('preferences.generate_new_token_confirm'),
+  :id=>'prefs_new_token') %>
+
+</div>
 <br/>
 
 <% if Tracks::Config.auth_schemes.length > 1 %>

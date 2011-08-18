@@ -478,6 +478,10 @@ body.preferences div.ui-tabs li a {
   padding: 0.1em 1em;
 }
 
+body.preferences div.pref_new_token a {
+  color: #CC3334;
+}
+
 /* The notes which may be attached to an item */
 .todo_notes {
     margin: 5px;

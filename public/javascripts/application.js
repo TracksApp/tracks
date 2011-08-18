@@ -629,7 +629,7 @@ var ProjectItems = {
 
 var UsersPage = {
     setup_behavior: function() {
-        /* delete button to delete a usedr from the list */
+        /* delete button to delete a user from the list */
         $('a.delete_user_button').live('click', function(evt){
             var confirm_message = $(this).attr("x_confirm_message")
             if(confirm(confirm_message)){

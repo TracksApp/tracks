@@ -25,10 +25,14 @@ When /^my session expires$/ do
   # use expire_session to force expiry of session
   js = '$.ajax({type: "GET", url: "/login/expire_session", dataType: "script", async: false});'
   selenium.run_script(js);
-  
+
   # force check of expiry bypassing timeout
   js = '$.ajax({type: "GET", url: "/login/check_expiry", dataType: "script", async: false});'
   selenium.run_script(js);
 
   sleep(2)
+end
+
+When /^I log out of Tracks$/ do
+  When "I go to the logout page"
 end

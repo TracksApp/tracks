@@ -55,6 +55,8 @@ module NavigationHelpers
       signup_path(options)
     when /the login page/
       login_path(options)
+    when /the logout page/
+      logout_path(options)
     when /the notes page/
       notes_path(options)
     when /the calendar page/
