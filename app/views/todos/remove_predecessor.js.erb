@@ -1,7 +1,7 @@
 <% # TODO: lots of overlap with add_predecessor --> helpers?
   if @removed -%>
   TracksPages.page_notify('notice', "<%= t('todos.removed_predecessor', :successor => @successor.description, :predecessor => @predecessor.description) %>", 8);
-  
+
   replace_updated_predecessor();
   regenerate_predecessor_family();
   update_successor();
@@ -15,7 +15,7 @@ function replace_updated_predecessor() {
 
 function regenerate_predecessor_family() {
 <%
-  parents = @predecessor.predecessors
+  parents = @predecessors
   until parents.empty?
     parent = parents.pop
     parents += parent.predecessors -%>

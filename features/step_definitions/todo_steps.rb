@@ -60,7 +60,6 @@ Then /^I should see ([0-9]+) todos$/ do |count|
 end
 
 Then /^there should not be an error$/ do
-  sleep(5)
   # form should be gone and thus no errors visible
   wait_for :timeout => 5 do
     !selenium.is_visible("edit_todo_#{@dep_todo.id}")
@@ -72,7 +71,11 @@ Then /^I should see the todo "([^\"]*)"$/ do |todo_description|
 end
 
 Then /^I should not see the todo "([^\"]*)"$/ do |todo_description|
-  selenium.is_element_present("//span[.=\"#{todo_description}\"]").should be_false
+  if selenium.is_element_present("//span[.=\"#{todo_description}\"]")
+    wait_for :timeout => 5 do
+      !selenium.is_element_present("//span[.=\"#{todo_description}\"]")
+    end
+  end
 end
 
 Then /^the number of actions should be (\d+)$/ do |count|

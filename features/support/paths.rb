@@ -74,6 +74,7 @@ module NavigationHelpers
     when /the integrations page/
       integrations_path(options)
     when /the tickler page/
+      @source_view = "deferred"
       tickler_path(options)
     when /the export page/
       data_path(options)

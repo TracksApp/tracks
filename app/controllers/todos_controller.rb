@@ -240,12 +240,12 @@ class TodosController < ApplicationController
   def add_predecessor
     @source_view = params['_source_view'] || 'todo'
     @predecessor = current_user.todos.find(params['predecessor'])
+    @predecessors = @predecessor.predecessors
     @todo = current_user.todos.find(params['successor'], :include => Todo::DEFAULT_INCLUDES)
     @original_state = @todo.state
     unless @predecessor.completed?
-      # Add predecessor
       @todo.add_predecessor(@predecessor)
-      @todo.state = 'pending'
+      @todo.block!
       @saved = @todo.save
 
       @status_message = t('todos.added_dependency', :dependency => @predecessor.description)
@@ -262,6 +262,7 @@ class TodosController < ApplicationController
     @source_view = params['_source_view'] || 'todo'
     @todo = current_user.todos.find(params['id'], :include => Todo::DEFAULT_INCLUDES)
     @predecessor = current_user.todos.find(params['predecessor'])
+    @predecessors = @predecessor.predecessors
     @successor = @todo
     @removed = @successor.remove_predecessor(@predecessor)
     determine_remaining_in_context_count
@@ -277,14 +278,19 @@ class TodosController < ApplicationController
     @source_view = params['_source_view'] || 'todo'
     @original_item_due = @todo.due
     @original_item_was_deferred = @todo.deferred?
+    @original_item_was_pending = @todo.pending?
     @original_item_was_hidden = @todo.hidden?
     @original_item_context_id = @todo.context_id
     @original_item_project_id = @todo.project_id
+    @todo_was_completed_from_deferred_or_blocked_state = @original_item_was_deferred || @original_item_was_pending
     @saved = @todo.toggle_completion!
+
+    @todo_was_blocked_from_completed_state = @todo.pending? # since we toggled_completion the previous state was completed
 
     # check if this todo has a related recurring_todo. If so, create next todo
     @new_recurring_todo = check_for_next_todo(@todo) if @saved
 
+    @predecessors = @todo.uncompleted_predecessors
     if @saved
       if @todo.completed?
         @pending_to_activate = @todo.activate_pending_todos
@@ -1008,6 +1014,7 @@ class TodosController < ApplicationController
         if tag.nil?
           tag = Tag.new(:name => params['tag'])
         end
+        @remaining_deferred_or_pending_count = current_user.todos.with_tag(tag).deferred_or_blocked.count
         @remaining_in_context = current_user.contexts.find(context_id).todos.active.not_hidden.with_tag(tag).count
         @target_context_count = current_user.contexts.find(@todo.context_id).todos.active.not_hidden.with_tag(tag).count
         @remaining_hidden_count = current_user.todos.hidden.with_tag(tag).count
@@ -1015,7 +1022,13 @@ class TodosController < ApplicationController
       from.project {
         project_id = @project_changed ? @original_item_project_id : @todo.project_id
         @remaining_deferred_or_pending_count = current_user.projects.find(project_id).todos.deferred_or_blocked.count
-        @remaining_in_context = current_user.projects.find(project_id).todos.active.count
+
+        if @todo_was_completed_from_deferred_or_blocked_state
+          @remaining_in_context = @remaining_deferred_or_pending_count
+        else
+          @remaining_in_context = current_user.projects.find(project_id).todos.active.count
+        end
+
         @target_context_count = current_user.projects.find(project_id).todos.active.count
       }
       from.calendar {

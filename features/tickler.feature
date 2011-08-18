@@ -57,3 +57,12 @@ Feature: Manage deferred todos
     When I go to the tickler page
     Then I should see "not yet now"
     And I should not see "now is a good time"
+
+  @selenium
+  Scenario: I can mark an action complete from the tickler
+    Given I have a deferred todo "not yet now"
+    When I go to the tickler page
+    And I mark "not yet now" as complete
+    Then I should not see "not yet now"
+    When I go to the done page
+    Then I should see "not yet now"

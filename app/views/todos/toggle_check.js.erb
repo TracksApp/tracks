@@ -7,15 +7,16 @@
     animation = []
     animation << "remove_todo"
     if @todo.completed?
-      animation << "add_to_completed_container" unless source_view_is(:calendar)
+      animation << "add_to_completed_container" unless source_view_is_one_of(:calendar, :deferred)
       animation << "add_new_recurring_todo"
       animation << "activate_pending_todos"
       animation << "remove_source_container"
     else
       animation << "add_todo_to_context" unless source_view_is(:done)
       animation << "block_predecessors"
-    end 
-    animation << "update_empty_container" if source_view_is_one_of(:tag, :todo) -%>
+    end
+    animation << "update_empty_container" if source_view_is_one_of(:tag, :todo)
+    animation << "regenerate_predecessor_family" -%>
     <%= render_animation(animation) %>
     TracksPages.set_page_badge(<%= @down_count %>);
   <% end -%>
@@ -73,7 +74,7 @@ function add_todo_to_context(next_steps) {
 function add_new_recurring_todo(next_steps) {
   <%  # show new todo if the completed todo was recurring
     if @todo.from_recurring_todo?
-      unless @new_recurring_todo.nil? || @new_recurring_todo.deferred? -%>
+      unless @new_recurring_todo.nil? || (@new_recurring_todo.deferred? && !source_view_is(:deferred)) -%>
       $('#<%= item_container_id(@new_recurring_todo) %>').append(html_for_recurring_todo());
       $('#c<%= @new_recurring_todo.context_id %>').fadeIn(500, function() {
         highlight_updated_recurring_todo(next_steps);
@@ -111,7 +112,7 @@ function highlight_updated_todo(next_steps) {
 
 function activate_pending_todos(next_steps) {
  <% # Activate pending todos that are successors of the completed
-    if @saved && @pending_to_activate 
+    if @saved && @pending_to_activate
       # do not render the js in case of an error or if no todos to activate
       @pending_to_activate.each do |t|
         html = escape_javascript(render(:partial => t, :locals => { :parent_container_type => parent_container_type }))
@@ -124,7 +125,7 @@ function activate_pending_todos(next_steps) {
           });
  <%     else -%>
           $('#<%= item_container_id(t) %>').append("<%= html%>");
- <%     end -%>       
+ <%     end -%>
         TodoItems.highlight_todo('#<%= dom_id(t)%>');
  <%   end -%>
  <% end -%>
@@ -132,7 +133,7 @@ function activate_pending_todos(next_steps) {
 }
 
 function block_predecessors(next_steps) {
- <% # Activate pending todos that are successors of the completed
+ <% # Block active todos that are successors of the uncompleted
     if @saved && @active_to_block
       # do not render the js in case of an error or if no todos to block
       @active_to_block.each do |t| %>
@@ -145,6 +146,20 @@ function block_predecessors(next_steps) {
         });
  <%   end -%>
  <% end -%>
+  next_steps.go();
+}
+
+function regenerate_predecessor_family(next_steps) {
+<%
+if @predecessors
+  parents = @predecessors
+  until parents.empty?
+    parent = parents.pop
+    parents += parent.predecessors -%>
+    $('#<%= dom_id(parent) %>').html("<%= escape_javascript(render(:partial => parent, :locals => { :parent_container_type => parent_container_type })) %>");
+<%end
+end
+-%>
   next_steps.go();
 }
 

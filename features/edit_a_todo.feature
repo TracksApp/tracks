@@ -35,6 +35,7 @@ Feature: Edit a next action from every page
     And I should see "delete me" in the context container for "@home"
     When I mark "delete me" as complete
     Then I should not see the container for context "@home"
+    And I should see "delete me" in the completed container
     When I mark "delete me" as uncompleted
     Then I should see the container for context "@home"
     When I edit the context of "delete me" to "@pc"

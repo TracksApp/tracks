@@ -9,7 +9,7 @@ parameters += "&_tag_name=#{@tag_name}" if @source_view == 'tag'
 <div id="<%= dom_id(todo) %>" class="item-container">
   <div id="<%= dom_id(todo, 'line') %>" class="item-show">
     <%= remote_star_icon(todo) %>
-    <%= remote_toggle_checkbox(todo) unless source_view_is :deferred %>
+    <%= remote_toggle_checkbox(todo) %>
     <%= remote_edit_button(todo) unless suppress_edit_button %>
     <ul class="sf-menu sf-item-menu">
       <li style="z-index:<%=@z_index_counter%>"><%= image_tag "downarrow.png", :alt=> "" %>

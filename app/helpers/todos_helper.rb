@@ -352,11 +352,21 @@ module TodosHelper
 
     source_view do |page|
       page.project  {
-        return "tickler-empty-nd" if @todo_was_deferred_from_active_state || @todo_was_blocked_from_active_state || @todo_was_destroyed_from_deferred_state || @todo_was_created_deferred
+        return "tickler-empty-nd" if
+          @todo_was_deferred_from_active_state ||
+          @todo_was_blocked_from_active_state ||
+          @todo_was_destroyed_from_deferred_state ||
+          @todo_was_created_deferred ||
+          @todo_was_blocked_from_completed_state
         return "p#{todo.project_id}empty-nd"
       }
       page.tag {
-        return "tickler-empty-nd" if @todo_was_deferred_from_active_state || @todo_was_destroyed_from_deferred_state || @todo_was_created_deferred
+        return "tickler-empty-nd" if
+          @todo_was_deferred_from_active_state ||
+          @todo_was_blocked_from_active_state ||
+          @todo_was_destroyed_from_deferred_state ||
+          @todo_was_created_deferred ||
+          @todo_was_blocked_from_completed_state
         return "hidden-empty-nd" if @todo.hidden?
         return "c#{todo.context_id}empty-nd"
       }
@@ -368,14 +378,19 @@ module TodosHelper
     return "c#{todo.context_id}empty-nd"
   end
 
+  def todo_was_removed_from_deferred_or_blocked_container
+    return @todo_was_activated_from_deferred_state ||
+           @todo_was_activated_from_pending_state ||
+           @todo_was_destroyed_from_deferred_or_pending_state ||
+           @todo_was_completed_from_deferred_or_blocked_state
+  end
+
   def show_empty_message_in_source_container
     container_id = ""
     source_view do |page|
       page.project  {
         container_id = "p#{@original_item_project_id}empty-nd" if @remaining_in_context == 0
-        container_id = "tickler-empty-nd" if (
-          ( (@todo_was_activated_from_deferred_state || @todo_was_activated_from_pending_state || @todo_was_destroyed_from_deferred_or_pending_state) && @remaining_deferred_or_pending_count == 0) ||
-            (@original_item_was_deferred && @remaining_deferred_or_pending_count == 0 && @todo.completed?) )
+        container_id = "tickler-empty-nd" if todo_was_removed_from_deferred_or_blocked_container && @remaining_deferred_or_pending_count == 0
         container_id = "empty-d" if @completed_count && @completed_count == 0 && !@todo.completed?
       }
       page.deferred { container_id = "c#{@original_item_context_id}empty-nd" if @remaining_in_context == 0 }
@@ -383,7 +398,7 @@ module TodosHelper
       page.tag      {
         container_id = "hidden-empty-nd" if (@remaining_hidden_count == 0 && !@todo.hidden? && @todo_hidden_state_changed) ||
           (@remaining_hidden_count == 0 && @todo.completed? && @original_item_was_hidden)
-        container_id = "tickler-empty-nd" if (@todo_was_activated_from_deferred_state && @remaining_deferred_or_pending_count == 0) ||
+        container_id = "tickler-empty-nd" if (todo_was_removed_from_deferred_or_blocked_container && @remaining_deferred_or_pending_count == 0) ||
           (@original_item_was_deferred && @remaining_deferred_or_pending_count == 0 && (@todo.completed? || @tag_was_removed))
         container_id = "empty-d" if @completed_count && @completed_count == 0 && !@todo.completed?
       }
