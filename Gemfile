@@ -3,13 +3,13 @@ source :rubyforge
 source "http://gems.github.com/"
 
 gem "rails", "~>2.3.12"
-gem "highline"
+gem "highline", "~>1.5.0"
 gem "RedCloth", "4.2.3"
 gem "soap4r"
-gem "sanitize", "~>2.0.0"
+gem "sanitize", "~>1.2.1"
 gem "rack", "1.1.0"
 gem "will_paginate", "~> 2.3.15"
-gem "has_many_polymorphs"
+gem "has_many_polymorphs", "~> 2.13"
 gem "aasm", "2.2.0"
 gem "actionwebservice", :git => "git://github.com/dejan/actionwebservice.git"
 gem "rubycas-client"
@@ -19,7 +19,7 @@ gem "sqlite3"
 
 gem "webrat", ">=0.7.0", :groups => [:cucumber, :test]
 gem "database_cleaner", ">=0.5.0", :groups => [:cucumber, :selenium]
-gem "cucumber-rails", "~>0.4.1", :groups => :cucumber
+gem "cucumber-rails", "~>0.3.0", :groups => :cucumber
 
 group :test do
   gem "flexmock"
