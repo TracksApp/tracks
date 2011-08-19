@@ -28,7 +28,7 @@ Feature: Tagging todos
   @selenium
   Scenario: I can add a new todo from tag view with a different tag and it will not be added to the page
     When I go to the tag page for "tracks"
-    And I submit a new action with description "prepare release" with tags "release, next" in the context "@pc"
+    And I submit a new action with description "prepare release" and the tags "release, next" in the context "@pc"
     Then I should not see "prepare release"
 
   @selenium

@@ -291,6 +291,7 @@ module TodosHelper
   def update_needs_to_hide_context
     return (@remaining_in_context == 0 && (@todo_hidden_state_changed && @todo.hidden?)) ||
       (@remaining_in_context == 0 && @todo_was_deferred_from_active_state) ||
+      (@remaining_in_context == 0 && @tag_was_removed) ||
       (@remaining_in_context == 0 && @todo.completed? && !(@original_item_was_deferred || @original_item_was_hidden)) if source_view_is(:tag)
 
     return false if source_view_is_one_of(:project, :calendar)
