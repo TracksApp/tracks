@@ -2,6 +2,7 @@ source :gemcutter
 source :rubyforge
 source "http://gems.github.com/"
 
+gem "rake", "~>0.8.7"
 gem "rails", "~>2.3.12"
 gem "highline", "~>1.5.0"
 gem "RedCloth", "4.2.3"
