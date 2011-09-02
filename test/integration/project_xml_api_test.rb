@@ -41,7 +41,9 @@ class ProjectXmlApiTest < ActionController::IntegrationTest
   
   def test_fails_with_comma_in_name
     authenticated_post_xml_to_project_create "<request><project><name>foo,bar</name></project></request>"
-    assert_response_and_body 404, "Name cannot contain the comma (',') character"
+    assert_response :created
+    project1 = Project.find_by_name("foo,bar")
+    assert_not_nil project1, "expected project 'foo,bar' to be created"
   end
     
   def test_creates_new_project
