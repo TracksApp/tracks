@@ -109,7 +109,9 @@ Feature: Manage the list of projects
     Then the project "very busy" should be above the project "test"
 
   @selenium
-  Scenario: Cannot add a project with comma in the name
+  Scenario: Can add a project with comma in the name
     When I go to the projects page
     And I submit a new project with name "foo,bar"
-    Then I should see "Name cannot contain the comma"
+    Then I should see "foo,bar"
+    And the badge should show 4
+    And the project list badge for "active" projects should show 4
