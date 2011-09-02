@@ -48,8 +48,8 @@ class ProjectsControllerTest < TodoContainerControllerTestBase
     assert_ajax_create_increments_count 'My New Project'
   end
 
-  def test_create_with_comma_in_name_does_not_increment_number_of_projects
-    assert_ajax_create_does_not_increment_count 'foo,bar'
+  def test_create_with_comma_in_name_increments_number_of_projects
+    assert_ajax_create_increments_count 'foo,bar'
   end
   
   def test_todo_state_is_project_hidden_after_hiding_project

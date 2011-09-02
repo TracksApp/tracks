@@ -31,12 +31,12 @@ class ProjectTest < ActiveSupport::TestCase
     assert_equal "already exists", newproj.errors.on(:name)
   end
     
-  def test_validate_name_does_not_contain_comma
+  def test_validate_name_can_contain_comma
     newproj = Project.new
     newproj.name = "Buy iPhones for Luke,bsag,David Allen"
-    assert !newproj.save
-    assert_equal 1, newproj.errors.count
-    assert_equal "cannot contain the comma (',') character", newproj.errors.on(:name)
+    assert newproj.save
+    assert_equal 0, newproj.errors.count
+    assert_equal "Buy iPhones for Luke,bsag,David Allen", newproj.name
   end
   
   def test_name_removes_extra_spaces
