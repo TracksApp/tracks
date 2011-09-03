@@ -392,8 +392,8 @@ a.delete_dependency_button:hover {background-color: white;}
 
 div.item-container {
     padding: 2px 0px;
-    line-height:20px;
-    clear: both;
+    /* line-height:20px; */
+    /* clear: both; */
 }
 
 .sf-item-selected {
@@ -406,21 +406,22 @@ a.recurring_icon {
 }
 
 a.icon {
-    float: left;
+    float: right;
     vertical-align: middle;
     background-color: transparent;
 }
 
 input.item-checkbox {
     float: left;
-    margin-left: 3px;
-    margin-right: 3px;
+    /* margin-left: 3px; */
+    /* margin-right: 3px; */
     vertical-align: middle;
 }
 
 .rec_description, .description {
-    margin-left: 80px;
-    position:relative;
+    /* margin-left: 80px; */
+    /* position:relative; */
+    position: relative;
 }
 
 .rec_description {
@@ -1016,6 +1017,8 @@ div.message {
 .grip {
     cursor: move;
     float: left;
+    margin-left: 3px;
+    margin-right: 3px;
 }
 
 .drop_target {
