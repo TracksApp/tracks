@@ -419,8 +419,8 @@ input.item-checkbox {
 }
 
 .rec_description, .description {
-    /* margin-left: 80px; */
-    /* position:relative; */
+    margin-left: 35px;
+    margin-right: 60px;
     position: relative;
 }
 
