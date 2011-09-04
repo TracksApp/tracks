@@ -330,6 +330,19 @@ class UserTest < ActiveSupport::TestCase
        assert_equal u.id, User.find_by_open_id_url(raw_open_id_url).id
      end
   end
+
+  def test_should_discover_using_depracted_password
+    assert_nil @admin_user.uses_deprecated_password?
+    assert_nil @other_user.uses_deprecated_password?
+    assert users(:user_with_sha1_password).uses_deprecated_password?
+  end
+
+  def test_should_not_have_deprecated_password_after_update
+    u = users(:user_with_sha1_password)
+    assert u.uses_deprecated_password?
+    u.change_password("foobar", "foobar")
+    assert_nil u.uses_deprecated_password?
+  end
   
   
   protected

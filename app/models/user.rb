@@ -211,6 +211,11 @@ class User < ActiveRecord::Base
     save(false)
   end
 
+  # Returns true if the user has a password hashed using SHA-1.
+  def uses_deprecated_password?
+    crypted_password =~ /^[a-f0-9]{40}$/i
+  end
+
 protected
 
   def self.salted(s)
