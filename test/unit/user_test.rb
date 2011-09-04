@@ -343,6 +343,19 @@ class UserTest < ActiveSupport::TestCase
     u.change_password("foobar", "foobar")
     assert_nil u.uses_deprecated_password?
   end
+
+  def test_should_authenticate_with_deprecated_password
+    assert_nil User.authenticate('mr_deprecated', 'wrong password')
+    assert_equal users(:user_with_sha1_password),
+      User.authenticate('mr_deprecated', 'foobar')
+  end
+
+  def test_password_matches
+    assert_not_nil User.authenticate(@admin_user.login, "abracadabra")
+    assert_nil User.authenticate(@admin_user.login, "incorrect")
+    assert_not_nil User.authenticate(users(:user_with_sha1_password).login, "foobar")
+    assert_nil User.authenticate(users(:user_with_sha1_password).login, "wrong")
+  end
   
   
   protected

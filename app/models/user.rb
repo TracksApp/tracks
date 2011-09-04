@@ -123,8 +123,8 @@ class User < ActiveRecord::Base
     return nil if candidate.nil?
 
     if Tracks::Config.auth_schemes.include?('database')
-      return candidate if candidate.auth_type == 'database' &&
-        BCrypt::Password.new(candidate.crypted_password) == pass
+      return candidate if candidate.auth_type == 'database' and
+        candidate.password_matches? pass
     end
     
     if Tracks::Config.auth_schemes.include?('ldap')
@@ -214,6 +214,14 @@ class User < ActiveRecord::Base
   # Returns true if the user has a password hashed using SHA-1.
   def uses_deprecated_password?
     crypted_password =~ /^[a-f0-9]{40}$/i
+  end
+
+  def password_matches?(pass)
+    if uses_deprecated_password?
+      crypted_password == User.sha1(pass)
+    else
+      BCrypt::Password.new(crypted_password) == pass
+    end
   end
 
 protected
