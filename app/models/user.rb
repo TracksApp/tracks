@@ -124,7 +124,7 @@ class User < ActiveRecord::Base
 
     if Tracks::Config.auth_schemes.include?('database')
       return candidate if candidate.auth_type == 'database' &&
-        BCrypt::Password.new(candidate.crypted_password) == salted(pass)
+        BCrypt::Password.new(candidate.crypted_password) == pass
     end
     
     if Tracks::Config.auth_schemes.include?('ldap')
@@ -222,7 +222,7 @@ protected
   end
 
   def self.hash(s)
-    BCrypt::Password.create salted s
+    BCrypt::Password.create s
   end
   
   def crypt_password
