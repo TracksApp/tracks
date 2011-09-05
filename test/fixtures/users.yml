@@ -48,3 +48,13 @@ ldap_user:
   first_name: International
   last_name: Harvester
   auth_type: CAS
+
+user_with_sha1_password:
+  id: 6
+  login: mr_deprecated
+  crypted_password: <%= Digest::SHA1::hexdigest("#{Tracks::Config.salt}--foobar--") %>
+  token: <%= Digest::SHA1.hexdigest("mr_deprecatedSun Feb 19 14:42:45 GMT 20060.408173979260027") %>
+  is_admin: false
+  first_name: Mister
+  last_name: Deprecated
+  auth_type: database
