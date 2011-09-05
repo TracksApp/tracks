@@ -109,7 +109,7 @@ describe User do
     end
 
     it 'authenticates user' do
-      User.authenticate('simon', 'foobarspam').should == @user
+      User.authenticate('simon', 'foobarspam').id.should be @user.id
     end
 
     it 'resets password' do
@@ -117,12 +117,13 @@ describe User do
         :password => 'new password',
         :password_confirmation => 'new password'
       )
-      User.authenticate('simon', 'new password').should == @user
+      User.authenticate('simon', 'foobarspam').should be_nil
+      User.authenticate('simon', 'new password').id.should be @user.id
     end
 
     it 'does not rehash password after update of login' do
       @user.update_attribute(:login, 'foobar')
-      User.authenticate('foobar', 'foobarspam').should == @user
+      User.authenticate('foobar', 'foobarspam').id.should be @user.id
     end
 
     it 'sets remember token' do
