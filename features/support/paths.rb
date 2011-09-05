@@ -104,6 +104,8 @@ module NavigationHelpers
     when /the tag page for "([^"]*)"/i
       @source_view = "tag"
       tag_path($1, options)
+    when /the change password page/
+      change_password_user_path @current_user
 
       # Add more mappings here.
       # Here is an example that pulls values out of the Regexp:

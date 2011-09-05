@@ -1,0 +1,21 @@
+Feature: Handling users with deprecated passwords hashes
+  In order to have my password hashed with BCrypt
+  As a user with password hashed with SHA1
+  I have to be redirected to the password resetting form
+
+  Background:
+    Given the following user records
+      | login         | password_with_algorithm |
+      | new_hash_user | first_secret bcrypt     |
+      | old_hash_user | another_secret sha1     |
+
+  Scenario: A user with SHA1 password
+    Given I have logged in as "old_hash_user" with password "another_secret"
+    When I go to the homepage
+    Then I should be redirected to the change password page
+    And I should see "You have to reset your password"
+
+  Scenario: A user with BCrypt password
+    Given I have logged in as "new_hash_user" with password "first_secret"
+    When I go to the homepage
+    Then I should be on the homepage

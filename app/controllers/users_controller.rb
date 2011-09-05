@@ -1,6 +1,8 @@
 class UsersController < ApplicationController
   before_filter :admin_login_required, :only => [ :index, :show, :destroy ]
   skip_before_filter :login_required, :only => [ :new, :create ]
+  skip_before_filter :check_for_deprecated_password_hash,
+    :only => [ :change_password ]
   prepend_before_filter :login_optional, :only => [ :new, :create ]
   
   # GET /users GET /users.xml
