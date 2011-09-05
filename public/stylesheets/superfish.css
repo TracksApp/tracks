@@ -62,7 +62,7 @@ ul.sf-menu li li li.sfHover ul {
 
 /*** TRACKS SKIN ***/
 .sf-menu {
-	float:			left;
+    float:			right;
     margin: 0;
     padding-right: 0px; /* 20 */
 }
