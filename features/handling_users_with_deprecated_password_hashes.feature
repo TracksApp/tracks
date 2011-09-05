@@ -14,6 +14,8 @@ Feature: Handling users with deprecated passwords hashes
     When I go to the homepage
     Then I should be redirected to the change password page
     And I should see "You have to reset your password"
+    When I change my password to "newer_better_password"
+    Then I should be redirected to the preference page
 
   Scenario: A user with BCrypt password
     Given I have logged in as "new_hash_user" with password "first_secret"
