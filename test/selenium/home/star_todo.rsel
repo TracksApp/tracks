@@ -1,5 +1,0 @@
-setup :fixtures => :all
-login :as => 'admin'
-open '/'
-click "css=#c1 #todo_9 a.star_item"
-wait_for_element_present "css=#c1 #todo_9 img.starred_todo"

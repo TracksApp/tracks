@@ -1,9 +1,0 @@
-setup :fixtures => :all
-login :as => 'admin'
-open "/"
-assert_context_count_incremented do
-  type "todo_description", "a new action"
-  type "todo_context_name", "Brand new context"
-  click "css=#todo-form-new-action .submit_box button"
-  assert_confirmation "New context 'Brand new context' will be also created. Are you sure?"
-end
