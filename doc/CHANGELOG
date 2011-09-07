@@ -28,12 +28,16 @@ New and changed features:
 3. You can star an action right from the form to add a new action
 4. redesign of preferences page
 5. You can now mark an action complete from the tickler
+6. project names can now contain comma (',') in it name
+7. There are two example ruby scripts in /doc to use the REST API to add a todo
+   or a project template with todos from the command line
 
 Under the hood:
 1. Upgraded rails to 2.3.12, jquery to 1.6.2 and jquery-ui to 1.8.14
 2. fixed several issues with the REST API
 3. upgraded the act_as_statemachine plugin. This change requires a
    migration, see note above!
+4. migated to bundler for gem dependencies
 
 See https://github.com/tracksapp/tracks/compare/v2.0...master for all
 detailled changes
