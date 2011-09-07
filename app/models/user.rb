@@ -1,4 +1,5 @@
 require 'digest/sha1'
+require 'bcrypt'
 
 class User < ActiveRecord::Base
   # Virtual attribute for the unencrypted password
