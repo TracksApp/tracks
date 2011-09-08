@@ -32,3 +32,9 @@ Then "I should be an admin" do
   # just check on the presence of the menu item for managing users
   Then "I should see \"Manage users\""
 end
+
+When /^I change my password to "([^"]*)"$/ do |password|
+  Then 'I should be on the change password page'
+  %w{new confirm}.each { |name| fill_in name + ' password', :with => password }
+  click_button
+end

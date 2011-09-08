@@ -1,7 +1,7 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 admin_user:
   login: admin
-  crypted_password: <%= Digest::SHA1.hexdigest("#{Tracks::Config.salt}--abracadabra--") %>
+  crypted_password: <%= BCrypt::Password.create("abracadabra") %>
   token: <%= Digest::SHA1.hexdigest("adminSat Feb 25 17:14:00 GMT 20060.236961325863376") %>
   is_admin: true
   first_name: Admin
@@ -10,7 +10,7 @@ admin_user:
 
 other_user:
   login: jane
-  crypted_password: <%= Digest::SHA1.hexdigest("#{Tracks::Config.salt}--sesame--") %>
+  crypted_password: <%= BCrypt::Password.create("sesame") %>
   token: <%= Digest::SHA1.hexdigest("janeSun Feb 19 14:42:45 GMT 20060.408173979260027") %>
   is_admin: false
   first_name: Jane
