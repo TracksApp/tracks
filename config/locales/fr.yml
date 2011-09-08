@@ -356,7 +356,7 @@ fr:
     no_deferred_actions_with: "Pas d'actions report\xC3\xA9es avec le tag '%{tag_name}'"
     no_hidden_actions: "Il n'y a pas d'actions cach\xC3\xA9es actuellement"
     edit_action_with_description: Modifier l'action '%{description}'
-    action_due_on: "(action \xC3\xA0 terminer avant le %{data})"
+    action_due_on: "(action \xC3\xA0 terminer avant le %{date})"
     action_deleted_success: "L'action suivante \xC3\xA0 \xC3\xA9t\xC3\xA9 supprim\xC3\xA9e avec succ\xC3\xA8s"
     archived_tasks_title: "TRACKS::T\xC3\xA2ches r\xC3\xA9alis\xC3\xA9es archiv\xC3\xA9es"
     remove_dependency: "Enlever les d\xC3\xA9pendances (l'action n'est pas supprim\xC3\xA9e)"
