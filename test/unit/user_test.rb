@@ -33,7 +33,7 @@ class UserTest < ActiveSupport::TestCase
     assert_kind_of User, @admin_user
     assert_equal 1, @admin_user.id
     assert_equal "admin", @admin_user.login
-    assert_equal "#{Digest::SHA1.hexdigest("#{Tracks::Config.salt}--abracadabra--")}", @admin_user.crypted_password
+    assert_not_nil @admin_user.crypted_password
     assert_not_nil @admin_user.token
     assert @admin_user.is_admin
   end
@@ -43,7 +43,7 @@ class UserTest < ActiveSupport::TestCase
     assert_kind_of User, @other_user
     assert_equal 2, @other_user.id
     assert_equal "jane", @other_user.login
-    assert_equal "#{Digest::SHA1.hexdigest("#{Tracks::Config.salt}--sesame--")}", @other_user.crypted_password
+    assert_not_nil @other_user.crypted_password
     assert_not_nil @other_user.token
     assert @other_user.is_admin == false || @other_user.is_admin == 0
   end
@@ -329,6 +329,32 @@ class UserTest < ActiveSupport::TestCase
      ['www.johndoe.com', 'WWW.JOHNDOE.COM', 'http://www.johndoe.com/', 'http://www.johndoe.com'].each do |raw_open_id_url|
        assert_equal u.id, User.find_by_open_id_url(raw_open_id_url).id
      end
+  end
+
+  def test_should_discover_using_depracted_password
+    assert_nil @admin_user.uses_deprecated_password?
+    assert_nil @other_user.uses_deprecated_password?
+    assert users(:user_with_sha1_password).uses_deprecated_password?
+  end
+
+  def test_should_not_have_deprecated_password_after_update
+    u = users(:user_with_sha1_password)
+    assert u.uses_deprecated_password?
+    u.change_password("foobar", "foobar")
+    assert_nil u.uses_deprecated_password?
+  end
+
+  def test_should_authenticate_with_deprecated_password
+    assert_nil User.authenticate('mr_deprecated', 'wrong password')
+    assert_equal users(:user_with_sha1_password),
+      User.authenticate('mr_deprecated', 'foobar')
+  end
+
+  def test_password_matches
+    assert_not_nil User.authenticate(@admin_user.login, "abracadabra")
+    assert_nil User.authenticate(@admin_user.login, "incorrect")
+    assert_not_nil User.authenticate(users(:user_with_sha1_password).login, "foobar")
+    assert_nil User.authenticate(users(:user_with_sha1_password).login, "wrong")
   end
   
   

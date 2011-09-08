@@ -31,7 +31,7 @@ class UsersControllerTest < ActionController::TestCase
     get :index
     assert_response :success
     assert_equal "TRACKS::Manage Users", assigns['page_title']  
-    assert_equal 4, assigns['total_users']
+    assert_equal 5, assigns['total_users']
     assert_equal "/users", session['return-to']
   end
 
@@ -68,7 +68,7 @@ class UsersControllerTest < ActionController::TestCase
     post :update_password, :updateuser => {:password => 'newpassword', :password_confirmation => 'newpassword'}
     assert_redirected_to preferences_path
     @updated_user = User.find(users(:admin_user).id)
-    assert_equal @updated_user.crypted_password, Digest::SHA1.hexdigest("#{Tracks::Config.salt}--newpassword--")
+    assert_not_nil User.authenticate(@updated_user.login, 'newpassword')
     assert_equal "Password updated.", flash[:notice]
   end
   

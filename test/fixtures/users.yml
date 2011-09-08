@@ -2,7 +2,7 @@
 admin_user:
   id: 1
   login: admin
-  crypted_password: <%= Digest::SHA1.hexdigest("#{Tracks::Config.salt}--abracadabra--") %>
+  crypted_password: <%= BCrypt::Password.create("abracadabra") %>
   token: <%= Digest::SHA1.hexdigest("adminSat Feb 25 17:14:00 GMT 20060.236961325863376") %>
   is_admin: true
   first_name: Admin
@@ -12,7 +12,7 @@ admin_user:
 other_user:
   id: 2
   login: jane
-  crypted_password: <%= Digest::SHA1.hexdigest("#{Tracks::Config.salt}--sesame--") %>
+  crypted_password: <%= BCrypt::Password.create("sesame") %>
   token: <%= Digest::SHA1.hexdigest("janeSun Feb 19 14:42:45 GMT 20060.408173979260027") %>
   is_admin: false
   first_name: Jane
@@ -32,7 +32,7 @@ ldap_user:
 sms_user:
   id: 4
   login: sms_user
-  crypted_password: <%= Digest::SHA1.hexdigest("#{Tracks::Config.salt}--sesame--") %>
+  crypted_password: <%= BCrypt::Password.create("sesame") %>
   token: <%= Digest::SHA1.hexdigest("sms_userSun Feb 19 14:42:45 GMT 20060.408173979260027") %>
   is_admin: false
   first_name: SMS
@@ -48,3 +48,13 @@ ldap_user:
   first_name: International
   last_name: Harvester
   auth_type: CAS
+
+user_with_sha1_password:
+  id: 6
+  login: mr_deprecated
+  crypted_password: <%= Digest::SHA1::hexdigest("#{Tracks::Config.salt}--foobar--") %>
+  token: <%= Digest::SHA1.hexdigest("mr_deprecatedSun Feb 19 14:42:45 GMT 20060.408173979260027") %>
+  is_admin: false
+  first_name: Mister
+  last_name: Deprecated
+  auth_type: database
