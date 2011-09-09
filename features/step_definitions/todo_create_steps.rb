@@ -163,7 +163,8 @@ Given /^I have a project "([^"]*)" that has the following todos$/ do |project_na
     new_todo = @current_user.todos.create!(
       :description => todo[:description],
       :context_id => context.id,
-      :project_id=>@project.id)
+      :project_id=>@project.id,
+      :notes => todo[:notes])
     unless todo[:tags].nil?
       new_todo.tag_with(todo[:tags])
     end

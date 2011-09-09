@@ -1,3 +1,17 @@
+When /^I collapse the context container of "([^"]*)"$/ do |context_name|
+  context = @current_user.contexts.find_by_name(context_name)
+  context.should_not be_nil
+
+  xpath = "//a[@id='toggle_c#{context.id}']"
+  selenium.is_visible(xpath).should be_true
+
+  selenium.click(xpath)
+end
+
+When /^I toggle all collapsed context containers$/ do
+  click_link 'Toggle collapsed contexts'
+end
+
 ####### Context #######
 
 Then /^I should not see the context "([^"]*)"$/ do |context_name|
@@ -14,6 +28,10 @@ Then /^I should not see the context "([^"]*)"$/ do |context_name|
 end
 
 Then /^I should not see the container for context "([^"]*)"$/ do |context_name|
+  Then "I should not see the context \"#{context_name}\""
+end
+
+Then /^I should not see the context container for "([^"]*)"$/ do |context_name|
   Then "I should not see the context \"#{context_name}\""
 end
 
