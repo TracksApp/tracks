@@ -305,6 +305,19 @@ var TracksPages = {
             $(".todo_notes").toggle();
         });
 
+	   
+       /* Poor man's perspectives, allows to hide any context that is collapsed */
+        $("#toggle-contexts-nav").click(function () {
+            /* Need to keep a single toggle across all contexts */
+            $(this).toggleClass("context_visibility"); 
+            if ($(this).hasClass("context_visibility")) {
+                $(".context_collapsed").hide(); /* Hide all collapsed contexts together*/
+            }
+            else {
+                $(".context_collapsed").show();       
+            }
+        });
+        
         /* fade flashes and alerts in automatically */
         $(".alert").fadeOut(8000);
     }
@@ -354,12 +367,16 @@ var TodoItemsContainer = {
                 $(this).find('img').attr('src', imgSrc.replace('collapse', 'expand'));
                 $.cookie(TodoItemsContainer.buildCookieName(this.parentNode.parentNode), true);
                 toggle_target.slideUp(500);
+                // set parent class to 'context_collapsed' so we can hide/unhide all collapsed contexts
+                toggle_target.parent().addClass("context_collapsed");
             } else {
                 // show it
                 imgSrc = $(this).find('img').attr('src');
                 $(this).find('img').attr('src', imgSrc.replace('expand', 'collapse'));
                 $.cookie(TodoItemsContainer.buildCookieName(this.parentNode.parentNode), null);
                 toggle_target.slideDown(500);
+                // remove class 'context_collapsed' from parent class
+                toggle_target.parent().removeClass("context_collapsed");
             }
             return false;
         });
@@ -370,6 +387,7 @@ var TodoItemsContainer = {
                 if (imgSrc) {
                     $(this).find('.container_toggle img').attr('src', imgSrc.replace('collapse', 'expand'));
                     $(this).find('.toggle_target').hide();
+                    $(this).find('.toggle_target').parent().addClass("context_collapsed");
                 }
             }
         });

@@ -2,6 +2,8 @@
 en:
   layouts:
     toggle_notes: Toggle notes
+    toggle_contexts: "Toggle collapsed contexts"
+    toggle_contexts_title: "Make collapsed contexts (in)visible"
     next_actions_rss_feed: RSS feed of next actions
     toggle_notes_title: Toggle all notes
     mobile_navigation:

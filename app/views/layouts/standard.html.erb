@@ -48,7 +48,9 @@
         </h1>
       </div>
       <div id="minilinks">
-        <%= link_to(t('layouts.toggle_notes'), "#", {:accesskey => "S", :title => t('layouts.toggle_notes_title'), :id => "toggle-notes-nav"}) %>
+        <%= link_to(t('layouts.toggle_contexts'), "#", {:title => t('layouts.toggle_contexts_title'), :id => "toggle-contexts-nav"}) %>
+        &nbsp;|&nbsp;
+	       <%= link_to(t('layouts.toggle_notes'), "#", {:accesskey => "S", :title => t('layouts.toggle_notes_title'), :id => "toggle-notes-nav"}) %>
         &nbsp;|&nbsp;
         <%= link_to( t('common.logout') + " (#{current_user.display_name}) »", logout_path) %>
       </div>
