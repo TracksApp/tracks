@@ -118,6 +118,13 @@ class SwfFuTest < ActionView::TestCase
 
     end
 
+    should "enforce HTML id validity" do
+      div_result = '<div id="swf_123-456_ok___X_div">'
+      assert_match /#{div_result}/, swf_tag("123-456_ok$!+X")
+      obj_result = '"id":"swf_123-456_ok___X"'
+      assert_match /#{obj_result}/, swf_tag("123-456_ok$!+X")
+    end
+
     should "treat initialize arrays as list of parameters" do
       assert_match 'initialize("hello","world")', swf_tag("mySwf", :initialize => ["hello", "world"], :javascript_class => "SomeClass")
     end
