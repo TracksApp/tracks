@@ -1,5 +1,4 @@
 source :gemcutter
-source :rubyforge
 source "http://gems.github.com/"
 
 gem "rake", "~>0.8.7"

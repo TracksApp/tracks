@@ -4,7 +4,7 @@ class UsersController < ApplicationController
   skip_before_filter :check_for_deprecated_password_hash,
     :only => [ :change_password, :update_password ]
   prepend_before_filter :login_optional, :only => [ :new, :create ]
-  
+
   # GET /users GET /users.xml
   def index
     respond_to do |format|
@@ -22,7 +22,7 @@ class UsersController < ApplicationController
       end
     end
   end
-  
+
   # GET /users/id GET /users/id.xml
   def show
     @user = User.find_by_id(params[:id])
@@ -54,7 +54,7 @@ class UsersController < ApplicationController
     end
     render :layout => "login"
   end
-  
+
   # Example usage: curl -H 'Accept: application/xml' -H 'Content-Type:
   # application/xml'
   #               -u admin:up2n0g00d
@@ -132,14 +132,14 @@ class UsersController < ApplicationController
         return
       end
     end
-  end  
-  
+  end
+
   # DELETE /users/id DELETE /users/id.xml
   def destroy
     @deleted_user = User.find_by_id(params[:id])
     @saved = @deleted_user.destroy
     @total_users = User.find(:all).size
-    
+
     respond_to do |format|
       format.html do
         if @saved
@@ -153,14 +153,15 @@ class UsersController < ApplicationController
       format.xml { head :ok }
     end
   end
-  
-    
+
+
   def change_password
     @page_title = t('users.change_password_title')
   end
-  
+
   def update_password
-    @user.change_password(params[:updateuser][:password], params[:updateuser][:password_confirmation])
+    # is used for focing password change after sha->bcrypt upgrade
+    @user.change_password(params[:user][:password], params[:user][:password_confirmation])
     notify :notice, t('users.password_updated')
     redirect_to preferences_path
   rescue Exception => error
@@ -171,7 +172,7 @@ class UsersController < ApplicationController
   def change_auth_type
     @page_title = t('users.change_auth_type_title')
   end
-  
+
   def update_auth_type
     if (params[:open_id_complete] || (params[:user][:auth_type] == 'open_id')) && openid_enabled?
       authenticate_with_open_id do |result, identity_url|
@@ -203,16 +204,16 @@ class UsersController < ApplicationController
       redirect_to :action => 'change_auth_type'
     end
   end
-  
+
   def refresh_token
     @user.generate_token
     @user.save!
     notify :notice, t('users.new_token_generated')
     redirect_to preferences_path
   end
-  
+
   private
-    
+
   def get_new_user
     if session['new_user']
       user = session['new_user']
@@ -222,7 +223,7 @@ class UsersController < ApplicationController
     end
     user
   end
-    
+
   def check_create_user_params
     return false unless params.has_key?(:request)
     return false unless params[:request].has_key?(:login)
@@ -231,5 +232,5 @@ class UsersController < ApplicationController
     return false if params[:request][:password].empty?
     return true
   end
-  
+
 end

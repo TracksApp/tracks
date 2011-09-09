@@ -4,10 +4,10 @@ Feature: Handling users with deprecated passwords hashes
   I have to be redirected to the password resetting form
 
   Background:
-    Given the following user records
-      | login         | password_with_algorithm |
-      | new_hash_user | first_secret bcrypt     |
-      | old_hash_user | another_secret sha1     |
+    Given the following user records with hash algorithm
+      | login         | password        | algorithm  |
+      | new_hash_user | first_secret    | bcrypt     |
+      | old_hash_user | another_secret  | sha1       |
 
   Scenario Outline: A user with SHA1 password
     Given I have logged in as "old_hash_user" with password "another_secret"
