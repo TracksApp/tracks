@@ -74,6 +74,9 @@ class TodosController < ApplicationController
         project = current_user.projects.find_or_create_by_name(p.project_name)
         @new_project_created = project.new_record_before_save?
         @todo.project_id = project.id
+      elsif !p.project_id.nil?
+        project = current_user.projects.find_by_id(p.project_id)
+        @todo.errors.add(:project, "unknown") if project.nil?
       end
 
       if p.context_specified_by_name?
@@ -81,15 +84,20 @@ class TodosController < ApplicationController
         @new_context_created = context.new_record_before_save?
         @not_done_todos = [@todo] if @new_context_created
         @todo.context_id = context.id
+      elsif !p.context_id.nil?
+        context = current_user.contexts.find_by_id(p.context_id)
+        @todo.errors.add(:context, "unknown") if context.nil?
       end
 
-      @todo.starred= (params[:new_todo_starred]||"").include? "true"
+      if @saved
+        @todo.starred= (params[:new_todo_starred]||"").include? "true"
 
-      @todo.add_predecessor_list(predecessor_list)
+        @todo.add_predecessor_list(predecessor_list)
 
-      # Fix for #977 because AASM overrides @state on creation
-      specified_state = @todo.state
-      @saved = @todo.save
+        # Fix for #977 because AASM overrides @state on creation
+        specified_state = @todo.state
+        @saved = @todo.save
+      end
 
       @todo.update_state_from_project if @saved
 
@@ -1457,8 +1465,16 @@ class TodosController < ApplicationController
       @params['project_name'].strip unless @params['project_name'].nil?
     end
 
+    def project_id
+      @attributes['project_id']
+    end
+
     def context_name
       @params['context_name'].strip unless @params['context_name'].nil?
+    end
+
+    def context_id
+      @attributes['context_id']
     end
 
     def tag_list
