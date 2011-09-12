@@ -89,7 +89,7 @@ class TodosController < ApplicationController
         @todo.errors.add(:context, "unknown") if context.nil?
       end
 
-      if @saved
+      if @todo.errors.empty?
         @todo.starred= (params[:new_todo_starred]||"").include? "true"
 
         @todo.add_predecessor_list(predecessor_list)
@@ -97,9 +97,11 @@ class TodosController < ApplicationController
         # Fix for #977 because AASM overrides @state on creation
         specified_state = @todo.state
         @saved = @todo.save
-      end
 
-      @todo.update_state_from_project if @saved
+        @todo.update_state_from_project if @saved
+      else
+        @saved = false
+      end
 
       unless (@saved == false) || tag_list.blank?
         @todo.tag_with(tag_list)

@@ -37,17 +37,15 @@ class TodoXmlApiTest < ActionController::IntegrationTest
   def test_post_create_todo_with_wrong_project_and_context_id
     authenticated_post_xml_to_todo_create "<todo><description>this will fail</description><context_id type='integer'>-16</context_id><project_id type='integer'>-11</project_id></todo>"
     assert_response 422
+    assert_xml_select 'errors' do
+      assert_select 'error', 2
+    end
   end
 
   private
 
   def authenticated_post_xml_to_todo_create(postdata = @@valid_postdata, user = users(:other_user).login, password = 'sesame')
     authenticated_post_xml "/todos", user, password, postdata
-    assert_xml_select 'errors' do
-      assert_select 'error', 2, 'Project unknown'
-      assert_select 'error', 2, 'Context unknown'
-    end
-
   end
 
 end
