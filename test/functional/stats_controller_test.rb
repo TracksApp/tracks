@@ -6,7 +6,7 @@ class StatsController; def rescue_action(e) raise e end; end
 
 class StatsControllerTest < ActionController::TestCase
   fixtures :users, :preferences, :projects, :contexts, :todos, :recurring_todos, :recurring_todos, :tags, :taggings
-  
+
   def setup
     @controller = StatsController.new
     @request    = ActionController::TestRequest.new
@@ -17,12 +17,12 @@ class StatsControllerTest < ActionController::TestCase
   def test_truth
     assert true
   end
-  
+
   def test_get_index_when_not_logged_in
     get :index
     assert_redirected_to :controller => 'login', :action => 'login'
   end
-  
+
   def test_get_index
     login_as(:admin_user)
     get :index
@@ -59,23 +59,23 @@ class StatsControllerTest < ActionController::TestCase
     assert_equal 17, assigns['actions'].count
     assert_equal 4, assigns['tags_count']
     assert_equal 2, assigns['unique_tags_count']
-    assert_equal 2.week.ago.at_midnight, assigns['first_action'].created_at.at_midnight
+    assert_equal 2.week.ago.utc.at_midnight, assigns['first_action'].created_at.utc.at_midnight
   end
-  
+
   def test_downdrill
     login_as(:admin_user)
-    
+
     # drill down without parameters
     get :show_selected_actions_from_chart
     assert_response :not_found
     assert_template nil
-    
+
     # get week 0-1 for actions visible running
     get :show_selected_actions_from_chart, :id => 'avrt', :index => 0
     assert_response :success
     assert_template "stats/show_selection_from_chart"
 
-    # get week 0 and further for actions visible running 
+    # get week 0 and further for actions visible running
     get :show_selected_actions_from_chart, :id => 'avrt_end', :index => 0
     assert_response :success
     assert_template "stats/show_selection_from_chart"

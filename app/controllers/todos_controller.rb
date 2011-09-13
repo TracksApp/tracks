@@ -74,7 +74,7 @@ class TodosController < ApplicationController
         project = current_user.projects.find_or_create_by_name(p.project_name)
         @new_project_created = project.new_record_before_save?
         @todo.project_id = project.id
-      elsif !p.project_id.nil?
+      elsif !(p.project_id.nil? || p.project_id.blank?)
         project = current_user.projects.find_by_id(p.project_id)
         @todo.errors.add(:project, "unknown") if project.nil?
       end
@@ -84,7 +84,7 @@ class TodosController < ApplicationController
         @new_context_created = context.new_record_before_save?
         @not_done_todos = [@todo] if @new_context_created
         @todo.context_id = context.id
-      elsif !p.context_id.nil?
+      elsif !(p.context_id.nil? || p.context_id.blank?)
         context = current_user.contexts.find_by_id(p.context_id)
         @todo.errors.add(:context, "unknown") if context.nil?
       end
