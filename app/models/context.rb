@@ -7,7 +7,7 @@ class Context < ActiveRecord::Base
   named_scope :active, :conditions => { :hide => false }
   named_scope :hidden, :conditions => { :hide => true }
 
-  acts_as_list :scope => :user
+  acts_as_list :scope => :user, :top_of_list => 0
   extend NamePartFinder
   include Tracks::TodoList
 
@@ -25,7 +25,7 @@ class Context < ActiveRecord::Base
       :description => "Lists all the contexts for #{user.display_name}"
     }
   end
-  
+
   def self.null_object
     NullContext.new
   end
@@ -33,29 +33,29 @@ class Context < ActiveRecord::Base
   def hidden?
     self.hide == true || self.hide == 1
   end
-  
+
   def title
     name
   end
-    
+
   def new_record_before_save?
     @new_record_before_save
-  end  
+  end
 
 end
 
 class NullContext
-    
+
   def nil?
     true
   end
-  
+
   def id
     nil
   end
-  
+
   def name
     ''
   end
-    
+
 end

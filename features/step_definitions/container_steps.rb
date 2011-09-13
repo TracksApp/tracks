@@ -61,8 +61,9 @@ Then /^I should see "([^"]*)" in the context container for "([^"]*)"$/ do |todo_
   todo.should_not be_nil
 
   xpath = "xpath=//div[@id=\"c#{context.id}\"]//div[@id='line_todo_#{todo.id}']"
-  selenium.wait_for_element(xpath, :timeout_in_seconds => 5)
-  selenium.is_visible(xpath).should be_true
+  wait_for :timeout => 5 do
+    selenium.is_visible(xpath)
+  end
 end
 
 Then /^I should not see "([^"]*)" in the context container for "([^"]*)"$/ do |todo_description, context_name|

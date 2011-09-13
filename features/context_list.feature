@@ -11,10 +11,10 @@ Feature: Manage the list of contexts
 
   Scenario: The list of contexts contain all contexts
     Given I have the following contexts
-      | name  | hide  |
-      | @ipad | false |
-      | @home | false |
-      | @boss | false |
+      | context  | hide  |
+      | @ipad    | false |
+      | @home    | false |
+      | @boss    | false |
     When I go to the contexts page
     Then I should see "@ipad"
     And I should see "@home"
@@ -25,7 +25,7 @@ Feature: Manage the list of contexts
     Given I have a context called "@computer"
     When I go to the contexts page
     And I follow "@computer"
-    Then I should be on the context page for "@computer" 
+    Then I should be on the context page for "@computer"
 
   @selenium
   Scenario: Delete context from context page should update badge
@@ -76,9 +76,9 @@ Feature: Manage the list of contexts
   @selenium
   Scenario Outline: Add a new context with state
     Given I have the following contexts
-      | name  | hide  |
-      | @ipad | true  |
-      | @home | false |
+      | context  | hide  |
+      | @ipad    | true  |
+      | @home    | false |
     When I go to the contexts page
     And I add a new <state> context "<name>"
     Then I should see the context "<name>" under "<state>"
@@ -97,10 +97,10 @@ Feature: Manage the list of contexts
   @selenium
   Scenario: I can drag and drop to order the contexts
     Given I have the following contexts
-      | name  |
-      | @ipad |
-      | @home |
-      | @boss |
+      | context |
+      | @ipad   |
+      | @home   |
+      | @boss   |
     When I go to the contexts page
     Then context "@ipad" should be above context "@home"
     When I drag context "@ipad" below context "@home"

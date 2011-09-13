@@ -34,24 +34,22 @@ end
 Given /^I have the following contexts:$/ do |table|
   table.hashes.each do |context|
     Given 'I have a context called "'+context[:context]+'"'
+    @context.hide = context[:hide] == "true" unless context[:hide].blank?
+    # acts_as_list puts the last added context at the top, but we want it
+    # at the bottom to be consistent with the table in the scenario
+    @context.move_to_bottom
+    @context.save!
   end
+end
+
+Given /^I have the following contexts$/ do |table|
+  Given("I have the following contexts:", table)
 end
 
 Given /^I have a context "([^\"]*)" with (.*) actions$/ do |context_name, number_of_actions|
   context = @current_user.contexts.create!(:name => context_name)
   1.upto number_of_actions.to_i do |i|
     @current_user.todos.create!(:context_id => context.id, :description => "todo #{i}")
-  end
-end
-
-Given /^I have the following contexts$/ do |table|
-  Context.delete_all
-  table.hashes.each do |hash|
-    context = @current_user.contexts.create!(:name => hash[:name])
-    unless hash[:hide].blank?
-      context.hide = hash[:hide] == true
-      context.save!
-    end
   end
 end
 

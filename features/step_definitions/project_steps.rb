@@ -34,6 +34,10 @@ end
 Given /^I have the following projects:$/ do |table|
   table.hashes.each do |project|
     Given 'I have a project called "'+project[:project_name]+'"'
+    # acts_as_list puts the last added project at the top, but we want it
+    # at the bottom to be consistent with the table in the scenario
+    @project.move_to_bottom
+    @project.save!
   end
 end
 

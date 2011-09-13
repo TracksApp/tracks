@@ -9,13 +9,13 @@ Feature: Toggle the context containers
       | testuser | secret   | false    |
     And I have logged in as "testuser" with password "secret"
 
-  @selenium
+  @selenium @clear_cookies
   Scenario: I can toggle a context container
     Given I have the following contexts
-      | name  | hide  |
-      | @ipad | false |
-      | @home | false |
-      | @boss | false |
+      | context  | hide  |
+      | @ipad    | false |
+      | @home    | false |
+      | @boss    | false |
     And I have a project "collapse those contexts" that has the following todos
       | description | context |
       | test 1      | @ipad   |
@@ -38,13 +38,13 @@ Feature: Toggle the context containers
     And I should not see "test 2"
     And I should not see "test 3"
 
-  @selenium
+  @selenium  @clear_cookies
   Scenario: I can hide all collapsed containers
     Given I have the following contexts
-      | name  | hide  |
-      | @ipad | false |
-      | @home | false |
-      | @boss | false |
+      | context | hide  |
+      | @ipad   | false |
+      | @home   | false |
+      | @boss   | false |
     And I have a project "collapse those contexts" that has the following todos
       | description | context |
       | test 1      | @ipad   |
@@ -64,4 +64,3 @@ Feature: Toggle the context containers
     Then I should not see the context container for "@home"
     And I should not see the context container for "@boss"
     And I should not see the context container for "@ipad"
-

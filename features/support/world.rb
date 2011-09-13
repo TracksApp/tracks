@@ -22,7 +22,7 @@ module TracksStepHelper
       !selenium.is_element_present("//form[@id='form_todo_#{todo.id}']")
     end
   end
-  
+
   def format_date(date)
     # copy-and-past from ApplicationController::format_date
     return date ? date.in_time_zone(@current_user.prefs.time_zone).strftime("#{@current_user.prefs.date_format}") : ''
@@ -46,14 +46,14 @@ module TracksStepHelper
     wait_for :timeout => 5 do
       selenium.is_element_present(edit_button)
     end
-   
+
     selenium.click(edit_button, :wait_for => :ajax, :javascript_framework => :jquery)
   end
 
   def wait_for_ajax
     selenium.wait_for :wait_for => :ajax, :javascript_framework => :jquery
   end
-  
+
 end
 
 World(TracksStepHelper)
