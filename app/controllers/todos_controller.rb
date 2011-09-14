@@ -174,7 +174,10 @@ class TodosController < ApplicationController
 
     tag_list = params[:tag_list]
 
+    @sequential = !params[:todos_sequential].blank? && params[:todos_sequential]=='true'
+
     @todos = []
+    @predecessor = nil
     params[:todo][:multiple_todos].split("\n").map do |line|
       unless line.blank?
         @todo = current_user.todos.build(
@@ -182,12 +185,20 @@ class TodosController < ApplicationController
         @todo.project_id = @project_id
         @todo.context_id = @context_id
         @saved = @todo.save
+
+        if @predecessor && @saved && @sequential
+          @todo.add_predecessor(@predecessor)
+          @todo.block!
+        end
+
         unless (@saved == false) || tag_list.blank?
           @todo.tag_with(tag_list)
           @todo.tags.reload
         end
+
         @todos << @todo
         @not_done_todos << @todo if @new_context_created
+        @predecessor = @todo
       end
     end
 

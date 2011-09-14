@@ -22,6 +22,9 @@
     <%= text_field_tag "multi_tag_list", @default_tags, :name=>:tag_list, :size => 30, :tabindex => next_tab_index %>
     <%= content_tag("div", "", :id => "tag_list_auto_complete", :class => "auto_complete") %>
 
+    <%= check_box_tag('todos_sequential', 'true', false, {:tabindex => next_tab_index}) %>
+    <label for="todos_sequential"><%= t('shared.make_actions_dependent') %></label>
+
     <div class="submit_box">
       <div class="widgets">
         <button type="submit" class="positive" id="todo_multi_new_action_submit" tabindex="<%= next_tab_index%>">

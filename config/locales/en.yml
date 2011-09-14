@@ -748,6 +748,7 @@ en:
     separate_tags_with_commas: separate with commas
     toggle_multi_title: Toggle single/multi new action form
     hide_action_form_title: Hide new action form
+    make_actions_dependent: Make actions dependent on each other
   users:
     successfully_deleted_user: Successfully deleted user %{username}
     failed_to_delete_user: Failed to delete user %{username}
