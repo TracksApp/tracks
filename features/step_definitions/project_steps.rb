@@ -1,6 +1,9 @@
 Given /^I have a project "([^\"]*)" with (.*) todos$/ do |project_name, num_todos|
   @context = @current_user.contexts.find_or_create_by_name("Context A")
   @project = @current_user.projects.create!(:name => project_name)
+  # acts_as_list adds at top by default, but that is counter-intuitive when reading scenario's, so reverse this
+  @project.move_to_bottom
+
   1.upto num_todos.to_i do |i|
     @current_user.todos.create!(
       :project_id => @project.id,
@@ -13,6 +16,8 @@ Given /^there exists a project "([^\"]*)" for user "([^\"]*)"$/ do |project_name
   user = User.find_by_login(user_name)
   user.should_not be_nil
   @project = user.projects.create!(:name => project_name)
+  # acts_as_list adds at top by default, but that is counter-intuitive when reading scenario's, so reverse this
+  @project.move_to_bottom
 end
 
 Given /^there exists a project called "([^"]*)" for user "([^"]*)"$/ do |project_name, login|
