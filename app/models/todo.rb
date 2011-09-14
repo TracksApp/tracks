@@ -80,11 +80,12 @@ class Todo < ActiveRecord::Base
   end
 
   aasm_event :hide do
-    transitions :to => :project_hidden, :from => [:active, :deferred]
+    transitions :to => :project_hidden, :from => [:active, :deferred, :pending]
   end
 
   aasm_event :unhide do
     transitions :to => :deferred, :from => [:project_hidden], :guard => Proc.new{|t| !t.show_from.blank? }
+    transitions :to => :pending, :from => [:project_hidden], :guard => :uncompleted_predecessors?
     transitions :to => :active, :from => [:project_hidden]
   end
 
