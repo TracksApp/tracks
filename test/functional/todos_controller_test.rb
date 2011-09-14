@@ -215,6 +215,37 @@ class TodosControllerTest < ActionController::TestCase
     assert_equal "8.1.2, four, one, three, two, version1.5", t.tag_list
   end
 
+  def test_add_multiple_todos
+    login_as(:admin_user)
+
+    start_count = Todo.count
+    put :create, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{
+      :multiple_todos=>"a\nb"}
+
+    assert_equal start_count+2, Todo.count, "two todos should have been added"
+  end
+
+  def test_add_multiple_dependent_todos
+    login_as(:admin_user)
+
+    start_count = Todo.count
+    put :create, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{
+      :multiple_todos=>"a\nb"}, :todos_sequential => 'true'
+    put :create, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{
+      :multiple_todos=>"c\nd"}, :todos_sequential => 'false'
+
+    assert_equal start_count+4, Todo.count, "four todos should have been added"
+
+    # find a,b,c and d
+    %w{a b c d}.each do |todo|
+      eval "@#{todo} = Todo.find_by_description('#{todo}')"
+      eval "assert !@#{todo}.nil?, 'a todo with description \"#{todo}\" should just have been added'"
+    end
+
+    assert @b.predecessors.include?(@a), "a should be a predeccesor of b"
+    assert !@d.predecessors.include?(@c), "c should not be a predecessor of d"
+  end
+
   def test_find_tagged_with
     login_as(:admin_user)
     @user = User.find(@request.session['user_id'])
