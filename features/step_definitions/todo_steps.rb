@@ -96,7 +96,6 @@ Then /^the selected context should be "([^"]*)"$/ do |content|
   field_labeled("Context").element.search(".//option[@selected = 'selected']").inner_html.should =~ /#{content}/
 end
 
-
 Then /^I should see the page selector$/ do
   page_selector_xpath = ".//a[@class='next_page']"
   response.body.should have_xpath(page_selector_xpath)
@@ -109,4 +108,31 @@ Then /^the page should be "([^"]*)"$/ do |page_number|
     page_number_found = node.first.content.to_i
   end
   page_number_found.should == page_number.to_i
+end
+
+Then /^the project field of the new todo form should contain "([^"]*)"$/ do |project_name|
+  xpath= "//form[@id='todo-form-new-action']/input[@id='todo_project_name']"
+  project_name.should == response.selenium.get_value("xpath=#{xpath}")
+end
+
+Then /^the default context of the new todo form should be "([^"]*)"$/ do |context_name|
+  xpath= "//form[@id='todo-form-new-action']/input[@id='todo_context_name']"
+  context_name.should == response.selenium.get_value("xpath=#{xpath}")
+end
+
+Then /^the tag field in the new todo form should be empty$/ do
+  xpath= "//form[@id='todo-form-new-action']/input[@id='todo_tag_list']"
+  assert response.selenium.get_value("xpath=#{xpath}").blank?
+end
+
+Then /^the tag field in the new todo form should be "([^"]*)"$/ do |tag_list|
+  xpath= "//form[@id='todo-form-new-action']/input[@id='todo_tag_list']"
+  tag_list.should == response.selenium.get_value("xpath=#{xpath}")
+end
+
+Then /^the tags of "([^"]*)" should be "([^"]*)"$/ do |todo_description, tag_list|
+  todo = @current_user.todos.find_by_description(todo_description)
+  todo.should_not be_nil
+
+  todo.tag_list.should == tag_list
 end

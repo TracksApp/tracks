@@ -139,6 +139,10 @@ When /^I remove the show from date from "([^"]*)"$/ do |action_description|
   submit_edit_todo_form(todo)
 end
 
+When /^I clear the show from date of "([^"]*)"$/ do |action_description|
+  When "I remove the show from date from \"#{action_description}\""
+end
+
 When /^I defer "([^"]*)" for 1 day$/ do |action_description|
   todo = @current_user.todos.find_by_description(action_description)
   todo.should_not be_nil

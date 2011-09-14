@@ -6,7 +6,6 @@
   -%>
     update_project_page();
   <% end %>
-  TracksForm.set_project_name_and_default_project_name("<%= escape_javascript(@project.name)%>");
 <% else -%>
   TracksPages.show_edit_errors(html_for_error_messages());
 <% end %>
@@ -24,12 +23,14 @@ function update_project_list_page() {
 
   ProjectListPage.update_all_states_count(<%=@active_projects_count%>, <%=@hidden_projects_count%>, <%=@completed_projects_count%>);
   ProjectListPage.show_or_hide_all_state_containers(<%= @show_active_projects %>, <%= @show_hidden_projects %>, <%= @show_completed_projects %>);
+  TracksForm.set_project_name_and_default_project_name("<%= escape_javascript(@project.name)%>");
 }
 
 function update_project_page() {
   remove_project_edit_form();
   update_and_show_project_settings();
   TracksForm.set_project_name("<%= escape_javascript(@project.name)%>");
+  $("h2#project_name").html("<%= escape_javascript(@project.name)%>");
   <% if @project.default_context %>
     TracksForm.set_context_name_and_default_context_name("<%= escape_javascript(@project.default_context.name)%>");
   <% end %>
@@ -75,7 +76,7 @@ function remove_and_re_add_project() {
 <%
 # the following functions return empty string if rendering the partial is not
 # necessary, for example the sidebar is not on the project list page, so do not
-# render it into the function. 
+# render it into the function.
 -%>
 function html_for_project_listing() {
   return "<%= source_view_is(:project_list) ? escape_javascript(render(:partial => 'project_listing', :object => @project )) : "" %>";

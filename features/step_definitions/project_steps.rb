@@ -1,14 +1,24 @@
-Given /^I have a project "([^\"]*)" with (.*) todos$/ do |project_name, num_todos|
+Given /^I have a project "([^\"]*)" with ([0-9]+) todos$/ do |project_name, num_todos|
   @context = @current_user.contexts.find_or_create_by_name("Context A")
   @project = @current_user.projects.create!(:name => project_name)
   # acts_as_list adds at top by default, but that is counter-intuitive when reading scenario's, so reverse this
   @project.move_to_bottom
 
+  @todos=[]
   1.upto num_todos.to_i do |i|
-    @current_user.todos.create!(
+    todo = @current_user.todos.create!(
       :project_id => @project.id,
       :context_id => @context.id,
       :description => "todo #{i}")
+    @todos << todo
+  end
+end
+
+Given /^I have a project "([^\"]*)" with ([0-9]+) deferred todos$/ do |project_name, num_todos|
+  Given "I have a project \"#{project_name}\" with #{num_todos} todos"
+  @todos.each do |todo|
+    todo.show_from = Time.zone.now + 1.week
+    todo.save!
   end
 end
 
@@ -130,6 +140,44 @@ When /^I try to edit the project name to "([^\"]*)"$/ do |new_title|
     :timeout => 5
 end
 
+When /^I edit the default context to "([^"]*)"$/ do |default_context|
+  click_link "link_edit_project_#{@project.id}"
+
+  wait_for do
+    selenium.is_element_present("submit_project_#{@project.id}")
+  end
+
+  fill_in "project[default_context_name]", :with => default_context
+
+  selenium.click "submit_project_#{@project.id}",
+    :wait_for => :text,
+    :text => "Project saved",
+    :timeout => 5
+
+  wait_for :timeout => 5 do
+    !selenium.is_element_present("submit_project_#{@project.id}")
+  end
+end
+
+Then /^I edit the default tags to "([^"]*)"$/ do |default_tags|
+  click_link "link_edit_project_#{@project.id}"
+
+  wait_for do
+    selenium.is_element_present("submit_project_#{@project.id}")
+  end
+
+  fill_in "project[default_tags]", :with => default_tags
+
+  selenium.click "submit_project_#{@project.id}",
+    :wait_for => :text,
+    :text => "Project saved",
+    :timeout => 5
+
+  wait_for :timeout => 5 do
+    !selenium.is_element_present("submit_project_#{@project.id}")
+  end
+end
+
 When /^I edit the project name of "([^"]*)" to "([^"]*)"$/ do |project_current_name, project_new_name|
   @project = @current_user.projects.find_by_name(project_current_name)
   @project.should_not be_nil
@@ -225,7 +273,9 @@ Then /^I should see the italic text "([^\"]*)" in the project description$/ do |
 end
 
 Then /^the project title should be "(.*)"$/ do |title|
-  selenium.get_text("css=h2#project_name").should == title
+  wait_for :timeout => 2 do
+    selenium.get_text("css=h2#project_name") == title
+  end
 end
 
 Then /^I should see the project name is "([^"]*)"$/ do |project_name|
