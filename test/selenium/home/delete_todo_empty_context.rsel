@@ -1,7 +1,0 @@
-setup :fixtures => :all
-login :as => 'admin'
-open "/"
-wait_for_element_present '//div[@id="line_todo_5"]//img[@alt="Delete"]/..'
-click '//div[@id="line_todo_5"]//img[@alt="Delete"]/..'
-assert_confirmation "Are you sure that you want to delete the action 'Construct time dilation device'?"
-wait_for_not_visible "c5"

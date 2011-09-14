@@ -1,9 +1,0 @@
-setup :fixtures => :all
-login :as => 'admin'
-open "/projects/1"
-click "edit_icon_todo_15"
-wait_for_element_present "show_from_todo_15"
-type "show_from_todo_15", ""
-click "css=#submit_todo_15"
-wait_for_element_present "xpath=//div[@id='p1items'] //div[@id='todo_15']"
-wait_for_visible "tickler-empty-nd"

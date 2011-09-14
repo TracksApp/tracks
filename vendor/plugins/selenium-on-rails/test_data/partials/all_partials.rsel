@@ -1,5 +1,0 @@
-include_partial 'partial', :source => title
-['html', 'rhtml',  'sel', 'rsel'].each do |format|
-  include_partial "partials/#{format}", :hello => 'world'
-end
-include_partial 'partials/nesting', :hello => 'world'

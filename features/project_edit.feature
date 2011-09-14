@@ -41,6 +41,24 @@ Feature: Edit a project
     And I edit the project name to "cherries"
     Then the project title should be "cherries"
 
+  @selenium @wip
+  Scenario: I can change the name of the project and it should update the new todo form
+    Given I have a project "bananas" with 1 todos
+    When I go to the "bananas" project
+    And I edit the project name to "cherries"
+    Then the project title should be "cherries"
+    And the project field of the new todo form should contain "cherries"
+
+  @selenium @wip
+  Scenario: I can change the default context of the project and it should update the new todo form
+    Given I have a project "bananas" with 1 todos
+    When I go to the "bananas" project
+    And I edit the default context to "@pc"
+    Then the default context of the new todo form should be "@pc"
+    # the default context should be prefilled ater submitting a new todo
+    When I submit a new action with description "test"
+    Then the default context of the new todo form should be "@pc"
+
   # Ticket #1042
   @selenium
   Scenario: I cannot change the name of a project in the project view to the name of another existing project
@@ -92,25 +110,40 @@ Feature: Edit a project
     When I cancel the project edit form
     Then I should see "This project is active with no default context and with no default tags"
 
-  @selenium
-  Scenario: Moving the todo to the tickler will move todo to tickler container
+  @selenium @wip
+  Scenario: Moving the todo to the tickler will move todo to tickler container and update empty messages
     Given I have a project "test" with 1 todos
     When I go to the "test" project
     Then I should see "todo 1" in the action container
+    And I should see "Currently there are no deferred actions in this project"
+    And I should not see "Currently there are no incomplete actions in this project"
     When I defer "todo 1" for 1 day
     Then I should see "todo 1" in the deferred container
+    And I should not see "Currently there are no deferred actions in this project"
+    And I should see "Currently there are no incomplete actions in this project"
 
-  @selenium
-  Scenario: Moving the todo out of the tickler will move todo to active container
-    Given I have a project "test" with 1 todos
+  @selenium @wip
+  Scenario: Moving the todo out of the tickler will move todo to active container and update empty messages
+    Given I have a project "test" with 1 deferred todos
     When I go to the "test" project
-    Then I should see "todo 1" in the action container
-    When I defer "todo 1" for 1 day
     Then I should see "todo 1" in the deferred container
+    And I should see "Currently there are no incomplete actions in this project"
+    And I should not see "Currently there are no deferred actions in this project"
+    When I defer "todo 1" for 1 day
+    Then I should see "todo 1" in the active container
+    And I should see "Currently there are no deferred actions in this project"
+    And I should not see "Currently there are no incomplete actions in this project"
 
   @selenium
   Scenario: Making all todos inactive will show empty message
     Given I have a project "test" with 1 todos
+    When I go to the "test" project
+    And I mark "todo 1" as complete
+    Then I should see "Currently there are no incomplete actions in this project"
+
+  @selenium @wip
+  Scenario: Making all deferred todos inactive will show empty message
+    Given I have a project "test" with 1 deferred todos
     When I go to the "test" project
     And I mark "todo 1" as complete
     Then I should see "Currently there are no incomplete actions in this project"

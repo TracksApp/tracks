@@ -11,6 +11,11 @@ Feature: Tagging todos
     And I have a context called "@pc"
     And I have a project called "hacking tracks"
 
+  @wip
+  Scenario: If there are no todos with a tag, the tag page should show an empty message
+    When I go to the tag page for "starred"
+    Then I should see "Currently there are no incomplete actions with the tag 'starred'"
+
   @selenium
   Scenario: I can remove a tag from a todo from the tag view and the todo will be removed
     Given I have a todo "fix tests" in context "@pc" with tags "now"
@@ -50,3 +55,25 @@ Feature: Tagging todos
     When I edit the context of "prepare release" to "@secret"
     Then I should not see "prepare release" in the context container for "@pc"
     Then I should see "prepare release" in the hidden container
+
+  @selenium @wip
+  Scenario: Completing the last todo from the tag view will show the empty message
+    Given I have a todo "migrate old scripts" in context "@pc" with tags "starred"
+    When I go to the tag page for "starred"
+    Then I should see "migrate old scripts" in the context container for "@pc"
+    When I mark "migrate old scripts" as complete
+    Then I should not see the context container for "@pc"
+    And I should see "Currently there are no incomplete actions with the tag 'starred'"
+
+  @selenium @wip
+  Scenario: Setting default tags for a project will prefill new todo form for that project
+    When I go to the project page for "hacking tracks"
+    Then the tag field in the new todo form should be empty
+    And I edit the default tags to "tests"
+    Then the tag field in the new todo form should be "tests"
+    # also the tag field should be prefilled after reload
+    When I go to the project page for "hacking tracks"
+    Then the tag field in the new todo form shoudl be "tests"
+    # and the tag field should be prefilled after submitting a new todo
+    When I submit a new action with description "are my tags prefilled"
+    Then the tags of "are my tags prefilled" should be "tests"

@@ -23,7 +23,7 @@ config.action_controller.allow_forgery_protection    = false
 config.action_controller.session_store = :cookie_store
 config.action_controller.session = { :key => 'TracksTest', :secret => SITE_CONFIG['salt'] * (30.0 /  SITE_CONFIG['salt'].length).ceil }
 
-# Overwrite the default settings for fixtures in tests. See Fixtures 
+# Overwrite the default settings for fixtures in tests. See Fixtures
 # for more details about these settings.
 # config.transactional_fixtures = true
 # config.instantiated_fixtures = false
@@ -31,8 +31,3 @@ config.action_controller.session = { :key => 'TracksTest', :secret => SITE_CONFI
 SITE_CONFIG['salt'] ||= 'change-me'
 
 config.time_zone = 'UTC'
-
-config.after_initialize do
-  require File.expand_path(File.dirname(__FILE__) + "/../../test/selenium_helper")
-end
-

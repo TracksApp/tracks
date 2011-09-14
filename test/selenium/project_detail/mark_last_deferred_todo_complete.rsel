@@ -1,5 +1,0 @@
-setup :fixtures => :all
-login :as => 'admin'
-open "/projects/1"
-click "xpath=//div[@id='tickler'] //div[@id='todo_15'] //input[@class='item-checkbox']"
-wait_for_visible "tickler-empty-nd"
