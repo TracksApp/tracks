@@ -51,6 +51,20 @@ class ProjectsController < ApplicationController
     render
   end
 
+  def set_reviewed
+    template = 'projects/update.js.erb'
+
+    #@source_view = 'project'
+    @project = current_user.projects.find(params[:id])
+
+    @project.todos.each do |todo|
+      todo.created_at = Time.now
+      todo.save
+    end
+   
+    redirect_to :action => 'show'
+  end
+
   def projects_and_actions
     @projects = current_user.projects.active
     respond_to do |format|

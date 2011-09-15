@@ -16,6 +16,7 @@ gem "actionwebservice", :git => "git://github.com/dejan/actionwebservice.git"
 gem "rubycas-client", "~>2.2.1"
 gem "ruby-openid", :require => "openid"
 gem "sqlite3"
+gem "ruby-debug"
 gem 'bcrypt-ruby', '~> 2.1.4'
 
 gem "webrat", ">=0.7.0", :groups => [:cucumber, :test]

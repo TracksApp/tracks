@@ -13,7 +13,7 @@ ActionController::Routing::Routes.draw do |map|
   end
 
   map.resources :projects, :collection => {:order => :post, :alphabetize => :post, :actionize => :post, :done => :get},
-  :member => {:done_todos => :get, :all_done_todos => :get} do |projects|
+  :member => {:done_todos => :get, :all_done_todos => :get, :set_reviewed => :get} do |projects|
     projects.resources :todos, :name_prefix => "project_"
   end
 
