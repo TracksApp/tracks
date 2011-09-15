@@ -1,3 +1,17 @@
+html body.projects div#content.projects div#input_box div#todo_new_action_container div#todo_multi_add form#todo-form-multi-new-action.inline-form label {
+    float: center;
+}
+
+html body.projects div#content.projects div#input_box div#todo_new_action_container div#todo_multi_add form#todo-form-multi-new-action.inline-form input#todos_sequential {
+    float:left;
+    width:30px;
+}
+
+
+input#project_name.project-name, input#project_default_context_name.ui-autocomplete-input, textarea#project_description.project-description, input#project_default_tags.ui-autocomplete-input {
+    width:100%;
+}
+
 div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td {
     margin:0;
     padding:0;
