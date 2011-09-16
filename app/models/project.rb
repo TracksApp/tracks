@@ -107,6 +107,11 @@ class Project < ActiveRecord::Base
     end
   end
 
+  def needs_review?(current_user)
+    return (last_reviewed < current_user.time ) # - current_user.prefs.review_period.days)
+  end
+
+
   def name=(value)
     self[:name] = value.gsub(/\s{2,}/, " ").strip
   end

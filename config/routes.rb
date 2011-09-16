@@ -17,12 +17,18 @@ ActionController::Routing::Routes.draw do |map|
     projects.resources :todos, :name_prefix => "project_"
   end
 
+   map.with_options :controller => :projects do |projects|
+ #    projects.home '', :action => "index"
+     projects.review 'review', :action => :review
+   end
+
   map.resources :notes
 
   map.resources :todos,
     :member => {:toggle_check => :put, :toggle_star => :put, :defer => :put},
     :collection => {:check_deferred => :post, :filter_to_context => :post, :filter_to_project => :post, :done => :get, :all_done => :get
   }
+
 
   map.with_options :controller => :todos do |todos|
     todos.home '', :action => "index"

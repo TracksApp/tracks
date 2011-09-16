@@ -33,6 +33,10 @@ class ProjectsController < ApplicationController
     end
   end
 
+  def review
+    puts "MUAUAUAUAUAUAUAUA"
+  end
+
   def done
     @source_view = params['_source_view'] || 'project_list'
     @page_title = t('projects.list_completed_projects')
