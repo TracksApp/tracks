@@ -67,4 +67,20 @@ module ProjectsHelper
     project_description
   end
 
+  def needsreview_class(item)
+#    if item.due || item.completed?
+#      return ""
+#    elsif item.last_reviewed < current_user.time - (prefs.staleness_starts * 3).days
+#      return " stale_l3"
+#    elsif item.last_reviewed < current_user.time - (prefs.staleness_starts * 2).days
+#      return " stale_l2"
+#    elsif 
+    if item.last_reviewed < current_user.time - (prefs.staleness_starts).days
+      return "needsreview"
+    else
+      return "needsnoreview"
+    end
+  end
+
+
 end

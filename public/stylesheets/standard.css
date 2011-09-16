@@ -1,3 +1,7 @@
+.needsreview {
+    background: #ffC;
+}
+
 .widgets a.reviewed, button.reviewed{
     float:right;
 }
