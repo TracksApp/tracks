@@ -71,11 +71,44 @@ Then /^I should see the todo "([^\"]*)"$/ do |todo_description|
 end
 
 Then /^I should not see the todo "([^\"]*)"$/ do |todo_description|
-  if selenium.is_element_present("//span[.=\"#{todo_description}\"]")
+  xpath = "//span[.=\"#{todo_description}\"]"
+  if selenium.is_element_present(xpath)
     wait_for :timeout => 5 do
-      !selenium.is_element_present("//span[.=\"#{todo_description}\"]")
+      !selenium.is_element_present(xpath)
     end
   end
+end
+
+Then /^I should see a completed todo "([^"]*)"$/ do |todo_description|
+  todo = @current_user.todos.find_by_description(todo_description)
+  todo.should_not be_nil
+
+  # only completed todos have a grey span with the completed_at date
+  xpath = "//div[@id='line_todo_#{todo.id}']/div/span[@class='grey']"
+
+  unless selenium.is_element_present(xpath)
+    wait_for :timeout => 5 do
+      selenium.is_element_present(xpath)
+    end
+  end
+  selenium.is_visible(xpath).should be_true
+
+end
+
+Then /^I should see an active todo "([^"]*)"$/ do |todo_description|
+  todo = @current_user.todos.find_by_description(todo_description)
+  todo.should_not be_nil
+
+  # only active todos have a grip div
+
+  xpath = "//div[@id='line_todo_#{todo.id}']/img[@class='grip']"
+
+  unless selenium.is_element_present(xpath)
+    wait_for :timeout => 5 do
+      selenium.is_element_present(xpath)
+    end
+  end
+  selenium.is_visible(xpath).should be_true
 end
 
 Then /^the number of actions should be (\d+)$/ do |count|

@@ -308,6 +308,7 @@ module TodosHelper
       page.stats    { return @todo.completed? }
       page.tag      { return (@context_changed && !@todo.hidden?) || @tag_was_removed || @todo_hidden_state_changed || @todo_deferred_state_changed }
       page.todo     { return @context_changed || @todo.hidden? || @todo.deferred? || @todo.pending?}
+      page.search   { return false }
     end
     return false
   end
@@ -321,6 +322,7 @@ module TodosHelper
       page.stats    { return !@todo.completed? }
       page.tag      { return !update_needs_to_remove_todo_from_container && !@tag_was_removed }
       page.todo     { return !update_needs_to_remove_todo_from_container }
+      page.search   { return true }
     end
     return false
   end

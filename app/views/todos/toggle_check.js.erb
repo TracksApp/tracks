@@ -5,18 +5,22 @@
     redirect_after_complete();
   <% else
     animation = []
-    animation << "remove_todo"
-    if @todo.completed?
-      animation << "add_to_completed_container" unless source_view_is_one_of(:calendar, :deferred)
-      animation << "add_new_recurring_todo"
-      animation << "activate_pending_todos"
-      animation << "remove_source_container"
+    unless source_view_is(:search)
+      animation << "remove_todo"
+      if @todo.completed?
+        animation << "add_to_completed_container" unless source_view_is_one_of(:calendar, :deferred)
+        animation << "add_new_recurring_todo"
+        animation << "activate_pending_todos"
+        animation << "remove_source_container"
+      else
+        animation << "add_todo_to_context" unless source_view_is(:done)
+        animation << "block_predecessors"
+      end
+      animation << "update_empty_container" if source_view_is_one_of(:tag, :todo)
+      animation << "regenerate_predecessor_family"
     else
-      animation << "add_todo_to_context" unless source_view_is(:done)
-      animation << "block_predecessors"
-    end
-    animation << "update_empty_container" if source_view_is_one_of(:tag, :todo)
-    animation << "regenerate_predecessor_family" -%>
+      animation << "replace_todo"
+    end -%>
     <%= render_animation(animation) %>
     TracksPages.set_page_badge(<%= @down_count %>);
   <% end -%>
@@ -53,6 +57,11 @@ function add_to_completed_container(next_steps) {
     $("#empty-d").slideUp(100);
     highlight_updated_todo(next_steps);
   <% end -%>
+}
+
+function replace_todo(next_steps) {
+  $('#<%= dom_id(@todo) %>').html(html_for_todo());
+  next_steps.go();
 }
 
 function add_todo_to_context(next_steps) {

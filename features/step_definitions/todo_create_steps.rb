@@ -40,6 +40,12 @@ Given /^I have a todo "([^"]*)"$/ do |description|
   Given "I have a todo \"#{description}\" in the context \"Context A\""
 end
 
+Given /^I have the following todos:$/ do |table|
+  table.hashes.each do | todo |
+    Given "I have a todo \"#{todo[:description]}\" in the context \"#{todo[:context]}\""
+  end
+end
+
 Given /^I have a todo "([^"]*)" with notes "([^"]*)"$/ do |description, notes|
   Given "I have a todo \"#{description}\" in the context \"Context A\""
   @todo.notes = notes

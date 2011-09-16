@@ -27,8 +27,8 @@
 function remove_todo(next_steps) {
   $('#<%= dom_id(@todo) %>').fadeOut(400, function() {
     $('#<%= dom_id(@todo) %>').remove();
-    <% if source_view_is :calendar 
-         # in calendar view it is possible to have a todo twice on the page 
+    <% if source_view_is :calendar
+         # in calendar view it is possible to have a todo twice on the page
     -%>
          $('#<%= dom_id(@todo) %>').remove();
     <% end %>
@@ -46,7 +46,7 @@ function add_to_existing_container(next_steps) {
     <% end -%>
   <% else -%>
     <% unless (@todo_hidden_state_changed && @todo.hidden?) || @todo_was_deferred_from_active_state -%>
-      $('#c<%= @todo.context_id %>').fadeIn(500, function() { 
+      $('#c<%= @todo.context_id %>').fadeIn(500, function() {
         next_steps.go();
         <% if @target_context_count==1 -%>
           $("#<%=  empty_container_msg_div_id %>").slideUp(100);
@@ -110,7 +110,7 @@ function html_for_error_messages() {
   return "<%= escape_javascript(error_messages_for('todo')) %>";
 }
 
-function update_predecessors() {
+function update_predecessors(next_steps) {
   <% @todo.uncompleted_predecessors.each do |p| -%>
     if ($('#<%=item_container_id(p)%>')) {
       $('#<%=dom_id(p)%>').html('<%=escape_javascript(render(:partial => p, :locals => { :parent_container_type => parent_container_type }))%>');
@@ -123,4 +123,5 @@ function update_predecessors() {
       }
     <% end -%>
   <% end -%>
+  next_steps.go();
 }
