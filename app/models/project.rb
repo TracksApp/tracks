@@ -116,6 +116,7 @@ class Project < ActiveRecord::Base
   def blocked?
     ## mutually exclusive for stalled and blocked
     return false if stalled?
+    return false if completed?
     is_blocked = true
     todos.each do |t|
       is_blocked = false if (!t.completed? && !t.deferred? && !t.pending?)
