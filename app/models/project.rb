@@ -125,6 +125,7 @@ class Project < ActiveRecord::Base
   
   def stalled?
     return true if todos.count == 0
+    return false if completed?
     is_stalled = true
      todos.each do |t|
        is_stalled = false if (!t.completed?)
