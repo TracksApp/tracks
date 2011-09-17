@@ -61,6 +61,9 @@ module NavigationHelpers
       notes_path(options)
     when /the calendar page/
       calendar_path(options)
+    when /the review page/
+      @source_view = "review"
+      review_path(options)
     when /the contexts page/
       @source_view = "contexts"
       contexts_path(options)

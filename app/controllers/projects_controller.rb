@@ -34,7 +34,40 @@ class ProjectsController < ApplicationController
   end
 
   def review
-    puts "MUAUAUAUAUAUAUAUA"
+    ## select project that need reviewing
+    @projects_to_review = Array.new
+    current_user.projects.each do |project|
+      @projects_to_review.push project if project.needs_review?(current_user)
+    end
+
+    ## select project that are stalled
+    @stalled_projects = Array.new
+    current_user.projects.each do |project|
+      @stalled_projects.push project if project.stalled?
+    end
+
+    ## select project that are stalled
+    @blocked_projects = Array.new
+    current_user.projects.each do |project|
+      @blocked_projects.push project if project.blocked?
+    end
+    
+    @contexts = current_user.contexts.all
+    init_not_done_counts(['project'])
+    init_project_hidden_todo_counts(['project'])
+    if params[:only_active_with_no_next_actions]
+      @projects = current_user.projects.active.select { |p| count_undone_todos(p) == 0  }
+    else
+      @projects = current_user.projects.all
+    end
+
+    @page_title = t('projects.list_reviews')
+    @count = @projects_to_review.count + @blocked_projects.count + @stalled_projects.count
+
+    @no_projects = current_user.projects.empty?
+    current_user.projects.cache_note_counts
+    @new_project = current_user.projects.build
+    render
   end
 
   def done

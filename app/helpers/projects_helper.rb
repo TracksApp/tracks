@@ -68,13 +68,13 @@ module ProjectsHelper
   end
 
   def needsreview_class(item)
-    ### FIXME: need to check to do this with active projects only
+    raise "item must be a Project " unless item.kind_of? Project
+
     if item.needs_review?(current_user)
       return "needsreview"
     else
       return "needsnoreview"
     end
   end
-
 
 end
