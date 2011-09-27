@@ -23,6 +23,10 @@ gem "webrat", ">=0.7.0", :groups => [:cucumber, :test]
 gem "database_cleaner", ">=0.5.0", :groups => [:cucumber, :selenium]
 gem "cucumber-rails", "~>0.3.0", :groups => :cucumber
 
+group :development do
+  gem "ruby-debug"
+end
+
 group :test do
   gem "flexmock"
   gem "ZenTest", ">=4.0.0"
