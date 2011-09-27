@@ -42,6 +42,9 @@ class ProjectsController < ApplicationController
 
     ## select project that are stalled
     @blocked_projects = current_user.projects.select  {|p| p.blocked?}
+
+    ## select projects that are current
+    @current_projects = current_user.projects.select  {|p| not(p.needs_review?(current_user))}
    
     @contexts = current_user.contexts.all
     init_not_done_counts(['project'])
@@ -53,7 +56,7 @@ class ProjectsController < ApplicationController
     end
 
     @page_title = t('projects.list_reviews')
-    @count = @projects_to_review.count + @blocked_projects.count + @stalled_projects.count
+    @count = @projects_to_review.count + @blocked_projects.count + @stalled_projects.count + @current_projects.count
 
     @no_projects = current_user.projects.empty?
     current_user.projects.cache_note_counts

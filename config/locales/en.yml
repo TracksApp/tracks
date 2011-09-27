@@ -182,6 +182,7 @@ en:
         mobile_todos_per_page: Actions per page (Mobile View)
         verbose_action_descriptors: Verbose action descriptors
         staleness_starts: Start of staleness
+        review_period: Project review interval
         sms_context: Default email context
         title_date_format: Title date format
         show_number_completed: Show number of completed actions
@@ -587,6 +588,8 @@ en:
     stalled: Stalled
     blocked_plural: Blocked
     blocked: Blocked
+    current_plural: Up-to-date
+    current: Up-to-date
   projects:
     was_marked_hidden: has been marked as hidden
     edit_project_title: Edit project

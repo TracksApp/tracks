@@ -6,7 +6,7 @@
   <h2>
     <span id="<%= state %>-projects-count" class="badge"><%= project_state_group.length%><%= total_count_string%></span>
 
-    <%= t('common.last' ) unless (state == 'review' || state == 'stalled' || state == 'blocked')%> 
+    <%= t('common.last' ) unless (state == 'review' || state == 'stalled' || state == 'blocked' || state == 'current')%> 
     <%= t('states.'+state+'_plural' )%> 
     <%= t('common.projects') %><%= total_count==-1 ? "" : " ("+link_to("Show all", done_projects_path)+")"%>
 
