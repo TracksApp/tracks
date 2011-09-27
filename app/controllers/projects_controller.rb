@@ -42,10 +42,7 @@ class ProjectsController < ApplicationController
 
     ## select project that are stalled
     @blocked_projects = current_user.projects.select  {|p| p.blocked?}
-
-
-
-    
+   
     @contexts = current_user.contexts.all
     init_not_done_counts(['project'])
     init_project_hidden_todo_counts(['project'])
