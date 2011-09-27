@@ -22,6 +22,7 @@ en:
       feeds: Feeds
       starred: Starred
       notes_title: Show all notes
+      review_title: Make review
       stats: Statistics
       tickler_title: Tickler
       manage_users: Manage users
@@ -102,6 +103,7 @@ en:
     server_error: An error occurred on the server.
     forum: Forum
     notes: Notes
+    review: Review
     last: Last
     projects: Projects
     action: Action
@@ -579,6 +581,12 @@ en:
     active_plural: Active
     hidden: Hidden
     active: Active
+    review_plural: Dated
+    review: Dated
+    stalled_plural: Stalled
+    stalled: Stalled
+    blocked_plural: Blocked
+    blocked: Blocked
   projects:
     was_marked_hidden: has been marked as hidden
     edit_project_title: Edit project
@@ -616,6 +624,7 @@ en:
     completed_projects: Completed projects
     with_default_tags: and with '%{tags}' as the default tags
     list_projects: TRACKS::List Projects
+    list_reviews: TRACKS::Review
     project_saved_status: Project saved
     add_project: Add Project
     add_note: Add a note

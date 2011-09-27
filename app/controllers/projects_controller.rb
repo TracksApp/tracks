@@ -33,6 +33,37 @@ class ProjectsController < ApplicationController
     end
   end
 
+  def review
+    ## select project that need reviewing
+    @projects_to_review = current_user.projects.select  {|p| p.needs_review?(current_user)}
+
+    ## select project that are stalled
+    @stalled_projects = current_user.projects.select  {|p| p.stalled?}
+
+    ## select project that are stalled
+    @blocked_projects = current_user.projects.select  {|p| p.blocked?}
+
+
+
+    
+    @contexts = current_user.contexts.all
+    init_not_done_counts(['project'])
+    init_project_hidden_todo_counts(['project'])
+    if params[:only_active_with_no_next_actions]
+      @projects = current_user.projects.active.select { |p| count_undone_todos(p) == 0  }
+    else
+      @projects = current_user.projects.all
+    end
+
+    @page_title = t('projects.list_reviews')
+    @count = @projects_to_review.count + @blocked_projects.count + @stalled_projects.count
+
+    @no_projects = current_user.projects.empty?
+    current_user.projects.cache_note_counts
+    @new_project = current_user.projects.build
+    render
+  end
+
   def done
     @source_view = params['_source_view'] || 'project_list'
     @page_title = t('projects.list_completed_projects')
@@ -49,6 +80,13 @@ class ProjectsController < ApplicationController
 
     init_not_done_counts(['project'])
     render
+  end
+
+  def set_reviewed
+    @project = current_user.projects.find(params[:id])
+    @project.last_reviewed = Time.now
+    @project.save
+    redirect_to :action => 'show'
   end
 
   def projects_and_actions

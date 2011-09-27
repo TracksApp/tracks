@@ -12,8 +12,12 @@ suppress_edit_button ||= false
       </div>
     <% end -%>
 
+    
     <div class="data">
-      <%= link_to_project( project ) %><%= " (" + count_undone_todos_and_notes_phrase(project,"actions") + ")" %>
+      <span class="<%= needsreview_class( project ) %>">
+         <%= link_to_project( project ) %>
+         <%= " (" + count_undone_todos_and_notes_phrase(project,"actions") + ")" %>
+      </span>      
     </div>
 
     <div class="buttons">

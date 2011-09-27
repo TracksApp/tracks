@@ -107,6 +107,34 @@ class Project < ActiveRecord::Base
     end
   end
 
+  def needs_review?(current_user)
+    return false unless !nil?
+    return true if last_reviewed.nil?
+    return (active? && (last_reviewed < current_user.time - current_user.prefs.review_period.days)) 
+  end
+
+  def blocked?
+    ## mutually exclusive for stalled and blocked
+    return false if stalled?
+    return false if completed?
+    is_blocked = true
+    todos.each do |t|
+      is_blocked = false if (!t.completed? && !t.deferred? && !t.pending?)
+    end
+    return is_blocked
+  end
+  
+  def stalled?
+    return true if todos.count == 0
+    return false if completed?
+    is_stalled = true
+     todos.each do |t|
+       is_stalled = false if (!t.completed?)
+     end
+    return is_stalled
+  end
+
+
   def name=(value)
     self[:name] = value.gsub(/\s{2,}/, " ").strip
   end

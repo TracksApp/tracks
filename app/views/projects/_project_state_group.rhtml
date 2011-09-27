@@ -5,7 +5,11 @@
 <div class="project-state-group" id="list-<%= state %>-projects-container" <%= " style=\"display:none\"" if project_state_group.empty? %>>
   <h2>
     <span id="<%= state %>-projects-count" class="badge"><%= project_state_group.length%><%= total_count_string%></span>
-    <%= t('common.last' )%> <%= t('states.'+state+'_plural' )%> <%= t('common.projects') %><%= total_count==-1 ? "" : " ("+link_to("Show all", done_projects_path)+")"%>
+
+    <%= t('common.last' ) unless (state == 'review' || state == 'stalled' || state == 'blocked')%> 
+    <%= t('states.'+state+'_plural' )%> 
+    <%= t('common.projects') %><%= total_count==-1 ? "" : " ("+link_to("Show all", done_projects_path)+")"%>
+
   </h2>
   <div class="menu_sort"><span class="sort_separator"><%= t('common.sort.sort') %>&nbsp;</span>
     <div class="alpha_sort">
@@ -18,6 +22,6 @@
   </div>
 
   <div id="list-<%= state %>-projects" class="project-list">
-    <%= render :partial => 'project_listing', :collection => project_state_group %>
+    <%= render :partial => 'projects/project_listing', :collection => project_state_group %>
   </div>
 </div>

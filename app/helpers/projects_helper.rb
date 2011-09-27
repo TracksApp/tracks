@@ -67,4 +67,14 @@ module ProjectsHelper
     project_description
   end
 
+  def needsreview_class(item)
+    raise "item must be a Project " unless item.kind_of? Project
+
+    if item.needs_review?(current_user)
+      return "needsreview"
+    else
+      return "needsnoreview"
+    end
+  end
+
 end
