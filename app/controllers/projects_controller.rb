@@ -35,22 +35,16 @@ class ProjectsController < ApplicationController
 
   def review
     ## select project that need reviewing
-    @projects_to_review = Array.new
-    current_user.projects.each do |project|
-      @projects_to_review.push project if project.needs_review?(current_user)
-    end
+    @projects_to_review = current_user.projects.select  {|p| p.needs_review?(current_user)}
 
     ## select project that are stalled
-    @stalled_projects = Array.new
-    current_user.projects.each do |project|
-      @stalled_projects.push project if project.stalled?
-    end
+    @stalled_projects = current_user.projects.select  {|p| p.stalled?}
 
     ## select project that are stalled
-    @blocked_projects = Array.new
-    current_user.projects.each do |project|
-      @blocked_projects.push project if project.blocked?
-    end
+    @blocked_projects = current_user.projects.select  {|p| p.blocked?}
+
+
+
     
     @contexts = current_user.contexts.all
     init_not_done_counts(['project'])

@@ -2,8 +2,9 @@
     background: #ffC;
 }
 
-.widgets a.reviewed, button.reviewed{
+.widgets a.reviewed, button.reviewed {
     float:right;
+}
 
 div.depends_on label {
     float: left;
