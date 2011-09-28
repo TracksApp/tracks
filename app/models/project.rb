@@ -109,28 +109,20 @@ class Project < ActiveRecord::Base
 
   def needs_review?(current_user)
     return true if last_reviewed.nil?
-    return (active? && (last_reviewed < current_user.time - current_user.prefs.review_period.days)) 
+    return (active? && (last_reviewed < current_user.time - current_user.prefs.review_period.days))
   end
 
   def blocked?
     ## mutually exclusive for stalled and blocked
-    return false if stalled?
-    return false if completed?
-    is_blocked = true
-    todos.each do |t|
-      is_blocked = false if (!t.completed? && !t.deferred? && !t.pending?)
-    end
-    return is_blocked
+    # blocked is uncompleted project with deferred or pending todos, but no next actions
+    return false if self.stalled? || self.completed?
+    return !self.todos.deferred_or_blocked.empty?
   end
-  
+
   def stalled?
-    return true if todos.count == 0
-    return false if completed?
-    is_stalled = true
-     todos.each do |t|
-       is_stalled = false if (!t.completed?)
-     end
-    return is_stalled
+    # stalled is active/hidden project with no active todos
+    return false if self.completed?
+    return self.todos.not_completed.empty?
   end
 
 

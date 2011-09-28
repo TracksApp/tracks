@@ -12,15 +12,15 @@ ActionController::Routing::Routes.draw do |map|
     contexts.resources :todos, :name_prefix => "context_"
   end
 
-  map.resources :projects, :collection => {:order => :post, :alphabetize => :post, :actionize => :post, :done => :get},
-  :member => {:done_todos => :get, :all_done_todos => :get, :set_reviewed => :get} do |projects|
-    projects.resources :todos, :name_prefix => "project_"
+  map.resources :projects,
+    :collection => {:order => :post, :alphabetize => :post, :actionize => :post, :done => :get},
+    :member => {:done_todos => :get, :all_done_todos => :get, :set_reviewed => :post} do |projects|
+      projects.resources :todos, :name_prefix => "project_"
   end
 
-   map.with_options :controller => :projects do |projects|
- #    projects.home '', :action => "index"
-     projects.review 'review', :action => :review
-   end
+  map.with_options :controller => :projects do |projects|
+    projects.review 'review', :action => :review
+  end
 
   map.resources :notes
 
@@ -28,7 +28,6 @@ ActionController::Routing::Routes.draw do |map|
     :member => {:toggle_check => :put, :toggle_star => :put, :defer => :put},
     :collection => {:check_deferred => :post, :filter_to_context => :post, :filter_to_project => :post, :done => :get, :all_done => :get
   }
-
 
   map.with_options :controller => :todos do |todos|
     todos.home '', :action => "index"
@@ -104,7 +103,6 @@ ActionController::Routing::Routes.draw do |map|
   map.search 'search', :controller => 'search', :action => 'index'
   map.data 'data', :controller => 'data', :action => 'index'
 
-  map.connect '/selenium_helper/login', :controller => 'selenium_helper', :action => 'login' if Rails.env == 'test'
   Translate::Routes.translation_ui(map) if Rails.env != "production"
 
   # Install the default route as the lowest priority.

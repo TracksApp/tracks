@@ -2,7 +2,7 @@ class ProjectsController < ApplicationController
 
   helper :application, :todos, :notes
   before_filter :set_source_view
-  before_filter :set_project_from_params, :only => [:update, :destroy, :show, :edit]
+  before_filter :set_project_from_params, :only => [:update, :destroy, :show, :edit, :set_reviewed]
   before_filter :default_context_filter, :only => [:create, :update]
   skip_before_filter :login_required, :only => [:index]
   prepend_before_filter :login_or_feed_token_required, :only => [:index]
@@ -34,34 +34,23 @@ class ProjectsController < ApplicationController
   end
 
   def review
-    ## select project that need reviewing
-    @projects_to_review = current_user.projects.select  {|p| p.needs_review?(current_user)}
-
-    ## select project that are stalled
-    @stalled_projects = current_user.projects.select  {|p| p.stalled?}
-
-    ## select project that are stalled
-    @blocked_projects = current_user.projects.select  {|p| p.blocked?}
-
-    ## select projects that are current
-    @current_projects = current_user.projects.select  {|p| not(p.needs_review?(current_user))}
-   
+    @page_title = t('projects.list_reviews')
+    @projects = current_user.projects.all
     @contexts = current_user.contexts.all
+    @projects_to_review = current_user.projects.select  {|p| p.needs_review?(current_user)}
+    @stalled_projects = current_user.projects.select  {|p| p.stalled?}
+    @blocked_projects = current_user.projects.select  {|p| p.blocked?}
+    @current_projects = current_user.projects.select  {|p| not(p.needs_review?(current_user))}
+
     init_not_done_counts(['project'])
     init_project_hidden_todo_counts(['project'])
-    if params[:only_active_with_no_next_actions]
-      @projects = current_user.projects.active.select { |p| count_undone_todos(p) == 0  }
-    else
-      @projects = current_user.projects.all
-    end
+    current_user.projects.cache_note_counts
 
     @page_title = t('projects.list_reviews')
     @count = @projects_to_review.count + @blocked_projects.count + @stalled_projects.count + @current_projects.count
 
     @no_projects = current_user.projects.empty?
-    current_user.projects.cache_note_counts
     @new_project = current_user.projects.build
-    render
   end
 
   def done
@@ -79,12 +68,10 @@ class ProjectsController < ApplicationController
     @range_high = @range_low + @projects.size - 1
 
     init_not_done_counts(['project'])
-    render
   end
 
   def set_reviewed
-    @project = current_user.projects.find(params[:id])
-    @project.last_reviewed = Time.now
+    @project.last_reviewed = Time.zone.now
     @project.save
     redirect_to :action => 'show'
   end
