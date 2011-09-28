@@ -40,7 +40,7 @@ class ProjectsController < ApplicationController
     @projects_to_review = current_user.projects.select  {|p| p.needs_review?(current_user)}
     @stalled_projects = current_user.projects.select  {|p| p.stalled?}
     @blocked_projects = current_user.projects.select  {|p| p.blocked?}
-    @current_projects = current_user.projects.select  {|p| not(p.needs_review?(current_user))}
+    @current_projects = current_user.projects.uncompleted.select  {|p| not(p.needs_review?(current_user))}
 
     init_not_done_counts(['project'])
     init_project_hidden_todo_counts(['project'])
