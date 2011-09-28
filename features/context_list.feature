@@ -21,7 +21,7 @@ Feature: Manage the list of contexts
     And I should see "@boss"
     And the badge should show 3
 
-  Scenario: Clicking on a project takes me to the context page
+  Scenario: Clicking on a context takes me to the context page
     Given I have a context called "@computer"
     When I go to the contexts page
     And I follow "@computer"
@@ -114,3 +114,4 @@ Feature: Manage the list of contexts
     Then the new context form should not be visible
     When I follow "Create a new context"
     Then the new context form should be visible
+

@@ -42,14 +42,6 @@ When /^I add a new hidden context "([^"]*)"$/ do |context_name|
   submit_new_context_form
 end
 
-Then /^context "([^"]*)" should be above context "([^"]*)"$/ do |context_high, context_low|
-  high_id = @current_user.contexts.find_by_name(context_high).id
-  low_id = @current_user.contexts.find_by_name(context_low).id
-  high_pos = selenium.get_element_position_top("//div[@id='context_#{high_id}']").to_i
-  low_pos = selenium.get_element_position_top("//div[@id='context_#{low_id}']").to_i
-  (high_pos < low_pos).should be_true
-end
-
 When /^I drag context "([^"]*)" below context "([^"]*)"$/ do |context_drag, context_drop|
   drag_id = @current_user.contexts.find_by_name(context_drag).id
   drop_id = @current_user.contexts.find_by_name(context_drop).id
@@ -65,6 +57,14 @@ When /^I drag context "([^"]*)" below context "([^"]*)"$/ do |context_drag, cont
   selenium.mouse_move_at(drop_context_container_xpath,coord_string)
   # no need to simulate mouse_over for this test
   selenium.mouse_up_at(drop_context_container_xpath,coord_string)
+end
+
+Then /^context "([^"]*)" should be above context "([^"]*)"$/ do |context_high, context_low|
+  high_id = @current_user.contexts.find_by_name(context_high).id
+  low_id = @current_user.contexts.find_by_name(context_low).id
+  high_pos = selenium.get_element_position_top("//div[@id='context_#{high_id}']").to_i
+  low_pos = selenium.get_element_position_top("//div[@id='context_#{low_id}']").to_i
+  (high_pos < low_pos).should be_true
 end
 
 Then /^I should see that a context named "([^"]*)" is not present$/ do |context_name|
