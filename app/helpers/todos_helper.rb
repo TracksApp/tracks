@@ -122,20 +122,20 @@ module TodosHelper
     todo.tags.collect{|t| t.name}.join(', ')
   end
 
-  def tag_list(todo=@todo)
-    tags_except_starred = todo.tags.reject{|t| t.name == Todo::STARRED_TAG_NAME}
-    tag_list = tags_except_starred.collect{|t| "<span class=\"tag #{t.name.gsub(' ','-')}\">" + link_to(t.name, :controller => "todos", :action => "tag", :id => t.name) + "</span>"}.join('')
-    "<span class='tags'>#{tag_list}</span>"
+  def tag_span (tag, mobile=false)
+    content_tag(:span, :class => "tag #{tag.name.gsub(' ','-')}") { link_to (tag.name, mobile ? mobile_tag_path(tag.name) : tag_path(tag.name)) }
+  end
+
+  def tag_list(todo=@todo, mobile=false)
+    content_tag(:span, :class => 'tags') { todo.tags.all_except_starred.collect{|tag| tag_span(tag, mobile)}.join('') }
   end
 
   def tag_list_mobile(todo=@todo)
-    tags_except_starred = todo.tags.reject{|t| t.name == Todo::STARRED_TAG_NAME}
-    # removed the link. TODO: add link to mobile view of tagged actions
-    tag_list = tags_except_starred.collect{|t|
-      "<span class=\"tag\">" +
-        link_to(t.name, {:action => "tag", :controller => "todos", :id => t.name+".m"}) +
-        "</span>"}.join('')
-    if tag_list.empty? then "" else "<span class=\"tags\">#{tag_list}</span>" end
+    unless todo.tags.all_except_starred.empty?
+      return tag_list(todo, true)
+    else
+      return ""
+    end
   end
 
   def deferred_due_date(todo=@todo)

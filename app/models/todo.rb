@@ -46,13 +46,14 @@ class Todo < ActiveRecord::Base
   STARRED_TAG_NAME = "starred"
   DEFAULT_INCLUDES = [ :project, :context, :tags, :taggings, :pending_successors, :uncompleted_predecessors, :recurring_todo ]
 
-  # regular expressions for dependencies
+  # regular expressions for dependencies. TODO: are these still used?
   RE_TODO = /[^']+/
   RE_CONTEXT = /[^']+/
   RE_PROJECT = /[^']+/
   RE_PARTS = /'(#{RE_TODO})'\s<'(#{RE_CONTEXT})';\s'(#{RE_PROJECT})'>/ # results in array
   RE_SPEC = /'#{RE_TODO}'\s<'#{RE_CONTEXT}';\s'#{RE_PROJECT}'>/ # results in string
 
+  # state machine
   include AASM
   aasm_column :state
   aasm_initial_state Proc.new { |t| (t.show_from && t.user && (t.show_from > t.user.date)) ? :deferred : :active}
