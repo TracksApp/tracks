@@ -65,10 +65,10 @@ class User < ActiveRecord::Base
                 todos_in_project.sort!{ |x, y| -(x.todos.active.count <=> y.todos.active.count) }
                 todos_in_project.reject{ |p| p.todos.active.count > 0 }
                 sorted_project_ids = todos_in_project.map {|p| p.id}
-                
+
                 all_project_ids = find(:all).map {|p| p.id}
                 other_project_ids = all_project_ids - sorted_project_ids
-                
+
                 update_positions(sorted_project_ids + other_project_ids)
 
                 return find(:all, :conditions => scope_conditions)
@@ -90,14 +90,14 @@ class User < ActiveRecord::Base
            end
   has_many :notes, :order => "created_at DESC", :dependent => :delete_all
   has_one :preference, :dependent => :destroy
-  
+
   attr_protected :is_admin
 
   validates_presence_of :login
   validates_presence_of :password, :if => :password_required?
   validates_length_of :password, :within => 5..40, :if => :password_required?
   validates_presence_of :password_confirmation, :if => :password_required?
-  validates_confirmation_of :password  
+  validates_confirmation_of :password
   validates_length_of :login, :within => 3..80
   validates_uniqueness_of :login, :on => :create
   validates_presence_of :open_id_url, :if => :using_openid?
@@ -109,7 +109,7 @@ class User < ActiveRecord::Base
   #for will_paginate plugin
   cattr_accessor :per_page
   @@per_page = 5
-  
+
   def validate
     unless Tracks::Config.auth_schemes.include?(auth_type)
       errors.add("auth_type", "not a valid authentication type (#{auth_type})")
@@ -127,41 +127,41 @@ class User < ActiveRecord::Base
       return candidate if candidate.auth_type == 'database' and
         candidate.password_matches? pass
     end
-    
+
     if Tracks::Config.auth_schemes.include?('ldap')
       return candidate if candidate.auth_type == 'ldap' && SimpleLdapAuthenticator.valid?(login, pass)
     end
-    
+
     if Tracks::Config.auth_schemes.include?('cas')
       # because we can not auth them with out thier real password we have to settle for this
       return candidate if candidate.auth_type.eql?("cas")
     end
-    
+
     if Tracks::Config.auth_schemes.include?('open_id')
       # hope the user enters the correct data
       return candidate if candidate.auth_type.eql?("open_id")
     end
-    
+
     return nil
   end
-  
+
   def self.find_by_open_id_url(raw_identity_url)
     normalized_open_id_url = OpenIdAuthentication.normalize_identifier(raw_identity_url)
     find(:first, :conditions => ['open_id_url = ?', normalized_open_id_url])
   end
-  
+
   def self.no_users_yet?
     count == 0
   end
-  
+
   def self.find_admin
-    find(:first, :conditions => [ "is_admin = ?", true ])    
+    find(:first, :conditions => [ "is_admin = ?", true ])
   end
-  
+
   def to_param
     login
   end
-  
+
   def display_name
     if first_name.blank? && last_name.blank?
       return login
@@ -172,13 +172,13 @@ class User < ActiveRecord::Base
     end
     "#{first_name} #{last_name}"
   end
-  
+
   def change_password(pass,pass_confirm)
     self.password = pass
     self.password_confirmation = pass_confirm
     save!
   end
-  
+
   def time
     Time.now.in_time_zone(prefs.time_zone)
   end
@@ -186,19 +186,19 @@ class User < ActiveRecord::Base
   def date
     time.midnight
   end
-  
+
   def at_midnight(date)
     return ActiveSupport::TimeZone[prefs.time_zone].local(date.year, date.month, date.day, 0, 0, 0)
   end
-  
+
   def generate_token
     self.token = self.class.sha1 "#{Time.now.to_i}#{rand}"
   end
-  
+
   def remember_token?
-    remember_token_expires_at && Time.now.utc < remember_token_expires_at 
+    remember_token_expires_at && Time.now.utc < remember_token_expires_at
   end
-  
+
   # These create and unset the fields required for remembering users between browser closes
   def remember_me
     self.remember_token_expires_at = 2.weeks.from_now.utc
@@ -227,40 +227,40 @@ class User < ActiveRecord::Base
 
 protected
 
-  def self.salted(s)
+  def salted(s)
     "#{Tracks::Config.salt}--#{s}--"
   end
 
-  def self.sha1(s)
+  def sha1(s)
     Digest::SHA1.hexdigest salted s
   end
 
-  def self.hash(s)
+  def hash(s)
     BCrypt::Password.create s
   end
-  
+
   def crypt_password
     return if password.blank?
     write_attribute("crypted_password", self.class.hash(password)) if password == password_confirmation
   end
-  
+
   def password_required?
     auth_type == 'database' && crypted_password.blank? || !password.blank?
   end
-  
+
   def using_openid?
     auth_type == 'open_id'
   end
-  
+
   def normalize_open_id_url
     return if open_id_url.nil?
-    
+
     # fixup empty url value
     if open_id_url.empty?
       self.open_id_url = nil
       return
     end
-    
+
     self.open_id_url = OpenIdAuthentication.normalize_identifier(open_id_url)
   end
 end

@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
 
   layout proc{ |controller| controller.mobile? ? "mobile" : "standard" }
   exempt_from_layout /\.js\.erb$/
- 
+
   before_filter :check_for_deprecated_password_hash
   before_filter :set_session_expiration
   before_filter :set_time_zone
@@ -24,12 +24,12 @@ class ApplicationController < ActionController::Base
   prepend_before_filter :login_required
   prepend_before_filter :enable_mobile_content_negotiation
   after_filter :set_charset
-  
+
   # By default, sets the charset to UTF-8 if it isn't already set
   def set_charset
-    headers["Content-Type"] ||= "text/html; charset=UTF-8" 
+    headers["Content-Type"] ||= "text/html; charset=UTF-8"
   end
-  
+
   def set_locale
     locale = params[:locale] # specifying a locale in the request takes precedence
     locale = locale || prefs.locale unless current_user.nil? # otherwise, the locale of the currently logged in user takes over
@@ -37,7 +37,7 @@ class ApplicationController < ActionController::Base
     I18n.locale = locale.nil? ? I18n.default_locale : (I18n::available_locales.include?(locale.to_sym) ? locale : I18n.default_locale)
     logger.debug("Selected '#{I18n.locale}' as locale")
   end
-  
+
   def set_session_expiration
     # http://wiki.rubyonrails.com/rails/show/HowtoChangeSessionOptions
     unless session == nil
@@ -68,11 +68,11 @@ class ApplicationController < ActionController::Base
       redirect_to change_password_user_path current_user
     end
   end
-  
+
   def render_failure message, status = 404
     render :text => message, :status => status
   end
-  
+
   # def rescue_action(exception)
   #   log_error(exception) if logger
   #   respond_to do |format|
@@ -84,7 +84,7 @@ class ApplicationController < ActionController::Base
   #     format.xml { render :text => 'An error occurred on the server.' + $! }
   #   end
   # end
-  
+
   # Returns a count of next actions in the given context or project The result
   # is count and a string descriptor, correctly pluralised if there are no
   # actions or multiple actions
@@ -94,7 +94,7 @@ class ApplicationController < ActionController::Base
     word = count == 1 ? string.singularize : string.pluralize
     return count.to_s + "&nbsp;" + word
   end
-  
+
   def count_undone_todos(todos_parent)
     if todos_parent.nil?
       count = 0
@@ -162,11 +162,11 @@ class ApplicationController < ActionController::Base
   def create_todo_from_recurring_todo(rt, date=nil)
     # create todo and initialize with data from recurring_todo rt
     todo = current_user.todos.build( { :description => rt.description, :notes => rt.notes, :project_id => rt.project_id, :context_id => rt.context_id})
-    
+
     # set dates
     todo.recurring_todo_id = rt.id
     todo.due = rt.get_due_date(date)
-    
+
     show_from_date = rt.get_show_from_date(date)
     if show_from_date.nil?
       todo.show_from=nil
@@ -174,20 +174,20 @@ class ApplicationController < ActionController::Base
       # make sure that show_from is not in the past
       todo.show_from = show_from_date < Time.zone.now ? nil : show_from_date
     end
-    
+
     saved = todo.save
     if saved
       todo.tag_with(rt.tag_list)
-      todo.tags.reload 
+      todo.tags.reload
     end
 
     # increate number of occurences created from recurring todo
     rt.inc_occurences
-    
+
     # mark recurring todo complete if there are no next actions left
     checkdate = todo.due.nil? ? todo.show_from : todo.due
     rt.toggle_completion! unless rt.has_next_todo(checkdate)
-    
+
     return saved ? todo : nil
   end
 
@@ -198,21 +198,21 @@ class ApplicationController < ActionController::Base
   end
 
   protected
-  
+
   def admin_login_required
     unless User.find_by_id_and_is_admin(session['user_id'], true)
       render :text => t('errors.user_unauthorized'), :status => 401
       return false
     end
   end
-  
+
   def redirect_back_or_home
     respond_to do |format|
       format.html { redirect_back_or_default home_url }
       format.m { redirect_back_or_default mobile_url }
     end
   end
-  
+
   def boolean_param(param_name)
     return false if param_name.blank?
     s = params[param_name]
@@ -220,11 +220,11 @@ class ApplicationController < ActionController::Base
     return true if s == true || s =~ /^true$/i
     raise ArgumentError.new("invalid value for Boolean: \"#{s}\"")
   end
-  
+
   def self.openid_enabled?
     Tracks::Config.openid_enabled?
   end
-  
+
   def openid_enabled?
     self.class.openid_enabled?
   end
@@ -244,18 +244,18 @@ class ApplicationController < ActionController::Base
   def prefered_auth?
     self.class.prefered_auth?
   end
-  
+
   def get_done_today(completed_todos, includes = {:include => Todo::DEFAULT_INCLUDES})
     start_of_this_day = Time.zone.now.beginning_of_day
     completed_todos.completed_after(start_of_this_day).all(includes)
   end
-    
+
   def get_done_this_week(completed_todos, includes = {:include => Todo::DEFAULT_INCLUDES})
     start_of_this_week = Time.zone.now.beginning_of_week
     start_of_this_day = Time.zone.now.beginning_of_day
     completed_todos.completed_after(start_of_this_week).completed_before(start_of_this_day).all(includes)
   end
-  
+
   def get_done_this_month(completed_todos, includes = {:include => Todo::DEFAULT_INCLUDES})
     start_of_this_month = Time.zone.now.beginning_of_month
     start_of_this_week = Time.zone.now.beginning_of_week
@@ -264,11 +264,11 @@ class ApplicationController < ActionController::Base
 
 
   private
-        
+
   def parse_date_per_user_prefs( s )
     prefs.parse_date(s)
   end
-    
+
   def init_data_for_sidebar
     @completed_projects = current_user.projects.completed
     @hidden_projects = current_user.projects.hidden
@@ -276,25 +276,25 @@ class ApplicationController < ActionController::Base
 
     @active_contexts = current_user.contexts.active
     @hidden_contexts = current_user.contexts.hidden
-    
+
     init_not_done_counts
     if prefs.show_hidden_projects_in_sidebar
       init_project_hidden_todo_counts(['project'])
     end
   end
-  
+
   def init_not_done_counts(parents = ['project','context'])
     parents.each do |parent|
       eval("@#{parent}_not_done_counts = @#{parent}_not_done_counts || current_user.todos.active.count(:group => :#{parent}_id)")
     end
   end
-  
+
   def init_project_hidden_todo_counts(parents = ['project','context'])
     parents.each do |parent|
       eval("@#{parent}_project_hidden_todo_counts = @#{parent}_project_hidden_todo_counts || current_user.todos.count(:conditions => ['state = ? or state = ?', 'project_hidden', 'active'], :group => :#{parent}_id)")
     end
   end
-  
+
   # Set the contents of the flash message from a controller Usage: notify
   # :warning, "This is the message" Sets the flash of type 'warning' to "This is
   # the message"
@@ -302,7 +302,7 @@ class ApplicationController < ActionController::Base
     flash[type] = message
     logger.error("ERROR: #{message}") if type == :error
   end
-  
+
   def set_time_zone
     Time.zone = current_user.prefs.time_zone if logged_in?
   end
@@ -311,5 +311,5 @@ class ApplicationController < ActionController::Base
     # this counter can be used to handle the IE z-index bug
     @z_index_counter = 500
   end
-  
+
 end
