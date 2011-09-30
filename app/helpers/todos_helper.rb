@@ -184,34 +184,38 @@ module TodosHelper
     end
   end
 
+  def show_date_tag(date, the_class, text)
+    content_tag(:a, :title => format_date(date)) do
+      content_tag(:span, :class => the_class) { text + " "}
+    end
+  end
+
   # Check show_from date in comparison to today's date Flag up date
   # appropriately with a 'traffic light' colour code
   #
   def show_date(d)
-    if d == nil
-      return ""
-    end
+    return "" if d == nil
 
     days = days_from_today(d)
 
     case days
       # overdue or due very soon! sound the alarm!
     when -1000..-1
-      "<a title=\"" + format_date(d) + "\"><span class=\"red\">#{t('todos.scheduled_overdue', :days => (days * -1).to_s)}</span></a> "
+      show_date_tag(d, :red, t('todos.scheduled_overdue', :days => (days * -1).to_s))
     when 0
-      "<a title=\"" + format_date(d) + "\"><span class=\"amber\">#{t('todos.show_today')}</span></a> "
+      show_date_tag(d, :amber, t('todos.show_today'))
     when 1
-      "<a title=\"" + format_date(d) + "\"><span class=\"amber\">#{t('todos.show_tomorrow')}</span></a> "
+      show_date_tag(d, :amber, t('todos.show_tomorrow'))
       # due 2-7 days away
     when 2..7
       if prefs.due_style == Preference.due_styles[:due_on]
-        "<a title=\"" + format_date(d) + "\"><span class=\"orange\">#{t('todos.show_on_date', :date => d.strftime("%A"))}</span></a> "
+        show_date_tag(d, :orange, t('todos.show_on_date', :date => d.strftime("%A")) )
       else
-        "<a title=\"" + format_date(d) + "\"><span class=\"orange\">#{t('todos.show_in_days', :days => days.to_s)}</span></a> "
+        show_date_tag(d, :orange, t('todos.show_in_days', :days => days.to_s) )
       end
       # more than a week away - relax
     else
-      "<a title=\"" + format_date(d) + "\"><span class=\"green\">#{t('todos.show_in_days', :days => days.to_s)}</span></a> "
+      show_date_tag(d, :green, t('todos.show_in_days', :days => days.to_s) )
     end
   end
 
