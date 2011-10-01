@@ -39,6 +39,7 @@ class Todo < ActiveRecord::Base
   # other scopes
   named_scope :are_due, :conditions => ['NOT (todos.due IS NULL)']
   named_scope :with_tag, lambda { |tag| {:joins => :taggings, :conditions => ["taggings.tag_id = ? ", tag.id] } }
+  named_scope :with_tags, lambda { |tag_ids| {:joins => :taggings, :conditions => ["taggings.tag_id IN (?) ", tag_ids] } }
   named_scope :of_user, lambda { |user_id| {:conditions => ["todos.user_id = ? ", user_id] } }
   named_scope :completed_after, lambda { |date| {:conditions => ["todos.completed_at > ? ", date] } }
   named_scope :completed_before, lambda { |date| {:conditions => ["todos.completed_at < ? ", date] } }
