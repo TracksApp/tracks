@@ -584,27 +584,72 @@ class TodosController < ApplicationController
     redirect_to project_todos_path(project, :format => 'm')
   end
 
+  def get_ids_from_tag_expr(tag_expr)
+    ids = []
+    tag_expr.each do |tag_list|
+      id_list = []
+      tag_list.each do |tag|
+        tag = Tag.find_by_name(tag)
+        id_list << tag.id if tag
+      end
+      ids << id_list
+    end
+    return ids
+  end
+
+  def get_params_for_tag_view
+    # use sanitize to prevent XSS attacks
+
+    @tag_expr = []
+    @tag_expr << sanitize(params[:name]).split(',')
+    @tag_expr << sanitize(params[:and]).split(',') if params[:and]
+
+    i = 1
+    while params['and'+i.to_s]
+      @tag_expr << sanitize(params['and'+i.to_s]).split(',')
+      i=i+1
+    end
+
+    @single_tag = @tag_expr.size == 1 && @tag_expr[0].size == 1
+    @tag_name = @tag_expr[0][0] # if @single_tag
+  end
+
+  def find_todos_with_tag_ids(tag_ids)
+    todos = current_user.todos
+    tag_ids.each do |ids|
+      todos = todos.with_tags(ids) unless ids.nil? || ids.empty?
+    end
+    return todos
+  end
+
   # /todos/tag/[tag_name] shows all the actions tagged with tag_name
   def tag
-    init_data_for_sidebar unless mobile?
-    @source_view = params['_source_view'] || 'tag'
-    @tag_name = sanitize(params[:name]) # sanitize to prevent XSS vunerability!
     @page_title = t('todos.tagged_page_title', :tag_name => @tag_name)
+    @source_view = params['_source_view'] || 'tag'
 
-    # mobile tags are routed with :name ending on .m. So we need to chomp it
-    @tag_name = @tag_name.chomp('.m') if mobile?
+    get_params_for_tag_view
+
+    if mobile?
+      # mobile tags are routed with :name ending on .m. So we need to chomp it
+      @tag_name = @tag_name.chomp('.m')
+    else
+      init_data_for_sidebar
+    end
 
     @tag = Tag.find_by_name(@tag_name)
     @tag = Tag.new(:name => @tag_name) if @tag.nil?
 
-    @not_done_todos = current_user.todos.with_tag(@tag).active.not_hidden.find(:all,
+    @tag_ids = get_ids_from_tag_expr(@tag_expr)
+    todos_with_tag_ids = find_todos_with_tag_ids(@tag_ids)
+
+    @not_done_todos = todos_with_tag_ids.active.not_hidden.find(:all,
       :order => 'todos.due IS NULL, todos.due ASC, todos.created_at ASC', :include => Todo::DEFAULT_INCLUDES)
-    @hidden_todos = current_user.todos.with_tag(@tag).hidden.find(:all,
+    @hidden_todos = todos_with_tag_ids.hidden.find(:all,
       :include => Todo::DEFAULT_INCLUDES,
       :order => 'todos.completed_at DESC, todos.created_at DESC')
-    @deferred = current_user.todos.with_tag(@tag).deferred.find(:all,
+    @deferred = todos_with_tag_ids.deferred.find(:all,
       :order => 'show_from ASC, todos.created_at DESC', :include => Todo::DEFAULT_INCLUDES)
-    @pending = current_user.todos.with_tag(@tag).blocked.find(:all,
+    @pending = todos_with_tag_ids.blocked.find(:all,
       :order => 'show_from ASC, todos.created_at DESC', :include => Todo::DEFAULT_INCLUDES)
 
     # If you've set no_completed to zero, the completed items box isn't shown on
