@@ -86,8 +86,9 @@ ActionController::Routing::Routes.draw do |map|
   map.with_options :controller => :integrations do |i|
     i.integrations  'integrations', :action => 'index'
     i.rest_api_docs 'integrations/rest_api', :action => "rest_api"
-    i.search_plugin 'integrations/search_plugin.xml', :controller => 'integrations', :action => 'search_plugin', :format => 'xml'
-    i.google_gadget 'integrations/google_gadget.xml', :controller => 'integrations', :action => 'google_gadget', :format => 'xml'
+    i.search_plugin 'integrations/search_plugin.xml', :action => 'search_plugin', :format => 'xml'
+    i.google_gadget 'integrations/google_gadget.xml', :action => 'google_gadget', :format => 'xml'
+    i.cloudmailin   'integrations/cloudmailin', :action => 'cloudmailin'
   end
 
   map.with_options :controller => :preferences do |p|
