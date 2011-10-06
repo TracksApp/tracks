@@ -43,6 +43,11 @@ class ProjectXmlApiTest < ActionController::IntegrationTest
     assert_equal @@project_name, @controller.params[:request][:project][:name]
   end
   
+  def test_fails_with_401_if_not_authorized_user	 	
+    authenticated_post_xml_to_project_create @@valid_postdata, 'nobody', 'nohow'
+    assert_response 401
+  end
+  
   def test_fails_with_too_long_name
     invalid_with_long_name_postdata = "<request><project><name>foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo arfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo arfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfo barfoobarfoobarfoobarfoobarfoobarfoobar</name></project></request>"
     authenticated_post_xml_to_project_create invalid_with_long_name_postdata
