@@ -192,7 +192,7 @@ class User < ActiveRecord::Base
   end
 
   def generate_token
-    self.token = self.class.sha1 "#{Time.now.to_i}#{rand}"
+    self.token = sha1 "#{Time.now.to_i}#{rand}"
   end
 
   def remember_token?
@@ -202,7 +202,7 @@ class User < ActiveRecord::Base
   # These create and unset the fields required for remembering users between browser closes
   def remember_me
     self.remember_token_expires_at = 2.weeks.from_now.utc
-    self.remember_token ||= self.class.sha1("#{login}--#{remember_token_expires_at}")
+    self.remember_token ||= sha1("#{login}--#{remember_token_expires_at}")
     save(false)
   end
 
@@ -219,7 +219,7 @@ class User < ActiveRecord::Base
 
   def password_matches?(pass)
     if uses_deprecated_password?
-      crypted_password == User.sha1(pass)
+      crypted_password == sha1(pass)
     else
       BCrypt::Password.new(crypted_password) == pass
     end
@@ -241,7 +241,7 @@ protected
 
   def crypt_password
     return if password.blank?
-    write_attribute("crypted_password", self.class.hash(password)) if password == password_confirmation
+    write_attribute("crypted_password", hash(password)) if password == password_confirmation
   end
 
   def password_required?
