@@ -107,7 +107,14 @@ class ProjectsController < ApplicationController
     respond_to do |format|
       format.html
       format.m     &render_project_mobile
-      format.xml   { render :xml => @project.to_xml( :except => :user_id )  }
+      format.xml   { 
+        render :xml => @project.to_xml(:except => :user_id) { |xml|
+          xml.not_done { @not_done.each { |child| child.to_xml(:builder => xml, :skip_instruct => true) } }
+          xml.deferred { @deferred.each { |child| child.to_xml(:builder => xml, :skip_instruct => true) } }
+          xml.pending { @pending.each { |child| child.to_xml(:builder => xml, :skip_instruct => true) } }
+          xml.done { @done.each { |child| child.to_xml(:builder => xml, :skip_instruct => true) } }
+        }
+      }
     end
   end
 
