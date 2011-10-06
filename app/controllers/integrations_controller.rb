@@ -44,7 +44,7 @@ class IntegrationsController < ApplicationController
 
     # if signature does not match, return 403
     if provided != signature
-      render :text => "Message signature fail #{provided} != #{signature}", :status => 403
+      render :text => "Message signature verification failed.", :status => 403
       return false
     end
     
