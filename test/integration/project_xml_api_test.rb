@@ -13,6 +13,16 @@ class ProjectXmlApiTest < ActionController::IntegrationTest
   def setup
     assert_test_environment_ok
   end
+  
+  def test_retrieve_project
+    authenticated_get_xml "/projects/1", users(:admin_user).login, 'abracadabra', {}
+    assert_tag :tag => "project"
+    assert_tag :tag => "project", :child => {:tag => "not_done" }
+    assert_tag :tag => "project", :child => {:tag => "deferred" }
+    assert_tag :tag => "project", :child => {:tag => "pending" }
+    assert_tag :tag => "project", :child => {:tag => "done" }
+    assert_response 200
+  end
 
  def test_fails_with_invalid_xml_format
    #Fails too hard for test to catch
