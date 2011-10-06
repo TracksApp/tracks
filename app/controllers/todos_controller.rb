@@ -137,7 +137,7 @@ class TodosController < ApplicationController
             @projects = current_user.projects.find(:all) if @new_project_created
             @initial_context_name = params['default_context_name']
             @initial_project_name = params['default_project_name']
-            @default_tags = @todo.project.default_tags unless @todo.project.nil?
+            @initial_tags = params['initial_tag_list']
             @status_message = t('todos.added_new_next_action')
             @status_message += ' ' + t('todos.to_tickler') if @todo.deferred?
             @status_message += ' ' + t('todos.in_pending_state') if @todo.pending?
@@ -210,6 +210,7 @@ class TodosController < ApplicationController
         @projects = current_user.projects.find(:all) if @new_project_created
         @initial_context_name = params['default_context_name']
         @initial_project_name = params['default_project_name']
+        @initial_tags = params['initial_tag_list']
         if @todos.size > 0
           @default_tags = @todos[0].project.default_tags unless @todos[0].project.nil?
         else
@@ -619,7 +620,7 @@ class TodosController < ApplicationController
     @contexts_to_show = @contexts.reject {|x| x.hide? }
 
     # Set defaults for new_action
-    @initial_tag_name = @tag_name
+    @initial_tags = @tag_name
     unless @not_done_todos.empty?
       @context = current_user.contexts.find_by_id(@not_done_todos[0].context_id)
     end
