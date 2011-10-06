@@ -143,6 +143,19 @@ class Todo < ActiveRecord::Base
     end
   end
 
+  def predecessor_dependencies=(params)
+    value = params[:predecessor_dependencies] 
+    if !value.nil?
+      if value.class == Array
+        value.each do |attrs|
+          predecessor_dependencies.build(attrs)
+        end
+      else 
+        predecessor_dependencies.build(value)
+      end
+    end
+  end
+
   def save_predecessors
     unless @predecessor_array.nil?  # Only save predecessors if they changed
       current_array = self.predecessors
@@ -175,6 +188,19 @@ class Todo < ActiveRecord::Base
     # remove predecessor and activate myself
     self.predecessors.delete(predecessor)
     self.activate!
+  end
+
+  def successor_dependencies=(params)
+    value = params[:successor_dependencies] 
+    if !value.nil?
+      if value.class == Array
+        value.each do |attrs|
+          successor_dependencies.build(attrs)
+        end
+      else 
+        successor_dependencies.build(value)
+      end
+    end
   end
 
   # Returns true if t is equal to self or a successor of self
