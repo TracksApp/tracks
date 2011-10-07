@@ -25,10 +25,6 @@ else
 	gem "soap4r", "~>1.5.8"
 end
 
-gem "webrat", ">=0.7.0", :groups => [:cucumber, :test]
-gem "database_cleaner", ">=0.5.0", :groups => [:cucumber, :selenium]
-gem "cucumber-rails", "~>0.3.0", :groups => :cucumber
-
 group :development do
   if RUBY_VERSION.to_f >= 1.9
     gem "ruby-debug19" 
@@ -49,8 +45,8 @@ group :test do
   gem "rspec-rails", "~>1.3.3"
   gem "thoughtbot-factory_girl"
   gem 'memory_test_fix', '~>0.1.3'
-end
-
-group :selenium do
   gem "selenium-client"
+  gem "webrat", ">=0.7.0"
+  gem "database_cleaner", ">=0.5.0"
+  gem "cucumber-rails", "~>0.3.0"
 end
