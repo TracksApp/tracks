@@ -19,26 +19,22 @@ gem "sqlite3"
 gem 'bcrypt-ruby', '~> 2.1.4'
 gem 'htmlentities', '~> 4.3.0'
 
-gem "webrat", ">=0.7.0", :groups => [:cucumber, :test]
-gem "database_cleaner", ">=0.5.0", :groups => [:cucumber, :selenium]
-gem "cucumber-rails", "~>0.3.0", :groups => :cucumber
-
 group :development do
   gem "ruby-debug"
 end
 
 group :test do
+  gem "cucumber-rails"
+  gem "database_cleaner", ">=0.5.0"
   gem "flexmock"
-  gem "ZenTest", ">=4.0.0"
   gem "hpricot"
   gem "hoe"
-  gem "rspec-rails", "~>1.3.3"
-  gem "thoughtbot-factory_girl"
   gem 'memory_test_fix', '~>0.1.3'
-end
-
-group :selenium do
-  gem "selenium-client"
   gem "mongrel"
+  gem "rspec-rails", "~>1.3.3"
+  gem "selenium-client"
+  gem "thoughtbot-factory_girl"
+  gem "webrat", ">=0.7.0"
+  gem "ZenTest", ">=4.0.0"
 end
 
