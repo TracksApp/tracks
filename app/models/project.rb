@@ -108,6 +108,7 @@ class Project < ActiveRecord::Base
   end
 
   def needs_review?(current_user)
+    return false if self.completed?
     return true if last_reviewed.nil?
     return (active? && (last_reviewed < current_user.time - current_user.prefs.review_period.days))
   end
