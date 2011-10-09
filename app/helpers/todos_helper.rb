@@ -123,7 +123,7 @@ module TodosHelper
   end
 
   def tag_span (tag, mobile=false)
-    content_tag(:span, :class => "tag #{tag.name.gsub(' ','-')}") { link_to (tag.name, mobile ? mobile_tag_path(tag.name) : tag_path(tag.name)) }
+    content_tag(:span, :class => "tag #{tag.name.gsub(' ','-')}") { link_to(tag.name, (mobile ? mobile_tag_path(tag.name) : tag_path(tag.name))) }
   end
 
   def tag_list(todo=@todo, mobile=false)

@@ -1,10 +1,16 @@
 # adapted from https://gist.github.com/471663 and https://rails.lighthouseapp.com/projects/8994/tickets/4690-mongrel-doesnt-work-with-rails-238
 
 def check_mongrel_around_115
-  # Gem.available? is deprecated from rubygems 1.8.2
-  Gem::Specification::find_by_name "mongrel", "~>1.1.5"
-rescue
-  Gem.available?('mongrel', '~>1.1.5')
+begin
+    # Gem.available? is deprecated from rubygems 1.8.2
+    Gem::Specification::find_by_name "mongrel", "~>1.1.5"
+  rescue Gem::LoadError
+    if RUBY_VERSION[2] == "9"
+      false
+    else
+      Gem.available?('mongrel', '~>1.1.5')
+    end
+  end
 end
 
 mongrel115 = check_mongrel_around_115
