@@ -69,22 +69,22 @@ class TodoXmlApiTest < ActionController::IntegrationTest
     assert_equal @user.todos.count, old_count + 1
   end
   
-    def test_post_create_todo_with_tags
-      old_count = @user.todos.count
-      authenticated_post_xml_to_todo_create "
-  <todo>
-    <description>this will succeed 2</description>
-    <context_id type='integer'>10</context_id>
-    <project_id type='integer'>4</project_id>
-    <tags>
-      <tag><name>starred</name></tag>
-    </tags>
-  </todo>"
+  def test_post_create_todo_with_tags
+    old_count = @user.todos.count
+    authenticated_post_xml_to_todo_create "
+<todo>
+  <description>this will succeed 2</description>
+  <context_id type='integer'>10</context_id>
+  <project_id type='integer'>4</project_id>
+  <tags>
+    <tag><name>starred</name></tag>
+  </tags>
+</todo>"
 
-      puts @response.body
-      assert_response :success
-      assert_equal @user.todos.count, old_count + 1
-    end
+    puts @response.body
+    assert_response :success
+    assert_equal @user.todos.count, old_count + 1
+  end
 
   def test_post_create_todo_with_wrong_project_and_context_id
     authenticated_post_xml_to_todo_create "<todo><description>this will fail</description><context_id type='integer'>-16</context_id><project_id type='integer'>-11</project_id></todo>"
