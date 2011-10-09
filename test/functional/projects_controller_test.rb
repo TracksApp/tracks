@@ -1,5 +1,5 @@
-require File.dirname(__FILE__) + '/../test_helper'
-require File.dirname(__FILE__) + '/todo_container_controller_test_base'
+require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
+require File.expand_path(File.dirname(__FILE__) + '/todo_container_controller_test_base')
 require 'projects_controller'
 
 # Re-raise errors caught by the controller.
