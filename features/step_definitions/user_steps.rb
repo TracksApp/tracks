@@ -22,10 +22,10 @@ Given /^the following user records with hash algorithm$/ do |table|
       BCrypt::Password.new(user.crypted_password).should == password
     when 'sha1'
       user.password = user.password_confirmation = nil
-      user.write_attribute :crypted_password, Digest::SHA1.hexdigest("#{Tracks::Config.salt}--#{password}--")
+      user.write_attribute :crypted_password, user.sha1(password)
       user.save
       user.reload
-      user.crypted_password.should == Digest::SHA1.hexdigest("#{Tracks::Config.salt}--#{password}--")
+      user.crypted_password.should == user.sha1(password)
     else
       raise "Unknown hashing algorithm: #{algorithm}"
     end
