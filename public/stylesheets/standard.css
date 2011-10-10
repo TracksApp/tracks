@@ -277,6 +277,12 @@ a.show_successors:hover, a.link_to_successors:hover {background-image: url(../im
 
 #navlist a:hover { color: #CCC; }
 
+#develop-notify-bar {
+    line-height:0.5; 
+    background-image: url(/images/construction.gif); 
+    background-repeat: repeat-x;
+}
+
 #topbar {
     position: fixed;
     top: 0px;
