@@ -17,6 +17,7 @@ gem "ruby-openid", :require => "openid"
 gem "sqlite3"
 gem 'bcrypt-ruby', '~> 2.1.4'
 gem 'htmlentities', '~> 4.3.0'
+gem "mail"
 
 if RUBY_VERSION.to_f >= 1.9
 	gem "soap4r-ruby1.9"
