@@ -3,9 +3,8 @@ module RecurringTodosHelper
   def recurring_todo_tag_list
     tags_except_starred = @recurring_todo.tags.reject{|t| t.name == Todo::STARRED_TAG_NAME}
     tag_list = tags_except_starred.collect{|t| "<span class=\"tag #{t.name.gsub(' ','-')}\">" +
-        # link_to(t.name, :controller => "todos", :action => "tag", :id =>
-        # t.name) + TODO: tag view for recurring_todos (yet?)
-      t.name +
+        link_to(t.name, :controller => "todos", :action => "tag", :id =>
+        t.name) + #TODO: tag view for recurring_todos (yet?)
         "</span>"}.join('')
     "<span class='tags'>#{tag_list}</span>"
   end
