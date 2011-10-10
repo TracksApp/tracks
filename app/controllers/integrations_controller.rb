@@ -1,6 +1,7 @@
 class IntegrationsController < ApplicationController
-
-  skip_before_filter :login_required, :only => [:search_plugin, :google_gadget]
+  require 'mail'
+  
+  skip_before_filter :login_required, :only => [:cloudmailin, :search_plugin, :google_gadget]
 
   def index
     @page_title = 'TRACKS::Integrations'
@@ -26,14 +27,59 @@ class IntegrationsController < ApplicationController
   end
 
   def search_plugin
-	@icon_data = [File.open(RAILS_ROOT + '/public/images/done.png').read].
-	  pack('m').gsub(/\n/, '')
-
-	render :layout => false
+    @icon_data = [File.open(RAILS_ROOT + '/public/images/done.png').read].
+      pack('m').gsub(/\n/, '')
+ 
+    render :layout => false
   end
 
   def google_gadget
     render :layout => false, :content_type => Mime::XML
   end
+  
+  def cloudmailin
+    # verify cloudmailin signature
+    provided = request.request_parameters.delete(:signature)
+    signature = Digest::MD5.hexdigest(request.request_parameters.sort{|a,b| a[0].to_s <=> b[0].to_s}.map{|k,v| v}.join + SITE_CONFIG['cloudmailin'])
 
+    # if signature does not match, return 403
+    if provided != signature
+      render :text => "Message signature verification failed.", :status => 403
+      return false
+    end
+    
+    # parse message
+    message = Mail.new(params[:message])
+        
+    # find user
+    user = User.find(:first, :include => [:preference], :conditions => ["preferences.sms_email = ?", message.from])
+    if user.nil?
+      render :text => "No user found", :status => 404
+      return false
+    end
+
+    # load user settings
+    context = user.prefs.sms_context
+
+    # prepare body
+    if message.body.multipart?
+      body = message.body.preamble
+    else
+      body = message.body.to_s
+    end
+    
+    # parse mail
+    if message.subject.to_s.empty?
+      description = body
+      notes = nil
+    else
+      description = message.subject.to_s
+      notes = body
+    end
+    
+    # create todo
+    todo = Todo.from_rich_message(user, context.id, description, notes)
+    todo.save!
+    render :text => 'success', :status => 200
+  end
 end
