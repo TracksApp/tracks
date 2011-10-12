@@ -353,7 +353,6 @@ class Todo < ActiveRecord::Base
     end
   end
   
-  alias_method :original_tags=, :tags=
   def tags=(params)
     value = params[:tag]
     
