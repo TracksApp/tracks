@@ -807,6 +807,8 @@ var ProjectListPage = {
                 update: update_order
             });
         });
+
+        $('#project_new #project_name').focus();
     }
 }
 
