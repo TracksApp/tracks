@@ -890,6 +890,8 @@ var ContextListPage = {
                 update: update_order
             })
         });
+
+        $('#context-form #context_name').focus();
     }
 }
 
