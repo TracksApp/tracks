@@ -109,8 +109,6 @@ module Gtd
       req.basic_auth ENV['GTD_LOGIN'], ENV['GTD_PASSWORD']
       req.body = "<todo>#{props}</todo>"
 
-      puts req.body
-
       resp = http.request(req)
 
       if resp.code == '302' || resp.code == '201'
@@ -212,6 +210,11 @@ module Gtd
 
         cmd.on('-f [S]', "filename of the template") do |v|
           @filename = v
+          
+          if not File.exist?(@filename)
+            puts "ERROR: file #{@filename} doesn't exist"
+            exit 1
+          end
         end
 
         cmd.on('-c [N]', Integer, 'default context id to set for new projects') do |v|
@@ -233,11 +236,6 @@ module Gtd
       # lines = STDIN.read
       gtd = API.new
 
-      if not File.exist?(@filename)
-        puts "ERROR: file #{@filename} doesn't exist"
-        exit 1
-      end
-
       if ENV['GTD_LOGIN'] == nil
         puts "ERROR: no GTD_LOGIN environment variable set"
         exit 1
@@ -248,7 +246,11 @@ module Gtd
         exit 1
       end
 
-      file = File.open(@filename)
+      if @filename.nil? 
+        file = STDIN
+      else
+        file = File.open(@filename)
+      end
       
       # if lines.strip.empty?
       #   puts "Please pipe in some content to tracks on STDIN."
