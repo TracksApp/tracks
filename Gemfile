@@ -37,6 +37,7 @@ group :development do
     gem "ruby-debug"
     gem "mongrel"
   end
+  gem "yard"
 end
 
 group :test do
