@@ -51,6 +51,8 @@
 
 # Instantiate this template: ./tracks_template_cli -c 1 -f template_file.txt
 
+# Template can also be read from STDIN, however, then you have specify all tokens with -k
+
 require 'net/https'
 require 'optparse'
 require 'cgi'
@@ -278,8 +280,11 @@ module Gtd
 
           newtok=line.split(' ')[1]
 
-          print "Input required for "+newtok+": "
-          @keywords[newtok]=gets.chomp
+          if @keywords[newtok].nil?
+            print "Input required for "+newtok+": "
+            @keywords[newtok]=gets.chomp
+          end
+
           next
         end
 
