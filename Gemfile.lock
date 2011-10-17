@@ -1,16 +1,8 @@
-GIT
-  remote: git://github.com/dejan/actionwebservice.git
-  revision: f0d48a4f747a998cc431615d69a0bdf089b18be3
-  specs:
-    actionwebservice (2.3.2.1705)
-      actionpack (>= 2.3.2)
-      activerecord (>= 2.3.2)
-
 GEM
   remote: http://rubygems.org/
   remote: http://gems.github.com/
   specs:
-    RedCloth (4.2.3)
+    RedCloth (4.2.8)
     ZenTest (4.6.1)
     aasm (2.2.0)
     actionmailer (2.3.14)
@@ -52,16 +44,23 @@ GEM
     hpricot (0.8.4)
     htmlentities (4.3.0)
     httpclient (2.2.1)
+    i18n (0.6.0)
     json (1.5.3)
     linecache (0.46)
       rbx-require-relative (> 0.0.4)
+    mail (2.3.0)
+      i18n (>= 0.4.0)
+      mime-types (~> 1.16)
+      treetop (~> 1.4.8)
     memory_test_fix (0.1.3)
+    mime-types (1.16)
     mongrel (1.1.5)
       cgi_multipart_eof_fix (>= 2.4)
       daemons (>= 1.0.3)
       fastthread (>= 1.0.1)
       gem_plugin (>= 0.2.3)
     nokogiri (1.4.7)
+    polyglot (0.3.2)
     rack (1.1.0)
     rack-test (0.6.1)
       rack (>= 1.0)
@@ -86,6 +85,10 @@ GEM
     ruby-openid (2.1.8)
     rubycas-client (2.2.1)
       activesupport
+    rubyjedi-actionwebservice (2.3.5.20100714122544)
+      actionpack (~> 2.3.0)
+      activerecord (~> 2.3.0)
+      activesupport (~> 2.3.0)
     sanitize (1.2.1)
       nokogiri (~> 1.4.1)
     selenium-client (1.2.18)
@@ -93,21 +96,26 @@ GEM
       httpclient (>= 2.1.1)
     sqlite3 (1.3.4)
     term-ansicolor (1.0.6)
+    test-unit (1.2.3)
+      hoe (>= 1.5.1)
     thoughtbot-factory_girl (1.2.2)
+    treetop (1.4.10)
+      polyglot
+      polyglot (>= 0.3.1)
     webrat (0.7.3)
       nokogiri (>= 1.2.0)
       rack (>= 1.0)
       rack-test (>= 0.5.3)
     will_paginate (2.3.16)
+    yard (0.7.3)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  RedCloth (= 4.2.3)
+  RedCloth (= 4.2.8)
   ZenTest (>= 4.0.0)
   aasm (~> 2.2.0)
-  actionwebservice!
   acts_as_list (~> 0.1.4)
   bcrypt-ruby (~> 2.1.4)
   cucumber-rails (~> 0.3.0)
@@ -118,6 +126,7 @@ DEPENDENCIES
   hoe
   hpricot
   htmlentities (~> 4.3.0)
+  mail
   memory_test_fix (~> 0.1.3)
   mongrel
   rack (= 1.1.0)
@@ -127,10 +136,13 @@ DEPENDENCIES
   ruby-debug
   ruby-openid
   rubycas-client (~> 2.2.1)
+  rubyjedi-actionwebservice
   sanitize (~> 1.2.1)
   selenium-client
   soap4r (~> 1.5.8)
   sqlite3
+  test-unit (= 1.2.3)
   thoughtbot-factory_girl
   webrat (>= 0.7.0)
   will_paginate (~> 2.3.15)
+  yard
