@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-# Version 0.1 (Sept 4, 2011)
+# Version 0.2 (Sept 30, 2011)
 
 #
 # Based on the tracks_cli by Vitalie Lazu (https://gist.github.com/45537)
@@ -21,11 +21,15 @@
 #    ENV['GTD_CONTEXT_URL']        --> 'http://localhost:3000/contexts.xml'
 
 # Format of input file:
+# - A token to be replaced in the subsequent lines starts with the string token
 # - New Projects start at the beginning of the line
 # - New actions start with a '.' at the beginning of the line. To add a note to an action, separate the action from its note by using '|'. You have to stay in the same line.
 # - Comments start with '#'
 
 # Example of an input file. Remove the '# ' string at the beginning and save it in a file.
+# token [location]
+# token [start]
+# token [end]
 # Book trip to [location]
 # .Check visa requirements for [location]|instantiate template_visa, if visa required
 # .Book flight to [location]|starting trip around [start], returning around [end]
@@ -45,12 +49,15 @@
 # .Set a reminder to check for reimbursement for [location]
 # .Mail folder to secretary
 
-# Instantiate this template: cat template | ./tracks_template_cli -c 1 -k '[location]=Dublin' -k '[start]=Oct 10' -k '[end]=Oct 16'
+# Instantiate this template: ./tracks_template_cli -c 1 -f template_file.txt
+
+# Template can also be read from STDIN, however, then you have specify all tokens with -k
 
 require 'net/https'
 require 'optparse'
 require 'cgi'
 require 'time'
+require 'readline'
 
 class Hash
   def to_query_string
@@ -203,6 +210,15 @@ module Gtd
           @keywords[v.split("=")[0]] = v.split("=")[1]
         end
 
+        cmd.on('-f [S]', "filename of the template") do |v|
+          @filename = v
+          
+          if not File.exist?(@filename)
+            puts "ERROR: file #{@filename} doesn't exist"
+            exit 1
+          end
+        end
+
         cmd.on('-c [N]', Integer, 'default context id to set for new projects') do |v|
           @options[:context_id] = v
         end
@@ -219,17 +235,33 @@ module Gtd
 
     def run(args)
       @parser.parse!(args)
-      lines = STDIN.read
+      # lines = STDIN.read
       gtd = API.new
 
-      if lines.strip.empty?
-        puts "Please pipe in some content to tracks on STDIN."
+      if ENV['GTD_LOGIN'] == nil
+        puts "ERROR: no GTD_LOGIN environment variable set"
+        exit 1
+      end
+      
+      if ENV['GTD_PASSWORD'] == nil
+        puts "ERROR: no GTD_PASSWORD environment variable set"
         exit 1
       end
 
+      if @filename.nil? 
+        file = STDIN
+      else
+        file = File.open(@filename)
+      end
+      
+      # if lines.strip.empty?
+      #   puts "Please pipe in some content to tracks on STDIN."
+      #   exit 1
+      # end
+
       ## check for existence of the context
       if !@options[:context_id]
-        puts "Error: need to specify a context_id with -c option. Go here to find one: #{API::GTD_URI_CONTEXTS}"
+        puts "ERROR: need to specify a context_id with -c option. Go here to find one: #{API::GTD_URI_CONTEXTS}"
         exit 1
       end
 
@@ -238,8 +270,23 @@ module Gtd
         exit 1
       end
 
-      lines.each_line do |line|
-        next if (line.strip.empty? || line[0].chr == "#")
+      #lines.each_line do |line|
+      while line = file.gets
+        line = line.strip
+        next if (line.empty? || line[0].chr == "#")
+
+        if (line.split(' ')[0] == "token") 
+          ## defining a new token; ask for input
+
+          newtok=line.split(' ')[1]
+
+          if @keywords[newtok].nil?
+            print "Input required for "+newtok+": "
+            @keywords[newtok]=gets.chomp
+          end
+
+          next
+        end
 
         # replace tokens
         @keywords.each do |key,val|
@@ -254,13 +301,13 @@ module Gtd
 
           # find notes
           tmp= line.split("|")
-          if tmp.length > 2
-            puts "Formatting error: found multiple |"
+          if tmp.length > 3
+            puts "Formatting error: found too many |"
             exit 1
           end
 
-          line=tmp[0]
-          @options[:note]=tmp[1]
+          line=tmp[0] 
+         @options[:note]=tmp[1]
 
           if !@options[:project_id]
             puts "Warning: no project specified for task \"#{line}\". Using default project."
