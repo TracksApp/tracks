@@ -90,3 +90,52 @@ end
 Then /^the new project form should not be visible$/ do 
   selenium.is_visible("project_new").should == false
 end
+
+
+Given /^I have a project "([^"]*)" with (\d+) active todos$/ do |name, count|
+  @context = @current_user.contexts.find_or_create_by_name("Context A")
+  @project = @current_user.projects.find_or_create_by_name(name)
+
+  @todos=[]
+  1.upto count.to_i do |i|
+    todo = @current_user.todos.create!(
+      :project_id => @project.id,
+      :context_id => @context.id,
+      :description => "todo #{i}")
+    @todos << todo
+  end
+end
+
+Then /^the project "([^"]*)" should have (\d+) actions listed$/ do |name, count|
+  project = @current_user.projects.find_by_name(name)
+  project.should_not be_nil
+  xpath = "//div[@id='list-active-projects-container']//div[@id='project_#{project.id}']//span[@class='needsreview']"
+  selenium.get_text("xpath=#{xpath}").should == "#{project.name} (#{count} actions)"
+end
+
+Given /^I have a project "([^"]*)" with (\d+) active actions and (\d+) deferred actions$/ do |name, active_count, deferred_count|
+  Given "I have a project \"#{name}\" with #{active_count} active todos"
+  Given "I have a project \"#{name}\" with #{deferred_count} deferred actions"
+end
+
+Given /^I have a project "([^"]*)" with (\d+) deferred actions$/ do |name, deferred|
+  @context = @current_user.contexts.find_or_create_by_name("Context A")
+  @project = @current_user.projects.find_or_create_by_name(name)
+
+  1.upto deferred.to_i do |i|
+    todo = @current_user.todos.create!(
+      :project_id => @project.id,
+      :context_id => @context.id,
+      :description => "deferred todo #{i}")
+    todo.show_from = Time.zone.now + 1.week
+    todo.save!
+  end
+end
+
+Then /^the project "([^"]*)" should have (\d+) deferred actions listed$/ do |name, deferred|
+  project = @current_user.projects.find_by_name(name)
+  project.should_not be_nil
+  xpath = "//div[@id='list-active-projects-container']//div[@id='project_#{project.id}']//span[@class='needsreview']"
+  selenium.get_text("xpath=#{xpath}").should == "#{project.name} (#{deferred} deferred actions)"
+end
+

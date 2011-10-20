@@ -116,25 +116,25 @@ Feature: Manage the list of projects
     And the badge should show 4
     And the project list badge for "active" projects should show 4
 
-  @selenium @wip
+  @selenium
   Scenario: Listing projects with only active actions
     Given I have a project "do it now" with 2 active todos
     When I go to the projects page
     Then the project "do it now" should have 2 actions listed
 
-  @selenium @wip
+  @selenium
   Scenario: Listing projects with both active and deferred actions
     Given I have a project "now and later" with 2 active actions and 2 deferred actions
     When I go to the projects page
     Then the project "now and later" should have 2 actions listed
 
-  @selenium @wip
+  @selenium
   Scenario: Listing projects with only deferred actions
     Given I have a project "only later" with 3 deferred actions
     When I go to the projects page
     Then the project "only later" should have 3 deferred actions listed
 
-  @selenium @wip
+  @selenium
   Scenario: Listing projects with no actions
     Given I have a project "all done" with 0 active actions and 0 deferred actions
     When I go to the projects page
