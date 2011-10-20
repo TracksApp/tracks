@@ -58,7 +58,7 @@ Feature: Show all due actions in a calendar view
     And I search for "test"
     Then I should not see "tester of stuff"
 
-  @selenium @wip
+  @selenium
   Scenario: I can mark found todos complete and uncomplete
       Given I have the following todos:
       | description     | context |
