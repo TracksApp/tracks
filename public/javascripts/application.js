@@ -734,8 +734,8 @@ var ProjectListPage = {
     },
     setup_behavior: function() {
         /* in-place edit of project name */
-        $('h2#project_name').editable(ProjectListPage.save_project_name, {
-            style: 'padding:0px',
+        $('div#project_name').editable(ProjectListPage.save_project_name, {
+            style: 'padding: 0px; width=100%;',
             submit: i18n['common.ok'],
             cancel: i18n['common.cancel']
         });
