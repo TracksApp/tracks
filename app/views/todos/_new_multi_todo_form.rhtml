@@ -19,7 +19,8 @@
     <div class="page_name_auto_complete" id="context_list" style="display:none"></div>
 
     <label for="tag_list"><%= t('shared.tags_for_all_actions') %></label>
-    <%= text_field_tag "multi_tag_list", @default_tags, :name=>:tag_list, :size => 30, :tabindex => next_tab_index %>
+    <%= hidden_field_tag "initial_tag_list", @initial_tags%>
+    <%= text_field_tag "multi_tag_list", @initial_tags, :name=>:tag_list, :size => 30, :tabindex => next_tab_index %>
     <%= content_tag("div", "", :id => "tag_list_auto_complete", :class => "auto_complete") %>
 
     <%= check_box_tag('todos_sequential', 'true', false, {:tabindex => next_tab_index}) %>
