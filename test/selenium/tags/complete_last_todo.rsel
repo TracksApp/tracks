@@ -1,7 +1,0 @@
-#Test for issue #952
-setup :fixtures => :all
-login :as => 'admin'
-open "/todos/tag/foo"
-click "css=#line_todo_2 .item-checkbox"
-wait_for_element_not_present "css=#c2 #line_todo_2"
-wait_for_not_visible "c2"

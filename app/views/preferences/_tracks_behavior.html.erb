@@ -1,0 +1,14 @@
+
+<%= pref_with_select_field('prefs', "due_style", [[t('models.preference.due_styles')[0],Preference.due_styles[:due_in_n_days]],[t('models.preference.due_styles')[1],Preference.due_styles[:due_on]]]) %>
+<%= pref_with_select_field('prefs', "show_completed_projects_in_sidebar") %>
+<%= pref_with_select_field('prefs', "show_hidden_projects_in_sidebar") %>
+<%= pref_with_select_field('prefs', "show_hidden_contexts_in_sidebar") %>
+<%= pref_with_select_field('prefs', "show_project_on_todo_done") %>
+<%= pref_with_text_field('prefs', 'staleness_starts') %>
+<%= pref_with_text_field('prefs', 'review_period') %>
+<%= pref_with_text_field('prefs', 'show_number_completed') %>
+<%= pref_with_text_field('prefs', 'refresh') %>
+<%= pref_with_select_field('prefs', "verbose_action_descriptors") %>
+<%= pref_with_text_field('prefs', "mobile_todos_per_page") %>
+<%= pref_with_text_field('prefs', "sms_email") %>
+<%= pref('prefs', "sms_context") { select('prefs', 'sms_context_id', current_user.contexts.map{|c| [c.name, c.id]}) } %>

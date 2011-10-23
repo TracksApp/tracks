@@ -1,7 +1,0 @@
-open :controller => 'login'
-type "username", username
-type "password", password
-click "//input[@value='Login']"
-wait_for_page_to_load "30000"
-click "signup"
-wait_for_page_to_load "30000"

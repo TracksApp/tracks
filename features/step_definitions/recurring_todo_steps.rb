@@ -26,6 +26,12 @@ Given /^I have a completed repeat pattern "([^"]*)"$/ do |pattern_name|
   @recurring_todo.completed?.should be_true
 end
 
+Given /^I have (\d+) completed repeat patterns$/ do |number_of_patterns|
+  1.upto number_of_patterns.to_i do |i|
+    Given "I have a completed repeat pattern \"Repeating Todo #{i}\""
+  end
+end
+
 When /^I select "([^\"]*)" recurrence pattern$/ do |recurrence_period|
   selenium.click("recurring_todo_recurring_period_#{recurrence_period.downcase}")
 end
@@ -78,6 +84,15 @@ When /^I mark the pattern "([^"]*)" as active$/ do |pattern_name|
   wait_for_ajax
 end
 
+When /^I follow the recurring todo link of "([^"]*)"$/ do |action_description|
+  todo = @current_user.todos.find_by_description(action_description)
+  todo.should_not be_nil
+
+  recurring_todo_link = "xpath=//div[@id='todo_#{todo.id}']//a[@class='recurring_icon']/img"
+  selenium.click( recurring_todo_link )
+  selenium.wait_for_page_to_load(5000)
+end
+
 Then /^the state list "([^"]*)" should be empty$/ do |state|
   empty_id = "recurring-todos-empty-nd" if state.downcase == "active"
   empty_id = "completed-empty-nd" if state.downcase == "completed"
@@ -87,7 +102,7 @@ end
 Then /^the pattern "([^\"]*)" should be starred$/ do |pattern_name|
   pattern = @current_user.recurring_todos.find_by_description(pattern_name)
   pattern.should_not be_nil
-  xpath = "//div[@id='recurring_todo_#{pattern.id}']//img[@class='starred_todo']"
+  xpath = "//div[@id='recurring_todo_#{pattern.id}']//img[@class='todo_star starred']"
   response.should have_xpath(xpath)
 end
 

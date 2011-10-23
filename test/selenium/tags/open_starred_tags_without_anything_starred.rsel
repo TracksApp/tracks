@@ -1,6 +1,0 @@
-setup :fixtures => [:users, :projects, :contexts, :todos, :notes]
-login :as => 'admin'
-open "/"
-click_and_wait "xpath=//a[@title='See your starred actions']"
-assert_title "exact:TRACKS::Tagged with 'starred'"
-verify_text_present "Currently there are no incomplete actions with the tag 'starred'"

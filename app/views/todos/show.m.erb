@@ -1,5 +1,29 @@
-<% form_tag todo_path(@todo, :format => 'm'), :name => 'mobileEdit', :method => :put do %>
-  <%= render :partial => 'edit_mobile', :locals => { :parent_container_type => "show_mobile" } %>
-  <p><input type="submit" value="<%= t('common.update') %>" tabindex="6" accesskey="#" /></p>
-<% end -%>
-<%= link_to t('common.cancel'), @return_path %>
+<h2>Description</h2>
+<%= @todo.description %><br/>
+
+<h2>Actions</h2>
+
+<form method="get" action="<%= edit_todo_path(@todo, :format => :m)%>">
+<button>Edit this action</button>
+<input type="hidden" name="_method" value="put" />
+</form><br/>
+
+<form method="post" action="<%=toggle_star_todo_path(@todo, :format=>:m)%>">
+<button>Toggle Star</button>
+<input type="hidden" name="_method" value="put" />
+</form><br/>
+
+<form method="post" action="<%=toggle_check_todo_path(@todo, :format=>:m)%>">
+<button>Mark complete</button>
+<input type="hidden" name="_method" value="put" />
+</form><br/>
+
+<form method="post" action="<%=defer_todo_path(@todo, :format=>:m, :days => 1)%>">
+<button>Defer 1 day</button>
+<input type="hidden" name="_method" value="put" />
+</form><br/>
+
+<form method="post" action="<%=defer_todo_path(@todo, :format=>:m, :days => 7)%>">
+<button>Defer 7 days</button>
+<input type="hidden" name="_method" value="put" />
+</form><br/>

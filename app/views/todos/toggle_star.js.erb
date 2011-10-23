@@ -1,5 +1,5 @@
 <%- if @saved -%>
-  $('div#line_todo_<%= @todo.id %> a.star_item img').toggleClass('starred_todo').toggleClass('unstarred_todo');
+  $('div#line_todo_<%= @todo.id %> a.star_item img').toggleClass('starred');
 <%- else -%>
   TracksPages.page_notify('error', '<%= t('todos.error_starring', :description => @todo.description) %>', 8);
 <%- end -%>

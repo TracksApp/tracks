@@ -42,3 +42,26 @@ Feature: View, add, remove notes
     When I go to the notes page
     And I edit the first note to "edited note"
     Then I should see "edited note"
+
+  @selenium
+  Scenario: Toggle all notes
+    Given I have a context called "@pc"
+    And I have a project "take notes" that has the following todos
+      | description | context | notes  |
+      | test 1      | @pc     | note A |
+      | test 2      | @pc     | note B |
+      | test 3      | @pc     | note C |
+    When I go to the home page
+    Then I should not see "note A"
+    And I should not see "note B"
+    And I should not see "note C"
+    When I toggle the note of "test 1"
+    Then I should see "note A"
+    And I should not see "note B"
+    And I should not see "note C"
+    When I toggle the note of "test 1"
+    Then I should not see "note A"
+    When I toggle all notes
+    Then I should see "note A"
+    And I should see "note B"
+    And I should see "note C"

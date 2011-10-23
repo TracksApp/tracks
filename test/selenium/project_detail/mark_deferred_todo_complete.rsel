@@ -1,7 +1,0 @@
-setup :fixtures => :all
-login :as => 'admin'
-open "/projects/1"
-include_partial 'project_detail/add_deferred_todo'
-click "xpath=//div[@id='tickler'] //div[@id='todo_15'] //input[@class='item-checkbox']"
-wait_for_element_present "xpath=//div[@id='completed_container'] //div[@id='todo_15']"
-assert_not_visible "tickler-empty-nd"

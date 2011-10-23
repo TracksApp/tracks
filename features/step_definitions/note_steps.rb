@@ -16,10 +16,6 @@ Given /^I have a project "([^\"]*)" with (.*) notes?$/ do |project_name, num|
   end
 end
 
-When /^I click Toggle Notes$/ do
-  click_link 'Toggle notes'
-end
-
 When /^I add note "([^\"]*)" from the "([^\"]*)" project page$/ do |note, project|
   project = Project.find_by_name(project)
   project.notes.create!(:user_id => @current_user.id, :body => note)
@@ -42,6 +38,23 @@ When /^I edit the first note to "([^"]*)"$/ do |note_body|
   click_link "link_edit_note_#{id}"
   fill_in "note[body]", :with => note_body
   click_button "submit_note_#{id}"
+end
+
+When /^I toggle the note of "([^"]*)"$/ do |todo_description|
+  todo = @current_user.todos.find_by_description(todo_description)
+  todo.should_not be_nil
+
+  xpath = "//div[@id='line_todo_#{todo.id}']/div/a/img"
+
+  selenium.click(xpath)
+end
+
+When /^I click Toggle Notes$/ do
+  click_link 'Toggle notes'
+end
+
+When /^I toggle all notes$/ do
+  When "I click Toggle Notes"
 end
 
 Then /^(.*) notes should be visible$/ do |number|

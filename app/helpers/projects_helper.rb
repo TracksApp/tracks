@@ -8,7 +8,7 @@ module ProjectsHelper
       :url => order_projects_path
     }
   end
-  
+
   def set_element_visible(id,test)
     if (test)
       page.show id
@@ -30,7 +30,7 @@ module ProjectsHelper
     end
     html
   end
-  
+
   def project_next_prev_mobile
     html = ''
     unless @previous_project.nil?
@@ -57,5 +57,19 @@ module ProjectsHelper
       }
     )
   end
-  
+
+  def summary(project)
+    project_description = ''
+    project_description += sanitize(markdown( project.description )) unless project.description.blank?
+    project_description += content_tag(:p,
+      "#{count_undone_todos_phrase(p)}. " + t('projects.project_state', :state => project.state)
+      )
+    project_description
+  end
+
+  def needsreview_class(item)
+    raise "item must be a Project " unless item.kind_of? Project
+    return item.needs_review?(current_user) ? "needsreview" : "needsnoreview"
+  end
+
 end

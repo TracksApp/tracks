@@ -1,6 +1,21 @@
 # adapted from https://gist.github.com/471663 and https://rails.lighthouseapp.com/projects/8994/tickets/4690-mongrel-doesnt-work-with-rails-238
 
-if Rails.version == '2.3.11' && Gem.available?('mongrel', '~>1.1.5') && self.class.const_defined?(:Mongrel)
+def check_mongrel_around_115
+begin
+    # Gem.available? is deprecated from rubygems 1.8.2
+    Gem::Specification::find_by_name "mongrel", "~>1.1.5"
+  rescue Gem::LoadError
+    if RUBY_VERSION[2] == "9"
+      false
+    else
+      Gem.available?('mongrel', '~>1.1.5')
+    end
+  end
+end
+
+mongrel115 = check_mongrel_around_115
+
+if Rails.version == '2.3.14' && mongrel115 && self.class.const_defined?(:Mongrel)
 
   # Pulled right from latest rack. Old looked like this in 1.1.0 version.
   #

@@ -1,7 +1,0 @@
-Selenese *support*
-
-|open|/selenium/setup|
-|goBack|
-|includePartial|partial|source=Selenese|
-  
-works.

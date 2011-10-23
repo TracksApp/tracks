@@ -188,7 +188,6 @@ module LoginSystem
   end
   
   def basic_auth_denied
-      response.headers["Status"] = "401 Unauthorized"
       response.headers["WWW-Authenticate"] = "Basic realm=\"'Tracks Login Required'\""
       render :text => t('login.unsuccessful'), :status => 401
   end

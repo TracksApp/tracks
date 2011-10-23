@@ -1,0 +1,7 @@
+  <div id="projects-empty-nd" style="<%= @no_projects ? 'display:block' : 'display:none'%>">
+    <div class="message"><p><%= t('projects.no_projects') %></p></div>
+  </div>
+  <%= render :partial => 'project_state_group', :object => @projects_to_review, :locals => { :state => 'review', :suppress_sort_menu => true, :suppress_drag_handle => true} %>
+  <%= render :partial => 'project_state_group', :object => @stalled_projects, :locals => { :state => 'stalled', :suppress_sort_menu => true, :suppress_drag_handle => true} %>
+  <%= render :partial => 'project_state_group', :object => @blocked_projects, :locals => { :state => 'blocked', :suppress_sort_menu => true, :suppress_drag_handle => true} %>
+  <%= render :partial => 'project_state_group', :object => @current_projects, :locals => { :state => 'current', :suppress_sort_menu => true, :suppress_drag_handle => true} %>

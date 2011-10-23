@@ -1,5 +1,4 @@
-require File.dirname(__FILE__) + '/../test_helper'
-require 'backend_controller'
+require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
 # Re-raise errors caught by the controller.
 class BackendController; def rescue_action(e) raise e end; end

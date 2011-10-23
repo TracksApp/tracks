@@ -25,7 +25,7 @@ module Tracks
     end
 
     def find_done_todos
-      self.todos.find_in_state(:all, :completed, :order => "todos.completed_at DESC", :limit => self.user.prefs.show_number_completed)
+      self.todos.completed.all(:order => "todos.completed_at DESC", :limit => self.user.prefs.show_number_completed)
     end
   
     def not_done_todo_count(opts={})
@@ -54,6 +54,6 @@ module Tracks
     def deferred_todo_count
       self.todos.count_in_state(:deferred)
     end
-  
+      
   end
 end

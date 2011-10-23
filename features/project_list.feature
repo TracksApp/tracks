@@ -109,7 +109,33 @@ Feature: Manage the list of projects
     Then the project "very busy" should be above the project "test"
 
   @selenium
-  Scenario: Cannot add a project with comma in the name
+  Scenario: Can add a project with comma in the name
     When I go to the projects page
     And I submit a new project with name "foo,bar"
-    Then I should see "Name cannot contain the comma"
+    Then I should see "foo,bar"
+    And the badge should show 4
+    And the project list badge for "active" projects should show 4
+
+  @selenium
+  Scenario: Listing projects with only active actions
+    Given I have a project "do it now" with 2 active todos
+    When I go to the projects page
+    Then the project "do it now" should have 2 actions listed
+
+  @selenium
+  Scenario: Listing projects with both active and deferred actions
+    Given I have a project "now and later" with 2 active actions and 2 deferred actions
+    When I go to the projects page
+    Then the project "now and later" should have 2 actions listed
+
+  @selenium
+  Scenario: Listing projects with only deferred actions
+    Given I have a project "only later" with 3 deferred actions
+    When I go to the projects page
+    Then the project "only later" should have 3 deferred actions listed
+
+  @selenium
+  Scenario: Listing projects with no actions
+    Given I have a project "all done" with 0 active actions and 0 deferred actions
+    When I go to the projects page
+    Then the project "all done" should have 0 actions listed

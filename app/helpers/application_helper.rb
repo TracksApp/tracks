@@ -27,33 +27,42 @@ module ApplicationHelper
   # a 'traffic light' colour code
   #
   def due_date(due)
-    if due == nil
-      return ""
-    end
+    return "" if due.nil?
 
     days = days_from_today(due)
-       
-    case days
-    when 0
-      "<a title='#{format_date(due)}'><span class=\"amber\">Due Today</span></a> "
-    when 1
-      "<a title='#{format_date(due)}'><span class=\"amber\">Due Tomorrow</span></a> "
-      # due 2-7 days away
-    when 2..7
-      if prefs.due_style == Preference.due_styles[:due_on]
-        "<a title='#{format_date(due)}'><span class=\"orange\">Due on #{due.strftime("%A")}</span></a> "
-      else
-        "<a title='#{format_date(due)}'><span class=\"orange\">Due in #{pluralize(days, 'day')}</span></a> "
-      end
-    else
-      # overdue or due very soon! sound the alarm!
-      if days < 0
-        "<a title='#{format_date(due)}'><span class=\"red\">Overdue by #{pluralize(days * -1, 'day')}</span></a> "
-      else
-        # more than a week away - relax
-        "<a title='#{format_date(due)}'><span class=\"green\">Due in #{pluralize(days, 'day')}</span></a> "
-      end
-    end
+
+    colors = ['amber','amber','orange','orange','orange','orange','orange','orange']
+    color = :red if days < 0
+    color = :green if days > 7
+    color = colors[days] if color.nil?
+    
+    return content_tag(:a, {:title => format_date(due)}) {
+      content_tag(:span, {:class => color}) {
+        case days
+        when 0
+          t('todos.next_actions_due_date.due_today')
+        when 1
+          t('todos.next_actions_due_date.due_tomorrow')
+        when 2..7
+          if prefs.due_style == Preference.due_styles[:due_on]
+            # TODO: internationalize strftime here
+            t('models.preference.due_on', :date => due.strftime("%A"))
+          else
+            t('models.preference.due_in', :days => days)
+          end
+        else
+          # overdue or due very soon! sound the alarm!
+          if days == -1
+            t('todos.next_actions_due_date.overdue_by', :days => days * -1)            
+          elsif days < -1
+            t('todos.next_actions_due_date.overdue_by_plural', :days => days * -1)
+          else
+            # more than a week away - relax
+            t('models.preference.due_in', :days => days)
+          end
+        end
+      }
+    }
   end
 
   # Check due date in comparison to today's date Flag up date appropriately with
@@ -152,12 +161,12 @@ module ApplicationHelper
   def recurrence_time_span(rt)
     case rt.ends_on
     when "no_end_date"
-      return rt.start_from.nil? ? "" : "from " + format_date(rt.start_from)
+      return rt.start_from.nil? ? "" : I18n.t("todos.recurrence.pattern.from") + " " + format_date(rt.start_from)
     when "ends_on_number_of_times"
-      return "for "+rt.number_of_occurences.to_s + " times"
+      return I18n.t("todos.recurrence.pattern.times", :number => rt.number_of_occurences)
     when "ends_on_end_date"
-      starts = rt.start_from.nil? ? "" : "from " + format_date(rt.start_from)
-      ends = rt.end_date.nil? ? "" : " until " + format_date(rt.end_date)
+      starts = rt.start_from.nil? ? "" : I18n.t("todos.recurrence.pattern.from") + " " + format_date(rt.start_from)
+      ends = rt.end_date.nil? ? "" : " " + I18n.t("todos.recurrence.pattern.until") + " " + format_date(rt.end_date)
       return starts+ends
     else
       raise Exception.new, "unknown recurrence time span selection (#{rt.ends_on})"
@@ -252,7 +261,7 @@ module ApplicationHelper
     contexts.show_form        contexts.show_form_title
     contexts.new_context_pre  contexts.new_context_post
     common.cancel             common.ok
-    common.ajaxError
+    common.ajaxError          todos.unresolved_dependency
     }.each do |s|
       js << "i18n['#{s}'] = '#{ t(s).gsub(/'/, "\\\\'") }';\n"
     end
@@ -264,6 +273,40 @@ module ApplicationHelper
     # do not include en as locale since this the available by default
     if locale and locale != :en
       javascript_include_tag("i18n/jquery.ui.datepicker-#{locale}.js")
+    end
+  end
+  
+  def determine_done_path
+    case @controller.controller_name
+    when "contexts"
+      done_todos_context_path(@context)
+    when "projects"
+      done_todos_project_path(@project)
+    when "todos"
+      if source_view_is(:tag)
+        done_tag_path(@tag_name)
+      else
+        done_todos_path
+      end      
+    else
+      done_todos_path
+    end
+  end
+  
+  def determine_all_done_path
+    case @controller.controller_name
+    when "contexts"
+      all_done_todos_context_path(@context)
+    when "projects"
+      all_done_todos_project_path(@project)
+    when "todos"
+      if source_view_is(:tag)
+        all_done_tag_path(@tag_name)
+      else
+        all_done_todos_path
+      end
+    else
+      all_done_todos_path
     end
   end
 

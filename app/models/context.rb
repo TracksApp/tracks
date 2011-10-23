@@ -1,13 +1,14 @@
 class Context < ActiveRecord::Base
 
-  has_many :todos, :dependent => :delete_all, :include => :project, :order => "todos.completed_at DESC"
+  has_many :todos, :dependent => :delete_all, :include => :project,
+    :order => 'todos.due IS NULL, todos.due ASC, todos.created_at ASC'
   has_many :recurring_todos, :dependent => :delete_all
   belongs_to :user
 
   named_scope :active, :conditions => { :hide => false }
   named_scope :hidden, :conditions => { :hide => true }
 
-  acts_as_list :scope => :user
+  acts_as_list :scope => :user, :top_of_list => 0
   extend NamePartFinder
   include Tracks::TodoList
 
@@ -19,12 +20,13 @@ class Context < ActiveRecord::Base
   validates_does_not_contain :name, :string => ',', :message => "cannot contain the comma (',') character"
 
   def self.feed_options(user)
+    # TODO: move to view or helper
     {
       :title => 'Tracks Contexts',
       :description => "Lists all the contexts for #{user.display_name}"
     }
   end
-  
+
   def self.null_object
     NullContext.new
   end
@@ -32,36 +34,29 @@ class Context < ActiveRecord::Base
   def hidden?
     self.hide == true || self.hide == 1
   end
-  
+
   def title
     name
   end
-  
-  def summary(undone_todo_count)
-    s = "<p>#{undone_todo_count}. "
-    s += "Context is #{hidden? ? 'Hidden' : 'Active'}."
-    s += "</p>"
-    s
-  end
-  
+
   def new_record_before_save?
     @new_record_before_save
-  end  
+  end
 
 end
 
 class NullContext
-    
+
   def nil?
     true
   end
-  
+
   def id
     nil
   end
-  
+
   def name
     ''
   end
-    
+
 end

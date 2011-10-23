@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../test_helper'
+require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 require 'contexts_controller'
 
 # Re-raise errors caught by the controller.
@@ -48,6 +48,11 @@ class ContextXmlApiTest < ActionController::IntegrationTest
     assert_xml_select 'errors' do
       assert_select 'error', 1, 'Name cannot contain the comma (\',\') character'
     end
+  end
+  
+  def test_fails_with_401_if_not_authorized_user	 	
+    authenticated_post_xml_to_context_create @@valid_postdata, 'nobody', 'nohow'
+    assert_response 401
   end
     
   def test_creates_new_context

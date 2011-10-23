@@ -7,10 +7,10 @@ class RecurringTodosController < ApplicationController
 
   def index
     @page_title = t('todos.recurring_actions_title')
-
+    @source_view = params['_source_view'] || 'recurring_todo'
     find_and_inactivate
     @recurring_todos = current_user.recurring_todos.active
-    @completed_recurring_todos = current_user.recurring_todos.completed
+    @completed_recurring_todos = current_user.recurring_todos.completed.find(:all, :limit => 10)
 
     @no_recurring_todos = @recurring_todos.size == 0
     @no_completed_recurring_todos = @completed_recurring_todos.size == 0
@@ -23,6 +23,17 @@ class RecurringTodosController < ApplicationController
   end
   
   def show
+  end
+  
+  def done
+    @page_title = t('todos.completed_recurring_actions_title')
+    @source_view = params['_source_view'] || 'recurring_todo'
+    items_per_page = 20
+    page = params[:page] || 1    
+    @completed_recurring_todos = current_user.recurring_todos.completed.paginate :page => params[:page], :per_page => items_per_page
+    @total = @count = current_user.recurring_todos.completed.count
+    @range_low = (page.to_i-1) * items_per_page + 1
+    @range_high = @range_low + @completed_recurring_todos.size - 1
   end
 
   def edit
@@ -131,7 +142,6 @@ class RecurringTodosController < ApplicationController
   end
   
   def destroy
-    
     # remove all references to this recurring todo
     @todos = @recurring_todo.todos
     @number_of_todos = @todos.size
@@ -176,7 +186,6 @@ class RecurringTodosController < ApplicationController
       @completed_remaining = current_user.recurring_todos.completed.count
       
       # from completed back to active -> check if there is an active todo
-      # current_user.todos.count(:all, {:conditions => ["state = ? AND recurring_todo_id = ?", 'active',params[:id]]})
       @active_todos = @recurring_todo.todos.active.count
       # create todo if there is no active todo belonging to the activated
       # recurring_todo

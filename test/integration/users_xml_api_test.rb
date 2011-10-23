@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../test_helper'
+require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 require 'users_controller'
 
 # Re-raise errors caught by the controller.
@@ -79,7 +79,7 @@ class UsersXmlApiTest < ActionController::IntegrationTest
     get '/users.xml', {}, basic_auth_headers()
     assert_response :success
     assert_tag :tag => "users",
-               :children => { :count => 4, :only => { :tag => "user" } }
+               :children => { :count => 5, :only => { :tag => "user" } }
     assert_no_tag :tag => "password"
   end
 

@@ -10,20 +10,19 @@ class RecurringTodo < ActiveRecord::Base
   named_scope :completed, :conditions => { :state => 'completed'}
 
   attr_protected :user
-
-  acts_as_state_machine :initial => :active, :column => 'state'
   
-  state :active, :enter => Proc.new { |t| 
-    t[:show_from], t.completed_at = nil, nil 
-    t.occurences_count = 0
-  }
-  state :completed, :enter => Proc.new { |t| t.completed_at = Time.zone.now }, :exit => Proc.new { |t| t.completed_at = nil }
+  include AASM
+  aasm_column :state
+  aasm_initial_state :active
+  
+  aasm_state :active, :enter => Proc.new { |t| t.occurences_count = 0 }
+  aasm_state :completed, :enter => Proc.new { |t| t.completed_at = Time.zone.now }, :exit => Proc.new { |t| t.completed_at = nil }
 
-  event :complete do
+  aasm_event :complete do
     transitions :to => :completed, :from => [:active]
   end
 
-  event :activate do
+  aasm_event :activate do
     transitions :to => :active, :from => [:completed]
   end
   
@@ -41,8 +40,7 @@ class RecurringTodo < ActiveRecord::Base
   validate :set_recurrence_on_validations
   
   def period_specific_validations
-    periods = %W[daily weekly monthly yearly]
-    if periods.include?(recurring_period)
+    if %W[daily weekly monthly yearly].include?(recurring_period)
       self.send("validate_#{recurring_period}")
     else
       errors.add(:recurring_period, "is an unknown recurrence pattern: '#{self.recurring_period}'")
@@ -93,7 +91,6 @@ class RecurringTodo < ActiveRecord::Base
       raise Exception.new, "unexpected value of recurrence selector '#{self.recurrence_selector}'"
     end
   end
-
 
   def starts_and_ends_on_validations
     errors.add_to_base("The start date needs to be filled in") if start_from.nil? || start_from.blank?
@@ -388,9 +385,9 @@ class RecurringTodo < ActiveRecord::Base
   def recurring_target_as_text
     case self.target
     when 'due_date'
-      return "due"
+      return I18n.t("todos.recurrence.pattern.due")
     when 'show_from_date'
-      return "show"
+      return I18n.t("todos.recurrence.pattern.show")
     else
       raise Exception.new, "unexpected value of recurrence target '#{self.target}'"
     end
@@ -403,38 +400,51 @@ class RecurringTodo < ActiveRecord::Base
   def recurring_show_always=(value)
     self.show_always=value
   end
-  
+
   def recurrence_pattern
     return "invalid repeat pattern" if every_other1.nil?
     case recurring_period
     when 'daily'
       if only_work_days
-        return "on work days"
+        return I18n.t("todos.recurrence.pattern.on_work_days")
       else
         if every_other1 > 1
-          return "every #{every_other1} days"
+          return I18n.t("todos.recurrence.pattern.every_n", :n => every_other1) + " " + I18n.t("common.days")
         else
-          return "every day"
+          return I18n.t("todos.recurrence.pattern.every_day")
         end
       end
     when 'weekly'
       if every_other1 > 1
-        return "every #{every_other1} weeks"
+        return I18n.t("todos.recurrence.pattern.every_n", :n => every_other1) + " " + I18n.t("common.weeks")
       else
-        return 'weekly'
+        return I18n.t('todos.recurrence.pattern.weekly')
       end
     when 'monthly'
       return "invalid repeat pattern" if every_other2.nil?
       if self.recurrence_selector == 0
-        return "every #{self.every_other2} month#{self.every_other2>1?'s':''} on day #{self.every_other1}"
+        on_day = " " + I18n.t('todos.recurrence.pattern.on_day_n', :n => self.every_other1)
+        if self.every_other2>1
+          return I18n.t("todos.recurrence.pattern.every_n", :n => self.every_other2) + " " + I18n.t('common.months') + on_day
+        else
+          return I18n.t("todos.recurrence.pattern.every_month") + on_day
+        end
       else
-        return "every #{self.xth} #{self.day_of_week} of every #{self.every_other2} month#{self.every_other2>1?'s':''}"
+        if self.every_other2>1
+          n_months = "#{self.every_other2} " + I18n.t('common.months')
+        else
+          n_months = I18n.t('common.month')
+        end
+        return I18n.t('todos.recurrence.pattern.every_xth_day_of_every_n_months', 
+          :x => self.xth, :day => self.day_of_week, :n_months => n_months)
       end
     when 'yearly'
       if self.recurrence_selector == 0
-        return "every year on #{self.month_of_year} #{self.every_other1}"
+        return I18n.t("todos.recurrence.pattern.every_year_on", 
+          :date => I18n.l(DateTime.new(Time.zone.now.year, self.every_other2, self.every_other1), :format => :month_day))
       else
-        return "every year on the #{self.xth} #{self.day_of_week} of #{self.month_of_year}"
+        return I18n.t("todos.recurrence.pattern.every_year_on", 
+          :date => I18n.t("todos.recurrence.pattern.the_xth_day_of_month", :x => self.xth, :day => self.day_of_week, :month => self.month_of_year))
       end
     else
       return 'unknown recurrence pattern: period unknown'
@@ -442,18 +452,18 @@ class RecurringTodo < ActiveRecord::Base
   end
   
   def xth
-    xth_day = ['first','second','third','fourth','last']
+    xth_day = [
+      I18n.t('todos.recurrence.pattern.first'),I18n.t('todos.recurrence.pattern.second'),I18n.t('todos.recurrence.pattern.third'),
+      I18n.t('todos.recurrence.pattern.fourth'),I18n.t('todos.recurrence.pattern.last')]
     return self.every_other3.nil? ? '??' : xth_day[self.every_other3-1]
   end
   
   def day_of_week
-    days_of_week = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
-    return (self.every_count.nil? ? '??' : days_of_week[self.every_count])
+    return (self.every_count.nil? ? '??' : I18n.t('todos.recurrence.pattern.day_names')[self.every_count])
   end
   
   def month_of_year
-    months_of_year = ['January','Februari','March','April','May','June','July','August','September','October','November','December']
-    return self.every_other2.nil? ? '??' : months_of_year[self.every_other2-1]
+    return self.every_other2.nil? ? '??' : I18n.t('todos.recurrence.pattern.month_names')[self.every_other2]
   end
   
   def starred?
@@ -692,13 +702,7 @@ class RecurringTodo < ActiveRecord::Base
   end
   
   def toggle_completion!
-    saved = false
-    if completed?
-      saved = activate!
-    else
-      saved = complete!
-    end
-    return saved
+    return completed? ? activate! : complete!
   end
   
   def toggle_star!

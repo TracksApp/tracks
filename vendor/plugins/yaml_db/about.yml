@@ -1,5 +1,0 @@
-author: Orion Henry and Adam Wiggins of Heroku
-summary: Dumps and loads a database-independent data dump format in db/data.yml.
-homepage: http://opensource.heroku.com/
-license: MIT
-rails_version: 1.2+

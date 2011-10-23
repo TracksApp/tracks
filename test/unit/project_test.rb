@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../test_helper'
+require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
 class ProjectTest < ActiveSupport::TestCase
   fixtures :projects, :contexts, :todos, :recurring_todos, :users, :preferences
@@ -31,12 +31,12 @@ class ProjectTest < ActiveSupport::TestCase
     assert_equal "already exists", newproj.errors.on(:name)
   end
     
-  def test_validate_name_does_not_contain_comma
+  def test_validate_name_can_contain_comma
     newproj = Project.new
     newproj.name = "Buy iPhones for Luke,bsag,David Allen"
-    assert !newproj.save
-    assert_equal 1, newproj.errors.count
-    assert_equal "cannot contain the comma (',') character", newproj.errors.on(:name)
+    assert newproj.save
+    assert_equal 0, newproj.errors.count
+    assert_equal "Buy iPhones for Luke,bsag,David Allen", newproj.name
   end
   
   def test_name_removes_extra_spaces
@@ -53,26 +53,26 @@ class ProjectTest < ActiveSupport::TestCase
   end
   
   def test_project_initial_state_is_active
-    assert_equal :active, @timemachine.current_state
+    assert_equal :active, @timemachine.aasm_current_state
     assert @timemachine.active?
   end
   
   def test_hide_project
     @timemachine.hide!
-    assert_equal :hidden, @timemachine.current_state
+    assert_equal :hidden, @timemachine.aasm_current_state
     assert @timemachine.hidden?
   end
   
   def test_activate_project
     @timemachine.activate!
-    assert_equal :active, @timemachine.current_state
+    assert_equal :active, @timemachine.aasm_current_state
     assert @timemachine.active?
   end
   
   def test_complete_project
     assert_nil @timemachine.completed_at
     @timemachine.complete!
-    assert_equal :completed, @timemachine.current_state
+    assert_equal :completed, @timemachine.aasm_current_state
     assert @timemachine.completed?
     assert_not_nil @timemachine.completed_at, "completed_at not expected to be nil"
     assert_in_delta Time.now, @timemachine.completed_at, 1
@@ -100,27 +100,27 @@ class ProjectTest < ActiveSupport::TestCase
   end
   
   def test_not_done_todos
-    assert_equal 2, @timemachine.not_done_todos.size
-    t = @timemachine.not_done_todos[0]
+    assert_equal 3, @timemachine.todos.not_completed.size
+    t = @timemachine.todos.not_completed[0]
     t.complete!
     t.save!
-    assert_equal 1, Project.find(@timemachine.id).not_done_todos.size
+    assert_equal 2, Project.find(@timemachine.id).todos.not_completed.size
   end
   
   def test_done_todos
-    assert_equal 0, @timemachine.done_todos.size
-    t = @timemachine.not_done_todos[0]
+    assert_equal 0, @timemachine.todos.completed.size
+    t = @timemachine.todos.not_completed[0]
     t.complete!
     t.save!
-    assert_equal 1, Project.find(@timemachine.id).done_todos.size
+    assert_equal 1, Project.find(@timemachine.id).todos.completed.size
   end
   
   def test_deferred_todos
-    assert_equal 1, @timemachine.deferred_todos.size
-    t = @timemachine.not_done_todos[0]
+    assert_equal 1, @timemachine.todos.deferred.size
+    t = @timemachine.todos.not_completed[0]
     t.show_from = 1.days.from_now.utc
     t.save!
-    assert_equal 2, Project.find(@timemachine.id).deferred_todos.size
+    assert_equal 2, Project.find(@timemachine.id).todos.deferred.size
   end
     
   def test_to_param_returns_id
@@ -141,40 +141,44 @@ class ProjectTest < ActiveSupport::TestCase
   end
 
   def test_transition_to_another_state
-    assert_equal :active, @timemachine.current_state
+    assert_equal :active, @timemachine.aasm_current_state
     @timemachine.transition_to(:hidden)
-    assert_equal :hidden, @timemachine.current_state
+    assert_equal :hidden, @timemachine.aasm_current_state
     @timemachine.transition_to(:completed)
-    assert_equal :completed, @timemachine.current_state
+    assert_equal :completed, @timemachine.aasm_current_state
     @timemachine.transition_to(:active)
-    assert_equal :active, @timemachine.current_state
+    assert_equal :active, @timemachine.aasm_current_state
   end
 
   def test_transition_to_same_state
-    assert_equal :active, @timemachine.current_state
+    assert_equal :active, @timemachine.aasm_current_state
     @timemachine.transition_to(:active)
-    assert_equal :active, @timemachine.current_state
+    assert_equal :active, @timemachine.aasm_current_state
   end
 
   def test_deferred_todo_count
-    assert_equal 1, @timemachine.deferred_todos.count
-    assert_equal 0, @moremoney.deferred_todos.count
-    @moremoney.todos[0].show_from = next_week
-    assert_equal 1, @moremoney.deferred_todos.count
+    assert_equal 1, @timemachine.todos.deferred.count
+    assert_equal 0, @moremoney.todos.deferred.count
+    
+    first_todo = @moremoney.todos[0]
+    first_todo.show_from = next_week
+    assert_equal :deferred, @moremoney.todos[0].aasm_current_state
+    
+    assert_equal 1, @moremoney.todos.deferred.count
   end
 
   def test_done_todo_count
-    assert_equal 0, @timemachine.done_todos.count
-    assert_equal 0, @moremoney.done_todos.count
+    assert_equal 0, @timemachine.todos.completed.count
+    assert_equal 0, @moremoney.todos.completed.count
     @moremoney.todos[0].complete!
-    assert_equal 1, @moremoney.done_todos.count
+    assert_equal 1, @moremoney.todos.completed.count
   end
 
   def test_not_done_todo_count
-    assert_equal 2, @timemachine.not_done_todos.count
-    assert_equal 4, @moremoney.not_done_todos.count
+    assert_equal 3, @timemachine.todos.not_completed.count
+    assert_equal 4, @moremoney.todos.not_completed.count
     @moremoney.todos[0].complete!
-    assert_equal 3, @moremoney.not_done_todos.count
+    assert_equal 3, @moremoney.todos.not_completed.count
   end
   
   def test_default_context_name

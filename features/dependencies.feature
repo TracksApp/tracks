@@ -92,8 +92,24 @@ Feature: dependencies
     And I should not see "test 2" in the deferred container
     And I should see the empty message in the deferred container
 
+  @selenium
   Scenario: Deleting a successor will update predecessor
-    Given this is a pending scenario
+    Given I have a context called "@pc"
+    And I have a project "dependencies" that has the following todos
+      | description | context |
+      | test 1      | @pc     |
+      | test 2      | @pc     |
+      | test 3      | @pc     |
+    And "test 2" depends on "test 1"
+    And "test 3" depends on "test 1"
+    When I go to the "dependencies" project
+    And I expand the dependencies of "test 1"
+    Then I should see "test 2" within the dependencies of "test 1"
+    And I should see "test 3" within the dependencies of "test 1"
+    When I delete the action "test 2"
+    And I expand the dependencies of "test 1"
+    Then I should see "test 3" within the dependencies of "test 1"
+    And I should not see "test 2"
 
   @selenium
   Scenario: Dragging an action to a completed action will not add it as a dependency
@@ -107,3 +123,49 @@ Feature: dependencies
     And I drag "test 1" to "test 3"
     Then I should see an error flash message saying "Cannot add this action as a dependency to a completed action!"
     And I should see "test 1" in project container for "dependencies"
+
+  @selenium
+  Scenario Outline: Marking a successor as complete will update predecessor
+    Given I have a context called "@pc"
+    And I have a project "dependencies" that has the following todos
+      | description | context | completed | tags |
+      | test 1      | @pc     | no        | bla  |
+      | test 2      | @pc     | no        | bla  |
+      | test 3      | @pc     | yes       | bla  |
+    When I go to the <page>
+    And I drag "test 1" to "test 2"
+    When I expand the dependencies of "test 2"
+    Then I should see "test 1" within the dependencies of "test 2"
+    And I should see "test 1" in the deferred container
+    When I mark "test 1" as complete
+    Then I should see that "test 2" does not have dependencies
+    And I should see "test 1" in the completed container
+
+    Scenarios:
+    | page                    |
+    | "dependencies" project  |
+    | tag page for "bla"      |
+
+  @selenium
+  Scenario Outline: Marking a successor as active will update predecessor
+    Given I have a context called "@pc"
+    And I have a project "dependencies" that has the following todos
+      | description | context | completed | tags |
+      | test 1      | @pc     | no        | bla  |
+      | test 2      | @pc     | no        | bla  |
+      | test 3      | @pc     | yes       | bla  |
+    When I go to the <page>
+    And I drag "test 1" to "test 2"
+    Then I should see "test 1" in the deferred container
+    When I mark "test 1" as complete
+    And I should see "test 1" in the completed container
+    And I should see that "test 2" does not have dependencies
+    When I mark the complete todo "test 1" active
+    Then I should not see "test 1" in the completed container
+    And I should see "test 1" in the deferred container
+    And I should see "test 1" within the dependencies of "test 2"
+
+    Scenarios:
+    | page                    |
+    | "dependencies" project  |
+    | tag page for "bla"      |

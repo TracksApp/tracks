@@ -4,7 +4,7 @@
   </div>
   <%= render :partial => 'project_state_group', :object => @active_projects, :locals => { :state => 'active'} %>
   <%= render :partial => 'project_state_group', :object => @hidden_projects, :locals => { :state => 'hidden'} %>
-  <%= render :partial => 'project_state_group', :object => @completed_projects, :locals => { :state => 'completed'} %>
+  <%= render :partial => 'project_state_group', :object => @completed_projects, :locals => { :state => 'completed', :total_count => @completed_count} %>
 </div>
 
 <div id="input_box">

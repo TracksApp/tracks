@@ -1,17 +1,17 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
- 
+
 describe Context do
   def valid_attributes
     {:name => 'Errands'}
   end
- 
+
   before(:each) do
     @context = Context.new
   end
 
   it 'has many users' do
     Context.should have_many(:todos).
-      with_order('todos.completed_at DESC').
+      with_order('todos.due IS NULL, todos.due ASC, todos.created_at ASC').
       with_dependent(:delete_all).
       with_include(:project)
   end
@@ -28,11 +28,6 @@ describe Context do
   it 'is hidden when hide is true' do
     Context.new(:hide => false).should_not be_hidden
     Context.new(:hide => true).should be_hidden
-  end
-
-  it 'produces correct summary depending on visibility' do
-    Context.new(:hide => true).summary(3).should == '<p>3. Context is Hidden.</p>'
-    Context.new(:hide => false).summary(3).should == '<p>3. Context is Active.</p>'
   end
 
   it 'returns name as title' do

@@ -21,15 +21,6 @@ Rails::Initializer.run do |config|
   # config.frameworks -= [ :action_web_service, :action_mailer ]
   config.autoload_paths += %W( #{RAILS_ROOT}/app/apis )
 
-  config.gem "highline"
-  config.gem "RedCloth"
-  config.gem "soap4r", :lib => false
-  config.gem 'datanoise-actionwebservice', :lib => 'actionwebservice', :source => "http://gems.github.com"
-  config.gem 'sanitize', :version => '~> 1.2.1'
-  config.gem 'rack', :version => '1.1.0'
-  config.gem 'will_paginate', :version => '~> 2.3.15'
-  config.gem 'has_many_polymorphs'
-
   config.action_controller.use_accept_header = true
 
   # Use the database for sessions instead of the file system
@@ -69,12 +60,7 @@ Rails::Initializer.run do |config|
   # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
   # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
   # config.i18n.default_locale = :de
-  
-  # See Rails::Configuration for more options
-  if ( SITE_CONFIG['authentication_schemes'].include? 'cas')
-    #requires rubycas-client gem to be installed
-    config.gem "rubycas-client", :lib => 'casclient'
-  end
+
 end
 
 # Add new inflection rules using the following format
@@ -121,7 +107,7 @@ if ( SITE_CONFIG['authentication_schemes'].include? 'cas')
   end
 end
 
-tracks_version='2.0devel'
+tracks_version='2.1devel'
 # comment out next two lines if you do not want (or can not) the date of the
 # last git commit in the footer
 info=`git log --pretty=format:"%ai" -1`

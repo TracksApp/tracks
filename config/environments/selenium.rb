@@ -24,6 +24,3 @@ config.action_mailer.delivery_method = :test
 # Unique cookies
 config.action_controller.session = { :key => 'TracksSelenium' }
 
-config.gem 'database_cleaner', :lib => false, :version => '>=0.5.0' unless File.directory?(File.join(Rails.root, 'vendor/plugins/database_cleaner'))
-config.gem 'selenium-client',  :lib => false unless File.directory?(File.join(Rails.root, 'vendor/plugins/selenium-client'))
-config.gem 'mongrel'  # required by webrat for selenium

@@ -8,6 +8,9 @@ Feature: Edit a context
       | login    | password | is_admin |
       | testuser | secret   | false    |
     And I have logged in as "testuser" with password "secret"
+    And I have a context called "@pc"
+    And I have a project called "test project"
+    And I have 2 todos in project "test project" in context "@pc" with tags "starred"
 
   @selenium
   Scenario: In place edit of context name
@@ -19,17 +22,52 @@ Feature: Edit a context
     Then he should see that a context named "Errands" is not present
     And he should see that a context named "OutAndAbout" is present
 
+  @selenium
   Scenario: Editing the context of a todo will remove the todo
-    Given this is a pending scenario
+    When I go to the the context page for "@pc"
+    Then the badge should show 2
+    When I edit the context of "todo 1" to "@laptop"
+    Then I should not see "todo 1"
+    And the badge should show 1
 
+  @selenium
   Scenario: Editing the description of a a todo will update that todo
-    Given this is a pending scenario
+    When I go to the the context page for "@pc"
+    And I edit the description of "todo 1" to "changed"
+    Then I should not see "todo 1"
+    And I should see "changed"
 
+  @selenium
   Scenario: Editing the context of the last todo will remove the todo and show empty message
-    Given this is a pending scenario
+    When I go to the the context page for "@pc"
+    And I edit the context of "todo 1" to "@laptop"
+    Then I should not see "todo 1"
+    And the badge should show 1
+    When I edit the context of "todo 2" to "@laptop"
+    Then I should not see "todo 2"
+    And the badge should show 0
+    And I should see "Currently there are no incomplete actions in this context"
 
+  @selenium
   Scenario: Adding a todo to a hidden project will not show the todo
-    Given this is a pending scenario
+    Given I have a hidden project called "hidden project"
+    When I go to the the context page for "@pc"
+    And I edit the project of "todo 1" to "hidden project"
+    Then I should not see "todo 1"
+    When I submit a new action with description "todo X" to project "hidden project" in the context "@pc"
+    Then I should not see "todo X"
+    When I go to the "hidden project" project
+    Then I should see "todo 1"
+    And I should see "todo X"
+    And the badge should show 2
 
+  @selenium
   Scenario: Adding a todo to a hidden context will show that todo
-    Given this is a pending scenario
+    Given I have a hidden context called "@personal"
+    When I go to the the context page for "@pc"
+    And I edit the context of "todo 1" to "@personal"
+    Then I should not see "todo 1"
+    When I go to the context page for "@personal"
+    Then I should see "todo 1"
+    When I submit a new action with description "todo X" to project "test project" in the context "@personal"
+    Then I should see "todo X"

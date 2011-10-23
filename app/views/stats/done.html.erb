@@ -1,0 +1,45 @@
+<div id="display_box">
+  <div class="container">
+    <div class=add_note_link><%= link_to "Show all", done_todos_path%></div>
+    <h2>
+      <%= t('common.last') %> <%= t('states.completed_plural' )%> <%= t('common.actions') %>
+    </h2>
+    <% if @done_recently.empty? -%>
+      <div class="message"><p><%= t('todos.no_last_completed_actions') %></p></div>
+    <% else -%>
+      <%= render :partial => "todos/todo", :collection => @done_recently, :locals => { :parent_container_type => "completed", :suppress_context => false, :suppress_project => false } %>
+    <% end -%>
+  </div>
+  
+  <div class="container">
+    <div class=add_note_link><%= link_to "Show all", done_projects_path%></div>
+    <h2>      
+      <%= t('common.last') %> <%= t('states.completed_plural' )%> <%= t('common.projects') %>
+    </h2>  
+    <% if @last_completed_projects.empty? -%>
+      <div class="message"><p><%= t('projects.no_last_completed_projects') %></p></div>
+    <% else -%>
+      <div id="list-completed-projects" class="project-list">
+      <%= render :partial => '/projects/project_listing', 
+      :collection => @last_completed_projects,
+      :locals => {:suppress_drag_handle => true}
+      %>
+    </div>
+    <% end -%>
+  </div>
+
+  <div class="container">
+    <div class=add_note_link><%= link_to "Show all", done_recurring_todos_path%></div>
+    <h2>      
+      <%= t('common.last') %> <%= t('states.completed_plural' )%> <%= t('common.recurring_todos') %>
+    </h2>  
+    <% if @last_completed_recurring_todos.empty? -%>
+      <div class="message"><p><%= t('projects.no_last_completed_recurring_todos') %></p></div>
+    <% else -%>
+      <%= render :partial => '/recurring_todos/recurring_todo', :collection => @last_completed_recurring_todos %>
+    <% end -%>
+  </div>
+
+
+
+</div><!-- End of display_box -->

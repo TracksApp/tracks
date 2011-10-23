@@ -11,7 +11,7 @@ class ContextsController < ApplicationController
   def index
     # #true is passed here to force an immediate load so that size and empty?
     # checks later don't result in separate SQL queries
-    @active_contexts = current_user.contexts.active(true) 
+    @active_contexts = current_user.contexts.active(true)
     @hidden_contexts = current_user.contexts.hidden(true)
     @new_context = current_user.contexts.build
 
@@ -19,8 +19,8 @@ class ContextsController < ApplicationController
     @all_contexts = @active_contexts + @hidden_contexts
     @count = @all_contexts.size
 
-
     init_not_done_counts(['context'])
+
     respond_to do |format|
       format.html &render_contexts_html
       format.m    &render_contexts_mobile
@@ -34,10 +34,10 @@ class ContextsController < ApplicationController
       format.autocomplete { render :text => for_autocomplete(@active_contexts + @hidden_contexts, params[:term])}
     end
   end
-  
+
   def show
     @contexts = current_user.contexts(true)
-    if (@context.nil?)
+    if @context.nil?
       respond_to do |format|
         format.html { render :text => 'Context not found', :status => 404 }
         format.xml  { render :xml => '<error>Context not found</error>', :status => 404 }
@@ -51,7 +51,7 @@ class ContextsController < ApplicationController
       end
     end
   end
-  
+
   # Example XML usage: curl -H 'Accept: application/xml' -H 'Content-Type:
   # application/xml'
   #                    -u username:password
@@ -86,14 +86,14 @@ class ContextsController < ApplicationController
       end
     end
   end
-  
+
   # Edit the details of the context
   #
   def update
     params['context'] ||= {}
     success_text = if params['field'] == 'name' && params['value']
-      params['context']['id'] = params['id'] 
-      params['context']['name'] = params['value'] 
+      params['context']['id'] = params['id']
+      params['context']['name'] = params['value']
     end
 
     @original_context_hidden = @context.hidden?
@@ -110,7 +110,7 @@ class ContextsController < ApplicationController
         end
 
         # TODO is this param ever used? is this dead code?
-        
+
       elsif boolean_param('update_context_name')
         @contexts = current_user.projects
         render :template => 'contexts/update_context_name.js.rjs'
@@ -121,6 +121,13 @@ class ContextsController < ApplicationController
     else
       respond_to do |format|
         format.js
+        format.xml {
+          if @saved
+            render :xml => @context.to_xml( :except => :user_id )
+          else
+            render :text => "Error on update: #{@context.errors.full_messages.inject("") {|v, e| v + e + " " }}", :status => 409
+          end
+        }
       end
     end
   end
@@ -138,7 +145,7 @@ class ContextsController < ApplicationController
   def destroy
     # make sure the deleted recurring patterns are removed from associated todos
     @context.recurring_todos.each { |rt| rt.clear_todos_association } unless @context.recurring_todos.nil?
-    
+
     @context.destroy
     respond_to do |format|
       format.js do
@@ -159,7 +166,32 @@ class ContextsController < ApplicationController
     notify :error, $!
     redirect_to :action => 'index'
   end
-  
+
+  def done_todos
+    @source_view = 'context'
+    @context = current_user.contexts.find(params[:id])
+    @page_title = t('contexts.completed_tasks_title', :context_name => @context.name)
+
+    completed_todos = @context.todos.completed
+
+    @done_today = get_done_today(completed_todos)
+    @done_this_week = get_done_this_week(completed_todos)
+    @done_this_month = get_done_this_month(completed_todos)
+    @count = @done_today.size + @done_this_week.size + @done_this_month.size
+
+    render :template => 'todos/done'
+  end
+
+  def all_done_todos
+    @source_view = 'context'
+    @context = current_user.contexts.find(params[:id])
+    @page_title = t('contexts.all_completed_tasks_title', :context_name => @context.name)
+
+    @done = @context.todos.completed.paginate :page => params[:page], :per_page => 20, :order => 'completed_at DESC', :include => Todo::DEFAULT_INCLUDES
+    @count = @done.size
+    render :template => 'todos/all_done'
+  end
+
   protected
 
   def update_state_counts
@@ -179,23 +211,23 @@ class ContextsController < ApplicationController
       render
     end
   end
-  
+
   def render_contexts_mobile
     lambda do
       @page_title = "TRACKS::List Contexts"
       @active_contexts = current_user.contexts.active
       @hidden_contexts = current_user.contexts.hidden
-      @down_count = @active_contexts.size + @hidden_contexts.size 
+      @down_count = @active_contexts.size + @hidden_contexts.size
       cookies[:mobile_url]= {:value => request.request_uri, :secure => SITE_CONFIG['secure_cookies']}
       render :action => 'index_mobile'
     end
   end
-    
+
   def render_context_mobile
     lambda do
       @page_title = "TRACKS::List actions in "+@context.name
-      @not_done = @not_done_todos.select {|t| t.context_id == @context.id } 
-      @down_count = @not_done.size 
+      @not_done = @not_done_todos.select {|t| t.context_id == @context.id }
+      @down_count = @not_done.size
       cookies[:mobile_url]= {:value => request.request_uri, :secure => SITE_CONFIG['secure_cookies']}
       @mobile_from_context = @context.id
       render :action => 'mobile_show_context'
@@ -205,18 +237,18 @@ class ContextsController < ApplicationController
   def render_contexts_rss_feed
     lambda do
       render_rss_feed_for current_user.contexts.all, :feed => feed_options,
-        :item => { :description => lambda { |c| c.summary(count_undone_todos_phrase(c)) } }
+        :item => { :description => lambda { |c| @template.summary(c, count_undone_todos_phrase(c)) } }
     end
   end
 
   def render_contexts_atom_feed
     lambda do
       render_atom_feed_for current_user.contexts.all, :feed => feed_options,
-        :item => { :description => lambda { |c| c.summary(count_undone_todos_phrase(c)) },
+        :item => { :description => lambda { |c| @template.summary(c, count_undone_todos_phrase(c)) },
         :author => lambda { |c| nil } }
     end
   end
-    
+
   def feed_options
     Context.feed_options(current_user)
   end
@@ -226,7 +258,7 @@ class ContextsController < ApplicationController
   rescue
     @context = nil
   end
-     
+
   def init
     @source_view = params['_source_view'] || 'context'
     init_data_for_sidebar
@@ -235,21 +267,19 @@ class ContextsController < ApplicationController
   def init_todos
     set_context_from_params
     unless @context.nil?
-      @context.todos.send :with_scope, :find => { :include => [:project, :tags] } do
+      @context.todos.send :with_scope, :find => { :include => Todo::DEFAULT_INCLUDES } do
         @done = @context.done_todos
       end
 
       @max_completed = current_user.prefs.show_number_completed
-        
+
       # @not_done_todos = @context.not_done_todos TODO: Temporarily doing this
       # search manually until I can work out a way to do the same thing using
       # not_done_todos acts_as_todo_container method Hides actions in hidden
       # projects from context.
-      @not_done_todos = @context.todos.find(
-        :all, 
-        :conditions => ['todos.state = ? AND (todos.project_id IS ? OR projects.state = ?)', 'active', nil, 'active'], 
-        :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC", 
-        :include => [:project, :tags])
+      @not_done_todos = @context.todos.active(
+        :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC",
+        :include => Todo::DEFAULT_INCLUDES)
 
       @projects = current_user.projects
 

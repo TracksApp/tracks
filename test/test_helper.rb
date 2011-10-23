@@ -1,14 +1,18 @@
 ENV["RAILS_ENV"] = "test"
+require 'thread'
 require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
 require File.expand_path(File.dirname(__FILE__) + "/../app/controllers/application_controller")
 require 'test_help'
 require 'flexmock/test_unit' #and the flexmock gem, too!
 require 'action_web_service/test_invoke'
-  
+
 module Tracks
   class Config
     def self.salt
       "change-me"
+    end
+    def self.auth_schemes
+      return ["database","open_id"]
     end
   end
 end
@@ -29,9 +33,9 @@ class Test::Unit::TestCase
     actual_error = model_instance.errors.on attribute.to_sym
     assert_equal expected_error, actual_error
   end
-  
+
   alias_method :assert_errors_on, :assert_error_on
-  
+
   def assert_value_changed(object, method = nil)
     initial_value = object.send(method)
     yield
@@ -41,7 +45,7 @@ class Test::Unit::TestCase
 end
 
 class ActiveSupport::TestCase
-   
+
   # Generates a random string of ascii characters (a-z, "1 0")
   # of a given length for testing assignment to fields
   # for validation purposes
@@ -55,11 +59,11 @@ class ActiveSupport::TestCase
     end
     return string
   end
-      
+
   def next_week
     1.week.from_now.utc
   end
-  
+
   # Courtesy of http://habtm.com/articles/2006/02/20/assert-yourself-man-redirecting-with-rjs
   def assert_js_redirected_to(options={}, message=nil)
    clean_backtrace do
@@ -103,12 +107,12 @@ end
 
 class ActionController::IntegrationTest
   Tag #avoid errors in integration tests
-  
+
   def assert_test_environment_ok
     assert_equal "test", ENV['RAILS_ENV']
     assert_equal "change-me", Tracks::Config.salt
   end
-  
+
   def authenticated_post_xml(url, username, password, parameters, headers = {})
     post url,
         parameters,
@@ -117,7 +121,7 @@ class ActionController::IntegrationTest
           'CONTENT_TYPE' => 'application/xml'
           }.merge(headers)
   end
-  
+
   def authenticated_get_xml(url, username, password, parameters, headers = {})
     get url,
         parameters,
@@ -126,7 +130,7 @@ class ActionController::IntegrationTest
           'CONTENT_TYPE' => 'application/xml'
           }.merge(headers)
   end
-    
+
   def assert_response_and_body(type, body, message = nil)
     assert_equal body, @response.body, message
     assert_response type, message
@@ -136,13 +140,13 @@ class ActionController::IntegrationTest
     assert_response type, message
     assert_match body_regex, @response.body, message
   end
-    
+
   def assert_401_unauthorized
     assert_response_and_body 401, "401 Unauthorized: You are not authorized to interact with Tracks."
   end
-  
+
   def assert_401_unauthorized_admin
     assert_response_and_body 401, "401 Unauthorized: Only admin users are allowed access to this function."
   end
-  
+
 end

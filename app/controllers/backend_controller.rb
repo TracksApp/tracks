@@ -1,6 +1,7 @@
 class CannotAccessContext < RuntimeError; end
 
 class BackendController < ApplicationController
+  acts_as_web_service
   wsdl_service_name 'Backend'
   web_service_api TodoApi
   web_service_scaffold :invoke

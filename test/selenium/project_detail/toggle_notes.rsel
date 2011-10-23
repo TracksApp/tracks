@@ -1,5 +1,0 @@
-setup :fixtures => :all
-login :as => 'admin'
-open "/projects/1"
-click "css=#toggle-notes-nav"
-wait_for_element_present "notes_todo_6"

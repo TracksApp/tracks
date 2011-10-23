@@ -12,7 +12,7 @@ var TracksForm = {
             $('#'+formId+' input:text:first').focus();
         }
         toggleLink.parent().toggleClass('hide_form');
-    }, 
+    },
     set_project_name: function (name) {
         $('input#todo_project_name').val(name);
     },
@@ -35,7 +35,7 @@ var TracksForm = {
         $('#project_name').html(name);
     },
     set_tag_list: function (name) {
-        $('input#tag_list').val(name);
+        $('input#todo_tag_list').val(name);
     },
     set_tag_list_for_multi_add: function (name) {
         $('#multi_tag_list').val(name);
@@ -74,8 +74,15 @@ var TracksForm = {
             $(this).prev().val('');
         });
 
+        $("#new_todo_starred_link").click(function() {
+          $("#new_todo_starred").val($(this).children(".todo_star").toggleClass("starred").hasClass("starred"));
+        });
+
         /* submit todo form after entering new todo */
         $("button#todo_new_action_submit").live('click', function (ev) {
+            if ($('input#predecessor_input').val() != "")
+              if (!confirm(i18n['todos.unresolved_dependency']))
+                return false;
             if (TodoItems.askIfNewContextProvided('', this))
                 submit_with_ajax_and_block_element('form#todo-form-new-action', $(this));
             return false;
@@ -174,8 +181,13 @@ var TracksPages = {
         var flash = $('div#message_holder');
         flash.html("<h4 id=\'flash\' class=\'alert "+type+"\'>"+message+"</h4>");
         flash = $('h4#flash');
-        flash.show();
-        flash.fadeOut(fade_duration_in_sec*1000);
+
+        fadein_duration = 1500;
+        fadeout_duration = 1500;
+        show_duration = fade_duration_in_sec*1000 - fadein_duration - fadeout_duration
+        if (show_duration < 0)
+          show_duration = 1000;
+        flash.fadeIn(fadein_duration).delay(show_duration).fadeOut(fadeout_duration);
     },
     set_page_badge: function(count) {
         $('#badge_count').html(count);
@@ -239,7 +251,8 @@ var TracksPages = {
         ProjectItems.setup_autocomplete_for_projects('input[name=project_name]');
         ContextItems.setup_autocomplete_for_contexts('input[name=context_name]');
         ContextItems.setup_autocomplete_for_contexts('input[id="project_default_context_name"]');
-        TracksPages.setup_autocomplete_for_tag_list('input[name=tag_list]');
+        TracksPages.setup_autocomplete_for_tag_list('input[name=tag_list]'); // todo edit form
+        TracksPages.setup_autocomplete_for_tag_list('input[name=todo_tag_list]'); // new todo form
         TracksPages.setup_autocomplete_for_tag_list('input[id="project_default_tags"]');
         TodoItems.setup_autocomplete_for_predecessor();
     },
@@ -292,6 +305,19 @@ var TracksPages = {
             $(".todo_notes").toggle();
         });
 
+	   
+       /* Poor man's perspectives, allows to hide any context that is collapsed */
+        $("#toggle-contexts-nav").click(function () {
+            /* Need to keep a single toggle across all contexts */
+            $(this).toggleClass("context_visibility"); 
+            if ($(this).hasClass("context_visibility")) {
+                $(".context_collapsed").hide(); /* Hide all collapsed contexts together*/
+            }
+            else {
+                $(".context_collapsed").show();       
+            }
+        });
+        
         /* fade flashes and alerts in automatically */
         $(".alert").fadeOut(8000);
     }
@@ -341,12 +367,16 @@ var TodoItemsContainer = {
                 $(this).find('img').attr('src', imgSrc.replace('collapse', 'expand'));
                 $.cookie(TodoItemsContainer.buildCookieName(this.parentNode.parentNode), true);
                 toggle_target.slideUp(500);
+                // set parent class to 'context_collapsed' so we can hide/unhide all collapsed contexts
+                toggle_target.parent().addClass("context_collapsed");
             } else {
                 // show it
                 imgSrc = $(this).find('img').attr('src');
                 $(this).find('img').attr('src', imgSrc.replace('expand', 'collapse'));
                 $.cookie(TodoItemsContainer.buildCookieName(this.parentNode.parentNode), null);
                 toggle_target.slideDown(500);
+                // remove class 'context_collapsed' from parent class
+                toggle_target.parent().removeClass("context_collapsed");
             }
             return false;
         });
@@ -357,6 +387,7 @@ var TodoItemsContainer = {
                 if (imgSrc) {
                     $(this).find('.container_toggle img').attr('src', imgSrc.replace('collapse', 'expand'));
                     $(this).find('.toggle_target').hide();
+                    $(this).find('.toggle_target').parent().addClass("context_collapsed");
                 }
             }
         });
@@ -616,7 +647,7 @@ var ProjectItems = {
 
 var UsersPage = {
     setup_behavior: function() {
-        /* delete button to delete a usedr from the list */
+        /* delete button to delete a user from the list */
         $('a.delete_user_button').live('click', function(evt){
             var confirm_message = $(this).attr("x_confirm_message")
             if(confirm(confirm_message)){
@@ -625,6 +656,47 @@ var UsersPage = {
             return false;
         });
 
+    }
+}
+
+var PreferencesPage = {
+    get_date_format: function(tag_name) {
+        var value = $('input[name="prefs['+tag_name+']"]').val();
+        var element = 'span[id="prefs.'+tag_name+'"]';
+        var url = 'preferences/render_date_format';
+        var param = "date_format="+encodeURIComponent( value );
+        generic_get_script_for_list(element, url, param);
+      },
+    setup_getter_for_date_format: function(tag_name) {
+      $('input[name="prefs['+tag_name+']"]').change(function() {
+        PreferencesPage.get_date_format(tag_name);
+      });
+    },
+    setup_behavior: function() {
+      $( "#tabs" ).tabs();
+
+      $( "button#prefs_submit" ).button();
+
+      $('input[name="user[auth_type]"]').change(function() {
+        var value = $('input[name="user[auth_type]"]:checked').val();
+        $('#open_id')[0].style.display = value == 'open_id' ? 'block' : 'none'
+        $('#database')[0].style.display = value == 'database' ? 'block' : 'none'
+      });
+
+      $('input[name="date_picker1"]').change(function() {
+        var value = $('input[name="date_picker1"]:checked').val();
+        $('input[name="prefs[date_format]"]').val(value);
+        PreferencesPage.get_date_format('date_format');
+      });
+
+      $('input[name="date_picker2"]').change(function() {
+        var value = $('input[name="date_picker2"]:checked').val();
+        $('input[name="prefs[title_date_format]"]').val(value);
+        PreferencesPage.get_date_format('title_date_format');
+      });
+
+      PreferencesPage.setup_getter_for_date_format('date_format');
+      PreferencesPage.setup_getter_for_date_format('title_date_format');
     }
 }
 
@@ -662,8 +734,8 @@ var ProjectListPage = {
     },
     setup_behavior: function() {
         /* in-place edit of project name */
-        $('h2#project_name').editable(ProjectListPage.save_project_name, {
-            style: 'padding:0px',
+        $('div#project_name').editable(ProjectListPage.save_project_name, {
+            style: 'padding: 0px; width=100%;',
             submit: i18n['common.ok'],
             cancel: i18n['common.cancel']
         });
@@ -735,6 +807,8 @@ var ProjectListPage = {
                 update: update_order
             });
         });
+
+        $('#project_new #project_name').focus();
     }
 }
 
@@ -818,6 +892,8 @@ var ContextListPage = {
                 update: update_order
             })
         });
+
+        $('#context-form #context_name').focus();
     }
 }
 
@@ -898,7 +974,7 @@ var NotesPage = {
 
         /* update button when editing a note */
         $("form.edit-note-form button.positive").live('click', function (ev) {
-            submit_with_ajax_and_block_element('form.edit-note-form', $(this));
+            submit_with_ajax_and_block_element($(this).parents('form.edit-note-form'), $(this));
             return false;
         });
     }
@@ -989,6 +1065,10 @@ var SearchPage = {
 
 function redirect_to(path) {
     window.location.href = path;
+}
+
+function refresh_page() {
+    location.reload(true);
 }
 
 function setup_auto_refresh(interval){
@@ -1208,12 +1288,20 @@ function enable_rich_interaction(){
 }
 
 $(document).ready(function() {
+
+    // fix for IE8. Without this checkboxes don't work AJAXy. See #1152
+    if($.browser.msie && ($.browser.version.substring(0, 2) == "8.")) {
+        $('body').bind('change', function() {
+            return true;
+        });
+    }
+
     TracksPages.setup_nifty_corners();
 
     TodoItemsContainer.setup_container_toggles();
 
     /* enable page specific behavior */
-    $([ 'IntegrationsPage', 'NotesPage', 'ProjectListPage', 'ContextListPage',
+    $([ 'PreferencesPage', 'IntegrationsPage', 'NotesPage', 'ProjectListPage', 'ContextListPage',
         'FeedsPage', 'RecurringTodosPage', 'TodoItems', 'TracksPages',
         'TracksForm', 'SearchPage', 'UsersPage' ]).each(function() {
         eval(this+'.setup_behavior();');

@@ -1,5 +1,5 @@
-require File.dirname(__FILE__) + '/../test_helper'
-require File.dirname(__FILE__) + '/todo_container_controller_test_base'
+require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
+require File.expand_path(File.dirname(__FILE__) + '/todo_container_controller_test_base')
 require 'projects_controller'
 
 # Re-raise errors caught by the controller.
@@ -24,7 +24,7 @@ class ProjectsControllerTest < TodoContainerControllerTestBase
     assert_not_nil assigns['deferred']
     assert_equal 1, assigns['deferred'].size
 
-    t = p.not_done_todos[0]
+    t = p.todos.not_completed[0]
     t.show_from = 1.days.from_now.utc
     t.save!
     
@@ -48,8 +48,8 @@ class ProjectsControllerTest < TodoContainerControllerTestBase
     assert_ajax_create_increments_count 'My New Project'
   end
 
-  def test_create_with_comma_in_name_does_not_increment_number_of_projects
-    assert_ajax_create_does_not_increment_count 'foo,bar'
+  def test_create_with_comma_in_name_increments_number_of_projects
+    assert_ajax_create_increments_count 'foo,bar'
   end
   
   def test_todo_state_is_project_hidden_after_hiding_project
@@ -58,7 +58,7 @@ class ProjectsControllerTest < TodoContainerControllerTestBase
     login_as(:admin_user)
     xhr :post, :update, :id => 1, "project"=>{"name"=>p.name, "description"=>p.description, "state"=>"hidden"}
     todos.each do |t|
-      assert_equal :project_hidden, t.reload().current_state
+      assert_equal :project_hidden, t.reload().aasm_current_state
     end
     assert p.reload().hidden?
   end
@@ -70,7 +70,7 @@ class ProjectsControllerTest < TodoContainerControllerTestBase
     xhr :post, :update, :id => 1, "project"=>{"name"=>p.name, "description"=>p.description, "state"=>"hidden"}
     xhr :post, :update, :id => 1, "project"=>{"name"=>p.name, "description"=>p.description, "state"=>"active"}
     todos.each do |t|
-      assert_equal :active, t.reload().current_state
+      assert_equal :active, t.reload().aasm_current_state
     end
     assert p.reload().active?
   end
@@ -164,8 +164,7 @@ class ProjectsControllerTest < TodoContainerControllerTestBase
     login_as :admin_user
     get :index, { :format => "txt" }
     assert_equal 'text/plain', @response.content_type
-    assert !(/&nbsp;/.match(@response.body)) 
-    #puts @response.body
+    assert !(/&nbsp;/.match(@response.body))
   end
   
   def test_text_feed_content_for_projects_with_no_actions
@@ -200,6 +199,7 @@ class ProjectsControllerTest < TodoContainerControllerTestBase
     login_as :admin_user
     u = users(:admin_user)
     post :actionize, :state => "active", :format => 'js'
+    
     assert_equal 1, projects(:gardenclean).position
     assert_equal 2, projects(:moremoney).position
     assert_equal 3, projects(:timemachine).position

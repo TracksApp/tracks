@@ -1,0 +1,37 @@
+<%
+  paginate_options = {
+    :class => :add_note_link, 
+    :previous_label => '&laquo; '+ t('common.previous'),
+    :next_label     => t('common.next')+' &raquo;',
+    :inner_window   => 2
+  }
+%>
+<div id="display_box">
+  <div id="projects-empty-nd" style="<%= @no_projects ? 'display:block' : 'display:none'%>">
+    <div class="message"><p><%= t('projects.no_projects') %></p></div>
+  </div>
+  
+  <div class="project-state-group" id="list-completed-projects-container" <%= " style=\"display:none\"" if @no_projects %>>
+    <%= will_paginate @projects, paginate_options %>
+    <h2>
+      <span id="completed-projects-count" class="badge"><%= "#{@total} (#{@range_low}-#{@range_high})" %></span>
+      <%= t('states.completed_plural' )%> <%= t('common.projects') %>
+    </h2>
+    <div id="list-completed-projects" class="project-list">
+      <%= render :partial => 'project_listing', :collection => @projects %>
+    </div>
+  </div>
+  <%= will_paginate @projects, paginate_options %>
+</div>
+
+<div id="input_box">
+  <div class="menu_sort"><h2><br/><%= t('common.sort.sort') %>&nbsp;<%= t('states.completed_plural' )%> <%= t('common.projects') %></h2>
+    <div class="alpha_sort">
+      <%= link_to(t("common.sort.alphabetically"), alphabetize_projects_path(:state => :completed),
+        :id => "completed_alphabetize_link", :class => "alphabetize_link", :title => t('common.sort.alphabetically_title'), :x_confirm_message => t('common.sort.alphabetically_confirm')) %>
+    </div><span class="sort_separator">&nbsp;|&nbsp;</span><div class="tasks_sort">
+      <%= link_to(t("common.sort.by_task_count"), actionize_projects_path(:state => :completed),
+        :id => "completed_actionize_link", :class => "actionize_link", :title => t('common.sort.by_task_count_title'), :x_confirm_message => t('common.sort.by_task_count_title_confirm')) %>
+    </div>
+  </div>
+</div>

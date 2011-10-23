@@ -1,5 +1,0 @@
-setup :fixtures => :all
-login :as => 'admin'
-open "/todos/tag/foo"
-wait_for_element_present "xpath=//div[@id='c1'] //h2"
-wait_for_text 'badge_count', '2'

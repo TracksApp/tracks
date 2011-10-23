@@ -41,7 +41,7 @@ call_bill_gates_every_day:
   show_from_delta: ~
   recurring_period: daily
   recurrence_selector: ~
-  show_always: 0
+  show_always: 1
   every_other1: 1
   every_other2: ~
   every_other3: ~

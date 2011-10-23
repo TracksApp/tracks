@@ -2,8 +2,42 @@ Given /^the following user records?$/ do |table|
   User.delete_all
   table.hashes.each do |hash|
     user = Factory(:user, hash)
-    user.create_preference
+    user.create_preference({:locale => 'en'})
   end
+end
+
+Given /^the following user records with hash algorithm$/ do |table|
+  User.delete_all
+  table.hashes.each do | hash |
+    password = hash[:password]
+    algorithm = hash[:algorithm]
+    hash.delete("algorithm")
+
+    user = Factory(:user, hash)
+
+    case algorithm
+    when 'bcrypt'
+      user.change_password( password, password )
+      user.reload
+      BCrypt::Password.new(user.crypted_password).should == password
+    when 'sha1'
+      user.password = user.password_confirmation = nil
+      user.write_attribute :crypted_password, user.sha1(password)
+      user.save
+      user.reload
+      user.crypted_password.should == user.sha1(password)
+    else
+      raise "Unknown hashing algorithm: #{algorithm}"
+    end
+
+    user.create_preference({:locale => 'en'})
+  end
+end
+
+When /^I change my password to "([^"]*)"$/ do |password|
+  Then 'I should be on the change password page'
+  %w{password password_confirmation}.each { |name| fill_in "user[#{name}]", :with => password }
+  click_button
 end
 
 Given "no users exists" do

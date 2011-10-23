@@ -1,4 +1,0 @@
-setup :fixtures => :all
-login :as => 'admin'
-open '/'
-assert_element_present "css=#c2 #todo_2 img.unstarred_todo"

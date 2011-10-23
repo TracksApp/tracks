@@ -3,11 +3,11 @@
 <% else -%>
 
   <% render :layout => 'show_results_collection', :object => @found_todos, :locals => { :collection_name => "found-todos", :collection_title => t('search.todos_matching_query')} do %>
-    <%= render :partial => "todos/todo", :collection => @found_todos, :locals => { :parent_container_type => 'search', :suppress_context => false, :suppress_project => false, :suppress_edit_button => true } %>
+    <%= render :partial => "todos/todo", :collection => @found_todos, :locals => { :parent_container_type => 'search', :suppress_context => false, :suppress_project => false, :suppress_edit_button => false } %>
   <% end -%>
 
   <% render :layout => 'show_results_collection', :object => @found_projects, :locals => { :collection_name => "found-project", :collection_title => t('search.projects_matching_query')} do %>
-    <%= render :partial => "projects/project_listing", :collection => @found_projects, :locals => { :suppress_drag_handle => true, :suppress_edit_button => true } %>
+    <%= render :partial => "projects/project_listing", :collection => @found_projects, :locals => { :suppress_drag_handle => true, :suppress_edit_button => true, :suppress_delete_button => true } %>
   <% end -%>
 
   <% render :layout => 'show_results_collection', :object => @found_notes, :locals => { :collection_name => "found-notes", :collection_title => t('search.notes_matching_query')} do %>

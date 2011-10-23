@@ -1,6 +1,6 @@
 class StatsController < ApplicationController
 
-  helper :todos
+  helper :todos, :projects, :recurring_todos
 
   append_before_filter :init, :exclude => []
   
@@ -641,6 +641,18 @@ class StatsController < ApplicationController
       # render error
       render_failure "404 NOT FOUND. Unknown query selected"
     end
+  end
+
+  def done 
+    @source_view = 'done'
+    
+    init_not_done_counts
+    
+    @done_recently = current_user.todos.completed.all(:limit => 10, :order => 'completed_at DESC', :include => Todo::DEFAULT_INCLUDES)
+    @last_completed_projects = current_user.projects.completed.all(:limit => 10, :order => 'completed_at DESC', :include => [:todos, :notes])
+    @last_completed_contexts = []
+    @last_completed_recurring_todos = current_user.recurring_todos.completed.all(:limit => 10, :order => 'completed_at DESC', :include => [:tags, :taggings])
+    #TODO: @last_completed_contexts = current_user.contexts.completed.all(:limit => 10, :order => 'completed_at DESC')
   end
 
   private

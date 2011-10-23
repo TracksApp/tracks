@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../test_helper'
+require  File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 require 'projects_controller'
 
 # Re-raise errors caught by the controller.
@@ -12,6 +12,16 @@ class ProjectXmlApiTest < ActionController::IntegrationTest
   
   def setup
     assert_test_environment_ok
+  end
+  
+  def test_retrieve_project
+    authenticated_get_xml "/projects/1", users(:admin_user).login, 'abracadabra', {}
+    assert_tag :tag => "project"
+    assert_tag :tag => "project", :child => {:tag => "not_done" }
+    assert_tag :tag => "project", :child => {:tag => "deferred" }
+    assert_tag :tag => "project", :child => {:tag => "pending" }
+    assert_tag :tag => "project", :child => {:tag => "done" }
+    assert_response 200
   end
 
  def test_fails_with_invalid_xml_format
@@ -33,6 +43,11 @@ class ProjectXmlApiTest < ActionController::IntegrationTest
     assert_equal @@project_name, @controller.params[:request][:project][:name]
   end
   
+  def test_fails_with_401_if_not_authorized_user	 	
+    authenticated_post_xml_to_project_create @@valid_postdata, 'nobody', 'nohow'
+    assert_response 401
+  end
+  
   def test_fails_with_too_long_name
     invalid_with_long_name_postdata = "<request><project><name>foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo arfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo arfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfo barfoobarfoobarfoobarfoobarfoobarfoobar</name></project></request>"
     authenticated_post_xml_to_project_create invalid_with_long_name_postdata
@@ -41,7 +56,9 @@ class ProjectXmlApiTest < ActionController::IntegrationTest
   
   def test_fails_with_comma_in_name
     authenticated_post_xml_to_project_create "<request><project><name>foo,bar</name></project></request>"
-    assert_response_and_body 404, "Name cannot contain the comma (',') character"
+    assert_response :created
+    project1 = Project.find_by_name("foo,bar")
+    assert_not_nil project1, "expected project 'foo,bar' to be created"
   end
     
   def test_creates_new_project

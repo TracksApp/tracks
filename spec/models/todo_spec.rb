@@ -48,7 +48,9 @@ describe Todo do
     end
 
     it 'is deferred when show from is in the future' do
-      create_todo(:show_from => 1.week.from_now).should be_deferred
+      todo = create_todo
+      todo.show_from = 1.week.from_now
+      todo.should be_deferred
     end
 
     describe 'active' do
@@ -110,14 +112,6 @@ describe Todo do
         end
       end
 
-      it 'unhides to deferred when if show_from' do
-        todo = create_todo(:show_from => 4.days.from_now)
-        todo.hide!
-        todo.should be_project_hidden
-        todo.unhide!
-        todo.should be_deferred
-      end
-
       it 'unhides to active when not show_from' do
         todo = create_todo(:show_from => '')
         todo.hide!
@@ -125,43 +119,6 @@ describe Todo do
         todo.unhide!
         todo.should be_active
       end
-    end
-
-    describe 'when update_state_from_project is called' do
-      it "should unhide when project is active" do
-        project = Factory.create(:project)
-        todo = Factory.create(:todo, :project => project, :state => 'project_hidden')
-        todo.hide!
-        todo.should be_project_hidden
-        todo.update_state_from_project
-        todo.should be_active
-      end
-   
-      it "should unhide when project is null" do
-        todo = Factory.create(:todo, :project => nil)
-        todo.hide!
-        todo.should be_project_hidden
-        todo.update_state_from_project
-        todo.should be_active
-      end
-   
-      it "should hide when project is hidden" do
-        project = Factory.create(:project)
-        project.hide!
-        todo = Factory.create(:todo, :project => project)
-
-        todo.should be_active
-        todo.update_state_from_project
-        todo.should be_project_hidden
-      end
-    end
-
-    it "is deferrable from `active'" do
-      todo = create_todo
-      todo.activate!
-      todo.should be_active
-      todo.defer!
-      todo.should be_deferred
     end
   end
 

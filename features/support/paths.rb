@@ -7,12 +7,47 @@ module NavigationHelpers
   #
   def path_to(page_name)
     options = @mobile_interface ? {:format => :m} : {}
+    options = {:locale => @locale}.merge(options) if @locale
     @source_view = nil
+
     case page_name
 
     when /the home\s?page/
       @source_view = "todos"
       root_path(options)
+
+    when /the done page/
+      @source_view = "done"
+      done_overview_path(options)
+    when /the done actions page for context "([^"]*)"/i
+      @source_view = "done"
+      context = @current_user.contexts.find_by_name($1)
+      done_todos_context_path(context, options)
+    when /the done actions page for project "([^"]*)"/i
+      @source_view = "done"
+      project = @current_user.projects.find_by_name($1)
+      done_todos_project_path(project, options)
+    when /the done actions page for tag "([^"]*)"/i
+      @source_view = "done"
+      done_tag_path($1, options)
+    when /the done actions page/
+      @source_view = "done"
+      done_todos_path(options)
+    when /the all done actions page for context "([^"]*)"/i
+      @source_view = "done"
+      context = @current_user.contexts.find_by_name($1)
+      all_done_todos_context_path(context, options)
+    when /the all done actions page for project "([^"]*)"/i
+      @source_view = "done"
+      project = @current_user.projects.find_by_name($1)
+      all_done_todos_project_path(project, options)
+    when /the all done actions page for tag "([^"]*)"/i
+      @source_view = "done"
+      all_done_tag_path($1, options)
+    when /the all done actions page/
+      @source_view = "done"
+      all_done_todos_path(options)
+
     when /the statistics page/
       @source_view = "stats"
       stats_path(options)
@@ -20,8 +55,15 @@ module NavigationHelpers
       signup_path(options)
     when /the login page/
       login_path(options)
+    when /the logout page/
+      logout_path(options)
     when /the notes page/
       notes_path(options)
+    when /the calendar page/
+      calendar_path(options)
+    when /the review page/
+      @source_view = "review"
+      review_path(options)
     when /the contexts page/
       @source_view = "contexts"
       contexts_path(options)
@@ -35,6 +77,7 @@ module NavigationHelpers
     when /the integrations page/
       integrations_path(options)
     when /the tickler page/
+      @source_view = "deferred"
       tickler_path(options)
     when /the export page/
       data_path(options)
@@ -64,6 +107,8 @@ module NavigationHelpers
     when /the tag page for "([^"]*)"/i
       @source_view = "tag"
       tag_path($1, options)
+    when /the change password page/
+      change_password_user_path @current_user
 
       # Add more mappings here.
       # Here is an example that pulls values out of the Regexp:

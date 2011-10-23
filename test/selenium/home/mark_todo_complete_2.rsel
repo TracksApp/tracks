@@ -1,6 +1,0 @@
-setup :fixtures => :all
-login :as => 'admin'
-open '/'
-click "xpath=//div[@id='c5'] //div[@id='todo_5'] //input[@class='item-checkbox']"
-wait_for_element_present "xpath=//div[@id='completed_container'] //div[@id='todo_5']"
-wait_for_not_visible 'c5'

@@ -1,9 +1,10 @@
 <div class="container">
-  <h2 id="project_name">
+  <h2 id="project_name_container">
     <% if collapsible -%>
       <a href="#" class="container_toggle" id="toggle_p<%= project.id %>"><%= image_tag("collapse.png") %></a>
     <% end -%>
-    <%= project.name -%></h2>
+    <div id="project_name" style="width: 100%;"><%= project.name -%></div>
+  </h2>
   <div id="<%= dom_id(project, "container")%>" class="list"><%-# list needs to be here for edit form to work -%>
     <%= render :partial => "projects/project_settings", :object => project, :locals => { :collapsible => collapsible } %>
   </div>

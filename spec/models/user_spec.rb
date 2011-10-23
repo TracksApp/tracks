@@ -26,21 +26,6 @@ describe User do
         with_dependent(:delete_all)
     end
 
-    # TODO: uses fixtures to test those
-    it 'has many active_projects' do
-      User.should have_many(:active_projects).
-        with_order('projects.position ASC').
-        with_conditions('state = ?', 'active').
-        with_class_name('Project')
-    end
-
-    it 'has many active contexts' do
-      User.should have_many(:active_contexts).
-        with_order('position ASC').
-        with_conditions('hide = ?', false).
-        with_class_name('Context')
-    end
-
     it 'has many todos' do
       User.should have_many(:todos).
         with_order('todos.completed_at DESC, todos.created_at DESC').
@@ -51,14 +36,6 @@ describe User do
       User.should have_many(:deferred_todos).
         with_order('show_from ASC, todos.created_at DESC').
         with_conditions('state = ?', 'deferred').
-        with_class_name('Todo')
-    end
-
-    it 'has many completed todos' do
-      User.should have_many(:completed_todos).
-        with_order('todos.completed_at DESC').
-        with_conditions('todos.state = ? AND NOT(todos.completed_at IS NULL)', 'completed').
-        with_include(:project, :context).
         with_class_name('Todo')
     end
 
@@ -132,7 +109,7 @@ describe User do
     end
 
     it 'authenticates user' do
-      User.authenticate('simon', 'foobarspam').should == @user
+      User.authenticate('simon', 'foobarspam').id.should be @user.id
     end
 
     it 'resets password' do
@@ -140,12 +117,13 @@ describe User do
         :password => 'new password',
         :password_confirmation => 'new password'
       )
-      User.authenticate('simon', 'new password').should == @user
+      User.authenticate('simon', 'foobarspam').should be_nil
+      User.authenticate('simon', 'new password').id.should be @user.id
     end
 
     it 'does not rehash password after update of login' do
       @user.update_attribute(:login, 'foobar')
-      User.authenticate('foobar', 'foobarspam').should == @user
+      User.authenticate('foobar', 'foobarspam').id.should be @user.id
     end
 
     it 'sets remember token' do
@@ -179,7 +157,8 @@ describe User do
     user.preference.update_attribute('time_zone', 'Pacific Time (US & Canada)')
 #    Time.zone = 'Pacific Time (US & Canada)'
     Time.stub!(:now).and_return(Time.new.end_of_day - 20.minutes)
-    todo = user.todos.build(:description => 'test task', :context => context, :show_from => user.date + 1.days)
+    todo = user.todos.build(:description => 'test task', :context => context)
+    todo.show_from = user.date + 1.days
     todo.save!
 
     user.deferred_todos.find_and_activate_ready

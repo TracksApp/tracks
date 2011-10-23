@@ -48,6 +48,7 @@ You can specify alternate content either with the options <tt>:alt => "Get Flash
 * <tt>:mode</tt> - Either :dynamic (default) or :static. Refer to SWFObject's doc[http://code.google.com/p/swfobject/wiki/documentation#Should_I_use_the_static_or_dynamic_publishing_method?]
 * <tt>:flashvars</tt> - a Hash of variables that are passed to the swf. Can also be a string like <tt>"foo=bar&hello=world"</tt>. Defaults to <tt>{:id => the DOM id}</tt>
 * <tt>:parameters</tt> - a Hash of configuration parameters for the swf. See Adobe's doc[http://kb.adobe.com/selfservice/viewContent.do?externalId=tn_12701#optional]
+* <tt>:html_options</tt> - a Hash of extra html options for the <tt>object</tt> tag.
 * <tt>:alt</tt> - HTML text that is displayed when the Flash player is not available. Defaults to a "Get Flash" image pointing to Adobe Flash's installation page. This can also be specified as a block (see embedding section). In Rails 3, this text is _assumed_ to be HTML, so there is no need to call +html_safe+ on it.
 * <tt>:flash_version</tt> - the version of the Flash player that is required (e.g. "7" (default) or "8.1.0")
 * <tt>:auto_install</tt> - a swf file that will upgrade flash player if needed (defaults to "expressInstall" which was installed by +swf_fu+)

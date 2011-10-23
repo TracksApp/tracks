@@ -1,6 +1,6 @@
 <% if !@saved
      if @predecessor.completed? -%>
-  TracksPages.page_notify('error', "<%= t('todos.cannot_add_dependency_to_completed_todo') %>", 8);  
+  TracksPages.page_notify('error', "<%= t('todos.cannot_add_dependency_to_completed_todo') %>", 8);
   $('#<%=dom_id(@todo)%>').html(html_for_todo());
 <%   else -%>
   TracksPages.page_notify('error', "<%= t('todos.unable_to_add_dependency') %>", 8);
@@ -29,7 +29,7 @@ function show_in_tickler_box() {
 
 function regenerate_predecessor_family() {
 <%
-  parents = @predecessor.predecessors
+  parents = @predecessors
   until parents.empty?
     parent = parents.pop
     parents += parent.predecessors -%>

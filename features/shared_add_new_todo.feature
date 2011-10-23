@@ -200,15 +200,21 @@ Feature: Add new next action from every page
 
   @selenium
   Scenario: Adding a todo to an empty container hides the empty message # TODO: make outline
-    And I have a context called "visible context"
+    Given I have a context called "visible context"
     When I go to the tag page for "test"
     Then I should see "Currently there are no incomplete actions with the tag 'test'"
     When I submit a new action with description "a new todo" and the tags "test" in the context "visible context"
     Then I should see "a new todo"
     And I should not see "Currently there are no incomplete actions with the tag 'bla'"
 
+  @selenium
   Scenario: Adding a dependency to a todo updated the successor
-    Given this is a pending scenario
+    When I go to the "test project" project
+    Then I should see "todo 1"
+    When I submit a new action with description "a new todo" with a dependency on "todo 1"
+    Then I should not see "a new todo" in the project container of "test project"
+    When I expand the dependencies of "todo 1"
+    Then I should see "a new todo" within the dependencies of "todo 1"
 
   @selenium
   Scenario: I can add multiple todos in a new project and a new context

@@ -1,23 +1,48 @@
 = Tracks: a GTD web application, built with Ruby on Rails
 
 * Project homepage: http://getontracks.org/
-* Manual: http://bsag.github.com/tracks/
-* Source at GitHub: http://github.com/bsag/tracks/
+* Manual: http://TracksApp.github.com/tracks/
+* Source at GitHub: http://github.com/TracksApp/tracks/
 * Assembla space (for bug reports and feature requests): http://www.assembla.com/spaces/tracks-tickets/tickets
-* Wiki (community contributed information): http://getontracks.org/wiki/
+* Wiki (community contributed information): https://github.com/TracksApp/tracks/wiki
 * Forum: http://getontracks.org/forums/
 * Mailing list: http://lists.rousette.org.uk/mailman/listinfo/tracks-discuss
 * Original developer: bsag (http://www.rousette.org.uk/)
-* Contributors: http://getontracks.org/wiki/Contributors
-* Version: 2.0devel
+* Contributors: https://github.com/TracksApp/tracks/wiki/Contributors
+* Version: 2.1devel
 * Copyright: (cc) 2004-2011 rousette.org.uk.
 * License:  GNU GPL
 
-== Version 2.0 (RC)
+== Version 2.1devel
 
-(RC1 was never release, but was mentioned in the DOCS for while. People are
- referencing RC1 with bug report. So for the release we've bumped the version
- to RC2)
+NOTE: to use this version you need to migrate your database. Not migrating will
+cause new actions not to appear!
+
+This version of tracks has moved to a new place on github. Also the wiki moved
+to github, see the changed URLs above.
+
+New and changed features:
+1. redesign of the completed todos: a new overview page. Also all context and
+   project pages have a link to their completed actions
+2. New locales (es and fr) and updated locales (de, nl)
+3. You can star an action right from the form to add a new action
+4. redesign of preferences page
+5. You can now mark an action complete from the tickler
+6. project names can now contain comma (',') in it name
+7. There are two example ruby scripts in /doc to use the REST API to add a todo
+   or a project template with todos from the command line
+
+Under the hood:
+1. Upgraded rails to 2.3.12, jquery to 1.6.2 and jquery-ui to 1.8.14
+2. fixed several issues with the REST API
+3. upgraded the act_as_statemachine plugin. This change requires a
+   migration, see note above!
+4. migated to bundler for gem dependencies
+
+See https://github.com/tracksapp/tracks/compare/v2.0...master for all
+detailled changes
+
+== Version 2.0
 
 New features:
 1. Redesign of menus and introduction of a context menu per todo
@@ -37,7 +62,7 @@ New features:
 11.You can enable open signup (like in tracks.tra.in)
 12.Cleanup of context page
 13.Support for CAS for login
-14.Support for adding Tracks as a GMail Widget with instructions on the 
+14.Support for adding Tracks as a GMail Widget with instructions on the
    Integrations page
 15.Tracks now support internationalization. First translations are German and
    Dutch. See http://www.getontracks.org/wiki/Translating-Tracks it you like to
@@ -70,7 +95,7 @@ Under the hood:
 == Version 1.6
 1. upgrade to rails 2.0.2
 2. new mobile interface (with some iPhone compatibility fixes)
-3. new search functionality to search on todos, projects, contexts and notes 
+3. new search functionality to search on todos, projects, contexts and notes
 4. Bugfixes
 
 == Version 1.5
@@ -89,7 +114,7 @@ Under the hood:
 13. Add optional Default Context for a Project
 14. Add ability to sort projects alphabetically
 15. Add "starring" of actions
-16. Statistics page with graphs 
+16. Statistics page with graphs
 17. Rake task to set password. Usage: rake tracks:password USER=useranme
 
 == Version 1.041
@@ -118,7 +143,7 @@ Under the hood:
 10. The Completed Items box on the home, context and project pages now shows the same format for the actions as the Done page.
 11. The navigation bar now shows which page you are on by underlining the appropriate link and colouring the text black.
 12. There are new accesskeys for the notes page (alt/ctrl o) and user preferences (alt/ctrl u).
- 
+
 == Version 1.04
 
 1. Tidied up the interface a bit, fixing mistakes in the wording.

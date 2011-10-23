@@ -1,0 +1,24 @@
+<%
+  paginate_options = {
+    :class => :add_note_link, 
+    :previous_label => '&laquo; '+ t('common.previous'),
+    :next_label     => t('common.next')+' &raquo;',
+    :inner_window   => 2
+  }
+%>
+<div id="display_box">
+  <div class="container" id="completed_recurring_todos_container">
+    <%= will_paginate @completed_recurring_todos, paginate_options %>
+    <h2>
+      <span id="completed-projects-count" class="badge"><%= "#{@total} (#{@range_low}-#{@range_high})" %></span>
+      <%= t('todos.completed_recurring') %>
+    </h2>
+    <div id="completed_recurring_todos_container">
+      <div id="completed-empty-nd" style="<%= @no_completed_recurring_todos ? 'display:block' : 'display:none'%>">
+        <div class="message"><p><%= t('todos.no_completed_recurring') %></p></div>
+      </div>
+      <%= render :partial => @completed_recurring_todos %>
+    </div>
+    <%= will_paginate @completed_recurring_todos, paginate_options %>
+  </div>
+</div>

@@ -24,4 +24,4 @@
 <% else -%><%= render :partial => "notes/mobile_notes_summary", :collection => @project.notes %>
 <% end -%>
 <h2><%= t('projects.settings') %></h2>
-<%= t('projects.state', :state => project.current_state.to_s) %>. <%= @project_default_context %>
+<%= t('projects.state', :state => project.aasm_current_state.to_s) %>. <%= @project_default_context %>

@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../test_helper'
+require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 require 'todos_controller'
 
 # Re-raise errors caught by the controller.
@@ -20,9 +20,28 @@ class TodosControllerTest < ActionController::TestCase
   def test_not_done_counts
     login_as(:admin_user)
     get :index
+    assert_equal 2, projects(:timemachine).todos.active.count
+    assert_equal 3, contexts(:call).todos.not_completed.count
+    assert_equal 1, contexts(:lab).todos.not_completed.count
+  end
+
+  def test_cached_not_done_counts
+    login_as(:admin_user)
+    get :index
     assert_equal 2, assigns['project_not_done_counts'][projects(:timemachine).id]
     assert_equal 3, assigns['context_not_done_counts'][contexts(:call).id]
     assert_equal 1, assigns['context_not_done_counts'][contexts(:lab).id]
+  end
+
+   def test_cached_not_done_counts_after_hiding_project
+    p = Project.find(1)
+    p.hide!
+    p.save!
+    login_as(:admin_user)
+    get :index
+    assert_equal nil, assigns['project_not_done_counts'][projects(:timemachine).id]
+    assert_equal 2, assigns['context_not_done_counts'][contexts(:call).id]
+    assert_equal nil, assigns['context_not_done_counts'][contexts(:lab).id]
   end
 
   def test_tag_is_retrieved_properly
@@ -40,7 +59,7 @@ class TodosControllerTest < ActionController::TestCase
     assert_difference 'Todo.count' do
       put :create, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{
         "notes"=>"", "description"=>"test tags", "due"=>"30/11/2006"},
-        "tag_list"=>"1234,5667,9876"
+        "todo_tag_list"=>"1234,5667,9876"
       # default has_many_polymorphs will fail on these high numbers as tags with those id's do not exist
     end
     t = assigns['todo']
@@ -54,7 +73,7 @@ class TodosControllerTest < ActionController::TestCase
     assert_difference 'Todo.count' do
       put :create, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{
         "notes"=>"", "description"=>"test tags", "due"=>"30/11/2006"},
-        "tag_list"=>"a,,b"
+        "todo_tag_list"=>"a,,b"
       # default has_many_polymorphs will fail on the empty tag
     end
     t = assigns['todo']
@@ -62,16 +81,15 @@ class TodosControllerTest < ActionController::TestCase
     assert_equal 2, t.tags.count
   end
 
-
   def test_not_done_counts_after_hiding_project
     p = Project.find(1)
     p.hide!
     p.save!
     login_as(:admin_user)
     get :index
-    assert_equal nil, assigns['project_not_done_counts'][projects(:timemachine).id]
-    assert_equal 2, assigns['context_not_done_counts'][contexts(:call).id]
-    assert_equal nil, assigns['context_not_done_counts'][contexts(:lab).id]
+    assert_equal 0, projects(:timemachine).todos.active.count
+    assert_equal 2, contexts(:call).todos.active.count
+    assert_equal 0, contexts(:lab).todos.active.count
   end
 
   def test_not_done_counts_after_hiding_and_unhiding_project
@@ -82,9 +100,9 @@ class TodosControllerTest < ActionController::TestCase
     p.save!
     login_as(:admin_user)
     get :index
-    assert_equal 2, assigns['project_not_done_counts'][projects(:timemachine).id]
-    assert_equal 3, assigns['context_not_done_counts'][contexts(:call).id]
-    assert_equal 1, assigns['context_not_done_counts'][contexts(:lab).id]
+    assert_equal 2, projects(:timemachine).todos.active.count
+    assert_equal 3, contexts(:call).todos.not_completed.count
+    assert_equal 1, contexts(:lab).todos.not_completed.count
   end
 
   def test_deferred_count_for_project_source_view
@@ -120,7 +138,7 @@ class TodosControllerTest < ActionController::TestCase
   def test_fail_to_create_todo_via_xml
     login_as(:admin_user)
     # #try to create with no context, which is not valid
-    put :create, :format => "xml", "request" => { 
+    put :create, :format => "xml", "request" => {
       "project_name"=>"Build a working time machine",
       "todo"=>{"notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>"foo bar" }
     assert_response 422
@@ -195,6 +213,37 @@ class TodosControllerTest < ActionController::TestCase
     xhr :post, :update, :id => 1, :_source_view => 'todo', "todo"=>{"context_id"=>"1", "project_id"=>"2", "id"=>"1", "notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>taglist
     t = Todo.find(1)
     assert_equal "8.1.2, four, one, three, two, version1.5", t.tag_list
+  end
+
+  def test_add_multiple_todos
+    login_as(:admin_user)
+
+    start_count = Todo.count
+    put :create, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{
+      :multiple_todos=>"a\nb"}
+
+    assert_equal start_count+2, Todo.count, "two todos should have been added"
+  end
+
+  def test_add_multiple_dependent_todos
+    login_as(:admin_user)
+
+    start_count = Todo.count
+    put :create, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{
+      :multiple_todos=>"a\nb"}, :todos_sequential => 'true'
+    put :create, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{
+      :multiple_todos=>"c\nd"}, :todos_sequential => 'false'
+
+    assert_equal start_count+4, Todo.count, "four todos should have been added"
+
+    # find a,b,c and d
+    %w{a b c d}.each do |todo|
+      eval "@#{todo} = Todo.find_by_description('#{todo}')"
+      eval "assert !@#{todo}.nil?, 'a todo with description \"#{todo}\" should just have been added'"
+    end
+
+    assert @b.predecessors.include?(@a), "a should be a predeccesor of b"
+    assert !@d.predecessors.include?(@c), "c should not be a predecessor of d"
   end
 
   def test_find_tagged_with
@@ -532,7 +581,7 @@ class TodosControllerTest < ActionController::TestCase
     todo.reload()
     assert_equal "active", todo.state
   end
-  
+
   def test_url_with_slash_in_query_string_are_parsed_correctly
     # See http://blog.swivel.com/code/2009/06/rails-auto_link-and-certain-query-strings.html
     login_as(:admin_user)

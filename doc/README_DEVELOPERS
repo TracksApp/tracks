@@ -8,6 +8,8 @@ Tracks is using
 
 See README for links to the respective sites
 
+Also see the Development pages on the wiki for details on installing, upgrading, etc.
+
 2. Dependencies
 
 The dependencies are maintained by Tracks. For development we try not to vendor them
@@ -20,7 +22,7 @@ Install them using
 
 3. Wiki
 
-There are some pointers for setting up your Tracks copy for testing at http://www.getontracks.org/wiki/Testing/
+There are some pointers for setting up your Tracks copy for testing at https://github.com/TracksApp/tracks/wiki/Testing/
 
 4. SQLITE3 FOR TESTING
 
@@ -34,9 +36,9 @@ If you want to run tests using another database, that's fine, too. Just change y
 
 5. SELENIUM TESTS (Selenium on Rails)
 
-This testing style is deprecated and are being moved over to Selenium via Cucumber.
+This testing style is deprecated and tests are being moved over to Selenium via Cucumber.
 
-See the wiki for more information to run the tests that are not yet migrated: http://www.getontracks.org/wiki/Testing
+See the wiki for more information to run the tests that are not yet migrated: https://github.com/TracksApp/tracks/wiki/Testing
 
 6. RSPEC tests
 
@@ -53,3 +55,5 @@ To run the cucumber test run
 and for those using javascript/ajax use
 
   rake cucumber:selenium
+
+See the wiki for more information on testing: https://github.com/TracksApp/tracks/wiki/Testing
