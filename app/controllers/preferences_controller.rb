@@ -12,8 +12,11 @@ class PreferencesController < ApplicationController
     user_updated = current_user.update_attributes(params['user'])
     prefs_updated = current_user.preference.update_attributes(params['prefs'])
     if (user_updated && prefs_updated)
-      notify :notice, "Preferences updated"
-      redirect_to :action => 'index'
+      if !params['user']['password'].blank? # password updated?
+        logout_user t('preferences.password_changed')
+      else
+        preference_updated
+      end
     else
       msg = "Preferences could not be updated: "
       msg += "User model errors; " unless user_updated
@@ -28,4 +31,12 @@ class PreferencesController < ApplicationController
     render :text => l(Date.today, :format => format)
   end
 
+private
+
+  # Display notification if preferences are successful updated
+  def preference_updated
+    notify :notice, t('preferences.updated')
+    redirect_to :action => 'index'
+  end
+  
 end

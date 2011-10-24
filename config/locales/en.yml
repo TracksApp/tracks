@@ -659,6 +659,8 @@ en:
     staleness_starts_after: Staleness starts after %{days} days
     change_identity_url: Change Your Identity URL
     change_password: Change your password
+    password_changed: You password has been changed, please log on again.
+    updated: Preferences updated
     page_title: TRACKS::Preferences
     title: Your preferences
     token_description: Token (for feeds and API use)
