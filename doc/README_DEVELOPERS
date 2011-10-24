@@ -3,8 +3,7 @@
 Tracks is using
 * github to host the git repository.
 * Assembla to manage bugs and enhancement request.
-* the mailing list to discuss features and development
-* the forum to discuss with users
+* the mailing list to discuss features and development and interact with users
 
 See README for links to the respective sites
 
@@ -12,35 +11,39 @@ Also see the Development pages on the wiki for details on installing, upgrading,
 
 2. Dependencies
 
-The dependencies are maintained by Tracks. For development we try not to vendor them
-
-Install them using
-
-  rake gems:install RAILS_ENV=development
-  rake gems:install RAILS_ENV=test
-  rake gems:install RAILS_ENV=selenium
+The dependencies for Tracks are maintained using bundler. Before starting your
+tracks instance, you'll need to run 'bundle install' to fetch all the
+dependencies
 
 3. Wiki
 
-There are some pointers for setting up your Tracks copy for testing at https://github.com/TracksApp/tracks/wiki/Testing/
+There are some pointers for setting up your Tracks copy for testing at
+https://github.com/TracksApp/tracks/wiki/Testing/
 
 4. SQLITE3 FOR TESTING
 
-By default, tests are configured to run using sqlite3 in memory mode to increase speed. You will need the sqlite3-ruby gem for this.
+By default, tests are configured to run using sqlite3 in memory mode to
+increase speed. You will need the sqlite3-ruby gem for this.
 
-To avoid showing the migrations as tests are run, add the following to your database.yml below 'database: ":memory:"':
+To avoid showing the migrations as tests are run, add the following to your
+database.yml below 'database: ":memory:"':
 
   verbosity: quiet
 
-If you want to run tests using another database, that's fine, too. Just change your database.yml accordingly.
+If you want to run tests using another database, that's fine, too. Just change
+your database.yml accordingly.
 
-5. SELENIUM TESTS (Selenium on Rails)
+5. Test::Unit tests
 
-This testing style is deprecated and tests are being moved over to Selenium via Cucumber.
+To run the Test::Unit tests run
 
-See the wiki for more information to run the tests that are not yet migrated: https://github.com/TracksApp/tracks/wiki/Testing
+  rake test
 
-6. RSPEC tests
+Running the above command will run through the unit, functional, and
+integration tests for Tracks. Use 'rake -T' to see a list of all rake tasks to
+determine how to run each section of tests separately.
+
+6. RSpec tests
 
 To run the RSpec tests run
 
@@ -55,5 +58,8 @@ To run the cucumber test run
 and for those using javascript/ajax use
 
   rake cucumber:selenium
+
+In order to run the selenium tests, you'll need to have Firefox 3.x installed.
+Newer versions won't work.
 
 See the wiki for more information on testing: https://github.com/TracksApp/tracks/wiki/Testing
