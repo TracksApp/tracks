@@ -4,7 +4,7 @@ def check_mongrel_around_115
 begin
     # Gem.available? is deprecated from rubygems 1.8.2
     Gem::Specification::find_by_name "mongrel", "~>1.1.5"
-  rescue Gem::LoadError
+  rescue
     if RUBY_VERSION[2] == "9"
       false
     else
