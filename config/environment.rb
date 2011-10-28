@@ -107,6 +107,9 @@ if ( SITE_CONFIG['authentication_schemes'].include? 'cas')
   end
 end
 
+# changed in development.rb to show under_construction bar
+NOTIFY_BAR = "" unless defined?(NOTIFY_BAR)
+
 tracks_version='2.1devel'
 # comment out next two lines if you do not want (or can not) the date of the
 # last git commit in the footer

@@ -40,9 +40,7 @@
   <body class="<%= @controller.controller_name %>">
 
     <div id="topbar">
-      <% if RAILS_ENV != "production" -%>
-      <div id="develop-notify-bar">&nbsp;</div>
-      <%   end -%>
+      <%= NOTIFY_BAR %>
 
       <div id="date">
         <h1>

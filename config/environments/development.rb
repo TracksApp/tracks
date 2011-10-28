@@ -15,3 +15,5 @@ config.action_mailer.raise_delivery_errors = false
 
 # Unique cookies
 config.action_controller.session = { :key => 'TracksDev' }
+
+NOTIFY_BAR="<div id=\"develop-notify-bar\">&nbsp;</div>"
