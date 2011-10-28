@@ -1028,6 +1028,9 @@ class TodosController < ApplicationController
   end
 
   def find_todos_with_tag_expr(tag_expr)
+    # optimize for the common case: selecting only one tag
+    return current_user.todos.with_tag(@tag_name) if @single_tag
+
     tag_ids = get_ids_from_tag_expr(tag_expr)
     todos = current_user.todos
     tag_ids.each do |ids|
