@@ -305,19 +305,19 @@ var TracksPages = {
             $(".todo_notes").toggle();
         });
 
-	   
+
        /* Poor man's perspectives, allows to hide any context that is collapsed */
         $("#toggle-contexts-nav").click(function () {
             /* Need to keep a single toggle across all contexts */
-            $(this).toggleClass("context_visibility"); 
+            $(this).toggleClass("context_visibility");
             if ($(this).hasClass("context_visibility")) {
                 $(".context_collapsed").hide(); /* Hide all collapsed contexts together*/
             }
             else {
-                $(".context_collapsed").show();       
+                $(".context_collapsed").show();
             }
         });
-        
+
         /* fade flashes and alerts in automatically */
         $(".alert").fadeOut(8000);
     }
