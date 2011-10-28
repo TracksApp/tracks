@@ -274,7 +274,7 @@ end
 
 Then /^the project title should be "(.*)"$/ do |title|
   wait_for :timeout => 2 do
-    selenium.get_text("css=h2#project_name") == title
+    selenium.get_text("css=h2#project_name_container div#project_name") == title
   end
 end
 
