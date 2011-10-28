@@ -28,18 +28,18 @@ class Todo < ActiveRecord::Base
   named_scope :deferred_or_blocked, :conditions => ["(todos.completed_at IS NULL AND NOT(todos.show_from IS NULL)) OR (todos.state = ?)", "pending"]
   named_scope :not_deferred_or_blocked, :conditions => ["todos.completed_at IS NULL AND todos.show_from IS NULL AND NOT(todos.state = ?)", "pending"]
   named_scope :hidden,
-    :joins => :context,
-    :conditions => ["todos.state = ? OR (contexts.hide = ? AND (todos.state = ? OR todos.state = ? OR todos.state = ?))",
+    :joins => "INNER JOIN contexts c_hidden ON c_hidden.id = todos.context_id",
+    :conditions => ["todos.state = ? OR (c_hidden.hide = ? AND (todos.state = ? OR todos.state = ? OR todos.state = ?))",
     'project_hidden', true, 'active', 'deferred', 'pending']
   named_scope :not_hidden,
-    :joins => [:context],
-    :conditions => ['NOT(todos.state = ? OR (contexts.hide = ? AND (todos.state = ? OR todos.state = ? OR todos.state = ?)))',
+    :joins => "INNER JOIN contexts c_hidden ON c_hidden.id = todos.context_id",
+    :conditions => ['NOT(todos.state = ? OR (c_hidden.hide = ? AND (todos.state = ? OR todos.state = ? OR todos.state = ?)))',
     'project_hidden', true, 'active', 'deferred', 'pending']
 
   # other scopes
   named_scope :are_due, :conditions => ['NOT (todos.due IS NULL)']
   named_scope :with_tag, lambda { |tag| {:joins => :taggings, :conditions => ["taggings.tag_id = ? ", tag.id] } }
-  named_scope :with_tags, lambda { |tag_ids| {:joins => :taggings, :conditions => ["taggings.tag_id IN (?) ", tag_ids] } }
+  named_scope :with_tags, lambda { |tag_ids| {:conditions => ["EXISTS(SELECT * from taggings t WHERE t.tag_id IN (?) AND t.taggable_id=todos.id AND t.taggable_type='Todo')", tag_ids] } }
   named_scope :of_user, lambda { |user_id| {:conditions => ["todos.user_id = ? ", user_id] } }
   named_scope :completed_after, lambda { |date| {:conditions => ["todos.completed_at > ? ", date] } }
   named_scope :completed_before, lambda { |date| {:conditions => ["todos.completed_at < ? ", date] } }

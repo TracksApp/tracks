@@ -2,8 +2,8 @@ class TodosController < ApplicationController
 
   helper :todos
 
-  skip_before_filter :login_required, :only => [:index, :calendar]
-  prepend_before_filter :login_or_feed_token_required, :only => [:index, :calendar]
+  skip_before_filter :login_required, :only => [:index, :calendar, :tag]
+  prepend_before_filter :login_or_feed_token_required, :only => [:index, :calendar, :tag]
   append_before_filter :find_and_activate_ready, :only => [:index, :list_deferred]
 
   # TODO: replace :except with :only
@@ -584,50 +584,11 @@ class TodosController < ApplicationController
     redirect_to project_todos_path(project, :format => 'm')
   end
 
-  def get_ids_from_tag_expr(tag_expr)
-    ids = []
-    tag_expr.each do |tag_list|
-      id_list = []
-      tag_list.each do |tag|
-        tag = Tag.find_by_name(tag)
-        id_list << tag.id if tag
-      end
-      ids << id_list
-    end
-    return ids
-  end
-
-  def get_params_for_tag_view
-    # use sanitize to prevent XSS attacks
-
-    @tag_expr = []
-    @tag_expr << sanitize(params[:name]).split(',')
-    @tag_expr << sanitize(params[:and]).split(',') if params[:and]
-
-    i = 1
-    while params['and'+i.to_s]
-      @tag_expr << sanitize(params['and'+i.to_s]).split(',')
-      i=i+1
-    end
-
-    @single_tag = @tag_expr.size == 1 && @tag_expr[0].size == 1
-    @tag_name = @tag_expr[0][0] # if @single_tag
-  end
-
-  def find_todos_with_tag_ids(tag_ids)
-    todos = current_user.todos
-    tag_ids.each do |ids|
-      todos = todos.with_tags(ids) unless ids.nil? || ids.empty?
-    end
-    return todos
-  end
-
   # /todos/tag/[tag_name] shows all the actions tagged with tag_name
   def tag
-    @page_title = t('todos.tagged_page_title', :tag_name => @tag_name)
-    @source_view = params['_source_view'] || 'tag'
-
     get_params_for_tag_view
+    @page_title = t('todos.tagged_page_title', :tag_name => @tag_title)
+    @source_view = params['_source_view'] || 'tag'
 
     if mobile?
       # mobile tags are routed with :name ending on .m. So we need to chomp it
@@ -636,11 +597,7 @@ class TodosController < ApplicationController
       init_data_for_sidebar
     end
 
-    @tag = Tag.find_by_name(@tag_name)
-    @tag = Tag.new(:name => @tag_name) if @tag.nil?
-
-    @tag_ids = get_ids_from_tag_expr(@tag_expr)
-    todos_with_tag_ids = find_todos_with_tag_ids(@tag_ids)
+    todos_with_tag_ids = find_todos_with_tag_expr(@tag_expr)
 
     @not_done_todos = todos_with_tag_ids.active.not_hidden.find(:all,
       :order => 'todos.due IS NULL, todos.due ASC, todos.created_at ASC', :include => Todo::DEFAULT_INCLUDES)
@@ -648,17 +605,15 @@ class TodosController < ApplicationController
       :include => Todo::DEFAULT_INCLUDES,
       :order => 'todos.completed_at DESC, todos.created_at DESC')
     @deferred = todos_with_tag_ids.deferred.find(:all,
-      :order => 'show_from ASC, todos.created_at DESC', :include => Todo::DEFAULT_INCLUDES)
+      :order => 'todos.show_from ASC, todos.created_at DESC', :include => Todo::DEFAULT_INCLUDES)
     @pending = todos_with_tag_ids.blocked.find(:all,
-      :order => 'show_from ASC, todos.created_at DESC', :include => Todo::DEFAULT_INCLUDES)
+      :order => 'todos.show_from ASC, todos.created_at DESC', :include => Todo::DEFAULT_INCLUDES)
 
     # If you've set no_completed to zero, the completed items box isn't shown on
     # the tag page
-    max_completed = current_user.prefs.show_number_completed
-    @done = current_user.todos.with_tag(@tag).completed.find(:all,
-      :limit => max_completed,
-      :order => 'todos.completed_at DESC',
-      :include => Todo::DEFAULT_INCLUDES)
+    @done = todos_with_tag_ids.completed.find(:all,
+      :limit => current_user.prefs.show_number_completed,
+      :order => 'todos.completed_at DESC', :include => Todo::DEFAULT_INCLUDES)
 
     @projects = current_user.projects
     @contexts = current_user.contexts
@@ -679,6 +634,9 @@ class TodosController < ApplicationController
       format.m {
         cookies[:mobile_url]= {:value => request.request_uri, :secure => SITE_CONFIG['secure_cookies']}
         render :action => "mobile_tag"
+      }
+      format.text {
+        render :action => 'index', :layout => false, :content_type => Mime::TEXT
       }
     end
   end
@@ -1031,6 +989,51 @@ class TodosController < ApplicationController
       :conditions => ['todos.state = ? AND contexts.hide = ? AND (projects.state = ? OR todos.project_id IS NULL)', 'active', false, 'active'],
       :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC",
       :include => [ :project, :context, :tags ])
+  end
+
+  def tag_title(tag_expr)
+    and_list = tag_expr.inject([]) { |s,tag_list| s << tag_list.join(',') }
+    return and_list.join(' AND ')
+  end
+
+  def get_params_for_tag_view
+    # use sanitize to prevent XSS attacks
+
+    @tag_expr = []
+    @tag_expr << sanitize(params[:name]).split(',')
+    @tag_expr << sanitize(params[:and]).split(',') if params[:and]
+
+    i = 1
+    while params['and'+i.to_s]
+      @tag_expr << sanitize(params['and'+i.to_s]).split(',')
+      i=i+1
+    end
+
+    @single_tag = @tag_expr.size == 1 && @tag_expr[0].size == 1
+    @tag_name = @tag_expr[0][0]
+    @tag_title = @single_tag ? @tag_name : tag_title(@tag_expr)
+  end
+
+  def get_ids_from_tag_expr(tag_expr)
+    ids = []
+    tag_expr.each do |tag_list|
+      id_list = []
+      tag_list.each do |tag|
+        tag = Tag.find_by_name(tag)
+        id_list << tag.id if tag
+      end
+      ids << id_list
+    end
+    return ids
+  end
+
+  def find_todos_with_tag_expr(tag_expr)
+    tag_ids = get_ids_from_tag_expr(tag_expr)
+    todos = current_user.todos
+    tag_ids.each do |ids|
+      todos = todos.with_tags(ids) unless ids.nil? || ids.empty?
+    end
+    return todos
   end
 
   def determine_down_count

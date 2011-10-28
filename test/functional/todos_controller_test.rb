@@ -644,4 +644,68 @@ class TodosControllerTest < ActionController::TestCase
     assert_select("div#notes_todo_#{todo.id} a", 'link me to onenote')
     assert_select("div#notes_todo_#{todo.id} a[href=onenote:///E:\\OneNote\\dir\\notes.one#PAGE&amp;section-id={FD597D3A-3793-495F-8345-23D34A00DD3B}&amp;page-id={1C95A1C7-6408-4804-B3B5-96C28426022B}&amp;end]", 'link me to onenote')
   end
+
+  def test_get_boolean_expression_from_parameters_of_tag_view_single_tag
+    login_as(:admin_user)
+    get :tag, :name => "single"
+    assert_equal true, assigns['single_tag'], "should recognize it is a single tag name"
+    assert_equal "single", assigns['tag_expr'][0][0], "should store the single tag"
+  end
+
+  def test_get_boolean_expression_from_parameters_of_tag_view_multiple_tags
+    login_as(:admin_user)
+    get :tag, :name => "multiple", :and => "tags", :and1 => "present", :and2 => "here"
+    assert_equal false, assigns['single_tag'], "should recognize it has multiple tags"
+    assert_equal 4, assigns['tag_expr'].size, "should have 4 AND expressions"
+  end
+
+  def test_get_boolean_expression_from_parameters_of_tag_view_multiple_tags_without_digitless_and
+    login_as(:admin_user)
+    get :tag, :name => "multiple", :and1 => "tags", :and2 => "present", :and3 => "here"
+    assert_equal false, assigns['single_tag'], "should recognize it has multiple tags"
+    assert_equal 4, assigns['tag_expr'].size, "should have 4 AND expressions"
+  end
+
+  def test_get_boolean_expression_from_parameters_of_tag_view_multiple_ORs
+    login_as(:admin_user)
+    get :tag, :name => "multiple,tags,present"
+    assert_equal false, assigns['single_tag'], "should recognize it has multiple tags"
+    assert_equal 1, assigns['tag_expr'].size, "should have 1 expressions"
+    assert_equal 3, assigns['tag_expr'][0].size, "should have 3 ORs in 1st expression"
+  end
+
+  def test_get_boolean_expression_from_parameters_of_tag_view_multiple_ORs_and_ANDS
+    login_as(:admin_user)
+    get :tag, :name => "multiple,tags,present", :and => "here,is,two", :and1=>"and,three"
+    assert_equal false, assigns['single_tag'], "should recognize it has multiple tags"
+    assert_equal 3, assigns['tag_expr'].size, "should have 3 expressions"
+    assert_equal 3, assigns['tag_expr'][0].size, "should have 3 ORs in 1st expression"
+    assert_equal 3, assigns['tag_expr'][1].size, "should have 3 ORs in 2nd expression"
+    assert_equal 2, assigns['tag_expr'][2].size, "should have 2 ORs in 3rd expression"
+  end
+
+  def test_set_right_title
+    login_as(:admin_user)
+
+    get :tag, :name => "foo"
+    assert_equal "foo", assigns['tag_title']
+    get :tag, :name => "foo,bar", :and => "baz"
+    assert_equal "foo,bar AND baz", assigns['tag_title']
+  end
+
+  def test_set_default_tag
+    login_as(:admin_user)
+
+    get :tag, :name => "foo"
+    assert_equal "foo", assigns['initial_tags']
+    get :tag, :name => "foo,bar", :and => "baz"
+    assert_equal "foo", assigns['initial_tags']
+  end
+
+  def test_tag_text_feed_not_accessible_to_anonymous_user_without_token
+    login_as nil
+    get :tag, {:name => "foo", :format => "txt" }
+    assert_response 401
+  end
+
 end
