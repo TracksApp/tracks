@@ -8,22 +8,22 @@
     :locals => { :collapsible => true } %>
 
   <% unless @deferred.nil? -%>
-    <%= render :partial => "todos/deferred", :locals => { 
-                                               :deferred => @deferred, 
+    <%= render :partial => "todos/deferred", :locals => {
+                                               :deferred => @deferred,
                                                :pending => @pending,
-                                               :collapsible => true, 
-                                               :append_descriptor => t('todos.tagged_with', :tag_name => @tag_name),
-                                               :parent_container_type => 'tag' 
+                                               :collapsible => true,
+                                               :append_descriptor => t('todos.tagged_with', :tag_name => @tag_title),
+                                               :parent_container_type => 'tag'
                                               } %>
   <% end -%>
 
   <% unless @hidden_todos.nil? -%>
-    <%= render :partial => "todos/hidden", :object => @hidden_todos, :locals => { :collapsible => true, :append_descriptor => t('todos.tagged_with', :tag_name => @tag_name) } %>
+    <%= render :partial => "todos/hidden", :object => @hidden_todos, :locals => { :collapsible => true, :append_descriptor => t('todos.tagged_with', :tag_name => @tag_title) } %>
   <% end -%>
 
   <% unless @done.nil? -%>
     <%= render :partial => "todos/completed", :object => @done,
-      :locals => { :collapsible => true, :append_descriptor => t('todos.tagged_with', :tag_name => @tag_name) } %>
+      :locals => { :collapsible => true, :append_descriptor => t('todos.tagged_with', :tag_name => @tag_title) } %>
   <% end -%>
 </div><!-- End of display_box -->
 
