@@ -648,7 +648,7 @@ class TodosController < ApplicationController
     @tag = Tag.find_by_name(@tag_name)
     @tag = Tag.new(:name => @tag_name) if @tag.nil?
 
-    completed_todos = current_user.todos.completed.with_tag(@tag)
+    completed_todos = current_user.todos.completed.with_tag(@tag.id)
 
     @done_today = get_done_today(completed_todos)
     @done_this_week = get_done_this_week(completed_todos)
@@ -665,7 +665,7 @@ class TodosController < ApplicationController
     @tag = Tag.find_by_name(@tag_name)
     @tag = Tag.new(:name => @tag_name) if @tag.nil?
 
-    @done = current_user.todos.completed.with_tag(@tag).paginate :page => params[:page], :per_page => 20, :order => 'completed_at DESC', :include => Todo::DEFAULT_INCLUDES
+    @done = current_user.todos.completed.with_tag(@tag.id).paginate :page => params[:page], :per_page => 20, :order => 'completed_at DESC', :include => Todo::DEFAULT_INCLUDES
     @count = @done.size
     render :template => 'todos/all_done'
   end
@@ -1029,7 +1029,11 @@ class TodosController < ApplicationController
 
   def find_todos_with_tag_expr(tag_expr)
     # optimize for the common case: selecting only one tag
-    return current_user.todos.with_tag(@tag_name) if @single_tag
+    if @single_tag
+      tag = Tag.find_by_name(@tag_name)
+      tag_id = tag.nil? ? -1 : tag.id
+      return current_user.todos.with_tag(tag_id)
+    end
 
     tag_ids = get_ids_from_tag_expr(tag_expr)
     todos = current_user.todos
@@ -1070,7 +1074,7 @@ class TodosController < ApplicationController
         if @tag.nil?
           @tag = Tag.new(:name => @tag_name)
         end
-        @down_count = current_user.todos.with_tag(@tag).active.not_hidden.count
+        @down_count = current_user.todos.with_tag(@tag.id).active.not_hidden.count
       end
     end
   end
@@ -1087,10 +1091,10 @@ class TodosController < ApplicationController
         if tag.nil?
           tag = Tag.new(:name => params['tag'])
         end
-        @remaining_deferred_or_pending_count = current_user.todos.with_tag(tag).deferred_or_blocked.count
-        @remaining_in_context = current_user.contexts.find(context_id).todos.active.not_hidden.with_tag(tag).count
-        @target_context_count = current_user.contexts.find(@todo.context_id).todos.active.not_hidden.with_tag(tag).count
-        @remaining_hidden_count = current_user.todos.hidden.with_tag(tag).count
+        @remaining_deferred_or_pending_count = current_user.todos.with_tag(tag.id).deferred_or_blocked.count
+        @remaining_in_context = current_user.contexts.find(context_id).todos.active.not_hidden.with_tag(tag.id).count
+        @target_context_count = current_user.contexts.find(@todo.context_id).todos.active.not_hidden.with_tag(tag.id).count
+        @remaining_hidden_count = current_user.todos.hidden.with_tag(tag.id).count
       }
       from.project {
         project_id = @project_changed ? @original_item_project_id : @todo.project_id
@@ -1141,7 +1145,7 @@ class TodosController < ApplicationController
         end
       end
       from.tag do
-        @completed_count = current_user.todos.with_tag(@tag).completed.count
+        @completed_count = current_user.todos.with_tag(@tag.id).completed.count
       end
     end
   end
@@ -1149,7 +1153,7 @@ class TodosController < ApplicationController
   def determine_deferred_tag_count(tag_name)
     tag = Tag.find_by_name(tag_name)
     # tag.nil? should normally not happen, but is a workaround for #929
-    @remaining_deferred_or_pending_count = tag.nil? ? 0 : current_user.todos.deferred.with_tag(tag).count
+    @remaining_deferred_or_pending_count = tag.nil? ? 0 : current_user.todos.deferred.with_tag(tag.id).count
   end
 
   def render_todos_html

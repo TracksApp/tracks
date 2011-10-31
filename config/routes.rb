@@ -40,7 +40,7 @@ ActionController::Routing::Routes.draw do |map|
     # UPDATE: added support for mobile view. All tags ending on .m will be
     # routed to mobile view of tags.
     todos.mobile_tag 'todos/tag/:name.m', :action => "tag", :format => 'm'
-    todos.mobile_tag 'todos/tag/:name.txt', :action => "tag", :format => 'txt'
+    todos.text_tag 'todos/tag/:name.txt', :action => "tag", :format => 'txt'
     todos.tag 'todos/tag/:name', :action => "tag", :name => /.*/
     todos.done_tag 'todos/done/tag/:name', :action => "done_tag"
     todos.all_done_tag 'todos/all_done/tag/:name', :action => "all_done_tag"
