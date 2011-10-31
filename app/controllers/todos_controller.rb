@@ -2,8 +2,8 @@ class TodosController < ApplicationController
 
   helper :todos
 
-  skip_before_filter :login_required, :only => [:index, :calendar]
-  prepend_before_filter :login_or_feed_token_required, :only => [:index, :calendar]
+  skip_before_filter :login_required, :only => [:index, :calendar, :tag]
+  prepend_before_filter :login_or_feed_token_required, :only => [:index, :calendar, :tag]
   append_before_filter :find_and_activate_ready, :only => [:index, :list_deferred]
 
   # TODO: replace :except with :only
@@ -586,34 +586,34 @@ class TodosController < ApplicationController
 
   # /todos/tag/[tag_name] shows all the actions tagged with tag_name
   def tag
-    init_data_for_sidebar unless mobile?
+    get_params_for_tag_view
+    @page_title = t('todos.tagged_page_title', :tag_name => @tag_title)
     @source_view = params['_source_view'] || 'tag'
-    @tag_name = sanitize(params[:name]) # sanitize to prevent XSS vunerability!
-    @page_title = t('todos.tagged_page_title', :tag_name => @tag_name)
 
-    # mobile tags are routed with :name ending on .m. So we need to chomp it
-    @tag_name = @tag_name.chomp('.m') if mobile?
+    if mobile?
+      # mobile tags are routed with :name ending on .m. So we need to chomp it
+      @tag_name = @tag_name.chomp('.m')
+    else
+      init_data_for_sidebar
+    end
 
-    @tag = Tag.find_by_name(@tag_name)
-    @tag = Tag.new(:name => @tag_name) if @tag.nil?
+    todos_with_tag_ids = find_todos_with_tag_expr(@tag_expr)
 
-    @not_done_todos = current_user.todos.with_tag(@tag).active.not_hidden.find(:all,
+    @not_done_todos = todos_with_tag_ids.active.not_hidden.find(:all,
       :order => 'todos.due IS NULL, todos.due ASC, todos.created_at ASC', :include => Todo::DEFAULT_INCLUDES)
-    @hidden_todos = current_user.todos.with_tag(@tag).hidden.find(:all,
+    @hidden_todos = todos_with_tag_ids.hidden.find(:all,
       :include => Todo::DEFAULT_INCLUDES,
       :order => 'todos.completed_at DESC, todos.created_at DESC')
-    @deferred = current_user.todos.with_tag(@tag).deferred.find(:all,
-      :order => 'show_from ASC, todos.created_at DESC', :include => Todo::DEFAULT_INCLUDES)
-    @pending = current_user.todos.with_tag(@tag).blocked.find(:all,
-      :order => 'show_from ASC, todos.created_at DESC', :include => Todo::DEFAULT_INCLUDES)
+    @deferred = todos_with_tag_ids.deferred.find(:all,
+      :order => 'todos.show_from ASC, todos.created_at DESC', :include => Todo::DEFAULT_INCLUDES)
+    @pending = todos_with_tag_ids.blocked.find(:all,
+      :order => 'todos.show_from ASC, todos.created_at DESC', :include => Todo::DEFAULT_INCLUDES)
 
     # If you've set no_completed to zero, the completed items box isn't shown on
     # the tag page
-    max_completed = current_user.prefs.show_number_completed
-    @done = current_user.todos.with_tag(@tag).completed.find(:all,
-      :limit => max_completed,
-      :order => 'todos.completed_at DESC',
-      :include => Todo::DEFAULT_INCLUDES)
+    @done = todos_with_tag_ids.completed.find(:all,
+      :limit => current_user.prefs.show_number_completed,
+      :order => 'todos.completed_at DESC', :include => Todo::DEFAULT_INCLUDES)
 
     @projects = current_user.projects
     @contexts = current_user.contexts
@@ -635,6 +635,9 @@ class TodosController < ApplicationController
         cookies[:mobile_url]= {:value => request.request_uri, :secure => SITE_CONFIG['secure_cookies']}
         render :action => "mobile_tag"
       }
+      format.text {
+        render :action => 'index', :layout => false, :content_type => Mime::TEXT
+      }
     end
   end
 
@@ -645,7 +648,7 @@ class TodosController < ApplicationController
     @tag = Tag.find_by_name(@tag_name)
     @tag = Tag.new(:name => @tag_name) if @tag.nil?
 
-    completed_todos = current_user.todos.completed.with_tag(@tag)
+    completed_todos = current_user.todos.completed.with_tag(@tag.id)
 
     @done_today = get_done_today(completed_todos)
     @done_this_week = get_done_this_week(completed_todos)
@@ -662,7 +665,7 @@ class TodosController < ApplicationController
     @tag = Tag.find_by_name(@tag_name)
     @tag = Tag.new(:name => @tag_name) if @tag.nil?
 
-    @done = current_user.todos.completed.with_tag(@tag).paginate :page => params[:page], :per_page => 20, :order => 'completed_at DESC', :include => Todo::DEFAULT_INCLUDES
+    @done = current_user.todos.completed.with_tag(@tag.id).paginate :page => params[:page], :per_page => 20, :order => 'completed_at DESC', :include => Todo::DEFAULT_INCLUDES
     @count = @done.size
     render :template => 'todos/all_done'
   end
@@ -988,6 +991,58 @@ class TodosController < ApplicationController
       :include => [ :project, :context, :tags ])
   end
 
+  def tag_title(tag_expr)
+    and_list = tag_expr.inject([]) { |s,tag_list| s << tag_list.join(',') }
+    return and_list.join(' AND ')
+  end
+
+  def get_params_for_tag_view
+    # use sanitize to prevent XSS attacks
+
+    @tag_expr = []
+    @tag_expr << sanitize(params[:name]).split(',')
+    @tag_expr << sanitize(params[:and]).split(',') if params[:and]
+
+    i = 1
+    while params['and'+i.to_s]
+      @tag_expr << sanitize(params['and'+i.to_s]).split(',')
+      i=i+1
+    end
+
+    @single_tag = @tag_expr.size == 1 && @tag_expr[0].size == 1
+    @tag_name = @tag_expr[0][0]
+    @tag_title = @single_tag ? @tag_name : tag_title(@tag_expr)
+  end
+
+  def get_ids_from_tag_expr(tag_expr)
+    ids = []
+    tag_expr.each do |tag_list|
+      id_list = []
+      tag_list.each do |tag|
+        tag = Tag.find_by_name(tag)
+        id_list << tag.id if tag
+      end
+      ids << id_list
+    end
+    return ids
+  end
+
+  def find_todos_with_tag_expr(tag_expr)
+    # optimize for the common case: selecting only one tag
+    if @single_tag
+      tag = Tag.find_by_name(@tag_name)
+      tag_id = tag.nil? ? -1 : tag.id
+      return current_user.todos.with_tag(tag_id)
+    end
+
+    tag_ids = get_ids_from_tag_expr(tag_expr)
+    todos = current_user.todos
+    tag_ids.each do |ids|
+      todos = todos.with_tags(ids) unless ids.nil? || ids.empty?
+    end
+    return todos
+  end
+
   def determine_down_count
     source_view do |from|
       from.todo do
@@ -1019,7 +1074,7 @@ class TodosController < ApplicationController
         if @tag.nil?
           @tag = Tag.new(:name => @tag_name)
         end
-        @down_count = current_user.todos.with_tag(@tag).active.not_hidden.count
+        @down_count = current_user.todos.with_tag(@tag.id).active.not_hidden.count
       end
     end
   end
@@ -1036,10 +1091,10 @@ class TodosController < ApplicationController
         if tag.nil?
           tag = Tag.new(:name => params['tag'])
         end
-        @remaining_deferred_or_pending_count = current_user.todos.with_tag(tag).deferred_or_blocked.count
-        @remaining_in_context = current_user.contexts.find(context_id).todos.active.not_hidden.with_tag(tag).count
-        @target_context_count = current_user.contexts.find(@todo.context_id).todos.active.not_hidden.with_tag(tag).count
-        @remaining_hidden_count = current_user.todos.hidden.with_tag(tag).count
+        @remaining_deferred_or_pending_count = current_user.todos.with_tag(tag.id).deferred_or_blocked.count
+        @remaining_in_context = current_user.contexts.find(context_id).todos.active.not_hidden.with_tag(tag.id).count
+        @target_context_count = current_user.contexts.find(@todo.context_id).todos.active.not_hidden.with_tag(tag.id).count
+        @remaining_hidden_count = current_user.todos.hidden.with_tag(tag.id).count
       }
       from.project {
         project_id = @project_changed ? @original_item_project_id : @todo.project_id
@@ -1090,7 +1145,7 @@ class TodosController < ApplicationController
         end
       end
       from.tag do
-        @completed_count = current_user.todos.with_tag(@tag).completed.count
+        @completed_count = current_user.todos.with_tag(@tag.id).completed.count
       end
     end
   end
@@ -1098,7 +1153,7 @@ class TodosController < ApplicationController
   def determine_deferred_tag_count(tag_name)
     tag = Tag.find_by_name(tag_name)
     # tag.nil? should normally not happen, but is a workaround for #929
-    @remaining_deferred_or_pending_count = tag.nil? ? 0 : current_user.todos.deferred.with_tag(tag).count
+    @remaining_deferred_or_pending_count = tag.nil? ? 0 : current_user.todos.deferred.with_tag(tag.id).count
   end
 
   def render_todos_html

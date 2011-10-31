@@ -95,7 +95,7 @@ Feature: Add new next action from every page
       | tickler page                    | not see |
       | "test project" project          | see     |
       | context page for "test context" | see     |
-      | tag page for "starred"          | not see |
+      | tag page for "starred"          | see     |
 
   @selenium
   Scenario Outline: I can add multiple todos from several pages

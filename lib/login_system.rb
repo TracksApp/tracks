@@ -9,6 +9,22 @@ module LoginSystem
   def prefs
     current_user.prefs unless current_user.nil?
   end
+  
+  # Logout the {#current_user} and redirect to login page
+  #
+  # @param [String] message notification to display
+  def logout_user message=t('login.logged_out')
+    @user.forget_me if logged_in?
+    cookies.delete :auth_token
+    session['user_id'] = nil
+    if ( SITE_CONFIG['authentication_schemes'].include? 'cas')  && session[:cas_user]
+      CASClient::Frameworks::Rails::Filter.logout(self)
+    else
+      reset_session
+      notify :notice, message
+      redirect_to_login
+    end
+  end
     
   protected
   
@@ -132,7 +148,7 @@ module LoginSystem
   def set_current_user(user)
     @user = user
   end
-
+  
   # overwrite if you want to have special behavior in case the user is not authorized
   # to access the current operation. 
   # the default action is to redirect to the login screen
@@ -190,6 +206,16 @@ module LoginSystem
   def basic_auth_denied
       response.headers["WWW-Authenticate"] = "Basic realm=\"'Tracks Login Required'\""
       render :text => t('login.unsuccessful'), :status => 401
+  end
+
+private
+
+  # Redirect the user to the login page.
+  def redirect_to_login
+    respond_to do |format|
+      format.html { redirect_to login_path }
+      format.m { redirect_to login_path(:format => 'm') }
+    end
   end
 
 end

@@ -391,10 +391,10 @@ en:
     all_completed: All completed actions
     feed_title_in_context: in context '%{context}'
     older_than_days: ""
-    completed_tagged_page_title: TRACKS::Completed tasks with tag %{tag_name}
+    completed_tagged_page_title: TRACKS::Completed tasks with tag '%{tag_name}'
     edit: Edit
     pending: Pending
-    completed_actions_with: Completed actions with the tag %{tag_name}
+    completed_actions_with: Completed actions with the tag '%{tag_name}'
     deleted_success: The action was deleted succesfully.
     completed_tasks_title: TRACKS::Completed tasks
     feed_title_in_project: in project '%{project}'
@@ -659,6 +659,8 @@ en:
     staleness_starts_after: Staleness starts after %{days} days
     change_identity_url: Change Your Identity URL
     change_password: Change your password
+    password_changed: You password has been changed, please log on again.
+    updated: Preferences updated
     page_title: TRACKS::Preferences
     title: Your preferences
     token_description: Token (for feeds and API use)
