@@ -1103,7 +1103,7 @@ class TodosController < ApplicationController
         if @todo_was_completed_from_deferred_or_blocked_state
           @remaining_in_context = @remaining_deferred_or_pending_count
         else
-          @remaining_in_context = current_user.projects.find(project_id).todos.active.count
+          @remaining_in_context = current_user.projects.find(project_id).todos.active_or_hidden.count
         end
 
         @target_context_count = current_user.projects.find(project_id).todos.active.count
