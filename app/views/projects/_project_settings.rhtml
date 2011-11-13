@@ -24,3 +24,10 @@
 <div id="<%= dom_id(project, 'edit') %>" class="edit-form" style="display:none;">
    <div class="placeholder"> </div>
 </div>
+
+<div class="project_settings">	
+  Quickactions: <a href="<%=set_reviewed_project_path(project)%>" id="<%= dom_id(project, 'reviewed') %>" class="reviewed">
+  <%=image_tag("reviewed.png", :alt => "") %>
+  Reviewed
+</a>
+</div>
