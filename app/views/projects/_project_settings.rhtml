@@ -26,8 +26,15 @@
 </div>
 
 <div class="project_settings">	
-  Quickactions: <a href="<%=set_reviewed_project_path(project)%>" id="<%= dom_id(project, 'reviewed') %>" class="reviewed">
-  <%=image_tag("reviewed.png", :alt => "") %>
-  Reviewed
-</a>
+  Quick actions: 
+  <a href="<%=set_reviewed_project_path(project)%>" 
+     id="<%= dom_id(project, 'reviewed') %>" class="reviewed">
+    <%=image_tag("reviewed.png", :alt => "") %>
+    Mark reviewed
+  </a>
+  <a href="<%=set_reviewed_and_done_project_path(project)%>" 
+     id="<%= dom_id(project, 'reviewed') %>" class="reviewed">
+    <%=image_tag("tick-button.png", :alt => "") %>
+    Mark reviewed & Done
+  </a>
 </div>

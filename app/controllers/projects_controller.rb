@@ -2,7 +2,7 @@ class ProjectsController < ApplicationController
 
   helper :application, :todos, :notes
   before_filter :set_source_view
-  before_filter :set_project_from_params, :only => [:update, :destroy, :show, :edit, :set_reviewed]
+  before_filter :set_project_from_params, :only => [:update, :destroy, :show, :edit, :set_reviewed, :set_reviewed_and_done]
   before_filter :default_context_filter, :only => [:create, :update]
   skip_before_filter :login_required, :only => [:index]
   prepend_before_filter :login_or_feed_token_required, :only => [:index]
@@ -75,6 +75,15 @@ class ProjectsController < ApplicationController
     @project.save
     redirect_to :action => 'show'
   end
+
+  def set_reviewed_and_done
+    @project.last_reviewed = Time.zone.now
+    @project.set_completed_at_date
+    @project.complete!
+    @project.save
+    redirect_to :action => 'show'
+  end
+
 
   def projects_and_actions
     @projects = current_user.projects.active
