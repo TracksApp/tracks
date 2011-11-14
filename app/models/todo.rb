@@ -288,6 +288,8 @@ class Todo < ActiveRecord::Base
   end
 
   def add_predecessor(t)
+    return if t.nil?
+    
     @predecessor_array = predecessors
     @predecessor_array << t
   end
@@ -309,7 +311,62 @@ class Todo < ActiveRecord::Base
   def raw_notes=(value)
     self[:notes] = value
   end
-
+  
+  # XML API fixups
+  def predecessor_dependencies=(params)
+    value = params[:predecessor]
+    
+    if !value.nil?
+      if value.class == Array
+        value.each do |ele|
+          if ele.is_a? String
+            add_predecessor(self.user.todos.find_by_id(ele.to_i)) unless ele.blank?
+          else
+            predecessor_dependencies.build(value)
+          end
+        end
+      else 
+        if ele.is_a? String
+          add_predecessor(self.user.todos.find_by_id(ele.to_i)) unless ele.blank?
+        else
+          predecessor_dependencies.build(value)
+        end
+      end
+    end
+  end
+  
+  alias_method :original_context=, :context=
+  def context=(value)
+    if value.is_a? Context
+      self.original_context=(value)
+    else
+      self.original_context=(Context.create(value))
+    end
+  end
+  
+  alias_method :original_project=, :project=
+  def project=(value)
+    if value.is_a? Project
+      self.original_project=(value)
+    else
+      self.original_project=(Project.create(value))
+    end
+  end
+  
+  def tags=(params)
+    value = params[:tag]
+    
+    if !value.nil?
+      if value.class == Array
+        value.each do |attrs|
+          tags.build(attrs)
+        end
+      else 
+        tags.build(value)
+      end
+    end
+  end
+  
   # Rich Todo API
 
   def self.from_rich_message(user, default_context_id, description, notes)
