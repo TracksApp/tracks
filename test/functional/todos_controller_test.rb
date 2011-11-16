@@ -530,7 +530,9 @@ class TodosControllerTest < ActionController::TestCase
     # check that the new_todo is in the tickler to show next month
     assert !new_todo.show_from.nil?
 
-    next_month = today + 1.month
+    # do not use today here. It somehow gets messed up with the timezone calculation.
+    next_month = (Time.zone.now + 1.month).at_midnight
+
     assert_equal next_month.utc.to_date.to_s(:db), new_todo.show_from.utc.to_date.to_s(:db)
   end
 

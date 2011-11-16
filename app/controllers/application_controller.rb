@@ -177,9 +177,9 @@ class ApplicationController < ActionController::Base
   def create_todo_from_recurring_todo(rt, date=nil)
     # create todo and initialize with data from recurring_todo rt
     todo = current_user.todos.build( { :description => rt.description, :notes => rt.notes, :project_id => rt.project_id, :context_id => rt.context_id})
+    todo.recurring_todo_id = rt.id
 
     # set dates
-    todo.recurring_todo_id = rt.id
     todo.due = rt.get_due_date(date)
 
     show_from_date = rt.get_show_from_date(date)
