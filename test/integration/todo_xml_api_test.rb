@@ -35,7 +35,7 @@ class TodoXmlApiTest < ActionController::IntegrationTest
     authenticated_get_xml "/tickler", @user.login, @password, {}
     assert_no_tag :tag => "user_id"
   end
-  
+
   def test_create_todo_with_show_from
     old_count = @user.todos.count
     authenticated_post_xml_to_todo_create "
@@ -49,7 +49,7 @@ class TodoXmlApiTest < ActionController::IntegrationTest
     assert_response :success
     assert_equal @user.todos.count, old_count + 1
   end
-  
+
   def test_post_create_todo_with_dependencies
     authenticated_post_xml_to_todo_create "
 <todo>
@@ -67,7 +67,7 @@ class TodoXmlApiTest < ActionController::IntegrationTest
     assert_not_nil todo
     assert !todo.uncompleted_predecessors.empty?
   end
-  
+
   def test_post_create_todo_with_tags
     authenticated_post_xml_to_todo_create "
 <todo>
@@ -76,6 +76,7 @@ class TodoXmlApiTest < ActionController::IntegrationTest
   <project_id>#{projects(:timemachine).id}</project_id>
   <tags>
     <tag><name>starred</name></tag>
+    <tag><name>starred1</name></tag>
     <tag><name>starred2</name></tag>
   </tags>
 </todo>"
@@ -83,9 +84,10 @@ class TodoXmlApiTest < ActionController::IntegrationTest
     assert_response :success
     todo = @user.todos.find_by_description("this will succeed 3")
     assert_not_nil todo
-    assert !todo.starred?
+    assert_equal "starred, starred1, starred2", todo.tag_list
+    assert todo.starred?
   end
-  
+
   def test_post_create_todo_with_new_context
     authenticated_post_xml_to_todo_create "
 <todo>
@@ -95,14 +97,14 @@ class TodoXmlApiTest < ActionController::IntegrationTest
     <name>@SomeNewContext</name>
   </context>
 </todo>"
-    
+
     assert_response :success
     todo = @user.todos.find_by_description("this will succeed 4")
     assert_not_nil todo
     assert_not_nil todo.context
     assert_equal todo.context.name, "@SomeNewContext"
   end
-  
+
   def test_post_create_todo_with_new_project
     authenticated_post_xml_to_todo_create "
 <todo>
@@ -132,8 +134,8 @@ class TodoXmlApiTest < ActionController::IntegrationTest
       assert_select 'error', 2
     end
   end
-  
-  def test_fails_with_401_if_not_authorized_user	 	
+
+  def test_fails_with_401_if_not_authorized_user
     authenticated_post_xml_to_todo_create '', 'nobody', 'nohow'
     assert_response 401
   end

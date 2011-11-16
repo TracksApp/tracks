@@ -90,7 +90,7 @@ class TodosController < ApplicationController
       end
 
       if @todo.errors.empty?
-        @todo.starred= (params[:new_todo_starred]||"").include? "true"
+        @todo.starred= (params[:new_todo_starred]||"").include? "true" if params[:new_todo_starred]
 
         @todo.add_predecessor_list(predecessor_list)
 
@@ -1516,6 +1516,13 @@ class TodosController < ApplicationController
       @params = params['request'] || params
       @prefs = prefs
       @attributes = params['request'] && params['request']['todo']  || params['todo']
+
+      if @attributes[:tags]
+        # the REST api may use <tags> which will collide with tags association, so rename tags to add_tags
+        add_tags = @attributes[:tags]
+        @attributes.delete :tags
+        @attributes[:add_tags] = add_tags
+      end
     end
 
     def attributes
