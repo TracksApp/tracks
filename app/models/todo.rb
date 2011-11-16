@@ -47,13 +47,6 @@ class Todo < ActiveRecord::Base
   STARRED_TAG_NAME = "starred"
   DEFAULT_INCLUDES = [ :project, :context, :tags, :taggings, :pending_successors, :uncompleted_predecessors, :recurring_todo ]
 
-  # regular expressions for dependencies. TODO: are these still used?
-  RE_TODO = /[^']+/
-  RE_CONTEXT = /[^']+/
-  RE_PROJECT = /[^']+/
-  RE_PARTS = /'(#{RE_TODO})'\s<'(#{RE_CONTEXT})';\s'(#{RE_PROJECT})'>/ # results in array
-  RE_SPEC = /'#{RE_TODO}'\s<'#{RE_CONTEXT}';\s'#{RE_PROJECT}'>/ # results in string
-
   # state machine
   include AASM
   aasm_column :state
@@ -113,12 +106,11 @@ class Todo < ActiveRecord::Base
 
   def no_uncompleted_predecessors_or_deferral?
     no_deferral = show_from.blank? or Time.zone.now > show_from
-    no_uncompleted_predecessors = uncompleted_predecessors.all(true).empty?
-    return (no_deferral && no_uncompleted_predecessors)
+    return (no_deferral && no_uncompleted_predecessors?)
   end
 
   def no_uncompleted_predecessors?
-    return uncompleted_predecessors.all(true).empty?
+    return !uncompleted_predecessors?
   end
 
   def uncompleted_predecessors?
@@ -197,8 +189,8 @@ class Todo < ActiveRecord::Base
     return !pending_successors.empty?
   end
 
-  def has_tag?(tag)
-    return self.tags.select{|t| t.name==tag }.size > 0
+  def has_tag?(tag_name)
+    return self.tags.any? {|tag| tag.name == tag_name}
   end
 
   def hidden?
@@ -239,12 +231,6 @@ class Todo < ActiveRecord::Base
     defer! if active? && !date.blank? && date > user.date
   end
 
-  alias_method :original_project, :project
-
-  def project
-    original_project.nil? ? Project.null_object : original_project
-  end
-
   def self.feed_options(user)
     {
       :title => 'Tracks Actions',
@@ -253,7 +239,7 @@ class Todo < ActiveRecord::Base
   end
 
   def starred?
-    tags.any? {|tag| tag.name == STARRED_TAG_NAME}
+    return has_tag?(STARRED_TAG_NAME)
   end
 
   def toggle_star!
@@ -276,12 +262,10 @@ class Todo < ActiveRecord::Base
   def add_predecessor_list(predecessor_list)
     return unless predecessor_list.kind_of? String
 
-    @predecessor_array=[]
-
-    predecessor_ids_array = predecessor_list.split(",")
-    predecessor_ids_array.each do |todo_id|
+    @predecessor_array=predecessor_list.split(",").inject([]) do |list, todo_id|
       predecessor = self.user.todos.find_by_id( todo_id.to_i ) unless todo_id.blank?
-      @predecessor_array << predecessor unless predecessor.nil?
+      list <<  predecessor unless predecessor.nil?
+      list
     end
 
     return @predecessor_array
@@ -344,12 +328,19 @@ class Todo < ActiveRecord::Base
     end
   end
 
+  alias_method :original_project, :project
+  def project
+    original_project.nil? ? Project.null_object : original_project
+  end
+
   alias_method :original_project=, :project=
   def project=(value)
     if value.is_a? Project
       self.original_project=(value)
-    else
+    elsif !value.nil?
       self.original_project=(Project.create(value))
+    else
+      self.original_project=value
     end
   end
 

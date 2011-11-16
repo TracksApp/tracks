@@ -1517,7 +1517,7 @@ class TodosController < ApplicationController
       @prefs = prefs
       @attributes = params['request'] && params['request']['todo']  || params['todo']
 
-      if @attributes[:tags]
+      if @attributes && @attributes[:tags]
         # the REST api may use <tags> which will collide with tags association, so rename tags to add_tags
         add_tags = @attributes[:tags]
         @attributes.delete :tags
