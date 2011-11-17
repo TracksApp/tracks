@@ -467,7 +467,11 @@ class RecurringTodo < ActiveRecord::Base
   end
 
   def starred?
-    tags.any? {|tag| tag.name == Todo::STARRED_TAG_NAME }
+    return has_tag?(Todo::STARRED_TAG_NAME)
+  end
+
+  def has_tag?(tag_name)
+    return self.tags.any? {|tag| tag.name == tag_name}
   end
 
   def get_due_date(previous)
