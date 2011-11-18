@@ -560,6 +560,7 @@ en:
       due_date: with a due date %{due_date} or earlier
     overdue: Overdue
     add_new_recurring: Add a new recurring action
+    edit_recurring_todo: Edit repeating action
     no_incomplete_actions: There are no incomplete actions
   notes:
     delete_confirmation: Are you sure that you want to delete the note '%{id}'?

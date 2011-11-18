@@ -1,5 +1,5 @@
 <%- if @saved -%>
-  RecurringTodosPage.toggle_overlay();
+  $( "#edit-recurring-todo" ).dialog( "close" );
   TracksPages.page_notify('notice', text_for_status_message(), 5);
   replace_old_recurring_todo_with_updated();
 <%-  else -%>

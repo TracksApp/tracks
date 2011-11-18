@@ -211,14 +211,6 @@ a.show_successors:hover, a.link_to_successors:hover {background-image: url(../im
     text-align: left;
 }
 
-.recurring_submit_box {
-    height: 25px;
-    padding: 5px 0;
-    text-align: center;
-    clear: both;
-    border: none;
-}
-
 /* Navigation links at the top */
 
 #navcontainer {

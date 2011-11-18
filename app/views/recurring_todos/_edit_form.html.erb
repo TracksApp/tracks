@@ -1,4 +1,3 @@
-<label>Edit Recurring Todo</label><br/>
 <div class="recurring_container">
   <% #form_remote_tag(
   #url => recurring_todo_path(@recurring_todo), :method => :put,
@@ -98,18 +97,6 @@
     <%= t('todos.recurrence.show_days_before', :days => text_field_tag( 'recurring_todo[recurring_show_days_before]', @recurring_todo.show_from_delta, {"size" => 3, "tabindex" => next_tab_index})) %><br/>
     <%= radio_button_tag('recurring_todo[recurring_target]', 'show_from_date', @recurring_todo.target == 'show_from_date', {:tabindex => next_tab_index})%> <%= t('todos.recurrence.from_tickler') %><br/>
     <br/>
-  </div>
-  <div class="recurring_submit_box">
-    <div class="widgets">
-      <button type="submit" class="positive" id="recurring_todo_edit_action_submit" tabindex="<%=next_tab_index%>">
-        <%=image_tag("accept.png", :alt => "") %>
-        <%= t('common.update') %>
-      </button>
-      <button type="button" class="positive" id="recurring_todo_edit_action_cancel" tabindex="<%=next_tab_index%>">
-        <%=image_tag("cancel.png", :alt => "") %>
-        <%= t('common.cancel') %>
-      </button>
-    </div>
   </div>
 <% end %>
 </div>
