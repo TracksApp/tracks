@@ -233,6 +233,7 @@ en:
           one: 1 error prohibited this %{model} from being saved
           other: "%{count} errors prohibited this %{model} from being saved"
   stats:
+    index_title: TRACKS::Statistics
     tag_cloud_title: Tag cloud for all actions
     tag_cloud_description: This tag cloud includes tags of all actions (completed, not completed, visible and/or hidden)
     tag_cloud_90days_title: Tag cloud actions in past 90 days

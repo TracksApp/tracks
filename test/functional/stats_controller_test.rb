@@ -13,11 +13,6 @@ class StatsControllerTest < ActionController::TestCase
     @response   = ActionController::TestResponse.new
   end
 
-  # Replace this with your real tests.
-  def test_truth
-    assert true
-  end
-
   def test_get_index_when_not_logged_in
     get :index
     assert_redirected_to :controller => 'login', :action => 'login'
