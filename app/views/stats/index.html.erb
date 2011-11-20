@@ -1,30 +1,26 @@
 <div class="stats_content">
   <h2><%= t('stats.totals') %></h2>
-  
+
   <%= render :partial => 'totals' -%>
-  
-  <% unless @actions.empty? -%>
-  
+
+  <% unless current_user.todos.empty? -%>
+
     <h2><%= t('stats.actions') %></h2>
-  
     <%= render :partial => 'actions' -%>
-  
+
     <h2><%= t('stats.contexts') %></h2>
-  
     <%= render :partial => 'contexts' -%>
-  
+
     <h2><%= t('stats.projects') %></h2>
-  
     <%= render :partial => 'projects' -%>
-  
+
     <h2><%= t('stats.tags') %></h2>
-  
     <%= render :partial => 'tags' -%>
-  
+
   <% else -%>
-  
+
     <p><%= t('stats.more_stats_will_appear') %></p>
-  
+
   <% end -%>
-  
+
 </div>

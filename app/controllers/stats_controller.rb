@@ -27,8 +27,8 @@ class StatsController < ApplicationController
     @actions_created_last12months = current_user.todos.created_after(@cut_off_year_plus3).find(:all, { :select => "created_at"})
 
     # convert to hash to be able to fill in non-existing months
-    @actions_done_last12months_hash = convert_to_hash(@actions_done_last12months, :completed_at)
-    @actions_created_last12months_hash = convert_to_hash(@actions_created_last12months, :created_at)
+    @actions_done_last12months_hash = convert_to_hash(@actions_done_last12months, :difference_in_months, :completed_at)
+    @actions_created_last12months_hash = convert_to_hash(@actions_created_last12months, :difference_in_months, :created_at)
 
     # find max for graph in both hashes
     @sum_actions_done_last12months, @sum_actions_created_last12months, @max = 0, 0, 0
@@ -70,8 +70,8 @@ class StatsController < ApplicationController
       difference_in_months(@today, @actions_done_last_months.last.completed_at)].max
 
     # convert to hash to be able to fill in non-existing months
-    @actions_done_last_months_hash = convert_to_hash(@actions_done_last_months, :completed_at)
-    @actions_created_last_months_hash = convert_to_hash(@actions_created_last_months, :created_at)
+    @actions_done_last_months_hash = convert_to_hash(@actions_done_last_months, :difference_in_months, :completed_at)
+    @actions_created_last_months_hash = convert_to_hash(@actions_created_last_months, :difference_in_months, :created_at)
 
     # find max for graph in both hashes
     @sum_actions_done_last_months, @sum_actions_created_last_months, @max = 0, 0, 0
@@ -110,8 +110,8 @@ class StatsController < ApplicationController
     # convert to hash to be able to fill in non-existing days in
     #   @actions_done_last30days and count the total actions done in the past 30
     #   days to be able to calculate percentage
-    @actions_done_last30days_hash = convert_to_hash(@actions_done_last30days, :completed_at, :difference_in_days)
-    @actions_created_last30days_hash = convert_to_hash(@actions_created_last30days, :created_at, :difference_in_days)
+    @actions_done_last30days_hash = convert_to_hash(@actions_done_last30days, :difference_in_days, :completed_at)
+    @actions_created_last30days_hash = convert_to_hash(@actions_created_last30days, :difference_in_days, :created_at)
 
     # find max for graph in both hashes
     @sum_actions_done_last30days, @sum_actions_created_last30days, @max = 0, 0, 0
@@ -125,23 +125,19 @@ class StatsController < ApplicationController
   end
 
   def actions_completion_time_data
-    @actions_completion_time = @actions.find(:all, {
-        :select => "completed_at, created_at",
-        :conditions => "completed_at IS NOT NULL"
-      })
+    @actions_completion_time = current_user.todos.completed.find(:all, { :select => "completed_at, created_at" })
 
     # convert to hash to be able to fill in non-existing days in
     #   @actions_completion_time also convert days to weeks (/7)
 
-    @max_days, @max_actions, @sum_actions=0,0,0
-    @actions_completion_time_hash = Hash.new(0)
+    @actions_completion_time_hash,@max_days, @max_actions, @sum_actions=Hash.new(0), 0,0,0
     @actions_completion_time.each do |r|
       days = (r.completed_at - r.created_at) / @seconds_per_day
       weeks = (days/7).to_i
       @actions_completion_time_hash[weeks] += 1
 
-      @max_days=days if days > @max_days
-      @max_actions = @actions_completion_time_hash[weeks] if @actions_completion_time_hash[weeks] > @max_actions
+      @max_days= [days, @max_days].max
+      @max_actions = [@actions_completion_time_hash[weeks], @max_actions].max
       @sum_actions += 1
     end
 
@@ -152,10 +148,7 @@ class StatsController < ApplicationController
   end
 
   def actions_running_time_data
-    @actions_running_time = @actions.find(:all, {
-        :select => "created_at",
-        :conditions => "completed_at IS NULL"
-      })
+    @actions_running_time = current_user.todos.not_completed.find(:all, { :select => "created_at" })
 
     # convert to hash to be able to fill in non-existing days in
     #   @actions_running_time also convert days to weeks (/7)
@@ -168,8 +161,8 @@ class StatsController < ApplicationController
 
       @actions_running_time_hash[weeks] += 1
 
-      @max_days=days if days > @max_days
-      @max_actions = @actions_running_time_hash[weeks] if @actions_running_time_hash[weeks] > @max_actions
+      @max_days=[days,@max_days].max
+      @max_actions = [@actions_running_time_hash[weeks], @max_actions].max
       @sum_actions += 1
     end
 
@@ -181,21 +174,14 @@ class StatsController < ApplicationController
 
   def actions_visible_running_time_data
     # running means
-    # - not completed (completed_at must be null) visible means
+    # - not completed (completed_at must be null)
+    # visible means
     # - actions not part of a hidden project
     # - actions not part of a hidden context
     # - actions not deferred (show_from must be null)
     # - actions not pending/blocked
 
-    @actions_running_time = @actions.find_by_sql([
-        "SELECT t.created_at "+
-          "FROM todos t LEFT OUTER JOIN projects p ON t.project_id = p.id LEFT OUTER JOIN contexts c ON t.context_id = c.id "+
-          "WHERE t.user_id=? "+
-          "AND t.completed_at IS NULL " +
-          "AND t.show_from IS NULL " +
-          "AND NOT (p.state='hidden' OR p.state='pending' OR c.hide=?) " +
-          "ORDER BY t.created_at ASC", @user.id, true]
-    )
+    @actions_running_time = current_user.todos.not_completed.not_hidden.not_deferred_or_blocked.find(:all, :select => "todos.created_at")
 
     # convert to hash to be able to fill in non-existing days in
     # @actions_running_time also convert days to weeks (/7)
@@ -205,11 +191,10 @@ class StatsController < ApplicationController
     @actions_running_time.each do |r|
       days = (@today - r.created_at) / @seconds_per_day
       weeks = (days/7).to_i
-      # RAILS_DEFAULT_LOGGER.error("\n" + total.to_s + " - " + days + "\n")
       @actions_running_time_hash[weeks] += 1
 
-      @max_days=days if days > @max_days
-      @max_actions = @actions_running_time_hash[weeks] if @actions_running_time_hash[weeks] > @max_actions
+      @max_days=[days, @max_days].max
+      @max_actions = [@actions_running_time_hash[weeks], @max_actions].max
       @sum_actions += 1
     end
 
@@ -224,11 +209,10 @@ class StatsController < ApplicationController
     # get total action count per context Went from GROUP BY c.id to c.name for
     # compatibility with postgresql. Since the name is forced to be unique, this
     # should work.
-    @all_actions_per_context = @contexts.find_by_sql(
+    @all_actions_per_context = current_user.contexts.find_by_sql(
       "SELECT c.name AS name, c.id as id, count(*) AS total "+
         "FROM contexts c, todos t "+
         "WHERE t.context_id=c.id "+
-        "AND t.user_id="+@user.id.to_s+" "+
         "GROUP BY c.name, c.id "+
         "ORDER BY total DESC"
     )
@@ -250,10 +234,7 @@ class StatsController < ApplicationController
       end
     end
 
-    @sum=0
-    0.upto @all_actions_per_context.size()-1 do |i|
-      @sum += @all_actions_per_context[i]['total'].to_i
-    end
+    @sum = @all_actions_per_context.inject(0){|sum, apc| sum += apc['total'].to_i }
 
     @truncate_chars = 15
 
@@ -265,11 +246,10 @@ class StatsController < ApplicationController
     #
     # Went from GROUP BY c.id to c.name for compatibility with postgresql. Since
     # the name is forced to be unique, this should work.
-    @all_actions_per_context = @contexts.find_by_sql(
+    @all_actions_per_context = current_user.contexts.find_by_sql(
       "SELECT c.name AS name, c.id as id, count(*) AS total "+
         "FROM contexts c, todos t "+
         "WHERE t.context_id=c.id AND t.completed_at IS NULL AND NOT c.hide "+
-        "AND t.user_id="+@user.id.to_s+" "+
         "GROUP BY c.name, c.id "+
         "ORDER BY total DESC"
     )
@@ -291,102 +271,57 @@ class StatsController < ApplicationController
       end
     end
 
-    @sum=0
-    0.upto @all_actions_per_context.size()-1 do |i|
-      @sum += @all_actions_per_context[i]['total'].to_i
-    end
-
+    @sum = @all_actions_per_context.inject(0){|sum, apc| sum += apc['total'].to_i }
     @truncate_chars = 15
 
     render :layout => false
   end
 
   def actions_day_of_week_all_data
-    @actions = @user.todos
-
-    @actions_creation_day = @actions.find(:all, {
-        :select => "created_at"
-      })
-
-    @actions_completion_day = @actions.find(:all, {
-        :select => "completed_at",
-        :conditions => "completed_at IS NOT NULL"
-      })
+    @actions_creation_day = current_user.todos.find(:all, { :select => "created_at" })
+    @actions_completion_day = current_user.todos.completed.find(:all, { :select => "completed_at" })
 
     # convert to hash to be able to fill in non-existing days
     @actions_creation_day_array = Array.new(7) { |i| 0}
-    @actions_creation_day.each do |t|
-      # dayofweek: sunday=0..saterday=6
-      dayofweek = t.created_at.wday
-      @actions_creation_day_array[dayofweek] += 1
-    end
-    # find max
-    @max=0
-    0.upto(6) { |i| @max = @actions_creation_day_array[i] if @actions_creation_day_array[i] >  @max}
-
+    @actions_creation_day.each { |t| @actions_creation_day_array[ t.created_at.wday ] += 1 }
+    @max = @actions_creation_day_array.max
 
     # convert to hash to be able to fill in non-existing days
     @actions_completion_day_array = Array.new(7) { |i| 0}
-    @actions_completion_day.each do |t|
-      # dayofweek: sunday=0..saterday=6
-      dayofweek = t.completed_at.wday
-      @actions_completion_day_array[dayofweek] += 1
-    end
-    0.upto(6) { |i| @max = @actions_completion_day_array[i] if @actions_completion_day_array[i] >  @max}
+    @actions_completion_day.each { |t| @actions_completion_day_array[ t.completed_at.wday ] += 1 }
+    @max = @actions_completion_day_array.max
 
     render :layout => false
   end
 
   def actions_day_of_week_30days_data
-    @actions_creation_day = @actions.find(:all, {
-        :select => "created_at",
-        :conditions => ["created_at > ?", @cut_off_month]
-      })
-
-    @actions_completion_day = @actions.find(:all, {
-        :select => "completed_at",
-        :conditions => ["completed_at IS NOT NULL AND completed_at > ?", @cut_off_month]
-      })
+    @actions_creation_day = current_user.todos.created_after(@cut_off_month).find(:all, { :select => "created_at" })
+    @actions_completion_day = current_user.todos.completed_after(@cut_off_month).find(:all, { :select => "completed_at" })
 
     # convert to hash to be able to fill in non-existing days
     @max=0
     @actions_creation_day_array = Array.new(7) { |i| 0}
-    @actions_creation_day.each do |r|
-      # dayofweek: sunday=1..saterday=8
-      dayofweek = r.created_at.wday
-      @actions_creation_day_array[dayofweek] += 1
-    end
-    0.upto(6) { |i| @max = @actions_creation_day_array[i] if @actions_creation_day_array[i] >  @max}
+    @actions_creation_day.each { |r| @actions_creation_day_array[ r.created_at.wday ] += 1 }
 
     # convert to hash to be able to fill in non-existing days
     @actions_completion_day_array = Array.new(7) { |i| 0}
-    @actions_completion_day.each do |r|
-      # dayofweek: sunday=1..saterday=7
-      dayofweek = r.completed_at.wday
-      @actions_completion_day_array[dayofweek] += 1
-    end
-    0.upto(6) { |i| @max = @actions_completion_day_array[i] if @actions_completion_day_array[i] >  @max}
+    @actions_completion_day.each { |r| @actions_completion_day_array[r.completed_at.wday] += 1 }
+
+    @max = [@actions_creation_day_array.max, @actions_completion_day_array.max].max
 
     render :layout => false
   end
 
   def actions_time_of_day_all_data
-    @actions_creation_hour = @actions.find(:all, {
-        :select => "created_at"
-      })
-    @actions_completion_hour = @actions.find(:all, {
-        :select => "completed_at",
-        :conditions => "completed_at IS NOT NULL"
-      })
+    @actions_creation_hour = current_user.todos.find(:all, { :select => "created_at" })
+    @actions_completion_hour = current_user.todos.completed.find(:all, { :select => "completed_at" })
 
     # convert to hash to be able to fill in non-existing days
-    @max=0
     @actions_creation_hour_array = Array.new(24) { |i| 0}
     @actions_creation_hour.each do |r|
       hour = r.created_at.hour
       @actions_creation_hour_array[hour] += 1
     end
-    0.upto(23) { |i| @max = @actions_creation_hour_array[i] if @actions_creation_hour_array[i] >  @max}
 
     # convert to hash to be able to fill in non-existing days
     @actions_completion_hour_array = Array.new(24) { |i| 0}
@@ -394,30 +329,22 @@ class StatsController < ApplicationController
       hour = r.completed_at.hour
       @actions_completion_hour_array[hour] += 1
     end
-    0.upto(23) { |i| @max = @actions_completion_hour_array[i] if @actions_completion_hour_array[i] >  @max}
+
+    @max = [@actions_creation_hour_array.max, @actions_completion_hour_array.max].max
 
     render :layout => false
   end
 
   def actions_time_of_day_30days_data
-    @actions_creation_hour = @actions.find(:all, {
-        :select => "created_at",
-        :conditions => ["created_at > ?", @cut_off_month]
-      })
-
-    @actions_completion_hour = @actions.find(:all, {
-        :select => "completed_at",
-        :conditions => ["completed_at IS NOT NULL AND completed_at > ?", @cut_off_month]
-      })
+    @actions_creation_hour = current_user.todos.created_after(@cut_off_month).find(:all, { :select => "created_at" })
+    @actions_completion_hour = current_user.todos.completed_after(@cut_off_month).find(:all, { :select => "completed_at" })
 
     # convert to hash to be able to fill in non-existing days
-    @max=0
     @actions_creation_hour_array = Array.new(24) { |i| 0}
     @actions_creation_hour.each do |r|
       hour = r.created_at.hour
       @actions_creation_hour_array[hour] += 1
     end
-    0.upto(23) { |i| @max = @actions_creation_hour_array[i] if @actions_creation_hour_array[i] >  @max}
 
     # convert to hash to be able to fill in non-existing days
     @actions_completion_hour_array = Array.new(24) { |i| 0}
@@ -425,7 +352,8 @@ class StatsController < ApplicationController
       hour = r.completed_at.hour
       @actions_completion_hour_array[hour] += 1
     end
-    0.upto(23) { |i| @max = @actions_completion_hour_array[i] if @actions_completion_hour_array[i] >  @max}
+
+    @max = [@actions_creation_hour_array.max, @max = @actions_completion_hour_array.max].max
 
     render :layout => false
   end
@@ -458,19 +386,17 @@ class StatsController < ApplicationController
       end
 
       # get all running actions that are visible
-      @actions_running_time = @actions.find_by_sql([
+      @actions_running_time = current_user.todos.find_by_sql([
           "SELECT t.id, t.created_at "+
             "FROM todos t LEFT OUTER JOIN projects p ON t.project_id = p.id LEFT OUTER JOIN contexts c ON t.context_id = c.id "+
-            "WHERE t.user_id=? "+
-            "AND t.completed_at IS NULL " +
+            "WHERE t.completed_at IS NULL " +
             "AND t.show_from IS NULL " +
             "AND NOT (p.state='hidden' OR c.hide=?) " +
-            "ORDER BY t.created_at ASC", @user.id, true]
+            "ORDER BY t.created_at ASC", true]
       )
 
       @selected_todo_ids, @count = get_ids_from(@actions_running_time, week_from, week_to, params['id']== 'avrt_end')
-      @actions = @user.todos
-      @selected_actions = @actions.find(:all, {
+      @selected_actions = current_user.todos.find(:all, {
           :conditions => "id in (" + @selected_todo_ids + ")"
         })
 
@@ -490,12 +416,8 @@ class StatsController < ApplicationController
         @page_title += week_from.to_s + " - " + week_to.to_s + ""
       end
 
-      @actions = @user.todos
       # get all running actions
-      @actions_running_time = @actions.find(:all, {
-          :select => "id, created_at",
-          :conditions => "completed_at IS NULL"
-        })
+      @actions_running_time = current_user.todos.not_completed.find(:all, { :select => "id, created_at" })
 
       @selected_todo_ids, @count = get_ids_from(@actions_running_time, week_from, week_to, params['id']=='art_end')
       @selected_actions = @actions.find(:all, {
@@ -524,12 +446,11 @@ class StatsController < ApplicationController
   private
 
   def get_unique_tags_of_user
-    tag_ids = @actions.find_by_sql([
+    tag_ids = current_user.todos.find_by_sql([
         "SELECT DISTINCT tags.id as id "+
           "FROM tags, taggings, todos "+
-          "WHERE todos.user_id=? "+
-          "AND tags.id = taggings.tag_id " +
-          "AND taggings.taggable_id = todos.id ", current_user.id])
+          "WHERE tags.id = taggings.tag_id " +
+          "AND taggings.taggable_id = todos.id "])
     tags_ids_s = tag_ids.map(&:id).sort.join(",")
     return {} if tags_ids_s.blank?  # return empty hash for .size to work
     return Tag.find(:all, :conditions => "id in (" + tags_ids_s + ")")
@@ -537,19 +458,15 @@ class StatsController < ApplicationController
 
   def get_total_number_of_tags_of_user
     # same query as get_unique_tags_of_user except for the DISTINCT
-    return @actions.find_by_sql([
+    return current_user.todos.find_by_sql([
         "SELECT tags.id as id "+
           "FROM tags, taggings, todos "+
-          "WHERE todos.user_id=? "+
-          "AND tags.id = taggings.tag_id " +
-          "AND taggings.taggable_id = todos.id ", current_user.id]).size
+          "WHERE tags.id = taggings.tag_id " +
+          "AND taggings.taggable_id = todos.id "]).size
   end
 
   def init
     @me = self # for meta programming
-    @actions = current_user.todos
-    @projects = current_user.projects
-    @contexts = current_user.contexts
 
     # default chart dimensions
     @chart_width=460
@@ -572,18 +489,15 @@ class StatsController < ApplicationController
 
   def get_stats_actions
     # time to complete
-    @completed_actions = @actions.find(:all, {
-        :select => "completed_at, created_at",
-        :conditions => "completed_at IS NOT NULL",
-      })
+    @completed_actions = current_user.todos.completed.find(:all, { :select => "completed_at, created_at" })
 
     actions_sum, actions_max, actions_min = 0,0,-1
     @completed_actions.each do |r|
       actions_sum += (r.completed_at - r.created_at)
-      actions_max = (r.completed_at - r.created_at) if (r.completed_at - r.created_at) > actions_max
+      actions_max = [(r.completed_at - r.created_at), actions_max].max
 
       actions_min = (r.completed_at - r.created_at) if actions_min == -1
-      actions_min = (r.completed_at - r.created_at) if (r.completed_at - r.created_at) < actions_min
+      actions_min = [(r.completed_at - r.created_at), actions_min].min
     end
 
     sum_actions = @completed_actions.size
@@ -597,22 +511,13 @@ class StatsController < ApplicationController
     @actions_min_ttc_sec = (min_ttc_sec).strftime("%H:%M:%S")
     @actions_min_ttc_sec = (actions_min / @seconds_per_day).round.to_s + " days " + @actions_min_ttc_sec if actions_min > @seconds_per_day
 
-
     # get count of actions created and actions done in the past 30 days.
-    @sum_actions_done_last30days = @actions.count(:all, {
-        :conditions => ["completed_at > ? AND completed_at IS NOT NULL", @cut_off_month]
-      })
-    @sum_actions_created_last30days = @actions.count(:all, {
-        :conditions => ["created_at > ?", @cut_off_month]
-      })
+    @sum_actions_done_last30days = current_user.todos.completed.completed_after(@cut_off_month).count(:all)
+    @sum_actions_created_last30days = current_user.todos.created_after(@cut_off_month).count(:all)
 
     # get count of actions done in the past 12 months.
-    @sum_actions_done_last12months = @actions.count(:all, {
-        :conditions => ["completed_at > ? AND completed_at IS NOT NULL", @cut_off_year]
-      })
-    @sum_actions_created_last12months = @actions.count(:all, {
-        :conditions => ["created_at > ?", @cut_off_year]
-      })
+    @sum_actions_done_last12months = current_user.todos.completed.completed_after(@cut_off_year).count(:all)
+    @sum_actions_created_last12months = current_user.todos.created_after(@cut_off_year).count(:all)
   end
 
   def get_stats_contexts
@@ -620,11 +525,10 @@ class StatsController < ApplicationController
     #
     # Went from GROUP BY c.id to c.id, c.name for compatibility with postgresql.
     # Since the name is forced to be unique, this should work.
-    @actions_per_context = @contexts.find_by_sql(
+    @actions_per_context = current_user.contexts.find_by_sql(
       "SELECT c.id AS id, c.name AS name, count(*) AS total "+
         "FROM contexts c, todos t "+
         "WHERE t.context_id=c.id "+
-        "AND t.user_id="+@user.id.to_s+" "+
         "GROUP BY c.id, c.name ORDER BY total DESC " +
         "LIMIT 5"
     )
@@ -633,11 +537,10 @@ class StatsController < ApplicationController
     #
     # Went from GROUP BY c.id to c.id, c.name for compatibility with postgresql.
     # Since the name is forced to be unique, this should work.
-    @running_actions_per_context = @contexts.find_by_sql(
+    @running_actions_per_context = current_user.contexts.find_by_sql(
       "SELECT c.id AS id, c.name AS name, count(*) AS total "+
         "FROM contexts c, todos t "+
         "WHERE t.context_id=c.id AND t.completed_at IS NULL AND NOT c.hide "+
-        "AND t.user_id="+@user.id.to_s+" "+
         "GROUP BY c.id, c.name ORDER BY total DESC " +
         "LIMIT 5"
     )
@@ -648,11 +551,10 @@ class StatsController < ApplicationController
     #
     # Went from GROUP BY p.id to p.name for compatibility with postgresql. Since
     # the name is forced to be unique, this should work.
-    @projects_and_actions = @projects.find_by_sql(
+    @projects_and_actions = current_user.projects.find_by_sql(
       "SELECT p.id, p.name, count(*) AS count "+
         "FROM projects p, todos t "+
         "WHERE p.id = t.project_id "+
-        "AND p.user_id="+@user.id.to_s+" "+
         "GROUP BY p.id, p.name "+
         "ORDER BY count DESC " +
         "LIMIT 10"
@@ -663,20 +565,19 @@ class StatsController < ApplicationController
 
     # using GROUP BY p.name (was: p.id) for compatibility with Postgresql. Since
     # you cannot create two contexts with the same name, this will work.
-    @projects_and_actions_last30days = @projects.find_by_sql([
+    @projects_and_actions_last30days = current_user.projects.find_by_sql([
         "SELECT p.id, p.name, count(*) AS count "+
           "FROM todos t, projects p "+
           "WHERE t.project_id = p.id AND "+
           "      (t.created_at > ? OR t.completed_at > ?) "+
-          "AND p.user_id=? "+
           "GROUP BY p.id, p.name "+
           "ORDER BY count DESC " +
-          "LIMIT 10", @cut_off_month, @cut_off_month, @user.id]
+          "LIMIT 10", @cut_off_month, @cut_off_month]
     )
 
     # get the first 10 projects and their running time (creation date versus
     # now())
-    @projects_and_runtime_sql = @projects.find_by_sql(
+    @projects_and_runtime_sql = current_user.projects.find_by_sql(
       "SELECT id, name, created_at "+
         "FROM projects "+
         "WHERE state='active' "+
@@ -717,8 +618,8 @@ class StatsController < ApplicationController
 
     max, @tags_min = 0, 0
     @tags_for_cloud.each { |t|
-      max = t.count.to_i if t.count.to_i > max
-      @tags_min = t.count.to_i if t.count.to_i < @tags_min
+      max = [t.count.to_i, max].max
+      @tags_min = [t.count.to_i, @tags_min].min
     }
 
     @tags_divisor = ((max - @tags_min) / levels) + 1
@@ -741,8 +642,8 @@ class StatsController < ApplicationController
 
     max_90days, @tags_min_90days = 0, 0
     @tags_for_cloud_90days.each { |t|
-      max_90days = t.count.to_i if t.count.to_i > max_90days
-      @tags_min_90days = t.count.to_i if t.count.to_i < @tags_min_90days
+      max_90days = [t.count.to_i, max_90days].max
+      @tags_min_90days = [t.count.to_i, @tags_min_90days].min
     }
 
     @tags_divisor_90days = ((max_90days - @tags_min_90days) / levels) + 1
@@ -775,10 +676,10 @@ class StatsController < ApplicationController
     return selected_todo_ids, count
   end
 
-  def convert_to_hash(records, date_method, difference_method=:difference_in_months)
+  def convert_to_hash(records, difference_method, date_method_on_todo)
     # use 0 to initialise action count to zero
     hash = Hash.new(0)
-    records.each { |t| hash[self.send(difference_method, @today, t.send(date_method))] += 1 }
+    records.each { |t| hash[self.send(difference_method, @today, t.send(date_method_on_todo))] += 1 }
     return hash
   end
 
