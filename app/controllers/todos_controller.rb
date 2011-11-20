@@ -1518,10 +1518,12 @@ class TodosController < ApplicationController
       @attributes = params['request'] && params['request']['todo']  || params['todo']
 
       if @attributes && @attributes[:tags]
+        # for single tags, @attributed[:tags] returns a hash. For multiple tags,
+        # it with return an array of hashes. Make sure it is always an array of hashes
+        @attributes[:tags][:tag] = [@attributes[:tags][:tag]] unless @attributes[:tags][:tag].class == Array
         # the REST api may use <tags> which will collide with tags association, so rename tags to add_tags
-        add_tags = @attributes[:tags]
+        @attributes[:add_tags] = @attributes[:tags]
         @attributes.delete :tags
-        @attributes[:add_tags] = add_tags
       end
     end
 

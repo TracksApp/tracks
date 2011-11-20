@@ -50,10 +50,10 @@ class TodoXmlApiTest < ActionController::IntegrationTest
     assert_equal @user.todos.count, old_count + 1
   end
 
-  def test_post_create_todo_with_dependencies
+  def test_post_create_todo_with_multiple_dependencies
     authenticated_post_xml_to_todo_create "
 <todo>
-  <description>this will succeed 2</description>
+  <description>this will succeed 2.0</description>
   <context_id>#{contexts(:office).id}</context_id>
   <project_id>#{projects(:timemachine).id}</project_id>
   <predecessor_dependencies>
@@ -63,12 +63,29 @@ class TodoXmlApiTest < ActionController::IntegrationTest
 </todo>"
 
     assert_response :success
-    todo = @user.todos.find_by_description("this will succeed 2")
+    todo = @user.todos.find_by_description("this will succeed 2.0")
     assert_not_nil todo
     assert !todo.uncompleted_predecessors.empty?
   end
 
-  def test_post_create_todo_with_tags
+  def test_post_create_todo_with_single_dependency
+    authenticated_post_xml_to_todo_create "
+<todo>
+  <description>this will succeed 2.1</description>
+  <context_id>#{contexts(:office).id}</context_id>
+  <project_id>#{projects(:timemachine).id}</project_id>
+  <predecessor_dependencies>
+    <predecessor>6</predecessor>
+  </predecessor_dependencies>
+</todo>"
+
+    assert_response :success
+    todo = @user.todos.find_by_description("this will succeed 2.1")
+    assert_not_nil todo
+    assert !todo.uncompleted_predecessors.empty?
+  end
+
+  def test_post_create_todo_with_multiple_tags
     authenticated_post_xml_to_todo_create "
 <todo>
   <description>this will succeed 3</description>
@@ -86,6 +103,23 @@ class TodoXmlApiTest < ActionController::IntegrationTest
     assert_not_nil todo
     assert_equal "starred, starred1, starred2", todo.tag_list
     assert todo.starred?
+  end
+
+  def test_post_create_todo_with_single_tag
+    authenticated_post_xml_to_todo_create "
+<todo>
+  <description>this will succeed 3.1</description>
+  <context_id>#{contexts(:office).id}</context_id>
+  <project_id>#{projects(:timemachine).id}</project_id>
+  <tags>
+    <tag><name>tracks</name></tag>
+  </tags>
+</todo>"
+
+    assert_response :success
+    todo = @user.todos.find_by_description("this will succeed 3.1")
+    assert_not_nil todo
+    assert_equal "tracks", todo.tag_list
   end
 
   def test_post_create_todo_with_new_context
