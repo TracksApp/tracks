@@ -313,7 +313,9 @@ class Todo < ActiveRecord::Base
     if value.is_a? Context
       self.original_context=(value)
     else
-      self.original_context=(Context.create(value))
+      c = Context.find_by_name(value[:name])
+      c = Context.create(value) if c.nil?
+      self.original_context=(c)
     end
   end
 
@@ -326,8 +328,10 @@ class Todo < ActiveRecord::Base
   def project=(value)
     if value.is_a? Project
       self.original_project=(value)
-    elsif !value.nil?
-      self.original_project=(Project.create(value))
+    elsif !(value.nil? || value.is_a?(NullProject))
+      p = Project.find_by_name(value[:name])
+      p = Project.create(value) if p.nil?
+      self.original_project=(p)
     else
       self.original_project=value
     end

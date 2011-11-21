@@ -139,6 +139,24 @@ class TodoXmlApiTest < ActionController::IntegrationTest
     assert_equal todo.context.name, "@SomeNewContext"
   end
 
+  def test_post_create_todo_with_name_of_existing_context
+    authenticated_post_xml_to_todo_create "
+<todo>
+  <description>this will succeed 4</description>
+  <project_id>#{projects(:timemachine).id}</project_id>
+  <context>
+    <name>#{contexts(:office).name}</name>
+  </context>
+</todo>"
+
+    assert_response :success
+    todo = @user.todos.find_by_description("this will succeed 4")
+    assert_not_nil todo
+    assert_not_nil todo.context
+    assert_equal contexts(:office).name, todo.context.name
+  end
+
+
   def test_post_create_todo_with_new_project
     authenticated_post_xml_to_todo_create "
 <todo>
@@ -154,6 +172,24 @@ class TodoXmlApiTest < ActionController::IntegrationTest
     assert_not_nil todo
     assert_not_nil todo.project
     assert_equal todo.project.name, "Make even more money"
+  end
+
+  def test_post_create_todo_with_name_of_existing_project
+    authenticated_post_xml_to_todo_create "
+<todo>
+  <description>this will succeed 5</description>
+  <context_id>#{contexts(:office).id}</context_id>
+  <project>
+    <name>#{projects(:timemachine).name}</name>
+  </project>
+</todo>"
+
+    assert_response :success
+    todo = @user.todos.find_by_description("this will succeed 5")
+    assert_not_nil todo
+    assert_not_nil todo.project
+    assert_equal projects(:timemachine).name, todo.project.name
+    assert 1, @user.projects.all(:conditions => ["projects.name = ?", projects(:timemachine).name]).count # no duplication of project
   end
 
   def test_post_create_todo_with_wrong_project_and_context_id
