@@ -88,12 +88,12 @@ es:
     mobile_navigation: 
       logout: "Cerrar sesi\xC3\xB3n"
       feeds: Feeds
-      new_action: 0-Nueva tarea
-      starred: 4-Favoritos
-      projects: 3-Proyectos
+      new_action: Nueva tarea
+      starred: avoritos
+      projects: Proyectos
       tickler: Tickler
-      contexts: 2-Contextos
-      home: 1-Inicio
+      contexts: Contextos
+      home: Inicio
     navigation: 
       api_docs: REST API Docs
       recurring_todos: Tareas repetitivas
