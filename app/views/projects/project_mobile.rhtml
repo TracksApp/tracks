@@ -5,20 +5,29 @@
 <div class="project_description"><%= sanitize(@project.description) %></div>
 <% end -%>
 <ul class="c">
-<%= render :partial => "todos/mobile_todo", :collection => @not_done, :locals => { :parent_container_type => "project" }%>
+<%= render :partial => "todos/mobile_todo", 
+           :collection => @not_done, 
+           :locals => { :parent_container_type => "project" }%>
+</ul>
 <h2><%= t('projects.deferred_actions')%></h2>
 <% if @deferred.empty? -%>
 <%= t('projects.deferred_actions_empty') %>
 <% else -%>
-<%= render :partial => "todos/mobile_todo", :collection => @deferred, :locals => { :parent_container_type => "project" }%>
-<% end 
+<ul class="c">
+<%= render :partial => "todos/mobile_todo", 
+           :collection => @deferred, 
+           :locals => { :parent_container_type => "project" }%>
+</ul><% end 
 -%>
 <h2><%= t('projects.completed_actions')%></h2>
 <% if @done.empty? -%>
 <%= t('projects.completed_actions_empty') %>
 <% else -%>
-<%= render :partial => "todos/mobile_todo", :collection => @done, :locals => { :parent_container_type => "project" }%>
-<% end %>
+<ul class="c">
+<%= render :partial => "todos/mobile_todo", 
+           :collection => @done, 
+           :locals => { :parent_container_type => "project" }%>
+</ul><% end %>
 <h2><%= t('projects.notes') %></h2>
 <% if @project.notes.empty? -%>
 <%= t('projects.notes_empty') %>

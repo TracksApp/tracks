@@ -5,5 +5,7 @@
 <% end -%>
 <% unless @done.nil? -%>
 <h2><%= t('todos.completed_actions') %></h2>
+<ul class="c">
 <%= render :partial => "todos/mobile_todo", :collection => @done %>
+</ul>
 <% end %>

@@ -1,10 +1,5 @@
 <% @todo = mobile_todo -%>
-<li id="<%= dom_id(mobile_todo) %>" ><%
-    if mobile_todo.completed?  
--%><span class="m_t_d">
-<%  else 
--%><span class="m_t">
-<%  end -%>
+<li id="<%= dom_id(mobile_todo) %>" >
 <% remote_mobile_checkbox(mobile_todo) %>
 <%= date_span -%> <%= link_to mobile_todo.description, todo_path(mobile_todo, :format => 'm') -%>
 <% unless mobile_todo.notes.blank? %>

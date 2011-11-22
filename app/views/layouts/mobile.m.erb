@@ -7,13 +7,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<meta name="viewport" content="initial-scale = 1.0" />
+<meta name="viewport" content="width=device-width, user-scalable=no">
 <%= stylesheet_link_tag "mobile", :media => 'handheld,all' %>
 <title><%= @page_title %></title>
 </head><body>
-<% if !(@new_mobile || @edit_mobile)
-      if current_user && !current_user.prefs.nil? -%>
-<h1><span class="count" id="badge_count"><%= @down_count %></span> <%=
+<% if current_user && !current_user.prefs.nil? -%>
+<div id="topbar"><h1><% if @down_count -%><span class="count" id="badge_count"><%= @down_count %></span><% end -%> <%=
         l(Date.today, :format => current_user.prefs.title_date_format) -%></h1>
 <div class="nav">
 <%=     (link_to(t('layouts.mobile_navigation.new_action'), new_todo_path(new_todo_params))+" | ") unless @new_mobile -%>
@@ -21,10 +20,9 @@
 <%=     (link_to(t('layouts.mobile_navigation.contexts'), contexts_path(:format => 'm'))+" | ") -%>
 <%=     (link_to(t('layouts.mobile_navigation.projects'), projects_path(:format => 'm'))+" | ") -%>
 <%=     (link_to(t('layouts.mobile_navigation.starred'), {:action => "tag", :controller => "todos", :id => "starred.m"})) -%>
-<%    end
-  end -%><%= render_flash -%>
-</div>
-<%=  yield -%>
+<% end -%>
+</div></div>
+<div id="content"><%= render_flash -%><%=  yield -%></div>
 <hr/><% if current_user && !current_user.prefs.nil? -%>
 <div class="nav">
 <%= (link_to(t('layouts.mobile_navigation.logout'), logout_path(:format => 'm')) +" | ") -%>
