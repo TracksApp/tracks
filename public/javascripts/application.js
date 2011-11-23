@@ -737,7 +737,8 @@ var ProjectListPage = {
         $('div#project_name').editable(ProjectListPage.save_project_name, {
             style: 'padding: 0px; width=100%;',
             submit: i18n['common.ok'],
-            cancel: i18n['common.cancel']
+            cancel: i18n['common.cancel'],
+            onblur: 'cancel'
         });
 
         /* alphabetize project list */
