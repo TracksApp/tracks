@@ -48,10 +48,6 @@ class StatsControllerTest < ActionController::TestCase
     login_as(:admin_user)
     get :index
     assert_response :success
-    assert_equal 3, assigns['projects'].count
-    assert_equal 3, assigns['projects'].count(:conditions => "state = 'active'")
-    assert_equal 10, assigns['contexts'].count
-    assert_equal 17, assigns['actions'].count
     assert_equal 4, assigns['tags_count']
     assert_equal 2, assigns['unique_tags_count']
     assert_equal 2.week.ago.utc.at_midnight, assigns['first_action'].created_at.utc.at_midnight
@@ -97,6 +93,61 @@ class StatsControllerTest < ActionController::TestCase
     Tagging.delete_all
     get :index
     assert_response :success
-
   end
+
+  def test_actions_done_last12months_data
+    login_as(:admin_user)
+    @current_user = User.find(users(:admin_user).id)
+    @current_user.todos.delete_all
+
+    # Given two todos created today
+    todo_today1 = @current_user.todos.create!(:description => "created today1", :context => contexts(:office))
+    todo_today2 = @current_user.todos.create!(:description => "created today2", :context => contexts(:office))
+    # And a todo created a month ago
+    todo_month1 = create_todo_in_past(1.month+1.day)
+    # And a todo created two months ago
+    todo_month2 = create_completed_todo_in_past(2.months+1.day, 2.months+2.days)
+    # And a todo created three months ago
+    todo_month3 = create_todo_in_past(3.months+1.day)
+    # And a todo created over a year ago
+    todo_year = create_todo_in_past(2.years+1.day)
+
+    # When I get the chart data
+    get :actions_done_last12months_data
+    assert_response :success
+
+    # Then the todos for the chart should be retrieved
+    assert_not_nil assigns['actions_done_last12months']
+    assert_not_nil assigns['actions_created_last12months']
+    assert_equal 5, assigns['actions_created_last12months'].count, "very old todo should not be retrieved"
+
+    # And they should be totalled in a hash
+    assert_equal 2, assigns['actions_created_last12months_hash'][0], "there should be two todos in current month"
+    assert_equal 1, assigns['actions_created_last12months_hash'][1], "there should be one todo in previous month"
+    assert_equal 1, assigns['actions_created_last12months_hash'][2], "there should be one todo in two month ago"
+    assert_equal 1, assigns['actions_created_last12months_hash'][3], "there should be one todo in three month ago"
+
+    assert_equal 1, assigns['actions_done_last12months_hash'][2], "there should be one completed todo in two month ago"
+
+    # And they should be averaged
+    # And the current month should be interpolated
+    # And totals should be calculated
+  end
+
+  def create_todo_in_past(creation_time_in_past)
+    todo = @current_user.todos.create!(:description => "created #{creation_time_in_past} ago", :context => contexts(:office))
+    todo.created_at = Time.zone.now - creation_time_in_past
+    todo.save!
+    return todo
+  end
+
+  def create_completed_todo_in_past(creation_time_in_past, completed_time_in_past)
+    todo = @current_user.todos.create!(:description => "created #{creation_time_in_past} ago", :context => contexts(:office))
+    todo.complete!
+    todo.completed_at = Time.zone.now - completed_time_in_past
+    todo.created_at = Time.zone.now - creation_time_in_past
+    todo.save!
+    return todo
+  end
+
 end

@@ -420,9 +420,7 @@ class StatsController < ApplicationController
       @actions_running_time = current_user.todos.not_completed.find(:all, { :select => "id, created_at" })
 
       @selected_todo_ids, @count = get_ids_from(@actions_running_time, week_from, week_to, params['id']=='art_end')
-      @selected_actions = @actions.find(:all, {
-          :conditions => "id in (" + @selected_todo_ids + ")"
-        })
+      @selected_actions = current_user.todos.find(:all, { :conditions => "id in (" + @selected_todo_ids + ")" })
 
       render :action => "show_selection_from_chart"
     else
