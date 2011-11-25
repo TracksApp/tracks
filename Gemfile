@@ -15,6 +15,7 @@ gem "rubyjedi-actionwebservice", :require => "actionwebservice"
 gem "rubycas-client", "~>2.2.1"
 gem "ruby-openid", :require => "openid"
 gem "sqlite3"
+gem "mysql"
 gem 'bcrypt-ruby', '~> 2.1.4'
 gem 'htmlentities', '~> 4.3.0'
 gem "mail"
