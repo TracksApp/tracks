@@ -30,14 +30,14 @@
   <span class="project_quickaction" >
     <a href="<%=set_reviewed_project_path(project)%>" 
        id="<%= dom_id(project, 'reviewed') %>" class="reviewed">
-      <%=image_tag("reviewed.png", :alt => "") %>
+      <%=image_tag("reviewed.png", :alt => "", :align => "absmiddle") %>
       <%= t('projects.markreviewed') %>
     </a>
   </span>
   <span class="project_quickaction" >
     <a href="<%=set_reviewed_and_done_project_path(project)%>" 
        id="<%= dom_id(project, 'reviewed') %>" class="reviewed">
-      <%=image_tag("tick-button.png", :alt => "") %>
+      <%=image_tag("tick-button.png", :alt => "", :align => "absmiddle") %>
       <%= t('projects.markrevieweddone') %>
     </a>
   </span>
