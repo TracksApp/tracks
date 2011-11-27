@@ -645,6 +645,9 @@ en:
     with_no_default_tags: and with no default tags
     edit_project_settings: Edit Project Settings
     state: This project is %{state}
+    quickactions: Quick actions	
+    markreviewed: Mark reviewed
+    markrevieweddone: Mark reviewed & Done
   time:
     am: am
     formats:
