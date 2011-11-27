@@ -280,6 +280,28 @@ class TodosController < ApplicationController
     end
   end
 
+  def waitingfor
+    @todo = current_user.todos.find(params['id'])
+    @todo.toggle_star!
+    @saved = true # cannot determine error
+    respond_to do |format|
+      format.js
+      format.xml { render :xml => @todo.to_xml( *to_xml_params ) }
+      format.html { redirect_to request.referrer}
+      format.m {
+        if cookies[:mobile_url]
+          old_path = cookies[:mobile_url]
+          cookies[:mobile_url] = {:value => nil, :secure => SITE_CONFIG['secure_cookies']}
+          notify(:notice, "Star toggled")
+          redirect_to old_path
+        else
+          notify(:notice, "Star toggled")
+          redirect_to todos_path(:format => 'm')
+        end
+      }
+    end
+  end
+
   def remove_predecessor
     @source_view = params['_source_view'] || 'todo'
     @todo = current_user.todos.find(params['id'], :include => Todo::DEFAULT_INCLUDES)
