@@ -6,12 +6,12 @@ module TodosHelper
       :class => "icon star_item", :title => t('todos.star_action_with_description', :description => todo.description))
   end
 
-  def remote_waitingfor_menu_item(todo)
+  def remote_followup_menu_item(todo)
     return link_to(
-      image_tag("waiting-for.png", :alt => t('todos.waitingfor'), :align => "absmiddle")+" "+t('todos.waitingfor'),
-      {:controller => 'todos', :action => 'waitingfor', :id => todo.id},
-      :class => "icon_waitingfor_item",
-      :id => "waitingfor_#{dom_id(todo)}");
+      image_tag("waiting-for.png", :alt => t('todos.followup'), :align => "absmiddle")+" "+t('todos.followup'),
+      {:controller => 'todos', :action => 'followup', :id => todo.id},
+      :class => "icon_followup_item",
+      :id => "followup_#{dom_id(todo)}");
   end
 
 

@@ -325,7 +325,7 @@ en:
       time_of_day: Time of day
     action_selection_title: TRACKS::Action selection
   todos:
-    waitingfor: Set Waiting-for
+    followup: Set followup
     show_from: Show from
     error_starring_recurring: Could not toggle the star of recurring todo \'%{description}\'
     recurring_action_deleted: Action was deleted. Because this action is recurring, a new action was added

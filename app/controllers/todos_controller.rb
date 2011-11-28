@@ -280,10 +280,14 @@ class TodosController < ApplicationController
     end
   end
 
-  def waitingfor
+  def followup
+    # Please keep the comment for future implementation of assertions
+    # assert ( current_user.prefs.followup_context_id != nil )
+    # assert ( current_user.prefs.followup_defer >= 0 )
     @todo = current_user.todos.find(params['id'])
-    @todo.toggle_star!
-    @saved = true # cannot determine error
+    @todo.context = current_user.contexts.find_by_id( current_user.prefs.followup_context_id )
+    @todo.show_from = @todo.show_from || (@todo.user.date + current_user.prefs.followup_defer.days)
+    @saved = @todo.save
     respond_to do |format|
       format.js
       format.xml { render :xml => @todo.to_xml( *to_xml_params ) }
@@ -292,10 +296,8 @@ class TodosController < ApplicationController
         if cookies[:mobile_url]
           old_path = cookies[:mobile_url]
           cookies[:mobile_url] = {:value => nil, :secure => SITE_CONFIG['secure_cookies']}
-          notify(:notice, "Star toggled")
           redirect_to old_path
         else
-          notify(:notice, "Star toggled")
           redirect_to todos_path(:format => 'm')
         end
       }
