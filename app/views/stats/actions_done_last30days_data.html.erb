@@ -16,18 +16,18 @@
 <% end -%><%= @actions_done_last30days_hash[30]%>&
 &values_3=
 <%0.upto 29 do |i| -%>
-<%=@sum_actions_created_last30days/30.0-%>,
+<%=@actions_created_last30days.count/30.0-%>,
 <%end-%>
-<%=@sum_actions_created_last30days/30.0-%>&
+<%=@actions_created_last30days.count/30.0-%>&
 &values_4=
 <%0.upto 29 do |i| -%>
-<%=@sum_actions_done_last30days/30.0-%>,
+<%=@actions_done_last30days.count/30.0-%>,
 <%end-%>
-<%=@sum_actions_done_last30days/30.0-%>&
+<%=@actions_done_last30days.count/30.0-%>&
 &x_labels=
-<%0.upto 29 do |i| 
+<%0.upto 29 do |i|
   seconds = i * 24 * 60 * 60
-  delta = Time.now-seconds 
+  delta = Time.now-seconds
 -%>
 <%= delta.strftime("%a %d-%m") -%>,
 <% end
@@ -36,7 +36,7 @@
 <%= delta.strftime("%a %d-%m") -%>&
 &y_min=0&
 <% # max + 10% for some extra space at the top
-   # add one to @max for people who have no actions completed yet. 
+   # add one to @max for people who have no actions completed yet.
    # OpenFlashChart cannot handle y_max=0 -%>
 &y_max=<%=@max+@max/10+1 -%>&
 &x_label_style=9,,2,3&

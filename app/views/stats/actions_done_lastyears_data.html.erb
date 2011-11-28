@@ -1,3 +1,8 @@
+<%-
+created_count_array = Array.new(@month_count){ |i| @actions_created_last_months.count/@month_count }
+done_count_array    = Array.new(@month_count){ |i| @actions_done_last_months.count/@month_count }
+month_names         = Array.new(@month_count){ |i| Date::MONTHNAMES[ (Time.now.mon - i -1 ) % 12 + 1 ]+ " " + (Time.now - i.months).year.to_s}
+-%>
 &title=<%= t('stats.actions_last_year') %>,{font-size:16},&
 &y_legend=<%= t('stats.actions_last_year_legend.number_of_actions') %>,12,0x736AFF&
 &x_legend=<%= t('stats.actions_last_year_legend.months_ago') %>,12,0x736AFF&
@@ -10,20 +15,17 @@
 &line_6=2,0xAA0000, <%= t('stats.labels.month_avg_completed', :months => 3) %>, 9&
 &line_7=1,0xAA0000&
 &line_8=1,0x007700&
-&values=<% 0.upto @month_count-1 do |i| -%><%= @actions_created_last_months_hash[i]%>,<% end -%><%= @actions_created_last_months_hash[@month_count]%>&
-&values_2=<% 0.upto @month_count-1 do |i| -%><%= @actions_done_last_months_hash[i]%>,<% end -%><%= @actions_done_last_months_hash[@month_count]%>&
-&values_3=<%0.upto @month_count-1 do |i| -%><%=@sum_actions_created_last_months/@month_count-%>,<%end-%><%=@sum_actions_created_last_months/@month_count-%>&
-&values_4=<%0.upto @month_count-1 do |i| -%><%=@sum_actions_done_last_months/@month_count-%>,<%end-%><%=@sum_actions_done_last_months/@month_count-%>&
-&values_5=<%0.upto @month_count-1 do |i| -%><%=@actions_created_avg_last_months_hash[i]-%>,<%end-%><%=@actions_created_avg_last_months_hash[@month_count]-%>&
-&values_6=<%0.upto @month_count-1 do |i| -%><%=@actions_done_avg_last_months_hash[i]-%>,<%end-%><%=@actions_done_avg_last_months_hash[@month_count]-%>&
-&values_7=<%=@interpolated_actions_created_this_month%>,<%=@actions_done_avg_last_months_hash[1]%>&
-&values_8=<%=@interpolated_actions_done_this_month%>,<%=@actions_created_avg_last_months_hash[1]%>&
-&x_labels=<%0.upto @month_count-1 do |i| -%>
-<%= Date::MONTHNAMES[ (Time.now.mon - i -1 ) % 12 + 1 ] + " " + (Time.now - i.months).year.to_s -%>,
-<% end -%>
-<%= Date::MONTHNAMES[(Time.now.mon - @month_count -1 ) % 12 + 1] + " " + (Time.now - @month_count.months).year.to_s -%>&
+&values=<%=   @actions_created_last_months_array.join(",")%>&
+&values_2=<%= @actions_done_last_months_array.join(",")%>&
+&values_3=<%= created_count_array.join(",")%>&
+&values_4=<%= done_count_array.join(",")%>&
+&values_5=<%= @actions_created_avg_last_months_array.join(",")%>&
+&values_6=<%= @actions_done_avg_last_months_array.join(",")%>&
+&values_7=<%= @interpolated_actions_created_this_month%>,<%=@actions_done_avg_last_months_array[1]%>&
+&values_8=<%= @interpolated_actions_done_this_month%>,<%=@actions_created_avg_last_months_array[1]%>&
+&x_labels=<%= month_names.join(",")%>&
 &y_min=0&
-<% # add one to @max for people who have no actions completed yet. 
+<% # add one to @max for people who have no actions completed yet.
 # OpenFlashChart cannot handle y_max=0 -%>
 &y_max=<%=@max+@max/10+1-%>&
 &x_label_style=9,,2,&

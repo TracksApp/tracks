@@ -23,33 +23,28 @@ class StatsController < ApplicationController
   def actions_done_last12months_data
     # get actions created and completed in the past 12+3 months. +3 for running
     #   average
-    @actions_done_last12months = current_user.todos.completed_after(@cut_off_year_plus3).find(:all, { :select => "completed_at" })
-    @actions_created_last12months = current_user.todos.created_after(@cut_off_year_plus3).find(:all, { :select => "created_at"})
+    @actions_done_last12months = current_user.todos.completed_after(@cut_off_year).find(:all, { :select => "completed_at" })
+    @actions_created_last12months = current_user.todos.created_after(@cut_off_year).find(:all, { :select => "created_at"})
+    @actions_done_last12monthsPlus3 = current_user.todos.completed_after(@cut_off_year_plus3).find(:all, { :select => "completed_at" })
+    @actions_created_last12monthsPlus3 = current_user.todos.created_after(@cut_off_year_plus3).find(:all, { :select => "created_at"})
 
-    # convert to hash to be able to fill in non-existing months
-    @actions_done_last12months_hash = convert_to_hash(@actions_done_last12months, :difference_in_months, :completed_at)
-    @actions_created_last12months_hash = convert_to_hash(@actions_created_last12months, :difference_in_months, :created_at)
+    # convert to array and fill in non-existing months
+    @actions_done_last12months_array = convert_to_array(convert_to_hash(@actions_done_last12months, :difference_in_months, :completed_at),13)
+    @actions_created_last12months_array = convert_to_array(convert_to_hash(@actions_created_last12months, :difference_in_months, :created_at),13)
+    @actions_done_last12monthsPlus3_array = convert_to_array(convert_to_hash(@actions_done_last12monthsPlus3, :difference_in_months, :completed_at),15)
+    @actions_created_last12monthsPlus3_array = convert_to_array(convert_to_hash(@actions_created_last12monthsPlus3, :difference_in_months, :created_at),15)
+    
+    # find max for graph in both arrays
+    @max = [@actions_done_last12months_array.max, @actions_created_last12months_array.max].max
 
-    # find max for graph in both hashes
-    @sum_actions_done_last12months, @sum_actions_created_last12months, @max = 0, 0, 0
-    0.upto 13 do |i|
-      @sum_actions_done_last12months += @actions_done_last12months_hash[i]
-      @sum_actions_created_last12months += @actions_created_last12months_hash[i]
-      @max = [@actions_done_last12months_hash[i], @actions_created_last12months_hash[i], @max].max
-    end
-
-    # find running avg for month i by calculating avg of month i and the two
-    # after them. Ignore current month [0] because you do not have full data for it
-    @actions_done_avg_last12months_hash, @actions_created_avg_last12months_hash = Hash.new("null"), Hash.new("null")
-    1.upto(12) do |i|
-      @actions_done_avg_last12months_hash[i] = three_month_avg(@actions_done_last12months_hash, i)
-      @actions_created_avg_last12months_hash[i] = three_month_avg(@actions_created_last12months_hash, i)
-    end
+    # find running avg
+    @actions_done_avg_last12months_array, @actions_created_avg_last12months_array =
+      find_running_avg_array(@actions_done_last12monthsPlus3_array, @actions_created_last12monthsPlus3_array, 13)
 
     # interpolate avg for current month.
     percent_of_month = Time.zone.now.day.to_f / Time.zone.now.end_of_month.day.to_f
-    @interpolated_actions_created_this_month = interpolate_avg(@actions_created_last12months_hash, percent_of_month)
-    @interpolated_actions_done_this_month = interpolate_avg(@actions_done_last12months_hash, percent_of_month)
+    @interpolated_actions_created_this_month = interpolate_avg(@actions_created_last12months_array, percent_of_month)
+    @interpolated_actions_done_this_month = interpolate_avg(@actions_done_last12months_array, percent_of_month)
 
     render :layout => false
   end
@@ -61,46 +56,35 @@ class StatsController < ApplicationController
   end
 
   def actions_done_lastyears_data
-    @actions = current_user.todos
-
     @actions_done_last_months = current_user.todos.completed.find(:all, { :select => "completed_at", :order => "completed_at DESC" })
     @actions_created_last_months = current_user.todos.find(:all, { :select => "created_at", :order => "created_at DESC" })
 
+    # query is sorted, so use last todo to calculate number of months
     @month_count = [difference_in_months(@today, @actions_created_last_months.last.created_at),
-      difference_in_months(@today, @actions_done_last_months.last.completed_at)].max
+      difference_in_months(@today, @actions_done_last_months.last.completed_at)].max + 1
 
-    # convert to hash to be able to fill in non-existing months
-    @actions_done_last_months_hash = convert_to_hash(@actions_done_last_months, :difference_in_months, :completed_at)
-    @actions_created_last_months_hash = convert_to_hash(@actions_created_last_months, :difference_in_months, :created_at)
+    # convert to array and fill in non-existing months
+    @actions_done_last_months_array = convert_to_array(convert_to_hash(@actions_done_last_months, :difference_in_months, :completed_at), @month_count)
+    @actions_created_last_months_array = convert_to_array(convert_to_hash(@actions_created_last_months, :difference_in_months, :created_at), @month_count)
 
     # find max for graph in both hashes
-    @sum_actions_done_last_months, @sum_actions_created_last_months, @max = 0, 0, 0
-    0.upto @month_count do |i|
-      @sum_actions_done_last_months += @actions_done_last_months_hash[i]
-      @sum_actions_created_last_months += @actions_created_last_months_hash[i]
-      @max = [@actions_done_last_months_hash[i], @actions_created_last_months_hash[i], @max].max
-    end
+    @max = [@actions_done_last_months_array.max, @actions_created_last_months_array.max].max
 
-    # find running avg for month i by calculating avg of month i and the two
-    # after them. Ignore current month because you do not have full data for it
-    @actions_done_avg_last_months_hash, @actions_created_avg_last_months_hash = Hash.new("null"), Hash.new("null")
-    1.upto(@month_count) do |i|
-      @actions_done_avg_last_months_hash[i] = three_month_avg(@actions_done_last_months_hash, i)
-      @actions_created_avg_last_months_hash[i] = three_month_avg(@actions_created_last_months_hash, i)
-    end
+    # find running avg
+    @actions_done_avg_last_months_array, @actions_created_avg_last_months_array =
+      find_running_avg_array(@actions_done_last_months_array, @actions_created_last_months_array, @month_count)
 
-    # correct last two months
-    correct_last_two_months(@actions_done_avg_last_months_hash, @month_count)
-    correct_last_two_months(@actions_created_avg_last_months_hash, @month_count)
+    # correct last two months since the data of last+1 and last+2 are not available for avg
+    correct_last_two_months(@actions_done_avg_last_months_array, @month_count-1)
+    correct_last_two_months(@actions_created_avg_last_months_array, @month_count-1)
 
     # interpolate avg for this month.
     percent_of_month = Time.zone.now.day.to_f / Time.zone.now.end_of_month.day.to_f
-    @interpolated_actions_created_this_month = interpolate_avg(@actions_created_last_months_hash, percent_of_month)
-    @interpolated_actions_done_this_month = interpolate_avg(@actions_done_last_months_hash, percent_of_month)
+    @interpolated_actions_created_this_month = interpolate_avg(@actions_created_last_months_array, percent_of_month)
+    @interpolated_actions_done_this_month = interpolate_avg(@actions_done_last_months_array, percent_of_month)
 
     render :layout => false
   end
-
 
   def actions_done_last30days_data
     # get actions created and completed in the past 30 days.
@@ -114,33 +98,21 @@ class StatsController < ApplicationController
     @actions_created_last30days_hash = convert_to_hash(@actions_created_last30days, :difference_in_days, :created_at)
 
     # find max for graph in both hashes
-    @sum_actions_done_last30days, @sum_actions_created_last30days, @max = 0, 0, 0
-    0.upto(30) do |i|
-      @sum_actions_done_last30days += @actions_done_last30days_hash[i]
-      @sum_actions_created_last30days += @actions_created_last30days_hash[i]
-      @max = [ @actions_done_last30days_hash[i], @actions_created_last30days_hash[i], @max].max
-    end
+    @max = [find_max_in_hash(@actions_done_last30days_hash, 30), find_max_in_hash(@actions_created_last30days_hash, 30)].max
 
     render :layout => false
   end
 
   def actions_completion_time_data
-    @actions_completion_time = current_user.todos.completed.find(:all, { :select => "completed_at, created_at" })
+    @actions_completion_time = current_user.todos.completed.find(:all, { :select => "completed_at, created_at", :order => "completed_at DESC" })
 
     # convert to hash to be able to fill in non-existing days in
     #   @actions_completion_time also convert days to weeks (/7)
 
-    @actions_completion_time_hash,@max_days, @max_actions, @sum_actions=Hash.new(0), 0,0,0
-    @actions_completion_time.each do |r|
-      days = (r.completed_at - r.created_at) / @seconds_per_day
-      weeks = (days/7).to_i
-      @actions_completion_time_hash[weeks] += 1
-
-      @max_days= [days, @max_days].max
-      @max_actions = [@actions_completion_time_hash[weeks], @max_actions].max
-      @sum_actions += 1
-    end
-
+    @actions_completion_time_hash = convert_to_week_hash(@actions_completion_time)
+    @max_weeks = difference_in_weeks(@today, @actions_completion_time.last.completed_at)
+    @max_actions = find_max_in_hash(@actions_completion_time_hash, @max_weeks)
+    
     # stop the chart after 10 weeks
     @cut_off = 10
 
@@ -148,23 +120,11 @@ class StatsController < ApplicationController
   end
 
   def actions_running_time_data
-    @actions_running_time = current_user.todos.not_completed.find(:all, { :select => "created_at" })
+    @actions_running_time = current_user.todos.not_completed.find(:all, { :select => "created_at", :order => "created_at DESC" })
 
-    # convert to hash to be able to fill in non-existing days in
-    #   @actions_running_time also convert days to weeks (/7)
-
-    @max_days, @max_actions, @sum_actions=0,0,0
-    @actions_running_time_hash = Hash.new(0)
-    @actions_running_time.each do |r|
-      days = (@today - r.created_at) / @seconds_per_day
-      weeks = (days/7).to_i
-
-      @actions_running_time_hash[weeks] += 1
-
-      @max_days=[days,@max_days].max
-      @max_actions = [@actions_running_time_hash[weeks], @max_actions].max
-      @sum_actions += 1
-    end
+    @actions_running_time_hash = convert_to_week_hash_today(@actions_running_time)
+    @max_weeks = difference_in_weeks(@today, @actions_running_time.last.created_at)
+    @max_actions = find_max_in_hash(@actions_running_time_hash, @max_weeks)
 
     # cut off chart at 52 weeks = one year
     @cut_off=52
@@ -181,29 +141,18 @@ class StatsController < ApplicationController
     # - actions not deferred (show_from must be null)
     # - actions not pending/blocked
 
-    @actions_running_time = current_user.todos.not_completed.not_hidden.not_deferred_or_blocked.find(:all, :select => "todos.created_at")
+    @actions_running_time = current_user.todos.not_completed.not_hidden.not_deferred_or_blocked.find(
+      :all, :select => "todos.created_at", :order => "todos.created_at DESC")
 
-    # convert to hash to be able to fill in non-existing days in
-    # @actions_running_time also convert days to weeks (/7)
-
-    @max_days, @max_actions, @sum_actions=0,0,0
-    @actions_running_time_hash = Hash.new(0)
-    @actions_running_time.each do |r|
-      days = (@today - r.created_at) / @seconds_per_day
-      weeks = (days/7).to_i
-      @actions_running_time_hash[weeks] += 1
-
-      @max_days=[days, @max_days].max
-      @max_actions = [@actions_running_time_hash[weeks], @max_actions].max
-      @sum_actions += 1
-    end
+    @actions_running_time_hash = convert_to_week_hash_today(@actions_running_time)
+    @max_weeks = difference_in_weeks(@today, @actions_running_time.last.created_at)
+    @max_actions = find_max_in_hash(@actions_running_time_hash, @max_weeks)
 
     # cut off chart at 52 weeks = one year
     @cut_off=52
 
     render :layout => false
   end
-
 
   def context_total_actions_data
     # get total action count per context Went from GROUP BY c.id to c.name for
@@ -674,10 +623,32 @@ class StatsController < ApplicationController
     return selected_todo_ids, count
   end
 
+  def convert_to_array(hash, upper_bound)
+    return Array.new(upper_bound){ |i| hash[i] }
+  end
+
   def convert_to_hash(records, difference_method, date_method_on_todo)
     # use 0 to initialise action count to zero
     hash = Hash.new(0)
     records.each { |t| hash[self.send(difference_method, @today, t.send(date_method_on_todo))] += 1 }
+    return hash
+  end
+
+  def convert_to_week_hash(records)
+    hash = Hash.new(0)
+    records.each do |r|
+      index = difference_in_weeks(r.completed_at, r.created_at)
+      hash[index] += 1
+    end
+    return hash
+  end
+  
+  def convert_to_week_hash_today(records)
+    hash = Hash.new(0)
+    records.each do |r|
+      index = difference_in_weeks(@today, r.created_at)
+      hash[index] += 1
+    end
     return hash
   end
 
@@ -690,18 +661,50 @@ class StatsController < ApplicationController
   def difference_in_days(date1, date2)
     return ((date1.at_midnight-date2.at_midnight)/@seconds_per_day).to_i
   end
-
-  def three_month_avg(hash, i)
-    return (hash[i] + hash[i+1] + hash[i+2])/3.0
+  
+  def difference_in_weeks(date1, date2)
+    return difference_in_days(date1, date2) / 7
   end
 
-  def interpolate_avg(hash, percent)
-    return (hash[0]*percent + hash[1] + hash[2]) / 3.0
+  def three_month_avg(set, i)
+    return ( (set[i]||0) + (set[i+1]||0) + (set[i+2]||0) )/3.0
+  end
+
+  def interpolate_avg(set, percent)
+    return (set[0]*percent + set[1] + set[2]) / 3.0
   end
 
   def correct_last_two_months(month_data, count)
     month_data[count] = month_data[count] * 3
     month_data[count-1] = month_data[count-1] * 3 / 2 if count > 1
   end
+  
+  def find_max_in_hash(hash, upper_bound)
+    max = hash[0]
+    1.upto(upper_bound){ |i| max = [hash[i], max].max }
+    return max
+  end
+  
+  def find_running_avg(done_hash, created_hash, upper_bound)
+    avg_done, avg_created = Hash.new("null"), Hash.new("null")
+    
+    # find running avg for month i by calculating avg of month i and the two
+    # after them. Ignore current month [0] because you do not have full data for it
+    1.upto(upper_bound) do |i|
+      avg_done[i] = three_month_avg(done_hash, i)
+      avg_created[i] = three_month_avg(created_hash, i)
+    end
+    
+    return avg_done, avg_created
+  end
+
+  def find_running_avg_array(done_array, created_array, upper_bound)
+    avg_done    = Array.new(upper_bound){ |i| three_month_avg(done_array,i) }
+    avg_created = Array.new(upper_bound){ |i| three_month_avg(created_array,i) }
+    avg_done[0] = avg_created[0] = "null"
+    
+    return avg_done, avg_created
+  end
+
 
 end

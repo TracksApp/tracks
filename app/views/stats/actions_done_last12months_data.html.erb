@@ -1,3 +1,9 @@
+<%-
+url_array           = Array.new(13){ |i| url_for :controller => 'stats', :action => 'actions_done_last_years'}
+created_count_array = Array.new(13){ |i| @actions_created_last12months.count/12.0 }
+done_count_array    = Array.new(13){ |i| @actions_done_last12months.count/12.0 }
+month_names         = Array.new(13){ |i| Date::MONTHNAMES[ (Time.now.mon - i -1 ) % 12 + 1 ]}
+-%>
 &title=<%= t('stats.actions_lastyear_title') %>,{font-size:16},&
 &y_legend=<%= t('stats.legend.number_of_actions') %>,12,0x736AFF&
 &x_legend=<%= t('stats.legend.months_ago') %>,12,0x736AFF&
@@ -10,22 +16,19 @@
 &line_6=2,0xAA0000, <%= t('stats.labels.month_avg_completed', :months => 3) %>, 9&
 &line_7=1,0xAA0000&
 &line_8=1,0x007700&
-&values=<% 0.upto 11 do |i| -%><%= @actions_created_last12months_hash[i]%>,<% end -%><%= @actions_created_last12months_hash[12]%>&
-&links=<% 0.upto 11 do |i| -%><%=  url_for :controller => 'stats', :action => 'actions_done_last_years' %>,<% end -%><%=  url_for :controller => 'stats', :action => 'actions_done_last_years' %>&
-&links_2=<% 0.upto 11 do |i| -%><%=  url_for :controller => 'stats', :action => 'actions_done_last_years' %>,<% end -%><%=  url_for :controller => 'stats', :action => 'actions_done_last_years' %>&
-&values_2=<% 0.upto 11 do |i| -%><%= @actions_done_last12months_hash[i]%>,<% end -%><%= @actions_done_last12months_hash[12]%>&
-&values_3=<%0.upto 11 do |i| -%><%=@sum_actions_created_last12months/12.0-%>,<%end-%><%=@sum_actions_created_last12months/12.0-%>&
-&values_4=<%0.upto 11 do |i| -%><%=@sum_actions_done_last12months/12.0-%>,<%end-%><%=@sum_actions_done_last12months/12.0-%>&
-&values_5=<%0.upto 11 do |i| -%><%=@actions_created_avg_last12months_hash[i]-%>,<%end-%><%=@actions_created_avg_last12months_hash[12]-%>&
-&values_6=<%0.upto 11 do |i| -%><%=@actions_done_avg_last12months_hash[i]-%>,<%end-%><%=@actions_done_avg_last12months_hash[12]-%>&
-&values_7=<%=@interpolated_actions_created_this_month%>,<%=@actions_done_avg_last12months_hash[1]%>&
-&values_8=<%=@interpolated_actions_done_this_month%>,<%=@actions_created_avg_last12months_hash[1]%>&
-&x_labels=<%0.upto 11 do |i| -%>
-<%= Date::MONTHNAMES[ (Time.now.mon - i -1 ) % 12 + 1 ] -%>,
-<% end -%>
-<%= Date::MONTHNAMES[(Time.now.mon - 12 -1 ) % 12 + 1] -%>&
+&values=<%=   @actions_created_last12months_array.join(",")%>&
+&links=<%=    url_array.join(",")%>&
+&links_2=<%=  url_array.join(",")%>&
+&values_2=<%= @actions_done_last12months_array.join(",")%>&
+&values_3=<%= created_count_array.join(",")%>&
+&values_4=<%= done_count_array.join(",")%>&
+&values_5=<%= @actions_created_avg_last12months_array.join(",")%>&
+&values_6=<%= @actions_done_avg_last12months_array.join(",")%>&
+&values_7=<%= @interpolated_actions_created_this_month%>,<%=@actions_done_avg_last12months_array[1]%>&
+&values_8=<%= @interpolated_actions_done_this_month%>,<%=@actions_created_avg_last12months_array[1]%>&
+&x_labels=<%= month_names.join(",")%>&
 &y_min=0&
-<% # add one to @max for people who have no actions completed yet. 
+<% # add one to @max for people who have no actions completed yet.
    # OpenFlashChart cannot handle y_max=0 -%>
 &y_max=<%=@max+@max/10+1-%>&
 &x_label_style=9,,2,&

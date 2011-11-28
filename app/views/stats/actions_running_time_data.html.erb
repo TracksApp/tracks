@@ -5,13 +5,13 @@
 &y_ticks=5,10,5&
 &filled_bar=50,0x9933CC,0x8010A0&
 &values=
-<% @count = @max_days > @cut_off*7 ? @cut_off : (@max_days/7).to_i
-   0.upto @count-1 do |i| -%>
+<% @count = @max_weeks > @cut_off ? @cut_off : @max_weeks
+   0.upto @count.to_i-1 do |i| -%>
 <%= @actions_running_time_hash[i] -%>,
 <% end -%>
-<% 
+<%
     @sum=0
-    @count.upto((@max_days/7).to_i) {|i| @sum += @actions_running_time_hash[i]} -%>
+    @count.upto(@max_weeks.to_i) {|i| @sum += @actions_running_time_hash[i]} -%>
 <%=@sum%>&
 &links=<%
 0.upto(@count-1) { |i| %><%= url_for :controller => 'stats', :action => 'show_selected_actions_from_chart', :index => i, :id=> "art" %>, <% }
@@ -19,20 +19,20 @@
 &line_2=2,0xFF0000&
 &values_2=
 <% total=0
-   @count = @max_days > @cut_off*7 ? @cut_off : (@max_days/7).to_i
-   0.upto @count-1 do |i| 
+   @count = @max_weeks > @cut_off ? @cut_off : @max_weeks
+   0.upto @count.to_i-1 do |i|
      total += @actions_running_time_hash[i] -%>
-     <%= total*100.0/@sum_actions -%>,
+     <%= total*100.0/@actions_running_time.count -%>,
 <% end -%>
-<%= (total+@sum)*100.0/@sum_actions%>&
+<%= (total+@sum)*100.0/@actions_running_time.count%>&
 &x_labels=< 1,
 <% 1.upto @count-1 do |i| -%>
 <%= i %>-<%= i+1 %>,
 <% end -%>
 ><%=@count-%>&
 &y_min=0&
-<% @max_actions = @sum > @max_actions ? @sum : @max_actions -%>
-<% # add one to @max for people who have no actions completed yet. 
+<% @max_actions = [@sum,@max_actions].max -%>
+<% # add one to @max for people who have no actions completed yet.
    # OpenFlashChart cannot handle y_max=0 -%>
 &y_max=<%=1+@max_actions+@max_actions/10-%>&
 &x_label_style=9,,2,2&
