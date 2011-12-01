@@ -345,7 +345,7 @@ div#input_box {
 
 #input_box ul#predecessor_ul {
     list-style-type: none;
-    color: black;
+    color: red;
 }
 
 .show_from_input, .due_input, .project_input, .context_input,
