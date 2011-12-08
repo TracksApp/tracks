@@ -664,7 +664,7 @@ cz:
     updated: Nastavení bylo uloženo
     page_title: TRACKS::Nastavení
     title: Vaše nastavení
-    token_description: Pešek (feedy feeds a použití API)
+    token_description: Pešek (feedy a použití API)
     is_false: "ne"
     show_number_completed: Zobrazit %{number} hotových položek
     page_title_edit: TRACKS::Editace nastavení
@@ -674,7 +674,7 @@ cz:
     generate_new_token: Generovat nového peška
     token_header: Váš pešek
     authentication_header: Vaše autentizace
-    current_authentication_type: Používate autentizaci %{auth_type}
+    current_authentication_type: Používáte autentizaci %{auth_type}
     change_authentication_type: Změna typu autentizace
     tabs:
       authentication: Autentizace
