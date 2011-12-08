@@ -1,0 +1,23 @@
+﻿/* German initialisation for the jQuery UI date picker plugin. */
+/* Written by Milian Wolff (mail@milianw.de). */
+jQuery(function($){
+	$.datepicker.regional['cz'] = {
+		closeText: 'zavřít',
+		prevText: 'předchozí',
+		nextText: 'další',
+		currentText: 'dnes',
+		monthNames: ['Leden','Únor','Březen','Duben','Květen','Červen',
+		'Červenec','Srpen','Září','Říjen','Listopad','Prosinec'],
+		monthNamesShort: ['Led','Úno','Bře','Dub','Kvě','Čvn',
+		'Čec','Srp','Zář','Říj','Lis','Pro'],
+		dayNames: ['Neděle','Pondělí','Úterý','Středa','Čtvrtek','Pátek','Sobota'],
+		dayNamesShort: ['Ne','Po','Út','St','Čt','Pá','So'],
+		dayNamesMin: ['Ne','Po','Út','St','Čt','Pá','So'],
+		weekHeader: 'č.',
+		dateFormat: 'dd.mm.yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	$.datepicker.setDefaults($.datepicker.regional['cz']);
+});
