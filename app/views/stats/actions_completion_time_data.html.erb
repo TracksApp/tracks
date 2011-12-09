@@ -1,37 +1,23 @@
+<%-
+time_labels         = Array.new(@count){ |i| "#{i}-#{i+1}" }
+time_labels[0]      = "within 1"
+time_labels[@count] = "#{@count}"
+-%>
 &title=<%= t('stats.action_completion_time_title') %>,{font-size:16},&
 &y_legend=<%= t('stats.legend.actions') %>,10,0x8010A0&
 &y2_legend=<%= t('stats.legend.percentage') %>,10,0xFF0000&
 &x_legend=<%= t('stats.legend.running_time') %>,12,0x736AFF&
 &y_ticks=5,10,5&
 &filled_bar=50,0x9933CC,0x8010A0&
-&values=
-<% @count = @max_weeks > @cut_off ? @cut_off : @max_weeks
-0.upto @count.to_i-1 do |i| -%>
-  <%= @actions_completion_time_hash[i] -%>,
-<% end -%>
-<%
-@sum=0
-@count.upto @max_weeks do |i|
-  @sum += @actions_completion_time_hash[i]
-end -%>
-<%=@sum%>&
+&values=<%= @actions_completion_time_array.join(",")%>&
 &line_2=2,0xFF0000&
-&values_2=
-<% total=0
-@count = @max_weeks > @cut_off ? @cut_off : @max_weeks
-0.upto @count-1 do |i|
-  total += @actions_completion_time_hash[i]*100.0/@actions_completion_time.count -%>
-  <%= total -%>,
-<% end -%>
-<%= total+@sum*100.0/@actions_completion_time.count%>&
-&x_labels=within 1,
-<% 1.upto @count-1 do |i| -%>
-  <%= i %>-<%= i+1 %>,
-<% end -%>
-> <%= @count %>&
+&values_2=<%= @cumm_percent_done.join(",")%>&
+&x_labels=<%= time_labels.join(",")%>&
 &y_min=0&
-<% # add one to @max for people who have no actions completed yet.
-# OpenFlashChart cannot handle y_max=0 -%>
+<%
+# add one to @max for people who have no actions completed yet.
+# OpenFlashChart cannot handle y_max=0
+-%>
 &y_max=<%=1+@max_actions+@max_actions/10-%>&
 &show_y2=true&
 &y2_lines=2&

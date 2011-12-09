@@ -1,37 +1,27 @@
-&title=<%= t('stats.current_running_time_of_incomplete_visible_actions') %>,{font-size:16},&
-&y_legend=<%= t('stats.running_time_legend.actions') %>,10,0x736AFF&
+<%-
+url_labels = Array.new(@count){ |i| url_for(:controller => 'stats', :action => 'show_selected_actions_from_chart', :index => i, :id=> "avrt") }
+url_labels[@count]=url_for(:controller => 'stats', :action => 'show_selected_actions_from_chart', :index => @count, :id=> "avrt_end")
+
+time_labels         = Array.new(@count){ |i| "#{i}-#{i+1}" }
+time_labels[0] = "< 1"
+time_labels[@count] = "#{@count}"
+-%>
+&title=<%=     t('stats.current_running_time_of_incomplete_visible_actions') %>,{font-size:16},&
+&y_legend=<%=  t('stats.running_time_legend.actions') %>,10,0x736AFF&
 &y2_legend=<%= t('stats.running_time_legend.percentage') %>,10,0xFF0000&
-&x_legend=<%= t('stats.running_time_legend.weeks') %>,11,0x736AFF&
+&x_legend=<%=  t('stats.running_time_legend.weeks') %>,11,0x736AFF&
 &y_ticks=5,10,5&
 &filled_bar=50,0x9933CC,0x8010A0&
-&values=
-<% @count = @max_weeks > @cut_off ? @cut_off : @max_weeks
-0.upto(@count-1) { |i| -%><%= @actions_running_time_hash[i] -%>,<% } %>
-<%
-@sum=0
-@count.upto(@max_weeks.to_i) { |i|  @sum += @actions_running_time_hash[i] } -%>
-<%=@sum%>&
-&links=<%
-0.upto(@count-1) { |i| %><%= url_for :controller => 'stats', :action => 'show_selected_actions_from_chart', :index => i, :id=> "avrt" %>, <% }
-%><%= url_for :controller => 'stats', :action => 'show_selected_actions_from_chart', :index => @count, :id=> "avrt_end" %>&
+&values=<%= @actions_running_time_array.join(",") -%>&
+&links=<%= url_labels.join(",") %>&
 &line_2=2,0xFF0000&
-&values_2=
-<% total=0
-@count = @max_weeks > @cut_off ? @cut_off : @max_weeks
-0.upto @count-1 do |i|
-  total += @actions_running_time_hash[i] -%>
-  <%= total*100.0/@actions_running_time.count -%>,
-<% end -%>
-<%= (total+@sum)*100.0/@actions_running_time.count%>&
-&x_labels=< 1,
-<% 1.upto @count-1 do |i| -%>
-  <%= i %>-<%= i+1 %>,
-<% end -%>
-><%=@count-%>&
+&values_2=<%= @cumm_percent_done.join(",") -%>&
+&x_labels=<%= time_labels.join(",")%>&
 &y_min=0&
-<% @max_actions = @sum > @max_actions ? @sum : @max_actions -%>
-<% # add one to @max for people who have no actions completed yet.
-# OpenFlashChart cannot handle y_max=0 -%>
+<%
+  # add one to @max for people who have no actions completed yet.
+  # OpenFlashChart cannot handle y_max=0
+-%>
 &y_max=<%=1+@max_actions+@max_actions/10-%>&
 &x_label_style=9,,2,2&
 &show_y2=true&

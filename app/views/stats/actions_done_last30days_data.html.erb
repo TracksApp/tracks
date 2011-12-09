@@ -1,3 +1,8 @@
+<%-
+created_count_array = Array.new(30){ |i| @actions_created_last30days.count/30.0 }
+done_count_array    = Array.new(30){ |i| @actions_done_last30days.count/30.0 }
+time_labels         = Array.new(30){ |i| (Time.zone.now-i.days).strftime("%a %d-%m") }
+-%>
 &title=<%= t('stats.actions_30days_title') %>,{font-size:16},&
 &y_legend=<%= t('stats.legend.number_of_actions') %>,12,0x736AFF&
 &x_legend=<%= t('stats.legend.number_of_days') %>,12,0x736AFF&
@@ -6,37 +11,15 @@
 &filled_bar_2=50,0x0066CC,0x0066CC,<%= t('stats.labels.completed') %>,9&
 &line_3=3,0x00FF00, <%= t('stats.labels.avg_created') %>, 9&
 &line_4=3,0xFF0000, <%= t('stats.labels.avg_completed') %>, 9&
-&values=
-<% 0.upto 29 do |i| -%>
-<%= @actions_created_last30days_hash[i]%>,
-<% end -%><%= @actions_created_last30days_hash[30]%>&
-&values_2=
-<% 0.upto 29 do |i| -%>
-<%= @actions_done_last30days_hash[i]%>,
-<% end -%><%= @actions_done_last30days_hash[30]%>&
-&values_3=
-<%0.upto 29 do |i| -%>
-<%=@actions_created_last30days.count/30.0-%>,
-<%end-%>
-<%=@actions_created_last30days.count/30.0-%>&
-&values_4=
-<%0.upto 29 do |i| -%>
-<%=@actions_done_last30days.count/30.0-%>,
-<%end-%>
-<%=@actions_done_last30days.count/30.0-%>&
-&x_labels=
-<%0.upto 29 do |i|
-  seconds = i * 24 * 60 * 60
-  delta = Time.now-seconds
--%>
-<%= delta.strftime("%a %d-%m") -%>,
-<% end
-   seconds = 29*25*60*60
-   delta = Time.now-seconds-%>
-<%= delta.strftime("%a %d-%m") -%>&
+&values=<%=   @actions_created_last30days_array.join(",")%>&
+&values_2=<%= @actions_done_last30days_array.join(",")%>&
+&values_3=<%= created_count_array.join(",")%>&
+&values_4=<%= done_count_array.join(",")%>&
+&x_labels=<%= time_labels.join(",")%>&
 &y_min=0&
 <% # max + 10% for some extra space at the top
    # add one to @max for people who have no actions completed yet.
-   # OpenFlashChart cannot handle y_max=0 -%>
+   # OpenFlashChart cannot handle y_max=0
+-%>
 &y_max=<%=@max+@max/10+1 -%>&
 &x_label_style=9,,2,3&

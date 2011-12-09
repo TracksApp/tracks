@@ -1,9 +1,9 @@
 <%-
-created_count_array = Array.new(@month_count){ |i| @actions_created_last_months.count/@month_count }
-done_count_array    = Array.new(@month_count){ |i| @actions_done_last_months.count/@month_count }
-month_names         = Array.new(@month_count){ |i| Date::MONTHNAMES[ (Time.now.mon - i -1 ) % 12 + 1 ]+ " " + (Time.now - i.months).year.to_s}
+created_count_array = Array.new(@month_count+1){ |i| @actions_created_last_months.count/@month_count }
+done_count_array    = Array.new(@month_count+1){ |i| @actions_done_last_months.count/@month_count }
+month_names         = Array.new(@month_count+1){ |i| Date::MONTHNAMES[ (Time.now.mon - i -1 ) % 12 + 1 ]+ " " + (Time.now - i.months).year.to_s}
 -%>
-&title=<%= t('stats.actions_last_year') %>,{font-size:16},&
+&title=<%=    t('stats.actions_last_year') %>,{font-size:16},&
 &y_legend=<%= t('stats.actions_last_year_legend.number_of_actions') %>,12,0x736AFF&
 &x_legend=<%= t('stats.actions_last_year_legend.months_ago') %>,12,0x736AFF&
 &y_ticks=5,10,5&
