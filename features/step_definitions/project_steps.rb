@@ -196,6 +196,33 @@ When /^I edit the project name in place to be "([^"]*)"$/ do |new_project_name|
   click_button "Ok"
 end
 
+When /^I click to edit the project name in place$/ do
+  selenium.click "project_name"
+end
+
+Then /^I should be able to change the project name in place$/ do
+  #Note that this is not changing the project name
+  selenium.wait_for_element "xpath=//div[@id='project_name']/form/input"
+  click_button "Cancel"
+end
+
+When /^I edit the project settings$/ do
+  @project.should_not be_nil
+
+  click_link "link_edit_project_#{@project.id}"
+  selenium.wait_for_element("xpath=//div[@id='edit_project_#{@project.id}']/form//button[@id='submit_project_#{@project.id}']")
+
+end
+
+Then /^I should not be able to change the project name in placeA$/ do
+    pending # express the regexp above with the code you wish you had
+end
+
+When /^I close the project settings$/ do
+    pending # express the regexp above with the code you wish you had
+end
+
+
 When /^I edit the project state of "([^"]*)" to "([^"]*)"$/ do |project_name, state_name|
   project = @current_user.projects.find_by_name(project_name)
   project.should_not be_nil
