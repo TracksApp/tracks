@@ -197,13 +197,13 @@ When /^I edit the project name in place to be "([^"]*)"$/ do |new_project_name|
 end
 
 When /^I click to edit the project name in place$/ do
-  selenium.click "project_name"
+  selenium.click "css=div#project_name"
 end
 
 Then /^I should be able to change the project name in place$/ do
   #Note that this is not changing the project name
-  selenium.wait_for_element "xpath=//div[@id='project_name']/form/input"
-  click_button "Cancel"
+  selenium.wait_for_element "css=div#project_name>form>input"
+  selenium.click "css=div#project_name > form > button[type=cancel]"
 end
 
 When /^I edit the project settings$/ do
@@ -214,12 +214,18 @@ When /^I edit the project settings$/ do
 
 end
 
-Then /^I should not be able to change the project name in placeA$/ do
-    pending # express the regexp above with the code you wish you had
+Then /^I should not be able to change the project name in place$/ do
+    When "I click to edit the project name in place"
+    found = selenium.element? "xpath=//div[@id='project_name']/form/input"
+    !found
 end
 
 When /^I close the project settings$/ do
-    pending # express the regexp above with the code you wish you had
+    @project.should_not be_nil
+    click_link "Cancel"
+    wait_for :wait_for => :effects , :javascript_framework => 'jquery' do
+      true
+    end
 end
 
 
