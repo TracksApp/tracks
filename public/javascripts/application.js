@@ -737,7 +737,8 @@ var ProjectListPage = {
         $('div#project_name').editable(ProjectListPage.save_project_name, {
             style: 'padding: 0px; width=100%;',
             submit: i18n['common.ok'],
-            cancel: i18n['common.cancel']
+            cancel: i18n['common.cancel'],
+            onblur: 'cancel'
         });
 
         /* alphabetize project list */
@@ -775,12 +776,14 @@ var ProjectListPage = {
 
         /* submit project form after edit */
         $("form.edit-project-form button.positive").live('click', function (ev) {
+            $('div#project_name').editable('enable');
             submit_with_ajax_and_block_element('form.edit-project-form', $(this));
             return false;
         });
 
         /* cancel edit project form */
         $('form.edit-project-form a.negative').live('click', function(){
+            $('div#project_name').editable('enable');
             $(this).parents('.edit-form').fadeOut(200, function () {
                 $(this).parents('.list').find('.project').fadeIn(500);
                 $(this).parents('.container').find('.item-show').fadeIn(500);
