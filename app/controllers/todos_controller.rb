@@ -284,10 +284,17 @@ class TodosController < ApplicationController
     # Please keep the comment for future implementation of assertions
     # assert ( current_user.prefs.followup_context_id != nil )
     # assert ( current_user.prefs.followup_defer >= 0 )
-    @todo = current_user.todos.find(params['id'])
-    @todo.context = current_user.contexts.find_by_id( current_user.prefs.followup_context_id )
-    @todo.show_from = @todo.show_from || (@todo.user.date + current_user.prefs.followup_defer.days)
-    @saved = @todo.save
+
+    todo = current_user.todos.find(params['id'])
+
+    ntodo = todo.clone
+    ntodo.context = current_user.contexts.find_by_id( current_user.prefs.followup_context_id )
+    ntodo.show_from = todo.show_from || (todo.user.date + current_user.prefs.followup_defer.days)
+
+    todo.complete!
+
+    @saved = todo.save and ntodo.save
+
     respond_to do |format|
       format.js
       format.xml { render :xml => @todo.to_xml( *to_xml_params ) }
