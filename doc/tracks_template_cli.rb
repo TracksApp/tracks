@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-# Version 0.2 (Sept 30, 2011)
+# Version 0.4 (Dec 17, 2011)
 
 #
 # Based on the tracks_cli by Vitalie Lazu (https://gist.github.com/45537)
@@ -20,19 +20,37 @@
 #    ENV['GTD_CONTEXT_URL_PREFIX'] --> 'http://localhost:3000/contexts/'
 #    ENV['GTD_CONTEXT_URL']        --> 'http://localhost:3000/contexts.xml'
 
+# project := <name>
+# dependent_action := ^<name>|context|<tag1>,..|<notes>
+# independent_action := .<name>|context|<tag1>,..|<notes>
+# to star an action add a tag 'starred'
+
 # Format of input file:
 # - A token to be replaced in the subsequent lines starts with the string token
 # - New Projects start at the beginning of the line
-# - New actions start with a '.' at the beginning of the line. To add a note to an action, separate the action from its note by using '|'. You have to stay in the same line.
+# - New actions start with an '.' or an '^' at the beginning of the line.
+# - To add a note to an action, separate the action from its note by using '|'. You have to stay in the same line.
 # - Comments start with '#'
+
+# Simple test file. Remove the '# ' string at the beginning.
+# token [A]
+# token [BB]
+# 
+# to [A] after [BB]
+# .task 1 in [A], [BB]|computer|starred,blue|my notes here
+# ^task 1.1 dependent on [A]|||only a note
+# .task 2
+# 
+# project 2 with [A]
+# .task in project 2
 
 # Example of an input file. Remove the '# ' string at the beginning and save it in a file.
 # token [location]
 # token [start]
 # token [end]
 # Book trip to [location]
-# .Check visa requirements for [location]|instantiate template_visa, if visa required
-# .Book flight to [location]|starting trip around [start], returning around [end]
+# .Check visa requirements for [location]|starred|instantiate template_visa, if visa required
+# .Book flight to [location]||starting trip around [start], returning around [end]
 # .Print flight details to [location]
 # .Book hotel in [location]|checking around [start], leaving around [end]
 # .Book rental car in [location]|starting [start], returning [end]
@@ -50,8 +68,6 @@
 # .Mail folder to secretary
 
 # Instantiate this template: ./tracks_template_cli -c 1 -f template_file.txt
-
-# Template can also be read from STDIN, however, then you have specify all tokens with -k
 
 require 'net/https'
 require 'optparse'
@@ -80,7 +96,7 @@ module Gtd
     GTD_URI_CONTEXTS_PREFIX = ENV['GTD_CONTEXT_URL_PREFIX'] || 'http://localhost:3000/contexts/'
     GTD_URI_CONTEXTS = ENV['GTD_CONTEXT_URL'] || 'http://localhost:3000/contexts.xml'
 
-    def post(l, options = {})
+    def postTodo(l, options = {})
       uri = URI.parse(GTD_URI_TODOS)
       http = Net::HTTP.new(uri.host, uri.port)
 
@@ -96,8 +112,7 @@ module Gtd
       description = CGI.escapeHTML(l)
       context_id = options[:context_id] ? options[:context_id].to_i : 1
       project_id = options[:project_id] ? options[:project_id].to_i : 1
-      starred = options[:starred] ? 1 : 0
-      props = "<description>#{description}</description><project_id>#{project_id}</project_id><context_id>#{context_id}</context_id>"
+      props = "<description>#{description}</description><project_id>#{project_id}</project_id>"
 
       if options[:show_from]
         props << "<show-from type=\"datetime\">#{Time.at(options[:show_from]).xmlschema}</show-from>"
@@ -107,14 +122,38 @@ module Gtd
         props << "<notes>#{options[:note]}</notes>"
       end
 
+      if options[:taglist]
+        tags = options[:taglist].split(",")
+        if tags.length() > 0
+          tags = tags.collect { |tag| "<tag><name>#{tag.strip}</name></tag>" unless tag.strip.empty?}.join('')
+          props << "<tags>#{tags}</tags>"
+        end
+      end
+
+      if not (options[:context].nil? || options[:context].empty?)
+        props << "<context><name>#{options[:context]}</name></context>"
+      else
+        ## use the default context
+        props << "<context_id>#{context_id}</context_id>"
+      end
+      
+      if options[:depend]
+        props << "<predecessor_dependencies><predecessor>#{options[:last_todo_id]}</predecessor></predecessor_dependencies>"
+      end
+
       req = Net::HTTP::Post.new(uri.path, "Content-Type" => "text/xml")
       req.basic_auth ENV['GTD_LOGIN'], ENV['GTD_PASSWORD']
       req.body = "<todo>#{props}</todo>"
+
+      puts req.body
 
       resp = http.request(req)
 
       if resp.code == '302' || resp.code == '201'
         puts resp['location']
+        
+        # return the todo id
+        return resp['location'].split("/").last
       else
         p resp.body
         raise Gtd::Error
@@ -193,7 +232,7 @@ module Gtd
       @keywords = {}
 
       @parser = OptionParser.new do |cmd|
-        cmd.banner = "Ruby Gtd CLI - takes todos input from STDIN"
+        cmd.banner = "Ruby Gtd Templates CLI"
 
         cmd.separator ''
 
@@ -212,11 +251,6 @@ module Gtd
 
         cmd.on('-f [S]', "filename of the template") do |v|
           @filename = v
-          
-          if not File.exist?(@filename)
-            puts "ERROR: file #{@filename} doesn't exist"
-            exit 1
-          end
         end
 
         cmd.on('-c [N]', Integer, 'default context id to set for new projects') do |v|
@@ -238,6 +272,11 @@ module Gtd
       # lines = STDIN.read
       gtd = API.new
 
+      if @filename != nil and not File.exist?(@filename)
+        puts "ERROR: file #{@filename} doesn't exist"
+        exit 1
+      end
+
       if ENV['GTD_LOGIN'] == nil
         puts "ERROR: no GTD_LOGIN environment variable set"
         exit 1
@@ -247,18 +286,13 @@ module Gtd
         puts "ERROR: no GTD_PASSWORD environment variable set"
         exit 1
       end
-
-      if @filename.nil? 
+      
+      if @filename == nil
         file = STDIN
       else
         file = File.open(@filename)
       end
       
-      # if lines.strip.empty?
-      #   puts "Please pipe in some content to tracks on STDIN."
-      #   exit 1
-      # end
-
       ## check for existence of the context
       if !@options[:context_id]
         puts "ERROR: need to specify a context_id with -c option. Go here to find one: #{API::GTD_URI_CONTEXTS}"
@@ -280,11 +314,8 @@ module Gtd
 
           newtok=line.split(' ')[1]
 
-          if @keywords[newtok].nil?
-            print "Input required for "+newtok+": "
-            @keywords[newtok]=gets.chomp
-          end
-
+          print "Input required for "+newtok+": "
+          @keywords[newtok]=gets.chomp
           next
         end
 
@@ -294,26 +325,34 @@ module Gtd
         end
 
         # decide whether project or task
-
-        if (line[0].chr == "." ) || (line[0].chr == "*")
-          @options[:starred]= line[0].chr == "*" ? true : false;
+        if (line[0].chr == "." ) || (line[0].chr == "^")
+          @options[:depend]= line[0].chr == "^" ? true : false;
           line = line[1..line.length]
 
           # find notes
           tmp= line.split("|")
-          if tmp.length > 3
+          if tmp.length > 5
             puts "Formatting error: found too many |"
             exit 1
           end
 
           line=tmp[0] 
-         @options[:note]=tmp[1]
+
+          tmp.each_with_index do |t,idx| 
+            t=t.strip.chomp
+            t=nil if t.empty?
+            tmp[idx]=t
+          end
+
+          @options[:context]=tmp[1]
+          @options[:taglist]=tmp[2]
+          @options[:note]=tmp[3]
 
           if !@options[:project_id]
             puts "Warning: no project specified for task \"#{line}\". Using default project."
           end
 
-          gtd.post(line, @options)
+          @options[:last_todo_id]=gtd.postTodo(line, @options)
         else
           @options[:project_id]=gtd.postProject(line, @options)
         end
