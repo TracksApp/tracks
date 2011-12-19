@@ -420,6 +420,7 @@ a.icon {
 
 input.item-checkbox {
     float: left;
+    margin-top: 2px;
     margin-left: 3px;
     margin-right: 3px;
     vertical-align: middle;
