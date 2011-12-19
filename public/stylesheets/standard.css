@@ -293,6 +293,9 @@ a.show_successors:hover, a.link_to_successors:hover {background-image: url(../im
     border: 1px solid #999;
     margin: 0px 0px 15px 0px;
     background: #fff;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
 }
 
 .completed {
@@ -725,6 +728,10 @@ The colour of the background gets progressively yellower with age */
     font-size: 12pt;
     margin: 10px 10px 0px 0px;
     height:26px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+
 }
 
 ul {
