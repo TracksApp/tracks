@@ -121,7 +121,7 @@ class Project < ActiveRecord::Base
 
   def stalled?
     # stalled is active/hidden project with no active todos
-    return false if self.completed?
+    return false if self.completed? || self.hidden?
     return self.todos.deferred_or_blocked.empty? && self.todos.not_deferred_or_blocked.empty?
   end
 
