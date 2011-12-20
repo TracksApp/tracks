@@ -145,12 +145,12 @@ module Gtd
       req.basic_auth ENV['GTD_LOGIN'], ENV['GTD_PASSWORD']
       req.body = "<todo>#{props}</todo>"
 
-      puts req.body
+      puts req.body if options[:verbose]
 
       resp = http.request(req)
 
       if resp.code == '302' || resp.code == '201'
-        puts resp['location']
+        puts resp['location'] if options[:verbose]
         
         # return the todo id
         return resp['location'].split("/").last
@@ -183,7 +183,7 @@ module Gtd
       resp = http.request(req)
 
       if resp.code == '302' || resp.code == '201'
-        puts resp['location']
+        puts resp['location'] if options[:verbose]
 
         # return the project id
         return resp['location'].split("/").last
@@ -247,6 +247,10 @@ module Gtd
 
         cmd.on('-k [S]', "keyword to be replaced") do |v|
           @keywords[v.split("=")[0]] = v.split("=")[1]
+        end
+
+        cmd.on('-v', "verbose on") do |v|
+          @options[:verbose] = true
         end
 
         cmd.on('-f [S]', "filename of the template") do |v|
