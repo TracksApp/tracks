@@ -7,14 +7,14 @@ en:
     next_actions_rss_feed: RSS feed of next actions
     toggle_notes_title: Toggle all notes
     mobile_navigation:
-      new_action: 0-New action
+      new_action: New
       logout: Logout
       feeds: Feeds
-      starred: 4-Starred
-      projects: 3-Projects
+      starred: Starred
+      projects: Projects
       tickler: Tickler
-      contexts: 2-Contexts
-      home: 1-Home
+      contexts: Contexts
+      home: Home
     navigation:
       manage_users_title: Add or delete users
       recurring_todos: Repeating todos

@@ -99,12 +99,12 @@ de:
     mobile_navigation: 
       logout: Abmelden
       feeds: Feeds
-      new_action: 0-Neue Aufgabe
-      starred: 4-Markiert
-      projects: 3-Projekte
+      new_action: Neue Aufgabe
+      starred: Markiert
+      projects: Projekte
       tickler: Notizbuch
-      contexts: 2-Kontexte
-      home: 1-Home
+      contexts: Kontexte
+      home: Home
     navigation: 
       api_docs: REST API Docs
       recurring_todos: Sich wiederholende To-Dos

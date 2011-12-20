@@ -99,11 +99,11 @@ fr:
       logout: "D\xC3\xA9connexion"
       feeds: Flux
       new_action: 0-Nouvelle action
-      starred: "4-Marqu\xC3\xA9"
-      projects: 3-Projets
+      starred: "Marqu\xC3\xA9"
+      projects: Projets
       tickler: Reporteur
-      contexts: 2-Contextes
-      home: 1-Accueil
+      contexts: Contextes
+      home: Accueil
     navigation: 
       api_docs: Doc REST API
       recurring_todos: "T\xC3\xA2ches (todos) r\xC3\xA9p\xC3\xA9titives"
