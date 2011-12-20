@@ -4,8 +4,10 @@
 <%= render :partial => "contexts/mobile_context", :collection => @contexts_to_show -%>
 <% end -%>
 <% unless @done.nil? -%>
+<div id="completed_container">
 <h2><%= t('todos.completed_actions') %></h2>
 <ul class="c">
 <%= render :partial => "todos/mobile_todo", :collection => @done %>
 </ul>
+</div>
 <% end %>
