@@ -86,12 +86,12 @@ nl:
     mobile_navigation: 
       logout: Afmelden
       feeds: Feeds
-      new_action: 0-Nieuwe actie
-      starred: 4-Ster
-      projects: 3-Projecten
+      new_action: Nieuwe actie
+      starred: Ster
+      projects: Projecten
       tickler: Tickler
-      contexts: 2-Contexten
-      home: 1-Start
+      contexts: Contexten
+      home: Start
     navigation: 
       api_docs: REST API Docs
       recurring_todos: Terugkerende acties

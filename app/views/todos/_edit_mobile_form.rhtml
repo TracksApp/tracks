@@ -4,37 +4,34 @@
 <%= error_messages_for("todo") %>
 </span>
 <% this_year = current_user.time.to_date.strftime("%Y").to_i -%>
-<% if parent_container_type == 'show_mobile' -%>
-<p><label for="todo_done"><%= t('todos.done') %></label>&nbsp;<%= check_box_tag("done", 1, @todo && @todo.completed?, "tabindex" => 1, "onClick" => "document.mobileEdit.submit()") %></p>
-<% end -%>
 <h2><label for="todo_description"><%= t('common.description') %></label></h2>
-<%= text_field( "todo", "description", "tabindex" => 2, "maxlength" => 100, "size" => 50) %>
-<h2><label for="todo_notes"><%= t('common.notes') %></label></h2>
-<%= text_area( "todo", "notes", "cols" => 40, "rows" => 3, "tabindex" => 3) %>
+<%= text_field( "todo", "description", "tabindex" => 1, "maxlength" => 100, "size" => 50) %>
+<h2><label for="tag_list"><%= t('todos.tags') %></label></h2>
+<%= text_field_tag "tag_list", @tag_list_text, :size => 50, :tabindex => 2 %>
 <h2><label for="todo_context_id"><%= t('common.context') %></label></h2>
 <%= unless @mobile_from_context
-  collection_select( "todo", "context_id", @contexts, "id", "name", {}, {"tabindex" => 4} )
+  collection_select( "todo", "context_id", @contexts, "id", "name", {}, {"tabindex" => 3} )
 else
   select_tag("todo[context_id]", options_from_collection_for_select(
     @contexts, "id", "name", @mobile_from_context.id),
-    {"id" => :todo_context_id, :tabindex => 4} )
+    {"id" => :todo_context_id, :tabindex => 3} )
 end %>
 <h2><label for="todo_project_id"><%= t('common.project')  %></label></h2>
 <%= unless @mobile_from_project
   collection_select( "todo", "project_id", @projects, "id", "name",
-                          {:include_blank => t('todos.no_project')}, {"tabindex" => 5} )
+                          {:include_blank => t('todos.no_project')}, {"tabindex" => 4} )
 else
   # manually add blank option since :include_blank does not work
   # with options_from_collection_for_select
   select_tag("todo[project_id]", "<option value=\"\"></option>"+options_from_collection_for_select(
     @projects, "id", "name", @mobile_from_project.id),
-    {"id" => :todo_project_id, :tabindex => 5} )
+    {"id" => :todo_project_id, :tabindex => 4} )
 end %>
-<h2><label for="tag_list"><%= t('todos.tags') %></label></h2>
-<%= text_field_tag "tag_list", @tag_list_text, :size => 50, :tabindex => 6 %>
+<h2><label for="todo_notes"><%= t('common.notes') %></label></h2>
+<%= text_area( "todo", "notes", "cols" => 40, "rows" => 3, "tabindex" => 5) %>
 <h2><label for="todo_due"><%= t('todos.due') %></label></h2>
 <%= date_select("todo", "due", {:order => [:day, :month, :year],
-                    :start_year => this_year, :include_blank => '--'}, :tabindex => 7) %>
+                    :start_year => this_year, :include_blank => '--'}, :tabindex => 6) %>
 <h2><label for="todo_show_from"><%= t('todos.show_from') %></label></h2>
 <%= date_select("todo", "show_from", {:order => [:day, :month, :year],
-                    :start_year => this_year, :include_blank => true}, :tabindex => 8) %>
+                    :start_year => this_year, :include_blank => true}, :tabindex => 7) %>
