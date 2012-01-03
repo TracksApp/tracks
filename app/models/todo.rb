@@ -26,7 +26,7 @@ class Todo < ActiveRecord::Base
   named_scope :blocked, :conditions => ['todos.state = ?', 'pending']
   named_scope :pending, :conditions => ['todos.state = ?', 'pending']
   named_scope :deferred_or_blocked, :conditions => ["(todos.completed_at IS NULL AND NOT(todos.show_from IS NULL)) OR (todos.state = ?)", "pending"]
-  named_scope :not_deferred_or_blocked, :conditions => ["todos.completed_at IS NULL AND todos.show_from IS NULL AND NOT(todos.state = ?)", "pending"]
+  named_scope :not_deferred_or_blocked, :conditions => ["(todos.completed_at IS NULL) AND (todos.show_from IS NULL) AND (NOT todos.state = ?)", "pending"]
   named_scope :hidden,
     :joins => "INNER JOIN contexts c_hidden ON c_hidden.id = todos.context_id",
     :conditions => ["todos.state = ? OR (c_hidden.hide = ? AND (todos.state = ? OR todos.state = ? OR todos.state = ?))",

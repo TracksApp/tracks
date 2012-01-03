@@ -273,6 +273,151 @@ class StatsControllerTest < ActionController::TestCase
     assert_equal "(others)",  assigns['actions_per_context'][9]['name'], "pie slices limited to max 10; last slice contains label for others"
   end
 
+  def test_context_running_actions_data
+    login_as(:admin_user)
+    @current_user = User.find(users(:admin_user).id)
+    @current_user.todos.delete_all
+    
+    given_todos_for_stats
+
+    # When I get the chart data
+    get :context_running_actions_data
+    assert_response :success
+
+    assert_equal 4, assigns['sum'], "Four running todos in 1 context"
+    assert_equal 1, assigns['actions_per_context'].size
+
+    # Given 10 more todos in 10 different contexts
+    1.upto(10) do |i|
+      context = @current_user.contexts.create!(:name => "context #{i}")
+      @current_user.todos.create!(:description => "created today with new context #{i}", :context => context)
+    end
+
+    # When I get the chart data
+    get :context_running_actions_data
+    assert_response :success
+
+    assert_equal 14, assigns['sum'], "added 10 todos"
+    assert_equal 10, assigns['actions_per_context'].size, "pie slices limited to max 10"
+    assert_equal  2, assigns['actions_per_context'][9]['total'], "pie slices limited to max 10; last pie contains sum of rest"
+    assert_equal "(others)",  assigns['actions_per_context'][9]['name'], "pie slices limited to max 10; last slice contains label for others"
+  end
+  
+  def test_actions_day_of_week_all_data
+    login_as(:admin_user)
+    @current_user = User.find(users(:admin_user).id)
+    @current_user.todos.delete_all
+    
+    given_todos_for_stats
+
+    # When I get the chart data
+    get :actions_day_of_week_all_data
+    assert_response :success
+
+    # FIXME: testdata is relative from today, so not stable to test on day_of_week
+    # trivial not_nil tests
+    assert_not_nil assigns['max']
+    assert_not_nil assigns['actions_creation_day_array']
+    assert_not_nil assigns['actions_completion_day_array']
+  end
+
+  def test_actions_day_of_week_30days_data
+    login_as(:admin_user)
+    @current_user = User.find(users(:admin_user).id)
+    @current_user.todos.delete_all
+    
+    given_todos_for_stats
+
+    # When I get the chart data
+    get :actions_day_of_week_30days_data
+    assert_response :success
+
+    # FIXME: testdata is relative from today, so not stable to test on day_of_week
+    # trivial not_nil tests
+    assert_not_nil assigns['max']
+    assert_not_nil assigns['actions_creation_day_array']
+    assert_not_nil assigns['actions_completion_day_array']
+  end
+
+  def test_actions_time_of_day_all_data
+    login_as(:admin_user)
+    @current_user = User.find(users(:admin_user).id)
+    @current_user.todos.delete_all
+    
+    given_todos_for_stats
+
+    # When I get the chart data
+    get :actions_time_of_day_all_data
+    assert_response :success
+
+    # FIXME: testdata is relative from today, so not stable to test on day_of_week
+    # for now just trivial not_nil tests
+    assert_not_nil assigns['max']
+    assert_not_nil assigns['actions_creation_hour_array']
+    assert_not_nil assigns['actions_completion_hour_array']
+  end
+  
+  def test_show_selected_actions_from_chart_avrt
+    login_as(:admin_user)
+    @current_user = User.find(users(:admin_user).id)
+    @current_user.todos.delete_all
+    
+    given_todos_for_stats
+
+    # When I get the chart data
+    get :show_selected_actions_from_chart, {:id => "avrt", :index => 1}
+    assert_response :success
+
+    assert_equal false, assigns['further']  # not at end
+    assert_equal 0, assigns['count']
+  end
+
+  def test_show_selected_actions_from_chart_avrt_end
+    login_as(:admin_user)
+    @current_user = User.find(users(:admin_user).id)
+    @current_user.todos.delete_all
+    
+    given_todos_for_stats
+
+    # When I get the chart data
+    get :show_selected_actions_from_chart, {:id => "avrt_end", :index => 1}
+    assert_response :success
+
+    assert assigns['further']  # at end
+    assert_equal 2, assigns['count']
+  end
+
+  def test_show_selected_actions_from_chart_art
+    login_as(:admin_user)
+    @current_user = User.find(users(:admin_user).id)
+    @current_user.todos.delete_all
+    
+    given_todos_for_stats
+
+    # When I get the chart data
+    get :show_selected_actions_from_chart, {:id => "art", :index => 1}
+    assert_response :success
+
+    assert_equal false, assigns['further']  # not at end
+    assert_equal 0, assigns['count']
+  end
+
+  def test_show_selected_actions_from_chart_art_end
+    login_as(:admin_user)
+    @current_user = User.find(users(:admin_user).id)
+    @current_user.todos.delete_all
+    
+    given_todos_for_stats
+
+    # When I get the chart data
+    get :show_selected_actions_from_chart, {:id => "art_end", :index => 1}
+    assert_response :success
+
+    assert assigns['further']  # at end
+    assert_equal 2, assigns['count']
+  end
+
+
   private
   
   def given_todos_for_stats

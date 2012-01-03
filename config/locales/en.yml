@@ -321,6 +321,12 @@ en:
     click_to_update_actions: Click on a bar in the chart to update the actions below.
     no_actions_selected: There are no actions selected.
     actions_actions_avg_created_30days: In the last 30 days you created on average %{count} actions
+    actions_dow_30days_legend:
+      number_of_actions: Number of actions
+      day_of_week: Day of the week
+    actions_day_of_week_legend:
+      number_of_actions: Number of actions
+      day_of_week: Day of the week
     tod30_legend:
       number_of_actions: Number of actions
       time_of_day: Time of day
