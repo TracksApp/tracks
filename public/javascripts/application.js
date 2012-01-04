@@ -12,7 +12,7 @@ var TracksForm = {
             $('#'+formId+' input:text:first').focus();
         }
         toggleLink.parent().toggleClass('hide_form');
-    }, 
+    },
     set_project_name: function (name) {
         $('input#todo_project_name').val(name);
     },
@@ -76,7 +76,7 @@ var TracksForm = {
 
         /* submit todo form after entering new todo */
         $("button#todo_new_action_submit").live('click', function (ev) {
-            if ($('input#predecessor_input').val() != "") 
+            if ($('input#predecessor_input').val() != "")
               if (!confirm(i18n['todos.unresolved_dependency']))
                 return false;
             if (TodoItems.askIfNewContextProvided('', this))
@@ -182,7 +182,7 @@ var TracksPages = {
         fadeout_duration = 1500;
         show_duration = fade_duration_in_sec*1000 - fadein_duration - fadeout_duration
         if (show_duration < 0)
-          show_duration = 1000;          
+          show_duration = 1000;
         flash.fadeIn(fadein_duration).delay(show_duration).fadeOut(fadeout_duration);
     },
     set_page_badge: function(count) {
@@ -1222,7 +1222,7 @@ function enable_rich_interaction(){
 $(document).ready(function() {
 
     // fix for IE8. Without this checkboxes don't work AJAXy. See #1152
-    if($.browser.msie && ($.browser.version.substring(0, 2) == "8.")) {
+    if($.browser.msie && ( ($.browser.version.substring(0, 2) == "8.") || ($.browser.version.substring(0, 2) == "7.") ) ) {
         $('body').bind('change', function() {
             return true;
         });
