@@ -1,10 +1,10 @@
 <%- reset_tab_index %>
 <div class="recurring_container">
-  <% 
+  <%
   form_for(@new_recurring_todo, :html=> { :id=>'recurring-todo-form-new-action', :name=>'recurring_todo', :class => 'inline-form' }) do
     -%>
     <div id="error_status"><%= error_messages_for("item", :object_name => 'action') %></div>
-  
+
     <div id="recurring_todo_form_container">
       <div id="recurring_todo">
         <label for="recurring_todo_description"><%= Todo.human_attribute_name('description') %></label><%=
@@ -14,12 +14,12 @@
         <label for="recurring_todo_project_name"><%= Todo.human_attribute_name('project') %></label>
         <input id="recurring_todo_project_name" name="project_name" autocomplete="off" tabindex="<%=next_tab_index%>" size="30" type="text" value="" />
         <div class="page_name_auto_complete" id="project_list" style="display:none"></div>
-      
+
         <label for="recurring_todo_context_name"><%= Todo.human_attribute_name('context') %></label>
         <input id="recurring_todo_context_name" name="context_name" autocomplete="off" tabindex="<%=next_tab_index%>" size="30" type="text" value="<%= current_user.contexts.first.name unless current_user.contexts.first.nil?%>" />
-        <div class="page_name_auto_complete" id="context_list" style="display:none"></div>  
+        <div class="page_name_auto_complete" id="context_list" style="display:none"></div>
         <label for="tag_list"><%= "#{Todo.human_attribute_name('tags')} #{t('shared.separate_tags_with_commas')}"%></label>
-        <%= text_field_tag "tag_list", nil, :size => 30, :tabindex => next_tab_index -%> 
+        <%= text_field_tag "tag_list", nil, :size => 30, :tabindex => next_tab_index -%>
       </div>
     </div>
     <div id="recurring_period_id">
@@ -88,17 +88,6 @@
       <%= radio_button_tag('recurring_todo[recurring_target]', 'show_from_date', false, {:tabindex => next_tab_index})%> <%= t('todos.recurrence.from_tickler') %><br/>
       <br/>
     </div>
-    <div class="recurring_submit_box">
-      <div class="widgets">
-        <button type="submit" class="positive" id="recurring_todo_new_action_submit" tabindex="<%=next_tab_index%>">
-          <%=image_tag("accept.png", :alt => "") %>
-          <%= t('common.create') %>
-        </button>
-        <button type="button" class="positive" id="recurring_todo_new_action_cancel" tabindex="<%=next_tab_index%>">
-          <%=image_tag("cancel.png", :alt => "") %>
-          <%= t('common.cancel') %>
-        </button>
-      </div>
-    </div>
+
   <% end %>
 </div>

@@ -8,17 +8,17 @@
 <%= render :partial => "contexts/mobile_context", :collection => @contexts_to_show -%>
 <h2><%= t('todos.deferred_actions_with', :tag_name=> @tag_title) %></h2>
 <% unless (@deferred.nil? or @deferred.size == 0)  -%>
-<table cellpadding="0" cellspacing="0" border="0">
+<ul class="c">
 <%= render :partial => "todos/mobile_todo", :collection => @deferred, :locals => { :parent_container_type => "tag" } -%>
-</table>
+</ul>
 <% else -%>
 <%= t('todos.no_deferred_actions_with', :tag_name => @tag_title) %>
 <% end -%>
 <h2><%= t('todos.completed_actions_with', :tag_name => @tag_title) %></h2>
 <% unless (@done.nil? or @done.size == 0) -%>
-<table cellpadding="0" cellspacing="0" border="0">
+<ul class="c">
 <%= render :partial => "todos/mobile_todo", :collection => @done, :locals => { :parent_container_type => "tag" } %>
-</table>
+</ul>
 <% else -%>
 <%= t('todos.no_completed_actions_with', :tag_name => @tag_title) %>
 <% end -%>

@@ -1,5 +1,6 @@
 Given /^I have a repeat pattern called "([^"]*)"$/ do |pattern_name|
   context = @current_user.contexts.first
+
   @recurring_todo = @current_user.recurring_todos.create!(
     :description => pattern_name,
     :context_id => context.id,
@@ -44,10 +45,10 @@ When /^I edit the name of the pattern "([^\"]*)" to "([^\"]*)"$/ do |pattern_nam
   wait_for_ajax
 
   fill_in "edit_recurring_todo_description", :with => new_name
-  selenium.click "recurring_todo_edit_action_submit"
+  selenium.click "recurring_todo_edit_update_button"
 
   wait_for do
-    !selenium.is_visible("overlay")
+    !selenium.is_visible("edit-recurring-todo")
   end
 end
 

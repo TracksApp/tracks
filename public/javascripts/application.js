@@ -737,7 +737,8 @@ var ProjectListPage = {
         $('div#project_name').editable(ProjectListPage.save_project_name, {
             style: 'padding: 0px; width=100%;',
             submit: i18n['common.ok'],
-            cancel: i18n['common.cancel']
+            cancel: i18n['common.cancel'],
+            onblur: 'cancel'
         });
 
         /* alphabetize project list */
@@ -775,12 +776,14 @@ var ProjectListPage = {
 
         /* submit project form after edit */
         $("form.edit-project-form button.positive").live('click', function (ev) {
+            $('div#project_name').editable('enable');
             submit_with_ajax_and_block_element('form.edit-project-form', $(this));
             return false;
         });
 
         /* cancel edit project form */
         $('form.edit-project-form a.negative').live('click', function(){
+            $('div#project_name').editable('enable');
             $(this).parents('.edit-form').fadeOut(200, function () {
                 $(this).parents('.list').find('.project').fadeIn(500);
                 $(this).parents('.container').find('.item-show').fadeIn(500);
@@ -991,64 +994,89 @@ var RecurringTodosPage = {
             $('#recurring_edit_'+this).hide();
         });
     },
+    reset_radio: function () {
+      $('input:radio[name="recurring_todo[recurring_period]"]')[0].checked = true;
+    },
     toggle_overlay: function () {
         var overlay_element = document.getElementById("overlay");
         overlay_element.style.visibility = (overlay_element.style.visibility == "visible") ? "hidden" : "visible";
     },
     setup_behavior: function() {
-        /* cancel button on new recurring todo form */
-        $("#recurring_todo_new_action_cancel").live('click', function(){
-            $('#recurring-todo-form-new-action input:text:first').focus();
-            RecurringTodosPage.hide_all_recurring();
-            $('#recurring_daily').show();
-            RecurringTodosPage.toggle_overlay();
-        });
-        /* cancel button on edit recurring todo form */
-        $("#recurring_todo_edit_action_cancel").live('click', function(){
-            $('#recurring-todo-form-edit-action input:text:first').focus();
-            RecurringTodosPage.hide_all_recurring();
-            $('#recurring_daily').show();
-            RecurringTodosPage.toggle_overlay();
-        });
-        /* change recurring period radio input on edit form */
-        $("#recurring_edit_period input").live('click', function(){
-            RecurringTodosPage.hide_all_edit_recurring();
-            $('#recurring_edit_'+this.id.split('_')[5]).show();
-        });
-        /* change recurring period radio input on new form */
-        $("#recurring_period input").live('click', function(){
-            RecurringTodosPage.hide_all_recurring();
-            $('#recurring_'+this.id.split('_')[4]).show();
-        });
-        /* add new recurring todo plus-button in sidebar */
-        $("#add-new-recurring-todo").live('click', function(){
-            $('#new-recurring-todo').show();
-            $('#edit-recurring-todo').hide();
-            RecurringTodosPage.toggle_overlay();
-        });
-        /* submit form when editing a recurring todo */
-        $("#recurring_todo_edit_action_submit").live('click', function (ev) {
-            submit_with_ajax_and_block_element('form#recurring-todo-form-edit-action', $(this));
-            return false;
-        });
-        /* submit form for new recurring todo */
-        $("#recurring_todo_new_action_submit").live('click', function (ev) {
-            submit_with_ajax_and_block_element('form.#recurring-todo-form-new-action', $(this));
-            return false;
-        });
-        /* set behavior for edit recurring todo */
-        $(".item-container a.edit_icon").live('click', function (ev){
-            get_with_ajax_and_block_element(this.href, $(this).parents(".item-container"));
-            return false;
-        });
-        /* delete button to delete a todo from the list */
-        $('.item-container a.delete_icon').live('click', function(evt){
-            var confirm_message = $(this).attr("x_confirm_message")
-            if(confirm(confirm_message)){
-                delete_with_ajax_and_block_element(this.href, $(this).parents('.project'));
+      /* add new recurring todo plus-button in sidebar */
+      $("#add-new-recurring-todo").live('click', function(){
+        $( "#new-recurring-todo" ).dialog( "open" );
+      });
+
+      /* setup dialog for new repeating action */
+      $( "#new-recurring-todo" ).dialog({
+    		autoOpen: false,
+        height: 690,
+  			width: 750,
+  			modal: true,
+        buttons: {
+          "Create": function() { submit_with_ajax_and_block_element('form.#recurring-todo-form-new-action', $(this).parents(".ui-dialog")); },
+          Cancel: function() { $( this ).dialog( "close" ); }
+        },
+        show: "fade",
+        hide: "fade",
+        close: function() {
+          $('#recurring-todo-form-new-action input:text:first').focus();
+          RecurringTodosPage.hide_all_recurring();
+          RecurringTodosPage.reset_radio();
+          $('#recurring_daily').show();
+        }
+      });
+
+      /* change recurring period radio input on new form */
+      $("#recurring_period input").live('click', function(){
+          RecurringTodosPage.hide_all_recurring();
+          $('#recurring_'+this.id.split('_')[4]).show();
+      });
+
+      /* setup dialog for new repeating action */
+      $( "#edit-recurring-todo" ).dialog({
+    		autoOpen: false,
+        height: 690,
+  			width: 750,
+  			modal: true,
+        buttons: {
+          "Update": {
+            text: "Update",
+            id: 'recurring_todo_edit_update_button',
+            click: function() { submit_with_ajax_and_block_element('form#recurring-todo-form-edit-action', $(this).parents(".ui-dialog")); }
+          },
+          Cancel: function() { $( this ).dialog( "close" ); }
+        },
+        show: "fade",
+        hide: "fade",
+        close: function() {
+          $('#recurring-todo-form-edit-action input:text:first').focus();
+          RecurringTodosPage.hide_all_recurring();
+          RecurringTodosPage.reset_radio();
+          $('#recurring_daily').show();
+        }
+      });
+
+      /* change recurring period radio input on edit form */
+      $("#recurring_edit_period input").live('click', function(){
+          RecurringTodosPage.hide_all_edit_recurring();
+          $('#recurring_edit_'+this.id.split('_')[5]).show();
+      });
+
+      /* set behavior for edit recurring todo */
+      $(".item-container a.edit_icon").live('click', function (ev){
+          get_with_ajax_and_block_element(this.href, $(this).parents(".item-container"));
+          return false;
+      });
+
+      /* delete button to delete a todo from the list */
+      $('.item-container a.delete_icon').live('click', function(evt){
+          var confirm_message = $(this).attr("x_confirm_message")
+          if(confirm(confirm_message)){
+              delete_with_ajax_and_block_element(this.href, $(this).parents('.project'));
             }
-            return false;
-        });
+          return false;
+      });
 
     }
 }
@@ -1290,7 +1318,7 @@ function enable_rich_interaction(){
 $(document).ready(function() {
 
     // fix for IE8. Without this checkboxes don't work AJAXy. See #1152
-    if($.browser.msie && ($.browser.version.substring(0, 2) == "8.")) {
+    if($.browser.msie && ( ($.browser.version.substring(0, 2) == "8.") || ($.browser.version.substring(0, 2) == "7.") ) ) {
         $('body').bind('change', function() {
             return true;
         });

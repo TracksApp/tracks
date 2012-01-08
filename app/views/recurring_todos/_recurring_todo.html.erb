@@ -1,8 +1,9 @@
 <% @recurring_todo = recurring_todo -%>
 <div id="<%= dom_id(@recurring_todo)%>" class="recurring_todo item-container">
-  <%= recurring_todo_remote_delete_icon %> <%= recurring_todo_remote_edit_icon -%> 
-
-  <%= recurring_todo_remote_star_icon %> <%= recurring_todo_remote_toggle_checkbox -%>
+  <%= recurring_todo_remote_delete_icon %>
+  <%= recurring_todo_remote_edit_icon -%>
+  <%= recurring_todo_remote_star_icon %>
+  <%= recurring_todo_remote_toggle_checkbox -%>
   <div class="rec_description">
     <span class="todo.descr"><%= sanitize(recurring_todo.description) %></span> <%= recurring_todo_tag_list %>
     <span class='recurrence_pattern'>

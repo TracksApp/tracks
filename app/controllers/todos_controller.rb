@@ -90,7 +90,7 @@ class TodosController < ApplicationController
       end
 
       if @todo.errors.empty?
-        @todo.starred= (params[:new_todo_starred]||"").include? "true"
+        @todo.starred= (params[:new_todo_starred]||"").include? "true" if params[:new_todo_starred]
 
         @todo.add_predecessor_list(predecessor_list)
 
@@ -358,6 +358,49 @@ class TodosController < ApplicationController
           redirect_to todos_path(:format => 'm')
         end
       }
+    end
+  end
+
+  def mobile_done
+    # copied from toggle_check, left out other formats as they shouldn't come here
+    # ultimately would like to just use toggle_check
+    @todo = current_user.todos.find(params['id'])
+    @source_view = params['_source_view'] || 'todo'
+    @original_item_due = @todo.due
+    @original_item_was_deferred = @todo.deferred?
+    @original_item_was_pending = @todo.pending?
+    @original_item_was_hidden = @todo.hidden?
+    @original_item_context_id = @todo.context_id
+    @original_item_project_id = @todo.project_id
+    @todo_was_completed_from_deferred_or_blocked_state = @original_item_was_deferred || @original_item_was_pending
+    @saved = @todo.toggle_completion!
+
+    @todo_was_blocked_from_completed_state = @todo.pending? # since we toggled_completion the previous state was completed
+
+    # check if this todo has a related recurring_todo. If so, create next todo
+    @new_recurring_todo = check_for_next_todo(@todo) if @saved
+
+    @predecessors = @todo.uncompleted_predecessors
+    if @saved
+      if @todo.completed?
+        @pending_to_activate = @todo.activate_pending_todos
+      else
+        @active_to_block = @todo.block_successors
+      end
+    end
+
+    if @saved
+      if cookies[:mobile_url]
+        old_path = cookies[:mobile_url]
+        cookies[:mobile_url] = {:value => nil, :secure => SITE_CONFIG['secure_cookies']}
+        notify(:notice, t("todos.action_marked_complete", :description => @todo.description, :completed => @todo.completed? ? 'complete' : 'incomplete'))
+        redirect_to old_path
+      else
+        notify(:notice, t("todos.action_marked_complete", :description => @todo.description, :completed => @todo.completed? ? 'complete' : 'incomplete'))
+        redirect_to todos_path(:format => 'm')
+      end
+    else
+      render :action => "edit", :format => :m
     end
   end
 
@@ -1103,7 +1146,7 @@ class TodosController < ApplicationController
         if @todo_was_completed_from_deferred_or_blocked_state
           @remaining_in_context = @remaining_deferred_or_pending_count
         else
-          @remaining_in_context = current_user.projects.find(project_id).todos.active.count
+          @remaining_in_context = current_user.projects.find(project_id).todos.active_or_hidden.count
         end
 
         @target_context_count = current_user.projects.find(project_id).todos.active.count
@@ -1176,6 +1219,10 @@ class TodosController < ApplicationController
     lambda do
       @page_title = t('todos.mobile_todos_page_title')
       @home = true
+
+      max_completed = current_user.prefs.show_number_completed
+      @done = current_user.todos.completed.find(:all, :limit => max_completed, :include => Todo::DEFAULT_INCLUDES) unless max_completed == 0
+
       cookies[:mobile_url]= { :value => request.request_uri, :secure => SITE_CONFIG['secure_cookies']}
       determine_down_count
 
@@ -1516,6 +1563,15 @@ class TodosController < ApplicationController
       @params = params['request'] || params
       @prefs = prefs
       @attributes = params['request'] && params['request']['todo']  || params['todo']
+
+      if @attributes && @attributes[:tags]
+        # for single tags, @attributed[:tags] returns a hash. For multiple tags,
+        # it with return an array of hashes. Make sure it is always an array of hashes
+        @attributes[:tags][:tag] = [@attributes[:tags][:tag]] unless @attributes[:tags][:tag].class == Array
+        # the REST api may use <tags> which will collide with tags association, so rename tags to add_tags
+        @attributes[:add_tags] = @attributes[:tags]
+        @attributes.delete :tags
+      end
     end
 
     def attributes
