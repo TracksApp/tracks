@@ -17,6 +17,8 @@ parameters += "&_tag_name=#{@tag_name}" if @source_view == 'tag'
           <li><%= remote_delete_menu_item(todo) %></li>
           <% unless todo.completed? || todo.deferred? -%>
             <li><%= remote_defer_menu_item(1, todo) %></li>
+            <li><%= remote_defer_menu_item(2, todo) %></li>
+            <li><%= remote_defer_menu_item(3, todo) %></li>
             <li><%= remote_defer_menu_item(7, todo) %></li>
             <li><%= remote_promote_to_project_menu_item(todo) %></li>
           <% end -%>
