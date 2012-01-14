@@ -14,7 +14,7 @@ Feature: Edit a next action from the mobile view
       | context | description |
       | @mobile | test action |
 
-  @selenium
+
   Scenario: I can edit an action on the mobile page
     When I am on the home page
     Then the badge should show 1
@@ -29,7 +29,7 @@ Feature: Edit a next action from the mobile view
     And I should not see "test action"
     When I follow "changed action"
     And I press "Mark complete"
-    Then I should see "changed action" in the completed container
+    Then I should see "changed action" in the completed section of the mobile site
 
   Scenario: Navigate from home page
     move this to separate features when other scenarios are created for these features
