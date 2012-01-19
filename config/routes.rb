@@ -25,7 +25,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :notes
 
   map.resources :todos,
-    :member => {:toggle_check => :put, :toggle_star => :put, :defer => :put, :mobile_done => :put},
+    :member => {:toggle_check => :put, :toggle_star => :put, :defer => :put},
     :collection => {:check_deferred => :post, :filter_to_context => :post, :filter_to_project => :post, :done => :get, :all_done => :get
   }
 

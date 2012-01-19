@@ -348,59 +348,20 @@ class TodosController < ApplicationController
         end
       end
       format.m {
-        if cookies[:mobile_url]
-          old_path = cookies[:mobile_url]
-          cookies[:mobile_url] = {:value => nil, :secure => SITE_CONFIG['secure_cookies']}
-          notify(:notice, t("todos.action_marked_complete", :description => @todo.description, :completed => @todo.completed? ? 'complete' : 'incomplete'))
-          redirect_to old_path
+        if @saved
+          if cookies[:mobile_url]
+            old_path = cookies[:mobile_url]
+            cookies[:mobile_url] = {:value => nil, :secure => SITE_CONFIG['secure_cookies']}
+            notify(:notice, t("todos.action_marked_complete", :description => @todo.description, :completed => @todo.completed? ? 'complete' : 'incomplete'))
+           redirect_to old_path
+          else
+            notify(:notice, t("todos.action_marked_complete", :description => @todo.description, :completed => @todo.completed? ? 'complete' : 'incomplete'))
+            redirect_to todos_path(:format => 'm')
+          end
         else
-          notify(:notice, t("todos.action_marked_complete", :description => @todo.description, :completed => @todo.completed? ? 'complete' : 'incomplete'))
-          redirect_to todos_path(:format => 'm')
+          render :action => "edit", :format => :m
         end
       }
-    end
-  end
-
-  def mobile_done
-    # copied from toggle_check, left out other formats as they shouldn't come here
-    # ultimately would like to just use toggle_check
-    @todo = current_user.todos.find(params['id'])
-    @source_view = params['_source_view'] || 'todo'
-    @original_item_due = @todo.due
-    @original_item_was_deferred = @todo.deferred?
-    @original_item_was_pending = @todo.pending?
-    @original_item_was_hidden = @todo.hidden?
-    @original_item_context_id = @todo.context_id
-    @original_item_project_id = @todo.project_id
-    @todo_was_completed_from_deferred_or_blocked_state = @original_item_was_deferred || @original_item_was_pending
-    @saved = @todo.toggle_completion!
-
-    @todo_was_blocked_from_completed_state = @todo.pending? # since we toggled_completion the previous state was completed
-
-    # check if this todo has a related recurring_todo. If so, create next todo
-    @new_recurring_todo = check_for_next_todo(@todo) if @saved
-
-    @predecessors = @todo.uncompleted_predecessors
-    if @saved
-      if @todo.completed?
-        @pending_to_activate = @todo.activate_pending_todos
-      else
-        @active_to_block = @todo.block_successors
-      end
-    end
-
-    if @saved
-      if cookies[:mobile_url]
-        old_path = cookies[:mobile_url]
-        cookies[:mobile_url] = {:value => nil, :secure => SITE_CONFIG['secure_cookies']}
-        notify(:notice, t("todos.action_marked_complete", :description => @todo.description, :completed => @todo.completed? ? 'complete' : 'incomplete'))
-        redirect_to old_path
-      else
-        notify(:notice, t("todos.action_marked_complete", :description => @todo.description, :completed => @todo.completed? ? 'complete' : 'incomplete'))
-        redirect_to todos_path(:format => 'm')
-      end
-    else
-      render :action => "edit", :format => :m
     end
   end
 
