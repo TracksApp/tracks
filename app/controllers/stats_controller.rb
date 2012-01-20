@@ -682,7 +682,7 @@ class StatsController < ApplicationController
   end
 
   def interpolate_avg(set, percent)
-    return (set[0]*percent + set[1] + set[2]) / 3.0
+    return (set[0]*(1/percent) + set[1] + set[2]) / 3.0
   end
 
   def correct_last_two_months(month_data, count)

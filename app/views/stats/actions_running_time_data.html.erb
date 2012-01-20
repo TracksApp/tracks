@@ -4,7 +4,7 @@ url_labels[@count]=url_for(:controller => 'stats', :action => 'show_selected_act
 
 time_labels         = Array.new(@count){ |i| "#{i}-#{i+1}" }
 time_labels[0] = "< 1"
-time_labels[@count] = "#{@count}"
+time_labels[@count] = "> #{@count}"
 -%>
 &title=<%=     t('stats.running_time_all') %>,{font-size:16},&
 &y_legend=<%=  t('stats.running_time_all_legend.actions') %>,10,0x736AFF&

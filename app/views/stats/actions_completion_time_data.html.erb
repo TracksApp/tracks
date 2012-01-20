@@ -1,7 +1,7 @@
 <%-
 time_labels         = Array.new(@count){ |i| "#{i}-#{i+1}" }
 time_labels[0]      = "within 1"
-time_labels[@count] = "#{@count}"
+time_labels[@count] = "> #{@count}"
 -%>
 &title=<%= t('stats.action_completion_time_title') %>,{font-size:16},&
 &y_legend=<%= t('stats.legend.actions') %>,10,0x8010A0&

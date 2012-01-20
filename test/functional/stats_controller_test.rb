@@ -137,7 +137,7 @@ class StatsControllerTest < ActionController::TestCase
     
     # And the current month should be interpolated
     fraction = Time.zone.now.day.to_f / Time.zone.now.end_of_month.day.to_f
-    assert_equal (2*fraction+2)/3.0, assigns['interpolated_actions_created_this_month'], "two this month and one in the last two months"
+    assert_equal (2*(1/fraction)+2)/3.0, assigns['interpolated_actions_created_this_month'], "two this month and one in the last two months"
     assert_equal 2/3.0, assigns['interpolated_actions_done_this_month'], "none this month and one two the last two months"
     
     # And totals should be calculated
