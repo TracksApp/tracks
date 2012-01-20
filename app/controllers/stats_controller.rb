@@ -19,7 +19,7 @@ class StatsController < ApplicationController
 
     render :layout => 'standard'
   end
-
+  
   def actions_done_last12months_data
     # get actions created and completed in the past 12+3 months. +3 for running
     #   average
@@ -29,10 +29,10 @@ class StatsController < ApplicationController
     @actions_created_last12monthsPlus3 = current_user.todos.created_after(@cut_off_year_plus3).find(:all, { :select => "created_at"})
 
     # convert to array and fill in non-existing months
-    @actions_done_last12months_array = convert_to_array(convert_to_hash(@actions_done_last12months, :difference_in_months, :completed_at),13)
-    @actions_created_last12months_array = convert_to_array(convert_to_hash(@actions_created_last12months, :difference_in_months, :created_at),13)
-    @actions_done_last12monthsPlus3_array = convert_to_array(convert_to_hash(@actions_done_last12monthsPlus3, :difference_in_months, :completed_at),15)
-    @actions_created_last12monthsPlus3_array = convert_to_array(convert_to_hash(@actions_created_last12monthsPlus3, :difference_in_months, :created_at),15)
+    @actions_done_last12months_array = convert_to_months_from_today_array(@actions_done_last12months, 13, :completed_at)
+    @actions_created_last12months_array = convert_to_months_from_today_array(@actions_created_last12months, 13, :created_at)
+    @actions_done_last12monthsPlus3_array = convert_to_months_from_today_array(@actions_done_last12monthsPlus3, 13, :completed_at)
+    @actions_created_last12monthsPlus3_array = convert_to_months_from_today_array(@actions_created_last12monthsPlus3, 15, :created_at)
     
     # find max for graph in both arrays
     @max = [@actions_done_last12months_array.max, @actions_created_last12months_array.max].max
@@ -64,8 +64,8 @@ class StatsController < ApplicationController
       difference_in_months(@today, @actions_done_last_months.last.completed_at)].max
 
     # convert to array and fill in non-existing months
-    @actions_done_last_months_array = convert_to_array(convert_to_hash(@actions_done_last_months, :difference_in_months, :completed_at), @month_count+1)
-    @actions_created_last_months_array = convert_to_array(convert_to_hash(@actions_created_last_months, :difference_in_months, :created_at), @month_count+1)
+    @actions_done_last_months_array = convert_to_months_from_today_array(@actions_done_last_months, @month_count+1, :completed_at)
+    @actions_created_last_months_array = convert_to_months_from_today_array(@actions_created_last_months, @month_count+1, :created_at)
 
     # find max for graph in both hashes
     @max = [@actions_done_last_months_array.max, @actions_created_last_months_array.max].max
@@ -92,8 +92,8 @@ class StatsController < ApplicationController
     @actions_created_last30days = current_user.todos.created_after(@cut_off_month).find(:all, { :select => "created_at" })
 
     # convert to array. 30+1 to have 30 complete days and one current day [0]
-    @actions_done_last30days_array = convert_to_array(convert_to_hash(@actions_done_last30days, :difference_in_days, :completed_at), 31)
-    @actions_created_last30days_array = convert_to_array(convert_to_hash(@actions_created_last30days, :difference_in_days, :created_at), 31)
+    @actions_done_last30days_array = convert_to_days_from_today_array(@actions_done_last30days, 31, :completed_at)
+    @actions_created_last30days_array = convert_to_days_from_today_array(@actions_created_last30days, 31, :created_at)
 
     # find max for graph in both hashes
     @max = [@actions_done_last30days_array.max, @actions_created_last30days_array.max].max
@@ -106,7 +106,7 @@ class StatsController < ApplicationController
 
     # convert to array and fill in non-existing weeks with 0
     @max_weeks = difference_in_weeks(@today, @actions_completion_time.last.completed_at)
-    @actions_completed_per_week_array = convert_to_array(convert_to_week_hash(@actions_completion_time), @max_weeks+1)
+    @actions_completed_per_week_array = convert_to_weeks_running_array(@actions_completion_time, @max_weeks+1)
     
     # stop the chart after 10 weeks
     @count = [10, @max_weeks].min
@@ -126,7 +126,7 @@ class StatsController < ApplicationController
 
     # convert to array and fill in non-existing weeks with 0
     @max_weeks = difference_in_weeks(@today, @actions_running_time.last.created_at)
-    @actions_running_per_week_array = convert_to_array(convert_to_week_hash_today(@actions_running_time), @max_weeks+1)
+    @actions_running_per_week_array = convert_to_weeks_from_today_array(@actions_running_time, @max_weeks+1, :created_at)
 
     # cut off chart at 52 weeks = one year
     @count = [52, @max_weeks].min
@@ -154,7 +154,7 @@ class StatsController < ApplicationController
       :all, :select => "todos.created_at", :order => "todos.created_at DESC")
 
     @max_weeks = difference_in_weeks(@today, @actions_running_time.last.created_at)
-    @actions_running_per_week_array = convert_to_array(convert_to_week_hash_today(@actions_running_time), @max_weeks+1)
+    @actions_running_per_week_array = convert_to_weeks_from_today_array(@actions_running_time, @max_weeks+1, :created_at)
 
     # cut off chart at 52 weeks = one year
     @count = [52, @max_weeks].min
@@ -619,31 +619,30 @@ class StatsController < ApplicationController
     return Array.new(upper_bound){ |i| hash[i] }
   end
 
-  def convert_to_hash(records, difference_method, date_method_on_todo)
+  # uses the supplied block to determine index in hash
+  def convert_to_hash(records)
     # use 0 to initialise action count to zero
     hash = Hash.new(0)
-    records.each { |t| hash[self.send(difference_method, @today, t.send(date_method_on_todo))] += 1 }
-    return hash
-  end
-
-  def convert_to_week_hash(records)
-    hash = Hash.new(0)
-    records.each do |r|
-      index = difference_in_weeks(r.completed_at, r.created_at)
-      hash[index] += 1
-    end
+    records.each { |r| hash[ yield r ] += 1 }
     return hash
   end
   
-  def convert_to_week_hash_today(records)
-    hash = Hash.new(0)
-    records.each do |r|
-      index = difference_in_weeks(@today, r.created_at)
-      hash[index] += 1
-    end
-    return hash
+  def convert_to_months_from_today_array(records, array_size, date_method_on_todo)
+    return convert_to_array(convert_to_hash(records){ |r| difference_in_months(@today, r.send(date_method_on_todo))}, array_size)
+  end
+  
+  def convert_to_days_from_today_array(records, array_size, date_method_on_todo)
+    return convert_to_array(convert_to_hash(records){ |r| difference_in_days(@today, r.send(date_method_on_todo))}, array_size)
   end
 
+  def convert_to_weeks_from_today_array(records, array_size, date_method_on_todo)
+    return convert_to_array(convert_to_hash(records) { |r| difference_in_weeks(@today, r.send(date_method_on_todo))}, array_size)
+  end
+
+  def convert_to_weeks_running_array(records, array_size)
+    return convert_to_array(convert_to_hash(records) { |r| difference_in_weeks(r.completed_at, r.created_at)}, array_size)
+  end
+  
   # returns a new array containing all elems of array up to cut_off and
   # adds the sum of the rest of array to the last elem
   def cut_off_array(array, cut_off)
