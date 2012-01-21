@@ -24,3 +24,11 @@ Feature: Reviewing projects
     When I go to the review page
     Then I see the project "dated_project" in the "dated" list
 
+  Scenario: The review list of projects contain all projects
+    Given I have no projects
+    Given I have a project "stalled_project" with 0 todos
+    Given I have a project "blocked_project" with 1 deferred todos
+    Given I have an outdated project "dated_project" with 1 todos
+    When I go to the review page
+    And the badge should show 5 ## note that stalled and blocked projects are also up-to-date listed
+
