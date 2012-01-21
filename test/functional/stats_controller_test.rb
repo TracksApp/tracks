@@ -32,6 +32,7 @@ class StatsControllerTest < ActionController::TestCase
  	    actions_completion_time_data
       actions_visible_running_time_data
   	  actions_running_time_data
+      actions_open_per_week_data
   	  actions_day_of_week_all_data
   	  actions_day_of_week_30days_data
   	  actions_time_of_day_all_data
@@ -218,6 +219,23 @@ class StatsControllerTest < ActionController::TestCase
     assert_equal  18,   assigns['actions_running_time_array'].size, "there should be 17 weeks ( < cut_off) of data + 1 for the rest"
     assert_equal   1,   assigns['actions_running_time_array'][17], "there is one running todos in week 17 and zero after 17 weeks ( < cut off; ) "
     assert_equal 100.0, assigns['cumm_percent_done'][17], "cummulative percentage should add up to 100%"
+  end
+
+  def test_actions_open_per_week_data
+    login_as(:admin_user)
+    @current_user = User.find(users(:admin_user).id)
+    @current_user.todos.delete_all
+    
+    given_todos_for_stats
+    
+    # When I get the chart data
+    get :actions_open_per_week_data
+    assert_response :success
+    
+    # do not test stuff already implicitly tested in other tests
+    assert_equal  17,   assigns['max_weeks'], "there are actions in the first 17 weeks of this year"
+    assert_equal   4,   assigns['max_actions'], "4 actions running together"
+    assert_equal  17,   assigns['actions_open_per_week_array'].size, "there should be 17 weeks ( < cut_off) of data"
   end
 
   def test_actions_visible_running_time_data
