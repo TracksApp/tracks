@@ -255,7 +255,11 @@ en:
       running_time: Running time of an action (weeks)
       months_ago: Months ago
     current_running_time_of_incomplete_visible_actions: Current running time of incomplete visible actions
-    totals_deferred_actions: of which %{count} are deferred actions in the tickler
+    open_per_week: Active (visible and hidden) next actions per week
+    open_per_week_legend:
+      actions: Actions
+      weeks: Weeks ago
+    totals_deferred_actions: "of which %{count} are deferred actions in the tickler"
     running_time_legend:
       actions: Actions
       percentage: Percentage

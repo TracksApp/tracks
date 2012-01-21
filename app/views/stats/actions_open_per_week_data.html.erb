@@ -1,0 +1,18 @@
+<%-
+time_labels         = Array.new(@count+1){ |i| "#{i}-#{i+1}" }
+time_labels[0]      = "< 1"
+-%>
+&title=<%=     t('stats.open_per_week') %>,{font-size:16},&
+&y_legend=<%=  t('stats.open_per_week_legend.actions') %>,10,0x736AFF&
+&x_legend=<%=  t('stats.open_per_week_legend.weeks') %>,11,0x736AFF&
+&y_ticks=5,10,5&
+&filled_bar=50,0x9933CC,0x8010A0&
+&values=<%= @actions_open_per_week_array.join(",") -%>&
+&x_labels=<%= time_labels.join(",")%>&
+&y_min=0&
+<%
+  # add one to @max for people who have no actions completed yet.
+  # OpenFlashChart cannot handle y_max=0
+-%>
+&y_max=<%=1+@max_actions+@max_actions/10-%>&
+&x_label_style=9,,2,2&

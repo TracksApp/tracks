@@ -112,7 +112,7 @@ class StatsController < ApplicationController
     @count = [10, @max_weeks].min
     
     # convert to new array to hold max @cut_off elems + 1 for sum of actions after @cut_off
-    @actions_completion_time_array = cut_off_array(@actions_completed_per_week_array, @count)
+    @actions_completion_time_array = cut_off_array_with_sum(@actions_completed_per_week_array, @count)
     @max_actions = @actions_completion_time_array.max
 
     # get percentage done cummulative
@@ -132,7 +132,7 @@ class StatsController < ApplicationController
     @count = [52, @max_weeks].min
     
     # convert to new array to hold max @cut_off elems + 1 for sum of actions after @cut_off
-    @actions_running_time_array = cut_off_array(@actions_running_per_week_array, @count)
+    @actions_running_time_array = cut_off_array_with_sum(@actions_running_per_week_array, @count)
     @max_actions = @actions_running_time_array.max
 
     # get percentage done cummulative
@@ -160,12 +160,28 @@ class StatsController < ApplicationController
     @count = [52, @max_weeks].min
     
     # convert to new array to hold max @cut_off elems + 1 for sum of actions after @cut_off
-    @actions_running_time_array = cut_off_array(@actions_running_per_week_array, @count)
+    @actions_running_time_array = cut_off_array_with_sum(@actions_running_per_week_array, @count)
     @max_actions = @actions_running_time_array.max
 
     # get percentage done cummulative
     @cumm_percent_done = convert_to_cummulative_array(@actions_running_time_array, @actions_running_time.count )
 
+    render :layout => false
+  end
+  
+  def actions_open_per_week_data
+    @actions_started = current_user.todos.created_after(@today-53.weeks).find(:all,
+      :select => "todos.created_at, todos.completed_at",:order => "todos.created_at DESC")
+      
+    @max_weeks = difference_in_weeks(@today, @actions_started.last.created_at)
+
+    # cut off chart at 52 weeks = one year
+    @count = [52, @max_weeks].min
+    
+    @actions_open_per_week_array = convert_to_weeks_running_from_today_array(@actions_started, @max_weeks)
+    @actions_open_per_week_array = cut_off_array(@actions_open_per_week_array, @count)
+    @max_actions = @actions_open_per_week_array.max
+    
     render :layout => false
   end
 
@@ -619,38 +635,56 @@ class StatsController < ApplicationController
     return Array.new(upper_bound){ |i| hash[i] }
   end
 
-  # uses the supplied block to determine index in hash
+  # uses the supplied block to determine array of indexes in hash
+  # the block should return an array of indexes each is added to the hash and summed
   def convert_to_hash(records)
     # use 0 to initialise action count to zero
     hash = Hash.new(0)
-    records.each { |r| hash[ yield r ] += 1 }
+    records.each { |r| (yield r).each { |i| hash[i] += 1} }
     return hash
   end
   
   def convert_to_months_from_today_array(records, array_size, date_method_on_todo)
-    return convert_to_array(convert_to_hash(records){ |r| difference_in_months(@today, r.send(date_method_on_todo))}, array_size)
+    return convert_to_array(convert_to_hash(records){ |r| [difference_in_months(@today, r.send(date_method_on_todo))]}, array_size)
   end
   
   def convert_to_days_from_today_array(records, array_size, date_method_on_todo)
-    return convert_to_array(convert_to_hash(records){ |r| difference_in_days(@today, r.send(date_method_on_todo))}, array_size)
+    return convert_to_array(convert_to_hash(records){ |r| [difference_in_days(@today, r.send(date_method_on_todo))]}, array_size)
   end
 
   def convert_to_weeks_from_today_array(records, array_size, date_method_on_todo)
-    return convert_to_array(convert_to_hash(records) { |r| difference_in_weeks(@today, r.send(date_method_on_todo))}, array_size)
+    return convert_to_array(convert_to_hash(records) { |r| [difference_in_weeks(@today, r.send(date_method_on_todo))]}, array_size)
   end
 
   def convert_to_weeks_running_array(records, array_size)
-    return convert_to_array(convert_to_hash(records) { |r| difference_in_weeks(r.completed_at, r.created_at)}, array_size)
+    return convert_to_array(convert_to_hash(records) { |r| [difference_in_weeks(r.completed_at, r.created_at)]}, array_size)
+  end
+
+  def convert_to_weeks_running_from_today_array(records, array_size)
+    hash = convert_to_hash(records) { |r| week_indexes_of(r) }
+    return convert_to_array(hash, array_size)
+  end
+  
+  def week_indexes_of(record)
+    a = []
+    start_week = difference_in_weeks(@today, record.created_at)
+    end_week   = record.completed_at ? difference_in_weeks(@today, record.completed_at) : 0
+    end_week.upto(start_week) { |i| a << i };
+    return a
   end
   
   # returns a new array containing all elems of array up to cut_off and
   # adds the sum of the rest of array to the last elem
-  def cut_off_array(array, cut_off)
+  def cut_off_array_with_sum(array, cut_off)
     # +1 to hold sum of rest
     a = Array.new(cut_off+1){|i| array[i]||0}
     # add rest of array to last elem
     a[cut_off] += array.inject(:+) - a.inject(:+)
     return a
+  end
+  
+  def cut_off_array(array, cut_off)
+    return Array.new(cut_off){|i| array[i]||0}
   end
 
   def convert_to_cummulative_array(array, max)
