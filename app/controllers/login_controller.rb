@@ -69,16 +69,7 @@ class LoginController < ApplicationController
   end
   
   def logout
-    @user.forget_me if logged_in?
-    cookies.delete :auth_token
-    session['user_id'] = nil
-    if ( SITE_CONFIG['authentication_schemes'].include? 'cas')  && session[:cas_user]
-      CASClient::Frameworks::Rails::Filter.logout(self)
-    else
-      reset_session
-      notify :notice, t('login.logged_out')
-      redirect_to_login
-    end
+    logout_user
   end
 
   def expire_session
@@ -149,13 +140,6 @@ class LoginController < ApplicationController
   
   private
       
-  def redirect_to_login
-    respond_to do |format|
-      format.html { redirect_to login_path }
-      format.m { redirect_to login_path(:format => 'm') }
-    end
-  end
-  
   def should_expire_sessions?
     session['noexpiry'] != "on"
   end

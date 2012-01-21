@@ -11,7 +11,7 @@ describe Context do
 
   it 'has many users' do
     Context.should have_many(:todos).
-      with_order('todos.completed_at DESC').
+      with_order('todos.due IS NULL, todos.due ASC, todos.created_at ASC').
       with_dependent(:delete_all).
       with_include(:project)
   end

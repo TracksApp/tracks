@@ -108,8 +108,8 @@ class Project < ActiveRecord::Base
   end
 
   def needs_review?(current_user)
-    return true if last_reviewed.nil?
-    return (active? && (last_reviewed < current_user.time - current_user.prefs.review_period.days))
+    return active? && ( last_reviewed.nil? ||
+                        (last_reviewed < current_user.time - current_user.prefs.review_period.days))
   end
 
   def blocked?
@@ -120,8 +120,8 @@ class Project < ActiveRecord::Base
   end
 
   def stalled?
-    # stalled is active/hidden project with no active todos
-    return false if self.completed?
+    # Stalled projects are active projects with no active next actions
+    return false if self.completed? || self.hidden?
     return self.todos.deferred_or_blocked.empty? && self.todos.not_deferred_or_blocked.empty?
   end
 

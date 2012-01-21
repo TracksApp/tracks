@@ -12,16 +12,16 @@ Feature: dependencies
   @selenium
   Scenario: Adding dependency to dependency by drag and drop
     Given I have a project "dependencies" with 3 todos
-    And "Todo 2" depends on "Todo 1"
+    And "todo 2" depends on "todo 1"
     When I go to the "dependencies" project
-    And I drag "Todo 3" to "Todo 2"
-    Then the successors of "Todo 1" should include "Todo 2"
-    And the successors of "Todo 2" should include "Todo 3"
-    When I expand the dependencies of "Todo 1"
-    Then I should see "Todo 2" within the dependencies of "Todo 1"
-    And I should see "Todo 3" within the dependencies of "Todo 1"
-    When I expand the dependencies of "Todo 2"
-    Then I should see "Todo 3" within the dependencies of "Todo 2"
+    And I drag "todo 3" to "todo 2"
+    Then the successors of "todo 1" should include "todo 2"
+    And the successors of "todo 2" should include "todo 3"
+    When I expand the dependencies of "todo 1"
+    Then I should see "todo 2" within the dependencies of "todo 1"
+    And I should see "todo 3" within the dependencies of "todo 1"
+    When I expand the dependencies of "todo 2"
+    Then I should see "todo 3" within the dependencies of "todo 2"
 
   @selenium
   Scenario: I can edit a todo to add the todo as a dependency to another

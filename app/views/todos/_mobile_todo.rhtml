@@ -1,20 +1,12 @@
-<% @todo = mobile_todo
-if mobile_todo.starred?
-  bullet = "<span class=\"star\">"+image_tag("menustar_small.gif")+"</span>"
-  li_class = " class=\"star\""
-else
-  bullet = "<span class=\"r\">&raquo;&nbsp;</span>"
-  li_class = ""
-end -%>
-<li id="<%= dom_id(mobile_todo) %>" <%= li_class %>><%= bullet %><% 
-    if mobile_todo.completed?  
--%><span class="m_t_d">
-<%  else 
--%><span class="m_t">
-<%  end -%>
+<% @todo = mobile_todo -%>
+<li id="<%= dom_id(mobile_todo) %>" >
+<% remote_mobile_checkbox(mobile_todo) %>
 <%= date_span -%> <%= link_to mobile_todo.description, todo_path(mobile_todo, :format => 'm') -%>
 <% unless mobile_todo.notes.blank? %>
 <%= link_to(image_tag("mobile_notes.png", :border => "0"), mobile_todo_show_notes_path(mobile_todo, :format => 'm')) -%>
+<% end %>
+<% if mobile_todo.starred? %>
+<%= image_tag("menustar_small.gif", :border => "0") -%>
 <% end %>
 <%  if parent_container_type == 'context' or parent_container_type == 'tag' -%>
 <%=    "<span class=\"prj\"> (" +

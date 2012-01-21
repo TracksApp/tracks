@@ -8,7 +8,7 @@
       <%= render :partial => @recurring_todos %>
     </div>
   </div>
-  
+
   <div class="container" id="completed_recurring_todos_container">
     <div class=add_note_link><%= link_to "Show all", done_recurring_todos_path%></div>
     <h2><%= t('common.last') %> <%= t('todos.completed_recurring') %></h2>
@@ -26,12 +26,9 @@
   </div>
 </div>
 
-<div id="overlay">
-  <div id="new-recurring-todo" class="new-form">
-    <label><%= t('todos.add_new_recurring') %></label><br/>
-    <%= render :partial => "recurring_todo_form" %>
-  </div>
-  <div id="edit-recurring-todo" class="edit-form"  style="display:none">
-    <div class='placeholder'>This should not be visible</div>
-  </div>
+<div id="new-recurring-todo" class="new-form" title="<%= t('todos.add_new_recurring') %>">
+  <%= render :partial => "recurring_todo_form" %>
+</div>
+<div id="edit-recurring-todo" class="edit-form" style="display:none" title="<%= t('todos.edit_recurring_todo') %>">
+  <div class='placeholder'>This should not be visible</div>
 </div>

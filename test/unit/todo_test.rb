@@ -9,7 +9,7 @@ class TodoTest < ActiveSupport::TestCase
     @not_completed2 = Todo.find(2).reload
     @completed = Todo.find(8).reload
   end
-  
+
   # Test loading a todo item
   def test_load
     assert_kind_of Todo, @not_completed1
@@ -24,13 +24,13 @@ class TodoTest < ActiveSupport::TestCase
     assert_nil @not_completed1.completed_at
     assert_equal 1, @not_completed1.user_id
   end
-  
+
   def test_completed
     assert_kind_of Todo, @completed
     assert @completed.completed?
     assert_not_nil @completed.completed_at
   end
-  
+
   def test_completed_at_cleared_after_toggle_to_active
     assert_kind_of Todo, @completed
     assert @completed.completed?
@@ -38,8 +38,8 @@ class TodoTest < ActiveSupport::TestCase
     assert @completed.active?
     assert_nil @completed.completed_at
   end
-  
-  
+
+
   # Validation tests
   #
   def test_validate_presence_of_description
@@ -49,7 +49,7 @@ class TodoTest < ActiveSupport::TestCase
     assert_equal 1, @not_completed2.errors.count
     assert_equal "can't be blank", @not_completed2.errors.on(:description)
   end
-  
+
   def test_validate_length_of_description
     assert_equal "Call dinosaur exterminator", @not_completed2.description
     @not_completed2.description = generate_random_string(101)
@@ -57,7 +57,7 @@ class TodoTest < ActiveSupport::TestCase
     assert_equal 1, @not_completed2.errors.count
     assert_equal "is too long (maximum is 100 characters)", @not_completed2.errors.on(:description)
   end
-  
+
   def test_validate_length_of_notes
     assert_equal "Ask him if I need to hire a skip for the corpses.", @not_completed2.notes
     @not_completed2.notes = generate_random_string(60001)
@@ -74,7 +74,7 @@ class TodoTest < ActiveSupport::TestCase
     assert_equal 1, t.errors.count
     assert_equal "must be a date in the future", t.errors.on(:show_from)
   end
-  
+
   def test_defer_an_existing_todo
     @not_completed2
     assert_equal :active, @not_completed2.aasm_current_state
@@ -82,20 +82,20 @@ class TodoTest < ActiveSupport::TestCase
     assert @not_completed2.save, "should have saved successfully" + @not_completed2.errors.to_xml
     assert_equal :deferred, @not_completed2.aasm_current_state
   end
-  
+
   def test_create_a_new_deferred_todo
     user = users(:other_user)
     todo = user.todos.build
     todo.show_from = next_week
     todo.context_id = 1
-    todo.description = 'foo'    
+    todo.description = 'foo'
     assert todo.save, "should have saved successfully" + todo.errors.to_xml
     assert_equal :deferred, todo.aasm_current_state
   end
 
   def test_create_a_new_deferred_todo_by_passing_attributes
     user = users(:other_user)
-    todo = user.todos.build(:show_from => next_week, :context_id => 1, :description => 'foo')    
+    todo = user.todos.build(:show_from => next_week, :context_id => 1, :description => 'foo')
     assert todo.save, "should have saved successfully" + todo.errors.to_xml
     assert_equal :deferred, todo.aasm_current_state
   end
@@ -167,15 +167,15 @@ class TodoTest < ActiveSupport::TestCase
     t.reload
     assert_equal :deferred, t.aasm_current_state
   end
-  
+
   def test_todo_is_not_starred
     assert !@not_completed1.starred?
   end
-  
+
   def test_todo_2_is_not_starred
     assert !Todo.find(2).starred?
   end
-  
+
   def test_todo_is_starred_after_starred_tag_is_added
     @not_completed1._add_tags('starred')
     assert @not_completed1.starred?
@@ -185,7 +185,7 @@ class TodoTest < ActiveSupport::TestCase
     @not_completed1.toggle_star!
     assert @not_completed1.starred?
   end
-  
+
   def test_todo_is_not_starred_after_toggle_starred_twice
     @not_completed1.toggle_star!
     @not_completed1.toggle_star!
@@ -238,5 +238,102 @@ class TodoTest < ActiveSupport::TestCase
     assert_not_nil @predecessor_array
     assert_equal 2, @predecessor_array.size
   end
+
+  def test_finding_todos_with_a_tag
+    todo = @not_completed1
+    todo.tag_list = "a, b, c"
+    todo.save!
+
+    tag_a = Tag.find_by_name("a")
+    tag_b = Tag.find_by_name("b")
+    tag_c = Tag.find_by_name("c")
+
+    todos_with_a = Todo.with_tag(tag_a)
+    assert 1, todos_with_a.count
+    assert_equal todo.description, todos_with_a.first.description
+
+    todos_with_b = Todo.with_tag(tag_b)
+    assert 1, todos_with_b.count
+    assert_equal todo.id, todos_with_b.first.id
+
+    todo2 = @not_completed2
+    todo2.tag_list = "a, c, d"
+    todo2.save!
+
+    tag_d = Tag.find_by_name("d")
+
+    todos_with_a = Todo.with_tag(tag_a)
+    assert 2, todos_with_a.count
+
+    todos_with_d = Todo.with_tag(tag_d)
+    assert 1, todos_with_a.count
+  end
+
+  def test_finding_todos_with_more_tags_using_OR
+    todo1 = @not_completed1
+    todo1.tag_list = "a, b, c"
+    todo1.save!
+
+    todo2 = @not_completed2
+    todo2.tag_list = "a, c, d"
+    todo2.save!
+
+    tag_a = Tag.find_by_name("a")
+    tag_b = Tag.find_by_name("b")
+    tag_c = Tag.find_by_name("c")
+    tag_d = Tag.find_by_name("d")
+
+    # overlapping tags
+    tag_ids = [tag_a.id, tag_c.id]
+    todos_with_a_or_c = Todo.with_tags(tag_ids)
+    assert 2, todos_with_a_or_c.count
+
+    # non-overlapping tags
+    tag_ids = [tag_b.id, tag_d.id]
+    todos_with_b_or_d = Todo.with_tags(tag_ids)
+    assert 2, todos_with_b_or_d.count
+  end
+
+  def test_finding_todos_with_more_tags_using_AND
+    todo1 = @not_completed1
+    todo1.tag_list = "a, b, c"
+    todo1.save!
+
+    todo2 = @not_completed2
+    todo2.tag_list = "a, c, d"
+    todo2.save!
+
+    tag_a_id = Tag.find_by_name("a").id
+    tag_b_id = Tag.find_by_name("b").id
+
+    todos_with_a_and_b = Todo.with_tags([tag_a_id]).with_tags([tag_b_id])
+    assert 1, todos_with_a_and_b.count
+    assert todo1.id, todos_with_a_and_b.first.id
+  end
+
+  def test_finding_todos_with_more_tags_using_AND_and_OR
+    todo1 = @not_completed1
+    todo1.tag_list = "a, b, c"
+    todo1.save!
+
+    todo2 = @not_completed2
+    todo2.tag_list = "a, c, d"
+    todo2.save!
+
+    tag_a_id = Tag.find_by_name("a").id
+    tag_b_id = Tag.find_by_name("b").id
+    tag_c_id = Tag.find_by_name("c").id
+
+    todos_with_aORc_and_b = Todo.with_tags([tag_a_id, tag_c_id]).with_tags([tag_b_id])
+    assert 1, todos_with_aORc_and_b.count
+    assert todo1.id, todos_with_aORc_and_b.first.id
+
+    # let todo2 fit the expression
+    todo2.tag_list = "a, b, r"
+    todo2.save!
+    todos_with_aORc_and_b = Todo.with_tags([tag_a_id, tag_c_id]).with_tags([tag_b_id])
+    assert 2, todos_with_aORc_and_b.count
+  end
+
 
 end

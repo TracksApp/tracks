@@ -15,32 +15,32 @@
 
 == Version 2.1devel
 
-NOTE: to use this version you need to migrate your database. Not migrating will
+NOTE: To use this version you need to migrate your database. Not migrating will
 cause new actions not to appear!
 
-This version of tracks has moved to a new place on github. Also the wiki moved
-to github, see the changed URLs above.
+This version of tracks has moved to a new place on GitHub. Also the wiki moved
+to GitHub, see the changed URLs above.
 
 New and changed features:
-1. redesign of the completed todos: a new overview page. Also all context and
+1. Redesign of the completed todos: a new overview page. Also all context and
    project pages have a link to their completed actions
 2. New locales (es and fr) and updated locales (de, nl)
 3. You can star an action right from the form to add a new action
-4. redesign of preferences page
+4. Redesign of preferences page.
 5. You can now mark an action complete from the tickler
-6. project names can now contain comma (',') in it name
+6. Project names can now contain comma (',') in it name
 7. There are two example ruby scripts in /doc to use the REST API to add a todo
    or a project template with todos from the command line
 
 Under the hood:
 1. Upgraded rails to 2.3.12, jquery to 1.6.2 and jquery-ui to 1.8.14
-2. fixed several issues with the REST API
-3. upgraded the act_as_statemachine plugin. This change requires a
-   migration, see note above!
-4. migated to bundler for gem dependencies
+2. Fixed several issues with the REST API
+3. Upgraded the act_as_statemachine plugin. This change requires a
+   migration. See note above!
+4. Migated to bundler for gem dependencies
 
 See https://github.com/tracksapp/tracks/compare/v2.0...master for all
-detailled changes
+detailed changes
 
 == Version 2.0
 
@@ -50,23 +50,23 @@ New features:
    to a new todo in that project if no tags are supplied
 3. Tracks now includes support of dependencies. Making an action dependent on
    another action will hide it until the dependency is completed
-4. you can now drag an action from one context to another
+4. You can now drag an action from one context to another
 5. Support for entering multiple actions in one form
 6. You can now promote an action to a project
 7. It is easier to view notes on the mobile interface and other interface fixes
 8. The project description supports markup
-9. support for Mail.app (message://) and OneNote (onenote://) links in notes
-10.The email receiver is now able to receive email from several email adresses.
-   In site.yml this could be set to the previous behavior (receive from one
-   address per user)
-11.You can enable open signup (like in tracks.tra.in)
-12.Cleanup of context page
-13.Support for CAS for login
-14.Support for adding Tracks as a GMail Widget with instructions on the
-   Integrations page
-15.Tracks now support internationalization. First translations are German and
-   Dutch. See http://www.getontracks.org/wiki/Translating-Tracks it you like to
-   help translating Tracks to other languages
+9. Support for Mail.app (message://) and OneNote (onenote://) links in notes
+10. The email receiver is now able to receive email from several email adresses.
+    In site.yml this could be set to the previous behavior (receive from one
+    address per user)
+11. You can enable open signup (like in tracks.tra.in)
+12. Cleanup of context page
+13. Support for CAS for login
+14. Support for adding Tracks as a GMail Widget with instructions on the
+    Integrations page
+15. Tracks now supports internationalization. First translations are German and
+    Dutch. See http://www.getontracks.org/wiki/Translating-Tracks if you'd like to
+    help translate Tracks to other languages
 
 Under the hood
 1. All js is migrated to jQuery and most ui-widgets are migrated to jQuery-UI
@@ -93,9 +93,9 @@ Under the hood:
 5. Bugfixes, including fixing OpenID
 
 == Version 1.6
-1. upgrade to rails 2.0.2
-2. new mobile interface (with some iPhone compatibility fixes)
-3. new search functionality to search on todos, projects, contexts and notes
+1. Upgrade to rails 2.0.2
+2. New mobile interface (with some iPhone compatibility fixes)
+3. New search functionality to search on todos, projects, contexts and notes
 4. Bugfixes
 
 == Version 1.5
@@ -173,11 +173,6 @@ Under the hood:
 
 == Version 1.03
 
-13. All the adding, updating, deleting and marking actions done is performed using Ajax, so happens without needing to refresh the page.
-14. There's a new setting in settings.yml ('staleness_starts') which defines the number of days before which actions get marked as stale. Let's say you set it to 7 days. Actions created between 7 and 14 days ago get marked pale yellow, those created between 14 and 28 days ago (staleness_starts x 2) get marked darker yellow, and those created more than 28 days ago (staleness_starts x 3) are fluorescent yellow! This is only applied to items without a due date, so you can add items to be done some time in the future without getting yellow splashed all over the place (thanks to Nicholas for the patch to restrict to items with no due date).
-15. Contexts and projects can now be sorted in any order you like. Arrow buttons on the <tt>/contexts</tt> and <tt>/projects</tt> pages let you move an item to the top, up, down or to the bottom. For contexts, this affects the order in which they sort on the home page. Position is also used to sort the listings of active/completed/hidden contexts and projects in the 'sidebar', and in the dropdown lists on forms.
-16. You can mark projects as completed (by editing the project on <tt>/projects</tt>). In the 'sidebar' active and completed projects are shown separately, but you can still view the completed project.
-17. New images (from eclipse.org) for the edit, delete, notes and up, down, top and bottom buttons. I've made a greyscale version for the default, then the coloured version gets loaded when the mouse is hovering over the button.
 1. Added back border="0" to images which I had mistakenly taken out. This should fix the ugly red border around images that appears in Firefox (thanks, Adam Hughes).
 2. Removed the section in <tt>config/environment.rb</tt> which requires Redcloth. This was causing errors because Rails now requires Redcloth itself. This means that you now need to have Redcloth installed as a gem (gem install redcloth) (thanks, Jim).
 3. SQL dumps are now available for each of the available database formats (MySQL, PostgreSQL and SQLite), as well as a separate file containing some example contents, which should work for all of the formats. These are in the <tt>tracks/db</tt> directory (thanks, Jim)
@@ -190,6 +185,11 @@ Under the hood:
 10. <b>Patch by lolindrath</b>: Sorting by date is now much smarter on the home page. Actions are sorted by ascending due date then ascending creation date, but non-due dated items sort to the bottom. This means that the most urgent items float to the top of each context list.
 11. You can now uncheck actions from the completed actions list, so that they dynamically appear back in the uncompleted actions area.
 12. A tiny improvement: the toggling of the individual notes now uses Element.toggle from prototype.js, so it doesn't have to be an onLoad property of the body tag. This means that you don't get the notes flashing before they are hidden when you load or reload a page.
+13. All the adding, updating, deleting and marking actions done is performed using Ajax, so happens without needing to refresh the page.
+14. There's a new setting in settings.yml ('staleness_starts') which defines the number of days before which actions get marked as stale. Let's say you set it to 7 days. Actions created between 7 and 14 days ago get marked pale yellow, those created between 14 and 28 days ago (staleness_starts x 2) get marked darker yellow, and those created more than 28 days ago (staleness_starts x 3) are fluorescent yellow! This is only applied to items without a due date, so you can add items to be done some time in the future without getting yellow splashed all over the place (thanks to Nicholas for the patch to restrict to items with no due date).
+15. Contexts and projects can now be sorted in any order you like. Arrow buttons on the <tt>/contexts</tt> and <tt>/projects</tt> pages let you move an item to the top, up, down or to the bottom. For contexts, this affects the order in which they sort on the home page. Position is also used to sort the listings of active/completed/hidden contexts and projects in the 'sidebar', and in the dropdown lists on forms.
+16. You can mark projects as completed (by editing the project on <tt>/projects</tt>). In the 'sidebar' active and completed projects are shown separately, but you can still view the completed project.
+17. New images (from eclipse.org) for the edit, delete, notes and up, down, top and bottom buttons. I've made a greyscale version for the default, then the coloured version gets loaded when the mouse is hovering over the button.
 
 == Version 1.02
 

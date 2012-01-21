@@ -1,9 +1,6 @@
-$('#new-recurring-todo').hide();
 $('#edit-recurring-todo').html(html_for_edit_form());
-$('#edit-recurring-todo').show();
-RecurringTodosPage.toggle_overlay();
-enable_rich_interaction();
+$('#edit-recurring-todo').dialog( "open" );
 
 function html_for_edit_form() {
-  return "<%= escape_javascript(render(:partial => 'edit_form')) %>"
+  return "<%= escape_javascript(render(:partial => 'edit_form')) %>";
 }

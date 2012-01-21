@@ -40,6 +40,7 @@ ActionController::Routing::Routes.draw do |map|
     # UPDATE: added support for mobile view. All tags ending on .m will be
     # routed to mobile view of tags.
     todos.mobile_tag 'todos/tag/:name.m', :action => "tag", :format => 'm'
+    todos.text_tag 'todos/tag/:name.txt', :action => "tag", :format => 'txt'
     todos.tag 'todos/tag/:name', :action => "tag", :name => /.*/
     todos.done_tag 'todos/done/tag/:name', :action => "done_tag"
     todos.all_done_tag 'todos/all_done/tag/:name', :action => "all_done_tag"
@@ -86,8 +87,9 @@ ActionController::Routing::Routes.draw do |map|
   map.with_options :controller => :integrations do |i|
     i.integrations  'integrations', :action => 'index'
     i.rest_api_docs 'integrations/rest_api', :action => "rest_api"
-    i.search_plugin 'integrations/search_plugin.xml', :controller => 'integrations', :action => 'search_plugin', :format => 'xml'
-    i.google_gadget 'integrations/google_gadget.xml', :controller => 'integrations', :action => 'google_gadget', :format => 'xml'
+    i.search_plugin 'integrations/search_plugin.xml', :action => 'search_plugin', :format => 'xml'
+    i.google_gadget 'integrations/google_gadget.xml', :action => 'google_gadget', :format => 'xml'
+    i.cloudmailin   'integrations/cloudmailin', :action => 'cloudmailin'
   end
 
   map.with_options :controller => :preferences do |p|

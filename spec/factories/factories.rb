@@ -20,6 +20,7 @@ begin
     t.sequence(:description) { |n| "testtodo#{n}" }
     t.association :context
   end
+
 rescue FactoryGirl::DuplicateDefinitionError
   # No problem, apparently this file was included already.
 end

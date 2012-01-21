@@ -7,14 +7,14 @@ en:
     next_actions_rss_feed: RSS feed of next actions
     toggle_notes_title: Toggle all notes
     mobile_navigation:
-      new_action: 0-New action
+      new_action: New
       logout: Logout
       feeds: Feeds
-      starred: 4-Starred
-      projects: 3-Projects
+      starred: Starred
+      projects: Projects
       tickler: Tickler
-      contexts: 2-Contexts
-      home: 1-Home
+      contexts: Contexts
+      home: Home
     navigation:
       manage_users_title: Add or delete users
       recurring_todos: Repeating todos
@@ -391,10 +391,10 @@ en:
     all_completed: All completed actions
     feed_title_in_context: in context '%{context}'
     older_than_days: ""
-    completed_tagged_page_title: TRACKS::Completed tasks with tag %{tag_name}
+    completed_tagged_page_title: TRACKS::Completed tasks with tag '%{tag_name}'
     edit: Edit
     pending: Pending
-    completed_actions_with: Completed actions with the tag %{tag_name}
+    completed_actions_with: Completed actions with the tag '%{tag_name}'
     deleted_success: The action was deleted succesfully.
     completed_tasks_title: TRACKS::Completed tasks
     feed_title_in_project: in project '%{project}'
@@ -426,7 +426,7 @@ en:
     completed_last_x_days: Completed in the last %{count} days
     no_actions_with: Currently there are no incomplete actions with the tag '%{tag_name}'
     defer_x_days:
-      one: Defer one day
+      one: Defer 1 day
       other: Defer %{count} days
     added_new_next_action_singular: Added new next action
     no_completed_actions: Currently there are no completed actions.
@@ -560,6 +560,7 @@ en:
       due_date: with a due date %{due_date} or earlier
     overdue: Overdue
     add_new_recurring: Add a new recurring action
+    edit_recurring_todo: Edit repeating action
     no_incomplete_actions: There are no incomplete actions
   notes:
     delete_confirmation: Are you sure that you want to delete the note '%{id}'?
@@ -659,6 +660,8 @@ en:
     staleness_starts_after: Staleness starts after %{days} days
     change_identity_url: Change Your Identity URL
     change_password: Change your password
+    password_changed: You password has been changed, please log on again.
+    updated: Preferences updated
     page_title: TRACKS::Preferences
     title: Your preferences
     token_description: Token (for feeds and API use)

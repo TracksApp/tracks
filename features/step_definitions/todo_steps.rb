@@ -169,3 +169,11 @@ Then /^the tags of "([^"]*)" should be "([^"]*)"$/ do |todo_description, tag_lis
 
   todo.tag_list.should == tag_list
 end
+
+Then /^I should see "([^"]*)" in the completed section of the mobile site$/ do |desc|
+  todo = @current_user.todos.find_by_description(desc)
+  todo.should_not be_nil
+
+  xpath = "//div[@id='completed_container']//a[@href='/todos/#{todo.id}.m']"
+  response.should have_xpath xpath
+end

@@ -91,8 +91,15 @@ class ApplicationController < ActionController::Base
   #
   def count_undone_todos_phrase(todos_parent, string="actions")
     count = count_undone_todos(todos_parent)
-    word = count == 1 ? string.singularize : string.pluralize
-    return count.to_s + "&nbsp;" + word
+    deferred_count = count_deferred_todos(todos_parent)
+    if count == 0 && deferred_count > 0
+      word = deferred_count == 1 ? string.singularize : string.pluralize
+      word = "deferred&nbsp;" + word
+      deferred_count.to_s + "&nbsp;" + word
+    else
+      word = count == 1 ? string.singularize : string.pluralize
+      count.to_s + "&nbsp;" + word
+    end
   end
 
   def count_undone_todos(todos_parent)
@@ -104,6 +111,14 @@ class ApplicationController < ActionController::Base
       count = eval "@#{todos_parent.class.to_s.downcase}_not_done_counts[#{todos_parent.id}]"
     end
     count || 0
+  end
+
+  def count_deferred_todos(todos_parent)
+    if todos_parent.nil?
+      count = 0
+    else
+      count = todos_parent.todos.deferred.count
+    end
   end
 
   # Convert a date object to the format specified in the user's preferences in
@@ -162,9 +177,9 @@ class ApplicationController < ActionController::Base
   def create_todo_from_recurring_todo(rt, date=nil)
     # create todo and initialize with data from recurring_todo rt
     todo = current_user.todos.build( { :description => rt.description, :notes => rt.notes, :project_id => rt.project_id, :context_id => rt.context_id})
+    todo.recurring_todo_id = rt.id
 
     # set dates
-    todo.recurring_todo_id = rt.id
     todo.due = rt.get_due_date(date)
 
     show_from_date = rt.get_show_from_date(date)

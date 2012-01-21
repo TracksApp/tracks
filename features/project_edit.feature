@@ -33,6 +33,15 @@ Feature: Edit a project
     Then I should see that a project named "release tracks 1.8" is not present
     And I should see that a project named "release tracks 2.0" is present
 
+  @selenium
+  Scenario: I cannot edit the project name in two places at once
+    Given I have a project "release tracks 1.8" with 1 todos
+    When I go to the "release tracks 1.8" project
+    And I click to edit the project name in place
+    Then I should be able to change the project name in place
+    When I edit the project settings
+    Then I should not be able to change the project name in place
+
   # Ticket #1041
   @selenium
   Scenario: I can change the name of the project using the Edit Project Settings form

@@ -14,7 +14,7 @@ Feature: Add new next action from mobile page
 
   Scenario Outline: The new action form is prefilled with context and project
     Given I am on the <page>
-    When I follow "0-New action"
+    When I follow "New"
     Then the selected project should be "<project>"
     And the selected context should be "<context>"
 
@@ -29,7 +29,7 @@ Feature: Add new next action from mobile page
   Scenario: I can add a new todo using the mobile interface
     Given I am on the home page
     Then the badge should show 0
-    When I follow "0-New action"
+    When I follow "New"
     And I fill in "Description" with "test me"
     And I press "Create"
     Then I should see "test me"

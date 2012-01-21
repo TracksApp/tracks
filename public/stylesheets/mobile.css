@@ -3,36 +3,41 @@ body {
     font-size: smaller;
 }
 
+#content {
+    margin-top: 50px;
+}
+
 div.footer {
     font-size: XX-small;
     color: #999999;
     text-align: center;
     }
     
+a, a:link, a:active, a:visited {
+    color: #CC3334;
+    padding-left: 1px;
+    padding-right: 1px;
+    text-decoration: none;
+}
+
+a:hover {
+    background-color: #CC3334;
+    color: #FFFFFF;
+}
+
 div.footer a {        
     text-decoration: underline;
     color: #999999;
     }
 
-.m_t_d a {
-    text-decoration: none;
-    color: #000000;
-}
-
-.m_t_d a:hover {
-    text-decoration: underline;
-    color: #0000FF;
-}
-
-.m_t_d .red, .m_t_d .amber, .m_t_d .orange, .m_t_d .green{
-    background-color: #999999;
-}
-
 h1 {
-  color: #f00;
+  color: #fff;
   font-size: small;
-  margin-top:.3em;
-  margin-bottom:.3em;
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
+  padding-left:8px;
+  margin-top:0;
+  margin-bottom:0;
 }
 
 h2 {
@@ -41,6 +46,17 @@ h2 {
   margin: .3em 0;
   padding: .3em 0 .1em .3em;
   border-top: 1px solid #777777;
+}
+
+h2 a, h2 a:link, h2 a:active, h2 a:visited {
+    color: #666666;
+    text-decoration: none;
+}
+
+h2 a:hover {
+    background-color: transparent;
+    color: #CC3334;
+    text-decoration: none;
 }
 
 h4.alert  {
@@ -79,6 +95,15 @@ span.r {
 span.prj, span.ctx{
     font-size: X-small;    
 }
+
+#ctx, #pjr {
+  margin: 0.5em 0;
+}
+
+#ctx a, #pjr a {
+  padding: 0.1em 0;
+}
+
 /*   Draw attention to some text 
     Same format as traffic lights */
 .red {
@@ -118,22 +143,22 @@ span.prj, span.ctx{
       
 .count {
       color: #fff;
-      background: #000;
-      font-size: medium;
+      background: #f00;
+      padding: 0.2em;
 }
 
 .errors {
       background: #FFC2C2;
 }
 
-ul.c li.star {
-list-style-type: circle;
+ul.c li {
+list-style-type: none;
 }
 
 ul.c {
   padding: 0;
   margin: 0;
-  padding-left: 1.1em;
+  padding-left: 0.1em;
 }
 
 ul.c li {
@@ -149,8 +174,44 @@ span.r {
   display:none;
 }
 
+#topbar {
+    background-color: #000000;
+    clear: both;
+    color: #EEEEEE;
+    height: 45px;
+    left: 0;
+    margin-bottom: 5px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 501;
+}
+
 .nav {
-  font-size: x-small;
+  color: #fff;
+  background: #000;
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
+}
+
+#topbar .nav {
+  padding-left:8px;
+  margin-bottom:0.3em;
+}
+
+.nav a, .nav a:link, .nav a:active, .nav a:visited {
+    color: #fff;
+    padding-top: 1.0em;
+    padding-bottom: 0.5em;
+}
+
+.nav a:focus, .nav a:hover, .nav a:active {
+    background: transparent;
+    text-decoration: underline;
+}
+
+.nav li:hover, .nav a:focus, .nav a:hover, .nav a:active {
+    color: #CCCCCC;
 }
 
 #database_auth_form table td {
@@ -159,4 +220,11 @@ span.r {
 
 table.c {
       margin-left: 5px;
+}
+.mobile-done {
+  display:inline;
+}
+
+input#todo_description, input#tag_list, textarea#todo_notes, select#todo_project_id, select#todo_context_id {
+  width: 95%;
 }

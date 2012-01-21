@@ -225,8 +225,6 @@ class User < ActiveRecord::Base
     end
   end
 
-protected
-
   def salted(s)
     "#{Tracks::Config.salt}--#{s}--"
   end
@@ -238,6 +236,8 @@ protected
   def hash(s)
     BCrypt::Password.create s
   end
+
+protected
 
   def crypt_password
     return if password.blank?
