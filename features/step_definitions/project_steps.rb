@@ -1,7 +1,7 @@
 Given /^I have an outdated project "([^"]*)" with (\d+) todos$/ do |project_name, num_todos|
   Given "I have a project \"#{project_name}\" with #{num_todos} todos"
   @project = @current_user.projects.find_by_name(project_name)
-  @project.last_reviewed = @current_user.time - @current_user.prefs.review_period.days+1
+  @project.last_reviewed = @current_user.time - @current_user.prefs.review_period.days-1
   @project.save
 end
 

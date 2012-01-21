@@ -1,7 +1,9 @@
-Then /^I see the project "([^"]*)" in the "([^"]*)" list$/ do |arg1, arg2|
-  ## does not check whether the project is actually stalled
-  ## need to check whether arg1 is in the right category for arg2
-  response.body.should contain(arg1)
+Then /^I see the project "([^"]*)" in the "([^"]*)" list$/ do |name, state|
+  project = @current_user.projects.find_by_name(name)
+  project.should_not be_nil
+
+  xpath = "//div[@id='list-#{state}-projects']//div[@id='project_#{project.id}']"
+  response.should have_xpath(xpath)
 end
 
 
