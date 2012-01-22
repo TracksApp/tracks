@@ -174,6 +174,16 @@ When /^I make a project of "([^"]*)"$/ do |action_description|
   end
 end
 
+####### FOLLOWUP #######
+
+When /^I set the todo "([^"]*)" to followup$/ do |action_description|
+  todo = @current_user.todos.find_by_description(action_description)
+  todo.should_not be_nil
+
+  followup_link = "//a[@id='followup_todo_#{todo.id}.icon_followup_item']"
+  selenium.click(followup_link, :wait_for => :ajax, :javascript_framework => :jquery)
+end
+
 ####### THEN #######
 
 Then /^I should see an error message$/ do
@@ -181,4 +191,10 @@ Then /^I should see an error message$/ do
   wait_for :timeout => 5 do
     selenium.is_element_present(error_block)
   end
+end
+
+Then /^the todo "([^"]*)" should be deferred$/ do |action_description|
+  todo = @current_user.todos.find_by_description(action_description)
+  todo.should_not be_nil
+  todo.show_from.should_not be_nil
 end
