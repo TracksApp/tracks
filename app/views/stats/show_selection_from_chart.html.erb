@@ -1,9 +1,18 @@
 <%= render :partial => 'chart', :locals => {:width => @chart_width, :height => @chart_height, :data => url_for(:action => @chart_name)} -%>
 <br/>
-<p><%= t('stats.click_to_update_actions') %> <%= t('stats.click_to_return', :link => link_to(t('stats.click_to_return_link'), {:controller => "stats", :action => "index"})) %> <%
-    unless @further -%> <%=
-    t('stats.click_to_show_actions_from_week', :link => link_to("here", {:controller => "stats", :action => "show_selected_actions_from_chart", :id=>"#{params[:id]}_end", :index => params[:index]}), :week => params[:index]) -%>
-    <% end %></p>
+<p>
+<%= t('stats.click_to_update_actions') %> <%= t('stats.click_to_return', :link => link_to(t('stats.click_to_return_link'), {:controller => "stats", :action => "index"})) %>
+<%
+    unless @further
+-%>
+<%= t('stats.click_to_show_actions_from_week',
+      :link => link_to("here", {:controller => "stats", :action => "show_selected_actions_from_chart", :id=>"#{params[:id]}_end", :index => params[:index]}),
+      :week => params[:index])
+-%>
+<%
+    end
+-%>
+</p>
 <br/>
 <div class="container tickler" id="tickler_container">
   <h2><%= @page_title -%></h2>
