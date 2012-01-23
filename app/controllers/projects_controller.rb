@@ -34,6 +34,7 @@ class ProjectsController < ApplicationController
   end
 
   def review
+    @source_view = params['_source_view'] || 'review'
     @page_title = t('projects.list_reviews')
     @projects = current_user.projects.all
     @contexts = current_user.contexts.all
@@ -107,7 +108,7 @@ class ProjectsController < ApplicationController
     respond_to do |format|
       format.html
       format.m     &render_project_mobile
-      format.xml   { 
+      format.xml   {
         render :xml => @project.to_xml(:except => :user_id) { |xml|
           xml.not_done { @not_done.each { |child| child.to_xml(:builder => xml, :skip_instruct => true) } }
           xml.deferred { @deferred.each { |child| child.to_xml(:builder => xml, :skip_instruct => true) } }
