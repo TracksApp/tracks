@@ -806,7 +806,7 @@ var ProjectListPage = {
         /* make the three lists of project sortable */
         $(['active', 'hidden', 'completed']).each(function() {
             $("#list-"+this+"-projects").sortable({
-                handle: '.handle',
+                handle: '.grip',
                 update: update_order
             });
         });

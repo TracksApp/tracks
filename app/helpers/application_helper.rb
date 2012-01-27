@@ -13,7 +13,7 @@ module ApplicationHelper
     else
       tag_options = nil
     end
-    url = options.is_a?(String) ? options : self.url_for(options, *parameters_for_method_reference)    
+    url = options.is_a?(String) ? options : self.url_for(options, *parameters_for_method_reference)
     id_tag = (request.request_uri == url) ? " id=\"current\"" : ""
     
     "<a href=\"#{url}\"#{tag_options}#{id_tag}>#{name || url}</a>"
@@ -53,7 +53,7 @@ module ApplicationHelper
         else
           # overdue or due very soon! sound the alarm!
           if days == -1
-            t('todos.next_actions_due_date.overdue_by', :days => days * -1)            
+            t('todos.next_actions_due_date.overdue_by', :days => days * -1)
           elsif days < -1
             t('todos.next_actions_due_date.overdue_by_plural', :days => days * -1)
           else
@@ -123,7 +123,7 @@ module ApplicationHelper
   def link_to_edit_project (project, descriptor = sanitize(project.name))
     link_to(descriptor,
       url_for({:controller => 'projects', :action => 'edit', :id => project.id}),
-      {:id => "link_edit_#{dom_id(project)}", :class => "project_edit_settings"})
+      {:id => "link_edit_#{dom_id(project)}", :class => "project_edit_settings icon"})
   end
 
   def link_to_edit_context (context, descriptor = sanitize(context.name))
@@ -155,7 +155,7 @@ module ApplicationHelper
   end
   
   def render_flash
-    render :partial => 'shared/flash', :object => flash 
+    render :partial => 'shared/flash', :object => flash
   end
 
   def recurrence_time_span(rt)
@@ -287,7 +287,7 @@ module ApplicationHelper
         done_tag_path(@tag_name)
       else
         done_todos_path
-      end      
+      end
     else
       done_todos_path
     end
