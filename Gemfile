@@ -28,7 +28,7 @@ end
 
 group :development do
   if RUBY_VERSION.to_f >= 1.9
-    gem "ruby-debug19" 
+    gem "ruby-debug19"
     gem "mongrel", "1.2.0.pre2"
   else
     gem "ruby-debug"
@@ -46,8 +46,7 @@ group :test do
   gem "rspec-rails", "~>1.3.3"
   gem "thoughtbot-factory_girl"
   gem 'memory_test_fix', '~>0.1.3'
-  gem "selenium-client"
-  gem "webrat", ">=0.7.0"
+  gem "capybara", ">=0.3.5"
   gem "database_cleaner", ">=0.5.0"
-  gem "cucumber-rails", "~>0.3.0"
+  gem "cucumber-rails", "~>0.3.2"
 end

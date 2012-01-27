@@ -9,7 +9,7 @@ module NavigationHelpers
     options = @mobile_interface ? {:format => :m} : {}
     options = {:locale => @locale}.merge(options) if @locale
     @source_view = nil
-
+    
     case page_name
 
     when /the home\s?page/
@@ -109,12 +109,12 @@ module NavigationHelpers
       tag_path($1, options)
     when /the change password page/
       change_password_user_path @current_user
-
-      # Add more mappings here.
-      # Here is an example that pulls values out of the Regexp:
-      #
-      #   when /^(.*)'s profile page$/i
-      #     user_profile_path(User.find_by_login($1))
+      
+    # Add more mappings here.
+    # Here is an example that pulls values out of the Regexp:
+    #
+    #   when /^(.*)'s profile page$/i
+    #     user_profile_path(User.find_by_login($1))
 
     else
       begin
