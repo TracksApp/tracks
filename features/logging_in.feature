@@ -50,10 +50,10 @@ Feature: Existing user logging in
       | "top secret" project for user "testuser"                | "top secret" project for user "testuser"                | Logout (Test User) |
       | context page for "@secret location" for user "testuser" | context page for "@secret location" for user "testuser" | Logout (Test User) |
 
-  @selenium
+  @javascript
   Scenario: When session expires, you should be logged out
     When I go to the login page
-    And I submit the login form as user "testuser" with password "secret" 
-    Then I should be on the login page
+    And I submit the login form as user "testuser" with password "secret"
+    Then I should be on the home page
     When my session expires
     Then I should be on the login page
