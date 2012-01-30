@@ -455,7 +455,7 @@ class StatsController < ApplicationController
     @completed_actions = current_user.todos.completed.find(:all, { :select => "completed_at, created_at" })
 
     actions_sum, actions_max = 0,0
-    actions_min = @completed_actions.first.completed_at - @completed_actions.first.created_at
+    actions_min = @completed_actions.first ? @completed_actions.first.completed_at - @completed_actions.first.created_at : 0
     
     @completed_actions.each do |r|
       actions_sum += (r.completed_at - r.created_at)

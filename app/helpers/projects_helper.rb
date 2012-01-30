@@ -51,7 +51,7 @@ module ProjectsHelper
       project_path(project, :format => 'js'),
       {
         :id => "delete_project_#{project.id}",
-        :class => "delete_project_button",
+        :class => "delete_project_button icon",
         :x_confirm_message => t('projects.delete_project_confirmation', :name => project.name),
         :title => t('projects.delete_project_title')
       }

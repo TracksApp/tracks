@@ -426,13 +426,13 @@ input.item-checkbox {
     vertical-align: middle;
 }
 
-.rec_description, .description {
+.rec_description, .description, .project_description {
     margin-left: 80px;
     position:relative;
 }
 
-.rec_description {
-    margin-left: 80px;
+.project_description {
+  margin-left: 50px;
 }
 
 .stale_l1 {
