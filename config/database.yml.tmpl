@@ -6,7 +6,7 @@ development:
   # encoding: utf8
   host: localhost
   username: root
-  password: 
+  password:
 
 test: &TEST
     adapter: sqlite3
@@ -20,10 +20,7 @@ production:
   # encoding: utf8
   host: localhost
   username: root
-  password: 
+  password:
 
 cucumber:
-  <<: *TEST
-
-selenium:
   <<: *TEST

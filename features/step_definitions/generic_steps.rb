@@ -11,18 +11,7 @@ Given /^I am working on the mobile interface$/ do
 end
 
 Then /the badge should show (.*)/ do |number|
-  badge = -1
-  xpath= "//span[@id='badge_count']"
-
-  if response.respond_to? :selenium
-    response.should have_xpath(xpath)
-    badge = response.selenium.get_text("xpath=#{xpath}").to_i
-  else
-    response.should have_xpath(xpath) do |node|
-      badge = node.first.content.to_i
-    end
-  end
-
+  badge = find("span#badge_count").text.to_i
   badge.should == number.to_i
 end
 

@@ -117,7 +117,12 @@ When /^I clear the due date of "([^"]*)"$/ do |action_description|
   todo = @current_user.todos.find_by_description(action_description)
   todo.should_not be_nil
   open_edit_form_for(todo)
-  selenium.click("//div[@id='edit_todo_#{todo.id}']//a[@id='due_x_todo_#{todo.id}']/img", :wait_for => :ajax, :javascript_framework => :jquery)
+  within "div#edit_todo_#{todo.id}" do
+    find("a#due_x_todo_#{todo.id}").click
+    wait_until do
+      find("input#due_todo_#{todo.id}").value == ""
+    end
+  end
   submit_edit_todo_form(todo)
 end
 

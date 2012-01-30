@@ -6,7 +6,7 @@ Given /^I have logged in as "(.*)" with password "(.*)"$/ do |username, password
   click_button "Sign in »"
   
   logout_regexp = @mobile_interface ? "Logout" : "Logout \(#{username}\)"
-  response.should contain(logout_regexp)
+  page.should have_content(logout_regexp)
   @current_user = User.find_by_login(username)
 end
 

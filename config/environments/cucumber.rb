@@ -21,7 +21,6 @@ config.action_controller.allow_forgery_protection    = false
 # ActionMailer::Base.deliveries array.
 config.action_mailer.delivery_method = :test
 
-# Unique cookies
 # Unique cookies and use cookies for session
 config.action_controller.session_store = :cookie_store
 config.action_controller.session = { :key => 'TracksCucumber', :secret => SITE_CONFIG['salt'] * (30.0 /  SITE_CONFIG['salt'].length).ceil }

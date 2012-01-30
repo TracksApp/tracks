@@ -4,7 +4,9 @@ module TracksStepHelper
   end
 
   def submit_next_action_form
-    selenium.click("xpath=//form[@id='todo-form-new-action']//button[@id='todo_new_action_submit']", :wait_for => :ajax, :javascript_framework => :jquery)
+    within("#todo-form-new-action") do
+      click_button("todo_new_action_submit")
+    end
     sleep(1)
   end
 
@@ -16,11 +18,16 @@ module TracksStepHelper
     selenium.click("xpath=//form[@id='project_form']//button[@id='project_new_project_submit']", :wait_for => :ajax, :javascript_framework => :jquery)
   end
 
+  def wait_for_form_to_go_away(todo)
+    page.should_not have_content("button#submit_todo_#{todo.id}")
+  end
+  
   def submit_edit_todo_form (todo)
-    selenium.click("//div[@id='edit_todo_#{todo.id}']//button[@id='submit_todo_#{todo.id}']", :wait_for => :ajax, :javascript_framework => :jquery)
-    wait_for do
-      !selenium.is_element_present("//form[@id='form_todo_#{todo.id}']")
+    within "div#edit_todo_#{todo.id}" do
+      click_button "submit_todo_#{todo.id}"
     end
+    wait_for_form_to_go_away(todo)
+    wait_for_animations_to_end
   end
 
   def format_date(date)
@@ -29,7 +36,7 @@ module TracksStepHelper
   end
 
   def execute_javascript(js)
-    selenium.get_eval "(function() {with(this) {#{js}}}).call(selenium.browserbot.getCurrentWindow());"
+    page.execute_script(js)
   end
 
   def clear_context_name_from_next_action_form
@@ -39,19 +46,37 @@ module TracksStepHelper
   def clear_project_name_from_next_action_form
     execute_javascript("$('#todo_project_name').val('');")
   end
-
+  
   def open_edit_form_for(todo)
-    edit_button = "xpath=//div[@id='line_todo_#{todo.id}']//img[@id='edit_icon_todo_#{todo.id}']"
-
-    wait_for :timeout => 5 do
-      selenium.is_element_present(edit_button)
+    within "div#line_todo_#{todo.id}" do
+      find("a#icon_edit_todo_#{todo.id}").click
     end
-
-    selenium.click(edit_button, :wait_for => :ajax, :javascript_framework => :jquery)
+    wait_for_animations_to_end
+  end
+  
+  def wait_for_animations_to_end
+    wait_until do
+      page.evaluate_script('$(":animated").length') == 0
+    end
   end
 
-  def wait_for_ajax
-    selenium.wait_for :wait_for => :ajax, :javascript_framework => :jquery
+  def handle_js_confirm(accept=true)
+    page.execute_script "window.original_confirm_function = window.confirm"
+    page.execute_script "window.confirmMsg = null"
+    page.execute_script "window.confirm = function(msg) { window.confirmMsg = msg; return #{!!accept}; }"
+    yield
+  ensure
+    page.execute_script "window.confirm = window.original_confirm_function"
+  end
+  
+  def get_confirm_text
+    page.evaluate_script "window.confirmMsg"
+  end
+
+  def open_submenu_for(todo)
+    within "div#line_todo_#{todo.id}" do
+      find("img#todo-submenu").click
+    end
   end
 
 end

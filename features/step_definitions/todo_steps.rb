@@ -4,13 +4,11 @@ When /^I delete the action "([^"]*)"$/ do |action_description|
   todo = @current_user.todos.find_by_description(action_description)
   todo.should_not be_nil
 
-  delete_todo_button = "xpath=//a[@id='delete_todo_#{todo.id}']/img"
-  selenium.click delete_todo_button
-  selenium.get_confirmation.should == "Are you sure that you want to delete the action '#{todo.description}'?"
-
-  wait_for :timeout => 5 do
-    !selenium.is_element_present("//div[@id='line_todo_#{todo.id}']")
+  handle_js_confirm do
+    open_submenu_for(todo)
+    find("a#delete_todo_#{todo.id}").click
   end
+  get_confirm_text.should == "Are you sure that you want to delete the action '#{todo.description}'?"
 end
 
 When /^I delete the todo "([^"]*)"$/ do |action_description|

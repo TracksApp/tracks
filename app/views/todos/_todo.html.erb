@@ -12,7 +12,7 @@ parameters += "&_tag_name=#{@tag_name}" if @source_view == 'tag'
     <%= remote_toggle_checkbox(todo) %>
     <%= remote_edit_button(todo) unless suppress_edit_button %>
     <ul class="sf-menu sf-item-menu">
-      <li style="z-index:<%=@z_index_counter%>"><%= image_tag "downarrow.png", :alt=> "" %>
+      <li style="z-index:<%=@z_index_counter%>"><%= image_tag "downarrow.png", :id => "todo-submenu", :alt=> "" %>
         <ul id="ul<%= dom_id(todo) %>">
           <li><%= remote_delete_menu_item(todo) %></li>
           <% unless todo.completed? || todo.deferred? -%>

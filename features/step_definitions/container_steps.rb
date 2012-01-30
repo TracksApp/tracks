@@ -193,10 +193,8 @@ Then /^I should see "([^"]*)" in the due next month container$/ do |todo_descrip
   todo = @current_user.todos.find_by_description(todo_description)
   todo.should_not be_nil
 
-  xpath = "//div[@id='due_after_this_month']//div[@id='line_todo_#{todo.id}']"
-
-  wait_for :timeout => 5 do
-    selenium.is_element_present(xpath)
+  within "div#due_after_this_month" do
+    find("div#line_todo_#{todo.id}").should_not be_nil
   end
 end
 
