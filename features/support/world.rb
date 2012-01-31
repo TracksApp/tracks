@@ -82,6 +82,12 @@ module TracksStepHelper
     end
   end
 
+  def context_list_find_index(context_name)
+    div_id = "context_#{@current_user.contexts.find_by_name(context_name).id}"
+    contexts = page.all("div.context").map { |x| x[:id] }
+    return contexts.find_index(div_id)
+  end
+  
 end
 
 World(TracksStepHelper)

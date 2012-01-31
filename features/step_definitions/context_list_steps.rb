@@ -42,37 +42,16 @@ end
 
 When /^I drag context "([^"]*)" above context "([^"]*)"$/ do |context_drag, context_drop|
   drag_id = @current_user.contexts.find_by_name(context_drag).id
-  drop_id = @current_user.contexts.find_by_name(context_drop).id
+  sortable_css = "div.ui-sortable div#container_context_#{drag_id}"
 
-  # container_height = page.driver.get_element_height("//div[@id='container_context_#{drag_id}']").to_i
-  # vertical_offset = container_height*2
-  # coord_string = "10,#{vertical_offset}"
-
-  drag_context_handle = find("div#context_#{drag_id} span.handle")
-  drag_context_handle.text.should == "DRAG"
+  drag_index = context_list_find_index(context_drag)
+  drop_index = context_list_find_index(context_drop)
   
-  drop_context_container = find("div#container_context_#{drop_id}")
-
-  drag_context_handle.drag_to(drop_context_container)
-
-  # TODO: omzetten naar volgende script
-  page.execute_script %Q{
-  	$('.sortable-books li:last').simulateDragSortable({move: -4});
-  }
-  
-  sleep(5)
-  
-  # page.driver.mouse_down_at(drag_context_handle_xpath,"2,2")
-  # page.driver.mouse_move_at(drop_context_container_xpath,coord_string)
-  # # no need to simulate mouse_over for this test
-  # page.driver.mouse_up_at(drop_context_container_xpath,coord_string)
+  page.execute_script "$('#{sortable_css}').simulateDragSortable({move: #{drop_index-drag_index}, handle: '.handle'});"
 end
 
 Then /^context "([^"]*)" should be above context "([^"]*)"$/ do |context_high, context_low|
-  high_id = "context_#{@current_user.contexts.find_by_name(context_high).id}"
-  low_id = "context_#{@current_user.contexts.find_by_name(context_low).id}"
-  contexts = page.all("div.context").map { |x| x[:id] }
-  contexts.find_index(high_id).should < contexts.find_index(low_id)
+  context_list_find_index(context_high).should < context_list_find_index(context_low)
 end
 
 Then /^I should see that a context named "([^"]*)" is not present$/ do |context_name|

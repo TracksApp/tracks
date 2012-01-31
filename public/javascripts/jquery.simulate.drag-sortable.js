@@ -27,7 +27,7 @@
           direction = moveCounter > 0 ? 'down' : 'up',
           moveVerticalAmount = 0,
           dragPastBy = 0;
-
+          
       if (moveCounter === 0) { return; }
 
       while (moveCounter !== 0) {
