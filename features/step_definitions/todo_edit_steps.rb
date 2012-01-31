@@ -65,7 +65,9 @@ When /I change the (.*) field of "([^\"]*)" to "([^\"]*)"$/ do |field_name, todo
   todo.should_not be_nil
 
   open_edit_form_for(todo)
-  selenium.type("css=form.edit_todo_form input[name=#{field_name}]", new_value)
+  within "form.edit_todo_form" do
+    fill_in "#{field_name}", :with => new_value
+  end
   submit_edit_todo_form(todo)
 end
 

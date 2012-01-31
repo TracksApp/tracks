@@ -11,7 +11,10 @@ module TracksStepHelper
   end
 
   def submit_new_context_form
-    selenium.click("xpath=//form[@id='context-form']//button[@id='context_new_submit']", :wait_for => :ajax, :javascript_framework => :jquery)
+    within "form#context-form" do
+      find("button#context_new_submit").click
+    end
+    wait_for_animations_to_end
   end
 
   def submit_new_project_form

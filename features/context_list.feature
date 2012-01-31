@@ -36,7 +36,7 @@ Feature: Manage the list of contexts
     Then I should be on the context page for "@bar"
     And the badge should show 3
 
-  @selenium
+  @javascript
   Scenario: Delete context from context page should update badge
     Given I have a context called "@computer"
     And I have a context called "@ipad"
@@ -48,7 +48,7 @@ Feature: Manage the list of contexts
     And the badge should show 1
     And the context list badge for active contexts should show 1
 
-  @selenium
+  @javascript
   Scenario: Delete last context from context page should remove the contexts container for hidden or active contexts
     Given I have a context called "@computer"
     And I have a hidden context called "@ipad"
@@ -62,7 +62,7 @@ Feature: Manage the list of contexts
     Then I should see that a context named "@ipad" is not present
     And I should see that the context container for hidden contexts is not present
 
-  @selenium
+  @javascript
   Scenario: Delete context from context page right after an edit
     Given I have a context called "@computer"
     When I go to the contexts page
@@ -71,7 +71,7 @@ Feature: Manage the list of contexts
     Then he should see that a context named "@laptop" is not present
     And the badge should show 0
 
-  @selenium
+  @javascript
   Scenario: Edit context from context twice
     Given I have a context called "@computer"
     When I go to the contexts page
@@ -82,7 +82,7 @@ Feature: Manage the list of contexts
     And he should see that a context named "@ipad" is present
     And the badge should show 1
 
-  @selenium
+  @javascript
   Scenario Outline: Add a new context with state
     Given I have the following contexts
       | context  | hide  |
@@ -97,13 +97,13 @@ Feature: Manage the list of contexts
       | active | @phone  |
       | hidden | @hidden |
 
-  @selenium
+  @javascript
   Scenario: Cannot add a context with comma in the name
     When I go to the contexts page
     And I add a new active context "foo, bar"
     Then I should see "Name cannot contain the comma"
 
-  @selenium
+  @javascript @wip
   Scenario: I can drag and drop to order the contexts
     Given I have the following contexts
       | context |
@@ -112,10 +112,10 @@ Feature: Manage the list of contexts
       | @boss   |
     When I go to the contexts page
     Then context "@ipad" should be above context "@home"
-    When I drag context "@ipad" below context "@home"
+    When I drag context "@home" above context "@ipad"
     Then context "@home" should be above context "@ipad"
 
-  @selenium
+  @javascript
   Scenario: Hiding and unhiding the new context form
     When I go to the contexts page
     Then the new context form should be visible

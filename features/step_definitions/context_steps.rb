@@ -54,7 +54,7 @@ Given /^I have a context "([^\"]*)" with (.*) actions$/ do |context_name, number
 end
 
 When /^I edit the context name in place to be "([^\"]*)"$/ do |new_context_name|
-  selenium.click "context_name"
+  page.find("span#context_name").click
   fill_in "value", :with => new_context_name
   click_button "Ok"
 end

@@ -12,7 +12,7 @@ Feature: Edit a context
     And I have a project called "test project"
     And I have 2 todos in project "test project" in context "@pc" with tags "starred"
 
-  @selenium
+  @javascript
   Scenario: In place edit of context name
     Given I have a context called "Errands"
     When I go to the context page for "Errands"
@@ -22,7 +22,7 @@ Feature: Edit a context
     Then he should see that a context named "Errands" is not present
     And he should see that a context named "OutAndAbout" is present
 
-  @selenium
+  @javascript
   Scenario: Editing the context of a todo will remove the todo
     When I go to the the context page for "@pc"
     Then the badge should show 2
@@ -30,14 +30,14 @@ Feature: Edit a context
     Then I should not see "todo 1"
     And the badge should show 1
 
-  @selenium
+  @javascript
   Scenario: Editing the description of a a todo will update that todo
     When I go to the the context page for "@pc"
     And I edit the description of "todo 1" to "changed"
     Then I should not see "todo 1"
     And I should see "changed"
 
-  @selenium
+  @javascript
   Scenario: Editing the context of the last todo will remove the todo and show empty message
     When I go to the the context page for "@pc"
     And I edit the context of "todo 1" to "@laptop"
@@ -48,7 +48,7 @@ Feature: Edit a context
     And the badge should show 0
     And I should see "Currently there are no incomplete actions in this context"
 
-  @selenium
+  @javascript
   Scenario: Adding a todo to a hidden project will not show the todo
     Given I have a hidden project called "hidden project"
     When I go to the the context page for "@pc"
@@ -61,7 +61,7 @@ Feature: Edit a context
     And I should see "todo X"
     And the badge should show 2
 
-  @selenium
+  @javascript
   Scenario: Adding a todo to a hidden context will show that todo
     Given I have a hidden context called "@personal"
     When I go to the the context page for "@pc"
