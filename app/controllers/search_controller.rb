@@ -1,7 +1,7 @@
 class SearchController < ApplicationController
 
-  helper :todos, :application, :notes, :projects
-
+  helper :todos, :application, :notes, :projects, :contexts
+  
   def results
     @source_view = params['_source_view'] || 'search'
     @page_title = "TRACKS::Search Results for #{params[:search]}"
