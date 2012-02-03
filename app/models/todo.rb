@@ -129,7 +129,6 @@ class Todo < ActiveRecord::Base
     if !show_from.blank? && show_from < user.date
       errors.add("show_from", I18n.t('models.todo.error_date_must_be_future'))
     end
-    errors.add(:description, "may not contain \" characters") if /\"/.match(self.description)
     unless @predecessor_array.nil? # Only validate predecessors if they changed
       @predecessor_array.each do |todo|
         errors.add("Depends on:", "Adding '#{h(todo.specification)}' would create a circular dependency") if is_successor?(todo)

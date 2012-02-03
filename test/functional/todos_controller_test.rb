@@ -220,10 +220,11 @@ class TodosControllerTest < ActionController::TestCase
 
     start_count = Todo.count
     put :create, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{
-      :multiple_todos=>"a\nb"}
+      :multiple_todos=>"a\nb\nmuch \"ado\" about \'nothing\'"}
 
     assert_equal start_count+2, Todo.count, "two todos should have been added"
   end
+
 
   def test_add_multiple_dependent_todos
     login_as(:admin_user)

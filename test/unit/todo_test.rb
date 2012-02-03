@@ -75,6 +75,13 @@ class TodoTest < ActiveSupport::TestCase
     assert_equal "must be a date in the future", t.errors.on(:show_from)
   end
 
+  def test_validate_description_can_contain_quote
+    t = @not_completed2
+    t[:description] = "much \"ado\" about nothing"
+    assert t.save
+    assert_equal 0, t.errors.count
+  end
+
   def test_defer_an_existing_todo
     @not_completed2
     assert_equal :active, @not_completed2.aasm_current_state
