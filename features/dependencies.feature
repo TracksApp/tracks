@@ -9,7 +9,7 @@ Feature: dependencies
       | testuser | secret   | false    |
     And I have logged in as "testuser" with password "secret"
 
-  @selenium
+  @javascript @webkit_only
   Scenario: Adding dependency to dependency by drag and drop
     Given I have a project "dependencies" with 3 todos
     And "todo 2" depends on "todo 1"
@@ -23,7 +23,7 @@ Feature: dependencies
     When I expand the dependencies of "todo 2"
     Then I should see "todo 3" within the dependencies of "todo 2"
 
-  @selenium
+  @javascript
   Scenario: I can edit a todo to add the todo as a dependency to another
     Given I have a context called "@pc"
     And I have a project "dependencies" that has the following todos
@@ -43,7 +43,7 @@ Feature: dependencies
     Then I should see "test 1" within the dependencies of "test 3"
     Then I should see "test 2" within the dependencies of "test 3"
 
-  @selenium
+  @javascript
   Scenario: I can remove a dependency by editing the todo
     Given I have a context called "@pc"
     And I have a project "dependencies" that has the following todos
@@ -57,7 +57,7 @@ Feature: dependencies
     Then I should not see "test 1" within the dependencies of "test 2"
     And I should not see "test 1" in the deferred container
 
-  @selenium
+  @javascript
   Scenario: Completing a predecessor will activate successors
     Given I have a context called "@pc"
     And I have a project "dependencies" that has the following todos
@@ -75,7 +75,7 @@ Feature: dependencies
     And I should not see "test 2" in the deferred container
     And I should see the empty message in the deferred container
 
-  @selenium
+  @javascript @selenium_only
   Scenario: Deleting a predecessor will activate successors
     Given I have a context called "@pc"
     And I have a project "dependencies" that has the following todos
@@ -88,11 +88,11 @@ Feature: dependencies
     Then I should see "test 2" in the deferred container
     And I should see "test 1" in the action container
     When I delete the action "test 1"
-    And I should see "test 2" in the action container
+    Then I should see "test 2" in the action container
     And I should not see "test 2" in the deferred container
     And I should see the empty message in the deferred container
 
-  @selenium
+  @javascript @selenium_only
   Scenario: Deleting a successor will update predecessor
     Given I have a context called "@pc"
     And I have a project "dependencies" that has the following todos
@@ -111,7 +111,7 @@ Feature: dependencies
     Then I should see "test 3" within the dependencies of "test 1"
     And I should not see "test 2"
 
-  @selenium
+  @javascript @webkit_only
   Scenario: Dragging an action to a completed action will not add it as a dependency
     Given I have a context called "@pc"
     And I have a project "dependencies" that has the following todos
@@ -124,7 +124,7 @@ Feature: dependencies
     Then I should see an error flash message saying "Cannot add this action as a dependency to a completed action!"
     And I should see "test 1" in project container for "dependencies"
 
-  @selenium
+  @javascript @webkit_only
   Scenario Outline: Marking a successor as complete will update predecessor
     Given I have a context called "@pc"
     And I have a project "dependencies" that has the following todos
@@ -146,7 +146,7 @@ Feature: dependencies
     | "dependencies" project  |
     | tag page for "bla"      |
 
-  @selenium
+  @javascript @webkit_only
   Scenario Outline: Marking a successor as active will update predecessor
     Given I have a context called "@pc"
     And I have a project "dependencies" that has the following todos

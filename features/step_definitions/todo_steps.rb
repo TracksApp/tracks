@@ -9,6 +9,9 @@ When /^I delete the action "([^"]*)"$/ do |action_description|
     find("a#delete_todo_#{todo.id}").click
   end
   get_confirm_text.should == "Are you sure that you want to delete the action '#{todo.description}'?"
+  
+  wait_for_ajax
+  wait_for_animations_to_end
 end
 
 When /^I delete the todo "([^"]*)"$/ do |action_description|

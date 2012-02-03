@@ -103,7 +103,7 @@ Feature: Manage the list of contexts
     And I add a new active context "foo, bar"
     Then I should see "Name cannot contain the comma"
 
-  @javascript @wip
+  @javascript
   Scenario: I can drag and drop to order the contexts
     Given I have the following contexts
       | context |

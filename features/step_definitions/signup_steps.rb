@@ -1,5 +1,5 @@
 Given /^public signups are turned (.*)$/ do |state|
-  case state 
+  case state
   when 'on'
     SITE_CONFIG['open_signups'] = true
   when 'off'
@@ -13,5 +13,5 @@ When /^I submit the signup form with username "([^\"]*)", password "([^\"]*)" an
   fill_in 'Desired login', :with => username
   fill_in 'Choose password', :with => password
   fill_in 'Confirm password', :with => confirm
-  click_button
+  click_button "Signup"
 end
