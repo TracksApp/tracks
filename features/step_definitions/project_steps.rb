@@ -1,3 +1,10 @@
+Given /^I have an outdated project "([^"]*)" with (\d+) todos$/ do |project_name, num_todos|
+  Given "I have a project \"#{project_name}\" with #{num_todos} todos"
+  @project = @current_user.projects.find_by_name(project_name)
+  @project.last_reviewed = @current_user.time - @current_user.prefs.review_period.days-1
+  @project.save
+end
+
 Given /^I have a project "([^\"]*)" with ([0-9]+) todos$/ do |project_name, num_todos|
   @context = @current_user.contexts.find_or_create_by_name("Context A")
   @project = @current_user.projects.create!(:name => project_name)

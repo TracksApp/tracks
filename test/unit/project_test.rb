@@ -68,7 +68,17 @@ class ProjectTest < ActiveSupport::TestCase
     assert_equal :active, @timemachine.aasm_current_state
     assert @timemachine.active?
   end
-  
+
+  def test_review_project
+    assert_nil @timemachine.last_reviewed
+    assert @timemachine.needs_review?(nil)
+  end
+
+  def test_review_completedprojects
+    @timemachine.complete!
+    assert !@timemachine.needs_review?(nil)
+  end
+
   def test_complete_project
     assert_nil @timemachine.completed_at
     @timemachine.complete!
