@@ -10,7 +10,7 @@ Feature: Edit a next action from every page
     And I have logged in as "testuser" with password "secret"
     And I have a context called "@pc"
 
-  @selenium
+  @javascript
   Scenario: I can toggle the star of a todo
     Given I have a todo "star me" in the context "@home"
     When I go to the home page
@@ -19,7 +19,7 @@ Feature: Edit a next action from every page
     When I go to the tag page for "starred"
     Then I should see "star me"
 
-  @selenium
+  @javascript @selenium_only
   Scenario: I can delete a todo
     Given I have a todo "delete me" in the context "@home"
     When I go to the home page
@@ -27,8 +27,10 @@ Feature: Edit a next action from every page
     When I delete the action "delete me"
     Then I should not see "delete me"
 
-  @selenium
+  @javascript @selenium_only
   Scenario: Removing the last todo in context will hide context
+  # the go to home page before the last delete was necessary because webkit was not able to
+  # hit the submenu arrow
     Given I have a todo "delete me" in the context "@home"
     When I go to the home page
     Then I should see the container for context "@home"
@@ -40,12 +42,15 @@ Feature: Edit a next action from every page
     Then I should see the container for context "@home"
     When I edit the context of "delete me" to "@pc"
     Then I should not see the container for context "@home"
-    When I delete the todo "delete me"
+    And I should see the container for context "@pc"
+    And I should see "delete me" in the context container for "@pc"
+    When I go to the home page
+    And I delete the todo "delete me"
     Then I should not see "delete me"
     And I should not see the container for context "@home"
     And I should not see the container for context "@pc"
 
-  @selenium
+  @javascript @selenium_only
   Scenario Outline: Deleting the last todo in container will show empty message # only project, context, tag, not todo
     Given I have a context called "@home"
     And I have a project "my project" that has the following todos
@@ -53,91 +58,91 @@ Feature: Edit a next action from every page
       | @home   | first action  | test, bla |
       | @home   | second action | bla       |
     When I go to the <page>
-    Then I should not see "<empty message>"
+    Then I should not see empty message for <page type> todos
     And I should see "first action"
     When I delete the todo "first action"
-    Then I should not see "<empty message>"
+    Then I should not see empty message for <page type> todos
     When I delete the todo "second action"
-    Then I should see "<empty message>"
+    Then I should see empty message for <page type> todos
 
     Scenarios:
-      | page                     | empty message                                             |
-      | "my project" project     | Currently there are no incomplete actions in this project |
-      | context page for "@home" | Currently there are no incomplete actions in this context |
-      | tag page for "bla"       | No actions found                                          |
+      | page                     | page type      |
+      | "my project" project     | project        |
+      | context page for "@home" | context        |
+      | tag page for "bla"       | tag            |
 
-  @selenium
+  @javascript
   Scenario Outline: I can mark an active todo complete and it will update empty messages
     Given I have a context called "visible context"
     And I have a project called "visible project"
     When I go to the <page>
-    Then I should see "<empty message>"
+    Then I should see empty message for <page type> todos
     When I submit a new action with description "visible todo" to project "visible project" with tags "starred" in the context "visible context"
     Then I should see "visible todo"
-    And I should not see "<empty message>"
+    And I should not see empty message for <page type> todos
     When I mark "visible todo" as complete
-    And I should see "<empty message>"
+    And I should see empty message for <page type> todos
     And I should see "visible todo" in the completed container
 
     Scenarios:
-      | page                               | empty message                                             |
-      | "visible project" project          | Currently there are no incomplete actions in this project |
-      | home page                          | Currently there are no incomplete actions                 |
-      | tag page for "starred"             | No actions found                                          |
-      | context page for "visible context" | Currently there are no incomplete actions in this context |
+      | page                               | page type |
+      | "visible project" project          | project   |
+      | home page                          | home      |
+      | tag page for "starred"             | tag       |
+      | context page for "visible context" | context   |
 
-  @selenium
+  @javascript
   Scenario Outline: I can mark a deferred todo complete and it will update empty messages
     Given I have a context called "visible context"
     And I have a project called "visible project"
     When I go to the <page>
-    Then I should see "<empty message>"
+    Then I should see empty message for <page type> deferred todos
     When I submit a new deferred action with description "visible todo" to project "visible project" with tags "starred" in the context "visible context"
     Then I should see "visible todo"
-    And I should not see "<empty message>"
+    And I should not see empty message for <page type> deferred todos
     When I mark "visible todo" as complete
-    And I should see "<empty message>"
+    And I should see empty message for <page type> deferred todos
     And I should see "visible todo" in the completed container
 
     Scenarios:
-      | page                      | empty message                                      |
-      | tag page for "starred"    | Currently there are no deferred or pending actions |
-      | "visible project" project | Currently there are no deferred or pending actions |
+      | page                      | page type  |
+      | tag page for "starred"    | tag        |
+      | "visible project" project | project    |
 
-  @selenium
+  @javascript
   Scenario Outline: I can mark a completed todo active and it will update empty messages and context containers
     Given I have a completed todo with description "visible todo" in project "visible project" with tags "starred" in the context "visible context"
     When I go to the <page>
-    Then I should see "<empty message>"
+    Then I should see empty message for <page type> todos
     And I should not see the container for context "visible context"
-    And I should not see "<empty completed message>"
+    And I should not see empty message for <page type> completed todos
     When I mark the complete todo "visible todo" active
     Then I should see the container for context "visible context"
-    And I should see "<empty completed message>"
+    And I should see empty message for <page type> completed todos
     And I should see "visible todo" in the context container for "visible context"
-    And I should not see "<empty message>"
+    And I should not see empty message for <page type> todos
 
     Scenarios:
-      | page                   | empty message    | empty completed message                  |
-      | tag page for "starred" | No actions found | Currently there are no completed actions |
-      | home page              | No actions found | Currently there are no completed actions |
+      | page                   | page type                |
+      | tag page for "starred" | tag                      |
+      | home page              | home                     |
 
-  @selenium
+  @javascript
   Scenario Outline: I can mark a completed todo active and it will update empty messages for pages without context containers
     Given I have a completed todo with description "visible todo" in project "visible project" with tags "starred" in the context "visible context"
     When I go to the <page>
-    Then I should see "<empty message>"
-    And I should not see "<empty completed message>"
+    Then I should see empty message for <page type> todos
+    And I should not see empty message for <page type> completed todos
     When I mark the complete todo "visible todo" active
-    And I should see "<empty completed message>"
-    And I should not see "<empty message>"
+    And I should see empty message for <page type> completed todos
+    And I should not see empty message for <page type> todos
 
     Scenarios:
-      | page                               | empty message                                             | empty completed message                  |
-      | context page for "visible context" | Currently there are no incomplete actions in this context | Currently there are no completed actions |
-      | "visible project" project          | Currently there are no incomplete actions in this project | Currently there are no completed actions |
+      | page                               | page type  |
+      | context page for "visible context" | context    |
+      | "visible project" project          | project    |
 
-  @selenium
+  @javascript
   Scenario Outline: I can edit a todo to change its description
     # do for more pages, see #1094
     Given I have a todo with description "visible todo" in project "visible project" with tags "starred" in the context "visible context" that is due next week
@@ -154,7 +159,7 @@ Feature: Edit a next action from every page
       | tag page for "starred"             |
       | calendar page                      |
 
-  @selenium
+  @javascript
   Scenario Outline: I can edit a todo to move it to another context
     Given I have a context called "@laptop"
     And I have a project "my project" that has the following todos
@@ -172,7 +177,7 @@ Feature: Edit a next action from every page
     | home page          |
     | tag page for "bla" |
 
-  @selenium
+  @javascript
   Scenario: I can edit a todo to move it to another context in tickler page
     Given I have a context called "@laptop"
     And I have a project "my project" that has the following deferred todos
@@ -185,7 +190,7 @@ Feature: Edit a next action from every page
     Then I should not see "first action" in the context container for "@pc"
     Then I should see "first action" in the context container for "@laptop"
 
-  @selenium
+  @javascript
   Scenario: I can edit a todo to move it to another project
     Given I have a project called "project one"
     And I have a project "project two" with 1 todos
@@ -195,7 +200,7 @@ Feature: Edit a next action from every page
     When I go to the "project one" project
     Then I should see "todo 1"
 
-  @selenium
+  @javascript
   Scenario: I can edit a todo to move it to the tickler
     When I go to the home page
     And I submit a new action with description "start later" in the context "@pc"
@@ -204,7 +209,7 @@ Feature: Edit a next action from every page
     When I go to the tickler page
     Then I should see "start later"
 
-  @selenium
+  @javascript
   Scenario: I can defer a todo
     When I go to the home page
     And I submit a new action with description "start later" in the context "@pc"
@@ -213,7 +218,7 @@ Feature: Edit a next action from every page
     When I go to the tickler page
     Then I should see "start later"
 
-  @selenium
+  @javascript
   Scenario: I can make a project from a todo
     When I go to the home page
     And I submit a new action with description "buy mediacenter" in the context "@pc"
@@ -223,16 +228,16 @@ Feature: Edit a next action from every page
     When I go to the projects page
     Then I should see "buy mediacenter"
 
-  @selenium
+  @javascript
   Scenario: I can show the notes of a todo
     Given I have a todo "read the notes" with notes "several things to read"
     When I go to the home page
     Then I should see "read the notes"
-    And I should not see "several things to read"
+    And I should not see the notes of "read the notes"
     When I open the notes of "read the notes"
-    Then I should see "several things to read"
+    Then I should see the notes of "read the notes"
 
-  @selenium
+  @javascript
   Scenario: I can tag a todo
     Given I have a todo "tag me"
     When I go to the home page
@@ -248,7 +253,7 @@ Feature: Edit a next action from every page
     When I follow "taga"
     Then I should be on the tag page for "taga"
 
-  @selenium
+  @javascript
   Scenario: I can edit the tags of a todo
     Given I have a todo "tag you are it" in context "@tags" with tags "taga, tagb"
     When I go to the home page
@@ -258,7 +263,7 @@ Feature: Edit a next action from every page
     And I should see "tagb"
     And I should see "tagc"
 
-  @selenium
+  @javascript
   Scenario Outline: Editing the context of a todo to a new context will show new context
     Given I have a todo "moving" in context "@pc" with tags "tag"
     When I go to the <page>
@@ -270,14 +275,14 @@ Feature: Edit a next action from every page
     | home page           |
     | tag page for "tag"  |
 
-  @selenium
+  @javascript
   Scenario: Editing the context of a todo in the tickler to a new context will show new context
     Given I have a deferred todo "moving" in context "@pc" with tags "tag"
     When I go to the tickler page
     And I edit the context of "moving" to "@new"
     And I should see the container for context "@new"
 
-  @selenium
+  @javascript
   Scenario: Making an error when editing a todo will show error message
     Given I have a todo "test"
     When I go to the home page

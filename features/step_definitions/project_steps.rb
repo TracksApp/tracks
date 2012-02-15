@@ -22,7 +22,7 @@ Given /^I have a project "([^\"]*)" with ([0-9]+) todos$/ do |project_name, num_
 end
 
 Given /^I have a project "([^\"]*)" with ([0-9]+) deferred todos$/ do |project_name, num_todos|
-  Given "I have a project \"#{project_name}\" with #{num_todos} todos"
+  step "I have a project \"#{project_name}\" with #{num_todos} todos"
   @todos.each do |todo|
     todo.show_from = Time.zone.now + 1.week
     todo.save!
@@ -39,15 +39,15 @@ end
 
 Given /^there exists a project called "([^"]*)" for user "([^"]*)"$/ do |project_name, login|
   # TODO: regexp change to integrate this with the previous since only 'called' is different
-  Given "there exists a project \"#{project_name}\" for user \"#{login}\""
+  step "there exists a project \"#{project_name}\" for user \"#{login}\""
 end
 
 Given /^I have a project called "([^"]*)"$/ do |project_name|
-  Given "there exists a project \"#{project_name}\" for user \"#{@current_user.login}\""
+  step "there exists a project \"#{project_name}\" for user \"#{@current_user.login}\""
 end
 
 Given /^I have a project "([^"]*)" with a default context of "([^"]*)"$/ do |project_name, context_name|
-  Given "there exists a project \"#{project_name}\" for user \"#{@current_user.login}\""
+  step "there exists a project \"#{project_name}\" for user \"#{@current_user.login}\""
   context = @current_user.contexts.create!(:name => context_name)
   @project.default_context = context
   @project.save!
@@ -55,7 +55,7 @@ end
 
 Given /^I have the following projects:$/ do |table|
   table.hashes.each do |project|
-    Given 'I have a project called "'+project[:project_name]+'"'
+    step 'I have a project called "'+project[:project_name]+'"'
     # acts_as_list puts the last added project at the top, but we want it
     # at the bottom to be consistent with the table in the scenario
     @project.move_to_bottom
@@ -64,7 +64,7 @@ Given /^I have the following projects:$/ do |table|
 end
 
 Given /^I have a completed project called "([^"]*)"$/ do |project_name|
-  Given "I have a project called \"#{project_name}\""
+  step "I have a project called \"#{project_name}\""
   @project.complete!
   @project.reload
   assert @project.completed?
@@ -72,7 +72,7 @@ end
 
 Given /^I have (\d+) completed projects$/ do |number_of_projects|
   1.upto number_of_projects.to_i do |i|
-    Given "I have a completed project called \"Project #{i}\""
+    step "I have a completed project called \"Project #{i}\""
   end
 end
 
@@ -166,6 +166,30 @@ When /^I edit the default context to "([^"]*)"$/ do |default_context|
   end
 end
 
+Then /^I should not see empty message for project todos/ do
+  find("div#p#{@project.id}empty-nd").should_not be_visible
+end
+
+Then /^I should see empty message for project todos/ do
+  find("div#p#{@project.id}empty-nd").should be_visible
+end
+
+Then /^I should not see empty message for project deferred todos/ do
+  find("div#tickler-empty-nd").should_not be_visible
+end
+
+Then /^I should see empty message for project deferred todos/ do
+  find("div#tickler-empty-nd").should be_visible
+end
+
+Then /^I should not see empty message for project completed todos$/ do
+  find("div#empty-d").should_not be_visible
+end
+
+When /^I should see empty message for project completed todos$/ do
+  find("div#empty-d").should be_visible
+end
+
 Then /^I edit the default tags to "([^"]*)"$/ do |default_tags|
   click_link "link_edit_project_#{@project.id}"
 
@@ -188,13 +212,13 @@ end
 When /^I edit the project name of "([^"]*)" to "([^"]*)"$/ do |project_current_name, project_new_name|
   @project = @current_user.projects.find_by_name(project_current_name)
   @project.should_not be_nil
-  When "I edit the project name to \"#{project_new_name}\""
+  step "I edit the project name to \"#{project_new_name}\""
 end
 
 When /^I try to edit the project name of "([^"]*)" to "([^"]*)"$/ do |project_current_name, project_new_name|
   @project = @current_user.projects.find_by_name(project_current_name)
   @project.should_not be_nil
-  When "I try to edit the project name to \"#{project_new_name}\""
+  step "I try to edit the project name to \"#{project_new_name}\""
 end
 
 When /^I edit the project name in place to be "([^"]*)"$/ do |new_project_name|
@@ -222,17 +246,17 @@ When /^I edit the project settings$/ do
 end
 
 Then /^I should not be able to change the project name in place$/ do
-    When "I click to edit the project name in place"
-    found = selenium.element? "xpath=//div[@id='project_name']/form/input"
-    !found
+  step "I click to edit the project name in place"
+  found = selenium.element? "xpath=//div[@id='project_name']/form/input"
+  !found
 end
 
 When /^I close the project settings$/ do
-    @project.should_not be_nil
-    click_link "Cancel"
-    wait_for :wait_for => :effects , :javascript_framework => 'jquery' do
-      true
-    end
+  @project.should_not be_nil
+  click_link "Cancel"
+  wait_for :wait_for => :effects , :javascript_framework => 'jquery' do
+    true
+  end
 end
 
 
@@ -319,5 +343,5 @@ Then /^the project title should be "(.*)"$/ do |title|
 end
 
 Then /^I should see the project name is "([^"]*)"$/ do |project_name|
-  Then "the project title should be \"#{project_name}\""
+  step "the project title should be \"#{project_name}\""
 end

@@ -10,7 +10,7 @@ Given /^there exists an active context called "([^"]*)" for user "([^"]*)"$/ do 
 end
 
 Given /^there exists a context called "([^"]*)" for user "([^"]*)"$/ do |context_name, login|
-  Given "there exists an active context called \"#{context_name}\" for user \"#{login}\""
+  step "there exists an active context called \"#{context_name}\" for user \"#{login}\""
 end
 
 Given /^there exists a hidden context called "([^"]*)" for user "([^"]*)"$/ do |context_name, login|
@@ -20,20 +20,20 @@ Given /^there exists a hidden context called "([^"]*)" for user "([^"]*)"$/ do |
 end
 
 Given /^I have a context called "([^\"]*)"$/ do |context_name|
-  Given "there exists an active context called \"#{context_name}\" for user \"#{@current_user.login}\""
+  step "there exists an active context called \"#{context_name}\" for user \"#{@current_user.login}\""
 end
 
 Given /^I have an active context called "([^\"]*)"$/ do |context_name|
-  Given "there exists an active context called \"#{context_name}\" for user \"#{@current_user.login}\""
+  step "there exists an active context called \"#{context_name}\" for user \"#{@current_user.login}\""
 end
 
 Given /^I have a hidden context called "([^\"]*)"$/ do |context_name|
-  Given "there exists a hidden context called \"#{context_name}\" for user \"#{@current_user.login}\""
+  step "there exists a hidden context called \"#{context_name}\" for user \"#{@current_user.login}\""
 end
 
 Given /^I have the following contexts:$/ do |table|
   table.hashes.each do |context|
-    Given 'I have a context called "'+context[:context]+'"'
+    step 'I have a context called "'+context[:context]+'"'
     @context.hide = context[:hide] == "true" unless context[:hide].blank?
     # acts_as_list puts the last added context at the top, but we want it
     # at the bottom to be consistent with the table in the scenario
@@ -43,7 +43,7 @@ Given /^I have the following contexts:$/ do |table|
 end
 
 Given /^I have the following contexts$/ do |table|
-  Given("I have the following contexts:", table)
+  step("I have the following contexts:", table)
 end
 
 Given /^I have a context "([^\"]*)" with (.*) actions$/ do |context_name, number_of_actions|
@@ -60,13 +60,29 @@ When /^I edit the context name in place to be "([^\"]*)"$/ do |new_context_name|
 end
 
 Then /^I should see the context name is "([^\"]*)"$/ do |context_name|
-  Then "I should see \"#{context_name}\""
+  step "I should see \"#{context_name}\""
 end
 
 Then /^he should see that a context named "([^\"]*)" is present$/ do |context_name|
-  Then "I should see \"#{context_name}\""
+  step "I should see \"#{context_name}\""
 end
 
 Then /^he should see that a context named "([^\"]*)" is not present$/ do |context_name|
-  Then "I should not see \"#{context_name} (\""
+  step "I should not see \"#{context_name} (\""
+end
+
+Then /^I should not see empty message for context todos/ do
+  find("div#c#{@context.id}empty-nd").should_not be_visible
+end
+
+Then /^I should see empty message for context todos/ do
+  find("div#c#{@context.id}empty-nd").should be_visible
+end
+
+Then /^I should not see empty message for context completed todos$/ do
+  find("div#empty-d").should_not be_visible
+end
+
+When /^I should see empty message for context completed todos$/ do
+  find("div#empty-d").should be_visible
 end

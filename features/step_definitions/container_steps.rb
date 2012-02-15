@@ -19,24 +19,19 @@ Then /^I should not see the context "([^"]*)"$/ do |context_name|
   context.should_not be_nil
 
   xpath = "//div[@id='c#{context.id}']"
-
-  if selenium.is_element_present(xpath) # only check visibility if it is present
-    wait_for :timeout => 5 do
-      !selenium.is_visible("xpath=#{xpath}")
-    end
-  end
+  page.should_not have_xpath(xpath, :visible => true)
 end
 
 Then /^I should not see the container for context "([^"]*)"$/ do |context_name|
-  Then "I should not see the context \"#{context_name}\""
+  step "I should not see the context \"#{context_name}\""
 end
 
 Then /^I should not see the context container for "([^"]*)"$/ do |context_name|
-  Then "I should not see the context \"#{context_name}\""
+  step "I should not see the context \"#{context_name}\""
 end
 
 Then /^the container for the context "([^"]*)" should not be visible$/ do |context_name|
-  Then "I should not see the context \"#{context_name}\""
+  step "I should not see the context \"#{context_name}\""
 end
 
 Then /^I should see the container for context "([^"]*)"$/ do |context_name|
@@ -48,7 +43,7 @@ Then /^I should see the container for context "([^"]*)"$/ do |context_name|
 end
 
 Then /^the container for the context "([^"]*)" should be visible$/ do |context_name|
-  Then "I should see the container for context \"#{context_name}\""
+  step "I should see the container for context \"#{context_name}\""
 end
 
 Then /^I should see "([^"]*)" in the context container for "([^"]*)"$/ do |todo_description, context_name|
@@ -57,7 +52,7 @@ Then /^I should see "([^"]*)" in the context container for "([^"]*)"$/ do |todo_
   todo = @current_user.todos.find_by_description(todo_description)
   todo.should_not be_nil
 
-  xpath = "xpath=//div[@id=\"c#{context.id}\"]//div[@id='line_todo_#{todo.id}']"
+  xpath = "//div[@id=\"c#{context.id}\"]//div[@id='line_todo_#{todo.id}']"
   page.should have_xpath(xpath)
 end
 
@@ -67,7 +62,7 @@ Then /^I should not see "([^"]*)" in the context container for "([^"]*)"$/ do |t
   todo = @current_user.todos.find_by_description(todo_description)
   todo.should_not be_nil
 
-  xpath = "xpath=//div[@id=\"c#{context.id}\"]//div[@id='line_todo_#{todo.id}']"
+  xpath = "//div[@id=\"c#{context.id}\"]//div[@id='line_todo_#{todo.id}']"
   page.should_not have_xpath(xpath)
 end
 
@@ -168,7 +163,7 @@ Then /^I should see "([^"]*)" in the active recurring todos container$/ do |repe
     selenium.wait_for_element("xpath=#{xpath}", :timeout_in_seconds => 5)
     selenium.is_visible(xpath).should be_true
   else
-    Then "I should not see \"#{repeat_pattern}\""
+    step "I should not see \"#{repeat_pattern}\""
   end
 end
 
@@ -180,7 +175,7 @@ Then /^I should not see "([^"]*)" in the completed recurring todos container$/ d
     selenium.wait_for_element("xpath=#{xpath}", :timeout_in_seconds => 5)
     selenium.is_visible(xpath).should be_true
   else
-    Then "I should not see \"#{repeat_pattern}\""
+    step "I should not see \"#{repeat_pattern}\""
   end
 end
 

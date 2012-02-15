@@ -1,5 +1,5 @@
 Given /^I have logged in as "(.*)" with password "(.*)"$/ do |username, password|
-  When "I go to the login page"
+  step "I go to the login page"
   fill_in "Login", :with => username
   fill_in "Password", :with => password
   uncheck "Stay logged in:"
@@ -28,5 +28,5 @@ When /^my session expires$/ do
 end
 
 When /^I log out of Tracks$/ do
-  When "I go to the logout page"
+  step "I go to the logout page"
 end

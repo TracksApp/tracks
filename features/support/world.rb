@@ -7,7 +7,8 @@ module TracksStepHelper
     within("#todo-form-new-action") do
       click_button("todo_new_action_submit")
     end
-    sleep(1)
+    wait_for_ajax
+    wait_for_animations_to_end
   end
 
   def submit_new_context_form
@@ -30,7 +31,6 @@ module TracksStepHelper
       click_button "submit_todo_#{todo.id}"
     end
     wait_for_form_to_go_away(todo)
-    wait_for_animations_to_end
   end
 
   def format_date(date)
@@ -85,9 +85,17 @@ module TracksStepHelper
   end
 
   def open_submenu_for(todo)
-    within "div#line_todo_#{todo.id}" do
-      find("img#todo-submenu").click
+    submenu_arrow = "div#line_todo_#{todo.id} img.todo-submenu"
+    page.find(submenu_arrow).should be_visible
+    
+    page.find(submenu_arrow).click
+    
+    # wait for the submenu to be visible
+    wait_until do
+      page.find("div#line_todo_#{todo.id} ul#ultodo_#{todo.id}").visible?
     end
+    
+    wait_for_animations_to_end
   end
 
   def context_list_find_index(context_name)

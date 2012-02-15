@@ -6,7 +6,7 @@ When /^I delete the action "([^"]*)"$/ do |action_description|
 
   handle_js_confirm do
     open_submenu_for(todo)
-    find("a#delete_todo_#{todo.id}").click
+    click_link "delete_todo_#{todo.id}"
   end
   get_confirm_text.should == "Are you sure that you want to delete the action '#{todo.description}'?"
   
@@ -15,7 +15,7 @@ When /^I delete the action "([^"]*)"$/ do |action_description|
 end
 
 When /^I delete the todo "([^"]*)"$/ do |action_description|
-  When "I delete the action \"#{action_description}\""
+  step "I delete the action \"#{action_description}\""
 end
 
 ####### Notes #######
@@ -24,11 +24,10 @@ When /^I open the notes of "([^"]*)"$/ do |action_description|
   todo = @current_user.todos.find_by_description(action_description)
   todo.should_not be_nil
 
-  show_notes_img = "xpath=//div[@id='line_todo_#{todo.id}']/div/a/img"
-  selenium.click show_notes_img
+  page.find(:xpath, "//div[@id='line_todo_#{todo.id}']/div/a/img").click
 
-  wait_for :timeout => 5 do
-    selenium.is_visible "//div[@id='notes_todo_#{todo.id}']"
+  wait_until do
+    page.find(:xpath, "//div[@id='notes_todo_#{todo.id}']").visible?
   end
 end
 
@@ -40,7 +39,7 @@ Then /^I should see a starred "([^"]*)"$/ do |action_description|
 
   xpath_starred = "//div[@id='line_todo_#{todo.id}']//img[@class='todo_star starred']"
 
-  selenium.is_element_present(xpath_starred).should be_true
+  page.should have_xpath(xpath_starred)
 end
 
 Then /^I should see an unstarred "([^"]*)"$/ do |action_description|
@@ -178,3 +177,36 @@ Then /^I should see "([^"]*)" in the completed section of the mobile site$/ do |
   xpath = "//div[@id='completed_container']//a[@href='/todos/#{todo.id}.m']"
   response.should have_xpath xpath
 end
+
+Then /^I should not see empty message for home todos/ do
+  find("div#no_todos_in_view").should_not be_visible
+end
+
+Then /^I should see empty message for home todos/ do
+  find("div#no_todos_in_view").should be_visible
+end
+
+Then /^I should not see empty message for home completed todos$/ do
+  find("div#empty-d").should_not be_visible
+end
+
+Then /^I should see empty message for home completed todos$/ do
+  find("div#empty-d").should be_visible
+end
+
+Then /^I should not see the notes of "([^"]*)"$/ do |todo_description|
+  todo = @current_user.todos.find_by_description(todo_description)
+  todo.should_not be_nil
+  
+  page.find("div#notes_todo_#{todo.id}").should_not be_visible
+end
+
+Then /^I should see the notes of "([^"]*)"$/ do |todo_description|
+  todo = @current_user.todos.find_by_description(todo_description)
+  todo.should_not be_nil
+  
+  page.find("div#notes_todo_#{todo.id}").should be_visible
+end
+
+
+

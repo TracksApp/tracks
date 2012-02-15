@@ -93,13 +93,16 @@ module NavigationHelpers
       feeds_path(options)
     when /the context page for "([^\"]*)" for user "([^\"]*)"/i
       @source_view = "context"
-      context_path(User.find_by_login($2).contexts.find_by_name($1), options)
+      @context = User.find_by_login($2).contexts.find_by_name($1)
+      context_path(@context, options)
     when /the context page for "([^\"]*)"/i
       @source_view = "context"
-      context_path(@current_user.contexts.find_by_name($1), options)
+      @context = @current_user.contexts.find_by_name($1)
+      context_path(@context, options)
     when /the "([^\"]*)" project for user "([^\"]*)"/i
       @source_view = "project"
-      project_path(User.find_by_login($2).projects.find_by_name($1), options)
+      @project = User.find_by_login($2).projects.find_by_name($1)
+      project_path(@project, options)
     when /the "([^\"]*)" project/i
       @source_view = "project"
       @project = @current_user.projects.find_by_name($1)

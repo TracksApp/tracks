@@ -47,7 +47,10 @@ group :test do
   gem "thoughtbot-factory_girl"
   gem 'memory_test_fix', '~>0.1.3'
   gem "capybara", ">=0.3.5"
+  gem "selenium-webdriver", '2.14.0' # locked to 2.14.0, see https://code.google.com/p/selenium/issues/detail?id=3075
   gem "capybara-webkit"
+  gem "capybara-screenshot"
+  gem "launchy"
   gem "database_cleaner", ">=0.5.0"
   gem "cucumber-rails", "~>0.3.2"
 end
