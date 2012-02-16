@@ -4,7 +4,7 @@ body {
 }
 
 #content {
-    margin-top: 50px;
+    margin-top: 4em;
 }
 
 div.footer {
@@ -178,9 +178,7 @@ span.r {
     background-color: #000000;
     clear: both;
     color: #EEEEEE;
-    height: 45px;
     left: 0;
-    margin-bottom: 5px;
     position: fixed;
     top: 0;
     width: 100%;
@@ -190,19 +188,15 @@ span.r {
 .nav {
   color: #fff;
   background: #000;
-  padding-top: 0.2em;
-  padding-bottom: 0.2em;
-}
-
-#topbar .nav {
-  padding-left:8px;
-  margin-bottom:0.3em;
+  padding-top: 0.75em;
+  padding-bottom: 0.75em;
 }
 
 .nav a, .nav a:link, .nav a:active, .nav a:visited {
+    background: #666;
     color: #fff;
-    padding-top: 1.0em;
-    padding-bottom: 0.5em;
+    padding: 0.5em;
+    margin-left:0.5em;
 }
 
 .nav a:focus, .nav a:hover, .nav a:active {
@@ -221,6 +215,7 @@ span.r {
 table.c {
       margin-left: 5px;
 }
+
 .mobile-done {
   display:inline;
 }
