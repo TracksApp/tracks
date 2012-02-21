@@ -27,6 +27,15 @@ Feature: Manage the list of contexts
     And I follow "@computer"
     Then I should be on the context page for "@computer"
 
+  Scenario: The context view shows all todos
+    Given I have a todo "foo" in the context "@bar" which is due tomorrow
+    Given I have a deferred todo "foo2" in the context "@bar"
+    Given I have a todo "foo3" in the context "@bar"
+    When I go to the contexts page
+    And I follow "@bar"
+    Then I should be on the context page for "@bar"
+    And the badge should show 3
+
   @selenium
   Scenario: Delete context from context page should update badge
     Given I have a context called "@computer"
