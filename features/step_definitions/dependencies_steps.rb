@@ -94,14 +94,14 @@ Then /^I should see "([^\"]*)" within the dependencies of "([^\"]*)"$/ do |succe
   todo = @current_user.todos.find_by_description(todo_description)
   todo.should_not be_nil
 
-  Then "I should see \"#{successor_description}\" within \"div#line_todo_#{todo.id}\""
+  step "I should see \"#{successor_description}\" within \"div#line_todo_#{todo.id}\""
 end
 
 Then /^I should not see "([^"]*)" within the dependencies of "([^"]*)"$/ do |successor_description, todo_description|
   todo = @current_user.todos.find_by_description(todo_description)
   todo.should_not be_nil
   
-  Then "I should not see \"#{successor_description}\" within \"div#line_todo_#{todo.id}\""
+  step "I should not see \"#{successor_description}\" within \"div#line_todo_#{todo.id}\""
 end
 
 Then /^I should see that "([^"]*)" does not have dependencies$/ do |todo_description|
@@ -110,4 +110,3 @@ Then /^I should see that "([^"]*)" does not have dependencies$/ do |todo_descrip
   dependencies_icon = "//div[@id='line_todo_#{todo.id}']/div/a[@class='show_successors']/img"
   page.should_not have_xpath(dependencies_icon)
 end
-

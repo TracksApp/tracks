@@ -36,7 +36,7 @@ Feature: Get all sorts of lists from Tracks
     And I should see feeds for contexts
     And I should see "@pc" as the selected context
 
-  @selenium
+  @javascript
   Scenario Outline: I can select the item for getting feeds for that item
     When I go to the feeds page
     And I select "<item>" from "<item-list>"

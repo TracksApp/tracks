@@ -28,7 +28,7 @@ Feature: View, add, remove notes
     And I click the icon next to the note
     Then I should see the note text
 
-  @selenium
+  @javascript
   Scenario: Delete note from notes page
     Given I have a project "Pass Final Exam" with 2 notes
     When I go to the notes page
@@ -36,14 +36,14 @@ Feature: View, add, remove notes
     Then the first note should disappear
     And the badge should show 1
 
-  @selenium
+  @javascript
   Scenario: Edit a note
     Given I have a project "Pass Final Exam" with 2 notes
     When I go to the notes page
     And I edit the first note to "edited note"
     Then I should see "edited note"
 
-  @selenium
+  @javascript
   Scenario: Toggle all notes
     Given I have a context called "@pc"
     And I have a project "take notes" that has the following todos
@@ -52,16 +52,16 @@ Feature: View, add, remove notes
       | test 2      | @pc     | note B |
       | test 3      | @pc     | note C |
     When I go to the home page
-    Then I should not see "note A"
-    And I should not see "note B"
-    And I should not see "note C"
+    Then I should not see the note "note A"
+    And I should not see the note "note B"
+    And I should not see the note "note C"
     When I toggle the note of "test 1"
-    Then I should see "note A"
-    And I should not see "note B"
-    And I should not see "note C"
+    Then I should see the note "note A"
+    And I should not see the note "note B"
+    And I should not see the note "note C"
     When I toggle the note of "test 1"
-    Then I should not see "note A"
+    Then I should not see the note "note A"
     When I toggle all notes
-    Then I should see "note A"
-    And I should see "note B"
-    And I should see "note C"
+    Then I should see the note "note A"
+    And I should see the note "note B"
+    And I should see the note "note C"

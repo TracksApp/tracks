@@ -22,7 +22,7 @@ Feature: Add new next action from mobile page
       | page                            | project      | context      |
       | home page                       |              |              |
       | tickler page                    |              |              |
-      | "test project" project          | test project |              |
+      | "test project" project          | test project | test context |
       | context page for "test context" |              | test context |
       | tag page for "starred"          |              |              |
 

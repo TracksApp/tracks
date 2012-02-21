@@ -121,12 +121,27 @@ end
 
 Then /^the selected project should be "([^"]*)"$/ do |content|
   # Works for mobile. TODO: make it work for both mobile and non-mobile
-  field_labeled("Project").element.search(".//option[@selected = 'selected']").inner_html.should =~ /#{content}/
+  if content.blank?
+    if page.has_css?("select#todo_project_id option[selected='selected']")
+      puts "text=#{page.find("select#todo_project_id option[selected='selected']").text}"
+    end
+    page.has_css?("select#todo_project_id option[selected='selected']").should be_false
+  else
+    page.find("select#todo_project_id option[selected='selected']").text.should =~ /#{content}/
+  end
 end
 
 Then /^the selected context should be "([^"]*)"$/ do |content|
   # Works for mobile. TODO: make it work for both mobile and non-mobile
-  field_labeled("Context").element.search(".//option[@selected = 'selected']").inner_html.should =~ /#{content}/
+  if content.blank?
+    if page.has_css?("select#todo_context_id option[selected='selected']")
+      puts "text=#{page.find("select#todo_context_id option[selected='selected']").text}"
+      save_and_open_page
+    end
+    page.has_css?("select#todo_context_id option[selected='selected']").should be_false
+  else
+    page.find("select#todo_context_id option[selected='selected']").text.should =~ /#{content}/
+  end
 end
 
 Then /^I should see the page selector$/ do
@@ -175,7 +190,7 @@ Then /^I should see "([^"]*)" in the completed section of the mobile site$/ do |
   todo.should_not be_nil
 
   xpath = "//div[@id='completed_container']//a[@href='/todos/#{todo.id}.m']"
-  response.should have_xpath xpath
+  page.should have_xpath(xpath)
 end
 
 Then /^I should not see empty message for home todos/ do

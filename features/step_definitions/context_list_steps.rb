@@ -31,7 +31,7 @@ When /^I add a new context "([^"]*)"$/ do |context_name|
 end
 
 When /^I add a new active context "([^"]*)"$/ do |context_name|
-  When "I add a new context \"#{context_name}\""
+  step "I add a new context \"#{context_name}\""
 end
 
 When /^I add a new hidden context "([^"]*)"$/ do |context_name|
@@ -56,7 +56,7 @@ end
 
 Then /^I should see that a context named "([^"]*)" is not present$/ do |context_name|
   within "div#display_box" do
-    Then "I should not see \"#{context_name}\""
+    step "I should not see \"#{context_name}\""
   end
 end
 
