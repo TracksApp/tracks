@@ -6,6 +6,10 @@
     float:right;
 }
 
+div.depends_on {
+    clear:both;
+}
+
 div.depends_on label {
     float: left;
 }
@@ -361,7 +365,7 @@ div#input_box {
 }
 
 .selected_predecessors {
-    clear:right;
+    clear:both;
 }
 
 form.new_todo_form ul.predecessor_list,
