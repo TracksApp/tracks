@@ -97,9 +97,9 @@ class ProjectsController < ApplicationController
 
     @done = {}
     @done = @project.todos.find_in_state(:all, :completed,
-                                         :order => "todos.completed_at DESC", 
-                                         :limit => current_user.prefs.show_number_completed, 
-                                         :include => Todo::DEFAULT_INCLUDES) if current_user.prefs.show_number_completed > 0
+                                         :order => "todos.completed_at DESC",
+                                         :limit => current_user.prefs.show_number_completed,
+                                         :include => Todo::DEFAULT_INCLUDES) unless current_user.prefs.show_number_completed == 0
 
     @count = @not_done.size
     @down_count = @count + @deferred.size + @pending.size
