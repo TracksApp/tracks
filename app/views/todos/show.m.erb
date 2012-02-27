@@ -6,24 +6,34 @@
 <form method="get" action="<%= edit_todo_path(@todo, :format => :m)%>">
 <button>Edit this action</button>
 <input type="hidden" name="_method" value="put" />
-</form><br/>
+</form>
 
 <form method="post" action="<%=toggle_star_todo_path(@todo, :format=>:m)%>">
 <button>Toggle Star</button>
 <input type="hidden" name="_method" value="put" />
-</form><br/>
+</form>
 
 <form method="post" action="<%=toggle_check_todo_path(@todo, :format=>:m)%>">
 <button>Mark complete</button>
 <input type="hidden" name="_method" value="put" />
-</form><br/>
+</form>
 
 <form method="post" action="<%=defer_todo_path(@todo, :format=>:m, :days => 1)%>">
 <button>Defer 1 day</button>
 <input type="hidden" name="_method" value="put" />
-</form><br/>
+</form>
+
+<form method="post" action="<%=defer_todo_path(@todo, :format=>:m, :days => 2)%>">
+<button>Defer 2 days</button>
+<input type="hidden" name="_method" value="put" />
+</form>
+
+<form method="post" action="<%=defer_todo_path(@todo, :format=>:m, :days => 3)%>">
+<button>Defer 3 days</button>
+<input type="hidden" name="_method" value="put" />
+</form>
 
 <form method="post" action="<%=defer_todo_path(@todo, :format=>:m, :days => 7)%>">
 <button>Defer 7 days</button>
 <input type="hidden" name="_method" value="put" />
-</form><br/>
+</form>
