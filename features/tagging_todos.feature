@@ -76,3 +76,9 @@ Feature: Tagging todos
     # and the tag field should be prefilled after submitting a new todo
     When I submit a new action with description "are my tags prefilled"
     Then the tags of "are my tags prefilled" should be "tests"
+    
+  @selenium
+  Scenario: If there are todos for a tag, when viewing the tag's page, the Tags field for new todos should be defaulted to that tag
+    Given I have a todo "migrate old scripts" in context "@pc" with tags "starred"
+    When I go to the tag page for "starred"
+    Then the tag field in the new todo form should be "starred"
