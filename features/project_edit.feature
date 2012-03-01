@@ -113,49 +113,50 @@ Feature: Edit a project
   Scenario: Cancelling editing a project will restore project settings
     Given I have a project called "test"
     When I go to the "test" project
-    Then I should see "This project is active with no default context and with no default tags"
+    Then I should see the default project settings
     When I open the project edit form
-    Then I should not see "This project is active with no default context and with no default tags"
+    Then I should not see the default project settings
     When I cancel the project edit form
-    Then I should see "This project is active with no default context and with no default tags"
+    Then I should see the default project settings
 
   @selenium
   Scenario: Moving the todo to the tickler will move todo to tickler container and update empty messages
     Given I have a project "test" with 1 todos
     When I go to the "test" project
     Then I should see "todo 1" in the action container
-    And I should see "Currently there are no deferred or pending actions"
-    And I should not see "Currently there are no incomplete actions in this project"
+    And I should see empty message for deferred todos of project
+    And I should see empty message for completed todos of project
     When I defer "todo 1" for 1 day
     Then I should see "todo 1" in the deferred container
-    And I should not see "Currently there are no deferred or pending actions"
-    And I should see "Currently there are no incomplete actions in this project"
+    And I should not see empty message for deferred todos of project
+    And I should see empty message for completed todos of project
+    And I should see empty message for todos of project
 
   @selenium
   Scenario: Moving the todo out of the tickler will move todo to active container and update empty messages
     Given I have a project "test" with 1 deferred todos
     When I go to the "test" project
     Then I should see "todo 1" in the deferred container
-    And I should see "Currently there are no incomplete actions in this project"
-    And I should not see "Currently there are no deferred or pending actions"
+    And I should see empty message for todos of project
+    And I should not see empty message for deferred todos of project
     When I clear the show from date of "todo 1"
     Then I should see "todo 1" in the action container
-    And I should see "Currently there are no deferred or pending actions"
-    And I should not see "Currently there are no incomplete actions in this project"
+    And I should see empty message for deferred todos of project
+    And I should not see empty message for todos of project
 
   @selenium
   Scenario: Making all todos inactive will show empty message
     Given I have a project "test" with 1 todos
     When I go to the "test" project
     And I mark "todo 1" as complete
-    Then I should see "Currently there are no incomplete actions in this project"
+    Then I should see empty message for todos of project
 
   @selenium
   Scenario: Making all deferred todos inactive will show empty message
     Given I have a project "test" with 1 deferred todos
     When I go to the "test" project
     And I mark "todo 1" as complete
-    Then I should see "Currently there are no incomplete actions in this project"
+    Then I should see empty message for todos of project
 
   # Ticket #1043
   @selenium

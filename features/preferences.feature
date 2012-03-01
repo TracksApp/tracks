@@ -34,7 +34,6 @@ Feature: Manage preferences
     And I set the password to "secret" and confirmation to "wrong"
     Then I should see "Password doesn't match confirmation"
 
-
   Scenario: I can edit preferences
     When I go to the preferences page
     Then I should see "Logout (testuser)"

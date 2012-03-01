@@ -67,16 +67,11 @@ Then /^there should not be an error$/ do
 end
 
 Then /^I should see the todo "([^\"]*)"$/ do |todo_description|
-  selenium.is_element_present("//span[.=\"#{todo_description}\"]").should be_true
+  page.should have_xpath("//span[.=\"#{todo_description}\"]", :visible => true)
 end
 
 Then /^I should not see the todo "([^\"]*)"$/ do |todo_description|
-  xpath = "//span[.=\"#{todo_description}\"]"
-  if selenium.is_element_present(xpath)
-    wait_for :timeout => 5 do
-      !selenium.is_element_present(xpath)
-    end
-  end
+  page.should_not have_xpath("//span[.=\"#{todo_description}\"]", :visible => true)
 end
 
 Then /^I should see a completed todo "([^"]*)"$/ do |todo_description|
@@ -160,22 +155,22 @@ end
 
 Then /^the project field of the new todo form should contain "([^"]*)"$/ do |project_name|
   xpath= "//form[@id='todo-form-new-action']/input[@id='todo_project_name']"
-  project_name.should == response.selenium.get_value("xpath=#{xpath}")
+  project_name.should == page.find(:xpath, xpath).value
 end
 
 Then /^the default context of the new todo form should be "([^"]*)"$/ do |context_name|
   xpath= "//form[@id='todo-form-new-action']/input[@id='todo_context_name']"
-  context_name.should == response.selenium.get_value("xpath=#{xpath}")
+  context_name.should == page.find(:xpath, xpath).value
 end
 
 Then /^the tag field in the new todo form should be empty$/ do
   xpath= "//form[@id='todo-form-new-action']/input[@id='todo_tag_list']"
-  assert response.selenium.get_value("xpath=#{xpath}").blank?
+  page.find(:xpath, xpath).value.blank?.should be_true
 end
 
 Then /^the tag field in the new todo form should be "([^"]*)"$/ do |tag_list|
   xpath= "//form[@id='todo-form-new-action']/input[@id='todo_tag_list']"
-  tag_list.should == response.selenium.get_value("xpath=#{xpath}")
+  tag_list.should == page.find(:xpath, xpath).value
 end
 
 Then /^the tags of "([^"]*)" should be "([^"]*)"$/ do |todo_description, tag_list|
@@ -193,19 +188,19 @@ Then /^I should see "([^"]*)" in the completed section of the mobile site$/ do |
   page.should have_xpath(xpath)
 end
 
-Then /^I should not see empty message for home todos/ do
+Then /^I should not see empty message for todos of home/ do
   find("div#no_todos_in_view").should_not be_visible
 end
 
-Then /^I should see empty message for home todos/ do
+Then /^I should see empty message for todos of home/ do
   find("div#no_todos_in_view").should be_visible
 end
 
-Then /^I should not see empty message for home completed todos$/ do
+Then /^I should not see empty message for completed todos of home$/ do
   find("div#empty-d").should_not be_visible
 end
 
-Then /^I should see empty message for home completed todos$/ do
+Then /^I should see empty message for completed todos of home$/ do
   find("div#empty-d").should be_visible
 end
 
@@ -222,6 +217,3 @@ Then /^I should see the notes of "([^"]*)"$/ do |todo_description|
   
   page.find("div#notes_todo_#{todo.id}").should be_visible
 end
-
-
-

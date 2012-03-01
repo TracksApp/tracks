@@ -44,7 +44,7 @@ Feature: Manage the list of contexts
     Then the badge should show 2
     And the context list badge for active contexts should show 2
     When I delete the context "@computer"
-    Then he should see that a context named "@computer" is not present
+    Then I should see that a context named "@computer" is not present
     And the badge should show 1
     And the context list badge for active contexts should show 1
 

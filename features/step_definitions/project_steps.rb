@@ -1,5 +1,5 @@
 Given /^I have an outdated project "([^"]*)" with (\d+) todos$/ do |project_name, num_todos|
-  Given "I have a project \"#{project_name}\" with #{num_todos} todos"
+  step "I have a project \"#{project_name}\" with #{num_todos} todos"
   @project = @current_user.projects.find_by_name(project_name)
   @project.last_reviewed = @current_user.time - @current_user.prefs.review_period.days-1
   @project.save
@@ -87,125 +87,61 @@ end
 
 When /^I open the project edit form$/ do
   click_link "link_edit_project_#{@project.id}"
-
-  wait_for do
-    selenium.is_element_present("submit_project_#{@project.id}")
-  end
+  page.should have_css("button#submit_project_#{@project.id}", :visible => true)
 end
 
 When /^I cancel the project edit form$/ do
   click_link "cancel_project_#{@project.id}"
 
-  if selenium.is_visible("submit_project_#{@project.id}")
-    wait_for do
-      !selenium.is_visible("submit_project_#{@project.id}")
-    end
+  wait_until do
+    !page.has_css?("submit_project_#{@project.id}")
   end
 end
 
 When /^I edit the project description to "([^\"]*)"$/ do |new_description|
-  click_link "link_edit_project_#{@project.id}"
-  fill_in "project[description]", :with => new_description
-  click_button "submit_project_#{@project.id}"
-
-  wait_for do
-    !selenium.is_element_present("submit_project_#{@project.id}")
+  edit_project(@project) do
+    fill_in "project[description]", :with => new_description
   end
 end
 
 When /^I edit the project name to "([^\"]*)"$/ do |new_title|
-  click_link "link_edit_project_#{@project.id}"
-
-  wait_for do
-    selenium.is_element_present("submit_project_#{@project.id}")
-  end
-
-  fill_in "project[name]", :with => new_title
-
-  selenium.click "submit_project_#{@project.id}",
-    :wait_for => :text,
-    :text => "Project saved",
-    :timeout => 5
-
-  wait_for do
-    !selenium.is_element_present("submit_project_#{@project.id}")
+  edit_project(@project) do
+    fill_in "project[name]", :with => new_title
   end
 end
 
 When /^I try to edit the project name to "([^\"]*)"$/ do |new_title|
-  click_link "link_edit_project_#{@project.id}"
-
-  wait_for do
-    selenium.is_element_present("submit_project_#{@project.id}")
+  edit_project_no_wait(@project) do
+    fill_in "project[name]", :with => new_title
   end
-
-  fill_in "project[name]", :with => new_title
-
-  selenium.click "submit_project_#{@project.id}",
-    :wait_for => :text,
-    :text => "There were problems with the following fields:",
-    :timeout => 5
 end
 
 When /^I edit the default context to "([^"]*)"$/ do |default_context|
-  click_link "link_edit_project_#{@project.id}"
-
-  wait_for do
-    selenium.is_element_present("submit_project_#{@project.id}")
-  end
-
-  fill_in "project[default_context_name]", :with => default_context
-
-  selenium.click "submit_project_#{@project.id}",
-    :wait_for => :text,
-    :text => "Project saved",
-    :timeout => 5
-
-  wait_for :timeout => 5 do
-    !selenium.is_element_present("submit_project_#{@project.id}")
+  edit_project(@project) do
+    fill_in "project[default_context_name]", :with => default_context
   end
 end
 
-Then /^I should not see empty message for project todos/ do
-  find("div#p#{@project.id}empty-nd").should_not be_visible
-end
-
-Then /^I should see empty message for project todos/ do
-  find("div#p#{@project.id}empty-nd").should be_visible
-end
-
-Then /^I should not see empty message for project deferred todos/ do
-  find("div#tickler-empty-nd").should_not be_visible
-end
-
-Then /^I should see empty message for project deferred todos/ do
-  find("div#tickler-empty-nd").should be_visible
-end
-
-Then /^I should not see empty message for project completed todos$/ do
-  find("div#empty-d").should_not be_visible
-end
-
-When /^I should see empty message for project completed todos$/ do
-  find("div#empty-d").should be_visible
+Then /^I should (see|not see) empty message for (todos|deferred todos|completed todos) of project/ do |visible, state|
+  case state
+  when "todos"
+    css = "div#p#{@project.id}empty-nd"
+  when "deferred todos"
+    css = "div#tickler-empty-nd"
+  when "completed todos"
+    css = "div#empty-d"
+  else
+    css = "wrong state"
+  end
+  
+  elem = find(css)
+  elem.nil?.should be_false
+  elem.visible?.should(visible=="see" ? be_true : be_false)
 end
 
 Then /^I edit the default tags to "([^"]*)"$/ do |default_tags|
-  click_link "link_edit_project_#{@project.id}"
-
-  wait_for do
-    selenium.is_element_present("submit_project_#{@project.id}")
-  end
-
-  fill_in "project[default_tags]", :with => default_tags
-
-  selenium.click "submit_project_#{@project.id}",
-    :wait_for => :text,
-    :text => "Project saved",
-    :timeout => 5
-
-  wait_for :timeout => 5 do
-    !selenium.is_element_present("submit_project_#{@project.id}")
+  edit_project(@project) do
+    fill_in "project[default_tags]", :with => default_tags
   end
 end
 
@@ -222,41 +158,40 @@ When /^I try to edit the project name of "([^"]*)" to "([^"]*)"$/ do |project_cu
 end
 
 When /^I edit the project name in place to be "([^"]*)"$/ do |new_project_name|
-  selenium.click "project_name"
+  page.find("div#project_name").click
   fill_in "value", :with => new_project_name
   click_button "Ok"
 end
 
 When /^I click to edit the project name in place$/ do
-  selenium.click "css=div#project_name"
+  page.find("div#project_name").click
 end
 
 Then /^I should be able to change the project name in place$/ do
   #Note that this is not changing the project name
-  selenium.wait_for_element "css=div#project_name>form>input"
-  selenium.click "css=div#project_name > form > button[type=cancel]"
+  wait_until do
+    page.has_css? "div#project_name>form>input"
+  end
+  page.find("div#project_name > form > button[type=cancel]").click
 end
 
 When /^I edit the project settings$/ do
   @project.should_not be_nil
 
   click_link "link_edit_project_#{@project.id}"
-  selenium.wait_for_element("xpath=//div[@id='edit_project_#{@project.id}']/form//button[@id='submit_project_#{@project.id}']")
-
+  page.has_xpath?("//div[@id='edit_project_#{@project.id}']/form//button[@id='submit_project_#{@project.id}']").should be_true
 end
 
 Then /^I should not be able to change the project name in place$/ do
   step "I click to edit the project name in place"
-  found = selenium.element? "xpath=//div[@id='project_name']/form/input"
-  !found
+  page.has_xpath?("//div[@id='project_name']/form/input").should be_false
 end
 
 When /^I close the project settings$/ do
   @project.should_not be_nil
   click_link "Cancel"
-  wait_for :wait_for => :effects , :javascript_framework => 'jquery' do
-    true
-  end
+  wait_for_ajax
+  wait_for_animations_to_end
 end
 
 
@@ -264,21 +199,8 @@ When /^I edit the project state of "([^"]*)" to "([^"]*)"$/ do |project_name, st
   project = @current_user.projects.find_by_name(project_name)
   project.should_not be_nil
 
-  click_link "link_edit_project_#{project.id}"
-  selenium.wait_for_element("xpath=//div[@id='edit_project_#{project.id}']/form//button[@id='submit_project_#{project.id}']")
-
-  choose "project_state_#{state_name}"
-
-  # changed to make sure selenium waits until the saving has a result either
-  # positive or negative. Was: :element=>"flash", :text=>"Project saved"
-  # we may need to change it back if you really need a positive outcome, i.e.
-  # this step needs to fail if the project was not saved successfully
-  selenium.click "submit_project_#{project.id}",
-    :wait_for => :text,
-    :text => /(Project saved|1 error prohibited this project from being saved)/
-
-  wait_for do # wait for the form to go away
-    !selenium.is_element_present("submit_project_#{project.id}")
+  edit_project_settings(project) do
+    choose "project_state_#{state_name}"
   end
 end
 
@@ -303,9 +225,7 @@ When /^I cancel adding a note to the project$/ do
 end
 
 Then /^the form for adding a note should not be visible$/ do
-  wait_for do # wait for the form to go away
-    !selenium.is_visible("edit_form_note")
-  end
+  page.should_not have_css("edit_form_note")
 end
 
 Then /^I should go to that note page$/ do
@@ -315,33 +235,45 @@ Then /^I should go to that note page$/ do
 end
 
 Then /^I should see one note in the project$/ do
-  selenium.wait_for_element("xpath=//div[@class='note_wrapper']")
+  page.should have_xpath("//div[@class='note_wrapper']")
 end
 
-Then /^I should see the bold text "([^\"]*)" in the project description$/ do |bold|
+Then /^I should see the bold text "([^\"]*)" in the project description$/ do |text_in_bold|
   xpath="//div[@class='project_description']/p/strong"
 
-  response.should have_xpath(xpath)
-  bold_text = response.selenium.get_text("xpath=#{xpath}")
+  page.should have_xpath(xpath)
+  bold_text = page.find(:xpath, xpath).text
 
-  bold_text.should =~ /#{bold}/
+  bold_text.should =~ /#{text_in_bold}/
 end
 
-Then /^I should see the italic text "([^\"]*)" in the project description$/ do |italic|
+Then /^I should see the italic text "([^\"]*)" in the project description$/ do |text_in_italic|
   xpath="//div[@class='project_description']/p/em"
 
-  response.should have_xpath(xpath)
-  italic_text = response.selenium.get_text("xpath=#{xpath}")
+  page.should have_xpath(xpath)
+  italic_text = page.find(:xpath, xpath).text
 
-  italic_text.should =~ /#{italic}/
+  italic_text.should =~ /#{text_in_italic}/
 end
 
 Then /^the project title should be "(.*)"$/ do |title|
-  wait_for :timeout => 2 do
-    selenium.get_text("css=h2#project_name_container div#project_name") == title
+  wait_until do
+    page.find("h2#project_name_container div#project_name").text == title
   end
 end
 
 Then /^I should see the project name is "([^"]*)"$/ do |project_name|
   step "the project title should be \"#{project_name}\""
+end
+
+Then /^I should (see|not see) the default project settings$/ do |visible|
+  default_settings = "This project is active with no default context and with no default tags"
+  if visible == "see"
+    elem = page.find("div.project_settings")
+    elem.visible?.should be_true
+    elem.text.should =~ /#{default_settings}/
+  else
+    elem = page.find("div.project_settings")
+    elem.visible?.should be_false
+  end
 end

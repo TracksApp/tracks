@@ -58,12 +58,12 @@ Feature: Edit a next action from every page
       | @home   | first action  | test, bla |
       | @home   | second action | bla       |
     When I go to the <page>
-    Then I should not see empty message for <page type> todos
+    Then I should not see empty message for todos of <page type>
     And I should see "first action"
     When I delete the todo "first action"
-    Then I should not see empty message for <page type> todos
+    Then I should not see empty message for todos of <page type>
     When I delete the todo "second action"
-    Then I should see empty message for <page type> todos
+    Then I should see empty message for todos of <page type>
 
     Scenarios:
       | page                     | page type      |
@@ -76,12 +76,12 @@ Feature: Edit a next action from every page
     Given I have a context called "visible context"
     And I have a project called "visible project"
     When I go to the <page>
-    Then I should see empty message for <page type> todos
+    Then I should see empty message for todos of <page type>
     When I submit a new action with description "visible todo" to project "visible project" with tags "starred" in the context "visible context"
     Then I should see "visible todo"
-    And I should not see empty message for <page type> todos
+    And I should not see empty message for todos of <page type>
     When I mark "visible todo" as complete
-    And I should see empty message for <page type> todos
+    And I should see empty message for todos of <page type>
     And I should see "visible todo" in the completed container
 
     Scenarios:
@@ -96,12 +96,12 @@ Feature: Edit a next action from every page
     Given I have a context called "visible context"
     And I have a project called "visible project"
     When I go to the <page>
-    Then I should see empty message for <page type> deferred todos
+    Then I should see empty message for deferred todos of <page type>
     When I submit a new deferred action with description "visible todo" to project "visible project" with tags "starred" in the context "visible context"
     Then I should see "visible todo"
-    And I should not see empty message for <page type> deferred todos
+    And I should not see empty message for deferred todos of <page type>
     When I mark "visible todo" as complete
-    And I should see empty message for <page type> deferred todos
+    And I should see empty message for deferred todos of <page type>
     And I should see "visible todo" in the completed container
 
     Scenarios:
@@ -113,14 +113,14 @@ Feature: Edit a next action from every page
   Scenario Outline: I can mark a completed todo active and it will update empty messages and context containers
     Given I have a completed todo with description "visible todo" in project "visible project" with tags "starred" in the context "visible context"
     When I go to the <page>
-    Then I should see empty message for <page type> todos
+    Then I should see empty message for todos of <page type>
     And I should not see the container for context "visible context"
-    And I should not see empty message for <page type> completed todos
+    And I should not see empty message for completed todos of <page type>
     When I mark the complete todo "visible todo" active
     Then I should see the container for context "visible context"
-    And I should see empty message for <page type> completed todos
+    And I should see empty message for completed todos of <page type>
     And I should see "visible todo" in the context container for "visible context"
-    And I should not see empty message for <page type> todos
+    And I should not see empty message for todos of <page type>
 
     Scenarios:
       | page                   | page type                |
@@ -131,11 +131,11 @@ Feature: Edit a next action from every page
   Scenario Outline: I can mark a completed todo active and it will update empty messages for pages without context containers
     Given I have a completed todo with description "visible todo" in project "visible project" with tags "starred" in the context "visible context"
     When I go to the <page>
-    Then I should see empty message for <page type> todos
-    And I should not see empty message for <page type> completed todos
+    Then I should see empty message for todos of <page type>
+    And I should not see empty message for completed todos of <page type>
     When I mark the complete todo "visible todo" active
-    And I should see empty message for <page type> completed todos
-    And I should not see empty message for <page type> todos
+    And I should see empty message for completed todos of <page type>
+    And I should not see empty message for todos of <page type>
 
     Scenarios:
       | page                               | page type  |

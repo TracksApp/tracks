@@ -144,7 +144,7 @@ When /^I remove the show from date from "([^"]*)"$/ do |action_description|
   todo.should_not be_nil
 
   open_edit_form_for(todo)
-  page.find("//div[@id='edit_todo_#{todo.id}']//a[@id='show_from_x_todo_#{todo.id}']/img").click
+  page.find(:xpath, "//div[@id='edit_todo_#{todo.id}']//a[@id='show_from_x_todo_#{todo.id}']/img").click
 
   submit_edit_todo_form(todo)
 end

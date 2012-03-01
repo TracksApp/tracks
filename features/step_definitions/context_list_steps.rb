@@ -6,7 +6,10 @@ When /^I delete the context "([^\"]*)"$/ do |context_name|
     click_link "delete_context_#{context.id}"
   end
   get_confirm_text.should == "Are you sure that you want to delete the context '#{context_name}'? Be aware that this will also delete all (repeating) actions in this context!"
-  wait_for_animations_to_end
+  
+  wait_until do
+    !page.has_css?("a#delete_context_#{context.id}")
+  end
 end
 
 When /^I edit the context to rename it to "([^\"]*)"$/ do |new_name|

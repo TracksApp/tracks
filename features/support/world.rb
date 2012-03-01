@@ -15,11 +15,16 @@ module TracksStepHelper
     within "form#context-form" do
       find("button#context_new_submit").click
     end
+    wait_for_ajax
     wait_for_animations_to_end
   end
 
   def submit_new_project_form
-    selenium.click("xpath=//form[@id='project_form']//button[@id='project_new_project_submit']", :wait_for => :ajax, :javascript_framework => :jquery)
+    within "form#project_form" do
+      click_button "project_new_project_submit"
+    end
+    wait_for_ajax
+    wait_for_animations_to_end
   end
 
   def wait_for_form_to_go_away(todo)
@@ -102,6 +107,42 @@ module TracksStepHelper
     div_id = "context_#{@current_user.contexts.find_by_name(context_name).id}"
     contexts = page.all("div.context").map { |x| x[:id] }
     return contexts.find_index(div_id)
+  end
+
+  def project_list_find_index(project_name)
+    # TODO: refactor with context_list_find_index
+    div_id = "project_#{@current_user.projects.find_by_name(project_name).id}"
+    project = page.all("div.project").map { |x| x[:id] }
+    return project.find_index(div_id)
+  end
+  
+  def open_project_edit_form(project)
+    click_link "link_edit_project_#{project.id}"
+    page.should have_css("button#submit_project_#{project.id}")
+  end
+  
+  def submit_project_edit_form(project)
+    page.find("button#submit_project_#{project.id}").click
+  end
+  
+  def edit_project_no_wait(project)
+    open_project_edit_form(project)
+    yield
+    submit_project_edit_form(project)
+  end
+  
+  def edit_project(project)
+    open_project_edit_form(project)
+    yield
+    submit_project_edit_form(project)
+    page.should_not have_css("button#submit_project_#{project.id}", :visible => true)
+  end
+  
+  def edit_project_settings(project)
+    open_project_edit_form(project)
+    yield
+    submit_project_edit_form(project)
+    page.should_not have_css("button#submit_project_#{project.id}", :visible => true)
   end
   
 end

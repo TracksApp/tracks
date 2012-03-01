@@ -71,18 +71,18 @@ Then /^he should see that a context named "([^\"]*)" is not present$/ do |contex
   step "I should not see \"#{context_name} (\""
 end
 
-Then /^I should not see empty message for context todos/ do
+Then /^I should not see empty message for todos of context/ do
   find("div#c#{@context.id}empty-nd").should_not be_visible
 end
 
-Then /^I should see empty message for context todos/ do
+Then /^I should see empty message for todos of context/ do
   find("div#c#{@context.id}empty-nd").should be_visible
 end
 
-Then /^I should not see empty message for context completed todos$/ do
+Then /^I should not see empty message for completed todos of context$/ do
   find("div#empty-d").should_not be_visible
 end
 
-When /^I should see empty message for context completed todos$/ do
+When /^I should see empty message for completed todos of context$/ do
   find("div#empty-d").should be_visible
 end
