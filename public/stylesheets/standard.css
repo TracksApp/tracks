@@ -1419,7 +1419,7 @@ div.auto_complete ul strong.highlight {
 }
 
 .ui-datepicker {
-  z-index: 1000;
+  z-index: 1000 !important;
 }
 
 .ui-autocomplete-loading {
