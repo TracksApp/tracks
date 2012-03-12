@@ -15,23 +15,18 @@
 <div id="topbar"><h1><% if @down_count -%><span class="count" id="badge_count"><%= @down_count %></span><% end -%> <%=
         l(Date.today, :format => current_user.prefs.title_date_format) -%></h1>
 <div class="nav">
-<%=     (link_to(t('layouts.mobile_navigation.new_action'), new_todo_path(new_todo_params))+" | ") unless @new_mobile -%>
-<%=     (link_to(t('layouts.mobile_navigation.home'), todos_path(:format => 'm'))+" | ") unless @home -%>
-<%=     (link_to(t('layouts.mobile_navigation.contexts'), contexts_path(:format => 'm'))+" | ") -%>
-<%=     (link_to(t('layouts.mobile_navigation.projects'), projects_path(:format => 'm'))+" | ") -%>
+<%=     (link_to(t('layouts.mobile_navigation.new_action'), new_todo_path(new_todo_params))) unless @new_mobile -%>
+<%=     (link_to(t('layouts.mobile_navigation.home'), todos_path(:format => 'm'))) unless @home -%>
+<%=     (link_to(t('layouts.mobile_navigation.contexts'), contexts_path(:format => 'm'))) -%>
+<%=     (link_to(t('layouts.mobile_navigation.projects'), projects_path(:format => 'm'))) -%>
 <%=     (link_to(t('layouts.mobile_navigation.starred'), {:action => "tag", :controller => "todos", :id => "starred.m"})) -%>
 <% end -%>
 </div></div>
 <div id="content"><%= render_flash -%><%=  yield -%></div>
 <hr/><% if current_user && !current_user.prefs.nil? -%>
 <div class="nav">
-<%= (link_to(t('layouts.mobile_navigation.logout'), logout_path(:format => 'm')) +" | ") -%>
-<%= (link_to(t('layouts.mobile_navigation.new_action'), new_todo_path(new_todo_params), {:accesskey => "0"})+" | ") unless @new_mobile -%>
-<%= (link_to(t('layouts.mobile_navigation.home'), todos_path(:format => 'm'), {:accesskey => "1"})+" | ") unless @home -%>
-<%= (link_to(t('layouts.mobile_navigation.contexts'), contexts_path(:format => 'm'), {:accesskey => "2"})+" | ") -%>
-<%= (link_to(t('layouts.mobile_navigation.projects'), projects_path(:format => 'm'), {:accesskey => "3"})+" | ") -%>
-<%= (link_to(t('layouts.mobile_navigation.starred'), {:action => "tag", :controller => "todos", :id => "starred.m"}, {:accesskey => "4"})+" | ") -%>
-<%= (link_to(t('layouts.mobile_navigation.tickler'), {:action => "index", :controller => "tickler.m"})+" | ") -%>
+<%= (link_to(t('layouts.mobile_navigation.logout'), logout_path(:format => 'm'))) -%>
+<%= (link_to(t('layouts.mobile_navigation.tickler'), {:action => "index", :controller => "tickler.m"})) -%>
 <%= (link_to(t('layouts.mobile_navigation.feeds'), {:action => "index", :controller => "feeds.m"})) -%>
 </div>
 <% end -%>
