@@ -104,15 +104,25 @@ end
 Then /^the project "([^"]*)" should not be in state list "([^"]*)"$/ do |project_name, state_name|
   project = @current_user.projects.find_by_name(project_name)
   project.should_not be_nil
-  xpath = "//div[@id='list-#{state_name}-projects-container']//div[@id='project_#{project.id}']"
-  page.has_xpath?(xpath).should_not be_true
+  
+  list_id = @source_view=="review" ? "list-#{state}-projects" : "list-#{state_name}-projects-container"
+  xpath = "//div[@id='#{list_id}']//div[@id='project_#{project.id}']"
+  
+  page.should_not have_xpath(xpath)
 end
 
 Then /^the project "([^"]*)" should be in state list "([^"]*)"$/ do |project_name, state_name|
   project = @current_user.projects.find_by_name(project_name)
   project.should_not be_nil
-  xpath = "//div[@id='list-#{state_name}-projects-container']//div[@id='project_#{project.id}']"
-  page.has_xpath?(xpath).should be_true
+  
+  list_id = @source_view=="review" ? "list-#{state_name}-projects" : "list-#{state_name}-projects-container"
+  xpath = "//div[@id='#{list_id}']//div[@id='project_#{project.id}']"
+  
+  page.should have_xpath(xpath)
+end
+
+Then /^I see the project "([^"]*)" in the "([^"]*)" list$/ do |project_name, state_name|
+  step "the project \"#{project_name}\" should be in state list \"#{state_name}\""
 end
 
 Then /^the project list badge for "([^"]*)" projects should show (\d+)$/ do |state_name, count|
@@ -120,7 +130,7 @@ Then /^the project list badge for "([^"]*)" projects should show (\d+)$/ do |sta
 end
 
 Then /^the new project form should be visible$/ do
-  page.has_css?("div#project_new", :visible => true).should be_true
+  page.should have_css("div#project_new", :visible => true)
 end
 
 Then /^the new project form should not be visible$/ do

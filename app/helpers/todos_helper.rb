@@ -92,7 +92,7 @@ module TodosHelper
   def remote_mobile_checkbox(todo=@todo)
     form_tag toggle_check_todo_path(@todo, :format => 'm'), :method => :put, :class => "mobile-done", :name => "mobile_complete_#{@todo.id}" do
       check_box_tag('_source_view', 'todo', @todo && @todo.completed?, "onClick" => "document.mobile_complete_#{@todo.id}.submit()")
-    end 
+    end
   end
 
   def date_span(todo=@todo)
@@ -370,7 +370,8 @@ module TodosHelper
           @todo_was_blocked_from_active_state ||
           @todo_was_destroyed_from_deferred_state ||
           @todo_was_created_deferred ||
-          @todo_was_blocked_from_completed_state
+          @todo_was_blocked_from_completed_state ||
+          @todo_was_created_blocked
         return "p#{todo.project_id}empty-nd"
       }
       page.tag {

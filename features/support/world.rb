@@ -1,14 +1,23 @@
 module TracksStepHelper
   def submit_multiple_next_action_form
-    selenium.click("xpath=//form[@id='todo-form-multi-new-action']//button[@id='todo_multi_new_action_submit']", :wait_for => :ajax, :javascript_framework => :jquery)
+    xpath = "//form[@id='todo-form-multi-new-action']//button[@id='todo_multi_new_action_submit']"
+    handle_js_confirm do
+      within("form#todo-form-multi-new-action") do
+        click_button("todo_multi_new_action_submit")
+      end
+      wait_for_ajax
+      wait_for_animations_to_end
+    end
   end
 
   def submit_next_action_form
-    within("#todo-form-new-action") do
-      click_button("todo_new_action_submit")
+    handle_js_confirm do
+      within("#todo-form-new-action") do
+        click_button("todo_new_action_submit")
+      end
+      wait_for_ajax
+      wait_for_animations_to_end
     end
-    wait_for_ajax
-    wait_for_animations_to_end
   end
 
   def submit_new_context_form
@@ -135,6 +144,10 @@ module TracksStepHelper
     open_project_edit_form(project)
     yield
     submit_project_edit_form(project)
+    
+    wait_for_ajax
+    wait_for_animations_to_end
+    
     page.should_not have_css("button#submit_project_#{project.id}", :visible => true)
   end
   

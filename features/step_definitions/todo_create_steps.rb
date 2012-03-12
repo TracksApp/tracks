@@ -212,21 +212,21 @@ When /^I submit a new action with description "([^"]*)" with a dependency on "([
   predecessor.should_not be_nil
 
   fill_in "todo[description]", :with => todo_description
-
-  input = "xpath=//form[@id='todo-form-new-action']//input[@id='predecessor_input']"
-  selenium.focus(input)
-  selenium.type_keys input, predecessor_description
+  fill_in "predecessor_input", :with => predecessor_description
+  # input = "xpath=//form[@id='todo-form-new-action']//input[@id='predecessor_input']"
+  # selenium.focus(input)
+  # selenium.type_keys input, predecessor_description
 
   # wait for auto complete
-  autocomplete = "xpath=//a[@id='ui-active-menuitem']"
-  selenium.wait_for_element(autocomplete, :timeout_in_seconds => 5)
+  autocomplete = "//a[@id='ui-active-menuitem']"
+  page.should have_xpath(autocomplete, :visible => true)
 
   # click first line
-  first_elem = "xpath=//ul/li[1]/a[@id='ui-active-menuitem']"
-  selenium.click(first_elem)
+  first_elem = "//ul/li[1]/a[@id='ui-active-menuitem']"
+  page.find(:xpath, first_elem).click
 
-  new_dependency_line = "xpath=//li[@id='pred_#{predecessor.id}']"
-  selenium.wait_for_element(new_dependency_line, :timeout_in_seconds => 5)
+  new_dependency_line = "//li[@id='pred_#{predecessor.id}']"
+  page.should have_xpath(new_dependency_line, :visible => true)
 
   submit_next_action_form
 end

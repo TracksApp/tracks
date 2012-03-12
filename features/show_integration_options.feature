@@ -24,12 +24,12 @@ Feature: Integrate Tracks in various ways
     When I go to the integrations page
     Then I should see scripts
 
-  @selenium
+  @javascript
   Scenario: The scripts on the page should be prefilled with the first context
     When I go to the integrations page
     Then I should see a script "applescript1" for "@pc"
 
-  @selenium
+  @javascript
   Scenario Outline: When I select a different context the example scripts should change accordingly
     When I go to the integrations page
     When I select "<context1>" from "<context-list>"

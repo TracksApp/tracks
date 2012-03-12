@@ -24,7 +24,7 @@ Feature: Show all due actions in a calendar view
     Then I should see "tester of stuff"
     And I should see "unrelated stuff"
 
-  @selenium
+  @javascript
   Scenario: I can edit found todos
       Given I have the following todos:
       | description     | context |
@@ -43,7 +43,7 @@ Feature: Show all due actions in a calendar view
     Then I should not see "tester of stuff"
     And I should see "test 1-2-3"
 
-  @selenium
+  @javascript
   Scenario: I can delete found todos
       Given I have the following todos:
       | description     | context |
@@ -58,7 +58,7 @@ Feature: Show all due actions in a calendar view
     And I search for "test"
     Then I should not see "tester of stuff"
 
-  @selenium
+  @javascript
   Scenario: I can mark found todos complete and uncomplete
       Given I have the following todos:
       | description     | context |

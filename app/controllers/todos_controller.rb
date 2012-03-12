@@ -117,6 +117,7 @@ class TodosController < ApplicationController
 
       @todo.reload if @saved
       @todo_was_created_deferred = @todo.deferred?
+      @todo_was_created_blocked = @todo.pending?
 
       respond_to do |format|
         format.html { redirect_to :action => "index" }

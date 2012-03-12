@@ -109,7 +109,7 @@ Feature: Edit a next action from every page
       | tag page for "starred"    | tag        |
       | "visible project" project | project    |
 
-  @javascript
+  @javascript @wip
   Scenario Outline: I can mark a completed todo active and it will update empty messages and context containers
     Given I have a completed todo with description "visible todo" in project "visible project" with tags "starred" in the context "visible context"
     When I go to the <page>

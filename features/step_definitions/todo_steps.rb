@@ -94,16 +94,8 @@ Then /^I should see an active todo "([^"]*)"$/ do |todo_description|
   todo = @current_user.todos.find_by_description(todo_description)
   todo.should_not be_nil
 
-  # only active todos have a grip div
-
   xpath = "//div[@id='line_todo_#{todo.id}']/img[@class='grip']"
-
-  unless selenium.is_element_present(xpath)
-    wait_for :timeout => 5 do
-      selenium.is_element_present(xpath)
-    end
-  end
-  selenium.is_visible(xpath).should be_true
+  page.should have_xpath(xpath, :visible=>true)
 end
 
 Then /^the number of actions should be (\d+)$/ do |count|
@@ -111,7 +103,7 @@ Then /^the number of actions should be (\d+)$/ do |count|
 end
 
 Then /^a confirmation for adding a new context "([^"]*)" should be asked$/ do |context_name|
-  selenium.get_confirmation.should == "New context '#{context_name}' will be also created. Are you sure?"
+  get_confirm_text.should == "New context '#{context_name}' will be also created. Are you sure?"
 end
 
 Then /^the selected project should be "([^"]*)"$/ do |content|
