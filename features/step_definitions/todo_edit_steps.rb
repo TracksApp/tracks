@@ -49,14 +49,12 @@ When /^I unstar the action "([^"]*)"$/ do |action_description|
   xpath_unstarred = "//div[@id='line_todo_#{todo.id}']//img[@class='todo_star']"
   xpath_starred = "//div[@id='line_todo_#{todo.id}']//img[@class='todo_star starred']"
 
-  selenium.is_element_present(xpath_starred).should be_true
+  page.should have_xpath(xpath_starred)
 
   star_img = "//img[@id='star_img_#{todo.id}']"
-  selenium.click(star_img, :wait_for => :ajax, :javascript_framework => :jquery)
-
-  wait_for :timeout => 5 do
-    selenium.is_element_present(xpath_unstarred)
-  end
+  page.find(:xpath, star_img).click
+  
+  page.should have_xpath(xpath_unstarred)
 end
 
 ####### Editing a todo using Edit Form #######

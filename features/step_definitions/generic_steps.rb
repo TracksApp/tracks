@@ -22,7 +22,7 @@ Then /^I should see an error flash message saying "([^"]*)"$/ do |message|
 end
 
 Then /^I should see "([^"]*)" $/ do |text|
-  Then "I should see \"#{text}\""
+  step "I should see \"#{text}\""
 end
 
 Then /^I should save and open the page$/ do

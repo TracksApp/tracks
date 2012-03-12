@@ -47,16 +47,12 @@ Then /^I should see an unstarred "([^"]*)"$/ do |action_description|
   todo.should_not be_nil
 
   xpath_starred = "//div[@id='line_todo_#{todo.id}']//img[@class='todo_star']"
-
-  wait_for :timeout => 5 do
-    selenium.is_element_present(xpath_starred)
-  end
+  page.should have_xpath(xpath_starred)
 end
 
 Then /^I should see ([0-9]+) todos$/ do |count|
-  count.to_i.downto 1 do |i|
-    match_xpath "div["
-  end
+  total = page.all("div.item-container").inject(0) { |s, e| s+=1 }
+  total.should == count.to_i
 end
 
 Then /^there should not be an error$/ do
@@ -132,17 +128,13 @@ Then /^the selected context should be "([^"]*)"$/ do |content|
 end
 
 Then /^I should see the page selector$/ do
-  page_selector_xpath = ".//a[@class='next_page']"
-  response.body.should have_xpath(page_selector_xpath)
+  page.should have_xpath(".//a[@class='next_page']")
 end
 
 Then /^the page should be "([^"]*)"$/ do |page_number|
   page_number_found = -1
   page_number_xpath = ".//span[@class='current']"
-  response.should have_xpath(page_number_xpath) do |node|
-    page_number_found = node.first.content.to_i
-  end
-  page_number_found.should == page_number.to_i
+  page.find(:xpath, page_number_xpath).text.should == page_number
 end
 
 Then /^the project field of the new todo form should contain "([^"]*)"$/ do |project_name|
@@ -194,6 +186,15 @@ end
 
 Then /^I should see empty message for completed todos of home$/ do
   find("div#empty-d").should be_visible
+end
+
+Then /^I should (see|not see) the empty tickler message$/ do |see|
+  elem = find("div#tickler-empty-nd")
+  if see=="see"
+    elem.should be_visible
+  else
+    elem.should_not be_visible
+  end
 end
 
 Then /^I should not see the notes of "([^"]*)"$/ do |todo_description|

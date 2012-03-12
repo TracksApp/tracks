@@ -3,9 +3,9 @@ When /^I collapse the context container of "([^"]*)"$/ do |context_name|
   context.should_not be_nil
 
   xpath = "//a[@id='toggle_c#{context.id}']"
-  selenium.is_visible(xpath).should be_true
-
-  selenium.click(xpath)
+  toggle = page.find(:xpath, xpath)
+  toggle.should be_visible
+  toggle.click
 end
 
 When /^I toggle all collapsed context containers$/ do
@@ -160,10 +160,9 @@ Then /^I should see "([^"]*)" in the active recurring todos container$/ do |repe
 
   unless repeat.nil?
     xpath = "//div[@id='active_recurring_todos_container']//div[@id='recurring_todo_#{repeat.id}']"
-    selenium.wait_for_element("xpath=#{xpath}", :timeout_in_seconds => 5)
-    selenium.is_visible(xpath).should be_true
+    page.should have_xpath(xpath, :visible => true)
   else
-    step "I should not see \"#{repeat_pattern}\""
+    step "I should see \"#{repeat_pattern}\""
   end
 end
 
@@ -172,8 +171,7 @@ Then /^I should not see "([^"]*)" in the completed recurring todos container$/ d
 
   unless repeat.nil?
     xpath = "//div[@id='completed_recurring_todos_container']//div[@id='recurring_todo_#{repeat.id}']"
-    selenium.wait_for_element("xpath=#{xpath}", :timeout_in_seconds => 5)
-    selenium.is_visible(xpath).should be_true
+    page.should_not have_xpath(xpath, :visible => true)
   else
     step "I should not see \"#{repeat_pattern}\""
   end

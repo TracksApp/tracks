@@ -71,7 +71,7 @@ Feature: Show done
     | page                                             |
     | all done actions page                            |
     | all done actions page for project "test project" |
-    | all done actions page for context "@pc"         |
+    | all done actions page for context "@pc"          |
     | all done actions page for tag "starred"          |
 
   Scenario: The projects page shows a link to all completed projects

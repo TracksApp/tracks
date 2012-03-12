@@ -9,7 +9,7 @@ Feature: Toggle the context containers
       | testuser | secret   | false    |
     And I have logged in as "testuser" with password "secret"
 
-  @selenium @clear_cookies
+  @javascript
   Scenario: I can toggle a context container
     Given I have the following contexts
       | context  | hide  |
@@ -26,19 +26,19 @@ Feature: Toggle the context containers
     And I should see "test 2" in the context container for "@home"
     And I should see "test 3" in the context container for "@boss"
     When I collapse the context container of "@ipad"
-    Then I should not see "test 1"
+    Then I should not see the todo "test 1"
     And I should see "test 2" in the context container for "@home"
     And I should see "test 3" in the context container for "@boss"
     When I collapse the context container of "@home"
-    Then I should not see "test 1"
-    And I should not see "test 2"
+    Then I should not see the todo "test 1"
+    And I should not see the todo "test 2"
     And I should see "test 3" in the context container for "@boss"
     When I collapse the context container of "@boss"
-    Then I should not see "test 1"
-    And I should not see "test 2"
-    And I should not see "test 3"
+    Then I should not see the todo "test 1"
+    And I should not see the todo "test 2"
+    And I should not see the todo "test 3"
 
-  @selenium  @clear_cookies
+  @javascript
   Scenario: I can hide all collapsed containers
     Given I have the following contexts
       | context | hide  |
@@ -57,9 +57,9 @@ Feature: Toggle the context containers
     When I collapse the context container of "@home"
     And I collapse the context container of "@boss"
     And I collapse the context container of "@ipad"
-    Then I should not see "test 1"
-    And I should not see "test 2"
-    And I should not see "test 3"
+    Then I should not see the todo "test 1"
+    And I should not see the todo "test 2"
+    And I should not see the todo "test 3"
     When I toggle all collapsed context containers
     Then I should not see the context container for "@home"
     And I should not see the context container for "@boss"
