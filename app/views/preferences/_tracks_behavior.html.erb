@@ -12,3 +12,5 @@
 <%= pref_with_text_field('prefs', "mobile_todos_per_page") %>
 <%= pref_with_text_field('prefs', "sms_email") %>
 <%= pref('prefs', "sms_context") { select('prefs', 'sms_context_id', current_user.contexts.map{|c| [c.name, c.id]}) } %>
+<%= pref('prefs','followup_context') { select('prefs', 'followup_context_id', current_user.contexts.map{|c| [c.name, c.id]}) }  %>
+<%= pref_with_text_field('prefs', 'followup_defer') %> 

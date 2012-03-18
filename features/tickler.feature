@@ -66,3 +66,9 @@ Feature: Manage deferred todos
     Then I should not see "not yet now"
     When I go to the done page
     Then I should see "not yet now"
+
+  @selenium
+  Scenario: I can mark an action as followup and it will get deferred
+    Given I have a todo "to_follow_up"
+    When I set the todo "to_follow_up" to followup
+    Then the todo "to_follow_up" should be deferred

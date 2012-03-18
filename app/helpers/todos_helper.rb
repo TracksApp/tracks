@@ -6,6 +6,15 @@ module TodosHelper
       :class => "icon star_item", :title => t('todos.star_action_with_description', :description => todo.description))
   end
 
+  def remote_followup_menu_item(todo)
+    return link_to(
+      image_tag("waiting-for.png", :alt => t('todos.followup'), :align => "absmiddle")+" "+t('todos.followup'),
+      {:controller => 'todos', :action => 'followup', :id => todo.id},
+      :class => "icon_followup_item",
+      :id => "followup_#{dom_id(todo)}");
+  end
+
+
   def remote_edit_button(todo=@todo)
     link_to(
       image_tag("blank.png", :alt => t('todos.edit'), :align => "absmiddle", :id => 'edit_icon_todo_'+todo.id.to_s, :class => 'edit_item'),
