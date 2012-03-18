@@ -52,7 +52,23 @@ class TodosController < ApplicationController
     end
   end
 
+  def self.strip_params params
+    case params
+    when Array
+      params.each do |list|
+        strip_params (list)
+      end
+    when Hash
+      params.each do |key,val|
+        strip_params (val)
+      end
+    else
+      params.strip! if params.is_a? String
+    end
+  end
+
   def create
+    TodosController.strip_params(params)
     @source_view = params['_source_view'] || 'todo'
     @default_context = current_user.contexts.find_by_name(params['default_context_name'])
     @default_project = current_user.projects.find_by_name(params['default_project_name']) unless params['default_project_name'].blank?

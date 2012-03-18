@@ -63,6 +63,8 @@ class ContextsController < ApplicationController
       render_failure "Expected post format is valid xml like so: <request><context><name>context name</name></context></request>.", 400
       return
     end
+    TodosController.strip_params(params)
+
     @context = current_user.contexts.build
     params_are_invalid = true
     if (params['context'] || (params['request'] && params['request']['context']))
