@@ -207,7 +207,7 @@ Feature: Add new next action from every page
     Then I should see "a new todo"
     And I should not see "Currently there are no incomplete actions with the tag 'bla'"
 
-  @javascript
+  @javascript @wip
   Scenario: Adding a dependency to a todo updated the successor
     When I go to the "test project" project
     Then I should see "todo 1"
@@ -215,6 +215,14 @@ Feature: Add new next action from every page
     Then I should not see "a new todo" in the project container of "test project"
     When I expand the dependencies of "todo 1"
     Then I should see "a new todo" within the dependencies of "todo 1"
+    And I should not see empty message for deferred todos of project
+    
+  @javascript @wip
+  Scenario: Adding a dependency to a todo in another project
+    Given I have a project "another project"
+    When I go to the "another project" project
+    And I submit a new action with description "a new todo" with a dependency on "todo 1"
+    Then I should not see "a new todo" in the project container of "another project"
     And I should not see empty message for deferred todos of project
 
   @javascript
