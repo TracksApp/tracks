@@ -104,7 +104,7 @@ class TodoXmlApiTest < ActionController::IntegrationTest
     assert_equal "starred, starred1, starred2", todo.tag_list
     assert todo.starred?
   end
-
+  
   def test_post_create_todo_with_single_tag
     authenticated_post_xml_to_todo_create "
 <todo>
@@ -122,6 +122,42 @@ class TodoXmlApiTest < ActionController::IntegrationTest
     assert_equal "tracks", todo.tag_list
   end
 
+ def test_post_create_todo_with_multiple_tags_and_space
+    # testing fix for #1229
+    authenticated_post_xml_to_todo_create "
+<todo>
+  <description>this will succeed 3</description>
+  <context_id>#{contexts(:office).id}</context_id>
+  <project_id>#{projects(:timemachine).id}</project_id>
+  <tags>
+    <tag><name>foo </name></tag>
+    <tag><name> bar</name></tag>
+    <tag><name>  bingo  </name></tag>
+  </tags>
+</todo>"
+
+    assert_response :success
+    todo = @user.todos.find_by_description("this will succeed 3")
+    assert_not_nil todo
+    assert_equal "bar, bingo, foo", todo.tag_list
+    authenticated_post_xml_to_todo_create "
+<todo>
+  <description>this will succeed 4</description>
+  <context_id>#{contexts(:office).id}</context_id>
+  <project_id>#{projects(:timemachine).id}</project_id>
+  <tags>
+    <tag><name>foo</name></tag>
+    <tag><name>bar</name></tag>
+    <tag><name>bingo</name></tag>
+  </tags>
+</todo>"
+
+    assert_response :success
+    todo = @user.todos.find_by_description("this will succeed 4")
+    assert_not_nil todo
+    assert_equal "bar, bingo, foo", todo.tag_list
+  end
+  
   def test_post_create_todo_with_new_context
     authenticated_post_xml_to_todo_create "
 <todo>

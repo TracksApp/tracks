@@ -340,7 +340,10 @@ class Todo < ActiveRecord::Base
 
   # used by the REST API. <tags> will also work, this is renamed to add_tags in TodosController::TodoCreateParamsHelper::initialize
   def add_tags=(params)
-    tag_with params[:tag].inject([]) { |list, value| list << value[:name] } unless params[:tag].nil?
+    unless params[:tag].nil?
+      tag_list = params[:tag].inject([]) { |list, value| list << value[:name] }
+      tag_with tag_list.join(", ")
+    end
   end
 
   # Rich Todo API
