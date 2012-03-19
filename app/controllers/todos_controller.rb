@@ -177,30 +177,44 @@ class TodosController < ApplicationController
 
     @sequential = !params[:todos_sequential].blank? && params[:todos_sequential]=='true'
 
-    @todos = []
+    @todos_init = []
     @predecessor = nil
+    validates = true
+    
+    # first build all todos and check if they would validate on save
     params[:todo][:multiple_todos].split("\n").map do |line|
       unless line.blank?
         @todo = current_user.todos.build(
           :description => line)
         @todo.project_id = @project_id
         @todo.context_id = @context_id
-        @saved = @todo.save
+        validates = validates && !@todo.invalid?
+        @todos_init << @todo
+      end
+    end
+    
+    # if all todos validate, then save them and add predecessors and tags
+    @todos = []
+    if validates
+      @todos_init.each do |todo|
+        @saved = todo.save
 
         if @predecessor && @saved && @sequential
-          @todo.add_predecessor(@predecessor)
-          @todo.block!
+          todo.add_predecessor(@predecessor)
+          todo.block!
         end
 
         unless (@saved == false) || tag_list.blank?
-          @todo.tag_with(tag_list)
-          @todo.tags.reload
+          todo.tag_with(tag_list)
+          todo.tags.reload
         end
 
-        @todos << @todo
-        @not_done_todos << @todo if @new_context_created
-        @predecessor = @todo
+        @todos << todo
+        @not_done_todos << todo if @new_context_created
+        @predecessor = todo
       end
+    else
+      @saved = false
     end
 
     respond_to do |format|
@@ -212,11 +226,11 @@ class TodosController < ApplicationController
         @initial_context_name = params['default_context_name']
         @initial_project_name = params['default_project_name']
         @initial_tags = params['initial_tag_list']
-        if @todos.size > 0
+        if @saved && @todos.size > 0
           @default_tags = @todos[0].project.default_tags unless @todos[0].project.nil?
         else
           @multiple_error = t('todos.next_action_needed')
-          @saved = false;
+          @saved = false
           @default_tags = current_user.projects.find_by_name(@initial_project_name).default_tags unless @initial_project_name.blank?
         end
 

@@ -222,9 +222,20 @@ class TodosControllerTest < ActionController::TestCase
     put :create, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{
       :multiple_todos=>"a\nb\nmuch \"ado\" about \'nothing\'"}
 
-    assert_equal start_count+2, Todo.count, "two todos should have been added"
+    assert_equal start_count+3, Todo.count, "two todos should have been added"
   end
+  
+  def test_add_multiple_todos_with_validation_error
+    login_as(:admin_user)
 
+    long_string = "a" * 500
+    
+    start_count = Todo.count
+    put :create, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{
+      :multiple_todos=>"a\nb\nmuch \"ado\" about \'nothing\'\n#{long_string}"}
+
+    assert_equal start_count, Todo.count, "no todos should have been added"
+  end
 
   def test_add_multiple_dependent_todos
     login_as(:admin_user)
