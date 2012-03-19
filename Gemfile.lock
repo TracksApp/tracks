@@ -1,3 +1,8 @@
+PATH
+  remote: vendor/gems/aruba-0.2.2
+  specs:
+    aruba (0.2.2)
+
 GEM
   remote: http://rubygems.org/
   remote: http://gems.github.com/
@@ -16,7 +21,6 @@ GEM
       activesupport (= 2.3.14)
     activesupport (2.3.14)
     acts_as_list (0.1.4)
-    aruba (0.2.2)
     bcrypt-ruby (2.1.4)
     builder (3.0.0)
     capybara (1.1.2)
@@ -133,7 +137,7 @@ DEPENDENCIES
   ZenTest (>= 4.0.0)
   aasm (~> 2.2.0)
   acts_as_list (~> 0.1.4)
-  aruba
+  aruba (= 0.2.2)!
   bcrypt-ruby (~> 2.1.4)
   capybara (>= 0.3.5)
   cucumber-rails (~> 0.3.2)

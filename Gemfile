@@ -54,7 +54,7 @@ group :test do
   gem "selenium-webdriver" # Note that > 2.14 has problems: https://code.google.com/p/selenium/issues/detail?id=3075
   gem "database_cleaner", ">=0.5.0"
   gem "cucumber-rails", "~>0.3.2"
-  gem "aruba"
+  gem "aruba", "0.2.2", :path => "vendor/gems/aruba-0.2.2"
   
   # uncomment to use the webkit option. This depends on Qt to be installed
   #gem "capybara-webkit"

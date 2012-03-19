@@ -1,0 +1,41 @@
+= aruba
+
+Cucumber steps for driving out command line applications. The command line application can be anything,
+a compiled C program, a Java program, a Perl script - anything. There is also special support for various
+Ruby versions (see below).
+
+== Usage
+
+  gem install aruba
+
+Then, just require the library in one of your ruby files under <tt>features/support</tt>
+
+  require 'aruba'
+
+You now have a bunch of step definitions that you can use in your features. Look at aruba/cucumber.rb
+to see all the step definitions. Look at features/*.feature for examples (which are also testing Aruba
+itself).
+
+== Getting more output with tags.
+
+Aruba has several tags you can use to see what command actually gets run (useful if you're using the RVM steps),
+STDOUT or STDERR. You can put these tags on individual scenarios, or on a feature. The tags are:
+
+* <tt>@announce-cmd</tt>
+* <tt>@announce-stdout</tt>
+* <tt>@announce-stderr</tt>
+* <tt>@announce</tt> (does all of the above)
+
+== Note on Patches/Pull Requests
+ 
+* Fork the project.
+* Make your feature addition or bug fix.
+* Add tests for it. This is important so I don't break it in a
+  future version unintentionally.
+* Commit, do not mess with rakefile, version, or history.
+  (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
+* Send me a pull request. Bonus points for topic branches.
+
+== Copyright
+
+Copyright (c) 2010 Aslak Hellesøy and David Chelimsky. See LICENSE for details.

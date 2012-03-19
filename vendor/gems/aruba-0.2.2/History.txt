@@ -1,0 +1,84 @@
+== 0.2.2
+
+=== New Features
+* Added a @bin tag that sets up './bin' first on the path (Aslak Hellesøy)
+* Richer API making aruba easier to use from Ruby code. (Mark Nijhof, Aslak Hellesøy)
+
+=== Removed Features
+* No more support for RVM. Use rvm 1.9.2,1.8.7 exec cucumber .... instead. (Mark Nijhof, Aslak Hellesøy)
+
+== 0.2.1
+
+=== Bugfixes
+* Always compare with RSpec should =~ instead of should match. This gives a diff when there is no match. (Aslak Hellesøy)
+
+== 0.2.0
+
+=== New Features
+* Added aruba.gemspec. (David Chelimsky)
+
+=== Changed features
+* Several step definitions regarding output have changed. (#1 Aslak Hellesøy)
+
+  - /^I should see "([^\"]*)"$/
+  + /^the output should contain "([^"]*)"$/
+
+  - /^I should not see "([^\"]*)"$/
+  + /^the output should not contain "([^"]*)"$/
+
+  - /^I should see:$/
+  + /^the output should contain:$/
+
+  - /^I should not see:$/
+  + /^the output should not contain:$/
+
+  - /^I should see exactly "([^\"]*)"$/
+  + /^the output should contain exactly "([^"]*)"$/
+
+  - /^I should see exactly:$/
+  + /^the output should contain exactly:$/
+
+  - /^I should see matching \/([^\/]*)\/$/
+  + /^the output should match \/([^\/]*)\/$/
+
+  - /^I should see matching:$/
+  + /^the output should match:$/
+
+== 0.1.9
+* If the GOTGEMS environment variable is set, bundler won't run (faster). (Aslak Hellesøy)
+
+== 0.1.8
+* Use // instead of "" for "I should see matching" step. (Aslak Hellesøy)
+* Replace rvm gemset character '%' with '@' for rvm 0.1.24 (#5 Ashley Moran)
+* Support gem bundler, making it easier to specify gems. (Aslak Hellesøy)
+
+== 0.1.7
+* New @announce-stderr tag (Robert Wahler)
+* New "I should see matching" steps using Regexp (Robert Wahler)
+
+== 0.1.6
+* When /^I successfully run "(.*)"$/ now prints the combined output if exit status is not 0. (Aslak Hellesøy)
+* Add bundle to list of common ruby scripts. (Aslak Hellesøy)
+
+== 0.1.5
+* Added ability to map rvm versions to a specific version with config/aruba-rvm.yml. (Aslak Hellesøy)
+* Check for presence of files. (Aslak Hellesøy)
+* Allow specification of rvm gemsets. (Aslak Hellesøy)
+* Detect ruby commands and use current ruby when rvm is not explicitly used. (Aslak Hellesøy)
+* Added support for rvm, making it possible to choose Ruby interpreter. (Aslak Hellesøy)
+* Added @announce-cmd, @announce-stdout and @announce tags, useful for seeing what's executed and outputted. (Aslak Hellesøy)
+
+== 0.1.4
+* New step definition for appending to a file (Aslak Hellesøy)
+
+== 0.1.3
+* New step definition for cd (change directory) (Aslak Hellesøy)
+
+== 0.1.2
+* Separated API from Cucumber step definitions, makes this usable without Cucumber. (Aslak Hellesøy)
+
+== 0.1.1
+* Better Regexp escaping (David Chelimsky)
+
+== 0.1.0
+* First release (David Chelimsky and Aslak Hellesøy)
