@@ -9,7 +9,7 @@ Feature: dependencies
       | testuser | secret   | false    |
     And I have logged in as "testuser" with password "secret"
 
-  @javascript @webkit_only
+  @javascript
   Scenario: Adding dependency to dependency by drag and drop
     Given I have a project "dependencies" with 3 todos
     And "todo 2" depends on "todo 1"
@@ -73,9 +73,9 @@ Feature: dependencies
     Then I should see "test 1" in the completed container
     And I should see "test 2" in the action container
     And I should not see "test 2" in the deferred container
-    And I should see the empty message in the deferred container
+    And I should see empty message for deferred todos of project
 
-  @javascript @selenium_only
+  @javascript
   Scenario: Deleting a predecessor will activate successors
     Given I have a context called "@pc"
     And I have a project "dependencies" that has the following todos
@@ -90,9 +90,9 @@ Feature: dependencies
     When I delete the action "test 1"
     Then I should see "test 2" in the action container
     And I should not see "test 2" in the deferred container
-    And I should see the empty message in the deferred container
+    And I should see empty message for deferred todos of project
 
-  @javascript @selenium_only
+  @javascript
   Scenario: Deleting a successor will update predecessor
     Given I have a context called "@pc"
     And I have a project "dependencies" that has the following todos
@@ -111,7 +111,7 @@ Feature: dependencies
     Then I should see "test 3" within the dependencies of "test 1"
     And I should not see "test 2"
 
-  @javascript @webkit_only
+  @javascript
   Scenario: Dragging an action to a completed action will not add it as a dependency
     Given I have a context called "@pc"
     And I have a project "dependencies" that has the following todos
@@ -124,7 +124,7 @@ Feature: dependencies
     Then I should see an error flash message saying "Cannot add this action as a dependency to a completed action!"
     And I should see "test 1" in project container for "dependencies"
 
-  @javascript @webkit_only
+  @javascript
   Scenario Outline: Marking a successor as complete will update predecessor
     Given I have a context called "@pc"
     And I have a project "dependencies" that has the following todos
@@ -146,7 +146,7 @@ Feature: dependencies
     | "dependencies" project  |
     | tag page for "bla"      |
 
-  @javascript @webkit_only
+  @javascript
   Scenario Outline: Marking a successor as active will update predecessor
     Given I have a context called "@pc"
     And I have a project "dependencies" that has the following todos

@@ -1,31 +1,3 @@
-Given /^I have a project "([^"]*)" with (\d+) active todos$/ do |name, count|
-  @context = @current_user.contexts.find_or_create_by_name("Context A")
-  @project = @current_user.projects.find_or_create_by_name(name)
-
-  @todos=[]
-  1.upto count.to_i do |i|
-    todo = @current_user.todos.create!(
-      :project_id => @project.id,
-      :context_id => @context.id,
-      :description => "todo #{i}")
-    @todos << todo
-  end
-end
-
-Given /^I have a project "([^"]*)" with (\d+) deferred actions$/ do |name, deferred|
-  step "I have a project \"#{name}\" with #{deferred} active todos"
-  @todos.each do |t|
-    t.show_from = Time.zone.now + 1.week
-    t.description = "deferred " + t.description
-    t.save!
-  end
-end
-
-Given /^I have a project "([^"]*)" with (\d+) active actions and (\d+) deferred actions$/ do |name, active_count, deferred_count|
-  step "I have a project \"#{name}\" with #{active_count} active todos"
-  step "I have a project \"#{name}\" with #{deferred_count} deferred actions"
-end
-
 When /^I delete project "([^"]*)"$/ do |project_name|
   project = @current_user.projects.find_by_name(project_name)
   project.should_not be_nil
@@ -134,7 +106,7 @@ Then /^the new project form should be visible$/ do
 end
 
 Then /^the new project form should not be visible$/ do
-  page.has_css?("div#project_new", :visible => true).should be_false
+  page.should_not have_css("div#project_new", :visible => true)
 end
 
 Then /^the project "([^"]*)" should have (\d+) actions listed$/ do |name, count|

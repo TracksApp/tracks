@@ -534,12 +534,12 @@ var TodoItems = {
         });
         $('.item-show').droppable({
             drop: TodoItems.drop_todo,
-            tolerance: 'pointer',
+            tolerance: 'intersect', /* warning: selenium fails on drag_and_drop when this is 'pointer' */
             hoverClass: 'hover'
         });
         $('.context_target').droppable({
             drop: TodoItems.drop_todo_on_context,
-            tolerance: 'pointer',
+            tolerance: 'intersect', /* warning: selenium fails on drag_and_drop when this is 'pointer' */
             hoverClass: 'hover'
         });
     },

@@ -6,26 +6,20 @@ When /^I delete the context "([^\"]*)"$/ do |context_name|
     click_link "delete_context_#{context.id}"
   end
   get_confirm_text.should == "Are you sure that you want to delete the context '#{context_name}'? Be aware that this will also delete all (repeating) actions in this context!"
-  
-  wait_until do
-    !page.has_css?("a#delete_context_#{context.id}")
-  end
+
+  # wait until the context is removed
+  page.should_not have_css("a#delete_context_#{context.id}")
 end
 
 When /^I edit the context to rename it to "([^\"]*)"$/ do |new_name|
   find("a#link_edit_context_#{@context.id}").click
-  
-  wait_until do
-    page.has_css?("button#submit_context_#{@context.id}")
-  end
+  page.should have_css("button#submit_context_#{@context.id}", :visible=>true)
   
   fill_in "context_name", :with => new_name
-
   click_button "submit_context_#{@context.id}"
-  
-  wait_until do
-    !page.has_css?("button#submit_context_#{@context.id}", :visible=>true)
-  end
+
+  # wait for the form to go away
+  page.should have_css("a#link_edit_context_#{@context.id}", :visible=> true)
 end
 
 When /^I add a new context "([^"]*)"$/ do |context_name|
@@ -64,11 +58,11 @@ Then /^I should see that a context named "([^"]*)" is not present$/ do |context_
 end
 
 Then /^I should see that the context container for (.*) contexts is not present$/ do |state|
-  page.has_css?("div#list-#{state}-contexts-container", :visible => true).should be_false
+  page.should_not have_css("div#list-#{state}-contexts-container", :visible => true)
 end
 
 Then /^I should see that the context container for (.*) contexts is present$/ do |state|
-  find("div#list-#{state}-contexts-container", :visible => true).should_not be_nil
+  page.should have_css("div#list-#{state}-contexts-container", :visible => true)
 end
 
 Then /^I should see the context "([^"]*)" under "([^"]*)"$/ do |context_name, state|

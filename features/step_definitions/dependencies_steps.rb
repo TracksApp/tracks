@@ -11,7 +11,7 @@ When /^I drag "(.*)" to "(.*)"$/ do |dragged, target|
   drag_id = Todo.find_by_description(dragged).id
   drop_id = Todo.find_by_description(target).id
   drag_elem = page.find(:xpath, "//div[@id='line_todo_#{drag_id}']//img[@class='grip']")
-  drop_elem = page.find(:xpath, "//div[@id='line_todo_#{drop_id}']//div[@class='description']")
+  drop_elem = page.find(:xpath, "//div[@id='line_todo_#{drop_id}']")
 
   drag_elem.drag_to(drop_elem)
 end
@@ -35,7 +35,6 @@ When /^I edit the dependency of "([^"]*)" to add "([^"]*)" as predecessor$/ do |
   open_edit_form_for(todo)
 
   form_css = "form#form_todo_#{todo.id}"
-  
   within form_css do
     fill_in 'predecessor_input', :with => predecessor_description
   end
@@ -86,8 +85,12 @@ Then /^the successors of "(.*)" should include "(.*)"$/ do |parent_name, child_n
   parent = @current_user.todos.find_by_description(parent_name)
   parent.should_not be_nil
 
-  child = parent.pending_successors.find_by_description(child_name)
-  child.should_not be_nil
+  # wait until the successor is added. TODO: make this not loop indefinitly
+  wait_until do
+    found = !parent.pending_successors.find_by_description(child_name).nil?
+    sleep 0.2 unless found
+    found
+  end
 end
 
 Then /^I should see "([^\"]*)" within the dependencies of "([^\"]*)"$/ do |successor_description, todo_description|

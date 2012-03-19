@@ -131,7 +131,7 @@ Feature: Show done
     When I delete the pattern "test pattern"
     Then I should not see "test pattern" in the completed recurring todos container
     When I go to the recurring todos page
-    Then I should see "test pattern" in the active recurring todos container
+    Then I should not see "test pattern" in the active recurring todos container
 
   @selenium
   Scenario Outline: I can toggle a todo active from the done pages

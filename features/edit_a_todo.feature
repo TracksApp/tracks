@@ -109,7 +109,7 @@ Feature: Edit a next action from every page
       | tag page for "starred"    | tag        |
       | "visible project" project | project    |
 
-  @javascript @wip
+  @javascript
   Scenario Outline: I can mark a completed todo active and it will update empty messages and context containers
     Given I have a completed todo with description "visible todo" in project "visible project" with tags "starred" in the context "visible context"
     When I go to the <page>
@@ -209,8 +209,10 @@ Feature: Edit a next action from every page
     When I go to the tickler page
     Then I should see "start later"
 
-  @javascript
+  @javascript @wip
   Scenario: I can defer a todo
+  # this script fails on https://code.google.com/p/selenium/issues/detail?id=3075 for selenium-webdriver > 2.14.
+  # and selenium-webdriver < 2.20 fails on firefox 11 :-( So @wip for now. This will work on webkit though
     When I go to the home page
     And I submit a new action with description "start later" in the context "@pc"
     And I defer "start later" for 1 day
@@ -218,8 +220,10 @@ Feature: Edit a next action from every page
     When I go to the tickler page
     Then I should see "start later"
 
-  @javascript
+  @javascript @wip
   Scenario: I can make a project from a todo
+  # this script fails on https://code.google.com/p/selenium/issues/detail?id=3075 for selenium-webdriver > 2.14.
+  # and selenium-webdriver < 2.20 fails on firefox 11 :-( So @wip for now. This will work on webkit though
     When I go to the home page
     And I submit a new action with description "buy mediacenter" in the context "@pc"
     And I make a project of "buy mediacenter"

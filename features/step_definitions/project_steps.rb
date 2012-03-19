@@ -1,3 +1,7 @@
+Given /^I have no projects$/ do
+  Project.delete_all
+end
+
 Given /^I have an outdated project "([^"]*)" with (\d+) todos$/ do |project_name, num_todos|
   step "I have a project \"#{project_name}\" with #{num_todos} todos"
   @project = @current_user.projects.find_by_name(project_name)
@@ -5,9 +9,18 @@ Given /^I have an outdated project "([^"]*)" with (\d+) todos$/ do |project_name
   @project.save
 end
 
-Given /^I have a project "([^\"]*)" with ([0-9]+) todos$/ do |project_name, num_todos|
+Given /^I have a project "([^"]*)" with (\d+) deferred actions$/ do |name, deferred|
+  step "I have a project \"#{name}\" with #{deferred} deferred todos"
+end
+
+Given /^I have a project "([^"]*)" with (\d+) active actions and (\d+) deferred actions$/ do |name, active_count, deferred_count|
+  step "I have a project \"#{name}\" with #{active_count} active todos"
+  step "I have a project \"#{name}\" with #{deferred_count} deferred todos"
+end
+
+Given /^I have a project "([^\"]*)" with ([0-9]+) (todo|active todo|deferred todo)s$/ do |project_name, num_todos, state|
   @context = @current_user.contexts.find_or_create_by_name("Context A")
-  @project = @current_user.projects.create!(:name => project_name)
+  @project = @current_user.projects.find_or_create_by_name(project_name)
   # acts_as_list adds at top by default, but that is counter-intuitive when reading scenario's, so reverse this
   @project.move_to_bottom
 
@@ -16,20 +29,14 @@ Given /^I have a project "([^\"]*)" with ([0-9]+) todos$/ do |project_name, num_
     todo = @current_user.todos.create!(
       :project_id => @project.id,
       :context_id => @context.id,
-      :description => "todo #{i}")
+      :description => "#{state} #{i}")
+    todo.show_from = Time.zone.now + 1.week if state=="deferred todo"
+    todo.save!
     @todos << todo
   end
 end
 
-Given /^I have a project "([^\"]*)" with ([0-9]+) deferred todos$/ do |project_name, num_todos|
-  step "I have a project \"#{project_name}\" with #{num_todos} todos"
-  @todos.each do |todo|
-    todo.show_from = Time.zone.now + 1.week
-    todo.save!
-  end
-end
-
-Given /^there exists a project "([^\"]*)" for user "([^\"]*)"$/ do |project_name, user_name|
+Given /^there exists a project (?:|called )"([^"]*)" for user "([^"]*)"$/ do |project_name, user_name|
   user = User.find_by_login(user_name)
   user.should_not be_nil
   @project = user.projects.create!(:name => project_name)
@@ -37,17 +44,12 @@ Given /^there exists a project "([^\"]*)" for user "([^\"]*)"$/ do |project_name
   @project.move_to_bottom
 end
 
-Given /^there exists a project called "([^"]*)" for user "([^"]*)"$/ do |project_name, login|
-  # TODO: regexp change to integrate this with the previous since only 'called' is different
-  step "there exists a project \"#{project_name}\" for user \"#{login}\""
-end
-
-Given /^I have a project called "([^"]*)"$/ do |project_name|
-  step "there exists a project \"#{project_name}\" for user \"#{@current_user.login}\""
+Given /^I have a project (?:|called )"([^"]*)"$/ do |project_name|
+  @project = @current_user.projects.create!(:name => project_name)
 end
 
 Given /^I have a project "([^"]*)" with a default context of "([^"]*)"$/ do |project_name, context_name|
-  step "there exists a project \"#{project_name}\" for user \"#{@current_user.login}\""
+  step "I have a project \"#{project_name}\""
   context = @current_user.contexts.create!(:name => context_name)
   @project.default_context = context
   @project.save!
@@ -55,7 +57,7 @@ end
 
 Given /^I have the following projects:$/ do |table|
   table.hashes.each do |project|
-    step 'I have a project called "'+project[:project_name]+'"'
+    step "I have a project called \"#{project[:project_name]}\""
     # acts_as_list puts the last added project at the top, but we want it
     # at the bottom to be consistent with the table in the scenario
     @project.move_to_bottom
@@ -63,11 +65,11 @@ Given /^I have the following projects:$/ do |table|
   end
 end
 
-Given /^I have a completed project called "([^"]*)"$/ do |project_name|
+Given /^I have a (completed|hidden) project called "([^"]*)"$/ do |state, project_name|
   step "I have a project called \"#{project_name}\""
-  @project.complete!
+  @project.send(state=="completed" ? "complete!" : "hide!")
   @project.reload
-  assert @project.completed?
+  assert @project.send(state=="completed" ? "completed?" : "hidden?")
 end
 
 Given /^I have (\d+) completed projects$/ do |number_of_projects|
@@ -76,13 +78,22 @@ Given /^I have (\d+) completed projects$/ do |number_of_projects|
   end
 end
 
-Given /^I have no projects$/ do
-  Project.delete_all
+Given /^I have one project "([^\"]*)" with no notes$/ do |project_name|
+  step "I have a project called \"#{project_name}\""
 end
 
-Given /^I have a hidden project called "([^"]*)"$/ do |project_name|
-  @project = @current_user.projects.create!(:name => project_name)
-  @project.hide!
+Given /^I have two projects with one note each$/ do
+  step "I have a project \"project A\""
+  @project.notes.create!(:user_id => @current_user.id, :body => 'note for project A')
+  step "I have a project \"project B\""
+  @project.notes.create!(:user_id => @current_user.id, :body => 'note for project B')
+end
+
+Given /^I have a project "([^\"]*)" with (.*) notes?$/ do |project_name, num|
+  project = @current_user.projects.create!(:name => project_name)
+  1.upto num.to_i do |i|
+    project.notes.create!(:user_id => @current_user.id, :body => "A note #{i}. This is the very long body of note #{i} where you should not see the last part of the note after 50 characters")
+  end
 end
 
 When /^I open the project edit form$/ do
@@ -92,10 +103,7 @@ end
 
 When /^I cancel the project edit form$/ do
   click_link "cancel_project_#{@project.id}"
-
-  wait_until do
-    !page.has_css?("submit_project_#{@project.id}")
-  end
+  page.should_not have_css("submit_project_#{@project.id}")
 end
 
 When /^I edit the project description to "([^\"]*)"$/ do |new_description|
@@ -135,8 +143,8 @@ Then /^I should (see|not see) empty message for (todos|deferred todos|completed 
   end
   
   elem = find(css)
-  elem.nil?.should be_false
-  elem.visible?.should(visible=="see" ? be_true : be_false)
+  elem.should_not be_nil
+  elem.send(visible=="see" ? "should" : "should_not", be_visible)
 end
 
 Then /^I edit the default tags to "([^"]*)"$/ do |default_tags|
@@ -169,9 +177,7 @@ end
 
 Then /^I should be able to change the project name in place$/ do
   #Note that this is not changing the project name
-  wait_until do
-    page.has_css? "div#project_name>form>input"
-  end
+  page.should have_css("div#project_name>form>input")
   page.find("div#project_name > form > button[type=cancel]").click
 end
 
@@ -179,12 +185,12 @@ When /^I edit the project settings$/ do
   @project.should_not be_nil
 
   click_link "link_edit_project_#{@project.id}"
-  page.has_xpath?("//div[@id='edit_project_#{@project.id}']/form//button[@id='submit_project_#{@project.id}']").should be_true
+  page.should have_xpath("//div[@id='edit_project_#{@project.id}']/form//button[@id='submit_project_#{@project.id}']")
 end
 
 Then /^I should not be able to change the project name in place$/ do
   step "I click to edit the project name in place"
-  page.has_xpath?("//div[@id='project_name']/form/input").should be_false
+  page.should_not have_xpath("//div[@id='project_name']/form/input")
 end
 
 When /^I close the project settings$/ do
@@ -193,7 +199,6 @@ When /^I close the project settings$/ do
   wait_for_ajax
   wait_for_animations_to_end
 end
-
 
 When /^I edit the project state of "([^"]*)" to "([^"]*)"$/ do |project_name, state_name|
   project = @current_user.projects.find_by_name(project_name)
@@ -243,7 +248,6 @@ Then /^I should see the bold text "([^\"]*)" in the project description$/ do |te
 
   page.should have_xpath(xpath)
   bold_text = page.find(:xpath, xpath).text
-
   bold_text.should =~ /#{text_in_bold}/
 end
 
@@ -252,7 +256,6 @@ Then /^I should see the italic text "([^\"]*)" in the project description$/ do |
 
   page.should have_xpath(xpath)
   italic_text = page.find(:xpath, xpath).text
-
   italic_text.should =~ /#{text_in_italic}/
 end
 
@@ -268,12 +271,12 @@ end
 
 Then /^I should (see|not see) the default project settings$/ do |visible|
   default_settings = "This project is active with no default context and with no default tags"
+  elem = page.find("div.project_settings")
+  
   if visible == "see"
-    elem = page.find("div.project_settings")
-    elem.visible?.should be_true
+    elem.should be_visible
     elem.text.should =~ /#{default_settings}/
   else
-    elem = page.find("div.project_settings")
-    elem.visible?.should be_false
+    elem.should_not be_visible
   end
 end

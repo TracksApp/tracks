@@ -81,6 +81,7 @@ end
 When /^I edit the description of "([^"]*)" to "([^"]*)"$/ do |action_description, new_description|
   todo = @current_user.todos.find_by_description(action_description)
   todo.should_not be_nil
+  
   open_edit_form_for(todo)
   fill_in "todo_description", :with => new_description
   submit_edit_todo_form(todo)
@@ -89,6 +90,7 @@ end
 When /^I try to edit the description of "([^"]*)" to "([^"]*)"$/ do |action_description, new_description|
   todo = @current_user.todos.find_by_description(action_description)
   todo.should_not be_nil
+  
   open_edit_form_for(todo)
   fill_in "todo_description", :with => new_description
   submit_button_xpath = "//div[@id='edit_todo_#{todo.id}']//button[@id='submit_todo_#{todo.id}']"
@@ -119,6 +121,7 @@ end
 When /^I clear the due date of "([^"]*)"$/ do |action_description|
   todo = @current_user.todos.find_by_description(action_description)
   todo.should_not be_nil
+  
   open_edit_form_for(todo)
   within "div#edit_todo_#{todo.id}" do
     find("a#due_x_todo_#{todo.id}").click
@@ -132,6 +135,7 @@ end
 When /^I edit the show from date of "([^"]*)" to next month$/ do  |action_description|
   todo = @current_user.todos.find_by_description(action_description)
   todo.should_not be_nil
+  
   open_edit_form_for(todo)
   fill_in "show_from_todo_#{todo.id}", :with => format_date(todo.created_at + 1.month)
   submit_edit_todo_form(todo)
@@ -143,7 +147,6 @@ When /^I remove the show from date from "([^"]*)"$/ do |action_description|
 
   open_edit_form_for(todo)
   page.find(:xpath, "//div[@id='edit_todo_#{todo.id}']//a[@id='show_from_x_todo_#{todo.id}']/img").click
-
   submit_edit_todo_form(todo)
 end
 
@@ -156,6 +159,7 @@ When /^I defer "([^"]*)" for 1 day$/ do |action_description|
   todo.should_not be_nil
 
   open_submenu_for(todo)
+  page.should have_css("a#defer_1_todo_#{todo.id}", :visible=>true)
   click_link "defer_1_todo_#{todo.id}"
 
   wait_for_ajax
@@ -176,6 +180,7 @@ When /^I make a project of "([^"]*)"$/ do |action_description|
   todo.should_not be_nil
 
   open_submenu_for(todo)
+  page.should have_css("a#to_project_todo_#{todo.id}", :visible=>true)
   click_link "to_project_todo_#{todo.id}"
 
   page.should have_no_css("div#line_todo_#{todo.id}")
@@ -187,5 +192,5 @@ end
 
 Then /^I should see an error message$/ do
   error_block = "//form/div[@id='edit_error_status']"
-  page.find(:xpath, error_block).should_not be_nil
+  page.should have_xpath(error_block)
 end

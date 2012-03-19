@@ -155,14 +155,14 @@ end
 
 ####### Repeat patterns #######
 
-Then /^I should see "([^"]*)" in the active recurring todos container$/ do |repeat_pattern|
+Then /^I should (see|not see) "([^"]*)" in the active recurring todos container$/ do |visibility, repeat_pattern|
   repeat = @current_user.recurring_todos.find_by_description(repeat_pattern)
 
   unless repeat.nil?
     xpath = "//div[@id='active_recurring_todos_container']//div[@id='recurring_todo_#{repeat.id}']"
-    page.should have_xpath(xpath, :visible => true)
+    page.send(visibility == "see" ? "should" : "should_not", have_xpath(xpath, :visible => true))
   else
-    step "I should see \"#{repeat_pattern}\""
+    step "I should #{visibility} \"#{repeat_pattern}\""
   end
 end
 

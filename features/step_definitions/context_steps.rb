@@ -72,17 +72,17 @@ Then /^he should see that a context named "([^\"]*)" is not present$/ do |contex
 end
 
 Then /^I should not see empty message for todos of context/ do
-  find("div#c#{@context.id}empty-nd").should_not be_visible
+  page.should_not have_css("div#c#{@context.id}empty-nd", :visible=>true)
 end
 
 Then /^I should see empty message for todos of context/ do
-  find("div#c#{@context.id}empty-nd").should be_visible
+  page.should have_css("div#c#{@context.id}empty-nd", :visible => true)
 end
 
 Then /^I should not see empty message for completed todos of context$/ do
-  find("div#empty-d").should_not be_visible
+  page.should_not have_css("div#empty-d", :visible=>true)
 end
 
 When /^I should see empty message for completed todos of context$/ do
-  find("div#empty-d").should be_visible
+  page.should have_css("div#empty-d", :visible=>true)
 end

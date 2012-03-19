@@ -16,7 +16,6 @@ GEM
       activesupport (= 2.3.14)
     activesupport (2.3.14)
     acts_as_list (0.1.4)
-    addressable (2.2.6)
     bcrypt-ruby (2.1.4)
     builder (3.0.0)
     capybara (1.1.2)
@@ -26,11 +25,6 @@ GEM
       rack-test (>= 0.5.4)
       selenium-webdriver (~> 2.0)
       xpath (~> 0.1.4)
-    capybara-screenshot (0.1.10)
-      capybara (>= 1.0)
-    capybara-webkit (0.9.0)
-      capybara (>= 1.0.0, < 1.2)
-      json
     cgi_multipart_eof_fix (2.5.0)
     childprocess (0.3.1)
       ffi (~> 1.0.6)
@@ -62,8 +56,6 @@ GEM
     httpclient (2.2.4)
     i18n (0.6.0)
     json (1.6.5)
-    launchy (2.0.5)
-      addressable (~> 2.2.6)
     linecache (0.46)
       rbx-require-relative (> 0.0.4)
     mail (2.4.1)
@@ -77,7 +69,7 @@ GEM
       daemons (>= 1.0.3)
       fastthread (>= 1.0.1)
       gem_plugin (>= 0.2.3)
-    multi_json (1.0.4)
+    multi_json (1.1.0)
     mysql (2.8.1)
     nokogiri (1.4.7)
     polyglot (0.3.3)
@@ -112,10 +104,10 @@ GEM
     rubyzip (0.9.6.1)
     sanitize (1.2.1)
       nokogiri (~> 1.4.1)
-    selenium-webdriver (2.14.0)
-      childprocess (>= 0.2.1)
-      ffi (~> 1.0.9)
-      multi_json (~> 1.0.4)
+    selenium-webdriver (2.20.0)
+      childprocess (>= 0.2.5)
+      ffi (~> 1.0)
+      multi_json (~> 1.0)
       rubyzip
     soap4r (1.5.8)
       httpclient (>= 2.1.1)
@@ -142,8 +134,6 @@ DEPENDENCIES
   acts_as_list (~> 0.1.4)
   bcrypt-ruby (~> 2.1.4)
   capybara (>= 0.3.5)
-  capybara-screenshot
-  capybara-webkit
   cucumber-rails (~> 0.3.2)
   database_cleaner (>= 0.5.0)
   flexmock
@@ -152,7 +142,6 @@ DEPENDENCIES
   hoe
   hpricot
   htmlentities (~> 4.3.0)
-  launchy
   mail
   memory_test_fix (~> 0.1.3)
   mongrel
@@ -166,7 +155,7 @@ DEPENDENCIES
   rubycas-client (~> 2.2.1)
   rubyjedi-actionwebservice
   sanitize (~> 1.2.1)
-  selenium-webdriver (= 2.14.0)
+  selenium-webdriver
   soap4r (~> 1.5.8)
   sqlite3
   test-unit (= 1.2.3)

@@ -160,7 +160,7 @@ end
 
 ####### PROJECT WITH TODOS ######
 
-Given /^I have a project "([^"]*)" that has the following todos$/ do |project_name, todos|
+Given /^I have a project "([^"]*)" that has the following (todos|deferred todos)$/ do |project_name, kind_of_todo, todos|
   step "I have a project called \"#{project_name}\""
   @project.should_not be_nil
   todos.hashes.each do |todo|
@@ -171,26 +171,7 @@ Given /^I have a project "([^"]*)" that has the following todos$/ do |project_na
       :context_id => context.id,
       :project_id=>@project.id,
       :notes => todo[:notes])
-    unless todo[:tags].nil?
-      new_todo.tag_with(todo[:tags])
-    end
-    unless todo[:completed].nil?
-      new_todo.complete! if todo[:completed] == 'yes'
-    end
-  end
-end
-
-Given /^I have a project "([^"]*)" that has the following deferred todos$/ do |project_name, todos|
-  step "I have a project called \"#{project_name}\""
-  @project.should_not be_nil
-  todos.hashes.each do |todo|
-    context = @current_user.contexts.find_by_name(todo[:context])
-    context.should_not be_nil
-    new_todo = @current_user.todos.create!(
-      :description => todo[:description],
-      :context_id => context.id,
-      :project_id=>@project.id,
-      :show_from=>Time.zone.now+1.week)
+    new_todo.show_from = Time.zone.now+1.week if kind_of_todo=="deferred todos"
     unless todo[:tags].nil?
       new_todo.tag_with(todo[:tags])
     end
@@ -213,9 +194,6 @@ When /^I submit a new action with description "([^"]*)" with a dependency on "([
 
   fill_in "todo[description]", :with => todo_description
   fill_in "predecessor_input", :with => predecessor_description
-  # input = "xpath=//form[@id='todo-form-new-action']//input[@id='predecessor_input']"
-  # selenium.focus(input)
-  # selenium.type_keys input, predecessor_description
 
   # wait for auto complete
   autocomplete = "//a[@id='ui-active-menuitem']"

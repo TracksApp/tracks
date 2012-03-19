@@ -36,7 +36,8 @@ end
 
 When /^I change my password to "([^"]*)"$/ do |password|
   step 'I should be on the change password page'
-  %w{password password_confirmation}.each { |name| fill_in "user[#{name}]", :with => password }
+  fill_in "user[password]", :with => password
+  fill_in "user[password_confirmation]", :with => password
   click_button "Change password"
 end
 
@@ -55,9 +56,7 @@ When /^I delete the user "([^\"]*)"$/ do |username|
   end
   get_confirm_text.should == "Warning: this will delete user '#{user.login}', all their actions, contexts, project and notes. Are you sure that you want to continue?"
   
-  wait_until do
-    !page.has_css?("tr#user-#{user.id}")
-  end
+  page.should_not have_css("tr#user-#{user.id}")
 end
 
 Then /^I should see that a user named "([^\"]*)" is not present$/ do |username|

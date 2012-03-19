@@ -68,17 +68,10 @@ When /^I delete the pattern "([^"]*)"$/ do |pattern_name|
   page.should_not have_css("#delete_icon_#{pattern.id}")
 end
 
-When /^I mark the pattern "([^"]*)" as complete$/ do |pattern_name|
+When /^I mark the pattern "([^"]*)" as (complete|active)$/ do |pattern_name, state|
   pattern = @current_user.recurring_todos.find_by_description(pattern_name)
   pattern.should_not be_nil
-  pattern.completed?.should be_false
-  page.find("#check_#{pattern.id}").click
-end
-
-When /^I mark the pattern "([^"]*)" as active$/ do |pattern_name|
-  pattern = @current_user.recurring_todos.find_by_description(pattern_name)
-  pattern.should_not be_nil
-  pattern.completed?.should be_true
+  pattern.completed?.should(state=="complete" ? be_false : be_true)
   page.find("#check_#{pattern.id}").click
 end
 

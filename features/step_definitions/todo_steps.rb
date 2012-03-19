@@ -25,10 +25,8 @@ When /^I open the notes of "([^"]*)"$/ do |action_description|
   todo.should_not be_nil
 
   page.find(:xpath, "//div[@id='line_todo_#{todo.id}']/div/a/img").click
-
-  wait_until do
-    page.find(:xpath, "//div[@id='notes_todo_#{todo.id}']").visible?
-  end
+  
+  page.should have_xpath("//div[@id='notes_todo_#{todo.id}']", :visible=>true)
 end
 
 ####### THEN #######
@@ -38,7 +36,6 @@ Then /^I should see a starred "([^"]*)"$/ do |action_description|
   todo.should_not be_nil
 
   xpath_starred = "//div[@id='line_todo_#{todo.id}']//img[@class='todo_star starred']"
-
   page.should have_xpath(xpath_starred)
 end
 
@@ -55,13 +52,6 @@ Then /^I should see ([0-9]+) todos$/ do |count|
   total.should == count.to_i
 end
 
-Then /^there should not be an error$/ do
-  # form should be gone and thus no errors visible
-  wait_for :timeout => 5 do
-    !selenium.is_visible("edit_todo_#{@dep_todo.id}")
-  end
-end
-
 Then /^I should see the todo "([^\"]*)"$/ do |todo_description|
   page.should have_xpath("//span[.=\"#{todo_description}\"]", :visible => true)
 end
@@ -76,14 +66,7 @@ Then /^I should see a completed todo "([^"]*)"$/ do |todo_description|
 
   # only completed todos have a grey span with the completed_at date
   xpath = "//div[@id='line_todo_#{todo.id}']/div/span[@class='grey']"
-
-  unless selenium.is_element_present(xpath)
-    wait_for :timeout => 5 do
-      selenium.is_element_present(xpath)
-    end
-  end
-  selenium.is_visible(xpath).should be_true
-
+  page.should have_xpath(xpath, :visible=>true)
 end
 
 Then /^I should see an active todo "([^"]*)"$/ do |todo_description|
@@ -105,9 +88,6 @@ end
 Then /^the selected project should be "([^"]*)"$/ do |content|
   # Works for mobile. TODO: make it work for both mobile and non-mobile
   if content.blank?
-    if page.has_css?("select#todo_project_id option[selected='selected']")
-      puts "text=#{page.find("select#todo_project_id option[selected='selected']").text}"
-    end
     page.has_css?("select#todo_project_id option[selected='selected']").should be_false
   else
     page.find("select#todo_project_id option[selected='selected']").text.should =~ /#{content}/
@@ -117,10 +97,6 @@ end
 Then /^the selected context should be "([^"]*)"$/ do |content|
   # Works for mobile. TODO: make it work for both mobile and non-mobile
   if content.blank?
-    if page.has_css?("select#todo_context_id option[selected='selected']")
-      puts "text=#{page.find("select#todo_context_id option[selected='selected']").text}"
-      save_and_open_page
-    end
     page.has_css?("select#todo_context_id option[selected='selected']").should be_false
   else
     page.find("select#todo_context_id option[selected='selected']").text.should =~ /#{content}/
@@ -132,9 +108,7 @@ Then /^I should see the page selector$/ do
 end
 
 Then /^the page should be "([^"]*)"$/ do |page_number|
-  page_number_found = -1
-  page_number_xpath = ".//span[@class='current']"
-  page.find(:xpath, page_number_xpath).text.should == page_number
+  page.find(:xpath, ".//span[@class='current']").text.should == page_number
 end
 
 Then /^the project field of the new todo form should contain "([^"]*)"$/ do |project_name|
@@ -172,41 +146,19 @@ Then /^I should see "([^"]*)" in the completed section of the mobile site$/ do |
   page.should have_xpath(xpath)
 end
 
-Then /^I should not see empty message for todos of home/ do
-  find("div#no_todos_in_view").should_not be_visible
-end
-
-Then /^I should see empty message for todos of home/ do
-  find("div#no_todos_in_view").should be_visible
-end
-
-Then /^I should not see empty message for completed todos of home$/ do
-  find("div#empty-d").should_not be_visible
-end
-
-Then /^I should see empty message for completed todos of home$/ do
-  find("div#empty-d").should be_visible
+Then /^I should (see|not see) empty message for (completed todos|todos) of home/ do |visible, kind_of_todo|
+  elem = find(kind_of_todo=="todos" ? "div#no_todos_in_view" : "div#empty-d")
+  elem.send(visible=="see" ? "should" : "should_not", be_visible)
 end
 
 Then /^I should (see|not see) the empty tickler message$/ do |see|
   elem = find("div#tickler-empty-nd")
-  if see=="see"
-    elem.should be_visible
-  else
-    elem.should_not be_visible
-  end
+  elem.send(see=="see" ? "should" : "should_not", be_visible)
 end
 
-Then /^I should not see the notes of "([^"]*)"$/ do |todo_description|
+Then /^I should (see|not see) the notes of "([^"]*)"$/ do |visible, todo_description|
   todo = @current_user.todos.find_by_description(todo_description)
   todo.should_not be_nil
   
-  page.find("div#notes_todo_#{todo.id}").should_not be_visible
-end
-
-Then /^I should see the notes of "([^"]*)"$/ do |todo_description|
-  todo = @current_user.todos.find_by_description(todo_description)
-  todo.should_not be_nil
-  
-  page.find("div#notes_todo_#{todo.id}").should be_visible
+  page.find("div#notes_todo_#{todo.id}").send(visible=="see" ? "should" : "should_not", be_visible)
 end

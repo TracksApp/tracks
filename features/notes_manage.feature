@@ -33,8 +33,7 @@ Feature: View, add, remove notes
     Given I have a project "Pass Final Exam" with 2 notes
     When I go to the notes page
     And I delete the first note
-    Then the first note should disappear
-    And the badge should show 1
+    Then the badge should show 1
 
   @javascript
   Scenario: Edit a note
