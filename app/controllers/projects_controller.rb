@@ -134,6 +134,7 @@ class ProjectsController < ApplicationController
       render_failure "Expected post format is valid xml like so: <request><project><name>project name</name></project></request>."
       return
     end
+    TodosController.strip_params(params)
 
     @project = current_user.projects.build
     params_are_invalid = true
