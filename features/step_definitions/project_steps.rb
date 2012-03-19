@@ -130,29 +130,6 @@ When /^I edit the default context to "([^"]*)"$/ do |default_context|
   end
 end
 
-Then /^I should (see|not see) empty message for (todos|deferred todos|completed todos) of project/ do |visible, state|
-  case state
-  when "todos"
-    css = "div#p#{@project.id}empty-nd"
-  when "deferred todos"
-    css = "div#tickler-empty-nd"
-  when "completed todos"
-    css = "div#empty-d"
-  else
-    css = "wrong state"
-  end
-  
-  elem = find(css)
-  elem.should_not be_nil
-  elem.send(visible=="see" ? "should" : "should_not", be_visible)
-end
-
-Then /^I edit the default tags to "([^"]*)"$/ do |default_tags|
-  edit_project(@project) do
-    fill_in "project[default_tags]", :with => default_tags
-  end
-end
-
 When /^I edit the project name of "([^"]*)" to "([^"]*)"$/ do |project_current_name, project_new_name|
   @project = @current_user.projects.find_by_name(project_current_name)
   @project.should_not be_nil
@@ -175,12 +152,6 @@ When /^I click to edit the project name in place$/ do
   page.find("div#project_name").click
 end
 
-Then /^I should be able to change the project name in place$/ do
-  #Note that this is not changing the project name
-  page.should have_css("div#project_name>form>input")
-  page.find("div#project_name > form > button[type=cancel]").click
-end
-
 When /^I edit the project settings$/ do
   @project.should_not be_nil
 
@@ -188,10 +159,6 @@ When /^I edit the project settings$/ do
   page.should have_xpath("//div[@id='edit_project_#{@project.id}']/form//button[@id='submit_project_#{@project.id}']")
 end
 
-Then /^I should not be able to change the project name in place$/ do
-  step "I click to edit the project name in place"
-  page.should_not have_xpath("//div[@id='project_name']/form/input")
-end
 
 When /^I close the project settings$/ do
   @project.should_not be_nil
@@ -227,6 +194,40 @@ When /^I cancel adding a note to the project$/ do
   click_link "Add a note"
   fill_in "note[body]", :with => "will not save this"
   click_link "neg_edit_form_note"
+end
+
+Then /^I should (see|not see) empty message for (todos|deferred todos|completed todos) of project/ do |visible, state|
+  case state
+  when "todos"
+    css = "div#p#{@project.id}empty-nd"
+  when "deferred todos"
+    css = "div#tickler-empty-nd"
+  when "completed todos"
+    css = "div#empty-d"
+  else
+    css = "wrong state"
+  end
+  
+  elem = find(css)
+  elem.should_not be_nil
+  elem.send(visible=="see" ? "should" : "should_not", be_visible)
+end
+
+Then /^I edit the default tags to "([^"]*)"$/ do |default_tags|
+  edit_project(@project) do
+    fill_in "project[default_tags]", :with => default_tags
+  end
+end
+
+Then /^I should be able to change the project name in place$/ do
+  #Note that this is not changing the project name
+  page.should have_css("div#project_name>form>input")
+  page.find("div#project_name > form > button[type=cancel]").click
+end
+
+Then /^I should not be able to change the project name in place$/ do
+  step "I click to edit the project name in place"
+  page.should_not have_xpath("//div[@id='project_name']/form/input")
 end
 
 Then /^the form for adding a note should not be visible$/ do
@@ -279,4 +280,15 @@ Then /^I should (see|not see) the default project settings$/ do |visible|
   else
     elem.should_not be_visible
   end
+end
+
+Then /^I should have a project called "([^"]*)"$/ do |project_name|
+  project = @current_user.projects.find_by_name(project_name)
+  project.should_not be_nil
+end
+
+Then /^I should have (\d+) todo in project "([^"]*)"$/ do |todo_count, project_name|
+  project = @current_user.projects.find_by_name(project_name)
+  project.should_not be_nil
+  project.todos.count.should == todo_count.to_i
 end
