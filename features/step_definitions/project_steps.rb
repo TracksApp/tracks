@@ -272,6 +272,8 @@ end
 
 Then /^I should (see|not see) the default project settings$/ do |visible|
   default_settings = "This project is active with no default context and with no default tags"
+
+  page.should have_css("div.project_settings")
   elem = page.find("div.project_settings")
   
   if visible == "see"
