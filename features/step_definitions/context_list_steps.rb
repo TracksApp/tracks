@@ -44,7 +44,7 @@ When /^I drag context "([^"]*)" above context "([^"]*)"$/ do |context_drag, cont
   drag_index = context_list_find_index(context_drag)
   drop_index = context_list_find_index(context_drop)
   
-  page.execute_script "$('#{sortable_css}').simulateDragSortable({move: #{drop_index-drag_index}, handle: '.handle'});"
+  page.execute_script "$('#{sortable_css}').simulateDragSortable({move: #{drop_index-drag_index}, handle: '.grip'});"
 end
 
 Then /^context "([^"]*)" should be above context "([^"]*)"$/ do |context_high, context_low|

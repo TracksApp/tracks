@@ -891,7 +891,7 @@ var ContextListPage = {
         /* make the two state lists of context sortable */
         $(['active', 'hidden']).each(function() {
             $("#list-contexts-"+this).sortable({
-                handle: '.handle',
+                handle: '.grip',
                 update: update_order
             })
         });

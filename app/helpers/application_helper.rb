@@ -120,18 +120,6 @@ module ApplicationHelper
     link_to( descriptor, project, :title => "View project: #{project.name}" )
   end
 
-  def link_to_edit_project (project, descriptor = sanitize(project.name))
-    link_to(descriptor,
-      url_for({:controller => 'projects', :action => 'edit', :id => project.id}),
-      {:id => "link_edit_#{dom_id(project)}", :class => "project_edit_settings icon"})
-  end
-
-  def link_to_edit_context (context, descriptor = sanitize(context.name))
-    link_to(descriptor,
-      url_for({:controller => 'contexts', :action => 'edit', :id => context.id}),
-      {:id => "link_edit_#{dom_id(context)}", :class => "context_edit_settings"})
-  end
-
   def link_to_edit_note (note, descriptor = sanitize(note.id.to_s))
     link_to(descriptor,
       url_for({:controller => 'notes', :action => 'edit', :id => note.id}),

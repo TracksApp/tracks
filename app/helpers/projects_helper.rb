@@ -58,6 +58,15 @@ module ProjectsHelper
     )
   end
 
+  def link_to_edit_project (project, descriptor = sanitize(project.name))
+    link_to(descriptor,
+      url_for({:controller => 'projects', :action => 'edit', :id => project.id}),
+      {
+        :id => "link_edit_#{dom_id(project)}",
+        :class => "project_edit_settings icon"
+      })
+  end
+  
   def summary(project)
     project_description = ''
     project_description += sanitize(markdown( project.description )) unless project.description.blank?

@@ -430,12 +430,12 @@ input.item-checkbox {
     vertical-align: middle;
 }
 
-.rec_description, .description, .project_description {
+.rec_description, .description, .project_description, .context_description {
     margin-left: 80px;
     position:relative;
 }
 
-.project_description {
+.project_description, .context_description {
   margin-left: 50px;
 }
 
@@ -861,6 +861,7 @@ form {
     padding: 10px;
     margin: 0px;
 }
+
 .inline-form {
     border: none;
     padding: 3px;
