@@ -75,9 +75,7 @@ Then /^I should see the note text$/ do
 end
 
 Then /^I should not see the note "([^"]*)"$/ do |note_content|
-  if page.has_selector?("div", :text => note_content)
-    page.find("div", :text => note_content).should_not be_visible
-  end
+  page.should_not have_selector("div", :text => note_content, :visible => true)
 end
 
 Then /^I should see the note "([^"]*)"$/ do |note_content|

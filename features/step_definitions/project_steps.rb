@@ -104,6 +104,7 @@ end
 When /^I cancel the project edit form$/ do
   click_link "cancel_project_#{@project.id}"
   page.should_not have_css("submit_project_#{@project.id}")
+  wait_for_animations_to_end
 end
 
 When /^I edit the project description to "([^\"]*)"$/ do |new_description|

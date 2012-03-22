@@ -180,6 +180,7 @@ class TodosController < ApplicationController
     @todos_init = []
     @predecessor = nil
     validates = true
+    errors = []
     
     # first build all todos and check if they would validate on save
     params[:todo][:multiple_todos].split("\n").map do |line|
@@ -188,7 +189,8 @@ class TodosController < ApplicationController
           :description => line)
         @todo.project_id = @project_id
         @todo.context_id = @context_id
-        validates = validates && !@todo.invalid?
+        validates = false if @todo.invalid?
+        
         @todos_init << @todo
       end
     end
@@ -198,6 +200,7 @@ class TodosController < ApplicationController
     if validates
       @todos_init.each do |todo|
         @saved = todo.save
+        validates = validates && @saved
 
         if @predecessor && @saved && @sequential
           todo.add_predecessor(@predecessor)
@@ -214,9 +217,10 @@ class TodosController < ApplicationController
         @predecessor = todo
       end
     else
+      @todos = @todos_init
       @saved = false
     end
-
+    
     respond_to do |format|
       format.html { redirect_to :action => "index" }
       format.js do
@@ -229,7 +233,7 @@ class TodosController < ApplicationController
         if @saved && @todos.size > 0
           @default_tags = @todos[0].project.default_tags unless @todos[0].project.nil?
         else
-          @multiple_error = t('todos.next_action_needed')
+          @multiple_error = @todos.size > 0 ? "" : t('todos.next_action_needed')
           @saved = false
           @default_tags = current_user.projects.find_by_name(@initial_project_name).default_tags unless @initial_project_name.blank?
         end
