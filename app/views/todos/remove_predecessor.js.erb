@@ -26,7 +26,7 @@ function regenerate_predecessor_family() {
 function update_successor() {
   <%
   if @successor.active? -%>
-    <%= "remove_successor();" unless source_view_is_one_of(:todo, :context) %>
+    <%= "remove_successor();" unless source_view_is(:todo) %>
     <%= "hide_empty_message();" unless empty_container_msg_div_id.nil? %>
     <%= "show_empty_deferred_message(); " if @remaining_deferred_or_pending_count == 0 %>
     <% if source_view_is_one_of(:todo, :deferred, :tag) -%>

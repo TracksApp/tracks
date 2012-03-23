@@ -529,7 +529,7 @@ class TodosController < ApplicationController
       format.js do
         if @saved
           determine_down_count
-          if source_view_is_one_of(:todo, :deferred, :project)
+          if source_view_is_one_of(:todo, :deferred, :project, :context)
             determine_remaining_in_context_count(@context_id)
           elsif source_view_is :calendar
             @original_item_due_id = get_due_id_for_calendar(@original_item_due)
@@ -1136,13 +1136,18 @@ class TodosController < ApplicationController
       }
       from.context {
         context = current_user.contexts.find(context_id)
+        @remaining_deferred_or_pending_count = context.todos.deferred_or_blocked.count
 
         remaining_actions_in_context = context.todos(true).active
         remaining_actions_in_context = remaining_actions_in_context.not_hidden if !context.hide?
         @remaining_in_context = remaining_actions_in_context.count
 
-        actions_in_target = current_user.contexts.find(@todo.context_id).todos(true).active
-        actions_in_target = actions_in_target.not_hidden if !context.hide?
+        if @todo_was_deferred_or_blocked
+          actions_in_target = current_user.contexts.find(@todo.context_id).todos(true).active
+          actions_in_target = actions_in_target.not_hidden if !context.hide?
+        else
+          actions_in_target = @todo.context.todos.deferred_or_blocked
+        end
         @target_context_count = actions_in_target.count
       }
     end

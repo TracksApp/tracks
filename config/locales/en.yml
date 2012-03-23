@@ -877,6 +877,7 @@ en:
     no_contexts_hidden: Currently there are no hidden contexts
     new_context_pre: New context '
     status_hidden: Context is hidden
+    todos_append: in this context
   login:
     login_cas: go to the CAS
     sign_in: Sign in

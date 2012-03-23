@@ -277,10 +277,13 @@ class ContextsController < ApplicationController
       # search manually until I can work out a way to do the same thing using
       # not_done_todos acts_as_todo_container method Hides actions in hidden
       # projects from context.
-      @not_done_todos = @context.todos.not_completed(
+      @not_done_todos = @context.todos.active(
         :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC",
         :include => Todo::DEFAULT_INCLUDES)
 
+      @deferred = @context.todos.deferred(:include => Todo::DEFAULT_INCLUDES)
+      @pending = @context.todos.pending(:include => Todo::DEFAULT_INCLUDES)
+        
       @projects = current_user.projects
 
       @count = @not_done_todos.size
