@@ -286,7 +286,7 @@ class ContextsController < ApplicationController
         
       @projects = current_user.projects
 
-      @count = @not_done_todos.size
+      @count = @not_done_todos.count + @deferred.count + @pending.count
     end
 
   end

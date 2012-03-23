@@ -18,7 +18,7 @@ Given /^I have a project "([^"]*)" with (\d+) active actions and (\d+) deferred 
   step "I have a project \"#{name}\" with #{deferred_count} deferred todos"
 end
 
-Given /^I have a project "([^\"]*)" with ([0-9]+) (todo|active todo|deferred todo)s$/ do |project_name, num_todos, state|
+Given /^I have a project "([^"]*)" with (\d+) (todo|active todo|deferred todo)s prefixed by "([^\"]*)"$/ do |project_name, num_todos, state, prefix|
   @context = @current_user.contexts.find_or_create_by_name("Context A")
   @project = @current_user.projects.find_or_create_by_name(project_name)
   # acts_as_list adds at top by default, but that is counter-intuitive when reading scenario's, so reverse this
@@ -29,11 +29,15 @@ Given /^I have a project "([^\"]*)" with ([0-9]+) (todo|active todo|deferred tod
     todo = @current_user.todos.create!(
       :project_id => @project.id,
       :context_id => @context.id,
-      :description => "#{state} #{i}")
+      :description => "#{prefix}#{state} #{i}")
     todo.show_from = Time.zone.now + 1.week if state=="deferred todo"
     todo.save!
     @todos << todo
   end
+end
+
+Given /^I have a project "([^"]*)" with (\d+) (todos|active todos|deferred todos)$/ do |project_name, num_todos, state|
+  step "I have a project \"#{project_name}\" with #{num_todos} #{state} prefixed by \"\""
 end
 
 Given /^there exists a project (?:|called )"([^"]*)" for user "([^"]*)"$/ do |project_name, user_name|
@@ -198,16 +202,10 @@ When /^I cancel adding a note to the project$/ do
 end
 
 Then /^I should (see|not see) empty message for (todos|deferred todos|completed todos) of project/ do |visible, state|
-  case state
-  when "todos"
-    css = "div#p#{@project.id}empty-nd"
-  when "deferred todos"
-    css = "div#tickler-empty-nd"
-  when "completed todos"
-    css = "div#empty-d"
-  else
-    css = "wrong state"
-  end
+  css = "wrong state"
+  css = "div#p#{@project.id}empty-nd" if state == "todos"
+  css = "div#tickler-empty-nd"        if state == "deferred todos"
+  css = "div#empty-d"                 if state == "completed todos"
   
   elem = find(css)
   elem.should_not be_nil

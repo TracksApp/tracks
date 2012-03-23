@@ -82,15 +82,21 @@ Then /^I should not see "([^"]*)" in the deferred container$/ do |todo_descripti
   page.should_not have_xpath("//div[@id='tickler']//div[@id='line_todo_#{todo.id}']")
 end
 
-####### Project #######
-
-Then /^I should see "([^"]*)" in the action container$/ do |todo_description|
+Then /^I should (not see|see) "([^"]*)" in the action container$/ do |visible, todo_description|
   todo = @current_user.todos.find_by_description(todo_description)
   todo.should_not be_nil
 
-  xpath = "//div[@id='p#{todo.project.id}items']//div[@id='line_todo_#{todo.id}']"
-  page.should have_xpath(xpath)
+  id = @source_view=="project" ? "p#{todo.project_id}items" : "c#{todo.context_id}items"
+
+  xpath = "//div[@id='#{id}']//div[@id='line_todo_#{todo.id}']"
+  page.send(visible=="see" ? :should : :should_not, have_xpath(xpath))
 end
+
+Then /^I should not see "([^"]*)" in the context container of "([^"]*)"$/ do |todo_description, context_name|
+  step "I should not see \"#{todo_description}\" in the action container"
+end
+
+####### Project #######
 
 Then /^I should not see "([^"]*)" in the project container of "([^"]*)"$/ do |todo_description, project_name|
   todo = @current_user.todos.find_by_description(todo_description)

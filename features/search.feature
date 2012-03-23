@@ -32,16 +32,16 @@ Feature: Show all due actions in a calendar view
       | testing search  | @work   |
     When I go to the search page
     And I search for "test"
-    Then I should see "tester of stuff"
+    Then I should see the todo "tester of stuff"
     When I star the action "tester of stuff"
     Then I should see a starred "tester of stuff"
     When I edit the description of "tester of stuff" to "test 1-2-3"
-    Then I should not see "tester of stuff"
-    And I should see "test 1-2-3"
+    Then I should not see the todo "tester of stuff"
+    And I should see the todo "test 1-2-3"
     When I go to the search page
     And I search for "test"
-    Then I should not see "tester of stuff"
-    And I should see "test 1-2-3"
+    Then I should not see the todo "tester of stuff"
+    And I should see the todo "test 1-2-3"
 
   @javascript
   Scenario: I can delete found todos

@@ -99,6 +99,10 @@ module NavigationHelpers
       @source_view = "context"
       @context = @current_user.contexts.find_by_name($1)
       context_path(@context, options)
+    when /the "([^\"]*)" context/i
+      @source_view = "context"
+      @context = @current_user.contexts.find_by_name($1)
+      context_path(@context, options)
     when /the "([^\"]*)" project for user "([^\"]*)"/i
       @source_view = "project"
       @project = User.find_by_login($2).projects.find_by_name($1)

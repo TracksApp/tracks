@@ -9,7 +9,7 @@ Feature: Add new next action from every page
       | testuser | secret   | false    |
     And I have logged in as "testuser" with password "secret"
     And I have a context called "test context"
-    And I have a project "test project" with 1 todos
+    And I have a project "test project"
 
   @javascript
   Scenario Outline: I can hide the input form for single next action on a page
@@ -99,6 +99,7 @@ Feature: Add new next action from every page
 
   @javascript
   Scenario Outline: I can add multiple todos from several pages
+    Given I have a project "testing" with 1 todos
     When I go to the <page>
     And I follow "Add multiple next actions"
     And I submit multiple actions with using
@@ -115,7 +116,7 @@ Feature: Add new next action from every page
       | page                            | see     | badge | count |
       | home page                       | see     | 3     | 3     |
       | tickler page                    | not see | 0     | 3     |
-      | "test project" project          | see     | 3     | 3     |
+      | "testing" project               | see     | 3     | 3     |
       | context page for "test context" | see     | 2     | 3     |
       | tag page for "starred"          | not see | 0     | 3     |
 
@@ -148,9 +149,9 @@ Feature: Add new next action from every page
 
     Scenarios:
       | page                            | todo            | badge | visible        |
-      | home page                       | action          | 2     | be visible     |
+      | home page                       | action          | 1     | be visible     |
       | tickler page                    | deferred action | 1     | be visible     |
-      | "test project" project          | action          | 2     | not be visible |
+      | "test project" project          | action          | 1     | not be visible |
       | context page for "test context" | action          | 1     | not be visible |
       | tag page for "starred"          | action          | 1     | be visible     |
 
@@ -188,7 +189,7 @@ Feature: Add new next action from every page
     Then I should not see "another new todo"
 
   @javascript
-  Scenario: Adding a todo to a context show the todo in that context page
+  Scenario: Adding a todo to a context shows the todo in that context page
     Given I have a context called "visible context"
     And I have a hidden context called "hidden context"
     When I go to the context page for "visible context"
@@ -202,24 +203,31 @@ Feature: Add new next action from every page
   Scenario: Adding a todo to an empty container hides the empty message # TODO: make outline
     Given I have a context called "visible context"
     When I go to the tag page for "test"
-    Then I should see "Currently there are no incomplete actions with the tag 'test'"
+    Then I should see empty message for todos of tag
     When I submit a new action with description "a new todo" and the tags "test" in the context "visible context"
     Then I should see "a new todo"
-    And I should not see "Currently there are no incomplete actions with the tag 'bla'"
+    And I should not see empty message for todos of tag
 
   @javascript
-  Scenario: Adding a dependency to a todo updated the successor
-    When I go to the "test project" project
+  Scenario Outline: Adding a dependency to a todo updates the successor
+    Given I have a <list_type> "test" with 1 todos
+    When I go to the "test" <list_type>
     Then I should see "todo 1"
     When I submit a new action with description "a new todo" with a dependency on "todo 1"
-    Then I should not see "a new todo" in the project container of "test project"
+    Then I should not see "a new todo" in the <list_type> container of "test"
     When I expand the dependencies of "todo 1"
     Then I should see "a new todo" within the dependencies of "todo 1"
-    And I should not see empty message for deferred todos of project
+    And I should not see empty message for deferred todos of <list_type>
+    
+    Examples:
+    | list_type |
+    | project   |
+    | context   |
     
   @javascript
   Scenario: Adding a dependency to a todo in another project
-    Given I have a project "another project"
+    Given I have a project "testing" with 1 todos
+    And I have a project "another project"
     When I go to the "another project" project
     And I submit a new action with description "a new todo" with a dependency on "todo 1"
     Then I should not see "a new todo" in the project container of "another project"

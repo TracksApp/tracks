@@ -157,6 +157,7 @@ Feature: Edit a project
     When I go to the "test" project
     And I mark "deferred todo 1" as complete
     Then I should see empty message for todos of project
+    And I should see empty message for deferred todos of project
 
   # Ticket #1043
   @javascript
@@ -165,5 +166,5 @@ Feature: Edit a project
     And I have a project called "bar"
     When I go to the "foo" project
     And I change the project_name field of "todo 1" to "bar"
-    Then I should not see "todo 1"
-    And I should see "todo 2"
+    Then I should not see the todo "todo 1"
+    And I should see the todo "todo 2"

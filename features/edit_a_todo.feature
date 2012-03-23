@@ -19,7 +19,7 @@ Feature: Edit a next action from every page
     When I go to the tag page for "starred"
     Then I should see "star me"
 
-  @javascript @selenium_only
+  @javascript
   Scenario: I can delete a todo
     Given I have a todo "delete me" in the context "@home"
     When I go to the home page
@@ -27,10 +27,10 @@ Feature: Edit a next action from every page
     When I delete the action "delete me"
     Then I should not see "delete me"
 
-  @javascript @selenium_only
+  @javascript @wip
   Scenario: Removing the last todo in context will hide context
-  # the go to home page before the last delete was necessary because webkit was not able to
-  # hit the submenu arrow
+  # this script fails on https://code.google.com/p/selenium/issues/detail?id=3075 for selenium-webdriver > 2.14.
+  # and selenium-webdriver < 2.20 fails on firefox 11 :-( So @wip for now. This will work on webkit though
     Given I have a todo "delete me" in the context "@home"
     When I go to the home page
     Then I should see the container for context "@home"
@@ -44,13 +44,12 @@ Feature: Edit a next action from every page
     Then I should not see the container for context "@home"
     And I should see the container for context "@pc"
     And I should see "delete me" in the context container for "@pc"
-    When I go to the home page
     And I delete the todo "delete me"
-    Then I should not see "delete me"
+    Then I should not see the todo "delete me"
     And I should not see the container for context "@home"
     And I should not see the container for context "@pc"
 
-  @javascript @selenium_only
+  @javascript
   Scenario Outline: Deleting the last todo in container will show empty message # only project, context, tag, not todo
     Given I have a context called "@home"
     And I have a project "my project" that has the following todos
@@ -105,9 +104,10 @@ Feature: Edit a next action from every page
     And I should see "visible todo" in the completed container
 
     Scenarios:
-      | page                      | page type  |
-      | tag page for "starred"    | tag        |
-      | "visible project" project | project    |
+      | page                               | page type  |
+      | tag page for "starred"             | tag        |
+      | "visible project" project          | project    |
+      | context page for "visible context" | context    |
 
   @javascript
   Scenario Outline: I can mark a completed todo active and it will update empty messages and context containers
@@ -144,12 +144,11 @@ Feature: Edit a next action from every page
 
   @javascript
   Scenario Outline: I can edit a todo to change its description
-    # do for more pages, see #1094
     Given I have a todo with description "visible todo" in project "visible project" with tags "starred" in the context "visible context" that is due next week
     When I go to the <page>
     And I edit the description of "visible todo" to "changed todo"
-    Then I should not see "visible todo"
-    And I should see "changed todo"
+    Then I should not see the todo "visible todo"
+    And I should see the todo "changed todo"
 
     Scenarios:
       | page                               |
@@ -196,18 +195,18 @@ Feature: Edit a next action from every page
     And I have a project "project two" with 1 todos
     When I go to the "project two" project
     And I edit the project of "todo 1" to "project one"
-    Then I should not see "todo 1"
+    Then I should not see the todo "todo 1"
     When I go to the "project one" project
-    Then I should see "todo 1"
+    Then I should see the todo "todo 1"
 
   @javascript
   Scenario: I can edit a todo to move it to the tickler
     When I go to the home page
     And I submit a new action with description "start later" in the context "@pc"
     And I edit the show from date of "start later" to next month
-    Then I should not see "start later"
+    Then I should not see the todo "start later"
     When I go to the tickler page
-    Then I should see "start later"
+    Then I should see the todo "start later"
 
   @javascript @wip
   Scenario: I can defer a todo
@@ -246,8 +245,8 @@ Feature: Edit a next action from every page
     Given I have a todo "tag me"
     When I go to the home page
     And I edit the tags of "tag me" to "bla, bli"
-    Then I should see "bla"
-    And I should see "bli"
+    Then I should see the todo "bla"
+    And I should see the todo "bli"
 
   Scenario: Clicking a tag of a todo will go to that tag page
     Given I have a todo "tag you are it" in context "@tags" with tags "taga, tagb"

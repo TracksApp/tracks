@@ -20,7 +20,7 @@ Given /^I have a todo "([^"]*)" in the context "([^"]*)" which is due tomorrow$/
   @todo.save!
 end
 
-Given /^I have (\d+) todos in project "([^"]*)" in context "([^"]*)" with tags "([^"]*)"$/ do |number_of_todos, project_name, context_name, tag_names|
+Given /^I have (\d+) todos in project "([^"]*)" in context "([^"]*)" with tags "([^"]*)" prefixed by "([^"]*)"$/ do |number_of_todos, project_name, context_name, tag_names, prefix|
   @context = @current_user.contexts.find_by_name(context_name)
   @context.should_not be_nil
 
@@ -29,11 +29,15 @@ Given /^I have (\d+) todos in project "([^"]*)" in context "([^"]*)" with tags "
 
   @todos = []
   number_of_todos.to_i.downto 1 do |i|
-    todo = @current_user.todos.create!(:context_id => @context.id, :description => "todo #{i}", :project_id => @project.id)
+    todo = @current_user.todos.create!(:context_id => @context.id, :description => "#{prefix}todo #{i}", :project_id => @project.id)
     todo.tag_with(tag_names)
     todo.save!
     @todos << todo
   end
+end
+
+Given /^I have (\d+) todos in project "([^"]*)" in context "([^"]*)" with tags "([^"]*)"$/ do |number_of_todos, project_name, context_name, tag_names|
+  step "I have #{number_of_todos} todos in project \"#{project_name}\" in context \"#{context_name}\" with tags \"#{tag_names}\" prefixed by \"\""
 end
 
 Given /^I have a todo "([^"]*)"$/ do |description|

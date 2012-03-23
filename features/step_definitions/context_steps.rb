@@ -46,11 +46,17 @@ Given /^I have the following contexts$/ do |table|
   step("I have the following contexts:", table)
 end
 
-Given /^I have a context "([^\"]*)" with (.*) actions$/ do |context_name, number_of_actions|
+Given /^I have a context "([^\"]*)" with (\d+) (?:actions|todos)$/ do |context_name, number_of_actions|
   context = @current_user.contexts.create!(:name => context_name)
+  @todos=[]
   1.upto number_of_actions.to_i do |i|
-    @current_user.todos.create!(:context_id => context.id, :description => "todo #{i}")
+    @todos << @current_user.todos.create!(:context_id => context.id, :description => "todo #{i}")
   end
+end
+
+Given /^I have a context "([^\"]*)" with (\d+) deferred (?:actions|todos)$/ do |context_name, number_of_actions|
+  step "I have a context \"#{context_name}\" with #{number_of_actions} actions"
+  @todos.each {|todo| todo.description = "deferred "+todo.description; todo.show_from = Time.zone.now + 1.week; todo.save!}
 end
 
 When /^I edit the context name in place to be "([^\"]*)"$/ do |new_context_name|
@@ -63,26 +69,15 @@ Then /^I should see the context name is "([^\"]*)"$/ do |context_name|
   step "I should see \"#{context_name}\""
 end
 
-Then /^he should see that a context named "([^\"]*)" is present$/ do |context_name|
-  step "I should see \"#{context_name}\""
+Then /^he should see that a context named "([^\"]*)" (is|is not) present$/ do |context_name, visible|
+  step "I should #{visible} \"#{context_name}\""
 end
 
-Then /^he should see that a context named "([^\"]*)" is not present$/ do |context_name|
-  step "I should not see \"#{context_name} (\""
-end
-
-Then /^I should not see empty message for todos of context/ do
-  page.should_not have_css("div#c#{@context.id}empty-nd", :visible=>true)
-end
-
-Then /^I should see empty message for todos of context/ do
-  page.should have_css("div#c#{@context.id}empty-nd", :visible => true)
-end
-
-Then /^I should not see empty message for completed todos of context$/ do
-  page.should_not have_css("div#empty-d", :visible=>true)
-end
-
-When /^I should see empty message for completed todos of context$/ do
-  page.should have_css("div#empty-d", :visible=>true)
+Then /^I should (see|not see) empty message for (todo|completed todo|deferred todo)s of context/ do |visible, state|
+  css = "error"
+  css = "div#c#{@context.id}empty-nd" if state == "todo"
+  css = "div#empty-d"                 if state == "completed todo"
+  css = "div#tickler-empty-nd"        if state == "deferred todo"
+  
+  page.send(visible=="see" ? :should : :should_not, have_css(css, :visible=>true))
 end

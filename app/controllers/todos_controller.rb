@@ -1371,6 +1371,7 @@ class TodosController < ApplicationController
     @original_item_due = @todo.due
     @original_item_due_id = get_due_id_for_calendar(@todo.due)
     @original_item_predecessor_list = @todo.predecessors.map{|t| t.specification}.join(', ')
+    @todo_was_deferred_or_blocked = @todo.deferred? || @todo.pending?
   end
 
   def update_project

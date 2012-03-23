@@ -19,9 +19,9 @@ Feature: Tagging todos
   Scenario: I can remove a tag from a todo from the tag view and the todo will be removed
     Given I have a todo "fix tests" in context "@pc" with tags "now"
     When I go to the tag page for "now"
-    Then I should see "fix tests"
+    Then I should see the todo "fix tests"
     When I edit the tags of "fix tests" to "later"
-    Then I should not see "fix tests"
+    Then I should not see the todo "fix tests"
 
   @javascript
   Scenario: I can add a new todo from tag view with that tag and it will be added to the page
