@@ -12,15 +12,15 @@ Feature: Edit a context
     And I have a project called "test project"
     And I have 2 todos in project "test project" in context "@pc" with tags "starred" prefixed by "test_project "
 
-  @javascript
+  @javascript @wip
   Scenario: In place edit of context name
     Given I have a context called "Errands"
     When I go to the context page for "Errands"
     And I edit the context name in place to be "OutAndAbout"
     Then I should see the context name is "OutAndAbout"
     When I go to the contexts page
-    Then he should see that a context named "Errands" is not present
-    And he should see that a context named "OutAndAbout" is present
+    Then I should see that a context named "Errands" is not present
+    And I should see that a context named "OutAndAbout" is present
 
   @javascript
   Scenario: Editing the context of a todo will remove the todo
@@ -34,7 +34,7 @@ Feature: Edit a context
   Scenario: Editing the description of a a todo will update that todo
     When I go to the the context page for "@pc"
     And I edit the description of "test_project todo 1" to "changed"
-    Then I should not see "test_project todo 1"
+    Then I should not see the todo "test_project todo 1"
     And I should see "changed"
 
   @javascript

@@ -51,9 +51,10 @@ Then /^context "([^"]*)" should be above context "([^"]*)"$/ do |context_high, c
   context_list_find_index(context_high).should < context_list_find_index(context_low)
 end
 
-Then /^I should see that a context named "([^"]*)" is not present$/ do |context_name|
+Then /^I should see that a context named "([^"]*)" (is|is not) present$/ do |context_name, present|
+  is_not = present=="is not" ? "not " : ""
   within "div#display_box" do
-    step "I should not see \"#{context_name}\""
+    step "I should #{is_not}see \"#{context_name}\""
   end
 end
 
