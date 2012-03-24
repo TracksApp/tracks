@@ -843,7 +843,7 @@ en:
     projects_and_actions: Active projects with their actions
     context_needed: There needs to be at least one context before you can request a feed
     actions_due_next_week: Actions due in 7 days or earlier
-    notice_incomplete_only: "Note: All feeds show only actions that have not been marked as done, unless stated otherwise."
+    notice_incomplete_only: "Note: All feeds show only actions that have not been marked as done, unless stated otherwise. These iCal feeds can be added to todo lists. If you want to show due todos in a calendar, use the iCal feed on the calendar page"
     all_actions: All actions
     actions_completed_last_week: Actions completed in the last 7 days
     context_centric_actions: Feeds for incomplete actions in a specific context
