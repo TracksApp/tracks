@@ -1,3 +1,9 @@
+.project_quickaction {
+    background: white;
+    padding: 3px;
+    margin: 2px;
+}
+
 .needsreview {
     background: #ffC;
 }
