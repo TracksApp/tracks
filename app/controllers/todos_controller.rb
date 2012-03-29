@@ -846,9 +846,16 @@ class TodosController < ApplicationController
     @todo = current_user.todos.find(params[:id])
     @project = current_user.projects.new(:name => @todo.description, :description => @todo.notes,
       :default_context => @todo.context)
-    @todo.destroy
-    @project.save!
-    redirect_to project_url(@project)
+      
+      
+    unless @project.invalid?
+      @todo.destroy
+      @project.save!
+      redirect_to project_url(@project)
+    else
+      flash[:error] = "Could not create project from todo: #{@project.errors.full_messages[0]}"
+      redirect_to request.env["HTTP_REFERER"] || root_url
+    end
   end
 
   def show_notes
