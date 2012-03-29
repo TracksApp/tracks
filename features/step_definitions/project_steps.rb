@@ -164,7 +164,6 @@ When /^I edit the project settings$/ do
   page.should have_xpath("//div[@id='edit_project_#{@project.id}']/form//button[@id='submit_project_#{@project.id}']")
 end
 
-
 When /^I close the project settings$/ do
   @project.should_not be_nil
   click_link "Cancel"
@@ -179,6 +178,19 @@ When /^I edit the project state of "([^"]*)" to "([^"]*)"$/ do |project_name, st
   edit_project_settings(project) do
     choose "project_state_#{state_name}"
   end
+end
+
+When /^I edit project "([^"]*)" and mark the project as reviewed$/ do |project_name|
+  project = @current_user.projects.find_by_name(project_name)
+  project.should_not be_nil
+  
+  open_project_edit_form(project)
+  click_link "reviewed_project_#{project.id}"
+end
+
+When /^I edit project settings and mark the project as reviewed$/ do
+  open_project_edit_form(@project)
+  click_link "reviewed_project_#{@project.id}"
 end
 
 When /^I add a note "([^"]*)" to the project$/ do |note_body|

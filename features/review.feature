@@ -34,3 +34,27 @@ Feature: Reviewing projects
     Given I have an outdated project "dated_project" with 1 todos
     When I go to the review page
     And the badge should show 5 ## note that stalled and blocked projects are also up-to-date listed
+
+  @javascript
+  Scenario: I can mark a project as reviewed from the projects list page
+    Given I have a project called "review me"
+    When I go to the projects page
+    Then I should see "review me"
+    When I edit project "review me" and mark the project as reviewed
+    Then I should be on the projects page
+    And I should see "review me"
+    
+  @javascript
+  Scenario: I can mark a project as reviewed from the project page
+    Given I have a project called "review me"
+    When I go to the "review me" project
+    When I edit project settings and mark the project as reviewed
+    Then I should be on the "review me" project
+
+  @javascript
+  Scenario: I can mark a project as reviewed from the review page
+    Given I have an outdated project "review me" with 1 todos
+    When I go to the review page
+    Then I should see "review me"
+    When I edit project "review me" and mark the project as reviewed
+    Then I should be on the review page

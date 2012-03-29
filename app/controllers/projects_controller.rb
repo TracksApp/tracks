@@ -74,7 +74,17 @@ class ProjectsController < ApplicationController
   def set_reviewed
     @project.last_reviewed = Time.zone.now
     @project.save
-    redirect_to :action => 'show'
+    
+    case @source_view
+    when "project"
+      redirect_to :action => 'show'
+    when "project_list"
+      redirect_to :action => 'index'
+    when "review"
+      redirect_to :action => 'review'
+    else
+      redirect_to :action => 'index'
+    end
   end
 
   def projects_and_actions

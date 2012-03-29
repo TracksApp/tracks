@@ -40,7 +40,7 @@ project = project_form
         <%=image_tag("cancel.png", :alt => "") %>
         Cancel
       </a>
-      <a href="<%=set_reviewed_project_path(project)%>" id="<%= dom_id(project, 'reviewed') %>" class="reviewed">
+      <a href="<%=set_reviewed_project_path(project)+"?_source_view=#{@source_view}"%>" id="<%= dom_id(project, 'reviewed') %>" class="reviewed">
         <%=image_tag("reviewed.png", :alt => "") %>
         Reviewed
       </a>
