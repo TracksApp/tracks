@@ -809,7 +809,7 @@ class TodosController < ApplicationController
       @items = current_user.todos.find(:all,
         :include => [:context, :project],
         :conditions => [ '(todos.state = ? OR todos.state = ? OR todos.state = ?) AND ' +
-            'NOT (id = ?) AND lower(description) LIKE ? AND project_id = ?',
+            'NOT (todos.id = ?) AND lower(todos.description) LIKE ? AND todos.project_id = ?',
           'active', 'pending', 'deferred',
           @todo.id,
           '%' + params[:predecessor_list].downcase + '%',
@@ -821,7 +821,7 @@ class TodosController < ApplicationController
         @items = current_user.todos.find(:all,
           :include => [:context, :project],
           :conditions => [ '(todos.state = ? OR todos.state = ? OR todos.state = ?) AND ' +
-              'NOT (id = ?) AND lower(description) LIKE ?',
+              'NOT (todos.id = ?) AND lower(todos.description) LIKE ?',
             'active', 'pending', 'deferred',
             params[:id], '%' + params[:term].downcase + '%' ],
           :order => 'description ASC',
@@ -832,7 +832,7 @@ class TodosController < ApplicationController
       # New todo - TODO: Filter on project
       @items = current_user.todos.find(:all,
         :include => [:context, :project],
-        :conditions => [ '(todos.state = ? OR todos.state = ? OR todos.state = ?) AND lower(description) LIKE ?',
+        :conditions => [ '(todos.state = ? OR todos.state = ? OR todos.state = ?) AND lower(todos.description) LIKE ?',
           'active', 'pending', 'deferred',
           '%' + params[:term].downcase + '%' ],
         :order => 'description ASC',
