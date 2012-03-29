@@ -770,8 +770,9 @@ var ProjectListPage = {
 
         /* set behavior for edit project settings link in both projects list page and project page */
         $("a.project_edit_settings").live('click', function (evt) {
-            get_with_ajax_and_block_element(this.href, $(this).parent().parent());
-            return false;
+          $(this).parent().parent().addClass('project-edit-current'); /* mark project in list */
+          get_with_ajax_and_block_element(this.href, $(this).parent().parent());
+          return false;
         });
 
         /* submit project form after edit */
@@ -785,6 +786,7 @@ var ProjectListPage = {
         $('form.edit-project-form a.negative').live('click', function(){
             $('div#project_name').editable('enable');
             $(this).parents('.edit-form').fadeOut(200, function () {
+                $(this).parents('.project-edit-current').removeClass('project-edit-current');
                 $(this).parents('.list').find('.project').fadeIn(500);
                 $(this).parents('.container').find('.item-show').fadeIn(500);
             })
