@@ -116,7 +116,7 @@ Feature: Edit a next action from every page
     Then I should see empty message for todos of <page type>
     And I should not see the container for context "visible context"
     And I should not see empty message for completed todos of <page type>
-    When I mark the complete todo "visible todo" active
+    When I mark the completed todo "visible todo" active
     Then I should see the container for context "visible context"
     And I should see empty message for completed todos of <page type>
     And I should see "visible todo" in the context container for "visible context"
@@ -133,7 +133,7 @@ Feature: Edit a next action from every page
     When I go to the <page>
     Then I should see empty message for todos of <page type>
     And I should not see empty message for completed todos of <page type>
-    When I mark the complete todo "visible todo" active
+    When I mark the completed todo "visible todo" active
     And I should see empty message for completed todos of <page type>
     And I should not see empty message for todos of <page type>
 

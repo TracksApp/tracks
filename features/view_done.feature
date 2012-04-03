@@ -137,7 +137,7 @@ Feature: Show done
   Scenario Outline: I can toggle a todo active from the done pages
     When I go to the <page>
     Then I should see "todo 1"
-    When I mark the complete todo "todo 1" active
+    When I mark the completed todo "todo 1" active
     Then I should not see "todo 1"
     When I go to the <next page>
     Then I should see "todo 1" <where>

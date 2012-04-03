@@ -160,7 +160,7 @@ Feature: dependencies
     When I mark "test 1" as complete
     And I should see "test 1" in the completed container
     And I should see that "test 2" does not have dependencies
-    When I mark the complete todo "test 1" active
+    When I mark the completed todo "test 1" active
     Then I should not see "test 1" in the completed container
     And I should see "test 1" in the deferred container
     And I should see "test 1" within the dependencies of "test 2"

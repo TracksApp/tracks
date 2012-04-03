@@ -12,7 +12,7 @@ Feature: Edit a context
     And I have a project called "test project"
     And I have 2 todos in project "test project" in context "@pc" with tags "starred" prefixed by "test_project "
 
-  @javascript @wip
+  @javascript
   Scenario: In place edit of context name
     Given I have a context called "Errands"
     When I go to the context page for "Errands"

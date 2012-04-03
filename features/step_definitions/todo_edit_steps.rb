@@ -18,8 +18,10 @@ When /^I mark "([^"]*)" as uncompleted$/ do |action_description|
   wait_for_ajax
 end
 
-When /^I mark the complete todo "([^"]*)" active$/ do |action_description|
+When /^I mark the completed todo "([^"]*)" active$/ do |action_description|
   step "I mark \"#{action_description}\" as uncompleted"
+  wait_for_ajax
+  wait_for_animations_to_end
 end
 
 ####### (UN)STARRING #######
