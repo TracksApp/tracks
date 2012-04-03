@@ -1,6 +1,7 @@
 <%
-@initial_context_name = @context.name unless @context.nil?
-@initial_context_name ||= @project.default_context.name unless @project.nil? || @project.default_context.nil? 
+@initial_context_name = @context.name if @context
+@initial_context_name ||= @project.default_context.name unless @project.nil? || @project.default_context.nil?
+@initial_context_name ||= @contexts.active.first.name unless @contexts.active.first.nil?
 @initial_context_name ||= @contexts.first.name unless @contexts.first.nil?
 @initial_project_name = @project.name unless @project.nil?
 @initial_tags ||= @default_tags

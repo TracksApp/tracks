@@ -1,4 +1,5 @@
 module TodosHelper
+  
 
   def remote_star_icon(todo=@todo)
     link_to( image_tag_for_star(todo),
@@ -272,7 +273,7 @@ module TodosHelper
   end
 
   def default_contexts_for_autocomplete
-    projects = current_user.uncompleted.projects.find(:all, :include => [:context], :conditions => ['default_context_id is not null'])
+    projects = current_user.projects.uncompleted.find(:all, :include => [:default_context], :conditions => ['NOT(default_context_id IS NULL)'])
     Hash[*projects.map{ |p| [escape_javascript(p.name), escape_javascript(p.default_context.name)] }.flatten].to_json
   end
 

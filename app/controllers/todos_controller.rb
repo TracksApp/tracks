@@ -18,8 +18,8 @@ class TodosController < ApplicationController
   extend ActionView::Helpers::SanitizeHelper::ClassMethods
 
   def index
-    @projects = current_user.projects.find(:all, :include => [:default_context])
-    @contexts = current_user.contexts.find(:all)
+    @projects = current_user.projects.all(:include => [:default_context])
+    @contexts = current_user.contexts
 
     @contexts_to_show = current_user.contexts.active
 
