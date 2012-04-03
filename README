@@ -1,26 +1,20 @@
 # Tracks: a GTD(TM) web application, built with Ruby on Rails
 
-**IMPORTANT: Tracks is moving to a GitHub Organization to make it easier to continue administering the project. Development will soon cease at bsag/tracks and move to TracksApp/tracks. If you are currently pulling from bsag/tracks, please pull from TracksApp instead.**
-
-`git clone git://github.com/TracksApp/tracks.git`
-
-**The new home for Tracks is https://github.com/TracksApp/tracks**
-
 * Project homepage: http://getontracks.org/
 * Manual: http://TracksApp.github.com/tracks/
 * Source at GitHub: http://github.com/TracksApp/tracks/
 * Assembla space (for bug reports and feature requests): http://www.assembla.com/spaces/tracks-tickets/tickets
 * Wiki (community contributed information): https://github.com/TracksApp/tracks/wiki
-* Forum: http://getontracks.org/forums/
+* Forum (read-only): http://getontracks.org/forums/
 * Mailing list: http://lists.rousette.org.uk/mailman/listinfo/tracks-discuss
 * Original developer: bsag (http://www.rousette.org.uk/)
 * Contributors: https://github.com/TracksApp/tracks/wiki/Contributors
-* Version: 2.1devel
-* Copyright: (cc) 2004-2011 rousette.org.uk.
+* Version: 2.2devel
+* Copyright: (cc) 2004-2012 rousette.org.uk.
 * License:  GNU GPL
 
 All the documentation for Tracks can be found within the /doc directory and at
-http://bsag.github.com/tracks/
+http://tracksapp.github.com/tracks/
 
 The latter includes full instructions for both new installations and upgrades
 from older installations of Tracks.
@@ -37,12 +31,12 @@ you cannot find a solution to your problem.
 The wiki has a lot of user contributed installation HOWTOs for various webhosts, specific OS's and more.
 
 If you are thinking about contributing towards the development of Tracks,
-please read /doc/README_DEVELOPERS for general information, or
-/doc/tracks_api_wrapper.rb for information on Tracks' API. Also you can find
-some information on development on the wiki.
+please read /doc/README_DEVELOPERS for general information. Also you can find
+some information on development, testing and contributing on the wiki.
 
 While fully usable for everyday use, Tracks is still a work in progress. Make
 sure that you take sensible precautions and back up all your data frequently,
 taking particular care when you are upgrading.
 
 Enjoy being productive!
+

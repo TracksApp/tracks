@@ -1,43 +1,56 @@
-= Tracks: a GTD web application, built with Ruby on Rails
+= Tracks: a GTD(TM) web application, built with Ruby on Rails
 
 * Project homepage: http://getontracks.org/
 * Manual: http://TracksApp.github.com/tracks/
 * Source at GitHub: http://github.com/TracksApp/tracks/
 * Assembla space (for bug reports and feature requests): http://www.assembla.com/spaces/tracks-tickets/tickets
 * Wiki (community contributed information): https://github.com/TracksApp/tracks/wiki
-* Forum: http://getontracks.org/forums/
+* Forum (read-only): http://getontracks.org/forums/
 * Mailing list: http://lists.rousette.org.uk/mailman/listinfo/tracks-discuss
 * Original developer: bsag (http://www.rousette.org.uk/)
 * Contributors: https://github.com/TracksApp/tracks/wiki/Contributors
-* Version: 2.1devel
-* Copyright: (cc) 2004-2011 rousette.org.uk.
+* Version: 2.1RC1
+* Copyright: (cc) 2004-2012 rousette.org.uk.
 * License:  GNU GPL
 
-== Version 2.1devel
+== Version 2.1RC1
 
-NOTE: To use this version you need to migrate your database. Not migrating will
+NOTE 1: To use this version you need to migrate your database. Not migrating will
 cause new actions not to appear!
 
-This version of tracks has moved to a new place on GitHub. Also the wiki moved
+NOTE 2: This version of tracks has moved to a new place on GitHub. Also the wiki moved
 to GitHub, see the changed URLs above.
 
 New and changed features:
 1. Redesign of the completed todos: a new overview page. Also all context and
    project pages have a link to their completed actions
 2. New locales (es and fr) and updated locales (de, nl)
-3. You can star an action right from the form to add a new action
-4. Redesign of preferences page.
+3. You can star an action right from the form for adding a new action
+4. Redesign of preferences page
 5. You can now mark an action complete from the tickler
 6. Project names can now contain comma (',') in it name
-7. There are two example ruby scripts in /doc to use the REST API to add a todo
+7. Context view now shows hidden and pending actions
+8. Mobile improvements by Tim Madden (we now require some javascript support on the mobile)
+9. Two extra defer periods in the context menu of an action
+10.There is a review page where you can see stalled or neglected projects.
+   There is a reviewed button on the project edit page.
+11.You need to change your password: migrated to better BCrypt hash algoritm for storing passwords by Jan Stępień
+
+New features (technical)
+1. There are two example ruby scripts in /doc to use the REST API to add a todo
    or a project template with todos from the command line
+2. The tag page can now select actions from mulitple tags using AND and OR.
+   There is no gui for this.
+   Syntax is /todos/tag/tagA,tagB?and=tagC to select all todos with (tagA or tagB) AND tagC
 
 Under the hood:
-1. Upgraded rails to 2.3.12, jquery to 1.6.2 and jquery-ui to 1.8.14
+1. Upgraded rails to 2.3.12, jquery to 1.7.1 and jquery-ui to 1.8.17
 2. Fixed several issues with the REST API
 3. Upgraded the act_as_statemachine plugin. This change requires a
    migration. See note above!
 4. Migated to bundler for gem dependencies
+5. Migrated to cucumber and capybara for integration testing
+6. Development mode shows a work-in-progress banner on top of the screen
 
 See https://github.com/tracksapp/tracks/compare/v2.0...master for all
 detailed changes
