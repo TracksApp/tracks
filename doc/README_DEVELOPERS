@@ -1,13 +1,13 @@
 1. Resources
 
 Tracks is using
-* github to host the git repository.
+* github to host the git repository and manage git pull requests.
 * Assembla to manage bugs and enhancement request.
 * the mailing list to discuss features and development and interact with users
 
 See README for links to the respective sites
 
-Also see the Development pages on the wiki for details on installing, upgrading, etc.
+Also see the Development pages on the wiki for details on installing, testing, upgrading, etc.
 
 2. Dependencies
 
@@ -15,12 +15,10 @@ The dependencies for Tracks are maintained using bundler. Before starting your
 tracks instance, you'll need to run 'bundle install' to fetch all the
 dependencies
 
-3. Wiki
+3. Testing
 
 There are some pointers for setting up your Tracks copy for testing at
 https://github.com/TracksApp/tracks/wiki/Testing/
-
-4. SQLITE3 FOR TESTING
 
 By default, tests are configured to run using sqlite3 in memory mode to
 increase speed. You will need the sqlite3-ruby gem for this.
@@ -33,33 +31,12 @@ database.yml below 'database: ":memory:"':
 If you want to run tests using another database, that's fine, too. Just change
 your database.yml accordingly.
 
-5. Test::Unit tests
+Running cucumber/selenium tests in :memory mode does not seem to work.
 
-To run the Test::Unit tests run
-
-  rake test
-
-Running the above command will run through the unit, functional, and
-integration tests for Tracks. Use 'rake -T' to see a list of all rake tasks to
-determine how to run each section of tests separately.
-
-6. RSpec tests
-
-To run the RSpec tests run
-
-  rake spec
-
-7. Cucumber tests
-
-To run the cucumber test run
-
-  rake cucumber
-
-and for those using javascript/ajax use
-
-  rake cucumber:selenium
-
-In order to run the selenium tests, you'll need to have Firefox 3.x installed.
-Newer versions won't work.
+The rspec tests are not actively maintained.
 
 See the wiki for more information on testing: https://github.com/TracksApp/tracks/wiki/Testing
+
+4. Contributing
+
+See https://github.com/TracksApp/tracks/wiki/How-to-contribute
