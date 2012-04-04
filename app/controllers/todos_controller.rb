@@ -573,7 +573,7 @@ class TodosController < ApplicationController
     @source_view = 'deferred'
     @page_title = t('todos.deferred_tasks_title')
 
-    @contexts_to_show = @contexts = current_user.contexts.find(:all)
+    @contexts_to_show = @contexts = current_user.contexts
 
     includes = params[:format]=='xml' ? [:context, :project] : Todo::DEFAULT_INCLUDES
 
