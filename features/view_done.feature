@@ -113,7 +113,7 @@ Feature: Show done
     Then I should be on the done recurring todos page
     And the page should be "2"
 
-  @selenium
+  @javascript @wip
   Scenario: I can toggle a done recurring todo active from done page
     Given I have a completed repeat pattern "test pattern"
     When I go to the done recurring todos page
@@ -123,7 +123,7 @@ Feature: Show done
     When I go to the recurring todos page
     Then I should see "test pattern" in the active recurring todos container
 
-  @selenium
+  @javascript
   Scenario: I can delete a recurring todo from the done page
     Given I have a completed repeat pattern "test pattern"
     When I go to the done recurring todos page
@@ -133,7 +133,7 @@ Feature: Show done
     When I go to the recurring todos page
     Then I should not see "test pattern" in the active recurring todos container
 
-  @selenium
+  @javascript
   Scenario Outline: I can toggle a todo active from the done pages
     When I go to the <page>
     Then I should see "todo 1"
@@ -153,7 +153,7 @@ Feature: Show done
     | all done actions page for project "test project"| "test project" project  |                                     |
     | all done actions page for tag "starred"         | home page               | in the context container for "@pc"  |
 
-  @selenium
+  @javascript
   Scenario Outline: I can toggle the star of a todo from the done pages
     When I go to the <page>
     Then I should see a starred "todo 1"
@@ -171,7 +171,7 @@ Feature: Show done
     | all done actions page for project "test project"|
     | all done actions page for tag "starred"         |
 
-  @selenium
+  @javascript
   Scenario: I can edit a project to active from the project done page
     Given I have a completed project called "completed project"
     When I go to the done projects page
@@ -180,7 +180,6 @@ Feature: Show done
     Then I should not see "completed project"
     When I go to the projects page
     Then I should see "completed project"
-
 
   Scenario Outline: All pages are internationalized
     Given I set the locale to "<locale>"
@@ -221,12 +220,19 @@ Feature: Show done
     | all done actions page for context "@pc"         | es      |
     | all done actions page for project "test project"| es      |
     | all done actions page for tag "starred"         | es      |
-# fr locale needs changes from preference branch
-#    | done actions page                               | fr      |
-#    | all done actions page                           | fr      |
-#    | done actions page for context "@pc"             | fr      |
-#    | done actions page for project "test project"    | fr      |
-#    | done actions page for tag "starred"             | fr      |
-#    | all done actions page for context "@pc"         | fr      |
-#    | all done actions page for project "test project"| fr      |
-#    | all done actions page for tag "starred"         | fr      |
+    | done actions page                               | fr      |
+    | all done actions page                           | fr      |
+    | done actions page for context "@pc"             | fr      |
+    | done actions page for project "test project"    | fr      |
+    | done actions page for tag "starred"             | fr      |
+    | all done actions page for context "@pc"         | fr      |
+    | all done actions page for project "test project"| fr      |
+    | all done actions page for tag "starred"         | fr      |
+    | done actions page                               | cz      |
+    | all done actions page                           | cz      |
+    | done actions page for context "@pc"             | cz      |
+    | done actions page for project "test project"    | cz      |
+    | done actions page for tag "starred"             | cz      |
+    | all done actions page for context "@pc"         | cz      |
+    | all done actions page for project "test project"| cz      |
+    | all done actions page for tag "starred"         | cz      |

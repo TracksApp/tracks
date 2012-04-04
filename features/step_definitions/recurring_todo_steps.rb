@@ -73,6 +73,8 @@ When /^I mark the pattern "([^"]*)" as (complete|active)$/ do |pattern_name, sta
   pattern.should_not be_nil
   pattern.completed?.should(state=="complete" ? be_false : be_true)
   page.find("#check_#{pattern.id}").click
+  wait_for_ajax
+  wait_for_animations_to_end
 end
 
 When /^I follow the recurring todo link of "([^"]*)"$/ do |action_description|

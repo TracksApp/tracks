@@ -1,8 +1,8 @@
 <%
   selector_edit = "div##{dom_id(@project, 'edit')}"
-  selector_edit = "div.project-edit-current " + selector unless @source_view="project"
+  selector_edit = "div.project-edit-current " + selector_edit unless @source_view=="project"
   selector_project = "div##{dom_id(@project)}"
-  selector_project = "div.project-edit-current " + selector unless @source_view="project"
+  selector_project = "div.project-edit-current " + selector_project unless @source_view=="project"
 -%>
 
 function html_for_edit_form() {
