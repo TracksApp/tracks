@@ -9,9 +9,9 @@ class User < ActiveRecord::Base
   has_many :contexts,
            :order => 'position ASC',
            :dependent => :delete_all do
-             def find_by_params(params)
-               find(params['id'] || params['context_id']) || nil
-             end
+             # def find_by_params(params)
+             #   find(params['id'] || params['context_id']) || nil
+             # end
              def update_positions(context_ids)
                 context_ids.each_with_index {|id, position|
                   context = self.detect { |c| c.id == id.to_i }
@@ -23,9 +23,9 @@ class User < ActiveRecord::Base
   has_many :projects,
            :order => 'projects.position ASC',
            :dependent => :delete_all do
-              def find_by_params(params)
-                find(params['id'] || params['project_id'])
-              end
+              # def find_by_params(params)
+              #   find(params['id'] || params['project_id'])
+              # end
               def update_positions(project_ids)
                 project_ids.each_with_index {|id, position|
                   project = self.detect { |p| p.id == id.to_i }
@@ -100,11 +100,11 @@ class User < ActiveRecord::Base
   validates_confirmation_of :password
   validates_length_of :login, :within => 3..80
   validates_uniqueness_of :login, :on => :create
-  validates_presence_of :open_id_url, :if => :using_openid?
+  # validates_presence_of :open_id_url, :if => :using_openid?
 
   before_create :crypt_password, :generate_token
   before_update :crypt_password
-  before_save :normalize_open_id_url
+  # before_save :normalize_open_id_url
 
   #for will_paginate plugin
   cattr_accessor :per_page
@@ -145,10 +145,10 @@ class User < ActiveRecord::Base
     return nil
   end
 
-  def self.find_by_open_id_url(raw_identity_url)
-    normalized_open_id_url = OpenIdAuthentication.normalize_identifier(raw_identity_url)
-    find(:first, :conditions => ['open_id_url = ?', normalized_open_id_url])
-  end
+  # def self.find_by_open_id_url(raw_identity_url)
+  #   normalized_open_id_url = OpenIdAuthentication.normalize_identifier(raw_identity_url)
+  #   find(:first, :conditions => ['open_id_url = ?', normalized_open_id_url])
+  # end
 
   def self.no_users_yet?
     count == 0
@@ -192,7 +192,7 @@ class User < ActiveRecord::Base
   end
 
   def generate_token
-    self.token = sha1 "#{Time.now.to_i}#{rand}"
+    self.token = Digest::SHA1.hexdigest "#{Time.now.to_i}#{rand}"
   end
 
   def remember_token?
@@ -202,14 +202,14 @@ class User < ActiveRecord::Base
   # These create and unset the fields required for remembering users between browser closes
   def remember_me
     self.remember_token_expires_at = 2.weeks.from_now.utc
-    self.remember_token ||= sha1("#{login}--#{remember_token_expires_at}")
-    save(false)
+    self.remember_token ||= Digest::SHA1.hexdigest("#{login}--#{remember_token_expires_at}")
+    save
   end
 
   def forget_me
     self.remember_token_expires_at = nil
     self.remember_token            = nil
-    save(false)
+    save
   end
 
   # Returns true if the user has a password hashed using SHA-1.
@@ -248,19 +248,19 @@ protected
     auth_type == 'database' && crypted_password.blank? || !password.blank?
   end
 
-  def using_openid?
-    auth_type == 'open_id'
-  end
-
-  def normalize_open_id_url
-    return if open_id_url.nil?
-
-    # fixup empty url value
-    if open_id_url.empty?
-      self.open_id_url = nil
-      return
-    end
-
-    self.open_id_url = OpenIdAuthentication.normalize_identifier(open_id_url)
-  end
+  # def using_openid?
+  #   auth_type == 'open_id'
+  # end
+  #
+  # def normalize_open_id_url
+  #   return if open_id_url.nil?
+  #
+  #   # fixup empty url value
+  #   if open_id_url.empty?
+  #     self.open_id_url = nil
+  #     return
+  #   end
+  #
+  #   self.open_id_url = OpenIdAuthentication.normalize_identifier(open_id_url)
+  # end
 end

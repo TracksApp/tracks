@@ -23,33 +23,33 @@ class Todo < ActiveRecord::Base
     :source => :successor, :conditions => ['todos.state = ?', 'pending']
     
   # scopes for states of this todo
-  named_scope :active, :conditions => { :state => 'active' }
-  named_scope :active_or_hidden, :conditions => ["todos.state = ? OR todos.state = ?", 'active', 'project_hidden']
-  named_scope :not_completed, :conditions =>  ['NOT (todos.state = ?)', 'completed']
-  named_scope :completed, :conditions =>  ["NOT (todos.completed_at IS NULL)"]
-  named_scope :deferred, :conditions => ["todos.completed_at IS NULL AND NOT (todos.show_from IS NULL)"]
-  named_scope :blocked, :conditions => ['todos.state = ?', 'pending']
-  named_scope :pending, :conditions => ['todos.state = ?', 'pending']
-  named_scope :deferred_or_blocked, :conditions => ["(todos.completed_at IS NULL AND NOT(todos.show_from IS NULL)) OR (todos.state = ?)", "pending"]
-  named_scope :not_deferred_or_blocked, :conditions => ["(todos.completed_at IS NULL) AND (todos.show_from IS NULL) AND (NOT todos.state = ?)", "pending"]
-  named_scope :hidden,
+  scope :active, :conditions => { :state => 'active' }
+  scope :active_or_hidden, :conditions => ["todos.state = ? OR todos.state = ?", 'active', 'project_hidden']
+  scope :not_completed, :conditions =>  ['NOT (todos.state = ?)', 'completed']
+  scope :completed, :conditions =>  ["NOT (todos.completed_at IS NULL)"]
+  scope :deferred, :conditions => ["todos.completed_at IS NULL AND NOT (todos.show_from IS NULL)"]
+  scope :blocked, :conditions => ['todos.state = ?', 'pending']
+  scope :pending, :conditions => ['todos.state = ?', 'pending']
+  scope :deferred_or_blocked, :conditions => ["(todos.completed_at IS NULL AND NOT(todos.show_from IS NULL)) OR (todos.state = ?)", "pending"]
+  scope :not_deferred_or_blocked, :conditions => ["(todos.completed_at IS NULL) AND (todos.show_from IS NULL) AND (NOT todos.state = ?)", "pending"]
+  scope :hidden,
     :joins => "INNER JOIN contexts c_hidden ON c_hidden.id = todos.context_id",
     :conditions => ["todos.state = ? OR (c_hidden.hide = ? AND (todos.state = ? OR todos.state = ? OR todos.state = ?))",
     'project_hidden', true, 'active', 'deferred', 'pending']
-  named_scope :not_hidden,
+  scope :not_hidden,
     :joins => "INNER JOIN contexts c_hidden ON c_hidden.id = todos.context_id",
     :conditions => ['NOT(todos.state = ? OR (c_hidden.hide = ? AND (todos.state = ? OR todos.state = ? OR todos.state = ?)))',
     'project_hidden', true, 'active', 'deferred', 'pending']
 
   # other scopes
-  named_scope :are_due, :conditions => ['NOT (todos.due IS NULL)']
-  named_scope :with_tag, lambda { |tag_id| {:joins => :taggings, :conditions => ["taggings.tag_id = ? ", tag_id] } }
-  named_scope :with_tags, lambda { |tag_ids| {:conditions => ["EXISTS(SELECT * from taggings t WHERE t.tag_id IN (?) AND t.taggable_id=todos.id AND t.taggable_type='Todo')", tag_ids] } }
-  named_scope :of_user, lambda { |user_id| {:conditions => ["todos.user_id = ? ", user_id] } }
-  named_scope :completed_after, lambda { |date| {:conditions => ["todos.completed_at > ?", date] } }
-  named_scope :completed_before, lambda { |date| {:conditions => ["todos.completed_at < ?", date] } }
-  named_scope :created_after, lambda { |date| {:conditions => ["todos.created_at > ?", date] } }
-  named_scope :created_before, lambda { |date| {:conditions => ["todos.created_at < ?", date] } }
+  scope :are_due, :conditions => ['NOT (todos.due IS NULL)']
+  scope :with_tag, lambda { |tag_id| {:joins => :taggings, :conditions => ["taggings.tag_id = ? ", tag_id] } }
+  scope :with_tags, lambda { |tag_ids| {:conditions => ["EXISTS(SELECT * from taggings t WHERE t.tag_id IN (?) AND t.taggable_id=todos.id AND t.taggable_type='Todo')", tag_ids] } }
+  scope :of_user, lambda { |user_id| {:conditions => ["todos.user_id = ? ", user_id] } }
+  scope :completed_after, lambda { |date| {:conditions => ["todos.completed_at > ?", date] } }
+  scope :completed_before, lambda { |date| {:conditions => ["todos.completed_at < ?", date] } }
+  scope :created_after, lambda { |date| {:conditions => ["todos.created_at > ?", date] } }
+  scope :created_before, lambda { |date| {:conditions => ["todos.created_at < ?", date] } }
 
   STARRED_TAG_NAME = "starred"
   DEFAULT_INCLUDES = [ :project, :context, :tags, :taggings, :pending_successors, :uncompleted_predecessors, :recurring_todo ]

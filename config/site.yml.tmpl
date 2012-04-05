@@ -5,10 +5,10 @@ salt: "change-me"
 
 # Uncomment ldap or open_id if you want to use those authentication schemes.
 # If you choose ldap, see the additional configuration options further down.
+# NOTE: openid is not supported anymore.
 authentication_schemes:
   - "database"
   # - "ldap"
-  # - "open_id"
   # - "cas"
 
 
@@ -54,5 +54,5 @@ open_signups: false
 
 # When integrating your tracks instance with http://cloudmailin.com/ by using the /integrations/cloudmailin URL,
 # this value is the cloudmailin-secret for verifying the authenticity of the request.
-# (see http://docs.cloudmailin.com/validating_the_sender) 
+# (see http://docs.cloudmailin.com/validating_the_sender)
 # cloudmailin: asdasd

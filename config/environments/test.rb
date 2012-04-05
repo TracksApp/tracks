@@ -34,4 +34,12 @@ Tracksapp::Application.configure do
 
   # Print deprecation notices to the stderr
   config.active_support.deprecation = :stderr
+  
+  # Unique cookies and use cookies for session
+  # config.action_controller.session_store = :cookie_store
+  # config.action_controller.session = { :key => 'TracksTest', :secret => SITE_CONFIG['salt'] * (30.0 /  SITE_CONFIG['salt'].length).ceil }
+
+  SITE_CONFIG['salt'] ||= 'change-me'
+  
+  config.time_zone = 'UTC'
 end

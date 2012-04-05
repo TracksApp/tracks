@@ -1,6 +1,6 @@
 require_dependency "user"
 
-module LoginSystem 
+module LoginSystem
 
   def current_user
     get_current_user
@@ -29,7 +29,7 @@ module LoginSystem
   protected
   
   # overwrite this if you want to restrict access to only a few actions
-  # or if you want to check if the user has the correct rights  
+  # or if you want to check if the user has the correct rights
   # example:
   #
   #  # only allow nonbobs
@@ -42,7 +42,7 @@ module LoginSystem
   
   # overwrite this method if you only want to protect certain actions of the controller
   # example:
-  # 
+  #
   #  # don't protect the login and the about method
   #  def protect?(action)
   #    if ['action', 'about'].include?(action)
@@ -59,7 +59,8 @@ module LoginSystem
   # cookie and log the user back in if appropriate
   def login_from_cookie
     return unless cookies[:auth_token] && !logged_in?
-    user = User.find_by_remember_token(cookies[:auth_token])
+    token = cookies[:auth_token]
+    user = User.find_by_remember_token(token)
     if user && user.remember_token?
       session['user_id'] = user.id
       set_current_user(user)
@@ -67,7 +68,7 @@ module LoginSystem
       cookies[:auth_token] = { :value => current_user.remember_token , :expires => current_user.remember_token_expires_at, :secure => SITE_CONFIG['secure_cookies'] }
       flash[:notice] = t('login.successful')
     end
-  end  
+  end
   
   def login_or_feed_token_required
     if ['rss', 'atom', 'txt', 'ics'].include?(params[:format])
@@ -79,15 +80,15 @@ module LoginSystem
     login_required
   end
    
-  # login_required filter. add 
+  # login_required filter. add
   #
   #   before_filter :login_required
   #
-  # if the controller should be under any rights management. 
+  # if the controller should be under any rights management.
   # for finer access control you can overwrite
-  #   
+  #
   #   def authorize?(user)
-  # 
+  #
   def login_required
     
     if not protect?(action_name)
@@ -107,13 +108,13 @@ module LoginSystem
       return true
     end
 
-    # store current location so that we can 
+    # store current location so that we can
     # come back after the user logged in
     store_location unless params[:format] == 'js'
     
     # call overwriteable reaction to unauthorized access
     access_denied
-    return false 
+    return false
   end
   
   def login_optional
@@ -131,7 +132,7 @@ module LoginSystem
       return true
     end
 
-    return true 
+    return true
   end
   
   def logged_in?
@@ -150,7 +151,7 @@ module LoginSystem
   end
   
   # overwrite if you want to have special behavior in case the user is not authorized
-  # to access the current operation. 
+  # to access the current operation.
   # the default action is to redirect to the login screen
   # example use :
   # a popup window might just close itself for instance
@@ -164,7 +165,7 @@ module LoginSystem
       format.atom { basic_auth_denied }
       format.text { basic_auth_denied }
     end
-  end  
+  end
   
   # store current uri in  the session.
   # we can return to this location by calling return_location
@@ -195,8 +196,8 @@ module LoginSystem
         authdata = request.env[location].to_s.split
       end
     end
-    if authdata and authdata[0] == 'Basic' 
-      user, pass = Base64.decode64(authdata[1]).split(':')[0..1] 
+    if authdata and authdata[0] == 'Basic'
+      user, pass = Base64.decode64(authdata[1]).split(':')[0..1]
     else
       user, pass = ['', '']
     end

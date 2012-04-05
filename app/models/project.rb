@@ -6,10 +6,10 @@ class Project < ActiveRecord::Base
   belongs_to :default_context, :class_name => "Context", :foreign_key => "default_context_id"
   belongs_to :user
 
-  named_scope :active, :conditions => { :state => 'active' }
-  named_scope :hidden, :conditions => { :state => 'hidden' }
-  named_scope :completed, :conditions => { :state => 'completed'}
-  named_scope :uncompleted, :conditions => ["NOT(state = ?)", 'completed']
+  scope :active, :conditions => { :state => 'active' }
+  scope :hidden, :conditions => { :state => 'hidden' }
+  scope :completed, :conditions => { :state => 'completed'}
+  scope :uncompleted, :conditions => ["NOT(state = ?)", 'completed']
 
   validates_presence_of :name
   validates_length_of :name, :maximum => 255
@@ -21,8 +21,8 @@ class Project < ActiveRecord::Base
   aasm_column :state
   aasm_initial_state :active
 
-  extend NamePartFinder
-  #include Tracks::TodoList
+  # extend NamePartFinder
+  # include Tracks::TodoList
 
   aasm_state :active
   aasm_state :hidden, :enter => :hide_todos, :exit => :unhide_todos

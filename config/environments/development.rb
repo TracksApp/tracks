@@ -34,4 +34,11 @@ Tracksapp::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
+  
+  # Unique cookies
+  # config.action_controller.session_store :cookie_store, :key => 'TracksCucumber'
+  # config.action_controller.session = { :key => 'TracksDev' }
+  
+  NOTIFY_BAR="<div id=\"develop-notify-bar\">&nbsp;</div>"
+
 end

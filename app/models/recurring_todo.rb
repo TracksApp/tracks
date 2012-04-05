@@ -8,8 +8,8 @@ class RecurringTodo < ActiveRecord::Base
 
   include IsTaggable
   
-  named_scope :active, :conditions => { :state => 'active'}
-  named_scope :completed, :conditions => { :state => 'completed'}
+  scope :active, :conditions => { :state => 'active'}
+  scope :completed, :conditions => { :state => 'completed'}
 
   attr_protected :user
 
