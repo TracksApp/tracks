@@ -1,0 +1,37 @@
+# MySQL.  Versions 4.1 and 5.0 are recommended.
+#
+#
+# Be sure to use new-style password hashing:
+#   http://dev.mysql.com/doc/refman/5.0/en/old-client.html
+development:
+    adapter: mysql
+    database: tracks_trunk
+    encoding: utf8
+    host: localhost
+    username: tracks
+    password: 32tracks55
+
+mdevelopment:
+  adapter: sqlite3
+  database: db/tracks-21-test.sqlite3.db
+
+test: &TEST
+#    adapter: sqlite3
+#    database: ":memory:"
+#    verbosity: quiet
+    adapter: mysql
+    database: tracks_test
+    host: localhost
+    username: tracks
+    password: 32tracks55
+
+production:
+  adapter: mysql
+  database: tracks_trunk
+  encoding: utf8
+  host: localhost
+  username: tracks
+  password: 32tracks55
+
+cucumber:
+  <<: *TEST

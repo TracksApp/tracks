@@ -1,0 +1,25 @@
+<h1><%= singular_name %>.new_record? ? "New" : "Edit" %> <%= model_name %></h1>
+<%% form_for(@<%= singular_name %>) do |f| %>
+  <div id="form_errors">
+    <%%= f.error_messages %>
+  </div>
+  <%- if attributes.blank? -%>
+  <p>Add your form elements here, please!</p>
+  <%- else -%>
+    <%- attributes.each do |attribute| -%>
+  <p>
+    <%%= f.label :<%= attribute.name %> %><br />
+    <%%= f.<%= attribute.field_type %> :<%= attribute.name %> %>
+  </p>
+    <%- end -%>
+  <%- end -%>
+  <div id="commands">
+    <%%= submit_tag "Save" %>
+    <div id="navigation_commands">
+      <%% unless @<%= singular_name %>.new_record? -%>
+        <%%= button_to "Show", <%= singular_name %>_path(@<%= singular_name %>), :method => "get", :title => "Show <%= singular_name %>. Unsaved changes will be lost." %>
+      <%% end -%>
+      <%%= button_to "Back to List", <%= plural_name %>_path, :class => "cancel", :method => "get", :title => "Return to <%= singular_name %> list without saving changes" %>
+    </div>
+  </div>
+<%% end -%>

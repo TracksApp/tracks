@@ -1,0 +1,270 @@
+= Skinny Spec
+
+Skinny Spec is a collection of spec helper methods designed to help trim the fat and DRY up
+some of the bloat that sometimes results from properly specing your classes and templates.
+
+== Requirements and Recommendations
+
+Obviously you'll need to be using RSpec[http://github.com/dchelimsky/rspec/tree/master] and
+Rspec-Rails[http://github.com/dchelimsky/rspec-rails/tree/master] as your testing framework.
+
+Skinny Spec was originally designed [and best enjoyed] if you're using
+Haml[http://github.com/nex3/haml/tree/master] and
+make_resourceful[http://github.com/rsl/make_resourceful/tree/master] but will default to
+ERb and a facsimile of Rails' default scaffolding [for the views and controllers, respectively]
+if Haml and/or make_resourceful are not available. I recommend using them though. :)
+
+In addition, Skinny Spec uses Ruby2Ruby to make nicer expectation messages and you'll want to
+have that installed as well. It's not a dependency or anything but it <i>is</i> highly
+recommended.
+
+== Setup
+
+Once you've installed the plugin in your app's vendor/plugins folder, you're ready to rock!
+Skinny Spec includes itself into the proper RSpec classes so there's no configuration on your
+part. Sweet!
+
+== Usage
+
+The simplest way to use Skinny Specs is to generate a resource scaffold:
+
+  script/generate skinny_scaffold User
+
+This command takes the usual complement of attribute definitions like
+<tt>script/generate scaffold</tt>. Then have a look at the generated files (particularly the
+specs) to see what's new and different with Skinny Spec.
+
+=== Controller Specs
+
+Let's look at the controller specs.
+
+  describe UsersController do
+    describe "GET :index" do
+      before(:each) do
+        @users = stub_index(User)
+      end
+
+      it_should_find_and_assign :users
+      it_should_render :template, "index"
+    end
+    
+    # ...
+
+    describe "POST :create" do
+      describe "when successful" do
+        before(:each) do
+          @user = stub_create(User)
+        end
+
+        it_should_initialize_and_save :user
+        it_should_redirect_to { user_url(@user) }
+      end
+    
+    # ...
+
+First thing you should see is an example group for <tt>GET :index</tt>. That <tt>stub_index</tt> method there
+does a lot of work behind the curtain. I'll leave it up to you to check the documentation for it
+(and its brothers and sister methods like <tt>stub_new</tt>) but I will point out that the
+methods named <tt>stub_<i>controller_method</i></tt> should only be used for stubbing and
+mocking the main object of the method. To create mocks for other ancillary objects, please
+use <tt>stub_find_all</tt>, <tt>stub_find_one</tt>, and <tt>stub_initialize</tt>. The reason
+for this is because the former methods actually save us a step by defining an implicit 
+controller method request. If you add a new method to your resource routing, you'll want to
+use the helper method <tt>define_request</tt> in those example groups to define an explicit
+request, like so:
+
+  describe "PUT :demote" do
+    define_request { put :demote }
+    
+    # ...
+  end
+
+You can also define a method called <tt>shared_request</tt> to "share" a
+<tt>define_request</tt> across nested describe blocks, like so:
+
+  describe "POST :create" do
+    def shared_request
+      post :create
+    end
+    
+    describe "when successful" do
+      # ...
+    end
+    
+    describe "when unsuccessful" do
+      # ...
+    end
+  end
+  
+Note: When you're adding longer, more complicated controller specs you can still leverage
+implicit and explicit requests by calling <tt>do_request</tt> in your spec as in the following
+example:
+
+  # Note this controller is UsersController and _not_ CategoriesController
+  # and that loading the categories isn't part of the default actions
+  # and cannot use the <tt>stub_<i>controller_method</i></tt> helpers
+  # [which create implicit requests based on the controller method in the name]
+  # but uses <tt>stub_find_all</tt> instead
+  describe "GET :new" do
+    before(:each) do
+      @user = stub_new(User)
+      @categories = stub_find_all(Category)
+    end
+    
+    # ...
+    
+    it "should preload categories" do
+      Category.should_receive(:find).with(:all)
+      do_request
+    end
+    
+    it "should assign @categories" do
+      do_request
+      assigns[:categories].should == @categories
+    end
+  end
+
+Finally we get to the meat of the spec and of Skinny Specs itself: the actual expectations.
+The first thing you'll notice is the use of example group (read: "describe" block) level methods
+instead of the usual example (read: "it") blocks. Using this helper at the example group level
+saves us three lines over using an example block. (If this isn't significant to you, this is
+probably the wrong plugin for you as well. Sorry.) Note that none of these methods use the
+instance variables defined in the "before" block because they are all nil at the example block
+level. Let's look at a sample method to see how it works:
+
+  it_should_find_and_assign :users
+
+This actually wraps two different expectations: one that <tt>User.should_receive(:find).with(:all)</tt>
+and another that the instance variable <tt>@users</tt> is assigned with the return value from that finder call.
+If you need to add more detailed arguments to the find, you can easily break this into two different
+expectations like:
+
+  it_should_find :users, :limit => 2
+  it_should_assign :users
+
+See the documentation for the <tt>it_should_find</tt> for more information. You might have guessed that
+<tt>it_should_initialize_assign</tt> and <tt>it_should_render_template</tt> work in a similar 
+fashion and you'd be right. Again, see the documentation for these individual methods for more
+information. Lots of information in those docs.
+
+A useful helper method that doesn't appear in any of the scaffolding is <tt>with_default_restful_actions</tt>
+which takes a block and evaluates it for each of the RESTful controller actions. Very useful for
+spec'ing that these methods redirect to the login page when the user isn't logged in, for example. This
+method is designed to be used inside an example like so:
+
+  describe "when not logged in" do
+    it "should redirect all requests to the login page" do
+      with_default_restful_actions do
+        response.should redirect_to(login_url)
+      end
+    end
+  end
+
+Before we're through with the controller specs, let me point out one more important detail. In
+order to use <tt>it_should_redirect_to</tt> we have to send the routing inside a block argument
+there so it can be evaluated in the example context instead of the example group, where it
+completely blows up. This methodology is used anywhere routing is referred to in a "skinny",
+example group level spec.
+
+=== View Specs
+
+Now let's move to the view specs!
+
+  describe "/users/form.html.haml" do
+    before(:each) do
+      @user = mock_and_assign(User, :stub => {
+        :name => "foo",
+        :birthday => 1.week.ago,
+        :adult => false
+      })
+    end
+    
+    it_should_have_form_for :user
+
+    it_should_allow_editing :user, :name
+    it_should_allow_editing :user, :birthday
+    it_should_allow_editing :user, :adult
+
+    it_should_link_to_show :user
+    it_should_link_to { users_path }
+  end
+
+Like the special <tt>stub_index</tt> methods in the controller
+specs, the view specs have a shorthand mock and stub helpers: <tt>mock_and_assign</tt> and
+<tt>mock_and_assign_collection</tt>. These are well documented so please check them out.
+
+There are also some really nice helper methods that I'd like point out. First is
+<tt>it_should_have_form_for</tt>. This is a really good convenience wrapper that basically wraps
+the much longer:
+
+  it "should use form_for to generate the proper form action and options" do
+    template.should_receive(:form_for).with(@user)
+    do_render
+  end
+  
+Next up is the <tt>it_should_allow_editing</tt> helper. I love this method the most because it
+really helps DRY up that view spec while at the same time being amazingly unbrittle. Instead of
+creating an expectation for a specific form element, this method creates a generalized expectation
+that there's a form element with the <tt>name</tt> attribute set in such away that it will
+generate the proper <tt>params</tt> to use in the controller to edit or create the instance.
+Check out the docs and the source for more information on this. Also check out
+<tt>it_should_have_form_element_for</tt> which is roughly equivalent for those times when you use
+<tt>form_tag</tt> instead.
+
+Finally let's look at those <tt>it_should_link_to_<i>controller_method</i></tt> helpers.
+These methods (and there's one each for the controller methods
+<tt>new</tt>, <tt>edit</tt>, <tt>show</tt>, and <tt>delete</tt>) point to instance variables
+which you should be created in the "before" blocks with <tt>mock_and_assign</tt>. The other is
+<tt>it_should_allow_editing</tt> which is likewise covered extensively in the documentation and
+I will just point out here that, like <tt>it_should_link_to_edit</tt> and such, it takes a
+symbol for the name of the instance variable it refers to and <i>additionally</i> takes
+a symbol for the name of the attribute to be edited.
+
+Also note that, when constructing a long form example, instead of defining an instance variable
+for the name of the template and calling <tt>render @that_template</tt> you can simply call
+<tt>do_render</tt> which takes the name of the template from the outermost example group where
+it is customarily stated.
+
+=== Model Specs
+
+Skinny Spec adds a matcher for the various ActiveRecord associations. On the example group level
+you call them like:
+
+  it_should_belong_to :manager
+  it_should_have_many :clients
+  
+Within an example you can call them on either the class or the instance setup in the
+"before" block. These are equivalent:
+
+  @user.should belong_to(:group)
+  User.should belong_to(:group)
+  
+I've also added some very basic validation helpers like <tt>it_should_validate_presence_of</tt>,
+<tt>it_should_validate_uniqueness_of</tt>, <tt>it_should_not_mass_assign</tt>. Please consult
+the documentation for more information.
+
+== Miscellaneous Notes
+
+In the scaffolding, I have used my own idiomatic Rails usage:
+
+* All controller actions which use HTML forms [<tt>new</tt>, <tt>edit</tt>, etc] use a shared
+  form and leverage <tt>form_for</tt> to its fullest by letting it create the appropriate
+  action and options.
+* Some instances where you might expect link_to are button_to. This is to provide a common
+  interface element which can be styled the same instead of a mishmash of links and buttons and
+  inputs everywhere. To take full advantage of this, I usually override many of Rails' default
+  helpers with custom ones that all use actual HTML <tt>BUTTON</tt> elements which are much 
+  easier to style than "button" typed <tt>INPUT</tt>. I've provided a text file in the
+  "additional" folder of this plugin which you can use in your ApplicationHelper. (I also
+  provide an optional override helper for the <tt>label</tt> method which uses
+  <tt>#titleize</tt> instead of <tt>humanize</tt> for stylistic reasons).
+* Probably more that I can't think of.
+
+== Credits and Thanks
+
+Sections of this code were taken from or inspired by Rick Olsen's
+rspec_on_rails_on_crack[http://github.com/technoweenie/rspec_on_rails_on_crack/tree/master].
+Also thanks and props to Hampton Catlin and Nathan Weizenbaum for the lovely and imminently useable
+Haml and make_resourceful. Also also praises and glory to David Chelimsky and the Rspec crew.
+
+Also thanks to Don Petersen, Nicolas Mérouze, Mikkel Malmberg, and Brandan Lennox for their suggestions and fixes.

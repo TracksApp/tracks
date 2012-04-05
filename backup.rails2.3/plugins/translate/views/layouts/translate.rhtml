@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <title><%= h(@page_title) %></title>
+
+    <%= translate_javascript_includes %>
+<script type="text/javascript">
+      google.load("language", "1");
+
+      function getGoogleTranslation(id, text, from_language, to_language) {
+        text = text.replace(/\{\{/, '__').replace(/\}\}/, '__')
+        google.language.translate(text, from_language, to_language, function(result) {
+          if (!result.error) { 
+            result_text = result.translation.unescapeHTML().gsub(/__(.+)__/, function(match){
+              return '{{' + match[1] + '}}';
+            });
+            Form.Element.setValue(id, result_text);
+          }
+        });
+
+    }
+
+    /*
+    prototypeUtils.js from http://jehiah.com/
+    Licensed under Creative Commons.
+    version 1.0 December 20 2005
+
+    Contains:
+    + Form.Element.setValue()
+    + unpackToForm()
+
+    */
+
+    /* Form.Element.setValue("fieldname/id","valueToSet") */
+    Form.Element.setValue = function(element,newValue) {
+        element_id = element;
+        element = $(element);
+        if (!element){element = document.getElementsByName(element_id)[0];}
+        if (!element){return false;}
+        var method = element.tagName.toLowerCase();
+        var parameter = Form.Element.SetSerializers[method](element,newValue);
+    }
+
+    Form.Element.SetSerializers = {
+      input: function(element,newValue) {
+        switch (element.type.toLowerCase()) {
+          case 'submit':
+          case 'hidden':
+          case 'password':
+          case 'text':
+            return Form.Element.SetSerializers.textarea(element,newValue);
+          case 'checkbox':
+          case 'radio':
+            return Form.Element.SetSerializers.inputSelector(element,newValue);
+        }
+        return false;
+      },
+
+      inputSelector: function(element,newValue) {
+        fields = document.getElementsByName(element.name);
+        for (var i=0;i<fields.length;i++){
+          if (fields[i].value == newValue){
+            fields[i].checked = true;
+          }
+        }
+      },
+
+      textarea: function(element,newValue) {
+        element.value = newValue;
+      },
+
+      select: function(element,newValue) {
+        var value = '', opt, index = element.selectedIndex;
+        for (var i=0;i< element.options.length;i++){
+          if (element.options[i].value == newValue){
+            element.selectedIndex = i;
+            return true;
+          }        
+        }
+      }
+    }
+
+    function unpackToForm(data){
+       for (i in data){
+         Form.Element.setValue(i,data[i].toString());
+       }
+    }
+
+</script>
+
+
+<style type="text/css">
+	/*reset.css*/
+	/* v1.0 | 20080212 */
+	html, body, div, span, applet, object, iframe,
+	h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+	a, abbr, acronym, address, big, cite, code,
+	del, dfn, em, font, img, ins, kbd, q, s, samp,
+	small, strike, strong, sub, sup, tt, var,
+	b, u, i, center,
+	dl, dt, dd, ol, ul, li,
+	fieldset, form, label, legend,
+	table, caption, tbody, tfoot, thead, tr, th, td {
+		margin: 0;
+		padding: 0;
+		border: 0;
+		outline: 0;
+		font-size: 100%;
+		vertical-align: baseline;
+		background: transparent;
+	}
+	body {
+		line-height: 1;
+	}
+	ol, ul {
+		list-style: none;
+	}
+	blockquote, q {
+		quotes: none;
+	}
+	blockquote:before, blockquote:after,
+	q:before, q:after {
+		content: '';
+		content: none;
+	}
+
+	/* remember to define focus styles! */
+	:focus {
+		outline: 0;
+	}
+
+	/* remember to highlight inserts somehow! */
+	ins {
+		text-decoration: none;
+	}
+	del {
+		text-decoration: line-through;
+	}
+
+	/* tables still need 'cellspacing="0"' in the markup */
+	table {
+		border-collapse: collapse;
+		border-spacing: 0;
+	}
+	/*clear fix*/
+	.clearfix:after{content:".";display:block;height:0;clear:both;visibility:hidden;}
+	.clearfix{display:inline-block;}
+	html[xmlns] .clearfix {
+	    display: block;
+	}
+	* html .clearfix{height:1%;}
+	/*start layout*/
+	body{
+		background:#fff;
+		color:#333;
+		font-size:75%;
+		font-family:Arial;
+		margin:2em auto;
+		line-height:1.5em;
+	}
+	textarea,input,select{
+		font-family:Arial;
+		font-size:1em;
+	}
+	h1{
+		color:#d46021;
+		font-size:2em;
+		margin-bottom:0.5em;
+	}
+	h2{
+		text-align:left;
+		color:#d46021;
+		font-size:1.3em;
+		padding-left:0;
+	}
+	a{
+		color:#2158C7;
+	}
+	div#container{
+		width:960px;
+		margin:0 auto;
+		font-size:1em;
+	}
+	/*paging*/
+	div.paging{
+		margin-bottom:1em;
+		text-align:left;
+	}
+	div.paging div{
+		border:solid 1px red;
+		margin:1em 1em 0;
+		padding:0.5em;
+		border:solid 1px #d5d6d5;
+		background:#f1f1f1;
+	}
+	ul.paging{
+		display:inline-block;
+	}
+	ul.paging li{
+		display:block;
+		margin:0.2em 0;
+		float:left;
+	}
+	ul.paging li.selected a{
+		color:#fff;
+		background:#2158C7;
+		font-weight:bold;
+		padding:0.5em 0.7em;
+	}
+	ul.paging li a{
+		display:inline-block;
+		line-height:1em;
+		padding:0.5em 0.5em;
+	}
+	/*forms filter*/
+	fieldset{
+		padding:1em;
+		margin:1em;
+		border:solid 2px #d46021;
+	}
+	legend{
+		font-size:1.2em;
+		font-weight:bold;
+		padding:0 1em;
+		padding-bottom:0.5em;
+	}
+	label{
+		font-weight:bold;
+	}
+	fieldset span{padding-right:0.5em;}
+	div#show-sort label,
+	div#languages label,
+	div#filter-pattern label{
+		display:inline-block;
+		width:100px;
+		line-height:2em;
+	}
+	div#show-sort select,
+	div#languages select,
+	div#filter-pattern select{
+		width:120px;
+		margin-right:0.5em;
+	}
+	div#show-sort input.text-default,
+	div#languages input.text-default,
+	div#filter-pattern input.text-default{
+		width:200px;
+	}
+	p.hits{
+		margin-top:1em;
+	}
+	/*translation edit*/
+	div.translations{
+		margin:1em;
+		padding:1em;
+		border:solid 2px #d46021;
+	}
+	div.translations h2{
+		margin-bottom:1em;
+	}
+	p.translate{
+		background:red;
+		border:solid 1px #d5d6d5;
+		background:#f1f1f1;
+		margin:0.5em;
+		padding:0.7em 0.5em 0.5em 1.5em;
+	}
+	div.translation{
+		padding:1em;
+		border-bottom:solid 0.2em #d46021;
+		margin:0 1em 1em 1.6em;
+	}
+	div.translation input, div.translation textarea{
+		width:98%;
+		margin:1em 0;
+		display:inline-block;
+		padding:0.3em;
+	}
+	div.translation textarea{
+		height:50px;
+	}
+	div.translation em strong{
+		color:#333;
+		padding-right:0.5em;
+	}
+	p.translation em{
+		display:block;
+		font-size:0.8333em;
+	}
+	div.translation a{
+		padding:1em;
+	}
+	div.translation input.btnDefault{
+		margin:0 0 1em;
+		width:auto;
+	}
+	.focus-text{
+		font-weight:bold;
+	}
+	div.selected{
+		margin:0 1em 1em 1em;
+		border-left:solid 0.6em #d46021;
+		border-right:solid 0.2em #d46021;
+		border-top:solid 0.2em #d46021;
+		background:#f1f1f1;
+	}
+	.display{display:block !important;}
+	/*feedback*/
+	div#notice, div#error {
+		font-size:1em;
+		margin:1em;
+    padding: 1em;
+  	border: 1px solid red;
+  }
+	div#notice span, div#error span{
+		font-size:1.5em;
+	}
+
+  div#error {
+    background-color: #F3C6CC;
+    color: red;
+  }
+  div#notice {
+    border-color: #72A974;
+    color: #597B5C;
+    background-color: #BCFFBD;
+  }
+    </style>
+	<script type="text/javascript">
+	onload = function (){
+		$$("div.translation input, div.translation textarea").each(function (e){
+			Event.observe(e,'focus', function (elm){
+				this.up(1).down(".translation-text").addClassName("focus-text");
+				this.up(1).addClassName("selected");
+			});
+			Event.observe(e,'blur', function (elm,e){
+				this.up(1).down(".translation-text").removeClassName("focus-text");
+				this.up(1).removeClassName("selected");
+			});
+		});
+	}
+	</script>
+  </head>
+  <body>
+		<div id="container">
+			<% if @page_title -%><h1><%=h @page_title %></h1><% end -%>
+			  <% [:notice, :error].each do |message| %>
+    		  <%if flash[message] %>
+      		<div id="<%= message %>">
+        			<span><%= h(flash[message]) if flash[message] %></span>
+      		</div>
+      		<% end %>
+    		<% end %>
+		<%= yield %>
+    </div>
+  </body>
+</html>
