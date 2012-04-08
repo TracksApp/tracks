@@ -286,7 +286,7 @@ class TodosController < ApplicationController
     @original_state = @todo.state
     unless @predecessor.completed?
       @todo.add_predecessor(@predecessor)
-      @todo.block!
+      @todo.block! unless @todo.pending?
       @saved = @todo.save
 
       @status_message = t('todos.added_dependency', :dependency => @predecessor.description)
