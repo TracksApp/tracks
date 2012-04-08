@@ -3,6 +3,12 @@ PATH
   specs:
     aruba (0.2.2)
 
+PATH
+  remote: vendor/gems/has_many_polymorphs-2.13
+  specs:
+    has_many_polymorphs (2.13)
+      activerecord
+
 GEM
   remote: http://rubygems.org/
   remote: http://gems.github.com/
@@ -51,8 +57,6 @@ GEM
     gem_plugin (0.2.3)
     gherkin (2.7.7)
       json (>= 1.4.6)
-    has_many_polymorphs (2.13)
-      activerecord
     highline (1.5.2)
     hoe (2.13.1)
       rake (~> 0.8)
@@ -143,7 +147,7 @@ DEPENDENCIES
   cucumber-rails (~> 0.3.2)
   database_cleaner (>= 0.5.0)
   flexmock
-  has_many_polymorphs (~> 2.13)
+  has_many_polymorphs (~> 2.13)!
   highline (~> 1.5.0)
   hoe
   hpricot
