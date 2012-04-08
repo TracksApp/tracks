@@ -2,12 +2,16 @@ class Todo < ActiveRecord::Base
 
   after_save :save_predecessors
 
-  # relations
+  # associations
   belongs_to :context
   belongs_to :project
   belongs_to :user
   belongs_to :recurring_todo
 
+  # Tag association
+  include IsTaggable
+  
+  # Dependencies associations
   has_many :predecessor_dependencies, :foreign_key => 'predecessor_id', :class_name => 'Dependency', :dependent => :destroy
   has_many :successor_dependencies,   :foreign_key => 'successor_id',   :class_name => 'Dependency', :dependent => :destroy
   has_many :predecessors, :through => :successor_dependencies
@@ -16,7 +20,7 @@ class Todo < ActiveRecord::Base
     :source => :predecessor, :conditions => ['NOT (todos.state = ?)', 'completed']
   has_many :pending_successors, :through => :predecessor_dependencies,
     :source => :successor, :conditions => ['todos.state = ?', 'pending']
-
+    
   # scopes for states of this todo
   named_scope :active, :conditions => { :state => 'active' }
   named_scope :active_or_hidden, :conditions => ["todos.state = ? OR todos.state = ?", 'active', 'project_hidden']

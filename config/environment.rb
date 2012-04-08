@@ -78,7 +78,6 @@ end
 require 'name_part_finder'
 require 'tracks/todo_list'
 require 'tracks/config'
-require 'tagging_extensions' # Needed for tagging-specific extensions
 require 'digest/sha1' #Needed to support 'rake db:fixtures:load' on some ruby installs: http://dev.rousette.org.uk/ticket/557
 
 if ( SITE_CONFIG['authentication_schemes'].include? 'ldap')

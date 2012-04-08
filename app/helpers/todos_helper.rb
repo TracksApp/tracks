@@ -1,5 +1,4 @@
 module TodosHelper
-  
 
   def remote_star_icon(todo=@todo)
     link_to( image_tag_for_star(todo),

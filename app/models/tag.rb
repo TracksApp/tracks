@@ -1,9 +1,8 @@
-
-# The Tag model. This model is automatically generated and added to your app if
-# you run the tagging generator included with has_many_polymorphs.
-
 class Tag < ActiveRecord::Base
-
+  
+  has_many :taggings
+  has_many :taggable, :through => :taggings
+  
   DELIMITER = "," # Controls how to split and join tagnames from strings. You may need to change the <tt>validates_format_of parameters</tt> if you change this.
   JOIN_DELIMITER = ", "
 
@@ -11,26 +10,6 @@ class Tag < ActiveRecord::Base
   # rescue the ActiveRecord database constraint errors instead.
   validates_presence_of :name
   validates_uniqueness_of :name, :case_sensitive => false
-
-  # Change this validation if you need more complex tag names.
-  # validates_format_of :name, :with => /^[a-zA-Z0-9\_\-]+$/, :message => "can not contain special characters"
-
-  # Set up the polymorphic relationship.
-  has_many_polymorphs :taggables,
-    :from => [:todos, :recurring_todos],
-    :through => :taggings,
-    :dependent => :destroy,
-    :skip_duplicates => false,
-    :parent_extend => proc {
-    # Defined on the taggable models, not on Tag itself. Return the tagnames
-    # associated with this record as a string.
-    def to_s
-      self.map(&:name).sort.join(Tag::JOIN_DELIMITER)
-    end
-    def all_except_starred
-      self.reject{|tag| tag.name == Todo::STARRED_TAG_NAME}
-    end
-  }
 
   # Callback to strip extra spaces from the tagname before saving it. If you
   # allow tags to be renamed later, you might want to use the
@@ -41,11 +20,6 @@ class Tag < ActiveRecord::Base
 
   def on(taggable, user)
     taggings.create :taggable => taggable, :user => user
-  end
-
-  # Tag::Error class. Raised by ActiveRecord::Base::TaggingExtensions if
-  # something goes wrong.
-  class Error < StandardError
   end
 
 end

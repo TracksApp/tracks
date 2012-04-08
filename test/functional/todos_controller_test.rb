@@ -261,7 +261,7 @@ class TodosControllerTest < ActionController::TestCase
   def test_find_tagged_with
     login_as(:admin_user)
     @user = User.find(@request.session['user_id'])
-    tag = Tag.find_by_name('foo').todos
+    tag = Tag.find_by_name('foo').taggings
     @tagged = tag.count
     get :tag, :name => 'foo'
     assert_response :success
