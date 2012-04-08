@@ -303,14 +303,14 @@ class Todo < ActiveRecord::Base
 
   # XML API fixups
   def predecessor_dependencies=(params)
-    value = params[:predecessor]
-    return if value.nil?
+    deps = params[:predecessor]
+    return if deps.nil?
 
     # for multiple dependencies, value will be an array of id's, but for a single dependency,
     # value will be a string. In that case convert to array
-    value = [value] unless value.class == Array
+    deps = [deps] unless deps.class == Array
 
-    value.each { |ele| add_predecessor(self.user.todos.find_by_id(ele.to_i)) unless ele.blank? }
+    deps.each { |dep| self.add_predecessor(self.user.todos.find(dep.to_i)) unless dep.blank? }
   end
 
   alias_method :original_context=, :context=
