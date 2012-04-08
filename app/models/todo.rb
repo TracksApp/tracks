@@ -164,10 +164,14 @@ class Todo < ActiveRecord::Base
     return @removed_predecessors
   end
 
+  # remove predecessor and activate myself if it was the last predecessor
   def remove_predecessor(predecessor)
-    # remove predecessor and activate myself
     self.predecessors.delete(predecessor)
-    self.activate!
+    if self.predecessors.empty?
+      self.activate!
+    else
+      save!
+    end
   end
 
   # Returns true if t is equal to self or a successor of self

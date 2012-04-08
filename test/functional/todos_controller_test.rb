@@ -722,5 +722,111 @@ class TodosControllerTest < ActionController::TestCase
     get :tag, {:name => "foo", :format => "txt" }
     assert_response 401
   end
+    
+  def test_make_todo_dependent
+    login_as(:admin_user)
 
+    predecessor = todos(:call_bill)
+    successor = todos(:call_dino_ext)
+    
+    # no predecessors yet
+    assert_equal 0, successor.predecessors.size
+    
+    # add predecessor
+    put :add_predecessor, :predecessor=>predecessor.id, :successor=>successor.id
+    
+    assert_equal 1, successor.predecessors.count
+    assert_equal predecessor.id, successor.predecessors.first.id
+  end
+
+  def test_make_todo_with_dependencies_dependent
+    login_as(:admin_user)
+
+    predecessor = todos(:call_bill)
+    successor = todos(:call_dino_ext)
+    other_todo = todos(:phone_grandfather)
+              
+    # predecessor -> successor
+    put :add_predecessor, :predecessor=>predecessor.id, :successor=>successor.id
+    
+    # other_todo -> predecessor -> successor
+    put :add_predecessor, :predecessor=>other_todo.id, :successor=>predecessor.id
+        
+    assert_equal 1, successor.predecessors(true).count
+    assert_equal 0, other_todo.predecessors(true).count
+    assert_equal 1, predecessor.predecessors(true).count
+    assert_equal predecessor.id, successor.predecessors.first.id
+    assert_equal other_todo.id, predecessor.predecessors.first.id
+  end
+
+  def test_mingle_dependent_todos_leave
+    # based on #1271
+    login_as(:admin_user)
+
+    t1 = todos(:call_bill)
+    t2 = todos(:call_dino_ext)
+    t3 = todos(:phone_grandfather)
+    t4 = todos(:construct_dilation_device)
+              
+    # t1 -> t2
+    put :add_predecessor, :predecessor=>t1.id, :successor=>t2.id
+    # t3 -> t4
+    put :add_predecessor, :predecessor=>t3.id, :successor=>t4.id
+    
+    # t2 -> t4
+    put :add_predecessor, :predecessor=>t2.id, :successor=>t4.id
+    
+    # should be: t1 -> t2 -> t4 and t3 -> t4
+    assert t4.predecessors.map(&:id).include?(t2.id)
+    assert t4.predecessors.map(&:id).include?(t3.id)
+    assert t2.predecessors.map(&:id).include?(t1.id)
+  end
+
+  def test_mingle_dependent_todos_root
+    # based on #1271
+    login_as(:admin_user)
+
+    t1 = todos(:call_bill)
+    t2 = todos(:call_dino_ext)
+    t3 = todos(:phone_grandfather)
+    t4 = todos(:construct_dilation_device)
+              
+    # t1 -> t2
+    put :add_predecessor, :predecessor=>t1.id, :successor=>t2.id
+    # t3 -> t4
+    put :add_predecessor, :predecessor=>t3.id, :successor=>t4.id
+    
+    # t3 -> t2
+    put :add_predecessor, :predecessor=>t3.id, :successor=>t2.id
+    
+    # should be: t1 -> t2 and t3 -> t4 & t2
+    assert t3.successors.map(&:id).include?(t4.id)
+    assert t3.successors.map(&:id).include?(t2.id)
+    assert t2.predecessors.map(&:id).include?(t1.id)
+    assert t2.predecessors.map(&:id).include?(t3.id)
+  end
+  
+  def test_unmingle_dependent_todos
+    # based on #1271
+    login_as(:admin_user)
+
+    t1 = todos(:call_bill)
+    t2 = todos(:call_dino_ext)
+    t3 = todos(:phone_grandfather)
+    t4 = todos(:construct_dilation_device)
+              
+    # create same dependency tree as previous test
+    # should be: t1 -> t2 -> t4 and t3 -> t4
+    put :add_predecessor, :predecessor=>t1.id, :successor=>t2.id
+    put :add_predecessor, :predecessor=>t3.id, :successor=>t4.id
+    put :add_predecessor, :predecessor=>t2.id, :successor=>t4.id
+
+    # removing t4 as successor of t2 should leave t4 blocked with t3 as predecessor
+    put :remove_predecessor, :predecessor=>t2.id, :id=>t4.id
+    
+    t4.reload
+    assert t4.pending?, "t4 should remain pending"
+    assert t4.predecessors.map(&:id).include?(t3.id)
+  end
+  
 end
