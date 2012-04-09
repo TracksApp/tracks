@@ -28,7 +28,7 @@ class ProjectsController < ApplicationController
         format.rss   &render_rss_feed
         format.atom  &render_atom_feed
         format.text  &render_text_feed
-        format.autocomplete { render :text => for_autocomplete(current_user.projects.uncompleted, params[:term]) }
+        format.autocomplete &render_autocomplete
       end
     end
   end
@@ -383,6 +383,13 @@ class ProjectsController < ApplicationController
   def render_text_feed
     lambda do
       render :action => 'index', :layout => false, :content_type => Mime::TEXT
+    end
+  end
+  
+  def render_autocomplete
+    lambda do
+      projects = current_user.projects.active + current_user.projects.hidden
+      render :text => for_autocomplete(projects, params[:term])
     end
   end
 
