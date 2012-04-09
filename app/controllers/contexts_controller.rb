@@ -31,7 +31,7 @@ class ContextsController < ApplicationController
         @all_contexts = current_user.contexts.all
         render :action => 'index', :layout => false, :content_type => Mime::TEXT
       end
-      format.autocomplete { render :text => for_autocomplete(@active_contexts + @hidden_contexts, params[:term])}
+      format.autocomplete &render_autocomplete
     end
   end
 
@@ -246,6 +246,15 @@ class ContextsController < ApplicationController
       render_atom_feed_for current_user.contexts.all, :feed => feed_options,
         :item => { :description => lambda { |c| @template.summary(c, count_undone_todos_phrase(c)) },
         :author => lambda { |c| nil } }
+    end
+  end
+  
+  def render_autocomplete
+    lambda do
+      # first get active contexts with todos then those without
+      filled_contexts = @active_contexts.reject { |ctx| ctx.todos.count == 0 } + @hidden_contexts.reject { |ctx| ctx.todos.count == 0 }
+      empty_contexts = @active_contexts.find_all { |ctx| ctx.todos.count == 0 } + @hidden_contexts.find_all { |ctx| ctx.todos.count == 0 }
+      render :text => for_autocomplete(filled_contexts + empty_contexts, params[:term])
     end
   end
 

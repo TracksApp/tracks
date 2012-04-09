@@ -694,9 +694,13 @@ class TodosController < ApplicationController
   end
 
   def tags
-    @tags = Tag.find(:all, :conditions =>['name like ?', '%'+params[:term]+'%'])
+    # TODO: limit to current_user
+    tags_beginning = Tag.find(:all, :conditions => ['name like ?', params[:term]+'%'])
+    tags_all = Tag.find(:all, :conditions =>['name like ?', '%'+params[:term]+'%'])
+    tags_all= tags_all - tags_beginning
+    
     respond_to do |format|
-      format.autocomplete { render :text => for_autocomplete(@tags, params[:term]) }
+      format.autocomplete { render :text => for_autocomplete(tags_beginning+tags_all, params[:term]) }
     end
   end
 
@@ -805,36 +809,32 @@ class TodosController < ApplicationController
   def auto_complete_for_predecessor
     unless params['id'].nil?
       get_todo_from_params
-      # Begin matching todos in current project
-      @items = current_user.todos.find(:all,
+      # Begin matching todos in current project, excluding @todo itself
+      @items = @todo.project.todos.not_completed.find(:all,
         :include => [:context, :project],
-        :conditions => [ '(todos.state = ? OR todos.state = ? OR todos.state = ?) AND ' +
-            'NOT (todos.id = ?) AND lower(todos.description) LIKE ? AND todos.project_id = ?',
-          'active', 'pending', 'deferred',
-          @todo.id,
-          '%' + params[:predecessor_list].downcase + '%',
-          @todo.project_id ],
+        :conditions => ['(LOWER(todos.description) LIKE ?) AND NOT(todos.id=?)', "%#{params[:term].downcase}%", @todo.id],
         :order => 'description ASC',
         :limit => 10
-      )
-      if @items.empty? # Match todos in other projects
-        @items = current_user.todos.find(:all,
-          :include => [:context, :project],
-          :conditions => [ '(todos.state = ? OR todos.state = ? OR todos.state = ?) AND ' +
-              'NOT (todos.id = ?) AND lower(todos.description) LIKE ?',
-            'active', 'pending', 'deferred',
-            params[:id], '%' + params[:term].downcase + '%' ],
-          :order => 'description ASC',
-          :limit => 10
-        )
-      end
-    else
-      # New todo - TODO: Filter on project
-      @items = current_user.todos.find(:all,
+      ) unless @todo.project.nil?
+      # Then look in the current context, excluding @todo itself
+      @items = @todo.context.todos.not_completed.find(:all,
         :include => [:context, :project],
-        :conditions => [ '(todos.state = ? OR todos.state = ? OR todos.state = ?) AND lower(todos.description) LIKE ?',
-          'active', 'pending', 'deferred',
-          '%' + params[:term].downcase + '%' ],
+        :conditions => ['(LOWER(todos.description) LIKE ?) AND NOT(todos.id=?)', "%#{params[:term].downcase}%", @todo.id],
+        :order => 'description ASC',
+        :limit => 10
+      ) unless !@items.empty? || @todo.context.nil?
+      # Match todos in other projects, excluding @todo itself
+      @items = current_user.todos.not_completed.find(:all,
+        :include => [:context, :project],
+        :conditions => ['(LOWER(todos.description) LIKE ?) AND NOT(todos.id=?)', "%#{params[:term].downcase}%", @todo.id],
+        :order => 'description ASC',
+        :limit => 10
+      ) unless !@items.empty?
+    else
+      # New todo - TODO: Filter on current project in project view
+      @items = current_user.todos.not_completed.find(:all,
+        :include => [:context, :project],
+        :conditions => ['(LOWER(todos.description) LIKE ?)', "%#{params[:term].downcase}%"],
         :order => 'description ASC',
         :limit => 10
       )
@@ -846,7 +846,6 @@ class TodosController < ApplicationController
     @todo = current_user.todos.find(params[:id])
     @project = current_user.projects.new(:name => @todo.description, :description => @todo.notes,
       :default_context => @todo.context)
-      
       
     unless @project.invalid?
       @todo.destroy
