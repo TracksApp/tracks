@@ -10,7 +10,7 @@
 
     <%= t('common.last' ) unless ( ['review','stalled','blocked','current'].include?(state) )%>
     <%= t('states.'+state+'_plural' )%>
-    <%= t('common.projects') %><%= total_count==-1 ? "" : " ("+link_to("Show all", done_projects_path)+")"%>
+    <%= t('common.projects') %><%= total_count==-1 ? "" : " ("+link_to(t('common.show_all'), done_projects_path)+")"%>
 
   </h2>
   <% unless suppress_sort_menu %>
