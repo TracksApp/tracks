@@ -1,7 +1,7 @@
 # Tracks: a GTD(TM) web application, built with Ruby on Rails
 
 * Project homepage: http://getontracks.org/
-* Manual: http://TracksApp.github.com/tracks/
+* Manual: http://getontracks.org/manual/
 * Source at GitHub: http://github.com/TracksApp/tracks/
 * Assembla space (for bug reports and feature requests): http://www.assembla.com/spaces/tracks-tickets/tickets
 * Wiki (community contributed information): https://github.com/TracksApp/tracks/wiki
@@ -13,10 +13,9 @@
 * Copyright: (cc) 2004-2012 rousette.org.uk.
 * License:  GNU GPL
 
-All the documentation for Tracks can be found within the /doc directory and at
-http://tracksapp.github.com/tracks/
+More documentation for Tracks can be found within the /doc directory.
 
-The latter includes full instructions for both new installations and upgrades
+The manual includes full instructions for both new installations and upgrades
 from older installations of Tracks.
 
 The instructions might appear long and intimidatingly complex, but that is
@@ -39,4 +38,3 @@ sure that you take sensible precautions and back up all your data frequently,
 taking particular care when you are upgrading.
 
 Enjoy being productive!
-
