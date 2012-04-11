@@ -7,7 +7,7 @@
   <% end
   if i < 10
     i.upto 10 do |j| -%>
-      <%= i -%> - n/a (n/a) <br/>
+      <%= i -%> - <%=t('common.not_available_abbr')%> (<%=t('common.not_available_abbr')%>) <br/>
     <% end
   end
   -%>
@@ -22,7 +22,7 @@
   <% end
   if i < 10
     i.upto 10 do |j| -%>
-      <%= i -%> - n/a (n/a) <br/>
+      <%= i -%> - <%=t('common.not_available_abbr')%> (<%=t('common.not_available_abbr')%>) <br/>
     <% end
   end
   -%>

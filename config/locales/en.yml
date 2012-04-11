@@ -144,6 +144,7 @@ en:
     search: Search
     ajaxError: There was an error retrieving from server
     days_midsentence: days
+    not_available_abbr: "n/a"
   data:
     import_successful: Import was successful.
     import_errors: Some errors occurred during import
@@ -243,6 +244,7 @@ en:
           other: "%{count} errors prohibited this %{model} from being saved"
   stats:
     index_title: TRACKS::Statistics
+    within_one: Within 1
     tag_cloud_title: Tag cloud for all actions
     tag_cloud_description: This tag cloud includes tags of all actions (completed, not completed, visible and/or hidden)
     tag_cloud_90days_title: Tag cloud actions in past 90 days
