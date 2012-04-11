@@ -47,6 +47,8 @@ en:
       projects_title: Projects
       search: Search All Items
       preferences_title: Show my preferences
+      admin: Admin
+      help: "?"
   integrations:
     opensearch_description: Search in Tracks
     applescript_next_action_prompt: "Description of next action:"
@@ -141,6 +143,7 @@ en:
     email: Email
     search: Search
     ajaxError: There was an error retrieving from server
+    days_midsentence: days
   data:
     import_successful: Import was successful.
     import_errors: Some errors occurred during import
@@ -174,6 +177,7 @@ en:
         context: Context
         description: Description
         due: Due
+        tags: Tags
       user:
         last_name: Last name
         first_name: First name
@@ -198,6 +202,9 @@ en:
         sms_email: From email
         first_name: First name
         show_completed_projects_in_sidebar: Show completed projects in sidebar
+      note:
+        created_at: Created at
+        updated_at: Updated at
     errors:
       messages:
         greater_than_or_equal_to: must be greater than or equal to %{count}
@@ -205,7 +212,7 @@ en:
         confirmation: doesn't match confirmation
         less_than_or_equal_to: must be less than or equal to %{count}
         blank: can't be blank
-        invalid: cannot contain the comma (',') character
+        invalid: "cannot contain the comma (',') character"
         exclusion: is reserved
         odd: must be odd
         even: must be even
@@ -587,6 +594,7 @@ en:
     no_notes_available: "Currently there are no notes: add notes to projects from individual project pages."
     note_header: Note %{id}
     delete_note_confirm: Are you sure that you want to delete the note '%{id}'?
+    in_project: "In: "
   states:
     hidden_plural: Hidden
     completed: Completed
@@ -768,6 +776,7 @@ en:
     toggle_single: Add a next action
     add_action: Add action
     add_actions: Add actions
+    add_context: Add Context
     tags_for_all_actions: Tags for all actions (sep. with commas)
     toggle_single_title: Add a new next action
     project_for_all_actions: Project for all actions

@@ -80,7 +80,7 @@
               <li><%= navigation_link( t('layouts.navigation.stats'), {:controller => "stats", :action => "index"}, :title => t('layouts.navigation.stats_title')) %></li>
             </ul>
           </li>
-          <li><a href="#">Admin</a>
+          <li><a href="#"><%= t('layouts.navigation.admin') %></a>
             <ul>
               <li><%= navigation_link( t('layouts.navigation.preferences'), preferences_path, {:accesskey => "u", :title => t('layouts.navigation.preferences_title')} ) %></li>
               <li><%= navigation_link( t('layouts.navigation.export'), {:controller => "data", :action => "index"}, {:accesskey => "i", :title => t('layouts.navigation.export_title')} ) %></li>
@@ -89,7 +89,7 @@
               <% end -%>
             </ul>
           </li>
-          <li><a href="#">?</a>
+          <li><a href="#"><%= t('layouts.navigation.help') %></a>
             <ul>
               <li><%= link_to t('layouts.navigation.integrations_'), integrations_path %></li>
               <li><%= link_to t('layouts.navigation.api_docs'), rest_api_docs_path %></li>
