@@ -1,6 +1,7 @@
 <%-
 created_count_array = Array.new(30){ |i| @actions_created_last30days.count/30.0 }
 done_count_array    = Array.new(30){ |i| @actions_done_last30days.count/30.0 }
+# TODO: make the strftime i18n proof
 time_labels         = Array.new(30){ |i| (Time.zone.now-i.days).strftime("%a %d-%m") }
 -%>
 &title=<%= t('stats.actions_30days_title') %>,{font-size:16},&

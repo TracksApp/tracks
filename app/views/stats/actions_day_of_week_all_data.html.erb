@@ -6,7 +6,7 @@
 &filled_bar_2=50,0x0066CC,0x0066CC,<%= t('stats.labels.completed') %>,8&
 &values=<%=  @actions_creation_day_array.join(",") %>&
 &values_2=<%= @actions_completion_day_array.join(",") %>&
-&x_labels=<%= Date::DAYNAMES.join(",") %>&
+&x_labels=<%= t('date.day_names').join(",") %>&
 &y_min=0&
 <%
   # add one to @max for people who have no actions completed yet.
