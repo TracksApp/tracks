@@ -1,11 +1,5 @@
 <div class="recurring_container">
-  <% #form_remote_tag(
-  #url => recurring_todo_path(@recurring_todo), :method => :put,
-  #:html=> { :id=>'recurring-todo-form-edit-action', :name=>'recurring_todo', :class => 'inline-form' },
-  #:before => "$('#recurring_todo_edit_action_submit').block({message: null})",
-  #:complete => "$('#recurring_todo_edit_action_submit').unblock();$('#recurring-todo-form-edit-action').clearForm();") do
-  form_for(@recurring_todo, :html=> { :id=>'recurring-todo-form-edit-action', :name=>'recurring_todo', :class => 'inline-form' }) do |f|
-  -%>
+<% form_for(@recurring_todo, :html=> { :id=>'recurring-todo-form-edit-action', :name=>'recurring_todo', :class => 'inline-form' }) do |f| -%>
   <div id="edit_error_status"><%= error_messages_for("item", :object_name => 'action') %></div>
 
   <div id="recurring_todo_form_container">

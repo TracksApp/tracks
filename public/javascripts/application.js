@@ -1016,8 +1016,14 @@ var RecurringTodosPage = {
   			width: 750,
   			modal: true,
         buttons: {
-          "Create": function() { submit_with_ajax_and_block_element('form.#recurring-todo-form-new-action', $(this).parents(".ui-dialog")); },
-          Cancel: function() { $( this ).dialog( "close" ); }
+          create: {
+            text: i18n['common.create'],
+            click: function() { submit_with_ajax_and_block_element('form.#recurring-todo-form-new-action', $(this).parents(".ui-dialog")); },
+          },
+          cancel: {
+            text: i18n['common.cancel'],
+            click: function() { $( this ).dialog( "close" ); }
+          }
         },
         show: "fade",
         hide: "fade",
@@ -1043,11 +1049,14 @@ var RecurringTodosPage = {
   			modal: true,
         buttons: {
           "Update": {
-            text: "Update",
+            text: i18n['common.update'],
             id: 'recurring_todo_edit_update_button',
             click: function() { submit_with_ajax_and_block_element('form#recurring-todo-form-edit-action', $(this).parents(".ui-dialog")); }
           },
-          Cancel: function() { $( this ).dialog( "close" ); }
+          cancel: {
+            text: i18n['common.cancel'],
+            click: function() { $( this ).dialog( "close" ); }
+          }
         },
         show: "fade",
         hide: "fade",
