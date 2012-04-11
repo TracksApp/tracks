@@ -256,11 +256,11 @@ class TodoTest < ActiveSupport::TestCase
     tag_c = Tag.find_by_name("c")
 
     todos_with_a = Todo.with_tag(tag_a)
-    assert 1, todos_with_a.count
+    assert_equal 1, todos_with_a.count
     assert_equal todo.description, todos_with_a.first.description
 
     todos_with_b = Todo.with_tag(tag_b)
-    assert 1, todos_with_b.count
+    assert_equal 1, todos_with_b.count
     assert_equal todo.id, todos_with_b.first.id
 
     todo2 = @not_completed2
@@ -270,10 +270,10 @@ class TodoTest < ActiveSupport::TestCase
     tag_d = Tag.find_by_name("d")
 
     todos_with_a = Todo.with_tag(tag_a)
-    assert 2, todos_with_a.count
+    assert_equal 2, todos_with_a.count
 
     todos_with_d = Todo.with_tag(tag_d)
-    assert 1, todos_with_a.count
+    assert_equal 1, todos_with_d.count
   end
 
   def test_finding_todos_with_more_tags_using_OR
@@ -293,12 +293,12 @@ class TodoTest < ActiveSupport::TestCase
     # overlapping tags
     tag_ids = [tag_a.id, tag_c.id]
     todos_with_a_or_c = Todo.with_tags(tag_ids)
-    assert 2, todos_with_a_or_c.count
+    assert_equal 2, todos_with_a_or_c.count
 
     # non-overlapping tags
     tag_ids = [tag_b.id, tag_d.id]
     todos_with_b_or_d = Todo.with_tags(tag_ids)
-    assert 2, todos_with_b_or_d.count
+    assert_equal 2, todos_with_b_or_d.count
   end
 
   def test_finding_todos_with_more_tags_using_AND
@@ -314,8 +314,8 @@ class TodoTest < ActiveSupport::TestCase
     tag_b_id = Tag.find_by_name("b").id
 
     todos_with_a_and_b = Todo.with_tags([tag_a_id]).with_tags([tag_b_id])
-    assert 1, todos_with_a_and_b.count
-    assert todo1.id, todos_with_a_and_b.first.id
+    assert_equal 1, todos_with_a_and_b.count
+    assert_equal todo1.id, todos_with_a_and_b.first.id
   end
 
   def test_finding_todos_with_more_tags_using_AND_and_OR
@@ -332,14 +332,14 @@ class TodoTest < ActiveSupport::TestCase
     tag_c_id = Tag.find_by_name("c").id
 
     todos_with_aORc_and_b = Todo.with_tags([tag_a_id, tag_c_id]).with_tags([tag_b_id])
-    assert 1, todos_with_aORc_and_b.count
-    assert todo1.id, todos_with_aORc_and_b.first.id
+    assert_equal 1, todos_with_aORc_and_b.count
+    assert_equal todo1.id, todos_with_aORc_and_b.first.id
 
     # let todo2 fit the expression
     todo2.tag_list = "a, b, r"
     todo2.save!
     todos_with_aORc_and_b = Todo.with_tags([tag_a_id, tag_c_id]).with_tags([tag_b_id])
-    assert 2, todos_with_aORc_and_b.count
+    assert_equal 2, todos_with_aORc_and_b.count
   end
 
   # test named_scopes
@@ -385,6 +385,5 @@ class TodoTest < ActiveSupport::TestCase
     assert !older_created_todos.include?(todo_now)
     assert !recent_created_todos.include?(todo_old)
   end
-
   
 end
