@@ -5,7 +5,15 @@
     <input id="default_project_name_id" name="default_project_name" type="hidden" value="<%=h @initial_project_name-%>" />
     <input id="default_context_name_id" name="default_context_name" type="hidden" value="<%=h @initial_context_name-%>" />
 
-    <div id="multiple_error_status"><%= error_messages_for("item", :object_name => 'action') %></div>
+    <div id="multiple_error_status">
+    <% if todo.errors.any? -%>
+      <ul>
+        <% todo.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+        <% end %>
+      </ul>
+    <% end -%>
+    </div>
 
     <label for="todo_notes"><%= t('shared.multiple_next_actions') %></label>
     <%= text_area_tag( "todo[multiple_todos]", "", :cols => 29, :rows => 6, :tabindex => next_tab_index) %>

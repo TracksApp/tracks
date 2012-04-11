@@ -4,12 +4,10 @@
     <div class="message"><p><%= t('todos.no_deferred_actions') %></p></div>
   </div>
 
-  <%= render :partial => "contexts/context", :collection => @contexts,
-            :locals => { :collapsible => true } %>
+  <%= render :partial => @contexts, :locals => { :collapsible => true } %>
 
-</div><!-- End of display_box -->
-
+</div>
 <div id="input_box">
   <%= render :partial => "shared/add_new_item_form" %>
   <%= render :file => "sidebar/sidebar.html.erb" %>
-</div><!-- End of input box -->
+</div>

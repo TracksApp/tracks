@@ -59,6 +59,60 @@ Tracksapp::Application.routes.draw do
   root :to => 'todos#index'
   
   match "tickler" => "todos#list_deferred"
+  match 'review' => "projects#review"
+  match 'logout' => 'users#logout'
+  match 'calendar' => "todos#calendar"
+  match 'done' => "stats#done", :as => 'done_overview'
+  match 'integrations' => "integrations#index"
+  match 'integrations/rest_api' => "integrations#rest_api", :as => 'rest_api_docs'
+  match 'integrations/cloudmailin' => 'integrations#cloudmailin'
+  match 'integrations/search_plugin.xml' => "integrations#search_plugin", :as => 'search_plugin'
+  match 'integrations/google_gadget.xml' => 'integrations#google_gadget', :as => 'google_gadget'
+  match 'preferences' => "preferences#index"
+  match 'preferences/render_date_format' => "preferences#render_date_format"
+  
+  resources :contexts do
+    collection do
+      post 'order'
+      get 'done'
+    end
+    member do
+      get 'done_todos'
+      get 'all_done_todos'
+    end
+  end
+  
+  resources :projects do
+    member do
+      get 'done_todos'
+      get 'all_done_todos'
+      get 'set_reviewed'  # TODO: convert to PUT/POST
+    end
+    collection do
+      get 'done'
+      post 'order'
+      post 'alphabetize'
+      post 'actionize'
+    end
+  end
+  
+  resources :todos do
+    member do
+      put 'toggle_check'
+      put 'toggle_star'
+      put 'defer'
+    end
+    collection do
+      get 'done'
+      get 'all_done'
+      post 'check_deferred'
+      post 'filter_to_context'
+      post 'filter_to_project'
+    end
+  end
+  match 'todos/tag/:name' => 'todos#tag', :as => :tag
+  
+  resources :notes
   
   # map.resources :users,
   #   :member => {:change_password => :get, :update_password => :post,

@@ -12,24 +12,24 @@ gem "mysql2"
 
 gem "highline", "~>1.5.0"
 gem "RedCloth"
-# gem "sanitize", "~>1.2.1"
-# gem "will_paginate"
-gem "has_many_polymorphs", :git => "git://github.com/lrbalt/has_many_polymorphs.git", :branch => "try"
+gem "sanitize", "~>1.2.1"
+gem "will_paginate"
 gem "acts_as_list", "~>0.1.4"
 gem "aasm", "~>2.2.0"
 # TODO: gem "rubyjedi-actionwebservice", :require => "actionwebservice"
 # gem "rubycas-client", "~>2.2.1"
 # gem "ruby-openid", :require => "openid"
 # gem "open_id_authentication"
-# gem 'htmlentities', '~> 4.3.0'
-# gem "mail"
-# gem "swf_fu"
+gem 'htmlentities', '~> 4.3.0'
+gem "mail"
+gem "swf_fu"
+gem "rails_autolink"
 
-# if RUBY_VERSION.to_f >= 1.9
-# 	gem "soap4r-ruby1.9"
-# else
-# 	gem "soap4r", "~>1.5.8"
-# end
+if RUBY_VERSION.to_f >= 1.9
+	gem "soap4r-ruby1.9"
+else
+	gem "soap4r", "~>1.5.8"
+end
 
 # Gems used only for assets and not required
 # in production environments by default.

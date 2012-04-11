@@ -3,10 +3,7 @@
        <h2><%= t('todos.no_actions_found_title')%></h2>
     <div class="message"><p><%= t('todos.no_actions_found') %></p></div>
   </div>
-  <%= render(
-    :partial => "contexts/context",
-    :collection => @contexts_to_show,
-    :locals => { :collapsible => true }) -%>
+  <%= render(:partial => @contexts_to_show, :locals => { :collapsible => true }) -%>
   <% unless @done.nil? -%>
     <%= render(
       :partial => "todos/completed",

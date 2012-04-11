@@ -6,7 +6,15 @@
     <input id="default_context_name_id" name="default_context_name" type="hidden" value="<%= h(@initial_context_name)-%>" />
     <input type="hidden" id="new_todo_starred" name="new_todo_starred" value="false" />
 
-    <div id="error_status"><%= error_messages_for("item", :object_name => 'action') %></div>
+    <div id="error_status">
+    <% if todo.errors.any? -%>
+      <ul>
+        <% todo.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+        <% end %>
+      </ul>
+    <% end -%>
+    </div>
 
     <label for="todo_description" style="float:left"><%= Todo.human_attribute_name('description') %></label>
     <a href="#" id="new_todo_starred_link" class="undecorated_link" ><%= image_tag("blank.png", :title =>t('todos.star_action'), :class => "todo_star", :style=> "float: right")%></a>
