@@ -398,10 +398,10 @@ class Todo < ActiveRecord::Base
   end
 
   def render_note
-    unless notes.nil?
-      rendered_notes = Tracks::Utils.render_text(notes)
+    unless self.notes.nil?
+      self.rendered_notes = Tracks::Utils.render_text(notes)
     else
-      rendered_notes = nil
+      self.rendered_notes = nil
     end
   end
   

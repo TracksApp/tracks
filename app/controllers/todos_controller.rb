@@ -1242,7 +1242,7 @@ class TodosController < ApplicationController
   def todo_feed_content
     # TODO: move view stuff into view, also the includes at the top
     lambda do |i|
-      item_notes = sanitize(markdown( i.notes )) if i.notes?
+      item_notes = i.rendered_notes if i.notes?
       due = "<div>#{t('todos.feeds.due', :date => format_date(i.due))}</div>\n" if i.due?
       done = "<div>#{t('todos.feeds.completed', :date => format_date(i.completed_at))}</div>\n" if i.completed?
       context_link = "<a href=\"#{ context_url(i.context) }\">#{ i.context.name }</a>"
