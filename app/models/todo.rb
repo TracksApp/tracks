@@ -1,5 +1,6 @@
 class Todo < ActiveRecord::Base
 
+  before_save :render_note
   after_save :save_predecessors
 
   # associations
@@ -396,4 +397,12 @@ class Todo < ActiveRecord::Base
     return todo
   end
 
+  def render_note
+    unless notes.nil?
+      rendered_notes = Tracks::Utils.render_text(notes)
+    else
+      rendered_notes = nil
+    end
+  end
+  
 end
