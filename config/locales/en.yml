@@ -677,6 +677,7 @@ en:
       short: "%d %b %H:%M"
       month_day: "%B %d"
       long: "%B %d, %Y %H:%M"
+      stats: "%a %d-%m"
     pm: pm
   preferences:
     open_id_url: Your OpenID URL is
