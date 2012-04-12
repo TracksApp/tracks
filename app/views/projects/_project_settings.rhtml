@@ -18,7 +18,7 @@
     <%= link_to_edit_project(project, t('projects.edit_project_settings')) %>
   </div>
   <% unless project.description.blank? -%>
-    <div class="project_description"><%= format_note(project.description) %></div>
+    <div class="project_description"><%= Tracks::Utils.render_text(project.description) %></div>
   <% end -%>
 </div>
 <div id="<%= dom_id(project, 'edit') %>" class="edit-form" style="display:none;">
