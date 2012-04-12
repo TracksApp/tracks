@@ -14,7 +14,7 @@ module Tracks
           # do not change string; URL is alreay linked
           href
         else
-          content = content_tag(:a, h(href), :href => h(href))
+          content = helpers.content_tag(:a, h(href), :href => h(href))
         end
       end
     end
@@ -22,7 +22,7 @@ module Tracks
     def self.render_text(text)
       rendered = Tracks::Utils.auto_link_message(text)
       rendered = markdown(rendered)
-      rendered = ActionController::Base.helpers.auto_link(rendered, :link => :urls)
+      rendered = helpers.auto_link(rendered, :link => :urls)
 
       # add onenote and message protocols
       Sanitize::Config::RELAXED[:protocols]['a']['href'] << 'onenote'
@@ -39,7 +39,13 @@ module Tracks
     def self.markdown(text)
       RedCloth.new(text).to_html
     end
-
+    
+    private
+    
+    def self.helpers
+      ActionController::Base.helpers
+    end
+    
   end
   
 end

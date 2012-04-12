@@ -387,4 +387,19 @@ class TodoTest < ActiveSupport::TestCase
   end
 
   
+  def test_notes_are_rendered_on_save
+    user = @completed.user
+    todo = user.todos.create(:description => "test", :context => @completed.context)
+    
+    assert_nil todo.notes
+    assert_nil todo.rendered_notes
+    
+    todo.notes = "*test*"
+    todo.save!
+    todo.reload
+    
+    assert_equal "*test*", todo.notes
+    assert_equal "<p><strong>test</strong></p>", todo.rendered_notes
+  end
+  
 end

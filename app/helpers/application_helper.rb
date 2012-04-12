@@ -189,19 +189,6 @@ module ApplicationHelper
     end
   end
 
-  def format_note(note)
-    note = auto_link_message(note)
-    note = markdown(note)
-    note = auto_link(note, :link => :urls)
-
-    # add onenote and message protocols
-    Sanitize::Config::RELAXED[:protocols]['a']['href'] << 'onenote'
-    Sanitize::Config::RELAXED[:protocols]['a']['href'] << 'message'
-
-    note = Sanitize.clean(note, Sanitize::Config::RELAXED)
-    return note
-  end
-
   def sidebar_html_for_titled_list (list, title)
     return content_tag(:h3, title+" (#{list.length})") +
       content_tag(:ul, sidebar_html_for_list(list))

@@ -69,7 +69,7 @@ module ProjectsHelper
   
   def summary(project)
     project_description = ''
-    project_description += sanitize(markdown( project.description )) unless project.description.blank?
+    project_description += Tracks::Utils.render_text( project.description ) unless project.description.blank?
     project_description += content_tag(:p,
       "#{count_undone_todos_phrase(p)}. " + t('projects.project_state', :state => project.state)
       )
