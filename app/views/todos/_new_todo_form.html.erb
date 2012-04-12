@@ -1,7 +1,7 @@
 <%- todo = new_todo_form -%>
 
 <div id="todo_new_action">
-  <% form_for(todo, :html=> { :id=>'todo-form-new-action', :name=>'todo', :class => 'inline-form new_todo_form' }) do |t|%>
+  <%= form_for(todo, :html=> { :id=>'todo-form-new-action', :name=>'todo', :class => 'inline-form new_todo_form' }) do |t|%>
     <input id="default_project_name_id" name="default_project_name" type="hidden" value="<%= h(@initial_project_name)-%>" />
     <input id="default_context_name_id" name="default_context_name" type="hidden" value="<%= h(@initial_context_name)-%>" />
     <input type="hidden" id="new_todo_starred" name="new_todo_starred" value="false" />

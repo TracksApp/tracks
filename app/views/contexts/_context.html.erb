@@ -1,5 +1,5 @@
 <% @not_done = @not_done_todos.select {|t| t.context_id == context.id } %>
-<div id="c<%= context.id %>" class="container context" <%= "style=\"display:none\"" if collapsible && @not_done.empty? %>>
+<div id="c<%= context.id %>" class="container context" style="display:<%= (collapsible && @not_done.empty?) ? "none" : "block" %>">
   <h2>
     <% if collapsible -%>
       <a href="#" class="container_toggle" id="toggle_c<%= context.id %>"><%= image_tag("collapse.png") %></a>

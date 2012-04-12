@@ -57,20 +57,16 @@ gem 'bcrypt-ruby', '~> 3.0.0'
 # Deploy with Capistrano
 # gem 'capistrano'
 
-# To use debugger
-# gem 'ruby-debug19', :require => 'ruby-debug'
-
-
-# group :development do
-#   if RUBY_VERSION.to_f >= 1.9
-#     gem "ruby-debug19"
-#     gem "mongrel", "1.2.0.pre2"
-#   else
-#     gem "ruby-debug"
-#     gem "mongrel"
-#   end
-#   gem "yard"
-# end
+group :development do
+  if RUBY_VERSION.to_f >= 1.9
+#    gem "ruby-debug19", :require => 'ruby-debug'
+    gem "mongrel", "1.2.0.pre2"
+  else
+#    gem "ruby-debug"
+#    gem "mongrel"
+  end
+  gem "yard"
+end
 #
 # group :test do
 #   gem "test-unit", "1.2.3"

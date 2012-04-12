@@ -64,7 +64,7 @@ module TodosHelper
 
   def collapsed_notes_image(todo)
     link = link_to(image_tag( 'blank.png', :width=>'16', :height=>'16', :border=>'0' ), "#", {:class => 'show_notes', :title => 'Show notes'})
-    notes = content_tag(:div, {:class => "todo_notes", :id => dom_id(todo, 'notes'), :style => "display:none"}) { todo.rendered_notes }
+    notes = content_tag(:div, {:class => "todo_notes", :id => dom_id(todo, 'notes'), :style => "display:none"}) { todo.rendered_notes.html_safe }
     return link+notes
   end
 
@@ -133,7 +133,7 @@ module TodosHelper
   end
 
   def tag_list(todo=@todo, mobile=false)
-    content_tag(:span, :class => 'tags') { todo.tags.all_except_starred.collect{|tag| tag_span(tag, mobile)}.join('') }
+    content_tag(:span, :class => 'tags') { todo.tags.all_except_starred.collect{|tag| tag_span(tag, mobile)}.join('').html_safe }
   end
 
   def tag_list_mobile(todo=@todo)
@@ -166,7 +166,7 @@ module TodosHelper
         str << item_link_to_project( todo )
       end
     end
-    return str
+    return str.html_safe
   end
 
   # Uses the 'staleness_starts' value from settings.yml (in days) to colour the

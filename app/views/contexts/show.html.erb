@@ -1,12 +1,12 @@
 <div id="display_box">
-<%= render :partial => "contexts/context", :object => @context, :locals => { :collapsible => false } %>
+<%= render :partial => @context, :locals => { :collapsible => false } %>
 <%= render :partial => "todos/deferred", :object => @deferred, :locals => { :collapsible => false, :append_descriptor => t('contexts.todos_append'), :parent_container_type => 'context', :pending => @pending } %>
 <% unless @max_completed==0 -%>
   <%= render :partial => "todos/completed", :object => @done, :locals => { :suppress_context => true, :collapsible => false, :append_descriptor => t('contexts.last_completed_in_context', :number=>prefs.show_number_completed) } %>
 <% end -%>
-</div><!-- [end:display_box] -->
+</div>
 
 <div id="input_box">
   <%= render :partial => "shared/add_new_item_form" %>
   <%= render :file => "sidebar/sidebar.html.erb" %>
-</div><!-- End of input box -->
+</div>

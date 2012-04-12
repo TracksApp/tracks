@@ -263,7 +263,7 @@ class ContextsController < ApplicationController
   end
 
   def set_context_from_params
-    @context = current_user.contexts.find_by_params(params)
+    @context = current_user.contexts.find(params[:id])
   rescue
     @context = nil
   end
@@ -276,11 +276,8 @@ class ContextsController < ApplicationController
   def init_todos
     set_context_from_params
     unless @context.nil?
-      @context.todos.send :with_scope, :find => { :include => Todo::DEFAULT_INCLUDES } do
-        @done = @context.done_todos
-      end
-
       @max_completed = current_user.prefs.show_number_completed
+      @done = @context.todos.completed.all(:limit => @max_completed)
 
       # @not_done_todos = @context.not_done_todos TODO: Temporarily doing this
       # search manually until I can work out a way to do the same thing using

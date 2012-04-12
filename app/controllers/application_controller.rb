@@ -95,10 +95,10 @@ class ApplicationController < ActionController::Base
     if count == 0 && deferred_count > 0
       word = deferred_count == 1 ? string.singularize : string.pluralize
       word = "deferred&nbsp;" + word
-      deferred_count.to_s + "&nbsp;" + word
+      return (deferred_count.to_s + "&nbsp;" + word).html_safe
     else
       word = count == 1 ? string.singularize : string.pluralize
-      count.to_s + "&nbsp;" + word
+      return (count.to_s + "&nbsp;" + word).html_safe
     end
   end
 

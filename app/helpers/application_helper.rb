@@ -192,18 +192,17 @@ module ApplicationHelper
   end
 
   def sidebar_html_for_titled_list (list, title)
-    return content_tag(:h3, title+" (#{list.length})") +
-      content_tag(:ul, sidebar_html_for_list(list))
+    return content_tag(:h3, title+" (#{list.length})")  + content_tag(:ul, sidebar_html_for_list(list))
   end
 
   def sidebar_html_for_list(list)
     if list.empty?
-      return content_tag(:li, t('sidebar.list_empty'))
+      return content_tag(:li, t('sidebar.list_empty')).html_safe
     else
       return list.inject("") do |html, item|
         link = (item.class == "Project") ? link_to_project( item ) : link_to_context(item)
         html << content_tag(:li, link + " (" + count_undone_todos_phrase(item)+")")
-      end
+      end.html_safe
     end
   end
 

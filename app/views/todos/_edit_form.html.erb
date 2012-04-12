@@ -1,7 +1,14 @@
-<%
-todo = edit_form
-form_for(todo, :html=> { :name=>'todo', :id => dom_id(@todo, 'form'), :class => 'inline-form edit_todo_form' }) do |t|%>
-  <div id="edit_error_status"><%= error_messages_for("todo", :object_name => 'action') %></div>
+<% todo = edit_form -%>
+<%= form_for(todo, :html=> { :name=>'todo', :id => dom_id(@todo, 'form'), :class => 'inline-form edit_todo_form' }) do |t|%>
+  <div id="edit_error_status">
+  <% if todo.errors.any? -%>
+    <ul>
+      <% todo.errors.full_messages.each do |msg| %>
+      <li><%= msg %></li>
+      <% end %>
+    </ul>
+  <% end -%>
+  </div>
 
   <%= t.hidden_field( "id" ) -%>
   <%= source_view_tag( @source_view ) -%>

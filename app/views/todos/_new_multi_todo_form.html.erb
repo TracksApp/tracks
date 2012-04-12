@@ -1,7 +1,7 @@
 <%- todo = new_multi_todo_form -%>
 
 <div id="todo_multi_add" style="display:none">
-  <% form_for(todo, :html=> { :id=>'todo-form-multi-new-action', :name=>'todo', :class => 'inline-form' }) do |t| %>
+  <%= form_for(todo, :html=> { :id=>'todo-form-multi-new-action', :name=>'todo', :class => 'inline-form' }) do |t| %>
     <input id="default_project_name_id" name="default_project_name" type="hidden" value="<%=h @initial_project_name-%>" />
     <input id="default_context_name_id" name="default_context_name" type="hidden" value="<%=h @initial_context_name-%>" />
 

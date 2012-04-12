@@ -12,4 +12,6 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require  ../../../vendor/assets/javascripts/jquery-ui-1.8.17.custom.min
+//= require_tree ../../../vendor/assets/javascripts
 //= require_tree .

@@ -2,24 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <%#= stylesheet_link_tag 'standard','superfish','niftyCorners', 'jquery-ui-1.8.17.custom', :cache => 'tracks-cached' %>
+    <%= stylesheet_link_tag "application", :media => "all" %>
     <%= stylesheet_link_tag "print", :media => "print" %>
-    <%#= javascript_include_tag 'jquery-1.7.1.min', 'jquery-ui-1.8.17.custom.min',
-      'jquery.truncator','jquery.jeditable.mini', 'jquery.cookie', 'jquery.blockUI',
-      'jquery.form',
-      :cache => 'jquery-cached' %>
-    <%#= javascript_tag_for_i18n_datepicker %>
-    <%#= javascript_include_tag 'hoverIntent','superfish','application',
-      'accesskey-hints','niftycube','swfobject',
-      :cache => 'tracks-cached' %>
-    <% #= javascript_include_tag('jquery.simulate.drag-sortable') if ENV['RAILS_ENV']=='cucumber' -%>
-    <%= javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? %>
-    <%= javascript_tag "var TAG_NAME = '#{@tag_name}';" if @tag_name %>
+    <%= javascript_include_tag "application" %>
     <%= csrf_meta_tag %>
     <script type="text/javascript">
       var SOURCE_VIEW = '<%=@source_view%>';
-      var defaultContexts = <%= default_contexts_for_autocomplete rescue '{}' %>;
-      var defaultTags = <%= default_tags_for_autocomplete rescue '{}' %>;
+      var AUTH_TOKEN = '<%= protect_against_forgery? ? form_authenticity_token.inspect : "" %>'
+      var TAG_NAME = '<%= @tag_name ? @tag_name : "" %>'
+      var defaultContexts = <%= default_contexts_for_autocomplete.html_safe rescue '{}' %>;
+      var defaultTags = <%= default_tags_for_autocomplete.html_safe rescue '{}' %>;
       var dateFormat = '<%= date_format_for_date_picker %>';
       var weekStart = '<%= current_user.prefs.week_starts %>';
       function relative_to_root(path) { return '<%= root_url %>'+path; };
@@ -41,7 +33,7 @@
   <body class="<%= controller.controller_name %>">
 
     <div id="topbar">
-      <%= NOTIFY_BAR %>
+      <%= NOTIFY_BAR.html_safe %>
 
       <div id="date">
         <h1>
@@ -68,7 +60,7 @@
             <ul>
               <li><%= navigation_link( t('common.contexts'), contexts_path, {:accesskey=>"c", :title=>t('layouts.navigation.contexts_title')} ) %></li>
               <li><%= navigation_link( t('common.notes'), notes_path, {:accesskey => "o", :title => t('layouts.navigation.notes_title')} ) %></li>
-	      <li><%= navigation_link( t('common.review'), review_path, {:accesskey => "r", :title => t('layouts.navigation.review_title')} ) %></li>
+      	      <li><%= navigation_link( t('common.review'), review_path, {:accesskey => "r", :title => t('layouts.navigation.review_title')} ) %></li>
               <li><%= navigation_link( t('layouts.navigation.recurring_todos'), {:controller => "recurring_todos", :action => "index"}, :title => t('layouts.navigation.recurring_todos_title')) %></li>
             </ul>
           </li>
