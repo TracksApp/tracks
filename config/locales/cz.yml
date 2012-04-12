@@ -1,106 +1,5 @@
 --- 
 cz: 
-  common: 
-    back: !binary |
-      WnDEm3Q=
-
-    recurring_todos: "Opakovan\xC3\xA9 \xC3\xBAkoly"
-    actions: !binary |
-      w5prb2x5
-
-    third: !binary |
-      VMWZZXTDrQ==
-
-    add: "P\xC5\x99idat"
-    previous: !binary |
-      UMWZZWRjaG96w60=
-
-    go_back: !binary |
-      WnDEm3Q=
-
-    logout: "Odhl\xC3\xA1sit"
-    second: !binary |
-      RHJ1aMO9
-
-    actions_midsentence: akce
-    none: !binary |
-      xb3DoWRuw70=
-
-    week: !binary |
-      dMO9ZGVu
-
-    optional: "voliteln\xC3\xA9"
-    show_all: "Zobrazit v\xC5\xA1echny"
-    cancel: "Zru\xC5\xA1it"
-    month: !binary |
-      bcSbc8OtYw==
-
-    server_error: Nastala chyba na serveru.
-    notes: "Pozn\xC3\xA1mky"
-    forum: !binary |
-      RsOzcnVt
-
-    last: "Posledn\xC3\xAD"
-    projects: Projekty
-    review: Revize
-    action: !binary |
-      w5prb2w=
-
-    project: Projekt
-    contribute: !binary |
-      UMWZaXNwxJt0
-
-    ok: Ok
-    first: !binary |
-      UHJ2bsOt
-
-    website: "Webov\xC3\xA1 str\xC3\xA1nka"
-    numbered_step: Krok %{number}
-    create: "Vytvo\xC5\x99it"
-    sort: 
-      by_task_count_title: "\xC5\x98adit podle po\xC4\x8Dtu \xC3\xBAkol\xC5\xAF"
-      by_task_count_title_confirm: "Ur\xC4\x8Dit\xC4\x9B chcete \xC5\x99adit tyto projekty podle po\xC4\x8Dtu \xC3\xBAkol\xC5\xAF? St\xC3\xA1vaj\xC3\xADc\xC3\xAD po\xC5\x99ad\xC3\xAD bude ztraceno."
-      alphabetically: "Abecedn\xC4\x9B"
-      sort: !binary |
-        xZhhZGl0
-
-      alphabetically_confirm: "Ur\xC4\x8Dit\xC4\x9B chcete \xC5\x99adit tyto projekty abecedn\xC4\x9B? St\xC3\xA1vaj\xC3\xADc\xC3\xAD po\xC5\x99ad\xC3\xAD bude ztraceno."
-      alphabetically_title: "Se\xC5\x99adit projekty abecedn\xC4\x9B"
-      by_task_count: "Podle po\xC4\x8Dtu \xC3\xBAkol\xC5\xAF"
-    drag_handle: !binary |
-      Q0hZxaQgTcSa
-
-    months: !binary |
-      bcSbc8OtY2U=
-
-    description: Popis
-    next: !binary |
-      RGFsxaHDrQ==
-
-    fourth: !binary |
-      xIx0dnJ0w70=
-
-    context: Kontext
-    todo: !binary |
-      w7prb2w=
-
-    contexts: Kontexty
-    errors_with_fields: !binary |
-      TmFzdGFseSBwb3TDrcW+ZSBzIG7DoXNsZWR1asOtY8OtbWkgcG9sw63EjWt5
-      Og==
-
-    update: "Ulo\xC5\xBEit"
-    weeks: !binary |
-      dMO9ZG55
-
-    forth: !binary |
-      xIx0dnJ0w70=
-
-    wiki: Wiki
-    bugs: Chyby
-    ajaxError: "Chyba \xC4\x8Dten\xC3\xAD ze serveru"
-    email: Email
-    search: Hledat
   number: 
     format: 
       separator: .
@@ -142,11 +41,11 @@ cz:
     next_actions_rss_feed: "RSS feed aktu\xC3\xA1ln\xC3\xADch \xC3\xBAkol\xC5\xAF"
     toggle_notes_title: "Zobraz\xC3\xAD/skryje v\xC5\xA1echny pozn\xC3\xA1mky"
     mobile_navigation: 
+      feeds: Feedy
       new_action: !binary |
         MC1Ob3bDvSDDumtvbA==
 
       logout: "Odhl\xC3\xA1sit"
-      feeds: Feedy
       starred: !binary |
         NC1IdsSbemRpxI1reQ==
 
@@ -156,31 +55,33 @@ cz:
       home: "1-Dom\xC5\xAF"
     navigation: 
       manage_users_title: "P\xC5\x99idat nebo smazat u\xC5\xBEivatele"
-      recurring_todos: "Opakuj\xC3\xADc\xC3\xAD se \xC3\xBAkoly"
       api_docs: REST API Dokumenty
+      recurring_todos: "Opakuj\xC3\xADc\xC3\xAD se \xC3\xBAkoly"
       feeds: Feedy
+      help: "?"
       stats: Statistiky
-      notes_title: "Zobrazit v\xC5\xA1echny pozn\xC3\xA1mky"
       starred: "S hv\xC4\x9Bzdou"
+      notes_title: "Zobrazit v\xC5\xA1echny pozn\xC3\xA1mky"
       manage_users: !binary |
         U3Byw6F2YSB1xb5pdmF0ZWzFrw==
 
       tickler_title: Tickler
+      admin: n/d
       integrations_: Integrovat Tracks
       export_title: Import a export dat
       preferences: "Nastaven\xC3\xAD"
-      feeds_title: "Seznam dostupn\xC3\xBDch feed\xC5\xAF"
       calendar_title: !binary |
         S2FsZW5kw6HFmSBkYXRvdmFuw71jaCDDumtvbMWv
 
-      recurring_todos_title: "Spr\xC3\xA1va opakovan\xC3\xBDch \xC3\xBAkol\xC5\xAF"
-      tickler: Tickler
+      feeds_title: "Seznam dostupn\xC3\xBDch feed\xC5\xAF"
       completed_tasks: "Hotov\xC3\xA9"
       stats_title: "Zobraz\xC3\xAD statistiky \xC3\xBAkol\xC5\xAF"
+      tickler: Tickler
       home_title: !binary |
         RG9txa8=
 
       starred_title: "Zobraz\xC3\xAD \xC3\xBAkoly s hv\xC4\x9Bzdi\xC4\x8Dkou"
+      recurring_todos_title: "Spr\xC3\xA1va opakovan\xC3\xBDch \xC3\xBAkol\xC5\xAF"
       view: "Uk\xC3\xA1zat"
       organize: "Spr\xC3\xA1va"
       completed_tasks_title: "Hotov\xC3\xA9 \xC3\xBAkoly"
@@ -189,19 +90,122 @@ cz:
 
       contexts_title: Kontexty
       export: Export
-      projects_title: Projekty
-      search: Hledat
       preferences_title: "Zobraz\xC3\xAD mo\xC5\xBEnosti nastaven\xC3\xAD"
       review_title: "Prov\xC3\xA9st revizi"
       calendar: !binary |
         S2FsZW5kw6HFmQ==
 
+      search: Hledat
+      projects_title: Projekty
   integrations: 
     opensearch_description: Prohledat Tracks
-    gmail_description: Gadget pro Tracks do Gmailu
     applescript_next_action_prompt: "Popis \xC3\xBAkolu:"
+    gmail_description: Gadget pro Tracks do Gmailu
     applescript_success_after_id: "vytvo\xC5\x99en"
     applescript_success_before_id: "Nov\xC3\xBD \xC3\xBAkol s ID"
+  common: 
+    back: !binary |
+      WnDEm3Q=
+
+    recurring_todos: "Opakovan\xC3\xA9 \xC3\xBAkoly"
+    actions: !binary |
+      w5prb2x5
+
+    third: !binary |
+      VMWZZXTDrQ==
+
+    add: "P\xC5\x99idat"
+    previous: !binary |
+      UMWZZWRjaG96w60=
+
+    go_back: !binary |
+      WnDEm3Q=
+
+    logout: "Odhl\xC3\xA1sit"
+    second: !binary |
+      RHJ1aMO9
+
+    show_all: "Zobrazit v\xC5\xA1echny"
+    none: !binary |
+      xb3DoWRuw70=
+
+    week: !binary |
+      dMO9ZGVu
+
+    optional: "voliteln\xC3\xA9"
+    cancel: "Zru\xC5\xA1it"
+    month: !binary |
+      bcSbc8OtYw==
+
+    actions_midsentence: akce
+    server_error: Nastala chyba na serveru.
+    forum: !binary |
+      RsOzcnVt
+
+    notes: "Pozn\xC3\xA1mky"
+    last: "Posledn\xC3\xAD"
+    projects: Projekty
+    action: !binary |
+      w5prb2w=
+
+    review: Revize
+    project: Projekt
+    days_midsentence: dny
+    contribute: !binary |
+      UMWZaXNwxJt0
+
+    ok: Ok
+    website: "Webov\xC3\xA1 str\xC3\xA1nka"
+    first: !binary |
+      UHJ2bsOt
+
+    numbered_step: Krok %{number}
+    errors_with_fields: !binary |
+      TmFzdGFseSBwb3TDrcW+ZSBzIG7DoXNsZWR1asOtY8OtbWkgcG9sw63EjWt5
+      Og==
+
+    create: "Vytvo\xC5\x99it"
+    sort: 
+      by_task_count_title: "\xC5\x98adit podle po\xC4\x8Dtu \xC3\xBAkol\xC5\xAF"
+      by_task_count_title_confirm: "Ur\xC4\x8Dit\xC4\x9B chcete \xC5\x99adit tyto projekty podle po\xC4\x8Dtu \xC3\xBAkol\xC5\xAF? St\xC3\xA1vaj\xC3\xADc\xC3\xAD po\xC5\x99ad\xC3\xAD bude ztraceno."
+      alphabetically: "Abecedn\xC4\x9B"
+      alphabetically_title: "Se\xC5\x99adit projekty abecedn\xC4\x9B"
+      sort: !binary |
+        xZhhZGl0
+
+      alphabetically_confirm: "Ur\xC4\x8Dit\xC4\x9B chcete \xC5\x99adit tyto projekty abecedn\xC4\x9B? St\xC3\xA1vaj\xC3\xADc\xC3\xAD po\xC5\x99ad\xC3\xAD bude ztraceno."
+      by_task_count: "Podle po\xC4\x8Dtu \xC3\xBAkol\xC5\xAF"
+    months: !binary |
+      bcSbc8OtY2U=
+
+    description: Popis
+    todo: !binary |
+      w7prb2w=
+
+    next: !binary |
+      RGFsxaHDrQ==
+
+    fourth: !binary |
+      xIx0dnJ0w70=
+
+    context: Kontext
+    contexts: Kontexty
+    drag_handle: !binary |
+      Q0hZxaQgTcSa
+
+    update: "Ulo\xC5\xBEit"
+    weeks: !binary |
+      dMO9ZG55
+
+    forth: !binary |
+      xIx0dnJ0w70=
+
+    wiki: Wiki
+    bugs: Chyby
+    ajaxError: "Chyba \xC4\x8Dten\xC3\xAD ze serveru"
+    not_available_abbr: ""
+    email: Email
+    search: Hledat
   activerecord: 
     attributes: 
       project: 
@@ -213,13 +217,17 @@ cz:
 
         default_context_name: "V\xC3\xBDchoz\xC3\xAD kontext"
         description: Popis
+      note: 
+        created_at: "Vytvo\xC5\x99eno:"
+        updated_at: "Aktualizov\xC3\xA1n"
       todo: 
-        show_from: Zobrazovat od
         predecessors: !binary |
           WsOhdmlzw60gbmE=
 
+        show_from: Zobrazovat od
         notes: "Pozn\xC3\xA1mky"
         project: Projekt
+        tags: Tagy
         description: Popis
         context: Kontext
         due: "Pl\xC3\xA1nov\xC3\xA1no na"
@@ -232,14 +240,14 @@ cz:
 
       preference: 
         show_hidden_projects_in_sidebar: "Zobrazovat skryt\xC3\xA9 projekty v sidebaru"
-        date_format: "Form\xC3\xA1t data"
         show_hidden_contexts_in_sidebar: "Zobrazovat skryt\xC3\xA9 kontexty v sidebaru"
-        verbose_action_descriptors: "Ukecan\xC3\xA9 popisova\xC4\x8De \xC3\xBAkol\xC5\xAF"
-        mobile_todos_per_page: "\xC3\x9Akol\xC5\xAF na str\xC3\xA1nku (mobiln\xC3\xAD zobrazen\xC3\xAD)"
-        staleness_starts: "Jako pro\xC5\xA1l\xC3\xA9 ozna\xC4\x8Dit projekty star\xC5\xA1\xC3\xAD ne\xC5\xBE"
+        date_format: "Form\xC3\xA1t data"
         sms_context: "V\xC3\xBDchoz\xC3\xAD emailov\xC3\xBD kontext"
-        show_number_completed: "Po\xC4\x8Det hotov\xC3\xBDch \xC3\xBAkol\xC5\xAF k zobrazen\xC3\xAD"
+        verbose_action_descriptors: "Ukecan\xC3\xA9 popisova\xC4\x8De \xC3\xBAkol\xC5\xAF"
+        staleness_starts: "Jako pro\xC5\xA1l\xC3\xA9 ozna\xC4\x8Dit projekty star\xC5\xA1\xC3\xAD ne\xC5\xBE"
+        mobile_todos_per_page: "\xC3\x9Akol\xC5\xAF na str\xC3\xA1nku (mobiln\xC3\xAD zobrazen\xC3\xAD)"
         title_date_format: "Form\xC3\xA1t data nadpisu"
+        show_number_completed: "Po\xC4\x8Det hotov\xC3\xBDch \xC3\xBAkol\xC5\xAF k zobrazen\xC3\xAD"
         refresh: "Interval obnoven\xC3\xAD str\xC3\xA1nky (v minut\xC3\xA1ch)"
         week_starts: !binary |
           WmHEjcOhdGVrIHTDvWRuZQ==
@@ -247,17 +255,17 @@ cz:
         last_name: !binary |
           UMWZw61qbWVuw60=
 
+        due_style: "Zobrazen\xC3\xAD datovan\xC3\xBDch \xC3\xBAkol\xC5\xAF"
         locale: "Lok\xC3\xA1le"
         time_zone: !binary |
           xIxhc292w6kgcMOhc21v
 
-        due_style: "Zobrazen\xC3\xAD datovan\xC3\xBDch \xC3\xBAkol\xC5\xAF"
-        sms_email: SMS email
         show_project_on_todo_done: "Po spln\xC4\x9Bn\xC3\xAD \xC3\xBAkolu p\xC5\x99ej\xC3\xADt na projekt"
-        show_completed_projects_in_sidebar: "Zobrazovat hotov\xC3\xA9 projekty v sidebaru"
+        sms_email: SMS email
         first_name: !binary |
           Sm3DqW5v
 
+        show_completed_projects_in_sidebar: "Zobrazovat hotov\xC3\xA9 projekty v sidebaru"
         review_period: "Interval revize projekt\xC5\xAF"
     errors: 
       models: 
@@ -298,8 +306,6 @@ cz:
         not_a_number: !binary |
           bmVuw60gxI3DrXNsbw==
 
-      full_messages: 
-        format: "%{attribute} %{message}"
       template: 
         body: !binary |
           TmFzdGFseSBwb3TDrcW+ZSBzIG7DoXNsZWR1asOtY8OtbWkgcG9sw63EjWt5
@@ -308,6 +314,8 @@ cz:
         header: 
           one: "jedna chyba br\xC3\xA1n\xC3\xAD ulo\xC5\xBEen\xC3\xAD tohoto objektu %{model}"
           other: "%{count} chyb br\xC3\xA1n\xC3\xAD ulo\xC5\xBEen\xC3\xAD tohoto objektu %{model}"
+      full_messages: 
+        format: "%{attribute} %{message}"
   data: 
     import_successful: !binary |
       SW1wb3J0IGJ5bCDDunNwxJvFoW7DvS4=
@@ -351,7 +359,7 @@ cz:
 
       time_of_day: "Denn\xC3\xAD doba"
     totals_incomplete_actions: "M\xC3\xA1te %{count} nehotov\xC3\xBDch \xC3\xBAkol\xC5\xAF"
-    totals_action_count: "m\xC3\xA1te celkem %{count} \xC3\xBAkol\xC5\xAF"
+    totals_deferred_actions: "z nich\xC5\xBE %{count} jsou odlo\xC5\xBEen\xC3\xA9 \xC3\xBAkoly v Ticlkeru"
     running_time_legend: 
       actions: !binary |
         w5prb2x5
@@ -360,7 +368,7 @@ cz:
         UG9kw61s
 
       weeks: "\xC4\x8Cas b\xC4\x9Bhu \xC3\xBAkolu (t\xC3\xBDdny). Klepn\xC4\x9Bte na sloupec pro dal\xC5\xA1\xC3\xAD info"
-    totals_deferred_actions: "z nich\xC5\xBE %{count} jsou odlo\xC5\xBEen\xC3\xA9 \xC3\xBAkoly v Ticlkeru"
+    totals_action_count: "m\xC3\xA1te celkem %{count} \xC3\xBAkol\xC5\xAF"
     tag_cloud_90days_title: "Zna\xC4\x8Dky \xC3\xBAkol\xC5\xAF z posledn\xC3\xADch 90-ti dn\xC3\xAD"
     tod30: "Denn\xC3\xAD doba (posledn\xC3\xADch 30 dn\xC3\xAD)"
     tags: !binary |
@@ -368,7 +376,7 @@ cz:
 
     projects: Projekty
     actions_avg_completion_time: "Pro v\xC5\xA1echny va\xC5\xA1e hotov\xC3\xA9 \xC3\xBAkoly je pr\xC5\xAFm\xC4\x9Brn\xC3\xBD \xC4\x8Das dokon\xC4\x8Den\xC3\xAD %{count} dn\xC3\xAD."
-    actions_day_of_week_title: "Den v t\xC3\xBDdnu (v\xC5\xA1echny \xC3\xBAkoly)"
+    actions_lastyear_title: "\xC3\x9Akoly za posledn\xC3\xADch 12 m\xC4\x9Bs\xC3\xADc\xC5\xAF"
     labels: 
       month_avg_completed: !binary |
         JXttb250aHN9IG3Em3PDrcSNbsOtIHByxa9txJtyIGhvdG92w71jaA==
@@ -384,9 +392,9 @@ cz:
         cHLFr23Em3JuxJsgdXphdsWZZW5v
 
       created: "Vytvo\xC5\x99eno"
-    totals_completed_project_count: "a %{count} je hotov\xC3\xBDch projekt\xC5\xAF."
     actions_selected_from_week: "\xC3\x9Akoly vybran\xC3\xA9 z t\xC3\xBDdne "
-    actions_lastyear_title: "\xC3\x9Akoly za posledn\xC3\xADch 12 m\xC4\x9Bs\xC3\xADc\xC5\xAF"
+    totals_completed_project_count: "a %{count} je hotov\xC3\xBDch projekt\xC5\xAF."
+    actions_day_of_week_title: "Den v t\xC3\xBDdnu (v\xC5\xA1echny \xC3\xBAkoly)"
     open_per_week: "Aktivn\xC3\xAD (viditeln\xC3\xA9 i skryt\xC3\xA9) dal\xC5\xA1\xC3\xAD akce za t\xC3\xBDden"
     action_selection_title: !binary |
       VFJBQ0tTOjp2w71ixJtyIMO6a29sxa8=
@@ -434,17 +442,17 @@ cz:
 
     top10_projects: "Top 10 projekt\xC5\xAF"
     top5_contexts: "Top 5 kontext\xC5\xAF"
+    click_to_return: "Klepn\xC4\x9Bte %{link} pro n\xC3\xA1vrat ke statistik\xC3\xA1m."
     totals: Celkem
     contexts: Kontexty
-    click_to_return: "Klepn\xC4\x9Bte %{link} pro n\xC3\xA1vrat ke statistik\xC3\xA1m."
     tag_cloud_90days_description: "Tento mrak zahrnuje \xC5\xA1t\xC3\xADtky \xC3\xBAkol\xC5\xAF, kter\xC3\xA9 byly vytvo\xC5\x99eny nebo dokon\xC4\x8Deny v posledn\xC3\xADch 90-ti dnech."
     totals_visible_context_count: "Z nich je %{count} viditeln\xC3\xBDch kontext\xC5\xAF"
+    actions_min_completion_time: "Minim\xC3\xA1ln\xC3\xAD \xC4\x8Das k dokon\xC4\x8Den\xC3\xAD je %{time}."
+    top10_projects_30days: "Top 10 projekt\xC5\xAF za posledn\xC3\xADch 30 dn\xC3\xAD"
     running_time_all: !binary |
       QWt0dcOhbG7DrSDEjWFzIGLEm2h1IHbFoWVjaCBuZWhvdG92w71jaCDDumtv
       bMWv
 
-    top10_projects_30days: "Top 10 projekt\xC5\xAF za posledn\xC3\xADch 30 dn\xC3\xAD"
-    actions_min_completion_time: "Minim\xC3\xA1ln\xC3\xAD \xC4\x8Das k dokon\xC4\x8Den\xC3\xAD je %{time}."
     action_completion_time_title: "\xC4\x8Cas dokon\xC4\x8Den\xC3\xAD (v\xC5\xA1echny hotov\xC3\xA9 \xC3\xBAkoly)"
     click_to_show_actions_from_week: "Klepn\xC4\x9Bte %{link} pro zobrazen\xC3\xAD \xC3\xBAkol\xC5\xAF z t\xC3\xBDdne %{week} a dal\xC5\xA1\xC3\xADch."
     top10_longrunning: !binary |
@@ -453,8 +461,8 @@ cz:
     no_actions_selected: !binary |
       TmVqc291IHZ5YnLDoW55IMW+w6FkbsOpIMO6a29seS4=
 
-    actions_further: " a d\xC3\xA1le"
     totals_tag_count: "Na akc\xC3\xADch je um\xC3\xADst\xC4\x9Bno %{count} \xC5\xA1t\xC3\xADtk\xC5\xAF."
+    actions_further: " a d\xC3\xA1le"
     actions_dow_30days_legend: 
       number_of_actions: !binary |
         UG/EjWV0IGFrY8Ot
@@ -467,20 +475,21 @@ cz:
     spread_of_actions_for_all_context: "Distribuce v\xC5\xA1ech \xC3\xBAkol\xC5\xAF do kontext\xC5\xAF"
     more_stats_will_appear: "Dal\xC5\xA1\xC3\xAD statistiky se zobraz\xC3\xAD a\xC5\xBE p\xC5\x99ibyde v\xC3\xADce \xC3\xBAkol\xC5\xAF."
     actions_avg_completed_30days: "a dokon\xC4\x8Deno pr\xC5\xAFm\xC4\x9Brn\xC4\x9B %{count} \xC3\xBAkol\xC5\xAF za den."
-    actions_dow_30days_title: "Dny v t\xC3\xBDdnu (poslen\xC3\xADch 30 dn\xC3\xAD)"
     actions_30days_title: "\xC3\x9Akoly za posledn\xC3\xADch 30 dn\xC3\xAD"
     no_tags_available: !binary |
       xb7DoWRuw6kgxaF0w610a3kgbmVqc291IGRlZmlub3bDoW55
 
     index_title: TRACKS::Statistika
+    actions_dow_30days_title: "Dny v t\xC3\xBDdnu (poslen\xC3\xADch 30 dn\xC3\xAD)"
     actions_day_of_week_legend: 
       number_of_actions: !binary |
         UG/EjWV0IGFrY8Ot
 
       day_of_week: "Den v t\xC3\xBDdnu"
+    within_one: "V r\xC3\xA1mci 1."
     spread_of_running_actions_for_visible_contexts: "Distribuce b\xC4\x9B\xC5\xBE\xC3\xADc\xC3\xADch \xC3\xBAkol\xC5\xAF do viditeln\xC3\xBDch kontext\xC5\xAF"
-    totals_blocked_actions: "%{count} je z\xC3\xA1visl\xC3\xBDch na dokon\xC4\x8Den\xC3\xAD jin\xC3\xBDch akc\xC3\xAD."
     actions_last_year: "\xC3\x9Akoly v posledn\xC3\xADm roce"
+    totals_blocked_actions: "%{count} je z\xC3\xA1visl\xC3\xBDch na dokon\xC4\x8Den\xC3\xAD jin\xC3\xBDch akc\xC3\xAD."
     totals_unique_tags: "Z t\xC4\x9Bchto \xC5\xA1t\xC3\xADtk\xC5\xAF je %{count} unik\xC3\xA1tn\xC3\xADch."
     totals_active_project_count: "Znich %{count} je aktivn\xC3\xADch projek\xC5\xAF"
     running_time_all_legend: 
@@ -492,13 +501,13 @@ cz:
         UG9kw61s
 
     other_actions_label: "(ostatn\xC3\xAD)"
-    totals_hidden_project_count: "%{count} je skryt\xC3\xBDch"
     time_of_day: "Denn\xC3\xAD doba (v\xC5\xA1echny \xC3\xBAkoly)"
+    totals_hidden_project_count: "%{count} je skryt\xC3\xBDch"
   todos: 
+    completed_actions: "Hotov\xC3\xA9 \xC3\xBAkoly"
     show_from: Zobrazovat od
     error_starring_recurring: "Nebylo mo\xC5\xBEno ohv\xC4\x9Bzdi\xC4\x8Dkovat opakovan\xC3\xBD \xC3\xBAkol \\'%{description}\\'"
     recurring_action_deleted: "\xC3\x9Akol byl smaz\xC3\xA1n. Proto\xC5\xBEe jde o opakovan\xC3\xBD \xC3\xBAkol, byl vlo\xC5\xBEen nov\xC3\xBD \xC3\xBAkol"
-    completed_actions: "Hotov\xC3\xA9 \xC3\xBAkoly"
     completed_rest_of_previous_month: "Uzav\xC5\x99eno ve zbytku minul\xC3\xA9ho m\xC4\x9Bs\xC3\xADce"
     completed_recurring: "Hotov\xC3\xA9 opakovan\xC3\xA9 \xC3\xBAkoly"
     added_new_next_action: !binary |
@@ -517,10 +526,10 @@ cz:
       xb3DoWRuw6kgb2Rsb8W+ZW7DqSDDumtvbHkgc2UgxaF0w610a2VtICcle3Rh
       Z19uYW1lfSc=
 
-    edit_action_with_description: "Upravit \xC3\xBAkol '%{description}'"
     no_hidden_actions: !binary |
       xb3DoWRuw6kgc2tyeXTDqSDDumtvbHk=
 
+    edit_action_with_description: "Upravit \xC3\xBAkol '%{description}'"
     action_due_on: "(\xC3\xBAkol pl\xC3\xA1nov\xC3\xA1n na %{date})"
     archived_tasks_title: "TRACKS::Archiv hotov\xC3\xBDch \xC3\xBAkol\xC5\xAF"
     remove_dependency: "Odstranit z\xC3\xA1vislost (nesma\xC5\xBEe \xC3\xBAkol)"
@@ -531,12 +540,12 @@ cz:
     action_deleted_success: !binary |
       w5prb2wgYnlsIMO6c3DEm8WhbsSbIHNtYXrDoW4=
 
+    mobile_todos_page_title: "V\xC5\xA1echny \xC3\xBAkoly"
     new_related_todo_created: "Byl vytvo\xC5\x99en nov\xC3\xBD \xC3\xBAkol pat\xC5\x99\xC3\xADc\xC3\xAD do tohoto opakovan\xC3\xA9ho \xC3\xBAkolu"
     context_changed: "Kontext byl zm\xC4\x9Bn\xC4\x9Bn na %{name}"
     add_another_dependency: !binary |
       UMWZaWRhdCBkYWzFocOtIHrDoXZpc2xvc3Q=
 
-    mobile_todos_page_title: "V\xC5\xA1echny \xC3\xBAkoly"
     delete_recurring_action_title: "Smazat opakovan\xC3\xBD \xC3\xBAkol"
     removed_predecessor: "Byl odstran\xC4\x9Bn %{successor} jako z\xC3\xA1vislost pro %{predecessor}."
     recurring_actions_title: "TRACKS::Opakovan\xC3\xA9 \xC3\xBAkoly"
@@ -549,15 +558,15 @@ cz:
     edit_action: "Upravit \xC3\xBAkol"
     added_new_context: "P\xC5\x99id\xC3\xA1n nov\xC3\xBD kontext"
     next_actions_description: "Filtr:"
-    list_incomplete_next_actions_with_limit: "Zobrazuje posledn\xC3\xADch %{count} nedokon\xC4\x8Den\xC3\xBDch \xC3\xBAkol\xC5\xAF"
-    set_to_pending: "%{task} nastaven jako \xC4\x8Dekaj\xC3\xADc\xC3\xAD"
-    added_new_project: "P\xC5\x99id\xC3\xA1n nov\xC3\xBD projekt"
     next_actions_title_additions: 
       completed: "hotov\xC3\xA9 \xC3\xBAkoly"
       due_today: dnes
       due_within_a_week: !binary |
         YsSbaGVtIHTDvWRuZQ==
 
+    list_incomplete_next_actions_with_limit: "Zobrazuje posledn\xC3\xADch %{count} nedokon\xC4\x8Den\xC3\xBDch \xC3\xBAkol\xC5\xAF"
+    set_to_pending: "%{task} nastaven jako \xC4\x8Dekaj\xC3\xADc\xC3\xAD"
+    added_new_project: "P\xC5\x99id\xC3\xA1n nov\xC3\xBD projekt"
     older_completed_items: ""
     error_deleting_item: "Nepoda\xC5\x99ilo se smazat polo\xC5\xBEku %{description}"
     edit_recurring_todo: "Upravit opakovan\xC3\xBD \xC3\xBAkol"
@@ -566,24 +575,24 @@ cz:
     no_actions_due_this_week: !binary |
       xb3DoWRuw6kgw7prb2x5IHBsw6Fub3bDoW55IG5hIHRlbnRvIHTDvWRlbg==
 
-    no_deferred_pending_actions: !binary |
-      xb3DoWRuw6kgb2Rsb8W+ZW7DqSBhbmkgxI1la2Fqw61jw60gw7prb2x5
-
     no_recurring_todos: !binary |
       xb3DoWRuw6kgb3Bha292YW7DqSDDumtvbHk=
 
     error_completing_todo: "Nepoda\xC5\x99ilo se ukon\xC4\x8Dit / aktivovat opakovan\xC3\xBD \xC3\xBAkol %{description}"
     recurring_pattern_removed: "Vzor opakov\xC3\xA1n\xC3\xAD byl odstran\xC4\x9Bn z %{count}"
     convert_to_project: "Vytvo\xC5\x99it projekt"
-    delete_recurring_action_confirm: "Opravdu chcete smazat opakovan\xC3\xBD \xC3\xBAkol '%{description}'?"
+    no_deferred_pending_actions: !binary |
+      xb3DoWRuw6kgb2Rsb8W+ZW7DqSBhbmkgxI1la2Fqw61jw60gw7prb2x5
+
     completed_last_day: "Ukon\xC4\x8Den\xC3\xA9 v posledn\xC3\xADch 24 hodin\xC3\xA1ch"
+    delete_recurring_action_confirm: "Opravdu chcete smazat opakovan\xC3\xBD \xC3\xBAkol '%{description}'?"
     show_in_days: "Zobrazit za %{days} dn\xC3\xAD"
     no_project: "--\xC5\xBD\xC3\xA1dn\xC3\xBD projekt--"
     error_saving_recurring: "Nepoda\xC5\x99ilo se ulo\xC5\xBEit opakovan\xC3\xBD \xC3\xBAkol \\'%{description}\\'"
     completed_more_than_x_days_ago: ""
-    new_related_todo_created_short: "vytvo\xC5\x99en nov\xC3\xBD \xC3\xBAkol"
-    feed_title_in_context: v kontextu '%{context}'
     all_completed: "V\xC5\xA1echny hotov\xC3\xA9 \xC3\xBAkoly"
+    feed_title_in_context: v kontextu '%{context}'
+    new_related_todo_created_short: "vytvo\xC5\x99en nov\xC3\xBD \xC3\xBAkol"
     edit: Upravit
     older_than_days: ""
     completed_tagged_page_title: "TRACKS::Hotov\xC3\xA9 \xC3\xBAkoly se \xC5\xA1t\xC3\xADtkem '%{tag_name}'"
@@ -591,56 +600,53 @@ cz:
       xIxla2Fqw61jw60=
 
     completed_actions_with: "Hotov\xC3\xA9 \xC3\xBAkoly se \xC5\xA1t\xC3\xADtkem '%{tag_name}'"
-    feed_title_in_project: v projektu '%{project}'
     deleted_success: !binary |
       w5prb2wgYnlsIMO6c3DEm8WhbsSbIHNtYXrDoW4u
 
     completed_tasks_title: "TRACKS::Hotov\xC3\xA9 \xC3\xBAkoly"
+    feed_title_in_project: v projektu '%{project}'
     clear_due_date: "Smazat pl\xC3\xA1novan\xC3\xA9 datum \xC3\xBAkolu"
     error_removing_dependency: "Nepoda\xC5\x99ilo se odstranit z\xC3\xA1vislost"
     hidden_actions: "Skryt\xC3\xA9 \xC3\xBAkoly"
-    deferred_actions_with: "Odlo\xC5\xBEen\xC3\xA9 \xC3\xBAkoly se \xC5\xA1t\xC3\xADtkem '%{tag_name}'"
     was_due_on_date: "bylo pl\xC3\xA1nov\xC3\xA1no na %{date}"
     show_on_date: "Uk\xC3\xA1zat %{date}"
     recurrence_period: "Interval opakov\xC3\xA1n\xC3\xAD"
+    deferred_actions_with: "Odlo\xC5\xBEen\xC3\xA9 \xC3\xBAkoly se \xC5\xA1t\xC3\xADtkem '%{tag_name}'"
     confirm_delete: "Opravdu chcete smazat \xC3\xBAkol '%{description}'?"
     recurring_deleted_success: !binary |
       T3Bha292YW7DvSDDumtvbCBieWwgw7pzcMSbxaFuxJsgc21hesOhbi4=
 
+    clear_show_from_date: "Odstranit datum zobrazen\xC3\xAD"
     next_actions_title: "Tracks - \xC3\x9Akoly"
     next_action_description: "Popis \xC3\xBAkolu"
     deferred_tasks_title: TRACKS::Tickler
     no_completed_actions_with: "\xC5\xBD\xC3\xA1dn\xC3\xA9 hotov\xC3\xA9 \xC3\xBAkoly se \xC5\xA1t\xC3\xADtkem '%{tag_name}'"
-    clear_show_from_date: "Odstranit datum zobrazen\xC3\xAD"
+    unresolved_dependency: "Hodnota v poli 'z\xC3\xA1vis\xC3\xAD na' neodpov\xC3\xADd\xC3\xA1 \xC5\xBE\xC3\xA1dn\xC3\xA9mu existuj\xC3\xADc\xC3\xADmu \xC3\xBAkolu. Hodnota bude ignorov\xC3\xA1na. Pokra\xC4\x8Dovat?"
     calendar_page_title: "TRACKS::Kalend\xC3\xA1\xC5\x99"
     in_hidden_state: "(skryt\xC3\xBD)"
-    unresolved_dependency: "Hodnota v poli 'z\xC3\xA1vis\xC3\xAD na' neodpov\xC3\xADd\xC3\xA1 \xC5\xBE\xC3\xA1dn\xC3\xA9mu existuj\xC3\xADc\xC3\xADmu \xC3\xBAkolu. Hodnota bude ignorov\xC3\xA1na. Pokra\xC4\x8Dovat?"
-    next_actions_due_date: 
-      overdue_by: "Pro\xC5\xA1l\xC3\xA9 %{days} den"
-      due_in_x_days: "Za %{days} dn\xC3\xAD"
-      due_today: Dnes
-      overdue_by_plural: "Pro\xC5\xA1l\xC3\xA9 %{days} dn\xC3\xAD"
-      due_tomorrow: !binary |
-        WsOtdHJh
-
     show_today: Zobrazit Dnes
     no_actions_found_title: !binary |
       TmVuYWxlemVueSDFvsOhZG7DqSDDumtvbHk=
 
+    next_actions_due_date: 
+      overdue_by: "Pro\xC5\xA1l\xC3\xA9 %{days} den"
+      due_today: Dnes
+      due_in_x_days: "Za %{days} dn\xC3\xAD"
+      overdue_by_plural: "Pro\xC5\xA1l\xC3\xA9 %{days} dn\xC3\xAD"
+      due_tomorrow: !binary |
+        WsOtdHJh
+
     completed_last_x_days: "Uzav\xC5\x99en\xC3\xA9 za posledn\xC3\xADch %{count} dn\xC3\xAD"
+    no_actions_with: "\xC5\xBD\xC3\xA1dn\xC3\xA9 \xC3\xBAkoly se \xC5\xA1t\xC3\xADtkem '%{tag_name}'"
     defer_x_days: 
       one: "Uk\xC3\xA1zat z\xC3\xADtra"
       other: "Uk\xC3\xA1zat za %{count} dn\xC3\xAD"
-    no_actions_with: "\xC5\xBD\xC3\xA1dn\xC3\xA9 \xC3\xBAkoly se \xC5\xA1t\xC3\xADtkem '%{tag_name}'"
     added_new_next_action_singular: !binary |
       UMWZaWTDoW4gbm92w70gw7prb2w=
 
     no_completed_actions: !binary |
       xb3DoWRuw6kgaG90b3bDqSDDumtvbHku
 
-    feeds: 
-      completed: "Hotov\xC3\xA9: %{date}"
-      due: "Pl\xC3\xA1nov\xC3\xA1no na: %{date}"
     deferred_pending_actions: !binary |
       T2Rsb8W+ZW7DqS/EjWVrYWrDrWPDrSDDumtvbHk=
 
@@ -651,6 +657,9 @@ cz:
       other: !binary |
         JXtjb3VudH0gxI1la2Fqw61jw61jaCDDumtvbMWv
 
+    feeds: 
+      completed: "Hotov\xC3\xA9: %{date}"
+      due: "Pl\xC3\xA1nov\xC3\xA1no na: %{date}"
     delete_action: "Smazat \xC3\xBAkol"
     error_deleting_recurring: "Nepoda\xC5\x99ilo se smazat opakovan\xC3\xBD \xC3\xBAkol \\'%{description}\\'"
     recurring_todos: "Opakovan\xC3\xA9 \xC3\xBAkoly"
@@ -660,19 +669,18 @@ cz:
     no_last_completed_actions: !binary |
       xb3DoWRuw6kgaG90b3bDqSDDumtvbHk=
 
-    tickler_items_due: 
-      one: "Jeden \xC3\xBAkol v Tickleru je pl\xC3\xA1nov\xC3\xA1n dnes - obnovte str\xC3\xA1nku pro zobrazen\xC3\xAD."
-      other: "%{count} polo\xC5\xBEek v Tickleru je pl\xC3\xA1nov\xC3\xA1no na dnes tickler items are now due - obnovte str\xC3\xA1nku pro zobrazen\xC3\xAD."
     depends_on: !binary |
       WsOhdmlzw60gbmE=
 
+    tickler_items_due: 
+      one: "Jeden \xC3\xBAkol v Tickleru je pl\xC3\xA1nov\xC3\xA1n dnes - obnovte str\xC3\xA1nku pro zobrazen\xC3\xAD."
+      other: "%{count} polo\xC5\xBEek v Tickleru je pl\xC3\xA1nov\xC3\xA1no na dnes tickler items are now due - obnovte str\xC3\xA1nku pro zobrazen\xC3\xAD."
     action_marked_complete: "\xC3\x9Akol <strong>'%{description}'</strong> byl ozna\xC4\x8Den jako <strong>%{completed}</strong>"
-    added_new_next_action_plural: "\xC3\x9Akoly byly p\xC5\x99id\xC3\xA1ny"
     completed_today: "Dokon\xC4\x8Den\xC3\xA9 dnes"
+    added_new_next_action_plural: "\xC3\x9Akoly byly p\xC5\x99id\xC3\xA1ny"
     new_related_todo_not_created_short: "\xC3\xBAkol nebyl vytvo\xC5\x99en"
     completed_rest_of_week: "Dokon\xC4\x8Den\xC3\xA9 ve zbytku t\xC3\xBDdne"
     error_starring: "Nepoda\xC5\x99ilo se ozna\xC4\x8Dit \xC3\xBAkol hv\xC4\x9Bzdi\xC4\x8Dkou '%{description}'"
-    show_tomorrow: "Zobrazit z\xC3\xADtra"
     calendar: 
       get_in_ical_format: "Kalend\xC3\xA1\xC5\x99 ve form\xC3\xA1tu iCal"
       due_next_week: !binary |
@@ -694,11 +702,13 @@ cz:
 
       no_actions_due_this_month: "Na zbytek tohoto m\xC4\x9Bs\xC3\xADce nejsou \xC5\xBE\xC3\xA1dn\xC3\xA9 \xC3\xBAkoly"
       due_this_month: "Pl\xC3\xA1nov\xC3\xA1no na %{month}"
+    show_tomorrow: "Zobrazit z\xC3\xADtra"
+    tagged_page_title: "TRACKS::Se \xC5\xA1t\xC3\xADtkem '%{tag_name}'"
     action_deferred: "\xC3\x9Akol '%{description}' byl oldo\xC5\xBEen"
     recurrence: 
-      ends_on_number_times: "Kon\xC4\x8D\xC3\xAD po %{number} opakov\xC3\xA1n\xC3\xADch"
       ends_on_date: "Kon\xC4\x8D\xC3\xAD %{date}"
       every_work_day: "Ka\xC5\xBEd\xC3\xBD pracovn\xC3\xAD den"
+      ends_on_number_times: "Kon\xC4\x8D\xC3\xAD po %{number} opakov\xC3\xA1n\xC3\xADch"
       recurrence_on_due_date: "datum na kter\xC3\xA9 je \xC3\xBAkol pl\xC3\xA1nov\xC3\xA1n"
       weekly_options: "Nastaven\xC3\xAD pro t\xC3\xBDdenn\xC3\xAD opakovan\xC3\xA9 \xC3\xBAkoly"
       weekly: !binary |
@@ -714,13 +724,13 @@ cz:
         WmHEjcOtbsOh
 
       daily_options: "Nastaven\xC3\xAD pro denn\xC3\xAD opakovan\xC3\xA9 \xC3\xBAkoly"
-      show_option_always: !binary |
-        c3TDoWxl
-
       daily: !binary |
         RGVubsSb
 
       pattern: 
+        third: !binary |
+          dMWZZXTDrQ==
+
         month_names: 
         - 
         - Leden
@@ -741,33 +751,24 @@ cz:
 
         - Listopad
         - Prosinec
-        third: !binary |
-          dMWZZXTDrQ==
-
         every_n: !binary |
           a2HFvmTDqSAle259
 
+        every_xth_day_of_every_n_months: "ka\xC5\xBEd\xC3\xBD %{x} %{day} ka\xC5\xBEd\xC3\xBDch %{n_months}"
         second: !binary |
           ZHJ1aMO9
 
-        every_xth_day_of_every_n_months: "ka\xC5\xBEd\xC3\xBD %{x} %{day} ka\xC5\xBEd\xC3\xBDch %{n_months}"
         on_day_n: "%{n}. den"
-        from: od
         weekly: !binary |
           a2HFvmTDvSB0w71kZW4=
 
+        from: od
         every_day: !binary |
           a2HFvmTDvSBkZW4=
 
         last: "posledn\xC3\xAD"
-        the_xth_day_of_month: "%{x} %{day} m\xC4\x9Bs\xC3\xADce %{month}"
         times: "(%{number} opakov\xC3\xA1n\xC3\xAD)"
-        every_year_on: "ka\xC5\xBEd\xC3\xBD rok %{date}"
-        on_work_days: "v pracovn\xC3\xAD dny"
-        first: !binary |
-          cHJ2bsOt
-
-        show: "uk\xC3\xA1zat"
+        the_xth_day_of_month: "%{x} %{day} m\xC4\x9Bs\xC3\xADce %{month}"
         day_names: 
         - "ned\xC4\x9Ble"
         - !binary |
@@ -782,16 +783,25 @@ cz:
           cMOhdGVr
 
         - sobota
+        show: "uk\xC3\xA1zat"
+        first: !binary |
+          cHJ2bsOt
+
+        every_year_on: "ka\xC5\xBEd\xC3\xBD rok %{date}"
+        on_work_days: "v pracovn\xC3\xAD dny"
         fourth: !binary |
           xI10dnJ0w70=
 
         due: "pl\xC3\xA1nov\xC3\xA1no na"
-        until: do
         every_month: !binary |
           a2HFvmTDvSBtxJtzw61j
 
-      recurrence_on_options: "Nastavit opakov\xC3\xA1n\xC3\xAD na"
+        until: do
+      show_option_always: !binary |
+        c3TDoWxl
+
       yearly_every_x_day: "Ka\xC5\xBEd\xC3\xBD %{month} %{day}"
+      recurrence_on_options: "Nastavit opakov\xC3\xA1n\xC3\xAD na"
       daily_every_number_day: "Ka\xC5\xBEd\xC3\xBDch %{number} dn\xC3\xAD"
       ends_on: !binary |
         S29uxI3DrQ==
@@ -800,60 +810,60 @@ cz:
         w5prw6F6YXQgw7prb2w=
 
       weekly_every_number_week: "Ka\xC5\xBEd\xC3\xBDch %{number} t\xC3\xBDdn\xC5\xAF"
-      from_tickler: "datum kdy \xC3\xBAkol vypadne z Tickleru (nen\xC3\xAD nastaveno pl\xC3\xA1novan\xC3\xA9 datum)"
+      show_days_before: "%{days} dn\xC3\xAD p\xC5\x99ed pl\xC3\xA1novan\xC3\xBDm datem"
       yearly_every_xth_day: "%{day} %{day_of_week} m\xC4\x9Bs\xC3\xADce %{month}"
+      from_tickler: "datum kdy \xC3\xBAkol vypadne z Tickleru (nen\xC3\xAD nastaveno pl\xC3\xA1novan\xC3\xA9 datum)"
       no_end_date: Nikdy
       day_x_on_every_x_month: "%{day}. den ka\xC5\xBEd\xC3\xBD %{month}. m\xC4\x9Bs\xC3\xADc"
       yearly_options: "Nastaven\xC3\xAD pro ro\xC4\x8Dn\xC3\xAD opakovan\xC3\xA9 \xC3\xBAkoly"
-      show_days_before: "%{days} dn\xC3\xAD p\xC5\x99ed pl\xC3\xA1novan\xC3\xBDm datem"
-      monthly_every_xth_day: "%{day} %{day_of_week} ka\xC5\xBEd\xC3\xBD %{month}. m\xC4\x9Bs\xC3\xADc"
       yearly: !binary |
         Um/EjW7Emw==
 
-    tagged_page_title: "TRACKS::Se \xC5\xA1t\xC3\xADtkem '%{tag_name}'"
+      monthly_every_xth_day: "%{day} %{day_of_week} ka\xC5\xBEd\xC3\xBD %{month}. m\xC4\x9Bs\xC3\xADc"
     no_completed_recurring: !binary |
       xb3DoWRuw6kgaG90b3bDqSBvcGFrb3ZhbsOpIMO6a29seQ==
 
     added_dependency: "P\xC5\x99id\xC3\xA1no %{dependency} jako z\xC3\xA1vislost."
-    all_completed_tagged_page_title: "TRACKS::Hotov\xC3\xA9 \xC3\xBAkoly se \xC5\xA1t\xC3\xADtkem %{tag_name}"
     no_deferred_actions: !binary |
       xb3DoWRuw6kgb2Rsb8W+ZW7DqSDDumtvbHku
 
+    all_completed_tagged_page_title: "TRACKS::Hotov\xC3\xA9 \xC3\xBAkoly se \xC5\xA1t\xC3\xADtkem %{tag_name}"
     completed_rest_of_month: "Ukon\xC4\x8Den\xC3\xA9 ve zbytku tohoto m\xC4\x9Bs\xC3\xADce"
     recurrence_completed: "Posledn\xC3\xAD opakov\xC3\xA1n\xC3\xAD \xC3\xBAkolu bylo ozna\xC4\x8Deno jako hotov\xC3\xA9. Opakovan\xC3\xBD \xC3\xBAkol je dokon\xC4\x8Den\xC3\xBD"
+    error_toggle_complete: "Nepoda\xC5\x99ilo se ozna\xC4\x8Dit \xC3\xBAkol jako hotov\xC3\xBD"
+    due: "Pl\xC3\xA1nov\xC3\xA1no na"
     no_actions_found: !binary |
       xb3DoWRuw6kgYsSbxb7DrWPDrSDDumtvbHku
 
     in_pending_state: "ve stavu \xC4\x8Dekaj\xC3\xADc\xC3\xAD"
-    error_toggle_complete: "Nepoda\xC5\x99ilo se ozna\xC4\x8Dit \xC3\xBAkol jako hotov\xC3\xBD"
-    due: "Pl\xC3\xA1nov\xC3\xA1no na"
     action_marked_complete_error: "\xC3\x9Akol <strong>'%{description}'</strong> NEBYL ozna\xC4\x8Den jako <strong>%{completed} kv\xC5\xAFli chyb\xC4\x9B na serveru.</strong>"
-    to_tickler: do Tickleru
-    add_new_recurring: "Vytvo\xC5\x99it opakovan\xC3\xBD \xC3\xBAkol"
     depends_on_separate_with_commas: !binary |
       WsOhdmlzw60gbmEgKG9kZMSbbGVubyDEjcOhcmthbWkp
 
-    recurring_action_saved: "Opakovan\xC3\xBD \xC3\xBAkol byl ulo\xC5\xBEen"
     action_saved_to_tickler: "\xC3\x9Akol byl ulo\xC5\xBEen do Tickleru"
+    recurring_action_saved: "Opakovan\xC3\xBD \xC3\xBAkol byl ulo\xC5\xBEen"
     completed_in_archive: 
       one: "V archivu je hotov\xC3\xBD \xC3\xBAkol."
       other: "V archivu je %{count} hotov\xC3\xBDch \xC3\xBAkol\xC5\xAF."
+    to_tickler: do Tickleru
     next_actions_description_additions: 
       completed: "v posledn\xC3\xADch %{count} dnech"
       due_date: "pl\xC3\xA1novano na %{due_date} nebo d\xC5\x99\xC3\xADve"
     overdue: !binary |
       U3Bvxb5kxJtuw6kgw7prb2x5
 
+    add_new_recurring: "Vytvo\xC5\x99it opakovan\xC3\xBD \xC3\xBAkol"
     no_incomplete_actions: !binary |
       xb3DoWRuw6kgbmVob3RvdsOpIMO6a29seQ==
 
   notes: 
     delete_note_title: "Smazat pozn\xC3\xA1mku '%{id}'"
     delete_confirmation: "Opravdu chcete smazat pozn\xC3\xA1mku '%{id}'?"
+    in_project: "V:"
     delete_item_title: "Smazat polo\xC5\xBEku"
-    deleted_note: "Smazat pozn\xC3\xA1mku '%{id}'"
     note_link_title: "Zobrazit pozn\xC3\xA1mku %{id}"
     show_note_title: "Zobrazit pozn\xC3\xA1mku"
+    deleted_note: "Smazat pozn\xC3\xA1mku '%{id}'"
     edit_item_title: "Upravit polo\xC5\xBEku"
     note_location_link: "V:"
     no_notes_available: "\xC5\xBD\xC3\xA1dn\xC3\xA9 pozn\xC3\xA1mky: p\xC5\x99idejte pozn\xC3\xA1mky ze str\xC3\xA1nek jednotliv\xC3\xBDch projekt\xC5\xAF."
@@ -871,20 +881,21 @@ cz:
 
     completed_plural: "Hotov\xC3\xA9"
     review: "Nerevidovan\xC3\xBD"
-    blocked_plural: "Blokovan\xC3\xA9"
     blocked: "Blokovan\xC3\xBD"
+    blocked_plural: "Blokovan\xC3\xA9"
     stalled_plural: !binary |
       T3B1xaF0xJtuw6k=
 
     visible_plural: "Viditeln\xC3\xA9"
     active_plural: "Aktivn\xC3\xAD"
     visible: "Viditeln\xC3\xBD"
-    hidden: "Skryt\xC3\xBD"
     current_plural: !binary |
       QWt0dcOhbG7DrQ==
 
+    hidden: "Skryt\xC3\xBD"
     active: "Aktivn\xC3\xAD"
   projects: 
+    was_marked_hidden: "byl ozna\xC4\x8Den jako skryt\xC3\xBD"
     edit_project_title: Upravit projekt
     default_tags_removed_notice: "V\xC3\xBDchoz\xC3\xAD \xC5\xA1t\xC3\xADtky byly odstran\xC4\x9Bny"
     default_context_set: "V\xC3\xBDchoz\xC3\xAD kontext %{default_context} byl nastaven"
@@ -892,15 +903,11 @@ cz:
       xb3DoWRuw6kgYWt0aXZuw60gw7prb2x5
 
     deferred_actions: "Odlo\xC5\xBEen\xC3\xA9 \xC3\xBAkoly projektu"
-    was_marked_hidden: "byl ozna\xC4\x8Den jako skryt\xC3\xBD"
+    all_completed_tasks_title: "TRACKS::Hotov\xC3\xA9 \xC3\xBAkoly projektu '%{project_name}'"
+    page_title: "TRACKS::Projekt: %{project}"
     hide_form: !binary |
       U2tyw710IGZvcm11bMOhxZk=
 
-    all_completed_tasks_title: "TRACKS::Hotov\xC3\xA9 \xC3\xBAkoly projektu '%{project_name}'"
-    page_title: "TRACKS::Projekt: %{project}"
-    this_project: Tento projekt
-    list_completed_projects: "TRACKS::Hotov\xC3\xA9 projekty"
-    to_new_project_page: "p\xC5\x99ej\xC3\xADt k nov\xC3\xA9mu projektu"
     no_notes_attached: !binary |
       xb3DoWRuw6kgcG96bsOhbWt5
 
@@ -908,7 +915,10 @@ cz:
     deferred_actions_empty: !binary |
       xb3DoWRuw6kgb2Rsb8W+ZW7DqSDDumtvbHk=
 
+    this_project: Tento projekt
     project_state: Projekt je %{state}.
+    list_completed_projects: "TRACKS::Hotov\xC3\xA9 projekty"
+    to_new_project_page: "p\xC5\x99ej\xC3\xADt k nov\xC3\xA9mu projektu"
     no_last_completed_recurring_todos: !binary |
       xb3DoWRuw6kgaG90b3bDqSBvcGFrb3ZhbsOpIMO6a29seQ==
 
@@ -925,58 +935,68 @@ cz:
 
     hide_form_title: "Schovat formul\xC3\xA1\xC5\x99 zalo\xC5\xBEen\xC3\xAD projektu"
     list_reviews: TRACKS::Revize
+    delete_project: Smazat projekt
     completed_actions_empty: "V tomto projektu nejsou \xC5\xBE\xC3\xA1dn\xC3\xA9 hotov\xC3\xA9 \xC3\xBAkoly"
     with_no_default_context: "bez v\xC3\xBDchoz\xC3\xADho kontextu"
-    delete_project: Smazat projekt
     show_form: "Nov\xC3\xBD projekt"
     actions_in_project_title: "\xC3\x9Akoly v tomto projetku"
     delete_project_confirmation: Opravdu chcete smazat projekt '%{name}'?
     with_default_context: "s v\xC3\xBDchoz\xC3\xADm kontextem '%{context_name}'"
-    is_active: "je aktivn\xC3\xAD"
-    completed_projects: "Hotov\xC3\xA9 projetky"
-    project_saved_status: "Projekt byl ulo\xC5\xBEen"
     add_note: "Nov\xC3\xA1 pozn\xC3\xA1mka"
     add_project: "P\xC5\x99idat projekt"
-    settings: "Nastaven\xC3\xAD"
     with_default_tags: "a s '%{tags}' jako v\xC3\xBDchoz\xC3\xAD \xC5\xA1t\xC3\xADtky"
+    is_active: "je aktivn\xC3\xAD"
     list_projects: TRACKS::Projekty
+    settings: "Nastaven\xC3\xAD"
+    completed_projects: "Hotov\xC3\xA9 projetky"
     set_default_tags_notice: "Nastavit v\xC3\xBDchoz\xC3\xAD \xC5\xA1\xC3\xADtky \xC3\xBAkol\xC5\xAF v tomto projektu %{default_tags}"
-    completed_tasks_title: "TRACKS::Hotov\xC3\xA9 \xC3\xBAkoly projektu '%{project_name}'"
+    project_saved_status: "Projekt byl ulo\xC5\xBEen"
     delete_project_title: "Sma\xC5\xBEe projekt"
     hidden_projects: "Skryt\xC3\xA9 projekty"
-    default_context_removed: "V\xC3\xBDchoz\xC3\xAD kontext byl odstran\xC4\x9Bn"
-    add_note_submit: "Nov\xC3\xA1 pozn\xC3\xA1mka"
+    completed_tasks_title: "TRACKS::Hotov\xC3\xA9 \xC3\xBAkoly projektu '%{project_name}'"
     was_marked_complete: "byl ozna\xC4\x8Den jako hotov\xC3\xBD"
     completed_actions: "Hotov\xC3\xA9 \xC3\xBAkoly tohoto projektu"
+    default_context_removed: "V\xC3\xBDchoz\xC3\xAD kontext byl odstran\xC4\x9Bn"
+    add_note_submit: "Nov\xC3\xA1 pozn\xC3\xA1mka"
+    edit_project_settings: Upravit vlastnosti projektu
+    status_project_name_changed: "Jm\xC3\xA9no projektu bylo zm\xC4\x9Bn\xC4\x9Bno"
+    active_projects: "Aktivn\xC3\xAD projekty"
+    default_context: "V\xC3\xBDchoz\xC3\xAD kontext pro tento projekt je %{context}"
+    state: Tento projekt je %{state}
     no_default_context: "Tento projekt nem\xC3\xA1 v\xC3\xBDchoz\xC3\xAD kontext"
     with_no_default_tags: !binary |
       YSBuZW3DoSDFvsOhZG7DqSB2w71jaG96w60gem5hxI1reQ==
 
-    edit_project_settings: Upravit vlastnosti projektu
-    state: Tento projekt je %{state}
-    status_project_name_changed: "Jm\xC3\xA9no projektu bylo zm\xC4\x9Bn\xC4\x9Bno"
-    default_context: "V\xC3\xBDchoz\xC3\xAD kontext pro tento projekt je %{context}"
-    active_projects: "Aktivn\xC3\xAD projekty"
   errors: 
     user_unauthorized: "401 Neautorizov\xC3\xA1no: Jen administr\xC3\xA1to\xC5\x99i sm\xC3\xAD pou\xC5\xBE\xC3\xADvat tuto funkci."
+  time: 
+    am: am
+    formats: 
+      stats: "%a %d-%m"
+      default: "%a, %d %b %Y %H:%M:%S %z"
+      time: ""
+      short: "%d %b %H:%M"
+      month_day: "%B %d"
+      long: "%B %d, %Y %H:%M"
+    pm: pm
   preferences: 
     change_identity_url: "Zm\xC4\x9Bna URL identity"
-    staleness_starts_after: "Zastar\xC3\xA1n\xC3\xAD nast\xC3\xA1v\xC3\xA1 po %{days} dnech"
     open_id_url: "Va\xC5\xA1e OpenID URL je"
-    change_password: "Zm\xC4\x9Bna hesla"
+    staleness_starts_after: "Zastar\xC3\xA1n\xC3\xAD nast\xC3\xA1v\xC3\xA1 po %{days} dnech"
     page_title: "TRACKS::Nastaven\xC3\xAD"
+    change_password: "Zm\xC4\x9Bna hesla"
     token_description: "Pe\xC5\xA1ek (feedy a pou\xC5\xBEit\xC3\xAD API)"
     title: "Va\xC5\xA1e nastaven\xC3\xAD"
-    show_number_completed: "Zobrazit %{number} hotov\xC3\xBDch polo\xC5\xBEek"
     is_false: ne
+    show_number_completed: "Zobrazit %{number} hotov\xC3\xBDch polo\xC5\xBEek"
     edit_preferences: "Editace nastaven\xC3\xAD"
     page_title_edit: "TRACKS::Editace nastaven\xC3\xAD"
     is_true: ano
     password_changed: "Heslo bylo zm\xC4\x9Bn\xC4\x9Bno. Pros\xC3\xADm znovu se p\xC5\x99ihla\xC5\xA1te."
-    generate_new_token: "Generovat nov\xC3\xA9ho pe\xC5\xA1ka"
     sms_context_none: !binary |
       xb7DoWRuw70=
 
+    generate_new_token: "Generovat nov\xC3\xA9ho pe\xC5\xA1ka"
     token_header: !binary |
       VsOhxaEgcGXFoWVr
 
@@ -990,15 +1010,6 @@ cz:
       authentication: Autentizace
       profile: Profil
       date_and_time: "Datum a \xC4\x8Das"
-  time: 
-    am: am
-    formats: 
-      default: "%a, %d %b %Y %H:%M:%S %z"
-      time: ""
-      short: "%d %b %H:%M"
-      month_day: "%B %d"
-      long: "%B %d, %Y %H:%M"
-    pm: pm
   date: 
     month_names: 
     - 
@@ -1115,12 +1126,14 @@ cz:
       two_words_connector: " a "
     select: 
       prompt: "Pros\xC3\xADm vyberte"
+  footer: 
+    send_feedback: "Poslat zp\xC4\x9Btnou vazbu na %{version}"
   shared: 
     multiple_next_actions: "\xC3\x9Akoly (jeden na ka\xC5\xBEd\xC3\xA9m \xC5\x99\xC3\xA1dku)"
-    make_actions_dependent: "Akce budou vz\xC3\xA1jemn\xC4\x9B z\xC3\xA1visl\xC3\xA9"
     toggle_single: !binary |
       UMWZaWRhdCDDumtvbA==
 
+    make_actions_dependent: "Akce budou vz\xC3\xA1jemn\xC4\x9B z\xC3\xA1visl\xC3\xA9"
     hide_form: "Schovat formul\xC3\xA1\xC5\x99"
     add_actions: "P\xC5\x99idat \xC3\xBAkoly"
     add_action: !binary |
@@ -1129,27 +1142,33 @@ cz:
     tags_for_all_actions: !binary |
       Wm5hxI1reSAob2RkxJtsZW7DqSDEjcOhcmthbWkp
 
+    toggle_single_title: "P\xC5\x99idat jeden nov\xC3\xBD \xC3\xBAkol"
     project_for_all_actions: "Projekt (pro v\xC5\xA1echny)"
     context_for_all_actions: "Kontext (pro v\xC5\xA1echny)"
     toggle_multi: !binary |
       UMWZaWRhdCB2w61jZSDDumtvbMWv
 
-    toggle_single_title: "P\xC5\x99idat jeden nov\xC3\xBD \xC3\xBAkol"
     separate_tags_with_commas: !binary |
       b2RkxJtsZW7DqSDEjcOhcmthbWk=
 
+    add_context: "P\xC5\x99idejte kontext"
     toggle_multi_title: !binary |
       UMWZZXBub3V0IGZvcm11bMOhxZkgemFrbMOhZMOhbsOtIGplZG9oby92w61j
       ZSDDumtvbMWv
 
     hide_action_form_title: "Skr\xC3\xBDt formul\xC3\xA1\xC5\x99 pro zalo\xC5\xBEen\xC3\xAD nov\xC3\xA9ho \xC3\xBAkolu"
-  footer: 
-    send_feedback: "Poslat zp\xC4\x9Btnou vazbu na %{version}"
+  sidebar: 
+    list_name_active_contexts: "Aktivn\xC3\xAD kontexty"
+    list_name_active_projects: "Aktivn\xC3\xAD projekty"
+    list_empty: Nic
+    list_name_completed_projects: "Hotov\xC3\xA9 projekty"
+    list_name_hidden_projects: "Skryt\xC3\xA9 projekty"
+    list_name_hidden_contexts: "Skryt\xC3\xA9 kontexty"
   feedlist: 
     actions_due_today: "Akce pl\xC3\xA1novan\xC3\xA9 na dnes"
     choose_context: "Vyberte kontext jeho\xC5\xBE feed si p\xC5\x99ejete"
-    legend: "Legenda:"
     rss_feed: RSS Feed
+    legend: "Legenda:"
     ical_feed: iCal feed
     all_contexts: "V\xC5\xA1echny kontexty"
     all_projects: "V\xC5\xA1echny projekty"
@@ -1171,102 +1190,97 @@ cz:
     all_actions: "V\xC5\xA1echny \xC3\xBAkoly"
     actions_completed_last_week: "\xC3\x9Akoly dokon\xC4\x8Den\xC3\xA9 v posledn\xC3\xADch sedmi dnech"
     project_centric: "Feedy s aktivn\xC3\xADmi \xC3\xBAkoly podle projektu"
+  contexts: 
+    delete_context_title: Smazat kontext
+    all_completed_tasks_title: "TRACKS::Hotov\xC3\xA9 \xC3\xBAkoly v kontextu '%{context_name}'"
+    hide_form: "Schovat formul\xC3\xA1\xC5\x99"
+    show_form_title: "Nov\xC3\xBD kontext"
+    todos_append: "v t\xC3\xA9to souvislosti"
+    delete_context_confirmation: "Opravdu chcete smazat kontext '%{name}'? Dojde ke smaz\xC3\xA1n\xC3\xAD v\xC5\xA1ech (opakovan\xC3\xBDch) \xC3\xBAkol\xC5\xAF z dan\xC3\xA9ho kontextu!"
+    delete_context: Smazat kontext
+    edit_context: Upravit kontext
+    hide_form_title: "Schovat formul\xC3\xA1\xC5\x99"
+    hidden_contexts: Schovat kontexty
+    no_contexts_active: !binary |
+      xb3DoWRuw6kgYWt0aXZuw60ga29udGV4dHk=
+
+    context_hide: "Schovat z \xC3\xBAvodn\xC3\xAD str\xC3\xA1nky?"
+    show_form: "Nov\xC3\xBD kontext"
+    visible_contexts: "Viditeln\xC3\xA9 kontexty"
+    save_status_message: "Kontext ulo\xC5\xBEen"
+    add_context: "Vytvo\xC5\x99it kontext"
+    update_status_message: "N\xC3\xA1zev kontextu byl zm\xC4\x9Bn\xC4\x9Bn"
+    context_name: "N\xC3\xA1ev kontextu"
+    status_active: "Kontext je aktivn\xC3\xAD"
+    completed_tasks_title: "TRACKS::Hotov\xC3\xA9 \xC3\xBAkoly v kontextu '%{context_name}'"
+    new_context_post: "' bude tak\xC3\xA9 vytvo\xC5\x99en. Opravdu?"
+    no_actions: "\xC5\xBD\xC3\xA1dn\xC3\xA9 aktivn\xC3\xAD \xC3\xBAkoly v tomto kontextu"
+    last_completed_in_context: "v tomto kontextu (posledn\xC3\xADch %{number})"
+    context_deleted: "Kontext byl odstran\xC4\x9Bn '%{name}'"
+    no_contexts_hidden: !binary |
+      xb3DoWRuw6kgc2tyeXTDqSBrb250ZXh0eQ==
+
+    new_context_pre: "Nov\xC3\xBD kontext '"
+    status_hidden: "kontext je skryt\xC3\xBD"
   users: 
-    first_user_heading: "V\xC3\xADtejte v TRACKS. Nejd\xC5\x99\xC3\xADve je  nutn\xC3\xA9 vytvo\xC5\x99it administr\xC3\xA1torsk\xC3\xBD \xC3\xBA\xC4\x8Det:"
     successfully_deleted_user: "U\xC5\xBEivatel %{username} byl \xC3\xBAsp\xC4\x9B\xC5\xA1n\xC4\x9B smaz\xC3\xA1n"
     auth_type_update_error: "Nepoda\xC5\x99ilo se zm\xC4\x9Bnit typ autentizace: %{error_messages}"
     failed_to_delete_user: "Nepoda\xC5\x99ilo se smazat u\xC5\xBEivatele %{username}"
     destroy_successful: "U\xC5\xBEivatel %{login} byl \xC3\xBAsp\xC4\x9B\xC5\xA1n\xC4\x9B zni\xC4\x8Den"
     total_contexts: "Kontext\xC5\xAF celkem"
+    first_user_heading: "V\xC3\xADtejte v TRACKS. Nejd\xC5\x99\xC3\xADve je  nutn\xC3\xA9 vytvo\xC5\x99it administr\xC3\xA1torsk\xC3\xBD \xC3\xBA\xC4\x8Det:"
     openid_url_verified: "Identitn\xC3\xAD url %{url} bylo \xC3\xBAsp\xC4\x9B\xC5\xA1n\xC4\x9B ov\xC4\x9B\xC5\x99eno a nastavena autentizace pomoc\xC3\xAD OpenID."
     signup_successful: "Registrace u\xC5\xBEivatele %{username} byla \xC3\xBAsp\xC4\x9B\xC5\xA1n\xC3\xA1."
     new_token_generated: !binary |
       Tm92w70gcGXFoWVrIGJ5bCDDunNwxJvFoW7EmyB2eWdlbmVyb3bDoW4=
 
     total_projects: "Projekt\xC5\xAF celkem"
+    change_password_submit: "Zm\xC4\x9Bnit heslo"
     no_signups_title: "TRACKS::Registrace nen\xC3\xAD povolena"
     user_created: "U\xC5\xBEivatel byl vytvo\xC5\x99en."
-    change_password_submit: "Zm\xC4\x9Bnit heslo"
+    account_signup: "Registrace u\xC5\xBEivatele"
+    password_updated: "Heslo bylo zm\xC4\x9Bn\xC4\x9Bno."
     manage_users: !binary |
       U3Byw6F2YSB1xb5pdmF0ZWzFrw==
 
-    account_signup: "Registrace u\xC5\xBEivatele"
-    password_updated: "Heslo bylo zm\xC4\x9Bn\xC4\x9Bno."
+    new_user_heading: "Registrace nov\xC3\xA9ho u\xC5\xBEivatele:"
+    auth_type_updated: "Typ autentizace byl zm\xC4\x9Bn\xC4\x9Bn."
     total_actions: "\xC3\x9Akol\xC5\xAF celkem"
     desired_login: "U\xC5\xBEivatelsk\xC3\xA9 jm\xC3\xA9no"
-    confirm_password: "Potvrzen\xC3\xAD hesla"
-    new_user_heading: "Registrace nov\xC3\xA9ho u\xC5\xBEivatele:"
     signup: Registrace
-    auth_type_updated: "Typ autentizace byl zm\xC4\x9Bn\xC4\x9Bn."
+    confirm_password: "Potvrzen\xC3\xAD hesla"
+    change_password_prompt: "Pro zm\xC4\x9Bnu hesla zadejte nov\xC3\xA9 hestlo do pol\xC3\xAD n\xC3\xAD\xC5\xBEe a stiskn\xC4\x9Bte 'Zm\xC4\x9Bna hesla'."
+    password_confirmation_label: "Potvrzen\xC3\xAD hesla"
     destroy_error: "Nepoda\xC5\x99ilo se smazat u\xC5\xBEivatele %{login}"
     choose_password: Zvolte heslo
     change_password_title: "TRACKS::Zm\xC4\x9Bna hesla"
     change_auth_type_title: "TRACKS::Zm\xC4\x9Bna z\xC5\xAFsobu autentizace"
-    change_password_prompt: "Pro zm\xC4\x9Bnu hesla zadejte nov\xC3\xA9 hestlo do pol\xC3\xAD n\xC3\xAD\xC5\xBEe a stiskn\xC4\x9Bte 'Zm\xC4\x9Bna hesla'."
-    password_confirmation_label: "Potvrzen\xC3\xAD hesla"
-    new_password_label: "Nov\xC3\xA9 heslo"
     register_with_cas: "S va\xC5\xA1\xC3\xADm u\xC5\xBEivatelsk\xC3\xBDm jm\xC3\xA9nem z CASu"
     label_auth_type: "Zp\xC5\xAFsob autentizace"
+    new_password_label: "Nov\xC3\xA9 heslo"
     total_users_count: "M\xC3\xA1te celkem %{count} u\xC5\xBEivatel\xC5\xAF"
     new_user_title: "TRACKS::P\xC5\x99ihl\xC3\xA1\xC5\xA1en\xC3\xAD jako administr\xC3\xA1tor"
     destroy_user: "Zni\xC4\x8Dit u\xC5\xBEivatele"
+    destroy_confirmation: "Varov\xC3\xA1n\xC3\xAD: tato akce sma\xC5\xBEe u\xC5\xBEivatele '%{login}', v\xC5\xA1echny jeho \xC3\xBAkoly, kontexty, projekty i pozn\xC3\xA1mky. Opravdu chcete pokra\xC4\x8Dovat?"
     you_have_to_reset_your_password: "Je nutn\xC3\xA9 zm\xC4\x9Bnit heslo"
     signup_new_user: "Registrace nov\xC3\xA9ho u\xC5\xBEivatele"
-    destroy_confirmation: "Varov\xC3\xA1n\xC3\xAD: tato akce sma\xC5\xBEe u\xC5\xBEivatele '%{login}', v\xC5\xA1echny jeho \xC3\xBAkoly, kontexty, projekty i pozn\xC3\xA1mky. Opravdu chcete pokra\xC4\x8Dovat?"
     identity_url: URL identity
-    change_authentication_type: !binary |
-      Wm3Em25hIHpwxa9zb2J1IHDFmWlobGHFoW92w6Fuw60=
-
     openid_ok_pref_failed: "Va\xC5\xA1e identitn\xC3\xAD URL %{url} bylo \xC3\xBAsp\xC4\x9B\xC5\xA1n\xC4\x9B ov\xC4\x9B\xC5\x99eno, ale do\xC5\xA1lo k probl\xC3\xA9mu p\xC5\x99i ukl\xC3\xA1d\xC3\xA1n\xC3\xAD nastaven\xC3\xAD."
     auth_change_submit: !binary |
       Wm3Em25pdCB6cMWvc29iIHDFmWlobGHFoW92w6Fuw60=
 
+    change_authentication_type: !binary |
+      Wm3Em25hIHpwxa9zb2J1IHDFmWlobGHFoW92w6Fuw60=
+
     select_authentication_type: "Vyberte nov\xC3\xBD zp\xC5\xAFsob autentizace a stiskn\xC4\x9Bte 'Zm\xC4\x9Bnit zp\xC5\xAFsob p\xC5\x99ihla\xC5\xA1ov\xC3\xA1n\xC3\xAD'."
     total_notes: "Pozn\xC3\xA1mek celkem"
-  sidebar: 
-    list_name_active_contexts: "Aktivn\xC3\xAD kontexty"
-    list_name_active_projects: "Aktivn\xC3\xAD projekty"
-    list_empty: Nic
-    list_name_completed_projects: "Hotov\xC3\xA9 projekty"
-    list_name_hidden_projects: "Skryt\xC3\xA9 projekty"
-    list_name_hidden_contexts: "Skryt\xC3\xA9 kontexty"
-  contexts: 
-    delete_context_title: Smazat kontext
-    hide_form: "Schovat formul\xC3\xA1\xC5\x99"
-    all_completed_tasks_title: "TRACKS::Hotov\xC3\xA9 \xC3\xBAkoly v kontextu '%{context_name}'"
-    show_form_title: "Nov\xC3\xBD kontext"
-    delete_context_confirmation: "Opravdu chcete smazat kontext '%{name}'? Dojde ke smaz\xC3\xA1n\xC3\xAD v\xC5\xA1ech (opakovan\xC3\xBDch) \xC3\xBAkol\xC5\xAF z dan\xC3\xA9ho kontextu!"
-    delete_context: Smazat kontext
-    todos_append: "v t\xC3\xA9to souvislosti"
-    edit_context: Upravit kontext
-    hide_form_title: "Schovat formul\xC3\xA1\xC5\x99"
-    no_contexts_active: !binary |
-      xb3DoWRuw6kgYWt0aXZuw60ga29udGV4dHk=
-
-    context_hide: "Schovat z \xC3\xBAvodn\xC3\xAD str\xC3\xA1nky?"
-    hidden_contexts: Schovat kontexty
-    visible_contexts: "Viditeln\xC3\xA9 kontexty"
-    save_status_message: "Kontext ulo\xC5\xBEen"
-    show_form: "Nov\xC3\xBD kontext"
-    add_context: "Vytvo\xC5\x99it kontext"
-    context_name: "N\xC3\xA1ev kontextu"
-    update_status_message: "N\xC3\xA1zev kontextu byl zm\xC4\x9Bn\xC4\x9Bn"
-    completed_tasks_title: "TRACKS::Hotov\xC3\xA9 \xC3\xBAkoly v kontextu '%{context_name}'"
-    status_active: "Kontext je aktivn\xC3\xAD"
-    new_context_post: "' bude tak\xC3\xA9 vytvo\xC5\x99en. Opravdu?"
-    context_deleted: "Kontext byl odstran\xC4\x9Bn '%{name}'"
-    no_contexts_hidden: !binary |
-      xb3DoWRuw6kgc2tyeXTDqSBrb250ZXh0eQ==
-
-    new_context_pre: "Nov\xC3\xBD kontext '"
-    no_actions: "\xC5\xBD\xC3\xA1dn\xC3\xA9 aktivn\xC3\xAD \xC3\xBAkoly v tomto kontextu"
-    last_completed_in_context: "v tomto kontextu (posledn\xC3\xADch %{number})"
-    status_hidden: "kontext je skryt\xC3\xBD"
   login: 
+    login_cas: "p\xC5\x99ej\xC3\xADt na CAS"
     openid_identity_url_not_found: "Je n\xC3\xA1m l\xC3\xADto, neexistuje u\xC5\xBEivatel s touto identitou (%{identity_url})"
     user_no_expiry: "Neodhl\xC5\xA1ovat"
-    login_cas: "p\xC5\x99ej\xC3\xADt na CAS"
     sign_in: "P\xC5\x99ihl\xC3\xA1sit se"
+    please_login: "Pro pokra\xC4\x8Dov\xC3\xA1n\xC3\xAD se pros\xC3\xADm p\xC5\x99ihl\xC5\xA1te do Tracks"
+    cas_logged_in_greeting: "Zdrav\xC3\xAD\xC4\x8Dko, %{username}! Byl jste autorizov\xC3\xA1n."
     cas_no_user_found: "Nazdar, %{username}! Nem\xC3\xA1te \xC3\xBA\xC4\x8Det na Tracks."
     cas_login: !binary |
       UMWZaWhsw6HFoWVuw60gcMWZZXMgQ0FT
@@ -1274,8 +1288,6 @@ cz:
     successful_with_session_info: !binary |
       UMWZaWhsw6HFoWVuw60gYnlsbyDDunNwxJvFoW7DqTo=
 
-    please_login: "Pro pokra\xC4\x8Dov\xC3\xA1n\xC3\xAD se pros\xC3\xADm p\xC5\x99ihl\xC5\xA1te do Tracks"
-    cas_logged_in_greeting: "Zdrav\xC3\xAD\xC4\x8Dko, %{username}! Byl jste autorizov\xC3\xA1n."
     cas_username_not_found: "Bohu\xC5\xBEel neexistuje u\xC5\xBEivatel v CASu se jm\xC3\xA9nem (%{username})"
     cas_create_account: "Pro vytvo\xC5\x99en\xC3\xAD \xC3\xBA\xC4\x8Dtu v CASu pros\xC3\xADm pokra\xC4\x8Dujte sem %{signup_link}"
     mobile_use_openid: !binary |
@@ -1291,9 +1303,9 @@ cz:
       UMWZaWhsw6HFoWVuw60gw7pzcMSbxaFuw6kuIFbDrXRlanRlIHpwxJt0IQ==
 
     session_will_not_expire: "sezen\xC3\xAD bylo nastaveno jako trval\xC3\xA9."
-    session_will_expire: "sezen vypr\xC5\xA1\xC3\xAD za %{hours} hodin neaktivity."
     option_separator: nebo
     session_time_out: "Sezen\xC3\xAD vypr\xC5\xA1elo. Pros\xC3\xADm %{link}"
+    session_will_expire: "sezen vypr\xC5\xA1\xC3\xAD za %{hours} hodin neaktivity."
     login_standard: "vra\xC5\xA5te se ke standardn\xC3\xADmu p\xC5\x99ihl\xC3\xA1\xC5\xA1en\xC3\xAD"
     log_in_again: "p\xC5\x99ihla\xC5\xA1te se znovu."
     logged_out: You have been logged out of Tracks.
@@ -1363,7 +1375,7 @@ cz:
     tags_matching_query: !binary |
       TmFsZXplbsOpIMWhdMOtdGt5
 
-    no_results: "Na v\xC3\xA1\xC5\xA1 dotaz nebylo nic nalezeno."
     todos_matching_query: "Nalezen\xC3\xA9 \xC3\xBAkoly"
     projects_matching_query: "Nalezen\xC3\xA9 projekty"
     notes_matching_query: "Nalezen\xC3\xA9 pozn\xC3\xA1mky"
+    no_results: "Na v\xC3\xA1\xC5\xA1 dotaz nebylo nic nalezeno."
