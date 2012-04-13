@@ -1,22 +1,20 @@
 body {
     font-family: Arial,Helvetica,sans-serif;
-    font-size: smaller;
 }
 
 #content {
-    margin-top: 5em;
+    margin-top: 4em;
 }
 
 div.footer {
-    font-size: XX-small;
+    font-size: small;
     color: #999999;
     text-align: center;
-    }
+}
     
 a, a:link, a:active, a:visited {
     color: #CC3334;
-    padding-left: 1px;
-    padding-right: 1px;
+    padding: 0.25em;
     text-decoration: none;
 }
 
@@ -32,20 +30,20 @@ div.footer a {
 
 h1 {
   color: #fff;
-  font-size: small;
   padding-top: 0.2em;
   padding-bottom: 0.2em;
   padding-left:8px;
   margin-top:0;
   margin-bottom:0;
+  font-size:medium;
 }
 
 h2 {
   background-color: #aaaaaa;
-  font-size : small;
   margin: .3em 0;
   padding: .3em 0 .1em .3em;
   border-top: 1px solid #777777;
+  font-size:medium;
 }
 
 h2 a, h2 a:link, h2 a:active, h2 a:visited {
@@ -70,7 +68,7 @@ h4.warning  {
   color: #000;
 }
 h4.error  {
-   color:#fff; 
+   color:#fff;
    background:#c00;
 }
 h4.notice {
@@ -80,7 +78,7 @@ h4.notice {
 }
 
 span.tag {
-  font-size: x-small;
+  font-size: small;
   background-color: #CCE7FF;
   color: #000;
   padding: 1px;
@@ -88,12 +86,12 @@ span.tag {
 }
 
 span.r {
-    font-size: XX-small;
+    font-size: small;
     color: #777777;
 }
 
 span.prj, span.ctx{
-    font-size: X-small;    
+    font-size: small;    
 }
 
 #ctx, #pjr {
@@ -162,7 +160,7 @@ ul.c {
 }
 
 ul.c li {
-  padding: 0; 
+  padding: 0.25em 0;
   margin: 0;
 }
 
@@ -188,15 +186,16 @@ span.r {
 .nav {
   color: #fff;
   background: #000;
-  padding-top: 0.75em;
-  padding-bottom: 0.75em;
+  padding:0;
+  overflow:auto;
+  list-style:none;
+  margin:0;
 }
 
 .nav a, .nav a:link, .nav a:active, .nav a:visited {
     background: #666;
     color: #fff;
     padding: 0.5em;
-    margin-left:0.5em;
 }
 
 .nav a:focus, .nav a:hover, .nav a:active {
@@ -206,6 +205,17 @@ span.r {
 
 .nav li:hover, .nav a:focus, .nav a:hover, .nav a:active {
     color: #CCCCCC;
+}
+
+.nav li.link {
+    width:20%;
+    float:left;
+    outline:black solid 1px;
+}
+.nav .link a {
+    font-size:small;
+    text-align:center;
+    display:block;
 }
 
 #database_auth_form table td {
@@ -222,4 +232,47 @@ table.c {
 
 input#todo_description, input#tag_list, textarea#todo_notes, select#todo_project_id, select#todo_context_id {
   width: 95%;
+}
+
+.next-prev-project {
+  overflow:auto;
+  padding:0;
+  margin:0;
+  list-style:none;
+}
+
+.prev,
+.next {
+  float:left;
+  width:50%;
+}
+
+.next {
+  float:right;
+}
+
+.prev a,
+.next a {
+  display:block;
+  height:1em;
+  overflow:hidden;
+}
+
+.prev a {
+  background: url(images/previous.png) left center no-repeat;
+  padding-left: 20px;
+}
+
+.prev a:hover {
+  background: #cc3334 url(images/previous.png) left center no-repeat;
+}
+
+.next a {
+  text-align:right;
+  background: url(images/next.png) right center no-repeat;
+  padding-right: 20px;
+}
+
+.next a:hover {
+  background: #cc3334 url(images/next.png) right center no-repeat;
 }
