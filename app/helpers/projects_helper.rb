@@ -32,16 +32,20 @@ module ProjectsHelper
   end
 
   def project_next_prev_mobile
-    html = ''
+    html = '<ul class="next-prev-project">'
     unless @previous_project.nil?
       project_name = truncate(@previous_project.name, :length => 40, :omission => "...")
-      html << link_to_project_mobile(@previous_project, "5", "&laquo; 5-#{project_name}")
+      html << '<li class="prev">'
+      html << link_to_project_mobile(@previous_project, "5", "#{project_name}")
+      html << '</li>'
     end
-    html << ' | ' if @previous_project && @next_project
     unless @next_project.nil?
       project_name = truncate(@next_project.name, :length => 40, :omission => "...")
-      html << link_to_project_mobile(@next_project, "6", "6-#{project_name} &raquo;")
+      html << '<li class="next">'
+      html << link_to_project_mobile(@next_project, "6", "#{project_name}")
+      html << '</li>'
     end
+    html << '</ul>'
     html
   end
 
