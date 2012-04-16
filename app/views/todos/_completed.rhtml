@@ -3,7 +3,7 @@
    suppress_project ||= false
 -%>
 <div class="container completed" id="completed_container">
-  <div class=add_note_link><%= link_to "Show all", determine_done_path%></div>
+  <div class=add_note_link><%= link_to t('common.show_all'), determine_done_path%></div>
   <h2>
       <% if collapsible %>
       <a href="#" class="container_toggle" id="toggle_completed"><%= image_tag("collapse.png") %></a>
@@ -18,4 +18,4 @@
 
       <%= render :partial => "todos/todo", :collection => completed, :locals => { :parent_container_type => "completed", :suppress_context => suppress_context, :suppress_project => suppress_project } %>
   </div>
-</div><!-- [end:next_actions] -->
+</div>

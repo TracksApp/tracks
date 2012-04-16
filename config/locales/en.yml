@@ -92,7 +92,10 @@ en:
     third: Third
     recurring_todos: Repeating Actions
     actions: Actions
-    actions_midsentence: actions
+    actions_midsentence:
+      zero: actions
+      one: action
+      other: actions
     add: Add
     previous: Previous
     show_all: Show all
@@ -132,6 +135,10 @@ en:
     errors_with_fields: "There were problems with the following fields:"
     next: Next
     todo: todo
+    note:
+      zero: no notes
+      one: 1 note
+      other: %{count} notes
     context: Context
     drag_handle: DRAG
     description: Description
@@ -143,7 +150,11 @@ en:
     email: Email
     search: Search
     ajaxError: There was an error retrieving from server
-    days_midsentence: days
+    days_midsentence:
+      zero: days
+      one: day
+      other: days
+    deferred: deferred
     not_available_abbr: "n/a"
   data:
     import_successful: Import was successful.
@@ -584,6 +595,8 @@ en:
     add_new_recurring: Add a new recurring action
     edit_recurring_todo: Edit repeating action
     no_incomplete_actions: There are no incomplete actions
+    see_all_completed: You can see all completed actions %{link}
+    all_completed_here: here
   notes:
     delete_confirmation: Are you sure that you want to delete the note '%{id}'?
     delete_item_title: Delete item

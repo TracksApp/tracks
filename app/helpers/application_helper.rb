@@ -98,17 +98,17 @@ module ApplicationHelper
   # is count and a string descriptor, correctly pluralised if there are no
   # actions or multiple actions
   #
-  def count_undone_todos_phrase(todos_parent, string="actions")
-    @controller.count_undone_todos_phrase(todos_parent, string)
+  def count_undone_todos_phrase(todos_parent)
+    @controller.count_undone_todos_phrase(todos_parent)
   end
 
-  def count_undone_todos_phrase_text(todos_parent, string="actions")
-    count_undone_todos_phrase(todos_parent, string).gsub("&nbsp;"," ")
+  def count_undone_todos_phrase_text(todos_parent)
+    count_undone_todos_phrase(todos_parent).gsub("&nbsp;"," ")
   end
 
-  def count_undone_todos_and_notes_phrase(project, string="actions")
-    s = count_undone_todos_phrase(project, string)
-    s += ", #{pluralize(project.note_count, 'note')}" unless project.note_count == 0
+  def count_undone_todos_and_notes_phrase(project)
+    s = count_undone_todos_phrase(project)
+    s += ", #{t('common.note', :count => project.note_count)}" unless project.note_count == 0
     s
   end
   
@@ -200,7 +200,7 @@ module ApplicationHelper
     else
       return list.inject("") do |html, item|
         link = (item.class == "Project") ? link_to_project( item ) : link_to_context(item)
-        html << content_tag(:li, link + " (" + count_undone_todos_phrase(item, I18n.t("common.actions_midsentence"))+")")
+        html << content_tag(:li, link + " (" + count_undone_todos_phrase(item)+")")
       end
     end
   end
