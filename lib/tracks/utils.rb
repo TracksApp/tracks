@@ -1,3 +1,5 @@
+require 'redcloth'
+
 module Tracks
 
   class Utils
