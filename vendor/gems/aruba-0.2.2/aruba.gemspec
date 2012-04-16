@@ -14,9 +14,9 @@ Gem::Specification.new do |s|
   s.add_development_dependency('rspec', "~> 2.0.0.beta.22")
 
   s.rubygems_version   = "1.3.7"
-  s.files            = `git ls-files`.split("\n")
-  s.test_files       = `git ls-files -- {spec,features}/*`.split("\n")
-  s.executables      = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
+  # s.files            = `git ls-files`.split("\n")
+  # s.test_files       = `git ls-files -- {spec,features}/*`.split("\n")
+  # s.executables      = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.extra_rdoc_files = ["LICENSE", "README.rdoc", "History.txt"]
   s.rdoc_options     = ["--charset=UTF-8"]
   s.require_path     = "lib"
