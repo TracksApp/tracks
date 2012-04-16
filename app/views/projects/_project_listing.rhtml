@@ -12,7 +12,7 @@ suppress_delete_button ||= false
     <div class="project_description">
       <span class="<%= needsreview_class( project ) %>">
          <%= link_to_project( project ) %>
-         <%= " (" + count_undone_todos_and_notes_phrase(project,t('common.actions_midsentence')) + ")" %>
+         <%= " (" + count_undone_todos_and_notes_phrase(project) + ")" %>
       </span>
     </div>
   </div>

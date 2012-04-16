@@ -10,7 +10,7 @@ suppress_delete_button ||= false
     <%= suppress_edit_button ? "" : link_to_edit_context(context, image_tag( "blank.png", :title => t('contexts.edit_context'), :class=>"edit_item")) -%>
     <%= suppress_drag_handle ? "" : image_tag('grip.png', :width => '7', :height => '16', :border => '0', :title => t('common.drag_handle'), :class => 'grip')-%>
     <div class="context_description">
-      <%= link_to_context( context ) %> <%= " (" + count_undone_todos_phrase(context,t('common.actions_midsentence')) + ")" %>
+      <%= link_to_context( context ) %> <%= " (" + count_undone_todos_phrase(context) + ")" %>
     </div>
   </div>
   <div id="<%= dom_id(context, 'edit') %>" class="edit-form" style="display:none;">

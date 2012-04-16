@@ -89,16 +89,16 @@ class ApplicationController < ActionController::Base
   # is count and a string descriptor, correctly pluralised if there are no
   # actions or multiple actions
   #
-  def count_undone_todos_phrase(todos_parent, string="actions")
+  def count_undone_todos_phrase(todos_parent)
     count = count_undone_todos(todos_parent)
     deferred_count = count_deferred_todos(todos_parent)
     if count == 0 && deferred_count > 0
-      word = deferred_count == 1 ? string.singularize : string.pluralize
-      word = "deferred&nbsp;" + word
-      deferred_count.to_s + "&nbsp;" + word
+      word = I18n.t('common.actions_midsentence', :count => deferred_count)
+      word = I18n.t('common.deferred') + "&nbsp;" + word
+      return deferred_count.to_s + "&nbsp;" + word
     else
-      word = count == 1 ? string.singularize : string.pluralize
-      count.to_s + "&nbsp;" + word
+      word = I18n.t('common.actions_midsentence', :count => count)
+      return count.to_s + "&nbsp;" + word
     end
   end
 

@@ -26,6 +26,6 @@
     <% end -%>
   </div>
 
-<p>You can see all completed actions <%= link_to "here", determine_all_done_path %></p>
+<p><%= t('todos.see_all_completed', :link => link_to(t("todos.all_completed_here"), determine_all_done_path)) %></p>
 
-</div><!-- End of display_box -->
+</div>
