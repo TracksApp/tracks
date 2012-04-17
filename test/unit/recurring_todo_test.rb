@@ -1,18 +1,17 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
 class RecurringTodoTest < ActiveSupport::TestCase
-  fixtures :todos, :users, :contexts, :preferences, :tags, :taggings, :recurring_todos
 
   def setup
-    @every_day = RecurringTodo.find(1).reload
-    @every_workday = RecurringTodo.find(2).reload
-    @weekly_every_day = RecurringTodo.find(3).reload
-    @monthly_every_last_friday = RecurringTodo.find(4).reload
-    @yearly = RecurringTodo.find(5).reload
+    @every_day = recurring_todos(:call_bill_gates_every_day)
+    @every_workday = recurring_todos(:call_bill_gates_every_workday)
+    @weekly_every_day = recurring_todos(:call_bill_gates_every_week)
+    @monthly_every_last_friday = recurring_todos(:check_with_bill_every_last_friday_of_month)
+    @yearly = recurring_todos(:birthday_reinier)
 
     @today = Time.now.utc
     @tomorrow = @today + 1.day
-    @in_three_days = Time.now.utc + 3.days
+    @in_three_days = @today + 3.days
     @in_four_days = @in_three_days + 1.day    # need a day after start_from
 
     @friday = Time.zone.local(2008,6,6)
@@ -34,8 +33,8 @@ class RecurringTodoTest < ActiveSupport::TestCase
   def test_daily_every_day
     # every_day should return todays date if there was no previous date
     due_date = @every_day.get_due_date(nil)
-    # use strftime in compare, because milisec / secs could be different
-    assert_equal @today.strftime("%d-%m-%y"), due_date.strftime("%d-%m-%y")
+    # use only day-month-year compare, because milisec / secs could be different
+    assert_equal_dmy @today, due_date
 
     # when the last todo was completed today, the next todo is due tomorrow
     due_date =@every_day.get_due_date(@today)
@@ -44,13 +43,13 @@ class RecurringTodoTest < ActiveSupport::TestCase
     # do something every 14 days
     @every_day.every_other1=14
     due_date = @every_day.get_due_date(@today)
-    assert_equal @today+14.days, due_date        
+    assert_equal @today+14.days, due_date
   end
   
   def test_daily_work_days
-    assert_equal @monday, @every_workday.get_due_date(@friday)
-    assert_equal @monday, @every_workday.get_due_date(@saturday)
-    assert_equal @monday, @every_workday.get_due_date(@sunday)
+    assert_equal @monday,  @every_workday.get_due_date(@friday)
+    assert_equal @monday,  @every_workday.get_due_date(@saturday)
+    assert_equal @monday,  @every_workday.get_due_date(@sunday)
     assert_equal @tuesday, @every_workday.get_due_date(@monday)
   end
   
@@ -63,7 +62,7 @@ class RecurringTodoTest < ActiveSupport::TestCase
     assert_equal nil, @every_day.get_due_date(@today-3.days)
     
     # check show from get the next day
-    assert_equal @today, @every_day.get_show_from_date(@today-1.days)
+    assert_equal_dmy @today, @every_day.get_show_from_date(@today-1.days)
     assert_equal @today+1.day, @every_day.get_show_from_date(@today)
     
     @every_day.target='due_date'
@@ -73,7 +72,7 @@ class RecurringTodoTest < ActiveSupport::TestCase
 
     @every_day.show_always = false
     @every_day.show_from_delta=10
-    assert_equal @today, @every_day.get_show_from_date(@today+9.days) #today+1+9-10
+    assert_equal_dmy @today, @every_day.get_show_from_date(@today+9.days) #today+1+9-10
     
     # when show_from is 0, show_from is the same day it's due
     @every_day.show_from_delta=0
@@ -140,9 +139,9 @@ class RecurringTodoTest < ActiveSupport::TestCase
     @weekly_every_day.every_other1 = 1
     @weekly_every_day.every_day = '  tw   '
     due_date = @weekly_every_day.get_due_date(@tuesday)
-    assert_equal @wednesday, due_date    
+    assert_equal @wednesday, due_date
     due_date = @weekly_every_day.get_due_date(@wednesday)
-    assert_equal @tuesday+1.week, due_date    
+    assert_equal @tuesday+1.week, due_date
 
     @weekly_every_day.every_day = '      s'
     due_date = @weekly_every_day.get_due_date(@sunday)
@@ -180,7 +179,7 @@ class RecurringTodoTest < ActiveSupport::TestCase
   def test_yearly_pattern
     # beginning of same year
     due_date = @yearly.get_due_date(Time.zone.local(2008,2,10)) # feb 10th
-    assert_equal @sunday, due_date # june 8th   
+    assert_equal @sunday, due_date # june 8th
     
     # same month, previous date
     due_date = @yearly.get_due_date(@saturday) # june 7th
@@ -195,7 +194,7 @@ class RecurringTodoTest < ActiveSupport::TestCase
     due_date = @yearly.get_due_date(@monday+5.months-2.days) # november 7
     assert_equal Time.zone.local(2009,6,8), due_date # june 8th next year
     
-    @yearly.recurrence_selector = 1 
+    @yearly.recurrence_selector = 1
     @yearly.every_other3 = 2 # second
     @yearly.every_count = 3 # wednesday
     # beginning of same year
@@ -213,7 +212,7 @@ class RecurringTodoTest < ActiveSupport::TestCase
     # test handling of nil as previous
     #
     # start_from is way_back
-    due_date1 = @yearly.get_due_date(nil) 
+    due_date1 = @yearly.get_due_date(nil)
     due_date2 = @yearly.get_due_date(Time.now.utc + 1.day)
     assert_equal due_date1, due_date2
 
@@ -250,7 +249,7 @@ class RecurringTodoTest < ActiveSupport::TestCase
     # if we give a date in the future for the previous todo, the next to do
     # should be based on that future date.
     due_date = @every_day.get_due_date(@in_four_days)
-    assert_equal @in_four_days+1.day, due_date    
+    assert_equal @in_four_days+1.day, due_date
 
     @weekly_every_day.start_from = Time.zone.local(2020,1,1)
     assert_equal Time.zone.local(2020,1,1), @weekly_every_day.get_due_date(nil)
@@ -270,7 +269,7 @@ class RecurringTodoTest < ActiveSupport::TestCase
     
     this_year = Time.now.utc.year
     @yearly.start_from = Time.zone.local(this_year+1,6,12)
-    due_date = @yearly.get_due_date(nil) 
+    due_date = @yearly.get_due_date(nil)
     assert_equal due_date.year, this_year+2
   end
   
@@ -308,7 +307,7 @@ class RecurringTodoTest < ActiveSupport::TestCase
     @every_day.inc_occurences
     assert_equal true, @every_day.has_next_todo(@in_three_days)
     @every_day.inc_occurences
-    assert_equal false, @every_day.has_next_todo(@in_three_days)    
+    assert_equal false, @every_day.has_next_todo(@in_three_days)
     
     # after completion, when you reactivate the recurring todo, the occurences
     # count should be reset

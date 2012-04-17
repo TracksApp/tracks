@@ -9,9 +9,9 @@ class User < ActiveRecord::Base
   has_many :contexts,
            :order => 'position ASC',
            :dependent => :delete_all do
-             # def find_by_params(params)
-             #   find(params['id'] || params['context_id']) || nil
-             # end
+             def find_by_params(params)
+               find(params['id'] || params['context_id']) || nil
+             end
              def update_positions(context_ids)
                 context_ids.each_with_index {|id, position|
                   context = self.detect { |c| c.id == id.to_i }
@@ -23,9 +23,9 @@ class User < ActiveRecord::Base
   has_many :projects,
            :order => 'projects.position ASC',
            :dependent => :delete_all do
-              # def find_by_params(params)
-              #   find(params['id'] || params['project_id'])
-              # end
+              def find_by_params(params)
+                find(params['id'] || params['project_id'])
+              end
               def update_positions(project_ids)
                 project_ids.each_with_index {|id, position|
                   project = self.detect { |p| p.id == id.to_i }
@@ -100,17 +100,16 @@ class User < ActiveRecord::Base
   validates_confirmation_of :password
   validates_length_of :login, :within => 3..80
   validates_uniqueness_of :login, :on => :create
-  # validates_presence_of :open_id_url, :if => :using_openid?
+  validate :validate_auth_type
 
   before_create :crypt_password, :generate_token
   before_update :crypt_password
-  # before_save :normalize_open_id_url
 
   #for will_paginate plugin
   cattr_accessor :per_page
   @@per_page = 5
 
-  def validate
+  def validate_auth_type
     unless Tracks::Config.auth_schemes.include?(auth_type)
       errors.add("auth_type", "not a valid authentication type (#{auth_type})")
     end
@@ -137,25 +136,15 @@ class User < ActiveRecord::Base
       return candidate if candidate.auth_type.eql?("cas")
     end
 
-    if Tracks::Config.auth_schemes.include?('open_id')
-      # hope the user enters the correct data
-      return candidate if candidate.auth_type.eql?("open_id")
-    end
-
     return nil
   end
-
-  # def self.find_by_open_id_url(raw_identity_url)
-  #   normalized_open_id_url = OpenIdAuthentication.normalize_identifier(raw_identity_url)
-  #   find(:first, :conditions => ['open_id_url = ?', normalized_open_id_url])
-  # end
 
   def self.no_users_yet?
     count == 0
   end
 
   def self.find_admin
-    find(:first, :conditions => [ "is_admin = ?", true ])
+    where(:is_admin => true).first
   end
 
   def to_param
@@ -230,37 +219,22 @@ class User < ActiveRecord::Base
   end
 
   def sha1(s)
-    Digest::SHA1.hexdigest salted s
+    Digest::SHA1.hexdigest(salted(s))
   end
 
-  def hash(s)
-    BCrypt::Password.create s
+  def create_hash(s)
+    BCrypt::Password.create(s)
   end
 
 protected
 
   def crypt_password
     return if password.blank?
-    write_attribute("crypted_password", hash(password)) if password == password_confirmation
+    write_attribute("crypted_password", self.create_hash(password)) if password == password_confirmation
   end
 
   def password_required?
     auth_type == 'database' && crypted_password.blank? || !password.blank?
   end
 
-  # def using_openid?
-  #   auth_type == 'open_id'
-  # end
-  #
-  # def normalize_open_id_url
-  #   return if open_id_url.nil?
-  #
-  #   # fixup empty url value
-  #   if open_id_url.empty?
-  #     self.open_id_url = nil
-  #     return
-  #   end
-  #
-  #   self.open_id_url = OpenIdAuthentication.normalize_identifier(open_id_url)
-  # end
 end

@@ -28,7 +28,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   # Test an admin user model
-  # 
+  #
   def test_admin
     assert_kind_of User, @admin_user
     assert_equal 1, @admin_user.id
@@ -57,14 +57,14 @@ class UserTest < ActiveSupport::TestCase
   def test_validate_short_password
     assert_no_difference 'User.count' do
       u = create_user :password => generate_random_string(4)
-      assert_error_on u, :password, "is too short (minimum is 5 characters)"
+      assert_equal "is too short (minimum is 5 characters)", u.errors[:password][0]
     end
   end
 
   def test_validate_long_password
     assert_no_difference 'User.count' do
       u = create_user :password => generate_random_string(41)
-      assert_error_on u, :password, "is too long (maximum is 40 characters)"
+      assert_equal "is too long (maximum is 40 characters)", u.errors[:password][0]
     end
   end
 
@@ -77,22 +77,22 @@ class UserTest < ActiveSupport::TestCase
   def test_validate_missing_password
     assert_no_difference 'User.count' do
       u = create_user :password => ''
-      assert_errors_on u, :password, ["can't be blank", "is too short (minimum is 5 characters)"]
+      assert_equal ["can't be blank", "is too short (minimum is 5 characters)"], u.errors[:password]
     end
   end
 
   def test_validate_short_login
     assert_no_difference 'User.count' do
       u = create_user :login => 'ba'
-      assert_error_on u, :login, "is too short (minimum is 3 characters)"
+      assert_equal "is too short (minimum is 3 characters)", u.errors[:login][0]
     end
   end
 
   def test_validate_long_login
     assert_no_difference 'User.count' do
       u = create_user :login => generate_random_string(81)
-      assert_error_on u, :login, "is too long (maximum is 80 characters)"
-    end    
+      assert_equal "is too long (maximum is 80 characters)", u.errors[:login][0]
+    end
   end
   
   def test_validate_correct_length_login
@@ -104,7 +104,7 @@ class UserTest < ActiveSupport::TestCase
   def test_validate_missing_login
     assert_no_difference 'User.count' do
       u = create_user :login => ''
-      assert_errors_on u, :login, ["can't be blank", "is too short (minimum is 3 characters)"]
+      assert_equal ["can't be blank", "is too short (minimum is 3 characters)"], u.errors[:login]
     end
   end
 
@@ -192,7 +192,7 @@ class UserTest < ActiveSupport::TestCase
     @other_user.auth_type = 'dnacheck'
     assert !@other_user.save
     assert_equal 1, @other_user.errors.count
-    assert_equal "not a valid authentication type (dnacheck)", @other_user.errors.on(:auth_type)
+    assert_equal ["not a valid authentication type (dnacheck)"], @other_user.errors[:auth_type]
   end
 
   def test_authenticate_can_use_ldap
@@ -246,9 +246,9 @@ class UserTest < ActiveSupport::TestCase
   def test_sort_active_projects_alphabetically
     u = users(:admin_user)
     u.projects.alphabetize(:state => "active")
-    assert_equal 1, projects(:timemachine).position 
+    assert_equal 1, projects(:timemachine).position
     assert_equal 2, projects(:gardenclean).position
-    assert_equal 3, projects(:moremoney).position 
+    assert_equal 3, projects(:moremoney).position
   end
   
   def test_sort_active_projects_alphabetically_case_insensitive
@@ -256,9 +256,9 @@ class UserTest < ActiveSupport::TestCase
     projects(:timemachine).name = projects(:timemachine).name.downcase
     projects(:timemachine).save!
     u.projects.alphabetize(:state => "active")
-    assert_equal 1, projects(:timemachine).position 
+    assert_equal 1, projects(:timemachine).position
     assert_equal 2, projects(:gardenclean).position
-    assert_equal 3, projects(:moremoney).position 
+    assert_equal 3, projects(:moremoney).position
   end
 
   def test_should_create_user
@@ -271,21 +271,21 @@ class UserTest < ActiveSupport::TestCase
   def test_should_require_login
     assert_no_difference 'User.count' do
       u = create_user(:login => nil)
-      assert u.errors.on(:login)
+      assert u.errors[:login][0]
     end
   end
 
   def test_should_require_password
     assert_no_difference 'User.count' do
       u = create_user(:password => nil)
-      assert u.errors.on(:password)
+      assert u.errors[:password][0]
     end
   end
 
   def test_should_require_password_confirmation
     assert_no_difference 'User.count' do
       u = create_user(:password_confirmation => nil)
-      assert u.errors.on(:password_confirmation)
+      assert u.errors[:password_confirmation][0]
     end
   end
 
@@ -316,21 +316,6 @@ class UserTest < ActiveSupport::TestCase
     assert_nil users(:other_user).remember_token
   end
   
-  def test_normalizes_open_id_url_on_save
-    ['www.johndoe.com', 'WWW.JOHNDOE.COM', 'http://www.johndoe.com/', 'http://www.johndoe.com'].each do |initial|
-      assert_open_id_url_normalized_on_save initial, 'http://www.johndoe.com/'
-    end
-  end
-  
-  def test_normalizes_open_id_url_on_find
-     u = users(:other_user)
-     u.open_id_url = 'http://www.johndoe.com'
-     u.save
-     ['www.johndoe.com', 'WWW.JOHNDOE.COM', 'http://www.johndoe.com/', 'http://www.johndoe.com'].each do |raw_open_id_url|
-       assert_equal u.id, User.find_by_open_id_url(raw_open_id_url).id
-     end
-  end
-
   def test_should_discover_using_depracted_password
     assert_nil @admin_user.uses_deprecated_password?
     assert_nil @other_user.uses_deprecated_password?

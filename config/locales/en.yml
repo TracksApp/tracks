@@ -136,9 +136,9 @@ en:
     next: Next
     todo: todo
     note:
-      zero: no notes
-      one: 1 note
-      other: %{count} notes
+      zero: "no notes"
+      one: "1 note"
+      other: "%{count} notes"
     context: Context
     drag_handle: DRAG
     description: Description

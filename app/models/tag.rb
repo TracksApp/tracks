@@ -11,6 +11,10 @@ class Tag < ActiveRecord::Base
   validates_presence_of :name
   validates_uniqueness_of :name, :case_sensitive => false
 
+  attr_accessible :name
+  
+  before_create :before_create
+  
   # Callback to strip extra spaces from the tagname before saving it. If you
   # allow tags to be renamed later, you might want to use the
   # <tt>before_save</tt> callback instead.

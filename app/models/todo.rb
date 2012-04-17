@@ -104,7 +104,23 @@ class Todo < ActiveRecord::Base
   validates_length_of :notes, :maximum => 60000, :allow_nil => true
   validates_presence_of :show_from, :if => :deferred?
   validates_presence_of :context
+  validate :check_show_from_in_future
+  validate :check_circular_dependencies
 
+  def check_show_from_in_future
+    if !show_from.blank? && show_from < user.date
+      errors.add("show_from", I18n.t('models.todo.error_date_must_be_future'))
+    end
+  end
+  
+  def check_circular_dependencies
+    unless @predecessor_array.nil? # Only validate predecessors if they changed
+      @predecessor_array.each do |todo|
+        errors.add("Depends on:", "Adding '#{todo.specification}' would create a circular dependency") if is_successor?(todo)
+      end
+    end
+  end
+  
   def initialize(*args)
     super(*args)
     @predecessor_array = nil # Used for deferred save of predecessors
@@ -121,24 +137,13 @@ class Todo < ActiveRecord::Base
   end
 
   def uncompleted_predecessors?
-    return !uncompleted_predecessors.all(true).empty?
+    return !uncompleted_predecessors.all.empty?
   end
 
   # Returns a string with description <context, project>
   def specification
     project_name = self.project.is_a?(NullProject) ? "(none)" : self.project.name
     return "\'#{self.description}\' <\'#{self.context.title}\'; \'#{project_name}\'>"
-  end
-
-  def validate
-    if !show_from.blank? && show_from < user.date
-      errors.add("show_from", I18n.t('models.todo.error_date_must_be_future'))
-    end
-    unless @predecessor_array.nil? # Only validate predecessors if they changed
-      @predecessor_array.each do |todo|
-        errors.add("Depends on:", "Adding '#{h(todo.specification)}' would create a circular dependency") if is_successor?(todo)
-      end
-    end
   end
 
   def save_predecessors

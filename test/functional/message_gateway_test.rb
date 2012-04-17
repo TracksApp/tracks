@@ -9,7 +9,7 @@ class MessageGatewayTest < ActiveSupport::TestCase
   end
 
   def load_message(filename)
-    MessageGateway.receive(File.read(File.join(RAILS_ROOT, 'test', 'fixtures', filename)))
+    MessageGateway.receive(File.read(File.join(Rails.root, 'test', 'fixtures', filename)))
   end
 
   def test_sms_with_no_subject
@@ -51,14 +51,14 @@ class MessageGatewayTest < ActiveSupport::TestCase
 
   def test_no_user
     todo_count = Todo.count
-    badmessage = File.read(File.join(RAILS_ROOT, 'test', 'fixtures', 'sample_sms.txt'))
+    badmessage = File.read(File.join(Rails.root, 'test', 'fixtures', 'sample_sms.txt'))
     badmessage.gsub!("5555555555", "notauser")
     MessageGateway.receive(badmessage)
     assert_equal(todo_count, Todo.count)
   end
 
   def test_direct_to_context
-    message = File.read(File.join(RAILS_ROOT, 'test', 'fixtures', 'sample_sms.txt'))
+    message = File.read(File.join(Rails.root, 'test', 'fixtures', 'sample_sms.txt'))
 
     valid_context_msg = message.gsub('message_content', 'this is a task @ anothercontext')
     invalid_context_msg = message.gsub('message_content', 'this is also a task @ notacontext')

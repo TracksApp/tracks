@@ -47,7 +47,7 @@ class TodoTest < ActiveSupport::TestCase
     @not_completed2.description = ""
     assert !@not_completed2.save
     assert_equal 1, @not_completed2.errors.count
-    assert_equal "can't be blank", @not_completed2.errors.on(:description)
+    assert_equal "can't be blank", @not_completed2.errors[:description][0]
   end
 
   def test_validate_length_of_description
@@ -55,7 +55,7 @@ class TodoTest < ActiveSupport::TestCase
     @not_completed2.description = generate_random_string(101)
     assert !@not_completed2.save
     assert_equal 1, @not_completed2.errors.count
-    assert_equal "is too long (maximum is 100 characters)", @not_completed2.errors.on(:description)
+    assert_equal "is too long (maximum is 100 characters)", @not_completed2.errors[:description][0]
   end
 
   def test_validate_length_of_notes
@@ -63,7 +63,7 @@ class TodoTest < ActiveSupport::TestCase
     @not_completed2.notes = generate_random_string(60001)
     assert !@not_completed2.save
     assert_equal 1, @not_completed2.errors.count
-    assert_equal "is too long (maximum is 60000 characters)", @not_completed2.errors.on(:notes)
+    assert_equal "is too long (maximum is 60000 characters)", @not_completed2.errors[:notes][0]
   end
 
   def test_validate_show_from_must_be_a_date_in_the_future
@@ -72,20 +72,34 @@ class TodoTest < ActiveSupport::TestCase
                                        # and actual show_from value appropriately based on the date
     assert !t.save
     assert_equal 1, t.errors.count
-    assert_equal "must be a date in the future", t.errors.on(:show_from)
+    assert_equal "must be a date in the future", t.errors[:show_from][0]
   end
-
-  def test_validate_description_can_contain_quote
-    t = @not_completed2
-    t[:description] = "much \"ado\" about nothing"
-    assert t.save
-    assert_equal 0, t.errors.count
+  
+  def test_validate_circular_dependencies
+    @completed.activate!
+    @not_completed3=@completed
+    
+    # 2 -> 1
+    @not_completed1.add_predecessor(@not_completed2)
+    assert @not_completed1.save!
+    assert_equal 1, @not_completed2.successors.count
+    
+    # 3 -> 2 -> 1
+    @not_completed2.add_predecessor(@not_completed3)
+    assert @not_completed2.save!
+    assert_equal 1, @not_completed3.successors.count
+    
+    # 1 -> 3 -> 2 -> 1 == circle
+    @not_completed3.add_predecessor(@not_completed1)
+    assert !@not_completed3.valid?
+    error_msg = "Adding ''Call Bill Gates to find out how much he makes per day' <'agenda'; 'Make more money than Billy Gates'>' would create a circular dependency"
+    assert_equal error_msg, @not_completed3.errors["Depends on:"][0]
   end
 
   def test_defer_an_existing_todo
     @not_completed2
     assert_equal :active, @not_completed2.aasm_current_state
-    @not_completed2.show_from = next_week
+    @not_completed2.show_from = Time.zone.now + 1.week
     assert @not_completed2.save, "should have saved successfully" + @not_completed2.errors.to_xml
     assert_equal :deferred, @not_completed2.aasm_current_state
   end
