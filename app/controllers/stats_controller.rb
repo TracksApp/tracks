@@ -554,7 +554,7 @@ class StatsController < ApplicationController
     )
 
     i=0
-    @projects_and_runtime = Array.new(10, [-1, "n/a", "n/a"])
+    @projects_and_runtime = Array.new(10, [-1, t('common.not_available_abbr'), t('common.not_available_abbr')])
     @projects_and_runtime_sql.each do |r|
       days = difference_in_days(@today, r.created_at)
       # add one so that a project that you just created returns 1 day
