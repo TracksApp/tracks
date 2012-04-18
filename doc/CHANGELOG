@@ -13,35 +13,40 @@
 * Copyright: (cc) 2004-2012 rousette.org.uk.
 * License:  GNU GPL
 
-== Version 2.1RC1
+== Version 2.2devel
 
-NOTE 1: To use this version you need to migrate your database. Not migrating will
-cause new actions not to appear!
+== Version 2.1
 
-NOTE 2: This version of tracks has moved to a new place on GitHub. Also the wiki moved
-to GitHub, see the changed URLs above.
+NOTE 1: To use this version you need to migrate your database. Not migrating
+will cause new actions not to appear!
+
+NOTE 2: Tracks' source code has moved to a new place on GitHub. Also the wiki
+moved to GitHub, see the changed URLs above.
 
 New and changed features:
 1. Redesign of the completed todos: a new overview page. Also all context and
    project pages have a link to their completed actions
-2. New locales (es and fr) and updated locales (de, nl)
+2. New locales (es, he and fr) and updated locales (de, nl)
 3. You can star an action right from the form for adding a new action
 4. Redesign of preferences page
 5. You can now mark an action complete from the tickler
 6. Project names can now contain comma (',') in it name
 7. Context view now shows hidden and pending actions
-8. Mobile improvements by Tim Madden (we now require some javascript support on the mobile)
+8. Mobile improvements by Tim Madden (we now require some javascript support
+   on the mobile)
 9. Two extra defer periods in the context menu of an action
 10.There is a review page where you can see stalled or neglected projects.
    There is a reviewed button on the project edit page.
-11.You need to change your password: migrated to better BCrypt hash algoritm for storing passwords by Jan Stępień
+11.You need to change your password: migrated to better BCrypt hash algoritm for
+   storing passwords by Jan Stępień
 
 New features (technical)
 1. There are two example ruby scripts in /doc to use the REST API to add a todo
    or a project template with todos from the command line
 2. The tag page can now select actions from mulitple tags using AND and OR.
    There is no gui for this.
-   Syntax is /todos/tag/tagA,tagB?and=tagC to select all todos with (tagA or tagB) AND tagC
+   Syntax is /todos/tag/tagA,tagB?and=tagC to select all todos
+   with (tagA or tagB) AND tagC
 
 Under the hood:
 1. Upgraded rails to 2.3.12, jquery to 1.7.1 and jquery-ui to 1.8.17
@@ -52,8 +57,9 @@ Under the hood:
 5. Migrated to cucumber and capybara for integration testing
 6. Development mode shows a work-in-progress banner on top of the screen
 
-See https://github.com/tracksapp/tracks/compare/v2.0...master for all
-detailed changes
+See https://github.com/tracksapp/tracks/compare/v2.0...v2.1 for all detailed
+changes. And for those upgrading from 2.1RC1, the changes are here:
+https://github.com/tracksapp/tracks/compare/v2.1RC1...v2.1
 
 == Version 2.0
 
@@ -78,12 +84,13 @@ New features:
 14. Support for adding Tracks as a GMail Widget with instructions on the
     Integrations page
 15. Tracks now supports internationalization. First translations are German and
-    Dutch. See http://www.getontracks.org/wiki/Translating-Tracks if you'd like to
-    help translate Tracks to other languages
+    Dutch. See http://www.getontracks.org/wiki/Translating-Tracks if you'd like
+    to help translate Tracks to other languages
 
 Under the hood
 1. All js is migrated to jQuery and most ui-widgets are migrated to jQuery-UI
-2. Cucumber is added for integration testing. The RSpec stories are migrated to cucumber
+2. Cucumber is added for integration testing. The RSpec stories are migrated to
+   cucumber
 3. Upgraded to rails 2.3.11 and upgraded most gems/plugins
 3. Bugfixes (lots of them)
 
@@ -92,11 +99,14 @@ Under the hood
 New features:
 1. Recurring todos
 2. Cleanup of feed page and add feed for starred actions
-3. New interface to import an email / sms messages into Tracks (needs an email server on the same server as Tracks)
+3. New interface to import an email / sms messages into Tracks (needs an email
+   server on the same server as Tracks)
 4. New buttons to quickly defer an action 1 or 7 days
-5. Calendar view to review due actions, includes iCal feed to use in your calendar app (tested with Google Calendar, Evolution, Outlook 2007)
+5. Calendar view to review due actions, includes iCal feed to use in your
+   calendar app (tested with Google Calendar, Evolution, Outlook 2007)
 6. You can now sort projects on number of active todos
-7. Support for OpenSearch. This means you can add a Tracks as a search provider in your webbrowser (tested on FF3 and IE7)
+7. Support for OpenSearch. This means you can add a Tracks as a search provider
+   in your webbrowser (tested on FF3 and IE7)
 
 Under the hood:
 1. We now allow users again to stay logged in on two devices at the same time
@@ -112,7 +122,8 @@ Under the hood:
 4. Bugfixes
 
 == Version 1.5
-1. Show from date allows you to postpone the appearance of actions in the list until you can do something about them (like a 'tickler')
+1. Show from date allows you to postpone the appearance of actions in the list
+   until you can do something about them (like a 'tickler')
 2. Tagging of actions
 3. Simple management of users (deleting users through the web interface)
 4. Import and export of data in various formats
@@ -122,7 +133,8 @@ Under the hood:
 8. Optional support for authentication via OpenID or LDAP
 9. Update to Rails 1.2.3
 10. Per-user time zone preference
-11. Use autocomplete fields for Project and Context specification to support on-the-fly adding of each
+11. Use autocomplete fields for Project and Context specification to support
+    on-the-fly adding of each
 12. Add a "Hidden" status to projects
 13. Add optional Default Context for a Project
 14. Add ability to sort projects alphabetically
