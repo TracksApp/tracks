@@ -11,21 +11,21 @@
 
 <% if show_database_form %>
   <div id="database_auth_form">
-      <% form_tag login_path(:format => 'm') do %>
+      <%= form_tag login_path(:format => 'm') do %>
         <table>
           <tr>
             <td><label for="user_login"><%= User.human_attribute_name('login') %>:</label></td>
             <td><input type="text" name="user_login" id="user_login" value="" class="login_text" /></td>
           </tr>
-          <tr> 
+          <tr>
             <td><label for="user_password"><%= User.human_attribute_name('password') %>:</label></td>
             <td><input type="password" name="user_password" id="user_password" class="login_text" /></td>
           </tr>
-         <tr> 
+         <tr>
             <td><label for="user_noexpiry"><%= t('login.user_no_expiry') %>:</label></td>
             <td><input type="checkbox" name="user_noexpiry" id="user_noexpiry" checked="checked" /></td>
           </tr>
-          <tr> 
+          <tr>
             <td>&nbsp;</td>
             <td><input type="submit" name="login" value="<%= t('login.sign_in') %> &#187;" class="primary" /></td>
           </tr>
@@ -34,28 +34,4 @@
   </div>
 <% end %>
 
-<% if show_openid_form %>
-
-  <h4><%= t('login.mobile_use_openid') %>:</h4>
-
-  <div id="openid_auth_form">
-    <% form_tag login_path(:format => 'm') do %>
-      <table>
-        <tr>
-          <td width="100px"><label for="openid_url"><%= User.human_attribute_name('open_id_url') %>:</label></td>
-          <td width="100px"><input type="text" name="openid_url" id="openid_url" value="<%= @openid_url %>" class="login_text open_id" /></td>
-        </tr>
-       <tr> 
-          <td width="100px"><label for="user_noexpiry"><%= t('login.user_no_expiry') %>:</label></td>
-          <td width="100px"><input type="checkbox" name="user_noexpiry" id="user_noexpiry" checked  /></td>
-        </tr>
-        <tr> 
-          <td width="100px"></td>
-          <td><input type="submit" name="login" value="<%= t('login.sign_in') %> &#187;" class="primary" /></td>
-        </tr>
-      </table>
-    <% end %>
-  </div>
- <% end %>
- 
 </div>

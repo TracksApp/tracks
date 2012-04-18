@@ -18,9 +18,9 @@ class DataController < ApplicationController
   def yaml_export
     all_tables = {}
     
-    all_tables['todos'] = current_user.todos.find(:all, :include => [:tags])
-    all_tables['contexts'] = current_user.contexts.find(:all)
-    all_tables['projects'] = current_user.projects.find(:all)
+    all_tables['todos'] = current_user.todos.includes(:tags)
+    all_tables['contexts'] = current_user.contexts.all
+    all_tables['projects'] = current_user.projects.all
 
     todo_tag_ids = Tag.find_by_sql([
         "SELECT DISTINCT tags.id "+
@@ -34,13 +34,13 @@ class DataController < ApplicationController
           "WHERE recurring_todos.user_id=? "+
           "AND tags.id = taggings.tag_id " +
           "AND taggings.taggable_id = recurring_todos.id ", current_user.id])
-    tags = Tag.find(:all, :conditions => ["id IN (?) OR id IN (?)", todo_tag_ids, rec_todo_tag_ids])
-    taggings = Tagging.find(:all, :conditions => ["tag_id IN (?) OR tag_id IN(?)", todo_tag_ids, rec_todo_tag_ids])
+    tags = Tag.where("id IN (?) OR id IN (?)", todo_tag_ids, rec_todo_tag_ids)
+    taggings = Tagging.where("tag_id IN (?) OR tag_id IN(?)", todo_tag_ids, rec_todo_tag_ids)
 
     all_tables['tags'] = tags
     all_tables['taggings'] = taggings
-    all_tables['notes'] = current_user.notes.find(:all)
-    all_tables['recurring_todos'] = current_user.recurring_todos.find(:all)
+    all_tables['notes'] = current_user.notes
+    all_tables['recurring_todos'] = current_user.recurring_todos
     
     result = all_tables.to_yaml
     result.gsub!(/\n/, "\r\n")   # TODO: general functionality for line endings
@@ -53,7 +53,7 @@ class DataController < ApplicationController
       csv << ["id", "Context", "Project", "Description", "Notes", "Tags",
         "Created at", "Due", "Completed at", "User ID", "Show from",
         "state"]
-      current_user.todos.find(:all, :include => [:context, :project]).each do |todo|
+      current_user.todos.include(:context, :project).all.each do |todo|
         csv << [todo.id, todo.context.name,
           todo.project_id.nil? ? "" : todo.project.name,
           todo.description,
@@ -78,13 +78,13 @@ class DataController < ApplicationController
       # had to remove project include because it's association order is leaking
       # through and causing an ambiguous column ref even with_exclusive_scope
       # didn't seem to help -JamesKebinger
-      current_user.notes.find(:all,:order=>"notes.created_at").each do |note|
+      current_user.notes.order("notes.created_at").each do |note|
         # Format dates in ISO format for easy sorting in spreadsheet Print
         # context and project names for easy viewing
-        csv << [note.id, note.user_id, 
+        csv << [note.id, note.user_id,
           note.project_id = note.project_id.nil? ? "" : note.project.name,
           note.body, note.created_at.to_formatted_s(:db),
-          note.updated_at.to_formatted_s(:db)] 
+          note.updated_at.to_formatted_s(:db)]
       end
     end
     send_data(result, :filename => "notes.csv", :type => content_type)
@@ -103,17 +103,17 @@ class DataController < ApplicationController
           "WHERE recurring_todos.user_id=? "+
           "AND tags.id = taggings.tag_id " +
           "AND taggings.taggable_id = recurring_todos.id ", current_user.id])
-    tags = Tag.find(:all, :conditions => ["id IN (?) OR id IN (?)", todo_tag_ids, rec_todo_tag_ids])
-    taggings = Tagging.find(:all, :conditions => ["tag_id IN (?) OR tag_id IN(?)", todo_tag_ids, rec_todo_tag_ids])
+    tags = Tag.where("id IN (?) OR id IN (?)", todo_tag_ids, rec_todo_tag_ids)
+    taggings = Tagging.where("tag_id IN (?) OR tag_id IN(?)", todo_tag_ids, rec_todo_tag_ids)
 
     result = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><tracks_data>"
-    result << current_user.todos.find(:all).to_xml(:skip_instruct => true)
-    result << current_user.contexts.find(:all).to_xml(:skip_instruct => true)
-    result << current_user.projects.find(:all).to_xml(:skip_instruct => true)
+    result << current_user.todos.to_xml(:skip_instruct => true)
+    result << current_user.contexts.to_xml(:skip_instruct => true)
+    result << current_user.projects.to_xml(:skip_instruct => true)
     result << tags.to_xml(:skip_instruct => true)
     result << taggings.to_xml(:skip_instruct => true)
-    result << current_user.notes.find(:all).to_xml(:skip_instruct => true)
-    result << current_user.recurring_todos.find(:all).to_xml(:skip_instruct => true)
+    result << current_user.notes.to_xml(:skip_instruct => true)
+    result << current_user.recurring_todos.to_xml(:skip_instruct => true)
     result << "</tracks_data>"
     send_data(result, :filename => "tracks_data.xml", :type => 'text/xml')
   end
@@ -126,7 +126,7 @@ class DataController < ApplicationController
   def adjust_time(timestring)
     if (timestring=='') or ( timestring == nil)
       return nil
-    else 
+    else
       return Time.parse(timestring + 'UTC')
     end
   end
@@ -186,7 +186,7 @@ class DataController < ApplicationController
       case item.ivars['attributes']['state']
       when 'active' then newitem.activate!
       when 'project_hidden' then newitem.hide!
-      when 'completed' 
+      when 'completed'
         newitem.complete!
         newitem.completed_at = adjust_time(item.ivars['attributes']['completed_at'])
       when 'deferred' then newitem.defer!

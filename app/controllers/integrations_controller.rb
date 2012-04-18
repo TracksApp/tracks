@@ -27,7 +27,8 @@ class IntegrationsController < ApplicationController
   end
 
   def search_plugin
-    @icon_data = [File.open(RAILS_ROOT + '/public/images/done.png').read].
+    # TODO: ASSET PATH!!
+    @icon_data = [File.open(Rails.root + '/public/images/done.png').read].
       pack('m').gsub(/\n/, '')
  
     render :layout => false
@@ -52,7 +53,7 @@ class IntegrationsController < ApplicationController
     message = Mail.new(params[:message])
         
     # find user
-    user = User.find(:first, :include => [:preference], :conditions => ["preferences.sms_email = ?", message.from])
+    user = User.where("preferences.sms_email = ?", message.from).includes(:preferences).first
     if user.nil?
       render :text => "No user found", :status => 404
       return false

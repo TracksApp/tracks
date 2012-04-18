@@ -13,13 +13,13 @@ class ProjectsController < ApplicationController
     if params[:projects_and_actions]
       projects_and_actions
     else
-      @contexts = current_user.contexts.all
+      @contexts = current_user.contexts
       init_not_done_counts(['project'])
       init_project_hidden_todo_counts(['project'])
       if params[:only_active_with_no_next_actions]
         @projects = current_user.projects.active.select { |p| count_undone_todos(p) == 0  }
       else
-        @projects = current_user.projects.all
+        @projects = current_user.projects
       end
       respond_to do |format|
         format.html  &render_projects_html
@@ -101,15 +101,15 @@ class ProjectsController < ApplicationController
     init_data_for_sidebar unless mobile?
     @page_title = t('projects.page_title', :project => @project.name)
 
-    @not_done = @project.todos.active_or_hidden(:include => Todo::DEFAULT_INCLUDES)
-    @deferred = @project.todos.deferred(:include => Todo::DEFAULT_INCLUDES)
-    @pending = @project.todos.pending(:include => Todo::DEFAULT_INCLUDES)
+    @not_done = @project.todos.active_or_hidden.includes(Todo::DEFAULT_INCLUDES)
+    @deferred = @project.todos.deferred.includes(Todo::DEFAULT_INCLUDES)
+    @pending = @project.todos.pending.includes(Todo::DEFAULT_INCLUDES)
 
     @done = {}
-    @done = @project.todos.find_in_state(:all, :completed,
-                                         :order => "todos.completed_at DESC",
-                                         :limit => current_user.prefs.show_number_completed,
-                                         :include => Todo::DEFAULT_INCLUDES) unless current_user.prefs.show_number_completed == 0
+    @done = @project.todos.completed.
+      order("todos.completed_at DESC").
+      limit(current_user.prefs.show_number_completed).
+      includes(Todo::DEFAULT_INCLUDES) unless current_user.prefs.show_number_completed == 0
 
     @count = @not_done.size
     @down_count = @count + @deferred.size + @pending.size
@@ -318,7 +318,7 @@ class ProjectsController < ApplicationController
       @count = current_user.projects.count
       @active_projects = current_user.projects.active
       @hidden_projects = current_user.projects.hidden
-      @completed_projects = current_user.projects.completed.find(:all, :limit => 10)
+      @completed_projects = current_user.projects.completed.limit(10)
       @completed_count = current_user.projects.completed.count
       @no_projects = current_user.projects.empty?
       current_user.projects.cache_note_counts

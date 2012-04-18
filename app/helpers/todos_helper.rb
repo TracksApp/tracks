@@ -110,7 +110,7 @@ module TodosHelper
 
   def successors_span(todo=@todo)
     unless todo.pending_successors.empty?
-      pending_count = todo.pending_successors.length
+      pending_count = todo.pending_successors.count
       title = "#{t('todos.has_x_pending', :count => pending_count)}: #{todo.pending_successors.map(&:description).join(', ')}"
       image_tag( 'successor_off.png', :width=>'10', :height=>'16', :border=>'0', :title => title )
     end
@@ -272,12 +272,12 @@ module TodosHelper
   end
 
   def default_contexts_for_autocomplete
-    projects = current_user.projects.uncompleted.find(:all, :include => [:default_context], :conditions => ['NOT(default_context_id IS NULL)'])
+    projects = current_user.projects.uncompleted.includes(:default_context).where('NOT(default_context_id IS NULL)')
     Hash[*projects.map{ |p| [escape_javascript(p.name), escape_javascript(p.default_context.name)] }.flatten].to_json
   end
 
   def default_tags_for_autocomplete
-    projects = current_user.projects.uncompleted.find(:all, :conditions => ["default_tags != ''"])
+    projects = current_user.projects.uncompleted.where("NOT(default_tags = '')")
     Hash[*projects.map{ |p| [escape_javascript(p.name), p.default_tags] }.flatten].to_json
   end
 

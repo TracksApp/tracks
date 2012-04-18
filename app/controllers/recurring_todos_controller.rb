@@ -9,12 +9,12 @@ class RecurringTodosController < ApplicationController
     @page_title = t('todos.recurring_actions_title')
     @source_view = params['_source_view'] || 'recurring_todo'
     find_and_inactivate
-    @recurring_todos = current_user.recurring_todos.active.find(:all, :include => [:tags, :taggings])
-    @completed_recurring_todos = current_user.recurring_todos.completed.find(:all, :limit => 10, :include => [:tags, :taggings])
+    @recurring_todos = current_user.recurring_todos.active.includes(:tags, :taggings)
+    @completed_recurring_todos = current_user.recurring_todos.completed.limit(10).includes(:tags, :taggings)
 
-    @no_recurring_todos = @recurring_todos.size == 0
-    @no_completed_recurring_todos = @completed_recurring_todos.size == 0
-    @count = @recurring_todos.size
+    @no_recurring_todos = @recurring_todos.count == 0
+    @no_completed_recurring_todos = @completed_recurring_todos.count == 0
+    @count = @recurring_todos.count
 
     @new_recurring_todo = RecurringTodo.new
   end
@@ -271,8 +271,8 @@ class RecurringTodosController < ApplicationController
     end
 
     @xth_day = [[t('common.first'),1],[t('common.second'),2],[t('common.third'),3],[t('common.fourth'),4],[t('common.last'),5]]
-    @projects = current_user.projects.find(:all, :include => [:default_context])
-    @contexts = current_user.contexts.find(:all)
+    @projects = current_user.projects.includes(:default_context)
+    @contexts = current_user.contexts
   end
 
   def get_recurring_todo_from_param
@@ -282,10 +282,11 @@ class RecurringTodosController < ApplicationController
   def find_and_inactivate
     # find active recurring todos without active todos and inactivate them
 
-    current_user.recurring_todos.active.all(
-      :select => "recurring_todos.id, recurring_todos.state",
-      :joins => "LEFT JOIN todos fai_todos ON (recurring_todos.id = fai_todos.recurring_todo_id) AND (NOT fai_todos.state='completed')",
-      :conditions => "fai_todos.id IS NULL").each { |rt| current_user.recurring_todos.find(rt.id).toggle_completion! }
+    current_user.recurring_todos.active.
+      select("recurring_todos.id, recurring_todos.state").
+      joins("LEFT JOIN todos fai_todos ON (recurring_todos.id = fai_todos.recurring_todo_id) AND (NOT fai_todos.state='completed')").
+      where("fai_todos.id IS NULL").
+      each { |rt| current_user.recurring_todos.find(rt.id).toggle_completion! }
   end
 
 end

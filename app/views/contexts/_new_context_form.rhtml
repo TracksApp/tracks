@@ -6,7 +6,7 @@
   </div>
 
   <div id="context_new" class="context_new" style="display:block">
-    <% form_for(@new_context, :html => {:id => 'context-form',:name=>'context',:class => "inline-form", :method => :post }) do -%>
+    <%= form_for(@new_context, :html => {:id => 'context-form',:name=>'context',:class => "inline-form", :method => :post }) do -%>
 
       <div id="error_status"><%= error_messages_for('context') %></div>
 

@@ -8,7 +8,7 @@
       <p>F&uuml;gen Sie den Inhalt der kopierten YAML Datei in das untenstehende Formular ein:</p>
     </div>
     <p>
-      <% form_for :import, @import, :url => {:controller => 'data', :action => 'yaml_import'} do |f| %>
+      <%= form_for :import, @import, :url => {:controller => 'data', :action => 'yaml_import'} do |f| %>
         <%= f.text_area :yaml %><br />
         <input type="submit" value="Daten importieren">
       <% end %>

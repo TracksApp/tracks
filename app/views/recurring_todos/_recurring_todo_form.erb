@@ -1,6 +1,6 @@
 <%- reset_tab_index %>
 <div class="recurring_container">
-<% form_for(@new_recurring_todo, :html=> { :id=>'recurring-todo-form-new-action', :name=>'recurring_todo', :class => 'inline-form' }) do -%>
+<%= form_for(@new_recurring_todo, :html=> { :id=>'recurring-todo-form-new-action', :name=>'recurring_todo', :class => 'inline-form' }) do -%>
     <div id="error_status"><%= error_messages_for("item", :object_name => 'action') %></div>
 
     <div id="recurring_todo_form_container">

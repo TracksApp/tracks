@@ -2,7 +2,7 @@
 
   <div id="edit_error_status"><%= error_messages_for(:user) + error_messages_for(:prefs) %></div>
 
-  <% form_tag :action => 'update' do %>
+  <%= form_tag :action => 'update' do %>
   <div id="tabs">
   	<ul>
       <li><a href="#tabs-1"><%= t('preferences.tabs.profile')%></a></li>

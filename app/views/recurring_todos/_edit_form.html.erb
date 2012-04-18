@@ -1,5 +1,5 @@
 <div class="recurring_container">
-<% form_for(@recurring_todo, :html=> { :id=>'recurring-todo-form-edit-action', :name=>'recurring_todo', :class => 'inline-form' }) do |f| -%>
+<%= form_for(@recurring_todo, :html=> { :id=>'recurring-todo-form-edit-action', :name=>'recurring_todo', :class => 'inline-form' }) do |f| -%>
   <div id="edit_error_status"><%= error_messages_for("item", :object_name => 'action') %></div>
 
   <div id="recurring_todo_form_container">

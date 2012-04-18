@@ -295,14 +295,14 @@ class Todo < ActiveRecord::Base
 
   # activate todos that should be activated if the current todo is completed
   def activate_pending_todos
-    pending_todos = successors.find_all {|t| t.uncompleted_predecessors.empty?}
+    pending_todos = successors.select {|t| t.uncompleted_predecessors.empty?}
     pending_todos.each {|t| t.activate! }
     return pending_todos
   end
 
   # Return todos that should be blocked if the current todo is undone
   def block_successors
-    active_successors = successors.find_all {|t| t.active? or t.deferred?}
+    active_successors = successors.select {|t| t.active? or t.deferred?}
     active_successors.each {|t| t.block!}
     return active_successors
   end
@@ -320,7 +320,7 @@ class Todo < ActiveRecord::Base
     # value will be a string. In that case convert to array
     deps = [deps] unless deps.class == Array
 
-    deps.each { |dep| self.add_predecessor(self.user.todos.find(dep.to_i)) unless dep.blank? }
+    deps.each { |dep| self.add_predecessor(self.user.todos.find_by_id(dep.to_i)) unless dep.blank? }
   end
 
   alias_method :original_context=, :context=
