@@ -194,21 +194,13 @@ class ProjectsController < ApplicationController
     if @saved
       @project.transition_to(@new_state) if @state_changed
       if boolean_param('wants_render')
-        if (@project.hidden?)
-          @project_project_hidden_todo_counts = Hash.new
-          @project_project_hidden_todo_counts[@project.id] = @project.reload().todos.active_or_hidden.count
-        else
-          @project_not_done_counts = Hash.new
-          @project_not_done_counts[@project.id] = @project.reload().todos.active_or_hidden.count
-        end
         @contexts = current_user.contexts
         update_state_counts
         init_data_for_sidebar
 
         template = 'projects/update.js.erb'
 
-        # TODO: are these params ever set? or is this dead code?
-
+      # TODO: are these params ever set? or is this dead code?
       elsif boolean_param('update_status')
         template = 'projects/update_status.js.rjs'
       elsif boolean_param('update_default_context')
