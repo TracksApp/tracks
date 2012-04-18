@@ -7,7 +7,8 @@ Tracks is using
 
 See README for links to the respective sites
 
-Also see the Development pages on the wiki for details on installing, testing, upgrading, etc.
+Also see the Development pages on the wiki for details on installing, testing,
+upgrading, etc.
 
 2. Dependencies
 
@@ -35,7 +36,8 @@ Running cucumber/selenium tests in :memory mode does not seem to work.
 
 The rspec tests are not actively maintained.
 
-See the wiki for more information on testing: https://github.com/TracksApp/tracks/wiki/Testing
+See the wiki for more information on testing:
+https://github.com/TracksApp/tracks/wiki/Testing
 
 4. Contributing
 
