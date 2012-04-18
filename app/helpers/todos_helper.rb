@@ -63,8 +63,14 @@ module TodosHelper
   end
 
   def collapsed_notes_image(todo)
-    link = link_to(image_tag( 'blank.png', :width=>'16', :height=>'16', :border=>'0' ), "#", {:class => 'show_notes', :title => 'Show notes'})
-    notes = content_tag(:div, {:class => "todo_notes", :id => dom_id(todo, 'notes'), :style => "display:none"}) { todo.rendered_notes.html_safe }
+    link = link_to(
+      image_tag( 'blank.png', :width=>'16', :height=>'16', :border=>'0' ),
+      "#",
+      {:class => 'show_notes', :title => 'Show notes'})
+    notes = content_tag(:div, {
+      :class => "todo_notes",
+      :id => dom_id(todo, 'notes'),
+      :style => "display:none"}) { raw todo.rendered_notes }
     return link+notes
   end
 

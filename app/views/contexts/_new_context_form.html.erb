@@ -8,7 +8,15 @@
   <div id="context_new" class="context_new" style="display:block">
     <%= form_for(@new_context, :html => {:id => 'context-form',:name=>'context',:class => "inline-form", :method => :post }) do -%>
 
-      <div id="error_status"><%= error_messages_for('context') %></div>
+      <div id="error_status">
+        <% if @new_context.errors.any? -%>
+          <ul>
+            <% @new_context.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+          </ul>
+        <% end -%>
+      </div>
 
       <label for="context_name"><%= t 'contexts.context_name' %></label><br />
       <%= text_field( "context", "name", :tabindex => next_tab_index ) %><br />

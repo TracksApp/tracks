@@ -1,6 +1,21 @@
 <div id="display_box">
 
-  <div id="edit_error_status"><%= error_messages_for(:user) + error_messages_for(:prefs) %></div>
+  <div id="edit_error_status">
+    <% if @user.errors.any? -%>
+      <ul>
+        <% @user.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    <% end -%>
+    <% if @prefs.errors.any? -%>
+      <ul>
+        <% @prefs.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    <% end -%>
+  </div>
 
   <%= form_tag :action => 'update' do %>
   <div id="tabs">

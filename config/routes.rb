@@ -60,6 +60,8 @@ Tracksapp::Application.routes.draw do
   
   match "tickler" => "todos#list_deferred"
   match 'review' => "projects#review"
+  match 'login' => 'users#login'
+  match 'login_cas' => 'users#login_cas'
   match 'logout' => 'users#logout'
   match 'calendar' => "todos#calendar"
   match 'done' => "stats#done", :as => 'done_overview'
@@ -111,6 +113,18 @@ Tracksapp::Application.routes.draw do
     end
   end
   match 'todos/tag/:name' => 'todos#tag', :as => :tag
+  
+  resources :users do
+    member do
+      get 'change_password'
+      get 'change_auth_type'
+      get 'complete'
+      post 'update_password'
+      post 'update_auth_type'
+      post 'refresh_token'
+    end
+  end
+  match 'signup' => "users#new"
   
   resources :notes
   

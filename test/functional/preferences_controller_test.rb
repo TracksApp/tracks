@@ -1,20 +1,16 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
-require 'preferences_controller'
-
-# Re-raise errors caught by the controller.
-class PreferencesController; def rescue_action(e) raise e end; end
 
 class PreferencesControllerTest < ActionController::TestCase
   fixtures :users, :preferences
 
   def setup
-    assert_equal "test", ENV['RAILS_ENV']
+    assert_equal "test", Rails.env
     assert_equal "change-me", Tracks::Config.salt
   end
 
   test "render_date_format requires login" do
     get :render_date_format
-    assert_redirected_to :controller => 'login', :action => 'login'
+    assert_redirected_to login_path
   end
 
   test "calling render_date_format returns date" do
@@ -31,7 +27,7 @@ class PreferencesControllerTest < ActionController::TestCase
 
   test "index page requires login" do
     get :index # should fail because no login
-    assert_redirected_to :controller => 'login', :action => 'login'
+    assert_redirected_to login_path
   end
 
   test "index sets prefs and user" do

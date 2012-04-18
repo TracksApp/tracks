@@ -110,14 +110,7 @@ function html_for_new_context() {
 }
 
 function html_for_error_messages() {
-  <%
-  error_messages = ""
-  if @todo.errors.any?
-    list_of_messages = @todo.errors.full_messages.inject("") { |all, msg| all += context_tag(:li, msg) }
-    error_messages = content_tag(:ul, list_of_messages)
-  end
-  -%>
-  return "<%= escape_javascript(error_messages) %>";
+  return "<%= escape_javascript(get_list_of_error_messages_for(@todo)) %>";
 }
 
 function update_predecessors(next_steps) {

@@ -101,7 +101,7 @@ module ApplicationHelper
   # actions or multiple actions
   #
   def count_undone_todos_phrase(todos_parent)
-    @controller.count_undone_todos_phrase(todos_parent)
+    controller.count_undone_todos_phrase(todos_parent)
   end
 
   def count_undone_todos_phrase_text(todos_parent)
@@ -266,6 +266,14 @@ module ApplicationHelper
       end
     else
       all_done_todos_path
+    end
+  end
+  
+  def get_list_of_error_messages_for(model)
+    error_messages = ""
+    if model.errors.any?
+      list_of_messages = model.errors.full_messages.inject("") { |all, msg| all += content_tag(:li, msg) }
+      error_messages = content_tag(:ul, list_of_messages)
     end
   end
 

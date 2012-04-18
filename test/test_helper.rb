@@ -10,6 +10,11 @@ class ActiveSupport::TestCase
   fixtures :all
 
   # Add more helper methods to be used by all tests here...
+  def assert_value_changed(object, method = nil)
+    initial_value = object.send(method)
+    yield
+    assert_not_equal initial_value, object.send(method), "#{object}##{method}"
+  end
 end
 
 module Tracks
@@ -21,6 +26,37 @@ module Tracks
       return ["database","open_id"]
     end
   end
+end
+
+class ActionController::TestCase
+  def login_as(user)
+    @request.session['user_id'] = user ? users(user).id : nil
+  end
+  
+  def assert_ajax_create_increments_count(name)
+    assert_count_after_ajax_create(name, get_class_count + 1)
+  end
+  
+  def assert_ajax_create_does_not_increment_count(name)
+    assert_count_after_ajax_create(name, get_class_count)
+  end
+  
+  def assert_count_after_ajax_create(name, expected_count)
+    ajax_create(name)
+    assert_equal(expected_count, get_class_count)
+  end
+  
+  def ajax_create(name)
+    xhr :post, :create, @controller.class.name.downcase.to_sym => {:name => name}
+  end
+  
+  private
+  
+  def get_class_count
+    model = @controller.class.to_s.tableize.split("_")[0].camelcase.singularize  #don't ask... converts ContextsController to Context
+    eval("#{model}.count")
+  end
+  
 end
 
 class ActiveSupport::TestCase
@@ -43,14 +79,4 @@ class ActiveSupport::TestCase
     assert_equal date1.strftime("%d-%m-%y"), date2.strftime("%d-%m-%y")
   end
 
-end
-
-class Test::Unit::TestCase
-
-  def assert_value_changed(object, method = nil)
-    initial_value = object.send(method)
-    yield
-    assert_not_equal initial_value, object.send(method), "#{object}##{method}"
-  end
-  
 end

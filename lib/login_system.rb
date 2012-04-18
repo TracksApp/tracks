@@ -170,7 +170,7 @@ module LoginSystem
   # store current uri in  the session.
   # we can return to this location by calling return_location
   def store_location
-    session['return-to'] = request.request_uri
+    session['return-to'] = request.url
   end
 
   # move to the last store_location call or to the passed default one

@@ -7,13 +7,13 @@
     <input type="hidden" id="new_todo_starred" name="new_todo_starred" value="false" />
 
     <div id="error_status">
-    <% if todo.errors.any? -%>
-      <ul>
-        <% todo.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-        <% end %>
-      </ul>
-    <% end -%>
+      <% if todo.errors.any? -%>
+        <ul>
+          <% todo.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      <% end -%>
     </div>
 
     <label for="todo_description" style="float:left"><%= Todo.human_attribute_name('description') %></label>
