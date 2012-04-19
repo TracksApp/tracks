@@ -16,14 +16,6 @@ class Context < ActiveRecord::Base
   validates_length_of :name, :maximum => 255, :message => "context name must be less than 256 characters"
   validates_uniqueness_of :name, :message => "already exists", :scope => "user_id"
 
-  def self.feed_options(user)
-    # TODO: move to view or helper
-    {
-      :title => 'Tracks Contexts',
-      :description => "Lists all the contexts for #{user.display_name}"
-    }
-  end
-
   def self.null_object
     NullContext.new
   end

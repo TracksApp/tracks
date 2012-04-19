@@ -71,7 +71,7 @@ module ProjectsHelper
       })
   end
   
-  def summary(project)
+  def project_summary(project)
     project_description = ''
     project_description += Tracks::Utils.render_text( project.description ) unless project.description.blank?
     project_description += content_tag(:p,

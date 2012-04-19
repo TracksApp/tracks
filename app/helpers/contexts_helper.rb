@@ -29,10 +29,8 @@ module ContextsHelper
       })
   end
 
-  
-  def summary(context, undone_todo_count)
-    content_tag(:p, "#{undone_todo_count}. Context is #{context.hidden? ? 'Hidden' : 'Active'}.")
+  def context_summary(context, undone_todo_count)
+    content_tag(:p, "#{undone_todo_count}. Context is #{context.hidden? ? 'Hidden' : 'Active'}.".html_safe)
   end
-
 
 end

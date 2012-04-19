@@ -47,14 +47,26 @@ class ActionController::TestCase
   end
   
   def ajax_create(name)
-    xhr :post, :create, @controller.class.name.downcase.to_sym => {:name => name}
+    xhr :post, :create, get_model_class.downcase => {:name => name}
+  end
+  
+  def assert_xml_select(*args, &block)
+    @html_document = xml_document
+    assert_select(*args, &block)
   end
   
   private
   
+  def xml_document
+    @xml_document ||= HTML::Document.new(@response.body, false, true)
+  end
+  
+  def get_model_class
+    @controller.class.to_s.tableize.split("_")[0].camelcase.singularize  #don't ask... converts ContextsController to Context
+  end
+  
   def get_class_count
-    model = @controller.class.to_s.tableize.split("_")[0].camelcase.singularize  #don't ask... converts ContextsController to Context
-    eval("#{model}.count")
+    eval("#{get_model_class}.count")
   end
   
 end

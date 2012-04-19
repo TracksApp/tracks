@@ -25,16 +25,21 @@ class ContextsController < ApplicationController
       format.html &render_contexts_html
       format.m    &render_contexts_mobile
       format.xml  { render :xml => @all_contexts.to_xml( :except => :user_id ) }
-      format.rss  &render_contexts_rss_feed
-      format.atom &render_contexts_atom_feed
+      format.rss  do
+        @feed_title = 'Tracks Contexts'
+        @feed_description = "Lists all the contexts for #{current_user.display_name}"
+      end
+      format.atom do
+        @feed_title = 'Tracks Contexts'
+        @feed_description = "Lists all the contexts for #{current_user.display_name}"
+      end
       format.text do
-        @all_contexts = current_user.contexts.all
         render :action => 'index', :layout => false, :content_type => Mime::TEXT
       end
       format.autocomplete &render_autocomplete
     end
   end
-
+  
   def show
     @contexts = current_user.contexts(true)
     if @context.nil?
@@ -60,15 +65,10 @@ class ContextsController < ApplicationController
   #
   def create
     if params[:format] == 'application/xml' && params['exception']
-      render_failure "Expected post format is valid xml like so: <request><context><name>context name</name></context></request>.", 400
+      render_failure "Expected post format is valid xml like so: <context><name>context name</name></context>.", 400
       return
     end
-    @context = current_user.contexts.build
-    params_are_invalid = true
-    if (params['context'] || (params['request'] && params['request']['context']))
-      @context.attributes = params['context'] || params['request']['context']
-      params_are_invalid = false
-    end
+    @context = current_user.contexts.build(params['context'])
     @saved = @context.save
     @context_not_done_counts = { @context.id => 0 }
     respond_to do |format|
@@ -76,9 +76,7 @@ class ContextsController < ApplicationController
         @down_count = current_user.contexts.size
       end
       format.xml do
-        if @context.new_record? && params_are_invalid
-          render_failure "Expected post format is valid xml like so: <request><context><name>context name</name></context></request>.", 400
-        elsif @context.new_record?
+        if @context.new_record?
           render_failure @context.errors.to_xml, 409
         else
           head :created, :location => context_url(@context)
@@ -231,21 +229,6 @@ class ContextsController < ApplicationController
       cookies[:mobile_url]= {:value => request.request_uri, :secure => SITE_CONFIG['secure_cookies']}
       @mobile_from_context = @context.id
       render :action => 'mobile_show_context'
-    end
-  end
-
-  def render_contexts_rss_feed
-    lambda do
-      render_rss_feed_for current_user.contexts.all, :feed => feed_options,
-        :item => { :description => lambda { |c| @template.summary(c, count_undone_todos_phrase(c)) } }
-    end
-  end
-
-  def render_contexts_atom_feed
-    lambda do
-      render_atom_feed_for current_user.contexts.all, :feed => feed_options,
-        :item => { :description => lambda { |c| @template.summary(c, count_undone_todos_phrase(c)) },
-        :author => lambda { |c| nil } }
     end
   end
   
