@@ -112,7 +112,7 @@ class UsersControllerTest < ActionController::TestCase
   def test_create_redirects_to_home_page
     login_as :admin_user
     post :create, :user => {:login => 'newbie', :password => 'newbiepass', :password_confirmation => 'newbiepass'}
-    assert_redirected_to home_url
+    assert_redirected_to root_url
   end
 
   def test_create_sets_flash_message

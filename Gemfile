@@ -12,6 +12,7 @@ gem "mysql2"
 
 gem "highline", "~>1.5.0"
 gem "RedCloth"
+gem "formatize"
 gem "sanitize", "~>1.2.1"
 gem "will_paginate"
 gem "acts_as_list", "~>0.1.4"

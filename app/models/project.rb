@@ -47,13 +47,6 @@ class Project < ActiveRecord::Base
     NullProject.new
   end
 
-  def self.feed_options(user)
-    {
-      :title => I18n.t('models.project.feed_title'),
-      :description => I18n.t('models.project.feed_description', :username => user.display_name)
-    }
-  end
-
   def hide_todos
     todos.each do |t|
       unless t.completed? || t.deferred?

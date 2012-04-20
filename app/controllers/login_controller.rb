@@ -27,15 +27,13 @@ class LoginController < ApplicationController
       @username = session[:cas_user]
       @login_url = CASClient::Frameworks::Rails::Filter.login_url(self)
     end
-    if openid_enabled? && using_open_id?
-      login_openid
-    elsif cas_enabled? && session[:cas_user]
+    if cas_enabled? && session[:cas_user]
       login_cas
     else
       @page_title = "TRACKS::Login"
       cookies[:preferred_auth] = prefered_auth? unless cookies[:preferred_auth]
       case request.method
-      when :post
+      when 'POST'
         if @user = User.authenticate(params['user_login'], params['user_password'])
           session['user_id'] = @user.id
           # If checkbox on login page checked, we don't expire the session after 1 hour
@@ -54,7 +52,7 @@ class LoginController < ApplicationController
           @login = params['user_login']
           notify :warning, t('login.unsuccessful')
         end
-      when :get
+      when 'GET'
         if User.no_users_yet?
           redirect_to signup_path
           return

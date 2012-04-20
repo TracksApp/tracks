@@ -75,9 +75,9 @@ module ProjectsHelper
     project_description = ''
     project_description += Tracks::Utils.render_text( project.description ) unless project.description.blank?
     project_description += content_tag(:p,
-      "#{count_undone_todos_phrase(p)}. " + t('projects.project_state', :state => project.state)
+      "#{count_undone_todos_phrase(p)}. #{t('projects.project_state', :state => project.state)}".html_safe
       )
-    project_description
+    raw project_description
   end
 
   def needsreview_class(item)

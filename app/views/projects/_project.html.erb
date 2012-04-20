@@ -5,7 +5,7 @@
     <% end -%>
     <div id="project_name" style="width: 100%;"><%= project.name -%></div>
   </h2>
-  <div id="<%= dom_id(project, "container")%>" class="list"><%-# list needs to be here for edit form to work -%>
+  <div id="<%= dom_id(project, "container")%>" class="list">
     <%= render :partial => "projects/project_settings", :object => project, :locals => { :collapsible => collapsible } %>
   </div>
 </div>

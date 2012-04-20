@@ -9,7 +9,6 @@ class ProjectsController < ApplicationController
 
   def index
     @source_view = params['_source_view'] || 'project_list'
-    @new_project = current_user.projects.build
     if params[:projects_and_actions]
       projects_and_actions
     else
@@ -19,15 +18,22 @@ class ProjectsController < ApplicationController
       if params[:only_active_with_no_next_actions]
         @projects = current_user.projects.active.select { |p| count_undone_todos(p) == 0  }
       else
-        @projects = current_user.projects
+        @projects = current_user.projects.all
       end
+      @new_project = current_user.projects.build
       respond_to do |format|
         format.html  &render_projects_html
         format.m     &render_projects_mobile
         format.xml   { render :xml => @projects.to_xml( :except => :user_id )  }
-        format.rss   &render_rss_feed
-        format.atom  &render_atom_feed
-        format.text  &render_text_feed
+        format.rss   do
+          @feed_title = I18n.t('models.project.feed_title')
+          @feed_description = I18n.t('models.project.feed_description', :username => current_user.display_name)
+        end
+        format.atom  do
+          @feed_title = I18n.t('models.project.feed_title')
+          @feed_description = I18n.t('models.project.feed_description', :username => current_user.display_name)
+        end
+        format.text
         format.autocomplete &render_autocomplete
       end
     end
@@ -144,16 +150,9 @@ class ProjectsController < ApplicationController
       render_failure "Expected post format is valid xml like so: <request><project><name>project name</name></project></request>."
       return
     end
-
-    @project = current_user.projects.build
-    params_are_invalid = true
-    if (params['project'] || (params['request'] && params['request']['project']))
-      @project.attributes = params['project'] || params['request']['project']
-      params_are_invalid = false
-    end
+    @project = current_user.projects.build(params['project'])
     @go_to_project = params['go_to_project']
     @saved = @project.save
-
     @project_not_done_counts = { @project.id => 0 }
     @active_projects_count = current_user.projects.active.count
     @contexts = current_user.contexts
@@ -161,9 +160,7 @@ class ProjectsController < ApplicationController
     respond_to do |format|
       format.js { @down_count = current_user.projects.size }
       format.xml do
-        if @project.new_record? && params_are_invalid
-          render_failure "Expected post format is valid xml like so: <request><project><name>project name</name></project></request>."
-        elsif @project.new_record?
+        if @project.new_record?
           render_failure @project.errors.full_messages.join(', ')
         else
           head :created, :location => project_url(@project), :text => @project.id
@@ -348,33 +345,6 @@ class ProjectsController < ApplicationController
       cookies[:mobile_url]= {:value => request.request_uri, :secure => SITE_CONFIG['secure_cookies']}
       @mobile_from_project = @project.id
       render :action => 'project_mobile'
-    end
-  end
-
-  def render_rss_feed
-    lambda do
-      render_rss_feed_for @projects, :feed => feed_options,
-        :title => :name,
-        :item => { :description => lambda { |p| @template.summary(p) } }
-    end
-  end
-
-  def render_atom_feed
-    lambda do
-      render_atom_feed_for @projects, :feed => feed_options,
-        :item => { :description => lambda { |p| @template.summary(p) },
-        :title => :name,
-        :author => lambda { |p| nil } }
-    end
-  end
-
-  def feed_options
-    Project.feed_options(current_user)
-  end
-
-  def render_text_feed
-    lambda do
-      render :action => 'index', :layout => false, :content_type => Mime::TEXT
     end
   end
   

@@ -14,8 +14,7 @@
       <div class="add_note_link"><%= link_to t('projects.add_note'), '#' %> </div>
       <h2><%= t('projects.notes') %></h2>
       <div id="empty-n" style="display:<%= @project.notes.empty? ? 'block' : 'none'%>;">
-        <%= render :partial => "shared/empty",
-          :locals => { :message => t('projects.no_notes_attached')} %>
+        <div class="message"><p><%= t('projects.no_notes_attached') %></p></div>
       </div>
       <%= render :partial => "notes/notes_summary", :collection => @project.notes %>
     </div>
@@ -29,5 +28,5 @@
 
 <div id="input_box">
   <%= render :partial => "shared/add_new_item_form" %>
-  <%= render :file => "sidebar/sidebar.html.erb" %>
+  <%= render :file => "sidebar/sidebar" %>
 </div><!-- End of input box -->

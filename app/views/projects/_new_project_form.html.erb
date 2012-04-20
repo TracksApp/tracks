@@ -7,7 +7,7 @@
 
   <div id="project_new" class="project_new" style="display:block">
     <%= form_for(@new_project, :html => {:id => 'project_form',:name=>'project',:class => "inline-form", :method => :post }) do -%>
-      <div id="error_status"><%= error_messages_for("project") %></div>
+      <div id="error_status"><%= get_list_of_error_messages_for(@new_project) %></div>
 
       <label for="project_name"><%= Project.human_attribute_name(:name) %>:</label><br />
       <%= text_field 'project', 'name', "tabindex" => next_tab_index  %><br />

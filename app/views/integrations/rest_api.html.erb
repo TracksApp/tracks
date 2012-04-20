@@ -21,7 +21,7 @@
 <pre>
 <code>
   $ curl -u username:p4ssw0rd -H "Content-Type: text/xml" \
-      <%= home_url %>contexts.xml
+      <%= root_url %>contexts.xml
   &gt;&gt; &lt;?xml version="1.0" encoding="UTF-8"?&gt;
   &lt;contexts&gt;...&lt;/contexts&gt;
 </code>
@@ -32,7 +32,7 @@
 <pre>
 <code>
   $ curl -u username:p4ssw0rd -H "Content-Type: text/xml" \
-      <%= home_url %>contexts/51.xml
+      <%= root_url %>contexts/51.xml
   &gt;&gt; &lt;?xml version="1.0" encoding="UTF-8"?&gt;
   &lt;context&gt;...&lt;/context&gt;
 </code>
@@ -43,7 +43,7 @@
 <pre>
 <code>
   $ curl -u username:p4ssw0rd -H "Content-Type: text/xml" \
-  <%= home_url %>contexts/51/todos.xml
+  <%= root_url %>contexts/51/todos.xml
   &gt;&gt; &lt;?xml version="1.0" encoding="UTF-8"?&gt;
   &lt;todos type="array"&gt;...&lt;/todos&gt;
 </code>
@@ -75,7 +75,7 @@ field to <code>ID, created_at, modified_at, completed_at</code> by adding the pa
 <pre>
 <code>
   $ curl -u username:p4ssw0rd -H "Content-Type: text/xml" \
-  <%= home_url %>tickler.xml?limit_fields=index
+  <%= root_url %>tickler.xml?limit_fields=index
 </code>
 </pre>
 
@@ -89,9 +89,9 @@ field to <code>ID, created_at, modified_at, completed_at</code> by adding the pa
 <code>
 $ curl -u username:p4ssw0rd -H "Content-Type: text/xml" \
     -d "&lt;project&gt;&lt;name&gt;Build a treehouse for the kids&lt;/name&gt;&lt;/project&gt;" \
-    <%= home_url %>projects.xml -i
+    <%= root_url %>projects.xml -i
 &gt;&gt; HTTP/1.1 201 Created
-Location: <%= home_url %>projects/65.xml
+Location: <%= root_url %>projects/65.xml
 ...
 </code>
 </pre>
@@ -102,9 +102,9 @@ Location: <%= home_url %>projects/65.xml
 <code>
 $ curl -u username:p4ssw0rd -H "Content-Type: text/xml" \
     -d "&lt;todo&gt;&lt;description&gt;Model treehouse in SketchUp&lt;/description&gt;&lt;context_id&gt;2&lt;/context_id&gt;&lt;project_id&gt;65&lt;/project_id&gt;&lt;/todo&gt;" \
-    <%= home_url %>todos.xml -i
+    <%= root_url %>todos.xml -i
 &gt;&gt; HTTP/1.1 201 Created
-Location: <%= home_url %>todos/452.xml
+Location: <%= root_url %>todos/452.xml
 ...
 </code>
 </pre>
@@ -115,7 +115,7 @@ Location: <%= home_url %>todos/452.xml
 <code>
   $ curl -u username:p4ssw0rd -H "Content-Type: text/xml" -X PUT \
       -d "&lt;todo&gt;&lt;notes&gt;use maple texture&lt;/notes&gt;&lt;/todos&gt;" \
-      <%= home_url %>todos/452.xml -i
+      <%= root_url %>todos/452.xml -i
   &gt;&gt; HTTP/1.1 200 OK
   ...
 
@@ -135,7 +135,7 @@ Location: <%= home_url %>todos/452.xml
 <pre>
 <code>
   $ curl -u username:p4ssw0rd -H "Content-Type: text/xml" -X PUT \
-      <%= home_url %>todos/452/toggle_check.xml -i
+      <%= root_url %>todos/452/toggle_check.xml -i
   &gt;&gt; HTTP/1.1 200 OK
   ...
 
@@ -156,7 +156,7 @@ Location: <%= home_url %>todos/452.xml
 <pre>
 <code>
   $ curl -u username:p4ssw0rd -H "Content-Type: text/xml" -X DELETE \
-      <%= home_url %>todos/452.xml -i
+      <%= root_url %>todos/452.xml -i
   &gt;&gt; HTTP/1.1 200 OK
   ...
 </code>
@@ -175,7 +175,7 @@ Location: <%= home_url %>todos/452.xml
 <pre>
 <code>
 $ curl -u username:p4ssw0rd -H "Content-Type: text/xml" \
-    <%= home_url %>contexts/2/todos.xml
+    <%= root_url %>contexts/2/todos.xml
 &gt;&gt; &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;nil-classes type="array"/&gt;
 
@@ -192,8 +192,8 @@ $ script/console
 Loading development environment (Rails 1.2.4)
 &gt;&gt; class Context &lt; ActiveResource::Base; end
 =&gt; nil
-&gt;&gt; Context.site = "<%= home_url %>"
-=&gt; "<%= home_url %>"
+&gt;&gt; Context.site = "<%= root_url %>"
+=&gt; "<%= root_url %>"
 &gt;&gt; Context.site.user = "username"
 =&gt; "username"
 

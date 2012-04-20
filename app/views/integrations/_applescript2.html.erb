@@ -1,10 +1,10 @@
-(* 
+(*
 Script to grab the sender and subject of the selected
 Mail message(s), and create new next action(s) with description
 "Email [sender] about [subject]"
 
 If you have Growl, it pops a notification up with the id of
-the newly created action. 
+the newly created action.
 *)
 
 (* Edit appropriately for your setup *)
@@ -50,25 +50,25 @@ on importMessage(theMessage)
 	
 	-- Now send all that info to Tracks
 	-- Edit the URL of your Tracks installation if necessary"
-	tell application "<%= home_url %>backend/api"
+	tell application "<%= root_url %>backend/api"
 		set returnValue to call xmlrpc {method name:"NewTodo", parameters:{myUsername, myToken, myContextID, myDesc, myNote}}
 	end tell
 	
-	(* Growl support - comment out or delete this section if 
+	(* Growl support - comment out or delete this section if
 	   you don't have Growl *)
 	tell application "GrowlHelperApp"
 		set the allNotificationsList to ¬
 			{"Tracks Notification"}
 		
-		-- Make a list of the notifications 
-		-- that will be enabled by default.      
-		-- Those not enabled by default can be enabled later 
+		-- Make a list of the notifications
+		-- that will be enabled by default.
+		-- Those not enabled by default can be enabled later
 		-- in the 'Applications' tab of the growl prefpane.
 		set the enabledNotificationsList to ¬
 			{"Tracks Notification"}
 		
 		-- Register our script with growl.
-		-- You can optionally (as here) set a default icon 
+		-- You can optionally (as here) set a default icon
 		-- for this script's notifications.
 		register as application ¬
 			"Tracks Applescript" all notifications allNotificationsList ¬

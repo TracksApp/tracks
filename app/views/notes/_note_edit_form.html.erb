@@ -7,7 +7,7 @@ form_for(note, :html => {
     :class => "inline-form edit-note-form"}) do |f|
   -%>
 
-  <div id="error_status"><%= error_messages_for("note") %></div>
+  <div id="error_status"><%= get_list_of_error_messages_for(note) %></div>
 
   <%= f.hidden_field( "project_id" ) %>
   <%= f.text_area( "body", "cols" => 70, "rows" => 15, "tabindex" => 1 ) %>

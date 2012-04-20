@@ -90,7 +90,7 @@
 
 <p>If you enter the following entry to your crontab, you will receive email every day around 5 AM with a list of the upcoming actions which are due within the next 7 days.</p>
 
-<textarea id="cron" name="cron">0 5 * * * /usr/bin/curl -0 "<%= home_url %>todos.txt?due=6&token=<%= current_user.token %>" | /usr/bin/mail -e -s 'Tracks actions due in the next 7 days' youremail@yourdomain.com</textarea>
+<textarea id="cron" name="cron">0 5 * * * /usr/bin/curl -0 "<%= root_url %>todos.txt?due=6&token=<%= current_user.token %>" | /usr/bin/mail -e -s 'Tracks actions due in the next 7 days' youremail@yourdomain.com</textarea>
 
 <p>You can of course use other text <%= link_to 'feeds provided by Tracks', feeds_path %> -- why not email a list of next actions in a particular project to a group of colleagues who are working on the project?</p>
 
@@ -100,7 +100,7 @@
   If Tracks is running on the same server as your mail server, you can use the integrated mail handler built into tracks. Steps to set it up:
 </p>
 <ul>
-  <li>Go to <%= link_to t('layouts.navigation.preferences'), preferences_url %> 
+  <li>Go to <%= link_to t('layouts.navigation.preferences'), preferences_url %>
     and set your "<%= Preference.human_attribute_name('sms_email') %>" and
     "<%= Preference.human_attribute_name('sms_context') %>" for todos sent in
     via email (which could come from an SMS message)</li>

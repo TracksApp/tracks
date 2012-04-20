@@ -7,7 +7,7 @@ project = project_form
     :class => "inline-form edit-project-form",
     :method => :put }) do
   -%>
-  <div id="edit_error_status"><%= error_messages_for("project") %></div>
+  <div id="edit_error_status"><%= get_list_of_error_messages_for(@project) %></div>
   <%= source_view_tag( @source_view ) -%>
 
   <label for="project_name">Name:</label><br/>

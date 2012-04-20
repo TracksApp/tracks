@@ -53,7 +53,7 @@ class IntegrationsController < ApplicationController
     message = Mail.new(params[:message])
         
     # find user
-    user = User.where("preferences.sms_email = ?", message.from).includes(:preferences).first
+    user = User.where("preferences.sms_email = ?", message.from).includes(:preference).first
     if user.nil?
       render :text => "No user found", :status => 404
       return false

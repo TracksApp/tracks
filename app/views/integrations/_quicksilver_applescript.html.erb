@@ -5,7 +5,7 @@ using terms from application "Quicksilver"
 		set myToken to "<%= current_user.token %>"
 		set myContextID to <%= context.id %> (* <%= context.name %> *)
 		
-		tell application "<%= home_url %>backend/api"
+		tell application "<%= root_url %>backend/api"
 			set returnValue to call xmlrpc {method name:"NewTodo", parameters:{myUsername, myToken, myContextID, ThisClipping}}
 		end tell
 		tell application "Quicksilver"

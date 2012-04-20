@@ -9,7 +9,6 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery
 
-  helper :application
   include LoginSystem
   helper_method :current_user, :prefs, :format_date, :markdown
 
@@ -143,14 +142,6 @@ class ApplicationController < ActionController::Base
     return json_elems
   end
 
-  # Uses RedCloth to transform text using either Textile or Markdown Need to
-  # require redcloth above RedCloth 3.0 or greater is needed to use Markdown,
-  # otherwise it only handles Textile
-  #
-  def markdown(text)
-    RedCloth.new(text).to_html
-  end
-
   # Here's the concept behind this "mobile content negotiation" hack: In
   # addition to the main, AJAXy Web UI, Tracks has a lightweight low-feature
   # 'mobile' version designed to be suitablef or use from a phone or PDA. It
@@ -223,7 +214,7 @@ class ApplicationController < ActionController::Base
 
   def redirect_back_or_home
     respond_to do |format|
-      format.html { redirect_back_or_default home_url }
+      format.html { redirect_back_or_default root_url }
       format.m { redirect_back_or_default mobile_url }
     end
   end

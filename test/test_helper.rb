@@ -2,6 +2,8 @@ ENV["RAILS_ENV"] = "test"
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
 
+{ :salt => "change-me", :authentication_schemes => ["database", "open_id"], :prefered_auth => "database"}.each{|k,v| SITE_CONFIG[k]=v}
+
 class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.(yml|csv) for all tests in alphabetical order.
   #
@@ -15,17 +17,7 @@ class ActiveSupport::TestCase
     yield
     assert_not_equal initial_value, object.send(method), "#{object}##{method}"
   end
-end
-
-module Tracks
-  class Config
-    def self.salt
-      "change-me"
-    end
-    def self.auth_schemes
-      return ["database","open_id"]
-    end
-  end
+    
 end
 
 class ActionController::TestCase
