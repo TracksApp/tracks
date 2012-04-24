@@ -1,9 +1,9 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
 class PreferencesControllerTest < ActionController::TestCase
-  fixtures :users, :preferences
 
   def setup
+    super
     assert_equal "test", Rails.env
     assert_equal "change-me", Tracks::Config.salt
   end

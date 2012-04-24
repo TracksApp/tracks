@@ -18,7 +18,7 @@ class DataController < ApplicationController
   def yaml_export
     all_tables = {}
     
-    all_tables['todos'] = current_user.todos.includes(:tags)
+    all_tables['todos'] = current_user.todos.includes(:tags).all
     all_tables['contexts'] = current_user.contexts.all
     all_tables['projects'] = current_user.projects.all
 
@@ -37,10 +37,10 @@ class DataController < ApplicationController
     tags = Tag.where("id IN (?) OR id IN (?)", todo_tag_ids, rec_todo_tag_ids)
     taggings = Tagging.where("tag_id IN (?) OR tag_id IN(?)", todo_tag_ids, rec_todo_tag_ids)
 
-    all_tables['tags'] = tags
-    all_tables['taggings'] = taggings
-    all_tables['notes'] = current_user.notes
-    all_tables['recurring_todos'] = current_user.recurring_todos
+    all_tables['tags'] = tags.all
+    all_tables['taggings'] = taggings.all
+    all_tables['notes'] = current_user.notes.all
+    all_tables['recurring_todos'] = current_user.recurring_todos.all
     
     result = all_tables.to_yaml
     result.gsub!(/\n/, "\r\n")   # TODO: general functionality for line endings
@@ -72,13 +72,13 @@ class DataController < ApplicationController
   
   def csv_notes
     content_type = 'text/csv'
-    CSV::Writer.generate(result = "") do |csv|
+    CSV.generate(result = "") do |csv|
       csv << ["id", "User ID", "Project", "Note",
         "Created at", "Updated at"]
       # had to remove project include because it's association order is leaking
       # through and causing an ambiguous column ref even with_exclusive_scope
       # didn't seem to help -JamesKebinger
-      current_user.notes.order("notes.created_at").each do |note|
+      current_user.notes.reorder("notes.created_at").each do |note|
         # Format dates in ISO format for easy sorting in spreadsheet Print
         # context and project names for easy viewing
         csv << [note.id, note.user_id,

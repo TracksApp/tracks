@@ -6,10 +6,10 @@ class StatsController < ApplicationController
   def index
     @page_title = t('stats.index_title')
 
+    @first_action = current_user.todos.reorder("created_at ASC").first
     @tags_count = get_total_number_of_tags_of_user
     @unique_tags_count = get_unique_tags_of_user.size
     @hidden_contexts = current_user.contexts.hidden
-    @first_action = current_user.todos.order("created_at ASC").first
 
     get_stats_actions
     get_stats_contexts
@@ -55,8 +55,8 @@ class StatsController < ApplicationController
   end
 
   def actions_done_lastyears_data
-    @actions_done_last_months = current_user.todos.completed.select("completed_at").order("completed_at DESC")
-    @actions_created_last_months = current_user.todos.select("created_at").order("created_at DESC" )
+    @actions_done_last_months = current_user.todos.completed.select("completed_at").reorder("completed_at DESC")
+    @actions_created_last_months = current_user.todos.select("created_at").reorder("created_at DESC" )
 
     # query is sorted, so use last todo to calculate number of months
     @month_count = [difference_in_months(@today, @actions_created_last_months.last.created_at),
@@ -101,7 +101,7 @@ class StatsController < ApplicationController
   end
 
   def actions_completion_time_data
-    @actions_completion_time = current_user.todos.completed.select("completed_at, created_at").order("completed_at DESC" )
+    @actions_completion_time = current_user.todos.completed.select("completed_at, created_at").reorder("completed_at DESC" )
 
     # convert to array and fill in non-existing weeks with 0
     @max_weeks = difference_in_weeks(@today, @actions_completion_time.last.completed_at)
@@ -121,7 +121,7 @@ class StatsController < ApplicationController
   end
 
   def actions_running_time_data
-    @actions_running_time = current_user.todos.not_completed.select("created_at").order("created_at DESC")
+    @actions_running_time = current_user.todos.not_completed.select("created_at").reorder("created_at DESC")
 
     # convert to array and fill in non-existing weeks with 0
     @max_weeks = difference_in_weeks(@today, @actions_running_time.last.created_at)
@@ -151,7 +151,7 @@ class StatsController < ApplicationController
 
     @actions_running_time = current_user.todos.not_completed.not_hidden.not_deferred_or_blocked.
       select("todos.created_at").
-      order("todos.created_at DESC")
+      reorder("todos.created_at DESC")
 
     @max_weeks = difference_in_weeks(@today, @actions_running_time.last.created_at)
     @actions_running_per_week_array = convert_to_weeks_from_today_array(@actions_running_time, @max_weeks+1, :created_at)
@@ -172,7 +172,7 @@ class StatsController < ApplicationController
   def actions_open_per_week_data
     @actions_started = current_user.todos.created_after(@today-53.weeks).
       select("todos.created_at, todos.completed_at").
-      order("todos.created_at DESC")
+      reorder("todos.created_at DESC")
       
     @max_weeks = difference_in_weeks(@today, @actions_started.last.created_at)
 
@@ -358,7 +358,7 @@ class StatsController < ApplicationController
       # get all running actions that are visible
       @actions_running_time = current_user.todos.not_completed.not_hidden.not_deferred_or_blocked.
         select("todos.id, todos.created_at").
-        order("todos.created_at DESC")
+        reorder("todos.created_at DESC")
 
       selected_todo_ids = get_ids_from(@actions_running_time, week_from, week_to, params['id']== 'avrt_end')
       @selected_actions = selected_todo_ids.size == 0 ? [] : current_user.todos.where("id in (" + selected_todo_ids.join(",") + ")")
@@ -399,10 +399,10 @@ class StatsController < ApplicationController
 
     init_not_done_counts
 
-    @done_recently = current_user.todos.completed.limit(10).order('completed_at DESC').includes(Todo::DEFAULT_INCLUDES)
-    @last_completed_projects = current_user.projects.completed.limit(10).order('completed_at DESC').includes(:todos, :notes)
+    @done_recently = current_user.todos.completed.limit(10).reorder('completed_at DESC').includes(Todo::DEFAULT_INCLUDES)
+    @last_completed_projects = current_user.projects.completed.limit(10).reorder('completed_at DESC').includes(:todos, :notes)
     @last_completed_contexts = []
-    @last_completed_recurring_todos = current_user.recurring_todos.completed.limit(10).order('completed_at DESC').includes(:tags, :taggings)
+    @last_completed_recurring_todos = current_user.recurring_todos.completed.limit(10).reorder('completed_at DESC').includes(:tags, :taggings)
     #TODO: @last_completed_contexts = current_user.contexts.completed.all(:limit => 10, :order => 'completed_at DESC')
   end
 

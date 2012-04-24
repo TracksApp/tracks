@@ -1,23 +1,10 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
-require 'users_controller'
-
-# Re-raise errors caught by the controller.
-class UsersController; def rescue_action(e) raise e end; end
 
 class UsersControllerTest < ActionController::TestCase
-  fixtures :preferences, :users
-
-  def setup
-    assert_equal "test", ENV['RAILS_ENV']
-    assert_equal "change-me", Tracks::Config.salt
-    @controller = UsersController.new
-    @request    = ActionController::TestRequest.new
-    @response   = ActionController::TestResponse.new
-  end
 
   def test_get_index_when_not_logged_in
     get :index
-    assert_redirected_to :controller => 'login', :action => 'login'
+    assert_redirected_to login_path
   end
 
   def test_get_index_by_nonadmin
@@ -32,7 +19,7 @@ class UsersControllerTest < ActionController::TestCase
     assert_response :success
     assert_equal "TRACKS::Manage Users", assigns['page_title']
     assert_equal 5, assigns['total_users']
-    assert_equal "/users", session['return-to']
+    assert_equal users_url, session['return-to']
   end
 
   def test_index_pagination_page_1
@@ -59,7 +46,7 @@ class UsersControllerTest < ActionController::TestCase
 
   def test_update_password_successful
     get :change_password # should fail because no login
-    assert_redirected_to :controller => 'login', :action => 'login'
+    assert_redirected_to login_path
     login_as :admin_user
     @user = @request.session['user_id']
     get :change_password # should now pass because we're logged in
@@ -74,21 +61,19 @@ class UsersControllerTest < ActionController::TestCase
 
   def test_update_password_no_confirmation
     post :update_password # should fail because no login
-    assert_redirected_to :controller => 'login', :action => 'login'
+    assert_redirected_to login_path
     login_as :admin_user
     post :update_password, :user => {:password => 'newpassword', :password_confirmation => 'wrong'}
-    assert_redirected_to :controller => 'users', :action => 'change_password'
-    assert users(:admin_user).save, false
+    assert_redirected_to change_password_user_path(users(:admin_user))
     assert_equal 'Validation failed: Password doesn\'t match confirmation', flash[:error]
   end
 
   def test_update_password_validation_errors
     post :update_password # should fail because no login
-    assert_redirected_to :controller => 'login', :action => 'login'
+    assert_redirected_to login_path
     login_as :admin_user
     post :update_password, :user => {:password => 'ba', :password_confirmation => 'ba'}
-    assert_redirected_to :controller => 'users', :action => 'change_password'
-    assert users(:admin_user).save, false
+    assert_redirected_to change_password_user_path(User.find(users(:admin_user).id))
     # For some reason, no errors are being raised now.
     #assert_equal 1, users(:admin_user).errors.count
     #assert_equal users(:admin_user).errors.on(:password), "is too short (min is 5 characters)"

@@ -113,7 +113,7 @@ class ProjectsController < ApplicationController
 
     @done = {}
     @done = @project.todos.completed.
-      order("todos.completed_at DESC").
+      reorder("todos.completed_at DESC").
       limit(current_user.prefs.show_number_completed).
       includes(Todo::DEFAULT_INCLUDES) unless current_user.prefs.show_number_completed == 0
 

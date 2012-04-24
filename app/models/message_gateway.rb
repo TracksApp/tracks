@@ -1,37 +1,25 @@
 class MessageGateway < ActionMailer::Base
-  # include ActionView::Helpers::SanitizeHelper
-  # extend ActionView::Helpers::SanitizeHelper::ClassMethods
+  include ActionView::Helpers::SanitizeHelper
+  extend ActionView::Helpers::SanitizeHelper::ClassMethods
   
   def receive(email)
-    puts "email = #{email}"
-    address = ''
-    if SITE_CONFIG['email_dispatch'] == 'to'
-      address = email.to[0]
-    else
-      address = email.from[0]
-    end
-    
-    user = User.where("preferences.sms_email" => address.strip).first(:include => [:preference])
-    if user.nil?
-      user = User.where("preferences.sms_email" => address.strip[1.100]).first(:include => [:preference])
-    end
+    user = get_user_from_email_address(email)
     return if user.nil?
+    
     context = user.prefs.sms_context
-
     description = nil
     notes = nil
-
-    if email.content_type == "multipart/related"
-      description = sanitize email.subject
-      body_part = email.parts.find{|m| m.content_type == "text/plain"}
-      notes = sanitize body_part.body.strip
+    
+    if email.multipart?
+      description = get_text_or_nil(email.subject)
+      notes = get_first_text_plain_part(email)
     else
-      if email.subject && email.subject.blank?
-        description = sanitize email.body.strip
+      if email.subject.blank?
+        description = get_decoded_text_or_nil(email.body)
         notes = nil
       else
-        description = sanitize email.subject.strip
-        notes = sanitize email.body.strip
+        description = get_text_or_nil(email.subject)
+        notes = get_decoded_text_or_nil(email.body)
       end
     end
 
@@ -41,4 +29,33 @@ class MessageGateway < ActionMailer::Base
     todo = Todo.from_rich_message(user, context.id, description, notes)
     todo.save!
   end
+  
+  private
+  
+  def get_address(email)
+    return SITE_CONFIG['email_dispatch'] == 'to' ?  email.to[0] :  email.from[0]
+  end
+  
+  def get_user_from_email_address(email)
+    address = get_address(email)
+    user = User.where("preferences.sms_email" => address.strip).includes(:preference).first
+    if user.nil?
+      user = User.where("preferences.sms_email" => address.strip[1.100]).includes(:preference).first
+    end
+    return user
+  end
+
+  def get_text_or_nil(text)
+    return text ? sanitize(text.strip) : nil
+  end
+
+  def get_decoded_text_or_nil(text)
+    return text ? sanitize(text.decoded.strip) : nil
+  end
+  
+  def get_first_text_plain_part(email)
+    parts = email.parts.reject{|part| !part.content_type.start_with?("text/plain") }
+    return parts ? sanitize(parts[0].decoded.strip) : ""
+  end
+  
 end

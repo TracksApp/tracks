@@ -1,7 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
 class MessageGatewayTest < ActiveSupport::TestCase
-  fixtures :users, :contexts, :todos
 
   def setup
     @user = users(:sms_user)
@@ -14,18 +13,18 @@ class MessageGatewayTest < ActiveSupport::TestCase
 
   def test_sms_with_no_subject
     todo_count = Todo.count
-
+  
     load_message('sample_sms.txt')
     # assert some stuff about it being created
     assert_equal(todo_count+1, Todo.count)
-
+  
     message_todo = Todo.find(:first, :conditions => {:description => "message_content"})
     assert_not_nil(message_todo)
-
+  
     assert_equal(@inbox, message_todo.context)
     assert_equal(@user, message_todo.user)
   end
-
+  
   def test_double_sms
     todo_count = Todo.count
     load_message('sample_sms.txt')
@@ -56,18 +55,18 @@ class MessageGatewayTest < ActiveSupport::TestCase
     MessageGateway.receive(badmessage)
     assert_equal(todo_count, Todo.count)
   end
-
+  
   def test_direct_to_context
     message = File.read(File.join(Rails.root, 'test', 'fixtures', 'sample_sms.txt'))
-
+  
     valid_context_msg = message.gsub('message_content', 'this is a task @ anothercontext')
     invalid_context_msg = message.gsub('message_content', 'this is also a task @ notacontext')
-
+  
     MessageGateway.receive(valid_context_msg)
     valid_context_todo = Todo.find(:first, :conditions => {:description => "this is a task"})
     assert_not_nil(valid_context_todo)
     assert_equal(contexts(:anothercontext), valid_context_todo.context)
-
+  
     MessageGateway.receive(invalid_context_msg)
     invalid_context_todo = Todo.find(:first, :conditions => {:description => 'this is also a task'})
     assert_not_nil(invalid_context_todo)

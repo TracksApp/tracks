@@ -128,12 +128,6 @@ class ProjectTest < ActiveSupport::TestCase
     assert p.nil?
     assert_nil p.id
   end
-
-  def test_feed_options
-    opts = Project.feed_options(users(:admin_user))
-    assert_equal 'Tracks Projects', opts[:title], 'Unexpected value for :title key of feed_options'
-    assert_equal 'Lists all the projects for Admin Schmadmin', opts[:description], 'Unexpected value for :description key of feed_options'
-  end
   
   def test_name_removes_extra_spaces
     newproj = Project.new

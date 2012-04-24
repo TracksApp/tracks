@@ -1,5 +1,4 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
-require 'date'
 
 class TodoTest < ActiveSupport::TestCase
   fixtures :todos, :recurring_todos, :users, :contexts, :preferences, :tags, :taggings, :projects

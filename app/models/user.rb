@@ -5,6 +5,11 @@ class User < ActiveRecord::Base
   # Virtual attribute for the unencrypted password
   attr_accessor :password
   attr_protected :is_admin # don't allow mass-assignment for this
+  
+  attr_accessible :login, :first_name, :last_name, :password_confirmation, :password, :auth_type, :open_id_url
+  #for will_paginate plugin
+  cattr_accessor :per_page
+  @@per_page = 5
 
   has_many :contexts,
            :order => 'position ASC',
@@ -91,8 +96,6 @@ class User < ActiveRecord::Base
   has_many :notes, :order => "created_at DESC", :dependent => :delete_all
   has_one :preference, :dependent => :destroy
 
-  attr_protected :is_admin
-
   validates_presence_of :login
   validates_presence_of :password, :if => :password_required?
   validates_length_of :password, :within => 5..40, :if => :password_required?
@@ -104,10 +107,6 @@ class User < ActiveRecord::Base
 
   before_create :crypt_password, :generate_token
   before_update :crypt_password
-
-  #for will_paginate plugin
-  cattr_accessor :per_page
-  @@per_page = 5
 
   def validate_auth_type
     unless Tracks::Config.auth_schemes.include?(auth_type)

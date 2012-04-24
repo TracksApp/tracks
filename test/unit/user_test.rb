@@ -1,13 +1,5 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
-module Tracks
-  class Config
-    def self.auth_schemes
-      ['database', 'ldap']
-    end
-  end
-end
-
 class SimpleLdapAuthenticator
   cattr_accessor :fake_success
 
@@ -22,7 +14,7 @@ class UserTest < ActiveSupport::TestCase
   def setup
     assert_equal "test", ENV['RAILS_ENV']
     assert_equal "change-me", Tracks::Config.salt
-    assert_equal ['database', 'ldap'], Tracks::Config.auth_schemes
+    assert Tracks::Config.auth_schemes.include?('ldap')
     @admin_user = User.find(1)
     @other_user = User.find(2)
   end

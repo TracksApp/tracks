@@ -2,7 +2,8 @@ ENV["RAILS_ENV"] = "test"
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
 
-{ :salt => "change-me", :authentication_schemes => ["database", "open_id"], :prefered_auth => "database"}.each{|k,v| SITE_CONFIG[k]=v}
+# set config for tests. Overwrite those read from config/site.yml. Use inject to avoid warning about changing CONSTANT
+{"salt" => "change-me", "authentication_schemes" => ["database", "open_id", "ldap"], "prefered_auth" => "database"}.inject( SITE_CONFIG ) { |h, elem| h[elem[0]] = elem[1]; h }
 
 class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.(yml|csv) for all tests in alphabetical order.
@@ -10,17 +11,35 @@ class ActiveSupport::TestCase
   # Note: You'll currently still have to declare fixtures explicitly in integration tests
   # -- they do not yet inherit this setting
   fixtures :all
-
+    
   # Add more helper methods to be used by all tests here...
   def assert_value_changed(object, method = nil)
     initial_value = object.send(method)
     yield
     assert_not_equal initial_value, object.send(method), "#{object}##{method}"
   end
+  # Generates a random string of ascii characters (a-z, "1 0")
+  # of a given length for testing assignment to fields
+  # for validation purposes
+  #
+  def generate_random_string(length)
+    string = ""
+    characters = %w(a b c d e f g h i j k l m n o p q r s t u v w z y z 1\ 0)
+    length.times do
+      pick = characters[rand(26)]
+      string << pick
+    end
+    return string
+  end
+  
+  def assert_equal_dmy(date1, date2)
+    assert_equal date1.strftime("%d-%m-%y"), date2.strftime("%d-%m-%y")
+  end
     
 end
 
 class ActionController::TestCase
+  
   def login_as(user)
     @request.session['user_id'] = user ? users(user).id : nil
   end
@@ -61,26 +80,4 @@ class ActionController::TestCase
     eval("#{get_model_class}.count")
   end
   
-end
-
-class ActiveSupport::TestCase
-
-  # Generates a random string of ascii characters (a-z, "1 0")
-  # of a given length for testing assignment to fields
-  # for validation purposes
-  #
-  def generate_random_string(length)
-    string = ""
-    characters = %w(a b c d e f g h i j k l m n o p q r s t u v w z y z 1\ 0)
-    length.times do
-      pick = characters[rand(26)]
-      string << pick
-    end
-    return string
-  end
-  
-  def assert_equal_dmy(date1, date2)
-    assert_equal date1.strftime("%d-%m-%y"), date2.strftime("%d-%m-%y")
-  end
-
 end

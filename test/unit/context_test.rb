@@ -54,12 +54,6 @@ class ContextTest < ActiveSupport::TestCase
     assert_equal @agenda.name, @agenda.title
   end
 
-  def test_feed_options
-    opts = Context.feed_options(users(:admin_user))
-    assert_equal 'Tracks Contexts', opts[:title], 'Unexpected value for :title key of feed_options'
-    assert_equal 'Lists all the contexts for Admin Schmadmin', opts[:description], 'Unexpected value for :description key of feed_options'
-  end
-
   def test_hidden_attr_reader
     assert !@agenda.hidden?
     @agenda.hide = true

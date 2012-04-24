@@ -51,30 +51,30 @@ class RecurringTodo < ActiveRecord::Base
 
   def validate_daily
     if (!only_work_days) && (daily_every_x_days.nil? || daily_every_x_days.blank?)
-      errors.add_to_base("Every other nth day may not be empty for recurrence setting")
+      errors[:base] << "Every other nth day may not be empty for recurrence setting"
     end
   end
 
   def validate_weekly
     if weekly_every_x_week.nil? || weekly_every_x_week.blank?
-      errors.add_to_base("Every other nth week may not be empty for recurrence setting")
+      errors[:base] << "Every other nth week may not be empty for recurrence setting"
     end
     something_set = false
     %w{sunday monday tuesday wednesday thursday friday saturday}.each do |day|
       something_set ||= self.send("on_#{day}")
     end
-    errors.add_to_base("You must specify at least one day on which the todo recurs") if !something_set
+    errors[:base] << "You must specify at least one day on which the todo recurs" if !something_set
   end
 
   def validate_monthly
     case recurrence_selector
     when 0 # 'monthly_every_x_day'
-      errors.add_to_base("The day of the month may not be empty for recurrence setting") if monthly_every_x_day.nil? || monthly_every_x_day.blank?
-      errors.add_to_base("Every other nth month may not be empty for recurrence setting") if monthly_every_x_month.nil? || monthly_every_x_month.blank?
+      errors[:base] << "The day of the month may not be empty for recurrence setting" if monthly_every_x_day.nil? || monthly_every_x_day.blank?
+      errors[:base] << "Every other nth month may not be empty for recurrence setting" if monthly_every_x_month.nil? || monthly_every_x_month.blank?
     when 1 # 'monthly_every_xth_day'
-      errors.add_to_base("Every other nth month may not be empty for recurrence setting") if monthly_every_x_month2.nil? || monthly_every_x_month2.blank?
-      errors.add_to_base("The nth day of the month may not be empty for recurrence setting") if monthly_every_xth_day.nil? || monthly_every_xth_day.blank?
-      errors.add_to_base("The day of the month may not be empty for recurrence setting") if monthly_day_of_week.nil? || monthly_day_of_week.blank?
+      errors[:base] <<"Every other nth month may not be empty for recurrence setting" if monthly_every_x_month2.nil? || monthly_every_x_month2.blank?
+      errors[:base] <<"The nth day of the month may not be empty for recurrence setting" if monthly_every_xth_day.nil? || monthly_every_xth_day.blank?
+      errors[:base] <<"The day of the month may not be empty for recurrence setting" if monthly_day_of_week.nil? || monthly_day_of_week.blank?
     else
       raise Exception.new, "unexpected value of recurrence selector '#{self.recurrence_selector}'"
     end
@@ -83,26 +83,26 @@ class RecurringTodo < ActiveRecord::Base
   def validate_yearly
     case recurrence_selector
     when 0 # 'yearly_every_x_day'
-      errors.add_to_base("The month of the year may not be empty for recurrence setting") if yearly_month_of_year.nil? || yearly_month_of_year.blank?
-      errors.add_to_base("The day of the month may not be empty for recurrence setting") if yearly_every_x_day.nil? || yearly_every_x_day.blank?
+      errors[:base] << "The month of the year may not be empty for recurrence setting" if yearly_month_of_year.nil? || yearly_month_of_year.blank?
+      errors[:base] << "The day of the month may not be empty for recurrence setting" if yearly_every_x_day.nil? || yearly_every_x_day.blank?
     when 1 # 'yearly_every_xth_day'
-      errors.add_to_base("The month of the year may not be empty for recurrence setting") if yearly_month_of_year2.nil? || yearly_month_of_year2.blank?
-      errors.add_to_base("The nth day of the month may not be empty for recurrence setting") if yearly_every_xth_day.nil? || yearly_every_xth_day.blank?
-      errors.add_to_base("The day of the week may not be empty for recurrence setting") if yearly_day_of_week.nil? || yearly_day_of_week.blank?
+      errors[:base] << "The month of the year may not be empty for recurrence setting" if yearly_month_of_year2.nil? || yearly_month_of_year2.blank?
+      errors[:base] << "The nth day of the month may not be empty for recurrence setting" if yearly_every_xth_day.nil? || yearly_every_xth_day.blank?
+      errors[:base] << "The day of the week may not be empty for recurrence setting" if yearly_day_of_week.nil? || yearly_day_of_week.blank?
     else
       raise Exception.new, "unexpected value of recurrence selector '#{self.recurrence_selector}'"
     end
   end
 
   def starts_and_ends_on_validations
-    errors.add_to_base("The start date needs to be filled in") if start_from.nil? || start_from.blank?
+    errors[:base] << "The start date needs to be filled in" if start_from.nil? || start_from.blank?
     case self.ends_on
     when 'ends_on_number_of_times'
-      errors.add_to_base("The number of recurrences needs to be filled in for 'Ends on'") if number_of_occurences.nil? || number_of_occurences.blank?
+      errors[:base] << "The number of recurrences needs to be filled in for 'Ends on'" if number_of_occurences.nil? || number_of_occurences.blank?
     when "ends_on_end_date"
-      errors.add_to_base("The end date needs to be filled in for 'Ends on'") if end_date.nil? || end_date.blank?
+      errors[:base] << "The end date needs to be filled in for 'Ends on'" if end_date.nil? || end_date.blank?
     else
-      errors.add_to_base("The end of the recurrence is not selected") unless ends_on == "no_end_date"
+      errors[:base] << "The end of the recurrence is not selected" unless ends_on == "no_end_date"
     end
   end
 
@@ -112,9 +112,9 @@ class RecurringTodo < ActiveRecord::Base
     when 'show_from_date'
       # no validations
     when 'due_date'
-      errors.add_to_base("Please select when to show the action") if show_always.nil?
+      errors[:base] << "Please select when to show the action" if show_always.nil?
       unless show_always
-        errors.add_to_base("Please fill in the number of days to show the todo before the due date") if show_from_delta.nil? || show_from_delta.blank?
+        errors[:base] << "Please fill in the number of days to show the todo before the due date" if show_from_delta.nil? || show_from_delta.blank?
       end
     else
       raise Exception.new, "unexpected value of recurrence target selector '#{self.recurrence_target}'"

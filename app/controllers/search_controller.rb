@@ -10,12 +10,12 @@ class SearchController < ApplicationController
     @found_not_complete_todos = current_user.todos.
       where("(todos.description LIKE ? OR todos.notes LIKE ?) AND todos.completed_at IS NULL", terms, terms).
       includes(Todo::DEFAULT_INCLUDES).
-      order("todos.due IS NULL, todos.due ASC, todos.created_at ASC")
+      reorder("todos.due IS NULL, todos.due ASC, todos.created_at ASC")
     
     @found_complete_todos = current_user.todos.
       where("(todos.description LIKE ? OR todos.notes LIKE ?) AND NOT (todos.completed_at IS NULL)", terms, terms).
       includes(Todo::DEFAULT_INCLUDES).
-      order("todos.completed_at DESC")
+      reorder("todos.completed_at DESC")
       
     @found_todos = @found_not_complete_todos + @found_complete_todos
 

@@ -372,9 +372,9 @@ class Todo < ActiveRecord::Base
 
     context_id = default_context_id
     unless(context.nil?)
-      found_context = user.contexts.active.find_by_namepart(context)
-      found_context = user.contexts.find_by_namepart(context) if found_context.nil?
-      context_id = found_context.id unless found_context.nil?
+      found_context = user.contexts.active.where("name like ?", "%#{context}%").first
+      found_context = user.contexts.where("name like ?", "%#{context}%").first if !found_context
+      context_id = found_context.id if found_context
     end
 
     unless user.contexts.exists? context_id

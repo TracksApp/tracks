@@ -51,7 +51,7 @@ Tracksapp::Application.routes.draw do
   # root :to => 'welcome#index'
 
   # See how all your routes lay out with "rake routes"
-
+  
   # This is a legacy wild controller route that's not recommended for RESTful applications.
   # Note: This route will make all actions in every controller accessible via GET requests.
   # match ':controller(/:action(/:id))(.:format)'
@@ -64,6 +64,7 @@ Tracksapp::Application.routes.draw do
   match 'login_cas' => 'users#login_cas'
   match 'logout' => 'users#logout'
   match 'calendar' => "todos#calendar"
+  match 'stats' => 'stats#index'
   match 'done' => "stats#done", :as => 'done_overview'
   match 'integrations' => "integrations#index"
   match 'integrations/rest_api' => "integrations#rest_api", :as => 'rest_api_docs'
@@ -113,6 +114,16 @@ Tracksapp::Application.routes.draw do
     end
   end
   match 'todos/tag/:name' => 'todos#tag', :as => :tag
+
+  resources :recurring_todos do
+    member do
+      put 'toggle_check'
+      put 'toggle_star'
+    end
+    collection do
+      get 'done'
+    end
+  end
   
   resources :users do
     member do

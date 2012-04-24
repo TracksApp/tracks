@@ -26,7 +26,7 @@ class UsersController < ApplicationController
 
   # GET /users/id GET /users/id.xml
   def show
-    @user = User.find_by_id(params[:id])
+    @user = User.find(params[:id])
     render :xml => @user.to_xml(:except => [ :password ])
   end
 
@@ -83,7 +83,7 @@ class UsersController < ApplicationController
             user.auth_type == 'ldap' &&
             !SimpleLdapAuthenticator.valid?(user.login, params['user']['password'])
           notify :warning, "Incorrect password"
-          redirect_to :action => 'new'
+          redirect_to signup_path
           return
         end
 
@@ -137,7 +137,7 @@ class UsersController < ApplicationController
 
   # DELETE /users/id DELETE /users/id.xml
   def destroy
-    @deleted_user = User.find_by_id(params[:id])
+    @deleted_user = User.find(params[:id])
     @saved = @deleted_user.destroy
     @total_users = User.all.size
 
@@ -155,19 +155,18 @@ class UsersController < ApplicationController
     end
   end
 
-
   def change_password
     @page_title = t('users.change_password_title')
   end
 
   def update_password
     # is used for focing password change after sha->bcrypt upgrade
-    @user.change_password(params[:user][:password], params[:user][:password_confirmation])
+    current_user.change_password(params[:user][:password], params[:user][:password_confirmation])
     notify :notice, t('users.password_updated')
     redirect_to preferences_path
   rescue Exception => error
     notify :error, error.message
-    redirect_to :action => 'change_password'
+    redirect_to change_password_user_path(current_user)
   end
 
   def change_auth_type
@@ -175,40 +174,19 @@ class UsersController < ApplicationController
   end
 
   def update_auth_type
-    if (params[:open_id_complete] || (params[:user][:auth_type] == 'open_id')) && openid_enabled?
-      authenticate_with_open_id do |result, identity_url|
-        if result.successful?
-          # Success means that the transaction completed without error. If info
-          # is nil, it means that the user cancelled the verification.
-          @user.auth_type = 'open_id'
-          @user.open_id_url = identity_url
-          if @user.save
-            notify :notice, t('users.openid_url_verified', :url => identity_url)
-          else
-            debugger
-            notify :warning, t('users.openid_ok_pref_failed', :url => identity_url)
-          end
-          redirect_to preferences_path
-        else
-          notify :warning, result.message
-          redirect_to :action => 'change_auth_type'
-        end
-      end
-      return
-    end
-    @user.auth_type = params[:user][:auth_type]
-    if @user.save
+    current_user.auth_type = params[:user][:auth_type]
+    if current_user.save
       notify :notice, t('users.auth_type_updated')
       redirect_to preferences_path
     else
-      notify :warning, t('users.auth_type_update_error', :error_messages => @user.errors.full_messages.join(', '))
-      redirect_to :action => 'change_auth_type'
+      notify :warning, t('users.auth_type_update_error', :error_messages => current_user.errors.full_messages.join(', '))
+      redirect_to change_auth_type_user_path(current_user)
     end
   end
 
   def refresh_token
-    @user.generate_token
-    @user.save!
+    current_user.generate_token
+    current_user.save!
     notify :notice, t('users.new_token_generated')
     redirect_to preferences_path
   end
