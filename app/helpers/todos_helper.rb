@@ -473,6 +473,17 @@ module TodosHelper
     return $tracks_tab_index
   end
 
+  def feed_content_for_todo(todo)
+    item_notes = todo.notes ? todo.rendered_notes : ''
+    due = todo.due ? content_tag(:div, t('todos.feeds.due', :date => format_date(todo.due))) : ''
+    done = todo.completed? ? content_tag(:div, t('todos.feeds.completed', :date => format_date(todo.completed_at))) : ''
+    context_link = link_to(context_url(todo.context), todo.context.name)
+    project_link = todo.project.is_a?(NullProject) ? content_tag(:em, t('common.none')) : link_to(project_url(todo.project), todo.project.name)
+    return "#{done} #{due} #{item_notes}\n" +
+      content_tag(:div, "#{t('common.project')}:  #{project_link}") + "\n" +
+      content_tag(:div, "#{t('common.context')}:  #{context_link}")
+  end
+  
   private
 
   def image_tag_for_star(todo)

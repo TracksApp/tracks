@@ -246,13 +246,6 @@ class Todo < ActiveRecord::Base
     defer! if active? && !date.blank? && date > user.date
   end
 
-  def self.feed_options(user)
-    {
-      :title => 'Tracks Actions',
-      :description => "Actions for #{user.display_name}"
-    }
-  end
-
   def starred?
     return has_tag?(STARRED_TAG_NAME)
   end

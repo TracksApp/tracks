@@ -60,9 +60,8 @@ Tracksapp::Application.routes.draw do
   
   match "tickler" => "todos#list_deferred"
   match 'review' => "projects#review"
-  match 'login' => 'users#login'
-  match 'login_cas' => 'users#login_cas'
-  match 'logout' => 'users#logout'
+  match 'login' => 'login#login'
+  match 'logout' => 'login#logout'
   match 'calendar' => "todos#calendar"
   match 'stats' => 'stats#index'
   match 'done' => "stats#done", :as => 'done_overview'
@@ -75,14 +74,15 @@ Tracksapp::Application.routes.draw do
   match 'preferences/render_date_format' => "preferences#render_date_format"
   
   resources :contexts do
-    collection do
-      post 'order'
-      get 'done'
-    end
     member do
       get 'done_todos'
       get 'all_done_todos'
     end
+    collection do
+      post 'order'
+      get 'done'
+    end
+    resources :todos
   end
   
   resources :projects do
@@ -97,6 +97,7 @@ Tracksapp::Application.routes.draw do
       post 'alphabetize'
       post 'actionize'
     end
+    resources :todos
   end
   
   resources :todos do

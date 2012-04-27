@@ -56,13 +56,7 @@ class ContextsController < ApplicationController
       end
     end
   end
-
-  # Example XML usage: curl -H 'Accept: application/xml' -H 'Content-Type:
-  # application/xml'
-  #                    -u username:password
-  #                    -d '<request><context><name>new context_name</name></context></request>'
-  #                    http://our.tracks.host/contexts
-  #
+  
   def create
     if params[:format] == 'application/xml' && params['exception']
       render_failure "Expected post format is valid xml like so: <context><name>context name</name></context>.", 400
@@ -77,7 +71,7 @@ class ContextsController < ApplicationController
       end
       format.xml do
         if @context.new_record?
-          render_failure @context.errors.to_xml, 409
+          render_failure @context.errors.to_xml.html_safe, 409
         else
           head :created, :location => context_url(@context)
         end

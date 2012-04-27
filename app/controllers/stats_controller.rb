@@ -106,7 +106,7 @@ class StatsController < ApplicationController
     # convert to array and fill in non-existing weeks with 0
     @max_weeks = difference_in_weeks(@today, @actions_completion_time.last.completed_at)
     @actions_completed_per_week_array = convert_to_weeks_running_array(@actions_completion_time, @max_weeks+1)
-    
+        
     # stop the chart after 10 weeks
     @count = [10, @max_weeks].min
     
@@ -179,7 +179,7 @@ class StatsController < ApplicationController
     # cut off chart at 52 weeks = one year
     @count = [52, @max_weeks].min
     
-    @actions_open_per_week_array = convert_to_weeks_running_from_today_array(@actions_started, @max_weeks)
+    @actions_open_per_week_array = convert_to_weeks_running_from_today_array(@actions_started, @max_weeks+1)
     @actions_open_per_week_array = cut_off_array(@actions_open_per_week_array, @count)
     @max_actions = @actions_open_per_week_array.max
     
@@ -440,7 +440,7 @@ class StatsController < ApplicationController
     @pie_height=325
 
     # get the current date wih time set to 0:0
-    @today = Time.zone.now.beginning_of_day
+    @today = Time.zone.now.utc.beginning_of_day
 
     # define the number of seconds in a day
     @seconds_per_day = 60*60*24
@@ -633,38 +633,33 @@ class StatsController < ApplicationController
     return selected_todo_ids
   end
 
-  def convert_to_array(hash, upper_bound)
-    return Array.new(upper_bound){ |i| hash[i] }
-  end
-
   # uses the supplied block to determine array of indexes in hash
   # the block should return an array of indexes each is added to the hash and summed
-  def convert_to_hash(records)
+  def convert_to_array(records, upper_bound)
     # use 0 to initialise action count to zero
-    hash = Hash.new(0)
-    records.each { |r| (yield r).each { |i| hash[i] += 1} }
-    return hash
+    a = Array.new(upper_bound){|i| 0 }
+    records.each { |r| (yield r).each { |i| a[i] += 1 } }
+    return a
   end
   
   def convert_to_months_from_today_array(records, array_size, date_method_on_todo)
-    return convert_to_array(convert_to_hash(records){ |r| [difference_in_months(@today, r.send(date_method_on_todo))]}, array_size)
+    return convert_to_array(records, array_size){ |r| [difference_in_months(@today, r.send(date_method_on_todo))]}
   end
   
   def convert_to_days_from_today_array(records, array_size, date_method_on_todo)
-    return convert_to_array(convert_to_hash(records){ |r| [difference_in_days(@today, r.send(date_method_on_todo))]}, array_size)
+    return convert_to_array(records, array_size){ |r| [difference_in_days(@today, r.send(date_method_on_todo))]}
   end
 
   def convert_to_weeks_from_today_array(records, array_size, date_method_on_todo)
-    return convert_to_array(convert_to_hash(records) { |r| [difference_in_weeks(@today, r.send(date_method_on_todo))]}, array_size)
+    return convert_to_array(records, array_size) { |r| [difference_in_weeks(@today, r.send(date_method_on_todo))]}
   end
 
   def convert_to_weeks_running_array(records, array_size)
-    return convert_to_array(convert_to_hash(records) { |r| [difference_in_weeks(r.completed_at, r.created_at)]}, array_size)
+    return convert_to_array(records, array_size) { |r| [difference_in_weeks(r.completed_at, r.created_at)]}
   end
 
   def convert_to_weeks_running_from_today_array(records, array_size)
-    hash = convert_to_hash(records) { |r| week_indexes_of(r) }
-    return convert_to_array(hash, array_size)
+    return convert_to_array(records, array_size) { |r| week_indexes_of(r) }
   end
   
   def week_indexes_of(record)
@@ -698,14 +693,14 @@ class StatsController < ApplicationController
   end
 
   # assumes date1 > date2
-  # this results in the number of months before the month of date1, not taking days into account, so diff of 31-12 and 1-1 is 1 month!
+  # this results in the number of months before the month of date1, not taking days into account, so diff of 31-dec and 1-jan is 1 month!
   def difference_in_months(date1, date2)
-    return (date1.year - date2.year)*12 + (date1.month - date2.month)
+    return (date1.utc.year - date2.utc.year)*12 + (date1.utc.month - date2.utc.month)
   end
 
   # assumes date1 > date2
   def difference_in_days(date1, date2)
-    return ((date1.at_midnight-date2.at_midnight)/@seconds_per_day).to_i
+    return ((date1.utc.at_midnight-date2.utc.at_midnight)/@seconds_per_day).to_i
   end
   
   # assumes date1 > date2

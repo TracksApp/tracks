@@ -11,10 +11,6 @@ class TodosController < ApplicationController
 
   protect_from_forgery :except => :check_deferred
 
-  # # these are needed for todo_feed_content. TODO: remove this view stuff from controller
-  # include ActionView::Helpers::SanitizeHelper
-  # extend ActionView::Helpers::SanitizeHelper::ClassMethods
-
   def with_feed_query_scope(&block)
     unless TodosController.is_feed_request(request)
       Todo.send(:where, ['todos.state = ?', 'active']) do
@@ -143,8 +139,8 @@ class TodosController < ApplicationController
         render :action => 'index'
       end
       format.xml   { render :xml => @todos.to_xml( *to_xml_params ) }
-      format.rss
-      format.atom
+      format.rss   { @feed_title, @feed_description = 'Tracks Actions', "Actions for #{current_user.display_name}" }
+      format.atom  { @feed_title, @feed_description = 'Tracks Actions', "Actions for #{current_user.display_name}" }
       format.text
       format.ics
     end
@@ -192,7 +188,7 @@ class TodosController < ApplicationController
         @todo.project_id = project.id
       elsif !(p.project_id.nil? || p.project_id.blank?)
         project = current_user.projects.find_by_id(p.project_id)
-        @todo.errors.add(:project, "unknown") if project.nil?
+        @todo.errors[:project] << "unknown" if project.nil?
       end
 
       if p.context_specified_by_name?
@@ -202,33 +198,26 @@ class TodosController < ApplicationController
         @todo.context_id = context.id
       elsif !(p.context_id.nil? || p.context_id.blank?)
         context = current_user.contexts.find_by_id(p.context_id)
-        @todo.errors.add(:context, "unknown") if context.nil?
+        @todo.errors[:context] << "unknown" if context.nil?
       end
 
       if @todo.errors.empty?
         @todo.starred= (params[:new_todo_starred]||"").include? "true" if params[:new_todo_starred]
-
         @todo.add_predecessor_list(predecessor_list)
-
-        # Fix for #977 because AASM overrides @state on creation
-        specified_state = @todo.state
         @saved = @todo.save
-
         @todo.update_state_from_project if @saved
       else
         @saved = false
       end
 
-      unless (@saved == false) || tag_list.blank?
+      unless ( !@saved ) || tag_list.blank?
         @todo.tag_with(tag_list)
         @todo.tags.reload
       end
 
       if @saved
-        unless @todo.uncompleted_predecessors.empty? || @todo.state == 'project_hidden'
-          @todo.state = 'pending'
-        end
-        @todo.save
+        @todo.block! unless @todo.uncompleted_predecessors.empty? || @todo.state == 'project_hidden'
+        @saved = @todo.save
       end
 
       @todo.reload if @saved
@@ -268,7 +257,7 @@ class TodosController < ApplicationController
           if @saved
             head :created, :location => todo_url(@todo)
           else
-            render :xml => @todo.errors.to_xml, :status => 422
+            render_failure @todo.errors.to_xml.html_safe, 409
           end
         end
       end
@@ -1424,84 +1413,6 @@ class TodosController < ApplicationController
     return !( all_list_uniq_ids.length == all_list_count )
   end
   
-  # def render_text_feed
-  #   lambda do
-  #     render :action => 'index', :layout => false, :content_type => Mime::TEXT
-  #   end
-  # end
-  #
-  # def render_ical_feed
-  #   lambda do
-  #     render :action => 'index', :layout => false, :content_type => Mime::ICS
-  #   end
-  # end
-  #
-  # def self.is_feed_request(req)
-  #   ['rss','atom','txt','ics'].include?(req.parameters[:format])
-  # end
-  #
-  # class FindConditionBuilder
-  #
-  #   def initialize
-  #     @queries = Array.new
-  #     @params = Array.new
-  #   end
-  #
-  #   def add(query, param)
-  #     @queries << query
-  #     @params << param
-  #   end
-  #
-  #   def to_conditions
-  #     [@queries.join(' AND ')] + @params
-  #   end
-  # end
-  # def render_rss_feed
-  #   lambda do
-  #     render_rss_feed_for @todos, :feed => todo_feed_options,
-  #       :item => {
-  #       :title => :description,
-  #       :link => lambda { |t| @project_feed.nil? ? context_url(t.context) : project_url(t.project) },
-  #       :guid => lambda { |t| todo_url(t) },
-  #       :description => todo_feed_content
-  #     }
-  #   end
-  # end
-  #
-  # def todo_feed_options
-  #   options = Todo.feed_options(current_user)
-  #   options[:title] = @feed_title
-  #   return options
-  # end
-  #
-  # def todo_feed_content
-  #   # TODO: move view stuff into view, also the includes at the top
-  #   lambda do |i|
-  #     item_notes = i.rendered_notes if i.notes?
-  #     due = "<div>#{t('todos.feeds.due', :date => format_date(i.due))}</div>\n" if i.due?
-  #     done = "<div>#{t('todos.feeds.completed', :date => format_date(i.completed_at))}</div>\n" if i.completed?
-  #     context_link = "<a href=\"#{ context_url(i.context) }\">#{ i.context.name }</a>"
-  #     if i.project_id?
-  #       project_link = "<a href=\"#{ project_url(i.project) }\">#{ i.project.name }</a>"
-  #     else
-  #       project_link = "<em>#{t('common.none')}</em>"
-  #     end
-  #     "#{done||''}#{due||''}#{item_notes||''}\n<div>#{t('common.project')}:  #{project_link}</div>\n<div>#{t('common.context')}:  #{context_link}</div>"
-  #   end
-  # end
-  #
-  # def render_atom_feed
-  #   lambda do
-  #     render_atom_feed_for @todos, :feed => todo_feed_options,
-  #       :item => {
-  #       :title => :description,
-  #       :link => lambda { |t| context_url(t.context) },
-  #       :description => todo_feed_content,
-  #       :author => lambda { |p| nil }
-  #     }
-  #   end
-  # end
-
   class TodoCreateParamsHelper
 
     def initialize(params, prefs)

@@ -36,6 +36,14 @@ class ActiveSupport::TestCase
     assert_equal date1.strftime("%d-%m-%y"), date2.strftime("%d-%m-%y")
   end
     
+  def xml_document
+    @xml_document ||= HTML::Document.new(@response.body, false, true)
+  end
+
+  def assert_xml_select(*args, &block)
+    @html_document = xml_document
+    assert_select(*args, &block)
+  end
 end
 
 class ActionController::TestCase
@@ -68,10 +76,6 @@ class ActionController::TestCase
   
   private
   
-  def xml_document
-    @xml_document ||= HTML::Document.new(@response.body, false, true)
-  end
-  
   def get_model_class
     @controller.class.to_s.tableize.split("_")[0].camelcase.singularize  #don't ask... converts ContextsController to Context
   end
@@ -80,4 +84,49 @@ class ActionController::TestCase
     eval("#{get_model_class}.count")
   end
   
+end
+
+class ActionController::IntegrationTest
+
+  def authenticated_post_xml(url, username, password, parameters, headers = {})
+    post url, parameters,
+        { 'HTTP_AUTHORIZATION' => "Basic " + Base64.encode64("#{username}:#{password}"),
+          'ACCEPT' => 'application/xml',
+          'CONTENT_TYPE' => 'application/xml'
+        }.merge(headers)
+  end
+
+  def authenticated_get_xml(url, username, password, parameters, headers = {})
+    get url, parameters,
+        { 'HTTP_AUTHORIZATION' => "Basic " + Base64.encode64("#{username}:#{password}"),
+          'ACCEPT' => 'application/xml',
+          'CONTENT_TYPE' => 'application/xml'
+          }.merge(headers)
+  end
+
+  def assert_response_and_body(type, body, message = nil)
+    assert_equal body, @response.body, message
+    assert_response type, message
+  end
+
+  def assert_response_and_body_matches(type, body_regex, message = nil)
+    assert_response type, message
+    assert_match body_regex, @response.body, message
+  end
+
+  def assert_401_unauthorized
+    assert_response_and_body 401, "401 Unauthorized: You are not authorized to interact with Tracks."
+  end
+
+  def assert_401_unauthorized_admin
+    assert_response_and_body 401, "401 Unauthorized: Only admin users are allowed access to this function."
+  end
+  
+  def assert_responses_with_error(error_msg)
+    assert_response 409
+    assert_xml_select 'errors' do
+      assert_select 'error', 1, error_msg
+    end
+  end
+
 end

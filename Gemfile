@@ -17,10 +17,6 @@ gem "sanitize", "~>1.2.1"
 gem "will_paginate"
 gem "acts_as_list", "~>0.1.4"
 gem "aasm", "~>2.2.0"
-# TODO: gem "rubyjedi-actionwebservice", :require => "actionwebservice"
-# gem "rubycas-client", "~>2.2.1"
-# gem "ruby-openid", :require => "openid"
-# gem "open_id_authentication"
 gem 'htmlentities', '~> 4.3.0'
 gem "mail"
 gem "swf_fu"
@@ -60,16 +56,16 @@ gem 'bcrypt-ruby', '~> 3.0.0'
 
 group :development do
   if RUBY_VERSION.to_f >= 1.9
-#    gem "ruby-debug19", :require => 'ruby-debug'
+    # gem "ruby-debug19", :require => 'ruby-debug'
     gem "mongrel", "1.2.0.pre2"
   else
-#    gem "ruby-debug"
-#    gem "mongrel"
+    gem "ruby-debug"
+    gem "mongrel"
   end
   gem "yard"
 end
-#
-# group :test do
+
+group :test do
 #   gem "test-unit", "1.2.3"
 #   gem "flexmock"
 #   gem "ZenTest", ">=4.0.0"
@@ -90,4 +86,4 @@ end
   # uncomment to be able to make screenshots from scenarios
   #gem "capybara-screenshot"
   #gem "launchy"
-# end
+end

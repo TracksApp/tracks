@@ -135,7 +135,7 @@ class TodosControllerTest < ActionController::TestCase
     put :create, :format => "xml", "request" => {
       "project_name"=>"Build a working time machine",
       "todo"=>{"notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>"foo bar" }
-    assert_response 422
+    assert_response 409
     assert_xml_select "errors" do
       assert_xml_select "error", "Context can't be blank"
     end

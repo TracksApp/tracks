@@ -1,7 +1,7 @@
 <div title="<%= t('users.account_signup') %>" id="signupform" class="form">
 <%= form_tag :action=> "create" do %>
 
-  <%= error_messages_for 'user' %><br/>
+  <%= get_list_of_error_messages_for @user %><br/>
 
   <%= render_flash %>
 	
@@ -39,7 +39,6 @@
 	      <td><label for="user_auth_type"><%= User.human_attribute_name('auth_type') %>:</label></td>
 	      <td><%= select("user", "auth_type", @auth_types, { :include_blank => false })%></td>
 	    </tr>
-		<%= observe_field( :user_auth_type, :function => "$('#open_id')[0].style.display = value == 'open_id' ? 'table-row' : 'none'") %>
     <%end%>
     <tr>
       <td></td>

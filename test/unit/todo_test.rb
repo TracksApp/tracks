@@ -120,12 +120,6 @@ class TodoTest < ActiveSupport::TestCase
     assert_equal :deferred, todo.aasm_current_state
   end
 
-  def test_feed_options
-    opts = Todo.feed_options(users(:admin_user))
-    assert_equal 'Tracks Actions', opts[:title], 'Unexpected value for :title key of feed_options'
-    assert_equal 'Actions for Admin Schmadmin', opts[:description], 'Unexpected value for :description key of feed_options'
-  end
-
   def test_toggle_completion
     t = @not_completed1
     assert_equal :active, t.aasm_current_state

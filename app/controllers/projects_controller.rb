@@ -139,15 +139,9 @@ class ProjectsController < ApplicationController
     end
   end
 
-  # Example XML usage: curl -H 'Accept: application/xml' -H 'Content-Type:
-  # application/xml'
-  #                    -u username:password
-  #                    -d '<request><project><name>new project_name</name></project></request>'
-  #                    http://our.tracks.host/projects
-  #
   def create
     if params[:format] == 'application/xml' && params['exception']
-      render_failure "Expected post format is valid xml like so: <request><project><name>project name</name></project></request>."
+      render_failure "Expected post format is valid xml like so: <project><name>project name</name></project>.", 400
       return
     end
     @project = current_user.projects.build(params['project'])
@@ -161,7 +155,7 @@ class ProjectsController < ApplicationController
       format.js { @down_count = current_user.projects.size }
       format.xml do
         if @project.new_record?
-          render_failure @project.errors.full_messages.join(', ')
+          render_failure @project.errors.to_xml.html_safe, 409
         else
           head :created, :location => project_url(@project), :text => @project.id
         end

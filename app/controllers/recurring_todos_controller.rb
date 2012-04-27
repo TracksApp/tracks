@@ -161,10 +161,10 @@ class RecurringTodosController < ApplicationController
 
       format.html do
         if @saved
-          notify :notice, t('todos.recurring_deleted_success'), 2.0
+          notify :notice, t('todos.recurring_deleted_success')
           redirect_to :action => 'index'
         else
-          notify :error, t('todos.error_deleting_recurring', :description => @recurring_todo.description), 2.0
+          notify :error, t('todos.error_deleting_recurring', :description => @recurring_todo.description)
           redirect_to :action => 'index'
         end
       end

@@ -1,8 +1,6 @@
-<% 
+<%
 require 'htmlentities'
 htmlentities = HTMLEntities.new
-
-todo = text_todo
 
 if (todo.starred?)
   result_string = "  * "
@@ -23,6 +21,6 @@ end
 
 unless todo.project.nil?
   result_string << "(" + todo.project.name + ")"
-end 
+end
 -%><%= result_string -%>
 

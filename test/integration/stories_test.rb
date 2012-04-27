@@ -1,11 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
 class StoriesTest < ActionController::IntegrationTest
-  fixtures :users, :preferences, :projects, :contexts, :todos, :recurring_todos, :notes
-  
-  def setup
-    assert_test_environment_ok
-  end
   
   # ####################################################
   # Testing login and signup by different kinds of users
@@ -13,7 +8,7 @@ class StoriesTest < ActionController::IntegrationTest
   def test_signup_new_user_by_admin
     admin = new_session_as(:admin_user,"abracadabra")
     admin.goes_to_signup
-    admin.signs_up_with(:user => {:login => "newbie", 
+    admin.signs_up_with(:user => {:login => "newbie",
                                   :password => "newbiepass",
                                   :password_confirmation => "newbiepass"})
   end
@@ -31,8 +26,8 @@ class StoriesTest < ActionController::IntegrationTest
 
       def logs_in_as(user,plain_pass)
         @user = user
-        post "/login", :user_login => @user.login, 
-                      :user_password => plain_pass, 
+        post "/login", :user_login => @user.login,
+                      :user_password => plain_pass,
                       :user_noexpiry => 'n'
         assert_response :redirect
         follow_redirect!

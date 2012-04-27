@@ -424,7 +424,6 @@ class StatsControllerTest < ActionController::TestCase
     assert_equal 2, assigns['count']
   end
 
-
   private
   
   def given_todos_for_stats

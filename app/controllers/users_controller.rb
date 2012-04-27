@@ -65,7 +65,7 @@ class UsersController < ApplicationController
   # POST /users POST /users.xml
   def create
     if params['exception']
-      render_failure "Expected post format is valid xml like so: <request><login>username</login><password>abc123</password></request>."
+      render_failure "Expected post format is valid xml like so: <user><login>username</login><password>abc123</password></user>."
       return
     end
     respond_to do |format|
@@ -112,23 +112,21 @@ class UsersController < ApplicationController
         return
       end
       format.xml do
-        unless User.find_by_id_and_is_admin(session['user_id'], true)
+        unless current_user && current_user.is_admin
           render :text => "401 Unauthorized: Only admin users are allowed access to this function.", :status => 401
           return
         end
         unless check_create_user_params
-          render_failure "Expected post format is valid xml like so: <request><login>username</login><password>abc123</password></request>."
+          render_failure "Expected post format is valid xml like so: <user><login>username</login><password>abc123</password></user>.", 400
           return
         end
-        user = User.new(params[:request])
-        if Tracks::Config.auth_schemes.include?('cas')   && session[:cas_user]
-          user.auth_type = "cas" #if they area  cas user
-        end
-        user.password_confirmation = params[:request][:password]
-        if user.save
+        user = User.new(params[:user])
+        user.password_confirmation = params[:user][:password]
+        saved = user.save
+        unless user.new_record?
           render :text => t('users.user_created'), :status => 200
         else
-          render_failure user.errors.to_xml
+          render_failure user.errors.to_xml, 409
         end
         return
       end
@@ -144,9 +142,9 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html do
         if @saved
-          notify :notice, t('users.successfully_deleted_user', :username => @deleted_user.login), 2.0
+          notify :notice, t('users.successfully_deleted_user', :username => @deleted_user.login)
         else
-          notify :error, t('users.failed_to_delete_user', :username => @deleted_user.login), 2.0
+          notify :error, t('users.failed_to_delete_user', :username => @deleted_user.login)
         end
         redirect_to users_url
       end
@@ -204,11 +202,11 @@ class UsersController < ApplicationController
   end
 
   def check_create_user_params
-    return false unless params.has_key?(:request)
-    return false unless params[:request].has_key?(:login)
-    return false if params[:request][:login].empty?
-    return false unless params[:request].has_key?(:password)
-    return false if params[:request][:password].empty?
+    return false unless params.has_key?(:user)
+    return false unless params[:user].has_key?(:login)
+    return false if params[:user][:login].empty?
+    return false unless params[:user].has_key?(:password)
+    return false if params[:user][:password].empty?
     return true
   end
 
