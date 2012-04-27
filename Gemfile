@@ -10,23 +10,16 @@ gem 'rails', '3.2.3'
 gem "sqlite3"
 gem "mysql2"
 
-gem "highline", "~>1.5.0"
+# gem "highline", "~>1.5.0"
 gem "RedCloth"
 gem "formatize"
-gem "sanitize", "~>1.2.1"
+gem "sanitize"
 gem "will_paginate"
-gem "acts_as_list", "~>0.1.4"
-gem "aasm", "~>2.2.0"
-gem 'htmlentities', '~> 4.3.0'
-gem "mail"
+gem "acts_as_list"
+gem "aasm"
+gem "htmlentities"
 gem "swf_fu"
 gem "rails_autolink"
-
-if RUBY_VERSION.to_f >= 1.9
-	gem "soap4r-ruby1.9"
-else
-	gem "soap4r", "~>1.5.8"
-end
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -72,13 +65,13 @@ group :test do
 #   gem "hpricot"
 #   gem "hoe"
 #   gem "rspec-rails", "~>1.3.3"
-# # TODO: gem "thoughtbot-factory_girl"
 #   gem 'memory_test_fix', '~>0.1.3'
-#   gem "capybara", ">=0.3.5"
-#   gem "selenium-webdriver" # Note that > 2.14 has problems: https://code.google.com/p/selenium/issues/detail?id=3075
-#   gem "database_cleaner", ">=0.5.0"
-#   gem "cucumber-rails", "~>0.3.2"
-#   gem "aruba", "0.2.2", :path => "vendor/gems/aruba-0.2.2"
+  gem "factory_girl_rails"
+  gem "capybara"
+  gem "selenium-webdriver" # Note that > 2.14 has problems: https://code.google.com/p/selenium/issues/detail?id=3075
+  gem "database_cleaner"
+  gem "cucumber-rails"
+  gem "aruba"
   
   # uncomment to use the webkit option. This depends on Qt to be installed
   #gem "capybara-webkit"
