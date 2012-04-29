@@ -23,8 +23,8 @@ form_for(todo, :html=> { :name=>'todo', :id => dom_id(@todo, 'form'), :class => 
     <input id="<%= dom_id(@todo, 'context_name') %>" name="context_name" autocomplete="off" tabindex="<%= next_tab_index%>" size="30" type="text" value="<%= h @todo.context.name %>" />
   </div>
 
-  <label class="tag_list_label" for="<%= dom_id(@todo, 'tag_list') %>"><%= t('todos.tags') %></label>
-  <%= text_field_tag 'tag_list', tag_list_text, :id => dom_id(@todo, 'tag_list'), :size => 30, :tabindex => next_tab_index %>
+  <label class="tag_list_label" for="<%= dom_id(@todo, 'todo_tag_list') %>"><%= t('todos.tags') %></label>
+  <%= text_field_tag 'todo_tag_list', tag_list_text, :id => dom_id(@todo, 'todo_tag_list'), :size => 30, :tabindex => next_tab_index %>
 
   <div class="due_input">
     <label for="<%= dom_id(@todo, 'due_label') %>"><%= Todo.human_attribute_name('due') %></label>

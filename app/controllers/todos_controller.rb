@@ -1424,8 +1424,8 @@ class TodosController < ApplicationController
   end
 
   def update_tags
-    if params[:tag_list]
-      @todo.tag_with(params[:tag_list])
+    if params[:todo_tag_list]
+      @todo.tag_with(params[:todo_tag_list])
       @todo.tags(true) #force a reload for proper rendering
     end
   end
