@@ -1,12 +1,12 @@
---- 
-he: 
-  will_paginate: 
-    page_entries_info: 
+---
+he:
+  will_paginate:
+    page_entries_info:
       multi_page: !binary |
         157XpteZ15IgJXttb2RlbH0gJXtmcm9tfSAtICV7dG99INee16rXldeaICV7
         Y291bnR9INeR16HXmiDXlNeb15w=
 
-      single_page: 
+      single_page:
         other: !binary |
           157XpteZ15Ig15DXqiDXm9ecICV7Y291bnR9ICV7bW9kZWx9
 
@@ -20,7 +20,7 @@ he:
         157XpteZ15IgJXttb2RlbH0gPGI+JXtmcm9tfSZuYnNwOy0mbmJzcDsle3Rv
         fTwvYj4g157XqteV15ogPGI+JXtjb3VudH08L2I+INeR16HXmiDXlNeb15w=
 
-      single_page_html: 
+      single_page_html:
         other: "\xD7\x9E\xD7\xA6\xD7\x99\xD7\x92  <b>\xD7\x9B\xD7\x9C&nbsp;%{count}</b> %{model}"
         zero: !binary |
           15zXkCDXoNee16bXkCAle21vZGVsfQ==
@@ -33,7 +33,7 @@ he:
     next_label: !binary |
       15TXkdeQICZyYXF1bzs=
 
-  integrations: 
+  integrations:
     applescript_success_before_id: !binary |
       16TXoteV15zXqiDXlNee16nXmiDXotedINeW15nXlNeV15k=
 
@@ -50,7 +50,7 @@ he:
     opensearch_description: !binary |
       15fXmdek15XXqSDXkdee16HXnNeV15zXmded
 
-  projects: 
+  projects:
     edit_project_settings: !binary |
       16LXqNeZ15vXqiDXlNeS15PXqNeV16og16TXqNeV15nXmden15g=
 
@@ -233,14 +233,14 @@ he:
     list_reviews: !binary |
       157Xodec15XXnNeZ1506Oteh16fXmdeo15Q=
 
-  errors: 
+  errors:
     user_unauthorized: !binary |
       NDAxINec15Ag157XkNeV16nXqDog16jXpyDXntep16rXntep15nXnSDXkdeT
       16jXkteqINee16DXlNecINeo16nXkNeZ150g15zXlNek16LXmdecINek16LX
       ldec15Qg15bXlQ==
 
-  support: 
-    array: 
+  support:
+    array:
       words_connector: ","
       last_word_connector: !binary |
         LCDXlS0=
@@ -248,11 +248,11 @@ he:
       two_words_connector: !binary |
         15Ut
 
-    select: 
+    select:
       prompt: !binary |
         15nXqSDXnNeR16bXoiDXkdeX15nXqNeU
 
-  login: 
+  login:
     log_in_again: !binary |
       15vXoNeZ16HXlCDXnteX15XXk9ep16o=
 
@@ -333,7 +333,7 @@ he:
     user_no_expiry: !binary |
       15TXqdeQ16jXqiDXl9eZ15HXldeo
 
-  sidebar: 
+  sidebar:
     list_name_active_contexts: !binary |
       15TXp9ep16jXmdedINek16LXmdec15nXnQ==
 
@@ -352,16 +352,16 @@ he:
     list_empty: !binary |
       15DXmdef
 
-  datetime: 
-    distance_in_words: 
-      about_x_years: 
+  datetime:
+    distance_in_words:
+      about_x_years:
         other: !binary |
           15stJXtjb3VudH0g16nXoNeZ150=
 
         one: !binary |
           15vXqdeg15Q=
 
-      less_than_x_seconds: 
+      less_than_x_seconds:
         other: !binary |
           16TXl9eV16og154tJXtjb3VudH0g16nXoNeZ15XXqg==
 
@@ -371,7 +371,7 @@ he:
         one: !binary |
           16TXl9eV16og157Xqdeg15nXmdeU
 
-      less_than_x_minutes: 
+      less_than_x_minutes:
         other: !binary |
           16TXl9eV16og154tJXtjb3VudH0g15PXp9eV16o=
 
@@ -381,56 +381,56 @@ he:
         one: !binary |
           16TXl9eV16og157Xk9en15Q=
 
-      x_minutes: 
+      x_minutes:
         other: !binary |
           JXtjb3VudH0g15PXp9eV16o=
 
         one: !binary |
           15PXp9eU
 
-      almost_x_years: 
+      almost_x_years:
         other: !binary |
           15vXntei15ggJXtjb3VudH0g16nXoNeZ150=
 
         one: !binary |
           15vXntei15gg16nXoNeU
 
-      about_x_months: 
+      about_x_months:
         other: !binary |
           15stJXtjb3VudH0g15fXldeT16nXmded
 
         one: !binary |
           15vXl9eV15PXqQ==
 
-      x_seconds: 
+      x_seconds:
         other: !binary |
           JXtjb3VudH0g16nXoNeZ15XXqg==
 
         one: !binary |
           16nXoNeZ15nXlA==
 
-      over_x_years: 
+      over_x_years:
         other: !binary |
           157XotecICV7Y291bnR9INep16DXmded
 
         one: !binary |
           157Xotec15Qg15zXqdeg15Q=
 
-      about_x_hours: 
+      about_x_hours:
         other: !binary |
           15stJXtjb3VudH0g16nXoteV16o=
 
         one: !binary |
           15vXqdei15Q=
 
-      x_months: 
+      x_months:
         other: !binary |
           JXtjb3VudH0g15fXldeT16nXmded
 
         one: !binary |
           15fXldeT16k=
 
-      x_days: 
+      x_days:
         other: !binary |
           JXtjb3VudH0g15nXnteZ150=
 
@@ -440,7 +440,7 @@ he:
       half_a_minute: !binary |
         15fXpteZINeT16fXlA==
 
-    prompts: 
+    prompts:
       hour: !binary |
         16nXoteU
 
@@ -459,13 +459,13 @@ he:
       year: !binary |
         16nXoNeU
 
-  activerecord: 
-    errors: 
-      template: 
+  activerecord:
+    errors:
+      template:
         body: !binary |
           15HXoteZ15XXqiDXkdep15PXldeqINeU15HXkNeZ1506
 
-        header: 
+        header:
           other: !binary |
             16nXkteZ15DXldeqINee16DXoteVINee157XldeT15wgJXttb2RlbH0g15zX
             lNeZ16nXnteo
@@ -474,7 +474,7 @@ he:
             16nXkteZ15DXlCDXnteg16LXlCDXntee15XXk9ecICV7bW9kZWx9INec15TX
             mdep157XqA==
 
-      messages: 
+      messages:
         greater_than: !binary |
           15fXmdeZ15Eg15zXlNeZ15XXqiDXkteT15XXnCDXniAle2NvdW50fQ==
 
@@ -541,10 +541,10 @@ he:
         empty: !binary |
           15zXkCDXmdeb15XXnCDXnNeU15nXldeqINeo15nXpw==
 
-      models: 
-        project: 
-          attributes: 
-            name: 
+      models:
+        project:
+          attributes:
+            name:
               too_long: !binary |
                 16LXnCDXqdedINeU16TXqNeV15nXmden15gg15zXlNeb15nXnCDXpNeX15XX
                 qiDXni0yNTYg16rXldeV15nXnQ==
@@ -555,10 +555,10 @@ he:
               taken: !binary |
                 15vXkdeoINen15nXmded
 
-      full_messages: 
+      full_messages:
         format: "%{attribute} %{message}"
-    attributes: 
-      todo: 
+    attributes:
+      todo:
         description: !binary |
           16rXmdeQ15XXqA==
 
@@ -583,21 +583,21 @@ he:
         notes: !binary |
           16TXqten15nXldeq
 
-      note: 
+      note:
         created_at: !binary |
           16DXldem16gg15E=
 
         updated_at: !binary |
           16LXldeT15vXnyDXkQ==
 
-      user: 
+      user:
         first_name: !binary |
           16nXnSDXpNeo15jXmQ==
 
         last_name: !binary |
           16nXnSDXntep16TXl9eU
 
-      project: 
+      project:
         name: !binary |
           16nXnQ==
 
@@ -610,7 +610,7 @@ he:
         default_tags: !binary |
           16rXkteZ15XXqiDXkdeo15nXqNeqINee15fXk9ec
 
-      preference: 
+      preference:
         review_period: !binary |
           16rXk9eZ16jXldeqINeo16LXoNeV158g16TXqNeV15nXmden15g=
 
@@ -676,20 +676,20 @@ he:
         time_zone: !binary |
           15DXlteV16gg15bXntef
 
-  data: 
+  data:
     import_successful: !binary |
       15nXkdeV15Ag15HXldem16Ig15HXlNem15zXl9eU
 
     import_errors: !binary |
       16nXkteZ15DXldeqINeR15nXkdeV15A=
 
-  date: 
-    formats: 
+  date:
+    formats:
       short: "%b %d "
       longer: "%A %B %d, %Y"
       default: "%Y-%m-%d "
       long: "%B %d, %Y "
-  shared: 
+  shared:
     toggle_single_title: !binary |
       15TXldeh16TXqiDXpNei15XXnNeqINeU157XqdeaINeX15PXqdeU
 
@@ -738,11 +738,11 @@ he:
     add_context: !binary |
       15TXldeh16TXqiDXlNen16nXqA==
 
-  time: 
+  time:
     pm: !binary |
       15DXl9eUItem
 
-    formats: 
+    formats:
       short: "%d %b %H:%M "
       stats: "%a %d-%m"
       default: "%a, %d %b %Y %H:%M:%S %z "
@@ -751,7 +751,7 @@ he:
     am: !binary |
       15zXpNeg15Qi16Y=
 
-  todos: 
+  todos:
     added_new_project: !binary |
       16DXldeh16Mg16TXqNeV15nXmden15gg15fXk9ep
 
@@ -771,7 +771,7 @@ he:
       16rXnNeV15kg15EtICjXmdepINec15TXpNeo15nXkyDXkdek16HXmden15nX
       nSg=
 
-    next_actions_description_additions: 
+    next_actions_description_additions:
       due_date: !binary |
         16LXnSDXqteQ16jXmdeaINeZ16LXkyAle2R1ZV9kYXRlfSDXkNeVINee15XX
         p9eT150g15nXldeq16gg
@@ -785,7 +785,7 @@ he:
     calendar_page_title: !binary |
       157Xodec15XXnNeZ1506Otec15XXlyDXqdeg15Q=
 
-    calendar: 
+    calendar:
       no_actions_due_after_this_month: !binary |
         15DXmdefINek16LXldec15XXqiDXnNeR15nXpteV16Ig15zXkNeX16gg15fX
         ldeT16kg15bXlA==
@@ -840,7 +840,7 @@ he:
     show_from: !binary |
       15TXpteS15Qg154t
 
-    next_actions_due_date: 
+    next_actions_due_date:
       due_tomorrow: !binary |
         15zXnteX16g=
 
@@ -938,7 +938,7 @@ he:
     feed_title_in_project: !binary |
       15HXpNeo15XXmdeZ16fXmCAnJXtwcm9qZWN0fSc=
 
-    next_actions_title_additions: 
+    next_actions_title_additions:
       completed: !binary |
         16TXoteV15zXldeqINep15TXodeq15nXnteV
 
@@ -965,7 +965,7 @@ he:
       15nXqSDXnNeU15bXmdefINec16TXl9eV16og16TXoteV15zXqiDXlNee16nX
       miDXkNeX16o=
 
-    tickler_items_due: 
+    tickler_items_due:
       other: !binary |
         JXtjb3VudH0g157XlNee1rTXltaw15vWuNa816jXmdedINeU15LXmdei15Ug
         15zXqteQ16jXmdeaINeU15nXoteTIC0g15nXqSDXnNeo16LXoNefINeU16LX
@@ -996,7 +996,7 @@ he:
     add_another_dependency: !binary |
       15TXldeh16TXqiDXqtec15XXqiDXoNeV16HXpNeq
 
-    defer_x_days: 
+    defer_x_days:
       other: !binary |
         15PXl9eZ15Qg15EtJXtjb3VudH0g15nXnteZ150=
 
@@ -1057,7 +1057,7 @@ he:
       157XqdeZ157XlCDXl9eT16nXlCDXlNeV16HXpNeUINec157XqdeZ157XlCDX
       nteX15bXldeo15nXqiDXlteV
 
-    completed_in_archive: 
+    completed_in_archive:
       other: !binary |
         16fXmdeZ157XldeqICV7Y291bnR9INek16LXldec15XXqiDXqdeU16HXqteZ
         15nXnteVINeR15DXqNeb15nXldefLg==
@@ -1150,7 +1150,7 @@ he:
       157Xodec15XXnNeZ1506INee16nXmdee15XXqiDXqdeU16HXqteZ15nXnteV
       INeU15XXoteR16jXlSDXnNeQ16jXm9eZ15XXnw==
 
-    completed_today: 
+    completed_today:
       other: !binary |
         16LXkyDXoteq15Qg15TXodeq15nXmdee15UgJXtjb3VudH0g16TXoteV15zX
         qiDXlNeZ15XXnS4=
@@ -1192,7 +1192,7 @@ he:
       15DXmdefINek16LXldec15XXqiDXqdeU16HXqteZ15nXnteVINei15wg15TX
       qteS15nXqiAnJXt0YWdfbmFtZX0n
 
-    feeds: 
+    feeds:
       completed: !binary |
         15TXodeq15nXmdedOiAle2RhdGV9
 
@@ -1214,7 +1214,7 @@ he:
       16jXqdeZ157XqiDXpNei15XXnNeV16og15TXntep15og16nXnNeQINeU16HX
       qteZ15nXnteV
 
-    recurrence: 
+    recurrence:
       recurrence_on_options: !binary |
         15TXkteT16jXqiDXnteX15bXldeo15nXldeqINec16TXmQ==
 
@@ -1287,7 +1287,7 @@ he:
       day_x_on_every_x_month: !binary |
         15HXmdeV150gJXtkYXl9INeR15vXnCAle21vbnRofSAg15fXldeT16k=
 
-      pattern: 
+      pattern:
         on_day_n: !binary |
           15HXmdeV150gJXtufQ==
 
@@ -1415,7 +1415,7 @@ he:
       INeU15PXktep16og15TXntep15nXnteUINeU157Xl9eW15XXqNeZ16ogIFwn
       JXtkZXNjcmlwdGlvbn1cJyDXnNeQINem15zXl9eU
 
-    has_x_pending: 
+    has_x_pending:
       other: !binary |
         157Xm9eZ15wgJXtjb3VudH0g16TXoteV15zXqiDXntee16rXmdeg15XXqg==
 
@@ -1457,7 +1457,7 @@ he:
     next_actions_description: !binary |
       157Xodeg1586
 
-  stats: 
+  stats:
     actions_avg_completed_30days: !binary |
       15XXlNeh16rXmdeZ157XlSDXkdee157Xldem16IgJXtjb3VudH0g16TXoteV
       15zXldeqINec15nXlded
@@ -1465,7 +1465,7 @@ he:
     projects: !binary |
       16TXqNeV15nXmden15jXmded
 
-    actions_dow_30days_legend: 
+    actions_dow_30days_legend:
       number_of_actions: !binary |
         157Xodek16gg16TXoteV15zXldeq
 
@@ -1489,7 +1489,7 @@ he:
     totals_context_count: !binary |
       16fXmdeZ157XmdedICV7Y291bnR9INeU16fXqdeo15nXnS4=
 
-    running_time_legend: 
+    running_time_legend:
       percentage: !binary |
         15DXl9eV15Y=
 
@@ -1528,7 +1528,7 @@ he:
       15bXntefINeh15nXldedICjXm9ecINeU16TXoteV15zXldeqINep15TXodeq
       15nXmdee15Up
 
-    open_per_week_legend: 
+    open_per_week_legend:
       weeks: !binary |
         16nXkdeV16LXldeqINen15XXk9edINec15vXnw==
 
@@ -1559,7 +1559,7 @@ he:
       15nXldedINeR16nXkdeV16IgKDMwINeU15nXnteZ150g15TXkNeX16jXldeg
       15nXnSg=
 
-    legend: 
+    legend:
       number_of_actions: !binary |
         157Xodek16gg16TXoteV15zXldeq
 
@@ -1581,7 +1581,7 @@ he:
       actions: !binary |
         16TXoteV15zXldeq
 
-    actions_last_year_legend: 
+    actions_last_year_legend:
       number_of_actions: !binary |
         157Xodek16gg15TXpNei15XXnNeV16o=
 
@@ -1609,7 +1609,7 @@ he:
     totals: !binary |
       16HXmdeb15XXnteZ150=
 
-    time_of_day_legend: 
+    time_of_day_legend:
       number_of_actions: !binary |
         157Xodek16gg16TXoteV15zXldeq
 
@@ -1642,7 +1642,7 @@ he:
     totals_hidden_context_count: !binary |
       15UtJXtjb3VudH0g15HXlNen16nXqNeZ150g157Xldeh16rXqNeZ150u
 
-    actions_day_of_week_legend: 
+    actions_day_of_week_legend:
       number_of_actions: !binary |
         157Xodek16gg16TXoteV15zXldeq
 
@@ -1703,7 +1703,7 @@ he:
     time_of_day: !binary |
       15bXntefINeR15nXldedICjXm9ecINeU16TXoteV15zXldeqKQ==
 
-    labels: 
+    labels:
       avg_created: !binary |
         16DXldem16jXlSDXkdee157Xldem16I=
 
@@ -1729,7 +1729,7 @@ he:
     tag_cloud_title: !binary |
       16LXoNefINeq15LXmdeV16og15zXm9ecINeU16TXoteV15zXldeq
 
-    running_time_all_legend: 
+    running_time_all_legend:
       percentage: !binary |
         15DXl9eV15Y=
 
@@ -1759,7 +1759,7 @@ he:
     click_to_return_link: !binary |
       15vXkNef
 
-    tod30_legend: 
+    tod30_legend:
       number_of_actions: !binary |
         157Xodek16gg16TXoteV15zXldeq
 
@@ -1792,7 +1792,7 @@ he:
       15EtMzAg15TXmdee15nXnSDXlNeQ15fXqNeV16DXmdedINeg15XXpteo15Ug
       15HXntee15XXpteiICV7Y291bnR9INek16LXldec15XXqg==
 
-  search: 
+  search:
     no_results: !binary |
       15TXl9eZ16TXldepINec15Ag15TXoNeZ15Eg16rXldem15DXldeq
 
@@ -1811,7 +1811,7 @@ he:
     notes_matching_query: !binary |
       16TXqten15nXldeqINeq15XXkNee15XXqiDXqdeQ15nXnNeq15A=
 
-  contexts: 
+  contexts:
     last_completed_in_context: !binary |
       15HXlNen16nXqCDXlteUICAo15DXl9eo15XXoNeV16ogJXtudW1iZXJ9KQ==
 
@@ -1901,12 +1901,12 @@ he:
     show_form_title: !binary |
       15TXldeh16TXqiDXlNen16nXqA==
 
-  models: 
-    todo: 
+  models:
+    todo:
       error_date_must_be_future: !binary |
         15fXmdeZ15Eg15zXlNeZ15XXqiDXqteQ16jXmdeaINei16rXmdeT15k=
 
-    user: 
+    user:
       error_project_not_associated: !binary |
         157XlteU15Qg16TXqNeV15nXmden15ggJXtwcm9qZWN0fSDXkNeZ16DXlSDX
         ntep15XXmdeZ15og16LXnSDXnteW15Qg157Xqdeq157XqSAle3VzZXJ9Lg==
@@ -1915,7 +1915,7 @@ he:
         157XlteU15Qg15TXp9ep16ggJXtjb250ZXh0fSDXkNeZ16DXlSDXntep15XX
         mdeZ15og16LXnSDXnteW15Qg157Xqdeq157XqSAle3VzZXJ9Lg==
 
-    project: 
+    project:
       feed_title: !binary |
         16TXqNeV15nXmden15jXmdedINeR157Xodec15XXnNeZ150=
 
@@ -1923,14 +1923,14 @@ he:
         16jXqdeZ157XqiDXm9ecINeU16TXqNeV15nXmden15jXmdedINei15HXldeo
         ICV7dXNlcm5hbWV9
 
-    preference: 
+    preference:
       due_on: !binary |
         LSDXmdei15Mg15Ele2RhdGV9
 
       due_in: !binary |
         16rXkNeo15nXmiDXmdei15Mg15HXoteV15MgJXtkYXlzfSDXmdee15nXnQ==
 
-  users: 
+  users:
     total_notes: !binary |
       15vXnCDXlNek16rXp9eZ15XXqg==
 
@@ -2081,7 +2081,7 @@ he:
     successfully_deleted_user: !binary |
       157Xqdeq157XqSAgJXt1c2VybmFtZX0g16DXnteX16cg15HXlNem15zXl9eU
 
-  preferences: 
+  preferences:
     page_title_edit: !binary |
       157Xodec15XXnNeZ1506Otei16jXmdeb16og15TXoteT16TXldeq
 
@@ -2126,7 +2126,7 @@ he:
     is_false: !binary |
       16nXnNeZ15zXmQ==
 
-    tabs: 
+    tabs:
       authentication: !binary |
         15DXmdee15XXqg==
 
@@ -2165,7 +2165,7 @@ he:
     title: !binary |
       15TXlNeS15PXqNeV16og16nXnNeZ
 
-  common: 
+  common:
     numbered_step: !binary |
       16bXoteTICV7bnVtYmVyfQ==
 
@@ -2217,7 +2217,7 @@ he:
     weeks: !binary |
       16nXkdeV16LXldeq
 
-    days_midsentence: 
+    days_midsentence:
       other: !binary |
         15nXnteZ150=
 
@@ -2230,7 +2230,7 @@ he:
     cancel: !binary |
       15HXmNec
 
-    sort: 
+    sort:
       sort: !binary |
         157XmdeZ158=
 
@@ -2274,7 +2274,7 @@ he:
     email: !binary |
       15PXldeQItec
 
-    note: 
+    note:
       other: !binary |
         JXtjb3VudH0g16TXqten15nXldeq
 
@@ -2356,7 +2356,7 @@ he:
     ok: !binary |
       15DXlden15k=
 
-    actions_midsentence: 
+    actions_midsentence:
       other: !binary |
         16TXoteV15zXldeq
 
@@ -2366,11 +2366,11 @@ he:
       one: !binary |
         16TXoteV15zXlA==
 
-  layouts: 
+  layouts:
     toggle_notes_title: !binary |
       15fXqdeZ16TXqiDXm9ecINeU16TXqten15nXldeq
 
-    mobile_navigation: 
+    mobile_navigation:
       home: !binary |
         MS3XkdeZ16o=
 
@@ -2395,7 +2395,7 @@ he:
       logout: !binary |
         16bXkA==
 
-    navigation: 
+    navigation:
       home: !binary |
         15HXmdeq
 
@@ -2506,7 +2506,7 @@ he:
     toggle_notes: !binary |
       15fXqdeZ16TXqiDXpNeq16fXmdeV16o=
 
-  feedlist: 
+  feedlist:
     actions_due_today: !binary |
       16TXoteV15zXldeqINec15HXmdem15XXoiDXlNeZ15XXnSDXkNeVINee15XX
       p9eT150g15nXldeq16g=
@@ -2593,18 +2593,18 @@ he:
       15HXl9eZ16jXqiDXlNeU15bXoNeUINei15HXldeoINeU15TXp9ep16gg15TX
       oNeq15XXnw==
 
-  number: 
-    currency: 
-      format: 
+  number:
+    currency:
+      format:
         unit: !binary |
           4oKq
 
         separator: .
         delimiter: ","
         format: "%u%n "
-    human: 
-      storage_units: 
-        units: 
+    human:
+      storage_units:
+        units:
           tb: !binary |
             15jXqNeUINeR15nXmdeY
 
@@ -2617,7 +2617,7 @@ he:
           mb: !binary |
             157XkteUINeR15nXmdeY
 
-          byte: 
+          byte:
             other: !binary |
               15HXqteZ150=
 
@@ -2625,15 +2625,15 @@ he:
               15HXmdeZ15g=
 
         format: "%u%n"
-    format: 
+    format:
       separator: .
       delimiter: ","
-  footer: 
+  footer:
     send_feedback: !binary |
       16nXnNeZ15fXqiDXntep15XXkSDXotecINeS15nXqNeh15AgJXt2ZXJzaW9u
       fQ==
 
-  notes: 
+  notes:
     delete_item_title: !binary |
       157Xl9eZ16fXqiDXpNeo15nXmA==
 
@@ -2673,7 +2673,7 @@ he:
     delete_note_title: !binary |
       157Xl9eZ16fXqiDXlNek16rXp9eZ16ogJyV7aWR9Jw==
 
-  states: 
+  states:
     stalled_plural: !binary |
       16LXpteV16jXmded
 

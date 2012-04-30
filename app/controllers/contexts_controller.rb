@@ -9,17 +9,13 @@ class ContextsController < ApplicationController
   prepend_before_filter :login_or_feed_token_required, :only => [:index]
 
   def index
-    # #true is passed here to force an immediate load so that size and empty?
-    # checks later don't result in separate SQL queries
-    @active_contexts = current_user.contexts.active(true)
-    @hidden_contexts = current_user.contexts.hidden(true)
+    @active_contexts = current_user.contexts.active
+    @hidden_contexts = current_user.contexts.hidden
     @new_context = current_user.contexts.build
 
     # save all contexts here as @new_context will add an empty one to current_user.contexts
     @all_contexts = @active_contexts + @hidden_contexts
     @count = @all_contexts.size
-
-    init_not_done_counts(['context'])
 
     respond_to do |format|
       format.html &render_contexts_html
@@ -200,6 +196,7 @@ class ContextsController < ApplicationController
       @no_hidden_contexts = @hidden_contexts.empty?
       @active_count = @active_contexts.size
       @hidden_count = @hidden_contexts.size
+      init_not_done_counts(['context'])
       render
     end
   end

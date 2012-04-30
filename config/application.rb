@@ -69,5 +69,6 @@ module Tracksapp
     
     # allow onenote:// and message:// as protocols for urls
     config.action_view.sanitized_allowed_protocols = 'onenote', 'message'
+    
   end
 end

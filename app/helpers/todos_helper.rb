@@ -447,7 +447,7 @@ module TodosHelper
       }
       page.todo     { container_id = "c#{@original_item_context_id}empty-nd" if @remaining_in_context == 0 }
     end
-    return container_id.blank? ? "" : "$(\"##{container_id}\").slideDown(100);"
+    return container_id.blank? ? "" : "$(\"##{container_id}\").slideDown(100);".html_safe
   end
 
   def render_animation(animation)

@@ -3,7 +3,7 @@ Given /^I have logged in as "(.*)" with password "(.*)"$/ do |username, password
   fill_in "Login", :with => username
   fill_in "Password", :with => password
   uncheck "Stay logged in:"
-  click_button "Sign in »"
+  click_button "Sign in"
   
   logout_regexp = @mobile_interface ? "Logout" : "Logout \(#{username}\)"
   page.should have_content(logout_regexp)
@@ -14,7 +14,7 @@ When /^I submit the login form as user "([^\"]*)" with password "([^\"]*)"$/ do 
   fill_in 'Login', :with => username
   fill_in 'Password', :with => password
   uncheck "Stay logged in:"
-  click_button "Sign in »"
+  click_button "Sign in"
 end
 
 When /^my session expires$/ do

@@ -1,10 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
 class TodosControllerTest < ActionController::TestCase
-  fixtures :users, :preferences, :projects, :contexts, :todos, :tags, :taggings, :recurring_todos
-
-  def setup
-  end
 
   def test_get_index_when_not_logged_in
     get :index
@@ -127,6 +123,20 @@ class TodosControllerTest < ActionController::TestCase
       put :create, :format => "xml", "request" => { "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{"notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>"foo bar" }
       assert_response 201
     end
+  end
+  
+  def test_create_todo_via_xhr
+    login_as(:admin_user)
+    assert_difference 'Todo.count' do
+      xhr :put, :create, "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{"notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>"foo bar"
+      assert_response 200
+    end
+  end
+  
+  def test_get_edit_form_using_xhr
+    login_as(:admin_user)
+    xhr :get, :edit, :id => todos(:call_bill).id
+    assert_response 200
   end
   
   def test_fail_to_create_todo_via_xml

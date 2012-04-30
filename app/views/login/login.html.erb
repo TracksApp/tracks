@@ -1,16 +1,9 @@
-<% auth_schemes = Tracks::Config.auth_schemes
-   show_database_form = auth_schemes.include?('database') || auth_schemes.include?('ldap')
-   show_openid_form = auth_schemes.include?('open_id')
-   show_cas_form = auth_schemes.include?('cas')
--%>
-
 <div title="<%= t('login.account_login') %>" id="loginform" class="form">
 
   <%= render_flash %>
 
   <h3><%= t('login.please_login') %>:</h3>
-<% if show_database_form %>
-  <div id="database_auth_form" style="display:<%=(@prefered_auth.eql?('database')) ? "block" : "none"%>">
+  <div id="database_auth_form" style="display:block">
       <%= form_tag :action=> 'login' do %>
         <table>
           <tr>
@@ -27,111 +20,9 @@
           </tr>
           <tr>
             <td></td>
-            <td><input type="submit" name="login" value="<%= t('login.sign_in') %> &#187;" class="primary" /></td>
+            <td><input type="submit" name="login" value="<%= t('login.sign_in') %>" class="primary" /></td>
           </tr>
         </table>
       <% end %>
   </div>
-<% end %>
-
-<% if show_openid_form %>
-  <div id="openid_auth_form" style="display:<%=(@prefered_auth.eql?('openid')) ? "block" : "none"%>">
-    <%= form_tag :action=> 'login' do %>
-      <table>
-        <tr>
-          <td><label for="openid_url"><%= User.human_attribute_name('open_id_url') %>:</label></td>
-          <td><input type="text" name="openid_url" id="openid_url" value="<%= @openid_url %>" class="login_text open_id" /></td>
-        </tr>
-       <tr>
-          <td><label for="user_noexpiry"><%= t('login.user_no_expiry') %>:</label></td>
-          <td><input type="checkbox" name="user_noexpiry" id="user_noexpiry" checked  /></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td><input type="submit" name="login" value="<%= t('login.sign_in') %> &#187;" class="primary" /></td>
-        </tr>
-      </table>
-    <% end %>
-  </div>
- <% end %>
-
-<% if show_cas_form %>
-  <div id="cas_auth_form" style="display:<%=(@prefered_auth.eql?('cas')) ? "block" : "none"%>">
-      <table>
-        <tr>
-          <td>
-			<% if @username && @user%>
-			  <p><%= t('login.cas_logged_in_greeting', :username => @username) %></p>
-			<% elsif @username %>
-			  <p><%= t('login.cas_no_user_found', :username => @username) %>
-                <%if SITE_CONFIG['open_signups']%>
-                   <%= t('login.cas_create_account', :signup_link => link_to(t('login.cas_signup_link'), signup_url)) %>
-                <%end%>
-              </p>
-			<% else %>
-			  <p><%= link_to(t('login.cas_login'), login_cas_url) %>  </p>
-			<% end %>
-			</td>
-        </tr>
-      </table>
-  </div>
- <% end %>
- 
 </div>
-<% if show_openid_form %><p id="alternate_auth_openid" class="alternate_auth"><%= t('login.option_separator') %> <a href="#" onclick="Login.showOpenid();return false;"><%= t('login.login_with_openid') %></a></p><% end %>
-<% if show_database_form %><p id="alternate_auth_database" class="alternate_auth"><%= t('login.option_separator') %> <a href="#" onclick="Login.showDatabase();return false;"><%= t('login.login_standard') %></a></p><% end %>
-<% if show_cas_form %><p id="alternate_auth_cas" class="alternate_auth"><%= t('login.option_separator') %> <a href="#" onclick="Login.showCAS();return false;"><%= t('login.login_cas')%></a></p><% end %>
-
-<script type="text/javascript">
-function showPreferredAuth() {
-  var preferredAuth = $.cookie('preferred_auth');
-  var casEnabled = <%= show_cas_form ? 'true' : 'false' %>;
-  var databaseEnabled = <%= show_database_form ? 'true' : 'false' %>;
-  var openidEnabled = <%= show_openid_form ? 'true' : 'false' %>;
-	if (preferredAuth && preferredAuth == 'openid' && openidEnabled) {
-	  Login.showOpenid();
-	}
-	else if (preferredAuth && preferredAuth == 'database' && databaseEnabled)  {
-	  Login.showDatabase();
-	}
-	else if (preferredAuth && preferredAuth == 'cas' && casEnabled)  {
-	  Login.showCAS();
-	}
-}
-$(document).ready(showPreferredAuth);
-
-var Login = {
-    showOpenid: function() {
-        $('#database_auth_form').hide();
-        $('#openid_auth_form').show();
-        $('#alternate_auth_openid').hide();
-        $('#alternate_auth_database').show();  ;
-        $('#alternate_auth_cas').show();
-        $('#openid_url').focus();
-        $('#openid_url').select();
-        $.cookie('preferred_auth', 'openid');
-    },
-
-    showDatabase: function(container) {
-        $('#openid_auth_form').hide();
-        $('#database_auth_form').show();
-        $('#alternate_auth_database').hide();
-        $('#alternate_auth_openid').show();
-        $('#alternate_auth_cas').show();
-        $('#user_login').focus();
-        $('#user_login').select();
-        $.cookie('preferred_auth', 'database');
-    },
-    showCAS: function(container) {
-        $('#database_auth_form').hide();
-        $('#openid_auth_form').hide();
-        $('#cas_auth_form').show();
-        $('#alternate_auth_cas').hide();
-        $('#alternate_auth_openid').show();
-        $('#alternate_auth_database').show();
-        $.cookie('preferred_auth', 'cas');
-    }
-
-}
-
-</script>

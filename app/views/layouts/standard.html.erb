@@ -24,7 +24,7 @@
       setup_periodic_check("<%=check_deferred_todos_path(:format => 'js')%>", 10*60, 'POST');
       <%= generate_i18n_strings %>
     </script>
-    <link rel="shortcut icon" href="<%= url_for(:controller => 'favicon.ico') %>" />
+    <link rel="shortcut icon" href="<%= image_path ('favicon.ico') %>" />
     <%= auto_discovery_link_tag(:rss, {:controller => "todos", :action => "index", :format => 'rss', :token => "#{current_user.token}"}, {:title => t('layouts.next_actions_rss_feed')}) %>
     <link rel="search" type="application/opensearchdescription+xml" title="Tracks" href="<%= search_plugin_path %>" />
     <title><%= @page_title %></title>
@@ -48,7 +48,7 @@
         &nbsp;|&nbsp;
 	       <%= link_to(t('layouts.toggle_notes'), "#", {:accesskey => "S", :title => t('layouts.toggle_notes_title'), :id => "toggle-notes-nav"}) %>
         &nbsp;|&nbsp;
-        <%= link_to( t('common.logout') + " (#{current_user.display_name}) »", logout_path) %>
+        <%= link_to("#{t('common.logout')} (#{current_user.display_name}) &raquo;".html_safe, logout_path) %>
       </div>
       <div id="navcontainer">
         <ul class="sf-menu">

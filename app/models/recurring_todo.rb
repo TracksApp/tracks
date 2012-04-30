@@ -433,7 +433,7 @@ class RecurringTodo < ActiveRecord::Base
         end
       else
         if self.every_other2>1
-          n_months = "#{self.every_other2} " + I18n.t('common.months')
+          n_months = "#{self.every_other2} #{I18n.t('common.months')}"
         else
           n_months = I18n.t('common.month')
         end

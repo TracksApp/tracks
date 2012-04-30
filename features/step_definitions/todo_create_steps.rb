@@ -14,7 +14,7 @@ Given /^I have a todo "([^"]*)" in context "([^"]*)" with tags "([^"]*)"$/ do |d
 end
 
 Given /^I have a todo "([^"]*)" in the context "([^"]*)" which is due tomorrow$/ do |description, context_name|
-  context = @current_user.contexts.find_or_create(:name => context_name)
+  context = @current_user.contexts.find_or_create_by_name(context_name)
   @todo = @current_user.todos.create!(:context_id => context.id, :description => description)
   @todo.due = @todo.created_at + 1.day
   @todo.save!

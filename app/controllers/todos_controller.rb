@@ -108,8 +108,7 @@ class TodosController < ApplicationController
         includes(:project, :context, :tags)
     else
       @todos = current_user.todos.includes(Todo::DEFAULT_INCLUDES)
-      @not_done_todos = current_user.todos.
-        where('contexts.hide = ? AND (projects.state = ? OR todos.project_id IS NULL)', false, 'active').
+      @not_done_todos = current_user.todos.active.not_hidden.
         reorder("todos.due IS NULL, todos.due ASC, todos.created_at ASC").
         includes(Todo::DEFAULT_INCLUDES)
     end
@@ -360,7 +359,7 @@ class TodosController < ApplicationController
   end
 
   def edit
-    @todo = current_user.todos.find_by_id(params['id']).includes(Todo::DEFAULT_INCLUDES)
+    @todo = current_user.todos.find(params['id'])
     @source_view = params['_source_view'] || 'todo'
     @tag_name = params['_tag_name']
     respond_to do |format|
