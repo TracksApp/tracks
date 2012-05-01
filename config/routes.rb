@@ -112,9 +112,12 @@ Tracksapp::Application.routes.draw do
       post 'check_deferred'
       post 'filter_to_context'
       post 'filter_to_project'
+      post 'add_predecessor'
     end
   end
   match 'todos/tag/:name' => 'todos#tag', :as => :tag
+  match 'todos/done/tag/:name' => "todos#done_tag", :as => :done_tag
+  match 'todos/all_done/tag/:name' => "todos#all_done_tag", :as => :all_done_tag
 
   resources :recurring_todos do
     member do

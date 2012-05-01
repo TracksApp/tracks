@@ -28,7 +28,7 @@ class IntegrationsController < ApplicationController
 
   def search_plugin
     # TODO: ASSET PATH!!
-    @icon_data = [File.open(Rails.root + '/public/images/done.png').read].
+    @icon_data = [File.open(Rails.root + '/app/assets/images/done.png').read].
       pack('m').gsub(/\n/, '')
  
     render :layout => false

@@ -189,6 +189,10 @@ class ApplicationController < ActionController::Base
       super # handle xml http auth via our own login code
     end
   end
+  
+  def sanitize(arg)
+    ActionController::Base.helpers.sanitize(arg)
+  end
 
   protected
 

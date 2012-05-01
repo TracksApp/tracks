@@ -434,7 +434,7 @@ var TodoItems = {
         return confirm(i18n['contexts.new_context_pre'] + givenContextName + i18n['contexts.new_context_post']);
     },
     generate_predecessor: function(todo_id, todo_spec) {
-        var img = "<img id=\"delete_dep_"+todo_id+"\" class=\"icon_delete_dep\" src=\""+ relative_to_root('images/blank.png') + "\">";
+        var img = "<img id=\"delete_dep_"+todo_id+"\" class=\"icon_delete_dep\" src=\""+ relative_to_root('assets/blank.png') + "\">";
         var anchor = "<a class=\"icon_delete_dep\" id=\""+todo_id+"\" href=\"#\">" + img + "</a>";
         var li = "<li style=\"display:none\" id=\"pred_"+todo_id+"\">"+ anchor +" "+ todo_spec + "</li>";
         return li;
@@ -728,7 +728,8 @@ var ProjectListPage = {
         };
         $.post(relative_to_root('projects/update/'+project_id), {
             'project[name]': value,
-            'update_project_name': 'true'
+            'update_project_name': 'true',
+            '_method': 'put'
         }, highlight, 'script');
         return(value);
     },
@@ -843,8 +844,9 @@ var ContextListPage = {
         var highlight = function(){
             $('div.context span#context_name').effect('highlight', {}, 500);
         };
-        $.post(relative_to_root('contexts/update/'+context_id), {
-            'context[name]': value
+        $.post(relative_to_root('contexts/'+context_id), {
+            'context[name]': value,
+            '_method': 'put'
         }, highlight);
         return value;
     },

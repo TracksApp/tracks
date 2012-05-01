@@ -23,7 +23,7 @@ a:hover {
     color: #FFFFFF;
 }
 
-div.footer a {        
+div.footer a {
     text-decoration: underline;
     color: #999999;
     }
@@ -58,12 +58,12 @@ h2 a:hover {
 }
 
 h4.alert  {
-  border: 1px solid #666666; 
+  border: 1px solid #666666;
    text-align: center;
 }
 
 h4.warning  {
-  border: 1px solid #ED2E38; 
+  border: 1px solid #ED2E38;
   background-color: #F6979C;
   color: #000;
 }
@@ -72,7 +72,7 @@ h4.error  {
    background:#c00;
 }
 h4.notice {
-  border: 1px solid #007E00; 
+  border: 1px solid #007E00;
   background-color: #c2ffc2;
   color: #007E00;
 }
@@ -91,7 +91,7 @@ span.r {
 }
 
 span.prj, span.ctx{
-    font-size: small;    
+    font-size: small;
 }
 
 #ctx, #pjr {
@@ -102,7 +102,7 @@ span.prj, span.ctx{
   padding: 0.1em 0;
 }
 
-/*   Draw attention to some text 
+/*   Draw attention to some text
     Same format as traffic lights */
 .red {
       color: #fff;
@@ -259,20 +259,20 @@ input#todo_description, input#todo_tag_list, textarea#todo_notes, select#todo_pr
 }
 
 .prev a {
-  background: url(images/previous.png) left center no-repeat;
+  background: url(assets/previous.png) left center no-repeat;
   padding-left: 20px;
 }
 
 .prev a:hover {
-  background: #cc3334 url(images/previous.png) left center no-repeat;
+  background: #cc3334 url(assets/previous.png) left center no-repeat;
 }
 
 .next a {
   text-align:right;
-  background: url(images/next.png) right center no-repeat;
+  background: url(assets/next.png) right center no-repeat;
   padding-right: 20px;
 }
 
 .next a:hover {
-  background: #cc3334 url(images/next.png) right center no-repeat;
+  background: #cc3334 url(assets/next.png) right center no-repeat;
 }

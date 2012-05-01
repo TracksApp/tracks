@@ -71,23 +71,23 @@ h4.alert  {
 }
 
 h4.warning  {
-  border: 1px solid #ED2E38; 
+  border: 1px solid #ED2E38;
   background-color: #F6979C;
   color: #000000;
 }
 h4.error  {
-   color:#fff; 
+   color:#fff;
    background:#c00;
 }
 h4.notice {
-  border: 1px solid #007E00; 
+  border: 1px solid #007E00;
   background-color: #c2ffc2;
   color: #007E00;
 }
 
 /*#notice {
   padding: 2px;
-  border: 1px solid #007E00; 
+  border: 1px solid #007E00;
   background-color: #c2ffc2;
   color: #007E00;
   margin-bottom: 15px;
@@ -147,8 +147,8 @@ input.login_text {
 	width:200px;
 }
 input.open_id {
-   background: url(../images/open-id-login-bg.gif) no-repeat; 
-   background-color: #fff; 
+   background: url(/assets/open-id-login-bg.gif) no-repeat;
+   background-color: #fff;
    background-position: 0 50%;
    color: #000;
    padding-left: 18px;

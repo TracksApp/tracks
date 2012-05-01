@@ -386,7 +386,7 @@ class TodosController < ApplicationController
     @source_view = params['_source_view'] || 'todo'
     @predecessor = current_user.todos.find_by_id(params['predecessor'])
     @predecessors = @predecessor.predecessors
-    @todo = current_user.todos.find_by_id(params['successor']).includes(Todo::DEFAULT_INCLUDES)
+    @todo = current_user.todos.includes(Todo::DEFAULT_INCLUDES).find_by_id(params['successor'])
     @original_state = @todo.state
     unless @predecessor.completed?
       @todo.add_predecessor(@predecessor)
@@ -757,7 +757,7 @@ class TodosController < ApplicationController
     # Set defaults for new_action
     @initial_tags = @tag_name
     unless @not_done_todos.empty?
-      @context = current_user.contexts.find_by_id(@not_done_todos[0].context_id)
+      @context = current_user.contexts.find(@not_done_todos.first.context_id)
     end
 
     # Set count badge to number of items with this tag

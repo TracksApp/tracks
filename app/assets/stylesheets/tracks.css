@@ -1313,7 +1313,7 @@ button.positive, .widgets a.positive{
 }
 
 .blockUI.blockOverlay {
-    background-image:url('../images/waiting.gif');
+    background-image:url('/assets/waiting.gif');
     background-repeat:no-repeat;
     background-position:center center;
     background-color:white;
@@ -1321,21 +1321,21 @@ button.positive, .widgets a.positive{
 }
 
 .bigWaiting {
-    background-image:url('../images/bigWaiting.gif');
+    background-image:url('/assets/bigWaiting.gif');
     background-repeat:no-repeat;
     background-position:center 20%;
     background-color:white;
 }
 
 .blackWaiting {
-    background-image:url('../images/blackWaiting.gif');
+    background-image:url('/assets/blackWaiting.gif');
     background-repeat:no-repeat;
     background-position:center center;
     background-color:black;
 }
 
 .bigBlackWaiting {
-    background-image:url('../images/bigBlackWaiting.gif');
+    background-image:url('/assets/bigBlackWaiting.gif');
     background-repeat:no-repeat;
     background-position:center center;
     background-color:black;
