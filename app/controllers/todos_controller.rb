@@ -685,7 +685,14 @@ class TodosController < ApplicationController
     @down_count = @count = @not_done_todos.size
 
     respond_to do |format|
-      format.html
+      format.html do
+        init_not_done_counts
+        @active_projects = current_user.projects.active
+        @active_contexts = current_user.contexts.active
+        @hidden_projects = current_user.projects.hidden
+        @hidden_contexts = current_user.contexts.hidden
+        @completed_projects = current_user.projects.completed
+      end
       format.m { render :action => 'mobile_list_deferred' }
       format.xml { render :xml => @not_done_todos.to_xml( *to_xml_params ) }
     end

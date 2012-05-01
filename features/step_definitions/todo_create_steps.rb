@@ -63,8 +63,8 @@ Given /^I have ([0-9]+) todos$/ do |count|
 end
 
 Given /^I have a todo with description "([^"]*)" in project "([^"]*)" with tags "([^"]*)" in the context "([^"]*)"$/ do |action_description, project_name, tags, context_name|
-  context = @current_user.contexts.find_or_create(:name => context_name)
-  project = @current_user.projects.find_or_create(:name => project_name)
+  context = @current_user.contexts.find_or_create_by_name(context_name)
+  project = @current_user.projects.find_or_create_by_name(project_name)
   @todo = @current_user.todos.create!(:context_id => context.id, :project_id => project.id, :description => action_description)
   @todo.tag_with(tags)
   @todo.save

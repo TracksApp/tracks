@@ -173,7 +173,7 @@ When /^I edit the tags of "([^"]*)" to "([^"]*)"$/ do |action_description, tags|
   todo.should_not be_nil
 
   open_edit_form_for(todo)
-  fill_in "tag_list", :with => tags
+  fill_in "todo_tag_list", :with => tags
   submit_edit_todo_form(todo)
 end
 

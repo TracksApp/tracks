@@ -192,7 +192,7 @@ module ApplicationHelper
   end
 
   def sidebar_html_for_titled_list (list, title)
-    return content_tag(:h3, title+" (#{list.length})")  + content_tag(:ul, sidebar_html_for_list(list))
+    return content_tag(:h3, title+" (#{list.size})")  + content_tag(:ul, sidebar_html_for_list(list))
   end
 
   def sidebar_html_for_list(list)
