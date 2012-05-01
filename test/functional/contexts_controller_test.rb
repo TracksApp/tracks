@@ -19,6 +19,12 @@ class ContextsControllerTest < ActionController::TestCase
     get :show, { :id => "1" }
     assert_template "contexts/show"
   end
+  
+  def test_get_edit_form_using_xhr
+    login_as(:admin_user)
+    xhr :get, :edit, :id => contexts(:errand).id
+    assert_response 200
+  end
 
   def test_create_context_via_ajax_increments_number_of_context
     login_as :other_user

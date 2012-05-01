@@ -70,7 +70,15 @@ Then /^I should see the context name is "([^\"]*)"$/ do |context_name|
 end
 
 Then /^he should see that a context named "([^\"]*)" (is|is not) present$/ do |context_name, visible|
-  step "I should #{visible} \"#{context_name}\""
+  context = @current_user.contexts.find_by_name(context_name)
+  if visible == "is"
+    context.should_not be_nil
+    css = "div#context_#{context.id} div.context_description a"
+    page.should have_selector(css, :visible => true)
+    page.find(:css, css).text.should == context_name
+  else
+    page.should_not have_selector("div#context_#{context.id} div.context_description a", :visible => true) if context
+  end
 end
 
 Then /^I should (see|not see) empty message for (todo|completed todo|deferred todo)s of context/ do |visible, state|

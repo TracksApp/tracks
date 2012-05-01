@@ -1,15 +1,13 @@
 <% context = context_form
-@context = context
 -%>
 
-<% form_for(context, :html => {
+<%= form_for(context, :html => {
     :id => dom_id(context, 'edit_form'),
     :class => "inline-form edit-project-form",
     :method => :put }) do
   -%>
 
-  <div id="edit_error_status"><%= error_messages_for("project") %></div>
-
+  <div id="edit_error_status"><%= get_list_of_error_messages_for(context) %></div>
 
   <label for="context_name"><%= t 'contexts.context_name' %></label><br/>
   <%= text_field('context', 'name', :class => 'context-name', :tabindex => next_tab_index) %><br/>

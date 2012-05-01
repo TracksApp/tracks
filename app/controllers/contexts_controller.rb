@@ -12,6 +12,7 @@ class ContextsController < ApplicationController
     @active_contexts = current_user.contexts.active
     @hidden_contexts = current_user.contexts.hidden
     @new_context = current_user.contexts.build
+    init_not_done_counts(['context'])
 
     # save all contexts here as @new_context will add an empty one to current_user.contexts
     @all_contexts = @active_contexts + @hidden_contexts
@@ -196,7 +197,6 @@ class ContextsController < ApplicationController
       @no_hidden_contexts = @hidden_contexts.empty?
       @active_count = @active_contexts.size
       @hidden_count = @hidden_contexts.size
-      init_not_done_counts(['context'])
       render
     end
   end

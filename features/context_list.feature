@@ -98,12 +98,6 @@ Feature: Manage the list of contexts
       | hidden | @hidden |
 
   @javascript
-  Scenario: Cannot add a context with comma in the name
-    When I go to the contexts page
-    And I add a new active context "foo, bar"
-    Then I should see "Name cannot contain the comma"
-
-  @javascript
   Scenario: I can drag and drop to order the contexts
     Given I have the following contexts
       | context |

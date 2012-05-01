@@ -101,17 +101,17 @@ module ApplicationHelper
   # actions or multiple actions
   #
   def count_undone_todos_phrase(todos_parent)
-    controller.count_undone_todos_phrase(todos_parent)
+    controller.count_undone_todos_phrase(todos_parent).html_safe
   end
 
   def count_undone_todos_phrase_text(todos_parent)
-    count_undone_todos_phrase(todos_parent).gsub("&nbsp;"," ")
+    count_undone_todos_phrase(todos_parent).gsub("&nbsp;"," ").html_safe
   end
 
   def count_undone_todos_and_notes_phrase(project)
     s = count_undone_todos_phrase(project)
     s += ", #{t('common.note', :count => project.note_count)}" unless project.note_count == 0
-    s
+    s.html_safe
   end
   
   def link_to_context(context, descriptor = sanitize(context.name))

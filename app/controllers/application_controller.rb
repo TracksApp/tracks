@@ -72,32 +72,19 @@ class ApplicationController < ActionController::Base
     render :text => message, :status => status
   end
 
-  # def rescue_action(exception)
-  #   log_error(exception) if logger
-  #   respond_to do |format|
-  #     format.html do
-  #       notify :warning, "An error occurred on the server."
-  #       render :action => "index"
-  #     end
-  #     format.js { render :action => 'error' }
-  #     format.xml { render :text => 'An error occurred on the server.' + $! }
-  #   end
-  # end
-
   # Returns a count of next actions in the given context or project The result
   # is count and a string descriptor, correctly pluralised if there are no
   # actions or multiple actions
   #
-  def count_undone_todos_phrase(todos_parent, string="actions")
+  def count_undone_todos_phrase(todos_parent)
     count = count_undone_todos(todos_parent)
     deferred_count = count_deferred_todos(todos_parent)
     if count == 0 && deferred_count > 0
-      word = deferred_count == 1 ? string.singularize : string.pluralize
-      word = "deferred&nbsp;" + word
-      return (deferred_count.to_s + "&nbsp;" + word).html_safe
+      word = "#{I18n.t('common.deferred')}&nbsp;#{I18n.t('common.actions_midsentence', :count => deferred_count)}"
+      return "#{deferred_count.to_s}&nbsp;#{word}".html_safe
     else
-      word = count == 1 ? string.singularize : string.pluralize
-      return (count.to_s + "&nbsp;" + word).html_safe
+      word = I18n.t('common.actions_midsentence', :count => count)
+      return "#{count.to_s}&nbsp;#{word}".html_safe
     end
   end
 
