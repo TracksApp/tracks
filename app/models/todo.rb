@@ -46,10 +46,10 @@ class Todo < ActiveRecord::Base
   scope :with_tag, lambda { |tag_id| joins("INNER JOIN taggings ON todos.id = taggings.taggable_id").where("taggings.tag_id = ? ", tag_id) }
   scope :with_tags, lambda { |tag_ids| where("EXISTS(SELECT * from taggings t WHERE t.tag_id IN (?) AND t.taggable_id=todos.id AND t.taggable_type='Todo')", tag_ids) }
   # scope :of_user, lambda { |user_id| {:conditions => ["todos.user_id = ? ", user_id] } }
-  # scope :completed_after, lambda { |date| {:conditions => ["todos.completed_at > ?", date] } }
-  # scope :completed_before, lambda { |date| {:conditions => ["todos.completed_at < ?", date] } }
-  # scope :created_after, lambda { |date| {:conditions => ["todos.created_at > ?", date] } }
-  # scope :created_before, lambda { |date| {:conditions => ["todos.created_at < ?", date] } }
+  scope :completed_after, lambda { |date| where("todos.completed_at > ?", date) }
+  scope :completed_before, lambda { |date| where("todos.completed_at < ?", date) }
+  scope :created_after, lambda { |date| where("todos.created_at > ?", date) }
+  scope :created_before, lambda { |date| where("todos.created_at < ?", date) }
 
   STARRED_TAG_NAME = "starred"
   DEFAULT_INCLUDES = [ :project, :context, :tags, :taggings, :pending_successors, :uncompleted_predecessors, :recurring_todo ]

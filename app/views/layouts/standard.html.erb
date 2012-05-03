@@ -68,14 +68,14 @@
             <ul>
               <li><%= navigation_link( t('layouts.navigation.calendar'), calendar_path, :title => t('layouts.navigation.calendar_title')) %></li>
               <li><%= navigation_link( t('layouts.navigation.completed_tasks'), done_overview_path, {:accesskey=>"d", :title=>t('layouts.navigation.completed_tasks_title')} ) %></li>
-              <li><%= navigation_link( t('layouts.navigation.feeds'), {:controller => "feedlist", :action => "index"}, :title => t('layouts.navigation.feeds_title')) %></li>
-              <li><%= navigation_link( t('layouts.navigation.stats'), {:controller => "stats", :action => "index"}, :title => t('layouts.navigation.stats_title')) %></li>
+              <li><%= navigation_link( t('layouts.navigation.feeds'), feeds_path, :title => t('layouts.navigation.feeds_title')) %></li>
+              <li><%= navigation_link( t('layouts.navigation.stats'), stats_path, :title => t('layouts.navigation.stats_title')) %></li>
             </ul>
           </li>
           <li><a href="#"><%= t('layouts.navigation.admin') %></a>
             <ul>
               <li><%= navigation_link( t('layouts.navigation.preferences'), preferences_path, {:accesskey => "u", :title => t('layouts.navigation.preferences_title')} ) %></li>
-              <li><%= navigation_link( t('layouts.navigation.export'), {:controller => "data", :action => "index"}, {:accesskey => "i", :title => t('layouts.navigation.export_title')} ) %></li>
+              <li><%= navigation_link( t('layouts.navigation.export'), data_path, {:accesskey => "i", :title => t('layouts.navigation.export_title')} ) %></li>
               <% if current_user.is_admin? -%>
                 <li><%= navigation_link(t('layouts.navigation.manage_users'), users_path, {:accesskey => "a", :title => t('layouts.navigation.manage_users_title')} ) %></li>
               <% end -%>
@@ -87,7 +87,7 @@
               <li><%= link_to t('layouts.navigation.api_docs'), rest_api_docs_path %></li>
             </ul>
           </li>
-          <li><%= navigation_link(image_tag("system-search.png", :size => "16X16", :border => 0), {:controller => "search", :action => "index"}, :title => t('layouts.navigation.search')) %></li>
+          <li><%= navigation_link(image_tag("system-search.png", :size => "16X16", :border => 0), search_path, :title => t('layouts.navigation.search')) %></li>
         </ul>
       </div>
       <%= render_flash %>

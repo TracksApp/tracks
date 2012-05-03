@@ -5,23 +5,25 @@ class SearchController < ApplicationController
   def results
     @source_view = params['_source_view'] || 'search'
     @page_title = "TRACKS::Search Results for #{params[:search]}"
-    terms = '%' + params[:search] + '%'
+    terms = "%#{params[:search]}%"
 
     @found_not_complete_todos = current_user.todos.
       where("(todos.description LIKE ? OR todos.notes LIKE ?) AND todos.completed_at IS NULL", terms, terms).
       includes(Todo::DEFAULT_INCLUDES).
-      reorder("todos.due IS NULL, todos.due ASC, todos.created_at ASC")
+      reorder("todos.due IS NULL, todos.due ASC, todos.created_at ASC").
+      all
     
     @found_complete_todos = current_user.todos.
       where("(todos.description LIKE ? OR todos.notes LIKE ?) AND NOT (todos.completed_at IS NULL)", terms, terms).
       includes(Todo::DEFAULT_INCLUDES).
-      reorder("todos.completed_at DESC")
+      reorder("todos.completed_at DESC").
+      all
       
     @found_todos = @found_not_complete_todos + @found_complete_todos
 
-    @found_projects = current_user.projects.where("name LIKE ? OR description LIKE ?", terms, terms)
-    @found_notes = current_user.notes.where("body LIKE ?", terms)
-    @found_contexts = current_user.contexts.where("name LIKE ?", terms)
+    @found_projects = current_user.projects.where("name LIKE ? OR description LIKE ?", terms, terms).all
+    @found_notes = current_user.notes.where("body LIKE ?", terms).all
+    @found_contexts = current_user.contexts.where("name LIKE ?", terms).all
     
     # TODO: limit search to tags on todos
     @found_tags = Tagging.find_by_sql([

@@ -13,5 +13,17 @@ class FeedlistControllerTest < ActionController::TestCase
     assert_response :success
     assert_equal "TRACKS::Feeds", assigns['page_title']
   end
+  
+  def test_get_feeds_for_context_using_xhr
+    login_as(:admin_user)
+    xhr :get, :get_feeds_for_context, :context_id => contexts(:errand).id
+    assert_response 200
+  end
+  
+  def test_get_feeds_for_project_using_xhr
+    login_as(:admin_user)
+    xhr :get, :get_feeds_for_project, :project_id => projects(:timemachine).id
+    assert_response 200
+  end
     
 end

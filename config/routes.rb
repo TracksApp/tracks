@@ -72,6 +72,10 @@ Tracksapp::Application.routes.draw do
   match 'integrations/google_gadget.xml' => 'integrations#google_gadget', :as => 'google_gadget'
   match 'preferences' => "preferences#index"
   match 'preferences/render_date_format' => "preferences#render_date_format"
+  match 'feeds' => "feedlist#index", :as => 'feeds'
+  match 'feedlist/get_feeds_for_context' => 'feedlist#get_feeds_for_context'
+  match 'feedlist/get_feeds_for_project' => 'feedlist#get_feeds_for_project'
+  match 'data' => "data#index"
   
   resources :contexts do
     member do
@@ -143,6 +147,9 @@ Tracksapp::Application.routes.draw do
   match 'signup' => "users#new"
   
   resources :notes
+  
+  match 'search' => 'search#index'
+  match 'search/results' => 'search#results', :via => 'post'
   
   # map.resources :users,
   #   :member => {:change_password => :get, :update_password => :post,

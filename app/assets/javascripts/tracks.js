@@ -1160,7 +1160,7 @@ $.fn.clearDeps = function() {
 /**************************************/
 
 function generic_get_script_for_list(element, getter, param){
-    $(element).load(relative_to_root(getter+'?'+param));
+    $(element).load(relative_to_root(getter+'.js?'+param));
 }
 
 function default_ajax_options_for_submit(ajax_type, element_to_block) {
