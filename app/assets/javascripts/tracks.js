@@ -35,7 +35,7 @@ var TracksForm = {
         $('#project_name').html(name);
     },
     set_tag_list: function (name) {
-        $('input#todo_tag_list').val(name);
+        $('input#tag_list').val(name);
     },
     set_tag_list_for_multi_add: function (name) {
         $('#multi_tag_list').val(name);
@@ -252,7 +252,6 @@ var TracksPages = {
         ContextItems.setup_autocomplete_for_contexts('input[name=context_name]');
         ContextItems.setup_autocomplete_for_contexts('input[id="project_default_context_name"]');
         TracksPages.setup_autocomplete_for_tag_list('input[name=tag_list]'); // todo edit form
-        TracksPages.setup_autocomplete_for_tag_list('input[name=todo_tag_list]'); // new todo form
         TracksPages.setup_autocomplete_for_tag_list('input[id="project_default_tags"]');
         TodoItems.setup_autocomplete_for_predecessor();
     },
