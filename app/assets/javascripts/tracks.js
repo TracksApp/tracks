@@ -726,7 +726,7 @@ var ProjectListPage = {
         var highlight = function(){
             $('h2#project_name').effect('highlight', {}, 500);
         };
-        $.post(relative_to_root('projects/update/'+project_id), {
+        $.post(relative_to_root('projects/'+project_id), {
             'project[name]': value,
             'update_project_name': 'true',
             '_method': 'put'

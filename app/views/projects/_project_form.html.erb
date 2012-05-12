@@ -2,7 +2,7 @@
 project = project_form
 %>
 
-<% form_for(project, :html => {
+<%= form_for(project, :html => {
     :id => dom_id(project, 'edit_form'),
     :class => "inline-form edit-project-form",
     :method => :put }) do

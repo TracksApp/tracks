@@ -84,7 +84,7 @@ class ApplicationController < ActionController::Base
       return "#{deferred_count.to_s}&nbsp;#{word}".html_safe
     else
       word = I18n.t('common.actions_midsentence', :count => count)
-      return "#{count.to_s}&nbsp;#{word}".html_safe
+      return "#{count}&nbsp;#{word}".html_safe
     end
   end
 
