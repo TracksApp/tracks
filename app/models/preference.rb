@@ -3,8 +3,10 @@ class Preference < ActiveRecord::Base
   belongs_to :sms_context, :class_name => 'Context'
 
   attr_accessible :date_format, :week_starts, :show_number_completed, :show_completed_projects_in_sidebar,
-    :show_hidden_contexts_in_sidebar, :staleness_starts, :due_style, :admin_email, :locale
-  
+    :show_hidden_contexts_in_sidebar, :staleness_starts, :due_style, :admin_email, :locale,
+    :title_date_format, :time_zone, :show_hidden_projects_in_sidebar, :show_project_on_todo_done, :review_period,
+    :refresh, :verbose_action_descriptors, :mobile_todos_per_page, :sms_email, :sms_context_id
+    
   def self.due_styles
     { :due_in_n_days => 0, :due_on => 1}
   end

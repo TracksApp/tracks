@@ -152,6 +152,7 @@ Tracksapp::Application.routes.draw do
   match 'signup' => "users#new"
   
   resources :notes
+  resources :preferences
   
   match 'search' => 'search#index'
   match 'search/results' => 'search#results', :via => 'post'
