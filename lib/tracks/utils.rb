@@ -31,7 +31,7 @@ module Tracks
       Sanitize::Config::RELAXED[:protocols]['a']['href'] << 'message'
   
       rendered = Sanitize.clean(rendered, Sanitize::Config::RELAXED)
-      return rendered
+      return rendered.html_safe
     end
     
     # Uses RedCloth to transform text using either Textile or Markdown Need to

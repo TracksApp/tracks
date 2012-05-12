@@ -324,8 +324,8 @@ class ProjectsController < ApplicationController
       @hidden_projects = current_user.projects.hidden
       @completed_projects = current_user.projects.completed
       @down_count = @active_projects.size + @hidden_projects.size + @completed_projects.size
-      cookies[:mobile_url]= {:value => request.request_uri, :secure => SITE_CONFIG['secure_cookies']}
-      render :action => 'index_mobile'
+      cookies[:mobile_url]= {:value => request.fullpath, :secure => SITE_CONFIG['secure_cookies']}
+      render
     end
   end
 
@@ -336,9 +336,9 @@ class ProjectsController < ApplicationController
       else
         @project_default_context = t('projects.default_context', :context => @project.default_context.name)
       end
-      cookies[:mobile_url]= {:value => request.request_uri, :secure => SITE_CONFIG['secure_cookies']}
+      cookies[:mobile_url]= {:value => request.fullpath, :secure => SITE_CONFIG['secure_cookies']}
       @mobile_from_project = @project.id
-      render :action => 'project_mobile'
+      render
     end
   end
   

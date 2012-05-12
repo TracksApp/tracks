@@ -18,7 +18,7 @@ class NotesController < ApplicationController
     @page_title = "TRACKS::Note " + @note.id.to_s
     respond_to do |format|
       format.html
-      format.m { render :action => 'note_mobile' }
+      format.m
     end
   end
 
@@ -29,7 +29,7 @@ class NotesController < ApplicationController
     @saved = @note.save
 
     respond_to do |format|
-      format.js 
+      format.js
       format.xml do
         if @saved
           head :created, :location => note_url(@note), :text => "new note with id #{@note.id}"

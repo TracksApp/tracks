@@ -58,10 +58,13 @@ Tracksapp::Application.routes.draw do
   
   root :to => 'todos#index'
   
+  match 'login' => 'login#login'
+  match 'login/expire_session' => 'login#expire_session'
+  match 'login/check_expiry' => 'login#check_expiry'
+  match 'logout' => 'login#logout'
+  
   match "tickler" => "todos#list_deferred"
   match 'review' => "projects#review"
-  match 'login' => 'login#login'
-  match 'logout' => 'login#logout'
   match 'calendar' => "todos#calendar"
   match 'stats' => 'stats#index'
   match 'done' => "stats#done", :as => 'done_overview'
@@ -109,6 +112,7 @@ Tracksapp::Application.routes.draw do
       put 'toggle_check'
       put 'toggle_star'
       put 'defer'
+      get 'show_notes'
     end
     collection do
       get 'done'
@@ -123,6 +127,7 @@ Tracksapp::Application.routes.draw do
   match 'todos/done/tag/:name' => "todos#done_tag", :as => :done_tag
   match 'todos/all_done/tag/:name' => "todos#all_done_tag", :as => :all_done_tag
   match 'auto_complete_for_predecessor' => 'todos#auto_complete_for_predecessor'
+  match 'mobile' => 'todos#index', :format => 'm'
 
   resources :recurring_todos do
     member do

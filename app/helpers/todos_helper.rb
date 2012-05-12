@@ -135,7 +135,7 @@ module TodosHelper
   end
 
   def tag_span (tag, mobile=false)
-    content_tag(:span, :class => "tag #{tag.name.gsub(' ','-')}") { link_to(tag.name, (mobile ? mobile_tag_path(tag.name) : tag_path(tag.name))) }
+    content_tag(:span, :class => "tag #{tag.name.gsub(' ','-')}") { link_to(tag.name, tag_path(tag.name, :format => mobile ? :m : :html)) }
   end
 
   def tag_list(todo=@todo, mobile=false)
@@ -143,17 +143,11 @@ module TodosHelper
   end
 
   def tag_list_mobile(todo=@todo)
-    unless todo.tags.all_except_starred.empty?
-      return tag_list(todo, true)
-    else
-      return ""
-    end
+    todo.tags.all_except_starred.empty? ? "" : tag_list(todo, true)
   end
 
   def deferred_due_date(todo=@todo)
-    if todo.deferred? && todo.due
-      t('todos.action_due_on', :date => format_date(todo.due))
-    end
+    t('todos.action_due_on', :date => format_date(todo.due)) if todo.deferred? && todo.due
   end
 
   def project_and_context_links(todo, parent_container_type, opts = {})

@@ -1,0 +1,12 @@
+<h2><%=@context.name%></h2>
+<%
+# select actions from this context
+@not_done = @not_done_todos.select {|t| t.context_id == @context.id }
+
+if not @not_done.empty?
+  # only show a context when there are actions in it
+-%>
+<ul class="c">
+<%= render :partial => @not_done, :locals => { :parent_container_type => "context" }-%>
+</ul>
+<% end -%>

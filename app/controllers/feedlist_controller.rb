@@ -6,7 +6,7 @@ class FeedlistController < ApplicationController
     @page_title = 'TRACKS::Feeds'
     
     unless mobile?
-      init_data_for_sidebar 
+      init_data_for_sidebar
     else
       @projects = current_user.projects
       @contexts = current_user.contexts
@@ -21,7 +21,7 @@ class FeedlistController < ApplicationController
     
     respond_to do |format|
       format.html { render :layout => 'standard' }
-      format.m { render :action => 'mobile_index' }
+      format.m
     end
   end
   

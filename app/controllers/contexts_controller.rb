@@ -207,8 +207,8 @@ class ContextsController < ApplicationController
       @active_contexts = current_user.contexts.active
       @hidden_contexts = current_user.contexts.hidden
       @down_count = @active_contexts.size + @hidden_contexts.size
-      cookies[:mobile_url]= {:value => request.request_uri, :secure => SITE_CONFIG['secure_cookies']}
-      render :action => 'index_mobile'
+      cookies[:mobile_url]= {:value => request.fullpath, :secure => SITE_CONFIG['secure_cookies']}
+      render
     end
   end
 
@@ -217,9 +217,9 @@ class ContextsController < ApplicationController
       @page_title = "TRACKS::List actions in "+@context.name
       @not_done = @not_done_todos.select {|t| t.context_id == @context.id }
       @down_count = @not_done.size
-      cookies[:mobile_url]= {:value => request.request_uri, :secure => SITE_CONFIG['secure_cookies']}
+      cookies[:mobile_url]= {:value => request.fullpath, :secure => SITE_CONFIG['secure_cookies']}
       @mobile_from_context = @context.id
-      render :action => 'mobile_show_context'
+      render
     end
   end
   

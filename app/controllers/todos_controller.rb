@@ -132,7 +132,7 @@ class TodosController < ApplicationController
         @page_title = t('todos.mobile_todos_page_title')
         @home = true
   
-        cookies[:mobile_url]= { :value => request.request_uri, :secure => SITE_CONFIG['secure_cookies']}
+        cookies[:mobile_url]= { :value => request.fullpath, :secure => SITE_CONFIG['secure_cookies']}
         determine_down_count
   
         render :action => 'index'
@@ -158,7 +158,6 @@ class TodosController < ApplicationController
           # we have a project but not a context -> use the default context
           @mobile_from_context = @mobile_from_project.default_context
         end
-        render :action => "new"
       }
     end
   end
@@ -369,7 +368,6 @@ class TodosController < ApplicationController
         @contexts = current_user.contexts
         @edit_mobile = true
         @return_path=cookies[:mobile_url] ? cookies[:mobile_url] : mobile_path
-        render :template => "/todos/edit_mobile.html.erb"
       }
     end
   end
@@ -693,7 +691,7 @@ class TodosController < ApplicationController
         @hidden_contexts = current_user.contexts.hidden
         @completed_projects = current_user.projects.completed
       end
-      format.m { render :action => 'mobile_list_deferred' }
+      format.m
       format.xml { render :xml => @not_done_todos.to_xml( *to_xml_params ) }
     end
   end
@@ -774,8 +772,7 @@ class TodosController < ApplicationController
     respond_to do |format|
       format.html
       format.m {
-        cookies[:mobile_url]= {:value => request.request_uri, :secure => SITE_CONFIG['secure_cookies']}
-        render :action => "mobile_tag"
+        cookies[:mobile_url]= {:value => request.fullpath, :secure => SITE_CONFIG['secure_cookies']}
       }
       format.text {
         render :action => 'index', :layout => false, :content_type => Mime::TEXT
@@ -980,7 +977,7 @@ class TodosController < ApplicationController
         redirect_to home_path, "Viewing note of todo is not implemented"
       }
       format.m   {
-        render:action => "mobile_show_notes"
+        render :action => "show_notes"
       }
     end
   end

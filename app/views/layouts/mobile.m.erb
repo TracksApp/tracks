@@ -19,16 +19,16 @@
   <li class="link"><%=     (link_to(t('layouts.mobile_navigation.home'), todos_path(:format => 'm'))) unless @home -%></li>
   <li class="link"><%=     (link_to(t('layouts.mobile_navigation.contexts'), contexts_path(:format => 'm'))) -%></li>
   <li class="link"><%=     (link_to(t('layouts.mobile_navigation.projects'), projects_path(:format => 'm'))) -%></li>
-  <li class="link"><%=     (link_to(t('layouts.mobile_navigation.starred'), {:action => "tag", :controller => "todos", :id => "starred.m"})) -%></li>
+  <li class="link"><%=     (link_to(t('layouts.mobile_navigation.starred'), tag_path("starred", :format => 'm'))) -%></li>
 <% end -%>
 </ul></div>
 <div id="content"><%= render_flash -%><%=  yield -%></div>
 <hr/><% if current_user && !current_user.prefs.nil? -%>
 <ul class="nav">
   <li class="link"><%= (link_to(t('layouts.mobile_navigation.logout'), logout_path(:format => 'm'))) -%></li>
-  <li class="link"><%= (link_to(t('layouts.mobile_navigation.tickler'), {:action => "index", :controller => "tickler.m"})) -%></li>
-  <li class="link"><%= (link_to(t('layouts.mobile_navigation.feeds'), {:action => "index", :controller => "feeds.m"})) -%></li>
+  <li class="link"><%= (link_to(t('layouts.mobile_navigation.tickler'), tickler_path(:format => :m))) -%></li>
+  <li class="link"><%= (link_to(t('layouts.mobile_navigation.feeds'), feeds_path(:format=>:m))) -%></li>
 </ul>
 <% end -%>
-<%= render :partial => "shared/mobile_footer" -%>  
+<%= render :partial => "shared/footer" -%>
 </body></html>

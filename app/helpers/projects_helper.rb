@@ -32,21 +32,16 @@ module ProjectsHelper
   end
 
   def project_next_prev_mobile
-    html = '<ul class="next-prev-project">'
+    prev_project,next_project= "", ""
     unless @previous_project.nil?
       project_name = truncate(@previous_project.name, :length => 40, :omission => "...")
-      html << '<li class="prev">'
-      html << link_to_project_mobile(@previous_project, "5", "#{project_name}")
-      html << '</li>'
+      prev_project = content_tag(:li, link_to_project_mobile(@previous_project, "5", project_name), :class=>"prev")
     end
     unless @next_project.nil?
       project_name = truncate(@next_project.name, :length => 40, :omission => "...")
-      html << '<li class="next">'
-      html << link_to_project_mobile(@next_project, "6", "#{project_name}")
-      html << '</li>'
+      next_project = content_tag(:li, link_to_project_mobile(@next_project, "6", project_name), :class=>"next")
     end
-    html << '</ul>'
-    html
+    return content_tag(:ul, "#{prev_project}#{next_project}".html_safe, :class=>"next-prev-project").html_safe
   end
 
   def link_to_delete_project(project, descriptor = sanitize(project.name))

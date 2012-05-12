@@ -1,0 +1,2 @@
+<% context = context_listing -%>
+<div id="ctx"><%= link_to context.name, context_path(context, :format => 'm') %><%= " (#{count_undone_todos_phrase(context)})".html_safe %></div>

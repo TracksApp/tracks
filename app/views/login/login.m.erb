@@ -1,14 +1,10 @@
-<% auth_schemes = Tracks::Config.auth_schemes
-   show_database_form = auth_schemes.include?('database')
-   show_openid_form = auth_schemes.include?('open_id')
+<%
+  auth_schemes = Tracks::Config.auth_schemes
+  show_database_form = auth_schemes.include?('database')
 -%>
-
 <div title="<%= t('login.account_login') %>" id="loginform" class="form">
-
-  <%= render_flash %>
-
+  <%= render_flash -%>
   <h3><%= t('login.please_login') %>:</h3>
-
 <% if show_database_form %>
   <div id="database_auth_form">
       <%= form_tag login_path(:format => 'm') do %>

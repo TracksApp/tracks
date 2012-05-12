@@ -1,8 +1,8 @@
 Given /^I have logged in as "(.*)" with password "(.*)"$/ do |username, password|
   step "I go to the login page"
-  fill_in "Login", :with => username
-  fill_in "Password", :with => password
-  uncheck "Stay logged in:"
+  fill_in "user_login", :with => username
+  fill_in "user_password", :with => password
+  uncheck "user_noexpiry"
   click_button "Sign in"
   
   logout_regexp = @mobile_interface ? "Logout" : "Logout \(#{username}\)"
@@ -25,6 +25,7 @@ When /^my session expires$/ do
   # force check of expiry bypassing timeout
   js = '$.ajax({type: "GET", url: "/login/check_expiry", dataType: "script", async: false});'
   page.execute_script(js);
+  sleep 1
 end
 
 When /^I log out of Tracks$/ do

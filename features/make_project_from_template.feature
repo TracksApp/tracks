@@ -1,9 +1,9 @@
 Feature: Create project from template
   In order to be able to create a project from a template
-  As a user this installed Tracks with console access
+  As a user who has installed Tracks with console access
   I want to run the script to add projects and actions from a template
   
-  These scenario's need selenium so that there is a Tracks server running
+  These scenarios are tagged javascript so that there is a Tracks server running
   to use from the command line script
 
   Background:
@@ -14,7 +14,7 @@ Feature: Create project from template
     And I have logged in as "testuser" with password "secret"
     And I have a context called "Context A"
   
-  @javascript
+  @javascript @announce @wip
   Scenario: Create a project with one task
     Given a template that looks like
       """

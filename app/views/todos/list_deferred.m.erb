@@ -1,0 +1,4 @@
+<% if @count == 0 -%>
+<div class="message"><p><%= t('todos.no_deferred_actions') %></p></div>
+<% end -%>
+<%= render :partial => @contexts, :locals => { :collapsible => true } -%>
