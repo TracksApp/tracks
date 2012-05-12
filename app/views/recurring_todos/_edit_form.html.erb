@@ -1,6 +1,6 @@
 <div class="recurring_container">
 <%= form_for(@recurring_todo, :html=> { :id=>'recurring-todo-form-edit-action', :name=>'recurring_todo', :class => 'inline-form' }) do |f| -%>
-  <div id="edit_error_status"><%= error_messages_for("item", :object_name => 'action') %></div>
+  <div id="edit_error_status"><%= get_list_of_error_messages_for(@recurring_todo) %></div>
 
   <div id="recurring_todo_form_container">
     <div id="recurring_todo">
@@ -38,19 +38,19 @@
       <label for="recurring_todo[ends_on]"><%= t('todos.recurrence.ends_on') %>:</label><br/>
       <%= radio_button_tag('recurring_todo[ends_on]', 'no_end_date', @recurring_todo.ends_on == 'no_end_date', {:tabindex => next_tab_index})%> <%= t('todos.recurrence.no_end_date') %><br/>
       <%= radio_button_tag('recurring_todo[ends_on]', 'ends_on_number_of_times', @recurring_todo.ends_on == 'ends_on_number_of_times', {:tabindex => next_tab_index})%>
-      <%= t('todos.recurrence.ends_on_number_times', :number => text_field( :recurring_todo, :number_of_occurences, "size" => 3, "tabindex" => next_tab_index)) %><br/>
+      <%= raw t('todos.recurrence.ends_on_number_times', :number => text_field( :recurring_todo, :number_of_occurences, "size" => 3, "tabindex" => next_tab_index)) %><br/>
       <%= radio_button_tag('recurring_todo[ends_on]', 'ends_on_end_date', @recurring_todo.ends_on == 'ends_on_end_date', {:tabindex => next_tab_index})%>
-      <%= t('todos.recurrence.ends_on_date', :date => text_field_tag('recurring_todo_edit_end_date', format_date(@recurring_todo.end_date), "size" => 12, "class" => "Date", "tabindex" => next_tab_index, "autocomplete" => "off")) %><br/>
+      <%= raw t('todos.recurrence.ends_on_date', :date => text_field_tag('recurring_todo_edit_end_date', format_date(@recurring_todo.end_date), "size" => 12, "class" => "Date", "tabindex" => next_tab_index, "autocomplete" => "off")) %><br/>
     </div></div>
   <div id="recurring_edit_daily" style="display:<%= @recurring_todo.recurring_period == 'daily' ? 'block' : 'none' %> ">
     <label><%= t('todos.recurrence.daily_options') %></label><br/>
     <%= radio_button_tag('recurring_todo[daily_selector]', 'daily_every_x_day', !@recurring_todo.only_work_days, {:tabindex => next_tab_index})%>
-    <%= t('todos.recurrence.daily_every_number_day', :number=> text_field_tag( 'recurring_todo[daily_every_x_days]', @recurring_todo.daily_every_x_days, {"size" => 3, "tabindex" => next_tab_index})) %><br/>
+    <%= raw t('todos.recurrence.daily_every_number_day', :number=> text_field_tag( 'recurring_todo[daily_every_x_days]', @recurring_todo.daily_every_x_days, {"size" => 3, "tabindex" => next_tab_index})) %><br/>
     <%= radio_button_tag('recurring_todo[daily_selector]', 'daily_every_work_day', @recurring_todo.only_work_days, {:tabindex => next_tab_index})%> <%= t('todos.recurrence.every_work_day') %><br/>
   </div>
   <div id="recurring_edit_weekly" style="display:<%= @recurring_todo.recurring_period == 'weekly' ? 'block' : 'none' %>">
     <label><%= t('todos.recurrence.weekly_options') %></label><br/>
-    <%= t('todos.recurrence.weekly_every_number_week', :number => text_field_tag('recurring_todo[weekly_every_x_week]', @recurring_todo.weekly_every_x_week, {"size" => 3, "tabindex" => next_tab_index})) %><br/>
+    <%= raw t('todos.recurrence.weekly_every_number_week', :number => text_field_tag('recurring_todo[weekly_every_x_week]', @recurring_todo.weekly_every_x_week, {"size" => 3, "tabindex" => next_tab_index})) %><br/>
     <%= check_box_tag('recurring_todo[weekly_return_monday]', 'm', @recurring_todo.on_monday, {:tabindex => next_tab_index} ) %> <%= t('date.day_names')[1] %>
     <%= check_box_tag('recurring_todo[weekly_return_tuesday]', 't', @recurring_todo.on_tuesday, {:tabindex => next_tab_index}) %> <%= t('date.day_names')[2] %>
     <%= check_box_tag('recurring_todo[weekly_return_wednesday]', 'w', @recurring_todo.on_wednesday, {:tabindex => next_tab_index}) %> <%= t('date.day_names')[3] %>
@@ -62,11 +62,11 @@
   <div id="recurring_edit_monthly" style="display:<%= @recurring_todo.recurring_period == 'monthly' ? 'block' : 'none' %>">
     <label><%= t('todos.recurrence.monthly_options') %></label><br/>
     <%= radio_button_tag('recurring_todo[monthly_selector]', 'monthly_every_x_day', @recurring_todo.is_monthly_every_x_day || @recurring_todo.recurring_period == 'weekly', {:tabindex => next_tab_index})%>
-    <%= t('todos.recurrence.day_x_on_every_x_month',
+    <%= raw t('todos.recurrence.day_x_on_every_x_month',
             :day => text_field_tag('recurring_todo[monthly_every_x_day]', @recurring_todo.monthly_every_x_day, {"size" => 3, "tabindex" => next_tab_index}),
             :month => text_field_tag('recurring_todo[monthly_every_x_month]', @recurring_todo.monthly_every_x_month, {"size" => 3, "tabindex" => next_tab_index})) %><br/>
     <%= radio_button_tag('recurring_todo[monthly_selector]', 'monthly_every_xth_day', @recurring_todo.is_monthly_every_xth_day, {:tabindex => next_tab_index})%>
-    <%= t('todos.recurrence.monthly_every_xth_day',
+    <%= raw t('todos.recurrence.monthly_every_xth_day',
             :day => select_tag('recurring_todo[monthly_every_xth_day]', options_for_select(@xth_day, @xth_day[@recurring_todo.monthly_every_xth_day(1)-1][1]), {:tabindex => next_tab_index}),
             :day_of_week => select_tag('recurring_todo[monthly_day_of_week]' , options_for_select(@days_of_week, @recurring_todo.monthly_day_of_week), {:tabindex => next_tab_index}),
             :month => text_field_tag('recurring_todo[monthly_every_x_month2]', @recurring_todo.monthly_every_x_month2, {"size" => 3, "tabindex" => next_tab_index})) %><br/>
@@ -74,11 +74,11 @@
   <div id="recurring_edit_yearly" style="display:<%= @recurring_todo.recurring_period == 'yearly' ? 'block' : 'none' %>">
     <label><%= t('todos.recurrence.yearly_options') %></label><br/>
     <%= radio_button_tag('recurring_todo[yearly_selector]', 'yearly_every_x_day', @recurring_todo.recurrence_selector == 0, {:tabindex => next_tab_index})%>
-    <%= t('todos.recurrence.yearly_every_x_day',
+    <%= raw t('todos.recurrence.yearly_every_x_day',
             :month => select_tag('recurring_todo[yearly_month_of_year]', options_for_select(@months_of_year, @recurring_todo.yearly_month_of_year), {:tabindex => next_tab_index}),
             :day => text_field_tag('recurring_todo[yearly_every_x_day]', @recurring_todo.yearly_every_x_day, "size" => 3, "tabindex" => next_tab_index)) %><br/>
     <%= radio_button_tag('recurring_todo[yearly_selector]', 'yearly_every_xth_day', @recurring_todo.recurrence_selector == 1, {:tabindex => next_tab_index})%>
-    <%= t('todos.recurrence.yearly_every_xth_day',
+    <%= raw t('todos.recurrence.yearly_every_xth_day',
             :day => select_tag('recurring_todo[yearly_every_xth_day]', options_for_select(@xth_day, @recurring_todo.yearly_every_xth_day), {:tabindex => next_tab_index}),
             :day_of_week => select_tag('recurring_todo[yearly_day_of_week]', options_for_select(@days_of_week, @recurring_todo.yearly_day_of_week), {:tabindex => next_tab_index}),
             :month => select_tag('recurring_todo[yearly_month_of_year2]', options_for_select(@months_of_year, @recurring_todo.yearly_month_of_year2), {:tabindex => next_tab_index})) %><br/>
@@ -88,7 +88,7 @@
     <%= radio_button_tag('recurring_todo[recurring_target]', 'due_date', @recurring_todo.target == 'due_date', {:tabindex => next_tab_index})%> <%= t('todos.recurrence.recurrence_on_due_date') %>. <%= t('todos.recurrence.show_options') %>:
     <%= radio_button_tag('recurring_todo[recurring_show_always]', '1', @recurring_todo.show_always?, {:tabindex => next_tab_index})%> <%= t('todos.recurrence.show_option_always') %>
     <%= radio_button_tag('recurring_todo[recurring_show_always]', '0', !@recurring_todo.show_always?, {:tabindex => next_tab_index})%>
-    <%= t('todos.recurrence.show_days_before', :days => text_field_tag( 'recurring_todo[recurring_show_days_before]', @recurring_todo.show_from_delta, {"size" => 3, "tabindex" => next_tab_index})) %><br/>
+    <%= raw t('todos.recurrence.show_days_before', :days => text_field_tag( 'recurring_todo[recurring_show_days_before]', @recurring_todo.show_from_delta, {"size" => 3, "tabindex" => next_tab_index})) %><br/>
     <%= radio_button_tag('recurring_todo[recurring_target]', 'show_from_date', @recurring_todo.target == 'show_from_date', {:tabindex => next_tab_index})%> <%= t('todos.recurrence.from_tickler') %><br/>
     <br/>
   </div>

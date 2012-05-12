@@ -86,7 +86,7 @@ module TodosHelper
   def image_tag_for_recurring_todo(todo)
     return link_to(
       image_tag("recurring16x16.png"),
-      {:controller => "recurring_todos", :action => "index"},
+      recurring_todos_path,
       :class => "recurring_icon", :title => recurrence_pattern_as_text(todo.recurring_todo))
   end
 

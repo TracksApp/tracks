@@ -42,7 +42,7 @@ When /^I edit the name of the pattern "([^\"]*)" to "([^\"]*)"$/ do |pattern_nam
   pattern.should_not be_nil
   click_link "link_edit_recurring_todo_#{pattern.id}"
 
-  wait_for_ajax
+  page.should have_css("input#edit_recurring_todo_description")
 
   fill_in "edit_recurring_todo_description", :with => new_name
   page.find("button#recurring_todo_edit_update_button").click
@@ -82,6 +82,7 @@ When /^I follow the recurring todo link of "([^"]*)"$/ do |action_description|
   todo.should_not be_nil
 
   page.find(:xpath, "//div[@id='todo_#{todo.id}']//a[@class='recurring_icon']/img").click
+  sleep 1 # wait for page to load
 end
 
 Then /^the state list "([^"]*)" should be empty$/ do |state|
