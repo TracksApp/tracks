@@ -15,7 +15,7 @@
   TracksPages.show_errors_for_multi_add(html_for_error_messages());
 <% end -%>
 
-<% if @saved 
+<% if @saved
    # the following functions assume a todo is saved or at least not nil,
    # so leave them out in case of an error
 -%>
@@ -68,11 +68,10 @@ function html_for_error_messages() {
   error_messages = @multiple_error || ""
   # add errors of individual @todos
   @todos.each do |todo|
-    @todo_i = todo
-    error_messages += error_messages_for('todo_i', :object_name => 'action')
+    error_messages += get_list_of_error_messages_for(todo)
   end
   -%>
-  return "<%= escape_javascript(error_messages)%>";
+  return "<%= escape_javascript(error_messages.html_safe)%>";
 }
 
 <% end # if @saved -%>

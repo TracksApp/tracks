@@ -685,6 +685,7 @@ class TodosController < ApplicationController
     respond_to do |format|
       format.html do
         init_not_done_counts
+        init_project_hidden_todo_counts
         @active_projects = current_user.projects.active
         @active_contexts = current_user.contexts.active
         @hidden_projects = current_user.projects.hidden
