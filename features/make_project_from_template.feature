@@ -25,7 +25,7 @@ Feature: Create project from template
     Then I should have a project called "My first project"
     And I should have 1 todo in project "My first project"
     
-  @javascript
+  @javascript @wip
   Scenario: Create a project with dependent tasks
     Given a template that looks like
       """

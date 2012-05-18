@@ -195,8 +195,10 @@ end
 
 When /^I add a note "([^"]*)" to the project$/ do |note_body|
   click_link "Add a note"
+  page.should have_css "div.widgets button#submit_note"
   fill_in "note[body]", :with => note_body
   click_button "Add note"
+  page.should_not have_css "div.widgets button#submit_note"
 end
 
 When /^I click on the first note icon$/ do
