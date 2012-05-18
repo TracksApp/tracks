@@ -12,6 +12,19 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require  ../../../vendor/assets/javascripts/jquery-ui-1.8.17.custom.min
-//= require_tree ../../../vendor/assets/javascripts
-//= require_tree .
+
+// Stuff in app/assets
+//= require tracks.js
+
+// Stuff in vendor/assets
+//= require jquery-ui-1.8.17.custom.min
+//= require jquery.blockUI
+//= require jquery.cookie
+//= require jquery.form
+//= require jquery.jeditable.mini
+//= require jquery.simulate.drag-sortable
+//= require jquery.truncator
+//= require niftycube
+//= require superfish
+//= require supersubs
+//= require swfobject
