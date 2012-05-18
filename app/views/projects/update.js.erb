@@ -87,7 +87,7 @@ function html_for_project_listing() {
 }
 
 function html_for_sidebar() {
-  return "<%= source_view_is(:project) ? escape_javascript(render(:file => 'sidebar/sidebar.html.erb')) : "" %>";
+  return "<%= source_view_is(:project) ? escape_javascript(render(:file => 'sidebar/sidebar')) : "" %>";
 }
 
 function html_for_project_settings() {

@@ -30,8 +30,8 @@ class StatsController < ApplicationController
     # convert to array and fill in non-existing months
     @actions_done_last12months_array = convert_to_months_from_today_array(@actions_done_last12months, 13, :completed_at)
     @actions_created_last12months_array = convert_to_months_from_today_array(@actions_created_last12months, 13, :created_at)
-    @actions_done_last12monthsPlus3_array = convert_to_months_from_today_array(@actions_done_last12monthsPlus3, 13, :completed_at)
-    @actions_created_last12monthsPlus3_array = convert_to_months_from_today_array(@actions_created_last12monthsPlus3, 15, :created_at)
+    @actions_done_last12monthsPlus3_array = convert_to_months_from_today_array(@actions_done_last12monthsPlus3, 16, :completed_at)
+    @actions_created_last12monthsPlus3_array = convert_to_months_from_today_array(@actions_created_last12monthsPlus3, 16, :created_at)
     
     # find max for graph in both arrays
     @max = [@actions_done_last12months_array.max, @actions_created_last12months_array.max].max
@@ -446,8 +446,8 @@ class StatsController < ApplicationController
     @seconds_per_day = 60*60*24
 
     # define cut_off date and discard the time for a month, 3 months and a year
-    @cut_off_year = 13.months.ago.beginning_of_day
-    @cut_off_year_plus3 = 16.months.ago.beginning_of_day
+    @cut_off_year = 12.months.ago.beginning_of_day
+    @cut_off_year_plus3 = 15.months.ago.beginning_of_day
     @cut_off_month = 1.month.ago.beginning_of_day
     @cut_off_3months = 3.months.ago.beginning_of_day
   end

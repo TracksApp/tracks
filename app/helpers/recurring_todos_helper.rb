@@ -26,7 +26,7 @@ module RecurringTodosHelper
         edit_recurring_todo_path(@recurring_todo),
         :class => "icon edit_icon", :id => "link_edit_recurring_todo_#{@recurring_todo.id}")
     else
-      str = '<a class="icon">' + image_tag("blank.png") + "</a> "
+      str = content_tag(:a, image_tag("blank.png"), :class => "icon")
     end
     str
   end

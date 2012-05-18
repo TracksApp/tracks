@@ -108,7 +108,7 @@ Then /^I should see the page selector$/ do
 end
 
 Then /^the page should be "([^"]*)"$/ do |page_number|
-  page.find(:xpath, ".//span[@class='current']").text.should == page_number
+  page.find(:xpath, ".//em[@class='current']").text.should == page_number
 end
 
 Then /^the project field of the new todo form should contain "([^"]*)"$/ do |project_name|

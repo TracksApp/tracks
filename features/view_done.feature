@@ -113,7 +113,7 @@ Feature: Show done
     Then I should be on the done recurring todos page
     And the page should be "2"
 
-  @javascript @wip
+  @javascript
   Scenario: I can toggle a done recurring todo active from done page
     Given I have a completed repeat pattern "test pattern"
     When I go to the done recurring todos page
@@ -181,6 +181,7 @@ Feature: Show done
     When I go to the projects page
     Then I should see "completed project"
 
+  @wip
   Scenario Outline: All pages are internationalized
     Given I set the locale to "<locale>"
     When I go to the <page>

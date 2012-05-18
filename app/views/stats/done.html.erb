@@ -36,7 +36,7 @@
     <% if @last_completed_recurring_todos.empty? -%>
       <div class="message"><p><%= t('projects.no_last_completed_recurring_todos') %></p></div>
     <% else -%>
-      <%= render :partial => '/recurring_todos/recurring_todo', :collection => @last_completed_recurring_todos %>
+      <%= render :partial => @last_completed_recurring_todos %>
     <% end -%>
   </div>
   

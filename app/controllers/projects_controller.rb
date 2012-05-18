@@ -189,26 +189,26 @@ class ProjectsController < ApplicationController
         update_state_counts
         init_data_for_sidebar
 
-        template = 'projects/update.js.erb'
+        template = 'projects/update'
 
       # TODO: are these params ever set? or is this dead code?
       elsif boolean_param('update_status')
-        template = 'projects/update_status.js.rjs'
+        template = 'projects/update_status'
       elsif boolean_param('update_default_context')
         @initial_context_name = @project.default_context.name
-        template = 'projects/update_default_context.js.rjs'
+        template = 'projects/update_default_context'
       elsif boolean_param('update_default_tags')
-        template = 'projects/update_default_tags.js.rjs'
+        template = 'projects/update_default_tags'
       elsif boolean_param('update_project_name')
         @projects = current_user.projects
-        template = 'projects/update_project_name.js.rjs'
+        template = 'projects/update_project_name'
       else
         render :text => success_text || 'Success'
         return
       end
     else
       init_data_for_sidebar
-      template = 'projects/update.js.erb'
+      template = 'projects/update'
     end
 
     respond_to do |format|

@@ -66,19 +66,41 @@ Tracksapp::Application.routes.draw do
   match "tickler" => "todos#list_deferred"
   match 'review' => "projects#review"
   match 'calendar' => "todos#calendar"
-  match 'stats' => 'stats#index'
+  match 'data' => "data#index"
   match 'done' => "stats#done", :as => 'done_overview'
+  
   match 'integrations' => "integrations#index"
   match 'integrations/rest_api' => "integrations#rest_api", :as => 'rest_api_docs'
   match 'integrations/cloudmailin' => 'integrations#cloudmailin'
   match 'integrations/search_plugin.xml' => "integrations#search_plugin", :as => 'search_plugin'
   match 'integrations/google_gadget.xml' => 'integrations#google_gadget', :as => 'google_gadget'
+  match 'integrations/get_applescript1.js' => 'integrations#get_applescript1'
+  match 'integrations/get_applescript2.js' => 'integrations#get_applescript2'
+  match 'integrations/get_quicksilver_applescript.js' => 'integrations#get_quicksilver_applescript'
+  
   match 'preferences' => "preferences#index"
   match 'preferences/render_date_format' => "preferences#render_date_format"
+  
   match 'feeds' => "feedlist#index", :as => 'feeds'
   match 'feedlist/get_feeds_for_context' => 'feedlist#get_feeds_for_context'
   match 'feedlist/get_feeds_for_project' => 'feedlist#get_feeds_for_project'
-  match 'data' => "data#index"
+  
+  match 'stats' => 'stats#index'
+  match 'stats/actions_done_last12months_data' => 'stats#actions_done_last12months_data'
+  match 'stats/actions_done_last_years' => 'stats#actions_done_last_years'
+  match 'stats/actions_done_lastyears_data' => 'stats#actions_done_lastyears_data'
+  match 'stats/actions_done_last30days_data' => 'stats#actions_done_last30days_data'
+  match 'stats/actions_completion_time_data' => 'stats#actions_completion_time_data'
+  match 'stats/actions_running_time_data' => 'stats#actions_running_time_data'
+  match 'stats/actions_visible_running_time_data' => 'stats#actions_visible_running_time_data'
+  match 'stats/actions_open_per_week_data' => 'stats#actions_open_per_week_data'
+  match 'stats/context_total_actions_data' => 'stats#context_total_actions_data'
+  match 'stats/context_running_actions_data' => 'stats#context_running_actions_data'
+  match 'stats/actions_day_of_week_all_data' => 'stats#actions_day_of_week_all_data'
+  match 'stats/actions_day_of_week_30days_data' => 'stats#actions_day_of_week_30days_data'
+  match 'stats/actions_time_of_day_all_data' => 'stats#actions_time_of_day_all_data'
+  match 'stats/actions_time_of_day_30days_data' => 'stats#actions_time_of_day_30days_data'
+  match 'stats/show_selected_actions_from_chart/:id' => 'stats#show_selected_actions_from_chart', :as => 'show_actions_from_chart'
   
   resources :contexts do
     member do

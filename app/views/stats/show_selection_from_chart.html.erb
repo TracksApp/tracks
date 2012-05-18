@@ -1,12 +1,12 @@
 <%= render :partial => 'chart', :locals => {:width => @chart_width, :height => @chart_height, :data => url_for(:action => @chart_name)} -%>
 <br/>
 <p>
-<%= t('stats.click_to_update_actions') %> <%= t('stats.click_to_return', :link => link_to(t('stats.click_to_return_link'), {:controller => "stats", :action => "index"})) %>
+<%= t('stats.click_to_update_actions') %> <%= raw t('stats.click_to_return', :link => link_to(t('stats.click_to_return_link'), stats_path)) %>
 <%
     unless @further
 -%>
-<%= t('stats.click_to_show_actions_from_week',
-      :link => link_to("here", {:controller => "stats", :action => "show_selected_actions_from_chart", :id=>"#{params[:id]}_end", :index => params[:index]}),
+<%= raw t('stats.click_to_show_actions_from_week',
+      :link => link_to("here", show_actions_from_chart_path(:id=>"#{params[:id]}_end", :index => params[:index])),
       :week => params[:index])
 -%>
 <%
