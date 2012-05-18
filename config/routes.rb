@@ -135,6 +135,8 @@ Tracksapp::Application.routes.draw do
       put 'toggle_star'
       put 'defer'
       get 'show_notes'
+      get 'convert_to_project' # TODO: convert to PUT/POST
+      get 'remove_predecessor' # TODO: convert to PUT/POST
     end
     collection do
       get 'done'
@@ -148,7 +150,6 @@ Tracksapp::Application.routes.draw do
   match 'todos/tag/:name' => 'todos#tag', :as => :tag
   match 'todos/done/tag/:name' => "todos#done_tag", :as => :done_tag
   match 'todos/all_done/tag/:name' => "todos#all_done_tag", :as => :all_done_tag
-  match 'todos/convert_to_project/:id' => "todos#convert_to_project"
   match 'auto_complete_for_predecessor' => 'todos#auto_complete_for_predecessor'
   match 'mobile' => 'todos#index', :format => 'm'
 
