@@ -610,7 +610,7 @@ var TodoItems = {
             return false;
         });
 
-        /* delete button to delete a project from the list */
+        /* delete button to delete a dependency from the list */
         $('.item-container a.delete_dependency_button').live('click', function(evt){
             var predecessor_id=$(this).attr("x_predecessors_id");
             var ajax_options = default_ajax_options_for_scripts('DELETE', this.href, $(this).parents('.item-container'));
