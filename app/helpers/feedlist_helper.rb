@@ -8,12 +8,12 @@ module FeedlistHelper
 
   def text_formatted_link(options = {})
     linkoptions = merge_hashes( {:format => 'txt'}, user_token_hash, options)
-    link_to(content_tag(:span, 'TXT', {:class => 'feed', :title => "Plain text feed"}, linkoptions))
+    link_to(content_tag(:span, 'TXT', {:class => 'feed', :title => "Plain text feed"}), linkoptions)
   end
   
   def ical_formatted_link(options = {})
     linkoptions = merge_hashes( {:format => 'ics'}, user_token_hash, options)
-    link_to(content_tag(:span, 'iCal', {:class=>"feed", :title => "iCal feed"}, linkoptions))
+    link_to(content_tag(:span, 'iCal', {:class=>"feed", :title => "iCal feed"}), linkoptions)
   end
 
   def feed_links(feeds, link_options, title)

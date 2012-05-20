@@ -21,10 +21,24 @@ class ProjectsController < ApplicationController
         @projects = current_user.projects.all
       end
       @new_project = current_user.projects.build
+      @active_projects = current_user.projects.active
+      @hidden_projects = current_user.projects.hidden
       respond_to do |format|
-        format.html  &render_projects_html
-        format.m     &render_projects_mobile
-        format.xml   { render :xml => @projects.to_xml( :except => :user_id )  }
+        format.html  do
+          @page_title = t('projects.list_projects')
+          @count = current_user.projects.count
+          @completed_projects = current_user.projects.completed.limit(10)
+          @completed_count = current_user.projects.completed.count
+          @no_projects = current_user.projects.empty?
+          current_user.projects.cache_note_counts
+          @new_project = current_user.projects.build
+        end
+        format.m     do
+          @completed_projects = current_user.projects.completed
+          @down_count = @active_projects.size + @hidden_projects.size + @completed_projects.size
+          cookies[:mobile_url]= {:value => request.fullpath, :secure => SITE_CONFIG['secure_cookies']}
+        end
+        format.xml   { render :xml => @projects.all.to_xml( :except => :user_id )  }
         format.rss   do
           @feed_title = I18n.t('models.project.feed_title')
           @feed_description = I18n.t('models.project.feed_description', :username => current_user.display_name)
@@ -33,8 +47,14 @@ class ProjectsController < ApplicationController
           @feed_title = I18n.t('models.project.feed_title')
           @feed_description = I18n.t('models.project.feed_description', :username => current_user.display_name)
         end
-        format.text
-        format.autocomplete &render_autocomplete
+        format.text do
+          # somehow passing Mime::TEXT using content_type to render does not work
+          headers['Content-Type']=Mime::TEXT.to_s
+        end
+        format.autocomplete do
+          projects = current_user.projects.active + current_user.projects.hidden
+          render :text => for_autocomplete(projects, params[:term])
+        end
       end
     end
   end
@@ -97,6 +117,8 @@ class ProjectsController < ApplicationController
     @projects = current_user.projects.active
     respond_to do |format|
       format.text  {
+        # somehow passing Mime::TEXT using content_type to render does not work
+        headers['Content-Type']=Mime::TEXT.to_s
         render :action => 'index_text_projects_and_actions', :layout => false, :content_type => Mime::TEXT
       }
     end
@@ -127,15 +149,23 @@ class ProjectsController < ApplicationController
     @contexts = current_user.contexts
     respond_to do |format|
       format.html
-      format.m     &render_project_mobile
-      format.xml   {
+      format.m     do
+        if @project.default_context.nil?
+          @project_default_context = t('projects.no_default_context')
+        else
+          @project_default_context = t('projects.default_context', :context => @project.default_context.name)
+        end
+        cookies[:mobile_url]= {:value => request.fullpath, :secure => SITE_CONFIG['secure_cookies']}
+        @mobile_from_project = @project.id
+      end
+      format.xml   do
         render :xml => @project.to_xml(:except => :user_id) { |xml|
           xml.not_done { @not_done.each { |child| child.to_xml(:builder => xml, :skip_instruct => true) } }
           xml.deferred { @deferred.each { |child| child.to_xml(:builder => xml, :skip_instruct => true) } }
           xml.pending { @pending.each { |child| child.to_xml(:builder => xml, :skip_instruct => true) } }
           xml.done { @done.each { |child| child.to_xml(:builder => xml, :skip_instruct => true) } }
         }
-      }
+      end
     end
   end
 
@@ -302,53 +332,7 @@ class ProjectsController < ApplicationController
     @show_hidden_projects = @hidden_projects_count > 0
     @show_completed_projects = @completed_projects_count > 0
   end
-
-  def render_projects_html
-    lambda do
-      @page_title = t('projects.list_projects')
-      @count = current_user.projects.count
-      @active_projects = current_user.projects.active
-      @hidden_projects = current_user.projects.hidden
-      @completed_projects = current_user.projects.completed.limit(10)
-      @completed_count = current_user.projects.completed.count
-      @no_projects = current_user.projects.empty?
-      current_user.projects.cache_note_counts
-      @new_project = current_user.projects.build
-      render
-    end
-  end
-
-  def render_projects_mobile
-    lambda do
-      @active_projects = current_user.projects.active
-      @hidden_projects = current_user.projects.hidden
-      @completed_projects = current_user.projects.completed
-      @down_count = @active_projects.size + @hidden_projects.size + @completed_projects.size
-      cookies[:mobile_url]= {:value => request.fullpath, :secure => SITE_CONFIG['secure_cookies']}
-      render
-    end
-  end
-
-  def render_project_mobile
-    lambda do
-      if @project.default_context.nil?
-        @project_default_context = t('projects.no_default_context')
-      else
-        @project_default_context = t('projects.default_context', :context => @project.default_context.name)
-      end
-      cookies[:mobile_url]= {:value => request.fullpath, :secure => SITE_CONFIG['secure_cookies']}
-      @mobile_from_project = @project.id
-      render
-    end
-  end
   
-  def render_autocomplete
-    lambda do
-      projects = current_user.projects.active + current_user.projects.hidden
-      render :text => for_autocomplete(projects, params[:term])
-    end
-  end
-
   def set_project_from_params
     @project = current_user.projects.find_by_params(params)
   end

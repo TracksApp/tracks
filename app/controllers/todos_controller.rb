@@ -11,55 +11,6 @@ class TodosController < ApplicationController
 
   protect_from_forgery :except => :check_deferred
 
-  def with_feed_query_scope(&block)
-    unless TodosController.is_feed_request(request)
-      Todo.send(:where, ['todos.state = ?', 'active']) do
-        yield
-        return
-      end
-    end
-    condition_builder = FindConditionBuilder.new
-
-    if params.key?('done')
-      condition_builder.add 'todos.state = ?', 'completed'
-    else
-      condition_builder.add 'todos.state = ?', 'active'
-    end
-
-    @title = t('todos.next_actions_title')
-    @description = t('todos.next_actions_description')
-
-    if params.key?('due')
-      due_within = params['due'].to_i
-      due_within_when = Time.zone.now + due_within.days
-      condition_builder.add('todos.due <= ?', due_within_when)
-      due_within_date_s = due_within_when.strftime("%Y-%m-%d")
-      @title << t('todos.next_actions_title_additions.due_today') if (due_within == 0)
-      @title << t('todos.next_actions_title_additions.due_within_a_week') if (due_within == 6)
-      @description << t('todos.next_actions_description_additions.due_date', :due_date => due_within_date_s)
-    end
-
-    if params.key?('done')
-      done_in_last = params['done'].to_i
-      condition_builder.add('todos.completed_at >= ?', Time.zone.now - done_in_last.days)
-      @title << t('todos.next_actions_title_additions.completed')
-      @description << t('todos.next_actions_description_additions.completed', :count => done_in_last.to_s)
-    end
-
-    if params.key?('tag')
-      tag = Tag.find_by_name(params['tag'])
-      if tag.nil?
-        tag = Tag.new(:name => params['tag'])
-      end
-      condition_builder.add('taggings.tag_id = ?', tag.id)
-    end
-
-    Todo.send :where, condition_builder.to_conditions do
-      yield
-    end
-
-  end
-
   def with_parent_resource_scope(&block)
     @feed_title = t('common.actions')
     if (params[:context_id])
@@ -79,38 +30,43 @@ class TodosController < ApplicationController
       yield
     end
   end
-
-  def with_limit_scope(&block)
-    if params.key?('limit')
-      Todo.send :with_scope, :find => { :limit => params['limit'] } do
-        yield
-      end
-      if TodosController.is_feed_request(request) && @description
-        if params.key?('limit')
-          @description << t('todos.list_incomplete_next_actions_with_limit', :count => params['limit'])
-        else
-          @description << t('todos.list_incomplete_next_actions')
-        end
-      end
-    else
-      yield
-    end
-  end
   
   def index
     @source_view = params['_source_view'] || 'todo'
     init_data_for_sidebar unless mobile?
     
-    if mobile?
-      @not_done_todos = current_user.todos.
-        where('todos.state = ? AND contexts.hide = ? AND (projects.state = ? OR todos.project_id IS NULL)', 'active', false, 'active').
-        reorder("todos.due IS NULL, todos.due ASC, todos.created_at ASC").
-        includes(:project, :context, :tags)
+    @todos = current_user.todos.includes(Todo::DEFAULT_INCLUDES)
+    
+    # TODO: refactor text feed for done todos to todos/done.text, not /todos.text?done=true
+    if params[:done]
+      @not_done_todos = current_user.todos.completed.completed_after(Time.zone.now - params[:done].to_i.days)
     else
-      @todos = current_user.todos.includes(Todo::DEFAULT_INCLUDES)
-      @not_done_todos = current_user.todos.active.not_hidden.
-        reorder("todos.due IS NULL, todos.due ASC, todos.created_at ASC").
-        includes(Todo::DEFAULT_INCLUDES)
+      @not_done_todos = current_user.todos.active.not_hidden
+    end
+    
+    @not_done_todos = @not_done_todos.
+      reorder("todos.due IS NULL, todos.due ASC, todos.created_at ASC").
+      includes(Todo::DEFAULT_INCLUDES)
+    @not_done_todos = @not_done_todos.limit(sanitize(params[:limit])) if params[:limit]
+    
+    if params[:due]
+      due_within_when = Time.zone.now + params['due'].to_i.days
+      @not_done_todos = @not_done_todos.where('todos.due <= ?', due_within_when)
+    end
+    
+    if params[:tag]
+      tag = Tag.find_by_name(params['tag'])
+      @not_done_todos = @not_done_todos.where('taggings.tag_id = ?', tag.id)
+    end
+    
+    if params[:context_id]
+      context = current_user.contexts.find(params[:context_id])
+      @not_done_todos = @not_done_todos.where('context_id' => context.id)
+    end
+    
+    if params[:project_id]
+      project = current_user.projects.find(params[:project_id])
+      @not_done_todos = @not_done_todos.where('project_id' => project)
     end
     
     @projects = current_user.projects.includes(:default_context)
@@ -137,10 +93,14 @@ class TodosController < ApplicationController
   
         render :action => 'index'
       end
+      format.text  do
+        # somehow passing Mime::TEXT using content_type to render does not work
+        headers['Content-Type']=Mime::TEXT.to_s
+        render :content_type => Mime::TEXT
+      end
       format.xml   { render :xml => @todos.to_xml( *to_xml_params ) }
       format.rss   { @feed_title, @feed_description = 'Tracks Actions', "Actions for #{current_user.display_name}" }
       format.atom  { @feed_title, @feed_description = 'Tracks Actions', "Actions for #{current_user.display_name}" }
-      format.text
       format.ics
     end
   end

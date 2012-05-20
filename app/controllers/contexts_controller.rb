@@ -31,6 +31,8 @@ class ContextsController < ApplicationController
         @feed_description = "Lists all the contexts for #{current_user.display_name}"
       end
       format.text do
+        # somehow passing Mime::TEXT using content_type to render does not work
+        headers['Content-Type']=Mime::TEXT.to_s
         render :action => 'index', :layout => false, :content_type => Mime::TEXT
       end
       format.autocomplete &render_autocomplete
