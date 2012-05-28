@@ -2,7 +2,7 @@
 
   <div class="container">
     <h2><%= t('todos.calendar.due_today') %></h2>
-    <div id="empty_due_today" <%= "style=\"display:none\"" unless @due_today.empty? %>>
+    <div id="empty_due_today" <%= raw "style=\"display:none\"" unless @due_today.empty? %>>
       <%= t('todos.calendar.no_actions_due_today') %>
     </div>
     <div id="due_today">
@@ -12,7 +12,7 @@
 
   <div class="container">
     <h2><%= t('todos.calendar.due_this_week') %></h2>
-    <div id="empty_due_this_week" <%= "style=\"display:none\"" unless @due_this_week.empty? %>>
+    <div id="empty_due_this_week" <%= raw "style=\"display:none\"" unless @due_this_week.empty? %>>
       <%= t('todos.no_actions_due_this_week') %>
     </div>
     <div id="due_this_week">
@@ -22,7 +22,7 @@
 
   <div class="container">
     <h2><%= t('todos.calendar.due_next_week') %></h2>
-    <div id="empty_due_next_week" <%= "style=\"display:none\"" unless @due_next_week.empty? %>>
+    <div id="empty_due_next_week" <%= raw "style=\"display:none\"" unless @due_next_week.empty? %>>
       <%= t('todos.calendar.no_actions_due_next_week') %>
     </div>
     <div id="due_next_week">
@@ -32,7 +32,7 @@
 
   <div class="container">
     <h2><%= t('todos.calendar.due_this_month', :month => l(Time.zone.now, :format => "%B")) %></h2>
-    <div id="empty_due_this_month" <%= "style=\"display:none\"" unless @due_this_month.empty? %>>
+    <div id="empty_due_this_month" <%= raw "style=\"display:none\"" unless @due_this_month.empty? %>>
       <%= t('todos.calendar.no_actions_due_this_month') %>
     </div>
     <div id="due_this_month">
@@ -42,7 +42,7 @@
 
   <div class="container">
     <h2><%= t('todos.calendar.due_next_month_and_later', :month => l(Time.zone.now+1.month, :format => "%B")) %></h2>
-    <div id="empty_due_after_this_month" <%= "style=\"display:none\"" unless @due_after_this_month.empty? %>>
+    <div id="empty_due_after_this_month" <%= raw "style=\"display:none\"" unless @due_after_this_month.empty? %>>
       <%= t('todos.calendar.no_actions_due_after_this_month') %>
     </div>
     <div id="due_after_this_month">
@@ -52,6 +52,6 @@
 
 </div><!-- End of display_box -->
 <div class="input_box" id="input_box">
-  <p><%= link_to('<span class="feed">iCal</span>', {:format => 'ics', :token => current_user.token}, :title => "iCal feed" ) %>
+  <p><%= link_to('<span class="feed">iCal</span>'.html_safe, {:format => 'ics', :token => current_user.token}, :title => "iCal feed" ) %>
   - <%= t('todos.calendar.get_in_ical_format') %></p>
 </div>

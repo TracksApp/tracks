@@ -9,7 +9,7 @@
   remove_successor_from_page();
   replace_updated_predecessor();
   regenerate_predecessor_family();
-  <%= "show_in_tickler_box();" if source_view_is_one_of :project, :tag %>
+  <%= "show_in_tickler_box();" if source_view_is_one_of :project, :tag, :context %>
   TracksPages.page_notify('notice', "<%= @status_message %>", 5);
 
 function remove_successor_from_page() {

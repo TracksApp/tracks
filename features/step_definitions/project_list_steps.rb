@@ -1,28 +1,25 @@
 When /^I delete project "([^"]*)"$/ do |project_name|
   project = @current_user.projects.find_by_name(project_name)
   project.should_not be_nil
-  click_link "delete_project_#{project.id}"
-  selenium.get_confirmation.should == "Are you sure that you want to delete the project '#{project_name}'?"
-  wait_for do
-    !selenium.is_element_present("delete_project_#{project.id}")
+  
+  handle_js_confirm do
+    click_link "delete_project_#{project.id}"
+  end
+  get_confirm_text.should == "Are you sure that you want to delete the project '#{project_name}'?"
+  
+  wait_until do
+    !page.has_css?("a#delete_project_#{project.id}")
   end
 end
 
 When /^I drag the project "([^"]*)" below "([^"]*)"$/ do |project_drag, project_drop|
   drag_id = @current_user.projects.find_by_name(project_drag).id
-  drop_id = @current_user.projects.find_by_name(project_drop).id
+  sortable_css = "div.ui-sortable div#container_project_#{drag_id}"
 
-  container_height = selenium.get_element_height("//div[@id='container_project_#{drag_id}']").to_i
-  vertical_offset = container_height*2
-  coord_string = "10,#{vertical_offset}"
-
-  drag_project_handle_xpath = "//div[@id='project_#{drag_id}']//span[@class='handle']"
-  drop_project_container_xpath = "//div[@id='container_project_#{drop_id}']"
-
-  selenium.mouse_down_at(drag_project_handle_xpath,"2,2")
-  selenium.mouse_move_at(drop_project_container_xpath,coord_string)
-  # no need to simulate mouse_over for this test
-  selenium.mouse_up_at(drop_project_container_xpath,coord_string)
+  drag_index = project_list_find_index(project_drag)
+  drop_index = project_list_find_index(project_drop)
+  
+  page.execute_script "$('#{sortable_css}').simulateDragSortable({move: #{drop_index-drag_index}, handle: '.grip'});"
 end
 
 When /^I submit a new project with name "([^"]*)"$/ do |project_name|
@@ -34,108 +31,94 @@ When /^I submit a new project with name "([^"]*)" and select take me to the proj
   fill_in "project[name]", :with => project_name
   check "go_to_project"
   submit_new_project_form
-  selenium.wait_for_page_to_load(5000) # follow the redirect
 end
 
 When /^I sort the active list alphabetically$/ do
-  click_link "Alphabetically"
-  wait_for_ajax
-  selenium.get_confirmation.should == "Are you sure that you want to sort these projects alphabetically? This will replace the existing sort order."
+  handle_js_confirm do
+    click_link "Alphabetically"
+    wait_for_ajax
+  end
+  get_confirm_text.should == "Are you sure that you want to sort these projects alphabetically? This will replace the existing sort order."
 end
 
 When /^I sort the list by number of tasks$/ do
-  click_link "By number of tasks"
-  wait_for_ajax
-  selenium.get_confirmation.should == "Are you sure that you want to sort these projects by the number of tasks? This will replace the existing sort order."
+  handle_js_confirm do
+    click_link "By number of tasks"
+    wait_for_ajax
+  end
+  get_confirm_text.should == "Are you sure that you want to sort these projects by the number of tasks? This will replace the existing sort order."
 end
 
 Then /^I should see that a project named "([^"]*)" is not present$/ do |project_name|
-  Then "I should not see \"#{project_name}\""
+  within "div#display_box" do
+    step "I should not see \"#{project_name}\""
+  end
 end
 
 Then /^I should see that a project named "([^"]*)" is present$/ do |project_name|
-  Then "I should see \"#{project_name}\""
+  within "div#display_box" do
+    step "I should see \"#{project_name}\""
+  end
+end
+
+Then /^I should see a project named "([^"]*)"$/ do |project_name|
+  step "I should see that a project named \"#{project_name}\" is present"
+end
+
+Then /^I should not see a project named "([^"]*)"$/ do |project_name|
+  step "I should see that a project named \"#{project_name}\" is not present"
 end
 
 Then /^the project "([^"]*)" should be above the project "([^"]*)"$/ do |project_high, project_low|
-  high_id = @current_user.projects.find_by_name(project_high).id
-  low_id = @current_user.projects.find_by_name(project_low).id
-  high_pos = selenium.get_element_position_top("//div[@id='project_#{high_id}']").to_i
-  low_pos = selenium.get_element_position_top("//div[@id='project_#{low_id}']").to_i
-  (high_pos < low_pos).should be_true
+  project_list_find_index(project_high).should < project_list_find_index(project_low)
 end
 
 Then /^the project "([^"]*)" should not be in state list "([^"]*)"$/ do |project_name, state_name|
   project = @current_user.projects.find_by_name(project_name)
   project.should_not be_nil
-  xpath = "//div[@id='list-#{state_name}-projects-container']//div[@id='project_#{project.id}']"
-  response.should_not have_xpath(xpath)
+  
+  list_id = @source_view=="review" ? "list-#{state}-projects" : "list-#{state_name}-projects-container"
+  xpath = "//div[@id='#{list_id}']//div[@id='project_#{project.id}']"
+  
+  page.should_not have_xpath(xpath)
 end
 
 Then /^the project "([^"]*)" should be in state list "([^"]*)"$/ do |project_name, state_name|
   project = @current_user.projects.find_by_name(project_name)
   project.should_not be_nil
-  xpath = "//div[@id='list-#{state_name}-projects-container']//div[@id='project_#{project.id}']"
-  response.should have_xpath(xpath)
+  
+  list_id = @source_view=="review" ? "list-#{state_name}-projects" : "list-#{state_name}-projects-container"
+  xpath = "//div[@id='#{list_id}']//div[@id='project_#{project.id}']"
+  
+  page.should have_xpath(xpath)
+end
+
+Then /^I see the project "([^"]*)" in the "([^"]*)" list$/ do |project_name, state_name|
+  step "the project \"#{project_name}\" should be in state list \"#{state_name}\""
 end
 
 Then /^the project list badge for "([^"]*)" projects should show (\d+)$/ do |state_name, count|
-  selenium.get_text("xpath=//span[@id='#{state_name}-projects-count']").should == count
+  page.find(:xpath, "//span[@id='#{state_name}-projects-count']").text.should == count
 end
 
-Then /^the new project form should be visible$/ do 
-  selenium.is_visible("project_new").should == true
+Then /^the new project form should be visible$/ do
+  page.should have_css("div#project_new", :visible => true)
 end
 
-Then /^the new project form should not be visible$/ do 
-  selenium.is_visible("project_new").should == false
-end
-
-
-Given /^I have a project "([^"]*)" with (\d+) active todos$/ do |name, count|
-  @context = @current_user.contexts.find_or_create_by_name("Context A")
-  @project = @current_user.projects.find_or_create_by_name(name)
-
-  @todos=[]
-  1.upto count.to_i do |i|
-    todo = @current_user.todos.create!(
-      :project_id => @project.id,
-      :context_id => @context.id,
-      :description => "todo #{i}")
-    @todos << todo
-  end
+Then /^the new project form should not be visible$/ do
+  page.should_not have_css("div#project_new", :visible => true)
 end
 
 Then /^the project "([^"]*)" should have (\d+) actions listed$/ do |name, count|
   project = @current_user.projects.find_by_name(name)
   project.should_not be_nil
   xpath = "//div[@id='list-active-projects-container']//div[@id='project_#{project.id}']//span[@class='needsreview']"
-  selenium.get_text("xpath=#{xpath}").should == "#{project.name} (#{count} actions)"
-end
-
-Given /^I have a project "([^"]*)" with (\d+) active actions and (\d+) deferred actions$/ do |name, active_count, deferred_count|
-  Given "I have a project \"#{name}\" with #{active_count} active todos"
-  Given "I have a project \"#{name}\" with #{deferred_count} deferred actions"
-end
-
-Given /^I have a project "([^"]*)" with (\d+) deferred actions$/ do |name, deferred|
-  @context = @current_user.contexts.find_or_create_by_name("Context A")
-  @project = @current_user.projects.find_or_create_by_name(name)
-
-  1.upto deferred.to_i do |i|
-    todo = @current_user.todos.create!(
-      :project_id => @project.id,
-      :context_id => @context.id,
-      :description => "deferred todo #{i}")
-    todo.show_from = Time.zone.now + 1.week
-    todo.save!
-  end
+  page.find(:xpath, xpath).text.should == "#{project.name} (#{count} actions)"
 end
 
 Then /^the project "([^"]*)" should have (\d+) deferred actions listed$/ do |name, deferred|
   project = @current_user.projects.find_by_name(name)
   project.should_not be_nil
   xpath = "//div[@id='list-active-projects-container']//div[@id='project_#{project.id}']//span[@class='needsreview']"
-  selenium.get_text("xpath=#{xpath}").should == "#{project.name} (#{deferred} deferred actions)"
+  page.find(:xpath, xpath).text.should == "#{project.name} (#{deferred} deferred actions)"
 end
-

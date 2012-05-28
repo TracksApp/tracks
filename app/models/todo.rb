@@ -1,13 +1,18 @@
 class Todo < ActiveRecord::Base
 
+  before_save :render_note
   after_save :save_predecessors
 
-  # relations
+  # associations
   belongs_to :context
   belongs_to :project
   belongs_to :user
   belongs_to :recurring_todo
 
+  # Tag association
+  include IsTaggable
+  
+  # Dependencies associations
   has_many :predecessor_dependencies, :foreign_key => 'predecessor_id', :class_name => 'Dependency', :dependent => :destroy
   has_many :successor_dependencies,   :foreign_key => 'successor_id',   :class_name => 'Dependency', :dependent => :destroy
   has_many :predecessors, :through => :successor_dependencies
@@ -16,33 +21,35 @@ class Todo < ActiveRecord::Base
     :source => :predecessor, :conditions => ['NOT (todos.state = ?)', 'completed']
   has_many :pending_successors, :through => :predecessor_dependencies,
     :source => :successor, :conditions => ['todos.state = ?', 'pending']
-
+    
   # scopes for states of this todo
-  named_scope :active, :conditions => { :state => 'active' }
-  named_scope :active_or_hidden, :conditions => ["todos.state = ? OR todos.state = ?", 'active', 'project_hidden']
-  named_scope :not_completed, :conditions =>  ['NOT (todos.state = ?)', 'completed']
-  named_scope :completed, :conditions =>  ["NOT (todos.completed_at IS NULL)"]
-  named_scope :deferred, :conditions => ["todos.completed_at IS NULL AND NOT (todos.show_from IS NULL)"]
-  named_scope :blocked, :conditions => ['todos.state = ?', 'pending']
-  named_scope :pending, :conditions => ['todos.state = ?', 'pending']
-  named_scope :deferred_or_blocked, :conditions => ["(todos.completed_at IS NULL AND NOT(todos.show_from IS NULL)) OR (todos.state = ?)", "pending"]
-  named_scope :not_deferred_or_blocked, :conditions => ["todos.completed_at IS NULL AND todos.show_from IS NULL AND NOT(todos.state = ?)", "pending"]
-  named_scope :hidden,
+  scope :active, :conditions => { :state => 'active' }
+  scope :active_or_hidden, :conditions => ["todos.state = ? OR todos.state = ?", 'active', 'project_hidden']
+  scope :not_completed, :conditions =>  ['NOT (todos.state = ?)', 'completed']
+  scope :completed, :conditions =>  ["NOT (todos.completed_at IS NULL)"]
+  scope :deferred, :conditions => ["todos.completed_at IS NULL AND NOT (todos.show_from IS NULL)"]
+  scope :blocked, :conditions => ['todos.state = ?', 'pending']
+  scope :pending, :conditions => ['todos.state = ?', 'pending']
+  scope :deferred_or_blocked, :conditions => ["(todos.completed_at IS NULL AND NOT(todos.show_from IS NULL)) OR (todos.state = ?)", "pending"]
+  scope :not_deferred_or_blocked, :conditions => ["(todos.completed_at IS NULL) AND (todos.show_from IS NULL) AND (NOT todos.state = ?)", "pending"]
+  scope :hidden,
     :joins => "INNER JOIN contexts c_hidden ON c_hidden.id = todos.context_id",
     :conditions => ["todos.state = ? OR (c_hidden.hide = ? AND (todos.state = ? OR todos.state = ? OR todos.state = ?))",
     'project_hidden', true, 'active', 'deferred', 'pending']
-  named_scope :not_hidden,
+  scope :not_hidden,
     :joins => "INNER JOIN contexts c_hidden ON c_hidden.id = todos.context_id",
     :conditions => ['NOT(todos.state = ? OR (c_hidden.hide = ? AND (todos.state = ? OR todos.state = ? OR todos.state = ?)))',
     'project_hidden', true, 'active', 'deferred', 'pending']
 
   # other scopes
-  named_scope :are_due, :conditions => ['NOT (todos.due IS NULL)']
-  named_scope :with_tag, lambda { |tag_id| {:joins => :taggings, :conditions => ["taggings.tag_id = ? ", tag_id] } }
-  named_scope :with_tags, lambda { |tag_ids| {:conditions => ["EXISTS(SELECT * from taggings t WHERE t.tag_id IN (?) AND t.taggable_id=todos.id AND t.taggable_type='Todo')", tag_ids] } }
-  named_scope :of_user, lambda { |user_id| {:conditions => ["todos.user_id = ? ", user_id] } }
-  named_scope :completed_after, lambda { |date| {:conditions => ["todos.completed_at > ? ", date] } }
-  named_scope :completed_before, lambda { |date| {:conditions => ["todos.completed_at < ? ", date] } }
+  scope :are_due, :conditions => ['NOT (todos.due IS NULL)']
+  scope :with_tag, lambda { |tag_id| joins("INNER JOIN taggings ON todos.id = taggings.taggable_id").where("taggings.tag_id = ? ", tag_id) }
+  scope :with_tags, lambda { |tag_ids| where("EXISTS(SELECT * from taggings t WHERE t.tag_id IN (?) AND t.taggable_id=todos.id AND t.taggable_type='Todo')", tag_ids) }
+  # scope :of_user, lambda { |user_id| {:conditions => ["todos.user_id = ? ", user_id] } }
+  scope :completed_after, lambda { |date| where("todos.completed_at > ?", date) }
+  scope :completed_before, lambda { |date| where("todos.completed_at < ?", date) }
+  scope :created_after, lambda { |date| where("todos.created_at > ?", date) }
+  scope :created_before, lambda { |date| where("todos.created_at < ?", date) }
 
   STARRED_TAG_NAME = "starred"
   DEFAULT_INCLUDES = [ :project, :context, :tags, :taggings, :pending_successors, :uncompleted_predecessors, :recurring_todo ]
@@ -97,7 +104,23 @@ class Todo < ActiveRecord::Base
   validates_length_of :notes, :maximum => 60000, :allow_nil => true
   validates_presence_of :show_from, :if => :deferred?
   validates_presence_of :context
+  validate :check_show_from_in_future
+  validate :check_circular_dependencies
 
+  def check_show_from_in_future
+    if !show_from.blank? && show_from < user.date
+      errors.add("show_from", I18n.t('models.todo.error_date_must_be_future'))
+    end
+  end
+  
+  def check_circular_dependencies
+    unless @predecessor_array.nil? # Only validate predecessors if they changed
+      @predecessor_array.each do |todo|
+        errors.add("Depends on:", "Adding '#{todo.specification}' would create a circular dependency") if is_successor?(todo)
+      end
+    end
+  end
+  
   def initialize(*args)
     super(*args)
     @predecessor_array = nil # Used for deferred save of predecessors
@@ -114,25 +137,13 @@ class Todo < ActiveRecord::Base
   end
 
   def uncompleted_predecessors?
-    return !uncompleted_predecessors.all(true).empty?
+    return !uncompleted_predecessors.all.empty?
   end
 
   # Returns a string with description <context, project>
   def specification
     project_name = self.project.is_a?(NullProject) ? "(none)" : self.project.name
     return "\'#{self.description}\' <\'#{self.context.title}\'; \'#{project_name}\'>"
-  end
-
-  def validate
-    if !show_from.blank? && show_from < user.date
-      errors.add("show_from", I18n.t('models.todo.error_date_must_be_future'))
-    end
-    errors.add(:description, "may not contain \" characters") if /\"/.match(self.description)
-    unless @predecessor_array.nil? # Only validate predecessors if they changed
-      @predecessor_array.each do |todo|
-        errors.add("Depends on:", "Adding '#{h(todo.specification)}' would create a circular dependency") if is_successor?(todo)
-      end
-    end
   end
 
   def save_predecessors
@@ -163,10 +174,14 @@ class Todo < ActiveRecord::Base
     return @removed_predecessors
   end
 
+  # remove predecessor and activate myself if it was the last predecessor
   def remove_predecessor(predecessor)
-    # remove predecessor and activate myself
     self.predecessors.delete(predecessor)
-    self.activate!
+    if self.predecessors.empty?
+      self.activate!
+    else
+      save!
+    end
   end
 
   # Returns true if t is equal to self or a successor of self
@@ -231,13 +246,6 @@ class Todo < ActiveRecord::Base
     defer! if active? && !date.blank? && date > user.date
   end
 
-  def self.feed_options(user)
-    {
-      :title => 'Tracks Actions',
-      :description => "Actions for #{user.display_name}"
-    }
-  end
-
   def starred?
     return has_tag?(STARRED_TAG_NAME)
   end
@@ -280,14 +288,14 @@ class Todo < ActiveRecord::Base
 
   # activate todos that should be activated if the current todo is completed
   def activate_pending_todos
-    pending_todos = successors.find_all {|t| t.uncompleted_predecessors.empty?}
+    pending_todos = successors.select {|t| t.uncompleted_predecessors.empty?}
     pending_todos.each {|t| t.activate! }
     return pending_todos
   end
 
   # Return todos that should be blocked if the current todo is undone
   def block_successors
-    active_successors = successors.find_all {|t| t.active? or t.deferred?}
+    active_successors = successors.select {|t| t.active? or t.deferred?}
     active_successors.each {|t| t.block!}
     return active_successors
   end
@@ -298,14 +306,14 @@ class Todo < ActiveRecord::Base
 
   # XML API fixups
   def predecessor_dependencies=(params)
-    value = params[:predecessor]
-    return if value.nil?
+    deps = params[:predecessor]
+    return if deps.nil?
 
     # for multiple dependencies, value will be an array of id's, but for a single dependency,
     # value will be a string. In that case convert to array
-    value = [value] unless value.class == Array
+    deps = [deps] unless deps.class == Array
 
-    value.each { |ele| add_predecessor(self.user.todos.find_by_id(ele.to_i)) unless ele.blank? }
+    deps.each { |dep| self.add_predecessor(self.user.todos.find_by_id(dep.to_i)) unless dep.blank? }
   end
 
   alias_method :original_context=, :context=
@@ -339,7 +347,10 @@ class Todo < ActiveRecord::Base
 
   # used by the REST API. <tags> will also work, this is renamed to add_tags in TodosController::TodoCreateParamsHelper::initialize
   def add_tags=(params)
-    tag_with params[:tag].inject([]) { |list, value| list << value[:name] } unless params[:tag].nil?
+    unless params[:tag].nil?
+      tag_list = params[:tag].inject([]) { |list, value| list << value[:name] }
+      tag_with tag_list.join(", ")
+    end
   end
 
   # Rich Todo API
@@ -354,9 +365,9 @@ class Todo < ActiveRecord::Base
 
     context_id = default_context_id
     unless(context.nil?)
-      found_context = user.contexts.active.find_by_namepart(context)
-      found_context = user.contexts.find_by_namepart(context) if found_context.nil?
-      context_id = found_context.id unless found_context.nil?
+      found_context = user.contexts.active.where("name like ?", "%#{context}%").first
+      found_context = user.contexts.where("name like ?", "%#{context}%").first if !found_context
+      context_id = found_context.id if found_context
     end
 
     unless user.contexts.exists? context_id
@@ -384,4 +395,12 @@ class Todo < ActiveRecord::Base
     return todo
   end
 
+  def render_note
+    unless self.notes.nil?
+      self.rendered_notes = Tracks::Utils.render_text(self.notes)
+    else
+      self.rendered_notes = nil
+    end
+  end
+  
 end

@@ -1,10 +1,17 @@
+<%
+  selector_edit = "div##{dom_id(@project, 'edit')}"
+  selector_edit = "div.project-edit-current " + selector_edit unless @source_view=="project"
+  selector_project = "div##{dom_id(@project)}"
+  selector_project = "div.project-edit-current " + selector_project unless @source_view=="project"
+-%>
+
 function html_for_edit_form() {
   return "<%= escape_javascript(render(:partial => 'project_form', :object => @project)) %>";
 }
 
 function show_edit_form() {
-  $('div#<%=dom_id(@project, 'edit')%>').html(html_for_edit_form());
-  $('div#<%=dom_id(@project, 'edit')%>').fadeIn(500);
+  $('<%= selector_edit %>').html(html_for_edit_form());
+  $('<%= selector_edit %>').fadeIn(500);
   $('div#project_name').editable('disable');
 }
 
@@ -12,14 +19,11 @@ function set_focus() {
   $('input.project-name').focus();
 }
 
-
 function replace_project_with_edit_form() {
-  $('div#<%=dom_id(@project)%>').fadeOut(250, function() {
+  $('<%= selector_project %>').fadeOut(250, function() {
     show_edit_form();
     set_focus();
-    enable_rich_interaction();
   });
 }
-
 
 replace_project_with_edit_form();

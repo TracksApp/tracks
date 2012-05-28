@@ -1,0 +1,28 @@
+<% @todo = todo -%>
+<li id="<%= dom_id(todo) %>" >
+<% remote_mobile_checkbox(todo) %>
+<%= date_span -%> <%= link_to todo.description, todo_path(todo, :format => 'm') -%>
+<% unless todo.notes.blank? %>
+<%= link_to(image_tag("mobile_notes.png", :border => "0"), show_notes_todo_path(todo, :format => 'm')) -%>
+<% end %>
+<% if todo.starred? %>
+<%= image_tag("menustar_small.gif", :border => "0") -%>
+<% end %>
+<%  if parent_container_type == 'context' or parent_container_type == 'tag' -%>
+<%=
+  if todo.project.nil?
+    ""
+  else
+    link = link_to(todo.project.name, project_path(todo.project, :format => :m))
+    content_tag(:span, " (#{link})".html_safe, :class=>"prj")
+  end
+-%>
+<%  end
+    if parent_container_type == 'project' or parent_container_type == 'tag' -%>
+<%=
+  link = link_to(todo.context.name, context_path(todo.context, :format => 'm'))
+  content_tag(:span, " (#{link})".html_safe, :class=>"ctx")
+-%>
+<%  end -%>
+ <%= tag_list_mobile -%>
+</span></li>

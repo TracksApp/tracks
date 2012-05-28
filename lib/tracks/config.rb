@@ -1,5 +1,7 @@
 module Tracks
+  
   class Config
+    
     def self.salt
        SITE_CONFIG['salt']
     end
@@ -15,7 +17,7 @@ module Tracks
     def self.cas_enabled?
       auth_schemes.include?('cas')
     end
-
+    
     def self.prefered_auth?
       if SITE_CONFIG['prefered_auth']
         SITE_CONFIG['prefered_auth']
@@ -23,5 +25,7 @@ module Tracks
         auth_schemes.first
       end
     end
+    
   end
+  
 end

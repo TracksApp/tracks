@@ -1,30 +1,29 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
-require 'feedlist_controller'
-
-# Re-raise errors caught by the controller.
-class FeedlistController; def rescue_action(e) raise e end; end
 
 class FeedlistControllerTest < ActionController::TestCase
-  fixtures :users, :preferences, :projects, :contexts, :todos, :recurring_todos, :notes
-  
-  def setup
-    assert_equal "test", ENV['RAILS_ENV']
-    assert_equal "change-me", Tracks::Config.salt
-    @controller = FeedlistController.new
-    @request    = ActionController::TestRequest.new
-    @response   = ActionController::TestResponse.new
-  end
   
   def test_get_index_when_not_logged_in
     get :index
-    assert_redirected_to :controller => 'login', :action => 'login'
+    assert_redirected_to login_path
   end
   
   def test_get_index_by_logged_in_user
     login_as :other_user
     get :index
     assert_response :success
-    assert_equal "TRACKS::Feeds", assigns['page_title']  
+    assert_equal "TRACKS::Feeds", assigns['page_title']
+  end
+  
+  def test_get_feeds_for_context_using_xhr
+    login_as(:admin_user)
+    xhr :get, :get_feeds_for_context, :context_id => contexts(:errand).id
+    assert_response 200
+  end
+  
+  def test_get_feeds_for_project_using_xhr
+    login_as(:admin_user)
+    xhr :get, :get_feeds_for_project, :project_id => projects(:timemachine).id
+    assert_response 200
   end
     
 end

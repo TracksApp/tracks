@@ -17,7 +17,7 @@ function replace_note_form_with_updated_note() {
 }
 
 function html_for_error_messages() {
-  return "<%= escape_javascript(error_messages_for('note')) %>";
+  return "<%= escape_javascript(get_list_of_error_messages_for(@note)) %>";
 }
 
 function html_for_updated_note_form(){

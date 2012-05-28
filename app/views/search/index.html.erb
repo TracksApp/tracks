@@ -1,0 +1,6 @@
+<div id="display_box_search">
+  <%= form_tag(search_results_path, :id => 'search-form') do %>
+    <%= text_field_tag(:search, params[:search]) %>
+    <%= submit_tag t('common.search') %>
+  <% end %>
+</div>

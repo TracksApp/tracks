@@ -37,7 +37,7 @@ function update_active_projects_container() {
 }
 
 function html_for_error_messages() {
-  return "<%= escape_javascript(error_messages_for('project')) %>";
+  return "<%= escape_javascript(get_list_of_error_messages_for(@project)) %>";
 }
 
 function html_for_project_listing() {

@@ -1,0 +1,15 @@
+<div class="container" id="note-<%= note.id %>-wrapper">
+  <div id="<%= dom_id(note, 'container') %>">
+
+    <h2><%= link_to(t('notes.note_header', :id => note.id.to_s), note, :title => t('notes.note_link_title', :id => note.id.to_s)) %></h2>
+
+    <div class="project_notes" id="<%= dom_id(note) %>">
+      <%= render :partial => "notes/note_details", :object => note %>
+    </div>
+
+    <div id="<%= dom_id(note, 'edit') %>" class="note-edit-form" style="display:none">
+      <%= render :partial => "notes/note_edit_form", :object => note %>
+    </div>
+
+  </div>
+</div>

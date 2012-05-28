@@ -184,14 +184,26 @@ function remove_source_container(next_steps) {
   <% end %>
 }
 
-function html_for_todo() {
-  return "<%= @saved && !source_view_is(:done) ? escape_javascript(render(:partial => @todo, :locals => {
-      :parent_container_type => parent_container_type,
-      :suppress_project => source_view_is(:project),
-      :suppress_context => source_view_is(:context)
-    })) : "" %>";
+function html_for_recurring_todo() {
+  <%-
+    js = @saved && @new_recurring_todo ? escape_javascript(render(:partial => @new_recurring_todo, :locals => { :parent_container_type => parent_container_type })) : ""
+  -%>
+  return "<%= js %>";
 }
 
-function html_for_recurring_todo() {
-  return "<%= @saved ? escape_javascript(render(:partial => @new_recurring_todo, :locals => { :parent_container_type => parent_container_type })) : "" %>";
+function html_for_todo() {
+  <%-
+    js = ""
+    if @saved && !source_view_is(:done)
+      js = escape_javascript(render(
+        :partial => @todo,
+        :locals => {
+          :parent_container_type => parent_container_type,
+          :suppress_project => source_view_is(:project),
+          :suppress_context => source_view_is(:context)
+        }
+      ))
+    end
+  -%>
+  return "<%= js %>";
 }

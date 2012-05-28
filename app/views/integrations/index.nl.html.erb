@@ -41,7 +41,7 @@
 
 <a name="applescript2-section"> </a>
 <h2>Voeg een acties toe met Applescript op basis van de huidig geselecteerde e-mail in Mail.app</h2>
-<p>Dit script neemt de verstuurder en het onderwerp van de geselecteerde email(s) 
+<p>Dit script neemt de verstuurder en het onderwerp van de geselecteerde email(s)
   van Mail over en maakt een nieuwe acties voor elke email met de beschrijving
   "Email [sender] about [subject]". De beschrijving wordt, als nodig, na 100 karakters afgebroken
   (dit is de limiet voor een beschrijving). Het heeft ook Growl notificaties mocht je Growl geïnstalleerd hebben.</p>
@@ -93,7 +93,7 @@
 
 <p>Als je de volgende regel toevoegd aan jouw crontab, dat ontvang je een e-mail op elke dag rond 05:00 met een lijst met acties waarvan de deadline afloopt binnen de komende 7 dagen.</p>
 
-<textarea id="cron" name="cron">0 5 * * * /usr/bin/curl -0 "<%= home_url %>todos.txt?due=6&token=<%= current_user.token %>" | /usr/bin/mail -e -s 'Tracks actions due in the next 7 days' youremail@yourdomain.com</textarea>
+<textarea id="cron" name="cron">0 5 * * * /usr/bin/curl -0 "<%= root_url %>todos.txt?due=6&token=<%= current_user.token %>" | /usr/bin/mail -e -s 'Tracks actions due in the next 7 days' youremail@yourdomain.com</textarea>
 
 <p>Uiteraard kan je ook een andere <%= link_to 'text feed gebruiken die Tracks biedt', feeds_path %> -- bijvoorbeeld een email met een lijst van acties voor een specifiek project naar een groep collega's die werken aan dat project?</p>
 
@@ -103,7 +103,7 @@
   Als Tracks draait op dezelfde server als jouw mailserver, dan kan je de geïntegreerde mail handler gebruiken van Tracks. Om dit in te stellen:
 </p>
 <ul>
-  <li>Ga naar <%= link_to t('layouts.navigation.preferences'), preferences_url %> 
+  <li>Ga naar <%= link_to t('layouts.navigation.preferences'), preferences_url %>
     en stel in "<%= Preference.human_attribute_name('sms_email') %>" en
     "<%= Preference.human_attribute_name('sms_context') %>" voor acties die
     verzonden zijn via email (die bijv. komen via een SMS message)</li>
@@ -122,7 +122,7 @@
 <p>
   Je kan nu ook jouw projects/actions beheren in Gmail met de Tracks Gmail Gadget.
   Voeg Tracks Gmail gadget toe aan de sidebar van Gmail en volg jouw acties
-  of voeg een nieuwe actie toe zonder apart een nieuw browser tab/scherm te openen 
+  of voeg een nieuwe actie toe zonder apart een nieuw browser tab/scherm te openen
   voor Tracks. Om dit in te stellen:
 </p>
 <ul>

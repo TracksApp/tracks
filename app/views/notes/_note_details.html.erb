@@ -1,0 +1,16 @@
+<% note = note_details -%>
+<div class="note_boby"><%= Tracks::Utils.render_text(note.body) %></div>
+
+<div class="note_footer">
+
+  <%= link_to_delete_note(note, image_tag( "blank.png",:title => t('notes.delete_item_title'), :class=>"delete_item")) %> &nbsp;
+  <%= link_to_edit_note(note, image_tag( "blank.png", :title => t('notes.edit_item_title'), :class=>"edit_item") ) %>
+
+  | <%= link_to(t('notes.in_project') + note.project.name, note.project, :class=>"footer_link" ) %>&nbsp;|&nbsp;
+
+  <%= Note.human_attribute_name('created_at') %>: <%= format_date(note.created_at) %>
+
+  <% if note.updated_at? -%>
+    &nbsp;|&nbsp;<%= Note.human_attribute_name('updated_at') %>: <%= format_date(note.updated_at) %>
+  <% end -%>
+</div>

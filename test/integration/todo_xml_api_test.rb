@@ -1,19 +1,15 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
-require 'todos_controller'
 
 class TodoXmlApiTest < ActionController::IntegrationTest
-  fixtures :users, :contexts, :preferences, :todos, :projects
-
   @@valid_postdata = "<todo><description>this will succeed</description><context_id type='integer'>10</context_id><project_id type='integer'>4</project_id></todo>"
 
   def setup
-    assert_test_environment_ok
     @user = users(:admin_user)
     @password = 'abracadabra'
   end
 
   def test_get_tickler_succeeds
-    authenticated_get_xml "/tickler", @user.login, @password, {}
+    authenticated_get_xml "/tickler.xml", @user.login, @password, {}
     assert_response 200
   end
 
@@ -21,18 +17,18 @@ class TodoXmlApiTest < ActionController::IntegrationTest
     get '/tickler.xml', {}, {}
     assert_response 401
 
-    get "/tickler", {}, {'AUTHORIZATION' => "Basic " + Base64.encode64("wrong:wrong"),'ACCEPT' => 'application/xml'}
+    get "/tickler.xml", {}, {'HTT_AUTHORIZATION' => "Basic " + Base64.encode64("wrong:wrong"),'ACCEPT' => 'application/xml'}
     assert_response 401
   end
 
   def test_get_tickler_returns_all_deferred_and_pending_todos
     number = @user.todos.deferred.count + @user.todos.pending.count
-    authenticated_get_xml "/tickler", @user.login, @password, {}
+    authenticated_get_xml "/tickler.xml", @user.login, @password, {}
     assert_tag :tag => "todos", :children => { :count => number }
   end
 
   def test_get_tickler_omits_user_id
-    authenticated_get_xml "/tickler", @user.login, @password, {}
+    authenticated_get_xml "/tickler.xml", @user.login, @password, {}
     assert_no_tag :tag => "user_id"
   end
 
@@ -104,7 +100,7 @@ class TodoXmlApiTest < ActionController::IntegrationTest
     assert_equal "starred, starred1, starred2", todo.tag_list
     assert todo.starred?
   end
-
+  
   def test_post_create_todo_with_single_tag
     authenticated_post_xml_to_todo_create "
 <todo>
@@ -122,6 +118,42 @@ class TodoXmlApiTest < ActionController::IntegrationTest
     assert_equal "tracks", todo.tag_list
   end
 
+ def test_post_create_todo_with_multiple_tags_and_space
+    # testing fix for #1229
+    authenticated_post_xml_to_todo_create "
+<todo>
+  <description>this will succeed 3</description>
+  <context_id>#{contexts(:office).id}</context_id>
+  <project_id>#{projects(:timemachine).id}</project_id>
+  <tags>
+    <tag><name>foo </name></tag>
+    <tag><name> bar</name></tag>
+    <tag><name>  bingo  </name></tag>
+  </tags>
+</todo>"
+
+    assert_response :success
+    todo = @user.todos.find_by_description("this will succeed 3")
+    assert_not_nil todo
+    assert_equal "bar, bingo, foo", todo.tag_list
+    authenticated_post_xml_to_todo_create "
+<todo>
+  <description>this will succeed 4</description>
+  <context_id>#{contexts(:office).id}</context_id>
+  <project_id>#{projects(:timemachine).id}</project_id>
+  <tags>
+    <tag><name>foo</name></tag>
+    <tag><name>bar</name></tag>
+    <tag><name>bingo</name></tag>
+  </tags>
+</todo>"
+
+    assert_response :success
+    todo = @user.todos.find_by_description("this will succeed 4")
+    assert_not_nil todo
+    assert_equal "bar, bingo, foo", todo.tag_list
+  end
+  
   def test_post_create_todo_with_new_context
     authenticated_post_xml_to_todo_create "
 <todo>
@@ -189,7 +221,7 @@ class TodoXmlApiTest < ActionController::IntegrationTest
     assert_not_nil todo
     assert_not_nil todo.project
     assert_equal projects(:timemachine).name, todo.project.name
-    assert 1, @user.projects.all(:conditions => ["projects.name = ?", projects(:timemachine).name]).count # no duplication of project
+    assert_equal 1, @user.projects.where("projects.name" => projects(:timemachine).name).count # no duplication of project
   end
 
   def test_post_create_todo_with_wrong_project_and_context_id
@@ -199,7 +231,7 @@ class TodoXmlApiTest < ActionController::IntegrationTest
   <context_id type='integer'>-16</context_id>
   <project_id type='integer'>-11</project_id>
 </todo>"
-    assert_response 422
+    assert_response 409
     assert_xml_select 'errors' do
       assert_select 'error', 2
     end
@@ -213,7 +245,7 @@ class TodoXmlApiTest < ActionController::IntegrationTest
   private
 
   def authenticated_post_xml_to_todo_create(postdata = @@valid_postdata, user = @user.login, password = @password)
-    authenticated_post_xml "/todos", user, password, postdata
+    authenticated_post_xml "/todos.xml", user, password, postdata
   end
 
 end

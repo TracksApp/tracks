@@ -1,19 +1,9 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
-require 'login_controller'
-require_dependency "login_system"
-
-# Re-raise errors caught by the controller.
-class LoginController; def rescue_action(e) raise e end; end
 
 class LoginControllerTest < ActionController::TestCase
   fixtures :preferences, :users
   
   def setup
-    assert_equal "test", ENV['RAILS_ENV']
-    assert_equal "change-me", Tracks::Config.salt
-    @controller = LoginController.new
-    @request = ActionController::TestRequest.new
-    @response = ActionController::TestResponse.new
   end
 
   #============================================
@@ -23,15 +13,16 @@ class LoginControllerTest < ActionController::TestCase
   def test_invalid_login
     post :login, {:user_login => 'cracker', :user_password => 'secret', :user_noexpiry => 'on'}
     assert_response :success
-    assert(!@response.has_session_object?(:user_id))
+    assert(!session[:user_id])
     assert_template "login"
   end
   
   def test_login_with_valid_admin_user
     @request.session['return-to'] = "/bogus/location"
     post :login, {:user_login => 'admin', :user_password => 'abracadabra', :user_noexpiry => 'on'}
-    user = User.find(session['user_id'])
-    assert_equal user.id, @response.session['user_id']
+    user = User.find_by_id(session['user_id'])
+    assert_not_nil user
+    assert_equal user.id, session['user_id']
     assert_equal user.login, "admin"
     assert user.is_admin
     assert_equal "Login successful: session will not expire.", flash[:notice]
@@ -40,12 +31,13 @@ class LoginControllerTest < ActionController::TestCase
   
   def test_login_with_valid_standard_user
     post :login, {:user_login => 'jane', :user_password => 'sesame', :user_noexpiry => 'off'}
-    user = User.find(session['user_id'])
-    assert_equal user.id, @response.session['user_id']
+    user = User.find_by_id(session['user_id'])
+    assert_not_nil user
+    assert_equal user.id, session['user_id']
     assert_equal user.login, "jane"
     assert user.is_admin == false || user.is_admin == 0
     assert_equal "Login successful: session will expire after 1 hour of inactivity.", flash[:notice]
-    assert_redirected_to home_url
+    assert_redirected_to root_url
   end
   
   def test_login_with_no_users_redirects_to_signup
@@ -58,21 +50,21 @@ class LoginControllerTest < ActionController::TestCase
     login_as :admin_user
     get :logout
     assert_nil(session['user_id'])
-    assert_redirected_to :controller => 'login', :action => 'login'
+    assert_redirected_to login_url
   end
   
   # Test login with a bad password for existing user
-  # 
+  #
   def test_login_bad_password
     post :login, {:user_login => 'jane', :user_password => 'wrong', :user_noexpiry => 'on'}
-    assert(!@response.has_session_object?(:user))
+    assert(!session[:user])
     assert_equal "Login unsuccessful.", flash[:warning]
     assert_response :success
   end
   
   def test_login_bad_login
     post :login, {:user_login => 'blah', :user_password => 'sesame', :user_noexpiry => 'on'}
-    assert(!@response.has_session_object?(:user))
+    assert(!session[:user])
     assert_equal "Login unsuccessful.", flash[:warning]
     assert_response :success
   end
@@ -81,7 +73,7 @@ class LoginControllerTest < ActionController::TestCase
     post :login, :user_login => 'jane', :user_password => 'sesame', :user_noexpiry => "on"
     assert_not_nil @response.cookies["auth_token"]
   end
-
+  
   def test_should_not_remember_me
     post :login, :user_login => 'jane', :user_password => 'sesame', :user_noexpiry => "off"
     assert_nil @response.cookies["auth_token"]
@@ -92,14 +84,14 @@ class LoginControllerTest < ActionController::TestCase
     get :logout
     assert_nil @response.cookies["auth_token"]
   end
-
+  
   def test_should_login_with_cookie
     users(:other_user).remember_me
     @request.cookies["auth_token"] = auth_token_cookie_for(:other_user)
     get :login
     assert @controller.send(:logged_in?)
   end
-
+  
   def test_should_fail_expired_cookie_login
     users(:other_user).remember_me
     users(:other_user).update_attribute :remember_token_expires_at, 5.minutes.ago.utc
@@ -107,7 +99,7 @@ class LoginControllerTest < ActionController::TestCase
     get :login
     assert !@controller.send(:logged_in?)
   end
-
+  
   def test_should_fail_cookie_login
     users(:other_user).remember_me
     @request.cookies["auth_token"] = 'invalid_auth_token'
@@ -137,10 +129,9 @@ class LoginControllerTest < ActionController::TestCase
   end
   
   private
-        
+  
   def auth_token_cookie_for(user)
     users(user).remember_token
   end
-  
     
 end

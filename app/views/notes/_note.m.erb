@@ -1,0 +1,12 @@
+<div class="mobile_note">
+  <%= sanitize(textilize_without_paragraph(note.body)) %>
+</div>
+<div class="mobile_note_info">
+  <br/>
+  <%= link_to(t('notes.note_location_link') + note.project.name, project_path(note.project, :format => 'm')) %>
+  <%= Note.human_attribute_name('created_at') %>: <%= format_date(note.created_at) %>
+  <% if note.updated_at? -%>
+  &nbsp;|&nbsp;<%= Note.human_attribute_name('updated_at') %>: <%= format_date(note.updated_at) %>
+<% end -%>
+</div>
+<% note = nil -%>

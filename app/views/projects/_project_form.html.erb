@@ -1,0 +1,52 @@
+<%
+project = project_form
+%>
+
+<%= form_for(project, :html => {
+    :id => dom_id(project, 'edit_form'),
+    :class => "inline-form edit-project-form",
+    :method => :put }) do
+  -%>
+  <div id="edit_error_status"><%= get_list_of_error_messages_for(@project) %></div>
+  <%= source_view_tag( @source_view ) -%>
+
+  <label for="project_name">Name:</label><br/>
+  <%= text_field :project, 'name', :class => 'project-name', :tabindex => next_tab_index  %><br/>
+
+  <label for="project_description">Description (optional):</label><br/>
+  <%= text_area :project, 'description', "cols" => 30, "rows" => 4, :class => 'project-description', :tabindex => next_tab_index  %><br/>
+
+  <label for="project_done">Project status:</label><br/>
+  <% ['active', 'hidden', 'completed'].each do | state | %>
+    <%= radio_button(:project, 'state', state, {:tabindex => next_tab_index}) %> <%= state.titlecase %>
+  <% end %><br/>
+
+  <label for="project[default_context_name]">Default Context</label><br/>
+  <%= text_field_tag("project[default_context_name]", project.default_context.name, {:tabindex=>next_tab_index,:size=> 25}) %>
+  <br/>
+
+  <label for="project[default_tags]">Default Tags</label><br/>
+  <%= text_field_tag("project[default_tags]", project.default_tags, {:tabindex=>next_tab_index,:size=> 25}) %>
+  <br/>
+
+  <input type="hidden" name="wants_render" value="true" />
+  <div class="submit_box">
+    <div class="widgets" id="<%= dom_id(project, 'widgets') %>">
+      <button type="submit" class="positive" id="<%= dom_id(project, 'submit') %>" tabindex="<%=next_tab_index%>">
+        <%=image_tag("accept.png", :alt => "") %>
+        Update
+      </button>
+      <a href="#" id="<%= dom_id(project, 'cancel') %>" class="negative">
+        <%=image_tag("cancel.png", :alt => "") %>
+        Cancel
+      </a>
+      <a href="<%=set_reviewed_project_path(project)+"?_source_view=#{@source_view}"%>" id="<%= dom_id(project, 'reviewed') %>" class="reviewed">
+        <%=image_tag("reviewed.png", :alt => "") %>
+        Reviewed
+      </a>
+    </div>
+  </div>
+  <br/><br/>
+<%
+end
+-%>

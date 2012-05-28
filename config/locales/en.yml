@@ -47,6 +47,8 @@ en:
       projects_title: Projects
       search: Search All Items
       preferences_title: Show my preferences
+      admin: Admin
+      help: "?"
   integrations:
     opensearch_description: Search in Tracks
     applescript_next_action_prompt: "Description of next action:"
@@ -90,8 +92,13 @@ en:
     third: Third
     recurring_todos: Repeating Actions
     actions: Actions
+    actions_midsentence:
+      zero: actions
+      one: action
+      other: actions
     add: Add
     previous: Previous
+    show_all: Show all
     logout: Logout
     go_back: Go back
     optional: optional
@@ -128,6 +135,10 @@ en:
     errors_with_fields: "There were problems with the following fields:"
     next: Next
     todo: todo
+    note:
+      zero: "no notes"
+      one: "1 note"
+      other: "%{count} notes"
     context: Context
     drag_handle: DRAG
     description: Description
@@ -139,6 +150,12 @@ en:
     email: Email
     search: Search
     ajaxError: There was an error retrieving from server
+    days_midsentence:
+      zero: days
+      one: day
+      other: days
+    deferred: deferred
+    not_available_abbr: "n/a"
   data:
     import_successful: Import was successful.
     import_errors: Some errors occurred during import
@@ -172,6 +189,7 @@ en:
         context: Context
         description: Description
         due: Due
+        tags: Tags
       user:
         last_name: Last name
         first_name: First name
@@ -196,6 +214,9 @@ en:
         sms_email: From email
         first_name: First name
         show_completed_projects_in_sidebar: Show completed projects in sidebar
+      note:
+        created_at: Created at
+        updated_at: Updated at
     errors:
       messages:
         greater_than_or_equal_to: must be greater than or equal to %{count}
@@ -203,7 +224,7 @@ en:
         confirmation: doesn't match confirmation
         less_than_or_equal_to: must be less than or equal to %{count}
         blank: can't be blank
-        invalid: cannot contain the comma (',') character
+        invalid: "cannot contain the comma (',') character"
         exclusion: is reserved
         odd: must be odd
         even: must be even
@@ -233,6 +254,8 @@ en:
           one: 1 error prohibited this %{model} from being saved
           other: "%{count} errors prohibited this %{model} from being saved"
   stats:
+    index_title: TRACKS::Statistics
+    within_one: Within 1
     tag_cloud_title: Tag cloud for all actions
     tag_cloud_description: This tag cloud includes tags of all actions (completed, not completed, visible and/or hidden)
     tag_cloud_90days_title: Tag cloud actions in past 90 days
@@ -254,7 +277,11 @@ en:
       running_time: Running time of an action (weeks)
       months_ago: Months ago
     current_running_time_of_incomplete_visible_actions: Current running time of incomplete visible actions
-    totals_deferred_actions: of which %{count} are deferred actions in the tickler
+    open_per_week: Active (visible and hidden) next actions per week
+    open_per_week_legend:
+      actions: Actions
+      weeks: Weeks ago
+    totals_deferred_actions: "of which %{count} are deferred actions in the tickler"
     running_time_legend:
       actions: Actions
       percentage: Percentage
@@ -320,6 +347,12 @@ en:
     click_to_update_actions: Click on a bar in the chart to update the actions below.
     no_actions_selected: There are no actions selected.
     actions_actions_avg_created_30days: In the last 30 days you created on average %{count} actions
+    actions_dow_30days_legend:
+      number_of_actions: Number of actions
+      day_of_week: Day of the week
+    actions_day_of_week_legend:
+      number_of_actions: Number of actions
+      day_of_week: Day of the week
     tod30_legend:
       number_of_actions: Number of actions
       time_of_day: Time of day
@@ -426,7 +459,7 @@ en:
     completed_last_x_days: Completed in the last %{count} days
     no_actions_with: Currently there are no incomplete actions with the tag '%{tag_name}'
     defer_x_days:
-      one: Defer one day
+      one: Defer 1 day
       other: Defer %{count} days
     added_new_next_action_singular: Added new next action
     no_completed_actions: Currently there are no completed actions.
@@ -562,6 +595,8 @@ en:
     add_new_recurring: Add a new recurring action
     edit_recurring_todo: Edit repeating action
     no_incomplete_actions: There are no incomplete actions
+    see_all_completed: You can see all completed actions %{link}
+    all_completed_here: here
   notes:
     delete_confirmation: Are you sure that you want to delete the note '%{id}'?
     delete_item_title: Delete item
@@ -574,6 +609,7 @@ en:
     no_notes_available: "Currently there are no notes: add notes to projects from individual project pages."
     note_header: Note %{id}
     delete_note_confirm: Are you sure that you want to delete the note '%{id}'?
+    in_project: "In: "
   states:
     hidden_plural: Hidden
     completed: Completed
@@ -654,6 +690,7 @@ en:
       short: "%d %b %H:%M"
       month_day: "%B %d"
       long: "%B %d, %Y %H:%M"
+      stats: "%a %d-%m"
     pm: pm
   preferences:
     open_id_url: Your OpenID URL is
@@ -755,6 +792,7 @@ en:
     toggle_single: Add a next action
     add_action: Add action
     add_actions: Add actions
+    add_context: Add Context
     tags_for_all_actions: Tags for all actions (sep. with commas)
     toggle_single_title: Add a new next action
     project_for_all_actions: Project for all actions
@@ -832,7 +870,7 @@ en:
     projects_and_actions: Active projects with their actions
     context_needed: There needs to be at least one context before you can request a feed
     actions_due_next_week: Actions due in 7 days or earlier
-    notice_incomplete_only: "Note: All feeds show only actions that have not been marked as done, unless stated otherwise."
+    notice_incomplete_only: "Note: All feeds show only actions that have not been marked as done, unless stated otherwise. These iCal feeds can be added to todo lists. If you want to show due todos in a calendar, use the iCal feed on the calendar page"
     all_actions: All actions
     actions_completed_last_week: Actions completed in the last 7 days
     context_centric_actions: Feeds for incomplete actions in a specific context
@@ -866,6 +904,7 @@ en:
     no_contexts_hidden: Currently there are no hidden contexts
     new_context_pre: New context '
     status_hidden: Context is hidden
+    todos_append: in this context
   login:
     login_cas: go to the CAS
     sign_in: Sign in

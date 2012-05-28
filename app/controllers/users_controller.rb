@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  
   before_filter :admin_login_required, :only => [ :index, :show, :destroy ]
   skip_before_filter :login_required, :only => [ :new, :create ]
   skip_before_filter :check_for_deprecated_password_hash,
@@ -17,7 +18,7 @@ class UsersController < ApplicationController
         store_location
       end
       format.xml do
-        @users  = User.find(:all, :order => 'login')
+        @users  = User.order('login').all
         render :xml => @users.to_xml(:except => [ :password ])
       end
     end
@@ -25,7 +26,7 @@ class UsersController < ApplicationController
 
   # GET /users/id GET /users/id.xml
   def show
-    @user = User.find_by_id(params[:id])
+    @user = User.find(params[:id])
     render :xml => @user.to_xml(:except => [ :password ])
   end
 
@@ -64,7 +65,7 @@ class UsersController < ApplicationController
   # POST /users POST /users.xml
   def create
     if params['exception']
-      render_failure "Expected post format is valid xml like so: <request><login>username</login><password>abc123</password></request>."
+      render_failure "Expected post format is valid xml like so: <user><login>username</login><password>abc123</password></user>."
       return
     end
     respond_to do |format|
@@ -82,7 +83,7 @@ class UsersController < ApplicationController
             user.auth_type == 'ldap' &&
             !SimpleLdapAuthenticator.valid?(user.login, params['user']['password'])
           notify :warning, "Incorrect password"
-          redirect_to :action => 'new'
+          redirect_to signup_path
           return
         end
 
@@ -111,23 +112,21 @@ class UsersController < ApplicationController
         return
       end
       format.xml do
-        unless User.find_by_id_and_is_admin(session['user_id'], true)
+        unless current_user && current_user.is_admin
           render :text => "401 Unauthorized: Only admin users are allowed access to this function.", :status => 401
           return
         end
         unless check_create_user_params
-          render_failure "Expected post format is valid xml like so: <request><login>username</login><password>abc123</password></request>."
+          render_failure "Expected post format is valid xml like so: <user><login>username</login><password>abc123</password></user>.", 400
           return
         end
-        user = User.new(params[:request])
-        if Tracks::Config.auth_schemes.include?('cas')   && session[:cas_user]
-          user.auth_type = "cas" #if they area  cas user
-        end
-        user.password_confirmation = params[:request][:password]
-        if user.save
+        user = User.new(params[:user])
+        user.password_confirmation = params[:user][:password]
+        saved = user.save
+        unless user.new_record?
           render :text => t('users.user_created'), :status => 200
         else
-          render_failure user.errors.to_xml
+          render_failure user.errors.to_xml, 409
         end
         return
       end
@@ -136,16 +135,16 @@ class UsersController < ApplicationController
 
   # DELETE /users/id DELETE /users/id.xml
   def destroy
-    @deleted_user = User.find_by_id(params[:id])
+    @deleted_user = User.find(params[:id])
     @saved = @deleted_user.destroy
-    @total_users = User.find(:all).size
+    @total_users = User.all.size
 
     respond_to do |format|
       format.html do
         if @saved
-          notify :notice, t('users.successfully_deleted_user', :username => @deleted_user.login), 2.0
+          notify :notice, t('users.successfully_deleted_user', :username => @deleted_user.login)
         else
-          notify :error, t('users.failed_to_delete_user', :username => @deleted_user.login), 2.0
+          notify :error, t('users.failed_to_delete_user', :username => @deleted_user.login)
         end
         redirect_to users_url
       end
@@ -154,19 +153,18 @@ class UsersController < ApplicationController
     end
   end
 
-
   def change_password
     @page_title = t('users.change_password_title')
   end
 
   def update_password
     # is used for focing password change after sha->bcrypt upgrade
-    @user.change_password(params[:user][:password], params[:user][:password_confirmation])
+    current_user.change_password(params[:user][:password], params[:user][:password_confirmation])
     notify :notice, t('users.password_updated')
     redirect_to preferences_path
   rescue Exception => error
     notify :error, error.message
-    redirect_to :action => 'change_password'
+    redirect_to change_password_user_path(current_user)
   end
 
   def change_auth_type
@@ -174,40 +172,19 @@ class UsersController < ApplicationController
   end
 
   def update_auth_type
-    if (params[:open_id_complete] || (params[:user][:auth_type] == 'open_id')) && openid_enabled?
-      authenticate_with_open_id do |result, identity_url|
-        if result.successful?
-          # Success means that the transaction completed without error. If info
-          # is nil, it means that the user cancelled the verification.
-          @user.auth_type = 'open_id'
-          @user.open_id_url = identity_url
-          if @user.save
-            notify :notice, t('users.openid_url_verified', :url => identity_url)
-          else
-            debugger
-            notify :warning, t('users.openid_ok_pref_failed', :url => identity_url)
-          end
-          redirect_to preferences_path
-        else
-          notify :warning, result.message
-          redirect_to :action => 'change_auth_type'
-        end
-      end
-      return
-    end
-    @user.auth_type = params[:user][:auth_type]
-    if @user.save
+    current_user.auth_type = params[:user][:auth_type]
+    if current_user.save
       notify :notice, t('users.auth_type_updated')
       redirect_to preferences_path
     else
-      notify :warning, t('users.auth_type_update_error', :error_messages => @user.errors.full_messages.join(', '))
-      redirect_to :action => 'change_auth_type'
+      notify :warning, t('users.auth_type_update_error', :error_messages => current_user.errors.full_messages.join(', '))
+      redirect_to change_auth_type_user_path(current_user)
     end
   end
 
   def refresh_token
-    @user.generate_token
-    @user.save!
+    current_user.generate_token
+    current_user.save!
     notify :notice, t('users.new_token_generated')
     redirect_to preferences_path
   end
@@ -225,11 +202,11 @@ class UsersController < ApplicationController
   end
 
   def check_create_user_params
-    return false unless params.has_key?(:request)
-    return false unless params[:request].has_key?(:login)
-    return false if params[:request][:login].empty?
-    return false unless params[:request].has_key?(:password)
-    return false if params[:request][:password].empty?
+    return false unless params.has_key?(:user)
+    return false unless params[:user].has_key?(:login)
+    return false if params[:user][:login].empty?
+    return false unless params[:user].has_key?(:password)
+    return false if params[:user][:password].empty?
     return true
   end
 

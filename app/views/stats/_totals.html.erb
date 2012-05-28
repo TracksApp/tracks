@@ -1,0 +1,23 @@
+<p><%= t('stats.totals_project_count', :count => current_user.projects.count) %>
+  <%= t('stats.totals_active_project_count', :count => current_user.projects.active.count) %>,
+  <%= t('stats.totals_hidden_project_count', :count => current_user.projects.hidden.count) %>
+  <%= t('stats.totals_completed_project_count', :count => current_user.projects.completed.count) %></p>
+
+<p><%= t('stats.totals_context_count', :count => current_user.contexts.count ) %>
+<%= t('stats.totals_visible_context_count', :count => current_user.contexts.active.count) %>
+<%= t('stats.totals_hidden_context_count', :count => current_user.contexts.hidden.count) %>
+
+<% unless current_user.todos.empty? -%>
+<p><%= t('stats.totals_first_action', :date => format_date(@first_action.created_at)) %>
+<%= t('stats.totals_action_count', :count => current_user.todos.count) %>,
+<%= t('stats.totals_actions_completed', :count => current_user.todos.completed.count) %>
+
+<p><%= t('stats.totals_incomplete_actions', :count => current_user.todos.not_completed.count) %>
+<%= t('stats.totals_deferred_actions', :count => current_user.todos.deferred.count) %>
+<%= t('stats.totals_blocked_actions', :count => current_user.todos.blocked.count) %>
+</p>
+
+<p><%= t('stats.totals_tag_count', :count => @tags_count) %>
+  <%= t('stats.totals_unique_tags', :count => @unique_tags_count) %>
+<% end -%>
+

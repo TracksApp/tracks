@@ -34,5 +34,5 @@ function text_for_status_message() {
 }
 
 function html_for_error_messages() {
-  return "<%= escape_javascript(error_messages_for('recurring_todo')) %>";
+  return "<%= escape_javascript(get_list_of_error_messages_for(@recurring_todo)) %>";
 }

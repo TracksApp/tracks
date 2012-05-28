@@ -1,21 +1,11 @@
 require  File.expand_path(File.dirname(__FILE__) + '/../test_helper')
-require 'projects_controller'
-
-# Re-raise errors caught by the controller.
-class ProjectsController; def rescue_action(e) raise e end; end
 
 class ProjectXmlApiTest < ActionController::IntegrationTest
-  fixtures :users, :projects
-
   @@project_name = "My New Project"
-  @@valid_postdata = "<request><project><name>#{@@project_name}</name></project></request>"
-  
-  def setup
-    assert_test_environment_ok
-  end
+  @@valid_postdata = "<project><name>#{@@project_name}</name></project>"
   
   def test_retrieve_project
-    authenticated_get_xml "/projects/1", users(:admin_user).login, 'abracadabra', {}
+    authenticated_get_xml "/projects/1.xml", users(:admin_user).login, 'abracadabra', {}
     assert_tag :tag => "project"
     assert_tag :tag => "project", :child => {:tag => "not_done" }
     assert_tag :tag => "project", :child => {:tag => "deferred" }
@@ -32,30 +22,29 @@ class ProjectXmlApiTest < ActionController::IntegrationTest
     
   def test_fails_with_invalid_xml_format2
     authenticated_post_xml_to_project_create "<request><project></project></request>"
-    assert_404_invalid_xml
+    assert_responses_with_error 'Name project must have a name'
   end
   
   def test_xml_simple_param_parsing
     authenticated_post_xml_to_project_create
-    assert @controller.params.has_key?(:request)
-    assert @controller.params[:request].has_key?(:project)
-    assert @controller.params[:request][:project].has_key?(:name)
-    assert_equal @@project_name, @controller.params[:request][:project][:name]
+    assert @controller.params.has_key?(:project)
+    assert @controller.params[:project].has_key?(:name)
+    assert_equal @@project_name, @controller.params[:project][:name]
   end
   
-  def test_fails_with_401_if_not_authorized_user	 	
+  def test_fails_with_401_if_not_authorized_user
     authenticated_post_xml_to_project_create @@valid_postdata, 'nobody', 'nohow'
     assert_response 401
   end
   
   def test_fails_with_too_long_name
-    invalid_with_long_name_postdata = "<request><project><name>foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo arfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo arfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfo barfoobarfoobarfoobarfoobarfoobarfoobar</name></project></request>"
+    invalid_with_long_name_postdata = "<project><name>foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo arfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo arfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfo barfoobarfoobarfoobarfoobarfoobarfoobar</name></project>"
     authenticated_post_xml_to_project_create invalid_with_long_name_postdata
-    assert_response_and_body 404, "Name project name must be less than 256 characters"
+    assert_responses_with_error 'Name context name must be less than 256 characters'
   end
   
   def test_fails_with_comma_in_name
-    authenticated_post_xml_to_project_create "<request><project><name>foo,bar</name></project></request>"
+    authenticated_post_xml_to_project_create "<project><name>foo,bar</name></project>"
     assert_response :created
     project1 = Project.find_by_name("foo,bar")
     assert_not_nil project1, "expected project 'foo,bar' to be created"
@@ -73,11 +62,11 @@ class ProjectXmlApiTest < ActionController::IntegrationTest
   private
     
   def authenticated_post_xml_to_project_create(postdata = @@valid_postdata, user = users(:other_user).login, password = 'sesame')
-    authenticated_post_xml "/projects", user, password, postdata
+    authenticated_post_xml "/projects.xml", user, password, postdata
   end
 
   def assert_404_invalid_xml
-    assert_response_and_body 404, "Expected post format is valid xml like so: <request><project><name>project name</name></project></request>."
+    assert_response_and_body 404, "Expected post format is valid xml like so: <project><name>project name</name></project>."
   end
   
 end

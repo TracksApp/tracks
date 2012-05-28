@@ -1,0 +1,31 @@
+<%-
+  total_count ||= -1
+  total_count_string = total_count!=-1 ? " / #{total_count}" : ""
+  suppress_sort_menu ||= false
+  suppress_drag_handle ||= false
+-%>
+<div class="project-state-group" id="list-<%= state %>-projects-container" <%= " style=\"display:none\"" if project_state_group.empty? %>>
+  <h2>
+    <span id="<%= state %>-projects-count" class="badge"><%= project_state_group.length%><%= total_count_string%></span>
+
+    <%= t('common.last' ) unless ( ['review','stalled','blocked','current'].include?(state) )%>
+    <%= t('states.'+state+'_plural' )%>
+    <%= t('common.projects') %><%= total_count==-1 ? "" : " (#{link_to(t('common.show_all'), done_projects_path)})".html_safe%>
+
+  </h2>
+  <% unless suppress_sort_menu %>
+  <div class="menu_sort"><span class="sort_separator"><%= t('common.sort.sort') %>&nbsp;</span>
+    <div class="alpha_sort">
+      <%= link_to(t("common.sort.alphabetically"), alphabetize_projects_path(:state => state),
+        :id => "#{state}_alphabetize_link", :class => "alphabetize_link", :title => t('common.sort.alphabetically_title'), :x_confirm_message => t('common.sort.alphabetically_confirm')) %>
+    </div><span class="sort_separator">&nbsp;|&nbsp;</span><div class="tasks_sort">
+      <%= link_to(t("common.sort.by_task_count"), actionize_projects_path(:state => state),
+        :id => "#{state}_actionize_link", :class => "actionize_link", :title => t('common.sort.by_task_count_title'), :x_confirm_message => t('common.sort.by_task_count_title_confirm')) %>
+    </div>
+  </div>
+  <% end %>
+
+  <div id="list-<%= state %>-projects" class="project-list">
+    <%= render :partial => 'projects/project_listing', :collection => project_state_group, :locals => {:suppress_drag_handle => suppress_drag_handle} %>
+  </div>
+</div>

@@ -6,7 +6,7 @@
 
   <p><%= t('users.select_authentication_type') %></p>
 
-  <% form_tag :action => 'update_auth_type' do %>
+  <%= form_tag :action => 'update_auth_type' do %>
 	  <div><label for="user_auth_type"><%= t('users.label_auth_type') %>:</label> <%=   select('user', 'auth_type', Tracks::Config.auth_schemes.collect {|p| [ p, p ] }) %></div>
 	  <div id="open_id" style="display:<%= current_user.auth_type == 'open_id' ? 'block' : 'none' %>"><label for="openid_url"><%= t('users.identity_url') %>:</label> <input type="text" name="openid_url" value="<%= current_user.open_id_url %>" class="open_id" /></div>
 		<div class="actions"><%= submit_tag t('users.auth_change_submit') %> <%= link_to t('common.cancel'), preferences_path %></div>

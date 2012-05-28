@@ -4,7 +4,7 @@ When /^I edit my last name to "([^"]*)"$/ do |last_name|
 end
 
 When /^I set the password and confirmation to "([^"]*)"$/ do |new_password|
-  When "I set the password to \"#{new_password}\" and confirmation to \"#{new_password}\""
+  step "I set the password to \"#{new_password}\" and confirmation to \"#{new_password}\""
 end
 
 When /^I set the password to "([^"]*)" and confirmation to "([^"]*)"$/ do |new_password, new_password_confirmation|

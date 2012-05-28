@@ -1,0 +1,41 @@
+<%- reset_tab_index %>
+<div id="project_new_project_container">
+
+  <div id="toggle_project_link" class="hide_form">
+    <a id="toggle_project_new" href="#" title="<%= t('projects.hide_form_title') %>" accesskey="n">&laquo; <%= t('projects.hide_form') %></a>
+  </div>
+
+  <div id="project_new" class="project_new" style="display:block">
+    <%= form_for(@new_project, :html => {:id => 'project_form',:name=>'project',:class => "inline-form", :method => :post }) do -%>
+      <div id="error_status"><%= get_list_of_error_messages_for(@new_project) %></div>
+
+      <label for="project_name"><%= Project.human_attribute_name(:name) %>:</label><br />
+      <%= text_field 'project', 'name', "tabindex" => next_tab_index  %><br />
+
+      <label for="project_description"><%= Project.human_attribute_name(:description) %> (<%= t('common.optional') %>):</label><br />
+      <%= text_area 'project', 'description', "cols" => 30, "rows" => 4, "tabindex" => next_tab_index  %><br />
+
+      <% unless @contexts.empty? -%>
+        <label for="default_context_name"><%= Project.human_attribute_name(:default_context_name) %> (<%= t('common.optional') %>):</label><br />
+        <%= text_field_tag("project[default_context_name]", @new_project.default_context.name, :tabindex => next_tab_index) %>
+        <br />
+      <% end -%>
+
+      <label for="default_tags"><%= Project.human_attribute_name(:default_tags) %> (<%= t('common.optional') %>):</label><br />
+      <%= text_field_tag("project[default_tags]", @new_project.default_tags, :tabindex => next_tab_index) %>
+
+      <br/>
+
+      <div class="submit_box">
+        <div class="widgets">
+          <button type="submit" class="positive" id="project_new_project_submit">
+            <%= image_tag("accept.png", :alt => "") + t('projects.add_project') %>
+          </button>
+        </div>
+      </div>
+
+      <input id="go_to_project" type="checkbox" tabindex="<%= next_tab_index%>" name="go_to_project"/><label for="go_to_project"><%= t('projects.to_new_project_page') %></label><br />
+
+    <% end -%>
+  </div>
+</div>

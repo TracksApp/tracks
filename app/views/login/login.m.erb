@@ -1,0 +1,33 @@
+<%
+  auth_schemes = Tracks::Config.auth_schemes
+  show_database_form = auth_schemes.include?('database')
+-%>
+<div title="<%= t('login.account_login') %>" id="loginform" class="form">
+  <%= render_flash -%>
+  <h3><%= t('login.please_login') %>:</h3>
+<% if show_database_form %>
+  <div id="database_auth_form">
+      <%= form_tag login_path(:format => 'm') do %>
+        <table>
+          <tr>
+            <td><label for="user_login"><%= User.human_attribute_name('login') %>:</label></td>
+            <td><input type="text" name="user_login" id="user_login" value="" class="login_text" /></td>
+          </tr>
+          <tr>
+            <td><label for="user_password"><%= User.human_attribute_name('password') %>:</label></td>
+            <td><input type="password" name="user_password" id="user_password" class="login_text" /></td>
+          </tr>
+         <tr>
+            <td><label for="user_noexpiry"><%= t('login.user_no_expiry') %>:</label></td>
+            <td><input type="checkbox" name="user_noexpiry" id="user_noexpiry" checked="checked" /></td>
+          </tr>
+          <tr>
+            <td>&nbsp;</td>
+            <td><input type="submit" name="login" value="<%= t('login.sign_in') %> &#187;" class="primary" /></td>
+          </tr>
+        </table>
+      <% end %>
+  </div>
+<% end %>
+
+</div>

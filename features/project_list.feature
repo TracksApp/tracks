@@ -24,34 +24,34 @@ Feature: Manage the list of projects
     And I follow "manage me"
     Then I should be on the "manage me" project page
 
-  @selenium
+  @javascript
   Scenario: Editing a project name will update the list
     When I go to the projects page
     And I edit the project name of "manage me" to "manage him"
     Then I should see "manage him"
 
-  @selenium
+  @javascript
   Scenario: Deleting a project will remove it from the list
     When I go to the projects page
     And I delete project "manage me"
-    Then I should not see "manage me"
+    Then I should see that a project named "manage me" is not present
     And the badge should show 2
     And the project list badge for "active" projects should show 2
 
-  @selenium
+  @javascript
   Scenario: Deleting a project after a edit will remove it from the list
     # make sure the js is enabled after an edit and another edit
     When I go to the projects page
     And I edit the project name of "manage me" to "manage him"
-    Then I should see "manage him"
+    Then I should see a project named "manage him"
     When I edit the project name of "manage him" to "manage her"
-    Then I should see "manage her"
+    Then I should see a project named "manage her"
     When I delete project "manage her"
-    Then I should not see "manage her"
+    Then I should not see a project named "manage her"
     And the badge should show 2
     And the project list badge for "active" projects should show 2
 
-  @selenium
+  @javascript
   Scenario: Changing project state will move project to other state list
     When I go to the projects page
     Then the project "manage me" should be in state list "active"
@@ -62,14 +62,14 @@ Feature: Manage the list of projects
     And the project list badge for "active" projects should show 2
     And the project list badge for "hidden" projects should show 1
 
-  @selenium
+  @javascript
   Scenario: Dragging a project to change list order of projects
     When I go to the projects page
     Then the project "manage me" should be above the project "upgrade jquery"
     When I drag the project "manage me" below "upgrade jquery"
     Then the project "upgrade jquery" should be above the project "manage me"
 
-  @selenium
+  @javascript
   Scenario: Hiding and unhiding the new project form
     When I go to the projects page
     Then the new project form should be visible
@@ -78,7 +78,7 @@ Feature: Manage the list of projects
     When I follow "Create a new project"
     Then the new project form should be visible
 
-  @selenium
+  @javascript
   Scenario: Adding a new project
     When I go to the projects page
     And I submit a new project with name "finish cucumber tests"
@@ -86,20 +86,20 @@ Feature: Manage the list of projects
     And the badge should show 4
     And the project list badge for "active" projects should show 4
 
-  @selenium
+  @javascript
   Scenario: Adding a new project and take me to the project page
     When I go to the projects page
     And I submit a new project with name "finish cucumber tests" and select take me to the project
     Then I should be on the "finish cucumber tests" project page
 
-  @selenium
+  @javascript
   Scenario: Sorting the project alphabetically
     When I go to the projects page
     Then the project "manage me" should be above the project "a project name starting with a"
     When I sort the active list alphabetically
     Then the project "a project name starting with a" should be above the project "manage me"
 
-  @selenium
+  @javascript
   Scenario: Sorting the project by number of task
     Given I have a project "test" with 2 todos
     And I have a project "very busy" with 10 todos
@@ -108,7 +108,7 @@ Feature: Manage the list of projects
     When I sort the list by number of tasks
     Then the project "very busy" should be above the project "test"
 
-  @selenium
+  @javascript
   Scenario: Can add a project with comma in the name
     When I go to the projects page
     And I submit a new project with name "foo,bar"
@@ -116,25 +116,25 @@ Feature: Manage the list of projects
     And the badge should show 4
     And the project list badge for "active" projects should show 4
 
-  @selenium
+  @javascript
   Scenario: Listing projects with only active actions
     Given I have a project "do it now" with 2 active todos
     When I go to the projects page
     Then the project "do it now" should have 2 actions listed
 
-  @selenium
+  @javascript
   Scenario: Listing projects with both active and deferred actions
     Given I have a project "now and later" with 2 active actions and 2 deferred actions
     When I go to the projects page
     Then the project "now and later" should have 2 actions listed
 
-  @selenium
+  @javascript
   Scenario: Listing projects with only deferred actions
     Given I have a project "only later" with 3 deferred actions
     When I go to the projects page
     Then the project "only later" should have 3 deferred actions listed
 
-  @selenium
+  @javascript
   Scenario: Listing projects with no actions
     Given I have a project "all done" with 0 active actions and 0 deferred actions
     When I go to the projects page

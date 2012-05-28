@@ -1,14 +1,12 @@
 Given /^I have logged in as "(.*)" with password "(.*)"$/ do |username, password|
-  When "I go to the login page"
-  fill_in "Login", :with => username
-  fill_in "Password", :with => password
-  uncheck "Stay logged in:"
-  click_button
-  if response.respond_to? :selenium
-    selenium.wait_for_page_to_load(5000)
-  end
+  step "I go to the login page"
+  fill_in "user_login", :with => username
+  fill_in "user_password", :with => password
+  uncheck "user_noexpiry"
+  click_button "Sign in"
+  
   logout_regexp = @mobile_interface ? "Logout" : "Logout \(#{username}\)"
-  response.should contain(logout_regexp)
+  page.should have_content(logout_regexp)
   @current_user = User.find_by_login(username)
 end
 
@@ -16,23 +14,20 @@ When /^I submit the login form as user "([^\"]*)" with password "([^\"]*)"$/ do 
   fill_in 'Login', :with => username
   fill_in 'Password', :with => password
   uncheck "Stay logged in:"
-  click_button
+  click_button "Sign in"
 end
 
 When /^my session expires$/ do
-  selenium.wait_for_page_to_load(5000)
-
   # use expire_session to force expiry of session
   js = '$.ajax({type: "GET", url: "/login/expire_session", dataType: "script", async: false});'
-  selenium.run_script(js);
+  page.execute_script(js);
 
   # force check of expiry bypassing timeout
   js = '$.ajax({type: "GET", url: "/login/check_expiry", dataType: "script", async: false});'
-  selenium.run_script(js);
-
-  sleep(2)
+  page.execute_script(js);
+  sleep 1
 end
 
 When /^I log out of Tracks$/ do
-  When "I go to the logout page"
+  step "I go to the logout page"
 end

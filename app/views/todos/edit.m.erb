@@ -1,0 +1,5 @@
+<%= form_tag todo_path(@todo, :format => 'm'), :name => 'mobileEdit', :method => :put do %>
+  <%= render :partial => 'edit_form', :locals => { :parent_container_type => "show_mobile" } %>
+  <p><input type="submit" value="<%= t('common.update') %>" tabindex="6" accesskey="#" /></p>
+<% end -%>
+<%= link_to t('common.cancel'), @return_path %>

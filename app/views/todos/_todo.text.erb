@@ -1,0 +1,26 @@
+<%
+require 'htmlentities'
+htmlentities = HTMLEntities.new
+
+if (todo.starred?)
+  result_string = "  * "
+else
+  result_string = "  - "
+end
+
+if (todo.completed?) && todo.completed_at
+  result_string << "["+ htmlentities.decode(t('todos.completed')) +": " + format_date(todo.completed_at) + "] "
+end
+
+if todo.due
+  result_string << "[" + htmlentities.decode(t('todos.due')) + ": " + format_date(todo.due) + "] "
+  result_string << todo.description + " "
+else
+  result_string << todo.description + " "
+end
+
+unless todo.project.nil?
+  result_string << "(" + todo.project.name + ")"
+end
+-%><%= result_string -%>
+

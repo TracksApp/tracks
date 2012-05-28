@@ -1,5 +1,4 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
-require 'date'
 
 class TodoTest < ActiveSupport::TestCase
   fixtures :todos, :recurring_todos, :users, :contexts, :preferences, :tags, :taggings, :projects
@@ -47,7 +46,7 @@ class TodoTest < ActiveSupport::TestCase
     @not_completed2.description = ""
     assert !@not_completed2.save
     assert_equal 1, @not_completed2.errors.count
-    assert_equal "can't be blank", @not_completed2.errors.on(:description)
+    assert_equal "can't be blank", @not_completed2.errors[:description][0]
   end
 
   def test_validate_length_of_description
@@ -55,7 +54,7 @@ class TodoTest < ActiveSupport::TestCase
     @not_completed2.description = generate_random_string(101)
     assert !@not_completed2.save
     assert_equal 1, @not_completed2.errors.count
-    assert_equal "is too long (maximum is 100 characters)", @not_completed2.errors.on(:description)
+    assert_equal "is too long (maximum is 100 characters)", @not_completed2.errors[:description][0]
   end
 
   def test_validate_length_of_notes
@@ -63,7 +62,7 @@ class TodoTest < ActiveSupport::TestCase
     @not_completed2.notes = generate_random_string(60001)
     assert !@not_completed2.save
     assert_equal 1, @not_completed2.errors.count
-    assert_equal "is too long (maximum is 60000 characters)", @not_completed2.errors.on(:notes)
+    assert_equal "is too long (maximum is 60000 characters)", @not_completed2.errors[:notes][0]
   end
 
   def test_validate_show_from_must_be_a_date_in_the_future
@@ -72,13 +71,34 @@ class TodoTest < ActiveSupport::TestCase
                                        # and actual show_from value appropriately based on the date
     assert !t.save
     assert_equal 1, t.errors.count
-    assert_equal "must be a date in the future", t.errors.on(:show_from)
+    assert_equal "must be a date in the future", t.errors[:show_from][0]
+  end
+  
+  def test_validate_circular_dependencies
+    @completed.activate!
+    @not_completed3=@completed
+    
+    # 2 -> 1
+    @not_completed1.add_predecessor(@not_completed2)
+    assert @not_completed1.save!
+    assert_equal 1, @not_completed2.successors.count
+    
+    # 3 -> 2 -> 1
+    @not_completed2.add_predecessor(@not_completed3)
+    assert @not_completed2.save!
+    assert_equal 1, @not_completed3.successors.count
+    
+    # 1 -> 3 -> 2 -> 1 == circle
+    @not_completed3.add_predecessor(@not_completed1)
+    assert !@not_completed3.valid?
+    error_msg = "Adding ''Call Bill Gates to find out how much he makes per day' <'agenda'; 'Make more money than Billy Gates'>' would create a circular dependency"
+    assert_equal error_msg, @not_completed3.errors["Depends on:"][0]
   end
 
   def test_defer_an_existing_todo
     @not_completed2
     assert_equal :active, @not_completed2.aasm_current_state
-    @not_completed2.show_from = next_week
+    @not_completed2.show_from = Time.zone.now + 1.week
     assert @not_completed2.save, "should have saved successfully" + @not_completed2.errors.to_xml
     assert_equal :deferred, @not_completed2.aasm_current_state
   end
@@ -98,12 +118,6 @@ class TodoTest < ActiveSupport::TestCase
     todo = user.todos.build(:show_from => next_week, :context_id => 1, :description => 'foo')
     assert todo.save, "should have saved successfully" + todo.errors.to_xml
     assert_equal :deferred, todo.aasm_current_state
-  end
-
-  def test_feed_options
-    opts = Todo.feed_options(users(:admin_user))
-    assert_equal 'Tracks Actions', opts[:title], 'Unexpected value for :title key of feed_options'
-    assert_equal 'Actions for Admin Schmadmin', opts[:description], 'Unexpected value for :description key of feed_options'
   end
 
   def test_toggle_completion
@@ -249,11 +263,11 @@ class TodoTest < ActiveSupport::TestCase
     tag_c = Tag.find_by_name("c")
 
     todos_with_a = Todo.with_tag(tag_a)
-    assert 1, todos_with_a.count
+    assert_equal 1, todos_with_a.count
     assert_equal todo.description, todos_with_a.first.description
 
     todos_with_b = Todo.with_tag(tag_b)
-    assert 1, todos_with_b.count
+    assert_equal 1, todos_with_b.count
     assert_equal todo.id, todos_with_b.first.id
 
     todo2 = @not_completed2
@@ -263,10 +277,10 @@ class TodoTest < ActiveSupport::TestCase
     tag_d = Tag.find_by_name("d")
 
     todos_with_a = Todo.with_tag(tag_a)
-    assert 2, todos_with_a.count
+    assert_equal 2, todos_with_a.count
 
     todos_with_d = Todo.with_tag(tag_d)
-    assert 1, todos_with_a.count
+    assert_equal 1, todos_with_d.count
   end
 
   def test_finding_todos_with_more_tags_using_OR
@@ -286,12 +300,12 @@ class TodoTest < ActiveSupport::TestCase
     # overlapping tags
     tag_ids = [tag_a.id, tag_c.id]
     todos_with_a_or_c = Todo.with_tags(tag_ids)
-    assert 2, todos_with_a_or_c.count
+    assert_equal 2, todos_with_a_or_c.count
 
     # non-overlapping tags
     tag_ids = [tag_b.id, tag_d.id]
     todos_with_b_or_d = Todo.with_tags(tag_ids)
-    assert 2, todos_with_b_or_d.count
+    assert_equal 2, todos_with_b_or_d.count
   end
 
   def test_finding_todos_with_more_tags_using_AND
@@ -307,8 +321,8 @@ class TodoTest < ActiveSupport::TestCase
     tag_b_id = Tag.find_by_name("b").id
 
     todos_with_a_and_b = Todo.with_tags([tag_a_id]).with_tags([tag_b_id])
-    assert 1, todos_with_a_and_b.count
-    assert todo1.id, todos_with_a_and_b.first.id
+    assert_equal 1, todos_with_a_and_b.count
+    assert_equal todo1.id, todos_with_a_and_b.first.id
   end
 
   def test_finding_todos_with_more_tags_using_AND_and_OR
@@ -325,15 +339,73 @@ class TodoTest < ActiveSupport::TestCase
     tag_c_id = Tag.find_by_name("c").id
 
     todos_with_aORc_and_b = Todo.with_tags([tag_a_id, tag_c_id]).with_tags([tag_b_id])
-    assert 1, todos_with_aORc_and_b.count
-    assert todo1.id, todos_with_aORc_and_b.first.id
+    assert_equal 1, todos_with_aORc_and_b.count
+    assert_equal todo1.id, todos_with_aORc_and_b.first.id
 
     # let todo2 fit the expression
     todo2.tag_list = "a, b, r"
     todo2.save!
     todos_with_aORc_and_b = Todo.with_tags([tag_a_id, tag_c_id]).with_tags([tag_b_id])
-    assert 2, todos_with_aORc_and_b.count
+    assert_equal 2, todos_with_aORc_and_b.count
   end
 
+  # test named_scopes
+  def test_find_completed
+    # Given 2 completed todos, one completed now and one completed 2 months ago
+    @not_completed1.toggle_completion!
+    @completed.completed_at = 2.months.ago
+    @completed.save!
 
+    completed_old = @completed
+    completed_now = @not_completed1
+
+    # When I use the finders
+    recent_completed_todos = Todo.completed_after(1.month.ago).find(:all)
+    older_completed_todos = Todo.completed_before(1.month.ago).find(:all)
+
+    # Then completed1 should be before and completed2 should be after a month ago
+    assert older_completed_todos.include?(completed_old)
+    assert recent_completed_todos.include?(completed_now)
+
+    # And completed1 should not be after and completed2 should not be before a month ago
+    assert !older_completed_todos.include?(completed_now)
+    assert !recent_completed_todos.include?(completed_old)
+  end
+
+  def test_find_created
+    # Given 2 created todos, one created now and one created 2 months ago
+    user = @completed.user
+    todo_old = user.todos.create!({:description => "created long long ago", :context => @completed.context})
+    todo_old.created_at = 2.months.ago
+    todo_old.save!
+    todo_now = user.todos.create!({:description => "just created", :context => @completed.context})
+
+    # When I use the finders
+    recent_created_todos = Todo.created_after(1.month.ago).find(:all)
+    older_created_todos = Todo.created_before(1.month.ago).find(:all)
+
+    # Then todo1 should be before and todo2 should be after a month ago
+    assert older_created_todos.include?(todo_old)
+    assert recent_created_todos.include?(todo_now)
+
+    # And todo1 should not be after and todo2 should not be before a month ago
+    assert !older_created_todos.include?(todo_now)
+    assert !recent_created_todos.include?(todo_old)
+  end
+  
+  def test_notes_are_rendered_on_save
+    user = @completed.user
+    todo = user.todos.create(:description => "test", :context => @completed.context)
+    
+    assert_nil todo.notes
+    assert_nil todo.rendered_notes
+    
+    todo.notes = "*test*"
+    todo.save!
+    todo.reload
+    
+    assert_equal "*test*", todo.notes
+    assert_equal "<p><strong>test</strong></p>", todo.rendered_notes
+  end
+  
 end

@@ -2,11 +2,10 @@ module RecurringTodosHelper
     
   def recurring_todo_tag_list
     tags_except_starred = @recurring_todo.tags.reject{|t| t.name == Todo::STARRED_TAG_NAME}
-    tag_list = tags_except_starred.collect{|t| "<span class=\"tag #{t.name.gsub(' ','-')}\">" +
-        link_to(t.name, :controller => "todos", :action => "tag", :id =>
-        t.name) + #TODO: tag view for recurring_todos (yet?)
-        "</span>"}.join('')
-    "<span class='tags'>#{tag_list}</span>"
+    tag_list = tags_except_starred.
+      collect{|t| content_tag(:span,link_to(t.name, tag_path(t.name)), :class => "tag #{t.name.gsub(' ','-')}")}.
+      join('')
+    return content_tag :span, tag_list.html_safe, :class => "tags"
   end
  
   def recurring_todo_remote_delete_icon
@@ -27,7 +26,7 @@ module RecurringTodosHelper
         edit_recurring_todo_path(@recurring_todo),
         :class => "icon edit_icon", :id => "link_edit_recurring_todo_#{@recurring_todo.id}")
     else
-      str = '<a class="icon">' + image_tag("blank.png") + "</a> "
+      str = content_tag(:a, image_tag("blank.png"), :class => "icon")
     end
     str
   end

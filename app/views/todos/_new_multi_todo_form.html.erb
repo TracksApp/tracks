@@ -1,0 +1,47 @@
+<%- todo = new_multi_todo_form -%>
+
+<div id="todo_multi_add" style="display:none">
+  <%= form_for(todo, :html=> { :id=>'todo-form-multi-new-action', :name=>'todo', :class => 'inline-form' }) do |t| %>
+    <input id="default_project_name_id" name="default_project_name" type="hidden" value="<%=h @initial_project_name-%>" />
+    <input id="default_context_name_id" name="default_context_name" type="hidden" value="<%=h @initial_context_name-%>" />
+
+    <div id="multiple_error_status">
+    <% if todo.errors.any? -%>
+      <ul>
+        <% todo.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+        <% end %>
+      </ul>
+    <% end -%>
+    </div>
+
+    <label for="todo_notes"><%= t('shared.multiple_next_actions') %></label>
+    <%= text_area_tag( "todo[multiple_todos]", "", :cols => 29, :rows => 6, :tabindex => next_tab_index) %>
+
+    <label for="todo_project_name"><%= t('shared.project_for_all_actions') %></label>
+    <input id="multi_todo_project_name" name="project_name" autocomplete="off" tabindex="<%= next_tab_index%>" size="30" type="text" value="<%=h @initial_project_name %>" />
+    <div class="page_name_auto_complete" id="project_list" style="display:none"></div>
+
+    <label for="todo_context_name"><%= t('shared.context_for_all_actions') %></label>
+    <input id="multi_todo_context_name" name="context_name" autocomplete="off" tabindex="<%= next_tab_index%>" size="30" type="text" value="<%=h @initial_context_name %>" />
+    <div class="page_name_auto_complete" id="context_list" style="display:none"></div>
+
+    <label for="tag_list"><%= t('shared.tags_for_all_actions') %></label>
+    <%= hidden_field_tag "initial_tag_list", @initial_tags%>
+    <%= text_field_tag "multi_tag_list", @initial_tags, :name=>:tag_list, :size => 30, :tabindex => next_tab_index %>
+    <%= content_tag("div", "", :id => "tag_list_auto_complete", :class => "auto_complete") %>
+
+    <%= check_box_tag('todos_sequential', 'true', false, {:tabindex => next_tab_index}) %>
+    <label for="todos_sequential"><%= t('shared.make_actions_dependent') %></label>
+
+    <div class="submit_box">
+      <div class="widgets">
+        <button type="submit" class="positive" id="todo_multi_new_action_submit" tabindex="<%= next_tab_index%>">
+          <%=  image_tag("accept.png", :alt => "") %><%= t('shared.add_actions') %>
+        </button>
+      </div>
+    </div>
+
+  <% end -%>
+
+</div>

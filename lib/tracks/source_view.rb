@@ -56,7 +56,7 @@ module Tracks
       end
     
       def source_view_is_one_of( *s )
-        s.include?(params[:_source_view].to_sym)
+        s.include?((params[:_source_view] || @source_view).to_sym)
       end
 
     end

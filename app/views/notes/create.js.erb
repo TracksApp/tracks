@@ -17,7 +17,7 @@ function clear_form() {
 }
 
 function html_for_error_messages() {
-  return "<%= escape_javascript(error_messages_for('project')) %>";
+  return "<%= escape_javascript(get_list_of_error_messages_for(@note)) %>";
 }
 
 function html_for_note_summary() {

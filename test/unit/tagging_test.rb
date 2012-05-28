@@ -1,10 +1,16 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
 class TaggingTest < ActiveSupport::TestCase
-  fixtures :taggings
+  fixtures :taggings, :tags
 
-  # Replace this with your real tests.
-  def test_truth
-    assert true
+  def test_removes_unused_tags
+    tag = Tag.create!(:name => "hello")
+    tagging = Tagging.create!(:tag => tag, :taggable_id => 1)
+    
+    assert_equal 1, Tagging.find(:all, :conditions => ["tag_id = ?", tag.id]).count
+    
+    tagging.destroy
+    
+    assert_nil Tag.find_by_name("hello")
   end
 end

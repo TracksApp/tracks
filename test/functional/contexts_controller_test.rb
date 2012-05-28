@@ -1,37 +1,93 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
-require File.expand_path(File.dirname(__FILE__) + '/todo_container_controller_test_base')
-require 'contexts_controller'
 
-# Re-raise errors caught by the controller.
-class ContextsController; def rescue_action(e) raise e end; end
-
-class ContextsControllerTest < TodoContainerControllerTestBase
+class ContextsControllerTest < ActionController::TestCase
   fixtures :users, :preferences, :contexts
-
-  def setup
-    perform_setup(Context, ContextsController)
-  end
 
   def test_contexts_list
     login_as :admin_user
     get :index
   end
+  
+  def test_show_sets_title
+    login_as :admin_user
+    get :show, { :id => "1" }
+    assert_equal 'TRACKS::Context: agenda', assigns['page_title']
+  end
+  
+  def test_show_renders_show_template
+    login_as :admin_user
+    get :show, { :id => "1" }
+    assert_template "contexts/show"
+  end
+  
+  def test_get_edit_form_using_xhr
+    login_as(:admin_user)
+    xhr :get, :edit, :id => contexts(:errand).id
+    assert_response 200
+  end
 
   def test_create_context_via_ajax_increments_number_of_context
+    login_as :other_user
     assert_ajax_create_increments_count '@newcontext'
   end
 
-
-  def test_create_via_ajax_with_comma_in_name_does_not_increment_number_of_contexts
-    assert_ajax_create_does_not_increment_count 'foo,bar'
+  # text feed
+  
+  def test_text_feed_content
+    login_as :admin_user
+    get :index, { :format => "txt" }
+    assert_equal 'text/plain', @response.content_type
+    assert !(/&nbsp;/.match(@response.body))
   end
   
+  def test_text_feed_not_accessible_to_anonymous_user_without_token
+    login_as nil
+    get :index, { :format => "txt" }
+    assert_response 401
+  end
+  
+  def test_text_feed_not_accessible_to_anonymous_user_with_invalid_token
+    login_as nil
+    get :index, { :format => "txt", :token => 'foo'  }
+    assert_response 401
+  end
+  
+  def test_text_feed_accessible_to_anonymous_user_with_valid_token
+    login_as nil
+    get :index, { :format => "txt", :token => users(:admin_user).token }
+    assert_response :ok
+  end
+
+  # REST xml
+  
+  def test_show_xml_renders_context_to_xml
+    login_as :admin_user
+    get :show, { :id => "1", :format => 'xml' }
+    assert_equal contexts(:agenda).to_xml( :except => :user_id ), @response.body
+  end
+  
+  def test_show_with_nil_context_returns_404
+    login_as :admin_user
+    get :show, { :id => "0" }
+    assert_equal 'Context not found', @response.body
+    assert_response 404
+  end
+  
+  def test_show_xml_with_nil_context_returns_404
+    login_as :admin_user
+    get :show, { :id => "0", :format => 'xml' }
+    assert_response 404
+    assert_xml_select 'error', 'Context not found'
+  end
+  
+  # RSS
+
   def test_rss_feed_content
     login_as :admin_user
     get :index, { :format => "rss" }
     assert_equal 'application/rss+xml', @response.content_type
     #puts @response.body
-
+  
     assert_xml_select 'rss[version="2.0"]' do
       assert_select 'channel' do
         assert_select '>title', 'Tracks Contexts'
@@ -71,6 +127,8 @@ class ContextsControllerTest < TodoContainerControllerTestBase
     get :index, { :format => "rss", :token => users(:admin_user).token }
     assert_response :ok
   end
+
+  # ATOM
   
   def test_atom_feed_content
     login_as :admin_user
@@ -110,65 +168,6 @@ class ContextsControllerTest < TodoContainerControllerTestBase
     get :index, { :format => "atom", :token => users(:admin_user).token }
     assert_response :ok
   end
- 
-  def test_text_feed_content
-    login_as :admin_user
-    get :index, { :format => "txt" }
-    assert_equal 'text/plain', @response.content_type
-    assert !(/&nbsp;/.match(@response.body)) 
-  end
+
   
-  def test_text_feed_not_accessible_to_anonymous_user_without_token
-    login_as nil
-    get :index, { :format => "txt" }
-    assert_response 401
-  end
-  
-  def test_text_feed_not_accessible_to_anonymous_user_with_invalid_token
-    login_as nil
-    get :index, { :format => "txt", :token => 'foo'  }
-    assert_response 401
-  end
-  
-  def test_text_feed_accessible_to_anonymous_user_with_valid_token
-    login_as nil
-    get :index, { :format => "txt", :token => users(:admin_user).token }
-    assert_response :ok
-  end
-  
-  def test_show_sets_title
-    login_as :admin_user
-    get :show, { :id => "1" }
-    assert_equal 'TRACKS::Context: agenda', assigns['page_title']
-  end
-  
-  def test_show_renders_show_template
-    login_as :admin_user
-    get :show, { :id => "1" }
-    assert_template "contexts/show"
-  end
-  
-  def test_show_xml_renders_context_to_xml
-    login_as :admin_user
-    get :show, { :id => "1", :format => 'xml' }
-    assert_equal contexts(:agenda).to_xml( :except => :user_id ), @response.body
-  end
-  
-  def test_show_with_nil_context_returns_404
-    login_as :admin_user
-    get :show, { :id => "0" }
-    assert_equal 'Context not found', @response.body 
-    assert_response 404
-  end
-  
-  def test_show_xml_with_nil_context_returns_404
-    login_as :admin_user
-    get :show, { :id => "0", :format => 'xml' }
-    assert_response 404
-    assert_xml_select 'error', 'Context not found'
-  end
-  
-  def protect_against_forgery?
-    false
-  end
 end

@@ -1,0 +1,38 @@
+<div class="stats_module">
+  <h3><%= t('stats.top10_projects') %></h3>
+  <% i=0
+  @projects_and_actions.each do |p|
+    i+=1 -%>
+    <%= i -%> - <%= link_to p.name, {:controller => "projects", :action => "show", :id => p.id}%> (<%=p.count %> <%= t('common.actions_midsentence', :count => p.count) %>) <br/>
+  <% end
+  if i < 10
+    i.upto 10 do |j| -%>
+      <%= i -%> - <%=t('common.not_available_abbr')%> (<%=t('common.not_available_abbr')%>) <br/>
+    <% end
+  end
+  -%>
+</div>
+
+<div class="stats_module">
+  <h3><%= t('stats.top10_projects_30days') %></h3>
+  <% i=0
+  @projects_and_actions_last30days.each do |p|
+    i+=1 -%>
+    <%= i -%> - <%= link_to p.name, {:controller => "projects", :action => "show", :id => p.id} %> (<%=p.count %> <%= t('common.actions_midsentence', :count => p.count) %>) <br/>
+  <% end
+  if i < 10
+    i.upto 10 do |j| -%>
+      <%= i -%> - <%=t('common.not_available_abbr')%> (<%=t('common.not_available_abbr')%>) <br/>
+    <% end
+  end
+  -%>
+</div>
+
+<div class="stats_module">
+  <h3><%= t('stats.top10_longrunning') %></h3>
+  <% i=0
+  @projects_and_runtime.each do |id, name, days|
+    i+=1 -%>
+    <%= i -%> - <%= link_to name, {:controller => "projects", :action => "show", :id => id} %> (<%=days %> <%= t('common.days_midsentence', :count => days) %>) <br/>
+  <% end -%>
+</div>

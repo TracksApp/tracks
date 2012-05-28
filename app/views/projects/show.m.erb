@@ -1,0 +1,31 @@
+<% project = @project %>
+<%= project_next_prev_mobile %>
+<h2><%=project.name%></h2>
+<% unless @project.description.blank? -%>
+<div class="project_description"><%= sanitize(@project.description) %></div>
+<% end -%>
+<ul class="c">
+<%= render :partial => @not_done, :locals => { :parent_container_type => "project" }%>
+</ul>
+<h2><%= t('projects.deferred_actions')%></h2>
+<% if @deferred.empty? -%>
+<%= t('projects.deferred_actions_empty') %>
+<% else -%>
+<ul class="c">
+<%= render :partial => @deferred, :locals => { :parent_container_type => "project" }%>
+</ul><% end
+-%>
+<h2><%= t('projects.completed_actions')%></h2>
+<% if @done.empty? -%>
+<%= t('projects.completed_actions_empty') %>
+<% else -%>
+<ul class="c">
+<%= render :partial => @done, :locals => { :parent_container_type => "project" }%>
+</ul><% end %>
+<h2><%= t('projects.notes') %></h2>
+<% if @project.notes.empty? -%>
+<%= t('projects.notes_empty') %>
+<% else -%><%= render :partial => "notes/notes_summary", :collection => @project.notes %>
+<% end -%>
+<h2><%= t('projects.settings') %></h2>
+<%= t('projects.state', :state => project.aasm_current_state.to_s) %>. <%= @project_default_context %>

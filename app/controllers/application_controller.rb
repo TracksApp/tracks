@@ -9,12 +9,11 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery
 
-  helper :application
   include LoginSystem
   helper_method :current_user, :prefs, :format_date, :markdown
 
   layout proc{ |controller| controller.mobile? ? "mobile" : "standard" }
-  exempt_from_layout /\.js\.erb$/
+  # exempt_from_layout /\.js\.erb$/
 
   before_filter :check_for_deprecated_password_hash
   before_filter :set_session_expiration
@@ -73,32 +72,19 @@ class ApplicationController < ActionController::Base
     render :text => message, :status => status
   end
 
-  # def rescue_action(exception)
-  #   log_error(exception) if logger
-  #   respond_to do |format|
-  #     format.html do
-  #       notify :warning, "An error occurred on the server."
-  #       render :action => "index"
-  #     end
-  #     format.js { render :action => 'error' }
-  #     format.xml { render :text => 'An error occurred on the server.' + $! }
-  #   end
-  # end
-
   # Returns a count of next actions in the given context or project The result
   # is count and a string descriptor, correctly pluralised if there are no
   # actions or multiple actions
   #
-  def count_undone_todos_phrase(todos_parent, string="actions")
+  def count_undone_todos_phrase(todos_parent)
     count = count_undone_todos(todos_parent)
     deferred_count = count_deferred_todos(todos_parent)
     if count == 0 && deferred_count > 0
-      word = deferred_count == 1 ? string.singularize : string.pluralize
-      word = "deferred&nbsp;" + word
-      deferred_count.to_s + "&nbsp;" + word
+      word = "#{I18n.t('common.deferred')}&nbsp;#{I18n.t('common.actions_midsentence', :count => deferred_count)}"
+      return "#{deferred_count.to_s}&nbsp;#{word}".html_safe
     else
-      word = count == 1 ? string.singularize : string.pluralize
-      count.to_s + "&nbsp;" + word
+      word = I18n.t('common.actions_midsentence', :count => count)
+      return "#{count}&nbsp;#{word}".html_safe
     end
   end
 
@@ -141,14 +127,6 @@ class ApplicationController < ActionController::Base
   def format_dependencies_as_json_for_auto_complete(entries)
     json_elems = Array[*entries.map{ |e| {:value => e.id.to_s, :label => e.specification} }].to_json
     return json_elems
-  end
-
-  # Uses RedCloth to transform text using either Textile or Markdown Need to
-  # require redcloth above RedCloth 3.0 or greater is needed to use Markdown,
-  # otherwise it only handles Textile
-  #
-  def markdown(text)
-    RedCloth.new(text).to_html
   end
 
   # Here's the concept behind this "mobile content negotiation" hack: In
@@ -211,6 +189,10 @@ class ApplicationController < ActionController::Base
       super # handle xml http auth via our own login code
     end
   end
+  
+  def sanitize(arg)
+    ActionController::Base.helpers.sanitize(arg)
+  end
 
   protected
 
@@ -223,7 +205,7 @@ class ApplicationController < ActionController::Base
 
   def redirect_back_or_home
     respond_to do |format|
-      format.html { redirect_back_or_default home_url }
+      format.html { redirect_back_or_default root_url }
       format.m { redirect_back_or_default mobile_url }
     end
   end
@@ -260,23 +242,25 @@ class ApplicationController < ActionController::Base
     self.class.prefered_auth?
   end
 
+  # all completed todos [today@00:00, today@now]
   def get_done_today(completed_todos, includes = {:include => Todo::DEFAULT_INCLUDES})
     start_of_this_day = Time.zone.now.beginning_of_day
     completed_todos.completed_after(start_of_this_day).all(includes)
   end
 
+  # all completed todos [begin_of_week, start_of_today]
   def get_done_this_week(completed_todos, includes = {:include => Todo::DEFAULT_INCLUDES})
     start_of_this_week = Time.zone.now.beginning_of_week
     start_of_this_day = Time.zone.now.beginning_of_day
-    completed_todos.completed_after(start_of_this_week).completed_before(start_of_this_day).all(includes)
+    completed_todos.completed_before(start_of_this_day).completed_after(start_of_this_week).all(includes)
   end
 
+  # all completed todos [begin_of_month, begin_of_week]
   def get_done_this_month(completed_todos, includes = {:include => Todo::DEFAULT_INCLUDES})
     start_of_this_month = Time.zone.now.beginning_of_month
     start_of_this_week = Time.zone.now.beginning_of_week
-    completed_todos.completed_after(start_of_this_month).completed_before(start_of_this_week).all(includes)
+    completed_todos.completed_before(start_of_this_week).completed_after(start_of_this_month).all(includes)
   end
-
 
   private
 

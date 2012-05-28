@@ -9,11 +9,10 @@ class ProjectsController < ApplicationController
 
   def index
     @source_view = params['_source_view'] || 'project_list'
-    @new_project = current_user.projects.build
     if params[:projects_and_actions]
       projects_and_actions
     else
-      @contexts = current_user.contexts.all
+      @contexts = current_user.contexts
       init_not_done_counts(['project'])
       init_project_hidden_todo_counts(['project'])
       if params[:only_active_with_no_next_actions]
@@ -21,19 +20,47 @@ class ProjectsController < ApplicationController
       else
         @projects = current_user.projects.all
       end
+      @new_project = current_user.projects.build
+      @active_projects = current_user.projects.active
+      @hidden_projects = current_user.projects.hidden
       respond_to do |format|
-        format.html  &render_projects_html
-        format.m     &render_projects_mobile
-        format.xml   { render :xml => @projects.to_xml( :except => :user_id )  }
-        format.rss   &render_rss_feed
-        format.atom  &render_atom_feed
-        format.text  &render_text_feed
-        format.autocomplete { render :text => for_autocomplete(current_user.projects.uncompleted, params[:term]) }
+        format.html  do
+          @page_title = t('projects.list_projects')
+          @count = current_user.projects.count
+          @completed_projects = current_user.projects.completed.limit(10)
+          @completed_count = current_user.projects.completed.count
+          @no_projects = current_user.projects.empty?
+          current_user.projects.cache_note_counts
+          @new_project = current_user.projects.build
+        end
+        format.m     do
+          @completed_projects = current_user.projects.completed
+          @down_count = @active_projects.size + @hidden_projects.size + @completed_projects.size
+          cookies[:mobile_url]= {:value => request.fullpath, :secure => SITE_CONFIG['secure_cookies']}
+        end
+        format.xml   { render :xml => @projects.all.to_xml( :except => :user_id )  }
+        format.rss   do
+          @feed_title = I18n.t('models.project.feed_title')
+          @feed_description = I18n.t('models.project.feed_description', :username => current_user.display_name)
+        end
+        format.atom  do
+          @feed_title = I18n.t('models.project.feed_title')
+          @feed_description = I18n.t('models.project.feed_description', :username => current_user.display_name)
+        end
+        format.text do
+          # somehow passing Mime::TEXT using content_type to render does not work
+          headers['Content-Type']=Mime::TEXT.to_s
+        end
+        format.autocomplete do
+          projects = current_user.projects.active + current_user.projects.hidden
+          render :text => for_autocomplete(projects, params[:term])
+        end
       end
     end
   end
 
   def review
+    @source_view = params['_source_view'] || 'review'
     @page_title = t('projects.list_reviews')
     @projects = current_user.projects.all
     @contexts = current_user.contexts.all
@@ -73,13 +100,25 @@ class ProjectsController < ApplicationController
   def set_reviewed
     @project.last_reviewed = Time.zone.now
     @project.save
-    redirect_to :action => 'show'
+    
+    case @source_view
+    when "project"
+      redirect_to :action => 'show'
+    when "project_list"
+      redirect_to :action => 'index'
+    when "review"
+      redirect_to :action => 'review'
+    else
+      redirect_to :action => 'index'
+    end
   end
 
   def projects_and_actions
     @projects = current_user.projects.active
     respond_to do |format|
       format.text  {
+        # somehow passing Mime::TEXT using content_type to render does not work
+        headers['Content-Type']=Mime::TEXT.to_s
         render :action => 'index_text_projects_and_actions', :layout => false, :content_type => Mime::TEXT
       }
     end
@@ -90,11 +129,15 @@ class ProjectsController < ApplicationController
     init_data_for_sidebar unless mobile?
     @page_title = t('projects.page_title', :project => @project.name)
 
-    @not_done = @project.todos.active_or_hidden(:include => Todo::DEFAULT_INCLUDES)
-    @deferred = @project.todos.deferred(:include => Todo::DEFAULT_INCLUDES)
-    @pending = @project.todos.pending(:include => Todo::DEFAULT_INCLUDES)
-    @done = @project.todos.find_in_state(:all, :completed,
-      :order => "todos.completed_at DESC", :limit => current_user.prefs.show_number_completed, :include => Todo::DEFAULT_INCLUDES)
+    @not_done = @project.todos.active_or_hidden.includes(Todo::DEFAULT_INCLUDES)
+    @deferred = @project.todos.deferred.includes(Todo::DEFAULT_INCLUDES)
+    @pending = @project.todos.pending.includes(Todo::DEFAULT_INCLUDES)
+
+    @done = {}
+    @done = @project.todos.completed.
+      reorder("todos.completed_at DESC").
+      limit(current_user.prefs.show_number_completed).
+      includes(Todo::DEFAULT_INCLUDES) unless current_user.prefs.show_number_completed == 0
 
     @count = @not_done.size
     @down_count = @count + @deferred.size + @pending.size
@@ -106,39 +149,34 @@ class ProjectsController < ApplicationController
     @contexts = current_user.contexts
     respond_to do |format|
       format.html
-      format.m     &render_project_mobile
-      format.xml   { 
+      format.m     do
+        if @project.default_context.nil?
+          @project_default_context = t('projects.no_default_context')
+        else
+          @project_default_context = t('projects.default_context', :context => @project.default_context.name)
+        end
+        cookies[:mobile_url]= {:value => request.fullpath, :secure => SITE_CONFIG['secure_cookies']}
+        @mobile_from_project = @project.id
+      end
+      format.xml   do
         render :xml => @project.to_xml(:except => :user_id) { |xml|
           xml.not_done { @not_done.each { |child| child.to_xml(:builder => xml, :skip_instruct => true) } }
           xml.deferred { @deferred.each { |child| child.to_xml(:builder => xml, :skip_instruct => true) } }
           xml.pending { @pending.each { |child| child.to_xml(:builder => xml, :skip_instruct => true) } }
           xml.done { @done.each { |child| child.to_xml(:builder => xml, :skip_instruct => true) } }
         }
-      }
+      end
     end
   end
 
-  # Example XML usage: curl -H 'Accept: application/xml' -H 'Content-Type:
-  # application/xml'
-  #                    -u username:password
-  #                    -d '<request><project><name>new project_name</name></project></request>'
-  #                    http://our.tracks.host/projects
-  #
   def create
     if params[:format] == 'application/xml' && params['exception']
-      render_failure "Expected post format is valid xml like so: <request><project><name>project name</name></project></request>."
+      render_failure "Expected post format is valid xml like so: <project><name>project name</name></project>.", 400
       return
     end
-
-    @project = current_user.projects.build
-    params_are_invalid = true
-    if (params['project'] || (params['request'] && params['request']['project']))
-      @project.attributes = params['project'] || params['request']['project']
-      params_are_invalid = false
-    end
+    @project = current_user.projects.build(params['project'])
     @go_to_project = params['go_to_project']
     @saved = @project.save
-
     @project_not_done_counts = { @project.id => 0 }
     @active_projects_count = current_user.projects.active.count
     @contexts = current_user.contexts
@@ -146,10 +184,8 @@ class ProjectsController < ApplicationController
     respond_to do |format|
       format.js { @down_count = current_user.projects.size }
       format.xml do
-        if @project.new_record? && params_are_invalid
-          render_failure "Expected post format is valid xml like so: <request><project><name>project name</name></project></request>."
-        elsif @project.new_record?
-          render_failure @project.errors.full_messages.join(', ')
+        if @project.new_record?
+          render_failure @project.errors.to_xml.html_safe, 409
         else
           head :created, :location => project_url(@project), :text => @project.id
         end
@@ -179,38 +215,30 @@ class ProjectsController < ApplicationController
     if @saved
       @project.transition_to(@new_state) if @state_changed
       if boolean_param('wants_render')
-        if (@project.hidden?)
-          @project_project_hidden_todo_counts = Hash.new
-          @project_project_hidden_todo_counts[@project.id] = @project.reload().todos.active_or_hidden.count
-        else
-          @project_not_done_counts = Hash.new
-          @project_not_done_counts[@project.id] = @project.reload().todos.active_or_hidden.count
-        end
         @contexts = current_user.contexts
         update_state_counts
         init_data_for_sidebar
 
-        template = 'projects/update.js.erb'
+        template = 'projects/update'
 
-        # TODO: are these params ever set? or is this dead code?
-
+      # TODO: are these params ever set? or is this dead code?
       elsif boolean_param('update_status')
-        template = 'projects/update_status.js.rjs'
+        template = 'projects/update_status'
       elsif boolean_param('update_default_context')
         @initial_context_name = @project.default_context.name
-        template = 'projects/update_default_context.js.rjs'
+        template = 'projects/update_default_context'
       elsif boolean_param('update_default_tags')
-        template = 'projects/update_default_tags.js.rjs'
+        template = 'projects/update_default_tags'
       elsif boolean_param('update_project_name')
         @projects = current_user.projects
-        template = 'projects/update_project_name.js.rjs'
+        template = 'projects/update_project_name'
       else
         render :text => success_text || 'Success'
         return
       end
     else
       init_data_for_sidebar
-      template = 'projects/update.js.erb'
+      template = 'projects/update'
     end
 
     respond_to do |format|
@@ -304,73 +332,7 @@ class ProjectsController < ApplicationController
     @show_hidden_projects = @hidden_projects_count > 0
     @show_completed_projects = @completed_projects_count > 0
   end
-
-  def render_projects_html
-    lambda do
-      @page_title = t('projects.list_projects')
-      @count = current_user.projects.count
-      @active_projects = current_user.projects.active
-      @hidden_projects = current_user.projects.hidden
-      @completed_projects = current_user.projects.completed.find(:all, :limit => 10)
-      @completed_count = current_user.projects.completed.count
-      @no_projects = current_user.projects.empty?
-      current_user.projects.cache_note_counts
-      @new_project = current_user.projects.build
-      render
-    end
-  end
-
-  def render_projects_mobile
-    lambda do
-      @active_projects = current_user.projects.active
-      @hidden_projects = current_user.projects.hidden
-      @completed_projects = current_user.projects.completed
-      @down_count = @active_projects.size + @hidden_projects.size + @completed_projects.size
-      cookies[:mobile_url]= {:value => request.request_uri, :secure => SITE_CONFIG['secure_cookies']}
-      render :action => 'index_mobile'
-    end
-  end
-
-  def render_project_mobile
-    lambda do
-      if @project.default_context.nil?
-        @project_default_context = t('projects.no_default_context')
-      else
-        @project_default_context = t('projects.default_context', :context => @project.default_context.name)
-      end
-      cookies[:mobile_url]= {:value => request.request_uri, :secure => SITE_CONFIG['secure_cookies']}
-      @mobile_from_project = @project.id
-      render :action => 'project_mobile'
-    end
-  end
-
-  def render_rss_feed
-    lambda do
-      render_rss_feed_for @projects, :feed => feed_options,
-        :title => :name,
-        :item => { :description => lambda { |p| @template.summary(p) } }
-    end
-  end
-
-  def render_atom_feed
-    lambda do
-      render_atom_feed_for @projects, :feed => feed_options,
-        :item => { :description => lambda { |p| @template.summary(p) },
-        :title => :name,
-        :author => lambda { |p| nil } }
-    end
-  end
-
-  def feed_options
-    Project.feed_options(current_user)
-  end
-
-  def render_text_feed
-    lambda do
-      render :action => 'index', :layout => false, :content_type => Mime::TEXT
-    end
-  end
-
+  
   def set_project_from_params
     @project = current_user.projects.find_by_params(params)
   end

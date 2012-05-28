@@ -1,0 +1,15 @@
+using terms from application "Quicksilver"
+	on process text ThisClipping
+		
+		set myUsername to "<%= current_user.login %>"
+		set myToken to "<%= current_user.token %>"
+		set myContextID to <%= context.id %> (* <%= context.name %> *)
+		
+		tell application "<%= root_url %>backend/api"
+			set returnValue to call xmlrpc {method name:"NewTodo", parameters:{myUsername, myToken, myContextID, ThisClipping}}
+		end tell
+		tell application "Quicksilver"
+			show notification "Tracks: action added."
+		end tell
+	end process text
+end using terms from

@@ -52,14 +52,14 @@ Feature: Show statistics
     Given I have 5 todos
     And I have 3 deferred todos
     When I go to the statistics page
-    And I click on the chart for running time of all incomplete actions
+    And I click on the chart for running time of all incomplete visible actions
     Then I should see a chart
     And I should see "Actions selected from week"
     And I should see 5 todos
     And I should see "to return to the statistics page"
     And I should see "to show the actions from week 0 and further"
 
-  @selenium
+  @javascript
   Scenario: I can edit the todos selected from a chart
     Given I have 5 todos
     When I go to the statistics page
@@ -70,7 +70,7 @@ Feature: Show statistics
     Then I should not see the todo "todo 1"
     And I should see the todo "foo bar"
 
-  @selenium
+  @javascript
   Scenario: Marking a todo selected from a chart as complete will remove it from the page
     Given I have 5 todos
     When I go to the statistics page

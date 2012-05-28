@@ -10,7 +10,7 @@ Feature: Manage deferred todos
     And there exists a project "manage me" for user "testuser"
     And I have logged in as "testuser" with password "secret"
 
-  @selenium
+  @javascript
   Scenario: I can add a deferred todo and it will show in the tickler
     # also adding the first deferred todo will hide the empty message
     Given I have a context called "test"
@@ -20,7 +20,7 @@ Feature: Manage deferred todos
     Then I should see "a new next action"
     And I should not see the empty tickler message
 
-  @selenium
+  @javascript
   Scenario: Editing the description of a todo in the tickler updated the todo
     Given I have a deferred todo "not yet now"
     When I go to the tickler page
@@ -29,7 +29,7 @@ Feature: Manage deferred todos
     Then I should not see "not yet now"
     And I should see "almost"
 
-  @selenium
+  @javascript
   Scenario: Editing the context of a todo moves it to the new context
     Given I have a context called "A"
     And I have a context called "B"
@@ -40,7 +40,7 @@ Feature: Manage deferred todos
     Then I should see "not yet now" in the context container for "B"
     And I should not see "not yet now" in the context container for "A"
 
-  @selenium
+  @javascript
   Scenario: Removing the show from date from a todo removes it from the tickler
     Given I have a deferred todo "not yet now"
     When I go to the tickler page
@@ -58,7 +58,7 @@ Feature: Manage deferred todos
     Then I should see "not yet now"
     And I should not see "now is a good time"
 
-  @selenium
+  @javascript
   Scenario: I can mark an action complete from the tickler
     Given I have a deferred todo "not yet now"
     When I go to the tickler page

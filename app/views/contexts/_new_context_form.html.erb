@@ -1,0 +1,37 @@
+<%- reset_tab_index %>
+<div id="context_new_container">
+
+  <div id="toggle_context_link" class="hide_form">
+    <a id="toggle_context_new" href="#" title="<%= t('contexts.hide_form_title') %>" accesskey="n"><%= t('contexts.hide_form') %></a>
+  </div>
+
+  <div id="context_new" class="context_new" style="display:block">
+    <%= form_for(@new_context, :html => {:id => 'context-form',:name=>'context',:class => "inline-form", :method => :post }) do -%>
+
+      <div id="error_status">
+        <% if @new_context.errors.any? -%>
+          <ul>
+            <% @new_context.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+          </ul>
+        <% end -%>
+      </div>
+
+      <label for="context_name"><%= t 'contexts.context_name' %></label><br />
+      <%= text_field( "context", "name", :tabindex => next_tab_index ) %><br />
+
+      <label for="context_hide"><%= t 'contexts.context_hide' %></label>
+      <%= check_box( "context", "hide", {:tabindex => next_tab_index} ) %><br />
+
+      <div class="submit_box">
+        <div class="widgets">
+          <button type="submit" class="positive" id="context_new_submit">
+            <%= image_tag("accept.png", :alt => "") + t('shared.add_context') %>
+          </button>
+        </div>
+      </div>
+      <br/><br/>
+    <% end -%>
+  </div>
+</div>

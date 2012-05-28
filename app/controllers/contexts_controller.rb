@@ -9,32 +9,36 @@ class ContextsController < ApplicationController
   prepend_before_filter :login_or_feed_token_required, :only => [:index]
 
   def index
-    # #true is passed here to force an immediate load so that size and empty?
-    # checks later don't result in separate SQL queries
-    @active_contexts = current_user.contexts.active(true)
-    @hidden_contexts = current_user.contexts.hidden(true)
+    @active_contexts = current_user.contexts.active
+    @hidden_contexts = current_user.contexts.hidden
     @new_context = current_user.contexts.build
+    init_not_done_counts(['context'])
 
     # save all contexts here as @new_context will add an empty one to current_user.contexts
     @all_contexts = @active_contexts + @hidden_contexts
     @count = @all_contexts.size
 
-    init_not_done_counts(['context'])
-
     respond_to do |format|
       format.html &render_contexts_html
       format.m    &render_contexts_mobile
       format.xml  { render :xml => @all_contexts.to_xml( :except => :user_id ) }
-      format.rss  &render_contexts_rss_feed
-      format.atom &render_contexts_atom_feed
+      format.rss  do
+        @feed_title = 'Tracks Contexts'
+        @feed_description = "Lists all the contexts for #{current_user.display_name}"
+      end
+      format.atom do
+        @feed_title = 'Tracks Contexts'
+        @feed_description = "Lists all the contexts for #{current_user.display_name}"
+      end
       format.text do
-        @all_contexts = current_user.contexts.all
+        # somehow passing Mime::TEXT using content_type to render does not work
+        headers['Content-Type']=Mime::TEXT.to_s
         render :action => 'index', :layout => false, :content_type => Mime::TEXT
       end
-      format.autocomplete { render :text => for_autocomplete(@active_contexts + @hidden_contexts, params[:term])}
+      format.autocomplete &render_autocomplete
     end
   end
-
+  
   def show
     @contexts = current_user.contexts(true)
     if @context.nil?
@@ -51,24 +55,13 @@ class ContextsController < ApplicationController
       end
     end
   end
-
-  # Example XML usage: curl -H 'Accept: application/xml' -H 'Content-Type:
-  # application/xml'
-  #                    -u username:password
-  #                    -d '<request><context><name>new context_name</name></context></request>'
-  #                    http://our.tracks.host/contexts
-  #
+  
   def create
     if params[:format] == 'application/xml' && params['exception']
-      render_failure "Expected post format is valid xml like so: <request><context><name>context name</name></context></request>.", 400
+      render_failure "Expected post format is valid xml like so: <context><name>context name</name></context>.", 400
       return
     end
-    @context = current_user.contexts.build
-    params_are_invalid = true
-    if (params['context'] || (params['request'] && params['request']['context']))
-      @context.attributes = params['context'] || params['request']['context']
-      params_are_invalid = false
-    end
+    @context = current_user.contexts.build(params['context'])
     @saved = @context.save
     @context_not_done_counts = { @context.id => 0 }
     respond_to do |format|
@@ -76,10 +69,8 @@ class ContextsController < ApplicationController
         @down_count = current_user.contexts.size
       end
       format.xml do
-        if @context.new_record? && params_are_invalid
-          render_failure "Expected post format is valid xml like so: <request><context><name>context name</name></context></request>.", 400
-        elsif @context.new_record?
-          render_failure @context.errors.to_xml, 409
+        if @context.new_record?
+          render_failure @context.errors.to_xml.html_safe, 409
         else
           head :created, :location => context_url(@context)
         end
@@ -218,8 +209,8 @@ class ContextsController < ApplicationController
       @active_contexts = current_user.contexts.active
       @hidden_contexts = current_user.contexts.hidden
       @down_count = @active_contexts.size + @hidden_contexts.size
-      cookies[:mobile_url]= {:value => request.request_uri, :secure => SITE_CONFIG['secure_cookies']}
-      render :action => 'index_mobile'
+      cookies[:mobile_url]= {:value => request.fullpath, :secure => SITE_CONFIG['secure_cookies']}
+      render
     end
   end
 
@@ -228,24 +219,18 @@ class ContextsController < ApplicationController
       @page_title = "TRACKS::List actions in "+@context.name
       @not_done = @not_done_todos.select {|t| t.context_id == @context.id }
       @down_count = @not_done.size
-      cookies[:mobile_url]= {:value => request.request_uri, :secure => SITE_CONFIG['secure_cookies']}
+      cookies[:mobile_url]= {:value => request.fullpath, :secure => SITE_CONFIG['secure_cookies']}
       @mobile_from_context = @context.id
-      render :action => 'mobile_show_context'
+      render
     end
   end
-
-  def render_contexts_rss_feed
+  
+  def render_autocomplete
     lambda do
-      render_rss_feed_for current_user.contexts.all, :feed => feed_options,
-        :item => { :description => lambda { |c| @template.summary(c, count_undone_todos_phrase(c)) } }
-    end
-  end
-
-  def render_contexts_atom_feed
-    lambda do
-      render_atom_feed_for current_user.contexts.all, :feed => feed_options,
-        :item => { :description => lambda { |c| @template.summary(c, count_undone_todos_phrase(c)) },
-        :author => lambda { |c| nil } }
+      # first get active contexts with todos then those without
+      filled_contexts = @active_contexts.reject { |ctx| ctx.todos.count == 0 } + @hidden_contexts.reject { |ctx| ctx.todos.count == 0 }
+      empty_contexts = @active_contexts.find_all { |ctx| ctx.todos.count == 0 } + @hidden_contexts.find_all { |ctx| ctx.todos.count == 0 }
+      render :text => for_autocomplete(filled_contexts + empty_contexts, params[:term])
     end
   end
 
@@ -254,7 +239,7 @@ class ContextsController < ApplicationController
   end
 
   def set_context_from_params
-    @context = current_user.contexts.find_by_params(params)
+    @context = current_user.contexts.find(params[:id])
   rescue
     @context = nil
   end
@@ -267,11 +252,8 @@ class ContextsController < ApplicationController
   def init_todos
     set_context_from_params
     unless @context.nil?
-      @context.todos.send :with_scope, :find => { :include => Todo::DEFAULT_INCLUDES } do
-        @done = @context.done_todos
-      end
-
       @max_completed = current_user.prefs.show_number_completed
+      @done = @context.todos.completed.all(:limit => @max_completed)
 
       # @not_done_todos = @context.not_done_todos TODO: Temporarily doing this
       # search manually until I can work out a way to do the same thing using
@@ -281,9 +263,12 @@ class ContextsController < ApplicationController
         :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC",
         :include => Todo::DEFAULT_INCLUDES)
 
+      @deferred = @context.todos.deferred(:include => Todo::DEFAULT_INCLUDES)
+      @pending = @context.todos.pending(:include => Todo::DEFAULT_INCLUDES)
+        
       @projects = current_user.projects
 
-      @count = @not_done_todos.size
+      @count = @not_done_todos.count + @deferred.count + @pending.count
     end
 
   end

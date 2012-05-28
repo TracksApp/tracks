@@ -9,7 +9,7 @@ module NavigationHelpers
     options = @mobile_interface ? {:format => :m} : {}
     options = {:locale => @locale}.merge(options) if @locale
     @source_view = nil
-
+    
     case page_name
 
     when /the home\s?page/
@@ -93,13 +93,20 @@ module NavigationHelpers
       feeds_path(options)
     when /the context page for "([^\"]*)" for user "([^\"]*)"/i
       @source_view = "context"
-      context_path(User.find_by_login($2).contexts.find_by_name($1), options)
+      @context = User.find_by_login($2).contexts.find_by_name($1)
+      context_path(@context, options)
     when /the context page for "([^\"]*)"/i
       @source_view = "context"
-      context_path(@current_user.contexts.find_by_name($1), options)
+      @context = @current_user.contexts.find_by_name($1)
+      context_path(@context, options)
+    when /the "([^\"]*)" context/i
+      @source_view = "context"
+      @context = @current_user.contexts.find_by_name($1)
+      context_path(@context, options)
     when /the "([^\"]*)" project for user "([^\"]*)"/i
       @source_view = "project"
-      project_path(User.find_by_login($2).projects.find_by_name($1), options)
+      @project = User.find_by_login($2).projects.find_by_name($1)
+      project_path(@project, options)
     when /the "([^\"]*)" project/i
       @source_view = "project"
       @project = @current_user.projects.find_by_name($1)
@@ -109,12 +116,12 @@ module NavigationHelpers
       tag_path($1, options)
     when /the change password page/
       change_password_user_path @current_user
-
-      # Add more mappings here.
-      # Here is an example that pulls values out of the Regexp:
-      #
-      #   when /^(.*)'s profile page$/i
-      #     user_profile_path(User.find_by_login($1))
+      
+    # Add more mappings here.
+    # Here is an example that pulls values out of the Regexp:
+    #
+    #   when /^(.*)'s profile page$/i
+    #     user_profile_path(User.find_by_login($1))
 
     else
       begin

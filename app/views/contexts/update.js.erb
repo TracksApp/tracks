@@ -34,7 +34,7 @@ function replace_context_form_with_updated_context() {
 }
 
 function html_for_error_messages() {
-  return "<%= escape_javascript(error_messages_for('context')) %>";
+  return "<%= escape_javascript(get_list_of_error_messages_for(@context)) %>";
 }
 
 function html_for_context_listing() {

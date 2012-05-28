@@ -1,0 +1,13 @@
+<% if @not_done_todos.empty? -%>
+<p><%= t('todos.no_incomplete_actions') %></p>
+<% else -%>
+<%= render :partial => @contexts_to_show -%>
+<% end -%>
+<% unless @done.nil? -%>
+<div id="completed_container">
+<h2><%= t('todos.completed_actions') %></h2>
+<ul class="c">
+<%= render :partial => @done %>
+</ul>
+</div>
+<% end %>

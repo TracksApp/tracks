@@ -1,51 +1,23 @@
 ENV["RAILS_ENV"] = "test"
-require 'thread'
-require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
-require File.expand_path(File.dirname(__FILE__) + "/../app/controllers/application_controller")
-require 'test_help'
-require 'flexmock/test_unit' #and the flexmock gem, too!
-require 'action_web_service/test_invoke'
+require File.expand_path('../../config/environment', __FILE__)
+require 'rails/test_help'
 
-module Tracks
-  class Config
-    def self.salt
-      "change-me"
-    end
-    def self.auth_schemes
-      return ["database","open_id"]
-    end
-  end
-end
+# set config for tests. Overwrite those read from config/site.yml. Use inject to avoid warning about changing CONSTANT
+{"salt" => "change-me", "authentication_schemes" => ["database", "open_id", "ldap"], "prefered_auth" => "database"}.inject( SITE_CONFIG ) { |h, elem| h[elem[0]] = elem[1]; h }
 
-class Test::Unit::TestCase
-  include AuthenticatedTestHelper
-
-  def xml_document
-    @xml_document ||= HTML::Document.new(@response.body, false, true)
-  end
-
-  def assert_xml_select(*args, &block)
-    @html_document = xml_document
-    assert_select(*args, &block)
-  end
-
-  def assert_error_on(model_instance, attribute, expected_error)
-    actual_error = model_instance.errors.on attribute.to_sym
-    assert_equal expected_error, actual_error
-  end
-
-  alias_method :assert_errors_on, :assert_error_on
-
+class ActiveSupport::TestCase
+  # Setup all fixtures in test/fixtures/*.(yml|csv) for all tests in alphabetical order.
+  #
+  # Note: You'll currently still have to declare fixtures explicitly in integration tests
+  # -- they do not yet inherit this setting
+  fixtures :all
+    
+  # Add more helper methods to be used by all tests here...
   def assert_value_changed(object, method = nil)
     initial_value = object.send(method)
     yield
     assert_not_equal initial_value, object.send(method), "#{object}##{method}"
   end
-
-end
-
-class ActiveSupport::TestCase
-
   # Generates a random string of ascii characters (a-z, "1 0")
   # of a given length for testing assignment to fields
   # for validation purposes
@@ -59,73 +31,74 @@ class ActiveSupport::TestCase
     end
     return string
   end
-
-  def next_week
-    1.week.from_now.utc
+  
+  def assert_equal_dmy(date1, date2)
+    assert_equal date1.strftime("%d-%m-%y"), date2.strftime("%d-%m-%y")
+  end
+    
+  def xml_document
+    @xml_document ||= HTML::Document.new(@response.body, false, true)
   end
 
-  # Courtesy of http://habtm.com/articles/2006/02/20/assert-yourself-man-redirecting-with-rjs
-  def assert_js_redirected_to(options={}, message=nil)
-   clean_backtrace do
-     assert_response(:success, message)
-     assert_equal 'text/javascript', @response.content_type, 'Response should be Javascript content-type';
-     js_regexp = %r{(\w+://)?.*?(/|$|\\\?)(.*)}
-     url_regexp = %r{^window\.location\.href [=] ['"]#{js_regexp}['"][;]$}
-     redirected_to = @response.body.match(url_regexp)
-     assert_not_nil(redirected_to, message)
-     redirected_to = redirected_to[3]
-     msg = build_message(message, "expected a JS redirect to <?>, found one to <?>", options, redirected_to)
-
-     if options.is_a?(String)
-       assert_equal(options.gsub(/^\//, ''), redirected_to, message)
-     elsif options.is_a?(Regexp)
-       assert(options =~ redirected_to, "#{message} #{options} #{redirected_to}")
-     else
-       msg = build_message(message, "response is not a redirection to all of the options supplied (redirection is <?>)", redirected_to)
-       assert_equal(@controller.url_for(options).match(js_regexp)[3], redirected_to, msg)
-     end
-   end
-  end
-
-  def set_user_to_current_time_zone(user)
-    jan_offset = Time.now.beginning_of_year.utc_offset
-    jul_offset = Time.now.beginning_of_year.change(:month => 7).utc_offset
-    offset = jan_offset < jul_offset ? jan_offset : jul_offset
-    offset = if offset.to_s.match(/(\+|-)?(\d+):(\d+)/)
-      sign = $1 == '-' ? -1 : 1
-      hours, minutes = $2.to_f, $3.to_f
-      ((hours * 3600) + (minutes.to_f * 60)) * sign
-    elsif offset.to_f.abs <= 13
-      offset.to_f * 3600
-    else
-      offset.to_f
-    end
-    zone = ActiveSupport::TimeZone.all.find{|t| t.utc_offset == offset}
-    user.prefs.update_attribute(:time_zone, zone.name)
+  def assert_xml_select(*args, &block)
+    @html_document = xml_document
+    assert_select(*args, &block)
   end
 end
 
-class ActionController::IntegrationTest
-  Tag #avoid errors in integration tests
-
-  def assert_test_environment_ok
-    assert_equal "test", ENV['RAILS_ENV']
-    assert_equal "change-me", Tracks::Config.salt
+class ActionController::TestCase
+  
+  def login_as(user)
+    @request.session['user_id'] = user ? users(user).id : nil
   end
+  
+  def assert_ajax_create_increments_count(name)
+    assert_count_after_ajax_create(name, get_class_count + 1)
+  end
+  
+  def assert_ajax_create_does_not_increment_count(name)
+    assert_count_after_ajax_create(name, get_class_count)
+  end
+  
+  def assert_count_after_ajax_create(name, expected_count)
+    ajax_create(name)
+    assert_equal(expected_count, get_class_count)
+  end
+  
+  def ajax_create(name)
+    xhr :post, :create, get_model_class.downcase => {:name => name}
+  end
+  
+  def assert_xml_select(*args, &block)
+    @html_document = xml_document
+    assert_select(*args, &block)
+  end
+  
+  private
+  
+  def get_model_class
+    @controller.class.to_s.tableize.split("_")[0].camelcase.singularize  #don't ask... converts ContextsController to Context
+  end
+  
+  def get_class_count
+    eval("#{get_model_class}.count")
+  end
+  
+end
+
+class ActionController::IntegrationTest
 
   def authenticated_post_xml(url, username, password, parameters, headers = {})
-    post url,
-        parameters,
-        {'AUTHORIZATION' => "Basic " + Base64.encode64("#{username}:#{password}"),
+    post url, parameters,
+        { 'HTTP_AUTHORIZATION' => "Basic " + Base64.encode64("#{username}:#{password}"),
           'ACCEPT' => 'application/xml',
           'CONTENT_TYPE' => 'application/xml'
-          }.merge(headers)
+        }.merge(headers)
   end
 
   def authenticated_get_xml(url, username, password, parameters, headers = {})
-    get url,
-        parameters,
-        {'AUTHORIZATION' => "Basic " + Base64.encode64("#{username}:#{password}"),
+    get url, parameters,
+        { 'HTTP_AUTHORIZATION' => "Basic " + Base64.encode64("#{username}:#{password}"),
           'ACCEPT' => 'application/xml',
           'CONTENT_TYPE' => 'application/xml'
           }.merge(headers)
@@ -147,6 +120,13 @@ class ActionController::IntegrationTest
 
   def assert_401_unauthorized_admin
     assert_response_and_body 401, "401 Unauthorized: Only admin users are allowed access to this function."
+  end
+  
+  def assert_responses_with_error(error_msg)
+    assert_response 409
+    assert_xml_select 'errors' do
+      assert_select 'error', 1, error_msg
+    end
   end
 
 end

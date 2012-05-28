@@ -1,0 +1,37 @@
+<%= render :partial => 'chart', :locals => {:width => @pie_width, :height => @pie_height, :data => url_for(:action => 'context_total_actions_data')} -%>
+
+<%= render :partial => 'chart', :locals => {:width => @pie_width, :height => @pie_height, :data => url_for(:action => 'context_running_actions_data')} -%>
+
+<br style="clear:both">
+
+<div class="stats_module">
+<h3><%= t('stats.top5_contexts') %></h3>
+<%
+    1.upto 5 do |i|
+      %><%=i-%> -
+      <%= i <= @actions_per_context.size ?
+        link_to(@actions_per_context[i-1]['name'], {:controller => "contexts", :action => "show", :id => @actions_per_context[i-1]['id']}) :
+        t('common.not_available_abbr')%>
+      (
+      <%= i <= @actions_per_context.size ? @actions_per_context[i-1]['total'] : t('common.not_available_abbr')%>
+      )
+      <br/><%
+    end
+-%>
+</div>
+
+<div class="stats_module">
+<h3><%= t('stats.top5_visible_contexts_with_incomplete_actions') %></h3>
+<%
+    1.upto 5 do |i|
+      %><%=i-%> -
+      <%= i <= @running_actions_per_context.size ?
+        link_to(@running_actions_per_context[i-1]['name'], {:controller => "contexts", :action => "show", :id => @running_actions_per_context[i-1]['id']}) :
+        t('common.not_available_abbr')-%>
+      (
+      <%= i <= @running_actions_per_context.size ? @running_actions_per_context[i-1]['total'] : t('common.not_available_abbr')-%>
+      )
+      <br/><%
+    end
+-%>
+</div>

@@ -1,0 +1,20 @@
+<%
+project = project_listing
+suppress_drag_handle ||= false
+suppress_edit_button ||= false
+suppress_delete_button ||= false
+-%>
+<div id="<%= dom_id(project, "container") %>" class="list">
+  <div id="<%= dom_id(project) %>" class="project sortable_row" style="display:block">
+    <%= suppress_delete_button ? "" : link_to_delete_project(project, image_tag( "blank.png", :title => t('projects.delete_project_title'), :class=>"delete_item")) %>
+    <%= suppress_edit_button ? "" : link_to_edit_project(project, image_tag( "blank.png", :title => t('projects.edit_project_title'), :class=>"edit_item")) %>
+    <%= suppress_drag_handle ? "" : image_tag('grip.png', :width => '7', :height => '16', :border => '0', :title => t('common.drag_handle'), :class => 'grip')  -%>
+    <div class="project_description">
+      <span class="<%= needsreview_class( project ) %>">
+         <%= link_to_project( project ) %>
+         <%= " (#{count_undone_todos_and_notes_phrase(project)})".html_safe %>
+      </span>
+    </div>
+  </div>
+  <div id="<%= dom_id(project, 'edit') %>" class="edit-form" style="display:none;"></div>
+</div>

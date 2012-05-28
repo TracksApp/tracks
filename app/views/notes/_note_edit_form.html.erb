@@ -1,0 +1,30 @@
+<%
+submit_text ||= t('common.update')
+note = note_edit_form
+-%><%=
+form_for(note, :html => {
+    :id => dom_id(note, 'edit_form'),
+    :class => "inline-form edit-note-form"}) do |f|
+-%>
+
+  <div id="error_status"><%= get_list_of_error_messages_for(note) %></div>
+
+  <%= f.hidden_field( "project_id" ) %>
+  <%= f.text_area( "body", "cols" => 70, "rows" => 15, "tabindex" => 1 ) %>
+
+  <div class="submit_box">
+    <div class="widgets">
+      <button type="submit" class="positive" id="<%= dom_id(note, 'submit') %>" tabindex="15">
+        <%=image_tag("accept.png", :alt => "") %>
+        <%= submit_text %>
+      </button>
+      <a href="" class="negative" id="neg_<%=dom_id(note, 'edit_form')%>">
+        <%=image_tag("cancel.png", :alt => "") %>
+        <%= t 'common.cancel' %>
+      </a>
+    </div>
+  </div>
+
+  <br/><br/>
+
+<% end -%>

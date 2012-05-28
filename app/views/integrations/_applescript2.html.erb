@@ -1,0 +1,82 @@
+(*
+Script to grab the sender and subject of the selected
+Mail message(s), and create new next action(s) with description
+"Email [sender] about [subject]"
+
+If you have Growl, it pops a notification up with the id of
+the newly created action.
+*)
+
+(* Edit appropriately for your setup *)
+property myUsername : "<%= current_user.login %>"
+property myToken : "<%= current_user.token %>"
+property myContextID : <%= context.id %> (* <%= context.name %> *)
+
+-- this string is used when the message subject is empty
+property emptySubject : "No Subject Specified"
+
+-- Get the selected email in Mail
+tell application "Mail"
+	set theSelection to the selection
+	if the length of theSelection is less than 1 then
+		display dialog "One or more messages must be selected." buttons {"OK"} default button 1 with icon caution
+	else
+		repeat with theMessage in theSelection
+			my importMessage(theMessage)
+		end repeat
+	end if
+end tell
+
+on importMessage(theMessage)
+	
+	-- Get the info from the email message
+	tell application "Mail"
+		try
+			set theSender to the sender of theMessage
+			set theSubject to subject of theMessage
+			if theSubject is equal to "" then set theSubject to emptySubject
+			set theMessageId to message id of theMessage
+			
+			-- Construct the description string from the email info
+			set myDesc to "Email " & theSender & " about " & theSubject
+			-- Trim the string to 100 characters otherwise it won't validate
+			if length of myDesc > 100 then
+				set myDesc to characters 1 thru 100 of myDesc
+			end if
+			
+			set myNote to "message://<" & theMessageId & ">"
+		end try
+	end tell
+	
+	-- Now send all that info to Tracks
+	-- Edit the URL of your Tracks installation if necessary"
+	tell application "<%= root_url %>backend/api"
+		set returnValue to call xmlrpc {method name:"NewTodo", parameters:{myUsername, myToken, myContextID, myDesc, myNote}}
+	end tell
+	
+	(* Growl support - comment out or delete this section if
+	   you don't have Growl *)
+	tell application "GrowlHelperApp"
+		set the allNotificationsList to ¬
+			{"Tracks Notification"}
+		
+		-- Make a list of the notifications
+		-- that will be enabled by default.
+		-- Those not enabled by default can be enabled later
+		-- in the 'Applications' tab of the growl prefpane.
+		set the enabledNotificationsList to ¬
+			{"Tracks Notification"}
+		
+		-- Register our script with growl.
+		-- You can optionally (as here) set a default icon
+		-- for this script's notifications.
+		register as application ¬
+			"Tracks Applescript" all notifications allNotificationsList ¬
+			default notifications enabledNotificationsList ¬
+			icon of application "Script Editor"
+		set growlDescription to "Action with ID " & returnValue & " was created."
+		notify with name "Tracks Notification" title "New action sent to Tracks" description growlDescription application name "Tracks Applescript" icon of application "Script Editor.app"
+	end tell
+	(* End of Growl section *)
+	
+end importMessage

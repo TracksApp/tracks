@@ -1,9 +1,10 @@
 module PreferencesHelper
 
   def pref(model, pref_name, &block)
-    s = "<label for #{model+pref_name}>#{Preference.human_attribute_name(pref_name)}:</label><br/>"
+    s = content_tag(:label, Preference.human_attribute_name(pref_name), :for => model+pref_name)
+    s << "<br/>".html_safe
     s << yield
-    s << "<br/><br/>"
+    s << "<br/><br/>".html_safe
     s
   end
 

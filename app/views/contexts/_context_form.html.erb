@@ -1,0 +1,34 @@
+<% context = context_form
+-%>
+
+<%= form_for(context, :html => {
+    :id => dom_id(context, 'edit_form'),
+    :class => "inline-form edit-project-form",
+    :method => :put }) do
+  -%>
+
+  <div id="edit_error_status"><%= get_list_of_error_messages_for(context) %></div>
+
+  <label for="context_name"><%= t 'contexts.context_name' %></label><br/>
+  <%= text_field('context', 'name', :class => 'context-name', :tabindex => next_tab_index) %><br/>
+
+  <label for="context_hide"><%= t 'contexts.context_hide' %>  </label>
+  <%= check_box('context', 'hide', {:class => 'context-hide', :tabindex => next_tab_index}) %>
+  <input type="hidden" name="wants_render" value="true" />
+
+  <div class="submit_box">
+    <div class="widgets">
+      <button type="submit" class="positive" id="<%= dom_id(context, 'submit') %>" tabindex="<%=next_tab_index%>">
+        <%=image_tag("accept.png", :alt => "") %>
+        <%= t 'common.update' %>
+      </button>
+      <a href="" onclick="" class="negative">
+        <%=image_tag("cancel.png", :alt => "") %>
+        <%= t 'common.cancel' %>
+      </a>
+    </div>
+  </div>
+  <br/><br/>
+
+<% end %>
+

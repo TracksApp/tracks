@@ -1,0 +1,6 @@
+<h2><%= t('projects.active_projects') %></h2><%=
+  render :partial => 'project_listing', :collection => @active_projects%>
+<h2><%= t('projects.hidden_projects') %></h2><%=
+  render :partial => 'project_listing', :collection => @hidden_projects %>
+<h2><%= t('projects.completed_projects') %></h2><%=
+  render :partial => 'project_listing', :collection => @completed_projects %>

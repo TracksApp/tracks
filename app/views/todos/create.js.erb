@@ -57,7 +57,7 @@ function update_predecessors() {
 }
 
 function html_for_error_messages() {
-  return "<%= escape_javascript(error_messages_for('todo', :object_name => 'action')) %>";
+  return "<%= escape_javascript(get_list_of_error_messages_for(@todo)) %>";
 }
 
 function html_for_new_context() {

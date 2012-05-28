@@ -1,0 +1,21 @@
+<%
+@initial_context_name = @context.name if @context
+@initial_context_name ||= @project.default_context.name unless @project.nil? || @project.default_context.nil?
+@initial_context_name ||= @contexts.active.first.name unless @contexts.active.first.nil?
+@initial_context_name ||= @contexts.first.name unless @contexts.first.nil?
+@initial_project_name = @project.name unless @project.nil?
+@initial_tags ||= @default_tags
+@initial_tags ||= @project.default_tags unless @project.nil?
+reset_tab_index
+-%>
+<div id="todo_new_action_container">
+
+  <div id="toggle_forms" class="toggle_forms">
+    <a title="<%= t('shared.hide_action_form_title') %>" accesskey="n" href="#" id="toggle_action_new"><%= t('shared.hide_form') %></a> |
+    <a title="<%= t('shared.toggle_multi_title') %>" accesskey="m" href="#" id="toggle_multi"><%= t('shared.toggle_multi') %></a>
+  </div>
+
+  <%= render :partial => 'todos/new_todo_form', :object => Todo.new %>
+  <%= render :partial => 'todos/new_multi_todo_form', :object => Todo.new %>
+
+</div>

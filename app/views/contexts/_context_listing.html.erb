@@ -1,0 +1,18 @@
+<%
+context = context_listing
+suppress_drag_handle ||= false
+suppress_edit_button ||= false
+suppress_delete_button ||= false
+%>
+<div id="<%= dom_id(context, "container") %>" class="list">
+  <div id="<%= dom_id(context) %>" class="context sortable_row" style="display:block">
+    <%= suppress_delete_button ? "" : link_to_delete_context(context, image_tag( "blank.png", :title => t('contexts.delete_context'), :class=>"delete_item")) -%>
+    <%= suppress_edit_button ? "" : link_to_edit_context(context, image_tag( "blank.png", :title => t('contexts.edit_context'), :class=>"edit_item")) -%>
+    <%= suppress_drag_handle ? "" : image_tag('grip.png', :width => '7', :height => '16', :border => '0', :title => t('common.drag_handle'), :class => 'grip')-%>
+    <div class="context_description">
+      <%= link_to_context( context ) %> <%= raw " (#{count_undone_todos_phrase(context)})" %>
+    </div>
+  </div>
+  <div id="<%= dom_id(context, 'edit') %>" class="edit-form" style="display:none;">
+  </div>
+</div>

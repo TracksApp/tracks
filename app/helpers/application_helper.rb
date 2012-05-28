@@ -6,21 +6,23 @@ module ApplicationHelper
   # current page. If that matches the url, the link is marked id = "current"
   #
   def navigation_link(name, options = {}, html_options = nil, *parameters_for_method_reference)
-    if html_options
-      html_options = html_options.stringify_keys
-      convert_options_to_javascript!(html_options)
-      tag_options = tag_options(html_options)
-    else
-      tag_options = nil
-    end
-    url = options.is_a?(String) ? options : self.url_for(options, *parameters_for_method_reference)    
-    id_tag = (request.request_uri == url) ? " id=\"current\"" : ""
-    
-    "<a href=\"#{url}\"#{tag_options}#{id_tag}>#{name || url}</a>"
+    link_to name, options, html_options
+    # TODO: check if this needs to be converted
+    # if html_options
+    #   html_options = html_options.stringify_keys
+    #   convert_options_to_javascript!(html_options)
+    #   tag_options = tag_options(html_options)
+    # else
+    #   tag_options = nil
+    # end
+    # url = options.is_a?(String) ? options : self.url_for(options, *parameters_for_method_reference)
+    # id_tag = (request.request_uri == url) ? " id=\"current\"" : ""
+    #
+    # "<a href=\"#{url}\"#{tag_options}#{id_tag}>#{name || url}</a>"
   end
   
   def days_from_today(date)
-    date.in_time_zone.to_date - current_user.time.to_date
+    Integer (date.in_time_zone.to_date - current_user.time.to_date)
   end
   
   # Check due date in comparison to today's date Flag up date appropriately with
@@ -53,7 +55,7 @@ module ApplicationHelper
         else
           # overdue or due very soon! sound the alarm!
           if days == -1
-            t('todos.next_actions_due_date.overdue_by', :days => days * -1)            
+            t('todos.next_actions_due_date.overdue_by', :days => days * -1)
           elsif days < -1
             t('todos.next_actions_due_date.overdue_by_plural', :days => days * -1)
           else
@@ -98,18 +100,18 @@ module ApplicationHelper
   # is count and a string descriptor, correctly pluralised if there are no
   # actions or multiple actions
   #
-  def count_undone_todos_phrase(todos_parent, string="actions")
-    @controller.count_undone_todos_phrase(todos_parent, string)
+  def count_undone_todos_phrase(todos_parent)
+    controller.count_undone_todos_phrase(todos_parent).html_safe
   end
 
-  def count_undone_todos_phrase_text(todos_parent, string="actions")
-    count_undone_todos_phrase(todos_parent, string).gsub("&nbsp;"," ")
+  def count_undone_todos_phrase_text(todos_parent)
+    count_undone_todos_phrase(todos_parent).gsub("&nbsp;"," ").html_safe
   end
 
-  def count_undone_todos_and_notes_phrase(project, string="actions")
-    s = count_undone_todos_phrase(project, string)
-    s += ", #{pluralize(project.note_count, 'note')}" unless project.note_count == 0
-    s
+  def count_undone_todos_and_notes_phrase(project)
+    s = count_undone_todos_phrase(project)
+    s += ", #{t('common.note', :count => project.note_count)}" unless project.note_count == 0
+    s.html_safe
   end
   
   def link_to_context(context, descriptor = sanitize(context.name))
@@ -118,18 +120,6 @@ module ApplicationHelper
   
   def link_to_project(project, descriptor = sanitize(project.name))
     link_to( descriptor, project, :title => "View project: #{project.name}" )
-  end
-
-  def link_to_edit_project (project, descriptor = sanitize(project.name))
-    link_to(descriptor,
-      url_for({:controller => 'projects', :action => 'edit', :id => project.id}),
-      {:id => "link_edit_#{dom_id(project)}", :class => "project_edit_settings"})
-  end
-
-  def link_to_edit_context (context, descriptor = sanitize(context.name))
-    link_to(descriptor,
-      url_for({:controller => 'contexts', :action => 'edit', :id => context.id}),
-      {:id => "link_edit_#{dom_id(context)}", :class => "context_edit_settings"})
   end
 
   def link_to_edit_note (note, descriptor = sanitize(note.id.to_s))
@@ -155,7 +145,7 @@ module ApplicationHelper
   end
   
   def render_flash
-    render :partial => 'shared/flash', :object => flash 
+    render :partial => 'shared/flash', :object => flash
   end
 
   def recurrence_time_span(rt)
@@ -201,50 +191,18 @@ module ApplicationHelper
     end
   end
 
-  AUTO_LINK_MESSAGE_RE = %r{message://<[^>]+>} unless const_defined?(:AUTO_LINK_MESSAGE_RE)
-
-  # Converts message:// links to href. This URL scheme is used on Mac OS X
-  # to link to a mail message in Mail.app.
-  def auto_link_message(text)
-    text.gsub(AUTO_LINK_MESSAGE_RE) do
-      href = $&
-      left, right = $`, $'
-      # detect already linked URLs and URLs in the middle of a tag
-      if left =~ /<[^>]+$/ && right =~ /^[^>]*>/
-        # do not change string; URL is alreay linked
-        href
-      else
-        content = content_tag(:a, h(href), :href => h(href))
-      end
-    end
-  end
-
-  def format_note(note)
-    note = auto_link_message(note)
-    note = markdown(note)
-    note = auto_link(note, :link => :urls)
-
-    # add onenote and message protocols
-    Sanitize::Config::RELAXED[:protocols]['a']['href'] << 'onenote'
-    Sanitize::Config::RELAXED[:protocols]['a']['href'] << 'message'
-
-    note = Sanitize.clean(note, Sanitize::Config::RELAXED)
-    return note
-  end
-
   def sidebar_html_for_titled_list (list, title)
-    return content_tag(:h3, title+" (#{list.length})") +
-      content_tag(:ul, sidebar_html_for_list(list))
+    return content_tag(:h3, title+" (#{list.size})")  + content_tag(:ul, sidebar_html_for_list(list))
   end
 
   def sidebar_html_for_list(list)
     if list.empty?
-      return content_tag(:li, t('sidebar.list_empty'))
+      return content_tag(:li, t('sidebar.list_empty')).html_safe
     else
       return list.inject("") do |html, item|
         link = (item.class == "Project") ? link_to_project( item ) : link_to_context(item)
-        html << content_tag(:li, link + " (" + count_undone_todos_phrase(item,"actions")+")")
-      end
+        html << content_tag(:li, link + " (" + count_undone_todos_phrase(item)+")")
+      end.html_safe
     end
   end
 
@@ -261,6 +219,7 @@ module ApplicationHelper
     contexts.show_form        contexts.show_form_title
     contexts.new_context_pre  contexts.new_context_post
     common.cancel             common.ok
+    common.update             common.create
     common.ajaxError          todos.unresolved_dependency
     }.each do |s|
       js << "i18n['#{s}'] = '#{ t(s).gsub(/'/, "\\\\'") }';\n"
@@ -277,7 +236,7 @@ module ApplicationHelper
   end
   
   def determine_done_path
-    case @controller.controller_name
+    case controller.controller_name
     when "contexts"
       done_todos_context_path(@context)
     when "projects"
@@ -287,14 +246,14 @@ module ApplicationHelper
         done_tag_path(@tag_name)
       else
         done_todos_path
-      end      
+      end
     else
       done_todos_path
     end
   end
   
   def determine_all_done_path
-    case @controller.controller_name
+    case controller.controller_name
     when "contexts"
       all_done_todos_context_path(@context)
     when "projects"
@@ -307,6 +266,14 @@ module ApplicationHelper
       end
     else
       all_done_todos_path
+    end
+  end
+  
+  def get_list_of_error_messages_for(model)
+    error_messages = ""
+    if model.errors.any?
+      list_of_messages = model.errors.full_messages.inject("") { |all, msg| all += content_tag(:li, msg) }
+      error_messages = content_tag(:ul, list_of_messages)
     end
   end
 

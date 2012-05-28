@@ -1,5 +1,0 @@
-<% @projects.each do |p| -%>
-<%= p.name.upcase -%>
-<% actions = p.todos.select { |t| t.active? } -%>  
-<%= render :partial => "todos/text_todo", :collection => actions -%>
-<% end -%>
