@@ -31,7 +31,6 @@ class ProjectsController < ApplicationController
           @completed_count = current_user.projects.completed.count
           @no_projects = current_user.projects.empty?
           current_user.projects.cache_note_counts
-          @new_project = current_user.projects.build
         end
         format.m     do
           @completed_projects = current_user.projects.completed
