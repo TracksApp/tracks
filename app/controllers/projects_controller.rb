@@ -37,7 +37,7 @@ class ProjectsController < ApplicationController
           @down_count = @active_projects.size + @hidden_projects.size + @completed_projects.size
           cookies[:mobile_url]= {:value => request.fullpath, :secure => SITE_CONFIG['secure_cookies']}
         end
-        format.xml   { render :xml => @projects.all.to_xml( :except => :user_id )  }
+        format.xml   { render :xml => @projects.to_xml( :except => :user_id )  }
         format.rss   do
           @feed_title = I18n.t('models.project.feed_title')
           @feed_description = I18n.t('models.project.feed_description', :username => current_user.display_name)
