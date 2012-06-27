@@ -34,7 +34,7 @@ class TodoCreateParamsHelperTest < ActiveSupport::TestCase
   end
 
   def test_tag_list_accessor
-    params = { 'todo' => { }, 'todo_tag_list' => 'foo, bar'}
+    params = { 'todo' => { }, 'tag_list' => 'foo, bar'}
     prefs = users(:admin_user).prefs
     params_helper = TodosController::TodoCreateParamsHelper.new(params, prefs)
     assert_equal('foo, bar', params_helper.tag_list)
