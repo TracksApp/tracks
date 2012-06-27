@@ -288,6 +288,7 @@ class ProjectsController < ApplicationController
     @projects = current_user.projects.alphabetize(:state => @state) if @state
     @contexts = current_user.contexts
     init_not_done_counts(['project'])
+    init_project_hidden_todo_counts(['project']) if @state == 'hidden'
   end
 
   def actionize
@@ -295,6 +296,7 @@ class ProjectsController < ApplicationController
     @projects = current_user.projects.actionize(:state => @state) if @state
     @contexts = current_user.contexts
     init_not_done_counts(['project'])
+    init_project_hidden_todo_counts(['project']) if @state == 'hidden'
   end
 
   def done_todos
