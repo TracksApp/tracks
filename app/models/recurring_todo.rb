@@ -411,7 +411,7 @@ class RecurringTodo < ActiveRecord::Base
         return I18n.t("todos.recurrence.pattern.on_work_days")
       else
         if every_other1 > 1
-          return I18n.t("todos.recurrence.pattern.every_n", :n => every_other1) + " " + I18n.t("common.days")
+          return I18n.t("todos.recurrence.pattern.every_n", :n => every_other1) + " " + I18n.t("common.days_midsentence.other")
         else
           return I18n.t("todos.recurrence.pattern.every_day")
         end
