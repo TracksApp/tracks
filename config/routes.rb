@@ -66,8 +66,11 @@ Tracksapp::Application.routes.draw do
   match "tickler" => "todos#list_deferred"
   match 'review' => "projects#review"
   match 'calendar' => "todos#calendar"
-  match 'data' => "data#index"
   match 'done' => "stats#done", :as => 'done_overview'
+
+  match 'data' => "data#index"  
+  match 'data/csv_notes' => 'data#csv_notes'
+  match 'data/yaml_export' => 'data#yaml_export'
   
   match 'integrations' => "integrations#index"
   match 'integrations/rest_api' => "integrations#rest_api", :as => 'rest_api_docs'

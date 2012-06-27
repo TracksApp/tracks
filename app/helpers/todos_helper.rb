@@ -16,8 +16,12 @@ module TodosHelper
   end
 
   def remote_delete_menu_item(todo)
+    # TODO: what is the current way to do mouseover with css?
     return link_to(
-      image_tag("delete_off.png", :mouseover => "delete_on.png", :alt => t('todos.delete'), :align => "absmiddle")+" "+t('todos.delete'),
+      image_tag("delete_off.png", 
+      :onmouseover => "this.src='#{path_to_image("delete_on.png")}'", 
+      :onmouseout => "this.src='#{path_to_image("delete_off.png")}'",
+      :alt => t('todos.delete'), :align => "absmiddle")+" "+t('todos.delete'),
       {:controller => 'todos', :action => 'destroy', :id => todo.id},
       :class => "icon_delete_item",
       :id => "delete_#{dom_id(todo)}",
@@ -59,7 +63,11 @@ module TodosHelper
   end
 
   def image_tag_for_defer(days)
-    image_tag("defer_#{days}_off.png", :mouseover => "defer_#{days}.png", :alt => t('todos.defer_x_days', :count => days), :align => "absmiddle")+" "+t('todos.defer_x_days', :count => days)
+    # TODO: what is the current way to do mouseover with css?
+    image_tag("defer_#{days}_off.png", 
+      :onmouseover => "this.src='#{path_to_image("defer_#{days}.png")}'", 
+      :onmouseout => "this.src='#{path_to_image("defer_#{days}_off.png")}'",
+      :alt => t('todos.defer_x_days', :count => days), :align => "absmiddle")+" "+t('todos.defer_x_days', :count => days)
   end
 
   def collapsed_notes_image(todo)

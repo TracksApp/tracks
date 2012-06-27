@@ -45,14 +45,15 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   def test_update_password_successful
-    get :change_password # should fail because no login
+    get :change_password, :id => users(:admin_user).id 
+    # should fail because no login
     assert_redirected_to login_path
     login_as :admin_user
     @user = @request.session['user_id']
-    get :change_password # should now pass because we're logged in
+    get :change_password, :id => users(:admin_user).id # should now pass because we're logged in
     assert_response :success
     assert_equal assigns['page_title'], "TRACKS::Change password"
-    post :update_password, :user => {:password => 'newpassword', :password_confirmation => 'newpassword'}
+    post :update_password, :id => users(:admin_user).id, :user => {:password => 'newpassword', :password_confirmation => 'newpassword'}
     assert_redirected_to preferences_path
     @updated_user = User.find(users(:admin_user).id)
     assert_not_nil User.authenticate(@updated_user.login, 'newpassword')
@@ -60,19 +61,21 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   def test_update_password_no_confirmation
-    post :update_password # should fail because no login
+    post :update_password, :id => users(:admin_user).id, :user => {:password => 'newpassword', :password_confirmation => 'wrong'} 
+    # should fail because no login
     assert_redirected_to login_path
     login_as :admin_user
-    post :update_password, :user => {:password => 'newpassword', :password_confirmation => 'wrong'}
+    post :update_password, :id => users(:admin_user).id, :user => {:password => 'newpassword', :password_confirmation => 'wrong'}
     assert_redirected_to change_password_user_path(users(:admin_user))
     assert_equal 'Validation failed: Password doesn\'t match confirmation', flash[:error]
   end
 
   def test_update_password_validation_errors
-    post :update_password # should fail because no login
+    post :update_password, :id => users(:admin_user).id
+    # should fail because no login
     assert_redirected_to login_path
     login_as :admin_user
-    post :update_password, :user => {:password => 'ba', :password_confirmation => 'ba'}
+    post :update_password, :id => users(:admin_user).id, :user => {:password => 'ba', :password_confirmation => 'ba'}
     assert_redirected_to change_password_user_path(User.find(users(:admin_user).id))
     # For some reason, no errors are being raised now.
     #assert_equal 1, users(:admin_user).errors.count

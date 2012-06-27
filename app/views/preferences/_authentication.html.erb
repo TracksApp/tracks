@@ -10,7 +10,7 @@
   t('preferences.generate_new_token'),
   refresh_token_user_path( current_user ),
   :method => :post,
-  :confirm => t('preferences.generate_new_token_confirm'),
+  :data => {:confirm => t('preferences.generate_new_token_confirm')},
   :id=>'prefs_new_token') %>
 
 </div>

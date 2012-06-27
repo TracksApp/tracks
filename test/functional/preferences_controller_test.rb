@@ -42,6 +42,7 @@ class PreferencesControllerTest < ActionController::TestCase
   test "should update preferences" do
     login_as :admin_user
     post :update, {
+      :id => users(:admin_user).id,
       :user => { :first_name => 'Jane', :last_name => 'Doe'},
       :prefs => { :date_format => "%m-%d-%Y", :week_starts => "0", :show_number_completed => "10", :show_completed_projects_in_sidebar => "false", :show_hidden_contexts_in_sidebar => "false", :staleness_starts => "14", :due_style => "1", :admin_email => "my.email@domain.com" }}
     updated_admin_user = users(:admin_user).reload
@@ -57,6 +58,7 @@ class PreferencesControllerTest < ActionController::TestCase
     old_password_hash = users(:admin_user).password
 
     post :update, {
+      :id => users(:admin_user).id,
       :user => { :first_name => 'Jane', :last_name => 'Doe', :password => "", :password_confirmation => ""},
       :prefs => { :date_format => "%m-%d-%Y", :week_starts => "0", :show_number_completed => "10", :show_completed_projects_in_sidebar => "false", :show_hidden_contexts_in_sidebar => "false", :staleness_starts => "14", :due_style => "1", :admin_email => "my.email@domain.com" }}
 
@@ -70,6 +72,7 @@ class PreferencesControllerTest < ActionController::TestCase
     login_as :admin_user
 
     post :update, {
+      :id => users(:admin_user).id,
       :user => { :first_name => 'Jane', :last_name => 'Doe', :auth_type => "open_id", :open_id_url => "http://test"},
       :prefs => { :date_format => "%m-%d-%Y", :week_starts => "0", :show_number_completed => "10", :show_completed_projects_in_sidebar => "false", :show_hidden_contexts_in_sidebar => "false", :staleness_starts => "14", :due_style => "1", :admin_email => "my.email@domain.com" }}
 
