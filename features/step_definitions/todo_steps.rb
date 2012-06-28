@@ -122,12 +122,12 @@ Then /^the default context of the new todo form should be "([^"]*)"$/ do |contex
 end
 
 Then /^the tag field in the new todo form should be empty$/ do
-  xpath= "//form[@id='todo-form-new-action']/input[@id='todo_tag_list']"
+  xpath= "//form[@id='todo-form-new-action']/input[@id='tag_list']"
   page.find(:xpath, xpath).value.blank?.should be_true
 end
 
 Then /^the tag field in the new todo form should be "([^"]*)"$/ do |tag_list|
-  xpath= "//form[@id='todo-form-new-action']/input[@id='todo_tag_list']"
+  xpath= "//form[@id='todo-form-new-action']/input[@id='tag_list']"
   tag_list.should == page.find(:xpath, xpath).value
 end
 

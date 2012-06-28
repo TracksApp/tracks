@@ -49,7 +49,7 @@ class TodosControllerTest < ActionController::TestCase
     assert_difference 'Todo.count' do
       put :create, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{
         "notes"=>"", "description"=>"test tags", "due"=>"30/11/2006"},
-        "todo_tag_list"=>"1234,5667,9876"
+        "tag_list"=>"1234,5667,9876"
       # default has_many_polymorphs will fail on these high numbers as tags with those id's do not exist
     end
     t = assigns['todo']
@@ -63,7 +63,7 @@ class TodosControllerTest < ActionController::TestCase
     assert_difference 'Todo.count' do
       put :create, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{
         "notes"=>"", "description"=>"test tags", "due"=>"30/11/2006"},
-        "todo_tag_list"=>"a,,b"
+        "tag_list"=>"a,,b"
       # default has_many_polymorphs will fail on the empty tag
     end
     t = assigns['todo']
