@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails' 
+gem 'rails'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -20,6 +20,7 @@ gem "aasm"
 gem "htmlentities"
 gem "swf_fu"
 gem "rails_autolink"
+gem "therubyracer"
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -72,7 +73,6 @@ group :test do
   gem "database_cleaner"
   gem "cucumber-rails"
   gem "aruba"
-  gem "therubyracer"
   
   # uncomment to use the webkit option. This depends on Qt to be installed
   #gem "capybara-webkit"
