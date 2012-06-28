@@ -23,11 +23,9 @@ class MessageGateway < ActionMailer::Base
       end
     end
 
-    # stupid T-Mobile often sends the same message multiple times
-    return if user.todos.where(:description => description).first
-
     todo = Todo.from_rich_message(user, context.id, description, notes)
     todo.save!
+    Rails.logger.info "Saved email as todo for user #{user.login} in context #{context.name}"
   end
   
   private
@@ -37,10 +35,18 @@ class MessageGateway < ActionMailer::Base
   end
   
   def get_user_from_email_address(email)
-    address = get_address(email)
-    user = User.where("preferences.sms_email" => address.strip).includes(:preference).first
-    if user.nil?
-      user = User.where("preferences.sms_email" => address.strip[1.100]).includes(:preference).first
+    if SITE_CONFIG['email_dispatch'] == 'single_user'
+      Rails.logger.info "All received email goes to #{ENV['TRACKS_MAIL_RECEIVER']}"
+      user = User.find_by_login(ENV['TRACKS_MAIL_RECEIVER'])
+      Rails.logger.info "WARNING: Unknown user set for TRACKS_MAIL_RECEIVER (#{ENV['TRACKS_MAIL_RECEIVER']})" if user.nil?
+    else
+      address = get_address(email)
+      Rails.logger.info "Looking for user with email #{address}"
+      user = User.where("preferences.sms_email" => address.strip).includes(:preference).first
+      if user.nil?
+        user = User.where("preferences.sms_email" => address.strip[1.100]).includes(:preference).first
+      end
+      Rails.logger.info(!user.nil? ? "Email belongs to #{user.login}" : "User unknown")
     end
     return user
   end
