@@ -5,6 +5,7 @@ suppress_dependencies ||= false
 parameters = "_source_view=#{@source_view}"
 parameters += "&_tag_name=#{@tag_name}" if @source_view == 'tag'
 @z_index_counter = @z_index_counter - 1  # for IE z-index bug
+@rec_depth ||= 0
 %>
 <div id="<%= dom_id(successor, 'successor') %>" class="item-container">
   <div id="<%= dom_id(successor, 'successor_line') %>">
@@ -13,16 +14,21 @@ parameters += "&_tag_name=#{@tag_name}" if @source_view == 'tag'
 
       <%= remote_delete_dependency(successor, predecessor) %>
 
-      <% unless successor.pending_successors.empty? %>
-        <div class="todo_successors" id="<%= dom_id(successor, 'successors') %>">
-          <%= render :partial => "todos/successor",
-            :collection => successor.pending_successors,
-            :locals => { :todo => successor,
-            :parent_container_type => parent_container_type,
-            :suppress_dependencies => true,
-            :predecessor => successor }
-        %>
-        </div>
+      <% unless successor.pending_successors.empty?
+        if @rec_depth < 8
+          @rec_depth+=1 %>
+          <div class="todo_successors" id="<%= dom_id(successor, 'successors') %>">
+            <%= render :partial => "todos/successor",
+              :collection => successor.pending_successors,
+              :locals => { :todo => successor,
+              :parent_container_type => parent_container_type,
+              :suppress_dependencies => true,
+              :predecessor => successor }
+            %>
+          </div>
+        <% else %>
+          <a title="There are more dependencies that are not shown">[...]</a>
+        <% end %>
       <% end %>
     </div>
   </div>
