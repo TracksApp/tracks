@@ -68,14 +68,14 @@ Tracksapp::Application.routes.draw do
   match 'calendar' => "todos#calendar"
   match 'done' => "stats#done", :as => 'done_overview'
 
-  match 'data' => "data#index"  
+  match 'data' => "data#index"
   match 'data/csv_notes' => 'data#csv_notes'
   match 'data/yaml_export' => 'data#yaml_export'
   
   match 'integrations' => "integrations#index"
   match 'integrations/rest_api' => "integrations#rest_api", :as => 'rest_api_docs'
   match 'integrations/cloudmailin' => 'integrations#cloudmailin'
-  match 'integrations/search_plugin.xml' => "integrations#search_plugin", :as => 'search_plugin'
+  match 'integrations/search_plugin' => "integrations#search_plugin", :as => 'search_plugin'
   match 'integrations/google_gadget.xml' => 'integrations#google_gadget', :as => 'google_gadget'
   match 'integrations/get_applescript1.js' => 'integrations#get_applescript1'
   match 'integrations/get_applescript2.js' => 'integrations#get_applescript2'

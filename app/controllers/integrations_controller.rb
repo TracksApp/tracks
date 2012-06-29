@@ -2,7 +2,7 @@ class IntegrationsController < ApplicationController
   require 'mail'
   
   skip_before_filter :login_required, :only => [:cloudmailin, :search_plugin, :google_gadget]
-
+  
   def index
     @page_title = 'TRACKS::Integrations'
   end
@@ -27,11 +27,8 @@ class IntegrationsController < ApplicationController
   end
 
   def search_plugin
-    # TODO: ASSET PATH!!
-    @icon_data = [File.open(Rails.root + '/app/assets/images/done.png').read].
+    @icon_data = [File.open(File.join(Rails.root, 'app', 'assets', 'images', 'done.png')).read].
       pack('m').gsub(/\n/, '')
- 
-    render :layout => false
   end
 
   def google_gadget

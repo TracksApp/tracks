@@ -182,7 +182,10 @@ class ProjectsController < ApplicationController
     @contexts = current_user.contexts
 
     respond_to do |format|
-      format.js { @down_count = current_user.projects.size }
+      format.js do
+        @down_count = current_user.projects.size
+        init_not_done_counts
+      end
       format.xml do
         if @project.new_record?
           render_failure @project.errors.to_xml.html_safe, 409

@@ -26,12 +26,12 @@ class Todo < ActiveRecord::Base
   scope :active, :conditions => { :state => 'active' }
   scope :active_or_hidden, :conditions => ["todos.state = ? OR todos.state = ?", 'active', 'project_hidden']
   scope :not_completed, :conditions =>  ['NOT (todos.state = ?)', 'completed']
-  scope :completed, :conditions =>  ["NOT (todos.completed_at IS NULL)"]
-  scope :deferred, :conditions => ["todos.completed_at IS NULL AND NOT (todos.show_from IS NULL)"]
+  scope :completed, :conditions =>  ["todos.state = ?", 'completed']
+  scope :deferred, :conditions => ["todos.state = ?", 'deferred']
   scope :blocked, :conditions => ['todos.state = ?', 'pending']
   scope :pending, :conditions => ['todos.state = ?', 'pending']
-  scope :deferred_or_blocked, :conditions => ["(todos.completed_at IS NULL AND NOT(todos.show_from IS NULL)) OR (todos.state = ?)", "pending"]
-  scope :not_deferred_or_blocked, :conditions => ["(todos.completed_at IS NULL) AND (todos.show_from IS NULL) AND (NOT todos.state = ?)", "pending"]
+  scope :deferred_or_blocked, :conditions => ["(todos.state = ?) OR (todos.state = ?)", "deferred", "pending"]
+  scope :not_deferred_or_blocked, :conditions => ["(NOT todos.state=?) AND (NOT todos.state = ?)", "deferred", "pending"]
   scope :hidden,
     :joins => "INNER JOIN contexts c_hidden ON c_hidden.id = todos.context_id",
     :conditions => ["todos.state = ? OR (c_hidden.hide = ? AND (todos.state = ? OR todos.state = ? OR todos.state = ?))",

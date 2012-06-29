@@ -200,7 +200,7 @@ module ApplicationHelper
       return content_tag(:li, t('sidebar.list_empty')).html_safe
     else
       return list.inject("") do |html, item|
-        link = (item.class == "Project") ? link_to_project( item ) : link_to_context(item)
+        link = item.is_a?(Project) ? link_to_project( item ) : link_to_context(item)
         html << content_tag(:li, link + " (" + count_undone_todos_phrase(item)+")")
       end.html_safe
     end

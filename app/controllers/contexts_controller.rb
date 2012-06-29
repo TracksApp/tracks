@@ -67,6 +67,7 @@ class ContextsController < ApplicationController
     respond_to do |format|
       format.js do
         @down_count = current_user.contexts.size
+        init_not_done_counts
       end
       format.xml do
         if @context.new_record?

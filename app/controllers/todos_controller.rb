@@ -10,26 +10,6 @@ class TodosController < ApplicationController
   #   :calendar, :auto_complete_for_predecessor, :remove_predecessor, :add_predecessor]
 
   protect_from_forgery :except => :check_deferred
-
-  def with_parent_resource_scope(&block)
-    @feed_title = t('common.actions')
-    if (params[:context_id])
-      @context = current_user.contexts.find_by_params(params)
-      @feed_title = @feed_title + t('todos.feed_title_in_context', :context => @context.name)
-      Todo.send :where, ['todos.context_id = ?', @context.id] do
-        yield
-      end
-    elsif (params[:project_id])
-      @project = current_user.projects.find_by_params(params)
-      @feed_title = @feed_title + t('todos.feed_title_in_project', :project => @project.name)
-      @project_feed = true
-      Todo.send :where, ['todos.project_id = ?', @project.id] do
-        yield
-      end
-    else
-      yield
-    end
-  end
   
   def index
     @source_view = params['_source_view'] || 'todo'

@@ -100,11 +100,7 @@ class ApplicationController < ActionController::Base
   end
 
   def count_deferred_todos(todos_parent)
-    if todos_parent.nil?
-      count = 0
-    else
-      count = todos_parent.todos.deferred.count
-    end
+    return todos_parent.nil? ? 0 : eval("@#{todos_parent.class.to_s.downcase}_deferred_counts[#{todos_parent.id}]") || 0
   end
 
   # Convert a date object to the format specified in the user's preferences in
@@ -284,7 +280,8 @@ class ApplicationController < ActionController::Base
 
   def init_not_done_counts(parents = ['project','context'])
     parents.each do |parent|
-      eval("@#{parent}_not_done_counts = @#{parent}_not_done_counts || current_user.todos.active.count(:group => :#{parent}_id)")
+      eval("@#{parent}_not_done_counts ||= current_user.todos.active.group('#{parent}_id').count")
+      eval("@#{parent}_deferred_counts ||= current_user.todos.deferred.group('#{parent}_id').count")
     end
   end
 
