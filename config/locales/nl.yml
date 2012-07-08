@@ -67,9 +67,7 @@ nl:
     currency:
       format:
         format: "%u %n"
-        unit: !binary |
-          4oKs
-
+        unit: "€"
         separator: ","
         delimiter: .
   common:
@@ -776,7 +774,7 @@ nl:
     select:
       prompt: Selecteer
   will_paginate:
-    previous_label: "\xC2\xABVorige"
+    previous_label: "«Vorige"
     page_entries_info:
       multi_page: Toon %{model} %{from} - %{to} van %{count} in totaal
       single_page_html:
@@ -789,7 +787,7 @@ nl:
         zero: Geen %{model} gevonden
       multi_page_html: Toon %{model} <b>%{from}&nbsp;-&nbsp;%{to}</b> van <b>%{count}</b> in totaal
     page_gap: "&hellip;"
-    next_label: "Volgende \xC2\xBB"
+    next_label: "Volgende »"
   dates:
     month_names:
     - Januari
@@ -839,11 +837,11 @@ nl:
     rss_feed: RSS Feed
     choose_project: Kies het project waar je een feed van wilt
     all_projects: Alle projecten
-    project_needed: "Er moet ten minste \xC3\xA9\xC3\xA9n project zijn voor een feed opgevraagd kan worden"
+    project_needed: "Er moet ten minste één project zijn voor een feed opgevraagd kan worden"
     select_feed_for_project: Kies de feed voor dit project
     active_projects_wo_next: Actieve projecten zonder acties
     active_starred_actions: Alle gesterde, actieve acties
-    context_needed: "Er moet eerst ten minste \xC3\xA9\xC3\xA9n context zijn voor je een feed kan opvragen"
+    context_needed: "Er moet eerst ten minste één context zijn voor je een feed kan opvragen"
     select_feed_for_context: Kies de feed voor deze context
     projects_and_actions: Actieve projecten met hun acties
     notice_incomplete_only: "Merk op: alle feeds laten alleen acties zien die niet afgerond zijn, tenzij anders vermeld."

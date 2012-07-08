@@ -916,7 +916,7 @@ en:
     please_login: Please log in to use Tracks
     cas_logged_in_greeting: Hello, %{username}! You are authenticated.
     cas_username_not_found: Sorry, no user by that CAS username exists (%{username})
-    mobile_use_openid: "\xE2\x80\xA6or login with an OpenID"
+    mobile_use_openid: "…or login with an OpenID"
     cas_create_account: If you like to request on please go here to %{signup_link}
     account_login: Account login
     cas_signup_link: Request account
