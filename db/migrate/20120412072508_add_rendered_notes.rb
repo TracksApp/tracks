@@ -9,11 +9,7 @@ class AddRenderedNotes < ActiveRecord::Migration
     # Call save! on each todo to force generation of rendered_todos
     i=0; max = Todo.all.count; start = Time.now
     Todo.all.each do |todo|
-      if Rails.version < '3.0'
-        todo.save(false)
-      else
-        todo.save(:validate => false)
-      end
+      todo.save(:validate => false)
       i = i + 1
       if i%250==0
         elapsed_sec = (Time.now-start)
