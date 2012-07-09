@@ -46,7 +46,7 @@ de:
       contexts_title: Kontexte
       preferences_title: Meine Einstellungen
       search: "Alle Einträge durchsuchen"
-      review_title: "Machen Sie überprüfen"
+      review_title: "Überprüfung"
       projects_title: Projekte
       calendar: Kalender
   number: 
@@ -368,7 +368,7 @@ de:
     blocked_by: Blockiert durch %{predecessors}
     star_action: Aufgabe markieren
     completed_recurrence_completed: Es gibt keine weitere Aufgabe nach der soeben gelöschten. Die Wiederholung ist abgeschlossen.
-    defer_date_after_due_date: "Zurückstellungsdatum nach Ablaufdatum. Bitte passe das Ablaufdatum an, daß es vor dem Zurückstellungsdatum liegt."
+    defer_date_after_due_date: "Zurückstellungsdatum nach Ablaufdatum. Bitte passe das Ablaufdatum an, dass es vor dem Zurückstellungsdatum liegt."
     unable_to_add_dependency: Abhängigkeit nicht hinzufügbar
     done: Erledigt?
     star_action_with_description: Aufgabe '%{description}' markieren
@@ -440,7 +440,7 @@ de:
     show_on_date: Anzeigen am %{date}
     recurrence_period: Wiederholungszeitraum
     deferred_actions_with: "Zurückgestellte Aufgaben mit dem Tag '%{tag_name}'"
-    confirm_delete: "Bist du sicher, daß du die Aufgabe '%{description}' löschen möchtest?"
+    confirm_delete: "Bist du sicher, dass du die Aufgabe '%{description}' löschen möchtest?"
     recurring_deleted_success: "Die wiederkehrende Aufgabe wurde erfolgreich gelöscht."
     no_completed_actions_with: Keine erledigten Aufgaben mit dem Tag '%{tag_name}'
     next_actions_title: TRACKS::Weitere Aufgaben
@@ -599,7 +599,7 @@ de:
     add_new_recurring: "Neue wiederkehrende Aufgabe"
   notes: 
     delete_note_title: Notiz '%{id}' löschen
-    delete_confirmation: "Bist du sicher, daß du die Notiz '%{id}' löschen möchtest?"
+    delete_confirmation: "Bist du sicher, dass du die Notiz '%{id}' löschen möchtest?"
     in_project: "In:"
     delete_item_title: Eintrag löschen
     deleted_note: "Notiz '%{id}' löschen"
@@ -883,7 +883,7 @@ de:
     total_users_count: Derzeit existieren %{count} Benutzer
     new_user_title: TRACKS::Als Administrator anmelden
     destroy_user: "Benutzer löschen"
-    destroy_confirmation: "Achtung: der Benutzer '%{login}' wird mit all seinen Aufgaben, Kontexten, Projekten und Notizen gelöscht. Bist du sicher, daß du fortfahren möchtest?"
+    destroy_confirmation: "Achtung: der Benutzer '%{login}' wird mit all seinen Aufgaben, Kontexten, Projekten und Notizen gelöscht. Bist du sicher, dass du fortfahren möchtest?"
     you_have_to_reset_your_password: "Sie haben Ihr Passwort zurücksetzen"
     signup_new_user: Neuen Benutzer anlegen
     identity_url: Identity-URL
