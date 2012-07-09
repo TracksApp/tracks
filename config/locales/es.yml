@@ -1,14 +1,14 @@
 --- 
 es: 
   layouts: 
-    toggle_contexts_title: "Haga contextos se derrumb\xC3\xB3 (in)visible"
-    toggle_contexts: "Cambiar los contextos se derrumb\xC3\xB3"
+    toggle_contexts_title: "Haga contextos se derrumbó (in)visible"
+    toggle_contexts: "Cambiar los contextos se derrumbó"
     toggle_notes: Activar/Desactivar notas
     next_actions_rss_feed: RSS feed of next actions
     toggle_notes_title: Activar/Desactivar todas las notas
     mobile_navigation: 
       new_action: Nueva tarea
-      logout: "Cerrar sesi\xC3\xB3n"
+      logout: "Cerrar sesión"
       feeds: Feeds
       starred: avoritos
       projects: Proyectos
@@ -16,13 +16,13 @@ es:
       contexts: Contextos
       home: Inicio
     navigation: 
-      manage_users_title: "A\xC3\xB1adir o eliminar usuarios"
+      manage_users_title: "Añadir o eliminar usuarios"
       recurring_todos: Tareas repetitivas
       api_docs: REST API Docs
       help: "?"
       feeds: Feeds
       starred: Estrellas
-      stats: "Estad\xC3\xADsticas"
+      stats: "Estadísticas"
       notes_title: Mostrar todas las notas
       manage_users: Administrar usuarios
       tickler_title: Tickler
@@ -46,7 +46,7 @@ es:
       contexts_title: Contexts
       preferences_title: Mostrar mis preferencias
       search: Search All Items
-      review_title: "Posibilidad de una revisi\xC3\xB3n"
+      review_title: "Posibilidad de una revisión"
       projects_title: Proyectos
       calendar: Calendario
   number: 
@@ -67,21 +67,17 @@ es:
     currency: 
       format: 
         format: "%u%n"
-        unit: !binary |
-          4oKs
-
+        unit: "€"
         separator: .
         delimiter: ","
   common: 
-    recurring_todos: "Repetici\xC3\xB3n de acciones"
-    back: !binary |
-      QXRyw6Fz
-
+    recurring_todos: "Repetición de acciones"
+    back: "Atrás"
     actions: Tareas
     third: Tercero
-    add: "A\xC3\xB1adir"
+    add: "Añadir"
     previous: Anterior
-    go_back: "Volver atr\xC3\xA1s"
+    go_back: "Volver atrás"
     logout: Salir
     second: Segundo
     optional: opcional
@@ -99,19 +95,13 @@ es:
     server_error: Ha ocurrido un error en el servidor.
     forum: Foro
     projects: Proyectos
-    last: "\xC3\x9Altimo"
-    review: "Revisi\xC3\xB3n"
+    last: "Último"
+    review: "Revisión"
     action: Tarea
     days_midsentence: 
-      one: !binary |
-        ZMOtYQ==
-
-      other: !binary |
-        ZMOtYXM=
-
-      zero: !binary |
-        ZMOtYXM=
-
+      one: "día"
+      other: "días"
+      zero: "días"
     project: Proyecto
     contribute: Contribuir
     ok: Ok
@@ -123,20 +113,20 @@ es:
       zero: 0 notas
     numbered_step: Paso %{number}
     sort: 
-      by_task_count_title: "Ordenar por n\xC3\xBAmero de tareas"
-      by_task_count_title_confirm: "\xC2\xBFEst\xC3\xA1 seguro que desea ordenar los proyectos por el n\xC3\xBAmero de tareas? Esto reemplazar\xC3\xA1 el orden existente."
-      alphabetically: "Alfab\xC3\xA9ticamente"
+      by_task_count_title: "Ordenar por número de tareas"
+      by_task_count_title_confirm: "¿Está seguro que desea ordenar los proyectos por el número de tareas? Esto reemplazará el orden existente."
+      alphabetically: "Alfabéticamente"
       sort: Ordenar
-      alphabetically_title: "Proyectos de ordenar alfab\xC3\xA9ticamente"
-      alphabetically_confirm: "\xC2\xBFEst\xC3\xA1 seguro que desea ordenar los proyectos por orden alfab\xC3\xA9tico? Esto reemplazar\xC3\xA1 el orden existente."
-      by_task_count: "Por n\xC3\xBAmero de tareas"
+      alphabetically_title: "Proyectos de ordenar alfabéticamente"
+      alphabetically_confirm: "¿Está seguro que desea ordenar los proyectos por orden alfabético? Esto reemplazará el orden existente."
+      by_task_count: "Por número de tareas"
     create: Crear
     todo: Todo
     months: meses
     errors_with_fields: "Ha habido problemas con los siguientes campos:"
-    description: "Descripci\xC3\xB3n"
+    description: "Descripción"
     fourth: Cuarto
-    next: "Pr\xC3\xB3ximo"
+    next: "Próximo"
     drag_handle: ARRASTRAR
     contexts: Contextos
     context: Contexto
@@ -151,17 +141,17 @@ es:
     not_available_abbr: n/e
   integrations: 
     opensearch_description: Buscar en las Tracks
-    applescript_next_action_prompt: "Descripci\xC3\xB3n de la pr\xC3\xB3xima tarea:"
-    gmail_description: "Gadget para a\xC3\xB1adir pistas a Gmail como un gadget"
+    applescript_next_action_prompt: "Descripción de la próxima tarea:"
+    gmail_description: "Gadget para añadir pistas a Gmail como un gadget"
     applescript_success_after_id: creado
-    applescript_success_before_id: "Nueva acci\xC3\xB3n junto con la identificaci\xC3\xB3n"
+    applescript_success_before_id: "Nueva acción junto con la identificación"
   activerecord: 
     attributes: 
       project: 
         name: Nombre
-        default_tags: "Etiquetas est\xC3\xA1ndar"
+        default_tags: "Etiquetas estándar"
         default_context_name: Default contexto
-        description: "Descripci\xC3\xB3n"
+        description: "Descripción"
       note: 
         created_at: Creado el
         updated_at: actualizado a las
@@ -171,30 +161,30 @@ es:
         notes: Notas
         tags: Etiquetas
         project: Proyecto
-        description: "Descripci\xC3\xB3n"
+        description: "Descripción"
         context: Contexto
-        due: "Fecha l\xC3\xADmite"
+        due: "Fecha límite"
       preference: 
         show_hidden_projects_in_sidebar: Mostrar proyectos ocultos en el lateral
         show_hidden_contexts_in_sidebar: Mostrar los contextos ocultos en el lateral
         date_format: Formato de fecha
         sms_context: Contexto por defecto para el email
-        verbose_action_descriptors: "Descriptores detallado de acci\xC3\xB3n"
+        verbose_action_descriptors: "Descriptores detallado de acción"
         staleness_starts: Comienzo de estancamiento
-        mobile_todos_per_page: "Tareas por p\xC3\xA1gina (Vista M\xC3\xB3vil)"
-        show_number_completed: "Mostrar n\xC3\xBAmero de tareas completadas"
-        title_date_format: "T\xC3\xADtulo del formato de fecha"
-        refresh: "Intervalo de actualizaci\xC3\xB3n (en minutos)"
+        mobile_todos_per_page: "Tareas por página (Vista Móvil)"
+        show_number_completed: "Mostrar número de tareas completadas"
+        title_date_format: "Título del formato de fecha"
+        refresh: "Intervalo de actualización (en minutos)"
         week_starts: La semana comienza
         last_name: Apellido
         due_style: Debido al estilo
         locale: Lugar
         time_zone: Zona horaria
         sms_email: Email origen
-        show_project_on_todo_done: "Ir a la p\xC3\xA1gina del proyecto al completar la tarea"
+        show_project_on_todo_done: "Ir a la página del proyecto al completar la tarea"
         show_completed_projects_in_sidebar: Show completed projects in sidebar
         first_name: Nombre
-        review_period: "Intervalo de revisi\xC3\xB3n del proyecto"
+        review_period: "Intervalo de revisión del proyecto"
       user: 
         last_name: Apellido
         first_name: Primer nombre
@@ -207,36 +197,36 @@ es:
               too_long: El nombre del proyecto tiene que tener menos de 256 caracteres
               taken: ya existe
       messages: 
-        record_invalid: "La validaci\xC3\xB3n ha fallado: %{errores}"
+        record_invalid: "La validación ha fallado: %{errores}"
         greater_than_or_equal_to: debe ser mayor que o igual a %{count}
-        confirmation: "no coincide con la confirmaci\xC3\xB3n"
+        confirmation: "no coincide con la confirmación"
         less_than_or_equal_to: debe ser menor o igual a %{count}
         blank: no puede estar en blanco
-        exclusion: "est\xC3\xA1 reservado"
-        invalid: "no puede contener el car\xC3\xA1cter de coma (',')"
+        exclusion: "está reservado"
+        invalid: "no puede contener el carácter de coma (',')"
         odd: tiene que ser impar
-        even: "debe ser a\xC3\xBAn"
-        empty: "no puede estar vac\xC3\xADo"
-        too_short: "es demasiado corto (m\xC3\xADnimo %{count} caracteres)"
+        even: "debe ser aún"
+        empty: "no puede estar vacío"
+        too_short: "es demasiado corto (mínimo %{count} caracteres)"
         wrong_length: es la longitud del mal (debe ser %{count} caracteres)
         less_than: debe ser menor que %{count}
         greater_than: debe ser mayor que %{count}
         equal_to: debe ser igual a %{count}
         accepted: debe ser aceptada
-        too_long: "es demasiado largo (el m\xC3\xA1ximo es %{count} caracteres)"
+        too_long: "es demasiado largo (el máximo es %{count} caracteres)"
         taken: Ya se ha dado
-        inclusion: "no est\xC3\xA1 incluido en la lista"
-        not_a_number: "no es un n\xC3\xBAmero"
+        inclusion: "no está incluido en la lista"
+        not_a_number: "no es un número"
       template: 
         body: "Hubo problemas con los campos siguientes:"
         header: 
           one: Un error esta prohibido %{model} se guarden
-          other: "%{count} errores proh\xC3\xADbe este %{model} que se guarden"
+          other: "%{count} errores prohíbe este %{model} que se guarden"
       full_messages: 
         format: "%{attribute} %{message}"
   data: 
-    import_successful: "Importaci\xC3\xB3n se realiz\xC3\xB3 correctamente."
-    import_errors: "Han ocurrido algunos errores durante la importaci\xC3\xB3n"
+    import_successful: "Importación se realizó correctamente."
+    import_errors: "Han ocurrido algunos errores durante la importación"
   models: 
     project: 
       feed_title: Tracks Projects
@@ -263,7 +253,7 @@ es:
     top5_visible_contexts_with_incomplete_actions: Top 5 visible contexts with incomplete actions
     actions: Actions
     time_of_day_legend: 
-      number_of_actions: "N\xC3\xBAmero de tareas"
+      number_of_actions: "Número de tareas"
       time_of_day: Time of day
     totals_incomplete_actions: You have %{count} incomplete actions
     totals_deferred_actions: of which %{count} are deferred actions in the tickler
@@ -288,25 +278,25 @@ es:
     actions_selected_from_week: "Actions selected from week "
     actions_day_of_week_title: Day of week (all actions)
     actions_lastyear_title: Actions in the last 12 months
-    open_per_week: "Pr\xC3\xB3ximas acciones activas (visibles y ocultas) a la semana"
+    open_per_week: "Próximas acciones activas (visibles y ocultas) a la semana"
     action_selection_title: TRACKS::Action selection
     totals_project_count: You have %{count} projects.
     legend: 
       number_of_days: Number of days ago
       actions: Tareas
-      number_of_actions: "N\xC3\xBAmero de tareas"
+      number_of_actions: "Número de tareas"
       day_of_week: Day of week
       running_time: Running time of an action (weeks)
       percentage: Percentage
       months_ago: Months ago
     current_running_time_of_incomplete_visible_actions: Current running time of incomplete visible actions
     tod30_legend: 
-      number_of_actions: "N\xC3\xBAmero de tareas"
+      number_of_actions: "Número de tareas"
       time_of_day: Time of day
     totals_context_count: You have %{count} contexts.
     open_per_week_legend: 
       actions: Acciones
-      weeks: "Semanas atr\xC3\xA1s"
+      weeks: "Semanas atrás"
     actions_last_year_legend: 
       number_of_actions: Number of actions
       months_ago: Months ago
@@ -327,8 +317,8 @@ es:
     totals_tag_count: You have %{count} tags placed on actions.
     actions_further: " and further"
     actions_dow_30days_legend: 
-      number_of_actions: "N\xC3\xBAmero de acciones"
-      day_of_week: "D\xC3\xADa de la semana"
+      number_of_actions: "Número de acciones"
+      day_of_week: "Día de la semana"
     totals_first_action: Since your first action on %{date}
     tag_cloud_description: This tag cloud includes tags of all actions (completed, not completed, visible and/or hidden)
     spread_of_actions_for_all_context: Spread of actions for all context
@@ -338,11 +328,11 @@ es:
     actions_avg_completed_30days: and completed an average of %{count} actions per day.
     actions_30days_title: Actions in the last 30 days
     no_tags_available: no tags available
-    index_title: "TRACKS::Estad\xC3\xADstica"
+    index_title: "TRACKS::Estadística"
     actions_dow_30days_title: Day of week (past 30 days)
     actions_day_of_week_legend: 
-      number_of_actions: "N\xC3\xBAmero de acciones"
-      day_of_week: "D\xC3\xADa de la semana"
+      number_of_actions: "Número de acciones"
+      day_of_week: "Día de la semana"
     within_one: Dentro de un
     spread_of_running_actions_for_visible_contexts: Spread of running actions for visible contexts
     actions_last_year: Actions in the last years
@@ -384,7 +374,7 @@ es:
     tags: Tags (separate with commas)
     delete_recurring_action_title: Delete the recurring action
     context_changed: Context changed to %{name}
-    new_related_todo_created: "Una nueva tarea fue a\xC3\xB1adida y que pertenece a esta tarea recurrente"
+    new_related_todo_created: "Una nueva tarea fue añadida y que pertenece a esta tarea recurrente"
     mobile_todos_page_title: Todas las tareas
     add_another_dependency: Add another dependency
     removed_predecessor: Removed %{successor} as dependency from %{predecessor}.
@@ -405,16 +395,14 @@ es:
       due_within_a_week: due within a week
     older_completed_items: Older completed items
     no_actions_due_this_week: No actions due in rest of this week
-    all_completed_here: !binary |
-      YXF1w60=
-
+    all_completed_here: "aquí"
     append_in_this_project: in this project
-    edit_recurring_todo: "Editar la acci\xC3\xB3n de repetici\xC3\xB3n"
+    edit_recurring_todo: "Editar la acción de repetición"
     error_deleting_item: There was an error deleting the item %{description}
     task_list_title: TRACKS::List tasks
     no_recurring_todos: Currently there are no recurring todos
     error_completing_todo: There was an error completing / activating the recurring todo %{description}
-    recurring_pattern_removed: "El patr\xC3\xB3n de repetici\xC3\xB3n se retira de %{count}"
+    recurring_pattern_removed: "El patrón de repetición se retira de %{count}"
     convert_to_project: Make project
     no_deferred_pending_actions: Currently there are no deferred or pending actions
     delete_recurring_action_confirm: Are you sure that you want to delete the recurring action '%{description}'?
@@ -445,7 +433,7 @@ es:
     recurring_deleted_success: The recurring action was deleted succesfully.
     no_completed_actions_with: No completed actions with the tag '%{tag_name}'
     next_actions_title: Tracks - Next Actions
-    next_action_description: "Descripci\xC3\xB3n de la nueva tarea"
+    next_action_description: "Descripción de la nueva tarea"
     deferred_tasks_title: TRACKS::Tickler
     clear_show_from_date: Clear show from date
     in_hidden_state: en estado oculto
@@ -456,10 +444,10 @@ es:
     show_today: Show Today
     next_actions_due_date: 
       overdue_by: Overdue by %{days} day
-      due_in_x_days: "Vence en %{days} d\xC3\xADas"
+      due_in_x_days: "Vence en %{days} días"
       due_today: Vence hoy
       overdue_by_plural: Overdue by %{days} days
-      due_tomorrow: "Vence ma\xC3\xB1ana"
+      due_tomorrow: "Vence mañana"
     completed_last_x_days: Completed in last %{count} days
     no_actions_with: Currently there are no incomplete actions with the tag '%{tag_name}'
     defer_x_days: 
@@ -478,7 +466,7 @@ es:
     error_deleting_recurring: There was an error deleting the recurring todo \'%{description}\'
     delete_action: Delete action
     delete: Delete
-    no_last_completed_actions: "No encontr\xC3\xB3 las acciones realizadas"
+    no_last_completed_actions: "No encontró las acciones realizadas"
     drag_action_title: Drag onto another action to make it depend on that action
     cannot_add_dependency_to_completed_todo: Cannot add this action as a dependency to a completed action!
     depends_on: Depends on
@@ -488,7 +476,7 @@ es:
     action_marked_complete: The action <strong>'%{description}'</strong> was marked as <strong>%{completed}</strong>
     completed_today: Completed Today
     added_new_next_action_plural: Added new next actions
-    new_related_todo_not_created_short: "no se cre\xC3\xB3 la tarea"
+    new_related_todo_not_created_short: "no se creó la tarea"
     completed_rest_of_week: Completado en el resto de esta semana
     show_tomorrow: Show Tomorrow
     error_starring: Could not toggle the star of this todo \'%{description}\'
@@ -573,7 +561,7 @@ es:
       yearly_options: Settings for yearly recurring actions
       yearly: Yearly
       monthly_every_xth_day: The %{day} %{day_of_week} of every %{month} month
-    action_deferred: "La acci\xC3\xB3n \\'%{description}\\' se aplaz\xC3\xB3"
+    action_deferred: "La acción \\'%{description}\\' se aplazó"
     tagged_page_title: TRACKS::Tagged with '%{tag_name}'
     added_dependency: Added %{dependency} as dependency.
     completed_rest_of_month: Completado en el resto de este mes
@@ -584,7 +572,7 @@ es:
     no_actions_found: Currently there are no incomplete actions.
     in_pending_state: en estado pendiente
     error_toggle_complete: Could not mark this todo complete
-    due: "Fecha l\xC3\xADmite"
+    due: "Fecha límite"
     no_incomplete_actions: There are no incomplete actions
     action_saved_to_tickler: Action saved to tickler
     recurring_action_saved: Recurring action saved
@@ -632,7 +620,7 @@ es:
     no_last_completed_recurring_todos: No se ha completado las acciones repetitivas que se encuentran
     notes: Notes
     todos_append: in this project
-    list_reviews: "TRACKS::Revisi\xC3\xB3n"
+    list_reviews: "TRACKS::Revisión"
     notes_empty: There are no notes for this project
     no_projects: Currently there are no projects
     hide_form_title: Hide new project form
@@ -644,10 +632,10 @@ es:
     show_form: Add a project
     actions_in_project_title: Actions in this project
     completed_projects: Proyectos completados
-    is_active: "est\xC3\xA1 activo"
-    add_note: "A\xC3\xB1adir una nota"
+    is_active: "está activo"
+    add_note: "Añadir una nota"
     set_default_tags_notice: Set project's default tags to %{default_tags}
-    add_project: "A\xC3\xB1adir Proyecto"
+    add_project: "Añadir Proyecto"
     settings: Settings
     project_saved_status: Project saved
     list_projects: TRACKS::Lista de Proyectos
@@ -656,7 +644,7 @@ es:
     hidden_projects: Proyectos ocultos
     delete_project_title: Delete the project
     default_context_removed: Eliminado el contexto por defecto
-    add_note_submit: "A\xC3\xB1adir nota"
+    add_note_submit: "Añadir nota"
     completed_actions: Tareas completadas para este proyecto
     was_marked_complete: has been marked as completed
     no_default_context: Este proyecto no tiene un contexto por defecto
@@ -671,7 +659,7 @@ es:
     stalled: Estancado
     review_plural: Fechado
     completed: Completed
-    current: "Hasta al d\xC3\xADa"
+    current: "Hasta al día"
     review: Fechado
     completed_plural: Completed
     blocked: Bloqueado
@@ -682,9 +670,9 @@ es:
     visible: Visible
     hidden: Hidden
     active: Active
-    current_plural: "Hasta al d\xC3\xADa"
+    current_plural: "Hasta al día"
   errors: 
-    user_unauthorized: "401 No autorizado: Solo los usuarios administrativos pueden acceder a esta funci\xC3\xB3n."
+    user_unauthorized: "401 No autorizado: Solo los usuarios administrativos pueden acceder a esta función."
   preferences: 
     open_id_url: Your OpenID URL is
     change_identity_url: Change Your Identity URL
@@ -695,7 +683,7 @@ es:
     title: Your preferences
     is_false: "false"
     show_number_completed: Show %{number} completed items
-    password_changed: "Que ha cambiado la contrase\xC3\xB1a, por favor vuelve a iniciar sesi\xC3\xB3n."
+    password_changed: "Que ha cambiado la contraseña, por favor vuelve a iniciar sesión."
     edit_preferences: Edit preferences
     page_title_edit: TRACKS::Edit Preferences
     is_true: "true"
@@ -703,12 +691,12 @@ es:
     generate_new_token: Generate a new token
     token_header: Your token
     authentication_header: Your authentication
-    updated: "Las preferencias de actualizaci\xC3\xB3n"
+    updated: "Las preferencias de actualización"
     current_authentication_type: Your authentication type is %{auth_type}
     change_authentication_type: Change your authentication type
     generate_new_token_confirm: Are you sure? Generating a new token will replace the existing one and break any external usages of this token.
     tabs: 
-      authentication: "Autenticaci\xC3\xB3n"
+      authentication: "Autenticación"
       tracks_behavior: Rastrea el comportamiento de
       profile: Perfil
       date_and_time: Fecha y hora
@@ -756,10 +744,10 @@ es:
     - Domingo
     - Lunes
     - Martes
-    - "Mi\xC3\xA9rcoles"
+    - "Miércoles"
     - Jueves
     - Viernes
-    - "S\xC3\xA1bado"
+    - "Sábado"
     abbr_month_names: 
     - 
     - Ene
@@ -775,7 +763,7 @@ es:
     - Nov
     - Dic
   will_paginate: 
-    previous_label: "\xC2\xAB Anterior"
+    previous_label: "« Anterior"
     page_entries_info: 
       multi_page: Viendo %{model} {%from} - %{to} de %{count} en el total de
       single_page_html: 
@@ -788,7 +776,7 @@ es:
         zero: No %{model} encontrado
       multi_page_html: Viendo %{model} <b>%{from}&nbsp;-&nbsp;%{to}</b> de %{count}</b> en el total de
     page_gap: ...
-    next_label: "Siguiente \xC2\xBB"
+    next_label: "Siguiente »"
   support: 
     array: 
       words_connector: ","
@@ -797,14 +785,14 @@ es:
     select: 
       prompt: Por favor seleccione
   footer: 
-    send_feedback: "Env\xC3\xADa comentarios sobre el %{version}"
+    send_feedback: "Envía comentarios sobre el %{version}"
   shared: 
     multiple_next_actions: Multiple next actions (one on each line)
-    make_actions_dependent: "Aseg\xC3\xBArese que las acciones dependen unos de otros"
+    make_actions_dependent: "Asegúrese que las acciones dependen unos de otros"
     toggle_single: Add a next action
     hide_form: Esconder formulario
-    add_actions: "A\xC3\xB1adir tareas"
-    add_action: "A\xC3\xB1adir tarea"
+    add_actions: "Añadir tareas"
+    add_action: "Añadir tarea"
     tags_for_all_actions: Tags for all actions (sep. with commas)
     toggle_single_title: Add a new next action
     project_for_all_actions: Project for all actions
@@ -817,7 +805,7 @@ es:
   feedlist: 
     choose_context: Elija el contexto en el que desea un canal de
     actions_due_today: Acciones pendientes hoy o antes
-    ical_feed: "iCal alimentaci\xC3\xB3n"
+    ical_feed: "iCal alimentación"
     legend: "Leyenda:"
     all_contexts: Todos los contextos
     rss_feed: RSS Feed
@@ -825,19 +813,19 @@ es:
     all_projects: Todos los proyectos
     project_needed: Es necesario que haya al menos un proyecto antes de poder solicitar un feed
     select_feed_for_project: Seleccione la fuente para este proyecto
-    active_projects_wo_next: "Proyectos activos, sin las pr\xC3\xB3ximas acciones"
-    active_starred_actions: "Todas las acciones que protagoniz\xC3\xB3, activa"
+    active_projects_wo_next: "Proyectos activos, sin las próximas acciones"
+    active_starred_actions: "Todas las acciones que protagonizó, activa"
     context_needed: Es necesario que haya al menos un contexto antes de poder solicitar un feed
-    select_feed_for_context: "Seleccione la alimentaci\xC3\xB3n de este contexto"
+    select_feed_for_context: "Seleccione la alimentación de este contexto"
     projects_and_actions: Proyectos activos con sus acciones
-    notice_incomplete_only: "Nota: Todos los alimentos muestran s\xC3\xB3lo las acciones que no han sido marcadas como realizadas, a menos que se indique lo contrario."
-    actions_due_next_week: "Tareas pendientes en 7 d\xC3\xADas o menos"
-    actions_completed_last_week: "Tareas completadas en los \xC3\xBAltimos 7 d\xC3\xADas"
-    context_centric_actions: "Feeds de acciones incompletas en un contexto espec\xC3\xADfico"
+    notice_incomplete_only: "Nota: Todos los alimentos muestran sólo las acciones que no han sido marcadas como realizadas, a menos que se indique lo contrario."
+    actions_due_next_week: "Tareas pendientes en 7 días o menos"
+    actions_completed_last_week: "Tareas completadas en los últimos 7 días"
+    context_centric_actions: "Feeds de acciones incompletas en un contexto específico"
     plain_text_feed: Canal Texto sin formato
-    last_fixed_number: "\xC3\x9Altima %{number} acciones"
+    last_fixed_number: "Última %{number} acciones"
     all_actions: Todas las tareas
-    project_centric: "Feeds de acciones incompletas en un proyecto espec\xC3\xADfico"
+    project_centric: "Feeds de acciones incompletas en un proyecto específico"
   sidebar: 
     list_name_active_contexts: Active contexts
     list_name_active_projects: Active projects
@@ -881,7 +869,7 @@ es:
     new_user_title: TRACKS::Sign up as the admin user
     destroy_user: Destroy user
     destroy_confirmation: "Warning: this will delete user '%{login}', all their actions, contexts, project and notes. Are you sure that you want to continue?"
-    you_have_to_reset_your_password: "Usted tiene que restablecer su contrase\xC3\xB1a"
+    you_have_to_reset_your_password: "Usted tiene que restablecer su contraseña"
     signup_new_user: Sign up new user
     identity_url: Identity URL
     openid_ok_pref_failed: You have successfully verified %{url} as your identity but there was a problem saving your authentication preferences.
@@ -893,27 +881,27 @@ es:
     delete_context_title: Eliminar contexto
     all_completed_tasks_title: "TRACKS:: Todas las acciones completadas en '%{context_name}' contexto"
     hide_form: Esconder formulario
-    show_form_title: "A\xC3\xB1adir un contexto"
-    delete_context_confirmation: "\xC2\xBFEst\xC3\xA1 seguro que desea eliminar '%{name}' el contexto? Tenga en cuenta que esto tambi\xC3\xA9n se eliminar\xC3\xA1n todas las acciones (la repetici\xC3\xB3n) en este contexto!"
+    show_form_title: "Añadir un contexto"
+    delete_context_confirmation: "¿Está seguro que desea eliminar '%{name}' el contexto? Tenga en cuenta que esto también se eliminarán todas las acciones (la repetición) en este contexto!"
     todos_append: en este contexto
     delete_context: Eliminar contexto
     edit_context: Editar contexto
     hide_form_title: Ocultar el formulario nuevo contexto
     hidden_contexts: Contextos ocultos
     no_contexts_active: Actualmente no hay contextos activos
-    context_hide: "\xC2\xBFEsconder de la p\xC3\xA1gina principal?"
-    add_context: "A\xC3\xB1adir contexto"
+    context_hide: "¿Esconder de la página principal?"
+    add_context: "Añadir contexto"
     show_form: Crear un nuevo contexto
     save_status_message: Contexto guardado
     visible_contexts: Contextos visible
     update_status_message: Nombre de contexto ha cambiado
     context_name: Nombre del contexto
-    status_active: "El contexto est\xC3\xA1 activo"
+    status_active: "El contexto está activo"
     completed_tasks_title: "TRACKS:: Las acciones completadas en '%{context_name}' el contexto"
-    new_context_post: "' Tambi\xC3\xA9n se ha creado. \xC2\xBFEst\xC3\xA1 seguro?"
+    new_context_post: "' También se ha creado. ¿Está seguro?"
     new_context_pre: Nuevo contexto '
     no_actions: Actualmente no hay acciones incompletas en este contexto
-    last_completed_in_context: "en este contexto (\xC3\xBAltimos %{number})"
+    last_completed_in_context: "en este contexto (últimos %{number})"
     context_deleted: Contexto eliminado '%{name}'
     no_contexts_hidden: Actualmente no hay contextos ocultos
     status_hidden: Contexto se oculta
@@ -929,10 +917,10 @@ es:
     cas_logged_in_greeting: Hello, %{username}! You are authenticated.
     cas_username_not_found: Sorry, no user by that CAS username exists (%{username})
     cas_create_account: If you like to request on please go here to %{signup_link}
-    mobile_use_openid: "\xE2\x80\xA6or login with an OpenID"
+    mobile_use_openid: "…or login with an OpenID"
     cas_signup_link: Request account
     account_login: Acceso a la cuenta
-    successful: "Has entrado con \xC3\xA9xito. Bienvenido!"
+    successful: "Has entrado con éxito. Bienvenido!"
     session_will_not_expire: session will not expire.
     option_separator: or,
     session_time_out: Session has timed out. Please %{link}
@@ -948,25 +936,19 @@ es:
       second: Segundos
       month: Mes
       hour: Hora
-      day: !binary |
-        RMOtYQ==
-
-      year: !binary |
-        QcOxbw==
-
+      day: "Día"
+      year: "Año"
     distance_in_words: 
       less_than_x_minutes: 
         one: menos de un minuto
         other: menos de %{count} minutos
         zero: menos de 1 minuto
       almost_x_years: 
-        one: "casi 1 a\xC3\xB1o"
-        other: "Casi %{count} a\xC3\xB1os"
+        one: "casi 1 año"
+        other: "Casi %{count} años"
       x_days: 
-        one: !binary |
-          MSBkw61h
-
-        other: "%{count} d\xC3\xADas"
+        one: "1 día"
+        other: "%{count} días"
       x_seconds: 
         one: Un segundo
         other: "%{count} segundos"
@@ -984,14 +966,14 @@ es:
         one: 1 minuto
         other: "%{count} minutos"
       about_x_years: 
-        one: "alrededor de 1 a\xC3\xB1o"
-        other: "Acerca de %{count} a\xC3\xB1os"
+        one: "alrededor de 1 año"
+        other: "Acerca de %{count} años"
       about_x_months: 
         one: alrededor de 1 mes
         other: Acerca de %{count} meses
       over_x_years: 
-        one: "m\xC3\xA1s de 1 a\xC3\xB1o"
-        other: "en %{count} a\xC3\xB1os"
+        one: "más de 1 año"
+        other: "en %{count} años"
       half_a_minute: medio minuto
   search: 
     contexts_matching_query: Contexts matching query

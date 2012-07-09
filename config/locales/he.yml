@@ -2,687 +2,248 @@
 he:
   will_paginate:
     page_entries_info:
-      multi_page: !binary |
-        157XpteZ15IgJXttb2RlbH0gJXtmcm9tfSAtICV7dG99INee16rXldeaICV7
-        Y291bnR9INeR16HXmiDXlNeb15w=
-
+      multi_page: "מציג %{model} %{from} - %{to} מתוך %{count} בסך הכל"
       single_page:
-        other: !binary |
-          157XpteZ15Ig15DXqiDXm9ecICV7Y291bnR9ICV7bW9kZWx9
-
-        zero: !binary |
-          15zXkCDXoNee16bXkCAle21vZGVsfQ==
-
-        one: !binary |
-          157XpteZ15IgJXttb2RlbH0g15DXl9eT
-
-      multi_page_html: !binary |
-        157XpteZ15IgJXttb2RlbH0gPGI+JXtmcm9tfSZuYnNwOy0mbmJzcDsle3Rv
-        fTwvYj4g157XqteV15ogPGI+JXtjb3VudH08L2I+INeR16HXmiDXlNeb15w=
-
+        other: "מציג את כל %{count} %{model}"
+        zero: "לא נמצא %{model}"
+        one: "מציג %{model} אחד"
+      multi_page_html: "מציג %{model} <b>%{from}&nbsp;-&nbsp;%{to}</b> מתוך <b>%{count}</b> בסך הכל"
       single_page_html:
-        other: "\xD7\x9E\xD7\xA6\xD7\x99\xD7\x92  <b>\xD7\x9B\xD7\x9C&nbsp;%{count}</b> %{model}"
-        zero: !binary |
-          15zXkCDXoNee16bXkCAle21vZGVsfQ==
-
-        one: "\xD7\x9E\xD7\xA6\xD7\x99\xD7\x92  <b>1</b> %{model}"
-    previous_label: !binary |
-      JmxhcXVvOyDXlNen15XXk9ed
-
+        other: "מציג  <b>כל&nbsp;%{count}</b> %{model}"
+        zero: "לא נמצא %{model}"
+        one: "מציג  <b>1</b> %{model}"
+    previous_label: "&laquo; הקודם"
     page_gap: "&hellip;"
-    next_label: !binary |
-      15TXkdeQICZyYXF1bzs=
-
+    next_label: "הבא &raquo;"
   integrations:
-    applescript_success_before_id: !binary |
-      16TXoteV15zXqiDXlNee16nXmiDXotedINeW15nXlNeV15k=
-
-    gmail_description: !binary |
-      15fWstek1rTXmdelINec15TXldeh16TXqiDXnteh15zXldec15nXnSDXnC1H
-      bWFpbA==
-
-    applescript_next_action_prompt: !binary |
-      16rXmdeQ15XXqCDXlNek16LXldec15XXqiDXlNeR15DXldeqOg==
-
-    applescript_success_after_id: !binary |
-      16DXldem16g=
-
-    opensearch_description: !binary |
-      15fXmdek15XXqSDXkdee16HXnNeV15zXmded
-
+    applescript_success_before_id: "פעולת המשך עם זיהוי"
+    gmail_description: "חֲפִיץ להוספת מסלולים ל-Gmail"
+    applescript_next_action_prompt: "תיאור הפעולות הבאות:"
+    applescript_success_after_id: "נוצר"
+    opensearch_description: "חיפוש במסלולים"
   projects:
-    edit_project_settings: !binary |
-      16LXqNeZ15vXqiDXlNeS15PXqNeV16og16TXqNeV15nXmden15g=
-
-    deferred_actions_empty: !binary |
-      15DXmdefINek16LXldec15XXqiDXqdeg15PXl9eVINei15HXldeoINek16jX
-      ldeZ15nXp9eYINeW15Q=
-
-    hide_form_title: !binary |
-      15TXodeq16jXqiDXmNeV16TXoSDXpNeo15XXmdeZ16fXmCDXl9eT16k=
-
-    completed_projects: !binary |
-      16TXqNeV15nXmden15jXmdedINep15TXodeq15nXmdee15U=
-
-    no_default_context: !binary |
-      15DXmdefINeU16fXqdeoINeR16jXmdeo16og157Xl9eT15wg15zXpNeo15XX
-      mdeZ16fXmCDXlteU
-
-    settings: !binary |
-      15TXkteT16jXldeq
-
-    add_note_submit: !binary |
-      15TXldeh16TXqiDXpNeq16c=
-
-    no_last_completed_projects: !binary |
-      15zXkCDXoNee16bXkNeVINek16jXldeZ15nXp9eY15nXnSDXqdeU16HXqteZ
-      15nXnteV
-
-    notes_empty: !binary |
-      15DXmdefINek16rXp9eZ15XXqiDXnNek16jXldeZ15nXp9eYINeW15Q=
-
-    with_default_context: !binary |
-      16LXnSDXlNen16nXqCDXkdeZ16jXqiDXnteX15PXnCAnJXtjb250ZXh0X25h
-      bWV9Jw==
-
-    show_form: !binary |
-      15TXldeh16TXqiDXpNeo15XXmdeZ16fXmA==
-
-    with_default_tags: !binary |
-      16LXnSDXlNeq15LXmdeV16ogICcle3RhZ3N9JyDXm9eR16jXmdeo16og15TX
-      nteX15PXnA==
-
-    completed_tasks_title: !binary |
-      157Xodec15XXnNeZ1506OteU16bXkteqINeo16nXmdee16og15TXntep15nX
-      nteV16og16nXlNeV16nXnNee15Ug15HXpNeo15XXmdeZ16fXmCAgJyV7cHJv
-      amVjdF9uYW1lfSc=
-
-    edit_project_title: !binary |
-      16LXqNeZ15vXqiDXpNeo15XXmdeZ16fXmA==
-
-    to_new_project_page: !binary |
-      16LXkdeV16gg15zXotee15XXkyDXlNek16jXldeZ15nXp9eYINeU15fXk9ep
-
-    project_saved_status: !binary |
-      16TXqNeV15nXmden15gg16DXqdee16g=
-
-    default_context_removed: !binary |
-      15TXp9ep16gg15HXqNeZ16jXqiDXlNee15fXk9ecINeU15XXodeo
-
-    default_context_set: !binary |
-      15HXl9eZ16jXqiDXlNen16nXqCDXkdeo15nXqNeqINeU157Xl9eT15wg15zX
-      pNeo15XXmdeZ16fXmCDXnC0le2RlZmF1bHRfY29udGV4dH0=
-
-    with_no_default_tags: !binary |
-      15XXnNec15Ag16rXkteZ15XXqiDXkdeo15nXqNeqINee15fXk9ec
-
-    was_marked_hidden: !binary |
-      16HXldee158g15vXnteV16HXqteo
-
-    no_projects: !binary |
-      15DXmdefINeb16jXkteiINek16jXldeZ15nXp9eY15nXnQ==
-
-    delete_project: !binary |
-      157Xl9eZ16fXqiDXpNeo15XXmdeZ16fXmA==
-
-    delete_project_title: !binary |
-      157Xl9eZ16fXqiDXlNek16jXldeZ15nXp9eY
-
-    active_projects: !binary |
-      16TXqNeV15nXmden15jXmdedINek16LXmdec15nXnQ==
-
-    list_completed_projects: !binary |
-      157Xodec15XXnNeZ1506Oteo16nXmdee16og15TXpNeo15XXmdeZ16fXmNeZ
-      150g16nXlNeV15zXqdee15U=
-
-    no_last_completed_recurring_todos: !binary |
-      15zXkCDXoNee16bXkNeVINee16nXmdee15XXqiDXnteX15bXldeo15nXldeq
-      INep15TXodeq15nXmdee15U=
-
-    state: !binary |
-      15TXpNeo15XXmdeZ16fXmCDXkdee16bXkSAle3N0YXRlfQ==
-
-    completed_actions_empty: !binary |
-      15DXmdefINek16LXldec15XXqiDXqdeU16HXqteZ15nXnteVINeR16TXqNeV
-      15nXmden15gg15bXlA==
-
-    add_project: !binary |
-      15TXldeh16TXqiDXpNeo15XXmdeZ16fXmA==
-
-    was_marked_complete: !binary |
-      16HXldee158g15vXkdeV16bXog==
-
-    no_actions_in_project: !binary |
-      15DXmdefINeb16jXkteiINee16nXmdee15XXqiDXqdecINeU15XXqdec157X
-      lSDXkdek16jXldeZ15nXp9eYINeW15Q=
-
-    page_title: !binary |
-      157Xodec15XXnNeZ1506Otek16jXldeZ15nXp9eYOiAle3Byb2plY3R9
-
-    delete_project_confirmation: !binary |
-      15TXkNedINec157Xl9eV16cg15DXqiDXlNek16jXldeZ15nXp9eYICAnJXtu
-      YW1lfSc/
-
-    actions_in_project_title: !binary |
-      16TXoteV15zXldeqINeR16TXqNeV15nXmden15gg15bXlA==
-
-    add_note: !binary |
-      15TXldeh16TXqiDXpNeq16c=
-
-    list_projects: !binary |
-      157Xodec15XXnNeZ1506Oteo16nXmdee16og16TXqNeV15nXmden15jXmded
-
-    todos_append: !binary |
-      15HXpNeo15XXmdeZ16fXmCDXlteU
-
-    default_tags_removed_notice: !binary |
-      16rXkteZ15XXqiDXkdeo15nXqNeqINeU157Xl9eT15wg15TXldeh16jXlQ==
-
-    no_notes_attached: !binary |
-      15DXmdefINeb16jXkteiINek16rXp9eZ15XXqiDXlNee16fXldep16jXldeq
-      INec16TXqNeV15nXmden15gg15bXlA==
-
-    project_state: !binary |
-      15TXpNeo15XXmdeZ16fXmCAle3N0YXRlfQ==
-
-    hidden_projects: !binary |
-      16TXqNeV15nXmden15jXmdedINep15TXldeh16rXqNeV
-
-    deferred_actions: !binary |
-      16TXoteV15zXldeqINep16DXk9eX15Ug16LXkdeV16gg16TXqNeV15nXmden
-      15gg15bXlA==
-
-    default_context: !binary |
-      15TXp9ep16gg15HXqNeZ16jXqiDXlNee15fXk9epINec16TXqNeV15nXmden
-      15gg15bXlCAle2NvbnRleHR9
-
-    set_default_tags_notice: !binary |
-      15HXl9eZ16jXqiDXqteS15nXldeqINeR16jXmdeo16og15TXnteX15PXnCDX
-      nC0le2RlZmF1bHRfdGFnc30=
-
-    completed_actions: !binary |
-      16TXoteV15zXldeqINep15TXodeq15nXmdee15Ug15HXpNeo15XXmdeZ16fX
-      mCDXlteU
-
-    status_project_name_changed: !binary |
-      16nXnSDXlNek16jXldeZ15nXp9eYINep15XXoNeU
-
-    with_no_default_context: !binary |
-      15zXnNeQINeU16fXqdeoINeR16jXmdeo16og157Xl9eT15w=
-
-    all_completed_tasks_title: !binary |
-      157Xodec15XXnNeZ1506OteU16bXkteqINeo16nXmdee16og15vXnCDXlNee
-      16nXmdee15XXqiDXqdeU15XXqdec157XlSDXkdek16jXldeZ15nXp9eYICAn
-      JXtwcm9qZWN0X25hbWV9Jw==
-
-    is_active: !binary |
-      16TXoteZ15w=
-
-    hide_form: !binary |
-      15TXodeq16jXqiDXmNeV16TXoQ==
-
-    show_form_title: !binary |
-      15nXpteZ16jXqiDXpNeo15XXmdeZ16fXmCDXl9eT16k=
-
-    notes: !binary |
-      16TXqten15nXldeq
-
-    this_project: !binary |
-      16TXqNeV15nXmden15gg15bXlA==
-
-    list_reviews: !binary |
-      157Xodec15XXnNeZ1506Oteh16fXmdeo15Q=
-
+    edit_project_settings: "עריכת הגדרות פרוייקט"
+    deferred_actions_empty: "אין פעולות שנדחו עבור פרוייקט זה"
+    hide_form_title: "הסתרת טופס פרוייקט חדש"
+    completed_projects: "פרוייקטים שהסתיימו"
+    no_default_context: "אין הקשר ברירת מחדל לפרוייקט זה"
+    settings: "הגדרות"
+    add_note_submit: "הוספת פתק"
+    no_last_completed_projects: "לא נמצאו פרוייקטים שהסתיימו"
+    notes_empty: "אין פתקיות לפרוייקט זה"
+    with_default_context: "עם הקשר בירת מחדל '%{context_name}'"
+    show_form: "הוספת פרוייקט"
+    with_default_tags: "עם התגיות  '%{tags}' כברירת המחדל"
+    completed_tasks_title: "מסלולים::הצגת רשימת המשימות שהושלמו בפרוייקט  '%{project_name}'"
+    edit_project_title: "עריכת פרוייקט"
+    to_new_project_page: "עבור לעמוד הפרוייקט החדש"
+    project_saved_status: "פרוייקט נשמר"
+    default_context_removed: "הקשר ברירת המחדל הוסר"
+    default_context_set: "בחירת הקשר ברירת המחדל לפרוייקט ל-%{default_context}"
+    with_no_default_tags: "וללא תגיות ברירת מחדל"
+    was_marked_hidden: "סומן כמוסתר"
+    no_projects: "אין כרגע פרוייקטים"
+    delete_project: "מחיקת פרוייקט"
+    delete_project_title: "מחיקת הפרוייקט"
+    active_projects: "פרוייקטים פעילים"
+    list_completed_projects: "מסלולים::רשימת הפרוייקטים שהולשמו"
+    no_last_completed_recurring_todos: "לא נמצאו משימות מחזוריות שהסתיימו"
+    state: "הפרוייקט במצב %{state}"
+    completed_actions_empty: "אין פעולות שהסתיימו בפרוייקט זה"
+    add_project: "הוספת פרוייקט"
+    was_marked_complete: "סומן כבוצע"
+    no_actions_in_project: "אין כרגע משימות של הושלמו בפרוייקט זה"
+    page_title: "מסלולים::פרוייקט: %{project}"
+    delete_project_confirmation: "האם למחוק את הפרוייקט  '%{name}'?"
+    actions_in_project_title: "פעולות בפרוייקט זה"
+    add_note: "הוספת פתק"
+    list_projects: "מסלולים::רשימת פרוייקטים"
+    todos_append: "בפרוייקט זה"
+    default_tags_removed_notice: "תגיות ברירת המחדל הוסרו"
+    no_notes_attached: "אין כרגע פתקיות המקושרות לפרוייקט זה"
+    project_state: "הפרוייקט %{state}"
+    hidden_projects: "פרוייקטים שהוסתרו"
+    deferred_actions: "פעולות שנדחו עבור פרוייקט זה"
+    default_context: "הקשר ברירת המחדש לפרוייקט זה %{context}"
+    set_default_tags_notice: "בחירת תגיות ברירת המחדל ל-%{default_tags}"
+    completed_actions: "פעולות שהסתיימו בפרוייקט זה"
+    status_project_name_changed: "שם הפרוייקט שונה"
+    with_no_default_context: "ללא הקשר ברירת מחדל"
+    all_completed_tasks_title: "מסלולים::הצגת רשימת כל המשימות שהושלמו בפרוייקט  '%{project_name}'"
+    is_active: "פעיל"
+    hide_form: "הסתרת טופס"
+    show_form_title: "יצירת פרוייקט חדש"
+    notes: "פתקיות"
+    this_project: "פרוייקט זה"
+    list_reviews: "מסלולים::סקירה"
   errors:
-    user_unauthorized: !binary |
-      NDAxINec15Ag157XkNeV16nXqDog16jXpyDXntep16rXntep15nXnSDXkdeT
-      16jXkteqINee16DXlNecINeo16nXkNeZ150g15zXlNek16LXmdecINek16LX
-      ldec15Qg15bXlQ==
-
+    user_unauthorized: "401 לא מאושר: רק משתמשים בדרגת מנהל רשאים להפעיל פעולה זו"
   support:
     array:
       words_connector: ","
-      last_word_connector: !binary |
-        LCDXlS0=
-
-      two_words_connector: !binary |
-        15Ut
-
+      last_word_connector: ", ו-"
+      two_words_connector: "ו-"
     select:
-      prompt: !binary |
-        15nXqSDXnNeR16bXoiDXkdeX15nXqNeU
-
+      prompt: "יש לבצע בחירה"
   login:
-    log_in_again: !binary |
-      15vXoNeZ16HXlCDXnteX15XXk9ep16o=
-
-    cas_login: !binary |
-      15TXqteX15HXqNeV16og16nXkCLXniAo16nXmdeo15XXqiDXkNeZ157Xldeq
-      INee16jXm9eW15kp
-
-    mobile_use_openid: !binary |
-      Li4u15DXlSDXm9eg15nXodeUINei150gT3BlbklE
-
-    cas_signup_link: !binary |
-      15HXp9ep16og157Xqdeq157XqQ==
-
-    login_standard: !binary |
-      15fXlteo15Qg15zXm9eg15nXodeUINeU16jXkteZ15zXlA==
-
-    session_time_out: !binary |
-      16TXkiDXqteV16fXoyDXlNeS15nXqdeULiDXoNeQICV7bGlua30=
-
-    login_cas: !binary |
-      15TXktei15Qg15DXnCDXqdeQItee
-
-    sign_in: !binary |
-      15vXoNeZ16HXlA==
-
-    session_will_not_expire: !binary |
-      15TXkteZ16nXlCDXnNec15Ag16rXpNeV15LXlC4=
-
-    login_with_openid: !binary |
-      15vXoNeZ16HXlCDXotecIE9wZW5JRA==
-
-    cas_username_not_found: !binary |
-      15zXptei16jXoNeVLCDXnNeQINen15nXmdedINee16nXqtee16kg16nXkCLX
-      niDXkdep150gKCV7dXNlcm5hbWV9KQ==
-
-    cas_create_account: !binary |
-      15DXnSDXkdeo16bXldeg15og15zXkden16kg15nXqSDXnNeU157XqdeZ15og
-      15wtJXtzaWdudXBfbGlua30=
-
-    logged_out: !binary |
-      15HXldem16LXlCDXmdem15nXkNeUINeeLdee16HXnNeV15zXmded
-
-    please_login: !binary |
-      15nXqSDXnNeU15vXoNehINeb15PXmSDXnNeU16nXqtee16kg15Et157Xodec
-      15XXnNeZ150=
-
-    account_login: !binary |
-      15vXoNeZ16HXlCDXnNeX16nXkdeV158=
-
-    session_will_expire: !binary |
-      16rXlden16Mg15TXkteZ16nXlCDXmdek15XXkiDXnNeQ15fXqCAle2hvdXJz
-      fSDXqdei15Qo15XXqikg16nXnCDXl9eV16HXqCDXpNei15nXnNeV16ou
-
-    unsuccessful: !binary |
-      15vXoNeZ16HXlCDXoNeb16nXnNeULg==
-
-    openid_identity_url_not_found: !binary |
-      15zXptei16jXoNeVLCDXnNeQINen15nXmdedINee16nXqtee16kg16LXnSDX
-      m9eq15XXkdeqINeW15TXldeqICAoJXtpZGVudGl0eV91cmx9KQ==
-
-    successful: !binary |
-      15vXoNeZ16HXlCDXkdeV16bXoteUINeR15TXptec15fXlC4g15HXqNeV15og
-      16nXldeR15oh
-
-    cas_no_user_found: !binary |
-      JXt1c2VybmFtZX0g16nXnNeV150hINeQ15nXnyDXl9ep15HXldefINeR16nX
-      nSDXlteUINeR157Xodec15XXnNeZ150u
-
-    successful_with_session_info: !binary |
-      15vXoNeZ16HXlCDXnteV16bXnNeX16o6
-
-    cas_logged_in_greeting: !binary |
-      16nXnNeV150gJXt1c2VybmFtZX0hINeU15bXmdeU15XXmSDXlNem15zXmdeX
-
-    option_separator: !binary |
-      15DXlSw=
-
-    user_no_expiry: !binary |
-      15TXqdeQ16jXqiDXl9eZ15HXldeo
-
+    log_in_again: "כניסה מחודשת"
+    cas_login: "התחברות שא\"מ (שירות אימות מרכזי)"
+    mobile_use_openid: "...או כניסה עם OpenID"
+    cas_signup_link: "בקשת משתמש"
+    login_standard: "חזרה לכניסה הרגילה"
+    session_time_out: "פג תוקף הגישה. נא %{link}"
+    login_cas: "הגעה אל שא\"מ"
+    sign_in: "כניסה"
+    session_will_not_expire: "הגישה ללא תפוגה."
+    login_with_openid: "כניסה על OpenID"
+    cas_username_not_found: "לצערנו, לא קיים משתמש שא\"מ בשם (%{username})"
+    cas_create_account: "אם ברצונך לבקש יש להמשיך ל-%{signup_link}"
+    logged_out: "בוצעה יציאה מ-מסלולים"
+    please_login: "יש להכנס כדי להשתמש ב-מסלולים"
+    account_login: "כניסה לחשבון"
+    session_will_expire: "תוקף הגישה יפוג לאחר %{hours} שעה(ות) של חוסר פעילות."
+    unsuccessful: "כניסה נכשלה."
+    openid_identity_url_not_found: "לצערנו, לא קיים משתמש עם כתובת זהות  (%{identity_url})"
+    successful: "כניסה בוצעה בהצלחה. ברוך שובך!"
+    cas_no_user_found: "%{username} שלום! אין חשבון בשם זה במסלולים."
+    successful_with_session_info: "כניסה מוצלחת:"
+    cas_logged_in_greeting: "שלום %{username}! הזיהוי הצליח"
+    option_separator: "או,"
+    user_no_expiry: "השארת חיבור"
   sidebar:
-    list_name_active_contexts: !binary |
-      15TXp9ep16jXmdedINek16LXmdec15nXnQ==
-
-    list_name_completed_projects: !binary |
-      16TXqNeV15nXmden15jXmdedINep15TXodeq15nXmdee15U=
-
-    list_name_hidden_projects: !binary |
-      16TXqNeV15nXmden15jXmdedINee15XXodeq16jXmded
-
-    list_name_hidden_contexts: !binary |
-      15TXp9ep16jXmdedINee15XXodeq16jXmded
-
-    list_name_active_projects: !binary |
-      16TXqNeV15nXmden15jXmdedINek16LXmdec15nXnQ==
-
-    list_empty: !binary |
-      15DXmdef
-
+    list_name_active_contexts: "הקשרים פעילים"
+    list_name_completed_projects: "פרוייקטים שהסתיימו"
+    list_name_hidden_projects: "פרוייקטים מוסתרים"
+    list_name_hidden_contexts: "הקשרים מוסתרים"
+    list_name_active_projects: "פרוייקטים פעילים"
+    list_empty: "אין"
   datetime:
     distance_in_words:
       about_x_years:
-        other: !binary |
-          15stJXtjb3VudH0g16nXoNeZ150=
-
-        one: !binary |
-          15vXqdeg15Q=
-
+        other: "כ-%{count} שנים"
+        one: "כשנה"
       less_than_x_seconds:
-        other: !binary |
-          16TXl9eV16og154tJXtjb3VudH0g16nXoNeZ15XXqg==
-
-        zero: !binary |
-          16TXl9eV16og157Xqdeg15nXmdeU
-
-        one: !binary |
-          16TXl9eV16og157Xqdeg15nXmdeU
-
+        other: "פחות מ-%{count} שניות"
+        zero: "פחות משנייה"
+        one: "פחות משנייה"
       less_than_x_minutes:
-        other: !binary |
-          16TXl9eV16og154tJXtjb3VudH0g15PXp9eV16o=
-
-        zero: !binary |
-          16TXl9eV16og157Xk9en15Q=
-
-        one: !binary |
-          16TXl9eV16og157Xk9en15Q=
-
+        other: "פחות מ-%{count} דקות"
+        zero: "פחות מדקה"
+        one: "פחות מדקה"
       x_minutes:
-        other: !binary |
-          JXtjb3VudH0g15PXp9eV16o=
-
-        one: !binary |
-          15PXp9eU
-
+        other: "%{count} דקות"
+        one: "דקה"
       almost_x_years:
-        other: !binary |
-          15vXntei15ggJXtjb3VudH0g16nXoNeZ150=
-
-        one: !binary |
-          15vXntei15gg16nXoNeU
-
+        other: "כמעט %{count} שנים"
+        one: "כמעט שנה"
       about_x_months:
-        other: !binary |
-          15stJXtjb3VudH0g15fXldeT16nXmded
-
-        one: !binary |
-          15vXl9eV15PXqQ==
-
+        other: "כ-%{count} חודשים"
+        one: "כחודש"
       x_seconds:
-        other: !binary |
-          JXtjb3VudH0g16nXoNeZ15XXqg==
-
-        one: !binary |
-          16nXoNeZ15nXlA==
-
+        other: "%{count} שניות"
+        one: "שנייה"
       over_x_years:
-        other: !binary |
-          157XotecICV7Y291bnR9INep16DXmded
-
-        one: !binary |
-          157Xotec15Qg15zXqdeg15Q=
-
+        other: "מעל %{count} שנים"
+        one: "מעלה לשנה"
       about_x_hours:
-        other: !binary |
-          15stJXtjb3VudH0g16nXoteV16o=
-
-        one: !binary |
-          15vXqdei15Q=
-
+        other: "כ-%{count} שעות"
+        one: "כשעה"
       x_months:
-        other: !binary |
-          JXtjb3VudH0g15fXldeT16nXmded
-
-        one: !binary |
-          15fXldeT16k=
-
+        other: "%{count} חודשים"
+        one: "חודש"
       x_days:
-        other: !binary |
-          JXtjb3VudH0g15nXnteZ150=
-
-        one: !binary |
-          15nXlded
-
-      half_a_minute: !binary |
-        15fXpteZINeT16fXlA==
-
+        other: "%{count} ימים"
+        one: "יום"
+      half_a_minute: "חצי דקה"
     prompts:
-      hour: !binary |
-        16nXoteU
-
-      second: !binary |
-        16nXoNeZ15XXqg==
-
-      day: !binary |
-        15nXlded
-
-      minute: !binary |
-        15PXp9eU
-
-      month: !binary |
-        15fXldeT16k=
-
-      year: !binary |
-        16nXoNeU
-
+      hour: "שעה"
+      second: "שניות"
+      day: "יום"
+      minute: "דקה"
+      month: "חודש"
+      year: "שנה"
   activerecord:
     errors:
       template:
-        body: !binary |
-          15HXoteZ15XXqiDXkdep15PXldeqINeU15HXkNeZ1506
-
+        body: "בעיות בשדות הבאים:"
         header:
-          other: !binary |
-            16nXkteZ15DXldeqINee16DXoteVINee157XldeT15wgJXttb2RlbH0g15zX
-            lNeZ16nXnteo
-
-          one: !binary |
-            16nXkteZ15DXlCDXnteg16LXlCDXntee15XXk9ecICV7bW9kZWx9INec15TX
-            mdep157XqA==
-
+          other: "שגיאות מנעו ממודל %{model} להישמר"
+          one: "שגיאה מנעה ממודל %{model} להישמר"
       messages:
-        greater_than: !binary |
-          15fXmdeZ15Eg15zXlNeZ15XXqiDXkteT15XXnCDXniAle2NvdW50fQ==
-
-        confirmation: !binary |
-          15DXmdeg15Ug16rXldeQ150g15DXqiDXlNeQ15nXqdeV16g=
-
-        too_short: !binary |
-          16fXpteoINem15PXmSAo15zXm9ecINeU16TXl9eV16ogJXtjb3VudH0g16rX
-          ldeV15nXnSg=
-
-        equal_to: !binary |
-          15fXmdeZ15Eg15zXlNeZ15XXqiDXqdeV15XXlCDXnCAle2NvdW50fQ==
-
-        too_long: !binary |
-          15DXqNeV15og157Xk9eZICjXnNeb15wg15TXmdeV16rXqCAle2NvdW50fSDX
-          qteV15XXmdedKA==
-
-        exclusion: !binary |
-          16nXnteV16g=
-
-        less_than: !binary |
-          15fXmdeZ15Eg15zXlNeZ15XXqiDXp9eY158g154gJHtjb3VudH0=
-
-        inclusion: !binary |
-          15zXkCDXnteV15vXnCDXkdeo16nXmdee15Q=
-
-        accepted: !binary |
-          15fXmdeZ15Eg15zXlNeq16fXkdec
-
-        blank: !binary |
-          15zXkCDXmdeb15XXnCDXnNeU15nXldeqINeo15nXpw==
-
-        odd: !binary |
-          15fXmdeZ15Eg15zXlNeZ15XXqiDXkNeZINeW15XXkteZ
-
-        invalid: !binary |
-          15zXkCDXmdeb15XXnCDXnNeU15vXmdecINeQ16og16rXlSAoJywnKSDXlNek
-          16HXmden
-
-        wrong_length: !binary |
-          15HXkNeV16jXmiDXnNeQINeg15vXldefICjXpteo15nXmiDXnNeU15nXldeq
-          ICV7Y291bnR9INeq15XXldeZ150o
-
-        less_than_or_equal_to: !binary |
-          15fXmdeZ15Eg15zXlNeZ15XXqiDXp9eY158g15DXlSDXqdeV15XXlCDXnCAl
-          e2NvdW50fQ==
-
-        not_a_number: !binary |
-          15DXmdeg15Ug157Xodek16g=
-
-        record_invalid: !binary |
-          15DXmdee15XXqiDXoNeb16nXnCAle2Vycm9yc30=
-
-        taken: !binary |
-          15vXkdeoINeg157XpteQINeR16nXmdee15XXqQ==
-
-        even: !binary |
-          15fXmdeZ15Eg15zXlNeZ15XXqiDXlteV15LXmQ==
-
-        greater_than_or_equal_to: !binary |
-          15fXmdeZ15Eg15zXlNeZ15XXqiDXkteV15PXnCDXkNeVINep15XXldeUINec
-          ICV7Y291bnR9
-
-        empty: !binary |
-          15zXkCDXmdeb15XXnCDXnNeU15nXldeqINeo15nXpw==
-
+        greater_than: "חייב להיות גדול מ %{count}"
+        confirmation: "אינו תואם את האישור"
+        too_short: "קצר צדי (לכל הפחות %{count} תווים("
+        equal_to: "חייב להיות שווה ל %{count}"
+        too_long: "ארוך מדי (לכל היותר %{count} תווים("
+        exclusion: "שמור"
+        less_than: "חייב להיות קטן מ ${count}"
+        inclusion: "לא מוכל ברשימה"
+        accepted: "חייב להתקבל"
+        blank: "לא יכול להיות ריק"
+        odd: "חייב להיות אי זוגי"
+        invalid: "לא יכול להכיל את תו (',') הפסיק"
+        wrong_length: "באורך לא נכון (צריך להיות %{count} תווים("
+        less_than_or_equal_to: "חייב להיות קטן או שווה ל %{count}"
+        not_a_number: "אינו מספר"
+        record_invalid: "אימות נכשל %{errors}"
+        taken: "כבר נמצא בשימוש"
+        even: "חייב להיות זוגי"
+        greater_than_or_equal_to: "חייב להיות גודל או שווה ל %{count}"
+        empty: "לא יכול להיות ריק"
       models:
         project:
           attributes:
             name:
-              too_long: !binary |
-                16LXnCDXqdedINeU16TXqNeV15nXmden15gg15zXlNeb15nXnCDXpNeX15XX
-                qiDXni0yNTYg16rXldeV15nXnQ==
-
-              blank: !binary |
-                15zXpNeo15XXmdeZ16fXmCDXl9eZ15nXkSDXnNeU15nXldeqINep150=
-
-              taken: !binary |
-                15vXkdeoINen15nXmded
-
+              too_long: "על שם הפרוייקט להכיל פחות מ-256 תווים"
+              blank: "לפרוייקט חייב להיות שם"
+              taken: "כבר קיים"
       full_messages:
         format: "%{attribute} %{message}"
     attributes:
       todo:
-        description: !binary |
-          16rXmdeQ15XXqA==
-
-        show_from: !binary |
-          15TXpteSINee
-
-        predecessors: !binary |
-          16rXnNeV15kg15E=
-
-        tags: !binary |
-          16rXkteZ15XXqg==
-
-        project: !binary |
-          16TXqNeV15nXmden15jXmded
-
-        due: !binary |
-          16rXkNeo15nXmiDXmdei15M=
-
-        context: !binary |
-          15TXp9ep16g=
-
-        notes: !binary |
-          16TXqten15nXldeq
-
+        description: "תיאור"
+        show_from: "הצג מ"
+        predecessors: "תלוי ב"
+        tags: "תגיות"
+        project: "פרוייקטים"
+        due: "תאריך יעד"
+        context: "הקשר"
+        notes: "פתקיות"
       note:
-        created_at: !binary |
-          16DXldem16gg15E=
-
-        updated_at: !binary |
-          16LXldeT15vXnyDXkQ==
-
+        created_at: "נוצר ב"
+        updated_at: "עודכן ב"
       user:
-        first_name: !binary |
-          16nXnSDXpNeo15jXmQ==
-
-        last_name: !binary |
-          16nXnSDXntep16TXl9eU
-
+        first_name: "שם פרטי"
+        last_name: "שם משפחה"
       project:
-        name: !binary |
-          16nXnQ==
-
-        description: !binary |
-          16rXmdeQ15XXqA==
-
-        default_context_name: !binary |
-          15TXp9ep16gg15HXqNeZ16jXqiDXnteX15PXnA==
-
-        default_tags: !binary |
-          16rXkteZ15XXqiDXkdeo15nXqNeqINee15fXk9ec
-
+        name: "שם"
+        description: "תיאור"
+        default_context_name: "הקשר ברירת מחדל"
+        default_tags: "תגיות ברירת מחדל"
       preference:
-        review_period: !binary |
-          16rXk9eZ16jXldeqINeo16LXoNeV158g16TXqNeV15nXmden15g=
-
-        locale: !binary |
-          16nXpNeU
-
-        date_format: !binary |
-          157Xkdeg15Qg16rXkNeo15nXmg==
-
-        show_project_on_todo_done: !binary |
-          16LXkdeV16gg15zXotee15XXkyDXlNek16jXldeZ15nXp9eYINeR16HXmdeV
-          150g157XqdeZ157XlA==
-
-        show_hidden_projects_in_sidebar: !binary |
-          15TXpteSINek16jXldeZ15nXp9eY15nXnSDXnteV16HXqteo15nXnSDXkdem
-          15M=
-
-        show_completed_projects_in_sidebar: !binary |
-          15TXpteSINek16jXldeZ15nXp9eY15nXnSDXqdeU16HXqteZ15nXnteVINeR
-          16bXkw==
-
-        verbose_action_descriptors: !binary |
-          16rXmdeQ15XXqNeZINee16nXmdee15XXqiDXntek15XXqNeY15nXnQ==
-
-        sms_context: !binary |
-          15PXldeQItecINeR16jXmdeo16og157Xl9eT16gg16LXkdeV16gg15TXp9ep
-          16g=
-
-        first_name: !binary |
-          16nXnSDXpNeo15jXmQ==
-
-        sms_email: !binary |
-          15PXldeQ16gg157XkNeq
-
-        due_style: !binary |
-          16HXkteg15XXnyDXqteQ16jXmdeaINeZ16LXkw==
-
-        last_name: !binary |
-          16nXnSDXntep16TXl9eU
-
-        refresh: !binary |
-          16rXk9eZ16jXldeqINeo16LXoNeV158gKNeR15PXp9eV16op
-
-        title_date_format: !binary |
-          157Xkdeg15Qg16rXkNeo15nXmiDXm9eV16rXqNeq
-
-        show_number_completed: !binary |
-          15TXpteSINee16HXpNenINek16LXldec15XXqiDXqdeR15XXptei15U=
-
-        staleness_starts: !binary |
-          15TXqteX15zXqiDXqtek15zXldeq
-
-        week_starts: !binary |
-          16nXkdeV16Ig157XqteX15nXnCDXkdeZ15XXnQ==
-
-        show_hidden_contexts_in_sidebar: !binary |
-          15TXpteSINeU16fXqdeo15nXnSDXnteV16HXqteo15nXnSDXkdem15M=
-
-        mobile_todos_per_page: !binary |
-          157Xodek16gg16TXoteV15zXldeqINec15PXoyAo16rXpteV15LXlCDXoNeZ
-          15nXk9eqKQ==
-
-        time_zone: !binary |
-          15DXlteV16gg15bXntef
-
+        review_period: "תדירות רענון פרוייקט"
+        locale: "שפה"
+        date_format: "מבנה תאריך"
+        show_project_on_todo_done: "עבור לעמוד הפרוייקט בסיום משימה"
+        show_hidden_projects_in_sidebar: "הצג פרוייקטים מוסתרים בצד"
+        show_completed_projects_in_sidebar: "הצג פרוייקטים שהסתיימו בצד"
+        verbose_action_descriptors: "תיאורי משימות מפורטים"
+        sms_context: "דוא\"ל ברירת מחדר עבור הקשר"
+        first_name: "שם פרטי"
+        sms_email: "דואר מאת"
+        due_style: "סגנון תאריך יעד"
+        last_name: "שם משפחה"
+        refresh: "תדירות רענון (בדקות)"
+        title_date_format: "מבנה תאריך כותרת"
+        show_number_completed: "הצג מספק פעולות שבוצעו"
+        staleness_starts: "התחלת תפלות"
+        week_starts: "שבוע מתחיל ביום"
+        show_hidden_contexts_in_sidebar: "הצג הקשרים מוסתרים בצד"
+        mobile_todos_per_page: "מספר פעולות לדף (תצוגה ניידת)"
+        time_zone: "אזור זמן"
   data:
-    import_successful: !binary |
-      15nXkdeV15Ag15HXldem16Ig15HXlNem15zXl9eU
-
-    import_errors: !binary |
-      16nXkteZ15DXldeqINeR15nXkdeV15A=
-
+    import_successful: "יבוא בוצע בהצלחה"
+    import_errors: "שגיאות ביבוא"
   date:
     formats:
       short: "%b %d "
@@ -690,2035 +251,664 @@ he:
       default: "%Y-%m-%d "
       long: "%B %d, %Y "
   shared:
-    toggle_single_title: !binary |
-      15TXldeh16TXqiDXpNei15XXnNeqINeU157XqdeaINeX15PXqdeU
-
-    toggle_multi_title: !binary |
-      15jXldek16Eg16nXmdeg15XXmSDXntem15Eg16TXoteV15zXlCDXkdeV15PX
-      k9eqIC8g16TXoteV15zXldeqINee16jXldeR15XXqg==
-
-    toggle_multi: !binary |
-      15TXldeh16TXqiDXpNei15XXnNeV16og15TXntep15og157XqNeV15HXldeq
-
-    separate_tags_with_commas: !binary |
-      157Xldek16jXkyDXkdek16HXmden15nXnQ==
-
-    add_action: !binary |
-      15TXldeh16TXqiDXpNei15XXnNeU
-
-    tags_for_all_actions: !binary |
-      16rXkteZ15XXqiDXnNeb15wg15TXpNei15XXnNeV16ogKNeZ16kg15zXlNek
-      16jXmdeTINeR16TXodeZ16fXmdedKQ==
-
-    multiple_next_actions: !binary |
-      16TXoteV15zXldeqINeU157XqdeaINee16jXldeR15XXqiAo16TXoteV15zX
-      lCDXkNeX16og15HXqdeV16jXlCk=
-
-    add_actions: !binary |
-      15TXldeh16TXqiDXpNei15XXnNeU
-
-    context_for_all_actions: !binary |
-      15TXp9ep16gg15zXm9ecINeU16TXoteV15zXldeq
-
-    hide_action_form_title: !binary |
-      15TXodeq16jXqiDXmNeV16TXoSDXpNei15XXnNeV16og15fXk9ep15XXqg==
-
-    make_actions_dependent: !binary |
-      15nXpteZ16jXqiDXqtec15XXqiDXkdeZ158g16TXoteV15zXldeq
-
-    toggle_single: !binary |
-      15TXldeh16TXqiDXpNei15XXnNeqINeU157Xqdea
-
-    project_for_all_actions: !binary |
-      16TXqNeV15nXmden15gg15zXm9ecINeU16TXoteV15zXldeq
-
-    hide_form: !binary |
-      15TXodeq16jXqiDXmNeV16TXoQ==
-
-    add_context: !binary |
-      15TXldeh16TXqiDXlNen16nXqA==
-
+    toggle_single_title: "הוספת פעולת המשך חדשה"
+    toggle_multi_title: "טופס שינוי מצב פעולה בודדת / פעולות מרובות"
+    toggle_multi: "הוספת פעולות המשך מרובות"
+    separate_tags_with_commas: "מופרד בפסיקים"
+    add_action: "הוספת פעולה"
+    tags_for_all_actions: "תגיות לכל הפעולות (יש להפריד בפסיקים)"
+    multiple_next_actions: "פעולות המשך מרובות (פעולה אחת בשורה)"
+    add_actions: "הוספת פעולה"
+    context_for_all_actions: "הקשר לכל הפעולות"
+    hide_action_form_title: "הסתרת טופס פעולות חדשות"
+    make_actions_dependent: "יצירת תלות בין פעולות"
+    toggle_single: "הוספת פעולת המשך"
+    project_for_all_actions: "פרוייקט לכל הפעולות"
+    hide_form: "הסתרת טופס"
+    add_context: "הוספת הקשר"
   time:
-    pm: !binary |
-      15DXl9eUItem
-
+    pm: "אחה\"צ"
     formats:
       short: "%d %b %H:%M "
       stats: "%a %d-%m"
       default: "%a, %d %b %Y %H:%M:%S %z "
       month_day: "%B %d "
       long: "%B %d, %Y "
-    am: !binary |
-      15zXpNeg15Qi16Y=
-
+    am: "לפנה\"צ"
   todos:
-    added_new_project: !binary |
-      16DXldeh16Mg16TXqNeV15nXmden15gg15fXk9ep
-
-    recurring_action_saved: !binary |
-      16TXoteV15zXlCDXnteX15bXldeo15nXqiDXoNep157XqNeU
-
-    completed_recurrence_completed: !binary |
-      15DXmdefINek16LXldec16og15TXntep15og15zXpNei15XXnNeUINeU157X
-      l9eW15XXqNeZ16og16nXoNee15fXp9eULiDXlNek16LXldec15Qg15TXnteX
-      15bXldeo15nXqiDXoNee15fXp9eULg==
-
-    all_completed_tagged_page_title: !binary |
-      157Xodec15XXnNeZ1506Oteb15wg15TXpNei15XXnNeV16og16nXlNeh16rX
-      mdeZ157XlSDXotedINeU16rXkteZ16ogJXt0YWdfbmFtZX0=
-
-    depends_on_separate_with_commas: !binary |
-      16rXnNeV15kg15EtICjXmdepINec15TXpNeo15nXkyDXkdek16HXmden15nX
-      nSg=
-
+    added_new_project: "נוסף פרוייקט חדש"
+    recurring_action_saved: "פעולה מחזורית נשמרה"
+    completed_recurrence_completed: "אין פעולת המשך לפעולה המחזורית שנמחקה. הפעולה המחזורית נמחקה."
+    all_completed_tagged_page_title: "מסלולים::כל הפעולות שהסתיימו עם התגית %{tag_name}"
+    depends_on_separate_with_commas: "תלוי ב- (יש להפריד בפסיקים("
     next_actions_description_additions:
-      due_date: !binary |
-        16LXnSDXqteQ16jXmdeaINeZ16LXkyAle2R1ZV9kYXRlfSDXkNeVINee15XX
-        p9eT150g15nXldeq16gg
-
-      completed: !binary |
-        15EtJXtjb3VudH0g15TXmdee15nXnSDXlNeQ15fXqNeV16DXmded
-
-    next_action_description: !binary |
-      16rXmdeQ15XXqCDXpNei15XXnNeqINeU157Xqdea
-
-    calendar_page_title: !binary |
-      157Xodec15XXnNeZ1506Otec15XXlyDXqdeg15Q=
-
+      due_date: "עם תאריך יעד %{due_date} או מוקדם יותר "
+      completed: "ב-%{count} הימים האחרונים"
+    next_action_description: "תיאור פעולת המשך"
+    calendar_page_title: "מסלולים::לוח שנה"
     calendar:
-      no_actions_due_after_this_month: !binary |
-        15DXmdefINek16LXldec15XXqiDXnNeR15nXpteV16Ig15zXkNeX16gg15fX
-        ldeT16kg15bXlA==
-
-      due_this_month: !binary |
-        16rXkNeo15nXmiDXmdei15Mg15zXmdeq16jXqiDXl9eV15PXqSAle21vbnRo
-        fQ==
-
-      no_actions_due_today: !binary |
-        15DXmdefINek16LXldec15XXqiDXoNeV16HXpNeV16og15zXlNeZ15XXnQ==
-
-      due_next_week: !binary |
-        15zXqdeR15XXoiDXlNeR15A=
-
-      due_next_month_and_later: !binary |
-        16rXkNeo15nXmiDXmdei15MgJXttb250aH0g15DXlSDXnteQ15XXl9eoINeZ
-        15XXqteo
-
-      due_today: !binary |
-        15zXlNeZ15XXnQ==
-
-      due_this_week: !binary |
-        15zXlNee16nXmiDXlNep15HXldei
-
-      get_in_ical_format: !binary |
-        16fXkdec16og15zXldeXINep16DXlCDXlteUINeR16TXldeo157XmCBpQ2Fs
-
-      no_actions_due_next_week: !binary |
-        15DXmdefINek16LXldec15XXqiDXnNeR15nXpteV16Ig15HXqdeR15XXoiDX
-        lNeR15A=
-
-      no_actions_due_this_month: !binary |
-        15DXmdefINek16LXldec15XXqiDXnNeR15nXpteV16Ig15HXmdeq16jXqiDX
-        lNeX15XXk9ep
-
-    recurring_deleted_success: !binary |
-      15TXpNei15XXnNeUINeU157Xl9eW15XXqNeZ16og16DXnteX16fXlCDXkdeU
-      16bXnNeX15Q=
-
-    added_new_context: !binary |
-      16DXldeh16Mg15TXp9ep16gg15fXk9ep
-
-    edit: !binary |
-      16LXqNeZ15vXlA==
-
-    show_today: !binary |
-      15TXpteS16og15TXmdeV150=
-
-    added_dependency: !binary |
-      16DXldeh16TXlCAle2RlcGVuZGVuY3l9INeb16rXnNeV16o=
-
-    show_from: !binary |
-      15TXpteS15Qg154t
-
+      no_actions_due_after_this_month: "אין פעולות לביצוע לאחר חודש זה"
+      due_this_month: "תאריך יעד ליתרת חודש %{month}"
+      no_actions_due_today: "אין פעולות נוספות להיום"
+      due_next_week: "לשבוע הבא"
+      due_next_month_and_later: "תאריך יעד %{month} או מאוחר יותר"
+      due_today: "להיום"
+      due_this_week: "להמשך השבוע"
+      get_in_ical_format: "קבלת לוח שנה זה בפורמט iCal"
+      no_actions_due_next_week: "אין פעולות לביצוע בשבוע הבא"
+      no_actions_due_this_month: "אין פעולות לביצוע ביתרת החודש"
+    recurring_deleted_success: "הפעולה המחזורית נמחקה בהצלחה"
+    added_new_context: "נוסף הקשר חדש"
+    edit: "עריכה"
+    show_today: "הצגת היום"
+    added_dependency: "נוספה %{dependency} כתלות"
+    show_from: "הצגה מ-"
     next_actions_due_date:
-      due_tomorrow: !binary |
-        15zXnteX16g=
-
-      due_in_x_days: !binary |
-        15nXoteTINeR16LXldeTICV7ZGF5c30g15nXnteZ150=
-
-      overdue_by_plural: !binary |
-        15HXkNeZ15fXldeoINep15wgJXtkYXlzfSDXmdee15nXnQ==
-
-      due_today: !binary |
-        15zXlNeZ15XXnQ==
-
-      overdue_by: !binary |
-        15HXkNeZ15fXldeoINep15wgJXtkYXlzfSDXmdeV150=
-
-    completed_rest_of_week: !binary |
-      15TXodeq15nXmdee15Ug15HXmdeq16jXqiDXqdeR15XXoiDXlteU
-
-    new_related_todo_created_short: !binary |
-      15nXpteZ16jXqiDXntep15nXnteUINeX15PXqdeU
-
-    delete_action: !binary |
-      157Xl9eZ16fXqiDXpNei15XXnNeU
-
-    task_list_title: !binary |
-      157Xodec15XXnNeZ1506Oteo16nXmdee16og157XqdeZ157Xldeq
-
-    blocked_by: !binary |
-      16DXl9eh150g16LXnCDXmdeT15kgJXtwcmVkZWNlc3NvcnN9
-
-    error_deleting_recurring: !binary |
-      15DXqNei15Qg16nXkteZ16LXlCDXkdee15fXmden16og15TXntep15nXnteU
-      INeU157Xl9eW15XXqNeZ16ogIFwnJXtkZXNjcmlwdGlvbn1cJw==
-
-    feed_title_in_context: !binary |
-      15HXlNen16nXqCAnJXtjb250ZXh0fSc=
-
-    completed_actions_with: !binary |
-      16TXoteV15zXldeqINep15TXodeq15nXmdee15Ug16LXnSDXlNeq15LXmdeq
-      ICV7dGFnX25hbWV9ICA=
-
-    error_saving_recurring: !binary |
-      15DXqNei15Qg16nXkteZ16LXlCDXkdep157Xmdeo16og15TXntep15nXnteU
-      INeU157Xl9eW15XXqNeZ16ogIFwnJXtkZXNjcmlwdGlvbn1cJw==
-
-    delete: !binary |
-      157Xl9eZ16fXlA==
-
-    deferred_tasks_title: !binary |
-      157Xodec15XXnNeZ1506Otee1rTXltaw15vWuNa816g=
-
-    tagged_with: !binary |
-      157XqteV15nXmdeSINeRLSAmbHNxdW87JXt0YWdfbmFtZX0mcnNxdW87
-
-    removed_predecessor: !binary |
-      15TXldeh16jXlCV7c3VjY2Vzc29yfSAg15vXqtec15XXqiDXqdecICV7cHJl
-      ZGVjZXNzb3J9Lta+
-
-    no_recurring_todos: !binary |
-      15DXmdefINeb16jXkteiINee16nXmdee15XXqiDXnteX15bXldeo15nXldeq
-
-    added_new_next_action_plural: !binary |
-      16DXldeh16TXlSDXpNei15XXnNeV16og15TXntep15og15fXk9ep15XXqg==
-
-    in_pending_state: !binary |
-      15HXntem15Eg15TXnteq16DXlA==
-
-    clear_show_from_date: !binary |
-      16DXp9eUINeU16bXkteUINee16rXkNeo15nXmg==
-
-    scheduled_overdue: !binary |
-      16rXldeW157XnyDXnNeq16bXldeS15Qg15zXpNeg15kgJXtkYXlzfSDXmdee
-      15nXnQ==
-
-    error_completing_todo: !binary |
-      15DXqNei15Qg16nXkteZ16LXlCDXkdeh15nXldedIC8g15TXpNei15zXlCDX
-      qdecINee16nXmdee15QgJXtkZXNjcmlwdGlvbn0=
-
-    no_hidden_actions: !binary |
-      15zXkCDXoNee16bXkNeVINek16LXldec15XXqiDXnteV16HXqteo15XXqg==
-
-    drag_action_title: !binary |
-      15nXqSDXnNeS16jXldeoINeQ15wg16TXoteV15zXlCDXkNeX16jXqiDXm9eT
-      15kg15zXmdem15XXqCDXqtec15XXqiDXkdeU
-
-    depends_on: !binary |
-      16rXnNeV15kg15E=
-
-    new_related_todo_not_created_short: !binary |
-      15zXkCDXoNeV16bXqNeUINee16nXmdee15Q=
-
-    action_deleted_success: !binary |
-      16TXoteV15zXqiDXlNee16nXmiDXoNee15fXp9eUINeR15TXptec15fXlA==
-
-    feed_title_in_project: !binary |
-      15HXpNeo15XXmdeZ16fXmCAnJXtwcm9qZWN0fSc=
-
+      due_tomorrow: "למחר"
+      due_in_x_days: "יעד בעוד %{days} ימים"
+      overdue_by_plural: "באיחור של %{days} ימים"
+      due_today: "להיום"
+      overdue_by: "באיחור של %{days} יום"
+    completed_rest_of_week: "הסתיימו ביתרת שבוע זה"
+    new_related_todo_created_short: "יצירת משימה חדשה"
+    delete_action: "מחיקת פעולה"
+    task_list_title: "מסלולים::רשימת משימות"
+    blocked_by: "נחסם על ידי %{predecessors}"
+    error_deleting_recurring: "ארעה שגיעה במחיקת המשימה המחזורית  \'%{description}\'"
+    feed_title_in_context: "בהקשר '%{context}'"
+    completed_actions_with: "פעולות שהסתיימו עם התגית %{tag_name}  "
+    error_saving_recurring: "ארעה שגיעה בשמירת המשימה המחזורית  \'%{description}\'"
+    delete: "מחיקה"
+    deferred_tasks_title: "מסלולים::מִזְכָּר"
+    tagged_with: "מתוייג ב- &lsquo;%{tag_name}&rsquo;"
+    removed_predecessor: "הוסרה%{successor}  כתלות של %{predecessor}.־"
+    no_recurring_todos: "אין כרגע משימות מחזוריות"
+    added_new_next_action_plural: "נוספו פעולות המשך חדשות"
+    in_pending_state: "במצב המתנה"
+    clear_show_from_date: "נקה הצגה מתאריך"
+    scheduled_overdue: "תוזמן לתצוגה לפני %{days} ימים"
+    error_completing_todo: "ארעה שגיעה בסיום / הפעלה של משימה %{description}"
+    no_hidden_actions: "לא נמצאו פעולות מוסתרות"
+    drag_action_title: "יש לגרור אל פעולה אחרת כדי ליצור תלות בה"
+    depends_on: "תלוי ב"
+    new_related_todo_not_created_short: "לא נוצרה משימה"
+    action_deleted_success: "פעולת המשך נמחקה בהצלחה"
+    feed_title_in_project: "בפרוייקט '%{project}'"
     next_actions_title_additions:
-      completed: !binary |
-        16TXoteV15zXldeqINep15TXodeq15nXnteV
-
-      due_within_a_week: !binary |
-        16rXldeaINep15HXldei
-
-      due_today: !binary |
-        15zXlNeZ15XXnQ==
-
-    deferred_actions_with: !binary |
-      16TXoteV15zXldeqINeT15fXldeZ15XXqiDXotecINeq15LXmdeqICcle3Rh
-      Z19uYW1lfSc=
-
-    show_on_date: !binary |
-      15TXpteSINeR16rXkNeo15nXmiAle2RhdGV9
-
-    recurring_todos: !binary |
-      157XqdeZ157XldeqINee15fXlteV16jXmdeV16o=
-
-    append_in_this_project: !binary |
-      15HXpNeo15XXmdeZ16fXmCDXlteU
-
-    next_action_needed: !binary |
-      15nXqSDXnNeU15bXmdefINec16TXl9eV16og16TXoteV15zXqiDXlNee16nX
-      miDXkNeX16o=
-
+      completed: "פעולות שהסתימו"
+      due_within_a_week: "תוך שבוע"
+      due_today: "להיום"
+    deferred_actions_with: "פעולות דחויות על תגית '%{tag_name}'"
+    show_on_date: "הצג בתאריך %{date}"
+    recurring_todos: "משימות מחזוריות"
+    append_in_this_project: "בפרוייקט זה"
+    next_action_needed: "יש להזין לפחות פעולת המשך אחת"
     tickler_items_due:
-      other: !binary |
-        JXtjb3VudH0g157XlNee1rTXltaw15vWuNa816jXmdedINeU15LXmdei15Ug
-        15zXqteQ16jXmdeaINeU15nXoteTIC0g15nXqSDXnNeo16LXoNefINeU16LX
-        nteV15Mg15zXlNem15LXlC4=
-
-      one: !binary |
-        15DXl9eTINee15TXnta015bWsNeb1rjWvNeo15nXnSDXlNeS15nXoiDXnNeq
-        15DXqNeZ15og15TXmdei15MgLSDXmdepINec16jXoteg158g15TXotee15XX
-        kyDXnNeU16bXkteULg==
-
-    action_deleted_error: !binary |
-      16DXm9ep15zXlCDXnteX15nXp9eqINeU16TXoteV15zXlA==
-
-    completed_rest_of_month: !binary |
-      15TXodeq15nXmdee15Ug15HXmdeq16jXqiDXlNeX15XXk9epINeU16DXldeb
-      15fXmQ==
-
-    recurring_pattern_removed: !binary |
-      15TXk9ek15XXoSDXlNee15fXlteV16jXmSDXlNeV16HXqCDXni0le2NvdW50
-      fQ==
-
-    done: !binary |
-      15TXodeq15nXmdedPw==
-
-    overdue: !binary |
-      15HXkNeZ15fXldeo
-
-    add_another_dependency: !binary |
-      15TXldeh16TXqiDXqtec15XXqiDXoNeV16HXpNeq
-
+      other: "%{count} מהמִזְכָּרים הגיעו לתאריך היעד - יש לרענן העמוד להצגה."
+      one: "אחד מהמִזְכָּרים הגיע לתאריך היעד - יש לרענן העמוד להצגה."
+    action_deleted_error: "נכשלה מחיקת הפעולה"
+    completed_rest_of_month: "הסתיימו ביתרת החודש הנוכחי"
+    recurring_pattern_removed: "הדפוס המחזורי הוסר מ-%{count}"
+    done: "הסתיים?"
+    overdue: "באיחור"
+    add_another_dependency: "הוספת תלות נוספת"
     defer_x_days:
-      other: !binary |
-        15PXl9eZ15Qg15EtJXtjb3VudH0g15nXnteZ150=
-
-      one: !binary |
-        15PXl9eZ15Qg15HXmdeV150=
-
-    set_to_pending: !binary |
-      JXt0YXNrfSDXlNeV15LXk9eo15Qg15vXntee16rXmdeg15Q=
-
-    completed_tasks_title: !binary |
-      157Xodec15XXnNeZ1506Otee16nXmdee15XXqiDXqdeU15XXqdec157XlQ==
-
-    completed_tagged_page_title: !binary |
-      157Xodec15XXnNeZ1506Otee16nXmdee15XXqiDXqdeU16HXqteZ15nXnteV
-      INei150g16rXkteZ16ogJyV7dGFnX25hbWV9Jw==
-
-    see_all_completed: !binary |
-      16DXmdeq158g15zXqNeQ15XXqiDXm9ecINeb15wg15TXpNei15XXnNeV16og
-      16nXlNeh16rXmdeZ157XlSDXm9eQ1586ICV7bGlua30=
-
-    add_new_recurring: !binary |
-      15TXldeh16TXqiDXpNei15XXnNeUINee15fXlteV16jXmdeqINeX15PXqdeU
-
-    in_hidden_state: !binary |
-      15HXntem15Eg157Xldeh16rXqA==
-
-    list_incomplete_next_actions_with_limit: !binary |
-      16jXmdep157XqiAle2NvdW50fSDXpNei15XXnNeV16og15TXlNee16nXmiDX
-      qdec15Ag15TXodeq15nXmdee15U=
-
-    clear_due_date: !binary |
-      157Xl9eZ16fXqiDXqteQ16jXmdeaINeZ16LXkw==
-
-    deferred_pending_actions: !binary |
-      16TXoteV15zXldeqINee157XqteZ16DXldeqL9eT15fXldeZ15XXqg==
-
-    tagged_page_title: !binary |
-      157Xodec15XXnNeZ1506Oteq15LXmdeV16og16LXnSAnJXt0YWdfbmFtZX0n
-
-    action_saved: !binary |
-      16TXoteV15zXlCDXoNep157XqNeU
-
-    completed_last_day: !binary |
-      15TXodeq15nXmdee15Ug15EtMjQg16nXoteV16og15TXkNeX16jXldeg15XX
-      qg==
-
-    error_starring: !binary |
-      15TXk9eS16nXqiDXlNee16nXmdee15QgIFwnJXtkZXNjcmlwdGlvbn1cJyDX
-      nNeQINem15zXl9eU
-
-    defer_date_after_due_date: !binary |
-      16rXkNeo15nXmiDXlNeT15fXmdeZ15Qg157XkNeV15fXqCDXnteq15DXqNeZ
-      15og15TXmdei15MuINeZ16kg15zXoteo15XXmiDXkNeqINeq15DXqNeZ15og
-      15TXmdei15Mg15HXlNeq15DXnSDXnNek16DXmSDXkden16nXqiDXlNeT15fX
-      mdeZ15Qu
-
-    new_related_todo_created: !binary |
-      157XqdeZ157XlCDXl9eT16nXlCDXlNeV16HXpNeUINec157XqdeZ157XlCDX
-      nteX15bXldeo15nXqiDXlteV
-
+      other: "דחיה ב-%{count} ימים"
+      one: "דחיה ביום"
+    set_to_pending: "%{task} הוגדרה כממתינה"
+    completed_tasks_title: "מסלולים::משימות שהושלמו"
+    completed_tagged_page_title: "מסלולים::משימות שהסתיימו עם תגית '%{tag_name}'"
+    see_all_completed: "ניתן לראות כל כל הפעולות שהסתיימו כאן: %{link}"
+    add_new_recurring: "הוספת פעולה מחזורית חדשה"
+    in_hidden_state: "במצב מוסתר"
+    list_incomplete_next_actions_with_limit: "רישמת %{count} פעולות ההמשך שלא הסתיימו"
+    clear_due_date: "מחיקת תאריך יעד"
+    deferred_pending_actions: "פעולות ממתינות/דחויות"
+    tagged_page_title: "מסלולים::תגיות עם '%{tag_name}'"
+    action_saved: "פעולה נשמרה"
+    completed_last_day: "הסתיימו ב-24 שעות האחרונות"
+    error_starring: "הדגשת המשימה  \'%{description}\' לא צלחה"
+    defer_date_after_due_date: "תאריך הדחייה מאוחר מתאריך היעד. יש לערוך את תאריך היעד בהתאם לפני בקשת הדחייה."
+    new_related_todo_created: "משימה חדשה הוספה למשימה מחזורית זו"
     completed_in_archive:
-      other: !binary |
-        16fXmdeZ157XldeqICV7Y291bnR9INek16LXldec15XXqiDXqdeU16HXqteZ
-        15nXnteVINeR15DXqNeb15nXldefLg==
-
-      one: !binary |
-        16fXmdeZ157XqiDXkdeQ16jXm9eZ15XXnyDXpNei15XXnNeUINep15TXodeq
-        15nXmdee15Qu
-
-    action_due_on: !binary |
-      KNek16LXldec15Qg16LXkyAgJXtkYXRlfSk=
-
-    remove_dependency: !binary |
-      15TXodeo16og16rXnNeV16ogKNec15Ag157XldeX16cg15DXqiDXlNek16LX
-      ldec15Qp
-
-    star_action: !binary |
-      15TXk9eS16nXqiDXpNei15XXnNeU
-
-    completed_actions: !binary |
-      16TXoteV15zXldeqINep15TXodeq15nXmdee15U=
-
-    show_in_days: !binary |
-      15TXpteSINeR16LXldeTICV7ZGF5c30g15nXnteZ150=
-
-    tags: !binary |
-      16rXkteZ15XXqiAo157Xldek16jXk9eV16og15HXpNeh15nXp9eZ150p
-
-    recurrence_completed: !binary |
-      15DXmdefINek16LXldec16og15TXntep15og15zXpNei15XXnNeUINeU157X
-      l9eW15XXqNeZ16og16nXodeV15nXnteULiDXlNee15fXlteV16jXmdeV16og
-      15TXodeq15nXmdee15Qu
-
-    edit_action_with_description: !binary |
-      16LXqNeZ15vXqiDXlNek16LXldec15QgJyV7ZGVzY3JpcHRpb259Jw==
-
-    deleted_success: !binary |
-      15TXpNei15XXnNeUINeg157Xl9en15Qg15HXlNem15zXl9eU
-
-    edit_action: !binary |
-      16LXqNeZ15vXqiDXpNei15XXnNeU
-
-    edit_recurring_todo: !binary |
-      16LXqNeb15nXqiDXpNei15XXnNeV16og157Xl9eW15XXqNeZ15XXqg==
-
-    no_actions_with: !binary |
-      15DXmdefINeb16jXkteiINek16LXldec15XXqiDXqdec15Ag15TXodeq15nX
-      mdee15XXqiDXotedINeU16rXkteZ16ogJyV7dGFnX25hbWV9Jw==
-
-    was_due_on_date: !binary |
-      15TXmdeUINee15nXldei15Mg16LXkyAle2RhdGV9
-
-    confirm_delete: !binary |
-      15TXkNedINec157Xl9eV16cg15DXqiDXlNek16LXmdec15XXqiAnJXtkZXNj
-      cmlwdGlvbn0nPw==
-
-    no_actions_found_title: !binary |
-      15zXkCDXoNee16bXkCDXpNei15XXnNeV16o=
-
-    next_actions_title: !binary |
-      157Xodec15XXnNeZ150gLSDXpNei15XXnNeV16og15TXntep15o=
-
-    due: !binary |
-      15nXoteT
-
-    no_actions_due_this_week: !binary |
-      15DXmdefINek16LXldec15XXqiDXlNee15nXldei15PXldeqINec15TXntep
-      15og15TXqdeR15XXog==
-
-    no_completed_recurring: !binary |
-      15DXmdefINeb16jXkteiINee16nXmdee15XXqiDXnteX15bXldeo15nXldeq
-      INep15TXodeq15nXmdee15U=
-
-    unresolved_dependency: !binary |
-      15TXoteo15og16nXlNeV15vXoNehINeR16rXnNeV16og15zXkCDXqteQ150g
-      15zXkNejINek16LXldec15Qg16fXmdeZ157Xqi4g15TXoteo15og15zXkCDX
-      mdep157XqCDXotedINeZ16rXqNeqINeU16TXoteV15zXlC4g15zXlNee16nX
-      mdeaPw==
-
-    completed_recurring: !binary |
-      15TXodeq15nXmdee15Ug157XqdeZ157XldeqINee15fXlteV16jXmdeV16o=
-
-    no_project: !binary |
-      LS3XkNeZ158g16TXqNeV15nXmden15gtLQ==
-
-    older_completed_items: !binary |
-      157XqdeZ157XldeqINep15TXodeq15nXmdee15XXqiDXmdep16DXldeqINeZ
-      15XXqteo
-
-    archived_tasks_title: !binary |
-      157Xodec15XXnNeZ1506INee16nXmdee15XXqiDXqdeU16HXqteZ15nXnteV
-      INeU15XXoteR16jXlSDXnNeQ16jXm9eZ15XXnw==
-
+      other: "קיימות %{count} פעולות שהסתיימו בארכיון."
+      one: "קיימת בארכיון פעולה שהסתיימה."
+    action_due_on: "(פעולה עד  %{date})"
+    remove_dependency: "הסרת תלות (לא מוחק את הפעולה)"
+    star_action: "הדגשת פעולה"
+    completed_actions: "פעולות שהסתיימו"
+    show_in_days: "הצג בעוד %{days} ימים"
+    tags: "תגיות (מופרדות בפסיקים)"
+    recurrence_completed: "אין פעולת המשך לפעולה המחזורית שסוימה. המחזוריות הסתיימה."
+    edit_action_with_description: "עריכת הפעולה '%{description}'"
+    deleted_success: "הפעולה נמחקה בהצלחה"
+    edit_action: "עריכת פעולה"
+    edit_recurring_todo: "ערכית פעולות מחזוריות"
+    no_actions_with: "אין כרגע פעולות שלא הסתיימות עם התגית '%{tag_name}'"
+    was_due_on_date: "היה מיועד עד %{date}"
+    confirm_delete: "האם למחוק את הפעילות '%{description}'?"
+    no_actions_found_title: "לא נמצא פעולות"
+    next_actions_title: "מסלולים - פעולות המשך"
+    due: "יעד"
+    no_actions_due_this_week: "אין פעולות המיועדות להמשך השבוע"
+    no_completed_recurring: "אין כרגע משימות מחזוריות שהסתיימו"
+    unresolved_dependency: "הערך שהוכנס בתלות לא תאם לאף פעולה קיימת. הערך לא ישמר עם יתרת הפעולה. להמשיך?"
+    completed_recurring: "הסתיימו משימות מחזוריות"
+    no_project: "--אין פרוייקט--"
+    older_completed_items: "משימות שהסתיימות ישנות יותר"
+    archived_tasks_title: "מסלולים: משימות שהסתיימו הועברו לארכיון"
     completed_today:
-      other: !binary |
-        16LXkyDXoteq15Qg15TXodeq15nXmdee15UgJXtjb3VudH0g16TXoteV15zX
-        qiDXlNeZ15XXnS4=
-
-      one: !binary |
-        15TXldep15zXnteUINek16LXldec15Qg15DXl9eqINeU15nXldedLCDXoteT
-        INei16rXlC4=
-
-    pending: !binary |
-      157Xnteq15nXnw==
-
-    context_changed: !binary |
-      15TXp9ep16gg16nXldeg15Qg15wtJXtuYW1lfQ==
-
-    error_removing_dependency: !binary |
-      15TXqteo15fXqdeUINep15LXmdeQ15Qg15HXlNeh16jXqiDXlNeq15zXldeq
-
-    show_tomorrow: !binary |
-      15TXpteS16og157Xl9eo
-
-    error_toggle_complete: !binary |
-      15zXkCDXoNeZ16rXnyDXnNeh157XnyDXntep15nXnteUINebIteU16HXqteZ
-      15nXnteUIg==
-
-    recurring_action_deleted: !binary |
-      16TXoteV15zXlCDXoNee15fXp9eULiDXnteQ15fXqCDXldeU16TXoteV15zX
-      lCDXnteX15bXldeo15nXqi4g16TXoteV15zXlCDXl9eT16nXlCDXoNeV16HX
-      pNeU
-
-    completed_more_than_x_days_ago: !binary |
-      15TXodeq15nXmdee15Ug15zXpNeg15kg15nXldeq16gg154tJXtjb3VudH0g
-      15nXnteZ150=
-
-    delete_recurring_action_confirm: !binary |
-      15TXkNedINec157Xl9eV16cg15DXqiDXlNek16LXmdec15XXqiDXlNee15fX
-      lteV16jXmdeqICcle2Rlc2NyaXB0aW9ufSc/
-
-    no_completed_actions_with: !binary |
-      15DXmdefINek16LXldec15XXqiDXqdeU16HXqteZ15nXnteVINei15wg15TX
-      qteS15nXqiAnJXt0YWdfbmFtZX0n
-
+      other: "עד עתה הסתיימו %{count} פעולת היום."
+      one: "הושלמה פעולה אחת היום, עד עתה."
+    pending: "ממתין"
+    context_changed: "הקשר שונה ל-%{name}"
+    error_removing_dependency: "התרחשה שגיאה בהסרת התלות"
+    show_tomorrow: "הצגת מחר"
+    error_toggle_complete: "לא ניתן לסמן משימה כ\"הסתיימה\""
+    recurring_action_deleted: "פעולה נמחקה. מאחר והפעולה מחזורית. פעולה חדשה נוספה"
+    completed_more_than_x_days_ago: "הסתיימו לפני יותר מ-%{count} ימים"
+    delete_recurring_action_confirm: "האם למחוק את הפעילות המחזורית '%{description}'?"
+    no_completed_actions_with: "אין פעולות שהסתיימו על התגית '%{tag_name}'"
     feeds:
-      completed: !binary |
-        15TXodeq15nXmdedOiAle2RhdGV9
-
-      due: !binary |
-        15nXoteTICV7ZGF0ZX0=
-
-    completed_rest_of_previous_month: !binary |
-      15TXodeq15nXmdee15Ug15HXmdeq16jXqiDXlNeX15XXk9epINeU16fXldeT
-      150=
-
-    cannot_add_dependency_to_completed_todo: !binary |
-      15DXmdefINeQ16TXqdeo15XXqiDXnNeU15XXodeZ16Mg16TXoteV15zXlCDX
-      lteVINeb16rXnNeV16og15zXpNei15XXnNeUINep15TXodeq15nXmdee15Qh
-
-    completed: !binary |
-      15TXodeq15nXmdee15U=
-
-    list_incomplete_next_actions: !binary |
-      16jXqdeZ157XqiDXpNei15XXnNeV16og15TXntep15og16nXnNeQINeU16HX
-      qteZ15nXnteV
-
+      completed: "הסתיים: %{date}"
+      due: "יעד %{date}"
+    completed_rest_of_previous_month: "הסתיימו ביתרת החודש הקודם"
+    cannot_add_dependency_to_completed_todo: "אין אפשרות להוסיף פעולה זו כתלות לפעולה שהסתיימה!"
+    completed: "הסתיימו"
+    list_incomplete_next_actions: "רשימת פעולות המשך שלא הסתיימו"
     recurrence:
-      recurrence_on_options: !binary |
-        15TXkteT16jXqiDXnteX15bXldeo15nXldeqINec16TXmQ==
-
-      show_days_before: !binary |
-        JXtkYXlzfSDXmdee15nXnSDXnNek16DXmSDXqteQ16jXmdeaINeU15nXoteT
-        INec157XqdeZ157XlA==
-
-      ends_on: !binary |
-        157Xodeq15nXmdedINeR
-
-      monthly: !binary |
-        15fXldeT16nXmQ==
-
-      every_work_day: !binary |
-        15HXm9ecINeZ15XXnSDXoteR15XXk9eU
-
-      weekly_options: !binary |
-        15TXkteT16jXldeqINec16TXoteV15zXldeqINeR157Xl9eW15XXqNeZ15XX
-        qiDXqdeR15XXoteZ16o=
-
-      daily_options: !binary |
-        15TXkteT16jXldeqINec16TXoteV15zXldeqINee15fXlteV16jXmdeV16og
-        15nXldee15nXldeq
-
-      weekly_every_number_week: !binary |
-        15fXldeW16gg15vXnCAle251bWJlcn0gINep15HXldeiINeR
-
-      yearly_every_xth_day: !binary |
-        15nXldedICV7ZGF5fSDXlCAtJXtkYXlfb2Zfd2Vla30gINeR15vXnCAle21v
-        bnRofSDXl9eV15PXqQ==
-
-      weekly: !binary |
-        16nXkdeV16LXmQ==
-
-      daily_every_number_day: !binary |
-        15vXnCAle251bWJlcn0gINeZ157Xmded
-
-      ends_on_date: !binary |
-        157Xodeq15nXmdedINeRLSV7ZGF0ZX0=
-
-      ends_on_number_times: !binary |
-        157Xodeq15nXmdedINec15DXl9eoICV7bnVtYmVyfSDXpNei157Xmded
-
-      recurrence_on_due_date: !binary |
-        15nXoteTINec157XqdeZ157XlA==
-
-      monthly_options: !binary |
-        15TXkteT16jXldeqINec16TXoteV15zXldeqINeR15fXlteV16jXmdeV16og
-        15fXldeT16nXmdeq
-
-      starts_on: !binary |
-        157XqteX15nXnCDXkQ==
-
-      show_option_always: !binary |
-        16rXnteZ15M=
-
-      monthly_every_xth_day: !binary |
-        15nXldedICV7ZGF5fSDXlCAtJXtkYXlfb2Zfd2Vla30gINeR15vXnCAle21v
-        bnRofSDXl9eV15PXqQ==
-
-      daily: !binary |
-        15nXldee15k=
-
-      no_end_date: !binary |
-        15DXmdefINeq15DXqNeZ15og16HXmdeV150=
-
-      show_options: !binary |
-        15TXpteS16og157XqdeZ157Xldeq
-
-      day_x_on_every_x_month: !binary |
-        15HXmdeV150gJXtkYXl9INeR15vXnCAle21vbnRofSAg15fXldeT16k=
-
+      recurrence_on_options: "הגדרת מחזוריות לפי"
+      show_days_before: "%{days} ימים לפני תאריך היעד למשימה"
+      ends_on: "מסתיים ב"
+      monthly: "חודשי"
+      every_work_day: "בכל יום עבודה"
+      weekly_options: "הגדרות לפעולות במחזוריות שבועית"
+      daily_options: "הגדרות לפעולות מחזוריות יומיות"
+      weekly_every_number_week: "חוזר כל %{number}  שבוע ב"
+      yearly_every_xth_day: "יום %{day} ה -%{day_of_week}  בכל %{month} חודש"
+      weekly: "שבועי"
+      daily_every_number_day: "כל %{number}  ימים"
+      ends_on_date: "מסתיים ב-%{date}"
+      ends_on_number_times: "מסתיים לאחר %{number} פעמים"
+      recurrence_on_due_date: "יעד למשימה"
+      monthly_options: "הגדרות לפעולות בחזוריות חודשית"
+      starts_on: "מתחיל ב"
+      show_option_always: "תמיד"
+      monthly_every_xth_day: "יום %{day} ה -%{day_of_week}  בכל %{month} חודש"
+      daily: "יומי"
+      no_end_date: "אין תאריך סיום"
+      show_options: "הצגת משימות"
+      day_x_on_every_x_month: "ביום %{day} בכל %{month}  חודש"
       pattern:
-        on_day_n: !binary |
-          15HXmdeV150gJXtufQ==
-
-        on_work_days: !binary |
-          15HXmdee15kg16LXkdeV15PXlA==
-
-        times: !binary |
-          15stJXtudW1iZXJ9INek16LXnteZ150=
-
-        second: !binary |
-          16nXoNeZ
-
-        every_month: !binary |
-          15vXnCDXl9eV15PXqQ==
-
-        weekly: !binary |
-          16nXkdeV16LXmQ==
-
-        every_day: !binary |
-          15vXnCDXmdeV150=
-
-        third: !binary |
-          16nXnNeZ16nXmQ==
-
-        show: !binary |
-          15TXpteS15Q=
-
-        every_year_on: !binary |
-          15HXm9ecINep16DXlCDXkdeq15DXqNeZ15ogJXtkYXRlfQ==
-
-        last: !binary |
-          15DXl9eo15XXnw==
-
-        the_xth_day_of_month: !binary |
-          15TXmdeV150g15QtICV7eH0gJXtkYXl9INeR15fXldeT16kgJXttb250aH0=
-
-        fourth: !binary |
-          16jXkdeZ16LXmQ==
-
-        until: !binary |
-          16LXkw==
-
-        every_n: !binary |
-          15vXnCAle259
-
-        first: !binary |
-          16jXkNep15XXnw==
-
-        every_xth_day_of_every_n_months: "\xD7\x9B\xD7\x9C %{x} %{day} \xD7\x91\xD7\x9B\xD7\x9C %{n_months}"
-        due: !binary |
-          15nXoteT
-
-        from: !binary |
-          154=
-
-      yearly: !binary |
-        16nXoNeq15nXqg==
-
-      yearly_every_x_day: "\xD7\x9B\xD7\x9C %{month} %{day}"
-      from_tickler: !binary |
-        16rXkNeo15nXmiDXlNeZ16LXkyDXnNee16nXmdee15Qg157XkteZ16Ig157X
-        lNee1rTXltaw15vWuNa816ggKNec15Ag16DXp9eR16Ig16rXkNeo15nXmiDX
-        mdei15Mp
-
-      yearly_options: !binary |
-        15TXkteT16jXldeqINec16TXoteV15zXldeqINeR157Xl9eW15XXqNeZ15XX
-        qiDXqdeg16rXmdeV16o=
-
-    no_deferred_pending_actions: !binary |
-      15DXmdefINeb16jXkteiINek16LXldec15XXqiDXk9eX15XXmdeV16og15DX
-      lSDXntee16rXmdeg15XXqg==
-
-    action_marked_complete_error: !binary |
-      15TXpNei15XXnNeUIDxzdHJvbmc+JyV7ZGVzY3JpcHRpb259Jzwvc3Ryb25n
-      Pta+15zXkNa+INeh15XXnteg15Qg15sgLSA8c3Ryb25nPiV7Y29tcGxldGVk
-      fSDXoten15Eg16nXkteZ15DXqiDXqdeo16o8L3N0cm9uZz4=
-
-    recurrence_period: !binary |
-      16rXp9eV16TXqiDXnteX15bXldeo15nXldeq
-
-    no_last_completed_actions: !binary |
-      15zXkCDXoNee16bXkNeVINek16LXldec15XXqiDXqdeU16HXqteZ15nXnteV
-
-    hidden_actions: !binary |
-      16TXoteV15zXldeqINee15XXodeq16jXldeq
-
-    to_tickler: !binary |
-      15zXnta015bWsNeb1rjWvNeo
-
-    added_new_next_action_singular: !binary |
-      16DXldeh16TXlCDXpNei15XXnNeqINeU157XqdeaINeX15PXqdeU
-
-    star_action_with_description: !binary |
-      15TXk9eS16nXqiDXpNei15nXnNeV16ogJyV7ZGVzY3JpcHRpb259Jw==
-
-    no_completed_actions: !binary |
-      15DXmdefINeb16jXkteiINek16LXldec15XXqiDXqdeU16HXqteZ15nXnteV
-      Lg==
-
-    no_incomplete_actions: !binary |
-      15DXmdefINek16LXldec15XXqiDXqdec15Ag15TXodeq15nXmdee15U=
-
-    older_than_days: !binary |
-      15XXldeq16cg157XotecICV7Y291bnR9INeZ157Xmded
-
-    error_deleting_item: !binary |
-      15DXqNei15Qg16nXkteZ15DXlCDXkdee15fXmden16og15TXpNeo15nXmCAl
-      e2Rlc2NyaXB0aW9ufQ==
-
-    action_saved_to_tickler: !binary |
-      16TXoteV15zXlCDXoNep157XqNeUINec157WtNeW1rDXm9a41rzXqA==
-
-    recurring_actions_title: !binary |
-      157Xodec15XXnNeZ1506Otek16LXldec15XXqiDXnteX15bXldeo15nXldeq
-
-    action_deferred: !binary |
-      15TXpNei15XXnNeUICcle2Rlc2NyaXB0aW9ufScg16DXk9eX16rXlA==
-
-    action_marked_complete: "\xD7\x94\xD7\xA4\xD7\xA2\xD7\x95\xD7\x9C\xD7\x94 <strong>'%{description}'</strong> \xD7\xA1\xD7\x95\xD7\x9E\xD7\xA0\xD7\x94 \xD7\x9B- <strong>%{completed}</strong>"
-    no_deferred_actions_with: !binary |
-      15DXmdefINek16LXldec15XXqiDXk9eX15XXmdeV16og16LXnSDXlNeq15LX
-      mdeqICcle3RhZ19uYW1lfSc=
-
-    error_starring_recurring: !binary |
-      INeU15PXktep16og15TXntep15nXnteUINeU157Xl9eW15XXqNeZ16ogIFwn
-      JXtkZXNjcmlwdGlvbn1cJyDXnNeQINem15zXl9eU
-
+        on_day_n: "ביום %{n}"
+        on_work_days: "בימי עבודה"
+        times: "כ-%{number} פעמים"
+        second: "שני"
+        every_month: "כל חודש"
+        weekly: "שבועי"
+        every_day: "כל יום"
+        third: "שלישי"
+        show: "הצגה"
+        every_year_on: "בכל שנה בתאריך %{date}"
+        last: "אחרון"
+        the_xth_day_of_month: "היום ה- %{x} %{day} בחודש %{month}"
+        fourth: "רביעי"
+        until: "עד"
+        every_n: "כל %{n}"
+        first: "ראשון"
+        every_xth_day_of_every_n_months: "כל %{x} %{day} בכל %{n_months}"
+        due: "יעד"
+        from: "מ"
+      yearly: "שנתית"
+      yearly_every_x_day: "כל %{month} %{day}"
+      from_tickler: "תאריך היעד למשימה מגיע מהמִזְכָּר (לא נקבע תאריך יעד)"
+      yearly_options: "הגדרות לפעולות במחזוריות שנתיות"
+    no_deferred_pending_actions: "אין כרגע פעולות דחויות או ממתינות"
+    action_marked_complete_error: "הפעולה <strong>'%{description}'</strong>־לא־ סומנה כ - <strong>%{completed} עקב שגיאת שרת</strong>"
+    recurrence_period: "תקופת מחזוריות"
+    no_last_completed_actions: "לא נמצאו פעולות שהסתיימו"
+    hidden_actions: "פעולות מוסתרות"
+    to_tickler: "למִזְכָּר"
+    added_new_next_action_singular: "נוספה פעולת המשך חדשה"
+    star_action_with_description: "הדגשת פעילות '%{description}'"
+    no_completed_actions: "אין כרגע פעולות שהסתיימו."
+    no_incomplete_actions: "אין פעולות שלא הסתיימו"
+    older_than_days: "וותק מעל %{count} ימים"
+    error_deleting_item: "ארעה שגיאה במחיקת הפריט %{description}"
+    action_saved_to_tickler: "פעולה נשמרה למִזְכָּר"
+    recurring_actions_title: "מסלולים::פעולות מחזוריות"
+    action_deferred: "הפעולה '%{description}' נדחתה"
+    action_marked_complete: "הפעולה <strong>'%{description}'</strong> סומנה כ- <strong>%{completed}</strong>"
+    no_deferred_actions_with: "אין פעולות דחויות עם התגית '%{tag_name}'"
+    error_starring_recurring: " הדגשת המשימה המחזורית  \'%{description}\' לא צלחה"
     has_x_pending:
-      other: !binary |
-        157Xm9eZ15wgJXtjb3VudH0g16TXoteV15zXqiDXntee16rXmdeg15XXqg==
-
-      one: !binary |
-        15HXotecINek16LXldec15Qg15PXl9eV15nXlCDXkNeX16o=
-
-    no_deferred_actions: !binary |
-      15DXmdefINeb16jXkteiINek16LXldec15XXqiDXqdeg15PXl9eVLg==
-
-    completed_last_x_days: !binary |
-      15TXodeq15nXmdee15Ug15EtJXtjb3VudH0g15TXmdee15nXnSDXlNeQ15fX
-      qNeV16DXmded
-
-    mobile_todos_page_title: !binary |
-      15vXnCDXlNek16LXldec15XXqg==
-
-    convert_to_project: !binary |
-      15nXpteZ16jXqiDXpNeo15XXmdeZ16fXmA==
-
-    added_new_next_action: !binary |
-      16DXldeh16TXlCDXpNei15XXnNeqINeU157XqdeaINeX15PXqdeU
-
-    no_actions_found: !binary |
-      15DXmdefINeb16jXkteiINek16LXldec15XXqiDXqdec15Ag15TXodeq15nX
-      mdee15U=
-
-    delete_recurring_action_title: !binary |
-      157Xl9eZ16fXqiDXpNei15XXnNeUINee15fXlteV16jXmdeq
-
-    all_completed_here: !binary |
-      15vXkNef
-
-    all_completed: !binary |
-      15vXnCDXlNek16LXldec15XXqiDXqdeU16HXqteZ15nXnteV
-
-    unable_to_add_dependency: !binary |
-      15zXkCDXoNeZ16rXnyDXnNeU15XXodeZ16Mg16rXnNeV16o=
-
-    next_actions_description: !binary |
-      157Xodeg1586
-
+      other: "מכיל %{count} פעולת ממתינות"
+      one: "בעל פעולה דחויה אחת"
+    no_deferred_actions: "אין כרגע פעולות שנדחו."
+    completed_last_x_days: "הסתיימו ב-%{count} הימים האחרונים"
+    mobile_todos_page_title: "כל הפעולות"
+    convert_to_project: "יצירת פרוייקט"
+    added_new_next_action: "נוספה פעולת המשך חדשה"
+    no_actions_found: "אין כרגע פעולות שלא הסתיימו"
+    delete_recurring_action_title: "מחיקת פעולה מחזורית"
+    all_completed_here: "כאן"
+    all_completed: "כל הפעולות שהסתיימו"
+    unable_to_add_dependency: "לא ניתן להוסיף תלות"
+    next_actions_description: "מסנן:"
   stats:
-    actions_avg_completed_30days: !binary |
-      15XXlNeh16rXmdeZ157XlSDXkdee157Xldem16IgJXtjb3VudH0g16TXoteV
-      15zXldeqINec15nXlded
-
-    projects: !binary |
-      16TXqNeV15nXmden15jXmded
-
+    actions_avg_completed_30days: "והסתיימו בממוצע %{count} פעולות ליום"
+    projects: "פרוייקטים"
     actions_dow_30days_legend:
-      number_of_actions: !binary |
-        157Xodek16gg16TXoteV15zXldeq
-
-      day_of_week: !binary |
-        15nXldedINeR16nXkdeV16I=
-
-    click_to_return: !binary |
-      15TXp9ec16fXlCDXotecICV7bGlua30g16rXl9eW15nXqCDXnNei157XldeT
-      INeU16HXmNeY15nXodeY15nXp9eU
-
-    top10_projects: !binary |
-      16LXqdeo16og15TXpNeo15XXmdeZ16fXmNeZ150g15TXnteV15HXmdec15nX
-      nQ==
-
-    other_actions_label: !binary |
-      KNeQ15fXqNeZ150p
-
-    top5_contexts: !binary |
-      NSDXlNen16nXqNeZ150g157XldeR15nXnNeZ150=
-
-    totals_context_count: !binary |
-      16fXmdeZ157XmdedICV7Y291bnR9INeU16fXqdeo15nXnS4=
-
+      number_of_actions: "מספר פעולות"
+      day_of_week: "יום בשבוע"
+    click_to_return: "הקלקה על %{link} תחזיר לעמוד הסטטיסטיקה"
+    top10_projects: "עשרת הפרוייקטים המובילים"
+    other_actions_label: "(אחרים)"
+    top5_contexts: "5 הקשרים מובילים"
+    totals_context_count: "קיימים %{count} הקשרים."
     running_time_legend:
-      percentage: !binary |
-        15DXl9eV15Y=
-
-      weeks: !binary |
-        15bXntefINee16bXmNeR16gg15zXpNei15XXnNeV16ogKNep15HXldei15XX
-        qikuINeU16fXnNen15Qg16LXnCDXlNeR16gg15zXnteZ15PXoiDXoNeV16HX
-        ow==
-
-      actions: !binary |
-        16TXoteV15zXldeq
-
-    actions_avg_created: !binary |
-      15EtMTIg15TXl9eV15PXqdeZ150g15TXkNeX16jXldeg15nXnSDXmdeV16bX
-      qNeVINeR157Xldem16IgJXtjb3VudH0g16TXoteV15zXldeq
-
-    actions_avg_completed: !binary |
-      15XXlNeh16rXmdeZ157XlSDXkdee157Xldem16IgJXtjb3VudH0g16TXoteV
-      15zXldeqINec15fXldeT16k=
-
-    totals_incomplete_actions: !binary |
-      16fXmdeZ157XldeqICV7Y291bnR9INek16LXldec15XXqiDXqdec15Ag15TX
-      odeq15nXmdee15U=
-
-    top5_visible_contexts_with_incomplete_actions: !binary |
-      NSDXlNeU16fXqdeo15nXnSDXlNee15XXkdeZ15zXmdedINei150g16TXoteV
-      15zXldeqINep15zXkCDXlNeh16rXmdeZ157XlQ==
-
-    index_title: !binary |
-      157Xodec15XXnNeZ1506Oteh15jXmNeZ16HXmNeZ16fXlA==
-
-    tag_cloud_90days_title: !binary |
-      16LXoNefINeq15LXmdeV16og15zXpNei15XXnNeV16og15EtOTAg15TXmdee
-      15nXnSDXlNeQ15fXqNeV16DXmded
-
-    action_completion_time_title: !binary |
-      15bXntefINeh15nXldedICjXm9ecINeU16TXoteV15zXldeqINep15TXodeq
-      15nXmdee15Up
-
+      percentage: "אחוז"
+      weeks: "זמן מצטבר לפעולות (שבועות). הקלקה על הבר למידע נוסף"
+      actions: "פעולות"
+    actions_avg_created: "ב-12 החודשים האחרונים יוצרו במוצע %{count} פעולות"
+    actions_avg_completed: "והסתיימו בממוצע %{count} פעולות לחודש"
+    totals_incomplete_actions: "קיימות %{count} פעולות שלא הסתיימו"
+    top5_visible_contexts_with_incomplete_actions: "5 ההקשרים המובילים עם פעולות שלא הסתיימו"
+    index_title: "מסלולים::סטטיסטיקה"
+    tag_cloud_90days_title: "ענן תגיות לפעולות ב-90 הימים האחרונים"
+    action_completion_time_title: "זמן סיום (כל הפעולות שהסתיימו)"
     open_per_week_legend:
-      weeks: !binary |
-        16nXkdeV16LXldeqINen15XXk9edINec15vXnw==
-
-      actions: !binary |
-        16TXoteV15zXldeq
-
-    action_selection_title: !binary |
-      157Xodec15XXnNeZ1506OteR15fXmdeo16og16TXoteV15zXlA==
-
-    actions_day_of_week_title: !binary |
-      15nXldedINeR16nXkdeV16IgKNeb15wg15TXpNei15XXnNeV16op
-
-    spread_of_actions_for_all_context: !binary |
-      16TXmdeW15XXqCDXpNei15XXnNeV16og15zXm9ecINeU15TXp9ep16jXmded
-
-    totals_hidden_project_count: !binary |
-      JXtjb3VudH0g157Xldeh16rXqNeZ150=
-
-    totals_deferred_actions: !binary |
-      157XlNefICV7Y291bnR9INek16LXldec15XXqiDXk9eX15XXmdeV16og15HX
-      nta015bWsNeb1rjWvNeo
-
-    click_to_show_actions_from_week: !binary |
-      15TXp9ec16fXlCDXotecICV7bGlua30g16rXpteZ15Ig15DXqiDXlNek16LX
-      ldec15XXqiDXntep15HXldeiICV7d2Vla30g15XXkNeZ15zXmg==
-
-    actions_dow_30days_title: !binary |
-      15nXldedINeR16nXkdeV16IgKDMwINeU15nXnteZ150g15TXkNeX16jXldeg
-      15nXnSg=
-
+      weeks: "שבועות קודם לכן"
+      actions: "פעולות"
+    action_selection_title: "מסלולים::בחירת פעולה"
+    actions_day_of_week_title: "יום בשבוע (כל הפעולות)"
+    spread_of_actions_for_all_context: "פיזור פעולות לכל ההקשרים"
+    totals_hidden_project_count: "%{count} מוסתרים"
+    totals_deferred_actions: "מהן %{count} פעולות דחויות במִזְכָּר"
+    click_to_show_actions_from_week: "הקלקה על %{link} תציג את הפעולות משבוע %{week} ואילך"
+    actions_dow_30days_title: "יום בשבוע (30 הימים האחרונים("
     legend:
-      number_of_actions: !binary |
-        157Xodek16gg16TXoteV15zXldeq
-
-      percentage: !binary |
-        15DXl9eV15Y=
-
-      number_of_days: !binary |
-        157Xodek16gg15nXnteZ150g16fXldeT150g15zXm9ef
-
-      day_of_week: !binary |
-        15nXldedINeR16nXkdeV16I=
-
-      running_time: !binary |
-        15bXntefINee16bXmNeR16gg15zXpNei15XXnNeUICjXqdeR15XXoteV16op
-
-      months_ago: !binary |
-        15fXldeT16nXmdedINen15XXk9ed
-
-      actions: !binary |
-        16TXoteV15zXldeq
-
+      number_of_actions: "מספר פעולות"
+      percentage: "אחוז"
+      number_of_days: "מספר ימים קודם לכן"
+      day_of_week: "יום בשבוע"
+      running_time: "זמן מצטבר לפעולה (שבועות)"
+      months_ago: "חודשים קודם"
+      actions: "פעולות"
     actions_last_year_legend:
-      number_of_actions: !binary |
-        157Xodek16gg15TXpNei15XXnNeV16o=
-
-      months_ago: !binary |
-        15fXldeT16nXmdedINen15XXk9ed
-
-    totals_visible_context_count: !binary |
-      157XqteV15og15DXnNeVICV7Y291bnR9INeU16fXqdeo15nXnSDXktec15XX
-      mdeZ150=
-
-    totals_blocked_actions: !binary |
-      JXtjb3VudH0g16rXnNeV15nXmdedINeR16HXmdeV150g15TXntep15nXnteV
-      16og16nXnNeU150=
-
-    spread_of_running_actions_for_visible_contexts: !binary |
-      16TXmdeW15XXqCDXlNek16LXldec15XXqiDXnNeU16fXqdeo15nXnSDXktec
-      15XXmdeZ150=
-
-    tag_cloud_description: !binary |
-      16LXoNefINeU16rXkteZ15XXqiDXnteb15nXnCDXqteS15nXldeqINec15vX
-      nCDXlNek16LXldec15XXqiAo15TXodeq15nXmdee15UsINec15Ag15TXodeq
-      15nXmdee15UsINeS15zXldeZ15XXqiDXlS/XkNeVINee15XXodeq16jXldeq
-      KA==
-
-    totals: !binary |
-      16HXmdeb15XXnteZ150=
-
+      number_of_actions: "מספר הפעולות"
+      months_ago: "חודשים קודם"
+    totals_visible_context_count: "מתוך אלו %{count} הקשרים גלויים"
+    totals_blocked_actions: "%{count} תלויים בסיום המשימות שלהם"
+    spread_of_running_actions_for_visible_contexts: "פיזור הפעולות להקשרים גלויים"
+    tag_cloud_description: "ענן התגיות מכיל תגיות לכל הפעולות (הסתיימו, לא הסתיימו, גלויות ו/או מוסתרות("
+    totals: "סיכומים"
     time_of_day_legend:
-      number_of_actions: !binary |
-        157Xodek16gg16TXoteV15zXldeq
-
-      time_of_day: !binary |
-        15bXntefINeR15nXlded
-
-    tags: !binary |
-      16rXkteZ15XXqg==
-
-    totals_action_count: !binary |
-      16fXmdeZ157XldeqICV7Y291bnR9INek16LXldec15XXqiDXkdeh15og15TX
-      m9ec
-
-    more_stats_will_appear: !binary |
-      16HXmNeY15nXodeY15nXp9eV16og16DXldeh16TXldeqINeZ15XXpteS15Ug
-      15vXkNefINec15DXl9eoINeU15XXodek16og16TXoteV15zXldeqINeg15XX
-      odek15XXqi4=
-
-    open_per_week: !binary |
-      16TXoteV15zXldeqINeU157XqdeaICjXnteV16bXkteV16og15DXlSDXnteV
-      16HXqteo15XXqikg15zXm9ecINep15HXldei
-
-    no_actions_selected: !binary |
-      15zXkCDXoNeR15fXqNeVINek16LXldec15XXqg==
-
-    totals_completed_project_count: !binary |
-      JXtjb3VudH0g157XlNedINek16jXldeZ15nXp9eY15nXnSDXqdeg16HXqteZ
-      15nXnteVLg==
-
-    totals_hidden_context_count: !binary |
-      15UtJXtjb3VudH0g15HXlNen16nXqNeZ150g157Xldeh16rXqNeZ150u
-
+      number_of_actions: "מספר פעולות"
+      time_of_day: "זמן ביום"
+    tags: "תגיות"
+    totals_action_count: "קיימות %{count} פעולות בסך הכל"
+    more_stats_will_appear: "סטטיסטיקות נוספות יוצגו כאן לאחר הוספת פעולות נוספות."
+    open_per_week: "פעולות המשך (מוצגות או מוסתרות) לכל שבוע"
+    no_actions_selected: "לא נבחרו פעולות"
+    totals_completed_project_count: "%{count} מהם פרוייקטים שנסתיימו."
+    totals_hidden_context_count: "ו-%{count} בהקשרים מוסתרים."
     actions_day_of_week_legend:
-      number_of_actions: !binary |
-        157Xodek16gg16TXoteV15zXldeq
-
-      day_of_week: !binary |
-        15nXldedINeR16nXkdeV16I=
-
-    click_to_update_actions: !binary |
-      15TXp9ec16fXlCDXotecINeU15HXqCDXkdeS16jXoyDXntei15PXm9eg16og
-      15DXqiDXlNek16LXldec15Qg15zXnteY15Q=
-
-    totals_first_action: !binary |
-      157XkNeWINeU16TXoteV15zXlCDXlNeo15DXqdeV16DXlCDXkS0le2RhdGV9
-
-    tod30: !binary |
-      15bXntefINeR15nXldedICgzMCDXmdee15nXnSDXkNeX16jXldeg15kp
-
-    tag_cloud_90days_description: !binary |
-      16LXoNefINeU16rXkteZ15XXqiDXnteb15nXnCDXqteS15nXldeqINei15HX
-      ldeoINek16LXldec15XXqiDXqdeg15XXpteo15Ug15DXlSDXlNeh16rXmdeZ
-      157XlSDXkS05MCDXlNeZ157XmdedINeU15DXl9eo15XXoNeZ150u
-
-    top10_projects_30days: !binary |
-      16LXqdeo16og15TXpNeo15XXmdeZ16fXmNeZ150g15TXnteV15HXmdec15nX
-      nSDXkS0zMCDXlNeZ157XmdedINeU15DXl9eo15XXoNeZ150=
-
-    top10_longrunning: !binary |
-      MTAg15TXpNeo15XXmdeZ16fXmNeZ150g16nXqNem15nXnSDXlNeb15kg15TX
-      qNeR15Qg15bXntef
-
-    within_one: !binary |
-      16rXldeaIDE=
-
-    actions: !binary |
-      16TXoteV15zXldeq
-
-    no_tags_available: !binary |
-      15DXmdefINeq15LXmdeV16og15bXnteZ16DXldeq
-
-    actions_min_completion_time: !binary |
-      15TXltee158g15TXnteW16LXqNeZINec16HXmdeV150g15TXldeQICV7dGlt
-      ZX0u
-
-    totals_active_project_count: !binary |
-      157XqteV15vXnSwgJXtjb3VudH0g15TXnSDXpNeo15XXmdeZ16fXmNeZ150g
-      16TXoteZ15zXmded
-
-    actions_selected_from_week: !binary |
-      16TXoteV15zXldeqINeg15HXl9eo15XXqiDXntep15HXldei
-
-    totals_actions_completed: !binary |
-      JXtjb3VudH0g157XlNedINeU16HXqteZ15nXnteV
-
-    actions_avg_completion_time: !binary |
-      157Xm9ecINeU16TXoteV15zXmdeV16og16nXoNeh16rXmdeZ157XldeqINeU
-      15bXntefINeU157XnteV16bXoiDXnNeh15nXldedINeU15XXkCAle2NvdW50
-      fSDXmdee15nXnQ==
-
-    time_of_day: !binary |
-      15bXntefINeR15nXldedICjXm9ecINeU16TXoteV15zXldeqKQ==
-
+      number_of_actions: "מספר פעולות"
+      day_of_week: "יום בשבוע"
+    click_to_update_actions: "הקלקה על הבר בגרף מעדכנת את הפעולה למטה"
+    totals_first_action: "מאז הפעולה הראשונה ב-%{date}"
+    tod30: "זמן ביום (30 ימים אחרוני)"
+    tag_cloud_90days_description: "ענן התגיות מכיל תגיות עבור פעולות שנוצרו או הסתיימו ב-90 הימים האחרונים."
+    top10_projects_30days: "עשרת הפרוייקטים המובילים ב-30 הימים האחרונים"
+    top10_longrunning: "10 הפרוייקטים שרצים הכי הרבה זמן"
+    within_one: "תוך 1"
+    actions: "פעולות"
+    no_tags_available: "אין תגיות זמינות"
+    actions_min_completion_time: "הזמן המזערי לסיום הוא %{time}."
+    totals_active_project_count: "מתוכם, %{count} הם פרוייקטים פעילים"
+    actions_selected_from_week: "פעולות נבחרות משבוע"
+    totals_actions_completed: "%{count} מהם הסתיימו"
+    actions_avg_completion_time: "מכל הפעוליות שנסתיימות הזמן הממוצע לסיום הוא %{count} ימים"
+    time_of_day: "זמן ביום (כל הפעולות)"
     labels:
-      avg_created: !binary |
-        16DXldem16jXlSDXkdee157Xldem16I=
-
-      created: !binary |
-        16DXldem16jXlQ==
-
-      month_avg_created: !binary |
-        JXttb250aHN9INeg15XXpteo15Ug15HXntee15XXpteiINec15fXldeT16k=
-
-      completed: !binary |
-        15TXodeq15nXmdee15U=
-
-      month_avg_completed: !binary |
-        JXttb250aHN9INeU16HXqteZ15nXnteVINeR157XnteV16bXoiDXnNeX15XX
-        k9ep
-
-      avg_completed: !binary |
-        15TXodeq15nXmdee15Ug15HXntee15XXptei
-
-    actions_further: !binary |
-      15XXkNeZ15zXmg==
-
-    tag_cloud_title: !binary |
-      16LXoNefINeq15LXmdeV16og15zXm9ecINeU16TXoteV15zXldeq
-
+      avg_created: "נוצרו בממוצע"
+      created: "נוצרו"
+      month_avg_created: "%{months} נוצרו בממוצע לחודש"
+      completed: "הסתיימו"
+      month_avg_completed: "%{months} הסתיימו בממוצע לחודש"
+      avg_completed: "הסתיימו בממוצע"
+    actions_further: "ואילך"
+    tag_cloud_title: "ענן תגיות לכל הפעולות"
     running_time_all_legend:
-      percentage: !binary |
-        15DXl9eV15Y=
-
-      running_time: !binary |
-        15bXntefINee16bXmNeR16gg15zXpNei15XXnNeV16ogKNep15HXldei15XX
-        qikuINeU16fXnNen15Qg16LXnCDXlNeR16gg15zXnteZ15PXoiDXoNeV16HX
-        ow==
-
-      actions: !binary |
-        16TXoteV15zXldeq
-
-    totals_tag_count: !binary |
-      16fXmdeZ157XmdedICV7Y291bnR9INeq15LXmdeV16og15TXntep15XXmdeZ
-      15vXldeqINec16TXoteV15zXldeqLg==
-
-    totals_project_count: !binary |
-      16fXmdeZ157XmdedICV7Y291bnR9INek16jXldeZ15nXp9eY15nXnS4=
-
-    actions_30days_title: !binary |
-      16TXoteV15zXldeqINeRLTMwINeU15nXnteZ150g15TXkNeX16jXldeg15nX
-      nQ==
-
-    current_running_time_of_incomplete_visible_actions: !binary |
-      15bXntefINee16bXmNeR16gg15zXm9ecINeU16TXoteV15zXldeqINeU15LX
-      nNeV15nXldeq
-
-    click_to_return_link: !binary |
-      15vXkNef
-
+      percentage: "אחוז"
+      running_time: "זמן מצטבר לפעולות (שבועות). הקלקה על הבר למידע נוסף"
+      actions: "פעולות"
+    totals_tag_count: "קיימים %{count} תגיות המשוייכות לפעולות."
+    totals_project_count: "קיימים %{count} פרוייקטים."
+    actions_30days_title: "פעולות ב-30 הימים האחרונים"
+    current_running_time_of_incomplete_visible_actions: "זמן מצטבר לכל הפעולות הגלויות"
+    click_to_return_link: "כאן"
     tod30_legend:
-      number_of_actions: !binary |
-        157Xodek16gg16TXoteV15zXldeq
-
-      time_of_day: !binary |
-        15bXntefINeR15nXlded
-
-    contexts: !binary |
-      15TXp9ep16jXmded
-
-    running_time_all: !binary |
-      15bXntefINee16bXmNeR16gg15zXm9ecINeU16TXoteV15zXldeqINep15zX
-      kCDXlNeh16rXmdeZ157XlQ==
-
-    actions_min_max_completion_days: !binary |
-      15nXl9ehINeW157XnyDXnteZ15bXoteo15kv157Xmdeo15HXmSDXnNeh15nX
-      ldedINeU15XXkCAle21pbn0vJXttYXh9Lg==
-
-    totals_unique_tags: !binary |
-      157XqteV15og16rXkteZ15XXqiDXkNec15UsICV7Y291bnR9INeZ15nXl9eV
-      15PXmdeV16ou
-
-    actions_lastyear_title: !binary |
-      16TXoteV15zXldeqINeRLTEyINeU15fXldeT16nXmdedINeU15DXl9eo15XX
-      oNeZ150=
-
-    actions_last_year: !binary |
-      16TXoteV15zXldeqINeR16nXoNeZ150g15TXkNeX16jXldeg15XXqg==
-
-    actions_actions_avg_created_30days: !binary |
-      15EtMzAg15TXmdee15nXnSDXlNeQ15fXqNeV16DXmdedINeg15XXpteo15Ug
-      15HXntee15XXpteiICV7Y291bnR9INek16LXldec15XXqg==
-
+      number_of_actions: "מספר פעולות"
+      time_of_day: "זמן ביום"
+    contexts: "הקשרים"
+    running_time_all: "זמן מצטבר לכל הפעולות שלא הסתיימו"
+    actions_min_max_completion_days: "יחס זמן מיזערי/מירבי לסיום הוא %{min}/%{max}."
+    totals_unique_tags: "מתוך תגיות אלו, %{count} ייחודיות."
+    actions_lastyear_title: "פעולות ב-12 החודשים האחרונים"
+    actions_last_year: "פעולות בשנים האחרונות"
+    actions_actions_avg_created_30days: "ב-30 הימים האחרונים נוצרו בממוצע %{count} פעולות"
   search:
-    no_results: !binary |
-      15TXl9eZ16TXldepINec15Ag15TXoNeZ15Eg16rXldem15DXldeq
-
-    contexts_matching_query: !binary |
-      15TXp9ep16jXmdedINeq15XXkNee15nXnSDXnNep15DXmdec16rXkA==
-
-    projects_matching_query: !binary |
-      16TXqNeV15nXmden15jXmdedINeq15XXkNee15nXnSDXqdeQ15nXnNeq15A=
-
-    todos_matching_query: !binary |
-      157XqdeZ157XldeqINeq15XXkNee15XXqiDXqdeQ15nXnNeq15A=
-
-    tags_matching_query: !binary |
-      16rXkteZ15XXqiDXqteV15DXnteV16og15zXqdeQ15nXnNeq15A=
-
-    notes_matching_query: !binary |
-      16TXqten15nXldeqINeq15XXkNee15XXqiDXqdeQ15nXnNeq15A=
-
+    no_results: "החיפוש לא הניב תוצאות"
+    contexts_matching_query: "הקשרים תואמים לשאילתא"
+    projects_matching_query: "פרוייקטים תואמים שאילתא"
+    todos_matching_query: "משימות תואמות שאילתא"
+    tags_matching_query: "תגיות תואמות לשאילתא"
+    notes_matching_query: "פתקיות תואמות שאילתא"
   contexts:
-    last_completed_in_context: !binary |
-      15HXlNen16nXqCDXlteUICAo15DXl9eo15XXoNeV16ogJXtudW1iZXJ9KQ==
-
-    hide_form_title: !binary |
-      15TXodeq16jXqiDXmNeV16TXoSDXlNen16nXqCDXl9eT16k=
-
-    status_hidden: !binary |
-      15TXlNen16nXqCDXnteV16HXqteo
-
-    delete_context_title: !binary |
-      157Xl9eZ16fXqiDXlNen16nXqA==
-
-    delete_context_confirmation: !binary |
-      15TXkNedINec157Xl9eV16cg15DXqiDXlNeU16fXqdeoICAnJXtuYW1lfSc/
-      INeZ16kg15zXlNeW15TXqCDXntek16DXmSDXqdek16LXldec15Qg15bXlSDX
-      nteq15fXldenINeQ16og15vXnCDXlNek16LXldec15XXqiDXlNee15fXlteV
-      16jXmdeV16og15HXlNen16nXqCDXlteU
-
-    update_status_message: !binary |
-      16nXldeg15Qg16nXnSDXlNeU16fXqdeo
-
-    edit_context: !binary |
-      16LXqNeZ15vXqiDXlNen16nXqA==
-
-    show_form: !binary |
-      15nXpteZ16jXqiDXlNen16nXqCDXl9eT16k=
-
-    context_name: !binary |
-      16nXnSDXlNen16nXqA==
-
-    completed_tasks_title: !binary |
-      157Xodec15XXnNeZ1506Otek16LXldec15XXqiDXqdeR15XXptei15Ug15HX
-      ntec15XXkNefINeR15TXp9ep16ggICcle2NvbnRleHRfbmFtZX0n
-
-    no_contexts_active: !binary |
-      15DXmdefINeb16jXkteiINeU16fXqdeo15nXnSDXpNei15nXnNeZ150=
-
-    save_status_message: !binary |
-      15TXp9ep16gg16DXqdee16g=
-
-    no_actions: !binary |
-      15DXmdefINeb16jXkteiINek16LXldec15XXqiDXqdec15Ag15TXldep15zX
-      nteVINeR15TXp9ep16gg15TXoNeV15vXl9eZ
-
-    delete_context: !binary |
-      157Xl9enINeU16fXqdeo
-
-    hidden_contexts: !binary |
-      15TXp9ep16jXmdedINee15XXodeq16jXmded
-
-    visible_contexts: !binary |
-      15TXp9ep16jXmdedINeS15zXldeZ15nXnQ==
-
-    context_hide: !binary |
-      15TXodeq16jXlCDXntei157XldeTINeU15HXmdeqPw==
-
-    context_deleted: !binary |
-      16DXnteX16cg15TXp9ep16ggJyV7bmFtZX0n
-
-    todos_append: !binary |
-      15HXlNen16nXqCDXlteU
-
-    new_context_post: !binary |
-      JyDXmdeV15XXpteo15Ug15HXoNeV16HXoy4g15TXkNedINec15TXntep15nX
-      mj8=
-
-    no_contexts_hidden: !binary |
-      15DXmdefINeb16jXkteiINeU16fXqdeo15nXnSDXnteV16HXqteo15nXnQ==
-
-    status_active: !binary |
-      15TXlNen16nXqCDXpNei15nXnA==
-
-    all_completed_tasks_title: !binary |
-      157Xodec15XXnNeZ1506Oteb15wg15TXpNei15XXnNeV16og16nXkdeV16bX
-      oteVINeR157XnNeV15DXnyDXkdeU16fXqdeoICAnJXtjb250ZXh0X25hbWV9
-      Jw==
-
-    hide_form: !binary |
-      15TXodeq16jXqiDXmNeV16TXoQ==
-
-    add_context: !binary |
-      15TXldeh16TXqiDXlNen16nXqA==
-
-    new_context_pre: !binary |
-      15TXp9ep16gg15fXk9epICc=
-
-    show_form_title: !binary |
-      15TXldeh16TXqiDXlNen16nXqA==
-
+    last_completed_in_context: "בהקשר זה  (אחרונות %{number})"
+    hide_form_title: "הסתרת טופס הקשר חדש"
+    status_hidden: "ההקשר מוסתר"
+    delete_context_title: "מחיקת הקשר"
+    delete_context_confirmation: "האם למחוק את ההקשר  '%{name}'? יש להזהר מפני שפעולה זו מתחוק את כל הפעולות המחזוריות בהקשר זה"
+    update_status_message: "שונה שם ההקשר"
+    edit_context: "עריכת הקשר"
+    show_form: "יצירת הקשר חדש"
+    context_name: "שם הקשר"
+    completed_tasks_title: "מסלולים::פעולות שבוצעו במלואן בהקשר  '%{context_name}'"
+    no_contexts_active: "אין כרגע הקשרים פעילים"
+    save_status_message: "הקשר נשמר"
+    no_actions: "אין כרגע פעולות שלא הושלמו בהקשר הנוכחי"
+    delete_context: "מחק הקשר"
+    hidden_contexts: "הקשרים מוסתרים"
+    visible_contexts: "הקשרים גלויים"
+    context_hide: "הסתרה מעמוד הבית?"
+    context_deleted: "נמחק הקשר '%{name}'"
+    todos_append: "בהקשר זה"
+    new_context_post: "' יווצרו בנוסף. האם להמשיך?"
+    no_contexts_hidden: "אין כרגע הקשרים מוסתרים"
+    status_active: "ההקשר פעיל"
+    all_completed_tasks_title: "מסלולים::כל הפעולות שבוצעו במלואן בהקשר  '%{context_name}'"
+    hide_form: "הסתרת טופס"
+    add_context: "הוספת הקשר"
+    new_context_pre: "הקשר חדש '"
+    show_form_title: "הוספת הקשר"
   models:
     todo:
-      error_date_must_be_future: !binary |
-        15fXmdeZ15Eg15zXlNeZ15XXqiDXqteQ16jXmdeaINei16rXmdeT15k=
-
+      error_date_must_be_future: "חייב להיות תאריך עתידי"
     user:
-      error_project_not_associated: !binary |
-        157XlteU15Qg16TXqNeV15nXmden15ggJXtwcm9qZWN0fSDXkNeZ16DXlSDX
-        ntep15XXmdeZ15og16LXnSDXnteW15Qg157Xqdeq157XqSAle3VzZXJ9Lg==
-
-      error_context_not_associated: !binary |
-        157XlteU15Qg15TXp9ep16ggJXtjb250ZXh0fSDXkNeZ16DXlSDXntep15XX
-        mdeZ15og16LXnSDXnteW15Qg157Xqdeq157XqSAle3VzZXJ9Lg==
-
+      error_project_not_associated: "מזהה פרוייקט %{project} אינו משוייך עם מזה משתמש %{user}."
+      error_context_not_associated: "מזהה הקשר %{context} אינו משוייך עם מזה משתמש %{user}."
     project:
-      feed_title: !binary |
-        16TXqNeV15nXmden15jXmdedINeR157Xodec15XXnNeZ150=
-
-      feed_description: !binary |
-        16jXqdeZ157XqiDXm9ecINeU16TXqNeV15nXmden15jXmdedINei15HXldeo
-        ICV7dXNlcm5hbWV9
-
+      feed_title: "פרוייקטים במסלולים"
+      feed_description: "רשימת כל הפרוייקטים עבור %{username}"
     preference:
-      due_on: !binary |
-        LSDXmdei15Mg15Ele2RhdGV9
-
-      due_in: !binary |
-        16rXkNeo15nXmiDXmdei15Mg15HXoteV15MgJXtkYXlzfSDXmdee15nXnQ==
-
+      due_on: "- יעד ב%{date}"
+      due_in: "תאריך יעד בעוד %{days} ימים"
   users:
-    total_notes: !binary |
-      15vXnCDXlNek16rXp9eZ15XXqg==
-
-    destroy_successful: !binary |
-      157Xqdeq157XqSAle2xvZ2lufSDXlNeV16nXnteTINeR15TXptec15fXlA==
-
-    change_password_submit: !binary |
-      16nXmdeg15XXmSDXodeZ16HXnteQ
-
-    destroy_confirmation: !binary |
-      15DXlteU16jXlDog15TXpNei15XXnNeUINeq157Xl9enINeQ16og15TXntep
-      16rXntepICcle2xvZ2lufScsINeb15wg15TXpNei15XXnNeV16osINeU16TX
-      qNeV15nXmden15jXmdedINeV15TXpNeq16fXmdedLiDXlNeQ150g15zXlNee
-      16nXmdeaPw==
-
-    label_auth_type: !binary |
-      16nXmdeY16og15DXmdee15XXqg==
-
-    identity_url: !binary |
-      15vXqteV15HXqiDXlteU15XXqg==
-
-    total_users_count: !binary |
-      16fXmdeZ157XmdedICV7Y291bnR9INee16nXqtee16nXmded
-
-    new_user_title: !binary |
-      157Xodec15XXnNeZ1506Oteo15nXqdeV150g157Xqdeq157XqSDXm9ee16DX
-      lNec
-
-    account_signup: !binary |
-      16jXmdep15XXnSDXnNeX16nXkdeV158=
-
-    password_confirmation_label: !binary |
-      15DXmdee15XXqiDXodeZ16HXnteQ
-
-    change_password_title: !binary |
-      157Xodec15XXnNeZ1506Otep15nXoNeV15kg16HXmdeh157XkA==
-
-    no_signups_title: !binary |
-      157Xodec15XXnNeZ1506OteQ15nXnyDXqNeZ16nXldee15nXnQ==
-
-    new_user_heading: !binary |
-      16jXmdep15XXnSDXntep16rXntepINeX15PXqTo=
-
-    total_projects: !binary |
-      16TXqNeV15nXp9eY15nXnSDXkdeh15og15TXm9ec
-
-    destroy_error: !binary |
-      15DXqNei15Qg16nXkteZ15DXlCDXkdee15fXmden16og15TXntep16rXntep
-      ICV7bG9naW59
-
-    new_password_label: !binary |
-      16HXmdeh157XkCDXl9eT16nXlA==
-
-    you_have_to_reset_your_password: !binary |
-      15nXqSDXnNeQ16TXoSDXkNeqINeU16HXmdeh157XkA==
-
-    openid_ok_pref_failed: !binary |
-      15vXqteV15HXqiDXlNeW15TXldeqICV7dXJsfSAu15DXldee16rXlCDXkdeU
-      16bXnNeX15Qg15DXmiDXkNeo16LXlCDXqten15zXlCDXkdep157Xmdeo16og
-      15TXkteT16jXldeqINeU15TXlteT15TXldeq
-
-    first_user_heading: !binary |
-      15HXqNeV15vXmdedINeU15HXkNeZ150g15DXnCDXnteh15zXldec15nXnS4g
-      15vXk9eZINec15TXqteX15nXnCwg15nXqSDXnNeZ16bXldeoINeX16nXkdeV
-      158g157XoNeU15w6
-
-    select_authentication_type: !binary |
-      15nXqSDXnNeR15fXldeoINeQ16og16nXmdeY16og15TXlteZ15TXldeZINeU
-      15fXk9ep15Qg15XXnNeU15zXnNeZ16cgJ9ep15nXoNeV15kg16nXmdeY16og
-      15TXlteT15TXldeqJyDXnNeR15fXmdeo16og15TXqdeZ15jXlCDXlNeg15XX
-      m9eX15nXqg==
-
-    desired_login: !binary |
-      157Xqdeq157XqSDXm9eg15nXodeUINeo16bXldeZ
-
-    confirm_password: !binary |
-      15DXmdep15XXqCDXodeZ16HXnteQ
-
-    change_password_prompt: !binary |
-      15nXqSDXnNeb16rXldeRINeQ16og15TXodeZ16HXnteQINeU15fXk9ep15Qg
-      15HXqdeT15XXqiDXqdec157XmNeUINeV15zXlNen15zXmdenICfXqdeg15Qg
-      16HXmdeh157XkCcg15vXk9eZINec15TXl9ec15nXoyDXkNeqINeU16HXmdeh
-      157XkCDXlNeg15XXm9eX15nXqiDXkdeX15PXqdeULg==
-
-    failed_to_delete_user: !binary |
-      157Xl9eZ16fXqiDXlNee16nXqtee16kgJXt1c2VybmFtZX0g16DXm9ep15zX
-      lA==
-
-    register_with_cas: !binary |
-      16LXnSDXntep16rXntepINeU16nXkCLXniDXqdec15o=
-
-    new_token_generated: !binary |
-      15DXodeZ157XldefINeX15PXqSDXoNeV16bXqCDXkdeU16bXnNeX15Q=
-
-    password_updated: !binary |
-      16HXmdeh157XkCDXoteV15PXm9eg15Qu
-
-    total_actions: !binary |
-      16HXmiDXpNei15XXnNeV16o=
-
-    choose_password: !binary |
-      15HXl9eZ16jXqiDXodeZ16HXnteQ
-
-    auth_change_submit: !binary |
-      16nXmdeg15XXmSDXqdeZ15jXqiDXkNeZ157Xldeq
-
-    total_contexts: !binary |
-      16HXmiDXlNen16nXqNeZ150=
-
-    manage_users: !binary |
-      16DXmdeU15XXnCDXntep16rXntep15nXnQ==
-
-    auth_type_updated: !binary |
-      16nXmdeY16og15DXmdee15XXqiDXoteV15PXm9eg15Q=
-
-    signup_successful: !binary |
-      16jXmdep15XXnSDXnteV16bXnNeXINei15HXldeoINee16nXqtee16kgJXt1
-      c2VybmFtZX0u
-
-    change_authentication_type: !binary |
-      16nXmdeg15XXmSDXqdeZ15jXqiDXlNeW15PXlNeV16o=
-
-    auth_type_update_error: !binary |
-      15DXqNei15Qg16nXkteZ15DXlCDXkdei15nXk9eb15XXnyDXqdeZ15jXqiDX
-      lNeQ15nXnteV16o6ICV7ZXJyb3JfbWVzc2FnZXN9
-
-    change_auth_type_title: !binary |
-      157Xodec15XXnNeZ1506Otep15nXoNeV15kg16nXmdeY16og15TXlteT15TX
-      ldeq
-
-    signup_new_user: !binary |
-      16jXqdeV150g157Xqdeq157XqSDXl9eT16k=
-
-    openid_url_verified: !binary |
-      15vXqteV15HXqiDXlNeW15TXldeqICV7dXJsfSAu15DXldee16rXlCDXkdeU
-      16bXnNeX15Qg15XXkNeV16TXnyDXlNeQ15nXnteV16og16DXp9eR16Ig15wt
-      T3BlbklELg==
-
-    destroy_user: !binary |
-      15TXqdee15PXqiDXntep16rXntep
-
-    user_created: !binary |
-      157Xqdeq157XqSDXoNeV16bXqA==
-
-    signup: !binary |
-      16jXmdep15XXnQ==
-
-    successfully_deleted_user: !binary |
-      157Xqdeq157XqSAgJXt1c2VybmFtZX0g16DXnteX16cg15HXlNem15zXl9eU
-
+    total_notes: "כל הפתקיות"
+    destroy_successful: "משתמש %{login} הושמד בהצלחה"
+    change_password_submit: "שינוי סיסמא"
+    destroy_confirmation: "אזהרה: הפעולה תמחק את המשתמש '%{login}', כל הפעולות, הפרוייקטים והפתקים. האם להמשיך?"
+    label_auth_type: "שיטת אימות"
+    identity_url: "כתובת זהות"
+    total_users_count: "קיימים %{count} משתמשים"
+    new_user_title: "מסלולים::רישום משתמש כמנהל"
+    account_signup: "רישום לחשבון"
+    password_confirmation_label: "אימות סיסמא"
+    change_password_title: "מסלולים::שינוי סיסמא"
+    no_signups_title: "מסלולים::אין רישומים"
+    new_user_heading: "רישום משתמש חדש:"
+    total_projects: "פרויקטים בסך הכל"
+    destroy_error: "ארעה שגיאה במחיקת המשתמש %{login}"
+    new_password_label: "סיסמא חדשה"
+    you_have_to_reset_your_password: "יש לאפס את הסיסמא"
+    openid_ok_pref_failed: "כתובת הזהות %{url} .אומתה בהצלחה אך ארעה תקלה בשמירת הגדרות ההזדהות"
+    first_user_heading: "ברוכים הבאים אל מסלולים. כדי להתחיל, יש ליצור חשבון מנהל:"
+    select_authentication_type: "יש לבחור את שיטת הזיהוי החדשה ולהלליק 'שינוי שיטת הזדהות' לבחירת השיטה הנוכחית"
+    desired_login: "משתמש כניסה רצוי"
+    confirm_password: "אישור סיסמא"
+    change_password_prompt: "יש לכתוב את הסיסמא החדשה בשדות שלמטה ולהקליק 'שנה סיסמא' כדי להחליף את הסיסמא הנוכחית בחדשה."
+    failed_to_delete_user: "מחיקת המשתמש %{username} נכשלה"
+    register_with_cas: "עם משתמש השא\"מ שלך"
+    new_token_generated: "אסימון חדש נוצר בהצלחה"
+    password_updated: "סיסמא עודכנה."
+    total_actions: "סך פעולות"
+    choose_password: "בחירת סיסמא"
+    auth_change_submit: "שינוי שיטת אימות"
+    total_contexts: "סך הקשרים"
+    manage_users: "ניהול משתמשים"
+    auth_type_updated: "שיטת אימות עודכנה"
+    signup_successful: "רישום מוצלח עבור משתמש %{username}."
+    change_authentication_type: "שינוי שיטת הזדהות"
+    auth_type_update_error: "ארעה שגיאה בעידכון שיטת האימות: %{error_messages}"
+    change_auth_type_title: "מסלולים::שינוי שיטת הזדהות"
+    signup_new_user: "רשום משתמש חדש"
+    openid_url_verified: "כתובת הזהות %{url} .אומתה בהצלחה ואופן האימות נקבע ל-OpenID."
+    destroy_user: "השמדת משתמש"
+    user_created: "משתמש נוצר"
+    signup: "רישום"
+    successfully_deleted_user: "משתמש  %{username} נמחק בהצלחה"
   preferences:
-    page_title_edit: !binary |
-      157Xodec15XXnNeZ1506Otei16jXmdeb16og15TXoteT16TXldeq
-
-    authentication_header: !binary |
-      15TXlteZ15TXldeZINep15zXmQ==
-
-    change_password: !binary |
-      16HXmdeg15XXmSDXodeZ16HXnteQ
-
-    staleness_starts_after: !binary |
-      16rXpNec15XXqiDXnteq15fXmdec15Qg15zXkNeX16ggJXtkYXlzfSDXmdee
-      15nXnQ==
-
-    change_identity_url: !binary |
-      16nXmdeg15XXmSDXm9eq15XXkdeqIFVSTCDXlNeW15PXlNeV16o=
-
-    updated: !binary |
-      15TXoteT16TXldeqINei15XXk9eb16DXlQ==
-
-    current_authentication_type: !binary |
-      16nXmdeY16og15TXlteZ15TXldeZINep15zXmSDXlNeZ15AgJXthdXRoX3R5
-      cGV9
-
-    token_description: !binary |
-      15DXodeZ157XldefICjXntep157XqSDXnNeU15bXoNeV16og15nXqdeZ157X
-      ldepINee157XqdenINeq15vXqteg15XXqik=
-
-    edit_preferences: !binary |
-      16LXqNeZ15vXqiDXlNei15PXpNeV16o=
-
-    is_true: !binary |
-      15fXmdeV15HXmQ==
-
-    token_header: !binary |
-      15TXkNeh15nXnteV158g16nXnNeZ
-
-    generate_new_token_confirm: !binary |
-      15HXmNeV15c/INeZ16bXmdeo16og15DXodeZ157XldefINeX15PXqSDXqteX
-      15zXmdejINeQ16og15TXkNeh15nXnteV158g15TXp9eZ15nXnSDXldeq15HX
-      mNecINeQ16og15TXqdeZ157XldepINeR15Uu
-
-    is_false: !binary |
-      16nXnNeZ15zXmQ==
-
+    page_title_edit: "מסלולים::עריכת העדפות"
+    authentication_header: "הזיהוי שלי"
+    change_password: "סינוי סיסמא"
+    staleness_starts_after: "תפלות מתחילה לאחר %{days} ימים"
+    change_identity_url: "שינוי כתובת URL הזדהות"
+    updated: "העדפות עודכנו"
+    current_authentication_type: "שיטת הזיהוי שלי היא %{auth_type}"
+    token_description: "אסימון (משמש להזנות ישימוש ממשק תכתנות)"
+    edit_preferences: "עריכת העדפות"
+    is_true: "חיובי"
+    token_header: "האסימון שלי"
+    generate_new_token_confirm: "בטוח? יצירת אסימון חדש תחליף את האסימון הקיים ותבטל את השימוש בו."
+    is_false: "שלילי"
     tabs:
-      authentication: !binary |
-        15DXmdee15XXqg==
-
-      tracks_behavior: !binary |
-        15TXqteg15TXkteV16og157Xodec15XXnNeZ150=
-
-      date_and_time: !binary |
-        16rXkNeo15nXmiDXldep16LXlA==
-
-      profile: !binary |
-        16TXqNeV16TXmdec
-
-    page_title: !binary |
-      157Xodec15XXnNeZ1506OteU16LXk9ek15XXqg==
-
-    sms_context_none: !binary |
-      15zXnNeQ
-
-    change_authentication_type: !binary |
-      16nXmdeg15XXmSDXodeV15Ig15TXlteT15TXldeq
-
-    open_id_url: !binary |
-      15vXqteV15HXqiDXlteZ15TXldeZIE9wZW5JRCDXqdec15og15TXmdeQ
-
-    show_number_completed: !binary |
-      15TXpteSICV7bnVtYmVyfSDXpNeo15nXmNeZ150g16nXlNeh16rXmdeZ157X
-      lQ==
-
-    generate_new_token: !binary |
-      15nXpteZ16jXqiDXkNeh15nXnteV158g15fXk9ep
-
-    password_changed: !binary |
-      15TXodeZ16HXnteQINep15XXoNeq15QsINeZ16kg15zXlNeZ15vXoNehINep
-      16DXmdeqLg==
-
-    title: !binary |
-      15TXlNeS15PXqNeV16og16nXnNeZ
-
+      authentication: "אימות"
+      tracks_behavior: "התנהגות מסלולים"
+      date_and_time: "תאריך ושעה"
+      profile: "פרופיל"
+    page_title: "מסלולים::העדפות"
+    sms_context_none: "ללא"
+    change_authentication_type: "שינוי סוג הזדהות"
+    open_id_url: "כתובת זיהוי OpenID שלך היא"
+    show_number_completed: "הצג %{number} פריטים שהסתיימו"
+    generate_new_token: "יצירת אסימון חדש"
+    password_changed: "הסיסמא שונתה, יש להיכנס שנית."
+    title: "ההגדרות שלי"
   common:
-    numbered_step: !binary |
-      16bXoteTICV7bnVtYmVyfQ==
-
-    projects: !binary |
-      16TXqNeV15nXmden15jXmded
-
-    add: !binary |
-      15TXldeh16M=
-
-    go_back: !binary |
-      15fXlteV16g=
-
-    optional: !binary |
-      15DXpNep16jXmQ==
-
-    contribute: !binary |
-      16rXqNeV150=
-
-    todo: !binary |
-      157XqdeZ157XlA==
-
-    forth: !binary |
-      15XXkNeZ15zXmg==
-
-    none: !binary |
-      15TXoteo15Q=
-
-    back: !binary |
-      15DXl9eV16jXlA==
-
-    second: !binary |
-      16nXoNeZ
-
-    update: !binary |
-      16LXk9eb158=
-
-    create: !binary |
-      16bXldeo
-
-    description: !binary |
-      16rXmdeQ15XXqA==
-
-    bugs: !binary |
-      15HXkNeS15nXnQ==
-
-    third: !binary |
-      16nXnNeZ16nXmQ==
-
-    weeks: !binary |
-      16nXkdeV16LXldeq
-
+    numbered_step: "צעד %{number}"
+    projects: "פרוייקטים"
+    add: "הוסף"
+    go_back: "חזור"
+    optional: "אפשרי"
+    contribute: "תרום"
+    todo: "משימה"
+    forth: "ואילך"
+    none: "הערה"
+    back: "אחורה"
+    second: "שני"
+    update: "עדכן"
+    create: "צור"
+    description: "תיאור"
+    bugs: "באגים"
+    third: "שלישי"
+    weeks: "שבועות"
     days_midsentence:
-      other: !binary |
-        15nXnteZ150=
-
-      zero: !binary |
-        15nXnteZ150=
-
-      one: !binary |
-        15nXlded
-
-    cancel: !binary |
-      15HXmNec
-
+      other: "ימים"
+      zero: "ימים"
+      one: "יום"
+    cancel: "בטל"
     sort:
-      sort: !binary |
-        157XmdeZ158=
-
-      by_task_count: !binary |
-        15zXpNeZINee16HXpNeoINee16nXmdee15XXqg==
-
-      alphabetically_title: !binary |
-        16HXk9eoINek16jXldeZ15nXp9eY15nXnSDXkNec16TXkdeY15nXqg==
-
-      by_task_count_title_confirm: !binary |
-        15zXodeT16gg15DXqiDXlNek16jXldeZ15nXp9eY15nXnSDXnNek15kg157X
-        odek16gg15TXntep15nXnteV16o/INeU16TXoteV15zXlCDXqteX15zXmdej
-        INeQ16og15TXodeT16gg15TXp9eZ15nXnQ==
-
-      alphabetically_confirm: !binary |
-        15zXodeT16gg15DXqiDXlNek16jXldeZ15nXp9eY15nXnSDXkdeh15PXqCDX
-        kNec16TXkdeq15k/INeU16TXoteV15zXlCDXqteX15zXmdejINeQ16og15TX
-        odeT16gg15TXp9eZ15nXnQ==
-
-      by_task_count_title: !binary |
-        157XmdeZ158g15zXpNeZINee16HXpNeoINee16nXmdee15XXqg==
-
-      alphabetically: !binary |
-        15DXnNek15HXqteZ
-
-    errors_with_fields: !binary |
-      16nXkteZ16jXldeqINeR16nXk9eV16og15TXntem15XXmdeZ16DXmded
-
-    ajaxError: !binary |
-      16nXkteZ15DXlCDXkdeq15LXldeR15Qg157XlNep16jXqg==
-
-    server_error: !binary |
-      15TXqteo15fXqdeUINep15LXmdeQ16og16nXqNeq
-
-    action: !binary |
-      16TXoteV15zXlA==
-
-    last: !binary |
-      15DXl9eo15XXnw==
-
-    email: !binary |
-      15PXldeQItec
-
+      sort: "מיין"
+      by_task_count: "לפי מספר משימות"
+      alphabetically_title: "סדר פרוייקטים אלפבטית"
+      by_task_count_title_confirm: "לסדר את הפרוייקטים לפי מספר המשימות? הפעולה תחליף את הסדר הקיים"
+      alphabetically_confirm: "לסדר את הפרוייקטים בסדר אלפבתי? הפעולה תחליף את הסדר הקיים"
+      by_task_count_title: "מיין לפי מספר משימות"
+      alphabetically: "אלפבתי"
+    errors_with_fields: "שגירות בשדות המצויינים"
+    ajaxError: "שגיאה בתגובה מהשרת"
+    server_error: "התרחשה שגיאת שרת"
+    action: "פעולה"
+    last: "אחרון"
+    email: "דוא\"ל"
     note:
-      other: !binary |
-        JXtjb3VudH0g16TXqten15nXldeq
-
-      zero: !binary |
-        15DXmdefINek16rXp9eZ15XXqg==
-
-      one: !binary |
-        16TXqten15Q=
-
-    deferred: !binary |
-      16DXk9eX15Q=
-
-    previous: !binary |
-      15TXp9eV15PXnQ==
-
-    months: !binary |
-      15fXldeT16nXmded
-
-    fourth: !binary |
-      16jXkdeZ16LXmQ==
-
-    search: !binary |
-      15fXmdek15XXqQ==
-
-    contexts: !binary |
-      15TXp9ep16jXmded
-
-    recurring_todos: !binary |
-      16TXoteV15zXldeqINee15fXlteV16jXmdeV16o=
-
-    project: !binary |
-      16TXqNeV15nXmden15g=
-
-    website: !binary |
-      15DXqteo
-
-    logout: !binary |
-      16bXkA==
-
-    forum: !binary |
-      16TXldeo15XXnQ==
-
-    month: !binary |
-      15fXldeT16k=
-
-    week: !binary |
-      16nXkdeV16I=
-
-    first: !binary |
-      16jXkNep15XXnw==
-
-    show_all: !binary |
-      15TXpteSINeU15vXnA==
-
-    review: !binary |
-      15HXmden15XXqNeq
-
-    context: !binary |
-      15TXp9ep16g=
-
-    drag_handle: !binary |
-      157XqdeV15o=
-
-    wiki: !binary |
-      15XXmden15k=
-
-    not_available_abbr: !binary |
-      15wv15k=
-
-    actions: !binary |
-      16TXoteV15zXldeq
-
-    next: !binary |
-      15TXkdeQ
-
-    notes: !binary |
-      16TXqten15nXldeq
-
-    ok: !binary |
-      15DXlden15k=
-
+      other: "%{count} פתקיות"
+      zero: "אין פתקיות"
+      one: "פתקה"
+    deferred: "נדחה"
+    previous: "הקודם"
+    months: "חודשים"
+    fourth: "רביעי"
+    search: "חיפוש"
+    contexts: "הקשרים"
+    recurring_todos: "פעולות מחזוריות"
+    project: "פרוייקט"
+    website: "אתר"
+    logout: "צא"
+    forum: "פורום"
+    month: "חודש"
+    week: "שבוע"
+    first: "ראשון"
+    show_all: "הצג הכל"
+    review: "ביקורת"
+    context: "הקשר"
+    drag_handle: "משוך"
+    wiki: "ויקי"
+    not_available_abbr: "ל/י"
+    actions: "פעולות"
+    next: "הבא"
+    notes: "פתקיות"
+    ok: "אוקי"
     actions_midsentence:
-      other: !binary |
-        16TXoteV15zXldeq
-
-      zero: !binary |
-        16TXoteV15zXldeq
-
-      one: !binary |
-        16TXoteV15zXlA==
-
+      other: "פעולות"
+      zero: "פעולות"
+      one: "פעולה"
   layouts:
-    toggle_notes_title: !binary |
-      15fXqdeZ16TXqiDXm9ecINeU16TXqten15nXldeq
-
+    toggle_notes_title: "חשיפת כל הפתקיות"
     mobile_navigation:
-      home: !binary |
-        MS3XkdeZ16o=
-
-      projects: !binary |
-        16TXqNeV15nXmden15jXmded
-
-      tickler: !binary |
-        157WtNeW1rDXm9a41rzXqA==
-
-      starred: !binary |
-        NC3XnteV15PXktep15nXnQ==
-
-      feeds: !binary |
-        15TXlteg15XXqg==
-
-      new_action: !binary |
-        MC3XpNei15XXnNeUINeX15PXqdeU
-
-      contexts: !binary |
-        Mi3XlNen16nXqNeZ150=
-
-      logout: !binary |
-        16bXkA==
-
+      home: "1-בית"
+      projects: "פרוייקטים"
+      tickler: "מִזְכָּר"
+      starred: "4-מודגשים"
+      feeds: "הזנות"
+      new_action: "0-פעולה חדשה"
+      contexts: "2-הקשרים"
+      logout: "צא"
     navigation:
-      home: !binary |
-        15HXmdeq
-
-      starred_title: !binary |
-        15TXpteS16og16TXoteV15zXldeqINee15XXk9eS16nXldeq
-
-      recurring_todos_title: !binary |
-        16DXmdeU15XXnCDXpNei15XXnNeV16og157Xl9eW15XXqNeZ15XXqg==
-
-      tickler: !binary |
-        157WtNeW1rDXm9a41rzXqA==
-
+      home: "בית"
+      starred_title: "הצגת פעולות מודגשות"
+      recurring_todos_title: "ניהול פעולות מחזוריות"
+      tickler: "מִזְכָּר"
       help: "?"
-      admin: !binary |
-        16DXmdeU15XXnA==
-
-      starred: !binary |
-        157XldeT15LXqdeZ150=
-
-      completed_tasks_title: !binary |
-        15TXodeq15nXmded
-
-      api_docs: !binary |
-        16rXmdei15XXkyDXntee16nXpyDXqteb16DXldeq
-
-      integrations_: !binary |
-        16nXmdec15XXkSDXnteh15zXldec15nXnQ==
-
-      feeds: !binary |
-        15TXlteg15XXqg==
-
-      preferences_title: !binary |
-        15TXpteS16og15TXoteT16TXldeq15k=
-
-      export_title: !binary |
-        15nXkdeV15Ag15XXmdem15XXkCDXoNeq15XXoNeZ150=
-
-      stats: !binary |
-        16HXmNeY15nXodeY15nXp9eU
-
-      home_title: !binary |
-        15HXmdeq
-
-      organize: !binary |
-        15DXqNeS15XXnw==
-
-      feeds_title: !binary |
-        16bXpNeZ15Qg15HXqNep15nXnteqINeU15TXlteg15XXqiDXlNeW157Xmdeg
-        15Q=
-
-      manage_users: !binary |
-        16DXmdeU15XXnCDXntep16rXntep15nXnQ==
-
-      notes_title: !binary |
-        15TXpteS16og15vXnCDXlNek16rXp9eZ15XXqg==
-
-      search: !binary |
-        15fXmdek15XXqSDXm9ecINeU16TXqNeZ15jXmded
-
-      completed_tasks: !binary |
-        15HXldem16I=
-
-      review_title: !binary |
-        16LXqNeZ15vXpiDXkdeZ16fXldeo16o=
-
-      recurring_todos: !binary |
-        157XqdeZ157XldeqINee15fXlteV16jXmdeV16o=
-
-      preferences: !binary |
-        15TXoteT16TXldeq
-
-      manage_users_title: !binary |
-        15TXldeh16TXlCDXkNeVINeU16HXqNeUINep15wg157Xqdeq157XqdeZ150=
-
-      stats_title: !binary |
-        15TXpteS16og15TXodeY15jXmdeh15jXmden15Qg16nXnNeZ
-
-      view: !binary |
-        16rXpteV15LXlA==
-
-      contexts_title: !binary |
-        15TXp9ep16jXmded
-
-      calendar_title: !binary |
-        15zXldeXINep16DXlCDXqdecINee16nXmdee15XXqiDXnNeR15nXpteV16I=
-
-      projects_title: !binary |
-        16TXqNeV15nXmden15jXmded
-
-      calendar: !binary |
-        15zXldeXINep16DXlA==
-
-      tickler_title: !binary |
-        157WtNeW1rDXm9a41rzXqA==
-
-      export: !binary |
-        15nXpteV15A=
-
-    next_actions_rss_feed: !binary |
-      15TXlteg16og16jXodehINec16TXoteV15zXldeqINeU157Xqdea
-
-    toggle_contexts_title: !binary |
-      15TXodeq16jXqi/XlNem15LXqiDXqdeT15XXqiDXnteV16HXqteo15nXnQ==
-
-    toggle_contexts: !binary |
-      15TXpteS16og16nXk9eV16og157Xldeh16rXqNeZ150=
-
-    toggle_notes: !binary |
-      15fXqdeZ16TXqiDXpNeq16fXmdeV16o=
-
+      admin: "ניהול"
+      starred: "מודגשים"
+      completed_tasks_title: "הסתיים"
+      api_docs: "תיעוד ממשק תכנות"
+      integrations_: "שילוב מסלולים"
+      feeds: "הזנות"
+      preferences_title: "הצגת העדפותי"
+      export_title: "יבוא ויצוא נתונים"
+      stats: "סטטיסטיקה"
+      home_title: "בית"
+      organize: "ארגון"
+      feeds_title: "צפיה ברשימת ההזנות הזמינה"
+      manage_users: "ניהול משתמשים"
+      notes_title: "הצגת כל הפתקיות"
+      search: "חיפוש כל הפריטים"
+      completed_tasks: "בוצע"
+      review_title: "עריכצ ביקורת"
+      recurring_todos: "משימות מחזוריות"
+      preferences: "העדפות"
+      manage_users_title: "הוספה או הסרה של משתמשים"
+      stats_title: "הצגת הסטטיסטיקה שלי"
+      view: "תצוגה"
+      contexts_title: "הקשרים"
+      calendar_title: "לוח שנה של משימות לביצוע"
+      projects_title: "פרוייקטים"
+      calendar: "לוח שנה"
+      tickler_title: "מִזְכָּר"
+      export: "יצוא"
+    next_actions_rss_feed: "הזנת רסס לפעולות המשך"
+    toggle_contexts_title: "הסתרת/הצגת שדות מוסתרים"
+    toggle_contexts: "הצגת שדות מוסתרים"
+    toggle_notes: "חשיפת פתקיות"
   feedlist:
-    actions_due_today: !binary |
-      16TXoteV15zXldeqINec15HXmdem15XXoiDXlNeZ15XXnSDXkNeVINee15XX
-      p9eT150g15nXldeq16g=
-
-    active_projects_wo_next: !binary |
-      16TXqNeV15nXmden15jXmdedINek16LXmdec15nXnSDXnNec15Ag16TXoteV
-      15zXldeqINeU157Xqdea
-
-    select_feed_for_project: !binary |
-      15HXl9eZ16jXqiDXlNeU15bXoNeUINei15HXldeoINeU16TXqNeV15nXmden
-      15g=
-
-    actions_completed_last_week: !binary |
-      16TXoteV15zXldeqINep15TXodeq15nXmdee15Ug15HXqdeR16LXqiDXlNeZ
-      157XmdedINeU15DXl9eo15XXoNeZ150=
-
-    all_contexts: !binary |
-      15vXnCDXlNeU16fXqdeo15nXnQ==
-
-    project_needed: !binary |
-      15PXqNeV16kg15zXpNeX15XXqiDXpNeo15XXmdeZ16fXmCDXkNeX15Mg15zX
-      pNeg15kg16nXoNeZ16rXnyDXnNeR16fXqSDXlNeW16DXlA==
-
-    notice_incomplete_only: !binary |
-      15TXoteo15Q6INeb15wg15TXlNeW16DXldeqINee16bXmdeS15XXqiDXkNeq
-      INeb15wg15TXpNei15XXnNeV16og16nXnNeQINeh15XXnteg15Ug15vXnteR
-      15XXptei15XXqiDXkNec15Ag15DXnSDXm9efINeg15HXl9eoINeR157XpNeV
-      16jXqSDXkNeX16jXqi4=
-
-    choose_context: !binary |
-      15HXl9eZ16jXqiDXlNeU16fXqdeoINei15HXldeo15Ug15PXqNeV16nXlCDX
-      lNeW16DXlA==
-
-    all_projects: !binary |
-      15vXnCDXlNek16jXldeZ15nXp9eY15nXnQ==
-
-    context_centric_actions: !binary |
-      15TXlteg15XXqiDXoteR15XXqCDXpNei15XXnNeV16og16nXnNeQINeg16HX
-      qteZ15nXnteVINeR15TXp9ep16gg16DXqteV158=
-
-    context_needed: !binary |
-      16bXqNeZ15og15zXlNeZ15XXqiDXnNek15fXldeqINeU16fXqdeoINeQ15fX
-      kyDXnNek16DXmSDXqdeg15nXqtefINec15HXp9ep16gg15TXlteg15Q=
-
-    project_centric: !binary |
-      15TXlteg15XXqiDXoteR15XXqCDXpNei15XXnNeV16og16nXnNeQINeU16HX
-      qteZ15nXnteVINeR16TXqNeV15nXmden15gg157XodeV15nXmded
-
-    ical_feed: !binary |
-      15TXlteg16ogaUNhbA==
-
-    active_starred_actions: !binary |
-      15vXnCDXlNek16LXldec15XXqiDXlNek16LXmdec15XXqiDXldeU157Xk9eS
-      16nXldeq
-
-    last_fixed_number: !binary |
-      JXtudW1iZXJ9INek16LXldec15XXqiDXkNeX16jXldeg15XXqg==
-
-    rss_feed: !binary |
-      15TXlteg16og16jXodeh
-
-    choose_project: !binary |
-      15HXl9eZ16jXqiDXlNek16jXldeZ15nXp9eYINei15HXldeo15Ug15PXqNeV
-      16nXlCDXlNeW16DXlA==
-
-    projects_and_actions: !binary |
-      16TXqNeV15XXmden15jXmdedINek16LXmdec15nXnSDXldeU16TXoteV15zX
-      ldeqINep15zXlNed
-
-    actions_due_next_week: !binary |
-      16TXoteV15zXldeqINep15nXqSDXnNeR16bXoiDXkdep15HXoteqINeU15nX
-      nteZ150g15TXp9eo15XXkdeZ150=
-
-    plain_text_feed: !binary |
-      15TXlteg16og15jXp9eh15gg16TXqdeV15g=
-
-    all_actions: !binary |
-      15vXnCDXlNek16LXldec15XXqg==
-
-    legend: !binary |
-      157Xp9eo15A6
-
-    select_feed_for_context: !binary |
-      15HXl9eZ16jXqiDXlNeU15bXoNeUINei15HXldeoINeU15TXp9ep16gg15TX
-      oNeq15XXnw==
-
+    actions_due_today: "פעולות לביצוע היום או מוקדם יותר"
+    active_projects_wo_next: "פרוייקטים פעילים ללא פעולות המשך"
+    select_feed_for_project: "בחירת ההזנה עבור הפרוייקט"
+    actions_completed_last_week: "פעולות שהסתיימו בשבעת הימים האחרונים"
+    all_contexts: "כל ההקשרים"
+    project_needed: "דרוש לפחות פרוייקט אחד לפני שניתן לבקש הזנה"
+    notice_incomplete_only: "הערה: כל ההזנות מציגות את כל הפעולות שלא סומנו כמבוצעות אלא אם כן נבחר במפורש אחרת."
+    choose_context: "בחירת ההקשר עבורו דרושה הזנה"
+    all_projects: "כל הפרוייקטים"
+    context_centric_actions: "הזנות עבור פעולות שלא נסתיימו בהקשר נתון"
+    context_needed: "צריך להיות לפחות הקשר אחד לפני שניתן לבקשר הזנה"
+    project_centric: "הזנות עבור פעולות שלא הסתיימו בפרוייקט מסויים"
+    ical_feed: "הזנת iCal"
+    active_starred_actions: "כל הפעולות הפעילות והמדגשות"
+    last_fixed_number: "%{number} פעולות אחרונות"
+    rss_feed: "הזנת רסס"
+    choose_project: "בחירת הפרוייקט עבורו דרושה הזנה"
+    projects_and_actions: "פרוויקטים פעילים והפעולות שלהם"
+    actions_due_next_week: "פעולות שיש לבצע בשבעת הימים הקרובים"
+    plain_text_feed: "הזנת טקסט פשוט"
+    all_actions: "כל הפעולות"
+    legend: "מקרא:"
+    select_feed_for_context: "בחירת ההזנה עבור ההקשר הנתון"
   number:
     currency:
       format:
-        unit: !binary |
-          4oKq
-
+        unit: "₪"
         separator: .
         delimiter: ","
         format: "%u%n "
     human:
       storage_units:
         units:
-          tb: !binary |
-            15jXqNeUINeR15nXmdeY
-
-          kb: !binary |
-            16fXmdec15Ug15HXmdeZ15g=
-
-          gb: !binary |
-            15In15nXkteU15HXmdeZ15g=
-
-          mb: !binary |
-            157XkteUINeR15nXmdeY
-
+          tb: "טרה בייט"
+          kb: "קילו בייט"
+          gb: "ג'יגהבייט"
+          mb: "מגה בייט"
           byte:
-            other: !binary |
-              15HXqteZ150=
-
-            one: !binary |
-              15HXmdeZ15g=
-
+            other: "בתים"
+            one: "בייט"
         format: "%u%n"
     format:
       separator: .
       delimiter: ","
   footer:
-    send_feedback: !binary |
-      16nXnNeZ15fXqiDXntep15XXkSDXotecINeS15nXqNeh15AgJXt2ZXJzaW9u
-      fQ==
-
+    send_feedback: "שליחת משוב על גירסא %{version}"
   notes:
-    delete_item_title: !binary |
-      157Xl9eZ16fXqiDXpNeo15nXmA==
-
-    in_project: !binary |
-      15E6
-
-    show_note_title: !binary |
-      15TXpteS16og16TXqten15nXqg==
-
-    note_location_link: !binary |
-      15HXqteV15o6
-
-    deleted_note: !binary |
-      15TXpNeq16fXmdeqICcle2lkfScg16DXnteX16fXlA==
-
-    delete_confirmation: !binary |
-      15TXkNedINec157Xl9eV16cg15DXqiDXlNek16rXp9eZ16ogICcle2lkfSc/
-
-    delete_note_confirm: !binary |
-      15TXkNedINec157Xl9eV16cg15DXqiDXlNek16rXp9eZ16ogICcle2lkfSc/
-
-    note_link_title: !binary |
-      15TXpteS16og16TXqten15nXqiAle2lkfQ==
-
-    edit_item_title: !binary |
-      16LXqNeZ15vXqiDXpNeo15nXmA==
-
-    no_notes_available: !binary |
-      15DXmdefINeb16jXkteiINek16rXp9eZ15XXqjog16DXmdeq158g15zXlNeV
-      16HXmdejINek16rXp9eZ15XXqiDXnNek1rDWvNeo15XWudeZ1rbXp9aw15jX
-      mdedINeh16TXpteZ16TXmdeZ150g157Xotee15XXkyDXlNek1rDWvNeo15XW
-      udeZ1rbXp9aw15g=
-
-    note_header: !binary |
-      16TXqten15nXqiAle2lkfQ==
-
-    delete_note_title: !binary |
-      157Xl9eZ16fXqiDXlNek16rXp9eZ16ogJyV7aWR9Jw==
-
+    delete_item_title: "מחיקת פריט"
+    in_project: "ב:"
+    show_note_title: "הצגת פתקית"
+    note_location_link: "בתוך:"
+    deleted_note: "הפתקית '%{id}' נמחקה"
+    delete_confirmation: "האם למחוק את הפתקית  '%{id}'?"
+    delete_note_confirm: "האם למחוק את הפתקית  '%{id}'?"
+    note_link_title: "הצגת פתקית %{id}"
+    edit_item_title: "עריכת פריט"
+    no_notes_available: "אין כרגע פתקיות: ניתן להוסיף פתקיות לפְּרוֹיֶקְטים ספציפיים מעמוד הפְּרוֹיֶקְט"
+    note_header: "פתקית %{id}"
+    delete_note_title: "מחיקת הפתקית '%{id}'"
   states:
-    stalled_plural: !binary |
-      16LXpteV16jXmded
-
-    visible_plural: !binary |
-      15LXnNeV15nXmded
-
-    hidden: !binary |
-      157Xldeh16rXqNeZ150=
-
-    review_plural: !binary |
-      157XqteV15DXqNeb15nXnQ==
-
-    completed_plural: !binary |
-      15TXodeq15nXmdee15U=
-
-    current_plural: !binary |
-      157XoteV15PXm9eg15nXnQ==
-
-    visible: !binary |
-      15LXnNeV15k=
-
-    completed: !binary |
-      15TXodeq15nXmded
-
-    hidden_plural: !binary |
-      157Xldeh16rXqNeZ150=
-
-    blocked_plural: !binary |
-      15fXodeV157Xmded
-
-    stalled: !binary |
-      16DXotem16g=
-
-    current: !binary |
-      16LXk9eb16DXmQ==
-
-    active_plural: !binary |
-      16TXoteZ15zXmded
-
-    active: !binary |
-      16TXoteZ15w=
-
-    review: !binary |
-      157XqteV15DXqNea
-
-    blocked: !binary |
-      16DXl9eh150=
-
+    stalled_plural: "עצורים"
+    visible_plural: "גלויים"
+    hidden: "מוסתרים"
+    review_plural: "מתוארכים"
+    completed_plural: "הסתיימו"
+    current_plural: "מעודכנים"
+    visible: "גלוי"
+    completed: "הסתיים"
+    hidden_plural: "מוסתרים"
+    blocked_plural: "חסומים"
+    stalled: "נעצר"
+    current: "עדכני"
+    active_plural: "פעילים"
+    active: "פעיל"
+    review: "מתוארך"
+    blocked: "נחסם"
