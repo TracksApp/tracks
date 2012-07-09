@@ -228,7 +228,6 @@ class ProjectsControllerTest < ActionController::TestCase
     login_as(:admin_user)
     get :index, { :format => "xml" }
     assert_equal 'application/xml', @response.content_type
-    # puts @response.body
   
     assert_xml_select 'projects' do
       assert_select 'project', 3 do
