@@ -78,6 +78,14 @@ Feature: Tagging todos
     Then the tags of "are my tags prefilled" should be "tests"
     
   @javascript
+  Scenario: Selecting a project with default tags when editing a todo will prefill the tags field
+    Given I have a todo "tag me" in the context "@pc"
+    And the default tags for "hacking tracks" are "TagA, TagB"
+    When I go to the "@pc" context
+    And I edit the project of "tag me" to "hacking tracks"
+    Then the tags of "tag me" should be "taga, tagb"
+    
+  @javascript
   Scenario: If there are todos for a tag, when viewing the tag's page, the Tags field for new todos should be defaulted to that tag
     Given I have a todo "migrate old scripts" in context "@pc" with tags "starred"
     When I go to the tag page for "starred"
