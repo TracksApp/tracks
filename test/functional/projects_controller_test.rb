@@ -221,5 +221,38 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_equal projects(:gardenclean), exposed_projects[1]
     assert_equal projects(:moremoney), exposed_projects[2]
   end
+
+  # XML (REST API)
+  
+  def test_xml_content
+    login_as(:admin_user)
+    get :index, { :format => "xml" }
+    assert_equal 'application/xml', @response.content_type
+  
+    assert_xml_select 'projects' do
+      assert_select 'project', 3 do
+        assert_select 'name', /.+/
+        assert_select 'state', 'active'
+      end
+    end
+  end
+  
+  def test_xml_not_accessible_to_anonymous_user_without_token
+    login_as nil
+    get :index, { :format => "xml" }
+    assert_response 401
+  end
+  
+  def test_xml_not_accessible_to_anonymous_user_with_invalid_token
+    login_as nil
+    get :index, { :format => "xml", :token => 'foo'  }
+    assert_response 401
+  end
+  
+  def test_xml_not_accessible_to_anonymous_user_with_valid_token
+    login_as nil
+    get :index, { :format => "xml", :token => users(:admin_user).token }
+    assert_response 401
+  end
   
 end
