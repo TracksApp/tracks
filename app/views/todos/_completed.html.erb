@@ -8,7 +8,7 @@
       <% if collapsible %>
       <a href="#" class="container_toggle" id="toggle_completed"><%= image_tag("collapse.png") %></a>
       <% end %>
-      <%= t('todos.completed_actions') %> <%= suffix %>
+      <%= t('todos.completed_actions') %> <%= raw suffix %>
   </h2>
   <div id="completed_containeritems" class="items toggle_target">
 

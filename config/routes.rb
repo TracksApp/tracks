@@ -71,6 +71,8 @@ Tracksapp::Application.routes.draw do
   match 'data' => "data#index"
   match 'data/csv_notes' => 'data#csv_notes'
   match 'data/yaml_export' => 'data#yaml_export'
+  match 'data/xml_export' => 'data#xml_export'
+  match 'data/csv_actions' => 'data#csv_actions'
   
   match 'integrations' => "integrations#index"
   match 'integrations/rest_api' => "integrations#rest_api", :as => 'rest_api_docs'
@@ -151,6 +153,8 @@ Tracksapp::Application.routes.draw do
     end
   end
   match 'todos/tag/:name' => 'todos#tag', :as => :tag
+  match 'tags.autocomplete' => "todos#tags", :format => 'autocomplete'
+
   match 'todos/done/tag/:name' => "todos#done_tag", :as => :done_tag
   match 'todos/all_done/tag/:name' => "todos#all_done_tag", :as => :all_done_tag
   match 'auto_complete_for_predecessor' => 'todos#auto_complete_for_predecessor'
@@ -230,7 +234,6 @@ Tracksapp::Application.routes.draw do
   #   todos.done_tag 'todos/done/tag/:name', :action => "done_tag"
   #   todos.all_done_tag 'todos/all_done/tag/:name', :action => "all_done_tag"
   #
-  #   todos.tags 'tags.autocomplete', :action => "tags", :format => 'autocomplete'
   #   todos.auto_complete_for_predecessor 'auto_complete_for_predecessor', :action => 'auto_complete_for_predecessor'
   #
   #   todos.calendar 'calendar.ics', :action => "calendar", :format => 'ics'

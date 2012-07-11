@@ -18,8 +18,8 @@ module TodosHelper
   def remote_delete_menu_item(todo)
     # TODO: what is the current way to do mouseover with css?
     return link_to(
-      image_tag("delete_off.png", 
-      :onmouseover => "this.src='#{path_to_image("delete_on.png")}'", 
+      image_tag("delete_off.png",
+      :onmouseover => "this.src='#{path_to_image("delete_on.png")}'",
       :onmouseout => "this.src='#{path_to_image("delete_off.png")}'",
       :alt => t('todos.delete'), :align => "absmiddle")+" "+t('todos.delete'),
       {:controller => 'todos', :action => 'destroy', :id => todo.id},
@@ -64,8 +64,8 @@ module TodosHelper
 
   def image_tag_for_defer(days)
     # TODO: what is the current way to do mouseover with css?
-    image_tag("defer_#{days}_off.png", 
-      :onmouseover => "this.src='#{path_to_image("defer_#{days}.png")}'", 
+    image_tag("defer_#{days}_off.png",
+      :onmouseover => "this.src='#{path_to_image("defer_#{days}.png")}'",
       :onmouseout => "this.src='#{path_to_image("defer_#{days}_off.png")}'",
       :alt => t('todos.defer_x_days', :count => days), :align => "absmiddle")+" "+t('todos.defer_x_days', :count => days)
   end
@@ -143,7 +143,7 @@ module TodosHelper
   end
 
   def tag_span (tag, mobile=false)
-    content_tag(:span, :class => "tag #{tag.name.gsub(' ','-')}") { link_to(tag.name, tag_path(tag.name, :format => mobile ? :m : :html)) }
+    content_tag(:span, :class => "tag #{tag.name.gsub(' ','-')}") { link_to(tag.name, tag_path(tag.name, :format => mobile ? :m : nil)) }
   end
 
   def tag_list(todo=@todo, mobile=false)

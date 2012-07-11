@@ -198,7 +198,11 @@ When /^I add a note "([^"]*)" to the project$/ do |note_body|
   page.should have_css "div.widgets button#submit_note"
   fill_in "note[body]", :with => note_body
   click_button "Add note"
-  page.should_not have_css "div.widgets button#submit_note"
+  
+  submit_button = "div.widgets button#submit_note"
+  elem = find(submit_button)
+  elem.should_not be_nil  # form is hidden
+  elem.should_not be_visible
 end
 
 When /^I click on the first note icon$/ do
