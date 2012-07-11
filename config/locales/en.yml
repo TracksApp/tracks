@@ -359,7 +359,7 @@ en:
     action_selection_title: TRACKS::Action selection
   todos:
     show_from: Show from
-    error_starring_recurring: Could not toggle the star of recurring todo \'%{description}\'
+    error_starring_recurring: "Could not toggle the star of recurring todo \'%{description}\'"
     recurring_action_deleted: Action was deleted. Because this action is recurring, a new action was added
     completed_actions: Completed actions
     completed_recurring: Completed recurring todos
@@ -371,7 +371,7 @@ en:
     defer_date_after_due_date: Defer date is after due date. Please edit and adjust due date before deferring.
     unable_to_add_dependency: Unable to add dependency
     done: Done?
-    star_action_with_description: star the action '%{description}'
+    star_action_with_description: "star the action '%{description}'"
     tagged_with: tagged with &lsquo;%{tag_name}&rsquo;
     completed: Completed
     no_deferred_actions_with: No deferred actions with the tag '%{tag_name}'
@@ -501,6 +501,7 @@ en:
     show_tomorrow: Show Tomorrow
     tagged_page_title: TRACKS::Tagged with '%{tag_name}'
     action_deferred: The action '%{description}' was deferred
+    mark_complete: Mark complete
     recurrence:
       ends_on_number_times: Ends after %{number} times
       ends_on_date: Ends on %{date}

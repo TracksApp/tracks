@@ -347,6 +347,7 @@ nl:
     totals_hidden_project_count: "%{count} zijn verborgen"
     time_of_day: Tijd van de dag (alle acties)
   todos:
+    mark_complete: Markeer gereed
     recurring_action_deleted: Actie werd verwijderd. Omdat deze actie herhalend is. werd een nieuwe actie toegevoegd
     show_from: Toon vanaf
     error_starring_recurring: Kon niet de ster van deze terugkerende actie niet omzetten \'%{description}\'

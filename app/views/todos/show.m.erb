@@ -1,39 +1,39 @@
-<h2>Description</h2>
+<h2><%= t('common.description') %></h2>
 <%= @todo.description %><br/>
 
-<h2>Actions</h2>
+<h2><Actions><%= t('common.actions') %></h2>
 
 <form method="get" action="<%= edit_todo_path(@todo, :format => :m)%>">
-<button>Edit this action</button>
+<button><%=t('todos.edit_action')%></button>
 <input type="hidden" name="_method" value="put" />
 </form>
 
 <form method="post" action="<%=toggle_star_todo_path(@todo, :format=>:m)%>">
-<button>Toggle Star</button>
+<button><%=t('todos.star_action')%></button>
 <input type="hidden" name="_method" value="put" />
 </form>
 
 <form method="post" action="<%=toggle_check_todo_path(@todo, :format=>:m)%>">
-<button>Mark complete</button>
+<button><%= t('todos.mark_complete')%></button>
 <input type="hidden" name="_method" value="put" />
 </form>
 
 <form method="post" action="<%=defer_todo_path(@todo, :format=>:m, :days => 1)%>">
-<button>Defer 1 day</button>
+<button><%=t('todos.defer_x_days', :count => 1)%></button>
 <input type="hidden" name="_method" value="put" />
 </form>
 
 <form method="post" action="<%=defer_todo_path(@todo, :format=>:m, :days => 2)%>">
-<button>Defer 2 days</button>
+<button><%=t('todos.defer_x_days', :count => 2)%></button>
 <input type="hidden" name="_method" value="put" />
 </form>
 
 <form method="post" action="<%=defer_todo_path(@todo, :format=>:m, :days => 3)%>">
-<button>Defer 3 days</button>
+<button><%=t('todos.defer_x_days', :count => 3)%></button>
 <input type="hidden" name="_method" value="put" />
 </form>
 
 <form method="post" action="<%=defer_todo_path(@todo, :format=>:m, :days => 7)%>">
-<button>Defer 7 days</button>
+<button><%=t('todos.defer_x_days', :count => 7)%></button>
 <input type="hidden" name="_method" value="put" />
 </form>
