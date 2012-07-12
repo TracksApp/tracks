@@ -2,27 +2,12 @@
 # application.
 module ApplicationHelper
   
-  # Replicates the link_to method but also checks request.request_uri to find
-  # current page. If that matches the url, the link is marked id = "current"
-  #
   def navigation_link(name, options = {}, html_options = nil, *parameters_for_method_reference)
     link_to name, options, html_options
-    # TODO: check if this needs to be converted
-    # if html_options
-    #   html_options = html_options.stringify_keys
-    #   convert_options_to_javascript!(html_options)
-    #   tag_options = tag_options(html_options)
-    # else
-    #   tag_options = nil
-    # end
-    # url = options.is_a?(String) ? options : self.url_for(options, *parameters_for_method_reference)
-    # id_tag = (request.request_uri == url) ? " id=\"current\"" : ""
-    #
-    # "<a href=\"#{url}\"#{tag_options}#{id_tag}>#{name || url}</a>"
   end
   
   def days_from_today(date)
-    Integer (date.in_time_zone.to_date - current_user.time.to_date)
+    (date.in_time_zone.to_date - current_user.time.to_date).to_i
   end
   
   # Check due date in comparison to today's date Flag up date appropriately with
@@ -123,8 +108,7 @@ module ApplicationHelper
   end
 
   def link_to_edit_note (note, descriptor = sanitize(note.id.to_s))
-    link_to(descriptor,
-      url_for({:controller => 'notes', :action => 'edit', :id => note.id}),
+    link_to(descriptor, edit_notes_path(note),
       {:id => "link_edit_#{dom_id(note)}", :class => "note_edit_settings"})
   end
   
@@ -133,30 +117,30 @@ module ApplicationHelper
   end
   
   def item_link_to_context(item)
-    descriptor = "[C]"
-    descriptor = "[#{item.context.name}]" if prefs.verbose_action_descriptors
-    link_to_context( item.context, descriptor )
+    link_to_context( item.context, prefs.verbose_action_descriptors ? "[#{item.context.name}]" : "[C]" )
   end
   
   def item_link_to_project(item)
-    descriptor = "[P]"
-    descriptor = "[#{item.project.name}]" if prefs.verbose_action_descriptors
-    link_to_project( item.project, descriptor )
+    link_to_project( item.project, prefs.verbose_action_descriptors ? "[#{item.project.name}]" : "[P]" )
   end
   
   def render_flash
     render :partial => 'shared/flash', :object => flash
   end
 
+  def time_span_text(date, i18n_text)
+    return (date ? "#{i18n_text} #{format_date(date)}" : "").html_safe
+  end
+  
   def recurrence_time_span(rt)
     case rt.ends_on
     when "no_end_date"
-      return rt.start_from.nil? ? "" : I18n.t("todos.recurrence.pattern.from") + " " + format_date(rt.start_from)
+      return time_span_text(rt.start_from, I18n.t("todos.recurrence.pattern.from"))
     when "ends_on_number_of_times"
       return I18n.t("todos.recurrence.pattern.times", :number => rt.number_of_occurences)
     when "ends_on_end_date"
-      starts = rt.start_from.nil? ? "" : I18n.t("todos.recurrence.pattern.from") + " " + format_date(rt.start_from)
-      ends = rt.end_date.nil? ? "" : " " + I18n.t("todos.recurrence.pattern.until") + " " + format_date(rt.end_date)
+      starts = time_span_text(rt.start_from, I18n.t("todos.recurrence.pattern.from"))
+      ends = time_span_text(rt.end_date, I18n.t("todos.recurrence.pattern.until"))
       return starts+ends
     else
       raise Exception.new, "unknown recurrence time span selection (#{rt.ends_on})"
@@ -166,17 +150,15 @@ module ApplicationHelper
   def recurrence_pattern_as_text(recurring_todo)
     rt = recurring_todo.recurring_target_as_text
     rp = recurring_todo.recurrence_pattern
-    # only add space if recurrence_pattern has content
-    rp = " " + rp if !rp.nil?
+    rp = " " + rp unless rp.nil?
     rts = recurrence_time_span(recurring_todo)
     # only add space if recurrence_time_span has content
-    rts = " " + rts if !(rts == "")
+    rts = " " + rts unless rts == ""
     return rt+rp+rts
   end
 
   def date_format_for_date_picker()
-    standard_format = current_user.prefs.date_format
-    translations = [
+    [
       ['%m', 'mm'],
       ['%b', 'M'],
       ['%B', 'MM'],
@@ -185,25 +167,24 @@ module ApplicationHelper
       ['%A', 'DD'],
       ['%y', 'y'],
       ['%Y', 'yy']
-    ]
-    translations.inject(standard_format) do |str, translation|
-      str.gsub(*translation)
-    end
+    ].inject(current_user.prefs.date_format) { |str, translation| str.gsub(*translation) }
   end
 
   def sidebar_html_for_titled_list (list, title)
     return content_tag(:h3, title+" (#{list.size})")  + content_tag(:ul, sidebar_html_for_list(list))
   end
 
+  def link_to_sidebar_item(item)
+    item.is_a?(Project) ? link_to_project( item ) : link_to_context( item )
+  end
+  
+  def sidebar_html_for_item(item)
+    content_tag(:li, link_to_sidebar_item(item) + " (" + count_undone_todos_phrase(item)+")")
+  end
+  
   def sidebar_html_for_list(list)
-    if list.empty?
-      return content_tag(:li, t('sidebar.list_empty')).html_safe
-    else
-      return list.inject("") do |html, item|
-        link = item.is_a?(Project) ? link_to_project( item ) : link_to_context(item)
-        html << content_tag(:li, link + " (" + count_undone_todos_phrase(item)+")")
-      end.html_safe
-    end
+    return content_tag(:li, t('sidebar.list_empty')).html_safe if list.empty?
+    return list.inject("") { |html, item| html << sidebar_html_for_item(item) }.html_safe
   end
 
   def generate_i18n_strings
@@ -230,7 +211,7 @@ module ApplicationHelper
   def javascript_tag_for_i18n_datepicker
     locale = I18n.locale
     # do not include en as locale since this the available by default
-    if locale and locale != :en
+    if locale && locale != :en
       javascript_include_tag("i18n/jquery.ui.datepicker-#{locale}.js")
     end
   end

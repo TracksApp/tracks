@@ -10,20 +10,17 @@ class IntegrationsController < ApplicationController
   def rest_api
     @page_title = 'TRACKS::REST API Documentation'
   end
-  
+    
   def get_quicksilver_applescript
-    context = current_user.contexts.find params[:context_id]
-    render :partial => 'quicksilver_applescript', :locals => { :context => context }
+    get_applescript('quicksilver_applescript')
   end
 
   def get_applescript1
-    context = current_user.contexts.find params[:context_id]
-    render :partial => 'applescript1', :locals => { :context => context }
+    get_applescript('applescript1')
   end
 
   def get_applescript2
-    context = current_user.contexts.find params[:context_id]
-    render :partial => 'applescript2', :locals => { :context => context }
+    get_applescript('applescript2')
   end
 
   def search_plugin
@@ -46,38 +43,18 @@ class IntegrationsController < ApplicationController
       return false
     end
     
-    # parse message
-    message = Mail.new(params[:message])
-        
-    # find user
-    user = User.where("preferences.sms_email = ?", message.from).includes(:preference).first
-    if user.nil?
-      render :text => "No user found", :status => 404
-      return false
-    end
-
-    # load user settings
-    context = user.prefs.sms_context
-
-    # prepare body
-    if message.body.multipart?
-      body = message.body.preamble
+    if MessageGateway::receive(Mail.new(params[:message]))
+      render :text => 'success', :status => 200
     else
-      body = message.body.to_s
+      render :text => "No user found or other error", :status => 404
     end
-    
-    # parse mail
-    if message.subject.to_s.empty?
-      description = body
-      notes = nil
-    else
-      description = message.subject.to_s
-      notes = body
-    end
-    
-    # create todo
-    todo = Todo.from_rich_message(user, context.id, description, notes)
-    todo.save!
-    render :text => 'success', :status => 200
   end
+  
+  private
+  
+  def get_applescript(partial_name)
+    context = current_user.contexts.find params[:context_id]
+    render :partial => partial_name, :locals => { :context => context }
+  end
+  
 end

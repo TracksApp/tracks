@@ -4,7 +4,7 @@ class MessageGateway < ActionMailer::Base
   
   def receive(email)
     user = get_user_from_email_address(email)
-    return if user.nil?
+    return false if user.nil?
     
     context = user.prefs.sms_context
     description = nil
