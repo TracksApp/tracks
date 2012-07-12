@@ -108,7 +108,7 @@ module ApplicationHelper
   end
 
   def link_to_edit_note (note, descriptor = sanitize(note.id.to_s))
-    link_to(descriptor, edit_notes_path(note),
+    link_to(descriptor, edit_note_path(note),
       {:id => "link_edit_#{dom_id(note)}", :class => "note_edit_settings"})
   end
   
