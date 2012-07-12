@@ -18,11 +18,11 @@ class PreferencesControllerTest < ActionController::TestCase
 
     get :render_date_format
     assert_response :success
-    assert_equal I18n.l(Time.zone.now, :format => "%Y-%m-%d"), @response.body
+    assert_equal I18n.l(Date.today, :format => "%Y-%m-%d"), @response.body
 
     get(:render_date_format, {:date_format => "%A %Y"})
     assert_response :success
-    assert_equal I18n.l(Time.zone.now, :format => "%A %Y"), @response.body
+    assert_equal I18n.l(Date.today, :format => "%A %Y"), @response.body
   end
 
   test "index page requires login" do
