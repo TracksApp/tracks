@@ -1,17 +1,16 @@
 class RecurringTodo < ActiveRecord::Base
+  attr_protected :user
 
   belongs_to :context
   belongs_to :project
   belongs_to :user
 
   has_many :todos
-
-  include IsTaggable
   
   scope :active, :conditions => { :state => 'active'}
   scope :completed, :conditions => { :state => 'completed'}
 
-  attr_protected :user
+  include IsTaggable
 
   include AASM
   aasm_column :state
@@ -50,31 +49,29 @@ class RecurringTodo < ActiveRecord::Base
   end
 
   def validate_daily
-    if (!only_work_days) && (daily_every_x_days.nil? || daily_every_x_days.blank?)
+    if (!only_work_days) && daily_every_x_days.blank?
       errors[:base] << "Every other nth day may not be empty for recurrence setting"
     end
   end
 
   def validate_weekly
-    if weekly_every_x_week.nil? || weekly_every_x_week.blank?
+    if weekly_every_x_week.blank?
       errors[:base] << "Every other nth week may not be empty for recurrence setting"
     end
     something_set = false
-    %w{sunday monday tuesday wednesday thursday friday saturday}.each do |day|
-      something_set ||= self.send("on_#{day}")
-    end
-    errors[:base] << "You must specify at least one day on which the todo recurs" if !something_set
+    %w{sunday monday tuesday wednesday thursday friday saturday}.each { |day| something_set ||= self.send("on_#{day}") }
+    errors[:base] << "You must specify at least one day on which the todo recurs" unless something_set
   end
 
   def validate_monthly
     case recurrence_selector
     when 0 # 'monthly_every_x_day'
-      errors[:base] << "The day of the month may not be empty for recurrence setting" if monthly_every_x_day.nil? || monthly_every_x_day.blank?
-      errors[:base] << "Every other nth month may not be empty for recurrence setting" if monthly_every_x_month.nil? || monthly_every_x_month.blank?
+      errors[:base] << "The day of the month may not be empty for recurrence setting" if monthly_every_x_day.blank?
+      errors[:base] << "Every other nth month may not be empty for recurrence setting" if monthly_every_x_month.blank?
     when 1 # 'monthly_every_xth_day'
-      errors[:base] <<"Every other nth month may not be empty for recurrence setting" if monthly_every_x_month2.nil? || monthly_every_x_month2.blank?
-      errors[:base] <<"The nth day of the month may not be empty for recurrence setting" if monthly_every_xth_day.nil? || monthly_every_xth_day.blank?
-      errors[:base] <<"The day of the month may not be empty for recurrence setting" if monthly_day_of_week.nil? || monthly_day_of_week.blank?
+      errors[:base] <<"Every other nth month may not be empty for recurrence setting" if monthly_every_x_month2.blank?
+      errors[:base] <<"The nth day of the month may not be empty for recurrence setting" if monthly_every_xth_day.blank?
+      errors[:base] <<"The day of the month may not be empty for recurrence setting" if monthly_day_of_week.blank?
     else
       raise Exception.new, "unexpected value of recurrence selector '#{self.recurrence_selector}'"
     end
@@ -83,24 +80,24 @@ class RecurringTodo < ActiveRecord::Base
   def validate_yearly
     case recurrence_selector
     when 0 # 'yearly_every_x_day'
-      errors[:base] << "The month of the year may not be empty for recurrence setting" if yearly_month_of_year.nil? || yearly_month_of_year.blank?
-      errors[:base] << "The day of the month may not be empty for recurrence setting" if yearly_every_x_day.nil? || yearly_every_x_day.blank?
+      errors[:base] << "The month of the year may not be empty for recurrence setting" if yearly_month_of_year.blank?
+      errors[:base] << "The day of the month may not be empty for recurrence setting" if yearly_every_x_day.blank?
     when 1 # 'yearly_every_xth_day'
-      errors[:base] << "The month of the year may not be empty for recurrence setting" if yearly_month_of_year2.nil? || yearly_month_of_year2.blank?
-      errors[:base] << "The nth day of the month may not be empty for recurrence setting" if yearly_every_xth_day.nil? || yearly_every_xth_day.blank?
-      errors[:base] << "The day of the week may not be empty for recurrence setting" if yearly_day_of_week.nil? || yearly_day_of_week.blank?
+      errors[:base] << "The month of the year may not be empty for recurrence setting" if yearly_month_of_year2.blank?
+      errors[:base] << "The nth day of the month may not be empty for recurrence setting" if yearly_every_xth_day.blank?
+      errors[:base] << "The day of the week may not be empty for recurrence setting" if yearly_day_of_week.blank?
     else
       raise Exception.new, "unexpected value of recurrence selector '#{self.recurrence_selector}'"
     end
   end
 
   def starts_and_ends_on_validations
-    errors[:base] << "The start date needs to be filled in" if start_from.nil? || start_from.blank?
+    errors[:base] << "The start date needs to be filled in" if start_from.blank?
     case self.ends_on
     when 'ends_on_number_of_times'
-      errors[:base] << "The number of recurrences needs to be filled in for 'Ends on'" if number_of_occurences.nil? || number_of_occurences.blank?
+      errors[:base] << "The number of recurrences needs to be filled in for 'Ends on'" if number_of_occurences.blank?
     when "ends_on_end_date"
-      errors[:base] << "The end date needs to be filled in for 'Ends on'" if end_date.nil? || end_date.blank?
+      errors[:base] << "The end date needs to be filled in for 'Ends on'" if end_date.blank?
     else
       errors[:base] << "The end of the recurrence is not selected" unless ends_on == "no_end_date"
     end
@@ -114,7 +111,7 @@ class RecurringTodo < ActiveRecord::Base
     when 'due_date'
       errors[:base] << "Please select when to show the action" if show_always.nil?
       unless show_always
-        errors[:base] << "Please fill in the number of days to show the todo before the due date" if show_from_delta.nil? || show_from_delta.blank?
+        errors[:base] << "Please fill in the number of days to show the todo before the due date" if show_from_delta.blank?
       end
     else
       raise Exception.new, "unexpected value of recurrence target selector '#{self.recurrence_target}'"
@@ -157,9 +154,7 @@ class RecurringTodo < ActiveRecord::Base
   end
 
   def daily_every_x_days=(x)
-    if recurring_period=='daily'
-      self.every_other1 = x
-    end
+    self.every_other1 = x if recurring_period=='daily'
   end
 
   def daily_every_x_days
@@ -177,9 +172,7 @@ class RecurringTodo < ActiveRecord::Base
   end
 
   def switch_week_day (day, position)
-    if self.every_day.nil?
-      self.every_day='       '
-    end
+    self.every_day = '       ' if self.every_day.nil?
     self.every_day = self.every_day[0,position] + day + self.every_day[position+1,self.every_day.length]
   end
 
@@ -250,9 +243,7 @@ class RecurringTodo < ActiveRecord::Base
   # MONTHLY
 
   def monthly_selector=(selector)
-    if recurring_period=='monthly'
-      self.recurrence_selector= (selector=='monthly_every_x_day')? 0 : 1
-    end
+    self.recurrence_selector = ( (selector=='monthly_every_x_day') ? 0 : 1) if recurring_period=='monthly'
   end
 
   def monthly_every_x_day=(x)
@@ -280,11 +271,7 @@ class RecurringTodo < ActiveRecord::Base
   def monthly_every_x_month
     # in case monthly pattern is every day x, return every_other2 otherwise
     # return a default value
-    if self.recurrence_selector == 0
-      return self.every_other2
-    else
-      return 1
-    end
+    return self.recurrence_selector == 0 ? self.every_other2 : 1
   end
 
   def monthly_every_x_month2=(x)
@@ -294,11 +281,7 @@ class RecurringTodo < ActiveRecord::Base
   def monthly_every_x_month2
     # in case monthly pattern is every xth day, return every_other2 otherwise
     # return a default value
-    if self.recurrence_selector == 1
-      return self.every_other2
-    else
-      return 1
-    end
+    return self.recurrence_selector == 1 ? self.every_other2 : 1
   end
 
   def monthly_every_xth_day=(x)
@@ -321,9 +304,7 @@ class RecurringTodo < ActiveRecord::Base
   # YEARLY
 
   def yearly_selector=(selector)
-    if recurring_period=='yearly'
-      self.recurrence_selector = (selector=='yearly_every_x_day') ? 0 : 1
-    end
+    self.recurrence_selector = ( (selector=='yearly_every_x_day') ? 0 : 1) if recurring_period=='yearly'
   end
 
   def yearly_month_of_year=(moy)
@@ -333,11 +314,7 @@ class RecurringTodo < ActiveRecord::Base
   def yearly_month_of_year
     # if recurrence pattern is every x day in a month, return month otherwise
     # return a default value
-    if self.recurrence_selector == 0
-      return self.every_other2
-    else
-      return Time.zone.now.month
-    end
+    return self.recurrence_selector == 0 ? self.every_other2 : Time.zone.now.month
   end
 
   def yearly_month_of_year2=(moy)
@@ -347,11 +324,7 @@ class RecurringTodo < ActiveRecord::Base
   def yearly_month_of_year2
     # if recurrence pattern is every xth day in a month, return month otherwise
     # return a default value
-    if self.recurrence_selector == 1
-      return self.every_other2
-    else
-      return Time.zone.now.month
-    end
+    return self.recurrence_selector == 1 ? self.every_other2 : Time.zone.now.month
   end
 
   def yearly_every_x_day=(x)
@@ -403,51 +376,60 @@ class RecurringTodo < ActiveRecord::Base
     self.show_always=value
   end
 
+  def daily_recurrence_pattern
+    return I18n.t("todos.recurrence.pattern.on_work_days") if only_work_days
+    if every_other1 > 1
+      return I18n.t("todos.recurrence.pattern.every_n", :n => every_other1) + " " + I18n.t("common.days_midsentence.other")
+    else
+      return I18n.t("todos.recurrence.pattern.every_day")
+    end
+  end
+  
+  def weekly_recurrence_pattern
+    if every_other1 > 1
+      return I18n.t("todos.recurrence.pattern.every_n", :n => every_other1) + " " + I18n.t("common.weeks")
+    else
+      return I18n.t('todos.recurrence.pattern.weekly')
+    end
+  end
+  
+  def monthly_recurrence_pattern
+    return "invalid repeat pattern" if every_other2.nil?
+    if self.recurrence_selector == 0
+      on_day = " #{I18n.t('todos.recurrence.pattern.on_day_n', :n => self.every_other1)}"
+      if self.every_other2>1
+        return I18n.t("todos.recurrence.pattern.every_n", :n => self.every_other2) + " " + I18n.t('common.months') + on_day
+      else
+        return I18n.t("todos.recurrence.pattern.every_month") + on_day
+      end
+    else
+      if self.every_other2>1
+        n_months = "#{self.every_other2} #{I18n.t('common.months')}"
+      else
+        n_months = I18n.t('common.month')
+      end
+      return I18n.t('todos.recurrence.pattern.every_xth_day_of_every_n_months',
+        :x => self.xth, :day => self.day_of_week, :n_months => n_months)
+    end
+  end
+  
+  def yearly_recurrence_pattern
+    if self.recurrence_selector == 0
+      return I18n.t("todos.recurrence.pattern.every_year_on",
+        :date => I18n.l(DateTime.new(Time.zone.now.year, self.every_other2, self.every_other1), :format => :month_day))
+    else
+      return I18n.t("todos.recurrence.pattern.every_year_on",
+        :date => I18n.t("todos.recurrence.pattern.the_xth_day_of_month", :x => self.xth, :day => self.day_of_week, :month => self.month_of_year))
+    end
+  end
+  
   def recurrence_pattern
     return "invalid repeat pattern" if every_other1.nil?
     case recurring_period
-    when 'daily'
-      if only_work_days
-        return I18n.t("todos.recurrence.pattern.on_work_days")
-      else
-        if every_other1 > 1
-          return I18n.t("todos.recurrence.pattern.every_n", :n => every_other1) + " " + I18n.t("common.days_midsentence.other")
-        else
-          return I18n.t("todos.recurrence.pattern.every_day")
-        end
-      end
-    when 'weekly'
-      if every_other1 > 1
-        return I18n.t("todos.recurrence.pattern.every_n", :n => every_other1) + " " + I18n.t("common.weeks")
-      else
-        return I18n.t('todos.recurrence.pattern.weekly')
-      end
-    when 'monthly'
-      return "invalid repeat pattern" if every_other2.nil?
-      if self.recurrence_selector == 0
-        on_day = " " + I18n.t('todos.recurrence.pattern.on_day_n', :n => self.every_other1)
-        if self.every_other2>1
-          return I18n.t("todos.recurrence.pattern.every_n", :n => self.every_other2) + " " + I18n.t('common.months') + on_day
-        else
-          return I18n.t("todos.recurrence.pattern.every_month") + on_day
-        end
-      else
-        if self.every_other2>1
-          n_months = "#{self.every_other2} #{I18n.t('common.months')}"
-        else
-          n_months = I18n.t('common.month')
-        end
-        return I18n.t('todos.recurrence.pattern.every_xth_day_of_every_n_months',
-          :x => self.xth, :day => self.day_of_week, :n_months => n_months)
-      end
-    when 'yearly'
-      if self.recurrence_selector == 0
-        return I18n.t("todos.recurrence.pattern.every_year_on",
-          :date => I18n.l(DateTime.new(Time.zone.now.year, self.every_other2, self.every_other1), :format => :month_day))
-      else
-        return I18n.t("todos.recurrence.pattern.every_year_on",
-          :date => I18n.t("todos.recurrence.pattern.the_xth_day_of_month", :x => self.xth, :day => self.day_of_week, :month => self.month_of_year))
-      end
+    when 'daily'   then daily_recurrence_pattern
+    when 'weekly'  then weekly_recurrence_pattern
+    when 'monthly' then monthly_recurrence_pattern
+    when 'yearly'  then yearly_recurrence_pattern
     else
       return 'unknown recurrence pattern: period unknown'
     end
@@ -461,7 +443,7 @@ class RecurringTodo < ActiveRecord::Base
   end
 
   def day_of_week
-    return (self.every_count.nil? ? '??' : I18n.t('todos.recurrence.pattern.day_names')[self.every_count])
+    return self.every_count.nil? ? '??' : I18n.t('todos.recurrence.pattern.day_names')[self.every_count]
   end
 
   def month_of_year
@@ -470,10 +452,6 @@ class RecurringTodo < ActiveRecord::Base
 
   def starred?
     return has_tag?(Todo::STARRED_TAG_NAME)
-  end
-
-  def has_tag?(tag_name)
-    return self.tags.any? {|tag| tag.name == tag_name}
   end
 
   def get_due_date(previous)
@@ -492,14 +470,10 @@ class RecurringTodo < ActiveRecord::Base
     case self.target
     when 'due_date'
       # so set show from date relative to due date unless show_always is true or show_from_delta is nil
-      if self.show_always? or self.show_from_delta.nil?
-        nil
-      else
-        get_due_date(previous) - self.show_from_delta.days
-      end
+      (self.show_always? || self.show_from_delta.nil?) ? nil : get_due_date(previous) - self.show_from_delta.days
     when 'show_from_date'
       # Leave due date empty
-      return get_next_date(previous)
+      get_next_date(previous)
     else
       raise Exception.new, "unexpected value of recurrence target '#{self.target}'"
     end
@@ -507,14 +481,10 @@ class RecurringTodo < ActiveRecord::Base
 
   def get_next_date(previous)
     case self.recurring_period
-    when 'daily'
-      return get_daily_date(previous)
-    when 'weekly'
-      return get_weekly_date(previous)
-    when 'monthly'
-      return get_monthly_date(previous)
-    when 'yearly'
-      return get_yearly_date(previous)
+    when 'daily'   then get_daily_date(previous)
+    when 'weekly'  then get_weekly_date(previous)
+    when 'monthly' then get_monthly_date(previous)
+    when 'yearly'  then get_yearly_date(previous)
     else
       raise Exception.new, "unknown recurrence pattern: '#{self.recurring_period}'"
     end
@@ -689,21 +659,16 @@ class RecurringTodo < ActiveRecord::Base
   end
 
   def has_next_todo(previous)
-    unless self.number_of_occurences.nil?
-      return self.occurences_count < self.number_of_occurences
+    return self.occurences_count < self.number_of_occurences unless self.number_of_occurences.nil?
+    return true if self.end_date.nil? || self.ends_on == 'no_end_date'
+    
+    case self.target
+    when 'due_date'
+      return get_due_date(previous) <= self.end_date
+    when 'show_from_date'
+      return get_show_from_date(previous) <= self.end_date
     else
-      if self.end_date.nil? || self.ends_on == 'no_end_date'
-        return true
-      else
-        case self.target
-        when 'due_date'
-          return get_due_date(previous) <= self.end_date
-        when 'show_from_date'
-          return get_show_from_date(previous) <= self.end_date
-        else
-          raise Exception.new, "unexpected value of recurrence target '#{self.target}'"
-        end
-      end
+      raise Exception.new, "unexpected value of recurrence target '#{self.target}'"
     end
   end
 
@@ -713,12 +678,11 @@ class RecurringTodo < ActiveRecord::Base
 
   def toggle_star!
     if starred?
-      _remove_tags Todo::STARRED_TAG_NAME
-      tags.reload
+      _remove_tags(Todo::STARRED_TAG_NAME)
     else
       _add_tags(Todo::STARRED_TAG_NAME)
-      tags.reload
     end
+    tags.reload
     starred?
   end
 

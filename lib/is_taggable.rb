@@ -39,6 +39,10 @@ module IsTaggable
         self
       end
 
+      def has_tag?(tag_name)
+        return tags.any? {|tag| tag.name == tag_name}
+      end
+      
       # Add tags to <tt>self</tt>. Accepts a string of tagnames, an array of tagnames, or an array of Tags.
       #
       # We need to avoid name conflicts with the built-in ActiveRecord association methods, thus the underscores.

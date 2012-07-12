@@ -204,10 +204,6 @@ class Todo < ActiveRecord::Base
     return !pending_successors.empty?
   end
 
-  def has_tag?(tag_name)
-    return self.tags.any? {|tag| tag.name == tag_name}
-  end
-
   def hidden?
     return self.state == 'project_hidden' || ( self.context.hidden? && (self.state == 'active' || self.state == 'deferred'))
   end
