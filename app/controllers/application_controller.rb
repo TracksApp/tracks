@@ -127,8 +127,8 @@ class ApplicationController < ActionController::Base
 
   # Here's the concept behind this "mobile content negotiation" hack: In
   # addition to the main, AJAXy Web UI, Tracks has a lightweight low-feature
-  # 'mobile' version designed to be suitablef or use from a phone or PDA. It
-  # makes some sense that tne pages of that mobile version are simply alternate
+  # 'mobile' version designed to be suitable for use from a phone or PDA. It
+  # makes some sense that the pages of that mobile version are simply alternate
   # representations of the same Todo resources. The implementation goal was to
   # treat mobile as another format and be able to use respond_to to render both
   # versions. Unfortunately, I ran into a lot of trouble simply registering a
