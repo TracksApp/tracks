@@ -343,7 +343,7 @@ class TodosController < ApplicationController
 
   def remove_predecessor
     @source_view = params['_source_view'] || 'todo'
-    @todo = current_user.todos.find_by_id(params['id']).includes(Todo::DEFAULT_INCLUDES)
+    @todo = current_user.todos.includes(Todo::DEFAULT_INCLUDES).find_by_id(params['id'])
     @predecessor = current_user.todos.find_by_id(params['predecessor'])
     @predecessors = @predecessor.predecessors
     @successor = @todo
@@ -449,8 +449,8 @@ class TodosController < ApplicationController
   end
 
   def change_context
-    # TODO: is this method used?
-    @todo = Todo.find_by_id(params[:todo][:id])
+    # change context if you drag a todo to another context
+    @todo = Todo.find_by_id(params[:id])
     @original_item_context_id = @todo.context_id
     @context = Context.find_by_id(params[:todo][:context_id])
     @todo.context = @context
@@ -1225,7 +1225,7 @@ class TodosController < ApplicationController
   end
 
   def update_todo_state_if_project_changed
-    if ( @project_changed ) then
+    if @project_changed
       @todo.update_state_from_project
       @remaining_undone_in_project = current_user.projects.find_by_id(@original_item_project_id).todos.active.count if source_view_is :project
     end

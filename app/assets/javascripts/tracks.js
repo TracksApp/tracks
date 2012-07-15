@@ -518,8 +518,8 @@ var TodoItems = {
         ui.draggable.remove();
         $('.drop_target').hide();
 
-        ajax_options = default_ajax_options_for_scripts('POST', relative_to_root('todos/change_context'), target);
-        ajax_options.data += "&todo[id]="+dragged_todo + "&todo[context_id]="+context_id
+        ajax_options = default_ajax_options_for_scripts('POST', relative_to_root('todos/'+dragged_todo + '/change_context'), target);
+        ajax_options.data += "&todo[context_id]="+context_id
         $.ajax(ajax_options);
     },
     setup_drag_and_drop: function() {

@@ -209,14 +209,14 @@ class Todo < ActiveRecord::Base
   end
 
   def update_state_from_project
-    if self.state == 'project_hidden' and !self.project.hidden?
+    if self.state == 'project_hidden' && !self.project.hidden?
       if self.uncompleted_predecessors.empty?
-        self.state = 'active'
+        self.activate!
       else
-        self.state = 'pending'
+        self.block!
       end
-    elsif self.state == 'active' and self.project.hidden?
-      self.state = 'project_hidden'
+    elsif self.state == 'active' && self.project.hidden?
+      self.hide!
     end
     self.save!
   end
