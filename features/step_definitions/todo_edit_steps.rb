@@ -70,6 +70,7 @@ When /I change the (.*) field of "([^\"]*)" to "([^\"]*)"$/ do |field_name, todo
     fill_in "#{field_name}", :with => new_value
   end
   submit_edit_todo_form(todo)
+  wait_for_ajax
 end
 
 When /^I edit the context of "([^"]*)" to "([^"]*)"$/ do |todo_name, context_new_name|
