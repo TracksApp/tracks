@@ -20,7 +20,7 @@
 
   <%= render :layout => 'show_results_collection', :object => @found_tags, :locals => { :collection_name => "found-tags", :collection_title => t('search.tags_matching_query')} do %>
     <span class="tags"><%  @found_tags.each do |tag| -%>
-        <span class="tag"><%= link_to tag.name, {:controller => "todos", :action => "tag", :id => tag.name} -%></span>
+        <span class="tag"><%= link_to tag.name, tag_path(tag.name) -%></span>
       <% end %>
     </span><br/><br/>
   <% end -%>
