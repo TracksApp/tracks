@@ -28,4 +28,4 @@
 //= require niftycube
 //= require superfish
 //= require supersubs
-//= require swfobject
+//= require swf_fu
