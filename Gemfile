@@ -24,19 +24,19 @@ gem "rails_autolink"
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'sass-rails',   '~> 3.2.3'
-  gem 'coffee-rails', '~> 3.2.1'
+  gem 'sass-rails'
+  gem 'coffee-rails'
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   gem 'therubyracer', :platform => :ruby
 
-  gem 'uglifier', '>= 1.0.3'
+  gem 'uglifier'
 end
 
 gem 'jquery-rails'
 
 # To use ActiveModel has_secure_password
-gem 'bcrypt-ruby', '~> 3.0.0'
+gem 'bcrypt-ruby'
 
 # To use Jbuilder templates for JSON
 # gem 'jbuilder'
@@ -50,22 +50,16 @@ gem 'bcrypt-ruby', '~> 3.0.0'
 group :development do
   if RUBY_VERSION.to_f >= 1.9
     # gem "ruby-debug19", :require => 'ruby-debug'
-    gem "mongrel", "1.2.0.pre2"
+    gem "mongrel", ">=1.2.0.pre2"
   else
     gem "ruby-debug"
     gem "mongrel"
   end
   gem "yard"
+  gem "tolk"
 end
 
 group :test do
-#   gem "test-unit", "1.2.3"
-#   gem "flexmock"
-#   gem "ZenTest", ">=4.0.0"
-#   gem "hpricot"
-#   gem "hoe"
-#   gem "rspec-rails", "~>1.3.3"
-#   gem 'memory_test_fix', '~>0.1.3'
   gem "factory_girl_rails"
   gem "capybara"
   gem "selenium-webdriver" # Note that > 2.14 has problems: https://code.google.com/p/selenium/issues/detail?id=3075
