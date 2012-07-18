@@ -7,6 +7,10 @@ class TodosControllerTest < ActionController::TestCase
     assert_redirected_to login_url
   end
 
+  ############################
+  # not done / deferred counts
+  ############################
+  
   def test_not_done_counts
     login_as(:admin_user)
     get :index
@@ -33,6 +37,42 @@ class TodosControllerTest < ActionController::TestCase
     assert_equal 2, assigns['context_not_done_counts'][contexts(:call).id]
     assert_equal nil, assigns['context_not_done_counts'][contexts(:lab).id]
   end
+  
+  def test_not_done_counts_after_hiding_project
+    p = Project.find(1)
+    p.hide!
+    p.save!
+    login_as(:admin_user)
+    get :index
+    assert_equal 0, projects(:timemachine).todos.active.count
+    assert_equal 2, contexts(:call).todos.active.count
+    assert_equal 0, contexts(:lab).todos.active.count
+  end
+  
+  def test_not_done_counts_after_hiding_and_unhiding_project
+    p = Project.find(1)
+    p.hide!
+    p.save!
+    p.activate!
+    p.save!
+    login_as(:admin_user)
+    get :index
+    assert_equal 2, projects(:timemachine).todos.active.count
+    assert_equal 3, contexts(:call).todos.not_completed.count
+    assert_equal 1, contexts(:lab).todos.not_completed.count
+  end
+  
+  def test_deferred_count_for_project_source_view
+    login_as(:admin_user)
+    xhr :post, :toggle_check, :id => 5, :_source_view => 'project'
+    assert_equal 1, assigns['remaining_deferred_or_pending_count']
+    xhr :post, :toggle_check, :id => 15, :_source_view => 'project'
+    assert_equal 0, assigns['remaining_deferred_or_pending_count']
+  end
+  
+  #########
+  # tagging
+  #########
   
   def test_tag_is_retrieved_properly
     login_as(:admin_user)
@@ -70,45 +110,78 @@ class TodosControllerTest < ActionController::TestCase
     assert_equal t.description, "test tags"
     assert_equal 2, t.tags.count
   end
-  
-  def test_not_done_counts_after_hiding_project
-    p = Project.find(1)
-    p.hide!
-    p.save!
+
+  def test_find_tagged_with
     login_as(:admin_user)
-    get :index
-    assert_equal 0, projects(:timemachine).todos.active.count
-    assert_equal 2, contexts(:call).todos.active.count
-    assert_equal 0, contexts(:lab).todos.active.count
+    @user = User.find(@request.session['user_id'])
+    tag = Tag.find_by_name('foo').taggings
+    @tagged = tag.count
+    get :tag, :name => 'foo'
+    assert_response :success
+    assert_equal 3, @tagged
   end
   
-  def test_not_done_counts_after_hiding_and_unhiding_project
-    p = Project.find(1)
-    p.hide!
-    p.save!
-    p.activate!
-    p.save!
+  def test_get_boolean_expression_from_parameters_of_tag_view_single_tag
     login_as(:admin_user)
-    get :index
-    assert_equal 2, projects(:timemachine).todos.active.count
-    assert_equal 3, contexts(:call).todos.not_completed.count
-    assert_equal 1, contexts(:lab).todos.not_completed.count
+    get :tag, :name => "single"
+    assert_equal true, assigns['single_tag'], "should recognize it is a single tag name"
+    assert_equal "single", assigns['tag_expr'][0][0], "should store the single tag"
+    assert_equal "single", assigns['tag_name'], "should store the single tag name"
   end
   
-  def test_deferred_count_for_project_source_view
+  def test_get_boolean_expression_from_parameters_of_tag_view_multiple_tags
     login_as(:admin_user)
-    xhr :post, :toggle_check, :id => 5, :_source_view => 'project'
-    assert_equal 1, assigns['remaining_deferred_or_pending_count']
-    xhr :post, :toggle_check, :id => 15, :_source_view => 'project'
-    assert_equal 0, assigns['remaining_deferred_or_pending_count']
+    get :tag, :name => "multiple", :and => "tags", :and1 => "present", :and2 => "here"
+    assert_equal false, assigns['single_tag'], "should recognize it has multiple tags"
+    assert_equal 4, assigns['tag_expr'].size, "should have 4 AND expressions"
   end
   
-  def test_destroy_todo
+  def test_get_boolean_expression_from_parameters_of_tag_view_multiple_tags_without_digitless_and
     login_as(:admin_user)
-    xhr :post, :destroy, :id => 1, :_source_view => 'todo'
-    todo = Todo.find_by_id(1)
-    assert_nil todo
+    get :tag, :name => "multiple", :and1 => "tags", :and2 => "present", :and3 => "here"
+    assert_equal false, assigns['single_tag'], "should recognize it has multiple tags"
+    assert_equal 4, assigns['tag_expr'].size, "should have 4 AND expressions"
   end
+  
+  def test_get_boolean_expression_from_parameters_of_tag_view_multiple_ORs
+    login_as(:admin_user)
+    get :tag, :name => "multiple,tags,present"
+    assert_equal false, assigns['single_tag'], "should recognize it has multiple tags"
+    assert_equal 1, assigns['tag_expr'].size, "should have 1 expressions"
+    assert_equal 3, assigns['tag_expr'][0].size, "should have 3 ORs in 1st expression"
+  end
+  
+  def test_get_boolean_expression_from_parameters_of_tag_view_multiple_ORs_and_ANDS
+    login_as(:admin_user)
+    get :tag, :name => "multiple,tags,present", :and => "here,is,two", :and1=>"and,three"
+    assert_equal false, assigns['single_tag'], "should recognize it has multiple tags"
+    assert_equal 3, assigns['tag_expr'].size, "should have 3 expressions"
+    assert_equal 3, assigns['tag_expr'][0].size, "should have 3 ORs in 1st expression"
+    assert_equal 3, assigns['tag_expr'][1].size, "should have 3 ORs in 2nd expression"
+    assert_equal 2, assigns['tag_expr'][2].size, "should have 2 ORs in 3rd expression"
+  end
+  
+  def test_set_right_title_tag_page
+    login_as(:admin_user)
+  
+    get :tag, :name => "foo"
+    assert_equal "foo", assigns['tag_title']
+    get :tag, :name => "foo,bar", :and => "baz"
+    assert_equal "foo,bar AND baz", assigns['tag_title']
+  end
+  
+  def test_set_default_tag
+    login_as(:admin_user)
+  
+    get :tag, :name => "foo"
+    assert_equal "foo", assigns['initial_tags']
+    get :tag, :name => "foo,bar", :and => "baz"
+    assert_equal "foo", assigns['initial_tags']
+  end
+  
+  ###############
+  # creating todo
+  ###############
   
   def test_create_todo
     assert_difference 'Todo.count' do
@@ -133,12 +206,6 @@ class TodosControllerTest < ActionController::TestCase
     end
   end
   
-  def test_get_edit_form_using_xhr
-    login_as(:admin_user)
-    xhr :get, :edit, :id => todos(:call_bill).id
-    assert_response 200
-  end
-  
   def test_fail_to_create_todo_via_xml
     login_as(:admin_user)
     # try to create with no context, which is not valid
@@ -156,6 +223,70 @@ class TodosControllerTest < ActionController::TestCase
     login_as(:admin_user)
     put :create, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{"notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2026", 'show_from' => '30/10/2026'}, "tag_list"=>"foo bar"
     assert_equal original_todo_count + 1, Todo.count
+  end
+  
+  def test_add_multiple_todos
+    login_as(:admin_user)
+  
+    start_count = Todo.count
+    put :create, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{
+      :multiple_todos=>"a\nb\nmuch \"ado\" about \'nothing\'"}
+  
+    assert_equal start_count+3, Todo.count, "two todos should have been added"
+  end
+  
+  def test_add_multiple_todos_with_validation_error
+    login_as(:admin_user)
+  
+    long_string = "a" * 500
+  
+    start_count = Todo.count
+    put :create, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{
+      :multiple_todos=>"a\nb\nmuch \"ado\" about \'nothing\'\n#{long_string}"}
+  
+    assert_equal start_count, Todo.count, "no todos should have been added"
+  end
+  
+  def test_add_multiple_dependent_todos
+    login_as(:admin_user)
+  
+    start_count = Todo.count
+    put :create, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{
+      :multiple_todos=>"a\nb"}, :todos_sequential => 'true'
+    put :create, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{
+      :multiple_todos=>"c\nd"}, :todos_sequential => 'false'
+  
+    assert_equal start_count+4, Todo.count, "four todos should have been added"
+  
+    # find a,b,c and d
+    %w{a b c d}.each do |todo|
+      eval "@#{todo} = Todo.find_by_description('#{todo}')"
+      eval "assert !@#{todo}.nil?, 'a todo with description \"#{todo}\" should just have been added'"
+    end
+  
+    assert @b.predecessors.include?(@a), "a should be a predeccesor of b"
+    assert !@d.predecessors.include?(@c), "c should not be a predecessor of d"
+  end
+  
+  #########
+  # destroy
+  #########
+    
+  def test_destroy_todo
+    login_as(:admin_user)
+    xhr :post, :destroy, :id => 1, :_source_view => 'todo'
+    todo = Todo.find_by_id(1)
+    assert_nil todo
+  end
+  
+  ###############
+  # edit / update
+  ###############
+  
+  def test_get_edit_form_using_xhr
+    login_as(:admin_user)
+    xhr :get, :edit, :id => todos(:call_bill).id
+    assert_response 200
   end
   
   def test_update_todo_project
@@ -219,58 +350,27 @@ class TodosControllerTest < ActionController::TestCase
     assert_equal "8.1.2, four, one, three, two, version1.5", t.tag_list
   end
   
-  def test_add_multiple_todos
+  def test_removing_hidden_project_activates_todo
     login_as(:admin_user)
   
-    start_count = Todo.count
-    put :create, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{
-      :multiple_todos=>"a\nb\nmuch \"ado\" about \'nothing\'"}
+    # get a project and hide it, todos in the project should be hidden
+    p = projects(:timemachine)
+    p.hide!
+    assert p.reload().hidden?
+    todo = p.todos.first
+    
+    assert todo.project_hidden?, "todo should be project_hidden"
   
-    assert_equal start_count+3, Todo.count, "two todos should have been added"
+    # clear project from todo: the todo should be unhidden
+    xhr :post, :update, :id => todo.id, :_source_view => 'todo', "project_name"=>"None", "todo"=>{}
+    
+    assert assigns['project_changed'], "the project of the todo should be changed"
+    assert todo.reload().active?, "todo should be active"
   end
-  
-  def test_add_multiple_todos_with_validation_error
-    login_as(:admin_user)
-  
-    long_string = "a" * 500
-  
-    start_count = Todo.count
-    put :create, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{
-      :multiple_todos=>"a\nb\nmuch \"ado\" about \'nothing\'\n#{long_string}"}
-  
-    assert_equal start_count, Todo.count, "no todos should have been added"
-  end
-  
-  def test_add_multiple_dependent_todos
-    login_as(:admin_user)
-  
-    start_count = Todo.count
-    put :create, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{
-      :multiple_todos=>"a\nb"}, :todos_sequential => 'true'
-    put :create, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{
-      :multiple_todos=>"c\nd"}, :todos_sequential => 'false'
-  
-    assert_equal start_count+4, Todo.count, "four todos should have been added"
-  
-    # find a,b,c and d
-    %w{a b c d}.each do |todo|
-      eval "@#{todo} = Todo.find_by_description('#{todo}')"
-      eval "assert !@#{todo}.nil?, 'a todo with description \"#{todo}\" should just have been added'"
-    end
-  
-    assert @b.predecessors.include?(@a), "a should be a predeccesor of b"
-    assert !@d.predecessors.include?(@c), "c should not be a predecessor of d"
-  end
-  
-  def test_find_tagged_with
-    login_as(:admin_user)
-    @user = User.find(@request.session['user_id'])
-    tag = Tag.find_by_name('foo').taggings
-    @tagged = tag.count
-    get :tag, :name => 'foo'
-    assert_response :success
-    assert_equal 3, @tagged
-  end
+
+  #######
+  # feeds
+  #######
   
   def test_rss_feed
     login_as(:admin_user)
@@ -398,6 +498,16 @@ class TodosControllerTest < ActionController::TestCase
     # #puts @response.body
   end
   
+  def test_tag_text_feed_not_accessible_to_anonymous_user_without_token
+    login_as nil
+    get :tag, {:name => "foo", :format => "txt" }
+    assert_response 401
+  end
+  
+  ##############
+  # mobile index
+  ##############
+  
   def test_mobile_index_uses_text_html_content_type
     login_as(:admin_user)
     get :index, { :format => "m" }
@@ -409,6 +519,10 @@ class TodosControllerTest < ActionController::TestCase
     get :index, { :format => "m" }
     assert_equal 11, assigns['down_count']
   end
+  
+  ###############
+  # mobile create
+  ###############
   
   def test_mobile_create_action_creates_a_new_todo
     login_as(:admin_user)
@@ -446,6 +560,10 @@ class TodosControllerTest < ActionController::TestCase
         "notes"=>"test notes"}, "tag_list"=>"test, test2"}
     assert_template 'todos/new'
   end
+  
+  ################
+  # recurring todo
+  ################
   
   def test_toggle_check_on_recurring_todo
     login_as(:admin_user)
@@ -583,24 +701,10 @@ class TodosControllerTest < ActionController::TestCase
     # check that the due date of the new todo is later than tomorrow
     assert next_todo.due > @todo.due
   end
-  
-  def test_removing_hidden_project_activates_todo
-    login_as(:admin_user)
-  
-    # get a project and hide it, todos in the project should be hidden
-    p = projects(:timemachine)
-    p.hide!
-    assert p.reload().hidden?
-    todo = p.todos.first
-    
-    assert todo.project_hidden?, "todo should be project_hidden"
-  
-    # clear project from todo: the todo should be unhidden
-    xhr :post, :update, :id => todo.id, :_source_view => 'todo', "project_name"=>"None", "todo"=>{}
-    
-    assert assigns['project_changed'], "the project of the todo should be changed"
-    assert todo.reload().active?, "todo should be active"
-  end
+
+  ############
+  # todo notes
+  ############
   
   def test_url_with_slash_in_query_string_are_parsed_correctly
     # See http://blog.swivel.com/code/2009/06/rails-auto_link-and-certain-query-strings.html
@@ -663,71 +767,11 @@ class TodosControllerTest < ActionController::TestCase
     assert_select("div#notes_todo_#{todo.id} a", 'link me to onenote')
     assert_select("div#notes_todo_#{todo.id} a[href=onenote:///E:%5COneNote%5Cdir%5Cnotes.one#PAGE&amp;section-id=%7BFD597D3A-3793-495F-8345-23D34A00DD3B%7D&amp;page-id=%7B1C95A1C7-6408-4804-B3B5-96C28426022B%7D&amp;end]", 'link me to onenote')
   end
-  
-  def test_get_boolean_expression_from_parameters_of_tag_view_single_tag
-    login_as(:admin_user)
-    get :tag, :name => "single"
-    assert_equal true, assigns['single_tag'], "should recognize it is a single tag name"
-    assert_equal "single", assigns['tag_expr'][0][0], "should store the single tag"
-    assert_equal "single", assigns['tag_name'], "should store the single tag name"
-  end
-  
-  def test_get_boolean_expression_from_parameters_of_tag_view_multiple_tags
-    login_as(:admin_user)
-    get :tag, :name => "multiple", :and => "tags", :and1 => "present", :and2 => "here"
-    assert_equal false, assigns['single_tag'], "should recognize it has multiple tags"
-    assert_equal 4, assigns['tag_expr'].size, "should have 4 AND expressions"
-  end
-  
-  def test_get_boolean_expression_from_parameters_of_tag_view_multiple_tags_without_digitless_and
-    login_as(:admin_user)
-    get :tag, :name => "multiple", :and1 => "tags", :and2 => "present", :and3 => "here"
-    assert_equal false, assigns['single_tag'], "should recognize it has multiple tags"
-    assert_equal 4, assigns['tag_expr'].size, "should have 4 AND expressions"
-  end
-  
-  def test_get_boolean_expression_from_parameters_of_tag_view_multiple_ORs
-    login_as(:admin_user)
-    get :tag, :name => "multiple,tags,present"
-    assert_equal false, assigns['single_tag'], "should recognize it has multiple tags"
-    assert_equal 1, assigns['tag_expr'].size, "should have 1 expressions"
-    assert_equal 3, assigns['tag_expr'][0].size, "should have 3 ORs in 1st expression"
-  end
-  
-  def test_get_boolean_expression_from_parameters_of_tag_view_multiple_ORs_and_ANDS
-    login_as(:admin_user)
-    get :tag, :name => "multiple,tags,present", :and => "here,is,two", :and1=>"and,three"
-    assert_equal false, assigns['single_tag'], "should recognize it has multiple tags"
-    assert_equal 3, assigns['tag_expr'].size, "should have 3 expressions"
-    assert_equal 3, assigns['tag_expr'][0].size, "should have 3 ORs in 1st expression"
-    assert_equal 3, assigns['tag_expr'][1].size, "should have 3 ORs in 2nd expression"
-    assert_equal 2, assigns['tag_expr'][2].size, "should have 2 ORs in 3rd expression"
-  end
-  
-  def test_set_right_title
-    login_as(:admin_user)
-  
-    get :tag, :name => "foo"
-    assert_equal "foo", assigns['tag_title']
-    get :tag, :name => "foo,bar", :and => "baz"
-    assert_equal "foo,bar AND baz", assigns['tag_title']
-  end
-  
-  def test_set_default_tag
-    login_as(:admin_user)
-  
-    get :tag, :name => "foo"
-    assert_equal "foo", assigns['initial_tags']
-    get :tag, :name => "foo,bar", :and => "baz"
-    assert_equal "foo", assigns['initial_tags']
-  end
-  
-  def test_tag_text_feed_not_accessible_to_anonymous_user_without_token
-    login_as nil
-    get :tag, {:name => "foo", :format => "txt" }
-    assert_response 401
-  end
-  
+
+  ##############
+  # dependencies
+  ##############
+    
   def test_make_todo_dependent
     login_as(:admin_user)
   
