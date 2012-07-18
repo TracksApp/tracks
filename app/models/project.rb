@@ -118,6 +118,9 @@ class Project < ActiveRecord::Base
     return self.todos.deferred_or_blocked.empty? && self.todos.not_deferred_or_blocked.empty?
   end
 
+  def shortened_name(length=40)
+    name.truncate(length, :omission => "...").html_safe
+  end
 
   def name=(value)
     self[:name] = value.gsub(/\s{2,}/, " ").strip

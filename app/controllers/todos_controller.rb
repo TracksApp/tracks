@@ -27,7 +27,11 @@ class TodosController < ApplicationController
     @not_done_todos = @not_done_todos.
       reorder("todos.due IS NULL, todos.due ASC, todos.created_at ASC").
       includes(Todo::DEFAULT_INCLUDES)
-    @not_done_todos = @not_done_todos.limit(sanitize(params[:limit])) if params[:limit]
+
+    if params[:limit]
+      @not_done_todos = @not_done_todos.limit(sanitize(params[:limit]))
+      @todos = @todos.limit(sanitize(params[:limit]))
+    end
     
     if params[:due]
       due_within_when = Time.zone.now + params['due'].to_i.days

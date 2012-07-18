@@ -338,7 +338,7 @@ class TodosControllerTest < ActionController::TestCase
     assert_xml_select 'feed[xmlns="http://www.w3.org/2005/Atom"]' do
       assert_xml_select '>title', 'Tracks Actions'
       assert_xml_select '>subtitle', "Actions for #{users(:admin_user).display_name}"
-      assert_xml_select 'entry', 11 do
+      assert_xml_select 'entry', 17 do
         assert_xml_select 'title', /.+/
         assert_xml_select 'content[type="html"]', /.*/
         assert_xml_select 'published', /(#{Regexp.escape(todos(:book).updated_at.xmlschema)}|#{Regexp.escape(projects(:moremoney).updated_at.xmlschema)})/
@@ -506,7 +506,7 @@ class TodosControllerTest < ActionController::TestCase
   
     # link todo_1 and recurring_todo_1
     recurring_todo_1 = RecurringTodo.find(1)
-    set_user_to_current_time_zone(recurring_todo_1.user)
+    #set_user_to_current_time_zone(recurring_todo_1.user)
     todo_1 = Todo.find_by_recurring_todo_id(1)
     today = Time.zone.now.at_midnight
   
@@ -592,20 +592,20 @@ class TodosControllerTest < ActionController::TestCase
     p.hide!
     assert p.reload().hidden?
     todo = p.todos.first
-    assert_equal "project_hidden", todo.state
+    
+    assert todo.project_hidden?, "todo should be project_hidden"
   
     # clear project from todo: the todo should be unhidden
-    xhr :post, :update, :id => 5, :_source_view => 'todo', "project_name"=>"None", "todo"=>{}
-    todo.reload()
-    assert assigns['project_changed']
-    assert_equal "active", todo.state
+    xhr :post, :update, :id => todo.id, :_source_view => 'todo', "project_name"=>"None", "todo"=>{}
+    
+    assert assigns['project_changed'], "the project of the todo should be changed"
+    assert todo.reload().active?, "todo should be active"
   end
   
   def test_url_with_slash_in_query_string_are_parsed_correctly
     # See http://blog.swivel.com/code/2009/06/rails-auto_link-and-certain-query-strings.html
     login_as(:admin_user)
-    user = users(:admin_user)
-    todo = user.todos.first
+    todo = users(:admin_user).todos.first
     url = "http://example.com/foo?bar=/baz"
     todo.notes = "foo #{url} bar"
     todo.save!
@@ -661,7 +661,7 @@ class TodosControllerTest < ActionController::TestCase
     get :index
     assert_select("div#notes_todo_#{todo.id}", 'link me to onenote')
     assert_select("div#notes_todo_#{todo.id} a", 'link me to onenote')
-    assert_select("div#notes_todo_#{todo.id} a[href=onenote:///E:\\OneNote\\dir\\notes.one#PAGE&amp;section-id={FD597D3A-3793-495F-8345-23D34A00DD3B}&amp;page-id={1C95A1C7-6408-4804-B3B5-96C28426022B}&amp;end]", 'link me to onenote')
+    assert_select("div#notes_todo_#{todo.id} a[href=onenote:///E:%5COneNote%5Cdir%5Cnotes.one#PAGE&amp;section-id=%7BFD597D3A-3793-495F-8345-23D34A00DD3B%7D&amp;page-id=%7B1C95A1C7-6408-4804-B3B5-96C28426022B%7D&amp;end]", 'link me to onenote')
   end
   
   def test_get_boolean_expression_from_parameters_of_tag_view_single_tag

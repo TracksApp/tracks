@@ -34,21 +34,26 @@ class MessageGateway < ActionMailer::Base
     return SITE_CONFIG['email_dispatch'] == 'to' ?  email.to[0] :  email.from[0]
   end
   
-  def get_user_from_email_address(email)
-    if SITE_CONFIG['email_dispatch'] == 'single_user'
-      Rails.logger.info "All received email goes to #{ENV['TRACKS_MAIL_RECEIVER']}"
-      user = User.find_by_login(ENV['TRACKS_MAIL_RECEIVER'])
-      Rails.logger.info "WARNING: Unknown user set for TRACKS_MAIL_RECEIVER (#{ENV['TRACKS_MAIL_RECEIVER']})" if user.nil?
-    else
-      address = get_address(email)
-      Rails.logger.info "Looking for user with email #{address}"
-      user = User.where("preferences.sms_email" => address.strip).includes(:preference).first
-      if user.nil?
-        user = User.where("preferences.sms_email" => address.strip[1.100]).includes(:preference).first
-      end
-      Rails.logger.info(!user.nil? ? "Email belongs to #{user.login}" : "User unknown")
-    end
+  def get_user_from_env_setting
+    Rails.logger.info "All received email goes to #{ENV['TRACKS_MAIL_RECEIVER']}"
+    user = User.find_by_login(ENV['TRACKS_MAIL_RECEIVER'])
+    Rails.logger.info "WARNING: Unknown user set for TRACKS_MAIL_RECEIVER (#{ENV['TRACKS_MAIL_RECEIVER']})" if user.nil?
     return user
+  end
+  
+  def get_user_from_mail_header(email)
+    address = get_address(email)
+    Rails.logger.info "Looking for user with email #{address}"
+    user = User.where("preferences.sms_email" => address.strip).includes(:preference).first
+    if user.nil?
+      user = User.where("preferences.sms_email" => address.strip[1.100]).includes(:preference).first
+    end
+    Rails.logger.info(!user.nil? ? "Email belongs to #{user.login}" : "User unknown")
+    return user
+  end
+  
+  def get_user_from_email_address(email)
+    SITE_CONFIG['email_dispatch'] == 'single_user' ? get_user_from_env_setting : get_user_from_mail_header(email)
   end
 
   def get_text_or_nil(text)

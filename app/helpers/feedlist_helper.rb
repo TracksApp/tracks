@@ -1,25 +1,26 @@
 module FeedlistHelper
   
+  def linkoptions(format, options)
+    merge_hashes( {:format => format}, options, user_token_hash)
+  end
+  
   def rss_formatted_link(options = {})
     image_tag = image_tag("feed-icon.png", :size => "16X16", :border => 0, :class => "rss-icon")
-    linkoptions = merge_hashes( {:format => 'rss'}, user_token_hash, options)
-		link_to(image_tag, linkoptions, :title => "RSS feed")
+		link_to(image_tag, linkoptions('rss', options), :title => "RSS feed")
   end
 
   def text_formatted_link(options = {})
-    linkoptions = merge_hashes( {:format => 'txt'}, user_token_hash, options)
-    link_to(content_tag(:span, 'TXT', {:class => 'feed', :title => "Plain text feed"}), linkoptions)
+    link_to(content_tag(:span, 'TXT', {:class => 'feed', :title => "Plain text feed"}), linkoptions('txt', options))
   end
   
   def ical_formatted_link(options = {})
-    linkoptions = merge_hashes( {:format => 'ics'}, user_token_hash, options)
-    link_to(content_tag(:span, 'iCal', {:class=>"feed", :title => "iCal feed"}), linkoptions)
+    link_to(content_tag(:span, 'iCal', {:class=>"feed", :title => "iCal feed"}), linkoptions('ics', options))
   end
 
   def feed_links(feeds, link_options, title)
     space = " "
     html = ""
-    html << rss_formatted_link(link_options)+space if feeds.include?(:rss)
+    html << rss_formatted_link(link_options) +space if feeds.include?(:rss)
     html << text_formatted_link(link_options)+space if feeds.include?(:txt)
     html << ical_formatted_link(link_options)+space if feeds.include?(:ical)
     html << title
