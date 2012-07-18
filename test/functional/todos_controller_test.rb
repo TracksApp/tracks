@@ -368,6 +368,21 @@ class TodosControllerTest < ActionController::TestCase
     assert todo.reload().active?, "todo should be active"
   end
 
+  def test_change_context_of_todo
+    # called by dragging a todo to another context container
+    login_as(:admin_user)
+    
+    todo = users(:admin_user).todos.active.first
+    context = users(:admin_user).contexts.first
+    
+    assert_not_equal todo.context.id, context.id
+    
+    xhr :post, :change_context, :id => todo.id, :todo=>{:context_id => context.id}, :_source_view=>"todo"
+    assert assigns['context_changed'], "context should have changed"
+    assert_equal todo.id, assigns['todo'].id, 'correct todo should have been found'
+    assert_equal context.id, todo.reload.context.id, 'context of todo should be changed'
+  end
+  
   #######
   # feeds
   #######

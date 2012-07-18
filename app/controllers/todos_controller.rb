@@ -454,9 +454,9 @@ class TodosController < ApplicationController
 
   def change_context
     # change context if you drag a todo to another context
-    @todo = Todo.find_by_id(params[:id])
+    @todo = current_user.todos.find_by_id(params[:id])
     @original_item_context_id = @todo.context_id
-    @context = Context.find_by_id(params[:todo][:context_id])
+    @context = current_user.contexts.find_by_id(params[:todo][:context_id])
     @todo.context = @context
     @saved = @todo.save
 
