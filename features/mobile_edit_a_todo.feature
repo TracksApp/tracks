@@ -14,14 +14,13 @@ Feature: Edit a next action from the mobile view
       | context | description |
       | @mobile | test action |
 
-
   Scenario: I can edit an action on the mobile page
     When I am on the home page
     Then the badge should show 1
     And I should see "test action"
     When I follow "test action"
     Then I should see "Actions"
-    When I press "Edit this action"
+    When I press "Edit action"
     Then I should see "Description"
     And I fill in "Description" with "changed action"
     And I press "Update"

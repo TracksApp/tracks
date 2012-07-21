@@ -10,26 +10,6 @@ class TodosController < ApplicationController
   #   :calendar, :auto_complete_for_predecessor, :remove_predecessor, :add_predecessor]
 
   protect_from_forgery :except => :check_deferred
-
-  def with_parent_resource_scope(&block)
-    @feed_title = t('common.actions')
-    if (params[:context_id])
-      @context = current_user.contexts.find_by_params(params)
-      @feed_title = @feed_title + t('todos.feed_title_in_context', :context => @context.name)
-      Todo.send :where, ['todos.context_id = ?', @context.id] do
-        yield
-      end
-    elsif (params[:project_id])
-      @project = current_user.projects.find_by_params(params)
-      @feed_title = @feed_title + t('todos.feed_title_in_project', :project => @project.name)
-      @project_feed = true
-      Todo.send :where, ['todos.project_id = ?', @project.id] do
-        yield
-      end
-    else
-      yield
-    end
-  end
   
   def index
     @source_view = params['_source_view'] || 'todo'
@@ -47,7 +27,11 @@ class TodosController < ApplicationController
     @not_done_todos = @not_done_todos.
       reorder("todos.due IS NULL, todos.due ASC, todos.created_at ASC").
       includes(Todo::DEFAULT_INCLUDES)
-    @not_done_todos = @not_done_todos.limit(sanitize(params[:limit])) if params[:limit]
+
+    if params[:limit]
+      @not_done_todos = @not_done_todos.limit(sanitize(params[:limit]))
+      @todos = @todos.limit(sanitize(params[:limit]))
+    end
     
     if params[:due]
       due_within_when = Time.zone.now + params['due'].to_i.days
@@ -363,7 +347,7 @@ class TodosController < ApplicationController
 
   def remove_predecessor
     @source_view = params['_source_view'] || 'todo'
-    @todo = current_user.todos.find_by_id(params['id']).includes(Todo::DEFAULT_INCLUDES)
+    @todo = current_user.todos.includes(Todo::DEFAULT_INCLUDES).find_by_id(params['id'])
     @predecessor = current_user.todos.find_by_id(params['predecessor'])
     @predecessors = @predecessor.predecessors
     @successor = @todo
@@ -469,10 +453,10 @@ class TodosController < ApplicationController
   end
 
   def change_context
-    # TODO: is this method used?
-    @todo = Todo.find_by_id(params[:todo][:id])
+    # change context if you drag a todo to another context
+    @todo = current_user.todos.find_by_id(params[:id])
     @original_item_context_id = @todo.context_id
-    @context = Context.find_by_id(params[:todo][:context_id])
+    @context = current_user.contexts.find_by_id(params[:todo][:context_id])
     @todo.context = @context
     @saved = @todo.save
 
@@ -1245,7 +1229,7 @@ class TodosController < ApplicationController
   end
 
   def update_todo_state_if_project_changed
-    if ( @project_changed ) then
+    if @project_changed
       @todo.update_state_from_project
       @remaining_undone_in_project = current_user.projects.find_by_id(@original_item_project_id).todos.active.count if source_view_is :project
     end
@@ -1269,8 +1253,8 @@ class TodosController < ApplicationController
   end
 
   def update_tags
-    if params[:todo_tag_list]
-      @todo.tag_with(params[:todo_tag_list])
+    if params[:tag_list]
+      @todo.tag_with(params[:tag_list])
       @todo.tags(true) #force a reload for proper rendering
     end
   end
@@ -1423,7 +1407,7 @@ class TodosController < ApplicationController
     end
 
     def tag_list
-      @params['todo_tag_list']
+      @params['tag_list']
     end
 
     def predecessor_list

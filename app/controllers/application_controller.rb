@@ -100,11 +100,7 @@ class ApplicationController < ActionController::Base
   end
 
   def count_deferred_todos(todos_parent)
-    if todos_parent.nil?
-      count = 0
-    else
-      count = todos_parent.todos.deferred.count
-    end
+    return todos_parent.nil? ? 0 : eval("@#{todos_parent.class.to_s.downcase}_deferred_counts[#{todos_parent.id}]") || 0
   end
 
   # Convert a date object to the format specified in the user's preferences in
@@ -131,8 +127,8 @@ class ApplicationController < ActionController::Base
 
   # Here's the concept behind this "mobile content negotiation" hack: In
   # addition to the main, AJAXy Web UI, Tracks has a lightweight low-feature
-  # 'mobile' version designed to be suitablef or use from a phone or PDA. It
-  # makes some sense that tne pages of that mobile version are simply alternate
+  # 'mobile' version designed to be suitable for use from a phone or PDA. It
+  # makes some sense that the pages of that mobile version are simply alternate
   # representations of the same Todo resources. The implementation goal was to
   # treat mobile as another format and be able to use respond_to to render both
   # versions. Unfortunately, I ran into a lot of trouble simply registering a
@@ -284,7 +280,8 @@ class ApplicationController < ActionController::Base
 
   def init_not_done_counts(parents = ['project','context'])
     parents.each do |parent|
-      eval("@#{parent}_not_done_counts = @#{parent}_not_done_counts || current_user.todos.active.count(:group => :#{parent}_id)")
+      eval("@#{parent}_not_done_counts ||= current_user.todos.active.group('#{parent}_id').count")
+      eval("@#{parent}_deferred_counts ||= current_user.todos.deferred.group('#{parent}_id').count")
     end
   end
 

@@ -31,14 +31,13 @@ class ProjectsController < ApplicationController
           @completed_count = current_user.projects.completed.count
           @no_projects = current_user.projects.empty?
           current_user.projects.cache_note_counts
-          @new_project = current_user.projects.build
         end
         format.m     do
           @completed_projects = current_user.projects.completed
           @down_count = @active_projects.size + @hidden_projects.size + @completed_projects.size
           cookies[:mobile_url]= {:value => request.fullpath, :secure => SITE_CONFIG['secure_cookies']}
         end
-        format.xml   { render :xml => @projects.all.to_xml( :except => :user_id )  }
+        format.xml   { render :xml => @projects.to_xml( :except => :user_id )  }
         format.rss   do
           @feed_title = I18n.t('models.project.feed_title')
           @feed_description = I18n.t('models.project.feed_description', :username => current_user.display_name)
@@ -182,7 +181,10 @@ class ProjectsController < ApplicationController
     @contexts = current_user.contexts
 
     respond_to do |format|
-      format.js { @down_count = current_user.projects.size }
+      format.js do
+        @down_count = current_user.projects.size
+        init_not_done_counts
+      end
       format.xml do
         if @project.new_record?
           render_failure @project.errors.to_xml.html_safe, 409
@@ -288,6 +290,7 @@ class ProjectsController < ApplicationController
     @projects = current_user.projects.alphabetize(:state => @state) if @state
     @contexts = current_user.contexts
     init_not_done_counts(['project'])
+    init_project_hidden_todo_counts(['project']) if @state == 'hidden'
   end
 
   def actionize
@@ -295,6 +298,7 @@ class ProjectsController < ApplicationController
     @projects = current_user.projects.actionize(:state => @state) if @state
     @contexts = current_user.contexts
     init_not_done_counts(['project'])
+    init_project_hidden_todo_counts(['project']) if @state == 'hidden'
   end
 
   def done_todos

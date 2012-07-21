@@ -248,7 +248,6 @@ Feature: Edit a next action from every page
     Then I should see the todo "bla"
     And I should see the todo "bli"
 
-  @wip
   Scenario: Clicking a tag of a todo will go to that tag page
     Given I have a todo "tag you are it" in context "@tags" with tags "taga, tagb"
     When I go to the home page

@@ -8,7 +8,7 @@
     <%= csrf_meta_tag %>
     <script type="text/javascript">
       var SOURCE_VIEW = '<%=@source_view%>';
-      var AUTH_TOKEN = '<%= protect_against_forgery? ? form_authenticity_token.inspect : "" %>'
+      var AUTH_TOKEN = '<%= raw(protect_against_forgery? ? form_authenticity_token.inspect : "") %>'
       var TAG_NAME = '<%= @tag_name ? @tag_name : "" %>'
       var defaultContexts = <%= default_contexts_for_autocomplete.html_safe rescue '{}' %>;
       var defaultTags = <%= default_tags_for_autocomplete.html_safe rescue '{}' %>;
@@ -26,7 +26,7 @@
     </script>
     <link rel="shortcut icon" href="<%= image_path ('favicon.ico') %>" />
     <%= auto_discovery_link_tag(:rss, {:controller => "todos", :action => "index", :format => 'rss', :token => "#{current_user.token}"}, {:title => t('layouts.next_actions_rss_feed')}) %>
-    <link rel="search" type="application/opensearchdescription+xml" title="Tracks" href="<%= search_plugin_path %>" />
+    <link rel="search" type="application/opensearchdescription+xml" title="Tracks" href="<%= search_plugin_path(:format => :xml) %>" />
     <title><%= @page_title %></title>
   </head>
 

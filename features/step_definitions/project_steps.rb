@@ -100,6 +100,14 @@ Given /^I have a project "([^\"]*)" with (.*) notes?$/ do |project_name, num|
   end
 end
 
+Given /^the default tags for "(.*?)" are "(.*?)"$/ do |project_name, default_tags|
+  project = @current_user.projects.find_by_name(project_name)
+  project.should_not be_nil
+  
+  project.default_tags = default_tags
+  project.save!
+end
+
 When /^I open the project edit form$/ do
   click_link "link_edit_project_#{@project.id}"
   page.should have_css("button#submit_project_#{@project.id}", :visible => true)
@@ -198,7 +206,11 @@ When /^I add a note "([^"]*)" to the project$/ do |note_body|
   page.should have_css "div.widgets button#submit_note"
   fill_in "note[body]", :with => note_body
   click_button "Add note"
-  page.should_not have_css "div.widgets button#submit_note"
+  
+  submit_button = "div.widgets button#submit_note"
+  elem = find(submit_button)
+  elem.should_not be_nil  # form is hidden
+  elem.should_not be_visible
 end
 
 When /^I click on the first note icon$/ do

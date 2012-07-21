@@ -3,7 +3,7 @@
       <% if collapsible %>
       <a href="#" class="container_toggle" id="toggle_deferred"><%= image_tag("collapse.png") %></a>
       <% end %>
-      <%= t('todos.deferred_pending_actions') %> <%= append_descriptor ? append_descriptor : '' %>
+      <%= t('todos.deferred_pending_actions') %> <%= raw(append_descriptor ? append_descriptor : '') %>
   </h2>
 
   <div id="tickleritems" class="items toggle_target">

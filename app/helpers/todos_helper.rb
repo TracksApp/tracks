@@ -16,8 +16,12 @@ module TodosHelper
   end
 
   def remote_delete_menu_item(todo)
+    # TODO: what is the current way to do mouseover with css?
     return link_to(
-      image_tag("delete_off.png", :mouseover => "delete_on.png", :alt => t('todos.delete'), :align => "absmiddle")+" "+t('todos.delete'),
+      image_tag("delete_off.png",
+      :onmouseover => "this.src='#{path_to_image("delete_on.png")}'",
+      :onmouseout => "this.src='#{path_to_image("delete_off.png")}'",
+      :alt => t('todos.delete'), :align => "absmiddle")+" "+t('todos.delete'),
       {:controller => 'todos', :action => 'destroy', :id => todo.id},
       :class => "icon_delete_item",
       :id => "delete_#{dom_id(todo)}",
@@ -59,7 +63,11 @@ module TodosHelper
   end
 
   def image_tag_for_defer(days)
-    image_tag("defer_#{days}_off.png", :mouseover => "defer_#{days}.png", :alt => t('todos.defer_x_days', :count => days), :align => "absmiddle")+" "+t('todos.defer_x_days', :count => days)
+    # TODO: what is the current way to do mouseover with css?
+    image_tag("defer_#{days}_off.png",
+      :onmouseover => "this.src='#{path_to_image("defer_#{days}.png")}'",
+      :onmouseout => "this.src='#{path_to_image("defer_#{days}_off.png")}'",
+      :alt => t('todos.defer_x_days', :count => days), :align => "absmiddle")+" "+t('todos.defer_x_days', :count => days)
   end
 
   def collapsed_notes_image(todo)
@@ -135,7 +143,7 @@ module TodosHelper
   end
 
   def tag_span (tag, mobile=false)
-    content_tag(:span, :class => "tag #{tag.name.gsub(' ','-')}") { link_to(tag.name, tag_path(tag.name, :format => mobile ? :m : :html)) }
+    content_tag(:span, :class => "tag #{tag.name.gsub(' ','-')}") { link_to(tag.name, tag_path(tag.name, :format => mobile ? :m : nil)) }
   end
 
   def tag_list(todo=@todo, mobile=false)
@@ -162,7 +170,7 @@ module TodosHelper
       if (['project', 'tag', 'stats', 'search'].include?(parent_container_type))
         str << item_link_to_context( todo )
       end
-      if (['context', 'tickler', 'tag', 'stats', 'search'].include?(parent_container_type)) && todo.project_id
+      if (['context', 'tickler', 'tag', 'stats', 'search'].include?(parent_container_type)) && !todo.project_id.nil? && !todo.project.is_a?(NullProject)
         str << item_link_to_project( todo )
       end
     end

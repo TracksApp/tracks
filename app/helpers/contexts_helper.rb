@@ -1,14 +1,5 @@
 module ContextsHelper
   
-  def get_listing_sortable_options
-    {
-      :tag => 'div',
-      :handle => 'handle',
-      :complete => visual_effect(:highlight, 'list-contexts'),
-      :url => order_contexts_path
-    }
-  end
-  
   def link_to_delete_context(context, descriptor = sanitize(context.name))
     link_to(descriptor,
       context_path(context, :format => 'js'),
@@ -21,8 +12,7 @@ module ContextsHelper
   end
 
   def link_to_edit_context (context, descriptor = sanitize(context.name))
-    link_to(descriptor,
-      url_for({:controller => 'contexts', :action => 'edit', :id => context.id}),
+    link_to(descriptor, edit_context_path(context),
       {
         :id => "link_edit_#{dom_id(context)}",
         :class => "context_edit_settings icon"

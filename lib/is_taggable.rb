@@ -39,6 +39,10 @@ module IsTaggable
         self
       end
 
+      def has_tag?(tag_name)
+        return tags.any? {|tag| tag.name == tag_name}
+      end
+      
       # Add tags to <tt>self</tt>. Accepts a string of tagnames, an array of tagnames, or an array of Tags.
       #
       # We need to avoid name conflicts with the built-in ActiveRecord association methods, thus the underscores.
@@ -62,24 +66,26 @@ module IsTaggable
         outgoing = tag_cast_to_string(outgoing)
         tags.delete(*(tags.select{|tag| outgoing.include? tag.name}))
       end
+      
+      def get_tag_name_from_item(item)
+        case item
+        # removed next line as it prevents using numbers as tags
+        # when /^\d+$/, Fixnum then Tag.find(item).name # This will be slow if you use ids a lot.
+        when Tag
+          item.name
+        when String
+          item
+        else
+          raise "Invalid type"
+        end
+      end
 
       def tag_cast_to_string obj
         case obj
         when Array
-          obj.map! do |item|
-            case item
-              # removed next line as it prevents using numbers as tags
-              # when /^\d+$/, Fixnum then Tag.find(item).name # This will be slow if you use ids a lot.
-            when Tag then item.name
-            when String then item
-            else
-              raise "Invalid type"
-            end
-          end
+          obj.map! { |item| get_tag_name_from_item(item) }
         when String
-          obj = obj.split(Tag::DELIMITER).map do |tag_name|
-            tag_name.strip.squeeze(" ")
-          end
+          obj.split(Tag::DELIMITER).map { |tag_name| tag_name.strip.squeeze(" ") }
         else
           raise "Invalid object of class #{obj.class} as tagging method parameter"
         end.flatten.compact.map(&:downcase).uniq

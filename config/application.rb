@@ -63,6 +63,9 @@ module Tracksapp
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
+    
+    # add /app/assets/swfs to asset pipeline for charts
+    config.assets.paths << Rails.root.join("app", "assets", "swfs")
         
     # configure Tracks to handle deployment in a subdir
     config.action_controller.relative_url_root = SITE_CONFIG['subdir'] if SITE_CONFIG['subdir']

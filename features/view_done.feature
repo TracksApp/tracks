@@ -181,7 +181,6 @@ Feature: Show done
     When I go to the projects page
     Then I should see "completed project"
 
-  @wip
   Scenario Outline: All pages are internationalized
     Given I set the locale to "<locale>"
     When I go to the <page>

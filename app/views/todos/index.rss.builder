@@ -12,7 +12,7 @@ xml.rss :version => "2.0" do
         xml.title h(todo.description)
         xml.description feed_content_for_todo(todo)
         xml.pubDate todo.created_at.to_s(:rfc822)
-        xml.link todo.project ? project_url(todo.project) : context_url(todo.context)
+        xml.link (todo.project && !todo.project.is_a?(NullProject)) ? project_url(todo.project) : context_url(todo.context)
         xml.guid todo_url(todo)
       end
     end

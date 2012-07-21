@@ -109,12 +109,18 @@
     verzonden zijn via email (die bijv. komen via een SMS message)</li>
   <li>In sendmail/qmail/postfix/whatever, stel een email address
     alias in om berichten door te sturen naar
-    <pre>/PATH/TO/RUBY/ruby /PATH/TO/TRACKS/script/runner -e production 'MessageGateway.receive(STDIN.read)'</pre></li>
+    <pre>/usr/bin/bundle exec /PATH/TO/TRACKS/script/rails r -e production 'MessageGateway.receive(STDIN.read)'</pre></li>
   <li>Verstuur een email naar het net geconfigureerde e-mail adres!</li>
 </ul>
 <p>Je kan ook de Rich Todo API gebruiken om acties te maken zoals "do laundry @ Home"
   of "Call Bill > project X". Het onderwerp van het bericht zal de bijschrijving van de actie vullen,
   de context, en het project, terwijl de body van het bericht de notities van de actie zal vullen.
+</p>
+<p>
+  Het kan nodig zijn om jouw <tt>site.yml</tt> te configureren om de message gateway te laten kijken naar het <tt>to:</tt> veld of het <tt>from:</tt> veld om
+  de Tracks-gebruiker op te zoeken met het emailadres uit dat veld. </p>
+  <p>Je kan ook alle email naar een specifieke Tracks gebruiker sturen. Stel mail_dispatch in site.yml in op <tt>single_user</tt> en geeft de login van de gebruiker door:
+    <pre>TRACKS_MAIL_RECEIVER=<%=current_user.login%> usr/bin/bundle exec /PATH/TO/TRACKS/script/rails r -e production 'MessageGateway.receive(STDIN.read)'</pre>
 </p>
 
 <a name="google_gadget"> </a>

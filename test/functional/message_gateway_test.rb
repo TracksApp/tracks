@@ -25,13 +25,6 @@ class MessageGatewayTest < ActiveSupport::TestCase
     assert_equal(@user, message_todo.user)
   end
   
-  def test_double_sms
-    todo_count = Todo.count
-    load_message('sample_sms.txt')
-    load_message('sample_sms.txt')
-    assert_equal(todo_count+1, Todo.count)
-  end
-
   def test_mms_with_subject
     todo_count = Todo.count
 

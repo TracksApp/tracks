@@ -1,5 +1,5 @@
 class Project < ActiveRecord::Base
-  has_many :todos, :dependent => :delete_all
+  has_many :todos, :dependent => :delete_all, :order => 'todos.due IS NULL, todos.due ASC, todos.created_at ASC'
   has_many :notes, :dependent => :delete_all, :order => "created_at DESC"
   has_many :recurring_todos
 
@@ -118,6 +118,9 @@ class Project < ActiveRecord::Base
     return self.todos.deferred_or_blocked.empty? && self.todos.not_deferred_or_blocked.empty?
   end
 
+  def shortened_name(length=40)
+    name.truncate(length, :omission => "...").html_safe
+  end
 
   def name=(value)
     self[:name] = value.gsub(/\s{2,}/, " ").strip

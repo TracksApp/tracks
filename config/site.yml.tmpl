@@ -3,23 +3,13 @@
 salt: "change-me"
 
 
-# Uncomment ldap or open_id if you want to use those authentication schemes.
-# If you choose ldap, see the additional configuration options further down.
-# NOTE: openid is not supported anymore.
+# NOTE: openid, ldap and cas are currently not supported anymore.
 authentication_schemes:
   - "database"
-  # - "ldap"
-  # - "cas"
 
 
 #set the prefered authentication scheme to display first on the login page
 #prefered_auth: database
-
-
-# Uncomment if using cas
-#cas_server: "https://cas.demo.edu/cas"
-#cas_server_logout: "https://cas.demo.edu/cas/logout"
-
 
 
 # You''ll probably want to change this to the time zone of the computer where Tracks is running
@@ -35,22 +25,21 @@ secure_cookies: false
 # rather than the From: address.
 # email_dispatch: 'to'
 
+# If you want to send all email to a specific user, uncomment the following line and
+# set the environment variable TRACKS_MAIL_RECEIVER to the login name of the user that
+# will receive all email
+# email_dispatch: 'single_user'
+
 
 # Set this to the subdirectory you're hosting tracks in and uncomment if applicable
 # NOTE: you will also need to set up your web server to deal with the relative
 # URL. Mongrel, for example, has a --prefix option.
 # subdir: "/tracks"
 
+
 # Set to true to allow anyone to sign up for a username.
 open_signups: false
 
-# Only needed if ldap is included in authentication_schemes
-# ldap:
-#   library: 'net/ldap'
-#   servers:
-#     - 'localhost'
-#   use_ssl: false
-#   login_format: 'cn=%s,dc=example,dc=com'
 
 # When integrating your tracks instance with http://cloudmailin.com/ by using the /integrations/cloudmailin URL,
 # this value is the cloudmailin-secret for verifying the authenticity of the request.
