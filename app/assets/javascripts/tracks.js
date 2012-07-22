@@ -252,6 +252,7 @@ var TracksPages = {
         ContextItems.setup_autocomplete_for_contexts('input[name=context_name]');
         ContextItems.setup_autocomplete_for_contexts('input[id="project_default_context_name"]');
         TracksPages.setup_autocomplete_for_tag_list('input[name=tag_list]'); // todo edit form
+        TracksPages.setup_autocomplete_for_tag_list('input[name=edit_recurring_todo_tag_list]');
         TracksPages.setup_autocomplete_for_tag_list('input[id="project_default_tags"]');
         TodoItems.setup_autocomplete_for_predecessor();
     },
