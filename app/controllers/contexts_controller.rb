@@ -3,7 +3,6 @@ class ContextsController < ApplicationController
   helper :todos
 
   before_filter :init, :except => [:index, :create, :destroy, :order]
-  before_filter :init_todos, :only => :show
   before_filter :set_context_from_params, :only => [:update, :destroy]
   skip_before_filter :login_required, :only => [:index]
   prepend_before_filter :login_or_feed_token_required, :only => [:index]
@@ -40,6 +39,21 @@ class ContextsController < ApplicationController
   end
   
   def show
+    set_context_from_params
+    
+    unless @context.nil?
+      @max_completed = current_user.prefs.show_number_completed
+      @done = @context.todos.completed.limit(@max_completed).reorder("todos.completed_at DESC, todos.created_at DESC").includes(Todo::DEFAULT_INCLUDES)
+      @not_done_todos = @context.todos.active.reorder("todos.due IS NULL, todos.due ASC, todos.created_at ASC").includes(Todo::DEFAULT_INCLUDES)
+
+      @deferred = @context.todos.deferred.includes(Todo::DEFAULT_INCLUDES)
+      @pending = @context.todos.pending.includes(Todo::DEFAULT_INCLUDES)
+        
+      @projects = current_user.projects
+
+      @count = @not_done_todos.count + @deferred.count + @pending.count
+    end
+    
     @contexts = current_user.contexts(true)
     if @context.nil?
       respond_to do |format|
@@ -248,30 +262,6 @@ class ContextsController < ApplicationController
   def init
     @source_view = params['_source_view'] || 'context'
     init_data_for_sidebar
-  end
-
-  def init_todos
-    set_context_from_params
-    unless @context.nil?
-      @max_completed = current_user.prefs.show_number_completed
-      @done = @context.todos.completed.all(:limit => @max_completed)
-
-      # @not_done_todos = @context.not_done_todos TODO: Temporarily doing this
-      # search manually until I can work out a way to do the same thing using
-      # not_done_todos acts_as_todo_container method Hides actions in hidden
-      # projects from context.
-      @not_done_todos = @context.todos.active(
-        :order => "todos.due IS NULL, todos.due ASC, todos.created_at ASC",
-        :include => Todo::DEFAULT_INCLUDES)
-
-      @deferred = @context.todos.deferred(:include => Todo::DEFAULT_INCLUDES)
-      @pending = @context.todos.pending(:include => Todo::DEFAULT_INCLUDES)
-        
-      @projects = current_user.projects
-
-      @count = @not_done_todos.count + @deferred.count + @pending.count
-    end
-
   end
 
 end
