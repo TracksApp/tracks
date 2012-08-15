@@ -47,6 +47,21 @@ class Project < ActiveRecord::Base
     NullProject.new
   end
 
+  def self.create_from_todo(todo)
+    project = Project.new(:name => todo.description,
+                          :description => todo.notes,
+                          :default_context => todo.context)
+
+    project.user = todo.user
+
+    if project.valid?
+      todo.destroy
+      project.save!
+    end
+
+    project
+  end
+
   def hide_todos
     todos.each do |t|
       unless t.completed? || t.deferred?

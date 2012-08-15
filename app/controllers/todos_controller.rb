@@ -900,13 +900,10 @@ class TodosController < ApplicationController
   end
 
   def convert_to_project
-    @todo = current_user.todos.find_by_id(params[:id])
-    @project = current_user.projects.new(:name => @todo.description, :description => @todo.notes,
-      :default_context => @todo.context)
-      
-    unless @project.invalid?
-      @todo.destroy
-      @project.save!
+    todo = current_user.todos.find_by_id(params[:id])
+    @project = Project.create_from_todo(todo)
+   
+    if @project.valid?
       redirect_to project_url(@project)
     else
       flash[:error] = "Could not create project from todo: #{@project.errors.full_messages[0]}"
