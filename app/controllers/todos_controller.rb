@@ -510,13 +510,7 @@ class TodosController < ApplicationController
       format.xml { render :xml => @todo.to_xml( *to_xml_params ) }
       format.m do
         if @saved
-          if cookies[:mobile_url]
-            old_path = cookies[:mobile_url]
-            cookies[:mobile_url] = {:value => nil, :secure => SITE_CONFIG['secure_cookies']}
-            redirect_to old_path
-          else
-            redirect_to todos_path(:format => 'm')
-          end
+          do_mobile_todo_redirection
         else
           render :action => "edit", :format => :m
         end
@@ -798,14 +792,8 @@ class TodosController < ApplicationController
       format.html { redirect_to :back }
       format.js {render :action => 'update'}
       format.m {
-      notify(:notice, t("todos.action_deferred", :description => @todo.description))
-        if cookies[:mobile_url]
-          old_path = cookies[:mobile_url]
-          cookies[:mobile_url] = {:value => nil, :secure => SITE_CONFIG['secure_cookies']}
-          redirect_to old_path
-        else
-          redirect_to todos_path(:format => 'm')
-        end
+        notify(:notice, t("todos.action_deferred", :description => @todo.description))
+        do_mobile_todo_redirection
       }
     end
   end
@@ -925,6 +913,16 @@ class TodosController < ApplicationController
   end
 
   private
+
+  def do_mobile_todo_redirection
+    if cookies[:mobile_url]
+      old_path = cookies[:mobile_url]
+      cookies[:mobile_url] = {:value => nil, :secure => SITE_CONFIG['secure_cookies']}
+      redirect_to old_path
+    else
+      redirect_to todos_path(:format => 'm')
+    end
+  end
 
   def to_xml_params
     if params[:limit_fields] == 'index'
