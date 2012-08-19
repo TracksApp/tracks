@@ -1,6 +1,6 @@
 <h1><%= t('users.manage_users') %></h1>
 
-<p><%= t('users.total_users_count', :count => "<span id=\"user_count\">#{@total_users}</span>") %></p>
+<p><%= t('users.total_users_count', :count => "<span id=\"user_count\">#{@total_users}</span>").html_safe %></p>
 
 <table class="users_table"> 
   <tr> 
@@ -24,7 +24,7 @@
       <td><%= h user.contexts.size %></td>
       <td><%= h user.projects.size %></td>
       <td><%= h user.notes.size %></td>
-      <td><%= !user.is_admin? ? remote_delete_user(user) : "&nbsp;" %></td>
+      <td><%= !user.is_admin? ? remote_delete_user(user) : "&nbsp;".html_safe %></td>
     </tr>
   <% end %>
 </table>
