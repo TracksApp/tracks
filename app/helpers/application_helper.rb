@@ -205,7 +205,7 @@ module ApplicationHelper
     }.each do |s|
       js << "i18n['#{s}'] = '#{ t(s).gsub(/'/, "\\\\'") }';\n"
     end
-    return js
+    return js.html_safe
   end
 
   def javascript_tag_for_i18n_datepicker

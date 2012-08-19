@@ -11,3 +11,12 @@ Capybara.javascript_driver = ENV["JS_DRIVER"] ? ENV["JS_DRIVER"].to_sym : :selen
 if Capybara.javascript_driver == :webkit
   require 'capybara/webkit'
 end
+
+if Capybara.javascript_driver == :selenium
+  profile = Selenium::WebDriver::Firefox::Profile.new
+  profile['intl.accept_languages'] = 'en'
+  Capybara.register_driver :selenium_english do |app|
+    Capybara::Selenium::Driver.new(app, :browser => :firefox, :profile => profile)
+  end
+  Capybara.javascript_driver = :selenium_english
+end

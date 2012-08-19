@@ -1430,3 +1430,14 @@ div.auto_complete ul strong.highlight {
 .ui-autocomplete-loading {
   background: white url('/assets/ui-anim_basic_16x16.gif') right center no-repeat;
 }
+
+ul.todo-submenu > li > a {
+  position: relative;
+  padding-left: 24px;
+}
+
+ul.todo-submenu > li > a > img {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+}
