@@ -40,7 +40,25 @@ class MessageGatewayTest < ActiveSupport::TestCase
     assert_equal(@user, message_todo.user)
     assert_equal("This is the message body", message_todo.notes)
   end
+  
+  def test_email_with_winmail_dat
+    todo_count = Todo.count
 
+    load_message('email_with_winmail.txt')
+
+    # assert some stuff about it being created
+    assert_equal(todo_count+1, Todo.count)
+  end
+
+  def test_email_with_multipart_attachments
+    todo_count = Todo.count
+
+    load_message('email_with_multipart.txt')
+
+    # assert some stuff about it being created
+    assert_equal(todo_count+1, Todo.count)
+  end
+  
   def test_no_user
     todo_count = Todo.count
     badmessage = File.read(File.join(Rails.root, 'test', 'fixtures', 'sample_sms.txt'))

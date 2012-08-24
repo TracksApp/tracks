@@ -65,8 +65,25 @@ class MessageGateway < ActionMailer::Base
   end
   
   def get_first_text_plain_part(email)
-    parts = email.parts.reject{|part| !part.content_type.start_with?("text/plain") }
-    return parts ? sanitize(parts[0].decoded.strip) : ""
+    # get all parts from multipart/alternative attachments
+    parts = get_all_parts(email.parts)
+    
+    # remove all parts that are not text/plain
+    parts.reject{|part| !part.content_type.start_with?("text/plain") }
+    
+    return parts.count > 0 ? sanitize(parts[0].decoded.strip) : ""
+  end
+  
+  def get_all_parts(parts)
+    # return a flattened array of parts. If a multipart attachment is found, recurse over its parts
+    all_parts = parts.inject([]) do |set, elem|
+      if elem.content_type.start_with?("multipart/alternative")
+        # recurse to handle multiparts in this multipart
+        set += get_all_parts(elem.parts)
+      else
+        set << elem
+      end
+    end
   end
   
 end
