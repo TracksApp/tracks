@@ -45,7 +45,7 @@ class LoginControllerTest < ActionController::TestCase
     get :login
     assert_redirected_to signup_url
   end
-  
+    
   def test_logout
     login_as :admin_user
     get :logout

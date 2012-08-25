@@ -535,6 +535,11 @@ class TodosControllerTest < ActionController::TestCase
     assert_equal 11, assigns['down_count']
   end
   
+  def test_mobile_redirect_to_login
+    get :index, { :format => "m" }
+    assert_redirected_to login_url(:format => "m")
+  end
+  
   ###############
   # mobile create
   ###############
