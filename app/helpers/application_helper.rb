@@ -251,11 +251,11 @@ module ApplicationHelper
   end
   
   def get_list_of_error_messages_for(model)
-    error_messages = ""
     if model.errors.any?
-      list_of_messages = model.errors.full_messages.inject("") { |all, msg| all += content_tag(:li, msg) }
-      error_messages = content_tag(:ul, list_of_messages)
+      content_tag(:ul) do
+        model.errors.full_messages.collect { |msg| concat(content_tag(:li, msg)) }
+      end
     end
   end
-
+  
 end
