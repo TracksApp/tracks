@@ -127,7 +127,7 @@ class Todo < ActiveRecord::Base
   end
 
   def validate
-    if !show_from.blank? && show_from < user.date
+    if !show_from.blank? && show_from < user.date && show_from_changed?
       errors.add("show_from", I18n.t('models.todo.error_date_must_be_future'))
     end
     unless @predecessor_array.nil? # Only validate predecessors if they changed
