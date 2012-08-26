@@ -67,9 +67,9 @@ class TodoTest < ActiveSupport::TestCase
 
   def test_validate_show_from_must_be_a_date_in_the_future
     t = @not_completed2
-    t[:show_from] = 1.week.ago # we have to set this via the indexer because show_from=() updates the state
-                                       # and actual show_from value appropriately based on the date
-    assert !t.save
+    t.show_from = 1.week.ago
+    
+    assert !t.save, "todo should not be saved without validation errors"
     assert_equal 1, t.errors.count
     assert_equal "must be a date in the future", t.errors[:show_from][0]
   end
@@ -127,6 +127,24 @@ class TodoTest < ActiveSupport::TestCase
     assert_equal :completed, t.aasm_current_state
     t.toggle_completion!
     assert_equal :active, t.aasm_current_state
+  end
+  
+  def test_toggle_completion_with_show_from_in_future
+    t = @not_completed1
+    t.show_from= 1.week.from_now
+    t.save!
+    assert_equal :deferred, t.aasm_current_state
+    t.toggle_completion!
+    assert_equal :completed, t.aasm_current_state
+  end
+  
+  def test_toggle_completion_with_show_from_in_past
+    t = @not_completed1
+    t.update_attribute(:show_from, 1.week.ago)
+    assert_equal :active, t.aasm_current_state
+    
+    assert t.toggle_completion!, "shoud be able to mark active todo complete even if show_from is set in the past"
+    assert_equal :completed, t.aasm_current_state
   end
 
   def test_activate_also_saves

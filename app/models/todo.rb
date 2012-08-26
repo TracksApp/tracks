@@ -108,8 +108,10 @@ class Todo < ActiveRecord::Base
   validate :check_circular_dependencies
 
   def check_show_from_in_future
-    if !show_from.blank? && show_from < user.date
-      errors.add("show_from", I18n.t('models.todo.error_date_must_be_future'))
+    if show_from_changed? # only check on change of show_from
+      if !show_from.blank? && (show_from < user.date)
+        errors.add("show_from", I18n.t('models.todo.error_date_must_be_future'))
+      end
     end
   end
   
