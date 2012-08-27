@@ -6,7 +6,7 @@ class Tagging < ActiveRecord::Base
   attr_accessible :taggable_id, :tag
  
   belongs_to :tag
-  belongs_to :taggable, :polymorphic => true
+  belongs_to :taggable, :polymorphic => true, :touch => true
   
   after_destroy :after_destroy
   
@@ -16,4 +16,5 @@ class Tagging < ActiveRecord::Base
   def after_destroy
     tag.destroy if tag and tag.taggings.count == 0
   end
+  
 end

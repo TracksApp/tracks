@@ -1,6 +1,6 @@
 <%
 @not_done = @not_done_todos.select {|t| t.context_id == context.id }
-cache context do
+cache [context, @source_view] do
 %>
   <div id="c<%= context.id %>" class="container context" style="display:<%= (collapsible && @not_done.empty?) ? "none" : "block" %>">
     <h2>

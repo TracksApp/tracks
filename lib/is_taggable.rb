@@ -64,7 +64,7 @@ module IsTaggable
       # Removes tags from <tt>self</tt>. Accepts a string of tagnames, an array of tagnames, or an array of Tags.
       def _remove_tags outgoing
         outgoing = tag_cast_to_string(outgoing)
-        tags.delete(*(tags.select{|tag| outgoing.include? tag.name}))
+        tags.destroy(*(tags.select{|tag| outgoing.include? tag.name}))
       end
       
       def get_tag_name_from_item(item)
