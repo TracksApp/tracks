@@ -4,8 +4,8 @@ class Todo < ActiveRecord::Base
   after_save :save_predecessors
 
   # associations
-  belongs_to :context
-  belongs_to :project
+  belongs_to :context, :touch => true
+  belongs_to :project, :touch => true
   belongs_to :user
   belongs_to :recurring_todo
 

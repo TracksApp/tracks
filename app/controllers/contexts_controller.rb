@@ -50,22 +50,19 @@ class ContextsController < ApplicationController
       @pending = @context.todos.pending.includes(Todo::DEFAULT_INCLUDES)
         
       @projects = current_user.projects
+      @contexts = current_user.contexts
 
       @count = @not_done_todos.count + @deferred.count + @pending.count
-    end
-    
-    @contexts = current_user.contexts(true)
-    if @context.nil?
-      respond_to do |format|
-        format.html { render :text => 'Context not found', :status => 404 }
-        format.xml  { render :xml => '<error>Context not found</error>', :status => 404 }
-      end
-    else
       @page_title = "TRACKS::Context: #{@context.name}"
       respond_to do |format|
         format.html
         format.m    &render_context_mobile
         format.xml  { render :xml => @context.to_xml( :except => :user_id ) }
+      end
+    else
+      respond_to do |format|
+        format.html { render :text => 'Context not found', :status => 404 }
+        format.xml  { render :xml => '<error>Context not found</error>', :status => 404 }
       end
     end
   end

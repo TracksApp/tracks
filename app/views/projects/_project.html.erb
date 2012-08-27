@@ -1,21 +1,23 @@
-<div class="container">
-  <h2 id="project_name_container">
-    <% if collapsible -%>
-      <a href="#" class="container_toggle" id="toggle_p<%= project.id %>"><%= image_tag("collapse.png") %></a>
-    <% end -%>
-    <div id="project_name" style="width: 100%;"><%= project.name -%></div>
-  </h2>
-  <div id="<%= dom_id(project, "container")%>" class="list">
-    <%= render :partial => "projects/project_settings", :object => project, :locals => { :collapsible => collapsible } %>
-  </div>
-</div>
-
-<div class="container">
-  <h2><%= t('projects.actions_in_project_title') %></h2>
-  <div id="p<%= project.id %>items" class="items toggle_target">
-    <div id="p<%= project.id %>empty-nd" style="display:<%= @not_done.empty? ? 'block' : 'none'%>;">
-      <div class="message"><p><%= t('projects.no_actions_in_project') %></p></div>
+<% cache project do %>
+  <div class="container">
+    <h2 id="project_name_container">
+      <% if collapsible -%>
+        <a href="#" class="container_toggle" id="toggle_p<%= project.id %>"><%= image_tag("collapse.png") %></a>
+      <% end -%>
+      <div id="project_name" style="width: 100%;"><%= project.name -%></div>
+    </h2>
+    <div id="<%= dom_id(project, "container")%>" class="list">
+      <%= render :partial => "projects/project_settings", :object => project, :locals => { :collapsible => collapsible } %>
     </div>
-    <%= render :partial => "todos/todo", :collection => @not_done, :locals => { :parent_container_type => "project" } %>
   </div>
-</div>
+  
+  <div class="container">
+    <h2><%= t('projects.actions_in_project_title') %></h2>
+    <div id="p<%= project.id %>items" class="items toggle_target">
+      <div id="p<%= project.id %>empty-nd" style="display:<%= @not_done.empty? ? 'block' : 'none'%>;">
+        <div class="message"><p><%= t('projects.no_actions_in_project') %></p></div>
+      </div>
+      <%= render :partial => "todos/todo", :collection => @not_done, :locals => { :parent_container_type => "project" } %>
+    </div>
+  </div>
+<% end %>

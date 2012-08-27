@@ -1,20 +1,24 @@
-<% @not_done = @not_done_todos.select {|t| t.context_id == context.id } -%>
-<div id="c<%= context.id %>" class="container context" style="display:<%= (collapsible && @not_done.empty?) ? "none" : "block" %>">
-  <h2>
-    <% if collapsible -%>
-      <a href="#" class="container_toggle" id="toggle_c<%= context.id %>"><%= image_tag("collapse.png") %></a>
-    <% end -%>
-    <% if source_view_is :context %>
-      <span id="context_name"><%= context.name %></span>
-    <% else %>
-      <%= link_to_context( context )  %>
-    <% end %>
-  </h2>
-  <div id="c_<%=context.id%>_target" class="context_target drop_target"></div>
-  <div id="c<%= context.id %>items" class="items toggle_target">
-    <div id="c<%= context.id %>empty-nd" style="display:<%= @not_done.empty? ? 'block' : 'none'%>;">
-      <div class="message"><p><%= t 'contexts.no_actions' %></p></div>
+<%
+@not_done = @not_done_todos.select {|t| t.context_id == context.id }
+cache context do
+%>
+  <div id="c<%= context.id %>" class="container context" style="display:<%= (collapsible && @not_done.empty?) ? "none" : "block" %>">
+    <h2>
+      <% if collapsible -%>
+        <a href="#" class="container_toggle" id="toggle_c<%= context.id %>"><%= image_tag("collapse.png") %></a>
+      <% end -%>
+      <% if source_view_is :context %>
+        <span id="context_name"><%= context.name %></span>
+      <% else %>
+        <%= link_to_context( context )  %>
+      <% end %>
+    </h2>
+    <div id="c_<%=context.id%>_target" class="context_target drop_target"></div>
+    <div id="c<%= context.id %>items" class="items toggle_target">
+      <div id="c<%= context.id %>empty-nd" style="display:<%= @not_done.empty? ? 'block' : 'none'%>;">
+        <div class="message"><p><%= t 'contexts.no_actions' %></p></div>
+      </div>
+      <%= render :partial => "todos/todo", :collection => @not_done, :locals => { :parent_container_type => "context" } %>
     </div>
-    <%= render :partial => "todos/todo", :collection => @not_done, :locals => { :parent_container_type => "context" } %>
   </div>
-</div>
+<% end %>

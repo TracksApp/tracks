@@ -41,6 +41,10 @@ GEM
     bcrypt-ruby (3.0.1)
     bluecloth (2.2.0)
     builder (3.0.0)
+    bullet (4.1.6)
+      uniform_notifier (~> 1.0.0)
+    cache_digests (0.1.0)
+      actionpack (>= 3.2)
     capybara (1.1.2)
       mime-types (>= 1.16)
       nokogiri (>= 1.3.3)
@@ -111,6 +115,8 @@ GEM
     rack (1.4.1)
     rack-cache (1.2)
       rack (>= 0.4)
+    rack-mini-profiler (0.1.10)
+      rack (>= 1.1.3)
     rack-ssl (1.3.2)
       rack
     rack-test (0.6.1)
@@ -178,6 +184,7 @@ GEM
     uglifier (1.2.7)
       execjs (>= 0.3.0)
       multi_json (~> 1.3)
+    uniform_notifier (1.0.2)
     will_paginate (3.0.3)
     xpath (0.1.4)
       nokogiri (~> 1.3)
@@ -193,6 +200,8 @@ DEPENDENCIES
   acts_as_list
   aruba
   bcrypt-ruby
+  bullet
+  cache_digests
   capybara
   coffee-rails
   cucumber-rails
@@ -203,6 +212,7 @@ DEPENDENCIES
   jquery-rails
   mongrel (>= 1.2.0.pre2)
   mysql2
+  rack-mini-profiler
   rails
   rails_autolink
   sanitize
