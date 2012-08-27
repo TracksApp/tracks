@@ -1,3 +1,10 @@
+GIT
+  remote: git://github.com/lrbalt/cache_digests.git
+  revision: 8469c4153c84c0d918b01daccaa1e69747e93e89
+  specs:
+    cache_digests (0.1.0)
+      actionpack (>= 3.2)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -43,8 +50,6 @@ GEM
     builder (3.0.0)
     bullet (4.1.6)
       uniform_notifier (~> 1.0.0)
-    cache_digests (0.1.0)
-      actionpack (>= 3.2)
     capybara (1.1.2)
       mime-types (>= 1.16)
       nokogiri (>= 1.3.3)
@@ -201,7 +206,7 @@ DEPENDENCIES
   aruba
   bcrypt-ruby
   bullet
-  cache_digests
+  cache_digests!
   capybara
   coffee-rails
   cucumber-rails

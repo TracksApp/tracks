@@ -16,7 +16,7 @@ gem "aasm"
 gem "htmlentities"
 gem "swf_fu"
 gem "rails_autolink"
-gem "cache_digests" #, :git => 'git://github.com/rails/cache_digests.git'
+gem "cache_digests", :git => 'git://github.com/lrbalt/cache_digests.git'
 gem "rack-mini-profiler"
 
 # Gems used only for assets and not required
