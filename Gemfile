@@ -2,15 +2,11 @@ source 'https://rubygems.org'
 
 gem 'rails'
 
-# Bundle edge Rails instead:
-# gem 'rails', :git => 'git://github.com/rails/rails.git'
-
 # you may comment out the database driver you will not be using.
 # This will prevent a native build of the driver. Building native drivers is not always possible on all hosters
 gem "sqlite3"
 gem "mysql2"
 
-# gem "highline", "~>1.5.0"
 gem "RedCloth"
 gem "formatize"
 gem "sanitize"
@@ -37,15 +33,6 @@ gem 'jquery-rails'
 
 # To use ActiveModel has_secure_password
 gem 'bcrypt-ruby'
-
-# To use Jbuilder templates for JSON
-# gem 'jbuilder'
-
-# Use unicorn as the app server
-# gem 'unicorn'
-
-# Deploy with Capistrano
-# gem 'capistrano'
 
 group :development do
   if RUBY_VERSION.to_f >= 1.9
