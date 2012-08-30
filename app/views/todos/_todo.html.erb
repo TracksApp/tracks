@@ -7,7 +7,9 @@ parameters += "&_tag_name=#{@tag_name}" if @source_view == 'tag'
 @z_index_counter = @z_index_counter - 1  # for IE z-index bug
 @rec_depth=0 # to prevent stack overflow on large dependency trees, see _successor.html.erb
 
-cache todo do
+# invalidate the cache every day because of staleness or
+# rendering of "due in x days" that change without touching updated at of the todo
+cache [todo, current_user.date.strftime("%Y%m%d")] do
 %>
   <div id="<%= dom_id(todo) %>" class="item-container">
     <div id="<%= dom_id(todo, 'line') %>" class="item-show">
