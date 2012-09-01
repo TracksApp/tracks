@@ -24,7 +24,8 @@
       setup_periodic_check("<%=check_deferred_todos_path(:format => 'js')%>", 10*60, 'POST');
       <%= generate_i18n_strings %>
     </script>
-    <link rel="shortcut icon" href="<%= image_path ('favicon.ico') %>" />
+    <%= favicon_link_tag 'favicon.ico' %>
+    <%= favicon_link_tag 'apple-touch-icon.png', :rel => 'apple-touch-icon', :type => 'image/png' %>
     <%= auto_discovery_link_tag(:rss, {:controller => "todos", :action => "index", :format => 'rss', :token => "#{current_user.token}"}, {:title => t('layouts.next_actions_rss_feed')}) %>
     <link rel="search" type="application/opensearchdescription+xml" title="Tracks" href="<%= search_plugin_path(:format => :xml) %>" />
     <title><%= @page_title %></title>

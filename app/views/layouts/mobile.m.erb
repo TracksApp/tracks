@@ -6,10 +6,12 @@
 <!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<meta name="viewport" content="width=device-width, user-scalable=no">
-<%= stylesheet_link_tag "mobile", :media => 'handheld,all' %>
-<title><%= @page_title %></title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, user-scalable=no">
+  <%= stylesheet_link_tag "mobile", :media => 'handheld,all' %>
+  <%= favicon_link_tag 'favicon.ico' %>
+  <%= favicon_link_tag 'apple-touch-icon.png', :rel => 'apple-touch-icon', :type => 'image/png' %>
+  <title><%= @page_title %></title>
 </head><body>
 <% if current_user && !current_user.prefs.nil? -%>
 <div id="topbar"><h1><% if @down_count -%><span class="count" id="badge_count"><%= @down_count %></span><% end -%> <%=
