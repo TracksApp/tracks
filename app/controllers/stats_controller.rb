@@ -16,7 +16,7 @@ class StatsController < ApplicationController
     get_stats_projects
     get_stats_tags
 
-    render :layout => 'standard'
+    render :layout => 'application'
   end
   
   def actions_done_last12months_data
