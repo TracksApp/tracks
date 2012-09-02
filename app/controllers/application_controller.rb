@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
   include LoginSystem
   helper_method :current_user, :prefs, :format_date, :markdown
 
-  layout proc{ |controller| controller.mobile? ? "mobile" : "standard" }
+  layout proc{ |controller| controller.mobile? ? "mobile" : "application" }
   # exempt_from_layout /\.js\.erb$/
 
   before_filter :check_for_deprecated_password_hash
