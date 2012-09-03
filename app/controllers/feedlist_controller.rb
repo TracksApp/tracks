@@ -20,7 +20,7 @@ class FeedlistController < ApplicationController
     @hidden_contexts = current_user.contexts.hidden
     
     respond_to do |format|
-      format.html { render :layout => 'application' }
+      format.html
       format.m
     end
   end

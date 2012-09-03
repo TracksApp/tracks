@@ -795,7 +795,7 @@ var ProjectListPage = {
 
         /* submit project form after entering new project */
         $("form#project_form button.positive").live('click', function (ev) {
-            submit_with_ajax_and_block_element('form.#project_form', $(this));
+            submit_with_ajax_and_block_element('form#project_form', $(this));
             return false;
         });
 
@@ -881,7 +881,7 @@ var ContextListPage = {
 
         /* submit form for new context in sidebar */
         $("form#context-form button.positive").live('click', function (ev) {
-            submit_with_ajax_and_block_element('form.#context-form', $(this));
+            submit_with_ajax_and_block_element('form#context-form', $(this));
             return false;
         });
 
@@ -1020,7 +1020,7 @@ var RecurringTodosPage = {
         buttons: {
           create: {
             text: i18n['common.create'],
-            click: function() { submit_with_ajax_and_block_element('form.#recurring-todo-form-new-action', $(this).parents(".ui-dialog")); },
+            click: function() { submit_with_ajax_and_block_element('form#recurring-todo-form-new-action', $(this).parents(".ui-dialog")); },
           },
           cancel: {
             text: i18n['common.cancel'],

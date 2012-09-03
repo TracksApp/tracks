@@ -2,7 +2,7 @@
 	
   <h2><%= t('users.change_authentication_type') %></h2>
 
-  <%= error_messages_for 'user' %>
+  <%= get_list_of_error_messages_for @user %>
 
   <p><%= t('users.select_authentication_type') %></p>
 

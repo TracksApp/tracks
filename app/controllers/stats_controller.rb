@@ -15,8 +15,6 @@ class StatsController < ApplicationController
     get_stats_contexts
     get_stats_projects
     get_stats_tags
-
-    render :layout => 'application'
   end
   
   def actions_done_last12months_data
@@ -181,7 +179,7 @@ class StatsController < ApplicationController
     
     @actions_open_per_week_array = convert_to_weeks_running_from_today_array(@actions_started, @max_weeks+1)
     @actions_open_per_week_array = cut_off_array(@actions_open_per_week_array, @count)
-    @max_actions = @actions_open_per_week_array.max
+    @max_actions = (@actions_open_per_week_array.max or 0)
     
     render :layout => false
   end
