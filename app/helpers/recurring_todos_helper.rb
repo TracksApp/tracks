@@ -44,13 +44,4 @@ module RecurringTodosHelper
   def image_tag_for_edit(todo)
     image_tag("blank.png", :title =>t('todos.edit_action'), :class=>"edit_item", :id=> dom_id(todo, 'edit_icon'))
   end
-
-  def get_list_of_error_messages_for(model)
-    if model.errors.any?
-      content_tag(:ul) do
-        model.errors.full_messages.collect { |msg| concat(content_tag(:li, msg)) }
-      end
-    end
-  end
-
 end
