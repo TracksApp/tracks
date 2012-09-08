@@ -1,5 +1,7 @@
 class StatsController < ApplicationController
 
+  SECONDS_PER_DAY = 86400;
+
   helper :todos, :projects, :recurring_todos
   append_before_filter :init
 
@@ -406,6 +408,7 @@ class StatsController < ApplicationController
 
   private
 
+
   def get_unique_tags_of_user
     tag_ids = current_user.todos.find_by_sql([
         "SELECT DISTINCT tags.id as id "+
@@ -440,9 +443,6 @@ class StatsController < ApplicationController
     # get the current date wih time set to 0:0
     @today = Time.zone.now.utc.beginning_of_day
 
-    # define the number of seconds in a day
-    @seconds_per_day = 60*60*24
-
     # define cut_off date and discard the time for a month, 3 months and a year
     @cut_off_year = 12.months.ago.beginning_of_day
     @cut_off_year_plus3 = 15.months.ago.beginning_of_day
@@ -466,13 +466,13 @@ class StatsController < ApplicationController
     sum_actions = @completed_actions.size
     sum_actions = 1 if sum_actions==0 # to prevent dividing by zero
 
-    @actions_avg_ttc = (actions_sum/sum_actions)/@seconds_per_day
-    @actions_max_ttc = actions_max/@seconds_per_day
-    @actions_min_ttc = actions_min/@seconds_per_day
+    @actions_avg_ttc = (actions_sum/sum_actions)/SECONDS_PER_DAY
+    @actions_max_ttc = actions_max/SECONDS_PER_DAY
+    @actions_min_ttc = actions_min/SECONDS_PER_DAY
 
     min_ttc_sec = Time.utc(2000,1,1,0,0)+actions_min # convert to a datetime
     @actions_min_ttc_sec = (min_ttc_sec).strftime("%H:%M:%S")
-    @actions_min_ttc_sec = (actions_min / @seconds_per_day).round.to_s + " days " + @actions_min_ttc_sec if actions_min > @seconds_per_day
+    @actions_min_ttc_sec = (actions_min / SECONDS_PER_DAY).round.to_s + " days " + @actions_min_ttc_sec if actions_min > SECONDS_PER_DAY
 
     # get count of actions created and actions done in the past 30 days.
     @sum_actions_done_last30days = current_user.todos.completed.completed_after(@cut_off_month).count
@@ -698,7 +698,7 @@ class StatsController < ApplicationController
 
   # assumes date1 > date2
   def difference_in_days(date1, date2)
-    return ((date1.utc.at_midnight-date2.utc.at_midnight)/@seconds_per_day).to_i
+    return ((date1.utc.at_midnight-date2.utc.at_midnight)/SECONDS_PER_DAY).to_i
   end
   
   # assumes date1 > date2
