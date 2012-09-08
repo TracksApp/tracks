@@ -190,7 +190,7 @@ class StatsController < ApplicationController
     # get total action count per context Went from GROUP BY c.id to c.name for
     # compatibility with postgresql. Since the name is forced to be unique, this
     # should work.
-    @all_actions_per_context = current_user.contexts.find_by_sql(
+    all_actions_per_context = current_user.contexts.find_by_sql(
       "SELECT c.name AS name, c.id as id, count(*) AS total "+
         "FROM contexts c, todos t "+
         "WHERE t.context_id=c.id "+
@@ -198,23 +198,23 @@ class StatsController < ApplicationController
         "GROUP BY c.name, c.id "+
         "ORDER BY total DESC"
     )
-    @sum = @all_actions_per_context.inject(0){|sum, apc| sum += apc['total'].to_i }
+    @sum = all_actions_per_context.inject(0){|sum, apc| sum += apc['total'].to_i }
     
     pie_cutoff=10
-    size = [@all_actions_per_context.size, pie_cutoff].min
+    size = [all_actions_per_context.size, pie_cutoff].min
     
     # explicitely copy contents of hash to avoid ending up with two arrays pointing to same hashes
     @actions_per_context = Array.new(size){|i| {
-      'name' => @all_actions_per_context[i][:name],
-      'total' => @all_actions_per_context[i][:total].to_i,
-      'id' => @all_actions_per_context[i][:id]
+      'name' => all_actions_per_context[i][:name],
+      'total' => all_actions_per_context[i][:total].to_i,
+      'id' => all_actions_per_context[i][:id]
       } }
 
     if size==pie_cutoff
       @actions_per_context[size-1]['name']=t('stats.other_actions_label')
       @actions_per_context[size-1]['total']=@actions_per_context[size-1]['total']
       @actions_per_context[size-1]['id']=-1
-      size.upto(@all_actions_per_context.size-1){ |i| @actions_per_context[size-1]['total']+=(@all_actions_per_context[i]['total'].to_i) }
+      size.upto(all_actions_per_context.size-1){ |i| @actions_per_context[size-1]['total']+=(all_actions_per_context[i]['total'].to_i) }
     end
     
     @truncate_chars = 15
@@ -227,7 +227,7 @@ class StatsController < ApplicationController
     #
     # Went from GROUP BY c.id to c.name for compatibility with postgresql. Since
     # the name is forced to be unique, this should work.
-    @all_actions_per_context = current_user.contexts.find_by_sql(
+    all_actions_per_context = current_user.contexts.find_by_sql(
       "SELECT c.name AS name, c.id as id, count(*) AS total "+
         "FROM contexts c, todos t "+
         "WHERE t.context_id=c.id AND t.completed_at IS NULL AND NOT c.hide "+
@@ -235,23 +235,23 @@ class StatsController < ApplicationController
         "GROUP BY c.name, c.id "+
         "ORDER BY total DESC"
     )
-    @sum = @all_actions_per_context.inject(0){|sum, apc| sum += apc['total'].to_i }
+    @sum = all_actions_per_context.inject(0){|sum, apc| sum += apc['total'].to_i }
 
     pie_cutoff=10
-    size = [@all_actions_per_context.size, pie_cutoff].min
+    size = [all_actions_per_context.size, pie_cutoff].min
 
     # explicitely copy contents of hash to avoid ending up with two arrays pointing to same hashes
     @actions_per_context = Array.new(size){|i| {
-      'name' => @all_actions_per_context[i][:name],
-      'total' => @all_actions_per_context[i][:total].to_i,
-      'id' => @all_actions_per_context[i][:id]
+      'name' => all_actions_per_context[i][:name],
+      'total' => all_actions_per_context[i][:total].to_i,
+      'id' => all_actions_per_context[i][:id]
       } }
 
     if size==pie_cutoff
       @actions_per_context[size-1]['name']=t('stats.other_actions_label')
       @actions_per_context[size-1]['total']=@actions_per_context[size-1]['total']
       @actions_per_context[size-1]['id']=-1
-      (size).upto(@all_actions_per_context.size()-1){|i| @actions_per_context[size-1]['total']+=@all_actions_per_context[i]['total'].to_i }
+      (size).upto(all_actions_per_context.size()-1){|i| @actions_per_context[size-1]['total']+=all_actions_per_context[i]['total'].to_i }
     end
 
     @truncate_chars = 15
@@ -407,7 +407,6 @@ class StatsController < ApplicationController
   end
 
   private
-
 
   def get_unique_tags_of_user
     tag_ids = current_user.todos.find_by_sql([
