@@ -1,6 +1,8 @@
 <%
 @not_done = @not_done_todos.select {|t| t.context_id == context.id }
-cache [context, @source_view] do
+# invalidate the cache every day because of staleness or
+# rendering of "due in x days" that change without touching updated at of the todo
+cache [context, @source_view, current_user.date.strftime("%Y%m%d")] do
 %>
   <div id="c<%= context.id %>" class="container context" style="display:<%= (collapsible && @not_done.empty?) ? "none" : "block" %>">
     <h2>

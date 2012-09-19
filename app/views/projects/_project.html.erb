@@ -1,4 +1,7 @@
-<% cache project do %>
+<%
+# invalidate the cache every day because of staleness or
+# rendering of "due in x days" that change without touching updated at of the todo
+cache [project, current_user.date.strftime("%Y%m%d")] do %>
   <div class="container">
     <h2 id="project_name_container">
       <% if collapsible -%>
