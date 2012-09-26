@@ -259,20 +259,20 @@ input#todo_description, input#tag_list, textarea#todo_notes, select#todo_project
 }
 
 .prev a {
-  background: url(assets/previous.png) left center no-repeat;
+  background: image-url('previous.png') left center no-repeat;
   padding-left: 20px;
 }
 
 .prev a:hover {
-  background: #cc3334 url(assets/previous.png) left center no-repeat;
+  background: #cc3334 image-url('previous.png') left center no-repeat;
 }
 
 .next a {
   text-align:right;
-  background: url(assets/next.png) right center no-repeat;
+  background: image-url('next.png') right center no-repeat;
   padding-right: 20px;
 }
 
 .next a:hover {
-  background: #cc3334 url(assets/next.png) right center no-repeat;
+  background: #cc3334 image-url('next.png') right center no-repeat;
 }
