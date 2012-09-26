@@ -106,35 +106,35 @@ h3 {
 
 /* Rules for the icon links */
 
-img.edit_item {background-image: url(/assets/edit_off.png); background-repeat: no-repeat; border: none;}
-a:hover img.edit_item {background-image: url(/assets/edit_on.png); background-color: transparent; background-repeat: no-repeat; border: none;}
+img.edit_item {background-image: image-url('edit_off.png'); background-repeat: no-repeat; border: none;}
+a:hover img.edit_item {background-image: image-url('edit_on.png'); background-color: transparent; background-repeat: no-repeat; border: none;}
 
-img.delete_item {background-image: url(/assets/delete_off.png); background-repeat: no-repeat; border: none;}
-a:hover img.delete_item {background-image: url(/assets/delete_on.png);background-color: transparent;background-repeat: no-repeat; border: none;}
+img.delete_item {background-image: image-url('delete_off.png'); background-repeat: no-repeat; border: none;}
+a:hover img.delete_item {background-image: image-url('delete_on.png');background-color: transparent;background-repeat: no-repeat; border: none;}
 
 a.undecorated_link {background-color:transparent;color:transparent;}
-img.todo_star {background-image: url(/assets/staricons.png); background-repeat: no-repeat; border:none; background-position: -32px 0px;}
+img.todo_star {background-image: image-url('staricons.png'); background-repeat: no-repeat; border:none; background-position: -32px 0px;}
 img.todo_star.starred{ background-position: 0px 0px; }
 a:hover img.todo_star { background-position: -48px 0px;}
 a:hover img.todo_star.starred { background-position: -16px 0px; }
 
-a.to_top {background: transparent url(/assets/top_off.png) no-repeat;}
-a.to_top:hover {background: transparent url(/assets/top_on.png) no-repeat;}
+a.to_top {background: transparent image-url('top_off.png') no-repeat;}
+a.to_top:hover {background: transparent image-url('top_on.png') no-repeat;}
 
-a.up {background: transparent url(/assets/up_off.png) no-repeat;}
-a.up:hover {background: transparent url(/assets/up_on.png) no-repeat;}
+a.up {background: transparent image-url('up_off.png') no-repeat;}
+a.up:hover {background: transparent image-url('up_on.png') no-repeat;}
 
-a.down {background: transparent url(/assets/down_off.png) no-repeat;}
-a.down:hover {background: transparent url(/assets/down_on.png) no-repeat;}
+a.down {background: transparent image-url('down_off.png') no-repeat;}
+a.down:hover {background: transparent image-url('down_on.png') no-repeat;}
 
-a.to_bottom {background: transparent url(/assets/bottom_off.png) no-repeat;}
-a.to_bottom:hover {background: transparent url(/assets/bottom_on.png) no-repeat;}
+a.to_bottom {background: transparent image-url('bottom_off.png') no-repeat;}
+a.to_bottom:hover {background: transparent image-url('bottom_on.png') no-repeat;}
 
-a.show_notes, a.link_to_notes {background-image: url(/assets/notes_off.png); background-repeat: no-repeat; padding: 1px; background-color: transparent;}
-a.show_notes:hover, a.link_to_notes:hover {background-image: url(/assets/notes_on.png); background-repeat: no-repeat; padding: 1px; background-color: transparent;}
+a.show_notes, a.link_to_notes {background-image: image-url('notes_off.png'); background-repeat: no-repeat; padding: 1px; background-color: transparent;}
+a.show_notes:hover, a.link_to_notes:hover {background-image: image-url('notes_on.png'); background-repeat: no-repeat; padding: 1px; background-color: transparent;}
 
-a.show_successors, a.link_to_successors {background-image: url(/assets/successor_off.png); background-repeat: no-repeat; padding: 1px; background-color: transparent;}
-a.show_successors:hover, a.link_to_successors:hover {background-image: url(/assets/successor_on.png); background-repeat: no-repeat; padding: 1px; background-color: transparent;}
+a.show_successors, a.link_to_successors {background-image: image-url('successor_off.png'); background-repeat: no-repeat; padding: 1px; background-color: transparent;}
+a.show_successors:hover, a.link_to_successors:hover {background-image: image-url('successor_on.png'); background-repeat: no-repeat; padding: 1px; background-color: transparent;}
 
 /* Structural divs */
 
@@ -255,7 +255,7 @@ a.show_successors:hover, a.link_to_successors:hover {background-image: url(/asse
 
 #develop-notify-bar {
     line-height:0.5;
-    background-image: url(/assets/construction.gif);
+    background-image: image-url('construction.gif');
     background-repeat: repeat-x;
 }
 
@@ -384,8 +384,8 @@ ul.predecessor_list li {
 }
 
 /* deleting dependency from new form of a todo */
-img.icon_delete_dep {width: 10px; background-image: url(/assets/icon_delete.png); background-repeat: no-repeat; background-position: -9px 0; border: none; color:black;}
-a:hover img.icon_delete_dep {width: 10px; background-image: url(/assets/icon_delete.png); background-repeat: no-repeat; background-position: 0 0; border: none; color:black; background-color: black;}
+img.icon_delete_dep {width: 10px; background-image: image-url('icon_delete.png'); background-repeat: no-repeat; background-position: -9px 0; border: none; color:black;}
+a:hover img.icon_delete_dep {width: 10px; background-image: image-url('icon_delete.png'); background-repeat: no-repeat; background-position: 0 0; border: none; color:black; background-color: black;}
 a.icon_delete_dep:hover {width: 10px; background-color: black;}
 
 /* deleting dependency from edit form of a todo */
@@ -1161,7 +1161,7 @@ ul#prefs {list-style-type: disc; margin-left: 15px;}
 }
 
 input.open_id {
-    background: url(/assets/open-id-login-bg.gif) no-repeat;
+    background: image-url('open-id-login-bg.gif') no-repeat;
     background-color: #fff;
     background-position: 0 50%;
     color: #000;
@@ -1313,7 +1313,7 @@ button.positive, .widgets a.positive{
 }
 
 .blockUI.blockOverlay {
-    background-image:url('/assets/waiting.gif');
+    background-image:image-url('waiting.gif');
     background-repeat:no-repeat;
     background-position:center center;
     background-color:white;
@@ -1321,21 +1321,21 @@ button.positive, .widgets a.positive{
 }
 
 .bigWaiting {
-    background-image:url('/assets/bigWaiting.gif');
+    background-image:image-url('bigWaiting.gif');
     background-repeat:no-repeat;
     background-position:center 20%;
     background-color:white;
 }
 
 .blackWaiting {
-    background-image:url('/assets/blackWaiting.gif');
+    background-image:image-url('blackWaiting.gif');
     background-repeat:no-repeat;
     background-position:center center;
     background-color:black;
 }
 
 .bigBlackWaiting {
-    background-image:url('/assets/bigBlackWaiting.gif');
+    background-image:image-url('bigBlackWaiting.gif');
     background-repeat:no-repeat;
     background-position:center center;
     background-color:black;
@@ -1428,7 +1428,7 @@ div.auto_complete ul strong.highlight {
 }
 
 .ui-autocomplete-loading {
-  background: white url('/assets/ui-anim_basic_16x16.gif') right center no-repeat;
+  background: white image-url('ui-anim_basic_16x16.gif') right center no-repeat;
 }
 
 ul.todo-submenu > li > a {
