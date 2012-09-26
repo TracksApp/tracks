@@ -1431,6 +1431,11 @@ div.auto_complete ul strong.highlight {
   background: white image-url('ui-anim_basic_16x16.gif') right center no-repeat;
 }
 
+a.item-downarrow {
+  margin-left: 0;
+  margin-right: 0;
+}
+
 ul.todo-submenu > li > a {
   position: relative;
   padding-left: 24px;
