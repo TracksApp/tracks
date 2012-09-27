@@ -1,26 +1,26 @@
 * {
-	margin: 0;
-	padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
 body {
-	background: #fff;
-	color: #000;
-	font-size: 8.2pt;
-	font-family: "Lucida Grande", "Bitstream Vera Sans", Helvetica, Verdana, Arial, sans-serif;
+    background: #fff;
+    color: #000;
+    font-size: 8.2pt;
+    font-family: "Lucida Grande", "Bitstream Vera Sans", Helvetica, Verdana, Arial, sans-serif;
 }
 
 img {
-	max-width: 2.2in;
-	max-height: 4.3in;
-	border:0;
+    max-width: 2.2in;
+    max-height: 4.3in;
+    border:0;
 }
 
 #navcontainer, #input_box, #footer, .big-box, .refresh, .badge, h1, .icon,
 #minilinks, .defer-container, .menu_sort, .position, .buttons, .sf-item-menu,
 .container_toggle, .grip, .show_notes, .recurring_icon, #project-next-prev,
 .project_settings, .add_note_link {
-	display:none; 
+    display:none; 
 }
 
 .tag {
@@ -28,56 +28,54 @@ img {
 }
 
 .contexts {
-	margin: 0 0 2em 0;
-	border-top: 1px solid #000;
-	page-break-before: always;
-}
+    margin: 0 0 2em 0;
+    border-top: 1px solid #000;
+    page-break-before: always;
 
-.contexts:first-child {
-	page-break-before: avoid;
+    &:first-child { page-break-before: avoid; }
 }
 
 h2 {
-	font-size: 1.4em;
-	font-weight: bold;
-	margin-bottom: .3em;
-        margin-top: 5pt;
-	padding: .2em 0;
-	border-bottom: 1pt dotted #000;
+    font-size: 1.4em;
+    font-weight: bold;
+    margin-bottom: .3em;
+    margin-top: 5pt;
+    padding: .2em 0;
+    border-bottom: 1pt dotted #000;
 }
 
 a, p, blockquote, ul, li, ol, dt, dd, dl, table {
-	margin: 0 0 .3em 0;
+    margin: 0 0 .3em 0;
 }
 
 .notes {
-	margin: .12em 1.2em;
-	padding: .3em;
+    margin: .12em 1.2em;
+    padding: .3em;
 }
 
 .description {
-	margin-left: 18pt;
-	line-height: 150%
+    margin-left: 18pt;
+    line-height: 150%
 }
 
 ul {
-	list-style-type: circle;
+    list-style-type: circle;
 }
 
 li {
-	margin: .1em 0 .1em 2em;
-	line-height: 1.4em; 
+    margin: .1em 0 .1em 2em;
+    line-height: 1.4em; 
 }
 
 .item-container {
-	clear:both;
-	padding-top: .3em;
-	padding-bottom: .3em;
+    clear:both;
+    padding-top: .3em;
+    padding-bottom: .3em;
 }
 
 .item-checkbox {
-	width: 10pt;
-	height: 10pt;
-	display:block;
-	float:left;
+    width: 10pt;
+    height: 10pt;
+    display:block;
+    float:left;
 }
