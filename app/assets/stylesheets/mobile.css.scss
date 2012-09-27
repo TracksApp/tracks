@@ -11,7 +11,7 @@ div.footer {
     color: #999999;
     text-align: center;
 }
-    
+
 a, a:link, a:active, a:visited {
     color: #CC3334;
     padding: 0.25em;
@@ -26,24 +26,24 @@ a:hover {
 div.footer a {
     text-decoration: underline;
     color: #999999;
-    }
+}
 
 h1 {
-  color: #fff;
-  padding-top: 0.2em;
-  padding-bottom: 0.2em;
-  padding-left:8px;
-  margin-top:0;
-  margin-bottom:0;
-  font-size:medium;
+    color: #fff;
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
+    padding-left:8px;
+    margin-top:0;
+    margin-bottom:0;
+    font-size:medium;
 }
 
 h2 {
-  background-color: #aaaaaa;
-  margin: .3em 0;
-  padding: .3em 0 .1em .3em;
-  border-top: 1px solid #777777;
-  font-size:medium;
+    background-color: #aaaaaa;
+    margin: .3em 0;
+    padding: .3em 0 .1em .3em;
+    border-top: 1px solid #777777;
+    font-size:medium;
 }
 
 h2 a, h2 a:link, h2 a:active, h2 a:visited {
@@ -58,31 +58,31 @@ h2 a:hover {
 }
 
 h4.alert  {
-  border: 1px solid #666666;
-   text-align: center;
+    border: 1px solid #666666;
+    text-align: center;
 }
 
 h4.warning  {
-  border: 1px solid #ED2E38;
-  background-color: #F6979C;
-  color: #000;
+    border: 1px solid #ED2E38;
+    background-color: #F6979C;
+    color: #000;
 }
 h4.error  {
-   color:#fff;
-   background:#c00;
+    color:#fff;
+    background:#c00;
 }
 h4.notice {
-  border: 1px solid #007E00;
-  background-color: #c2ffc2;
-  color: #007E00;
+    border: 1px solid #007E00;
+    background-color: #c2ffc2;
+    color: #007E00;
 }
 
 span.tag {
-  font-size: small;
-  background-color: #CCE7FF;
-  color: #000;
-  padding: 1px;
-  margin-right: 2px;
+    font-size: small;
+    background-color: #CCE7FF;
+    color: #000;
+    padding: 1px;
+    margin-right: 2px;
 }
 
 span.r {
@@ -95,81 +95,81 @@ span.prj, span.ctx{
 }
 
 #ctx, #pjr {
-  margin: 0.5em 0;
+    margin: 0.5em 0;
 }
 
 #ctx a, #pjr a {
-  padding: 0.1em 0;
+    padding: 0.1em 0;
 }
 
 /*   Draw attention to some text
     Same format as traffic lights */
 .red {
-      color: #fff;
-      background: #f00;
-      padding: 1px;
-      font-size: 1em;
+    color: #fff;
+    background: #f00;
+    padding: 1px;
+    font-size: 1em;
 }
-      
+
 .amber {
-      color: #fff;
-      background: #ff6600;
-      padding: 1px;
-      font-size: 1em;
+    color: #fff;
+    background: #ff6600;
+    padding: 1px;
+    font-size: 1em;
 }
-         
+
 .orange {
-      color: #fff;
-      background: #FFA500;
-      padding: 1px;
-      font-size: 1em;
+    color: #fff;
+    background: #FFA500;
+    padding: 1px;
+    font-size: 1em;
 }
 
 .green {
-      color: #fff;
-      background: #33cc00;
-      padding: 1px;
-      font-size: 1em;
+    color: #fff;
+    background: #33cc00;
+    padding: 1px;
+    font-size: 1em;
 }
-      
+
 .grey {
-      color: #fff;
-      background: #999;
-      padding: 1px;
-      font-size: 1em;
+    color: #fff;
+    background: #999;
+    padding: 1px;
+    font-size: 1em;
 }
-      
+
 .count {
-      color: #fff;
-      background: #f00;
-      padding: 0.2em;
+    color: #fff;
+    background: #f00;
+    padding: 0.2em;
 }
 
 .errors {
-      background: #FFC2C2;
+    background: #FFC2C2;
 }
 
 ul.c li {
-list-style-type: none;
+    list-style-type: none;
 }
 
 ul.c {
-  padding: 0;
-  margin: 0;
-  padding-left: 0.1em;
+    padding: 0;
+    margin: 0;
+    padding-left: 0.1em;
 }
 
 ul.c li {
-  padding: 0.25em 0;
-  margin: 0;
+    padding: 0.25em 0;
+    margin: 0;
 }
 
 ul.c li span.r {
-  display: none;
+    display: none;
 }
 
 span.r {
-  display:none;
+    display:none;
 }
 
 #topbar {
@@ -184,12 +184,12 @@ span.r {
 }
 
 .nav {
-  color: #fff;
-  background: #000;
-  padding:0;
-  overflow:auto;
-  list-style:none;
-  margin:0;
+    color: #fff;
+    background: #000;
+    padding:0;
+    overflow:auto;
+    list-style:none;
+    margin:0;
 }
 
 .nav a, .nav a:link, .nav a:active, .nav a:visited {
@@ -219,60 +219,60 @@ span.r {
 }
 
 #database_auth_form table td {
-  width:7em;
+    width:7em;
 }
 
 table.c {
-      margin-left: 5px;
+    margin-left: 5px;
 }
 
 .mobile-done {
-  display:inline;
+    display:inline;
 }
 
 input#todo_description, input#tag_list, textarea#todo_notes, select#todo_project_id, select#todo_context_id {
-  width: 95%;
+    width: 95%;
 }
 
 .next-prev-project {
-  overflow:auto;
-  padding:0;
-  margin:0;
-  list-style:none;
+    overflow:auto;
+    padding:0;
+    margin:0;
+    list-style:none;
 }
 
 .prev,
 .next {
-  float:left;
-  width:50%;
+    float:left;
+    width:50%;
 }
 
 .next {
-  float:right;
+    float:right;
 }
 
 .prev a,
 .next a {
-  display:block;
-  height:1em;
-  overflow:hidden;
+    display:block;
+    height:1em;
+    overflow:hidden;
 }
 
 .prev a {
-  background: image-url('previous.png') left center no-repeat;
-  padding-left: 20px;
+    background: image-url('previous.png') left center no-repeat;
+    padding-left: 20px;
 }
 
 .prev a:hover {
-  background: #cc3334 image-url('previous.png') left center no-repeat;
+    background: #cc3334 image-url('previous.png') left center no-repeat;
 }
 
 .next a {
-  text-align:right;
-  background: image-url('next.png') right center no-repeat;
-  padding-right: 20px;
+    text-align:right;
+    background: image-url('next.png') right center no-repeat;
+    padding-right: 20px;
 }
 
 .next a:hover {
-  background: #cc3334 image-url('next.png') right center no-repeat;
+    background: #cc3334 image-url('next.png') right center no-repeat;
 }

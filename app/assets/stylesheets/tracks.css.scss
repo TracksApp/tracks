@@ -60,7 +60,7 @@ q:before,q:after {
 }
 
 abbr,acronym {
-  border:0;
+    border:0;
 }
 
 body {
@@ -436,7 +436,7 @@ input.item-checkbox {
 }
 
 .project_description, .context_description {
-  margin-left: 50px;
+    margin-left: 50px;
 }
 
 .stale_l1 {
@@ -483,15 +483,15 @@ body.preferences div#footer {
 /* override jquery css to match tracks defaults better */
 
 body.preferences div.ui-widget {
-  font-size: 1em;
+    font-size: 1em;
 }
 
 body.preferences div.ui-tabs li a {
-  padding: 0.1em 1em;
+    padding: 0.1em 1em;
 }
 
 body.preferences div.pref_new_token a {
-  color: #CC3334;
+    color: #CC3334;
 }
 
 /* The notes which may be attached to an item */
@@ -522,21 +522,21 @@ body.preferences div.pref_new_token a {
 
 .todo_notes ol li, .todo_notes ul li,
 .project_notes ol li, .project_notes ul li {
-  margin-left: 20px;
+    margin-left: 20px;
 }
 
 .todo_notes h1, .project_notes h1 {
-  font-size: 1.5em;
-  font-weight: bold;
-  margin: 10px 0px;
+    font-size: 1.5em;
+    font-weight: bold;
+    margin: 10px 0px;
 }
 
 .todo_notes h2, .project_notes h2 {
-  font-size: 1.2em;
-  font-style: italic;
-  margin: 10px 0px !important;
-  padding: 0px !important;
-  background-color: transparent !important;
+    font-size: 1.2em;
+    font-style: italic;
+    margin: 10px 0px !important;
+    padding: 0px !important;
+    background-color: transparent !important;
 }
 
 /* The notes for the project */
@@ -571,7 +571,7 @@ div.note_footer a, div.note_footer a:hover {
 
 /* For the detailed notes view */
 .project_notes {
-  padding: 5px;
+    padding: 5px;
 }
 
 div.add_note_link {
@@ -1040,7 +1040,7 @@ div.message {
 }
 
 .drop_target {
-  display:none;
+    display:none;
 }
 
 .hover {
@@ -1049,9 +1049,9 @@ div.message {
 }
 
 .context_target {
-  height: 15px;
-  margin: 4px;
-  border: 4px dotted #999;
+    height: 15px;
+    margin: 4px;
+    border: 4px dotted #999;
 }
 
 /* Error message styles */
@@ -1384,65 +1384,65 @@ div.integrations textarea {
 }
 
 .defer-container {
-  float:right;
+    float:right;
 }
 
 .defer-container a:hover {
-  background-color: inherit;
+    background-color: inherit;
 }
 
 div.auto_complete {
-  width: 350px;
-  background: #fff;
-  color: #000;
+    width: 350px;
+    background: #fff;
+    color: #000;
 }
 
 div.auto_complete ul {
-  border:1px solid #888;
-  margin:0;
-  padding:0;
-  width:100%;
-  list-style-type:none;
+    border:1px solid #888;
+    margin:0;
+    padding:0;
+    width:100%;
+    list-style-type:none;
 }
 
 div.auto_complete ul li {
-  font-size: 1.0em;
-  margin:0;
-  padding:3px;
-  list-style-type: none;
+    font-size: 1.0em;
+    margin:0;
+    padding:3px;
+    list-style-type: none;
 }
 
 div.auto_complete ul li.selected {
-  background-color: #ffb;
-  font-weight:bold;
+    background-color: #ffb;
+    font-weight:bold;
 }
 
 div.auto_complete ul strong.highlight {
-  color: #800;
-  margin:0;
-  padding:0;
+    color: #800;
+    margin:0;
+    padding:0;
 }
 
 .ui-datepicker {
-  z-index: 1000 !important;
+    z-index: 1000 !important;
 }
 
 .ui-autocomplete-loading {
-  background: white image-url('ui-anim_basic_16x16.gif') right center no-repeat;
+    background: white image-url('ui-anim_basic_16x16.gif') right center no-repeat;
 }
 
 a.item-downarrow {
-  margin-left: 0;
-  margin-right: 0;
+    margin-left: 0;
+    margin-right: 0;
 }
 
 ul.todo-submenu > li > a {
-  position: relative;
-  padding-left: 24px;
+    position: relative;
+    padding-left: 24px;
 }
 
 ul.todo-submenu > li > a > img {
-  position: absolute;
-  left: 0px;
-  top: 0px;
+    position: absolute;
+    left: 0px;
+    top: 0px;
 }
