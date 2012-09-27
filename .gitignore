@@ -12,15 +12,12 @@ db/data.yml
 db/schema.rb
 log
 nbproject
-public/javascripts/cache
-public/stylesheets/cache
 tmp
 vendor/plugins/query_trace/
 rerun.txt
-public/javascripts/jquery-cached.js
-public/javascripts/tracks-cached.js
-public/stylesheets/tracks-cached.css
 .idea
 .rvmrc
 .yardoc
 tags
+/.bundle/
+/public/assets/
