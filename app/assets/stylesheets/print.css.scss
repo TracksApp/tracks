@@ -31,10 +31,8 @@ img {
     margin: 0 0 2em 0;
     border-top: 1px solid #000;
     page-break-before: always;
-}
 
-.contexts:first-child {
-    page-break-before: avoid;
+    &:first-child { page-break-before: avoid; }
 }
 
 h2 {

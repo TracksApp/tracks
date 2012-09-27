@@ -106,11 +106,31 @@ h3 {
 
 /* Rules for the icon links */
 
-img.edit_item {background-image: image-url('edit_off.png'); background-repeat: no-repeat; border: none;}
-a:hover img.edit_item {background-image: image-url('edit_on.png'); background-color: transparent; background-repeat: no-repeat; border: none;}
+img.edit_item {
+    background-image: image-url('edit_off.png');
+    background-repeat: no-repeat;
+    border: none;
 
-img.delete_item {background-image: image-url('delete_off.png'); background-repeat: no-repeat; border: none;}
-a:hover img.delete_item {background-image: image-url('delete_on.png');background-color: transparent;background-repeat: no-repeat; border: none;}
+    a:hover & {
+        background-image: image-url('edit_on.png');
+        background-color: transparent;
+        background-repeat: no-repeat;
+        border: none;
+    }
+}
+
+img.delete_item {
+    background-image: image-url('delete_off.png');
+    background-repeat: no-repeat;
+    border: none;
+
+    a:hover & {
+        background-image: image-url('delete_on.png');
+        background-color: transparent;
+        background-repeat: no-repeat;
+        border: none;
+    }
+}
 
 a.undecorated_link {background-color:transparent;color:transparent;}
 img.todo_star {background-image: image-url('staricons.png'); background-repeat: no-repeat; border:none; background-position: -32px 0px;}
@@ -118,14 +138,20 @@ img.todo_star.starred{ background-position: 0px 0px; }
 a:hover img.todo_star { background-position: -48px 0px;}
 a:hover img.todo_star.starred { background-position: -16px 0px; }
 
-a.to_top {background: transparent image-url('top_off.png') no-repeat;}
-a.to_top:hover {background: transparent image-url('top_on.png') no-repeat;}
+a.to_top {
+    background: transparent image-url('top_off.png') no-repeat;
+    &:hover {background: transparent image-url('top_on.png') no-repeat;}
+}
 
-a.up {background: transparent image-url('up_off.png') no-repeat;}
-a.up:hover {background: transparent image-url('up_on.png') no-repeat;}
+a.up {
+    background: transparent image-url('up_off.png') no-repeat;
+    &:hover {background: transparent image-url('up_on.png') no-repeat;}
+}
 
-a.down {background: transparent image-url('down_off.png') no-repeat;}
-a.down:hover {background: transparent image-url('down_on.png') no-repeat;}
+a.down {
+    background: transparent image-url('down_off.png') no-repeat;
+    &:hover {background: transparent image-url('down_on.png') no-repeat;}
+}
 
 a.to_bottom {background: transparent image-url('bottom_off.png') no-repeat;}
 a.to_bottom:hover {background: transparent image-url('bottom_on.png') no-repeat;}
@@ -203,8 +229,8 @@ a.show_successors:hover, a.link_to_successors:hover {background-image: image-url
     float: left;
 }
 
-#recurring_todo input, #recurring_todo textarea {
-    width: 100%;
+#recurring_todo {
+    input, textarea { width: 100%; }
 }
 
 .recurring_container {
@@ -226,32 +252,32 @@ a.show_successors:hover, a.link_to_successors:hover {background-image: image-url
 #navlist {
     margin: 0;
     padding: 0 0 20px 5px;
-}
 
-#navlist ul, #navlist li {
-    margin: 0;
-    padding: 0;
-    display: inline;
-    list-style-type: none;
-}
+    ul, li {
+        margin: 0;
+        padding: 0;
+        display: inline;
+        list-style-type: none;
+    }
 
-#navlist a:link, #navlist a:visited {
-    float: left;
-    line-height: 14px;
-    font-weight: bold;
-    margin: 0 10px 4px 10px;
-    text-decoration: none;
-    color: #eee;
-}
+    a:link, a:visited {
+        float: left;
+        line-height: 14px;
+        font-weight: bold;
+        margin: 0 10px 4px 10px;
+        text-decoration: none;
+        color: #eee;
+    }
 
-#navlist a:link#current, #navlist a:visited#current, #navlist a:hover {
-    border-bottom: 4px solid #CCC;
-    padding-bottom: 2px;
-    background: transparent;
-    color: #CCC;
-}
+    a:link#current, a:visited#current, a:hover {
+        border-bottom: 4px solid #CCC;
+        padding-bottom: 2px;
+        background: transparent;
+        color: #CCC;
+    }
 
-#navlist a:hover { color: #CCC; }
+    a:hover { color: #CCC; }
+}
 
 #develop-notify-bar {
     line-height:0.5;
@@ -279,9 +305,8 @@ a.show_successors:hover, a.link_to_successors:hover {background-image: image-url
     margin-top: 15px;
     margin-bottom: 5px;
     white-space: nowrap; /* added 2006-05-17 for safari display, timfm */
-}
-#date h1 {
-    font-size: 152%;
+
+    h1 { font-size: 152%; }
 }
 
 #minilinks {
@@ -323,15 +348,17 @@ a.show_successors:hover, a.link_to_successors:hover {background-image: image-url
     border:0px;
 }
 
-h2 a, h2 a:link, h2 a:active, h2 a:visited {
-    color: #666;
-    text-decoration: none;
-}
+h2 {
+    a, a:link, a:active, a:visited {
+        color: #666;
+        text-decoration: none;
+    }
 
-h2 a:hover {
-    color: #cc3334;
-    background-color: transparent;
-    text-decoration: none;
+    a:hover {
+        color: #cc3334;
+        background-color: transparent;
+        text-decoration: none;
+    }
 }
 
 div#input_box {
@@ -389,8 +416,10 @@ a:hover img.icon_delete_dep {width: 10px; background-image: image-url('icon_dele
 a.icon_delete_dep:hover {width: 10px; background-color: black;}
 
 /* deleting dependency from edit form of a todo */
-form.edit_todo_form a.icon_delete_dep:hover { background-color: #cccccc;}
-form.edit_todo_form a:hover img.icon_delete_dep { background-color: #cccccc; }
+form.edit_todo_form {
+    a.icon_delete_dep:hover { background-color: #cccccc;}
+    a:hover img.icon_delete_dep { background-color: #cccccc; }
+}
 
 /* delete button for deleting a dep from the tree of a todo */
 a.delete_dependency_button:hover {background-color: white;}
@@ -458,40 +487,40 @@ input.item-checkbox {
     padding: 0px;
 }
 
-a.footer_link {color: #cc3334; font-style: normal;}
-a.footer_link:hover {color: #fff; background-color: #cc3334 !important;}
+a.footer_link {
+    color: #cc3334;
+    font-style: normal;
+    
+    &:hover {
+        color: #fff;
+        background-color: #cc3334 !important;
+    }
+}
 
 /* preferences */
 
-body.preferences div#display_box {
-    margin-right:510px;
-}
+body.preferences {
+    div#display_box {
+        margin-right:510px;
+    }
 
-body.preferences div#input_box {
-    width:490px;
-    right:15px;
-}
+    div#input_box {
+        width:490px;
+        right:15px;
+    }
 
-body.preferences select#prefs_time_zone, body.preferences select#prefs_sms_context_id {
-    width: 250px;
-}
+    select#prefs_time_zone, select#prefs_sms_context_id {
+        width: 250px;
+    }
 
-body.preferences div#footer {
-    margin-right:410px;
-}
+    div#footer {
+        margin-right:410px;
+    }
 
-/* override jquery css to match tracks defaults better */
-
-body.preferences div.ui-widget {
-    font-size: 1em;
-}
-
-body.preferences div.ui-tabs li a {
-    padding: 0.1em 1em;
-}
-
-body.preferences div.pref_new_token a {
-    color: #CC3334;
+    /* override jquery css to match tracks defaults better */
+    div.ui-widget { font-size: 1em; }
+    div.ui-tabs li a { padding: 0.1em 1em; }
+    div.pref_new_token a { color: #CC3334; }
 }
 
 /* The notes which may be attached to an item */
@@ -915,54 +944,54 @@ input#go_to_project, input#context_hide {
     width: 5%;
 }
 
-#todo_new_action_container .show_from_input, #todo_new_action_container .due_input {
-    width: 45%;
+#todo_new_action_container {
+    .show_from_input, .due_input {
+        width: 45%;
+    }
 }
 
 #todo_new_action_container .show_from_input {
     float: right;
 }
 
-#todo-form-new-action .submit_box, #project_form .submit_box, #context_form .submit_box, #todo-form-multi-new-action .submit_box {
-    height: 25px;
-    padding: 5px 0;
-    text-align: center;
-    clear: right;
+#todo-form-new-action, #project_form, #context_form, #todo-form-multi-new-action {
+    .submit_box {
+        height: 25px;
+        padding: 5px 0;
+        text-align: center;
+        clear: right;
+    }
 }
 
-.edit_todo_form .submit_box {
-    height: 25px;
-    padding: 5px 0;
-    text-align: center;
-    clear: right;
+.edit_todo_form {
+    input, textarea { width:100%; }
+
+    .submit_box {
+        height: 25px;
+        padding: 5px 0;
+        text-align: center;
+        clear: right;
+    }
+
+    .Date { width:89%; }
+
+    a.date_clear:hover { background: #CCCCCC; }
+
+    .tag_list_label { clear:both; }
+
+    .due_input, .show_from_input, .project_input, .context_input {
+        width:48%;
+    }
+
+    .show_from_input, .context_input {
+        float: right;
+    }
+
+    .submit_box input {
+        width:120px;
+    }
 }
 
-.edit_todo_form input, .edit_todo_form textarea {
-    width:100%;
-}
-
-.edit_todo_form .Date {
-    width:89%;
-}
-
-.edit_todo_form a.date_clear:hover {
-    background: #CCCCCC;
-}
-
-.edit_todo_form .tag_list_label {
-    clear:both;
-}
-.edit_todo_form .due_input, .edit_todo_form .show_from_input, .edit_todo_form .project_input, .edit_todo_form .context_input {
-    width:48%;
-}
-
-.edit_todo_form .show_from_input, .edit_todo_form .context_input {
-    float: right;
-}
-
-.edit_todo_form .submit_box input {
-    width:120px;
-}
 .hide_form {
     text-align:right;
 }
@@ -1067,31 +1096,31 @@ div.message {
     padding-bottom: 12px;
     margin: 10px auto 20px auto;
     background-color: #f0f0f0;
-}
 
-#errorExplanation h2 {
-    text-align: left;
-    font-weight: bold;
-    padding: 5px 5px 5px 15px;
-    font-size: 12px;
-    margin: -7px;
-    background-color: #c00;
-    color: #fff;
-}
+    h2 {
+        text-align: left;
+        font-weight: bold;
+        padding: 5px 5px 5px 15px;
+        font-size: 12px;
+        margin: -7px;
+        background-color: #c00;
+        color: #fff;
+    }
 
-#errorExplanation > p {
-    color: #333;
-    margin-top: 5px;
-    margin-bottom: 0;
-    padding: 5px;
-}
+    > p {
+        color: #333;
+        margin-top: 5px;
+        margin-bottom: 0;
+        padding: 5px;
+    }
 
-#errorExplanation ul li {
-    font-size: 1em;
-    list-style-type: disc;
-    list-style-position: inside;
-    margin-left:7px;
-    color: #333;
+    ul li {
+        font-size: 1em;
+        list-style-type: disc;
+        list-style-position: inside;
+        margin-left:7px;
+        color: #333;
+    }
 }
 
 ul#prefs {list-style-type: disc; margin-left: 15px;}
@@ -1126,38 +1155,32 @@ ul#prefs {list-style-type: disc; margin-left: 15px;}
     color: #666;
     padding: 5px 20px;
     text-align: left;
+
+    h3, dl, dt, dd {
+        display: inline;
+    }
+
+    dt { margin-left: 15px; }
+    dd { margin-left: 3px; }
+    p { margin-bottom: 0px; }
 }
 
-#feedlegend h3, #feedlegend dl, #feedlegend dt, #feedlegend dd {
-    display: inline;
-}
+#feeds {
+    img.rss-icon {
+        margin-bottom: -4px;
+    }
 
-#feedlegend dt {
-    margin-left: 15px;
-}
+    li {
+        font-size:13px;
+        font-family: "Lucida Grande", Verdana, Geneva, Arial, sans-serif;
 
-#feedlegend dd {
-    margin-left: 3px;
-}
-
-#feedlegend p {
-    margin-bottom: 0px;
-}
-
-#feeds img.rss-icon {
-    margin-bottom: -4px;
-}
-
-#feeds li {
-    font-size:13px;
-    font-family: "Lucida Grande", Verdana, Geneva, Arial, sans-serif;
-}
-
-#feeds li h4 {
-    margin-top: 12px;
-    margin-bottom: 4px;
-    font-weight: normal;
-    font-style:oblique;
+        h4 {
+            margin-top: 12px;
+            margin-bottom: 4px;
+            font-weight: normal;
+            font-style:oblique;
+        }
+    }
 }
 
 input.open_id {
@@ -1174,32 +1197,32 @@ div.page_name_auto_complete {
     background: #fff;
     display: inline;
     z-index: 100;
-}
 
-div.page_name_auto_complete ul {
-    border: 1px solid #888;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    list-style-type: none;
-}
+    ul {
+        border: 1px solid #888;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        list-style-type: none;
 
-div.page_name_auto_complete ul li {
-    margin: 0;
-    padding: 2px;
-    font-weight:bold;
-    list-style-type: none;
-    color: #000;
-}
+        li {
+            margin: 0;
+            padding: 2px;
+            font-weight:bold;
+            list-style-type: none;
+            color: #000;
+        }
 
-div.page_name_auto_complete ul li.selected {
-    background-color: #ffb;
-}
+        li.selected {
+            background-color: #ffb;
+        }
 
-div.page_name_auto_complete ul strong.highlight {
-    color: #800;
-    margin: 0;
-    padding: 0;
+        strong.highlight {
+            color: #800;
+            margin: 0;
+            padding: 0;
+        }
+    }
 }
 
 table.next_actions td {
@@ -1355,72 +1378,67 @@ button.positive, .widgets a.positive{
     margin-bottom:15px;
 }
 
-div.integrations h2 {
-    margin-top:40px;
-    padding-top:20px;
-    margin-bottom:10px;
-    border-top:1px solid #ccc;
-}
+div.integrations {
+    h2 {
+        margin-top:40px;
+        padding-top:20px;
+        margin-bottom:10px;
+        border-top:1px solid #ccc;
+    }
 
-div.integrations p, div.integrations li {
-    font-size:1.0em;
-}
+    p, li { font-size:1.0em; }
+    pre { font-size:1.1em; }
 
-div.integrations pre {
-    font-size:1.1em;
-}
+    li {
+        list-style-type: disc;
+        list-style-position: inside;
+        margin-left:30px;
+    }
 
-div.integrations li {
-    list-style-type: disc;
-    list-style-position: inside;
-    margin-left:30px;
-}
-
-div.integrations textarea {
-    margin:10px;
-    padding:3px;
-    width:80%;
-    background-color:#ddd;
+    textarea {
+        margin:10px;
+        padding:3px;
+        width:80%;
+        background-color:#ddd;
+    }
 }
 
 .defer-container {
     float:right;
-}
 
-.defer-container a:hover {
-    background-color: inherit;
+    a:hover { background-color: inherit; }
 }
 
 div.auto_complete {
     width: 350px;
     background: #fff;
     color: #000;
-}
 
-div.auto_complete ul {
-    border:1px solid #888;
-    margin:0;
-    padding:0;
-    width:100%;
-    list-style-type:none;
-}
+    ul {
+        border:1px solid #888;
+        margin:0;
+        padding:0;
+        width:100%;
+        list-style-type:none;
 
-div.auto_complete ul li {
-    font-size: 1.0em;
-    margin:0;
-    padding:3px;
-    list-style-type: none;
-}
+        li {
+            font-size: 1.0em;
+            margin:0;
+            padding:3px;
+            list-style-type: none;
+        }
 
-div.auto_complete ul li.selected {
-    background-color: #ffb;
-    font-weight:bold;
-}
+        li.selected {
+            background-color: #ffb;
+            font-weight:bold;
+        }
 
-div.auto_complete ul strong.highlight {
-    color: #800;
-    margin:0;
-    padding:0;
+        strong.highlight {
+            color: #800;
+            margin:0;
+            padding:0;
+        }
+    }
 }
 
 .ui-datepicker {
@@ -1439,10 +1457,10 @@ a.item-downarrow {
 ul.todo-submenu > li > a {
     position: relative;
     padding-left: 24px;
-}
 
-ul.todo-submenu > li > a > img {
-    position: absolute;
-    left: 0px;
-    top: 0px;
+    > img {
+        position: absolute;
+        left: 0px;
+        top: 0px;
+    }
 }

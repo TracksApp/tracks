@@ -21,3 +21,4 @@ rerun.txt
 tags
 /.bundle/
 /public/assets/
+.sass-cache/

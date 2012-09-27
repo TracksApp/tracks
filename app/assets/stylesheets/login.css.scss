@@ -119,28 +119,28 @@ h4.notice {
     padding-bottom: 12px;
     margin: 10px auto 10px auto;
     background-color: #f0f0f0;
-}
 
-#errorExplanation h2 {
-    text-align: left;
-    font-weight: bold;
-    padding: 5px 5px 5px 15px;
-    font-size: 12px;
-    margin: -7px;
-    background-color: #c00;
-    color: #fff;
-}
+    h2 {
+        text-align: left;
+        font-weight: bold;
+        padding: 5px 5px 5px 15px;
+        font-size: 12px;
+        margin: -7px;
+        background-color: #c00;
+        color: #fff;
+    }
 
-#errorExplanation p {
-    color: #333;
-    margin-bottom: 0;
-    padding: 5px;
-}
+    p {
+        color: #333;
+        margin-bottom: 0;
+        padding: 5px;
+    }
 
-#errorExplanation ul li {
-    font-size: 1em;
-    list-style-type: disc;
-    list-style-position: outside;
+    ul li {
+        font-size: 1em;
+        list-style-type: disc;
+        list-style-position: outside;
+    }
 }
 
 input.login_text {
@@ -156,7 +156,5 @@ input.open_id {
 }
 p.alternate_auth {
     text-align: center;
-}
-p.alternate_auth a {
-    text-decoration: underline;
+    a { text-decoration:underline; }
 }
