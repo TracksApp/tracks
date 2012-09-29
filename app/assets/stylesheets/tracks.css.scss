@@ -247,6 +247,8 @@ a.show_successors:hover, a.link_to_successors:hover {background-image: image-url
     position: fixed;
     top: 48px;
     left: 0px;
+    a { color: #eee; }
+    a:hover { color: #ccc; }
 }
 
 #navlist {
