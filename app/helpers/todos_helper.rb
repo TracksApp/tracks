@@ -16,12 +16,8 @@ module TodosHelper
   end
 
   def remote_delete_menu_item(todo)
-    # TODO: what is the current way to do mouseover with css?
     return link_to(
-      image_tag("delete_off.png",
-      :onmouseover => "this.src='#{path_to_image("delete_on.png")}'",
-      :onmouseout => "this.src='#{path_to_image("delete_off.png")}'",
-      :alt => t('todos.delete'), :align => "absmiddle")+" "+t('todos.delete'),
+      t('todos.delete'),
       {:controller => 'todos', :action => 'destroy', :id => todo.id},
       :class => "icon_delete_item",
       :id => "delete_#{dom_id(todo)}",
@@ -34,7 +30,7 @@ module TodosHelper
       :_source_view => (@source_view.underscore.gsub(/\s+/,'_') rescue "")}
     url[:_tag_name] = @tag_name if @source_view == 'tag'
 
-    options = {:x_defer_alert => false, :class => "icon_defer_item", :id => "defer_#{days}_#{dom_id(todo)}" }
+    options = {:x_defer_alert => false, :class => "icon_defer_item icon_defer_#{days}_item", :id => "defer_#{days}_#{dom_id(todo)}" }
     if todo.due
       futuredate = (todo.show_from || todo.user.date) + days.days
       if futuredate > todo.due
@@ -43,7 +39,7 @@ module TodosHelper
       end
     end
 
-    return link_to(image_tag_for_defer(days), url, options)
+    return link_to(t('todos.defer_x_days', :count => days), url, options)
   end
 
   def remote_delete_dependency(todo, predecessor)
@@ -59,15 +55,7 @@ module TodosHelper
       :_source_view => (@source_view.underscore.gsub(/\s+/,'_') rescue "")}
     url[:_tag_name] = @tag_name if @source_view == 'tag'
 
-    return link_to(image_tag("to_project_off.png", :align => "absmiddle")+" " + t('todos.convert_to_project'), url, {:id => "to_project_#{dom_id(todo)}"})
-  end
-
-  def image_tag_for_defer(days)
-    # TODO: what is the current way to do mouseover with css?
-    image_tag("defer_#{days}_off.png",
-      :onmouseover => "this.src='#{path_to_image("defer_#{days}.png")}'",
-      :onmouseout => "this.src='#{path_to_image("defer_#{days}_off.png")}'",
-      :alt => t('todos.defer_x_days', :count => days), :align => "absmiddle")+" "+t('todos.defer_x_days', :count => days)
+    return link_to(t('todos.convert_to_project'), url, {:class => "icon_item_to_project", :id => "to_project_#{dom_id(todo)}"})
   end
 
   def collapsed_notes_image(todo)
