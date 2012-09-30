@@ -107,28 +107,20 @@ h3 {
 /* Rules for the icon links */
 
 img.edit_item {
-    background-image: image-url('edit_off.png');
-    background-repeat: no-repeat;
+    background: image-url('edit.png') no-repeat top;
     border: none;
 
     a:hover & {
-        background-image: image-url('edit_on.png');
-        background-color: transparent;
-        background-repeat: no-repeat;
-        border: none;
+        background-position: bottom;
     }
 }
 
 img.delete_item {
-    background-image: image-url('delete_off.png');
-    background-repeat: no-repeat;
+    background: image-url('delete.png') no-repeat top;
     border: none;
 
     a:hover & {
-        background-image: image-url('delete_on.png');
-        background-color: transparent;
-        background-repeat: no-repeat;
-        border: none;
+        background-position: bottom;
     }
 }
 
@@ -1457,10 +1449,21 @@ a.item-downarrow {
 ul.todo-submenu > li > a {
     position: relative;
     padding-left: 24px;
+    height: 16px;
 
-    > img {
-        position: absolute;
-        left: 0px;
-        top: 0px;
+    &.icon_delete_item {
+        background: image-url('delete.png') no-repeat 2px top;
+        &:hover { background-position: 2px bottom; }
+    }
+
+    @each $days in 1, 2, 3, 7 {
+        &.icon_defer_#{$days}_item {
+            background: image-url('defer_#{$days}.png') no-repeat left top;
+            &:hover { background-position: left bottom; }
+        }
+    }
+
+    &.icon_item_to_project {
+        background: image-url('to_project_off.png') no-repeat;
     }
 }
