@@ -1449,9 +1449,12 @@ a.item-downarrow {
 }
 
 ul.todo-submenu > li > a {
-    position: relative;
-    padding-left: 24px;
-    height: 16px;
+    &, &:hover, &:active, &:visited {
+        position: relative;
+        padding-left: 24px;
+        height: 16px;
+        line-height: 16px;
+    }
 
     &.icon_delete_item {
         background: image-url('delete.png') no-repeat 2px top;
