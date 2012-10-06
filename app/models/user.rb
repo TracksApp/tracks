@@ -81,7 +81,11 @@ class User < ActiveRecord::Base
             end
   has_many :todos,
            :order => 'todos.completed_at DESC, todos.created_at DESC',
-           :dependent => :delete_all
+           :dependent => :delete_all do
+              def count_by_group(g)
+                except(:order).group(g).count
+              end
+           end
   has_many :recurring_todos,
            :order => 'recurring_todos.completed_at DESC, recurring_todos.created_at DESC',
            :dependent => :delete_all
