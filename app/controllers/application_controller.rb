@@ -280,14 +280,14 @@ class ApplicationController < ActionController::Base
 
   def init_not_done_counts(parents = ['project','context'])
     parents.each do |parent|
-      eval("@#{parent}_not_done_counts ||= current_user.todos.active.group('#{parent}_id').count")
-      eval("@#{parent}_deferred_counts ||= current_user.todos.deferred.group('#{parent}_id').count")
+      eval("@#{parent}_not_done_counts ||= current_user.todos.active.count_by_group('#{parent}_id')")
+      eval("@#{parent}_deferred_counts ||= current_user.todos.deferred.count_by_group('#{parent}_id')")
     end
   end
 
   def init_project_hidden_todo_counts(parents = ['project','context'])
     parents.each do |parent|
-      eval("@#{parent}_project_hidden_todo_counts = @#{parent}_project_hidden_todo_counts || current_user.todos.count(:conditions => ['state = ? or state = ?', 'project_hidden', 'active'], :group => :#{parent}_id)")
+      eval("@#{parent}_project_hidden_todo_counts ||= current_user.todos.active_or_hidden.count_by_group('#{parent}_id')")
     end
   end
 
