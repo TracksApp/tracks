@@ -1,0 +1,1 @@
+task :ci => [:test, :cucumber]
