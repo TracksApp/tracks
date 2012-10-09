@@ -4,9 +4,11 @@ rvm:
  - 1.8.7
 
 before_install:
+  - "mysql -e 'create database tracks_test;'"
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
   - "cp config/site.yml.tmpl config/site.yml"
+  - "cp config/database.yml.tmpl config/database.yml"
 
 script: "bundle exec rake ci"
 
