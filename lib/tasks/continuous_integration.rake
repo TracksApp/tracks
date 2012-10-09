@@ -1,1 +1,1 @@
-task :ci => [:test, :cucumber]
+task :ci => [:db:migrate, :test, :cucumber]
