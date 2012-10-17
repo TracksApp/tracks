@@ -27,6 +27,7 @@
 <div id="content"><%= render_flash -%><%=  yield -%></div>
 <hr/><% if current_user && !current_user.prefs.nil? -%>
 <ul class="nav">
+  <li class="link"><%= (link_to(t('layouts.mobile_navigation.home'), todos_path(:format => 'm'))) -%></li>
   <li class="link"><%= (link_to(t('layouts.mobile_navigation.logout'), logout_path(:format => 'm'))) -%></li>
   <li class="link"><%= (link_to(t('layouts.mobile_navigation.tickler'), tickler_path(:format => :m))) -%></li>
   <li class="link"><%= (link_to(t('layouts.mobile_navigation.feeds'), feeds_path(:format=>:m))) -%></li>
