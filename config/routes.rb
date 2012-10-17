@@ -108,6 +108,7 @@ Tracksapp::Application.routes.draw do
   match 'todos/all_done/tag/:name' => "todos#all_done_tag", :as => :all_done_tag
   match 'auto_complete_for_predecessor' => 'todos#auto_complete_for_predecessor'
   match 'mobile' => 'todos#index', :format => 'm'
+  match 'm' => 'todos#index', :format => 'm'
 
   resources :recurring_todos do
     member do
