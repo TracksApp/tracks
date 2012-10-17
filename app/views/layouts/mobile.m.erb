@@ -30,6 +30,7 @@
   <li class="link"><%= (link_to(t('layouts.mobile_navigation.logout'), logout_path(:format => 'm'))) -%></li>
   <li class="link"><%= (link_to(t('layouts.mobile_navigation.tickler'), tickler_path(:format => :m))) -%></li>
   <li class="link"><%= (link_to(t('layouts.mobile_navigation.feeds'), feeds_path(:format=>:m))) -%></li>
+  <li class="link"><%= (link_to(t('layouts.mobile_navigation.full'),  todos_path(:format => 'html'))) -%></li>
 </ul>
 <% end -%>
 <%= render :partial => "shared/footer" -%>
