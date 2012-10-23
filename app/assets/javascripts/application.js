@@ -17,7 +17,7 @@
 //= require tracks.js
 
 // Stuff in vendor/assets
-//= require jquery-ui-1.8.23.custom.min
+//= require jquery-ui-1.9.0.custom.min
 //= require jquery.ui.touch-punch.min
 //= require jquery.blockUI
 //= require jquery.cookie
