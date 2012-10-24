@@ -17,8 +17,8 @@
 <div id="topbar"><h1><% if @down_count -%><span class="count" id="badge_count"><%= @down_count %></span><% end -%> <%=
         l(Date.today, :format => current_user.prefs.title_date_format) -%></h1>
 <ul class="nav">
-  <li class="link"><%=     (link_to(t('layouts.mobile_navigation.new_action'), new_todo_path(new_todo_params))) unless @new_mobile -%></li>
-  <li class="link"><%=     (link_to(t('layouts.mobile_navigation.home'), todos_path(:format => 'm'))) unless @home -%></li>
+  <li class="link"><%=     (link_to(t('layouts.mobile_navigation.new_action'), new_todo_path(new_todo_params))) -%></li>
+  <li class="link"><%=     (link_to(t('layouts.mobile_navigation.home'), todos_path(:format => 'm'))) -%></li>
   <li class="link"><%=     (link_to(t('layouts.mobile_navigation.contexts'), contexts_path(:format => 'm'))) -%></li>
   <li class="link"><%=     (link_to(t('layouts.mobile_navigation.projects'), projects_path(:format => 'm'))) -%></li>
   <li class="link"><%=     (link_to(t('layouts.mobile_navigation.starred'), tag_path("starred", :format => 'm'))) -%></li>
@@ -27,9 +27,11 @@
 <div id="content"><%= render_flash -%><%=  yield -%></div>
 <hr/><% if current_user && !current_user.prefs.nil? -%>
 <ul class="nav">
+  <li class="link"><%= (link_to(t('layouts.mobile_navigation.home'), todos_path(:format => 'm'))) -%></li>
   <li class="link"><%= (link_to(t('layouts.mobile_navigation.logout'), logout_path(:format => 'm'))) -%></li>
   <li class="link"><%= (link_to(t('layouts.mobile_navigation.tickler'), tickler_path(:format => :m))) -%></li>
   <li class="link"><%= (link_to(t('layouts.mobile_navigation.feeds'), feeds_path(:format=>:m))) -%></li>
+  <li class="link"><%= (link_to(t('layouts.mobile_navigation.full'),  todos_path(:format => 'html'))) -%></li>
 </ul>
 <% end -%>
 <%= render :partial => "shared/footer" -%>
