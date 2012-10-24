@@ -10,6 +10,7 @@ en:
       new_action: New
       logout: Logout
       feeds: Feeds
+      full: Full Site
       starred: Starred
       projects: Projects
       tickler: Tickler
@@ -49,6 +50,7 @@ en:
       preferences_title: Show my preferences
       admin: Admin
       help: "?"
+      mobile: Mobile Site
   integrations:
     opensearch_description: Search in Tracks
     applescript_next_action_prompt: "Description of next action:"
