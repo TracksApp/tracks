@@ -110,7 +110,6 @@ en:
     second: Second
     month: month
     server_error: An error occurred on the server.
-    forum: Forum
     notes: Notes
     review: Review
     last: Last
@@ -150,6 +149,7 @@ en:
     weeks: weeks
     wiki: Wiki
     email: Email
+    mailing_list: Mailing List
     search: Search
     ajaxError: There was an error retrieving from server
     days_midsentence:
