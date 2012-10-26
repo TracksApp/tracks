@@ -838,7 +838,8 @@ en:
     label_auth_type: Authentication type
     new_password_label: New password
     you_have_to_reset_your_password: "You have to reset your password"
-    new_user_title: TRACKS::Sign up as the admin user
+    first_user_title: TRACKS::Sign up as the admin user
+    new_user_title: TRACKS::Sign up
     destroy_user: Destroy user
     total_users_count: You have a total of %{count} users
     destroy_confirmation: "Warning: this will delete user '%{login}', all their actions, contexts, project and notes. Are you sure that you want to continue?"
