@@ -40,7 +40,7 @@ class UsersController < ApplicationController
     end
 
     if User.no_users_yet?
-      @page_title = t('users.new_user_title')
+      @page_title = t('users.first_user_title')
       @heading = t('users.first_user_heading')
       @user = get_new_user
     elsif (@user && @user.is_admin?) || SITE_CONFIG['open_signups']
