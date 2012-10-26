@@ -3,7 +3,7 @@
   <h4 id="flash" class="alert" style="display:none"></h4>
 <% else -%>
   <% flash.each do |key,value| -%>
-    <h4 id="flash" class='alert <%= key %>'><%= value %></h4>
+    <h4 id="flash" class='alert <%= key %>'><%= value.html_safe %></h4>
   <% end -%>
 <% end -%>
 </div>
