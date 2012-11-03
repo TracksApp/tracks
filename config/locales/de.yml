@@ -851,7 +851,7 @@ de:
         every_day: "jeden Tag"
         every_month: "jeden Monat"
         every_n: "jeden %{n}"
-        every_xth_day_of_every_n_months: "jedes %{x} %{day} jedes %{n_months} ?"
+        every_xth_day_of_every_n_months: "jedes %{x} %{day} jedes %{n_months} ​"
         every_year_on: "jedes Jahr in %{date}"
         first: erste
         fourth: vierte
