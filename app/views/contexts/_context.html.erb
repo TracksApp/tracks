@@ -7,7 +7,7 @@ cache [context, @source_view, current_user.date.strftime("%Y%m%d")] do
   <div id="c<%= context.id %>" class="container context" style="display:<%= (collapsible && @not_done.empty?) ? "none" : "block" %>">
     <h2>
       <% if collapsible -%>
-        <a href="#" class="container_toggle" id="toggle_c<%= context.id %>"><%= image_tag("collapse.png") %></a>
+        <a href="#" class="container_toggle" id="toggle_c<%= context.id %>"><%= image_tag("blank.png", :alt => t('common.collapse_expand')) %></a>
       <% end -%>
       <% if source_view_is :context %>
         <span id="context_name"><%= context.name %></span>
