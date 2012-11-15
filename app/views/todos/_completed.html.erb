@@ -6,7 +6,7 @@
   <div class=add_note_link><%= link_to t('common.show_all'), determine_done_path%></div>
   <h2>
       <% if collapsible %>
-      <a href="#" class="container_toggle" id="toggle_completed"><%= image_tag("collapse.png") %></a>
+      <a href="#" class="container_toggle" id="toggle_completed"><%= image_tag("blank.png", :alt => t('common.collapse_expand')) %></a>
       <% end %>
       <%= t('todos.completed_actions') %> <%= raw suffix %>
   </h2>

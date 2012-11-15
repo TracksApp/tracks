@@ -5,7 +5,7 @@ cache [project, current_user.date.strftime("%Y%m%d")] do %>
   <div class="container">
     <h2 id="project_name_container">
       <% if collapsible -%>
-        <a href="#" class="container_toggle" id="toggle_p<%= project.id %>"><%= image_tag("collapse.png") %></a>
+        <a href="#" class="container_toggle" id="toggle_p<%= project.id %>"><%= image_tag("blank.png", :alt => t('common.collapse_expand')) %></a>
       <% end -%>
       <div id="project_name" style="width: 100%;"><%= project.name -%></div>
     </h2>

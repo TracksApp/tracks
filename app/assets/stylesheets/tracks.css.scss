@@ -337,9 +337,12 @@ a.show_successors:hover, a.link_to_successors:hover {background-image: image-url
 }
 
 .container_toggle img {
-    height:14px;
-    width:14px;
-    border:0px;
+    height: 14px;
+    width: 14px;
+    border: 0px;
+    background: image-url('collapse_expand.png') no-repeat left top;
+    	
+    .context_collapsed & { background-position: left bottom; }
 }
 
 h2 {
