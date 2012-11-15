@@ -158,6 +158,7 @@ en:
       other: days
     deferred: deferred
     not_available_abbr: "n/a"
+    collapse_expand: Collapse/expand
   data:
     import_successful: Import was successful.
     import_errors: Some errors occurred during import

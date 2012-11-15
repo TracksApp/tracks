@@ -1,7 +1,7 @@
 <div class="container hidden" id="hidden">
   <h2>
       <% if collapsible %>
-      <a href="#" class="container_toggle" id="toggle_deferred"><%= image_tag("collapse.png") %></a>
+      <a href="#" class="container_toggle" id="toggle_deferred"><%= image_tag("blank.png", :alt => t('common.collapse_expand')) %></a>
       <% end %>
       <%= t('todos.hidden_actions') %> <%= raw(append_descriptor ? append_descriptor : '') %>
   </h2>

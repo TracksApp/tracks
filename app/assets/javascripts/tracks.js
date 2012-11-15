@@ -328,34 +328,11 @@ var TodoItemsContainer = {
     ensureVisibleWithEffectAppear: function(elemId){
         $('#'+elemId).fadeIn(500);
     },
-    expandNextActionListing: function(itemsElem, skipAnimation) {
-        itemsElem = $(itemsElem);
-        if(skipAnimation == true) {
-            itemsElem.show();
-        }
-        else {
-            itemsElem.show('blind', 400);
-        }
-        TodoItems.showContainer(itemsElem.parentNode);
-    },
-    collapseNextActionListing: function(itemsElem, skipAnimation) {
-        itemsElem = $(itemsElem);
-        if(skipAnimation == true) {
-            itemsElem.hide();
-        }
-        else {
-            itemsElem.hide('blind', 400);
-        }
-        TodoItems.hideContainer(itemsElem.parentNode);
-    },
     ensureContainerHeight: function(itemsElem) {
         $(itemsElem).css({
             height: '',
             overflow: ''
         });
-    },
-    expandNextActionListingByContext: function(itemsElemId, skipAnimation){
-        TodoItems.expandNextActionListing($('#'+itemsElemId).get(), skipAnimation);
     },
     setup_container_toggles: function(){
         // bind handlers
@@ -363,16 +340,12 @@ var TodoItemsContainer = {
             var toggle_target = $(this.parentNode.parentNode).find('.toggle_target');
             if(toggle_target.is(':visible')){
                 // hide it
-                var imgSrc = $(this).find('img').attr('src');
-                $(this).find('img').attr('src', imgSrc.replace('collapse', 'expand'));
                 $.cookie(TodoItemsContainer.buildCookieName(this.parentNode.parentNode), true);
                 toggle_target.slideUp(500);
                 // set parent class to 'context_collapsed' so we can hide/unhide all collapsed contexts
                 toggle_target.parent().addClass("context_collapsed");
             } else {
                 // show it
-                imgSrc = $(this).find('img').attr('src');
-                $(this).find('img').attr('src', imgSrc.replace('expand', 'collapse'));
                 $.cookie(TodoItemsContainer.buildCookieName(this.parentNode.parentNode), null);
                 toggle_target.slideDown(500);
                 // remove class 'context_collapsed' from parent class
@@ -383,12 +356,8 @@ var TodoItemsContainer = {
         // set to cookied state
         $('.container.context').each(function(){
             if($.cookie(TodoItemsContainer.buildCookieName(this))=="true"){
-                var imgSrc = $(this).find('.container_toggle img').attr('src');
-                if (imgSrc) {
-                    $(this).find('.container_toggle img').attr('src', imgSrc.replace('collapse', 'expand'));
-                    $(this).find('.toggle_target').hide();
-                    $(this).find('.toggle_target').parent().addClass("context_collapsed");
-                }
+                $(this).find('.toggle_target').hide();
+                $(this).find('.toggle_target').parent().addClass("context_collapsed");
             }
         });
     },
@@ -397,14 +366,6 @@ var TodoItemsContainer = {
     buildCookieName: function(containerElem) {
         var tracks_login = $.cookie('tracks_login');
         return 'tracks_'+tracks_login+'_context_' + containerElem.id + '_collapsed';
-    },
-    showContainer: function(containerElem) {
-        var imgSrc = $(containerElem).find('.container_toggle img').attr('src');
-        $(containerElem).find('.container_toggle img').attr('src', imgSrc.replace('expand', 'collapse'));
-    },
-    hideContainer: function (containerElem) {
-        var imgSrc = $(containerElem).find('.container_toggle img').attr('src');
-        $(containerElem).find('.container_toggle img').attr('src', imgSrc.replace('collapse', 'expand'));
     }
 }
 
