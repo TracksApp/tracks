@@ -588,16 +588,15 @@ class TodosController < ApplicationController
     @source_view = 'done'
     @page_title = t('todos.completed_tasks_title')
 
-    completed_todos = current_user.todos.completed
-
-    @done_today = get_done_today(completed_todos)
-    @done_this_week = get_done_this_week(completed_todos)
-    @done_this_month = get_done_this_month(completed_todos)
+    @done_today, @done_this_week, @done_this_month = DoneTodos.done_todos_for_container(current_user)
     @count = @done_today.size + @done_this_week.size + @done_this_month.size
 
     respond_to do |format|
       format.html
-      format.xml { render :xml => completed_todos.to_xml( *to_xml_params ) }
+      format.xml do 
+        completed_todos = current_user.todos.completed
+        render :xml => completed_todos.to_xml( *to_xml_params ) 
+      end
     end
   end
 
@@ -1354,6 +1353,26 @@ class TodosController < ApplicationController
       @due_next_week.count + @due_this_month.count + @due_after_this_month.count
 
     return !( all_list_uniq_ids.length == all_list_count )
+  end
+
+  # all completed todos [today@00:00, today@now]
+  def get_done_today(completed_todos, includes = {:include => Todo::DEFAULT_INCLUDES})
+    start_of_this_day = Time.zone.now.beginning_of_day
+    completed_todos.completed_after(start_of_this_day).all(includes)
+  end
+
+  # all completed todos [begin_of_week, start_of_today]
+  def get_done_this_week(completed_todos, includes = {:include => Todo::DEFAULT_INCLUDES})
+    start_of_this_week = Time.zone.now.beginning_of_week
+    start_of_this_day = Time.zone.now.beginning_of_day
+    completed_todos.completed_before(start_of_this_day).completed_after(start_of_this_week).all(includes)
+  end
+
+  # all completed todos [begin_of_month, begin_of_week]
+  def get_done_this_month(completed_todos, includes = {:include => Todo::DEFAULT_INCLUDES})
+    start_of_this_month = Time.zone.now.beginning_of_month
+    start_of_this_week = Time.zone.now.beginning_of_week
+    completed_todos.completed_before(start_of_this_week).completed_after(start_of_this_month).all(includes)
   end
   
   class TodoCreateParamsHelper

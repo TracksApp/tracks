@@ -175,11 +175,7 @@ class ContextsController < ApplicationController
     @context = current_user.contexts.find(params[:id])
     @page_title = t('contexts.completed_tasks_title', :context_name => @context.name)
 
-    completed_todos = @context.todos.completed
-
-    @done_today = get_done_today(completed_todos)
-    @done_this_week = get_done_this_week(completed_todos)
-    @done_this_month = get_done_this_month(completed_todos)
+    @done_today, @done_this_week, @done_this_month = DoneTodos.done_todos_for_container(@context)
     @count = @done_today.size + @done_this_week.size + @done_this_month.size
 
     render :template => 'todos/done'
