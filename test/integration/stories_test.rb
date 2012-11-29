@@ -14,9 +14,24 @@ class StoriesTest < ActionController::IntegrationTest
   end
   
   def test_signup_new_user_by_nonadmin
+    SITE_CONFIG['open_signups'] = false
     other_user = new_session_as(:other_user,"sesame")
     other_user.goes_to_signup_as_nonadmin
   end
+  
+  def test_open_signup_new_user
+    SITE_CONFIG['open_signups'] = true
+    get "/signup"
+    assert_response :success
+    assert_template "users/new"
+    post "/users", :user => {:login => "newbie",
+                                  :password => "newbiepass",
+                                  :password_confirmation => "newbiepass"}
+    assert_response :redirect
+    follow_redirect!
+    assert_response :success
+    assert_template "todos/index"
+  end    
   
   private
 
