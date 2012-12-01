@@ -188,7 +188,7 @@ module TodosHelper
 
   def show_date_tag(date, the_class, text)
     content_tag(:a, :title => format_date(date)) do
-      content_tag(:span, :class => the_class) { text + " "}
+      content_tag(:span, :class => the_class) { text }
     end
   end
 
