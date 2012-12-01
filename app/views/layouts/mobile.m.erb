@@ -22,8 +22,8 @@
   <li class="link"><%=     (link_to(t('layouts.mobile_navigation.contexts'), contexts_path(:format => 'm'))) -%></li>
   <li class="link"><%=     (link_to(t('layouts.mobile_navigation.projects'), projects_path(:format => 'm'))) -%></li>
   <li class="link"><%=     (link_to(t('layouts.mobile_navigation.starred'), tag_path("starred", :format => 'm'))) -%></li>
-<% end -%>
 </ul></div>
+<% end -%>
 <div id="content"><%= render_flash -%><%=  yield -%></div>
 <hr/><% if current_user && !current_user.prefs.nil? -%>
 <ul class="nav">
