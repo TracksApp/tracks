@@ -140,7 +140,7 @@ DEPENDENCIES
   RedCloth (= 4.2.8)
   ZenTest (>= 4.0.0)
   aasm (~> 2.2.0)
-  acts_as_list (~> 0.1.4)
+  acts_as_list (= 0.1.4)
   aruba (= 0.2.2)!
   bcrypt-ruby (~> 2.1.4)
   capybara (>= 0.3.5)

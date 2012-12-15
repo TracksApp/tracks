@@ -582,18 +582,20 @@ class TodosControllerTest < ActionController::TestCase
 
   def test_removing_hidden_project_activates_todo
     login_as(:admin_user)
-
+  
     # get a project and hide it, todos in the project should be hidden
     p = projects(:timemachine)
     p.hide!
     assert p.reload().hidden?
     todo = p.todos.first
-    assert_equal "project_hidden", todo.state
-
+    
+    assert todo.project_hidden?, "todo should be project_hidden"
+  
     # clear project from todo: the todo should be unhidden
-    xhr :post, :update, :id => 5, :_source_view => 'todo', "project_name"=>"None", "todo"=>{}
-    todo.reload()
-    assert_equal "active", todo.state
+    xhr :post, :update, :id => todo.id, :_source_view => 'todo', "project_name"=>"None", "todo"=>{}
+    
+    assert assigns['project_changed'], "the project of the todo should be changed"
+    assert todo.reload().active?, "todo should be active"
   end
 
   def test_url_with_slash_in_query_string_are_parsed_correctly
