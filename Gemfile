@@ -50,7 +50,7 @@ group :test do
   gem "rspec-rails", "~>1.3.3"
   gem "thoughtbot-factory_girl"
   gem 'memory_test_fix', '~>0.1.3'
-  gem "capybara", ">=0.3.5"
+  gem "capybara", "~>1.1.2"
   gem "selenium-webdriver" # Note that > 2.14 has problems: https://code.google.com/p/selenium/issues/detail?id=3075
   gem "database_cleaner", ">=0.5.0"
   gem "cucumber-rails", "~>0.3.2"
