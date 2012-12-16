@@ -207,7 +207,7 @@ class Todo < ActiveRecord::Base
   end
 
   def hidden?
-    return self.state == 'project_hidden' || ( self.context.hidden? && (self.state == 'active' || self.state == 'deferred'))
+    return self.project_hidden? || ( self.context.hidden? && (self.active? || self.deferred?))
   end
 
   def update_state_from_project

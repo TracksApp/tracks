@@ -252,8 +252,10 @@ module ApplicationHelper
   
   def get_list_of_error_messages_for(model)
     if model.errors.any?
-      content_tag(:ul) do
-        model.errors.full_messages.collect { |msg| concat(content_tag(:li, msg)) }
+      content_tag(:div, {:id=>"errorExplanation"}) do
+        content_tag(:ul) do
+          model.errors.full_messages.collect { |msg| concat(content_tag(:li, msg)) }
+        end
       end
     end
   end
