@@ -49,7 +49,7 @@ class UsersController < ApplicationController
       @user = get_new_user
     else # all other situations (i.e. a non-admin is logged in, or no one is logged in, but we have some users)
       @page_title = t('users.no_signups_title')
-      @admin_email = User.find_admin.preference.admin_email
+      @admin_email = SITE_CONFIG['admin_email']
       render :action => "nosignup", :layout => "login"
       return
     end
@@ -72,7 +72,7 @@ class UsersController < ApplicationController
       format.html do
         unless User.no_users_yet? || (@user && @user.is_admin?) || SITE_CONFIG['open_signups']
           @page_title = t('users.no_signups_title')
-          @admin_email = User.find_admin.preference.admin_email
+          @admin_email = SITE_CONFIG['admin_email']
           render :action => "nosignup", :layout => "login"
           return
         end
