@@ -44,7 +44,7 @@ class PreferencesControllerTest < ActionController::TestCase
     post :update, {
       :id => users(:admin_user).id,
       :user => { :first_name => 'Jane', :last_name => 'Doe'},
-      :prefs => { :date_format => "%m-%d-%Y", :week_starts => "0", :show_number_completed => "10", :show_completed_projects_in_sidebar => "false", :show_hidden_contexts_in_sidebar => "false", :staleness_starts => "14", :due_style => "1", :admin_email => "my.email@domain.com" }}
+      :prefs => { :date_format => "%m-%d-%Y", :week_starts => "0", :show_number_completed => "10", :show_completed_projects_in_sidebar => "false", :show_hidden_contexts_in_sidebar => "false", :staleness_starts => "14", :due_style => "1" }}
     updated_admin_user = users(:admin_user).reload
     assert_not_nil updated_admin_user.preference
     assert_equal 'Jane', updated_admin_user.first_name
@@ -60,7 +60,7 @@ class PreferencesControllerTest < ActionController::TestCase
     post :update, {
       :id => users(:admin_user).id,
       :user => { :first_name => 'Jane', :last_name => 'Doe', :password => "", :password_confirmation => ""},
-      :prefs => { :date_format => "%m-%d-%Y", :week_starts => "0", :show_number_completed => "10", :show_completed_projects_in_sidebar => "false", :show_hidden_contexts_in_sidebar => "false", :staleness_starts => "14", :due_style => "1", :admin_email => "my.email@domain.com" }}
+      :prefs => { :date_format => "%m-%d-%Y", :week_starts => "0", :show_number_completed => "10", :show_completed_projects_in_sidebar => "false", :show_hidden_contexts_in_sidebar => "false", :staleness_starts => "14", :due_style => "1" }}
 
     updated_admin_user = users(:admin_user).reload
     assert_equal old_password_hash, updated_admin_user.password
@@ -74,7 +74,7 @@ class PreferencesControllerTest < ActionController::TestCase
     post :update, {
       :id => users(:admin_user).id,
       :user => { :first_name => 'Jane', :last_name => 'Doe', :auth_type => "open_id", :open_id_url => "http://test"},
-      :prefs => { :date_format => "%m-%d-%Y", :week_starts => "0", :show_number_completed => "10", :show_completed_projects_in_sidebar => "false", :show_hidden_contexts_in_sidebar => "false", :staleness_starts => "14", :due_style => "1", :admin_email => "my.email@domain.com" }}
+      :prefs => { :date_format => "%m-%d-%Y", :week_starts => "0", :show_number_completed => "10", :show_completed_projects_in_sidebar => "false", :show_hidden_contexts_in_sidebar => "false", :staleness_starts => "14", :due_style => "1" }}
 
     updated_admin_user = users(:admin_user).reload
     assert_equal "open_id", updated_admin_user.auth_type
