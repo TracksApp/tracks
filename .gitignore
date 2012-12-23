@@ -22,3 +22,4 @@ tags
 /.bundle
 /public/assets/
 .sass-cache/
+/coverage
