@@ -1,7 +1,7 @@
 Feature: Show done
   In order to see what I have completed
   As an user
-  I want see my done todos
+  I want to see my done todos
 
   Background:
     Given the following user record

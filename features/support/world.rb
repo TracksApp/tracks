@@ -1,5 +1,26 @@
 module TracksStepHelper
 
+  def wait_until(timeout = 5)
+    timeout(timeout) { yield }
+  end
+
+  def timeout(seconds = 1, error_message = nil, &block)
+    start_time = Time.now
+
+    result = nil
+
+    until result
+     return result if result = yield
+
+     delay = seconds - (Time.now - start_time)
+     if delay <= 0
+       raise TimeoutError, error_message || "timed out"
+     end
+
+     sleep(0.05)
+    end
+  end
+
   def open_edit_form_for(todo)
     within "div#line_todo_#{todo.id}" do
       find("a#icon_edit_todo_#{todo.id}").click

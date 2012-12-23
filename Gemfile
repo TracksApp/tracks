@@ -3,7 +3,8 @@ source 'https://rubygems.org'
 gem 'rails'
 
 # you may comment out the database driver you will not be using.
-# This will prevent a native build of the driver. Building native drivers is not always possible on all hosters
+# This will prevent a native build of the driver. Building native drivers is not 
+# always possible on all hosters
 gem "sqlite3"
 gem "mysql2"
 
@@ -54,10 +55,13 @@ end
 group :test do
   gem "factory_girl_rails"
   gem "capybara"
-  gem "selenium-webdriver" # Note that > 2.14 has problems: https://code.google.com/p/selenium/issues/detail?id=3075
-  gem "database_cleaner"
   gem "cucumber-rails", :require => false
+  gem "database_cleaner"
   gem "aruba"
+
+  # Note that > 2.14 has problems, see: 
+  # https://code.google.com/p/selenium/issues/detail?id=3075
+  gem "selenium-webdriver" 
   
   # uncomment to use the webkit option. This depends on Qt to be installed
   #gem "capybara-webkit"

@@ -86,7 +86,9 @@ When /^I edit the description of "([^"]*)" to "([^"]*)"$/ do |action_description
   todo.should_not be_nil
   
   open_edit_form_for(todo)
-  fill_in "todo_description", :with => new_description
+  within "form.edit_todo_form" do
+    fill_in "todo_description", :with => new_description
+  end
   submit_edit_todo_form(todo)
 end
 
