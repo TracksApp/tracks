@@ -48,6 +48,7 @@ group :development do
   gem "yard"
   gem "tolk"
   gem "bullet"
+  gem "simplecov"
 end
 
 group :test do
