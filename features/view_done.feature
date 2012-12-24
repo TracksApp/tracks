@@ -63,7 +63,7 @@ Feature: Show done
     Given I have 50 completed todos with a note in project "test project" in context "@pc" with tags "starred"
     When I go to the <page>
     Then I should see the page selector
-    When I follow "2"
+    When I select the second page
     Then I should be on the <page>
     And the page should be "2"
 

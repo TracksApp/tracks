@@ -188,7 +188,9 @@ end
 ####### submitting using sidebar form #######
 
 When /^I submit a new action with description "([^"]*)"$/ do |description|
-  fill_in "todo[description]", :with => description
+  within "form#todo-form-new-action" do
+    fill_in "todo[description]", :with => description
+  end
   submit_next_action_form
 end
 
@@ -196,16 +198,16 @@ When /^I submit a new action with description "([^"]*)" with a dependency on "([
   predecessor = @current_user.todos.find_by_description(predecessor_description)
   predecessor.should_not be_nil
 
-  fill_in "todo[description]", :with => todo_description
-  fill_in "predecessor_input", :with => predecessor_description
+  within "form#todo-form-new-action" do
+    fill_in "todo[description]", :with => todo_description
+    fill_in "predecessor_input", :with => predecessor_description
+  end
 
-  # wait for auto complete
-  autocomplete = "//a[@id='ui-active-menuitem']"
-  page.should have_xpath(autocomplete, :visible => true)
+  # wait for auto complete 
+  page.should have_css("a.ui-state-focus", :visible => true)
 
   # click first line
-  first_elem = "//ul/li[1]/a[@id='ui-active-menuitem']"
-  page.find(:xpath, first_elem).click
+  page.find(:css, "ul li a.ui-state-focus").click
 
   new_dependency_line = "//li[@id='pred_#{predecessor.id}']"
   page.should have_xpath(new_dependency_line, :visible => true)
@@ -214,24 +216,28 @@ When /^I submit a new action with description "([^"]*)" with a dependency on "([
 end
 
 When /^I submit a new action with description "([^"]*)" and the tags "([^"]*)" in the context "([^"]*)"$/ do |description, tags, context_name|
-  fill_in "todo[description]", :with => description
-  fill_in "tag_list", :with => tags
+  within "form#todo-form-new-action" do
+    fill_in "todo[description]", :with => description
+    fill_in "tag_list", :with => tags
 
-  # fill_in does not seem to work when the field is prefilled with something. Empty the field first
-  clear_context_name_from_next_action_form
-  fill_in "todo_context_name", :with => context_name
+    # fill_in does not seem to work when the field is prefilled with something. Empty the field first
+    clear_context_name_from_next_action_form
+    fill_in "todo_context_name", :with => context_name
+  end
   submit_next_action_form
 end
 
 When /^I submit a new action with description "([^"]*)" to project "([^"]*)" with tags "([^"]*)" in the context "([^"]*)"$/ do |description, project_name, tags, context_name|
-  fill_in "todo[description]", :with => description
+  within "form#todo-form-new-action" do
+    fill_in "todo[description]", :with => description
 
-  clear_project_name_from_next_action_form
-  clear_context_name_from_next_action_form
+    clear_project_name_from_next_action_form
+    clear_context_name_from_next_action_form
 
-  fill_in "todo_project_name", :with => project_name
-  fill_in "todo_context_name", :with => context_name
-  fill_in "tag_list", :with => tags
+    fill_in "todo_project_name", :with => project_name
+    fill_in "todo_context_name", :with => context_name
+    fill_in "tag_list", :with => tags
+  end
 
   submit_next_action_form
 end
@@ -241,10 +247,12 @@ When /^I submit a new action with description "([^"]*)" to project "([^"]*)" in 
 end
 
 When /^I submit a new action with description "([^"]*)" in the context "([^"]*)"$/ do |description, context_name|
-  fill_in "todo[description]", :with => description
+  within "form#todo-form-new-action" do
+    fill_in "todo[description]", :with => description
 
-  clear_context_name_from_next_action_form
-  fill_in "todo_context_name", :with => context_name
+    clear_context_name_from_next_action_form
+    fill_in "todo_context_name", :with => context_name
+  end
 
   submit_next_action_form
 end
@@ -258,13 +266,15 @@ When /^I submit a new deferred action with description "([^"]*)"$/ do |descripti
 end
 
 When /^I submit a new deferred action with description "([^"]*)" and the tags "([^"]*)" in the context "([^"]*)"$/ do |description, tags, context_name|
-  fill_in "todo[description]", :with => description
+  within "form#todo-form-new-action" do
+    fill_in "todo[description]", :with => description
 
-  clear_context_name_from_next_action_form
-  fill_in "todo_context_name", :with => context_name
+    clear_context_name_from_next_action_form
+    fill_in "todo_context_name", :with => context_name
 
-  fill_in "tag_list", :with => tags
-  fill_in "todo[show_from]", :with => format_date(@current_user.time + 1.week)
+    fill_in "tag_list", :with => tags
+    fill_in "todo[show_from]", :with => format_date(@current_user.time + 1.week)
+  end
   submit_next_action_form
 end
 
@@ -274,10 +284,12 @@ When /^I submit a new deferred action with description "([^"]*)" to project "([^
   clear_project_name_from_next_action_form
   clear_context_name_from_next_action_form
 
-  fill_in "todo_project_name", :with => project_name
-  fill_in "todo_context_name", :with => context_name
-  fill_in "tag_list", :with => tags
-  fill_in "todo[show_from]", :with => format_date(@current_user.time + 1.week)
+  within "form#todo-form-new-action" do
+    fill_in "todo_project_name", :with => project_name
+    fill_in "todo_context_name", :with => context_name
+    fill_in "tag_list", :with => tags
+    fill_in "todo[show_from]", :with => format_date(@current_user.time + 1.week)
+  end
 
   submit_next_action_form
 end

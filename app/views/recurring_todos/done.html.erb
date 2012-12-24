@@ -8,7 +8,7 @@
 %>
 <div id="display_box">
   <div class="container" id="completed_recurring_todos_container">
-    <%= will_paginate @completed_recurring_todos, paginate_options %>
+    <div class="paginate_header"><%= will_paginate @completed_recurring_todos, paginate_options %></div>
     <h2>
       <span id="completed-projects-count" class="badge"><%= "#{@total} (#{@range_low}-#{@range_high})" %></span>
       <%= t('todos.completed_recurring') %>
@@ -19,6 +19,6 @@
       </div>
       <%= render :partial => @completed_recurring_todos %>
     </div>
-    <%= will_paginate @completed_recurring_todos, paginate_options %>
+    <div class="paginate_footer"><%= will_paginate @completed_recurring_todos, paginate_options %></div>
   </div>
 </div>

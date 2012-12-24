@@ -8,7 +8,7 @@
 %>
 <div id="display_box_projects">
   <div class="container">
-    <%= will_paginate @done, paginate_options %>
+    <div class="paginate_header"><%= will_paginate @done, paginate_options %></div>
     <h2><%= t('todos.all_completed') %></h2>
     <% if @done.empty? -%>
       <div class="message"><p><%= t('todos.no_completed_actions') %></p></div>
@@ -17,6 +17,6 @@
     <% end -%>
   </div>
   
-  <%= will_paginate @done, paginate_options %>
+  <div class="paginate_footer"><%= will_paginate @done, paginate_options %></div>
   
 </div>

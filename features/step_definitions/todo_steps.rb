@@ -1,3 +1,7 @@
+When /^I select the second page$/ do
+  step "I follow \"2\" within \"div.paginate_header\""
+end
+
 ####### DELETE #######
 
 When /^I delete the action "([^"]*)"$/ do |action_description|
@@ -108,7 +112,7 @@ Then /^I should see the page selector$/ do
 end
 
 Then /^the page should be "([^"]*)"$/ do |page_number|
-  page.find(:xpath, ".//em[@class='current']").text.should == page_number
+  page.find(:xpath, ".//div[@class='paginate_header']//em[@class='current']").text.should == page_number
 end
 
 Then /^the project field of the new todo form should contain "([^"]*)"$/ do |project_name|

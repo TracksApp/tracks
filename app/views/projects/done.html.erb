@@ -12,7 +12,7 @@
   </div>
   
   <div class="project-state-group" id="list-completed-projects-container" <%= " style=\"display:none\"" if @no_projects %>>
-    <%= will_paginate @projects, paginate_options %>
+    <div class="paginate_header"><%= will_paginate @projects, paginate_options %></div>
     <h2>
       <span id="completed-projects-count" class="badge"><%= "#{@total} (#{@range_low}-#{@range_high})" %></span>
       <%= t('states.completed_plural' )%> <%= t('common.projects') %>
@@ -21,7 +21,7 @@
       <%= render :partial => 'project_listing', :collection => @projects %>
     </div>
   </div>
-  <%= will_paginate @projects, paginate_options %>
+  <div class="paginate_footer"><%= will_paginate @projects, paginate_options %></div>
 </div>
 
 <div id="input_box">
