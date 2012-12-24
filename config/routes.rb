@@ -89,7 +89,7 @@ Tracksapp::Application.routes.draw do
       put 'defer'
       get 'show_notes'
       get 'convert_to_project' # TODO: convert to PUT/POST
-      get 'remove_predecessor' # TODO: convert to PUT/POST
+      delete 'remove_predecessor' # TODO: convert to PUT/POST
       post 'change_context'
     end
     collection do
