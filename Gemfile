@@ -49,7 +49,6 @@ group :development do
   gem "yard"
   gem "tolk"
   gem "bullet"
-  gem "simplecov"
 end
 
 group :test do
@@ -58,6 +57,7 @@ group :test do
   gem "cucumber-rails", :require => false
   gem "database_cleaner"
   gem "aruba"
+  gem "simplecov"
 
   # Note that > 2.14 has problems, see: 
   # https://code.google.com/p/selenium/issues/detail?id=3075
