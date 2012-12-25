@@ -43,10 +43,10 @@ When /^I edit the dependency of "([^"]*)" to add "([^"]*)" as predecessor$/ do |
   page.execute_script %Q{$("#{form_css}").find('input[id$="predecessor_input"]').autocomplete('search')} if Capybara.javascript_driver == :webkit
   
   # wait for auto complete
-  page.should have_css("a#ui-active-menuitem")
+  page.should have_css("a.ui-state-focus")
 
   # click first line
-  page.find(:xpath, "//ul/li[1]/a[@id='ui-active-menuitem']").click
+  page.find(:css, "ul li a.ui-state-focus").click
 
   # wait for the new dependency to be added to the list
   page.should have_css("li#pred_#{predecessor.id}")
@@ -96,6 +96,13 @@ end
 Then /^I should see "([^\"]*)" within the dependencies of "([^\"]*)"$/ do |successor_description, todo_description|
   todo = @current_user.todos.find_by_description(todo_description)
   todo.should_not be_nil
+
+  # open successors
+  within "div#line_todo_#{todo.id}" do
+    if !find(:css, "div#successors_todo_#{todo.id}").visible?
+      find(:css, "a.show_successors").click
+    end
+  end
 
   step "I should see \"#{successor_description}\" within \"div#line_todo_#{todo.id}\""
 end

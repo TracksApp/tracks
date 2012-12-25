@@ -80,7 +80,7 @@ function activate_pending_todos() {
           $('#<%= dom_id(t) %>').fadeOut(400, function() {
             $('#<%= dom_id(t) %>').remove();
             $('#<%= item_container_id(t) %>').append("<%= html  %>");
-            <%= "$('#tickler-empty-nd').show();" if @remaining_deferred_or_pending_count==0 -%>
+            <%= "$('#tickler-empty-nd').show();".html_safe if @remaining_deferred_or_pending_count==0 -%>
           });
  <%     else -%>
           $('#<%= item_container_id(t) %>').append("<%= html%>");
