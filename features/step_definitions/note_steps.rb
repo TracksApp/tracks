@@ -4,7 +4,7 @@ When /^I add note "([^\"]*)" from the "([^\"]*)" project page$/ do |note, projec
 end
 
 When /^I delete the first note$/ do
-  title = page.find("div.container h2").text
+  title = page.all("div.container h2").first.text
   id = title.split(' ').last
 
   handle_js_confirm do
@@ -20,12 +20,14 @@ When /^I click the icon next to the note$/ do
 end
 
 When /^I edit the first note to "([^"]*)"$/ do |note_body|
-  title = page.find("div.container h2").text
+  title = page.all("div.container h2").first.text
   id = title.split(' ').last
   
   click_link "link_edit_note_#{id}"
-  fill_in "note[body]", :with => note_body
-  click_button "submit_note_#{id}"
+  within "form#edit_form_note_#{id}" do
+    fill_in "note[body]", :with => note_body
+    click_button "submit_note_#{id}"
+  end
 end
 
 When /^I toggle the note of "([^"]*)"$/ do |todo_description|
@@ -79,5 +81,5 @@ Then /^I should not see the note "([^"]*)"$/ do |note_content|
 end
 
 Then /^I should see the note "([^"]*)"$/ do |note_content|
-  page.find("div", :text => note_content).should be_visible
+  page.all("div", :text => note_content).first.should be_visible
 end

@@ -14,9 +14,11 @@ end
 When /^I edit the context to rename it to "([^\"]*)"$/ do |new_name|
   find("a#link_edit_context_#{@context.id}").click
   page.should have_css("button#submit_context_#{@context.id}", :visible=>true)
-  
-  fill_in "context_name", :with => new_name
-  click_button "submit_context_#{@context.id}"
+
+  within "div.edit-form" do  
+    fill_in "context_name", :with => new_name
+    click_button "submit_context_#{@context.id}"
+  end
 
   # wait for the form to go away
   page.should have_css("a#link_edit_context_#{@context.id}", :visible=> true)

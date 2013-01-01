@@ -10,10 +10,16 @@ class DoneTodos
   end
 
   def self.done_this_week(todos, includes = {:include => Todo::DEFAULT_INCLUDES})
-    todos.completed_before(Time.zone.now.beginning_of_day).completed_after(Time.zone.now.beginning_of_week).all(includes)
+    done_between(todos, Time.zone.now.beginning_of_day, Time.zone.now.beginning_of_week)
   end
 
   def self.done_this_month(todos, includes = {:include => Todo::DEFAULT_INCLUDES})
-    todos.completed_before(Time.zone.now.beginning_of_week).completed_after(Time.zone.now.beginning_of_month).all(includes)
+    done_between(todos, includes, Time.zone.now.beginning_of_week, Time.zone.now.beginning_of_month)
+  end
+
+  private
+
+  def self.done_between(todos, includes, start_date, end_date)
+    todos.completed_before(start_date).completed_after(end_date).all(includes)
   end
 end

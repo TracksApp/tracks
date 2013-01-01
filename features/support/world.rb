@@ -22,16 +22,15 @@ module TracksStepHelper
   end
 
   def open_edit_form_for(todo)
-    within "div#line_todo_#{todo.id}" do
-      find("a#icon_edit_todo_#{todo.id}").click
-    end
+    # on calendar page there can be more than 1 occurance of a todo, so we select the first here
+    all(:css, "div#line_todo_#{todo.id} a#icon_edit_todo_#{todo.id}")[0].click
     wait_for_ajax
     wait_for_animations_to_end
   end
   
-  def submit_form(form_css, button_name)
+  def submit_form(form_xpath, button_name)
     handle_js_confirm do
-      within(form_css) do
+      within(:xpath, form_xpath) do
         click_button(button_name)
       end
       wait_for_ajax
@@ -40,23 +39,23 @@ module TracksStepHelper
   end
   
   def submit_multiple_next_action_form
-    submit_form("form#todo-form-multi-new-action", "todo_multi_new_action_submit")
+    submit_form("//form[@id='todo-form-multi-new-action']", "todo_multi_new_action_submit")
   end
 
   def submit_next_action_form
-    submit_form("#todo-form-new-action", "todo_new_action_submit")
+    submit_form("//form[@id='todo-form-new-action']", "todo_new_action_submit")
   end
 
   def submit_new_context_form
-    submit_form("form#context-form", "context_new_submit")
+    submit_form("//form[@id='context-form']", "context_new_submit")
   end
 
   def submit_new_project_form
-    submit_form("form#project_form", "project_new_project_submit")
+    submit_form("//form[@id='project_form']", "project_new_project_submit")
   end
   
   def submit_edit_todo_form (todo)
-    submit_form("div#edit_todo_#{todo.id}", "submit_todo_#{todo.id}")
+    submit_form("//div[@id='edit_todo_#{todo.id}']", "submit_todo_#{todo.id}")
     wait_for_todo_form_to_go_away(todo)
   end
   
@@ -81,7 +80,9 @@ module TracksStepHelper
   
   def edit_project(project)
     open_project_edit_form(project)
-    yield
+    within "form#edit_form_project_#{project.id}" do
+      yield
+    end
     submit_project_edit_form(project)
     
     wait_for_ajax

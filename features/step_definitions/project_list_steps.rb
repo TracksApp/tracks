@@ -35,15 +35,19 @@ end
 
 When /^I sort the active list alphabetically$/ do
   handle_js_confirm do
-    click_link "Alphabetically"
+    within "div#list-active-projects-container" do
+      click_link "Alphabetically"
+    end
     wait_for_ajax
   end
   get_confirm_text.should == "Are you sure that you want to sort these projects alphabetically? This will replace the existing sort order."
 end
 
-When /^I sort the list by number of tasks$/ do
+When /^I sort the active list by number of tasks$/ do
   handle_js_confirm do
-    click_link "By number of tasks"
+    within "div#list-active-projects-container" do
+      click_link "By number of tasks"
+    end
     wait_for_ajax
   end
   get_confirm_text.should == "Are you sure that you want to sort these projects by the number of tasks? This will replace the existing sort order."

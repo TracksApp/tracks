@@ -105,7 +105,7 @@ Feature: Manage the list of projects
     And I have a project "very busy" with 10 todos
     When I go to the projects page
     Then the project "test" should be above the project "very busy"
-    When I sort the list by number of tasks
+    When I sort the active list by number of tasks
     Then the project "very busy" should be above the project "test"
 
   @javascript

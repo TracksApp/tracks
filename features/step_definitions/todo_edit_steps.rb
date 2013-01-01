@@ -97,7 +97,9 @@ When /^I try to edit the description of "([^"]*)" to "([^"]*)"$/ do |action_desc
   todo.should_not be_nil
   
   open_edit_form_for(todo)
-  fill_in "todo_description", :with => new_description
+  within "form.edit_todo_form" do
+    fill_in "todo_description", :with => new_description
+  end
   submit_button_xpath = "//div[@id='edit_todo_#{todo.id}']//button[@id='submit_todo_#{todo.id}']"
   page.find(:xpath, submit_button_xpath).click
   wait_for_ajax

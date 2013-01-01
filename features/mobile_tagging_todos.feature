@@ -11,14 +11,14 @@ Feature: Show the actions that are tagged on the mobile page
     And I have logged in as "testuser" with password "secret"
     And I have a context called "@mobile"
     And I have a project "my project" that has the following todos
-      | context | description   | tags |
+      | context | description   | tags      |
       | @mobile | first action  | test, bla |
       | @mobile | second action | bla       |
 
   Scenario: I can follow the tag of a action to see all actions belonging to that todo
     When I go to the home page
-    And I follow "test"
+    And I follow the tag "test"
     Then the badge should show 1
     When I go to the home page
-    And I follow "bla"
+    And I follow the tag "bla"
     Then the badge should show 2

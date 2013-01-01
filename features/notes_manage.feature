@@ -35,14 +35,14 @@ Feature: View, add, remove notes
     And I delete the first note
     Then the badge should show 1
 
-  @javascript
+  @javascript 
   Scenario: Edit a note
     Given I have a project "Pass Final Exam" with 2 notes
     When I go to the notes page
     And I edit the first note to "edited note"
     Then I should see "edited note"
 
-  @javascript
+  @javascript 
   Scenario: Toggle all notes
     Given I have a context called "@pc"
     And I have a project "take notes" that has the following todos
