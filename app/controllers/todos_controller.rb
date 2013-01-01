@@ -4,11 +4,6 @@ class TodosController < ApplicationController
   prepend_before_filter :login_or_feed_token_required, :only => [:index, :calendar, :tag]
   append_before_filter :find_and_activate_ready, :only => [:index, :list_deferred]
 
-  # # TODO: replace :except with :only
-  # append_before_filter :init, :except => [ :tag, :tags, :destroy, :done,
-  #   :check_deferred, :toggle_check, :toggle_star, :edit, :update, :defer, :create,
-  #   :calendar, :auto_complete_for_predecessor, :remove_predecessor, :add_predecessor]
-
   protect_from_forgery :except => :check_deferred
   
   def index
@@ -927,7 +922,7 @@ class TodosController < ApplicationController
     if params[:limit_fields] == 'index'
       return [:only => [:id, :created_at, :updated_at, :completed_at] ]
     else
-      return [:except => :user_id, :include => [:tags] ]
+      return [:except => :user_id, :include => [:tags, :predecessors, :successors] ]
     end
   end
 
