@@ -112,10 +112,6 @@ class StatsControllerTest < ActionController::TestCase
     # FIXME: make testdata not relative of today to avoid crossing end_of_month
     too_early = Time.zone.now.day <= 8 ? 1 : 0
 
-    assigns['actions_created_last12months_array'].each do |e|
-      puts "#{e} \t"
-    end
-
     assert_equal 1, assigns['actions_created_last12months_array'][1+too_early], "there should be one todo in previous month"
     assert_equal 1, assigns['actions_created_last12months_array'][2+too_early], "there should be one todo in two month ago"
     assert_equal 1, assigns['actions_created_last12months_array'][3+too_early], "there should be one todo in three month ago"
