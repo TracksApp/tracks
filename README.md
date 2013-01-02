@@ -11,14 +11,15 @@
 * Mailing list: http://groups.google.com/group/TracksApp
 * Original developer: bsag (http://www.rousette.org.uk/)
 * Contributors: https://github.com/TracksApp/tracks/wiki/Contributors
-* Version: 2.2devel
-* Copyright: (cc) 2004-2012 rousette.org.uk.
+* Version: 2.2RC
+* Copyright: (cc) 2004-2013 rousette.org.uk.
 * License:  GNU GPL
 
-More documentation for Tracks can be found within the /doc directory
+More documentation for Tracks can be found within the /doc directory. 
 
-The manual includes full instructions for both new installations and upgrades
-from older installations of Tracks.
+The manual can be found at the website mentioned above. The manual includes
+full instructions for both new installations and upgrades from older 
+installations of Tracks.
 
 The instructions might appear long and intimidatingly complex, but that is
 mostly because of the number of different platforms supported, and the
@@ -29,11 +30,14 @@ you should find the instructions easy to follow. If you encounter problems, try
 searching the wiki, forum or mailing list (URLs above), and ask a question if
 you cannot find a solution to your problem.
 
-The wiki has a lot of user contributed installation HOWTOs for various webhosts, specific OS's and more.
+The wiki has a lot of user contributed installation HOWTOs for various webhosts, 
+specific OS's and more.
 
 If you are thinking about contributing towards the development of Tracks,
 please read /doc/README_DEVELOPERS for general information. Also you can find
-some information on development, testing and contributing on the wiki.
+some information on development, testing and contributing on the wiki. And if 
+coding is not your thing, we welcome contributions in translations or (updates 
+on) HOWTO's on the wiki a lot!
 
 While fully usable for everyday use, Tracks is still a work in progress. Make
 sure that you take sensible precautions and back up all your data frequently,

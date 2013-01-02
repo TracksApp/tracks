@@ -1,6 +1,6 @@
 require 'activeresource'
 
-# WARNING: this is not really maintained or tested...
+# WARNING: this is not really maintained or tested anymore...
 
 # Install the ActiveResource gem if you don't already have it:
 #
