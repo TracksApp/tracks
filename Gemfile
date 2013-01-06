@@ -27,8 +27,7 @@ group :assets do
   gem 'coffee-rails'
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-  gem 'therubyracer', :platform => :ruby
-  gem "libv8"
+  gem 'therubyracer', :platform => :ruby, :require => "v8"
 
   gem 'uglifier'
 end
@@ -58,6 +57,7 @@ group :test do
   gem "database_cleaner"
   gem "aruba"
   gem "simplecov"
+  gem "timecop"
 
   # Note that > 2.14 has problems, see: 
   # https://code.google.com/p/selenium/issues/detail?id=3075

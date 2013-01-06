@@ -89,52 +89,49 @@ class StatsControllerTest < ActionController::TestCase
   end
 
   def test_actions_done_last12months_data
-    login_as(:admin_user)
-    @current_user = User.find(users(:admin_user).id)
-    @current_user.todos.delete_all
+    Timecop.travel(Time.local(2013, 1, 15)) do
+        login_as(:admin_user)
+        @current_user = User.find(users(:admin_user).id)
+        @current_user.todos.delete_all
 
-    given_todos_for_stats
+        given_todos_for_stats
 
-    # When I get the chart data
-    get :actions_done_last12months_data
-    assert_response :success
+        # When I get the chart data
+        get :actions_done_last12months_data
+        assert_response :success
 
-    # Then the todos for the chart should be retrieved
-    assert_not_nil assigns['actions_done_last12months']
-    assert_not_nil assigns['actions_created_last12months']
-    assert_equal 7, assigns['actions_created_last12months'].count, "very old todo should not be retrieved"
+        # Then the todos for the chart should be retrieved
+        assert_not_nil assigns['actions_done_last12months']
+        assert_not_nil assigns['actions_created_last12months']
+        assert_equal 7, assigns['actions_created_last12months'].count, "very old todo should not be retrieved"
 
-    # And they should be totalled in a hash
-    assert_equal 2, assigns['actions_created_last12months_array'][0], "there should be two todos in current month"
+        # And they should be totalled in a hash
+        assert_equal 2, assigns['actions_created_last12months_array'][0], "there should be two todos in current month"
 
-    # these test use relative dates. It will go wrong when the data is [1-8] of the month :-(
-    # in this case we need to check for a month further (i.e. too_early==1)
-    # FIXME: make testdata not relative of today to avoid crossing end_of_month
-    too_early = Time.zone.now.day <= 8 ? 1 : 0
+        assert_equal 1, assigns['actions_created_last12months_array'][1], "there should be one todo in previous month"
+        assert_equal 1, assigns['actions_created_last12months_array'][2], "there should be one todo in two month ago"
+        assert_equal 1, assigns['actions_created_last12months_array'][3], "there should be one todo in three month ago"
+        assert_equal 2, assigns['actions_created_last12months_array'][4], "there should be two todos (1 created & 1 done) in four month ago"
 
-    assert_equal 1, assigns['actions_created_last12months_array'][1+too_early], "there should be one todo in previous month"
-    assert_equal 1, assigns['actions_created_last12months_array'][2+too_early], "there should be one todo in two month ago"
-    assert_equal 1, assigns['actions_created_last12months_array'][3+too_early], "there should be one todo in three month ago"
-    assert_equal 2, assigns['actions_created_last12months_array'][4+too_early], "there should be two todos (1 created & 1 done) in four month ago"
+        assert_equal 1, assigns['actions_done_last12months_array'][1], "there should be one completed todo one-two months ago"
+        assert_equal 1, assigns['actions_done_last12months_array'][2], "there should be one completed todo two-three months ago"
+        assert_equal 1, assigns['actions_done_last12months_array'][4], "there should be one completed todo four-five months ago"
 
-    assert_equal 1, assigns['actions_done_last12months_array'][1+too_early], "there should be one completed todo one-two months ago"
-    assert_equal 1, assigns['actions_done_last12months_array'][2+too_early], "there should be one completed todo two-three months ago"
-    assert_equal 1, assigns['actions_done_last12months_array'][4+too_early], "there should be one completed todo four-five months ago"
-
-    # And they should be averaged over three months
-    assert_equal 2/3.0, assigns['actions_done_avg_last12months_array'][1], "fourth month should be excluded"
-    assert_equal 2/3.0, assigns['actions_done_avg_last12months_array'][2], "fourth month should be included"
-    
-    assert_equal (3-too_early)/3.0, assigns['actions_created_avg_last12months_array'][1], "one every month"
-    assert_equal (4-too_early)/3.0, assigns['actions_created_avg_last12months_array'][2], "two in fourth month"
-    
-    # And the current month should be interpolated
-    fraction = Time.zone.now.day.to_f / Time.zone.now.end_of_month.day.to_f
-    assert_equal (2*(1/fraction)+2-too_early)/3.0, assigns['interpolated_actions_created_this_month'], "two this month and one in the last two months"
-    assert_equal (2-too_early)/3.0, assigns['interpolated_actions_done_this_month'], "none this month and one two the last two months"
-    
-    # And totals should be calculated
-    assert_equal 2, assigns['max'], "max of created or completed todos in one month"
+        # And they should be averaged over three months
+        assert_equal 2/3.0, assigns['actions_done_avg_last12months_array'][1], "fourth month should be excluded"
+        assert_equal 2/3.0, assigns['actions_done_avg_last12months_array'][2], "fourth month should be included"
+        
+        assert_equal (3)/3.0, assigns['actions_created_avg_last12months_array'][1], "one every month"
+        assert_equal (4)/3.0, assigns['actions_created_avg_last12months_array'][2], "two in fourth month"
+        
+        # And the current month should be interpolated
+        fraction = Time.zone.now.day.to_f / Time.zone.now.end_of_month.day.to_f
+        assert_equal (2*(1/fraction)+2)/3.0, assigns['interpolated_actions_created_this_month'], "two this month and one in the last two months"
+        assert_equal (2)/3.0, assigns['interpolated_actions_done_this_month'], "none this month and one two the last two months"
+        
+        # And totals should be calculated
+        assert_equal 2, assigns['max'], "max of created or completed todos in one month"
+    end
   end
 
   def test_actions_done_last30days_data
