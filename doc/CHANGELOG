@@ -48,10 +48,14 @@ New and changed features (technical)
 
 Under the hood
 * Upgrade to Rails 3.2. This means Tracks makes use of the new asset pipeline 
-  of Rails
+  of Rails.
 * Uses Cache Digest. This speeds up page rendering a lot
 * Migrated to Tolk for managing translations
 * Upgraded to JQuery 1.8.3 and JQueryUI 1.9.0
+
+== Version 2.1.1
+
+Various bugfixes
 
 == Version 2.1
 
