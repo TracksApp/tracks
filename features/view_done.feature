@@ -90,7 +90,7 @@ Feature: Show done
     When I follow "Show all"
     Then I should see the page selector
     And I should see "40 (1-20)"
-    When I follow "2"
+    When I select the second page
     Then I should be on the done projects page
     And the page should be "2"
 
@@ -109,7 +109,7 @@ Feature: Show done
     And I follow "Show all"
     Then I should see the page selector
     And I should see "40 (1-20)"
-    When I follow "2"
+    When I select the second page
     Then I should be on the done recurring todos page
     And the page should be "2"
 

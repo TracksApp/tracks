@@ -104,7 +104,7 @@ class StatsController < ApplicationController
     @actions_completion_time = current_user.todos.completed.select("completed_at, created_at").reorder("completed_at DESC" )
 
     # convert to array and fill in non-existing weeks with 0
-    @max_weeks = difference_in_weeks(@today, @actions_completion_time.last.completed_at)
+    @max_weeks = @actions_completion_time.last ? difference_in_weeks(@today, @actions_completion_time.last.completed_at) : 1
     @actions_completed_per_week_array = convert_to_weeks_running_array(@actions_completion_time, @max_weeks+1)
         
     # stop the chart after 10 weeks
