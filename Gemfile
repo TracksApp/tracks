@@ -6,7 +6,7 @@ gem "rails", "~>2.3.15"
 gem "highline", "~>1.5.0"
 gem "RedCloth", "4.2.8"
 gem "sanitize", "~>1.2.1"
-gem "rack", "1.1.0"
+gem "rack", "~>1.1"
 gem "will_paginate", "~> 2.3.15"
 gem "has_many_polymorphs", "~> 2.13", :path => "vendor/gems/has_many_polymorphs-2.13" # vendorred to get rid of some deprecation warnings
 gem "acts_as_list", "= 0.1.4"
