@@ -11,7 +11,7 @@
 * Mailing list: http://groups.google.com/group/TracksApp
 * Original developer: bsag (http://www.rousette.org.uk/)
 * Contributors: https://github.com/TracksApp/tracks/wiki/Contributors
-* Version: 2.2RC
+* Version: 2.2RC2
 * Copyright: (cc) 2004-2013 rousette.org.uk.
 * License:  GNU GPL
 

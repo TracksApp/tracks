@@ -11,11 +11,16 @@
 * Mailing list: http://groups.google.com/group/TracksApp
 * Original developer: bsag (http://www.rousette.org.uk/)
 * Contributors: https://github.com/TracksApp/tracks/wiki/Contributors
-* Version: 2.2RC
+* Version: 2.2RC2
 * Copyright: (cc) 2004-2013 rousette.org.uk.
 * License:  GNU GPL
 
-== Version 2.2RC
+== Version 2.2RC2
+
+The purpose of this release is to provide additional bugfixes since RC 1 and
+to upgrade Rails due to the recent security vulnerabilities.
+
+== Version 2.2RC1
 
 The main change to this release of Tracks is the migration to Rails 3.2. We had 
 to remove some features because the code and dependencies were not compatible with 
