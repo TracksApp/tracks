@@ -1,6 +1,5 @@
-GIT
-  remote: git://github.com/lrbalt/cache_digests.git
-  revision: 8469c4153c84c0d918b01daccaa1e69747e93e89
+PATH
+  remote: vendor/gems/cache_digests-0.1.0
   specs:
     cache_digests (0.1.0)
       actionpack (>= 3.2)
