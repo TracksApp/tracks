@@ -1,5 +1,5 @@
 # Tracks: a GTD(TM) web application, built with Ruby on Rails
-Copyright (C) 2004-2013 bsag (http://rousette.org.uk)
+Copyright (C) 2004-2013 rousette.org.uk
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
