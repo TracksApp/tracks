@@ -1,4 +1,10 @@
 # Tracks: a GTD(TM) web application, built with Ruby on Rails
+Copyright (C) 2004-2013 bsag (http://rousette.org.uk)
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
 
 [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/TracksApp/tracks)
 
@@ -12,8 +18,6 @@
 * Original developer: bsag (http://www.rousette.org.uk/)
 * Contributors: https://github.com/TracksApp/tracks/wiki/Contributors
 * Version: 2.2RC2
-* Copyright: (cc) 2004-2013 rousette.org.uk.
-* License:  GNU GPL
 
 More documentation for Tracks can be found within the /doc directory. 
 
@@ -44,3 +48,12 @@ sure that you take sensible precautions and back up all your data frequently,
 taking particular care when you are upgrading.
 
 Enjoy being productive!
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
