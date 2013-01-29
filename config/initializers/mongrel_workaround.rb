@@ -15,7 +15,7 @@ end
 
 mongrel115 = check_mongrel_around_115
 
-if Rails.version == '2.3.15' && mongrel115 && self.class.const_defined?(:Mongrel)
+if Gem::Version.new(Rails.version) >= Gem::Version.new('2.3.8') && mongrel115 && self.class.const_defined?(:Mongrel)
 
   # Pulled right from latest rack. Old looked like this in 1.1.0 version.
   #
