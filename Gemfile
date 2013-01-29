@@ -2,7 +2,7 @@ source :gemcutter
 source "http://gems.github.com/"
 
 gem "rake", "~>0.8.7"
-gem "rails", "~>2.3.15"
+gem "rails", "~>2.3"
 gem "highline", "~>1.5.0"
 gem "RedCloth", "4.2.8"
 gem "sanitize", "~>1.2.1"
