@@ -389,11 +389,11 @@ fr:
     user_no_expiry: "Rester connecté"
   models:
     preference:
-      due_in: "Echéance dans %{days} jours"
-      due_on: "Echéance le %{date}"
+      due_in: "Échéance dans %{days} jours"
+      due_on: "Échéance le %{date}"
       due_styles:
-        - "Echéance dans ____ jours"
-        - "Echéance le ____"
+        - "Échéance dans ____ jours"
+        - "Échéance le ____"
     project:
       feed_description: "Liste de tous les projets de %{username}"
       feed_title: "Projets Tracks"
@@ -756,7 +756,7 @@ fr:
     depends_on_separate_with_commas: "Dépend de (séparer avec des virgules)"
     done: "Terminé ?"
     drag_action_title: "Déplacer sur une autre action pour la rendre dépendante de cette action"
-    due: Echéance
+    due: Échéance
     edit: Modifier
     edit_action: "Modifier action"
     edit_action_with_description: "Modifier l'action '%{description}'"
@@ -773,7 +773,7 @@ fr:
     feed_title_in_project: "dans le projet '%{project}'"
     feeds:
       completed: "Complété : %{date}"
-      due: "Echéance : %{date}"
+      due: "Échéance : %{date}"
     has_x_pending:
       one: "A une action en attente"
       other: "A %{count} actions en attente"
@@ -793,9 +793,9 @@ fr:
       completed: "dans les %{count} derniers jours"
       due_date: "avec au plus la date d'échéance %{due_date}"
     next_actions_due_date:
-      due_in_x_days: "Echéance dans %{days} days"
-      due_today: "Echéance aujourd'hui"
-      due_tomorrow: "Echéance demain"
+      due_in_x_days: "Échéance dans %{days} days"
+      due_today: "Échéance aujourd'hui"
+      due_tomorrow: "Échéance demain"
       overdue_by: "Dépassée de %{days} jour"
       overdue_by_plural: "Dépassée de %{days} jours"
     next_actions_title: "Tracks - Prochaines Actions"
@@ -844,7 +844,7 @@ fr:
           - Jeudi
           - Vendredi
           - Samedi
-        due: Echéance
+        due: Échéance
         every_day: "chaque jour"
         every_month: "chaque mois"
         every_n: "tous les %{n}"
