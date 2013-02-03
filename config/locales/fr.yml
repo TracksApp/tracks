@@ -322,7 +322,7 @@ fr:
       new_action: "0-Nouvelle action"
       projects: Projets
       starred: Marqué
-      tickler: Reporteur
+      tickler: Échéancier
     navigation:
       admin: Admin
       api_docs: "Doc REST API"
@@ -354,8 +354,8 @@ fr:
       starred_title: "Voir vos actions préférées"
       stats: Statistiques
       stats_title: "Voir vos statistiques"
-      tickler: Reporteur
-      tickler_title: Reporteur
+      tickler: Échéancier
+      tickler_title: Échéancier
       view: Vue
     next_actions_rss_feed: "Flux RSS des prochaines actions"
     toggle_contexts: "Basculer contextes effondré"
@@ -658,7 +658,7 @@ fr:
     totals_blocked_actions: "%{count} dépendent de la réalisation de leurs actions"
     totals_completed_project_count: "et %{count} sont des projets réalisés."
     totals_context_count: "Vous avez %{count} contextes."
-    totals_deferred_actions: "desquels %{count} sont des actions reportés dans le Reporteur"
+    totals_deferred_actions: "desquels %{count} sont des actions reportées dans l'échéancier"
     totals_first_action: "Depuis votre première action du %{date}"
     totals_hidden_context_count: "et %{count} sont des contextes cachés."
     totals_hidden_project_count: "%{count} sont cachés"
@@ -693,7 +693,7 @@ fr:
     action_marked_complete: "L'action <strong>'%{description}'</strong> a été marquée comme <strong>%{completed}</strong>"
     action_marked_complete_error: "L'action <strong>'%{description}'</strong> n'a PAS été marquée comme <strong>%{completed} a cause d'une erreur sur le serveur </strong> "
     action_saved: "Action sauvegardée"
-    action_saved_to_tickler: "Action sauvegardée dans le Reporteur"
+    action_saved_to_tickler: "Action sauvegardée dans l'échéancier"
     add_another_dependency: "Ajouter une autre dépendance"
     add_new_recurring: "Ajouter une nouvelle action récurrente"
     added_dependency: "%{dependency} ajoutée comme dépendance"
@@ -747,7 +747,7 @@ fr:
       other: "Report de %{count} jours"
     deferred_actions_with: "Action reportées avec le tag '%{tag_name}'"
     deferred_pending_actions: "Actions reportées ou en attente"
-    deferred_tasks_title: "TRACKS::Reporteur"
+    deferred_tasks_title: "TRACKS::Échéancier"
     delete: Supprimer
     delete_action: "Supprimer action"
     delete_recurring_action_title: "Supprimer l'action récurrente"
