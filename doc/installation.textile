@@ -6,7 +6,7 @@ h2. Getting Tracks
 
 There are two methods of downloading Tracks:
 
-# (Recommended for most people) Download the "zipped package":{{ site.download_link }} for the latest stable release ({{ site.version }}) and unzip in your preferred location (e.g. @~/Sites@ for Mac OS X users).
+# (Recommended for most people) Download the "zipped package":https://github.com/TracksApp/tracks/zipball/v2.2 for the latest stable release (2.2) and unzip in your preferred location (e.g. @~/Sites@ for Mac OS X users).
 # If you want to live on the edge, you can get the latest development version from GitHub using git (bear in mind that this may be less stable than the released versions):
 
 bc. cd ~/Sites
@@ -52,7 +52,7 @@ Various Tracks users have contributed installation howtos for specific setups. T
 
 h2.  Installation
 
-This description is intended for people installing Tracks from scratch. If you would like to upgrade an existing installation, please see Upgrading to Tracks {{ site.version }}.
+This description is intended for people installing Tracks from scratch. If you would like to upgrade an existing installation, please see the "upgrade documentation":upgrading.textile.
 
 # Unzip tracks and install in a directory
 # Decide on a database to use
