@@ -1,17 +1,7 @@
----
-title: "Manual - Installation"
-layout: page
-comments: false
-sharing: false
-footer: false
----
-
-"&laquo; Introduction":/manual/ - "Upgrading &raquo;":/manual/upgrading.html
-
-h2. Installing Tracks
+h1. Installing Tracks
 
 
-h3. Getting Tracks
+h2. Getting Tracks
 
 
 There are two methods of downloading Tracks:
@@ -19,14 +9,12 @@ There are two methods of downloading Tracks:
 # (Recommended for most people) Download the "zipped package":{{ site.download_link }} for the latest stable release ({{ site.version }}) and unzip in your preferred location (e.g. @~/Sites@ for Mac OS X users).
 # If you want to live on the edge, you can get the latest development version from GitHub using git (bear in mind that this may be less stable than the released versions):
 
-{% codeblock lang:bash %}
-cd ~/Sites
+bc. cd ~/Sites
 git clone git://github.com/tracksapp/tracks.git
 cd tracks
-{% endcodeblock %}
 
 
-h4. Easy installation options
+h3. Easy installation options
 
 
 There are a few easy options if you are not confident about installing Tracks from source using these instructions. If you'd like to install Tracks on a local machine, try "BitNami":http://bitnami.org/stack/tracks -- it runs on Windows, Mac OS X and Linux. But they also support preconfigured virtual machines, including Amazon machine images.
@@ -36,7 +24,7 @@ Alternatively, you could try "JumpBox":http://jumpbox.com/app/tracks, who provid
 Several third parties provide Tracks hosting as a service. A list of these providers can be found "on the wiki":https://github.com/TracksApp/tracks/wiki/Tracks-hosting. Please note that they may run older versions of Tracks.
 
 
-h4.  Requirements
+h3.  Requirements
 
 
 The Tracks interface is accessed through a web browser, so you need to run a webserver to serve the Tracks pages up to you. This isn't as daunting as it sounds, however: Tracks ships with a built-in web server called Mongrel which you can run on your own computer to serve the Tracks application locally. If you want to be able to access Tracks from any computer connected to the Internet, then you need to install Tracks on a publicly accessible server, and you will probably be better off using a more robust web server such as "Apache":http://www.apache.org/ (using "modrails":http://www.modrails.com/) or "Lighttpd":http://www.lighttpd.net/ to serve the pages, particularly if it will be used by many people.
@@ -44,13 +32,13 @@ The Tracks interface is accessed through a web browser, so you need to run a web
 Tracks stores its data in a database, and you can either use SQLite3, MySQL or PostgreSQL. SQLite3 is the best choice for a single user (or a small number of users) on a local installation, while MySQL or PostgreSQL is better for multiple users on a remote installation.
 
 
-h4.  What is included with the Tracks package?
+h3.  What is included with the Tracks package?
 
 # Tracks itself
 # An empty SQLite3 database, set up with the correct database schema
 
 
-h4.  What you need to install
+h3.  What you need to install
 
 If you don't want to (or can't) use one of the all in one installations, you'll need to install a few things, depending on your platform and your needs.
 
@@ -62,7 +50,7 @@ If you don't want to (or can't) use one of the all in one installations, you'll 
 Various Tracks users have contributed installation howtos for specific setups. They are "on the wiki":https://github.com/TracksApp/tracks/wiki/Installation-index. 
 
 
-h3.  Installation
+h2.  Installation
 
 This description is intended for people installing Tracks from scratch. If you would like to upgrade an existing installation, please see Upgrading to Tracks {{ site.version }}.
 
@@ -78,26 +66,24 @@ This description is intended for people installing Tracks from scratch. If you w
 # Customise Tracks
 
 
-h4.  Unzip Tracks and install
+h3.  Unzip Tracks and install
 
 Unzip the package and move Tracks into the directory you want to run it from. For example, for Mac OS X users, @~/Sites@ is a good choice.
 
 
-h4.  Decide on a database
+h3.  Decide on a database
 
 Before you go any further, you need to decide which database you will use. See the 'What you need to install' section for details on installing the required components for you choice of database.
 
 # *SQLite3*. All you need to do is make sure that you point Tracks to the included SQLite3 database in @/db@ in the next step, 'Configure variables'.
 # *MySQL*. Once you have MySQL installed, you need to create a database and database-user to use with Tracks. For this, you can use MySQL Administrator or go into a terminal and issue the following commands:
 
-{% codeblock lang:mysql %}
-mysql -uroot -p
+bc. mysql -uroot -p
 mysql> CREATE DATABASE tracks;
 mysql> GRANT ALL PRIVILEGES ON tracks.* TO yourmysqluser@localhost \
 IDENTIFIED BY 'password-goes-here' WITH GRANT OPTION;
-{% endcodeblock %}
 
-h4. Install the necessary prerequisites using Bundler
+h3. Install the necessary prerequisites using Bundler
 
 Tracks makes use of several other Ruby libraries (known as 'gems') to provide additional functionality. The Bundler tool makes it easy for the gems that Tracks needs to be installed. 
 
@@ -105,7 +91,7 @@ Tracks makes use of several other Ruby libraries (known as 'gems') to provide ad
 # Run the command @bundle install --without development,test@ in the directory that you unzipped your Tracks download to.
 # Wait for Bundler to finish installing the necessary gems that Tracks needs. This can take some time depending on the speed of your internet connection and the speed of the system you're installing Tracks on.
 
-h4.  Configure variables
+h3.  Configure variables
 
 # If you downloaded Tracks via GitHub, you need to duplicate the files @database.yml.tmpl@ and @site.yml.tmpl@ and remove the @*.tmpl@ extension from the duplicates. Once you've made those copies, edit the files as described in steps 2 and 3.
 # Open the file @/config/database.yml@ and edit the @production:@ section with the details of your database. If you are using MySQL the @adapter:@ line should read @adapter: mysql2@, @host: localhost@ (in the majority of cases), and your username and password should match those you assigned when you created the database. If you are using SQLite3, you should have only two lines under the production section: @adapter: sqlite3@ and @database: db/tracks-blank.db@.
@@ -114,40 +100,34 @@ h4.  Configure variables
 # If you intend to deploy Tracks with the built in webserver called WEBrick, you'll need to change @config.serve_static_assets@ to @true@ in @config/environments/production.rb@ in order for the images, stylesheets, and javascript files to be served correctly.
 
 
-h4.  Populate your database with the Tracks schema
+h3.  Populate your database with the Tracks schema
 
 Open a terminal and change into the root of your Tracks directory. Enter the following command:
 
-{% codeblock lang:ruby %}
-bundle exec rake db:migrate RAILS_ENV=production
-{% endcodeblock %}
+bc. bundle exec rake db:migrate RAILS_ENV=production
 
 This will update your database with the required schema for Tracks. If you are using SQLite3, it is not strictly necessary, because the SQLite3 database included with Tracks already has the schema included in it, but it should not do any harm to run the command (nothing will happen if it is up to date).
 
-h4. Precompile assets
+h3. Precompile assets
 
 Static assets (images, stylesheets, and javascript) need to be compiled in order for them to work correctly with the new asset pipeline feature in Rails. Precompiling your assets is as simple as running the following command while inside the Tracks root directory:
 
-{% codeblock lang:ruby %}
-bundle exec rake assets:precompile
-{% endcodeblock %}
+bc. bundle exec rake assets:precompile
 
-h4.  Start the server
+h3.  Start the server
 
 While still in the Terminal inside the Tracks root directory, issue the following command:
 
-{% codeblock lang:ruby %}
-bundle exec rails server -e production
-{% endcodeblock %}
+bc. bundle exec rails server -e production
 
 If all goes well, you should see some text informing you that the WEBrick server is running: @=> Rails application starting in production on http://0.0.0.0:3000@. If you are already running other services on port 3000, you need to select a different port when running the server, using the @-p@ option. You can stop the server again by the key combination Ctrl-C.
 
 
-h4.  Visit Tracks in a browser
+h3.  Visit Tracks in a browser
 
 Visit @http://0.0.0.0:3000/signup@ in a browser (or whatever URL and port was reported when you started the server in the step above) and chose a user name and password for admin user. Once logged in as admin, you can add other (ordinary level) users. If you need to access Tracks from a mobile/cellular phone browser, visit @http://yourdomain.com/mobile/@. This mobile version is a special, lightweight version of Tracks, designed to use on a mobile browser.
 
 
-h4.  Customise Tracks
+h3.  Customise Tracks
 
 Once logged in, add some Contexts and Projects, and then go ahead and add your actions. You might also want to visit the Preferences page to edit various settings to your liking. Have fun!
