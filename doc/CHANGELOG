@@ -1,6 +1,4 @@
-# Tracks: a GTD(TM) web application, built with Ruby on Rails
-
-[![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/TracksApp/tracks)
+= Tracks: a GTD(TM) web application, built with Ruby on Rails
 
 * Project homepage: http://getontracks.org/
 * Manual: http://getontracks.org/manual/
@@ -57,6 +55,14 @@ Under the hood
 * Uses Cache Digest. This speeds up page rendering a lot
 * Migrated to Tolk for managing translations
 * Upgraded to JQuery 1.8.3 and JQueryUI 1.9.0
+
+== Version 2.1.3
+
+Upgrade Rails to 2.3.16 to address security vulnerabilities in Rails
+
+== Version 2.1.2
+
+Upgrade Rails to 2.3.15 to address security vulnerabilities in Rails
 
 == Version 2.1.1
 
