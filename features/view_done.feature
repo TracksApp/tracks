@@ -228,11 +228,11 @@ Feature: Show done
     | all done actions page for context "@pc"         | fr      |
     | all done actions page for project "test project"| fr      |
     | all done actions page for tag "starred"         | fr      |
-    | done actions page                               | cz      |
-    | all done actions page                           | cz      |
-    | done actions page for context "@pc"             | cz      |
-    | done actions page for project "test project"    | cz      |
-    | done actions page for tag "starred"             | cz      |
-    | all done actions page for context "@pc"         | cz      |
-    | all done actions page for project "test project"| cz      |
-    | all done actions page for tag "starred"         | cz      |
+    | done actions page                               | cs      |
+    | all done actions page                           | cs      |
+    | done actions page for context "@pc"             | cs      |
+    | done actions page for project "test project"    | cs      |
+    | done actions page for tag "starred"             | cs      |
+    | all done actions page for context "@pc"         | cs      |
+    | all done actions page for project "test project"| cs      |
+    | all done actions page for tag "starred"         | cs      |

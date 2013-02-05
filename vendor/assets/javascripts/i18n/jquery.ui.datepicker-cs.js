@@ -1,7 +1,7 @@
 ﻿/* Czech initialisation for the jQuery UI date picker plugin. */
 /* Written by Pavel Župa (pavel.zupa@gmail.com). */
 jQuery(function($){
-	$.datepicker.regional['cz'] = {
+	$.datepicker.regional['cs'] = {
 		closeText: 'zavřít',
 		prevText: 'předchozí',
 		nextText: 'další',
@@ -19,5 +19,5 @@ jQuery(function($){
 		isRTL: false,
 		showMonthAfterYear: false,
 		yearSuffix: ''};
-	$.datepicker.setDefaults($.datepicker.regional['cz']);
+	$.datepicker.setDefaults($.datepicker.regional['cs']);
 });
