@@ -23,4 +23,3 @@ db/schema.rb
 nbproject
 rerun.txt
 tags
-vendor/plugins/query_trace/
