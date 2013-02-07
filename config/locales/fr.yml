@@ -133,7 +133,7 @@ fr:
     search: Rechercher
     second: Seconde
     server_error: "Une erreur s'est produite sur le serveur"
-    show_all: "Voir tous"
+    show_all: "voir tous"
     sort: 
       alphabetically: "Par ordre alphabétique"
       alphabetically_confirm: "Êtes-vous sûr de vouloir trier ces projets par ordre alphabétique ? L'ordre actuel sera remplacé."
@@ -303,7 +303,7 @@ fr:
     actions_completed_last_week: "Actions réalisées dans les 7 derniers jours"
     actions_due_next_week: "Actions devant se terminer dans les 7 prochains jours ou moins"
     actions_due_today: "Actions devant se terminer aujourd'hui ou avant"
-    active_projects_wo_next: "Projets actifs avec aucune action suivante"
+    active_projects_wo_next: "Projets actifs sans action suivante"
     active_starred_actions: "Toutes les actions préferrées actives"
     all_actions: "Toutes les actions"
     all_contexts: "Tous les contextes"
@@ -410,7 +410,7 @@ fr:
     openid_identity_url_not_found: "Désolé, aucun utilisateur avec cette identité URL n'existe (%{identity_url})"
     option_separator: "ou,"
     please_login: "Veuillez vous connecter pour utiliser Tracks"
-    session_time_out: "La session a expirée. Merci de %{link}"
+    session_time_out: "La session a expiré. Merci de %{link}"
     session_will_expire: "la session expire après %{hours} heure(s) d'inactivité."
     session_will_not_expire: "la session n'expire jamais."
     sign_in: "Se connecter"
@@ -853,7 +853,7 @@ fr:
     no_deferred_pending_actions: "Il n'y pas d'actions reportées ou en attente actuellement"
     no_hidden_actions: "Il n'y a pas d'actions cachées actuellement"
     no_incomplete_actions: "Il n'y a pas d'actions incomplètes"
-    no_last_completed_actions: "Aucune action achevée trouve"
+    no_last_completed_actions: "Aucune action achevée trouvée"
     no_project: "--Pas de projet--"
     no_recurring_todos: "Il n'y a pas de tâches récurrentes actuellement"
     older_completed_items: "Anciens éléments complétés"
@@ -955,7 +955,7 @@ fr:
     tickler_items_due: 
       one: "Un élément de l'échéancier est arrivé à échéance − rafraîchir la page pour le voir."
       other: "%{count} éléments de l'échéancier sont arrivés à échéance − rafraîchir la page pour les voir."
-    to_tickler: "Vers l'échéancier"
+    to_tickler: "vers l'échéancier"
     unable_to_add_dependency: "Impossible d'ajouter la dépendance"
     unresolved_dependency: "La valeur saisie dans le champ dépendance ne correspond pas à une action existante. Cette valeur ne sera pas sauvegardée avec le reste de l'action. Continuer ?"
     was_due_on_date: "arrivée à échéance le %{date}"
