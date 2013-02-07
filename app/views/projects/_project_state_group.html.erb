@@ -9,8 +9,13 @@
     <span id="<%= state %>-projects-count" class="badge"><%= project_state_group.length%><%= total_count_string%></span>
 
     <%= t('common.last' ) unless ( ['review','stalled','blocked','current'].include?(state) )%>
-    <%= t('states.'+state+'_plural' )%>
-    <%= t('common.projects') %><%= total_count==-1 ? "" : " (#{link_to(t('common.show_all'), done_projects_path)})".html_safe%>
+    <% if (I18n.locale == :fr) %>
+      <%= t('common.projects').downcase %>
+      <%= t('states.'+state+'_plural' ).downcase %><%= total_count==-1 ? "" : " (#{link_to(t('common.show_all'), done_projects_path)})".html_safe%>
+    <% else %>
+      <%= t('states.'+state+'_plural' )%>
+      <%= t('common.projects') %><%= total_count==-1 ? "" : " (#{link_to(t('common.show_all'), done_projects_path)})".html_safe%>
+    <% end %>
 
   </h2>
   <% unless suppress_sort_menu %>
