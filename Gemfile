@@ -38,13 +38,6 @@ gem 'jquery-rails'
 gem 'bcrypt-ruby'
 
 group :development do
-  if RUBY_VERSION.to_f >= 1.9
-    # gem "ruby-debug19", :require => 'ruby-debug'
-    gem "mongrel", ">=1.2.0.pre2"
-  else
-    gem "ruby-debug"
-    gem "mongrel"
-  end
   gem "yard"
   gem "tolk"
   gem "bullet"
