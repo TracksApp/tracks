@@ -40,10 +40,8 @@ gem 'bcrypt-ruby', "~>3.0"
 group :development do
   if RUBY_VERSION.to_f >= 1.9
     # gem "ruby-debug19", :require => 'ruby-debug'
-    gem "mongrel", ">=1.2.0.pre2"
   else
     gem "ruby-debug"
-    gem "mongrel"
   end
   gem "yard", "~>0.8"
   gem "tolk", "~>1.3"
