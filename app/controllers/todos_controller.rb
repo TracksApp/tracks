@@ -454,6 +454,7 @@ class TodosController < ApplicationController
     @context = current_user.contexts.find_by_id(params[:todo][:context_id])
     @todo.context = @context
     @saved = @todo.save
+    current_user.contexts.find(@original_item_context_id).touch
 
     @context_changed = true
     @status_message = t('todos.context_changed', :name => @context.name)
