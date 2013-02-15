@@ -1,0 +1,4 @@
+<% if @saved -%>
+  TracksPages.page_notify('notice', '<%=t('projects.status_project_name_changed')%>', 5);
+  TracksForm.set_project_name("<%= escape_javascript(@project.name)%>");
+<% end %>
