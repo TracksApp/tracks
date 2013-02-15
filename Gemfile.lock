@@ -155,6 +155,7 @@ DEPENDENCIES
   hoe
   hpricot
   htmlentities (~> 4.3.0)
+  json (>= 1.7.7)
   mail
   memory_test_fix (~> 0.1.3)
   mongrel
