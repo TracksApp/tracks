@@ -6,6 +6,9 @@
 	padding-bottom:	2.5em;
 	position:		relative;
 }
+.sf-navbar ul {
+	box-shadow: none;
+}
 .sf-navbar li {
 	background:		#AABDE6;
 	position:		static;
@@ -80,14 +83,4 @@ ul.sf-navbar .current ul ul {
 .sf-navbar ul li:hover > a > .sf-sub-indicator,
 .sf-navbar ul li.sfHover > a > .sf-sub-indicator {
 	background-position: -10px -100px; /* arrow hovers for modern browsers*/
-}
-
-/*** remove shadow on first submenu ***/
-.sf-navbar > li > ul {
-	background: transparent;
-	padding: 0;
-	-moz-border-radius-bottomleft: 0;
-	-moz-border-radius-topright: 0;
-	-webkit-border-top-right-radius: 0;
-	-webkit-border-bottom-left-radius: 0;
 }

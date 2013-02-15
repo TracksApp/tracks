@@ -1,8 +1,0 @@
-#TODO: is this dead code?
-page['default_project_name_id'].value = @project.name
-page['todo_project_name'].value = @project.name
-
-page << "enable_rich_interaction();"
-
-status_message = t('projects.status_project_name_changed')
-page.notify :notice, status_message, 5.0

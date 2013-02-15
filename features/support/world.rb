@@ -22,8 +22,13 @@ module TracksStepHelper
   end
 
   def open_edit_form_for(todo)
+    edit_link = "div#line_todo_#{todo.id} a#icon_edit_todo_#{todo.id}"
+
+    # make sure we can open the edit form
+    page.should have_css(edit_link)
+
     # on calendar page there can be more than 1 occurance of a todo, so we select the first here
-    all(:css, "div#line_todo_#{todo.id} a#icon_edit_todo_#{todo.id}")[0].click
+    all(:css, edit_link)[0].click
     wait_for_ajax
     wait_for_animations_to_end
   end

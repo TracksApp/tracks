@@ -57,7 +57,7 @@ group :test do
   gem "selenium-webdriver" 
   
   # uncomment to use the webkit option. This depends on Qt to be installed
-  #gem "capybara-webkit"
+  # gem "capybara-webkit"
   
   # uncomment to be able to make screenshots from scenarios
   #gem "capybara-screenshot"

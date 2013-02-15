@@ -133,7 +133,9 @@ end
 
 When /^I try to edit the project name to "([^\"]*)"$/ do |new_title|
   edit_project_no_wait(@project) do
-    fill_in "project[name]", :with => new_title
+    within "form.edit-project-form" do
+      fill_in "project[name]", :with => new_title
+    end
   end
 end
 
@@ -202,15 +204,20 @@ When /^I edit project settings and mark the project as reviewed$/ do
 end
 
 When /^I add a note "([^"]*)" to the project$/ do |note_body|
-  click_link "Add a note"
-  page.should have_css "div.widgets button#submit_note"
-  fill_in "note[body]", :with => note_body
-  click_button "Add note"
-  
   submit_button = "div.widgets button#submit_note"
+
+  click_link "Add a note"
+  page.should have_css submit_button
+  fill_in "note[body]", :with => note_body
+  
   elem = find(submit_button)
-  elem.should_not be_nil  # form is hidden
-  elem.should_not be_visible
+  elem.should_not be_nil  
+  elem.click
+
+  wait_until do
+    !elem.visible?
+  end
+
 end
 
 When /^I click on the first note icon$/ do
@@ -245,9 +252,10 @@ Then /^I edit the default tags to "([^"]*)"$/ do |default_tags|
 end
 
 Then /^I should be able to change the project name in place$/ do
-  #Note that this is not changing the project name
+  # Note that this is not changing the project name
   page.should have_css("div#project_name>form>input")
   page.find("div#project_name > form > button[type=cancel]").click
+  page.should_not have_css("div#project_name>form>input")
 end
 
 Then /^I should not be able to change the project name in place$/ do

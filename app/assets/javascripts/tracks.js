@@ -70,7 +70,7 @@ var TracksForm = {
         });
 
         /* add behavior to clear the date both buttons for show_from and due */
-        $(".date_clear").live('click', function() {
+        $(document).on("click", ".date_clear", function() {
             $(this).prev().val('');
         });
 
@@ -79,7 +79,7 @@ var TracksForm = {
         });
 
         /* submit todo form after entering new todo */
-        $("button#todo_new_action_submit").live('click', function (ev) {
+        $(document).on("click", "button#todo_new_action_submit", function (ev) {
             if ($('input#predecessor_input').val() != "")
               if (!confirm(i18n['todos.unresolved_dependency']))
                 return false;
@@ -89,14 +89,14 @@ var TracksForm = {
         });
 
         /* submit multi-todo form after entering multiple new todos */
-        $("button#todo_multi_new_action_submit").live('click', function (ev) {
+        $(document).on("click", "button#todo_multi_new_action_submit", function (ev) {
             if (TodoItems.askIfNewContextProvided('multi_', this))
                 submit_with_ajax_and_block_element('form#todo-form-multi-new-action', $(this));
             return false;
         });
     },
     enable_dependency_delete: function() {
-        $('a[class=icon_delete_dep]').live('click', function() {
+        $(document).on("click", 'a[class=icon_delete_dep]', function() {
             var form = $(this).parents('form').get(0);
             var predecessor_list = $(form).find('input[name=predecessor_list]');
             var id_list = split( predecessor_list.val() );
@@ -506,30 +506,30 @@ var TodoItems = {
     },
     setup_behavior: function() {
         /* show the notes of a todo */
-        $(".show_notes").live('click', function () {
+        $(document).on("click",".show_notes", function () {
             $(this).next().toggle("fast");
             return false;
         });
 
-        $(".show_successors").live('click', function () {
+        $(document).on("click",".show_successors", function () {
             $(this).next().toggle("fast");
             return false;
         });
 
         /* set behavior for star icon */
-        $(".item-container a.star_item").live('click', function (ev){
+        $(document).on("click", ".item-container a.star_item", function (ev){
             put_with_ajax_and_block_element(this.href, $(this));
             return false;
         });
 
         /* set behavior for toggle checkboxes for Recurring Todos */
-        $(".item-container input.item-checkbox").live('click', function(ev){
+        $(document).on("click", ".item-container input.item-checkbox", function(ev){
             put_with_ajax_and_block_element(this.value, $(this).parents(".item-container"));
             return false;
         });
 
         /* set behavior for edit icon */
-        $(".item-container a.edit_item").live('click', function (ev){
+        $(document).on("click", ".item-container a.edit_item", function (ev){
             var ajax_options = default_ajax_options_for_scripts('GET', this.href, $(this).parents('.item-container'));
             var id = this.id.substr(15);
             ajax_options.complete.push( function(){
@@ -540,7 +540,7 @@ var TodoItems = {
         });
 
         /* delete button to delete a todo from the list */
-        $('.item-container a.icon_delete_item').live('click', function(evt){
+        $(document).on("click",".item-container a.icon_delete_item", function(evt){
             var confirm_message = $(this).attr("x_confirm_message")
             if(confirm(confirm_message)){
                 delete_with_ajax_and_block_element(this.href, $(this).parents('.item-container'));
@@ -549,13 +549,13 @@ var TodoItems = {
         });
 
         /* submit todo form after edit */
-        $("form.edit_todo_form button.positive").live('click', function (ev) {
+        $(document).on("click","form.edit_todo_form button.positive", function(evt) {
             submit_with_ajax_and_block_element('form.edit_todo_form', $(this));
             return false;
         });
 
         // for cancelling edit todo form
-        $('form.edit_todo_form a.negative').live('click', function(){
+        $(document).on("click",'form.edit_todo_form a.negative', function(){
             $(this).parents('.edit-form').fadeOut(200, function () {
                 $(this).parents('.list').find('.project').fadeIn(500);
                 $(this).parents('.container').find('.item-show').fadeIn(500);
@@ -563,7 +563,7 @@ var TodoItems = {
         });
 
         // defer a todo
-        $(".item-container a.icon_defer_item").live('click', function(ev){
+        $(document).on("click",".item-container a.icon_defer_item", function(ev){
             if ($(this).attr("x_defer_alert") == "true")
                 alert ($(this).attr("x_defer_date_after_due_date"));
             else
@@ -572,7 +572,7 @@ var TodoItems = {
         });
 
         /* delete button to delete a dependency from the list */
-        $('.item-container a.delete_dependency_button').live('click', function(evt){
+        $(document).on("click",'.item-container a.delete_dependency_button', function(evt){
             var predecessor_id=$(this).attr("x_predecessors_id");
             var ajax_options = default_ajax_options_for_scripts('DELETE', this.href, $(this).parents('.item-container'));
             ajax_options.data += "&predecessor="+predecessor_id
@@ -609,7 +609,7 @@ var ProjectItems = {
 var UsersPage = {
     setup_behavior: function() {
         /* delete button to delete a user from the list */
-        $('a.delete_user_button').live('click', function(evt){
+        $(document).on("click",'a.delete_user_button', function(evt){
             var confirm_message = $(this).attr("x_confirm_message")
             if(confirm(confirm_message)){
                 delete_with_ajax_and_block_element(this.href, $(this).parents('.project'));
@@ -704,7 +704,7 @@ var ProjectListPage = {
         });
 
         /* alphabetize project list */
-        $('.alphabetize_link').live('click', function(evt){
+        $(document).on("click",'.alphabetize_link', function(evt) {
             var confirm_message = $(this).attr("x_confirm_message")
             if(confirm(confirm_message)){
                 post_with_ajax_and_block_element(this.href, $(this).parents('.alpha_sort'));
@@ -722,7 +722,7 @@ var ProjectListPage = {
         });
 
         /* delete button to delete a project from the list */
-        $('a.delete_project_button').live('click', function(evt){
+        $(document).on("click",'a.delete_project_button', function(evt){
             var confirm_message = $(this).attr("x_confirm_message")
             if(confirm(confirm_message)){
                 delete_with_ajax_and_block_element(this.href, $(this).parents('.project'));
@@ -731,21 +731,21 @@ var ProjectListPage = {
         });
 
         /* set behavior for edit project settings link in both projects list page and project page */
-        $("a.project_edit_settings").live('click', function (evt) {
+        $(document).on("click","a.project_edit_settings", function (evt) {
           $(this).parent().parent().addClass('project-edit-current'); /* mark project in list */
           get_with_ajax_and_block_element(this.href, $(this).parent().parent());
           return false;
         });
 
         /* submit project form after edit */
-        $("form.edit-project-form button.positive").live('click', function (ev) {
+        $(document).on("click", "form.edit-project-form button.positive", function (ev) {
             $('div#project_name').editable('enable');
             submit_with_ajax_and_block_element('form.edit-project-form', $(this));
             return false;
         });
 
         /* cancel edit project form */
-        $('form.edit-project-form a.negative').live('click', function(){
+        $(document).on("click",'form.edit-project-form a.negative', function(){
             $('div#project_name').editable('enable');
             $(this).parents('.edit-form').fadeOut(200, function () {
                 $(this).parents('.project-edit-current').removeClass('project-edit-current');
@@ -755,7 +755,7 @@ var ProjectListPage = {
         });
 
         /* submit project form after entering new project */
-        $("form#project_form button.positive").live('click', function (ev) {
+        $(document).on("click","form#project_form button.positive", function(evt) {
             submit_with_ajax_and_block_element('form#project_form', $(this));
             return false;
         });
@@ -820,7 +820,7 @@ var ContextListPage = {
         });
 
         /* delete a context using the x button */
-        $('a.delete_context_button').live('click', function(evt){
+        $(document).on("click",'a.delete_context_button', function(evt){
             var confirm_message = $(this).attr("x_confirm_message")
             if(confirm(confirm_message)){
                 delete_with_ajax_and_block_element(this.href, $(this).parents('.context'));
@@ -829,19 +829,19 @@ var ContextListPage = {
         });
 
         /* set behavior for edit context settings link in projects list page and project page */
-        $("a.context_edit_settings").live('click', function (ev) {
+        $(document).on("click","a.context_edit_settings", function(evt) {
             get_with_ajax_and_block_element(this.href, $(this).parent().parent());
             return false;
         });
 
         /* submit form when editing a context */
-        $("form.edit-context-form button.positive").live('click', function (ev) {
+        $(document).on("click","form.edit-context-form button.positive", function(evt) {
             submit_with_ajax_and_block_element('form.edit-context-form', $(this));
             return false;
         });
 
         /* submit form for new context in sidebar */
-        $("form#context-form button.positive").live('click', function (ev) {
+        $(document).on("click","form#context-form button.positive", function(evt) {
             submit_with_ajax_and_block_element('form#context-form', $(this));
             return false;
         });
@@ -867,13 +867,13 @@ var ContextListPage = {
 
 var IntegrationsPage = {
     setup_behavior: function() {
-        $('#applescript1-contexts').live('change', function(){
+        $(document).on("change",'#applescript1-contexts', function(){
             IntegrationsPage.get_script_for_context("#applescript1", "get_applescript1", this.value);
         });
-        $('#applescript2-contexts').live('change', function(){
+        $(document).on("change",'#applescript2-contexts', function(){
             IntegrationsPage.get_script_for_context("#applescript2", "get_applescript2", this.value);
         });
-        $('#quicksilver-contexts').live('change', function(){
+        $(document).on("change",'#quicksilver-contexts', function(){
             IntegrationsPage.get_script_for_context("#quicksilver", "get_quicksilver_applescript", this.value)
         });
     },
@@ -903,14 +903,14 @@ var FeedsPage = {
 var NotesPage = {
     setup_behavior: function() {
         /* Add note */
-        $(".add_note_link a").live('click', function(){
+        $(document).on("click",".add_note_link a", function(){
             $('#new-note').show();
             $('textarea#note_body').val('');
             $('textarea#note_body').focus();
         });
 
         /* delete button for note */
-        $('a.delete_note_button').live('click', function(){
+        $(document).on("click",'a.delete_note_button', function(){
             var confirm_message = $(this).attr("x_confirm_message")
             if(confirm(confirm_message)){
                 delete_with_ajax_and_block_element(this.href, $(this).parents('.project_notes'));
@@ -919,7 +919,7 @@ var NotesPage = {
         });
 
         /* edit button for note */
-        $('a.note_edit_settings').live('click', function(){
+        $(document).on("click",'a.note_edit_settings', function(){
             var dom_id = this.id.substr(10);
             $('#'+dom_id).toggle();
             $('#edit_'+dom_id).show();
@@ -928,7 +928,7 @@ var NotesPage = {
         });
 
         /* cancel button when editing a note */
-        $('.edit-note-form a.negative').live('click', function(){
+        $(document).on("click",'.edit-note-form a.negative', function(){
             var dom_id = this.id.substr(14);
             /* dom_id == 'note_XX' on notes page and just 'note' on project page */
             if (dom_id == 'note') {
@@ -941,7 +941,7 @@ var NotesPage = {
         });
 
         /* update button when editing a note */
-        $("form.edit-note-form button.positive").live('click', function (ev) {
+        $(document).on("click","form.edit-note-form button.positive", function(evt) {
             submit_with_ajax_and_block_element($(this).parents('form.edit-note-form'), $(this));
             return false;
         });
@@ -968,7 +968,7 @@ var RecurringTodosPage = {
     },
     setup_behavior: function() {
       /* add new recurring todo plus-button in sidebar */
-      $("#add-new-recurring-todo").live('click', function(){
+      $(document).on("click","#add-new-recurring-todo", function(){
         $( "#new-recurring-todo" ).dialog( "open" );
       });
 
@@ -999,7 +999,7 @@ var RecurringTodosPage = {
       });
 
       /* change recurring period radio input on new form */
-      $("#recurring_period input").live('click', function(){
+      $(document).on("click","#recurring_period input", function(){
           RecurringTodosPage.hide_all_recurring();
           $('#recurring_'+this.id.split('_')[4]).show();
       });
@@ -1032,19 +1032,19 @@ var RecurringTodosPage = {
       });
 
       /* change recurring period radio input on edit form */
-      $("#recurring_edit_period input").live('click', function(){
+      $(document).on("click","#recurring_edit_period input", function(){
           RecurringTodosPage.hide_all_edit_recurring();
           $('#recurring_edit_'+this.id.split('_')[5]).show();
       });
 
       /* set behavior for edit recurring todo */
-      $(".item-container a.edit_icon").live('click', function (ev){
+      $(document).on("click",".item-container a.edit_icon", function(evt){
           get_with_ajax_and_block_element(this.href, $(this).parents(".item-container"));
           return false;
       });
 
       /* delete button to delete a todo from the list */
-      $('.item-container a.delete_icon').live('click', function(evt){
+      $(document).on("click",'.item-container a.delete_icon', function(evt){
           var confirm_message = $(this).attr("x_confirm_message")
           if(confirm(confirm_message)){
               delete_with_ajax_and_block_element(this.href, $(this).parents('.project'));
@@ -1082,7 +1082,7 @@ function setup_auto_refresh(interval){
     }
     setTimeout(refresh_page, interval);
     $(function(){
-        $("input").live('keydown', function(){
+        $(document).on("keydown","input", function(){
             field_touched = true;
         });
     });
@@ -1267,13 +1267,13 @@ function enable_rich_interaction(){
     TodoItems.setup_drag_and_drop();
 
     /* have to bind on keypress because of limitations of live() */
-    $('input[name=project_name]').live('keypress', function(){
+    $(document).on("keypress",'input[name=project_name]', function(){
         $(this).bind('blur', project_defaults);
     });
-    $('input[name=context_name]').live('keypress', function(){
+    $(document).on("keypress",'input[name=context_name]', function(){
         $(this).attr('edited', 'true');
     });
-    $('input[name=tag_list]').live('keypress', function(){
+    $(document).on("keypress",'input[name=tag_list]', function(){
         $(this).attr('edited', 'true');
     });
 
@@ -1291,8 +1291,10 @@ function enable_rich_interaction(){
 
 $(document).ready(function() {
 
-    // fix for IE8. Without this checkboxes don't work AJAXy. See #1152
-    if($.browser.msie && ( ($.browser.version.substring(0, 2) == "8.") || ($.browser.version.substring(0, 2) == "7.") ) ) {
+    // fix for IE7/8. Without this checkboxes don't work AJAXy. See #1152
+    var msie8 = /MSIE 8.0/.test(navigator.userAgent);
+    var msie7 = /MSIE 7.0/.test(navigator.userAgent);
+    if(msie8 || msie7) {
         $('body').bind('change', function() {
             return true;
         });

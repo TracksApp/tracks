@@ -34,7 +34,7 @@ class ApplicationController < ActionController::Base
     locale = locale || prefs.locale unless current_user.nil? # otherwise, the locale of the currently logged in user takes over
     locale = locale || request.env['HTTP_ACCEPT_LANGUAGE'].scan(/^[a-z]{2}/).first if request.env['HTTP_ACCEPT_LANGUAGE']
     I18n.locale = locale.nil? ? I18n.default_locale : (I18n::available_locales.include?(locale.to_sym) ? locale : I18n.default_locale)
-    logger.debug("Selected '#{I18n.locale}' as locale")
+    # logger.debug("Selected '#{I18n.locale}' as locale")
   end
 
   def set_session_expiration

@@ -62,7 +62,7 @@ Feature: Manage the list of contexts
     Then I should see that a context named "@ipad" is not present
     And I should see that the context container for hidden contexts is not present
 
-  @javascript 
+  @javascript
   Scenario: Delete context from context page right after an edit
     Given I have a context called "@computer"
     When I go to the contexts page

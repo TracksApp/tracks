@@ -7,6 +7,7 @@ When /^I mark "([^"]*)" as complete$/ do |action_description|
   check "mark_complete_#{todo.id}"
 
   wait_for_ajax
+  wait_for_animations_to_end
 end
 
 When /^I mark "([^"]*)" as uncompleted$/ do |action_description|
@@ -16,6 +17,7 @@ When /^I mark "([^"]*)" as uncompleted$/ do |action_description|
   uncheck "mark_complete_#{todo.id}"
 
   wait_for_ajax
+  wait_for_animations_to_end
 end
 
 When /^I mark the completed todo "([^"]*)" active$/ do |action_description|
@@ -68,6 +70,8 @@ When /I change the (.*) field of "([^\"]*)" to "([^\"]*)"$/ do |field_name, todo
   open_edit_form_for(todo)
   within "form.edit_todo_form" do
     fill_in "#{field_name}", :with => new_value
+    # force blur event
+    page.execute_script("$('form.edit_todo_form input.#{field_name}_todo_#{todo.id}').blur();")
   end
   submit_edit_todo_form(todo)
   wait_for_ajax
