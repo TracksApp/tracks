@@ -1,13 +1,7 @@
 <%
-suppress_context ||= false
-suppress_project ||= false
-suppress_dependencies ||= false
-parameters = "_source_view=#{@source_view}"
-parameters += "&_tag_name=#{@tag_name}" if @source_view == 'tag'
-@z_index_counter = @z_index_counter - 1  # for IE z-index bug
 @rec_depth ||= 0
 
-cache successor do
+cache [successor, "successor"] do
 %>
   <div id="<%= dom_id(successor, 'successor') %>" class="item-container">
     <div id="<%= dom_id(successor, 'successor_line') %>">

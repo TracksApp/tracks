@@ -172,6 +172,11 @@ class Todo < ActiveRecord::Base
     end
   end
 
+  def touch_predecessors
+    self.touch
+    predecessors.each { |p| p.touch_predecessors }
+  end
+
   def removed_predecessors
     return @removed_predecessors
   end

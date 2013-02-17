@@ -114,11 +114,7 @@ function html_for_error_messages() {
 }
 
 function update_predecessors(next_steps) {
-  <% @todo.uncompleted_predecessors.each do |p| -%>
-    if ($('#<%=item_container_id(p)%>')) {
-      $('#<%=dom_id(p)%>').html('<%=escape_javascript(render(:partial => p, :locals => { :parent_container_type => parent_container_type }))%>');
-    }
-  <% end -%>
+  regenerate_predecessor_family();
   <% if @removed_predecessors
     @removed_predecessors.each do |p| -%>
       if ($('#<%=item_container_id(p)%>')) {
@@ -127,4 +123,15 @@ function update_predecessors(next_steps) {
     <% end -%>
   <% end -%>
   next_steps.go();
+}
+
+function regenerate_predecessor_family() {
+<%
+  parents = @todo.predecessors
+  until parents.empty?
+    parent = parents.pop
+    parents += parent.predecessors -%>
+    $('#<%= dom_id(parent) %>').html("<%= escape_javascript(render(:partial => parent, :locals => { :parent_container_type => parent_container_type })) %>");
+<%end
+-%>
 }
