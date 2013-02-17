@@ -469,7 +469,7 @@ class TodosController < ApplicationController
   def update
     @todo = current_user.todos.find_by_id(params['id'])
     @source_view = params['_source_view'] || 'todo'
-    init_data_for_sidebar unless mobile?
+    # init_data_for_sidebar unless mobile?
 
     cache_attributes_from_before_update
 
@@ -495,6 +495,8 @@ class TodosController < ApplicationController
     determine_remaining_in_context_count(@context_changed ? @original_item_context_id : @todo.context_id)
     determine_down_count
     determine_deferred_tag_count(params['_tag_name']) if source_view_is(:tag)
+
+    @todo.touch_predecessors if @original_item_description != @todo.description
 
     respond_to do |format|
       format.js {
@@ -1195,6 +1197,7 @@ class TodosController < ApplicationController
     @original_item_due = @todo.due
     @original_item_due_id = get_due_id_for_calendar(@todo.due)
     @original_item_predecessor_list = @todo.predecessors.map{|t| t.specification}.join(', ')
+    @original_item_description = @todo.description
     @todo_was_deferred_or_blocked = @todo.deferred? || @todo.pending?
   end
 
