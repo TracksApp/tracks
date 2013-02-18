@@ -8,14 +8,10 @@ class ContextsController < ApplicationController
   prepend_before_filter :login_or_feed_token_required, :only => [:index]
 
   def index
+    @all_contexts = current_user.contexts
     @active_contexts = current_user.contexts.active
     @hidden_contexts = current_user.contexts.hidden
-    @new_context = current_user.contexts.build
-    init_not_done_counts(['context'])
-
-    # save all contexts here as @new_context will add an empty one to current_user.contexts
-    @all_contexts = @active_contexts + @hidden_contexts
-    @count = @all_contexts.size
+    init_not_done_counts(['context']) unless request.format == :autocomplete
 
     respond_to do |format|
       format.html &render_contexts_html
@@ -207,6 +203,9 @@ class ContextsController < ApplicationController
       @no_hidden_contexts = @hidden_contexts.empty?
       @active_count = @active_contexts.size
       @hidden_count = @hidden_contexts.size
+      @count = @active_count + @hidden_count
+      @new_context = current_user.contexts.build
+
       render
     end
   end
@@ -235,9 +234,14 @@ class ContextsController < ApplicationController
   
   def render_autocomplete
     lambda do
-      # first get active contexts with todos then those without
-      filled_contexts = @active_contexts.reject { |ctx| ctx.todos.count == 0 } + @hidden_contexts.reject { |ctx| ctx.todos.count == 0 }
-      empty_contexts = @active_contexts.find_all { |ctx| ctx.todos.count == 0 } + @hidden_contexts.find_all { |ctx| ctx.todos.count == 0 }
+      # find contexts and the todos count. use a join to prevent all count(todos) of each context to be fetched
+      context_and_todo_count = current_user.contexts
+      .select('contexts.*, count(todos.id) as todos_count')
+      .joins('left outer join todos on context_id=contexts.id')
+      .group('context_id')
+
+      filled_contexts = context_and_todo_count.reject { |ctx| ctx.todos.size == 0 } 
+      empty_contexts = context_and_todo_count.find_all { |ctx| ctx.todos.size == 0 } 
       render :text => for_autocomplete(filled_contexts + empty_contexts, params[:term])
     end
   end
