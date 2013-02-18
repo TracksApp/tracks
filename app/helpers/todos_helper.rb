@@ -131,7 +131,7 @@ module TodosHelper
   end
 
   def tag_span (tag, mobile=false)
-    content_tag(:span, :class => "tag #{tag.name.gsub(' ','-')}") { link_to(tag.name, tag_path(tag.name, :format => mobile ? :m : nil)) }
+    content_tag(:span, :class => "tag #{tag.label}") { link_to(tag.name, tag_path(tag.name, :format => mobile ? :m : nil)) }
   end
 
   def tag_list(todo=@todo, mobile=false)
