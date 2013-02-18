@@ -30,7 +30,7 @@ class TagTest < ActiveSupport::TestCase
     tag = Tag.find_or_create_by_name("UPPER")
     assert !tag.new_record?
     
-    upper = Tag.find_by_name("UPPER")
+    upper = Tag.find_by_name("upper")
     assert_not_nil upper
     assert upper.name == "upper"
   end
