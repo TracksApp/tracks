@@ -1,4 +1,10 @@
-<% if @saved -%>
+<% unless @saved -%>
+  TracksPages.show_errors(html_for_error_messages());
+
+  function html_for_error_messages() {
+    return "<%= escape_javascript(get_list_of_error_messages_for(@todo)) %>";
+  }
+<% else -%>  
   TracksPages.page_notify('notice', "<%=escape_javascript @status_message%>", 8);
   TracksPages.hide_errors();
   TracksPages.set_page_badge(<%= @down_count %>);
@@ -11,59 +17,53 @@
   <% end -%>
   update_predecessors();
   clear_form();
-<% else -%>
-  TracksPages.show_errors(html_for_error_messages());
-<% end -%>
 
-function clear_form() {
-  $('#todo-form-new-action').clearForm();
-  $('#todo-form-new-action').clearDeps();
-  TracksForm.set_context_name('<%=escape_javascript @initial_context_name%>');
-  TracksForm.set_project_name('<%=escape_javascript @initial_project_name%>');
-  TracksForm.set_tag_list('<%=escape_javascript @initial_tags%>');
-  $('#todo-form-new-action input:text:first').focus();
-  $('#new_todo_starred_link .todo_star').removeClass('starred');
-  $('#new_todo_starred').val('false');
-}
+  function clear_form() {
+    $('#todo-form-new-action').clearForm();
+    $('#todo-form-new-action').clearDeps();
+    TracksForm.set_context_name('<%=escape_javascript @initial_context_name%>');
+    TracksForm.set_project_name('<%=escape_javascript @initial_project_name%>');
+    TracksForm.set_tag_list('<%=escape_javascript @initial_tags%>');
+    $('#todo-form-new-action input:text:first').focus();
+    $('#new_todo_starred_link .todo_star').removeClass('starred');
+    $('#new_todo_starred').val('false');
+  }
 
-function insert_new_context_with_new_todo() {
-  <%-
-    empty_id = '#no_todos_in_view'
-    empty_id = '#tickler-empty-nd' if source_view_is :tickler
-  -%>
-  $('<%=empty_id%>').slideUp(100);
-  $('#display_box').prepend(html_for_new_context());
-}
+  function insert_new_context_with_new_todo() {
+    <%-
+      empty_id = '#no_todos_in_view'
+      empty_id = '#tickler-empty-nd' if source_view_is :tickler
+    -%>
+    $('<%=empty_id%>').slideUp(100);
+    $('#display_box').prepend(html_for_new_context());
+  }
 
-function add_todo_to_existing_context() {
-  <% if source_view_is_one_of(:todo, :deferred, :tag) -%>
-    <% unless source_view_is_one_of(:todo, :tag) && (@todo.deferred?||@todo.hidden?) -%>
-      $('#c<%= @todo.context_id %>').fadeIn(500, function() {});
-      $('#no_todos_in_view').slideUp(100);
-      <%= "$('#tickler-empty-nd').slideUp(100);".html_safe if source_view_is(:deferred) && @todo.deferred? %>
+  function add_todo_to_existing_context() {
+    <% if source_view_is_one_of(:todo, :deferred, :tag) -%>
+      <% unless source_view_is_one_of(:todo, :tag) && (@todo.deferred?||@todo.hidden?) -%>
+        $('#c<%= @todo.context_id %>').fadeIn(500, function() {});
+        $('#no_todos_in_view').slideUp(100);
+        <%= "$('#tickler-empty-nd').slideUp(100);".html_safe if source_view_is(:deferred) && @todo.deferred? %>
+      <% end -%>
     <% end -%>
-  <% end -%>
-  $('#<%=empty_container_msg_div_id%>').hide();
-  $('#<%=item_container_id(@todo)%>').append(html_for_new_todo());
-  $('#<%= dom_id(@todo)%>').effect('highlight', {}, 2000 );
-}
+    $('#<%=empty_container_msg_div_id%>').hide();
+    $('#<%=item_container_id(@todo)%>').append(html_for_new_todo());
+    $('#<%= dom_id(@todo)%>').effect('highlight', {}, 2000 );
+  }
 
-function update_predecessors() {
-  <%  @todo.uncompleted_predecessors.each do |p| -%>
-    if ($('<%=item_container_id(p)%>')) {
-      $('#<%=dom_id(p)%>').html('<%= escape_javascript(render(:partial =>  p, :locals => { :parent_container_type => parent_container_type, :source_view => @source_view }))%>');
-    }
-  <% end -%>
-}
+  function update_predecessors() {
+    <%  @todo.uncompleted_predecessors.each do |p| -%>
+      if ($('<%=item_container_id(p)%>')) {
+        $('#<%=dom_id(p)%>').html('<%= escape_javascript(render(:partial =>  p, :locals => { :parent_container_type => parent_container_type, :source_view => @source_view }))%>');
+      }
+    <% end -%>
+  }
 
-function html_for_error_messages() {
-  return "<%= escape_javascript(get_list_of_error_messages_for(@todo)) %>";
-}
+  function html_for_new_context() {
+    return "<%= @saved && @new_context_created ? escape_javascript(render(:partial => @todo.context, :locals => { :collapsible => true })) : "" %>";
+  }
 
-function html_for_new_context() {
-  return "<%= @saved && @new_context_created ? escape_javascript(render(:partial => @todo.context, :locals => { :collapsible => true })) : "" %>";
-}
-
-function html_for_new_todo() {
-  return "<%= @saved ? escape_javascript(render(:partial => @todo, :locals => { :parent_container_type => parent_container_type, :source_view => @source_view })) : "" %>";
-}
+  function html_for_new_todo() {
+    return "<%= @saved ? escape_javascript(render(:partial => @todo, :locals => { :parent_container_type => parent_container_type, :source_view => @source_view })) : "" %>";
+  }
+<% end -%>
