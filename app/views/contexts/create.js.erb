@@ -9,7 +9,11 @@
 <% end -%>
 
 function hide_empty_message() {
-  $('contexts-empty-nd').hide();
+<% if @context.hidden? -%>
+  $('div#hidden-contexts-empty-nd').hide();
+<% else -%>
+  $('div#active-contexts-empty-nd').hide();
+<% end -%>
 }
 
 function add_context(state) {
