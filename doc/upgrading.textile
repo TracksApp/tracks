@@ -1,0 +1,206 @@
+h1.  Upgrading Tracks
+
+h2. Upgrading from Tracks 2.1.x or 2.2RC to 2.2
+
+This release adds a variety of new features and bugfixes to Tracks.
+
+The database will need to be migrated as part of the install. 
+
+To upgrade:
+# Back up your existing database and installation of Tracks
+# Install Tracks 2.2 in a new directory
+# Copy over the configuration from your previous Tracks installation. If using SQLite3, copy the old database into the new Tracks 2.2 directory.
+# Check that you have all dependencies installed: @bundle install --without development test@
+# Run @bundle exec rake db:migrate RAILS_ENV=production@ to update your old database to the new schema. This is the point of no return. Make sure you have backups!
+# The administrator email address shown on the signup page is now configured in @config/site.yml@. Edit your @config/site.yml@ and add an @admin_email@ option. See @config/site.yml.tmpl@ for an example.
+# If you're using mysql, change the database adapter from @mysql@ to @mysql2@ in your @config/database.yml@ file. The @mysql2@ adapter replaces the @mysql@ adapter in Rails 3.2
+# Precompile your static assets (css, javascript, etc.) by running @bundle exec rake assets:precompile@.
+# Run @bundle exec rails server -e production@ inside your Tracks 2.2 directory to start up Tracks 2.2.
+# Once you are happy that everything is working well, delete your old Tracks directory.
+
+h3. Upgrading from Tracks 2.1, 2.1.1, 2.1.2, 2.1.3 to 2.1.4
+
+The purpose of this release is to address several security vulnerabilities that were recently discovered in Rails. For details about the contents of the release, please see the "difference view":https://github.com/TracksApp/tracks/compare/v2.1.1...v2.1.4 on GitHub.
+
+There are no changes done to the database, it is therefore not necessary to run the migrations. To upgrade:
+
+# Back up your existing database and installation of Tracks
+# Install Tracks 2.1.4 in a new directory
+# Copy over the configuration from your previous Tracks installation. If using SQLite3, copy the old database into the new Tracks 2.1.4 directory.
+# Check that you have all dependencies installed and up-to-date: @bundle install --without development test@
+# Run @bundle exec script/server@ inside your Tracks 2.1.4 directory to start up Tracks 2.1.4.
+# Once you are happy that everything is working well, delete your old Tracks directory.
+
+h2. Upgrading from Tracks 2.0 or 2.1RC1 to 2.1
+
+For the upgrade, please note that with version 2.1 Tracks started to use @bundler@. This means you need to have to install bundler using @gem install bundler@.
+
+To upgrade:
+# Back up your existing database and installation of Tracks
+# Install Tracks 2.1 in a new directory
+# Copy over the configuration from your previous Tracks installation. If using SQLite3, copy the old database into the new Tracks 2.1 directory.
+# Check that you have all dependencies installed: @bundle install --without development test@
+# Run @bundle exec rake db:migrate RAILS_ENV=production@ to update your old database to the new schema -- you did back up your database didn't you?
+## This may take a while!
+# Run @bundle exec script/server@ inside your Tracks 2.1 directory to start up Tracks 2.1.
+# Once you are happy that everything is working well, delete your old Tracks directory.
+
+If you did not start with a new copy of Tracks as described above, but installed over an older version (or used git to pull in a newer version), you may need to remove the cached version of the javascript and stylesheets of Tracks.
+# jquery-cached.js from public/javascripts
+# tracks-cached.js from public/javascripts
+# tracks-cached.css from public/stylesheets
+
+If you are running an older version of Tracks (1.8devel), they could also be called jquery-all.js, tracks.js and all.css
+
+If you have problems with Passenger not finding the gems bundler installed, you might want to let bundler put all gems in the Tracks directory so that Passenger can find them (and probably have sufficient permissions). Create a directory @.bundle@ in your Tracks root directory. Add the following config in @/path/to/tracks/.bundle/config@:
+
+bc. ---
+BUNDLE_DISABLE_SHARED_GEMS: "1"
+BUNDLE_PATH: /path/to/tracks/.bundle
+
+h2. Upgrading from Tracks 2.0RC2 to 2.0
+
+The upgrade to the latest stable 2.0 release consists of the same steps as upgrading from 1.7.x in the following paragraph, just replace 2.0RC with 2.0 where appropriate
+
+PLEASE NOTE that the requirements for Tracks have changes:
+# Rubygems needs at least version 1.3.7 or above. 1.3.7 and 1.5.0 are tested. 1.7.0 does not work for this release of Tracks
+# Only Ruby 1.8.7 is supported, both 1.8.6 and 1.9.x are not tested and are known to have issues.
+
+h2. Upgrading from Tracks 1.7.x or from 2.0RC1 to Tracks 2.0 final
+
+NOTE
+# these instructions will work too if you are upgrading to latest 2.0devel tree.
+# Actually no 2.0RC1 release was done, but some people have been using a development version referred to as RC1. Upgrading is the same as from 1.7.x to RC2.
+
+To upgrade:
+# Back up your existing database and installation of Tracks
+# Install Tracks 2.0RC in a new directory
+# Copy over the configuration from your previous Tracks installation. If using SQLite3, copy the old database into the new Tracks 2.0RC directory.
+# Run @rake db:migrate RAILS_ENV=production@ to update your old database to the new schema -- you did back up your database didn't you?
+# Run @script/server@ inside your Tracks 2.0RC directory to start up Tracks 2.0RC2.
+# Once you are happy that everything is working well, delete your old Tracks directory.
+
+If you did not start with a new copy of Tracks as described above, but installed over an older version (or used git to pull in a newer version), you need to remove the cached version of the javascript and stylesheets of Tracks.
+# jquery-cached.js from public/javascripts
+# tracks-cached.js from public/javascripts
+# trachs-cached.css from public/stylesheets
+
+If you are running an older version of Tracks (1.8devel), they could also be called jquery-all.js, tracks.js and all.css
+
+h2. Upgrading from Tracks 1.7 or 1.7.1 or 1.7.2 to 1.7.3
+
+The 1.7.1, 1.7.2 and 1.7.3 releases are bug fix releases that do not contain changes to the database structure. You can unzip the new release over your current 1.7 or 1.7.1 install.
+It is also possible to follow the instructions below and copy your existing site.yml and database.yml from your Tracks 1.7 install.
+
+h2.  Upgrading from Tracks 1.7RC2 to Tracks 1.7
+
+There were only a few fixes in the code, so you can consider unzipping the new release over your install of Tracks 1.7RC2. Do make a backup of your Tracks 1.7RC2 install and your database!
+
+It is also possible to follow the instructions below and copy your existing Site.yml from your Tracks 1.7RC2 install.
+
+h2.  Upgrading from Tracks 1.5, 1.6 or from Tracks 1.7RC1 to Tracks 1.7
+
+In Tracks 1.7 (since RC2) the site specific configuration is moved from @environment.rb@ into the new @site.yml@. This makes updating @environment.rb@ much easier without you needing to set your site specific settings after each update.
+
+After you install Tracks 1.7 there will be no @environment.rb.tmpl@ anymore. You will find an @environment.rb@ which you can leave untouched. Just fill in your settings from your old @environment.rb@ in the new @site.yml@. If you have made any other customisations to @environment.rb@ in the past, you can put them in your own configuration file (for example, in my-config.rb) in @config/initializers@. Please let us know it you think they should be in @site.yml.tmpl@
+
+Also, there were some database changes made in Tracks 1.7, so you need to migrate to them.
+
+# Back up your existing database and installation of Tracks
+# Install Tracks 1.7 in a new directory
+# Copy over the configuration from your previous Tracks installation (except for environment.rb, see above). If using SQLite3, copy the old database into the new Tracks 1.7 directory.
+# Run @rake db:migrate RAILS_ENV=production@ to update your old database to the new schema -- you did back up your database didn't you?
+# Run @script/server@ inside your Tracks 1.7 directory to start up Tracks 1.7.
+# Once you are happy that everything is working well, delete your old Tracks directory.
+
+h2.  Upgrading from Tracks 1.043 to 1.7
+
+This should be a relatively straightforward, and involves the following main steps:
+
+# Back up your existing database and installation of Tracks
+# Install Tracks 1.6 in a new directory
+# Copy over the configuration from your previous Tracks 1.043 installation. If using SQLite3, copy the old database into the new Tracks 1.7 directory.
+# Run @rake db:migrate RAILS_ENV=production@ to update your old database to the new schema -- you did back up your database didn't you?
+# Run @script/server@ inside your Tracks 1.7 directory to start up Tracks 1.7.
+# Once you are happy that everything is working well, delete your old Tracks directory.
+
+h2. Detailed steps
+
+h3.  Backing up
+
+It's very important that you *back up your database* before you start the upgrade process. It's always possible for things to go wrong with the database update, and you don't want to lose any data. If you are using SQLite3 and you are leaving your old Tracks directory in place, then you don't need to do anything. However, there is no harm in taking extra precautions and copying your database from @/db@ to a safe location as an extra backup, or making a dump of the schema and contents. You will never regret making too many backups! If you are using MySQL, make a SQL dump of your database, replacing the terms in square brackets with the correct information for your setup:
+
+<pre>
+  <code>
+    mysqldump –-user [user name] –-password=[password] [database name] > [dump file]
+  </code>
+</pre>
+
+Rename your old Tracks installation (e.g. to 'tracks-old') so that you can install Tracks 1.7 along side it.
+
+h3.  Install the latest version of Tracks
+
+There are two methods of downloading Tracks:
+
+# (Recommended for most people) Download the "zipped package":http://bsag.bingodisk.com/public/files/tracks_1.7.zip, and unzip in your preferred location (e.g. @~/Sites@ for Mac OS X users).
+# If you want to live on the edge, you can get the latest development version from GitHub using git (bear in mind that this may be less stable than the released versions):
+
+bc. cd ~/Sites
+git clone git://github.com/TracksApp/tracks.git
+cd tracks
+
+
+h3.  Copy over old configuration
+
+There are a few settings and configuration files you need to copy over from your old installation. If you copy them over rather than moving them, you can still run your old version of Tracks if anything goes awry with the installation process.
+
+# Copy @/config/database.yml@ from your old Tracks directory to the same location in the new one. Double check that the information there is still correct.
+# Duplicate @/config/site.yml.tmpl@ in the Tracks 1.7 directory, and rename the file to @site.yml@. Open the file and alter the line @salt: "change-me"@ so that it matches what you had in the @environment.rb@ file in your old installation. You may also want to change the time zone setting as appropriate for your location. If you have made any other customisations to @environment.rb@ in the past, you can put them in your own configuration file (e.g. my-config.rb) in @config/initializers@. Please let us know it you think they should be in @site.yml.tmpl@.
+# Copy your @/log@ directory over from your old installation to the root of the new one, or just rename @/log.tmpl@ to @log@ to start afresh.
+# If you are using SQLite3, copy your database from @/db@ in your old Tracks directory to the same location in the new one.
+# If you are using Windows, you may need to check the 'shebang' lines (@#!/usr/bin/env ruby@) [1] of the @/public/dispatch.*@ files and all the files in the @/script@ directory. They are set to @#!/usr/bin/env ruby@ by default. Check the format of those lines in your old installation, and change the new ones as necessary.
+
+
+h3.  Update your old database to the new format
+
+In a terminal, change directories so that you are inside the Tracks 1.7 directory. Then issue the command to update your Tracks 1.6 database to the format required for Tracks 1.7:
+
+bc. rake db:migrate RAILS_ENV=production
+
+
+Watch the output carefully for errors, but it should report at the end of the process that everything worked OK. If you do get errors, you'll have to fix them before you proceed any further. Running rake with the @--trace@ option can help to track down the problem.
+
+
+h3.  Start the server
+
+If you're still in the Tracks 1.7 root directory in a terminal, enter the following command to start up Tracks in production mode:
+
+bc. script/server -e production
+
+
+Visit the URL indicated by the output (e.g. @** Mongrel available at 0.0.0.0:3000@
+) in a browser, and with any luck, you should be able to log in and find all your actions as you left them! If you need to access Tracks from a mobile/cellular phone browser, visit @http://yourdomain.com/mobile/@. This mobile version is a special, lightweight version of Tracks, designed to use on a mobile browser.
+
+
+h3.  Clean up your old installation
+
+Once you're certain that your new Tracks 1.7 installation is working perfectly, you can delete your old Tracks directory.
+
+h2.  Upgrading from versions prior to 1.043
+
+The best option for versions prior to 1.043 is to follow the instructions below to upgrade to version 1.043, then use the instructions above to upgrade from version 1.043.
+
+# For safety, rename your current Tracks directory to 'tracks-old' or something similar.
+# Before you do anything else, *BACK UP YOUR DATABASE* (tables and content) and keep the SQL dumps somewhere safe so that you can recreate the old database if necesary.
+# Download a copy of Tracks 1.043 and unzip alongside your 'tracks-old' directory.
+# Open the file @config/environment.rb@ and look at the last line which should read: @SALT = "change-me"@. Change the word change-me to something else of your choosing. This string will be used as a 'salt' to encrypt your password and make it a bit more secure. Also look at the timezone setting at the bottom. You can leave it commented out if your server is in the same time zone as you, but you may need to adjust it if your server is in a different time zone.
+# In @database.yml@ insert your old database name, user and password under the 'development' section. If you are using SQLite3 rather than MySQL or PostgreSQL, you need only the database name, and to change the 'adapter' line to 'sqlite3'. You also need to copy (NOT MOVE!), your SQLite3 database from your tracks-old @db@ directory to your new tracks @db@ directory
+# Run the command @rake extract_fixtures@ inside the Tracks directory. This will populate the @db/exported_fixtures@ directory with @*.yml@ files corresponding to the contexts, projects and todos table from the contents of your old database.
+# Open @db/exported_fixtures/todos.yml@ and search for the lines starting @created:@ and replace with @created_at:@. If you are using SQLite3, you also need to change the following: @done: "0"@ with @done: "f"@ and @done: "1"@ with @done: "t"@. You need to replace the similar 'done' lines in @projects.yml@, and in @contexts.yml@ replace @hide: "0"@ with @hide: "f"@ and @hide: "1"@ with @hide: "t"@.
+# Create a new MySQL database (named tracks1043, for example). In @database.yml@ insert this new database name, user and password under the 'development' and 'production' sections. If you are using SQLite3, insert a new name for a database to hold your Tracks 1.043 data.
+# Run the command @rake db_schema_import@ inside the Tracks directory. This should import the upgraded schema for 1.043 into your new database.
+#  Run the command @rake load_exported_fixtures@ which will import the contents of your old database from the fixtures files in @db/exported_fixtures@.
+#  If you are using Windows, you may need to check the 'shebang' lines (@#!/usr/bin/env ruby@) [1] of the @/public/dispatch.*@ files and all the files in the @/script@ directory. They are set to @#!/usr/bin/env ruby@ by default. Check the format of those lines in your old installation, and change the new ones as necessary.
+#  Try starting up the server with @script/server@ to make sure that all your data has migrated successfully. If all is well, follow the instructions above to upgrade from version 1.043 to Tracks 1.6. If you need to access Tracks from a mobile/cellular phone browser, visit @http://yourdomain.com/mobile/@. This mobile version is a special, lightweight version of Tracks, designed to use on a mobile browser.
+
+fn1. The @env@ binary helps to locate other binaries, regardless of their location. If you don't have @env@ installed, you'll need to change this line to point to the location of your Ruby binary.
