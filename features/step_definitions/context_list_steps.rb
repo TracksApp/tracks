@@ -90,3 +90,12 @@ end
 Then /^the context list badge for ([^"]*) contexts should show (\d+)$/ do |state_name, count|
   find("span##{state_name}-contexts-count").text.should == count
 end
+
+Then /^I should (see|not see) empty message for (active|hidden) contexts$/ do |visible, state|
+  box = (state=='active') ? "div#active-contexts-empty-nd" : "div#hidden-contexts-empty-nd"
+
+  elem = page.find(box)
+  elem.should_not be_nil
+
+  elem.send(visible=="see" ? "should" : "should_not", be_visible)
+end
