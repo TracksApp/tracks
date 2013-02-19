@@ -45,5 +45,10 @@ class TagTest < ActiveSupport::TestCase
   def test_tag_label
     assert_equal 'one-two-three', Tag.new(:name => 'one two three').label
   end
-  
+
+  def test_tag_as_string
+    tags = [Tag.new(:name => 'tag1'), Tag.new(:name => 'tag2')]
+    assert_equal 'tag1, tag2', tags.join(', ')
+  end
+
 end
