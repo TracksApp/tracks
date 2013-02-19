@@ -41,5 +41,9 @@ class TagTest < ActiveSupport::TestCase
     
     assert tag.name == "strip spaces"
   end
+
+  def test_tag_label
+    assert_equal 'one-two-three', Tag.new(:name => 'one two three').label
+  end
   
 end
