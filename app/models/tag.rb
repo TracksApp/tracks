@@ -30,4 +30,8 @@ class Tag < ActiveRecord::Base
     @label ||= name.gsub(' ', '-')
   end
 
+  def to_s
+    name
+  end
+
 end

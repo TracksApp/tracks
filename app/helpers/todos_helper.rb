@@ -127,7 +127,7 @@ module TodosHelper
   end
 
   def tag_list_text(todo=@todo)
-    todo.tags.collect{|t| t.name}.join(', ')
+    todo.tags.join(', ')
   end
 
   def tag_span (tag, mobile=false)
