@@ -26,4 +26,8 @@ class Tag < ActiveRecord::Base
     taggings.create :taggable => taggable, :user => user
   end
 
+  def label
+    @label ||= name.gsub(' ', '-')
+  end
+
 end
