@@ -220,7 +220,8 @@ class ProjectsController < ApplicationController
         @contexts = current_user.contexts
         update_state_counts
         init_data_for_sidebar
-
+        init_project_hidden_todo_counts(['project'])
+        
         template = 'projects/update'
 
       # TODO: are these params ever set? or is this dead code?
