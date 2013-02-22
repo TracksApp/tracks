@@ -20,10 +20,8 @@ of the License, or (at your option) any later version.
 * Contributors: https://github.com/TracksApp/tracks/wiki/Contributors
 * Version: 2.3devel
 
-More documentation for Tracks can be found within the /doc directory
-
-The manual includes full instructions for both new installations and upgrades
-from older installations of Tracks.
+Full instructions for both new installations and upgrades from older installations of Tracks
+can be found within the /doc directory.
 
 The instructions might appear long and intimidatingly complex, but that is
 mostly because of the number of different platforms supported, and the
