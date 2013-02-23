@@ -47,8 +47,11 @@ group :test do
   gem "factory_girl_rails"
   gem "capybara"
   gem "cucumber-rails", :require => false
+  gem "rspec-expectations"
   gem "database_cleaner"
-  gem "aruba"
+
+  # aruba 0.5 conflics with newer gems
+  # gem "aruba", :require => false
   gem "simplecov"
   gem "timecop"
 

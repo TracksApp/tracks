@@ -1,4 +1,5 @@
-require 'aruba/cucumber'
+# commented out because aruba 0.5 conflics
+# require 'aruba/cucumber'
 
 require 'capybara/rails'
 require 'capybara/cucumber'
