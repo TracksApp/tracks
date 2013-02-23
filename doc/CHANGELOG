@@ -10,10 +10,60 @@
 * Original developer: bsag (http://www.rousette.org.uk/)
 * Contributors: https://github.com/TracksApp/tracks/wiki/Contributors
 * Version: 2.3devel
-* Copyright: (cc) 2004-2012 rousette.org.uk.
+* Copyright: (cc) 2004-2013 rousette.org.uk.
 * License:  GNU GPL
 
-== Version 2.2devel
+== Version 2.3devel
+
+== Version 2.2
+
+The main change to this release of Tracks is the migration to Rails 3.2. We had 
+to remove some features because the code and dependencies were not compatible with 
+Rails 3.2. This may impact your scripts or mobile apps that integrate with 
+Tracks using SOAP XML API.
+
+Tracks now  includes support for Ruby 1.8.7 and Ruby 1.9. For development, you
+need to use Ruby 1.9, version 1.8.7 is not supported by some dependencies for 
+testing. The next version of Tracks will only support Ruby 1.9. Support for 
+older versions of Ruby will be droppped.
+
+New and changed features
+* Updates to all locales
+* Improvements to mobile view
+* Drag and drop should work on mobile devices
+* The email adres for administrator is now a global setting in site.yml, not an 
+  attribute in the User model. This means you need to set the admin_email in 
+  site.yml when you upgrade. (The email address is shown on the signup page)
+
+Removed features
+* The outdated code for login in using OpenID has been removed. Also the login 
+  code for CAS and LDAP has been removed because of compatibility issues with 
+  Rails 3.2. We plan to migrate to Devise and OmniAuth to get these features back.
+* Removed the SOAP XML interface. Please use REST. 
+
+New and changed features (technical)
+* Improvements to the XML and REST API
+* Improvements to the MessageGateway to pass email to Tracks. Since the SOAP 
+  interface is removed, this is a good way to import an email as a todo.
+
+Under the hood
+* Upgrade to Rails 3.2. This means Tracks makes use of the new asset pipeline 
+  of Rails.
+* Uses Cache Digest. This speeds up page rendering a lot
+* Migrated to Tolk for managing translations
+* Upgraded to JQuery 1.8.3 and JQueryUI 1.9.0
+
+== Version 2.1.3
+
+Upgrade Rails to 2.3.16 to address security vulnerabilities in Rails
+
+== Version 2.1.2
+
+Upgrade Rails to 2.3.15 to address security vulnerabilities in Rails
+
+== Version 2.1.1
+
+Various bugfixes
 
 == Version 2.1
 
