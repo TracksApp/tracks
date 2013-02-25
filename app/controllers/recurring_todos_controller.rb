@@ -60,7 +60,7 @@ class RecurringTodosController < ApplicationController
       if params['project_name'] == 'None'
         project = Project.null_object
       else
-        project = current_user.projects.find_by_name(params['project_name'].strip)
+        project = current_user.projects.where(:name => params['project_name'].strip)
         unless project
           project = current_user.projects.build
           project.name = params['project_name'].strip
@@ -73,7 +73,7 @@ class RecurringTodosController < ApplicationController
 
     # update context
     if params['recurring_todo']['context_id'].blank? && !params['context_name'].blank?
-      context = current_user.contexts.find_by_name(params['context_name'].strip)
+      context = current_user.contexts.where(:name => params['context_name'].strip)
       unless context
         context = current_user.contexts.build
         context.name = params['context_name'].strip
@@ -105,13 +105,13 @@ class RecurringTodosController < ApplicationController
     @recurring_todo.update_attributes(p.attributes)
 
     if p.project_specified_by_name?
-      project = current_user.projects.find_or_create_by_name(p.project_name)
+      project = current_user.projects.where(:name => p.project_name).first_or_create
       @new_project_created = project.new_record_before_save?
       @recurring_todo.project_id = project.id
     end
 
     if p.context_specified_by_name?
-      context = current_user.contexts.find_or_create_by_name(p.context_name)
+      context = current_user.contexts.where(:name => p.context_name).first_or_create
       @new_context_created = context.new_record_before_save?
       @recurring_todo.context_id = context.id
     end

@@ -69,4 +69,10 @@ class ContextTest < ActiveSupport::TestCase
     assert_equal '', c.name
   end
 
+  def test_new_record_before_save
+    assert !@agenda.new_record_before_save?, "existing records should not be new_record"
+    c = Context.where(:name => "I do not exist").first_or_create
+    assert c.new_record_before_save?, "newly created record should be new_record"
+  end
+
 end
