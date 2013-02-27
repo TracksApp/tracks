@@ -39,7 +39,7 @@ class ContextXmlApiTest < ActionController::IntegrationTest
       authenticated_post_xml_to_context_create
       assert_response 201
     end
-    context1 = Context.find_by_name(@@context_name)
+    context1 = Context.where(:name => @@context_name).first
     assert_not_nil context1, "expected context '#{@@context_name}' to be created"
   end
   

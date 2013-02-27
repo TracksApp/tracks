@@ -74,7 +74,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
     assert recurring_todo_1.completed?
 
     # remove remaining todo
-    todo = Todo.find_by_recurring_todo_id(1)
+    todo = Todo.where(:recurring_todo_id => 1).first
     todo.recurring_todo_id = 2
     todo.save
 
@@ -89,7 +89,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
     assert_equal todo_count+1, Todo.count
 
     # find the new todo and check its description
-    new_todo = Todo.find_by_recurring_todo_id 1
+    new_todo = Todo.where(:recurring_todo_id => 1).first
     assert_equal "Call Bill Gates every day", new_todo.description
   end
 
@@ -113,7 +113,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
     xhr :post, :toggle_check, :id=>5, :_source_view=>""
     xhr :post, :toggle_check, :id=>5, :_source_view=>""
 
-    new_todo = Todo.find_by_recurring_todo_id 5
+    new_todo = Todo.where(:recurring_todo_id => 5).first
 
     # due date should be the target_date
     assert_equal users(:admin_user).at_midnight(Date.new(target_date.year, target_date.month, target_date.day)), new_todo.due
@@ -171,7 +171,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
     assert_equal orig_todo_count+1, Todo.count
 
     # find the newly created todo
-    new_todo = Todo.find_by_description("new recurring pattern")
+    new_todo = Todo.where(:description => "new recurring pattern").first
     assert !new_todo.nil?
 
     # the date should be 31 march 2013
@@ -224,7 +224,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
     assert_equal orig_todo_count+1, Todo.count
 
     # find the newly created recurring todo
-    recurring_todo = RecurringTodo.find_by_description("new recurring pattern")
+    recurring_todo = RecurringTodo.where(:description => "new recurring pattern").first
     assert !recurring_todo.nil?
 
     assert_equal "due_date", recurring_todo.target
@@ -235,7 +235,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
     login_as(:admin_user)
 
     rt = RecurringTodo.find(recurring_todos(:call_bill_gates_every_day).id)
-    todo = Todo.find_by_recurring_todo_id(rt.id)
+    todo = Todo.where(:recurring_todo_id => rt.id).first
 
     assert_not_nil todo
     assert_equal "active", todo.state, "todo should be active"

@@ -26,14 +26,14 @@ class UsersControllerTest < ActionController::TestCase
     User.per_page = 1
     login_as :admin_user
     get :index
-    assert_equal assigns['users'],[User.find_by_login('admin')]
+    assert_equal assigns['users'],[User.where(:login => 'admin').first]
   end
 
   def test_index_pagination_page_2
     User.per_page = 1
     login_as :admin_user
     get :index, :page => 2
-    assert_equal assigns['users'],[User.find_by_login('jane')]
+    assert_equal assigns['users'],[User.where(:login => 'jane').first]
   end
 
   def test_destroy_user
@@ -90,7 +90,7 @@ class UsersControllerTest < ActionController::TestCase
   def test_create_adds_a_new_nonadmin_user
     login_as :admin_user
     post :create, :user => {:login => 'newbie', :password => 'newbiepass', :password_confirmation => 'newbiepass'}
-    newbie = User.find_by_login('newbie')
+    newbie = User.where(:login => 'newbie').first
     assert_equal newbie.login, "newbie"
     assert newbie.is_admin == false || newbie.is_admin == 0
     assert_not_nil newbie.preference # have user preferences been created?

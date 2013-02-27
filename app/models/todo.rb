@@ -274,7 +274,7 @@ class Todo < ActiveRecord::Base
     return unless predecessor_list.kind_of? String
 
     @predecessor_array=predecessor_list.split(",").inject([]) do |list, todo_id|
-      predecessor = self.user.todos.find_by_id( todo_id.to_i ) unless todo_id.blank?
+      predecessor = self.user.todos.find( todo_id.to_i ) unless todo_id.blank?
       list <<  predecessor unless predecessor.nil?
       list
     end
@@ -316,7 +316,7 @@ class Todo < ActiveRecord::Base
     # value will be a string. In that case convert to array
     deps = [deps] unless deps.class == Array
 
-    deps.each { |dep| self.add_predecessor(self.user.todos.find_by_id(dep.to_i)) unless dep.blank? }
+    deps.each { |dep| self.add_predecessor(self.user.todos.find(dep.to_i)) unless dep.blank? }
   end
 
   alias_method :original_context=, :context=
@@ -324,7 +324,7 @@ class Todo < ActiveRecord::Base
     if value.is_a? Context
       self.original_context=(value)
     else
-      c = Context.find_by_name(value[:name])
+      c = Context.where(:name => value[:name]).first
       c = Context.create(value) if c.nil?
       self.original_context=(c)
     end
@@ -340,7 +340,7 @@ class Todo < ActiveRecord::Base
     if value.is_a? Project
       self.original_project=(value)
     elsif !(value.nil? || value.is_a?(NullProject))
-      p = Project.find_by_name(value[:name])
+      p = Project.where(:name => value[:name]).first
       p = Project.create(value) if p.nil?
       self.original_project=(p)
     else

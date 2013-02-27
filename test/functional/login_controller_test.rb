@@ -20,7 +20,7 @@ class LoginControllerTest < ActionController::TestCase
   def test_login_with_valid_admin_user
     @request.session['return-to'] = "/bogus/location"
     post :login, {:user_login => 'admin', :user_password => 'abracadabra', :user_noexpiry => 'on'}
-    user = User.find_by_id(session['user_id'])
+    user = User.find(session['user_id'])
     assert_not_nil user
     assert_equal user.id, session['user_id']
     assert_equal user.login, "admin"
@@ -31,7 +31,7 @@ class LoginControllerTest < ActionController::TestCase
   
   def test_login_with_valid_standard_user
     post :login, {:user_login => 'jane', :user_password => 'sesame', :user_noexpiry => 'off'}
-    user = User.find_by_id(session['user_id'])
+    user = User.find(session['user_id'])
     assert_not_nil user
     assert_equal user.id, session['user_id']
     assert_equal user.login, "jane"

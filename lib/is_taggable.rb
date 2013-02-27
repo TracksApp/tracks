@@ -51,7 +51,7 @@ module IsTaggable
           # added following check to prevent empty tags from being saved (which will fail)
           unless tag_name.blank?
             begin
-              tag = Tag.find_or_create_by_name(tag_name)
+              tag = Tag.where(:name => tag_name).first_or_create
               raise Tag::Error, "tag could not be saved: #{tag_name}" if tag.new_record?
               tags << tag
             rescue ActiveRecord::StatementInvalid => e

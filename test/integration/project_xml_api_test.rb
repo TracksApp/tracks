@@ -46,7 +46,7 @@ class ProjectXmlApiTest < ActionController::IntegrationTest
   def test_fails_with_comma_in_name
     authenticated_post_xml_to_project_create "<project><name>foo,bar</name></project>"
     assert_response :created
-    project1 = Project.find_by_name("foo,bar")
+    project1 = Project.where(:name => "foo,bar").first
     assert_not_nil project1, "expected project 'foo,bar' to be created"
   end
     
@@ -55,7 +55,7 @@ class ProjectXmlApiTest < ActionController::IntegrationTest
       authenticated_post_xml_to_project_create
       assert_response :created
     end
-    project1 = Project.find_by_name(@@project_name)
+    project1 = Project.where(:name => @@project_name).first
     assert_not_nil project1, "expected project '#{@@project_name}' to be created"
   end
       

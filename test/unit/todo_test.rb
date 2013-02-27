@@ -276,9 +276,9 @@ class TodoTest < ActiveSupport::TestCase
     todo.tag_list = "a, b, c"
     todo.save!
 
-    tag_a = Tag.find_by_name("a")
-    tag_b = Tag.find_by_name("b")
-    tag_c = Tag.find_by_name("c")
+    tag_a = Tag.where(:name => "a").first
+    tag_b = Tag.where(:name => "b").first
+    tag_c = Tag.where(:name => "c").first
 
     todos_with_a = Todo.with_tag(tag_a)
     assert_equal 1, todos_with_a.count
@@ -292,7 +292,7 @@ class TodoTest < ActiveSupport::TestCase
     todo2.tag_list = "a, c, d"
     todo2.save!
 
-    tag_d = Tag.find_by_name("d")
+    tag_d = Tag.where(:name => "d").first
 
     todos_with_a = Todo.with_tag(tag_a)
     assert_equal 2, todos_with_a.count
@@ -310,10 +310,10 @@ class TodoTest < ActiveSupport::TestCase
     todo2.tag_list = "a, c, d"
     todo2.save!
 
-    tag_a = Tag.find_by_name("a")
-    tag_b = Tag.find_by_name("b")
-    tag_c = Tag.find_by_name("c")
-    tag_d = Tag.find_by_name("d")
+    tag_a = Tag.where(:name => "a").first
+    tag_b = Tag.where(:name => "b").first
+    tag_c = Tag.where(:name => "c").first
+    tag_d = Tag.where(:name => "d").first
 
     # overlapping tags
     tag_ids = [tag_a.id, tag_c.id]
@@ -335,8 +335,8 @@ class TodoTest < ActiveSupport::TestCase
     todo2.tag_list = "a, c, d"
     todo2.save!
 
-    tag_a_id = Tag.find_by_name("a").id
-    tag_b_id = Tag.find_by_name("b").id
+    tag_a_id = Tag.where(:name => "a").first.id
+    tag_b_id = Tag.where(:name => "b").first.id
 
     todos_with_a_and_b = Todo.with_tags([tag_a_id]).with_tags([tag_b_id])
     assert_equal 1, todos_with_a_and_b.count
@@ -352,9 +352,9 @@ class TodoTest < ActiveSupport::TestCase
     todo2.tag_list = "a, c, d"
     todo2.save!
 
-    tag_a_id = Tag.find_by_name("a").id
-    tag_b_id = Tag.find_by_name("b").id
-    tag_c_id = Tag.find_by_name("c").id
+    tag_a_id = Tag.where(:name => "a").first.id
+    tag_b_id = Tag.where(:name => "b").first.id
+    tag_c_id = Tag.where(:name => "c").first.id
 
     todos_with_aORc_and_b = Todo.with_tags([tag_a_id, tag_c_id]).with_tags([tag_b_id])
     assert_equal 1, todos_with_aORc_and_b.count

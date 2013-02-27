@@ -114,7 +114,7 @@ class TodosControllerTest < ActionController::TestCase
   def test_find_tagged_with
     login_as(:admin_user)
     @user = User.find(@request.session['user_id'])
-    tag = Tag.find_by_name('foo').taggings
+    tag = Tag.where(:name => 'foo').first.taggings
     @tagged = tag.count
     get :tag, :name => 'foo'
     assert_response :success
@@ -260,7 +260,7 @@ class TodosControllerTest < ActionController::TestCase
   
     # find a,b,c and d
     %w{a b c d}.each do |todo|
-      eval "@#{todo} = Todo.find_by_description('#{todo}')"
+      eval "@#{todo} = Todo.where(:description => '#{todo}').first"
       eval "assert !@#{todo}.nil?, 'a todo with description \"#{todo}\" should just have been added'"
     end
   
@@ -275,7 +275,7 @@ class TodosControllerTest < ActionController::TestCase
   def test_destroy_todo
     login_as(:admin_user)
     xhr :post, :destroy, :id => 1, :_source_view => 'todo'
-    todo = Todo.find_by_id(1)
+    todo = Todo.where(:id=>1).first
     assert_nil todo
   end
   
@@ -551,7 +551,7 @@ class TodosControllerTest < ActionController::TestCase
         "show_from(1i)"=>"", "show_from(2i)"=>"", "show_from(3i)"=>"",
         "project_id"=>"1",
         "notes"=>"test notes", "description"=>"test_mobile_create_action"}}
-    t = Todo.find_by_description("test_mobile_create_action")
+    t = Todo.where(:description => "test_mobile_create_action").first
     assert_not_nil t
     assert_equal 2, t.context_id
     assert_equal 1, t.project_id
@@ -590,7 +590,7 @@ class TodosControllerTest < ActionController::TestCase
   
     # link todo_1 and recurring_todo_1
     recurring_todo_1 = RecurringTodo.find(1)
-    todo_1 = Todo.find_by_recurring_todo_id(1)
+    todo_1 = Todo.where(:recurring_todo_id => 1).first
   
     # mark todo_1 as complete by toggle_check
     xhr :post, :toggle_check, :id => todo_1.id, :_source_view => 'todo'
@@ -645,7 +645,7 @@ class TodosControllerTest < ActionController::TestCase
     # link todo_1 and recurring_todo_1
     recurring_todo_1 = RecurringTodo.find(1)
     #set_user_to_current_time_zone(recurring_todo_1.user)
-    todo_1 = Todo.find_by_recurring_todo_id(1)
+    todo_1 = Todo.where(:recurring_todo_id => 1).first
     today = Time.zone.now.at_midnight
   
     # change recurrence pattern to monthly and set show_from to today
@@ -694,7 +694,7 @@ class TodosControllerTest < ActionController::TestCase
     login_as :admin_user
   
     recurring_todo_1 = RecurringTodo.find(5)
-    @todo = Todo.find_by_recurring_todo_id(1)
+    @todo = Todo.where(:recurring_todo_id => 1).first
     assert @todo.from_recurring_todo?
     # rewire @todo to yearly recurring todo
     @todo.recurring_todo_id = 5

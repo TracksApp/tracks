@@ -60,7 +60,7 @@ module LoginSystem
   def login_from_cookie
     return unless cookies[:auth_token] && !logged_in?
     token = cookies[:auth_token]
-    user = User.find_by_remember_token(token)
+    user = User.where(:remember_token => token).first
     if user && user.remember_token?
       session['user_id'] = user.id
       set_current_user(user)
@@ -72,7 +72,7 @@ module LoginSystem
   
   def login_or_feed_token_required
     if ['rss', 'atom', 'txt', 'ics'].include?(params[:format])
-      if user = User.find_by_token(params[:token])
+      if user = User.where(:token => params[:token]).first
         set_current_user(user)
         return true
       end

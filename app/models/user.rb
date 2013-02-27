@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
            :order => 'position ASC',
            :dependent => :delete_all do
              def find_by_params(params)
-               find_by_id(params['id'] || params['context_id']) || nil
+               find(params['id'] || params['context_id']) || nil
              end
              def update_positions(context_ids)
                 context_ids.each_with_index {|id, position|
@@ -29,7 +29,7 @@ class User < ActiveRecord::Base
            :order => 'projects.position ASC',
            :dependent => :delete_all do
               def find_by_params(params)
-                find_by_id(params['id'] || params['project_id'])
+                find(params['id'] || params['project_id'])
               end
               def update_positions(project_ids)
                 project_ids.each_with_index {|id, position|

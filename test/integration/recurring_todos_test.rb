@@ -21,7 +21,7 @@ class RecurringTodosTest < ActionController::IntegrationTest
     assert_equal 1, rt.todos.size     # and it has one todo referencing it
 
     # when I toggle the todo complete
-    todo = Todo.find_by_recurring_todo_id(1)
+    todo = Todo.where(:recurring_todo_id => 1).first
     put "/todos/#{todo.id}/toggle_check", :_source_view => 'todo'
     todo.reload
     assert todo.completed?

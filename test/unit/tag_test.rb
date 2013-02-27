@@ -4,39 +4,39 @@ class TagTest < ActiveSupport::TestCase
   fixtures :tags
 
   def test_find_or_create_with_single_word
-    tag = Tag.find_or_create_by_name("test")
+    tag = Tag.where(:name => "test").first_or_create
     assert !tag.new_record?
   end
 
   def test_find_or_create_with_space
-    tag = Tag.find_or_create_by_name("test test")
+    tag = Tag.where(:name => "test test").first_or_create
     assert !tag.new_record?
   end
 
   def test_find_or_create_with_dot
-    tag = Tag.find_or_create_by_name("a.b.c")
+    tag = Tag.where(:name => "a.b.c").first_or_create
     assert !tag.new_record?
   end
 
   def test_find_or_create_with_number_as_string
-    tag = Tag.find_or_create_by_name("12343")
+    tag = Tag.where(:name => "12343").first_or_create
     assert !tag.new_record?
 
-    tag = Tag.find_or_create_by_name("8.1.2")
+    tag = Tag.where(:name => "8.1.2").first_or_create
     assert !tag.new_record?
   end
   
   def test_tag_name_always_lowercase
-    tag = Tag.find_or_create_by_name("UPPER")
+    tag = Tag.where(:name => "UPPER").first_or_create
     assert !tag.new_record?
     
-    upper = Tag.find_by_name("upper")
+    upper = Tag.where(:name => "upper").first
     assert_not_nil upper
     assert upper.name == "upper"
   end
   
   def test_tag_name_stripped_of_spaces
-    tag = Tag.find_or_create_by_name("  strip spaces  ")
+    tag = Tag.where(:name => "  strip spaces  ").first_or_create
     assert !tag.new_record?
     
     assert tag.name == "strip spaces"
