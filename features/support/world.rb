@@ -35,7 +35,8 @@ module TracksStepHelper
   
   def submit_form(form_xpath, button_name)
     handle_js_confirm do
-      within(:xpath, form_xpath) do
+      # on calendar page there can be more than 1 occurance of a todo, so we select the first here
+      within all(:xpath, form_xpath)[0] do
         click_button(button_name)
       end
       wait_for_ajax
