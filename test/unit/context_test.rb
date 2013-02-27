@@ -54,14 +54,6 @@ class ContextTest < ActiveSupport::TestCase
     assert_equal @agenda.name, @agenda.title
   end
 
-  def test_hidden_attr_reader
-    assert !@agenda.hidden?
-    @agenda.hide = true
-    @agenda.save!
-    @agenda.reload
-    assert_equal true, @agenda.hidden?
-  end
-
   def test_null_object
     c = Context.null_object
     assert c.nil?
@@ -73,6 +65,36 @@ class ContextTest < ActiveSupport::TestCase
     assert !@agenda.new_record_before_save?, "existing records should not be new_record"
     c = Context.where(:name => "I do not exist").first_or_create
     assert c.new_record_before_save?, "newly created record should be new_record"
+  end
+
+  def test_hide_context
+    assert @agenda.active?
+    @agenda.hide!
+    assert @agenda.hidden?
+  end
+
+  def test_closing_context_guarded_for_active_todos
+    assert @agenda.active?
+    assert AASM::InvalidTransition do
+      @agenda.close!
+    end
+
+    @agenda.todos.active.each {|t| t.complete! }
+    @agenda.close!
+    assert @agenda.closed?
+  end
+
+  def test_activating_closed_context
+    # given a context @agenda that is closed
+    @agenda.todos.active.each {|t| t.complete! }
+    @agenda.close!
+    assert @agenda.closed?
+
+    # when I activate @agenda
+    @agenda.activate!
+
+    # then @agenda should have an active state
+    assert @agenda.active?
   end
 
 end
