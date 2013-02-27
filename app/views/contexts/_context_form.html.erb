@@ -13,7 +13,7 @@
   <%= text_field('context', 'name', :class => 'context-name', :tabindex => next_tab_index) %><br/>
 
   <label for="context_hide"><%= t 'contexts.context_hide' %>  </label>
-  <%= check_box('context', 'hide', {:class => 'context-hide', :tabindex => next_tab_index}) %>
+  <%= check_box_tag('context_state[hide]', 1, context.hidden?, {:class => 'context-hide', :tabindex => next_tab_index}) %>
   <input type="hidden" name="wants_render" value="true" />
 
   <div class="submit_box">

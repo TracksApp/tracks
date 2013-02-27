@@ -6,7 +6,7 @@ end
 Given /^there exists an active context called "([^"]*)" for user "([^"]*)"$/ do |context_name, login|
   user = User.where(:login => login).first
   user.should_not be_nil
-  @context = user.contexts.where(:name => context_name, :hide => false).first_or_create
+  @context = user.contexts.where(:name => context_name, :state => 'active').first_or_create
 end
 
 Given /^there exists a context called "([^"]*)" for user "([^"]*)"$/ do |context_name, login|
@@ -16,7 +16,7 @@ end
 Given /^there exists a hidden context called "([^"]*)" for user "([^"]*)"$/ do |context_name, login|
   user = User.where(:login => login).first
   user.should_not be_nil
-  @context = user.contexts.create!(:name => context_name, :hide => true)
+  @context = user.contexts.create!(:name => context_name, :state => 'hidden')
 end
 
 Given /^I have a context called "([^\"]*)"$/ do |context_name|
@@ -34,7 +34,7 @@ end
 Given /^I have the following contexts:$/ do |table|
   table.hashes.each do |context|
     step 'I have a context called "'+context[:context]+'"'
-    @context.hide = context[:hide] == "true" unless context[:hide].blank?
+    @context.state = (context[:hide] == "true") ? 'hidden' : 'active' unless context[:hide].blank?
     # acts_as_list puts the last added context at the top, but we want it
     # at the bottom to be consistent with the table in the scenario
     @context.move_to_bottom

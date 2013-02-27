@@ -69,6 +69,7 @@ class ContextsController < ApplicationController
       return
     end
     @context = current_user.contexts.build(params['context'])
+    @context.hide! if params['context_state']['hide'] == '1'
     @saved = @context.save
     @context_not_done_counts = { @context.id => 0 }
     respond_to do |format|
@@ -97,13 +98,22 @@ class ContextsController < ApplicationController
 
     @original_context_hidden = @context.hidden?
     @context.attributes = params["context"]
+    if params['context_state']
+      if params['context_state']['hide'] == '1'
+        @context.hide! if !@context.hidden?
+      else
+        @context.activate! if @context.hidden?
+      end
+    else
+      @context.activate! if @context.hidden?
+    end
 
     @saved = @context.save
 
     if @saved
       if boolean_param('wants_render')
         @state_changed = (@original_context_hidden != @context.hidden?)
-        @new_state = (@context.hidden? ? "hidden" : "active") if @state_changed
+        @new_state = @context.state if @state_changed
         respond_to do |format|
           format.js
         end

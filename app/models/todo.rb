@@ -34,12 +34,12 @@ class Todo < ActiveRecord::Base
   scope :not_deferred_or_blocked, :conditions => ["(NOT todos.state=?) AND (NOT todos.state = ?)", "deferred", "pending"]
   scope :hidden,
     :joins => "INNER JOIN contexts c_hidden ON c_hidden.id = todos.context_id",
-    :conditions => ["todos.state = ? OR (c_hidden.hide = ? AND (todos.state = ? OR todos.state = ? OR todos.state = ?))",
-    'project_hidden', true, 'active', 'deferred', 'pending']
+    :conditions => ["todos.state = ? OR (c_hidden.state = ? AND (todos.state = ? OR todos.state = ? OR todos.state = ?))",
+    'project_hidden', 'hidden', 'active', 'deferred', 'pending']
   scope :not_hidden,
     :joins => "INNER JOIN contexts c_hidden ON c_hidden.id = todos.context_id",
-    :conditions => ['NOT(todos.state = ? OR (c_hidden.hide = ? AND (todos.state = ? OR todos.state = ? OR todos.state = ?)))',
-    'project_hidden', true, 'active', 'deferred', 'pending']
+    :conditions => ['NOT(todos.state = ? OR (c_hidden.state = ? AND (todos.state = ? OR todos.state = ? OR todos.state = ?)))',
+    'project_hidden', 'hidden', 'active', 'deferred', 'pending']
 
   # other scopes
   scope :are_due, :conditions => ['NOT (todos.due IS NULL)']

@@ -6,7 +6,7 @@ class Context < ActiveRecord::Base
   belongs_to :user
 
   scope :active, :conditions => { :state => :active }
-  scope :hidden, :conditions => { :state => :hide }
+  scope :hidden, :conditions => { :state => :hidden }
 
   acts_as_list :scope => :user, :top_of_list => 0
 

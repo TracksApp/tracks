@@ -212,7 +212,7 @@ class StatsController < ApplicationController
     all_actions_per_context = current_user.contexts.find_by_sql(
       "SELECT c.name AS name, c.id as id, count(*) AS total "+
         "FROM contexts c, todos t "+
-        "WHERE t.context_id=c.id AND t.completed_at IS NULL AND NOT c.hide "+
+        "WHERE t.context_id=c.id AND t.completed_at IS NULL AND NOT c.state='hidden' "+
         "AND c.user_id = #{current_user.id} " +
         "GROUP BY c.name, c.id "+
         "ORDER BY total DESC"
@@ -491,7 +491,7 @@ class StatsController < ApplicationController
     @running_actions_per_context = current_user.contexts.find_by_sql(
       "SELECT c.id AS id, c.name AS name, count(*) AS total "+
         "FROM contexts c, todos t "+
-        "WHERE t.context_id=c.id AND t.completed_at IS NULL AND NOT c.hide "+
+        "WHERE t.context_id=c.id AND t.completed_at IS NULL AND NOT c.state='hidden' "+
         "AND t.user_id=#{current_user.id} " +
         "GROUP BY c.id, c.name ORDER BY total DESC " +
         "LIMIT 5"

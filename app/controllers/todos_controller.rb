@@ -692,7 +692,7 @@ class TodosController < ApplicationController
 
     @projects = current_user.projects
     @contexts = current_user.contexts
-    @contexts_to_show = @contexts.reject {|x| x.hide? }
+    @contexts_to_show = @contexts.reject {|c| c.hidden? }
 
     # Set defaults for new_action
     @initial_tags = @tag_name
@@ -999,7 +999,7 @@ class TodosController < ApplicationController
         context_id = @original_item_context_id || @todo.context_id
         todos = current_user.contexts.find(context_id).todos.not_completed
 
-        if @todo.context.hide?
+        if @todo.context.hidden?
           # include hidden todos
           @down_count = todos.count
         else
@@ -1063,12 +1063,12 @@ class TodosController < ApplicationController
         @remaining_deferred_or_pending_count = context.todos.deferred_or_blocked.count
 
         remaining_actions_in_context = context.todos(true).active
-        remaining_actions_in_context = remaining_actions_in_context.not_hidden if !context.hide?
+        remaining_actions_in_context = remaining_actions_in_context.not_hidden if !context.hidden?
         @remaining_in_context = remaining_actions_in_context.count
 
         if @todo_was_deferred_or_blocked
           actions_in_target = current_user.contexts.find(@todo.context_id).todos(true).active
-          actions_in_target = actions_in_target.not_hidden if !context.hide?
+          actions_in_target = actions_in_target.not_hidden if !context.hidden?
         else
           actions_in_target = @todo.context.todos.deferred_or_blocked
         end
