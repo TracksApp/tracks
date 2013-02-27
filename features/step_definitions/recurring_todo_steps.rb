@@ -38,7 +38,7 @@ When /^I select "([^\"]*)" recurrence pattern$/ do |recurrence_period|
 end
 
 When /^I edit the name of the pattern "([^\"]*)" to "([^\"]*)"$/ do |pattern_name, new_name|
-  pattern = @current_user.recurring_todos.find_by_description(pattern_name)
+  pattern = @current_user.recurring_todos.where(:description => pattern_name).first
   pattern.should_not be_nil
   click_link "link_edit_recurring_todo_#{pattern.id}"
 
@@ -51,13 +51,13 @@ When /^I edit the name of the pattern "([^\"]*)" to "([^\"]*)"$/ do |pattern_nam
 end
 
 When /^I star the pattern "([^\"]*)"$/ do |pattern_name|
-  pattern = @current_user.recurring_todos.find_by_description(pattern_name)
+  pattern = @current_user.recurring_todos.where(:description => pattern_name).first
   pattern.should_not be_nil
   click_link "star_icon_#{pattern.id}"
 end
 
 When /^I delete the pattern "([^"]*)"$/ do |pattern_name|
-  pattern = @current_user.recurring_todos.find_by_description(pattern_name)
+  pattern = @current_user.recurring_todos.where(:description => pattern_name).first
   pattern.should_not be_nil
   
   handle_js_confirm do
@@ -69,7 +69,7 @@ When /^I delete the pattern "([^"]*)"$/ do |pattern_name|
 end
 
 When /^I mark the pattern "([^"]*)" as (complete|active)$/ do |pattern_name, state|
-  pattern = @current_user.recurring_todos.find_by_description(pattern_name)
+  pattern = @current_user.recurring_todos.where(:description => pattern_name).first
   pattern.should_not be_nil
   pattern.completed?.should(state=="complete" ? be_false : be_true)
   page.find("#check_#{pattern.id}").click
@@ -78,7 +78,7 @@ When /^I mark the pattern "([^"]*)" as (complete|active)$/ do |pattern_name, sta
 end
 
 When /^I follow the recurring todo link of "([^"]*)"$/ do |action_description|
-  todo = @current_user.todos.find_by_description(action_description)
+  todo = @current_user.todos.where(:description => action_description).first
   todo.should_not be_nil
 
   page.find(:xpath, "//div[@id='todo_#{todo.id}']//a[@class='recurring_icon']/img").click
@@ -93,7 +93,7 @@ Then /^the state list "([^"]*)" should be empty$/ do |state|
 end
 
 Then /^the pattern "([^\"]*)" should be starred$/ do |pattern_name|
-  pattern = @current_user.recurring_todos.find_by_description(pattern_name)
+  pattern = @current_user.recurring_todos.where(:description => pattern_name).first
   pattern.should_not be_nil
   page.should have_xpath("//div[@id='recurring_todo_#{pattern.id}']//img[@class='todo_star starred']")
 end
@@ -103,7 +103,7 @@ Then /^I should see the form for "([^\"]*)" recurrence pattern$/ do |recurrence_
 end
 
 Then /^the pattern "([^"]*)" should be in the state list "([^"]*)"$/ do |pattern_name, state_name|
-  pattern = @current_user.recurring_todos.find_by_description(pattern_name)
+  pattern = @current_user.recurring_todos.where(:description => pattern_name).first
   pattern.should_not be_nil
   page.should have_xpath("//div[@id='#{state_name}_recurring_todos_container']//div[@id='recurring_todo_#{pattern.id}']")
 end

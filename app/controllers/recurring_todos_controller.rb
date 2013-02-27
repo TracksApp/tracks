@@ -73,7 +73,7 @@ class RecurringTodosController < ApplicationController
 
     # update context
     if params['recurring_todo']['context_id'].blank? && !params['context_name'].blank?
-      context = current_user.contexts.where(:name => params['context_name'].strip)
+      context = current_user.contexts.where(:name => params['context_name'].strip).first
       unless context
         context = current_user.contexts.build
         context.name = params['context_name'].strip

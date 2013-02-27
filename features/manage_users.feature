@@ -23,7 +23,7 @@ Feature: Manage users
     Then I should be on the manage users page
     And I should see "new.user"
 
-  @selenium
+  @javascript
   Scenario: Delete account from users page
     When I go to the manage users page
     And I delete the user "testuser"

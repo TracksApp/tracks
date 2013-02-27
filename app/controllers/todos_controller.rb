@@ -34,7 +34,7 @@ class TodosController < ApplicationController
     end
     
     if params[:tag]
-      tag = Tag.where(:name => params['tag'])
+      tag = Tag.where(:name => params['tag']).first
       @not_done_todos = @not_done_todos.where('taggings.tag_id = ?', tag.id)
     end
     
@@ -103,8 +103,8 @@ class TodosController < ApplicationController
 
   def create
     @source_view = params['_source_view'] || 'todo'
-    @default_context = current_user.contexts.where(:name => params['default_context_name'])
-    @default_project = current_user.projects.where(:name => params['default_project_name']) unless params['default_project_name'].blank?
+    @default_context = current_user.contexts.where(:name => params['default_context_name']).first
+    @default_project = current_user.projects.where(:name => params['default_project_name']).first unless params['default_project_name'].blank?
 
     @tag_name = params['_tag_name']
 
@@ -719,7 +719,7 @@ class TodosController < ApplicationController
     @source_view = params['_source_view'] || 'tag'
     @tag_name = sanitize(params[:name]) # sanitize to prevent XSS vunerability!
     @page_title = t('todos.completed_tagged_page_title', :tag_name => @tag_name)
-    @tag = Tag.where(:name => @tag_name)
+    @tag = Tag.where(:name => @tag_name).first
     @tag = Tag.new(:name => @tag_name) if @tag.nil?
 
     completed_todos = current_user.todos.completed.with_tag(@tag.id)
@@ -736,7 +736,7 @@ class TodosController < ApplicationController
     @source_view = params['_source_view'] || 'tag'
     @tag_name = sanitize(params[:name]) # sanitize to prevent XSS vunerability!
     @page_title = t('todos.all_completed_tagged_page_title', :tag_name => @tag_name)
-    @tag = Tag.where(:name => @tag_name)
+    @tag = Tag.where(:name => @tag_name).first
     @tag = Tag.new(:name => @tag_name) if @tag.nil?
 
     @done = current_user.todos.completed.with_tag(@tag.id).reorder('completed_at DESC').includes(Todo::DEFAULT_INCLUDES).paginate :page => params[:page], :per_page => 20
@@ -1017,7 +1017,7 @@ class TodosController < ApplicationController
       end
       from.tag do
         @tag_name = params['_tag_name']
-        @tag = Tag.where(:name => @tag_name)
+        @tag = Tag.where(:name => @tag_name).first
         if @tag.nil?
           @tag = Tag.new(:name => @tag_name)
         end
@@ -1034,7 +1034,7 @@ class TodosController < ApplicationController
         @target_context_count = current_user.contexts.find(@todo.context_id).todos.deferred_or_blocked.count
       }
       from.tag {
-        tag = Tag.where(:name => params['_tag_name'])
+        tag = Tag.where(:name => params['_tag_name']).first
         if tag.nil?
           tag = Tag.new(:name => params['tag'])
         end
@@ -1103,7 +1103,7 @@ class TodosController < ApplicationController
   end
 
   def determine_deferred_tag_count(tag_name)
-    tag = Tag.where(:name => tag_name)
+    tag = Tag.where(:name => tag_name).first
     # tag.nil? should normally not happen, but is a workaround for #929
     @remaining_deferred_or_pending_count = tag.nil? ? 0 : current_user.todos.deferred.with_tag(tag.id).count
   end

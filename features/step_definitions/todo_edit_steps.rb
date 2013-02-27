@@ -1,7 +1,7 @@
 ####### MARK (UN)COMPLETE #######
 
 When /^I mark "([^"]*)" as complete$/ do |action_description|
-  todo = @current_user.todos.find_by_description(action_description)
+  todo = @current_user.todos.where(:description => action_description).first
   todo.should_not be_nil
 
   check "mark_complete_#{todo.id}"
@@ -11,7 +11,7 @@ When /^I mark "([^"]*)" as complete$/ do |action_description|
 end
 
 When /^I mark "([^"]*)" as uncompleted$/ do |action_description|
-  todo = @current_user.todos.find_by_description(action_description)
+  todo = @current_user.todos.where(:description => action_description).first
   todo.should_not be_nil
 
   uncheck "mark_complete_#{todo.id}"
@@ -29,7 +29,7 @@ end
 ####### (UN)STARRING #######
 
 When /^I star the action "([^"]*)"$/ do |action_description|
-  todo = @current_user.todos.find_by_description(action_description)
+  todo = @current_user.todos.where(:description => action_description).first
   todo.should_not be_nil
 
   xpath_unstarred = "//div[@id='line_todo_#{todo.id}']//img[@class='todo_star']"
@@ -47,7 +47,7 @@ When /^I star the action "([^"]*)"$/ do |action_description|
 end
 
 When /^I unstar the action "([^"]*)"$/ do |action_description|
-  todo = @current_user.todos.find_by_description(action_description)
+  todo = @current_user.todos.where(:description => action_description).first
   todo.should_not be_nil
 
   xpath_unstarred = "//div[@id='line_todo_#{todo.id}']//img[@class='todo_star']"
@@ -64,7 +64,7 @@ end
 ####### Editing a todo using Edit Form #######
 
 When /I change the (.*) field of "([^\"]*)" to "([^\"]*)"$/ do |field_name, todo_name, new_value|
-  todo = @current_user.todos.find_by_description(todo_name)
+  todo = @current_user.todos.where(:description => todo_name).first
   todo.should_not be_nil
 
   open_edit_form_for(todo)
@@ -86,7 +86,7 @@ When /^I edit the project of "([^"]*)" to "([^"]*)"$/ do |todo_name, project_new
 end
 
 When /^I edit the description of "([^"]*)" to "([^"]*)"$/ do |action_description, new_description|
-  todo = @current_user.todos.find_by_description(action_description)
+  todo = @current_user.todos.where(:description => action_description).first
   todo.should_not be_nil
   
   open_edit_form_for(todo)
@@ -97,7 +97,7 @@ When /^I edit the description of "([^"]*)" to "([^"]*)"$/ do |action_description
 end
 
 When /^I try to edit the description of "([^"]*)" to "([^"]*)"$/ do |action_description, new_description|
-  todo = @current_user.todos.find_by_description(action_description)
+  todo = @current_user.todos.where(:description => action_description).first
   todo.should_not be_nil
   
   open_edit_form_for(todo)
@@ -111,7 +111,7 @@ When /^I try to edit the description of "([^"]*)" to "([^"]*)"$/ do |action_desc
 end
 
 When /^I edit the due date of "([^"]*)" to "([^"]*)"$/ do |action_description, date|
-  todo = @current_user.todos.find_by_description(action_description)
+  todo = @current_user.todos.where(:description => action_description).first
   todo.should_not be_nil
 
   open_edit_form_for(todo)
@@ -130,7 +130,7 @@ When /^I edit the due date of "([^"]*)" to next month$/ do  |action_description|
 end
 
 When /^I clear the due date of "([^"]*)"$/ do |action_description|
-  todo = @current_user.todos.find_by_description(action_description)
+  todo = @current_user.todos.where(:description => action_description).first
   todo.should_not be_nil
   
   open_edit_form_for(todo)
@@ -144,7 +144,7 @@ When /^I clear the due date of "([^"]*)"$/ do |action_description|
 end
 
 When /^I edit the show from date of "([^"]*)" to next month$/ do  |action_description|
-  todo = @current_user.todos.find_by_description(action_description)
+  todo = @current_user.todos.where(:description => action_description).first
   todo.should_not be_nil
   
   open_edit_form_for(todo)
@@ -153,7 +153,7 @@ When /^I edit the show from date of "([^"]*)" to next month$/ do  |action_descri
 end
 
 When /^I remove the show from date from "([^"]*)"$/ do |action_description|
-  todo = @current_user.todos.find_by_description(action_description)
+  todo = @current_user.todos.where(:description => action_description).first
   todo.should_not be_nil
 
   open_edit_form_for(todo)
@@ -166,7 +166,7 @@ When /^I clear the show from date of "([^"]*)"$/ do |action_description|
 end
 
 When /^I defer "([^"]*)" for 1 day$/ do |action_description|
-  todo = @current_user.todos.find_by_description(action_description)
+  todo = @current_user.todos.where(:description => action_description).first
   todo.should_not be_nil
 
   open_submenu_for(todo)
@@ -178,7 +178,7 @@ When /^I defer "([^"]*)" for 1 day$/ do |action_description|
 end
 
 When /^I edit the tags of "([^"]*)" to "([^"]*)"$/ do |action_description, tags|
-  todo = @current_user.todos.find_by_description(action_description)
+  todo = @current_user.todos.where(:description => action_description).first
   todo.should_not be_nil
 
   open_edit_form_for(todo)
@@ -189,7 +189,7 @@ When /^I edit the tags of "([^"]*)" to "([^"]*)"$/ do |action_description, tags|
 end
 
 When /^I make a project of "([^"]*)"$/ do |action_description|
-  todo = @current_user.todos.find_by_description(action_description)
+  todo = @current_user.todos.where(:description => action_description).first
   todo.should_not be_nil
 
   open_submenu_for(todo)

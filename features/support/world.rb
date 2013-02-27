@@ -112,14 +112,14 @@ module TracksStepHelper
   end
 
   def context_list_find_index(context_name)
-    div_id = "context_#{@current_user.contexts.find_by_name(context_name).id}"
+    div_id = "context_#{@current_user.contexts.where(:name => context_name).first.id}"
     contexts = page.all("div.context").map { |x| x[:id] }
     return contexts.find_index(div_id)
   end
 
   def project_list_find_index(project_name)
     # TODO: refactor with context_list_find_index
-    div_id = "project_#{@current_user.projects.find_by_name(project_name).id}"
+    div_id = "project_#{@current_user.projects.where(:name => project_name).first.id}"
     project = page.all("div.project").map { |x| x[:id] }
     return project.find_index(div_id)
   end

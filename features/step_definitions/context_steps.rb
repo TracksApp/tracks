@@ -4,9 +4,9 @@ Given /^I have no contexts$/ do
 end
 
 Given /^there exists an active context called "([^"]*)" for user "([^"]*)"$/ do |context_name, login|
-  user = User.find_by_login(login)
+  user = User.where(:login => login).first
   user.should_not be_nil
-  @context = user.contexts.find_or_create_by_name(:name => context_name, :hide => false)
+  @context = user.contexts.where(:name => context_name, :hide => false).first_or_create
 end
 
 Given /^there exists a context called "([^"]*)" for user "([^"]*)"$/ do |context_name, login|
@@ -14,7 +14,7 @@ Given /^there exists a context called "([^"]*)" for user "([^"]*)"$/ do |context
 end
 
 Given /^there exists a hidden context called "([^"]*)" for user "([^"]*)"$/ do |context_name, login|
-  user = User.find_by_login(login)
+  user = User.where(:login => login).first
   user.should_not be_nil
   @context = user.contexts.create!(:name => context_name, :hide => true)
 end
@@ -70,7 +70,7 @@ Then /^I should see the context name is "([^\"]*)"$/ do |context_name|
 end
 
 Then /^he should see that a context named "([^\"]*)" (is|is not) present$/ do |context_name, visible|
-  context = @current_user.contexts.find_by_name(context_name)
+  context = @current_user.contexts.where(:name => context_name).first
   if visible == "is"
     context.should_not be_nil
     css = "div#context_#{context.id} div.context_description a"

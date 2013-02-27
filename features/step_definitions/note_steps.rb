@@ -1,5 +1,5 @@
 When /^I add note "([^\"]*)" from the "([^\"]*)" project page$/ do |note, project|
-  project = Project.find_by_name(project)
+  project = Project.where(:name => project).first
   project.notes.create!(:user_id => @current_user.id, :body => note)
 end
 
@@ -31,7 +31,7 @@ When /^I edit the first note to "([^"]*)"$/ do |note_body|
 end
 
 When /^I toggle the note of "([^"]*)"$/ do |todo_description|
-  todo = @current_user.todos.find_by_description(todo_description)
+  todo = @current_user.todos.where(:description => todo_description).first
   todo.should_not be_nil
 
   xpath = "//div[@id='line_todo_#{todo.id}']/div/a/img"
@@ -54,7 +54,7 @@ Then /^(.*) notes should be visible$/ do |number|
 end
 
 Then /^I should see note "([^\"]*)" on the "([^\"]*)" project page$/ do |note, project|
-  project = Project.find_by_name(project)
+  project = Project.where(:name => project).first
   visit project_path(project)
   step "I should see the note \"#{note}\""
 end

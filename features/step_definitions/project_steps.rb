@@ -4,7 +4,7 @@ end
 
 Given /^I have an outdated project "([^"]*)" with (\d+) todos$/ do |project_name, num_todos|
   step "I have a project \"#{project_name}\" with #{num_todos} todos"
-  @project = @current_user.projects.find_by_name(project_name)
+  @project = @current_user.projects.where(:name => project_name).first
   @project.last_reviewed = @current_user.time - @current_user.prefs.review_period.days-1
   @project.save
 end
@@ -19,8 +19,8 @@ Given /^I have a project "([^"]*)" with (\d+) active actions and (\d+) deferred 
 end
 
 Given /^I have a project "([^"]*)" with (\d+) (todo|active todo|deferred todo)s prefixed by "([^\"]*)"$/ do |project_name, num_todos, state, prefix|
-  @context = @current_user.contexts.find_or_create_by_name("Context A")
-  @project = @current_user.projects.find_or_create_by_name(project_name)
+  @context = @current_user.contexts.where(:name => "Context A").first_or_create
+  @project = @current_user.projects.where(:name => project_name).first_or_create
   # acts_as_list adds at top by default, but that is counter-intuitive when reading scenario's, so reverse this
   @project.move_to_bottom
 
@@ -41,7 +41,7 @@ Given /^I have a project "([^"]*)" with (\d+) (todos|active todos|deferred todos
 end
 
 Given /^there exists a project (?:|called )"([^"]*)" for user "([^"]*)"$/ do |project_name, user_name|
-  user = User.find_by_login(user_name)
+  user = User.where(:login => user_name).first
   user.should_not be_nil
   @project = user.projects.create!(:name => project_name)
   # acts_as_list adds at top by default, but that is counter-intuitive when reading scenario's, so reverse this
@@ -101,7 +101,7 @@ Given /^I have a project "([^\"]*)" with (.*) notes?$/ do |project_name, num|
 end
 
 Given /^the default tags for "(.*?)" are "(.*?)"$/ do |project_name, default_tags|
-  project = @current_user.projects.find_by_name(project_name)
+  project = @current_user.projects.where(:name => project_name).first
   project.should_not be_nil
   
   project.default_tags = default_tags
@@ -146,13 +146,13 @@ When /^I edit the default context to "([^"]*)"$/ do |default_context|
 end
 
 When /^I edit the project name of "([^"]*)" to "([^"]*)"$/ do |project_current_name, project_new_name|
-  @project = @current_user.projects.find_by_name(project_current_name)
+  @project = @current_user.projects.where(:name => project_current_name).first
   @project.should_not be_nil
   step "I edit the project name to \"#{project_new_name}\""
 end
 
 When /^I try to edit the project name of "([^"]*)" to "([^"]*)"$/ do |project_current_name, project_new_name|
-  @project = @current_user.projects.find_by_name(project_current_name)
+  @project = @current_user.projects.where(:name => project_current_name).first
   @project.should_not be_nil
   step "I try to edit the project name to \"#{project_new_name}\""
 end
@@ -182,7 +182,7 @@ When /^I close the project settings$/ do
 end
 
 When /^I edit the project state of "([^"]*)" to "([^"]*)"$/ do |project_name, state_name|
-  project = @current_user.projects.find_by_name(project_name)
+  project = @current_user.projects.where(:name => project_name).first
   project.should_not be_nil
 
   edit_project_settings(project) do
@@ -191,7 +191,7 @@ When /^I edit the project state of "([^"]*)" to "([^"]*)"$/ do |project_name, st
 end
 
 When /^I edit project "([^"]*)" and mark the project as reviewed$/ do |project_name|
-  project = @current_user.projects.find_by_name(project_name)
+  project = @current_user.projects.where(:name => project_name).first
   project.should_not be_nil
   
   open_project_edit_form(project)
@@ -318,12 +318,12 @@ Then /^I should (see|not see) the default project settings$/ do |visible|
 end
 
 Then /^I should have a project called "([^"]*)"$/ do |project_name|
-  project = @current_user.projects.find_by_name(project_name)
+  project = @current_user.projects.where(:name => project_name).first
   project.should_not be_nil
 end
 
 Then /^I should have (\d+) todo in project "([^"]*)"$/ do |todo_count, project_name|
-  project = @current_user.projects.find_by_name(project_name)
+  project = @current_user.projects.where(:name => project_name).first
   project.should_not be_nil
   project.todos.count.should == todo_count.to_i
 end

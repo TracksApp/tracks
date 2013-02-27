@@ -9,7 +9,7 @@ end
 
 Then /^I should see a script "([^\"]*)" for "([^\"]*)"$/ do |script, context_name|
   page.should have_css("##{script}", :visible => true)
-  context = Context.find_by_name(context_name)
+  context = Context.where(:name => context_name).first
 
   page.should have_content("#{context.id} (* #{context_name} *)")
 

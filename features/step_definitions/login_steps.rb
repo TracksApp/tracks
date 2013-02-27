@@ -7,7 +7,7 @@ Given /^I have logged in as "(.*)" with password "(.*)"$/ do |username, password
   
   logout_regexp = @mobile_interface ? "Logout" : "Logout \(#{username}\)"
   page.should have_content(logout_regexp)
-  @current_user = User.find_by_login(username)
+  @current_user = User.where(:login => username).first
 end
 
 When /^I submit the login form as user "([^\"]*)" with password "([^\"]*)"$/ do |username, password|

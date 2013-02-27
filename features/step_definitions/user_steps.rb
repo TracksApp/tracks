@@ -48,7 +48,7 @@ end
 When /^I delete the user "([^\"]*)"$/ do |username|
   # click "//tr[@id='user-3']//img"
   # assert_confirmation "Warning: this will delete user 'john', all their actions, contexts, project and notes. Are you sure that you want to continue?"
-  user = User.find_by_login(username)
+  user = User.where(:login => username).first
   user.should_not be_nil
 
   handle_js_confirm do

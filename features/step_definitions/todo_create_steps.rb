@@ -3,7 +3,7 @@ Given /^I have no todos$/ do
 end
 
 Given /^I have a todo "([^"]*)" in the context "([^"]*)"$/ do |description, context_name|
-  context = @current_user.contexts.find_or_create_by_name(context_name)
+  context = @current_user.contexts.where(:name => context_name).first_or_create
   @todo = @current_user.todos.create!(:context_id => context.id, :description => description)
 end
 
@@ -14,17 +14,17 @@ Given /^I have a todo "([^"]*)" in context "([^"]*)" with tags "([^"]*)"$/ do |d
 end
 
 Given /^I have a todo "([^"]*)" in the context "([^"]*)" which is due tomorrow$/ do |description, context_name|
-  context = @current_user.contexts.find_or_create_by_name(context_name)
+  context = @current_user.contexts.where(:name => context_name).first_or_create
   @todo = @current_user.todos.create!(:context_id => context.id, :description => description)
   @todo.due = @todo.created_at + 1.day
   @todo.save!
 end
 
 Given /^I have (\d+) todos in project "([^"]*)" in context "([^"]*)" with tags "([^"]*)" prefixed by "([^"]*)"$/ do |number_of_todos, project_name, context_name, tag_names, prefix|
-  @context = @current_user.contexts.find_by_name(context_name)
+  @context = @current_user.contexts.where(:name => context_name).first
   @context.should_not be_nil
 
-  @project = @current_user.projects.find_by_name(project_name)
+  @project = @current_user.projects.where(:name => project_name).first
   @project.should_not be_nil
 
   @todos = []
@@ -63,8 +63,8 @@ Given /^I have ([0-9]+) todos$/ do |count|
 end
 
 Given /^I have a todo with description "([^"]*)" in project "([^"]*)" with tags "([^"]*)" in the context "([^"]*)"$/ do |action_description, project_name, tags, context_name|
-  context = @current_user.contexts.find_or_create_by_name(context_name)
-  project = @current_user.projects.find_or_create_by_name(project_name)
+  context = @current_user.contexts.where(:name => context_name).first_or_create
+  project = @current_user.projects.where(:name => project_name).first_or_create
   @todo = @current_user.todos.create!(:context_id => context.id, :project_id => project.id, :description => action_description)
   @todo.tag_with(tags)
   @todo.save
@@ -88,7 +88,7 @@ Given /^I have ([0-9]+) deferred todos$/ do |count|
 end
 
 Given /^I have a deferred todo "([^"]*)" in the context "([^"]*)"$/ do |description, context_name|
-  context = @current_user.contexts.find_or_create_by_name(context_name)
+  context = @current_user.contexts.where(:name => context_name).first_or_create
   todo = @current_user.todos.create!(:context_id => context.id, :description => description)
   todo.show_from = @current_user.time + 1.week
   todo.save!
@@ -107,10 +107,10 @@ end
 ####### COMPLETED TODOS #######
 
 Given /^I have ([0-9]+) completed todos in project "([^"]*)" in context "([^"]*)"$/ do |count, project_name, context_name|
-  @context = @current_user.contexts.find_by_name(context_name)
+  @context = @current_user.contexts.where(:name => context_name).first
   @context.should_not be_nil
 
-  @project = @current_user.projects.find_by_name(project_name)
+  @project = @current_user.projects.where(:name => project_name).first
   @project.should_not be_nil
 
   @todos = []
@@ -133,7 +133,7 @@ Given /^I have (\d+) completed todos in project "([^"]*)" in context "([^"]*)" w
 end
 
 Given /^I have ([0-9]+) completed todos in context "([^"]*)"$/ do |count, context_name|
-  context = @current_user.contexts.find_by_name(context_name)
+  context = @current_user.contexts.where(:name => context_name).first
   context.should_not be_nil
 
   count.to_i.downto 1 do |i|
@@ -168,7 +168,7 @@ Given /^I have a project "([^"]*)" that has the following (todos|deferred todos)
   step "I have a project called \"#{project_name}\""
   @project.should_not be_nil
   todos.hashes.each do |todo|
-    context = @current_user.contexts.find_by_name(todo[:context])
+    context = @current_user.contexts.where(:name => todo[:context]).first
     context.should_not be_nil
     new_todo = @current_user.todos.create!(
       :description => todo[:description],
@@ -195,7 +195,7 @@ When /^I submit a new action with description "([^"]*)"$/ do |description|
 end
 
 When /^I submit a new action with description "([^"]*)" with a dependency on "([^"]*)"$/ do |todo_description, predecessor_description|
-  predecessor = @current_user.todos.find_by_description(predecessor_description)
+  predecessor = @current_user.todos.where(:description => predecessor_description).first
   predecessor.should_not be_nil
 
   within "form#todo-form-new-action" do

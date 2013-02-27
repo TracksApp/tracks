@@ -1,5 +1,5 @@
 When /^I collapse the context container of "([^"]*)"$/ do |context_name|
-  context = @current_user.contexts.find_by_name(context_name)
+  context = @current_user.contexts.where(:name => context_name).first
   context.should_not be_nil
 
   xpath = "//a[@id='toggle_c#{context.id}']"
@@ -15,7 +15,7 @@ end
 ####### Context #######
 
 Then /^I should not see the context "([^"]*)"$/ do |context_name|
-  context = @current_user.contexts.find_by_name(context_name)
+  context = @current_user.contexts.where(:name => context_name).first
   context.should_not be_nil
 
   xpath = "//div[@id='c#{context.id}']"
@@ -35,7 +35,7 @@ Then /^the container for the context "([^"]*)" should not be visible$/ do |conte
 end
 
 Then /^I should see the container for context "([^"]*)"$/ do |context_name|
-  context = @current_user.contexts.find_by_name(context_name)
+  context = @current_user.contexts.where(:name => context_name).first
   context.should_not be_nil
 
   xpath = "//div[@id='c#{context.id}']"
@@ -47,9 +47,9 @@ Then /^the container for the context "([^"]*)" should be visible$/ do |context_n
 end
 
 Then /^I should see "([^"]*)" in the context container for "([^"]*)"$/ do |todo_description, context_name|
-  context = @current_user.contexts.find_by_name(context_name)
+  context = @current_user.contexts.where(:name => context_name).first
   context.should_not be_nil
-  todo = @current_user.todos.find_by_description(todo_description)
+  todo = @current_user.todos.where(:description => todo_description).first
   todo.should_not be_nil
 
   xpath = "//div[@id=\"c#{context.id}\"]//div[@id='line_todo_#{todo.id}']"
@@ -57,9 +57,9 @@ Then /^I should see "([^"]*)" in the context container for "([^"]*)"$/ do |todo_
 end
 
 Then /^I should not see "([^"]*)" in the context container for "([^"]*)"$/ do |todo_description, context_name|
-  context = @current_user.contexts.find_by_name(context_name)
+  context = @current_user.contexts.where(:name => context_name).first
   context.should_not be_nil
-  todo = @current_user.todos.find_by_description(todo_description)
+  todo = @current_user.todos.where(:description => todo_description).first
   todo.should_not be_nil
 
   xpath = "//div[@id=\"c#{context.id}\"]//div[@id='line_todo_#{todo.id}']"
@@ -69,21 +69,21 @@ end
 ####### Deferred #######
 
 Then /^I should see "([^"]*)" in the deferred container$/ do |todo_description|
-  todo = @current_user.todos.find_by_description(todo_description)
+  todo = @current_user.todos.where(:description => todo_description).first
   todo.should_not be_nil
 
   page.should have_xpath("//div[@id='tickler']//div[@id='line_todo_#{todo.id}']")
 end
 
 Then /^I should not see "([^"]*)" in the deferred container$/ do |todo_description|
-  todo = @current_user.todos.find_by_description(todo_description)
+  todo = @current_user.todos.where(:description => todo_description).first
   todo.should_not be_nil
 
   page.should_not have_xpath("//div[@id='tickler']//div[@id='line_todo_#{todo.id}']")
 end
 
 Then /^I should (not see|see) "([^"]*)" in the action container$/ do |visible, todo_description|
-  todo = @current_user.todos.find_by_description(todo_description)
+  todo = @current_user.todos.where(:description => todo_description).first
   todo.should_not be_nil
 
   id = @source_view=="project" ? "p#{todo.project_id}items" : "c#{todo.context_id}items"
@@ -99,10 +99,10 @@ end
 ####### Project #######
 
 Then /^I should not see "([^"]*)" in the project container of "([^"]*)"$/ do |todo_description, project_name|
-  todo = @current_user.todos.find_by_description(todo_description)
+  todo = @current_user.todos.where(:description => todo_description).first
   todo.should_not be_nil
 
-  project = @current_user.projects.find_by_name(project_name)
+  project = @current_user.projects.where(:name => project_name).first
   project.should_not be_nil
 
   xpath = "//div[@id='p#{todo.project.id}items']//div[@id='line_todo_#{todo.id}']"
@@ -110,10 +110,10 @@ Then /^I should not see "([^"]*)" in the project container of "([^"]*)"$/ do |to
 end
 
 Then /^I should see "([^"]*)" in project container for "([^"]*)"$/ do |todo_description, project_name|
-  todo = @current_user.todos.find_by_description(todo_description)
+  todo = @current_user.todos.where(:description => todo_description).first
   todo.should_not be_nil
 
-  project = @current_user.projects.find_by_name(project_name)
+  project = @current_user.projects.where(:name => project_name).first
   project.should_not be_nil
 
   xpath = "//div[@id='p#{project.id}items']//div[@id='line_todo_#{todo.id}']"
@@ -123,7 +123,7 @@ end
 ####### Completed #######
 
 Then /^I should see "([^"]*)" in the completed container$/ do |todo_description|
-  todo = @current_user.todos.find_by_description(todo_description)
+  todo = @current_user.todos.where(:description => todo_description).first
   todo.should_not be_nil
 
   xpath = "//div[@id='completed_container']//div[@id='line_todo_#{todo.id}']"
@@ -131,7 +131,7 @@ Then /^I should see "([^"]*)" in the completed container$/ do |todo_description|
 end
 
 Then /^I should not see "([^"]*)" in the completed container$/ do |todo_description|
-  todo = @current_user.todos.find_by_description(todo_description)
+  todo = @current_user.todos.where(:description => todo_description).first
   todo.should_not be_nil
 
   xpath = "//div[@id='completed_container']//div[@id='line_todo_#{todo.id}']"
@@ -141,7 +141,7 @@ end
 ####### Hidden #######
 
 Then /^I should see "([^"]*)" in the hidden container$/ do |todo_description|
-  todo = @current_user.todos.find_by_description(todo_description)
+  todo = @current_user.todos.where(:description => todo_description).first
   todo.should_not be_nil
 
   xpath = "//div[@id='hidden']//div[@id='line_todo_#{todo.id}']"
@@ -151,7 +151,7 @@ end
 ####### Calendar #######
 
 Then /^I should see "([^"]*)" in the due next month container$/ do |todo_description|
-  todo = @current_user.todos.find_by_description(todo_description)
+  todo = @current_user.todos.where(:description => todo_description).first
   todo.should_not be_nil
 
   within "div#due_after_this_month" do
@@ -162,7 +162,7 @@ end
 ####### Repeat patterns #######
 
 Then /^I should (see|not see) "([^"]*)" in the active recurring todos container$/ do |visibility, repeat_pattern|
-  repeat = @current_user.recurring_todos.find_by_description(repeat_pattern)
+  repeat = @current_user.recurring_todos.where(:description => repeat_pattern).first
 
   unless repeat.nil?
     xpath = "//div[@id='active_recurring_todos_container']//div[@id='recurring_todo_#{repeat.id}']"
@@ -173,7 +173,7 @@ Then /^I should (see|not see) "([^"]*)" in the active recurring todos container$
 end
 
 Then /^I should not see "([^"]*)" in the completed recurring todos container$/ do |repeat_pattern|
-  repeat = @current_user.recurring_todos.find_by_description(repeat_pattern)
+  repeat = @current_user.todos.where(:description =>  repeat_pattern).first
 
   unless repeat.nil?
     xpath = "//div[@id='completed_recurring_todos_container']//div[@id='recurring_todo_#{repeat.id}']"
@@ -182,4 +182,3 @@ Then /^I should not see "([^"]*)" in the completed recurring todos container$/ d
     step "I should not see \"#{repeat_pattern}\""
   end
 end
-

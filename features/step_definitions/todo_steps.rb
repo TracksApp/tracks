@@ -5,7 +5,7 @@ end
 ####### DELETE #######
 
 When /^I delete the action "([^"]*)"$/ do |action_description|
-  todo = @current_user.todos.find_by_description(action_description)
+  todo = @current_user.todos.where(:description => action_description).first
   todo.should_not be_nil
 
   handle_js_confirm do
@@ -26,7 +26,7 @@ end
 ####### Notes #######
 
 When /^I open the notes of "([^"]*)"$/ do |action_description|
-  todo = @current_user.todos.find_by_description(action_description)
+  todo = @current_user.todos.where(:description => action_description).first
   todo.should_not be_nil
 
   page.find(:xpath, "//div[@id='line_todo_#{todo.id}']/div/a/img").click
@@ -37,7 +37,7 @@ end
 ####### THEN #######
 
 Then /^I should see a starred "([^"]*)"$/ do |action_description|
-  todo = @current_user.todos.find_by_description(action_description)
+  todo = @current_user.todos.where(:description => action_description).first
   todo.should_not be_nil
 
   xpath_starred = "//div[@id='line_todo_#{todo.id}']//img[@class='todo_star starred']"
@@ -45,7 +45,7 @@ Then /^I should see a starred "([^"]*)"$/ do |action_description|
 end
 
 Then /^I should see an unstarred "([^"]*)"$/ do |action_description|
-  todo = @current_user.todos.find_by_description(action_description)
+  todo = @current_user.todos.where(:description => action_description).first
   todo.should_not be_nil
 
   xpath_starred = "//div[@id='line_todo_#{todo.id}']//img[@class='todo_star']"
@@ -66,7 +66,7 @@ Then /^I should not see the todo "([^\"]*)"$/ do |todo_description|
 end
 
 Then /^I should see a completed todo "([^"]*)"$/ do |todo_description|
-  todo = @current_user.todos.find_by_description(todo_description)
+  todo = @current_user.todos.where(:description => todo_description).first
   todo.should_not be_nil
 
   # only completed todos have a grey span with the completed_at date
@@ -75,7 +75,7 @@ Then /^I should see a completed todo "([^"]*)"$/ do |todo_description|
 end
 
 Then /^I should see an active todo "([^"]*)"$/ do |todo_description|
-  todo = @current_user.todos.find_by_description(todo_description)
+  todo = @current_user.todos.where(:description => todo_description).first
   todo.should_not be_nil
 
   xpath = "//div[@id='line_todo_#{todo.id}']/img[@class='grip']"
@@ -137,14 +137,14 @@ Then /^the tag field in the new todo form should be "([^"]*)"$/ do |tag_list|
 end
 
 Then /^the tags of "([^"]*)" should be "([^"]*)"$/ do |todo_description, tag_list|
-  todo = @current_user.todos.find_by_description(todo_description)
+  todo = @current_user.todos.where(:description => todo_description).first
   todo.should_not be_nil
 
   todo.tag_list.should == tag_list
 end
 
 Then /^I should see "([^"]*)" in the completed section of the mobile site$/ do |desc|
-  todo = @current_user.todos.find_by_description(desc)
+  todo = @current_user.todos.where(:description => desc).first
   todo.should_not be_nil
 
   xpath = "//div[@id='completed_container']//a[@href='/todos/#{todo.id}.m']"
@@ -162,7 +162,7 @@ Then /^I should (see|not see) the empty tickler message$/ do |see|
 end
 
 Then /^I should (see|not see) the notes of "([^"]*)"$/ do |visible, todo_description|
-  todo = @current_user.todos.find_by_description(todo_description)
+  todo = @current_user.todos.where(:description => todo_description).first
   todo.should_not be_nil
   
   page.find("div#notes_todo_#{todo.id}").send(visible=="see" ? "should" : "should_not", be_visible)

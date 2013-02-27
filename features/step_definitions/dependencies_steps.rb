@@ -1,6 +1,6 @@
 Given /^"([^"]*)" depends on "([^"]*)"$/ do |successor_name, predecessor_name|
-  successor = Todo.find_by_description(successor_name)
-  predecessor = Todo.find_by_description(predecessor_name)
+  successor = Todo.where(:description => successor_name).first
+  predecessor = Todo.where(:description => predecessor_name).first
 
   successor.add_predecessor(predecessor)
   successor.state = "pending"
@@ -8,8 +8,8 @@ Given /^"([^"]*)" depends on "([^"]*)"$/ do |successor_name, predecessor_name|
 end
 
 When /^I drag "(.*)" to "(.*)"$/ do |dragged, target|
-  drag_id = Todo.find_by_description(dragged).id
-  drop_id = Todo.find_by_description(target).id
+  drag_id = Todo.where(:description => dragged).first.id
+  drop_id = Todo.where(:description => target).first.id
   drag_elem = page.find(:xpath, "//div[@id='line_todo_#{drag_id}']//img[@class='grip']")
   drop_elem = page.find(:xpath, "//div[@id='line_todo_#{drop_id}']")
 
@@ -17,7 +17,7 @@ When /^I drag "(.*)" to "(.*)"$/ do |dragged, target|
 end
 
 When /^I expand the dependencies of "([^\"]*)"$/ do |todo_name|
-  todo = Todo.find_by_description(todo_name)
+  todo = Todo.where(:description=>todo_name).first
   todo.should_not be_nil
 
   expand_img_locator = "//div[@id='line_todo_#{todo.id}']/div/a[@class='show_successors']/img"
@@ -27,9 +27,9 @@ When /^I expand the dependencies of "([^\"]*)"$/ do |todo_name|
 end
 
 When /^I edit the dependency of "([^"]*)" to add "([^"]*)" as predecessor$/ do |todo_description, predecessor_description|
-  todo = @current_user.todos.find_by_description(todo_description)
+  todo = @current_user.todos.where(:description => todo_description).first
   todo.should_not be_nil
-  predecessor = @current_user.todos.find_by_description(predecessor_description)
+  predecessor = @current_user.todos.where(:description => predecessor_description).first
   predecessor.should_not be_nil
 
   open_edit_form_for(todo)
@@ -55,9 +55,9 @@ When /^I edit the dependency of "([^"]*)" to add "([^"]*)" as predecessor$/ do |
 end
 
 When /^I edit the dependency of "([^"]*)" to remove "([^"]*)" as predecessor$/ do |todo_description, predecessor_description|
-  todo = @current_user.todos.find_by_description(todo_description)
+  todo = @current_user.todos.where(:description => todo_description).first
   todo.should_not be_nil
-  predecessor = @current_user.todos.find_by_description(predecessor_description)
+  predecessor = @current_user.todos.where(:description => predecessor_description).first
   predecessor.should_not be_nil
 
   open_edit_form_for(todo)
@@ -73,7 +73,7 @@ When /^I edit the dependency of "([^"]*)" to remove "([^"]*)" as predecessor$/ d
 end
 
 When /^I edit the dependency of "([^"]*)" to "([^"]*)"$/ do |todo_name, deps|
-  todo = @dep_todo = @current_user.todos.find_by_description(todo_name)
+  todo = @dep_todo = @current_user.todos.where(:description => todo_name).first
   todo.should_not be_nil
 
   open_edit_form_for(todo)
@@ -82,19 +82,19 @@ When /^I edit the dependency of "([^"]*)" to "([^"]*)"$/ do |todo_name, deps|
 end
 
 Then /^the successors of "(.*)" should include "(.*)"$/ do |parent_name, child_name|
-  parent = @current_user.todos.find_by_description(parent_name)
+  parent = @current_user.todos.where(:description => parent_name).first
   parent.should_not be_nil
 
   # wait until the successor is added. TODO: make this not loop indefinitly
   wait_until do
-    found = !parent.pending_successors.find_by_description(child_name).nil?
+    found = !parent.pending_successors.where(:description => child_name).first.nil?
     sleep 0.2 unless found
     found
   end
 end
 
 Then /^I should see "([^\"]*)" within the dependencies of "([^\"]*)"$/ do |successor_description, todo_description|
-  todo = @current_user.todos.find_by_description(todo_description)
+  todo = @current_user.todos.where(:description => todo_description).first
   todo.should_not be_nil
 
   # open successors
@@ -108,14 +108,14 @@ Then /^I should see "([^\"]*)" within the dependencies of "([^\"]*)"$/ do |succe
 end
 
 Then /^I should not see "([^"]*)" within the dependencies of "([^"]*)"$/ do |successor_description, todo_description|
-  todo = @current_user.todos.find_by_description(todo_description)
+  todo = @current_user.todos.where(:description => todo_description).first
   todo.should_not be_nil
   
   step "I should not see \"#{successor_description}\" within \"div#line_todo_#{todo.id}\""
 end
 
 Then /^I should see that "([^"]*)" does not have dependencies$/ do |todo_description|
-  todo = @current_user.todos.find_by_description(todo_description)
+  todo = @current_user.todos.where(:description => todo_description).first
   todo.should_not be_nil
   dependencies_icon = "//div[@id='line_todo_#{todo.id}']/div/a[@class='show_successors']/img"
   page.should_not have_xpath(dependencies_icon)
