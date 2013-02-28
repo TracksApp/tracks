@@ -107,9 +107,14 @@ module TracksStepHelper
     submenu_arrow = "div#line_todo_#{todo.id} img.todo-submenu"
     page.should have_css(submenu_arrow, :visible=>true)
     
-    page.find(submenu_arrow).click
+    # pick the first because calendar page could have the same todo more than once
+    page.all(submenu_arrow)[0].click
     
     page.should have_css("div#line_todo_#{todo.id} ul#ultodo_#{todo.id}", :visible => true)
+
+    within all("div#line_todo_#{todo.id} ul#ultodo_#{todo.id}")[0] do
+      yield
+    end
   end
 
   def context_list_find_index(context_name)

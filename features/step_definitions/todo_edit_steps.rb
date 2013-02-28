@@ -134,7 +134,9 @@ When /^I clear the due date of "([^"]*)"$/ do |action_description|
   todo.should_not be_nil
   
   open_edit_form_for(todo)
-  within "div#edit_todo_#{todo.id}" do
+  # use all()[0] to get the first todo. This is for calendar page where you can have 
+  # de same todo more than once
+  within all("div#edit_todo_#{todo.id}")[0] do
     find("a#due_x_todo_#{todo.id}").click
     wait_until do
       find("input#due_todo_#{todo.id}").value == ""
@@ -169,9 +171,9 @@ When /^I defer "([^"]*)" for 1 day$/ do |action_description|
   todo = @current_user.todos.where(:description => action_description).first
   todo.should_not be_nil
 
-  open_submenu_for(todo)
-  page.should have_css("a#defer_1_todo_#{todo.id}", :visible=>true)
-  click_link "defer_1_todo_#{todo.id}"
+  open_submenu_for(todo) do
+    click_link "defer_1_todo_#{todo.id}"
+  end
 
   wait_for_ajax
   wait_for_animations_to_end
@@ -192,9 +194,9 @@ When /^I make a project of "([^"]*)"$/ do |action_description|
   todo = @current_user.todos.where(:description => action_description).first
   todo.should_not be_nil
 
-  open_submenu_for(todo)
-  page.should have_css("a#to_project_todo_#{todo.id}", :visible=>true)
-  click_link "to_project_todo_#{todo.id}"
+  open_submenu_for(todo) do
+    click_link "to_project_todo_#{todo.id}"
+  end
 
   page.should have_no_css("div#line_todo_#{todo.id}")
   wait_for_ajax
