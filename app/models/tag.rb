@@ -22,10 +22,6 @@ class Tag < ActiveRecord::Base
     self.name = name.downcase.strip.squeeze(" ")
   end
 
-  def on(taggable, user)
-    taggings.create :taggable => taggable, :user => user
-  end
-
   def label
     @label ||= name.gsub(' ', '-')
   end
