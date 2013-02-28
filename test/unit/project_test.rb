@@ -174,5 +174,21 @@ class ProjectTest < ActiveSupport::TestCase
     assert_equal project.description, todo.notes
     assert_equal project.default_context, todo.context
   end
+
+  def test_new_record_before_save
+    assert !@timemachine.new_record_before_save?, "existing records should not be new_record"
+    p = Project.where(:name => "I do not exist").first_or_create
+    assert p.new_record_before_save?, "newly created record should be new_record"
+  end
+
+  def test_shortened_name
+    s = "project"*7 # len=49
+    p = users(:admin_user).projects.create(:name => s)
+    assert_equal 49, p.name.length
+    assert_equal 40, p.shortened_name.length
+    assert_equal "project"*5+"pr...", p.shortened_name
+
+    assert p.shortened_name.html_safe?
+  end
   
 end

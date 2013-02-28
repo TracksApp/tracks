@@ -1,20 +1,11 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
-class SimpleLdapAuthenticator
-  cattr_accessor :fake_success
-
-  def self.valid?(login, pass)
-    fake_success
-  end
-end
-
 class UserTest < ActiveSupport::TestCase
   fixtures :users, :preferences, :projects, :contexts, :todos, :recurring_todos
 
   def setup
     assert_equal "test", ENV['RAILS_ENV']
     assert_equal "change-me", Tracks::Config.salt
-    assert Tracks::Config.auth_schemes.include?('ldap')
     @admin_user = User.find(1)
     @other_user = User.find(2)
   end
@@ -187,16 +178,6 @@ class UserTest < ActiveSupport::TestCase
     assert_equal ["not a valid authentication type (dnacheck)"], @other_user.errors[:auth_type]
   end
 
-  def test_authenticate_can_use_ldap
-    u = @other_user
-    u.auth_type = 'ldap'
-    u.save!
-    SimpleLdapAuthenticator.fake_success = false
-    assert_nil User.authenticate(u.login, 'foobar')
-    SimpleLdapAuthenticator.fake_success = true
-    assert_equal @other_user, User.authenticate(u.login, 'foobar')
-  end
-
   def test_find_context_by_params
     u = @admin_user
     c = u.contexts.find_by_params('id' => '1')
@@ -333,19 +314,83 @@ class UserTest < ActiveSupport::TestCase
     assert_not_nil User.authenticate(users(:user_with_sha1_password).login, "foobar")
     assert_nil User.authenticate(users(:user_with_sha1_password).login, "wrong")
   end
-  
-  
+
+  def test_update_positions_of_contexts
+    u = users(:admin_user)
+    assert_equal "1,2,3,4,5,6,7,8,9,12", u.contexts.map(&:id).join(",")
+
+    u.contexts.update_positions [1,2,3,8,9,12,4,5,6,7]
+    assert_equal "1,2,3,8,9,12,4,5,6,7", u.contexts.reload.map(&:id).join(",")
+  end
+
+  def test_cache_notes_count_for_projects
+    u = users(:admin_user)
+    u.projects.each do |p|
+      assert_nil p.cached_note_count, "notes count should not be there"
+    end
+
+    u.projects.cache_note_counts
+
+    u.projects.each do |p|
+      assert !p.cached_note_count.nil?, "notes count should be there"
+    end
+  end
+
+  def test_actionize_projects
+    u = users(:admin_user)
+    assert_equal "1,2,3", u.projects.map(&:id).join(",")
+
+    u.projects.actionize
+
+    assert_equal "3,2,1", u.projects.reload.map(&:id).join(",")    
+  end
+
+  def test_remember_token
+    u = users(:admin_user)
+    assert_nil u.remember_token
+    assert_nil u.remember_token_expires_at
+
+    # set token on 2013-feb-28
+    Timecop.travel(Time.local(2013, 2, 28)) do
+      u.remember_me
+      assert_not_nil u.remember_token_expires_at
+
+      assert u.remember_token?
+    end
+
+    # token should be valid after 5 days
+    Timecop.travel(Time.local(2013, 3, 5)) do
+      assert u.remember_token?
+    end
+
+    # token should not be valid after more than 2 weeks
+    Timecop.travel(Time.local(2013, 3, 28)) do
+      assert !u.remember_token?
+    end
+  end
+
+  def test_count_todos_by_group
+    u = users(:admin_user)
+
+    # test group counts for projects and contexts
+    project_counts = u.todos.count_by_group(:project_id)
+    assert_equal "6,3,4,4", project_counts.map{|pc|pc[1]}.join(",")
+
+    context_counts = u.todos.count_by_group(:context_id)
+    assert_equal "7,3,1,3,1,2", context_counts.map{|cc|cc[1]}.join(",")
+
+    # add a todo to the first context and check that the count is increased
+    u.todos.create!(:description => "yet another todo", :context => u.contexts.first)
+
+    context_counts = u.todos.reload.count_by_group(:context_id)
+    assert_equal "8,3,1,3,1,2", context_counts.map{|cc|cc[1]}.join(",")
+  end
+    
   protected
-    def create_user(options = {})
-      options[:password_confirmation] = options[:password] unless options.has_key?(:password_confirmation) || !options.has_key?(:password)
-      User.create({ :login => 'quire', :password => 'quire', :password_confirmation => 'quire' }.merge(options))
-    end
-    
-    def assert_open_id_url_normalized_on_save(initial, expected)
-      u = users(:other_user)
-      u.open_id_url = initial
-      u.save
-      assert_equal expected, u.open_id_url
-    end
-    
+
+  def create_user(options = {})
+    options[:password_confirmation] = options[:password] unless options.has_key?(:password_confirmation) || !options.has_key?(:password)
+    User.create({ :login => 'quire', :password => 'quire', :password_confirmation => 'quire' }.merge(options))
+  end
+        
 end
