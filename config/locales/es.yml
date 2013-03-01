@@ -583,7 +583,7 @@ es:
       number_of_actions: "Number of actions"
     actions_lastyear_title: "Actions in the last 12 months"
     actions_min_completion_time: "The minimum time to complete is %{time}."
-    actions_min_max_completion_days: "The Max-/minimum days to complete is %{min}/%{max}."
+    actions_min_max_completion_days: "The Min-/maximum days to complete is %{min}/%{max}."
     actions_selected_from_week: "Actions selected from week "
     click_to_return: "Click %{link} to return to the statistics page."
     click_to_return_link: here
