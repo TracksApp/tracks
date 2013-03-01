@@ -190,5 +190,40 @@ class ProjectTest < ActiveSupport::TestCase
 
     assert p.shortened_name.html_safe?
   end
+
+  def test_note_count
+    p = users(:admin_user).projects.first
+    assert_not_nil p
+
+    assert_equal 2, p.note_count
+
+    p.notes.create(:user_id => p.user_id, :body => "new note")
+
+    assert_equal 3, p.note_count
+  end
+
+  def test_project_blocked
+    p = users(:admin_user).projects.first
+    todo_in_other_project = users(:admin_user).projects.last.todos.first
+
+    assert !p.blocked?, "first project should not be blocked"
+
+    p.complete!
+    assert !p.blocked?, "completed projects should not be blocked"
+
+    p.activate!
+    p.todos.each{|t| t.show_from = 2.weeks.from_now; t.save! }
+    assert p.blocked?, "projects with deferred todos should be blocked"
+  end
+
+  def test_project_stalled
+    p = users(:admin_user).projects.first
+
+    p.todos.each{|t| t.complete!}
+
+    assert p.todos.active.count == 0, "project should not have active todos"
+
+    assert p.stalled?, "project should be stalled"
+  end
   
 end
