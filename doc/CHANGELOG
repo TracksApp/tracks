@@ -15,6 +15,9 @@
 
 == Version 2.3devel
 
+New and changed features
+* You can now change a context to a closed state
+
 == Version 2.2
 
 The main change to this release of Tracks is the migration to Rails 3.2. We had 
