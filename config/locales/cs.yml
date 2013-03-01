@@ -592,7 +592,7 @@ cs:
       number_of_actions: "Počet úklolů"
     actions_lastyear_title: "Úkoly za posledních 12 měsíců"
     actions_min_completion_time: "Minimální čas k dokončení je %{time}."
-    actions_min_max_completion_days: "Maximum/minimum dní na dokončení je %{min}/%{max}."
+    actions_min_max_completion_days: "Minimum/maximum dní na dokončení je %{min}/%{max}."
     actions_selected_from_week: "Úkoly vybrané z týdne "
     click_to_return: "Klepněte %{link} pro návrat ke statistikám."
     click_to_return_link: zde

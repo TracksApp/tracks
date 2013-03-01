@@ -635,7 +635,7 @@ nl:
       number_of_actions: "Aantal acties"
     actions_lastyear_title: "Acties in de afgelopen 12 maanden"
     actions_min_completion_time: "De minimale tijd tot afronding is %{time}."
-    actions_min_max_completion_days: "De max-/minimum dagen tot voltooiing is %{min}/%{max}."
+    actions_min_max_completion_days: "De min-/maximum dagen tot voltooiing is %{min}/%{max}."
     actions_selected_from_week: "Gekozen acties van week"
     click_to_return: "Klik %{link} om terug te keren naar de statistieken pagina."
     click_to_return_link: hier
