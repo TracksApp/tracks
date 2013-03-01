@@ -25,23 +25,19 @@ module Stats
     private
 
     def max
-      @max ||= tag_counts.max
+      @max ||= counts.max
     end
 
-    # 2013-02-28: Possible bug.
-    # The original code always set the minimum to zero.
-    # This might need to use tag_counts.min
-    # https://github.com/TracksApp/tracks/commit/8c26ea7cb596c97e37213c0cc994e66ee5fd27b0#commitcomment-2719199
     def min
-      0
+      @min ||= counts.min
     end
 
     def divisor
       @divisor ||= ((max - min) / levels) + 1
     end
 
-    def tag_counts
-      @tag_counts ||= tags.map {|t| t.count.to_i}
+    def counts
+      @counts ||= tags.map {|t| t.count.to_i}
     end
 
     def top_tags
