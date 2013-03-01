@@ -66,18 +66,4 @@ class PreferencesControllerTest < ActionController::TestCase
     assert_equal old_password_hash, updated_admin_user.password
   end
 
-  test "should be able to change authentication type" do
-    assert Tracks::Config.auth_schemes.include?("open_id"), "open_id should be a valid authentication scheme"
-
-    login_as :admin_user
-
-    post :update, {
-      :id => users(:admin_user).id,
-      :user => { :first_name => 'Jane', :last_name => 'Doe', :auth_type => "open_id", :open_id_url => "http://test"},
-      :prefs => { :date_format => "%m-%d-%Y", :week_starts => "0", :show_number_completed => "10", :show_completed_projects_in_sidebar => "false", :show_hidden_contexts_in_sidebar => "false", :staleness_starts => "14", :due_style => "1" }}
-
-    updated_admin_user = users(:admin_user).reload
-    assert_equal "open_id", updated_admin_user.auth_type
-  end
-
 end

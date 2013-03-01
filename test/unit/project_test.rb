@@ -219,11 +219,17 @@ class ProjectTest < ActiveSupport::TestCase
   def test_project_stalled
     p = users(:admin_user).projects.first
 
+    p.hide!
+    assert !p.stalled?, "hidden projects are not stalled"
+
+    p.complete!
+    assert !p.stalled?, "completed projects are not stalled"
+
+    p.activate!
     p.todos.each{|t| t.complete!}
-
-    assert p.todos.active.count == 0, "project should not have active todos"
-
-    assert p.stalled?, "project should be stalled"
+    assert p.todos.active.empty?, "project should not have active todos"
+    assert p.todos.deferred_or_blocked.empty?, "there should not be deferred or blocked todos"
+    assert p.reload.stalled?, "project should be stalled"
   end
   
 end
