@@ -14,6 +14,5 @@ script: "bundle exec rake ci"
 
 bundler_args: --without development
 notifications:
-  recipients:
-    - tracksapp@googlegroups.com
+  email: false
 
