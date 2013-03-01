@@ -1,17 +1,19 @@
 <div class="stats_module">
 <h3><%= t("stats.tag_cloud#{key}_title") %></h3>
 <p><%= t("stats.tag_cloud#{key}_description") %></p>
-
-  <p>
-    <% if tag_cloud.tags.size < 1
+<p>
+<%
+  if tag_cloud.empty?
     t('stats.no_tags_available')
-    else
-    tag_cloud.tags.each do |t| %>
-    <%= link_to t.name, tag_path(t.name), {
-      :style => "font-size: " + "#{tag_cloud.font_size(t)}pt",
-      :title => t.count.to_s+" #{t('common.actions_midsentence', :count => t.count)}"}
-    -%> <%
+  else
+    tag_cloud.tags.each do |t|
+%><%=
+      link_to t.name, tag_path(t.name), {
+        :style => "font-size: " + "#{tag_cloud.font_size(t)}pt",
+        :title => "#{t.count} #{t('common.actions_midsentence', :count => t.count)}"}
+-%><%
+      end
     end
-    end-%>
+-%>
 </p>
 </div>
