@@ -1,6 +1,6 @@
 <div class="stats_module">
-<h3><%= t('stats.tag_cloud_title') %></h3>
-<p><%= t('stats.tag_cloud_description') %></p>
+<h3><%= t("stats.tag_cloud#{key}_title") %></h3>
+<p><%= t("stats.tag_cloud#{key}_description") %></p>
 
   <p>
     <% if tag_cloud.tags.size < 1
@@ -9,23 +9,6 @@
     tag_cloud.tags.each do |t| %>
     <%= link_to t.name, tag_path(t.name), {
       :style => "font-size: " + (9 + 2*(t.count.to_i-tag_cloud.min)/tag_cloud.divisor).to_s + "pt",
-      :title => t.count.to_s+" #{t('common.actions_midsentence', :count => t.count)}"}
-    -%> <%
-    end
-    end-%>
-</p>
-</div>
-
-<div class="stats_module">
-<h3><%= t('stats.tag_cloud_90days_title') %></h3>
-<p><%= t('stats.tag_cloud_90days_description') %></p>
-  <p>
-    <% if tag_cloud_90days.tags.size < 1
-    t('stats.no_tags_available')
-    else
-    tag_cloud_90days.tags.each do |t| %>
-    <%= link_to t.name, tag_path(t.name), {
-      :style => "font-size: " + (9 + 2*(t.count.to_i-tag_cloud_90days.min)/tag_cloud_90days.divisor).to_s + "pt",
       :title => t.count.to_s+" #{t('common.actions_midsentence', :count => t.count)}"}
     -%> <%
     end
