@@ -6,9 +6,6 @@ modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
 
-[![Build Status](https://travis-ci.org/TracksApp/tracks.png?branch=master)](https://travis-ci.org/TracksApp/tracks)
-[![Code Climate](https://codeclimate.com/github/TracksApp/tracks.png)](https://codeclimate.com/github/TracksApp/tracks)
-
 * Project homepage: http://getontracks.org/
 * Manual: http://getontracks.org/manual/
 * Source at GitHub: https://github.com/TracksApp/tracks
@@ -19,6 +16,9 @@ of the License, or (at your option) any later version.
 * Original developer: bsag (http://www.rousette.org.uk/)
 * Contributors: https://github.com/TracksApp/tracks/wiki/Contributors
 * Version: 2.3devel
+
+[![Build Status](https://travis-ci.org/TracksApp/tracks.png?branch=master)](https://travis-ci.org/TracksApp/tracks)
+[![Code Climate](https://codeclimate.com/github/TracksApp/tracks.png)](https://codeclimate.com/github/TracksApp/tracks)
 
 Full instructions for both new installations and upgrades from older installations of Tracks
 can be found within the /doc directory.
