@@ -3,32 +3,23 @@ Given /^I have no contexts$/ do
   Context.delete_all
 end
 
-Given /^there exists an active context called "([^"]*)" for user "([^"]*)"$/ do |context_name, login|
+Given /^there exists (an active|a hidden|a closed) context called "([^"]*)" for user "([^"]*)"$/ do |state, context_name, login|
   user = User.where(:login => login).first
   user.should_not be_nil
-  @context = user.contexts.where(:name => context_name, :state => 'active').first_or_create
+  context_state = {"an active" => "active", "a hidden" => "hidden", "a closed" => "closed"}[state]
+  @context = user.contexts.where(:name => context_name, :state => context_state).first_or_create
 end
 
 Given /^there exists a context called "([^"]*)" for user "([^"]*)"$/ do |context_name, login|
   step "there exists an active context called \"#{context_name}\" for user \"#{login}\""
 end
 
-Given /^there exists a hidden context called "([^"]*)" for user "([^"]*)"$/ do |context_name, login|
-  user = User.where(:login => login).first
-  user.should_not be_nil
-  @context = user.contexts.create!(:name => context_name, :state => 'hidden')
-end
-
 Given /^I have a context called "([^\"]*)"$/ do |context_name|
   step "there exists an active context called \"#{context_name}\" for user \"#{@current_user.login}\""
 end
 
-Given /^I have an active context called "([^\"]*)"$/ do |context_name|
-  step "there exists an active context called \"#{context_name}\" for user \"#{@current_user.login}\""
-end
-
-Given /^I have a hidden context called "([^\"]*)"$/ do |context_name|
-  step "there exists a hidden context called \"#{context_name}\" for user \"#{@current_user.login}\""
+Given /^I have (an active|a hidden|a closed) context called "([^\"]*)"$/ do |state, context_name|
+  step "there exists #{state} context called \"#{context_name}\" for user \"#{@current_user.login}\""
 end
 
 Given /^I have the following contexts:$/ do |table|

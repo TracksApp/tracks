@@ -11,6 +11,7 @@ class ContextsController < ApplicationController
     @all_contexts = current_user.contexts
     @active_contexts = current_user.contexts.active
     @hidden_contexts = current_user.contexts.hidden
+    @closed_contexts = current_user.contexts.closed
     init_not_done_counts(['context']) unless request.format == :autocomplete
 
     respond_to do |format|
@@ -96,24 +97,17 @@ class ContextsController < ApplicationController
       params['context']['name'] = params['value']
     end
 
-    @original_context_hidden = @context.hidden?
+    @original_context_state = @context.state
     @context.attributes = params["context"]
-    if params['context_state']
-      if params['context_state']['hide'] == '1'
-        @context.hide! if !@context.hidden?
-      else
-        @context.activate! if @context.hidden?
-      end
-    else
-      @context.activate! if @context.hidden?
-    end
-
     @saved = @context.save
 
     if @saved
       if boolean_param('wants_render')
-        @state_changed = (@original_context_hidden != @context.hidden?)
+        @state_changed = (@original_context_state != @context.state)
         @new_state = @context.state if @state_changed
+        @active_contexts = current_user.contexts.active
+        @hidden_contexts = current_user.contexts.hidden
+        @closed_contexts = current_user.contexts.closed
         respond_to do |format|
           format.js
         end
@@ -202,8 +196,10 @@ class ContextsController < ApplicationController
   def update_state_counts
     @active_contexts_count = current_user.contexts.active.count
     @hidden_contexts_count = current_user.contexts.hidden.count
+    @closed_contexts_count = current_user.contexts.closed.count
     @show_active_contexts = @active_contexts_count > 0
     @show_hidden_contexts = @hidden_contexts_count > 0
+    @show_closed_contexts = @closed_contexts_count > 0
   end
 
   def render_contexts_html
@@ -211,9 +207,11 @@ class ContextsController < ApplicationController
       @page_title = "TRACKS::List Contexts"
       @no_active_contexts = @active_contexts.empty?
       @no_hidden_contexts = @hidden_contexts.empty?
+      @no_closed_contexts = @closed_contexts.empty?
       @active_count = @active_contexts.size
       @hidden_count = @hidden_contexts.size
-      @count = @active_count + @hidden_count
+      @closed_count = @closed_contexts.size
+      @count = @active_count + @hidden_count + @closed_count
       @new_context = current_user.contexts.build
 
       render

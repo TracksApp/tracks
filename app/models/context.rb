@@ -7,6 +7,7 @@ class Context < ActiveRecord::Base
 
   scope :active, :conditions => { :state => :active }
   scope :hidden, :conditions => { :state => :hidden }
+  scope :closed, :conditions => { :state => :closed }
 
   acts_as_list :scope => :user, :top_of_list => 0
 

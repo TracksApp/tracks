@@ -2,18 +2,14 @@
   hide_empty_message();
   TracksPages.hide_errors();
   TracksPages.set_page_badge(<%= @down_count %>);
-  add_context("<%=@context.hidden? ? 'hidden' : 'active'%>");
+  add_context("<%=@context.state%>");
   clear_form();
 <% else -%>
   TracksPages.show_errors(html_for_error_messages());
 <% end -%>
 
 function hide_empty_message() {
-<% if @context.hidden? -%>
-  $('div#hidden-contexts-empty-nd').hide();
-<% else -%>
-  $('div#active-contexts-empty-nd').hide();
-<% end -%>
+  $('div#<%=@context.state%>-contexts-empty-nd').hide();
 }
 
 function add_context(state) {

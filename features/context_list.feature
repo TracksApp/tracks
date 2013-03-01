@@ -49,18 +49,23 @@ Feature: Manage the list of contexts
     And the context list badge for active contexts should show 1
 
   @javascript
-  Scenario: Delete last context from context page should remove the contexts container for hidden or active contexts
+  Scenario: Delete last context from context page should remove the contexts container
     Given I have a context called "@computer"
     And I have a hidden context called "@ipad"
+    And I have a closed context called "@ibm-pc"
     When I go to the contexts page
     And I should see that the context container for active contexts is present
     And I should see that the context container for hidden contexts is present
+    And I should see that the context container for closed contexts is present
     When I delete the context "@computer"
     Then I should see that a context named "@computer" is not present
     And I should see that the context container for active contexts is not present
     When I delete the context "@ipad"
     Then I should see that a context named "@ipad" is not present
     And I should see that the context container for hidden contexts is not present
+    When I delete the context "@ibm-pc"
+    Then I should see that a context named "@ibm-pc" is not present
+    And I should see that the context container for closed contexts is not present
 
   @javascript 
   Scenario: Delete context from context page right after an edit
@@ -102,12 +107,16 @@ Feature: Manage the list of contexts
     When I go to the contexts page
     Then I should see empty message for active contexts
     And I should see empty message for hidden contexts
+    And I should see empty message for closed contexts
     When I add a new active context "@active"
     Then I should see the context "@active" under "active"
     And I should not see empty message for active contexts
     When I add a new hidden context "@hidden"
     Then I should see the context "@hidden" under "hidden"
     And I should not see empty message for hidden contexts
+    When I edit the state of context "@hidden" to closed
+    Then I should not see empty message for closed contexts
+    And I should see the context "@hidden" under "closed"
 
   @javascript
   Scenario: I can drag and drop to order the contexts

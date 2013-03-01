@@ -783,15 +783,23 @@ var ContextListPage = {
     update_state_count: function(state, count) {
         $('#'+state+'-contexts-count').html(count);
     },
-    update_all_states_count: function (active_count, hidden_count, completed_count) {
-        $(["active", "hidden"]).each(function() {
+    update_all_states_count: function (active_count, hidden_count, closed_count) {
+        $(["active", "hidden", "closed"]).each(function() {
             ContextListPage.update_state_count(this, eval(this+'_count'));
         });
     },
-    show_or_hide_all_state_containers: function (show_active, show_hidden, show_completed) {
-        $(["active", "hidden"]).each(function() {
+    show_or_hide_all_state_containers: function (show_active, show_hidden, show_closed) {
+        $(["active", "hidden", "closed"]).each(function() {
             ContextListPage.set_state_container_visibility(this, eval('show_'+this));
+            ContextListPage.hide_empty_message(this, !eval('show_'+this));
         });
+    },
+    hide_empty_message: function(state, set_visible) {
+        if(set_visible) {
+            $('div#'+state+'-contexts-empty-nd').slideDown("fast");
+        } else {
+            $('div#'+state+'-contexts-empty-nd').slideUp("fast");
+        }
     },
     set_state_container_visibility: function (state, set_visible) {
         if (set_visible) {

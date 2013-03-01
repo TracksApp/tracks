@@ -892,6 +892,7 @@ en:
     edit_context: Edit context
     hide_form_title: Hide new context form
     context_hide: Hide from front page?
+    context_state: Context state
     hidden_contexts: Hidden contexts
     no_contexts_active: Currently there are no active contexts
     show_form: Create a new context

@@ -1,6 +1,7 @@
 <div id="display_box">
   <%= render :partial => 'context_state_group', :object => @active_contexts, :locals => { :state => 'active', :no_contexts => @no_active_contexts} %>
   <%= render :partial => 'context_state_group', :object => @hidden_contexts, :locals => { :state => 'hidden', :no_contexts => @no_hidden_contexts} %>
+  <%= render :partial => 'context_state_group', :object => @closed_contexts, :locals => { :state => 'closed', :no_contexts => @no_closed_contexts} %>
 </div>
 
 <div id="input_box">

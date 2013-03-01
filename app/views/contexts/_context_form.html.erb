@@ -12,8 +12,11 @@
   <label for="context_name"><%= t 'contexts.context_name' %></label><br/>
   <%= text_field('context', 'name', :class => 'context-name', :tabindex => next_tab_index) %><br/>
 
-  <label for="context_hide"><%= t 'contexts.context_hide' %>  </label>
-  <%= check_box_tag('context_state[hide]', 1, context.hidden?, {:class => 'context-hide', :tabindex => next_tab_index}) %>
+  <label for="context_hide"><%= t 'contexts.context_state' %> </label><br/>
+  <% ['active', 'hidden', 'closed'].each do | state | %>
+    <%= radio_button(:context, 'state', state, {:tabindex => next_tab_index}) %> <%= state.titlecase %>
+  <% end %> 
+
   <input type="hidden" name="wants_render" value="true" />
 
   <div class="submit_box">
