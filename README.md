@@ -7,7 +7,7 @@ as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
 
 [![Build Status](https://travis-ci.org/TracksApp/tracks.png?branch=master)](https://travis-ci.org/TracksApp/tracks)
-[![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/TracksApp/tracks)
+[![Code Climate](https://codeclimate.com/github/TracksApp/tracks.png)](https://codeclimate.com/github/TracksApp/tracks)
 
 * Project homepage: http://getontracks.org/
 * Manual: http://getontracks.org/manual/
