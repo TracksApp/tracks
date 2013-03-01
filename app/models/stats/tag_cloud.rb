@@ -14,7 +14,7 @@ module Stats
     end
 
     def font_size(tag)
-      (9 + 2*(tag.count.to_i-min)/divisor)
+      (9 + 2*(tag.count-min)/divisor)
     end
 
     private
