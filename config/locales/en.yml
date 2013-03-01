@@ -302,7 +302,7 @@ en:
     projects: Projects
     action_completion_time_title: Completion time (all completed actions)
     actions_last_year: Actions in the last years
-    actions_min_max_completion_days: The Max-/minimum days to complete is %{min}/%{max}.
+    actions_min_max_completion_days: The Min-/maximum days to complete is %{min}/%{max}.
     tags: Tags
     actions_min_completion_time: The minimum time to complete is %{time}.
     no_tags_available: no tags available

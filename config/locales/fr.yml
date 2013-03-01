@@ -629,7 +629,7 @@ fr:
       number_of_actions: "Nombre d'actions"
     actions_lastyear_title: "Actions des 12 derniers mois"
     actions_min_completion_time: "Le temps minimum de réalisation est %{time}."
-    actions_min_max_completion_days: "Le nombre max/min de jours pour réaliser est %{min}/%{max}."
+    actions_min_max_completion_days: "Le nombre min/max de jours pour réaliser est %{min}/%{max}."
     actions_selected_from_week: "Actions selectionnées depuis la semaine"
     click_to_return: "Cliquer %{link} pour revenir à la page des statistiques"
     click_to_return_link: ici
