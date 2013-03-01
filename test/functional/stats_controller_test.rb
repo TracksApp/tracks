@@ -188,7 +188,7 @@ class StatsControllerTest < ActionController::TestCase
     assert_equal   3,   assigns['max_actions'], "3 completed within one week"
     assert_equal  11,   assigns['actions_completion_time_array'].size, "there should be 10 weeks of data + 1 for the rest"
     assert_equal   1,   assigns['actions_completion_time_array'][10], "there is one completed todo after the 10 weeks cut_off"
-    assert_equal 100.0, assigns['cumm_percent_done'][10], "cummulative percentage should add up to 100%"
+    assert_equal 100.0, assigns['cum_percent_done'][10], "cumulative percentage should add up to 100%"
   end
 
   def test_actions_running_time_data
@@ -207,7 +207,7 @@ class StatsControllerTest < ActionController::TestCase
     assert_equal   2,   assigns['max_actions'], "2 actions running long together"
     assert_equal  18,   assigns['actions_running_time_array'].size, "there should be 17 weeks ( < cut_off) of data + 1 for the rest"
     assert_equal   1,   assigns['actions_running_time_array'][17], "there is one running todos in week 17 and zero after 17 weeks ( < cut off; ) "
-    assert_equal 100.0, assigns['cumm_percent_done'][17], "cummulative percentage should add up to 100%"
+    assert_equal 100.0, assigns['cum_percent_done'][17], "cumulative percentage should add up to 100%"
   end
 
   def test_actions_open_per_week_data
@@ -247,7 +247,7 @@ class StatsControllerTest < ActionController::TestCase
     assert_equal   1,   assigns['actions_running_time_array'][0], "there is one running todos and one deferred todo created in week 1"
     assert_equal  18,   assigns['actions_running_time_array'].size, "there should be 17 weeks ( < cut_off) of data + 1 for the rest"
     assert_equal   1,   assigns['actions_running_time_array'][17], "there is one running todos in week 17 and zero after 17 weeks ( < cut off; ) "
-    assert_equal 100.0, assigns['cumm_percent_done'][17], "cummulative percentage should add up to 100%"
+    assert_equal 100.0, assigns['cum_percent_done'][17], "cumulative percentage should add up to 100%"
   end
 
   def test_context_total_actions_data

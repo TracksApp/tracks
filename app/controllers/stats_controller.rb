@@ -114,8 +114,8 @@ class StatsController < ApplicationController
     @actions_completion_time_array = cut_off_array_with_sum(@actions_completed_per_week_array, @count)
     @max_actions = @actions_completion_time_array.max
 
-    # get percentage done cummulative
-    @cumm_percent_done = convert_to_cummulative_array(@actions_completion_time_array, @actions_completion_time.count)
+    # get percentage done cumulative
+    @cum_percent_done = convert_to_cumulative_array(@actions_completion_time_array, @actions_completion_time.count)
 
     render :layout => false
   end
@@ -134,8 +134,8 @@ class StatsController < ApplicationController
     @actions_running_time_array = cut_off_array_with_sum(@actions_running_per_week_array, @count)
     @max_actions = @actions_running_time_array.max
 
-    # get percentage done cummulative
-    @cumm_percent_done = convert_to_cummulative_array(@actions_running_time_array, @actions_running_time.count )
+    # get percentage done cumulative
+    @cum_percent_done = convert_to_cumulative_array(@actions_running_time_array, @actions_running_time.count )
       
     render :layout => false
   end
@@ -163,8 +163,8 @@ class StatsController < ApplicationController
     @actions_running_time_array = cut_off_array_with_sum(@actions_running_per_week_array, @count)
     @max_actions = @actions_running_time_array.max
 
-    # get percentage done cummulative
-    @cumm_percent_done = convert_to_cummulative_array(@actions_running_time_array, @actions_running_time.count )
+    # get percentage done cumulative
+    @cum_percent_done = convert_to_cumulative_array(@actions_running_time_array, @actions_running_time.count )
 
     render :layout => false
   end
@@ -669,10 +669,10 @@ class StatsController < ApplicationController
     return Array.new(cut_off){|i| array[i]||0}
   end
 
-  def convert_to_cummulative_array(array, max)
+  def convert_to_cumulative_array(array, max)
     # calculate fractions
     a = Array.new(array.size){|i| array[i]*100.0/max}
-    # make cummulative
+    # make cumulative
     1.upto(array.size-1){ |i| a[i] += a[i-1] }
     return a
   end
