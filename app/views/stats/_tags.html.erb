@@ -8,7 +8,7 @@
     else
     tag_cloud.tags.each do |t| %>
     <%= link_to t.name, tag_path(t.name), {
-      :style => "font-size: " + (9 + 2*(t.count.to_i-tag_cloud.min)/tag_cloud.divisor).to_s + "pt",
+      :style => "font-size: " + "#{tag_cloud.font_size(t)}pt",
       :title => t.count.to_s+" #{t('common.actions_midsentence', :count => t.count)}"}
     -%> <%
     end

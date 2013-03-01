@@ -10,9 +10,19 @@ module Stats
       @levels = 10
     end
 
+    def empty?
+      tags.empty?
+    end
+
+    def font_size(tag)
+      (9 + 2*(tag.count.to_i-min)/divisor)
+    end
+
     def tags
       @tags ||= top_tags
     end
+
+    private
 
     def max
       @max ||= tag_counts.max
@@ -29,8 +39,6 @@ module Stats
     def divisor
       @divisor ||= ((max - min) / levels) + 1
     end
-
-    private
 
     def tag_counts
       @tag_counts ||= tags.map {|t| t.count.to_i}
