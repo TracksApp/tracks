@@ -569,12 +569,9 @@ class StatsController < ApplicationController
     query << " ORDER BY count DESC, name"
     query << " LIMIT 100"
     @tags_for_cloud = Tag.find_by_sql(query).sort_by { |tag| tag.name.downcase }
-
-    max, @tags_min = 0, 0
-    @tags_for_cloud.each { |t|
-      max = [t.count.to_i, max].max
-      @tags_min = [t.count.to_i, @tags_min].min
-    }
+    tag_counts = @tags_for_cloud.map(&:count)
+    max = tag_counts.max || 0
+    @tags_min = tag_counts.min || 0
 
     @tags_divisor = ((max - @tags_min) / levels) + 1
 
@@ -594,12 +591,9 @@ class StatsController < ApplicationController
       [query, current_user.id, @cut_off_3months, @cut_off_3months]
     ).sort_by { |tag| tag.name.downcase }
 
-    max_90days, @tags_min_90days = 0, 0
-    @tags_for_cloud_90days.each { |t|
-      max_90days = [t.count.to_i, max_90days].max
-      @tags_min_90days = [t.count.to_i, @tags_min_90days].min
-    }
-
+    tag_counts_90days = @tags_for_cloud_90days.map(&:count)
+    max_90days = tag_counts_90days.max || 0
+    @tags_min_90days = tag_counts_90days.min || 0
     @tags_divisor_90days = ((max_90days - @tags_min_90days) / levels) + 1
   end
 
