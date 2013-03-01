@@ -553,14 +553,12 @@ class StatsController < ApplicationController
 
   def get_stats_tags
     cloud = Stats::TagCloud.new(current_user)
-    cloud.compute
 
     @tags_for_cloud = cloud.tags
     @tags_min = cloud.min
     @tags_divisor = cloud.divisor
 
     cloud = Stats::TagCloud.new(current_user, @cut_off_3months)
-    cloud.compute
     @tags_for_cloud_90days = cloud.tags
     @tags_min_90days = cloud.min
     @tags_divisor_90days = cloud.divisor
