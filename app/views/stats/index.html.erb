@@ -15,7 +15,8 @@
     <%= render :partial => 'projects' -%>
 
     <h2><%= t('stats.tags') %></h2>
-    <%= render :partial => 'tags' -%>
+    <%= render :partial => 'tags', :locals => {:tag_cloud => @tag_cloud, :key => ''} -%>
+    <%= render :partial => 'tags', :locals => {:tag_cloud => @tag_cloud_90days, :key => '_90days'} -%>
 
   <% else -%>
 
