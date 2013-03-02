@@ -9,7 +9,7 @@
     tag_cloud.tags.each do |t|
 %><%=
       link_to t.name, tag_path(t.name), {
-        :style => "font-size: " + "#{tag_cloud.font_size(t)}pt",
+        :style => "font-size: " + "#{font_size(tag_cloud, t)}pt",
         :title => "#{t.count} #{t('common.actions_midsentence', :count => t.count)}"}
 -%><%
       end
