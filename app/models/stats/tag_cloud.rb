@@ -13,8 +13,8 @@ module Stats
       tags.empty?
     end
 
-    def font_size(tag)
-      (9 + 2*(tag.count-min)/divisor)
+    def relative_size(tag)
+      (tag.count - min) / divisor
     end
 
     private
