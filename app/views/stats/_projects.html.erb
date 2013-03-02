@@ -6,8 +6,8 @@
     <%= i -%> - <%= link_to p.name, {:controller => "projects", :action => "show", :id => p.id}%> (<%=p.count %> <%= t('common.actions_midsentence', :count => p.count) %>) <br/>
   <% end
   if i < 10
-    i.upto 10 do |j| -%>
-      <%= i -%> - <%=t('common.not_available_abbr')%> (<%=t('common.not_available_abbr')%>) <br/>
+    (i+1).upto 10 do |j| -%>
+      <%= j -%> - <%=t('common.not_available_abbr')%> (<%=t('common.not_available_abbr')%>) <br/>
     <% end
   end
   -%>
@@ -21,8 +21,8 @@
     <%= i -%> - <%= link_to p.name, {:controller => "projects", :action => "show", :id => p.id} %> (<%=p.count %> <%= t('common.actions_midsentence', :count => p.count) %>) <br/>
   <% end
   if i < 10
-    i.upto 10 do |j| -%>
-      <%= i -%> - <%=t('common.not_available_abbr')%> (<%=t('common.not_available_abbr')%>) <br/>
+    (i+1).upto 10 do |j| -%>
+      <%= j -%> - <%=t('common.not_available_abbr')%> (<%=t('common.not_available_abbr')%>) <br/>
     <% end
   end
   -%>
