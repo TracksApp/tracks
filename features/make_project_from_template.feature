@@ -14,7 +14,7 @@ Feature: Create project from template
     And I have logged in as "testuser" with password "secret"
     And I have a context called "Context A"
   
-  @javascript @announce @wip
+  @javascript @aruba 
   Scenario: Create a project with one task
     Given a template that looks like
       """
@@ -25,7 +25,7 @@ Feature: Create project from template
     Then I should have a project called "My first project"
     And I should have 1 todo in project "My first project"
     
-  @javascript @wip
+  @javascript @aruba 
   Scenario: Create a project with dependent tasks
     Given a template that looks like
       """

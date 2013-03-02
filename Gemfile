@@ -50,8 +50,7 @@ group :test do
   gem "rspec-expectations"
   gem "database_cleaner"
 
-  # aruba 0.5 conflics with newer gems
-  # gem "aruba", :require => false
+  gem "aruba", :require => false
   gem "simplecov"
   gem "timecop"
 
