@@ -1,6 +1,6 @@
-<%= render :partial => 'chart', :locals => {:width => @pie_width, :height => @pie_height, :data => url_for(:action => 'context_total_actions_data')} -%>
-
-<%= render :partial => 'chart', :locals => {:width => @pie_width, :height => @pie_height, :data => url_for(:action => 'context_running_actions_data')} -%>
+<% @context_charts.each do |chart| %><%=
+    render :partial => 'chart', :locals => {:chart => chart}
+-%><% end %>
 
 <br style="clear:both">
 

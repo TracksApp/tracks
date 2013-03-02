@@ -1,4 +1,4 @@
-<%= render :partial => 'chart', :locals => {:width => @chart_width, :height => @chart_height, :data => url_for(:action => @chart_name)} -%>
+<%= render :partial => 'chart', :locals => {:chart => @chart} -%>
 <br/>
 <p>
 <%= t('stats.click_to_update_actions') %> <%= raw t('stats.click_to_return', :link => link_to(t('stats.click_to_return_link'), stats_path)) %>
