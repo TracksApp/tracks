@@ -50,8 +50,7 @@ class StatsController < ApplicationController
 
   def actions_done_last_years
     @page_title = t('stats.index_title')
-    @chart_width = 900
-    @chart_height = 400
+    @chart = Stats::Chart.new('actions_done_lastyears_data', :height => 400, :width => 900)
   end
 
   def actions_done_lastyears_data
@@ -309,7 +308,7 @@ class StatsController < ApplicationController
       week_from = params['index'].to_i
       week_to = week_from+1
 
-      @chart_name = "actions_visible_running_time_data"
+      @chart = Stats::Chart.new('actions_visible_running_time_data')
       @page_title = t('stats.actions_selected_from_week')
       @further = false
       if params['id'] == 'avrt_end'
@@ -334,7 +333,7 @@ class StatsController < ApplicationController
       week_from = params['index'].to_i
       week_to = week_from+1
 
-      @chart_name = "actions_running_time_data"
+      @chart = Stats::Chart.new('actions_running_time_data')
       @page_title = "Actions selected from week "
       @further = false
       if params['id'] == 'art_end'
@@ -421,12 +420,6 @@ class StatsController < ApplicationController
   def init
     @me = self # for meta programming
 
-    # default chart dimensions
-    @chart_width=460
-    @chart_height=250
-    @pie_width=@chart_width
-    @pie_height=325
-
     # get the current date wih time set to 0:0
     @today = Time.zone.now.utc.beginning_of_day
 
@@ -468,6 +461,27 @@ class StatsController < ApplicationController
     # get count of actions done in the past 12 months.
     @sum_actions_done_last12months = current_user.todos.completed.completed_after(@cut_off_year).count
     @sum_actions_created_last12months = current_user.todos.created_after(@cut_off_year).count
+
+    @completion_charts = %w{
+     actions_done_last30days_data
+     actions_done_last12months_data
+     actions_completion_time_data
+    }.map do |action|
+      Stats::Chart.new(action)
+    end
+
+    @timing_charts = %w{
+      actions_visible_running_time_data
+      actions_running_time_data
+      actions_open_per_week_data
+      actions_day_of_week_all_data
+      actions_day_of_week_30days_data
+      actions_time_of_day_all_data
+      actions_time_of_day_30days_data
+    }.map do |action|
+      Stats::Chart.new(action)
+    end
+
   end
 
   def get_stats_contexts
@@ -496,6 +510,13 @@ class StatsController < ApplicationController
         "GROUP BY c.id, c.name ORDER BY total DESC " +
         "LIMIT 5"
     )
+
+    @context_charts = %w{
+      context_total_actions_data
+      context_running_actions_data
+    }.map do |action|
+      Stats::Chart.new(action, :height => 325)
+    end
   end
 
   def get_stats_projects
