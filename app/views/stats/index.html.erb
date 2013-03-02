@@ -6,7 +6,7 @@
   <% unless current_user.todos.empty? -%>
 
     <h2><%= t('stats.actions') %></h2>
-    <%= render :partial => 'actions' -%>
+    <%= render :partial => 'actions', :locals => {:actions => @actions} -%>
 
     <h2><%= t('stats.contexts') %></h2>
     <%= render :partial => 'contexts' -%>
