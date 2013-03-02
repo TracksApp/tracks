@@ -9,8 +9,9 @@ class StatsController < ApplicationController
     @page_title = t('stats.index_title')
 
     @first_action = current_user.todos.reorder("created_at ASC").first
-    @tags_count = get_total_number_of_tags_of_user
-    @unique_tags_count = get_unique_tags_of_user.size
+    tag_ids = Stats::UserTagsQuery.new(current_user).result.map(&:id)
+    @tags_count = tag_ids.size
+    @unique_tags_count = tag_ids.uniq.size
     @hidden_contexts = current_user.contexts.hidden
 
     get_stats_actions
@@ -394,28 +395,6 @@ class StatsController < ApplicationController
     end
 
     @truncate_chars = 15
-  end
-
-  def get_unique_tags_of_user
-    tag_ids = current_user.todos.find_by_sql([
-        "SELECT DISTINCT tags.id as id "+
-          "FROM tags, taggings, todos "+
-          "WHERE tags.id = taggings.tag_id " +
-          "AND taggings.taggable_id = todos.id "+
-          "AND todos.user_id = #{current_user.id}"])
-    tags_ids_s = tag_ids.map(&:id).sort.join(",")
-    return {} if tags_ids_s.blank?  # return empty hash for .size to work
-    return Tag.where("id in (#{tags_ids_s})")
-  end
-
-  def get_total_number_of_tags_of_user
-    # same query as get_unique_tags_of_user except for the DISTINCT
-    return current_user.todos.find_by_sql([
-        "SELECT tags.id as id "+
-          "FROM tags, taggings, todos "+
-          "WHERE tags.id = taggings.tag_id " +
-          "AND taggings.taggable_id = todos.id " +
-          "AND todos.user_id = #{current_user.id}"]).size
   end
 
   def init
