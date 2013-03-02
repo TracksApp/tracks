@@ -464,31 +464,8 @@ class StatsController < ApplicationController
   end
 
   def get_stats_contexts
-    # get action count per context for TOP 5
-    #
-    # Went from GROUP BY c.id to c.id, c.name for compatibility with postgresql.
-    # Since the name is forced to be unique, this should work.
-    @actions_per_context = current_user.contexts.find_by_sql(
-      "SELECT c.id AS id, c.name AS name, count(*) AS total "+
-        "FROM contexts c, todos t "+
-        "WHERE t.context_id=c.id "+
-        "AND t.user_id=#{current_user.id} " +
-        "GROUP BY c.id, c.name ORDER BY total DESC " +
-        "LIMIT 5"
-    )
-
-    # get incomplete action count per visible context for TOP 5
-    #
-    # Went from GROUP BY c.id to c.id, c.name for compatibility with postgresql.
-    # Since the name is forced to be unique, this should work.
-    @running_actions_per_context = current_user.contexts.find_by_sql(
-      "SELECT c.id AS id, c.name AS name, count(*) AS total "+
-        "FROM contexts c, todos t "+
-        "WHERE t.context_id=c.id AND t.completed_at IS NULL AND NOT c.state='hidden' "+
-        "AND t.user_id=#{current_user.id} " +
-        "GROUP BY c.id, c.name ORDER BY total DESC " +
-        "LIMIT 5"
-    )
+    @actions_per_context = Stats::TopContextsQuery.new(current_user).result
+    @running_actions_per_context = Stats::TopContextsQuery.new(current_user, :running).result
 
     @context_charts = %w{
       context_total_actions_data
