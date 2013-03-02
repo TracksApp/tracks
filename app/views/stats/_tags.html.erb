@@ -7,11 +7,11 @@
     t('stats.no_tags_available')
   else
     tag_cloud.tags.each do |t|
-%><%=
+%> <%=
       link_to t.name, tag_path(t.name), {
         :style => "font-size: " + "#{font_size(tag_cloud, t)}pt",
         :title => "#{t.count} #{t('common.actions_midsentence', :count => t.count)}"}
--%><%
+-%> <%
       end
     end
 -%>
