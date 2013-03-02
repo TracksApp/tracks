@@ -31,7 +31,16 @@ class ContextsControllerTest < ActionController::TestCase
     assert_ajax_create_increments_count '@newcontext'
   end
 
-  # text feed
+  def test_update_handles_invalid_state_change
+    login_as :admin_user
+    context = users(:admin_user).contexts.first
+    xhr :put, :update, :id => context.id, :context => {:name => "@name", :state => 'closed'}
+
+    assert_response 200
+    assert /The context cannot be closed if you have uncompleted actions/.match(@response.body)
+  end
+
+  # TXT feed
   
   def test_text_feed_content
     login_as :admin_user

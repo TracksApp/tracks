@@ -91,47 +91,30 @@ class ContextsController < ApplicationController
   # Edit the details of the context
   #
   def update
-    params['context'] ||= {}
-    success_text = if params['field'] == 'name' && params['value']
-      params['context']['id'] = params['id']
-      params['context']['name'] = params['value']
-    end
+    process_params_for_update
 
-    @original_context_state = @context.state
     @context.attributes = params["context"]
     @saved = @context.save
+    @state_saved = set_state_for_update(@new_state) 
+    @saved = @saved && @state_saved
 
     if @saved
-      if boolean_param('wants_render')
-        @state_changed = (@original_context_state != @context.state)
-        @new_state = @context.state if @state_changed
-        @active_contexts = current_user.contexts.active
-        @hidden_contexts = current_user.contexts.hidden
-        @closed_contexts = current_user.contexts.closed
-        respond_to do |format|
-          format.js
-        end
+      @state_changed = (@original_context_state != @context.state)
+      @new_state = @context.state if @state_changed
+      @active_contexts = current_user.contexts.active
+      @hidden_contexts = current_user.contexts.hidden
+      @closed_contexts = current_user.contexts.closed
+    end
 
-        # TODO is this param ever used? is this dead code?
-
-      elsif boolean_param('update_context_name')
-        @contexts = current_user.projects
-        render :template => 'contexts/update_context_name.js.rjs'
-        return
-      else
-        render :text => success_text || 'Success'
-      end
-    else
-      respond_to do |format|
-        format.js
-        format.xml {
+    respond_to do |format|
+      format.js
+      format.xml {
           if @saved
             render :xml => @context.to_xml( :except => :user_id )
           else
             render :text => "Error on update: #{@context.errors.full_messages.inject("") {|v, e| v + e + " " }}", :status => 409
           end
         }
-      end
     end
   end
 
@@ -267,6 +250,36 @@ class ContextsController < ApplicationController
   def init
     @source_view = params['_source_view'] || 'context'
     init_data_for_sidebar
+  end
+
+  def process_params_for_update
+    params['context'] ||= {}
+    @success_text = if params['field'] == 'name' && params['value']
+      params['context']['id'] = params['id']
+      params['context']['name'] = params['value']
+    end
+
+    @original_context_state = @context.state
+    @new_state = params['context']['state']
+    params['context'].delete('state')
+  end
+
+  def set_state_for_update(new_state)
+    begin
+      unless @original_context_state == new_state
+        if new_state == 'active'
+          @context.activate!
+        elsif new_state == 'hidden'
+          @context.hide!
+        elsif new_state == 'closed'
+          @context.close!
+        end
+      end
+      return true
+    rescue AASM::InvalidTransition
+      @context.errors.add(:state, "cannot be changed. The context cannot be closed if you have uncompleted actions in this context")
+      return false
+    end
   end
 
 end

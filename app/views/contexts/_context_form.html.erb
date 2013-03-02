@@ -15,9 +15,8 @@
   <label for="context_hide"><%= t 'contexts.context_state' %> </label><br/>
   <% ['active', 'hidden', 'closed'].each do | state | %>
     <%= radio_button(:context, 'state', state, {:tabindex => next_tab_index}) %> <%= state.titlecase %>
-  <% end %> 
-
-  <input type="hidden" name="wants_render" value="true" />
+  <% end %>
+  </br></br>
 
   <div class="submit_box">
     <div class="widgets">
