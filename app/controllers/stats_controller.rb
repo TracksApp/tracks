@@ -13,8 +13,8 @@ class StatsController < ApplicationController
     @tags_count = tag_ids.size
     @unique_tags_count = tag_ids.uniq.size
     @hidden_contexts = current_user.contexts.hidden
+    @actions = Stats::Actions.new(current_user)
 
-    get_stats_actions
     get_stats_contexts
     get_stats_projects
     get_stats_tags
@@ -385,60 +385,6 @@ class StatsController < ApplicationController
     @cut_off_year_plus3 = 15.months.ago.beginning_of_day
     @cut_off_month = 1.month.ago.beginning_of_day
     @cut_off_3months = 3.months.ago.beginning_of_day
-  end
-
-  def get_stats_actions
-    # time to complete
-    @completed_actions = current_user.todos.completed.select("completed_at, created_at")
-
-    actions_sum, actions_max = 0,0
-    actions_min = @completed_actions.first ? @completed_actions.first.completed_at - @completed_actions.first.created_at : 0
-    
-    @completed_actions.each do |r|
-      actions_sum += (r.completed_at - r.created_at)
-      actions_max = [(r.completed_at - r.created_at), actions_max].max
-      actions_min = [(r.completed_at - r.created_at), actions_min].min
-    end
-
-    sum_actions = @completed_actions.size
-    sum_actions = 1 if sum_actions==0 # to prevent dividing by zero
-
-    @actions_avg_ttc = (actions_sum/sum_actions)/SECONDS_PER_DAY
-    @actions_max_ttc = actions_max/SECONDS_PER_DAY
-    @actions_min_ttc = actions_min/SECONDS_PER_DAY
-
-    min_ttc_sec = Time.utc(2000,1,1,0,0)+actions_min # convert to a datetime
-    @actions_min_ttc_sec = (min_ttc_sec).strftime("%H:%M:%S")
-    @actions_min_ttc_sec = (actions_min / SECONDS_PER_DAY).round.to_s + " days " + @actions_min_ttc_sec if actions_min > SECONDS_PER_DAY
-
-    # get count of actions created and actions done in the past 30 days.
-    @sum_actions_done_last30days = current_user.todos.completed.completed_after(@cut_off_month).count
-    @sum_actions_created_last30days = current_user.todos.created_after(@cut_off_month).count
-
-    # get count of actions done in the past 12 months.
-    @sum_actions_done_last12months = current_user.todos.completed.completed_after(@cut_off_year).count
-    @sum_actions_created_last12months = current_user.todos.created_after(@cut_off_year).count
-
-    @completion_charts = %w{
-     actions_done_last30days_data
-     actions_done_last12months_data
-     actions_completion_time_data
-    }.map do |action|
-      Stats::Chart.new(action)
-    end
-
-    @timing_charts = %w{
-      actions_visible_running_time_data
-      actions_running_time_data
-      actions_open_per_week_data
-      actions_day_of_week_all_data
-      actions_day_of_week_30days_data
-      actions_time_of_day_all_data
-      actions_time_of_day_30days_data
-    }.map do |action|
-      Stats::Chart.new(action)
-    end
-
   end
 
   def get_stats_contexts
