@@ -7,16 +7,19 @@ class AddStateToContext < ActiveRecord::Migration
     add_column :contexts, :state, :string, :limit => 20, :null => false, :default => 'active'
     Context.reset_column_information
     Context.all.each do |c|
-		c.state = c.hide ? 'hidden' : 'active'
-		c.save!
+      c.state = c.hide ? 'hidden' : 'active'
+      c.save!
     end
     remove_column :contexts, :hide
   end
 
   def down
-  	add_column :contexts, :hide, :boolean, :default => false
+    add_column :contexts, :hide, :boolean, :default => false
     Context.reset_column_information
-  	Context.all.each { |c| c.hide = ( c.state == 'hidden' ); c.save! }
-  	remove_column :contexts, :state
+    Context.all.each do |c|
+      c.hide = ( c.state == 'hidden' )
+      c.save!
+    end
+    remove_column :contexts, :state
   end
 end
