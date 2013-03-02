@@ -1,0 +1,7 @@
+<div class="stats_module">
+  <h3><%= t("stats.top5_#{key}") %></h3>
+  <% contexts.each_with_index do |c, i| -%>
+    <%= i + 1 -%> - <%= link_to c.name, context_path(c) %> (<%=c.total%> <%= t('common.actions_midsentence', :count => c.total) %>) <br/>
+  <% end -%>
+  <%= render :partial => 'null_list_item', :locals => {:from => contexts.size + 1, :to => 5} -%>
+</div>
