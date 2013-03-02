@@ -476,35 +476,8 @@ class StatsController < ApplicationController
   end
 
   def get_stats_projects
-    # get the first 10 projects and their action count (all actions)
-    #
-    # Went from GROUP BY p.id to p.name for compatibility with postgresql. Since
-    # the name is forced to be unique, this should work.
-    @projects_and_actions = current_user.projects.find_by_sql(
-      "SELECT p.id, p.name, count(*) AS count "+
-        "FROM projects p, todos t "+
-        "WHERE p.id = t.project_id "+
-        "AND t.user_id=#{current_user.id} " +
-        "GROUP BY p.id, p.name "+
-        "ORDER BY count DESC " +
-        "LIMIT 10"
-    )
-
-    # get the first 10 projects with their actions count of actions that have
-    # been created or completed the past 30 days
-
-    # using GROUP BY p.name (was: p.id) for compatibility with Postgresql. Since
-    # you cannot create two contexts with the same name, this will work.
-    @projects_and_actions_last30days = current_user.projects.find_by_sql([
-        "SELECT p.id, p.name, count(*) AS count "+
-          "FROM todos t, projects p "+
-          "WHERE t.project_id = p.id AND "+
-          "      (t.created_at > ? OR t.completed_at > ?) "+
-          "AND t.user_id=#{current_user.id} " +
-          "GROUP BY p.id, p.name "+
-          "ORDER BY count DESC " +
-          "LIMIT 10", @cut_off_month, @cut_off_month]
-    )
+    @projects_and_actions = Stats::TopProjectsQuery.new(current_user).result
+    @projects_and_actions_last30days = Stats::TopProjectsQuery.new(current_user, @cut_off_month).result
 
     # get the first 10 projects and their running time (creation date versus
     # now())
