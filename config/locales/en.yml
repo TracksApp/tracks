@@ -620,6 +620,8 @@ en:
     completed_plural: Completed
     visible_plural: Visible
     visible: Visible
+    close: Closed
+    closed_plural: Closed
     active_plural: Active
     hidden: Hidden
     active: Active

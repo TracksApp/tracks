@@ -854,6 +854,15 @@ var ContextListPage = {
             return false;
         });
 
+        /* cancel edit context form */
+        $(document).on("click",'form.edit-context-form a.negative', function(){
+            $(this).parents('.edit-form').fadeOut(200, function () {
+                $(this).parents('.context-edit-current').removeClass('context-edit-current');
+                $(this).parents('.list').find('.context').fadeIn(500);
+                $(this).parents('.container').find('.item-show').fadeIn(500);
+            });
+        });
+
         /* Contexts behavior */
         $('#toggle_context_new').click(function(evt){
             TracksForm.toggle('toggle_context_new', 'context_new', 'context-form',
@@ -862,7 +871,7 @@ var ContextListPage = {
         });
 
         /* make the two state lists of context sortable */
-        $(['active', 'hidden']).each(function() {
+        $(['active', 'hidden', 'closed']).each(function() {
             $("#list-contexts-"+this).sortable({
                 handle: '.grip',
                 update: update_order
