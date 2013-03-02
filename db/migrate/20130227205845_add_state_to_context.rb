@@ -4,7 +4,7 @@ class AddStateToContext < ActiveRecord::Migration
   end
 
   def up
-    add_column :contexts, :state, :string, :limit => 20, :null => false
+    add_column :contexts, :state, :string, :limit => 20, :null => false, :default => 'active'
     Context.reset_column_information
     Context.all.each do |c|
 		c.state = c.hide ? 'hidden' : 'active'
