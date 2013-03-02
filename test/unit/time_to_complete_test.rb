@@ -81,7 +81,7 @@ class TimeToCompleteTest < Test::Unit::TestCase
     assert_equal 1.8, ttc.max
   end
 
-  def test_min_sec_with_almost_two_days
+  def test_min_sec_with_almost_three_days
     start_time = Time.utc(2012, 12, 30, 8, 0, 0)
     task = FakeTask.new(start_time, now)
     stats = Stats::TimeToComplete.new([task])
