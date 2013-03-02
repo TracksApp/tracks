@@ -3,5 +3,5 @@
   <% projects.each_with_index do |p, i| -%>
     <%= i + 1 -%> - <%= link_to p.name, project_path(p) %> (<%=p.send(n)%> <%= t('common.actions_midsentence', :count => p.send(n)) %>) <br/>
   <% end -%>
-  <%= render :partial => 'null_list_item', :locals => {:from => projects.size + 1} -%>
+  <%= render :partial => 'null_list_item', :locals => {:from => projects.size + 1, :to => 10} -%>
 </div>
