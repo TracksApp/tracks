@@ -1,6 +1,6 @@
-<p><%= t('stats.actions_avg_completion_time', :count => (actions.avg_ttc*10).round/10.0) %>
-<%= t('stats.actions_min_max_completion_days', :max => (actions.max_ttc*10).round/10.0, :min => (actions.min_ttc*10).round/10.0) %>
-<%= t('stats.actions_min_completion_time', :time => actions.min_ttc_sec) %></p>
+<p><%= t('stats.actions_avg_completion_time', :count => (actions.ttc.avg*10).round/10.0) %>
+<%= t('stats.actions_min_max_completion_days', :max => (actions.ttc.max*10).round/10.0, :min => (actions.ttc.min*10).round/10.0) %>
+<%= t('stats.actions_min_completion_time', :time => actions.ttc.min_sec) %></p>
 
 <p><%= t('stats.actions_actions_avg_created_30days', :count => (actions.created_last30days*10.0/30.0).round/10.0 )%>
 <%= t('stats.actions_avg_completed_30days', :count => (actions.done_last30days*10.0/30.0).round/10.0 )%>
