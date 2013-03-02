@@ -1,4 +1,4 @@
-<p><%= t('stats.actions_avg_completion_time', :count => (ttc.avg*10).round/10.0) %>
-<%= t('stats.actions_min_max_completion_days', :max => (ttc.max*10).round/10.0, :min => (ttc.min*10).round/10.0) %>
+<p><%= t('stats.actions_avg_completion_time', :count => ttc.avg) %>
+<%= t('stats.actions_min_max_completion_days', :max => ttc.max, :min => ttc.min) %>
 <%= t('stats.actions_min_completion_time', :time => ttc.min_sec) %></p>
 

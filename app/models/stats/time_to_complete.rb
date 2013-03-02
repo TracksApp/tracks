@@ -9,15 +9,15 @@ module Stats
     end
 
     def avg
-      @avg ||= (sum / count) / SECONDS_PER_DAY
+      @avg ||= to_days(sum / count)
     end
 
     def max
-      @max ||= max_in_seconds / SECONDS_PER_DAY
+      @max ||= to_days(max_in_seconds)
     end
 
     def min
-      @min ||= min_in_seconds / SECONDS_PER_DAY
+      @min ||= to_days(min_in_seconds)
     end
 
     def min_sec
@@ -28,6 +28,10 @@ module Stats
     end
 
     private
+
+    def to_days(value)
+      (value * 10 / SECONDS_PER_DAY).round / 10.0
+    end
 
     def min_in_seconds
       @min_in_seconds ||= durations.min || 0

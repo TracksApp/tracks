@@ -52,15 +52,15 @@ class TimeToCompleteTest < Test::Unit::TestCase
   end
 
   def test_minimum
-    assert_equal 2.127835648148148, Stats::TimeToComplete.new(fake_tasks).min
+    assert_equal 2.1, Stats::TimeToComplete.new(fake_tasks).min
   end
 
   def test_maximum
-    assert_equal 6.127835648148148, Stats::TimeToComplete.new(fake_tasks).max
+    assert_equal 6.1, Stats::TimeToComplete.new(fake_tasks).max
   end
 
   def test_avg
-    assert_equal 4.127835648148148, Stats::TimeToComplete.new(fake_tasks).avg
+    assert_equal 4.1, Stats::TimeToComplete.new(fake_tasks).avg
   end
 
   def test_min_sec
@@ -71,5 +71,15 @@ class TimeToCompleteTest < Test::Unit::TestCase
     task = FakeTask.new(day0, now)
     assert_equal '03:04:05', Stats::TimeToComplete.new([task]).min_sec
   end
+
+  def test_rounding
+    start_time = Time.utc(2012, 12, 31, 8, 0, 0)
+    task = FakeTask.new(start_time, now)
+    ttc = Stats::TimeToComplete.new([task])
+    assert_equal 1.8, ttc.avg
+    assert_equal 1.8, ttc.min
+    assert_equal 1.8, ttc.max
+  end
+
 end
 
