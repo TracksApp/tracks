@@ -531,7 +531,7 @@ class StatsController < ApplicationController
 
     # get the first 10 projects and their running time (creation date versus
     # now())
-    @projects_and_runtime_sql = current_user.projects.find_by_sql(
+    @projects_and_runtime = current_user.projects.find_by_sql(
       "SELECT id, name, created_at "+
         "FROM projects "+
         "WHERE state='active' "+
@@ -539,16 +539,6 @@ class StatsController < ApplicationController
         "ORDER BY created_at ASC "+
         "LIMIT 10"
     )
-
-    i=0
-    @projects_and_runtime = Array.new(10, [-1, t('common.not_available_abbr'), t('common.not_available_abbr')])
-    @projects_and_runtime_sql.each do |r|
-      days = difference_in_days(@today, r.created_at)
-      # add one so that a project that you just created returns 1 day
-      @projects_and_runtime[i]=[r.id, r.name, days.to_i+1]
-      i += 1
-    end
-
   end
 
   def get_stats_tags
