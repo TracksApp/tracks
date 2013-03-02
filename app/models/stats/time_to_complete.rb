@@ -23,7 +23,7 @@ module Stats
     def min_sec
       min_sec = arbitrary_day + min_in_seconds # convert to a datetime
       @min_sec = min_sec.strftime("%H:%M:%S")
-      @min_sec = min.round.to_s + " days " + @min_sec if min >= 1
+      @min_sec = min.floor.to_s + " days " + @min_sec if min >= 1
       @min_sec
     end
 
