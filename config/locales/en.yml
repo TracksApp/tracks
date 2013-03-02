@@ -419,14 +419,12 @@ en:
     convert_to_project: Make project
     delete_recurring_action_confirm: Are you sure that you want to delete the recurring action '%{description}'?
     completed_last_day: Completed in the last 24 hours
-    completed_more_than_x_days_ago: ""
     show_in_days: Show in %{days} days
     no_project: --No project--
     error_saving_recurring: There was an error saving the recurring todo \'%{description}\'
     new_related_todo_created_short: created a new todo
     all_completed: All completed actions
     feed_title_in_context: in context '%{context}'
-    older_than_days: ""
     completed_tagged_page_title: TRACKS::Completed tasks with tag '%{tag_name}'
     edit: Edit
     pending: Pending
