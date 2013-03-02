@@ -9,7 +9,7 @@
     <%= render :partial => 'actions', :locals => {:actions => @actions} -%>
 
     <h2><%= t('stats.contexts') %></h2>
-    <%= render :partial => 'contexts' -%>
+    <%= render :partial => 'contexts', :locals => {:contexts => @contexts} -%>
 
     <h2><%= t('stats.projects') %></h2>
     <%= render :partial => 'projects', :locals => {:projects => @projects} -%>

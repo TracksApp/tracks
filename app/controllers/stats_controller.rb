@@ -15,8 +15,8 @@ class StatsController < ApplicationController
     @hidden_contexts = current_user.contexts.hidden
     @actions = Stats::Actions.new(current_user)
     @projects = Stats::Projects.new(current_user)
+    @contexts = Stats::Contexts.new(current_user)
 
-    get_stats_contexts
     get_stats_tags
   end
   
@@ -385,18 +385,6 @@ class StatsController < ApplicationController
     @cut_off_year_plus3 = 15.months.ago.beginning_of_day
     @cut_off_month = 1.month.ago.beginning_of_day
     @cut_off_3months = 3.months.ago.beginning_of_day
-  end
-
-  def get_stats_contexts
-    @actions_per_context = Stats::TopContextsQuery.new(current_user, :limit => 5).result
-    @running_actions_per_context = Stats::TopContextsQuery.new(current_user, :limit => 5, :running => true).result
-
-    @context_charts = %w{
-      context_total_actions_data
-      context_running_actions_data
-    }.map do |action|
-      Stats::Chart.new(action, :height => 325)
-    end
   end
 
   def get_stats_tags
