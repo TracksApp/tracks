@@ -187,36 +187,14 @@ class StatsController < ApplicationController
   end
 
   def context_total_actions_data
-    # get total action count per context Went from GROUP BY c.id to c.name for
-    # compatibility with postgresql. Since the name is forced to be unique, this
-    # should work.
-    all_actions_per_context = current_user.contexts.find_by_sql(
-      "SELECT c.name AS name, c.id as id, count(*) AS total "+
-        "FROM contexts c, todos t "+
-        "WHERE t.context_id=c.id "+
-        "AND c.user_id = #{current_user.id} " +
-        "GROUP BY c.name, c.id "+
-        "ORDER BY total DESC"
-    )
-
+    all_actions_per_context = Stats::TopContextsQuery.new(current_user).result
     prep_context_data_for_view(all_actions_per_context)
 
     render :layout => false
   end
 
   def context_running_actions_data
-    # get incomplete action count per visible context
-    #
-    # Went from GROUP BY c.id to c.name for compatibility with postgresql. Since
-    # the name is forced to be unique, this should work.
-    all_actions_per_context = current_user.contexts.find_by_sql(
-      "SELECT c.name AS name, c.id as id, count(*) AS total "+
-        "FROM contexts c, todos t "+
-        "WHERE t.context_id=c.id AND t.completed_at IS NULL AND NOT c.state='hidden' "+
-        "AND c.user_id = #{current_user.id} " +
-        "GROUP BY c.name, c.id "+
-        "ORDER BY total DESC"
-    )
+    all_actions_per_context = Stats::TopContextsQuery.new(current_user, :running => true).result
 
     prep_context_data_for_view(all_actions_per_context)
 
@@ -464,8 +442,8 @@ class StatsController < ApplicationController
   end
 
   def get_stats_contexts
-    @actions_per_context = Stats::TopContextsQuery.new(current_user).result
-    @running_actions_per_context = Stats::TopContextsQuery.new(current_user, :running).result
+    @actions_per_context = Stats::TopContextsQuery.new(current_user, :limit => 5).result
+    @running_actions_per_context = Stats::TopContextsQuery.new(current_user, :limit => 5, :running => true).result
 
     @context_charts = %w{
       context_total_actions_data

@@ -4,10 +4,11 @@
 module Stats
   class TopContextsQuery
 
-    attr_reader :user, :running
-    def initialize(user, running = nil)
+    attr_reader :user, :running, :limit
+    def initialize(user, options = {})
       @user = user
-      @running = running == :running
+      @running = options.fetch(:running) { false }
+      @limit = options.fetch(:limit) { false }
     end
 
     def result
@@ -27,8 +28,10 @@ module Stats
       end
       query << "GROUP BY c.id, c.name "
       query << "ORDER BY total DESC "
-      query << "LIMIT 5"
+      if limit
+        query << "LIMIT #{limit}"
+      end
+      query
     end
-
   end
 end
