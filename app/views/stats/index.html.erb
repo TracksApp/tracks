@@ -1,22 +1,22 @@
 <div class="stats_content">
   <h2><%= t('stats.totals') %></h2>
 
-  <%= render :partial => 'totals', :locals => {:totals => @totals} -%>
+  <%= render :partial => 'totals', :locals => {:totals => @stats.totals} -%>
 
   <% unless current_user.todos.empty? -%>
 
     <h2><%= t('stats.actions') %></h2>
-    <%= render :partial => 'actions', :locals => {:actions => @actions} -%>
+    <%= render :partial => 'actions', :locals => {:actions => @stats.actions} -%>
 
     <h2><%= t('stats.contexts') %></h2>
-    <%= render :partial => 'contexts', :locals => {:contexts => @contexts} -%>
+    <%= render :partial => 'contexts', :locals => {:contexts => @stats.contexts} -%>
 
     <h2><%= t('stats.projects') %></h2>
-    <%= render :partial => 'projects', :locals => {:projects => @projects} -%>
+    <%= render :partial => 'projects', :locals => {:projects => @stats.projects} -%>
 
     <h2><%= t('stats.tags') %></h2>
-    <%= render :partial => 'tags', :locals => {:tag_cloud => @tag_cloud, :key => ''} -%>
-    <%= render :partial => 'tags', :locals => {:tag_cloud => @tag_cloud_90days, :key => '_90days'} -%>
+    <%= render :partial => 'tags', :locals => {:tag_cloud => @stats.tag_cloud, :key => ''} -%>
+    <%= render :partial => 'tags', :locals => {:tag_cloud => @stats.tag_cloud_90days, :key => '_90days'} -%>
 
   <% else -%>
 

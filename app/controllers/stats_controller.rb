@@ -8,15 +8,7 @@ class StatsController < ApplicationController
   def index
     @page_title = t('stats.index_title')
     @hidden_contexts = current_user.contexts.hidden
-    @actions = Stats::Actions.new(current_user)
-    @totals = Stats::Totals.new(current_user)
-    @projects = Stats::Projects.new(current_user)
-    @contexts = Stats::Contexts.new(current_user)
-    tags = Stats::TagCloudQuery.new(current_user).result
-    @tag_cloud = Stats::TagCloud.new(tags)
-    cutoff = 3.months.ago.beginning_of_day
-    tags = Stats::TagCloudQuery.new(current_user, cutoff).result
-    @tag_cloud_90days = Stats::TagCloud.new(tags)
+    @stats = Stats::IndexPage.new(current_user)
   end
   
   def actions_done_last12months_data
