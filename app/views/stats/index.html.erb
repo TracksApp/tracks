@@ -1,7 +1,7 @@
 <div class="stats_content">
   <h2><%= t('stats.totals') %></h2>
 
-  <%= render :partial => 'totals' -%>
+  <%= render :partial => 'totals', :locals => {:totals => @totals} -%>
 
   <% unless current_user.todos.empty? -%>
 

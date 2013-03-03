@@ -7,13 +7,9 @@ class StatsController < ApplicationController
 
   def index
     @page_title = t('stats.index_title')
-
-    @first_action = current_user.todos.reorder("created_at ASC").first
-    tag_ids = Stats::UserTagsQuery.new(current_user).result.map(&:id)
-    @tags_count = tag_ids.size
-    @unique_tags_count = tag_ids.uniq.size
     @hidden_contexts = current_user.contexts.hidden
     @actions = Stats::Actions.new(current_user)
+    @totals = Stats::Totals.new(current_user)
     @projects = Stats::Projects.new(current_user)
     @contexts = Stats::Contexts.new(current_user)
 

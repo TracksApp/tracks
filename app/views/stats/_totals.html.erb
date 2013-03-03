@@ -1,23 +1,23 @@
-<p><%= t('stats.totals_project_count', :count => current_user.projects.count) %>
-  <%= t('stats.totals_active_project_count', :count => current_user.projects.active.count) %>,
-  <%= t('stats.totals_hidden_project_count', :count => current_user.projects.hidden.count) %>
-  <%= t('stats.totals_completed_project_count', :count => current_user.projects.completed.count) %></p>
+<p><%= t('stats.totals_project_count', :count => totals.projects) %>
+  <%= t('stats.totals_active_project_count', :count => totals.active_projects) %>,
+  <%= t('stats.totals_hidden_project_count', :count => totals.hidden_projects) %>
+  <%= t('stats.totals_completed_project_count', :count => totals.completed_projects) %></p>
 
-<p><%= t('stats.totals_context_count', :count => current_user.contexts.count ) %>
-<%= t('stats.totals_visible_context_count', :count => current_user.contexts.active.count) %>
-<%= t('stats.totals_hidden_context_count', :count => current_user.contexts.hidden.count) %>
+<p><%= t('stats.totals_context_count', :count => totals.contexts) %>
+<%= t('stats.totals_visible_context_count', :count => totals.visible_contexts) %>
+<%= t('stats.totals_hidden_context_count', :count => totals.hidden_contexts) %>
 
-<% unless current_user.todos.empty? -%>
-<p><%= t('stats.totals_first_action', :date => format_date(@first_action.created_at)) %>
-<%= t('stats.totals_action_count', :count => current_user.todos.count) %>,
-<%= t('stats.totals_actions_completed', :count => current_user.todos.completed.count) %>
+<% unless totals.empty? -%>
+<p><%= t('stats.totals_first_action', :date => format_date(totals.first_action_at)) %>
+<%= t('stats.totals_action_count', :count => totals.all_actions) %>,
+<%= t('stats.totals_actions_completed', :count => totals.completed_actions) %>
 
-<p><%= t('stats.totals_incomplete_actions', :count => current_user.todos.not_completed.count) %>
-<%= t('stats.totals_deferred_actions', :count => current_user.todos.deferred.count) %>
-<%= t('stats.totals_blocked_actions', :count => current_user.todos.blocked.count) %>
+<p><%= t('stats.totals_incomplete_actions', :count => totals.incomplete_actions) %>
+<%= t('stats.totals_deferred_actions', :count => totals.deferred_actions) %>
+<%= t('stats.totals_blocked_actions', :count => totals.blocked_actions) %>
 </p>
 
-<p><%= t('stats.totals_tag_count', :count => @tags_count) %>
-  <%= t('stats.totals_unique_tags', :count => @unique_tags_count) %>
+<p><%= t('stats.totals_tag_count', :count => totals.tags) %>
+  <%= t('stats.totals_unique_tags', :count => totals.unique_tags) %>
 <% end -%>
 
