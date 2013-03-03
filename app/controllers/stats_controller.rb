@@ -3,7 +3,7 @@ class StatsController < ApplicationController
   SECONDS_PER_DAY = 86400;
 
   helper :todos, :projects, :recurring_todos
-  append_before_filter :init
+  append_before_filter :init, :except => :index
 
   def index
     @page_title = t('stats.index_title')
@@ -14,7 +14,8 @@ class StatsController < ApplicationController
     @contexts = Stats::Contexts.new(current_user)
     tags = Stats::TagCloudQuery.new(current_user).result
     @tag_cloud = Stats::TagCloud.new(tags)
-    tags = Stats::TagCloudQuery.new(current_user, @cut_off_3months).result
+    cutoff = 3.months.ago.beginning_of_day
+    tags = Stats::TagCloudQuery.new(current_user, cutoff).result
     @tag_cloud_90days = Stats::TagCloud.new(tags)
   end
   
@@ -382,7 +383,6 @@ class StatsController < ApplicationController
     @cut_off_year = 12.months.ago.beginning_of_day
     @cut_off_year_plus3 = 15.months.ago.beginning_of_day
     @cut_off_month = 1.month.ago.beginning_of_day
-    @cut_off_3months = 3.months.ago.beginning_of_day
   end
 
   def get_ids_from (actions, week_from, week_to, at_end)
