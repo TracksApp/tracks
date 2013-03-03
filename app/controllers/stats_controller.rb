@@ -3,21 +3,12 @@ class StatsController < ApplicationController
   SECONDS_PER_DAY = 86400;
 
   helper :todos, :projects, :recurring_todos
-  append_before_filter :init
+  append_before_filter :init, :except => :index
 
   def index
     @page_title = t('stats.index_title')
-
-    @first_action = current_user.todos.reorder("created_at ASC").first
-    tag_ids = Stats::UserTagsQuery.new(current_user).result.map(&:id)
-    @tags_count = tag_ids.size
-    @unique_tags_count = tag_ids.uniq.size
     @hidden_contexts = current_user.contexts.hidden
-    @actions = Stats::Actions.new(current_user)
-
-    get_stats_contexts
-    get_stats_projects
-    get_stats_tags
+    @stats = Stats::IndexPage.new(current_user)
   end
   
   def actions_done_last12months_data
@@ -384,43 +375,6 @@ class StatsController < ApplicationController
     @cut_off_year = 12.months.ago.beginning_of_day
     @cut_off_year_plus3 = 15.months.ago.beginning_of_day
     @cut_off_month = 1.month.ago.beginning_of_day
-    @cut_off_3months = 3.months.ago.beginning_of_day
-  end
-
-  def get_stats_contexts
-    @actions_per_context = Stats::TopContextsQuery.new(current_user, :limit => 5).result
-    @running_actions_per_context = Stats::TopContextsQuery.new(current_user, :limit => 5, :running => true).result
-
-    @context_charts = %w{
-      context_total_actions_data
-      context_running_actions_data
-    }.map do |action|
-      Stats::Chart.new(action, :height => 325)
-    end
-  end
-
-  def get_stats_projects
-    @projects_and_actions = Stats::TopProjectsQuery.new(current_user).result
-    @projects_and_actions_last30days = Stats::TopProjectsQuery.new(current_user, @cut_off_month).result
-
-    # get the first 10 projects and their running time (creation date versus
-    # now())
-    @projects_and_runtime = current_user.projects.find_by_sql(
-      "SELECT id, name, created_at "+
-        "FROM projects "+
-        "WHERE state='active' "+
-        "AND user_id=#{current_user.id} "+
-        "ORDER BY created_at ASC "+
-        "LIMIT 10"
-    )
-  end
-
-  def get_stats_tags
-    tags = Stats::TagCloudQuery.new(current_user).result
-    @tag_cloud = Stats::TagCloud.new(tags)
-
-    tags = Stats::TagCloudQuery.new(current_user, @cut_off_3months).result
-    @tag_cloud_90days = Stats::TagCloud.new(tags)
   end
 
   def get_ids_from (actions, week_from, week_to, at_end)
