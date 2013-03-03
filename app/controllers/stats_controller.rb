@@ -12,8 +12,10 @@ class StatsController < ApplicationController
     @totals = Stats::Totals.new(current_user)
     @projects = Stats::Projects.new(current_user)
     @contexts = Stats::Contexts.new(current_user)
-
-    get_stats_tags
+    tags = Stats::TagCloudQuery.new(current_user).result
+    @tag_cloud = Stats::TagCloud.new(tags)
+    tags = Stats::TagCloudQuery.new(current_user, @cut_off_3months).result
+    @tag_cloud_90days = Stats::TagCloud.new(tags)
   end
   
   def actions_done_last12months_data
@@ -381,14 +383,6 @@ class StatsController < ApplicationController
     @cut_off_year_plus3 = 15.months.ago.beginning_of_day
     @cut_off_month = 1.month.ago.beginning_of_day
     @cut_off_3months = 3.months.ago.beginning_of_day
-  end
-
-  def get_stats_tags
-    tags = Stats::TagCloudQuery.new(current_user).result
-    @tag_cloud = Stats::TagCloud.new(tags)
-
-    tags = Stats::TagCloudQuery.new(current_user, @cut_off_3months).result
-    @tag_cloud_90days = Stats::TagCloud.new(tags)
   end
 
   def get_ids_from (actions, week_from, week_to, at_end)
