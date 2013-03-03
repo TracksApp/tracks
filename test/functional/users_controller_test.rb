@@ -87,6 +87,13 @@ class UsersControllerTest < ActionController::TestCase
   # Signup and creation of new users
   # ============================================
 
+  def test_with_no_users
+    User.expects(:no_users_yet?).returns(true)
+    get :new
+    assert_match assigns['heading'], /get started/
+    assert_not_nil assigns[:user]
+  end
+
   def test_create_adds_a_new_nonadmin_user
     login_as :admin_user
     post :create, :user => {:login => 'newbie', :password => 'newbiepass', :password_confirmation => 'newbiepass'}
