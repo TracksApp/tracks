@@ -14,9 +14,9 @@ class StatsController < ApplicationController
     @unique_tags_count = tag_ids.uniq.size
     @hidden_contexts = current_user.contexts.hidden
     @actions = Stats::Actions.new(current_user)
+    @projects = Stats::Projects.new(current_user)
 
     get_stats_contexts
-    get_stats_projects
     get_stats_tags
   end
   
@@ -397,22 +397,6 @@ class StatsController < ApplicationController
     }.map do |action|
       Stats::Chart.new(action, :height => 325)
     end
-  end
-
-  def get_stats_projects
-    @projects_and_actions = Stats::TopProjectsQuery.new(current_user).result
-    @projects_and_actions_last30days = Stats::TopProjectsQuery.new(current_user, @cut_off_month).result
-
-    # get the first 10 projects and their running time (creation date versus
-    # now())
-    @projects_and_runtime = current_user.projects.find_by_sql(
-      "SELECT id, name, created_at "+
-        "FROM projects "+
-        "WHERE state='active' "+
-        "AND user_id=#{current_user.id} "+
-        "ORDER BY created_at ASC "+
-        "LIMIT 10"
-    )
   end
 
   def get_stats_tags

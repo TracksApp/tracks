@@ -12,7 +12,7 @@
     <%= render :partial => 'contexts' -%>
 
     <h2><%= t('stats.projects') %></h2>
-    <%= render :partial => 'projects' -%>
+    <%= render :partial => 'projects', :locals => {:projects => @projects} -%>
 
     <h2><%= t('stats.tags') %></h2>
     <%= render :partial => 'tags', :locals => {:tag_cloud => @tag_cloud, :key => ''} -%>
