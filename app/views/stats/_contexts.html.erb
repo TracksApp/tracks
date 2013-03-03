@@ -1,9 +1,10 @@
-<% @context_charts.each do |chart| %><%=
+<% contexts.charts.each do |chart| %><%=
     render :partial => 'chart', :locals => {:chart => chart}
 -%><% end %>
 
 <br style="clear:both">
 
-<%= render :partial => 'contexts_list', :locals => {:contexts => @actions_per_context, :key => 'contexts'} -%>
+<%= render :partial => 'contexts_list', :locals => {:contexts => contexts.actions, :key => 'contexts'} -%>
 
-<%= render :partial => 'contexts_list', :locals => {:contexts => @running_actions_per_context, :key => 'visible_contexts_with_incomplete_actions'} -%>
+<%= render :partial => 'contexts_list', :locals => {:contexts => contexts.running_actions, :key => 'visible_contexts_with_incomplete_actions'} -%>
+

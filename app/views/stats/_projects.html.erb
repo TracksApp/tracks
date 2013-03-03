@@ -1,6 +1,6 @@
-<%= render :partial => 'projects_list', :locals => {:projects => @projects_and_actions, :key => 'projects', :n => :count} -%>
+<%= render :partial => 'projects_list', :locals => {:projects => projects.actions, :key => 'projects', :n => :count} -%>
 
-<%= render :partial => 'projects_list', :locals => {:projects => @projects_and_actions_last30days, :key => 'projects_30days', :n => :count} -%>
+<%= render :partial => 'projects_list', :locals => {:projects => projects.actions_last30days, :key => 'projects_30days', :n => :count} -%>
 
-<%= render :partial => 'projects_list', :locals => {:projects => @projects_and_runtime, :key => 'longrunning', :n => :age_in_days} -%>
+<%= render :partial => 'projects_list', :locals => {:projects => projects.runtime, :key => 'longrunning', :n => :age_in_days} -%>
 
