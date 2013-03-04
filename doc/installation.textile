@@ -104,9 +104,9 @@ h3.  Populate your database with the Tracks schema
 
 Open a terminal and change into the root of your Tracks directory. Enter the following command:
 
-bc. bundle exec rake db:migrate RAILS_ENV=production
+bc. bundle exec rake db:schema:load RAILS_ENV=production
 
-This will update your database with the required schema for Tracks. If you are using SQLite3, it is not strictly necessary, because the SQLite3 database included with Tracks already has the schema included in it, but it should not do any harm to run the command (nothing will happen if it is up to date).
+This will populate your database with the required schema for Tracks. If you are using SQLite3, it is not strictly necessary, because the SQLite3 database included with Tracks already has the schema included in it, but it should not do any harm to run the command (nothing will happen if it is up to date).
 
 h3. Precompile assets
 

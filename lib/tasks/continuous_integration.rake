@@ -1,1 +1,1 @@
-task :ci => ['db:migrate', :test, :cucumber]
+task :ci => ['db:schema:load', :test, :cucumber]
