@@ -19,7 +19,6 @@ config/database.yml
 config/deploy.rb
 config/site.yml
 db/data.yml
-db/schema.rb
 nbproject
 rerun.txt
 tags
