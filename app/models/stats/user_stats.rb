@@ -1,5 +1,5 @@
 module Stats
-  class IndexPage
+  class UserStats
 
     attr_reader :user
     def initialize(user)
