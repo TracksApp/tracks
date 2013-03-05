@@ -39,9 +39,10 @@ class StatsControllerTest < ActionController::TestCase
     login_as(:admin_user)
     get :index
     assert_response :success
-    assert_equal 4, assigns['tags_count']
-    assert_equal 2, assigns['unique_tags_count']
-    assert_equal 2.week.ago.utc.at_midnight, assigns['first_action'].created_at.utc.at_midnight
+    totals = assigns['stats'].totals
+    assert_equal 4, totals.tags
+    assert_equal 2, totals.unique_tags
+    assert_equal 2.week.ago.utc.at_midnight, totals.first_action_at.utc.at_midnight
   end
 
   def test_downdrill
