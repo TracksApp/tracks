@@ -8,7 +8,7 @@ class StatsController < ApplicationController
   def index
     @page_title = t('stats.index_title')
     @hidden_contexts = current_user.contexts.hidden
-    @stats = Stats::IndexPage.new(current_user)
+    @stats = Stats::UserStats.new(current_user)
   end
   
   def actions_done_last12months_data
