@@ -1,4 +1,12 @@
 module ContextsHelper
+
+  def show_context_name(context)
+    if source_view_is :context
+      content_tag(:span, :id => "context_name"){context.name}
+    else
+      link_to_context( context )
+    end
+  end
   
   def link_to_delete_context(context, descriptor = sanitize(context.name))
     link_to(descriptor,

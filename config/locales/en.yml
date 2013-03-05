@@ -51,6 +51,9 @@ en:
       admin: Admin
       help: "?"
       mobile: Mobile Site
+      group_view_by_context: "Order by context"
+      group_view_by_project: "Order by project"
+      group_view_by_title: "Change the ordering of the actions on this page"
   integrations:
     opensearch_description: Search in Tracks
     applescript_next_action_prompt: "Description of next action:"

@@ -128,9 +128,9 @@ class ProjectsController < ApplicationController
     init_data_for_sidebar unless mobile?
     @page_title = t('projects.page_title', :project => @project.name)
 
-    @not_done = @project.todos.active_or_hidden.includes(Todo::DEFAULT_INCLUDES)
-    @deferred = @project.todos.deferred.includes(Todo::DEFAULT_INCLUDES)
-    @pending = @project.todos.pending.includes(Todo::DEFAULT_INCLUDES)
+    @not_done_todos = @project.todos.active_or_hidden.includes(Todo::DEFAULT_INCLUDES)
+    @deferred_todos = @project.todos.deferred.includes(Todo::DEFAULT_INCLUDES)
+    @pending_todos = @project.todos.pending.includes(Todo::DEFAULT_INCLUDES)
 
     @done = {}
     @done = @project.todos.completed.
@@ -138,8 +138,8 @@ class ProjectsController < ApplicationController
       limit(current_user.prefs.show_number_completed).
       includes(Todo::DEFAULT_INCLUDES) unless current_user.prefs.show_number_completed == 0
 
-    @count = @not_done.size
-    @down_count = @count + @deferred.size + @pending.size
+    @count = @not_done_todos.size
+    @down_count = @count + @deferred_todos.size + @pending_todos.size
     @next_project = current_user.projects.next_from(@project)
     @previous_project = current_user.projects.previous_from(@project)
     @default_tags = @project.default_tags
@@ -159,9 +159,9 @@ class ProjectsController < ApplicationController
       end
       format.xml   do
         render :xml => @project.to_xml(:except => :user_id) { |xml|
-          xml.not_done { @not_done.each { |child| child.to_xml(:builder => xml, :skip_instruct => true) } }
-          xml.deferred { @deferred.each { |child| child.to_xml(:builder => xml, :skip_instruct => true) } }
-          xml.pending { @pending.each { |child| child.to_xml(:builder => xml, :skip_instruct => true) } }
+          xml.not_done { @not_done_todos.each { |child| child.to_xml(:builder => xml, :skip_instruct => true) } }
+          xml.deferred { @deferred_todos.each { |child| child.to_xml(:builder => xml, :skip_instruct => true) } }
+          xml.pending { @pending_todos.each { |child| child.to_xml(:builder => xml, :skip_instruct => true) } }
           xml.done { @done.each { |child| child.to_xml(:builder => xml, :skip_instruct => true) } }
         }
       end

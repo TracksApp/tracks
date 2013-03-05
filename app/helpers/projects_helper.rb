@@ -1,5 +1,19 @@
 module ProjectsHelper
 
+  def show_project_name(project)
+    if source_view_is :project
+      content_tag(:span, :id => "project_name"){project.name}
+    else
+      link_to_project( project )
+    end
+  end
+
+  def show_project_settings(project)
+    content_tag(:div, :id => dom_id(project, "container"), :class=>"list") do
+      render :partial => "projects/project_settings", :object => project
+    end
+  end
+
   def project_next_prev
     html = ""
     html << link_to_project(@previous_project, "&laquo; #{@previous_project.shortened_name}".html_safe) if @previous_project

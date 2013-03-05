@@ -1,16 +1,12 @@
 <div id="display_box">
-  <div id="no_todos_in_view" class="container context" <%= "style=\"display:none\"".html_safe unless @not_done_todos.empty? %> >
-       <h2><%= t('todos.no_actions_found_title')%></h2>
-    <div class="message"><p><%= t('todos.no_actions_with', :tag_name=>@tag_name) %></p></div>
-  </div>
+  <%= empty_message_holder(@not_done_todos.empty?) %>
 
-  <%= render :partial => "contexts/context", :collection => @contexts_to_show,
-    :locals => { :collapsible => true } %>
+  <%= show_grouped_todos %>
 
-  <% unless @deferred.nil? -%>
+  <% unless @deferred_todos.nil? -%>
     <%= render :partial => "todos/deferred", :locals => {
-                                               :deferred => @deferred,
-                                               :pending => @pending,
+                                               :deferred => @deferred_todos,
+                                               :pending => @pending_todos,
                                                :collapsible => true,
                                                :append_descriptor => t('todos.tagged_with', :tag_name => @tag_title),
                                                :parent_container_type => 'tag'

@@ -1,6 +1,28 @@
 # The methods added to this helper will be available to all templates in the
 # application.
 module ApplicationHelper
+
+  def group_view_by_menu_entry
+    # not set, no menu entry
+    return "" if @group_view_by.nil?
+
+    # if view == context, the menu shows Order By Project
+    menu_name = @group_view_by == 'context' ? 'project' : 'context'
+
+    content_tag(:li) do
+      link_to( 
+        t("layouts.navigation.group_view_by_#{menu_name}"), 
+        '#', 
+        {:id => "group_view_by_link", :accesskey => "g", :title => t('layouts.navigation.group_view_by_title'), :x_current_group_by => @group_view_by} )
+    end
+  end
+
+  def container_toggle(id)
+    link_to(
+      image_tag("blank.png", :alt => t('common.collapse_expand')),
+      "#", 
+      {:class => "container_toggle", :id => id} )
+  end
   
   def navigation_link(name, options = {}, html_options = nil, *parameters_for_method_reference)
     link_to name, options, html_options

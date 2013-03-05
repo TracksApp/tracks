@@ -1,5 +1,19 @@
 module TodosHelper
 
+  def empty_message_holder(show)
+    content_tag(:div, :id => "no_todos_in_view", :class => "container context", :style => "display:" + (show ? "block" : "none") ) do
+      content_tag(:h2) { t('todos.no_actions_found_title') }
+      content_tag(:div, :class => "message") do
+        content_tag(:p) { t('todos.no_actions_found') }
+      end
+    end
+  end
+
+  def show_grouped_todos
+    collection = (@group_view_by == 'context') ? @contexts_to_show : @projects_to_show
+    render(:partial => collection, :locals => { :collapsible => true })
+  end
+
   def remote_star_icon(todo=@todo)
     link_to( image_tag_for_star(todo),
       toggle_star_todo_path(todo),

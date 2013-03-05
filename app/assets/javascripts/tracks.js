@@ -318,6 +318,17 @@ var TracksPages = {
             }
         });
 
+        $("a#group_view_by_link").click(function () {
+            var state = $(this).attr("x_current_group_by")
+            if(state =='context'){
+                state='project';
+            } else {
+                state='context';
+            }
+            $.cookie('group_view_by', state);
+            refresh_page();
+        });
+
         /* fade flashes and alerts in automatically */
         $(".alert").fadeOut(8000);
     }
@@ -696,7 +707,7 @@ var ProjectListPage = {
     },
     setup_behavior: function() {
         /* in-place edit of project name */
-        $('div#project_name').editable(ProjectListPage.save_project_name, {
+        $('span#project_name').editable(ProjectListPage.save_project_name, {
             style: 'padding: 0px; width=100%;',
             submit: i18n['common.ok'],
             cancel: i18n['common.cancel'],

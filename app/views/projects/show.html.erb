@@ -4,7 +4,7 @@
   </div>
 
   <%= render :partial => @project, :locals => {:collapsible => false } %>
-  <%= render :partial => "todos/deferred", :object => @deferred, :locals => { :collapsible => false, :append_descriptor => t('projects.todos_append'), :parent_container_type => 'project', :pending => @pending } %>
+  <%= render :partial => "todos/deferred", :object => @deferred_todos, :locals => { :collapsible => false, :append_descriptor => t('projects.todos_append'), :parent_container_type => 'project', :pending => @pending_todos } %>
   <% unless @max_completed==0 -%>
     <%= render :partial => "todos/completed", :object => @done, :locals => { :collapsible => false, :suppress_project => true, :append_descriptor => t('projects.todos_append') } %>
   <% end -%>

@@ -8,49 +8,18 @@ class TodosController < ApplicationController
   
   def index
     @source_view = params['_source_view'] || 'todo'
+    @group_view_by = cookies['group_view_by'] || 'context'
     init_data_for_sidebar unless mobile?
     
     @todos = current_user.todos.includes(Todo::DEFAULT_INCLUDES)
+    @todos = @todos.limit(sanitize(params[:limit])) if params[:limit]
     
-    # TODO: refactor text feed for done todos to todos/done.text, not /todos.text?done=true
-    if params[:done]
-      @not_done_todos = current_user.todos.completed.completed_after(Time.zone.now - params[:done].to_i.days)
-    else
-      @not_done_todos = current_user.todos.active.not_hidden
-    end
-    
-    @not_done_todos = @not_done_todos.
-      reorder("todos.due IS NULL, todos.due ASC, todos.created_at ASC").
-      includes(Todo::DEFAULT_INCLUDES)
-
-    if params[:limit]
-      @not_done_todos = @not_done_todos.limit(sanitize(params[:limit]))
-      @todos = @todos.limit(sanitize(params[:limit]))
-    end
-    
-    if params[:due]
-      due_within_when = Time.zone.now + params['due'].to_i.days
-      @not_done_todos = @not_done_todos.where('todos.due <= ?', due_within_when)
-    end
-    
-    if params[:tag]
-      tag = Tag.where(:name => params['tag']).first
-      @not_done_todos = @not_done_todos.where('taggings.tag_id = ?', tag.id)
-    end
-    
-    if params[:context_id]
-      context = current_user.contexts.find(params[:context_id])
-      @not_done_todos = @not_done_todos.where('context_id' => context.id)
-    end
-    
-    if params[:project_id]
-      project = current_user.projects.find(params[:project_id])
-      @not_done_todos = @not_done_todos.where('project_id' => project)
-    end
+    @not_done_todos = get_not_done_todos
     
     @projects = current_user.projects.includes(:default_context)
     @contexts = current_user.contexts
     @contexts_to_show = current_user.contexts.active
+    @projects_to_show = current_user.projects.active
     
     # If you've set no_completed to zero, the completed items box isn't shown
     # on the home page
@@ -674,11 +643,11 @@ class TodosController < ApplicationController
       hidden.
       reorder('todos.completed_at DESC, todos.created_at DESC').
       includes(Todo::DEFAULT_INCLUDES)
-    @deferred = todos_with_tag_ids.
+    @deferred_todos = todos_with_tag_ids.
       deferred.
       reorder('todos.show_from ASC, todos.created_at DESC').
       includes(Todo::DEFAULT_INCLUDES)
-    @pending = todos_with_tag_ids.
+    @pending_todos = todos_with_tag_ids.
       blocked.
       reorder('todos.show_from ASC, todos.created_at DESC').
       includes(Todo::DEFAULT_INCLUDES)
@@ -692,7 +661,8 @@ class TodosController < ApplicationController
 
     @projects = current_user.projects
     @contexts = current_user.contexts
-    @contexts_to_show = @contexts.reject {|c| c.hidden? }
+    @contexts_to_show = @contexts.active
+    @projects_to_show = @projects.active
 
     # Set defaults for new_action
     @initial_tags = @tag_name
@@ -959,6 +929,8 @@ class TodosController < ApplicationController
     @single_tag = @tag_expr.size == 1 && @tag_expr[0].size == 1
     @tag_name = @tag_expr[0][0]
     @tag_title = @single_tag ? @tag_name : tag_title(@tag_expr)
+
+    @group_view_by = cookies['group_view_by'] || 'context'
   end
 
   def get_ids_from_tag_expr(tag_expr)
@@ -1372,6 +1344,44 @@ class TodosController < ApplicationController
     start_of_this_week = Time.zone.now.beginning_of_week
     completed_todos.completed_before(start_of_this_week).completed_after(start_of_this_month).all(includes)
   end
+
+  def get_not_done_todos
+      # TODO: refactor text feed for done todos to todos/done.text, not /todos.text?done=true
+    if params[:done]
+      not_done_todos = current_user.todos.completed.completed_after(Time.zone.now - params[:done].to_i.days)
+    else
+      not_done_todos = current_user.todos.active.not_hidden
+    end
+    
+    not_done_todos = not_done_todos.
+      reorder("todos.due IS NULL, todos.due ASC, todos.created_at ASC").
+      includes(Todo::DEFAULT_INCLUDES)
+    
+    not_done_todos = not_done_todos.limit(sanitize(params[:limit])) if params[:limit]
+    
+    if params[:due]
+      due_within_when = Time.zone.now + params['due'].to_i.days
+      not_done_todos = not_done_todos.where('todos.due <= ?', due_within_when)
+    end
+    
+    if params[:tag]
+      tag = Tag.where(:name => params['tag']).first
+      not_done_todos = not_done_todos.where('taggings.tag_id = ?', tag.id)
+    end
+    
+    if params[:context_id]
+      context = current_user.contexts.find(params[:context_id])
+      not_done_todos = not_done_todos.where('context_id' => context.id)
+    end
+    
+    if params[:project_id]
+      project = current_user.projects.find(params[:project_id])
+      not_done_todos = not_done_todos.where('project_id' => project)
+    end
+
+    return not_done_todos
+  end
+
   
   class TodoCreateParamsHelper
 
