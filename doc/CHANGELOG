@@ -17,6 +17,7 @@
 
 New and changed features
 * You can now change a context to a closed state
+* Czech locale has been renamed from cz to cs to follow ISO standards
 
 == Version 2.2
 
