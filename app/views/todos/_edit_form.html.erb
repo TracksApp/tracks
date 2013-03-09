@@ -37,7 +37,7 @@
     <label for="<%= dom_id(@todo, 'due_label') %>"><%= Todo.human_attribute_name('due') %></label>
     <%= date_field_tag("todo[due]", dom_id(@todo, 'due'), format_date(@todo.due), "tabindex" => next_tab_index) %>
     <a href="#" id="<%= dom_id(@todo, 'due_x') %>" class="date_clear" title="<%= t('todos.clear_due_date') %>">
-      <%= image_tag("blank.png", :alt => "Clear due date", :class => "delete_item") %>
+      <%= image_tag("blank.png", :alt => t('todos.clear_due_date'), :class => "delete_item") %>
     </a>
   </div>
 
@@ -45,7 +45,7 @@
     <label for="<%= dom_id(@todo, 'show_from') %>"><%= t('todos.show_from') %></label>
     <%= date_field_tag("todo[show_from]", dom_id(@todo, 'show_from'), format_date(@todo.show_from), "tabindex" => next_tab_index) %>
     <a href="#" id="<%= dom_id(@todo, 'show_from_x') %>" class="date_clear" title="<%= t('todos.clear_show_from_date') %>">
-      <%= image_tag("blank.png", :alt => "Clear show from date", :class => "delete_item") %>
+      <%= image_tag("blank.png", :alt => t('todos.clear_show_from_date'), :class => "delete_item") %>
     </a>
   </div>
 
