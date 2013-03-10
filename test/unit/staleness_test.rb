@@ -14,14 +14,6 @@ class StalenessTest < Test::Unit::TestCase
     @now ||= Time.utc(2013, 2, 28, 0, 0, 0)
   end
 
-  def day0
-    @day0 ||= Time.utc(2013, 2, 27, 0, 0, 0)
-  end
-
-  def day24
-    @day24 ||= Time.utc(2013, 2, 4, 0, 0, 0)
-  end
-
   def day16
     @day16 ||= Time.utc(2013, 2, 12, 0, 0, 0)
   end
@@ -35,12 +27,12 @@ class StalenessTest < Test::Unit::TestCase
   end
 
   def test_item_with_due_date_is_not_stale_ever
-    todo = FakeTask.new(now, false, day24)
+    todo = FakeTask.new(now, false, day8)
     assert_equal 0, Staleness.days_stale(todo, @current_user)
   end
 
   def test_complete_item_is_not_stale
-    todo = FakeTask.new(day16, true, day24)
+    todo = FakeTask.new(day8, true, day16)
     assert_equal 0, Staleness.days_stale(todo, @current_user)
   end
 
