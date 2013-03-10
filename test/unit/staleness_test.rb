@@ -3,8 +3,7 @@ require_relative '../../lib/staleness'
 
 
 class StalenessTest < Test::Unit::TestCase
-  FakeUser = Struct.new(:time, :prefs)
-  FakePrefs = Struct.new(:staleness_starts)
+  FakeUser = Struct.new(:time)
   FakeTask = Struct.new(:due, :completed, :created_at) do
     def completed?
       self.completed
@@ -31,12 +30,8 @@ class StalenessTest < Test::Unit::TestCase
     @day8 ||= Time.utc(2013, 2, 20, 0, 0, 0)
   end
 
-  def fake_prefs
-    @fake_prefs ||= FakePrefs.new(7)
-  end
-
   def setup
-    @current_user = FakeUser.new(now, fake_prefs)
+    @current_user = FakeUser.new(now)
   end
 
   def test_item_with_due_date_is_not_stale_ever
