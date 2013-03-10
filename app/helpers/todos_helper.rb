@@ -66,7 +66,8 @@ module TodosHelper
       :object => todos_without_project, 
       :locals => {:settings => { 
         :collapsible => true, 
-        :container_name => "without_project"
+        :container_name => "without_project",
+        :parent_container_type => "home"
         }
       }
   end
@@ -457,13 +458,13 @@ module TodosHelper
   end
 
   def item_container_id (todo)
-    return "hiddenitems"              if source_view_is(:tag) && todo.hidden?
-    return "c#{todo.context_id}items" if source_view_is :deferred
-    return @new_due_id                if source_view_is :calendar
-    return "tickleritems"             if !source_view_is(:todo) && (todo.deferred? || todo.pending?)
-    return "completed_containeritems" if todo.completed?
-    return "p#{todo.project_id}items" if source_view_is :project
-    return "c#{todo.context_id}items"
+    return "hidden_items"              if source_view_is(:tag) && todo.hidden?
+    return "c#{todo.context_id}_items" if source_view_is :deferred
+    return @new_due_id                 if source_view_is :calendar
+    return "tickler_items"             if !source_view_is(:todo) && (todo.deferred? || todo.pending?)
+    return "completed_container_items" if todo.completed?
+    return "p#{todo.project_id}_items" if source_view_is :project
+    return "c#{todo.context_id}_items"
   end
 
   def empty_container_msg_div_id(todo = @todo || @successor)
@@ -472,12 +473,12 @@ module TodosHelper
     source_view do |page|
       page.project  {
         return "tickler-empty-nd" if empty_criteria_met
-        return "p#{todo.project_id}empty-nd"
+        return "p#{todo.project_id}-empty-d"
       }
       page.tag {
         return "tickler-empty-nd" if empty_criteria_met
         return "hidden-empty-nd" if @todo.hidden?
-        return "c#{todo.context_id}empty-nd"
+        return "c#{todo.context_id}-empty-d"
       }
       page.calendar {
         return "tickler-empty-nd" if empty_criteria_met
@@ -485,11 +486,11 @@ module TodosHelper
       }
       page.context {
         return "tickler-empty-nd" if empty_criteria_met
-        return "c#{todo.context_id}empty-nd"
+        return "c#{todo.context_id}-empty-d"
       }
     end
 
-    return "c#{todo.context_id}empty-nd"
+    return "c#{todo.context_id}-empty-d"
   end
 
   def empty_criteria_met

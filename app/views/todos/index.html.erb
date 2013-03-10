@@ -3,8 +3,8 @@
 
   <%= show_grouped_todos %>
 
-  <% if @group_view_by == 'context' -%>
-    <%= show_todos_without_project(@todos_with_project) unless @todos_without_project.nil? -%>
+  <% if @group_view_by == 'project' -%>
+    <%= show_todos_without_project(@todos_without_project) unless @todos_without_project.nil? -%>
   <% end -%>
 
   <%= show_done_todos(@done, {:collapsible => true}) unless @done.nil? %>

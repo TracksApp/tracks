@@ -9,7 +9,6 @@ class TodosController < ApplicationController
   def index
     @source_view = params['_source_view'] || 'todo'
     @group_view_by = cookies['group_view_by'] || 'context'
-    @show_empty_containers = (cookies['show_empty_containers']=="true") || false
 
     init_data_for_sidebar unless mobile?
     
@@ -934,7 +933,6 @@ class TodosController < ApplicationController
     @tag_title = @single_tag ? @tag_name : tag_title(@tag_expr)
 
     @group_view_by = cookies['group_view_by'] || 'context'
-    @show_empty_containers = (cookies['show_empty_containers']=="true") || false
   end
 
   def get_ids_from_tag_expr(tag_expr)

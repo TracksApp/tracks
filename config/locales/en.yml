@@ -434,7 +434,7 @@ en:
     actions:
       completed: Completed actions
       tag_completed: "Completed actions tagged with '%{param}'"
-      without_project: "Actions without project"
+      home_without_project: "Actions without project"
       project_project: "Actions in this project"
       project_deferred_pending: Deferred/pending actions in this project
       context_deferred_pending: Deferred/pending actions in this context
