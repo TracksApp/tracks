@@ -1,12 +1,13 @@
 <div id="display_box">
-  <%= empty_message_holder(@not_done_todos.empty?) %>
+  <%= empty_message_holder("not_done", @not_done_todos.empty?) %>
 
   <%= show_grouped_todos %>
 
-  <% unless @done.nil? -%>
-    <%= render(:partial => "todos/completed", :object => @done,
-          :locals => { :collapsible => true, :append_descriptor => nil }) -%>
+  <% if @group_view_by == 'context' -%>
+    <%= show_todos_without_project(@todos_with_project) unless @todos_without_project.nil? -%>
   <% end -%>
+
+  <%= show_done_todos(@done, {:collapsible => true}) unless @done.nil? %>
 </div>
 
 <div id="input_box">

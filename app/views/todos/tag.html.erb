@@ -1,29 +1,27 @@
+<% 
+  options = {
+    :collapsible => false,
+    :parent_container_type => 'tag',
+    :title_param => @tag_title    
+  }
+  deferred_pending_options=options.clone.merge({:deferred => @deferred_todos, :pending => @pending_todos})
+  hidden_options = options.clone
+  done_options = options.clone
+-%>
 <div id="display_box">
-  <%= empty_message_holder(@not_done_todos.empty?) %>
+  <%= empty_message_holder("not_done_with_tag", @not_done_todos.empty?, @tag_name) %>
 
   <%= show_grouped_todos %>
 
-  <% unless @deferred_todos.nil? -%>
-    <%= render :partial => "todos/deferred", :locals => {
-                                               :deferred => @deferred_todos,
-                                               :pending => @pending_todos,
-                                               :collapsible => true,
-                                               :append_descriptor => t('todos.tagged_with', :tag_name => @tag_title),
-                                               :parent_container_type => 'tag'
-                                              } %>
-  <% end -%>
+  <%= show_deferred_pending_todos(@deferred_todos, @pending_todos, deferred_pending_options) %>
 
-  <% unless @hidden_todos.nil? -%>
-    <%= render :partial => "todos/hidden", :object => @hidden_todos, :locals => { :collapsible => true, :append_descriptor => t('todos.tagged_with', :tag_name => @tag_title) } %>
-  <% end -%>
+  <%= show_hidden_todos(@hidden_todos, hidden_options) unless @hidden_todos.nil? %>
 
-  <% unless @done.nil? -%>
-    <%= render :partial => "todos/completed", :object => @done,
-      :locals => { :collapsible => true, :append_descriptor => t('todos.tagged_with', :tag_name => @tag_title) } %>
-  <% end -%>
-</div><!-- End of display_box -->
+  <%= show_done_todos(@done, done_options) unless @done.nil? %>
+
+</div>
 
 <div id="input_box">
   <%= render :partial => "shared/add_new_item_form" %>
   <%= render :file => "sidebar/sidebar" %>
-</div><!-- End of input box -->
+</div>

@@ -5,18 +5,19 @@
 cache [project, @source_view, current_user.date.strftime("%Y%m%d")] do 
 %>
   <%= render :partial => "project_settings_container", :locals => {:project => project} if source_view_is :project %>
-  
-  <div id="p<%= project.id %>" class="container project" style="display:<%= (collapsible && @not_done.empty?) ? "none" : "block" %>">
-    <h2>
-      <%= container_toggle("toggle_p#{project.id}") if collapsible %>
-      <%= source_view_is(:project) ? t('projects.actions_in_project_title') : show_project_name(project) %>
-    </h2>
-    <div id="p<%= project.id %>items" class="items toggle_target">
-      <div id="p<%= project.id %>empty-nd" style="display:<%= @not_done.empty? ? 'block' : 'none'%>;">
-        <div class="message"><p><%= t('projects.no_actions_in_project') %></p></div>
-      </div>
-      <%= render :partial => "todos/todo", :collection => @not_done, :locals => { :parent_container_type => "project" } %>
-    </div>
-  </div>
+
+  <%= 
+    title = source_view_is(:project) ? t('projects.actions_in_project_title') : show_project_name(project)
+
+    render :partial => 'todos/collection', 
+      :object => @not_done, 
+      :locals => { :settings => {
+        :id => "p#{project.id}", 
+        :collapsible => settings[:collapsible], 
+        :title => title, 
+        :container_name => 'project',
+        :show_empty_containers => @show_empty_containers
+      }} 
+  %>
 
 <% end %>

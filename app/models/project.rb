@@ -167,4 +167,8 @@ class NullProject
     nil
   end
 
+  def name
+    ""
+  end
+
 end

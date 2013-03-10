@@ -1,14 +1,20 @@
+<% 
+  deferred_pending_options = {:append_descriptor => nil, :parent_container_type => 'project'}
+  done_todo_options = {
+    :append_descriptor => t('projects.last_completed_in_project', :number=>prefs.show_number_completed), 
+    :suppress_project => true, 
+    :parent_container_type => 'project'
+  }
+-%>
 <div id="display_box">
-  <div id="project-next-prev">
-    <%= project_next_prev %>
-  </div>
+  <%= project_next_prev %>
 
-  <%= render :partial => @project, :locals => {:collapsible => false } %>
-  <%= render :partial => "todos/deferred", :object => @deferred_todos, :locals => { :collapsible => false, :append_descriptor => t('projects.todos_append'), :parent_container_type => 'project', :pending => @pending_todos } %>
-  <% unless @max_completed==0 -%>
-    <%= render :partial => "todos/completed", :object => @done, :locals => { :collapsible => false, :suppress_project => true, :append_descriptor => t('projects.todos_append') } %>
-  <% end -%>
+  <%= render :partial => @project, :locals => {:settings => {:collapsible => false }} %>
 
+  <%= show_deferred_pending_todos(@deferred_todos, @pending_todos, deferred_pending_options) %>
+
+  <%= show_done_todos(@done, done_todo_options) unless @done.nil? %>
+  
   <div class="container">
     <div id="notes">
       <div class="add_note_link"><%= link_to t('projects.add_note'), '#' %> </div>
@@ -29,4 +35,4 @@
 <div id="input_box">
   <%= render :partial => "shared/add_new_item_form" %>
   <%= render :file => "sidebar/sidebar" %>
-</div><!-- End of input box -->
+</div>

@@ -9,6 +9,8 @@ class TodosController < ApplicationController
   def index
     @source_view = params['_source_view'] || 'todo'
     @group_view_by = cookies['group_view_by'] || 'context'
+    @show_empty_containers = (cookies['show_empty_containers']=="true") || false
+
     init_data_for_sidebar unless mobile?
     
     @todos = current_user.todos.includes(Todo::DEFAULT_INCLUDES)
@@ -31,6 +33,7 @@ class TodosController < ApplicationController
         @page_title = t('todos.task_list_title')
         # Set count badge to number of not-done, not hidden context items
         @count = current_user.todos.active.not_hidden.count(:all)
+        @todos_without_project = @not_done_todos.select{|t|t.project.nil?}
       end
       format.m do
         @page_title = t('todos.mobile_todos_page_title')
@@ -931,6 +934,7 @@ class TodosController < ApplicationController
     @tag_title = @single_tag ? @tag_name : tag_title(@tag_expr)
 
     @group_view_by = cookies['group_view_by'] || 'context'
+    @show_empty_containers = (cookies['show_empty_containers']=="true") || false
   end
 
   def get_ids_from_tag_expr(tag_expr)

@@ -17,6 +17,17 @@ module ApplicationHelper
     end
   end
 
+  def show_empty_containers_menu_entry
+    @show_empty_containers ||= false
+    @group_view_by ||= 'context'
+    content_tag(:li) do
+      link_to( 
+        t("layouts.navigation.show_empty_containers_#{@group_view_by}"), 
+        '#', 
+        {:id => "show_empty_containers", :accesskey => "s", :title => t('layouts.navigation.show_empty_containers_title'), :x_show_empty_containers => @show_empty_containers} )
+    end
+  end
+
   def container_toggle(id)
     link_to(
       image_tag("blank.png", :alt => t('common.collapse_expand')),

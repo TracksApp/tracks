@@ -1,17 +1,112 @@
 module TodosHelper
 
-  def empty_message_holder(show)
-    content_tag(:div, :id => "no_todos_in_view", :class => "container context", :style => "display:" + (show ? "block" : "none") ) do
-      content_tag(:h2) { t('todos.no_actions_found_title') }
+  def empty_message_holder(container_name, show, title_param=nil)
+    content_tag(:div, :id => "no_todos_in_view", :class => "container #{container_name}", :style => "display:" + (show ? "block" : "none") ) do
+      content_tag(:h2) { t("todos.no_actions.title", :param=>title_param) } +
       content_tag(:div, :class => "message") do
-        content_tag(:p) { t('todos.no_actions_found') }
+        content_tag(:p) { t("todos.no_actions.#{container_name}", :param=>title_param) }
+      end
+    end
+  end
+
+  def todos_container_empty_message(container_name, container_id, show_message)
+    content_tag(:div, :id=>"#{container_id}-empty-d", :style=>"display:#{show_message ? 'block' : 'none'}") do
+      content_tag(:div, :class=>"message") do
+        content_tag(:p) do
+          t("todos.no_actions.#{container_name}")
+        end
       end
     end
   end
 
   def show_grouped_todos
     collection = (@group_view_by == 'context') ? @contexts_to_show : @projects_to_show
-    render(:partial => collection, :locals => { :collapsible => true })
+    render(:partial => collection, :locals => { :settings => {:collapsible => true, :show_empty_containers => @show_empty_containers }})
+  end
+
+  def default_collection_settings
+    {
+      :suppress_context => false, 
+      :suppress_project => false,
+      :collapsible => false, 
+      :append_descriptor => nil,
+      :parent_container_type => nil,
+      :show_empty_containers => true
+    }
+  end
+
+  def show_done_todos(done_todos, settings={})
+    settings[:container_name] = "completed"
+    settings[:link_in_header] = link_to(t('common.show_all'), determine_done_path)
+
+    render :partial => 'todos/collection', 
+      :object => done_todos, 
+      :locals => {:settings => settings.reverse_merge!(default_collection_settings)}
+  end
+
+  def show_hidden_todos(hidden_todos, settings={})
+    settings[:container_name] = "hidden"
+
+    render :partial => 'todos/collection', 
+      :object => hidden_todos, 
+      :locals => {:settings => settings.reverse_merge!(default_collection_settings)}
+  end
+
+  def show_deferred_pending_todos(deferred_todos, pending_todos, settings={})
+    settings[:pending] = pending_todos
+    settings[:container_name]="deferred_pending"
+
+    render :partial => "todos/collection", 
+      :object => deferred_todos+pending_todos, 
+      :locals => {:settings => settings.reverse_merge!(default_collection_settings)}
+  end
+
+  def show_todos_without_project(todos_without_project)
+    render :partial => 'todos/collection', 
+      :object => todos_without_project, 
+      :locals => {:settings => { 
+        :collapsible => true, 
+        :container_name => "without_project"
+        }
+      }
+  end
+
+  def todos_container(settings={})
+    container_name = settings[:container_name]
+    settings.reverse_merge!({
+      :id => "#{container_name}_container",
+      :class => "container #{container_name}",
+      })
+
+    content_tag(:div, 
+      :class=>settings[:class], 
+      :id=>settings[:id], 
+      :style => "display:" + (settings[:show_container] ? "block" : "none")) do
+      yield
+    end
+  end
+
+  def todos_container_header(settings={})
+    settings.reverse_merge!({
+        :title => t("todos.actions.#{settings[:parent_container_type]}_#{settings[:container_name]}", :param => settings[:title_param])
+      })
+    header = settings[:link_in_header].nil? ? "" : content_tag(:div, :class=>"add_note_link"){settings[:link_in_header]}
+    header += content_tag(:h2) do
+      toggle = settings[:collapsible] ? container_toggle("toggle_#{settings[:container_name]}") : ""
+      "#{toggle} #{settings[:title]} #{settings[:append_descriptor]}".html_safe
+    end
+    header.html_safe
+  end
+
+  def todos_container_items(collection, settings={})
+    settings.reverse_merge!({:id => "#{settings[:container_name]}"})
+    # do not pass :class to partial locals
+    settings.delete(:class)
+
+    content_tag(:div, :id =>settings[:id]+"_items", :class=>"items toggle_target") do
+      todos_container_empty_message(settings[:container_name], settings[:id], collection.empty?) +
+      render(:partial => "todos/todo", :collection => collection, :locals => settings)
+    end
   end
 
   def remote_star_icon(todo=@todo)

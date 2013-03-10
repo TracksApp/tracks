@@ -14,15 +14,15 @@ class ProjectsControllerTest < ActionController::TestCase
     p = projects(:timemachine)
     login_as :admin_user
     get :show, :id => p.to_param
-    assert_not_nil assigns['deferred']
-    assert_equal 1, assigns['deferred'].size
+    assert_not_nil assigns['deferred_todos']
+    assert_equal 1, assigns['deferred_todos'].size
   
     t = p.todos.not_completed[0]
     t.show_from = 1.days.from_now.utc
     t.save!
   
     get :show, :id => p.to_param
-    assert_equal 2, assigns['deferred'].size
+    assert_equal 2, assigns['deferred_todos'].size
   end
   
   def test_show_exposes_next_project_in_same_state

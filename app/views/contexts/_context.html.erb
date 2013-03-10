@@ -4,17 +4,17 @@
 # rendering of "due in x days" that change without touching updated at of the todo
 cache [context, @source_view, current_user.date.strftime("%Y%m%d"), @tag_name] do
 %>
-  <div id="c<%= context.id %>" class="container context" style="display:<%= (collapsible && @not_done.empty?) ? "none" : "block" %>">
-    <h2>
-      <%= container_toggle("toggle_c#{context.id}") %>
-      <%= show_context_name(context) %>
-    </h2>
-    <div id="c_<%=context.id%>_target" class="context_target drop_target"></div>
-    <div id="c<%= context.id %>items" class="items toggle_target">
-      <div id="c<%= context.id %>empty-nd" style="display:<%= @not_done.empty? ? 'block' : 'none'%>;">
-        <div class="message"><p><%= t 'contexts.no_actions' %></p></div>
-      </div>
-      <%= render :partial => "todos/todo", :collection => @not_done, :locals => { :parent_container_type => "context" } %>
-    </div>
-  </div>
+
+  <%= 
+    render :partial => 'todos/collection', 
+      :object => @not_done, 
+      :locals => { :settings => {
+        :id => "c#{context.id}", 
+        :collapsible => settings[:collapsible], 
+        :container_name => 'context', 
+        :title => show_context_name(context),
+        :show_empty_containers => @show_empty_containers
+      }} 
+  %>
+
 <% end %>

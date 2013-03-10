@@ -329,6 +329,12 @@ var TracksPages = {
             refresh_page();
         });
 
+        $("a#show_empty_containers").click(function () {
+            var show = ($(this).attr("x_show_empty_containers") == "true");
+            $.cookie('show_empty_containers', !show);
+            refresh_page();
+        });
+
         /* fade flashes and alerts in automatically */
         $(".alert").fadeOut(8000);
     }

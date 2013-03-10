@@ -1,9 +1,14 @@
+<% 
+  suffix_completed = t('contexts.last_completed_in_context', :number=>prefs.show_number_completed)
+  deferred_pending_options = {:append_descriptor => nil, :parent_container_type => 'context'}
+  done_todo_options = {:append_descriptor => suffix_completed, :suppress_context => true, :parent_container_type => 'context'}
+-%>
 <div id="display_box">
-<%= render :partial => @context, :locals => { :collapsible => false } %>
-<%= render :partial => "todos/deferred", :object => @deferred, :locals => { :collapsible => false, :append_descriptor => t('contexts.todos_append'), :parent_container_type => 'context', :pending => @pending } %>
-<% unless @max_completed==0 -%>
-  <%= render :partial => "todos/completed", :object => @done, :locals => { :suppress_context => true, :collapsible => false, :append_descriptor => t('contexts.last_completed_in_context', :number=>prefs.show_number_completed) } %>
-<% end -%>
+	<%= render :partial => @context, :locals => { :settings => {:collapsible => false }} %>
+
+	<%= show_deferred_pending_todos(@deferred_todos, @pending_todos, deferred_pending_options) %>
+
+	<%= show_done_todos(@done, done_todo_options) unless @done.nil? %>
 </div>
 
 <div id="input_box">
