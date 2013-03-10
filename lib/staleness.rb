@@ -1,18 +1,10 @@
 require 'active_support/all'
 
 class Staleness
+  SECONDS_PER_DAY = 86400
   def self.days_stale(item, current_user)
-    if item.due || item.completed?
-      return ""
-    elsif item.created_at < current_user.time - (current_user.prefs.staleness_starts * 3).days
-      return " stale_l3"
-    elsif item.created_at < current_user.time - (current_user.prefs.staleness_starts * 2).days
-      return " stale_l2"
-    elsif item.created_at < current_user.time - (current_user.prefs.staleness_starts).days
-      return " stale_l1"
-    else
-      return ""
-    end
+    return 0 if item.due || item.completed?
+    (current_user.time - item.created_at).to_i / SECONDS_PER_DAY
   end
 end
 
