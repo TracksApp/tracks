@@ -1,15 +1,15 @@
 require_relative '../minimal_test_helper'
 require_relative '../../lib/staleness'
 
-FakeUser = Struct.new(:time, :prefs)
-FakePrefs = Struct.new(:staleness_starts)
-FakeTask = Struct.new(:due, :completed, :created_at) do
-  def completed?
-    self.completed
-  end
-end
 
 class StalenessTest < Test::Unit::TestCase
+  FakeUser = Struct.new(:time, :prefs)
+  FakePrefs = Struct.new(:staleness_starts)
+  FakeTask = Struct.new(:due, :completed, :created_at) do
+    def completed?
+      self.completed
+    end
+  end
 
   def now
     @now ||= Time.utc(2013, 2, 28, 0, 0, 0)
