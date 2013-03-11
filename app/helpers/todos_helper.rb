@@ -173,7 +173,18 @@ module TodosHelper
   # * l3: created more than 3 x staleness_starts
   #
   def staleness_class(item)
-    Staleness.days_stale(item, current_user)
+    days_stale = Staleness.days_stale(item, current_user)
+    start = current_user.prefs.staleness_starts
+    case days_stale
+    when 0...start
+      ""
+    when start...start*2
+      " stale_l1"
+    when start*2...start*3
+      " stale_l2"
+    else
+      " stale_l3"
+    end
   end
 
   def show_date_tag(date, the_class, text)
