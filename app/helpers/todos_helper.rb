@@ -362,49 +362,34 @@ module TodosHelper
 
     source_view do |page|
       page.project  {
-        return "tickler-empty-nd" if
-          @todo_was_deferred_from_active_state ||
-          @todo_was_blocked_from_active_state ||
-          @todo_was_destroyed_from_deferred_state ||
-          @todo_was_created_deferred ||
-          @todo_was_blocked_from_completed_state ||
-          @todo_was_created_blocked
+        return "tickler-empty-nd" if empty_criteria_met
         return "p#{todo.project_id}empty-nd"
       }
       page.tag {
-        return "tickler-empty-nd" if
-          @todo_was_deferred_from_active_state ||
-          @todo_was_blocked_from_active_state ||
-          @todo_was_destroyed_from_deferred_state ||
-          @todo_was_created_deferred ||
-          @todo_was_blocked_from_completed_state ||
-          @todo_was_created_blocked
+        return "tickler-empty-nd" if empty_criteria_met
         return "hidden-empty-nd" if @todo.hidden?
         return "c#{todo.context_id}empty-nd"
       }
       page.calendar {
-        return "tickler-empty-nd" if
-          @todo_was_deferred_from_active_state ||
-          @todo_was_blocked_from_active_state ||
-          @todo_was_destroyed_from_deferred_state ||
-          @todo_was_created_deferred ||
-          @todo_was_blocked_from_completed_state ||
-          @todo_was_created_blocked
+        return "tickler-empty-nd" if empty_criteria_met
         return "empty_#{@new_due_id}"
       }
       page.context {
-        return "tickler-empty-nd" if
-          @todo_was_deferred_from_active_state ||
-          @todo_was_blocked_from_active_state ||
-          @todo_was_destroyed_from_deferred_state ||
-          @todo_was_created_deferred ||
-          @todo_was_blocked_from_completed_state ||
-          @todo_was_created_blocked
+        return "tickler-empty-nd" if empty_criteria_met
         return "c#{todo.context_id}empty-nd"
       }
     end
 
     return "c#{todo.context_id}empty-nd"
+  end
+
+  def empty_criteria_met
+    @todo_was_deferred_from_active_state ||
+      @todo_was_blocked_from_active_state ||
+      @todo_was_destroyed_from_deferred_state ||
+      @todo_was_created_deferred ||
+      @todo_was_blocked_from_completed_state ||
+      @todo_was_created_blocked
   end
 
   def todo_was_removed_from_deferred_or_blocked_container
