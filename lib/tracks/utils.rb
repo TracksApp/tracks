@@ -22,8 +22,8 @@ module Tracks
     end
 
     def self.render_text(text)
-      rendered = Tracks::Utils.auto_link_message(text)
-      rendered = markdown(rendered)
+      rendered = auto_link_message(text)
+      rendered = textile(rendered)
       rendered = helpers.auto_link(rendered, :link => :urls)
 
       # add onenote and message protocols
@@ -34,11 +34,7 @@ module Tracks
       return rendered.html_safe
     end
     
-    # Uses RedCloth to transform text using either Textile or Markdown Need to
-    # require redcloth above RedCloth 3.0 or greater is needed to use Markdown,
-    # otherwise it only handles Textile
-    #
-    def self.markdown(text)
+    def self.textile(text)
       RedCloth.new(text).to_html
     end
     

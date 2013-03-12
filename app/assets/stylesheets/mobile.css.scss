@@ -280,3 +280,7 @@ input#todo_description, input#tag_list, textarea#todo_notes, select#todo_project
         background: #cc3334 image-url('next.png') right center no-repeat;
     }
 }
+
+div.note_wrapper p {
+    display: inline;
+}

@@ -9,7 +9,6 @@ gem "sqlite3"
 gem "mysql2"
 
 gem "RedCloth"
-gem "formatize"
 gem "sanitize"
 gem "will_paginate"
 gem "acts_as_list"

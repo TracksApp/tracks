@@ -1,10 +1,10 @@
 module NotesHelper
   def truncated_note(note, characters = 50)
-    sanitize(textilize_without_paragraph(truncate(note.body, :length => characters, :omission => "...")))
+    Tracks::Utils.render_text(truncate(note.body, :length => characters, :omission => "..."))
   end
 
   def rendered_note(note)
-    sanitize(textilize_without_paragraph(note.body))
+    Tracks::Utils.render_text(note.body)
   end
 
   def link_to_delete_note(note, descriptor = sanitize(note.id.to_s))
