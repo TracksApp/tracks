@@ -1,3 +1,5 @@
 <% note = notes_summary -%>
-<div class="note"><%= link_to( truncated_note(note), note_path(note, :format => 'm')) %></div>
+<div class="note_wrapper">
+  <div class="note"><%= link_to( truncated_note(note), note_path(note, :format => 'm')) %></div>
+</div>
 <% note = nil -%>

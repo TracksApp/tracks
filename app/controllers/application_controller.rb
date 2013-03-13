@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
 
   include LoginSystem
-  helper_method :current_user, :prefs, :format_date, :markdown
+  helper_method :current_user, :prefs, :format_date
 
   layout proc{ |controller| controller.mobile? ? "mobile" : "application" }
   # exempt_from_layout /\.js\.erb$/
