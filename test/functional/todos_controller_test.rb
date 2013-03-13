@@ -746,7 +746,7 @@ class TodosControllerTest < ActionController::TestCase
     assert_select("div#notes_todo_#{todo.id}", "A normal description.")
   end
   
-  def test_format_note_markdown
+  def test_format_note_textile
     login_as(:admin_user)
     todo = users(:admin_user).todos.first
     todo.notes = "A *bold description*."
