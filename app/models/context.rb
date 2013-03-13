@@ -8,6 +8,7 @@ class Context < ActiveRecord::Base
   scope :active, :conditions => { :state => :active }
   scope :hidden, :conditions => { :state => :hidden }
   scope :closed, :conditions => { :state => :closed }
+  scope :with_name, lambda { |name| where("name LIKE ?", name) }
 
   acts_as_list :scope => :user, :top_of_list => 0
 

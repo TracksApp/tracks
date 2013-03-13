@@ -11,6 +11,8 @@ class Project < ActiveRecord::Base
   scope :completed, :conditions => { :state => 'completed'}
   scope :uncompleted, :conditions => ["NOT(state = ?)", 'completed']
 
+  scope :with_name_or_description, lambda { |body| where("name LIKE ? OR description LIKE ?", body, body) }
+
   validates_presence_of :name
   validates_length_of :name, :maximum => 255
   validates_uniqueness_of :name, :scope => "user_id"

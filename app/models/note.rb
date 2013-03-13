@@ -4,4 +4,5 @@ class Note < ActiveRecord::Base
 
   attr_protected :user
 
+  scope :with_body, lambda { |terms| where("body LIKE ?", terms) }
 end
