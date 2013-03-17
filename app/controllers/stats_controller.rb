@@ -355,7 +355,7 @@ class StatsController < ApplicationController
       'id' => all_actions_per_context[i][:id]
     } }
 
-    if size==pie_cutoff
+    if all_actions_per_context.size > pie_cutoff
       @actions_per_context[size-1]['name']=t('stats.other_actions_label')
       @actions_per_context[size-1]['total']=@actions_per_context[size-1]['total']
       @actions_per_context[size-1]['id']=-1
