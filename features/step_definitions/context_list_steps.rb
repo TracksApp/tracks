@@ -71,8 +71,10 @@ When /^I edit the state of context "(.*?)" to closed$/ do |context_name|
 
   # wait for the form to go away
   page.should_not have_css("button#submit_context_#{context.id}", :visible => true)
-  sleep 0.10
   # wait for the changed context to appear
+  elem = page.find("a#link_edit_context_#{context.id}")
+  elem.should_not be_nil
+  
   page.should have_css("a#link_edit_context_#{context.id}", :visible=> true)
 end
 
