@@ -15,7 +15,7 @@
   end
   animation << "hide_context" if update_needs_to_hide_context
   animation << "highlight_updated_todo"
-  animation << "update_empty_container" if source_view_is_one_of(:tag, :todo)
+  animation << "update_empty_container" if source_view_is_one_of(:tag, :todo, :deferred)
   animation << "update_predecessors"
 %>
 
@@ -72,7 +72,7 @@ function replace_todo(next_steps) {
 function hide_context(next_steps) {
   <% context_id = @context_changed ? @original_item_context_id : @todo.context_id -%>
   $('#c<%=  context_id %>').fadeOut(400, function(){ next_steps.go(); });
-  <%= "$('#tickler-empty-nd').slideDown(400);".html_safe if source_view_is(:deferred) && @down_count == 0 %>
+  <%= "$('#deferred_pending_container_empty-nd').slideDown(400);".html_safe if source_view_is(:deferred) && @down_count == 0 %>
 }
 
 function highlight_updated_todo(next_steps) {
@@ -82,9 +82,9 @@ function highlight_updated_todo(next_steps) {
 
 function update_empty_container(next_steps) {
   <% if @down_count==0 -%>
-    $('#no_todos_in_view').slideDown(400, function(){ next_steps.go(); });
+    $('div#no_todos_in_view').slideDown(400, function(){ next_steps.go(); });
   <% else -%>
-    $('#no_todos_in_view').fadeOut(100, function(){ next_steps.go(); });
+    $('div#no_todos_in_view').fadeOut(100, function(){ next_steps.go(); });
   <% end -%>
 }
 
@@ -130,8 +130,10 @@ function regenerate_predecessor_family() {
   parents = @todo.predecessors
   until parents.empty?
     parent = parents.pop
-    parents += parent.predecessors -%>
+    parents += parent.predecessors 
+-%>
     $('#<%= dom_id(parent) %>').html("<%= escape_javascript(render(:partial => parent, :locals => { :settings => {:parent_container_type => parent_container_type }})) %>");
-<%end
+<%
+  end
 -%>
 }

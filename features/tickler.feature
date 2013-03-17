@@ -10,7 +10,7 @@ Feature: Manage deferred todos
     And there exists a project "manage me" for user "testuser"
     And I have logged in as "testuser" with password "secret"
 
-  @javascript
+  @javascript 
   Scenario: I can add a deferred todo and it will show in the tickler
     # also adding the first deferred todo will hide the empty message
     Given I have a context called "test"

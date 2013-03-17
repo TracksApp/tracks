@@ -9,7 +9,7 @@
 <div id="display_box">
   <%= project_next_prev %>
 
-  <%= render :partial => @project, :locals => {:settings => {:collapsible => false }} %>
+  <%= render :partial => @project, :locals => {:settings => {:collapsible => false, :show_empty_containers => true }} %>
 
   <%= show_deferred_pending_todos(@deferred_todos, @pending_todos, deferred_pending_options) %>
 

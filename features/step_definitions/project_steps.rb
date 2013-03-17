@@ -158,13 +158,13 @@ When /^I try to edit the project name of "([^"]*)" to "([^"]*)"$/ do |project_cu
 end
 
 When /^I edit the project name in place to be "([^"]*)"$/ do |new_project_name|
-  page.find("div#project_name").click
+  page.find("span#project_name").click
   fill_in "value", :with => new_project_name
   click_button "Ok"
 end
 
 When /^I click to edit the project name in place$/ do
-  page.find("div#project_name").click
+  page.find("span#project_name").click
 end
 
 When /^I edit the project settings$/ do
@@ -236,13 +236,13 @@ end
 
 Then /^I should (see|not see) empty message for (todos|deferred todos|completed todos) of project/ do |visible, state|
   css = "wrong state"
-  css = "div#p#{@project.id}empty-nd" if state == "todos"
-  css = "div#tickler-empty-nd"        if state == "deferred todos"
-  css = "div#empty-d"                 if state == "completed todos"
+  css = "div#p#{@project.id}-empty-d"             if state == "todos"
+  css = "div#deferred_pending_container-empty-d"  if state == "deferred todos"
+  css = "div#completed_container-empty-d"         if state == "completed todos"
   
   elem = find(css)
   elem.should_not be_nil
-  elem.send(visible=="see" ? "should" : "should_not", be_visible)
+  elem.send(visible=="see" ? :should : :should_not, be_visible)
 end
 
 Then /^I edit the default tags to "([^"]*)"$/ do |default_tags|
@@ -253,14 +253,14 @@ end
 
 Then /^I should be able to change the project name in place$/ do
   # Note that this is not changing the project name
-  page.should have_css("div#project_name>form>input")
-  page.find("div#project_name > form > button[type=cancel]").click
-  page.should_not have_css("div#project_name>form>input")
+  page.should have_css("span#project_name>form>input")
+  page.find("span#project_name > form > button[type=cancel]").click
+  page.should_not have_css("span#project_name>form>input")
 end
 
 Then /^I should not be able to change the project name in place$/ do
   step "I click to edit the project name in place"
-  page.should_not have_xpath("//div[@id='project_name']/form/input")
+  page.should_not have_xpath("//span[@id='project_name']/form/input")
 end
 
 Then /^the form for adding a note should not be visible$/ do
@@ -295,7 +295,7 @@ end
 
 Then /^the project title should be "(.*)"$/ do |title|
   wait_until do
-    page.find("h2#project_name_container div#project_name").text == title
+    page.find("h2#project_name_container span#project_name").text == title
   end
 end
 

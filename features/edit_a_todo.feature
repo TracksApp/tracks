@@ -85,8 +85,8 @@ Feature: Edit a next action from every page
 
     Scenarios:
       | page                               | page type |
-      | "visible project" project          | project   |
       | home page                          | home      |
+      | "visible project" project          | project   |
       | tag page for "starred"             | tag       |
       | context page for "visible context" | context   |
 

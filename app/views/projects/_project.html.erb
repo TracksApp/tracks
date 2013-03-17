@@ -16,7 +16,7 @@ cache [project, @source_view, current_user.date.strftime("%Y%m%d")] do
         :collapsible => settings[:collapsible], 
         :title => title, 
         :container_name => 'project',
-        :show_empty_containers => @show_empty_containers
+        :show_empty_containers => settings[:show_empty_containers]
       }} 
   %>
 

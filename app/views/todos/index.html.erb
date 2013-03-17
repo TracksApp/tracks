@@ -7,7 +7,7 @@
     <%= show_todos_without_project(@todos_without_project) unless @todos_without_project.nil? -%>
   <% end -%>
 
-  <%= show_done_todos(@done, {:collapsible => true}) unless @done.nil? %>
+  <%= show_done_todos(@done, {:parent_container_type => 'home', :collapsible => true}) unless @done.nil? %>
 </div>
 
 <div id="input_box">

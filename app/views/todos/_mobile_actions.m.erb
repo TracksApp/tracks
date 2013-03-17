@@ -1,5 +1,5 @@
 <% if @not_done_todos.empty? -%>
-<p><%= t('todos.no_incomplete_actions') %></p>
+<p><%= t('todos.no_actions.not_done') %></p>
 <% else -%>
 <%= render :partial => @contexts_to_show -%>
 <% end -%>

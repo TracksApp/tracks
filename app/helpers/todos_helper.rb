@@ -73,10 +73,9 @@ module TodosHelper
   end
 
   def todos_container(settings={})
-    container_name = settings[:container_name]
     settings.reverse_merge!({
-      :id => "#{container_name}_container",
-      :class => "container #{container_name}",
+      :id => "#{settings[:container_name]}_container",
+      :class => "container #{settings[:container_name]}",
       })
 
     content_tag(:div, 
@@ -93,7 +92,7 @@ module TodosHelper
       })
     header = settings[:link_in_header].nil? ? "" : content_tag(:div, :class=>"add_note_link"){settings[:link_in_header]}
     header += content_tag(:h2) do
-      toggle = settings[:collapsible] ? container_toggle("toggle_#{settings[:container_name]}") : ""
+      toggle = settings[:collapsible] ? container_toggle("toggle_#{settings[:id]}") : ""
       "#{toggle} #{settings[:title]} #{settings[:append_descriptor]}".html_safe
     end
     header.html_safe
@@ -458,12 +457,12 @@ module TodosHelper
   end
 
   def item_container_id (todo)
-    return "hidden_items"              if source_view_is(:tag) && todo.hidden?
-    return "c#{todo.context_id}_items" if source_view_is :deferred
-    return @new_due_id                 if source_view_is :calendar
-    return "tickler_items"             if !source_view_is(:todo) && (todo.deferred? || todo.pending?)
-    return "completed_container_items" if todo.completed?
-    return "p#{todo.project_id}_items" if source_view_is :project
+    return "hidden_container_items"                        if source_view_is(:tag) && todo.hidden?
+    return "c#{todo.context_id}_items"           if source_view_is :deferred
+    return @new_due_id                           if source_view_is :calendar
+    return "deferred_pending_container_items"    if !source_view_is(:todo) && (todo.deferred? || todo.pending?)
+    return "completed_container_items"           if todo.completed?
+    return "p#{todo.project_id}_items"           if source_view_is :project
     return "c#{todo.context_id}_items"
   end
 
@@ -472,20 +471,20 @@ module TodosHelper
 
     source_view do |page|
       page.project  {
-        return "tickler-empty-nd" if empty_criteria_met
+        return "deferred_pending_container-empty-d" if empty_criteria_met
         return "p#{todo.project_id}-empty-d"
       }
       page.tag {
-        return "tickler-empty-nd" if empty_criteria_met
-        return "hidden-empty-nd" if @todo.hidden?
+        return "deferred_pending_container-empty-d" if empty_criteria_met
+        return "hidden_container-empty-d" if @todo.hidden?
         return "c#{todo.context_id}-empty-d"
       }
       page.calendar {
-        return "tickler-empty-nd" if empty_criteria_met
+        return "deferred_pending_container-empty-d" if empty_criteria_met
         return "empty_#{@new_due_id}"
       }
       page.context {
-        return "tickler-empty-nd" if empty_criteria_met
+        return "deferred_pending_container-empty-d" if empty_criteria_met
         return "c#{todo.context_id}-empty-d"
       }
     end
@@ -513,25 +512,25 @@ module TodosHelper
     container_id = ""
     source_view do |page|
       page.project  {
-        container_id = "p#{@original_item_project_id}empty-nd" if @remaining_in_context == 0
-        container_id = "tickler-empty-nd" if todo_was_removed_from_deferred_or_blocked_container && @remaining_deferred_or_pending_count == 0
-        container_id = "empty-d" if @completed_count && @completed_count == 0 && !@todo.completed?
+        container_id = "p#{@original_item_project_id}-empty-d" if @remaining_in_context == 0
+        container_id = "deferred_pending_container-empty-d" if todo_was_removed_from_deferred_or_blocked_container && @remaining_deferred_or_pending_count == 0
+        container_id = "completed_container-empty-d" if @completed_count && @completed_count == 0 && !@todo.completed?
       }
-      page.deferred { container_id = "c#{@original_item_context_id}empty-nd" if @remaining_in_context == 0 }
+      page.deferred { container_id = "c#{@original_item_context_id}empty-d" if @remaining_in_context == 0 }
       page.calendar { container_id = "empty_#{@original_item_due_id}" if @old_due_empty }
       page.tag      {
-        container_id = "hidden-empty-nd" if (@remaining_hidden_count == 0 && !@todo.hidden? && @todo_hidden_state_changed) ||
+        container_id = "hidden_container-empty-d" if (@remaining_hidden_count == 0 && !@todo.hidden? && @todo_hidden_state_changed) ||
           (@remaining_hidden_count == 0 && @todo.completed? && @original_item_was_hidden)
-        container_id = "tickler-empty-nd" if (todo_was_removed_from_deferred_or_blocked_container && @remaining_deferred_or_pending_count == 0) ||
+        container_id = "deferred_pending_container-empty-d" if (todo_was_removed_from_deferred_or_blocked_container && @remaining_deferred_or_pending_count == 0) ||
           (@original_item_was_deferred && @remaining_deferred_or_pending_count == 0 && (@todo.completed? || @tag_was_removed))
-        container_id = "empty-d" if @completed_count && @completed_count == 0 && !@todo.completed?
+        container_id = "completed_container-empty-d" if @completed_count && @completed_count == 0 && !@todo.completed?
       }
       page.context  {
-        container_id = "c#{@original_item_context_id}empty-nd" if @remaining_in_context == 0
-        container_id = "tickler-empty-nd" if todo_was_removed_from_deferred_or_blocked_container && @remaining_deferred_or_pending_count == 0
-        container_id = "empty-d" if @completed_count && @completed_count == 0 && !@todo.completed?
+        container_id = "c#{@original_item_context_id}-empty-d" if @remaining_in_context == 0
+        container_id = "deferred_pending_container-empty-d" if todo_was_removed_from_deferred_or_blocked_container && @remaining_deferred_or_pending_count == 0
+        container_id = "completed_container-empty-d" if @completed_count && @completed_count == 0 && !@todo.completed?
       }
-      page.todo     { container_id = "c#{@original_item_context_id}empty-nd" if @remaining_in_context == 0 }
+      page.todo     { container_id = "c#{@original_item_context_id}-empty-d" if @remaining_in_context == 0 }
     end
     return container_id.blank? ? "" : "$(\"##{container_id}\").slideDown(100);".html_safe
   end

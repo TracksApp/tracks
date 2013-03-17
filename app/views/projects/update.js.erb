@@ -31,7 +31,7 @@ function update_project_page() {
   remove_project_edit_form();
   update_and_show_project_settings();
   TracksForm.set_project_name("<%= escape_javascript(@project.name)%>");
-  $("h2 div#project_name").html("<%= escape_javascript(@project.name)%>");
+  $("h2 span#project_name").html("<%= escape_javascript(@project.name)%>");
   <% if @project.default_context %>
     TracksForm.set_context_name_and_default_context_name("<%= escape_javascript(@project.default_context.name)%>");
   <% end %>

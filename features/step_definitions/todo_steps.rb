@@ -153,12 +153,12 @@ Then /^I should see "([^"]*)" in the completed section of the mobile site$/ do |
 end
 
 Then /^I should (see|not see) empty message for (completed todos|todos) of home/ do |visible, kind_of_todo|
-  elem = find(kind_of_todo=="todos" ? "div#no_todos_in_view" : "div#empty-d")
+  elem = find(kind_of_todo=="todos" ? "div#no_todos_in_view" : "div#completed_container-empty-d")
   elem.send(visible=="see" ? "should" : "should_not", be_visible)
 end
 
 Then /^I should (see|not see) the empty tickler message$/ do |see|
-  elem = find("div#tickler-empty-nd")
+  elem = find("div#no_todos_in_view")
   elem.send(see=="see" ? "should" : "should_not", be_visible)
 end
 

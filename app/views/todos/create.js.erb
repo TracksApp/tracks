@@ -32,7 +32,7 @@
   function insert_new_context_with_new_todo() {
     <%-
       empty_id = '#no_todos_in_view'
-      empty_id = '#tickler-empty-nd' if source_view_is :tickler
+      empty_id = '#deferred_pending_container-empty-d' if source_view_is :tickler
     -%>
     $('<%=empty_id%>').slideUp(100);
     $('#display_box').prepend(html_for_new_context());
@@ -43,7 +43,7 @@
       <% unless source_view_is_one_of(:todo, :tag) && (@todo.deferred?||@todo.hidden?) -%>
         $('#c<%= @todo.context_id %>').fadeIn(500, function() {});
         $('#no_todos_in_view').slideUp(100);
-        <%= "$('#tickler-empty-nd').slideUp(100);".html_safe if source_view_is(:deferred) && @todo.deferred? %>
+        <%= "$('#deferred_pending_container-empty-nd').slideUp(100);".html_safe if source_view_is(:deferred) && @todo.deferred? %>
       <% end -%>
     <% end -%>
     $('#<%=empty_container_msg_div_id%>').hide();
@@ -60,7 +60,7 @@
   }
 
   function html_for_new_context() {
-    return "<%= @saved && @new_context_created ? escape_javascript(render(:partial => @todo.context, :locals => { :collapsible => true })) : "" %>";
+    return "<%= @saved && @new_context_created ? escape_javascript(render(:partial => @todo.context, :locals => { :settings => {:collapsible => true} })) : "" %>";
   }
 
   function html_for_new_todo() {

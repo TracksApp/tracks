@@ -72,21 +72,21 @@ Then /^I should see "([^"]*)" in the deferred container$/ do |todo_description|
   todo = @current_user.todos.where(:description => todo_description).first
   todo.should_not be_nil
 
-  page.should have_xpath("//div[@id='tickler']//div[@id='line_todo_#{todo.id}']")
+  page.should have_xpath("//div[@id='deferred_pending_container']//div[@id='line_todo_#{todo.id}']")
 end
 
 Then /^I should not see "([^"]*)" in the deferred container$/ do |todo_description|
   todo = @current_user.todos.where(:description => todo_description).first
   todo.should_not be_nil
 
-  page.should_not have_xpath("//div[@id='tickler']//div[@id='line_todo_#{todo.id}']")
+  page.should_not have_xpath("//div[@id='deferred_pending_container']//div[@id='line_todo_#{todo.id}']")
 end
 
 Then /^I should (not see|see) "([^"]*)" in the action container$/ do |visible, todo_description|
   todo = @current_user.todos.where(:description => todo_description).first
   todo.should_not be_nil
 
-  id = @source_view=="project" ? "p#{todo.project_id}items" : "c#{todo.context_id}items"
+  id = @source_view=="project" ? "p#{todo.project_id}_items" : "c#{todo.context_id}_items"
 
   xpath = "//div[@id='#{id}']//div[@id='line_todo_#{todo.id}']"
   page.send(visible=="see" ? :should : :should_not, have_xpath(xpath))
@@ -105,7 +105,7 @@ Then /^I should not see "([^"]*)" in the project container of "([^"]*)"$/ do |to
   project = @current_user.projects.where(:name => project_name).first
   project.should_not be_nil
 
-  xpath = "//div[@id='p#{todo.project.id}items']//div[@id='line_todo_#{todo.id}']"
+  xpath = "//div[@id='p#{todo.project.id}_items']//div[@id='line_todo_#{todo.id}']"
   page.should_not have_xpath(xpath)
 end
 
@@ -116,7 +116,7 @@ Then /^I should see "([^"]*)" in project container for "([^"]*)"$/ do |todo_desc
   project = @current_user.projects.where(:name => project_name).first
   project.should_not be_nil
 
-  xpath = "//div[@id='p#{project.id}items']//div[@id='line_todo_#{todo.id}']"
+  xpath = "//div[@id='p#{project.id}_items']//div[@id='line_todo_#{todo.id}']"
   page.should have_xpath(xpath)
 end
 
@@ -144,7 +144,7 @@ Then /^I should see "([^"]*)" in the hidden container$/ do |todo_description|
   todo = @current_user.todos.where(:description => todo_description).first
   todo.should_not be_nil
 
-  xpath = "//div[@id='hidden']//div[@id='line_todo_#{todo.id}']"
+  xpath = "//div[@id='hidden_container']//div[@id='line_todo_#{todo.id}']"
   page.should have_xpath(xpath)
 end
 

@@ -97,7 +97,7 @@ Feature: Edit a context
     And I should see empty message for deferred todos of context
     And I should not see empty message for todos of context
 
-  @javascript
+  @javascript 
   Scenario: Making all deferred todos inactive will show empty message
     Given I have a context "test" with 1 deferred todos
     When I go to the "test" context

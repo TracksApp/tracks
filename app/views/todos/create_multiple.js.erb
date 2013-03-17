@@ -39,7 +39,7 @@ function insert_new_context_with_new_todo() {
 function hide_empty_message() {
   $('#<%=empty_container_msg_div_id%>').hide();
   <% if (source_view_is :project and @todo.pending?) or (source_view_is :deferred) -%>
-    $('#tickler-empty-nd').hide();
+    $('#deferred_pending_container-empty-d').hide();
   <% end -%>
 }
 
@@ -56,7 +56,7 @@ function add_todo_to_existing_context() {
 }
 
 function html_for_new_context() {
-  return "<%= @saved && @new_context_created ? escape_javascript(render(:partial => @todo.context, :locals => { :collapsible => true })) : "" %>";
+  return "<%= @saved && @new_context_created ? escape_javascript(render(:partial => @todo.context, :locals => { :settings => {:collapsible => true} })) : "" %>";
 }
 
 <% else # if @saved -%>

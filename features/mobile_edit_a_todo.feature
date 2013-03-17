@@ -45,6 +45,6 @@ Feature: Edit a next action from the mobile view
     And I should see "test action"
     When I follow "test action"
     And I press "Defer 1 day"
-    Then I should see "There are no incomplete actions"
+    Then I should see "Currently there are no incomplete actions"
     When I follow "Tickler"
     Then I should see "test action"

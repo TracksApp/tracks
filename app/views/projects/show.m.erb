@@ -5,14 +5,14 @@
 <div class="project_description"><%= sanitize(@project.description) %></div>
 <% end -%>
 <ul class="c">
-<%= render :partial => @not_done, :locals => { :parent_container_type => "project" }%>
+<%= render :partial => @not_done_todos, :locals => { :parent_container_type => "project" }%>
 </ul>
 <h2><%= t('projects.deferred_actions')%></h2>
-<% if @deferred.empty? -%>
+<% if @deferred_todos.empty? -%>
 <%= t('projects.deferred_actions_empty') %>
 <% else -%>
 <ul class="c">
-<%= render :partial => @deferred, :locals => { :parent_container_type => "project" }%>
+<%= render :partial => @deferred_todos, :locals => { :parent_container_type => "project" }%>
 </ul><% end
 -%>
 <h2><%= t('projects.completed_actions')%></h2>

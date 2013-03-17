@@ -433,6 +433,7 @@ en:
       context: Currently there are no incomplete actions in this context
     actions:
       completed: Completed actions
+      home_completed: Completed actions
       tag_completed: "Completed actions tagged with '%{param}'"
       home_without_project: "Actions without project"
       project_project: "Actions in this project"
