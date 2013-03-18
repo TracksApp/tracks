@@ -307,8 +307,8 @@ class ProjectsController < ApplicationController
     @project = current_user.projects.find(params[:id])
     @page_title = t('projects.completed_tasks_title', :project_name => @project.name)
 
-    @done_today, @done_this_week, @done_this_month = DoneTodos.done_todos_for_container(@project)
-    @count = @done_today.size + @done_this_week.size + @done_this_month.size
+    @done_today, @done_rest_of_week, @done_rest_of_month = DoneTodos.done_todos_for_container(@project)
+    @count = @done_today.size + @done_rest_of_week.size + @done_rest_of_month.size
 
     render :template => 'todos/done'
   end

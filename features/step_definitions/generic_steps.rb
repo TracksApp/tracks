@@ -10,6 +10,11 @@ Given /^I am working on the mobile interface$/ do
   @mobile_interface = true
 end
 
+Given /^the date is "(.*?)"$/ do |date|
+  # remember to tag the scenario with @reset_time to reset this travel
+  Timecop.travel(date)
+end
+
 Then /the badge should show (.*)/ do |number|
   badge = find("span#badge_count").text.to_i
   badge.should == number.to_i

@@ -234,17 +234,6 @@ When /^I cancel adding a note to the project$/ do
   click_link "neg_edit_form_note"
 end
 
-Then /^I should (see|not see) empty message for (todos|deferred todos|completed todos) of project/ do |visible, state|
-  css = "wrong state"
-  css = "div#p#{@project.id}-empty-d"             if state == "todos"
-  css = "div#deferred_pending_container-empty-d"  if state == "deferred todos"
-  css = "div#completed_container-empty-d"         if state == "completed todos"
-  
-  elem = find(css)
-  elem.should_not be_nil
-  elem.send(visible=="see" ? :should : :should_not, be_visible)
-end
-
 Then /^I edit the default tags to "([^"]*)"$/ do |default_tags|
   edit_project(@project) do
     fill_in "project[default_tags]", :with => default_tags

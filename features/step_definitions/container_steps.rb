@@ -122,20 +122,17 @@ end
 
 ####### Completed #######
 
-Then /^I should see "([^"]*)" in the completed container$/ do |todo_description|
+Then /^I should (not see|see) "([^"]*)" in the (completed|done today|done this week|done this month) container$/ do |visible, todo_description, container|
   todo = @current_user.todos.where(:description => todo_description).first
   todo.should_not be_nil
 
-  xpath = "//div[@id='completed_container']//div[@id='line_todo_#{todo.id}']"
-  page.should have_xpath(xpath)
-end
+  id = 'completed_container'                if container == 'completed'
+  id = 'completed_today_container'          if container == 'done today'
+  id = 'completed_rest_of_week_container'   if container == 'done this week'
+  id = 'completed_rest_of_month_container'  if container == 'done this month'
 
-Then /^I should not see "([^"]*)" in the completed container$/ do |todo_description|
-  todo = @current_user.todos.where(:description => todo_description).first
-  todo.should_not be_nil
-
-  xpath = "//div[@id='completed_container']//div[@id='line_todo_#{todo.id}']"
-  page.should_not have_xpath(xpath)
+  xpath = "//div[@id='#{id}']//div[@id='line_todo_#{todo.id}']"
+  page.send( visible=='see' ? :should : :should_not, have_xpath(xpath))
 end
 
 ####### Hidden #######
@@ -181,4 +178,22 @@ Then /^I should not see "([^"]*)" in the completed recurring todos container$/ d
   else
     step "I should not see \"#{repeat_pattern}\""
   end
+end
+
+####### Empty message patterns #######
+
+Then /^I should (see|not see) empty message for (done today|done this week|done this month|completed todos|deferred todos|todos) (of done actions|of context|of project|of home|of tag)/ do |visible, state, type|
+  css = "error: wrong state"
+  css = "div#c#{@context.id}-empty-d"             if state == "todos" && type == "of context"
+  css = "div#p#{@project.id}-empty-d"             if state == "todos" && type == "of project"
+  css = "div#no_todos_in_view"                    if state == "todos" && (type == "of home" || type == "of tag")
+  css = "div#completed_today_container"           if state == "done today"
+  css = "div#completed_rest_of_week_container"       if state == "done this week"
+  css = "div#completed_rest_of_month_container"      if state == "done this month"
+  css = "div#completed_container-empty-d"         if state == "completed todos"
+  css = "div#deferred_pending_container-empty-d"  if state == "deferred todos"
+  
+  elem = find(css)
+  elem.should_not be_nil
+  elem.send(visible=="see" ? :should : :should_not, be_visible)
 end

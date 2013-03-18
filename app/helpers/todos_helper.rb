@@ -44,6 +44,19 @@ module TodosHelper
       :locals => {:settings => settings.reverse_merge!(default_collection_settings)}
   end
 
+  def show_completed_todos_for(period, collection)
+    settings = {
+      :parent_container_type => "completed", 
+      :container_name => "completed_#{period}",
+      :title => t("todos.completed_#{period}"),
+      :show_empty_containers => true
+    }
+
+    render :partial => "todos/collection", 
+      :object => collection, 
+      :locals => { :settings => settings}
+  end
+
   def show_hidden_todos(hidden_todos, settings={})
     settings[:container_name] = "hidden"
 
@@ -410,7 +423,7 @@ module TodosHelper
       (@remaining_in_context == 0 && @tag_was_removed) ||
       (@remaining_in_context == 0 && @todo.completed? && !(@original_item_was_deferred || @original_item_was_hidden)) if source_view_is(:tag)
 
-    return false if source_view_is_one_of(:project, :calendar)
+    return false if source_view_is_one_of(:project, :calendar, :done)
 
     return (@remaining_in_context == 0) && !source_view_is(:context)
   end
@@ -531,6 +544,7 @@ module TodosHelper
         container_id = "completed_container-empty-d" if @completed_count && @completed_count == 0 && !@todo.completed?
       }
       page.todo     { container_id = "c#{@original_item_context_id}-empty-d" if @remaining_in_context == 0 }
+      page.done     { container_id = "completed_#{@original_completed_period}_container-empty-d" if @remaining_in_context == 0 }
     end
     return container_id.blank? ? "" : "$(\"##{container_id}\").slideDown(100);".html_safe
   end

@@ -162,6 +162,15 @@ Given /^I have a completed todo with description "([^"]*)" in project "([^"]*)" 
   @todo.complete!
 end
 
+Given(/^I have a completed todo with description "([^"]*)" in context "(.*?)" completed (\d+) days ago$/) do |action_description, context_name, num_of_days|
+  step "I have a todo \"#{action_description}\" in the context \"#{context_name}\""
+  @todo.complete!
+  @todo.completed_at = Time.zone.now - num_of_days.to_i.days
+  @todo.save!
+  @todo.reload
+end
+
+
 ####### PROJECT WITH TODOS ######
 
 Given /^I have a project "([^"]*)" that has the following (todos|deferred todos)$/ do |project_name, kind_of_todo, todos|

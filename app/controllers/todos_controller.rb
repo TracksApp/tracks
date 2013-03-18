@@ -329,13 +329,16 @@ class TodosController < ApplicationController
   def toggle_check
     @todo = current_user.todos.find(params['id'])
     @source_view = params['_source_view'] || 'todo'
+
     @original_item_due = @todo.due
     @original_item_was_deferred = @todo.deferred?
     @original_item_was_pending = @todo.pending?
     @original_item_was_hidden = @todo.hidden?
     @original_item_context_id = @todo.context_id
     @original_item_project_id = @todo.project_id
+    @original_completed_period = DoneTodos.completed_period(@todo.completed_at)
     @todo_was_completed_from_deferred_or_blocked_state = @original_item_was_deferred || @original_item_was_pending
+
     @saved = @todo.toggle_completion!
 
     @todo_was_blocked_from_completed_state = @todo.pending? # since we toggled_completion the previous state was completed
@@ -556,8 +559,8 @@ class TodosController < ApplicationController
     @source_view = 'done'
     @page_title = t('todos.completed_tasks_title')
 
-    @done_today, @done_this_week, @done_this_month = DoneTodos.done_todos_for_container(current_user)
-    @count = @done_today.size + @done_this_week.size + @done_this_month.size
+    @done_today, @done_rest_of_week, @done_rest_of_month = DoneTodos.done_todos_for_container(current_user)
+    @count = @done_today.size + @done_rest_of_week.size + @done_rest_of_month.size
 
     respond_to do |format|
       format.html
@@ -697,9 +700,9 @@ class TodosController < ApplicationController
     completed_todos = current_user.todos.completed.with_tag(@tag.id)
 
     @done_today = get_done_today(completed_todos)
-    @done_this_week = get_done_this_week(completed_todos)
-    @done_this_month = get_done_this_month(completed_todos)
-    @count = @done_today.size + @done_this_week.size + @done_this_month.size
+    @done_rest_of_week = get_done_rest_of_week(completed_todos)
+    @done_rest_of_month = get_done_rest_of_month(completed_todos)
+    @count = @done_today.size + @done_rest_of_week.size + @done_rest_of_month.size
 
     render :template => 'todos/done'
   end
@@ -1009,9 +1012,8 @@ class TodosController < ApplicationController
       }
       from.tag {
         tag = Tag.where(:name => params['_tag_name']).first
-        if tag.nil?
-          tag = Tag.new(:name => params['tag'])
-        end
+        tag = Tag.new(:name => params['tag']) if tag.nil?
+
         @remaining_deferred_or_pending_count = current_user.todos.with_tag(tag.id).deferred_or_blocked.count
         @remaining_in_context = current_user.contexts.find(context_id).todos.active.not_hidden.with_tag(tag.id).count
         @target_context_count = current_user.contexts.find(@todo.context_id).todos.active.not_hidden.with_tag(tag.id).count
@@ -1048,9 +1050,12 @@ class TodosController < ApplicationController
         end
         @target_context_count = actions_in_target.count
       }
+      from.done {
+        @remaining_in_context = DoneTodos.remaining_in_container(current_user, @original_completed_period)
+      }
     end
-    @remaining_in_context = current_user.contexts.find(context_id).todos(true).active.not_hidden.count if !@remaining_in_context
-    @target_context_count = current_user.contexts.find(@todo.context_id).todos(true).active.not_hidden.count if !@target_context_count
+    @remaining_in_context = current_user.contexts.find(context_id).todos(true).active.not_hidden.count if @remaining_in_context.nil?
+    @target_context_count = current_user.contexts.find(@todo.context_id).todos(true).active.not_hidden.count if !@target_context_count.nil?
   end
 
   def determine_completed_count
@@ -1334,14 +1339,14 @@ class TodosController < ApplicationController
   end
 
   # all completed todos [begin_of_week, start_of_today]
-  def get_done_this_week(completed_todos, includes = {:include => Todo::DEFAULT_INCLUDES})
+  def get_done_rest_of_week(completed_todos, includes = {:include => Todo::DEFAULT_INCLUDES})
     start_of_this_week = Time.zone.now.beginning_of_week
     start_of_this_day = Time.zone.now.beginning_of_day
     completed_todos.completed_before(start_of_this_day).completed_after(start_of_this_week).all(includes)
   end
 
   # all completed todos [begin_of_month, begin_of_week]
-  def get_done_this_month(completed_todos, includes = {:include => Todo::DEFAULT_INCLUDES})
+  def get_done_rest_of_month(completed_todos, includes = {:include => Todo::DEFAULT_INCLUDES})
     start_of_this_month = Time.zone.now.beginning_of_month
     start_of_this_week = Time.zone.now.beginning_of_week
     completed_todos.completed_before(start_of_this_week).completed_after(start_of_this_month).all(includes)

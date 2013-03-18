@@ -35,7 +35,7 @@ Feature: Show done
   Scenario Outline: I can see all todos completed in the last timeperiod
     When I go to the <page>
     Then I should see "todo 1"
-    And I should see "Completed today"
+    And I should see "Completed Today"
     And I should see "Completed in the rest of this week"
     And I should see "Completed in the rest of this month"
 
@@ -152,6 +152,25 @@ Feature: Show done
     | all done actions page for context "@pc"         | context page for "@pc"  |                                     |
     | all done actions page for project "test project"| "test project" project  |                                     |
     | all done actions page for tag "starred"         | home page               | in the context container for "@pc"  |
+
+  @javascript @reset_time
+  Scenario: Activating the last todo will show empty message
+    Given the date is "2013-03-11"
+    And I have a completed todo with description "todo 2" in context "@pc" completed 1 days ago
+    And I have a completed todo with description "todo 3" in context "@pc" completed 8 days ago    
+    When I go to the done actions page
+    Then I should see "todo 1" in the done today container
+    And I should see "todo 2" in the done this week container
+    And I should see "todo 3" in the done this month container
+    When I mark the completed todo "todo 1" active
+    Then I should not see "todo 1"
+    And I should see empty message for done today of done actions
+    When I mark the completed todo "todo 2" active
+    Then I should not see "todo 2"
+    And I should see empty message for done this week of done actions
+    When I mark the completed todo "todo 3" active
+    Then I should not see "todo 3"
+    And I should see empty message for done this month of done actions
 
   @javascript
   Scenario Outline: I can toggle the star of a todo from the done pages
