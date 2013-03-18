@@ -347,30 +347,28 @@ class StatsController < ApplicationController
 
   def prep_context_data_for_view(all_actions_per_context)
 
-    @sum = all_actions_per_context.inject(0){|sum, apc| sum += apc['total'].to_i }
+    sum = all_actions_per_context.inject(0){|sum, apc| sum += apc['total'].to_i }
 
     pie_cutoff=10
     size = [all_actions_per_context.size, pie_cutoff].min
 
     # explicitely copy contents of hash to avoid ending up with two arrays pointing to same hashes
-    @actions_per_context = Array.new(size){|i| {
+    actions_per_context = Array.new(size){|i| {
       'name' => all_actions_per_context[i]['name'],
       'total' => all_actions_per_context[i]['total'].to_i,
       'id' => all_actions_per_context[i]['id']
     } }
 
     if all_actions_per_context.size > pie_cutoff
-      @actions_per_context[size-1]['name']=t('stats.other_actions_label')
-      @actions_per_context[size-1]['total']=@actions_per_context[size-1]['total']
-      @actions_per_context[size-1]['id']=-1
-      size.upto(all_actions_per_context.size-1){ |i| @actions_per_context[size-1]['total']+=(all_actions_per_context[i]['total'].to_i) }
+      actions_per_context[size-1]['name']=t('stats.other_actions_label')
+      actions_per_context[size-1]['total']=actions_per_context[size-1]['total']
+      actions_per_context[size-1]['id']=-1
+      size.upto(all_actions_per_context.size-1){ |i| actions_per_context[size-1]['total']+=(all_actions_per_context[i]['total'].to_i) }
     end
 
-    @truncate_chars = 15
-
-    @pie_slices = Array.new(size){|i| @actions_per_context[i]['total'].to_i*100/@sum }
-    @pie_labels = Array.new(size){|i| @actions_per_context[i]['name'].truncate(@truncate_chars, :omission => '...') }
-    @pie_links  = Array.new(size){|i| context_path(@actions_per_context[i]['id'])}
+    @pie_slices = Array.new(size){|i| actions_per_context[i]['total'].to_i*100/sum }
+    @pie_labels = Array.new(size){|i| actions_per_context[i]['name'].truncate(15, :omission => '...') }
+    @pie_links  = Array.new(size){|i| context_path(actions_per_context[i]['id'])}
   end
 
   def init
