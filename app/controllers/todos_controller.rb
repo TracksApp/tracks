@@ -3,12 +3,12 @@ class TodosController < ApplicationController
   skip_before_filter :login_required, :only => [:index, :calendar, :tag]
   prepend_before_filter :login_or_feed_token_required, :only => [:index, :calendar, :tag]
   append_before_filter :find_and_activate_ready, :only => [:index, :list_deferred]
+  append_before_filter :set_group_view_by, :only => [:index, :tag]
 
   protect_from_forgery :except => :check_deferred
   
   def index
     @source_view = params['_source_view'] || 'todo'
-    @group_view_by = cookies['group_view_by'] || 'context'
 
     init_data_for_sidebar unless mobile?
     
@@ -885,6 +885,10 @@ class TodosController < ApplicationController
 
   private
 
+  def set_group_view_by
+    @group_view_by = params['group_view_by'] || cookies['group_view_by'] || 'context'
+  end
+
   def do_mobile_todo_redirection
     if cookies[:mobile_url]
       old_path = cookies[:mobile_url]
@@ -934,8 +938,6 @@ class TodosController < ApplicationController
     @single_tag = @tag_expr.size == 1 && @tag_expr[0].size == 1
     @tag_name = @tag_expr[0][0]
     @tag_title = @single_tag ? @tag_name : tag_title(@tag_expr)
-
-    @group_view_by = cookies['group_view_by'] || 'context'
   end
 
   def get_ids_from_tag_expr(tag_expr)

@@ -8,6 +8,16 @@ When /^I collapse the context container of "([^"]*)"$/ do |context_name|
   toggle.click
 end
 
+When(/^I collapse the project container of "(.*?)"$/) do |project_name|
+  project = @current_user.projects.where(:name => project_name).first
+  project.should_not be_nil
+
+  xpath = "//a[@id='toggle_p#{project.id}']"
+  toggle = page.find(:xpath, xpath)
+  toggle.should be_visible
+  toggle.click
+end
+
 When /^I toggle all collapsed context containers$/ do
   click_link 'Toggle collapsed contexts'
 end
@@ -46,24 +56,14 @@ Then /^the container for the context "([^"]*)" should be visible$/ do |context_n
   step "I should see the container for context \"#{context_name}\""
 end
 
-Then /^I should see "([^"]*)" in the context container for "([^"]*)"$/ do |todo_description, context_name|
+Then /^I should (see|not see) "([^"]*)" in the context container for "([^"]*)"$/ do |visible, todo_description, context_name|
   context = @current_user.contexts.where(:name => context_name).first
   context.should_not be_nil
   todo = @current_user.todos.where(:description => todo_description).first
   todo.should_not be_nil
 
   xpath = "//div[@id=\"c#{context.id}\"]//div[@id='line_todo_#{todo.id}']"
-  page.should have_xpath(xpath)
-end
-
-Then /^I should not see "([^"]*)" in the context container for "([^"]*)"$/ do |todo_description, context_name|
-  context = @current_user.contexts.where(:name => context_name).first
-  context.should_not be_nil
-  todo = @current_user.todos.where(:description => todo_description).first
-  todo.should_not be_nil
-
-  xpath = "//div[@id=\"c#{context.id}\"]//div[@id='line_todo_#{todo.id}']"
-  page.should_not have_xpath(xpath)
+  page.send( visible=='see' ? :should : :should_not, have_xpath(xpath))
 end
 
 ####### Deferred #######
@@ -118,6 +118,18 @@ Then /^I should see "([^"]*)" in project container for "([^"]*)"$/ do |todo_desc
 
   xpath = "//div[@id='p#{project.id}_items']//div[@id='line_todo_#{todo.id}']"
   page.should have_xpath(xpath)
+end
+
+Then(/^I should see "(.*?)" in the project container for "(.*?)"$/) do |todo_description, project_name|
+  step "I should see \"#{todo_description}\" in project container for \"#{project_name}\""
+end
+
+Then /^I should not see the project container for "([^"]*)"$/ do |project_name|
+  project = @current_user.projects.where(:name => project_name).first
+  project.should_not be_nil
+
+  xpath = "//div[@id='p#{project.id}']"
+  page.should_not have_xpath(xpath, :visible => true)
 end
 
 ####### Completed #######

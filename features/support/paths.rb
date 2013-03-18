@@ -6,8 +6,10 @@ module NavigationHelpers
   # step definition in web_steps.rb
   #
   def path_to(page_name)
-    options = @mobile_interface ? {:format => :m} : {}
-    options = {:locale => @locale}.merge(options) if @locale
+    options = {}
+    options[:format] = :m if @mobile_interface 
+    options[:locale] = @locale if @locale
+    options[:group_view_by] = @group_view_by if @group_view_by
     @source_view = nil
     
     case page_name
