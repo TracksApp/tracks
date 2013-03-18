@@ -321,7 +321,7 @@ en:
     top10_projects_30days: Top 10 project in past 30 days
     spread_of_running_actions_for_visible_contexts: Spread of running actions for visible contexts
     actions_selected_from_week: "Actions selected from week "
-    spread_of_actions_for_all_context: Spread of actions for all context
+    spread_of_actions_for_all_context: Spread of actions for all contexts
     click_to_show_actions_from_week: Click %{link} to show the actions from week %{week} and further.
     other_actions_label: (others)
     top10_projects: Top 10 projects
