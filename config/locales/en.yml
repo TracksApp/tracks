@@ -452,7 +452,6 @@ en:
     show_from: Show from
     error_starring_recurring: "Could not toggle the star of recurring todo \'%{description}\'"
     recurring_action_deleted: Action was deleted. Because this action is recurring, a new action was added
->>>>>>> do a big refactor of rendering collections of todos for home page, tag page, project page, context page
     completed_recurring: Completed recurring todos
     added_new_next_action: Added new next action
     completed_rest_of_previous_month: Completed in the rest of the previous month
