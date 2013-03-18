@@ -71,6 +71,9 @@
               <li><%= navigation_link( t('layouts.navigation.completed_tasks'), done_overview_path, {:accesskey=>"d", :title=>t('layouts.navigation.completed_tasks_title')} ) %></li>
               <li><%= navigation_link( t('layouts.navigation.feeds'), feeds_path, :title => t('layouts.navigation.feeds_title')) %></li>
               <li><%= navigation_link( t('layouts.navigation.stats'), stats_path, :title => t('layouts.navigation.stats_title')) %></li>
+              <li><hr/></li>
+              <%= group_view_by_menu_entry %>
+              <%= show_empty_containers_menu_entry %>
             </ul>
           </li>
           <li><a href="#"><%= t('layouts.navigation.admin') %></a>
