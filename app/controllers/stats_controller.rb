@@ -350,9 +350,9 @@ class StatsController < ApplicationController
 
     # explicitely copy contents of hash to avoid ending up with two arrays pointing to same hashes
     @actions_per_context = Array.new(size){|i| {
-      'name' => all_actions_per_context[i][:name],
-      'total' => all_actions_per_context[i][:total].to_i,
-      'id' => all_actions_per_context[i][:id]
+      'name' => all_actions_per_context[i]['name'],
+      'total' => all_actions_per_context[i]['total'].to_i,
+      'id' => all_actions_per_context[i]['id']
     } }
 
     if all_actions_per_context.size > pie_cutoff
