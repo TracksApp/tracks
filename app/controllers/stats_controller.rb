@@ -178,20 +178,18 @@ class StatsController < ApplicationController
   end
 
   def context_total_actions_data
-    all_actions_per_context = Stats::TopContextsQuery.new(current_user).result
-    @title = t('stats.spread_of_actions_for_all_context')
-    @alpha = 70
-    prep_context_data_for_view(all_actions_per_context)
+    actions = Stats::TopContextsQuery.new(current_user).result
+
+    @data = Stats::PieChartData.new(actions, t('stats.spread_of_actions_for_all_context'), 70)
+    @data.calculate
 
     render :pie_chart_data, :layout => false
   end
 
   def context_running_actions_data
-    all_actions_per_context = Stats::TopContextsQuery.new(current_user, :running => true).result
-
-    @title = t('stats.spread_of_running_actions_for_visible_contexts')
-    @alpha = 60
-    prep_context_data_for_view(all_actions_per_context)
+    actions = Stats::TopContextsQuery.new(current_user, :running => true).result
+    @data = Stats::PieChartData.new(actions, t('stats.spread_of_running_actions_for_visible_contexts'), 60)
+    @data.calculate
 
     render :pie_chart_data, :layout => false
   end
@@ -344,31 +342,6 @@ class StatsController < ApplicationController
   end
 
   private
-
-  def prep_context_data_for_view(all_actions_per_context)
-
-    sum = all_actions_per_context.inject(0){|sum, apc| sum + apc['total']}
-
-    pie_cutoff=10
-    size = [all_actions_per_context.size, pie_cutoff].min
-
-    # explicitly copy contents of hash to avoid ending up with two arrays pointing to same hashes
-    actions_per_context = Array.new(size){|i| {
-      'name' => all_actions_per_context[i]['name'],
-      'total' => all_actions_per_context[i]['total'],
-      'id' => all_actions_per_context[i]['id']
-    } }
-
-    if all_actions_per_context.size > pie_cutoff
-      actions_per_context[-1]['name']=t('stats.other_actions_label')
-      actions_per_context[-1]['id']=-1
-      size.upto(all_actions_per_context.size-1){ |i| actions_per_context[-1]['total']+=(all_actions_per_context[i]['total']) }
-    end
-
-    @pie_slices = Array.new(size){|i| actions_per_context[i]['total']*100/sum }
-    @pie_labels = Array.new(size){|i| actions_per_context[i]['name'].truncate(15, :omission => '...') }
-    @pie_links  = Array.new(size){|i| context_path(actions_per_context[i]['id'])}
-  end
 
   def init
     @me = self # for meta programming
