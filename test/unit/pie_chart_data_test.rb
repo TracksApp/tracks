@@ -12,7 +12,6 @@ class Stats::PieChartDataTest < Test::Unit::TestCase
 
   def test_with_0_items
     data = Stats::PieChartData.new([], 'a chart', 50)
-    data.calculate
 
     assert_equal [], data.values
     assert_equal [], data.labels
@@ -33,7 +32,6 @@ class Stats::PieChartDataTest < Test::Unit::TestCase
     ]
 
     data = Stats::PieChartData.new(items, 'a chart', 50)
-    data.calculate
 
     assert_equal [12, 4, 9, 15, 23, 20, 5, 1, 7], data.values
     assert_equal ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"], data.labels
@@ -55,7 +53,6 @@ class Stats::PieChartDataTest < Test::Unit::TestCase
     ]
 
     data = Stats::PieChartData.new(items, 'a chart', 50)
-    data.calculate
 
     assert_equal [10, 3, 7, 12, 19, 16, 4, 0, 5, 18], data.values
     assert_equal ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"], data.labels
@@ -78,7 +75,6 @@ class Stats::PieChartDataTest < Test::Unit::TestCase
     ]
 
     data = Stats::PieChartData.new(items, 'a chart', 50)
-    data.calculate
 
     assert_equal [9, 3, 6, 11, 16, 14, 4, 0, 5, 27], data.values
     assert_equal ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "(other)"], data.labels

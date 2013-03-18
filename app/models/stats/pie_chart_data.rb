@@ -1,37 +1,86 @@
 module Stats
   class PieChartData
 
-    attr_reader :all_actions_per_context, :values, :labels, :ids, :alpha, :title
-    def initialize(all_actions_per_context, title, alpha)
-      @all_actions_per_context = all_actions_per_context
+    attr_reader :all_totals, :alpha, :title
+    def initialize(all_totals, title, alpha)
+      @all_totals = all_totals
       @title = title
       @alpha = alpha
     end
 
-    def calculate
-      sum = all_actions_per_context.inject(0){|sum, apc| sum + apc['total']}
-
-      pie_cutoff=10
-      size = [all_actions_per_context.size, pie_cutoff].min
-
-      # explicitly copy contents of hash to avoid ending up with two arrays pointing to same hashes
-      actions_per_context = Array.new(size){|i| {
-        'name' => all_actions_per_context[i]['name'],
-        'total' => all_actions_per_context[i]['total'],
-        'id' => all_actions_per_context[i]['id']
-      } }
-
-      if all_actions_per_context.size > pie_cutoff
-        actions_per_context[-1]['name']=I18n.t('stats.other_actions_label')
-        actions_per_context[-1]['id']=-1
-        size.upto(all_actions_per_context.size-1){ |i| actions_per_context[-1]['total']+=(all_actions_per_context[i]['total']) }
+    def values
+      @values ||= Array.new(slices) do |i|
+        chart_totals[i]['total'] * 100 / sum
       end
-
-      @values = Array.new(size){|i| actions_per_context[i]['total']*100/sum }
-      @labels = Array.new(size){|i| actions_per_context[i]['name'].truncate(15, :omission => '...') }
-      @ids = Array.new(size){|i| actions_per_context[i]['id']}
     end
 
+    def labels
+      @labels ||= Array.new(slices) do |i|
+        chart_totals[i]['name'].truncate(15, :omission => '...')
+      end
+    end
+
+    def ids
+      @ids ||= Array.new(slices) do |i|
+        chart_totals[i]['id']
+      end
+    end
+
+    private
+
+    def sum
+      @sum ||= totals.inject(0) do |sum, amount|
+        sum + amount
+      end
+    end
+
+    def pie_cutoff
+      10
+    end
+
+    def slices
+      @slices ||= [all_totals.size, pie_cutoff].min
+    end
+
+    def subtotal(from, to)
+      totals[from..to].inject(0) do |sum, amount|
+        sum + amount
+      end
+    end
+
+    def chart_totals
+      unless @chart_totals
+        @chart_totals = first_n_totals(10)
+        if all_totals.size > pie_cutoff
+          @chart_totals[-1] = other
+        end
+      end
+      @chart_totals
+    end
+
+    def first_n_totals(n)
+      # create a duplicate so that we don't accidentally
+      # overwrite the original array
+      Array.new(slices) do |i|
+        {
+          'name' => all_totals[i]['name'],
+          'total' => all_totals[i]['total'],
+          'id' => all_totals[i]['id']
+        }
+      end
+    end
+
+    def other
+      {
+        'name' => I18n.t('stats.other_actions_label'),
+        'id' => -1,
+        'total' => subtotal(slices-1, all_totals.size-1)
+      }
+    end
+
+    def totals
+      @totals ||= all_totals.map { |item| item['total'] }
+    end
 
   end
 end
