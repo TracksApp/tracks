@@ -179,17 +179,21 @@ class StatsController < ApplicationController
 
   def context_total_actions_data
     all_actions_per_context = Stats::TopContextsQuery.new(current_user).result
+    @title = t('stats.spread_of_actions_for_all_context')
+    @alpha = 70
     prep_context_data_for_view(all_actions_per_context)
 
-    render :layout => false
+    render :pie_chart_data, :layout => false
   end
 
   def context_running_actions_data
     all_actions_per_context = Stats::TopContextsQuery.new(current_user, :running => true).result
 
+    @title = t('stats.spread_of_running_actions_for_visible_contexts')
+    @alpha = 60
     prep_context_data_for_view(all_actions_per_context)
 
-    render :layout => false
+    render :pie_chart_data, :layout => false
   end
 
   def actions_day_of_week_all_data
@@ -363,6 +367,10 @@ class StatsController < ApplicationController
     end
 
     @truncate_chars = 15
+
+    @pie_slices = Array.new(size){|i| @actions_per_context[i]['total'].to_i*100/@sum }
+    @pie_labels = Array.new(size){|i| @actions_per_context[i]['name'].truncate(@truncate_chars, :omission => '...') }
+    @pie_links  = Array.new(size){|i| context_path(@actions_per_context[i]['id'])}
   end
 
   def init
