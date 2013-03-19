@@ -16,6 +16,3 @@ bundler_args: --without development
 notifications:
   email: false
 
-matrix:
-  allow_failures:
-    - rvm: 2.0.0
