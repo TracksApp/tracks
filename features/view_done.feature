@@ -35,7 +35,7 @@ Feature: Show done
   Scenario Outline: I can see all todos completed in the last timeperiod
     When I go to the <page>
     Then I should see "todo 1"
-    And I should see "Completed Today"
+    And I should see "Completed today"
     And I should see "Completed in the rest of this week"
     And I should see "Completed in the rest of this month"
 
