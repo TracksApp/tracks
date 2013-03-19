@@ -26,13 +26,13 @@ module Stats
       end
     end
 
-    private
-
     def sum
-      @sum ||= totals.inject(0) do |sum, amount|
-        sum + amount
+      @sum ||= totals.inject(0) do |sum, total|
+        sum + total
       end
     end
+
+    private
 
     def pie_cutoff
       10
@@ -43,8 +43,8 @@ module Stats
     end
 
     def subtotal(from, to)
-      totals[from..to].inject(0) do |sum, amount|
-        sum + amount
+      totals[from..to].inject(0) do |sum, total|
+        sum + total
       end
     end
 
