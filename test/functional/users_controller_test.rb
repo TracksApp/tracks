@@ -90,7 +90,7 @@ class UsersControllerTest < ActionController::TestCase
   def test_with_no_users
     User.expects(:no_users_yet?).returns(true)
     get :new
-    assert_match assigns['heading'], /get started/
+    assert_match /get started/, assigns['heading']
     assert_not_nil assigns[:user]
   end
 
