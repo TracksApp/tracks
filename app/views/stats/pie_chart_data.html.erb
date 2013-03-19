@@ -1,0 +1,9 @@
+&title=<%= @data.title %>,{font-size:16}&
+&pie=<%= @data.alpha %>,#505050,{font-size: 12px; color: #404040;}&
+&x_axis_steps=1& &y_ticks=5,10,5& &line=3,#87421F& &y_min=0& &y_max=20&
+&values=<%=     @data.values.join(",") %>&
+&pie_labels=<%= @data.labels.join(",") %>&
+&links=<%=      @data.ids.map{|id| context_path(id)}.join(",") %>&
+&colours=#d01f3c,#356aa0,#C79810,#c61fd0,#1fc6d0,#1fd076,#72d01f,#c6d01f,#d0941f,#40941f&
+&tool_tip=#x_label#: #val#%25&
+&x_label_style=9,,2,1&
