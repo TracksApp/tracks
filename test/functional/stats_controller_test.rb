@@ -26,12 +26,19 @@ class StatsControllerTest < ActionController::TestCase
   	  actions_day_of_week_30days_data
   	  actions_time_of_day_all_data
   	  actions_time_of_day_30days_data
+    }.each do |action|
+      get action
+      assert_response :success
+      assert_template "stats/"+action
+    end
+
+    %w{
       context_total_actions_data
       context_running_actions_data
     }.each do |action|
       get action
       assert_response :success
-      assert_template "stats/"+action
+      assert_template "stats/pie_chart_data"
     end
   end
 
@@ -262,8 +269,8 @@ class StatsControllerTest < ActionController::TestCase
     get :context_total_actions_data
     assert_response :success
 
-    assert_equal 9, assigns['sum'], "Nine todos in 1 context"
-    assert_equal 1, assigns['actions_per_context'].size
+    assert_equal 9, assigns['data'].sum, "Nine todos in 1 context"
+    assert_equal 1, assigns['data'].values.size
 
     # Given 10 more todos in 10 different contexts
     1.upto(10) do |i|
@@ -275,10 +282,10 @@ class StatsControllerTest < ActionController::TestCase
     get :context_total_actions_data
     assert_response :success
 
-    assert_equal 19, assigns['sum'], "added 10 todos"
-    assert_equal 10, assigns['actions_per_context'].size, "pie slices limited to max 10"
-    assert_equal  2, assigns['actions_per_context'][9]['total'], "pie slices limited to max 10; last pie contains sum of rest"
-    assert_equal "(others)",  assigns['actions_per_context'][9]['name'], "pie slices limited to max 10; last slice contains label for others"
+    assert_equal 19, assigns['data'].sum, "added 10 todos"
+    assert_equal 10, assigns['data'].values.size, "pie slices limited to max 10"
+    assert_equal 10, assigns['data'].values[9], "pie slices limited to max 10; last pie contains sum of rest (in percentage)"
+    assert_equal "(others)",  assigns['data'].labels[9], "pie slices limited to max 10; last slice contains label for others"
   end
 
   def test_context_running_actions_data
@@ -292,8 +299,8 @@ class StatsControllerTest < ActionController::TestCase
     get :context_running_actions_data
     assert_response :success
 
-    assert_equal 4, assigns['sum'], "Four running todos in 1 context"
-    assert_equal 1, assigns['actions_per_context'].size
+    assert_equal 4, assigns['data'].sum, "Four todos in 1 context"
+    assert_equal 1, assigns['data'].values.size
 
     # Given 10 more todos in 10 different contexts
     1.upto(10) do |i|
@@ -305,10 +312,9 @@ class StatsControllerTest < ActionController::TestCase
     get :context_running_actions_data
     assert_response :success
 
-    assert_equal 14, assigns['sum'], "added 10 todos"
-    assert_equal 10, assigns['actions_per_context'].size, "pie slices limited to max 10"
-    assert_equal  2, assigns['actions_per_context'][9]['total'], "pie slices limited to max 10; last pie contains sum of rest"
-    assert_equal "(others)",  assigns['actions_per_context'][9]['name'], "pie slices limited to max 10; last slice contains label for others"
+    assert_equal 10, assigns['data'].values.size, "pie slices limited to max 10"
+    assert_equal 14, assigns['data'].values[9], "pie slices limited to max 10; last pie contains sum of rest (in percentage)"
+    assert_equal "(others)",  assigns['data'].labels[9], "pie slices limited to max 10; last slice contains label for others"
   end
   
   def test_actions_day_of_week_all_data
