@@ -91,6 +91,10 @@ module TodosHelper
       :class => "container #{settings[:container_name]}",
       })
 
+    if settings[:collapsible]
+      settings[:class] += " collapsible"
+    end
+
     content_tag(:div, 
       :class=>settings[:class], 
       :id=>settings[:id], 

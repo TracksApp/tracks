@@ -365,7 +365,7 @@ var TodoItemsContainer = {
             return false;
         });
         // set to cookied state
-        $('.container.context, .container.completed').each(function(){
+        $('.container.collapsible').each(function(){
             if($.cookie(TodoItemsContainer.buildCookieName(this))=="true"){
                 $(this).find('.toggle_target').hide();
                 $(this).find('.toggle_target').parent().addClass("context_collapsed");
