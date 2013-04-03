@@ -88,7 +88,7 @@ h3. Install the necessary prerequisites using Bundler
 Tracks makes use of several other Ruby libraries (known as 'gems') to provide additional functionality. The Bundler tool makes it easy for the gems that Tracks needs to be installed. 
 
 # Make sure you have bundler on your system already. It can be installed by running @gem install bundler@
-# Run the command @bundle install --without development,test@ in the directory that you unzipped your Tracks download to.
+# Run the command @bundle install --without development test@ in the directory that you unzipped your Tracks download to.
 # Wait for Bundler to finish installing the necessary gems that Tracks needs. This can take some time depending on the speed of your internet connection and the speed of the system you're installing Tracks on.
 
 h3.  Configure variables
