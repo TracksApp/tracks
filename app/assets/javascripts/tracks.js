@@ -480,7 +480,7 @@ var TodoItems = {
         $('.drop_target').hide(); // IE8 doesn't call stop() in this situation
 
         ajax_options = default_ajax_options_for_scripts('POST', relative_to_root('todos/add_predecessor'), $(this));
-        ajax_options.data += "&predecessor="+dropped_todo + "&successor="+dragged_todo
+        ajax_options.data << {predecessor: dropped_todo, successor: dragged_todo}
         $.ajax(ajax_options);
     },
     drop_todo_on_context: function(evt, ui) {
@@ -492,7 +492,7 @@ var TodoItems = {
         $('.drop_target').hide();
 
         ajax_options = default_ajax_options_for_scripts('POST', relative_to_root('todos/'+dragged_todo + '/change_context'), target);
-        ajax_options.data += "&todo[context_id]="+context_id
+        ajax_options.data << {"todo[context_id]": context_id}
         $.ajax(ajax_options);
     },
     setup_drag_and_drop: function() {
@@ -586,7 +586,7 @@ var TodoItems = {
         $(document).on("click",'.item-container a.delete_dependency_button', function(evt){
             var predecessor_id=$(this).attr("x_predecessors_id");
             var ajax_options = default_ajax_options_for_scripts('DELETE', this.href, $(this).parents('.item-container'));
-            ajax_options.data += "&predecessor="+predecessor_id
+            ajax_options.data << {predecessor: predecessor_id}
             $.ajax(ajax_options);
             return false;
         });
@@ -1155,11 +1155,12 @@ function generic_get_script_for_list(element, getter, param){
 function default_ajax_options_for_submit(ajax_type, element_to_block) {
     // the complete is not a function but an array so you can push other
     // functions that will be executed after the ajax call completes
+
     var options = {
         type: ajax_type,
         async: true,
         block_element: element_to_block,
-        data: "_source_view=" + SOURCE_VIEW,
+        data: {_source_view: SOURCE_VIEW, _group_view_by: GROUP_VIEW_BY},
         beforeSend: function() {
             if (this.block_element) {
                 $(this.block_element).block({
@@ -1180,8 +1181,9 @@ function default_ajax_options_for_submit(ajax_type, element_to_block) {
             TracksPages.page_notify('error', i18n['common.ajaxError']+': '+status, 8);
         }
     }
-    if(typeof(TAG_NAME) !== 'undefined')
-        options.data += "&_tag_name="+ TAG_NAME;
+    if(typeof(TAG_NAME) !== 'undefined') {
+        options.data["_tag_name"] = TAG_NAME;
+    }
     return options;
 }
 
@@ -1208,7 +1210,7 @@ function post_with_ajax_and_block_element(the_url, element_to_block) {
 
 function put_with_ajax_and_block_element(the_url, element_to_block) {
     var options = default_ajax_options_for_scripts('POST', the_url, element_to_block);
-    options.data += '&_method=put';
+    options.data["_method"] = "put";
     $.ajax(options);
 }
 
@@ -1220,12 +1222,10 @@ $(document).ajaxSend(function(event, request, settings) {
     /* Set up authenticity token properly */
     if ( settings.type == 'POST' || settings.type == 'post' ) {
         if(typeof(AUTH_TOKEN) != 'undefined'){
-            settings.data = (settings.data ? settings.data + "&" : "")
-            + "authenticity_token=" + encodeURIComponent( AUTH_TOKEN ) + "&"
-            + "_source_view=" + encodeURIComponent( SOURCE_VIEW );
+            settings.data["authenticity_token"] = AUTH_TOKEN;
+            settings.data["_source_view"] = SOURCE_VIEW;
         } else {
-            settings.data = (settings.data ? settings.data + "&" : "")
-            + "_source_view=" + encodeURIComponent( SOURCE_VIEW );
+            settings.data["_source_view"] = SOURCE_VIEW;
         }
         request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     }
@@ -1238,7 +1238,7 @@ function setup_periodic_check(url_for_check, interval_in_sec, method) {
         function(){
             var settings = default_ajax_options_for_scripts( method ? method : "GET", url_for_check, null);
             if(typeof(AUTH_TOKEN) != 'undefined'){
-                settings.data += "&authenticity_token=" + encodeURIComponent( AUTH_TOKEN )
+                settings.data << {authenticity_token: AUTH_TOKEN}
             }
             $.ajax(settings);
         },
