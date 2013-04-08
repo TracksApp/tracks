@@ -402,9 +402,9 @@ en:
       admin: Admin
       help: "?"
       mobile: Mobile Site
-      group_view_by_context: "Order by context"
-      group_view_by_project: "Order by project"
-      group_view_by_title: "Change the ordering of the actions on this page"
+      group_view_by_context: "Group by context"
+      group_view_by_project: "Group by project"
+      group_view_by_title: "Change the grouping of the actions on this page"
       show_empty_containers_project: "Show empty projects"
       show_empty_containers_context: "Show empty contexts"
       show_empty_containers_title: "Show or hide the empty projects or contexts"
