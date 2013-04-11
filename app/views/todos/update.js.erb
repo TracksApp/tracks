@@ -1,5 +1,10 @@
-<% if !@saved -%>
+<% unless @saved -%>
   TracksPages.show_edit_errors(html_for_error_messages());
+
+  function html_for_error_messages() {
+    return "<%= escape_javascript(get_list_of_error_messages_for(@todo)) %>";
+  }
+
 <% else
 
   # jquery animations are async, so first collect all animation steps that need
@@ -13,15 +18,14 @@
   elsif append_updated_todo
     animation << (@new_context_created ? "insert_new_context_with_updated_todo" : "add_to_existing_container")
   end
-  animation << "hide_context" if update_needs_to_hide_context
+  animation << "hide_container" if update_needs_to_hide_container
   animation << "highlight_updated_todo"
   animation << "update_empty_container" if source_view_is_one_of(:tag, :todo, :deferred)
   animation << "update_predecessors"
 %>
-
-  <%= render_animation(animation) %>
   TracksPages.page_notify('notice', '<%=escape_javascript @status_message%>', 5);
   TracksPages.set_page_badge(<%= @down_count %>);
+  <%= render_animation(animation) %>
 <% end %>
 
 function remove_todo(next_steps) {
@@ -46,7 +50,7 @@ function add_to_existing_container(next_steps) {
     <% end -%>
   <% else -%>
     <% unless (@todo_hidden_state_changed && @todo.hidden?) || @todo_was_deferred_from_active_state -%>
-      $('#c<%= @todo.context_id %>').fadeIn(500, function() {
+      $('#<%= item_container_id(@todo) %>').fadeIn(500, function() {
         next_steps.go();
         <% if @target_context_count==1 -%>
           $("#<%=  empty_container_msg_div_id %>").slideUp(100);
@@ -69,9 +73,8 @@ function replace_todo(next_steps) {
   next_steps.go();
 }
 
-function hide_context(next_steps) {
-  <% context_id = @context_changed ? @original_item_context_id : @todo.context_id -%>
-  $('#c<%=  context_id %>').fadeOut(400, function(){ next_steps.go(); });
+function hide_container(next_steps) {
+  $('#<%= item_container_id(@original_item) %>').fadeOut(400, function(){ next_steps.go(); });
   <%= "$('#deferred_pending_container_empty-nd').slideDown(400);".html_safe if source_view_is(:deferred) && @down_count == 0 %>
 }
 
@@ -107,10 +110,6 @@ function html_for_todo() {
 
 function html_for_new_context() {
   return "<%= @saved && @new_context_created ? escape_javascript(render(:partial => @new_context, :locals => { :settings => {:collapsible => true }})) : "" %>";
-}
-
-function html_for_error_messages() {
-  return "<%= escape_javascript(get_list_of_error_messages_for(@todo)) %>";
 }
 
 function update_predecessors(next_steps) {

@@ -9,7 +9,7 @@ module NavigationHelpers
     options = {}
     options[:format] = :m if @mobile_interface 
     options[:locale] = @locale if @locale
-    options[:group_view_by] = @group_view_by if @group_view_by
+    options[:_group_view_by] = @group_view_by if @group_view_by
     @source_view = nil
     
     case page_name

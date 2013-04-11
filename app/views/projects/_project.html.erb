@@ -3,9 +3,10 @@
 # invalidate the cache every day because of staleness or
 # rendering of "due in x days" that change without touching updated at of the todo
 cache [project, @source_view, current_user.date.strftime("%Y%m%d")] do 
-%>
-  <%= render :partial => "project_settings_container", :locals => {:project => project} if source_view_is :project %>
-
+-%>
+  <% if source_view_is :project -%>
+    <%= render :partial => "project_settings_container", :locals => {:project => project} %>
+  <% end -%>
   <%= 
     title = source_view_is(:project) ? t('projects.actions_in_project_title') : show_project_name(project)
 
@@ -19,5 +20,4 @@ cache [project, @source_view, current_user.date.strftime("%Y%m%d")] do
         :show_empty_containers => settings[:show_empty_containers]
       }} 
   %>
-
-<% end %>
+<% end -%>

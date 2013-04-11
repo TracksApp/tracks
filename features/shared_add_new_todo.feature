@@ -85,21 +85,26 @@ Feature: Add new next action from every page
 
   @javascript
   Scenario Outline: I can add a todo from several pages
+    Given I have selected the view for group by <grouping>
     When I go to the <page>
-    And I submit a new action with description "a new next action"
+    And I submit a new action with description "a new next action" 
     Then I should <see> the todo "a new next action"
 
     Scenarios:
-      | page                            | see     |
-      | home page                       | see     |
-      | tickler page                    | not see |
-      | "test project" project          | see     |
-      | context page for "test context" | see     |
-      | tag page for "starred"          | see     |
+      | page                            | grouping | see     |
+      | home page                       | context  | see     |
+      | home page                       | project  | see     |
+      | tickler page                    | context  | not see |
+      | tickler page                    | project  | not see |
+      | "test project" project          | context  | see     |
+      | context page for "test context" | context  | see     |
+      | tag page for "starred"          | context  | see     |
+      | tag page for "starred"          | project  | see     |
 
   @javascript
   Scenario Outline: I can add multiple todos from several pages
     Given I have a project "testing" with 1 todos
+    And I have selected the view for group by <grouping>
     When I go to the <page>
     And I follow "Add multiple next actions"
     And I submit multiple actions with using
@@ -113,15 +118,18 @@ Feature: Add new next action from every page
     And the number of actions should be <count>
 
     Scenarios:
-      | page                            | see     | badge | count |
-      | home page                       | see     | 3     | 3     |
-      | tickler page                    | not see | 0     | 3     |
-      | "testing" project               | see     | 3     | 3     |
-      | context page for "test context" | see     | 2     | 3     |
-      | tag page for "starred"          | not see | 0     | 3     |
+      | page                            | see     | badge | count | grouping |
+      | home page                       | see     | 3     | 3     | context  |
+      | home page                       | see     | 3     | 3     | project  |
+      | tickler page                    | not see | 0     | 3     | context  |
+      | tickler page                    | not see | 0     | 3     | project  |
+      | "testing" project               | see     | 3     | 3     | context  |
+      | context page for "test context" | see     | 2     | 3     | context  |
+      | tag page for "starred"          | see     | 2     | 3     | context  |
+      | tag page for "starred"          | see     | 2     | 3     | project  |
 
   @javascript
-  Scenario: Adding a todo to another project does not show the todo
+  Scenario: Adding a todo to another project does not show the todo in project view
     Given I have a project called "another project"
     When I go to the "test project" project
     And I submit a new action with description "can you see me?" to project "another project" in the context "test context"
@@ -140,11 +148,27 @@ Feature: Add new next action from every page
     Then I should see the todo "another new next action"
 
   @javascript
-  Scenario Outline: Adding a todo with a new context shows the new context
+  Scenario Outline: Adding a todo with a new context shows the new context when page groups todos by context
     When I go to the <page>
     And I submit a new <todo> with description "do at new context" and the tags "starred" in the context "New"
     Then a confirmation for adding a new context "New" should be asked
     And the container for the context "New" should <visible>
+    And the badge should show <badge>
+
+    Scenarios:
+      | page                            | todo            | badge | visible        |
+      | home page                       | action          | 1     | be visible     |
+      | tickler page                    | deferred action | 1     | be visible     |
+      | "test project" project          | action          | 1     | not be visible |
+      | context page for "test context" | action          | 1     | not be visible |
+      | tag page for "starred"          | action          | 1     | be visible     |
+
+  @javascript
+  Scenario Outline: Adding a todo with a new project shows the new project when page groups todos by project
+    And I have selected the view for group by project
+    When I go to the <page>
+    And I submit a new <todo> with description "do in new project" to project "New" with tags "starred" 
+    Then the container for the project "New" should <visible>
     And the badge should show <badge>
 
     Scenarios:
@@ -161,6 +185,7 @@ Feature: Add new next action from every page
     And I have a project called "visible project"
     And I have a context called "visible context"
     And I have a context called "other context"
+    And I have selected the view for group by <grouping>
     When I go to the <page>
     And I submit a new action with description "hidden todo" to project "hidden project" with tags "test" in the context "visible context"
     Then I should <see_hidden> "hidden todo"
@@ -168,17 +193,21 @@ Feature: Add new next action from every page
     Then I should <see_visible> "visible todo"
 
     Scenarios:
-      | page                               | see_hidden | see_visible |
-      | home page                          | not see    | see         |
-      | tickler page                       | not see    | not see     |
-      | "visible project" project          | not see    | see         |
-      | "hidden project" project           | see        | not see     |
-      | context page for "visible context" | not see    | see         |
-      | context page for "other context"   | not see    | not see     |
-      | tag page for "starred"             | not see    | not see     |
-      | tag page for "test"                | see        | see         |
+      | page                               | grouping | see_hidden | see_visible |
+      | home page                          | context  | not see    | see         |
+      | home page                          | project  | not see    | see         |
+      | tickler page                       | context  | not see    | not see     |
+      | tickler page                       | project  | not see    | not see     |
+      | "visible project" project          | project  | not see    | see         |
+      | "hidden project" project           | project  | see        | not see     |
+      | context page for "visible context" | context  | not see    | see         |
+      | context page for "other context"   | context  | not see    | not see     |
+      | tag page for "starred"             | context  | not see    | not see     |
+      | tag page for "starred"             | project  | not see    | not see     |
+      | tag page for "test"                | context  | see        | see         |
+      | tag page for "test"                | project  | see        | see         |
 
-  @javascript
+  @javascript 
   Scenario: Adding a todo to a hidden context from home page does not show the todo
     Given I have a context called "visible context"
     And I have a hidden context called "hidden context"
@@ -200,13 +229,20 @@ Feature: Add new next action from every page
     Then I should see "another new todo"
 
   @javascript
-  Scenario: Adding a todo to an empty container hides the empty message # TODO: make outline
+  Scenario Outline: Adding a todo to an empty container hides the empty message 
     Given I have a context called "visible context"
+    And I have a project called "visible project"
+    And I have selected the view for group by <grouping>
     When I go to the tag page for "test"
     Then I should see empty message for todos of tag
-    When I submit a new action with description "a new todo" and the tags "test" in the context "visible context"
+    When I submit a new action with description "a new todo" to project "visible project" with tags "test" in the context "visible context"
     Then I should see "a new todo"
     And I should not see empty message for todos of tag
+
+    Scenarios:
+      | grouping |
+      | context  |
+      | project  |
 
   @javascript
   Scenario Outline: Adding a dependency to a todo updates the successor
@@ -224,7 +260,7 @@ Feature: Add new next action from every page
     | project   |
     | context   |
     
-  @javascript
+  @javascript 
   Scenario: Adding a dependency to a todo in another project
     Given I have a project "testing" with 1 todos
     And I have a project "another project"
@@ -233,8 +269,9 @@ Feature: Add new next action from every page
     Then I should not see "a new todo" in the project container of "another project"
     And I should not see empty message for deferred todos of project
 
-  @javascript
-  Scenario: I can add multiple todos in a new project and a new context
+  @javascript @wip
+  Scenario Outline: I can add multiple todos in a new project and a new context
+    Given I have selected the view for group by <grouping>  
     When I go to the home page
     And I follow "Add multiple next actions"
     And I fill the multiple actions form with "", "a next project", "@anywhere", "new tag"
@@ -253,7 +290,13 @@ Feature: Add new next action from every page
     And I should see "b"
     And I should see "c"
 
-  @javascript
+    Scenarios:
+    | grouping  |
+    | project   |
+    | context   |
+
+
+  @javascript 
   Scenario: I need to fill in at least one description and a context
     When I go to the home page
     And I follow "Add multiple next actions"

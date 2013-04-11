@@ -1,5 +1,21 @@
-<% if @saved -%>
-  set_notification();
+<% unless @saved -%>
+  TracksPages.show_errors_for_multi_add(html_for_error_messages());
+
+  function html_for_error_messages() {
+    <%
+      # add error about missing todo description that is not available in @todos
+      @multiple_error = content_tag(:div, content_tag(:p, @multiple_error), {:class => 'errorExplanation', :id => 'errorExplanation'}) unless @multiple_error.blank?
+      error_messages = @multiple_error || ""
+      # add errors of individual @todos
+      @todos.each do |todo|
+        error_messages += get_list_of_error_messages_for(todo)
+      end
+    -%>
+    return "<%= escape_javascript(error_messages.html_safe)%>";
+  }
+
+<% else -%>
+  TracksPages.page_notify('notice', "<%=@status_message%>", 5);
   hide_empty_message();
   TracksPages.hide_errors();
   TracksPages.set_page_badge(<%= @down_count %>);
@@ -11,67 +27,44 @@
     <% end -%>
   <% end -%>
   clear_form();
-<% else -%>
-  TracksPages.show_errors_for_multi_add(html_for_error_messages());
+
+  function clear_form() {
+    $('#todo-form-multi-new-action').clearForm();
+    TracksForm.set_context_name_for_multi_add('<%=escape_javascript @initial_context_name%>');
+    TracksForm.set_project_name_for_multi_add('<%=escape_javascript @initial_project_name%>');
+    TracksForm.set_tag_list_for_multi_add('<%=escape_javascript @initial_tags%>');
+    $('#todo-form-multi-new-action input:text:first').focus();
+  }
+
+  function insert_new_context_with_new_todo() {
+    $('#display_box').prepend(html_for_new_context());
+  }
+
+  function hide_empty_message() {
+    <% if (source_view_is :project and @todo.pending?) or (source_view_is :deferred) -%>
+      $('#deferred_pending_container-empty-d').hide();
+    <% else -%>
+      $('#no_todos_in_view').hide();
+    <% end -%>
+  }
+
+  function add_todo_to_existing_context() {
+    <%
+    @todos.each do |todo|
+      if should_show_new_item(todo)
+        html = escape_javascript(render(:partial => todo, :locals => { :parent_container_type => parent_container_type, :source_view => @source_view }))
+        -%>
+        $('#<%= empty_container_msg_div_id(todo) %>').hide();
+        $('#<%= item_container_id(todo) %>').append('<%= html %>');
+        $('#<%= item_container_id(todo) %>').fadeIn(500, function() {
+          $('#<%= dom_id(todo) %>').effect('highlight', {}, 2000 );
+        });
+      <% end %>
+    <% end %>
+  }
+
+  function html_for_new_context() {
+    return "<%= @saved && @new_context_created ? escape_javascript(render(:partial => @todo.context, :locals => { :settings => {:collapsible => true} })) : "" %>";
+  }
+
 <% end -%>
-
-<% if @saved
-   # the following functions assume a todo is saved or at least not nil,
-   # so leave them out in case of an error
--%>
-
-function set_notification() {
- TracksPages.page_notify('notice', "<%=@status_message%>", 5);
-}
-
-function clear_form() {
-  $('#todo-form-multi-new-action').clearForm();
-  TracksForm.set_context_name_for_multi_add('<%=escape_javascript @initial_context_name%>');
-  TracksForm.set_project_name_for_multi_add('<%=escape_javascript @initial_project_name%>');
-  TracksForm.set_tag_list_for_multi_add('<%=escape_javascript @initial_tags%>');
-  $('#todo-form-multi-new-action input:text:first').focus();
-}
-
-function insert_new_context_with_new_todo() {
-  $('#display_box').prepend(html_for_new_context());
-}
-
-function hide_empty_message() {
-  $('#<%=empty_container_msg_div_id%>').hide();
-  <% if (source_view_is :project and @todo.pending?) or (source_view_is :deferred) -%>
-    $('#deferred_pending_container-empty-d').hide();
-  <% end -%>
-}
-
-function add_todo_to_existing_context() {
-  <% if source_view_is_one_of(:todo, :deferred, :tag) -%>
-    TodoItemsContainer.ensureVisibleWithEffectAppear("c<%=@todo.context_id%>");
-  <% end
-     show = should_show_new_item # to hide html if not necessary
-     @todos.each do |todo|
-       html = show ? escape_javascript(render(:partial => todo, :locals => { :parent_container_type => parent_container_type, :source_view => @source_view })) : "" -%>
-       $('#<%=item_container_id(todo)%>').append('<%= html %>');
-       $('#<%= dom_id(todo)%>').effect('highlight', {}, 3000);
-  <% end %>
-}
-
-function html_for_new_context() {
-  return "<%= @saved && @new_context_created ? escape_javascript(render(:partial => @todo.context, :locals => { :settings => {:collapsible => true} })) : "" %>";
-}
-
-<% else # if @saved -%>
-
-function html_for_error_messages() {
-  <%
-  # add error about missing todo description that is not available in @todos
-  @multiple_error = content_tag(:div, content_tag(:p, @multiple_error), {:class => 'errorExplanation', :id => 'errorExplanation'}) unless @multiple_error.blank?
-  error_messages = @multiple_error || ""
-  # add errors of individual @todos
-  @todos.each do |todo|
-    error_messages += get_list_of_error_messages_for(todo)
-  end
-  -%>
-  return "<%= escape_javascript(error_messages.html_safe)%>";
-}
-
-<% end # if @saved -%>

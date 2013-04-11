@@ -1,4 +1,6 @@
-<%- if @saved -%>
+<%- unless @saved -%>
+  TracksPages.page_notify('error', "<%= t('todos.error_deleting_item', :description => @todo.description) %>", 8);
+<%- else -%>
   TracksPages.page_notify('notice', '<%=  escape_javascript(t('todos.deleted_success')) %>', 5);
   TracksPages.set_page_badge(<%=@down_count%>);
   remove_todo_from_page();
@@ -6,20 +8,14 @@
   activate_pending_todos();
   update_predecessors();
   show_empty_messages();
-<%- else -%>
-  TracksPages.page_notify('error', "<%= t('todos.error_deleting_item', :description => @todo.description) %>", 8);
 <%- end -%>
-
-<% if @saved
-  # do not send the js in case of an error
--%>
 
 function show_empty_messages() {
   <% if @old_due_empty -%>
     $('#empty_<%=@original_item_due_id%>').slideDown(1000);
   <% end -%>
 
-  <% if empty_container_msg_div_id && todo_container_is_empty -%>
+  <% if todo_container_is_empty -%>
       $('#<%=empty_container_msg_div_id%>').slideDown(1000);
       <% if @down_count == 0 -%>
         $('#no_todos_in_view').slideDown(1000);
@@ -32,10 +28,10 @@ function show_empty_messages() {
 }
 
 function remove_todo_from_page() {
-  <% if (@remaining_in_context == 0) && update_needs_to_hide_context
+  <% if (@remaining_in_context == 0) && update_needs_to_hide_container
        # remove context with deleted todo
   -%>
-       $('#c<%=@todo.context_id%>').fadeOut(400, function() {
+       $('#<%=item_container_id(@todo)%>').fadeOut(400, function() {
          $('#<%=dom_id(@todo)%>').remove();
        });
        <%= show_empty_message_in_source_container -%>
@@ -105,7 +101,3 @@ function update_predecessors() {
 function html_for_new_recurring_todo() {
   return "<%= @saved && @new_recurring_todo ? escape_javascript(render(:partial => @new_recurring_todo, :locals => { :parent_container_type => parent_container_type })) : "" %>";
 }
-
-<% end
-  # if @saved
--%>

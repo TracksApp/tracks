@@ -1,24 +1,32 @@
 <% unless @saved -%>
+
   TracksPages.show_errors(html_for_error_messages());
 
   function html_for_error_messages() {
     return "<%= escape_javascript(get_list_of_error_messages_for(@todo)) %>";
   }
-<% else -%>  
+
+<% else
+
+  animation = []
+  if should_show_new_item
+    if should_add_new_container 
+      animation << "insert_new_container_with_new_todo";
+    else
+      animation << "add_todo_to_existing_container";
+    end
+  end
+  animation << "remove_empty_message_container";
+  animation << "update_predecessors";
+  animation << "clear_form";
+-%>
+
+  <%= render_animation(animation) %>
   TracksPages.page_notify('notice', "<%=escape_javascript @status_message%>", 8);
   TracksPages.hide_errors();
   TracksPages.set_page_badge(<%= @down_count %>);
-  <% if should_show_new_item -%>
-    <% if should_add_new_context -%>
-      insert_new_context_with_new_todo();
-    <% else -%>
-      add_todo_to_existing_context();
-    <% end -%>
-  <% end -%>
-  update_predecessors();
-  clear_form();
 
-  function clear_form() {
+  function clear_form(next_steps) {
     $('#todo-form-new-action').clearForm();
     $('#todo-form-new-action').clearDeps();
     TracksForm.set_context_name('<%=escape_javascript @initial_context_name%>');
@@ -27,43 +35,55 @@
     $('#todo-form-new-action input:text:first').focus();
     $('#new_todo_starred_link .todo_star').removeClass('starred');
     $('#new_todo_starred').val('false');
+    next_steps.go();
   }
 
-  function insert_new_context_with_new_todo() {
+  function insert_new_container_with_new_todo(next_steps) {
     <%-
       empty_id = '#no_todos_in_view'
       empty_id = '#deferred_pending_container-empty-d' if source_view_is :tickler
     -%>
-    $('<%=empty_id%>').slideUp(100);
-    $('#display_box').prepend(html_for_new_context());
+    $('<%=empty_id%>').slideUp(100, function() { 
+      $('#display_box').prepend(html_for_new_container());
+      next_steps.go(); 
+    });
   }
 
-  function add_todo_to_existing_context() {
-    <% if source_view_is_one_of(:todo, :deferred, :tag) -%>
-      <% unless source_view_is_one_of(:todo, :tag) && (@todo.deferred?||@todo.hidden?) -%>
-        $('#c<%= @todo.context_id %>').fadeIn(500, function() {});
-        $('#no_todos_in_view').slideUp(100);
-        <%= "$('#deferred_pending_container-empty-nd').slideUp(100);".html_safe if source_view_is(:deferred) && @todo.deferred? %>
-      <% end -%>
-    <% end -%>
-    $('#<%=empty_container_msg_div_id%>').hide();
-    $('#<%=item_container_id(@todo)%>').append(html_for_new_todo());
-    $('#<%= dom_id(@todo)%>').effect('highlight', {}, 2000 );
+  function add_todo_to_existing_container(next_steps) {    
+    $('#<%= empty_container_msg_div_id %>').hide();
+    $('#<%= item_container_id(@todo) %>').append(html_for_new_todo());
+    $('#<%= item_container_id(@todo) %>').slideDown(500, function() {
+      $('#<%= dom_id(@todo) %>').effect('highlight', {}, 2000 );
+      next_steps.go();
+    });
   }
 
-  function update_predecessors() {
+  function remove_empty_message_container(next_steps) {
+    $('#no_todos_in_view').slideUp(100, function() { });
+    <%# = "$('#deferred_pending_container-empty-nd').slideUp(100);".html_safe if source_view_is(:deferred) && @todo.deferred? %>
+    next_steps.go();
+  }
+
+  function update_predecessors(next_steps) {
     <%  @todo.uncompleted_predecessors.each do |p| -%>
       if ($('<%=item_container_id(p)%>')) {
         $('#<%=dom_id(p)%>').html('<%= escape_javascript(render(:partial =>  p, :locals => { :parent_container_type => parent_container_type, :source_view => @source_view }))%>');
       }
     <% end -%>
+    next_steps.go();
   }
 
-  function html_for_new_context() {
-    return "<%= @saved && @new_context_created ? escape_javascript(render(:partial => @todo.context, :locals => { :settings => {:collapsible => true} })) : "" %>";
+  function html_for_new_container() {
+    <% 
+      want_render = @group_view_by == 'project' ? @new_project_created : @new_context_created
+      container   = @group_view_by == 'project' ? @todo.project        : @todo.context
+      js = want_render ? escape_javascript(render(:partial => container, :locals => { :settings => {:collapsible => true} })) : ""
+    %>
+    return "<%= js %>";
   }
 
   function html_for_new_todo() {
     return "<%= @saved ? escape_javascript(render(:partial => @todo, :locals => { :parent_container_type => parent_container_type, :source_view => @source_view })) : "" %>";
   }
+  
 <% end -%>

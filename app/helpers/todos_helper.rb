@@ -1,5 +1,7 @@
 module TodosHelper
 
+  # === helpers for rendering container
+
   def empty_message_holder(container_name, show, title_param=nil)
     content_tag(:div, :id => "no_todos_in_view", :class => "container #{container_name}", :style => "display:" + (show ? "block" : "none") ) do
       content_tag(:h2) { t("todos.no_actions.title", :param=>title_param) } +
@@ -126,6 +128,8 @@ module TodosHelper
     end
   end
 
+  # === helpers for rendering a todo
+
   def remote_star_icon(todo=@todo)
     link_to( image_tag_for_star(todo),
       toggle_star_todo_path(todo),
@@ -210,6 +214,10 @@ module TodosHelper
       image_tag("recurring16x16.png"),
       recurring_todos_path,
       :class => "recurring_icon", :title => recurrence_pattern_as_text(todo.recurring_todo))
+  end
+
+  def image_tag_for_star(todo)
+    image_tag("blank.png", :title =>t('todos.star_action'), :class => "todo_star"+(todo.starred? ? " starred":""), :id => "star_img_"+todo.id.to_s)
   end
 
   def remote_toggle_checkbox(todo=@todo)
@@ -348,51 +356,11 @@ module TodosHelper
     end
   end
 
-  def should_show_new_item
-    source_view do |page|
-      page.todo { return !@todo.hidden? }
-      page.deferred { return @todo.deferred? || @todo.pending? }
-      page.context {
-        return @todo.context_id==@default_context.id && ( (@todo.hidden? && @todo.context.hidden?) || (!@todo.hidden?) )
-      }
-      page.tag {
-        return ( (@todo.pending? && @todo.has_tag?(@tag_name)) ||
-            (@todo.has_tag?(@tag_name)) ||
-            (@todo.starred? && @tag_name == Todo::STARRED_TAG_NAME)
-        )
-      }
-      page.project {
-        return (@todo.active? && @todo.project && @todo.project.id == @default_project.id) ||
-          (@todo.project.hidden? && @todo.project_hidden?) ||
-          ( @todo.deferred? && (@todo.project.id == @default_project.id) ) ||
-          @todo.pending?
-      }
-    end
-
-    return false
+  def date_field_tag(name, id, value = nil, options = {})
+    text_field_tag name, value, {"size" => 12, "id" => id, "class" => "Date", "autocomplete" => "off"}.update(options.stringify_keys)
   end
 
-  def should_make_context_visible
-    return @todo.active? && (!@todo.hidden? && !source_view_is(:project) )
-  end
-
-  def should_add_new_context
-    return @new_context_created && !source_view_is(:project)
-  end
-
-  def parent_container_type
-    return 'tickler' if source_view_is :deferred
-    return 'project' if source_view_is :project
-    return 'stats' if source_view_is :stats
-    return 'tag' if source_view_is :tag
-    return 'context'
-  end
-
-  def todo_container_is_empty
-    default_container_empty = ( @down_count == 0 )
-    deferred_container_empty = ( @todo.deferred? && @remaining_deferred_count == 0)
-    return default_container_empty || deferred_container_empty
-  end
+  # === helpers for default layout
 
   def default_contexts_for_autocomplete
     projects = current_user.projects.uncompleted.includes(:default_context).where('NOT(default_context_id IS NULL)')
@@ -404,6 +372,13 @@ module TodosHelper
     Hash[*projects.map{ |p| [escape_javascript(p.name), p.default_tags] }.flatten].to_json
   end
 
+  # === various helpers
+
+  def formatted_pagination(total)
+    s = will_paginate(@todos)
+    (s.gsub(/(<\/[^<]+>)/, '\1 ')).chomp(' ')
+  end
+
   def format_ical_notes(notes)
     unless notes.nil? || notes.blank?
       split_notes = notes.split(/\n/)
@@ -412,145 +387,12 @@ module TodosHelper
     joined_notes || ""
   end
 
-  def formatted_pagination(total)
-    s = will_paginate(@todos)
-    (s.gsub(/(<\/[^<]+>)/, '\1 ')).chomp(' ')
-  end
-
-  def date_field_tag(name, id, value = nil, options = {})
-    text_field_tag name, value, {"size" => 12, "id" => id, "class" => "Date", "autocomplete" => "off"}.update(options.stringify_keys)
-  end
-
-  def update_needs_to_hide_context
-    return (@remaining_in_context == 0 && (@todo_hidden_state_changed && @todo.hidden?)) ||
-      (@remaining_in_context == 0 && @todo_was_deferred_from_active_state) ||
-      (@remaining_in_context == 0 && @tag_was_removed) ||
-      (@remaining_in_context == 0 && @todo.completed? && !(@original_item_was_deferred || @original_item_was_hidden)) if source_view_is(:tag)
-
-    return false if source_view_is_one_of(:project, :calendar, :done)
-
-    return (@remaining_in_context == 0) && !source_view_is(:context)
-  end
-
-  def update_needs_to_remove_todo_from_container
-    source_view do |page|
-      page.context  { return @context_changed || @todo_deferred_state_changed || @todo_pending_state_changed || @todo_should_be_hidden }
-      page.project  { return @todo_deferred_state_changed || @todo_pending_state_changed || @project_changed}
-      page.deferred { return @context_changed || !(@todo.deferred? || @todo.pending?) }
-      page.calendar { return @due_date_changed || !@todo.due }
-      page.stats    { return @todo.completed? }
-      page.tag      { return (@context_changed && !@todo.hidden?) || @tag_was_removed || @todo_hidden_state_changed || @todo_deferred_state_changed }
-      page.todo     { return @context_changed || @todo.hidden? || @todo.deferred? || @todo.pending?}
-      page.search   { return false }
-    end
-    return false
-  end
-
-  def replace_with_updated_todo
-    source_view do |page|
-      page.context  { return !update_needs_to_remove_todo_from_container }
-      page.project  { return !update_needs_to_remove_todo_from_container }
-      page.deferred { return !@context_changed && (@todo.deferred? || @todo.pending?) }
-      page.calendar { return !@due_date_changed && @todo.due }
-      page.stats    { return !@todo.completed? }
-      page.tag      { return !update_needs_to_remove_todo_from_container && !@tag_was_removed }
-      page.todo     { return !update_needs_to_remove_todo_from_container }
-      page.search   { return true }
-    end
-    return false
-  end
-
-  def append_updated_todo
-    source_view do |page|
-      page.context  { return @todo_deferred_state_changed || @todo_pending_state_changed }
-      page.project  { return @todo_deferred_state_changed || @todo_pending_state_changed }
-      page.deferred { return @context_changed && (@todo.deferred? || @todo.pending?) }
-      page.calendar { return @due_date_changed && @todo.due }
-      page.stats    { return false }
-      page.tag      { return update_needs_to_remove_todo_from_container && !@tag_was_removed}
-      page.todo     { return @context_changed && !(@todo.deferred? || @todo.pending? || @todo.hidden?) }
-    end
-    return false
-  end
-
-  def item_container_id (todo)
-    return "hidden_container_items"                        if source_view_is(:tag) && todo.hidden?
-    return "c#{todo.context_id}_items"           if source_view_is :deferred
-    return @new_due_id                           if source_view_is :calendar
-    return "deferred_pending_container_items"    if !source_view_is(:todo) && (todo.deferred? || todo.pending?)
-    return "completed_container_items"           if todo.completed?
-    return "p#{todo.project_id}_items"           if source_view_is :project
-    return "c#{todo.context_id}_items"
-  end
-
-  def empty_container_msg_div_id(todo = @todo || @successor)
-    raise Exception.new, "no @todo or @successor set" if !todo
-
-    source_view do |page|
-      page.project  {
-        return "deferred_pending_container-empty-d" if empty_criteria_met
-        return "p#{todo.project_id}-empty-d"
-      }
-      page.tag {
-        return "deferred_pending_container-empty-d" if empty_criteria_met
-        return "hidden_container-empty-d" if @todo.hidden?
-        return "c#{todo.context_id}-empty-d"
-      }
-      page.calendar {
-        return "deferred_pending_container-empty-d" if empty_criteria_met
-        return "empty_#{@new_due_id}"
-      }
-      page.context {
-        return "deferred_pending_container-empty-d" if empty_criteria_met
-        return "c#{todo.context_id}-empty-d"
-      }
-    end
-
-    return "c#{todo.context_id}-empty-d"
-  end
-
-  def empty_criteria_met
-    @todo_was_deferred_from_active_state ||
-      @todo_was_blocked_from_active_state ||
-      @todo_was_destroyed_from_deferred_state ||
-      @todo_was_created_deferred ||
-      @todo_was_blocked_from_completed_state ||
-      @todo_was_created_blocked
-  end
-
-  def todo_was_removed_from_deferred_or_blocked_container
-    return @todo_was_activated_from_deferred_state ||
-           @todo_was_activated_from_pending_state ||
-           @todo_was_destroyed_from_deferred_or_pending_state ||
-           @todo_was_completed_from_deferred_or_blocked_state
-  end
-
-  def show_empty_message_in_source_container
-    container_id = ""
-    source_view do |page|
-      page.project  {
-        container_id = "p#{@original_item_project_id}-empty-d" if @remaining_in_context == 0
-        container_id = "deferred_pending_container-empty-d" if todo_was_removed_from_deferred_or_blocked_container && @remaining_deferred_or_pending_count == 0
-        container_id = "completed_container-empty-d" if @completed_count && @completed_count == 0 && !@todo.completed?
-      }
-      page.deferred { container_id = "c#{@original_item_context_id}empty-d" if @remaining_in_context == 0 }
-      page.calendar { container_id = "empty_#{@original_item_due_id}" if @old_due_empty }
-      page.tag      {
-        container_id = "hidden_container-empty-d" if (@remaining_hidden_count == 0 && !@todo.hidden? && @todo_hidden_state_changed) ||
-          (@remaining_hidden_count == 0 && @todo.completed? && @original_item_was_hidden)
-        container_id = "deferred_pending_container-empty-d" if (todo_was_removed_from_deferred_or_blocked_container && @remaining_deferred_or_pending_count == 0) ||
-          (@original_item_was_deferred && @remaining_deferred_or_pending_count == 0 && (@todo.completed? || @tag_was_removed))
-        container_id = "completed_container-empty-d" if @completed_count && @completed_count == 0 && !@todo.completed?
-      }
-      page.context  {
-        container_id = "c#{@original_item_context_id}-empty-d" if @remaining_in_context == 0
-        container_id = "deferred_pending_container-empty-d" if todo_was_removed_from_deferred_or_blocked_container && @remaining_deferred_or_pending_count == 0
-        container_id = "completed_container-empty-d" if @completed_count && @completed_count == 0 && !@todo.completed?
-      }
-      page.todo     { container_id = "c#{@original_item_context_id}-empty-d" if @remaining_in_context == 0 }
-      page.done     { container_id = "completed_#{@original_completed_period}_container-empty-d" if @remaining_in_context == 0 }
-    end
-    return container_id.blank? ? "" : "$(\"##{container_id}\").slideDown(100);".html_safe
+  def parent_container_type
+    return 'tickler' if source_view_is :deferred
+    return 'project' if source_view_is :project
+    return 'stats'   if source_view_is :stats
+    return 'tag'     if source_view_is :tag
+    return 'context'
   end
 
   def render_animation(animation)
@@ -587,10 +429,208 @@ module TodosHelper
       content_tag(:div, "#{t('common.context')}:  #{context_link}")
   end
   
-  private
+  # === handle CRUD actions for todos
 
-  def image_tag_for_star(todo)
-    image_tag("blank.png", :title =>t('todos.star_action'), :class => "todo_star"+(todo.starred? ? " starred":""), :id => "star_img_"+todo.id.to_s)
+  def show_todo_on_current_context_page
+    return @todo.context_id==@default_context.id
+  end
+
+  def todo_should_not_be_hidden_on_context_page
+    return !@todo.hidden? ||                        # todo is not hidden --> show
+           (@todo.hidden? && @todo.context.hidden?) # todo is hidden, but context is hidden too --> show          
+  end
+
+  def show_todo_on_current_project_page
+    return @todo.project.id == @default_project.id
+  end
+
+  def todo_should_not_be_hidden_on_project_page
+    return !@todo.hidden? ||
+           (@todo.project_hidden? && @todo.project.hidden?)
+  end
+
+  def should_show_new_item(todo = @todo)
+    return false if todo.nil?
+    source_view do |page|
+      page.todo     { return !todo.hidden? }
+      page.deferred { return todo.deferred? || todo.pending? }
+      page.context  { return show_todo_on_current_context_page && todo_should_not_be_hidden_on_context_page }
+      page.tag      { return todo.has_tag?(@tag_name) }
+      page.project  { return show_todo_on_current_project_page && todo_should_not_be_hidden_on_project_page }
+    end
+    return false
+  end
+
+  def should_make_context_visible
+    return @todo.active? && (!@todo.hidden? && !source_view_is(:project) )
+  end
+
+  def should_add_new_container
+    if @group_view_by == 'project'
+      return @new_project_created && !source_view_is(:context)
+    else
+      return @new_context_created && !source_view_is(:project)
+    end
+  end
+
+  def todo_container_is_empty
+    default_container_empty = ( @down_count == 0 )
+    deferred_container_empty = ( @todo.deferred? && @remaining_deferred_count == 0)
+    return default_container_empty || deferred_container_empty
+  end
+
+  def todo_moved_out_of_container
+    return (@project_changed && @group_view_by=='project') || (@context_changed && @group_view_by='context')
+  end
+
+  def update_needs_to_hide_container
+    return (@remaining_in_context == 0 && todo_moved_out_of_container ) ||
+      (@remaining_in_context == 0 && (@todo_hidden_state_changed && @todo.hidden?)) ||
+      (@remaining_in_context == 0 && @todo_was_deferred_from_active_state) ||
+      (@remaining_in_context == 0 && @tag_was_removed) ||
+      (@remaining_in_context == 0 && @todo_was_destroyed) ||
+      (@remaining_in_context == 0 && @todo.completed? && !(@original_item_was_deferred || @original_item_was_hidden)) if source_view_is(:tag)
+
+    return false if source_view_is_one_of(:project, :calendar, :done)
+
+    return (@remaining_in_context == 0) && !source_view_is(:context)
+  end
+
+  def update_needs_to_remove_todo_from_container
+    source_view do |page|
+      page.context  { return @context_changed || @todo_deferred_state_changed || @todo_pending_state_changed || @todo_should_be_hidden }
+      page.project  { return @todo_deferred_state_changed || @todo_pending_state_changed || @project_changed}
+      page.deferred { return @context_changed || !(@todo.deferred? || @todo.pending?) }
+      page.calendar { return @due_date_changed || !@todo.due }
+      page.stats    { return @todo.completed? }
+      page.tag      { return ( (@context_changed | @project_changed) && !@todo.hidden?) || @tag_was_removed || @todo_hidden_state_changed || @todo_deferred_state_changed }
+      page.todo     { return todo_moved_out_of_container || @todo.hidden? || @todo.deferred? || @todo.pending?}
+      page.search   { return false }
+    end
+    return false
+  end
+
+  def replace_with_updated_todo
+    source_view do |page|
+      page.context  { return !update_needs_to_remove_todo_from_container }
+      page.project  { return !update_needs_to_remove_todo_from_container }
+      page.deferred { return !@context_changed && (@todo.deferred? || @todo.pending?) }
+      page.calendar { return !@due_date_changed && @todo.due }
+      page.stats    { return !@todo.completed? }
+      page.tag      { return !update_needs_to_remove_todo_from_container && !@tag_was_removed }
+      page.todo     { return !update_needs_to_remove_todo_from_container }
+      page.search   { return true }
+    end
+    return false
+  end
+
+  def append_updated_todo
+    source_view do |page|
+      page.context  { return @todo_deferred_state_changed || @todo_pending_state_changed }
+      page.project  { return @todo_deferred_state_changed || @todo_pending_state_changed }
+      page.deferred { return @context_changed && (@todo.deferred? || @todo.pending?) }
+      page.calendar { return @due_date_changed && @todo.due }
+      page.stats    { return false }
+      page.tag      { return update_needs_to_remove_todo_from_container && !@tag_was_removed}
+      page.todo     { return todo_moved_out_of_container && !(@todo.deferred? || @todo.pending? || @todo.hidden?) }
+    end
+    return false
+  end
+
+  def project_container_id(todo)
+    return "p#{todo.project_id}"         unless todo.project.nil?
+    return "without_project_container"
+  end
+
+  def project_container_empty_id(todo)
+    return "p#{todo.project_id}-empty-d" unless todo.project.nil?
+    return "without_project_container-empty-d"
+  end
+
+  def item_container_id (todo)
+    return "hidden_container_items"              if source_view_is(:tag) && todo.hidden?
+    return "c#{todo.context_id}_items"           if source_view_is :deferred
+    return @new_due_id                           if source_view_is :calendar
+    return "deferred_pending_container_items"    if !source_view_is(:todo) && (todo.deferred? || todo.pending?)
+    return "completed_container_items"           if todo.completed?
+    return "p#{todo.project_id}_items"           if source_view_is :project
+    return project_container_id(todo)            if source_view_is_one_of(:todo, :tag) && @group_view_by == 'project'
+    return "c#{todo.context_id}"           
+  end
+
+  def empty_container_msg_div_id(todo = @todo || @successor)
+    raise Exception.new, "no @todo or @successor set" if !todo
+
+    source_view do |page|
+      page.project  {
+        return "deferred_pending_container-empty-d" if empty_criteria_met
+        return "p#{todo.project_id}-empty-d"
+      }
+      page.tag {
+        return "deferred_pending_container-empty-d" if empty_criteria_met
+        return "hidden_container-empty-d"           if @todo.hidden?
+        return "c#{todo.context_id}-empty-d"        if @group_view_by == 'context'
+        return project_container_empty_id(todo)
+      }
+      page.calendar {
+        return "deferred_pending_container-empty-d" if empty_criteria_met
+        return "empty_#{@new_due_id}"
+      }
+      page.context {
+        return "deferred_pending_container-empty-d" if empty_criteria_met
+        return "c#{todo.context_id}-empty-d"
+      }
+      page.todo {
+        return "c#{todo.context_id}-empty-d"        if @group_view_by == 'context'
+        return project_container_empty_id(todo) 
+      }
+    end
+
+    return "c#{todo.context_id}-empty-d"
+  end
+
+  def empty_criteria_met
+    return @todo_was_deferred_from_active_state ||
+      @todo_was_blocked_from_active_state ||
+      @todo_was_destroyed_from_deferred_state ||
+      @todo_was_created_deferred ||
+      @todo_was_blocked_from_completed_state ||
+      @todo_was_created_blocked
+  end
+
+  def todo_was_removed_from_deferred_or_blocked_container
+    return @todo_was_activated_from_deferred_state ||
+      @todo_was_activated_from_pending_state ||
+      @todo_was_destroyed_from_deferred_or_pending_state ||
+      @todo_was_completed_from_deferred_or_blocked_state
+  end
+
+  def show_empty_message_in_source_container
+    container_id = ""
+    source_view do |page|
+      page.project  {
+        container_id = "p#{@original_item_project_id}-empty-d" if @remaining_in_context == 0
+        container_id = "deferred_pending_container-empty-d" if todo_was_removed_from_deferred_or_blocked_container && @remaining_deferred_or_pending_count == 0
+        container_id = "completed_container-empty-d" if @completed_count && @completed_count == 0 && !@todo.completed?
+      }
+      page.deferred { container_id = "c#{@original_item_context_id}empty-d" if @remaining_in_context == 0 }
+      page.calendar { container_id = "empty_#{@original_item_due_id}" if @old_due_empty }
+      page.tag      {
+        container_id = "hidden_container-empty-d" if (@remaining_hidden_count == 0 && !@todo.hidden? && @todo_hidden_state_changed) ||
+          (@remaining_hidden_count == 0 && @todo.completed? && @original_item_was_hidden)
+        container_id = "deferred_pending_container-empty-d" if (todo_was_removed_from_deferred_or_blocked_container && @remaining_deferred_or_pending_count == 0) ||
+          (@original_item_was_deferred && @remaining_deferred_or_pending_count == 0 && (@todo.completed? || @tag_was_removed))
+        container_id = "completed_container-empty-d" if @completed_count && @completed_count == 0 && !@todo.completed?
+      }
+      page.context  {
+        container_id = "c#{@original_item_context_id}-empty-d" if @remaining_in_context == 0
+        container_id = "deferred_pending_container-empty-d" if todo_was_removed_from_deferred_or_blocked_container && @remaining_deferred_or_pending_count == 0
+        container_id = "completed_container-empty-d" if @completed_count && @completed_count == 0 && !@todo.completed?
+      }
+      page.todo     { container_id = "c#{@original_item_context_id}-empty-d" if @remaining_in_context == 0 }
+      page.done     { container_id = "completed_#{@original_completed_period}_container-empty-d" if @remaining_in_context == 0 }
+    end
+    return container_id.blank? ? "" : "$(\"##{container_id}\").slideDown(100);".html_safe
   end
 
 end

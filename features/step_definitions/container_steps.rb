@@ -98,7 +98,7 @@ end
 
 ####### Project #######
 
-Then /^I should not see "([^"]*)" in the project container of "([^"]*)"$/ do |todo_description, project_name|
+Then /^I should (see|not see) "([^"]*)" in the project container of "([^"]*)"$/ do |visible, todo_description, project_name|
   todo = @current_user.todos.where(:description => todo_description).first
   todo.should_not be_nil
 
@@ -106,30 +106,20 @@ Then /^I should not see "([^"]*)" in the project container of "([^"]*)"$/ do |to
   project.should_not be_nil
 
   xpath = "//div[@id='p#{todo.project.id}_items']//div[@id='line_todo_#{todo.id}']"
-  page.should_not have_xpath(xpath)
+  page.send( visible=='see' ? :should : :should_not, have_xpath(xpath))
 end
 
-Then /^I should see "([^"]*)" in project container for "([^"]*)"$/ do |todo_description, project_name|
-  todo = @current_user.todos.where(:description => todo_description).first
-  todo.should_not be_nil
-
-  project = @current_user.projects.where(:name => project_name).first
-  project.should_not be_nil
-
-  xpath = "//div[@id='p#{project.id}_items']//div[@id='line_todo_#{todo.id}']"
-  page.should have_xpath(xpath)
-end
-
-Then(/^I should see "(.*?)" in the project container for "(.*?)"$/) do |todo_description, project_name|
-  step "I should see \"#{todo_description}\" in project container for \"#{project_name}\""
-end
-
-Then /^I should not see the project container for "([^"]*)"$/ do |project_name|
+Then(/^I should (see|not see) the project container for "([^"]*)"$/) do |visible, project_name|
   project = @current_user.projects.where(:name => project_name).first
   project.should_not be_nil
 
   xpath = "//div[@id='p#{project.id}']"
-  page.should_not have_xpath(xpath, :visible => true)
+  page.send( visible=='see' ? :should : :should_not, have_xpath(xpath, :visible => true))
+end
+
+Then(/^the container for the project "(.*?)" should (be visible|not be visible)$/) do |project_name, visible|
+  map = { "be visible" => "see", "not be visible" => "not see"}
+  step("I should #{map[visible]} the project container for \"#{project_name}\"")
 end
 
 ####### Completed #######

@@ -13,6 +13,10 @@
 
   <%= show_grouped_todos %>
 
+  <% if @group_view_by == 'project' -%>
+    <%= show_todos_without_project(@todos_without_project) -%>
+  <% end -%>
+
   <%= show_deferred_pending_todos(@deferred_todos, @pending_todos, deferred_pending_options) %>
 
   <%= show_hidden_todos(@hidden_todos, hidden_options) unless @hidden_todos.nil? %>

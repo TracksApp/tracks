@@ -4,7 +4,7 @@
   <%= show_grouped_todos %>
 
   <% if @group_view_by == 'project' -%>
-    <%= show_todos_without_project(@todos_without_project) unless @todos_without_project.nil? -%>
+    <%= show_todos_without_project(@todos_without_project) -%>
   <% end -%>
 
   <%= show_done_todos(@done, {:parent_container_type => 'home', :collapsible => true}) unless @done.nil? %>

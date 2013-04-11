@@ -15,8 +15,8 @@ Given /^the date is "(.*?)"$/ do |date|
   Timecop.travel(date)
 end
 
-Given(/^I have selected the view for group by project$/) do
-  @group_view_by='projects'
+Given(/^I have selected the view for group by (project|context)$/) do |grouping|
+  @group_view_by = grouping 
 end
 
 Then /the badge should show (.*)/ do |number|

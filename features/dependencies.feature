@@ -57,7 +57,7 @@ Feature: dependencies
     Then I should not see "test 1" within the dependencies of "test 2"
     And I should not see "test 1" in the deferred container
 
-  @javascript @wip
+  @javascript
   Scenario: Completing a predecessor will activate successors
     Given I have a context called "@pc"
     And I have a project "dependencies" that has the following todos

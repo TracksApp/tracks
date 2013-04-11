@@ -32,7 +32,7 @@ function redirect_after_complete() {
 }
 
 function remove_todo(next_steps) {
-  <% if (@remaining_in_context == 0) && update_needs_to_hide_context
+  <% if (@remaining_in_context == 0) && update_needs_to_hide_container
     # remove context with deleted todo
   -%>
     $('#c<%=@todo.context_id%>').fadeOut(400, function() {

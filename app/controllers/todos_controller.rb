@@ -3,7 +3,7 @@ class TodosController < ApplicationController
   skip_before_filter :login_required, :only => [:index, :calendar, :tag]
   prepend_before_filter :login_or_feed_token_required, :only => [:index, :calendar, :tag]
   append_before_filter :find_and_activate_ready, :only => [:index, :list_deferred]
-  append_before_filter :set_group_view_by, :only => [:index, :tag]
+  append_before_filter :set_group_view_by, :only => [:index, :tag, :create, :list_deferred, :destroy, :defer, :update]
 
   protect_from_forgery :except => :check_deferred
   
@@ -93,6 +93,7 @@ class TodosController < ApplicationController
       if p.project_specified_by_name?
         project = current_user.projects.where(:name => p.project_name).first_or_create
         @new_project_created = project.new_record_before_save?
+        @not_done_todos = [@todo] if @new_project_created
         @todo.project_id = project.id
       elsif !(p.project_id.nil? || p.project_id.blank?)
         project = current_user.projects.where(:id => p.project_id).first
@@ -197,12 +198,11 @@ class TodosController < ApplicationController
     
     # first build all todos and check if they would validate on save
     params[:todo][:multiple_todos].split("\n").map do |line|
-      unless line.blank?
-        @todo = current_user.todos.build(
-          :description => line)
+      unless line.blank? #ignore blank lines
+        @todo = current_user.todos.build(:description => line)
         @todo.project_id = @project_id
         @todo.context_id = @context_id
-        validates = false if @todo.invalid?
+        validates &&= @todo.valid?
         
         @todos_init << @todo
       end
@@ -358,7 +358,7 @@ class TodosController < ApplicationController
     respond_to do |format|
       format.js do
         if @saved
-          determine_remaining_in_context_count(@todo.context_id)
+          determine_remaining_in_container_count(@todo)
           determine_down_count
           determine_completed_count
           determine_deferred_tag_count(params['_tag_name']) if source_view_is(:tag)
@@ -441,11 +441,12 @@ class TodosController < ApplicationController
   end
 
   def update
-    @todo = current_user.todos.find(params['id'])
     @source_view = params['_source_view'] || 'todo'
-    # init_data_for_sidebar unless mobile?
 
-    cache_attributes_from_before_update
+    @todo = current_user.todos.find(params['id'])
+    @original_item = current_user.todos.build(@todo.attributes)  # create a (unsaved) copy of the original todo
+
+    cache_attributes_from_before_update # TODO: remove in favor of @orininal_item
 
     update_tags
     update_project
@@ -466,7 +467,7 @@ class TodosController < ApplicationController
     update_todo_state_if_project_changed
 
     determine_changes_by_this_update
-    determine_remaining_in_context_count(@context_changed ? @original_item_context_id : @todo.context_id)
+    determine_remaining_in_container_count(@context_changed || @project_changed ? @original_item : @todo)
     determine_down_count
     determine_deferred_tag_count(params['_tag_name']) if source_view_is(:tag)
 
@@ -495,6 +496,7 @@ class TodosController < ApplicationController
     @original_item_due = @todo.due
     @context_id = @todo.context_id
     @project_id = @todo.project_id
+    @todo_was_destroyed = true
     @todo_was_destroyed_from_deferred_state = @todo.deferred?
     @todo_was_destroyed_from_pending_state = @todo.pending?
     @todo_was_destroyed_from_deferred_or_pending_state = @todo_was_destroyed_from_deferred_state || @todo_was_destroyed_from_pending_state
@@ -540,8 +542,8 @@ class TodosController < ApplicationController
       format.js do
         if @saved
           determine_down_count
-          if source_view_is_one_of(:todo, :deferred, :project, :context)
-            determine_remaining_in_context_count(@context_id)
+          if source_view_is_one_of(:todo, :deferred, :project, :context, :tag)
+            determine_remaining_in_container_count(@todo)
           elsif source_view_is :calendar
             @original_item_due_id = get_due_id_for_calendar(@original_item_due)
             @old_due_empty = is_old_due_empty(@original_item_due_id)
@@ -656,6 +658,7 @@ class TodosController < ApplicationController
       blocked.
       reorder('todos.show_from ASC, todos.created_at DESC').
       includes(Todo::DEFAULT_INCLUDES)
+    @todos_without_project = @not_done_todos.select{|t| t.project.nil?}
 
     # If you've set no_completed to zero, the completed items box isn't shown on
     # the tag page
@@ -735,6 +738,8 @@ class TodosController < ApplicationController
     numdays = params['days'].to_i
 
     @todo = current_user.todos.find(params[:id])
+    @original_item = current_user.todos.build(@todo.attributes)  # create a (unsaved) copy of the original todo
+
     @original_item_context_id = @todo.context_id
     @todo_deferred_state_changed = true
     @new_context_created = false
@@ -748,7 +753,7 @@ class TodosController < ApplicationController
     @status_message = t('todos.action_saved_to_tickler')
 
     determine_down_count
-    determine_remaining_in_context_count(@todo.context_id)
+    determine_remaining_in_container_count(@todo)
     source_view do |page|
       page.project {
         @remaining_undone_in_project = current_user.projects.find(@todo.project_id).todos.not_completed.count
@@ -886,7 +891,7 @@ class TodosController < ApplicationController
   private
 
   def set_group_view_by
-    @group_view_by = params['group_view_by'] || cookies['group_view_by'] || 'context'
+    @group_view_by = params['_group_view_by'] || cookies['group_view_by'] || 'context'
   end
 
   def do_mobile_todo_redirection
@@ -1005,21 +1010,48 @@ class TodosController < ApplicationController
     end
   end
 
-  def determine_remaining_in_context_count(context_id = @todo.context_id)
+  def find_todos_in_project_container(todo)
+    if todo.project.nil?
+      # container with todos without project
+      todos_in_container = current_user.todos.where(:project_id => nil).active.not_hidden
+    else
+      todos_in_container = current_user.projects.find(todo.project_id).todos.active.not_hidden
+    end
+  end
+
+  def find_todos_in_container_and_target_container(todo, target_todo)
+    if @group_view_by == 'context'
+      todos_in_container = current_user.contexts.find(todo.context_id).todos.active.not_hidden
+      todos_in_target_container = current_user.contexts.find(@todo.context_id).todos.active.not_hidden
+    else
+      todos_in_container = find_todos_in_project_container(todo)
+      todos_in_target_container = find_todos_in_project_container(@todo)          
+    end
+    return todos_in_container, todos_in_target_container
+  end
+
+  def determine_remaining_in_container_count(todo = @todo)
     source_view do |from|
       from.deferred {
         # force reload to todos to get correct count and not a cached one
-        @remaining_in_context = current_user.contexts.find(context_id).todos.deferred_or_blocked.count
+        @remaining_in_context = current_user.contexts.find(todo.context_id).todos.deferred_or_blocked.count
         @target_context_count = current_user.contexts.find(@todo.context_id).todos.deferred_or_blocked.count
+      }
+      from.todo {
+        todos_in_container, todos_in_target_container = find_todos_in_container_and_target_container(todo, @todo)
+        @remaining_in_context = todos_in_container.active.not_hidden.count 
+        @target_context_count = todos_in_target_container.active.not_hidden.count 
       }
       from.tag {
         tag = Tag.where(:name => params['_tag_name']).first
         tag = Tag.new(:name => params['tag']) if tag.nil?
 
-        @remaining_deferred_or_pending_count = current_user.todos.with_tag(tag.id).deferred_or_blocked.count
-        @remaining_in_context = current_user.contexts.find(context_id).todos.active.not_hidden.with_tag(tag.id).count
-        @target_context_count = current_user.contexts.find(@todo.context_id).todos.active.not_hidden.with_tag(tag.id).count
+        todos_in_container, todos_in_target_container = find_todos_in_container_and_target_container(todo, @todo)
+
+        @remaining_in_context = todos_in_container.with_tag(tag.id).count
+        @target_context_count = todos_in_target_container.with_tag(tag.id).count
         @remaining_hidden_count = current_user.todos.hidden.with_tag(tag.id).count
+        @remaining_deferred_or_pending_count = current_user.todos.with_tag(tag.id).deferred_or_blocked.count
       }
       from.project {
         project_id = @project_changed ? @original_item_project_id : @todo.project_id
@@ -1037,7 +1069,7 @@ class TodosController < ApplicationController
         @target_context_count = @new_due_id.blank? ? 0 : count_old_due_empty(@new_due_id)
       }
       from.context {
-        context = current_user.contexts.find(context_id)
+        context = current_user.contexts.find(todo.context_id)
         @remaining_deferred_or_pending_count = context.todos.deferred_or_blocked.count
 
         remaining_actions_in_context = context.todos(true).active
@@ -1056,8 +1088,6 @@ class TodosController < ApplicationController
         @remaining_in_context = DoneTodos.remaining_in_container(current_user, @original_completed_period)
       }
     end
-    @remaining_in_context = current_user.contexts.find(context_id).todos(true).active.not_hidden.count if @remaining_in_context.nil?
-    @target_context_count = current_user.contexts.find(@todo.context_id).todos(true).active.not_hidden.count if !@target_context_count.nil?
   end
 
   def determine_completed_count
