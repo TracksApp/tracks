@@ -318,7 +318,7 @@ class TodosController < ApplicationController
     @predecessors = @predecessor.predecessors
     @successor = @todo
     @removed = @successor.remove_predecessor(@predecessor)
-    determine_remaining_in_context_count
+    determine_remaining_in_container_count(@todo)
     respond_to do |format|
       format.js
     end
@@ -425,6 +425,7 @@ class TodosController < ApplicationController
     # change context if you drag a todo to another context
     @todo = current_user.todos.find(params[:id])
     @original_item_context_id = @todo.context_id
+    @original_item = current_user.todos.build(@todo.attributes)  # create a (unsaved) copy of the original todo
     @context = current_user.contexts.find(params[:todo][:context_id])
     @todo.context = @context
     @saved = @todo.save
@@ -432,7 +433,7 @@ class TodosController < ApplicationController
     @context_changed = true
     @status_message = t('todos.context_changed', :name => @context.name)
     determine_down_count
-    determine_remaining_in_context_count(@original_item_context_id)
+    determine_remaining_in_container_count(@original_item)
 
     respond_to do |format|
       format.js  { render :action => :update }
