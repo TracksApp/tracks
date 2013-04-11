@@ -38,7 +38,7 @@ Feature: Toggle the containers
     And I should not see the todo "test 2"
     And I should not see the todo "test 3"
 
-  @javascript @wip
+  @javascript
   Scenario: I can toggle a project container
     Given I have the following contexts
       | context  | hide  |
@@ -87,7 +87,7 @@ Feature: Toggle the containers
     And I should not see the context container for "@boss"
     And I should not see the context container for "@ipad"
 
-  @javascript @wip
+  @javascript
   Scenario: I can hide all collapsed project containers
     Given I have the following contexts
       | context | hide  |
