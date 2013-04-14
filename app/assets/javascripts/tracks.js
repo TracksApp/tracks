@@ -480,7 +480,8 @@ var TodoItems = {
         $('.drop_target').hide(); // IE8 doesn't call stop() in this situation
 
         ajax_options = default_ajax_options_for_scripts('POST', relative_to_root('todos/add_predecessor'), $(this));
-        ajax_options.data << {predecessor: dropped_todo, successor: dragged_todo}
+        ajax_options.data["predecessor"]=dropped_todo;
+        ajax_options.data["successor"]=dragged_todo;
         $.ajax(ajax_options);
     },
     drop_todo_on_context: function(evt, ui) {
@@ -492,7 +493,7 @@ var TodoItems = {
         $('.drop_target').hide();
 
         ajax_options = default_ajax_options_for_scripts('POST', relative_to_root('todos/'+dragged_todo + '/change_context'), target);
-        ajax_options.data << {"todo[context_id]": context_id}
+        ajax_options.data["todo[context_id]"]=context_id;
         $.ajax(ajax_options);
     },
     setup_drag_and_drop: function() {

@@ -42,7 +42,7 @@ function remove_todo(next_steps) {
 }
 
 function add_to_existing_container(next_steps) {
-  $('#<%= item_container_id(@todo) %>').append(html_for_todo());
+  $('#<%= item_container_id(@todo) %>_items').append(html_for_todo());
   <% if source_view_is_one_of(:project,:calendar) -%>
     next_steps.go();
     <% if (@target_context_count==1) || ( (@todo.deferred? || @todo.pending?) && @remaining_deferred_or_pending_count == 1) -%>

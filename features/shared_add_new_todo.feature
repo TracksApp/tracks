@@ -269,7 +269,7 @@ Feature: Add new next action from every page
     Then I should not see "a new todo" in the project container of "another project"
     And I should not see empty message for deferred todos of project
 
-  @javascript @wip
+  @javascript
   Scenario Outline: I can add multiple todos in a new project and a new context
     Given I have selected the view for group by <grouping>  
     When I go to the home page

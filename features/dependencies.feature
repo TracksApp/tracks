@@ -122,7 +122,7 @@ Feature: dependencies
     When I go to the "dependencies" project
     And I drag "test 1" to "test 3"
     Then I should see an error flash message saying "Cannot add this action as a dependency to a completed action!"
-    And I should see "test 1" in project container for "dependencies"
+    And I should see "test 1" in the project container of "dependencies"
 
   @javascript
   Scenario Outline: Marking a successor as complete will update predecessor
@@ -146,7 +146,7 @@ Feature: dependencies
     | "dependencies" project  |
     | tag page for "bla"      |
 
-  @javascript
+  @javascript 
   Scenario Outline: Marking a successor as active will update predecessor
     Given I have a context called "@pc"
     And I have a project "dependencies" that has the following todos
