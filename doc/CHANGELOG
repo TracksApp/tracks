@@ -16,7 +16,9 @@
 == Version 2.3devel
 
 New and changed features
-* You can now change a context to a closed state
+* you can select to group todos on the home page by context or by 
+  project (using the view menu). This also works for tag page
+* You can now change the state of a context to closed
 * Czech locale has been renamed from cz to cs to follow ISO standards
 
 == Version 2.2
