@@ -1,4 +1,4 @@
-<% if !@saved -%>
+<% unless @saved -%>
   TracksPages.page_notify('error', "<%= t('todos.error_toggle_complete') %>", 5);
 <% else -%>
   <% if @wants_redirect_after_complete && @todo.completed? -%>
@@ -16,7 +16,7 @@
         animation << "add_todo_to_context" unless source_view_is(:done)
         animation << "block_predecessors"
       end
-      animation << "update_empty_container" if source_view_is_one_of(:tag, :todo)
+      animation << "update_empty_container" if source_view_is_one_of(:tag, :todo, :deferred)
       animation << "regenerate_predecessor_family"
     else
       animation << "replace_todo"
@@ -24,7 +24,6 @@
     <%= render_animation(animation) %>
     TracksPages.set_page_badge(<%= @down_count %>);
   <% end -%>
-<% end -%>
 
 function redirect_after_complete() {
   var path = "<%= @todo.project_id.nil? ? "/" : project_path(@todo.project) -%>";
@@ -207,3 +206,5 @@ function html_for_todo() {
   -%>
   return "<%= js %>";
 }
+
+<% end -%>

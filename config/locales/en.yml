@@ -434,6 +434,11 @@ en:
       completed_today: No actions were completed today
       completed_rest_of_week: No actions were completed in the rest of this week
       completed_rest_of_month: No actions were completed in the rest of this month
+      due_today: No actions due today
+      due_this_week: No actions due this week
+      due_next_week: No actions due in next week
+      due_this_month: No actions due in rest of this month
+      due_after_this_month: No actions due after this month
     actions:
       completed: Completed actions
       home_completed: Completed actions
@@ -566,15 +571,11 @@ en:
     error_starring: "Could not toggle the star of this todo '%{description}'"
     calendar:
       get_in_ical_format: Get this calendar in iCal format
-      due_next_week: Due next week
-      no_actions_due_next_week: No actions due in next week
-      due_this_week: Due in rest of this week
       due_today: Due today
-      no_actions_due_today: No actions due today
-      due_next_month_and_later: Due in %{month} and later
-      no_actions_due_after_this_month: No actions due after this month
+      due_this_week: Due in rest of this week
+      due_next_week: Due next week
       due_this_month: Due in rest of %{month}
-      no_actions_due_this_month: No actions due in rest of this month
+      due_after_this_month: Due in %{month} and later
     show_tomorrow: Show Tomorrow
     tagged_page_title: "TRACKS::Tagged with '%{tag_name}'"
     action_deferred: "The action '%{description}' was deferred"

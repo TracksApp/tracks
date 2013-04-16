@@ -72,7 +72,7 @@ Feature: Edit a context
     When I submit a new action with description "todo X" to project "test project" in the context "@personal"
     Then I should see the todo "todo X"
     
-  @javascript
+  @javascript 
   Scenario: Moving the todo to the tickler will move todo to tickler container and update empty messages
     Given I have a context "test" with 1 todos
     When I go to the "test" context

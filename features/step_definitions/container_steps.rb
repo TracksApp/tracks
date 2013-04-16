@@ -153,7 +153,7 @@ Then /^I should see "([^"]*)" in the due next month container$/ do |todo_descrip
   todo = @current_user.todos.where(:description => todo_description).first
   todo.should_not be_nil
 
-  within "div#due_after_this_month" do
+  within "div#due_after_this_month_container" do
     page.should have_css("div#line_todo_#{todo.id}")
   end
 end

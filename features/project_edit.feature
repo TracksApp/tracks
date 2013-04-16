@@ -132,7 +132,7 @@ Feature: Edit a project
     And I should see empty message for completed todos of project
     And I should see empty message for todos of project
 
-  @javascript
+  @javascript 
   Scenario: Moving the todo out of the tickler will move todo to active container and update empty messages
     Given I have a project "test" with 1 deferred todos
     When I go to the "test" project

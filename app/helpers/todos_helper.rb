@@ -128,6 +128,18 @@ module TodosHelper
     end
   end
 
+  def todos_calendar_container(period, collection)
+    render :partial => 'todos/collection', 
+      :object => collection, 
+      :locals => {:settings => { 
+        :collapsible => false, 
+        :show_empty_containers => true,
+        :container_name => "#{period}",
+        :title =>t("todos.calendar.#{period}", :month => l(Time.zone.now, :format => "%B"))
+        }
+      }
+  end
+
   # === helpers for rendering a todo
 
   def remote_star_icon(todo=@todo)
@@ -548,13 +560,13 @@ module TodosHelper
   end
 
   def item_container_id (todo)
-    return "hidden_container_items"              if source_view_is(:tag) && todo.hidden?
-    return "c#{todo.context_id}_items"           if source_view_is :deferred
-    return @new_due_id                           if source_view_is :calendar
-    return "deferred_pending_container_items"    if !source_view_is(:todo) && (todo.deferred? || todo.pending?)
-    return "completed_container_items"           if todo.completed?
-    return "p#{todo.project_id}_items"           if source_view_is :project
-    return project_container_id(todo)            if source_view_is_one_of(:todo, :tag) && @group_view_by == 'project'
+    return "hidden_container"           if source_view_is(:tag) && todo.hidden?
+    return "c#{todo.context_id}"        if source_view_is :deferred
+    return "#{@new_due_id}_container"   if source_view_is :calendar
+    return "deferred_pending_container" if !source_view_is(:todo) && (todo.deferred? || todo.pending?)
+    return "completed_container"        if todo.completed?
+    return "p#{todo.project_id}"        if source_view_is :project
+    return project_container_id(todo)   if source_view_is_one_of(:todo, :tag) && @group_view_by == 'project'
     return "c#{todo.context_id}"           
   end
 
@@ -574,7 +586,7 @@ module TodosHelper
       }
       page.calendar {
         return "deferred_pending_container-empty-d" if empty_criteria_met
-        return "empty_#{@new_due_id}"
+        return "#{@new_due_id}_container-empty-d"
       }
       page.context {
         return "deferred_pending_container-empty-d" if empty_criteria_met
@@ -613,8 +625,8 @@ module TodosHelper
         container_id = "deferred_pending_container-empty-d" if todo_was_removed_from_deferred_or_blocked_container && @remaining_deferred_or_pending_count == 0
         container_id = "completed_container-empty-d" if @completed_count && @completed_count == 0 && !@todo.completed?
       }
-      page.deferred { container_id = "c#{@original_item_context_id}empty-d" if @remaining_in_context == 0 }
-      page.calendar { container_id = "empty_#{@original_item_due_id}" if @old_due_empty }
+      page.deferred { container_id = "c#{@original_item_context_id}-empty-d" if @remaining_in_context == 0 }
+      page.calendar { container_id = "#{@original_item_due_id}_container-empty-d" if @old_due_empty }
       page.tag      {
         container_id = "hidden_container-empty-d" if (@remaining_hidden_count == 0 && !@todo.hidden? && @todo_hidden_state_changed) ||
           (@remaining_hidden_count == 0 && @todo.completed? && @original_item_was_hidden)
