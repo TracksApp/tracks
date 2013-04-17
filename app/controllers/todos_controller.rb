@@ -470,7 +470,7 @@ class TodosController < ApplicationController
     update_todo_state_if_project_changed
 
     determine_changes_by_this_update
-    determine_remaining_in_container_count(@context_changed || @project_changed ? @original_item : @todo)
+    determine_remaining_in_container_count( (@context_changed || @project_changed) ? @original_item : @todo)
     determine_down_count
     determine_deferred_tag_count(params['_tag_name']) if source_view_is(:tag)
 
@@ -1228,6 +1228,8 @@ class TodosController < ApplicationController
           project.name = params['project_name'].strip
           project.save
           @new_project_created = true
+          @new_container = project
+          @not_done_todos = [@todo]
         end
       end
       params["todo"]["project_id"] = project.id
@@ -1251,6 +1253,7 @@ class TodosController < ApplicationController
         @new_context.name = params['context_name'].strip
         @new_context.save
         @new_context_created = true
+        @new_container = @new_context
         @not_done_todos = [@todo]
         context = @new_context
       end

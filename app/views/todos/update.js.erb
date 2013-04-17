@@ -16,7 +16,7 @@
   if replace_with_updated_todo
     animation << "replace_todo"
   elsif append_updated_todo
-    animation << (@new_context_created ? "insert_new_context_with_updated_todo" : "add_to_existing_container")
+    animation << ( update_needs_to_add_new_container ? "insert_new_container_with_updated_todo" : "add_to_existing_container")
   end
   animation << "hide_container" if update_needs_to_hide_container
   animation << "highlight_updated_todo"
@@ -26,7 +26,6 @@
   TracksPages.page_notify('notice', '<%=escape_javascript @status_message%>', 5);
   TracksPages.set_page_badge(<%= @down_count %>);
   <%= render_animation(animation) %>
-<% end %>
 
 function remove_todo(next_steps) {
   $('#<%= dom_id(@todo) %>').fadeOut(400, function() {
@@ -99,17 +98,17 @@ function update_badge_count() {
   TracksPages.set_page_badge(<%= count %>);
 }
 
-function insert_new_context_with_updated_todo(next_steps) {
-  $('#display_box').prepend(html_for_new_context());
+function insert_new_container_with_updated_todo(next_steps) {
+  $('#display_box').prepend(html_for_new_container());
   $('#<%= item_container_id(@todo) %>').fadeIn(500, function() { next_steps.go(); });
 }
 
 function html_for_todo() {
-  return "<%= @saved ? escape_javascript(render(:partial => @todo, :locals => { :parent_container_type => parent_container_type })) : "" %>";
+  return "<%= escape_javascript(render(:partial => @todo, :locals => { :parent_container_type => parent_container_type })) %>";
 }
 
-function html_for_new_context() {
-  return "<%= @saved && @new_context_created ? escape_javascript(render(:partial => @new_context, :locals => { :settings => {:collapsible => true }})) : "" %>";
+function html_for_new_container() {
+  return "<%= ( @new_context_created || @new_project_created ) ? escape_javascript(render(:partial => @new_container, :locals => { :settings => {:collapsible => true }})) : "" %>";
 }
 
 function update_predecessors(next_steps) {
@@ -136,3 +135,5 @@ function regenerate_predecessor_family() {
   end
 -%>
 }
+
+<% end %>

@@ -492,7 +492,7 @@ module TodosHelper
   end
 
   def todo_moved_out_of_container
-    return (@project_changed && @group_view_by=='project') || (@context_changed && @group_view_by='context')
+    return (@project_changed && @group_view_by=='project') || (@context_changed && @group_view_by=='context')
   end
 
   def update_needs_to_hide_container
@@ -524,6 +524,12 @@ module TodosHelper
       page.search   { return false }
     end
     return false
+  end
+
+  def update_needs_to_add_new_container
+    needs_new_context = @new_context_created && (@group_view_by == "context")
+    needs_new_project = @new_project_created && (@group_view_by == "project")
+    return needs_new_project || needs_new_context
   end
 
   def replace_with_updated_todo
