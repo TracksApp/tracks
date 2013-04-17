@@ -57,7 +57,7 @@ Feature: dependencies
     Then I should not see "test 1" within the dependencies of "test 2"
     And I should not see "test 1" in the deferred container
 
-  @javascript
+  @javascript 
   Scenario: Completing a predecessor will activate successors
     Given I have a context called "@pc"
     And I have a project "dependencies" that has the following todos
@@ -75,7 +75,7 @@ Feature: dependencies
     And I should not see "test 2" in the deferred container
     And I should see empty message for deferred todos of project
 
-  @javascript
+  @javascript 
   Scenario: Deleting a predecessor will activate successors
     Given I have a context called "@pc"
     And I have a project "dependencies" that has the following todos
@@ -124,9 +124,10 @@ Feature: dependencies
     Then I should see an error flash message saying "Cannot add this action as a dependency to a completed action!"
     And I should see "test 1" in the project container of "dependencies"
 
-  @javascript
+  @javascript 
   Scenario Outline: Marking a successor as complete will update predecessor
     Given I have a context called "@pc"
+    And I have selected the view for group by <grouping>
     And I have a project "dependencies" that has the following todos
       | description | context | completed | tags |
       | test 1      | @pc     | no        | bla  |
@@ -142,13 +143,15 @@ Feature: dependencies
     And I should see "test 1" in the completed container
 
     Scenarios:
-    | page                    |
-    | "dependencies" project  |
-    | tag page for "bla"      |
+    | page                    | grouping |
+    | "dependencies" project  | project  |
+    | tag page for "bla"      | context  |
+    | tag page for "bla"      | project  |
 
   @javascript 
   Scenario Outline: Marking a successor as active will update predecessor
     Given I have a context called "@pc"
+    And I have selected the view for group by <grouping>
     And I have a project "dependencies" that has the following todos
       | description | context | completed | tags |
       | test 1      | @pc     | no        | bla  |
@@ -166,6 +169,7 @@ Feature: dependencies
     And I should see "test 1" within the dependencies of "test 2"
 
     Scenarios:
-    | page                    |
-    | "dependencies" project  |
-    | tag page for "bla"      |
+    | page                    | grouping |
+    | "dependencies" project  | project  |
+    | tag page for "bla"      | context  |
+    | tag page for "bla"      | project  |

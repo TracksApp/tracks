@@ -496,16 +496,20 @@ module TodosHelper
   end
 
   def update_needs_to_hide_container
-    return (@remaining_in_context == 0 && todo_moved_out_of_container ) ||
-      (@remaining_in_context == 0 && (@todo_hidden_state_changed && @todo.hidden?)) ||
-      (@remaining_in_context == 0 && @todo_was_deferred_from_active_state) ||
-      (@remaining_in_context == 0 && @tag_was_removed) ||
-      (@remaining_in_context == 0 && @todo_was_destroyed) ||
-      (@remaining_in_context == 0 && @todo.completed? && !(@original_item_was_deferred || @original_item_was_hidden)) if source_view_is(:tag)
+    if source_view_is(:tag)
+      return @remaining_in_context == 0 && (
+        todo_moved_out_of_container                                                       ||
+        (@todo_hidden_state_changed && @todo.hidden?)                                     ||
+        @todo_was_deferred_from_active_state                                              ||
+        @tag_was_removed                                                                  ||
+        @todo_was_destroyed                                                               ||
+        (@todo.completed? && !(@original_item_was_deferred || @original_item_was_hidden))
+      ) 
+    end
 
-    return false if source_view_is_one_of(:project, :calendar, :done)
+    return false if source_view_is_one_of(:project, :calendar, :done, :context)
 
-    return (@remaining_in_context == 0) && !source_view_is(:context)
+    return @remaining_in_context == 0 
   end
 
   def update_needs_to_remove_todo_from_container
@@ -559,6 +563,15 @@ module TodosHelper
     return "without_project_container-empty-d"
   end
 
+  def context_container_empty_id(todo)
+    return "c#{todo.context_id}-empty-d"
+  end
+
+  def container_empty_id(todo)
+    raise Exception.new, "no todo set in TodosHelper::container_empty_id. You probably not assign @original_item" if !todo    
+    @group_view_by == "project" ? project_container_empty_id(todo) : context_container_empty_id(todo)
+  end
+
   def item_container_id (todo)
     return "hidden_container"           if source_view_is(:tag) && todo.hidden?
     return "c#{todo.context_id}"        if source_view_is :deferred
@@ -576,13 +589,12 @@ module TodosHelper
     source_view do |page|
       page.project  {
         return "deferred_pending_container-empty-d" if empty_criteria_met
-        return "p#{todo.project_id}-empty-d"
+        return project_container_empty_id(todo)
       }
       page.tag {
         return "deferred_pending_container-empty-d" if empty_criteria_met
         return "hidden_container-empty-d"           if @todo.hidden?
-        return "c#{todo.context_id}-empty-d"        if @group_view_by == 'context'
-        return project_container_empty_id(todo)
+        return container_empty_id(todo)
       }
       page.calendar {
         return "deferred_pending_container-empty-d" if empty_criteria_met
@@ -590,15 +602,14 @@ module TodosHelper
       }
       page.context {
         return "deferred_pending_container-empty-d" if empty_criteria_met
-        return "c#{todo.context_id}-empty-d"
+        return context_container_empty_id(todo)
       }
       page.todo {
-        return "c#{todo.context_id}-empty-d"        if @group_view_by == 'context'
-        return project_container_empty_id(todo) 
+        return container_empty_id(todo) 
       }
     end
 
-    return "c#{todo.context_id}-empty-d"
+    return context_container_empty_id(todo)
   end
 
   def empty_criteria_met
@@ -621,11 +632,11 @@ module TodosHelper
     container_id = ""
     source_view do |page|
       page.project  {
-        container_id = "p#{@original_item_project_id}-empty-d" if @remaining_in_context == 0
+        container_id = project_container_empty_id(@original_item) if @remaining_in_context == 0
         container_id = "deferred_pending_container-empty-d" if todo_was_removed_from_deferred_or_blocked_container && @remaining_deferred_or_pending_count == 0
         container_id = "completed_container-empty-d" if @completed_count && @completed_count == 0 && !@todo.completed?
       }
-      page.deferred { container_id = "c#{@original_item_context_id}-empty-d" if @remaining_in_context == 0 }
+      page.deferred { container_id = container_empty_id(@original_item) if @remaining_in_context == 0 }
       page.calendar { container_id = "#{@original_item_due_id}_container-empty-d" if @old_due_empty }
       page.tag      {
         container_id = "hidden_container-empty-d" if (@remaining_hidden_count == 0 && !@todo.hidden? && @todo_hidden_state_changed) ||
@@ -635,11 +646,11 @@ module TodosHelper
         container_id = "completed_container-empty-d" if @completed_count && @completed_count == 0 && !@todo.completed?
       }
       page.context  {
-        container_id = "c#{@original_item_context_id}-empty-d" if @remaining_in_context == 0
+        container_id = context_container_empty_id(@original_item) if @remaining_in_context == 0
         container_id = "deferred_pending_container-empty-d" if todo_was_removed_from_deferred_or_blocked_container && @remaining_deferred_or_pending_count == 0
         container_id = "completed_container-empty-d" if @completed_count && @completed_count == 0 && !@todo.completed?
       }
-      page.todo     { container_id = "c#{@original_item_context_id}-empty-d" if @remaining_in_context == 0 }
+      page.todo     { container_id = context_container_empty_id(@original_item) if @remaining_in_context == 0 }
       page.done     { container_id = "completed_#{@original_completed_period}_container-empty-d" if @remaining_in_context == 0 }
     end
     return container_id.blank? ? "" : "$(\"##{container_id}\").slideDown(100);".html_safe

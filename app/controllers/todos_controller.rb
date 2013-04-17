@@ -3,7 +3,7 @@ class TodosController < ApplicationController
   skip_before_filter :login_required, :only => [:index, :calendar, :tag]
   prepend_before_filter :login_or_feed_token_required, :only => [:index, :calendar, :tag]
   append_before_filter :find_and_activate_ready, :only => [:index, :list_deferred]
-  append_before_filter :set_group_view_by, :only => [:index, :tag, :create, :list_deferred, :destroy, :defer, :update]
+  append_before_filter :set_group_view_by, :only => [:index, :tag, :create, :list_deferred, :destroy, :defer, :update, :toggle_check]
 
   protect_from_forgery :except => :check_deferred
   
@@ -328,8 +328,10 @@ class TodosController < ApplicationController
   #
   def toggle_check
     @todo = current_user.todos.find(params['id'])
+
     @source_view = params['_source_view'] || 'todo'
 
+    @original_item = current_user.todos.build(@todo.attributes)  # create a (unsaved) copy of the original todo
     @original_item_due = @todo.due
     @original_item_was_deferred = @todo.deferred?
     @original_item_was_pending = @todo.pending?
@@ -494,6 +496,7 @@ class TodosController < ApplicationController
   def destroy
     @source_view = params['_source_view'] || 'todo'
     @todo = current_user.todos.find(params['id'])
+    @original_item = current_user.todos.build(@todo.attributes)  # create a (unsaved) copy of the original todo    
     @original_item_due = @todo.due
     @context_id = @todo.context_id
     @project_id = @todo.project_id

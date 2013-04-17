@@ -52,9 +52,9 @@ Feature: Toggle the containers
       | test 3      | @boss   |
     And I have selected the view for group by project
     When I go to the home page
-    Then I should see "test 1" in the project container for "collapse those containers"
-    And I should see "test 2" in the project container for "collapse those containers"
-    And I should see "test 3" in the project container for "collapse those containers"
+    Then I should see "test 1" in the project container of "collapse those containers"
+    And I should see "test 2" in the project container of "collapse those containers"
+    And I should see "test 3" in the project container of "collapse those containers"
     When I collapse the project container of "collapse those containers"
     Then I should not see the todo "test 1"
     And I should not see the todo "test 2"
@@ -100,8 +100,8 @@ Feature: Toggle the containers
       | test 2      | @ipad   |
     And I have selected the view for group by project
     When I go to the home page
-    Then I should see "test 1" in the project container for "collapse those containers"
-    And I should see "test 2" in the project container for "collapse those other containers"
+    Then I should see "test 1" in the project container of "collapse those containers"
+    And I should see "test 2" in the project container of "collapse those other containers"
     When I collapse the project container of "collapse those containers"
     Then I should not see the todo "test 1"
     And I should see the todo "test 2"

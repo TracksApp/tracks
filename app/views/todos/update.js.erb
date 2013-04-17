@@ -101,7 +101,7 @@ function update_badge_count() {
 
 function insert_new_context_with_updated_todo(next_steps) {
   $('#display_box').prepend(html_for_new_context());
-  $('#c<%= @todo.context_id %>').fadeIn(500, function() { next_steps.go(); });
+  $('#<%= item_container_id(@todo) %>').fadeIn(500, function() { next_steps.go(); });
 }
 
 function html_for_todo() {

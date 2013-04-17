@@ -51,7 +51,7 @@
 
   function add_todo_to_existing_container(next_steps) {    
     $('#<%= empty_container_msg_div_id %>').hide();
-    $('#<%= item_container_id(@todo) %>').append(html_for_new_todo());
+    $('#<%= item_container_id(@todo) %>_items').append(html_for_new_todo());
     $('#<%= item_container_id(@todo) %>').slideDown(500, function() {
       $('#<%= dom_id(@todo) %>').effect('highlight', {}, 2000 );
       next_steps.go();

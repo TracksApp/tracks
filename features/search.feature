@@ -43,7 +43,7 @@ Feature: Show all due actions in a calendar view
     Then I should not see the todo "tester of stuff"
     And I should see the todo "test 1-2-3"
 
-  @javascript
+  @javascript 
   Scenario: I can delete found todos
       Given I have the following todos:
       | description     | context |
