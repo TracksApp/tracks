@@ -46,7 +46,7 @@ Feature: Edit a next action from every page
       | context  | container for context "@home"  |
       | project  | container for project "do it!" |
 
-  @javascript @wipp
+  @javascript @wip
   Scenario Outline: Changing container of the todo in that container will hide it
   # this script fails on https://code.google.com/p/selenium/issues/detail?id=3075 for selenium-webdriver > 2.14.
   # and selenium-webdriver < 2.20 fails on firefox 11 :-( So @wip for now. This may work on webkit though

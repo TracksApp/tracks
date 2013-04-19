@@ -142,7 +142,7 @@ Given /^I have (\d+) completed todos in project "([^"]*)" in context "([^"]*)" w
 end
 
 Given(/^I have ([0-9]+) completed todos in context "([^"]*)"$/) do |count, context_name|
-  find_context(context_name)
+  context = find_context(context_name)
 
   count.to_i.downto 1 do |i|
     todo = @current_user.todos.create!(:context_id => context.id, :description => "todo #{i}")

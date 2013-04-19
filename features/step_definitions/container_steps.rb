@@ -48,7 +48,7 @@ Then(/^I should (not see|see) "([^"]*)" in the deferred container$/) do |visible
 end
 
 Then(/^I should (not see|see) "([^"]*)" in the action container$/) do |visible, todo_description|
-  check_xpath_visibility(visible, todo_in_container_xpath(@source_view.to_s, find_todo(todo_description)))
+  check_xpath_visibility(visible, todo_in_container_xpath(find_todo(todo_description), @source_view.to_sym))
 end
 
 ####### Project #######

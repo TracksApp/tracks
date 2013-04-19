@@ -75,7 +75,7 @@ Feature: dependencies
     And I should not see "test 2" in the deferred container
     And I should see empty message for deferred todos of project
 
-  @javascript 
+  @javascript
   Scenario: Deleting a predecessor will activate successors
     Given I have a context called "@pc"
     And I have a project "dependencies" that has the following todos

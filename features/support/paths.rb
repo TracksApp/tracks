@@ -67,10 +67,10 @@ module NavigationHelpers
       @source_view = "review"
       review_path(options)
     when /the contexts page/
-      @source_view = "contexts"
+      @source_view = "context"
       contexts_path(options)
     when /the projects page/
-      @source_view = "projects"
+      @source_view = "project"
       projects_path(options)
     when /the manage users page/
       users_path(options)
