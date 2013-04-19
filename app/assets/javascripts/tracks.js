@@ -794,6 +794,9 @@ var ProjectListPage = {
 var ContextListPage = {
     update_state_count: function(state, count) {
         $('#'+state+'-contexts-count').html(count);
+        if (count==0) {
+            ContextListPage.set_empty_message(state, true);
+        }
     },
     update_all_states_count: function (active_count, hidden_count, closed_count) {
         $(["active", "hidden", "closed"]).each(function() {
@@ -807,6 +810,10 @@ var ContextListPage = {
         });
     },
     hide_empty_message: function(state, set_visible) {
+        // TODO: wrong method name. refactor to remove this method
+        set_empty_message(state, set_visible);
+    },
+    set_empty_message: function(state, set_visible) {
         if(set_visible) {
             $('div#'+state+'-contexts-empty-nd').slideDown("fast");
         } else {

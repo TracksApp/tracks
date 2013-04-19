@@ -684,6 +684,7 @@ en:
     context_state: Context state
     hidden_contexts: Hidden contexts
     no_contexts_active: Currently there are no active contexts
+    no_contexts_closed: Currently there are no closed contexts
     show_form: Create a new context
     visible_contexts: Visible contexts
     save_status_message: Context saved
