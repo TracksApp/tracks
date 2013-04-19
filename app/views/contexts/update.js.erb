@@ -38,7 +38,6 @@
 
   function update_container_states() {
     ContextListPage.update_all_states_count(<%=@active_contexts.count%>, <%=@hidden_contexts.count%>, <%=@closed_contexts.count%>);
-    ContextListPage.show_or_hide_all_state_containers(<%= !@active_contexts.empty? %>, <%= !@hidden_contexts.empty? %>, <%= !@closed_contexts.empty? %>);
   }
 
   function html_for_context_listing() {

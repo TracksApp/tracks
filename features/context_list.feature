@@ -59,13 +59,13 @@ Feature: Manage the list of contexts
     And I should see that the context container for closed contexts is present
     When I delete the context "@computer"
     Then I should see that a context named "@computer" is not present
-    And I should see that the context container for active contexts is not present
+    And I should see empty message for active contexts
     When I delete the context "@ipad"
     Then I should see that a context named "@ipad" is not present
-    And I should see that the context container for hidden contexts is not present
+    And I should see empty message for hidden contexts
     When I delete the context "@ibm-pc"
     Then I should see that a context named "@ibm-pc" is not present
-    And I should see that the context container for closed contexts is not present
+    And I should see empty message for closed contexts
 
   @javascript 
   Scenario: Delete context from context page right after an edit
@@ -138,4 +138,3 @@ Feature: Manage the list of contexts
     Then the new context form should not be visible
     When I follow "Create a new context"
     Then the new context form should be visible
-

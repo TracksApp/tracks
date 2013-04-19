@@ -19,13 +19,19 @@ Feature: Edit a next action from every page
     When I go to the tag page for "starred"
     Then I should see "star me"
 
-  @javascript 
-  Scenario: I can delete a todo
+  @javascript
+  Scenario Outline: I can delete a todo
     Given I have a todo "delete me" in the context "@home"
+    And I have selected the view for group by <grouping>
     When I go to the home page
     Then I should see "delete me"
     When I delete the action "delete me"
     Then I should not see "delete me"
+
+    Scenarios:
+      | grouping |
+      | context  |
+      | project  |
 
   @javascript 
   Scenario Outline: Removing the last todo in container will hide that container
@@ -67,7 +73,6 @@ Feature: Edit a next action from every page
       | grouping | container                      | new_grouping | new_container                      |
       | context  | container for context "@home"  | "@pc"        | container for context "@pc"        |
       | project  | container for project "do it"  | "go for it"  | container for project "go for it"  |
-
 
   @javascript
   Scenario Outline: Deleting the last todo in container will show empty message # only project, context, tag, not todo

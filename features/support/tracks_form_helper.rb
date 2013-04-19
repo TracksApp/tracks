@@ -12,6 +12,14 @@ module TracksFormHelper
     wait_for_animations_to_end
   end
   
+  def open_context_edit_form(context)
+    # open edit form
+    page.find("a#link_edit_context_#{context.id}").click
+
+    # wait for the form to appear (which included a submit button)
+    page.should have_css("button#submit_context_#{context.id}", :visible=>true)
+  end
+
   def submit_form(form_xpath, button_name)
     handle_js_confirm do
       # on calendar page there can be more than 1 occurance of a todo, so we select the first here
@@ -46,6 +54,17 @@ module TracksFormHelper
   
   def wait_for_todo_form_to_go_away(todo)
     page.should_not have_content("button#submit_todo_#{todo.id}")
+  end
+
+  def wait_for_context_form_to_appear(context)
+    page.should have_css("button#submit_context_#{context.id}", :visible=>true)
+  end
+
+  def wait_for_context_form_to_go_away(context)
+    # wait for the form to go away
+    page.should_not have_css("button#submit_context_#{context.id}", :visible => true)
+    # wait for the changed context to appear
+    page.should have_css("a#link_edit_context_#{context.id}", :visible=> true)
   end
     
   def open_project_edit_form(project)

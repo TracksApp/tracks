@@ -794,9 +794,7 @@ var ProjectListPage = {
 var ContextListPage = {
     update_state_count: function(state, count) {
         $('#'+state+'-contexts-count').html(count);
-        if (count==0) {
-            ContextListPage.set_empty_message(state, true);
-        }
+        ContextListPage.set_empty_message(state, count==0);
     },
     update_all_states_count: function (active_count, hidden_count, closed_count) {
         $(["active", "hidden", "closed"]).each(function() {

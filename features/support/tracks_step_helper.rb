@@ -95,6 +95,11 @@ module TracksStepHelper
     page.execute_script(js)
   end
 
+  def context_drag_and_drop(drag_id, delta)
+    sortable_css = "div.ui-sortable div#container_context_#{drag_id}"
+    execute_javascript("$('#{sortable_css}').simulateDragSortable({move: #{delta}, handle: '.grip'});")
+  end
+
   def open_submenu_for(todo)
     submenu_arrow = "div#line_todo_#{todo.id} img.todo-submenu"
     page.should have_css(submenu_arrow, :visible=>true)
@@ -109,12 +114,12 @@ module TracksStepHelper
   end
   
   def handle_js_confirm(accept=true)
-    page.execute_script "window.original_confirm_function = window.confirm"
-    page.execute_script "window.confirmMsg = null"
-    page.execute_script "window.confirm = function(msg) { window.confirmMsg = msg; return #{!!accept}; }"
+    execute_javascript "window.original_confirm_function = window.confirm"
+    execute_javascript "window.confirmMsg = null"
+    execute_javascript "window.confirm = function(msg) { window.confirmMsg = msg; return #{!!accept}; }"
     yield
   ensure
-    page.execute_script "window.confirm = window.original_confirm_function"
+    execute_javascript "window.confirm = window.original_confirm_function"
   end
   
   def get_confirm_text
