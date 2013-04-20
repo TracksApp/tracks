@@ -590,10 +590,12 @@ class TodosController < ApplicationController
     @page_title = t('todos.deferred_tasks_title')
 
     @contexts_to_show = @contexts = current_user.contexts
+    @projects_to_show = @projects = current_user.projects
 
     includes = params[:format]=='xml' ? [:context, :project] : Todo::DEFAULT_INCLUDES
 
     @not_done_todos = current_user.todos.deferred.includes(includes) + current_user.todos.pending.includes(includes)
+    @todos_without_project = @not_done_todos.select{|t|t.project.nil?}
     @down_count = @count = @not_done_todos.size
 
     respond_to do |format|

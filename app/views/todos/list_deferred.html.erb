@@ -2,7 +2,11 @@
 
   <%= empty_message_holder("deferred_pending", @not_done_todos.empty?) %>
 
-  <%= render :partial => @contexts, :locals => { :settings => {:collapsible => true} } %>
+  <%= show_grouped_todos %>
+
+  <% if @group_view_by == 'project' -%>
+    <%= show_todos_without_project(@todos_without_project) -%>
+  <% end -%>
 
 </div>
 <div id="input_box">
