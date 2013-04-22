@@ -1,7 +1,7 @@
 <%-
 url_array           = Array.new(13){ |i| url_for :controller => 'stats', :action => 'actions_done_last_years'}
-created_count_array = Array.new(13){ |i| @actions_created_last12months.count/12.0 }
-done_count_array    = Array.new(13){ |i| @actions_done_last12months.count/12.0 }
+created_count_array = Array.new(13){ |i| @actions_created_last12months.size/12.0 }
+done_count_array    = Array.new(13){ |i| @actions_done_last12months.size/12.0 }
 month_names         = Array.new(13){ |i| t('date.month_names')[ (Time.now.mon - i -1 ) % 12 + 1 ]}
 -%>
 &title=<%= t('stats.actions_lastyear_title') %>,{font-size:16},&

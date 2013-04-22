@@ -1,6 +1,6 @@
 <%-
-created_count_array = Array.new(@month_count+1){ |i| @actions_created_last_months.count/@month_count }
-done_count_array    = Array.new(@month_count+1){ |i| @actions_done_last_months.count/@month_count }
+created_count_array = Array.new(@month_count+1){ |i| @actions_created_last_months.size/@month_count }
+done_count_array    = Array.new(@month_count+1){ |i| @actions_done_last_months.size/@month_count }
 month_names         = Array.new(@month_count+1){ |i| t('date.month_names')[ (Time.now.mon - i -1 ) % 12 + 1 ]+ " " + (Time.now - i.months).year.to_s}
 -%>
 &title=<%=    t('stats.actions_last_year') %>,{font-size:16},&

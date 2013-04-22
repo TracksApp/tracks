@@ -37,6 +37,10 @@ Then /^I should (see|not see) "([^"]*)" in the context container for "([^"]*)"$/
   check_xpath_visibility(visible, todo_in_context_container_xpath(find_todo(todo_description), find_context(context_name)))
 end
 
+Then(/^I should (see|not see) "([^"]*)" in the context container of "([^"]*)"$/) do |visible, todo_description, context_name|
+  step "I should #{visible} \"#{todo_description}\" in the context container for \"#{context_name}\""
+end
+
 Then /^I should (see|not see) "([^"]*)" in the container for context "([^"]*)"$/ do |visible, todo_description, context_name|
   step "I should #{visible} \"#{todo_description}\" in the context container for \"#{context_name}\""
 end

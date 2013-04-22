@@ -78,8 +78,8 @@ class StatsController < ApplicationController
 
   def actions_done_last30days_data
     # get actions created and completed in the past 30 days.
-    @actions_done_last30days = current_user.todos.completed_after(@cut_off_month).select("completed_at")
-    @actions_created_last30days = current_user.todos.created_after(@cut_off_month).select("created_at")
+    @actions_done_last30days = current_user.todos.completed_after(@cut_off_30days).select("completed_at")
+    @actions_created_last30days = current_user.todos.created_after(@cut_off_30days).select("created_at")
 
     # convert to array. 30+1 to have 30 complete days and one current day [0]
     @actions_done_last30days_array = convert_to_days_from_today_array(@actions_done_last30days, 31, :completed_at)
@@ -351,6 +351,7 @@ class StatsController < ApplicationController
     @cut_off_year = 12.months.ago.beginning_of_day
     @cut_off_year_plus3 = 15.months.ago.beginning_of_day
     @cut_off_month = 1.month.ago.beginning_of_day
+    @cut_off_30days = 30.days.ago.beginning_of_day
   end
 
   def get_ids_from (actions, week_from, week_to, at_end)

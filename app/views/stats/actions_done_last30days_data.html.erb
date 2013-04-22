@@ -1,6 +1,6 @@
 <%-
-created_count_array = Array.new(30){ |i| @actions_created_last30days.count/30.0 }
-done_count_array    = Array.new(30){ |i| @actions_done_last30days.count/30.0 }
+created_count_array = Array.new(30){ |i| @actions_created_last30days.size/30.0 }
+done_count_array    = Array.new(30){ |i| @actions_done_last30days.size/30.0 }
 # TODO: make the strftime i18n proof
 time_labels         = Array.new(30){ |i| l(Time.zone.now-i.days, :format => :stats)  }
 -%>
