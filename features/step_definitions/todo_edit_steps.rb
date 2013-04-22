@@ -64,14 +64,14 @@ end
 ####### Editing a todo using Edit Form #######
 
 When /I change the (.*) field of "([^\"]*)" to "([^\"]*)"$/ do |field_name, todo_name, new_value|
-  todo = @current_user.todos.where(:description => todo_name).first
-  todo.should_not be_nil
+  todo = find_todo(todo_name)
 
   open_edit_form_for(todo)
   within "form.edit_todo_form" do
     fill_in "#{field_name}", :with => new_value
     # force blur event
-    page.execute_script("$('form.edit_todo_form input.#{field_name}_todo_#{todo.id}').blur();")
+    execute_javascript("$('form.edit_todo_form input.#{field_name}_todo_#{todo.id}').blur();")
+    sleep 0.10
   end
   submit_edit_todo_form(todo)
   wait_for_ajax

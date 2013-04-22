@@ -138,10 +138,7 @@ Then /^the tag field in the new todo form should be "([^"]*)"$/ do |tag_list|
 end
 
 Then /^the tags of "([^"]*)" should be "([^"]*)"$/ do |todo_description, tag_list|
-  todo = @current_user.todos.where(:description => todo_description).first
-  todo.should_not be_nil
-
-  todo.tag_list.should == tag_list
+  find_todo(todo_description).tag_list.should == tag_list
 end
 
 Then /^I should see "([^"]*)" in the completed section of the mobile site$/ do |desc|
