@@ -116,6 +116,13 @@ Given /^I have a deferred todo "([^"]*)" in context "([^"]*)" with tags "([^"]*)
   @todo.save!
 end
 
+Given(/^I have a deferred todo "(.*?)" in the context "(.*?)" in the project "(.*?)"$/) do |action_description, context_name, project_name|
+  step "I have a todo \"#{action_description}\" in the context \"#{context_name}\" in the project \"#{project_name}\""
+  @todo.show_from = @current_user.time + 1.week
+  @todo.save!
+end
+
+
 ####### COMPLETED TODOS #######
 
 Given /^I have ([0-9]+) completed todos in project "([^"]*)" in context "([^"]*)"$/ do |count, project_name, context_name|

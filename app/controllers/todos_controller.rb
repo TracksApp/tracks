@@ -1019,16 +1019,16 @@ class TodosController < ApplicationController
   def find_todos_in_project_container(todo)
     if todo.project.nil?
       # container with todos without project
-      todos_in_container = current_user.todos.where(:project_id => nil).active.not_hidden
+      todos_in_container = current_user.todos.where(:project_id => nil)
     else
-      todos_in_container = current_user.projects.find(todo.project_id).todos.active.not_hidden
+      todos_in_container = current_user.projects.find(todo.project_id).todos
     end
   end
 
   def find_todos_in_container_and_target_container(todo, target_todo)
     if @group_view_by == 'context'
-      todos_in_container = current_user.contexts.find(todo.context_id).todos.active.not_hidden
-      todos_in_target_container = current_user.contexts.find(@todo.context_id).todos.active.not_hidden
+      todos_in_container = current_user.contexts.find(todo.context_id).todos
+      todos_in_target_container = current_user.contexts.find(@todo.context_id).todos
     else
       todos_in_container = find_todos_in_project_container(todo)
       todos_in_target_container = find_todos_in_project_container(@todo)          
@@ -1039,9 +1039,9 @@ class TodosController < ApplicationController
   def determine_remaining_in_container_count(todo = @todo)
     source_view do |from|
       from.deferred {
-        # force reload to todos to get correct count and not a cached one
-        @remaining_in_context = current_user.contexts.find(todo.context_id).todos.deferred_or_blocked.count
-        @target_context_count = current_user.contexts.find(@todo.context_id).todos.deferred_or_blocked.count
+        todos_in_container, todos_in_target_container = find_todos_in_container_and_target_container(todo, @todo)
+        @remaining_in_context = todos_in_container.deferred_or_blocked.count
+        @target_context_count = todos_in_target_container.deferred_or_blocked.count
       }
       from.todo {
         todos_in_container, todos_in_target_container = find_todos_in_container_and_target_container(todo, @todo)
@@ -1054,8 +1054,8 @@ class TodosController < ApplicationController
 
         todos_in_container, todos_in_target_container = find_todos_in_container_and_target_container(todo, @todo)
 
-        @remaining_in_context = todos_in_container.with_tag(tag.id).count
-        @target_context_count = todos_in_target_container.with_tag(tag.id).count
+        @remaining_in_context = todos_in_container.active.not_hidden.with_tag(tag.id).count
+        @target_context_count = todos_in_target_container.active.not_hidden.with_tag(tag.id).count
         @remaining_hidden_count = current_user.todos.hidden.with_tag(tag.id).count
         @remaining_deferred_or_pending_count = current_user.todos.with_tag(tag.id).deferred_or_blocked.count
       }
