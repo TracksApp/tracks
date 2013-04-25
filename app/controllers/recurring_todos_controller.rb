@@ -124,7 +124,7 @@ class RecurringTodosController < ApplicationController
 
     if @saved
       @status_message = t('todos.recurring_action_saved')
-      @todo_saved = create_todo_from_recurring_todo(@recurring_todo).nil? == false
+      @todo_saved = TodoFromRecurringTodo.new(current_user, @recurring_todo).create.nil? == false
       if @todo_saved
         @status_message += " / " + t('todos.new_related_todo_created_short')
       else
@@ -189,7 +189,7 @@ class RecurringTodosController < ApplicationController
       @active_todos = @recurring_todo.todos.active.count
       # create todo if there is no active todo belonging to the activated
       # recurring_todo
-      @new_recurring_todo = create_todo_from_recurring_todo(@recurring_todo) if @active_todos == 0
+      @new_recurring_todo = TodoFromRecurringTodo.new(current_user, @recurring_todo).create if @active_todos == 0
     end
 
     respond_to do |format|

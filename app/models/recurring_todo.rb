@@ -672,6 +672,10 @@ class RecurringTodo < ActiveRecord::Base
     end
   end
 
+  def done?(end_date)
+    !has_next_todo(end_date)
+  end
+
   def toggle_completion!
     return completed? ? activate! : complete!
   end

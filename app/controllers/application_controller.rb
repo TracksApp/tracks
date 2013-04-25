@@ -148,38 +148,6 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def create_todo_from_recurring_todo(rt, date=nil)
-    # create todo and initialize with data from recurring_todo rt
-    todo = current_user.todos.build( { :description => rt.description, :notes => rt.notes, :project_id => rt.project_id, :context_id => rt.context_id})
-    todo.recurring_todo_id = rt.id
-
-    # set dates
-    todo.due = rt.get_due_date(date)
-
-    show_from_date = rt.get_show_from_date(date)
-    if show_from_date.nil?
-      todo.show_from=nil
-    else
-      # make sure that show_from is not in the past
-      todo.show_from = show_from_date < Time.zone.now ? nil : show_from_date
-    end
-
-    saved = todo.save
-    if saved
-      todo.tag_with(rt.tag_list)
-      todo.tags.reload
-    end
-
-    # increate number of occurences created from recurring todo
-    rt.inc_occurences
-
-    # mark recurring todo complete if there are no next actions left
-    checkdate = todo.due.nil? ? todo.show_from : todo.due
-    rt.toggle_completion! unless rt.has_next_todo(checkdate)
-
-    return saved ? todo : nil
-  end
-
   def handle_unverified_request
     unless request.format=="application/xml"
       super # handle xml http auth via our own login code
