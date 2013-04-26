@@ -181,7 +181,7 @@ class TodosController < ApplicationController
       @project_id = project.id
     end
 
-    if context_specified_by_name(params[:context_name])
+    if p.context_specified_by_name?
       context = current_user.contexts.where(:name => params[:context_name]).first_or_create
       @new_context_created = context.new_record_before_save?
       @not_done_todos = [] if @new_context_created
@@ -1349,12 +1349,6 @@ class TodosController < ApplicationController
         @todo_should_be_hidden = @todo_hidden_state_changed && @todo.hidden?
       end
     end
-  end
-
-  def context_specified_by_name(context_name)
-    return false unless params['context_id'].blank?
-    return false if context_name.blank?
-    true
   end
 
   def determine_non_uniq_todo
