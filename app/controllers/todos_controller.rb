@@ -1142,7 +1142,7 @@ class TodosController < ApplicationController
         # if both due and show_from are nil, check for a next todo from now
         date_to_check = Time.zone.now if date_to_check.nil?
 
-        if recurring_todo.active? && recurring_todo.has_next_todo(date_to_check)
+        if recurring_todo.active? && recurring_todo.continues_recurring?(date_to_check)
 
           # shift the reference date to yesterday if date_to_check is furher in
           # the past. This is to make sure we do not get older todos for overdue

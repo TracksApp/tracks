@@ -87,11 +87,11 @@ class RecurringTodoTest < ActiveSupport::TestCase
   end
   
   def test_end_date_on_recurring_todo
-    assert_equal true, @every_day.has_next_todo(@in_three_days)
-    assert_equal true, @every_day.has_next_todo(@in_four_days)
+    assert_equal true, @every_day.continues_recurring?(@in_three_days)
+    assert_equal true, @every_day.continues_recurring?(@in_four_days)
     @every_day.end_date = @in_four_days
     @every_day.ends_on = 'ends_on_end_date'
-    assert_equal false, @every_day.has_next_todo(@in_four_days)
+    assert_equal false, @every_day.continues_recurring?(@in_four_days)
   end
   
   def test_weekly_every_day_setters
@@ -118,7 +118,7 @@ class RecurringTodoTest < ActiveSupport::TestCase
   end
   
   def test_weekly_pattern
-    assert_equal true, @weekly_every_day.has_next_todo(nil)
+    assert_equal true, @weekly_every_day.continues_recurring?(nil)
         
     due_date = @weekly_every_day.get_due_date(@sunday)
     assert_equal @monday, due_date
@@ -303,11 +303,11 @@ class RecurringTodoTest < ActiveSupport::TestCase
   
   def test_occurence_count
     @every_day.number_of_occurences = 2
-    assert_equal true, @every_day.has_next_todo(@in_three_days)
+    assert_equal true, @every_day.continues_recurring?(@in_three_days)
     @every_day.increment_occurrences
-    assert_equal true, @every_day.has_next_todo(@in_three_days)
+    assert_equal true, @every_day.continues_recurring?(@in_three_days)
     @every_day.increment_occurrences
-    assert_equal false, @every_day.has_next_todo(@in_three_days)
+    assert_equal false, @every_day.continues_recurring?(@in_three_days)
     
     # after completion, when you reactivate the recurring todo, the occurences
     # count should be reset
@@ -315,7 +315,7 @@ class RecurringTodoTest < ActiveSupport::TestCase
     assert @every_day.toggle_completion!
     assert @every_day.toggle_completion!
     
-    assert_equal true, @every_day.has_next_todo(@in_three_days)
+    assert_equal true, @every_day.continues_recurring?(@in_three_days)
     assert_equal 0, @every_day.occurences_count
   end
   

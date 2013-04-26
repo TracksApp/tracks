@@ -658,7 +658,7 @@ class RecurringTodo < ActiveRecord::Base
     return nil
   end
 
-  def has_next_todo(previous)
+  def continues_recurring?(previous)
     return self.occurences_count < self.number_of_occurences unless self.number_of_occurences.nil?
     return true if self.end_date.nil? || self.ends_on == 'no_end_date'
     
@@ -673,7 +673,7 @@ class RecurringTodo < ActiveRecord::Base
   end
 
   def done?(end_date)
-    !has_next_todo(end_date)
+    !continues_recurring?(end_date)
   end
 
   def toggle_completion!
