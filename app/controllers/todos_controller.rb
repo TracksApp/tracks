@@ -724,8 +724,7 @@ class TodosController < ApplicationController
     @source_view = params['_source_view'] || 'tag'
     @tag_name = sanitize(params[:name]) # sanitize to prevent XSS vunerability!
     @page_title = t('todos.all_completed_tagged_page_title', :tag_name => @tag_name)
-    @tag = Tag.where(:name => @tag_name).first
-    @tag = Tag.new(:name => @tag_name) if @tag.nil?
+    @tag = Tag.where(:name => @tag_name).first_or_create
   end
 
 
