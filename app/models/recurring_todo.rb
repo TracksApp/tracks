@@ -704,7 +704,7 @@ class RecurringTodo < ActiveRecord::Base
     end
   end
 
-  def inc_occurences
+  def increment_occurrences
     self.occurences_count += 1
     self.save
   end

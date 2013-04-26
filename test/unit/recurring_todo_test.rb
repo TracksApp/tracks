@@ -304,9 +304,9 @@ class RecurringTodoTest < ActiveSupport::TestCase
   def test_occurence_count
     @every_day.number_of_occurences = 2
     assert_equal true, @every_day.has_next_todo(@in_three_days)
-    @every_day.inc_occurences
+    @every_day.increment_occurrences
     assert_equal true, @every_day.has_next_todo(@in_three_days)
-    @every_day.inc_occurences
+    @every_day.increment_occurrences
     assert_equal false, @every_day.has_next_todo(@in_three_days)
     
     # after completion, when you reactivate the recurring todo, the occurences

@@ -21,7 +21,7 @@ class TodoFromRecurringTodo
   end
 
   def update_recurring_todo
-    recurring_todo.inc_occurences
+    recurring_todo.increment_occurrences
     recurring_todo.toggle_completion! if recurring_todo.done?(end_date)
   end
 
