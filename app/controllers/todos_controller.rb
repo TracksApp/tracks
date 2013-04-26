@@ -701,11 +701,7 @@ class TodosController < ApplicationController
   end
 
   def done_tag
-    @source_view = params['_source_view'] || 'tag'
-    @tag_name = sanitize(params[:name]) # sanitize to prevent XSS vunerability!
-    @page_title = t('todos.completed_tagged_page_title', :tag_name => @tag_name)
-    @tag = Tag.where(:name => @tag_name).first
-    @tag = Tag.new(:name => @tag_name) if @tag.nil?
+    done_by_tag_setup
 
     completed_todos = current_user.todos.completed.with_tag(@tag.id)
 
@@ -718,16 +714,20 @@ class TodosController < ApplicationController
   end
 
   def all_done_tag
+    done_by_tag_setup
+    @done = current_user.todos.completed.with_tag(@tag.id).reorder('completed_at DESC').includes(Todo::DEFAULT_INCLUDES).paginate :page => params[:page], :per_page => 20
+    @count = @done.size
+    render :template => 'todos/all_done'
+  end
+
+  def done_by_tag_setup
     @source_view = params['_source_view'] || 'tag'
     @tag_name = sanitize(params[:name]) # sanitize to prevent XSS vunerability!
     @page_title = t('todos.all_completed_tagged_page_title', :tag_name => @tag_name)
     @tag = Tag.where(:name => @tag_name).first
     @tag = Tag.new(:name => @tag_name) if @tag.nil?
-
-    @done = current_user.todos.completed.with_tag(@tag.id).reorder('completed_at DESC').includes(Todo::DEFAULT_INCLUDES).paginate :page => params[:page], :per_page => 20
-    @count = @done.size
-    render :template => 'todos/all_done'
   end
+
 
   def tags
     # TODO: limit to current_user
