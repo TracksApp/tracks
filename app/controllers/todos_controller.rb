@@ -174,7 +174,8 @@ class TodosController < ApplicationController
   end
 
   def create_multiple
-    if project_specified_by_name(params[:project_name])
+    p = TodoCreateParamsHelper.new(params, prefs)
+    if p.project_specified_by_name?
       project = current_user.projects.where(:name => params[:project_name]).first_or_create
       @new_project_created = project.new_record_before_save?
       @project_id = project.id
@@ -1348,13 +1349,6 @@ class TodosController < ApplicationController
         @todo_should_be_hidden = @todo_hidden_state_changed && @todo.hidden?
       end
     end
-  end
-
-  def project_specified_by_name(project_name)
-    return false unless params['project_id'].blank?
-    return false if project_name.blank?
-    return false if project_name == 'None'
-    true
   end
 
   def context_specified_by_name(context_name)
