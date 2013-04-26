@@ -6,22 +6,22 @@ class TodosController < ApplicationController
   append_before_filter :set_group_view_by, :only => [:index, :tag, :create, :list_deferred, :destroy, :defer, :update, :toggle_check]
 
   protect_from_forgery :except => :check_deferred
-  
+
   def index
     @source_view = params['_source_view'] || 'todo'
 
     init_data_for_sidebar unless mobile?
-    
+
     @todos = current_user.todos.includes(Todo::DEFAULT_INCLUDES)
     @todos = @todos.limit(sanitize(params[:limit])) if params[:limit]
-    
+
     @not_done_todos = get_not_done_todos
-    
+
     @projects = current_user.projects.includes(:default_context)
     @contexts = current_user.contexts
     @contexts_to_show = current_user.contexts.active
     @projects_to_show = current_user.projects.active
-    
+
     # If you've set no_completed to zero, the completed items box isn't shown
     # on the home page
     max_completed = current_user.prefs.show_number_completed
@@ -37,10 +37,10 @@ class TodosController < ApplicationController
       format.m do
         @page_title = t('todos.mobile_todos_page_title')
         @home = true
-  
+
         cookies[:mobile_url]= { :value => request.fullpath, :secure => SITE_CONFIG['secure_cookies']}
         determine_down_count
-  
+
         render :action => 'index'
       end
       format.text  do
@@ -195,7 +195,7 @@ class TodosController < ApplicationController
     @predecessor = nil
     validates = true
     errors = []
-    
+
     # first build all todos and check if they would validate on save
     params[:todo][:multiple_todos].split("\n").map do |line|
       unless line.blank? #ignore blank lines
@@ -203,11 +203,11 @@ class TodosController < ApplicationController
         @todo.project_id = @project_id
         @todo.context_id = @context_id
         validates &&= @todo.valid?
-        
+
         @todos_init << @todo
       end
     end
-    
+
     # if all todos validate, then save them and add predecessors and tags
     @todos = []
     if validates
@@ -233,7 +233,7 @@ class TodosController < ApplicationController
       @todos = @todos_init
       @saved = false
     end
-    
+
     respond_to do |format|
       format.html { redirect_to :action => "index" }
       format.js do
@@ -496,7 +496,7 @@ class TodosController < ApplicationController
   def destroy
     @source_view = params['_source_view'] || 'todo'
     @todo = current_user.todos.find(params['id'])
-    @original_item = current_user.todos.build(@todo.attributes)  # create a (unsaved) copy of the original todo    
+    @original_item = current_user.todos.build(@todo.attributes)  # create a (unsaved) copy of the original todo
     @original_item_due = @todo.due
     @context_id = @todo.context_id
     @project_id = @todo.project_id
@@ -570,9 +570,9 @@ class TodosController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.xml do 
+      format.xml do
         completed_todos = current_user.todos.completed
-        render :xml => completed_todos.to_xml( *to_xml_params ) 
+        render :xml => completed_todos.to_xml( *to_xml_params )
       end
     end
   end
@@ -733,7 +733,7 @@ class TodosController < ApplicationController
     tags_beginning = Tag.where('name like ?', params[:term]+'%')
     tags_all = Tag.where('name like ?', '%'+params[:term]+'%')
     tags_all= tags_all - tags_beginning
-    
+
     respond_to do |format|
       format.autocomplete { render :text => for_autocomplete(tags_beginning+tags_all, params[:term]) }
     end
@@ -872,7 +872,7 @@ class TodosController < ApplicationController
   def convert_to_project
     todo = current_user.todos.find(params[:id])
     @project = Project.create_from_todo(todo)
-   
+
     if @project.valid?
       redirect_to project_url(@project)
     else
@@ -1031,7 +1031,7 @@ class TodosController < ApplicationController
       todos_in_target_container = current_user.contexts.find(@todo.context_id).todos
     else
       todos_in_container = find_todos_in_project_container(todo)
-      todos_in_target_container = find_todos_in_project_container(@todo)          
+      todos_in_target_container = find_todos_in_project_container(@todo)
     end
     return todos_in_container, todos_in_target_container
   end
@@ -1045,8 +1045,8 @@ class TodosController < ApplicationController
       }
       from.todo {
         todos_in_container, todos_in_target_container = find_todos_in_container_and_target_container(todo, @todo)
-        @remaining_in_context = todos_in_container.active.not_hidden.count 
-        @target_context_count = todos_in_target_container.active.not_hidden.count 
+        @remaining_in_context = todos_in_container.active.not_hidden.count
+        @target_context_count = todos_in_target_container.active.not_hidden.count
       }
       from.tag {
         tag = Tag.where(:name => params['_tag_name']).first
@@ -1400,28 +1400,28 @@ class TodosController < ApplicationController
     else
       not_done_todos = current_user.todos.active.not_hidden
     end
-    
+
     not_done_todos = not_done_todos.
       reorder("todos.due IS NULL, todos.due ASC, todos.created_at ASC").
       includes(Todo::DEFAULT_INCLUDES)
-    
+
     not_done_todos = not_done_todos.limit(sanitize(params[:limit])) if params[:limit]
-    
+
     if params[:due]
       due_within_when = Time.zone.now + params['due'].to_i.days
       not_done_todos = not_done_todos.where('todos.due <= ?', due_within_when)
     end
-    
+
     if params[:tag]
       tag = Tag.where(:name => params['tag']).first
       not_done_todos = not_done_todos.where('taggings.tag_id = ?', tag.id)
     end
-    
+
     if params[:context_id]
       context = current_user.contexts.find(params[:context_id])
       not_done_todos = not_done_todos.where('context_id' => context.id)
     end
-    
+
     if params[:project_id]
       project = current_user.projects.find(params[:project_id])
       not_done_todos = not_done_todos.where('project_id' => project)
@@ -1430,7 +1430,7 @@ class TodosController < ApplicationController
     return not_done_todos
   end
 
-  
+
   class TodoCreateParamsHelper
 
     def initialize(params, prefs)
