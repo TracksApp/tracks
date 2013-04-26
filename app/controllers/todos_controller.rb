@@ -847,7 +847,7 @@ class TodosController < ApplicationController
         reorder('description ASC').
         limit(10) unless @todo.project.nil?
       # Then look in the current context, excluding @todo itself
-      @items = @todo.context.todos.not_completed
+      @items = @todo.context.todos.not_completed.
         where('(LOWER(todos.description) LIKE ?) AND NOT(todos.id=?)', "%#{params[:term].downcase}%", @todo.id).
         includes(:context, :project).
         reorder('description ASC').
