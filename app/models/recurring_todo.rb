@@ -6,7 +6,7 @@ class RecurringTodo < ActiveRecord::Base
   belongs_to :user
 
   has_many :todos
-  
+
   scope :active, :conditions => { :state => 'active'}
   scope :completed, :conditions => { :state => 'completed'}
 
@@ -384,7 +384,7 @@ class RecurringTodo < ActiveRecord::Base
       return I18n.t("todos.recurrence.pattern.every_day")
     end
   end
-  
+
   def weekly_recurrence_pattern
     if every_other1 > 1
       return I18n.t("todos.recurrence.pattern.every_n", :n => every_other1) + " " + I18n.t("common.weeks")
@@ -392,7 +392,7 @@ class RecurringTodo < ActiveRecord::Base
       return I18n.t('todos.recurrence.pattern.weekly')
     end
   end
-  
+
   def monthly_recurrence_pattern
     return "invalid repeat pattern" if every_other2.nil?
     if self.recurrence_selector == 0
@@ -412,7 +412,7 @@ class RecurringTodo < ActiveRecord::Base
         :x => self.xth, :day => self.day_of_week, :n_months => n_months)
     end
   end
-  
+
   def yearly_recurrence_pattern
     if self.recurrence_selector == 0
       return I18n.t("todos.recurrence.pattern.every_year_on",
@@ -422,7 +422,7 @@ class RecurringTodo < ActiveRecord::Base
         :date => I18n.t("todos.recurrence.pattern.the_xth_day_of_month", :x => self.xth, :day => self.day_of_week, :month => self.month_of_year))
     end
   end
-  
+
   def recurrence_pattern
     return "invalid repeat pattern" if every_other1.nil?
     case recurring_period
@@ -658,10 +658,10 @@ class RecurringTodo < ActiveRecord::Base
     return nil
   end
 
-  def has_next_todo(previous)
+  def continues_recurring?(previous)
     return self.occurences_count < self.number_of_occurences unless self.number_of_occurences.nil?
     return true if self.end_date.nil? || self.ends_on == 'no_end_date'
-    
+
     case self.target
     when 'due_date'
       return get_due_date(previous) <= self.end_date
@@ -673,7 +673,7 @@ class RecurringTodo < ActiveRecord::Base
   end
 
   def done?(end_date)
-    !has_next_todo(end_date)
+    !continues_recurring?(end_date)
   end
 
   def toggle_completion!
