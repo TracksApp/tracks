@@ -1,10 +1,10 @@
 <div id="display_box">
 
-  <%= todos_calendar_container(:due_today,            @due_today           ) %>
-  <%= todos_calendar_container(:due_this_week,        @due_this_week       ) %>
-  <%= todos_calendar_container(:due_next_week,        @due_next_week       ) %>
-  <%= todos_calendar_container(:due_this_month,       @due_this_month      ) %>
-  <%= todos_calendar_container(:due_after_this_month, @due_after_this_month) %>
+  <%= todos_calendar_container(:due_today,            @calendar.due_today           ) %>
+  <%= todos_calendar_container(:due_this_week,        @calendar.due_this_week       ) %>
+  <%= todos_calendar_container(:due_next_week,        @calendar.due_next_week       ) %>
+  <%= todos_calendar_container(:due_this_month,       @calendar.due_this_month      ) %>
+  <%= todos_calendar_container(:due_after_this_month, @calendar.due_after_this_month) %>
 
 </div><!-- End of display_box -->
 <div class="input_box" id="input_box">

@@ -784,17 +784,8 @@ class TodosController < ApplicationController
     @source_view = params['_source_view'] || 'calendar'
     @page_title = t('todos.calendar_page_title')
 
-    calendar = Todos::Calendar.new(current_user)
-    @projects = calendar.projects
-
-    due_this_month_date = Time.zone.now.end_of_month
-    included_tables = Todo::DEFAULT_INCLUDES
-
-    @due_today = calendar.due_today
-    @due_this_week = calendar.due_this_week
-    @due_next_week = calendar.due_next_week
-    @due_this_month = calendar.due_this_month
-    @due_after_this_month = calendar.due_after_this_month
+    @calendar = Todos::Calendar.new(current_user)
+    @projects = @calendar.projects
     @count = current_user.todos.not_completed.are_due.count
 
     respond_to do |format|

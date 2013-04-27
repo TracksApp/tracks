@@ -916,10 +916,10 @@ class TodosControllerTest < ActionController::TestCase
 
     assert_equal "calendar", assigns['source_view']
     assert_equal projects, assigns['projects']
-    assert_equal due_today, assigns['due_today']
-    assert_equal [], assigns['due_this_week']
-    assert_equal due_next_week, assigns['due_next_week']
-    assert_equal [], assigns['due_this_month']
+    assert_equal due_today, assigns['calendar'].due_today
+    assert_equal [], assigns['calendar'].due_this_week
+    assert_equal due_next_week, assigns['calendar'].due_next_week
+    assert_equal [], assigns['calendar'].due_this_month
     assert_equal 8, assigns['count']
   end
 end
