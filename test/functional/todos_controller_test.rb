@@ -898,4 +898,28 @@ class TodosControllerTest < ActionController::TestCase
     assert t4.predecessors.map(&:id).include?(t3.id)
   end
 
+
+  def test_calendar
+    login_as(:admin_user)
+
+    get :calendar
+
+    projects = [projects(:timemachine),
+                projects(:moremoney),
+                projects(:gardenclean)]
+    due_today = [todos(:phone_grandfather),
+                 todos(:call_bill_gates_every_day),
+                 todos(:due_today)]
+    due_next_week = [todos(:buy_shares),
+                     todos(:buy_stego_bait),
+                     todos(:new_action_in_context)]
+
+    assert_equal "calendar", assigns['source_view']
+    assert_equal projects, assigns['projects']
+    assert_equal due_today, assigns['due_today']
+    assert_equal [], assigns['due_this_week']
+    assert_equal due_next_week, assigns['due_next_week']
+    assert_equal [], assigns['due_this_month']
+    assert_equal 8, assigns['count']
+  end
 end
