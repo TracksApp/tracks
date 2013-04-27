@@ -784,35 +784,17 @@ class TodosController < ApplicationController
     @source_view = params['_source_view'] || 'calendar'
     @page_title = t('todos.calendar_page_title')
 
-    @projects = current_user.projects
+    calendar = Todos::Calendar.new(current_user)
+    @projects = calendar.projects
 
-    due_today_date = Time.zone.now
-    due_this_week_date = due_today_date.end_of_week
-    due_next_week_date = due_this_week_date + 7.days
-    due_this_month_date = due_today_date.end_of_month
+    due_this_month_date = Time.zone.now.end_of_month
     included_tables = Todo::DEFAULT_INCLUDES
 
-    @due_today = current_user.todos.not_completed.
-      where('todos.due <= ?', due_today_date).
-      includes(included_tables).
-      reorder("due")
-    @due_this_week = current_user.todos.not_completed.
-      where('todos.due > ? AND todos.due <= ?', due_today_date, due_this_week_date).
-      includes(included_tables).
-      reorder("due")
-    @due_next_week = current_user.todos.not_completed.
-      where('todos.due > ? AND todos.due <= ?', due_this_week_date, due_next_week_date).
-      includes(included_tables).
-      reorder("due")
-    @due_this_month = current_user.todos.not_completed.
-      where('todos.due > ? AND todos.due <= ?', due_next_week_date, due_this_month_date).
-      includes(included_tables).
-      reorder("due")
-    @due_after_this_month = current_user.todos.not_completed.
-      where('todos.due > ?', due_this_month_date).
-      includes(included_tables).
-      reorder("due")
-
+    @due_today = calendar.due_today
+    @due_this_week = calendar.due_this_week
+    @due_next_week = calendar.due_next_week
+    @due_this_month = calendar.due_this_month
+    @due_after_this_month = calendar.due_after_this_month
     @count = current_user.todos.not_completed.are_due.count
 
     respond_to do |format|
