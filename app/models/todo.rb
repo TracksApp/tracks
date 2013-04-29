@@ -144,6 +144,10 @@ class Todo < ActiveRecord::Base
     return !uncompleted_predecessors.all.empty?
   end
 
+  def should_be_blocked?
+    return !( uncompleted_predecessors.empty? || state == 'project_hidden' )
+  end
+
   # Returns a string with description <context, project>
   def specification
     project_name = self.project.is_a?(NullProject) ? "(none)" : self.project.name

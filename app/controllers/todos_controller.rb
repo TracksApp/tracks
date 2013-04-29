@@ -83,58 +83,33 @@ class TodosController < ApplicationController
     if is_multiple
       create_multiple
     else
-      p = TodoCreateParamsHelper.new(params, prefs)
+      p = Todos::TodoCreateParamsHelper.new(params, current_user)
       p.parse_dates() unless mobile?
       tag_list = p.tag_list
-      predecessor_list = p.predecessor_list
 
       @todo = current_user.todos.build(p.attributes)
-
-      if p.project_specified_by_name?
-        project = current_user.projects.where(:name => p.project_name).first_or_create
-        @new_project_created = project.new_record_before_save?
-        @not_done_todos = [@todo] if @new_project_created
-        @todo.project_id = project.id
-      elsif !(p.project_id.nil? || p.project_id.blank?)
-        project = current_user.projects.where(:id => p.project_id).first
-        @todo.errors[:project] << "unknown" if project.nil?
-      end
-
-      if p.context_specified_by_name?
-        context = current_user.contexts.where(:name => p.context_name).first_or_create
-        @new_context_created = context.new_record_before_save?
-        @not_done_todos = [@todo] if @new_context_created
-        @todo.context_id = context.id
-      elsif !(p.context_id.nil? || p.context_id.blank?)
-        context = current_user.contexts.where(:id=>p.context_id).first
-        @todo.errors[:context] << "unknown" if context.nil?
-      end
+      p.add_errors(@todo)
 
       if @todo.errors.empty?
-        @todo.starred= (params[:new_todo_starred]||"").include? "true" if params[:new_todo_starred]
-        @todo.add_predecessor_list(predecessor_list)
+        @todo.add_predecessor_list(p.predecessor_list)
         @saved = @todo.save
+        @todo.tag_with(tag_list) if @saved && !tag_list.blank?
         @todo.update_state_from_project if @saved
+        @todo.block! if @todo.should_be_blocked?
       else
         @saved = false
       end
 
-      unless ( !@saved ) || tag_list.blank?
-        @todo.tag_with(tag_list)
-        @todo.tags.reload
-      end
-
-      if @saved
-        @todo.block! unless @todo.uncompleted_predecessors.empty? || @todo.state == 'project_hidden'
-        @saved = @todo.save
-      end
-
-      @todo.reload if @saved
       @todo_was_created_deferred = @todo.deferred?
       @todo_was_created_blocked = @todo.pending?
+      @not_done_todos = [@todo] if p.new_project_created || p.new_context_created
+      @new_project_created = p.new_project_created
+      @new_context_created = p.new_context_created
 
       respond_to do |format|
-        format.html { redirect_to :action => "index" }
+        format.html do
+          redirect_to :action => "index" 
+        end
         format.m do
           @return_path=cookies[:mobile_url] ? cookies[:mobile_url] : mobile_path
           if @saved
@@ -148,8 +123,8 @@ class TodosController < ApplicationController
         format.js do
           if @saved
             determine_down_count
-            @contexts = current_user.contexts if @new_context_created
-            @projects = current_user.projects if @new_project_created
+            @contexts = current_user.contexts
+            @projects = current_user.projects
             @initial_context_name = params['default_context_name']
             @initial_project_name = params['default_project_name']
             @initial_tags = params['initial_tag_list']
@@ -174,60 +149,38 @@ class TodosController < ApplicationController
   end
 
   def create_multiple
-    p = TodoCreateParamsHelper.new(params, prefs)
-    if p.project_specified_by_name?
-      project = current_user.projects.where(:name => params[:project_name]).first_or_create
-      @new_project_created = project.new_record_before_save?
-      @project_id = project.id
-    end
+    p = Todos::TodoCreateParamsHelper.new(params, current_user)
+    tag_list = p.tag_list
 
-    if p.context_specified_by_name?
-      context = current_user.contexts.where(:name => params[:context_name]).first_or_create
-      @new_context_created = context.new_record_before_save?
-      @not_done_todos = [] if @new_context_created
-      @context_id = context.id
-    end
-
-    tag_list = params[:tag_list]
-
-    @sequential = !params[:todos_sequential].blank? && params[:todos_sequential]=='true'
-
-    @todos_init = []
+    @not_done_todos, @build_todos, @todos, errors = [], [], [], []
     @predecessor = nil
     validates = true
-    errors = []
 
     # first build all todos and check if they would validate on save
     params[:todo][:multiple_todos].split("\n").map do |line|
       unless line.blank? #ignore blank lines
-        @todo = current_user.todos.build(:description => line)
-        @todo.project_id = @project_id
-        @todo.context_id = @context_id
+        @todo = current_user.todos.build({:description => line, :context_id => p.context_id, :project_id => p.project_id})
         validates &&= @todo.valid?
 
-        @todos_init << @todo
+        @build_todos << @todo
       end
     end
 
     # if all todos validate, then save them and add predecessors and tags
-    @todos = []
     if validates
-      @todos_init.each do |todo|
+      @build_todos.each do |todo|
         @saved = todo.save
-        validates = validates && @saved
+        validates &&= @saved
 
-        if @predecessor && @saved && @sequential
+        if @predecessor && @saved && p.sequential?
           todo.add_predecessor(@predecessor)
           todo.block!
         end
-
-        unless (@saved == false) || tag_list.blank?
-          todo.tag_with(tag_list)
-          todo.tags.reload
-        end
+        
+        todo.tag_with(tag_list) unless (@saved == false) || tag_list.blank?
 
         @todos << todo
-        @not_done_todos << todo if @new_context_created
+        @not_done_todos << todo if p.new_context_created || p.new_project_created
         @predecessor = todo
       end
     else
@@ -239,8 +192,8 @@ class TodosController < ApplicationController
       format.html { redirect_to :action => "index" }
       format.js do
         determine_down_count if @saved
-        @contexts = current_user.contexts if @new_context_created
-        @projects = current_user.projects if @new_project_created
+        @contexts = current_user.contexts if p.new_context_created
+        @projects = current_user.projects if p.new_project_created
         @initial_context_name = params['default_context_name']
         @initial_project_name = params['default_project_name']
         @initial_tags = params['initial_tag_list']
@@ -253,8 +206,8 @@ class TodosController < ApplicationController
         end
 
         @status_message = @todos.size > 1 ? t('todos.added_new_next_action_plural') : t('todos.added_new_next_action_singular')
-        @status_message = t('todos.added_new_project') + ' / ' + @status_message if @new_project_created
-        @status_message = t('todos.added_new_context') + ' / ' + @status_message if @new_context_created
+        @status_message = t('todos.added_new_project') + ' / ' + @status_message if p.new_project_created
+        @status_message = t('todos.added_new_context') + ' / ' + @status_message if p.new_context_created
 
         render :action => 'create_multiple'
       end
@@ -1378,81 +1331,6 @@ class TodosController < ApplicationController
     end
 
     return not_done_todos
-  end
-
-
-  class TodoCreateParamsHelper
-
-    def initialize(params, prefs)
-      @params = params['request'] || params
-      @prefs = prefs
-      @attributes = params['request'] && params['request']['todo']  || params['todo']
-
-      if @attributes && @attributes[:tags]
-        # for single tags, @attributed[:tags] returns a hash. For multiple tags,
-        # it with return an array of hashes. Make sure it is always an array of hashes
-        @attributes[:tags][:tag] = [@attributes[:tags][:tag]] unless @attributes[:tags][:tag].class == Array
-        # the REST api may use <tags> which will collide with tags association, so rename tags to add_tags
-        @attributes[:add_tags] = @attributes[:tags]
-        @attributes.delete :tags
-      end
-    end
-
-    def attributes
-      @attributes
-    end
-
-    def show_from
-      @attributes['show_from']
-    end
-
-    def due
-      @attributes['due']
-    end
-
-    def project_name
-      @params['project_name'].strip unless @params['project_name'].nil?
-    end
-
-    def project_id
-      @attributes['project_id']
-    end
-
-    def context_name
-      @params['context_name'].strip unless @params['context_name'].nil?
-    end
-
-    def context_id
-      @attributes['context_id']
-    end
-
-    def tag_list
-      @params['tag_list']
-    end
-
-    def predecessor_list
-      @params['predecessor_list']
-    end
-
-    def parse_dates()
-      @attributes['show_from'] = @prefs.parse_date(show_from)
-      @attributes['due'] = @prefs.parse_date(due)
-      @attributes['due'] ||= ''
-    end
-
-    def project_specified_by_name?
-      return false unless @attributes['project_id'].blank?
-      return false if project_name.blank?
-      return false if project_name == 'None'
-      true
-    end
-
-    def context_specified_by_name?
-      return false unless @attributes['context_id'].blank?
-      return false if context_name.blank?
-      true
-    end
-
   end
 
 end
