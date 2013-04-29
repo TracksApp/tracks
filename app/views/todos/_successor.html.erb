@@ -1,32 +1,29 @@
 <%
 @rec_depth ||= 0
-
-cache [successor, "successor"] do
 %>
-  <div id="<%= dom_id(successor, 'successor') %>" class="item-container">
-    <div id="<%= dom_id(successor, 'successor_line') %>">
-      <div class="description<%= staleness_class( successor ) %>" style="margin-left: 20px">
-        <span class="todo.descr"><%= h sanitize(successor.description) %></span>
-  
-        <%= remote_delete_dependency(successor, predecessor) %>
-  
-        <% unless successor.pending_successors.empty?
-          if @rec_depth < 8
-            @rec_depth+=1 %>
-            <div class="todo_successors" id="<%= dom_id(successor, 'successors') %>">
-              <%= render :partial => "todos/successor",
-                :collection => successor.pending_successors,
-                :locals => { :todo => successor,
-                :parent_container_type => parent_container_type,
-                :suppress_dependencies => true,
-                :predecessor => successor }
-              %>
-            </div>
-          <% else %>
-            <a title="There are more dependencies that are not shown">[...]</a>
-          <% end %>
+<div id="<%= dom_id(successor, 'successor') %>" class="item-container">
+  <div id="<%= dom_id(successor, 'successor_line') %>">
+    <div class="description<%= staleness_class( successor ) %>" style="margin-left: 20px">
+      <span class="todo.descr"><%= h sanitize(successor.description) %></span>
+
+      <%= remote_delete_dependency(successor, predecessor) %>
+
+      <% unless successor.pending_successors.empty?
+        if @rec_depth < 8
+          @rec_depth+=1 %>
+          <div class="todo_successors" id="<%= dom_id(successor, 'successors') %>">
+            <%= render :partial => "todos/successor",
+              :collection => successor.pending_successors,
+              :locals => { :todo => successor,
+              :parent_container_type => parent_container_type,
+              :suppress_dependencies => true,
+              :predecessor => successor }
+            %>
+          </div>
+        <% else %>
+          <a title="There are more dependencies that are not shown">[...]</a>
         <% end %>
-      </div>
+      <% end %>
     </div>
   </div>
-<% end %>
+</div>
