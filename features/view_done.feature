@@ -157,7 +157,7 @@ Feature: Show done
   Scenario: Activating the last todo will show empty message
     Given the date is "2013-03-11"
     And I have a completed todo with description "todo 2" in context "@pc" completed 1 days ago
-    And I have a completed todo with description "todo 3" in context "@pc" completed 8 days ago    
+    And I have a completed todo with description "todo 3" in context "@pc" completed 7 days ago    
     When I go to the done actions page
     Then I should see "todo 1" in the done today container
     And I should see "todo 2" in the done this week container

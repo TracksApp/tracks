@@ -5,8 +5,7 @@ end
 ####### DELETE #######
 
 When /^I delete the action "([^"]*)"$/ do |action_description|
-  todo = @current_user.todos.where(:description => action_description).first
-  todo.should_not be_nil
+  todo = find_todo(action_description)
 
   handle_js_confirm do
     open_submenu_for(todo) do

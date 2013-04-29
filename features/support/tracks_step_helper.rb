@@ -74,14 +74,14 @@ module TracksStepHelper
   end    
 
   def context_list_find_index(context_name)
-    div_id = "context_#{@current_user.contexts.where(:name => context_name).first.id}"
+    div_id = "context_#{find_context(context_name).id}"
     contexts = page.all("div.context").map { |x| x[:id] }
     return contexts.find_index(div_id)
   end
 
   def project_list_find_index(project_name)
     # TODO: refactor with context_list_find_index
-    div_id = "project_#{@current_user.projects.where(:name => project_name).first.id}"
+    div_id = "project_#{find_project(project_name).id}"
     project = page.all("div.project").map { |x| x[:id] }
     return project.find_index(div_id)
   end
@@ -89,10 +89,6 @@ module TracksStepHelper
   def format_date(date)
     # copy-and-past from ApplicationController::format_date
     return date ? date.in_time_zone(@current_user.prefs.time_zone).strftime("#{@current_user.prefs.date_format}") : ''
-  end
-
-  def execute_javascript(js)
-    page.execute_script(js)
   end
 
   def context_drag_and_drop(drag_id, delta)
@@ -103,12 +99,13 @@ module TracksStepHelper
   def open_submenu_for(todo)
     submenu_arrow = "div#line_todo_#{todo.id} img.todo-submenu"
     page.should have_css(submenu_arrow, :visible=>true)
-    
     page.find(submenu_arrow, :match => :first).click
-    
-    page.should have_css("div#line_todo_#{todo.id} ul#ultodo_#{todo.id}", :visible => true)
 
-    within all("div#line_todo_#{todo.id} ul#ultodo_#{todo.id}")[0] do
+    submenu_css = "div#line_todo_#{todo.id} ul#ultodo_#{todo.id}"
+    submenu = page.find(submenu_css)
+    wait_until { submenu.visible? }
+
+    within submenu do
       yield
     end
   end
@@ -124,6 +121,10 @@ module TracksStepHelper
   
   def get_confirm_text
     page.evaluate_script "window.confirmMsg"
+  end
+
+  def execute_javascript(js)
+    page.execute_script(js)
   end
   
 end
