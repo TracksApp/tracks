@@ -13,38 +13,23 @@ module Todos
     end
 
     def due_today
-      user.todos.not_completed.
-        where('todos.due <= ?', today).
-        includes(included_tables).
-        reorder("due")
+      actions.due_today
     end
 
     def due_this_week
-      user.todos.not_completed.
-        where('todos.due > ? AND todos.due <= ?', today, Time.zone.now.end_of_week).
-        includes(included_tables).
-        reorder("due")
+      actions.due_between(today, end_of_the_week)
     end
 
     def due_next_week
-      user.todos.not_completed.
-        where('todos.due > ? AND todos.due <= ?', end_of_the_week, end_of_next_week).
-        includes(included_tables).
-        reorder("due")
+      actions.due_between(end_of_the_week, end_of_next_week)
     end
 
     def due_this_month
-      user.todos.not_completed.
-        where('todos.due > ? AND todos.due <= ?', end_of_next_week, end_of_the_month).
-        includes(included_tables).
-        reorder("due")
+      actions.due_between(end_of_next_week, end_of_the_month)
     end
 
     def due_after_this_month
-      user.todos.not_completed.
-        where('todos.due > ?', end_of_the_month).
-        includes(included_tables).
-        reorder("due")
+      actions.due_after(end_of_the_month)
     end
 
     def today
@@ -61,6 +46,12 @@ module Todos
 
     def end_of_the_month
       @end_of_the_month ||= today.end_of_month
+    end
+
+  private
+
+    def actions
+      user.todos.not_completed.includes(included_tables).reorder("due")
     end
 
   end

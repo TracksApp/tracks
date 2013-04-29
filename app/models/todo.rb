@@ -51,6 +51,16 @@ class Todo < ActiveRecord::Base
   scope :created_after, lambda { |date| where("todos.created_at > ?", date) }
   scope :created_before, lambda { |date| where("todos.created_at < ?", date) }
 
+  scope :due_today, lambda { where("todos.due <= ?", Time.zone.now) }
+
+  def self.due_after(date)
+    where('todos.due > ?', date)
+  end
+
+  def self.due_between(start_date, end_date)
+    where('todos.due > ? AND todos.due <= ?', start_date, end_date)
+  end
+
   STARRED_TAG_NAME = "starred"
   DEFAULT_INCLUDES = [ :project, :context, :tags, :taggings, :pending_successors, :uncompleted_predecessors, :recurring_todo ]
 
