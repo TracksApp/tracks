@@ -10,7 +10,7 @@ parameters += "&_tag_name=#{@tag_name}" if @source_view == 'tag'
 # invalidate the cache every day because of staleness or
 # rendering of "due in x days" that change without touching updated at of the todo
 # also make different caches per source_view to handle difference in showing [C] and [P]
-cache [todo, current_user.date.strftime("%Y%m%d"), @source_view] do
+cache [todo, current_user.date.strftime("%Y%m%d"), @source_view, current_user.prefs.verbose_action_descriptors] do
 %>
   <div id="<%= dom_id(todo) %>" class="item-container">
     <div id="<%= dom_id(todo, 'line') %>" class="item-show">
