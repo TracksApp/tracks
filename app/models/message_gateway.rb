@@ -36,7 +36,7 @@ class MessageGateway < ActionMailer::Base
   
   def get_user_from_env_setting
     Rails.logger.info "All received email goes to #{ENV['TRACKS_MAIL_RECEIVER']}"
-    user = User.find_by_login(ENV['TRACKS_MAIL_RECEIVER'])
+    user = User.find_by_login(ENV['TRACKS_MAIL_RECEIVER']).first
     Rails.logger.info "WARNING: Unknown user set for TRACKS_MAIL_RECEIVER (#{ENV['TRACKS_MAIL_RECEIVER']})" if user.nil?
     return user
   end
