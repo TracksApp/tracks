@@ -11,7 +11,7 @@ class Todo < ActiveRecord::Base
 
   # Tag association
   include IsTaggable
-  
+
   # Dependencies associations
   has_many :predecessor_dependencies, :foreign_key => 'predecessor_id', :class_name => 'Dependency', :dependent => :destroy
   has_many :successor_dependencies,   :foreign_key => 'successor_id',   :class_name => 'Dependency', :dependent => :destroy
@@ -21,7 +21,7 @@ class Todo < ActiveRecord::Base
     :source => :predecessor, :conditions => ['NOT (todos.state = ?)', 'completed']
   has_many :pending_successors, :through => :predecessor_dependencies,
     :source => :successor, :conditions => ['todos.state = ?', 'pending']
-    
+
   # scopes for states of this todo
   scope :active, :conditions => { :state => 'active' }
   scope :active_or_hidden, :conditions => ["todos.state = ? OR todos.state = ?", 'active', 'project_hidden']
@@ -58,7 +58,7 @@ class Todo < ActiveRecord::Base
   include AASM
   aasm_initial_state Proc.new { |t| (t.show_from && t.user && (t.show_from > t.user.date)) ? :deferred : :active}
 
-  aasm :column => :state do    
+  aasm :column => :state do
 
     state :active
     state :project_hidden
@@ -116,7 +116,7 @@ class Todo < ActiveRecord::Base
       end
     end
   end
-  
+
   def check_circular_dependencies
     unless @predecessor_array.nil? # Only validate predecessors if they changed
       @predecessor_array.each do |todo|
@@ -124,7 +124,7 @@ class Todo < ActiveRecord::Base
       end
     end
   end
-  
+
   def initialize(*args)
     super(*args)
     @predecessor_array = nil # Used for deferred save of predecessors
@@ -411,5 +411,5 @@ class Todo < ActiveRecord::Base
       self.rendered_notes = nil
     end
   end
-  
+
 end
