@@ -20,26 +20,24 @@ class Project < ActiveRecord::Base
   acts_as_list :scope => 'user_id = #{user_id} AND state = \'#{state}\'', :top_of_list => 0
 
   include AASM
-  aasm_column :state
-  aasm_initial_state :active
 
-  # extend NamePartFinder
-  # include Tracks::TodoList
+  aasm :column => :state do
 
-  aasm_state :active
-  aasm_state :hidden, :enter => :hide_todos, :exit => :unhide_todos
-  aasm_state :completed, :enter => :set_completed_at_date, :exit => :clear_completed_at_date
+    state :active, :initial => true
+    state :hidden, :enter => :hide_todos, :exit => :unhide_todos
+    state :completed, :enter => :set_completed_at_date, :exit => :clear_completed_at_date
 
-  aasm_event :activate do
-    transitions :to => :active,   :from => [:active, :hidden, :completed]
-  end
+    event :activate do
+      transitions :to => :active,   :from => [:active, :hidden, :completed]
+    end
 
-  aasm_event :hide do
-    transitions :to => :hidden,   :from => [:active, :completed]
-  end
+    event :hide do
+      transitions :to => :hidden,   :from => [:active, :completed]
+    end
 
-  aasm_event :complete do
-    transitions :to => :completed, :from => [:active, :hidden]
+    event :complete do
+      transitions :to => :completed, :from => [:active, :hidden]
+    end
   end
 
   attr_protected :user

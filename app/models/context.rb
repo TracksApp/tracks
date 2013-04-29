@@ -14,23 +14,24 @@ class Context < ActiveRecord::Base
 
   # state machine
   include AASM
-  aasm_column :state
-  aasm_initial_state :active
 
-  aasm_state :active
-  aasm_state :closed
-  aasm_state :hidden
+  aasm :column => :state do
+  
+    state :active, :initial => true
+    state :closed
+    state :hidden
 
-  aasm_event :close do
-    transitions :to => :closed, :from => [:active, :hidden], :guard => :no_active_todos?
-  end
+    event :close do
+      transitions :to => :closed, :from => [:active, :hidden], :guard => :no_active_todos?
+    end
 
-  aasm_event :hide do
-    transitions :to => :hidden, :from => [:active, :closed]
-  end
+    event :hide do
+      transitions :to => :hidden, :from => [:active, :closed]
+    end
 
-  aasm_event :activate do
-    transitions :to => :active, :from => [:closed, :hidden]
+    event :activate do
+      transitions :to => :active, :from => [:closed, :hidden]
+    end
   end
 
   attr_protected :user

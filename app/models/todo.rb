@@ -56,43 +56,45 @@ class Todo < ActiveRecord::Base
 
   # state machine
   include AASM
-  aasm_column :state
   aasm_initial_state Proc.new { |t| (t.show_from && t.user && (t.show_from > t.user.date)) ? :deferred : :active}
 
-  aasm_state :active
-  aasm_state :project_hidden
-  aasm_state :completed, :enter => Proc.new { |t| t.completed_at = Time.zone.now }, :exit => Proc.new { |t| t.completed_at = nil}
-  aasm_state :deferred, :exit => Proc.new { |t| t[:show_from] = nil }
-  aasm_state :pending
+  aasm :column => :state do    
 
-  aasm_event :defer do
-    transitions :to => :deferred, :from => [:active]
-  end
+    state :active
+    state :project_hidden
+    state :completed, :enter => Proc.new { |t| t.completed_at = Time.zone.now }, :exit => Proc.new { |t| t.completed_at = nil}
+    state :deferred, :after_exit => Proc.new { |t| t[:show_from] = nil}
+    state :pending
 
-  aasm_event :complete do
-    transitions :to => :completed, :from => [:active, :project_hidden, :deferred, :pending]
-  end
+    event :defer do
+      transitions :to => :deferred, :from => [:active]
+    end
 
-  aasm_event :activate do
-    transitions :to => :active, :from => [:project_hidden, :deferred]
-    transitions :to => :active, :from => [:completed], :guard => :no_uncompleted_predecessors?
-    transitions :to => :active, :from => [:pending], :guard => :no_uncompleted_predecessors_or_deferral?
-    transitions :to => :pending, :from => [:completed], :guard => :uncompleted_predecessors?
-    transitions :to => :deferred, :from => [:pending], :guard => :no_uncompleted_predecessors?
-  end
+    event :complete do
+      transitions :to => :completed, :from => [:active, :project_hidden, :deferred, :pending]
+    end
 
-  aasm_event :hide do
-    transitions :to => :project_hidden, :from => [:active, :deferred, :pending]
-  end
+    event :activate do
+      transitions :to => :active, :from => [:project_hidden, :deferred]
+      transitions :to => :active, :from => [:completed], :guard => :no_uncompleted_predecessors?
+      transitions :to => :active, :from => [:pending], :guard => :no_uncompleted_predecessors_or_deferral?
+      transitions :to => :pending, :from => [:completed], :guard => :uncompleted_predecessors?
+      transitions :to => :deferred, :from => [:pending], :guard => :no_uncompleted_predecessors?
+    end
 
-  aasm_event :unhide do
-    transitions :to => :deferred, :from => [:project_hidden], :guard => Proc.new{|t| !t.show_from.blank? }
-    transitions :to => :pending, :from => [:project_hidden], :guard => :uncompleted_predecessors?
-    transitions :to => :active, :from => [:project_hidden]
-  end
+    event :hide do
+      transitions :to => :project_hidden, :from => [:active, :deferred, :pending]
+    end
 
-  aasm_event :block do
-    transitions :to => :pending, :from => [:active, :deferred]
+    event :unhide do
+      transitions :to => :deferred, :from => [:project_hidden], :guard => Proc.new{|t| !t.show_from.blank? }
+      transitions :to => :pending, :from => [:project_hidden], :guard => :uncompleted_predecessors?
+      transitions :to => :active, :from => [:project_hidden]
+    end
+
+    event :block do
+      transitions :to => :pending, :from => [:active, :deferred]
+    end
   end
 
   attr_protected :user

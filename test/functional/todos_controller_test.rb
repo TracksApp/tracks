@@ -365,7 +365,8 @@ class TodosControllerTest < ActionController::TestCase
     xhr :post, :update, :id => todo.id, :_source_view => 'todo', "project_name"=>"None", "todo"=>{}
 
     assert assigns['project_changed'], "the project of the todo should be changed"
-    assert todo.reload().active?, "todo should be active"
+    todo = Todo.find(todo.id) # reload does not seem to work anymore
+    assert todo.active?, "todo should be active"
   end
 
   def test_change_context_of_todo
@@ -708,7 +709,7 @@ class TodosControllerTest < ActionController::TestCase
 
     # mark todo complete
     xhr :post, :toggle_check, :id => @todo.id, :_source_view => 'todo'
-    @todo.reload
+    @todo = Todo.find(@todo.id) #reload does not seem to work anymore
     assert @todo.completed?
 
     # check that there is no active todo

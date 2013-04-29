@@ -13,18 +13,17 @@ class RecurringTodo < ActiveRecord::Base
   include IsTaggable
 
   include AASM
-  aasm_column :state
-  aasm_initial_state :active
+  aasm :column => :state do
+    state :active, :initial => true, :before_enter => Proc.new { |t| t.occurences_count = 0 }
+    state :completed, :before_enter => Proc.new { |t| t.completed_at = Time.zone.now }, :before_exit => Proc.new { |t| t.completed_at = nil }
 
-  aasm_state :active, :enter => Proc.new { |t| t.occurences_count = 0 }
-  aasm_state :completed, :enter => Proc.new { |t| t.completed_at = Time.zone.now }, :exit => Proc.new { |t| t.completed_at = nil }
+    event :complete do
+      transitions :to => :completed, :from => [:active]
+    end
 
-  aasm_event :complete do
-    transitions :to => :completed, :from => [:active]
-  end
-
-  aasm_event :activate do
-    transitions :to => :active, :from => [:completed]
+    event :activate do
+      transitions :to => :active, :from => [:completed]
+    end
   end
 
   validates_presence_of :description
