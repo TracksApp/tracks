@@ -37,11 +37,11 @@ class TodoCreateParamsHelperTest < ActiveSupport::TestCase
 
   def test_parse_dates_parses_show_from_date_based_on_prefs
     params = { 'todo' => { 'show_from' => '20/05/07', 'due' => '23/5/07'}}
-    
+
     user = users(:admin_user)
     prefs = user.prefs
     prefs.date_format = "%d/%m/%y"  # make sure the format matches the above
-    
+
     params_helper = Todos::TodoCreateParamsHelper.new(params, user)
     params_helper.parse_dates()
     assert_equal Date.new(2007, 5, 20), params_helper.show_from.to_date
@@ -49,7 +49,7 @@ class TodoCreateParamsHelperTest < ActiveSupport::TestCase
 
   def test_parse_dates_parses_due_date_based_on_prefs
     params = { 'todo' => { 'show_from' => '20/5/07', 'due' => '23/5/07'}}
-    
+
     user = users(:admin_user)
     prefs = user.prefs
     prefs.date_format = "%d/%m/%y"  # make sure the format matches the above

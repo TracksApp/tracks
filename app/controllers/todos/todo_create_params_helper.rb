@@ -1,7 +1,7 @@
 module Todos
   class TodoCreateParamsHelper
 
-  	attr_reader :new_project_created, :new_context_created
+    attr_reader :new_project_created, :new_context_created
 
     def initialize(params, user)
       @params = params['request'] || params
@@ -76,7 +76,7 @@ module Todos
 
     def specified_by_id?(group_type)
       group_id = send("#{group_type}_id")
-      return !group_id.blank?
+      !group_id.blank?
     end
 
     def project_specified_by_name?
@@ -93,7 +93,7 @@ module Todos
     end
 
     def add_errors(model)
-    	@errors.each {|e| model.errors[ e[:attribute] ] = e[:message] }
+      @errors.each {|e| model.errors[ e[:attribute] ] = e[:message] }
     end
 
     private
@@ -107,17 +107,15 @@ module Todos
       group = set.where(:name => name).first_or_create
       @attributes["#{group_type}_id"] = group.id
       return group.new_record_before_save?
-		end
+    end
 
-		def set_id_by_id_string(group_type, set, id)
-	  	begin
-	  		# be aware, this will replace the project_id/context_id (string) in @attributes with the new found id (int)
-      	@attributes["#{group_type}_id"] = set.find(id).id
-	  		return false
-	  	rescue
-	  		@errors << { :attribute => group_type, :message => "unknown"}
-	  	end
-	end
+    def set_id_by_id_string(group_type, set, id)
+      # be aware, this will replace the project_id/context_id (string) in @attributes with the new found id (int)
+      @attributes["#{group_type}_id"] = set.find(id).id
+      return false
+    rescue
+      @errors << { :attribute => group_type, :message => "unknown"}
+    end
 
   end
 end
