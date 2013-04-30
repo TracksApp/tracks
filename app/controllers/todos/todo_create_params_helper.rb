@@ -36,7 +36,7 @@ module Todos
     end
 
     def project_name
-      @params['project_name'].strip unless @params['project_name'].nil?
+      @project_name ||= @params['project_name'].strip if @params['project_name']
     end
 
     def project_id
@@ -44,7 +44,7 @@ module Todos
     end
 
     def context_name
-      @params['context_name'].strip unless @params['context_name'].nil?
+      @context_name ||= @params['context_name'].strip if @params['context_name']
     end
 
     def context_id
