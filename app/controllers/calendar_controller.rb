@@ -17,7 +17,7 @@ class CalendarController < ApplicationController
         render :action => 'show', :layout => false, :content_type => Mime::ICS
       }
       format.xml {
-        render :xml => @due_all.to_xml( *to_xml_params )
+        render :xml => @due_all.to_xml( *todo_xml_params )
       }
     end
   end

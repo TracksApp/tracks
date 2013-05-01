@@ -48,7 +48,7 @@ class TodosController < ApplicationController
         headers['Content-Type']=Mime::TEXT.to_s
         render :content_type => Mime::TEXT
       end
-      format.xml   { render :xml => @todos.to_xml( *to_xml_params ) }
+      format.xml   { render :xml => @todos.to_xml( *todo_xml_params ) }
       format.rss   { @feed_title, @feed_description = 'Tracks Actions', "Actions for #{current_user.display_name}" }
       format.atom  { @feed_title, @feed_description = 'Tracks Actions', "Actions for #{current_user.display_name}" }
       format.ics
@@ -240,7 +240,7 @@ class TodosController < ApplicationController
     @todo = current_user.todos.find(params['id'])
     respond_to do |format|
       format.m { render :action => 'show' }
-      format.xml { render :xml => @todo.to_xml( *to_xml_params ) }
+      format.xml { render :xml => @todo.to_xml( *todo_xml_params ) }
     end
   end
 
@@ -326,7 +326,7 @@ class TodosController < ApplicationController
         end
         render
       end
-      format.xml { render :xml => @todo.to_xml( *to_xml_params ) }
+      format.xml { render :xml => @todo.to_xml( *todo_xml_params ) }
       format.html do
         if @saved
           # TODO: I think this will work, but can't figure out how to test it
@@ -361,7 +361,7 @@ class TodosController < ApplicationController
     @saved = true # cannot determine error
     respond_to do |format|
       format.js
-      format.xml { render :xml => @todo.to_xml( *to_xml_params ) }
+      format.xml { render :xml => @todo.to_xml( *todo_xml_params ) }
       format.html { redirect_to request.referrer}
       format.m {
         if cookies[:mobile_url]
@@ -393,7 +393,7 @@ class TodosController < ApplicationController
 
     respond_to do |format|
       format.js  { render :action => :update }
-      format.xml { render :xml => @todo.to_xml( *to_xml_params ) }
+      format.xml { render :xml => @todo.to_xml( *todo_xml_params ) }
     end
   end
 
@@ -436,7 +436,7 @@ class TodosController < ApplicationController
         @status_message = t('todos.added_new_project') + ' / ' + @status_message if @new_project_created
         @status_message = t('todos.added_new_context') + ' / ' + @status_message if @new_context_created
       }
-      format.xml { render :xml => @todo.to_xml( *to_xml_params ) }
+      format.xml { render :xml => @todo.to_xml( *todo_xml_params ) }
       format.m do
         if @saved
           do_mobile_todo_redirection
@@ -526,7 +526,7 @@ class TodosController < ApplicationController
       format.html
       format.xml do
         completed_todos = current_user.todos.completed
-        render :xml => completed_todos.to_xml( *to_xml_params )
+        render :xml => completed_todos.to_xml( *todo_xml_params )
       end
     end
   end
@@ -563,7 +563,7 @@ class TodosController < ApplicationController
         @completed_projects = current_user.projects.completed
       end
       format.m
-      format.xml { render :xml => @not_done_todos.to_xml( *to_xml_params ) }
+      format.xml { render :xml => @not_done_todos.to_xml( *todo_xml_params ) }
     end
   end
 
@@ -737,7 +737,7 @@ class TodosController < ApplicationController
     @hidden = current_user.todos.hidden
     respond_to do |format|
       format.xml {
-        render :xml => @hidden.to_xml( *to_xml_params )
+        render :xml => @hidden.to_xml( *todo_xml_params )
       }
     end
   end
