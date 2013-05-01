@@ -14,11 +14,19 @@ class CalendarController < ApplicationController
     respond_to do |format|
       format.html
       format.ics   {
-        render :action => 'calendar', :layout => false, :content_type => Mime::ICS
+        render :action => 'show', :layout => false, :content_type => Mime::ICS
       }
       format.xml {
         render :xml => @due_all.to_xml( *to_xml_params )
       }
+    end
+  end
+
+  def to_xml_params
+    if params[:limit_fields] == 'index'
+      return [:only => [:id, :created_at, :updated_at, :completed_at] ]
+    else
+      return [:except => :user_id, :include => [:tags, :predecessors, :successors] ]
     end
   end
 end
