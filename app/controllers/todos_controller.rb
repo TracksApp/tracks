@@ -1,7 +1,7 @@
 class TodosController < ApplicationController
 
-  skip_before_filter :login_required, :only => [:index, :calendar, :tag]
-  prepend_before_filter :login_or_feed_token_required, :only => [:index, :calendar, :tag]
+  skip_before_filter :login_required, :only => [:index, :tag]
+  prepend_before_filter :login_or_feed_token_required, :only => [:index, :tag]
   append_before_filter :find_and_activate_ready, :only => [:index, :list_deferred]
   append_before_filter :set_group_view_by, :only => [:index, :tag, :create, :list_deferred, :destroy, :defer, :update, :toggle_check]
 
@@ -729,27 +729,6 @@ class TodosController < ApplicationController
       format.m {
         notify(:notice, t("todos.action_deferred", :description => @todo.description))
         do_mobile_todo_redirection
-      }
-    end
-  end
-
-  def calendar
-    @source_view = params['_source_view'] || 'calendar'
-    @page_title = t('todos.calendar_page_title')
-
-    @calendar = Todos::Calendar.new(current_user)
-    @projects = @calendar.projects
-    @count = current_user.todos.not_completed.are_due.count
-
-    respond_to do |format|
-      format.html
-      format.ics   {
-        @due_all = current_user.todos.not_completed.are_due.reorder("due")
-        render :action => 'calendar', :layout => false, :content_type => Mime::ICS
-      }
-      format.xml {
-        @due_all = current_user.todos.not_completed.are_due.reorder("due")
-        render :xml => @due_all.to_xml( *to_xml_params )
       }
     end
   end
