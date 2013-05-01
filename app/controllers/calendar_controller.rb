@@ -1,4 +1,7 @@
 class CalendarController < ApplicationController
+  skip_before_filter :login_required, :only => [:show]
+  prepend_before_filter :login_or_feed_token_required, :only => [:show]
+
   def show
     @source_view = 'calendar'
     @page_title = t('todos.calendar_page_title')
