@@ -12,7 +12,7 @@ de:
         last_name: Nachname
         locale: Lokalisierung
         mobile_todos_per_page: "Aufgaben pro Seite (Mobile Version)"
-        refresh: "Aktualisierungsintverall (in Minuten)"
+        refresh: "Aktualisierungsintervall (in Minuten)"
         review_period: Projekt-Review-Intervall
         show_completed_projects_in_sidebar: "Zeige erledigte Projekte in der Sidebar"
         show_hidden_contexts_in_sidebar: "Zeige Versteckte Kontexte in der Sidebar"
