@@ -1,0 +1,32 @@
+BEGIN:VCALENDAR
+PRODID:-//TRACKS//<%= TRACKS_VERSION %>//EN
+VERSION:2.0
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Tracks
+<% for todo in @due_all 
+  due_date = todo.due
+  overdue_text = ""
+  if due_date.at_midnight < Time.zone.now.at_midnight
+    due_date = Time.zone.now
+    overdue_text = t('todos.overdue') +": "
+  end
+  modified = todo.updated_at || todo.created_at
+%>BEGIN:VEVENT
+DTSTART;VALUE=DATE:<%= due_date.strftime("%Y%m%d") %>
+DTEND;VALUE=DATE:<%= (due_date+1.day).strftime("%Y%m%d") %>
+DTSTAMP:<%= due_date.strftime("%Y%m%dT%H%M%SZ") %>
+UID:<%= todo_url(todo) %>
+CLASS:PUBLIC
+CATEGORIES:Tracks
+CREATED:<%= todo.created_at.strftime("%Y%m%dT%H%M%SZ") %>
+DESCRIPTION:<%= format_ical_notes(todo.notes) %>
+LAST-MODIFIED:<%= modified.strftime("%Y%m%dT%H%M%SZ") %>
+LOCATION:
+SEQUENCE:0
+STATUS:CONFIRMED
+SUMMARY:<%= overdue_text + todo.description %>
+TRANSP:TRANSPARENT
+END:VEVENT
+<% end
+%>END:VCALENDAR

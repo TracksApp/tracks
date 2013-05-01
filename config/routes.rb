@@ -10,7 +10,7 @@ Tracksapp::Application.routes.draw do
 
   match "tickler" => "todos#list_deferred"
   match 'review' => "projects#review"
-  match 'calendar' => "todos#calendar"
+  match 'calendar' => "calendar#show"
   match 'done' => "stats#done", :as => 'done_overview'
 
   match 'search' => 'search#index'
