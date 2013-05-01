@@ -815,14 +815,6 @@ class TodosController < ApplicationController
     end
   end
 
-  def to_xml_params
-    if params[:limit_fields] == 'index'
-      return [:only => [:id, :created_at, :updated_at, :completed_at] ]
-    else
-      return [:except => :user_id, :include => [:tags, :predecessors, :successors] ]
-    end
-  end
-
   def get_todo_from_params
     # TODO: this was a :append_before but was removed to tune performance per
     # method. Reconsider re-enabling it
