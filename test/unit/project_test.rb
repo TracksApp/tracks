@@ -167,14 +167,6 @@ class ProjectTest < ActiveSupport::TestCase
     assert_equal 3, @moremoney.todos.not_completed.count
   end
 
-  def test_convert_from_todo
-    todo = todos(:upgrade_rails)
-    project = Project.create_from_todo(todo)
-    assert_equal project.name, todo.description
-    assert_equal project.description, todo.notes
-    assert_equal project.default_context, todo.context
-  end
-
   def test_new_record_before_save
     assert !@timemachine.new_record_before_save?, "existing records should not be new_record"
     p = Project.where(:name => "I do not exist").first_or_create

@@ -776,7 +776,7 @@ class TodosController < ApplicationController
 
   def convert_to_project
     todo = current_user.todos.find(params[:id])
-    @project = Project.create_from_todo(todo)
+    @project = ProjectFromTodo.new(todo).create
 
     if @project.valid?
       redirect_to project_url(@project)
