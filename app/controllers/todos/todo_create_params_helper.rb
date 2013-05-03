@@ -4,12 +4,28 @@ module Todos
     attr_reader :new_project_created, :new_context_created
 
     def initialize(params, user)
-      @params = params['request'] || params
-      @attributes = params['request'] && params['request']['todo'] || params['todo']
-      @attributes = {} if @attributes.nil?  # make sure there is at least an empty hash
+      set_params(params)
+      filter_attributes
+      filter_tags
+      filter_starred
+
       @user = user
       @errors = []
 
+      @new_project_created = find_or_create_group(:project, user.projects, project_name)
+      @new_context_created = find_or_create_group(:context, user.contexts, context_name)
+    end
+
+    def set_params(params)
+      @params = params['request'] || params
+    end
+
+    def filter_attributes
+      @attributes = @params['request'] && @params['request']['todo'] || @params['todo']
+      @attributes = {} if @attributes.nil?  # make sure there is at least an empty hash
+		end
+
+		def filter_tags
       if @attributes[:tags]
         # for single tags, @attributed[:tags] returns a hash. For multiple tags,
         # it with return an array of hashes. Make sure it is always an array of hashes
@@ -18,11 +34,13 @@ module Todos
         @attributes[:add_tags] = @attributes[:tags]
         @attributes.delete :tags
       end
+		end
 
-      @new_project_created = find_or_create_group(:project, user.projects, project_name)
-      @new_context_created = find_or_create_group(:context, user.contexts, context_name)
-      @attributes["starred"] = (params[:new_todo_starred]||"").include? "true" if params[:new_todo_starred]
-    end
+		def filter_starred
+      if @params[:new_todo_starred]
+      	@attributes["starred"] = (@params[:new_todo_starred]||"").include? "true"
+      end
+		end
 
     def attributes
       @attributes

@@ -64,7 +64,7 @@
   }
 
   function html_for_new_context() {
-    return "<%= @saved && @new_context_created ? escape_javascript(render(:partial => @todo.context, :locals => { :settings => {:collapsible => true} })) : "" %>";
+    return "<%= @new_context_created ? escape_javascript(render(:partial => @todo.context, :locals => { :settings => {:collapsible => true} })) : "" %>";
   }
 
 <% end -%>

@@ -71,19 +71,20 @@ module TracksStepHelper
     project = @current_user.projects.where(:name => project_name).first
     project.should_not be_nil
     return project
-  end    
+  end
+
+  def container_list_find_index(container, object)
+    div_id = "#{container}_#{object.id}"
+    containers = page.all("div.#{container}").map { |x| x[:id] }
+    return containers.find_index(div_id)
+  end
 
   def context_list_find_index(context_name)
-    div_id = "context_#{find_context(context_name).id}"
-    contexts = page.all("div.context").map { |x| x[:id] }
-    return contexts.find_index(div_id)
+    return container_list_find_index(:context, find_context(context_name))
   end
 
   def project_list_find_index(project_name)
-    # TODO: refactor with context_list_find_index
-    div_id = "project_#{find_project(project_name).id}"
-    project = page.all("div.project").map { |x| x[:id] }
-    return project.find_index(div_id)
+    return container_list_find_index(:project, find_project(project_name))
   end
     
   def format_date(date)
@@ -100,7 +101,8 @@ module TracksStepHelper
     submenu_arrow = "div#line_todo_#{todo.id} img.todo-submenu"
     page.should have_css(submenu_arrow, :visible=>true)
     page.find(submenu_arrow, :match => :first).click
-
+    sleep 0.1
+    
     submenu_css = "div#line_todo_#{todo.id} ul#ultodo_#{todo.id}"
     submenu = page.find(submenu_css)
     wait_until { submenu.visible? }

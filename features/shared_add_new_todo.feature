@@ -296,7 +296,7 @@ Feature: Add new next action from every page
     | context   |
 
 
-  @javascript 
+  @javascript
   Scenario: I need to fill in at least one description and a context
     When I go to the home page
     And I follow "Add multiple next actions"

@@ -148,6 +148,7 @@ class ProjectTest < ActiveSupport::TestCase
     
     first_todo = @moremoney.todos[0]
     first_todo.show_from = Time.zone.now + 1.week
+    first_todo.save!
     assert_equal :deferred, @moremoney.todos[0].aasm_current_state
     
     assert_equal 1, @moremoney.todos.deferred.count
@@ -219,8 +220,8 @@ class ProjectTest < ActiveSupport::TestCase
 
     p.activate!
     p.todos.each{|t| t.complete!}
-    assert p.todos.active.empty?, "project should not have active todos"
-    assert p.todos.deferred_or_blocked.empty?, "there should not be deferred or blocked todos"
+    assert p.todos.reload.active.empty?, "project should not have active todos"
+    assert p.todos.reload.deferred_or_blocked.empty?, "there should not be deferred or blocked todos"
     assert p.reload.stalled?, "project should be stalled"
   end
   

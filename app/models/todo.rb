@@ -70,10 +70,10 @@ class Todo < ActiveRecord::Base
 
   aasm :column => :state do
 
-    state :active
+    state :active #, :enter => Proc.new{|t| puts "$$$ activating #{t.aasm_current_state} - #{t.show_from} "}
     state :project_hidden
-    state :completed, :enter => Proc.new { |t| t.completed_at = Time.zone.now }, :exit => Proc.new { |t| t.completed_at = nil}
-    state :deferred, :after_exit => Proc.new { |t| t[:show_from] = nil}
+    state :completed, :before_enter => Proc.new { |t| t.completed_at = Time.zone.now }, :before_exit => Proc.new { |t| t.completed_at = nil}
+    state :deferred,  :after_exit => Proc.new { |t| t[:show_from] = nil }
     state :pending
 
     event :defer do
@@ -253,16 +253,19 @@ class Todo < ActiveRecord::Base
   end
 
   def show_from=(date)
-    # parse Date objects into the proper timezone
-    date = user.at_midnight(date) if (date.is_a? Date)
+    if deferred? && date.blank?
+      activate
+    else
+      # parse Date objects into the proper timezone
+      date = user.at_midnight(date) if (date.is_a? Date)
 
-    # show_from needs to be set before state_change because of "bug" in aasm.
-    # If show_from is not set, the todo will not validate and thus aasm will not save
-    # (see http://stackoverflow.com/questions/682920/persisting-the-state-column-on-transition-using-rubyist-aasm-acts-as-state-machi)
-    self[:show_from] = date
+      # show_from needs to be set before state_change because of "bug" in aasm.
+      # If show_from is not set, the todo will not validate and thus aasm will not save
+      # (see http://stackoverflow.com/questions/682920/persisting-the-state-column-on-transition-using-rubyist-aasm-acts-as-state-machi)
+      self[:show_from] = date
 
-    activate! if deferred? && date.blank?
-    defer! if active? && !date.blank? && date > user.date
+      defer if active? && !date.blank? && date > user.date
+    end
   end
 
   def starred?

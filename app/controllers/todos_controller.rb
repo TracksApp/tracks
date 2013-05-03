@@ -184,7 +184,7 @@ class TodosController < ApplicationController
         @predecessor = todo
       end
     else
-      @todos = @todos_init
+      @todos = @build_todos
       @saved = false
     end
 
@@ -194,6 +194,8 @@ class TodosController < ApplicationController
         determine_down_count if @saved
         @contexts = current_user.contexts if p.new_context_created
         @projects = current_user.projects if p.new_project_created
+        @new_project_created = p.new_project_created
+        @new_context_created = p.new_context_created
         @initial_context_name = params['default_context_name']
         @initial_project_name = params['default_project_name']
         @initial_tags = params['initial_tag_list']

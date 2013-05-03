@@ -384,6 +384,28 @@ class TodosControllerTest < ActionController::TestCase
     assert_equal context.id, todo.reload.context.id, 'context of todo should be changed'
   end
 
+  def test_update_clearing_show_from_makes_todo_active
+    t = Todo.find(1)
+    t.show_from = "01/01/2030"
+    assert t.deferred?
+    login_as(:admin_user)
+    xhr :post, :update, :id => 1, :_source_view => 'todo', "todo"=>{"show_from"=>""}, "tag_list"=>""
+    t = Todo.find(1)
+    assert t.active?
+    assert_nil t.show_from
+  end
+
+  def test_update_setting_show_from_makes_todo_deferred
+    t = Todo.find(1)
+    assert t.active?
+    login_as(:admin_user)
+    xhr :post, :update, :id => 1, :_source_view => 'todo', "todo"=>{"show_from"=>"01/01/2030"}, "tag_list"=>""
+    t = Todo.find(1)
+    assert t.deferred?
+    assert_not_nil t.show_from
+  end
+
+
   #######
   # feeds
   #######
