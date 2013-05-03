@@ -367,6 +367,10 @@ class Todo < ActiveRecord::Base
     end
   end
 
+  def has_project?
+    return ! (project_id.nil? || project.is_a?(NullProject))
+  end
+
   # used by the REST API. <tags> will also work, this is renamed to add_tags in TodosController::TodoCreateParamsHelper::initialize
   def add_tags=(params)
     unless params[:tag].nil?

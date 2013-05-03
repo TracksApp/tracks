@@ -527,19 +527,15 @@ class RecurringTodo < ActiveRecord::Base
       end
     end
 
-    # check if there are any days left this week for the next todo
-    start.wday().upto 6 do |i|
-      return start + (i-start.wday()).days unless self.every_day[i,1] == ' '
-    end
+    day = find_first_day_in_this_week(start)
+    return day unless day == -1
 
     # we did not find anything this week, so check the nth next, starting from
     # sunday
     start = start + self.every_other1.week - (start.wday()).days
 
-    # check if there are any days left this week for the next todo
-    start.wday().upto 6 do |i|
-      return start + (i-start.wday()).days unless self.every_day[i,1] == ' '
-    end
+    start = find_first_day_in_this_week(start)
+    return start unless start == -1
 
     raise Exception.new, "unable to find next weekly date (#{self.every_day})"
   end
@@ -727,6 +723,14 @@ class RecurringTodo < ActiveRecord::Base
     end
 
     return start
+  end
+
+  def find_first_day_in_this_week(start)
+    # check if there are any days left this week for the next todo
+    start.wday().upto 6 do |i|
+      return start + (i-start.wday()).days unless self.every_day[i,1] == ' '
+    end
+    return -1
   end
 
 end

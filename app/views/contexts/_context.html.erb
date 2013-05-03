@@ -4,7 +4,6 @@
 # rendering of "due in x days" that change without touching updated at of the todo
 cache [context, @source_view, current_user.date.strftime("%Y%m%d"), @tag_name] do
 %>
-
   <%= 
     render :partial => 'todos/collection', 
       :object => @not_done, 
@@ -13,8 +12,8 @@ cache [context, @source_view, current_user.date.strftime("%Y%m%d"), @tag_name] d
         :collapsible => settings[:collapsible], 
         :container_name => 'context', 
         :title => show_context_name(context),
-        :show_empty_containers => settings[:show_empty_containers]
+        :show_empty_containers => settings[:show_empty_containers],
+        :parent_container_type => settings[:parent_container_type]
       }} 
   %>
-
 <% end %>

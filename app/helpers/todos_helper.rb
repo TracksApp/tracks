@@ -23,7 +23,11 @@ module TodosHelper
 
   def show_grouped_todos
     collection = (@group_view_by == 'context') ? @contexts_to_show : @projects_to_show
-    render(:partial => collection, :locals => { :settings => {:collapsible => true, :show_empty_containers => @show_empty_containers }})
+    render(:partial => collection, :locals => { :settings => {
+      :collapsible => true, 
+      :show_empty_containers => @show_empty_containers,
+      :parent_container_type => @group_view_by
+    }})
   end
 
   def default_collection_settings
@@ -295,20 +299,32 @@ module TodosHelper
   def project_and_context_links(todo, parent_container_type, opts = {})
     str = ''
     if todo.completed?
-      str += todo.context.name unless opts[:suppress_context]
-      should_suppress_project = opts[:suppress_project] || todo.project.nil?
-      str += ", " unless str.blank? || should_suppress_project
-      str += todo.project.name unless should_suppress_project
-      str = "(#{str})" unless str.blank?
+      links = []
+      links << todo.context.name unless opts[:suppress_context]
+      links << todo.project.name unless opts[:suppress_project] || todo.project.nil?
+      str = "(#{links.join(", ")})" unless links.empty?
     else
-      if (['project', 'tag', 'stats', 'search'].include?(parent_container_type))
-        str << item_link_to_context( todo )
-      end
-      if (['context', 'tickler', 'tag', 'stats', 'search'].include?(parent_container_type)) && !todo.project_id.nil? && !todo.project.is_a?(NullProject)
-        str << item_link_to_project( todo )
-      end
+      str << item_link_to_context( todo ) if include_context_link(todo, parent_container_type)
+      str << item_link_to_project( todo ) if include_project_link(todo, parent_container_type)
     end
     return str.html_safe
+  end
+
+  def include_context_link(todo, parent_container_type)
+    return true if (['stats', 'search'].include?(parent_container_type))
+    # TODO: remove next line if 'project' supports group_view_by
+    return true if parent_container_type == 'project'
+    return true if @group_view_by == 'project'
+    return false
+  end
+
+  def include_project_link(todo, parent_container_type)
+    return false unless todo.has_project?
+    return true if (['stats', 'search'].include?(parent_container_type))
+    # TODO: remove next line if 'context' supports group_view_by
+    return true if parent_container_type == 'context'
+    return true if @group_view_by == 'context'
+    return false
   end
 
   # Uses the 'staleness_starts' value from settings.yml (in days) to colour the

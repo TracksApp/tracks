@@ -10,14 +10,15 @@ cache [project, @source_view, current_user.date.strftime("%Y%m%d")] do
   <%= 
     title = source_view_is(:project) ? t('projects.actions_in_project_title') : show_project_name(project)
 
-    render :partial => 'todos/collection', 
+    render(:partial => 'todos/collection', 
       :object => @not_done, 
       :locals => { :settings => {
         :id => "p#{project.id}", 
         :collapsible => settings[:collapsible], 
         :title => title, 
         :container_name => 'project',
-        :show_empty_containers => settings[:show_empty_containers]
-      }} 
+        :show_empty_containers => settings[:show_empty_containers],
+        :parent_container_type => settings[:parent_container_type]
+      }})
   %>
 <% end -%>
