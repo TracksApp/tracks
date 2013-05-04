@@ -264,7 +264,7 @@ class Todo < ActiveRecord::Base
       # (see http://stackoverflow.com/questions/682920/persisting-the-state-column-on-transition-using-rubyist-aasm-acts-as-state-machi)
       self[:show_from] = date
 
-      defer if active? && !date.blank? && date > user.date
+      defer if active? && !date.blank? && show_from > user.date
     end
   end
 
