@@ -90,8 +90,8 @@ Then(/^I should (not see|see) "([^"]*)" in the (completed|done today|done this w
   id = 'completed_rest_of_week_container'   if container == 'done this week'
   id = 'completed_rest_of_month_container'  if container == 'done this month'
 
-  xpath = "//div[@id='#{id}']//div[@id='line_todo_#{find_todo(todo_description).id}']"
-  check_xpath_visibility(visible, xpath)
+  css = "div##{id} div#line_todo_#{find_todo(todo_description).id}"
+  check_css_visibility(visible, css)
 end
 
 ####### Hidden #######

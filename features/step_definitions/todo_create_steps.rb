@@ -200,6 +200,7 @@ Given /^I have a project "([^"]*)" that has the following (todos|deferred todos)
     new_todo.show_from = Time.zone.now+1.week if kind_of_todo=="deferred todos"
     new_todo.tag_with(todo[:tags]) unless todo[:tags].nil?
     new_todo.complete! if !todo[:completed].nil? && todo[:completed] == 'yes' 
+    new_todo.save!
   end
 end
 
