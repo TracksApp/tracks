@@ -173,6 +173,21 @@ class TodoTest < ActiveSupport::TestCase
     assert t.show_from.nil?
   end
 
+  def test_clearing_show_from_activates_todo
+    t = @not_completed1
+    t.show_from = 1.week.from_now
+    t.save!
+    t.reload
+
+    assert t.deferred?
+
+    t.show_from = nil
+    t.save!
+    t.reload
+
+    assert t.active?
+  end
+
   def test_project_returns_null_object_when_nil
     t = @not_completed1
     assert !t.project.is_a?(NullProject)
@@ -269,6 +284,22 @@ class TodoTest < ActiveSupport::TestCase
     @predecessor_array = todo.add_predecessor_list(multi)
     assert_not_nil @predecessor_array
     assert_equal 2, @predecessor_array.size
+  end
+
+  def test_add_and_remove_precesessor
+    @not_completed1.add_predecessor(@not_completed2)
+    @not_completed1.save_predecessors
+    # blocking is not done automagically
+    @not_completed1.block! 
+
+    assert @not_completed1.uncompleted_predecessors?
+    assert @not_completed1.pending?, "a todo with predecessors should be pending"
+
+    @not_completed1.remove_predecessor(@not_completed2)
+    @not_completed1.save_predecessors
+
+    assert !@not_completed1.uncompleted_predecessors?
+    assert @not_completed1.active?, "removing last predecessor should activate todo"
   end
 
   def test_finding_todos_with_a_tag
@@ -424,6 +455,17 @@ class TodoTest < ActiveSupport::TestCase
     
     assert_equal "*test*", todo.notes
     assert_equal "<p><strong>test</strong></p>", todo.rendered_notes
+  end
+
+  def test_from_rich_message_adds_to_default_context
+    user = @completed.user
+    default_context_id = @completed.context_id
+    new_todo = Todo::from_rich_message(user, default_context_id, "new todo", "notes")
+
+    assert_not_nil new_todo
+    assert_equal "new todo", new_todo.description
+    assert_equal "notes", new_todo.notes
+    assert_equal default_context_id, new_todo.context_id
   end
   
 end

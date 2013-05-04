@@ -20,4 +20,12 @@ class TagCloudTest < Test::Unit::TestCase
     assert_equal 9, cloud.relative_size(FakeTag.new("whatever", 100))
   end
 
+  def test_empty_tags
+    cloud = Stats::TagCloud.new([])
+    assert cloud.empty?
+
+    cloud = Stats::TagCloud.new([FakeTag.new("Tag", 1)])
+    assert !cloud.empty?
+  end
+
 end

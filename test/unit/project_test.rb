@@ -127,6 +127,7 @@ class ProjectTest < ActiveSupport::TestCase
     assert !p.hidden?
     assert p.nil?
     assert_nil p.id
+    assert_equal "", p.name
   end
   
   def test_name_removes_extra_spaces
@@ -224,5 +225,17 @@ class ProjectTest < ActiveSupport::TestCase
     assert p.todos.reload.deferred_or_blocked.empty?, "there should not be deferred or blocked todos"
     assert p.reload.stalled?, "project should be stalled"
   end
+
+  def test_age_in_days
+    p1 = users(:admin_user).projects.create!(:name => "test1")
+    assert_equal 1, p1.age_in_days, "newly created project has age or one day"
+
+    p2 = users(:admin_user).projects.create!(:name => "test7")
+    p2.created_at = 1.week.ago
+    p2.save!
   
+    p2.reload
+    assert_equal 8, p2.age_in_days
+  end
+
 end

@@ -6,7 +6,9 @@ class RecurringTodoTest < ActiveSupport::TestCase
     @every_day = recurring_todos(:call_bill_gates_every_day)
     @every_workday = recurring_todos(:call_bill_gates_every_workday)
     @weekly_every_day = recurring_todos(:call_bill_gates_every_week)
+    @every_week = @weekly_every_day
     @monthly_every_last_friday = recurring_todos(:check_with_bill_every_last_friday_of_month)
+    @every_month = @monthly_every_last_friday
     @yearly = recurring_todos(:birthday_reinier)
 
     @today = Time.now.utc
@@ -318,5 +320,37 @@ class RecurringTodoTest < ActiveSupport::TestCase
     assert_equal true, @every_day.continues_recurring?(@in_three_days)
     assert_equal 0, @every_day.occurences_count
   end
+
+  def test_invalid_recurring_period_will_not_save
+    @every_day.recurring_period = 'invalid'
+    assert !@every_day.valid?
+
+    @every_month.recurrence_selector = 99
+    assert_raise(Exception){ @every_month.valid? }
+
+    @yearly.recurrence_selector = 99
+    assert_raise(Exception){ @yearly.valid? }
+  end
+
+  def test_every_n_the_day_must_be_filled
+    @every_day.every_other1 = nil
+    assert !@every_day.valid?
+  end
+
+  def test_every_n_week_must_be_filled
+    @every_week.every_other1 = nil
+    assert !@every_week.valid?
+  end
+
+  def test_every_n_month_must_be_filled
+    @every_month.every_other1 = nil
+    @every_month.every_other2 = nil
+    assert !@every_month.valid?
+
+    @every_month.recurrence_selector = 0
+    assert !@every_month.valid?
+  end
+
+
 
 end
