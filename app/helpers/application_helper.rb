@@ -241,7 +241,7 @@ module ApplicationHelper
   def done_path(controller_name, type)
     case controller_name
     when "contexts"
-      send("#{type}_context_path",@context)
+      send("#{type}_todos_context_path",@context)
     when "projects"
       send("#{type}_todos_project_path", @project)
     when "todos"
