@@ -30,27 +30,6 @@ module ProjectsHelper
     next_project = content_tag(:li, link_to_project_mobile(@next_project, "6", @next_project.shortened_name), :class=>"next") if @next_project
     return content_tag(:ul, "#{prev_project}#{next_project}".html_safe, :class=>"next-prev-project")
   end
-
-  def link_to_delete_project(project, descriptor = sanitize(project.name))
-    link_to(
-      descriptor,
-      project_path(project, :format => 'js'),
-      {
-        :id => "delete_project_#{project.id}",
-        :class => "delete_project_button icon",
-        :x_confirm_message => t('projects.delete_project_confirmation', :name => project.name),
-        :title => t('projects.delete_project_title')
-      }
-    )
-  end
-
-  def link_to_edit_project (project, descriptor = sanitize(project.name))
-    link_to(descriptor, edit_project_path(project),
-      {
-        :id => "link_edit_#{dom_id(project)}",
-        :class => "project_edit_settings icon"
-      })
-  end
   
   def project_summary(project)
     project_description = ''
@@ -63,6 +42,14 @@ module ProjectsHelper
   def needsreview_class(item)
     raise "item must be a Project " unless item.kind_of? Project
     return item.needs_review?(current_user) ? "needsreview" : "needsnoreview"
+  end
+
+  def link_to_delete_project(project, descriptor = sanitize(project.name))
+    link_to_delete(:project, project, descriptor)
+  end
+
+  def link_to_edit_project (project, descriptor = sanitize(project.name))
+    link_to_edit(:project, project, descriptor)
   end
 
 end
