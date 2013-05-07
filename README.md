@@ -17,7 +17,7 @@ of the License, or (at your option) any later version.
 * Mailing list: http://groups.google.com/group/TracksApp
 * Original developer: bsag (http://www.rousette.org.uk/)
 * Contributors: https://github.com/TracksApp/tracks/wiki/Contributors
-* Version: 2.2
+* Version: 2.2.2
 
 More documentation for Tracks can be found within the /doc directory. 
 

@@ -1,16 +1,17 @@
 h1.  Upgrading Tracks
 
-h2. Upgrading from Tracks 2.2 to 2.2.1
+h2. Upgrading from Tracks 2.2 to 2.2.1 and to 2.2.2
 
-This release contains two bugfixes, one of which allows you to run Tracks on ruby 1.8.7. For details about the contents of the release, please see the "difference view":https://github.com/TracksApp/tracks/compare/v2.2...v2.2.1 on GitHub.
+2.2.1 and 2.2.2 contain bug- and security fixes. For details about the contents of the release, please see the "difference view":https://github.com/TracksApp/tracks/compare/v2.2...v2.2.2 on GitHub.
 
 To upgrade:
 # Back up your existing database and installation of Tracks
-# Install Tracks 2.2.1 in a new directory
-# Copy over the configuration from your previous Tracks installation. If using SQLite3, copy the old database into the new Tracks 2.2.1 directory.
+# Install Tracks 2.2.2 in a new directory
+# Copy over the configuration from your previous Tracks installation. If using SQLite3, copy the old database into the new Tracks 2.2.2 directory.
+# Update @site.yml@ in the @/config@ directory and set the @secret_token@ to a large random string. See also the comment in @site.yml.tmpl@.
 # Check that you have all dependencies installed: @bundle install --without development test@
 # Precompile your static assets (css, javascript, etc.) by running @bundle exec rake assets:precompile@.
-# Run @bundle exec rails server -e production@ inside your Tracks 2.2 directory to start up Tracks 2.2.
+# Run @bundle exec rails server -e production@ inside your Tracks 2.2.2 directory to start up Tracks 2.2.2
 # Once you are happy that everything is working well, delete your old Tracks directory.
 
 h2. Upgrading from Tracks 2.1.x or 2.2RC to 2.2
