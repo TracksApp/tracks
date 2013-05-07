@@ -8,12 +8,9 @@ authentication_schemes:
   - "database"
 
 
-#set the prefered authentication scheme to display first on the login page
-#prefered_auth: database
-
-
-# You''ll probably want to change this to the time zone of the computer where Tracks is running
-# run rake time:zones:local have Rails suggest time zone names on your system
+# You'll probably want to change this to the time zone of the computer where 
+# Tracks is running. Run rake time:zones:local have Rails suggest time zone 
+# names on your system
 time_zone: "UTC"
 
 
@@ -21,19 +18,33 @@ time_zone: "UTC"
 secure_cookies: false
 
 
-# Uncomment if you want to dispatch todos that come from email based on the To: address
-# rather than the From: address.
+# Your secret key for verifying the integrity of signed cookies.
+# If you change this key, all old signed cookies will become invalid!
+# Make sure the secret is at least 30 characters and all random,
+# no regular words or you'll be exposed to dictionary attacks.
+#
+# if you want a nice random key, run this in rails console and copy-and-paste
+# the result:
+#
+#   SecureRandom.hex(64)
+#
+secret_token: "change-me"
+
+
+# Uncomment if you want to dispatch todos that come from email based on the To: 
+# address rather than the From: address.
 # email_dispatch: 'to'
 
-# If you want to send all email to a specific user, uncomment the following line and
-# set the environment variable TRACKS_MAIL_RECEIVER to the login name of the user that
-# will receive all email
+
+# If you want to send all email to a specific user, uncomment the following line 
+# and set the environment variable TRACKS_MAIL_RECEIVER to the login name of the 
+# user that will receive all email
 # email_dispatch: 'single_user'
 
 
-# Set this to the subdirectory you're hosting tracks in and uncomment if applicable
-# NOTE: you will also need to set up your web server to deal with the relative
-# URL. Mongrel, for example, has a --prefix option.
+# Set this to the subdirectory you're hosting tracks in and uncomment if 
+# applicable. NOTE: you will also need to set up your web server to deal with 
+# the relative URL. Mongrel, for example, has a --prefix option.
 # subdir: "/tracks"
 
 
@@ -41,10 +52,12 @@ secure_cookies: false
 open_signups: false
 
 
-# When integrating your tracks instance with http://cloudmailin.com/ by using the /integrations/cloudmailin URL,
-# this value is the cloudmailin-secret for verifying the authenticity of the request.
+# When integrating your tracks instance with http://cloudmailin.com/ by using 
+# the /integrations/cloudmailin URL, this value is the cloudmailin-secret for 
+# verifying the authenticity of the request.
 # (see http://docs.cloudmailin.com/validating_the_sender)
 # cloudmailin: asdasd
+
 
 # change this to reflect the email address of the admin that you want to show 
 # on the signup page
