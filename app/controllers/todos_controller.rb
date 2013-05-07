@@ -113,7 +113,7 @@ class TodosController < ApplicationController
         format.m do
           @return_path=cookies[:mobile_url] ? cookies[:mobile_url] : mobile_path
           if @saved
-            redirect_to @return_path
+            onsite_redirect_to @return_path
           else
             @projects = current_user.projects
             @contexts = current_user.contexts
@@ -345,10 +345,10 @@ class TodosController < ApplicationController
             old_path = cookies[:mobile_url]
             cookies[:mobile_url] = {:value => nil, :secure => SITE_CONFIG['secure_cookies']}
             notify(:notice, t("todos.action_marked_complete", :description => @todo.description, :completed => @todo.completed? ? 'complete' : 'incomplete'))
-           redirect_to old_path
+            onsite_redirect_to old_path
           else
             notify(:notice, t("todos.action_marked_complete", :description => @todo.description, :completed => @todo.completed? ? 'complete' : 'incomplete'))
-            redirect_to todos_path(:format => 'm')
+            onsite_redirect_to todos_path(:format => 'm')
           end
         else
           render :action => "edit", :format => :m
@@ -370,10 +370,10 @@ class TodosController < ApplicationController
           old_path = cookies[:mobile_url]
           cookies[:mobile_url] = {:value => nil, :secure => SITE_CONFIG['secure_cookies']}
           notify(:notice, "Star toggled")
-          redirect_to old_path
+          onsite_redirect_to old_path
         else
           notify(:notice, "Star toggled")
-          redirect_to todos_path(:format => 'm')
+          onsite_redirect_to todos_path(:format => 'm')
         end
       }
     end
@@ -784,7 +784,7 @@ class TodosController < ApplicationController
       redirect_to project_url(@project)
     else
       flash[:error] = "Could not create project from todo: #{@project.errors.full_messages[0]}"
-      redirect_to request.env["HTTP_REFERER"] || root_url
+      onsite_redirect_to request.env["HTTP_REFERER"] || root_url
     end
   end
 
@@ -811,9 +811,9 @@ class TodosController < ApplicationController
     if cookies[:mobile_url]
       old_path = cookies[:mobile_url]
       cookies[:mobile_url] = {:value => nil, :secure => SITE_CONFIG['secure_cookies']}
-      redirect_to old_path
+      onsite_redirect_to old_path
     else
-      redirect_to todos_path(:format => 'm')
+      onsite_redirect_to todos_path(:format => 'm')
     end
   end
 
@@ -1305,5 +1305,15 @@ class TodosController < ApplicationController
 
     return not_done_todos
   end
+
+  def onsite_redirect_to(destination)
+    uri = URI.parse(destination)
+
+    if uri.query.present?
+      redirect_to("#{uri.path}?#{uri.query}")
+    else
+      redirect_to(uri.path)
+    end
+  end 
 
 end
