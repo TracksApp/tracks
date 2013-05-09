@@ -21,6 +21,14 @@ New and changed features
 * You can now change the state of a context to closed
 * Czech locale has been renamed from cz to cs to follow ISO standards
 
+== Version 2.2.2
+
+* Security fixes
+
+== Version 2.2.1
+
+* Bugfixes (including one that prevented Tracks to work on ruby 1.8.7)
+
 == Version 2.2
 
 The main change to this release of Tracks is the migration to Rails 3.2. We had 
