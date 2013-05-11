@@ -3,57 +3,57 @@ Tracksapp::Application.routes.draw do
 
   root :to => 'todos#index'
 
-  match 'login' => 'login#login'
-  match 'login/expire_session' => 'login#expire_session'
-  match 'login/check_expiry' => 'login#check_expiry'
-  match 'logout' => 'login#logout'
+  post 'login' => 'login#login'
+  get 'login/expire_session' => 'login#expire_session'
+  get 'login/check_expiry' => 'login#check_expiry'
+  get 'logout' => 'login#logout'
 
-  match "tickler" => "todos#list_deferred"
-  match 'review' => "projects#review"
-  match 'calendar' => "calendar#show"
-  match 'done' => "stats#done", :as => 'done_overview'
+  get "tickler" => "todos#list_deferred"
+  get 'review' => "projects#review"
+  get 'calendar' => "calendar#show"
+  get 'done' => "stats#done", :as => 'done_overview'
 
-  match 'search' => 'search#index'
-  match 'search/results' => 'search#results', :via => 'post'
+  get 'search' => 'search#index'
+  get 'search/results' => 'search#results', :via => 'post'
 
-  match 'data' => "data#index"
-  match 'data/csv_notes' => 'data#csv_notes'
-  match 'data/yaml_export' => 'data#yaml_export'
-  match 'data/xml_export' => 'data#xml_export'
-  match 'data/csv_actions' => 'data#csv_actions'
+  get 'data' => "data#index"
+  get 'data/csv_notes' => 'data#csv_notes'
+  get 'data/yaml_export' => 'data#yaml_export'
+  get 'data/xml_export' => 'data#xml_export'
+  get 'data/csv_actions' => 'data#csv_actions'
 
-  match 'integrations' => "integrations#index"
-  match 'integrations/rest_api' => "integrations#rest_api", :as => 'rest_api_docs'
-  match 'integrations/cloudmailin' => 'integrations#cloudmailin'
-  match 'integrations/search_plugin' => "integrations#search_plugin", :as => 'search_plugin'
-  match 'integrations/google_gadget.xml' => 'integrations#google_gadget', :as => 'google_gadget'
-  match 'integrations/get_applescript1.js' => 'integrations#get_applescript1'
-  match 'integrations/get_applescript2.js' => 'integrations#get_applescript2'
-  match 'integrations/get_quicksilver_applescript.js' => 'integrations#get_quicksilver_applescript'
+  get 'integrations' => "integrations#index"
+  get 'integrations/rest_api' => "integrations#rest_api", :as => 'rest_api_docs'
+  get 'integrations/cloudmailin' => 'integrations#cloudmailin'
+  get 'integrations/search_plugin' => "integrations#search_plugin", :as => 'search_plugin'
+  get 'integrations/google_gadget.xml' => 'integrations#google_gadget', :as => 'google_gadget'
+  get 'integrations/get_applescript1.js' => 'integrations#get_applescript1'
+  get 'integrations/get_applescript2.js' => 'integrations#get_applescript2'
+  get 'integrations/get_quicksilver_applescript.js' => 'integrations#get_quicksilver_applescript'
 
-  match 'preferences' => "preferences#index"
-  match 'preferences/render_date_format' => "preferences#render_date_format"
+  get 'preferences' => "preferences#index"
+  get 'preferences/render_date_format' => "preferences#render_date_format"
 
-  match 'feeds' => "feedlist#index", :as => 'feeds'
-  match 'feedlist/get_feeds_for_context' => 'feedlist#get_feeds_for_context'
-  match 'feedlist/get_feeds_for_project' => 'feedlist#get_feeds_for_project'
+  get 'feeds' => "feedlist#index", :as => 'feeds'
+  get 'feedlist/get_feeds_for_context' => 'feedlist#get_feeds_for_context'
+  get 'feedlist/get_feeds_for_project' => 'feedlist#get_feeds_for_project'
 
-  match 'stats' => 'stats#index'
-  match 'stats/actions_done_last12months_data' => 'stats#actions_done_last12months_data'
-  match 'stats/actions_done_last_years' => 'stats#actions_done_last_years'
-  match 'stats/actions_done_lastyears_data' => 'stats#actions_done_lastyears_data'
-  match 'stats/actions_done_last30days_data' => 'stats#actions_done_last30days_data'
-  match 'stats/actions_completion_time_data' => 'stats#actions_completion_time_data'
-  match 'stats/actions_running_time_data' => 'stats#actions_running_time_data'
-  match 'stats/actions_visible_running_time_data' => 'stats#actions_visible_running_time_data'
-  match 'stats/actions_open_per_week_data' => 'stats#actions_open_per_week_data'
-  match 'stats/context_total_actions_data' => 'stats#context_total_actions_data'
-  match 'stats/context_running_actions_data' => 'stats#context_running_actions_data'
-  match 'stats/actions_day_of_week_all_data' => 'stats#actions_day_of_week_all_data'
-  match 'stats/actions_day_of_week_30days_data' => 'stats#actions_day_of_week_30days_data'
-  match 'stats/actions_time_of_day_all_data' => 'stats#actions_time_of_day_all_data'
-  match 'stats/actions_time_of_day_30days_data' => 'stats#actions_time_of_day_30days_data'
-  match 'stats/show_selected_actions_from_chart/:id' => 'stats#show_selected_actions_from_chart', :as => 'show_actions_from_chart'
+  get 'stats' => 'stats#index'
+  get 'stats/actions_done_last12months_data' => 'stats#actions_done_last12months_data'
+  get 'stats/actions_done_last_years' => 'stats#actions_done_last_years'
+  get 'stats/actions_done_lastyears_data' => 'stats#actions_done_lastyears_data'
+  get 'stats/actions_done_last30days_data' => 'stats#actions_done_last30days_data'
+  get 'stats/actions_completion_time_data' => 'stats#actions_completion_time_data'
+  get 'stats/actions_running_time_data' => 'stats#actions_running_time_data'
+  get 'stats/actions_visible_running_time_data' => 'stats#actions_visible_running_time_data'
+  get 'stats/actions_open_per_week_data' => 'stats#actions_open_per_week_data'
+  get 'stats/context_total_actions_data' => 'stats#context_total_actions_data'
+  get 'stats/context_running_actions_data' => 'stats#context_running_actions_data'
+  get 'stats/actions_day_of_week_all_data' => 'stats#actions_day_of_week_all_data'
+  get 'stats/actions_day_of_week_30days_data' => 'stats#actions_day_of_week_30days_data'
+  get 'stats/actions_time_of_day_all_data' => 'stats#actions_time_of_day_all_data'
+  get 'stats/actions_time_of_day_30days_data' => 'stats#actions_time_of_day_30days_data'
+  get 'stats/show_selected_actions_from_chart/:id' => 'stats#show_selected_actions_from_chart', :as => 'show_actions_from_chart'
 
   resources :contexts do
     member do
@@ -101,14 +101,14 @@ Tracksapp::Application.routes.draw do
       post 'add_predecessor'
     end
   end
-  match 'todos/tag/:name' => 'todos#tag', :as => :tag
-  match 'tags.autocomplete' => "todos#tags", :format => 'autocomplete'
+  get 'todos/tag/:name' => 'todos#tag', :as => :tag
+  get 'tags.autocomplete' => "todos#tags", :format => 'autocomplete'
 
-  match 'todos/done/tag/:name' => "todos#done_tag", :as => :done_tag
-  match 'todos/all_done/tag/:name' => "todos#all_done_tag", :as => :all_done_tag
-  match 'auto_complete_for_predecessor' => 'todos#auto_complete_for_predecessor'
-  match 'mobile' => 'todos#index', :format => 'm'
-  match 'm' => 'todos#index', :format => 'm'
+  get 'todos/done/tag/:name' => "todos#done_tag", :as => :done_tag
+  get 'todos/all_done/tag/:name' => "todos#all_done_tag", :as => :all_done_tag
+  get 'auto_complete_for_predecessor' => 'todos#auto_complete_for_predecessor'
+  get 'mobile' => 'todos#index', :format => 'm'
+  get 'm' => 'todos#index', :format => 'm'
 
   resources :recurring_todos do
     member do
@@ -130,7 +130,7 @@ Tracksapp::Application.routes.draw do
       post 'refresh_token'
     end
   end
-  match 'signup' => "users#new"
+  get 'signup' => "users#new"
 
   resources :notes
   resources :preferences

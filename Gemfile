@@ -1,6 +1,19 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~>3.2'
+gem 'rails', '4.0.0.rc1'
+gem 'sass-rails', '4.0.0.rc1'
+gem 'coffee-rails', '~>4.0'
+
+# add these gems to help with the transition:
+gem 'protected_attributes'
+gem 'rails-observers'
+
+# See https://github.com/sstephenson/execjs#readme for more supported runtimes
+gem 'therubyracer'
+
+gem 'uglifier', '>=1.3.0'
+
+gem 'jquery-rails'
 
 # you may comment out the database driver you will not be using.
 # This will prevent a native build of the driver. Building native drivers is not 
@@ -19,22 +32,14 @@ gem "rails_autolink"
 gem "cache_digests"
 gem "rack-mini-profiler"
 
-# Gems used only for assets and not required
-# in production environments by default.
-group :assets do
-  gem 'sass-rails'
-  gem 'coffee-rails'
-
-  # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-  gem 'therubyracer'
-
-  gem 'uglifier'
-end
-
-gem 'jquery-rails'
-
 # To use ActiveModel has_secure_password
 gem 'bcrypt-ruby'
+
+# Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
+# gem 'turbolinks'
+
+# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
+# gem 'jbuilder', '~> 1.0.1'
 
 group :development do
   gem "yard"
