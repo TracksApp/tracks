@@ -154,24 +154,11 @@ class ContextsController < ApplicationController
   end
 
   def done_todos
-    @source_view = 'context'
-    @context = current_user.contexts.find(params[:id])
-    @page_title = t('contexts.completed_tasks_title', :context_name => @context.name)
-
-    @done_today, @done_rest_of_week, @done_rest_of_month = DoneTodos.done_todos_for_container(@context)
-    @count = @done_today.size + @done_rest_of_week.size + @done_rest_of_month.size
-
-    render :template => 'todos/done'
+    done_todos_for current_user.contexts.find(params[:id])
   end
 
   def all_done_todos
-    @source_view = 'context'
-    @context = current_user.contexts.find(params[:id])
-    @page_title = t('contexts.all_completed_tasks_title', :context_name => @context.name)
-
-    @done = @context.todos.completed.paginate :page => params[:page], :per_page => 20, :order => 'completed_at DESC', :include => Todo::DEFAULT_INCLUDES
-    @count = @done.size
-    render :template => 'todos/all_done'
+    all_done_todos_for current_user.contexts.find(params[:id])
   end
 
   protected
