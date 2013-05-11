@@ -26,17 +26,18 @@ class FeedlistController < ApplicationController
   end
   
   def get_feeds_for_context
-    @context = current_user.contexts.find params[:context_id]
-    respond_to do |format|
-      format.html { render :file => 'feedlist/get_feeds_for_context'}
-      format.js
-    end
+    get_feeds_for(@context = current_user.contexts.find(params[:context_id]))
   end
 
   def get_feeds_for_project
-    @project = current_user.projects.find params[:project_id]
+    get_feeds_for(@project = current_user.projects.find(params[:project_id]))
+  end
+
+  private
+
+  def get_feeds_for(object)
     respond_to do |format|
-      format.html { render :file => "feedlist/get_feeds_for_project"}
+      format.html { render :file => "feedlist/get_feeds_for_#{object.class.name.downcase}"}
       format.js
     end
   end
