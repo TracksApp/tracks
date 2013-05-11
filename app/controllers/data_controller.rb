@@ -18,9 +18,9 @@ class DataController < ApplicationController
   def yaml_export
     all_tables = {}
     
-    all_tables['todos'] = current_user.todos.includes(:tags).all
-    all_tables['contexts'] = current_user.contexts.all
-    all_tables['projects'] = current_user.projects.all
+    all_tables['todos'] = current_user.todos.includes(:tags)
+    all_tables['contexts'] = current_user.contexts
+    all_tables['projects'] = current_user.projects
 
     todo_tag_ids = Tag.find_by_sql([
         "SELECT DISTINCT tags.id "+
@@ -37,10 +37,10 @@ class DataController < ApplicationController
     tags = Tag.where("id IN (?) OR id IN (?)", todo_tag_ids, rec_todo_tag_ids)
     taggings = Tagging.where("tag_id IN (?) OR tag_id IN(?)", todo_tag_ids, rec_todo_tag_ids)
 
-    all_tables['tags'] = tags.all
-    all_tables['taggings'] = taggings.all
-    all_tables['notes'] = current_user.notes.all
-    all_tables['recurring_todos'] = current_user.recurring_todos.all
+    all_tables['tags'] = tags
+    all_tables['taggings'] = taggings
+    all_tables['notes'] = current_user.notes
+    all_tables['recurring_todos'] = current_user.recurring_todos
     
     result = all_tables.to_yaml
     result.gsub!(/\n/, "\r\n")   # TODO: general functionality for line endings

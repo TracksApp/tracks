@@ -17,41 +17,37 @@ class Todo < ActiveRecord::Base
   has_many :successor_dependencies,   :foreign_key => 'successor_id',   :class_name => 'Dependency', :dependent => :destroy
   has_many :predecessors, :through => :successor_dependencies
   has_many :successors,   :through => :predecessor_dependencies
-  has_many :uncompleted_predecessors, :through => :successor_dependencies,
-    :source => :predecessor, :conditions => ['NOT (todos.state = ?)', 'completed']
-  has_many :pending_successors, :through => :predecessor_dependencies,
-    :source => :successor, :conditions => ['todos.state = ?', 'pending']
+  has_many :uncompleted_predecessors, -> {where('NOT (todos.state = ?)', 'completed')}, :through => :successor_dependencies,
+    :source => :predecessor
+  has_many :pending_successors, -> {where('todos.state = ?', 'pending')}, :through => :predecessor_dependencies,
+    :source => :successor
 
   # scopes for states of this todo
-  scope :active, :conditions => { :state => 'active' }
-  scope :active_or_hidden, :conditions => ["todos.state = ? OR todos.state = ?", 'active', 'project_hidden']
-  scope :not_completed, :conditions =>  ['NOT (todos.state = ?)', 'completed']
-  scope :completed, :conditions =>  ["todos.state = ?", 'completed']
-  scope :deferred, :conditions => ["todos.state = ?", 'deferred']
-  scope :blocked, :conditions => ['todos.state = ?', 'pending']
-  scope :pending, :conditions => ['todos.state = ?', 'pending']
-  scope :deferred_or_blocked, :conditions => ["(todos.state = ?) OR (todos.state = ?)", "deferred", "pending"]
-  scope :not_deferred_or_blocked, :conditions => ["(NOT todos.state=?) AND (NOT todos.state = ?)", "deferred", "pending"]
-  scope :hidden,
-    :joins => "INNER JOIN contexts c_hidden ON c_hidden.id = todos.context_id",
-    :conditions => ["todos.state = ? OR (c_hidden.state = ? AND (todos.state = ? OR todos.state = ? OR todos.state = ?))",
-    'project_hidden', 'hidden', 'active', 'deferred', 'pending']
-  scope :not_hidden,
-    :joins => "INNER JOIN contexts c_hidden ON c_hidden.id = todos.context_id",
-    :conditions => ['NOT(todos.state = ? OR (c_hidden.state = ? AND (todos.state = ? OR todos.state = ? OR todos.state = ?)))',
-    'project_hidden', 'hidden', 'active', 'deferred', 'pending']
+  scope :active, -> { where state: 'active' }
+  scope :active_or_hidden, -> { where "todos.state = ? OR todos.state = ?", 'active', 'project_hidden' }
+  scope :not_completed, -> { where 'NOT (todos.state = ?)', 'completed' }
+  scope :completed, -> { where "todos.state = ?", 'completed' }
+  scope :deferred, -> { where "todos.state = ?", 'deferred' }
+  scope :blocked, -> {where 'todos.state = ?', 'pending' }
+  scope :pending, -> {where 'todos.state = ?', 'pending' }
+  scope :deferred_or_blocked, -> { where "(todos.state = ?) OR (todos.state = ?)", "deferred", "pending" }
+  scope :not_deferred_or_blocked, -> { where "(NOT todos.state=?) AND (NOT todos.state = ?)", "deferred", "pending" }
+  scope :hidden, -> {
+    joins("INNER JOIN contexts c_hidden ON c_hidden.id = todos.context_id").
+    where("todos.state = ? OR (c_hidden.state = ? AND (todos.state = ? OR todos.state = ? OR todos.state = ?))", 'project_hidden', 'hidden', 'active', 'deferred', 'pending') }
+  scope :not_hidden, -> {
+    joins("INNER JOIN contexts c_hidden ON c_hidden.id = todos.context_id").
+    where('NOT(todos.state = ? OR (c_hidden.state = ? AND (todos.state = ? OR todos.state = ? OR todos.state = ?)))','project_hidden', 'hidden', 'active', 'deferred', 'pending') }
 
   # other scopes
-  scope :are_due, :conditions => ['NOT (todos.due IS NULL)']
-  scope :with_tag, lambda { |tag_id| joins("INNER JOIN taggings ON todos.id = taggings.taggable_id").where("taggings.tag_id = ? ", tag_id) }
-  scope :with_tags, lambda { |tag_ids| where("EXISTS(SELECT * from taggings t WHERE t.tag_id IN (?) AND t.taggable_id=todos.id AND t.taggable_type='Todo')", tag_ids) }
-  # scope :of_user, lambda { |user_id| {:conditions => ["todos.user_id = ? ", user_id] } }
-  scope :completed_after, lambda { |date| where("todos.completed_at > ?", date) }
-  scope :completed_before, lambda { |date| where("todos.completed_at < ?", date) }
-  scope :created_after, lambda { |date| where("todos.created_at > ?", date) }
-  scope :created_before, lambda { |date| where("todos.created_at < ?", date) }
-
-  scope :due_today, lambda { where("todos.due <= ?", Time.zone.now) }
+  scope :are_due,           -> { where 'NOT (todos.due IS NULL)' }
+  scope :due_today,         -> { where("todos.due <= ?", Time.zone.now) }
+  scope :with_tag,          lambda { |tag_id| joins("INNER JOIN taggings ON todos.id = taggings.taggable_id").where("taggings.tag_id = ? ", tag_id) }
+  scope :with_tags,         lambda { |tag_ids| where("EXISTS(SELECT * from taggings t WHERE t.tag_id IN (?) AND t.taggable_id=todos.id AND t.taggable_type='Todo')", tag_ids) }
+  scope :completed_after,   lambda { |date| where("todos.completed_at > ?", date) }
+  scope :completed_before,  lambda { |date| where("todos.completed_at < ?", date) }
+  scope :created_after,     lambda { |date| where("todos.created_at > ?", date) }
+  scope :created_before,    lambda { |date| where("todos.created_at < ?", date) }
 
   def self.due_after(date)
     where('todos.due > ?', date)
@@ -151,7 +147,7 @@ class Todo < ActiveRecord::Base
   end
 
   def uncompleted_predecessors?
-    return !uncompleted_predecessors.all.empty?
+    return !uncompleted_predecessors.empty?
   end
 
   def should_be_blocked?

@@ -1,15 +1,15 @@
 class Project < ActiveRecord::Base
-  has_many :todos, :dependent => :delete_all, :order => 'todos.due IS NULL, todos.due ASC, todos.created_at ASC'
-  has_many :notes, :dependent => :delete_all, :order => "created_at DESC"
+  has_many :todos, -> {order("todos.due IS NULL, todos.due ASC, todos.created_at ASC")}, dependent: :delete_all
+  has_many :notes, -> {order "created_at DESC"}, dependent: :delete_all
   has_many :recurring_todos
 
   belongs_to :default_context, :class_name => "Context", :foreign_key => "default_context_id"
   belongs_to :user
 
-  scope :active, :conditions => { :state => 'active' }
-  scope :hidden, :conditions => { :state => 'hidden' }
-  scope :completed, :conditions => { :state => 'completed'}
-  scope :uncompleted, :conditions => ["NOT(state = ?)", 'completed']
+  scope :active,      -> { where state: 'active' }
+  scope :hidden,      -> { where state: 'hidden' }
+  scope :completed,   -> { where state: 'completed' }
+  scope :uncompleted, -> { where("NOT(state = ?)", 'completed') }
 
   scope :with_name_or_description, lambda { |body| where("name LIKE ? OR description LIKE ?", body, body) }
 

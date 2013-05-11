@@ -3,7 +3,7 @@ class NotesController < ApplicationController
   before_filter :set_source_view
 
   def index
-    @all_notes = current_user.notes.all
+    @all_notes = current_user.notes
     @count = @all_notes.size
     @page_title = "TRACKS::All notes"
     @source_view = 'note_list'

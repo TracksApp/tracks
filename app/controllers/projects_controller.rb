@@ -18,7 +18,7 @@ class ProjectsController < ApplicationController
       if params[:only_active_with_no_next_actions]
         @projects = current_user.projects.active.select { |p| count_undone_todos(p) == 0  }
       else
-        @projects = current_user.projects.all
+        @projects = current_user.projects
       end
       @new_project = current_user.projects.build
       @active_projects = current_user.projects.active

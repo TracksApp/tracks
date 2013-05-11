@@ -11,14 +11,14 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html do
         @page_title = "TRACKS::Manage Users"
-        @users = User.paginate :page => params[:page], :order => 'login ASC'
+        @users = User.order('login ASC').paginate :page => params[:page]
         @total_users = User.count
         # When we call users/signup from the admin page we store the URL so that
         # we get returned here when signup is successful
         store_location
       end
       format.xml do
-        @users  = User.order('login').all
+        @users  = User.order('login')
         render :xml => @users.to_xml(:except => [ :password ])
       end
     end
@@ -138,7 +138,7 @@ class UsersController < ApplicationController
   def destroy
     @deleted_user = User.find(params[:id])
     @saved = @deleted_user.destroy
-    @total_users = User.all.size
+    @total_users = User.size
 
     respond_to do |format|
       format.html do

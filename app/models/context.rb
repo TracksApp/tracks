@@ -1,13 +1,13 @@
 class Context < ActiveRecord::Base
 
-  has_many :todos, :dependent => :delete_all, :include => :project,
-    :order => 'todos.due IS NULL, todos.due ASC, todos.created_at ASC'
+  has_many :todos, -> { order("todos.due IS NULL, todos.due ASC, todos.created_at ASC").includes(:project) }, :dependent => :delete_all
+    
   has_many :recurring_todos, :dependent => :delete_all
   belongs_to :user
 
-  scope :active, :conditions => { :state => :active }
-  scope :hidden, :conditions => { :state => :hidden }
-  scope :closed, :conditions => { :state => :closed }
+  scope :active,    -> { where state: :active }
+  scope :hidden,    -> { where state: :hidden }
+  scope :closed,    -> { where state: :closed }
   scope :with_name, lambda { |name| where("name LIKE ?", name) }
 
   acts_as_list :scope => :user, :top_of_list => 0

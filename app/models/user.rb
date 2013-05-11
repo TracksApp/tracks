@@ -11,9 +11,7 @@ class User < ActiveRecord::Base
   cattr_accessor :per_page
   @@per_page = 5
 
-  has_many :contexts,
-           :order => 'position ASC',
-           :dependent => :delete_all do
+  has_many(:contexts, -> { order 'position ASC' }, dependent: :delete_all) do
              def find_by_params(params)
                find(params['id'] || params['context_id']) || nil
              end
@@ -25,9 +23,8 @@ class User < ActiveRecord::Base
                 }
               end
            end
-  has_many :projects,
-           :order => 'projects.position ASC',
-           :dependent => :delete_all do
+
+  has_many(:projects, -> {order 'projects.position ASC'}, dependent: :delete_all) do
               def find_by_params(params)
                 find(params['id'] || params['project_id'])
               end
@@ -79,34 +76,36 @@ class User < ActiveRecord::Base
                 return where(scope_conditions)
               end
             end
-  has_many :todos,
-           :order => 'todos.completed_at DESC, todos.created_at DESC',
-           :dependent => :delete_all do
+
+  has_many(:todos, -> { order 'todos.completed_at DESC, todos.created_at DESC' }, dependent: :delete_all) do
               def count_by_group(g)
                 except(:order).group(g).count
               end
            end
+
   has_many :recurring_todos,
-           :order => 'recurring_todos.completed_at DESC, recurring_todos.created_at DESC',
-           :dependent => :delete_all
-  has_many :deferred_todos,
-           :class_name => 'Todo',
-           :conditions => [ 'state = ?', 'deferred' ],
-           :order => 'show_from ASC, todos.created_at DESC' do
+           -> {order 'recurring_todos.completed_at DESC, recurring_todos.created_at DESC'},
+           dependent: :delete_all
+
+  has_many(:deferred_todos,
+           -> { where('state = ?', 'deferred').
+                order('show_from ASC, todos.created_at DESC')},
+           :class_name => 'Todo') do
               def find_and_activate_ready
                 where('show_from <= ?', Time.zone.now).collect { |t| t.activate! }
               end
            end
-  has_many :notes, :order => "created_at DESC", :dependent => :delete_all
-  has_one :preference, :dependent => :destroy
+
+  has_many :notes, -> { order "created_at DESC" }, dependent: :delete_all
+  has_one :preference, dependent: :destroy
 
   validates_presence_of :login
-  validates_presence_of :password, :if => :password_required?
-  validates_length_of :password, :within => 5..40, :if => :password_required?
-  validates_presence_of :password_confirmation, :if => :password_required?
+  validates_presence_of :password, if: :password_required?
+  validates_length_of :password, within: 5..40, if: :password_required?
+  validates_presence_of :password_confirmation, if: :password_required?
   validates_confirmation_of :password
-  validates_length_of :login, :within => 3..80
-  validates_uniqueness_of :login, :on => :create
+  validates_length_of :login, within: 3..80
+  validates_uniqueness_of :login, on: :create
   validate :validate_auth_type
 
   before_create :crypt_password, :generate_token

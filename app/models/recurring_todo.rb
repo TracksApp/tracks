@@ -7,8 +7,8 @@ class RecurringTodo < ActiveRecord::Base
 
   has_many :todos
 
-  scope :active, :conditions => { :state => 'active'}
-  scope :completed, :conditions => { :state => 'completed'}
+  scope :active,    -> { where state: 'active'}
+  scope :completed, -> { where state: 'completed'}
 
   include IsTaggable
 
