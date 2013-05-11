@@ -688,7 +688,7 @@ class TodosControllerTest < ActionController::TestCase
 
     # locate the new todo. This todo is created from the adjusted recurring
     # pattern defined in this test
-    new_todo = Todo.find(:first, :conditions => {:recurring_todo_id => recurring_todo_1.id, :state => 'active'})
+    new_todo = Todo.where(:recurring_todo_id => recurring_todo_1.id, :state => 'active').first
     assert !new_todo.nil?
 
     # mark new_todo as complete by toggle_check
@@ -697,7 +697,7 @@ class TodosControllerTest < ActionController::TestCase
     assert todo_1.completed?
 
     # locate the new todo in tickler
-    new_todo = Todo.find(:first, :conditions => {:recurring_todo_id => recurring_todo_1.id, :state => 'deferred'})
+    new_todo = Todo.where(:recurring_todo_id => recurring_todo_1.id, :state => 'deferred').first
     assert !new_todo.nil?
 
     assert_equal "Call Bill Gates every day", new_todo.description
@@ -735,11 +735,11 @@ class TodosControllerTest < ActionController::TestCase
     assert @todo.completed?
 
     # check that there is no active todo
-    next_todo = Todo.find(:first, :conditions => {:recurring_todo_id => recurring_todo_1.id, :state => 'active'})
+    next_todo = Todo.where(:recurring_todo_id => recurring_todo_1.id, :state => 'active').first
     assert next_todo.nil?
 
     # check for new deferred todo
-    next_todo = Todo.find(:first, :conditions => {:recurring_todo_id => recurring_todo_1.id, :state => 'deferred'})
+    next_todo = Todo.where(:recurring_todo_id => recurring_todo_1.id, :state => 'deferred').first
     assert !next_todo.nil?
     # check that the due date of the new todo is later than tomorrow
     assert next_todo.due > @todo.due

@@ -18,7 +18,7 @@ class MessageGatewayTest < ActiveSupport::TestCase
     # assert some stuff about it being created
     assert_equal(todo_count+1, Todo.count)
   
-    message_todo = Todo.find(:first, :conditions => {:description => "message_content"})
+    message_todo = Todo.where(:description => "message_content").first
     assert_not_nil(message_todo)
   
     assert_equal(@inbox, message_todo.context)
@@ -33,7 +33,7 @@ class MessageGatewayTest < ActiveSupport::TestCase
     # assert some stuff about it being created
     assert_equal(todo_count+1, Todo.count)
 
-    message_todo = Todo.find(:first, :conditions => {:description => "This is the subject"})
+    message_todo = Todo.where(:description => "This is the subject").first
     assert_not_nil(message_todo)
 
     assert_equal(@inbox, message_todo.context)
@@ -74,12 +74,12 @@ class MessageGatewayTest < ActiveSupport::TestCase
     invalid_context_msg = message.gsub('message_content', 'this is also a task @ notacontext')
   
     MessageGateway.receive(valid_context_msg)
-    valid_context_todo = Todo.find(:first, :conditions => {:description => "this is a task"})
+    valid_context_todo = Todo.where(:description => "this is a task").first
     assert_not_nil(valid_context_todo)
     assert_equal(contexts(:anothercontext), valid_context_todo.context)
   
     MessageGateway.receive(invalid_context_msg)
-    invalid_context_todo = Todo.find(:first, :conditions => {:description => 'this is also a task'})
+    invalid_context_todo = Todo.where(:description => 'this is also a task').first
     assert_not_nil(invalid_context_todo)
     assert_equal(@inbox, invalid_context_todo.context)
   end

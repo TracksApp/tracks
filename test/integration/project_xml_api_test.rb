@@ -1,6 +1,6 @@
 require  File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
-class ProjectXmlApiTest < ActionController::IntegrationTest
+class ProjectXmlApiTest < ActionDispatch::IntegrationTest
   @@project_name = "My New Project"
   @@valid_postdata = "<project><name>#{@@project_name}</name></project>"
   

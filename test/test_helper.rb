@@ -6,6 +6,7 @@ require 'rails/test_help'
 {"salt" => "change-me", "authentication_schemes" => ["database"], "prefered_auth" => "database"}.inject( SITE_CONFIG ) { |h, elem| h[elem[0]] = elem[1]; h }
 
 class ActiveSupport::TestCase
+  ActiveRecord::Migration.check_pending!
   # Setup all fixtures in test/fixtures/*.(yml|csv) for all tests in alphabetical order.
   #
   # Note: You'll currently still have to declare fixtures explicitly in integration tests
@@ -86,7 +87,7 @@ class ActionController::TestCase
   
 end
 
-class ActionController::IntegrationTest
+class ActionDispatch::IntegrationTest
 
   def authenticated_post_xml(url, username, password, parameters, headers = {})
     post url, parameters,

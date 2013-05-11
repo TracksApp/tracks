@@ -409,8 +409,8 @@ class TodoTest < ActiveSupport::TestCase
     completed_now = @not_completed1
 
     # When I use the finders
-    recent_completed_todos = Todo.completed_after(1.month.ago).find(:all)
-    older_completed_todos = Todo.completed_before(1.month.ago).find(:all)
+    recent_completed_todos = Todo.completed_after(1.month.ago)
+    older_completed_todos = Todo.completed_before(1.month.ago)
 
     # Then completed1 should be before and completed2 should be after a month ago
     assert older_completed_todos.include?(completed_old)
@@ -430,8 +430,8 @@ class TodoTest < ActiveSupport::TestCase
     todo_now = user.todos.create!({:description => "just created", :context => @completed.context})
 
     # When I use the finders
-    recent_created_todos = Todo.created_after(1.month.ago).find(:all)
-    older_created_todos = Todo.created_before(1.month.ago).find(:all)
+    recent_created_todos = Todo.created_after(1.month.ago)
+    older_created_todos = Todo.created_before(1.month.ago)
 
     # Then todo1 should be before and todo2 should be after a month ago
     assert older_created_todos.include?(todo_old)

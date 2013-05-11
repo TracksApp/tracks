@@ -4,8 +4,8 @@ class IsTaggableTest < ActiveSupport::TestCase
   fixtures :todos, :recurring_todos
   
   def test_models_are_taggable
-    assert Todo.find(:first).respond_to?(:tag_list)
-    assert RecurringTodo.find(:first).respond_to?(:tag_list)
+    assert Todo.first.respond_to?(:tag_list)
+    assert RecurringTodo.first.respond_to?(:tag_list)
   end
   
   def test_test_to_s

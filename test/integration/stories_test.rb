@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
-class StoriesTest < ActionController::IntegrationTest
+class StoriesTest < ActionDispatch::IntegrationTest
   
   # ####################################################
   # Testing login and signup by different kinds of users

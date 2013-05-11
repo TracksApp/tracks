@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
-class RecurringTodosTest < ActionController::IntegrationTest
+class RecurringTodosTest < ActionDispatch::IntegrationTest
 
   def logs_in_as(user,plain_pass)
     @user = user

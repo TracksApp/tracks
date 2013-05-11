@@ -1,6 +1,8 @@
 require File.expand_path( File.dirname(__FILE__) + '/../test_helper')
 
-class FeedSmokeTest < ActionController::IntegrationTest
+class FeedSmokeTest < ActionDispatch::IntegrationTest
+
+  fixtures :users, :projects
   
   def test_last_15_actions_rss
     assert_success "/todos.rss?token=#{ users(:admin_user).token }&limit=15"

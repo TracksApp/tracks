@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
-class ContextXmlApiTest < ActionController::IntegrationTest
+class ContextXmlApiTest < ActionDispatch::IntegrationTest
 
   @@context_name = "@newcontext"
   @@valid_postdata = "<context><name>#{@@context_name}</name></context>"
