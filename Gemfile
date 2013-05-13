@@ -7,6 +7,7 @@ gem 'coffee-rails', '~>4.0'
 # add these gems to help with the transition:
 gem 'protected_attributes'
 gem 'rails-observers'
+gem 'actionpack-xml_parser', github: 'rails/actionpack-xml_parser'
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 gem 'therubyracer'

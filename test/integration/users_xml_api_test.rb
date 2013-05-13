@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
-class UsersXmlApiTest < ActionController::IntegrationTest
+class UsersXmlApiTest < ActionDispatch::IntegrationTest
   
   @@foobar_postdata = "<user><login>foo</login><password>bar</password></user>"
   @@johnny_postdata = "<user><login>johnny</login><password>barracuda</password></user>"

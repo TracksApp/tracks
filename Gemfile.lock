@@ -1,3 +1,10 @@
+GIT
+  remote: git://github.com/rails/actionpack-xml_parser.git
+  revision: 13b8750446f472d7d5191d79eee2209dbff675d6
+  specs:
+    actionpack-xml_parser (0.1.0)
+      actionpack (~> 4.0.0.beta)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -190,6 +197,7 @@ PLATFORMS
 DEPENDENCIES
   RedCloth
   aasm
+  actionpack-xml_parser!
   acts_as_list
   aruba
   bcrypt-ruby
