@@ -68,7 +68,7 @@ class User < ActiveRecord::Base
                 todos_in_project.reject{ |p| p.todos.active.count > 0 }
                 sorted_project_ids = todos_in_project.map {|p| p.id}
 
-                all_project_ids = all.map {|p| p.id}
+                all_project_ids = self.map {|p| p.id}
                 other_project_ids = all_project_ids - sorted_project_ids
 
                 update_positions(sorted_project_ids + other_project_ids)
