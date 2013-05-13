@@ -17,6 +17,7 @@ Feature: Signup new users
     Then I should be on the homepage
     And I should be an admin
 
+  @wip
   Scenario: Signup should be refused when password and confirmation is not the same
     Given no users exists
     When I go to the signup page

@@ -34,15 +34,15 @@ Given /^the following user records with hash algorithm$/ do |table|
   end
 end
 
-When /^I change my password to "([^"]*)"$/ do |password|
+Given("no users exists") do
+  User.delete_all
+end
+
+When(/^I change my password to "([^"]*)"$/) do |password|
   step 'I should be on the change password page'
   fill_in "user[password]", :with => password
   fill_in "user[password_confirmation]", :with => password
   click_button "Change password"
-end
-
-Given "no users exists" do
-  User.delete_all
 end
 
 When /^I delete the user "([^\"]*)"$/ do |username|

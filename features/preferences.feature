@@ -32,7 +32,7 @@ Feature: Manage preferences
   Scenario: The password and the confirmation need to be the same
     When I go to the preferences page
     And I set the password to "secret" and confirmation to "wrong"
-    Then I should see "Password doesn't match confirmation"
+    Then I should see "Password confirmation doesn't match confirmation"
 
   Scenario: I can edit preferences
     When I go to the preferences page

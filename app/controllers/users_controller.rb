@@ -68,6 +68,7 @@ class UsersController < ApplicationController
       render_failure "Expected post format is valid xml like so: <user><login>username</login><password>abc123</password></user>."
       return
     end
+
     respond_to do |format|
       format.html do
         unless User.no_users_yet? || (@user && @user.is_admin?) || SITE_CONFIG['open_signups']
@@ -78,20 +79,6 @@ class UsersController < ApplicationController
         end
 
         user = User.new(params['user'])
-
-        if Tracks::Config.auth_schemes.include?('ldap') &&
-            user.auth_type == 'ldap' &&
-            !SimpleLdapAuthenticator.valid?(user.login, params['user']['password'])
-          notify :warning, "Incorrect password"
-          redirect_to signup_path
-          return
-        end
-
-        if Tracks::Config.auth_schemes.include?('cas')
-          if user.auth_type.eql? "cas"
-             user.crypted_password = "cas"
-          end
-        end
 
         unless user.valid?
           session['new_user'] = user

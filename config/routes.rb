@@ -15,7 +15,7 @@ Tracksapp::Application.routes.draw do
   get 'done' => "stats#done", :as => 'done_overview'
 
   get 'search' => 'search#index'
-  get 'search/results' => 'search#results', :via => 'post'
+  post 'search/results' => 'search#results', :via => 'post'
 
   get 'data' => "data#index"
   get 'data/csv_notes' => 'data#csv_notes'
