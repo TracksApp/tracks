@@ -20,7 +20,6 @@ class ProjectsController < ApplicationController
       else
         @projects = current_user.projects
       end
-      @new_project = current_user.projects.build
       @active_projects = current_user.projects.active
       @hidden_projects = current_user.projects.hidden
       respond_to do |format|
@@ -31,6 +30,7 @@ class ProjectsController < ApplicationController
           @completed_count = current_user.projects.completed.count
           @no_projects = current_user.projects.empty?
           current_user.projects.cache_note_counts
+          @new_project = current_user.projects.build
         end
         format.m     do
           @completed_projects = current_user.projects.completed

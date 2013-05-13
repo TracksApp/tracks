@@ -44,7 +44,7 @@ class ProjectsControllerTest < ActionController::TestCase
     
   def test_todo_state_is_project_hidden_after_hiding_project
     p = projects(:timemachine)
-    todos = p.todos.find_in_state(:all, :active)
+    todos = p.todos.active
     login_as(:admin_user)
     xhr :post, :update, :id => 1, "project"=>{"name"=>p.name, "description"=>p.description, "state"=>"hidden"}
     todos.each do |t|
@@ -55,7 +55,7 @@ class ProjectsControllerTest < ActionController::TestCase
   
   def test_not_done_counts_after_hiding_and_unhiding_project
     p = projects(:timemachine)
-    todos = p.todos.find_in_state(:all, :active)
+    todos = p.todos.active
     login_as(:admin_user)
     xhr :post, :update, :id => 1, "project"=>{"name"=>p.name, "description"=>p.description, "state"=>"hidden"}
     xhr :post, :update, :id => 1, "project"=>{"name"=>p.name, "description"=>p.description, "state"=>"active"}

@@ -11,7 +11,7 @@ xml.rss :version => "2.0" do
       xml.item do
         xml.title h(project.name)
         xml.description project_summary(project)
-        xml.pubDate project.created_at.to_s(:rfc822)
+        xml.pubDate project.created_at.rfc822
         xml.link project_url(project)
         xml.guid project_url(project)
       end
