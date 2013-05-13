@@ -3,7 +3,7 @@
 
 class Tagging < ActiveRecord::Base
   
-  attr_accessible :taggable_id, :tag
+  attr_accessible :taggable_id, :tag, :taggable_type
  
   belongs_to :tag
   belongs_to :taggable, :polymorphic => true, :touch => true

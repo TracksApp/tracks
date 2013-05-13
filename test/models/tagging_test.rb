@@ -5,9 +5,9 @@ class TaggingTest < ActiveSupport::TestCase
 
   def test_removes_unused_tags
     tag = Tag.create!(:name => "hello")
-    tagging = Tagging.create!(:tag => tag, :taggable_id => 1)
+    tagging = Tagging.create!(:tag => tag, :taggable_id => 1, :taggable_type => "Todo")
     
-    assert_equal 1, Tagging.find(:all, :conditions => ["tag_id = ?", tag.id]).count
+    assert_equal 1, Tagging.where("tag_id = ?", tag.id).count
     
     tagging.destroy
     
