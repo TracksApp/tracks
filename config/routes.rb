@@ -4,6 +4,7 @@ Tracksapp::Application.routes.draw do
   root :to => 'todos#index'
 
   post 'login' => 'login#login'
+  get 'login' => 'login#login'
   get 'login/expire_session' => 'login#expire_session'
   get 'login/check_expiry' => 'login#check_expiry'
   get 'logout' => 'login#logout'

@@ -28,7 +28,7 @@ class RecurringTodosTest < ActionDispatch::IntegrationTest
 
     rt.reload                   # then there should be two todos referencing
     assert_equal 2, rt.todos.size
-    todo2 = Todo.find(:first, :conditions => {:recurring_todo_id => rt.id, :state => 'active'})
+    todo2 = Todo.where(:recurring_todo_id => rt.id, :state => 'active').first
     assert_not_equal todo2.id, todo.id # and the todos should be different
 
     # when I delete the recurring todo

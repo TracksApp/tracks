@@ -54,7 +54,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
       "yearly_month_of_year"=>"6",
       "yearly_selector"=>"yearly_every_x_day"
     },
-      "tag_list"=>"one, two, three, four"
+      "tag_list"=>"one, two, three, four", :format => :js
 
     # check new recurring todo added
     assert_equal orig_rt_count+1, RecurringTodo.count
@@ -156,7 +156,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
         "recurring_show_days_before"=>"0",
         "recurring_target"=>"due_date",
         "recurring_show_always" => "1",
-        "start_from"=>"1/10/2012",  # adjust after 2012
+        "start_from"=>"1/10/2012",  
         "weekly_every_x_week"=>"1",
         "weekly_return_monday"=>"w",
         "yearly_day_of_week"=>"0",
@@ -166,7 +166,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
         "yearly_month_of_year"=>"10",
         "yearly_selector"=>"yearly_every_xth_day"
       },
-        "tag_list"=>"one, two, three, four"
+        "tag_list"=>"one, two, three, four", :format => :js
 
       # check new recurring todo added
       assert_equal orig_rt_count+1, RecurringTodo.count
@@ -220,7 +220,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
       "yearly_month_of_year"=>"10",
       "yearly_selector"=>"yearly_every_xth_day"
     },
-      "tag_list"=>"one, two, three, four"
+      "tag_list"=>"one, two, three, four", :format => :js
 
     # check new recurring todo added
     assert_equal orig_rt_count+1, RecurringTodo.count

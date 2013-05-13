@@ -138,7 +138,7 @@ class UsersController < ApplicationController
   def destroy
     @deleted_user = User.find(params[:id])
     @saved = @deleted_user.destroy
-    @total_users = User.size
+    @total_users = User.count
 
     respond_to do |format|
       format.html do

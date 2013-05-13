@@ -38,10 +38,10 @@ class UsersControllerTest < ActionController::TestCase
 
   def test_destroy_user
     login_as :admin_user
-    @no_users_before = User.find(:all).size
+    @no_users_before = User.count
     user_id = users(:ldap_user).id
     xhr :post, :destroy, :id => user_id.to_param
-    assert_equal @no_users_before-1, User.find(:all).size
+    assert_equal @no_users_before-1, User.count
   end
 
   def test_update_password_successful
@@ -67,7 +67,7 @@ class UsersControllerTest < ActionController::TestCase
     login_as :admin_user
     post :update_password, :id => users(:admin_user).id, :user => {:password => 'newpassword', :password_confirmation => 'wrong'}
     assert_redirected_to change_password_user_path(users(:admin_user))
-    assert_equal 'Validation failed: Password doesn\'t match confirmation', flash[:error]
+    assert_equal 'Validation failed: Password confirmation doesn\'t match confirmation', flash[:error]
   end
 
   def test_update_password_validation_errors

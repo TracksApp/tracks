@@ -621,11 +621,11 @@ class TodosControllerTest < ActionController::TestCase
     assert todo_1.completed?
 
     # check that there is only one active todo belonging to recurring_todo
-    count = Todo.count(:all, :conditions => {:recurring_todo_id => recurring_todo_1.id, :state => 'active'})
+    count = Todo.where(:recurring_todo_id => recurring_todo_1.id, :state => 'active').count
     assert_equal 1, count
 
     # check there is a new todo linked to the recurring pattern
-    next_todo = Todo.find(:first, :conditions => {:recurring_todo_id => recurring_todo_1.id, :state => 'active'})
+    next_todo = Todo.where(:recurring_todo_id => recurring_todo_1.id, :state => 'active').first
     assert_equal "Call Bill Gates every day", next_todo.description
     # check that the new todo is not the same as todo_1
     assert_not_equal todo_1.id, next_todo.id
@@ -651,11 +651,11 @@ class TodosControllerTest < ActionController::TestCase
 
     # check that there are three todos belonging to recurring_todo: two
     # completed and one deferred
-    count = Todo.count(:all, :conditions => {:recurring_todo_id => recurring_todo_1.id})
+    count = Todo.where(:recurring_todo_id => recurring_todo_1.id).count
     assert_equal 3, count
 
     # check there is a new todo linked to the recurring pattern in the tickler
-    next_todo = Todo.find(:first, :conditions => {:recurring_todo_id => recurring_todo_1.id, :state => 'deferred'})
+    next_todo = Todo.where(:recurring_todo_id => recurring_todo_1.id, :state => 'deferred').first
     assert !next_todo.nil?
     assert_equal "Call Bill Gates every day", next_todo.description
     # check that the todo is in the tickler
@@ -825,7 +825,7 @@ class TodosControllerTest < ActionController::TestCase
     assert_equal 0, successor.predecessors.size
 
     # add predecessor
-    put :add_predecessor, :predecessor=>predecessor.id, :successor=>successor.id
+    put :add_predecessor, :predecessor=>predecessor.id, :successor=>successor.id, :format => "js"
 
     assert_equal 1, successor.predecessors.count
     assert_equal predecessor.id, successor.predecessors.first.id
@@ -839,10 +839,10 @@ class TodosControllerTest < ActionController::TestCase
     other_todo = todos(:phone_grandfather)
 
     # predecessor -> successor
-    put :add_predecessor, :predecessor=>predecessor.id, :successor=>successor.id
+    put :add_predecessor, :predecessor=>predecessor.id, :successor=>successor.id, :format => "js"
 
     # other_todo -> predecessor -> successor
-    put :add_predecessor, :predecessor=>other_todo.id, :successor=>predecessor.id
+    put :add_predecessor, :predecessor=>other_todo.id, :successor=>predecessor.id, :format => "js"
 
     assert_equal 1, successor.predecessors(true).count
     assert_equal 0, other_todo.predecessors(true).count
@@ -861,12 +861,12 @@ class TodosControllerTest < ActionController::TestCase
     t4 = todos(:construct_dilation_device)
 
     # t1 -> t2
-    put :add_predecessor, :predecessor=>t1.id, :successor=>t2.id
+    put :add_predecessor, :predecessor=>t1.id, :successor=>t2.id, :format => "js"
     # t3 -> t4
-    put :add_predecessor, :predecessor=>t3.id, :successor=>t4.id
+    put :add_predecessor, :predecessor=>t3.id, :successor=>t4.id, :format => "js"
 
     # t2 -> t4
-    put :add_predecessor, :predecessor=>t2.id, :successor=>t4.id
+    put :add_predecessor, :predecessor=>t2.id, :successor=>t4.id, :format => "js"
 
     # should be: t1 -> t2 -> t4 and t3 -> t4
     assert t4.predecessors.map(&:id).include?(t2.id)
@@ -884,12 +884,12 @@ class TodosControllerTest < ActionController::TestCase
     t4 = todos(:construct_dilation_device)
 
     # t1 -> t2
-    put :add_predecessor, :predecessor=>t1.id, :successor=>t2.id
+    put :add_predecessor, :predecessor=>t1.id, :successor=>t2.id, :format => "js"
     # t3 -> t4
-    put :add_predecessor, :predecessor=>t3.id, :successor=>t4.id
+    put :add_predecessor, :predecessor=>t3.id, :successor=>t4.id, :format => "js"
 
     # t3 -> t2
-    put :add_predecessor, :predecessor=>t3.id, :successor=>t2.id
+    put :add_predecessor, :predecessor=>t3.id, :successor=>t2.id, :format => "js"
 
     # should be: t1 -> t2 and t3 -> t4 & t2
     assert t3.successors.map(&:id).include?(t4.id)
@@ -909,12 +909,12 @@ class TodosControllerTest < ActionController::TestCase
 
     # create same dependency tree as previous test
     # should be: t1 -> t2 -> t4 and t3 -> t4
-    put :add_predecessor, :predecessor=>t1.id, :successor=>t2.id
-    put :add_predecessor, :predecessor=>t3.id, :successor=>t4.id
-    put :add_predecessor, :predecessor=>t2.id, :successor=>t4.id
+    put :add_predecessor, :predecessor=>t1.id, :successor=>t2.id, :format => "js"
+    put :add_predecessor, :predecessor=>t3.id, :successor=>t4.id, :format => "js"
+    put :add_predecessor, :predecessor=>t2.id, :successor=>t4.id, :format => "js"
 
     # removing t4 as successor of t2 should leave t4 blocked with t3 as predecessor
-    put :remove_predecessor, :predecessor=>t2.id, :id=>t4.id
+    put :remove_predecessor, :predecessor=>t2.id, :id=>t4.id, :format => "js"
 
     t4.reload
     assert t4.pending?, "t4 should remain pending"
