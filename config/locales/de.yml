@@ -210,11 +210,11 @@ de:
       - Samstag
     formats: 
       default: "%d.%m.%Y"
-      long: "%e. %B %Y"
+      long: "%d. %B %Y"
       longer: "%A, %d. %B %Y"
       month_day: "%d. %B"
-      only_day: "%e"
-      short: "%e. %b"
+      only_day: "%d"
+      short: "%d. %b"
     month_names: 
       - ~
       - Januar
