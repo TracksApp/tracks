@@ -24,7 +24,7 @@ class NotesController < ApplicationController
 
   def create
     @note = current_user.notes.build
-    @note.attributes = params["note"]
+    @note.attributes = note_params
 
     @saved = @note.save
 
@@ -45,7 +45,7 @@ class NotesController < ApplicationController
 
   def update
     @note = current_user.notes.find(params['id'])
-    @note.attributes = params["note"]
+    @note.attributes = note_params
     @saved = @note.save
     respond_to do |format|
       format.html
@@ -67,6 +67,12 @@ class NotesController < ApplicationController
 
   def set_source_view
     @source_view = params['_source_view'] || 'note'
+  end
+
+  private
+
+  def note_params
+    params.require(:note).permit(:project_id, :body)
   end
 
 end

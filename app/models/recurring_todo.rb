@@ -1,6 +1,4 @@
 class RecurringTodo < ActiveRecord::Base
-  attr_protected :user
-
   belongs_to :context
   belongs_to :project
   belongs_to :user

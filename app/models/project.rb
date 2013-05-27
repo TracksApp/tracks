@@ -40,7 +40,6 @@ class Project < ActiveRecord::Base
     end
   end
 
-  attr_protected :user
   attr_accessor :cached_note_count
 
   def self.null_object
@@ -123,7 +122,11 @@ class Project < ActiveRecord::Base
   end
 
   def name=(value)
-    self[:name] = value.gsub(/\s{2,}/, " ").strip
+    if value
+      self[:name] = value.gsub(/\s{2,}/, " ").strip
+    else
+      self[:name] = nil
+    end
   end
 
   def new_record_before_save?

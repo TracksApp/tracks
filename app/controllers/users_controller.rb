@@ -78,7 +78,7 @@ class UsersController < ApplicationController
           return
         end
 
-        user = User.new(params['user'])
+        user = User.new(user_params)
 
         unless user.valid?
           session['new_user'] = user
@@ -108,8 +108,8 @@ class UsersController < ApplicationController
           render_failure "Expected post format is valid xml like so: <user><login>username</login><password>abc123</password></user>.", 400
           return
         end
-        user = User.new(params[:user])
-        user.password_confirmation = params[:user][:password]
+        user = User.new(user_params)
+        user.password_confirmation = user_params[:password]
         saved = user.save
         unless user.new_record?
           render :text => t('users.user_created'), :status => 200
@@ -147,7 +147,7 @@ class UsersController < ApplicationController
 
   def update_password
     # is used for focing password change after sha->bcrypt upgrade
-    current_user.change_password(params[:user][:password], params[:user][:password_confirmation])
+    current_user.change_password(user_params[:password], user_params[:password_confirmation])
     notify :notice, t('users.password_updated')
     redirect_to preferences_path
   rescue Exception => error
@@ -160,7 +160,7 @@ class UsersController < ApplicationController
   end
 
   def update_auth_type
-    current_user.auth_type = params[:user][:auth_type]
+    current_user.auth_type = user_params[:auth_type]
     if current_user.save
       notify :notice, t('users.auth_type_updated')
       redirect_to preferences_path
@@ -178,6 +178,10 @@ class UsersController < ApplicationController
   end
 
   private
+
+  def user_params
+    params.require(:user).permit(:login, :first_name, :last_name, :password_confirmation, :password, :auth_type, :open_id_url)
+  end
 
   def get_new_user
     if session['new_user']

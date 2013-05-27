@@ -428,7 +428,7 @@ class TodosController < ApplicationController
     determine_changes_by_this_update
     determine_remaining_in_container_count( (@context_changed || @project_changed) ? @original_item : @todo)
     determine_down_count
-    determine_deferred_tag_count(params['_tag_name']) if source_view_is(:tag)
+    determine_deferred_tag_count(sanitize(params['_tag_name'])) if source_view_is(:tag)
 
     @todo.touch_predecessors if @original_item_description != @todo.description
 
@@ -1219,7 +1219,10 @@ class TodosController < ApplicationController
   end
 
   def update_attributes_of_todo
-    @todo.attributes = params["todo"]
+    # TODO: duplication with todo_create_params_helper
+    @todo.attributes = params.require(:todo).permit(
+        :context_id, :project_id, :description, :notes, 
+        :due, :show_from, :state)
   end
 
   def determine_changes_by_this_update

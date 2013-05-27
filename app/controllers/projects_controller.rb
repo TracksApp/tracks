@@ -173,7 +173,7 @@ class ProjectsController < ApplicationController
       render_failure "Expected post format is valid xml like so: <project><name>project name</name></project>.", 400
       return
     end
-    @project = current_user.projects.build(params['project'])
+    @project = current_user.projects.build(project_params)
     @go_to_project = params['go_to_project']
     @saved = @project.save
     @project_not_done_counts = { @project.id => 0 }
@@ -212,7 +212,7 @@ class ProjectsController < ApplicationController
       params['project']['name'] = params['value']
     end
 
-    @project.attributes = params['project']
+    @project.attributes = project_params
     @saved = @project.save
     if @saved
       @project.transition_to(@new_state) if @state_changed
@@ -340,6 +340,12 @@ class ProjectsController < ApplicationController
       default_context = current_user.contexts.where(:name => default_context_name).first_or_create
       p['default_context_id'] = default_context.id
     end
+  end
+
+  private
+
+  def project_params
+    params.require(:project).permit(:name, :position, :user_id, :description, :state, :default_context_id, :default_tags)
   end
 
 end

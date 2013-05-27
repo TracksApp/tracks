@@ -66,7 +66,7 @@ class Todo < ActiveRecord::Base
 
   aasm :column => :state do
 
-    state :active #, :enter => Proc.new{|t| puts "$$$ activating #{t.aasm_current_state} - #{t.show_from} "}
+    state :active 
     state :project_hidden
     state :completed, :before_enter => Proc.new { |t| t.completed_at = Time.zone.now }, :before_exit => Proc.new { |t| t.completed_at = nil}
     state :deferred,  :after_exit => Proc.new { |t| t[:show_from] = nil }
@@ -102,8 +102,6 @@ class Todo < ActiveRecord::Base
       transitions :to => :pending, :from => [:active, :deferred]
     end
   end
-
-  attr_protected :user
 
   # Description field can't be empty, and must be < 100 bytes Notes must be <
   # 60,000 bytes (65,000 actually, but I'm being cautious)

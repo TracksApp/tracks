@@ -1,7 +1,6 @@
 class Context < ActiveRecord::Base
 
-  has_many :todos, -> { order("todos.due IS NULL, todos.due ASC, todos.created_at ASC").includes(:project) }, :dependent => :delete_all
-    
+  has_many :todos, -> { order("todos.due IS NULL, todos.due ASC, todos.created_at ASC").includes(:project) }, :dependent => :delete_all    
   has_many :recurring_todos, :dependent => :delete_all
   belongs_to :user
 
@@ -33,8 +32,6 @@ class Context < ActiveRecord::Base
       transitions :to => :active, :from => [:closed, :hidden]
     end
   end
-
-  attr_protected :user
 
   validates_presence_of :name, :message => "context must have a name"
   validates_length_of :name, :maximum => 255, :message => "context name must be less than 256 characters"

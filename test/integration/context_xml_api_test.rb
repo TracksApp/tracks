@@ -19,7 +19,7 @@ class ContextXmlApiTest < ActionDispatch::IntegrationTest
   end
   
   def test_fails_gracefully_with_invalid_xml_format
-    authenticated_post_xml_to_context_create "<context_name></context_name>"
+    authenticated_post_xml_to_context_create "<context><name></name></context>"
     assert_responses_with_error 'Name context must have a name'
   end
     

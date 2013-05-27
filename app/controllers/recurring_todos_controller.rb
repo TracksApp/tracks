@@ -89,7 +89,7 @@ class RecurringTodosController < ApplicationController
       params["recurring_todo"]["weekly_return_"+day]=' ' if params["recurring_todo"]["weekly_return_"+day].nil?
     end
 
-    @saved = @recurring_todo.update_attributes params["recurring_todo"]
+    @saved = @recurring_todo.update_attributes recurring_todo_params
 
     respond_to do |format|
       format.js
@@ -97,7 +97,7 @@ class RecurringTodosController < ApplicationController
   end
 
   def create
-    p = RecurringTodoCreateParamsHelper.new(params)
+    p = RecurringTodoCreateParamsHelper.new(params, recurring_todo_params)
     p.attributes['end_date']=parse_date_per_user_prefs(p.attributes['end_date'])
     p.attributes['start_from']=parse_date_per_user_prefs(p.attributes['start_from'])
 
@@ -207,9 +207,9 @@ class RecurringTodosController < ApplicationController
 
   class RecurringTodoCreateParamsHelper
 
-    def initialize(params)
+    def initialize(params, recurring_todo_params)
       @params = params['request'] || params
-      @attributes = params['request'] && params['request']['recurring_todo']  || params['recurring_todo']
+      @attributes = recurring_todo_params
 
       # make sure all selectors (recurring_period, recurrence_selector,
       # daily_selector, monthly_selector and yearly_selector) are first in hash
@@ -258,6 +258,25 @@ class RecurringTodosController < ApplicationController
   end
 
   private
+
+  def recurring_todo_params
+    params.require(:recurring_todo).permit(
+      # model attributes
+      :context_id, :project_id, :description, :notes, :state, :start_from, 
+      :ends_on, :end_date, :number_of_occurences, :occurences_count, :target, 
+      :show_from_delta, :recurring_period, :recurrence_selector, :every_other1, 
+      :every_other2, :every_other3, :every_day, :only_work_days, :every_count, 
+      :weekday, :show_always,
+      # form attributes
+      :recurring_period, :daily_selector, :monthly_selector, :yearly_selector, 
+      :recurring_target, :daily_every_x_days, :monthly_day_of_week, 
+      :monthly_every_x_day, :monthly_every_x_month2, :monthly_every_x_month, 
+      :monthly_every_xth_day, :recurring_show_days_before, 
+      :recurring_show_always, :weekly_every_x_week, :weekly_return_monday,
+      :yearly_day_of_week, :yearly_every_x_day, :yearly_every_xth_day, 
+      :yearly_month_of_year2, :yearly_month_of_year
+      )
+  end
 
   def init
     @days_of_week = []

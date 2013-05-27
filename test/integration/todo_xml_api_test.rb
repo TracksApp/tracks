@@ -61,7 +61,7 @@ class TodoXmlApiTest < ActionDispatch::IntegrationTest
     assert_response :success
     todo = @user.todos.where(:description => "this will succeed 2.0").first
     assert_not_nil todo
-    assert !todo.uncompleted_predecessors.empty?
+    assert !todo.uncompleted_predecessors.empty?, "should have predecessors"
   end
 
   def test_post_create_todo_with_single_dependency

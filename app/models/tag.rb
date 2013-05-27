@@ -10,8 +10,6 @@ class Tag < ActiveRecord::Base
   # rescue the ActiveRecord database constraint errors instead.
   validates_presence_of :name
   validates_uniqueness_of :name, :case_sensitive => false
-
-  attr_accessible :name
   
   before_create :before_create
   

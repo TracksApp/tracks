@@ -5,7 +5,7 @@ module Todos
 
     def initialize(params, user)
       set_params(params)
-      filter_attributes
+      filter_attributes(params)
       filter_tags
       filter_starred
 
@@ -20,8 +20,12 @@ module Todos
       @params = params['request'] || params
     end
 
-    def filter_attributes
-      @attributes = @params['request'] && @params['request']['todo'] || @params['todo']
+    def filter_attributes(params)
+      if params[:request]
+        @attributes = todo_params(params[:request])
+      else
+        @attributes = todo_params(params)
+      end
       @attributes = {} if @attributes.nil?  # make sure there is at least an empty hash
 		end
 
@@ -115,6 +119,24 @@ module Todos
     end
 
     private
+
+    def todo_params(params)
+      # keep :predecessor_dependencies from being filterd (for XML API). 
+      # The permit cannot handle multiple precessors
+      deps = params[:todo][:predecessor_dependencies][:predecessor] if params[:todo][:predecessor_dependencies]
+
+      filtered = params.require(:todo).permit(
+        :context_id, :project_id, :description, :notes, 
+        :due, :show_from, :state, 
+        # XML API
+        :tags => [:tag => [:name]],
+        :context => [:name],
+        :project => [:name])
+
+      # add back :predecessor_dependencies
+      filtered[:predecessor_dependencies] = {:predecessor => deps } unless deps.nil?
+      filtered
+    end
 
     def find_or_create_group(group_type, set, name)
       return set_id_by_name(group_type, set, name) if specified_by_name?(group_type)

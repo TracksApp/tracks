@@ -8,7 +8,7 @@ class ContextsController < ApplicationController
   prepend_before_filter :login_or_feed_token_required, :only => [:index]
 
   def index
-    @all_contexts = current_user.contexts
+    @all_contexts    = current_user.contexts
     @active_contexts = current_user.contexts.active
     @hidden_contexts = current_user.contexts.hidden
     @closed_contexts = current_user.contexts.closed
@@ -69,7 +69,7 @@ class ContextsController < ApplicationController
       render_failure "Expected post format is valid xml like so: <context><name>context name</name></context>.", 400
       return
     end
-    @context = current_user.contexts.build(params['context'])
+    @context = current_user.contexts.build(context_params)
     @context.hide! if params['context_state'] && params['context_state']['hide'] == '1'
     @saved = @context.save
     @context_not_done_counts = { @context.id => 0 }
@@ -93,7 +93,7 @@ class ContextsController < ApplicationController
   def update
     process_params_for_update
 
-    @context.attributes = params["context"]
+    @context.attributes = context_params
     @saved = @context.save
     @state_saved = set_state_for_update(@new_state) 
     @saved = @saved && @state_saved
@@ -159,6 +159,12 @@ class ContextsController < ApplicationController
 
   def all_done_todos
     all_done_todos_for current_user.contexts.find(params[:id])
+  end
+
+  private
+
+  def context_params
+    params.require(:context).permit(:name, :position, :state)
   end
 
   protected

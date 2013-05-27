@@ -21,7 +21,7 @@ class ProjectXmlApiTest < ActionDispatch::IntegrationTest
  end
     
   def test_fails_with_invalid_xml_format2
-    authenticated_post_xml_to_project_create "<request><project></project></request>"
+    authenticated_post_xml_to_project_create "<project><name></name></project>"
     assert_responses_with_error 'Name project must have a name'
   end
   

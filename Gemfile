@@ -4,8 +4,7 @@ gem 'rails', '4.0.0.rc1'
 gem 'sass-rails', '4.0.0.rc1'
 gem 'coffee-rails', '~>4.0'
 
-# add these gems to help with the transition:
-gem 'protected_attributes'
+# todo: remove xml api 
 gem 'actionpack-xml_parser', github: 'rails/actionpack-xml_parser'
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
