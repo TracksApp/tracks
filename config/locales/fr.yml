@@ -1,93 +1,96 @@
---- 
-fr: 
-  activerecord: 
-    attributes: 
-      note: 
-        created_at: "créée le"
-        updated_at: "Mise à jour le"
-      preference: 
-        date_format: "Format de date"
-        due_style: "Style d'échéance"
+---
+fr:
+  activerecord:
+    attributes:
+      note:
+        created_at: créée le
+        updated_at: Mise à jour le
+      preference:
+        date_format: Format de date
+        due_style: Style d'échéance
         first_name: Prénom
         last_name: Nom
         locale: Langue
-        mobile_todos_per_page: "Actions par page (vue mobile)"
-        refresh: "Intervalle de rafraîchissement (en minutes)"
-        review_period: "Intervalle de revue de projet"
-        show_completed_projects_in_sidebar: "Montrer les projets complétés dans le panneau latéral"
-        show_hidden_contexts_in_sidebar: "Montrer les contextes cachés dans le panneau latéral"
-        show_hidden_projects_in_sidebar: "Montrer les projets cachés dans le panneau latéral"
-        show_number_completed: "Montrer le nombre d'actions complétées"
-        show_project_on_todo_done: "Aller au projet quand la tâche est terminée"
-        sms_context: "Contexte email par défaut"
-        sms_email: "De l'email"
-        staleness_starts: "Début de dépassement"
-        time_zone: "Fuseau horaire"
-        title_date_format: "Format de la date en entête"
-        verbose_action_descriptors: "Descripteurs d'action détaillés"
-        week_starts: "Les semaines commencent un"
-      project: 
-        default_context_name: "Contexte par défaut"
-        default_tags: "Étiquette par défaut"
+        mobile_todos_per_page: Actions par page (vue mobile)
+        refresh: Intervalle de rafraîchissement (en minutes)
+        review_period: Intervalle de revue de projet
+        show_completed_projects_in_sidebar: Montrer les projets complétés dans le
+          panneau latéral
+        show_hidden_contexts_in_sidebar: Montrer les contextes cachés dans le panneau
+          latéral
+        show_hidden_projects_in_sidebar: Montrer les projets cachés dans le panneau
+          latéral
+        show_number_completed: Montrer le nombre d'actions complétées
+        show_project_on_todo_done: Aller au projet quand la tâche est terminée
+        sms_context: Contexte email par défaut
+        sms_email: De l'email
+        staleness_starts: Début de dépassement
+        time_zone: Fuseau horaire
+        title_date_format: Format de la date en entête
+        verbose_action_descriptors: Descripteurs d'action détaillés
+        week_starts: Les semaines commencent un
+      project:
+        default_context_name: Contexte par défaut
+        default_tags: Étiquette par défaut
         description: Description
         name: Nom
-      todo: 
+      todo:
         context: Contexte
         description: Description
         due: Échéance
         notes: Note
-        predecessors: "Dépend de"
+        predecessors: Dépend de
         project: Projet
-        show_from: "Afficher depuis"
+        show_from: Afficher depuis
         tags: Étiquettes
-      user: 
+      user:
         first_name: Prénom
         last_name: Nom
-    errors: 
-      full_messages: 
-        format: "%{attribute} %{message}"
-      messages: 
-        accepted: "doit être accepté"
-        blank: "ne peux être vide"
-        confirmation: "n'est pas identique à la confirmation"
-        empty: "ne peut être vide"
-        equal_to: "doit être égal à %{count}"
-        even: "doit être pair"
+    errors:
+      full_messages:
+        format: '%{attribute} %{message}'
+      messages:
+        accepted: doit être accepté
+        blank: ne peux être vide
+        confirmation: n'est pas identique à la confirmation
+        empty: ne peut être vide
+        equal_to: doit être égal à %{count}
+        even: doit être pair
         exclusion: exclusion?
-        greater_than: "doit être plus grand que %{count}"
-        greater_than_or_equal_to: "doit être plus grand ou égal à %{count}"
-        inclusion: "n'appartient pas à la liste"
-        invalid: "ne peut pas contenir le caractère virgule (« , »)"
-        less_than: "doit être inférieur à %{count}"
-        less_than_or_equal_to: "doit être inférieur ou égal à %{count}"
-        not_a_number: "n'est pas un nombre"
-        odd: "doit être impair"
-        record_invalid: "La validation a échoué : %{errors}"
-        taken: "est déjà pris"
-        too_long: "est trop long (maximum de %{count} caractères)"
-        too_short: "est trop court (minimum de %{count} charactères)"
-        wrong_length: "est de longueur incorrecte (doit être de %{count} caractères)"
-      models: 
-        project: 
-          attributes: 
-            name: 
-              blank: "le projet doit avoir un nom"
-              taken: "existe déjà"
-              too_long: "le nom du projet doit faire moins de 256 caractères"
-      template: 
-        body: "Il y a des problèmes avec les champs suivants :"
-        header: 
-          one: "1 erreur a empêché ce %{model} d'être sauvegardé"
-          other: "%{count} erreurs ont empêché ce %{model} d'être sauvegardé"
-  common: 
+        greater_than: doit être plus grand que %{count}
+        greater_than_or_equal_to: doit être plus grand ou égal à %{count}
+        inclusion: n'appartient pas à la liste
+        invalid: ne peut pas contenir le caractère virgule («?,?»)
+        less_than: doit être inférieur à %{count}
+        less_than_or_equal_to: doit être inférieur ou égal à %{count}
+        not_a_number: n'est pas un nombre
+        odd: doit être impair
+        record_invalid: 'La validation a échoué : %{errors}'
+        taken: est déjà pris
+        too_long: est trop long (maximum de %{count} caractères)
+        too_short: est trop court (minimum de %{count} charactères)
+        wrong_length: est de longueur incorrecte (doit être de %{count} caractères)
+      models:
+        project:
+          attributes:
+            name:
+              blank: le projet doit avoir un nom
+              taken: existe déjà
+              too_long: le nom du projet doit faire moins de 256 caractères
+      template:
+        body: 'Il y a des problèmes avec les champs suivants :'
+        header:
+          one: 1 erreur a empêché ce %{model} d'être sauvegardé
+          other: '%{count} erreurs ont empêché ce %{model} d''être sauvegardé'
+  common:
     action: Action
     actions: Actions
-    actions_midsentence: 
+    actions_midsentence:
       one: action
       other: actions
       zero: actions
     add: Ajouter
-    ajaxError: "Une erreur s'est produite en accédant un serveur"
+    ajaxError: Une erreur s'est produite en accédant un serveur
     back: Retour
     bugs: Bugs
     cancel: Annuler
@@ -96,7 +99,7 @@ fr:
     contexts: Contextes
     contribute: Contribuer
     create: Créer
-    days_midsentence: 
+    days_midsentence:
       one: jour
       other: jours
       zero: jours
@@ -104,490 +107,493 @@ fr:
     description: Description
     drag_handle: DRAG
     email: email
-    errors_with_fields: "Il y a des problèmes avec les champs suivants :"
+    errors_with_fields: 'Il y a des problèmes avec les champs suivants :'
     first: Premier
     forth: FORTH
     fourth: Quatrième
     go_back: Retour
     last: Dernier
     logout: Déconnexion
-    mailing_list: "Mailing List"
+    mailing_list: Mailing List
     month: mois
     months: Mois
     next: Suivant
     none: Aucun
     not_available_abbr: n/a
-    note: 
-      one: "1 note"
-      other: "%{count} notes"
-      zero: "non notes"
+    note:
+      one: 1 note
+      other: '%{count} notes'
+      zero: non notes
     notes: Notes
-    numbered_step: "Étape %{number}"
+    numbered_step: Étape %{number}
     ok: OK
     optional: optionnel
     previous: Précédente
     project: Projet
     projects: Projets
-    recurring_todos: "Répétition d'actions"
+    recurring_todos: Répétition d'actions
     review: Revue
     search: Rechercher
     second: Seconde
-    server_error: "Une erreur s'est produite sur le serveur"
-    show_all: "voir tous"
-    sort: 
-      alphabetically: "Par ordre alphabétique"
-      alphabetically_confirm: "Êtes-vous sûr de vouloir trier ces projets par ordre alphabétique ? L'ordre actuel sera remplacé."
-      alphabetically_title: "Trier les projets par ordre alphabétique"
-      by_task_count: "Par nombre de tâches"
-      by_task_count_title: "Trier par nombre de tâches"
-      by_task_count_title_confirm: "Êtes-vous sûr de vouloir trier ces projets par nombre de tâches ? L'ordre actuel sera remplacé."
+    server_error: Une erreur s'est produite sur le serveur
+    show_all: voir tous
+    sort:
+      alphabetically: Par ordre alphabétique
+      alphabetically_confirm: Êtes-vous sûr de vouloir trier ces projets par ordre
+        alphabétique ? L'ordre actuel sera remplacé.
+      alphabetically_title: Trier les projets par ordre alphabétique
+      by_task_count: Par nombre de tâches
+      by_task_count_title: Trier par nombre de tâches
+      by_task_count_title_confirm: Êtes-vous sûr de vouloir trier ces projets par
+        nombre de tâches ? L'ordre actuel sera remplacé.
       sort: Trier
     third: Troisième
     todo: Action
-    update: "Mettre à jour"
-    website: "Site web"
+    update: Mettre à jour
+    website: Site web
     week: semaine
     weeks: semaines
     wiki: Wiki
-  contexts: 
-    add_context: "Ajouter un contexte"
-    all_completed_tasks_title: "TRACKS::Toutes les actions achevées du contexte « %{context_name} »"
-    completed_tasks_title: "TRACKS::actions achevées du contexte « %{context_name} »"
-    context_deleted: "Contexte « %{name} » supprimé"
-    context_hide: "Caché de la première page ?"
-    context_name: "Nom du Contexte"
-    delete_context: "Supprimer contexte"
-    delete_context_confirmation: "Êtes-vous sûr de vouloir supprimer le contexte %{name}? Toutes les actions (répétitives) de ce contexte seront également supprimées !"
-    delete_context_title: "Supprimer contexte"
-    edit_context: "Modifier contexte"
-    hidden_contexts: "Contextes cachés"
-    hide_form: "Cacher le formulaire"
-    hide_form_title: "Cacher le formulaire nouveau contexte"
-    last_completed_in_context: "dans ce contexte (dernier %{number})"
-    new_context_post: " » sera aussi créé. Êtes-vous sûr ?"
-    new_context_pre: "Le contexte « "
-    no_actions: "Actuellement, il n'y pas d'actions incomplètes dans ce contexte"
-    no_contexts_active: "Actuellement, il n'y a pas de contextes actifs"
-    no_contexts_hidden: "Actuellement, il n'y a pas de contextes cachés"
-    save_status_message: "Contexte sauvegardé"
-    show_form: "Créer un nouveau contexte"
-    show_form_title: "Ajouter un contexte"
-    status_active: "Le Contexte est actif"
-    status_hidden: "Le Contexte est caché"
-    todos_append: "dans ce contexte"
-    update_status_message: "Le nom du contexte a été modifié"
-    visible_contexts: "Contextes visibles"
-  data: 
-    import_errors: "Des erreurs se sont produites durant l'importation."
-    import_successful: "L'import a réussi."
-  date: 
-    abbr_day_names: 
-      - dim
-      - lun
-      - mar
-      - mer
-      - jeu
-      - ven
-      - sam
-    abbr_month_names: 
-      - ~
-      - jan.
-      - fév.
-      - mar.
-      - avr.
-      - mai
-      - juin
-      - juil.
-      - août
-      - sept.
-      - oct.
-      - nov.
-      - déc.
-    day_names: 
-      - dimanche
-      - lundi
-      - mardi
-      - mercredi
-      - jeudi
-      - vendredi
-      - samedi
-    formats: 
-      default: "%d/%m/%Y"
-      long: "%e %B %Y"
-      longer: "%A, %d %b %Y"
-      month_day: "%d. %B"
-      only_day: "%e"
-      short: "%e %b"
-    month_names: 
-      - ~
-      - janvier
-      - février
-      - mars
-      - avril
-      - mai
-      - juin
-      - juillet
-      - Août
-      - septembre
-      - octobre
-      - novembre
-      - décembre
-    order: 
-      - !ruby/symbol day
-      - !ruby/symbol month
-      - !ruby/symbol year
-  datetime: 
-    distance_in_words: 
-      about_x_hours: 
-        one: "environ 1 heure"
-        other: "environ %{count} heures"
-      about_x_months: 
-        one: "environ 1 mois"
-        other: "environ %{count} mois"
-      about_x_years: 
-        one: "environ 1 an"
-        other: "environ %{count} ans"
-      almost_x_years: 
-        one: "presque 1 an"
-        other: "presque %{count} ans"
-      half_a_minute: "30 secondes"
-      less_than_x_minutes: 
-        one: "moins d'1 minute"
-        other: "moins de %{count} minutes"
-        zero: "moins d'1 minute"
-      less_than_x_seconds: 
-        one: "moins d'1 seconde"
-        other: "moins de %{count} secondes"
-        zero: "moins d'1 seconde"
-      over_x_years: 
-        one: "plus d'1 an"
-        other: "plus de %{count} ans"
-      x_days: 
-        one: "1 jour"
-        other: "%{count} jours"
-      x_minutes: 
-        one: "1 minute"
-        other: "%{count} minutes"
-      x_months: 
-        one: "1 mois"
-        other: "%{count} mois"
-      x_seconds: 
-        one: "1 seconde"
-        other: "%{count} secondes"
-    prompts: 
+  contexts:
+    add_context: Ajouter un contexte
+    all_completed_tasks_title: TRACKS::Toutes les actions achevées du contexte «?%{context_name}?»
+    completed_tasks_title: TRACKS::actions achevées du contexte «?%{context_name}?»
+    context_deleted: Contexte «?%{name}?» supprimé
+    context_hide: Caché de la première page ?
+    context_name: Nom du Contexte
+    delete_context: Supprimer contexte
+    delete_context_confirmation: Êtes-vous sûr de vouloir supprimer le contexte %{name}?
+      Toutes les actions (répétitives) de ce contexte seront également supprimées !
+    delete_context_title: Supprimer contexte
+    edit_context: Modifier contexte
+    hidden_contexts: Contextes cachés
+    hide_form: Cacher le formulaire
+    hide_form_title: Cacher le formulaire nouveau contexte
+    last_completed_in_context: dans ce contexte (dernier %{number})
+    new_context_post: ?» sera aussi créé. Êtes-vous sûr ?
+    new_context_pre: Le contexte «?
+    no_contexts_active: Actuellement, il n'y a pas de contextes actifs
+    no_contexts_hidden: Actuellement, il n'y a pas de contextes cachés
+    save_status_message: Contexte sauvegardé
+    show_form: Créer un nouveau contexte
+    show_form_title: Ajouter un contexte
+    status_active: Le Contexte est actif
+    status_hidden: Le Contexte est caché
+    todos_append: dans ce contexte
+    update_status_message: Le nom du contexte a été modifié
+    visible_contexts: Contextes visibles
+  data:
+    import_errors: Des erreurs se sont produites durant l'importation.
+    import_successful: L'import a réussi.
+  date:
+    abbr_day_names:
+    - dim
+    - lun
+    - mar
+    - mer
+    - jeu
+    - ven
+    - sam
+    abbr_month_names:
+    - 
+    - jan.
+    - fév.
+    - mar.
+    - avr.
+    - mai
+    - juin
+    - juil.
+    - août
+    - sept.
+    - oct.
+    - nov.
+    - déc.
+    day_names:
+    - dimanche
+    - lundi
+    - mardi
+    - mercredi
+    - jeudi
+    - vendredi
+    - samedi
+    formats:
+      default: '%d/%m/%Y'
+      long: '%e %B %Y'
+      longer: '%A, %d %b %Y'
+      month_day: '%d. %B'
+      only_day: '%e'
+      short: '%e %b'
+    month_names:
+    - 
+    - janvier
+    - février
+    - mars
+    - avril
+    - mai
+    - juin
+    - juillet
+    - Août
+    - septembre
+    - octobre
+    - novembre
+    - décembre
+    order:
+    - day
+    - month
+    - year
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: environ 1 heure
+        other: environ %{count} heures
+      about_x_months:
+        one: environ 1 mois
+        other: environ %{count} mois
+      about_x_years:
+        one: environ 1 an
+        other: environ %{count} ans
+      almost_x_years:
+        one: presque 1 an
+        other: presque %{count} ans
+      half_a_minute: 30 secondes
+      less_than_x_minutes:
+        one: moins d'1 minute
+        other: moins de %{count} minutes
+        zero: moins d'1 minute
+      less_than_x_seconds:
+        one: moins d'1 seconde
+        other: moins de %{count} secondes
+        zero: moins d'1 seconde
+      over_x_years:
+        one: plus d'1 an
+        other: plus de %{count} ans
+      x_days:
+        one: 1 jour
+        other: '%{count} jours'
+      x_minutes:
+        one: 1 minute
+        other: '%{count} minutes'
+      x_months:
+        one: 1 mois
+        other: '%{count} mois'
+      x_seconds:
+        one: 1 seconde
+        other: '%{count} secondes'
+    prompts:
       day: Jour
       hour: Heure
       minute: Minute
       month: Mois
       second: Seconde
       year: Année
-  errors: 
-    messages: 
-      blank: "ne peut pas être absent"
-      empty: "ne peut pas être vide"
-      equal_to: "doit être égal à %{count}"
-      even: "doit être pair"
-      exclusion: "est réservé"
-      greater_than: "doit être supérieur à %{count}"
-      greater_than_or_equal_to: "doit être supérieur ou égal à %{count}"
-      invalid: "est invalide"
-      less_than: "doit être inférieur à %{count}"
-      less_than_or_equal_to: "doit être inférieur ou égal à %{count}"
-      not_a_number: "n'est pas un nombre"
-      not_an_integer: "doit être un entier"
-      odd: "doit être impair"
-      too_long: "est trop long (%{count} caractères maximum)"
-      too_short: "est trop court (%{count} caractères minimum)"
-    user_unauthorized: "401 Non autorisé : Administrateur seulement."
-  feedlist: 
-    actions_completed_last_week: "Actions réalisées dans les 7 derniers jours"
-    actions_due_next_week: "Actions devant se terminer dans les 7 prochains jours ou moins"
-    actions_due_today: "Actions devant se terminer aujourd'hui ou avant"
-    active_projects_wo_next: "Projets actifs sans action suivante"
-    active_starred_actions: "Toutes les actions préferrées actives"
-    all_actions: "Toutes les actions"
-    all_contexts: "Tous les contextes"
-    all_projects: "Tous les projets"
-    choose_context: "Choisir le contexte dont vous voulez un flux"
-    choose_project: "Choisir le projet dont vous voulez un flux"
-    context_centric_actions: "Flux des actions dans un contexte spécifique"
-    context_needed: "Il faut au moins un contexte pour le flux"
-    ical_feed: "Flux iCal"
-    last_fixed_number: "Dernières %{number} actions"
+  errors:
+    messages:
+      blank: ne peut pas être absent
+      empty: ne peut pas être vide
+      equal_to: doit être égal à %{count}
+      even: doit être pair
+      exclusion: est réservé
+      greater_than: doit être supérieur à %{count}
+      greater_than_or_equal_to: doit être supérieur ou égal à %{count}
+      invalid: est invalide
+      less_than: doit être inférieur à %{count}
+      less_than_or_equal_to: doit être inférieur ou égal à %{count}
+      not_a_number: n'est pas un nombre
+      not_an_integer: doit être un entier
+      odd: doit être impair
+      too_long: est trop long (%{count} caractères maximum)
+      too_short: est trop court (%{count} caractères minimum)
+    user_unauthorized: '401 Non autorisé : Administrateur seulement.'
+  feedlist:
+    actions_completed_last_week: Actions réalisées dans les 7 derniers jours
+    actions_due_next_week: Actions devant se terminer dans les 7 prochains jours ou
+      moins
+    actions_due_today: Actions devant se terminer aujourd'hui ou avant
+    active_projects_wo_next: Projets actifs sans action suivante
+    active_starred_actions: Toutes les actions préferrées actives
+    all_actions: Toutes les actions
+    all_contexts: Tous les contextes
+    all_projects: Tous les projets
+    choose_context: Choisir le contexte dont vous voulez un flux
+    choose_project: Choisir le projet dont vous voulez un flux
+    context_centric_actions: Flux des actions dans un contexte spécifique
+    context_needed: Il faut au moins un contexte pour le flux
+    ical_feed: Flux iCal
+    last_fixed_number: Dernières %{number} actions
     legend: Légende
-    notice_incomplete_only: "N.B. : Les flux ne montrent que les actions incomplètes, sauf indication contraire"
-    plain_text_feed: "Flux texte"
-    project_centric: "Flux des actions incomplètes d'un projet spécifique"
-    project_needed: "Il faut au moins un projet pour le flux"
-    projects_and_actions: "Projets actifs et leurs actions"
-    rss_feed: "Flux RSS"
-    select_feed_for_context: "Selectionner un flux pour ce contexte"
-    select_feed_for_project: "Selectionner le flux pour ce projet"
-  footer: 
-    send_feedback: "Envoyer un feedback sur %{version}"
-  helpers: 
-    button: 
-      create: "Créer %{model}"
-      submit: "Sauvegarder %{model}"
-      update: "Mettre à jour %{model}"
-    select: 
+    notice_incomplete_only: 'N.B. : Les flux ne montrent que les actions incomplètes,
+      sauf indication contraire'
+    plain_text_feed: Flux texte
+    project_centric: Flux des actions incomplètes d'un projet spécifique
+    project_needed: Il faut au moins un projet pour le flux
+    projects_and_actions: Projets actifs et leurs actions
+    rss_feed: Flux RSS
+    select_feed_for_context: Selectionner un flux pour ce contexte
+    select_feed_for_project: Selectionner le flux pour ce projet
+  footer:
+    send_feedback: Envoyer un feedback sur %{version}
+  helpers:
+    button:
+      create: Créer %{model}
+      submit: Sauvegarder %{model}
+      update: Mettre à jour %{model}
+    select:
       prompt: Sélectionnez
-    submit: 
-      create: "Créer %{model}"
-      submit: "Sauvegarder %{model}"
-      update: "Mettre à jour %{model}"
-  integrations: 
-    applescript_next_action_prompt: "Description de l'action suivante :"
+    submit:
+      create: Créer %{model}
+      submit: Sauvegarder %{model}
+      update: Mettre à jour %{model}
+  integrations:
+    applescript_next_action_prompt: 'Description de l''action suivante :'
     applescript_success_after_id: Créé
-    applescript_success_before_id: "Nouvelle action suivante avec ID"
-    gmail_description: "Gadget pour ajouter Tracks à Gmail"
-    opensearch_description: "Rechercher dans Tracks"
-  layouts: 
-    mobile_navigation: 
+    applescript_success_before_id: Nouvelle action suivante avec ID
+    gmail_description: Gadget pour ajouter Tracks à Gmail
+    opensearch_description: Rechercher dans Tracks
+  layouts:
+    mobile_navigation:
       contexts: Contextes
       feeds: Flux
-      full: "Site en version complète"
+      full: Site en version complète
       home: Accueil
       logout: Déconnexion
-      new_action: "0-Nouvelle action"
+      new_action: 0-Nouvelle action
       projects: Projets
       starred: Favoris
       tickler: Échéancier
-    navigation: 
+    navigation:
       admin: Administration
-      api_docs: "API REST"
+      api_docs: API REST
       calendar: Calendrier
-      calendar_title: "Calendrier des actions à échéance"
+      calendar_title: Calendrier des actions à échéance
       completed_tasks: Terminé
       completed_tasks_title: Terminé
       contexts_title: Contextes
       export: Exporter
-      export_title: "Importer et exporter des données"
+      export_title: Importer et exporter des données
       feeds: Flux
-      feeds_title: "Voir une liste des flux disponibles"
-      help: "?"
+      feeds_title: Voir une liste des flux disponibles
+      help: '?'
       home: Accueil
       home_title: Accueil
-      integrations_: "Intégrer Tracks"
-      manage_users: "Gestion des utilisateurs"
-      manage_users_title: "Ajouter ou supprimer des utilisateurs"
-      mobile: "Site en version mobile"
-      notes_title: "Voir toutes les notes"
+      integrations_: Intégrer Tracks
+      manage_users: Gestion des utilisateurs
+      manage_users_title: Ajouter ou supprimer des utilisateurs
+      mobile: Site en version mobile
+      notes_title: Voir toutes les notes
       organize: Organiser
       preferences: Préférences
-      preferences_title: "Voir mes préférences"
+      preferences_title: Voir mes préférences
       projects_title: Projets
-      recurring_todos: "Tâches (todos) répétitives"
-      recurring_todos_title: "Gerer les actions récurrentes"
-      review_title: "Faire examiner"
-      search: "Recherches tous les items"
+      recurring_todos: Tâches (todos) répétitives
+      recurring_todos_title: Gerer les actions récurrentes
+      review_title: Faire examiner
+      search: Recherches tous les items
       starred: Favoris
-      starred_title: "Voir vos actions préférées"
+      starred_title: Voir vos actions préférées
       stats: Statistiques
-      stats_title: "Voir vos statistiques"
+      stats_title: Voir vos statistiques
       tickler: Échéancier
       tickler_title: Échéancier
       view: Vue
-    next_actions_rss_feed: "Flux RSS des prochaines actions"
-    toggle_contexts: "Basculer contextes effondré"
-    toggle_contexts_title: "Faire des contextes effondré (in)visibles"
-    toggle_notes: "Afficher/Cacher notes"
-    toggle_notes_title: "Afficher/Cacher toutes les notes"
-  login: 
-    account_login: "Identifiant du compte"
-    cas_create_account: "Si vous voulez vous inscrire aller à %{signup_link}"
-    cas_logged_in_greeting: "Bonjour, %{username} ! Vous êtes authentifié."
-    cas_login: "Login CAS"
-    cas_no_user_found: "Bonjour, %{username} ! Vous n'avez  pas de compte sur Tracks."
-    cas_signup_link: "Demander un compte"
-    cas_username_not_found: "Désolé, aucun utilisateur avec ce nom CAS n'existe (%{username})"
-    log_in_again: "Se reconnecter"
-    logged_out: "Vous avez été déconnecté de Tracks."
-    login_cas: "Aller au CAS"
-    login_standard: "retourner à l'écran de connexion standard"
-    login_with_openid: "se connecter avec un OpenID"
-    mobile_use_openid: "... ou ce connecter avec un OpenID"
-    openid_identity_url_not_found: "Désolé, aucun utilisateur avec cette identité URL n'existe (%{identity_url})"
-    option_separator: "ou,"
-    please_login: "Veuillez vous connecter pour utiliser Tracks"
-    session_time_out: "La session a expiré. Merci de %{link}"
-    session_will_expire: "la session expire après %{hours} heure(s) d'inactivité."
-    session_will_not_expire: "la session n'expire jamais."
-    sign_in: "Se connecter"
-    successful: "La connexion a réussi. Bienvenue !"
-    successful_with_session_info: "La connexion a réussi :"
-    unsuccessful: "La connexion a échoué."
-    user_no_expiry: "Rester connecté"
-  models: 
-    preference: 
-      due_in: "Échéance dans %{days} jours"
-      due_on: "Échéance le %{date}"
-      due_styles: 
-        - "Échéance dans ____ jours"
-        - "Échéance le ____"
-    project: 
-      feed_description: "Liste de tous les projets de %{username}"
-      feed_title: "Projets Tracks"
-    todo: 
-      error_date_must_be_future: "doit être une date dans le futur"
-    user: 
-      error_context_not_associated: "L'identifiant contexte %{context} n'est pas associé à l'identifiant utilisateur %{user}."
-  notes: 
-    delete_confirmation: "Êtes-vous sur de vouloir supprimer la note « %{id} » ?"
-    delete_item_title: "Supprimer l'élément"
-    delete_note_confirm: "Êtes-vous sur de vouloir supprimer la note « %{id} » ?"
-    delete_note_title: "Supprimer la note « %{id} »"
-    deleted_note: "Supprimer la note « %{id} »"
-    edit_item_title: "Modifier l'élément"
-    in_project: "Dans :"
-    no_notes_available: "Il n'y a actuellement aucune note : ajouter des notes aux projets sur les pages individuelles des projets."
-    note_header: "Note %{id}"
-    note_link_title: "Voir note %{id}"
-    note_location_link: "ln:"
-    show_note_title: "Voir note"
-  number: 
-    currency: 
-      format: 
-        delimiter: ","
-        format: "%u%n"
+    next_actions_rss_feed: Flux RSS des prochaines actions
+    toggle_contexts: Basculer contextes effondré
+    toggle_contexts_title: Faire des contextes effondré (in)visibles
+    toggle_notes: Afficher/Cacher notes
+    toggle_notes_title: Afficher/Cacher toutes les notes
+  login:
+    account_login: Identifiant du compte
+    cas_create_account: Si vous voulez vous inscrire aller à %{signup_link}
+    cas_logged_in_greeting: Bonjour, %{username} ! Vous êtes authentifié.
+    cas_login: Login CAS
+    cas_no_user_found: Bonjour, %{username} ! Vous n'avez  pas de compte sur Tracks.
+    cas_signup_link: Demander un compte
+    cas_username_not_found: Désolé, aucun utilisateur avec ce nom CAS n'existe (%{username})
+    log_in_again: Se reconnecter
+    logged_out: Vous avez été déconnecté de Tracks.
+    login_cas: Aller au CAS
+    login_standard: retourner à l'écran de connexion standard
+    login_with_openid: se connecter avec un OpenID
+    mobile_use_openid: '... ou ce connecter avec un OpenID'
+    openid_identity_url_not_found: Désolé, aucun utilisateur avec cette identité URL
+      n'existe (%{identity_url})
+    option_separator: ou,
+    please_login: Veuillez vous connecter pour utiliser Tracks
+    session_time_out: La session a expiré. Merci de %{link}
+    session_will_expire: la session expire après %{hours} heure(s) d'inactivité.
+    session_will_not_expire: la session n'expire jamais.
+    sign_in: Se connecter
+    successful: La connexion a réussi. Bienvenue !
+    successful_with_session_info: 'La connexion a réussi :'
+    unsuccessful: La connexion a échoué.
+    user_no_expiry: Rester connecté
+  models:
+    preference:
+      due_in: Échéance dans %{days} jours
+      due_on: Échéance le %{date}
+      due_styles:
+      - Échéance dans ____ jours
+      - Échéance le ____
+    project:
+      feed_description: Liste de tous les projets de %{username}
+      feed_title: Projets Tracks
+    todo:
+      error_date_must_be_future: doit être une date dans le futur
+    user:
+      error_context_not_associated: L'identifiant contexte %{context} n'est pas associé
+        à l'identifiant utilisateur %{user}.
+  notes:
+    delete_confirmation: Êtes-vous sur de vouloir supprimer la note «?%{id}?» ?
+    delete_item_title: Supprimer l'élément
+    delete_note_confirm: Êtes-vous sur de vouloir supprimer la note «?%{id}?» ?
+    delete_note_title: Supprimer la note «?%{id}?»
+    deleted_note: Supprimer la note «?%{id}?»
+    edit_item_title: Modifier l'élément
+    in_project: 'Dans :'
+    no_notes_available: 'Il n''y a actuellement aucune note : ajouter des notes aux
+      projets sur les pages individuelles des projets.'
+    note_header: Note %{id}
+    note_link_title: Voir note %{id}
+    note_location_link: 'ln:'
+    show_note_title: Voir note
+  number:
+    currency:
+      format:
+        delimiter: ','
+        format: '%u%n'
         precision: 2
-        separator: "."
+        separator: .
         significant: false
         strip_insignificant_zeros: false
         unit: $
-    format: 
-      delimiter: ","
+    format:
+      delimiter: ','
       precision: 2
-      separator: "."
+      separator: .
       significant: false
       strip_insignificant_zeros: false
-    human: 
-      format: 
+    human:
+      format:
         precision: 1
         significant: true
         strip_insignificant_zeros: true
-      storage_units: 
-        format: "%n %u"
-        units: 
-          byte: 
+      storage_units:
+        format: '%n %u'
+        units:
+          byte:
             one: Octet
             other: Octets
           gb: GB
           kb: KB
           mb: MB
           tb: TB
-  preferences: 
-    authentication_header: "Votre authentification"
-    change_authentication_type: "Modifier votre type d'authentification"
-    change_identity_url: "Modifier votre URL d'identité"
-    change_password: "Modifier votre mot de passe"
-    current_authentication_type: "Votre type d'authentification est %{auth_type}"
-    edit_preferences: "Éditer les préférences"
-    generate_new_token: "Générer un nouveau jeton"
-    generate_new_token_confirm: "Êtes-vous sûr ? Générer un nouveau jeton va remplacer le jeton existant et en interdire les utilisations externes."
+  preferences:
+    authentication_header: Votre authentification
+    change_authentication_type: Modifier votre type d'authentification
+    change_identity_url: Modifier votre URL d'identité
+    change_password: Modifier votre mot de passe
+    current_authentication_type: Votre type d'authentification est %{auth_type}
+    edit_preferences: Éditer les préférences
+    generate_new_token: Générer un nouveau jeton
+    generate_new_token_confirm: Êtes-vous sûr ? Générer un nouveau jeton va remplacer
+      le jeton existant et en interdire les utilisations externes.
     is_false: faux
     is_true: vrai
-    open_id_url: "Votre URL OpenID est"
-    page_title: "TRACKS::Préférences"
-    page_title_edit: "TRACKS::Éditer les préférences"
-    password_changed: "Votre mot de passe a été changé, s'il vous plaît vous connecter à nouveau."
-    show_number_completed: "Montrer %{number} items réalisés"
+    open_id_url: Votre URL OpenID est
+    page_title: TRACKS::Préférences
+    page_title_edit: TRACKS::Éditer les préférences
+    password_changed: Votre mot de passe a été changé, s'il vous plaît vous connecter
+      à nouveau.
+    show_number_completed: Montrer %{number} items réalisés
     sms_context_none: Aucun
-    staleness_starts_after: "\"date de fraicher\" dépassée à près %{days} days"
-    tabs: 
+    staleness_starts_after: '"date de fraicher" dépassée à près %{days} days'
+    tabs:
       authentication: Authentification
-      date_and_time: "Date et heure"
+      date_and_time: Date et heure
       profile: Profil
-      tracks_behavior: "Comportements Tracks"
-    title: "Vos préférences"
-    token_description: "Jeton (pour flux et utilisation API)"
-    token_header: "Votre jeton"
-    updated: "Préférences jour"
-  projects: 
-    actions_in_project_title: "Actions pour ce projet"
-    active_projects: "Projets actifs"
-    add_note: "Ajouter une note"
-    add_note_submit: "Ajouter note"
-    add_project: "Ajouter projet"
-    all_completed_tasks_title: "TRACKS::Tous les actions achevées en Projet '%{project_name}'"
-    completed_actions: "Actions réalisées pour ce projet"
-    completed_actions_empty: "Il n'y a pas d'actions réalisées pour ce projet"
-    completed_projects: "Projets réalisés"
-    completed_tasks_title: "TRACKS::Liste des actions menées à terme dans Projet '%{project_name}'"
-    default_context: "Le contexte par défaut pour ce projet est %{context}"
-    default_context_removed: "Contexte par défaut supprimé"
-    default_context_set: "Définir le contexte par défaut du projet à %{default_context}"
-    default_tags_removed_notice: "Supprimer les étiquettes par défaut"
-    deferred_actions: "Actions reportées pour ce projet"
-    deferred_actions_empty: "Il n'y a pas d'actions reportées pour ce projet"
-    delete_project: "Supprimer projet"
-    delete_project_confirmation: "Êtes-vous sûr de vouloir supprimer le projet « %{name} » ?"
-    delete_project_title: "Supprimer le projet"
-    edit_project_settings: "Modifier les paramètres du projet"
-    edit_project_title: "Éditer le projet"
-    hidden_projects: "Projets cachés"
-    hide_form: "Cacher le formulaire"
-    hide_form_title: "Cacher le formulaire nouveau projet"
-    is_active: "est actif"
-    list_completed_projects: "TRACKS::Liste des projets achevés"
-    list_projects: "TRACKS::Liste des projets"
-    list_reviews: "TRACKS::Revue"
-    no_actions_in_project: "Il n'y a pas d'action incomplètes pour ce projet"
-    no_default_context: "Ce projet n'a pas de contexte par défaut"
-    no_last_completed_projects: "Pas de projets terminés trouvés"
-    no_last_completed_recurring_todos: "Non terminé actions répétitives trouvées"
-    no_notes_attached: "Il n'y a actuellement aucune note attachée à ce projet"
-    no_projects: "Il n'y a actuellement aucun projet"
+      tracks_behavior: Comportements Tracks
+    title: Vos préférences
+    token_description: Jeton (pour flux et utilisation API)
+    token_header: Votre jeton
+    updated: Préférences jour
+  projects:
+    actions_in_project_title: Actions pour ce projet
+    active_projects: Projets actifs
+    add_note: Ajouter une note
+    add_note_submit: Ajouter note
+    add_project: Ajouter projet
+    all_completed_tasks_title: TRACKS::Tous les actions achevées en Projet '%{project_name}'
+    completed_projects: Projets réalisés
+    completed_tasks_title: TRACKS::Liste des actions menées à terme dans Projet '%{project_name}'
+    default_context: Le contexte par défaut pour ce projet est %{context}
+    default_context_removed: Contexte par défaut supprimé
+    default_context_set: Définir le contexte par défaut du projet à %{default_context}
+    default_tags_removed_notice: Supprimer les étiquettes par défaut
+    delete_project: Supprimer projet
+    delete_project_confirmation: Êtes-vous sûr de vouloir supprimer le projet «?%{name}?» ?
+    delete_project_title: Supprimer le projet
+    edit_project_settings: Modifier les paramètres du projet
+    edit_project_title: Éditer le projet
+    hidden_projects: Projets cachés
+    hide_form: Cacher le formulaire
+    hide_form_title: Cacher le formulaire nouveau projet
+    is_active: est actif
+    list_completed_projects: TRACKS::Liste des projets achevés
+    list_projects: TRACKS::Liste des projets
+    list_reviews: TRACKS::Revue
+    no_default_context: Ce projet n'a pas de contexte par défaut
+    no_last_completed_projects: Pas de projets terminés trouvés
+    no_last_completed_recurring_todos: Non terminé actions répétitives trouvées
+    no_notes_attached: Il n'y a actuellement aucune note attachée à ce projet
+    no_projects: Il n'y a actuellement aucun projet
     notes: Notes
-    notes_empty: "Il n'y a pas de notes pour ce projet"
-    page_title: "TRACKS::Projet : %{project}"
-    project_saved_status: "Projet sauvegardé"
-    project_state: "Le projet est %{state}"
-    set_default_tags_notice: "Définir les étiquettes par défaut du projet à %{default_tags}"
+    notes_empty: Il n'y a pas de notes pour ce projet
+    page_title: 'TRACKS::Projet : %{project}'
+    project_saved_status: Projet sauvegardé
+    project_state: Le projet est %{state}
+    set_default_tags_notice: Définir les étiquettes par défaut du projet à %{default_tags}
     settings: Paramètres
-    show_form: "Ajouter un projet"
-    show_form_title: "Créer un nouveau projet"
-    state: "Le projet est %{state}"
-    status_project_name_changed: "Le nom du projet a été modifié"
-    this_project: "Ce projet"
-    to_new_project_page: "Aller à la page du nouveau projet"
-    todos_append: "dans ce projet"
-    was_marked_complete: "est complété"
-    was_marked_hidden: "est caché"
-    with_default_context: "avec '%{context_name}' comme contexte par défaut"
-    with_no_default_context: "sans contexte par défaut"
-    with_no_default_tags: "et sans étiquettes par défaut"
-  search: 
-    contexts_matching_query: "Contextes correspondant à la requête"
-    no_results: "Aucun résultat à votre recherche."
-    notes_matching_query: "Notes correspondant à la requête"
-    projects_matching_query: "Projets correspondant à la requête"
-    tags_matching_query: "Étiquettes correspondant à la requête"
-    todos_matching_query: "À faire correspondant à la requête"
-  shared: 
-    add_action: "Ajouter action"
-    add_actions: "Ajouter actions"
-    add_context: "Ajouter Contexte"
-    context_for_all_actions: "Contexte pour toutes les actions"
-    hide_action_form_title: "Cacher le formulaire nouvelle action"
-    hide_form: "Cacher le formulaire"
-    make_actions_dependent: "Faire actions dépendantes les unes des autres"
-    multiple_next_actions: "Actions suivante multiples (une sur chaque ligne)"
-    project_for_all_actions: "Projet pour toutes les actions"
-    separate_tags_with_commas: "séparer avec des virgules"
-    tags_for_all_actions: "Étiquettes pour toutes les actions (sép. avec des virgules)"
-    toggle_multi: "Ajouter plusieurs actions suivantes"
-    toggle_multi_title: "Basculer formulaire action simple/multiple"
-    toggle_single: "Ajouter action suivante"
-    toggle_single_title: "Ajouter une nouvelle action suivante"
-  sidebar: 
+    show_form: Ajouter un projet
+    show_form_title: Créer un nouveau projet
+    state: Le projet est %{state}
+    status_project_name_changed: Le nom du projet a été modifié
+    this_project: Ce projet
+    to_new_project_page: Aller à la page du nouveau projet
+    was_marked_complete: est complété
+    was_marked_hidden: est caché
+    with_default_context: avec '%{context_name}' comme contexte par défaut
+    with_no_default_context: sans contexte par défaut
+    with_no_default_tags: et sans étiquettes par défaut
+  search:
+    contexts_matching_query: Contextes correspondant à la requête
+    no_results: Aucun résultat à votre recherche.
+    notes_matching_query: Notes correspondant à la requête
+    projects_matching_query: Projets correspondant à la requête
+    tags_matching_query: Étiquettes correspondant à la requête
+    todos_matching_query: À faire correspondant à la requête
+  shared:
+    add_action: Ajouter action
+    add_actions: Ajouter actions
+    add_context: Ajouter Contexte
+    context_for_all_actions: Contexte pour toutes les actions
+    hide_action_form_title: Cacher le formulaire nouvelle action
+    hide_form: Cacher le formulaire
+    make_actions_dependent: Faire actions dépendantes les unes des autres
+    multiple_next_actions: Actions suivante multiples (une sur chaque ligne)
+    project_for_all_actions: Projet pour toutes les actions
+    separate_tags_with_commas: séparer avec des virgules
+    tags_for_all_actions: Étiquettes pour toutes les actions (sép. avec des virgules)
+    toggle_multi: Ajouter plusieurs actions suivantes
+    toggle_multi_title: Basculer formulaire action simple/multiple
+    toggle_single: Ajouter action suivante
+    toggle_single_title: Ajouter une nouvelle action suivante
+  sidebar:
     list_empty: Aucun
-    list_name_active_contexts: "Contextes actifs"
-    list_name_active_projects: "Projets actifs"
-    list_name_completed_projects: "Projets réalisés"
-    list_name_hidden_contexts: "Contextes cachés"
-    list_name_hidden_projects: "Projets cachés"
-  states: 
+    list_name_active_contexts: Contextes actifs
+    list_name_active_projects: Projets actifs
+    list_name_completed_projects: Projets réalisés
+    list_name_hidden_contexts: Contextes cachés
+    list_name_hidden_projects: Projets cachés
+  states:
     active: Actif
     active_plural: Actifs
     blocked: Bloquée
@@ -604,417 +610,446 @@ fr:
     stalled_plural: Bloqués
     visible: Visible
     visible_plural: Visibles
-  stats: 
-    action_completion_time_title: "Temps de réalisation (toutes les actions réalisées)"
-    action_selection_title: "TRACKS::Selection action"
+  stats:
+    action_completion_time_title: Temps de réalisation (toutes les actions réalisées)
+    action_selection_title: TRACKS::Selection action
     actions: Actions
-    actions_30days_title: "Actions des 30 derniers jours"
-    actions_actions_avg_created_30days: "Dans les 30 jours vous avez créer en moyenne %{count} actions"
-    actions_avg_completed: "et réalisé une moyenne de %{count} actions par mois."
-    actions_avg_completed_30days: "et réalisé une moyenne de %{count} actions par jour."
-    actions_avg_completion_time: "Pour toutes vos actions réalisés, le temps moyen de réalisation est %{count} jours."
-    actions_avg_created: "Dans les 12 derniers mois vous avez créé une moyenne de %{count} actions"
-    actions_day_of_week_legend: 
-      day_of_week: "Jour de la semaine"
-      number_of_actions: "Certain nombre d'actions"
-    actions_day_of_week_title: "Jour de la semaine (toutes les actions)"
-    actions_dow_30days_legend: 
-      day_of_week: "Jour de la semaine"
-      number_of_actions: "Certain nombre d'actions"
-    actions_dow_30days_title: "Jour de la semaine (les 30 derniers jours)"
-    actions_further: "et plus"
-    actions_last_year: "Actions des dernières années"
-    actions_last_year_legend: 
-      months_ago: "Mois précédents"
-      number_of_actions: "Nombre d'actions"
-    actions_lastyear_title: "Actions des 12 derniers mois"
-    actions_min_completion_time: "Le temps minimum de réalisation est %{time}."
-    actions_min_max_completion_days: "Le nombre min/max de jours pour réaliser est %{min}/%{max}."
-    actions_selected_from_week: "Actions selectionnées depuis la semaine"
-    click_to_return: "Cliquer %{link} pour revenir à la page des statistiques"
+    actions_30days_title: Actions des 30 derniers jours
+    actions_actions_avg_created_30days: Dans les 30 jours vous avez créer en moyenne
+      %{count} actions
+    actions_avg_completed: et réalisé une moyenne de %{count} actions par mois.
+    actions_avg_completed_30days: et réalisé une moyenne de %{count} actions par jour.
+    actions_avg_completion_time: Pour toutes vos actions réalisés, le temps moyen
+      de réalisation est %{count} jours.
+    actions_avg_created: Dans les 12 derniers mois vous avez créé une moyenne de %{count}
+      actions
+    actions_day_of_week_legend:
+      day_of_week: Jour de la semaine
+      number_of_actions: Certain nombre d'actions
+    actions_day_of_week_title: Jour de la semaine (toutes les actions)
+    actions_dow_30days_legend:
+      day_of_week: Jour de la semaine
+      number_of_actions: Certain nombre d'actions
+    actions_dow_30days_title: Jour de la semaine (les 30 derniers jours)
+    actions_further: et plus
+    actions_last_year: Actions des dernières années
+    actions_last_year_legend:
+      months_ago: Mois précédents
+      number_of_actions: Nombre d'actions
+    actions_lastyear_title: Actions des 12 derniers mois
+    actions_min_completion_time: Le temps minimum de réalisation est %{time}.
+    actions_min_max_completion_days: Le nombre min/max de jours pour réaliser est
+      %{min}/%{max}.
+    actions_selected_from_week: Actions selectionnées depuis la semaine
+    click_to_return: Cliquer %{link} pour revenir à la page des statistiques
     click_to_return_link: ici
-    click_to_show_actions_from_week: "Cliquer %{link} pour voir les actions depuis la semaine %{week}."
-    click_to_update_actions: "Cliquer sur une barre du graphique pour mettre a jour les actions ci-dessous."
+    click_to_show_actions_from_week: Cliquer %{link} pour voir les actions depuis
+      la semaine %{week}.
+    click_to_update_actions: Cliquer sur une barre du graphique pour mettre a jour
+      les actions ci-dessous.
     contexts: Contextes
-    current_running_time_of_incomplete_visible_actions: "Durée en cours des actions incomplètes visibles"
-    index_title: "TRACKS::Statistiques"
-    labels: 
-      avg_completed: "Moy. Réalisé"
-      avg_created: "Moy. Créé"
+    current_running_time_of_incomplete_visible_actions: Durée en cours des actions
+      incomplètes visibles
+    index_title: TRACKS::Statistiques
+    labels:
+      avg_completed: Moy. Réalisé
+      avg_created: Moy. Créé
       completed: Complété
       created: Créé
-    legend: 
+    legend:
       actions: Actions
-      day_of_week: "Jour de la semaine"
-      months_ago: "Il y a ... mois"
-      number_of_actions: "Nombre d'actions"
-      number_of_days: "Il y a ... jours"
+      day_of_week: Jour de la semaine
+      months_ago: Il y a ... mois
+      number_of_actions: Nombre d'actions
+      number_of_days: Il y a ... jours
       percentage: Pourcentage
-      running_time: "Temps en cours d'une action (en semaines)"
-    more_stats_will_appear: "Plus de statistiques apparaitront quand vous aurez ajouter quelques actions."
-    no_actions_selected: "Il n'y a pas d'actions sélectionnées."
-    no_tags_available: "pas d'étiquettes disponibles"
-    open_per_week: "Actifs (visibles et cachés) prochaines actions par semaine"
-    open_per_week_legend: 
+      running_time: Temps en cours d'une action (en semaines)
+    more_stats_will_appear: Plus de statistiques apparaitront quand vous aurez ajouter
+      quelques actions.
+    no_actions_selected: Il n'y a pas d'actions sélectionnées.
+    no_tags_available: pas d'étiquettes disponibles
+    open_per_week: Actifs (visibles et cachés) prochaines actions par semaine
+    open_per_week_legend:
       actions: Actions
-      weeks: "Semaines Il ya"
+      weeks: Semaines Il ya
     other_actions_label: (autres)
     projects: Projets
-    running_time_all: "Temps en cours de toutes les actions incomplètes"
-    running_time_all_legend: 
+    running_time_all: Temps en cours de toutes les actions incomplètes
+    running_time_all_legend:
       actions: Actions
       percentage: Pourcentage
-      running_time: "Temps en cours d'une action (en semaines). Cliquer sur une barre pour plus d'info"
-    running_time_legend: 
+      running_time: Temps en cours d'une action (en semaines). Cliquer sur une barre
+        pour plus d'info
+    running_time_legend:
       actions: Actions
       percentage: Pourcentage
-      weeks: "Temps en cours d'une action (en semaines). Cliquer sur une barre pour plus d'info"
-    spread_of_actions_for_all_context: "Vue des actions pour tous les contextes"
-    spread_of_running_actions_for_visible_contexts: "Vue des actions en cours pour tous les contextes"
-    tag_cloud_90days_description: "Nuage d'étiquettes correspondant aux actions créées ou réalisées lors des 90 derniers jours."
-    tag_cloud_90days_title: "Étiquettes pour les actions des 90 derniers jours"
-    tag_cloud_description: "Nuage d'étiquettes correspondant à la totalité des actions (réalisées, en cours, visibles ou cachées)."
-    tag_cloud_title: "Étiquettes pour toutes les actions"
+      weeks: Temps en cours d'une action (en semaines). Cliquer sur une barre pour
+        plus d'info
+    spread_of_actions_for_all_context: Vue des actions pour tous les contextes
+    spread_of_running_actions_for_visible_contexts: Vue des actions en cours pour
+      tous les contextes
+    tag_cloud_90days_description: Nuage d'étiquettes correspondant aux actions créées
+      ou réalisées lors des 90 derniers jours.
+    tag_cloud_90days_title: Étiquettes pour les actions des 90 derniers jours
+    tag_cloud_description: Nuage d'étiquettes correspondant à la totalité des actions
+      (réalisées, en cours, visibles ou cachées).
+    tag_cloud_title: Étiquettes pour toutes les actions
     tags: Étiquettes
-    time_of_day: "Heure (toutes les actions)"
-    time_of_day_legend: 
-      number_of_actions: "Nombre d'actions"
+    time_of_day: Heure (toutes les actions)
+    time_of_day_legend:
+      number_of_actions: Nombre d'actions
       time_of_day: Heure
-    tod30: "Heure (30 derniers jours)"
-    tod30_legend: 
-      number_of_actions: "Nombre d'actions"
+    tod30: Heure (30 derniers jours)
+    tod30_legend:
+      number_of_actions: Nombre d'actions
       time_of_day: Heure
-    top10_longrunning: "Top 10 des plus longs projets en cours"
-    top10_projects: "Top 10 des projets"
-    top10_projects_30days: "Top 10 des projets (30 derniers jours)"
-    top5_contexts: "Top 5 des contextes"
-    top5_visible_contexts_with_incomplete_actions: "Top 5 des contextes visibles avec des actions en cours"
+    top10_longrunning: Top 10 des plus longs projets en cours
+    top10_projects: Top 10 des projets
+    top10_projects_30days: Top 10 des projets (30 derniers jours)
+    top5_contexts: Top 5 des contextes
+    top5_visible_contexts_with_incomplete_actions: Top 5 des contextes visibles avec
+      des actions en cours
     totals: Totaux
-    totals_action_count: "vous avez un total de %{count} actions"
-    totals_actions_completed: "dont %{count} sont réalisées."
-    totals_active_project_count: "De ceux-ci %{count} sont des projets actifs"
-    totals_blocked_actions: "%{count} dépendent de la réalisation de leurs actions"
-    totals_completed_project_count: "et %{count} sont des projets réalisés."
-    totals_context_count: "Vous avez %{count} contextes."
-    totals_deferred_actions: "desquels %{count} sont des actions reportées dans l'échéancier"
-    totals_first_action: "Depuis votre première action du %{date}"
-    totals_hidden_context_count: "et %{count} sont des contextes cachés."
-    totals_hidden_project_count: "%{count} sont cachés"
-    totals_incomplete_actions: "Vous avez %{count} actions en cours"
-    totals_project_count: "Vous avez %{count} projets"
-    totals_tag_count: "Vous avez %{count} étiquettes sur des actions."
-    totals_unique_tags: "%{count} étiquettes sont uniques."
-    totals_visible_context_count: "%{count} sont des contextes visibles"
-    within_one: "Moins de 1"
-  support: 
-    array: 
-      last_word_connector: ", et"
+    totals_action_count: vous avez un total de %{count} actions
+    totals_actions_completed: dont %{count} sont réalisées.
+    totals_active_project_count: De ceux-ci %{count} sont des projets actifs
+    totals_blocked_actions: '%{count} dépendent de la réalisation de leurs actions'
+    totals_completed_project_count: et %{count} sont des projets réalisés.
+    totals_context_count: Vous avez %{count} contextes.
+    totals_deferred_actions: desquels %{count} sont des actions reportées dans l'échéancier
+    totals_first_action: Depuis votre première action du %{date}
+    totals_hidden_context_count: et %{count} sont des contextes cachés.
+    totals_hidden_project_count: '%{count} sont cachés'
+    totals_incomplete_actions: Vous avez %{count} actions en cours
+    totals_project_count: Vous avez %{count} projets
+    totals_tag_count: Vous avez %{count} étiquettes sur des actions.
+    totals_unique_tags: '%{count} étiquettes sont uniques.'
+    totals_visible_context_count: '%{count} sont des contextes visibles'
+    within_one: Moins de 1
+  support:
+    array:
+      last_word_connector: ', et'
       two_words_connector: et
-      words_connector: ","
-    select: 
-      prompt: "Veuillez sélectionner"
-  time: 
+      words_connector: ','
+    select:
+      prompt: Veuillez sélectionner
+  time:
     am: am
-    formats: 
-      default: "%a, %d %b %Y %H:%M:%S %z"
-      long: "%B %d, %Y %H:%M"
-      month_day: "%B %d"
-      short: "%d %b %H:%M"
-      stats: "%a %d-%m"
-      time: "%H:%M"
+    formats:
+      default: '%a, %d %b %Y %H:%M:%S %z'
+      long: '%B %d, %Y %H:%M'
+      month_day: '%B %d'
+      short: '%d %b %H:%M'
+      stats: '%a %d-%m'
+      time: '%H:%M'
     pm: pm
-  todos: 
-    action_deferred: "L'action « %{description} » a été reportée"
-    action_deleted_error: "La suppression de l'action a échoué"
-    action_deleted_success: "L'action suivante à été supprimée avec succès"
-    action_due_on: "(action à terminer avant le %{date})"
-    action_marked_complete: "L'action <strong>'%{description}'</strong> a été marquée comme <strong>%{completed}</strong>"
-    action_marked_complete_error: "L'action <strong>'%{description}'</strong> n'a PAS été marquée comme <strong>%{completed} a cause d'une erreur sur le serveur </strong> "
-    action_saved: "Action sauvegardée"
-    action_saved_to_tickler: "Action sauvegardée dans l'échéancier"
-    add_another_dependency: "Ajouter une autre dépendance"
-    add_new_recurring: "Ajouter une nouvelle action récurrente"
-    added_dependency: "%{dependency} ajoutée comme dépendance"
-    added_new_context: "Nouveau context ajouté"
-    added_new_next_action: "Nouvelle action suivante ajoutée"
-    added_new_next_action_plural: "Nouvelles actions suivantes ajoutées"
-    added_new_next_action_singular: "Nouvelle action suivante ajoutée"
-    added_new_project: "Nouveau projet ajouté"
-    all_completed: "Toutes les actions réalisées"
+  todos:
+    action_deferred: L'action «?%{description}?» a été reportée
+    action_deleted_error: La suppression de l'action a échoué
+    action_deleted_success: L'action suivante à été supprimée avec succès
+    action_due_on: (action à terminer avant le %{date})
+    action_marked_complete: L'action <strong>'%{description}'</strong> a été marquée
+      comme <strong>%{completed}</strong>
+    action_marked_complete_error: 'L''action <strong>''%{description}''</strong> n''a
+      PAS été marquée comme <strong>%{completed} a cause d''une erreur sur le serveur
+      </strong> '
+    action_saved: Action sauvegardée
+    action_saved_to_tickler: Action sauvegardée dans l'échéancier
+    add_another_dependency: Ajouter une autre dépendance
+    add_new_recurring: Ajouter une nouvelle action récurrente
+    added_dependency: '%{dependency} ajoutée comme dépendance'
+    added_new_context: Nouveau context ajouté
+    added_new_next_action: Nouvelle action suivante ajoutée
+    added_new_next_action_plural: Nouvelles actions suivantes ajoutées
+    added_new_next_action_singular: Nouvelle action suivante ajoutée
+    added_new_project: Nouveau projet ajouté
+    all_completed: Toutes les actions réalisées
     all_completed_here: ici
-    all_completed_tagged_page_title: "TRACKS::Toutes les tâches accomplies par marquer %{tag_name}"
-    append_in_this_project: "dans ce projet"
-    archived_tasks_title: "TRACKS::Tâches réalisées archivées"
-    blocked_by: "Bloqué par %{predecessors}"
-    calendar: 
-      due_next_month_and_later: "À réaliser dans %{month} et plus"
-      due_next_week: "À réaliser la semaine prochaine"
-      due_this_month: "À réaliser avant la fin de %{month}"
-      due_this_week: "À réaliser avant la fin de cette semaine"
-      due_today: "À réaliser aujourd'hui"
-      get_in_ical_format: "Télécharger au format iCal"
-      no_actions_due_after_this_month: "Pas d'actions à réaliser après ce mois"
-      no_actions_due_next_week: "Pas d'actions à terminer la semaine prochaine"
-      no_actions_due_this_month: "Pas d'actions à terminer pour ce mois"
-      no_actions_due_today: "Pas d'action à terminer aujourd'hui"
-    calendar_page_title: "TRACKS::Calendrier"
-    cannot_add_dependency_to_completed_todo: "Impossible d'ajouter cette action en tant que dépendance d'une action complétée !"
-    clear_due_date: "Effacer la date d'échéance"
-    clear_show_from_date: "Effacer show from date"
+    all_completed_tagged_page_title: TRACKS::Toutes les tâches accomplies par marquer
+      %{tag_name}
+    append_in_this_project: dans ce projet
+    archived_tasks_title: TRACKS::Tâches réalisées archivées
+    blocked_by: Bloqué par %{predecessors}
+    calendar:
+      due_next_week: À réaliser la semaine prochaine
+      due_this_month: À réaliser avant la fin de %{month}
+      due_this_week: À réaliser avant la fin de cette semaine
+      due_today: À réaliser aujourd'hui
+      get_in_ical_format: Télécharger au format iCal
+    calendar_page_title: TRACKS::Calendrier
+    cannot_add_dependency_to_completed_todo: Impossible d'ajouter cette action en
+      tant que dépendance d'une action complétée !
+    clear_due_date: Effacer la date d'échéance
+    clear_show_from_date: Effacer show from date
     completed: Complété
-    completed_actions: "Actions complétées"
-    completed_actions_with: "Action complétées avec l'étiquette %{tag_name}"
-    completed_in_archive: 
-      one: "Il n'y a pas d'action complétée dans l'archive"
-      other: "Il y a %{count} actions complétées dans l'archive"
-    completed_last_day: "Complété ces dernières 24 heures"
-    completed_last_x_days: "Complété ces %{count} jours"
-    completed_recurrence_completed: "Il n'y pas d'action suivante après l'action récurrente que vous avez supprimée. La récurrence est terminée"
-    completed_recurring: "Tâches reccurents complétés"
-    completed_rest_of_month: "Complété dans le reste de ce mois-ci"
-    completed_rest_of_previous_month: "Complété dans le reste du mois précédent"
-    completed_rest_of_week: "Complété dans le reste de cette semaine"
-    completed_tagged_page_title: "TRACKS::Les tâches terminées avec marquer %{tag_name}"
-    completed_tasks_title: "TRACKS::Tâches complétées"
-    confirm_delete: "Êtes-vous sûr de vouloir supprimer l'action '%{description}' ?"
-    context_changed: "Contexte changé en %{name}"
-    convert_to_project: "Faire projet"
-    defer_date_after_due_date: "La date de report est après la date d'échéance. Veuillez ajuster la date d'écheance avant de reporter."
-    defer_x_days: 
-      one: "Reporter d'1 jour"
-      other: "Report de %{count} jours"
-    deferred_actions_with: "Action reportées avec l'étiquette '%{tag_name}'"
-    deferred_pending_actions: "Actions reportées ou en attente"
-    deferred_tasks_title: "TRACKS::Échéancier"
+    completed_actions_with: Action complétées avec l'étiquette %{tag_name}
+    completed_in_archive:
+      one: Il n'y a pas d'action complétée dans l'archive
+      other: Il y a %{count} actions complétées dans l'archive
+    completed_last_day: Complété ces dernières 24 heures
+    completed_last_x_days: Complété ces %{count} jours
+    completed_recurrence_completed: Il n'y pas d'action suivante après l'action récurrente
+      que vous avez supprimée. La récurrence est terminée
+    completed_recurring: Tâches reccurents complétés
+    completed_rest_of_month: Complété dans le reste de ce mois-ci
+    completed_rest_of_previous_month: Complété dans le reste du mois précédent
+    completed_rest_of_week: Complété dans le reste de cette semaine
+    completed_tagged_page_title: TRACKS::Les tâches terminées avec marquer %{tag_name}
+    completed_tasks_title: TRACKS::Tâches complétées
+    confirm_delete: Êtes-vous sûr de vouloir supprimer l'action '%{description}' ?
+    context_changed: Contexte changé en %{name}
+    convert_to_project: Faire projet
+    defer_date_after_due_date: La date de report est après la date d'échéance. Veuillez
+      ajuster la date d'écheance avant de reporter.
+    defer_x_days:
+      one: Reporter d'1 jour
+      other: Report de %{count} jours
+    deferred_actions_with: Action reportées avec l'étiquette '%{tag_name}'
+    deferred_pending_actions: Actions reportées ou en attente
+    deferred_tasks_title: TRACKS::Échéancier
     delete: Supprimer
-    delete_action: "Supprimer action"
-    delete_recurring_action_title: "Supprimer l'action récurrente"
-    deleted_success: "Action supprimée avec succès."
-    depends_on: "Dépend de"
-    depends_on_separate_with_commas: "Dépend de (séparer avec des virgules)"
+    delete_action: Supprimer action
+    delete_recurring_action_title: Supprimer l'action récurrente
+    deleted_success: Action supprimée avec succès.
+    depends_on: Dépend de
+    depends_on_separate_with_commas: Dépend de (séparer avec des virgules)
     done: Terminé ?
-    drag_action_title: "Déplacer sur une autre action pour la rendre dépendante de cette action"
+    drag_action_title: Déplacer sur une autre action pour la rendre dépendante de
+      cette action
     due: Échéance
     edit: Modifier
-    edit_action: "Modifier action"
-    edit_action_with_description: "Modifier l'action '%{description}'"
-    edit_recurring_todo: "Modifier l'action répétant"
-    error_completing_todo: "Il s'est produit une erreur lors de l'execution de l'action récurrente %{description}"
-    error_deleting_item: "Il s'est produit une erreur lors de la suppression de l'élément %{description}"
-    error_deleting_recurring: "Il s'est produit une erreur lors de la suppression de la tâche récurrente \\'%{description}\\'"
-    error_removing_dependency: "Il s'est produit une erreur lors de la suppression de la dépendance"
-    error_saving_recurring: "Il s'est produit une erreur lors de la sauvegarde de la tâche récurrente \\'%{description}\\'"
-    error_starring: "Impossible d'actionner l'étoile de cette tache \\'%{description}\\'"
-    error_starring_recurring: "Impossible d'actionner l'étoile de la tache récurrente \\'%{description}\\'"
-    error_toggle_complete: "Impossible de marquer cette tache comme complétée"
-    feed_title_in_context: "dans le contexte '%{context}'"
-    feed_title_in_project: "dans le projet '%{project}'"
-    feeds: 
-      completed: "Complété : %{date}"
-      due: "Échéance : %{date}"
-    has_x_pending: 
-      one: "A une action en attente"
-      other: "A %{count} actions en attente"
-    hidden_actions: "Actions cachées"
-    in_hidden_state: "a l\\'état caché"
-    in_pending_state: "en attente"
-    list_incomplete_next_actions: "Liste les prochaines actions incomplètes"
-    list_incomplete_next_actions_with_limit: "Liste les %{count} dernières actions suivantes incomplètes"
-    mobile_todos_page_title: "Toutes les actions"
-    new_related_todo_created: "Une nouvelle tâche a été ajoutée qui appartient à cette tâche récurrente"
-    new_related_todo_created_short: "à créé une nouvelle tâche"
-    new_related_todo_not_created_short: "n'a pas créé la tâche"
-    next_action_description: "Description de la prochaine action"
-    next_action_needed: "Vous devez soumettre au moins une prochaine action"
-    next_actions_description: "Filtre :"
-    next_actions_description_additions: 
-      completed: "dans les %{count} derniers jours"
-      due_date: "avec au plus la date d'échéance %{due_date}"
-    next_actions_due_date: 
-      due_in_x_days: "Échéance dans %{days} days"
-      due_today: "Échéance aujourd'hui"
-      due_tomorrow: "Échéance demain"
-      overdue_by: "Dépassée de %{days} jour"
-      overdue_by_plural: "Dépassée de %{days} jours"
-    next_actions_title: "Tracks - Prochaines Actions"
-    next_actions_title_additions: 
-      completed: "Actions complétées"
-      due_today: "échéance aujourd'hui"
-      due_within_a_week: "échéance dans la semaine"
-    no_actions_due_this_week: "Pas actions à faire cette semaine"
-    no_actions_found: "Il n'y pas d'actions incomplètes actuellement."
-    no_actions_found_title: "Aucune action trouvée"
-    no_actions_with: "Il n'y pas d'actions incomplètes avec l'étiquette '%{tag_name}' actuellement"
-    no_completed_actions: "Il n'y a pas d'actions complétées actuellement."
-    no_completed_actions_with: "Pas d'actions complétées avec l'étiquette '%{tag_name}'"
-    no_completed_recurring: "Il n'y a pas d'actions récurrentes complétées actuellement"
-    no_deferred_actions: "Il n'y a pas d'actions reportées actuellement"
-    no_deferred_actions_with: "Pas d'actions reportées avec l'étiquette '%{tag_name}'"
-    no_deferred_pending_actions: "Il n'y pas d'actions reportées ou en attente actuellement"
-    no_hidden_actions: "Il n'y a pas d'actions cachées actuellement"
-    no_incomplete_actions: "Il n'y a pas d'actions incomplètes"
-    no_last_completed_actions: "Aucune action achevée trouvée"
-    no_project: "--Pas de projet--"
-    no_recurring_todos: "Il n'y a pas de tâches récurrentes actuellement"
-    older_completed_items: "Anciens éléments complétés"
-    overdue: "En retard"
-    pending: "En attente"
-    recurrence: 
+    edit_action: Modifier action
+    edit_action_with_description: Modifier l'action '%{description}'
+    edit_recurring_todo: Modifier l'action répétant
+    error_completing_todo: Il s'est produit une erreur lors de l'execution de l'action
+      récurrente %{description}
+    error_deleting_item: Il s'est produit une erreur lors de la suppression de l'élément
+      %{description}
+    error_deleting_recurring: Il s'est produit une erreur lors de la suppression de
+      la tâche récurrente \'%{description}\'
+    error_removing_dependency: Il s'est produit une erreur lors de la suppression
+      de la dépendance
+    error_saving_recurring: Il s'est produit une erreur lors de la sauvegarde de la
+      tâche récurrente \'%{description}\'
+    error_starring: Impossible d'actionner l'étoile de cette tache \'%{description}\'
+    error_starring_recurring: Impossible d'actionner l'étoile de la tache récurrente
+      \'%{description}\'
+    error_toggle_complete: Impossible de marquer cette tache comme complétée
+    feed_title_in_context: dans le contexte '%{context}'
+    feed_title_in_project: dans le projet '%{project}'
+    feeds:
+      completed: 'Complété : %{date}'
+      due: 'Échéance : %{date}'
+    has_x_pending:
+      one: A une action en attente
+      other: A %{count} actions en attente
+    hidden_actions: Actions cachées
+    in_hidden_state: a l\'état caché
+    in_pending_state: en attente
+    list_incomplete_next_actions: Liste les prochaines actions incomplètes
+    list_incomplete_next_actions_with_limit: Liste les %{count} dernières actions
+      suivantes incomplètes
+    mobile_todos_page_title: Toutes les actions
+    new_related_todo_created: Une nouvelle tâche a été ajoutée qui appartient à cette
+      tâche récurrente
+    new_related_todo_created_short: à créé une nouvelle tâche
+    new_related_todo_not_created_short: n'a pas créé la tâche
+    next_action_description: Description de la prochaine action
+    next_action_needed: Vous devez soumettre au moins une prochaine action
+    next_actions_description: 'Filtre :'
+    next_actions_description_additions:
+      completed: dans les %{count} derniers jours
+      due_date: avec au plus la date d'échéance %{due_date}
+    next_actions_due_date:
+      due_in_x_days: Échéance dans %{days} days
+      due_today: Échéance aujourd'hui
+      due_tomorrow: Échéance demain
+      overdue_by: Dépassée de %{days} jour
+      overdue_by_plural: Dépassée de %{days} jours
+    next_actions_title: Tracks - Prochaines Actions
+    next_actions_title_additions:
+      completed: Actions complétées
+      due_today: échéance aujourd'hui
+      due_within_a_week: échéance dans la semaine
+    no_actions_due_this_week: Pas actions à faire cette semaine
+    no_last_completed_actions: Aucune action achevée trouvée
+    no_project: --Pas de projet--
+    overdue: En retard
+    pending: En attente
+    recurrence:
       daily: Quotidiennement
-      daily_every_number_day: "Tous les %{number} jour(s)"
-      daily_options: "Paramètres des actions récurrentes quotidiennes"
-      day_x_on_every_x_month: "Le %{day} tous les %{month} mois"
-      ends_on: "Fini le"
-      ends_on_date: "Fini le %{date}"
-      ends_on_number_times: "Fini au bout de %{number} fois"
-      every_work_day: "Chaque jour ouvré"
-      from_tickler: "la date de la tâche provient du reporteur (pas de date d\\'échéance définie)"
+      daily_every_number_day: Tous les %{number} jour(s)
+      daily_options: Paramètres des actions récurrentes quotidiennes
+      day_x_on_every_x_month: Le %{day} tous les %{month} mois
+      ends_on: Fini le
+      ends_on_date: Fini le %{date}
+      ends_on_number_times: Fini au bout de %{number} fois
+      every_work_day: Chaque jour ouvré
+      from_tickler: la date de la tâche provient du reporteur (pas de date d\'échéance
+        définie)
       monthly: Mensuellement
-      monthly_every_xth_day: "Le %{day} %{day_of_week} tous les %{month} mois"
-      monthly_options: "Paramètres pour les actions récurrentes mensuelles"
-      no_end_date: "Pas de date de fin"
-      pattern: 
-        day_names: 
-          - Dimanche
-          - Lundi
-          - Mardi
-          - Mercredi
-          - Jeudi
-          - Vendredi
-          - Samedi
+      monthly_every_xth_day: Le %{day} %{day_of_week} tous les %{month} mois
+      monthly_options: Paramètres pour les actions récurrentes mensuelles
+      no_end_date: Pas de date de fin
+      pattern:
+        day_names:
+        - Dimanche
+        - Lundi
+        - Mardi
+        - Mercredi
+        - Jeudi
+        - Vendredi
+        - Samedi
         due: Échéance
-        every_day: "chaque jour"
-        every_month: "chaque mois"
-        every_n: "tous les %{n}"
-        every_xth_day_of_every_n_months: "tous les %{x} %{day} tous les %{n_months}"
-        every_year_on: "chaque année le %{date}"
+        every_day: chaque jour
+        every_month: chaque mois
+        every_n: tous les %{n}
+        every_xth_day_of_every_n_months: tous les %{x} %{day} tous les %{n_months}
+        every_year_on: chaque année le %{date}
         first: premier
         fourth: quatrième
         from: de
         last: dernier
-        month_names: 
-          - ~
-          - Janvier
-          - Février
-          - Mars
-          - Avril
-          - Mai
-          - Juin
-          - Juillet
-          - Août
-          - Septembre
-          - Octobre
-          - Novembre
-          - Décembre
-        on_day_n: "le %{n}e jour"
-        on_work_days: "les jours ouvrés"
+        month_names:
+        - 
+        - Janvier
+        - Février
+        - Mars
+        - Avril
+        - Mai
+        - Juin
+        - Juillet
+        - Août
+        - Septembre
+        - Octobre
+        - Novembre
+        - Décembre
+        on_day_n: le %{n}e jour
+        on_work_days: les jours ouvrés
         second: seconde
         show: montrer
-        the_xth_day_of_month: "le %{x} %{day} de %{month}"
+        the_xth_day_of_month: le %{x} %{day} de %{month}
         third: troisième
-        times: "pour %{number} fois"
+        times: pour %{number} fois
         until: jusqu'a
-        weekly: "Toutes les semaines"
-      recurrence_on_due_date: "La date d'échéance de la tâche"
-      recurrence_on_options: "Activer la récurrence"
-      show_days_before: "%{days} jours avant la date d'échéance de la tâche"
+        weekly: Toutes les semaines
+      recurrence_on_due_date: La date d'échéance de la tâche
+      recurrence_on_options: Activer la récurrence
+      show_days_before: '%{days} jours avant la date d''échéance de la tâche'
       show_option_always: toujours
-      show_options: "Montrer la tâche"
-      starts_on: "Démarre le"
-      weekly: "Toutes les semaines"
-      weekly_every_number_week: "Returns every %{number} week on"
-      weekly_options: "Paramètres pour les actions récurrentes hebdomadaires"
-      yearly: "Tous les ans"
-      yearly_every_x_day: "Chaque %{month} %{day}"
-      yearly_every_xth_day: "Chaque %{day} %{day_of_week} de %{month}"
-      yearly_options: "Paramètres pour les actions récurrentes annuelles"
-    recurrence_completed: "Il n'y a pas d'action suivante après l'action récurrente que vous venez de terminer. Fin de la récurrence"
-    recurrence_period: "Periode de récurrence"
-    recurring_action_deleted: "L'action a été supprimée. Parce que cette action est récurrente, une nouvelle action à été ajoutée"
-    recurring_action_saved: "Action récurrente sauvée"
-    recurring_actions_title: "TRACKS::Actions récurrentes"
-    recurring_deleted_success: "L'action récurrente a été supprimée avec succès."
-    recurring_pattern_removed: "La périodicité est retiré de %{count}"
-    recurring_todos: "Tâches récurrentes"
-    remove_dependency: "Enlever les dépendances (l'action n'est pas supprimée)"
-    removed_predecessor: "Suppression de %{successor} comme dépendance de %{predecessor}"
-    scheduled_overdue: "Programmée pour apparaitre il y a %{days} jours"
-    see_all_completed: "Vous pouvez voir toutes les actions accomplies %{link}"
-    set_to_pending: "%{task} mise en attente"
-    show_from: "Afficher depuis"
-    show_in_days: "Afficher dans %{days} jours"
-    show_on_date: "Afficher le %{date}"
-    show_today: "Afficher aujourd'hui"
-    show_tomorrow: "Afficher demain"
-    star_action: "Élire cette action"
-    star_action_with_description: "Élire l'action '%{description}'"
-    tagged_page_title: "TRACKS::Étiquetté avec %{tag_name}'"
-    tagged_with: "étiquettées avec « %{tag_name} »"
-    tags: "Étiquettes (séparées par des virgules)"
-    task_list_title: "TRACKS::Lister les tâches"
-    tickler_items_due: 
-      one: "Un élément de l'échéancier est arrivé à échéance − rafraîchir la page pour le voir."
-      other: "%{count} éléments de l'échéancier sont arrivés à échéance − rafraîchir la page pour les voir."
-    to_tickler: "vers l'échéancier"
-    unable_to_add_dependency: "Impossible d'ajouter la dépendance"
-    unresolved_dependency: "La valeur saisie dans le champ dépendance ne correspond pas à une action existante. Cette valeur ne sera pas sauvegardée avec le reste de l'action. Continuer ?"
-    was_due_on_date: "arrivée à échéance le %{date}"
-  users: 
-    account_signup: "Créer un compte"
-    auth_change_submit: "Modifier le type d'authenfication"
-    auth_type_update_error: "Un problème est survenu lors de la modification du type d'authentification : %{error_messages}"
-    auth_type_updated: "Type d'authentification modifié."
-    change_auth_type_title: "TRACKS::Modifier le type d'authentification"
-    change_authentication_type: "Modifier le type d'authentification"
-    change_password_prompt: "Entrez votre nouveau mot de passe dans les champs ci-dessous et cliquez sur « Modifier mot de passe » pour remplacer votre mot de passe actuel par le nouveau."
-    change_password_submit: "Modifier mot de passe"
-    change_password_title: "TRACKS::Modifier mot de passe"
-    choose_password: "Choisir le mot de passe"
-    confirm_password: "Confirmer le mot de passe"
-    desired_login: "Login souhaité"
-    destroy_confirmation: "Attention : cela va supprimer l'utilisateur '%{login}', toutes ses actions, contextes, projets et notes. Êtes-vous sûr de vouloir continuer ?"
-    destroy_error: "Une erreur s'est produite lors de la suppression de l'utilisateur %{login}"
-    destroy_successful: "Utilisateur %{login} supprimé avec succès"
-    destroy_user: "Supprimer utilisateur"
-    failed_to_delete_user: "La suppression de l'utilisateur %{username} a échoué"
-    first_user_heading: "Bienvenue dans TRACKS. Pour commencer, veuillez créer un compte administrateur"
-    identity_url: "URL d'identification"
-    label_auth_type: "Type d'authentification"
-    manage_users: "Gérer utilisateurs"
-    new_password_label: "Nouveau mot de passe"
-    new_token_generated: "Nouveau jeton généré avec succès"
-    new_user_heading: "Créer un nouvel utilisateur :"
-    new_user_title: "TRACKS::Créer un administrateur"
-    no_signups_title: "TRACKS::Pas de signups"
-    openid_ok_pref_failed: "Vous avez vérifié avec succès votre identité comme %{url} mais un problème est survenu lors de la sauvegarde de vos préférences d'authentification."
-    openid_url_verified: "Vous avez vérifié avec succès votre identité comme %{url} et défini votre type authentification comme OpenID"
-    password_confirmation_label: "Confirmer mot de passe"
-    password_updated: "Mot de passe modifié"
-    register_with_cas: "Avec votre nom d'utilisateur CAS"
-    select_authentication_type: "Sélectionner votre nouveau type d'authentification et cliquer sur 'Modifier type d'authenfication' pour remplacer les paramètres actuels."
+      show_options: Montrer la tâche
+      starts_on: Démarre le
+      weekly: Toutes les semaines
+      weekly_every_number_week: Returns every %{number} week on
+      weekly_options: Paramètres pour les actions récurrentes hebdomadaires
+      yearly: Tous les ans
+      yearly_every_x_day: Chaque %{month} %{day}
+      yearly_every_xth_day: Chaque %{day} %{day_of_week} de %{month}
+      yearly_options: Paramètres pour les actions récurrentes annuelles
+    recurrence_completed: Il n'y a pas d'action suivante après l'action récurrente
+      que vous venez de terminer. Fin de la récurrence
+    recurrence_period: Periode de récurrence
+    recurring_action_deleted: L'action a été supprimée. Parce que cette action est
+      récurrente, une nouvelle action à été ajoutée
+    recurring_action_saved: Action récurrente sauvée
+    recurring_actions_title: TRACKS::Actions récurrentes
+    recurring_deleted_success: L'action récurrente a été supprimée avec succès.
+    recurring_pattern_removed: La périodicité est retiré de %{count}
+    recurring_todos: Tâches récurrentes
+    remove_dependency: Enlever les dépendances (l'action n'est pas supprimée)
+    removed_predecessor: Suppression de %{successor} comme dépendance de %{predecessor}
+    scheduled_overdue: Programmée pour apparaitre il y a %{days} jours
+    see_all_completed: Vous pouvez voir toutes les actions accomplies %{link}
+    set_to_pending: '%{task} mise en attente'
+    show_from: Afficher depuis
+    show_in_days: Afficher dans %{days} jours
+    show_on_date: Afficher le %{date}
+    show_today: Afficher aujourd'hui
+    show_tomorrow: Afficher demain
+    star_action: Élire cette action
+    star_action_with_description: Élire l'action '%{description}'
+    tagged_page_title: TRACKS::Étiquetté avec %{tag_name}'
+    tagged_with: étiquettées avec «?%{tag_name}?»
+    tags: Étiquettes (séparées par des virgules)
+    task_list_title: TRACKS::Lister les tâches
+    tickler_items_due:
+      one: Un élément de l'échéancier est arrivé à échéance ? rafraîchir la page pour
+        le voir.
+      other: '%{count} éléments de l''échéancier sont arrivés à échéance ? rafraîchir
+        la page pour les voir.'
+    to_tickler: vers l'échéancier
+    unable_to_add_dependency: Impossible d'ajouter la dépendance
+    unresolved_dependency: La valeur saisie dans le champ dépendance ne correspond
+      pas à une action existante. Cette valeur ne sera pas sauvegardée avec le reste
+      de l'action. Continuer ?
+    was_due_on_date: arrivée à échéance le %{date}
+  users:
+    account_signup: Créer un compte
+    auth_change_submit: Modifier le type d'authenfication
+    auth_type_update_error: 'Un problème est survenu lors de la modification du type
+      d''authentification : %{error_messages}'
+    auth_type_updated: Type d'authentification modifié.
+    change_auth_type_title: TRACKS::Modifier le type d'authentification
+    change_authentication_type: Modifier le type d'authentification
+    change_password_prompt: Entrez votre nouveau mot de passe dans les champs ci-dessous
+      et cliquez sur «?Modifier mot de passe?» pour remplacer votre mot de passe actuel
+      par le nouveau.
+    change_password_submit: Modifier mot de passe
+    change_password_title: TRACKS::Modifier mot de passe
+    choose_password: Choisir le mot de passe
+    confirm_password: Confirmer le mot de passe
+    desired_login: Login souhaité
+    destroy_confirmation: 'Attention : cela va supprimer l''utilisateur ''%{login}'',
+      toutes ses actions, contextes, projets et notes. Êtes-vous sûr de vouloir continuer ?'
+    destroy_error: Une erreur s'est produite lors de la suppression de l'utilisateur
+      %{login}
+    destroy_successful: Utilisateur %{login} supprimé avec succès
+    destroy_user: Supprimer utilisateur
+    failed_to_delete_user: La suppression de l'utilisateur %{username} a échoué
+    first_user_heading: Bienvenue dans TRACKS. Pour commencer, veuillez créer un compte
+      administrateur
+    identity_url: URL d'identification
+    label_auth_type: Type d'authentification
+    manage_users: Gérer utilisateurs
+    new_password_label: Nouveau mot de passe
+    new_token_generated: Nouveau jeton généré avec succès
+    new_user_heading: 'Créer un nouvel utilisateur :'
+    new_user_title: TRACKS::Créer un administrateur
+    no_signups_title: TRACKS::Pas de signups
+    openid_ok_pref_failed: Vous avez vérifié avec succès votre identité comme %{url}
+      mais un problème est survenu lors de la sauvegarde de vos préférences d'authentification.
+    openid_url_verified: Vous avez vérifié avec succès votre identité comme %{url}
+      et défini votre type authentification comme OpenID
+    password_confirmation_label: Confirmer mot de passe
+    password_updated: Mot de passe modifié
+    register_with_cas: Avec votre nom d'utilisateur CAS
+    select_authentication_type: Sélectionner votre nouveau type d'authentification
+      et cliquer sur 'Modifier type d'authenfication' pour remplacer les paramètres
+      actuels.
     signup: Création
-    signup_new_user: "Créer un nouvel utilisateur"
-    signup_successful: "Utilisateur %{username} créé avec succès."
-    successfully_deleted_user: "Utilisateur %{username} supprimé avec succès"
-    total_actions: "Total actions"
-    total_contexts: "Total contextes"
-    total_notes: "Total notes"
-    total_projects: "Total projets"
-    total_users_count: "Vous avez %{count} utilisateurs"
-    user_created: "Utilisateur créé."
-    you_have_to_reset_your_password: "Vous devez réinitialiser votre mot de passe"
-  will_paginate: 
-    next_label: "Suivant »"
-    page_entries_info: 
-      multi_page: "Affiche %{model} de %{from} - %{to} à %{count} au total"
-      multi_page_html: "Affiche %{model} <b>%{from}&nbsp;-&nbsp;%{to}</b> à la <b>%{count}</b> au total"
-      single_page: 
-        one: "Voir de 1 %{model}"
-        other: "Afficher tous les %{count} %{model}"
-        zero: "Aucun %{model} trouvés"
-      single_page_html: 
-        one: "Voir de <b>1</b> %{model}"
-        other: "Afficher <b>tous les %{count}</b> %{model}"
-        zero: "Aucun %{model} trouvés"
-    page_gap: "..."
+    signup_new_user: Créer un nouvel utilisateur
+    signup_successful: Utilisateur %{username} créé avec succès.
+    successfully_deleted_user: Utilisateur %{username} supprimé avec succès
+    total_actions: Total actions
+    total_contexts: Total contextes
+    total_notes: Total notes
+    total_projects: Total projets
+    total_users_count: Vous avez %{count} utilisateurs
+    user_created: Utilisateur créé.
+    you_have_to_reset_your_password: Vous devez réinitialiser votre mot de passe
+  will_paginate:
+    next_label: Suivant »
+    page_entries_info:
+      multi_page: Affiche %{model} de %{from} - %{to} à %{count} au total
+      multi_page_html: Affiche %{model} <b>%{from}&nbsp;-&nbsp;%{to}</b> à la <b>%{count}</b>
+        au total
+      single_page:
+        one: Voir de 1 %{model}
+        other: Afficher tous les %{count} %{model}
+        zero: Aucun %{model} trouvés
+      single_page_html:
+        one: Voir de <b>1</b> %{model}
+        other: Afficher <b>tous les %{count}</b> %{model}
+        zero: Aucun %{model} trouvés
+    page_gap: '...'
     previous_label: «Précédent
