@@ -18,7 +18,6 @@
   TracksPages.page_notify('notice', "<%=@status_message%>", 5);
   hide_empty_message();
   TracksPages.hide_errors();
-  TracksPages.set_page_badge(<%= @down_count %>);
   <% if should_show_new_item -%>
     <% if @new_context_created -%>
       insert_new_context_with_new_todo();

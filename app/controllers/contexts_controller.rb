@@ -52,8 +52,6 @@ class ContextsController < ApplicationController
 
       @projects_to_show = @projects.active
       @contexts_to_show = [@context]
-
-      @count = @not_done_todos.count + @deferred_todos.count + @pending_todos.count
       @page_title = "TRACKS::Context: #{@context.name}"
       respond_to do |format|
         format.html
@@ -185,7 +183,6 @@ class ContextsController < ApplicationController
       @active_count = @active_contexts.size
       @hidden_count = @hidden_contexts.size
       @closed_count = @closed_contexts.size
-      @count = @active_count + @hidden_count + @closed_count
       @new_context = current_user.contexts.build
 
       render

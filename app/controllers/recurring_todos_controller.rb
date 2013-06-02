@@ -14,7 +14,6 @@ class RecurringTodosController < ApplicationController
 
     @no_recurring_todos = @recurring_todos.count == 0
     @no_completed_recurring_todos = @completed_recurring_todos.count == 0
-    @count = @recurring_todos.count
 
     @new_recurring_todo = RecurringTodo.new
   end
@@ -31,7 +30,6 @@ class RecurringTodosController < ApplicationController
     items_per_page = 20
     page = params[:page] || 1
     @completed_recurring_todos = current_user.recurring_todos.completed.paginate :page => params[:page], :per_page => items_per_page
-    @total = @count = current_user.recurring_todos.completed.count
     @range_low = (page.to_i-1) * items_per_page + 1
     @range_high = @range_low + @completed_recurring_todos.size - 1
   end

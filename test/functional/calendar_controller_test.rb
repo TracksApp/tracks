@@ -25,7 +25,6 @@ class CalendarControllerTest < ActionController::TestCase
     assert_equal due_next_week, assigns['calendar'].due_next_week
     assert_equal due_this_month, assigns['calendar'].due_this_month
     assert_equal [], assigns['calendar'].due_after_this_month
-    assert_equal 8, assigns['count']
   end
 
   def test_show_ics

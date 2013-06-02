@@ -1,5 +1,4 @@
 <%- if @saved -%>
-  TracksPages.set_page_badge(<%= @down_count %>);
   remove_old_and_add_updated_recurring_todo();
   inform_if_new_todo_created();
 <%- else -%>

@@ -3,7 +3,6 @@
   add_recurring_todo_to_active_container();
   replace_form_with_empty_form();
   $( "#new-recurring-todo" ).dialog( "close" );
-  TracksPages.set_page_badge(<%= @down_count %>);
 <% else -%>
   TracksPages.show_errors(html_for_error_messages());
 <% end -%>
