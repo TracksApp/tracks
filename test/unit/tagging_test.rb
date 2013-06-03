@@ -11,6 +11,6 @@ class TaggingTest < ActiveSupport::TestCase
     
     tagging.destroy
     
-    assert_nil Tag.find_by_name("hello")
+    assert_nil Tag.find_by_name("hello"), "Tag should be destroyed when last use in tagging was removed"
   end
 end

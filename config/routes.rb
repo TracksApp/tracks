@@ -101,7 +101,12 @@ Tracksapp::Application.routes.draw do
       post 'add_predecessor'
     end
   end
-  match 'todos/tag/:name' => 'todos#tag', :as => :tag
+
+  # match /todos/tag and put everything in :name, including extensions like .m and .txt. 
+  # This means the controller action needs to parse the extension and set format/content type
+  # Needed for /todos/tag/first.last.m to work
+  match 'todos/tag/:name'     => 'todos#tag', :as => :tag, :format => false, :name => /.*/
+
   match 'tags.autocomplete' => "todos#tags", :format => 'autocomplete'
 
   match 'todos/done/tag/:name' => "todos#done_tag", :as => :done_tag
