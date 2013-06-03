@@ -120,6 +120,28 @@ class TodosControllerTest < ActionController::TestCase
     assert_response :success
     assert_equal 3, @tagged
   end
+  
+  def test_find_tagged_with_terms_separated_with_dot
+    login_as :admin_user
+    create_todo(description: "test dotted tag", tag_list: "first.last, second")
+    t = assigns['todo']
+    assert_equal "first.last, second", t.tag_list
+
+    get :tag, name: 'first.last.m'
+    assert_equal "text/html", request.format, "controller should set right content type"
+    assert_equal "text/html", @response.content_type
+    assert_equal "first.last", assigns['tag_name'], ".m should be chomped"
+
+    get :tag, name: 'first.last.txt'
+    assert_equal "text/plain", request.format, "controller should set right content type"
+    assert_equal "text/plain", @response.content_type
+    assert_equal "first.last", assigns['tag_name'], ".txt should be chomped"
+
+    get :tag, name: 'first.last'
+    assert_equal "text/html", request.format, "controller should set right content type"
+    assert_equal "text/html", @response.content_type
+    assert_equal "first.last", assigns['tag_name'], ":name should be correct"
+  end
 
   def test_get_boolean_expression_from_parameters_of_tag_view_single_tag
     login_as(:admin_user)
@@ -920,4 +942,17 @@ class TodosControllerTest < ActionController::TestCase
     assert t4.pending?, "t4 should remain pending"
     assert t4.predecessors.map(&:id).include?(t3.id)
   end
-end
+
+  private
+
+  def create_todo(params={})
+    defaults = { source_view: 'todo', 
+      context_name: "library", project_name: "Build a working time machine", 
+      notes: "note", description: "a new todo", due: nil, tag_list: "a,b,c"}
+
+    params=params.reverse_merge(defaults)
+
+    put :create, _source_view: params[:_source_view], 
+      context_name: params[:context_name], project_name: params[:project_name], tag_list: params[:tag_list],
+      todo: {notes: params[:notes], description: params[:description], due: params[:due]}
+  end
