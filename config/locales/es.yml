@@ -333,8 +333,8 @@ es:
       completed_tasks: Hecho
       completed_tasks_title: Completed
       contexts_title: Contexts
-      export: Export
-      export_title: Import and export data
+      export: Exportar
+      export_title: "Importar y exportar datos"
       feeds: Feeds
       feeds_title: See a list of available feeds
       help: '?'
@@ -471,7 +471,7 @@ es:
     updated: Las preferencias de actualización
   projects:
     actions_in_project_title: Actions in this project
-    active_projects: Active projects
+    active_projects: "Proyectos Activos"
     add_note: Añadir una nota
     add_note_submit: Añadir nota
     add_project: Añadir Proyecto
@@ -547,12 +547,12 @@ es:
     toggle_single_title: Add a new next action
   sidebar:
     list_empty: None
-    list_name_active_contexts: Active contexts
-    list_name_active_projects: Active projects
-    list_name_completed_projects: Completed projects
-    list_name_hidden_contexts: Hidden contexts
-    list_name_hidden_projects: Hidden projects
-  states:
+    list_name_active_contexts: "Contextos activos"
+    list_name_active_projects: "Proyectos activos"
+    list_name_completed_projects: "Proyectos completados"
+    list_name_hidden_contexts: "Contextos ocultos"
+    list_name_hidden_projects: "Proyectos ocultos"
+  states: 
     active: Active
     active_plural: Active
     blocked: Bloqueado
@@ -570,10 +570,10 @@ es:
     visible: Visible
     visible_plural: Visible
   stats:
-    action_completion_time_title: Completion time (all completed actions)
-    action_selection_title: TRACKS::Action selection
-    actions: Actions
-    actions_30days_title: Actions in the last 30 days
+    action_completion_time_title: "Tiempo de finalización (todas las acciones completadas)"
+    action_selection_title: "TRACKS::Selección de Acción"
+    actions: Acciones
+    actions_30days_title: "Acciones en los últimos 30 días"
     actions_actions_avg_created_30days: In the last 30 days you created on average
       %{count} actions
     actions_avg_completed: and completed an average of %{count} actions per month.
@@ -700,6 +700,8 @@ es:
       stats: '%a %d-%m'
     pm: pm
   todos:
+    no_actions:
+      completed: "Actualmente no hay acciones completadas."
     action_deferred: La acción \'%{description}\' se aplazó
     action_deleted_error: Failed to delete the action
     action_deleted_success: Successfully deleted next action
@@ -737,7 +739,8 @@ es:
     clear_due_date: Clear due date
     clear_show_from_date: Clear show from date
     completed: Completed
-    completed_actions_with: Completed actions with the tag %{tag_name}
+    completed_actions: "Acciones completadas"
+    completed_actions_with: "Acciones completadas with the tag %{tag_name}"
     completed_in_archive:
       one: There is one completed action in the archive.
       other: There are %{count} completed actions in the archive.
