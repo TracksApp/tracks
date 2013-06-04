@@ -480,7 +480,7 @@ module TodosHelper
   def should_show_new_item(todo = @todo)
     return false if todo.nil?
     source_view do |page|
-      page.todo     { return !todo.hidden? }
+      page.todo     { return !todo.hidden? && !todo.deferred? }
       page.deferred { return todo.deferred? || todo.pending? }
       page.context  { return show_todo_on_current_context_page && todo_should_not_be_hidden_on_context_page }
       page.tag      { return todo.has_tag?(@tag_name) }
