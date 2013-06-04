@@ -610,6 +610,10 @@ fr:
     stalled_plural: Bloqués
     visible: Visible
     visible_plural: Visibles
+    contexts:
+      active: Contextes actifs
+      closed: Contextes fermés
+      hidden: Contextes cachés
   stats:
     action_completion_time_title: Temps de réalisation (toutes les actions réalisées)
     action_selection_title: TRACKS::Selection action

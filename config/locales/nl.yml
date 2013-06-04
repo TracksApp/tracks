@@ -647,6 +647,14 @@ nl:
     visible_plural: Zichtbare
     close: Gesloten
     closed_plural: Gesloten
+    contexts:
+      active: Actieve contexten
+      closed: Gesloten contexten
+      hidden: Verborgen contexten
+    projects:
+      active: Actieve projecten
+      closed: Gesloten projecten
+      hidden: Verborgen projecten
   stats:
     action_completion_time_title: Doorlooptijd (alle voltooide acties)
     action_selection_title: 'TRACKS:: Actie selectie'

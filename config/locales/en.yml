@@ -333,6 +333,14 @@ en:
     hide_action_form_title: Hide new action form
     make_actions_dependent: Make actions dependent on each other
   states:
+    contexts:
+      hidden: Hidden contexts
+      active: Active contexts
+      closed: Closed contexts
+    projects:
+      hidden: Hidden projects
+      active: Active projects
+      closed: Closed projects
     hidden_plural: Hidden
     completed: Completed
     completed_plural: Completed
