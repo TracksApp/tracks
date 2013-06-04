@@ -78,7 +78,7 @@ class Todo < ActiveRecord::Base
     transitions :to => :active, :from => [:completed], :guard => :no_uncompleted_predecessors?
     transitions :to => :active, :from => [:pending], :guard => :no_uncompleted_predecessors_or_deferral?
     transitions :to => :pending, :from => [:completed], :guard => :uncompleted_predecessors?
-    transitions :to => :deferred, :from => [:pending], :guard => :no_uncompleted_predecessors?
+    transitions :to => :deferred, :from => [:pending], :guard => :guard_for_transition_from_deferred_to_pending
   end
 
   aasm_event :hide do
@@ -92,7 +92,7 @@ class Todo < ActiveRecord::Base
   end
 
   aasm_event :block do
-    transitions :to => :pending, :from => [:active, :deferred]
+    transitions :to => :pending, :from => [:active, :deferred, :project_hidden]
   end
 
   attr_protected :user
@@ -142,6 +142,14 @@ class Todo < ActiveRecord::Base
     return !uncompleted_predecessors.all.empty?
   end
 
+  def guard_for_transition_from_deferred_to_pending
+    no_uncompleted_predecessors? && not_part_of_hidden_container?
+  end
+
+  def not_part_of_hidden_container?
+    !( (self.project && self.project.hidden?) || self.context.hidden? )
+  end
+
   # Returns a string with description <context, project>
   def specification
     project_name = self.project.is_a?(NullProject) ? "(none)" : self.project.name
@@ -185,7 +193,7 @@ class Todo < ActiveRecord::Base
   def remove_predecessor(predecessor)
     self.predecessors.delete(predecessor)
     if self.predecessors.empty?
-      self.activate!
+      self.not_part_of_hidden_container? ? self.activate! : self.hide!
     else
       save!
     end
