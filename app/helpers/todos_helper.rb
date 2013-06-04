@@ -223,7 +223,7 @@ module TodosHelper
 
   def should_show_new_item
     source_view do |page|
-      page.todo { return !@todo.hidden? }
+      page.todo { return !@todo.hidden? && !@todo.deferred? }
       page.deferred { return @todo.deferred? || @todo.pending? }
       page.context {
         return @todo.context_id==@default_context.id && ( (@todo.hidden? && @todo.context.hidden?) || (!@todo.hidden?) )
