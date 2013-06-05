@@ -766,7 +766,6 @@ he:
       ends_on_date: מסתיים ב-%{date}
       ends_on_number_times: מסתיים לאחר %{number} פעמים
       every_work_day: בכל יום עבודה
-      from_tickler: תאריך היעד למשימה מגיע מהמִזְכָּר (לא נקבע תאריך יעד)
       monthly: חודשי
       monthly_every_xth_day: יום %{day} ה -%{day_of_week}  בכל %{month} חודש
       monthly_options: הגדרות לפעולות בחזוריות חודשית
@@ -791,11 +790,6 @@ he:
         times: כ-%{number} פעמים
         until: עד
         weekly: שבועי
-      recurrence_on_due_date: יעד למשימה
-      recurrence_on_options: הגדרת מחזוריות לפי
-      show_days_before: '%{days} ימים לפני תאריך היעד למשימה'
-      show_option_always: תמיד
-      show_options: הצגת משימות
       starts_on: מתחיל ב
       weekly: שבועי
       weekly_every_number_week: חוזר כל %{number}  שבוע ב

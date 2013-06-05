@@ -592,7 +592,6 @@ en:
       ends_on_number_times: Ends after %{number} times
       ends_on_date: Ends on %{date}
       every_work_day: Every work day
-      recurrence_on_due_date: the date that the todo is due
       weekly_options: Settings for weekly recurring actions
       weekly: Weekly
       monthly_options: Settings for monthly recurring actions
@@ -641,16 +640,18 @@ en:
         due: due
         until: until
         every_month: every month
-      show_option_always: always
       daily: Daily
       yearly_every_x_day: Every %{month} %{day}
-      recurrence_on_options: Set recurrence on
+      recurrence_on:
+        options: Use the calculated date to 
+        due_date: set the actions due date
+        show_options: Show the action
+        show_always: always
+        show_days_before: "not until %{days} days before the due date"
+        from_tickler: set the date the action should be shown (do not set a due date)
       daily_every_number_day: Every %{number} day(s)
-      show_options: Show the todo
       weekly_every_number_week: Returns every %{number} week on
       ends_on: Ends on
-      show_days_before: "%{days} days before the todo is due"
-      from_tickler: the date todo comes from tickler (no due date set)
       no_end_date: No end date
       day_x_on_every_x_month: Day %{day} on every %{month} month
       yearly_options: Settings for yearly recurring actions

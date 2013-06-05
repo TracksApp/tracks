@@ -830,7 +830,6 @@ cs:
       ends_on_date: Končí %{date}
       ends_on_number_times: Končí po %{number} opakováních
       every_work_day: Každý pracovní den
-      from_tickler: datum kdy úkol vypadne z Tickleru (není nastaveno plánované datum)
       monthly: Měsíčně
       monthly_every_xth_day: '%{day} %{day_of_week} každý %{month}. měsíc'
       monthly_options: Nastavení pro měsíční opakované úkoly
@@ -877,11 +876,6 @@ cs:
         times: (%{number} opakování)
         until: do
         weekly: každý týden
-      recurrence_on_due_date: datum na které je úkol plánován
-      recurrence_on_options: Nastavit opakování na
-      show_days_before: '%{days} dní před plánovaným datem'
-      show_option_always: stále
-      show_options: Úkázat úkol
       starts_on: Začíná
       weekly: Týdně
       weekly_every_number_week: Každých %{number} týdnů

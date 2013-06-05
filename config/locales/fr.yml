@@ -889,8 +889,6 @@ fr:
       ends_on_date: Fini le %{date}
       ends_on_number_times: Fini au bout de %{number} fois
       every_work_day: Chaque jour ouvré
-      from_tickler: la date de la tâche provient du reporteur (pas de date d\'échéance
-        définie)
       monthly: Mensuellement
       monthly_every_xth_day: Le %{day} %{day_of_week} tous les %{month} mois
       monthly_options: Paramètres pour les actions récurrentes mensuelles
@@ -937,11 +935,6 @@ fr:
         times: pour %{number} fois
         until: jusqu'a
         weekly: Toutes les semaines
-      recurrence_on_due_date: La date d'échéance de la tâche
-      recurrence_on_options: Activer la récurrence
-      show_days_before: '%{days} jours avant la date d''échéance de la tâche'
-      show_option_always: toujours
-      show_options: Montrer la tâche
       starts_on: Démarre le
       weekly: Toutes les semaines
       weekly_every_number_week: Returns every %{number} week on

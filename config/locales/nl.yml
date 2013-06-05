@@ -933,7 +933,6 @@ nl:
       ends_on_date: Eindigt op %{date}
       ends_on_number_times: Eindigt na %{number} keer
       every_work_day: Elke werkdag
-      from_tickler: de datum dat de actie uit de tickler komt (geen deadline ingesteld)
       monthly: Maandelijks
       monthly_every_xth_day: De %{day} %{day_of_week} van elke %{month} maand
       monthly_options: Instellingen voor maandelijks terugkerende acties
@@ -980,11 +979,6 @@ nl:
         times: voor %{number} keer
         until: tot
         weekly: wekelijks
-      recurrence_on_due_date: de datum dat deadline van de actie is
-      recurrence_on_options: Stel herhaling in op
-      show_days_before: '%{days} dagen voor de deadline van actie'
-      show_option_always: altijd
-      show_options: Toon de actie
       starts_on: Begint op
       weekly: Wekelijks
       weekly_every_number_week: Herhaalt elke %{number} weken op
@@ -993,6 +987,13 @@ nl:
       yearly_every_x_day: Elke %{month} %{day}
       yearly_every_xth_day: De %{day} %{day_of_week} van %{month}
       yearly_options: Instellingen voor jaarlijks terugkerende acties
+      recurrence_on:
+        due_date: 'de deadline van de actie '
+        from_tickler: de datum wanneer de actie getoond moet worden (geen deadline)
+        options: Gebruik de berekende datum voor
+        show_always: altijd
+        show_days_before: niet voor %{days} dagen voor de deadline
+        show_options: Toon de actie
     recurrence_completed: Er is geen volgende actie na de terugkerende actie die u
       zojuist hebt voltooid. De herhaling is voltooid
     recurrence_period: Herhaling periode

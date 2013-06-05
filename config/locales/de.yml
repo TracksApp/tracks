@@ -848,7 +848,6 @@ de:
       ends_on_date: Endet am %{date}
       ends_on_number_times: Endet nach %{number} mal
       every_work_day: Jeden Arbeitstag
-      from_tickler: Fälligkeitsdatum kommt vom Notizbuch (keine Fälligkeit setzen)
       monthly: Monatlich
       monthly_every_xth_day: Der %{day} %{day_of_week} eines jeden %{month}. Monats
       monthly_options: Einstellungen für monatliche Aufgaben
@@ -895,11 +894,6 @@ de:
         times: für %{number} Zeiten
         until: bis
         weekly: wöchentlich
-      recurrence_on_due_date: Fälligkeitsdatum
-      recurrence_on_options: Setze Wiederholung auf
-      show_days_before: '%{days} Tage bevor die Aufgabe fällig ist'
-      show_option_always: immer
-      show_options: Aufgabe anzeigen
       starts_on: Beginnt am
       weekly: Wöchentlich
       weekly_every_number_week: Kehrt jede %{number}. Woche wieder am
