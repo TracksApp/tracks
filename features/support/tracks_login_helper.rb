@@ -9,6 +9,14 @@ class SessionBackdoorController < ::ApplicationController
     cookies[:auth_token] = { :value => user.remember_token, :expires => user.remember_token_expires_at }
     redirect_to root_path
   end
+
+  def expire_session
+    current_user.forget_me if logged_in?
+    cookies.delete :auth_token
+    session['user_id'] = nil
+    reset_session
+    session['expiry_time'] = Time.now
+  end
 end
 
 module TracksLoginHelper
@@ -20,6 +28,7 @@ module TracksLoginHelper
     _routes.draw do
       # here you can add any route you want
       match "/test_login_backdoor", to: "session_backdoor#create"
+      match "login/expire_session", to: "session_backdoor#expire_session"
     end
     ActiveSupport.on_load(:action_controller) { _routes.finalize! }
   ensure
