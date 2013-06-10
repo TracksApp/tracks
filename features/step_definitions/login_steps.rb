@@ -1,13 +1,7 @@
 Given /^I have logged in as "(.*)" with password "(.*)"$/ do |username, password|
-  step "I go to the login page"
-  fill_in "user_login", :with => username
-  fill_in "user_password", :with => password
-  uncheck "user_noexpiry"
-  click_button "Sign in"
-  
-  logout_regexp = @mobile_interface ? "Logout" : "Logout \(#{username}\)"
-  page.should have_content(logout_regexp)
-  @current_user = User.where(:login => username).first
+  user = User.where(:login => username).first
+  request_signin_as(user)
+  @current_user = user
 end
 
 When /^I submit the login form as user "([^\"]*)" with password "([^\"]*)"$/ do |username, password|
