@@ -16,6 +16,11 @@ class SessionBackdoorController < ::ApplicationController
     session['user_id'] = nil
     reset_session
     session['expiry_time'] = Time.now
+
+    respond_to do |format|
+      format.html { render :text => "Session expired for test purposes"}
+      format.js   { render :text => "" }
+    end
   end
 end
 
