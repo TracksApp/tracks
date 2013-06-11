@@ -5,11 +5,18 @@
     :suppress_project => true, 
     :parent_container_type => 'project'
   }
+  if @not_done_todos.count == 0
+    # force project view so one empty container will be shown with an empty message
+    @group_view_by = 'project'
+  end
+  show_empty_containers = (@group_view_by == 'project')
 -%>
 <div id="display_box">
   <%= project_next_prev %>
 
-  <%= render :partial => @project, :locals => {:settings => {:collapsible => false, :show_empty_containers => true, :parent_container_type => 'project' }} %>
+  <%= render :partial => "project_settings_container", :locals => {:project => @project} %>
+
+  <%= show_grouped_todos({:collapsible => false, :show_empty_containers => show_empty_containers, :parent_container_type => 'project' }) %>
 
   <%= show_deferred_pending_todos(@deferred_todos, @pending_todos, deferred_pending_options) %>
 

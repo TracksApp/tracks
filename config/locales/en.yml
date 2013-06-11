@@ -452,6 +452,7 @@ en:
       home_completed: Completed actions
       tag_completed: "Completed actions tagged with '%{param}'"
       home_without_project: "Actions without project"
+      context_without_project: "Actions without project in %{param}"
       project_project: "Actions in this project"
       project_deferred_pending: Deferred/pending actions in this project
       context_deferred_pending: Deferred/pending actions in this context

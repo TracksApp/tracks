@@ -20,6 +20,7 @@ class ApplicationController < ActionController::Base
   before_filter :set_time_zone
   before_filter :set_zindex_counter
   before_filter :set_locale
+  append_before_filter :set_group_view_by
   prepend_before_filter :login_required
   prepend_before_filter :enable_mobile_content_negotiation
   after_filter :set_charset
@@ -288,6 +289,10 @@ class ApplicationController < ActionController::Base
     @count = @done_today.size + @done_rest_of_week.size + @done_rest_of_month.size
 
     render :template => 'todos/done'
+  end
+
+  def set_group_view_by
+    @group_view_by = params['_group_view_by'] || cookies['group_view_by'] || 'context'
   end
 
 end

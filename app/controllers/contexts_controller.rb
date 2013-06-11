@@ -42,12 +42,16 @@ class ContextsController < ApplicationController
       @max_completed = current_user.prefs.show_number_completed
       @done = @context.todos.completed.limit(@max_completed).reorder("todos.completed_at DESC, todos.created_at DESC").includes(Todo::DEFAULT_INCLUDES)
       @not_done_todos = @context.todos.active.reorder("todos.due IS NULL, todos.due ASC, todos.created_at ASC").includes(Todo::DEFAULT_INCLUDES)
+      @todos_without_project = @not_done_todos.select{|t| t.project.nil?}
 
       @deferred_todos = @context.todos.deferred.includes(Todo::DEFAULT_INCLUDES)
       @pending_todos = @context.todos.pending.includes(Todo::DEFAULT_INCLUDES)
         
       @projects = current_user.projects
       @contexts = current_user.contexts
+
+      @projects_to_show = @projects.active
+      @contexts_to_show = [@context]
 
       @count = @not_done_todos.count + @deferred_todos.count + @pending_todos.count
       @page_title = "TRACKS::Context: #{@context.name}"

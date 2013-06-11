@@ -21,13 +21,13 @@ module TodosHelper
     end
   end
 
-  def show_grouped_todos
+  def show_grouped_todos(settings = {})
     collection = (@group_view_by == 'context') ? @contexts_to_show : @projects_to_show
-    render(:partial => collection, :locals => { :settings => {
+    render(:partial => collection, :locals => { :settings => settings.reverse_merge!({
       :collapsible => true, 
       :show_empty_containers => @show_empty_containers,
       :parent_container_type => @group_view_by
-    }})
+    })})
   end
 
   def default_collection_settings
@@ -80,14 +80,14 @@ module TodosHelper
       :locals => {:settings => settings.reverse_merge!(default_collection_settings)}
   end
 
-  def show_todos_without_project(todos_without_project)
+  def show_todos_without_project(todos_without_project, settings = {})
     render :partial => 'todos/collection', 
       :object => todos_without_project, 
-      :locals => {:settings => { 
+      :locals => {:settings => settings.reverse_merge!({ 
         :collapsible => true, 
         :container_name => "without_project",
         :parent_container_type => "home"
-        }
+        })
       }
   end
 

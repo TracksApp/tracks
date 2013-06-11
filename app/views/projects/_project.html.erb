@@ -2,11 +2,8 @@
 @not_done = @not_done_todos.select {|t| t.project_id == project.id }
 # invalidate the cache every day because of staleness or
 # rendering of "due in x days" that change without touching updated at of the todo
-cache [project, @source_view, current_user.date.strftime("%Y%m%d")] do 
+cache [project, @source_view, current_user.date.strftime("%Y%m%d"), @tag_name] do 
 -%>
-  <% if source_view_is :project -%>
-    <%= render :partial => "project_settings_container", :locals => {:project => project} %>
-  <% end -%>
   <%= 
     title = source_view_is(:project) ? t('projects.actions_in_project_title') : show_project_name(project)
 
