@@ -435,6 +435,8 @@ en:
       completed: Currently there are no completed actions
       title: No actions found
       not_done_with_tag: "Currently there are no incomplete actions with the tag '%{param}'"
+      not_done_project: Currently there are no incomplete actions in this project
+      not_done_context: Currently there are no incomplete actions in this context
       completed_recurring: Currently there are no completed recurring todos
       not_done: Currently there are no incomplete actions
       project: Currently there are no incomplete actions in this project

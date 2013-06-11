@@ -91,7 +91,6 @@ Then(/^I should (not see|see) "([^"]*)" in the (completed|done today|done this w
   id = 'completed_rest_of_month_container'  if container == 'done this month'
 
   css = "div##{id} div#line_todo_#{find_todo(todo_description).id}"
-  page.should have_css(css)
   check_css_visibility(visible, css)
 end
 
@@ -138,9 +137,8 @@ end
 
 Then /^I should (see|not see) empty message for (done today|done this week|done this month|completed todos|deferred todos|todos) (of done actions|of context|of project|of home|of tag)/ do |visible, state, type|
   css = "error: wrong state"
-  css = "div#c#{@context.id}-empty-d"             if state == "todos" && type == "of context"
-  css = "div#p#{@project.id}-empty-d"             if state == "todos" && type == "of project"
-  css = "div#no_todos_in_view"                    if state == "todos" && (type == "of home" || type == "of tag")
+  css = "div#c#{@context.id}-empty-d"             if state == "todos" 
+  css = "div#no_todos_in_view"                    if state == "todos" && ["of home", "of tag", "of context", "of project"].include?(type)
   css = "div#completed_today_container"           if state == "done today"
   css = "div#completed_rest_of_week_container"    if state == "done this week"
   css = "div#completed_rest_of_month_container"   if state == "done this month"

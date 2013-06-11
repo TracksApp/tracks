@@ -97,7 +97,9 @@ Feature: Add new next action from every page
       | tickler page                    | context  | not see |
       | tickler page                    | project  | not see |
       | "test project" project          | context  | see     |
+      | "test project" project          | project  | see     |
       | context page for "test context" | context  | see     |
+      | context page for "test context" | project  | see     |
       | tag page for "starred"          | context  | see     |
       | tag page for "starred"          | project  | see     |
 
@@ -124,7 +126,9 @@ Feature: Add new next action from every page
       | tickler page                    | not see | 0     | 3     | context  |
       | tickler page                    | not see | 0     | 3     | project  |
       | "testing" project               | see     | 3     | 3     | context  |
+      | "testing" project               | see     | 3     | 3     | project  |
       | context page for "test context" | see     | 2     | 3     | context  |
+      | context page for "test context" | see     | 2     | 3     | project  |
       | tag page for "starred"          | see     | 2     | 3     | context  |
       | tag page for "starred"          | see     | 2     | 3     | project  |
 
@@ -199,9 +203,13 @@ Feature: Add new next action from every page
       | tickler page                       | context  | not see    | not see     |
       | tickler page                       | project  | not see    | not see     |
       | "visible project" project          | project  | not see    | see         |
+      | "visible project" project          | context  | not see    | see         |
       | "hidden project" project           | project  | see        | not see     |
+      | "hidden project" project           | context  | see        | not see     |
       | context page for "visible context" | context  | not see    | see         |
+      | context page for "visible context" | project  | not see    | see         |
       | context page for "other context"   | context  | not see    | not see     |
+      | context page for "other context"   | project  | not see    | not see     |
       | tag page for "starred"             | context  | not see    | not see     |
       | tag page for "starred"             | project  | not see    | not see     |
       | tag page for "test"                | context  | see        | see         |

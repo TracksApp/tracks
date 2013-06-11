@@ -123,7 +123,7 @@ Feature: Edit a project
   Scenario: Moving the todo to the tickler will move todo to tickler container and update empty messages
     Given I have a project "test" with 1 todos
     When I go to the "test" project
-    Then I should see "todo 1" in the action container
+    Then I should see "todo 1" in the context container for "Context A"
     And I should see empty message for deferred todos of project
     And I should see empty message for completed todos of project
     When I defer "todo 1" for 1 day

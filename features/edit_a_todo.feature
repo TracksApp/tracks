@@ -55,7 +55,7 @@ Feature: Edit a next action from every page
   @javascript @wip
   Scenario Outline: Changing container of the todo in that container will hide it
   # this script fails on https://code.google.com/p/selenium/issues/detail?id=3075 for selenium-webdriver > 2.14.
-  # and selenium-webdriver < 2.20 fails on firefox 11 :-( So @wip for now. This may work on webkit though
+  # and selenium-webdriver < 2.20 fails on firefox 11 :-( So @wip for now. This may work with webkit though
     Given I have a todo "delete me" in the context "@home" in the project "do it"
     And I have a project "go for it"
     And I have selected the view for group by <grouping>
@@ -77,6 +77,7 @@ Feature: Edit a next action from every page
   @javascript
   Scenario Outline: Deleting the last todo in container will show empty message # only project, context, tag, not todo
     Given I have a context called "@home"
+    And I have selected the view for group by <grouping>
     And I have a project "my project" that has the following todos
       | context | description   | tags      |
       | @home   | first action  | test, bla |
@@ -90,12 +91,15 @@ Feature: Edit a next action from every page
     Then I should see empty message for todos of <page type>
 
     Scenarios:
-      | page                     | page type      |
-      | "my project" project     | project        |
-      | context page for "@home" | context        |
-      | tag page for "bla"       | tag            |
+      | page                     | page type      | grouping |
+      | "my project" project     | project        | project  |
+      | "my project" project     | project        | context  |
+      | context page for "@home" | context        | context  |
+      | context page for "@home" | context        | project  |
+      | tag page for "bla"       | tag            | context  |
+      | tag page for "bla"       | tag            | project  |
 
-  @javascript
+  @javascript 
   Scenario Outline: I can mark an active todo complete and it will update empty messages
     Given I have a context called "visible context"
     And I have a project called "visible project"
@@ -134,7 +138,7 @@ Feature: Edit a next action from every page
       | "visible project" project          | project    |
       | context page for "visible context" | context    |
 
-  @javascript
+  @javascript 
   Scenario Outline: I can mark a completed todo active and it will update empty messages and context containers
     Given I have a completed todo with description "visible todo" in project "visible project" with tags "starred" in the context "visible context"
     And I have selected the view for group by <grouping>
@@ -155,8 +159,8 @@ Feature: Edit a next action from every page
       | home page              | home                     | context  | container for context "visible context" |
       | home page              | home                     | project  | container for project "visible project" |
 
-  @javascript
-  Scenario Outline: I can mark a completed todo active and it will update empty messages for pages without context containers
+  @javascript 
+  Scenario Outline: I can mark a completed todo active and it will update empty messages for pages without hideable containers
     Given I have a completed todo with description "visible todo" in project "visible project" with tags "starred" in the context "visible context"
     When I go to the <page>
     Then I should see empty message for todos of <page type>

@@ -512,18 +512,18 @@ module TodosHelper
   end
 
   def update_needs_to_hide_container
-    if source_view_is(:tag)
+    if source_view_is_one_of(:tag, :context, :project)
       return @remaining_in_context == 0 && (
         todo_moved_out_of_container                                                       ||
         (@todo_hidden_state_changed && @todo.hidden?)                                     ||
         @todo_was_deferred_from_active_state                                              ||
         @tag_was_removed                                                                  ||
         @todo_was_destroyed                                                               ||
-        (@todo.completed? && !(@original_item_was_deferred || @original_item_was_hidden))
+        (@todo.completed? && !(@original_item_was_deferred || @original_item_was_hidden || @original_item_was_pending))
       ) 
     end
 
-    return false if source_view_is_one_of(:project, :calendar, :done, :context)
+    return false if source_view_is_one_of(:calendar, :done)
 
     return @remaining_in_context == 0 
   end
@@ -599,7 +599,7 @@ module TodosHelper
   end
 
   def todo_container_empty_id(todo)
-    raise Exception.new, "no todo set in TodosHelper::todo_container_empty_id. You probably not assign @original_item" if !todo    
+    raise Exception.new, "no todo set in TodosHelper::todo_container_empty_id. You probably did not assign @original_item" if !todo    
     @group_view_by == "project" ? project_container_empty_id(todo) : context_container_empty_id(todo)
   end
 
@@ -609,8 +609,7 @@ module TodosHelper
     return "#{@new_due_id}_container"   if source_view_is :calendar
     return "deferred_pending_container" if !source_view_is(:todo) && (todo.deferred? || todo.pending?)
     return "completed_container"        if todo.completed?
-    return "p#{todo.project_id}"        if source_view_is :project
-    return project_container_id(todo)   if source_view_is_one_of(:todo, :tag) && @group_view_by == 'project'
+    return project_container_id(todo)   if source_view_is_one_of(:todo, :tag, :project, :context) && @group_view_by == 'project'
     return context_container_id(todo)           
   end
 
@@ -620,7 +619,7 @@ module TodosHelper
     source_view do |page|
       page.project  {
         return "deferred_pending_container-empty-d" if empty_criteria_met
-        return project_container_empty_id(todo)
+        return todo_container_empty_id(todo)
       }
       page.tag {
         return "deferred_pending_container-empty-d" if empty_criteria_met
@@ -633,7 +632,7 @@ module TodosHelper
       }
       page.context {
         return "deferred_pending_container-empty-d" if empty_criteria_met
-        return context_container_empty_id(todo)
+        return todo_container_empty_id(todo)
       }
       page.todo {
         return todo_container_empty_id(todo) 
