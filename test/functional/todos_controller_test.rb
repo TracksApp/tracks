@@ -691,7 +691,7 @@ class TodosControllerTest < ActionController::TestCase
     recurring_todo_1 = RecurringTodo.find(1)
     #set_user_to_current_time_zone(recurring_todo_1.user)
     todo_1 = Todo.where(:recurring_todo_id => 1).first
-    today = Time.zone.now.at_midnight
+    today = Time.zone.now.at_midnight - 1.day
 
     # change recurrence pattern to monthly and set show_from to today
     recurring_todo_1.target = 'show_from_date'
@@ -730,7 +730,7 @@ class TodosControllerTest < ActionController::TestCase
     assert !new_todo.show_from.nil?
 
     # do not use today here. It somehow gets messed up with the timezone calculation.
-    next_month = (Time.zone.now + 1.month).at_midnight
+    next_month = (Time.zone.now - 1.day + 1.month).at_midnight
 
     assert_equal next_month.utc.to_date.to_s(:db), new_todo.show_from.utc.to_date.to_s(:db)
   end
