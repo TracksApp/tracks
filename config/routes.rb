@@ -4,7 +4,6 @@ Tracksapp::Application.routes.draw do
   root :to => 'todos#index'
 
   match 'login' => 'login#login'
-  match 'login/expire_session' => 'login#expire_session'
   match 'login/check_expiry' => 'login#check_expiry'
   match 'logout' => 'login#logout'
 
