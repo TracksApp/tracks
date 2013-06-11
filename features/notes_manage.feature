@@ -42,7 +42,7 @@ Feature: View, add, remove notes
     And I edit the first note to "edited note"
     Then I should see "edited note"
 
-  @javascript 
+  @javascript
   Scenario: Toggle all notes
     Given I have a context called "@pc"
     And I have a project "take notes" that has the following todos

@@ -46,10 +46,6 @@
         </h1>
       </div>
       <div id="minilinks">
-        <%= link_to(t('layouts.toggle_contexts'), "#", {:title => t('layouts.toggle_contexts_title'), :id => "toggle-contexts-nav"}) %>
-        &nbsp;|&nbsp;
-	       <%= link_to(t('layouts.toggle_notes'), "#", {:accesskey => "S", :title => t('layouts.toggle_notes_title'), :id => "toggle-notes-nav"}) %>
-        &nbsp;|&nbsp;
         <%= link_to("#{t('common.logout')} (#{current_user.display_name}) &raquo;".html_safe, logout_path) %>
       </div>
       <div id="navcontainer">
@@ -66,13 +62,15 @@
               <li><%= navigation_link( t('layouts.navigation.recurring_todos'), {:controller => "recurring_todos", :action => "index"}, :title => t('layouts.navigation.recurring_todos_title')) %></li>
             </ul>
           </li>
-          <li><a href="#"><%= t('layouts.navigation.view') %></a>
+          <li id="menu_view"><a href="#" id="menu_view_link"><%= t('layouts.navigation.view') %></a>
             <ul>
               <li><%= navigation_link( t('layouts.navigation.calendar'), calendar_path, :title => t('layouts.navigation.calendar_title')) %></li>
               <li><%= navigation_link( t('layouts.navigation.completed_tasks'), done_overview_path, {:accesskey=>"d", :title=>t('layouts.navigation.completed_tasks_title')} ) %></li>
               <li><%= navigation_link( t('layouts.navigation.feeds'), feeds_path, :title => t('layouts.navigation.feeds_title')) %></li>
               <li><%= navigation_link( t('layouts.navigation.stats'), stats_path, :title => t('layouts.navigation.stats_title')) %></li>
               <li><hr/></li>
+              <li id="menu_view_toggle_contexts"><%= link_to(t('layouts.toggle_contexts'), "#", {:title => t('layouts.toggle_contexts_title'), :id => "toggle-contexts-nav"}) %></li>
+              <li><%= link_to(t('layouts.toggle_notes'), "#", {:accesskey => "S", :title => t('layouts.toggle_notes_title'), :id => "toggle-notes-nav"}) %></li>
               <%= group_view_by_menu_entry %>
             </ul>
           </li>

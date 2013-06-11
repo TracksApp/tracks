@@ -30,7 +30,7 @@ When /^I edit the first note to "([^"]*)"$/ do |note_body|
   end
 end
 
-When /^I toggle the note of "([^"]*)"$/ do |todo_description|
+When(/^I toggle the note of "([^"]*)"$/) do |todo_description|
   todo = @current_user.todos.where(:description => todo_description).first
   todo.should_not be_nil
 
@@ -39,7 +39,9 @@ When /^I toggle the note of "([^"]*)"$/ do |todo_description|
 end
 
 When /^I click Toggle Notes$/ do
-  click_link 'Toggle notes'
+  open_view_menu do
+    click_link 'Toggle notes'
+  end
 end
 
 When /^I toggle all notes$/ do

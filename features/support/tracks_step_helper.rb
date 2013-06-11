@@ -97,6 +97,23 @@ module TracksStepHelper
     execute_javascript("$('#{sortable_css}').simulateDragSortable({move: #{delta}, handle: '.grip'});")
   end
 
+  def open_view_menu
+    view_menu = "ul.sf-menu li#menu_view"
+
+    # click menu 
+    view_menu_link = "#{view_menu} a#menu_view_link"
+    page.should have_css(view_menu_link, :visible => true)
+    page.find(view_menu_link).click
+
+    # wait for menu to be visible
+    view_menu_item = "#{view_menu} li#menu_view_toggle_contexts"
+    page.should have_css(view_menu_item)
+
+    within view_menu do
+      yield
+    end
+  end
+
   def open_submenu_for(todo)
     submenu_arrow = "div#line_todo_#{todo.id} img.todo-submenu"
     page.should have_css(submenu_arrow, :visible=>true)

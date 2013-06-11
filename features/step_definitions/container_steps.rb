@@ -11,7 +11,9 @@ When(/^I collapse the project container of "(.*?)"$/) do |project_name|
 end
 
 When /^I toggle all collapsed context containers$/ do
-  click_link 'Toggle collapsed contexts'
+  open_view_menu do
+    click_link 'Toggle collapsed contexts'
+  end
 end
 
 ####### Context #######
