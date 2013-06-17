@@ -272,7 +272,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
         "yearly_month_of_year"=>"6",
         "yearly_selector"=>"yearly_every_x_day"
       },
-        "tag_list"=>"one, two, three, four"
+        "tag_list"=>"one, two, three, four", format: :js
 
       assert_equal "new recurring pattern", assigns['recurring_todo'].description
       assert_equal "2013-01-02 00:00:00 +0000", assigns['recurring_todo'].start_from.to_s

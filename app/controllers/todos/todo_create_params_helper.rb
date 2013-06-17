@@ -23,7 +23,7 @@ module Todos
     def filter_attributes(params)
       if params[:request]
         @attributes = todo_params(params[:request])
-      else
+      elsif params[:todo]
         @attributes = todo_params(params)
       end
       @attributes = {} if @attributes.nil?  # make sure there is at least an empty hash
@@ -123,7 +123,14 @@ module Todos
     def todo_params(params)
       # keep :predecessor_dependencies from being filterd (for XML API). 
       # The permit cannot handle multiple precessors
-      deps = params[:todo][:predecessor_dependencies][:predecessor] if params[:todo][:predecessor_dependencies]
+      if params[:todo][:predecessor_dependencies]
+        deps = params[:todo][:predecessor_dependencies][:predecessor] 
+      end
+
+      # accept empty :todo hash
+      if params[:todo].empty?
+        params[:todo] = {:ignore => true}
+      end
 
       filtered = params.require(:todo).permit(
         :context_id, :project_id, :description, :notes, 

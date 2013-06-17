@@ -62,7 +62,7 @@ group :test do
   # https://code.google.com/p/selenium/issues/detail?id=3075
   gem "selenium-webdriver" 
   
-  # uncomment to use the webkit option. This depends on Qt to be installed
+  # uncomment to use the webkit option. This depends on Qt being installed
   # gem "capybara-webkit"
   
   # uncomment to be able to make screenshots from scenarios
