@@ -11,6 +11,6 @@ class TaggingTest < ActiveSupport::TestCase
     
     tagging.destroy
     
-    assert_nil Tag.where(:name => "hello").first
+    assert_nil Tag.where(:name => "hello").first, "Tag should be destroyed when last use in tagging was removed"
   end
 end

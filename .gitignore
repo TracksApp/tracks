@@ -3,6 +3,8 @@
 .dotest
 .idea
 .rvmrc
+.ruby-gemset
+.ruby-version
 .sass-cache/
 .yardoc
 /.bundle

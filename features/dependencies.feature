@@ -68,10 +68,10 @@ Feature: dependencies
     And "test 2" depends on "test 1"
     When I go to the "dependencies" project
     Then I should see "test 2" in the deferred container
-    And I should see "test 1" in the action container
+    And I should see "test 1" in the context container for "@pc"
     When I mark "test 1" as complete
     Then I should see "test 1" in the completed container
-    And I should see "test 2" in the action container
+    And I should see "test 2" in the context container for "@pc"
     And I should not see "test 2" in the deferred container
     And I should see empty message for deferred todos of project
 
@@ -86,9 +86,9 @@ Feature: dependencies
     And "test 2" depends on "test 1"
     When I go to the "dependencies" project
     Then I should see "test 2" in the deferred container
-    And I should see "test 1" in the action container
+    And I should see "test 1" in the context container for "@pc"
     When I delete the action "test 1"
-    Then I should see "test 2" in the action container
+    Then I should see "test 2" in the context container for "@pc"
     And I should not see "test 2" in the deferred container
     And I should see empty message for deferred todos of project
 
@@ -111,7 +111,7 @@ Feature: dependencies
     Then I should see "test 3" within the dependencies of "test 1"
     And I should not see "test 2"
 
-  @javascript
+  @javascript 
   Scenario: Dragging an action to a completed action will not add it as a dependency
     Given I have a context called "@pc"
     And I have a project "dependencies" that has the following todos
@@ -122,7 +122,7 @@ Feature: dependencies
     When I go to the "dependencies" project
     And I drag "test 1" to "test 3"
     Then I should see an error flash message saying "Cannot add this action as a dependency to a completed action!"
-    And I should see "test 1" in the project container of "dependencies"
+    And I should see "test 1" in the context container for "@pc"
 
   @javascript 
   Scenario Outline: Marking a successor as complete will update predecessor
@@ -148,7 +148,7 @@ Feature: dependencies
     | tag page for "bla"      | context  |
     | tag page for "bla"      | project  |
 
-  @javascript 
+  @javascript
   Scenario Outline: Marking a successor as active will update predecessor
     Given I have a context called "@pc"
     And I have selected the view for group by <grouping>
@@ -171,5 +171,6 @@ Feature: dependencies
     Scenarios:
     | page                    | grouping |
     | "dependencies" project  | project  |
+    | "dependencies" project  | context  |
     | tag page for "bla"      | context  |
     | tag page for "bla"      | project  |

@@ -21,13 +21,13 @@ module TodosHelper
     end
   end
 
-  def show_grouped_todos
+  def show_grouped_todos(settings = {})
     collection = (@group_view_by == 'context') ? @contexts_to_show : @projects_to_show
-    render(:partial => collection, :locals => { :settings => {
+    render(:partial => collection, :locals => { :settings => settings.reverse_merge!({
       :collapsible => true, 
       :show_empty_containers => @show_empty_containers,
       :parent_container_type => @group_view_by
-    }})
+    })})
   end
 
   def default_collection_settings
@@ -80,14 +80,14 @@ module TodosHelper
       :locals => {:settings => settings.reverse_merge!(default_collection_settings)}
   end
 
-  def show_todos_without_project(todos_without_project)
+  def show_todos_without_project(todos_without_project, settings = {})
     render :partial => 'todos/collection', 
       :object => todos_without_project, 
-      :locals => {:settings => { 
+      :locals => {:settings => settings.reverse_merge!({ 
         :collapsible => true, 
         :container_name => "without_project",
         :parent_container_type => "home"
-        }
+        })
       }
   end
 
@@ -480,7 +480,7 @@ module TodosHelper
   def should_show_new_item(todo = @todo)
     return false if todo.nil?
     source_view do |page|
-      page.todo     { return !todo.hidden? }
+      page.todo     { return !todo.hidden? && !todo.deferred? }
       page.deferred { return todo.deferred? || todo.pending? }
       page.context  { return show_todo_on_current_context_page && todo_should_not_be_hidden_on_context_page }
       page.tag      { return todo.has_tag?(@tag_name) }
@@ -512,18 +512,18 @@ module TodosHelper
   end
 
   def update_needs_to_hide_container
-    if source_view_is(:tag)
+    if source_view_is_one_of(:tag, :context, :project)
       return @remaining_in_context == 0 && (
         todo_moved_out_of_container                                                       ||
         (@todo_hidden_state_changed && @todo.hidden?)                                     ||
         @todo_was_deferred_from_active_state                                              ||
         @tag_was_removed                                                                  ||
         @todo_was_destroyed                                                               ||
-        (@todo.completed? && !(@original_item_was_deferred || @original_item_was_hidden))
+        (@todo.completed? && !(@original_item_was_deferred || @original_item_was_hidden || @original_item_was_pending))
       ) 
     end
 
-    return false if source_view_is_one_of(:project, :calendar, :done, :context)
+    return false if source_view_is_one_of(:calendar, :done)
 
     return @remaining_in_context == 0 
   end
@@ -599,7 +599,7 @@ module TodosHelper
   end
 
   def todo_container_empty_id(todo)
-    raise Exception.new, "no todo set in TodosHelper::todo_container_empty_id. You probably not assign @original_item" if !todo    
+    raise Exception.new, "no todo set in TodosHelper::todo_container_empty_id. You probably did not assign @original_item" if !todo    
     @group_view_by == "project" ? project_container_empty_id(todo) : context_container_empty_id(todo)
   end
 
@@ -609,8 +609,7 @@ module TodosHelper
     return "#{@new_due_id}_container"   if source_view_is :calendar
     return "deferred_pending_container" if !source_view_is(:todo) && (todo.deferred? || todo.pending?)
     return "completed_container"        if todo.completed?
-    return "p#{todo.project_id}"        if source_view_is :project
-    return project_container_id(todo)   if source_view_is_one_of(:todo, :tag) && @group_view_by == 'project'
+    return project_container_id(todo)   if source_view_is_one_of(:todo, :tag, :project, :context) && @group_view_by == 'project'
     return context_container_id(todo)           
   end
 
@@ -620,7 +619,7 @@ module TodosHelper
     source_view do |page|
       page.project  {
         return "deferred_pending_container-empty-d" if empty_criteria_met
-        return project_container_empty_id(todo)
+        return todo_container_empty_id(todo)
       }
       page.tag {
         return "deferred_pending_container-empty-d" if empty_criteria_met
@@ -633,7 +632,7 @@ module TodosHelper
       }
       page.context {
         return "deferred_pending_container-empty-d" if empty_criteria_met
-        return context_container_empty_id(todo)
+        return todo_container_empty_id(todo)
       }
       page.todo {
         return todo_container_empty_id(todo) 

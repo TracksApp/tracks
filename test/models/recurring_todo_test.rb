@@ -175,6 +175,9 @@ class RecurringTodoTest < ActiveSupport::TestCase
     assert_equal @sunday, due_date # june 8th
 
     due_date = @monthly.get_due_date(@sunday) # june 8th
+    assert_equal Time.zone.local(2008,6,8), due_date # june 8th
+
+    due_date = @monthly.get_due_date(@monday) # june 9th
     assert_equal Time.zone.local(2008,8,8), due_date # aug 8th
   end
 

@@ -131,12 +131,14 @@ class ProjectsController < ApplicationController
     @not_done_todos = @project.todos.active_or_hidden.includes(Todo::DEFAULT_INCLUDES)
     @deferred_todos = @project.todos.deferred.includes(Todo::DEFAULT_INCLUDES)
     @pending_todos = @project.todos.pending.includes(Todo::DEFAULT_INCLUDES)
+    @contexts_to_show = current_user.contexts.active
+    @projects_to_show = [@project]
 
     @done = {}
     @done = @project.todos.completed.
       reorder("todos.completed_at DESC").
       limit(current_user.prefs.show_number_completed).
-      includes(Todo::DEFAULT_INCLUDES) unless current_user.prefs.show_number_completed == 0
+      includes(Todo::DEFAULT_INCLUDES) unless @max_completed == 0
 
     @count = @not_done_todos.size
     @down_count = @count + @deferred_todos.size + @pending_todos.size

@@ -3,7 +3,6 @@ class TodosController < ApplicationController
   skip_before_filter :login_required, :only => [:index, :tag]
   prepend_before_filter :login_or_feed_token_required, :only => [:index, :tag]
   append_before_filter :find_and_activate_ready, :only => [:index, :list_deferred]
-  append_before_filter :set_group_view_by, :only => [:index, :tag, :create, :list_deferred, :destroy, :defer, :update, :toggle_check]
 
   protect_from_forgery :except => :check_deferred
 
@@ -594,13 +593,8 @@ class TodosController < ApplicationController
     get_params_for_tag_view
     @page_title = t('todos.tagged_page_title', :tag_name => @tag_title)
     @source_view = params['_source_view'] || 'tag'
-
-    if mobile?
-      # mobile tags are routed with :name ending on .m. So we need to chomp it
-      @tag_name = @tag_name.chomp('.m')
-    else
-      init_data_for_sidebar
-    end
+    
+    init_data_for_sidebar unless mobile?
 
     todos_with_tag_ids = find_todos_with_tag_expr(@tag_expr)
 
@@ -833,8 +827,9 @@ class TodosController < ApplicationController
   end
 
   def get_params_for_tag_view
-    # use sanitize to prevent XSS attacks
+    filter_format_for_tag_view
 
+    # use sanitize to prevent XSS attacks
     @tag_expr = []
     @tag_expr << sanitize(params[:name]).split(',')
     @tag_expr << sanitize(params[:and]).split(',') if params[:and]
@@ -849,6 +844,27 @@ class TodosController < ApplicationController
     @tag_name = @tag_expr[0][0]
     @tag_title = @single_tag ? @tag_name : tag_title(@tag_expr)
   end
+
+  def filter_format_for_tag_view
+    # routes for tag view do not set :format
+    if params[:name] =~ /.*\.m$/
+      set_format_for_tag_view(:m)
+    elsif params[:name] =~ /.*\.txt$/
+      set_format_for_tag_view(:txt)
+      # set content-type to text/plain or it remains text/html
+      response.headers["Content-Type"] = 'text/plain'
+    elsif params[:format].nil?
+      # if no format is given, default to html
+      # note that if url has ?format=m, we should not overwrite it here
+      request.format, params[:format] = :html, :html
+    end
+  end
+
+  def set_format_for_tag_view(format)
+    # tag name ends with .m, set format to :m en remove .m from name
+    request.format, params[:format] = format, format
+    params[:name] = params[:name].chomp(".#{format.to_s}")
+end
 
   def get_ids_from_tag_expr(tag_expr)
     ids = []

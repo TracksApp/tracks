@@ -2,9 +2,17 @@
   suffix_completed = t('contexts.last_completed_in_context', :number=>prefs.show_number_completed)
   deferred_pending_options = {:append_descriptor => nil, :parent_container_type => 'context'}
   done_todo_options = {:append_descriptor => suffix_completed, :suppress_context => true, :parent_container_type => 'context'}
+  show_empty_containers = (@group_view_by == 'context')
 -%>
 <div id="display_box">
-	<%= render :partial => @context, :locals => { :settings => {:collapsible => false, :show_empty_containers => true, :parent_container_type => 'context' }} %>
+
+  <%= empty_message_holder("not_done_project", @not_done_todos.empty?) %>
+  
+	<%= show_grouped_todos({:collapsible => false, :show_empty_containers => show_empty_containers, :parent_container_type => 'context'}) %>
+
+  <% if @group_view_by == 'project' -%>
+    <%= show_todos_without_project(@todos_without_project, {:collapsible => false, :parent_container_type => 'context', :title_param => @context.name}) -%>
+  <% end -%>
 
 	<%= show_deferred_pending_todos(@deferred_todos, @pending_todos, deferred_pending_options) %>
 

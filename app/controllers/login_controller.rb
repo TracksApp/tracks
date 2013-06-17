@@ -47,29 +47,6 @@ class LoginController < ApplicationController
     logout_user
   end
 
-  def expire_session
-    # this is a hack to enable cucumber to expire a session by calling this
-    # method. The method will be unavailable for production environment
-    
-    @user.forget_me if logged_in?
-    cookies.delete :auth_token
-    session['user_id'] = nil
-    reset_session
-    
-    unless Rails.env.production?
-      session['expiry_time'] = Time.now
-      respond_to do |format|
-        format.html { render :text => "Session expired for test purposes"}
-        format.js { render :text => "" }
-      end
-    else
-      respond_to do |format|
-        format.html { render :text => "Not available for production use"}
-        format.js { render :text => "" }
-      end
-    end
-  end
-  
   def check_expiry
     # Gets called by periodically_call_remote to check whether
     # the session has timed out yet

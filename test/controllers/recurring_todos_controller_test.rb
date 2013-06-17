@@ -235,6 +235,52 @@ class RecurringTodosControllerTest < ActionController::TestCase
     assert_equal true, recurring_todo.show_always?
   end
 
+  def test_start_on_monthly_rec_todo
+    Timecop.travel(Time.local(2012,1,1)) do
+
+      login_as(:admin_user)
+
+      put :create,
+        "context_name"=>"library",
+        "project_name"=>"Build a working time machine",
+        "recurring_todo" =>
+        {
+        "daily_every_x_days"=>"1",
+        "daily_selector"=>"daily_every_x_day",
+        "description"=>"new recurring pattern",
+        "end_date" => nil,
+        "ends_on" => "no_end_date",
+        "monthly_day_of_week" => "2",
+        "monthly_every_x_day" => "2",
+        "monthly_every_x_month2" => "1",
+        "monthly_every_x_month" => "3",
+        "monthly_every_xth_day"=>"1",
+        "monthly_selector"=>"monthly_every_x_day",
+        "notes"=>"with some notes",
+        "number_of_occurences" => nil,
+        "recurring_period"=>"monthly",
+        "recurring_show_days_before"=>"0",
+        "recurring_target"=>"show_from_date",
+        "recurring_show_always" => "1",
+        "start_from"=>"2/1/2013",
+        "weekly_every_x_week"=>"1",
+        "weekly_return_monday"=>"m",
+        "yearly_day_of_week"=>"1",
+        "yearly_every_x_day"=>"8",
+        "yearly_every_xth_day"=>"1",
+        "yearly_month_of_year2"=>"8",
+        "yearly_month_of_year"=>"6",
+        "yearly_selector"=>"yearly_every_x_day"
+      },
+        "tag_list"=>"one, two, three, four"
+
+      assert_equal "new recurring pattern", assigns['recurring_todo'].description
+      assert_equal "2013-01-02 00:00:00 +0000", assigns['recurring_todo'].start_from.to_s
+      todo = assigns['recurring_todo'].todos.first
+      assert_equal "2013-01-02 00:00:00 +0000", todo.show_from.to_s
+    end
+  end
+
   def test_find_and_inactivate
     login_as(:admin_user)
 

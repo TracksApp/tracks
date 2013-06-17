@@ -84,12 +84,12 @@
             :month => select_tag('recurring_todo[yearly_month_of_year2]', options_for_select(@months_of_year, @recurring_todo.yearly_month_of_year2))) %><br/>
   </div>
   <div id="recurring_target">
-    <label><%= t('todos.recurrence.recurrence_on_options') %></label><br/>
-    <%= radio_button_tag('recurring_todo[recurring_target]', 'due_date', @recurring_todo.target == 'due_date')%> <%= t('todos.recurrence.recurrence_on_due_date') %>. <%= t('todos.recurrence.show_options') %>:
-    <%= radio_button_tag('recurring_todo[recurring_show_always]', '1', @recurring_todo.show_always?)%> <%= t('todos.recurrence.show_option_always') %>
+    <label><%= t('todos.recurrence.recurrence_on.options') %></label><br/>
+    <%= radio_button_tag('recurring_todo[recurring_target]', 'due_date', @recurring_todo.target == 'due_date')%> <%= t('todos.recurrence.recurrence_on.due_date') %>. <%= t('todos.recurrence.recurrence_on.show_options') %>:
+    <%= radio_button_tag('recurring_todo[recurring_show_always]', '1', @recurring_todo.show_always?)%> <%= t('todos.recurrence.recurrence_on.show_always') %>
     <%= radio_button_tag('recurring_todo[recurring_show_always]', '0', !@recurring_todo.show_always?)%>
-    <%= raw t('todos.recurrence.show_days_before', :days => text_field_tag( 'recurring_todo[recurring_show_days_before]', @recurring_todo.show_from_delta, {"size" => 3})) %><br/>
-    <%= radio_button_tag('recurring_todo[recurring_target]', 'show_from_date', @recurring_todo.target == 'show_from_date')%> <%= t('todos.recurrence.from_tickler') %><br/>
+    <%= raw t('todos.recurrence.recurrence_on.show_days_before', :days => text_field_tag( 'recurring_todo[recurring_show_days_before]', @recurring_todo.show_from_delta, {"size" => 3})) %><br/>
+    <%= radio_button_tag('recurring_todo[recurring_target]', 'show_from_date', @recurring_todo.target == 'show_from_date')%> <%= t('todos.recurrence.recurrence_on.from_tickler') %><br/>
     <br/>
   </div>
 <% end %>

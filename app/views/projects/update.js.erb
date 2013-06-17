@@ -36,7 +36,7 @@ function update_project_page() {
     TracksForm.set_context_name_and_default_context_name("<%= escape_javascript(@project.default_context.name)%>");
   <% end %>
   <% if @project.default_tags %>
-    TracksForm.set_tag_list("<%= escape_javascript(@project.default_tags)%>");
+    TracksForm.set_tag_list_and_default_tag_list("<%= escape_javascript(@project.default_tags)%>");
   <% end %>
   TracksPages.update_sidebar(html_for_sidebar());
 }

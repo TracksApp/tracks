@@ -1,7 +1,7 @@
 <div class="list-stategroup-contexts-container" id="list-<%= state %>-contexts-container">
   <h2>
     <span id="<%= state %>-contexts-count" class="badge"><%= context_state_group.length %></span>
-    <%= t("states."+ state +"_plural")%> <%= t('common.contexts') %>
+    <%= t("states.contexts."+ state) %>
   </h2>
   
   <div id="<%= state%>-contexts-empty-nd" style="<%= no_contexts ? 'display:block' : 'display:none'%>">

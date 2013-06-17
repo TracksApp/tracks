@@ -34,8 +34,9 @@ var TracksForm = {
         $('#default_project_name_id').val(name);
         $('#project_name').html(name);
     },
-    set_tag_list: function (name) {
+    set_tag_list_and_default_tag_list: function (name) {
         $('input#tag_list').val(name);
+        $('input#initial_tag_list').val(name);
     },
     set_tag_list_for_multi_add: function (name) {
         $('#multi_tag_list').val(name);

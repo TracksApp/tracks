@@ -20,7 +20,7 @@
   end
   animation << "hide_container" if update_needs_to_hide_container
   animation << "highlight_updated_todo"
-  animation << "update_empty_container" if source_view_is_one_of(:tag, :todo, :deferred)
+  animation << "update_empty_container" if source_view_is_one_of(:tag, :todo, :deferred, :project, :context)
   animation << "update_predecessors"
 %>
   TracksPages.page_notify('notice', '<%=escape_javascript @status_message%>', 5);

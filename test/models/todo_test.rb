@@ -239,6 +239,26 @@ class TodoTest < ActiveSupport::TestCase
     assert !@not_completed1.starred?
   end
 
+  def test_hidden_todo_remains_hidden_after_getting_unblokked
+    todo = todos(:call_bill)
+    project=todo.project
+    project.hide!
+
+    assert todo.reload.hidden?, "todo in hidden project should be hidden"
+
+    todo2 = todos(:call_dino_ext)
+    todo.add_predecessor(todo2)
+    todo.block!
+
+    assert todo.pending?, "todo with predecessor should be blocked"
+
+    # cannot activate if part of hidden project
+    assert_raise(AASM::InvalidTransition) { todo.activate! } 
+
+    todo.remove_predecessor(todo2)
+    assert todo.reload.hidden?, "todo should be put back in hidden state"
+  end
+
   def test_todo_specification_handles_null_project
     # @not_completed1 has a project
     todo_desc = @not_completed1.description
