@@ -2,7 +2,7 @@
 @not_done = @not_done_todos.select {|t| t.context_id == context.id }
 # invalidate the cache every day because of staleness or
 # rendering of "due in x days" that change without touching updated at of the todo
-cache [context, @source_view, current_user.date.strftime("%Y%m%d"), @tag_name] do
+cache [context, source_view_key, current_user.date.strftime("%Y%m%d"), @tag_name] do
 -%>
   <%= 
     render :partial => 'todos/collection', 
