@@ -101,7 +101,10 @@ class RecurringTodosController < ApplicationController
     p.attributes['end_date']=parse_date_per_user_prefs(p.attributes['end_date'])
     p.attributes['start_from']=parse_date_per_user_prefs(p.attributes['start_from'])
 
-    @recurring_todo = current_user.recurring_todos.build(p.selector_attributes)
+    # make sure we set :recurring_period first, since other setters depend on it being set
+    # TODO: move logic into model
+    @recurring_todo = current_user.recurring_todos.build(:recurring_period => params[:recurring_period])
+    @recurring_todo.assign_attributes(p.selector_attributes)
     @recurring_todo.update_attributes(p.attributes)
 
     if p.project_specified_by_name?
