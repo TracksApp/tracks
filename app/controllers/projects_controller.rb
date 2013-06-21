@@ -26,7 +26,6 @@ class ProjectsController < ApplicationController
       respond_to do |format|
         format.html  do
           @page_title = t('projects.list_projects')
-          @count = current_user.projects.count
           @completed_projects = current_user.projects.completed.limit(10)
           @completed_count = current_user.projects.completed.count
           @no_projects = current_user.projects.empty?
@@ -73,7 +72,6 @@ class ProjectsController < ApplicationController
     current_user.projects.cache_note_counts
 
     @page_title = t('projects.list_reviews')
-    @count = @projects_to_review.count + @blocked_projects.count + @stalled_projects.count + @current_projects.count
 
     @no_projects = current_user.projects.empty?
     @new_project = current_user.projects.build
@@ -86,7 +84,6 @@ class ProjectsController < ApplicationController
     page = params[:page] || 1
     projects_per_page = 20
     @projects = current_user.projects.completed.paginate :page => page, :per_page => projects_per_page
-    @count = @projects.count
     @total = current_user.projects.completed.count
     @no_projects = @projects.empty?
 
@@ -140,8 +137,6 @@ class ProjectsController < ApplicationController
       limit(current_user.prefs.show_number_completed).
       includes(Todo::DEFAULT_INCLUDES) unless @max_completed == 0
 
-    @count = @not_done_todos.size
-    @down_count = @count + @deferred_todos.size + @pending_todos.size
     @next_project = current_user.projects.next_from(@project)
     @previous_project = current_user.projects.previous_from(@project)
     @default_tags = @project.default_tags

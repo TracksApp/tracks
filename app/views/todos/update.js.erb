@@ -24,7 +24,6 @@
   animation << "update_predecessors"
 %>
   TracksPages.page_notify('notice', '<%=escape_javascript @status_message%>', 5);
-  TracksPages.set_page_badge(<%= @down_count %>);
   <%= render_animation(animation) %>
 
 function remove_todo(next_steps) {
@@ -88,14 +87,6 @@ function update_empty_container(next_steps) {
   <% else -%>
     $('div#no_todos_in_view').fadeOut(100, function(){ next_steps.go(); });
   <% end -%>
-}
-
-function update_badge_count() {
-  <%
-    count = source_view_is(:context) ? @remaining_in_context : @down_count
-    count = @project_changed ? @remaining_undone_in_project : count
-  -%>
-  TracksPages.set_page_badge(<%= count %>);
 }
 
 function insert_new_container_with_updated_todo(next_steps) {

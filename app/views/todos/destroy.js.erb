@@ -2,7 +2,6 @@
   TracksPages.page_notify('error', "<%= t('todos.error_deleting_item', :description => @todo.description) %>", 8);
 <%- else -%>
   TracksPages.page_notify('notice', '<%=  escape_javascript(t('todos.deleted_success')) %>', 5);
-  TracksPages.set_page_badge(<%=@down_count%>);
   remove_todo_from_page();
   show_new_todo_if_todo_was_recurring();
   activate_pending_todos();

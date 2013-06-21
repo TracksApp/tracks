@@ -8,7 +8,6 @@ class CalendarController < ApplicationController
 
     @calendar = Todos::Calendar.new(current_user)
     @projects = @calendar.projects
-    @count = current_user.todos.not_completed.are_due.count
     @due_all = current_user.todos.not_completed.are_due.reorder("due")
 
     respond_to do |format|

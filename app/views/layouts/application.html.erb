@@ -39,9 +39,6 @@
 
       <div id="date">
         <h1>
-          <% if @count -%>
-            <span id="badge_count" class="badge"><%= @count %></span>
-          <% end -%>
           <%= l(Date.today, :format => current_user.prefs.title_date_format) %>
         </h1>
       </div>

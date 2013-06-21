@@ -190,9 +190,6 @@ var TracksPages = {
           show_duration = 1000;
         flash.fadeIn(fadein_duration).delay(show_duration).fadeOut(fadeout_duration);
     },
-    set_page_badge: function(count) {
-        $('#badge_count').html(count);
-    },
     setup_autocomplete_for_tag_list: function(id) {
         $(id+':not(.ac_input)')
         .bind( "keydown", function( event ) { // don't navigate away from the field on tab when selecting an item

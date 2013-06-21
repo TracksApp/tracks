@@ -24,7 +24,6 @@
   <%= render_animation(animation) %>
   TracksPages.page_notify('notice', "<%=escape_javascript @status_message%>", 8);
   TracksPages.hide_errors();
-  TracksPages.set_page_badge(<%= @down_count %>);
 
   function clear_form(next_steps) {
     $('#todo-form-new-action').clearForm();

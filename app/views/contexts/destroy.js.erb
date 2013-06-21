@@ -2,7 +2,6 @@ remove_deleted_context();
 
 ContextListPage.update_all_states_count(<%=@active_contexts_count%>, <%=@hidden_contexts_count%>, <%=@closed_contexts_count%>)
 
-TracksPages.set_page_badge(<%=@down_count%>);
 TracksPages.page_notify('notice', "<%=  t('contexts.context_deleted', :name=>@context.name)%>", 5);
 
 /* TODO: refactor and move function to application.js */

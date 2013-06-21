@@ -29,8 +29,6 @@ class TodosController < ApplicationController
     respond_to do |format|
       format.html  do
         @page_title = t('todos.task_list_title')
-        # Set count badge to number of not-done, not hidden context items
-        @count = current_user.todos.active.not_hidden.count(:all)
         @todos_without_project = @not_done_todos.select{|t|t.project.nil?}
       end
       format.m do
@@ -521,7 +519,6 @@ class TodosController < ApplicationController
     @page_title = t('todos.completed_tasks_title')
 
     @done_today, @done_rest_of_week, @done_rest_of_month = DoneTodos.done_todos_for_container(current_user)
-    @count = @done_today.size + @done_rest_of_week.size + @done_rest_of_month.size
 
     respond_to do |format|
       format.html
@@ -537,7 +534,6 @@ class TodosController < ApplicationController
     @page_title = t('todos.completed_tasks_title')
 
     @done = current_user.todos.completed.includes(Todo::DEFAULT_INCLUDES).reorder('completed_at DESC').paginate :page => params[:page], :per_page => 20
-    @count = @done.size
   end
 
   def list_deferred
@@ -551,7 +547,7 @@ class TodosController < ApplicationController
 
     @not_done_todos = current_user.todos.deferred.includes(includes) + current_user.todos.pending.includes(includes)
     @todos_without_project = @not_done_todos.select{|t|t.project.nil?}
-    @down_count = @count = @not_done_todos.size
+    @down_count = @not_done_todos.size
 
     respond_to do |format|
       format.html do
@@ -634,9 +630,7 @@ class TodosController < ApplicationController
       @context = current_user.contexts.find(@not_done_todos.first.context_id)
     end
 
-    # Set count badge to number of items with this tag
-    @not_done_todos.empty? ? @count = 0 : @count = @not_done_todos.size
-    @down_count = @count
+    @down_count = @not_done_todos.size
 
     respond_to do |format|
       format.html
@@ -657,7 +651,6 @@ class TodosController < ApplicationController
     @done_today = get_done_today(completed_todos)
     @done_rest_of_week = get_done_rest_of_week(completed_todos)
     @done_rest_of_month = get_done_rest_of_month(completed_todos)
-    @count = @done_today.size + @done_rest_of_week.size + @done_rest_of_month.size
 
     render :template => 'todos/done'
   end
@@ -665,7 +658,6 @@ class TodosController < ApplicationController
   def all_done_tag
     done_by_tag_setup
     @done = current_user.todos.completed.with_tag(@tag.id).reorder('completed_at DESC').includes(Todo::DEFAULT_INCLUDES).paginate :page => params[:page], :per_page => 20
-    @count = @done.size
     render :template => 'todos/all_done'
   end
 

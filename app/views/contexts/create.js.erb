@@ -1,7 +1,6 @@
 <% if @saved -%>
   hide_empty_message();
   TracksPages.hide_errors();
-  TracksPages.set_page_badge(<%= @down_count %>);
   add_context("<%=@context.state%>");
   clear_form();
 <% else -%>
