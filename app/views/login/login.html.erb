@@ -1,28 +1,30 @@
-<div title="<%= t('login.account_login') %>" id="loginform" class="form">
+<div id="tracks-login-form">
+  <%= form_tag(login_path, class: "form-horizontal") do %>
+    <div class="control-group">
+      <div class="controls">
+        <h3><%= t('login.please_login') %></h3>
+      </div>
+    </div>
 
-  <%= render_flash %>
-
-  <h3><%= t('login.please_login') %>:</h3>
-  <div id="database_auth_form" style="display:block">
-      <%= form_tag :action=> 'login' do %>
-        <table>
-          <tr>
-            <td><label for="user_login"><%= User.human_attribute_name('login') %>:</label></td>
-            <td><input type="text" name="user_login" id="user_login" value="" class="login_text" /></td>
-          </tr>
-          <tr>
-            <td><label for="user_password"><%= User.human_attribute_name('password') %>:</label></td>
-            <td><input type="password" name="user_password" id="user_password" class="login_text" /></td>
-          </tr>
-         <tr>
-            <td><label for="user_noexpiry"><%= t('login.user_no_expiry') %>:</label></td>
-            <td><input type="checkbox" name="user_noexpiry" id="user_noexpiry" checked  /></td>
-          </tr>
-          <tr>
-            <td></td>
-            <td><input type="submit" name="login" value="<%= t('login.sign_in') %>" class="primary" /></td>
-          </tr>
-        </table>
-      <% end %>
-  </div>
+    <div class="control-group">
+      <label class="control-label" for="user_login"><%= User.human_attribute_name('login') %></label>
+      <div class="controls">
+        <input type="text" id="user_login" name="user_login" placeholder="<%= User.human_attribute_name('login') %>">
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="user_password"><%= User.human_attribute_name('password') %></label>
+      <div class="controls">
+        <input type="password" id="user_password" name="user_password" placeholder="<%= User.human_attribute_name('password') %>">
+      </div>
+    </div>
+    <div class="control-group">
+      <div class="controls">
+        <label class="checkbox">
+          <input type="checkbox" name="user_noexpiry" id="user_noexpiry" checked > <%= t('login.user_no_expiry') %>
+        </label>
+        <button type="submit" class="btn btn-primary"><%= t('login.sign_in') %></button>
+      </div>
+    </div>
+  <% end %>
 </div>

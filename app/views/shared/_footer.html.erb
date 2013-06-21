@@ -1,8 +1,14 @@
-<div id="footer">
-  <p><%= t('footer.send_feedback', :version => TRACKS_VERSION) %>: <a href="https://www.assembla.com/spaces/tracks-tickets/tickets"><%= t('common.bugs')%></a> |
-    <a href="https://github.com/TracksApp/tracks/wiki"><%= t('common.wiki')%></a> |
-    <a href="http://groups.google.com/group/TracksApp"><%= t('common.mailing_list')%></a> |
-    <a href="http://getontracks.org/"><%= t('common.website')%></a> |
-    <a href="http://getontracks.org/development/"><%= t('common.contribute')%></a> | 
-    <%= link_to(t('layouts.navigation.mobile'), todos_path(:format => 'm')) %></p>
-</div>
+<footer>
+	<div class="row-fluid">
+		<div class="span12">
+			<p><small>
+				<%= t('footer.send_feedback', :version => TRACKS_VERSION) %>: <a href="https://www.assembla.com/spaces/tracks-tickets/tickets"><%= t('common.bugs')%></a> |
+				<a href="https://github.com/TracksApp/tracks/wiki"><%= t('common.wiki')%></a> |
+				<a href="http://groups.google.com/group/TracksApp"><%= t('common.mailing_list')%></a> |
+				<a href="http://getontracks.org/"><%= t('common.website')%></a> |
+				<a href="http://getontracks.org/development/"><%= t('common.contribute')%></a> | 
+				<%= link_to(t('layouts.navigation.mobile'), todos_path(:format => 'm')) %>
+			</small></p>
+		</div>
+	</div>
+</footer>
