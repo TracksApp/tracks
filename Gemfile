@@ -14,11 +14,19 @@ gem 'uglifier', '>=1.3.0'
 
 gem 'jquery-rails'
 
+# Twitter Bootstrap
+gem 'therubyracer'
+gem 'less-rails'
+gem 'twitter-bootstrap-rails'
+
 # you may comment out the database driver you will not be using.
 # This will prevent a native build of the driver. Building native drivers is not 
 # always possible on all hosters
 gem "sqlite3"
 gem "mysql2"
+
+# handling keyboard
+gem 'mousetrap-rails' 
 
 gem "RedCloth"
 gem "sanitize"
