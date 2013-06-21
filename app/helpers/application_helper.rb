@@ -294,5 +294,9 @@ module ApplicationHelper
       })
   end
 
+  def source_view_key
+    # uses @project.id or @context.id depending on source_view
+    source_view_is_one_of(:project, :context) ? "#{@source_view}-#{eval("@#{@source_view}.id")}" : @source_view
+  end
 
 end
