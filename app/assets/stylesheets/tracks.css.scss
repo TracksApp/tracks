@@ -2,17 +2,31 @@
  * Tracks CSS
 */
 
-.navbar-inner {
-	background-color: #000;
-	background-image: none;
-}
-
 footer {
 	text-align: center;
 	background-color: #000;
 	background-image: linear-gradient(to bottom, #FFFFFF, #F2F2F2);
 }
 
+.navbar-inner {
+	border-radius: none;
+}
+
+div#tracks-login-navbar {
+	.navbar-inner {
+		background-color: #000;
+		background-image: none;
+	}
+}
+
 div#tracks-login-form {
 	margin: 0 0 100px 0;
+}
+
+span.badge_count {
+	color: #FFF;
+	background-color: #F00;
+	text-shadow: none;
+	padding: 5px 5px 5px 5px;
+	border-radius: 2px 2px 2px 2px;
 }
