@@ -4,7 +4,7 @@ module TodosHelper
 
   def empty_message_holder(container_name, show, title_param=nil)
     content_tag(:div, :id => "no_todos_in_view", :class => "container #{container_name}", :style => "display:" + (show ? "block" : "none") ) do
-      content_tag(:h2) { t("todos.no_actions.title", :param=>title_param) } +
+      content_tag(:h4) { t("todos.no_actions.title", :param=>title_param) } +
       content_tag(:div, :class => "message") do
         content_tag(:p) { t("todos.no_actions.#{container_name}", :param=>title_param) }
       end
@@ -114,7 +114,7 @@ module TodosHelper
         :title => t("todos.actions.#{settings[:parent_container_type]}_#{settings[:container_name]}", :param => settings[:title_param])
       })
     header = settings[:link_in_header].nil? ? "" : content_tag(:div, :class=>"add_note_link"){settings[:link_in_header]}
-    header += content_tag(:h2) do
+    header += content_tag(:h4) do
       toggle = settings[:collapsible] ? container_toggle("toggle_#{settings[:id]}") : ""
       "#{toggle} #{settings[:title]} #{settings[:append_descriptor]}".html_safe
     end
@@ -249,10 +249,10 @@ module TodosHelper
 
   def date_span(todo=@todo)
     if todo.completed?
-      content_tag(:span, {:class => :grey}) { format_date( todo.completed_at ) }
+      content_tag(:span, {class: "label"}) { format_date( todo.completed_at ) }
     elsif todo.pending?
       title = t('todos.depends_on')+ ": " + todo.uncompleted_predecessors.map(&:description).join(', ')
-      content_tag(:a, {:title => title}) { content_tag(:span, {:class => :orange}) { t('todos.pending') } }
+      content_tag(:a, {:title => title}) { content_tag(:span, {class: "label label-info"}) { t('todos.pending') } }
     elsif todo.deferred?
       show_date( todo.show_from )
     else
@@ -281,7 +281,7 @@ module TodosHelper
   end
 
   def tag_span (tag, mobile=false)
-    content_tag(:span, :class => "tag #{tag.label}") { link_to(tag.name, tag_path(tag.name, :format => mobile ? :m : nil)) }
+    content_tag(:span, :class => "label label-info #{tag.label}") { link_to(tag.name, tag_path(tag.name, :format => mobile ? :m : nil)) }
   end
 
   def tag_list(todo=@todo, mobile=false)
@@ -351,7 +351,7 @@ module TodosHelper
 
   def show_date_tag(date, the_class, text)
     content_tag(:a, :title => format_date(date)) do
-      content_tag(:span, :class => the_class) { text }
+      content_tag(:span, :class => "label label-#{the_class.to_s}") { text }
     end
   end
 
@@ -366,21 +366,21 @@ module TodosHelper
     case days
       # overdue or due very soon! sound the alarm!
     when -1000..-1
-      show_date_tag(d, :red, t('todos.scheduled_overdue', :days => (days * -1).to_s))
+      show_date_tag(d, :important, t('todos.scheduled_overdue', :days => (days * -1).to_s))
     when 0
-      show_date_tag(d, :amber, t('todos.show_today'))
+      show_date_tag(d, :warning, t('todos.show_today'))
     when 1
-      show_date_tag(d, :amber, t('todos.show_tomorrow'))
+      show_date_tag(d, :warning, t('todos.show_tomorrow'))
       # due 2-7 days away
     when 2..7
       if prefs.due_style == Preference.due_styles[:due_on]
-        show_date_tag(d, :orange, t('todos.show_on_date', :date => d.strftime("%A")) )
+        show_date_tag(d, :important, t('todos.show_on_date', :date => d.strftime("%A")) )
       else
-        show_date_tag(d, :orange, t('todos.show_in_days', :days => days.to_s) )
+        show_date_tag(d, :important, t('todos.show_in_days', :days => days.to_s) )
       end
       # more than a week away - relax
     else
-      show_date_tag(d, :green, t('todos.show_in_days', :days => days.to_s) )
+      show_date_tag(d, :success, t('todos.show_in_days', :days => days.to_s) )
     end
   end
 

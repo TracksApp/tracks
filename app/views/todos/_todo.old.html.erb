@@ -1,0 +1,51 @@
+<%
+suppress_context ||= false
+suppress_project ||= false
+suppress_edit_button ||= todo.completed?
+parameters = "_source_view=#{@source_view}"
+parameters += "&_tag_name=#{@tag_name}" if @source_view == 'tag'
+@z_index_counter = @z_index_counter - 1  # for IE z-index bug
+@rec_depth=0 # to prevent stack overflow on large dependency trees, see _successor.html.erb
+
+# invalidate the cache every day because of staleness or
+# rendering of "due in x days" that change without touching updated at of the todo
+# also make different caches per source_view to handle difference in showing [C] and [P]
+cache [todo, current_user.date.strftime("%Y%m%d"), @source_view, current_user.prefs.verbose_action_descriptors] do
+%>
+  <div id="<%= dom_id(todo) %>" class="item-container">
+    <div id="<%= dom_id(todo, 'line') %>" class="item-show">
+      <%= remote_star_icon(todo) %>
+      <%= remote_toggle_checkbox(todo) %>
+      <%= remote_edit_button(todo) unless suppress_edit_button %>
+      <ul class="sf-menu sf-item-menu">
+        <li style="z-index:<%=@z_index_counter%>"><a href="#" class="item-downarrow"><%= image_tag "downarrow.png", :class => "todo-submenu", :alt=> "" %></a>
+          <ul id="ul<%= dom_id(todo) %>" class="todo-submenu">
+            <li><%= remote_delete_menu_item(todo) %></li>
+            <% unless todo.completed? || todo.deferred? -%>
+              <li><%= remote_defer_menu_item(1, todo) %></li>
+              <li><%= remote_defer_menu_item(2, todo) %></li>
+              <li><%= remote_defer_menu_item(3, todo) %></li>
+              <li><%= remote_defer_menu_item(7, todo) %></li>
+              <li><%= remote_promote_to_project_menu_item(todo) %></li>
+            <% end -%>
+          </ul>
+        </li>
+      </ul>
+      <%= grip_span(todo) %>
+      <div class="description<%= staleness_class( todo ) %>">
+        <%= date_span(todo) -%>
+        <span class="todo.descr"><%= h todo.description %></span>
+        <%= image_tag_for_recurring_todo(todo) if todo.from_recurring_todo? %>
+        <%= tag_list(todo) %>
+        <%= deferred_due_date(todo) %>
+        <%= project_and_context_links( todo, parent_container_type, :suppress_context => suppress_context, :suppress_project => suppress_project ) %>
+        <%= collapsed_notes_image(todo) unless todo.notes.blank? %>
+        <%= collapsed_successors_image(todo) if todo.has_pending_successors %>
+      </div>
+    </div>
+    <div id="<%= dom_id(todo, 'edit') %>" class="edit-form" style="display:none">
+      <% #note: edit form will load here remotely -%>
+      <div class="placeholder"> </div>
+    </div>
+  </div>
+<% end %>

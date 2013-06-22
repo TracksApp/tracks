@@ -17,7 +17,9 @@ gem 'jquery-rails'
 # Twitter Bootstrap
 gem 'therubyracer'
 gem 'less-rails'
-gem 'twitter-bootstrap-rails'
+# use dev version to get fontawsome 3.2.1
+#gem 'twitter-bootstrap-rails'
+gem 'twitter-bootstrap-rails', :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
 
 # you may comment out the database driver you will not be using.
 # This will prevent a native build of the driver. Building native drivers is not 

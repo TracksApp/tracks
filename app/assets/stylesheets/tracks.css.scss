@@ -2,11 +2,7 @@
  * Tracks CSS
 */
 
-footer {
-	text-align: center;
-	background-color: #000;
-	background-image: linear-gradient(to bottom, #FFFFFF, #F2F2F2);
-}
+/* Header */
 
 .navbar-inner {
 	border-radius: none;
@@ -29,4 +25,34 @@ span.badge_count {
 	text-shadow: none;
 	padding: 5px 5px 5px 5px;
 	border-radius: 2px 2px 2px 2px;
+}
+
+/* Footer */
+
+footer {
+	margin-top: 50px;
+	text-align: center;
+	background-color: #000;
+	background-image: linear-gradient(to bottom, #FFFFFF, #F2F2F2);
+}
+
+/* Todo tags */
+span.tags {
+	.label {
+		a:hover, a:focus {
+			text-decoration: none;
+		}
+		a {
+			text-shadow: none;
+			color: #FFF;
+			font-weight: normal;
+		}
+		margin-right: 1px;
+	}
+}
+
+/* Container */
+
+h4 a {
+	color: #222;
 }
