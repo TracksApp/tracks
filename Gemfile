@@ -1,8 +1,8 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.0.0.rc2'
-gem 'sass-rails', '4.0.0.rc2'
-gem 'coffee-rails', '~>4.0'
+gem 'rails', '~>4.0.0'
+gem 'sass-rails', '~>4.0.0'
+gem 'coffee-rails', '~>4.0.0'
 
 # todo: remove xml api 
 gem 'actionpack-xml_parser', github: 'rails/actionpack-xml_parser'
@@ -32,13 +32,13 @@ gem "cache_digests"
 gem "rack-mini-profiler"
 
 # To use ActiveModel has_secure_password
-gem 'bcrypt-ruby'
+gem 'bcrypt-ruby', '~> 3.0.0'
 
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 # gem 'turbolinks'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-# gem 'jbuilder', '~> 1.0.1'
+# gem 'jbuilder', '~> 1.2'
 
 group :development do
   gem "yard"
