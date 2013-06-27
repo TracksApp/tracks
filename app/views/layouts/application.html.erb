@@ -40,7 +40,7 @@
 
     <div class="container-fluid">
       <div class="row-fluid">
-        <div class="span6 offset3">
+        <div class="span8 offset2 tracks-middle">
           <%= bootstrap_flash %>
           <%= yield %>
         </div>
@@ -48,7 +48,9 @@
     </div> 
 
     <%= render partial: "shared/footer" %>
-
+    <% # dialogs -%>
+    <%= render partial: "shared/keyboard_shortcuts" %>
+    <%= render partial: "shared/add_new_action" %>
     <%
       # Javascripts
       # ================================================== 

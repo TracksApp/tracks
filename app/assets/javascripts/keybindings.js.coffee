@@ -41,3 +41,15 @@ $ ->
 
   mouseTrapRails.toggleHints() if mouseTrapRails.showOnLoad
 
+  Mousetrap.bind '?', -> $('div#tracks-shortcuts-dialog').modal()
+  Mousetrap.bind 'a', -> $('div#tracks-add-action-dialog').modal()
+  # GO TO
+  # Mousetrap.bind 'g h', TracksApp.go_home
+  Mousetrap.bind 'g c', -> alert("go context")
+  # Mousetrap.bind 'g C', TracksApp.go_contexts
+  Mousetrap.bind 'g t', -> alert("go tag")
+  Mousetrap.bind 'g p', -> alert("go project")
+  # Mousetrap.bind 'g P', TracksApp.go_projects
+  # VIEW
+  Mousetrap.bind 'v p', -> alert("group by project")
+  Mousetrap.bind 'v c', -> alert("group by context")
