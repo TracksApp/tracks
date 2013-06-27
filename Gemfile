@@ -17,9 +17,10 @@ gem 'jquery-rails'
 # Twitter Bootstrap
 gem 'therubyracer'
 gem 'less-rails'
+
 # use dev version to get fontawsome 3.2.1
 #gem 'twitter-bootstrap-rails'
-gem 'twitter-bootstrap-rails', :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
+gem 'twitter-bootstrap-rails', github: 'seyhunak/twitter-bootstrap-rails', branch: "master"
 
 # you may comment out the database driver you will not be using.
 # This will prevent a native build of the driver. Building native drivers is not 
@@ -45,7 +46,7 @@ gem "rack-mini-profiler"
 gem 'bcrypt-ruby', '~> 3.0.0'
 
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
-# gem 'turbolinks'
+gem 'turbolinks'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 1.2'

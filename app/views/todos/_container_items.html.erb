@@ -1,0 +1,4 @@
+<div id="<%=div_id%>" class="todo_items toggle_target">
+	<%= todos_container_empty_message(container_name, todo_id, hide_empty_message) %>
+	<%= render(:partial => "todos/todo", :collection => collection, :locals => settings) %>
+</div>

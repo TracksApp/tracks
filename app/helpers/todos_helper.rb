@@ -12,13 +12,8 @@ module TodosHelper
   end
 
   def todos_container_empty_message(container_name, container_id, show_message)
-    content_tag(:div, :id=>"#{container_id}-empty-d", :style=>"display:#{show_message ? 'block' : 'none'}") do
-      content_tag(:div, :class=>"message") do
-        content_tag(:p) do
-          t("todos.no_actions.#{container_name}")
-        end
-      end
-    end
+    render partial: "todos/container_empty_message", locals: 
+      {container_id: container_id, container_name: container_name, show_message: show_message}
   end
 
   def show_grouped_todos(settings = {})
@@ -93,8 +88,8 @@ module TodosHelper
 
   def todos_container(settings={})
     settings.reverse_merge!({
-      :id => "#{settings[:container_name]}_container",
-      :class => "container #{settings[:container_name]}",
+      :id => "#{settings[:container_name]}-container",
+      :class => "todos-container #{settings[:container_name]}",
       })
 
     if settings[:collapsible]
@@ -115,7 +110,8 @@ module TodosHelper
       })
     header = settings[:link_in_header].nil? ? "" : content_tag(:div, :class=>"add_note_link"){settings[:link_in_header]}
     header += content_tag(:h4) do
-      toggle = settings[:collapsible] ? container_toggle("toggle_#{settings[:id]}") : ""
+      toggle = ""
+      # toggle = settings[:collapsible] ? container_toggle("toggle_#{settings[:id]}") : ""
       "#{toggle} #{settings[:title]} #{settings[:append_descriptor]}".html_safe
     end
     header.html_safe
@@ -126,10 +122,14 @@ module TodosHelper
     # do not pass :class to partial locals
     settings.delete(:class)
 
-    content_tag(:div, :id =>settings[:id]+"_items", :class=>"items toggle_target") do
-      todos_container_empty_message(settings[:container_name], settings[:id], collection.empty?) +
-      render(:partial => "todos/todo", :collection => collection, :locals => settings)
-    end
+    render :partial => 'todos/container_items', :locals => {
+      div_id: settings[:id]+"_items",
+      container_name: settings[:container_name],
+      todo_id: settings[:id],
+      hide_empty_message: collection.empty?,
+      collection: collection,
+      settings: settings
+    }
   end
 
   def todos_calendar_container(period, collection)
@@ -281,7 +281,7 @@ module TodosHelper
   end
 
   def tag_span (tag, mobile=false)
-    content_tag(:span, :class => "label label-info #{tag.label}") { link_to(tag.name, tag_path(tag.name, :format => mobile ? :m : nil)) }
+    content_tag(:span, :class => "label #{tag.label}") { link_to(tag.name, tag_path(tag.name, :format => mobile ? :m : nil)) }
   end
 
   def tag_list(todo=@todo, mobile=false)

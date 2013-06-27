@@ -16,13 +16,6 @@ module ApplicationHelper
         {:id => "group_view_by_link", :accesskey => "g", :title => t('layouts.navigation.group_view_by_title'), :x_current_group_by => @group_view_by} )
     end
   end
-
-  def container_toggle(id)
-    link_to(
-      image_tag("blank.png", :alt => t('common.collapse_expand')),
-      "#", 
-      {:class => "container_toggle", :id => id} )
-  end
   
   def navigation_link(name, options = {}, html_options = nil, *parameters_for_method_reference)
     link_to name, options, html_options
@@ -39,38 +32,31 @@ module ApplicationHelper
     return "" if due.nil?
 
     days = days_from_today(due)
+    days_limited = days
+    days_limited = -2 if days < -2
+    days_limited =  2 if days >  2
 
-    colors = ['amber','amber','orange','orange','orange','orange','orange','orange']
-    color = :red if days < 0
-    color = :green if days > 7
+    colors = [:warning, :warning, :warning, :info, :info, :info]
+    color = :important if days < 0
+    color = :default   if days > 7
     color = colors[days] if color.nil?
-    
+
+    if prefs.due_style == Preference.due_styles[:due_on]
+      # TODO: internationalize strftime here
+      due_text = Hash.new( t('models.preference.due_on', :date => due.strftime("%A")) )   
+    else
+      due_text = Hash.new( t('models.preference.due_in', :days => days) )
+    end
+
+    due_text = Hash.new(t('models.preference.due_in', :days => days)).merge({
+      "-2" => t('todos.next_actions_due_date.overdue_by_plural', :days => days * -1),
+      "-1" => t('todos.next_actions_due_date.overdue_by', :days => days * -1),
+      "0"  => t('todos.next_actions_due_date.due_today'),
+      "1"  => t('todos.next_actions_due_date.due_tomorrow')
+    })
+
     return content_tag(:a, {:title => format_date(due)}) {
-      content_tag(:span, {:class => color}) {
-        case days
-        when 0
-          t('todos.next_actions_due_date.due_today')
-        when 1
-          t('todos.next_actions_due_date.due_tomorrow')
-        when 2..7
-          if prefs.due_style == Preference.due_styles[:due_on]
-            # TODO: internationalize strftime here
-            t('models.preference.due_on', :date => due.strftime("%A"))
-          else
-            t('models.preference.due_in', :days => days)
-          end
-        else
-          # overdue or due very soon! sound the alarm!
-          if days == -1
-            t('todos.next_actions_due_date.overdue_by', :days => days * -1)
-          elsif days < -1
-            t('todos.next_actions_due_date.overdue_by_plural', :days => days * -1)
-          else
-            # more than a week away - relax
-            t('models.preference.due_in', :days => days)
-          end
-        end
-      }
+      content_tag(:span, {:class => "badge badge-#{color}"}) { due_text[days_limited.to_s] }
     }
   end
 

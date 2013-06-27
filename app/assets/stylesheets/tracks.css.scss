@@ -2,6 +2,16 @@
  * Tracks CSS
 */
 
+body {
+	background-color: #DDD;
+}
+
+div.tracks-middle {
+	background-color: #FFF;
+	padding: 15px;
+	border-radius: 10px;
+}
+
 /* Header */
 
 .navbar-inner {
@@ -36,7 +46,46 @@ footer {
 	background-image: linear-gradient(to bottom, #FFFFFF, #F2F2F2);
 }
 
-/* Todo tags */
+/* Todo */
+div.todo-item {
+	margin-top: 7px;
+	margin-left: 0px;
+	border: 3px solid #EEE;
+	border-width: 0px 0px 1px;
+
+	min-height: none;
+	line-height: none;
+	[class*="span"] {
+		min-height: 0px;
+	}
+
+	i.icon-check-empty {
+		margin-right: 10px;
+	}
+	i.icon-check-sign {
+		margin-right: 10px;
+		color: #666;	
+	}
+	i.icon-star-empty, i.icon-play-sign, i.icon-book, i.icon-refresh {
+		color: #BBB;	  /* light gray */
+	}
+	i.icon-star {
+		color: #F89406; /* orange */
+	}
+	span.todo-description {
+		margin-right: 10px;
+	}
+	div.todo-item-icons {
+		display: block;
+		margin-right: 10px;
+		float:left;
+	}
+	div.todo-item-description-container {
+		display: inline-block;
+		float:left;
+	}
+}
+
 span.tags {
 	.label {
 		a:hover, a:focus {
@@ -48,11 +97,19 @@ span.tags {
 			font-weight: normal;
 		}
 		margin-right: 1px;
+		background-color: #BBB;
 	}
 }
 
 /* Container */
 
-h4 a {
-	color: #222;
+div.todos-container {
+	margin-bottom: 25px;
+	h4 {
+		margin-bottom: 0px;
+		color: #444;
+		a {
+			color: #444;
+		}
+	}
 }
