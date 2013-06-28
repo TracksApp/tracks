@@ -9,16 +9,15 @@ module ApplicationHelper
     # if view == context, the menu shows Order By Project
     menu_name = @group_view_by == 'context' ? 'project' : 'context'
 
-    content_tag(:li) do
-      link_to( 
-        t("layouts.navigation.group_view_by_#{menu_name}"), 
-        '#', 
-        {:id => "group_view_by_link", :accesskey => "g", :title => t('layouts.navigation.group_view_by_title'), :x_current_group_by => @group_view_by} )
-    end
+    return link_to( 
+      t("layouts.navigation.group_view_by_#{menu_name}"), 
+      '#', 
+      {:id => "group_view_by_link", :title => t('layouts.navigation.group_view_by_title'), :x_current_group_by => @group_view_by} )
   end
-  
-  def navigation_link(name, options = {}, html_options = nil, *parameters_for_method_reference)
-    link_to name, options, html_options
+
+  def menu_item(name, path, settings={})
+    return link_to(
+      t("layouts.navigation.#{name}"), path, settings.merge({:title => t("layouts.navigation.#{name}_title")}) )
   end
   
   def days_from_today(date)

@@ -360,11 +360,7 @@ en:
     current_plural: Up-to-date
     current: Up-to-date
   layouts:
-    toggle_notes: Toggle notes
-    toggle_contexts: "Toggle collapsed contexts"
-    toggle_contexts_title: "Make collapsed contexts (in)visible"
     next_actions_rss_feed: RSS feed of next actions
-    toggle_notes_title: Toggle all notes
     mobile_navigation:
       new_action: New
       logout: Logout
@@ -376,27 +372,36 @@ en:
       contexts: Contexts
       home: Home
     navigation:
+      toggle_notes: Toggle notes
+      toggle_notes_title: Toggle all notes
+      toggle_contexts: "Toggle collapsed contexts"
+      toggle_contexts_title: "Make collapsed contexts (in)visible"
       manage_users_title: Add or delete users
       recurring_todos: Repeating todos
+      recurring_todos_title: Manage recurring actions
       api_docs: REST API Docs
+      api_docs_title: Documentation on how to use the Tracks API
       feeds: Feeds
       starred: Starred
+      starred_title: See your starred actions
       notes_title: View all notes
       review_title: Make review
       stats: Statistics
-      tickler_title: Tickler
+      stats_title: See your statistics
       manage_users: Manage users
       export_title: Import and export data
       preferences: Preferences
-      integrations_: Integrate Tracks
+      integrations: Integrate Tracks
+      integrations_title: Integrate Tracks in various other apps
       feeds_title: See a list of available feeds
       calendar_title: Calendar of due actions
       completed_tasks: Done
-      stats_title: See your statistics
       tickler: Tickler
-      home_title: Home
-      starred_title: See your starred actions
-      recurring_todos_title: Manage recurring actions
+      tickler_title: Tickler
+      home_title: Go to home page
+      contexts: Contexts
+      notes: Notes
+      review: Review
       view: View
       organize: Organize
       completed_tasks_title: Completed

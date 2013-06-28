@@ -12,47 +12,48 @@
 
       <div class="container-fluid nav-collapse">
         <ul class="nav">
-          <li><%= navigation_link(t('layouts.navigation.home'), root_path, {:accesskey => "t", :title => t('layouts.navigation.home_title')} ) %></li>
-          <li><%= navigation_link(t('layouts.navigation.starred'), tag_path("starred"), :title => t('layouts.navigation.starred_title')) %></li>
-          <li><%= navigation_link(t('common.projects'), projects_path, {:accesskey=>"p", :title=>t('layouts.navigation.projects_title')} ) %></li>
-          <li><%= navigation_link(t('layouts.navigation.tickler'), tickler_path, {:accesskey =>"k", :title => t('layouts.navigation.tickler_title')} ) %></li>
+          <li><%= menu_item("home",     root_path)           %></li>
+          <li><%= menu_item("starred",  tag_path("starred")) %></li>
+          <li><%= menu_item("projects", projects_path)       %></li>
+          <li><%= menu_item("tickler",  tickler_path)        %></li>
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= t('layouts.navigation.organize') %><b class="caret"></b></a>
             <ul class="dropdown-menu">
-              <li><%= navigation_link( t('common.contexts'), contexts_path, {:accesskey=>"c", :title=>t('layouts.navigation.contexts_title')} ) %></li>
-              <li><%= navigation_link( t('common.notes'), notes_path, {:accesskey => "o", :title => t('layouts.navigation.notes_title')} ) %></li>
-              <li><%= navigation_link( t('common.review'), review_path, {:accesskey => "r", :title => t('layouts.navigation.review_title')} ) %></li>
-              <li><%= navigation_link( t('layouts.navigation.recurring_todos'), {:controller => "recurring_todos", :action => "index"}, :title => t('layouts.navigation.recurring_todos_title')) %></li>
+              <li><%= menu_item("contexts",        contexts_path)        %></li>
+              <li><%= menu_item("notes",           notes_path)           %></li>
+              <li><%= menu_item("review",          review_path)          %></li>
+              <li><%= menu_item("recurring_todos", recurring_todos_path) %></li>
             </ul>
           </li>
           <li class="dropdown" id="menu_view">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="menu_view_link"><%= t('layouts.navigation.view') %><b class="caret"></b></a>
             <ul class="dropdown-menu">
-              <li><%= navigation_link( t('layouts.navigation.calendar'), calendar_path, :title => t('layouts.navigation.calendar_title')) %></li>
-              <li><%= navigation_link( t('layouts.navigation.completed_tasks'), done_overview_path, {:accesskey=>"d", :title=>t('layouts.navigation.completed_tasks_title')} ) %></li>
-              <li><%= navigation_link( t('layouts.navigation.feeds'), feeds_path, :title => t('layouts.navigation.feeds_title')) %></li>
-              <li><%= navigation_link( t('layouts.navigation.stats'), stats_path, :title => t('layouts.navigation.stats_title')) %></li>
+              <li><%= menu_item("calendar",        calendar_path)      %></li>
+              <li><%= menu_item("completed_tasks", done_overview_path) %></li>
+              <li><%= menu_item("feeds",           feeds_path)         %></li>
+              <li><%= menu_item("stats",           stats_path)         %></li>
               <li class="divider"></li>
-              <li id="menu_view_toggle_contexts"><%= link_to(t('layouts.toggle_contexts'), "#", {:title => t('layouts.toggle_contexts_title'), :id => "toggle-contexts-nav"}) %></li>
-              <li><%= link_to(t('layouts.toggle_notes'), "#", {:accesskey => "S", :title => t('layouts.toggle_notes_title'), :id => "toggle-notes-nav"}) %></li>
-              <%= group_view_by_menu_entry %>
+              <li><%= menu_item("toggle_contexts", "#", {:id => "toggle-contexts-nav"}) %></li>
+              <li><%= menu_item("toggle_notes",    "#", {:id => "toggle-notes-nav"}) %></li>
+              <li><%= group_view_by_menu_entry %></li>
             </ul>
           </li>
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= t('layouts.navigation.admin') %><b class="caret"></b></a>
             <ul class="dropdown-menu">
-              <li><%= navigation_link( t('layouts.navigation.preferences'), preferences_path, {:accesskey => "u", :title => t('layouts.navigation.preferences_title')} ) %></li>
-              <li><%= navigation_link( t('layouts.navigation.export'), data_path, {:accesskey => "i", :title => t('layouts.navigation.export_title')} ) %></li>
+              <li><%= menu_item("preferences",    preferences_path) %></li>
+              <li><%= menu_item("export",         data_path)        %></li>
               <% if current_user.is_admin? -%>
-                <li><%= navigation_link(t('layouts.navigation.manage_users'), users_path, {:accesskey => "a", :title => t('layouts.navigation.manage_users_title')} ) %></li>
+                <li><%= menu_item("manage_users", users_path)       %></li>
               <% end -%>
             </ul>
           </li>
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= t('layouts.navigation.help') %><b class="caret"></b></a>
             <ul class="dropdown-menu">
-              <li><%= link_to t('layouts.navigation.integrations_'), integrations_path %></li>
-              <li><%= link_to t('layouts.navigation.api_docs'), rest_api_docs_path %></li>
+              <li><%= menu_item("keyboard_shortcuts", "#")                %></li>
+              <li><%= menu_item("integrations",       integrations_path)  %></li>
+              <li><%= menu_item("api_docs",           rest_api_docs_path) %></li>
             </ul>
           </li>          
         </ul>
@@ -63,7 +64,7 @@
               <input type="text" class="search-query" placeholder="Search">
             </form>
           </li>
-          <li><%= link_to("#{t('common.logout')} (#{current_user.display_name}) &raquo;".html_safe, logout_path) %>
+          <li><%= link_to("#{t('common.logout')} (#{current_user.display_name})".html_safe, logout_path) %>
         </ul>
 
       </div>
