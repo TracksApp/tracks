@@ -1,8 +1,9 @@
-<%= 
-  settings[:show_container] = !collection.empty? || settings[:show_empty_containers]
-  
-  todos_container(settings) do
-    todos_container_header(settings) +
-    todos_container_items(collection, settings) 
-  end 
-%>
+<% 
+	# Template Dependency: todos/container_items
+	settings = todos_container_settings(settings)
+	settings[:class] += " hide" if collection.empty? || settings[:show_container]
+-%>
+<div id="<%=settings[:id]%>" class="<%=settings[:class]%>">
+    <%= todos_container_header(settings) %>
+    <%= todos_container_items(collection, settings)  %>
+</div>

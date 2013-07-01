@@ -1,0 +1,10 @@
+<% 
+	title_param ||= "" 
+	hidden_class = show ? "" : " hide"
+%>
+<div id="no_todos_in_view" class="container <%=container_name + hidden_class%>">
+	<h4><%= t("todos.no_actions.title", :param=>title_param) %></h4>
+	<div class="message">
+		<p><%= t("todos.no_actions.#{container_name}", :param=>title_param)%></p>
+	</div>
+</div>

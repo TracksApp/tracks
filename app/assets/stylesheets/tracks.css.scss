@@ -16,6 +16,9 @@ div.tracks-middle {
 
 .navbar-inner {
 	border-radius: none;
+	div.btn-toolbar {
+		margin: 0px 15px 0px 0px;
+	}
 }
 
 div#tracks-login-navbar {
@@ -42,16 +45,15 @@ span.badge_count {
 footer {
 	margin-top: 50px;
 	text-align: center;
-	background-color: #000;
-	background-image: linear-gradient(to bottom, #FFFFFF, #F2F2F2);
+	background-color: #DDD;
 }
 
 /* Todo */
 div.todo-item {
 	margin-top: 7px;
-	margin-left: 0px;
 	border: 3px solid #EEE;
-	border-width: 0px 0px 1px;
+	border-width: 0px 0px 1px 0px;
+	padding: 0px 3px 0px 3px;
 
 	min-height: none;
 	line-height: none;
@@ -59,6 +61,9 @@ div.todo-item {
 		min-height: 0px;
 	}
 
+	div.row {
+		margin-left: 0px;
+	}
 	i.icon-check-empty {
 		margin-right: 10px;
 	}
@@ -83,6 +88,23 @@ div.todo-item {
 	div.todo-item-description-container {
 		display: inline-block;
 		float:left;
+	}
+	div.todo-notes {
+		background-color: #EEE;
+		border-radius: 3px;
+		padding: 10px;
+		margin: 0px -3px 0px -3px;
+	}
+}
+
+div.selected-item {
+	border: 3px solid #AAA;
+	border-radius: 3px;
+	.row {
+		font-weight: bold;
+	}
+	.todo-notes {
+		font-weight: normal;
 	}
 }
 
@@ -112,4 +134,8 @@ div.todos-container {
 			color: #444;
 		}
 	}
+}
+
+div.hide_me {
+	display: none;
 }

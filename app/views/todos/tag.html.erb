@@ -1,4 +1,7 @@
 <% 
+  # Template Dependency: todos/collection
+  # Template Dependency: contexts/context
+  # Template Dependency: projects/project
   options = {
     :collapsible => false,
     :parent_container_type => 'tag',
@@ -8,19 +11,18 @@
   hidden_options = options.clone
   done_options = options.clone
 -%>
-<div id="display_box">
-  <%= empty_message_holder("not_done_with_tag", @not_done_todos.empty?, @tag_name) %>
+<% cache("not_done_with_tag_#{@tag_name}", @not_done_todos.empty?) do -%>
+  <%= render partial: "empty_message_container", locals: {:show => @not_done_todos.empty?, :container_name => "not_done_with_tag"} %>
+<% end -%>
 
-  <%= show_grouped_todos %>
+<%= show_grouped_todos %>
 
-  <% if @group_view_by == 'project' -%>
-    <%= show_todos_without_project(@todos_without_project) -%>
-  <% end -%>
+<% if @group_view_by == 'project' -%>
+  <%= show_todos_without_project(@todos_without_project) -%>
+<% end -%>
 
-  <%= show_deferred_pending_todos(@deferred_todos, @pending_todos, deferred_pending_options) %>
+<%= show_deferred_pending_todos(@deferred_todos, @pending_todos, deferred_pending_options) %>
 
-  <%= show_hidden_todos(@hidden_todos, hidden_options) unless @hidden_todos.nil? %>
+<%= show_hidden_todos(@hidden_todos, hidden_options) unless @hidden_todos.nil? %>
 
-  <%= show_done_todos(@done, done_options) unless @done.nil? %>
-
-</div>
+<%= show_done_todos(@done, done_options) unless @done.nil? %>

@@ -2,26 +2,13 @@ module TodosHelper
 
   # === helpers for rendering container
 
-  def empty_message_holder(container_name, show, title_param=nil)
-    content_tag(:div, :id => "no_todos_in_view", :class => "container #{container_name}", :style => "display:" + (show ? "block" : "none") ) do
-      content_tag(:h4) { t("todos.no_actions.title", :param=>title_param) } +
-      content_tag(:div, :class => "message") do
-        content_tag(:p) { t("todos.no_actions.#{container_name}", :param=>title_param) }
-      end
-    end
-  end
-
-  def todos_container_empty_message(container_name, container_id, show_message)
-    render partial: "todos/container_empty_message", locals: 
-      {container_id: container_id, container_name: container_name, show_message: show_message}
-  end
-
   def show_grouped_todos(settings = {})
     collection = (@group_view_by == 'context') ? @contexts_to_show : @projects_to_show
     render(:partial => collection, :locals => { :settings => settings.reverse_merge!({
       :collapsible => true, 
       :show_empty_containers => @show_empty_containers,
-      :parent_container_type => @group_view_by
+      :parent_container_type => @group_view_by,
+      :show_container => !collection.empty? || settings[:show_empty_containers],
     })})
   end
 
@@ -86,32 +73,24 @@ module TodosHelper
       }
   end
 
-  def todos_container(settings={})
+  def todos_container_settings(settings={})
     settings.reverse_merge!({
       :id => "#{settings[:container_name]}-container",
       :class => "todos-container #{settings[:container_name]}",
+      :title => t("todos.actions.#{settings[:parent_container_type]}_#{settings[:container_name]}", :param => settings[:title_param])
       })
 
     if settings[:collapsible]
       settings[:class] += " collapsible"
     end
-
-    content_tag(:div, 
-      :class=>settings[:class], 
-      :id=>settings[:id], 
-      :style => "display:" + (settings[:show_container] ? "block" : "none")) do
-      yield
-    end
+    return settings
   end
 
   def todos_container_header(settings={})
-    settings.reverse_merge!({
-        :title => t("todos.actions.#{settings[:parent_container_type]}_#{settings[:container_name]}", :param => settings[:title_param])
-      })
     header = settings[:link_in_header].nil? ? "" : content_tag(:div, :class=>"add_note_link"){settings[:link_in_header]}
     header += content_tag(:h4) do
       toggle = ""
-      # toggle = settings[:collapsible] ? container_toggle("toggle_#{settings[:id]}") : ""
+      # TODO: toggle = settings[:collapsible] ? container_toggle("toggle_#{settings[:id]}") : ""
       "#{toggle} #{settings[:title]} #{settings[:append_descriptor]}".html_safe
     end
     header.html_safe
@@ -126,7 +105,7 @@ module TodosHelper
       div_id: settings[:id]+"_items",
       container_name: settings[:container_name],
       todo_id: settings[:id],
-      hide_empty_message: collection.empty?,
+      show_empty_message: !collection.empty?,
       collection: collection,
       settings: settings
     }

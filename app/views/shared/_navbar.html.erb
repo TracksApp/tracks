@@ -51,20 +51,25 @@
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= t('layouts.navigation.help') %><b class="caret"></b></a>
             <ul class="dropdown-menu">
-              <li><%= menu_item("keyboard_shortcuts", "#")                %></li>
-              <li><%= menu_item("integrations",       integrations_path)  %></li>
-              <li><%= menu_item("api_docs",           rest_api_docs_path) %></li>
+              <li><%= menu_item("keyboard_shortcuts", "#",{:id => "menu-keyboard-shotcuts"}) %></li>
+              <li><%= menu_item("integrations",       integrations_path)                     %></li>
+              <li><%= menu_item("api_docs",           rest_api_docs_path)                    %></li>
             </ul>
           </li>          
         </ul>
 
         <ul class="nav pull-right">
           <li>
+            <div class="btn-toolbar">
+                <a class="btn btn-primary btn-small button-add-todo" title="Add a new action" data-keybinding="a"><i class="icon-plus icon-large"></i></a>
+            </div>
+          </li>
+          <li>
             <form class="navbar-search pull-right">
               <input type="text" class="search-query" placeholder="Search">
             </form>
           </li>
-          <li><%= link_to("#{t('common.logout')} (#{current_user.display_name})".html_safe, logout_path) %>
+          <li><%= link_to("<i class='icon-signout'></i>".html_safe, logout_path, title: "#{t('common.logout')} (#{current_user.display_name})") %></li>
         </ul>
 
       </div>
