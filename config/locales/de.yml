@@ -146,7 +146,7 @@ de:
     update: Aktualisieren
     website: Website
     week: Woche
-    weeks: Woche
+    weeks: Wochen
     wiki: Wiki
   contexts:
     add_context: Kontext hinzufügen
@@ -369,11 +369,11 @@ de:
     toggle_notes_title: Alle Notizen umschalten
   login:
     account_login: Account-Anmeldung
-    cas_create_account: 'Wenn du die Anfrage fortsetzen möchtest, klicke bitte hier:
+    cas_create_account: 'Wenn Sie die Anfrage fortsetzen möchten, klicken Sie bitte hier:
       %{signup_link}'
-    cas_logged_in_greeting: Hallo, %{username}! Du bist authentifiziert.
+    cas_logged_in_greeting: Hallo, %{username}! Sie sind authentifiziert.
     cas_login: CAS-Anmeldung
-    cas_no_user_found: Hallo, %{username}! Du hast leider keinen Tracks-Account.
+    cas_no_user_found: Hallo, %{username}! Sie haben leider keinen Tracks-Account.
     cas_signup_link: Account beantragen
     cas_username_not_found: Sorry, aber es existiert kein Benutzer mit dem CAS-Benutzernamen
       (%{username})
@@ -413,7 +413,7 @@ de:
       error_project_not_associated: Projekt-ID %{project} nicht mit User-ID %{user}
         verknüpft.
   notes:
-    delete_confirmation: Bist du sicher, dass du die Notiz '%{id}' löschen möchtest?
+    delete_confirmation: Sind Sie sicher, dass Sie die Notiz '%{id}' löschen möchten?
     delete_item_title: Eintrag löschen
     delete_note_confirm: Soll die Notiz '%{id}' wirklich gelöscht werden?
     delete_note_title: Notiz '%{id}' löschen
@@ -458,7 +458,7 @@ de:
     current_authentication_type: Dein Authentifizierungsart ist %{auth_type}
     edit_preferences: Einstellungen bearbeiten
     generate_new_token: Neues Token generieren
-    generate_new_token_confirm: Bist du sicher? Wenn du ein neues Token generierst,
+    generate_new_token_confirm: Sind Sie sicher? Wenn Sie ein neues Token generieren,
       wird dies das alte Token ersetzen und jegliche externe Nutzung stören, die das
       alte Token verwendet.
     is_false: Nein
@@ -580,13 +580,13 @@ de:
     action_selection_title: TRACKS::Aufgabenauswahl
     actions: Aufgaben
     actions_30days_title: _Aufgaben der letzten 30 Tage
-    actions_actions_avg_created_30days: In den letzten 30 Tagen hast du durchschnittlich
-      %{count} Aufgaben erstellt
+    actions_actions_avg_created_30days: In den letzten 30 Tagen haben Sie durchschnittlich
+      %{count} Aufgaben erstellt.
     actions_avg_completed: und davon durchschnittlich %{count} per Monat erledigt.
     actions_avg_completed_30days: und durchschnittlich %{count} davon erledigt.
-    actions_avg_completion_time: Durchschnittlich hast du %{count} Tage gebraucht
+    actions_avg_completion_time: Durchschnittlich haben Sie %{count} Tage gebraucht
       um eine Aufgabe zu erledigen.
-    actions_avg_created: In den letzten 12 Monaten hast du durchschnittlich %{count}
+    actions_avg_created: In den letzten 12 Monaten haben Sie durchschnittlich %{count}
       Aufgaben erstellt
     actions_day_of_week_legend:
       day_of_week: Tag der Woche
@@ -677,19 +677,19 @@ de:
     top5_visible_contexts_with_incomplete_actions: Top 5 der sichtbaren Kontexte mit
       unerledigten Aufgaben
     totals: Ingesamt
-    totals_action_count: hattest du insgesamt %{count} Aufgaben
+    totals_action_count: hatten Sie insgesamt %{count} Aufgaben
     totals_actions_completed: '%{count} davon sind erledigt.'
     totals_active_project_count: Von diesen sind %{count} aktive Projekte
     totals_blocked_actions: '%{count} hängen vom Abschluss anderer Aufgaben ab.'
     totals_completed_project_count: und %{count} sind erledigte Projekte.
-    totals_context_count: Du hast %{count} Kontexte.
+    totals_context_count: Sie haben %{count} Kontexte.
     totals_deferred_actions: von denen %{count} im Notizbuch zurückgestellt sind
     totals_first_action: Seit deiner ersten Aufgabe am %{date}
     totals_hidden_context_count: und %{count} sind versteckte Kontexte.
     totals_hidden_project_count: '%{count} sind versteckt'
-    totals_incomplete_actions: Du hast %{count} unerledigte Aufgaben
-    totals_project_count: Du hast %{count} Projekte.
-    totals_tag_count: Du hast %{count} Tags in Aufgaben.
+    totals_incomplete_actions: Sie haben %{count} unerledigte Aufgaben
+    totals_project_count: Sie haben %{count} Projekte.
+    totals_tag_count: Sie haben %{count} Tags in Aufgaben.
     totals_unique_tags: Von diesen Tags sind %{count} einmalig.
     totals_visible_context_count: Von diesen sind %{count} sichtbare Kontexte
     within_one: Innerhalb von 1
@@ -761,7 +761,7 @@ de:
     completed_tagged_page_title: 'TRACKS:: Erledigte Aufgaben mit Tag %{tag_name}'
     completed_tasks_title: TRACKS::Erledigte Aufgaben
     completed_today: Heute erledigt
-    confirm_delete: Bist du sicher, dass du die Aufgabe '%{description}' löschen möchtest?
+    confirm_delete: Sind Sie sicher, dass Sie die Aufgabe '%{description}' löschen möchten?
     context_changed: Kontext zu %{name} gewechselt
     convert_to_project: In Projekt umwandeln
     defer_date_after_due_date: Zurückstellungsdatum nach Ablaufdatum. Bitte passe
@@ -887,10 +887,10 @@ de:
         - Dezember
         on_day_n: am Tag %{n}
         on_work_days: an Wochentagen
-        second: zweite
-        show: Show
+        second: zweiten
+        show: zeige
         the_xth_day_of_month: der %{x} %{day} von %{month}
-        third: Drittel
+        third: dritten
         times: für %{number} Zeiten
         until: bis
         weekly: wöchentlich
@@ -934,9 +934,7 @@ de:
         sie zu sehen.'
     to_tickler: ', im Notizbuch hinterlegt'
     unable_to_add_dependency: Abhängigkeit nicht hinzufügbar
-    unresolved_dependency: Der Wert, den Sie in die Abhängigkeit Feld eingegeben nicht
-      zu einer bestehenden Aufgabe zu lösen. Dieser Wert wird nicht mit dem Rest der
-      Aufgabe gerettet werden. Weiter gehen?
+    unresolved_dependency: Zu dem Wert, den Sie im Feld ''Hängt ab von'' eingegeben haben, konnte keine Aufgabe gefunden werden. Dieser Wert wird nicht mit der neuen Aufgabe gespeichert. Trotzdem fortfahren?
     was_due_on_date: war am %{date} fällig
   users:
     account_signup: Accounteinrichtung
@@ -955,8 +953,8 @@ de:
     confirm_password: Passwort bestätigen
     desired_login: Gewünschter Benutzername
     destroy_confirmation: 'Achtung: der Benutzer ''%{login}'' wird mit all seinen
-      Aufgaben, Kontexten, Projekten und Notizen gelöscht. Bist du sicher, dass du
-      fortfahren möchtest?'
+      Aufgaben, Kontexten, Projekten und Notizen gelöscht. Sind Sie sicher, dass Sie
+      fortfahren möchten?'
     destroy_error: Beim Löschen des Benutzers %{login} ist ein Fehler aufgetreten.
     destroy_successful: Benutzer %{login} wurde erfolgreich gelöscht
     destroy_user: Benutzer löschen
