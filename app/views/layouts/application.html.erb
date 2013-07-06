@@ -29,7 +29,7 @@
   </head>
   <body class="<%= controller.controller_name %>">
 
-    <% cache do -%>
+    <% cache [:navbar] do -%>
       <%= render partial: "shared/navbar" %>
     <% end -%>
 
@@ -42,11 +42,12 @@
       </div>
     </div> 
 
-    <% cache do -%>
+    <% cache [:footer] do -%>
       <%= render partial: "shared/footer" %>
       <% # dialogs -%>
       <%= render partial: "shared/keyboard_shortcuts" %>
       <%= render partial: "shared/add_new_action" %>
+      <%= render partial: "todos/todo_sub_menu" %>
     <% end -%>
     <%
       # Javascripts

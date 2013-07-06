@@ -6,20 +6,30 @@
 # 	go_projects: this.goto_page "/projects"
 
 TracksApp =
-	currentPosition: 0
 
-	updateCurrentPosition: ->
-		this.currentPosition = 0
-		$("div.todo-item").each ->
-			if $(this).hasClass("selected-item")
-				return false
-			else
-				this.currentPosition++
+	createSubmenu: (todo, itemToAddBefore) ->
+		template_clone = $("div.todo-sub-menu-template").clone()
+		itemToAddBefore.before(template_clone)
+		todo_menu = todo.find("div.todo-sub-menu-template")
+		todo_menu.removeClass("todo-sub-menu-template")
+		todo_menu.addClass("todo-sub-menu")
+		todo_menu.removeClass("hide")
+
+	appendTodoSubMenu: (todo) ->
+		if todo.find("div.todo-sub-menu").length is 0
+			notes_row = todo.find(".todo-notes").parent()
+			submenu = TracksApp.createSubmenu(todo, notes_row)
+		else
+			todo.find("div.todo-sub-menu").removeClass("hide")
 
 	selectTodo: (new_todo) ->
-		$("div.todo-item.selected-item").removeClass("selected-item")
+		selected_item = $("div.todo-item.selected-item")
+		selected_item.find("div.todo-sub-menu").addClass("hide")
+		selected_item.find("span.todo-item-detail").addClass("hide")
+		selected_item.removeClass("selected-item")
+		TracksApp.appendTodoSubMenu(new_todo)
+		new_todo.find("span.todo-item-detail").removeClass("hide")
 		new_todo.addClass("selected-item")
-		TracksApp.updateCurrentPosition()
 
 	selectPrevNext: (go_next) ->
 		current = prev = next = null
@@ -66,5 +76,5 @@ $ ->
 		todo_item = $(this).parent().parent().parent().parent()
 		TracksApp.selectTodo(todo_item)
 
-	$("div.todo-item-description-container").click ->
+	$("span.todo-item-description-container").click ->
 		TracksApp.selectTodo( $(this).parent().parent().parent() )

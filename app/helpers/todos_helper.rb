@@ -125,6 +125,10 @@ module TodosHelper
 
   # === helpers for rendering a todo
 
+  def todo_notes(todo)
+    todo.rendered_notes.html_safe
+  end
+
   def remote_star_icon(todo=@todo)
     link_to( image_tag_for_star(todo),
       toggle_star_todo_path(todo),

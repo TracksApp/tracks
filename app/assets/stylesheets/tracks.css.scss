@@ -80,12 +80,12 @@ div.todo-item {
 	span.todo-description {
 		margin-right: 10px;
 	}
-	div.todo-item-icons {
+	span.todo-item-icons {
 		display: block;
 		margin-right: 10px;
 		float:left;
 	}
-	div.todo-item-description-container {
+	span.todo-item-description-container {
 		display: inline-block;
 		float:left;
 	}
@@ -95,11 +95,24 @@ div.todo-item {
 		padding: 10px;
 		margin: 0px -3px 0px -3px;
 	}
+	div.todo-sub-menu {
+		margin-top: 5px;
+		padding-top: 5px;
+		margin-bottom: 10px;
+		border: 1px solid #EEE;
+		border-width: 1px 0 0 0;
+	}
+	span.todo-item-detail {
+		text-decoration: none;
+		font-weight: normal;
+		font-style: italic;
+		color: #999;
+	}
 }
 
 div.selected-item {
-	border: 3px solid #AAA;
-	border-radius: 3px;
+	border: 1.5px solid #AAA;
+	border-radius: 4px;
 	.row {
 		font-weight: bold;
 	}

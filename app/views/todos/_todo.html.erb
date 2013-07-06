@@ -6,17 +6,23 @@
     <div id="<%= dom_id(todo) %>" class="todo-item">
       <div class="row">
         <div class="span8">
-          <div class="todo-item-icons">
+          <span class="todo-item-icons">
             <i class="<%= todo.completed? ? "icon-check-sign" : "icon-check-empty"%>"></i>
             <i class="<%= todo.starred?   ? "icon-star" : "icon-star-empty"%>"></i>
-          </div>
-          <div class="todo-item-description-container">
+          </span>
+          <span class="todo-item-description-container">
             <span class="todo-description"><%= todo.description %></span>
             <%= content_tag(:i, {class: "icon-refresh"}){} if todo.from_recurring_todo? -%>
             <%= deferred_due_date(todo) -%>
             <%= content_tag(:i, {class: "icon-sitemap"}){} if todo.has_pending_successors -%>
             <%= content_tag(:i, {class: "icon-book", "data-note-id" => dom_id(todo, 'notes')}){} unless todo.notes.blank? %>
-          </div>
+          </span>
+          <span class="todo-item-detail hide"><br/>
+            <p class="small todo-project-and-context"><small>
+              project: <span class="todo-project-name"><%= todo.project.name.blank? ? "none" : todo.project.name %></span>
+              context: <span class="todo-context-name"><%= todo.context.name.blank? ? "none" : todo.context.name %></span>
+            </small></p>
+          </span>
         </div>
         <div class="span4 pull-right">
           <%= date_span(todo) -%>
@@ -25,7 +31,7 @@
       </div>
       <div class="row">
         <div id="<%=dom_id(todo, 'notes')%>" class="todo-notes hide">
-          <%=todo.rendered_notes.html_safe%>
+          <%= todo_notes(todo) %>
         </div>
       </div>
     </div>

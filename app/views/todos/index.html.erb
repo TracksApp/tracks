@@ -1,7 +1,7 @@
 <%# Template Dependency: todos/collection -%>
 <%# Template Dependency: contexts/context -%>
 <%# Template Dependency: projects/project -%>
-<% cache("not_done", @not_done_todos.empty?) do -%>
+<% cache ["not_done", @not_done_todos.empty?] do -%>
   <%= render partial: "empty_message_container", locals: {:show => @not_done_todos.empty?, :container_name => "not_done"} %>
 <% end -%>
 
@@ -11,4 +11,6 @@
 <%= show_todos_without_project(@todos_without_project) -%>
 <% end -%>
 
-<%= show_done_todos(@done, {:parent_container_type => @group_view_by, :collapsible => true}) unless @done.nil? %>
+<% cache [@done.first, "home_completed"] do %>
+	<%= show_done_todos(@done, {:parent_container_type => @group_view_by, :collapsible => true}) unless @done.nil? %>
+<% end %>
