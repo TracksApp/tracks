@@ -1,5 +1,5 @@
 GIT
-  remote: git://github.com/rails/actionpack-xml_parser.git
+  remote: https://github.com/rails/actionpack-xml_parser
   revision: 246653ab3670f329176c1e77e6cd1a632466f06e
   specs:
     actionpack-xml_parser (1.0.0)
