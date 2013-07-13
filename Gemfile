@@ -5,7 +5,7 @@ gem 'sass-rails', '~>4.0.0'
 gem 'coffee-rails', '~>4.0.0'
 
 # todo: remove xml api 
-gem 'actionpack-xml_parser', github: 'rails/actionpack-xml_parser'
+gem 'actionpack-xml_parser', git: 'https://github.com/rails/actionpack-xml_parser'
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 gem 'therubyracer'
