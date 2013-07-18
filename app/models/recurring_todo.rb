@@ -169,15 +169,13 @@ class RecurringTodo < ActiveRecord::Base
     self.every_day = every_day[0, position] + day + every_day[position+1, every_day.length]
   end
 
-  DAYS_TO_NUMBER = { monday: 1, tuesday: 2, wednesday: 3, thursday: 4, friday: 5, saturday: 6, sunday: 0 }
-
-  DAYS_TO_NUMBER.keys.each do |day|
+  { monday: 1, tuesday: 2, wednesday: 3, thursday: 4, friday: 5, saturday: 6, sunday: 0 }.each do |day, number|
     define_method("weekly_return_#{day}=") do |selector|
-      switch_week_day(selector, DAYS_TO_NUMBER[day]) if recurring_period=='weekly'
+      switch_week_day(selector, number) if recurring_period=='weekly'
     end
 
     define_method("on_#{day}") do
-      on_xday DAYS_TO_NUMBER[day]
+      on_xday number
     end
   end
 
