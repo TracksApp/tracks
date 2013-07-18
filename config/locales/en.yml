@@ -586,7 +586,7 @@ en:
       due_this_week: Due in rest of this week
       due_next_week: Due next week
       due_this_month: Due in rest of %{month}
-      due_after_this_month: Due in %{month} and later
+      due_after_this_month: Due in %{next_month} and later
     show_tomorrow: Show Tomorrow
     tagged_page_title: "TRACKS::Tagged with '%{tag_name}'"
     action_deferred: "The action '%{description}' was deferred"
@@ -646,7 +646,7 @@ en:
       daily: Daily
       yearly_every_x_day: Every %{month} %{day}
       recurrence_on:
-        options: Use the calculated date to 
+        options: Use the calculated date to
         due_date: set the actions due date
         show_options: Show the action
         show_always: always
@@ -1015,4 +1015,4 @@ en:
     notes_matching_query: Notes matching query
     no_results: Your search yielded no results.
     todos_matching_query: Todos matching query
-    projects_matching_query: Projects matching query 
+    projects_matching_query: Projects matching query
