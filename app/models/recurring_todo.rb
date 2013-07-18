@@ -24,11 +24,7 @@ class RecurringTodo < ActiveRecord::Base
     end
   end
 
-  validates_presence_of :description
-  validates_presence_of :recurring_period
-  validates_presence_of :target
-  validates_presence_of :ends_on
-  validates_presence_of :context
+  validates_presence_of :description, :recurring_period, :target, :ends_on, :context
 
   validates_length_of :description, :maximum => 100
   validates_length_of :notes, :maximum => 60000, :allow_nil => true
@@ -41,7 +37,7 @@ class RecurringTodo < ActiveRecord::Base
     if %W[daily weekly monthly yearly].include?(recurring_period)
       self.send("validate_#{recurring_period}")
     else
-      errors.add(:recurring_period, "is an unknown recurrence pattern: '#{self.recurring_period}'")
+      errors.add(:recurring_period, "is an unknown recurrence pattern: '#{recurring_period}'")
     end
   end
 
@@ -70,7 +66,7 @@ class RecurringTodo < ActiveRecord::Base
       errors[:base] <<"The nth day of the month may not be empty for recurrence setting" if monthly_every_xth_day.blank?
       errors[:base] <<"The day of the month may not be empty for recurrence setting" if monthly_day_of_week.blank?
     else
-      raise Exception.new, "unexpected value of recurrence selector '#{self.recurrence_selector}'"
+      raise Exception.new, "unexpected value of recurrence selector '#{recurrence_selector}'"
     end
   end
 
@@ -84,13 +80,13 @@ class RecurringTodo < ActiveRecord::Base
       errors[:base] << "The nth day of the month may not be empty for recurrence setting" if yearly_every_xth_day.blank?
       errors[:base] << "The day of the week may not be empty for recurrence setting" if yearly_day_of_week.blank?
     else
-      raise Exception.new, "unexpected value of recurrence selector '#{self.recurrence_selector}'"
+      raise Exception.new, "unexpected value of recurrence selector '#{recurrence_selector}'"
     end
   end
 
   def starts_and_ends_on_validations
     errors[:base] << "The start date needs to be filled in" if start_from.blank?
-    case self.ends_on
+    case ends_on
     when 'ends_on_number_of_times'
       errors[:base] << "The number of recurrences needs to be filled in for 'Ends on'" if number_of_occurences.blank?
     when "ends_on_end_date"
@@ -102,7 +98,7 @@ class RecurringTodo < ActiveRecord::Base
 
   def set_recurrence_on_validations
     # show always or x days before due date. x not null
-    case self.target
+    case target
     when 'show_from_date'
       # no validations
     when 'due_date'
@@ -111,7 +107,7 @@ class RecurringTodo < ActiveRecord::Base
         errors[:base] << "Please fill in the number of days to show the todo before the due date" if show_from_delta.blank?
       end
     else
-      raise Exception.new, "unexpected value of recurrence target selector '#{self.recurrence_target}'"
+      raise Exception.new, "unexpected value of recurrence target selector '#{recurrence_target}'"
     end
   end
 
@@ -142,99 +138,49 @@ class RecurringTodo < ActiveRecord::Base
   def daily_selector=(selector)
     case selector
     when 'daily_every_x_day'
-      self.only_work_days = false
+      only_work_days = false
     when 'daily_every_work_day'
-      self.only_work_days = true
+      only_work_days = true
     else
       raise Exception.new, "unknown daily recurrence pattern: '#{selector}'"
     end
   end
 
   def daily_every_x_days=(x)
-    self.every_other1 = x if recurring_period=='daily'
+    every_other1 = x if recurring_period=='daily'
   end
 
   def daily_every_x_days
-    return self.every_other1
+    every_other1
   end
 
   # WEEKLY
 
   def weekly_every_x_week=(x)
-    self.every_other1 = x if recurring_period=='weekly'
+    every_other1 = x if recurring_period=='weekly'
   end
 
   def weekly_every_x_week
-    return self.every_other1
+    every_other1
   end
 
-  def switch_week_day (day, position)
+  def switch_week_day(day, position)
     self.every_day = '       ' if self.every_day.nil?
-    self.every_day = self.every_day[0,position] + day + self.every_day[position+1,self.every_day.length]
+    self.every_day = every_day[0, position] + day + every_day[position+1, every_day.length]
   end
 
-  def weekly_return_monday=(selector)
-    switch_week_day(selector,1) if recurring_period=='weekly'
-  end
+  { monday: 1, tuesday: 2, wednesday: 3, thursday: 4, friday: 5, saturday: 6, sunday: 0 }.each do |day, number|
+    define_method("weekly_return_#{day}=") do |selector|
+      switch_week_day(selector, number) if recurring_period=='weekly'
+    end
 
-  def weekly_return_tuesday=(selector)
-    switch_week_day(selector,2) if recurring_period=='weekly'
-  end
-
-  def weekly_return_wednesday=(selector)
-    switch_week_day(selector,3) if recurring_period=='weekly'
-  end
-
-  def weekly_return_thursday=(selector)
-    switch_week_day(selector,4) if recurring_period=='weekly'
-  end
-
-  def weekly_return_friday=(selector)
-    switch_week_day(selector,5) if recurring_period=='weekly'
-  end
-
-  def weekly_return_saturday=(selector)
-    switch_week_day(selector,6) if recurring_period=='weekly'
-  end
-
-  def weekly_return_sunday=(selector)
-    switch_week_day(selector,0) if recurring_period=='weekly'
-  end
-
-  def on_xday(n)
-    unless self.every_day.nil?
-      return self.every_day[n,1] == ' ' ? false : true
-    else
-      return false
+    define_method("on_#{day}") do
+      on_xday number
     end
   end
 
-  def on_monday
-    return on_xday(1)
-  end
-
-  def on_tuesday
-    return on_xday(2)
-  end
-
-  def on_wednesday
-    return on_xday(3)
-  end
-
-  def on_thursday
-    return on_xday(4)
-  end
-
-  def on_friday
-    return on_xday(5)
-  end
-
-  def on_saturday
-    return on_xday(6)
-  end
-
-  def on_sunday
-    return on_xday(0)
+  def on_xday(n)
+    every_day && every_day[n, 1] != ' '
   end
 
   # MONTHLY
