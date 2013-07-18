@@ -24,11 +24,7 @@ class RecurringTodo < ActiveRecord::Base
     end
   end
 
-  validates_presence_of :description
-  validates_presence_of :recurring_period
-  validates_presence_of :target
-  validates_presence_of :ends_on
-  validates_presence_of :context
+  validates_presence_of :description, :recurring_period, :target, :ends_on, :context
 
   validates_length_of :description, :maximum => 100
   validates_length_of :notes, :maximum => 60000, :allow_nil => true
