@@ -180,7 +180,7 @@ class RecurringTodo < ActiveRecord::Base
   end
 
   def on_xday(n)
-    every_day && every_day[n, 1] != ' ' ? true : false
+    every_day && every_day[n, 1] != ' '
   end
 
   # MONTHLY
