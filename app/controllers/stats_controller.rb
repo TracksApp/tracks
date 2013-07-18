@@ -33,11 +33,15 @@ class StatsController < ApplicationController
       find_running_avg_array(@actions_done_last12monthsPlus3_array, @actions_created_last12monthsPlus3_array, 13)
 
     # interpolate avg for current month.
-    percent_of_month = Time.zone.now.day.to_f / Time.zone.now.end_of_month.day.to_f
-    @interpolated_actions_created_this_month = interpolate_avg(@actions_created_last12months_array, percent_of_month)
-    @interpolated_actions_done_this_month = interpolate_avg(@actions_done_last12months_array, percent_of_month)
+    interpolate_avg_for_current_month(@actions_created_last12months_array, @actions_done_last12months_array)
 
     render :layout => false
+  end
+
+  def interpolate_avg_for_current_month(created_set, done_set)
+    percent_of_month = Time.zone.now.day.to_f / Time.zone.now.end_of_month.day.to_f
+    @interpolated_actions_created_this_month = interpolate_avg(created_set, percent_of_month)
+    @interpolated_actions_done_this_month = interpolate_avg(done_set, percent_of_month)
   end
 
   def actions_done_last_years
@@ -46,32 +50,34 @@ class StatsController < ApplicationController
   end
 
   def actions_done_lastyears_data
-    @actions_done_last_months = current_user.todos.completed.select("completed_at").reorder("completed_at DESC")
-    @actions_created_last_months = current_user.todos.select("created_at").reorder("created_at DESC" )
+    actions_done_last_months = current_user.todos.completed.select("completed_at").reorder("completed_at DESC")
+    actions_created_last_months = current_user.todos.select("created_at").reorder("created_at DESC" )
 
     # query is sorted, so use last todo to calculate number of months
-    @month_count = [difference_in_months(@today, @actions_created_last_months.last.created_at),
-      difference_in_months(@today, @actions_done_last_months.last.completed_at)].max
+    month_count = [difference_in_months(@today, actions_created_last_months.last.created_at),
+      difference_in_months(@today, actions_done_last_months.last.completed_at)].max
 
     # convert to array and fill in non-existing months
-    @actions_done_last_months_array = convert_to_months_from_today_array(@actions_done_last_months, @month_count+1, :completed_at)
-    @actions_created_last_months_array = convert_to_months_from_today_array(@actions_created_last_months, @month_count+1, :created_at)
+    @actions_done_last_months_array = convert_to_months_from_today_array(actions_done_last_months, month_count+1, :completed_at)
+    @actions_created_last_months_array = convert_to_months_from_today_array(actions_created_last_months, month_count+1, :created_at)
 
     # find max for graph in both hashes
     @max = [@actions_done_last_months_array.max, @actions_created_last_months_array.max].max
 
     # find running avg
     @actions_done_avg_last_months_array, @actions_created_avg_last_months_array =
-      find_running_avg_array(@actions_done_last_months_array, @actions_created_last_months_array, @month_count+1)
+      find_running_avg_array(@actions_done_last_months_array, @actions_created_last_months_array, month_count+1)
 
     # correct last two months since the data of last+1 and last+2 are not available for avg
-    correct_last_two_months(@actions_done_avg_last_months_array, @month_count)
-    correct_last_two_months(@actions_created_avg_last_months_array, @month_count)
+    correct_last_two_months(@actions_done_avg_last_months_array, month_count)
+    correct_last_two_months(@actions_created_avg_last_months_array, month_count)
 
     # interpolate avg for this month.
-    percent_of_month = Time.zone.now.day.to_f / Time.zone.now.end_of_month.day.to_f
-    @interpolated_actions_created_this_month = interpolate_avg(@actions_created_last_months_array, percent_of_month)
-    @interpolated_actions_done_this_month = interpolate_avg(@actions_done_last_months_array, percent_of_month)
+    interpolate_avg_for_current_month(@actions_created_last_months_array, @actions_done_last_months_array)
+
+    @created_count_array = Array.new(month_count+1, actions_created_last_months.size/month_count)
+    @done_count_array    = Array.new(month_count+1, actions_done_last_months.size/month_count)
+    @month_names         = Array.new(month_count+1){ |i| t('date.month_names')[ (Time.now.mon - i -1 ) % 12 + 1 ]+ " " + (Time.now - i.months).year.to_s}
 
     render :layout => false
   end
@@ -449,7 +455,7 @@ class StatsController < ApplicationController
   end
 
   def interpolate_avg(set, percent)
-    return (set[0]*(1/percent) + set[1] + set[2]) / 3.0
+    (set[0]*(1/percent) + set[1] + set[2]) / 3.0
   end
 
   def correct_last_two_months(month_data, count)

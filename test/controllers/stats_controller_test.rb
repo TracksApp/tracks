@@ -172,9 +172,6 @@ class StatsControllerTest < ActionController::TestCase
     
     # only tests difference with actions_done_last_12months_data
     
-    # Then the count of months should be calculated
-    assert_equal 27, assigns['month_count'], "two years and three months of last todo"
-    
     # And the last two months are corrected
     assert_equal 2/3.0, assigns['actions_done_avg_last_months_array'][23]
     assert_equal 2/3.0, assigns['actions_done_avg_last_months_array'][24]
