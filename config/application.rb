@@ -59,7 +59,7 @@ module Tracksapp
     config.assets.paths << Rails.root.join("app", "assets", "swfs")
 
     # add print and login css to assets
-    config.assets.precompile += %w(login.css print.css)
+    config.assets.precompile += %w(login.css print.css mobile.css)
         
     # configure Tracks to handle deployment in a subdir
     config.action_controller.relative_url_root = SITE_CONFIG['subdir'] if SITE_CONFIG['subdir']
