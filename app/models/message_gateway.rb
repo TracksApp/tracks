@@ -23,7 +23,8 @@ class MessageGateway < ActionMailer::Base
       end
     end
 
-    todo = Todo.from_rich_message(user, context.id, description, notes)
+    todo_builder = TodoFromRichMessage.new(user, context.id, description, notes)
+    todo = todo_builder.construct
     todo.save!
     Rails.logger.info "Saved email as todo for user #{user.login} in context #{context.name}"
   end
