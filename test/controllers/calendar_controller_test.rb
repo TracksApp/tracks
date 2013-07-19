@@ -1,6 +1,11 @@
 require_relative '../test_helper'
 
 class CalendarControllerTest < ActionController::TestCase
+  def setup
+    todos(:call_bill).update_attribute(:due, Time.zone.now.end_of_month.beginning_of_day)
+    todos(:call_dino_ext).update_attribute(:due, Time.zone.now.end_of_month.beginning_of_day)
+  end
+    
   def test_show
     login_as(:admin_user)
 
