@@ -42,7 +42,7 @@ class StatsController < ApplicationController
 
   def interpolate_avg_for_current_month(set)
     percent_of_month = Time.zone.now.day.to_f / Time.zone.now.end_of_month.day.to_f
-    interpolate_avg(set, percent_of_month)
+    (set[0]*(1/percent_of_month) + set[1] + set[2]) / 3.0
   end
 
   def actions_done_last_years
@@ -448,10 +448,6 @@ class StatsController < ApplicationController
 
   def three_month_avg(set, i)
     (set.fetch(i,0) + set.fetch(i+1,0) + set.fetch(i+2,0)) / 3.0
-  end
-
-  def interpolate_avg(set, percent)
-    (set[0]*(1/percent) + set[1] + set[2]) / 3.0
   end
 
   # sets "null" on first column and - if necessary - cleans up last two columns, which may have insufficient data
