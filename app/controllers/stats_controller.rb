@@ -450,9 +450,13 @@ class StatsController < ApplicationController
     (set.fetch(i,0) + set.fetch(i+1,0) + set.fetch(i+2,0)) / 3.0
   end
 
+  def set_three_month_avg(set,upper_bound)
+    (0..upper_bound-1).map { |i| three_month_avg(set, i) }
+  end
+
   # sets "null" on first column and - if necessary - cleans up last two columns, which may have insufficient data
   def compute_running_avg_array(set, upper_bound)
-    result = Array.new(upper_bound) { |i| three_month_avg(set, i) }
+    result = set_three_month_avg(set, upper_bound)
     result[upper_bound-1] = result[upper_bound-1] * 3 if upper_bound == set.length 
     result[upper_bound-2] = result[upper_bound-2] * 3 / 2 if upper_bound > 1 and upper_bound == set.length
     result[0] = "null"
