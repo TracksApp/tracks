@@ -139,7 +139,7 @@ module TodosHelper
         :collapsible => false, 
         :show_empty_containers => true,
         :container_name => "#{period}",
-        :title =>t("todos.calendar.#{period}", :month => l(Time.zone.now, :format => "%B"))
+        :title =>t("todos.calendar.#{period}", :month => l(Time.zone.now, :format => "%B"), :next_month => l(1.month.from_now, :format => "%B"))
         }
       }
   end
