@@ -648,20 +648,16 @@ class RecurringTodo < ActiveRecord::Base
   # Determine start date to calculate next date for recurring todo
   # offset needs to be 1.day for daily patterns
   def determine_start(previous, offset=0.day)
-
-    if previous.nil?
-      start = self.start_from.nil? ? Time.zone.now : self.start_from
-      # skip to present
-      start = Time.zone.now if Time.zone.now > start
-    else
-      start = previous + offset
-
+    start = self.start_from || NullTime.new
+    now = Time.zone.now
+    if previous
       # check if the start_from date is later than previous. If so, use
       # start_from as start to search for next date
-      start = self.start_from if ( self.start_from && self.start_from > previous )
+      start > previous ? start : previous + offset
+    else
+      # skip to present
+      start > now ? start : now
     end
-
-    start
   end
 
   def find_first_day_in_this_week(start)
