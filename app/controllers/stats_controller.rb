@@ -41,8 +41,11 @@ class StatsController < ApplicationController
   end
 
   def interpolate_avg_for_current_month(set)
-    percent_of_month = Time.zone.now.day.to_f / Time.zone.now.end_of_month.day.to_f
     (set[0]*(1/percent_of_month) + set[1] + set[2]) / 3.0
+  end
+
+  def percent_of_month
+    Time.zone.now.day / Time.zone.now.end_of_month.day.to_f
   end
 
   def actions_done_last_years
