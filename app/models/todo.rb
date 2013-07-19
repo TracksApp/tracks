@@ -48,6 +48,7 @@ class Todo < ActiveRecord::Base
   scope :completed_before,  lambda { |date| where("todos.completed_at < ?", date) }
   scope :created_after,     lambda { |date| where("todos.created_at > ?", date) }
   scope :created_before,    lambda { |date| where("todos.created_at < ?", date) }
+  scope :created_or_completed_after,  lambda { |date| where("todos.created_at > ? or todos.completed_at > ?", date, date) }
 
   def self.due_after(date)
     where('todos.due > ?', date)
