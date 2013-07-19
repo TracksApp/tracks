@@ -194,7 +194,7 @@ nl:
     - Vr
     - Za
     abbr_month_names:
-    - 
+    -
     - Jan
     - Feb
     - Maa
@@ -223,7 +223,7 @@ nl:
       only_day: '%e'
       short: '%e %b'
     month_names:
-    - 
+    -
     - Januari
     - Februari
     - Maart
@@ -819,7 +819,7 @@ nl:
       due_this_week: Deadline in rest van deze week
       due_today: Deadline vandaag
       get_in_ical_format: Ontvang deze agenda in iCal-formaat
-      due_after_this_month: Deadline in %{month} en later
+      due_after_this_month: Deadline in %{next_month} en later
     calendar_page_title: TRACKS::Agenda
     cannot_add_dependency_to_completed_todo: Kan deze actie niet als een afhankelijkheid
       van een voltooide actie toevoegen!
@@ -957,7 +957,7 @@ nl:
         from: vanaf
         last: laatste
         month_names:
-        - 
+        -
         - januari
         - februari
         - maart

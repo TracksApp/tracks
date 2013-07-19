@@ -1,8 +1,3 @@
-<%-
-created_count_array = Array.new(@month_count+1){ |i| @actions_created_last_months.size/@month_count }
-done_count_array    = Array.new(@month_count+1){ |i| @actions_done_last_months.size/@month_count }
-month_names         = Array.new(@month_count+1){ |i| t('date.month_names')[ (Time.now.mon - i -1 ) % 12 + 1 ]+ " " + (Time.now - i.months).year.to_s}
--%>
 &title=<%=    t('stats.actions_last_year') %>,{font-size:16},&
 &y_legend=<%= t('stats.actions_last_year_legend.number_of_actions') %>,12,0x736AFF&
 &x_legend=<%= t('stats.actions_last_year_legend.months_ago') %>,12,0x736AFF&
@@ -17,13 +12,13 @@ month_names         = Array.new(@month_count+1){ |i| t('date.month_names')[ (Tim
 &line_8=1,0x007700&
 &values=<%=   @actions_created_last_months_array.join(",")%>&
 &values_2=<%= @actions_done_last_months_array.join(",")%>&
-&values_3=<%= created_count_array.join(",")%>&
-&values_4=<%= done_count_array.join(",")%>&
+&values_3=<%= @created_count_array.join(",")%>&
+&values_4=<%= @done_count_array.join(",")%>&
 &values_5=<%= @actions_created_avg_last_months_array.join(",")%>&
 &values_6=<%= @actions_done_avg_last_months_array.join(",")%>&
 &values_7=<%= @interpolated_actions_created_this_month%>,<%=@actions_done_avg_last_months_array[1]%>&
 &values_8=<%= @interpolated_actions_done_this_month%>,<%=@actions_created_avg_last_months_array[1]%>&
-&x_labels=<%= month_names.join(",")%>&
+&x_labels=<%= @month_names.join(",")%>&
 &y_min=0&
 <% # add one to @max for people who have no actions completed yet.
 # OpenFlashChart cannot handle y_max=0 -%>

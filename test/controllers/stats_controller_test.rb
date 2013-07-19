@@ -109,9 +109,9 @@ class StatsControllerTest < ActionController::TestCase
         assert_response :success
 
         # Then the todos for the chart should be retrieved
-        assert_not_nil assigns['actions_done_last12months']
-        assert_not_nil assigns['actions_created_last12months']
-        assert_equal 7, assigns['actions_created_last12months'].count, "very old todo should not be retrieved"
+        #assert_not_nil assigns['actions_done_last12months']
+        #assert_not_nil assigns['actions_created_last12months']
+        #assert_equal 7, assigns['actions_created_last12months'].count, "very old todo should not be retrieved"
 
         # And they should be totalled in a hash
         assert_equal 2, assigns['actions_created_last12months_array'][0], "there should be two todos in current month"
@@ -171,9 +171,6 @@ class StatsControllerTest < ActionController::TestCase
     assert_response :success
     
     # only tests difference with actions_done_last_12months_data
-    
-    # Then the count of months should be calculated
-    assert_equal 27, assigns['month_count'], "two years and three months of last todo"
     
     # And the last two months are corrected
     assert_equal 2/3.0, assigns['actions_done_avg_last_months_array'][23]
