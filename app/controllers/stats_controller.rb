@@ -27,8 +27,8 @@ class StatsController < ApplicationController
     done_in_last_15_months = put_events_into_month_buckets(actions_last12months, 16, :completed_at)
     created_in_last_15_months = put_events_into_month_buckets(actions_last12months, 16, :created_at)
 
-    @actions_done_avg_last12months_array = make_running_avg_array(done_in_last_15_months, 13)
-    @actions_created_avg_last12months_array = make_running_avg_array(created_in_last_15_months, 13)
+    @actions_done_avg_last12months_array = compute_running_avg_array(done_in_last_15_months, 13)
+    @actions_created_avg_last12months_array = compute_running_avg_array(created_in_last_15_months, 13)
 
     # interpolate avg for current month.
     @interpolated_actions_created_this_month = interpolate_avg_for_current_month(@actions_created_last12months_array)
@@ -454,19 +454,13 @@ class StatsController < ApplicationController
     (set[0]*(1/percent) + set[1] + set[2]) / 3.0
   end
 
-  def make_running_avg_array(set, upper_bound)
-    result = Array.new(upper_bound) { |i| three_month_avg(set, i) }
-    result[0] = "null"
-    result
-  end
-
-  # sets "null" on first column and cleans up last two columns, which have insufficient data
+  # sets "null" on first column and - if necessary - cleans up last two columns, which may have insufficient data
   def compute_running_avg_array(set, upper_bound)
     result = Array.new(upper_bound) { |i| three_month_avg(set, i) }
-    result[upper_bound-1] = result[upper_bound-1] * 3
-    result[upper_bound-2] = result[upper_bound-2] * 3 / 2 if upper_bound > 1
+    result[upper_bound-1] = result[upper_bound-1] * 3 if upper_bound == set.length 
+    result[upper_bound-2] = result[upper_bound-2] * 3 / 2 if upper_bound > 1 and upper_bound == set.length
     result[0] = "null"
     result
-  end
+  end # unsolved, not triggered, edge case for set.length == upper_bound + 1
 
 end
