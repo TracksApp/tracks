@@ -14,27 +14,31 @@ class StatsController < ApplicationController
   def actions_done_last12months_data
     # get actions created and completed in the past 12+3 months. +3 for running
     #   average
-    @actions_done_last12months = current_user.todos.completed_after(@cut_off_year).select("completed_at" )
-    @actions_created_last12months = current_user.todos.created_after(@cut_off_year).select("created_at")
-    @actions_done_last12monthsPlus3 = current_user.todos.completed_after(@cut_off_year_plus3).select("completed_at" )
-    @actions_created_last12monthsPlus3 = current_user.todos.created_after(@cut_off_year_plus3).select("created_at")
+    actions_done_last12months = current_user.todos.completed_after(@cut_off_year).select("completed_at" )
+    actions_created_last12months = current_user.todos.created_after(@cut_off_year).select("created_at")
 
     # convert to array and fill in non-existing months
-    @actions_done_last12months_array = convert_to_months_from_today_array(@actions_done_last12months, 13, :completed_at)
-    @actions_created_last12months_array = convert_to_months_from_today_array(@actions_created_last12months, 13, :created_at)
-    @actions_done_last12monthsPlus3_array = convert_to_months_from_today_array(@actions_done_last12monthsPlus3, 16, :completed_at)
-    @actions_created_last12monthsPlus3_array = convert_to_months_from_today_array(@actions_created_last12monthsPlus3, 16, :created_at)
+    @actions_done_last12months_array = convert_to_months_from_today_array(actions_done_last12months, 13, :completed_at)
+    @actions_created_last12months_array = convert_to_months_from_today_array(actions_created_last12months, 13, :created_at)
     
     # find max for graph in both arrays
     @max = [@actions_done_last12months_array.max, @actions_created_last12months_array.max].max
 
     # find running avg
+    actions_done_last12monthsPlus3 = current_user.todos.completed_after(@cut_off_year_plus3).select("completed_at" )
+    actions_created_last12monthsPlus3 = current_user.todos.created_after(@cut_off_year_plus3).select("created_at")
+    actions_done_last12monthsPlus3_array = convert_to_months_from_today_array(actions_done_last12monthsPlus3, 16, :completed_at)
+    actions_created_last12monthsPlus3_array = convert_to_months_from_today_array(actions_created_last12monthsPlus3, 16, :created_at)
+
     @actions_done_avg_last12months_array, @actions_created_avg_last12months_array =
-      find_running_avg_array(@actions_done_last12monthsPlus3_array, @actions_created_last12monthsPlus3_array, 13)
+      find_running_avg_array(actions_done_last12monthsPlus3_array, actions_created_last12monthsPlus3_array, 13)
 
     # interpolate avg for current month.
     interpolate_avg_for_current_month(@actions_created_last12months_array, @actions_done_last12months_array)
 
+    @created_count_array = Array.new(13, actions_created_last12months.size/12.0)
+    @done_count_array    = Array.new(13, actions_done_last12months.size/12.0)
+    @month_names         = Array.new(13){ |i| t('date.month_names')[ (Time.now.mon - i -1 ) % 12 + 1 ]}
     render :layout => false
   end
 

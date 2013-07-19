@@ -1,8 +1,5 @@
-<%-
-url_array           = Array.new(13){ |i| url_for :controller => 'stats', :action => 'actions_done_last_years'}
-created_count_array = Array.new(13){ |i| @actions_created_last12months.size/12.0 }
-done_count_array    = Array.new(13){ |i| @actions_done_last12months.size/12.0 }
-month_names         = Array.new(13){ |i| t('date.month_names')[ (Time.now.mon - i -1 ) % 12 + 1 ]}
+<%- 
+    url = url_for :controller => 'stats', :action => 'actions_done_last_years' 
 -%>
 &title=<%= t('stats.actions_lastyear_title') %>,{font-size:16},&
 &y_legend=<%= t('stats.legend.number_of_actions') %>,12,0x736AFF&
@@ -17,16 +14,16 @@ month_names         = Array.new(13){ |i| t('date.month_names')[ (Time.now.mon - 
 &line_7=1,0xAA0000&
 &line_8=1,0x007700&
 &values=<%=   @actions_created_last12months_array.join(",")%>&
-&links=<%=    url_array.join(",")%>&
-&links_2=<%=  url_array.join(",")%>&
+&links=<%=    Array.new(13,url).join(",") %>&
+&links_2=<%=  Array.new(13,url).join(",") %>&
 &values_2=<%= @actions_done_last12months_array.join(",")%>&
-&values_3=<%= created_count_array.join(",")%>&
-&values_4=<%= done_count_array.join(",")%>&
+&values_3=<%= @created_count_array.join(",")%>&
+&values_4=<%= @done_count_array.join(",")%>&
 &values_5=<%= @actions_created_avg_last12months_array.join(",")%>&
 &values_6=<%= @actions_done_avg_last12months_array.join(",")%>&
 &values_7=<%= @interpolated_actions_created_this_month%>,<%=@actions_done_avg_last12months_array[1]%>&
 &values_8=<%= @interpolated_actions_done_this_month%>,<%=@actions_created_avg_last12months_array[1]%>&
-&x_labels=<%= month_names.join(",")%>&
+&x_labels=<%= @month_names.join(",")%>&
 &y_min=0&
 <% # add one to @max for people who have no actions completed yet.
    # OpenFlashChart cannot handle y_max=0 -%>
