@@ -13,39 +13,36 @@ class StatsController < ApplicationController
   
   def actions_done_last12months_data
     # get actions created and completed in the past 12+3 months. +3 for running
-    #   average
-    actions_done_last12months = current_user.todos.completed_after(@cut_off_year).select("completed_at" )
-    actions_created_last12months = current_user.todos.created_after(@cut_off_year).select("created_at")
+    # - outermost set of entries needed for these calculations
+    actions_last12months = current_user.todos.created_or_completed_after(@cut_off_year_plus3).select("completed_at,created_at")
 
     # convert to array and fill in non-existing months
-    @actions_done_last12months_array = convert_to_months_from_today_array(actions_done_last12months, 13, :completed_at)
-    @actions_created_last12months_array = convert_to_months_from_today_array(actions_created_last12months, 13, :created_at)
+    @actions_done_last12months_array = put_events_into_month_buckets(actions_last12months, 13, :completed_at)
+    @actions_created_last12months_array = put_events_into_month_buckets(actions_last12months, 13, :created_at)
     
     # find max for graph in both arrays
-    @max = [@actions_done_last12months_array.max, @actions_created_last12months_array.max].max
+    @max = (@actions_done_last12months_array + @actions_created_last12months_array).max
 
     # find running avg
-    actions_done_last12monthsPlus3 = current_user.todos.completed_after(@cut_off_year_plus3).select("completed_at" )
-    actions_created_last12monthsPlus3 = current_user.todos.created_after(@cut_off_year_plus3).select("created_at")
-    actions_done_last12monthsPlus3_array = convert_to_months_from_today_array(actions_done_last12monthsPlus3, 16, :completed_at)
-    actions_created_last12monthsPlus3_array = convert_to_months_from_today_array(actions_created_last12monthsPlus3, 16, :created_at)
+    done_in_last_15_months = put_events_into_month_buckets(actions_last12months, 16, :completed_at)
+    created_in_last_15_months = put_events_into_month_buckets(actions_last12months, 16, :created_at)
 
-    @actions_done_avg_last12months_array, @actions_created_avg_last12months_array =
-      find_running_avg_array(actions_done_last12monthsPlus3_array, actions_created_last12monthsPlus3_array, 13)
+    @actions_done_avg_last12months_array = make_running_avg_array(done_in_last_15_months, 13)
+    @actions_created_avg_last12months_array = make_running_avg_array(created_in_last_15_months, 13)
 
     # interpolate avg for current month.
-    interpolate_avg_for_current_month(@actions_created_last12months_array, @actions_done_last12months_array)
+    @interpolated_actions_created_this_month = interpolate_avg_for_current_month(@actions_created_last12months_array)
+    @interpolated_actions_done_this_month = interpolate_avg_for_current_month(@actions_done_last12months_array)
 
-    @created_count_array = Array.new(13, actions_created_last12months.size/12.0)
-    @done_count_array    = Array.new(13, actions_done_last12months.size/12.0)
+    @created_count_array = Array.new(13, actions_last12months.created_after(@cut_off_year).count/12.0)
+    @done_count_array    = Array.new(13, actions_last12months.completed_after(@cut_off_year).count/12.0)
     @month_names         = Array.new(13){ |i| t('date.month_names')[ (Time.now.mon - i -1 ) % 12 + 1 ]}
     render :layout => false
   end
 
-  def interpolate_avg_for_current_month(created_set, done_set)
+  def interpolate_avg_for_current_month(set)
     percent_of_month = Time.zone.now.day.to_f / Time.zone.now.end_of_month.day.to_f
-    @interpolated_actions_created_this_month = interpolate_avg(created_set, percent_of_month)
-    @interpolated_actions_done_this_month = interpolate_avg(done_set, percent_of_month)
+    interpolate_avg(set, percent_of_month)
   end
 
   def actions_done_last_years
@@ -54,16 +51,14 @@ class StatsController < ApplicationController
   end
 
   def actions_done_lastyears_data
-    actions_done_last_months = current_user.todos.completed.select("completed_at").reorder("completed_at DESC")
-    actions_created_last_months = current_user.todos.select("created_at").reorder("created_at DESC" )
-
-    # query is sorted, so use last todo to calculate number of months
-    month_count = [difference_in_months(@today, actions_created_last_months.last.created_at),
-      difference_in_months(@today, actions_done_last_months.last.completed_at)].max
+    actions_last_months = current_user.todos.select("completed_at,created_at")
+    
+    month_count = [difference_in_months(@today, actions_last_months.minimum(:created_at)),
+      difference_in_months(@today, actions_last_months.minimum(:completed_at))].max
 
     # convert to array and fill in non-existing months
-    @actions_done_last_months_array = convert_to_months_from_today_array(actions_done_last_months, month_count+1, :completed_at)
-    @actions_created_last_months_array = convert_to_months_from_today_array(actions_created_last_months, month_count+1, :created_at)
+    @actions_done_last_months_array = put_events_into_month_buckets(actions_last_months, month_count+1, :completed_at)
+    @actions_created_last_months_array = put_events_into_month_buckets(actions_last_months, month_count+1, :created_at)
 
     # find max for graph in both hashes
     @max = [@actions_done_last_months_array.max, @actions_created_last_months_array.max].max
@@ -77,10 +72,11 @@ class StatsController < ApplicationController
     correct_last_two_months(@actions_created_avg_last_months_array, month_count)
 
     # interpolate avg for this month.
-    interpolate_avg_for_current_month(@actions_created_last_months_array, @actions_done_last_months_array)
+    @interpolated_actions_created_this_month = interpolate_avg_for_current_month(@actions_created_last_months_array)
+    @interpolated_actions_done_this_month = interpolate_avg_for_current_month(@actions_done_last_months_array)
 
-    @created_count_array = Array.new(month_count+1, actions_created_last_months.size/month_count)
-    @done_count_array    = Array.new(month_count+1, actions_done_last_months.size/month_count)
+    @created_count_array = Array.new(month_count+1, actions_last_months.select { |x| x.created_at }.size/month_count)
+    @done_count_array    = Array.new(month_count+1, actions_last_months.select { |x| x.completed_at }.size/month_count)
     @month_names         = Array.new(month_count+1){ |i| t('date.month_names')[ (Time.now.mon - i -1 ) % 12 + 1 ]+ " " + (Time.now - i.months).year.to_s}
 
     render :layout => false
@@ -382,14 +378,17 @@ class StatsController < ApplicationController
   # uses the supplied block to determine array of indexes in hash
   # the block should return an array of indexes each is added to the hash and summed
   def convert_to_array(records, upper_bound)
-    # use 0 to initialise action count to zero
-    a = Array.new(upper_bound){|i| 0 }
+    a = Array.new(upper_bound, 0)
     records.each { |r| (yield r).each { |i| a[i] += 1 } }
-    return a
+    a
   end
   
+  def put_events_into_month_buckets(records, array_size, date_method_on_todo)
+    convert_to_array(records.select { |x| x.send(date_method_on_todo) }, array_size) { |r| [difference_in_months(@today, r.send(date_method_on_todo))]}
+  end
+
   def convert_to_months_from_today_array(records, array_size, date_method_on_todo)
-    return convert_to_array(records, array_size){ |r| [difference_in_months(@today, r.send(date_method_on_todo))]}
+    convert_to_array(records, array_size){ |r| [difference_in_months(@today, r.send(date_method_on_todo))]}
   end
   
   def convert_to_days_from_today_array(records, array_size, date_method_on_todo)
@@ -455,7 +454,7 @@ class StatsController < ApplicationController
   end
 
   def three_month_avg(set, i)
-    return ( (set[i]||0) + (set[i+1]||0) + (set[i+2]||0) ) / 3.0
+    (set.fetch(i,0) + set.fetch(i+1,0) + set.fetch(i+2,0)) / 3.0
   end
 
   def interpolate_avg(set, percent)
@@ -465,6 +464,12 @@ class StatsController < ApplicationController
   def correct_last_two_months(month_data, count)
     month_data[count] = month_data[count] * 3
     month_data[count-1] = month_data[count-1] * 3 / 2 if count > 1
+  end
+
+  def make_running_avg_array(set, upper_bound)
+    result = Array.new(upper_bound) { |i| three_month_avg(set, i) }
+    result[0] = "null"
+    result
   end
 
   def find_running_avg_array(done_array, created_array, upper_bound)
