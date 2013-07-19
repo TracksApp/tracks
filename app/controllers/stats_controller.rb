@@ -36,7 +36,6 @@ class StatsController < ApplicationController
 
     @created_count_array = Array.new(13, actions_last12months.created_after(@cut_off_year).count/12.0)
     @done_count_array    = Array.new(13, actions_last12months.completed_after(@cut_off_year).count/12.0)
-    @month_names         = Array.new(13){ |i| label_for_month_ago(i) }
     render :layout => false
   end
 
@@ -46,14 +45,6 @@ class StatsController < ApplicationController
 
   def percent_of_month
     Time.zone.now.day / Time.zone.now.end_of_month.day.to_f
-  end
-
-  def label_for_month_and_year_ago(i)
-    t('date.month_names')[ (Time.now.mon - i -1 ) % 12 + 1 ]+ " " + (Time.now - i.months).year.to_s
-  end
-
-  def label_for_month_ago(i)
-    t('date.month_names')[ (Time.now.mon - i -1 ) % 12 + 1 ]
   end
 
   def actions_done_last_years
@@ -85,7 +76,6 @@ class StatsController < ApplicationController
 
     @created_count_array = Array.new(month_count+1, actions_last_months.select { |x| x.created_at }.size/month_count)
     @done_count_array    = Array.new(month_count+1, actions_last_months.select { |x| x.completed_at }.size/month_count)
-    @month_names         = Array.new(month_count+1){ |i| label_for_month_and_year_ago(i) }
 
     render :layout => false
   end
