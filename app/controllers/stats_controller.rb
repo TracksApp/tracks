@@ -53,23 +53,20 @@ class StatsController < ApplicationController
   def actions_done_lastyears_data
     actions_last_months = current_user.todos.select("completed_at,created_at")
     
-    month_count = [difference_in_months(@today, actions_last_months.minimum(:created_at)),
-      difference_in_months(@today, actions_last_months.minimum(:completed_at))].max
+    month_count = difference_in_months(@today, actions_last_months.minimum(:created_at))
+    # because this action is not scoped by date, the minimum created_at should always be
+    # less than the minimum completed_at, so no reason to check minimum completed_at
 
     # convert to array and fill in non-existing months
     @actions_done_last_months_array = put_events_into_month_buckets(actions_last_months, month_count+1, :completed_at)
     @actions_created_last_months_array = put_events_into_month_buckets(actions_last_months, month_count+1, :created_at)
 
     # find max for graph in both hashes
-    @max = [@actions_done_last_months_array.max, @actions_created_last_months_array.max].max
+    @max = (@actions_done_last_months_array + @actions_created_last_months_array).max
 
-    # find running avg
-    @actions_done_avg_last_months_array, @actions_created_avg_last_months_array =
-      find_running_avg_array(@actions_done_last_months_array, @actions_created_last_months_array, month_count+1)
-
-    # correct last two months since the data of last+1 and last+2 are not available for avg
-    correct_last_two_months(@actions_done_avg_last_months_array, month_count)
-    correct_last_two_months(@actions_created_avg_last_months_array, month_count)
+    # set running avg
+    @actions_done_avg_last_months_array = compute_running_avg_array(@actions_done_last_months_array,month_count+1)
+    @actions_created_avg_last_months_array = compute_running_avg_array(@actions_created_last_months_array,month_count+1)
 
     # interpolate avg for this month.
     @interpolated_actions_created_this_month = interpolate_avg_for_current_month(@actions_created_last_months_array)
@@ -387,10 +384,6 @@ class StatsController < ApplicationController
     convert_to_array(records.select { |x| x.send(date_method_on_todo) }, array_size) { |r| [difference_in_months(@today, r.send(date_method_on_todo))]}
   end
 
-  def convert_to_months_from_today_array(records, array_size, date_method_on_todo)
-    convert_to_array(records, array_size){ |r| [difference_in_months(@today, r.send(date_method_on_todo))]}
-  end
-  
   def convert_to_days_from_today_array(records, array_size, date_method_on_todo)
     return convert_to_array(records, array_size){ |r| [difference_in_days(@today, r.send(date_method_on_todo))]}
   end
@@ -461,23 +454,19 @@ class StatsController < ApplicationController
     (set[0]*(1/percent) + set[1] + set[2]) / 3.0
   end
 
-  def correct_last_two_months(month_data, count)
-    month_data[count] = month_data[count] * 3
-    month_data[count-1] = month_data[count-1] * 3 / 2 if count > 1
-  end
-
   def make_running_avg_array(set, upper_bound)
     result = Array.new(upper_bound) { |i| three_month_avg(set, i) }
     result[0] = "null"
     result
   end
 
-  def find_running_avg_array(done_array, created_array, upper_bound)
-    avg_done    = Array.new(upper_bound){ |i| three_month_avg(done_array,i) }
-    avg_created = Array.new(upper_bound){ |i| three_month_avg(created_array,i) }
-    avg_done[0] = avg_created[0] = "null"
-    
-    return avg_done, avg_created
+  # sets "null" on first column and cleans up last two columns, which have insufficient data
+  def compute_running_avg_array(set, upper_bound)
+    result = Array.new(upper_bound) { |i| three_month_avg(set, i) }
+    result[upper_bound-1] = result[upper_bound-1] * 3
+    result[upper_bound-2] = result[upper_bound-2] * 3 / 2 if upper_bound > 1
+    result[0] = "null"
+    result
   end
 
 end
