@@ -47,12 +47,14 @@ $ ->
   # ADD: a is bound in navbar
 
   # GO TO
-  # Mousetrap.bind 'g h', TracksApp.go_home
+  Mousetrap.bind 'G',   -> TracksApp.go_menu()
+  Mousetrap.bind 'g h', -> TracksApp.go_home()
   Mousetrap.bind 'g c', -> alert("go context")
-  # Mousetrap.bind 'g C', TracksApp.go_contexts
+  Mousetrap.bind 'g C', -> TracksApp.go_contexts()
   Mousetrap.bind 'g t', -> alert("go tag")
-  Mousetrap.bind 'g p', -> alert("go project")
-  # Mousetrap.bind 'g P', TracksApp.go_projects
+  Mousetrap.bind 'g p', -> TracksApp.go_project()
+  Mousetrap.bind 'g P', -> TracksApp.go_projects()
+  Mousetrap.bind 'g s', -> TracksApp.go_starred()
 
   # VIEW
   Mousetrap.bind 'v p', -> alert("group by project")

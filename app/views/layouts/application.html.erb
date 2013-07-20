@@ -44,10 +44,12 @@
 
     <% cache [:footer] do -%>
       <%= render partial: "shared/footer" %>
-      <% # dialogs -%>
+      <% # dialogs / partials -%>
       <%= render partial: "shared/keyboard_shortcuts" %>
       <%= render partial: "shared/add_new_action" %>
+      <%= render partial: "shared/goto" %>
       <%= render partial: "todos/todo_sub_menu" %>
+      <%= render partial: "projects/go_project" %>
     <% end -%>
     <%
       # Javascripts

@@ -1,13 +1,6 @@
 GIT
-  remote: https://github.com/rails/actionpack-xml_parser
-  revision: 246653ab3670f329176c1e77e6cd1a632466f06e
-  specs:
-    actionpack-xml_parser (1.0.0)
-      actionpack (>= 4.0.0.rc1, < 4.1)
-
-GIT
   remote: git://github.com/seyhunak/twitter-bootstrap-rails.git
-  revision: 9a0a31096ecee572638132d5ed94bc5500f74330
+  revision: 3ebe7b161a7699e56431d546aa98034483a3bb3c
   branch: master
   specs:
     twitter-bootstrap-rails (2.2.7)
@@ -15,6 +8,13 @@ GIT
       execjs
       rails (>= 3.1)
       railties (>= 3.1)
+
+GIT
+  remote: https://github.com/rails/actionpack-xml_parser
+  revision: 246653ab3670f329176c1e77e6cd1a632466f06e
+  specs:
+    actionpack-xml_parser (1.0.0)
+      actionpack (>= 4.0.0.rc1, < 4.1)
 
 GEM
   remote: https://rubygems.org/
@@ -74,13 +74,14 @@ GEM
     coffee-script (2.2.0)
       coffee-script-source
       execjs
-    coffee-script-source (1.6.2)
+    coffee-script-source (1.6.3)
     commonjs (0.2.6)
-    cucumber (1.3.2)
+    cucumber (1.3.5)
       builder (>= 2.1.2)
       diff-lcs (>= 1.1.3)
       gherkin (~> 2.12.0)
-      multi_json (~> 1.3)
+      multi_json (~> 1.7.5)
+      multi_test (>= 0.0.2)
     cucumber-rails (1.3.0)
       capybara (>= 1.1.2)
       cucumber (>= 1.1.8)
@@ -101,7 +102,7 @@ GEM
     hike (1.2.3)
     htmlentities (4.3.1)
     i18n (0.6.4)
-    jquery-rails (3.0.1)
+    jquery-rails (3.0.4)
       railties (>= 3.0, < 5.0)
       thor (>= 0.14, < 2.0)
     less (2.3.2)
@@ -115,13 +116,14 @@ GEM
       treetop (~> 1.4.8)
     metaclass (0.0.1)
     mime-types (1.23)
-    mini_portile (0.5.0)
+    mini_portile (0.5.1)
     minitest (4.7.5)
     mocha (0.14.0)
       metaclass (~> 0.0.1)
-    mousetrap-rails (0.0.10)
+    mousetrap-rails (0.0.11)
     multi_json (1.7.7)
-    mysql2 (0.3.11)
+    multi_test (0.0.2)
+    mysql2 (0.3.13)
     nokogiri (1.6.0)
       mini_portile (~> 0.5.0)
     polyglot (0.3.3)
@@ -147,12 +149,12 @@ GEM
       thor (>= 0.18.1, < 2.0)
     rake (10.1.0)
     ref (1.0.5)
-    rspec-expectations (2.13.0)
+    rspec-expectations (2.14.0)
       diff-lcs (>= 1.1.3, < 2.0)
     rubyzip (0.9.9)
-    safe_yaml (0.9.3)
-    sanitize (2.0.4)
-      nokogiri (~> 1.6.0)
+    safe_yaml (0.9.4)
+    sanitize (2.0.6)
+      nokogiri (>= 1.4.4)
     sass (3.2.9)
     sass-rails (4.0.0)
       railties (>= 4.0.0.beta, < 5.0)
@@ -187,17 +189,17 @@ GEM
     thread_safe (0.1.0)
       atomic
     tilt (1.4.1)
-    timecop (0.6.1)
-    tolk (1.3.9)
+    timecop (0.6.2)
+    tolk (1.3.11)
       safe_yaml (~> 0.8)
       will_paginate
     treetop (1.4.14)
       polyglot
       polyglot (>= 0.3.1)
-    turbolinks (1.2.0)
+    turbolinks (1.3.0)
       coffee-rails
     tzinfo (0.3.37)
-    uglifier (2.1.1)
+    uglifier (2.1.2)
       execjs (>= 0.3.0)
       multi_json (~> 1.0, >= 1.0.2)
     uniform_notifier (1.2.0)

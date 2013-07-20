@@ -19,6 +19,9 @@ div.tracks-middle {
 	div.btn-toolbar {
 		margin: 0px 15px 0px 0px;
 	}
+	input {
+		width: 100px;
+	}
 }
 
 div#tracks-login-navbar {
@@ -148,6 +151,20 @@ div.todos-container {
 		}
 	}
 }
+
+/* Dialogs */
+
+.modal-body {
+	overflow-y: visible;
+}
+
+div#tracks-go-project-dialog {
+	input.input-medium {
+		width : 95%;
+	}
+}
+
+/* Generic */
 
 div.hide_me {
 	display: none;

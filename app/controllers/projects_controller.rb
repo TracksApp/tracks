@@ -52,7 +52,8 @@ class ProjectsController < ApplicationController
         end
         format.autocomplete do
           projects = current_user.projects.active + current_user.projects.hidden
-          render :text => for_autocomplete(projects, params[:term])
+          term = params[:term] || params[:query]
+          render :text => for_autocomplete(projects, term)
         end
       end
     end
