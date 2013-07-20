@@ -48,6 +48,7 @@ class RecurringTodo < ActiveRecord::Base
   end
 
   def validate_weekly
+    puts "@@@ validate_weekly [#{self.weekly_every_x_week}]"
     if weekly_every_x_week.blank?
       errors[:base] << "Every other nth week may not be empty for recurrence setting"
     end
@@ -157,11 +158,11 @@ class RecurringTodo < ActiveRecord::Base
   # WEEKLY
 
   def weekly_every_x_week=(x)
-    every_other1 = x if recurring_period=='weekly'
+    self.every_other1 = x if recurring_period=='weekly'
   end
 
   def weekly_every_x_week
-    every_other1
+    self.every_other1
   end
 
   def switch_week_day(day, position)
