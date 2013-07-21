@@ -389,7 +389,8 @@ en:
       stats: Statistics
       stats_title: See your statistics
       manage_users: Manage users
-      export_title: Import and export data
+      export_title: Export data
+      import_title: Import data
       preferences: Preferences
       integrations: Integrate Tracks
       integrations_title: Integrate Tracks in various other apps
@@ -407,6 +408,7 @@ en:
       completed_tasks_title: Completed
       home: Home
       export: Export
+      import: Import 
       contexts_title: Contexts
       calendar: Calendar
       projects_title: Projects
