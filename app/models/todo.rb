@@ -1,5 +1,8 @@
 class Todo < ActiveRecord::Base
 
+  MAX_DESC_LENGTH = 300
+  MAX_NOTES_LENGTH = 60000
+
   before_save :render_note
   after_save :save_predecessors
 
@@ -106,8 +109,8 @@ class Todo < ActiveRecord::Base
   # Description field can't be empty, and must be < 100 bytes Notes must be <
   # 60,000 bytes (65,000 actually, but I'm being cautious)
   validates_presence_of :description
-  validates_length_of :description, :maximum => 100
-  validates_length_of :notes, :maximum => 60000, :allow_nil => true
+  validates_length_of :description, :maximum => MAX_DESC_LENGTH
+  validates_length_of :notes, :maximum => MAX_NOTES_LENGTH, :allow_nil => true
   validates_presence_of :show_from, :if => :deferred?
   validates_presence_of :context
   validate :check_show_from_in_future
@@ -430,5 +433,28 @@ class Todo < ActiveRecord::Base
       self.rendered_notes = nil
     end
   end
+
+  def self.import params, user
+    default_context = Context.where(:user_id=>user.id).order('id').first
+    
+    count = 0
+    CSV.foreach(params[:file], headers: true) do |row|
+      unless find_by_description_and_user_id row[params[:description].to_i], user.id
+        todo = new 
+        todo.user = user
+        todo.description = row[params[:description].to_i].truncate MAX_DESC_LENGTH
+        todo.context = Context.find_by_name_and_user_id(row[params[:context].to_i], user.id) || default_context
+        todo.project = Project.find_by_name_and_user_id(row[params[:project].to_i], user.id) if row[params[:project].to_i].present?
+        todo.state = row[params[:completed_at].to_i].present? ? 'completed' : 'active'
+        todo.notes = row[params[:notes].to_i].truncate MAX_NOTES_LENGTH if row[params[:notes].to_i].present?
+        todo.created_at = row[params[:created_at].to_i] if row[params[:created_at].to_i].present?
+        todo.due = row[params[:due].to_i] 
+        todo.completed_at = row[params[:completed_at].to_i] if row[params[:completed_at].to_i].present?
+        todo.save!
+        count += 1
+      end
+    end
+    count
+  end  
 
 end
