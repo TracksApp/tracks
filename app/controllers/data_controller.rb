@@ -52,10 +52,10 @@ class DataController < ApplicationController
         count = Todo.import params, current_user
         flash[:notice] = "#{count} Todos imported"
       else
-        flash[:error] = "Ivalid import desitination"
+        flash[:error] = t('data.invalid_import_destination')
       end
     rescue Exception => e
-      flash[:error] = "Error importing CSV: #{e}"
+      flash[:error] = t('data.invalid_import_destination') + ": #{e}"
     end
     File.delete(params[:file])
     redirect_to import_data_path
