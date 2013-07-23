@@ -1,6 +1,6 @@
 class Todo < ActiveRecord::Base
 
-  MAX_DESC_LENGTH = 300
+  MAX_DESCRIPTION_LENGTH = 300
   MAX_NOTES_LENGTH = 60000
 
   before_save :render_note
@@ -393,7 +393,7 @@ class Todo < ActiveRecord::Base
     end
   end
 
-  def self.import params, user
+  def self.import(params, user)
     default_context = Context.where(:user_id=>user.id).order('id').first
     
     count = 0
@@ -414,6 +414,6 @@ class Todo < ActiveRecord::Base
       end
     end
     count
-  end  
+  end
 
 end
