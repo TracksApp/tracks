@@ -109,7 +109,7 @@ class Todo < ActiveRecord::Base
   # Description field can't be empty, and must be < 100 bytes Notes must be <
   # 60,000 bytes (65,000 actually, but I'm being cautious)
   validates_presence_of :description
-  validates_length_of :description, :maximum => MAX_DESC_LENGTH
+  validates_length_of :description, :maximum => MAX_DESCRIPTION_LENGTH
   validates_length_of :notes, :maximum => MAX_NOTES_LENGTH, :allow_nil => true
   validates_presence_of :show_from, :if => :deferred?
   validates_presence_of :context
@@ -442,7 +442,7 @@ class Todo < ActiveRecord::Base
       unless find_by_description_and_user_id row[params[:description].to_i], user.id
         todo = new 
         todo.user = user
-        todo.description = row[params[:description].to_i].truncate MAX_DESC_LENGTH
+        todo.description = row[params[:description].to_i].truncate MAX_DESCRIPTION_LENGTH
         todo.context = Context.find_by_name_and_user_id(row[params[:context].to_i], user.id) || default_context
         todo.project = Project.find_by_name_and_user_id(row[params[:project].to_i], user.id) if row[params[:project].to_i].present?
         todo.state = row[params[:completed_at].to_i].present? ? 'completed' : 'active'
