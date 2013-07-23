@@ -137,7 +137,7 @@ class Project < ActiveRecord::Base
     @age_in_days ||= (Date.today - created_at.to_date + 1).to_i
   end
 
-  def self.import params, user
+  def self.import(params, user)
     count = 0
     CSV.foreach(params[:file], headers: true) do |row|
       unless find_by_name_and_user_id row[params[:name].to_i], user.id
@@ -151,7 +151,7 @@ class Project < ActiveRecord::Base
       end
     end
     count
-  end  
+  end
 
 end
 

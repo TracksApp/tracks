@@ -33,7 +33,7 @@ class DataController < ApplicationController
       when 'todos'
         @labels = [:description, :context, :project, :notes, :created_at, :due, :completed_at]
       else
-        flash[:error] = "Ivalid import desitination"
+        flash[:error] = "Invalid import destination"
         redirect_to :back
       end
       respond_to do |format|
