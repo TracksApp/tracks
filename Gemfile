@@ -56,7 +56,7 @@ group :test do
 
   gem "aruba", :require => false
   gem "simplecov"
-  gem "timecop"
+  gem "timecop", "~> 0.6.2"
 
   # Note that > 2.14 has problems, see: 
   # https://code.google.com/p/selenium/issues/detail?id=3075
