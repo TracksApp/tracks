@@ -190,7 +190,11 @@ GEM
       atomic
     tilt (1.4.1)
     timecop (0.6.2.2)
+<<<<<<< HEAD
     tolk (1.3.11)
+=======
+    tolk (1.3.9)
+>>>>>>> Update the version specifier for timecop
       safe_yaml (~> 0.8)
       will_paginate
     treetop (1.4.14)
