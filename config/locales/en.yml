@@ -386,7 +386,8 @@ en:
       stats: Statistics
       tickler_title: Tickler
       manage_users: Manage users
-      export_title: Import and export data
+      export_title: Export data
+      import_title: Import data
       preferences: Preferences
       integrations_: Integrate Tracks
       feeds_title: See a list of available feeds
@@ -402,6 +403,7 @@ en:
       completed_tasks_title: Completed
       home: Home
       export: Export
+      import: Import 
       contexts_title: Contexts
       calendar: Calendar
       projects_title: Projects
@@ -811,6 +813,7 @@ en:
   data:
     import_successful: Import was successful.
     import_errors: Some errors occurred during import
+    import_destination_invalid: Invalid import destination
   stats:
     index_title: TRACKS::Statistics
     within_one: Within 1

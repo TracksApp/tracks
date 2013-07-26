@@ -1,0 +1,11 @@
+<h3>Map fields to be imported<h3>
+<%= form_tag csv_import_data_path do %>
+	<% @labels.each do |l| %>
+		<%= label_tag l %>: 
+		<%= select_tag(l, options_for_select(@headers) ) %>
+		<br>
+	<% end %>
+	<%= hidden_field_tag :file, @path %>
+	<%= hidden_field_tag :import_to, @import_to %>
+	<%= submit_tag "Import" %>	
+<% end %>	

@@ -7,6 +7,64 @@ class DataController < ApplicationController
   end
 
   def import
+    
+  end
+
+  def csv_map
+    if params[:file].blank?
+      flash[:notice] = "File can't be blank"
+      redirect_to :back
+    else  
+      @import_to = params[:import_to]
+     
+      #get column headers and formart as [['name', column_number]...]
+      i = -1
+      @headers = import_headers(params[:file].path).collect { |v| [v, i+=1] }
+      @headers.unshift ['',i] 
+      
+      #save file for later
+      directory = "public/uploads/csv"
+      @path = File.join(directory, params[:file].original_filename)
+      File.open(@path, "wb") { |f| f.write(params[:file].read) }
+
+      case @import_to
+      when 'projects'
+        @labels = [:name, :description]
+      when 'todos'
+        @labels = [:description, :context, :project, :notes, :created_at, :due, :completed_at]
+      else
+        flash[:error] = "Invalid import destination"
+        redirect_to :back
+      end
+      respond_to do |format|
+        format.html
+      end
+    end
+  end
+
+  def csv_import
+    begin
+      case params[:import_to]
+      when 'projects'
+        count = Project.import params, current_user
+        flash[:notice] = "#{count} Projects imported"
+      when 'todos'
+        count = Todo.import params, current_user
+        flash[:notice] = "#{count} Todos imported"
+      else
+        flash[:error] = t('data.invalid_import_destination')
+      end
+    rescue Exception => e
+      flash[:error] = t('data.invalid_import_destination') + ": #{e}"
+    end
+    File.delete(params[:file])
+    redirect_to import_data_path
+  end
+
+  def import_headers file
+    CSV.foreach(file, headers: false) do |row|
+      return row
+    end
   end
 
   def export

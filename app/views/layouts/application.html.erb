@@ -77,7 +77,8 @@
           <li><a href="#"><%= t('layouts.navigation.admin') %></a>
             <ul>
               <li><%= navigation_link( t('layouts.navigation.preferences'), preferences_path, {:accesskey => "u", :title => t('layouts.navigation.preferences_title')} ) %></li>
-              <li><%= navigation_link( t('layouts.navigation.export'), data_path, {:accesskey => "i", :title => t('layouts.navigation.export_title')} ) %></li>
+              <li><%= navigation_link( t('layouts.navigation.export'), data_path, {:accesskey => "e", :title => t('layouts.navigation.export_title')} ) %></li>
+              <li><%= navigation_link( t('layouts.navigation.import'), import_data_path, {:accesskey => "i", :title => t('layouts.navigation.import_title')} ) %></li>
               <% if current_user.is_admin? -%>
                 <li><%= navigation_link(t('layouts.navigation.manage_users'), users_path, {:accesskey => "a", :title => t('layouts.navigation.manage_users_title')} ) %></li>
               <% end -%>

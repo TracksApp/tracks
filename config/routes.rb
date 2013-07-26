@@ -139,4 +139,12 @@ Tracksapp::Application.routes.draw do
   resources :notes
   resources :preferences
 
+  resources :data do
+    collection do
+      get :import
+      post :csv_map
+      post :csv_import
+    end
+  end
+
 end
