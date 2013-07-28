@@ -4,6 +4,8 @@ gem 'rails', '~>4.0.0'
 gem 'sass-rails', '~>4.0.0'
 gem 'coffee-rails', '~>4.0.0'
 
+gem 'json'
+
 # todo: remove xml api 
 gem 'actionpack-xml_parser', git: 'https://github.com/rails/actionpack-xml_parser'
 
