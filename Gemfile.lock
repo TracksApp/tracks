@@ -155,7 +155,7 @@ GEM
     safe_yaml (0.9.4)
     sanitize (2.0.6)
       nokogiri (>= 1.4.4)
-    sass (3.2.9)
+    sass (3.2.10)
     sass-rails (4.0.0)
       railties (>= 4.0.0.beta, < 5.0)
       sass (>= 3.1.10)
@@ -186,15 +186,11 @@ GEM
       libv8 (~> 3.11.8.12)
       ref
     thor (0.18.1)
-    thread_safe (0.1.0)
+    thread_safe (0.1.2)
       atomic
     tilt (1.4.1)
     timecop (0.6.2.2)
-<<<<<<< HEAD
     tolk (1.3.11)
-=======
-    tolk (1.3.9)
->>>>>>> Update the version specifier for timecop
       safe_yaml (~> 0.8)
       will_paginate
     treetop (1.4.14)
@@ -211,7 +207,7 @@ GEM
     will_paginate (3.0.4)
     xpath (2.0.0)
       nokogiri (~> 1.3)
-    yard (0.8.6.2)
+    yard (0.8.7)
 
 PLATFORMS
   ruby
