@@ -2,19 +2,17 @@
   <div class="navbar-inner">
     <div class="container-fluid">
 
-      <a class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </a>
-
-      <a class="brand" href="#"><span id="badge_count" class="badge_count"><%= @badge_count || @count %></span></a>
-
       <div class="btn-navbar" data-target=".nav-collapse">
-        <a class="btn btn-primary btn-small button-home" title="Go to home page"><i class="icon-home icon-large"></i></a>
+        <a class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </a>
         <a class="btn btn-primary btn-small button-add-todo" title="Add a new action"><i class="icon-plus icon-large"></i></a>
         <a class="btn btn-primary btn-small button-goto" title="Go to..."><i class="icon-mail-forward icon-large"></i></a>
       </div>
+
+      <a class="brand" href="#"><span id="badge_count" class="badge_count"><%= @badge_count || @count %></span></a>
 
       <div class="container-fluid nav-collapse">
         <ul class="nav">
