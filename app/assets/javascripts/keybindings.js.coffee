@@ -57,8 +57,8 @@ $ ->
   Mousetrap.bind 'g s', -> TracksApp.go_starred()
 
   # VIEW
-  Mousetrap.bind 'v p', -> alert("group by project")
-  Mousetrap.bind 'v c', -> alert("group by context")
+  Mousetrap.bind 'v p', -> TracksApp.group_view_by_project()
+  Mousetrap.bind 'v c', -> TracksApp.group_view_by_context()
 
   # Item Selection
   Mousetrap.bind 'j', -> TracksApp.selectNext()

@@ -7,6 +7,7 @@ TracksApp =
     go_projects: -> TracksApp.goto_page "/projects"
     go_starred:  -> TracksApp.goto_page "/tag/starred"
 
+    # TODO: refactor to work for contexts and projects and tags
     go_project:  ->         
         $("input#tracks-goto-project").val("")
         $('div#tracks-go-project-dialog').on 'shown', -> $("input#tracks-goto-project").focus()
@@ -68,29 +69,42 @@ TracksApp =
         unless TracksApp.selectPrevNext(false)?
             TracksApp.selectTodo($("div.todo-item").first())
 
+    show_note: (node) ->
+        notes_id = node.attr("data-note-id")
+        notes_div = $("div#" + notes_id )
+        notes_div.toggleClass("hide")
+        todo_item = $(this).parent().parent().parent().parent().parent()
+        TracksApp.selectTodo(todo_item)
+
+    refresh_page: ->
+        location.reload(true)
+
+    group_view_by: (state) ->
+        $.cookie('group_view_by', state)
+
+    group_view_by_context: ->
+        TracksApp.group_view_by('context')
+        TracksApp.refresh_page()
+
+    group_view_by_project: ->
+        TracksApp.group_view_by('project')
+        TracksApp.refresh_page()
+
+
 # Make TracksApp globally accessible. From http://stackoverflow.com/questions/4214731/coffeescript-global-variables
 root = exports ? this
 root.TracksApp = TracksApp
 
 $ ->
-    $("a#menu-keyboard-shotcuts").click -> $('div#tracks-shortcuts-dialog').modal()
-
-    $("a.button-add-todo").click -> TracksApp.add_todo()
-    $("a.button-home").click -> TracksApp.go_home()
-    $("a.button-goto").click -> TracksApp.go_menu()
-
-    $("i.icon-book").click -> 
-        notes_id = $( this ).attr("data-note-id")
-        notes_div = $("div#" + notes_id )
-        notes_div.toggleClass("hide")
-        todo_item = $(this).parent().parent().parent().parent()
-        TracksApp.selectTodo(todo_item)
-
-    $("span.todo-item-description-container").click ->
-        TracksApp.selectTodo( $(this).parent().parent().parent() )
+    $("a#menu-keyboard-shotcuts").click             -> $('div#tracks-shortcuts-dialog').modal()
+    $("a.button-add-todo").click                    -> TracksApp.add_todo()
+    $("a.button-home").click                        -> TracksApp.go_home()
+    $("a.button-goto").click                        -> TracksApp.go_menu()
+    $("i.icon-book").click                          -> TracksApp.show_note( $(this) )
+    $("span.todo-item-description-container").click -> TracksApp.selectTodo( $(this).parent().parent().parent() )
 
     $('.ajax-typeahead').typeahead
-        minLength: 3, 
+        minLength: 2, 
         source: (query, process) -> 
             typeaheadURL = $(this)[0].$element[0].dataset.link
             return $.ajax

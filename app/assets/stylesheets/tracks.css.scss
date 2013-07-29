@@ -57,13 +57,12 @@ div.todo-item {
 	border: 3px solid #EEE;
 	border-width: 0px 0px 1px 0px;
 	padding: 0px 3px 0px 3px;
-
 	min-height: none;
 	line-height: none;
+
 	[class*="span"] {
 		min-height: 0px;
 	}
-
 	div.row {
 		margin-left: 0px;
 	}
@@ -74,19 +73,26 @@ div.todo-item {
 		margin-right: 10px;
 		color: #666;	
 	}
-	i.icon-star-empty, i.icon-play-sign, i.icon-book, i.icon-refresh {
+	span.todo-description-icons {
 		color: #BBB;	  /* light gray */
+		cursor: pointer;
 	}
-	i.icon-star {
-		color: #F89406; /* orange */
+	span.todo-item-icons {
+		color: #BBB;	  /* light gray */
+		display: block;
+		margin-right: 5px;
+		float:left;
+		cursor: pointer;
+		i.icon-check-empty {
+			color: #333;
+		}
+		i.icon-star {
+			color: #F89406; /* orange */
+		}
 	}
 	span.todo-description {
 		margin-right: 10px;
-	}
-	span.todo-item-icons {
-		display: block;
-		margin-right: 10px;
-		float:left;
+		cursor: pointer;
 	}
 	span.todo-item-description-container {
 		display: inline-block;
@@ -126,6 +132,8 @@ div.selected-item {
 
 span.tags {
 	.label {
+		margin-right: 1px;
+		background-color: #BBB;
 		a:hover, a:focus {
 			text-decoration: none;
 		}
@@ -134,8 +142,6 @@ span.tags {
 			color: #FFF;
 			font-weight: normal;
 		}
-		margin-right: 1px;
-		background-color: #BBB;
 	}
 }
 
@@ -148,6 +154,12 @@ div.todos-container {
 		color: #444;
 		a {
 			color: #444;
+		}
+		span.add-note-link {
+			a {
+				color: #BBB;
+				font-size: 14px;
+			}
 		}
 	}
 }
@@ -162,6 +174,10 @@ div#tracks-go-project-dialog {
 	input.input-medium {
 		width : 95%;
 	}
+}
+
+div.paginate_header {
+	text-align: center;
 }
 
 /* Generic */

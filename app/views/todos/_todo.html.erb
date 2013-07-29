@@ -12,10 +12,12 @@
           </span>
           <span class="todo-item-description-container">
             <span class="todo-description"><%= todo.description %></span>
-            <%= content_tag(:i, {class: "icon-refresh"}){} if todo.from_recurring_todo? -%>
-            <%= deferred_due_date(todo) -%>
-            <%= content_tag(:i, {class: "icon-sitemap"}){} if todo.has_pending_successors -%>
-            <%= content_tag(:i, {class: "icon-book", "data-note-id" => dom_id(todo, 'notes')}){} unless todo.notes.blank? %>
+            <span class="todo-description-icons">
+              <%= content_tag(:i, {class: "icon-refresh"}){} if todo.from_recurring_todo? -%>
+              <%= deferred_due_date(todo) -%>
+              <%= content_tag(:i, {class: "icon-sitemap"}){} if todo.has_pending_successors -%>
+              <%= content_tag(:i, {class: "icon-book", "data-note-id" => dom_id(todo, 'notes')}){} unless todo.notes.blank? %>
+            </span>
           </span>
           <span class="todo-item-detail hide"><br/>
             <p class="small todo-project-and-context"><small>

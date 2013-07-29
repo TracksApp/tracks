@@ -23,9 +23,10 @@
 // require jquery-ui-1.10.0.custom.min
 // require jquery.ui.touch-punch.min
 // require jquery.blockUI
-// require jquery.cookie
 // require jquery.form
 // require jquery.jeditable.mini
 // require jquery.simulate.drag-sortable
 // require jquery.truncator
+
+//= require jquery.cookie
 //= require swf_fu
