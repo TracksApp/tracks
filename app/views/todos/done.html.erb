@@ -1,13 +1,18 @@
-<div id="display_box_projects">
-
+<%# Template Dependency: todos/collection -%>
+<% cache [@done_today.first, "done_today"] do -%>
   <%= show_completed_todos_for("today", @done_today) %>
-  <%= show_completed_todos_for("rest_of_week", @done_rest_of_week) %>
-  <%= show_completed_todos_for("rest_of_month", @done_rest_of_month) %>
+<% end -%>
 
-  <p>
+<% cache [@done_rest_of_week.first, "done_rest_of_week"] do -%>
+  <%= show_completed_todos_for("rest_of_week", @done_rest_of_week) %>
+<% end -%>
+
+<% cache [@done_rest_of_month.first, "done_rest_of_month"] do -%>
+  <%= show_completed_todos_for("rest_of_month", @done_rest_of_month) %>
+<% end -%>
+
+<p>
     <%= raw t('todos.see_all_completed', 
       :link => link_to(t("todos.all_completed_here"), determine_all_done_path)) 
     %>
-  </p>
-
-</div>
+</p>

@@ -35,7 +35,7 @@ gem 'mousetrap-rails'
 
 gem "RedCloth"
 gem "sanitize"
-gem "will_paginate"
+gem "will_paginate-bootstrap"
 gem "acts_as_list"
 gem "aasm"
 gem "htmlentities"

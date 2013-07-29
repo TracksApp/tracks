@@ -87,11 +87,11 @@ module TodosHelper
   end
 
   def todos_container_header(settings={})
-    header = settings[:link_in_header].nil? ? "" : content_tag(:div, :class=>"add_note_link"){settings[:link_in_header]}
-    header += content_tag(:h4) do
+    link = settings[:link_in_header].nil? ? "" : content_tag(:span, :class=>"add-note-link"){"(#{settings[:link_in_header]})".html_safe}
+    header = content_tag(:h4) do
       toggle = ""
       # TODO: toggle = settings[:collapsible] ? container_toggle("toggle_#{settings[:id]}") : ""
-      "#{toggle} #{settings[:title]} #{settings[:append_descriptor]}".html_safe
+      "#{toggle} #{settings[:title]} #{settings[:append_descriptor]} #{link}".html_safe
     end
     header.html_safe
   end

@@ -1,22 +1,24 @@
 <%
   paginate_options = {
-    :class => :add_note_link,
-    :previous_label => '&laquo; '+ t('common.previous'),
-    :next_label     => t('common.next')+' &raquo;',
-    :inner_window   => 2
+    class:          'pagination pagination-small',
+    previous_label: '&laquo; '+ t('common.previous'),
+    next_label:     t('common.next')+' &raquo;',
+    inner_window:   2,
+    renderer:       BootstrapPagination::Rails
   }
 %>
-<div id="display_box_projects">
-  <div class="container">
-    <div class="paginate_header"><%= will_paginate @done, paginate_options %></div>
-    <h2><%= t('todos.all_completed') %></h2>
-    <% if @done.empty? -%>
-      <div class="message"><p><%= t('todos.no_completed_actions') %></p></div>
-    <% else -%>
-      <%= render :partial => "todos/todo", :collection => @done, :locals => { :parent_container_type => "completed", :suppress_context => false, :suppress_project => false } %>
-    <% end -%>
-  </div>
-  
-  <div class="paginate_footer"><%= will_paginate @done, paginate_options %></div>
-  
+<div class="paginate_header">
+  <%= will_paginate @done, paginate_options %>
 </div>
+
+<h2><%= t('todos.all_completed') %></h2>
+
+<% if @done.empty? -%>
+  <div class="message">
+    <p><%= t('todos.no_completed_actions') %></p>
+  </div>
+<% else -%>
+  <%= render :partial => "todos/todo", :collection => @done, :locals => { :parent_container_type => "completed", :suppress_context => false, :suppress_project => false } %>
+<% end -%>
+
+<div class="paginate_footer"><%= will_paginate @done, paginate_options %></div>

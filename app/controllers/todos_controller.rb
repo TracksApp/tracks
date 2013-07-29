@@ -32,6 +32,8 @@ class TodosController < ApplicationController
         # Set count badge to number of not-done, not hidden context items
         @count = current_user.todos.active.not_hidden.count(:all)
         @todos_without_project = @not_done_todos.select{|t|t.project.nil?}
+        @last_updated_todo_without_project = @todos_without_project
+          .inject(@todos_without_project.first){ |last, todo| todo.updated_at > last.updated_at ? todo : last }
       end
       format.m do
         @page_title = t('todos.mobile_todos_page_title')
@@ -536,7 +538,11 @@ class TodosController < ApplicationController
     @source_view = 'done'
     @page_title = t('todos.completed_tasks_title')
 
-    @done = current_user.todos.completed.includes(Todo::DEFAULT_INCLUDES).reorder('completed_at DESC').paginate :page => params[:page], :per_page => 20
+    @done = current_user.todos.completed
+      .includes(Todo::DEFAULT_INCLUDES)
+      .reorder('completed_at DESC')
+      .page(params[:page]).per_page(20)
+
     @count = @done.size
   end
 
