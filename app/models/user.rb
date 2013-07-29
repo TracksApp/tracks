@@ -167,10 +167,6 @@ class User < ActiveRecord::Base
     time.midnight
   end
 
-  def at_midnight(date)
-    return ActiveSupport::TimeZone[prefs.time_zone].local(date.year, date.month, date.day, 0, 0, 0)
-  end
-
   def generate_token
     self.token = Digest::SHA1.hexdigest "#{Time.now.to_i}#{rand}"
   end

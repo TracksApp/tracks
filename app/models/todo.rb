@@ -260,7 +260,7 @@ class Todo < ActiveRecord::Base
       activate
     else
       # parse Date objects into the proper timezone
-      date = user.at_midnight(date) if (date.is_a? Date)
+      date = DateUtils.midnight_for(user.prefs, date) if (date.is_a? Date)
 
       # show_from needs to be set before state_change because of "bug" in aasm.
       # If show_from is not set, the todo will not validate and thus aasm will not save

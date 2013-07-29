@@ -20,7 +20,8 @@ class PreferenceTest < ActiveSupport::TestCase
   end
   
   def test_parse_date
-    assert_equal @admin_user.at_midnight(Date.new(2007, 5, 20)).to_s, @admin_user.preference.parse_date('20/5/2007').to_s
+    date = Time.new(2007, 05, 20).in_time_zone(@admin_user.preference.time_zone).at_midnight
+    assert_equal date.to_s, @admin_user.preference.parse_date('20/5/2007').to_s
   end
   
   def test_parse_date_returns_nil_if_string_is_empty

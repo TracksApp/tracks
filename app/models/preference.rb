@@ -22,6 +22,6 @@ class Preference < ActiveRecord::Base
       raise ArgumentError.new("Bad argument type:#{s.class}")
     end
 
-    user.at_midnight(date)
+    DateUtils::midnight_for(self, date)
   end
 end
