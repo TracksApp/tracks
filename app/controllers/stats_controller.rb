@@ -377,7 +377,7 @@ class StatsController < ApplicationController
   # the block should return an array of indexes each is added to the hash and summed
   def convert_to_array(records, upper_bound)
     a = Array.new(upper_bound, 0)
-    records.each { |r| (yield r).each { |i| a[i] += 1 } }
+    records.each { |r| (yield r).each { |i| a[i] += 1 if a[i] } }
     a
   end
   
