@@ -142,6 +142,28 @@ class StatsControllerTest < ActionController::TestCase
     end
   end
 
+  def test_empty_last12months_data
+    Timecop.travel(Time.local(2013, 1, 15)) do
+      login_as(:admin_user)
+      @current_user = User.find(users(:admin_user).id)
+      @current_user.todos.delete_all
+      given_todos_for_stats
+      get :actions_done_last12months_data
+      assert_response :success
+    end
+  end
+
+  def test_out_of_bounds_events_for_last12months_data
+    login_as(:admin_user)
+    @current_user = User.find(users(:admin_user).id)
+    @current_user.todos.delete_all
+    create_todo_in_past(2.years)
+    create_todo_in_past(15.months)
+
+    get :actions_done_last12months_data
+    assert_response :success
+  end
+
   def test_actions_done_last30days_data
     login_as(:admin_user)
     @current_user = User.find(users(:admin_user).id)
