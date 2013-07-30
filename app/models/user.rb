@@ -164,7 +164,7 @@ class User < ActiveRecord::Base
   end
 
   def date
-    time.midnight
+    UserTime.new(self).midnight(Time.now)
   end
 
   def generate_token

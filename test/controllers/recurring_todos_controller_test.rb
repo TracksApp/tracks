@@ -119,7 +119,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
     # due date should be the target_date
     user = users(:admin_user)
     target_date = Date.new(target_date.year, target_date.month, target_date.day)
-    assert_equal DateUtils.midnight_for(user.prefs, target_date), new_todo.due
+    assert_equal UserTime.new(user).midnight(target_date), new_todo.due
 
     # show_from should be nil since now+4.days-10.days is in the past
     assert_equal nil, new_todo.show_from
