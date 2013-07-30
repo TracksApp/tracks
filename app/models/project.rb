@@ -134,7 +134,7 @@ class Project < ActiveRecord::Base
   end
 
   def age_in_days
-    @age_in_days ||= (Date.today - created_at.to_date + 1).to_i
+    @age_in_days ||= ((Time.now.utc - created_at).to_i / 1.day) + 1
   end
 
 end
