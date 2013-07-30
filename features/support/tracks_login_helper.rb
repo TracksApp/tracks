@@ -32,8 +32,8 @@ module TracksLoginHelper
     Rails.application.routes_reloader.paths.each{ |path| load(path) }
     _routes.draw do
       # here you can add any route you want
-      match "/test_login_backdoor", to: "session_backdoor#create"
-      match "login/expire_session", to: "session_backdoor#expire_session"
+      get "/test_login_backdoor", to: "session_backdoor#create"
+      get "login/expire_session", to: "session_backdoor#expire_session"
     end
     ActiveSupport.on_load(:action_controller) { _routes.finalize! }
   ensure

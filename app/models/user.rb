@@ -159,10 +159,6 @@ class User < ActiveRecord::Base
     save!
   end
 
-  def time
-    Time.now.in_time_zone(prefs.time_zone)
-  end
-
   def date
     UserTime.new(self).midnight(Time.now)
   end

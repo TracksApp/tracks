@@ -11,4 +11,12 @@ class UserTime
   def midnight(date)
     timezone.local(date.year, date.month, date.day, 0, 0, 0)
   end
+
+  def time
+    timezone.now
+  end
+
+  def date
+    time.to_date
+  end
 end

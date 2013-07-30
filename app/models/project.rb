@@ -99,9 +99,10 @@ class Project < ActiveRecord::Base
     end
   end
 
-  def needs_review?(current_user)
+  def needs_review?(user)
+    current_time = UserTime.new(user).time
     return active? && ( last_reviewed.nil? ||
-                        (last_reviewed < current_user.time - current_user.prefs.review_period.days))
+                        (last_reviewed < current_time - user.prefs.review_period.days))
   end
 
   def blocked?
