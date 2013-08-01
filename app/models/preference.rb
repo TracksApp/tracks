@@ -1,7 +1,7 @@
 class Preference < ActiveRecord::Base
   belongs_to :user
   belongs_to :sms_context, :class_name => 'Context'
-    
+
   def self.due_styles
     { :due_in_n_days => 0, :due_on => 1}
   end
@@ -22,6 +22,6 @@ class Preference < ActiveRecord::Base
       raise ArgumentError.new("Bad argument type:#{s.class}")
     end
 
-    user.at_midnight(date)
+    UserTime.new(user).midnight(date)
   end
 end

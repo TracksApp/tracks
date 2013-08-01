@@ -84,12 +84,12 @@ class ProjectTest < ActiveSupport::TestCase
   
   def test_review_project
     assert_nil @timemachine.last_reviewed
-    assert @timemachine.needs_review?(nil)
+    assert @timemachine.needs_review?(users(:admin_user))
   end
 
   def test_review_completedprojects
     @timemachine.complete!
-    assert !@timemachine.needs_review?(nil)
+    assert !@timemachine.needs_review?(users(:admin_user))
   end
 
   def test_complete_project

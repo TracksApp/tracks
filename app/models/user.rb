@@ -159,16 +159,8 @@ class User < ActiveRecord::Base
     save!
   end
 
-  def time
-    Time.now.in_time_zone(prefs.time_zone)
-  end
-
   def date
-    time.midnight
-  end
-
-  def at_midnight(date)
-    return ActiveSupport::TimeZone[prefs.time_zone].local(date.year, date.month, date.day, 0, 0, 0)
+    UserTime.new(self).midnight(Time.now)
   end
 
   def generate_token

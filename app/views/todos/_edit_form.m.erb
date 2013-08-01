@@ -3,7 +3,7 @@
 <span class="errors">
 <%= get_list_of_error_messages_for(@todo) if @todo %>
 </span>
-<% this_year = current_user.time.to_date.strftime("%Y").to_i -%>
+<% this_year = UserTime.new(current_user).date.strftime("%Y").to_i -%>
 <h2><label for="todo_description"><%= t('common.description') %></label></h2>
 <%= text_field( "todo", "description", "tabindex" => 1, "maxlength" => 100, "size" => 50) %>
 <h2><label for="tag_list"><%= t('todos.tags') %></label></h2>
