@@ -79,7 +79,7 @@ end
 
 Given /^I have a todo with description "([^"]*)" in project "([^"]*)" with tags "([^"]*)" in the context "([^"]*)" that is due next week$/ do |action_description, project_name, tags, context_name|
   step "I have a todo with description \"#{action_description}\" in project \"#{project_name}\" with tags \"#{tags}\" in the context \"#{context_name}\""
-  @todo.due = @current_user.time + 1.week
+  @todo.due = UserTime.new(@current_user).time + 1.week
   @todo.save!
 end
 
@@ -94,7 +94,7 @@ Given /^I have ([0-9]+) deferred todos$/ do |count|
   context = @current_user.contexts.create!(:name => "context B")
   count.to_i.downto 1 do |i|
     todo = @current_user.todos.create!(:context_id => context.id, :description => "todo #{i}")
-    todo.show_from = @current_user.time + 1.week
+    todo.show_from = UserTime.new(@current_user).time + 1.week
     todo.save!
   end
 end
@@ -102,7 +102,7 @@ end
 Given /^I have a deferred todo "([^"]*)" in the context "([^"]*)"$/ do |description, context_name|
   context = @current_user.contexts.where(:name => context_name).first_or_create
   todo = @current_user.todos.create!(:context_id => context.id, :description => description)
-  todo.show_from = @current_user.time + 1.week
+  todo.show_from = UserTime.new(@current_user).time + 1.week
   todo.save!
 end
 
@@ -112,13 +112,13 @@ end
 
 Given /^I have a deferred todo "([^"]*)" in context "([^"]*)" with tags "([^"]*)"$/ do |action_description, context_name, tag_list|
   step "I have a todo \"#{action_description}\" in context \"#{context_name}\" with tags \"#{tag_list}\""
-  @todo.show_from = @current_user.time + 1.week
+  @todo.show_from = UserTime.new(@current_user).time + 1.week
   @todo.save!
 end
 
 Given(/^I have a deferred todo "(.*?)" in the context "(.*?)" in the project "(.*?)"$/) do |action_description, context_name, project_name|
   step "I have a todo \"#{action_description}\" in the context \"#{context_name}\" in the project \"#{project_name}\""
-  @todo.show_from = @current_user.time + 1.week
+  @todo.show_from = UserTime.new(@current_user).time + 1.week
   @todo.save!
 end
 
@@ -293,7 +293,7 @@ end
 
 When(/^I submit a new deferred action with description "([^"]*)"$/) do |description|
   fill_in "todo[description]", :with => description
-  fill_in "todo[show_from]", :with => format_date(@current_user.time + 1.week)
+  fill_in "todo[show_from]", :with => format_date(UserTime.new(@current_user).time + 1.week)
   submit_next_action_form
 end
 
@@ -305,7 +305,7 @@ When /^I submit a new deferred action with description "([^"]*)" and the tags "(
     fill_in "todo_context_name", :with => context_name
 
     fill_in "tag_list", :with => tags
-    fill_in "todo[show_from]", :with => format_date(@current_user.time + 1.week)
+    fill_in "todo[show_from]", :with => format_date(UserTime.new(@current_user).time + 1.week)
   end
   submit_next_action_form
 end
@@ -315,7 +315,7 @@ When(/^I submit a new deferred action with description "([^"]*)" to project "(.*
     fill_in "todo[description]", :with => description
     fill_in "todo_project_name", :with => project_name
     fill_in "tag_list", :with => tags
-    fill_in "todo[show_from]", :with => format_date(@current_user.time + 1.week)
+    fill_in "todo[show_from]", :with => format_date(UserTime.new(@current_user).time + 1.week)
   end
   submit_next_action_form
 end
@@ -330,7 +330,7 @@ When /^I submit a new deferred action with description "([^"]*)" to project "([^
     fill_in "todo_project_name", :with => project_name
     fill_in "todo_context_name", :with => context_name
     fill_in "tag_list", :with => tags
-    fill_in "todo[show_from]", :with => format_date(@current_user.time + 1.week)
+    fill_in "todo[show_from]", :with => format_date(UserTime.new(@current_user).time + 1.week)
   end
 
   submit_next_action_form

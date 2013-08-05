@@ -99,9 +99,10 @@ class Project < ActiveRecord::Base
     end
   end
 
-  def needs_review?(current_user)
+  def needs_review?(user)
+    current_time = UserTime.new(user).time
     return active? && ( last_reviewed.nil? ||
-                        (last_reviewed < current_user.time - current_user.prefs.review_period.days))
+                        (last_reviewed < current_time - user.prefs.review_period.days))
   end
 
   def blocked?
@@ -134,7 +135,7 @@ class Project < ActiveRecord::Base
   end
 
   def age_in_days
-    @age_in_days ||= (Date.today - created_at.to_date + 1).to_i
+    @age_in_days ||= ((Time.now.utc - created_at).to_i / 1.day) + 1
   end
 
   def self.import(params, user)
