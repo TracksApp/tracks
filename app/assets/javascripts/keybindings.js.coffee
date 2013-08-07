@@ -48,13 +48,13 @@ $ ->
 
   # GO TO
   Mousetrap.bind 'G',   -> TracksApp.go_menu()
-  Mousetrap.bind 'g h', -> TracksApp.go_home()
-  Mousetrap.bind 'g c', -> alert("go context")
-  Mousetrap.bind 'g C', -> TracksApp.go_contexts()
-  Mousetrap.bind 'g t', -> alert("go tag")
+  Mousetrap.bind 'g h', -> TracksApp.go_home_page()
+  Mousetrap.bind 'g c', -> TracksApp.go_context()
+  Mousetrap.bind 'g C', -> TracksApp.go_contexts_page()
+  Mousetrap.bind 'g t', -> TracksApp.go_tag()
   Mousetrap.bind 'g p', -> TracksApp.go_project()
-  Mousetrap.bind 'g P', -> TracksApp.go_projects()
-  Mousetrap.bind 'g s', -> TracksApp.go_starred()
+  Mousetrap.bind 'g P', -> TracksApp.go_projects_page()
+  Mousetrap.bind 'g s', -> TracksApp.go_starred_page()
 
   # VIEW
   Mousetrap.bind 'v p', -> TracksApp.group_view_by_project()
@@ -63,3 +63,4 @@ $ ->
   # Item Selection
   Mousetrap.bind 'j', -> TracksApp.selectNext()
   Mousetrap.bind 'k', -> TracksApp.selectPrev()
+  Mousetrap.bind 'n', -> TracksApp.toggleNoteOfSelectedTodo()

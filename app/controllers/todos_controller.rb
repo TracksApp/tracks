@@ -685,12 +685,13 @@ class TodosController < ApplicationController
 
   def tags
     # TODO: limit to current_user
-    tags_beginning = Tag.where('name like ?', params[:term]+'%')
-    tags_all = Tag.where('name like ?', '%'+params[:term]+'%')
+    term = params[:query] || param[:term]
+    tags_beginning = Tag.where('name like ?', term+'%')
+    tags_all = Tag.where('name like ?', '%'+term+'%')
     tags_all= tags_all - tags_beginning
 
     respond_to do |format|
-      format.autocomplete { render :text => for_autocomplete(tags_beginning+tags_all, params[:term]) }
+      format.autocomplete { render :text => for_autocomplete(tags_beginning+tags_all, term) }
     end
   end
 

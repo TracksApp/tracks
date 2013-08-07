@@ -12,12 +12,9 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require twitter/bootstrap
+//= require twitter/bootstrap/bootstrap-tooltip
+//= require twitter/bootstrap/bootstrap-popover
 //= require mousetrap
-
-// Stuff in app/assets
-//= require tracks.js
-//= require keybindings.js
 
 // Stuff in vendor/assets
 // require jquery-ui-1.10.0.custom.min
@@ -28,5 +25,10 @@
 // require jquery.simulate.drag-sortable
 // require jquery.truncator
 
+//= require typeahead
 //= require jquery.cookie
 //= require swf_fu
+
+// Stuff in app/assets
+//= require tracks.js
+//= require keybindings.js

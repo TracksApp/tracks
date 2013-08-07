@@ -1,6 +1,6 @@
 <% project = project_settings -%>
-<div id="<%= dom_id(project) %>" class="project">
-  <div class="project_settings"><%= t('projects.this_project') %>
+<div id='<%= dom_id(project) %>' class='project'>
+  <div class='project_settings'><%= t('projects.this_project') %>
     <% if project.completed? -%><%= t('projects.was_marked_complete') %>
     <% elsif project.hidden? -%><%= t('projects.was_marked_hidden') %>
     <% else -%><%= t('projects.is_active') %>
@@ -18,9 +18,9 @@
     <%= link_to_edit_project(project, t('projects.edit_project_settings')) %>
   </div>
   <% unless project.description.blank? -%>
-    <div class="project_description"><%= Tracks::Utils.render_text(project.description) %></div>
+    <div class='project_description'><%= Tracks::Utils.render_text(project.description) %></div>
   <% end -%>
 </div>
-<div id="<%= dom_id(project, 'edit') %>" class="edit-form" style="display:none;">
-   <div class="placeholder"> </div>
+<div id='<%= dom_id(project, 'edit') %>' class='edit-form' style='display:none;'>
+   <div class='placeholder'> </div>
 </div>

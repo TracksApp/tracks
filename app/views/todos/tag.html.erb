@@ -11,7 +11,7 @@
   hidden_options = options.clone
   done_options = options.clone
 -%>
-<% cache("not_done_with_tag_#{@tag_name}", @not_done_todos.empty?) do -%>
+<% cache ["not_done_with_tag_#{@tag_name}", @not_done_todos.empty?] do -%>
   <%= render partial: "empty_message_container", locals: {:show => @not_done_todos.empty?, :container_name => "not_done_with_tag"} %>
 <% end -%>
 

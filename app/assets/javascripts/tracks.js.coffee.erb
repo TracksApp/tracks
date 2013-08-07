@@ -1,0 +1,177 @@
+# Tracks specific coffeescript
+
+TracksApp =
+    dialog_data: {
+        project: { 
+            title: "Go to project"
+            placeholder: "Type (part of) project name"
+            autocomplete_link: "<%= Rails.application.routes.url_helpers.projects_path(format: :autocomplete) %>"
+            target_link: "<%= Rails.application.routes.url_helpers.project_path "" %>"
+            target_id: "id" # json/datum field containing id to use
+        }
+        context: {
+            title: "Go to context"
+            placeholder: "Type (part of) context name"
+            autocomplete_link: "<%= Rails.application.routes.url_helpers.contexts_path(format: :autocomplete) %>"
+            target_link: "<%= Rails.application.routes.url_helpers.context_path ""%>"
+            target_id: "id" # json/datum field containing id to use
+        }
+        tag: {
+            title: "Go to tagged actions"
+            placeholder: "Type (part of) tag name"
+            autocomplete_link: "<%= Rails.application.routes.url_helpers.tags_autocomplete_path %>"
+            target_link: "<%= Rails.application.routes.url_helpers.tag_path "" %>"
+            # json/datum field containing id to use. For tag it is the tag name, not the id field
+            target_id: "value" 
+        }
+    }
+
+    goto_page: (page) -> window.location.href = page
+    go_home_page:     -> TracksApp.goto_page "<%= Rails.application.routes.url_helpers.root_path %>"
+    go_contexts_page: -> TracksApp.goto_page "<%= Rails.application.routes.url_helpers.contexts_path %>"
+    go_projects_page: -> TracksApp.goto_page "<%= Rails.application.routes.url_helpers.projects_path %>"
+    go_starred_page:  -> TracksApp.goto_page "<%= Rails.application.routes.url_helpers.tag_path("starred") %>"
+
+    show_item_dialog: (settings) ->
+        dialog = $('div#tracks-go-item-dialog')
+        # clear input field and set attributes
+        dialog.find("input#tracks-goto-item").typeahead("val", "")
+        dialog.find("input#tracks-goto-item").attr("placeholder", settings.placeholder)
+        dialog.find("input#tracks-goto-item").attr("data-link", settings.autocomplete_link)
+        dialog.find("form").attr("data-link", settings.target_link)
+        dialog.find("form").attr("data-id", settings.target_id)
+        # set title of dialog
+        dialog.find("h3#myModalLabel").html(settings.title)
+        # set focus to input field when dialog is shown
+        dialog.on 'shown', -> 
+            # twitter-typeahead adds span around search field with display:inline-block. This causes
+            # the search field to ignore the width set in tracks.css
+            $("span.twitter-typeahead").css("display", "block")
+            $("input#tracks-goto-item").focus()
+        # show the dialog
+        dialog.modal()
+
+    go_project: -> TracksApp.show_item_dialog(TracksApp.dialog_data.project)
+    go_context: -> TracksApp.show_item_dialog(TracksApp.dialog_data.context)
+    go_tag:     -> TracksApp.show_item_dialog(TracksApp.dialog_data.tag)
+
+    go_menu:  -> $('div#tracks-goto-dialog').modal()
+    add_todo: -> $('div#tracks-add-action-dialog').modal()
+
+    createSubmenu: (todo, itemToAddBefore) ->
+        template_clone = $("div.todo-sub-menu-template").clone()
+        itemToAddBefore.before(template_clone)
+        todo_menu = todo.find("div.todo-sub-menu-template")
+        todo_menu.removeClass("todo-sub-menu-template")
+        todo_menu.addClass("todo-sub-menu")
+        todo_menu.removeClass("hide")
+
+    appendTodoSubMenu: (todo) ->
+        if todo.find("div.todo-sub-menu").length is 0
+            notes_row = todo.find(".todo-notes").parent()
+            submenu = TracksApp.createSubmenu(todo, notes_row)
+        else
+            todo.find("div.todo-sub-menu").removeClass("hide")
+
+    selectTodo: (new_todo) ->
+        selected_item = $("div.todo-item.selected-item")
+        selected_item.find("div.todo-sub-menu").addClass("hide")
+        selected_item.find("span.todo-item-detail").addClass("hide")
+        selected_item.removeClass("selected-item")
+        TracksApp.appendTodoSubMenu(new_todo)
+        new_todo.find("span.todo-item-detail").removeClass("hide")
+        new_todo.addClass("selected-item")
+
+    selectPrevNext: (go_next) ->
+        current = prev = next = null
+        stop = false
+        $("div.todo-item").each ->
+            if stop
+                next = $(this)
+                return false
+
+            prev = current
+            current = $(this) 
+
+            if $(this).hasClass("selected-item")
+                stop = true
+        
+        if go_next 
+            TracksApp.selectTodo(prev) if prev?
+            return prev
+        else
+            TracksApp.selectTodo(next) if next?
+            return next
+    
+    selectPrev: ->
+        unless TracksApp.selectPrevNext(true)?
+            TracksApp.selectTodo($("div.todo-item").last())
+    
+    selectNext: ->
+        unless TracksApp.selectPrevNext(false)?
+            TracksApp.selectTodo($("div.todo-item").first())
+
+    toggleNoteOfSelectedTodo: ->
+        selected_item = $("div.todo-item.selected-item")
+        notes_id = selected_item.find("i.icon-book").attr("data-note-id")
+        notes_div = $("div#" + notes_id )
+        notes_div.toggleClass("hide")
+
+    toggleNoteOfTodo: (node) ->
+        todo_item = $(this).parent().parent().parent().parent().parent()
+        TracksApp.selectTodo(todo_item)
+        TracksApp.toggleNoteOfSelectedTodo()
+
+    refresh_page: ->
+        location.reload(true)
+
+    group_view_by: (state) ->
+        $.cookie('group_view_by', state)
+
+    group_view_by_context: ->
+        TracksApp.group_view_by('context')
+        TracksApp.refresh_page()
+
+    group_view_by_project: ->
+        TracksApp.group_view_by('project')
+        TracksApp.refresh_page()
+
+
+# Make TracksApp globally accessible. From http://stackoverflow.com/questions/4214731/coffeescript-global-variables
+root = exports ? this
+root.TracksApp = TracksApp
+
+$ ->
+    $("a#menu-keyboard-shotcuts").click             -> $('div#tracks-shortcuts-dialog').modal()
+    $("a.button-add-todo").click                    -> TracksApp.add_todo()
+    $("a.button-home").click                        -> TracksApp.go_home()
+    $("a.button-goto").click                        -> TracksApp.go_menu()
+    $("i.icon-book").click                          -> TracksApp.toggleNoteOfTodo( $(this) )
+    $("span.todo-item-description-container").click -> TracksApp.selectTodo( $(this).parent().parent().parent() )
+
+    autocompleteDataset = new Dataset
+        limit: 7
+        remote: 
+            url: "/wrong-url-from-tracks-js.autocomplete"
+            replace: (url, query) ->
+                # replace url with data-link attribute
+                $("input#tracks-goto-item").attr("data-link")+"?query="+query
+
+    autocompleteDataset.initialize()
+
+    $('input.ajax-typeahead').typeahead
+        minLength: 2
+        hint: true
+        autoselect: true
+        sections:
+            highlight: true
+            source: autocompleteDataset
+
+    $('input.ajax-typeahead').on "typeahead:selected", (ev, datum) ->
+        form = $("div#tracks-go-item-dialog form")
+        base_url = form.attr("data-link")
+        base_id = datum[form.attr("data-id")]
+        form.attr("action", base_url + base_id)
+        form.submit()
+
+    $('a[rel="tracks-popover"]').popover()

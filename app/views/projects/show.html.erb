@@ -13,9 +13,13 @@
 <div id="display_box">
   <%= project_next_prev %>
 
-  <%= render :partial => "project_settings_container", :locals => {:project => @project} %>
+  <% cache @project do %>
+    <%= render :partial => "project_settings_container", :locals => {:project => @project} %>
+  <% end %>
 
-  <%= empty_message_holder("not_done_context", @not_done_todos.empty?) %>
+  <% cache("not_done_project", @not_done_todos.empty?) do -%>
+    <%= render partial: "todos/empty_message_container", locals: {:show => @not_done_todos.empty?, :container_name => "not_done"} %>
+  <% end -%>
 
   <%= show_grouped_todos({:collapsible => false, :show_empty_containers => false, :parent_container_type => 'project' }) %>
 
@@ -35,12 +39,7 @@
   </div>
 
   <div id="new-note" style="display:none;">
-    <%= render :partial => "notes/note_edit_form", :object => @new_note, :locals => {:submit_text => t('projects.add_note_submit')} %>
+    <%# render :partial => "notes/note_edit_form", :object => @new_note, :locals => {:submit_text => t('projects.add_note_submit')} %>
   </div>
 
-</div>
-
-<div id="input_box">
-  <%= render :partial => "shared/add_new_item_form" %>
-  <%= render :file => "sidebar/sidebar" %>
 </div>

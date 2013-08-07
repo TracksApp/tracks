@@ -1,6 +1,6 @@
-<div class="container project">
-  <h2 id="project_name_container">
-    <%= show_project_name(project) %>
-  </h2>
-    <%= show_project_settings(project) %>
-</div>
+<h2 id="project_name_container"><%= show_project_name(project) %> </h2>
+<a 
+  role="button" title="" 
+  data-placement="bottom" rel="tracks-popover" href="#" 
+  data-original-title="Details of project" data-html="true"
+  data-content="<%= render(partial: "project_settings", object: project) %>"><i class="icon-info-sign"></i></a>

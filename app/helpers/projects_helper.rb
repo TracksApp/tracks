@@ -8,12 +8,6 @@ module ProjectsHelper
     end
   end
 
-  def show_project_settings(project)
-    content_tag(:div, :id => dom_id(project, "container"), :class=>"list") do
-      render :partial => "projects/project_settings", :object => project
-    end
-  end
-
   def project_next_prev
     content_tag(:div, :id=>"project-next-prev") do
       html = ""
@@ -49,7 +43,7 @@ module ProjectsHelper
   end
 
   def link_to_edit_project (project, descriptor = sanitize(project.name))
-    link_to_edit(:project, project, descriptor)
+    link_to_edit(:project, project, descriptor).sub!('"',"'")
   end
 
 end

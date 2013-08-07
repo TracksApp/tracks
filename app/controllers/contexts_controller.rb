@@ -31,7 +31,9 @@ class ContextsController < ApplicationController
         headers['Content-Type']=Mime::TEXT.to_s
         render :action => 'index', :layout => false, :content_type => Mime::TEXT
       end
-      format.autocomplete &render_autocomplete
+      format.autocomplete do
+        render :text => for_autocomplete(@all_contexts, params[:query] || params[:term])
+      end
     end
   end
   
@@ -220,12 +222,6 @@ class ContextsController < ApplicationController
     end
   end
   
-  def render_autocomplete
-    lambda do
-      render :text => for_autocomplete(current_user.contexts, params[:term])
-    end
-  end
-
   def feed_options
     Context.feed_options(current_user)
   end
