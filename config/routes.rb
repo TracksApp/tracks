@@ -107,7 +107,7 @@ Tracksapp::Application.routes.draw do
   # Needed for /todos/tag/first.last.m to work
   get 'todos/tag/:name' => 'todos#tag', :as => :tag, :format => false, :name => /.*/
   
-  get 'tags.autocomplete' => "todos#tags", :format => 'autocomplete'
+  get 'tags.autocomplete' => "todos#tags", :format => 'autocomplete', :as => :tags_autocomplete
   get 'todos/done/tag/:name' => "todos#done_tag", :as => :done_tag
   get 'todos/all_done/tag/:name' => "todos#all_done_tag", :as => :all_done_tag
   get 'auto_complete_for_predecessor' => 'todos#auto_complete_for_predecessor'
