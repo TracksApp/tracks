@@ -8,16 +8,24 @@
   show_empty_containers = (@group_view_by == 'context')
 -%>
 
-<% cache("not_done_context", @not_done_todos.empty?) do -%>
+<% cache ["not_done_context", @not_done_todos.empty?] do -%>
   <%= render partial: "todos/empty_message_container", locals: {:show => @not_done_todos.empty?, :container_name => "not_done"} %>
 <% end -%>
 
 <%= show_grouped_todos({:collapsible => false, :show_empty_containers => show_empty_containers, :parent_container_type => 'context'}) %>
 
-<% if @group_view_by == 'project' -%>
-  <%= show_todos_without_project(@todos_without_project, {:collapsible => false, :parent_container_type => 'context', :title_param => @context.name}) -%>
+<% if @group_view_by == 'project'
+     cache [@last_updated_todo_without_project, @context, "todos_without_project"] do -%>
+        <%= show_todos_without_project(@todos_without_project, 
+        {:collapsible => false, :parent_container_type => 'context', :title_param => @context.name}) -%>
+    <% end -%>
 <% end -%>
 
-<%= show_deferred_pending_todos(@deferred_todos, @pending_todos, deferred_pending_options) %>
+<% cache [@context, "deferred_pending"] do -%>
+    <%= show_deferred_pending_todos(@deferred_todos, @pending_todos, deferred_pending_options) %>
+<% end -%>
 
-<%= show_done_todos(@done, done_todo_options) unless @done.nil? %>
+<% # use the first completed todo (which is the last one to be completed) as cache invariant
+  cache [@context, @done.first, "context_completed"] do -%>
+    <%= show_done_todos(@done, done_todo_options) unless @done.nil? %>
+<% end -%>

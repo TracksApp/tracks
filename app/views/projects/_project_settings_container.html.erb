@@ -1,6 +1,18 @@
-<h2 id="project_name_container"><%= show_project_name(project) %> </h2>
-<a 
-  role="button" title="" 
-  data-placement="bottom" rel="tracks-popover" href="#" 
-  data-original-title="Details of project" data-html="true"
-  data-content="<%= render(partial: "project_settings", object: project) %>"><i class="icon-info-sign"></i></a>
+<h3 class="project-name-container"><%= show_project_name(project) %> </h3>
+<div class="project-badges">
+  <a class="badge" title="" 
+    data-placement="bottom" rel="tracks-popover" href="#" 
+    data-original-title="<%= project.name %>" data-html="true"
+    data-content="<div class='project-details'><%= project_details(project) %></div>">
+      <i class="icon-info-sign"></i> Details 
+  </a>
+  <a class="badge hide tracks-badge-description" title="Show project description" href="#">
+    <i class="icon-book"></i> Description
+  </a>
+</div>
+<% unless project.description.blank? %>
+  <div class='project-description alert alert-info'>
+    <button type="button" class="close">&times;</button>
+    <small><%= Tracks::Utils.render_text(project.description) %></small>
+  </div>
+<% end %>

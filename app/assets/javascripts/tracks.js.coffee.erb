@@ -75,12 +75,15 @@ TracksApp =
 
     selectTodo: (new_todo) ->
         selected_item = $("div.todo-item.selected-item")
-        selected_item.find("div.todo-sub-menu").addClass("hide")
-        selected_item.find("span.todo-item-detail").addClass("hide")
-        selected_item.removeClass("selected-item")
-        TracksApp.appendTodoSubMenu(new_todo)
-        new_todo.find("span.todo-item-detail").removeClass("hide")
-        new_todo.addClass("selected-item")
+        # do nothing if the new_todo is already selected
+        unless new_todo.attr("id") == selected_item.attr("id")
+            selected_item.find("div.todo-sub-menu").addClass("hide")
+            selected_item.find("span.todo-item-detail").addClass("hide")
+            TracksApp.noteOfTodo(selected_item).addClass("hide")
+            selected_item.removeClass("selected-item")
+            TracksApp.appendTodoSubMenu(new_todo)
+            new_todo.find("span.todo-item-detail").removeClass("hide")
+            new_todo.addClass("selected-item")
 
     selectPrevNext: (go_next) ->
         current = prev = next = null
@@ -111,16 +114,16 @@ TracksApp =
         unless TracksApp.selectPrevNext(false)?
             TracksApp.selectTodo($("div.todo-item").first())
 
+    noteOfTodo: (todo) ->
+        notes_id = todo.find("i.icon-book").attr("data-note-id")
+        $("div#" + notes_id )
+
+    toggleNoteOfTodo: (todo) ->
+        TracksApp.noteOfTodo(todo).toggleClass("hide")
+
     toggleNoteOfSelectedTodo: ->
         selected_item = $("div.todo-item.selected-item")
-        notes_id = selected_item.find("i.icon-book").attr("data-note-id")
-        notes_div = $("div#" + notes_id )
-        notes_div.toggleClass("hide")
-
-    toggleNoteOfTodo: (node) ->
-        todo_item = $(this).parent().parent().parent().parent().parent()
-        TracksApp.selectTodo(todo_item)
-        TracksApp.toggleNoteOfSelectedTodo()
+        TracksApp.toggleNoteOfTodo(selected_item)
 
     refresh_page: ->
         location.reload(true)
@@ -142,12 +145,12 @@ root = exports ? this
 root.TracksApp = TracksApp
 
 $ ->
-    $("a#menu-keyboard-shotcuts").click             -> $('div#tracks-shortcuts-dialog').modal()
-    $("a.button-add-todo").click                    -> TracksApp.add_todo()
-    $("a.button-home").click                        -> TracksApp.go_home()
-    $("a.button-goto").click                        -> TracksApp.go_menu()
-    $("i.icon-book").click                          -> TracksApp.toggleNoteOfTodo( $(this) )
-    $("span.todo-item-description-container").click -> TracksApp.selectTodo( $(this).parent().parent().parent() )
+    $("a#menu-keyboard-shotcuts").click                -> $('div#tracks-shortcuts-dialog').modal()
+    $("a.button-add-todo").click                       -> TracksApp.add_todo()
+    $("a.button-home").click                           -> TracksApp.go_home()
+    $("a.button-goto").click                           -> TracksApp.go_menu()
+    $("span.todo-description-icons i.icon-book").click -> TracksApp.toggleNoteOfTodo( $(this).parent().parent().parent().parent().parent() )
+    $("span.todo-item-description-container").click    -> TracksApp.selectTodo( $(this).parent().parent().parent() )
 
     autocompleteDataset = new Dataset
         limit: 7
@@ -175,3 +178,11 @@ $ ->
         form.submit()
 
     $('a[rel="tracks-popover"]').popover()
+
+    $('div.project-description button.close').on "click", ->
+        $(this).parent().addClass("hide")
+        $("a.tracks-badge-description").removeClass("hide")
+
+    $("a.tracks-badge-description").on "click", ->
+        $("div.project-description").removeClass("hide")
+        $(this).addClass("hide")

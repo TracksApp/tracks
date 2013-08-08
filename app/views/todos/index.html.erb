@@ -8,15 +8,15 @@
 <%= show_grouped_todos %>
 
 <%  if @group_view_by == 'project'
-			# use the last updated todo without a project as cache invariant. 
-			# Changing an exisiting todo or adding a new one will result in a new cache key
-			cache [@last_updated_todo_without_project, "todos_without_project"] do -%>
-				<%= show_todos_without_project(@todos_without_project) %>
-<%		end
-	 	end 
+      # use the last updated todo without a project as cache invariant. 
+      # Changing an exisiting todo or adding a new one will result in a new cache key
+      cache [@last_updated_todo_without_project, "todos_without_project"] do -%>
+        <%= show_todos_without_project(@todos_without_project) %>
+<%    end
+    end 
 -%>
 
 <% # use the first completed todo (which is the last one to be completed) as cache invariant
-	cache [@done.first, "home_completed"] do %>
-		<%= show_done_todos(@done, {:parent_container_type => @group_view_by, :collapsible => true}) unless @done.nil? %>
+  cache [@done.first, "home_completed"] do %>
+    <%= show_done_todos(@done, {:parent_container_type => @group_view_by, :collapsible => true}) unless @done.nil? %>
 <% end %>

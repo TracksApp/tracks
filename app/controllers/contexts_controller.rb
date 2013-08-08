@@ -45,6 +45,8 @@ class ContextsController < ApplicationController
       @done = @context.todos.completed.limit(@max_completed).reorder("todos.completed_at DESC, todos.created_at DESC").includes(Todo::DEFAULT_INCLUDES)
       @not_done_todos = @context.todos.active.reorder("todos.due IS NULL, todos.due ASC, todos.created_at ASC").includes(Todo::DEFAULT_INCLUDES)
       @todos_without_project = @not_done_todos.select{|t| t.project.nil?}
+      @last_updated_todo_without_project = @todos_without_project
+        .inject(@todos_without_project.first){ |last, todo| todo.updated_at > last.updated_at ? todo : last }
 
       @deferred_todos = @context.todos.deferred.includes(Todo::DEFAULT_INCLUDES)
       @pending_todos = @context.todos.pending.includes(Todo::DEFAULT_INCLUDES)

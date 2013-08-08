@@ -8,13 +8,40 @@ module ProjectsHelper
     end
   end
 
+  def project_details(project)
+
+    state = {
+      "complete" => "projects.was_marked_complete", 
+      "hidden"   => "projects.was_marked_hidden", 
+      "active"   => "projects.is_active"}
+
+    default_context = project.default_context.nil? ? 
+      t('projects.with_no_default_context') :
+      t('projects.with_default_context', :context_name => project.default_context.name)
+
+    tags = project.default_tags.blank? ? t('projects.with_no_default_tags') : t('projects.with_default_tags', :tags => project.default_tags)
+
+    created_at = format_date(project.created_at)
+    modified_at = format_date(project.updated_at)
+
+    "#{t('projects.this_project')} #{t(state[project.state])} #{default_context} #{tags}." +
+    "#{t('projects.this_project')} was created at #{created_at} and last modified at #{modified_at}"
+  end
+
   def project_next_prev
-    content_tag(:div, :id=>"project-next-prev") do
-      html = ""
-      html << link_to_project(@previous_project, "&laquo; #{@previous_project.shortened_name}".html_safe) if @previous_project
-      html << " | " if @previous_project && @next_project
-      html << link_to_project(@next_project, "#{@next_project.shortened_name} &raquo;".html_safe) if @next_project
-      html.html_safe
+    content_tag(:div, {class: "pagination", id: "project-next-prev"}) do
+      content_tag(:small) do 
+        content_tag(:ul) do
+          html = ""
+          html << content_tag(:li) do
+            link_to_project(@previous_project, "&laquo; #{@previous_project.shortened_name}".html_safe) 
+          end if @previous_project
+          html << content_tag(:li) do
+            link_to_project(@next_project, "#{@next_project.shortened_name} &raquo;".html_safe) 
+          end if @next_project
+          html.html_safe
+        end
+      end
     end
   end
 

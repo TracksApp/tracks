@@ -17,29 +17,26 @@
     <%= render :partial => "project_settings_container", :locals => {:project => @project} %>
   <% end %>
 
-  <% cache("not_done_project", @not_done_todos.empty?) do -%>
+  <% cache ["not_done_project", @not_done_todos.empty?] do -%>
     <%= render partial: "todos/empty_message_container", locals: {:show => @not_done_todos.empty?, :container_name => "not_done"} %>
   <% end -%>
 
   <%= show_grouped_todos({:collapsible => false, :show_empty_containers => false, :parent_container_type => 'project' }) %>
 
-  <%= show_deferred_pending_todos(@deferred_todos, @pending_todos, deferred_pending_options) %>
+  <% cache [@project, "deferred_pending"] do -%>
+    <%= show_deferred_pending_todos(@deferred_todos, @pending_todos, deferred_pending_options) %>
+  <% end -%>
 
-  <%= show_done_todos(@done, done_todo_options) unless @done.nil? %>
-  
+  <% # use the first completed todo (which is the last one to be completed) as cache invariant
+    cache [@project, @done.first, "project_completed"] do -%>
+      <%= show_done_todos(@done, done_todo_options) unless @done.nil? %>
+  <% end -%>
+
+  <%# TODO: new note impl -%>
   <div class="container">
     <div id="notes">
-      <div class="add_note_link"><%= link_to t('projects.add_note'), '#' %> </div>
       <h2><%= t('projects.notes') %></h2>
-      <div id="empty-n" style="display:<%= @project.notes.empty? ? 'block' : 'none'%>;">
-        <div class="message"><p><%= t('projects.no_notes_attached') %></p></div>
-      </div>
-      <%= render :partial => "notes/notes_summary", :collection => @project.notes %>
     </div>
-  </div>
-
-  <div id="new-note" style="display:none;">
-    <%# render :partial => "notes/note_edit_form", :object => @new_note, :locals => {:submit_text => t('projects.add_note_submit')} %>
   </div>
 
 </div>

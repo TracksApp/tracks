@@ -164,6 +164,30 @@ div.todos-container {
 	}
 }
 
+/* Project */
+
+div.project-details {
+	font-style: italic;	
+}
+
+div.project-description {
+	margin-top: 10px;
+	margin-bottom: 20px;
+}
+
+h3.project-name-container {
+	margin: 15px 0 0 0;
+	line-height: 25px;
+}
+
+div.project-badges {
+}
+
+div#project-next-prev {
+	margin: 0 0 0 0;
+	text-align: center;
+}
+
 /* Dialogs */
 
 .modal-body {
