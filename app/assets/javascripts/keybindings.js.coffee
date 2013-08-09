@@ -64,3 +64,4 @@ $ ->
   Mousetrap.bind 'j', -> TracksApp.selectNext()
   Mousetrap.bind 'k', -> TracksApp.selectPrev()
   Mousetrap.bind 'n', -> TracksApp.toggleNoteOfSelectedTodo()
+  Mousetrap.bind 'i', -> TracksApp.toggleDetailsPopover()

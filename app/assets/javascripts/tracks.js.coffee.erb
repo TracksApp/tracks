@@ -26,11 +26,18 @@ TracksApp =
         }
     }
 
+    refresh_page:     -> location.reload(true)
     goto_page: (page) -> window.location.href = page
     go_home_page:     -> TracksApp.goto_page "<%= Rails.application.routes.url_helpers.root_path %>"
     go_contexts_page: -> TracksApp.goto_page "<%= Rails.application.routes.url_helpers.contexts_path %>"
     go_projects_page: -> TracksApp.goto_page "<%= Rails.application.routes.url_helpers.projects_path %>"
     go_starred_page:  -> TracksApp.goto_page "<%= Rails.application.routes.url_helpers.tag_path("starred") %>"
+
+    go_menu:          -> $('div#tracks-goto-dialog').modal()
+    add_todo:         -> $('div#tracks-add-action-dialog').modal()
+    go_project:       -> TracksApp.show_item_dialog(TracksApp.dialog_data.project)
+    go_context:       -> TracksApp.show_item_dialog(TracksApp.dialog_data.context)
+    go_tag:           -> TracksApp.show_item_dialog(TracksApp.dialog_data.tag)
 
     show_item_dialog: (settings) ->
         dialog = $('div#tracks-go-item-dialog')
@@ -51,19 +58,15 @@ TracksApp =
         # show the dialog
         dialog.modal()
 
-    go_project: -> TracksApp.show_item_dialog(TracksApp.dialog_data.project)
-    go_context: -> TracksApp.show_item_dialog(TracksApp.dialog_data.context)
-    go_tag:     -> TracksApp.show_item_dialog(TracksApp.dialog_data.tag)
-
-    go_menu:  -> $('div#tracks-goto-dialog').modal()
-    add_todo: -> $('div#tracks-add-action-dialog').modal()
-
     createSubmenu: (todo, itemToAddBefore) ->
         template_clone = $("div.todo-sub-menu-template").clone()
         itemToAddBefore.before(template_clone)
         todo_menu = todo.find("div.todo-sub-menu-template")
         todo_menu.removeClass("todo-sub-menu-template")
         todo_menu.addClass("todo-sub-menu")
+        info = todo.find('a[rel="tracks-popover"]')
+        info.attr("data-content", todo.attr("data-info"))
+        info.popover()
         todo_menu.removeClass("hide")
 
     appendTodoSubMenu: (todo) ->
@@ -81,9 +84,11 @@ TracksApp =
             selected_item.find("span.todo-item-detail").addClass("hide")
             TracksApp.noteOfTodo(selected_item).addClass("hide")
             selected_item.removeClass("selected-item")
+            selected_item.find("div.tracks-todo-badges").addClass("hidden-phone")
             TracksApp.appendTodoSubMenu(new_todo)
             new_todo.find("span.todo-item-detail").removeClass("hide")
             new_todo.addClass("selected-item")
+            new_todo.find("div.tracks-todo-badges").removeClass("hidden-phone")
 
     selectPrevNext: (go_next) ->
         current = prev = next = null
@@ -125,8 +130,12 @@ TracksApp =
         selected_item = $("div.todo-item.selected-item")
         TracksApp.toggleNoteOfTodo(selected_item)
 
-    refresh_page: ->
-        location.reload(true)
+    toggleDetailsPopover: ->
+        if $("body").hasClass("projects")
+            selected_item = $("div.project-badges")
+        else
+            selected_item = $("div.todo-item.selected-item")
+        selected_item.find("a.tracks-popover-toggle").popover("toggle")
 
     group_view_by: (state) ->
         $.cookie('group_view_by', state)

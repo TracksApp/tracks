@@ -278,6 +278,12 @@ class Todo < ActiveRecord::Base
     return has_tag?(STARRED_TAG_NAME)
   end
 
+  def overdue?
+    return false if due.nil?
+    # TODO: refactor duplication with application_helper.days_from_today
+    return (due.in_time_zone.to_date - UserTime.new(user).date).to_i < 0
+  end
+
   def toggle_star!
     self.starred= !starred?
   end

@@ -79,9 +79,6 @@ div.todo-item {
 	}
 	span.todo-item-icons {
 		color: #BBB;	  /* light gray */
-		display: block;
-		margin-right: 5px;
-		float:left;
 		cursor: pointer;
 		i.icon-check-empty {
 			color: #333;
@@ -93,10 +90,6 @@ div.todo-item {
 	span.todo-description {
 		margin-right: 10px;
 		cursor: pointer;
-	}
-	span.todo-item-description-container {
-		display: inline-block;
-		float:left;
 	}
 	div.todo-notes {
 		background-color: #EEE;
@@ -116,6 +109,9 @@ div.todo-item {
 		font-weight: normal;
 		font-style: italic;
 		color: #999;
+	}
+	.tracks-todo-overdue {
+		color: #A00;
 	}
 }
 

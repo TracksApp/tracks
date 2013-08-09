@@ -12,14 +12,18 @@
 //
 //= require jquery
 //= require jquery_ujs
+//
 //= require twitter/bootstrap/bootstrap-tooltip
 //= require twitter/bootstrap/bootstrap-popover
 //= require twitter/bootstrap/bootstrap-modal
 //= require twitter/bootstrap/bootstrap-tab
 //= require twitter/bootstrap/bootstrap-button
 //= require twitter/bootstrap/bootstrap-dropdown
+//= require twitter/bootstrap/bootstrap-collapse
+//= require twitter/bootstrap/bootstrap-transition
+//
 //= require mousetrap
-
+//
 // Stuff in vendor/assets
 // require jquery-ui-1.10.0.custom.min
 // require jquery.ui.touch-punch.min
@@ -28,11 +32,11 @@
 // require jquery.jeditable.mini
 // require jquery.simulate.drag-sortable
 // require jquery.truncator
-
+//
 //= require typeahead
 //= require jquery.cookie
 //= require swf_fu
-
+//
 // Stuff in app/assets
 //= require tracks.js
 //= require keybindings.js

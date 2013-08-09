@@ -3,7 +3,8 @@
   suppress_project ||= false
   cache [todo, current_user.date.strftime("%Y%m%d"), @source_view, current_user.prefs.verbose_action_descriptors] do
 -%>
-    <div id="<%= dom_id(todo) %>" class="todo-item">
+    <div id="<%= dom_id(todo) %>" class="todo-item" 
+         data-info="<%= render partial: "todos/todo_info", locals: {todo: todo} %>">
       <div class="row">
         <div class="span8">
           <span class="todo-item-icons">
@@ -11,7 +12,7 @@
             <i class="<%= todo.starred?   ? "icon-star" : "icon-star-empty"%>"></i>
           </span>
           <span class="todo-item-description-container">
-            <span class="todo-description"><%= todo.description %></span>
+            <span class="todo-description <%= "tracks-todo-overdue" if todo.overdue?%>"><%= todo.description %></span>
             <span class="todo-description-icons">
               <%= content_tag(:i, {class: "icon-refresh"}){} if todo.from_recurring_todo? -%>
               <%= deferred_due_date(todo) -%>
@@ -20,13 +21,13 @@
             </span>
           </span>
           <span class="todo-item-detail hide"><br/>
-            <p class="small todo-project-and-context"><small>
-              project: <span class="todo-project-name"><%= todo.project.name.blank? ? "none" : todo.project.name %></span>
-              context: <span class="todo-context-name"><%= todo.context.name.blank? ? "none" : todo.context.name %></span>
+            <p class="todo-project-and-context"><small>
+              project: <span class="todo-project-name"><%= todo.project.name.blank? ? "none" : link_to(todo.project.name, todo.project) %></span><br/>
+              context: <span class="todo-context-name"><%= todo.context.name.blank? ? "none" : link_to(todo.context.name, todo.context) %></span>
             </small></p>
           </span>
         </div>
-        <div class="span4 pull-right">
+        <div class="span4 pull-right hidden-phone tracks-todo-badges">
           <%= date_span(todo) -%>
           <%= tag_list(todo) %>
         </div>
