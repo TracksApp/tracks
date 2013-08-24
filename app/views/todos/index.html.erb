@@ -17,6 +17,6 @@
 -%>
 
 <% # use the first completed todo (which is the last one to be completed) as cache invariant
-  cache [@done.first, "home_completed"] do %>
+  cache [@done.first, "home_completed"] do -%>
     <%= show_done_todos(@done, {:parent_container_type => @group_view_by, :collapsible => true}) unless @done.nil? %>
-<% end %>
+<% end -%>

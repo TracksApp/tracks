@@ -1,11 +1,9 @@
 <div id="<%=div_id%>" class="todo_items toggle_target">
-
   <% cache [settings[:container_name], settings[:show_empty_message]] do %>
     <%= render partial: "todos/container_empty_message", locals: {
       container_id: settings[:container_id], 
       container_name: settings[:container_name],
       show_empty_message: settings[:show_empty_message]} -%>
   <% end -%>
-
   <%= render(:partial => "todos/todo", :collection => collection, :locals => settings) %>
 </div>

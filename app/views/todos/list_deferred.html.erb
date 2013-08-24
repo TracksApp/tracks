@@ -1,15 +1,17 @@
-<div id="display_box">
+<%# Template Dependency: todos/collection -%>
+<%# Template Dependency: contexts/context -%>
+<%# Template Dependency: projects/project -%>
+<% cache [@not_done_todos.empty?, "tickler_not_done"] do -%>
+  <%= render partial: "empty_message_container", locals: {:show => @not_done_todos.empty?, :container_name => "not_done"} %>
+<% end -%>
 
-  <%= empty_message_holder("deferred_pending", @not_done_todos.empty?) %>
+<%= show_grouped_todos %>
 
-  <%= show_grouped_todos %>
-
-  <% if @group_view_by == 'project' -%>
-    <%= show_todos_without_project(@todos_without_project) -%>
-  <% end -%>
-
-</div>
-<div id="input_box">
-  <%= render :partial => "shared/add_new_item_form" %>
-  <%= render :file => "sidebar/sidebar" %>
-</div>
+<%  if @group_view_by == 'project'
+      # use the last updated todo without a project as cache invariant. 
+      # Changing an exisiting todo or adding a new one will result in a new cache key
+      cache [@last_updated_todo_without_project, "todos_without_project"] do -%>
+        <%= show_todos_without_project(@todos_without_project) %>
+<%    end
+    end 
+-%>

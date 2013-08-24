@@ -29,7 +29,7 @@
   </head>
   <body class="<%= controller.controller_name %>">
 
-    <% cache [:navbar] do -%>
+    <% cache [:navbar, @count||@badge_count] do -%>
       <%= render partial: "shared/navbar" %>
     <% end -%>
 
