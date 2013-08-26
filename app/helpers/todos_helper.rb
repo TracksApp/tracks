@@ -123,6 +123,13 @@ module TodosHelper
       }
   end
 
+  def todo_form_control_group (label_for, label)
+    content_tag(:div, class: "control-group") do
+      content_tag(:label, class: "control-label", for: label_for){label} +
+      content_tag(:div, class:"controls") { yield }
+    end
+  end
+
   # === helpers for rendering a todo
 
   def todo_notes(todo)

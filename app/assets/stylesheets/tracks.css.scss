@@ -200,6 +200,13 @@ div.paginate_header {
 	text-align: center;
 }
 
+/* Todo form */
+form#todo-form-new-action {
+	.control-group {
+		margin-bottom: 10px;
+	}
+}
+
 /* Generic */
 
 div.hide_me {
