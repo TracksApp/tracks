@@ -160,17 +160,23 @@ class TodoTest < ActiveSupport::TestCase
   end
 
   def test_activate_also_clears_show_from
-    # setup test case
-    t = @not_completed1
-    t.show_from = 1.week.from_now
-    t.save!
-    assert t.deferred?
-    t.reload
+    dates = [1.week.from_now, 1.week.ago]
 
-    # activate and check show_from
-    t.activate!
-    assert t.active?
-    assert t.show_from.nil?
+    dates.each do |show_from_date|
+      # setup test case
+      t = @not_completed1
+      Timecop.travel(show_from_date - 1.day) do
+        t.show_from = show_from_date
+        t.save!
+        assert t.deferred?
+        t.reload
+      end
+
+      # activate and check show_from
+      t.activate!
+      assert t.active?
+      assert t.show_from.nil?
+    end
   end
 
   def test_clearing_show_from_activates_todo

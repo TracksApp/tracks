@@ -406,6 +406,10 @@ class TodosControllerTest < ActionController::TestCase
     assert_equal context.id, todo.reload.context.id, 'context of todo should be changed'
   end
 
+  #######
+  # defer
+  ####### 
+
   def test_update_clearing_show_from_makes_todo_active
     t = Todo.find(1)
     t.show_from = "01/01/2030"
@@ -427,6 +431,31 @@ class TodosControllerTest < ActionController::TestCase
     assert_not_nil t.show_from
   end
 
+  def test_find_and_activate_ready
+    login_as(:admin_user)
+
+    # given a todo in the tickler that should be activated
+    Timecop.travel(2.weeks.ago) do
+      create_todo(
+        description: "tickler", 
+        show_from: 1.week.from_now.
+          in_time_zone(users(:admin_user).prefs.time_zone).
+          strftime("#{users(:admin_user).prefs.date_format}"))
+    end
+
+    todos = Todo.where(description: "tickler").where('show_from < ?', Time.zone.now)
+    assert_equal 1, todos.count, "there should be one todo in tickler"
+    todo = todos.first
+
+    assert todo.deferred?, "todo should be in deferred state"
+
+    # index page calls find_and_activate_ready
+    get :index
+
+    todo.reload
+    assert todo.active?, "todo should have been activated"
+    assert todo.show_from.nil?, "show_from date should have been cleared"
+  end
 
   #######
   # feeds
@@ -954,7 +983,7 @@ class TodosControllerTest < ActionController::TestCase
 
     put :create, _source_view: params[:_source_view], 
       context_name: params[:context_name], project_name: params[:project_name], tag_list: params[:tag_list],
-      todo: {notes: params[:notes], description: params[:description], due: params[:due]}
+      todo: {notes: params[:notes], description: params[:description], due: params[:due], show_from: params[:show_from]}
   end
 
 end
