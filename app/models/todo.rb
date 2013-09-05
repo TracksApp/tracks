@@ -73,7 +73,7 @@ class Todo < ActiveRecord::Base
     state :active 
     state :project_hidden
     state :completed, :before_enter => Proc.new { |t| t.completed_at = Time.zone.now }, :before_exit => Proc.new { |t| t.completed_at = nil}
-    state :deferred,  :after_exit => Proc.new { |t| t[:show_from] = nil }
+    state :deferred,  :before_exit => Proc.new { |t| t[:show_from] = nil }
     state :pending
 
     event :defer do

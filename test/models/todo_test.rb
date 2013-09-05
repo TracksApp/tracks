@@ -51,18 +51,18 @@ class TodoTest < ActiveSupport::TestCase
 
   def test_validate_length_of_description
     assert_equal "Call dinosaur exterminator", @not_completed2.description
-    @not_completed2.description = generate_random_string(101)
+    @not_completed2.description = generate_random_string(Todo::MAX_DESCRIPTION_LENGTH+1)
     assert !@not_completed2.save
     assert_equal 1, @not_completed2.errors.count
-    assert_equal "is too long (maximum is 100 characters)", @not_completed2.errors[:description][0]
+    assert_equal "is too long (maximum is #{Todo::MAX_DESCRIPTION_LENGTH} characters)", @not_completed2.errors[:description][0]
   end
 
   def test_validate_length_of_notes
     assert_equal "Ask him if I need to hire a skip for the corpses.", @not_completed2.notes
-    @not_completed2.notes = generate_random_string(60001)
+    @not_completed2.notes = generate_random_string(Todo::MAX_NOTES_LENGTH+1)
     assert !@not_completed2.save
     assert_equal 1, @not_completed2.errors.count
-    assert_equal "is too long (maximum is 60000 characters)", @not_completed2.errors[:notes][0]
+    assert_equal "is too long (maximum is #{Todo::MAX_NOTES_LENGTH} characters)", @not_completed2.errors[:notes][0]
   end
 
   def test_validate_show_from_must_be_a_date_in_the_future
@@ -160,17 +160,23 @@ class TodoTest < ActiveSupport::TestCase
   end
 
   def test_activate_also_clears_show_from
-    # setup test case
-    t = @not_completed1
-    t.show_from = 1.week.from_now
-    t.save!
-    assert t.deferred?
-    t.reload
+    dates = [1.week.from_now, 1.week.ago]
 
-    # activate and check show_from
-    t.activate!
-    assert t.active?
-    assert t.show_from.nil?
+    dates.each do |show_from_date|
+      # setup test case
+      t = @not_completed1
+      Timecop.travel(show_from_date - 1.day) do
+        t.show_from = show_from_date
+        t.save!
+        assert t.deferred?
+        t.reload
+      end
+
+      # activate and check show_from
+      t.activate!
+      assert t.active?
+      assert t.show_from.nil?
+    end
   end
 
   def test_clearing_show_from_activates_todo
