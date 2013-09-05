@@ -286,7 +286,10 @@ class RecurringTodosController < ApplicationController
       :monthly_every_xth_day, :recurring_show_days_before, 
       :recurring_show_always, :weekly_every_x_week, :weekly_return_monday,
       :yearly_day_of_week, :yearly_every_x_day, :yearly_every_xth_day, 
-      :yearly_month_of_year2, :yearly_month_of_year
+      :yearly_month_of_year2, :yearly_month_of_year,
+      # derived attribues
+      :weekly_return_monday, :weekly_return_tuesday, :weekly_return_wednesday, 
+      :weekly_return_thursday, :weekly_return_friday, :weekly_return_saturday, :weekly_return_sunday
       )
   end
 
