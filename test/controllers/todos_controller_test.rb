@@ -718,7 +718,6 @@ class TodosControllerTest < ActionController::TestCase
 
     # link todo_1 and recurring_todo_1
     recurring_todo_1 = RecurringTodo.find(1)
-    #set_user_to_current_time_zone(recurring_todo_1.user)
     todo_1 = Todo.where(:recurring_todo_id => 1).first
     today = Time.zone.now.at_midnight - 1.day
 
@@ -767,33 +766,37 @@ class TodosControllerTest < ActionController::TestCase
   def test_check_for_next_todo
     login_as :admin_user
 
-    recurring_todo_1 = RecurringTodo.find(5)
-    @todo = Todo.where(:recurring_todo_id => 1).first
-    assert @todo.from_recurring_todo?
-    # rewire @todo to yearly recurring todo
-    @todo.recurring_todo_id = 5
+    tomorrow = Time.zone.now + 1.day
 
-    # make todo due tomorrow and change recurring date also to tomorrow
-    @todo.due = Time.zone.now + 1.day
-    @todo.save
-    recurring_todo_1.every_other1 = @todo.due.day
-    recurring_todo_1.every_other2 = @todo.due.month
+    # Given a repeat pattern with recurring date set to tomorrow
+    recurring_todo_1 = RecurringTodo.find(5)
+    recurring_todo_1.every_other1 = tomorrow.day
+    recurring_todo_1.every_other2 = tomorrow.month
     recurring_todo_1.save
 
-    # mark todo complete
-    xhr :post, :toggle_check, :id => @todo.id, :_source_view => 'todo'
-    @todo = Todo.find(@todo.id) #reload does not seem to work anymore
-    assert @todo.completed?
+    # Given a recurring todo (todo) that belongs to the repeat pattern (recurring_todo_1) and is due tomorrow
+    todo = Todo.where(:recurring_todo_id => 1).first
+    assert todo.from_recurring_todo?
+    todo.recurring_todo_id = 5 # rewire todo to the repeat pattern above
+    todo.due = tomorrow
+    todo.save!
 
-    # check that there is no active todo
+    # When I mark the todo complete
+    xhr :post, :toggle_check, :id => todo.id, :_source_view => 'todo'
+    todo = Todo.find(todo.id) #reload does not seem to work here
+    assert todo.completed?
+
+    # Then there should not be an active todo beloning to the repeat pattern
     next_todo = Todo.where(:recurring_todo_id => recurring_todo_1.id, :state => 'active').first
     assert next_todo.nil?
 
-    # check for new deferred todo
+    # Then there should be one new deferred todo
     next_todo = Todo.where(:recurring_todo_id => recurring_todo_1.id, :state => 'deferred').first
     assert !next_todo.nil?
+    assert !next_todo.show_from.nil?
+
     # check that the due date of the new todo is later than tomorrow
-    assert next_todo.due > @todo.due
+    assert next_todo.due > todo.due
   end
 
   ############
