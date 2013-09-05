@@ -6,9 +6,9 @@
 -%>
 <div id="display_box">
 
-  <%= empty_message_holder("not_done_project", @not_done_todos.empty?) %>
+  <%= empty_message_holder("not_done_context", @not_done_todos.empty?) %>
   
-	<%= show_grouped_todos({:collapsible => false, :show_empty_containers => show_empty_containers, :parent_container_type => 'context'}) %>
+	<%= show_grouped_todos({:collapsible => false, :show_empty_containers => false, :parent_container_type => 'context'}) %>
 
   <% if @group_view_by == 'project' -%>
     <%= show_todos_without_project(@todos_without_project, {:collapsible => false, :parent_container_type => 'context', :title_param => @context.name}) -%>
