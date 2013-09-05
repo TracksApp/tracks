@@ -5,14 +5,13 @@
   suffix_completed = t('contexts.last_completed_in_context', :number=>prefs.show_number_completed)
   deferred_pending_options = {:append_descriptor => nil, :parent_container_type => 'context'}
   done_todo_options = {:append_descriptor => suffix_completed, :suppress_context => true, :parent_container_type => 'context'}
-  show_empty_containers = (@group_view_by == 'context')
 -%>
 
 <% cache ["not_done_context", @not_done_todos.empty?] do -%>
   <%= render partial: "todos/empty_message_container", locals: {:show => @not_done_todos.empty?, :container_name => "not_done"} %>
 <% end -%>
 
-<%= show_grouped_todos({:collapsible => false, :show_empty_containers => show_empty_containers, :parent_container_type => 'context'}) %>
+<%= show_grouped_todos({:collapsible => false, :show_empty_containers => false, :parent_container_type => 'context'}) %>
 
 <% if @group_view_by == 'project'
      cache [@last_updated_todo_without_project, @context, "todos_without_project"] do -%>

@@ -89,6 +89,15 @@ class RecurringTodosController < ApplicationController
       params["recurring_todo"]["weekly_return_"+day]=' ' if params["recurring_todo"]["weekly_return_"+day].nil?
     end
 
+    selector_attributes = {
+        'recurring_period' => recurring_todo_params['recurring_period'],
+        'daily_selector' => recurring_todo_params['daily_selector'],
+        'monthly_selector' => recurring_todo_params['monthly_selector'],
+        'yearly_selector' => recurring_todo_params['yearly_selector']
+      }
+
+    @recurring_todo.assign_attributes(:recurring_period => recurring_todo_params[:recurring_period])
+    @recurring_todo.assign_attributes(selector_attributes)
     @saved = @recurring_todo.update_attributes recurring_todo_params
 
     respond_to do |format|
@@ -277,7 +286,10 @@ class RecurringTodosController < ApplicationController
       :monthly_every_xth_day, :recurring_show_days_before, 
       :recurring_show_always, :weekly_every_x_week, :weekly_return_monday,
       :yearly_day_of_week, :yearly_every_x_day, :yearly_every_xth_day, 
-      :yearly_month_of_year2, :yearly_month_of_year
+      :yearly_month_of_year2, :yearly_month_of_year,
+      # derived attribues
+      :weekly_return_monday, :weekly_return_tuesday, :weekly_return_wednesday, 
+      :weekly_return_thursday, :weekly_return_friday, :weekly_return_saturday, :weekly_return_sunday
       )
   end
 
