@@ -89,6 +89,15 @@ class RecurringTodosController < ApplicationController
       params["recurring_todo"]["weekly_return_"+day]=' ' if params["recurring_todo"]["weekly_return_"+day].nil?
     end
 
+    selector_attributes = {
+        'recurring_period' => recurring_todo_params['recurring_period'],
+        'daily_selector' => recurring_todo_params['daily_selector'],
+        'monthly_selector' => recurring_todo_params['monthly_selector'],
+        'yearly_selector' => recurring_todo_params['yearly_selector']
+      }
+
+    @recurring_todo.assign_attributes(:recurring_period => recurring_todo_params[:recurring_period])
+    @recurring_todo.assign_attributes(selector_attributes)
     @saved = @recurring_todo.update_attributes recurring_todo_params
 
     respond_to do |format|
