@@ -1,6 +1,7 @@
 require_relative '../minimal_test_helper'
 require_relative '../../lib/staleness'
-
+require_relative '../../lib/user_time'
+require 'timecop'
 
 class StalenessTest < Test::Unit::TestCase
   FakePrefs = Struct.new(:time_zone)
@@ -35,7 +36,7 @@ class StalenessTest < Test::Unit::TestCase
 
   def setup
     @current_user = FakeUser.new(now)
-    Timecop.freeze(Time.local(2013,02,28))
+    Timecop.freeze(Time.utc(2013,02,28))
   end
 
   def teardown
