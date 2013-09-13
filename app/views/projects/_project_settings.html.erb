@@ -17,7 +17,7 @@
     <% end -%>
     <%= link_to_edit_project(project, t('projects.edit_project_settings')) %>
   </div>
-  <% unless project.description.blank? -%>
+  <% if project.description.present? -%>
     <div class="project_description"><%= Tracks::Utils.render_text(project.description) %></div>
   <% end -%>
 </div>

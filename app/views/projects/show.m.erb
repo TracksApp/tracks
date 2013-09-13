@@ -1,7 +1,7 @@
 <% project = @project %>
 <%= project_next_prev_mobile %>
 <h2><%=project.name%></h2>
-<% unless @project.description.blank? -%>
+<% if @project.description.present? -%>
 <div class="project_description"><%= sanitize(@project.description) %></div>
 <% end -%>
 <ul class="c">
