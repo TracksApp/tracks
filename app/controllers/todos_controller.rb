@@ -92,7 +92,7 @@ class TodosController < ApplicationController
       if @todo.errors.empty?
         @todo.add_predecessor_list(p.predecessor_list)
         @saved = @todo.save
-        @todo.tag_with(tag_list) if @saved && !tag_list.blank?
+        @todo.tag_with(tag_list) if @saved && tag_list.present?
         @todo.update_state_from_project if @saved
         @todo.block! if @todo.should_be_blocked?
       else
@@ -175,8 +175,8 @@ class TodosController < ApplicationController
           todo.add_predecessor(@predecessor)
           todo.block!
         end
-        
-        todo.tag_with(tag_list) unless (@saved == false) || tag_list.blank?
+
+        todo.tag_with(tag_list) if @saved && tag_list.present?
 
         @todos << todo
         @not_done_todos << todo if p.new_context_created || p.new_project_created
@@ -1163,7 +1163,7 @@ end
 
   def update_context
     @context_changed = false
-    if params['todo']['context_id'].blank? && !params['context_name'].blank?
+    if params['todo']['context_id'].blank? && params['context_name'].present?
       context = current_user.contexts.where(:name => params['context_name'].strip).first
       unless context
         @new_context = current_user.contexts.build
