@@ -338,7 +338,7 @@ class ProjectsController < ApplicationController
     default_context_name = p['default_context_name']
     p.delete('default_context_name')
 
-    unless default_context_name.blank?
+    if default_context_name.present?
       default_context = current_user.contexts.where(:name => default_context_name).first_or_create
       p['default_context_id'] = default_context.id
     end

@@ -299,7 +299,7 @@ class Todo < ActiveRecord::Base
     return unless predecessor_list.kind_of? String
 
     @predecessor_array=predecessor_list.split(",").inject([]) do |list, todo_id|
-      predecessor = self.user.todos.find( todo_id.to_i ) unless todo_id.blank?
+      predecessor = self.user.todos.find( todo_id.to_i ) if todo_id.present?
       list <<  predecessor unless predecessor.nil?
       list
     end
@@ -341,7 +341,7 @@ class Todo < ActiveRecord::Base
     # value will be a string. In that case convert to array
     deps = [deps] unless deps.class == Array
 
-    deps.each { |dep| self.add_predecessor(self.user.todos.find(dep.to_i)) unless dep.blank? }
+    deps.each { |dep| self.add_predecessor(self.user.todos.find(dep.to_i)) if dep.present? }
   end
 
   alias_method :original_context=, :context=

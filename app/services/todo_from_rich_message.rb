@@ -16,7 +16,7 @@ class TodoFromRichMessage
     project     = extractor.project
 
     context_id = default_context_id
-    unless context.blank?
+    if context.present?
       found_context = user.contexts.active.where("name like ?", "%#{context}%").first
       found_context = user.contexts.where("name like ?", "%#{context}%").first if !found_context
       context_id = found_context.id if found_context
@@ -27,7 +27,7 @@ class TodoFromRichMessage
     end
 
     project_id = nil
-    unless project.blank?
+    if project.present?
       if project[0..3].downcase == "new:"
         found_project = user.projects.build
         found_project.name = project[4..259].strip

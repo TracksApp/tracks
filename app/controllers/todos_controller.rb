@@ -74,7 +74,7 @@ class TodosController < ApplicationController
   def create
     @source_view = params['_source_view'] || 'todo'
     @default_context = current_user.contexts.where(:name => params['default_context_name']).first
-    @default_project = current_user.projects.where(:name => params['default_project_name']).first unless params['default_project_name'].blank?
+    @default_project = current_user.projects.where(:name => params['default_project_name']).first if params['default_project_name'].present?
 
     @tag_name = params['_tag_name']
 
@@ -157,7 +157,7 @@ class TodosController < ApplicationController
 
     # first build all todos and check if they would validate on save
     params[:todo][:multiple_todos].split("\n").map do |line|
-      unless line.blank? #ignore blank lines
+      if line.present? #ignore blank lines
         @todo = current_user.todos.build({:description => line, :context_id => p.context_id, :project_id => p.project_id})
         validates &&= @todo.valid?
 
@@ -175,8 +175,8 @@ class TodosController < ApplicationController
           todo.add_predecessor(@predecessor)
           todo.block!
         end
-        
-        todo.tag_with(tag_list) unless (@saved == false) || tag_list.blank?
+
+        todo.tag_with(tag_list) if @saved && tag_list.present?
 
         @todos << todo
         @not_done_todos << todo if p.new_context_created || p.new_project_created
@@ -203,7 +203,7 @@ class TodosController < ApplicationController
         else
           @multiple_error = @todos.size > 0 ? "" : t('todos.next_action_needed')
           @saved = false
-          @default_tags = current_user.projects.where(:name => @initial_project_name).default_tags unless @initial_project_name.blank?
+          @default_tags = current_user.projects.where(:name => @initial_project_name).default_tags if @initial_project_name.present?
         end
 
         @status_message = @todos.size > 1 ? t('todos.added_new_next_action_plural') : t('todos.added_new_next_action_singular')
