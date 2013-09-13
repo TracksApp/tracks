@@ -272,7 +272,8 @@ class ApplicationController < ActionController::Base
     @source_view = object_name
     @page_title = t("#{object_name.pluralize}.all_completed_tasks_title", "#{object_name}_name".to_sym => object.name)
 
-    @done = object.todos.completed.paginate :page => params[:page], :per_page => 20, :order => 'completed_at DESC', :include => Todo::DEFAULT_INCLUDES
+    @done = object.todos.completed.reorder('completed_at DESC').includes(Todo::DEFAULT_INCLUDES).
+      paginate(:page => params[:page], :per_page => 20)
     @count = @done.size
     render :template => 'todos/all_done'
   end

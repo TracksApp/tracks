@@ -1270,21 +1270,21 @@ end
   # all completed todos [today@00:00, today@now]
   def get_done_today(completed_todos, includes = {:include => Todo::DEFAULT_INCLUDES})
     start_of_this_day = Time.zone.now.beginning_of_day
-    completed_todos.completed_after(start_of_this_day).all(includes)
+    completed_todos.completed_after(start_of_this_day).includes(includes[:include])
   end
 
   # all completed todos [begin_of_week, start_of_today]
   def get_done_rest_of_week(completed_todos, includes = {:include => Todo::DEFAULT_INCLUDES})
     start_of_this_week = Time.zone.now.beginning_of_week
     start_of_this_day = Time.zone.now.beginning_of_day
-    completed_todos.completed_before(start_of_this_day).completed_after(start_of_this_week).all(includes)
+    completed_todos.completed_before(start_of_this_day).completed_after(start_of_this_week).includes(includes[:include])
   end
 
   # all completed todos [begin_of_month, begin_of_week]
   def get_done_rest_of_month(completed_todos, includes = {:include => Todo::DEFAULT_INCLUDES})
     start_of_this_month = Time.zone.now.beginning_of_month
     start_of_this_week = Time.zone.now.beginning_of_week
-    completed_todos.completed_before(start_of_this_week).completed_after(start_of_this_month).all(includes)
+    completed_todos.completed_before(start_of_this_week).completed_after(start_of_this_month).includes(includes[:include])
   end
 
   def get_not_done_todos

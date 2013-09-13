@@ -6,7 +6,8 @@ class DoneTodos
 
   def self.done_today(todos, includes = {:include => Todo::DEFAULT_INCLUDES})
     start_of_this_day = Time.zone.now.beginning_of_day
-    todos.completed_after(start_of_this_day).all(includes)
+    # TODO: refactor to remove outer hash from includes param
+    todos.completed_after(start_of_this_day).includes(includes[:include])
   end
 
   def self.done_rest_of_week(todos, includes = {:include => Todo::DEFAULT_INCLUDES})
@@ -37,6 +38,7 @@ class DoneTodos
   private
 
   def self.done_between(todos, includes, start_date, end_date)
-    todos.completed_before(start_date).completed_after(end_date).all(includes)
+    # TODO: refactor to remove outer hash from includes param
+    todos.completed_before(start_date).completed_after(end_date).includes(includes[:include])
   end
 end

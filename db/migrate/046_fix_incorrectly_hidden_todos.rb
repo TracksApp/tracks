@@ -1,11 +1,11 @@
 class FixIncorrectlyHiddenTodos < ActiveRecord::Migration
   def self.up
     hidden_todos_without_project =
-      Todo.find(:all, :conditions => "state='project_hidden' AND project_id IS NULL")
+      Todo.where(:state => 'project_hidden', :project_id => nil)
     
-    active_projects = Project.find(:all, :conditions => "state='active'")
+    active_projects = Project.where(:state => 'active')
     hidden_todos_in_active_projects =
-      Todo.find(:all, :conditions => ["state='project_hidden' AND project_id IN (?)", active_projects])
+      Todo.where(:state => 'project_hidden').where("project_id IN (?)", active_projects)
     
     todos_to_fix = hidden_todos_without_project + hidden_todos_in_active_projects
     todos_to_fix.each do |todo|

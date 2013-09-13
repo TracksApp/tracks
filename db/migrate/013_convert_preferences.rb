@@ -3,7 +3,7 @@ class ConvertPreferences < ActiveRecord::Migration
   class User < ActiveRecord::Base; has_one :preference; serialize :preferences; end
 
   def self.up
-    @users = User.find(:all)
+    @users = User.all
     @users.each do |user|
       user.create_preference
       user.preference.date_format = user.preferences['date_format']
@@ -27,7 +27,7 @@ class ConvertPreferences < ActiveRecord::Migration
 
   def self.down
     add_column :users, :preferences, :text
-    @users = User.find(:all)
+    @users = User.all
     @users.each do |user|
       user.preferences = { "date_format" => "#{user.preference.date_format}",
                             "week_starts" => "#{user.preference.week_starts}",
