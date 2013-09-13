@@ -97,7 +97,7 @@ class Todo < ActiveRecord::Base
     end
 
     event :unhide do
-      transitions :to => :deferred, :from => [:project_hidden], :guard => Proc.new{|t| !t.show_from.blank? }
+      transitions :to => :deferred, :from => [:project_hidden], :guard => Proc.new{|t| t.show_from.present? }
       transitions :to => :pending, :from => [:project_hidden], :guard => :uncompleted_predecessors?
       transitions :to => :active, :from => [:project_hidden]
     end
@@ -119,7 +119,7 @@ class Todo < ActiveRecord::Base
 
   def check_show_from_in_future
     if show_from_changed? # only check on change of show_from
-      if !show_from.blank? && (show_from < user.date)
+      if show_from.present? && (show_from < user.date)
         errors.add("show_from", I18n.t('models.todo.error_date_must_be_future'))
       end
     end
@@ -270,7 +270,7 @@ class Todo < ActiveRecord::Base
       # (see http://stackoverflow.com/questions/682920/persisting-the-state-column-on-transition-using-rubyist-aasm-acts-as-state-machi)
       self[:show_from] = date
 
-      defer if active? && !date.blank? && show_from > user.date
+      defer if active? && date.present? && show_from > user.date
     end
   end
 
