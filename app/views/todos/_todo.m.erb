@@ -2,7 +2,7 @@
 <li id="<%= dom_id(todo) %>" >
 <%= remote_mobile_checkbox(todo) %>
 <%= date_span -%> <%= link_to todo.description, todo_path(todo, :format => 'm') -%>
-<% unless todo.notes.blank? %>
+<% if todo.notes.present? %>
 <%= link_to(image_tag("mobile_notes.png", :border => "0"), show_notes_todo_path(todo, :format => 'm')) -%>
 <% end %>
 <% if todo.starred? %>

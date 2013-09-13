@@ -129,7 +129,7 @@ class RecurringTodosController < ApplicationController
     end
 
     @saved = @recurring_todo.save
-    unless (@saved == false) || p.tag_list.blank?
+    if @saved && p.tag_list.present?
       @recurring_todo.tag_with(p.tag_list)
       @recurring_todo.tags.reload
     end
@@ -255,14 +255,14 @@ class RecurringTodosController < ApplicationController
     end
 
     def project_specified_by_name?
-      return false unless @attributes['project_id'].blank?
+      return false if @attributes['project_id'].present?
       return false if project_name.blank?
       return false if project_name == 'None'
       true
     end
 
     def context_specified_by_name?
-      return false unless @attributes['context_id'].blank?
+      return false if @attributes['context_id'].present?
       return false if context_name.blank?
       true
     end

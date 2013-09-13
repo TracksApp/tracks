@@ -408,7 +408,7 @@ module TodosHelper
   end
 
   def format_ical_notes(notes)
-    unless notes.nil? || notes.blank?
+    if notes.present?
       split_notes = notes.split(/\n/)
       joined_notes = split_notes.join("\\n")
     end
@@ -426,7 +426,7 @@ module TodosHelper
   def render_animation(animation)
     html = ""
     animation.each do |step|
-      unless step.blank?
+      if step.present?
         html += step + "({ go: function() {\r\n"
       end
     end

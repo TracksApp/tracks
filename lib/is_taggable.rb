@@ -49,7 +49,7 @@ module IsTaggable
       def _add_tags incoming
         tag_cast_to_string(incoming).each do |tag_name|
           # added following check to prevent empty tags from being saved (which will fail)
-          unless tag_name.blank?
+          if tag_name.present?
             begin
               tag = Tag.where(:name => tag_name).first_or_create
               raise Tag::Error, "tag could not be saved: #{tag_name}" if tag.new_record?

@@ -30,10 +30,10 @@ module ProjectsHelper
     next_project = content_tag(:li, link_to_project_mobile(@next_project, "6", @next_project.shortened_name), :class=>"next") if @next_project
     return content_tag(:ul, "#{prev_project}#{next_project}".html_safe, :class=>"next-prev-project")
   end
-  
+
   def project_summary(project)
     project_description = ''
-    project_description += Tracks::Utils.render_text( project.description ) unless project.description.blank?
+    project_description += Tracks::Utils.render_text( project.description ) if project.description.present?
     project_description += content_tag(:p,
       "#{count_undone_todos_phrase(p)}. #{t('projects.project_state', :state => project.state)}".html_safe
       )

@@ -102,14 +102,14 @@ module Todos
     end
 
     def project_specified_by_name?
-      return false unless @attributes['project_id'].blank?
+      return false if @attributes['project_id'].present?
       return false if project_name.blank?
       return false if project_name == 'None'
       true
     end
 
     def context_specified_by_name?
-      return false unless @attributes['context_id'].blank?
+      return false if @attributes['context_id'].present?
       return false if context_name.blank?
       true
     end
