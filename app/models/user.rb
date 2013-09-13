@@ -217,7 +217,7 @@ protected
   end
 
   def password_required?
-    auth_type == 'database' && crypted_password.blank? || !password.blank?
+    auth_type == 'database' && crypted_password.blank? || password.present?
   end
 
 end
