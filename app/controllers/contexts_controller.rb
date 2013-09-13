@@ -18,11 +18,7 @@ class ContextsController < ApplicationController
       format.html &render_contexts_html
       format.m    &render_contexts_mobile
       format.xml  { render :xml => @all_contexts.to_xml( :except => :user_id ) }
-      format.rss  do
-        @feed_title = 'Tracks Contexts'
-        @feed_description = "Lists all the contexts for #{current_user.display_name}"
-      end
-      format.atom do
+      format.any(:rss, :atom) do
         @feed_title = 'Tracks Contexts'
         @feed_description = "Lists all the contexts for #{current_user.display_name}"
       end

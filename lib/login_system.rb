@@ -160,13 +160,10 @@ module LoginSystem
       format.html { redirect_to login_path }
       format.m { redirect_to login_path(:format => 'm') }
       format.js { render :partial => 'login/redirect_to_login' }
-      format.xml { basic_auth_denied }
-      format.rss { basic_auth_denied }
-      format.atom { basic_auth_denied }
-      format.text { basic_auth_denied }
+      format.any(:xml, :rss, :atom, :text) { basic_auth_denied }
     end
   end
-  
+
   # store current uri in  the session.
   # we can return to this location by calling return_location
   def store_location

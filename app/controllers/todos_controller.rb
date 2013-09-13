@@ -48,8 +48,7 @@ class TodosController < ApplicationController
         render :content_type => Mime::TEXT
       end
       format.xml   { render :xml => @todos.to_xml( *todo_xml_params ) }
-      format.rss   { @feed_title, @feed_description = 'Tracks Actions', "Actions for #{current_user.display_name}" }
-      format.atom  { @feed_title, @feed_description = 'Tracks Actions', "Actions for #{current_user.display_name}" }
+      format.any(:rss, :atom) { @feed_title, @feed_description = 'Tracks Actions', "Actions for #{current_user.display_name}" }
       format.ics
     end
   end

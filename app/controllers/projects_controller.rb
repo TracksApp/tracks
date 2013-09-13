@@ -38,11 +38,7 @@ class ProjectsController < ApplicationController
           cookies[:mobile_url]= {:value => request.fullpath, :secure => SITE_CONFIG['secure_cookies']}
         end
         format.xml   { render :xml => @projects.to_xml( :except => :user_id )  }
-        format.rss   do
-          @feed_title = I18n.t('models.project.feed_title')
-          @feed_description = I18n.t('models.project.feed_description', :username => current_user.display_name)
-        end
-        format.atom  do
+        format.any(:rss, :atom) do
           @feed_title = I18n.t('models.project.feed_title')
           @feed_description = I18n.t('models.project.feed_description', :username => current_user.display_name)
         end
