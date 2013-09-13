@@ -5,7 +5,7 @@ class ChangeDatesToDatetimes < ActiveRecord::Migration
     change_column :recurring_todos, :start_from, :datetime
     change_column :recurring_todos, :end_date, :datetime
 
-    User.all(:include => [:todos, :recurring_todos]).each do |user|
+    User.includes(:todos, :recurring_todos).each do |user|
       if !user.prefs ## ugly hack for strange edge-case of not having preferences object
         user.instance_eval do
           def at_midnight(date)

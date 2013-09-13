@@ -6,7 +6,7 @@ class AddSubclassAttrToTodos < ActiveRecord::Migration
   def self.up
     add_column :todos, :type, :string, :null => false, :default => "Immediate"
     add_column :todos, :show_from, :date
-    Todo.find(:all).each { |todo| todo.type = "Immediate" }
+    Todo.all.each { |todo| todo.type = "Immediate" }
   end
 
   def self.down

@@ -1,6 +1,6 @@
 class MakeOldRecurringTodosValidate < ActiveRecord::Migration
   def self.up
-    RecurringTodo.find(:all).each do |rt|
+    RecurringTodo.all.each do |rt|
       # show_always may not be nil
       rt.show_always = false if rt.show_always.nil?
       # start date should be filled

@@ -12,7 +12,7 @@ class PreferencesController < ApplicationController
     user_updated = current_user.update_attributes(user_params)
     prefs_updated = current_user.preference.update_attributes(prefs_params)
     if (user_updated && prefs_updated)
-      if !params['user']['password'].blank? # password updated?
+      if params['user']['password'].present? # password updated?
         logout_user t('preferences.password_changed')
       else
         preference_updated

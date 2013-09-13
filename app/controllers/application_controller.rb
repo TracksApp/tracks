@@ -45,23 +45,20 @@ class ApplicationController < ActionController::Base
 
   def set_session_expiration
     # http://wiki.rubyonrails.com/rails/show/HowtoChangeSessionOptions
-    unless session == nil
-      return if self.controller_name == 'feed' or session['noexpiry'] == "on"
-      # If the method is called by the feed controller (which we don't have
-      # under session control) or if we checked the box to keep logged in on
-      # login don't set the session expiry time.
-      if session
-        # Get expiry time (allow ten seconds window for the case where we have
-        # none)
-        expiry_time = session['expiry_time'] || Time.now + 10
-        if expiry_time < Time.now
-          # Too late, matey...  bang goes your session!
-          reset_session
-        else
-          # Okay, you get another hour
-          session['expiry_time'] = Time.now + (60*60)
-        end
-      end
+    # If the method is called by the feed controller (which we don't have
+    # under session control) or if we checked the box to keep logged in on
+    # login don't set the session expiry time.
+    return if session.nil? || self.controller_name == 'feed' || session['noexpiry'] == "on"
+
+    # Get expiry time (allow ten seconds window for the case where we have
+    # none)
+    expiry_time = session['expiry_time'] || Time.now + 10
+    if expiry_time < Time.now
+      # Too late, matey...  bang goes your session!
+      reset_session
+    else
+      # Okay, you get another hour
+      session['expiry_time'] = Time.now + (60*60)
     end
   end
 
@@ -159,7 +156,7 @@ class ApplicationController < ActionController::Base
       super # handle xml http auth via our own login code
     end
   end
-  
+
   def sanitize(arg)
     ActionController::Base.helpers.sanitize(arg)
   end
@@ -272,10 +269,11 @@ class ApplicationController < ActionController::Base
 
   def all_done_todos_for(object)
     object_name = object.class.name.downcase # context or project
-    @source_view = object_name 
+    @source_view = object_name
     @page_title = t("#{object_name.pluralize}.all_completed_tasks_title", "#{object_name}_name".to_sym => object.name)
 
-    @done = object.todos.completed.paginate :page => params[:page], :per_page => 20, :order => 'completed_at DESC', :include => Todo::DEFAULT_INCLUDES
+    @done = object.todos.completed.reorder('completed_at DESC').includes(Todo::DEFAULT_INCLUDES).
+      paginate(:page => params[:page], :per_page => 20)
     @count = @done.size
     render :template => 'todos/all_done'
   end

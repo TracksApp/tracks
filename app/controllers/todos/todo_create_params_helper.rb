@@ -89,7 +89,7 @@ module Todos
     end
 
     def sequential?
-      return !@params[:todos_sequential].blank? && @params[:todos_sequential]=='true'
+      return @params[:todos_sequential].present? && @params[:todos_sequential]=='true'
     end
 
     def specified_by_name?(group_type)
@@ -98,18 +98,18 @@ module Todos
 
     def specified_by_id?(group_type)
       group_id = send("#{group_type}_id")
-      !group_id.blank?
+      group_id.present?
     end
 
     def project_specified_by_name?
-      return false unless @attributes['project_id'].blank?
+      return false if @attributes['project_id'].present?
       return false if project_name.blank?
       return false if project_name == 'None'
       true
     end
 
     def context_specified_by_name?
-      return false unless @attributes['context_id'].blank?
+      return false if @attributes['context_id'].present?
       return false if context_name.blank?
       true
     end

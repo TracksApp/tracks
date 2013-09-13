@@ -16,7 +16,7 @@ class UpdateOpenIdUrls < ActiveRecord::Migration
   end
 
   def self.up
-    User.find(:all).each do |user|
+    User.all.each do |user|
       original = user.open_id_url
       user.normalize_open_id_url
       say "#{original} -> #{user.open_id_url}"

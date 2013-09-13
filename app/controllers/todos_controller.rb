@@ -50,8 +50,7 @@ class TodosController < ApplicationController
         render :content_type => Mime::TEXT
       end
       format.xml   { render :xml => @todos.to_xml( *todo_xml_params ) }
-      format.rss   { @feed_title, @feed_description = 'Tracks Actions', "Actions for #{current_user.display_name}" }
-      format.atom  { @feed_title, @feed_description = 'Tracks Actions', "Actions for #{current_user.display_name}" }
+      format.any(:rss, :atom) { @feed_title, @feed_description = 'Tracks Actions', "Actions for #{current_user.display_name}" }
       format.ics
     end
   end
@@ -76,7 +75,7 @@ class TodosController < ApplicationController
   def create
     @source_view = params['_source_view'] || 'todo'
     @default_context = current_user.contexts.where(:name => params['default_context_name']).first
-    @default_project = current_user.projects.where(:name => params['default_project_name']).first unless params['default_project_name'].blank?
+    @default_project = current_user.projects.where(:name => params['default_project_name']).first if params['default_project_name'].present?
 
     @tag_name = params['_tag_name']
 
@@ -94,7 +93,7 @@ class TodosController < ApplicationController
       if @todo.errors.empty?
         @todo.add_predecessor_list(p.predecessor_list)
         @saved = @todo.save
-        @todo.tag_with(tag_list) if @saved && !tag_list.blank?
+        @todo.tag_with(tag_list) if @saved && tag_list.present?
         @todo.update_state_from_project if @saved
         @todo.block! if @todo.should_be_blocked?
       else
@@ -159,7 +158,7 @@ class TodosController < ApplicationController
 
     # first build all todos and check if they would validate on save
     params[:todo][:multiple_todos].split("\n").map do |line|
-      unless line.blank? #ignore blank lines
+      if line.present? #ignore blank lines
         @todo = current_user.todos.build({:description => line, :context_id => p.context_id, :project_id => p.project_id})
         validates &&= @todo.valid?
 
@@ -177,8 +176,8 @@ class TodosController < ApplicationController
           todo.add_predecessor(@predecessor)
           todo.block!
         end
-        
-        todo.tag_with(tag_list) unless (@saved == false) || tag_list.blank?
+
+        todo.tag_with(tag_list) if @saved && tag_list.present?
 
         @todos << todo
         @not_done_todos << todo if p.new_context_created || p.new_project_created
@@ -205,7 +204,7 @@ class TodosController < ApplicationController
         else
           @multiple_error = @todos.size > 0 ? "" : t('todos.next_action_needed')
           @saved = false
-          @default_tags = current_user.projects.where(:name => @initial_project_name).default_tags unless @initial_project_name.blank?
+          @default_tags = current_user.projects.where(:name => @initial_project_name).default_tags if @initial_project_name.present?
         end
 
         @status_message = @todos.size > 1 ? t('todos.added_new_next_action_plural') : t('todos.added_new_next_action_singular')
@@ -1170,7 +1169,7 @@ end
 
   def update_context
     @context_changed = false
-    if params['todo']['context_id'].blank? && !params['context_name'].blank?
+    if params['todo']['context_id'].blank? && params['context_name'].present?
       context = current_user.contexts.where(:name => params['context_name'].strip).first
       unless context
         @new_context = current_user.contexts.build
@@ -1278,21 +1277,21 @@ end
   # all completed todos [today@00:00, today@now]
   def get_done_today(completed_todos, includes = {:include => Todo::DEFAULT_INCLUDES})
     start_of_this_day = Time.zone.now.beginning_of_day
-    completed_todos.completed_after(start_of_this_day).all(includes)
+    completed_todos.completed_after(start_of_this_day).includes(includes[:include])
   end
 
   # all completed todos [begin_of_week, start_of_today]
   def get_done_rest_of_week(completed_todos, includes = {:include => Todo::DEFAULT_INCLUDES})
     start_of_this_week = Time.zone.now.beginning_of_week
     start_of_this_day = Time.zone.now.beginning_of_day
-    completed_todos.completed_before(start_of_this_day).completed_after(start_of_this_week).all(includes)
+    completed_todos.completed_before(start_of_this_day).completed_after(start_of_this_week).includes(includes[:include])
   end
 
   # all completed todos [begin_of_month, begin_of_week]
   def get_done_rest_of_month(completed_todos, includes = {:include => Todo::DEFAULT_INCLUDES})
     start_of_this_month = Time.zone.now.beginning_of_month
     start_of_this_week = Time.zone.now.beginning_of_week
-    completed_todos.completed_before(start_of_this_week).completed_after(start_of_this_month).all(includes)
+    completed_todos.completed_before(start_of_this_week).completed_after(start_of_this_month).includes(includes[:include])
   end
 
   def get_not_done_todos

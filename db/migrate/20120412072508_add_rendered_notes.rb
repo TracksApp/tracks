@@ -6,7 +6,8 @@ class AddRenderedNotes < ActiveRecord::Migration
 
     say "Clearing show_from dates from completed todos"
     # clear up completed todos that have show_from set. These could have been left over from before the AASM migration
-    Todo.completed.find(:all, :conditions =>[ "NOT(show_from IS NULL)"]).each {|t| t.show_from=nil; t.save!}
+    Todo.completed.where( "NOT(show_from IS NULL)" ).each {|t| t.show_from=nil; t.save!}
+    
     say "Generating new column values from notes. This may take a while."
     # Call save! on each todo to force generation of rendered_todos
     i=0; max = Todo.all.count; start = Time.now
