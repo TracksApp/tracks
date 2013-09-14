@@ -799,6 +799,44 @@ class TodosControllerTest < ActionController::TestCase
     assert next_todo.due > todo.due
   end
 
+  def test_check_for_next_todo_monthly
+    login_as :admin_user
+
+    tomorrow = Time.zone.now + 1.day
+
+    # Given a monthly repeat pattern
+    recurring_todo = RecurringTodo.find(5)
+    recurring_todo.target = "due_date"
+    recurring_todo.recurring_period = "monthly"
+    recurring_todo.every_other1 = tomorrow.day
+    recurring_todo.every_other2 = 1
+    recurring_todo.save
+
+    # Given a recurring todo (todo) that belongs to the repeat pattern (recurring_todo) and is due tomorrow
+    todo = Todo.where(:recurring_todo_id => 1).first
+    assert todo.from_recurring_todo?
+    todo.recurring_todo_id = 5 # rewire todo to the repeat pattern above
+    todo.due = tomorrow
+    todo.save!
+
+    # When I mark the todo complete
+    xhr :post, :toggle_check, :id => todo.id, :_source_view => 'todo'
+    todo.reload
+    assert todo.completed?
+
+    # Then there should not be an active todo beloning to the repeat pattern
+    next_todo = Todo.where(:recurring_todo_id => recurring_todo.id, :state => 'active').first
+    assert next_todo.nil?
+
+    # Then there should be one new deferred todo
+    next_todo = Todo.where(:recurring_todo_id => recurring_todo.id, :state => 'deferred').first
+    assert !next_todo.nil?
+    assert !next_todo.show_from.nil?
+
+    # check that the due date of the new todo is later than tomorrow
+    assert next_todo.due > todo.due
+  end
+
   ############
   # todo notes
   ############
