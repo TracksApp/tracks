@@ -147,7 +147,7 @@ class RecurringTodo < ActiveRecord::Base
   end
 
   def daily_every_x_days=(x)
-    every_other1 = x if recurring_period=='daily'
+    self.every_other1 = x if recurring_period=='daily'
   end
 
   def daily_every_x_days
