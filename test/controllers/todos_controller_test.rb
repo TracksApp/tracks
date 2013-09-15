@@ -729,21 +729,9 @@ class TodosControllerTest < ActionController::TestCase
     recurring_todo_1.every_other2 = 1
     assert recurring_todo_1.save
 
-    # mark todo_1 as complete by toggle_check, this gets rid of todo_1 that was
-    # not correctly created from the adjusted recurring pattern we defined
-    # above.
+    # mark todo_1 as complete by toggle_check
     xhr :post, :toggle_check, :id => todo_1.id, :_source_view => 'todo'
     todo_1.reload
-    assert todo_1.completed?
-
-    # locate the new todo. This todo is created from the adjusted recurring
-    # pattern defined in this test
-    new_todo = Todo.where(:recurring_todo_id => recurring_todo_1.id, :state => 'active').first
-    assert !new_todo.nil?
-
-    # mark new_todo as complete by toggle_check
-    xhr :post, :toggle_check, :id => new_todo.id, :_source_view => 'todo'
-    new_todo.reload
     assert todo_1.completed?
 
     # locate the new todo in tickler
