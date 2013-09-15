@@ -13,6 +13,7 @@ class IntegrationsControllerTest < ActionController::TestCase
   
   def test_cloudmailin_integration_success
     SITE_CONFIG['cloudmailin'] = "123456789"
+    SITE_CONFIG['email_dispatch'] = 'from'
     post :cloudmailin, {
       "html"=>"",
       "plain"=>"asdasd",

@@ -27,6 +27,7 @@ class MessageGateway < ActionMailer::Base
     todo = todo_builder.construct
     todo.save!
     Rails.logger.info "Saved email as todo for user #{user.login} in context #{context.name}"
+    todo
   end
   
   private
@@ -49,10 +50,26 @@ class MessageGateway < ActionMailer::Base
     if user.nil?
       user = User.where("preferences.sms_email" => address.strip[1.100]).includes(:preference).first
     end
+    if user.present? and !sender_is_in_mailmap?(user,email)
+      Rails.logger.warn "#{email.from[0]} not found in mailmap for #{user.login}"
+      return nil
+    end
     Rails.logger.info(!user.nil? ? "Email belongs to #{user.login}" : "User unknown")
     return user
   end
-  
+
+  def sender_is_in_mailmap?(user,email)
+    if SITE_CONFIG['mailmap'].is_a? Hash and SITE_CONFIG['email_dispatch'] == 'to'
+      # Look for the sender in the map of allowed senders
+      SITE_CONFIG['mailmap'][user.preference.sms_email].include? email.from[0]
+    else
+      # We can't check the map if it's not defined, or if the lookup is the
+      # wrong way round, so just allow it
+      true
+    end
+  end
+
+
   def get_user_from_email_address(email)
     SITE_CONFIG['email_dispatch'] == 'single_user' ? get_user_from_env_setting : get_user_from_mail_header(email)
   end
