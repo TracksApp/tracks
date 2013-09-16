@@ -393,11 +393,11 @@ class Todo < ActiveRecord::Base
     end
   end
 
-  def self.import(params, user)
-    default_context = Context.where(:user_id=>user.id).order('id').first
+  def self.import(filename, params, user)
+    default_context = user.contexts.order('id').first
     
     count = 0
-    CSV.foreach(params[:file], headers: true) do |row|
+    CSV.foreach(filename, headers: true) do |row|
       unless find_by_description_and_user_id row[params[:description].to_i], user.id
         todo = new 
         todo.user = user

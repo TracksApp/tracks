@@ -5,7 +5,7 @@
 		<%= select_tag(l, options_for_select(@headers) ) %>
 		<br>
 	<% end %>
-	<%= hidden_field_tag :file, @path %>
+	<%= hidden_field_tag :file, @filename %>
 	<%= hidden_field_tag :import_to, @import_to %>
 	<%= submit_tag "Import" %>	
 <% end %>	
