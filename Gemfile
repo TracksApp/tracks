@@ -70,4 +70,7 @@ group :test do
   # uncomment to be able to make screenshots from scenarios
   #gem "capybara-screenshot"
   #gem "launchy"
+
+  # get test coverage info on codeclimate
+  gem "codeclimate-test-reporter", group: :test, require: nil
 end
