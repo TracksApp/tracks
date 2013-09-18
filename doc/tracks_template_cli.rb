@@ -1,7 +1,5 @@
 #!/usr/bin/env ruby
 
-# Version 0.4 (Dec 17, 2011)
-
 #
 # Based on the tracks_cli by Vitalie Lazu (https://gist.github.com/45537)
 #
@@ -67,313 +65,248 @@
 # .Set a reminder to check for reimbursement for [location]
 # .Mail folder to secretary
 
-# Instantiate this template: ./tracks_template_cli -c 1 -f template_file.txt
+# Instantiate this template: ruby tracks_template_cli -c 1 -f template_file.txt
 
-require 'net/https'
 require 'optparse'
 require 'cgi'
-require 'time'
 require 'readline'
+require File.expand_path(File.dirname(__FILE__) + '/tracks_cli/tracks_api')
 
-class Hash
-  def to_query_string
-    map { |k, v|
-      if v.instance_of?(Hash)
-        v.map { |sk, sv|
-          "#{k}[#{sk}]=#{sv}"
-        }.join('&')
-      else
-        "#{k}=#{v}"
-      end
-    }.join('&')
+class TemplateParser
+
+  def initialize
+    @keywords = {}
   end
+
+  def parse_keyword(token)
+    print "Input required for "+token+": "
+    @keywords[token]=gets.chomp
+  end
+
+  def replace_tokens_in(line)
+    @keywords.each{ |key,val| line=line.sub(key,val) }
+    line
+  end
+
+  def parse_todo(line)
+    options = {}
+
+    # first char is . or ^ the latter meaning this todo is dependent on the previous one
+    options[:depend]= line[0].chr == "^" ? true : false;
+    line = line[1..line.length] # remove first char
+
+    # find notes
+    tmp= line.split("|")
+    if tmp.length > 5
+      puts "Formatting error: found too many |"
+      exit 1
+    end
+
+    tmp[0].chomp!
+    options[:description]=tmp[0]
+
+    tmp.each_with_index do |t,idx| 
+      t=t.strip.chomp
+      t=nil if t.empty?
+      tmp[idx]=t
+    end
+
+    options[:context]=tmp[1]
+    options[:taglist]=tmp[2]
+    options[:notes]=tmp[3]
+    options
+  end
+
+  def parse(file, poster)
+    while line = file.gets
+      line = line.strip
+
+      # skip line if empty or comment
+      next if (line.empty? || line[0].chr == "#")
+
+      # check if line defines a token
+      if (line.split(' ')[0] == "token") 
+        parse_keyword line.split(' ')[1] 
+        next
+      end
+
+      # replace defined tokes in current line
+      line = replace_tokens_in line
+
+      # line is either todo/dependency or project
+      if (line[0].chr == "." ) || (line[0].chr == "^")
+        if @last_project_id.nil?
+          puts "Warning: no project specified for task \"#{line}\". Using default project."
+        end  
+        poster.postTodo(parse_todo(line), @last_project_id)
+      else
+        @last_project_id = poster.postProject(line)
+      end
+    end
+  end
+
 end
 
-module Gtd
-  class API
-    GTD_URI_TODOS = ENV['GTD_TODOS_URL'] || 'http://localhost:3000/todos.xml'
-    GTD_URI_PROJECTS = ENV['GTD_PROJECTS_URL'] || 'http://localhost:3000/projects.xml'
-    GTD_URI_CONTEXTS_PREFIX = ENV['GTD_CONTEXT_URL_PREFIX'] || 'http://localhost:3000/contexts/'
-    GTD_URI_CONTEXTS = ENV['GTD_CONTEXT_URL'] || 'http://localhost:3000/contexts.xml'
+class TemplatePoster
 
-    def postTodo(l, options = {})
-      uri = URI.parse(GTD_URI_TODOS)
-      http = Net::HTTP.new(uri.host, uri.port)
-
-      if uri.scheme == "https"  # enable SSL/TLS
-        http.use_ssl = true
-        http.ca_path = "/etc/ssl/certs/" # Debian based path
-        http.verify_mode = OpenSSL::SSL::VERIFY_PEER
-        http.verify_depth = 5
-      end
-
-      l.chomp!
-
-      description = CGI.escapeHTML(l)
-      context_id = options[:context_id] ? options[:context_id].to_i : 1
-      project_id = options[:project_id] ? options[:project_id].to_i : 1
-      props = "<description>#{description}</description><project_id>#{project_id}</project_id>"
-
-      if options[:show_from]
-        props << "<show-from type=\"datetime\">#{Time.at(options[:show_from]).xmlschema}</show-from>"
-      end
-
-      if options[:note]
-        props << "<notes>#{options[:note]}</notes>"
-      end
-
-      if options[:taglist]
-        tags = options[:taglist].split(",")
-        if tags.length() > 0
-          tags = tags.collect { |tag| "<tag><name>#{tag.strip}</name></tag>" unless tag.strip.empty?}.join('')
-          props << "<tags>#{tags}</tags>"
-        end
-      end
-
-      if not (options[:context].nil? || options[:context].empty?)
-        props << "<context><name>#{options[:context]}</name></context>"
-      else
-        ## use the default context
-        props << "<context_id>#{context_id}</context_id>"
-      end
-      
-      if options[:depend]
-        props << "<predecessor_dependencies><predecessor>#{options[:last_todo_id]}</predecessor></predecessor_dependencies>"
-      end
-
-      req = Net::HTTP::Post.new(uri.path, "Content-Type" => "text/xml")
-      req.basic_auth ENV['GTD_LOGIN'], ENV['GTD_PASSWORD']
-      req.body = "<todo>#{props}</todo>"
-
-      puts req.body if options[:verbose]
-
-      resp = http.request(req)
-
-      if resp.code == '302' || resp.code == '201'
-        puts resp['location'] if options[:verbose]
-        
-        # return the todo id
-        return resp['location'].split("/").last
-      else
-        p resp.body
-        raise Gtd::Error
-      end
-    end
-
-    def postProject(l, options = {})
-      uri = URI.parse(GTD_URI_PROJECTS)
-      http = Net::HTTP.new(uri.host, uri.port)
-
-      if uri.scheme == "https"  # enable SSL/TLS
-        http.use_ssl = true
-        http.ca_path = "/etc/ssl/certs/" # Debian based path
-        http.verify_mode = OpenSSL::SSL::VERIFY_PEER
-        http.verify_depth = 5
-      end
-
-      l.chomp!
-
-      description = CGI.escapeHTML(l)
-      props = "<name>#{l}</name><default-context-id>#{options[:context_id]}</default-context-id>"
-
-      req = Net::HTTP::Post.new(uri.path, "Content-Type" => "text/xml")
-      req.basic_auth ENV['GTD_LOGIN'], ENV['GTD_PASSWORD']
-      req.body = "<project>#{props}</project>"
-
-      resp = http.request(req)
-
-      if resp.code == '302' || resp.code == '201'
-        puts resp['location'] if options[:verbose]
-
-        # return the project id
-        return resp['location'].split("/").last
-      else
-        p resp.body
-        raise Gtd::Error
-      end
-    end
-
-    def queryContext(contextID)
-      return false unless contextID.is_a? Integer
-
-      uri = URI.parse(GTD_URI_CONTEXTS_PREFIX + contextID.to_s + ".xml")
-      http = Net::HTTP.new(uri.host, uri.port)
-
-      if uri.scheme == "https"  # enable SSL/TLS
-        http.use_ssl = true
-        http.ca_path = "/etc/ssl/certs/" # Debian based path
-        http.verify_mode = OpenSSL::SSL::VERIFY_PEER
-        http.verify_depth = 5
-      end
-
-      req = Net::HTTP::Get.new(uri.path)
-      req.basic_auth ENV['GTD_LOGIN'], ENV['GTD_PASSWORD']
-      resp = http.request(req)
-
-      case resp
-      when Net::HTTPSuccess
-        return true
-      else
-        return false
-      end
-    end
-
+  def initialize(options)
+    @options = options
+    @tracks = TracksCli::TracksAPI.new({
+      uri:            ENV['GTD_TODOS_URL'] || 'http://localhost:3000/todos.xml',
+      login:          ENV['GTD_LOGIN'],
+      password:       ENV['GTD_PASSWORD'],
+      projects_uri:   ENV['GTD_PROJECTS_URL'] || 'http://localhost:3000/projects.xml',
+      contexts_uri:   ENV['GTD_CONTEXT_URL'] || 'http://localhost:3000/contexts.xml',
+      context_prefix: ENV['GTD_CONTEXT_URL_PREFIX'] || 'http://localhost:3000/contexts/'})
+    @context_id = options[:context_id] ? options[:context_id].to_i : 1
+    @project_id = options[:project_id] ? options[:project_id].to_i : 1
   end
 
+  def postTodo(parsed_todo, project_id)
+    resp = @tracks.post_todo(
+      description:  CGI.escapeHTML(parsed_todo[:description]), 
+      context_name: parsed_todo[:context], 
+      context_id:   @context_id, 
+      project_id:   project_id || @project_id, 
+      show_from:    parsed_todo[:show_from],
+      notes:        parsed_todo[:notes],
+      is_dependend: parsed_todo[:depend],
+      predecessor:  @last_posted_todo_id)
 
-  class Error < StandardError; end
-  class InvalidParser < StandardError; end
+    if resp.code == '302' || resp.code == '201'
+      puts resp['location'] if @options[:verbose]
+      
+      # return the todo id
+      @last_posted_todo_id = resp['location'].split("/").last
+      return @last_posted_todo_id
+    else
+      p resp.body
+      raise Error
+    end
+  end
 
-  class ConsoleOptions
-    attr_reader :parser, :options, :keywords
+  def postProject(project_description)
+    project_description.chomp!
 
-    def initialize
-      @options = {}
-      @keywords = {}
+    resp = @tracks.post_project(
+      description:        CGI.escapeHTML(project_description),
+      default_context_id: @context_id)
 
-      @parser = OptionParser.new do |cmd|
-        cmd.banner = "Ruby Gtd Templates CLI"
+    if resp.code == '302' || resp.code == '201'
+      puts resp['location'] if @options[:verbose]
 
-        cmd.separator ''
+      # return the project id
+      return resp['location'].split("/").last
+    else
+      p resp.body
+      raise Error
+    end
+  end
 
-        cmd.on('-h', '--help', 'Displays this help message') do
-          puts @parser
-          exit
-        end
+  def queryContext(context_id)
+    return false unless context_id.is_a? Integer
 
-        cmd.on('-p [N]', Integer, "project id to set for new todo") do |v|
-          @options[:project_id] = v
-        end
+    resp = @tracks.get_context(context_id)
 
-        cmd.on('-k [S]', "keyword to be replaced") do |v|
-          @keywords[v.split("=")[0]] = v.split("=")[1]
-        end
+    return resp.code == '200'
+  end
 
-        cmd.on('-v', "verbose on") do |v|
-          @options[:verbose] = true
-        end
+end
 
-        cmd.on('-f [S]', "filename of the template") do |v|
-          @filename = v
-        end
+class Error < StandardError; end
+class InvalidParser < StandardError; end
 
-        cmd.on('-c [N]', Integer, 'default context id to set for new projects') do |v|
-          @options[:context_id] = v
-        end
+class ConsoleOptions
+  attr_reader :parser, :options, :keywords
 
-        cmd.on('-w [N]', Integer, 'Postpone task for N weeks') do |v|
-          @options[:show_from] = Time.now.to_i + 24 * 3600 * 7 * (v || 1)
-        end
+  def initialize
+    @options = {}
+    @keywords = {}
 
-        cmd.on('-m [N]', Integer, 'Postpone task for N months') do |v|
-          @options[:show_from] = Time.now.to_i + 24 * 3600 * 7 * 4 * (v || 1)
-        end
+    @parser = OptionParser.new do |cmd|
+      cmd.banner = "Ruby Gtd Templates CLI"
+
+      cmd.separator ''
+
+      cmd.on('-h', '--help', 'Displays this help message') do
+        puts @parser
+        exit
+      end
+
+      cmd.on('-p [N]', Integer, "project id to set for new todo") do |v|
+        @options[:project_id] = v
+      end
+
+      cmd.on('-k [S]', "keyword to be replaced") do |v|
+        @keywords[v.split("=")[0]] = v.split("=")[1]
+      end
+
+      cmd.on('-v', "verbose on") do |v|
+        @options[:verbose] = true
+      end
+
+      cmd.on('-f [S]', "filename of the template") do |v|
+        @filename = v
+      end
+
+      cmd.on('-c [N]', Integer, 'default context id to set for new projects') do |v|
+        @options[:context_id] = v
+      end
+
+      cmd.on('-w [N]', Integer, 'Postpone task for N weeks') do |v|
+        @options[:show_from] = Time.now.to_i + 24 * 3600 * 7 * (v || 1)
+      end
+
+      cmd.on('-m [N]', Integer, 'Postpone task for N months') do |v|
+        @options[:show_from] = Time.now.to_i + 24 * 3600 * 7 * 4 * (v || 1)
       end
     end
+  end
 
-    def run(args)
-      @parser.parse!(args)
-      # lines = STDIN.read
-      gtd = API.new
+  def run(args)
+    @parser.parse!(args)
+    @poster = TemplatePoster.new(@options)
 
-      if @filename != nil and not File.exist?(@filename)
-        puts "ERROR: file #{@filename} doesn't exist"
-        exit 1
-      end
-
-      if ENV['GTD_LOGIN'] == nil
-        puts "ERROR: no GTD_LOGIN environment variable set"
-        exit 1
-      end
-      
-      if ENV['GTD_PASSWORD'] == nil
-        puts "ERROR: no GTD_PASSWORD environment variable set"
-        exit 1
-      end
-      
-      if @filename == nil
-        file = STDIN
-      else
-        file = File.open(@filename)
-      end
-      
-      ## check for existence of the context
-      if !@options[:context_id]
-        puts "ERROR: need to specify a context_id with -c option. Go here to find one: #{API::GTD_URI_CONTEXTS}"
-        exit 1
-      end
-
-      if !gtd.queryContext(@options[:context_id])
-        puts "Error: context_id #{options[:context_id]} doesn't exist"
-        exit 1
-      end
-
-      #lines.each_line do |line|
-      while line = file.gets
-        line = line.strip
-        next if (line.empty? || line[0].chr == "#")
-
-        if (line.split(' ')[0] == "token") 
-          ## defining a new token; ask for input
-
-          newtok=line.split(' ')[1]
-
-          print "Input required for "+newtok+": "
-          @keywords[newtok]=gets.chomp
-          next
-        end
-
-        # replace tokens
-        @keywords.each do |key,val|
-          line=line.sub(key,val)
-        end
-
-        # decide whether project or task
-        if (line[0].chr == "." ) || (line[0].chr == "^")
-          @options[:depend]= line[0].chr == "^" ? true : false;
-          line = line[1..line.length]
-
-          # find notes
-          tmp= line.split("|")
-          if tmp.length > 5
-            puts "Formatting error: found too many |"
-            exit 1
-          end
-
-          line=tmp[0] 
-
-          tmp.each_with_index do |t,idx| 
-            t=t.strip.chomp
-            t=nil if t.empty?
-            tmp[idx]=t
-          end
-
-          @options[:context]=tmp[1]
-          @options[:taglist]=tmp[2]
-          @options[:note]=tmp[3]
-
-          if !@options[:project_id]
-            puts "Warning: no project specified for task \"#{line}\". Using default project."
-          end
-
-          @options[:last_todo_id]=gtd.postTodo(line, @options)
-        else
-          @options[:project_id]=gtd.postProject(line, @options)
-        end
-      end
-
-      exit 0
-    rescue InvalidParser
-      puts "Please specify a valid format parser."
-      exit 1
-    rescue Error
-      puts "An unknown error occurred"
+    if !@filename.nil? and not File.exist?(@filename)
+      puts "ERROR: file #{@filename} doesn't exist"
       exit 1
     end
+
+    if ENV['GTD_LOGIN'] == nil
+      puts "ERROR: no GTD_LOGIN environment variable set"
+      exit 1
+    end
+    
+    if ENV['GTD_PASSWORD'] == nil
+      puts "ERROR: no GTD_PASSWORD environment variable set"
+      exit 1
+    end
+    
+    file = @filename.nil? ? STDIN : File.open(@filename)
+    
+    ## check for existence of the context
+    if @options[:context_id].nil?
+      puts "ERROR: need to specify a context_id with -c option."
+      exit 1
+    end
+
+    if !@poster.queryContext(@options[:context_id])
+      puts "Error: context_id #{options[:context_id]} doesn't exist"
+      exit 1
+    end
+
+    TemplateParser.new.parse(file, @poster)
+
+    exit 0
+  rescue InvalidParser
+    puts "Please specify a valid format parser."
+    exit 1
+  rescue Error
+    puts "An unknown error occurred"
+    exit 1
   end
 end
 
 if $0 == __FILE__
-  app = Gtd::ConsoleOptions.new
-  app.run(ARGV)
+  ConsoleOptions.new.run(ARGV)
 end

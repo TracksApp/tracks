@@ -85,7 +85,8 @@ class TodosController < ApplicationController
       p.parse_dates() unless mobile?
       tag_list = p.tag_list
 
-      @todo = current_user.todos.build(p.attributes)
+      @todo = current_user.todos.build
+      @todo.assign_attributes(p.attributes)
       p.add_errors(@todo)
 
       if @todo.errors.empty?
