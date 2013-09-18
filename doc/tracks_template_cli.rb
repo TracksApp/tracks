@@ -95,7 +95,6 @@ class TemplateParser
     options[:depend]= line[0].chr == "^" ? true : false;
     line = line[1..line.length] # remove first char
 
-    # find notes
     tmp= line.split("|")
     if tmp.length > 5
       puts "Formatting error: found too many |"
@@ -113,7 +112,7 @@ class TemplateParser
 
     options[:context]=tmp[1]
     options[:taglist]=tmp[2]
-    options[:notes]=tmp[3]
+    options[:notes]  =tmp[3]
     options
   end
 
