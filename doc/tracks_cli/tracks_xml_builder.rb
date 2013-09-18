@@ -33,7 +33,7 @@ module TracksCli
     end
 
     def xml_for_context(context_name, context_id)
-      if context_name && context_name.empty?
+      if context_name && !context_name.empty?
         return "<context><name>#{context_name}</name></context>"
       else
         return "<context_id>#{context_id}</context_id>"
