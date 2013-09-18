@@ -123,6 +123,8 @@ class TodosController < ApplicationController
             determine_down_count
             @contexts = current_user.contexts
             @projects = current_user.projects
+            @context = @todo.context
+            @project = @todo.project
             @initial_context_name = params['default_context_name']
             @initial_project_name = params['default_project_name']
             @initial_tags = params['initial_tag_list']
@@ -1163,18 +1165,18 @@ end
   def update_context
     @context_changed = false
     if params['todo']['context_id'].blank? && params['context_name'].present?
-      context = current_user.contexts.where(:name => params['context_name'].strip).first
-      unless context
+      @context = current_user.contexts.where(:name => params['context_name'].strip).first
+      if @context.nil?
         @new_context = current_user.contexts.build
         @new_context.name = params['context_name'].strip
         @new_context.save
         @new_context_created = true
         @new_container = @new_context
         @not_done_todos = [@todo]
-        context = @new_context
+        @context = @new_context
       end
-      params["todo"]["context_id"] = context.id
-      @context_changed = @original_item_context_id != params["todo"]["context_id"] = context.id
+      params["todo"]["context_id"] = @context.id
+      @context_changed = @original_item_context_id != params["todo"]["context_id"] = @context.id
     end
   end
 

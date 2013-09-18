@@ -42,7 +42,7 @@ function remove_todo(next_steps) {
 
 function add_to_existing_container(next_steps) {
   $('#<%= item_container_id(@todo) %>_items').append(html_for_todo());
-  <% if source_view_is_one_of(:project,:calendar) -%>
+  <% if source_view_is_one_of(:calendar) -%>
     next_steps.go();
     <% if (@target_context_count==1) || ( (@todo.deferred? || @todo.pending?) && @remaining_deferred_or_pending_count == 1) -%>
       $("#<%=  empty_container_msg_div_id %>").slideUp(100);
@@ -83,7 +83,7 @@ function highlight_updated_todo(next_steps) {
 }
 
 function update_empty_container(next_steps) {
-  <% if @down_count==0 -%>
+  <% if should_show_empty_container -%>
     $('div#no_todos_in_view').slideDown(400, function(){ next_steps.go(); });
   <% else -%>
     $('div#no_todos_in_view').fadeOut(100, function(){ next_steps.go(); });

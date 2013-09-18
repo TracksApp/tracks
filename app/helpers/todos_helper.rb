@@ -575,6 +575,13 @@ module TodosHelper
     return false
   end
 
+  def should_show_empty_container
+    source_view do |page|
+      page.context { return @remaining_in_context == 0 } 
+    end
+    return @down_count==0 
+  end
+
   def project_container_id(todo)
     return "p#{todo.project_id}"         unless todo.project.nil?
     return "without_project_container"

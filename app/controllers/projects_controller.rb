@@ -136,8 +136,8 @@ class ProjectsController < ApplicationController
       limit(current_user.prefs.show_number_completed).
       includes(Todo::DEFAULT_INCLUDES) unless @max_completed == 0
 
-    @count = @not_done_todos.size
-    @down_count = @count + @deferred_todos.size + @pending_todos.size
+    @down_count = @not_done_todos.size + @deferred_todos.size + @pending_todos.size
+    @count=@down_count
     @next_project = current_user.projects.next_from(@project)
     @previous_project = current_user.projects.previous_from(@project)
     @default_tags = @project.default_tags
