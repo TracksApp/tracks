@@ -1,9 +1,10 @@
 require './test/minimal_test_helper'
 require './doc/tracks_cli/tracks_xml_builder'
+require 'active_support/time_with_zone'
 
 module TracksCli
 
-  class TimeToCompleteTest < Test::Unit::TestCase
+  class TracksXmlBuilderTest < Test::Unit::TestCase
     def test_all
       todo = {
         description: "test action",
@@ -18,7 +19,7 @@ module TracksCli
 
       xml = TracksCli::TracksXmlBuilder.new.build_todo_xml(todo)
       expect = "<todo><description>test action</description>" +
-        "<project_id>1</project_id><show-from type=\"datetime\">2013-01-01T14:00:00Z</show-from>" +
+        "<project_id>1</project_id><show-from type=\"datetime\">#{Time.at(todo[:show_from]).xmlschema}</show-from>" +
         "<notes>action notes</notes><tags><tag><name>one</name></tag><tag><name>two</name></tag></tags>" +
         "<context><name>@home</name></context><predecessor_dependencies><predecessor>123</predecessor></predecessor_dependencies></todo>"
 

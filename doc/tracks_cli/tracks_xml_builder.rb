@@ -1,4 +1,4 @@
-require 'time'
+require 'active_support/time_with_zone'
 
 module TracksCli
 
