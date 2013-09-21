@@ -58,7 +58,20 @@ open_signups: false
 # (see http://docs.cloudmailin.com/validating_the_sender)
 # cloudmailin: asdasd
 
+# Mailgun api key - used to verify incoming HTTP requests from Mailgun.org
+# mailgun_api_key: key-abcdef1234567890
 
 # change this to reflect the email address of the admin that you want to show 
 # on the signup page
 admin_email: my.email@domain.com
+
+
+# Map of allowed incoming email addresses to real users
+# Requires email_dispatch == 'to'
+# This allows you to specify _who_ can send email Todos to your list
+# The format is your incoming email (as per preferences page) for the key, and
+# an array-list of acceptable senders for that account
+#mailmap:
+#  'user@preferences.from.value':
+#  - 'acceptable1@personal.org'
+#  - 'acceptable2@work.com'
