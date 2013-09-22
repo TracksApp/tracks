@@ -57,7 +57,6 @@ group :test do
   gem "mocha", :require => false
 
   gem "aruba", git: 'https://github.com/cucumber/aruba', :require => false  # need 0.5.4 for piping files; 0.5.3 is latest
-  gem "simplecov"
   gem "timecop", "~> 0.6.2"
 
   # Note that > 2.14 has problems, see: 

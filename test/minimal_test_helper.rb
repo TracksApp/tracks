@@ -1,5 +1,6 @@
-require 'simplecov'
-SimpleCov.start 'rails'
+# test coverage from codeclimate
+require "codeclimate-test-reporter"
+CodeClimate::TestReporter.start
 
 ENV["RAILS_ENV"] = "test"
 require 'test/unit'
