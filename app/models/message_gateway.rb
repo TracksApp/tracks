@@ -3,27 +3,14 @@ class MessageGateway < ActionMailer::Base
   extend ActionView::Helpers::SanitizeHelper::ClassMethods
   
   def receive(email)
-    user = get_user_from_email_address(email)
+    user = get_receiving_user_from_email_address(email)
     return false if user.nil?
+    return false unless check_sender_is_in_mailmap(user, email)
     
     context = user.prefs.sms_context
-    description = nil
-    notes = nil
-    
-    if email.multipart?
-      description = get_text_or_nil(email.subject)
-      notes = get_first_text_plain_part(email)
-    else
-      if email.subject.blank?
-        description = get_decoded_text_or_nil(email.body)
-        notes = nil
-      else
-        description = get_text_or_nil(email.subject)
-        notes = get_decoded_text_or_nil(email.body)
-      end
-    end
+    todo_params = get_todo_params(email)
 
-    todo_builder = TodoFromRichMessage.new(user, context.id, description, notes)
+    todo_builder = TodoFromRichMessage.new(user, context.id, todo_params[:description], todo_params[:notes])
     todo = todo_builder.construct
     todo.save!
     Rails.logger.info "Saved email as todo for user #{user.login} in context #{context.name}"
@@ -32,31 +19,59 @@ class MessageGateway < ActionMailer::Base
   
   private
   
-  def get_address(email)
-    return SITE_CONFIG['email_dispatch'] == 'to' ?  email.to[0] :  email.from[0]
-  end
-  
-  def get_user_from_env_setting
+  def get_todo_params(email)
+    params = {}
+    
+    if email.multipart?
+      params[:description] = get_text_or_nil(email.subject)
+      params[:notes]       = get_first_text_plain_part(email)
+    else
+      if email.subject.blank?
+        params[:description] = get_decoded_text_or_nil(email.body)
+        params[:notes]       = nil
+      else
+        params[:description] = get_text_or_nil(email.subject)
+        params[:notes]       = get_decoded_text_or_nil(email.body)
+      end
+    end
+    params
+  end    
+
+  def get_receiving_user_from_email_address(email)
+    SITE_CONFIG['email_dispatch'] == 'single_user' ? get_receiving_user_from_env_setting : get_receiving_user_from_mail_header(email)
+  end  
+
+  def get_receiving_user_from_env_setting
     Rails.logger.info "All received email goes to #{ENV['TRACKS_MAIL_RECEIVER']}"
     user = User.where(:login => ENV['TRACKS_MAIL_RECEIVER']).first
     Rails.logger.info "WARNING: Unknown user set for TRACKS_MAIL_RECEIVER (#{ENV['TRACKS_MAIL_RECEIVER']})" if user.nil?
     return user
   end
   
-  def get_user_from_mail_header(email)
-    address = get_address(email)
-    Rails.logger.info "Looking for user with email #{address}"
-    user = User.where("preferences.sms_email" => address.strip).includes(:preference).first
-    if user.nil?
-      user = User.where("preferences.sms_email" => address.strip[1.100]).includes(:preference).first
-    end
-    if user.present? and !sender_is_in_mailmap?(user,email)
-      Rails.logger.warn "#{email.from[0]} not found in mailmap for #{user.login}"
-      return nil
-    end
-    Rails.logger.info(!user.nil? ? "Email belongs to #{user.login}" : "User unknown")
+  def get_receiving_user_from_mail_header(email)
+    user = get_receiving_user_from_sms_email( get_address(email) )
+    Rails.logger.info(user.nil? ? "User unknown": "Email belongs to #{user.login}")
     return user
   end
+
+  def get_address(email)
+    return SITE_CONFIG['email_dispatch'] == 'to' ?  email.to[0] :  email.from[0]
+  end
+
+  def get_receiving_user_from_sms_email(address)
+    Rails.logger.info "Looking for user with email #{address}"
+    user = User.where("preferences.sms_email" => address.strip).includes(:preference).first
+    user = User.where("preferences.sms_email" => address.strip[1.100]).includes(:preference).first if user.nil?
+    return user
+  end    
+
+  def check_sender_is_in_mailmap(user, email)
+    if user.present? and !sender_is_in_mailmap?(user,email)
+      Rails.logger.warn "#{email.from[0]} not found in mailmap for #{user.login}"
+      return false
+    end
+    return true
+  end    
 
   def sender_is_in_mailmap?(user,email)
     if SITE_CONFIG['mailmap'].is_a? Hash and SITE_CONFIG['email_dispatch'] == 'to'
@@ -67,11 +82,6 @@ class MessageGateway < ActionMailer::Base
       # wrong way round, so just allow it
       true
     end
-  end
-
-
-  def get_user_from_email_address(email)
-    SITE_CONFIG['email_dispatch'] == 'single_user' ? get_user_from_env_setting : get_user_from_mail_header(email)
   end
 
   def get_text_or_nil(text)
