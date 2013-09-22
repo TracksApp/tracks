@@ -45,7 +45,7 @@ end
 #
 #   Before('@no-txn,@selenium,@culerity,@celerity,@javascript') do
 #     # { :except => [:widgets] } may not do what you expect here
-#     # as tCucumber::Rails::Database.javascript_strategy overrides
+#     # as Cucumber::Rails::Database.javascript_strategy overrides
 #     # this setting.
 #     DatabaseCleaner.strategy = :truncation
 #   end

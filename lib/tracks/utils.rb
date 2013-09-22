@@ -38,6 +38,10 @@ module Tracks
       RedCloth.new(text).to_html
     end
     
+    def self.sanitize_filename(filename)
+      filename.gsub(/[^0-9A-z.\-]/, '_')
+    end
+
     private
     
     def self.helpers

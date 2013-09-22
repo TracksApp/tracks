@@ -138,9 +138,9 @@ class Project < ActiveRecord::Base
     @age_in_days ||= ((Time.now.utc - created_at).to_i / 1.day) + 1
   end
 
-  def self.import(params, user)
+  def self.import(filename, params, user)
     count = 0
-    CSV.foreach(params[:file], headers: true) do |row|
+    CSV.foreach(filename, headers: true) do |row|
       unless find_by_name_and_user_id row[params[:name].to_i], user.id
         project = new 
         project.name = row[params[:name].to_i]

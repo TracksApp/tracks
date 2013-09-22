@@ -10,7 +10,7 @@ before_install:
   - "cp config/site.yml.tmpl config/site.yml"
   - "cp config/database.yml.tmpl config/database.yml"
 
-script: "bundle exec rake ci"
+script: "CODECLIMATE_REPO_TOKEN=5c52fdd2bbcd0734d56ddb2c3cbaac782da345273e8689d25f54a065ccc3397c bundle exec rake ci RACK_ENV=test"
 
 bundler_args: --without development
 notifications:

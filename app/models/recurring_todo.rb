@@ -147,7 +147,7 @@ class RecurringTodo < ActiveRecord::Base
   end
 
   def daily_every_x_days=(x)
-    every_other1 = x if recurring_period=='daily'
+    self.every_other1 = x if recurring_period=='daily'
   end
 
   def daily_every_x_days
@@ -489,7 +489,7 @@ class RecurringTodo < ActiveRecord::Base
 
     case self.recurrence_selector
     when 0 # specific day of the month
-      if start.mday > day
+      if (previous && start.mday >= day) || (previous.nil? && start.mday > day)
         # there is no next day n in this month, search in next month
         #
         #  start += n.months

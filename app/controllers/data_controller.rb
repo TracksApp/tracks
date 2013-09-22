@@ -16,16 +16,29 @@ class DataController < ApplicationController
       redirect_to :back
     else  
       @import_to = params[:import_to]
-     
-      #get column headers and formart as [['name', column_number]...]
-      i = -1
-      @headers = import_headers(params[:file].path).collect { |v| [v, i+=1] }
-      @headers.unshift ['',i] 
+
+      begin      
+        #get column headers and format as [['name', column_number]...]
+        i = -1
+        @headers = import_headers(params[:file].path).collect { |v| [v, i+=1] }
+        @headers.unshift ['',i] 
+      rescue Exception => e
+        flash[:error] = "Invalid CVS: could not read headers: #{e}"
+        redirect_to :back
+        return
+      end
       
       #save file for later
-      directory = "public/uploads/csv"
-      @path = File.join(directory, params[:file].original_filename)
-      File.open(@path, "wb") { |f| f.write(params[:file].read) }
+      begin
+        uploaded_file = params[:file]
+        @filename = Tracks::Utils.sanitize_filename(uploaded_file.original_filename)
+        path_and_file = Rails.root.join('public', 'uploads', 'csv', @filename)
+        File.open(path_and_file, "wb") { |f| f.write(uploaded_file.read) }
+      rescue Exception => e
+        flash[:error] = "Could not save uploaded CSV (#{path_and_file}). Can Tracks write to the upload directory? #{e}"
+        redirect_to :back
+        return
+      end
 
       case @import_to
       when 'projects'
@@ -44,12 +57,14 @@ class DataController < ApplicationController
 
   def csv_import
     begin
+      filename = Tracks::Utils.sanitize_filename(params[:file])
+      path_and_file = Rails.root.join('public', 'uploads', 'csv', filename)
       case params[:import_to]
       when 'projects'
-        count = Project.import params, current_user
+        count = Project.import path_and_file, params, current_user
         flash[:notice] = "#{count} Projects imported"
       when 'todos'
-        count = Todo.import params, current_user
+        count = Todo.import path_and_file, params, current_user
         flash[:notice] = "#{count} Todos imported"
       else
         flash[:error] = t('data.invalid_import_destination')
@@ -57,11 +72,11 @@ class DataController < ApplicationController
     rescue Exception => e
       flash[:error] = t('data.invalid_import_destination') + ": #{e}"
     end
-    File.delete(params[:file])
+    File.delete(path_and_file)
     redirect_to import_data_path
   end
 
-  def import_headers file
+  def import_headers(file)
     CSV.foreach(file, headers: false) do |row|
       return row
     end
@@ -105,13 +120,14 @@ class DataController < ApplicationController
     send_data(result, :filename => "tracks_backup.yml", :type => 'text/plain')
   end
   
+  # export all actions as csv
   def csv_actions
     content_type = 'text/csv'
-    CSV::Writer.generate(result = "") do |csv|
+    CSV.generate(result = "") do |csv|
       csv << ["id", "Context", "Project", "Description", "Notes", "Tags",
         "Created at", "Due", "Completed at", "User ID", "Show from",
         "state"]
-      current_user.todos.include(:context, :project).all.each do |todo|
+      current_user.todos.includes(:context, :project, :taggings, :tags).each do |todo|
         csv << [todo.id, todo.context.name,
           todo.project_id.nil? ? "" : todo.project.name,
           todo.description,
@@ -127,7 +143,7 @@ class DataController < ApplicationController
     send_data(result, :filename => "todos.csv", :type => content_type)
   end
 
-  
+  # export all notes as csv
   def csv_notes
     content_type = 'text/csv'
     CSV.generate(result = "") do |csv|
