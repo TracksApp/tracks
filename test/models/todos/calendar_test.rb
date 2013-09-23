@@ -32,10 +32,21 @@ module Todos
       assert_equal [due_next_week], @calendar.due_next_week
     end
 
-    def test_due_this_month
-      due_this_month = create_todo(Time.zone.now.end_of_month)
+    def test_due_this_month_at_start_month
+      # should return 1 todo
+      Timecop.travel(2013,9,1) do
+        due_this_month = create_todo(Time.zone.now.end_of_month)
+        assert_equal [due_this_month], @calendar.due_this_month
+      end
+    end
 
-      assert_equal [due_this_month], @calendar.due_this_month
+    def test_due_this_month_at_end_month
+      # the todo is due next week and is thus left out for todos due rest 
+      # of month (i.e. after next week, but in this month)
+      Timecop.travel(2013,9,23) do
+        due_this_month = create_todo(Time.zone.now.end_of_month)
+        assert_equal 0, @calendar.due_this_month.size
+      end
     end
 
     def test_due_after_this_month
