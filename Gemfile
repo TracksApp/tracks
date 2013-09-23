@@ -70,6 +70,7 @@ group :test do
   #gem "capybara-screenshot"
   #gem "launchy"
 
+  gem "simplecov"
   # get test coverage info on codeclimate
   gem "codeclimate-test-reporter", group: :test, require: nil
 end
