@@ -4,14 +4,6 @@
 # instead of editing this one. Cucumber will automatically load all features/**/*.rb
 # files.
 
-# test coverage from codeclimate
-require "codeclimate-test-reporter"
-CodeClimate::TestReporter.start
-
-# local test coverage
-require 'simplecov'
-SimpleCov.start 'rails'
-
 require 'cucumber/rails'
 require 'aruba/cucumber'
 
