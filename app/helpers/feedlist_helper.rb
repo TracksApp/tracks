@@ -27,12 +27,16 @@ module FeedlistHelper
     return html.html_safe
   end
 
+  def all_feed_links(object, symbol)
+    feed_links([:rss, :txt, :ical], { :controller=> 'todos', :action => 'index', symbol => object.to_param }, content_tag(:strong, object.name))
+  end
+
   def all_feed_links_for_project(project)
-    feed_links([:rss, :txt, :ical], { :controller=> 'todos', :action => 'index', :project_id => project.to_param }, content_tag(:strong, project.name))
+    all_feed_links(project, :project_id)  
   end
 
   def all_feed_links_for_context(context)
-    feed_links([:rss, :txt, :ical], { :controller=> 'todos', :action => 'index', :context_id => context.to_param }, content_tag(:strong, context.name))
+    all_feed_links(context, :context_id)
   end
 
   protected
@@ -44,5 +48,6 @@ module FeedlistHelper
   def user_token_hash
     { :token => current_user.token }
   end
+
     
 end

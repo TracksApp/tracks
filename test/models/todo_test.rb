@@ -201,6 +201,24 @@ class TodoTest < ActiveSupport::TestCase
     assert t.project.is_a?(NullProject)
   end
 
+  def test_update_from_project
+    # Given a hidden project
+    assert_not_nil @not_completed1.project
+    project = @not_completed1.project
+    project.hide!
+    assert project.hidden?
+    assert @not_completed1.reload.hidden?
+
+    # When I manually create a new todo in the hidden projct
+    new_todo = @not_completed1.user.todos.build(description: "test", context: @not_completed1.context, project: project)
+    new_todo.save!
+    assert new_todo.active?
+    # And I update the state of the todo from its project
+    new_todo.update_state_from_project
+    # Then the todo should be hidden
+    assert new_todo.hidden?    
+  end
+
   def test_initial_state_defaults_to_active
     t = Todo.new
     t.description = 'foo'
@@ -326,6 +344,31 @@ class TodoTest < ActiveSupport::TestCase
 
     assert !@not_completed1.uncompleted_predecessors?
     assert @not_completed1.active?, "removing last predecessor should activate todo"
+  end
+
+  def test_removing_precesessor_using_new_dependency_list
+    # Given three active todos (@not_completed{1,2.3})
+    @completed.activate!
+    @not_completed3 = @completed
+
+    #When I add two todos as dependency to one todo
+    @not_completed1.add_predecessor_list("#{@not_completed2.id}, #{@not_completed3.id}")
+    @not_completed1.save_predecessors
+    # blocking is not done automagically
+    @not_completed1.block! 
+
+    # Then @completed1 should have predecessors and should be blocked
+    assert @not_completed1.uncompleted_predecessors?
+    assert @not_completed1.pending?, "a todo with predecessors should be pending"
+
+    # When I set the predecessors to only todo2
+    @not_completed1.add_predecessor_list("#{@not_completed2.id}") #
+    @not_completed1.save_predecessors
+
+    # Then todo1 should have only one predecessor and it should be todo2
+    assert @not_completed1.uncompleted_predecessors?
+    assert_equal 1, @not_completed1.predecessors.count
+    assert_equal @not_completed2, @not_completed1.predecessors.first
   end
 
   def test_finding_todos_with_a_tag

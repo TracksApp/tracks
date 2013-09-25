@@ -215,7 +215,7 @@ end
 class Error < StandardError; end
 class InvalidParser < StandardError; end
 
-class ConsoleOptions
+class ConsoleOptionsForTemplate
   attr_reader :parser, :options, :keywords
 
   def initialize
@@ -307,5 +307,5 @@ class ConsoleOptions
 end
 
 if $0 == __FILE__
-  ConsoleOptions.new.run(ARGV)
+  ConsoleOptionsForTemplate.new.run(ARGV)
 end

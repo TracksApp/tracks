@@ -1,7 +1,4 @@
-require 'simplecov'
-SimpleCov.start 'rails'
-
-ENV["RAILS_ENV"] = "test"
+ENV["RAILS_ENV"] ||= "test"
 require 'test/unit'
 require 'mocha/setup'
 
