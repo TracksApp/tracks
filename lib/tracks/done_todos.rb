@@ -1,32 +1,32 @@
 class DoneTodos
+
+
   def self.done_todos_for_container(user)
     completed_todos = user.todos.completed
     return done_today(completed_todos), done_rest_of_week(completed_todos), done_rest_of_month(completed_todos)
   end
 
   def self.done_today(todos, includes = {:include => Todo::DEFAULT_INCLUDES})
-    start_of_this_day = Time.zone.now.beginning_of_day
     # TODO: refactor to remove outer hash from includes param
-    todos.completed_after(start_of_this_day).includes(includes[:include])
+    todos.completed_after(beginning_of_day).includes(includes[:include])
   end
 
   def self.done_rest_of_week(todos, includes = {:include => Todo::DEFAULT_INCLUDES})
-    done_between(todos, includes, Time.zone.now.beginning_of_day, Time.zone.now.beginning_of_week)
+    done_between(todos, includes, beginning_of_day, beginning_of_week)
   end
 
   def self.done_rest_of_month(todos, includes = {:include => Todo::DEFAULT_INCLUDES})
-    done_between(todos, includes, Time.zone.now.beginning_of_week, Time.zone.now.beginning_of_month)
+    done_between(todos, includes, beginning_of_week, beginning_of_month)
   end
 
   def self.completed_period(date)
-    return nil if date.nil?
+    return nil if date.nil? 
 
-    period = nil
-    period = "rest_of_month" if date > Time.zone.now.beginning_of_month
-    period = "rest_of_week"  if date > Time.zone.now.beginning_of_week
-    period = "today"         if date > Time.zone.now.beginning_of_day
-
-    return period
+    return "today"         if date >= end_of_day  # treat todos with completed_at in future as done today (happens in tests)
+    return "today"         if date.between?(beginning_of_day, end_of_day)
+    return "rest_of_week"  if date >= beginning_of_week
+    return "rest_of_month" if date >= beginning_of_month
+    return nil
   end
 
   def self.remaining_in_container(user, period)
@@ -41,4 +41,21 @@ class DoneTodos
     # TODO: refactor to remove outer hash from includes param
     todos.completed_before(start_date).completed_after(end_date).includes(includes[:include])
   end
+
+  def self.beginning_of_day
+    Time.zone.now.beginning_of_day
+  end
+
+  def self.end_of_day
+    Time.zone.now.end_of_day
+  end
+
+  def self.beginning_of_week
+    Time.zone.now.beginning_of_week
+  end
+
+  def self.beginning_of_month
+    Time.zone.now.beginning_of_month
+  end
+
 end
