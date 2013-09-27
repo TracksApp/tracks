@@ -13,6 +13,7 @@
   <li><a href="#quicksilver-applescript-section">Add Actions with Quicksilver and Applescript</a></li>
   <li><a href="#email-cron-section">Automatically Email Yourself Upcoming Actions</a></li>
   <li><a href="#message_gateway">Integrate Tracks with an email server to be able to send an action through email to Tracks</a></li>
+  <li><a href="#mailgun">Send emails to Tracks with Mailgun</a>
   <li><a href="#google_gadget">Add Tracks as a Google Gmail gadget</a></li>
 </ul><br/>
 <p>Do you have one of your own to add?
@@ -118,6 +119,41 @@
   <p>You can also send all email to a specific Tracks user. Configure mail_dispatch in site.yml to <tt>single_user</tt> and pass the login of the user:
     <pre>TRACKS_MAIL_RECEIVER=<%=current_user.login%> usr/bin/bundle exec /PATH/TO/TRACKS/script/rails r -e production 'MessageGateway.receive(STDIN.read)'</pre>
 </p>
+
+<a name="mailgun"> </a>
+<h2>Send emails to Tracks with Mailgun</h2>
+If you want to email tasks to Tracks, but cannot run a mailserver on the same host,
+you could use the <a href='www.mailgun.com'>Mailgun</a> support built in to Tracks.
+</p>
+<p>
+For this to work your Tracks server will need to be reachable from the internet, so
+that Mailgun can POST data to it.
+<p>
+<ul>
+  <li>Go to <%= link_to 'http://mailgun.com' %> and register for a free account.</li>
+  <li>Go to 'Routes' in the Mailgun control panel, and add a new route:</li>
+  <ul>
+    <li>'Filter expression' should be set to 'catch_all()'</li>
+    <li>'Action' should be 'forward("http://mytracksserver.domain.com/mailgun/mime")'
+  </ul>
+  <li>Go to <%= link_to t('layouts.navigation.preferences'), preferences_url %> and
+    enter your incoming Mailgun email address (e.g. tracks@user.mailgun.com) in the
+    "<%= Preference.human_attribute_name('sms_email') %>" box.</li>
+  <li>Select a default context for emails to be put in with
+    "<%= Preference.human_attribute_name('sms_context') %>"</li>
+  <li>Add your Mailgun API key (not the Public API key) to the Tracks 'site.yml'
+  <li>Update the mailmap in 'site.yml' to define which senders can send emails to
+    which incoming addresses. For example, to send emails from your work and home
+    email accounts to your tracks Mailgun route, set it up like this:
+    <pre class=code>
+mailmap:
+  tracks@user.mailgun.org:
+  - me@myhome.domain.net
+  - mr.user@work.company.com
+</pre>
+</ul>
+<p>All the comments about the email format from the section above apply to the
+Mailgun handling, as the data is processed the same way</p>
 
 <a name="google_gadget"> </a>
 <h2>Add Tracks as a Google Gmail gadget</h2>
