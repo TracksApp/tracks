@@ -1,6 +1,4 @@
 class MessageGateway < ActionMailer::Base
-  include ActionView::Helpers::SanitizeHelper
-  extend ActionView::Helpers::SanitizeHelper::ClassMethods
   
   def receive(email)
     user = get_receiving_user_from_email_address(email)
@@ -85,11 +83,11 @@ class MessageGateway < ActionMailer::Base
   end
 
   def get_text_or_nil(text)
-    return text ? sanitize(text.strip) : nil
+    return text ? text.strip : nil
   end
 
   def get_decoded_text_or_nil(text)
-    return text ? sanitize(text.decoded.strip) : nil
+    return text ? text.decoded.strip : nil
   end
   
   def get_first_text_plain_part(email)
@@ -99,7 +97,7 @@ class MessageGateway < ActionMailer::Base
     # remove all parts that are not text/plain
     parts.reject{|part| !part.content_type.start_with?("text/plain") }
     
-    return parts.count > 0 ? sanitize(parts[0].decoded.strip) : ""
+    return parts.count > 0 ? parts[0].decoded.strip : ""
   end
   
   def get_all_parts(parts)
