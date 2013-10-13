@@ -4,7 +4,6 @@ class PreferencesControllerTest < ActionController::TestCase
 
   def setup
     super
-    assert_equal "test", Rails.env
     assert_equal "change-me", Tracks::Config.salt
   end
 
