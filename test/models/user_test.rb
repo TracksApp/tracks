@@ -1,4 +1,5 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
+require 'timecop'
 
 class UserTest < ActiveSupport::TestCase
   fixtures :users, :preferences, :projects, :contexts, :todos, :recurring_todos
