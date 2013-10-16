@@ -374,16 +374,16 @@ class UserTest < ActiveSupport::TestCase
 
     # test group counts for projects and contexts
     project_counts = u.todos.count_by_group(:project_id)
-    assert_equal "6,3,4,4", project_counts.map{|pc|pc[1]}.join(",")
+    assert_equal [6,3,4,4], project_counts.values
 
     context_counts = u.todos.count_by_group(:context_id)
-    assert_equal "7,3,1,3,1,2", context_counts.map{|cc|cc[1]}.join(",")
+    assert_equal [7,3,1,3,1,2], context_counts.values
 
     # add a todo to the first context and check that the count is increased
     u.todos.create!(:description => "yet another todo", :context => u.contexts.first)
 
     context_counts = u.todos.reload.count_by_group(:context_id)
-    assert_equal "8,3,1,3,1,2", context_counts.map{|cc|cc[1]}.join(",")
+    assert_equal [8,3,1,3,1,2], context_counts.values
   end
     
   protected
