@@ -1,28 +1,72 @@
+require 'date'
 class RichMessageExtractor
+  include ActionView::Helpers::SanitizeHelper
+  extend ActionView::Helpers::SanitizeHelper::ClassMethods
 
-  RICH_MESSAGE_FIELDS_REGEX = /([^>@]*)@?([^>]*)>?(.*)/
+  PROJECT_MARKER = '~'
+  CONTEXT_MARKER = '@'
+  TICKLER_MARKER = '>'
+  DUE_MARKER = '<'
+  TAG_MARKER = '#'
+  STAR_MARKER = '*'
+
+  ALL_MARKERS = [
+    PROJECT_MARKER,
+    CONTEXT_MARKER,
+    TICKLER_MARKER,
+    DUE_MARKER,
+    TAG_MARKER,
+    STAR_MARKER
+  ]
 
   def initialize(message)
     @message = message
   end
 
   def description
-    fields[1].strip
+    desc = select_for('')
+    desc.blank? ? '' : sanitize(desc[1].strip)
   end
 
   def context
-    fields[2].strip
+    context = select_for(CONTEXT_MARKER)
+    context.blank? ? '' : sanitize(context[1].strip)
   end
 
   def project
-    stripped = fields[3].strip
-    stripped.blank? ? nil : stripped
+    project = select_for PROJECT_MARKER
+    project.blank? ? nil : sanitize(project[1].strip)
+  end
+
+  def tags
+    string = @message.dup
+    tags = []
+    # Regex only matches one tag, so recurse until we have them all
+    while string.match /#(.*?)(?=[#{ALL_MARKERS.join}]|\Z)/
+      tags << sanitize($1)
+      string.gsub!(/##{$1}/,'')
+    end
+    tags.empty? ? nil : tags
+  end
+
+  def due
+    due = select_for DUE_MARKER
+    due.blank? ? nil : Date.parse(due[1].strip)
+  end
+
+  def show_from
+    show_from = select_for TICKLER_MARKER
+    show_from.blank? ? nil : Date.parse(show_from[1].strip)
+  end
+
+  def starred?
+    @message.include? '*'
   end
 
   private
 
-    def fields
-      @message.match(RICH_MESSAGE_FIELDS_REGEX)
-    end
+  def select_for symbol
+    @message.match /#{symbol}(.*?)(?=[#{ALL_MARKERS.join}]|\Z)/
+  end
 
 end
