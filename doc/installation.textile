@@ -10,7 +10,7 @@ There are two methods of downloading Tracks:
 # If you want to live on the edge, you can get the latest development version from GitHub using git (bear in mind that this may be less stable than the released versions):
 
 bc. cd ~/Sites
-git clone git://github.com/tracksapp/tracks.git
+git clone https://github.com/TracksApp/tracks.git
 cd tracks
 
 
