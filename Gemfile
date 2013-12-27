@@ -6,7 +6,7 @@ gem 'coffee-rails', '~>4.0.0'
 
 gem 'json'
 
-# todo: remove xml api 
+# todo: remove xml api
 gem 'actionpack-xml_parser', git: 'https://github.com/rails/actionpack-xml_parser'
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
@@ -17,7 +17,7 @@ gem 'uglifier', '>=1.3.0'
 gem 'jquery-rails'
 
 # you may comment out the database driver you will not be using.
-# This will prevent a native build of the driver. Building native drivers is not 
+# This will prevent a native build of the driver. Building native drivers is not
 # always possible on all hosters
 gem "sqlite3"
 gem "mysql2"
@@ -59,13 +59,13 @@ group :test do
   gem "aruba", git: 'https://github.com/cucumber/aruba', :require => false  # need 0.5.4 for piping files; 0.5.3 is latest
   gem "timecop", "~> 0.6.2"
 
-  # Note that > 2.14 has problems, see: 
+  # Note that > 2.14 has problems, see:
   # https://code.google.com/p/selenium/issues/detail?id=3075
-  gem "selenium-webdriver" 
-  
+  gem "selenium-webdriver"
+
   # uncomment to use the webkit option. This depends on Qt being installed
   # gem "capybara-webkit"
-  
+
   # uncomment to be able to make screenshots from scenarios
   #gem "capybara-screenshot"
   #gem "launchy"
