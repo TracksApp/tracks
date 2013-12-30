@@ -66,7 +66,7 @@ class Todo < ActiveRecord::Base
 
   # state machine
   include AASM
-  aasm_initial_state Proc.new { |t| (t.show_from && t.user && (t.show_from > t.user.date)) ? :deferred : :active}
+  aasm_initial_state = Proc.new { |t| (t.show_from && t.user && (t.show_from > t.user.date)) ? :deferred : :active}
 
   aasm :column => :state do
 

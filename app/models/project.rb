@@ -89,7 +89,7 @@ class Project < ActiveRecord::Base
   # as a result of acts_as_state_machine calling state=() to update the attribute
   def transition_to(candidate_state)
     case candidate_state.to_sym
-      when aasm_current_state
+      when aasm.current_state
         return
       when :hidden
         hide!

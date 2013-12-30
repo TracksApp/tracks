@@ -97,10 +97,10 @@ class TodoTest < ActiveSupport::TestCase
 
   def test_defer_an_existing_todo
     @not_completed2
-    assert_equal :active, @not_completed2.aasm_current_state
+    assert_equal :active, @not_completed2.aasm.current_state
     @not_completed2.show_from = Time.zone.now + 1.week
     assert @not_completed2.save, "should have saved successfully" + @not_completed2.errors.to_xml
-    assert_equal :deferred, @not_completed2.aasm_current_state
+    assert_equal :deferred, @not_completed2.aasm.current_state
   end
 
   def test_create_a_new_deferred_todo
@@ -110,41 +110,41 @@ class TodoTest < ActiveSupport::TestCase
     todo.context_id = 1
     todo.description = 'foo'
     assert todo.save, "should have saved successfully" + todo.errors.to_xml
-    assert_equal :deferred, todo.aasm_current_state
+    assert_equal :deferred, todo.aasm.current_state
   end
 
   def test_create_a_new_deferred_todo_by_passing_attributes
     user = users(:other_user)
     todo = user.todos.build(:show_from => next_week, :context_id => 1, :description => 'foo')
     assert todo.save, "should have saved successfully" + todo.errors.to_xml
-    assert_equal :deferred, todo.aasm_current_state
+    assert_equal :deferred, todo.aasm.current_state
   end
 
   def test_toggle_completion
     t = @not_completed1
-    assert_equal :active, t.aasm_current_state
+    assert_equal :active, t.aasm.current_state
     t.toggle_completion!
-    assert_equal :completed, t.aasm_current_state
+    assert_equal :completed, t.aasm.current_state
     t.toggle_completion!
-    assert_equal :active, t.aasm_current_state
+    assert_equal :active, t.aasm.current_state
   end
   
   def test_toggle_completion_with_show_from_in_future
     t = @not_completed1
     t.show_from= 1.week.from_now
     t.save!
-    assert_equal :deferred, t.aasm_current_state
+    assert_equal :deferred, t.aasm.current_state
     t.toggle_completion!
-    assert_equal :completed, t.aasm_current_state
+    assert_equal :completed, t.aasm.current_state
   end
   
   def test_toggle_completion_with_show_from_in_past
     t = @not_completed1
     t.update_attribute(:show_from, 1.week.ago)
-    assert_equal :active, t.aasm_current_state
+    assert_equal :active, t.aasm.current_state
     
     assert t.toggle_completion!, "shoud be able to mark active todo complete even if show_from is set in the past"
-    assert_equal :completed, t.aasm_current_state
+    assert_equal :completed, t.aasm.current_state
   end
 
   def test_activate_also_saves
@@ -225,7 +225,7 @@ class TodoTest < ActiveSupport::TestCase
     t.context_id = 1
     t.save!
     t.reload
-    assert_equal :active, t.aasm_current_state
+    assert_equal :active, t.aasm.current_state
   end
 
   def test_initial_state_is_deferred_when_show_from_in_future
@@ -236,7 +236,7 @@ class TodoTest < ActiveSupport::TestCase
     t.show_from = 1.week.from_now.to_date
     t.save!
     t.reload
-    assert_equal :deferred, t.aasm_current_state
+    assert_equal :deferred, t.aasm.current_state
   end
 
   def test_todo_is_not_starred
