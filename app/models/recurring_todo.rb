@@ -14,16 +14,16 @@ class RecurringTodo < ActiveRecord::Base
 
   include AASM
   aasm_column :state
-  aasm_initial_state :active
+  aasm.initial_state :active
 
-  aasm_state :active, :enter => Proc.new { |t| t.occurences_count = 0 }
-  aasm_state :completed, :enter => Proc.new { |t| t.completed_at = Time.zone.now }, :exit => Proc.new { |t| t.completed_at = nil }
+  aasm.state :active, :enter => Proc.new { |t| t.occurences_count = 0 }
+  aasm.state :completed, :enter => Proc.new { |t| t.completed_at = Time.zone.now }, :exit => Proc.new { |t| t.completed_at = nil }
 
-  aasm_event :complete do
+  aasm.event :complete do
     transitions :to => :completed, :from => [:active]
   end
 
-  aasm_event :activate do
+  aasm.event :activate do
     transitions :to => :active, :from => [:completed]
   end
 

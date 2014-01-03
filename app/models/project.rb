@@ -19,24 +19,24 @@ class Project < ActiveRecord::Base
 
   include AASM
   aasm_column :state
-  aasm_initial_state :active
+  aasm.initial_state :active
 
   # extend NamePartFinder
   # include Tracks::TodoList
 
-  aasm_state :active
-  aasm_state :hidden, :enter => :hide_todos, :exit => :unhide_todos
-  aasm_state :completed, :enter => :set_completed_at_date, :exit => :clear_completed_at_date
+  aasm.state :active
+  aasm.state :hidden, :enter => :hide_todos, :exit => :unhide_todos
+  aasm.state :completed, :enter => :set_completed_at_date, :exit => :clear_completed_at_date
 
-  aasm_event :activate do
+  aasm.event :activate do
     transitions :to => :active,   :from => [:active, :hidden, :completed]
   end
 
-  aasm_event :hide do
+  aasm.event :hide do
     transitions :to => :hidden,   :from => [:active, :completed]
   end
 
-  aasm_event :complete do
+  aasm.event :complete do
     transitions :to => :completed, :from => [:active, :hidden]
   end
 
@@ -104,7 +104,7 @@ class Project < ActiveRecord::Base
   # as a result of acts_as_state_machine calling state=() to update the attribute
   def transition_to(candidate_state)
     case candidate_state.to_sym
-      when aasm_current_state
+      when aasm.current_state
         return
       when :hidden
         hide!

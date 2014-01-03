@@ -48,7 +48,7 @@ class ProjectsControllerTest < ActionController::TestCase
     login_as(:admin_user)
     xhr :post, :update, :id => 1, "project"=>{"name"=>p.name, "description"=>p.description, "state"=>"hidden"}
     todos.each do |t|
-      assert_equal :project_hidden, t.reload().aasm_current_state
+      assert_equal :project_hidden, t.reload().aasm.current_state
     end
     assert p.reload().hidden?
   end
@@ -60,7 +60,7 @@ class ProjectsControllerTest < ActionController::TestCase
     xhr :post, :update, :id => 1, "project"=>{"name"=>p.name, "description"=>p.description, "state"=>"hidden"}
     xhr :post, :update, :id => 1, "project"=>{"name"=>p.name, "description"=>p.description, "state"=>"active"}
     todos.each do |t|
-      assert_equal :active, t.reload().aasm_current_state
+      assert_equal :active, t.reload().aasm.current_state
     end
     assert p.reload().active?
   end

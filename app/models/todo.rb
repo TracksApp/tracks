@@ -57,23 +57,23 @@ class Todo < ActiveRecord::Base
   # state machine
   include AASM
   aasm_column :state
-  aasm_initial_state Proc.new { |t| (t.show_from && t.user && (t.show_from > t.user.date)) ? :deferred : :active}
+  aasm.initial_state Proc.new { |t| (t.show_from && t.user && (t.show_from > t.user.date)) ? :deferred : :active}
 
-  aasm_state :active
-  aasm_state :project_hidden
-  aasm_state :completed, :enter => Proc.new { |t| t.completed_at = Time.zone.now }, :exit => Proc.new { |t| t.completed_at = nil}
-  aasm_state :deferred, :exit => Proc.new { |t| t[:show_from] = nil }
-  aasm_state :pending
+  aasm.state :active
+  aasm.state :project_hidden
+  aasm.state :completed, :enter => Proc.new { |t| t.completed_at = Time.zone.now }, :exit => Proc.new { |t| t.completed_at = nil}
+  aasm.state :deferred, :exit => Proc.new { |t| t[:show_from] = nil }
+  aasm.state :pending
 
-  aasm_event :defer do
+  aasm.event :defer do
     transitions :to => :deferred, :from => [:active]
   end
 
-  aasm_event :complete do
+  aasm.event :complete do
     transitions :to => :completed, :from => [:active, :project_hidden, :deferred, :pending]
   end
 
-  aasm_event :activate do
+  aasm.event :activate do
     transitions :to => :active, :from => [:project_hidden, :deferred]
     transitions :to => :active, :from => [:completed], :guard => :no_uncompleted_predecessors?
     transitions :to => :active, :from => [:pending], :guard => :no_uncompleted_predecessors_or_deferral?
@@ -81,17 +81,17 @@ class Todo < ActiveRecord::Base
     transitions :to => :deferred, :from => [:pending], :guard => :guard_for_transition_from_deferred_to_pending
   end
 
-  aasm_event :hide do
+  aasm.event :hide do
     transitions :to => :project_hidden, :from => [:active, :deferred, :pending]
   end
 
-  aasm_event :unhide do
+  aasm.event :unhide do
     transitions :to => :deferred, :from => [:project_hidden], :guard => Proc.new{|t| !t.show_from.blank? }
     transitions :to => :pending, :from => [:project_hidden], :guard => :uncompleted_predecessors?
     transitions :to => :active, :from => [:project_hidden]
   end
 
-  aasm_event :block do
+  aasm.event :block do
     transitions :to => :pending, :from => [:active, :deferred, :project_hidden]
   end
 
@@ -350,6 +350,7 @@ class Todo < ActiveRecord::Base
     elsif !(value.nil? || value.is_a?(NullProject))
       p = Project.find_by_name(value[:name])
       p = Project.create(value) if p.nil?
+
       self.original_project=(p)
     else
       self.original_project=value
