@@ -240,7 +240,7 @@ Then /^I should (see|not see) empty message for (todos|deferred todos|completed 
   css = "div#tickler-empty-nd"        if state == "deferred todos"
   css = "div#empty-d"                 if state == "completed todos"
   
-  elem = find(css)
+  elem = find(css, :visible=>false)
   elem.should_not be_nil
   elem.send(visible=="see" ? "should" : "should_not", be_visible)
 end
@@ -306,7 +306,7 @@ end
 Then /^I should (see|not see) the default project settings$/ do |visible|
   default_settings = "This project is active with no default context and with no default tags"
 
-  page.should have_css("div.project_settings")
+  page.should have_css("div.project_settings", :visible => false)
   elem = page.find("div.project_settings")
   
   if visible == "see"

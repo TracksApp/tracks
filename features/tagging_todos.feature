@@ -77,7 +77,7 @@ Feature: Tagging todos
     When I submit a new action with description "are my tags prefilled"
     Then the tags of "are my tags prefilled" should be "tests"
     
-  @javascript
+  @javascript @wip
   Scenario: Selecting a project with default tags when editing a todo will prefill the tags field
     Given I have a todo "tag me" in the context "@pc"
     And the default tags for "hacking tracks" are "TagA, TagB"

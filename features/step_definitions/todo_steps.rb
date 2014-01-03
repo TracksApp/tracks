@@ -152,12 +152,12 @@ Then /^I should see "([^"]*)" in the completed section of the mobile site$/ do |
 end
 
 Then /^I should (see|not see) empty message for (completed todos|todos) of home/ do |visible, kind_of_todo|
-  elem = find(kind_of_todo=="todos" ? "div#no_todos_in_view" : "div#empty-d")
+  elem = find( (kind_of_todo=="todos" ? "div#no_todos_in_view" : "div#empty-d"), :visible=>false)
   elem.send(visible=="see" ? "should" : "should_not", be_visible)
 end
 
 Then /^I should (see|not see) the empty tickler message$/ do |see|
-  elem = find("div#tickler-empty-nd")
+  elem = find("div#tickler-empty-nd", :visible => false)
   elem.send(see=="see" ? "should" : "should_not", be_visible)
 end
 
@@ -165,5 +165,5 @@ Then /^I should (see|not see) the notes of "([^"]*)"$/ do |visible, todo_descrip
   todo = @current_user.todos.find_by_description(todo_description)
   todo.should_not be_nil
   
-  page.find("div#notes_todo_#{todo.id}").send(visible=="see" ? "should" : "should_not", be_visible)
+  page.find("div#notes_todo_#{todo.id}", :visible => false).send(visible=="see" ? "should" : "should_not", be_visible)
 end

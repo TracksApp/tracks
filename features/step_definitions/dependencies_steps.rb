@@ -69,7 +69,7 @@ When /^I edit the dependency of "([^"]*)" to remove "([^"]*)" as predecessor$/ d
 
   submit_edit_todo_form(todo)
   wait_for_ajax
-  wait_for_animations_to_end
+  # wait_for_animations_to_end
 end
 
 When /^I edit the dependency of "([^"]*)" to "([^"]*)"$/ do |todo_name, deps|
@@ -99,9 +99,7 @@ Then /^I should see "([^\"]*)" within the dependencies of "([^\"]*)"$/ do |succe
 
   # open successors
   within "div#line_todo_#{todo.id}" do
-    if !find(:css, "div#successors_todo_#{todo.id}").visible?
-      find(:css, "a.show_successors").click
-    end
+    find(:css, "a.show_successors", :visible => false).click
   end
 
   step "I should see \"#{successor_description}\" within \"div#line_todo_#{todo.id}\""

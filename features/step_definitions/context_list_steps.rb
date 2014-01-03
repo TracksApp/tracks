@@ -94,7 +94,7 @@ end
 Then /^I should (see|not see) empty message for (active|hidden) contexts$/ do |visible, state|
   box = (state=='active') ? "div#active-contexts-empty-nd" : "div#hidden-contexts-empty-nd"
 
-  elem = page.find(box)
+  elem = page.find(box, :visible => false)
   elem.should_not be_nil
 
   elem.send(visible=="see" ? "should" : "should_not", be_visible)

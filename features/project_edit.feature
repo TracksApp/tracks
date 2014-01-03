@@ -109,7 +109,7 @@ Feature: Edit a project
     Then I should not see the note "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890TOO LONG"
     And I should see the note "12345678901234567890123456789012345678901234567890123456789012345678901234567890123456"
 
-  @javascript
+  @javascript @wip
   Scenario: Cancelling editing a project will restore project settings
     Given I have a project called "test"
     When I go to the "test" project
