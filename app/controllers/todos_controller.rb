@@ -498,6 +498,8 @@ class TodosController < ApplicationController
     determine_deferred_tag_count(params['_tag_name']) if source_view_is(:tag)
 
     @todo.touch_predecessors if @original_item_description != @todo.description
+    current_user.contexts.find(@original_item_context_id).touch if @context_changed
+    current_user.projects.find(@original_item_project_id).touch if @project_changed
 
     respond_to do |format|
       format.js {
