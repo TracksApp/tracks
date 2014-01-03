@@ -114,7 +114,7 @@ GEM
     mocha (0.14.0)
       metaclass (~> 0.0.1)
     multi_json (1.8.2)
-    multi_test (0.0.2)
+    multi_test (0.0.3)
     mysql2 (0.3.14)
     nokogiri (1.6.1)
       mini_portile (~> 0.5.0)
