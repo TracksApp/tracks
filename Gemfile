@@ -10,7 +10,7 @@ gem 'json'
 gem 'actionpack-xml_parser', git: 'https://github.com/rails/actionpack-xml_parser'
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-gem 'therubyracer'
+gem 'therubyracer', :platform => :ruby
 
 gem 'uglifier', '>=1.3.0'
 
@@ -34,7 +34,7 @@ gem "cache_digests"
 gem "rack-mini-profiler"
 
 # To use ActiveModel has_secure_password
-gem 'bcrypt-ruby', '~> 3.0.0'
+gem 'bcrypt-ruby', '~> 3.1.0'
 
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 # gem 'turbolinks'
