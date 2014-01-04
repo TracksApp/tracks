@@ -22,7 +22,11 @@ gem 'jquery-rails'
 gem "sqlite3"
 gem "mysql2"
 
-gem "RedCloth"
+if RUBY_PLATFORM =~ /mswin|mingw/
+  gem "RedCloth", path: './vendor/RedCloth-4.2.9-x86-mingw32'
+else
+  gem "RedCloth"
+end
 gem "sanitize"
 gem "will_paginate"
 gem "acts_as_list"
