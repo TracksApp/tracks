@@ -1187,9 +1187,12 @@ end
     end
   end
 
+  def update_date_for_update(key)
+    params['todo'][key] = params["todo"].has_key?(key) ? parse_date_for_update(params["todo"][key], t("todos.error.invalid_#{key}_date")) : ""
+  end    
+
   def update_due_and_show_from_dates
-    params['todo']['due']       = params["todo"].has_key?("due") ?       parse_date_for_update(params["todo"]["due"],       t('todos.error.invalid_due_date')) : ""
-    params['todo']['show_from'] = params['todo'].has_key?('show_from') ? parse_date_for_update(params['todo']['show_from'], t('todos.error.invalid_show_from_date') ) : ""
+    %w{ due show_from }.each {|date| update_date_for_update(date) }
   end
 
   def update_completed_state
