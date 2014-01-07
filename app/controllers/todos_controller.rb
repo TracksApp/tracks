@@ -740,34 +740,29 @@ class TodosController < ApplicationController
     end
   end
 
+  def get_not_completed_for_predecessor(relation, todo_id=nil)
+    items = relation.todos.not_completed.
+      where('(LOWER(todos.description) LIKE ?)', "%#{params[:term].downcase}%")
+    items = items.where("AND NOT(todos.id=?)", todo_id) unless todo_id.nil?
+
+    items.
+      includes(:context, :project).
+      reorder('description ASC').
+      limit(10) 
+  end
+
   def auto_complete_for_predecessor
     unless params['id'].nil?
       get_todo_from_params
       # Begin matching todos in current project, excluding @todo itself
-      @items = @todo.project.todos.not_completed.
-        where('(LOWER(todos.description) LIKE ?) AND NOT(todos.id=?)', "%#{params[:term].downcase}%", @todo.id).
-        includes(:context, :project).
-        reorder('description ASC').
-        limit(10) unless @todo.project.nil?
+      @items = get_not_completed_for_predecessor(@todo.project, @todo.id) unless @todo.project.nil?
       # Then look in the current context, excluding @todo itself
-      @items = @todo.context.todos.not_completed.
-        where('(LOWER(todos.description) LIKE ?) AND NOT(todos.id=?)', "%#{params[:term].downcase}%", @todo.id).
-        includes(:context, :project).
-        reorder('description ASC').
-        limit(10) unless !@items.empty? || @todo.context.nil?
+      @items = get_not_completed_for_predecessor(@todo.context, @todo.id) unless !@items.empty? || @todo.context.nil?
       # Match todos in other projects, excluding @todo itself
-      @items = current_user.todos.not_completed.
-        where('(LOWER(todos.description) LIKE ?) AND NOT(todos.id=?)', "%#{params[:term].downcase}%", @todo.id).
-        includes(:context, :project).
-        reorder('description ASC').
-        limit(10) unless !@items.empty?
+      @items = get_not_completed_for_predecessor(current_user, @todo.id) unless !@items.empty?
     else
       # New todo - TODO: Filter on current project in project view
-      @items = current_user.todos.not_completed.
-        where('(LOWER(todos.description) LIKE ?)', "%#{params[:term].downcase}%").
-        includes(:context, :project).
-        reorder('description ASC').
-        limit(10)
+      @items = get_not_complete_for_predecessor(current_user)
     end
     render :inline => format_dependencies_as_json_for_auto_complete(@items)
   end
@@ -1013,27 +1008,23 @@ end
     end
   end
 
+  def find_completed(relation, id, include_hidden)
+    todos = relation.find(id).todos.completed
+    todos = todos.not_hidden if !include_hidden
+    return todos
+  end
+
   def determine_completed_count
+    todos=nil
+
     source_view do |from|
-      from.todo do
-        @completed_count = current_user.todos.not_hidden.completed.count
-      end
-      from.context do
-        todos = current_user.contexts.find(@todo.context_id).todos.completed
-        todos = todos.not_hidden if !@todo.context.hidden?
-        @completed_count = todos.count
-      end
-      from.project do
-        unless @todo.project_id == nil
-          todos = current_user.projects.find(@todo.project_id).todos.completed
-          todos = todos.not_hidden if !@todo.project.hidden?
-          @completed_count = todos.count
-        end
-      end
-      from.tag do
-        @completed_count = current_user.todos.with_tag(@tag.id).completed.count
-      end
+      from.todo    { todos = current_user.todos.not_hidden.completed }
+      from.context { todos = find_completed(current_user.contexts, @todo.context_id, @todo.context.hidden?) }
+      from.project { todos = find_completed(current_user.projects, @todo.project_id, @todo.project.hidden?) unless @todo.project_id.nil? }
+      from.tag     { todos = current_user.todos.with_tag(@tag.id).completed }
     end
+
+    @completed_count = todos.nil? ? 0 : todos.count
   end
 
   def determine_deferred_tag_count(tag_name)
@@ -1188,23 +1179,17 @@ end
     end
   end
 
+  def parse_date_for_update(date, error_msg)
+    begin
+      parse_date_per_user_prefs(date)
+    rescue
+      @todo.errors[:base] << error_msg
+    end
+  end
+
   def update_due_and_show_from_dates
-    if params["todo"].has_key?("due")
-      begin
-        params["todo"]["due"] = parse_date_per_user_prefs(params["todo"]["due"])
-      rescue
-        @todo.errors[:base] << "Invalid due date"
-      end
-    else
-      params["todo"]["due"] = ""
-    end
-    if params['todo']['show_from']
-      begin
-        params['todo']['show_from'] = parse_date_per_user_prefs(params['todo']['show_from'])
-      rescue
-        @todo.errors[:base] << "Invalid show from date"
-      end
-    end
+    params['todo']['due']       = params["todo"].has_key?("due") ?       parse_date_for_update(params["todo"]["due"],       t('todos.error.invalid_due_date')) : ""
+    params['todo']['show_from'] = params['todo'].has_key?('show_from') ? parse_date_for_update(params['todo']['show_from'], t('todos.error.invalid_show_from_date') ) : ""
   end
 
   def update_completed_state
@@ -1276,18 +1261,18 @@ end
     completed_todos.completed_after(start_of_this_day).includes(includes[:include])
   end
 
+  def get_done_in_period(before, after, includes = {:include => Todo::DEFAULT_INCLUDES})
+    completed_todos.completed_before(before).completed_after(after).includes(includes[:include])
+  end
+
   # all completed todos [begin_of_week, start_of_today]
   def get_done_rest_of_week(completed_todos, includes = {:include => Todo::DEFAULT_INCLUDES})
-    start_of_this_week = Time.zone.now.beginning_of_week
-    start_of_this_day = Time.zone.now.beginning_of_day
-    completed_todos.completed_before(start_of_this_day).completed_after(start_of_this_week).includes(includes[:include])
+    get_done_in_period(Time.zone.now.beginning_of_day, Time.zone.now.beginning_of_week)
   end
 
   # all completed todos [begin_of_month, begin_of_week]
   def get_done_rest_of_month(completed_todos, includes = {:include => Todo::DEFAULT_INCLUDES})
-    start_of_this_month = Time.zone.now.beginning_of_month
-    start_of_this_week = Time.zone.now.beginning_of_week
-    completed_todos.completed_before(start_of_this_week).completed_after(start_of_this_month).includes(includes[:include])
+    get_done_in_period(Time.zone.now.beginning_of_week, Time.zone.now.beginning_of_month)
   end
 
   def get_not_done_todos

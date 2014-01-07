@@ -464,6 +464,9 @@ en:
       project_completed: Completed actions in this project
       context_completed: Completed actions in this context
       tag_hidden: "Hidden actions tagged with '%{param}'"
+    error:
+      invalid_due_date: "Invalid due date"
+      invalid_show_from_date: "Invalid show from date"
     completed_today: Completed today
     completed_rest_of_week: Completed in the rest of this week
     completed_rest_of_month: Completed in the rest of this month
