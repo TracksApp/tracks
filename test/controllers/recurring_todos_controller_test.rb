@@ -84,7 +84,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
     xhr :post, :toggle_check, :id=>1, :_source_view=>""
     
     recurring_todo_1 = RecurringTodo.find(1) # reload seems to not work
-    assert recurring_todo_1.active?, "recurring todo should be active but is #{recurring_todo_1.aasm_current_state}"
+    assert recurring_todo_1.active?, "recurring todo should be active but is #{recurring_todo_1.aasm.current_state}"
 
     # by making  active, a new todo should be created from the pattern
     assert_equal todo_count+1, Todo.count

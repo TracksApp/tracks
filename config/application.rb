@@ -68,5 +68,8 @@ module Tracksapp
     config.action_view.sanitized_allowed_protocols = 'onenote', 'message'
     
     config.middleware.insert_after ActionDispatch::ParamsParser, ActionDispatch::XmlParamsParser
+
+    # if a locale is invalid, the Rails app will raise an error
+    config.i18n.enforce_available_locales = true
   end
 end

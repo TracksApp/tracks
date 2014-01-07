@@ -3,7 +3,7 @@ class FixIncorrectlyHiddenTodos < ActiveRecord::Migration
     hidden_todos_without_project =
       Todo.where(:state => 'project_hidden', :project_id => nil)
     
-    active_projects = Project.where(:state => 'active')
+    active_projects = Project.where(:state => 'active').select("id")
     hidden_todos_in_active_projects =
       Todo.where(:state => 'project_hidden').where("project_id IN (?)", active_projects)
     

@@ -48,36 +48,36 @@ class ProjectTest < ActiveSupport::TestCase
   # state machine
   
   def test_project_initial_state_is_active
-    assert_equal :active, @timemachine.aasm_current_state
+    assert_equal :active, @timemachine.aasm.current_state
     assert @timemachine.active?
   end
   
   def test_hide_project
     @timemachine.hide!
-    assert_equal :hidden, @timemachine.aasm_current_state
+    assert_equal :hidden, @timemachine.aasm.current_state
     assert @timemachine.hidden?
   end
   
   def test_activate_project
     @timemachine.activate!
-    assert_equal :active, @timemachine.aasm_current_state
+    assert_equal :active, @timemachine.aasm.current_state
     assert @timemachine.active?
   end
 
   def test_transition_to_another_state
-    assert_equal :active, @timemachine.aasm_current_state
+    assert_equal :active, @timemachine.aasm.current_state
     @timemachine.transition_to(:hidden)
-    assert_equal :hidden, @timemachine.aasm_current_state
+    assert_equal :hidden, @timemachine.aasm.current_state
     @timemachine.transition_to(:completed)
-    assert_equal :completed, @timemachine.aasm_current_state
+    assert_equal :completed, @timemachine.aasm.current_state
     @timemachine.transition_to(:active)
-    assert_equal :active, @timemachine.aasm_current_state
+    assert_equal :active, @timemachine.aasm.current_state
   end
 
   def test_transition_to_same_state
-    assert_equal :active, @timemachine.aasm_current_state
+    assert_equal :active, @timemachine.aasm.current_state
     @timemachine.transition_to(:active)
-    assert_equal :active, @timemachine.aasm_current_state
+    assert_equal :active, @timemachine.aasm.current_state
   end
 
   # other tests
@@ -95,7 +95,7 @@ class ProjectTest < ActiveSupport::TestCase
   def test_complete_project
     assert_nil @timemachine.completed_at
     @timemachine.complete!
-    assert_equal :completed, @timemachine.aasm_current_state
+    assert_equal :completed, @timemachine.aasm.current_state
     assert @timemachine.completed?
     assert_not_nil @timemachine.completed_at, "completed_at not expected to be nil"
     assert_in_delta Time.now, @timemachine.completed_at, 1
@@ -150,7 +150,7 @@ class ProjectTest < ActiveSupport::TestCase
     first_todo = @moremoney.todos[0]
     first_todo.show_from = Time.zone.now + 1.week
     first_todo.save!
-    assert_equal :deferred, @moremoney.todos[0].aasm_current_state
+    assert_equal :deferred, @moremoney.todos[0].aasm.current_state
     
     assert_equal 1, @moremoney.todos.deferred.count
   end

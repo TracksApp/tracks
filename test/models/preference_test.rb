@@ -4,7 +4,6 @@ class PreferenceTest < ActiveSupport::TestCase
   fixtures :users, :preferences
 
   def setup
-    assert_equal "test", ENV['RAILS_ENV']
     assert_equal "change-me", Tracks::Config.salt
     @admin_user = User.find(1)
     @other_user = User.find(2)

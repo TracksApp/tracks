@@ -4,36 +4,42 @@
 <h2><Actions><%= t('common.actions') %></h2>
 
 <form method="get" action="<%= edit_todo_path(@todo, :format => :m)%>">
-<button><%=t('todos.edit_action')%></button>
-<input type="hidden" name="_method" value="put" />
+	<button><%=t('todos.edit_action')%></button>
+	<input type="hidden" name="_method" value="put" />
 </form>
 
 <form method="post" action="<%=toggle_star_todo_path(@todo, :format=>:m)%>">
-<button><%=t('todos.star_action')%></button>
-<input type="hidden" name="_method" value="put" />
+	<button><%=t('todos.star_action')%></button>
+	<input type="hidden" name="_method" value="put" />
+	<%= token_tag %>
 </form>
 
 <form method="post" action="<%=toggle_check_todo_path(@todo, :format=>:m)%>">
-<button><%= t('todos.mark_complete')%></button>
-<input type="hidden" name="_method" value="put" />
+	<button><%= t('todos.mark_complete')%></button>
+	<input type="hidden" name="_method" value="put" />
+	<%= token_tag %>
 </form>
 
 <form method="post" action="<%=defer_todo_path(@todo, :format=>:m, :days => 1)%>">
-<button><%=t('todos.defer_x_days', :count => 1)%></button>
-<input type="hidden" name="_method" value="put" />
+	<button><%=t('todos.defer_x_days', :count => 1)%></button>
+	<input type="hidden" name="_method" value="put" />
+	<%= token_tag %>
 </form>
 
 <form method="post" action="<%=defer_todo_path(@todo, :format=>:m, :days => 2)%>">
-<button><%=t('todos.defer_x_days', :count => 2)%></button>
-<input type="hidden" name="_method" value="put" />
+	<button><%=t('todos.defer_x_days', :count => 2)%></button>
+	<input type="hidden" name="_method" value="put" />
+	<%= token_tag %>
 </form>
 
 <form method="post" action="<%=defer_todo_path(@todo, :format=>:m, :days => 3)%>">
-<button><%=t('todos.defer_x_days', :count => 3)%></button>
-<input type="hidden" name="_method" value="put" />
+	<button><%=t('todos.defer_x_days', :count => 3)%></button>
+	<input type="hidden" name="_method" value="put" />
+	<%= token_tag %>
 </form>
 
 <form method="post" action="<%=defer_todo_path(@todo, :format=>:m, :days => 7)%>">
-<button><%=t('todos.defer_x_days', :count => 7)%></button>
-<input type="hidden" name="_method" value="put" />
+	<button><%=t('todos.defer_x_days', :count => 7)%></button>
+	<input type="hidden" name="_method" value="put" />
+	<%= token_tag %>
 </form>

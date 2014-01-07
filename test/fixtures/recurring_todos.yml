@@ -20,7 +20,7 @@ def two_weeks_hence
 end
 
 def way_back
-  Time.zone.local(2008,1,1)
+  Time.zone.local(2008,1,1).to_s(:db)
 end
 
 %>
