@@ -52,7 +52,7 @@ Feature: Edit a next action from every page
       | context  | container for context "@home"  |
       | project  | container for project "do it!" |
 
-  @javascript @wip
+  @javascript
   Scenario Outline: Changing container of the todo in that container will hide it
   # this script fails on https://code.google.com/p/selenium/issues/detail?id=3075 for selenium-webdriver > 2.14.
   # and selenium-webdriver < 2.20 fails on firefox 11 :-( So @wip for now. This may work with webkit though
@@ -247,7 +247,7 @@ Feature: Edit a next action from every page
     When I go to the tickler page
     Then I should see the todo "start later"
 
-  @javascript @wip
+  @javascript
   Scenario: I can defer a todo
   # this script fails on https://code.google.com/p/selenium/issues/detail?id=3075 for selenium-webdriver > 2.14.
   # and selenium-webdriver < 2.20 fails on firefox 11 :-( So @wip for now. This will work on webkit though
@@ -258,7 +258,7 @@ Feature: Edit a next action from every page
     When I go to the tickler page
     Then I should see "start later"
 
-  @javascript @wip
+  @javascript
   Scenario: I can make a project from a todo
   # this script fails on https://code.google.com/p/selenium/issues/detail?id=3075 for selenium-webdriver > 2.14.
   # and selenium-webdriver < 2.20 fails on firefox 11 :-( So @wip for now. This will work on webkit though
