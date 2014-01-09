@@ -523,7 +523,7 @@ module TodosHelper
       ) 
     end
 
-    return false if source_view_is_one_of(:calendar, :done)
+    return false if source_view_is_one_of(:calendar, :done, :all_done)
 
     return @remaining_in_context == 0 
   end
@@ -692,6 +692,7 @@ module TodosHelper
       }
       page.todo     { container_id = context_container_empty_id(@original_item) if @remaining_in_context == 0 }
       page.done     { container_id = "completed_#{@original_completed_period}_container-empty-d" if @remaining_in_context == 0 }
+      page.all_done { container_id = "all-done-empty-nd" if @remaining_in_context == 0 }
     end
     return container_id.blank? ? "" : "$(\"##{container_id}\").slideDown(100);".html_safe
   end

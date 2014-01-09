@@ -10,9 +10,11 @@
   <div class="container">
     <div class="paginate_header"><%= will_paginate @done, paginate_options %></div>
     <h2><%= t('todos.all_completed') %></h2>
-    <% if @done.empty? -%>
+    <div id="all-done-empty-nd" style="<%= @done.empty? ? 'display:block' : 'display:none'%>">
       <div class="message"><p><%= t('todos.no_completed_actions') %></p></div>
-    <% else -%>
+    </div>
+
+    <% if !@done.empty? -%>
       <%= render :partial => "todos/todo", :collection => @done, :locals => { :parent_container_type => "completed", :suppress_context => false, :suppress_project => false } %>
     <% end -%>
   </div>

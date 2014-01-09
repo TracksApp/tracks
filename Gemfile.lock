@@ -55,7 +55,7 @@ GEM
     cache_digests (0.3.1)
       actionpack (>= 3.2)
       thread_safe
-    capybara (2.2.0)
+    capybara (2.2.1)
       mime-types (>= 1.16)
       nokogiri (>= 1.3.3)
       rack (>= 1.0.0)
@@ -122,7 +122,7 @@ GEM
     protected_attributes (1.0.5)
       activemodel (>= 4.0.1, < 5.0)
     rack (1.5.2)
-    rack-mini-profiler (0.1.31)
+    rack-mini-profiler (0.9.0)
       rack (>= 1.1.3)
     rack-test (0.6.2)
       rack (>= 1.0)

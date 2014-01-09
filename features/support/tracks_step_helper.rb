@@ -115,10 +115,12 @@ module TracksStepHelper
   end
 
   def open_submenu_for(todo)
+    wait_for_animations_to_end
+
     submenu_arrow = "div#line_todo_#{todo.id} img.todo-submenu"
     page.should have_css(submenu_arrow, :visible=>true)
-    page.find(submenu_arrow, :match => :first).click
-    sleep 0.1
+    arrow = page.find(submenu_arrow, :match => :first)
+    arrow.click
     
     submenu_css = "div#line_todo_#{todo.id} ul#ultodo_#{todo.id}"
     submenu = page.find(submenu_css)

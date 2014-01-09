@@ -54,8 +54,6 @@ Feature: Edit a next action from every page
 
   @javascript
   Scenario Outline: Changing container of the todo in that container will hide it
-  # this script fails on https://code.google.com/p/selenium/issues/detail?id=3075 for selenium-webdriver > 2.14.
-  # and selenium-webdriver < 2.20 fails on firefox 11 :-( So @wip for now. This may work with webkit though
     Given I have a todo "delete me" in the context "@home" in the project "do it"
     And I have a project "go for it"
     And I have selected the view for group by <grouping>
@@ -249,8 +247,6 @@ Feature: Edit a next action from every page
 
   @javascript
   Scenario: I can defer a todo
-  # this script fails on https://code.google.com/p/selenium/issues/detail?id=3075 for selenium-webdriver > 2.14.
-  # and selenium-webdriver < 2.20 fails on firefox 11 :-( So @wip for now. This will work on webkit though
     When I go to the home page
     And I submit a new action with description "start later" in the context "@pc"
     And I defer "start later" for 1 day
@@ -260,8 +256,6 @@ Feature: Edit a next action from every page
 
   @javascript
   Scenario: I can make a project from a todo
-  # this script fails on https://code.google.com/p/selenium/issues/detail?id=3075 for selenium-webdriver > 2.14.
-  # and selenium-webdriver < 2.20 fails on firefox 11 :-( So @wip for now. This will work on webkit though
     When I go to the home page
     And I submit a new action with description "buy mediacenter" in the context "@pc"
     And I make a project of "buy mediacenter"

@@ -1,8 +1,8 @@
 class DoneTodos
 
 
-  def self.done_todos_for_container(user)
-    completed_todos = user.todos.completed
+  def self.done_todos_for_container(todos)
+    completed_todos = todos.completed
     return done_today(completed_todos), done_rest_of_week(completed_todos), done_rest_of_month(completed_todos)
   end
 
@@ -29,8 +29,8 @@ class DoneTodos
     return nil
   end
 
-  def self.remaining_in_container(user, period)
-    count = self.send("done_#{period}", user.todos.completed, {}).count
+  def self.remaining_in_container(todos, period)
+    count = self.send("done_#{period}", todos.completed, {}).count
     return nil if period.nil?
     return count
   end

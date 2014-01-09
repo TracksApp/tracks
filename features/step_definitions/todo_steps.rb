@@ -15,8 +15,6 @@ When /^I delete the action "([^"]*)"$/ do |action_description|
   get_confirm_text.should == "Are you sure that you want to delete the action '#{todo.description}'?"
   
   wait_for_ajax
-  # commented out: the notice is gone if you want to check for it
-  # wait_for_animations_to_end
 end
 
 When /^I delete the todo "([^"]*)"$/ do |action_description|
