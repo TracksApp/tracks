@@ -1264,18 +1264,18 @@ end
     completed_todos.completed_after(start_of_this_day).includes(includes[:include])
   end
 
-  def get_done_in_period(before, after, includes = {:include => Todo::DEFAULT_INCLUDES})
+  def get_done_in_period(completed_todos, before, after, includes = {:include => Todo::DEFAULT_INCLUDES})
     completed_todos.completed_before(before).completed_after(after).includes(includes[:include])
   end
 
   # all completed todos [begin_of_week, start_of_today]
   def get_done_rest_of_week(completed_todos, includes = {:include => Todo::DEFAULT_INCLUDES})
-    get_done_in_period(Time.zone.now.beginning_of_day, Time.zone.now.beginning_of_week)
+    get_done_in_period(completed_todos, Time.zone.now.beginning_of_day, Time.zone.now.beginning_of_week)
   end
 
   # all completed todos [begin_of_month, begin_of_week]
   def get_done_rest_of_month(completed_todos, includes = {:include => Todo::DEFAULT_INCLUDES})
-    get_done_in_period(Time.zone.now.beginning_of_week, Time.zone.now.beginning_of_month)
+    get_done_in_period(completed_todos, Time.zone.now.beginning_of_week, Time.zone.now.beginning_of_month)
   end
 
   def get_not_done_todos
