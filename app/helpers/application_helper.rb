@@ -245,7 +245,7 @@ module ApplicationHelper
     when "projects"
       send("#{type}_todos_project_path", @project)
     when "todos"
-      if source_view_is(:tag)
+      if @tag_name
         send("#{type}_tag_path",@tag_name)
       else
         send("#{type}_todos_path")

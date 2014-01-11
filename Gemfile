@@ -31,7 +31,6 @@ gem "htmlentities"
 gem "swf_fu"
 gem "rails_autolink"
 gem "cache_digests"
-gem "rack-mini-profiler"
 
 # To use ActiveModel has_secure_password
 gem 'bcrypt-ruby', '~> 3.0.0'
@@ -46,6 +45,7 @@ group :development do
   gem "yard"
   gem "tolk"
   gem "bullet"
+  gem "rack-mini-profiler"
 end
 
 group :test do

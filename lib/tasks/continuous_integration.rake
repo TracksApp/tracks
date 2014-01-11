@@ -10,7 +10,6 @@ task :ci do |t|
   SimpleCov.start 'rails'
 
   [:environment, 'db:migrate', 'test:all', 'cucumber'].each do |t|
-    print "running '#{t}'\n"
     Rake::Task[t].invoke
   end
 end
