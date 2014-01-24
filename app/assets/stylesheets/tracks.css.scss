@@ -233,6 +233,10 @@ a.show_successors:hover, a.link_to_successors:hover {background-image: image-url
     text-align: left;
 }
 
+.recurring_todos .ui-front {
+    z-index:502;
+}
+
 /* Navigation links at the top */
 
 #navcontainer {
