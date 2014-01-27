@@ -193,58 +193,6 @@ class RecurringTodosController < ApplicationController
     end
   end
 
-  class RecurringTodoCreateParamsHelper
-
-    def initialize(params, recurring_todo_params)
-      @params = params['request'] || params
-      @attributes = recurring_todo_params
-
-      # make sure all selectors (recurring_period, recurrence_selector,
-      # daily_selector, monthly_selector and yearly_selector) are first in hash
-      # so that they are processed first by the model
-      @selector_attributes = {
-        'recurring_period' => @attributes['recurring_period'],
-        'daily_selector' => @attributes['daily_selector'],
-        'monthly_selector' => @attributes['monthly_selector'],
-        'yearly_selector' => @attributes['yearly_selector']
-      }
-    end
-
-    def attributes
-      @attributes
-    end
-
-    def selector_attributes
-      return @selector_attributes
-    end
-
-    def project_name
-      @params['project_name'].strip unless @params['project_name'].nil?
-    end
-
-    def context_name
-      @params['context_name'].strip unless @params['context_name'].nil?
-    end
-
-    def tag_list
-      @params['tag_list']
-    end
-
-    def project_specified_by_name?
-      return false if @attributes['project_id'].present?
-      return false if project_name.blank?
-      return false if project_name == 'None'
-      true
-    end
-
-    def context_specified_by_name?
-      return false if @attributes['context_id'].present?
-      return false if context_name.blank?
-      true
-    end
-
-  end
-
   private
 
   def recurring_todo_params

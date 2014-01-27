@@ -53,29 +53,47 @@ module RecurringTodos
     end
 
     def parse_project
-      if project_specified_by_name?
-        @project = @user.projects.where(:name => project_name).first
-        unless @project
-          @project = @user.projects.build(:name => project_name)
-          @new_project_created = true
-        end
-      else
-        @project = @attributes['project_id'].present? ? @user.projects.find(@attributes['project_id']) : nil
-      end
-      @attributes[:project] = @project
+      @project, @new_project_created = parse(:project, @user.projects, project_name)
     end
 
     def parse_context
-      if context_specified_by_name?
-        @context = @user.contexts.where(:name => context_name).first
-        unless @context
-          @context = @user.contexts.build(:name => context_name)
-          @new_context_created = true
-        end
+      @context, @new_context_created = parse(:context, @user.contexts, context_name)
+    end
+
+    def parse(object_type, relation, name)
+      object = nil
+      new_object_created = false
+
+      if specified_by_name?(object_type)
+        # find or create context or project by given name
+        object, new_object_created = find_or_create_by_name(relation, name)
       else
-        @context = @attributes['context_id'].present? ? @user.contexts.find(@attributes['context_id']) : nil
+        # find context or project by its id
+        object = attribute_with_id_of(object_type).present? ? relation.find(attribute_with_id_of(object_type)) : nil
       end
-      @attributes[:context] = @context
+      @attributes[object_type] = object
+      return object, new_object_created
+    end
+
+    def attribute_with_id_of(object_type)
+      map = { project: 'project_id', context: 'context_id' }
+      @attributes[map[object_type]]
+    end
+
+    def find_or_create_by_name(relation, name)
+      new_object_created = false
+
+      object = relation.where(:name => name).first
+      unless object
+        object = relation.build(:name => name)
+        new_object_created = true
+      end
+      
+      return object, new_object_created
+    end      
+
+    def specified_by_name?(object_type)
+      self.send("#{object_type}_specified_by_name?")
     end
 
     def project_specified_by_name?
@@ -92,11 +110,11 @@ module RecurringTodos
     end
 
     def project_name
-      @attributes['project_name'].strip unless @attributes['project_name'].nil?
+      @attributes['project_name'].try(:strip)
     end
 
     def context_name
-      @attributes['context_name'].strip unless @attributes['context_name'].nil?
+      @attributes['context_name'].try(:strip)
     end
 
   end
