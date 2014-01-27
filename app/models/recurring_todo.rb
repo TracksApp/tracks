@@ -107,7 +107,7 @@ class RecurringTodo < ActiveRecord::Base
         errors[:base] << "Please fill in the number of days to show the todo before the due date" if show_from_delta.blank?
       end
     else
-      raise Exception.new, "unexpected value of recurrence target selector '#{recurrence_target}'"
+      raise Exception.new, "unexpected value of recurrence target selector '#{target}'"
     end
   end
 

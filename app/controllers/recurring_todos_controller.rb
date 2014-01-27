@@ -106,33 +106,9 @@ class RecurringTodosController < ApplicationController
   end
 
   def create
-    p = RecurringTodoCreateParamsHelper.new(params, recurring_todo_params)
-    p.attributes['end_date']=parse_date_per_user_prefs(p.attributes['end_date'])
-    p.attributes['start_from']=parse_date_per_user_prefs(p.attributes['start_from'])
-
-    # make sure we set :recurring_period first, since other setters depend on it being set
-    # TODO: move logic into model
-    @recurring_todo = current_user.recurring_todos.build(:recurring_period => params[:recurring_period])
-    @recurring_todo.assign_attributes(p.selector_attributes)
-    @recurring_todo.update_attributes(p.attributes)
-
-    if p.project_specified_by_name?
-      project = current_user.projects.where(:name => p.project_name).first_or_create
-      @new_project_created = project.new_record_before_save?
-      @recurring_todo.project_id = project.id
-    end
-
-    if p.context_specified_by_name?
-      context = current_user.contexts.where(:name => p.context_name).first_or_create
-      @new_context_created = context.new_record_before_save?
-      @recurring_todo.context_id = context.id
-    end
-
-    @saved = @recurring_todo.save
-    if @saved && p.tag_list.present?
-      @recurring_todo.tag_with(p.tag_list)
-      @recurring_todo.tags.reload
-    end
+    builder = RecurringTodos::RecurringTodosBuilder.new(current_user, all_recurring_todo_params)
+    @saved = builder.save
+    @recurring_todo = builder.saved_recurring_todo
 
     if @saved
       @status_message = t('todos.recurring_action_saved')
@@ -278,7 +254,7 @@ class RecurringTodosController < ApplicationController
       :ends_on, :end_date, :number_of_occurences, :occurences_count, :target, 
       :show_from_delta, :recurring_period, :recurrence_selector, :every_other1, 
       :every_other2, :every_other3, :every_day, :only_work_days, :every_count, 
-      :weekday, :show_always,
+      :weekday, :show_always, :context_name, :project_name, :tag_list,
       # form attributes
       :recurring_period, :daily_selector, :monthly_selector, :yearly_selector, 
       :recurring_target, :daily_every_x_days, :monthly_day_of_week, 
@@ -291,6 +267,14 @@ class RecurringTodosController < ApplicationController
       :weekly_return_monday, :weekly_return_tuesday, :weekly_return_wednesday, 
       :weekly_return_thursday, :weekly_return_friday, :weekly_return_saturday, :weekly_return_sunday
       )
+  end
+
+  def all_recurring_todo_params    
+    # move context_name, project_name and tag_list into :recurring_todo hash for easier processing
+    params[:recurring_todo][:context_name] = params[:context_name] unless params[:context_name].blank?
+    params[:recurring_todo][:project_name] = params[:project_name] unless params[:project_name].blank?
+    params[:recurring_todo][:tag_list] =     params[:tag_list]     unless params[:tag_list].blank?
+    recurring_todo_params
   end
 
   def init
