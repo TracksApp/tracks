@@ -641,7 +641,8 @@ class TodosControllerTest < ActionController::TestCase
         "due(1i)"=>"2007", "due(2i)"=>"1", "due(3i)"=>"2",
         "show_from(1i)"=>"", "show_from(2i)"=>"", "show_from(3i)"=>"",
         "project_id"=>"1",
-        "notes"=>"test notes", "description"=>"test_mobile_create_action", "state"=>"0"}}
+        "notes"=>"test notes", "description"=>"test_mobile_create_action"}}
+
     assert_redirected_to '/mobile'
   end
 
@@ -714,41 +715,43 @@ class TodosControllerTest < ActionController::TestCase
   end
 
   def test_toggle_check_on_rec_todo_show_from_today
-    login_as(:admin_user)
+    Timecop.travel(Time.local(2014, 1, 15)) do
+      login_as(:admin_user)
 
-    # link todo_1 and recurring_todo_1
-    recurring_todo_1 = RecurringTodo.find(1)
-    todo_1 = Todo.where(:recurring_todo_id => 1).first
-    today = Time.zone.now.at_midnight - 1.day
+      # link todo_1 and recurring_todo_1
+      recurring_todo_1 = RecurringTodo.find(1)
+      todo_1 = Todo.where(:recurring_todo_id => 1).first
+      today = Time.zone.now.at_midnight - 1.day
 
-    # change recurrence pattern to monthly and set show_from to today
-    recurring_todo_1.target = 'show_from_date'
-    recurring_todo_1.recurring_period = 'monthly'
-    recurring_todo_1.recurrence_selector = 0
-    recurring_todo_1.every_other1 = today.day
-    recurring_todo_1.every_other2 = 1
-    assert recurring_todo_1.save
+      # change recurrence pattern to monthly and set show_from to today
+      recurring_todo_1.target = 'show_from_date'
+      recurring_todo_1.recurring_period = 'monthly'
+      recurring_todo_1.recurrence_selector = 0
+      recurring_todo_1.every_other1 = today.day
+      recurring_todo_1.every_other2 = 1
+      assert recurring_todo_1.save
 
-    # mark todo_1 as complete by toggle_check
-    xhr :post, :toggle_check, :id => todo_1.id, :_source_view => 'todo'
-    todo_1.reload
-    assert todo_1.completed?
+      # mark todo_1 as complete by toggle_check
+      xhr :post, :toggle_check, :id => todo_1.id, :_source_view => 'todo'
+      todo_1.reload
+      assert todo_1.completed?
 
-    # locate the new todo in tickler
-    new_todo = Todo.where(:recurring_todo_id => recurring_todo_1.id, :state => 'deferred').first
-    assert !new_todo.nil?
+      # locate the new todo in tickler
+      new_todo = Todo.where(:recurring_todo_id => recurring_todo_1.id, :state => 'deferred').first
+      assert !new_todo.nil?
 
-    assert_equal "Call Bill Gates every day", new_todo.description
-    # check that the new todo is not the same as todo_1
-    assert_not_equal todo_1.id, new_todo.id
+      assert_equal "Call Bill Gates every day", new_todo.description
+      # check that the new todo is not the same as todo_1
+      assert_not_equal todo_1.id, new_todo.id
 
-    # check that the new_todo is in the tickler to show next month
-    assert !new_todo.show_from.nil?
+      # check that the new_todo is in the tickler to show next month
+      assert !new_todo.show_from.nil?
 
-    # do not use today here. It somehow gets messed up with the timezone calculation.
-    next_month = (Time.zone.now - 1.day + 1.month).at_midnight
+      # do not use today here. It somehow gets messed up with the timezone calculation.
+      next_month = (Time.zone.now - 1.day + 1.month).at_midnight
 
-    assert_equal next_month.utc.to_date.to_s(:db), new_todo.show_from.utc.to_date.to_s(:db)
+      assert_equal next_month.utc.to_date.to_s(:db), new_todo.show_from.utc.to_date.to_s(:db)
+    end
   end
 
   def test_check_for_next_todo
