@@ -19,12 +19,16 @@ module RecurringTodos
       if %w{daily weekly monthly yearly}.include?(selector)
         return eval("RecurringTodos::#{selector.capitalize}RecurringTodosBuilder.new(@user, @attributes)")
       else
-        raise Exception.new("Unknown recurrence selector (#{selector})")
+        raise Exception.new("Unknown recurrence selector in recurring_period (#{selector})")
       end
     end
 
     def build
       @builder.build
+    end
+
+    def update(recurring_todo)
+      @builder.update(recurring_todo)
     end
 
     def save

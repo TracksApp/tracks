@@ -3,7 +3,7 @@ class RecurringTodosController < ApplicationController
   helper :todos, :recurring_todos
 
   append_before_filter :init, :only => [:index, :new, :edit, :create]
-  append_before_filter :get_recurring_todo_from_param, :only => [:destroy, :toggle_check, :toggle_star, :edit, :update]
+  append_before_filter :get_recurring_todo_from_param, :only => [:destroy, :toggle_check, :toggle_star, :edit]
 
   def index
     @page_title = t('todos.recurring_actions_title')
@@ -43,62 +43,15 @@ class RecurringTodosController < ApplicationController
   end
 
   def update
-    # TODO: write tests for updating
-    @recurring_todo.tag_with(params[:edit_recurring_todo_tag_list]) if params[:edit_recurring_todo_tag_list]
+    @recurring_todo = current_user.recurring_todos.find(params[:id])
+
     @original_item_context_id = @recurring_todo.context_id
     @original_item_project_id = @recurring_todo.project_id
 
-    # we needed to rename the recurring_period selector in the edit form because
-    # the form for a new recurring todo and the edit form are on the same page.
-    # Same goes for start_from and end_date
-    params['recurring_todo']['recurring_period']=params['recurring_edit_todo']['recurring_period']
-    params['recurring_todo']['end_date']=parse_date_per_user_prefs(params['recurring_todo_edit_end_date'])
-    params['recurring_todo']['start_from']=parse_date_per_user_prefs(params['recurring_todo_edit_start_from'])
+    updater = RecurringTodos::RecurringTodosBuilder.new(current_user, edit_recurring_todo_params)
 
-    # update project
-    if params['recurring_todo']['project_id'].blank? && !params['project_name'].nil?
-      if params['project_name'] == 'None'
-        project = Project.null_object
-      else
-        project = current_user.projects.where(:name => params['project_name'].strip)
-        unless project
-          project = current_user.projects.build
-          project.name = params['project_name'].strip
-          project.save
-          @new_project_created = true
-        end
-      end
-      params["recurring_todo"]["project_id"] = project.id
-    end
-
-    # update context
-    if params['recurring_todo']['context_id'].blank? && params['context_name'].present?
-      context = current_user.contexts.where(:name => params['context_name'].strip).first
-      unless context
-        context = current_user.contexts.build
-        context.name = params['context_name'].strip
-        context.save
-        @new_context_created = true
-      end
-      params["recurring_todo"]["context_id"] = context.id
-    end
-
-    # make sure that we set weekly_return_xxx to empty (space) when they are
-    # not checked (and thus not present in params["recurring_todo"])
-    %w{monday tuesday wednesday thursday friday saturday sunday}.each do |day|
-      params["recurring_todo"]["weekly_return_"+day]=' ' if params["recurring_todo"]["weekly_return_"+day].nil?
-    end
-
-    selector_attributes = {
-        'recurring_period' => recurring_todo_params['recurring_period'],
-        'daily_selector' => recurring_todo_params['daily_selector'],
-        'monthly_selector' => recurring_todo_params['monthly_selector'],
-        'yearly_selector' => recurring_todo_params['yearly_selector']
-      }
-
-    @recurring_todo.assign_attributes(:recurring_period => recurring_todo_params[:recurring_period])
-    @recurring_todo.assign_attributes(selector_attributes)
-    @saved = @recurring_todo.update_attributes recurring_todo_params
+    @saved = updater.update(@recurring_todo)
+    @recurring_todo.reload
 
     respond_to do |format|
       format.js
@@ -108,16 +61,15 @@ class RecurringTodosController < ApplicationController
   def create
     builder = RecurringTodos::RecurringTodosBuilder.new(current_user, all_recurring_todo_params)
     @saved = builder.save
-    @recurring_todo = builder.saved_recurring_todo
 
     if @saved
-      @status_message = t('todos.recurring_action_saved')
+      @recurring_todo = builder.saved_recurring_todo
       @todo_saved = TodoFromRecurringTodo.new(current_user, @recurring_todo).create.nil? == false
-      if @todo_saved
-        @status_message += " / " + t('todos.new_related_todo_created_short')
-      else
-        @status_message += " / " + t('todos.new_related_todo_not_created_short')
-      end
+
+      @status_message = 
+        t('todos.recurring_action_saved') + " / " + 
+        t("todos.new_related_todo_#{@todo_saved ? "" : "not_"}created_short")
+
       @down_count = current_user.recurring_todos.active.count
       @new_recurring_todo = RecurringTodo.new
     else
@@ -219,10 +171,36 @@ class RecurringTodosController < ApplicationController
 
   def all_recurring_todo_params    
     # move context_name, project_name and tag_list into :recurring_todo hash for easier processing
-    params[:recurring_todo][:context_name] = params[:context_name] unless params[:context_name].blank?
-    params[:recurring_todo][:project_name] = params[:project_name] unless params[:project_name].blank?
-    params[:recurring_todo][:tag_list] =     params[:tag_list]     unless params[:tag_list].blank?
+    { context_name: :context_name, project_name: :project_name, tag_list: :tag_list}.each do |target,source|
+      move_into_recurring_todo_param(params, target, source)
+    end
     recurring_todo_params
+  end
+
+  def edit_recurring_todo_params
+    # we needed to rename the recurring_period selector in the edit form because
+    # the form for a new recurring todo and the edit form are on the same page.
+    # Same goes for start_from and end_date
+    params['recurring_todo']['recurring_period'] = params['recurring_edit_todo']['recurring_period']
+
+    { context_name: :context_name, 
+      project_name: :project_name, 
+      tag_list:     :edit_recurring_todo_tag_list,
+      end_date:     :recurring_todo_edit_end_date,
+      start_from:   :recurring_todo_edit_start_from}.each do |target,source|
+      move_into_recurring_todo_param(params, target, source)
+    end    
+
+    # make sure that we set weekly_return_xxx to empty (space) when they are
+    # not checked (and thus not present in params["recurring_todo"])
+    %w{monday tuesday wednesday thursday friday saturday sunday}.each do |day|
+      params["recurring_todo"]["weekly_return_#{day}"]=' ' if params["recurring_todo"]["weekly_return_#{day}"].nil?
+    end
+    params['recurring_todo']
+  end
+
+  def move_into_recurring_todo_param(params, target, source)
+    params[:recurring_todo][target] = params[source] unless params[source].blank?
   end
 
   def init

@@ -5,16 +5,11 @@ module RecurringTodos
     def initialize(user, attributes)
       @user = user
       @attributes = attributes
-      @filterred_attributes = filter_attributes(attributes)
+      @filterred_attributes = filter_attributes(@attributes)
       @saved = false
     end
 
-    def filter_attributes(attributes)
-      raise Exception.new, "filter_attributes should be overridden"
-    end
-
     def filter_generic_attributes(attributes)
-      attributes['tag_list'] = 
       {
         recurring_period: attributes["recurring_period"],
         description:      attributes['description'], 
@@ -41,6 +36,16 @@ module RecurringTodos
       @recurring_todo.project = @filterred_attributes[:project]
     end
 
+    def update(recurring_todo)
+      @recurring_todo = @pattern.update_recurring_todo(recurring_todo)
+      @recurring_todo.context = @filterred_attributes[:context]
+      @recurring_todo.project = @filterred_attributes[:project]
+      
+      @saved = @recurring_todo.save
+      @recurring_todo.tag_with(@filterred_attributes[:tag_list]) if @saved && @filterred_attributes[:tag_list].present?
+      return @saved
+    end
+
     def save
       build
       @saved = @recurring_todo.save
@@ -58,6 +63,16 @@ module RecurringTodos
 
     def attributes
       @pattern.attributes
+    end
+
+    def attributes_to_filter
+      raise Exception.new, "attributes_to_filter should be overridden"
+    end
+
+    def filter_attributes(attributes)
+      @filterred_attributes = filter_generic_attributes(attributes)
+      attributes_to_filter.each{|key| @filterred_attributes[key] = attributes[key] if attributes.key?(key)}
+      @filterred_attributes
     end
 
     private

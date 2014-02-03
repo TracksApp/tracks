@@ -68,7 +68,7 @@ module RecurringTodos
       assert_equal "", builder.attributes[:tag_list]
     end
 
-    def test_tags_should_be_saved
+    def test_tags_should_be_saved_on_create_and_update
       attributes = {
         'recurring_period'  => "daily",
         'description'       => "test",
@@ -91,6 +91,14 @@ module RecurringTodos
       assert !builder.tag_list.present?, "tag list should not be present"
       assert builder.save, "it should be saved"
       assert_equal "", builder.saved_recurring_todo.tag_list, "tag list should be empty"
+
+      # tags should be updated
+      rt = builder.saved_recurring_todo
+      attributes['tag_list'] = "bar, foo"
+      updater = RecurringTodosBuilder.new(@admin, attributes)
+      updater.update(rt)
+      rt.reload
+      assert_equal "bar, foo", rt.tag_list
     end
 
 

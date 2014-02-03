@@ -102,7 +102,7 @@ module RecurringTodos
     end
 
     def test_project_is_optional
-      builder = RecurringTodosBuilder.new(@admin, {
+      attributes = {
         'recurring_period' => "daily",
         'description'      => "test",
         'context_name'     => "my new context",
@@ -110,11 +110,40 @@ module RecurringTodos
         'recurring_target' => 'show_from_date',
         'show_always'      => true,
         'start_from'       => '01/01/01',
-        'ends_on'          => 'no_end_date'})
+        'ends_on'          => 'no_end_date'}
+
+      builder = RecurringTodosBuilder.new(@admin, attributes)
 
       assert_nil builder.project, "project should not exist"
       builder.save
       assert_nil builder.saved_recurring_todo.project
+    end
+
+    def test_builder_can_update_description
+      attributes = {
+        'recurring_period' => "daily",
+        'description'      => "test",
+        'context_name'     => "my new context",
+        'daily_selector'   => 'daily_every_work_day', 
+        'recurring_target' => 'show_from_date',
+        'show_always'      => true,
+        'start_from'       => '01/01/01',
+        'ends_on'          => 'no_end_date'}
+
+      builder = RecurringTodosBuilder.new(@admin, attributes)
+      builder.save
+      rt = builder.saved_recurring_todo
+
+      assert_equal "test", rt.description
+
+      attributes['description'] = 'updated'
+
+      updater = RecurringTodosBuilder.new(@admin, attributes)
+      updater.update(rt)
+      rt.reload
+
+      assert_equal rt.id, builder.saved_recurring_todo.id
+      assert_equal "updated", rt.description
     end
 
   end

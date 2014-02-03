@@ -359,4 +359,30 @@ class RecurringTodosControllerTest < ActionController::TestCase
     assert_equal "completed", rt.state, "repeat pattern should be completed"
   end
 
+  def test_update_recurring_todo
+    login_as(:admin_user)
+    rt = recurring_todos(:call_bill_gates_every_day)
+    current_descr = rt.description
+
+    put :update, 
+      "recurring_todo" => { 
+        "description"        => "changed", 
+        "daily_selector"     => "daily_every_x_day",
+        "daily_every_x_days" => "2",
+        "ends_on"            => "no_end_date",
+        "recurring_target"   => "show_from_date"
+        },
+      "recurring_edit_todo"  => {
+        "recurring_period"   => rt.recurring_period,
+      },
+      "recurring_todo_edit_start_from" => "2/1/2013",
+      "end_date"                       => nil,
+      "ends_on"                        => "no_end_date",
+      "id"                             => "#{rt.id}", 
+      "context_name"                   => "library",
+      format: :js
+
+    assert_equal "changed", rt.reload.description
+  end
+
 end

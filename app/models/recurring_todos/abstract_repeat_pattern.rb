@@ -3,15 +3,22 @@ module RecurringTodos
   class AbstractRepeatPattern
 
     def initialize(user, attributes)
-      @attributes = attributes
       @user = user
+      @attributes = attributes
+      @filterred_attributes = nil
     end
 
     def build_recurring_todo
       @recurring_todo = @user.recurring_todos.build(mapped_attributes)
     end
 
+    def update_recurring_todo(recurring_todo)
+      recurring_todo.assign_attributes(mapped_attributes)
+      recurring_todo
+    end
+
     def mapped_attributes
+      # should be overwritten to map attributes to activerecord model
       @attributes
     end
 

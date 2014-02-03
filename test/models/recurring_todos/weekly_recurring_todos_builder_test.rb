@@ -30,6 +30,19 @@ module RecurringTodos
       assert_equal "a repeating todo",  result[:description], "description should be preserved"
     end
 
+    def test_attributes_to_filter
+      attributes = {
+        'recurring_period'     => 'weekly',
+        'description'          => 'a repeating todo',  # generic
+        'weekly_return_monday' => 'm',                 # weekly specific
+      }
+
+      w = WeeklyRecurringTodosBuilder.new(@admin, attributes)
+      assert_equal 9, w.attributes_to_filter.size
+      assert w.attributes_to_filter.include?('weekly_selector'), "attributes_to_filter should return static attribute weekly_selector"
+      assert w.attributes_to_filter.include?('weekly_return_monday'), "attributes_to_filter should return generated weekly_return_xyz"
+    end
+
   end
 
 end
