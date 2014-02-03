@@ -3,7 +3,7 @@ class RecurringTodosController < ApplicationController
   helper :todos, :recurring_todos
 
   append_before_filter :init, :only => [:index, :new, :edit, :create]
-  append_before_filter :get_recurring_todo_from_param, :only => [:destroy, :toggle_check, :toggle_star, :edit]
+  append_before_filter :get_recurring_todo_from_param, :only => [:destroy, :toggle_check, :toggle_star, :edit, :update]
 
   def index
     @page_title = t('todos.recurring_actions_title')
@@ -43,14 +43,9 @@ class RecurringTodosController < ApplicationController
   end
 
   def update
-    @recurring_todo = current_user.recurring_todos.find(params[:id])
-
-    @original_item_context_id = @recurring_todo.context_id
-    @original_item_project_id = @recurring_todo.project_id
-
     updater = RecurringTodos::RecurringTodosBuilder.new(current_user, edit_recurring_todo_params)
-
     @saved = updater.update(@recurring_todo)
+
     @recurring_todo.reload
 
     respond_to do |format|
@@ -64,11 +59,11 @@ class RecurringTodosController < ApplicationController
 
     if @saved
       @recurring_todo = builder.saved_recurring_todo
-      @todo_saved = TodoFromRecurringTodo.new(current_user, @recurring_todo).create.nil? == false
+      todo_saved = TodoFromRecurringTodo.new(current_user, @recurring_todo).create.nil? == false
 
       @status_message = 
         t('todos.recurring_action_saved') + " / " + 
-        t("todos.new_related_todo_#{@todo_saved ? "" : "not_"}created_short")
+        t("todos.new_related_todo_#{todo_saved ? "" : "not_"}created_short")
 
       @down_count = current_user.recurring_todos.active.count
       @new_recurring_todo = RecurringTodo.new
@@ -102,11 +97,10 @@ class RecurringTodosController < ApplicationController
       format.html do
         if @saved
           notify :notice, t('todos.recurring_deleted_success')
-          redirect_to :action => 'index'
         else
-          notify :error, t('todos.error_deleting_recurring', :description => @recurring_todo.description)
-          redirect_to :action => 'index'
+          notify :error,  t('todos.error_deleting_recurring', :description => @recurring_todo.description)
         end
+          redirect_to :action => 'index'
       end
 
       format.js do
@@ -204,16 +198,8 @@ class RecurringTodosController < ApplicationController
   end
 
   def init
-    @days_of_week = []
-    0.upto 6 do |i|
-      @days_of_week << [t('date.day_names')[i], i]
-    end
-
-    @months_of_year = []
-    1.upto 12 do |i|
-      @months_of_year << [t('date.month_names')[i], i]
-    end
-
+    @days_of_week   = (0..6).map{|i| [t('date.day_names')[i], i] }
+    @months_of_year = (1..12).map{|i| [t('date.month_names')[i], i] }
     @xth_day = [[t('common.first'),1],[t('common.second'),2],[t('common.third'),3],[t('common.fourth'),4],[t('common.last'),5]]
     @projects = current_user.projects.includes(:default_context)
     @contexts = current_user.contexts
