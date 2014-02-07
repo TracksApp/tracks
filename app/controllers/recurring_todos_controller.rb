@@ -77,13 +77,10 @@ class RecurringTodosController < ApplicationController
   end
 
   def destroy
+    @number_of_todos = @recurring_todo.todos.count
+
     # remove all references to this recurring todo
-    @todos = @recurring_todo.todos
-    @number_of_todos = @todos.size
-    @todos.each do |t|
-      t.recurring_todo_id = nil
-      t.save
-    end
+    @recurring_todo.clear_todos_association
 
     # delete the recurring todo
     @saved = @recurring_todo.destroy
@@ -100,7 +97,7 @@ class RecurringTodosController < ApplicationController
         else
           notify :error,  t('todos.error_deleting_recurring', :description => @recurring_todo.description)
         end
-          redirect_to :action => 'index'
+        redirect_to :action => 'index'
       end
 
       format.js do

@@ -5,6 +5,16 @@ module RecurringTodos
   class AbstractRecurringTodosBuilderTest < ActiveSupport::TestCase
     fixtures :users
 
+    class TestRepeatPattern < AbstractRepeatPattern 
+      def selector_key
+        'test'
+      end
+
+      def valid_selector?(selector)
+        true
+      end
+    end
+
     def setup
       @admin = users(:admin_user)
     end 
@@ -23,7 +33,7 @@ module RecurringTodos
       }
   
       assert_raise(Exception, "should have exception since we are using abstract builder") do 
-        builder = AbstractRecurringTodosBuilder.new(@admin, attributes)
+        builder = AbstractRecurringTodosBuilder.new(@admin, attributes, DailyRepeatPattern)
       end
     end  
 
@@ -101,7 +111,6 @@ module RecurringTodos
       assert_equal "bar, foo", rt.tag_list
     end
 
-
     def test_saved_should_raise_exception_on_validation_errors
       attributes = {
         'recurring_period' => "daily",
@@ -123,6 +132,32 @@ module RecurringTodos
 
       assert !builder.save, "should not be able to save because of validation errors"
       assert_raise(Exception, "should have exception since there is no saved recurring todo"){ builder.saved_recurring_todo }
+    end
+
+    def test_map_removes_mapped_key
+      attributes = { :source => "value"}
+
+      arp = WeeklyRecurringTodosBuilder.new(@admin, attributes)
+      attributes = arp.map(attributes, :target, :source)
+
+      assert_equal "value", attributes[:target]
+      assert_nil attributes[:source]
+      assert !attributes.key?(:source)
+    end
+
+    def test_get_selector_removes_selector_from_hash
+      attributes = { :selector => "weekly" }
+      arp = WeeklyRecurringTodosBuilder.new(@admin, attributes)
+
+      assert "weekly", arp.get_selector(:selector)
+      assert !arp.attributes.key?(:selector)
+    end
+
+    def test_get_selector_raises_exception_when_missing_selector
+      attributes = { }
+      arp = WeeklyRecurringTodosBuilder.new(@admin, attributes)
+
+      assert_raise(Exception, "should raise exception when recurrence selector is missing"){ arp.get_selector(:selector) }
     end
 
   end

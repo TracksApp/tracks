@@ -9,13 +9,21 @@ class RecurringTodosControllerTest < ActionController::TestCase
 
   def test_destroy_recurring_todo
     login_as(:admin_user)
+
+    rc = RecurringTodo.find(1)
+    todo = rc.todos.first
+
     xhr :post, :destroy, :id => 1, :_source_view => 'todo'
+
     begin
       rc = RecurringTodo.find(1)
     rescue
       rc = nil
     end
-    assert_nil rc
+
+    assert_nil rc, "rc should be deleted"
+    assert_nil todo.reload.recurring_todo_id, "todo should be unlinked from deleted recurring_todo"
+
   end
 
   def test_new_recurring_todo
@@ -362,7 +370,6 @@ class RecurringTodosControllerTest < ActionController::TestCase
   def test_update_recurring_todo
     login_as(:admin_user)
     rt = recurring_todos(:call_bill_gates_every_day)
-    current_descr = rt.description
 
     put :update, 
       "recurring_todo" => { 
