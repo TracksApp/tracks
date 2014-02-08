@@ -277,7 +277,7 @@ class RecurringTodoTest < ActiveSupport::TestCase
 
   def test_toggle_completion
     assert @yearly.active?
-    assert @yearly.toggle_completion!
+    assert @yearly.toggle_completion!, "toggle of completion should succeed"
     assert @yearly.completed?
 
     # entering completed state should set completed_at
@@ -329,7 +329,7 @@ class RecurringTodoTest < ActiveSupport::TestCase
     assert_raise(Exception){ @every_month.valid? }
 
     @yearly.recurrence_selector = 99
-    assert_raise(Exception){ @yearly.valid? }
+    assert_raise(RuntimeError){ @yearly.valid? }
   end
 
   def test_every_n_the_day_must_be_filled
