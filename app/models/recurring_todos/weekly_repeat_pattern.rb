@@ -22,7 +22,7 @@ module RecurringTodos
 
     def validate
       super
-      errors[:base] << "Every other nth week may not be empty for weekly recurrence setting" if every_x_week.blank?
+      validate_not_blank(every_x_week, "Every other nth week may not be empty for weekly recurrence setting")
       something_set = %w{sunday monday tuesday wednesday thursday friday saturday}.inject(false) { |set, day| set || self.send("on_#{day}") }
       errors[:base] << "You must specify at least one day on which the todo recurs" unless something_set
     end

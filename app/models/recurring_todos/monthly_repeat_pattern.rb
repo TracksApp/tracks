@@ -40,12 +40,13 @@ module RecurringTodos
 
     def validate
       super
+
       case recurrence_selector
       when 0 # 'monthly_every_x_day'
-        errors[:base] << "Every other nth month may not be empty for recurrence setting" if every_x_month.blank?
+        validate_not_blank(every_x_month, "Every other nth month may not be empty for recurrence setting")
       when 1 # 'every_xth_day'
-        errors[:base] <<"Every other nth month may not be empty for recurrence setting" if every_x_month2.blank?
-        errors[:base] <<"The day of the month may not be empty for recurrence setting" if day_of_week.blank?
+        validate_not_blank(every_x_month2, "Every other nth month may not be empty for recurrence setting")
+        validate_not_blank(day_of_week, "The day of the month may not be empty for recurrence setting")
       else
         raise Exception.new, "unexpected value of recurrence selector '#{recurrence_selector}'"
       end

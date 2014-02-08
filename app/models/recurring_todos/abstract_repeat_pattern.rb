@@ -46,18 +46,26 @@ module RecurringTodos
       @attributes = recurring_todo.attributes
     end
 
+    def validate_not_blank(object, msg)
+      errors[:base] << msg if object.blank?
+    end
+
+    def validate_not_nil(object, msg)
+      errors[:base] << msg if object.nil?
+    end
+
     def validate
       starts_and_ends_on_validations
       set_recurrence_on_validations
     end
 
     def starts_and_ends_on_validations
-      errors[:base] << "The start date needs to be filled in" if start_from.blank?
+      validate_not_blank(start_from, "The start date needs to be filled in")
       case ends_on
       when 'ends_on_number_of_times'
-        errors[:base] << "The number of recurrences needs to be filled in for 'Ends on'" if number_of_occurences.blank?
+        validate_not_blank(number_of_occurences, "The number of recurrences needs to be filled in for 'Ends on'")
       when "ends_on_end_date"
-        errors[:base] << "The end date needs to be filled in for 'Ends on'" if end_date.blank?
+        validate_not_blank(end_date, "The end date needs to be filled in for 'Ends on'")
       else
         errors[:base] << "The end of the recurrence is not selected" unless ends_on == "no_end_date"
       end
@@ -69,10 +77,8 @@ module RecurringTodos
       when 'show_from_date'
         # no validations
       when 'due_date'
-        errors[:base] << "Please select when to show the action" if show_always.nil?
-        unless show_always
-          errors[:base] << "Please fill in the number of days to show the todo before the due date" if show_from_delta.blank?
-        end
+        validate_not_nil(show_always, "Please select when to show the action")
+        validate_not_blank(show_from_delta, "Please fill in the number of days to show the todo before the due date") unless show_always
       else
         raise Exception.new, "unexpected value of recurrence target selector '#{target}'"
       end
