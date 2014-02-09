@@ -35,8 +35,8 @@ module RecurringTodos
         'end_date' => '05/05/05'
         })
 
-      assert builder.attributes[:start_from].is_a?(ActiveSupport::TimeWithZone), "Dates should be parsed to ActiveSupport::TimeWithZone class"
-      assert builder.attributes[:end_date].is_a?(ActiveSupport::TimeWithZone), "Dates should be parsed to ActiveSupport::TimeWithZone class"
+      assert builder.attributes.get(:start_from).is_a?(ActiveSupport::TimeWithZone), "Dates should be parsed to ActiveSupport::TimeWithZone class"
+      assert builder.attributes.get(:end_date).is_a?(ActiveSupport::TimeWithZone), "Dates should be parsed to ActiveSupport::TimeWithZone class"
     end
 
     def test_exisisting_project_is_used

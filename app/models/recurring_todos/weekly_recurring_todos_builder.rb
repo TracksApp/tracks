@@ -19,10 +19,10 @@ module RecurringTodos
     end
 
     def map_day(mapping, key, source_key, index)
-      mapping[key]        ||= '       ' # avoid nil
-      mapping[source_key] ||= ' '       # avoid nil
+      mapping.set_if_nil(key, '       ')  # avoid nil
+      mapping.set_if_nil(source_key, ' ') # avoid nil
 
-      mapping[key] = mapping[key][0, index] + mapping[source_key] + mapping[key][index+1, mapping[key].length]
+      mapping.set(key, mapping.get(key)[0, index] + mapping.get(source_key) + mapping.get(key)[index+1, mapping.get(key).length])
       mapping
     end
 

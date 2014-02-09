@@ -32,18 +32,18 @@ module RecurringTodos
       get :show_from_delta
     end
 
-    def build_recurring_todo(attributes)
-      @recurring_todo = @user.recurring_todos.build(attributes)
+    def build_recurring_todo(attribute_handler)
+      @recurring_todo = @user.recurring_todos.build(attribute_handler.attributes)
     end
 
-    def update_recurring_todo(recurring_todo, attributes)
-      recurring_todo.assign_attributes(attributes)
+    def update_recurring_todo(recurring_todo, attribute_handler)
+      recurring_todo.assign_attributes(attribute_handler.attributes)
       recurring_todo
     end
 
     def build_from_recurring_todo(recurring_todo)
       @recurring_todo = recurring_todo
-      @attributes = recurring_todo.attributes
+      @attributes = Tracks::AttributeHandler.new(@user, recurring_todo.attributes)
     end
 
     def validate_not_blank(object, msg)
@@ -88,9 +88,8 @@ module RecurringTodos
       @recurring_todo.errors
     end
 
-    def get attribute
-      # handle attribute as symbol and as string
-      @attributes[attribute] || @attributes[attribute.to_s]
+    def get(attribute)
+      @attributes.get attribute
     end
 
   end

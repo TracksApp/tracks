@@ -20,7 +20,7 @@ module RecurringTodos
     end 
 
     def test_filter_attributes_should_throw_exception
-      attributes = {
+      attributes = Tracks::AttributeHandler.new(@admin, {
         'recurring_period' => "daily",
         'description'      => "test",
         'tag_list'         => "tag, this, that",
@@ -30,7 +30,7 @@ module RecurringTodos
         'show_always'      => true,
         'start_from'       => '01/01/01',
         'ends_on'          => 'no_end_date'
-      }
+      })
   
       assert_raise(Exception, "should have exception since we are using abstract builder") do 
         builder = AbstractRecurringTodosBuilder.new(@admin, attributes, DailyRepeatPattern)
@@ -46,7 +46,7 @@ module RecurringTodos
       }
 
       builder = RecurringTodosBuilder.new(@admin, attributes)
-      assert_equal "tag, this, that", builder.attributes[:tag_list]
+      assert_equal "tag, this, that", builder.attributes.get(:tag_list)
 
       # given attributes without tag_list
       attributes = {
@@ -55,7 +55,7 @@ module RecurringTodos
       }
 
       builder = RecurringTodosBuilder.new(@admin, attributes)
-      assert_equal "", builder.attributes[:tag_list]
+      assert_equal "", builder.attributes.get(:tag_list)
 
       # given attributes with nil tag_list
       attributes = {
@@ -65,7 +65,7 @@ module RecurringTodos
       }
 
       builder = RecurringTodosBuilder.new(@admin, attributes)
-      assert_equal "", builder.attributes[:tag_list]
+      assert_equal "", builder.attributes.get(:tag_list)
 
       # given attributes with empty tag_list ==> should be stripped
       attributes = {
@@ -75,7 +75,7 @@ module RecurringTodos
       }
 
       builder = RecurringTodosBuilder.new(@admin, attributes)
-      assert_equal "", builder.attributes[:tag_list]
+      assert_equal "", builder.attributes.get(:tag_list)
     end
 
     def test_tags_should_be_saved_on_create_and_update
@@ -135,18 +135,18 @@ module RecurringTodos
     end
 
     def test_map_removes_mapped_key
-      attributes = { :source => "value"}
+      attributes = Tracks::AttributeHandler.new(@admin, { :source => "value"})
 
       arp = WeeklyRecurringTodosBuilder.new(@admin, attributes)
       attributes = arp.map(attributes, :target, :source)
 
-      assert_equal "value", attributes[:target]
-      assert_nil attributes[:source]
+      assert_equal "value", attributes.get(:target)
+      assert_nil attributes.get(:source)
       assert !attributes.key?(:source)
     end
 
     def test_get_selector_removes_selector_from_hash
-      attributes = { :selector => "weekly" }
+      attributes = Tracks::AttributeHandler.new(@admin, { :selector => "weekly" })
       arp = WeeklyRecurringTodosBuilder.new(@admin, attributes)
 
       assert "weekly", arp.get_selector(:selector)
@@ -154,7 +154,7 @@ module RecurringTodos
     end
 
     def test_get_selector_raises_exception_when_missing_selector
-      attributes = { }
+      attributes = Tracks::AttributeHandler.new(@admin, { })
       arp = WeeklyRecurringTodosBuilder.new(@admin, attributes)
 
       assert_raise(Exception, "should raise exception when recurrence selector is missing"){ arp.get_selector(:selector) }

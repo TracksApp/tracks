@@ -352,9 +352,9 @@ class RecurringTodoTest < ActiveSupport::TestCase
   end
 
   def test_set_every_n_days_from_form_input
-    todo = RecurringTodo.new({
+    builder = RecurringTodos::RecurringTodosBuilder.new(users(:admin_user), {
       :description => "Task every 2 days",
-      :context => Context.first,
+      :context_id => Context.first.id,
       :recurring_target => "show_from_date",
       :start_from => "01/01/01",
       :ends_on => "no_end_date",
@@ -362,14 +362,17 @@ class RecurringTodoTest < ActiveSupport::TestCase
       :daily_selector => "daily_every_x_day",
       :daily_every_x_days => 2,
     })
+    builder.save
+    todo = builder.saved_recurring_todo
+
     assert todo.valid?, todo.errors.full_messages
     assert_equal 2, todo.every_other1
   end
 
   def test_set_every_n_weeks_from_form_input
-    todo = RecurringTodo.new({
+    builder = RecurringTodos::RecurringTodosBuilder.new(users(:admin_user), {
       :description => "Task every 3 weeks",
-      :context => Context.first,
+      :context_id => Context.first.id,
       :recurring_target => "show_from_date",
       :start_from => "01/01/01",
       :ends_on => "no_end_date",
@@ -377,15 +380,18 @@ class RecurringTodoTest < ActiveSupport::TestCase
       :weekly_every_x_week => 3,
       :weekly_return_monday => "m",
     })
+    builder.save
+    todo = builder.saved_recurring_todo
+
     assert todo.valid?, todo.errors.full_messages
     assert_equal 3, todo.every_other1
-    assert todo.on_monday
+    assert todo.pattern.on_monday
   end
 
   def test_set_every_n_months_from_form_input
-    todo = RecurringTodo.new({
+    builder = RecurringTodos::RecurringTodosBuilder.new(users(:admin_user), {
       :description => "Task every 4 months",
-      :context => Context.first,
+      :context_id => Context.first.id,
       :recurring_target => "show_from_date",
       :start_from => "01/01/01",
       :ends_on => "no_end_date",
@@ -394,14 +400,17 @@ class RecurringTodoTest < ActiveSupport::TestCase
       :monthly_every_x_day => 1,
       :monthly_every_x_month => 4,
     })
+    builder.save
+    todo = builder.saved_recurring_todo
+
     assert todo.valid?, todo.errors.full_messages
     assert_equal 4, todo.every_other2
   end
 
   def test_set_yearly_from_form_input
-    todo = RecurringTodo.new({
+    builder = RecurringTodos::RecurringTodosBuilder.new(users(:admin_user), {
       :description => "Task every year in May",
-      :context => Context.first,
+      :context_id => Context.first.id,
       :recurring_target => "show_from_date",
       :start_from => "01/01/01",
       :ends_on => "no_end_date",
@@ -410,6 +419,9 @@ class RecurringTodoTest < ActiveSupport::TestCase
       :yearly_every_x_day => 15,
       :yearly_month_of_year => 5,
     })
+    builder.save
+    todo = builder.saved_recurring_todo
+
     assert todo.valid?, todo.errors.full_messages
     assert_equal 5, todo.every_other2
   end

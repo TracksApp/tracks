@@ -12,25 +12,18 @@ module RecurringTodos
     end
 
     def map_attributes(mapping)
-      mapping[:only_work_days] = only_work_days?(@selector)
-
-      mapping[:every_other1] = mapping['daily_every_x_days']
-      mapping = mapping.except('daily_every_x_days')
-
-      mapping
+      mapping.set(:only_work_days, only_work_days?(@selector))
+      mapping.set(:every_other1,   mapping.get(:daily_every_x_days))
+      mapping.except(:daily_every_x_days)
     end
 
     def only_work_days?(daily_selector)
-      case daily_selector
-      when 'daily_every_x_day'
-        return false
-      when 'daily_every_work_day'
-        return true
-      end
+      { 'daily_every_x_day' => false, 
+        'daily_every_work_day' => true}[daily_selector]
     end
 
     def selector_key
-      'daily_selector'
+      :daily_selector
     end
 
     def valid_selector?(selector)
