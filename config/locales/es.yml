@@ -45,7 +45,7 @@ es:
         last_name: Apellido
     errors:
       full_messages:
-        format: '%{attribute} %{message}'
+        format: "%{attribute} %{message}"
       messages:
         accepted: debe ser aceptada
         blank: no puede estar en blanco
@@ -77,7 +77,7 @@ es:
         body: 'Hubo problemas con los campos siguientes:'
         header:
           one: Un error esta prohibido %{model} se guarden
-          other: '%{count} errores prohíbe este %{model} que se guarden'
+          other: "%{count} errores prohíbe este %{model} que se guarden"
   common:
     action: Tarea
     actions: Tareas
@@ -107,7 +107,7 @@ es:
     forth: Siguiente
     fourth: Cuarto
     go_back: Volver atrás
-    last: Último
+    last: "Último"
     logout: Salir
     month: mes
     months: meses
@@ -116,7 +116,7 @@ es:
     not_available_abbr: n/e
     note:
       one: 1 nota
-      other: '%{count} notas'
+      other: "%{count} notas"
       zero: 0 notas
     notes: Notas
     numbered_step: Paso %{number}
@@ -133,13 +133,13 @@ es:
     show_all: Mostrar todo
     sort:
       alphabetically: Alfabéticamente
-      alphabetically_confirm: ¿Está seguro que desea ordenar los proyectos por orden
-        alfabético? Esto reemplazará el orden existente.
+      alphabetically_confirm: "¿Está seguro que desea ordenar los proyectos por orden
+        alfabético? Esto reemplazará el orden existente."
       alphabetically_title: Proyectos de ordenar alfabéticamente
       by_task_count: Por número de tareas
       by_task_count_title: Ordenar por número de tareas
-      by_task_count_title_confirm: ¿Está seguro que desea ordenar los proyectos por
-        el número de tareas? Esto reemplazará el orden existente.
+      by_task_count_title_confirm: "¿Está seguro que desea ordenar los proyectos por
+        el número de tareas? Esto reemplazará el orden existente."
       sort: Ordenar
     third: Tercero
     todo: Todo
@@ -155,19 +155,19 @@ es:
     completed_tasks_title: 'TRACKS:: Las acciones completadas en ''%{context_name}''
       el contexto'
     context_deleted: Contexto eliminado '%{name}'
-    context_hide: ¿Esconder de la página principal?
+    context_hide: "¿Esconder de la página principal?"
     context_name: Nombre del contexto
     delete_context: Eliminar contexto
-    delete_context_confirmation: ¿Está seguro que desea eliminar '%{name}' el contexto?
+    delete_context_confirmation: "¿Está seguro que desea eliminar '%{name}' el contexto?
       Tenga en cuenta que esto también se eliminarán todas las acciones (la repetición)
-      en este contexto!
+      en este contexto!"
     delete_context_title: Eliminar contexto
     edit_context: Editar contexto
     hidden_contexts: Contextos ocultos
     hide_form: Esconder formulario
     hide_form_title: Ocultar el formulario nuevo contexto
     last_completed_in_context: en este contexto (últimos %{number})
-    new_context_post: ''' También se ha creado. ¿Está seguro?'
+    new_context_post: "' También se ha creado. ¿Está seguro?"
     new_context_pre: Nuevo contexto '
     no_contexts_active: Actualmente no hay contextos activos
     no_contexts_hidden: Actualmente no hay contextos ocultos
@@ -214,10 +214,10 @@ es:
     - Viernes
     - Sábado
     formats:
-      default: '%Y-%m-%d'
-      long: '%B %d, %Y'
-      longer: '%A, %d %b %Y'
-      short: '%b %d'
+      default: "%Y-%m-%d"
+      long: "%B %d, %Y"
+      longer: "%A, %d %b %Y"
+      short: "%b %d"
     month_names:
     - 
     - Enero
@@ -260,16 +260,16 @@ es:
         other: en %{count} años
       x_days:
         one: 1 día
-        other: '%{count} días'
+        other: "%{count} días"
       x_minutes:
         one: 1 minuto
-        other: '%{count} minutos'
+        other: "%{count} minutos"
       x_months:
         one: 1 mes
-        other: '%{count} meses'
+        other: "%{count} meses"
       x_seconds:
         one: Un segundo
-        other: '%{count} segundos'
+        other: "%{count} segundos"
     prompts:
       day: Día
       hour: Hora
@@ -295,7 +295,7 @@ es:
     context_needed: Es necesario que haya al menos un contexto antes de poder solicitar
       un feed
     ical_feed: iCal alimentación
-    last_fixed_number: Última %{number} acciones
+    last_fixed_number: "Última %{number} acciones"
     legend: 'Leyenda:'
     notice_incomplete_only: 'Nota: Todos los alimentos muestran sólo las acciones
       que no han sido marcadas como realizadas, a menos que se indique lo contrario.'
@@ -337,7 +337,7 @@ es:
       export_title: Importar y exportar datos
       feeds: Feeds
       feeds_title: See a list of available feeds
-      help: '?'
+      help: "?"
       home: Inicio
       home_title: Inicio
       integrations_: Integrar Tracks
@@ -377,7 +377,7 @@ es:
     login_cas: go to the CAS
     login_standard: go back to the standard login
     login_with_openid: login with an OpenID
-    mobile_use_openid: …or login with an OpenID
+    mobile_use_openid: "…or login with an OpenID"
     openid_identity_url_not_found: Sorry, no user by that identity URL exists (%{identity_url})
     option_separator: or,
     please_login: Please log in to use Tracks
@@ -423,16 +423,16 @@ es:
   number:
     currency:
       format:
-        delimiter: ','
-        format: '%u%n'
-        separator: .
-        unit: €
+        delimiter: ","
+        format: "%u%n"
+        separator: "."
+        unit: "€"
     format:
-      delimiter: ','
-      separator: .
+      delimiter: ","
+      separator: "."
     human:
       storage_units:
-        format: '%n %u'
+        format: "%n %u"
         units:
           byte:
             one: Byte
@@ -590,7 +590,7 @@ es:
       day_of_week: Día de la semana
       number_of_actions: Número de acciones
     actions_dow_30days_title: Day of week (past 30 days)
-    actions_further: ' and further'
+    actions_further: and further
     actions_last_year: Actions in the last years
     actions_last_year_legend:
       months_ago: Months ago
@@ -598,7 +598,7 @@ es:
     actions_lastyear_title: Actions in the last 12 months
     actions_min_completion_time: The minimum time to complete is %{time}.
     actions_min_max_completion_days: The Min-/maximum days to complete is %{min}/%{max}.
-    actions_selected_from_week: 'Actions selected from week '
+    actions_selected_from_week: Actions selected from week
     click_to_return: Click %{link} to return to the statistics page.
     click_to_return_link: here
     click_to_show_actions_from_week: Click %{link} to show the actions from week %{week}
@@ -613,8 +613,8 @@ es:
       avg_created: Avg created
       completed: Completed
       created: Created
-      month_avg_completed: '%{months} Month avg completed'
-      month_avg_created: '%{months} Month avg created'
+      month_avg_completed: "%{months} Month avg completed"
+      month_avg_created: "%{months} Month avg created"
     legend:
       actions: Tareas
       day_of_week: Day of week
@@ -631,7 +631,7 @@ es:
     open_per_week_legend:
       actions: Acciones
       weeks: Semanas atrás
-    other_actions_label: (otros)
+    other_actions_label: "(otros)"
     projects: Projects
     running_time_all: Current running time of all incomplete actions
     running_time_all_legend:
@@ -668,15 +668,15 @@ es:
       actions
     totals: Totals
     totals_action_count: you have a total of %{count} actions
-    totals_actions_completed: '%{count} of these are completed.'
+    totals_actions_completed: "%{count} of these are completed."
     totals_active_project_count: Of those %{count} are active projects
-    totals_blocked_actions: '%{count} are dependent on the completion of their actions.'
+    totals_blocked_actions: "%{count} are dependent on the completion of their actions."
     totals_completed_project_count: and %{count} are completed projects.
     totals_context_count: You have %{count} contexts.
     totals_deferred_actions: of which %{count} are deferred actions in the tickler
     totals_first_action: Since your first action on %{date}
     totals_hidden_context_count: and %{count} are hidden contexts.
-    totals_hidden_project_count: '%{count} are hidden'
+    totals_hidden_project_count: "%{count} are hidden"
     totals_incomplete_actions: You have %{count} incomplete actions
     totals_project_count: You have %{count} projects.
     totals_tag_count: You have %{count} tags placed on actions.
@@ -685,19 +685,19 @@ es:
     within_one: Dentro de un
   support:
     array:
-      last_word_connector: ', y'
+      last_word_connector: ", y"
       two_words_connector: y
-      words_connector: ','
+      words_connector: ","
     select:
       prompt: Por favor seleccione
   time:
     am: soy
     formats:
-      default: '%a, %d %b %Y %H:%M:%S %z'
-      long: '%B %d, %Y %H:%M'
-      month_day: '%B %d'
-      short: '%d %b %H:%M'
-      stats: '%a %d-%m'
+      default: "%a, %d %b %Y %H:%M:%S %z"
+      long: "%B %d, %Y %H:%M"
+      month_day: "%B %d"
+      short: "%d %b %H:%M"
+      stats: "%a %d-%m"
     pm: pm
   todos:
     no_actions:
@@ -705,7 +705,7 @@ es:
     action_deferred: La acción \'%{description}\' se aplazó
     action_deleted_error: Failed to delete the action
     action_deleted_success: Successfully deleted next action
-    action_due_on: (action due on %{date})
+    action_due_on: "(action due on %{date})"
     action_marked_complete: The action <strong>'%{description}'</strong> was marked
       as <strong>%{completed}</strong>
     action_marked_complete_error: The action <strong>'%{description}'</strong> was
@@ -827,7 +827,7 @@ es:
       due_within_a_week: due within a week
     no_actions_due_this_week: No actions due in rest of this week
     no_last_completed_actions: No encontró las acciones realizadas
-    no_project: --No project--
+    no_project: "--No project--"
     overdue: Overdue
     pending: Pending
     recurrence:
@@ -907,7 +907,7 @@ es:
     removed_predecessor: Removed %{successor} as dependency from %{predecessor}.
     scheduled_overdue: Scheduled to show %{days} days ago
     see_all_completed: Usted puede ver todas las acciones realizadas %{link}
-    set_to_pending: '%{task} set to pending'
+    set_to_pending: "%{task} set to pending"
     show_from: Show from
     show_in_days: Show in %{days} days
     show_on_date: Show on %{date}
@@ -921,7 +921,7 @@ es:
     task_list_title: TRACKS::List tasks
     tickler_items_due:
       one: One tickler item is now due - refresh the page to see it.
-      other: '%{count} tickler items are now due - refresh the page to see them.'
+      other: "%{count} tickler items are now due - refresh the page to see them."
     to_tickler: to tickler
     unable_to_add_dependency: Unable to add dependency
     unresolved_dependency: The value you entered in the dependency field did not resolve
@@ -992,5 +992,5 @@ es:
         one: Viendo del <b>1</b> %{model}
         other: Viendo <b>todos los %{count}</b> %{model}
         zero: No %{model} encontrado
-    page_gap: '...'
-    previous_label: « Anterior
+    page_gap: "..."
+    previous_label: "« Anterior"
