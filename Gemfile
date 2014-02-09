@@ -31,6 +31,7 @@ gem "htmlentities"
 gem "swf_fu"
 gem "rails_autolink"
 gem "cache_digests"
+gem "highline" # for reset_password rake task
 
 # To use ActiveModel has_secure_password
 gem 'bcrypt-ruby', '~> 3.0.0'
