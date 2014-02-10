@@ -42,8 +42,9 @@ module Tracks
       new_object_created = false
 
       if specified_by_name?(object_type)
-        # find or create context or project by given name
         object, new_object_created = find_or_create_by_name(relation, name)
+        # put id of object in @attributes, i.e. set :project_id to project.id
+        @attributes[object_type.to_s + "_id"] = object.id unless new_object_created
       else
         # find context or project by its id
         object = attribute_with_id_of(object_type).present? ? relation.find(attribute_with_id_of(object_type)) : nil
@@ -97,6 +98,29 @@ module Tracks
     def normalize(attributes)
       # make sure the hash keys are all symbols
       Hash[attributes.map{|k,v| [k.to_sym,v]}]
+    end
+
+    def safe_attributes
+      ActionController::Parameters.new(attributes).permit(
+      :context, :project,
+      # model attributes
+      :context_id, :project_id, :description, :notes, :state, :start_from, 
+      :ends_on, :end_date, :number_of_occurences, :occurences_count, :target, 
+      :show_from_delta, :recurring_period, :recurrence_selector, :every_other1, 
+      :every_other2, :every_other3, :every_day, :only_work_days, :every_count, 
+      :weekday, :show_always, :context_name, :project_name, :tag_list,
+      # form attributes
+      :recurring_period, :daily_selector, :monthly_selector, :yearly_selector, 
+      :recurring_target, :daily_every_x_days, :monthly_day_of_week, 
+      :monthly_every_x_day, :monthly_every_x_month2, :monthly_every_x_month, 
+      :monthly_every_xth_day, :recurring_show_days_before, 
+      :recurring_show_always, :weekly_every_x_week, :weekly_return_monday,
+      :yearly_day_of_week, :yearly_every_x_day, :yearly_every_xth_day, 
+      :yearly_month_of_year2, :yearly_month_of_year,
+      # derived attributes
+      :weekly_return_monday, :weekly_return_tuesday, :weekly_return_wednesday, 
+      :weekly_return_thursday, :weekly_return_friday, :weekly_return_saturday, :weekly_return_sunday
+      )    
     end
 
   end

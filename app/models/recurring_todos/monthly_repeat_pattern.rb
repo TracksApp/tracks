@@ -14,8 +14,16 @@ module RecurringTodos
       get(:recurrence_selector) == 0
     end
 
+    def every_x_day
+      get(:every_other1)
+    end
+
     def every_xth_day?
       get(:recurrence_selector) == 1
+    end
+
+    def every_xth_day
+      get :every_other2
     end
 
     def every_x_month

@@ -37,13 +37,15 @@ class RecurringTodosController < ApplicationController
   end
 
   def edit
+    @form_helper = RecurringTodos::FormHelper.new(@recurring_todo)
+
     respond_to do |format|
       format.js
     end
   end
 
   def update
-    updater = RecurringTodos::RecurringTodosBuilder.new(current_user, edit_recurring_todo_params)
+    updater = RecurringTodos::RecurringTodosBuilder.new(current_user, update_recurring_todo_params)
     @saved = updater.update(@recurring_todo)
 
     @recurring_todo.reload
@@ -162,23 +164,29 @@ class RecurringTodosController < ApplicationController
 
   def all_recurring_todo_params    
     # move context_name, project_name and tag_list into :recurring_todo hash for easier processing
-    { context_name: :context_name, project_name: :project_name, tag_list: :tag_list}.each do |target,source|
+    { 
+      context_name: :context_name, 
+      project_name: :project_name, 
+      tag_list:     :tag_list
+    }.each do |target,source|
       move_into_recurring_todo_param(params, target, source)
     end
     recurring_todo_params
   end
 
-  def edit_recurring_todo_params
+  def update_recurring_todo_params
     # we needed to rename the recurring_period selector in the edit form because
     # the form for a new recurring todo and the edit form are on the same page.
     # Same goes for start_from and end_date
     params['recurring_todo']['recurring_period'] = params['recurring_edit_todo']['recurring_period']
 
-    { context_name: :context_name, 
+    { 
+      context_name: :context_name, 
       project_name: :project_name, 
       tag_list:     :edit_recurring_todo_tag_list,
       end_date:     :recurring_todo_edit_end_date,
-      start_from:   :recurring_todo_edit_start_from}.each do |target,source|
+      start_from:   :recurring_todo_edit_start_from
+    }.each do |target,source|
       move_into_recurring_todo_param(params, target, source)
     end    
 
@@ -187,7 +195,8 @@ class RecurringTodosController < ApplicationController
     %w{monday tuesday wednesday thursday friday saturday sunday}.each do |day|
       params["recurring_todo"]["weekly_return_#{day}"]=' ' if params["recurring_todo"]["weekly_return_#{day}"].nil?
     end
-    params['recurring_todo']
+
+    recurring_todo_params
   end
 
   def move_into_recurring_todo_param(params, target, source)

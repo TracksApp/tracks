@@ -101,14 +101,6 @@ class RecurringTodo < ActiveRecord::Base
     end
   end
 
-  def recurring_show_days_before=(days)
-    self.show_from_delta=days
-  end
-
-  def recurring_show_always=(value)
-    self.show_always=value
-  end
-
   def daily_recurrence_pattern
     if only_work_days
       I18n.t("todos.recurrence.pattern.on_work_days")

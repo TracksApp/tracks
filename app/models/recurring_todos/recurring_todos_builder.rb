@@ -32,8 +32,8 @@ module RecurringTodos
     end
 
     def save
-      @project.save if @new_project_created
-      @context.save if @new_context_created
+      @builder.save_project if @new_project_created
+      @builder.save_context if @new_context_created
 
       return @builder.save
     end

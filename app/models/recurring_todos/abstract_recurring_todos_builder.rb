@@ -22,15 +22,10 @@ module RecurringTodos
     def build
       @recurring_todo = @pattern.build_recurring_todo(@mapped_attributes)
 
-      @recurring_todo.context = @filterred_attributes.get(:context)
-      @recurring_todo.project = @filterred_attributes.get(:project)
     end
 
     def update(recurring_todo)
       @recurring_todo = @pattern.update_recurring_todo(recurring_todo, @mapped_attributes)
-      @recurring_todo.context = @filterred_attributes.get(:context)
-      @recurring_todo.project = @filterred_attributes.get(:project)
-      
       @saved = @recurring_todo.save
       @recurring_todo.tag_with(@filterred_attributes.get(:tag_list)) if @saved && @filterred_attributes.get(:tag_list).present?
       @recurring_todo.reload
@@ -43,6 +38,22 @@ module RecurringTodos
       @saved = @recurring_todo.save
       @recurring_todo.tag_with(@filterred_attributes.get(:tag_list)) if @saved && @filterred_attributes.get(:tag_list).present?
       return @saved
+    end
+
+    def save_collection(collection, collection_id)
+      # save object (project or context) and add its id to @mapped_attributes and remove the object from the attributes
+      object = @mapped_attributes.get(collection)
+      object.save
+      @mapped_attributes.set(collection_id, object.id)
+      @mapped_attributes.except(collection)
+    end
+
+    def save_project
+      save_collection(:project, :project_id)
+    end
+
+    def save_context
+      save_collection(:context, :context_id)
     end
 
     def saved_recurring_todo      

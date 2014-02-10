@@ -33,11 +33,11 @@ module RecurringTodos
     end
 
     def build_recurring_todo(attribute_handler)
-      @recurring_todo = @user.recurring_todos.build(attribute_handler.attributes)
+      @recurring_todo = @user.recurring_todos.build(attribute_handler.safe_attributes)
     end
 
     def update_recurring_todo(recurring_todo, attribute_handler)
-      recurring_todo.assign_attributes(attribute_handler.attributes)
+      recurring_todo.assign_attributes(attribute_handler.safe_attributes)
       recurring_todo
     end
 
