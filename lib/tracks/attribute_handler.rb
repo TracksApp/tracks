@@ -13,12 +13,20 @@ module Tracks
       @attributes[attribute.to_sym] 
     end
 
+    def [](attribute)
+      get attribute
+    end
+
     def set(key, value)
       @attributes[key.to_sym] = value
     end
 
     def set_if_nil(key, value)
       @attributes[key.to_sym] ||= value
+    end
+
+    def []=(attribute, value)
+      set attribute, value
     end
 
     def except(key)
@@ -30,19 +38,19 @@ module Tracks
     end
 
     def selector_key_present?(key)      
-      @attributes.key?(key.to_sym)
+      key?(key)
     end
 
     def parse_date(date)
       set(date, @user.prefs.parse_date(get(date)))
     end
 
-    def parse_collection(object_type, relation, name)
+    def parse_collection(object_type, relation)
       object = nil
       new_object_created = false
 
       if specified_by_name?(object_type)
-        object, new_object_created = find_or_create_by_name(relation, name)
+        object, new_object_created = find_or_create_by_name(relation, object_name(object_type))
         # put id of object in @attributes, i.e. set :project_id to project.id
         @attributes[object_type.to_s + "_id"] = object.id unless new_object_created
       else
@@ -51,6 +59,10 @@ module Tracks
       end
       @attributes[object_type] = object
       return object, new_object_created
+    end
+
+    def object_name(object_type)
+      send("#{object_type}_name")
     end
 
     def attribute_with_id_of(object_type)

@@ -10,7 +10,11 @@ module RecurringTodos
     end 
 
     def test_create_builder_needs_selector
-      assert_raise(Exception){ builder = RecurringTodosBuilder.new(@admin, {}) }
+      assert_raise(RuntimeError){ builder = RecurringTodosBuilder.new(@admin, {}) }
+    end
+
+    def test_create_builder_needs_valid_selector
+      assert_raise(RuntimeError){ builder = RecurringTodosBuilder.new(@admin, { 'recurring_period' => 'wrong_value'}) }
     end
 
     def test_create_builder_uses_selector
@@ -35,8 +39,8 @@ module RecurringTodos
         'end_date' => '05/05/05'
         })
 
-      assert builder.attributes.get(:start_from).is_a?(ActiveSupport::TimeWithZone), "Dates should be parsed to ActiveSupport::TimeWithZone class"
-      assert builder.attributes.get(:end_date).is_a?(ActiveSupport::TimeWithZone), "Dates should be parsed to ActiveSupport::TimeWithZone class"
+      assert builder.attributes[:start_from].is_a?(ActiveSupport::TimeWithZone), "Dates should be parsed to ActiveSupport::TimeWithZone class"
+      assert builder.attributes[:end_date  ].is_a?(ActiveSupport::TimeWithZone), "Dates should be parsed to ActiveSupport::TimeWithZone class"
     end
 
     def test_exisisting_project_is_used

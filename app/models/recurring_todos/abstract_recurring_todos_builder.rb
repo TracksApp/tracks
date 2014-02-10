@@ -21,31 +21,16 @@ module RecurringTodos
     # build does not add tags. For tags, the recurring todos needs to be saved
     def build
       @recurring_todo = @pattern.build_recurring_todo(@mapped_attributes)
-
     end
 
     def update(recurring_todo)
       @recurring_todo = @pattern.update_recurring_todo(recurring_todo, @mapped_attributes)
-      @saved = @recurring_todo.save
-      @recurring_todo.tag_with(@filterred_attributes.get(:tag_list)) if @saved && @filterred_attributes.get(:tag_list).present?
-      @recurring_todo.reload
-      
-      return @saved
+      save_recurring_todo
     end
 
     def save
       build
-      @saved = @recurring_todo.save
-      @recurring_todo.tag_with(@filterred_attributes.get(:tag_list)) if @saved && @filterred_attributes.get(:tag_list).present?
-      return @saved
-    end
-
-    def save_collection(collection, collection_id)
-      # save object (project or context) and add its id to @mapped_attributes and remove the object from the attributes
-      object = @mapped_attributes.get(collection)
-      object.save
-      @mapped_attributes.set(collection_id, object.id)
-      @mapped_attributes.except(collection)
+      save_recurring_todo
     end
 
     def save_project
@@ -71,29 +56,31 @@ module RecurringTodos
     end
 
     def filter_attributes(attributes)
+      # get pattern independend attributes
       filterred_attributes = filter_generic_attributes(attributes)
-      attributes_to_filter.each{|key| filterred_attributes.set(key, attributes.get(key)) if attributes.key?(key)}
+      # append pattern specific attributes
+      attributes_to_filter.each{|key| filterred_attributes[key]= attributes[key] if attributes.key?(key)}
+
       filterred_attributes
     end
 
     def filter_generic_attributes(attributes)
       return Tracks::AttributeHandler.new(@user, {
-        recurring_period: attributes.get(:recurring_period),
-        description:      attributes.get(:description), 
-        notes:            attributes.get(:notes),
+        recurring_period: attributes[:recurring_period],
+        description:      attributes[:description],
+        notes:            attributes[:notes],
         tag_list:         tag_list_or_empty_string(attributes),
-        start_from:       attributes.get(:start_from),
-        end_date:         attributes.get(:end_date),
-        ends_on:          attributes.get(:ends_on),
-        show_always:      attributes.get(:show_always),
-        target:           attributes.get(:target),
-        project:          attributes.get(:project),
-        context:          attributes.get(:context),
-        project_id:       attributes.get(:project_id),
-        context_id:       attributes.get(:context_id),
-        target:           attributes.get(:recurring_target),
-        show_from_delta:  attributes.get(:recurring_show_days_before),
-        show_always:      attributes.get(:recurring_show_always)
+        start_from:       attributes[:start_from],
+        end_date:         attributes[:end_date],
+        ends_on:          attributes[:ends_on],
+        target:           attributes[:target],
+        project:          attributes[:project],
+        context:          attributes[:context],
+        project_id:       attributes[:project_id],
+        context_id:       attributes[:context_id],
+        target:           attributes[:recurring_target],
+        show_from_delta:  attributes[:recurring_show_days_before],
+        show_always:      attributes[:recurring_show_always]
       })
     end
 
@@ -103,8 +90,9 @@ module RecurringTodos
     end
 
     # helper method to be used in mapped_attributes in subclasses
+    # changes name of key from source_key to key
     def map(mapping, key, source_key)
-      mapping.set(key, mapping.get(source_key))
+      mapping[key] = mapping[source_key]
       mapping.except(source_key)
     end
 
@@ -117,7 +105,7 @@ module RecurringTodos
       return nil if key.nil?
 
       raise Exception.new, "recurrence selector pattern (#{key}) not given" unless @attributes.selector_key_present?(key)
-      selector = @attributes.get(key)
+      selector = @attributes[key]
 
       raise Exception.new, "unknown recurrence selector pattern: '#{selector}'" unless valid_selector?(selector)
 
@@ -131,9 +119,28 @@ module RecurringTodos
 
     private
 
+    def save_recurring_todo
+      @saved = @recurring_todo.save
+      save_tags if @saved
+      return @saved
+    end
+
+    def save_tags
+      @recurring_todo.tag_with(@filterred_attributes[:tag_list]) if @filterred_attributes[:tag_list].present?
+      @recurring_todo.reload
+    end
+
+    def save_collection(collection, collection_id)
+      # save object (project or context) and add its id to @mapped_attributes and remove the object from the attributes
+      object = @mapped_attributes[collection]
+      object.save
+      @mapped_attributes[collection_id] = object.id
+      @mapped_attributes.except(collection)
+    end
+
     def tag_list_or_empty_string(attributes)
       # avoid nil
-      attributes.get(:tag_list).blank? ? "" : attributes.get(:tag_list).strip
+      attributes[:tag_list].blank? ? "" : attributes[:tag_list].strip
     end
 
   end

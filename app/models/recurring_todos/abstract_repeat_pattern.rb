@@ -46,6 +46,10 @@ module RecurringTodos
       @attributes = Tracks::AttributeHandler.new(@user, recurring_todo.attributes)
     end
 
+    def valid?
+      @recurring_todo.valid?
+    end
+
     def validate_not_blank(object, msg)
       errors[:base] << msg if object.blank?
     end
@@ -80,7 +84,7 @@ module RecurringTodos
         validate_not_nil(show_always, "Please select when to show the action")
         validate_not_blank(show_from_delta, "Please fill in the number of days to show the todo before the due date") unless show_always
       else
-        raise Exception.new, "unexpected value of recurrence target selector '#{target}'"
+        errors[:base] << "Unexpected value of recurrence target selector '#{target}'"
       end
     end
 
@@ -89,7 +93,7 @@ module RecurringTodos
     end
 
     def get(attribute)
-      @attributes.get attribute
+      @attributes[attribute]
     end
 
   end
