@@ -52,7 +52,7 @@ module RecurringTodos
       case recurrence_selector
       when 0 # 'monthly_every_x_day'
         validate_not_blank(every_x_month, "Every other nth month may not be empty for recurrence setting")
-      when 1 # 'every_xth_day'
+      when 1 # 'monthly_every_xth_day'
         validate_not_blank(every_x_month2, "Every other nth month may not be empty for recurrence setting")
         validate_not_blank(day_of_week, "The day of the month may not be empty for recurrence setting")
       else

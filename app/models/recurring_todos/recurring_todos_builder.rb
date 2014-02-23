@@ -51,6 +51,10 @@ module RecurringTodos
       @builder.pattern
     end
 
+    def errors
+      @builder.errors
+    end
+
     private
 
     def valid_selector?(selector)

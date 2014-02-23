@@ -51,6 +51,10 @@ module RecurringTodos
       @pattern.attributes
     end
 
+    def errors
+      @recurring_todo.try(:errors)
+    end
+
     def attributes_to_filter
       raise Exception.new, "attributes_to_filter should be overridden"
     end
