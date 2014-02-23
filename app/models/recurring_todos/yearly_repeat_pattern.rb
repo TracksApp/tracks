@@ -32,6 +32,20 @@ module RecurringTodos
       get(:recurrence_selector) == 1 ? get(:every_other2) : Time.zone.now.month
     end
 
+    def recurrence_pattern
+      if self.recurrence_selector == 0
+        I18n.t("todos.recurrence.pattern.every_year_on",
+          :date => I18n.l(DateTime.new(Time.zone.now.year, month_of_year, every_x_day), :format => :month_day))
+      else
+        I18n.t("todos.recurrence.pattern.every_year_on",
+          :date => I18n.t("todos.recurrence.pattern.the_xth_day_of_month", 
+            :x => xth(every_xth_day), 
+            :day => day_of_week_as_text(day_of_week), 
+            :month => month_of_year_as_text(month_of_year)
+          ))
+      end
+    end
+
     def validate
       super
       case recurrence_selector

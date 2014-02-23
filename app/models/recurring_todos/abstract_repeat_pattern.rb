@@ -32,6 +32,29 @@ module RecurringTodos
       get :show_from_delta
     end
 
+    def recurring_target_as_text
+      target == 'due_date' ? I18n.t("todos.recurrence.pattern.due") : I18n.t("todos.recurrence.pattern.show")
+    end
+
+    def recurrence_pattern
+      raise "Should not call AbstractRepeatPattern.recurrence_pattern directly. Overwrite in subclass"
+    end
+
+    def xth(x)
+      xth_day = [
+        I18n.t('todos.recurrence.pattern.first'),I18n.t('todos.recurrence.pattern.second'),I18n.t('todos.recurrence.pattern.third'),
+        I18n.t('todos.recurrence.pattern.fourth'),I18n.t('todos.recurrence.pattern.last')]
+      x.nil? ? '??' : xth_day[x-1]
+    end
+
+    def day_of_week_as_text(day)
+      day.nil? ? '??' : I18n.t('todos.recurrence.pattern.day_names')[day]
+    end
+
+    def month_of_year_as_text(month)
+      month.nil? ? '??' : I18n.t('todos.recurrence.pattern.month_names')[month]
+    end
+
     def build_recurring_todo(attribute_handler)
       @recurring_todo = @user.recurring_todos.build(attribute_handler.safe_attributes)
     end

@@ -20,6 +20,14 @@ module RecurringTodos
       get(:every_day) && get(:every_day)[n, 1] != ' '
     end
 
+    def recurrence_pattern
+      if every_x_week > 1
+        I18n.t("todos.recurrence.pattern.every_n", :n => every_x_week) + " " + I18n.t("common.weeks")
+      else
+        I18n.t('todos.recurrence.pattern.weekly')
+      end
+    end
+
     def validate
       super
       validate_not_blank(every_x_week, "Every other nth week may not be empty for weekly recurrence setting")
