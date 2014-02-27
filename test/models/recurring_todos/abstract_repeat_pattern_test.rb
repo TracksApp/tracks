@@ -6,6 +6,7 @@ module RecurringTodos
     fixtures :users
 
     def setup
+      super
       @admin = users(:admin_user)
     end 
 
@@ -86,6 +87,16 @@ module RecurringTodos
       attributes['end_date']= Time.zone.now + 1.week
       pattern = create_pattern(attributes)
       assert pattern.valid?, "should be valid"
+    end
+
+    def test_end_date_on_recurring_todo
+      rt = recurring_todos(:call_bill_gates_every_day)
+
+      assert_equal true, rt.continues_recurring?(@in_three_days)
+      assert_equal true, rt.continues_recurring?(@in_four_days)
+      rt.end_date = @in_four_days
+      rt.ends_on = 'ends_on_end_date'
+      assert_equal false, rt.continues_recurring?(@in_four_days)
     end
 
     private
