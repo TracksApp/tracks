@@ -25,13 +25,6 @@ class RecurringTodoTest < ActiveSupport::TestCase
     @thursday = Time.zone.local(2008,6,12)
   end
 
-  def test_pattern_text
-    assert_equal "every day", @every_day.recurrence_pattern
-    assert_equal "on work days", @every_workday.recurrence_pattern
-    assert_equal "every last friday of every 2 months", @monthly_every_last_friday.recurrence_pattern
-    assert_equal "every year on June 08", @yearly.recurrence_pattern
-  end
-
   def test_daily_every_day
     # every_day should return todays date if there was no previous date
     due_date = @every_day.get_due_date(nil)
@@ -96,29 +89,6 @@ class RecurringTodoTest < ActiveSupport::TestCase
     assert_equal false, @every_day.continues_recurring?(@in_four_days)
   end
 
-  def test_weekly_every_day_setters
-    @weekly_every_day.every_day = '       '
-
-    @weekly_every_day.weekly_return_sunday=('s')
-    assert_equal 's      ', @weekly_every_day.every_day
-    @weekly_every_day.weekly_return_monday=('m')
-    assert_equal 'sm     ', @weekly_every_day.every_day
-    @weekly_every_day.weekly_return_tuesday=('t')
-    assert_equal 'smt    ', @weekly_every_day.every_day
-    @weekly_every_day.weekly_return_wednesday=('w')
-    assert_equal 'smtw   ', @weekly_every_day.every_day
-    @weekly_every_day.weekly_return_thursday=('t')
-    assert_equal 'smtwt  ', @weekly_every_day.every_day
-    @weekly_every_day.weekly_return_friday=('f')
-    assert_equal 'smtwtf ', @weekly_every_day.every_day
-    @weekly_every_day.weekly_return_saturday=('s')
-    assert_equal 'smtwtfs', @weekly_every_day.every_day
-
-    # test remove
-    @weekly_every_day.weekly_return_wednesday=(' ')
-    assert_equal 'smt tfs', @weekly_every_day.every_day
-  end
-
   def test_weekly_pattern
     assert_equal true, @weekly_every_day.continues_recurring?(nil)
 
@@ -132,9 +102,7 @@ class RecurringTodoTest < ActiveSupport::TestCase
     assert_equal @sunday + 2.weeks, due_date
 
     # remove tuesday and wednesday
-    @weekly_every_day.weekly_return_tuesday=(' ')
-    @weekly_every_day.weekly_return_wednesday=(' ')
-    assert_equal 'sm  tfs', @weekly_every_day.every_day
+    @weekly_every_day.every_day = 'sm  tfs'
     due_date = @weekly_every_day.get_due_date(@monday)
     assert_equal @thursday, due_date
 

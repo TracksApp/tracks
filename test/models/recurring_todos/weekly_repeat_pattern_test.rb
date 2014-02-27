@@ -40,6 +40,14 @@ module RecurringTodos
       assert !rt.valid?, "missing selected days in every_day"
     end
     
+    def test_pattern_text
+      rt = @admin.recurring_todos.where(recurring_period: 'weekly').first
+      assert_equal "every 2 weeks", rt.recurrence_pattern            
+
+      rt.every_other1 = 1
+      assert_equal "weekly", rt.recurrence_pattern            
+    end
+
   end
 
 end

@@ -98,6 +98,20 @@ module RecurringTodos
       assert !rt.valid?, "should not be valid since day_of_week is empty"
     end
 
+    def test_pattern_text
+      rt = recurring_todos(:check_with_bill_every_last_friday_of_month)
+      assert_equal "every last friday of every 2 months", rt.recurrence_pattern
+
+      rt.every_other2 = 1
+      assert_equal "every last friday of every month", rt.recurrence_pattern
+
+      rt.recurrence_selector = 0
+      assert_equal "every 5 months on day 1", rt.recurrence_pattern
+
+      rt.every_other3 = 1
+      assert_equal "every month on day 1", rt.recurrence_pattern
+    end
+
   end
 
 end

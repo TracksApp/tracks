@@ -64,6 +64,16 @@ module RecurringTodos
       assert !rt.valid?, "should not be valid since day_of_week is empty"
     end
 
+    def test_pattern_text
+      rt = recurring_todos(:birthday_reinier)
+      assert_equal "every year on June 08", rt.recurrence_pattern
+
+      rt.recurrence_selector = 1
+      rt.every_count = 3
+      rt.every_other3 = 3
+      assert_equal "every year on the third wednesday of June", rt.recurrence_pattern
+    end
+
   end
 
 end

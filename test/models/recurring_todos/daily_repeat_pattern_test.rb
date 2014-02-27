@@ -32,6 +32,17 @@ module RecurringTodos
       assert rt.valid?, "should be valid again"
     end
 
+    def test_pattern_text
+      @every_day = recurring_todos(:call_bill_gates_every_day)
+      @every_workday = recurring_todos(:call_bill_gates_every_workday)
+
+      assert_equal "every day", @every_day.recurrence_pattern
+      assert_equal "on work days", @every_workday.recurrence_pattern
+      
+      @every_day.every_other1 = 2
+      assert_equal "every 2 days", @every_day.recurrence_pattern      
+    end
+
   end
 
 end

@@ -40,14 +40,6 @@ class RecurringTodo < ActiveRecord::Base
     end
   end
 
-  def pattern
-    if valid_period?
-      @pattern = eval("RecurringTodos::#{recurring_period.capitalize}RepeatPattern.new(user)")
-      @pattern.build_from_recurring_todo(self)
-    end
-    @pattern
-  end
-
   def valid_period?
     %W[daily weekly monthly yearly].include?(recurring_period)
   end
@@ -78,16 +70,12 @@ class RecurringTodo < ActiveRecord::Base
   #   choosing between both options is done on recurrence_selector where 0 is
   #   for first type and 1 for second type
 
-
-  def switch_week_day(day, position)
-    self.every_day = '       ' if self.every_day.nil?
-    self.every_day = every_day[0, position] + day + every_day[position+1, every_day.length]
-  end
-
-  { monday: 1, tuesday: 2, wednesday: 3, thursday: 4, friday: 5, saturday: 6, sunday: 0 }.each do |day, number|
-    define_method("weekly_return_#{day}=") do |selector|
-      switch_week_day(selector, number) if recurring_period=='weekly'
+  def pattern
+    if valid_period?
+      @pattern = eval("RecurringTodos::#{recurring_period.capitalize}RepeatPattern.new(user)")
+      @pattern.build_from_recurring_todo(self)
     end
+    @pattern
   end
 
   def recurrence_pattern
@@ -103,214 +91,11 @@ class RecurringTodo < ActiveRecord::Base
   end
 
   def get_due_date(previous)
-    case self.target
-    when 'due_date'
-      get_next_date(previous)
-    when 'show_from_date'
-      # so leave due date empty
-      nil
-    else
-      raise Exception.new, "unexpected value of recurrence target '#{self.target}'"
-    end
+    pattern.get_due_date(previous)
   end
 
   def get_show_from_date(previous)
-    case self.target
-    when 'due_date'
-      # so set show from date relative to due date unless show_always is true or show_from_delta is nil
-      (self.show_always? || self.show_from_delta.nil?) ? nil : get_due_date(previous) - self.show_from_delta.days
-    when 'show_from_date'
-      # Leave due date empty
-      get_next_date(previous)
-    else
-      raise Exception.new, "unexpected value of recurrence target '#{self.target}'"
-    end
-  end
-
-  def get_next_date(previous)
-    case self.recurring_period
-    when 'daily'   then get_daily_date(previous)
-    when 'weekly'  then get_weekly_date(previous)
-    when 'monthly' then get_monthly_date(previous)
-    when 'yearly'  then get_yearly_date(previous)
-    else
-      raise Exception.new, "unknown recurrence pattern: '#{self.recurring_period}'"
-    end
-  end
-
-  def get_daily_date(previous)
-    # previous is the due date of the previous todo or it is the completed_at
-    # date when the completed_at date is after due_date (i.e. you did not make
-    # the due date in time)
-    #
-    # assumes self.recurring_period == 'daily'
-
-    start = determine_start(previous, 1.day)
-
-    if self.only_work_days
-      return start + 2.day if start.wday() == 6 # saturday
-      return start + 1.day if start.wday() == 0 # sunday
-      return start
-    else # every nth day; n = every_other1
-      # if there was no previous todo, do not add n: the first todo starts on
-      # today or on start_from
-      return previous == nil ? start : start+every_other1.day-1.day
-    end
-  end
-
-  def get_weekly_date(previous)
-    # determine start
-    if previous == nil
-      start = self.start_from.nil? ? Time.zone.now : self.start_from
-    else
-      start = previous + 1.day
-      if start.wday() == 0
-        # we went to a new week , go to the nth next week and find first match
-        # that week. Note that we already went into the next week, so -1
-        start += (self.every_other1-1).week
-      end
-      unless self.start_from.nil?
-        # check if the start_from date is later than previous. If so, use
-        # start_from as start to search for next date
-        start = self.start_from if self.start_from > previous
-      end
-    end
-
-    day = find_first_day_in_this_week(start)
-    return day unless day == -1
-
-    # we did not find anything this week, so check the nth next, starting from
-    # sunday
-    start = start + self.every_other1.week - (start.wday()).days
-
-    start = find_first_day_in_this_week(start)
-    return start unless start == -1
-
-    raise Exception.new, "unable to find next weekly date (#{self.every_day})"
-  end
-
-  def get_monthly_date(previous)
-    start = determine_start(previous)
-    day = self.every_other1
-    n = self.every_other2
-
-    case self.recurrence_selector
-    when 0 # specific day of the month
-      if (previous && start.mday >= day) || (previous.nil? && start.mday > day)
-        # there is no next day n in this month, search in next month
-        #
-        #  start += n.months
-        #
-        # The above seems to not work. Fiddle with timezone. Looks like we hit a
-        # bug in rails here where 2008-12-01 +0100 plus 1.month becomes
-        # 2008-12-31 +0100. For now, just calculate in UTC and convert back to
-        # local timezone.
-        #
-        #  TODO: recheck if future rails versions have this problem too
-        start = Time.utc(start.year, start.month, start.day)+n.months
-        start = Time.zone.local(start.year, start.month, start.day)
-
-        # go back to day
-      end
-      Time.zone.local(start.year, start.month, day)
-
-    when 1 # relative weekday of a month
-      the_next = get_xth_day_of_month(self.every_other3, self.every_count, start.month, start.year)
-      if the_next.nil? || the_next <= start
-        # the nth day is already passed in this month, go to next month and try
-        # again
-
-        # fiddle with timezone. Looks like we hit a bug in rails here where
-        # 2008-12-01 +0100 plus 1.month becomes 2008-12-31 +0100. For now, just
-        # calculate in UTC and convert back to local timezone.
-        #  TODO: recheck if future rails versions have this problem too
-        the_next = Time.utc(the_next.year, the_next.month, the_next.day)+n.months
-        the_next = Time.zone.local(the_next.year, the_next.month, the_next.day)
-
-        # TODO: if there is still no match, start will be set to nil. if we ever
-        # support 5th day of the month, we need to handle this case
-        the_next = get_xth_day_of_month(self.every_other3, self.every_count, the_next.month, the_next.year)
-      end
-      the_next
-    else
-      raise Exception.new, "unknown monthly recurrence selection (#{self.recurrence_selector})"
-    end
-  end
-
-  def get_xth_day_of_month(x, weekday, month, year)
-    if x == 5
-      # last -> count backwards. use UTC to avoid strange timezone oddities
-      # where last_day -= 1.day seems to shift tz+0100 to tz+0000
-      last_day = Time.utc(year, month, Time.days_in_month(month))
-      while last_day.wday != weekday
-        last_day -= 1.day
-      end
-      # convert back to local timezone
-      Time.zone.local(last_day.year, last_day.month, last_day.day)
-    else
-      # 1-4th -> count upwards last -> count backwards. use UTC to avoid strange
-      # timezone oddities where last_day -= 1.day seems to shift tz+0100 to
-      # tz+0000
-      start = Time.utc(year,month,1)
-      n = x
-      while n > 0
-        while start.wday() != weekday
-          start+= 1.day
-        end
-        n -= 1
-        start += 1.day unless n==0
-      end
-      # convert back to local timezone
-      Time.zone.local(start.year, start.month, start.day)
-    end
-  end
-
-  def get_yearly_date(previous)
-    start = determine_start(previous)
-    day = self.every_other1
-    month = self.every_other2
-
-    case self.recurrence_selector
-    when 0 # specific day of a specific month
-      if start.month > month || (start.month == month && start.day >= day)
-        # if there is no next month n and day m in this year, search in next
-        # year
-        start = Time.zone.local(start.year+1, month, 1)
-      else
-        # if there is a next month n, stay in this year
-        start = Time.zone.local(start.year, month, 1)
-      end
-      Time.zone.local(start.year, month, day)
-
-    when 1 # relative weekday of a specific month
-      # if there is no next month n in this year, search in next year
-      the_next = start.month > month ? Time.zone.local(start.year+1, month, 1) : start
-
-      # get the xth day of the month
-      the_next = get_xth_day_of_month(self.every_other3, self.every_count, month, the_next.year)
-
-      # if the_next is before previous, we went back into the past, so try next
-      # year
-      the_next = get_xth_day_of_month(self.every_other3, self.every_count, month, start.year+1) if the_next <= start
-
-      the_next
-    else
-      raise Exception.new, "unknown monthly recurrence selection (#{self.recurrence_selector})"
-    end
-  end
-
-  def continues_recurring?(previous)
-    return self.occurences_count < self.number_of_occurences unless self.number_of_occurences.nil?
-    return true if self.end_date.nil? || self.ends_on == 'no_end_date'
-
-    case self.target
-    when 'due_date'
-      get_due_date(previous) <= self.end_date
-    when 'show_from_date'
-      get_show_from_date(previous) <= self.end_date
-    else
-      raise Exception.new, "unexpected value of recurrence target '#{self.target}'"
-    end
+    pattern.get_show_from_date(previous)
   end
 
   def done?(end_date)
@@ -350,29 +135,8 @@ class RecurringTodo < ActiveRecord::Base
     self.save
   end
 
-  protected
-
-  # Determine start date to calculate next date for recurring todo
-  # offset needs to be 1.day for daily patterns
-  def determine_start(previous, offset=0.day)
-    start = self.start_from || NullTime.new
-    now = Time.zone.now
-    if previous
-      # check if the start_from date is later than previous. If so, use
-      # start_from as start to search for next date
-      start > previous ? start : previous + offset
-    else
-      # skip to present
-      start > now ? start : now
-    end
-  end
-
-  def find_first_day_in_this_week(start)
-    # check if there are any days left this week for the next todo
-    start.wday().upto 6 do |i|
-      return start + (i-start.wday()).days unless self.every_day[i,1] == ' '
-    end
-    -1
+  def continues_recurring?(previous)
+    pattern.continues_recurring?(previous)
   end
 
 end

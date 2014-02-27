@@ -24,7 +24,7 @@ module RecurringTodos
       get :target
     end
 
-    def show_always
+    def show_always?
       get :show_always
     end
 
@@ -104,8 +104,8 @@ module RecurringTodos
       when 'show_from_date'
         # no validations
       when 'due_date'
-        validate_not_nil(show_always, "Please select when to show the action")
-        validate_not_blank(show_from_delta, "Please fill in the number of days to show the todo before the due date") unless show_always
+        validate_not_nil(show_always?, "Please select when to show the action")
+        validate_not_blank(show_from_delta, "Please fill in the number of days to show the todo before the due date") unless show_always?
       else
         errors[:base] << "Unexpected value of recurrence target selector '#{target}'"
       end
@@ -119,6 +119,93 @@ module RecurringTodos
       @attributes[attribute]
     end
 
+    # gets the next due date. returns nil if recurrence_target is not 'due_date'
+    def get_due_date(previous)
+      case target
+      when 'due_date'
+        get_next_date(previous)
+      when 'show_from_date'
+        nil
+      end
+    end
+
+    def get_show_from_date(previous)
+      case target
+      when 'due_date'
+        # so set show from date relative to due date unless show_always is true or show_from_delta is nil
+        return nil unless put_in_tickler?
+        get_due_date(previous) - show_from_delta.days
+      when 'show_from_date'
+        # Leave due date empty
+        get_next_date(previous)
+      end
+    end
+
+    # checks if the next todos should be put in the tickler for recurrence_target == 'due_date'
+    def put_in_tickler?
+      !( show_always? || show_from_delta.nil?)
+    end
+
+    def get_next_date(previous)
+      raise "Should not call AbstractRepeatPattern.get_next_date directly. Overwrite in subclass"
+    end
+
+    def continues_recurring?(previous)
+      return @recurring_todo.occurences_count < @recurring_todo.number_of_occurences unless @recurring_todo.number_of_occurences.nil?
+      return true if self.end_date.nil? || self.ends_on == 'no_end_date'
+
+      case self.target
+      when 'due_date'
+        get_due_date(previous) <= self.end_date
+      when 'show_from_date'
+        get_show_from_date(previous) <= self.end_date
+      end
+    end
+    
+    private
+
+    # Determine start date to calculate next date for recurring todo
+    # offset needs to be 1.day for daily patterns
+    def determine_start(previous, offset=0.day)
+      start = self.start_from || NullTime.new
+      now = Time.zone.now
+      if previous
+        # check if the start_from date is later than previous. If so, use
+        # start_from as start to search for next date
+        start > previous ? start : previous + offset
+      else
+        # skip to present
+        start > now ? start : now
+      end
+    end
+
+    def get_xth_day_of_month(x, weekday, month, year)
+      if x == 5
+        # last -> count backwards. use UTC to avoid strange timezone oddities
+        # where last_day -= 1.day seems to shift tz+0100 to tz+0000
+        last_day = Time.utc(year, month, Time.days_in_month(month))
+        while last_day.wday != weekday
+          last_day -= 1.day
+        end
+        # convert back to local timezone
+        Time.zone.local(last_day.year, last_day.month, last_day.day)
+      else
+        # 1-4th -> count upwards last -> count backwards. use UTC to avoid strange
+        # timezone oddities where last_day -= 1.day seems to shift tz+0100 to
+        # tz+0000
+        start = Time.utc(year,month,1)
+        n = x
+        while n > 0
+          while start.wday() != weekday
+            start+= 1.day
+          end
+          n -= 1
+          start += 1.day unless n==0
+        end
+        # convert back to local timezone
+        Time.zone.local(start.year, start.month, start.day)
+      end
+    end    
+
   end
-  
 end

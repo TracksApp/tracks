@@ -29,7 +29,23 @@ module RecurringTodos
       errors[:base] << "Every other nth day may not be empty for this daily recurrence setting" if (!only_work_days?) && every_x_days.blank?
     end
 
+    def get_next_date(previous)
+      # previous is the due date of the previous todo or it is the completed_at
+      # date when the completed_at date is after due_date (i.e. you did not make
+      # the due date in time)
+
+      start = determine_start(previous, 1.day)
+
+      if only_work_days?
+        return start + 2.day if start.wday() == 6 # saturday
+        return start + 1.day if start.wday() == 0 # sunday
+        return start
+      else # every nth day; n = every_other1
+        # if there was no previous todo, do not add n: the first todo starts on
+        # today or on start_from
+        return previous == nil ? start : start+every_x_days.day-1.day
+      end
+    end
 
   end
-  
 end
