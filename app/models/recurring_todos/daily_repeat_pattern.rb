@@ -18,7 +18,7 @@ module RecurringTodos
       if only_work_days?
         I18n.t("todos.recurrence.pattern.on_work_days")
       elsif every_x_days > 1
-        I18n.t("todos.recurrence.pattern.every_n", :n => every_x_days) + " " + I18n.t("common.days_midsentence.other")
+        I18n.t("todos.recurrence.pattern.every_n_days", :n => every_x_days)
       else
         I18n.t("todos.recurrence.pattern.every_day")
       end
@@ -37,10 +37,11 @@ module RecurringTodos
       start = determine_start(previous, 1.day)
 
       if only_work_days?
+        # jump over weekend if necessary
         return start + 2.day if start.wday() == 6 # saturday
         return start + 1.day if start.wday() == 0 # sunday
         return start
-      else # every nth day; n = every_other1
+      else 
         # if there was no previous todo, do not add n: the first todo starts on
         # today or on start_from
         return previous == nil ? start : start+every_x_days.day-1.day

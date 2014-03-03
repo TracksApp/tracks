@@ -62,11 +62,18 @@ module RecurringTodos
       assert_equal @today+14.days, due_date
     end
 
-    def test_daily_work_days
-      assert_equal @monday,  @every_workday.get_due_date(@friday)
-      assert_equal @monday,  @every_workday.get_due_date(@saturday)
-      assert_equal @monday,  @every_workday.get_due_date(@sunday)
-      assert_equal @tuesday, @every_workday.get_due_date(@monday)
+    def test_only_work_days_skips_weekend
+      assert_equal @tuesday, @every_workday.get_due_date(@monday), "should select next day if it is not in weekend"
+
+      assert_equal @monday,  @every_workday.get_due_date(@friday), "should select monday if it is in weekend"
+      assert_equal @monday,  @every_workday.get_due_date(@saturday), "should select monday if it is in weekend"
+      assert_equal @monday,  @every_workday.get_due_date(@sunday), "should select monday if it is in weekend"
+    end
+
+    def test_every_x_days
+      assert_equal @tuesday,  @every_day.get_due_date(@monday), "should select next day in middle week"
+      assert_equal @saturday, @every_day.get_due_date(@friday), "should select next day at end of week"
+      assert_equal @sunday,   @every_day.get_due_date(@saturday), "should select next day in weekend"
     end
 
   end
