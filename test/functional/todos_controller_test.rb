@@ -589,7 +589,7 @@ class TodosControllerTest < ActionController::TestCase
         "due(1i)"=>"2007", "due(2i)"=>"1", "due(3i)"=>"2",
         "show_from(1i)"=>"", "show_from(2i)"=>"", "show_from(3i)"=>"",
         "project_id"=>"1",
-        "notes"=>"test notes", "description"=>"test_mobile_create_action", "state"=>"0"}}
+        "notes"=>"test notes", "description"=>"test_mobile_create_action"}}
     assert_redirected_to '/mobile'
   end
   
