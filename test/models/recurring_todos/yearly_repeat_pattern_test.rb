@@ -6,6 +6,7 @@ module RecurringTodos
     fixtures :users
 
     def setup
+      super
       @admin = users(:admin_user)
     end 
 
@@ -73,6 +74,41 @@ module RecurringTodos
       rt.every_other3 = 3
       assert_equal "every year on the third wednesday of June", rt.recurrence_pattern
     end
+
+    def test_yearly_pattern
+      @yearly = recurring_todos(:birthday_reinier)
+
+      # beginning of same year
+      due_date = @yearly.get_due_date(Time.zone.local(2008,2,10)) # feb 10th
+      assert_equal @sunday, due_date # june 8th
+
+      # same month, previous date
+      due_date = @yearly.get_due_date(@saturday) # june 7th
+      show_from_date = @yearly.get_show_from_date(@saturday) # june 7th
+      assert_equal @sunday, due_date # june 8th
+      assert_equal @sunday-5.days, show_from_date
+
+      # same month, day after
+      due_date = @yearly.get_due_date(@monday) # june 9th
+      assert_equal Time.zone.local(2009,6,8), due_date # june 8th next year
+      # very overdue
+      due_date = @yearly.get_due_date(@monday+5.months-2.days) # november 7
+      assert_equal Time.zone.local(2009,6,8), due_date # june 8th next year
+
+      @yearly.recurrence_selector = 1
+      @yearly.every_other3 = 2 # second
+      @yearly.every_count = 3 # wednesday
+      # beginning of same year
+      due_date = @yearly.get_due_date(Time.zone.local(2008,2,10)) # feb 10th
+      assert_equal Time.zone.local(2008,6,11), due_date # june 11th
+      # same month, before second wednesday
+      due_date = @yearly.get_due_date(@saturday) # june 7th
+      assert_equal Time.zone.local(2008,6,11), due_date # june 11th
+      # same month, after second wednesday
+      due_date = @yearly.get_due_date(Time.zone.local(2008,6,12)) # june 7th
+      assert_equal Time.zone.local(2009,6,10), due_date # june 10th
+    end
+
 
   end
 

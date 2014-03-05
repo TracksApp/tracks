@@ -6,6 +6,7 @@ module RecurringTodos
     fixtures :users
 
     def setup
+      super
       @admin = users(:admin_user)
     end
 
@@ -110,6 +111,36 @@ module RecurringTodos
 
       rt.every_other3 = 1
       assert_equal "every month on day 1", rt.recurrence_pattern
+    end
+
+    def test_monthly_pattern
+      @monthly_every_last_friday = recurring_todos(:check_with_bill_every_last_friday_of_month)
+      
+      due_date = @monthly_every_last_friday.get_due_date(@sunday)
+      assert_equal Time.zone.local(2008,6,27), due_date
+
+      friday_is_last_day_of_month = Time.zone.local(2008,10,31)
+      due_date = @monthly_every_last_friday.get_due_date(friday_is_last_day_of_month-1.day )
+      assert_equal friday_is_last_day_of_month , due_date
+
+      @monthly_every_third_friday = @monthly_every_last_friday
+      @monthly_every_third_friday.every_other3=3 #third
+      due_date = @monthly_every_last_friday.get_due_date(@sunday) # june 8th 2008
+      assert_equal Time.zone.local(2008, 6, 20), due_date
+      # set date past third friday of this month
+      due_date = @monthly_every_last_friday.get_due_date(Time.zone.local(2008,6,21)) # june 21th 2008
+      assert_equal Time.zone.local(2008, 8, 15), due_date    # every 2 months, so aug
+
+      @monthly = @monthly_every_last_friday
+      @monthly.recurrence_selector=0
+      @monthly.every_other1 = 8  # every 8th day of the month
+      @monthly.every_other2 = 2  # every 2 months
+
+      due_date = @monthly.get_due_date(@saturday) # june 7th
+      assert_equal @sunday, due_date # june 8th
+
+      due_date = @monthly.get_due_date(@sunday) # june 8th
+      assert_equal Time.zone.local(2008,8,8), due_date # aug 8th
     end
 
   end

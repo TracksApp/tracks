@@ -624,6 +624,7 @@ en:
         third: third
         every_n: every %{n}
         every_n_days: every %{n} days
+        every_n_months: every %{n} months
         every_day: every day
         on_day_n: on day %{n}
         second: second

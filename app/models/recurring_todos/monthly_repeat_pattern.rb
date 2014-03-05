@@ -44,20 +44,9 @@ module RecurringTodos
 
     def recurrence_pattern
       if recurrence_selector == 0
-        on_day = " #{I18n.t('todos.recurrence.pattern.on_day_n', :n => every_x_day)}"
-        if every_xth_day(0) > 1
-          I18n.t("todos.recurrence.pattern.every_n", :n => every_xth_day) + " " + I18n.t('common.months') + on_day
-        else
-          I18n.t("todos.recurrence.pattern.every_month") + on_day
-        end
+        recurrence_pattern_for_specific_day
       else
-        n_months = if get(:every_other2) > 1
-                     "#{get(:every_other2)} #{I18n.t('common.months')}"
-                   else
-                     I18n.t('common.month')
-                   end
-        I18n.t('todos.recurrence.pattern.every_xth_day_of_every_n_months',
-          :x => xth(every_xth_day), :day => day_of_week_as_text(day_of_week), :n_months => n_months)
+        recurrence_pattern_for_relative_day_in_month
       end
     end
 
@@ -121,6 +110,29 @@ module RecurringTodos
       else
         raise Exception.new, "unknown monthly recurrence selection (#{self.recurrence_selector})"
       end
+    end
+
+    private
+
+    def recurrence_pattern_for_specific_day
+      on_day = " #{I18n.t('todos.recurrence.pattern.on_day_n', :n => every_x_day)}"
+      if every_xth_day(0) > 1
+        I18n.t("todos.recurrence.pattern.every_n_months", :n => every_xth_day) + on_day
+      else
+        I18n.t("todos.recurrence.pattern.every_month") + on_day
+      end
+    end
+
+    def recurrence_pattern_for_relative_day_in_month
+      n_months = if every_x_month2 > 1
+                   "#{every_x_month2} #{I18n.t('common.months')}"
+                 else
+                   I18n.t('common.month')
+                 end
+      I18n.t('todos.recurrence.pattern.every_xth_day_of_every_n_months',
+        x:        xth(every_xth_day), 
+        day:      day_of_week_as_text(day_of_week), 
+        n_months: n_months)
     end
 
   end

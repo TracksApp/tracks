@@ -6,6 +6,7 @@ module RecurringTodos
     fixtures :users
 
     def setup
+      super
       @admin = users(:admin_user)
     end 
 
@@ -46,6 +47,34 @@ module RecurringTodos
 
       rt.every_other1 = 1
       assert_equal "weekly", rt.recurrence_pattern            
+    end
+
+    def test_weekly_pattern
+      rt = recurring_todos(:call_bill_gates_every_week)
+      due_date = rt.get_due_date(@sunday)
+      assert_equal @monday, due_date
+
+      # saturday is last day in week, so the next date should be sunday + n-1 weeks
+      # n-1 because sunday is already in the next week
+      rt.every_other1 = 3
+      due_date = rt.get_due_date(@saturday)
+      assert_equal @sunday + 2.weeks, due_date
+
+      # remove tuesday and wednesday
+      rt.every_day = 'sm  tfs'
+      due_date = rt.get_due_date(@monday)
+      assert_equal @thursday, due_date
+
+      rt.every_other1 = 1
+      rt.every_day = '  tw   '
+      due_date = rt.get_due_date(@tuesday)
+      assert_equal @wednesday, due_date
+      due_date = rt.get_due_date(@wednesday)
+      assert_equal @tuesday+1.week, due_date
+
+      rt.every_day = '      s'
+      due_date = rt.get_due_date(@sunday)
+      assert_equal @saturday+1.week, due_date
     end
 
   end
