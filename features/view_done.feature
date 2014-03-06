@@ -136,9 +136,9 @@ Feature: Show done
   @javascript
   Scenario Outline: I can toggle a todo active from the done pages
     When I go to the <page>
-    Then I should see "todo 1"
+    Then I should see the todo "todo 1"
     When I mark the completed todo "todo 1" active
-    Then I should not see "todo 1"
+    Then I should not see the todo "todo 1"
     When I go to the <next page>
     Then I should see "todo 1" <where>
 
@@ -163,13 +163,13 @@ Feature: Show done
     And I should see "todo 2" in the done this week container
     And I should see "todo 3" in the done this month container
     When I mark the completed todo "todo 1" active
-    Then I should not see "todo 1"
+    Then I should not see the todo "todo 1"
     And I should see empty message for done today of done actions
     When I mark the completed todo "todo 2" active
-    Then I should not see "todo 2"
+    Then I should not see the todo "todo 2"
     And I should see empty message for done this week of done actions
     When I mark the completed todo "todo 3" active
-    Then I should not see "todo 3"
+    Then I should not see the todo "todo 3"
     And I should see empty message for done this month of done actions
 
   @javascript
@@ -196,7 +196,7 @@ Feature: Show done
     When I go to the done projects page
     Then I should see "completed project"
     When I edit the project state of "completed project" to "active"
-    Then I should not see "completed project"
+    Then I should not see the project "completed project"
     When I go to the projects page
     Then I should see "completed project"
 

@@ -33,7 +33,7 @@ Feature: Tagging todos
   Scenario: I can add a new todo from tag view with a different tag and it will not be added to the page
     When I go to the tag page for "tracks"
     And I submit a new action with description "prepare release" and the tags "release, next" in the context "@pc"
-    Then I should not see "prepare release"
+    Then I should not see the todo "prepare release"
 
   @javascript
   Scenario: I can move a tagged todo in tag view to a hidden project and it will move the todo on the page to the hidden container

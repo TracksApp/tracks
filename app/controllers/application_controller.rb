@@ -269,7 +269,7 @@ class ApplicationController < ActionController::Base
 
   def all_done_todos_for(object)
     object_name = object.class.name.downcase # context or project
-    @source_view = object_name
+    @source_view = "all_done"
     @page_title = t("#{object_name.pluralize}.all_completed_tasks_title", "#{object_name}_name".to_sym => object.name)
 
     @done = object.todos.completed.reorder('completed_at DESC').includes(Todo::DEFAULT_INCLUDES).
@@ -280,11 +280,11 @@ class ApplicationController < ActionController::Base
 
   def done_todos_for(object)
     object_name = object.class.name.downcase # context or project
-    @source_view = object_name
+    @source_view = "done" 
     eval("@#{object_name} = object")
     @page_title = t("#{object_name.pluralize}.completed_tasks_title", "#{object_name}_name".to_sym => object.name)
 
-    @done_today, @done_rest_of_week, @done_rest_of_month = DoneTodos.done_todos_for_container(object)
+    @done_today, @done_rest_of_week, @done_rest_of_month = DoneTodos.done_todos_for_container(object.todos)
     @count = @done_today.size + @done_rest_of_week.size + @done_rest_of_month.size
 
     render :template => 'todos/done'

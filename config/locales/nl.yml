@@ -45,7 +45,7 @@ nl:
         last_name: Achternaam
     errors:
       full_messages:
-        format: '%{attribute} %{message}'
+        format: "%{attribute} %{message}"
       messages:
         accepted: moet geaccepteerd worden
         blank: mag niet leeg zijn
@@ -78,7 +78,7 @@ nl:
         body: Er waren problemen met de volgende velden
         header:
           one: 1 fout voorkomt het kunnen bewaren van deze %{model}
-          other: '%{count} fouten voorkomen dat dit %{model} bewaard kan worden'
+          other: "%{count} fouten voorkomen dat dit %{model} bewaard kan worden"
   common:
     action: Actie
     actions: Acties
@@ -117,7 +117,7 @@ nl:
     not_available_abbr: n/b
     note:
       one: 1 notitie
-      other: '%{count} notities'
+      other: "%{count} notities"
       zero: geen notities
     notes: Notities
     numbered_step: Stap %{number}
@@ -165,9 +165,9 @@ nl:
     edit_context: Bewerk context
     hidden_contexts: Verborgen contexten
     hide_form: Verberg formulier
-    hide_form_title: 'Verberg formulier voor nieuwe context '
+    hide_form_title: Verberg formulier voor nieuwe context
     last_completed_in_context: in deze context (laatste %{number})
-    new_context_post: ''' zal ook gemaakt worden. Weet u dit zeker?'
+    new_context_post: "' zal ook gemaakt worden. Weet u dit zeker?"
     new_context_pre: Nieuwe context '
     no_contexts_active: Momenteel zijn er geen actieve contexten
     no_contexts_hidden: Momenteel zijn er geen verborgen contexten
@@ -184,6 +184,7 @@ nl:
   data:
     import_errors: Er hebben zich fouten voorgedaan bij de import
     import_successful: De import was succesvol
+    import_destination_invalid: Verkeerde bestemming voor import
   date:
     abbr_day_names:
     - Zo
@@ -194,7 +195,7 @@ nl:
     - Vr
     - Za
     abbr_month_names:
-    -
+    - 
     - Jan
     - Feb
     - Maa
@@ -216,14 +217,14 @@ nl:
     - Vrijdag
     - Zaterdag
     formats:
-      default: '%d-%m-%Y'
-      long: '%e %B %Y'
-      longer: '%A %d %B %Y'
-      month_day: '%B %d'
-      only_day: '%e'
-      short: '%e %b'
+      default: "%d-%m-%Y"
+      long: "%e %B %Y"
+      longer: "%A %d %B %Y"
+      month_day: "%B %d"
+      only_day: "%e"
+      short: "%e %b"
     month_names:
-    -
+    - 
     - Januari
     - Februari
     - Maart
@@ -268,16 +269,16 @@ nl:
         other: over %{count} jaren
       x_days:
         one: 1 dag
-        other: '%{count} dagen'
+        other: "%{count} dagen"
       x_minutes:
         one: 1 minuut
-        other: '%{count} minuten'
+        other: "%{count} minuten"
       x_months:
         one: 1 maand
-        other: '%{count} maanden'
+        other: "%{count} maanden"
       x_seconds:
         one: 1 seconde
-        other: '%{count} seconden'
+        other: "%{count} seconden"
     prompts:
       day: Dag
       hour: Uur
@@ -286,11 +287,10 @@ nl:
       second: Seconden
       year: Jaar
   errors:
-    format: '%{attribute} %{message} '
+    format: "%{attribute} %{message}"
     messages:
       accepted: moet geaccepteerd worden
       blank: kan niet leeg zijn
-      confirmation: komt niet met bevestiging overeen
       empty: kan niet leeg zijn
       equal_to: moet gelijk zijn aan %{count}
       even: moet even zijn
@@ -307,6 +307,10 @@ nl:
       too_long: is te lang (maximum is %{count} karakters)
       too_short: is te kort (minimum is %{count} karakters)
       wrong_length: is de verkeerde lengte (zou %{count} karakters moeten zijn)
+      confirmation: Komt niet met %{attribute} overeen
+      other_than: moet anders zijn dan %{count}
+      present: moet leeg zijn
+      taken: is al bezet
     user_unauthorized: '401 Unauthorized: Alleen administratieve gebruikers mogen
       deze functie gebruiken.'
   feedlist:
@@ -339,10 +343,6 @@ nl:
   footer:
     send_feedback: Stuur reactie op %{version}
   helpers:
-    button:
-      create: Maak %{model}
-      submit: Bewaar %{model}
-      update: '%{model} bijwerken'
     select:
       prompt: Maak een keuze
     submit:
@@ -378,7 +378,7 @@ nl:
       export_title: Import en export van gegevens
       feeds: Feeds
       feeds_title: Zie een lijst met beschikbare feeds
-      help: '?'
+      help: "?"
       home: Start
       home_title: Start
       integrations_: Integreer Tracks
@@ -407,6 +407,8 @@ nl:
       show_empty_containers_context: Toon lege contexten
       show_empty_containers_project: Toon lege projecten
       show_empty_containers_title: Toon of verberg lege projecten of contexten
+      import: import
+      import_title: importeer gegevens
     next_actions_rss_feed: RSS-feed van de acties
     toggle_contexts: Toggle ingeklapte contexten
     toggle_contexts_title: Maak ingeklapte contexten (on)zichtbaar
@@ -426,7 +428,7 @@ nl:
     login_cas: Ga naar het CAS
     login_standard: Ga terug naar de standaard login
     login_with_openid: inloggen met een OpenID
-    mobile_use_openid: '... if inloggen met een OpenID'
+    mobile_use_openid: "... if inloggen met een OpenID"
     openid_identity_url_not_found: Sorry, geen gebruiker met die identiteit URL bestaat
       (%{identity_url})
     option_separator: of,
@@ -473,36 +475,35 @@ nl:
   number:
     currency:
       format:
-        delimiter: .
-        format: '%u %n'
+        delimiter: "."
+        format: "%u %n"
         precision: 2
-        separator: ','
-        unit: €
+        separator: ","
+        unit: "€"
         significant: false
         strip_insignificant_zeros: false
     format:
-      delimiter: .
+      delimiter: "."
       precision: 3
-      separator: ','
+      separator: ","
       significant: false
       strip_insignificant_zeros: false
     human:
       decimal_units:
-        format: '%n %u'
+        format: "%n %u"
         units:
           billion: Biljoen
           million: Miljoen
           quadrillion: Quadriljoen
           thousand: Duizend
           trillion: Triljoen
-          unit: false
       format:
-        delimiter: .
+        delimiter: "."
         precision: 1
         significant: true
         strip_insignificant_zeros: true
       storage_units:
-        format: '%n %u'
+        format: "%n %u"
         units:
           byte:
             one: Byte
@@ -513,10 +514,7 @@ nl:
           tb: TB
     percentage:
       format:
-        delimiter: false
-    precision:
-      format:
-        delimiter: false
+        format: "%n%"
   preferences:
     authentication_header: Uw authenticatie
     change_authentication_type: Verander uw authenticatietype
@@ -597,7 +595,7 @@ nl:
     with_default_tags: en met '%{tags}' als de standaard tags
     with_no_default_context: zonder standaard context
     with_no_default_tags: en zonder standaard tags
-    last_completed_in_project: (laatste %{number})
+    last_completed_in_project: "(laatste %{number})"
   search:
     contexts_matching_query: Contexten passend bij zoekopdracht
     no_results: Uw zoekopdracht heeft geen resultaten opgeleverd.
@@ -701,8 +699,8 @@ nl:
       avg_created: Gem gemaakt
       completed: Afgerond
       created: Gemaakt
-      month_avg_completed: '%{months} gem afgerond per maand'
-      month_avg_created: '%{months} gem gemaakt per maand'
+      month_avg_completed: "%{months} gem afgerond per maand"
+      month_avg_created: "%{months} gem gemaakt per maand"
     legend:
       actions: Acties
       day_of_week: Dag van de week
@@ -719,7 +717,7 @@ nl:
     open_per_week_legend:
       actions: Acties
       weeks: Weken geleden
-    other_actions_label: (anderen)
+    other_actions_label: "(anderen)"
     projects: Projecten
     running_time_all: Huidige looptijd van alle onvolledige acties
     running_time_all_legend:
@@ -756,15 +754,15 @@ nl:
       acties
     totals: Totalen
     totals_action_count: u heeft een totaal van %{count} acties
-    totals_actions_completed: '%{count} van deze zijn voltooid.'
+    totals_actions_completed: "%{count} van deze zijn voltooid."
     totals_active_project_count: Van deze zijn %{count} actieve projecten
-    totals_blocked_actions: '%{count} zijn afhankelijk van de voltooiing van hun acties.'
+    totals_blocked_actions: "%{count} zijn afhankelijk van de voltooiing van hun acties."
     totals_completed_project_count: en %{count} zijn afgeronde projecten.
     totals_context_count: U heeft %{count} contexten.
     totals_deferred_actions: waarvan %{count} uitgestelde acties in de tickler zijn
     totals_first_action: Sinds uw eerste actie op %{date}
     totals_hidden_context_count: en %{count} zijn verborgen contexten.
-    totals_hidden_project_count: '%{count} zijn verborgen'
+    totals_hidden_project_count: "%{count} zijn verborgen"
     totals_incomplete_actions: U heeft %{count} onvolledige acties
     totals_project_count: U heeft %{count} projecten.
     totals_tag_count: U heeft %{count} tags geplaatst op acties.
@@ -773,26 +771,26 @@ nl:
     within_one: Binnen 1
   support:
     array:
-      last_word_connector: ', en'
+      last_word_connector: ", en"
       two_words_connector: en
-      words_connector: ','
+      words_connector: ","
     select:
       prompt: Selecteer
   time:
     am: ochtend
     formats:
-      default: '%A, %d %B %Y %H:%M:%S %z'
-      long: '%A, %d. %B %Y, %H:%M'
-      month_day: '%d %B'
-      short: '%d %B %H:%M'
-      stats: '%a %d-%m'
-      time: '%H:%M'
+      default: "%A, %d %B %Y %H:%M:%S %z"
+      long: "%A, %d. %B %Y, %H:%M"
+      month_day: "%d %B"
+      short: "%d %B %H:%M"
+      stats: "%a %d-%m"
+      time: "%H:%M"
     pm: middag
   todos:
     action_deferred: De actie '%{description}' is uitgesteld
     action_deleted_error: Verwijderen van de actie is mislukt
     action_deleted_success: Actie succesvol verwijderd
-    action_due_on: (deadline actie op %{date})
+    action_due_on: "(deadline actie op %{date})"
     action_marked_complete: De actie <strong>'%{description}'</strong> werd gemarkeerd
       als <strong>%{completed}</strong>
     action_marked_complete_error: De actie <strong>'%{description}'</strong> is niet
@@ -801,7 +799,7 @@ nl:
     action_saved_to_tickler: Actie opgeslagen in tickler
     add_another_dependency: Nog een afhankelijkheid toevoegen
     add_new_recurring: Voeg een nieuwe terugkerende actie toe
-    added_dependency: '%{dependency} als afhankelijkheid toegevoegd.'
+    added_dependency: "%{dependency} als afhankelijkheid toegevoegd."
     added_new_context: Nieuwe context toegevoegd
     added_new_next_action: Nieuwe actie toegevoegd
     added_new_next_action_plural: Nieuwe acties toegevoegd
@@ -848,7 +846,7 @@ nl:
       bewerken alvorens uitsteldatum aan te passen.
     defer_x_days:
       one: Een dag uitstellen
-      other: '%{count} dagen uitstellen'
+      other: "%{count} dagen uitstellen"
     deferred_actions_with: Uitgestelde acties met de tag '%{tag_name}'
     deferred_pending_actions: Uitgestelde/wachtende acties
     deferred_tasks_title: TRACKS::Tickler
@@ -921,7 +919,7 @@ nl:
       due_within_a_week: deadline binnen een week
     no_actions_due_this_week: Geen acties met deadline in rest van deze week
     no_last_completed_actions: Geen afgeronde acties gevonden
-    no_project: -- Geen project --
+    no_project: "-- Geen project --"
     overdue: Achterstallig
     pending: Wachtend
     recurrence:
@@ -957,7 +955,7 @@ nl:
         from: vanaf
         last: laatste
         month_names:
-        -
+        - 
         - januari
         - februari
         - maart
@@ -988,7 +986,7 @@ nl:
       yearly_every_xth_day: De %{day} %{day_of_week} van %{month}
       yearly_options: Instellingen voor jaarlijks terugkerende acties
       recurrence_on:
-        due_date: 'de deadline van de actie '
+        due_date: de deadline van de actie
         from_tickler: de datum wanneer de actie getoond moet worden (geen deadline)
         options: Gebruik de berekende datum voor
         show_always: altijd
@@ -1005,10 +1003,10 @@ nl:
     recurring_pattern_removed: Het herhalingspatroon is verwijderd van %{count}
     recurring_todos: Terugkerende acties
     remove_dependency: Verwijder afhankelijkheid (zal niet de actie zelf verwijderen)
-    removed_predecessor: '''%{successor}'' is verwijderd als afhankelijkheid van ''%{predecessor}''.'
+    removed_predecessor: "'%{successor}' is verwijderd als afhankelijkheid van '%{predecessor}'."
     scheduled_overdue: Gepland om %{days} dagen geleden te tonen
     see_all_completed: Je kan alle afgeronde acties %{link} zien
-    set_to_pending: '''%{task}'' als wachtend ingesteld'
+    set_to_pending: "'%{task}' als wachtend ingesteld"
     show_from: Toon vanaf
     show_in_days: Toon over %{days} dagen
     show_on_date: Toon op %{date}
@@ -1022,8 +1020,8 @@ nl:
     task_list_title: TRACKS::Toon acties
     tickler_items_due:
       one: Een tickler item wordt nu zichtbaar - vernieuw de pagina om het te zien.
-      other: '%{count} tickerl items zijn nu zichtbaar - vernieuw de pagina om ze
-        te zien.'
+      other: "%{count} tickerl items zijn nu zichtbaar - vernieuw de pagina om ze
+        te zien."
     to_tickler: naar tickler
     unable_to_add_dependency: Niet in staat om de afhankelijkheid toe te voegen
     unresolved_dependency: De waarde die u ingevoerd heeft in het afhankelijkheden
@@ -1042,6 +1040,7 @@ nl:
       tag_completed: Afgeronde acties getagged met '%{param}'
       tag_deferred_pending: Uitgestelde/wachtende acties getagged met '%{param}'
       tag_hidden: Verborgen acties getagged met '%{param}'
+      context_without_project: Acties zonder project in %{param}
     no_actions:
       completed: Momenteel zijn er geen afgeronde acties
       completed_recurring: Momenteel zijn er geen afgeronden herhalende acties
@@ -1063,6 +1062,11 @@ nl:
       tag_hidden: Momenteel zijn er geen verborgen acties
       title: Geen acties gevonden
       without_project: Momenteel zijn er geen acties zonder project
+      not_done_context: Momenteel zijn er geen openstaande acties in deze context
+      not_done_project: Momenteel zijn er geen openstaande acties in dit project
+    error:
+      invalid_due_date: Ongeldige deadline datum
+      invalid_show_from_date: Ongeldige datum voor tonen vanaf
   users:
     account_signup: Aanmelden voor een account
     auth_change_submit: Wijzigen authenticatietype
@@ -1130,5 +1134,5 @@ nl:
         one: Toon <b>1</b> %{model}
         other: Toon <b>alle&nbsp;%{count}</b> %{model}
         zero: Geen %{model} gevonden
-    page_gap: '&hellip;'
-    previous_label: «Vorige
+    page_gap: "&hellip;"
+    previous_label: "«Vorige"

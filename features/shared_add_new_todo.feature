@@ -192,9 +192,9 @@ Feature: Add new next action from every page
     And I have selected the view for group by <grouping>
     When I go to the <page>
     And I submit a new action with description "hidden todo" to project "hidden project" with tags "test" in the context "visible context"
-    Then I should <see_hidden> "hidden todo"
+    Then I should <see_hidden> the todo "hidden todo"
     When I submit a new action with description "visible todo" to project "visible project" with tags "test" in the context "visible context"
-    Then I should <see_visible> "visible todo"
+    Then I should <see_visible> the todo "visible todo"
 
     Scenarios:
       | page                               | grouping | see_hidden | see_visible |

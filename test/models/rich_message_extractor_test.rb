@@ -11,8 +11,8 @@ class RichMessageExtractorTest < Test::Unit::TestCase
     assert_equal "ohai", extractor.description
     assert_equal "some-context", extractor.context
     assert_equal "this-project", extractor.project
-    assert_equal "2013-10-12", extractor.show_from.to_s
-    assert_equal "2013-10-14", extractor.due.to_s
+    assert_equal Time.zone.parse("2013-10-12").utc.to_s, extractor.show_from.utc.to_s
+    assert_equal Time.zone.parse("2013-10-14").utc.to_s, extractor.due.utc.to_s
     assert_equal ["tag1","tag2"], extractor.tags
     assert extractor.starred?
   end
@@ -72,7 +72,7 @@ class RichMessageExtractorTest < Test::Unit::TestCase
   def test_message_with_due_date
     message = "datetest<141013"
     extractor = RichMessageExtractor.new(message)
-    assert_equal "2014-10-13", extractor.due.to_s
+    assert_equal Time.zone.parse("2014-10-13").utc.to_s, extractor.due.utc.to_s
   end
 
   def test_message_with_no_due_date
@@ -84,7 +84,7 @@ class RichMessageExtractorTest < Test::Unit::TestCase
   def test_message_with_show_from
     message = "datetest>161013"
     extractor = RichMessageExtractor.new(message)
-    assert_equal "2016-10-13", extractor.show_from.to_s
+    assert_equal Time.zone.parse("2016-10-13").utc.to_s, extractor.show_from.utc.to_s
   end
 
   def test_message_with_no_show_from

@@ -48,8 +48,8 @@ class TodoFromRichMessage
     todo.raw_notes   = notes
     todo.context_id  = context_id
     todo.project_id  = project_id unless project_id.nil?
-    todo.show_from   = show_from if show_from.is_a? Date
-    todo.due         = due if due.is_a? Date
+    todo.show_from   = show_from if show_from.is_a? Time
+    todo.due         = due if due.is_a? Time
     todo.tag_with tags unless tags.nil? || tags.empty?
     todo.starred     = star
     todo

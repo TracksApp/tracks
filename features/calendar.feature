@@ -41,7 +41,7 @@ Feature: Show all due actions in a calendar view
     When I clear the due date of "something new"
     Then I should not see the todo "something new"
 
-  @javascript
+  @javascript 
   Scenario: Deleting a todo will remove it from the calendar
     Given I have a todo "something new" in the context "@calendar" which is due tomorrow
     When I go to the calendar page

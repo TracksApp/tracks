@@ -51,12 +51,12 @@ class RichMessageExtractor
 
   def due
     due = select_for DUE_MARKER
-    due.blank? ? nil : Date.parse(due[1].strip)
+    due.blank? ? nil : Time.zone.parse(fix_date_string(due[1].strip))
   end
 
   def show_from
     show_from = select_for TICKLER_MARKER
-    show_from.blank? ? nil : Date.parse(show_from[1].strip)
+    show_from.blank? ? nil : Time.zone.parse(fix_date_string(show_from[1].strip))
   end
 
   def starred?
@@ -67,6 +67,10 @@ class RichMessageExtractor
 
   def select_for symbol
     @message.match /#{symbol}(.*?)(?=[#{ALL_MARKERS.join}]|\Z)/
+  end
+
+  def fix_date_string yymmdd
+    "20#{yymmdd[0..1]}-#{yymmdd[2..3]}-#{yymmdd[4..5]} 00:00"
   end
 
 end

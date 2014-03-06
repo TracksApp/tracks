@@ -524,7 +524,7 @@ class TodosController < ApplicationController
     @source_view = 'done'
     @page_title = t('todos.completed_tasks_title')
 
-    @done_today, @done_rest_of_week, @done_rest_of_month = DoneTodos.done_todos_for_container(current_user)
+    @done_today, @done_rest_of_week, @done_rest_of_month = DoneTodos.done_todos_for_container(current_user.todos)
     @count = @done_today.size + @done_rest_of_week.size + @done_rest_of_month.size
 
     respond_to do |format|
@@ -678,7 +678,7 @@ class TodosController < ApplicationController
   end
 
   def done_by_tag_setup
-    @source_view = params['_source_view'] || 'tag'
+    @source_view = params['_source_view'] || 'done'
     @tag_name = sanitize(params[:name]) # sanitize to prevent XSS vunerability!
     @page_title = t('todos.all_completed_tagged_page_title', :tag_name => @tag_name)
     @tag = Tag.where(:name => @tag_name).first_or_create
@@ -769,7 +769,11 @@ class TodosController < ApplicationController
       @items = get_not_completed_for_predecessor(current_user, @todo.id) unless !@items.empty?
     else
       # New todo - TODO: Filter on current project in project view
+<<<<<<< HEAD
       @items = get_not_complete_for_predecessor(current_user)
+=======
+      @items = get_not_completed_for_predecessor(current_user)
+>>>>>>> master
     end
     render :inline => format_dependencies_as_json_for_auto_complete(@items)
   end
@@ -1010,7 +1014,10 @@ end
         @target_context_count = actions_in_target.count
       }
       from.done {
-        @remaining_in_context = DoneTodos.remaining_in_container(current_user, @original_completed_period)
+        @remaining_in_context = DoneTodos.remaining_in_container(current_user.todos, @original_completed_period)
+      }
+      from.all_done {
+        @remaining_in_context = current_user.todos.completed.count
       }
     end
   end
@@ -1271,18 +1278,18 @@ end
     completed_todos.completed_after(start_of_this_day).includes(includes[:include])
   end
 
-  def get_done_in_period(before, after, includes = {:include => Todo::DEFAULT_INCLUDES})
+  def get_done_in_period(completed_todos, before, after, includes = {:include => Todo::DEFAULT_INCLUDES})
     completed_todos.completed_before(before).completed_after(after).includes(includes[:include])
   end
 
   # all completed todos [begin_of_week, start_of_today]
   def get_done_rest_of_week(completed_todos, includes = {:include => Todo::DEFAULT_INCLUDES})
-    get_done_in_period(Time.zone.now.beginning_of_day, Time.zone.now.beginning_of_week)
+    get_done_in_period(completed_todos, Time.zone.now.beginning_of_day, Time.zone.now.beginning_of_week)
   end
 
   # all completed todos [begin_of_month, begin_of_week]
   def get_done_rest_of_month(completed_todos, includes = {:include => Todo::DEFAULT_INCLUDES})
-    get_done_in_period(Time.zone.now.beginning_of_week, Time.zone.now.beginning_of_month)
+    get_done_in_period(completed_todos, Time.zone.now.beginning_of_week, Time.zone.now.beginning_of_month)
   end
 
   def get_not_done_todos

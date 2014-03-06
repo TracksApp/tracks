@@ -11,7 +11,7 @@ cs:
         first_name: Jméno
         last_name: Příjmení
         locale: Lokále
-        mobile_todos_per_page: Úkolů na stránku (mobilní zobrazení)
+        mobile_todos_per_page: "Úkolů na stránku (mobilní zobrazení)"
         refresh: Interval obnovení stránky (v minutách)
         review_period: Interval revize projektů
         show_completed_projects_in_sidebar: Zobrazovat hotové projekty v sidebaru
@@ -22,7 +22,7 @@ cs:
         sms_context: Výchozí emailový kontext
         sms_email: SMS email
         staleness_starts: Jako prošlé označit projekty starší než
-        time_zone: Časové pásmo
+        time_zone: "Časové pásmo"
         title_date_format: Formát data nadpisu
         verbose_action_descriptors: Ukecané popisovače úkolů
         week_starts: Začátek týdne
@@ -45,7 +45,7 @@ cs:
         last_name: Jméno
     errors:
       full_messages:
-        format: '%{attribute} %{message}'
+        format: "%{attribute} %{message}"
       messages:
         accepted: musí být akceptováno
         blank: nesmí být prázdné
@@ -78,14 +78,14 @@ cs:
         body: 'Nastaly potíže s následujícími políčky:'
         header:
           one: jedna chyba brání uložení tohoto objektu %{model}
-          other: '%{count} chyb brání uložení tohoto objektu %{model}'
+          other: "%{count} chyb brání uložení tohoto objektu %{model}"
   common:
-    action: Úkol
-    actions: Úkoly
+    action: "Úkol"
+    actions: "Úkoly"
     actions_midsentence:
-      one: úkolů
-      other: Úkoly
-      zero: Úkoly
+      one: "úkolů"
+      other: "Úkoly"
+      zero: "Úkoly"
     add: Přidat
     ajaxError: Chyba čtení ze serveru
     back: Zpět
@@ -105,19 +105,19 @@ cs:
     email: Email
     errors_with_fields: 'Nastaly potíže s následujícími políčky:'
     first: První
-    forth: Čtvrtý
-    fourth: Čtvrtý
+    forth: "Čtvrtý"
+    fourth: "Čtvrtý"
     go_back: Zpět
     last: Poslední
     logout: Odhlásit
     month: měsíc
     months: měsíce
     next: Další
-    none: Žádný
+    none: "Žádný"
     not_available_abbr: n/a
     note:
       one: 1 na vědomí
-      other: '%{count} na vědomy'
+      other: "%{count} na vědomy"
       zero: 0 na vědomí
     notes: Poznámky
     numbered_step: Krok %{number}
@@ -138,12 +138,12 @@ cs:
         pořadí bude ztraceno.
       alphabetically_title: Seřadit projekty abecedně
       by_task_count: Podle počtu úkolů
-      by_task_count_title: Řadit podle počtu úkolů
+      by_task_count_title: "Řadit podle počtu úkolů"
       by_task_count_title_confirm: Určitě chcete řadit tyto projekty podle počtu úkolů?
         Stávající pořadí bude ztraceno.
-      sort: Řadit
+      sort: "Řadit"
     third: Třetí
-    todo: úkol
+    todo: "úkol"
     update: Uložit
     website: Webová stránka
     week: týden
@@ -165,10 +165,10 @@ cs:
     hide_form: Schovat formulář
     hide_form_title: Schovat formulář
     last_completed_in_context: v tomto kontextu (posledních %{number})
-    new_context_post: ''' bude také vytvořen. Opravdu?'
+    new_context_post: "' bude také vytvořen. Opravdu?"
     new_context_pre: Nový kontext '
-    no_contexts_active: Žádné aktivní kontexty
-    no_contexts_hidden: Žádné skryté kontexty
+    no_contexts_active: "Žádné aktivní kontexty"
+    no_contexts_hidden: "Žádné skryté kontexty"
     save_status_message: Kontext uložen
     show_form: Nový kontext
     show_form_title: Nový kontext
@@ -184,55 +184,55 @@ cs:
     abbr_day_names:
     - Ne
     - Po
-    - Út
+    - "Út"
     - St
-    - Čt
+    - "Čt"
     - Pá
     - So
     abbr_month_names:
     - 
     - Led
-    - Úno
+    - "Úno"
     - Bře
     - Dub
     - Kvě
-    - Čer
-    - Čec
+    - "Čer"
+    - "Čec"
     - Srp
     - Zář
-    - Říj
+    - "Říj"
     - Lis
     - Pro
     day_names:
     - Neděle
     - Ponělí
-    - Úterý
+    - "Úterý"
     - Středa
-    - Čtvrtek
+    - "Čtvrtek"
     - Pátek
     - Sobota
     formats:
-      default: '%Y-%m-%d'
-      long: '%B %d, %Y'
-      longer: '%A %B %d, %Y'
-      short: '%b %d'
+      default: "%Y-%m-%d"
+      long: "%B %d, %Y"
+      longer: "%A %B %d, %Y"
+      short: "%b %d"
     month_names:
     - 
     - Leden
-    - Únor
+    - "Únor"
     - Březen
     - Duben
     - Květen
-    - Červen
-    - Červenec
+    - "Červen"
+    - "Červenec"
     - Srpen
     - Září
-    - Říjen
+    - "Říjen"
     - Listopad
     - Prosinec
     order:
     - rok
-    - ':měsíc'
+    - ":měsíc"
     - den
   datetime:
     distance_in_words:
@@ -262,16 +262,16 @@ cs:
         other: přes %{count} let
       x_days:
         one: 1 den
-        other: '%{count} dní'
+        other: "%{count} dní"
       x_minutes:
         one: 1 minuta
-        other: '%{count} minut'
+        other: "%{count} minut"
       x_months:
         one: 1 měsíc
-        other: '%{count} měsíců'
+        other: "%{count} měsíců"
       x_seconds:
         one: 1 sekunda
-        other: '%{count} sekund'
+        other: "%{count} sekund"
     prompts:
       day: Den
       hour: Hodina
@@ -282,8 +282,8 @@ cs:
   errors:
     user_unauthorized: '401 Neautorizováno: Jen administrátoři smí používat tuto funkci.'
   feedlist:
-    actions_completed_last_week: Úkoly dokončené v posledních sedmi dnech
-    actions_due_next_week: Úkoly plánované na příštích sedm dní
+    actions_completed_last_week: "Úkoly dokončené v posledních sedmi dnech"
+    actions_due_next_week: "Úkoly plánované na příštích sedm dní"
     actions_due_today: Akce plánované na dnes
     active_projects_wo_next: Aktivni projekty bez úkolů
     active_starred_actions: Všechny aktivní úkoly s hvězdičkou
@@ -335,7 +335,7 @@ cs:
       export_title: Import a export dat
       feeds: Feedy
       feeds_title: Seznam dostupných feedů
-      help: '?'
+      help: "?"
       home: Domů
       home_title: Domů
       integrations_: Integrovat Tracks
@@ -375,7 +375,7 @@ cs:
     login_cas: přejít na CAS
     login_standard: vraťte se ke standardnímu přihlášení
     login_with_openid: přihlašte se se svým OpenID
-    mobile_use_openid: …nebo přihlášení s OpenID
+    mobile_use_openid: "…nebo přihlášení s OpenID"
     openid_identity_url_not_found: Je nám líto, neexistuje uživatel s touto identitou
       (%{identity_url})
     option_separator: nebo
@@ -411,8 +411,8 @@ cs:
     deleted_note: Smazat poznámku '%{id}'
     edit_item_title: Upravit položku
     in_project: 'V:'
-    no_notes_available: 'Žádné poznámky: přidejte poznámky ze stránek jednotlivých
-      projektů.'
+    no_notes_available: "Žádné poznámky: přidejte poznámky ze stránek jednotlivých
+      projektů."
     note_header: Poznámka %{id}
     note_link_title: Zobrazit poznámku %{id}
     note_location_link: 'V:'
@@ -420,20 +420,20 @@ cs:
   number:
     currency:
       format:
-        delimiter: ','
-        format: '%u%n'
+        delimiter: ","
+        format: "%u%n"
         precision: 2
-        separator: .
-        unit: $
+        separator: "."
+        unit: "$"
     format:
-      delimiter: ','
+      delimiter: ","
       precision: 3
-      separator: .
+      separator: "."
     human:
       format:
         precision: 1
       storage_units:
-        format: '%n %u'
+        format: "%n %u"
         units:
           byte:
             one: Byte
@@ -459,7 +459,7 @@ cs:
     page_title_edit: TRACKS::Editace nastavení
     password_changed: Heslo bylo změněno. Prosím znovu se přihlašte.
     show_number_completed: Zobrazit %{number} hotových položek
-    sms_context_none: žádný
+    sms_context_none: "žádný"
     staleness_starts_after: Zastarání nastává po %{days} dnech
     tabs:
       authentication: Autentizace
@@ -471,7 +471,7 @@ cs:
     token_header: Váš pešek
     updated: Nastavení bylo uloženo
   projects:
-    actions_in_project_title: Úkoly v tomto projetku
+    actions_in_project_title: "Úkoly v tomto projetku"
     active_projects: Aktivní projekty
     add_note: Nová poznámka
     add_note_submit: Nová poznámka
@@ -496,12 +496,12 @@ cs:
     list_projects: TRACKS::Projekty
     list_reviews: TRACKS::Revize
     no_default_context: Tento projekt nemá výchozí kontext
-    no_last_completed_projects: Žádné hotové projekty
-    no_last_completed_recurring_todos: Žádné hotové opakované úkoly
-    no_notes_attached: Žádné poznámky
-    no_projects: Žádné projekty
+    no_last_completed_projects: "Žádné hotové projekty"
+    no_last_completed_recurring_todos: "Žádné hotové opakované úkoly"
+    no_notes_attached: "Žádné poznámky"
+    no_projects: "Žádné projekty"
     notes: Poznámky
-    notes_empty: Žádné poznámky
+    notes_empty: "Žádné poznámky"
     page_title: 'TRACKS::Projekt: %{project}'
     project_saved_status: Projekt byl uložen
     project_state: Projekt je %{state}.
@@ -534,7 +534,7 @@ cs:
     hide_action_form_title: Skrýt formulář pro založení nového úkolu
     hide_form: Schovat formulář
     make_actions_dependent: Akce budou vzájemně závislé
-    multiple_next_actions: Úkoly (jeden na každém řádku)
+    multiple_next_actions: "Úkoly (jeden na každém řádku)"
     project_for_all_actions: Projekt (pro všechny)
     separate_tags_with_commas: oddělené čárkami
     tags_for_all_actions: Značky (oddělené čárkami)
@@ -567,10 +567,10 @@ cs:
     visible: Viditelný
     visible_plural: Viditelné
   stats:
-    action_completion_time_title: Čas dokončení (všechny hotové úkoly)
+    action_completion_time_title: "Čas dokončení (všechny hotové úkoly)"
     action_selection_title: TRACKS::výběr úkolů
-    actions: Úkoly
-    actions_30days_title: Úkoly za posledních 30 dní
+    actions: "Úkoly"
+    actions_30days_title: "Úkoly za posledních 30 dní"
     actions_actions_avg_created_30days: Za posledních 30 dní bylo vytvořeno průměrně
       %{count} úkolů
     actions_avg_completed: a uzavřeno průměrně %{count} úkolů za měsíc.
@@ -587,15 +587,15 @@ cs:
       day_of_week: Den v týdnu
       number_of_actions: Počet akcí
     actions_dow_30days_title: Dny v týdnu (posleních 30 dní)
-    actions_further: ' a dále'
-    actions_last_year: Úkoly v posledním roce
+    actions_further: a dále
+    actions_last_year: "Úkoly v posledním roce"
     actions_last_year_legend:
       months_ago: měsíců zpět
       number_of_actions: Počet úklolů
-    actions_lastyear_title: Úkoly za posledních 12 měsíců
+    actions_lastyear_title: "Úkoly za posledních 12 měsíců"
     actions_min_completion_time: Minimální čas k dokončení je %{time}.
     actions_min_max_completion_days: Minimum/maximum dní na dokončení je %{min}/%{max}.
-    actions_selected_from_week: 'Úkoly vybrané z týdne '
+    actions_selected_from_week: "Úkoly vybrané z týdne"
     click_to_return: Klepněte %{link} pro návrat ke statistikám.
     click_to_return_link: zde
     click_to_show_actions_from_week: Klepněte %{link} pro zobrazení úkolů z týdne
@@ -610,34 +610,34 @@ cs:
       avg_created: průměrně vytvořeno
       completed: Completed
       created: Vytvořeno
-      month_avg_completed: '%{months} měsíční průměr hotových'
-      month_avg_created: '%{months} měsíční průměr vytvořených'
+      month_avg_completed: "%{months} měsíční průměr hotových"
+      month_avg_created: "%{months} měsíční průměr vytvořených"
     legend:
-      actions: Úkoly
+      actions: "Úkoly"
       day_of_week: Den v týdnu
       months_ago: měsíců zpět
       number_of_actions: Počet úkolů
       number_of_days: Před kolika dny
       percentage: Podíl
-      running_time: Čas k dokončení úkolu (týdny)
+      running_time: "Čas k dokončení úkolu (týdny)"
     more_stats_will_appear: Další statistiky se zobrazí až přibyde více úkolů.
     no_actions_selected: Nejsou vybrány žádné úkoly.
-    no_tags_available: žádné štítky nejsou definovány
+    no_tags_available: "žádné štítky nejsou definovány"
     open_per_week: Aktivní (viditelné i skryté) další akce za týden
     open_per_week_legend:
       actions: Akcí
       weeks: Týdny
-    other_actions_label: (ostatní)
+    other_actions_label: "(ostatní)"
     projects: Projekty
     running_time_all: Aktuální čas běhu všech nehotových úkolů
     running_time_all_legend:
-      actions: Úkoly
+      actions: "Úkoly"
       percentage: Podíl
-      running_time: Čas běhu úkolů (týdny). Klepněte na sloupec pro další info
+      running_time: "Čas běhu úkolů (týdny). Klepněte na sloupec pro další info"
     running_time_legend:
-      actions: Úkoly
+      actions: "Úkoly"
       percentage: Podíl
-      weeks: Čas běhu úkolu (týdny). Klepněte na sloupec pro další info
+      weeks: "Čas běhu úkolu (týdny). Klepněte na sloupec pro další info"
     spread_of_actions_for_all_context: Distribuce všech úkolů do kontextů
     spread_of_running_actions_for_visible_contexts: Distribuce běžících úkolů do viditelných
       kontextů
@@ -647,7 +647,7 @@ cs:
     tag_cloud_description: Tento mrak zahrnuje štítky všech úkolů (hotových, nehotových,
       viditelných i skrytých)
     tag_cloud_title: Mrak štítků pro všechny úkly
-    tags: Štítky
+    tags: "Štítky"
     time_of_day: Denní doba (všechny úkoly)
     time_of_day_legend:
       number_of_actions: Počet úkolů
@@ -664,15 +664,15 @@ cs:
       úkoly
     totals: Celkem
     totals_action_count: máte celkem %{count} úkolů
-    totals_actions_completed: '%{count} z nich je hotových.'
+    totals_actions_completed: "%{count} z nich je hotových."
     totals_active_project_count: Znich %{count} je aktivních projeků
-    totals_blocked_actions: '%{count} je závislých na dokončení jiných akcí.'
+    totals_blocked_actions: "%{count} je závislých na dokončení jiných akcí."
     totals_completed_project_count: a %{count} je hotových projektů.
     totals_context_count: Máte %{count} kontextů.
     totals_deferred_actions: z nichž %{count} jsou odložené úkoly v Ticlkeru
     totals_first_action: Od vašeho prvního úkolu %{date}
     totals_hidden_context_count: a %{count} skrytých kontextů.
-    totals_hidden_project_count: '%{count} je skrytých'
+    totals_hidden_project_count: "%{count} je skrytých"
     totals_incomplete_actions: Máte %{count} nehotových úkolů
     totals_project_count: Máte %{count} projektů.
     totals_tag_count: Na akcích je umístěno %{count} štítků.
@@ -681,37 +681,37 @@ cs:
     within_one: V rámci 1.
   support:
     array:
-      last_word_connector: ', a '
-      two_words_connector: ' a '
-      words_connector: ', '
+      last_word_connector: ", a"
+      two_words_connector: a
+      words_connector: ","
     select:
       prompt: Prosím vyberte
   time:
     am: am
     formats:
-      default: '%a, %d %b %Y %H:%M:%S %z'
-      long: '%B %d, %Y %H:%M'
-      month_day: '%B %d'
-      short: '%d %b %H:%M'
-      stats: '%a %d-%m'
+      default: "%a, %d %b %Y %H:%M:%S %z"
+      long: "%B %d, %Y %H:%M"
+      month_day: "%B %d"
+      short: "%d %b %H:%M"
+      stats: "%a %d-%m"
     pm: pm
   todos:
-    action_deferred: Úkol '%{description}' byl oldožen
+    action_deferred: "Úkol '%{description}' byl oldožen"
     action_deleted_error: Nepodařilo se smazat úkol
-    action_deleted_success: Úkol byl úspěšně smazán
-    action_due_on: (úkol plánován na %{date})
-    action_marked_complete: Úkol <strong>'%{description}'</strong> byl označen jako
-      <strong>%{completed}</strong>
-    action_marked_complete_error: Úkol <strong>'%{description}'</strong> NEBYL označen
-      jako <strong>%{completed} kvůli chybě na serveru.</strong>
-    action_saved: Úkol uložen
-    action_saved_to_tickler: Úkol byl uložen do Tickleru
+    action_deleted_success: "Úkol byl úspěšně smazán"
+    action_due_on: "(úkol plánován na %{date})"
+    action_marked_complete: "Úkol <strong>'%{description}'</strong> byl označen jako
+      <strong>%{completed}</strong>"
+    action_marked_complete_error: "Úkol <strong>'%{description}'</strong> NEBYL označen
+      jako <strong>%{completed} kvůli chybě na serveru.</strong>"
+    action_saved: "Úkol uložen"
+    action_saved_to_tickler: "Úkol byl uložen do Tickleru"
     add_another_dependency: Přidat další závislost
     add_new_recurring: Vytvořit opakovaný úkol
     added_dependency: Přidáno %{dependency} jako závislost.
     added_new_context: Přidán nový kontext
     added_new_next_action: Přidán nový úkol
-    added_new_next_action_plural: Úkoly byly přidány
+    added_new_next_action_plural: "Úkoly byly přidány"
     added_new_next_action_singular: Přidán nový úkol
     added_new_project: Přidán nový projekt
     all_completed: Všechny hotové úkoly
@@ -719,7 +719,7 @@ cs:
     all_completed_tagged_page_title: TRACKS::Hotové úkoly se štítkem %{tag_name}
     append_in_this_project: v tomto projektu
     archived_tasks_title: TRACKS::Archiv hotových úkolů
-    blocked_by: Čeká na %{predecessors}
+    blocked_by: "Čeká na %{predecessors}"
     calendar:
       due_next_week: Plánované příští týden
       due_this_month: Plánováno na %{month}
@@ -762,7 +762,7 @@ cs:
     delete_action: Smazat úkol
     delete_recurring_action_confirm: Opravdu chcete smazat opakovaný úkol '%{description}'?
     delete_recurring_action_title: Smazat opakovaný úkol
-    deleted_success: Úkol byl úspěšně smazán.
+    deleted_success: "Úkol byl úspěšně smazán."
     depends_on: Závisí na
     depends_on_separate_with_commas: Závisí na (odděleno čárkami)
     done: Hotovo?
@@ -787,9 +787,9 @@ cs:
       due: 'Plánováno na: %{date}'
     has_x_pending:
       one: Jeden čekající úkol
-      other: '%{count} čekajících úkolů'
+      other: "%{count} čekajících úkolů"
     hidden_actions: Skryté úkoly
-    in_hidden_state: (skrytý)
+    in_hidden_state: "(skrytý)"
     in_pending_state: ve stavu čekající
     list_incomplete_next_actions: Zabrazí nehotové úkoly
     list_incomplete_next_actions_with_limit: Zobrazuje posledních %{count} nedokončených
@@ -798,7 +798,7 @@ cs:
     new_related_todo_created: Byl vytvořen nový úkol patřící do tohoto opakovaného
       úkolu
     new_related_todo_created_short: vytvořen nový úkol
-    new_related_todo_not_created_short: úkol nebyl vytvořen
+    new_related_todo_not_created_short: "úkol nebyl vytvořen"
     next_action_description: Popis úkolu
     next_action_needed: Je potřeba zadat aspoň jeden úkol
     next_actions_description: 'Filtr:'
@@ -816,31 +816,31 @@ cs:
       completed: hotové úkoly
       due_today: dnes
       due_within_a_week: během týdne
-    no_actions_due_this_week: Žádné úkoly plánovány na tento týden
-    no_last_completed_actions: Žádné hotové úkoly
-    no_project: --Žádný projekt--
+    no_actions_due_this_week: "Žádné úkoly plánovány na tento týden"
+    no_last_completed_actions: "Žádné hotové úkoly"
+    no_project: "--Žádný projekt--"
     overdue: Spožděné úkoly
-    pending: Čekající
+    pending: "Čekající"
     recurrence:
       daily: Denně
       daily_every_number_day: Každých %{number} dní
       daily_options: Nastavení pro denní opakované úkoly
-      day_x_on_every_x_month: '%{day}. den každý %{month}. měsíc'
+      day_x_on_every_x_month: "%{day}. den každý %{month}. měsíc"
       ends_on: Končí
       ends_on_date: Končí %{date}
       ends_on_number_times: Končí po %{number} opakováních
       every_work_day: Každý pracovní den
       monthly: Měsíčně
-      monthly_every_xth_day: '%{day} %{day_of_week} každý %{month}. měsíc'
+      monthly_every_xth_day: "%{day} %{day_of_week} každý %{month}. měsíc"
       monthly_options: Nastavení pro měsíční opakované úkoly
       no_end_date: Nikdy
       pattern:
         day_names:
         - neděle
         - pondělí
-        - úterý
+        - "úterý"
         - středa
-        - čtvrtek
+        - "čtvrtek"
         - pátek
         - sobota
         due: plánováno na
@@ -850,30 +850,30 @@ cs:
         every_xth_day_of_every_n_months: každý %{x} %{day} každých %{n_months}
         every_year_on: každý rok %{date}
         first: první
-        fourth: čtvrtý
+        fourth: "čtvrtý"
         from: od
         last: poslední
         month_names:
         - 
         - Leden
-        - Únor
+        - "Únor"
         - Březen
         - Duben
         - Květen
-        - Červen
-        - Červenec
+        - "Červen"
+        - "Červenec"
         - Srpen
         - Září
-        - Říjen
+        - "Říjen"
         - Listopad
         - Prosinec
-        on_day_n: '%{n}. den'
+        on_day_n: "%{n}. den"
         on_work_days: v pracovní dny
         second: druhý
         show: ukázat
-        the_xth_day_of_month: '%{x} %{day} měsíce %{month}'
+        the_xth_day_of_month: "%{x} %{day} měsíce %{month}"
         third: třetí
-        times: (%{number} opakování)
+        times: "(%{number} opakování)"
         until: do
         weekly: každý týden
       starts_on: Začíná
@@ -882,13 +882,13 @@ cs:
       weekly_options: Nastavení pro týdenní opakované úkoly
       yearly: Ročně
       yearly_every_x_day: Každý %{month} %{day}
-      yearly_every_xth_day: '%{day} %{day_of_week} měsíce %{month}'
+      yearly_every_xth_day: "%{day} %{day_of_week} měsíce %{month}"
       yearly_options: Nastavení pro roční opakované úkoly
     recurrence_completed: Poslední opakování úkolu bylo označeno jako hotové. Opakovaný
       úkol je dokončený
     recurrence_period: Interval opakování
-    recurring_action_deleted: Úkol byl smazán. Protože jde o opakovaný úkol, byl vložen
-      nový úkol
+    recurring_action_deleted: "Úkol byl smazán. Protože jde o opakovaný úkol, byl
+      vložen nový úkol"
     recurring_action_saved: Opakovaný úkol byl uložen
     recurring_actions_title: TRACKS::Opakované úkoly
     recurring_deleted_success: Opakovaný úkol byl úspěšně smazán.
@@ -898,7 +898,7 @@ cs:
     removed_predecessor: Byl odstraněn %{successor} jako závislost pro %{predecessor}.
     scheduled_overdue: Naplánováno zobrazení před %{days} dny
     see_all_completed: Můžete vidět všechny dokončené akce %{link}
-    set_to_pending: '%{task} nastaven jako čekající'
+    set_to_pending: "%{task} nastaven jako čekající"
     show_from: Zobrazovat od
     show_in_days: Zobrazit za %{days} dní
     show_on_date: Ukázat %{date}
@@ -908,12 +908,12 @@ cs:
     star_action_with_description: ohvězdičkovat úkol '%{description}'
     tagged_page_title: TRACKS::Se štítkem '%{tag_name}'
     tagged_with: označeno štítkem &lsquo;%{tag_name}&rsquo;
-    tags: Štítky (oddělené čárkami)
+    tags: "Štítky (oddělené čárkami)"
     task_list_title: TRACKS::Úkoly
     tickler_items_due:
       one: Jeden úkol v Tickleru je plánován dnes - obnovte stránku pro zobrazení.
-      other: '%{count} položek v Tickleru je plánováno na dnes tickler items are now
-        due - obnovte stránku pro zobrazení.'
+      other: "%{count} položek v Tickleru je plánováno na dnes tickler items are now
+        due - obnovte stránku pro zobrazení."
     to_tickler: do Tickleru
     unable_to_add_dependency: Nepodařilo se přidat závislost
     unresolved_dependency: Hodnota v poli 'závisí na' neodpovídá žádnému existujícímu
@@ -962,7 +962,7 @@ cs:
     signup_new_user: Registrace nového uživatele
     signup_successful: Registrace uživatele %{username} byla úspěšná.
     successfully_deleted_user: Uživatel %{username} byl úspěšně smazán
-    total_actions: Úkolů celkem
+    total_actions: "Úkolů celkem"
     total_contexts: Kontextů celkem
     total_notes: Poznámek celkem
     total_projects: Projektů celkem
@@ -978,10 +978,10 @@ cs:
       single_page:
         one: Zobrazuji 1 %{model}
         other: Zobrazení všech %{count} %{model}
-        zero: Žádné %{model} nalézt
+        zero: "Žádné %{model} nalézt"
       single_page_html:
         one: Zobrazení <b>1</b> %{model}
         other: Zobrazení <b>vše&nbsp;%{count}</b> %{model}
-        zero: Žádné %{model} nalézt
-    page_gap: '&hellip;'
-    previous_label: '&laquo; předchozí'
+        zero: "Žádné %{model} nalézt"
+    page_gap: "&hellip;"
+    previous_label: "&laquo; předchozí"

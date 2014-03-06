@@ -73,6 +73,14 @@ Then /^I should not see a project named "([^"]*)"$/ do |project_name|
   step "I should see that a project named \"#{project_name}\" is not present"
 end
 
+Then(/^I should not see the project "(.*?)"$/) do |project_name|
+  project = @current_user.projects.where(:name => project_name).first
+  project.should_not be_nil
+  
+  project_xpath = "//div[@id='project_#{project.id}']"
+  page.should_not have_xpath(project_xpath)
+end
+
 Then /^the project "([^"]*)" should be above the project "([^"]*)"$/ do |project_high, project_low|
   project_list_find_index(project_high).should < project_list_find_index(project_low)
 end
