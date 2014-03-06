@@ -17,7 +17,6 @@ gem 'uglifier', '>=1.3.0'
 gem 'jquery-rails'
 
 # Twitter Bootstrap
-gem 'therubyracer'
 gem 'less-rails'
 
 gem 'twitter-bootstrap-rails'
