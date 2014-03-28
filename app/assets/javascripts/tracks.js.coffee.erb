@@ -6,14 +6,14 @@ TracksApp =
             title: "Go to project"
             placeholder: "Type (part of) project name"
             autocomplete_link: "<%= Rails.application.routes.url_helpers.projects_path(format: :autocomplete) %>"
-            target_link: "<%= Rails.application.routes.url_helpers.project_path "" %>"
+            target_link: "<%= Rails.application.routes.url_helpers.project_path(1)[0..-2] %>" # remove id 1 from path
             target_id: "id" # json/datum field containing id to use
         }
         context: {
             title: "Go to context"
             placeholder: "Type (part of) context name"
             autocomplete_link: "<%= Rails.application.routes.url_helpers.contexts_path(format: :autocomplete) %>"
-            target_link: "<%= Rails.application.routes.url_helpers.context_path ""%>"
+            target_link: "<%= Rails.application.routes.url_helpers.context_path(1)[0..-2] %>" # remove id 1 from path
             target_id: "id" # json/datum field containing id to use
         }
         tag: {
