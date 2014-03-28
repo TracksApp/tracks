@@ -769,11 +769,7 @@ class TodosController < ApplicationController
       @items = get_not_completed_for_predecessor(current_user, @todo.id) unless !@items.empty?
     else
       # New todo - TODO: Filter on current project in project view
-<<<<<<< HEAD
-      @items = get_not_complete_for_predecessor(current_user)
-=======
       @items = get_not_completed_for_predecessor(current_user)
->>>>>>> master
     end
     render :inline => format_dependencies_as_json_for_auto_complete(@items)
   end
