@@ -1,9 +1,6 @@
-<div id="message_holder">
-<% if flash.empty? -%>
-  <h4 id="flash" class="alert" style="display:none"></h4>
-<% else -%>
-  <% flash.each do |key,value| -%>
-    <h4 id="flash" class='alert <%= key %>'><%= value %></h4>
-  <% end -%>
+<% flash.each do |key,value| -%>
+  <div class='alert <%= key.to_s == 'notice' ? 'alert-success' : 'alert-danger' %> alert-dismissable'>
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <%= value %>
+  </div>
 <% end -%>
-</div>

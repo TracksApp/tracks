@@ -124,9 +124,9 @@ module TodosHelper
   end
 
   def todo_form_control_group (label_for, label)
-    content_tag(:div, class: "control-group") do
-      content_tag(:label, class: "control-label", for: label_for){label} +
-      content_tag(:div, class:"controls") { yield }
+    content_tag(:div, class: "form-group") do
+      content_tag(:label, class: "col-sm-3 control-label", for: label_for){label} +
+      content_tag(:div, class:"col-sm-9") { yield }
     end
   end
 

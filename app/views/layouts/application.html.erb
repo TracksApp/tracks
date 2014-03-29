@@ -33,13 +33,9 @@
       <%= render partial: "shared/navbar" %>
     <% end -%>
 
-    <div class="container-fluid">
-      <div class="row-fluid">
-        <div class="span8 offset2 tracks-middle">
-          <%= bootstrap_flash %>
-          <%= yield %>
-        </div>
-      </div>
+    <div class="container tracks-main">
+      <%= render_flash %>
+      <%= yield %>
     </div> 
 
     <% cache [:footer] do -%>

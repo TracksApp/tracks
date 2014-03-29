@@ -36,21 +36,15 @@
   </head>
   <body>
 
-    <div id="tracks-login-navbar" class="navbar navbar-fluid-top navbar-inverse">
-      <div class="navbar-inner">
-        <div class="container-fluid">
-          <a class="brand" href="#"><%= image_tag "tracks-logo-dark.png"%></a>
-        </div>
+    <div class="jumbotron" id="tracks-login-header">
+      <div class="container">
+        <h1><%= image_tag "tracks-logo-dark.png"%></h1>
       </div>
     </div>
 
-    <div class="container-fluid">
-      <div class="row-fluid">
-        <div class="span6 offset3">
-          <%= bootstrap_flash %>
-          <%= yield %>
-        </div>
-      </div>
+    <div class="container">
+      <%= render_flash %>
+      <%= yield %>
     </div>
 
     <%= render partial: "shared/footer" %>

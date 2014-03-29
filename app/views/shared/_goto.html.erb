@@ -1,29 +1,33 @@
-<div id="tracks-goto-dialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-		<h3 id="myModalLabel">Go to...</h3>
-	</div>
-	<div class="modal-body">
-		<div>
-			<h4>Go to project...</h4>
-			<ul>
-			  <% current_user.projects.active.each do |project| -%>
-				  <%= content_tag(:li){ link_to project.name, project_path(project)} %>
-			  <% end -%>
-			  <li><%= link_to "All projects", projects_path %></li>
-			</ul>
-		</div>
-		<div>
-			<h4>Go to context...</h4>
-			<ul>
-			  <% current_user.contexts.active.each do |context| -%>
-				  <%= content_tag(:li){ link_to context.name, context_path(context)} %>
-			  <% end -%>
-			  <li><%= link_to "All contexts", contexts_path %></li>
-			</ul>
-		</div>
-	</div>
-	<div class="modal-footer">
-		<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-	</div>
+<div id="tracks-goto-dialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="tracks-goto-dialog-title" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3 class="modal-title" id="tracks-goto-dialog-title">Go to...</h3>
+      </div>
+      <div class="modal-body">
+        <div>
+          <h4>Go to project...</h4>
+          <ul>
+            <% current_user.projects.active.each do |project| -%>
+              <%= content_tag(:li){ link_to project.name, project_path(project)} %>
+            <% end -%>
+            <li><%= link_to "All projects", projects_path %></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Go to context...</h4>
+          <ul>
+            <% current_user.contexts.active.each do |context| -%>
+              <%= content_tag(:li){ link_to context.name, context_path(context)} %>
+            <% end -%>
+            <li><%= link_to "All contexts", contexts_path %></li>
+          </ul>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
 </div>

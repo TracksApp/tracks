@@ -1,27 +1,29 @@
 <div id="tracks-login-form">
-  <%= form_tag(login_path, class: "form-horizontal") do %>
-    <div class="control-group">
-      <div class="controls">
-        <h3><%= t('login.please_login') %></h3>
+  <h2><%= t('login.please_login') %></h2>
+  <%= form_tag(login_path, class: "form-horizontal", role: "form") do %>
+    <div class="form-group">
+      <label class="col-sm-2 control-label" for="user_login"><%= User.human_attribute_name('login') %></label>
+      <div class="col-sm-10">
+        <input class="form-control" type="text" id="user_login" name="user_login" placeholder="<%= User.human_attribute_name('login') %>">
       </div>
     </div>
-    <div class="control-group">
-      <label class="control-label" for="user_login"><%= User.human_attribute_name('login') %></label>
-      <div class="controls">
-        <input type="text" id="user_login" name="user_login" placeholder="<%= User.human_attribute_name('login') %>">
+    <div class="form-group">
+      <label class="col-sm-2 control-label" for="user_password"><%= User.human_attribute_name('password') %></label>
+      <div class="col-sm-10">
+        <input class="form-control" type="password" id="user_password" name="user_password" placeholder="<%= User.human_attribute_name('password') %>">
       </div>
     </div>
-    <div class="control-group">
-      <label class="control-label" for="user_password"><%= User.human_attribute_name('password') %></label>
-      <div class="controls">
-        <input type="password" id="user_password" name="user_password" placeholder="<%= User.human_attribute_name('password') %>">
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" name="user_noexpiry" id="user_noexpiry" checked > <%= t('login.user_no_expiry') %>
+          </label>
+        </div>
       </div>
     </div>
-    <div class="control-group">
-      <div class="controls">
-        <label class="checkbox">
-          <input type="checkbox" name="user_noexpiry" id="user_noexpiry" checked > <%= t('login.user_no_expiry') %>
-        </label>
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
         <button type="submit" class="btn btn-primary"><%= t('login.sign_in') %></button>
       </div>
     </div>

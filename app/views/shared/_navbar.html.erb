@@ -1,81 +1,67 @@
-<div class="navbar navbar-fluid-top navbar-inverse">
-  <div class="navbar-inner">
-    <div class="container-fluid">
-
-      <div class="btn-navbar" data-target=".nav-collapse">
-        <a class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </a>
-        <a class="btn btn-primary btn-small button-add-todo" title="Add a new action"><i class="icon-plus icon-large"></i></a>
-        <a class="btn btn-primary btn-small button-goto" title="Go to..."><i class="icon-mail-forward icon-large"></i></a>
-      </div>
-
-      <a class="brand" href="#"><span id="badge_count" class="badge_count"><%= @badge_count || @count %></span></a>
-
-      <div class="container-fluid nav-collapse">
-        <ul class="nav">
-          <li><%= menu_item("home",     root_path)           %></li>
-          <li><%= menu_item("starred",  tag_path("starred")) %></li>
-          <li><%= menu_item("projects", projects_path)       %></li>
-          <li><%= menu_item("tickler",  tickler_path)        %></li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= t('layouts.navigation.organize') %><b class="caret"></b></a>
-            <ul class="dropdown-menu">
-              <li><%= menu_item("contexts",        contexts_path)        %></li>
-              <li><%= menu_item("notes",           notes_path)           %></li>
-              <li><%= menu_item("review",          review_path)          %></li>
-              <li><%= menu_item("recurring_todos", recurring_todos_path) %></li>
-            </ul>
-          </li>
-          <li class="dropdown" id="menu_view">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="menu_view_link"><%= t('layouts.navigation.view') %><b class="caret"></b></a>
-            <ul class="dropdown-menu">
-              <li><%= menu_item("calendar",        calendar_path)      %></li>
-              <li><%= menu_item("completed_tasks", done_overview_path) %></li>
-              <li><%= menu_item("feeds",           feeds_path)         %></li>
-              <li><%= menu_item("stats",           stats_path)         %></li>
-              <li class="divider"></li>
-              <li><%= menu_item("toggle_contexts", "#", {:id => "toggle-contexts-nav"}) %></li>
-              <li><%= menu_item("toggle_notes",    "#", {:id => "toggle-notes-nav"}) %></li>
-              <li><%= group_view_by_menu_entry %></li>
-            </ul>
-          </li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= t('layouts.navigation.admin') %><b class="caret"></b></a>
-            <ul class="dropdown-menu">
-              <li><%= menu_item("preferences",    preferences_path) %></li>
-              <li><%= menu_item("export",         data_path)        %></li>
-              <% if current_user.is_admin? -%>
-                <li><%= menu_item("manage_users", users_path)       %></li>
-              <% end -%>
-            </ul>
-          </li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= t('layouts.navigation.help') %><b class="caret"></b></a>
-            <ul class="dropdown-menu">
-              <li><%= menu_item("keyboard_shortcuts", "#",{:id => "menu-keyboard-shotcuts"}) %></li>
-              <li><%= menu_item("integrations",       integrations_path)                     %></li>
-              <li><%= menu_item("api_docs",           rest_api_docs_path)                    %></li>
-            </ul>
-          </li>          
-        </ul>
-        <ul class="nav pull-right">
-          <li>
-            <div class="btn-toolbar">
-              <a class="btn btn-primary btn-small button-add-todo" title="Add a new action" data-keybinding="a"><i class="icon-plus icon-large"></i></a>
-              <a class="btn btn-primary btn-small button-goto" title="Go to..." data-keybinding="G"><i class="icon-mail-forward icon-large"></i></a>
-            </div>
-          </li>
-          <li>
-            <form class="navbar-search pull-right">
-              <input type="text" class="search-query" placeholder="Search">
-            </form>
-          </li>
-          <li><%= link_to("<i class='icon-signout'></i>".html_safe, logout_path, title: "#{t('common.logout')} (#{current_user.display_name})") %></li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</div>
+<div class="navbar navbar-static-top navbar-inverse" role="navigation">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#"><span id="badge_count" class="badge_count"><%= @badge_count || @count %></span></a>
+    </div><%# //.navbar-header %>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li><%= menu_item("home",     root_path)           %></li>
+        <li><%= menu_item("starred",  tag_path("starred")) %></li>
+        <li><%= menu_item("projects", projects_path)       %></li>
+        <li><%= menu_item("tickler",  tickler_path)        %></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= t('layouts.navigation.organize') %><b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><%= menu_item("contexts",        contexts_path)        %></li>
+            <li><%= menu_item("notes",           notes_path)           %></li>
+            <li><%= menu_item("review",          review_path)          %></li>
+            <li><%= menu_item("recurring_todos", recurring_todos_path) %></li>
+          </ul>
+        </li>
+        <li class="dropdown" id="menu_view">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="menu_view_link"><%= t('layouts.navigation.view') %><b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><%= menu_item("calendar",        calendar_path)      %></li>
+            <li><%= menu_item("completed_tasks", done_overview_path) %></li>
+            <li><%= menu_item("feeds",           feeds_path)         %></li>
+            <li><%= menu_item("stats",           stats_path)         %></li>
+            <li class="divider"></li>
+            <li><%= menu_item("toggle_contexts", "#", {:id => "toggle-contexts-nav"}) %></li>
+            <li><%= menu_item("toggle_notes",    "#", {:id => "toggle-notes-nav"}) %></li>
+            <li><%= group_view_by_menu_entry %></li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= t('layouts.navigation.admin') %><b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><%= menu_item("preferences",    preferences_path) %></li>
+            <li><%= menu_item("export",         data_path)        %></li>
+            <% if current_user.is_admin? -%>
+              <li><%= menu_item("manage_users", users_path)       %></li>
+            <% end -%>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= t('layouts.navigation.help') %><b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><%= menu_item("keyboard_shortcuts", "#",{:id => "menu-keyboard-shotcuts"}) %></li>
+            <li><%= menu_item("integrations",       integrations_path)                     %></li>
+            <li><%= menu_item("api_docs",           rest_api_docs_path)                    %></li>
+          </ul>
+        </li>
+      </ul>
+      <form class="navbar-form navbar-right" role="form">
+        <a class="btn btn-primary button-add-todo" title="Add a new action"><i class="fa fa-plus fa-lg"></i></a>
+        <a class="btn btn-primary button-goto" title="Go to..."><i class="fa fa-share fa-lg"></i></a>
+        <input type="text" class="form-control search-query" placeholder="Search">
+        <%= link_to("<i class='fa fa-sign-out'></i>".html_safe, logout_path, title: "#{t('common.logout')} (#{current_user.display_name})") %>
+      </form>
+    </div><%# //.navbar-collapse %>
+  </div><%# //.container %>
+</div><%# //.navbar %>

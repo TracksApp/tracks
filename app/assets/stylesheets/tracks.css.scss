@@ -6,29 +6,16 @@ body {
 	background-color: #DDD;
 }
 
-div.tracks-middle {
+div.tracks-main {
 	background-color: #FFF;
-	padding: 15px;
 	border-radius: 10px;
 }
 
 /* Header */
 
-.navbar-inner {
-	border-radius: none;
-	div.btn-toolbar {
-		margin: 0px 15px 0px 0px;
-	}
-	input {
-		width: 100px;
-	}
-}
-
-div#tracks-login-navbar {
-	.navbar-inner {
-		background-color: #000;
-		background-image: none;
-	}
+div#tracks-login-header {
+	background-color: #000;
+	padding: 0;
 }
 
 div#tracks-login-form {
@@ -66,10 +53,10 @@ div.todo-item {
 	div.row {
 		margin-left: 0px;
 	}
-	i.icon-check-empty {
+	i.fa-square-o {
 		margin-right: 10px;
 	}
-	i.icon-check-sign {
+	i.fa-check-square-o {
 		margin-right: 10px;
 		color: #666;	
 	}
@@ -80,10 +67,10 @@ div.todo-item {
 	span.todo-item-icons {
 		color: #BBB;	  /* light gray */
 		cursor: pointer;
-		i.icon-check-empty {
+		i.fa-square-o {
 			color: #333;
 		}
-		i.icon-star {
+		i.fa-star {
 			color: #F89406; /* orange */
 		}
 	}
@@ -185,16 +172,6 @@ div#project-next-prev {
 }
 
 /* Dialogs */
-
-.modal-body {
-	overflow-y: visible;
-}
-
-div#tracks-go-item-dialog {
-	input.input-medium {
-		width : 95%;
-	}
-}
 
 div.paginate_header {
 	text-align: center;

@@ -1,60 +1,57 @@
 <%- todo = new_todo_form -%>
-<%= form_for(todo, :html=> { :id=>'todo-form-new-action', :name=>'todo', :class => 'form-horizontal' }) do |t|%>
-  <fieldset>
-    <input id="default_project_name_id" name="default_project_name" type="hidden" value="<%= h(@initial_project_name)-%>"/>
-    <input id="default_context_name_id" name="default_context_name" type="hidden" value="<%= h(@initial_context_name)-%>"/>
-    <input id="new_todo_starred"        name="new_todo_starred"     type="hidden" value="false"/>
-    <%= hidden_field_tag :_tag_name, @tag_name.underscore.gsub(/\s+/,'_') if source_view_is :tag -%>
-    <%= hidden_field_tag "initial_tag_list", @initial_tags%>
-    <%= source_view_tag( @source_view ) %>
+<%= form_for(todo, :html=> { :id=>'todo-form-new-action', :name=>'todo', :class => 'form-horizontal', :role => 'form' }) do |t|%>
+  <input id="default_project_name_id" name="default_project_name" type="hidden" value="<%= h(@initial_project_name)-%>"/>
+  <input id="default_context_name_id" name="default_context_name" type="hidden" value="<%= h(@initial_context_name)-%>"/>
+  <input id="new_todo_starred"        name="new_todo_starred"     type="hidden" value="false"/>
+  <%= hidden_field_tag :_tag_name, @tag_name.underscore.gsub(/\s+/,'_') if source_view_is :tag -%>
+  <%= hidden_field_tag "initial_tag_list", @initial_tags%>
+  <%= source_view_tag( @source_view ) %>
 
-    <div id="error_status">
-      <%= get_list_of_error_messages_for(todo) %>
+  <div id="error_status">
+    <%= get_list_of_error_messages_for(todo) %>
+  </div>
+
+  <%= todo_form_control_group("todo_starred", "Starred") do -%>
+    <i class="fa fa-star-o"></i>
+  <% end -%>
+
+  <%= todo_form_control_group("todo_description", Todo.human_attribute_name('description')) do -%>
+    <%= t.text_field("description",
+          "size" => 30, "maxlength" => 100, "autocomplete" => "off",
+          placeholder: "Description of action", :autofocus => 1)
+      %>
+  <% end -%>
+
+  <%= todo_form_control_group("todo_notes", Todo.human_attribute_name('notes')) do -%>
+    <%= t.text_area("notes", "cols" => 29, "rows" => 6) %>
+  <% end -%>
+
+  <%= todo_form_control_group("todo_project_name", Todo.human_attribute_name('project')) do -%>
+    <input id="todo_project_name" name="project_name" autocomplete="off" size="30" type="text" value="<%= h(@initial_project_name) %>"/>
+  <% end -%>
+
+  <%= todo_form_control_group("todo_context_name", Todo.human_attribute_name('context')) do -%>
+    <input id="todo_context_name" name="context_name" autocomplete="off" size="30" type="text" value="<%= h(@initial_context_name) %>"/>
+  <% end -%>
+
+  <%= todo_form_control_group("tag_list", Todo.human_attribute_name('tags')) do -%>
+    <%= text_field_tag "tag_list", @initial_tags, :size => 30, placeholder: t('shared.separate_tags_with_commas') %>
+  <% end -%>
+
+  <%= todo_form_control_group("todo_due", Todo.human_attribute_name('due')) do -%>
+    <%= t.text_field("due", "size" => 12, "class" => "Date", "autocomplete" => "off") %>
+  <% end -%>
+
+  <%= todo_form_control_group("todo_show_from", Todo.human_attribute_name('show_from')) do -%>
+    <%= t.text_field("show_from", "size" => 12, "class" => "Date", "autocomplete" => "off") %>
+  <% end -%>
+
+  <%= todo_form_control_group("predecessor_ul", Todo.human_attribute_name('predecessors')) do -%>
+    <div class="selected_predecessors">
+      <ul class="predecessor_list" id="predecessor_ul" style="display:none">
+      </ul>
     </div>
-
-    <%= todo_form_control_group("todo_starred", "Starred") do -%>
-      <i class="icon-star-empty"></i>
-    <% end -%>
-
-    <%= todo_form_control_group("todo_description", Todo.human_attribute_name('description')) do -%>
-      <%= t.text_field("description", 
-            "size" => 30, "maxlength" => 100, "autocomplete" => "off", 
-            placeholder: "Description of action", :autofocus => 1) 
-        %>
-    <% end -%>
-
-    <%= todo_form_control_group("todo_notes", Todo.human_attribute_name('notes')) do -%>
-      <%= t.text_area("notes", "cols" => 29, "rows" => 6) %>
-    <% end -%>
-
-    <%= todo_form_control_group("todo_project_name", Todo.human_attribute_name('project')) do -%>
-      <input id="todo_project_name" name="project_name" autocomplete="off" size="30" type="text" value="<%= h(@initial_project_name) %>"/>
-    <% end -%>
-
-    <%= todo_form_control_group("todo_context_name", Todo.human_attribute_name('context')) do -%>
-      <input id="todo_context_name" name="context_name" autocomplete="off" size="30" type="text" value="<%= h(@initial_context_name) %>"/>
-    <% end -%>
-
-    <%= todo_form_control_group("tag_list", Todo.human_attribute_name('tags')) do -%>
-      <%= text_field_tag "tag_list", @initial_tags, :size => 30, placeholder: t('shared.separate_tags_with_commas') %>
-    <% end -%>
-
-    <%= todo_form_control_group("todo_due", Todo.human_attribute_name('due')) do -%>
-      <%= t.text_field("due", "size" => 12, "class" => "Date", "autocomplete" => "off") %>
-    <% end -%>
-
-    <%= todo_form_control_group("todo_show_from", Todo.human_attribute_name('show_from')) do -%>
-      <%= t.text_field("show_from", "size" => 12, "class" => "Date", "autocomplete" => "off") %>
-    <% end -%>
-
-    <%= todo_form_control_group("predecessor_ul", Todo.human_attribute_name('predecessors')) do -%>
-      <div class="selected_predecessors">
-        <ul class="predecessor_list" id="predecessor_ul" style="display:none">
-        </ul>
-      </div>
-      <label id="label_for_predecessor_input" for="predecessor_input" style="display:none"><%= t('todos.add_another_dependency')%></label>
-      <%= text_field_tag "predecessor_input", nil, :size => 30%>
-    <% end -%>
-
-  </fieldset>
+    <label id="label_for_predecessor_input" for="predecessor_input" style="display:none"><%= t('todos.add_another_dependency')%></label>
+    <%= text_field_tag "predecessor_input", nil, :size => 30%>
+  <% end -%>
 <% end # form_for -%>
