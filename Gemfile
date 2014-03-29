@@ -16,12 +16,9 @@ gem 'uglifier', '>=1.3.0'
 
 gem 'jquery-rails'
 
-# Twitter Bootstrap
-gem 'less-rails'
-
-gem 'twitter-bootstrap-rails'
-# use following for dev version to get fontawsome 3.2.1
-#gem 'twitter-bootstrap-rails', github: 'seyhunak/twitter-bootstrap-rails', branch: "master"
+# Bootstrap and Font Awesome
+gem 'bootstrap-sass'
+gem 'font-awesome-sass'
 
 # you may comment out the database driver you will not be using.
 # This will prevent a native build of the driver. Building native drivers is not
