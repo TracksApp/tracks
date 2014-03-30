@@ -20,5 +20,15 @@ namespace :tracks do
       user.errors.each_full { |msg| puts "- #{msg}\n" }
     end
   end
+
+  desc 'Check all passwords for deprecated hashes'
+  task :check_passwords => :environment do
+    puts "The following users have deprecated password hashes:"
+    User.all.each do |user|
+      if user.uses_deprecated_password?
+        puts "  #{user.login}"
+      end
+    end
+  end
 end
 
