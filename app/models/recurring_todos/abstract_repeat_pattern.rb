@@ -164,8 +164,10 @@ module RecurringTodos
     
     private
 
-    # Determine start date to calculate next date for recurring todo
-    # offset needs to be 1.day for daily patterns
+    # Determine start date to calculate next date for recurring todo which
+    # takes start_from and previous into account.
+    # offset needs to be 1.day for daily patterns or the start will be the
+    # same day as the previous
     def determine_start(previous, offset=0.day)
       start = self.start_from || NullTime.new
       now = Time.zone.now
@@ -179,9 +181,14 @@ module RecurringTodos
       end
     end
 
+    # Example: get 3rd (x) wednesday  (weekday) of december (month) 2014 (year)
+    # 5th means last, so it will return the 4th if there is no 5th
     def get_xth_day_of_month(x, weekday, month, year)
+      raise "Weekday should be between 0 and 6 with 0=sunday. You supplied #{weekday}" unless (0..6).include?(weekday)
+      raise "x should be 1-4 for first-fourth or 5 for last. You supplied #{x}" unless (0..5).include?(x)
+
       if x == 5
-        # last -> count backwards. use UTC to avoid strange timezone oddities
+        # 5 means last -> count backwards. use UTC to avoid strange timezone oddities
         # where last_day -= 1.day seems to shift tz+0100 to tz+0000
         last_day = Time.utc(year, month, Time.days_in_month(month))
         while last_day.wday != weekday

@@ -36,22 +36,7 @@ module RecurringTodos
     end
 
     def get_next_date(previous)
-      # determine start
-      if previous.nil?
-        start = start_from.nil? ? Time.zone.now : self.start_from
-      else
-        start = previous + 1.day
-        if start.wday() == 0
-          # we went to a new week , go to the nth next week and find first match
-          # that week. Note that we already went into the next week, so -1
-          start += (every_x_week-1).week
-        end
-        unless self.start_from.nil?
-          # check if the start_from date is later than previous. If so, use
-          # start_from as start to search for next date
-          start = self.start_from if self.start_from > previous
-        end
-      end
+      start = determine_start_date(previous)
 
       day = find_first_day_in_this_week(start)
       return day unless day == -1
@@ -67,6 +52,25 @@ module RecurringTodos
     end
 
     private
+
+    def determine_start_date(previous)
+      if previous.nil?
+        return self.start_from || Time.zone.now
+      else
+        start = previous + 1.day
+        if start.wday() == 0
+          # we went to a new week, go to the nth next week and find first match
+          # that week. Note that we already went into the next week, so -1
+          start += (every_x_week-1).week
+        end
+        unless self.start_from.nil?
+          # check if the start_from date is later than previous. If so, use
+          # start_from as start to search for next date
+          start = self.start_from if self.start_from > previous
+        end
+        return start
+      end
+    end
 
     def find_first_day_in_this_week(start)
       # check if there are any days left this week for the next todo

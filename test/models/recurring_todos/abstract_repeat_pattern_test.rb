@@ -100,6 +100,32 @@ module RecurringTodos
       assert !rt.continues_recurring?(Time.zone.now), "should end since all occurences are there"
     end
 
+    def test_determine_start
+      Timecop.travel(2013,1,1) do
+        rt = create_recurring_todo
+        assert_equal "2013-01-01 00:00:00 UTC", rt.send(:determine_start, nil).to_s, "no previous date, use today"
+        assert_equal "2013-01-01 00:00:00 UTC", rt.send(:determine_start, nil, 1.day).to_s, "no previous date, use today without offset"
+        assert_equal "2013-01-02 00:00:00 UTC", rt.send(:determine_start, Time.zone.now, 1.day).to_s, "use previous date and offset"
+      end
+    end
+
+    def test_xth_day_of_month
+      rt = create_recurring_todo
+
+      # march 2014 has 5 saturdays, the last will return the 5th
+      assert_equal "2014-03-01 00:00:00 UTC", rt.send(:get_xth_day_of_month, 1, 6, 3, 2014).to_s
+      assert_equal "2014-03-22 00:00:00 UTC", rt.send(:get_xth_day_of_month, 4, 6, 3, 2014).to_s
+      assert_equal "2014-03-29 00:00:00 UTC", rt.send(:get_xth_day_of_month, 5, 6, 3, 2014).to_s
+
+      # march 2014 has 4 fridays, the last will return the 4th
+      assert_equal "2014-03-07 00:00:00 UTC", rt.send(:get_xth_day_of_month, 1, 5, 3, 2014).to_s
+      assert_equal "2014-03-28 00:00:00 UTC", rt.send(:get_xth_day_of_month, 4, 5, 3, 2014).to_s
+      assert_equal "2014-03-28 00:00:00 UTC", rt.send(:get_xth_day_of_month, 5, 5, 3, 2014).to_s
+
+      assert_raise(RuntimeError, "should check on valid weekdays"){ rt.send(:get_xth_day_of_month, 5, 9, 3, 2014) }
+      assert_raise(RuntimeError, "should check on valid count x"){ rt.send(:get_xth_day_of_month, 6, 5, 3, 2014) }
+    end
+
     private
 
     def create_pattern(attributes)
@@ -108,7 +134,7 @@ module RecurringTodos
       builder.pattern
     end
 
-    def create_recurring_todo(attributes)      
+    def create_recurring_todo(attributes={})
       create_pattern(attributes.reverse_merge({
         'recurring_period'     => 'weekly',
         'recurring_target'     => 'due_date',

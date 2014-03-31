@@ -66,53 +66,55 @@ module RecurringTodos
 
     def get_next_date(previous)
       start = determine_start(previous)
-      day = every_x_day
       n = get(:every_other2)
 
       case recurrence_selector
       when 0 # specific day of the month
-        if (previous && start.mday >= day) || (previous.nil? && start.mday > day)
-          # there is no next day n in this month, search in next month
-          #
-          #  start += n.months
-          #
-          # The above seems to not work. Fiddle with timezone. Looks like we hit a
-          # bug in rails here where 2008-12-01 +0100 plus 1.month becomes
-          # 2008-12-31 +0100. For now, just calculate in UTC and convert back to
-          # local timezone.
-          #
-          #  TODO: recheck if future rails versions have this problem too
-          start = Time.utc(start.year, start.month, start.day)+n.months
-          start = Time.zone.local(start.year, start.month, start.day)
-
-          # go back to day
-        end
-        Time.zone.local(start.year, start.month, day)
-
+        return find_specific_day_of_month(previous, start, n)
       when 1 # relative weekday of a month
-        the_next = get_xth_day_of_month(every_xth_day, day_of_week, start.month, start.year)
-        if the_next.nil? || the_next <= start
-          # the nth day is already passed in this month, go to next month and try
-          # again
-
-          # fiddle with timezone. Looks like we hit a bug in rails here where
-          # 2008-12-01 +0100 plus 1.month becomes 2008-12-31 +0100. For now, just
-          # calculate in UTC and convert back to local timezone.
-          #  TODO: recheck if future rails versions have this problem too
-          the_next = Time.utc(the_next.year, the_next.month, the_next.day)+n.months
-          the_next = Time.zone.local(the_next.year, the_next.month, the_next.day)
-
-          # TODO: if there is still no match, start will be set to nil. if we ever
-          # support 5th day of the month, we need to handle this case
-          the_next = get_xth_day_of_month(every_xth_day, day_of_week, the_next.month, the_next.year)
-        end
-        the_next
-      else
-        raise Exception.new, "unknown monthly recurrence selection (#{self.recurrence_selector})"
+        return find_relative_day_of_month(start, n)
       end
+      nil
     end
 
     private
+
+    def find_specific_day_of_month(previous, start, n)
+      if (previous && start.mday >= every_x_day) || (previous.nil? && start.mday > every_x_day)
+        # there is no next day n in this month, search in next month
+        #
+        #  start += n.months
+        #
+        # The above seems to not work. Fiddle with timezone. Looks like we hit a
+        # bug in rails here where 2008-12-01 +0100 plus 1.month becomes
+        # 2008-12-31 +0100. For now, just calculate in UTC and convert back to
+        # local timezone.
+        #
+        #  TODO: recheck if future rails versions have this problem too
+        start = Time.utc(start.year, start.month, start.day)+n.months
+      end
+      Time.zone.local(start.year, start.month, every_x_day)
+    end      
+
+    def find_relative_day_of_month(start, n)
+      the_next = get_xth_day_of_month(every_xth_day, day_of_week, start.month, start.year)
+      if the_next.nil? || the_next <= start
+        # the nth day is already passed in this month, go to next month and try
+        # again
+
+        # fiddle with timezone. Looks like we hit a bug in rails here where
+        # 2008-12-01 +0100 plus 1.month becomes 2008-12-31 +0100. For now, just
+        # calculate in UTC and convert back to local timezone.
+        #  TODO: recheck if future rails versions have this problem too
+        the_next = Time.utc(the_next.year, the_next.month, the_next.day)+n.months
+        the_next = Time.zone.local(the_next.year, the_next.month, the_next.day)
+
+        # TODO: if there is still no match, start will be set to nil. if we ever
+        # support 5th day of the month, we need to handle this case
+        the_next = get_xth_day_of_month(every_xth_day, day_of_week, the_next.month, the_next.year)
+      end
+      the_next      
+    end
 
     def recurrence_pattern_for_specific_day
       on_day = " #{I18n.t('todos.recurrence.pattern.on_day_n', :n => every_x_day)}"
