@@ -136,7 +136,7 @@ class Project < ActiveRecord::Base
   end
 
   def age_in_days
-    @age_in_days ||= (Time.now.to_date - created_at.to_date).to_i + 1
+    @age_in_days ||= (Time.current.to_date - created_at.to_date).to_i + 1
   end
 
   def self.import(filename, params, user)
