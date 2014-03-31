@@ -188,31 +188,39 @@ module RecurringTodos
       raise "x should be 1-4 for first-fourth or 5 for last. You supplied #{x}" unless (0..5).include?(x)
 
       if x == 5
-        # 5 means last -> count backwards. use UTC to avoid strange timezone oddities
-        # where last_day -= 1.day seems to shift tz+0100 to tz+0000
-        last_day = Time.utc(year, month, Time.days_in_month(month))
-        while last_day.wday != weekday
-          last_day -= 1.day
-        end
-        # convert back to local timezone
-        Time.zone.local(last_day.year, last_day.month, last_day.day)
+        return find_last_day_x_of_month(weekday, month, year)
       else
-        # 1-4th -> count upwards last -> count backwards. use UTC to avoid strange
-        # timezone oddities where last_day -= 1.day seems to shift tz+0100 to
-        # tz+0000
-        start = Time.utc(year,month,1)
-        n = x
-        while n > 0
-          while start.wday() != weekday
-            start+= 1.day
-          end
-          n -= 1
-          start += 1.day unless n==0
-        end
-        # convert back to local timezone
-        Time.zone.local(start.year, start.month, start.day)
+        return find_xth_day_of_month(x, weekday, month, year)
       end
     end    
+
+    def find_last_day_x_of_month(weekday, month, year)
+      # count backwards. use UTC to avoid strange timezone oddities
+      # where last_day -= 1.day seems to shift tz+0100 to tz+0000
+      last_day = Time.utc(year, month, Time.days_in_month(month))
+      while last_day.wday != weekday
+        last_day -= 1.day
+      end
+      # convert back to local timezone
+      Time.zone.local(last_day.year, last_day.month, last_day.day)
+    end      
+
+    def find_xth_day_of_month(x, weekday, month, year)
+      # 1-4th -> count upwards last -> count backwards. use UTC to avoid strange
+      # timezone oddities where last_day -= 1.day seems to shift tz+0100 to
+      # tz+0000
+      start = Time.utc(year,month,1)
+      n = x
+      while n > 0
+        while start.wday() != weekday
+          start+= 1.day
+        end
+        n -= 1
+        start+= 1.day unless n==0
+      end
+      # convert back to local timezone
+      Time.zone.local(start.year, start.month, start.day)
+    end      
 
   end
 end
