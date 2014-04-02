@@ -13,7 +13,22 @@ class ActiveSupport::TestCase
   # Note: You'll currently still have to declare fixtures explicitly in integration tests
   # -- they do not yet inherit this setting
   fixtures :all
-    
+
+  def setup
+    @today = Time.now.utc
+    @tomorrow = @today + 1.day
+    @in_three_days = @today + 3.days
+    @in_four_days = @in_three_days + 1.day    # need a day after start_from
+
+    @friday = Time.zone.local(2008,6,6)
+    @saturday = Time.zone.local(2008,6,7)
+    @sunday = Time.zone.local(2008,6,8)  # june 8, 2008 was a sunday
+    @monday = Time.zone.local(2008,6,9)
+    @tuesday = Time.zone.local(2008,6,10)
+    @wednesday = Time.zone.local(2008,6,11)
+    @thursday = Time.zone.local(2008,6,12)
+  end
+
   # Add more helper methods to be used by all tests here...
   def assert_value_changed(object, method = nil)
     initial_value = object.send(method)

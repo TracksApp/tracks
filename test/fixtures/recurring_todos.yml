@@ -92,7 +92,7 @@ call_bill_gates_every_week:
   end_date: ~
   number_of_occurences: ~
   target: due_date
-  show_from_delta: ~
+  show_from_delta: 5
   recurring_period: weekly
   recurrence_selector: ~
   show_always: false

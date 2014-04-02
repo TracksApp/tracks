@@ -37,68 +37,18 @@ class RecurringTodosController < ApplicationController
   end
 
   def edit
+    @form_helper = RecurringTodos::FormHelper.new(@recurring_todo)
+
     respond_to do |format|
       format.js
     end
   end
 
   def update
-    # TODO: write tests for updating
-    @recurring_todo.tag_with(params[:edit_recurring_todo_tag_list]) if params[:edit_recurring_todo_tag_list]
-    @original_item_context_id = @recurring_todo.context_id
-    @original_item_project_id = @recurring_todo.project_id
+    updater = RecurringTodos::RecurringTodosBuilder.new(current_user, update_recurring_todo_params)
+    @saved = updater.update(@recurring_todo)
 
-    # we needed to rename the recurring_period selector in the edit form because
-    # the form for a new recurring todo and the edit form are on the same page.
-    # Same goes for start_from and end_date
-    params['recurring_todo']['recurring_period']=params['recurring_edit_todo']['recurring_period']
-    params['recurring_todo']['end_date']=parse_date_per_user_prefs(params['recurring_todo_edit_end_date'])
-    params['recurring_todo']['start_from']=parse_date_per_user_prefs(params['recurring_todo_edit_start_from'])
-
-    # update project
-    if params['recurring_todo']['project_id'].blank? && !params['project_name'].nil?
-      if params['project_name'] == 'None'
-        project = Project.null_object
-      else
-        project = current_user.projects.where(:name => params['project_name'].strip)
-        unless project
-          project = current_user.projects.build
-          project.name = params['project_name'].strip
-          project.save
-          @new_project_created = true
-        end
-      end
-      params["recurring_todo"]["project_id"] = project.id
-    end
-
-    # update context
-    if params['recurring_todo']['context_id'].blank? && params['context_name'].present?
-      context = current_user.contexts.where(:name => params['context_name'].strip).first
-      unless context
-        context = current_user.contexts.build
-        context.name = params['context_name'].strip
-        context.save
-        @new_context_created = true
-      end
-      params["recurring_todo"]["context_id"] = context.id
-    end
-
-    # make sure that we set weekly_return_xxx to empty (space) when they are
-    # not checked (and thus not present in params["recurring_todo"])
-    %w{monday tuesday wednesday thursday friday saturday sunday}.each do |day|
-      params["recurring_todo"]["weekly_return_"+day]=' ' if params["recurring_todo"]["weekly_return_"+day].nil?
-    end
-
-    selector_attributes = {
-        'recurring_period' => recurring_todo_params['recurring_period'],
-        'daily_selector' => recurring_todo_params['daily_selector'],
-        'monthly_selector' => recurring_todo_params['monthly_selector'],
-        'yearly_selector' => recurring_todo_params['yearly_selector']
-      }
-
-    @recurring_todo.assign_attributes(:recurring_period => recurring_todo_params[:recurring_period])
-    @recurring_todo.assign_attributes(selector_attributes)
-    @saved = @recurring_todo.update_attributes recurring_todo_params
+    @recurring_todo.reload
 
     respond_to do |format|
       format.js
@@ -106,42 +56,17 @@ class RecurringTodosController < ApplicationController
   end
 
   def create
-    p = RecurringTodoCreateParamsHelper.new(params, recurring_todo_params)
-    p.attributes['end_date']=parse_date_per_user_prefs(p.attributes['end_date'])
-    p.attributes['start_from']=parse_date_per_user_prefs(p.attributes['start_from'])
-
-    # make sure we set :recurring_period first, since other setters depend on it being set
-    # TODO: move logic into model
-    @recurring_todo = current_user.recurring_todos.build(:recurring_period => params[:recurring_period])
-    @recurring_todo.assign_attributes(p.selector_attributes)
-    @recurring_todo.update_attributes(p.attributes)
-
-    if p.project_specified_by_name?
-      project = current_user.projects.where(:name => p.project_name).first_or_create
-      @new_project_created = project.new_record_before_save?
-      @recurring_todo.project_id = project.id
-    end
-
-    if p.context_specified_by_name?
-      context = current_user.contexts.where(:name => p.context_name).first_or_create
-      @new_context_created = context.new_record_before_save?
-      @recurring_todo.context_id = context.id
-    end
-
-    @saved = @recurring_todo.save
-    if @saved && p.tag_list.present?
-      @recurring_todo.tag_with(p.tag_list)
-      @recurring_todo.tags.reload
-    end
+    builder = RecurringTodos::RecurringTodosBuilder.new(current_user, all_recurring_todo_params)
+    @saved = builder.save
 
     if @saved
-      @status_message = t('todos.recurring_action_saved')
-      @todo_saved = TodoFromRecurringTodo.new(current_user, @recurring_todo).create.nil? == false
-      if @todo_saved
-        @status_message += " / " + t('todos.new_related_todo_created_short')
-      else
-        @status_message += " / " + t('todos.new_related_todo_not_created_short')
-      end
+      @recurring_todo = builder.saved_recurring_todo
+      todo_saved = TodoFromRecurringTodo.new(current_user, @recurring_todo).create.nil? == false
+
+      @status_message = 
+        t('todos.recurring_action_saved') + " / " + 
+        t("todos.new_related_todo_#{todo_saved ? "" : "not_"}created_short")
+
       @down_count = current_user.recurring_todos.active.count
       @new_recurring_todo = RecurringTodo.new
     else
@@ -154,13 +79,10 @@ class RecurringTodosController < ApplicationController
   end
 
   def destroy
+    @number_of_todos = @recurring_todo.todos.count
+
     # remove all references to this recurring todo
-    @todos = @recurring_todo.todos
-    @number_of_todos = @todos.size
-    @todos.each do |t|
-      t.recurring_todo_id = nil
-      t.save
-    end
+    @recurring_todo.clear_todos_association
 
     # delete the recurring todo
     @saved = @recurring_todo.destroy
@@ -174,11 +96,10 @@ class RecurringTodosController < ApplicationController
       format.html do
         if @saved
           notify :notice, t('todos.recurring_deleted_success')
-          redirect_to :action => 'index'
         else
-          notify :error, t('todos.error_deleting_recurring', :description => @recurring_todo.description)
-          redirect_to :action => 'index'
+          notify :error,  t('todos.error_deleting_recurring', :description => @recurring_todo.description)
         end
+        redirect_to :action => 'index'
       end
 
       format.js do
@@ -217,58 +138,6 @@ class RecurringTodosController < ApplicationController
     end
   end
 
-  class RecurringTodoCreateParamsHelper
-
-    def initialize(params, recurring_todo_params)
-      @params = params['request'] || params
-      @attributes = recurring_todo_params
-
-      # make sure all selectors (recurring_period, recurrence_selector,
-      # daily_selector, monthly_selector and yearly_selector) are first in hash
-      # so that they are processed first by the model
-      @selector_attributes = {
-        'recurring_period' => @attributes['recurring_period'],
-        'daily_selector' => @attributes['daily_selector'],
-        'monthly_selector' => @attributes['monthly_selector'],
-        'yearly_selector' => @attributes['yearly_selector']
-      }
-    end
-
-    def attributes
-      @attributes
-    end
-
-    def selector_attributes
-      return @selector_attributes
-    end
-
-    def project_name
-      @params['project_name'].strip unless @params['project_name'].nil?
-    end
-
-    def context_name
-      @params['context_name'].strip unless @params['context_name'].nil?
-    end
-
-    def tag_list
-      @params['tag_list']
-    end
-
-    def project_specified_by_name?
-      return false if @attributes['project_id'].present?
-      return false if project_name.blank?
-      return false if project_name == 'None'
-      true
-    end
-
-    def context_specified_by_name?
-      return false if @attributes['context_id'].present?
-      return false if context_name.blank?
-      true
-    end
-
-  end
-
   private
 
   def recurring_todo_params
@@ -278,7 +147,7 @@ class RecurringTodosController < ApplicationController
       :ends_on, :end_date, :number_of_occurences, :occurences_count, :target, 
       :show_from_delta, :recurring_period, :recurrence_selector, :every_other1, 
       :every_other2, :every_other3, :every_day, :only_work_days, :every_count, 
-      :weekday, :show_always,
+      :weekday, :show_always, :context_name, :project_name, :tag_list,
       # form attributes
       :recurring_period, :daily_selector, :monthly_selector, :yearly_selector, 
       :recurring_target, :daily_every_x_days, :monthly_day_of_week, 
@@ -293,17 +162,50 @@ class RecurringTodosController < ApplicationController
       )
   end
 
+  def all_recurring_todo_params    
+    # move context_name, project_name and tag_list into :recurring_todo hash for easier processing
+    { 
+      context_name: :context_name, 
+      project_name: :project_name, 
+      tag_list:     :tag_list
+    }.each do |target,source|
+      move_into_recurring_todo_param(params, target, source)
+    end
+    recurring_todo_params
+  end
+
+  def update_recurring_todo_params
+    # we needed to rename the recurring_period selector in the edit form because
+    # the form for a new recurring todo and the edit form are on the same page.
+    # Same goes for start_from and end_date
+    params['recurring_todo']['recurring_period'] = params['recurring_edit_todo']['recurring_period']
+
+    { 
+      context_name: :context_name, 
+      project_name: :project_name, 
+      tag_list:     :edit_recurring_todo_tag_list,
+      end_date:     :recurring_todo_edit_end_date,
+      start_from:   :recurring_todo_edit_start_from
+    }.each do |target,source|
+      move_into_recurring_todo_param(params, target, source)
+    end    
+
+    # make sure that we set weekly_return_xxx to empty (space) when they are
+    # not checked (and thus not present in params["recurring_todo"])
+    %w{monday tuesday wednesday thursday friday saturday sunday}.each do |day|
+      params["recurring_todo"]["weekly_return_#{day}"]=' ' if params["recurring_todo"]["weekly_return_#{day}"].nil?
+    end
+
+    recurring_todo_params
+  end
+
+  def move_into_recurring_todo_param(params, target, source)
+    params[:recurring_todo][target] = params[source] unless params[source].blank?
+  end
+
   def init
-    @days_of_week = []
-    0.upto 6 do |i|
-      @days_of_week << [t('date.day_names')[i], i]
-    end
-
-    @months_of_year = []
-    1.upto 12 do |i|
-      @months_of_year << [t('date.month_names')[i], i]
-    end
-
+    @days_of_week   = (0..6).map{|i| [t('date.day_names')[i], i] }
+    @months_of_year = (1..12).map{|i| [t('date.month_names')[i], i] }
     @xth_day = [[t('common.first'),1],[t('common.second'),2],[t('common.third'),3],[t('common.fourth'),4],[t('common.last'),5]]
     @projects = current_user.projects.includes(:default_context)
     @contexts = current_user.contexts

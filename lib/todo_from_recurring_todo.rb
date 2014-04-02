@@ -1,5 +1,6 @@
 class TodoFromRecurringTodo
   attr_reader :user, :recurring_todo, :todo
+
   def initialize(user, recurring_todo)
     @user = user
     @recurring_todo = recurring_todo
@@ -32,9 +33,9 @@ class TodoFromRecurringTodo
   def attributes
     {
       :description => recurring_todo.description,
-      :notes => recurring_todo.notes,
-      :project_id => recurring_todo.project_id,
-      :context_id => recurring_todo.context_id
+      :notes       => recurring_todo.notes,
+      :project_id  => recurring_todo.project_id,
+      :context_id  => recurring_todo.context_id
     }
   end
 

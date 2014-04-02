@@ -630,13 +630,15 @@ en:
         - December
         third: third
         every_n: every %{n}
-        on_day_n: on day  %{n}
+        every_n_days: every %{n} days
+        every_n_months: every %{n} months
+        every_day: every day
+        on_day_n: on day %{n}
         second: second
         every_xth_day_of_every_n_months: every %{x} %{day} of every %{n_months}
         from: from
         weekly: weekly
         last: last
-        every_day: every day
         the_xth_day_of_month: the %{x} %{day} of %{month}
         times: for %{number} times
         on_work_days: on work days
