@@ -237,6 +237,13 @@ Feature: Edit a next action from every page
     Then I should see the todo "todo 1"
 
   @javascript
+  Scenario: I can give a todo without a project a blank project name
+    Given I have a todo "todo 1" in the context "@pc"
+    When I go to the home page
+    And I edit the project of "todo 1" to ""
+    Then I should see the todo "todo 1"
+
+  @javascript
   Scenario: I can edit a todo to move it to the tickler
     When I go to the home page
     And I submit a new action with description "start later" in the context "@pc"
