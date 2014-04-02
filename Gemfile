@@ -45,7 +45,6 @@ gem 'bcrypt-ruby', '~> 3.0.0'
 group :development do
   gem "yard"
   gem "tolk", git: 'https://github.com/tolk/tolk'
-  gem 'protected_attributes' # needed for tolk. remove when tolk updates
   gem "bullet"
   gem "rack-mini-profiler"
 end
