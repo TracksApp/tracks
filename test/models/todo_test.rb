@@ -9,6 +9,10 @@ class TodoTest < ActiveSupport::TestCase
     @completed = Todo.find(8).reload
   end
 
+  def next_week
+    1.week.from_now.beginning_of_day.to_s(:db)
+  end
+
   # Test loading a todo item
   def test_load
     assert_kind_of Todo, @not_completed1
