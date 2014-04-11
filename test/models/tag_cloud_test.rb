@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../minimal_test_helper')
 require 'app/models/stats/tag_cloud'
 
-class TagCloudTest < Test::Unit::TestCase
+class TagCloudTest < Minitest::Test
 
   FakeTag = Struct.new(:name, :count)
 

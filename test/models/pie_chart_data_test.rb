@@ -2,7 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../minimal_test_helper')
 require 'app/models/stats/pie_chart_data'
 require 'active_support/core_ext/string'
 
-class Stats::PieChartDataTest < Test::Unit::TestCase
+class Stats::PieChartDataTest < Minitest::Test
 
   def setup
     xx = { :stats => { :other_actions_label => '(other)' } }

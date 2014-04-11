@@ -3,7 +3,7 @@ require_relative '../../lib/staleness'
 require_relative '../../lib/user_time'
 require 'timecop'
 
-class StalenessTest < Test::Unit::TestCase
+class StalenessTest < Minitest::Test
   FakePrefs = Struct.new(:time_zone)
   FakeUser = Struct.new(:time) do
     def prefs
