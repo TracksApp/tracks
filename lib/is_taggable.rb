@@ -9,10 +9,10 @@ module IsTaggable
       has_many :taggings, :as => :taggable
       has_many :tags, :through => :taggings do
         def to_s
-          self.map(&:name).sort.join(Tag::JOIN_DELIMITER)
+          self.to_a.map(&:name).sort.join(Tag::JOIN_DELIMITER)
         end
         def all_except_starred
-          self.reject{|tag| tag.name == Todo::STARRED_TAG_NAME}
+          self.to_a.reject{|tag| tag.name == Todo::STARRED_TAG_NAME}
         end
       end
       
@@ -31,7 +31,7 @@ module IsTaggable
   
         # Transactions may not be ideal for you here; be aware.
         Tag.transaction do
-          current = tags.map(&:name)
+          current = tags.to_a.map(&:name)
           _add_tags(list - current)
           _remove_tags(current - list)
         end

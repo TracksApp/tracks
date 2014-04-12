@@ -159,7 +159,7 @@ function block_predecessors(next_steps) {
 function regenerate_predecessor_family(next_steps) {
 <%
 if @predecessors
-  parents = @predecessors
+  parents = @predecessors.to_a
   until parents.empty?
     parent = parents.pop
     parents += parent.predecessors -%>

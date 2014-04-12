@@ -238,7 +238,7 @@ module TodosHelper
 
   def remote_toggle_checkbox(todo=@todo)
     check_box_tag("mark_complete_#{todo.id}", toggle_check_todo_path(todo), todo.completed?, :class => 'item-checkbox',
-      :title => todo.pending? ? t('todos.blocked_by', :predecessors => todo.uncompleted_predecessors.map(&:description).join(', ')) : "", :readonly => todo.pending?)
+      :title => todo.pending? ? t('todos.blocked_by', :predecessors => todo.uncompleted_predecessors.to_a.map(&:description).join(', ')) : "", :readonly => todo.pending?)
   end
 
   def remote_mobile_checkbox(todo=@todo)
@@ -251,7 +251,7 @@ module TodosHelper
     if todo.completed?
       content_tag(:span, {:class => :grey}) { format_date( todo.completed_at ) }
     elsif todo.pending?
-      title = t('todos.depends_on')+ ": " + todo.uncompleted_predecessors.map(&:description).join(', ')
+      title = t('todos.depends_on')+ ": " + todo.uncompleted_predecessors.to_a.map(&:description).join(', ')
       content_tag(:a, {:title => title}) { content_tag(:span, {:class => :orange}) { t('todos.pending') } }
     elsif todo.deferred?
       show_date( todo.show_from )
@@ -263,7 +263,7 @@ module TodosHelper
   def successors_span(todo=@todo)
     unless todo.pending_successors.empty?
       pending_count = todo.pending_successors.count
-      title = "#{t('todos.has_x_pending', :count => pending_count)}: #{todo.pending_successors.map(&:description).join(', ')}"
+      title = "#{t('todos.has_x_pending', :count => pending_count)}: #{todo.pending_successors.to_a.map(&:description).join(', ')}"
       image_tag( 'successor_off.png', :width=>'10', :height=>'16', :border=>'0', :title => title )
     end
   end
@@ -277,7 +277,7 @@ module TodosHelper
   end
 
   def tag_list_text(todo=@todo)
-    todo.tags.join(', ')
+    todo.tags.to_a.join(', ')
   end
 
   def tag_span (tag, mobile=false)
