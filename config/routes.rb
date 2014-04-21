@@ -3,8 +3,6 @@ Tracksapp::Application.routes.draw do
 
   root :to => 'todos#index'
 
-  post 'mailgun/mime' => 'mailgun#mailgun'
-
   post 'login' => 'login#login'
   get 'login' => 'login#login'
   get 'login/check_expiry' => 'login#check_expiry'
@@ -25,13 +23,16 @@ Tracksapp::Application.routes.draw do
   get 'data/csv_actions' => 'data#csv_actions'
 
   get 'integrations' => "integrations#index"
-  get 'integrations/rest_api' => "integrations#rest_api", :as => 'rest_api_docs'
-  get 'integrations/cloudmailin' => 'integrations#cloudmailin'
-  get 'integrations/search_plugin' => "integrations#search_plugin", :as => 'search_plugin'
-  get 'integrations/google_gadget.xml' => 'integrations#google_gadget', :as => 'google_gadget'
-  get 'integrations/get_applescript1.js' => 'integrations#get_applescript1'
-  get 'integrations/get_applescript2.js' => 'integrations#get_applescript2'
-  get 'integrations/get_quicksilver_applescript.js' => 'integrations#get_quicksilver_applescript'
+  get 'integrations/api_docs' => "integrations#api_docs", :as => 'api_docs'
+  namespace :integrations do
+    get 'cloudmailin' => 'cloudmailin#cloudmailin'
+    get 'search_plugin' => "search_plugin#search_plugin"
+    get 'google_gadget.xml' => 'google_gadget#google_gadget'
+    get 'get_applescript1.js' => 'applescript#get_applescript1'
+    get 'get_applescript2.js' => 'applescript#get_applescript2'
+    get 'get_quicksilver_applescript.js' => 'applescript#get_quicksilver_applescript'
+    post 'mailgun' => 'mailgun#mailgun'
+  end
 
   get 'preferences' => "preferences#index"
   get 'preferences/render_date_format' => "preferences#render_date_format"

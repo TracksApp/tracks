@@ -5,7 +5,7 @@
   This page has information on setting up some of these.
   Not all of these are applicable to all platforms, and some require more
   technical knowledge than others.
-  See also <%= link_to "developer documentation for Tracks' REST API", url_for(:action => 'rest_api') %>.</p>
+  See also <%= link_to "developer documentation for Tracks' REST API", url_for(:action => 'api_docs') %>.</p>
 <br/><p>Contents:</p>
 <ul>
   <li><a href="#applescript1-section">Add an Action with Applescript</a></li>
@@ -32,7 +32,7 @@
     </li>
     <li>Copy the Applescript below to the clipboard.<br />
 
-      <textarea id="applescript1" name="applescript1" rows="15"><%= render :partial => 'applescript1', :locals => { :context => current_user.contexts.first } %></textarea>
+      <textarea id="applescript1" name="applescript1" rows="15"><%= render :partial => 'integrations/applescript/applescript1', :locals => { :context => current_user.contexts.first } %></textarea>
     </li>
     <li>Open Script Editor and paste the script into a new document.</li>
     <li>Compile and save the script. Run it as necessary.</li>
@@ -51,7 +51,7 @@
     </li>
     <li>Copy the Applescript below to the clipboard.<br />
 
-      <textarea id="applescript2" name="applescript2" rows="15"><%= render :partial => 'applescript2', :locals => { :context => current_user.contexts.first } %></textarea>
+      <textarea id="applescript2" name="applescript2" rows="15"><%= render :partial => 'integrations/applescript/applescript2', :locals => { :context => current_user.contexts.first } %></textarea>
     </li>
     <li>Open Script Editor and paste the script into a new document.</li>
     <li>Compile and save the script to the ~/Library/Scriipts/Mail Scripts directory.</li>
@@ -72,7 +72,7 @@
     </li>
     <li>Copy the Applescript below to the clipboard.<br />
 
-      <textarea id="quicksilver" name="quicksilver" rows="15"><%= render :partial => 'quicksilver_applescript', :locals => { :context => current_user.contexts.first } %></textarea>
+      <textarea id="quicksilver" name="quicksilver" rows="15"><%= render :partial => 'integrations/applescript/quicksilver_applescript', :locals => { :context => current_user.contexts.first } %></textarea>
     </li>
     <li>Open Script Editor and paste the script into a new document.</li>
     <li>Compile and save the script as "Add to Tracks.scpt" in ~/Library/Application Support/Quicksilver/Actions/ (you may need to create the Actions directory)</li>
@@ -136,7 +136,7 @@ that Mailgun can POST data to it.
   <li>Go to 'Routes' in the Mailgun control panel, and add a new route:</li>
   <ul>
     <li>'Filter expression' should be set to 'catch_all()'</li>
-    <li>'Action' should be 'forward("http://mytracksserver.domain.com/mailgun/mime")'
+    <li>'Action' should be 'forward("<%= integrations_mailgun_url %>")'
   </ul>
   <li>Go to <%= link_to t('layouts.navigation.preferences'), preferences_url %> and
     enter your incoming Mailgun email address (e.g. tracks@user.mailgun.com) in the
@@ -199,5 +199,5 @@ Mailgun handling, as the data is processed the same way</p>
   <li>Enable the "Add any gadget by URL" feature. You will find it at bottom of the list. Select Enable radio button and click Save Changes button.</li>
   <li>Now you can see Gadgets tab added to Gmail Settings. Go to the Gadgets tab</li>
   <li>Paste following link to the Add a gadget by its URL: and then click Add button:<br/>
-    <pre><%= integrations_url + "/google_gadget" %></pre></li>
+    <pre><%= integrations_google_gadget_url %></pre></li>
 </ul>

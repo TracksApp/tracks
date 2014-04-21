@@ -1,6 +1,6 @@
-require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
+require 'test_helper'
 
-class MailgunControllerTest < ActionController::TestCase
+class Integrations::MailgunControllerTest < ActionController::TestCase
 
   def setup
     @user = users(:sms_user)
