@@ -27,7 +27,7 @@ Tracksapp::Application.routes.draw do
   namespace :integrations do
     get 'cloudmailin' => 'cloudmailin#cloudmailin'
     get 'search_plugin' => "search_plugin#search_plugin"
-    get 'google_gadget.xml' => 'google_gadget#google_gadget'
+    get 'google_gadget.xml' => 'google_gadget#google_gadget', :as => 'google_gadget'
     get 'get_applescript1.js' => 'applescript#get_applescript1'
     get 'get_applescript2.js' => 'applescript#get_applescript2'
     get 'get_quicksilver_applescript.js' => 'applescript#get_quicksilver_applescript'
