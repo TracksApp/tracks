@@ -14,14 +14,6 @@ GIT
     actionpack-xml_parser (1.0.1)
       actionpack (>= 4.0.0, < 5)
 
-GIT
-  remote: https://github.com/tolk/tolk
-  revision: 06f99b3b747f2f8f7297fa35ec9c9d5f38eaada6
-  specs:
-    tolk (1.4.00)
-      safe_yaml (~> 0.8)
-      will_paginate
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -192,6 +184,9 @@ GEM
       atomic (>= 1.1.7, < 2)
     tilt (1.4.1)
     timecop (0.6.3)
+    tolk (1.5.0)
+      safe_yaml (~> 0.8)
+      will_paginate
     treetop (1.4.15)
       polyglot
       polyglot (>= 0.3.1)
@@ -242,7 +237,7 @@ DEPENDENCIES
   swf_fu
   therubyracer
   timecop (~> 0.6.2)
-  tolk!
+  tolk (>= 1.5.0)
   uglifier (>= 1.3.0)
   will_paginate
   yard

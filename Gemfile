@@ -44,7 +44,7 @@ gem 'bcrypt-ruby', '~> 3.0.0'
 
 group :development do
   gem "yard"
-  gem "tolk", git: 'https://github.com/tolk/tolk'
+  gem 'tolk', '>=1.5.0'
   gem "bullet"
   gem "rack-mini-profiler"
 end
