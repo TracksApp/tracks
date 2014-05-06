@@ -1,0 +1,34 @@
+<h2 id="mailgun-section">Send emails to Tracks with Mailgun</h2>
+<p>
+If you want to email tasks to Tracks, but cannot run a mailserver on the same host,
+you could use the <a href='www.mailgun.com'>Mailgun</a> support built in to Tracks.
+</p>
+<p>
+For this to work your Tracks server will need to be reachable from the internet, so
+that Mailgun can POST data to it.
+<p>
+<ul>
+  <li>Go to <%= link_to 'http://mailgun.com' %> and register for a free account.</li>
+  <li>Go to 'Routes' in the Mailgun control panel, and add a new route:</li>
+  <ul>
+    <li>'Filter expression' should be set to 'catch_all()'</li>
+    <li>'Action' should be 'forward("<%= integrations_mailgun_url %>")'
+  </ul>
+  <li>Go to <%= link_to t('layouts.navigation.preferences'), preferences_url %> and
+    enter your incoming Mailgun email address (e.g. tracks@user.mailgun.com) in the
+    "<%= Preference.human_attribute_name('sms_email') %>" box.</li>
+  <li>Select a default context for emails to be put in with
+    "<%= Preference.human_attribute_name('sms_context') %>"</li>
+  <li>Add your Mailgun API key (not the Public API key) to the Tracks 'site.yml'
+  <li>Update the mailmap in 'site.yml' to define which senders can send emails to
+    which incoming addresses. For example, to send emails from your work and home
+    email accounts to your tracks Mailgun route, set it up like this:
+    <pre class=code>
+mailmap:
+  tracks@user.mailgun.org:
+  - me@myhome.domain.net
+  - mr.user@work.company.com
+</pre>
+</ul>
+<p>All the comments about the email format from the section above apply to the
+Mailgun handling, as the data is processed the same way</p>

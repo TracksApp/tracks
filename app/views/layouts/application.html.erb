@@ -28,7 +28,7 @@
     <%= favicon_link_tag 'favicon.ico' %>
     <%= favicon_link_tag 'apple-touch-icon.png', :rel => 'apple-touch-icon', :type => 'image/png' %>
     <%= auto_discovery_link_tag(:rss, {:controller => "todos", :action => "index", :format => 'rss', :token => "#{current_user.token}"}, {:title => t('layouts.next_actions_rss_feed')}) %>
-    <link rel="search" type="application/opensearchdescription+xml" title="Tracks" href="<%= search_plugin_path(:format => :xml) %>" />
+    <link rel="search" type="application/opensearchdescription+xml" title="Tracks" href="<%= integrations_search_plugin_path(:format => :xml) %>" />
     <title><%= @page_title %></title>
   </head>
 
@@ -87,7 +87,7 @@
           <li><a href="#"><%= t('layouts.navigation.help') %></a>
             <ul>
               <li><%= link_to t('layouts.navigation.integrations_'), integrations_path %></li>
-              <li><%= link_to t('layouts.navigation.api_docs'), rest_api_docs_path %></li>
+              <li><%= link_to t('layouts.navigation.api_docs'), api_docs_path %></li>
             </ul>
           </li>
           <li><%= navigation_link(image_tag("system-search.png", :size => "16X16", :border => 0), search_path, :title => t('layouts.navigation.search')) %></li>

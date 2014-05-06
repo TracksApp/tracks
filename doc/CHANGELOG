@@ -23,6 +23,7 @@ New and changed features
 * Czech locale has been renamed from cz to cs to follow ISO standards
 * The toggle-notes and toggle-collapsed-containers have been moved into the view
   menu
+* Mailgun integration
 * Bugfixes
 * Tracks is tested on Ruby 1.9.3 and on Ruby 2.0
 
