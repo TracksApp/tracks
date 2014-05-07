@@ -175,4 +175,8 @@ class NullProject
     ""
   end
 
+  def persisted?
+    false
+  end
+
 end
