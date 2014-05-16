@@ -4,7 +4,7 @@ When /^I click on the chart for actions done in the last 12 months$/ do
 end
 
 Then /^I should see a chart$/ do
-  page.should have_css("div.open-flash-chart")
+  expect(page).to have_css("div.open-flash-chart")
 end
 
 When /^I click on the chart for running time of all incomplete actions$/ do

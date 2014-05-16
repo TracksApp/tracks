@@ -14,7 +14,7 @@ Given /^I have a repeat pattern called "([^"]*)"$/ do |pattern_name|
     :created_at => Time.now - 1.day,
     :completed_at => nil
   )
-  @recurring_todo.completed?.should be_false
+  expect(@recurring_todo.completed?).to be_false
   @todo = @current_user.todos.create!(
     :description => pattern_name,
     :context_id => context.id,
@@ -24,7 +24,7 @@ end
 Given /^I have a completed repeat pattern "([^"]*)"$/ do |pattern_name|
   step "I have a repeat pattern called \"#{pattern_name}\""
   @recurring_todo.toggle_completion!
-  @recurring_todo.completed?.should be_true
+  expect(@recurring_todo.completed?).to be_true
 end
 
 Given /^I have (\d+) completed repeat patterns$/ do |number_of_patterns|
@@ -39,39 +39,39 @@ end
 
 When /^I edit the name of the pattern "([^\"]*)" to "([^\"]*)"$/ do |pattern_name, new_name|
   pattern = @current_user.recurring_todos.where(:description => pattern_name).first
-  pattern.should_not be_nil
+  expect(pattern).to_not be_nil
   click_link "link_edit_recurring_todo_#{pattern.id}"
 
-  page.should have_css("input#edit_recurring_todo_description")
+  expect(page).to have_css("input#edit_recurring_todo_description")
 
   fill_in "edit_recurring_todo_description", :with => new_name
   page.find("button#recurring_todo_edit_update_button").click
 
-  page.should_not have_css("div#edit-recurring-todo", :visible => true)
+  expect(page).to_not have_css("div#edit-recurring-todo", :visible => true)
 end
 
 When /^I star the pattern "([^\"]*)"$/ do |pattern_name|
   pattern = @current_user.recurring_todos.where(:description => pattern_name).first
-  pattern.should_not be_nil
+  expect(pattern).to_not be_nil
   click_link "star_icon_#{pattern.id}"
 end
 
 When /^I delete the pattern "([^"]*)"$/ do |pattern_name|
   pattern = @current_user.recurring_todos.where(:description => pattern_name).first
-  pattern.should_not be_nil
+  expect(pattern).to_not be_nil
   
   handle_js_confirm do
     click_link "delete_icon_#{pattern.id}"
   end
-  get_confirm_text.should == "Are you sure that you want to delete the recurring action '#{pattern_name}'?"
+  expect(get_confirm_text).to eq("Are you sure that you want to delete the recurring action '#{pattern_name}'?")
   
-  page.should_not have_css("#delete_icon_#{pattern.id}")
+  expect(page).to_not have_css("#delete_icon_#{pattern.id}")
 end
 
 When /^I mark the pattern "([^"]*)" as (complete|active)$/ do |pattern_name, state|
   pattern = @current_user.recurring_todos.where(:description => pattern_name).first
-  pattern.should_not be_nil
-  pattern.completed?.should(state=="complete" ? be_false : be_true)
+  expect(pattern).to_not be_nil
+  expect(pattern.completed?).to (state=="complete" ? be_false : be_true)
   page.find("#check_#{pattern.id}").click
   wait_for_ajax
   wait_for_animations_to_end
@@ -79,7 +79,7 @@ end
 
 When /^I follow the recurring todo link of "([^"]*)"$/ do |action_description|
   todo = @current_user.todos.where(:description => action_description).first
-  todo.should_not be_nil
+  expect(todo).to_not be_nil
 
   page.find(:xpath, "//div[@id='todo_#{todo.id}']//a[@class='recurring_icon']/img").click
   sleep 1 # wait for page to load
@@ -89,21 +89,21 @@ Then /^the state list "([^"]*)" should be empty$/ do |state|
   empty_id = "recurring-todos-empty-nd" if state.downcase == "active"
   empty_id = "completed-empty-nd" if state.downcase == "completed"
   empty_msg = page.find("div##{empty_id}")
-  empty_msg.visible?.should be_true
+  expect(empty_msg.visible?).to be_true
 end
 
 Then /^the pattern "([^\"]*)" should be starred$/ do |pattern_name|
   pattern = @current_user.recurring_todos.where(:description => pattern_name).first
-  pattern.should_not be_nil
-  page.should have_xpath("//div[@id='recurring_todo_#{pattern.id}']//img[@class='todo_star starred']")
+  expect(pattern).to_not be_nil
+  expect(page).to have_xpath("//div[@id='recurring_todo_#{pattern.id}']//img[@class='todo_star starred']")
 end
 
 Then /^I should see the form for "([^\"]*)" recurrence pattern$/ do |recurrence_period|
-  page.should have_css("#recurring_#{recurrence_period.downcase}", :visible => true)
+  expect(page).to have_css("#recurring_#{recurrence_period.downcase}", :visible => true)
 end
 
 Then /^the pattern "([^"]*)" should be in the state list "([^"]*)"$/ do |pattern_name, state_name|
   pattern = @current_user.recurring_todos.where(:description => pattern_name).first
-  pattern.should_not be_nil
-  page.should have_xpath("//div[@id='#{state_name}_recurring_todos_container']//div[@id='recurring_todo_#{pattern.id}']")
+  expect(pattern).to_not be_nil
+  expect(page).to have_xpath("//div[@id='#{state_name}_recurring_todos_container']//div[@id='recurring_todo_#{pattern.id}']")
 end

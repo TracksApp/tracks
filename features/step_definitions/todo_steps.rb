@@ -12,7 +12,7 @@ When /^I delete the action "([^"]*)"$/ do |action_description|
       click_link "delete_todo_#{todo.id}"
     end
   end
-  get_confirm_text.should == "Are you sure that you want to delete the action '#{todo.description}'?"
+  expect(get_confirm_text).to eq("Are you sure that you want to delete the action '#{todo.description}'?")
   
   wait_for_ajax
 end
@@ -25,130 +25,130 @@ end
 
 When /^I open the notes of "([^"]*)"$/ do |action_description|
   todo = @current_user.todos.where(:description => action_description).first
-  todo.should_not be_nil
+  expect(todo).to_not be_nil
 
   page.find(:xpath, "//div[@id='line_todo_#{todo.id}']/div/a/img").click
   
-  page.should have_xpath("//div[@id='notes_todo_#{todo.id}']", :visible=>true)
+  expect(page).to have_xpath("//div[@id='notes_todo_#{todo.id}']", :visible=>true)
 end
 
 ####### THEN #######
 
 Then /^I should see a starred "([^"]*)"$/ do |action_description|
   todo = @current_user.todos.where(:description => action_description).first
-  todo.should_not be_nil
+  expect(todo).to_not be_nil
 
   xpath_starred = "//div[@id='line_todo_#{todo.id}']//img[@class='todo_star starred']"
-  page.should have_xpath(xpath_starred)
+  expect(page).to have_xpath(xpath_starred)
 end
 
 Then /^I should see an unstarred "([^"]*)"$/ do |action_description|
   todo = @current_user.todos.where(:description => action_description).first
-  todo.should_not be_nil
+  expect(todo).to_not be_nil
 
   xpath_starred = "//div[@id='line_todo_#{todo.id}']//img[@class='todo_star']"
-  page.should have_xpath(xpath_starred)
+  expect(page).to have_xpath(xpath_starred)
 end
 
 Then /^I should see ([0-9]+) todos$/ do |count|
   total = page.all("div.item-container").inject(0) { |s, e| s+=1 }
-  total.should == count.to_i
+  expect(total).to eq(count.to_i)
 end
 
 Then /^I should see the todo "([^\"]*)"$/ do |todo_description|
-  page.should have_xpath("//span[.=\"#{todo_description}\"]", :visible => true)
+  expect(page).to have_xpath("//span[.=\"#{todo_description}\"]", :visible => true)
 end
 
 Then /^I should not see the todo "([^\"]*)"$/ do |todo_description|
-  page.should_not have_xpath("//span[.=\"#{todo_description}\"]", :visible => true)
+  expect(page).to_not have_xpath("//span[.=\"#{todo_description}\"]", :visible => true)
 end
 
 Then /^I should see a completed todo "([^"]*)"$/ do |todo_description|
   todo = @current_user.todos.where(:description => todo_description).first
-  todo.should_not be_nil
+  expect(todo).to_not be_nil
 
   # only completed todos have a grey span with the completed_at date
   xpath = "//div[@id='line_todo_#{todo.id}']/div/span[@class='grey']"
-  page.should have_xpath(xpath, :visible=>true)
+  expect(page).to have_xpath(xpath, :visible=>true)
 end
 
 Then /^I should see an active todo "([^"]*)"$/ do |todo_description|
   todo = @current_user.todos.where(:description => todo_description).first
-  todo.should_not be_nil
+  expect(todo).to_not be_nil
 
   xpath = "//div[@id='line_todo_#{todo.id}']/img[@class='grip']"
-  page.should have_xpath(xpath, :visible=>true)
+  expect(page).to have_xpath(xpath, :visible=>true)
 end
 
 Then /^the number of actions should be (\d+)$/ do |count|
-  @current_user.todos.count.should == count.to_i
+  expect(@current_user.todos.count).to eq(count.to_i)
 end
 
 Then /^a confirmation for adding a new context "([^"]*)" should be asked$/ do |context_name|
-  get_confirm_text.should == "New context '#{context_name}' will be also created. Are you sure?"
+  expect(get_confirm_text).to eq("New context '#{context_name}' will be also created. Are you sure?")
 end
 
 Then /^the selected project should be "([^"]*)"$/ do |content|
   # Works for mobile. TODO: make it work for both mobile and non-mobile
   if content.blank?
-    page.has_css?("select#todo_project_id option[selected='selected']").should be_false
+    expect(page.has_css?("select#todo_project_id option[selected='selected']")).to be_false
   else
-    page.find("select#todo_project_id option[selected='selected']").text.should =~ /#{content}/
+    expect(page.find("select#todo_project_id option[selected='selected']").text).to match(/#{content}/)
   end
 end
 
 Then /^the selected context should be "([^"]*)"$/ do |content|
   # Works for mobile. TODO: make it work for both mobile and non-mobile
   if content.blank?
-    page.has_css?("select#todo_context_id option[selected='selected']").should be_false
+    expect(page.has_css?("select#todo_context_id option[selected='selected']")).to be_false
   else
-    page.find("select#todo_context_id option[selected='selected']").text.should =~ /#{content}/
+    expect(page.find("select#todo_context_id option[selected='selected']").text).to match(/#{content}/)
   end
 end
 
 Then /^I should see the page selector$/ do
-  page.should have_xpath(".//a[@class='next_page']")
+  expect(page).to have_xpath(".//a[@class='next_page']")
 end
 
 Then /^the page should be "([^"]*)"$/ do |page_number|
-  page.find(:xpath, ".//div[@class='paginate_header']//em[@class='current']").text.should == page_number
+  expect(page.find(:xpath, ".//div[@class='paginate_header']//em[@class='current']").text).to eq(page_number)
 end
 
 Then /^the project field of the new todo form should contain "([^"]*)"$/ do |project_name|
   xpath= "//form[@id='todo-form-new-action']/input[@id='todo_project_name']"
-  project_name.should == page.find(:xpath, xpath).value
+  expect(project_name).to eq(page.find(:xpath, xpath).value)
 end
 
 Then /^the default context of the new todo form should be "([^"]*)"$/ do |context_name|
   xpath= "//form[@id='todo-form-new-action']/input[@id='todo_context_name']"
-  context_name.should == page.find(:xpath, xpath).value
+  expect(context_name).to eq(page.find(:xpath, xpath).value)
 end
 
 Then /^the tag field in the new todo form should be empty$/ do
   xpath= "//form[@id='todo-form-new-action']/input[@id='tag_list']"
-  page.find(:xpath, xpath).value.blank?.should be_true
+  expect(page.find(:xpath, xpath).value).to be_blank
 end
 
 Then /^the tag field in the new todo form should be "([^"]*)"$/ do |tag_list|
   xpath= "//form[@id='todo-form-new-action']/input[@id='tag_list']"
-  tag_list.should == page.find(:xpath, xpath).value
+  expect(tag_list).to eq(page.find(:xpath, xpath).value)
 end
 
 Then /^the tags of "([^"]*)" should be "([^"]*)"$/ do |todo_description, tag_list|
-  find_todo(todo_description).tag_list.should == tag_list
+  expect(find_todo(todo_description).tag_list).to eq(tag_list)
 end
 
 Then /^I should see "([^"]*)" in the completed section of the mobile site$/ do |desc|
   todo = @current_user.todos.where(:description => desc).first
-  todo.should_not be_nil
+  expect(todo).to_not be_nil
 
   xpath = "//div[@id='completed_container']//a[@href='/todos/#{todo.id}.m']"
-  page.should have_xpath(xpath)
+  expect(page).to have_xpath(xpath)
 end
 
 Then /^I should (see|not see) the notes of "([^"]*)"$/ do |visible, todo_description|
   todo = @current_user.todos.where(:description => todo_description).first
-  todo.should_not be_nil
+  expect(todo).to_not be_nil
   
   page.find("div#notes_todo_#{todo.id}").send(visible=="see" ? "should" : "should_not", be_visible)
 end

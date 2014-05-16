@@ -18,7 +18,7 @@ end
 
 When /^I expand the dependencies of "([^\"]*)"$/ do |todo_name|
   todo = Todo.where(:description=>todo_name).first
-  todo.should_not be_nil
+  expect(todo).to_not be_nil
 
   expand_img_locator = "//div[@id='line_todo_#{todo.id}']/div/a[@class='show_successors']/img"
   page.find(:xpath, expand_img_locator).click
@@ -28,9 +28,9 @@ end
 
 When /^I edit the dependency of "([^"]*)" to add "([^"]*)" as predecessor$/ do |todo_description, predecessor_description|
   todo = @current_user.todos.where(:description => todo_description).first
-  todo.should_not be_nil
+  expect(todo).to_not be_nil
   predecessor = @current_user.todos.where(:description => predecessor_description).first
-  predecessor.should_not be_nil
+  expect(predecessor).to_not be_nil
 
   open_edit_form_for(todo)
 
@@ -43,29 +43,29 @@ When /^I edit the dependency of "([^"]*)" to add "([^"]*)" as predecessor$/ do |
   page.execute_script %Q{$("#{form_css}").find('input[id$="predecessor_input"]').autocomplete('search')} if Capybara.javascript_driver == :webkit
   
   # wait for auto complete
-  page.should have_css("a.ui-state-focus")
+  expect(page).to have_css("a.ui-state-focus")
 
   # click first line
   page.find(:css, "ul li a.ui-state-focus").click
 
   # wait for the new dependency to be added to the list
-  page.should have_css("li#pred_#{predecessor.id}")
+  expect(page).to have_css("li#pred_#{predecessor.id}")
 
   submit_edit_todo_form(todo)
 end
 
 When /^I edit the dependency of "([^"]*)" to remove "([^"]*)" as predecessor$/ do |todo_description, predecessor_description|
   todo = @current_user.todos.where(:description => todo_description).first
-  todo.should_not be_nil
+  expect(todo).to_not be_nil
   predecessor = @current_user.todos.where(:description => predecessor_description).first
-  predecessor.should_not be_nil
+  expect(predecessor).to_not be_nil
 
   open_edit_form_for(todo)
 
   delete_dep_button = "//form[@id='form_todo_#{todo.id}']//img[@id='delete_dep_#{predecessor.id}']"
   page.find(:xpath, delete_dep_button).click
   
-  page.should_not have_xpath(delete_dep_button)
+  expect(page).to_not have_xpath(delete_dep_button)
 
   submit_edit_todo_form(todo)
   wait_for_ajax
@@ -74,7 +74,7 @@ end
 
 When /^I edit the dependency of "([^"]*)" to "([^"]*)"$/ do |todo_name, deps|
   todo = @dep_todo = @current_user.todos.where(:description => todo_name).first
-  todo.should_not be_nil
+  expect(todo).to_not be_nil
 
   open_edit_form_for(todo)
   fill_in "predecessor_list_todo_#{todo.id}", :with => deps
@@ -83,7 +83,7 @@ end
 
 Then /^the successors of "(.*)" should include "(.*)"$/ do |parent_name, child_name|
   parent = @current_user.todos.where(:description => parent_name).first
-  parent.should_not be_nil
+  expect(parent).to_not be_nil
 
   # wait until the successor is added. TODO: make this not loop indefinitly
   wait_until do
@@ -95,7 +95,7 @@ end
 
 Then /^I should see "([^\"]*)" within the dependencies of "([^\"]*)"$/ do |successor_description, todo_description|
   todo = @current_user.todos.where(:description => todo_description).first
-  todo.should_not be_nil
+  expect(todo).to_not be_nil
 
   # open successors
   within "div#line_todo_#{todo.id}" do
@@ -109,14 +109,14 @@ end
 
 Then /^I should not see "([^"]*)" within the dependencies of "([^"]*)"$/ do |successor_description, todo_description|
   todo = @current_user.todos.where(:description => todo_description).first
-  todo.should_not be_nil
+  expect(todo).to_not be_nil
   
   step "I should not see \"#{successor_description}\" within \"div#line_todo_#{todo.id}\""
 end
 
 Then /^I should see that "([^"]*)" does not have dependencies$/ do |todo_description|
   todo = @current_user.todos.where(:description => todo_description).first
-  todo.should_not be_nil
+  expect(todo).to_not be_nil
   dependencies_icon = "//div[@id='line_todo_#{todo.id}']/div/a[@class='show_successors']/img"
-  page.should_not have_xpath(dependencies_icon)
+  expect(page).to_not have_xpath(dependencies_icon)
 end

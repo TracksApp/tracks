@@ -1,12 +1,12 @@
 When(/^I collapse the context container of "([^"]*)"$/) do |context_name|
   toggle = page.find(:xpath, toggle_context_container_xpath(find_context(context_name)))
-  toggle.should be_visible
+  expect(toggle).to be_visible
   toggle.click
 end
 
 When(/^I collapse the project container of "(.*?)"$/) do |project_name|
   toggle = page.find(:xpath, toggle_project_container_xpath(find_project(project_name)))
-  toggle.should be_visible
+  expect(toggle).to be_visible
   toggle.click
 end
 
@@ -107,7 +107,7 @@ end
 
 Then /^I should see "([^"]*)" in the due next month container$/ do |todo_description|
   within "div#due_after_this_month_container" do
-    page.should have_css("div#line_todo_#{find_todo(todo_description).id}")
+    expect(page).to have_css("div#line_todo_#{find_todo(todo_description).id}")
   end
 end
 
@@ -148,7 +148,7 @@ Then /^I should (see|not see) empty message for (done today|done this week|done 
   css = "div#deferred_pending_container-empty-d"  if state == "deferred todos"
   
   elem = find(css)
-  elem.should_not be_nil
+  expect(elem).to_not be_nil
 
   check_elem_visibility(visible, elem)
 end

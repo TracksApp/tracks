@@ -29,14 +29,14 @@ module TracksStepHelper
   
   def wait_for_ajax
     start_time = Time.now
-    page.evaluate_script('jQuery.isReady&&jQuery.active==0').class.should_not eql(String)
+    expect(page.evaluate_script('jQuery.isReady&&jQuery.active==0').class).to_not eql(String)
     until(page.evaluate_script('jQuery.isReady&&jQuery.active==0') || (start_time + 5.seconds) < Time.now)
       sleep 0.05
     end
   end
 
   def wait_for_auto_complete
-    page.should have_css("a.ui-state-focus", :visible => true)
+    expect(page).to have_css("a.ui-state-focus", :visible => true)
   end
 
   def click_first_line_of_auto_complete
@@ -57,19 +57,19 @@ module TracksStepHelper
 
   def find_todo(description)
     todo = @current_user.todos.where(:description => description).first
-    todo.should_not be_nil
+    expect(todo).to_not be_nil
     return todo
   end
 
   def find_context(context_name)
     context = @current_user.contexts.where(:name => context_name).first
-    context.should_not be_nil
+    expect(context).to_not be_nil
     return context
   end
 
   def find_project(project_name)
     project = @current_user.projects.where(:name => project_name).first
-    project.should_not be_nil
+    expect(project).to_not be_nil
     return project
   end
 
@@ -102,12 +102,12 @@ module TracksStepHelper
 
     # click menu 
     view_menu_link = "#{view_menu} a#menu_view_link"
-    page.should have_css(view_menu_link, :visible => true)
+    expect(page).to have_css(view_menu_link, :visible => true)
     page.find(view_menu_link).click
 
     # wait for menu to be visible
     view_menu_item = "#{view_menu} li#menu_view_toggle_contexts"
-    page.should have_css(view_menu_item)
+    expect(page).to have_css(view_menu_item)
 
     within view_menu do
       yield
@@ -118,7 +118,7 @@ module TracksStepHelper
     wait_for_animations_to_end
 
     submenu_arrow = "div#line_todo_#{todo.id} img.todo-submenu"
-    page.should have_css(submenu_arrow, :visible=>true)
+    expect(page).to have_css(submenu_arrow, :visible=>true)
     arrow = page.find(submenu_arrow, :match => :first)
     arrow.click
     

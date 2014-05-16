@@ -19,13 +19,13 @@ Given /^the following user records with hash algorithm$/ do |table|
     when 'bcrypt'
       user.change_password( password, password )
       user.reload
-      BCrypt::Password.new(user.crypted_password).should == password
+      expect(BCrypt::Password.new(user.crypted_password)).to eq(password)
     when 'sha1'
       user.password = user.password_confirmation = nil
       user.send(:write_attribute, :crypted_password, user.sha1(password))
       user.save
       user.reload
-      user.crypted_password.should == user.sha1(password)
+      expect(user.crypted_password).to eq(user.sha1(password))
     else
       raise "Unknown hashing algorithm: #{algorithm}"
     end
@@ -49,14 +49,14 @@ When /^I delete the user "([^\"]*)"$/ do |username|
   # click "//tr[@id='user-3']//img"
   # assert_confirmation "Warning: this will delete user 'john', all their actions, contexts, project and notes. Are you sure that you want to continue?"
   user = User.where(:login => username).first
-  user.should_not be_nil
+  expect(user).to_not be_nil
 
   handle_js_confirm do
     page.find(:xpath, "//tr[@id='user-#{user.id}']//img").click
   end
-  get_confirm_text.should == "Warning: this will delete user '#{user.login}', all their actions, contexts, project and notes. Are you sure that you want to continue?"
+  expect(get_confirm_text).to eq("Warning: this will delete user '#{user.login}', all their actions, contexts, project and notes. Are you sure that you want to continue?")
   
-  page.should_not have_css("tr#user-#{user.id}")
+  expect(page).to_not have_css("tr#user-#{user.id}")
 end
 
 Then /^I should see that a user named "([^\"]*)" is not present$/ do |username|
