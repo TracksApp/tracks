@@ -1,4 +1,4 @@
-require './test/minimal_test_helper'
+require 'minimal_test_helper'
 require './doc/tracks_cli/tracks_xml_builder'
 require 'active_support/time_with_zone'
 

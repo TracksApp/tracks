@@ -1,4 +1,4 @@
-require_relative '../minimal_test_helper'
+require 'minimal_test_helper'
 require_relative '../../lib/staleness'
 require_relative '../../lib/user_time'
 

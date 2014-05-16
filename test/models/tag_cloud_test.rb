@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/../minimal_test_helper')
+require 'minimal_test_helper'
 require 'app/models/stats/tag_cloud'
 
 class TagCloudTest < Minitest::Test

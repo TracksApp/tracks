@@ -1,6 +1,6 @@
 require 'date'
 require 'time'
-require './test/minimal_test_helper'
+require 'minimal_test_helper'
 require 'app/models/stats/time_to_complete'
 
 FakeTask = Struct.new(:created_at, :completed_at)

@@ -1,4 +1,4 @@
-require_relative '../test_helper'
+require 'test_helper'
 require_relative '../../lib/project_from_todo'
 
 class ProjectFromTodoTest < ActiveSupport::TestCase

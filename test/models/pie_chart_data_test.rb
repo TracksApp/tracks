@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/../minimal_test_helper')
+require 'minimal_test_helper'
 require 'app/models/stats/pie_chart_data'
 require 'active_support/core_ext/string'
 
