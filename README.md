@@ -6,6 +6,7 @@ modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
 
+[![Build Status](https://travis-ci.org/TracksApp/tracks.png?branch=2.2_branch)](https://travis-ci.org/TracksApp/tracks)
 [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/TracksApp/tracks)
 
 * Project homepage: http://getontracks.org/
