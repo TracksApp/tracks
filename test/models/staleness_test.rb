@@ -1,9 +1,10 @@
 require_relative '../minimal_test_helper'
 require_relative '../../lib/staleness'
 require_relative '../../lib/user_time'
-require 'timecop'
 
 class StalenessTest < Minitest::Test
+  include ActiveSupport::Testing::TimeHelpers
+
   FakePrefs = Struct.new(:time_zone)
   FakeUser = Struct.new(:time) do
     def prefs
@@ -36,11 +37,11 @@ class StalenessTest < Minitest::Test
 
   def setup
     @current_user = FakeUser.new(now)
-    Timecop.freeze(Time.utc(2013,02,28))
+    travel_to Time.utc(2013,02,28)
   end
 
   def teardown
-    Timecop.return
+    travel_back
   end
 
   def test_item_with_due_date_is_not_stale_ever

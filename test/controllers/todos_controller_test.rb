@@ -435,7 +435,7 @@ class TodosControllerTest < ActionController::TestCase
     login_as(:admin_user)
 
     # given a todo in the tickler that should be activated
-    Timecop.travel(2.weeks.ago) do
+    travel_to 2.weeks.ago do
       create_todo(
         description: "tickler", 
         show_from: 1.week.from_now.
@@ -715,7 +715,7 @@ class TodosControllerTest < ActionController::TestCase
   end
 
   def test_toggle_check_on_rec_todo_show_from_today
-    Timecop.travel(2014, 1, 15) do
+    travel_to Time.zone.local(2014, 1, 15) do
       login_as(:admin_user)
 
       # link todo_1 and recurring_todo_1

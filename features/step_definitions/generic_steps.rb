@@ -12,7 +12,7 @@ end
 
 Given /^the date is "(.*?)"$/ do |date|
   # remember to tag the scenario with @reset_time to reset this travel
-  Timecop.travel(date)
+  travel_to date
 end
 
 Given(/^I have selected the view for group by (project|context)$/) do |grouping|

@@ -97,7 +97,7 @@ class StatsControllerTest < ActionController::TestCase
   end
 
   def test_actions_done_last12months_data
-    Timecop.travel(Time.local(2013, 1, 15)) do
+    travel_to Time.local(2013, 1, 15) do
         login_as(:admin_user)
         @current_user = User.find(users(:admin_user).id)
         @current_user.todos.delete_all
@@ -143,7 +143,7 @@ class StatsControllerTest < ActionController::TestCase
   end
 
   def test_empty_last12months_data
-    Timecop.travel(Time.local(2013, 1, 15)) do
+    travel_to Time.local(2013, 1, 15) do
       login_as(:admin_user)
       @current_user = User.find(users(:admin_user).id)
       @current_user.todos.delete_all

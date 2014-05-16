@@ -183,7 +183,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
     # this test is a duplicate of the unit test. Only this test covers the
     # codepath in the controllers
 
-    Timecop.travel(Time.local(2012,1,1)) do
+    travel_to Time.local(2012,1,1) do
 
       login_as(:admin_user)
 
@@ -292,7 +292,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
   end
 
   def test_start_on_monthly_rec_todo
-    Timecop.travel(Time.local(2012,1,1)) do
+    travel_to Time.local(2012,1,1) do
 
       login_as(:admin_user)
 

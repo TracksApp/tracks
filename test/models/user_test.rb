@@ -1,5 +1,4 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
-require 'timecop'
 
 class UserTest < ActiveSupport::TestCase
   fixtures :users, :preferences, :projects, :contexts, :todos, :recurring_todos
@@ -351,7 +350,7 @@ class UserTest < ActiveSupport::TestCase
     assert_nil u.remember_token_expires_at
 
     # set token on 2013-feb-28
-    Timecop.travel(Time.local(2013, 2, 28)) do
+    travel_to Time.local(2013, 2, 28) do
       u.remember_me
       assert_not_nil u.remember_token_expires_at
 
@@ -359,12 +358,12 @@ class UserTest < ActiveSupport::TestCase
     end
 
     # token should be valid after 5 days
-    Timecop.travel(Time.local(2013, 3, 5)) do
+    travel_to Time.local(2013, 3, 5) do
       assert u.remember_token?
     end
 
     # token should not be valid after more than 2 weeks
-    Timecop.travel(Time.local(2013, 3, 28)) do
+    travel_to Time.local(2013, 3, 28) do
       assert !u.remember_token?
     end
   end

@@ -9,5 +9,5 @@ Before('@aruba') do
 end
 
 After('@reset_time') do
-	Timecop.return
+	travel_back
 end

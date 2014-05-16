@@ -169,7 +169,7 @@ class TodoTest < ActiveSupport::TestCase
     dates.each do |show_from_date|
       # setup test case
       t = @not_completed1
-      Timecop.travel(show_from_date - 1.day) do
+      travel_to show_from_date - 1.day do
         t.show_from = show_from_date
         t.save!
         assert t.deferred?

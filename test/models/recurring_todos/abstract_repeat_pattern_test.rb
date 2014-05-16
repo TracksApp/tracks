@@ -101,7 +101,7 @@ module RecurringTodos
     end
 
     def test_determine_start
-      Timecop.travel(2013,1,1) do
+      travel_to Time.zone.local(2013,1,1) do
         rt = create_recurring_todo
         assert_equal "2013-01-01 00:00:00", rt.send(:determine_start, nil).to_s(:db), "no previous date, use today"
         assert_equal "2013-01-01 00:00:00", rt.send(:determine_start, nil, 1.day).to_s(:db), "no previous date, use today without offset"
