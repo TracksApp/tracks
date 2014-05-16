@@ -228,7 +228,7 @@ DEPENDENCIES
   mocha
   mysql2
   rack-mini-profiler
-  rails (~> 4.1)
+  rails (~> 4.1.0)
   rails_autolink
   rspec-expectations
   sanitize
