@@ -17,7 +17,7 @@ class TodoXmlApiTest < ActionDispatch::IntegrationTest
     get '/tickler.xml', {}, {}
     assert_response 401
 
-    get "/tickler.xml", {}, {'HTT_AUTHORIZATION' => "Basic " + Base64.encode64("wrong:wrong"),'ACCEPT' => 'application/xml'}
+    get "/tickler.xml", {}, {'HTTP_AUTHORIZATION' => "Basic " + Base64.encode64("wrong:wrong"),'ACCEPT' => 'application/xml'}
     assert_response 401
   end
 
@@ -30,6 +30,19 @@ class TodoXmlApiTest < ActionDispatch::IntegrationTest
   def test_get_tickler_omits_user_id
     authenticated_get_xml "/tickler.xml", @user.login, @password, {}
     assert_no_tag :tag => "user_id"
+  end
+
+  def test_get_index_with_only_active_todos
+    authenticated_get_xml "/todos.xml", @user.login, @password, {}
+    assert_response 200
+
+    all_todo_count = assigns['xml_todos']
+
+    authenticated_get_xml "/todos.xml?limit_to_active_todos=1", @user.login, @password, {}
+    assert_response 200
+
+    active_todo_count = assigns['xml_todos']
+    assert all_todo_count != active_todo_count, "active should be less than all todos"
   end
 
   def test_create_todo_with_show_from
