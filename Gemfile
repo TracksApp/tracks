@@ -42,6 +42,8 @@ gem 'bcrypt-ruby', '~> 3.0.0'
 # gem 'jbuilder', '~> 1.2'
 
 group :development do
+  gem "spring"
+  gem "spring-commands-cucumber"
   gem "yard"
   gem 'tolk', '>=1.5.0'
   gem "bullet"

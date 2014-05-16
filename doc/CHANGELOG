@@ -16,6 +16,8 @@
 == Version 2.3devel
 
 New and changed features
+* Added new binstubs. The commands `bin/rails` and `bin/rake` take the place of
+  the old `bundle exec rails` and `bundle exec rake`, respectively.
 * You can select to group todos on the home page by context or by 
   project (using the view menu). This also works for tag page, the project page, 
   the tickler and the context page
