@@ -4,7 +4,7 @@ require 'active_support/time_with_zone'
 
 module TracksCli
 
-  class TracksXmlBuilderTest < Test::Unit::TestCase
+  class TracksXmlBuilderTest < Minitest::Test
     def test_all
       todo = {
         description: "test action",

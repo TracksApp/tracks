@@ -73,7 +73,7 @@ Given /^I have a (completed|hidden) project called "([^"]*)"$/ do |state, projec
   step "I have a project called \"#{project_name}\""
   @project.send(state=="completed" ? "complete!" : "hide!")
   @project.reload
-  assert @project.send(state=="completed" ? "completed?" : "hidden?")
+  @project.send(state=="completed" ? "completed?" : "hidden?").should be_true
 end
 
 Given /^I have (\d+) completed projects$/ do |number_of_projects|

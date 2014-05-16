@@ -125,7 +125,7 @@ function update_predecessors(next_steps) {
 
 function regenerate_predecessor_family() {
 <%
-  parents = @todo.predecessors
+  parents = @todo.predecessors.to_a
   until parents.empty?
     parent = parents.pop
     parents += parent.predecessors 

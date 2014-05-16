@@ -56,13 +56,13 @@ class User < ActiveRecord::Base
               end
               def alphabetize(scope_conditions = {})
                 projects = where(scope_conditions)
-                projects.sort!{ |x,y| x.name.downcase <=> y.name.downcase }
+                projects.to_a.sort!{ |x,y| x.name.downcase <=> y.name.downcase }
                 self.update_positions(projects.map{ |p| p.id })
                 return projects
               end
               def actionize(scope_conditions = {})
                 todos_in_project = where(scope_conditions).includes(:todos)
-                todos_in_project.sort!{ |x, y| -(x.todos.active.count <=> y.todos.active.count) }
+                todos_in_project.to_a.sort!{ |x, y| -(x.todos.active.count <=> y.todos.active.count) }
                 todos_in_project.reject{ |p| p.todos.active.count > 0 }
                 sorted_project_ids = todos_in_project.map {|p| p.id}
 

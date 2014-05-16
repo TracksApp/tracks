@@ -1,9 +1,8 @@
 require 'date'
-require 'test/unit'
 require 'active_support/core_ext/object/blank'
 require_relative '../../app/services/rich_message_extractor.rb'
 
-class RichMessageExtractorTest < Test::Unit::TestCase
+class RichMessageExtractorTest < Minitest::Test
 
   def test_message_with_all_options
     message = "ohai@some-context~this-project>131012<131014#tag1#tag2*"
