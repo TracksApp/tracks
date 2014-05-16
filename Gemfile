@@ -7,7 +7,7 @@ gem 'coffee-rails', '~>4.0'
 #gem 'json'
 
 # todo: remove xml api
-gem 'actionpack-xml_parser', git: 'https://github.com/rails/actionpack-xml_parser'
+gem 'actionpack-xml_parser', '>=1.0.1'
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 gem 'therubyracer'
@@ -58,7 +58,7 @@ group :test do
   gem "database_cleaner"
   gem "mocha", :require => false
 
-  gem "aruba", git: 'https://github.com/cucumber/aruba', :require => false  # need 0.5.4 for piping files; 0.5.3 is latest
+  gem "aruba", ">=0.5.4", :require => false
 
   # Note that > 2.14 has problems, see:
   # https://code.google.com/p/selenium/issues/detail?id=3075
