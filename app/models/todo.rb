@@ -207,6 +207,7 @@ class Todo < ActiveRecord::Base
   def remove_predecessor(predecessor)
     self.predecessors.delete(predecessor)
     if self.predecessors.empty?
+      self.reload  # reload predecessors
       self.not_part_of_hidden_container? ? self.activate! : self.hide!
     else
       save!
