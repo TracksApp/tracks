@@ -77,6 +77,20 @@ module RecurringTodos
       nil
     end
 
+    def icecube_rule
+      #TODO: end date/count
+      if every_x_day?
+        IceCube::Rule.monthly(every_x_month).day_of_month(every_x_day)
+      else
+        if every_xth_day == 5
+          week_of_month = -1
+        else
+          week_of_month = every_xth_day
+        end
+        IceCube::Rule.monthly(every_x_month2).day_of_week(day_of_week => [week_of_month])
+      end
+    end
+
     private
 
     def find_specific_day_of_month(previous, start, n)

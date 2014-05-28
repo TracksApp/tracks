@@ -162,6 +162,12 @@ module RecurringTodos
       end
     end
     
+    def schedule
+      IceCube::Schedule.new(start_from) do |s|
+        s.add_recurrence_rule icecube_rule
+      end
+    end
+
     private
 
     # Determine start date to calculate next date for recurring todo which

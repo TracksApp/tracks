@@ -51,6 +51,13 @@ module RecurringTodos
       raise Exception.new, "unable to find next weekly date (#{self.every_day})"
     end
 
+    def icecube_rule
+      #TODO: end date/count
+      #TODO: does this correctly retrieve days of week?
+      days = (0..6).select {|n| on_xday(n) }
+      IceCube::Rule.weekly(every_x_week).day(days)
+    end
+
     private
 
     def determine_start_date(previous)
