@@ -8,8 +8,6 @@ rvm:
 bundler_args: --without development
 
 before_install:
-before_install: 
-  - "gem install bundler -v=1.5.1"
   - "mysql -e 'create database tracks_test;'"
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
