@@ -73,6 +73,20 @@ module RecurringTodos
       nil
     end
 
+    def icecube_rule
+      #TODO: end date/count
+      if self.recurrence_selector == 0
+        IceCube::Rule.yearly.month_of_year(month_of_year).day_of_month(every_x_day)
+      else
+        if every_xth_day == 5
+          week_of_month = -1
+        else
+          week_of_month = every_xth_day
+        end
+        IceCube::Rule.yearly.month_of_year(month_of_year2).day_of_week(day_of_week => [week_of_month])
+      end
+    end
+
     private
 
     def date_as_month_day

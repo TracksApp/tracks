@@ -5,6 +5,9 @@ class RecurringTodo < ActiveRecord::Base
 
   has_many :todos
 
+  serialize :schedule, IceCube::Schedule
+  before_save :generate_schedule
+
   scope :active,    -> { where state: 'active'}
   scope :completed, -> { where state: 'completed'}
 
@@ -137,6 +140,10 @@ class RecurringTodo < ActiveRecord::Base
 
   def continues_recurring?(previous)
     pattern.continues_recurring?(previous)
+  end
+
+  def generate_schedule
+    self.schedule = pattern.schedule
   end
 
 end

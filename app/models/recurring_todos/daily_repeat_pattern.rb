@@ -48,5 +48,14 @@ module RecurringTodos
       end
     end
 
+    def icecube_rule
+      #TODO: end date/count
+      if only_work_days?
+        IceCube::Rule.weekly.day(1, 2, 3, 4, 5)
+      else
+        IceCube::Rule.daily(every_x_days)
+      end
+    end
+
   end
 end
