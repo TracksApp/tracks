@@ -19,6 +19,7 @@ of the License, or (at your option) any later version.
 
 [![Build Status](https://travis-ci.org/TracksApp/tracks.png?branch=master)](https://travis-ci.org/TracksApp/tracks)
 [![Code Climate](https://codeclimate.com/github/TracksApp/tracks.png)](https://codeclimate.com/github/TracksApp/tracks)
+[![Dependency Status](https://gemnasium.com/TracksApp/tracks.svg)](https://gemnasium.com/TracksApp/tracks)
 
 Full instructions for both new installations and upgrades from older installations of Tracks
 can be found within the /doc directory.
