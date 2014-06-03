@@ -1,0 +1,8 @@
+stage:
+  before:
+    - cp config/site.teatro.yml config/site.yml
+    - cp config/database.teatro.yml config/database.yml
+
+  database:
+    - bundle exec rake db:create db:migrate
+    - bundle exec rake db:seed

@@ -75,3 +75,5 @@ group :test do
   # get test coverage info on codeclimate
   gem "codeclimate-test-reporter", group: :test, require: nil
 end
+
+gem "thin"
