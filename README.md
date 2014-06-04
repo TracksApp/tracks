@@ -11,7 +11,6 @@ of the License, or (at your option) any later version.
 * Source at GitHub: https://github.com/TracksApp/tracks
 * Assembla space (for bug reports and feature requests): https://www.assembla.com/spaces/tracks-tickets/tickets
 * Wiki (community contributed information): https://github.com/TracksApp/tracks/wiki
-* Forum (read-only): http://getontracks.org/forums/
 * Mailing list: http://groups.google.com/group/TracksApp
 * Original developer: bsag (http://www.rousette.org.uk/)
 * Contributors: https://github.com/TracksApp/tracks/wiki/Contributors
@@ -30,7 +29,7 @@ different configurations which can be used (e.g. running Tracks on your local
 computer or on a remote server). If you choose the appropriate section for your
 situation (installation vs. upgrade), and use the easiest (recommended) method,
 you should find the instructions easy to follow. If you encounter problems, try
-searching the wiki, forum or mailing list (URLs above), and ask a question if
+searching the wiki or mailing list (URLs above), and ask a question if
 you cannot find a solution to your problem.
 
 The wiki has a lot of user contributed installation HOWTOs for various webhosts, specific OS's and more.
