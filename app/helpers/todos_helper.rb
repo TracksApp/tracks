@@ -508,13 +508,14 @@ module TodosHelper
   end
 
   def todo_moved_out_of_container
-    return 
-      # moved from one project container to another
-      (@project_changed && @group_view_by=='project') ||  
-      # moved from one context container to another
-      (@context_changed && @group_view_by=='context') || 
-      # moved from actions-without-project container to another
-      (@context_changed && @group_view_by=='project' && @todo.project_id.nil?)
+    # moved from one project container to another
+    moved_project = @project_changed && @group_view_by=='project'
+    # moved from one context container to another
+    moved_context = @context_changed && @group_view_by=='context'
+    # moved from actions-without-project container to another
+    moved_without_project = @context_changed && @group_view_by=='project' && @todo.project_id.nil?
+
+    return moved_project || moved_context || moved_without_project
   end
 
   def update_needs_to_hide_container
