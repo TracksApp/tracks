@@ -1,0 +1,3 @@
+<% if Rails.env.test? || Rails.env.cucumber? %>
+$.fx.off = true;
+<% end %>

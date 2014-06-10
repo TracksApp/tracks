@@ -15,6 +15,7 @@
 
 // Stuff in app/assets
 //= require tracks.js
+//= require disable_fx_in_test
 
 // Stuff in vendor/assets
 //= require jquery-ui-1.10.0.custom.min
