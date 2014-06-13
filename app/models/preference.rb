@@ -15,13 +15,13 @@ class Preference < ActiveRecord::Base
     date = nil
 
     if s.is_a?(Time)
-      date = s.in_time_zone(time_zone).to_date
+      date = s.to_date
     elsif s.is_a?(String)
       date = Date.strptime(s, date_format)
     else
       raise ArgumentError.new("Bad argument type:#{s.class}")
     end
 
-    UserTime.new(user).midnight(date)
+    date.in_time_zone(time_zone).beginning_of_day
   end
 end

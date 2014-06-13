@@ -90,7 +90,7 @@ class User < ActiveRecord::Base
                 order('show_from ASC, todos.created_at DESC')},
            :class_name => 'Todo') do
               def find_and_activate_ready
-                where('show_from <= ?', Time.zone.now).collect { |t| t.activate! }
+                where('show_from <= ?', Time.current).collect { |t| t.activate! }
               end
            end
 
@@ -160,7 +160,7 @@ class User < ActiveRecord::Base
   end
 
   def date
-    UserTime.new(self).midnight(Time.now)
+    Date.current
   end
 
   def generate_token
