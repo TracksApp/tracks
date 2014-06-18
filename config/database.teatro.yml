@@ -1,0 +1,12 @@
+default: &default
+  adapter: mysql2
+  encoding: utf8
+  reconnect: true
+  database: teatro
+  pool: 5
+
+development:
+  <<: *default
+
+production:
+  <<: *default
