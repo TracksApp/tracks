@@ -70,6 +70,54 @@ class RecurringTodosControllerTest < ActionController::TestCase
     assert_equal orig_todo_count+1, Todo.count
   end
 
+  def test_invalid_recurring_todo
+    login_as(:admin_user)
+    orig_rt_count = RecurringTodo.count
+    orig_todo_count = Todo.count
+    put :create,
+      "context_name"=>"library",
+      "project_name"=>"Build a working time machine",
+      "recurring_todo" =>
+      {
+      "daily_every_x_days"=>"1",
+      "daily_selector"=>"daily_every_x_day",
+      "description"=>"",
+      "end_date" => "31/08/2010",
+      "ends_on" => "ends_on_end_date",
+      "monthly_day_of_week" => "1",
+      "monthly_every_x_day" => "18",
+      "monthly_every_x_month2" => "1",
+      "monthly_every_x_month" => "1",
+      "monthly_every_xth_day"=>"1",
+      "monthly_selector"=>"monthly_every_x_day",
+      "notes"=>"with some notes",
+      "number_of_occurences" => "",
+      "recurring_period"=>"yearly",
+      "recurring_show_days_before"=>"10",
+      "recurring_target"=>"due_date",
+      "recurring_show_always" => "1",
+      "start_from"=>"18/08/2008",
+      "weekly_every_x_week"=>"1",
+      "weekly_return_monday"=>"m",
+      "yearly_day_of_week"=>"1",
+      "yearly_every_x_day"=>"8",
+      "yearly_every_xth_day"=>"1",
+      "yearly_month_of_year2"=>"8",
+      "yearly_month_of_year"=>"6",
+      "yearly_selector"=>"yearly_every_x_day"
+    },
+      "tag_list"=>"one, two, three, four", :format => :js
+
+    # check no new recurring todo added
+    assert_equal orig_rt_count, RecurringTodo.count
+    # check no new todo added
+    assert_equal orig_todo_count, Todo.count
+    # check error message
+    errors = assigns(:recurring_todo).errors
+    assert_equal 1, errors.size
+    assert_equal errors.get(:description), ["can't be blank"]
+  end
+
   def test_new_recurring_todo_handles_attribs_outside_rec_todo
     login_as(:admin_user)
 

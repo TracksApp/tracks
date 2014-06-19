@@ -1,6 +1,7 @@
 module RecurringTodos
 
   class YearlyRecurringTodosBuilder < AbstractRecurringTodosBuilder
+    attr_reader :recurring_todo
 
     def initialize(user, attributes)
       super(user, attributes, YearlyRepeatPattern)
