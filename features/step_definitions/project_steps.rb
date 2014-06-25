@@ -73,7 +73,7 @@ Given /^I have a (completed|hidden) project called "([^"]*)"$/ do |state, projec
   step "I have a project called \"#{project_name}\""
   @project.send(state=="completed" ? "complete!" : "hide!")
   @project.reload
-  expect(@project.send(state=="completed" ? "completed?" : "hidden?")).to be_true
+  expect(@project.send(state=="completed" ? "completed?" : "hidden?")).to be true
 end
 
 Given /^I have (\d+) completed projects$/ do |number_of_projects|

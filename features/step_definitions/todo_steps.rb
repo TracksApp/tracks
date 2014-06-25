@@ -91,7 +91,7 @@ end
 Then /^the selected project should be "([^"]*)"$/ do |content|
   # Works for mobile. TODO: make it work for both mobile and non-mobile
   if content.blank?
-    expect(page.has_css?("select#todo_project_id option[selected='selected']")).to be_false
+    expect(page.has_css?("select#todo_project_id option[selected='selected']")).to be false
   else
     expect(page.find("select#todo_project_id option[selected='selected']").text).to match(/#{content}/)
   end
@@ -100,7 +100,7 @@ end
 Then /^the selected context should be "([^"]*)"$/ do |content|
   # Works for mobile. TODO: make it work for both mobile and non-mobile
   if content.blank?
-    expect(page.has_css?("select#todo_context_id option[selected='selected']")).to be_false
+    expect(page.has_css?("select#todo_context_id option[selected='selected']")).to be false
   else
     expect(page.find("select#todo_context_id option[selected='selected']").text).to match(/#{content}/)
   end

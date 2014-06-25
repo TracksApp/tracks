@@ -14,7 +14,7 @@ Given /^I have a repeat pattern called "([^"]*)"$/ do |pattern_name|
     :created_at => Time.now - 1.day,
     :completed_at => nil
   )
-  expect(@recurring_todo.completed?).to be_false
+  expect(@recurring_todo.completed?).to be false
   @todo = @current_user.todos.create!(
     :description => pattern_name,
     :context_id => context.id,
@@ -24,7 +24,7 @@ end
 Given /^I have a completed repeat pattern "([^"]*)"$/ do |pattern_name|
   step "I have a repeat pattern called \"#{pattern_name}\""
   @recurring_todo.toggle_completion!
-  expect(@recurring_todo.completed?).to be_true
+  expect(@recurring_todo.completed?).to be true
 end
 
 Given /^I have (\d+) completed repeat patterns$/ do |number_of_patterns|
@@ -71,7 +71,7 @@ end
 When /^I mark the pattern "([^"]*)" as (complete|active)$/ do |pattern_name, state|
   pattern = @current_user.recurring_todos.where(:description => pattern_name).first
   expect(pattern).to_not be_nil
-  expect(pattern.completed?).to (state=="complete" ? be_false : be_true)
+  expect(pattern.completed?).to be (state != "complete")
   page.find("#check_#{pattern.id}").click
   wait_for_ajax
   wait_for_animations_to_end
@@ -89,7 +89,7 @@ Then /^the state list "([^"]*)" should be empty$/ do |state|
   empty_id = "recurring-todos-empty-nd" if state.downcase == "active"
   empty_id = "completed-empty-nd" if state.downcase == "completed"
   empty_msg = page.find("div##{empty_id}")
-  expect(empty_msg.visible?).to be_true
+  expect(empty_msg.visible?).to be true
 end
 
 Then /^the pattern "([^\"]*)" should be starred$/ do |pattern_name|
