@@ -26,6 +26,6 @@ Rails.application.configure do
   # config.action_controller.session_store :cookie_store, :key => 'TracksCucumber'
   # config.action_controller.session = { :key => 'TracksDev' }
   
-  NOTIFY_BAR="<div id=\"develop-notify-bar\">&nbsp;</div>"
+  config.rack_dev_mark.enable = true
 
 end
