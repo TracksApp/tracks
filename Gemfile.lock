@@ -206,7 +206,7 @@ DEPENDENCIES
   actionpack-xml_parser (>= 1.0.1)
   acts_as_list
   aruba (>= 0.5.4)
-  bcrypt (~> 3.1.3)
+  bcrypt (~> 3.1.7)
   bullet
   cache_digests
   capybara
