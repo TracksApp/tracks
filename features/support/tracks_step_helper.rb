@@ -44,15 +44,15 @@ module TracksStepHelper
   end
 
   def check_xpath_visibility(visible, xpath)
-    page.send( (visible=="see" ? :should : :should_not), have_xpath(xpath, :visible => true))
+    expect(page).send( (visible=="see" ? :to : :to_not), have_xpath(xpath, :visible => true))
   end
 
   def check_css_visibility(visible, css)
-    page.send( (visible=="see" ? :should : :should_not), have_css(css, :visible => true))
+    expect(page).send( (visible=="see" ? :to : :to_not), have_css(css, :visible => true))
   end
 
   def check_elem_visibility(visible, elem)
-    elem.send(visible=="see" ? :should : :should_not, be_visible)
+    expect(elem).send( (visible=="see" ? :to : :to_not), be_visible)
   end
 
   def find_todo(description)
