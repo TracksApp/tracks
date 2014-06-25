@@ -150,10 +150,10 @@ Then /^I should (see|not see) the notes of "([^"]*)"$/ do |visible, todo_descrip
   todo = @current_user.todos.where(:description => todo_description).first
   expect(todo).to_not be_nil
   
-  page.find("div#notes_todo_#{todo.id}").send(visible=="see" ? "should" : "should_not", be_visible)
+  expect(page.find("div#notes_todo_#{todo.id}")).send(visible=="see" ? :to : :to_not, be_visible)
 end
 
 Then /^I should (see|not see) the empty tickler message$/ do |see|
   elem = find("div#no_todos_in_view")
-  elem.send(see=="see" ? "should" : "should_not", be_visible)
+  expect(elem).send(see=="see" ? :to : :to_not, be_visible)
 end
