@@ -55,6 +55,7 @@ group :development do
   gem 'tolk', '>=1.5.0'
   gem "bullet"
   gem "rack-mini-profiler"
+  gem "rack-dev-mark"
 end
 
 group :test do
