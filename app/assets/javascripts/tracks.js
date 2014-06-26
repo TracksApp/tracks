@@ -322,7 +322,7 @@ var TracksPages = {
             }
             else {
                 $(".context_collapsed").show();
-            };
+            }
         });
 
         $("a#group_view_by_link").click(function () {
@@ -339,7 +339,7 @@ var TracksPages = {
         /* fade flashes and alerts in automatically */
         $(".alert").fadeOut(8000);
     }
-}
+};
 
 var TodoItemsContainer = {
     // public
@@ -373,7 +373,7 @@ var TodoItemsContainer = {
         });
         // set to cookied state
         $('.container.collapsible').each(function(){
-            if($.cookie(TodoItemsContainer.buildCookieName(this))=="true"){
+            if($.cookie(TodoItemsContainer.buildCookieName(this)) === "true"){
                 $(this).find('.toggle_target').hide();
                 $(this).find('.toggle_target').parent().addClass("context_collapsed");
             }
@@ -385,7 +385,7 @@ var TodoItemsContainer = {
         var tracks_login = $.cookie('tracks_login');
         return 'tracks_'+tracks_login+'_context_' + containerElem.id + '_collapsed';
     }
-}
+};
 
 var TodoItems = {
     getContextsForAutocomplete: function (term, element_to_block) {
@@ -410,7 +410,7 @@ var TodoItems = {
 
         if (contexts) {
           for (var i=0; i<contexts.length; i++) {
-            if (contexts[i].value == givenContextName) {
+            if (contexts[i].value === givenContextName) {
               return true;
             }
           }
@@ -444,7 +444,7 @@ var TodoItems = {
                   $.getJSON( relative_to_root('auto_complete_for_predecessor'), {
                       term: term
                   }, response );
-                };
+                }
             },
             focus: function() {
                 // prevent value inserted on focus
@@ -589,11 +589,11 @@ var TodoItems = {
 
         // defer a todo
         $(document).on("click",".item-container a.icon_defer_item", function(ev){
-            if ($(this).attr("x_defer_alert") == "true") {
+            if ($(this).attr("x_defer_alert") === "true") {
                 alert ($(this).attr("x_defer_date_after_due_date"));
             } else {
                 put_with_ajax_and_block_element(this.href, $(this).parents(".item-container"));
-            };
+            }
             return false;
         });
 
@@ -608,7 +608,7 @@ var TodoItems = {
 
         TracksForm.enable_dependency_delete();
     }
-}
+};
 
 var ContextItems = {
     setup_autocomplete_for_contexts: function(id) {
@@ -619,7 +619,7 @@ var ContextItems = {
             delay: 400 /* increase a bit. default was 300 */
         });
     }
-}
+};
 
 var ProjectItems = {
     setup_autocomplete_for_projects: function(id) {
@@ -630,13 +630,13 @@ var ProjectItems = {
             delay: 400 /* increase a bit. default was 300 */
         });
     }
-}
+};
 
 var UsersPage = {
     setup_behavior: function() {
         /* delete button to delete a user from the list */
         $(document).on("click",'a.delete_user_button', function(evt){
-            var confirm_message = $(this).attr("x_confirm_message")
+            var confirm_message = $(this).attr("x_confirm_message");
             if(confirm(confirm_message)){
                 delete_with_ajax_and_block_element(this.href, $(this).parents('.project'));
             }
@@ -644,7 +644,7 @@ var UsersPage = {
         });
 
     }
-}
+};
 
 var PreferencesPage = {
     get_date_format: function(tag_name) {
@@ -666,8 +666,8 @@ var PreferencesPage = {
 
       $('input[name="user[auth_type]"]').change(function() {
         var value = $('input[name="user[auth_type]"]:checked').val();
-        $('#open_id')[0].style.display = value == 'open_id' ? 'block' : 'none'
-        $('#database')[0].style.display = value == 'database' ? 'block' : 'none'
+        $('#open_id')[0].style.display = value ==='open_id' ? 'block' : 'none';
+        $('#database')[0].style.display = value === 'database' ? 'block' : 'none';
       });
 
       $('input[name="date_picker1"]').change(function() {
@@ -685,7 +685,7 @@ var PreferencesPage = {
       PreferencesPage.setup_getter_for_date_format('date_format');
       PreferencesPage.setup_getter_for_date_format('title_date_format');
     }
-}
+};
 
 var ProjectListPage = {
     update_state_count: function(state, count) {
@@ -731,7 +731,7 @@ var ProjectListPage = {
 
         /* alphabetize project list */
         $(document).on("click",'.alphabetize_link', function(evt) {
-            var confirm_message = $(this).attr("x_confirm_message")
+            var confirm_message = $(this).attr("x_confirm_message");
             if(confirm(confirm_message)){
                 post_with_ajax_and_block_element(this.href, $(this).parents('.alpha_sort'));
             }
@@ -740,7 +740,7 @@ var ProjectListPage = {
 
         /* sort by number of actions */
         $('.actionize_link').click(function(evt){
-            var confirm_message = $(this).attr("x_confirm_message")
+            var confirm_message = $(this).attr("x_confirm_message");
             if(confirm(confirm_message)){
                 post_with_ajax_and_block_element(this.href, $(this).parents('.tasks_sort'));
             }
@@ -749,7 +749,7 @@ var ProjectListPage = {
 
         /* delete button to delete a project from the list */
         $(document).on("click",'a.delete_project_button', function(evt){
-            var confirm_message = $(this).attr("x_confirm_message")
+            var confirm_message = $(this).attr("x_confirm_message");
             if(confirm(confirm_message)){
                 delete_with_ajax_and_block_element(this.href, $(this).parents('.project'));
             }
@@ -777,7 +777,7 @@ var ProjectListPage = {
                 $(this).parents('.project-edit-current').removeClass('project-edit-current');
                 $(this).parents('.list').find('.project').fadeIn(500);
                 $(this).parents('.container').find('.item-show').fadeIn(500);
-            })
+            });
         });
 
         /* submit project form after entering new project */
@@ -803,12 +803,12 @@ var ProjectListPage = {
 
         $('#project_new #project_name').focus();
     }
-}
+};
 
 var ContextListPage = {
     update_state_count: function(state, count) {
         $('#'+state+'-contexts-count').html(count);
-        ContextListPage.set_empty_message(state, count==0);
+        ContextListPage.set_empty_message(state, count===0);
     },
     update_all_states_count: function (active_count, hidden_count, closed_count) {
         $(["active", "hidden", "closed"]).each(function() {
@@ -860,7 +860,7 @@ var ContextListPage = {
 
         /* delete a context using the x button */
         $(document).on("click",'a.delete_context_button', function(evt){
-            var confirm_message = $(this).attr("x_confirm_message")
+            var confirm_message = $(this).attr("x_confirm_message");
             if(confirm(confirm_message)){
                 delete_with_ajax_and_block_element(this.href, $(this).parents('.context'));
             }
@@ -906,12 +906,12 @@ var ContextListPage = {
             $("#list-contexts-"+this).sortable({
                 handle: '.grip',
                 update: update_order
-            })
+            });
         });
 
         $('#context-form #context_name').focus();
     }
-}
+};
 
 var IntegrationsPage = {
     setup_behavior: function() {
@@ -928,7 +928,7 @@ var IntegrationsPage = {
     get_script_for_context: function(element, getter, context){
         generic_get_script_for_list(element, "integrations/"+getter, "context_id="+context);
     }
-}
+};
 
 var FeedsPage = {
     setup_behavior: function() {
@@ -946,7 +946,7 @@ var FeedsPage = {
     get_script_for_project: function(element, getter, project){
         generic_get_script_for_list(element, "feedlist/"+getter, "project_id="+project);
     }
-}
+};
 
 var NotesPage = {
     setup_behavior: function() {
@@ -994,7 +994,7 @@ var NotesPage = {
             return false;
         });
     }
-}
+};
 
 var RecurringTodosPage = {
     hide_all_recurring: function () {
@@ -1101,13 +1101,13 @@ var RecurringTodosPage = {
       });
 
     }
-}
+};
 
 var SearchPage = {
     setup_behavior: function() {
         $('#search-form #search').focus();
     }
-}
+};
 
 /**************************************/
 /* generic Tracks functions           */
