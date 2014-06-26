@@ -12,9 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
-//
 //= require bootstrap
-//
 //= require mousetrap
 //
 // Stuff in vendor/assets
@@ -32,4 +30,5 @@
 //
 // Stuff in app/assets
 //= require tracks.js
+//= require disable_fx_in_test
 //= require keybindings.js

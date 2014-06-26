@@ -5,7 +5,7 @@ end
 
 Given /^there exists (an active|a hidden|a closed) context called "([^"]*)" for user "([^"]*)"$/ do |state, context_name, login|
   user = User.where(:login => login).first
-  user.should_not be_nil
+  expect(user).to_not be_nil
   context_state = {"an active" => "active", "a hidden" => "hidden", "a closed" => "closed"}[state]
   @context = user.contexts.where(:name => context_name, :state => context_state).first_or_create
 end
@@ -63,11 +63,11 @@ end
 Then /^he should see that a context named "([^\"]*)" (is|is not) present$/ do |context_name, visible|
   context = @current_user.contexts.where(:name => context_name).first
   if visible == "is"
-    context.should_not be_nil
+    expect(context).to_not be_nil
     css = "div#context_#{context.id} div.context_description a"
-    page.should have_selector(css, :visible => true)
-    page.find(:css, css).text.should == context_name
+    expect(page).to have_selector(css, :visible => true)
+    expect(page.find(:css, css).text).to eq(context_name)
   else
-    page.should_not have_selector("div#context_#{context.id} div.context_description a", :visible => true) if context
+    expect(page).to_not have_selector("div#context_#{context.id} div.context_description a", :visible => true) if context
   end
 end

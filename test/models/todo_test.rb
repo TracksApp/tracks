@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
+require 'test_helper'
 
 class TodoTest < ActiveSupport::TestCase
   fixtures :todos, :recurring_todos, :users, :contexts, :preferences, :tags, :taggings, :projects
@@ -7,6 +7,10 @@ class TodoTest < ActiveSupport::TestCase
     @not_completed1 = Todo.find(1).reload
     @not_completed2 = Todo.find(2).reload
     @completed = Todo.find(8).reload
+  end
+
+  def next_week
+    1.week.from_now.beginning_of_day.to_s(:db)
   end
 
   # Test loading a todo item
@@ -165,7 +169,7 @@ class TodoTest < ActiveSupport::TestCase
     dates.each do |show_from_date|
       # setup test case
       t = @not_completed1
-      Timecop.travel(show_from_date - 1.day) do
+      travel_to show_from_date - 1.day do
         t.show_from = show_from_date
         t.save!
         assert t.deferred?

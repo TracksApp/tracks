@@ -27,10 +27,11 @@ module Tracks
       rendered = helpers.auto_link(rendered, :link => :urls)
 
       # add onenote and message protocols
-      Sanitize::Config::RELAXED[:protocols]['a']['href'] << 'onenote'
-      Sanitize::Config::RELAXED[:protocols]['a']['href'] << 'message'
+      config = Sanitize::Config.merge(Sanitize::Config::RELAXED,
+        :protocols => { 'a' => {'href' => Sanitize::Config::RELAXED[:protocols]['a']['href'] + ['onenote', 'message']}}
+        )
   
-      rendered = Sanitize.clean(rendered, Sanitize::Config::RELAXED)
+      rendered = Sanitize.clean(rendered, config)
       return rendered.html_safe
     end
     

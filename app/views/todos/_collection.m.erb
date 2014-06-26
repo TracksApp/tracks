@@ -1,0 +1,8 @@
+<%= 
+  settings[:show_container] = !collection.empty? || settings[:show_empty_containers]
+  
+  todos_container(settings) do
+    todos_container_header(settings) +
+    todos_container_items(collection, settings) 
+  end 
+%>

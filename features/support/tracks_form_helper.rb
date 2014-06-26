@@ -4,7 +4,7 @@ module TracksFormHelper
     edit_link = "div#line_todo_#{todo.id} a#icon_edit_todo_#{todo.id}"
 
     # make sure we can open the edit form
-    page.should have_css(edit_link)
+    expect(page).to have_css(edit_link)
 
     # on calendar page there can be more than 1 occurance of a todo, so we select the first here
     all(:css, edit_link)[0].click
@@ -17,7 +17,7 @@ module TracksFormHelper
     page.find("a#link_edit_context_#{context.id}").click
 
     # wait for the form to appear (which included a submit button)
-    page.should have_css("button#submit_context_#{context.id}", :visible=>true)
+    expect(page).to have_css("button#submit_context_#{context.id}", :visible=>true)
   end
 
   def submit_form(form_xpath, button_name)
@@ -53,23 +53,23 @@ module TracksFormHelper
   end
   
   def wait_for_todo_form_to_go_away(todo)
-    page.should_not have_content("button#submit_todo_#{todo.id}")
+    expect(page).to_not have_content("button#submit_todo_#{todo.id}")
   end
 
   def wait_for_context_form_to_appear(context)
-    page.should have_css("button#submit_context_#{context.id}", :visible=>true)
+    expect(page).to have_css("button#submit_context_#{context.id}", :visible=>true)
   end
 
   def wait_for_context_form_to_go_away(context)
     # wait for the form to go away
-    page.should_not have_css("button#submit_context_#{context.id}", :visible => true)
+    expect(page).to_not have_css("button#submit_context_#{context.id}", :visible => true)
     # wait for the changed context to appear
-    page.should have_css("a#link_edit_context_#{context.id}", :visible=> true)
+    expect(page).to have_css("a#link_edit_context_#{context.id}", :visible=> true)
   end
     
   def open_project_edit_form(project)
     click_link "link_edit_project_#{project.id}"
-    page.should have_css("button#submit_project_#{project.id}")
+    expect(page).to have_css("button#submit_project_#{project.id}")
   end
   
   def submit_project_edit_form(project)
@@ -92,7 +92,7 @@ module TracksFormHelper
     wait_for_ajax
     wait_for_animations_to_end
     
-    page.should_not have_css("button#submit_project_#{project.id}", :visible => true)
+    expect(page).to_not have_css("button#submit_project_#{project.id}", :visible => true)
   end
   
   def edit_project_settings(project)

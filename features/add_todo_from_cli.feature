@@ -15,7 +15,7 @@ Feature: Add a todo to Tracks on console
     And I have a context called "Context A"
     And I have a project called "Project A"
 
-  @javascript @aruba
+  @javascript @aruba @wip
   Scenario: Create a single todo 
     Given a console input that looks like
       """
@@ -24,7 +24,7 @@ Feature: Add a todo to Tracks on console
     When I execute the add-todo script
     Then I should have 1 todo in project "Project A"
     
-  @javascript @aruba 
+  @javascript @aruba @wip
   Scenario: Create multiple todos
     Given a console input that looks like
       """

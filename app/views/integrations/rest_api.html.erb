@@ -79,6 +79,15 @@ field to <code>ID, created_at, modified_at, completed_at</code> by adding the pa
 </code>
 </pre>
 
+If you only want to get the active todos, you add the parameter <code>limit_to_active_todos</code> and set it to some value like this:
+
+<pre>
+<code>
+  $ curl -u username:p4ssw0rd -H "Content-Type: text/xml" \
+  <%= root_url %>todos.xml?limit_to_active_todos=1
+</code>
+</pre>
+
 <h2>Writing to the API</h2>
 
 <p>The API provides mechanisms for adding, updating and deleting resources using the HTTP methods <code>PUT</code>, <code>POST</code> and <code>DELETE</code> in combination with the content.</p>

@@ -1,5 +1,5 @@
 ENV["RAILS_ENV"] ||= "test"
-require 'test/unit'
+require 'minitest/autorun'
 require 'mocha/setup'
 
 $:.unshift File.dirname(File.dirname(__FILE__))

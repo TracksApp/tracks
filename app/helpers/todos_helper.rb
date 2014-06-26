@@ -228,7 +228,7 @@ module TodosHelper
 
   def remote_toggle_checkbox(todo=@todo)
     check_box_tag("mark_complete_#{todo.id}", toggle_check_todo_path(todo), todo.completed?, :class => 'item-checkbox',
-      :title => todo.pending? ? t('todos.blocked_by', :predecessors => todo.uncompleted_predecessors.map(&:description).join(', ')) : "", :readonly => todo.pending?)
+      :title => todo.pending? ? t('todos.blocked_by', :predecessors => todo.uncompleted_predecessors.to_a.map(&:description).join(', ')) : "", :readonly => todo.pending?)
   end
 
   def remote_mobile_checkbox(todo=@todo)
@@ -241,8 +241,8 @@ module TodosHelper
     if todo.completed?
       content_tag(:span, {class: "label"}) { format_date( todo.completed_at ) }
     elsif todo.pending?
-      title = t('todos.depends_on')+ ": " + todo.uncompleted_predecessors.map(&:description).join(', ')
-      content_tag(:a, {:title => title}) { content_tag(:span, {class: "label label-info"}) { t('todos.pending') } }
+      title = t('todos.depends_on')+ ": " + todo.uncompleted_predecessors.to_a.map(&:description).join(', ')
+      content_tag(:a, {:title => title}) { content_tag(:span, {:class => :orange}) { t('todos.pending') } }
     elsif todo.deferred?
       show_date( todo.show_from )
     else
@@ -253,7 +253,7 @@ module TodosHelper
   def successors_span(todo=@todo)
     unless todo.pending_successors.empty?
       pending_count = todo.pending_successors.count
-      title = "#{t('todos.has_x_pending', :count => pending_count)}: #{todo.pending_successors.map(&:description).join(', ')}"
+      title = "#{t('todos.has_x_pending', :count => pending_count)}: #{todo.pending_successors.to_a.map(&:description).join(', ')}"
       image_tag( 'successor_off.png', :width=>'10', :height=>'16', :border=>'0', :title => title )
     end
   end
@@ -267,7 +267,7 @@ module TodosHelper
   end
 
   def tag_list_text(todo=@todo)
-    todo.tags.join(', ')
+    todo.tags.to_a.join(', ')
   end
 
   def tag_span (tag, mobile=false)
@@ -498,7 +498,14 @@ module TodosHelper
   end
 
   def todo_moved_out_of_container
-    return (@project_changed && @group_view_by=='project') || (@context_changed && @group_view_by=='context')
+    # moved from one project container to another
+    moved_project = @project_changed && @group_view_by=='project'
+    # moved from one context container to another
+    moved_context = @context_changed && @group_view_by=='context'
+    # moved from actions-without-project container to another
+    moved_without_project = @context_changed && @group_view_by=='project' && @todo.project_id.nil?
+
+    return moved_project || moved_context || moved_without_project
   end
 
   def update_needs_to_hide_container

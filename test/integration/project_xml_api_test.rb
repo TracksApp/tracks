@@ -1,4 +1,4 @@
-require  File.expand_path(File.dirname(__FILE__) + '/../test_helper')
+require 'test_helper'
 
 class ProjectXmlApiTest < ActionDispatch::IntegrationTest
   @@project_name = "My New Project"

@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
+require 'test_helper'
 
 class ProjectTest < ActiveSupport::TestCase
   fixtures :projects, :contexts, :todos, :recurring_todos, :users, :preferences

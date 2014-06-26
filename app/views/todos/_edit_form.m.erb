@@ -3,7 +3,6 @@
 <span class="errors">
 <%= get_list_of_error_messages_for(@todo) if @todo %>
 </span>
-<% this_year = UserTime.new(current_user).date.strftime("%Y").to_i -%>
 <h2><label for="todo_description"><%= t('common.description') %></label></h2>
 <%= text_field( "todo", "description", "tabindex" => 1, "maxlength" => 100, "size" => 50) %>
 <h2><label for="tag_list"><%= t('todos.tags') %></label></h2>
@@ -32,7 +31,7 @@ end %>
 <%= text_area( "todo", "notes", "cols" => 40, "rows" => 3, "tabindex" => 5) %>
 <h2><label for="todo_due"><%= t('todos.due') %></label></h2>
 <%= date_select("todo", "due", {:order => [:day, :month, :year],
-                    :start_year => this_year, :include_blank => '--'}, :tabindex => 6) %>
+                    :start_year => Date.current.year, :include_blank => '--'}, :tabindex => 6) %>
 <h2><label for="todo_show_from"><%= t('todos.show_from') %></label></h2>
 <%= date_select("todo", "show_from", {:order => [:day, :month, :year],
-                    :start_year => this_year, :include_blank => true}, :tabindex => 7) %>
+                    :start_year => Date.current.year, :include_blank => true}, :tabindex => 7) %>

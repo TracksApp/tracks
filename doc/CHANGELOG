@@ -3,19 +3,20 @@
 * Project homepage: http://getontracks.org/
 * Manual: http://getontracks.org/manual/
 * Source at GitHub: https://github.com/TracksApp/tracks
-* Assembla space (for bug reports and feature requests): https://www.assembla.com/spaces/tracks-tickets/tickets
+* Bug reports and feature requests: https://github.com/TracksApp/tracks/issues
 * Wiki (community contributed information): https://github.com/TracksApp/tracks/wiki
-* Forum (read-only): http://getontracks.org/forums/
 * Mailing list: http://groups.google.com/group/TracksApp
 * Original developer: bsag (http://www.rousette.org.uk/)
 * Contributors: https://github.com/TracksApp/tracks/wiki/Contributors
 * Version: 2.3devel
-* Copyright: (cc) 2004-2013 rousette.org.uk.
+* Copyright: (cc) 2004-2014 rousette.org.uk.
 * License:  GNU GPL
 
 == Version 2.3devel
 
 New and changed features
+* Added new binstubs. The commands `bin/rails` and `bin/rake` take the place of
+  the old `bundle exec rails` and `bundle exec rake`, respectively.
 * You can select to group todos on the home page by context or by 
   project (using the view menu). This also works for tag page, the project page, 
   the tickler and the context page

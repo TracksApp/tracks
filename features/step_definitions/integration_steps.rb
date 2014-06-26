@@ -8,13 +8,13 @@ Then /^I should see scripts$/ do
 end
 
 Then /^I should see a script "([^\"]*)" for "([^\"]*)"$/ do |script, context_name|
-  page.should have_css("##{script}", :visible => true)
+  expect(page).to have_css("##{script}", :visible => true)
   context = Context.where(:name => context_name).first
 
-  page.should have_content("#{context.id} (* #{context_name} *)")
+  expect(page).to have_content("#{context.id} (* #{context_name} *)")
 
   # make sure the text is found within the textarea
   script_source = page.find(:xpath, "//textarea[@id='#{script}']").text
-  script_source.should =~ /#{context.id} \(\* #{context_name} \*\)/
+  expect(script_source).to match(/#{context.id} \(\* #{context_name} \*\)/)
 end
 

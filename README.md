@@ -1,5 +1,5 @@
 # Tracks: a GTD(TM) web application, built with Ruby on Rails
-Copyright (C) 2004-2013 rousette.org.uk
+Copyright (C) 2004-2014 rousette.org.uk
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -9,9 +9,8 @@ of the License, or (at your option) any later version.
 * Project homepage: http://getontracks.org/
 * Manual: http://getontracks.org/manual/
 * Source at GitHub: https://github.com/TracksApp/tracks
-* Assembla space (for bug reports and feature requests): https://www.assembla.com/spaces/tracks-tickets/tickets
+* Bug reports and feature requests: https://github.com/TracksApp/tracks/issues
 * Wiki (community contributed information): https://github.com/TracksApp/tracks/wiki
-* Forum (read-only): http://getontracks.org/forums/
 * Mailing list: http://groups.google.com/group/TracksApp
 * Original developer: bsag (http://www.rousette.org.uk/)
 * Contributors: https://github.com/TracksApp/tracks/wiki/Contributors
@@ -19,6 +18,7 @@ of the License, or (at your option) any later version.
 
 [![Build Status](https://travis-ci.org/TracksApp/tracks.png?branch=master)](https://travis-ci.org/TracksApp/tracks)
 [![Code Climate](https://codeclimate.com/github/TracksApp/tracks.png)](https://codeclimate.com/github/TracksApp/tracks)
+[![Dependency Status](https://gemnasium.com/TracksApp/tracks.svg)](https://gemnasium.com/TracksApp/tracks)
 
 Full instructions for both new installations and upgrades from older installations of Tracks
 can be found within the /doc directory.
@@ -29,7 +29,7 @@ different configurations which can be used (e.g. running Tracks on your local
 computer or on a remote server). If you choose the appropriate section for your
 situation (installation vs. upgrade), and use the easiest (recommended) method,
 you should find the instructions easy to follow. If you encounter problems, try
-searching the wiki, forum or mailing list (URLs above), and ask a question if
+searching the wiki or mailing list (URLs above), and ask a question if
 you cannot find a solution to your problem.
 
 The wiki has a lot of user contributed installation HOWTOs for various webhosts, specific OS's and more.

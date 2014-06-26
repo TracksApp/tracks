@@ -1,13 +1,13 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~>4.0.0'
-gem 'sass-rails', '~>4.0.0'
-gem 'coffee-rails', '~>4.0.0'
+gem 'rails', '~>4.1.0'
+gem 'sass-rails', '~>4.0'
+gem 'coffee-rails', '~>4.0'
 
-gem 'json'
+#gem 'json'
 
 # todo: remove xml api
-gem 'actionpack-xml_parser', git: 'https://github.com/rails/actionpack-xml_parser'
+gem 'actionpack-xml_parser', '>=1.0.1'
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 gem 'therubyracer'
@@ -38,10 +38,9 @@ gem "htmlentities"
 gem "swf_fu"
 gem "rails_autolink"
 gem "cache_digests"
-gem "highline" # for reset_password rake task
 
 # To use ActiveModel has_secure_password
-gem 'bcrypt-ruby', '~> 3.0.0'
+gem 'bcrypt', '~> 3.1.7'
 
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
@@ -50,8 +49,10 @@ gem 'turbolinks'
 # gem 'jbuilder', '~> 1.2'
 
 group :development do
+  gem "spring"
+  gem "spring-commands-cucumber"
   gem "yard"
-  gem "tolk", git: 'https://github.com/tolk/tolk'
+  gem 'tolk', '>=1.5.0'
   gem "bullet"
   gem "rack-mini-profiler"
 end
@@ -64,8 +65,7 @@ group :test do
   gem "database_cleaner"
   gem "mocha", :require => false
 
-  gem "aruba", git: 'https://github.com/cucumber/aruba', :require => false  # need 0.5.4 for piping files; 0.5.3 is latest
-  gem "timecop", "~> 0.6.2"
+  gem "aruba", ">=0.5.4", :require => false
 
   # Note that > 2.14 has problems, see:
   # https://code.google.com/p/selenium/issues/detail?id=3075

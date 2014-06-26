@@ -1,10 +1,10 @@
 require 'net/https'
-require './test/minimal_test_helper'
+require 'minimal_test_helper'
 require './doc/tracks_cli/tracks_api'
 
 module TracksCli
 
-  class TracksApiTest < Test::Unit::TestCase
+  class TracksApiTest < Minitest::Test
 
     def test_https_detection
       uri = URI.parse("https://tracks.example.com")

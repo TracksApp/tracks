@@ -34,8 +34,8 @@ class StatsController < ApplicationController
     @interpolated_actions_created_this_month = interpolate_avg_for_current_month(@actions_created_last12months_array)
     @interpolated_actions_done_this_month = interpolate_avg_for_current_month(@actions_done_last12months_array)
 
-    @created_count_array = Array.new(13, actions_last12months.created_after(@cut_off_year).count/12.0)
-    @done_count_array    = Array.new(13, actions_last12months.completed_after(@cut_off_year).count/12.0)
+    @created_count_array = Array.new(13, actions_last12months.created_after(@cut_off_year).count(:all)/12.0)
+    @done_count_array    = Array.new(13, actions_last12months.completed_after(@cut_off_year).count(:all)/12.0)
     render :layout => false
   end
 
@@ -110,7 +110,7 @@ class StatsController < ApplicationController
     @max_actions = @actions_completion_time_array.max
 
     # get percentage done cumulative
-    @cum_percent_done = convert_to_cumulative_array(@actions_completion_time_array, @actions_completion_time.count)
+    @cum_percent_done = convert_to_cumulative_array(@actions_completion_time_array, @actions_completion_time.count(:all))
 
     render :layout => false
   end

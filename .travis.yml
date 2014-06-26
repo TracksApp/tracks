@@ -8,16 +8,18 @@ rvm:
 bundler_args: --without development
 
 before_install:
-before_install: 
-  - "gem install bundler -v=1.5.1"
   - "mysql -e 'create database tracks_test;'"
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
   - "cp config/site.yml.tmpl config/site.yml"
   - "cp config/database.yml.tmpl config/database.yml"
 
-script: "CODECLIMATE_REPO_TOKEN=5c52fdd2bbcd0734d56ddb2c3cbaac782da345273e8689d25f54a065ccc3397c bundle exec rake ci RACK_ENV=test"
+script: "bin/rake ci"
 
 notifications:
   email: false
 
+addons:
+  code_climate:
+    repo_token:
+      secure: Ev0v5x9abxM+vlCdY7J/AHMP/Eq9FlhFtNlKSMnD3n2I1xWT0oB5kgidS3L+U0/janXxf4aNe28rDcj5AUePSoNBiSg6wzZ95D3Dz7AxqL9i61IQ/hllpA1kzQrTUsXtS5qAqa3H90Ev5hTQQahExjGvLB+1t8Ea2JBLR+8nUvU=

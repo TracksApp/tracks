@@ -588,7 +588,7 @@ var TodoItems = {
         $(document).on("click",'.item-container a.delete_dependency_button', function(evt){
             var predecessor_id=$(this).attr("x_predecessors_id");
             var ajax_options = default_ajax_options_for_scripts('DELETE', this.href, $(this).parents('.item-container'));
-            ajax_options.data << {predecessor: predecessor_id}
+            ajax_options.data["predecessor"] = predecessor_id
             $.ajax(ajax_options);
             return false;
         });
@@ -1245,7 +1245,7 @@ function setup_periodic_check(url_for_check, interval_in_sec, method) {
         function(){
             var settings = default_ajax_options_for_scripts( method ? method : "GET", url_for_check, null);
             if(typeof(AUTH_TOKEN) != 'undefined'){
-                settings.data << {authenticity_token: AUTH_TOKEN}
+                settings.data["authenticity_token"] = AUTH_TOKEN
             }
             $.ajax(settings);
         },

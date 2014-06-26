@@ -4,10 +4,10 @@ When /^I delete the context "([^\"]*)"$/ do |context_name|
   handle_js_confirm do
     click_link "delete_context_#{context.id}"
   end
-  get_confirm_text.should == "Are you sure that you want to delete the context '#{context_name}'? Be aware that this will also delete all (repeating) actions in this context!"
+  expect(get_confirm_text).to eq("Are you sure that you want to delete the context '#{context_name}'? Be aware that this will also delete all (repeating) actions in this context!")
 
   # wait until the context is removed
-  page.should_not have_css("a#delete_context_#{context.id}")
+  expect(page).to_not have_css("a#delete_context_#{context.id}")
 end
 
 When /^I edit the context to rename it to "([^\"]*)"$/ do |new_name|
@@ -61,7 +61,7 @@ When /^I edit the state of context "(.*?)" to closed$/ do |context_name|
 end
 
 Then /^context "([^"]*)" should be above context "([^"]*)"$/ do |context_high, context_low|
-  context_list_find_index(context_high).should < context_list_find_index(context_low)
+  expect(context_list_find_index(context_high)).to be < context_list_find_index(context_low)
 end
 
 Then(/^I should see that a context named "([^"]*)" (is|is not) present$/) do |context_name, present|
@@ -87,7 +87,7 @@ Then /^the new context form should (be|not be) visible$/ do |visible|
 end
 
 Then /^the context list badge for ([^"]*) contexts should show (\d+)$/ do |state_name, count|
-  find("span##{state_name}-contexts-count").text.should == count
+  expect(find("span##{state_name}-contexts-count").text).to eq(count)
 end
 
 Then /^I should (see|not see) empty message for (active|hidden|closed) contexts$/ do |visible, state|

@@ -1,11 +1,11 @@
 require 'date'
 require 'time'
-require './test/minimal_test_helper'
+require 'minimal_test_helper'
 require 'app/models/stats/time_to_complete'
 
 FakeTask = Struct.new(:created_at, :completed_at)
 
-class TimeToCompleteTest < Test::Unit::TestCase
+class TimeToCompleteTest < Minitest::Test
 
   def now
     @now ||= Time.utc(2013, 1, 2, 3, 4, 5)

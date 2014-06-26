@@ -70,6 +70,7 @@ class RecurringTodosController < ApplicationController
       @down_count = current_user.recurring_todos.active.count
       @new_recurring_todo = RecurringTodo.new
     else
+      @recurring_todo = builder.recurring_todo
       @status_message = t('todos.error_saving_recurring')
     end
 

@@ -17,7 +17,7 @@ Given(/^I have a todo "([^"]*)" in the context "([^"]*)" in the project "([^"]*)
   step "I have a todo \"#{description}\" in the context \"#{context_name}\""
 
   @project = @current_user.projects.where(:name => project_name).first_or_create
-  @project.should_not be_nil
+  expect(@project).to_not be_nil
 
   @todo.project = @project
   @todo.save!
@@ -189,7 +189,7 @@ end
 
 Given /^I have a project "([^"]*)" that has the following (todos|deferred todos)$/ do |project_name, kind_of_todo, todos|
   step "I have a project called \"#{project_name}\""
-  @project.should_not be_nil
+  expect(@project).to_not be_nil
 
   todos.hashes.each do |todo|
     new_todo = @current_user.todos.create!(
@@ -242,7 +242,7 @@ When /^I submit a new action with description "([^"]*)" with a dependency on "([
   click_first_line_of_auto_complete
 
   new_dependency_line = "//li[@id='pred_#{predecessor.id}']"
-  page.should have_xpath(new_dependency_line, :visible => true)
+  expect(page).to have_xpath(new_dependency_line, :visible => true)
 
   submit_next_action_form
 end

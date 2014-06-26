@@ -10,26 +10,21 @@ Given /^I am working on the mobile interface$/ do
   @mobile_interface = true
 end
 
-Given /^the date is "(.*?)"$/ do |date|
-  # remember to tag the scenario with @reset_time to reset this travel
-  Timecop.travel(date)
-end
-
 Given(/^I have selected the view for group by (project|context)$/) do |grouping|
   @group_view_by = grouping 
 end
 
 Then /the badge should show (.*)/ do |number|
   badge = find("span#badge_count").text.to_i
-  badge.should == number.to_i
+  expect(badge).to eq(number.to_i)
 end
 
 Then(/^I should see an error flash message saying "([^"]*)"$/) do |message|
   xpath = "//div[@id='message_holder']/h4[@id='flash']"
-  page.should have_xpath(xpath, :visible => true)
+  expect(page).to have_xpath(xpath, :visible => true)
   
   text = page.find(:xpath, xpath).text
-  text.should == message
+  expect(text).to eq(message)
 end
 
 Then /^I should see "([^"]*)" $/ do |text|

@@ -29,7 +29,7 @@ function show_in_tickler_box() {
 
 function regenerate_predecessor_family() {
 <%
-  parents = @predecessors
+  parents = @predecessors.to_a
   until parents.empty?
     parent = parents.pop
     parents += parent.predecessors -%>

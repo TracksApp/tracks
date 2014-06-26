@@ -1,11 +1,11 @@
 When /^I delete project "([^"]*)"$/ do |project_name|
   project = @current_user.projects.where(:name => project_name).first
-  project.should_not be_nil
+  expect(project).to_not be_nil
   
   handle_js_confirm do
     click_link "delete_project_#{project.id}"
   end
-  get_confirm_text.should == "Are you sure that you want to delete the project '#{project_name}'?"
+  expect(get_confirm_text).to eq("Are you sure that you want to delete the project '#{project_name}'?")
   
   wait_until do
     !page.has_css?("a#delete_project_#{project.id}")
@@ -40,7 +40,7 @@ When /^I sort the active list alphabetically$/ do
     end
     wait_for_ajax
   end
-  get_confirm_text.should == "Are you sure that you want to sort these projects alphabetically? This will replace the existing sort order."
+  expect(get_confirm_text).to eq("Are you sure that you want to sort these projects alphabetically? This will replace the existing sort order.")
 end
 
 When /^I sort the active list by number of tasks$/ do
@@ -50,7 +50,7 @@ When /^I sort the active list by number of tasks$/ do
     end
     wait_for_ajax
   end
-  get_confirm_text.should == "Are you sure that you want to sort these projects by the number of tasks? This will replace the existing sort order."
+  expect(get_confirm_text).to eq("Are you sure that you want to sort these projects by the number of tasks? This will replace the existing sort order.")
 end
 
 Then /^I should see that a project named "([^"]*)" is not present$/ do |project_name|
@@ -75,34 +75,34 @@ end
 
 Then(/^I should not see the project "(.*?)"$/) do |project_name|
   project = @current_user.projects.where(:name => project_name).first
-  project.should_not be_nil
+  expect(project).to_not be_nil
   
   project_xpath = "//div[@id='project_#{project.id}']"
-  page.should_not have_xpath(project_xpath)
+  expect(page).to_not have_xpath(project_xpath)
 end
 
 Then /^the project "([^"]*)" should be above the project "([^"]*)"$/ do |project_high, project_low|
-  project_list_find_index(project_high).should < project_list_find_index(project_low)
+  expect(project_list_find_index(project_high)).to be < project_list_find_index(project_low)
 end
 
 Then /^the project "([^"]*)" should not be in state list "([^"]*)"$/ do |project_name, state_name|
   project = @current_user.projects.where(:name => project_name).first
-  project.should_not be_nil
+  expect(project).to_not be_nil
   
   list_id = @source_view=="review" ? "list-#{state}-projects" : "list-#{state_name}-projects-container"
   xpath = "//div[@id='#{list_id}']//div[@id='project_#{project.id}']"
   
-  page.should_not have_xpath(xpath)
+  expect(page).to_not have_xpath(xpath)
 end
 
 Then /^the project "([^"]*)" should be in state list "([^"]*)"$/ do |project_name, state_name|
   project = @current_user.projects.where(:name => project_name).first
-  project.should_not be_nil
+  expect(project).to_not be_nil
   
   list_id = @source_view=="review" ? "list-#{state_name}-projects" : "list-#{state_name}-projects-container"
   xpath = "//div[@id='#{list_id}']//div[@id='project_#{project.id}']"
   
-  page.should have_xpath(xpath)
+  expect(page).to have_xpath(xpath)
 end
 
 Then /^I see the project "([^"]*)" in the "([^"]*)" list$/ do |project_name, state_name|
@@ -110,27 +110,27 @@ Then /^I see the project "([^"]*)" in the "([^"]*)" list$/ do |project_name, sta
 end
 
 Then /^the project list badge for "([^"]*)" projects should show (\d+)$/ do |state_name, count|
-  page.find(:xpath, "//span[@id='#{state_name}-projects-count']").text.should == count
+  expect(page.find(:xpath, "//span[@id='#{state_name}-projects-count']").text).to eq(count)
 end
 
 Then /^the new project form should be visible$/ do
-  page.should have_css("div#project_new", :visible => true)
+  expect(page).to have_css("div#project_new", :visible => true)
 end
 
 Then /^the new project form should not be visible$/ do
-  page.should_not have_css("div#project_new", :visible => true)
+  expect(page).to_not have_css("div#project_new", :visible => true)
 end
 
 Then /^the project "([^"]*)" should have (\d+) actions listed$/ do |project_name, count|
   project = @current_user.projects.where(:name => project_name).first
-  project.should_not be_nil
+  expect(project).to_not be_nil
   xpath = "//div[@id='list-active-projects-container']//div[@id='project_#{project.id}']//span[@class='needsreview']"
-  page.find(:xpath, xpath).text.should == "#{project.name} (#{count} actions)"
+  expect(page.find(:xpath, xpath).text).to eq("#{project.name} (#{count} actions)")
 end
 
 Then /^the project "([^"]*)" should have (\d+) deferred actions listed$/ do |project_name, deferred|
   project = @current_user.projects.where(:name => project_name).first
-  project.should_not be_nil
+  expect(project).to_not be_nil
   xpath = "//div[@id='list-active-projects-container']//div[@id='project_#{project.id}']//span[@class='needsreview']"
-  page.find(:xpath, xpath).text.should == "#{project.name} (#{deferred} deferred actions)"
+  expect(page.find(:xpath, xpath).text).to eq("#{project.name} (#{deferred} deferred actions)")
 end
