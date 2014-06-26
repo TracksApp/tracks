@@ -1,16 +1,22 @@
-<div id="tracks-go-item-dialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="myModalLabel">...</h3>
-  </div>
-  <div class="modal-body">
-    <form class="form-search" action="/goto" method="get" data-link="/goto">
-      <input type="text" id="tracks-goto-item" class="input-medium search-query ajax-typeahead" placeholder="..." 
-       data-link="/from_go_item_dialog.autocomplete" autocomplete="off">
-    </form>
-  </div>
-  <div class="modal-footer">
-    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-    <button class="btn btn-primary">Go to project</button>
+<div id="tracks-go-item-dialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 id="myModalLabel">...</h4>
+      </div>
+      <div class="modal-body">
+        <form action="/goto" method="get" data-link="/goto" role="form">
+          <div class="form-group">
+            <input type="text" id="tracks-goto-item" class="form-control input-medium search-query ajax-typeahead" placeholder="..." 
+             data-link="/from_go_item_dialog.autocomplete" autocomplete="off">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+        <button class="btn btn-primary">Go to project</button>
+      </div>
+    </div>
   </div>
 </div>

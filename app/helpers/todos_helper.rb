@@ -239,7 +239,7 @@ module TodosHelper
 
   def date_span(todo=@todo)
     if todo.completed?
-      content_tag(:span, {class: "label"}) { format_date( todo.completed_at ) }
+      content_tag(:span, {class: "label label-default"}) { format_date( todo.completed_at ) }
     elsif todo.pending?
       title = t('todos.depends_on')+ ": " + todo.uncompleted_predecessors.to_a.map(&:description).join(', ')
       content_tag(:a, {:title => title}) { content_tag(:span, {:class => :orange}) { t('todos.pending') } }
@@ -340,8 +340,8 @@ module TodosHelper
   end
 
   def show_date_tag(date, the_class, text)
-    content_tag(:a, :title => format_date(date)) do
-      content_tag(:span, :class => "label label-#{the_class.to_s}") { text }
+    content_tag(:span, :class => "label label-#{the_class.to_s}") do
+      content_tag(:a, :title => format_date(date)) { text }
     end
   end
 
@@ -356,7 +356,7 @@ module TodosHelper
     case days
       # overdue or due very soon! sound the alarm!
     when -1000..-1
-      show_date_tag(d, :important, t('todos.scheduled_overdue', :days => (days * -1).to_s))
+      show_date_tag(d, :danger, t('todos.scheduled_overdue', :days => (days * -1).to_s))
     when 0
       show_date_tag(d, :warning, t('todos.show_today'))
     when 1
@@ -364,9 +364,9 @@ module TodosHelper
       # due 2-7 days away
     when 2..7
       if prefs.due_style == Preference.due_styles[:due_on]
-        show_date_tag(d, :important, t('todos.show_on_date', :date => d.strftime("%A")) )
+        show_date_tag(d, :danger, t('todos.show_on_date', :date => d.strftime("%A")) )
       else
-        show_date_tag(d, :important, t('todos.show_in_days', :days => days.to_s) )
+        show_date_tag(d, :danger, t('todos.show_in_days', :days => days.to_s) )
       end
       # more than a week away - relax
     else

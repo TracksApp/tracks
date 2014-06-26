@@ -9,6 +9,7 @@ body {
 div.tracks-main {
 	background-color: #FFF;
 	border-radius: 10px;
+    padding-top: 10px;
 }
 
 /* Header */
@@ -43,7 +44,7 @@ div.todo-item {
 	margin-top: 7px;
 	border: 3px solid #EEE;
 	border-width: 0px 0px 1px 0px;
-	padding: 0px 3px 0px 3px;
+	padding: 0px 3px 0px 3px; 
 	min-height: none;
 	line-height: none;
 
@@ -82,7 +83,7 @@ div.todo-item {
 		background-color: #EEE;
 		border-radius: 3px;
 		padding: 10px;
-		margin: 0px -3px 0px -3px;
+		margin: 0px 12px 0px -3px;
 	}
 	div.todo-sub-menu {
 		margin-top: 5px;
@@ -117,6 +118,11 @@ span.tags {
 	.label {
 		margin-right: 1px;
 		background-color: #BBB;
+    }
+}
+
+span.tags, div.tracks-todo-badges{
+    span.label {
 		a:hover, a:focus {
 			text-decoration: none;
 		}

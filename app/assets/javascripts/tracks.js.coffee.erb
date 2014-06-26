@@ -48,13 +48,16 @@ TracksApp =
         dialog.find("form").attr("data-link", settings.target_link)
         dialog.find("form").attr("data-id", settings.target_id)
         # set title of dialog
-        dialog.find("h3#myModalLabel").html(settings.title)
+        dialog.find("h4#myModalLabel").html(settings.title)
         # set focus to input field when dialog is shown
-        dialog.on 'shown', -> 
+        dialog.on 'show.bs.modal', -> 
             # twitter-typeahead adds span around search field with display:inline-block. This causes
             # the search field to ignore the width set in tracks.css
             $("span.twitter-typeahead").css("display", "block")
+
+        dialog.on 'shown.bs.modal', -> 
             $("input#tracks-goto-item").focus()
+
         # show the dialog
         dialog.modal()
 
@@ -120,7 +123,7 @@ TracksApp =
             TracksApp.selectTodo($("div.todo-item").first())
 
     noteOfTodo: (todo) ->
-        notes_id = todo.find("i.icon-book").attr("data-note-id")
+        notes_id = todo.find("i.fa-book").attr("data-note-id")
         $("div#" + notes_id )
 
     toggleNoteOfTodo: (todo) ->
@@ -154,12 +157,12 @@ root = exports ? this
 root.TracksApp = TracksApp
 
 $ ->
-    $("a#menu-keyboard-shotcuts").click                -> $('div#tracks-shortcuts-dialog').modal()
-    $("a.button-add-todo").click                       -> TracksApp.add_todo()
-    $("a.button-home").click                           -> TracksApp.go_home()
-    $("a.button-goto").click                           -> TracksApp.go_menu()
-    $("span.todo-description-icons i.icon-book").click -> TracksApp.toggleNoteOfTodo( $(this).parent().parent().parent().parent().parent() )
-    $("span.todo-item-description-container").click    -> TracksApp.selectTodo( $(this).parent().parent().parent() )
+    $("a#menu-keyboard-shotcuts").click              -> $('div#tracks-shortcuts-dialog').modal()
+    $("button.button-add-todo").click                -> TracksApp.add_todo()
+    $("button.button-home").click                    -> TracksApp.go_home()
+    $("button.button-goto").click                    -> TracksApp.go_menu()
+    $("span.todo-description-icons i.fa-book").click -> TracksApp.toggleNoteOfTodo( $(this).parent().parent().parent().parent().parent() )
+    $("span.todo-item-description-container").click  -> TracksApp.selectTodo( $(this).parent().parent().parent() )
 
     autocompleteDataset = new Dataset
         limit: 7

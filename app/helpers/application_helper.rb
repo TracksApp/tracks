@@ -36,8 +36,8 @@ module ApplicationHelper
     days_limited =  2 if days >  2
 
     colors = [:warning, :warning, :warning, :info, :info, :info]
-    color = :important if days < 0
-    color = :default   if days > 7
+    color = :danger  if days < 0
+    color = :default if days > 7
     color = colors[days] if color.nil?
 
     if prefs.due_style == Preference.due_styles[:due_on]
@@ -54,8 +54,8 @@ module ApplicationHelper
       "1"  => t('todos.next_actions_due_date.due_tomorrow')
     })
 
-    return content_tag(:a, {:title => format_date(due)}) {
-      content_tag(:span, {:class => "badge badge-#{color}"}) { due_text[days_limited.to_s] }
+    return content_tag(:span, {:class => "label label-#{color}"}) {
+      content_tag(:a, {:title => format_date(due)}) { due_text[days_limited.to_s] }
     }
   end
 

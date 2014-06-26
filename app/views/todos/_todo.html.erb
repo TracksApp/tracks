@@ -1,8 +1,8 @@
 <% cache [todo, current_user.date.strftime("%Y%m%d"), @source_view, current_user.prefs.verbose_action_descriptors] do -%>
-  <div id="<%= dom_id(todo) %>" class="todo-item" 
+  <div id="<%= dom_id(todo) %>" class="todo-item container-fluid" 
        data-info="<%= render partial: "todos/todo_info", locals: {todo: todo} %>">
     <div class="row">
-      <div class="span8">
+      <div class="col-md-8">
         <span class="todo-item-icons">
           <i class="fa <%= todo.completed? ? "fa-check-square-o" : "fa-square-o" %>"></i>
           <i class="fa <%= todo.starred?   ? "fa-star" : "fa-star-o"%>"></i>
@@ -23,7 +23,7 @@
           </small></p>
         </span>
       </div>
-      <div class="span4 pull-right hidden-phone tracks-todo-badges">
+      <div class="col-md-4 pull-right hidden-phone tracks-todo-badges">
         <%= date_span(todo) -%>
         <%= tag_list(todo) %>
       </div>

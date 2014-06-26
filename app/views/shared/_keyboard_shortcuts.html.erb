@@ -1,35 +1,39 @@
-<div id="tracks-shortcuts-dialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="myModalLabel">Keyboard Shortcuts</h3>
-    </div>
-    <div class="modal-body">
+<div id="tracks-shortcuts-dialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="tracks-keyboard-shortcuts" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="tracks-keyboard-shortcuts">Keyboard Shortcuts</h4>
+      </div>
+      <div class="modal-body">
         <ul>
-            <li><span class="badge">?</span>: Shows this help page</li>
-            <li><span class="badge">a</span>: add action</li>
-            <li><span class="badge">i</span>: show details of action or project</li>
+          <li><span class="badge">?</span>: Shows this help page</li>
+          <li><span class="badge">a</span>: add action</li>
+          <li><span class="badge">i</span>: show details of action or project</li>
         </ul>
         <p>Navigation:</p>
         <ul>
-            <li><span class="badge">j</span> or <span class="badge">k</span>: go to previous or next item</li>
-            <li><span class="badge">G</span>: show list of project and contexts</li>
-            <li><span class="badge">g</span> then <span class="badge">h</span>: go to the home page</li>
-            <li><span class="badge">g</span> then <span class="badge">c</span>: go to a specific context</li>
-            <li><span class="badge">g</span> then <span class="badge">C</span>: go to the contexts page</li>
-            <li><span class="badge">g</span> then <span class="badge">p</span>: go to a specific project</li>
-            <li><span class="badge">g</span> then <span class="badge">P</span>: go to the projects page</li>
+          <li><span class="badge">j</span> or <span class="badge">k</span>: go to previous or next item</li>
+          <li><span class="badge">Shift-G</span>: show list of project and contexts</li>
+          <li><span class="badge">g</span> then <span class="badge">h</span>: go to the home page</li>
+          <li><span class="badge">g</span> then <span class="badge">c</span>: go to a specific context</li>
+          <li><span class="badge">g</span> then <span class="badge">Shift-C</span>: go to the contexts page</li>
+          <li><span class="badge">g</span> then <span class="badge">p</span>: go to a specific project</li>
+          <li><span class="badge">g</span> then <span class="badge">Shift-P</span>: go to the projects page</li>
         </ul>
         <p>Grouping of actions:</p>
         <ul>
-            <li><span class="badge">v</span> then <span class="badge">p</span>: group the actions on the page by project</li>
-            <li><span class="badge">v</span> then <span class="badge">c</span>: group the actions on the page by context</li>
+          <li><span class="badge">v</span> then <span class="badge">p</span>: group the actions on the page by project</li>
+          <li><span class="badge">v</span> then <span class="badge">c</span>: group the actions on the page by context</li>
         </ul>
         <p>Handling actions:</p>
         <ul>
-            <li><span class="badge">n</span>: Toggle the notes of the selected action</li>
+          <li><span class="badge">n</span>: Toggle the notes of the selected action</li>
         </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>
     </div>
-    <div class="modal-footer">
-        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-    </div>
+  </div>
 </div>
