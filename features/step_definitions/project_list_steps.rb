@@ -20,6 +20,7 @@ When /^I drag the project "([^"]*)" below "([^"]*)"$/ do |project_drag, project_
   drop_index = project_list_find_index(project_drop)
   
   page.execute_script "$('#{sortable_css}').simulateDragSortable({move: #{drop_index-drag_index}, handle: '.grip'});"
+  sleep 0.1 # wait for the js to process the drop
 end
 
 When /^I submit a new project with name "([^"]*)"$/ do |project_name|

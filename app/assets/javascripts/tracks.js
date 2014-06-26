@@ -1,7 +1,7 @@
 var TracksForm = {
     toggle: function(toggleLinkId, formContainerId, formId, hideLinkText,
         hideLinkTitle, showLinkText, showLinkTitle) {
-        var form=$('#'+formContainerId)
+        var form=$('#'+formContainerId);
         form.toggle();
         var toggleLink = $('#'+toggleLinkId);
         if (!form.is(':visible')) {
@@ -81,18 +81,22 @@ var TracksForm = {
 
         /* submit todo form after entering new todo */
         $(document).on("click", "button#todo_new_action_submit", function (ev) {
-            if ($('input#predecessor_input').val() != "")
-              if (!confirm(i18n['todos.unresolved_dependency']))
+            if ($('input#predecessor_input').val() !== "") {
+              if (!confirm(i18n['todos.unresolved_dependency'])) {
                 return false;
-            if (TodoItems.askIfNewContextProvided('', this))
+              }
+            }
+            if (TodoItems.askIfNewContextProvided('', this)) {
                 submit_with_ajax_and_block_element('form#todo-form-new-action', $(this));
+            }
             return false;
         });
 
         /* submit multi-todo form after entering multiple new todos */
         $(document).on("click", "button#todo_multi_new_action_submit", function (ev) {
-            if (TodoItems.askIfNewContextProvided('multi_', this))
-                submit_with_ajax_and_block_element('form#todo-form-multi-new-action', $(this));
+            if (TodoItems.askIfNewContextProvided('multi_', this)) {
+              submit_with_ajax_and_block_element('form#todo-form-multi-new-action', $(this));
+            }
             return false;
         });
     },
@@ -109,7 +113,7 @@ var TracksForm = {
             var new_list = new Array();
             while (id_list.length > 0) {
                 var elem = id_list.pop();
-                if (elem != this.id && elem != '' && elem != ' ') {
+                if (elem !== this.id && elem !== '' && elem !== ' ') {
                     new_list.push ( elem );
                 }
             }
@@ -117,13 +121,13 @@ var TracksForm = {
             // update id list
             predecessor_list.val( new_list.join(", ") );
 
-            if (new_list.length == 0) {
+            if (new_list.length === 0) {
                 $(form).find("label#label_for_predecessor_input").hide();
                 $(form).find("ul#predecessor_ul").hide();
             }
 
             return false; // prevent submit/follow link
-        })
+        });
     },
     generate_dependency_list: function(todo_id) {
         if (spec_of_todo.length > 0) {
@@ -146,7 +150,7 @@ var TracksForm = {
             }
         }
     }
-}
+};
 
 var TracksPages = {
     show_errors: function (html) {
@@ -185,9 +189,10 @@ var TracksPages = {
 
         fadein_duration = 1500;
         fadeout_duration = 1500;
-        show_duration = fade_duration_in_sec*1000 - fadein_duration - fadeout_duration
-        if (show_duration < 0)
+        show_duration = fade_duration_in_sec*1000 - fadein_duration - fadeout_duration;
+        if (show_duration < 0) {
           show_duration = 1000;
+        }
         flash.fadeIn(fadein_duration).delay(show_duration).fadeOut(fadeout_duration);
     },
     set_page_badge: function(count) {
@@ -204,10 +209,10 @@ var TracksPages = {
         .autocomplete({
             minLength: 2,
             autoFocus: true,
-            delay: 400, /* increase a bit over dthe default of 300 */
+            delay: 400, /* increase a bit over the default of 300 */
             source: function( request, response ) {
                 var last_term = extractLast( request.term );
-                if (last_term != "" && last_term != " ")
+                if (last_term !== "" && last_term !== " ") {
                     $.ajax( {
                         url: relative_to_root('tags.autocomplete'),
                         dataType: 'json',
@@ -219,7 +224,8 @@ var TracksPages = {
                             $(id).removeClass('ui-autocomplete-loading');
                             response(data, textStatus, jqXHR); // call jquery callback to handle data
                         }
-                    })
+                    });
+                  }
                 else {
                     // remove spinner as typing will always add the spinner
                     $(id).removeClass('ui-autocomplete-loading');
@@ -316,16 +322,16 @@ var TracksPages = {
             }
             else {
                 $(".context_collapsed").show();
-            }
+            };
         });
 
         $("a#group_view_by_link").click(function () {
             var state = $(this).attr("x_current_group_by")
-            if(state =='context'){
+            if(state === 'context'){
                 state='project';
             } else {
                 state='context';
-            }
+            };
             $.cookie('group_view_by', state);
             refresh_page();
         });
@@ -390,19 +396,24 @@ var TodoItems = {
         params.async = false;
         params.success = function(result){
             allContexts = result;
-        }
+        };
         $.ajax(params);
         return allContexts;
     },
     askIfNewContextProvided: function(source, element_to_block) {
         var givenContextName = $('#'+source+'todo_context_name').val();
-        if (givenContextName.length == 0) return true; // do nothing and depend on rails validation error
+        if (givenContextName.length === 0) {
+          return true; // do nothing and depend on rails validation error
+        }
 
         var contexts = TodoItems.getContextsForAutocomplete(givenContextName, element_to_block);
 
         if (contexts) {
-            for (var i=0; i<contexts.length; i++)
-                if (contexts[i].value == givenContextName) return true;
+          for (var i=0; i<contexts.length; i++) {
+            if (contexts[i].value == givenContextName) {
+              return true;
+            }
+          }
         }
         return confirm(i18n['contexts.new_context_pre'] + givenContextName + i18n['contexts.new_context_post']);
     },
@@ -429,10 +440,11 @@ var TodoItems = {
             delay: 400, /* delay a bit more than the default of 300 */
             source: function( request, response ) {
                 var term = request.term;
-                if (term != "" && term != " ")
-                    $.getJSON( relative_to_root('auto_complete_for_predecessor'), {
-                        term: term
-                    }, response );
+                if (term !== "" && term !== " ") {
+                  $.getJSON( relative_to_root('auto_complete_for_predecessor'), {
+                      term: term
+                  }, response );
+                };
             },
             focus: function() {
                 // prevent value inserted on focus
@@ -440,10 +452,10 @@ var TodoItems = {
             },
             select: function( event, ui ) {
                 // retrieve values from input fields
-                var todo_spec = ui.item.label
-                var todo_id = ui.item.value
+                var todo_spec = ui.item.label;
+                var todo_id = ui.item.value;
                 var form = $(this).parents('form').get(0);
-                var predecessor_list = $(form).find('input[name=predecessor_list]')
+                var predecessor_list = $(form).find('input[name=predecessor_list]');
                 var id_list = split( predecessor_list.val() );
 
                 // add the dependency to id list
@@ -453,7 +465,7 @@ var TodoItems = {
                 // show the html for the list of deps
                 $(form).find('ul#predecessor_ul').show();
                 $(form).find("label#label_for_predecessor_input").show();
-                if (todo_spec.length > 35 && form.id == "todo-form-new-action") {
+                if (todo_spec.length > 35 && form.id === "todo-form-new-action") {
                     // cut off string only in new-todo-form
                     todo_spec = todo_spec.substring(0,40)+"...";
                 }
@@ -554,7 +566,7 @@ var TodoItems = {
 
         /* delete button to delete a todo from the list */
         $(document).on("click",".item-container a.icon_delete_item", function(evt){
-            var confirm_message = $(this).attr("x_confirm_message")
+            var confirm_message = $(this).attr("x_confirm_message");
             if(confirm(confirm_message)){
                 delete_with_ajax_and_block_element(this.href, $(this).parents('.item-container'));
             }
@@ -572,15 +584,16 @@ var TodoItems = {
             $(this).parents('.edit-form').fadeOut(200, function () {
                 $(this).parents('.list').find('.project').fadeIn(500);
                 $(this).parents('.container').find('.item-show').fadeIn(500);
-            })
+            });
         });
 
         // defer a todo
         $(document).on("click",".item-container a.icon_defer_item", function(ev){
-            if ($(this).attr("x_defer_alert") == "true")
+            if ($(this).attr("x_defer_alert") == "true") {
                 alert ($(this).attr("x_defer_date_after_due_date"));
-            else
+            } else {
                 put_with_ajax_and_block_element(this.href, $(this).parents(".item-container"));
+            };
             return false;
         });
 
