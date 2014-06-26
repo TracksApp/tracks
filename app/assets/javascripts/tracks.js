@@ -187,9 +187,9 @@ var TracksPages = {
         flash.html("<h4 id=\'flash\' class=\'alert "+type+"\'>"+message+"</h4>");
         flash = $('h4#flash');
 
-        fadein_duration = 1500;
-        fadeout_duration = 1500;
-        show_duration = fade_duration_in_sec*1000 - fadein_duration - fadeout_duration;
+        var fadein_duration = 1500;
+        var fadeout_duration = 1500;
+        var show_duration = fade_duration_in_sec*1000 - fadein_duration - fadeout_duration;
         if (show_duration < 0) {
           show_duration = 1000;
         }
@@ -1289,24 +1289,23 @@ function update_order(event, ui){
         'script');
 }
 
+function set_defaults(defaults, val, input_name) {
+  if(defaults[val] !== undefined) {
+    var input = $(this).parents('form').find('input[name='+input_name+']');
+    if(input.attr('edited') === undefined) {
+      input.val(defaults[val]);
+    }
+  }
+}
+
 function project_defaults(){
     if($('body').hasClass('contexts')){
     // don't change the context
     // see ticket #934
     } else {
-        if(defaultContexts[$(this).val()] !== undefined) {
-            var context_name = $(this).parents('form').find('input[name=context_name]');
-            if(context_name.attr('edited') === undefined) {
-                context_name.val(defaultContexts[$(this).val()]);
-            }
-        }
+      set_defaults(defaultContexts, $(this).val(), 'context_name');
     }
-    if(defaultTags[$(this).val()] !== undefined) {
-        var tag_list = $(this).parents('form').find('input[name=tag_list]');
-        if(tag_list.attr('edited') === undefined) {
-            tag_list.val(defaultTags[$(this).val()]);
-        }
-    }
+    set_defaults(defaultTags, $(this).val(), 'tag_list')
 }
 
 function enable_rich_interaction(){
