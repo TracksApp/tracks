@@ -326,12 +326,12 @@ var TracksPages = {
         });
 
         $("a#group_view_by_link").click(function () {
-            var state = $(this).attr("x_current_group_by")
+            var state = $(this).attr("x_current_group_by");
             if(state === 'context'){
                 state='project';
             } else {
                 state='context';
-            };
+            }
             $.cookie('group_view_by', state);
             refresh_page();
         });
@@ -601,7 +601,7 @@ var TodoItems = {
         $(document).on("click",'.item-container a.delete_dependency_button', function(evt){
             var predecessor_id=$(this).attr("x_predecessors_id");
             var ajax_options = default_ajax_options_for_scripts('DELETE', this.href, $(this).parents('.item-container'));
-            ajax_options.data["predecessor"] = predecessor_id
+            ajax_options.data["predecessor"] = predecessor_id;
             $.ajax(ajax_options);
             return false;
         });
@@ -922,7 +922,7 @@ var IntegrationsPage = {
             IntegrationsPage.get_script_for_context("#applescript2", "get_applescript2", this.value);
         });
         $(document).on("change",'#quicksilver-contexts', function(){
-            IntegrationsPage.get_script_for_context("#quicksilver", "get_quicksilver_applescript", this.value)
+            IntegrationsPage.get_script_for_context("#quicksilver", "get_quicksilver_applescript", this.value);
         });
     },
     get_script_for_context: function(element, getter, context){
@@ -979,7 +979,7 @@ var NotesPage = {
         $(document).on("click",'.edit-note-form a.negative', function(){
             var dom_id = this.id.substr(14);
             /* dom_id == 'note_XX' on notes page and just 'note' on project page */
-            if (dom_id == 'note') {
+            if (dom_id === 'note') {
                 $('#new-note').hide();
             } else {
                 $('#'+dom_id).toggle();
@@ -1012,7 +1012,7 @@ var RecurringTodosPage = {
     },
     toggle_overlay: function () {
         var overlay_element = document.getElementById("overlay");
-        overlay_element.style.visibility = (overlay_element.style.visibility == "visible") ? "hidden" : "visible";
+        overlay_element.style.visibility = (overlay_element.style.visibility === "visible") ? "hidden" : "visible";
     },
     setup_behavior: function() {
       /* add new recurring todo plus-button in sidebar */
@@ -1022,10 +1022,10 @@ var RecurringTodosPage = {
 
       /* setup dialog for new repeating action */
       $( "#new-recurring-todo" ).dialog({
-    		autoOpen: false,
+        autoOpen: false,
         height: 690,
-  			width: 750,
-  			modal: true,
+        width: 750,
+        modal: true,
         buttons: {
           create: {
             text: i18n['common.create'],
@@ -1054,10 +1054,10 @@ var RecurringTodosPage = {
 
       /* setup dialog for new repeating action */
       $( "#edit-recurring-todo" ).dialog({
-    		autoOpen: false,
+        autoOpen: false,
         height: 690,
-  			width: 750,
-  			modal: true,
+        width: 750,
+        modal: true,
         buttons: {
           "Update": {
             text: i18n['common.update'],
@@ -1093,7 +1093,7 @@ var RecurringTodosPage = {
 
       /* delete button to delete a todo from the list */
       $(document).on("click",'.item-container a.delete_icon', function(evt){
-          var confirm_message = $(this).attr("x_confirm_message")
+          var confirm_message = $(this).attr("x_confirm_message");
           if(confirm(confirm_message)){
               delete_with_ajax_and_block_element(this.href, $(this).parents('.project'));
             }
@@ -1146,14 +1146,16 @@ function extractLast( term ) {
 $.fn.clearForm = function() {
     return this.each(function() {
         var type = this.type, tag = this.tagName.toLowerCase();
-        if (tag == 'form')
-            return $(':input',this).clearForm();
-        if (type == 'text' || type == 'password' || tag == 'textarea')
-            this.value = '';
-        else if (type == 'checkbox' || type == 'radio')
-            this.checked = false;
-        else if (tag == 'select')
-            this.selectedIndex = -1;
+        if (tag === 'form') {
+          return $(':input',this).clearForm();
+        }
+        if (type === 'text' || type === 'password' || tag === 'textarea') {
+          this.value = '';
+        } else if (type === 'checkbox' || type === 'radio') {
+          this.checked = false;
+        } else if (tag === 'select') {
+          this.selectedIndex = -1;
+        }
     });
 };
 
@@ -1162,7 +1164,7 @@ $.fn.clearDeps = function() {
     $("label#label_for_predecessor_input").hide();
     $('ul#predecessor_ul', this).html("");
     $('input[name=predecessor_list]').val("");
-}
+};
 
 /**************************************/
 /* Tracks AJAX functions              */
@@ -1240,8 +1242,8 @@ function delete_with_ajax_and_block_element(the_url, element_to_block) {
 
 $(document).ajaxSend(function(event, request, settings) {
     /* Set up authenticity token properly */
-    if ( settings.type == 'POST' || settings.type == 'post' ) {
-        if(typeof(AUTH_TOKEN) != 'undefined'){
+    if ( settings.type === 'POST' || settings.type === 'post' ) {
+        if(typeof(AUTH_TOKEN) !== 'undefined'){
             settings.data["authenticity_token"] = AUTH_TOKEN;
             settings.data["_source_view"] = SOURCE_VIEW;
         } else {
@@ -1271,11 +1273,11 @@ function update_order(event, ui){
     var row = $(ui.item).children('.sortable_row');
 
     var url = '';
-    if(row.hasClass('context'))
+    if(row.hasClass('context')) {
         url = relative_to_root('contexts/order');
-    else if(row.hasClass('project'))
+    } else if(row.hasClass('project')) {
         url = relative_to_root('projects/order');
-    else {
+    } else {
         console.log("Bad sortable list");
         return;
     }
@@ -1294,14 +1296,14 @@ function project_defaults(){
     } else {
         if(defaultContexts[$(this).val()] !== undefined) {
             var context_name = $(this).parents('form').find('input[name=context_name]');
-            if(context_name.attr('edited') === undefined){
+            if(context_name.attr('edited') === undefined) {
                 context_name.val(defaultContexts[$(this).val()]);
             }
         }
     }
     if(defaultTags[$(this).val()] !== undefined) {
         var tag_list = $(this).parents('form').find('input[name=tag_list]');
-        if(tag_list.attr('edited') === undefined){
+        if(tag_list.attr('edited') === undefined) {
             tag_list.val(defaultTags[$(this).val()]);
         }
     }
@@ -1315,13 +1317,13 @@ function enable_rich_interaction(){
     TodoItems.setup_drag_and_drop();
 
     /* have to bind on keypress because of limitations of live() */
-    $(document).on("keypress",'input[name=project_name]', function(){
+    $(document).on("keypress",'input[name=project_name]', function() {
         $(this).bind('blur', project_defaults);
     });
-    $(document).on("keypress",'input[name=context_name]', function(){
+    $(document).on("keypress",'input[name=context_name]', function() {
         $(this).attr('edited', 'true');
     });
-    $(document).on("keypress",'input[name=tag_list]', function(){
+    $(document).on("keypress",'input[name=tag_list]', function() {
         $(this).attr('edited', 'true');
     });
 
