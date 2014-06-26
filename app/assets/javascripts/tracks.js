@@ -959,7 +959,7 @@ var NotesPage = {
 
         /* delete button for note */
         $(document).on("click",'a.delete_note_button', function(){
-            var confirm_message = $(this).attr("x_confirm_message")
+            var confirm_message = $(this).attr("x_confirm_message");
             if(confirm(confirm_message)){
                 delete_with_ajax_and_block_element(this.href, $(this).parents('.project_notes'));
             }
@@ -1202,7 +1202,7 @@ function default_ajax_options_for_submit(ajax_type, element_to_block) {
         error: function(req, status) {
             TracksPages.page_notify('error', i18n['common.ajaxError']+': '+status, 8);
         }
-    }
+    };
     if(typeof(TAG_NAME) !== 'undefined') {
         options.data["_tag_name"] = TAG_NAME;
     }
@@ -1259,8 +1259,8 @@ function setup_periodic_check(url_for_check, interval_in_sec, method) {
     setInterval(
         function(){
             var settings = default_ajax_options_for_scripts( method ? method : "GET", url_for_check, null);
-            if(typeof(AUTH_TOKEN) != 'undefined'){
-                settings.data["authenticity_token"] = AUTH_TOKEN
+            if(typeof(AUTH_TOKEN) !== 'undefined'){
+                settings.data["authenticity_token"] = AUTH_TOKEN;
             }
             $.ajax(settings);
         },
@@ -1284,7 +1284,7 @@ function update_order(event, ui){
     $.post(url,
         container.sortable("serialize"),
         function(){
-            row.effect('highlight', {}, 1000)
+            row.effect('highlight', {}, 1000);
         },
         'script');
 }
