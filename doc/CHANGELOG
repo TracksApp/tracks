@@ -23,14 +23,13 @@ New and changed features
 * The toggle-notes and toggle-collapsed-containers have been moved into the view
   menu
 * Bugfixes
-* Tracks is tested on Ruby 1.9.3 and on Ruby 2.0
+* Tracks is tested on Ruby 1.9.3, 2.0.0, and 2.1
 
 Removed features
-* This version of Tracks dropped support for Ruby 1.8.x. Please use Ruby 1.9 or 
-  Ruby 2.0
+* Ruby 1.8.x is no longer supported
 
 Under the hood
-* Upgrade to Rails 3.213
+* Upgrade to Rails 4.1
 * Several refactorings al over the place for easier maintenance
 
 == Version 2.2.2
