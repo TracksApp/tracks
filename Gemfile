@@ -24,7 +24,7 @@ gem "mysql2"
 
 gem "RedCloth"
 gem "sanitize"
-gem "will_paginate"
+gem "will_paginate", github: 'mislav/will_paginate'
 gem "acts_as_list"
 gem "aasm"
 gem "htmlentities"
