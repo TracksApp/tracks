@@ -30,7 +30,7 @@ Removed features
 
 Under the hood
 * Upgrade to Rails 4.1
-* Several refactorings al over the place for easier maintenance
+* Several refactorings all over the place for easier maintenance
 
 == Version 2.2.2
 
