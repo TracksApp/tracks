@@ -52,7 +52,7 @@ module Tracks
       if specified_by_name?(object_type)
         object, new_object_created = find_or_create_by_name(relation, object_name(object_type))
         # put id of object in @attributes, i.e. set :project_id to project.id
-        @attributes[object_type.to_s + "_id"] = object.id unless new_object_created
+        @attributes["#{object_type.to_s}_id".to_sym] = object.id unless new_object_created
       else
         # find context or project by its id
         object = attribute_with_id_of(object_type).present? ? relation.find(attribute_with_id_of(object_type)) : nil

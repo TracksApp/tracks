@@ -15,7 +15,6 @@ module RecurringTodos
 
       @pattern              = pattern_class.new(user)
       @pattern.attributes   = @mapped_attributes
-
     end
 
     # build does not add tags. For tags, the recurring todos needs to be saved
