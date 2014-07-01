@@ -1,10 +1,4 @@
 # Tracks: a GTD(TM) web application, built with Ruby on Rails
-Copyright (C) 2004-2014 rousette.org.uk
-
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
 
 * Project homepage: http://getontracks.org/
 * Manual: http://getontracks.org/manual/
@@ -43,6 +37,15 @@ sure that you take sensible precautions and back up all your data frequently,
 taking particular care when you are upgrading.
 
 Enjoy being productive!
+
+--------------------------------------------------------------------------------
+
+Copyright (C) 2004-2014 rousette.org.uk
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
