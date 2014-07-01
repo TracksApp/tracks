@@ -910,7 +910,7 @@ class TodosControllerTest < ActionController::TestCase
     put :add_predecessor, :predecessor=>predecessor.id, :successor=>successor.id, :format => "js"
 
     assert_equal 1, successor.predecessors.count
-    assert_equal predecessor.id, successor.predecessors.first.id
+    assert_equal predecessor.id, successor.predecessors.reload.first.id
   end
 
   def test_make_todo_with_dependencies_dependent
