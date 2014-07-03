@@ -20,5 +20,4 @@ class Attachment < ActiveRecord::Base
     file = nil
     save!
   end
-
 end
