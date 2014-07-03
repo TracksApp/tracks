@@ -83,4 +83,22 @@ class MessageGatewayTest < ActiveSupport::TestCase
     assert_not_nil(invalid_context_todo)
     assert_equal(@inbox, invalid_context_todo.context)
   end
+
+  def test_receiving_email_adds_attachment
+    attachment_count = Attachment.count
+
+    load_message('sample_mms.txt')
+
+    message_todo = Todo.where(:description => "This is the subject").first
+    assert_not_nil(message_todo)
+
+    assert_equal attachment_count+1, Attachment.count
+    assert_equal 1,message_todo.attachments.count
+
+    orig = File.read(File.join(Rails.root, 'test', 'fixtures', 'sample_mms.txt'))
+    attachment = File.read(message_todo.attachments.first.file.path)
+
+    assert_equal orig, attachment
+  end
+
 end

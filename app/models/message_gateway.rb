@@ -1,3 +1,5 @@
+require 'tempfile'
+
 class MessageGateway < ActionMailer::Base
 
   def receive(email)
@@ -10,8 +12,26 @@ class MessageGateway < ActionMailer::Base
 
     todo_builder = TodoFromRichMessage.new(user, context.id, todo_params[:description], todo_params[:notes])
     todo = todo_builder.construct
-    todo.save!
-    Rails.logger.info "Saved email as todo for user #{user.login} in context #{context.name}"
+
+    saved = todo.save!
+
+    if saved
+      Rails.logger.info "Saved email as todo for user #{user.login} in context #{context.name}"
+
+      attachment = todo.attachments.build
+      tmp = Tempfile.new(['attachment', '.eml'], cr_newline: false)
+      tmp.write email.raw_source.gsub(/\r\n?/, "\n")  # replace \r with \n
+      Rails.logger.info "Saved received email to #{tmp.path}"
+      attachment.file = tmp
+      tmp.close
+      saved = attachment.save!
+      tmp.unlink
+
+      if saved 
+        Rails.logger.info "Saved email as todo for user #{user.login} in context #{context.name}"
+      end
+    end
+
     todo
   end
 
