@@ -1289,11 +1289,11 @@ function update_order(event, ui){
         'script');
 }
 
-function set_defaults(defaults, val, input_name) {
-  if(defaults[val] !== undefined) {
-    var input = $(this).parents('form').find('input[name='+input_name+']');
+function set_defaults(defaults, field, input_name) {
+  if(defaults[field.val()] !== undefined) {
+    var input = field.parents(".edit_todo_form").find('input[name='+input_name+']');
     if(input.attr('edited') === undefined) {
-      input.val(defaults[val]);
+      input.val(defaults[field.val()]);
     }
   }
 }
@@ -1303,9 +1303,9 @@ function project_defaults(){
     // don't change the context
     // see ticket #934
     } else {
-      set_defaults(defaultContexts, $(this).val(), 'context_name');
+      set_defaults(defaultContexts, $(this), 'context_name');
     }
-    set_defaults(defaultTags, $(this).val(), 'tag_list')
+    set_defaults(defaultTags, $(this), 'tag_list')
 }
 
 function enable_rich_interaction(){
