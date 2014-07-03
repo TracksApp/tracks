@@ -25,7 +25,7 @@ class Todo < ActiveRecord::Base
   has_many :pending_successors, -> {where('todos.state = ?', 'pending')}, :through => :predecessor_dependencies,
     :source => :successor
 
-  has_many :attachments, dependent: :destroy
+  has_many :attachments, dependent: :delete_all
 
   # scopes for states of this todo
   scope :active, -> { where state: 'active' }
