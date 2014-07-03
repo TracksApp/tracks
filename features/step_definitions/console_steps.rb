@@ -54,6 +54,6 @@ When /^I execute the add-todo script$/ do
 
   # it seems aruba does not wait for process to end with interactively run command, but 
   # continues anyway which will start cleaning up the database while the process is still running
-  # so wait 2 secs for the process to finish
-  sleep 2  
+  # so wait 2.5 secs for the process to finish
+  sleep 2.5
 end
