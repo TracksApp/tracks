@@ -49,18 +49,6 @@ module Tracksapp
     # Set timezone of dates in database
     config.active_record.default_timezone = :utc
 
-    # Disable loading of the full environment when precompiling assets
-    config.assets.initialize_on_precompile = false
-
-    # Version of your assets, change this if you want to expire all your assets
-    config.assets.version = '1.0'
-    
-    # add /app/assets/swfs to asset pipeline for charts
-    config.assets.paths << Rails.root.join("app", "assets", "swfs")
-
-    # add print and login css to assets
-    config.assets.precompile += %w(login.css print.css mobile.css)
-        
     # configure Tracks to handle deployment in a subdir
     config.action_controller.relative_url_root = SITE_CONFIG['subdir'] if SITE_CONFIG['subdir']
     
