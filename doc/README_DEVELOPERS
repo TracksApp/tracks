@@ -1,8 +1,7 @@
 1. Resources
 
 Tracks is using
-* github to host the git repository and manage git pull requests.
-* Assembla to manage bugs and enhancement request.
+* GitHub to host the git repository, manage git pull requests, and manage bugs and enhancement requests.
 * the mailing list to discuss features and development and interact with users
 
 See README for links to the respective sites
