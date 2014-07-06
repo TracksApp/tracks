@@ -15,6 +15,7 @@
 /db/*.db
 /db/*.sqlite3
 /db/*.sqlite3-journal
+/db/assets/*
 /log/*.log
 /public/assets/
 /tmp
