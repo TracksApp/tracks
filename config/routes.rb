@@ -90,7 +90,6 @@ Rails.application.routes.draw do
       get 'convert_to_project' # TODO: convert to PUT/POST
       delete 'remove_predecessor' # TODO: convert to PUT/POST
       post 'change_context'
-      get 'attachment'
     end
     collection do
       get 'done'

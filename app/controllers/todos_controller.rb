@@ -817,7 +817,7 @@ class TodosController < ApplicationController
   def attachment
     id = params[:id]
     filename = params[:filename]
-    attachment = current_user.attachments.find(id)
+    attachment = Attachment.where(id: id).first
 
     if attachment
       send_file(attachment.file.path,
