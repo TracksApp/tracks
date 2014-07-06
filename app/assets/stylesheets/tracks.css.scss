@@ -124,6 +124,11 @@ img.delete_item {
     }
 }
 
+a.todo_attachment {
+    background: image-url('bottom_off.png') no-repeat top;
+    border: none;
+}
+
 a.undecorated_link {background-color:transparent;color:transparent;}
 img.todo_star {background-image: image-url('staricons.png'); background-repeat: no-repeat; border:none; background-position: -32px 0px;}
 img.todo_star.starred{ background-position: 0px 0px; }
