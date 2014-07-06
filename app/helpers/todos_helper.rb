@@ -212,6 +212,14 @@ module TodosHelper
     )
   end
 
+  def attachment_image(todo)
+    link_to(
+      image_tag('blank.png', width: 16, height: 16, border:0),
+      todo.attachments.first.file.url,
+      {:class => 'todo_attachment', title: 'Get attachments of this todo'}
+    )
+  end
+
   def collapsed_notes_image(todo)
     link = link_to(
       image_tag( 'blank.png', :width=>'16', :height=>'16', :border=>'0' ),

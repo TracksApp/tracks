@@ -819,7 +819,7 @@ class TodosController < ApplicationController
     filename = params[:filename]
     attachment = current_user.attachments.find(id)
 
-    if attachment 
+    if attachment
       send_file(attachment.file.path,
         disposition: 'attachment',
         type: 'message/rfc822')
