@@ -78,7 +78,7 @@ h2. Precompile assets
 
 Static assets (images, stylesheets, and javascript) need to be compiled in order for them to work correctly with the new asset pipeline feature in Rails. Precompiling your assets is as simple as running the following command while inside the Tracks root directory:
 
-bc. bundle exec rake assets:precompile
+bc. bundle exec rake assets:precompile RAILS_ENV=production
 
 
 h2.  Start the server
