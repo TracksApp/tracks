@@ -29,10 +29,6 @@ Rails.application.configure do
   # Raises helpful error messages.
   config.assets.raise_runtime_errors = true
 
-  # Unique cookies
-  # config.action_controller.session_store :cookie_store, :key => 'TracksCucumber'
-  # config.action_controller.session = { :key => 'TracksDev' }
-  
   config.rack_dev_mark.enable = true
 
   # Raises error for missing translations

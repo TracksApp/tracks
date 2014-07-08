@@ -28,12 +28,6 @@ module Tracksapp
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
-    # Configure the default encoding used in templates for Ruby 1.9.
-    config.encoding = "utf-8"
-    
-    # Set timezone of dates in database
-    config.active_record.default_timezone = :utc
-
     # configure Tracks to handle deployment in a subdir
     config.action_controller.relative_url_root = SITE_CONFIG['subdir'] if SITE_CONFIG['subdir']
     
@@ -41,8 +35,5 @@ module Tracksapp
     config.action_view.sanitized_allowed_protocols = 'onenote', 'message'
     
     config.middleware.insert_after ActionDispatch::ParamsParser, ActionDispatch::XmlParamsParser
-
-    # if a locale is invalid, the Rails app will raise an error
-    config.i18n.enforce_available_locales = true
   end
 end
