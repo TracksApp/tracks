@@ -52,6 +52,7 @@ h2. Install dependencies
 
 Tracks is built upon a number of Ruby libraries (known as 'gems'). The Bundler tool makes it easy to install all the gems that Tracks needs, and ensures that they are all the correct versions.
 
+# Edit the file @Gemfile@ in the Tracks root directory. You may comment out any database drivers you will not be using. You may also comment out @therubyracer@ if you are installing Tracks on Windows or Mac OS X, or if you have another JavaScript runtime such as Node.js installed.
 # Run the command @bundle install --without development test@ in the directory that you unzipped your Tracks download to.
 # Wait for Bundler to finish installing the necessary gems that Tracks needs. This can take some time depending on the speed of your internet connection and the speed of the system you're installing Tracks on.
 
