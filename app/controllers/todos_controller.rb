@@ -817,14 +817,12 @@ class TodosController < ApplicationController
   def attachment
     id = params[:id]
     filename = params[:filename]
-    attachment = Attachment.where(id: id).first
+    attachment = current_user.attachments.find(id)
 
     if attachment 
-      if attachment.todo.user == current_user
-        send_file(attachment.file.path)
-      else
-        head :forbidden
-      end
+      send_file(attachment.file.path,
+        disposition: 'attachment',
+        type: 'message/rfc822')
     else
       head :not_found
     end

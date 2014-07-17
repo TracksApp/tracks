@@ -7,4 +7,14 @@ class Attachment < ActiveRecord::Base
 
   do_not_validate_attachment_file_type :file
   # validates_attachment_content_type :file, :content_type => ["text/plain"]
+
+  before_destroy :delete_attached_file
+
+  private
+
+  def delete_attached_file
+    file = nil
+    save!
+  end
+
 end
