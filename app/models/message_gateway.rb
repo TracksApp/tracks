@@ -146,5 +146,4 @@ class MessageGateway < ActionMailer::Base
       end
     end
   end
-
 end
