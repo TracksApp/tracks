@@ -361,7 +361,7 @@ module TodosHelper
   def show_date(d)
     return "" if d == nil
 
-    days = days_from_today(d)
+    days = DueDateHelper::DueDateView.days_from_today(d)
 
     case days
       # overdue or due very soon! sound the alarm!

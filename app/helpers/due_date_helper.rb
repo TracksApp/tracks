@@ -8,7 +8,7 @@ module DueDateHelper
 
     def initialize(date, prefs)
       @due = date
-      @days = date.nil? ? nil : days_from_today(date)
+      @days = date.nil? ? nil : self.class.days_from_today(date)
       @prefs = prefs
     end
 
@@ -62,9 +62,7 @@ module DueDateHelper
       }
     end     
 
-    private
-
-    def days_from_today(date)
+    def self.days_from_today(date)
       (date.in_time_zone.to_date - Date.current).to_i
     end
 
