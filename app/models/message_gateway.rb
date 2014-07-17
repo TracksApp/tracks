@@ -18,16 +18,9 @@ class MessageGateway < ActionMailer::Base
     if saved
       Rails.logger.info "Saved email as todo for user #{user.login} in context #{context.name}"
 
-      attachment = todo.attachments.build
-      tmp = Tempfile.new(['attachment', '.eml'], cr_newline: false)
-      tmp.write email.raw_source.gsub(/\r\n?/, "\n")  # replace \r with \n
-      Rails.logger.info "Saved received email to #{tmp.path}"
-      attachment.file = tmp
-      tmp.close
-      saved = attachment.save!
-      tmp.unlink
+      saved = attach_email_to_todo(todo, email)
 
-      if saved 
+      if saved
         Rails.logger.info "Saved email as todo for user #{user.login} in context #{context.name}"
       end
     end
@@ -36,6 +29,23 @@ class MessageGateway < ActionMailer::Base
   end
 
   private
+
+  def attach_email_to_todo(todo, email)
+    attachment = todo.attachments.build
+
+    # create temp file
+    tmp = Tempfile.new(['attachment', '.eml'], universal_newline: true)
+    tmp.write email.raw_source
+
+    # add temp file to attachment. paperclip will copy the file to the right location
+    Rails.logger.info "Saved received email to #{tmp.path}"
+    attachment.file = tmp
+    tmp.close
+    saved = attachment.save!
+
+    # delete temp file
+    tmp.unlink
+  end
 
   def get_todo_params(email)
     params = {}
