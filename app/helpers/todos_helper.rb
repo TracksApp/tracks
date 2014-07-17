@@ -349,39 +349,11 @@ module TodosHelper
     end
   end
 
-  def show_date_tag(date, the_class, text)
-    content_tag(:a, :title => format_date(date)) do
-      content_tag(:span, :class => the_class) { text }
-    end
-  end
-
   # Check show_from date in comparison to today's date Flag up date
   # appropriately with a 'traffic light' colour code
   #
-  def show_date(d)
-    return "" if d == nil
-
-    days = DueDateHelper::DueDateView.days_from_today(d)
-
-    case days
-      # overdue or due very soon! sound the alarm!
-    when -1000..-1
-      show_date_tag(d, :red, t('todos.scheduled_overdue', :days => (days * -1).to_s))
-    when 0
-      show_date_tag(d, :amber, t('todos.show_today'))
-    when 1
-      show_date_tag(d, :amber, t('todos.show_tomorrow'))
-      # due 2-7 days away
-    when 2..7
-      if prefs.due_style == Preference.due_styles[:due_on]
-        show_date_tag(d, :orange, t('todos.show_on_date', :date => d.strftime("%A")) )
-      else
-        show_date_tag(d, :orange, t('todos.show_in_days', :days => days.to_s) )
-      end
-      # more than a week away - relax
-    else
-      show_date_tag(d, :green, t('todos.show_in_days', :days => days.to_s) )
-    end
+  def show_date(date)
+    return DueDateHelper::ShowFromDateView.new(date, prefs).show_from_date_html
   end
 
   def date_field_tag(name, id, value = nil, options = {})
