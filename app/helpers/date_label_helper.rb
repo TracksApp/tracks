@@ -1,4 +1,4 @@
-module DueDateHelper
+module DateLabelHelper
 
   class GenericDateView
     include ActionView::Context

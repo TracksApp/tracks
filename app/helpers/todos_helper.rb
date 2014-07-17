@@ -349,11 +349,8 @@ module TodosHelper
     end
   end
 
-  # Check show_from date in comparison to today's date Flag up date
-  # appropriately with a 'traffic light' colour code
-  #
   def show_date(date)
-    return DueDateHelper::ShowFromDateView.new(date, prefs).show_from_date_html
+    return DateLabelHelper::ShowFromDateView.new(date, prefs).show_from_date_html
   end
 
   def date_field_tag(name, id, value = nil, options = {})

@@ -30,14 +30,14 @@ module ApplicationHelper
   # a 'traffic light' colour code
   #
   def due_date(due)
-    return DueDateHelper::DueDateView.new(due, prefs).due_date_html
+    return DateLabelHelper::DueDateView.new(due, prefs).due_date_html
   end
 
   # Check due date in comparison to today's date Flag up date appropriately with
   # a 'traffic light' colour code Modified method for mobile screen
   #
   def due_date_mobile(due)
-    return DueDateHelper::DueDateView.new(due, prefs).due_date_mobile_html
+    return DateLabelHelper::DueDateView.new(due, prefs).due_date_mobile_html
   end
   
   # Returns a count of next actions in the given context or project. The result
