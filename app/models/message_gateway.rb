@@ -34,8 +34,8 @@ class MessageGateway < ActionMailer::Base
     attachment = todo.attachments.build
 
     # create temp file
-    tmp = Tempfile.new(['attachment', '.eml'], universal_newline: true)
-    tmp.write email.raw_source
+    tmp = Tempfile.new(['attachment', '.eml'], {universal_newline: true})
+    tmp.write email.raw_source.gsub(/\r/, "")
 
     # add temp file to attachment. paperclip will copy the file to the right location
     Rails.logger.info "Saved received email to #{tmp.path}"
