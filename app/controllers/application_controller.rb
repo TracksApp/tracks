@@ -106,7 +106,7 @@ class ApplicationController < ActionController::Base
   # config/settings.yml
   #
   def format_date(date)
-    return date ? date.in_time_zone(prefs.time_zone).strftime("#{prefs.date_format}") : ''
+    return prefs.format_date(date)
   end
 
   def for_autocomplete(coll, substr)

@@ -25,80 +25,19 @@ module ApplicationHelper
   def navigation_link(name, options = {}, html_options = nil, *parameters_for_method_reference)
     link_to name, options, html_options
   end
-  
-  def days_from_today(date)
-    (date.in_time_zone.to_date - Date.current).to_i
-  end
-  
+    
   # Check due date in comparison to today's date Flag up date appropriately with
   # a 'traffic light' colour code
   #
   def due_date(due)
-    return "" if due.nil?
-
-    days = days_from_today(due)
-
-    colors = ['amber','amber','orange','orange','orange','orange','orange','orange']
-    color = :red if days < 0
-    color = :green if days > 7
-    color = colors[days] if color.nil?
-    
-    return content_tag(:a, {:title => format_date(due)}) {
-      content_tag(:span, {:class => color}) {
-        case days
-        when 0
-          t('todos.next_actions_due_date.due_today')
-        when 1
-          t('todos.next_actions_due_date.due_tomorrow')
-        when 2..7
-          if prefs.due_style == Preference.due_styles[:due_on]
-            # TODO: internationalize strftime here
-            t('models.preference.due_on', :date => due.strftime("%A"))
-          else
-            t('models.preference.due_in', :days => days)
-          end
-        else
-          # overdue or due very soon! sound the alarm!
-          if days == -1
-            t('todos.next_actions_due_date.overdue_by', :days => days * -1)
-          elsif days < -1
-            t('todos.next_actions_due_date.overdue_by_plural', :days => days * -1)
-          else
-            # more than a week away - relax
-            t('models.preference.due_in', :days => days)
-          end
-        end
-      }
-    }
+    return DueDateHelper::DueDateView.new(due, prefs).due_date_html
   end
 
   # Check due date in comparison to today's date Flag up date appropriately with
   # a 'traffic light' colour code Modified method for mobile screen
   #
   def due_date_mobile(due)
-    if due == nil
-      return ""
-    end
-
-    days = days_from_today(due)
-       
-    case days
-    when 0
-      "<span class=\"amber\">"+ format_date(due) + "</span>"
-    when 1
-      "<span class=\"amber\">" + format_date(due) + "</span>"
-      # due 2-7 days away
-    when 2..7
-      "<span class=\"orange\">" + format_date(due) + "</span>"
-    else
-      # overdue or due very soon! sound the alarm!
-      if days < 0
-        "<span class=\"red\">" + format_date(due) +"</span>"
-      else
-        # more than a week away - relax
-        "<span class=\"green\">" + format_date(due) + "</span>"
-      end
-    end
+    return DueDateHelper::DueDateView.new(due, prefs).due_date_mobile_html
   end
   
   # Returns a count of next actions in the given context or project. The result

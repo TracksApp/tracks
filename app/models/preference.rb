@@ -24,4 +24,9 @@ class Preference < ActiveRecord::Base
 
     date.in_time_zone(time_zone).beginning_of_day
   end
+
+  def format_date (date)
+    return date ? date.in_time_zone(time_zone).strftime("#{date_format}") : ''
+  end
+
 end
