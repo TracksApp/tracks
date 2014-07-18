@@ -20,15 +20,15 @@ class Stats::PieChartDataTest < Minitest::Test
 
   def test_with_less_than_10_items
     items = [
-      {'id' => 1, 'name' => 'one', 'total' => 11},
-      {'id' => 2, 'name' => 'two', 'total' => 4},
+      {'id' => 1, 'name' => 'one',   'total' => 11},
+      {'id' => 2, 'name' => 'two',   'total' => 4},
       {'id' => 3, 'name' => 'three', 'total' => 8},
-      {'id' => 4, 'name' => 'four', 'total' => 13},
-      {'id' => 5, 'name' => 'five', 'total' => 20},
-      {'id' => 6, 'name' => 'six', 'total' => 17},
+      {'id' => 4, 'name' => 'four',  'total' => 13},
+      {'id' => 5, 'name' => 'five',  'total' => 20},
+      {'id' => 6, 'name' => 'six',   'total' => 17},
       {'id' => 7, 'name' => 'seven', 'total' => 5},
       {'id' => 8, 'name' => 'eight', 'total' => 1},
-      {'id' => 9, 'name' => 'nine', 'total' => 6}
+      {'id' => 9, 'name' => 'nine',  'total' => 6}
     ]
 
     data = Stats::PieChartData.new(items, 'a chart', 50)
@@ -40,16 +40,16 @@ class Stats::PieChartDataTest < Minitest::Test
 
   def test_with_exactly_10_items
     items = [
-      {'id' => 1, 'name' => 'one', 'total' => 11},
-      {'id' => 2, 'name' => 'two', 'total' => 4},
-      {'id' => 3, 'name' => 'three', 'total' => 8},
-      {'id' => 4, 'name' => 'four', 'total' => 13},
-      {'id' => 5, 'name' => 'five', 'total' => 20},
-      {'id' => 6, 'name' => 'six', 'total' => 17},
-      {'id' => 7, 'name' => 'seven', 'total' => 5},
-      {'id' => 8, 'name' => 'eight', 'total' => 1},
-      {'id' => 9, 'name' => 'nine', 'total' => 6},
-      {'id' => 10, 'name' => 'ten', 'total' => 19}
+      {'id' => 1,  'name' => 'one',   'total' => 11},
+      {'id' => 2,  'name' => 'two',   'total' => 4},
+      {'id' => 3,  'name' => 'three', 'total' => 8},
+      {'id' => 4,  'name' => 'four',  'total' => 13},
+      {'id' => 5,  'name' => 'five',  'total' => 20},
+      {'id' => 6,  'name' => 'six',   'total' => 17},
+      {'id' => 7,  'name' => 'seven', 'total' => 5},
+      {'id' => 8,  'name' => 'eight', 'total' => 1},
+      {'id' => 9,  'name' => 'nine',  'total' => 6},
+      {'id' => 10, 'name' => 'ten',   'total' => 19}
     ]
 
     data = Stats::PieChartData.new(items, 'a chart', 50)

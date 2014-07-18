@@ -3,7 +3,7 @@ require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
 
 # set config for tests. Overwrite those read from config/site.yml. Use inject to avoid warning about changing CONSTANT
-{ "salt" => "change-me", "authentication_schemes" => ["database"], "prefered_auth" => "database"}.inject( SITE_CONFIG ) { |h, elem| h[elem[0]] = elem[1]; h }
+{ "salt" => "change-me", "authentication_schemes" => ["database"], "prefered_auth" => "database", "email_dispatch" => nil}.inject( SITE_CONFIG ) { |h, elem| h[elem[0]] = elem[1]; h }
 
 class ActiveSupport::TestCase
   ActiveRecord::Migration.check_pending!
