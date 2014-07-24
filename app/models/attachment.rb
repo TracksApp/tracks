@@ -1,9 +1,13 @@
 class Attachment < ActiveRecord::Base
   belongs_to :todo, touch: true
 
+  # enable write permissions on group, since MessageGateway could be run under different
+  # user than Tracks (i.e. apache versus mail)
+
   has_attached_file :file,
     url:  '/:class/:id/:basename.:extension',
-    path: ":rails_root/db/assets/#{Rails.env}/:class/:id/:basename.:extension"
+    path: ":rails_root/db/assets/#{Rails.env}/:class/:id/:basename.:extension",
+    override_file_permissions: 0660
 
   do_not_validate_attachment_file_type :file
   # validates_attachment_content_type :file, :content_type => ["text/plain"]

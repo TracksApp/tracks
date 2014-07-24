@@ -43,6 +43,11 @@ class MessageGateway < ActionMailer::Base
     tmp.close
     saved = attachment.save!
 
+    # enable write permissions on group, since MessageGateway could be run under different
+    # user than Tracks (i.e. apache versus mail)
+    dir = File.open(File.dirname(attachment.file.path))
+    dir.chmod(0770)
+
     # delete temp file
     tmp.unlink
   end
