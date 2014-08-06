@@ -4,12 +4,6 @@ require 'active_support/core_ext/string'
 
 class Stats::PieChartDataTest < Minitest::Test
 
-  def setup
-    xx = { :stats => { :other_actions_label => '(other)' } }
-    I18n.backend.store_translations(:xx, xx)
-    I18n.locale = :xx
-  end
-
   def test_with_0_items
     data = Stats::PieChartData.new([], 'a chart', 50)
 
@@ -77,7 +71,7 @@ class Stats::PieChartDataTest < Minitest::Test
     data = Stats::PieChartData.new(items, 'a chart', 50)
 
     assert_equal [9, 3, 6, 11, 16, 14, 4, 0, 5, 27], data.values
-    assert_equal ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "(other)"], data.labels
+    assert_equal ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "(others)"], data.labels
     assert_equal [1, 2, 3, 4, 5, 6, 7, 8, 9, -1], data.ids
   end
 
