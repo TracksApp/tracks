@@ -1,197 +1,191 @@
 <% unless @saved -%>
   TracksPages.page_notify('error', "<%= t('todos.error_toggle_complete') %>", 5);
-<% else -%>
-  <% if @wants_redirect_after_complete && @todo.completed? -%>
-    redirect_after_complete();
-  <% else
-    animation = []
-    unless source_view_is(:search)
-      animation << "remove_todo"
-      if @todo.completed?
-        animation << "add_to_completed_container" unless source_view_is_one_of(:calendar, :deferred)
-        animation << "add_new_recurring_todo"
-        animation << "activate_pending_todos"
+<% else 
+  # create a unique obejct name to prevent concurrent toggles to overwrite each other functions 
+  object_name = "toggle_check_#{SecureRandom.hex(5)}" 
+-%>
+var <%= object_name %> = {
+  animate: function() { 
+    <% if @wants_redirect_after_complete && @todo.completed? -%>
+      <%=object_name%>.redirect_after_complete();
+    <% else
+      animation = []
+      unless source_view_is(:search)
+        animation << "remove_todo"
+        if @todo.completed?
+          animation << "add_to_completed_container" unless source_view_is_one_of(:calendar, :deferred)
+          animation << "add_new_recurring_todo"
+          animation << "activate_pending_todos"
+        else
+          animation << "add_todo_to_container" unless source_view_is(:done)
+          animation << "block_predecessors"
+        end
+        animation << "update_empty_container" if source_view_is_one_of(:tag, :todo, :deferred, :project, :context)
+        animation << "regenerate_predecessor_family"
       else
-        animation << "add_todo_to_container" unless source_view_is(:done)
-        animation << "block_predecessors"
-      end
-      animation << "update_empty_container" if source_view_is_one_of(:tag, :todo, :deferred, :project, :context)
-      animation << "regenerate_predecessor_family"
-    else
-      animation << "replace_todo"
-    end -%>
-    <%= render_animation(animation) %>
-    TracksPages.set_page_badge(<%= @down_count %>);
-  <% end -%>
-
-function redirect_after_complete() {
-  var path = "<%= @todo.project_id.nil? ? "/" : project_path(@todo.project) -%>";
-  redirect_to(path);
-}
-
-function remove_todo(next_steps) {
-  <% if (@remaining_in_context == 0) && update_needs_to_hide_container
-    # remove context with deleted todo
-  -%>
-    $('#<%= item_container_id(@original_item)%>').slideUp(400, function() {
-      $('#<%=dom_id(@todo)%>').remove();
-      next_steps.go();
-    });
-    <%= show_empty_message_in_source_container -%>
-  <% else
-    # remove only the todo
-  -%>
-    <%= show_empty_message_in_source_container %>
-    $('#<%=dom_id(@todo)%>').slideUp(400, function() {
-      $('#<%=dom_id(@todo)%>').remove();
-      next_steps.go();
-  });
-  <% end -%>
-}
-
-function add_to_completed_container(next_steps) {
-  <% unless current_user.prefs.hide_completed_actions? -%>
-    $('#<%= item_container_id(@todo) %>_items').prepend(html_for_todo());
-    $("#completed_container-empty-d").slideUp(100);
-    highlight_updated_todo(next_steps);
-  <% end -%>
-}
-
-function replace_todo(next_steps) {
-  $('#<%= dom_id(@todo) %>').html(html_for_todo());
-  next_steps.go();
-}
-
-function add_todo_to_container(next_steps) {
-  $('#<%= item_container_id(@todo) %>_items').append(html_for_todo());
-  <% if should_make_context_visible -%>
-    $('#<%= item_container_id(@todo) %>').slideDown(500, function() {
-      $("#<%= empty_container_msg_div_id %>").slideUp(100);
-      highlight_updated_todo(next_steps);
-    });
-  <% else -%>
-    $("#<%= empty_container_msg_div_id(@todo) %>").slideUp(100);
-    highlight_updated_todo(next_steps);
-  <% end -%>
-  <% if @completed_count == 0 -%>
-    $("#completed_container-empty-d").slideDown(100);
-  <% end -%>
-}
-
-function add_new_recurring_todo(next_steps) {
-  <%  # show new todo if the completed todo was recurring
-    if @todo.from_recurring_todo?
-      unless @new_recurring_todo.nil? || (@new_recurring_todo.deferred? && !source_view_is(:deferred)) -%>
-      $('#<%= item_container_id(@new_recurring_todo) %>_items').append(html_for_recurring_todo());
-      $('#c<%= @new_recurring_todo.context_id %>').slideDown(500, function() {
-        highlight_updated_recurring_todo(next_steps);
-      });
-   <% else
-        if @todo.recurring_todo.todos.active.count(:all) == 0 && @new_recurring_todo.nil? -%>
-          TracksPages.page_notify('notice', "<%=t('todos.recurrence_completed')%>", 6);
-   <%   end -%>
+        animation << "replace_todo"
+      end -%>
+      <%= render_animation(animation, object_name) %>
+      TracksPages.set_page_badge(<%= @down_count %>);
+    <% end -%>
+  },
+  redirect_after_complete: function() {
+    var path = "<%= @todo.project_id.nil? ? root_path : project_path(@todo.project) -%>";
+    redirect_to(path);
+  },
+  remove_todo: function(next_steps) {
+    <% if (@remaining_in_context == 0) && update_needs_to_hide_container
+      # remove context with deleted todo
+    -%>
+      $('#<%= item_container_id(@original_item)%>').slideUp(400, function() {
+        $('#<%=dom_id(@todo)%>').remove();
         next_steps.go();
-   <% end
-    else -%>
-      next_steps.go();
- <% end -%>
-}
-
-function update_empty_container(next_steps) {
-  <% if @down_count==0 -%>
-    $('#no_todos_in_view').slideDown(400, function(){ next_steps.go(); });
-  <% else -%>
-    $('#no_todos_in_view').slideUp(400, function(){ next_steps.go(); });
-  <% end -%>
-}
-
+      });
+      <%= show_empty_message_in_source_container -%>
+    <% else
+      # remove only the todo
+    -%>
+      <%= show_empty_message_in_source_container %>
+      $('#<%=dom_id(@todo)%>').slideUp(400, function() {
+        $('#<%=dom_id(@todo)%>').remove();
+        next_steps.go();
+    });
+    <% end -%>
+  },
+  add_to_completed_container: function(next_steps) {
+    <% unless current_user.prefs.hide_completed_actions? -%>
+      $('#<%= item_container_id(@todo) %>_items').prepend(<%=object_name%>.html_for_todo());
+      $("#completed_container-empty-d").slideUp(100);
+      <%=object_name%>.highlight_updated_todo(next_steps);
+    <% end -%>
+  },
+  replace_todo: function(next_steps) {
+    $('#<%= dom_id(@todo) %>').html(<%=object_name%>.html_for_todo());
+    next_steps.go();
+  },
+  add_todo_to_container: function(next_steps) {
+    $('#<%= item_container_id(@todo) %>_items').append(<%=object_name%>.html_for_todo());
+    <% if should_make_context_visible -%>
+      $('#<%= item_container_id(@todo) %>').slideDown(500, function() {
+        $("#<%= empty_container_msg_div_id %>").slideUp(100);
+        <%=object_name%>.highlight_updated_todo(next_steps);
+      });
+    <% else -%>
+      $("#<%= empty_container_msg_div_id(@todo) %>").slideUp(100);
+      <%=object_name%>.highlight_updated_todo(next_steps);
+    <% end -%>
+    <% if @completed_count == 0 -%>
+      $("#completed_container-empty-d").slideDown(100);
+    <% end -%>
+  },
+  add_new_recurring_todo: function(next_steps) {
+    <%  # show new todo if the completed todo was recurring
+      if @todo.from_recurring_todo?
+        unless @new_recurring_todo.nil? || (@new_recurring_todo.deferred? && !source_view_is(:deferred)) -%>
+        $('#<%= item_container_id(@new_recurring_todo) %>_items').append(<%=object_name%>.html_for_recurring_todo());
+        $('#c<%= @new_recurring_todo.context_id %>').slideDown(500, function() {
+          <%=object_name%>.highlight_updated_recurring_todo(next_steps);
+        });
+     <% else
+          if @todo.recurring_todo.todos.active.count(:all) == 0 && @new_recurring_todo.nil? -%>
+            TracksPages.page_notify('notice', "<%=t('todos.recurrence_completed')%>", 6);
+     <%   end -%>
+          next_steps.go();
+     <% end
+      else -%>
+        next_steps.go();
+   <% end -%>
+  },
+  update_empty_container: function(next_steps) {
+    <% if @down_count==0 -%>
+      $('#no_todos_in_view').slideDown(400, function(){ next_steps.go(); });
+    <% else -%>
+      $('#no_todos_in_view').slideUp(400, function(){ next_steps.go(); });
+    <% end -%>
+  },
 <% if @new_recurring_todo # hide js if @new_recurring_todo is not there-%>
-function highlight_updated_recurring_todo(next_steps) {
-  TodoItems.highlight_todo('#<%= dom_id(@new_recurring_todo)%>');
-  next_steps.go();
-}
+  highlight_updated_recurring_todo: function(next_steps) {
+    TodoItems.highlight_todo('#<%= dom_id(@new_recurring_todo)%>');
+    next_steps.go();
+  },
 <% end -%>
-
-function highlight_updated_todo(next_steps) {
-  TodoItems.highlight_todo('#<%= dom_id(@todo)%>');
-  next_steps.go();
-}
-
-function activate_pending_todos(next_steps) {
- <% # Activate pending todos that are successors of the completed
-    if @pending_to_activate
-      # do not render the js in case of an error or if no todos to activate
-      @pending_to_activate.each do |t|
-        html = escape_javascript(render(:partial => t, :locals => { :parent_container_type => parent_container_type }))
-        # only project and tag view have a deferred/blocked container
-        if source_view_is_one_of(:project,:tag) -%>
+  highlight_updated_todo: function(next_steps) {
+    TodoItems.highlight_todo('#<%= dom_id(@todo)%>');
+    next_steps.go();
+  },
+  activate_pending_todos: function(next_steps) {
+   <% # Activate pending todos that are successors of the completed
+      if @pending_to_activate
+        # do not render the js in case of an error or if no todos to activate
+        @pending_to_activate.each do |t|
+          html = escape_javascript(render(:partial => t, :locals => { :parent_container_type => parent_container_type }))
+          # only project and tag view have a deferred/blocked container
+          if source_view_is_one_of(:project,:tag) -%>
+            $('#<%= dom_id(t) %>').slideUp(400, function() {
+              $('#<%= dom_id(t) %>').remove();
+              $('#<%= item_container_id(t) %>_items').append("<%= html  %>");
+              <%= "$('#deferred_pending_container-empty-d').show();".html_safe if @remaining_deferred_or_pending_count==0 -%>
+            });
+   <%     else -%>
+            $('#<%= item_container_id(t) %>_items').append("<%= html%>");
+   <%     end -%>
+          TodoItems.highlight_todo('#<%= dom_id(t)%>');
+   <%   end -%>
+   <% end -%>
+    next_steps.go();
+  },
+  block_predecessors: function(next_steps) {
+   <% # Block active todos that are successors of the uncompleted
+      if @saved && @active_to_block
+        # do not render the js in case of an error or if no todos to block
+        @active_to_block.each do |t| %>
           $('#<%= dom_id(t) %>').slideUp(400, function() {
             $('#<%= dom_id(t) %>').remove();
-            $('#<%= item_container_id(t) %>_items').append("<%= html  %>");
-            <%= "$('#deferred_pending_container-empty-d').show();".html_safe if @remaining_deferred_or_pending_count==0 -%>
+   <%       if source_view_is(:project) or source_view_is(:tag) # Insert it in deferred/pending block if existing -%>
+              $('#<%= item_container_id(t) %>_items').append("<%= escape_javascript(render(:partial => t, :locals => { :parent_container_type => parent_container_type }))%>");
+              TodoItems.highlight_todo('#<%= dom_id(t)%>');
+   <%       end -%>
           });
- <%     else -%>
-          $('#<%= item_container_id(t) %>_items').append("<%= html%>");
- <%     end -%>
-        TodoItems.highlight_todo('#<%= dom_id(t)%>');
- <%   end -%>
- <% end -%>
-  next_steps.go();
-}
-
-function block_predecessors(next_steps) {
- <% # Block active todos that are successors of the uncompleted
-    if @saved && @active_to_block
-      # do not render the js in case of an error or if no todos to block
-      @active_to_block.each do |t| %>
-        $('#<%= dom_id(t) %>').slideUp(400, function() {
-          $('#<%= dom_id(t) %>').remove();
- <%       if source_view_is(:project) or source_view_is(:tag) # Insert it in deferred/pending block if existing -%>
-            $('#<%= item_container_id(t) %>_items').append("<%= escape_javascript(render(:partial => t, :locals => { :parent_container_type => parent_container_type }))%>");
-            TodoItems.highlight_todo('#<%= dom_id(t)%>');
- <%       end -%>
-        });
- <%   end -%>
- <% end -%>
-  next_steps.go();
-}
-
-function regenerate_predecessor_family(next_steps) {
-<%
-if @predecessors
-  parents = @predecessors.to_a
-  until parents.empty?
-    parent = parents.pop
-    parents += parent.predecessors -%>
-    $('#<%= dom_id(parent) %>').html("<%= escape_javascript(render(:partial => parent, :locals => { :parent_container_type => parent_container_type })) %>");
-<%end
-end
--%>
-  next_steps.go();
-}
-
-function html_for_recurring_todo() {
-  <%-
-    js = @new_recurring_todo ? escape_javascript(render(:partial => @new_recurring_todo, :locals => { :parent_container_type => parent_container_type })) : ""
-  -%>
-  return "<%= js %>";
-}
-
-function html_for_todo() {
-  <%-
-    js = ""
-    if !source_view_is(:done)
-      js = escape_javascript(render(
-        :partial => @todo,
-        :locals => {
-          :parent_container_type => parent_container_type,
-          :suppress_project => source_view_is(:project),
-          :suppress_context => source_view_is(:context)
-        }
-      ))
+   <%   end -%>
+   <% end -%>
+    next_steps.go();
+  },
+  regenerate_predecessor_family: function(next_steps) {
+    <%
+    if @predecessors
+      parents = @predecessors.to_a
+      until parents.empty?
+        parent = parents.pop
+        parents += parent.predecessors -%>
+        $('#<%= dom_id(parent) %>').html("<%= escape_javascript(render(:partial => parent, :locals => { :parent_container_type => parent_container_type })) %>");
+    <%end
     end
-  -%>
-  return "<%= js %>";
+    -%>
+    next_steps.go();
+  },
+  html_for_recurring_todo: function() {
+    <%-
+      js = @new_recurring_todo ? escape_javascript(render(:partial => @new_recurring_todo, :locals => { :parent_container_type => parent_container_type })) : ""
+    -%>
+    return "<%= js %>";
+  },
+  html_for_todo: function() {
+    <%-
+      js = ""
+      if !source_view_is(:done)
+        js = escape_javascript(render(
+          :partial => @todo,
+          :locals => {
+            :parent_container_type => parent_container_type,
+            :suppress_project => source_view_is(:project),
+            :suppress_context => source_view_is(:context)
+          }
+        ))
+      end
+    -%>
+    return "<%= js %>";
+  }
 }
 
+<%=object_name%>.animate();
 <% end -%>

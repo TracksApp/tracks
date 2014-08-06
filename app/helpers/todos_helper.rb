@@ -392,11 +392,11 @@ module TodosHelper
     return 'context'
   end
 
-  def render_animation(animation)
+  def render_animation(animation, object_name=nil)
     html = ""
     animation.each do |step|
       if step.present?
-        html += step + "({ go: function() {\r\n"
+        html += (object_name.nil? ? step : "#{object_name}.#{step}") + "({ go: function() {\r\n"
       end
     end
     html += "}}) " * animation.size
