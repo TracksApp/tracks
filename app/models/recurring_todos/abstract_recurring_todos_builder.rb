@@ -69,21 +69,22 @@ module RecurringTodos
 
     def filter_generic_attributes(attributes)
       return Tracks::AttributeHandler.new(@user, {
-        recurring_period: attributes[:recurring_period],
-        description:      attributes[:description],
-        notes:            attributes[:notes],
-        tag_list:         tag_list_or_empty_string(attributes),
-        start_from:       attributes[:start_from],
-        end_date:         attributes[:end_date],
-        ends_on:          attributes[:ends_on],
-        target:           attributes[:target],
-        project:          attributes[:project],
-        context:          attributes[:context],
-        project_id:       attributes[:project_id],
-        context_id:       attributes[:context_id],
-        target:           attributes[:recurring_target],
-        show_from_delta:  attributes[:recurring_show_days_before],
-        show_always:      attributes[:recurring_show_always]
+        recurring_period:     attributes[:recurring_period],
+        description:          attributes[:description],
+        notes:                attributes[:notes],
+        tag_list:             tag_list_or_empty_string(attributes),
+        start_from:           attributes[:start_from],
+        end_date:             attributes[:end_date],
+        ends_on:              attributes[:ends_on],
+        number_of_occurences: attributes[:number_of_occurences],
+        target:               attributes[:target],
+        project:              attributes[:project],
+        context:              attributes[:context],
+        project_id:           attributes[:project_id],
+        context_id:           attributes[:context_id],
+        target:               attributes[:recurring_target],
+        show_from_delta:      attributes[:recurring_show_days_before],
+        show_always:          attributes[:recurring_show_always]
       })
     end
 

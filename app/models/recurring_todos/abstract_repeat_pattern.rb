@@ -32,6 +32,10 @@ module RecurringTodos
       get :show_from_delta
     end
 
+    def number_of_occurences
+      get :number_of_occurences
+    end
+
     def recurring_target_as_text
       target == 'due_date' ? I18n.t("todos.recurrence.pattern.due") : I18n.t("todos.recurrence.pattern.show")
     end

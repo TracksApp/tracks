@@ -73,6 +73,24 @@ module RecurringTodos
       assert pattern.valid?, "should be valid"
     end
 
+    def test_validation_on_number_of_occurences
+      attributes = {
+        'weekly_return_monday'       => 'm',                 # weekly specific
+        'weekly_every_x_week'        => 1,
+        'recurring_show_always'      => false,
+        'recurring_show_days_before' => 5,
+        'ends_on' => 'ends_on_number_of_times',
+      }
+
+#      pattern = create_recurring_todo(attributes)
+#      assert !pattern.valid?, "number_of_occurences should be filled"
+
+      attributes['number_of_occurences']=5
+      pattern = create_recurring_todo(attributes)
+      assert pattern.valid?, "should be valid"
+    end
+
+
     def test_end_date_on_recurring_todo
       rt = recurring_todos(:call_bill_gates_every_day)
 
