@@ -410,7 +410,8 @@ var TodoItems = {
 
         if (contexts) {
           for (var i=0; i<contexts.length; i++) {
-            if (contexts[i].value === givenContextName) {
+            // do case insensitive check, so Home == home
+            if (contexts[i].value.toLowerCase() === givenContextName.toLowerCase()) {
               return true;
             }
           }
