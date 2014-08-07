@@ -49,8 +49,13 @@ en:
         due: Due
         tags: Tags
       user:
-        last_name: Last name
+        auth_type: Auth type
+        display_name: Display name
         first_name: First name
+        last_name: Last name
+        login: Login
+        open_id_url: OpenID URL
+        password: Password
       preference:
         show_hidden_projects_in_sidebar: Show hidden projects in sidebar
         date_format: Date format
@@ -338,9 +343,14 @@ en:
       active: Active contexts
       closed: Closed contexts
     projects:
-      hidden: Hidden projects
       active: Active projects
+      blocked: Blocked
       closed: Closed projects
+      completed: Completed
+      current: Current
+      hidden: Hidden projects
+      review: Review
+      stalled: Stalled
     hidden_plural: Hidden
     completed: Completed
     completed_plural: Completed
@@ -403,7 +413,7 @@ en:
       completed_tasks_title: Completed
       home: Home
       export: Export
-      import: Import 
+      import: Import
       contexts_title: Contexts
       calendar: Calendar
       projects_title: Projects
