@@ -45,10 +45,15 @@ group :development do
   gem "spring"
   gem "spring-commands-cucumber"
   gem "yard"
-  gem 'tolk', '>=1.5.0'
+
+  # tolk is not completly migrated to rails 4 yet, so use master of AlexStein
+  # to get a working version 
+  gem 'tolk', github: "AlexStein/tolk" 
+
   gem "bullet"
   gem "rack-mini-profiler"
   gem "rack-dev-mark"
+  gem "activerecord-deprecated_finders"
 end
 
 group :test do

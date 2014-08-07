@@ -119,12 +119,12 @@ fr:
     months: Mois
     next: Suivant
     none: Aucun
-    not_available_abbr: n/a
     note:
       one: 1 note
       other: "%{count} notes"
       zero: non notes
     notes: Notes
+    not_available_abbr: n/a
     numbered_step: "Étape %{number}"
     ok: OK
     optional: optionnel
@@ -298,8 +298,8 @@ fr:
       invalid: est invalide
       less_than: doit être inférieur à %{count}
       less_than_or_equal_to: doit être inférieur ou égal à %{count}
-      not_a_number: n'est pas un nombre
       not_an_integer: doit être un entier
+      not_a_number: n'est pas un nombre
       odd: doit être impair
       too_long: est trop long (%{count} caractères maximum)
       too_short: est trop court (%{count} caractères minimum)
@@ -324,9 +324,9 @@ fr:
     notice_incomplete_only: 'N.B. : Les flux ne montrent que les actions incomplètes,
       sauf indication contraire'
     plain_text_feed: Flux texte
+    projects_and_actions: Projets actifs et leurs actions
     project_centric: Flux des actions incomplètes d'un projet spécifique
     project_needed: Il faut au moins un projet pour le flux
-    projects_and_actions: Projets actifs et leurs actions
     rss_feed: Flux RSS
     select_feed_for_context: Selectionner un flux pour ce contexte
     select_feed_for_project: Selectionner le flux pour ce projet
@@ -404,11 +404,11 @@ fr:
     cas_no_user_found: Bonjour, %{username} ! Vous n'avez  pas de compte sur Tracks.
     cas_signup_link: Demander un compte
     cas_username_not_found: Désolé, aucun utilisateur avec ce nom CAS n'existe (%{username})
-    log_in_again: Se reconnecter
     logged_out: Vous avez été déconnecté de Tracks.
     login_cas: Aller au CAS
     login_standard: retourner à l'écran de connexion standard
     login_with_openid: se connecter avec un OpenID
+    log_in_again: Se reconnecter
     mobile_use_openid: "... ou ce connecter avec un OpenID"
     openid_identity_url_not_found: Désolé, aucun utilisateur avec cette identité URL
       n'existe (%{identity_url})
@@ -438,18 +438,18 @@ fr:
       error_context_not_associated: L'identifiant contexte %{context} n'est pas associé
         à l'identifiant utilisateur %{user}.
   notes:
+    deleted_note: Supprimer la note «?%{id}?»
     delete_confirmation: "Êtes-vous sur de vouloir supprimer la note «?%{id}?» ?"
     delete_item_title: Supprimer l'élément
     delete_note_confirm: "Êtes-vous sur de vouloir supprimer la note «?%{id}?» ?"
     delete_note_title: Supprimer la note «?%{id}?»
-    deleted_note: Supprimer la note «?%{id}?»
     edit_item_title: Modifier l'élément
     in_project: 'Dans :'
-    no_notes_available: 'Il n''y a actuellement aucune note : ajouter des notes aux
-      projets sur les pages individuelles des projets.'
     note_header: Note %{id}
     note_link_title: Voir note %{id}
     note_location_link: 'ln:'
+    no_notes_available: 'Il n''y a actuellement aucune note : ajouter des notes aux
+      projets sur les pages individuelles des projets.'
     show_note_title: Voir note
   number:
     currency:
@@ -501,7 +501,7 @@ fr:
       à nouveau.
     show_number_completed: Montrer %{number} items réalisés
     sms_context_none: Aucun
-    staleness_starts_after: "\"date de fraicher\" dépassée à près %{days} days"
+    staleness_starts_after: '"date de fraicher" dépassée à près %{days} days'
     tabs:
       authentication: Authentification
       date_and_time: Date et heure
@@ -536,18 +536,18 @@ fr:
     list_completed_projects: TRACKS::Liste des projets achevés
     list_projects: TRACKS::Liste des projets
     list_reviews: TRACKS::Revue
+    notes: Notes
+    notes_empty: Il n'y a pas de notes pour ce projet
     no_default_context: Ce projet n'a pas de contexte par défaut
     no_last_completed_projects: Pas de projets terminés trouvés
     no_last_completed_recurring_todos: Non terminé actions répétitives trouvées
     no_notes_attached: Il n'y a actuellement aucune note attachée à ce projet
     no_projects: Il n'y a actuellement aucun projet
-    notes: Notes
-    notes_empty: Il n'y a pas de notes pour ce projet
     page_title: 'TRACKS::Projet : %{project}'
     project_saved_status: Projet sauvegardé
     project_state: Le projet est %{state}
-    set_default_tags_notice: Définir les étiquettes par défaut du projet à %{default_tags}
     settings: Paramètres
+    set_default_tags_notice: Définir les étiquettes par défaut du projet à %{default_tags}
     show_form: Ajouter un projet
     show_form_title: Créer un nouveau projet
     state: Le projet est %{state}
@@ -561,8 +561,8 @@ fr:
     with_no_default_tags: et sans étiquettes par défaut
   search:
     contexts_matching_query: Contextes correspondant à la requête
-    no_results: Aucun résultat à votre recherche.
     notes_matching_query: Notes correspondant à la requête
+    no_results: Aucun résultat à votre recherche.
     projects_matching_query: Projets correspondant à la requête
     tags_matching_query: "Étiquettes correspondant à la requête"
     todos_matching_query: "À faire correspondant à la requête"
@@ -596,6 +596,10 @@ fr:
     blocked_plural: Bloquée
     completed: Completé
     completed_plural: Completés
+    contexts:
+      active: Contextes actifs
+      closed: Contextes fermés
+      hidden: Contextes cachés
     current: Up-to-date
     current_plural: Up-to-date
     hidden: Caché
@@ -606,13 +610,7 @@ fr:
     stalled_plural: Bloqués
     visible: Visible
     visible_plural: Visibles
-    contexts:
-      active: Contextes actifs
-      closed: Contextes fermés
-      hidden: Contextes cachés
   stats:
-    action_completion_time_title: Temps de réalisation (toutes les actions réalisées)
-    action_selection_title: TRACKS::Selection action
     actions: Actions
     actions_30days_title: Actions des 30 derniers jours
     actions_actions_avg_created_30days: Dans les 30 jours vous avez créer en moyenne
@@ -632,15 +630,17 @@ fr:
       number_of_actions: Certain nombre d'actions
     actions_dow_30days_title: Jour de la semaine (les 30 derniers jours)
     actions_further: et plus
+    actions_lastyear_title: Actions des 12 derniers mois
     actions_last_year: Actions des dernières années
     actions_last_year_legend:
       months_ago: Mois précédents
       number_of_actions: Nombre d'actions
-    actions_lastyear_title: Actions des 12 derniers mois
     actions_min_completion_time: Le temps minimum de réalisation est %{time}.
     actions_min_max_completion_days: Le nombre min/max de jours pour réaliser est
       %{min}/%{max}.
     actions_selected_from_week: Actions selectionnées depuis la semaine
+    action_completion_time_title: Temps de réalisation (toutes les actions réalisées)
+    action_selection_title: TRACKS::Selection action
     click_to_return: Cliquer %{link} pour revenir à la page des statistiques
     click_to_return_link: ici
     click_to_show_actions_from_week: Cliquer %{link} pour voir les actions depuis
@@ -688,13 +688,13 @@ fr:
     spread_of_actions_for_all_context: Vue des actions pour tous les contextes
     spread_of_running_actions_for_visible_contexts: Vue des actions en cours pour
       tous les contextes
+    tags: "Étiquettes"
     tag_cloud_90days_description: Nuage d'étiquettes correspondant aux actions créées
       ou réalisées lors des 90 derniers jours.
     tag_cloud_90days_title: "Étiquettes pour les actions des 90 derniers jours"
     tag_cloud_description: Nuage d'étiquettes correspondant à la totalité des actions
       (réalisées, en cours, visibles ou cachées).
     tag_cloud_title: "Étiquettes pour toutes les actions"
-    tags: "Étiquettes"
     time_of_day: Heure (toutes les actions)
     time_of_day_legend:
       number_of_actions: Nombre d'actions
@@ -710,8 +710,8 @@ fr:
     top5_visible_contexts_with_incomplete_actions: Top 5 des contextes visibles avec
       des actions en cours
     totals: Totaux
-    totals_action_count: vous avez un total de %{count} actions
     totals_actions_completed: dont %{count} sont réalisées.
+    totals_action_count: vous avez un total de %{count} actions
     totals_active_project_count: De ceux-ci %{count} sont des projets actifs
     totals_blocked_actions: "%{count} dépendent de la réalisation de leurs actions"
     totals_completed_project_count: et %{count} sont des projets réalisés.
@@ -754,14 +754,14 @@ fr:
       été marquée comme <strong>%{completed} a cause d'une erreur sur le serveur </strong>
     action_saved: Action sauvegardée
     action_saved_to_tickler: Action sauvegardée dans l'échéancier
-    add_another_dependency: Ajouter une autre dépendance
-    add_new_recurring: Ajouter une nouvelle action récurrente
     added_dependency: "%{dependency} ajoutée comme dépendance"
     added_new_context: Nouveau context ajouté
     added_new_next_action: Nouvelle action suivante ajoutée
     added_new_next_action_plural: Nouvelles actions suivantes ajoutées
     added_new_next_action_singular: Nouvelle action suivante ajoutée
     added_new_project: Nouveau projet ajouté
+    add_another_dependency: Ajouter une autre dépendance
+    add_new_recurring: Ajouter une nouvelle action récurrente
     all_completed: Toutes les actions réalisées
     all_completed_here: ici
     all_completed_tagged_page_title: TRACKS::Toutes les tâches accomplies par marquer
@@ -798,18 +798,18 @@ fr:
     confirm_delete: "Êtes-vous sûr de vouloir supprimer l'action '%{description}' ?"
     context_changed: Contexte changé en %{name}
     convert_to_project: Faire projet
+    deferred_actions_with: Action reportées avec l'étiquette '%{tag_name}'
+    deferred_pending_actions: Actions reportées ou en attente
+    deferred_tasks_title: TRACKS::Échéancier
     defer_date_after_due_date: La date de report est après la date d'échéance. Veuillez
       ajuster la date d'écheance avant de reporter.
     defer_x_days:
       one: Reporter d'1 jour
       other: Report de %{count} jours
-    deferred_actions_with: Action reportées avec l'étiquette '%{tag_name}'
-    deferred_pending_actions: Actions reportées ou en attente
-    deferred_tasks_title: TRACKS::Échéancier
     delete: Supprimer
+    deleted_success: Action supprimée avec succès.
     delete_action: Supprimer action
     delete_recurring_action_title: Supprimer l'action récurrente
-    deleted_success: Action supprimée avec succès.
     depends_on: Dépend de
     depends_on_separate_with_commas: Dépend de (séparer avec des virgules)
     done: Terminé ?
@@ -834,11 +834,11 @@ fr:
     error_starring_recurring: Impossible d'actionner l'étoile de la tache récurrente
       \'%{description}\'
     error_toggle_complete: Impossible de marquer cette tache comme complétée
-    feed_title_in_context: dans le contexte '%{context}'
-    feed_title_in_project: dans le projet '%{project}'
     feeds:
       completed: 'Complété : %{date}'
       due: "Échéance : %{date}"
+    feed_title_in_context: dans le contexte '%{context}'
+    feed_title_in_project: dans le projet '%{project}'
     has_x_pending:
       one: A une action en attente
       other: A %{count} actions en attente
@@ -853,8 +853,6 @@ fr:
       tâche récurrente
     new_related_todo_created_short: "à créé une nouvelle tâche"
     new_related_todo_not_created_short: n'a pas créé la tâche
-    next_action_description: Description de la prochaine action
-    next_action_needed: Vous devez soumettre au moins une prochaine action
     next_actions_description: 'Filtre :'
     next_actions_description_additions:
       completed: dans les %{count} derniers jours
@@ -870,6 +868,8 @@ fr:
       completed: Actions complétées
       due_today: "échéance aujourd'hui"
       due_within_a_week: "échéance dans la semaine"
+    next_action_description: Description de la prochaine action
+    next_action_needed: Vous devez soumettre au moins une prochaine action
     no_actions_due_this_week: Pas actions à faire cette semaine
     no_last_completed_actions: Aucune action achevée trouvée
     no_project: "--Pas de projet--"
@@ -935,21 +935,21 @@ fr:
       weekly_every_number_week: Returns every %{number} week on
       weekly_options: Paramètres pour les actions récurrentes hebdomadaires
       yearly: Tous les ans
-      yearly_every_x_day: Chaque %{month} %{day}
       yearly_every_xth_day: Chaque %{day} %{day_of_week} de %{month}
+      yearly_every_x_day: Chaque %{month} %{day}
       yearly_options: Paramètres pour les actions récurrentes annuelles
     recurrence_completed: Il n'y a pas d'action suivante après l'action récurrente
       que vous venez de terminer. Fin de la récurrence
     recurrence_period: Periode de récurrence
+    recurring_actions_title: TRACKS::Actions récurrentes
     recurring_action_deleted: L'action a été supprimée. Parce que cette action est
       récurrente, une nouvelle action à été ajoutée
     recurring_action_saved: Action récurrente sauvée
-    recurring_actions_title: TRACKS::Actions récurrentes
     recurring_deleted_success: L'action récurrente a été supprimée avec succès.
     recurring_pattern_removed: La périodicité est retiré de %{count}
     recurring_todos: Tâches récurrentes
-    remove_dependency: Enlever les dépendances (l'action n'est pas supprimée)
     removed_predecessor: Suppression de %{successor} comme dépendance de %{predecessor}
+    remove_dependency: Enlever les dépendances (l'action n'est pas supprimée)
     scheduled_overdue: Programmée pour apparaitre il y a %{days} jours
     see_all_completed: Vous pouvez voir toutes les actions accomplies %{link}
     set_to_pending: "%{task} mise en attente"
@@ -978,11 +978,11 @@ fr:
   users:
     account_signup: Créer un compte
     auth_change_submit: Modifier le type d'authenfication
+    auth_type_updated: Type d'authentification modifié.
     auth_type_update_error: 'Un problème est survenu lors de la modification du type
       d''authentification : %{error_messages}'
-    auth_type_updated: Type d'authentification modifié.
-    change_auth_type_title: TRACKS::Modifier le type d'authentification
     change_authentication_type: Modifier le type d'authentification
+    change_auth_type_title: TRACKS::Modifier le type d'authentification
     change_password_prompt: Entrez votre nouveau mot de passe dans les champs ci-dessous
       et cliquez sur «?Modifier mot de passe?» pour remplacer votre mot de passe actuel
       par le nouveau.
