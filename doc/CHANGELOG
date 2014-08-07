@@ -20,11 +20,12 @@ New and changed features
   the tickler and the context page
 * You can now change the state of a context to closed
 * Czech locale has been renamed from cz to cs to follow ISO standards
+* Russian locale was updated by Alex Stein
 * The toggle-notes and toggle-collapsed-containers have been moved into the view
   menu
 * The environment must now be specified during asset precompilation.
 * Bugfixes
-* Tracks is tested on Ruby 1.9.3, 2.0.0, and 2.1
+* Tracks is tested on Ruby 1.9.3, 2.0.0, and 2.1. Ruby 1.8.x is not supported anymore
 
 Removed features
 * Ruby 1.8.x is no longer supported
