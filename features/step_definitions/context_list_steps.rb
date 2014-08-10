@@ -61,6 +61,7 @@ When /^I edit the state of context "(.*?)" to closed$/ do |context_name|
 end
 
 Then /^context "([^"]*)" should be above context "([^"]*)"$/ do |context_high, context_low|
+  sleep 0.2
   expect(context_list_find_index(context_high)).to be < context_list_find_index(context_low)
 end
 

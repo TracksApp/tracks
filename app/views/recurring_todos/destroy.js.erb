@@ -1,9 +1,9 @@
 <%- if @saved -%>
   show_empty_messages();
-  TracksPages.page_notify('notice', '<%=  escape_javascript(t('todos.recurring_deleted_success') + t('todos.recurring_pattern_removed', :count => pluralize(@number_of_todos,t('common.todo')))) %>', 5);
+  TracksPages.page_inform('<%=  escape_javascript(t('todos.recurring_deleted_success') + t('todos.recurring_pattern_removed', :count => pluralize(@number_of_todos,t('common.todo')))) %>');
   remove_recurring_todo_from_page();
 <%- else -%>
-  TracksPages.page_notify('error', '<%= t('todos.error_deleting_recurring', :description => @recurring_todo.description) %>', 8);
+  TracksPages.page_error('<%= t('todos.error_deleting_recurring', :description => @recurring_todo.description) %>');
 <%- end -%>
 
 function show_empty_messages() {

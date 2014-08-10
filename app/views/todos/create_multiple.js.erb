@@ -15,7 +15,7 @@
   }
 
 <% else -%>
-  TracksPages.page_notify('notice', "<%=@status_message%>", 5);
+  TracksPages.page_inform("<%=@status_message%>");
   hide_empty_message();
   TracksPages.hide_errors();
   TracksPages.set_page_badge(<%= @down_count %>);
@@ -49,10 +49,10 @@
   }
 
   function add_todo_to_existing_context() {
-    <%
+  <%
     @todos.each do |todo|
       if should_show_new_item(todo)
-        html = escape_javascript(render(:partial => todo, :locals => { :parent_container_type => parent_container_type, :source_view => @source_view }))
+        html = js_render(todo, { :parent_container_type => parent_container_type, :source_view => @source_view })
         -%>
         $('#<%= empty_container_msg_div_id(todo) %>').hide();
         $('#<%= item_container_id(todo) %>').append('<%= html %>');
@@ -60,11 +60,11 @@
           $('#<%= dom_id(todo) %>').effect('highlight', {}, 2000 );
         });
       <% end %>
-    <% end %>
+  <% end %>
   }
 
   function html_for_new_context() {
-    return "<%= @new_context_created ? escape_javascript(render(:partial => @todo.context, :locals => { :settings => {:collapsible => true} })) : "" %>";
+    return "<%= @new_context_created ? js_render(@todo.context, { :settings => {:collapsible => true} }) : "" %>";
   }
 
 <% end -%>

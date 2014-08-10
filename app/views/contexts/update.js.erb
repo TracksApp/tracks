@@ -7,11 +7,11 @@ var <%=object_name%> = {
       TracksPages.show_edit_errors(<%=object_name%>.html_for_error_messages());
     },
     html_for_error_messages: function() {
-      return "<%= escape_javascript(get_list_of_error_messages_for(@context)) %>";
+      return "<%= js_error_messages_for(@context) %>";
     }
   <% else -%>
     animate: function() {
-      TracksPages.page_notify('notice', '<%= t('contexts.save_status_message') %>', 5);
+      TracksPages.page_inform('<%= t('contexts.save_status_message') %>');
       <% if @state_changed -%>
         <%=object_name%>.remove_and_re_add_context();
         <%=object_name%>.update_container_states();
@@ -42,7 +42,7 @@ var <%=object_name%> = {
       ContextListPage.update_all_states_count(<%=@active_contexts.count%>, <%=@hidden_contexts.count%>, <%=@closed_contexts.count%>);
     },
     html_for_context_listing: function() {
-      return "<%= escape_javascript(render(:partial => 'context_listing', :object => @context))%>";
+      return "<%= js_render('context_listing', {}, @context)%>";
     }
   <% end -%>
 }

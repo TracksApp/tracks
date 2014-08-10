@@ -1,20 +1,19 @@
 <% if !@saved
-     if @predecessor.completed? -%>
-  TracksPages.page_notify('error', "<%= t('todos.cannot_add_dependency_to_completed_todo') %>", 8);
-  $('#<%=dom_id(@todo)%>').html(html_for_todo());
-<%   else -%>
-  TracksPages.page_notify('error', "<%= t('todos.unable_to_add_dependency') %>", 8);
-<%   end
+    if @predecessor.completed? -%>
+      TracksPages.page_error("<%= t('todos.cannot_add_dependency_to_completed_todo') %>");
+      $('#<%=dom_id(@todo)%>').html(html_for_todo());
+<%  else -%>
+      TracksPages.page_error("<%= t('todos.unable_to_add_dependency') %>");
+<%  end
    else -%>
   remove_successor_from_page();
   replace_updated_predecessor();
   regenerate_predecessor_family();
   <%= "show_in_tickler_box();".html_safe if source_view_is_one_of :project, :tag, :context %>
-  TracksPages.page_notify('notice', "<%= @status_message %>", 5);
+  TracksPages.page_inform("<%= @status_message %>");
 
 function remove_successor_from_page() {
-  <% # TODO: last todo in context --> remove context??
-  -%>
+  <% # TODO: last todo in context --> remove context?? -%>
   $('#<%=dom_id(@todo)%>').remove();
 }
 
@@ -33,13 +32,12 @@ function regenerate_predecessor_family() {
   until parents.empty?
     parent = parents.pop
     parents += parent.predecessors -%>
-    $('#<%= dom_id(parent) %>').html("<%= escape_javascript(render(:partial => parent, :locals => { :parent_container_type => parent_container_type })) %>");
-<%end
--%>
+    $('#<%= dom_id(parent) %>').html("<%= js_render(parent, { :parent_container_type => parent_container_type }) %>");
+<%end-%>
 }
 
 function html_for_predecessor() {
-  return "<%= escape_javascript(render(:partial => @predecessor, :locals => { :parent_container_type => parent_container_type })) %>";
+  return "<%= js_render(@predecessor, { :parent_container_type => parent_container_type }) %>";
 }
 
 <% end # if !@saved
@@ -48,6 +46,5 @@ function html_for_predecessor() {
 %>
 
 function html_for_todo() {
-  return "<%= escape_javascript(render(:partial => @todo, :locals => { :parent_container_type => parent_container_type })) %>";
+  return "<%= js_render(@todo, { :parent_container_type => parent_container_type }) %>";
 }
-

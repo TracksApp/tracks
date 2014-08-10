@@ -7,13 +7,13 @@ var <%=object_name%> = {
       TracksPages.show_edit_errors(<%=object_name%>.html_for_error_messages());
     },
     html_for_error_messages: function() {
-      return "<%= escape_javascript(get_list_of_error_messages_for(@project)) %>";
+      return "<%= js_error_messages_for(@project) %>";
     }
   <%- 
     else
   -%>
     animate: function() {
-      TracksPages.page_notify('notice', '<%=t('projects.project_saved_status')%>', 5);
+      TracksPages.page_inform('<%=t('projects.project_saved_status')%>');
       <% if source_view_is_one_of(:project_list, :review) -%>
         <%=object_name%>.update_project_list_page();
       <% else # assume source_view :project -%>
@@ -84,13 +84,13 @@ var <%=object_name%> = {
     # render it into the function.
     -%>
     html_for_project_listing: function() {
-      return "<%= source_view_is_one_of(:project_list, :review) ? escape_javascript(render(:partial => 'project_listing', :object => @project, :locals=>{:suppress_drag_handle => source_view_is(:review)} )) : "" %>";
+      return "<%= source_view_is_one_of(:project_list, :review) ? js_render('project_listing', {:suppress_drag_handle => source_view_is(:review)}, @project) : "" %>";
     },
     html_for_sidebar: function() {
       return "<%= source_view_is(:project) ? escape_javascript(render(:file => 'sidebar/sidebar')) : "" %>";
     },
     html_for_project_settings: function() {
-      return "<%= source_view_is(:project) ? escape_javascript(render(:partial => 'project_settings', :object => @project )) : "" %>";
+      return "<%= source_view_is(:project) ? js_render('project_settings', {}, @project) : "" %>";
     }
   <% end # if @saved -%>
 }

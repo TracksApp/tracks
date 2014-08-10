@@ -764,6 +764,7 @@ en:
     list_projects: TRACKS::List Projects
     list_reviews: TRACKS::Review
     project_saved_status: Project saved
+    project_destroyed_status: "Deleted project '%{name}'"
     add_project: Add Project
     add_note: Add a note
     completed_tasks_title: "TRACKS::List Completed Actions in Project '%{project_name}'"
@@ -792,6 +793,7 @@ en:
     note_header: Note %{id}
     delete_note_confirm: "Are you sure that you want to delete the note '%{id}'?"
     in_project: "In: "
+    save_status_message: "Note %{id} was saved"    
   integrations:
     opensearch_description: Search in Tracks
     applescript_next_action_prompt: "Description of next action:"

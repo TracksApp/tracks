@@ -1,4 +1,4 @@
 <%
 # TODO: is this ever called?
 -%>
-TracksPages.page_notify('error', "<%=@error_message || t('common.server_error')%>", 8);
+TracksPages.page_error("<%=@error_message || t('common.server_error')%>");

@@ -242,8 +242,16 @@ module ApplicationHelper
     "#{name}_#{SecureRandom.hex(5)}"   
   end
 
-  def js_render(object, locals = {})
-    escape_javascript(render(partial: object, locals: locals)) 
+  def js_render(partial, locals = {}, object=nil)
+    if object
+      escape_javascript(render(partial: partial, locals: locals, object: object)) 
+    else
+      escape_javascript(render(partial: partial, locals: locals)) 
+    end
   end
+
+  def js_error_messages_for(object)
+    escape_javascript(get_list_of_error_messages_for(object))
+  end  
 
 end

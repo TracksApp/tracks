@@ -17,9 +17,9 @@ function clear_form() {
 }
 
 function html_for_error_messages() {
-  return "<%= escape_javascript(get_list_of_error_messages_for(@note)) %>";
+  return "<%= js_error_messages_for(@note) %>";
 }
 
 function html_for_note_summary() {
-  return "<%= @saved ? escape_javascript(render(:partial => 'notes_summary', :object => @note)) : "" %>";
+  return "<%= @saved ? js_render('notes_summary', {}, @note) : "" %>";
 }

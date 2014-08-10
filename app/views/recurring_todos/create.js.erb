@@ -1,5 +1,5 @@
 <% if @saved -%>
-  TracksPages.page_notify('notice', "<%=@status_message%>", 5);
+  TracksPages.page_inform("<%=@status_message%>");
   add_recurring_todo_to_active_container();
   replace_form_with_empty_form();
   $( "#new-recurring-todo" ).dialog( "close" );
@@ -13,19 +13,19 @@ function replace_form_with_empty_form() {
 }
 
 function add_recurring_todo_to_active_container() {
-    $('#recurring_todos_container').append(html_for_recurring_todo());
-    $('#<%= dom_id(@recurring_todo)%>').effect('highlight', {}, 2000 );
-    $('#recurring-todos-empty-nd').hide();
+  $('#recurring_todos_container').append(html_for_recurring_todo());
+  $('#<%= dom_id(@recurring_todo)%>').effect('highlight', {}, 2000 );
+  $('#recurring-todos-empty-nd').hide();
 }
 
 function html_for_recurring_todo() {
-  return "<%= @saved ? escape_javascript(render(:partial => @recurring_todo)) : "" %>";
+  return "<%= @saved ? js_render(@recurring_todo) : "" %>";
 }
 
 function html_for_empty_form() {
-  return "<%= @saved ? escape_javascript(render(:partial => 'recurring_todo_form')) : "" %>";
+  return "<%= @saved ? js_render('recurring_todo_form') : "" %>";
 }
 
 function html_for_error_messages() {
-  return "<%= escape_javascript(get_list_of_error_messages_for(@recurring_todo)) %>";
+  return "<%= js_error_messages_for(@recurring_todo) %>";
 }

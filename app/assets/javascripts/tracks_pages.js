@@ -19,6 +19,11 @@ var TracksPages = {
   update_sidebar: function(html) {
     $('#sidebar').html(html);
   },
+  slide_up_and_remove: function(selector) {
+    $(selector).slideUp(1000, function() { 
+      $(selector).remove();
+    });
+  },
   setup_nifty_corners: function() {
     Nifty("div#recurring_new_container","normal");
     Nifty("div#context_new_container","normal");
@@ -42,7 +47,7 @@ var TracksPages = {
     flash.fadeIn(fadein_duration).delay(show_duration).fadeOut(fadeout_duration);
   },
   page_error: function(message) {
-    TracksPages.page_notify('error', message, 5);
+    TracksPages.page_notify('error', message, 8);
   },
   page_inform: function(message) {
     TracksPages.page_notify('notice', message, 5);

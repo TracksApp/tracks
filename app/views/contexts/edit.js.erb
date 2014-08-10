@@ -18,7 +18,7 @@ var <%=object_name%> = {
     $('input.context-name').focus();
   },
   html_for_edit_form: function() {
-    return "<%= escape_javascript(render(:partial => 'context_form', :object => @context)) %>";
+    return "<%= js_render('context_form', {}, @context) %>";
   }
 };
 

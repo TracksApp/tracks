@@ -88,7 +88,7 @@ var <%= object_name %> = {
         });
      <% else
           if @todo.recurring_todo.todos.active.count(:all) == 0 && @new_recurring_todo.nil? -%>
-            TracksPages.page_notify('notice', "<%=t('todos.recurrence_completed')%>", 6);
+            TracksPages.page_inform("<%=t('todos.recurrence_completed')%>");
      <%   end -%>
           next_steps.go();
      <% end

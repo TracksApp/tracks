@@ -6,8 +6,14 @@
   object_name = unique_object_name_for("edit_project_#{@project.id}")
 -%>  
 var <%=object_name%> = {
-  html_for_edit_form: function() {
-    return "<%= escape_javascript(render(:partial => 'project_form', :object => @project)) %>";
+  animate: function() {
+    <%=object_name%>.replace_project_with_edit_form();
+  },
+  replace_project_with_edit_form: function() {
+    $('<%= selector_project %>').fadeOut(250, function() {
+      <%=object_name%>.show_edit_form();
+      <%=object_name%>.set_focus();
+    });
   },
   show_edit_form: function() {
     $('<%= selector_edit %>').html(<%=object_name%>.html_for_edit_form());
@@ -17,14 +23,8 @@ var <%=object_name%> = {
   set_focus: function() {
     $('input.project-name').focus();
   },
-  replace_project_with_edit_form: function() {
-    $('<%= selector_project %>').fadeOut(250, function() {
-      <%=object_name%>.show_edit_form();
-      <%=object_name%>.set_focus();
-    });
-  },
-  animate: function() {
-    <%=object_name%>.replace_project_with_edit_form();
+  html_for_edit_form: function() {
+    return "<%= js_render('project_form', {}, @project) %>";
   }
 }
 

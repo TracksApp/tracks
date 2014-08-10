@@ -1,10 +1,10 @@
 <%- if @saved -%>
   $( "#edit-recurring-todo" ).dialog( "close" );
-  TracksPages.page_notify('notice', text_for_status_message(), 5);
+  TracksPages.page_inform(text_for_status_message());
   replace_old_recurring_todo_with_updated();
-<%-  else -%>
+<%- else -%>
   TracksPages.show_edit_errors(html_for_error_messages());
-<%-  end -%>
+<%- end -%>
 
 function replace_old_recurring_todo_with_updated() {
   $('#<%=dom_id(@recurring_todo)%>').fadeOut(250, function() {
@@ -21,7 +21,7 @@ function replace_old_recurring_todo_with_updated() {
 }
 
 function html_for_updated_recurring_todo() {
-  return "<%= escape_javascript(render(:partial => @recurring_todo))%>";
+  return "<%= js_render(@recurring_todo)%>";
 }
 
 function text_for_status_message() {
@@ -34,5 +34,5 @@ function text_for_status_message() {
 }
 
 function html_for_error_messages() {
-  return "<%= escape_javascript(get_list_of_error_messages_for(@recurring_todo)) %>";
+  return "<%= js_error_messages_for(@recurring_todo) %>";
 }

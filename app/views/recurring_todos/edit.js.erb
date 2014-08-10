@@ -5,7 +5,7 @@ var <%=object_name%> = {
     $('#edit-recurring-todo').dialog( "open" );    
   },
   html_for_edit_form: function() {
-    return "<%= escape_javascript(render(:partial => 'edit_form')) %>";
+    return "<%= js_render('edit_form') %>";
   }
 }
 <%=object_name%>.animate();

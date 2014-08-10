@@ -1,11 +1,9 @@
 <% unless @saved -%>
-
   TracksPages.show_errors(html_for_error_messages());
 
   function html_for_error_messages() {
-    return "<%= escape_javascript(get_list_of_error_messages_for(@todo)) %>";
+    return "<%= js_error_messages_for(@todo) %>";
   }
-
 <% else
 
   animation = []
@@ -22,7 +20,7 @@
 -%>
 
   <%= render_animation(animation) %>
-  TracksPages.page_notify('notice', "<%=escape_javascript @status_message%>", 8);
+  TracksPages.page_inform("<%=escape_javascript @status_message%>");
   TracksPages.hide_errors();
   TracksPages.set_page_badge(<%= @down_count %>);
 
@@ -60,14 +58,13 @@
 
   function remove_empty_message_container(next_steps) {
     $('#no_todos_in_view').slideUp(100, function() { });
-    <%# = "$('#deferred_pending_container-empty-nd').slideUp(100);".html_safe if source_view_is(:deferred) && @todo.deferred? %>
     next_steps.go();
   }
 
   function update_predecessors(next_steps) {
     <%  @todo.uncompleted_predecessors.each do |p| -%>
       if ($('<%=item_container_id(p)%>')) {
-        $('#<%=dom_id(p)%>').html('<%= escape_javascript(render(:partial =>  p, :locals => { :parent_container_type => parent_container_type, :source_view => @source_view }))%>');
+        $('#<%=dom_id(p)%>').html('<%= js_render(p, { :parent_container_type => parent_container_type, :source_view => @source_view })%>');
       }
     <% end -%>
     next_steps.go();
@@ -77,13 +74,12 @@
     <% 
       want_render = @group_view_by == 'project' ? @new_project_created : @new_context_created
       container   = @group_view_by == 'project' ? @todo.project        : @todo.context
-      js = want_render ? escape_javascript(render(:partial => container, :locals => { :settings => {:collapsible => true} })) : ""
     %>
-    return "<%= js %>";
+    return "<%= want_render ? js_render(container, { :settings => {:collapsible => true} }) : "" %>";
   }
 
   function html_for_new_todo() {
-    return "<%= @saved ? escape_javascript(render(:partial => @todo, :locals => { :parent_container_type => parent_container_type, :source_view => @source_view })) : "" %>";
+    return "<%= @saved ? js_render(@todo, { :parent_container_type => parent_container_type, :source_view => @source_view }) : "" %>";
   }
   
 <% end -%>

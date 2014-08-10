@@ -2,7 +2,7 @@
   TracksPages.show_errors(html_for_error_messages());
 
   function html_for_error_messages() {
-    return "<%= escape_javascript(get_list_of_error_messages_for(@project)) %>";
+    return "<%= js_error_messages_for(@project) %>";
   }
 <% else -%>
   <% if @go_to_project -%>
@@ -14,7 +14,7 @@
   update_active_projects_container();
   add_project();
   clear_form();
-  TracksPages.page_notify('notice', "Created new project '<%= @project.name%>'", 5);
+  TracksPages.page_inform("Created new project '<%= @project.name%>'");
   <% end -%>
 
 /* TODO: make this generic for all pages with lists */
@@ -40,7 +40,7 @@ function update_active_projects_container() {
 }
 
 function html_for_project_listing() {
-  return "<%= @saved ? escape_javascript(render(:partial => 'project_listing', :object => @project)) : "" %>";
+  return "<%= @saved ? js_render('project_listing', {}, @project) : "" %>";
 }
 
 <% end -%>

@@ -1,9 +1,7 @@
 <% if @saved -%>
-
   TracksPages.hide_errors();
-  TracksPages.page_notify('notice', 'Note <%=@note.id %> saved', 5);
+  TracksPages.page_inform("<%= t('notes.save_status_message', id: @note.id) %>");
   replace_note_form_with_updated_note();
-
 <% else -%>
   TracksPages.show_errors(html_for_error_messages());
 <% end %>
@@ -17,13 +15,13 @@ function replace_note_form_with_updated_note() {
 }
 
 function html_for_error_messages() {
-  return "<%= escape_javascript(get_list_of_error_messages_for(@note)) %>";
+  return "<%= js_error_messages_for(@note) %>";
 }
 
 function html_for_updated_note_form(){
-  return "<%= escape_javascript(render(:partial => 'note_edit_form', :object => @note)) %>";
+  return "<%= js_render('note_edit_form', {}, @note) %>";
 }
 
 function html_for_updated_note_details(){
-  return "<%= escape_javascript(render(:partial => 'note_details', :object => @note)) %>";
+  return "<%= js_render('note_details', {}, @note) %>";
 }

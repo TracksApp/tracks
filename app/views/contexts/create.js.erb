@@ -22,9 +22,9 @@ function clear_form() {
 }
 
 function html_for_context_listing() {
-  return "<%= @saved ? escape_javascript(render(:partial => 'context_listing', :object => @context )) : "" %>";
+  return "<%= @saved ? js_render('context_listing', {}, @context) : "" %>";
 }
 
 function html_for_error_messages() {
-  return "<%= escape_javascript(get_list_of_error_messages_for(@context)) %>";
+  return "<%= js_error_messages_for(@context) %>";
 }
