@@ -14,7 +14,8 @@
 //= require jquery_ujs
 
 // Stuff in app/assets
-//= require tracks.js
+//= require tracks
+//= require tracks_pages
 //= require disable_fx_in_test
 
 // Stuff in vendor/assets

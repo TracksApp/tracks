@@ -1,5 +1,5 @@
 <% unless @saved -%>
-  TracksPages.page_notify('error', "<%= t('todos.error_toggle_complete') %>", 5);
+  TracksPages.page_error("<%= t('todos.error_toggle_complete') %>");
 <% else 
   # create a unique object name to prevent concurrent toggles to overwrite each other functions 
   object_name = unique_object_name_for("toggle_check")
@@ -142,8 +142,7 @@ var <%= object_name %> = {
           $('#<%= dom_id(t) %>').slideUp(400, function() {
             $('#<%= dom_id(t) %>').remove();
    <%       if source_view_is(:project) or source_view_is(:tag) # Insert it in deferred/pending block if existing -%>
-              $('#<%= item_container_id(t) %>_items').append("<%= escape_javascript(render(:partial => t, :locals => { :parent_container_type => parent_container_type }))%>");
-              TodoItems.highlight_todo('#<%= dom_id(t)%>');
+              $('#<%= item_container_id(t) %>_items').append("<%= js_render(t, { :parent_container_type => parent_container_type }) %>");
    <%       end -%>
           });
    <%   end -%>
@@ -157,7 +156,7 @@ var <%= object_name %> = {
       until parents.empty?
         parent = parents.pop
         parents += parent.predecessors -%>
-        $('#<%= dom_id(parent) %>').html("<%= escape_javascript(render(:partial => parent, :locals => { :parent_container_type => parent_container_type })) %>");
+        $('#<%= dom_id(parent) %>').html("<%= js_render(parent, { :parent_container_type => parent_container_type }) %>");
     <%end
     end
     -%>
@@ -165,23 +164,18 @@ var <%= object_name %> = {
   },
   html_for_recurring_todo: function() {
     <%-
-      js = @new_recurring_todo ? escape_javascript(render(:partial => @new_recurring_todo, :locals => { :parent_container_type => parent_container_type })) : ""
+      js = @new_recurring_todo ? js_render(@new_recurring_todo, { :parent_container_type => parent_container_type }) : ""
     -%>
     return "<%= js %>";
   },
   html_for_todo: function() {
     <%-
-      js = ""
-      if !source_view_is(:done)
-        js = escape_javascript(render(
-          :partial => @todo,
-          :locals => {
-            :parent_container_type => parent_container_type,
-            :suppress_project => source_view_is(:project),
-            :suppress_context => source_view_is(:context)
-          }
-        ))
-      end
+      locals = {
+        :parent_container_type => parent_container_type,
+        :suppress_project => source_view_is(:project),
+        :suppress_context => source_view_is(:context)
+      }
+      js = source_view_is(:done) ? "" : js_render(@todo, locals)
     -%>
     return "<%= js %>";
   }

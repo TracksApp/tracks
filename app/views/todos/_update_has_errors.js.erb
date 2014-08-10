@@ -1,0 +1,6 @@
+animate: function() {
+  TracksPages.show_edit_errors(<%=object_name%>.html_for_error_messages());
+},
+html_for_error_messages: function() {
+  return "<%= escape_javascript(get_list_of_error_messages_for(@todo)) %>";
+}
