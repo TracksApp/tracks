@@ -236,4 +236,10 @@ module ApplicationHelper
     source_view_is_one_of(:project, :context) ? "#{@source_view}-#{eval("@#{@source_view}.id")}" : @source_view
   end
 
+  # create a unique object name which can be used in ajax calls returning js
+  # to prevent concurrent calls with same functions to overwrite each other functions
+  def unique_object_name_for(name)
+    "#{name}_#{SecureRandom.hex(5)}"   
+  end
+
 end

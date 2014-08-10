@@ -1,28 +1,40 @@
-hide_todo();
-replace_placeholder_with_form();
-fill_dependency_array();
-enable_rich_interaction();
+<%- object_name = unique_object_name_for("edit_todo_#{@todo.id}") %>
 
-function hide_todo() {
-  $('#<%= dom_id(@todo, 'line') %>').hide();
+function add_spec(id, spec) {
+  <%- 
+    # do this outside of object_name to fill spec_of_todo in 
+    # global namespace, not in namespace of object. Otherwise 
+    # spec_of_todo is not available for the js attached to the 
+    # edit form
+  -%>
+  spec_of_todo[id] = spec;
 }
 
-function replace_placeholder_with_form() {
-  $('#<%=dom_id(@todo, 'edit')%>').html(html_for_edit_form());
-  $('#<%=dom_id(@todo, 'edit')%>').show();
-  $('#<%=dom_id(@todo, 'form')%> input#todo_description').focus();
+var <%=object_name%> = {
+  animate: function() {
+    <%=object_name%>.hide_todo();
+    <%=object_name%>.replace_placeholder_with_form();
+    <%=object_name%>.fill_dependency_array();
+    enable_rich_interaction();
+  },
+  hide_todo: function() {
+    $('#<%= dom_id(@todo, 'line') %>').hide();
+  },
+  replace_placeholder_with_form: function() {
+    $('#<%=dom_id(@todo, 'edit')%>').html(<%=object_name%>.html_for_edit_form());
+    $('#<%=dom_id(@todo, 'edit')%>').show();
+    $('#<%=dom_id(@todo, 'form')%> input#todo_description').focus();
+  },
+  fill_dependency_array: function() {
+    spec_of_todo = new Array();
+    <%
+    @todo.predecessors.each do |dep| -%>
+      add_spec('<%=dep.id%>', "<%= escape_javascript(dep.specification)%>");
+    <% end -%>
+  },
+  html_for_edit_form: function() {
+    return "<%= escape_javascript(render(:partial => 'todos/edit_form', :object => @todo)) %>"
+  }
 }
 
-function fill_dependency_array() {
-  spec_of_todo = new Array();
-<%
-@todo.predecessors.each do |dep| -%>
-  spec_of_todo['<%=dep.id%>'] = "<%= escape_javascript(dep.specification)%>";
-<% end -%>
-}
-
-function html_for_edit_form() {
-  return "<%= escape_javascript(render(:partial => 'todos/edit_form', :object => @todo)) %>"
-}
-
-
+<%=object_name%>.animate();

@@ -1,4 +1,10 @@
-<% if @saved -%>
+<% unless @saved -%>
+  TracksPages.show_errors(html_for_error_messages());
+
+  function html_for_error_messages() {
+    return "<%= escape_javascript(get_list_of_error_messages_for(@project)) %>";
+  }
+<% else -%>
   <% if @go_to_project -%>
     redirect_to("<%= project_path(@project) -%>")
   <% else -%>
@@ -10,9 +16,6 @@
   clear_form();
   TracksPages.page_notify('notice', "Created new project '<%= @project.name%>'", 5);
   <% end -%>
-<% else -%>
-  TracksPages.show_errors(html_for_error_messages());
-<% end -%>
 
 /* TODO: make this generic for all pages with lists */
 function hide_empty_message() {
@@ -36,10 +39,8 @@ function update_active_projects_container() {
   ProjectListPage.update_state_count('active', <%=@active_projects_count%>);
 }
 
-function html_for_error_messages() {
-  return "<%= escape_javascript(get_list_of_error_messages_for(@project)) %>";
-}
-
 function html_for_project_listing() {
   return "<%= @saved ? escape_javascript(render(:partial => 'project_listing', :object => @project)) : "" %>";
 }
+
+<% end -%>

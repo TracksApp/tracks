@@ -392,15 +392,21 @@ module TodosHelper
     return 'context'
   end
 
+  # jquery animations are async, so first collect all animation steps that need
+  # to be run sequential in array animation, then execute them. All steps are 
+  # functions which are passed a function as parameter that should execute the next 
+  # animation steps. 
+  # if the animation needs to be run inside the namespace of an object, set the 
+  # object_name to the name of the object and this name will be prepended to each step
   def render_animation(animation, object_name=nil)
-    html = ""
-    animation.each do |step|
-      if step.present?
-        html += (object_name.nil? ? step : "#{object_name}.#{step}") + "({ go: function() {\r\n"
-      end
-    end
-    html += "}}) " * animation.size
-    return html + ";"
+    object_name += "." unless object_name.nil?  # add dot if object_name is given
+
+    # concatenate all steps into functions that call functions
+    html = animation.map{ |step| "#{object_name}#{step}({ go: function() {" }.join("\r\n")
+    # close all functions
+    html += "}}) " * animation.size + ";"
+
+    return html
   end
 
   def reset_tab_index

@@ -1,8 +1,8 @@
 <% unless @saved -%>
   TracksPages.page_notify('error', "<%= t('todos.error_toggle_complete') %>", 5);
 <% else 
-  # create a unique obejct name to prevent concurrent toggles to overwrite each other functions 
-  object_name = "toggle_check_#{SecureRandom.hex(5)}" 
+  # create a unique object name to prevent concurrent toggles to overwrite each other functions 
+  object_name = unique_object_name_for("toggle_check")
 -%>
 var <%= object_name %> = {
   animate: function() { 
