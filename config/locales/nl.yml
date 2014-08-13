@@ -479,6 +479,7 @@ nl:
     note_location_link: 'In:'
     no_notes_available: 'Momenteel zijn er geen notities: voeg notities toe aan projecten
       vanaf de individuele project pagina''s.'
+    save_status_message: Notitie %{id} bewaard
     show_note_title: Toon notitie
   number:
     currency:
@@ -588,6 +589,7 @@ nl:
     no_notes_attached: Momenteel zijn er geen notities toegevoegd aan dit project
     no_projects: Momenteel zijn er geen projecten
     page_title: 'TRACKS:: Project: %{project}'
+    project_destroyed_status: Project '%{name}' verwijderd
     project_saved_status: Project opgeslagen
     project_state: Project is %{state}.
     settings: Instellingen
