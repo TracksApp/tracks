@@ -25,7 +25,7 @@ New and changed features
   menu
 * The environment must now be specified during asset precompilation.
 * Bugfixes
-* Tracks is tested on Ruby 1.9.3, 2.0.0, and 2.1. Ruby 1.8.x is not supported anymore
+* Tracks is tested on Ruby 1.9.3, 2.0.0, and 2.1
 
 Removed features
 * Ruby 1.8.x is no longer supported
