@@ -29,7 +29,7 @@ module Tracksapp
     # config.i18n.default_locale = :de
 
     # configure Tracks to handle deployment in a subdir
-    config.action_controller.relative_url_root = SITE_CONFIG['subdir'] if SITE_CONFIG['subdir']
+    config.relative_url_root = SITE_CONFIG['subdir'] if SITE_CONFIG['subdir']
     
     # allow onenote:// and message:// as protocols for urls
     config.action_view.sanitized_allowed_protocols = 'onenote', 'message'
