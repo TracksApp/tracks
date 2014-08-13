@@ -14,7 +14,6 @@ When /^I drag "(.*)" to "(.*)"$/ do |dragged, target|
   drop_elem = page.find(:xpath, "//div[@id='line_todo_#{drop_id}']")
 
   drag_elem.drag_to(drop_elem)
-  sleep 0.2 # wait for the resulting events to be handled in the browser
 end
 
 When /^I expand the dependencies of "([^\"]*)"$/ do |todo_name|
