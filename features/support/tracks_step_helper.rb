@@ -121,6 +121,7 @@ module TracksStepHelper
     expect(page).to have_css(submenu_arrow, :visible=>true)
     arrow = page.find(submenu_arrow, :match => :first)
     arrow.click
+    sleep 0.2 # wait for the event to be handled by the browser
     
     submenu_css = "div#line_todo_#{todo.id} ul#ultodo_#{todo.id}"
     submenu = page.find(submenu_css)
