@@ -94,7 +94,7 @@ module RecurringTodos
         start = Time.utc(start.year, start.month, start.day)+n.months
       end
       Time.zone.local(start.year, start.month, every_x_day)
-    end      
+    end
 
     def find_relative_day_of_month(start, n)
       the_next = get_xth_day_of_month(every_xth_day, day_of_week, start.month, start.year)
@@ -113,7 +113,7 @@ module RecurringTodos
         # support 5th day of the month, we need to handle this case
         the_next = get_xth_day_of_month(every_xth_day, day_of_week, the_next.month, the_next.year)
       end
-      the_next      
+      the_next
     end
 
     def recurrence_pattern_for_specific_day
@@ -132,11 +132,11 @@ module RecurringTodos
                    I18n.t('common.month')
                  end
       I18n.t('todos.recurrence.pattern.every_xth_day_of_every_n_months',
-        x:        xth(every_xth_day), 
-        day:      day_of_week_as_text(day_of_week), 
+        x:        xth(every_xth_day),
+        day:      day_of_week_as_text(day_of_week),
         n_months: n_months)
     end
 
   end
-  
+
 end

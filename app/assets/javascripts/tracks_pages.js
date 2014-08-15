@@ -20,7 +20,7 @@ var TracksPages = {
     $('#sidebar').html(html);
   },
   slide_up_and_remove: function(selector) {
-    $(selector).slideUp(1000, function() { 
+    $(selector).slideUp(1000, function() {
       $(selector).remove();
     });
   },

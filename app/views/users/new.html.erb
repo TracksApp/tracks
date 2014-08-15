@@ -4,7 +4,7 @@
   <%= get_list_of_error_messages_for @user %><br/>
 
   <%= render_flash %>
-	
+
   <h3><%= @heading -%></h3>
 
   <table>
@@ -12,14 +12,14 @@
       <td><label for="user_login"><%= t('users.desired_login') %>:</label></td>
       <td> <%= text_field "user", "login", :size => 20 %></td>
     </tr>
-		<tr>
+    <tr>
       <td><label for="user_password"><%= t('users.choose_password') %>:</label></td>
-	    <td><%= password_field "user", "password", :size => 20 %></td>
-	  </tr>
-	  <tr>
-	    <td><label for="user_password_confirmation"><%= t('users.confirm_password') %>:</label></td>
-	    <td><%= password_field "user", "password_confirmation", :size => 20 %></td>
-	  </tr>
+      <td><%= password_field "user", "password", :size => 20 %></td>
+    </tr>
+    <tr>
+      <td><label for="user_password_confirmation"><%= t('users.confirm_password') %>:</label></td>
+      <td><%= password_field "user", "password_confirmation", :size => 20 %></td>
+    </tr>
     <tr>
       <td></td>
       <td><input type="submit" id="signup" value="<%= t('users.signup') %> &#187;" class="primary" /></td>

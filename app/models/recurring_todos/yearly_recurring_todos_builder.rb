@@ -8,8 +8,8 @@ module RecurringTodos
     end
 
     def attributes_to_filter
-      %w{ yearly_selector     yearly_month_of_year  yearly_month_of_year2 
-          yearly_every_x_day  yearly_every_xth_day  yearly_day_of_week    
+      %w{ yearly_selector     yearly_month_of_year  yearly_month_of_year2
+          yearly_every_x_day  yearly_every_xth_day  yearly_day_of_week
       }
     end
 
@@ -34,7 +34,7 @@ module RecurringTodos
 
     def get_recurrence_selector
       @selector=='yearly_every_x_day' ? 0 : 1
-    end  
+    end
 
     def get_every_other2
       { 0 => :yearly_month_of_year, 1 => :yearly_month_of_year2 }[get_recurrence_selector]

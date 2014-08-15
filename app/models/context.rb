@@ -1,6 +1,6 @@
 class Context < ActiveRecord::Base
 
-  has_many :todos, -> { order("todos.due IS NULL, todos.due ASC, todos.created_at ASC").includes(:project) }, :dependent => :delete_all    
+  has_many :todos, -> { order("todos.due IS NULL, todos.due ASC, todos.created_at ASC").includes(:project) }, :dependent => :delete_all
   has_many :recurring_todos, :dependent => :delete_all
   belongs_to :user
 
@@ -15,7 +15,7 @@ class Context < ActiveRecord::Base
   include AASM
 
   aasm :column => :state do
-  
+
     state :active, :initial => true
     state :closed
     state :hidden

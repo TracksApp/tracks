@@ -1,33 +1,33 @@
 class DataController < ApplicationController
-  
+
   require 'csv'
-  
+
   def index
     @page_title = "TRACKS::Export"
   end
 
   def import
-    
+
   end
 
   def csv_map
     if params[:file].blank?
       flash[:notice] = "File can't be blank"
       redirect_to :back
-    else  
+    else
       @import_to = params[:import_to]
 
-      begin      
+      begin
         #get column headers and format as [['name', column_number]...]
         i = -1
         @headers = import_headers(params[:file].path).collect { |v| [v, i+=1] }
-        @headers.unshift ['',i] 
+        @headers.unshift ['',i]
       rescue Exception => e
         flash[:error] = "Invalid CVS: could not read headers: #{e}"
         redirect_to :back
         return
       end
-      
+
       #save file for later
       begin
         uploaded_file = params[:file]
@@ -85,12 +85,12 @@ class DataController < ApplicationController
   def export
     # Show list of formats for export
   end
-  
+
   # Thanks to a tip by Gleb Arshinov
   # <http://lists.rubyonrails.org/pipermail/rails/2004-November/000199.html>
   def yaml_export
     all_tables = {}
-    
+
     all_tables['todos'] = current_user.todos.includes(:tags).load
     all_tables['contexts'] = current_user.contexts.load
     all_tables['projects'] = current_user.projects.load
@@ -114,12 +114,12 @@ class DataController < ApplicationController
     all_tables['taggings'] = taggings.load
     all_tables['notes'] = current_user.notes.load
     all_tables['recurring_todos'] = current_user.recurring_todos.load
-    
+
     result = all_tables.to_yaml
     result.gsub!(/\n/, "\r\n")   # TODO: general functionality for line endings
     send_data(result, :filename => "tracks_backup.yml", :type => 'text/plain')
   end
-  
+
   # export all actions as csv
   def csv_actions
     content_type = 'text/csv'
@@ -163,7 +163,7 @@ class DataController < ApplicationController
     end
     send_data(result, :filename => "notes.csv", :type => content_type)
   end
-  
+
   def xml_export
     todo_tag_ids = Tag.find_by_sql([
         "SELECT DISTINCT tags.id "+
@@ -191,7 +191,7 @@ class DataController < ApplicationController
     result << "</tracks_data>"
     send_data(result, :filename => "tracks_data.xml", :type => 'text/xml')
   end
-  
+
   def yaml_form
     # Draw the form to input the YAML text data
   end
@@ -206,7 +206,7 @@ class DataController < ApplicationController
   end
 
   def yaml_import
-    raise "YAML loading is disabled" 
+    raise "YAML loading is disabled"
   end
-  
+
 end

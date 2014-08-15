@@ -119,7 +119,7 @@ class RecurringTodo < ActiveRecord::Base
   def remove_from_project!
     self.project = nil
     self.save
-  end  
+  end
 
   def clear_todos_association
     unless todos.nil?

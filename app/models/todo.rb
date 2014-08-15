@@ -70,7 +70,7 @@ class Todo < ActiveRecord::Base
 
   aasm :column => :state do
 
-    state :active 
+    state :active
     state :project_hidden
     state :completed, :before_enter => Proc.new { |t| t.completed_at = Time.zone.now }, :before_exit => Proc.new { |t| t.completed_at = nil}
     state :deferred,  :before_exit => Proc.new { |t| t[:show_from] = nil }
@@ -396,11 +396,11 @@ class Todo < ActiveRecord::Base
 
   def self.import(filename, params, user)
     default_context = user.contexts.order('id').first
-    
+
     count = 0
     CSV.foreach(filename, headers: true) do |row|
       unless find_by_description_and_user_id row[params[:description].to_i], user.id
-        todo = new 
+        todo = new
         todo.user = user
         todo.description = row[params[:description].to_i].truncate MAX_DESCRIPTION_LENGTH
         todo.context = Context.find_by_name_and_user_id(row[params[:context].to_i], user.id) || default_context
@@ -408,7 +408,7 @@ class Todo < ActiveRecord::Base
         todo.state = row[params[:completed_at].to_i].present? ? 'completed' : 'active'
         todo.notes = row[params[:notes].to_i].truncate MAX_NOTES_LENGTH if row[params[:notes].to_i].present?
         todo.created_at = row[params[:created_at].to_i] if row[params[:created_at].to_i].present?
-        todo.due = row[params[:due].to_i] 
+        todo.due = row[params[:due].to_i]
         todo.completed_at = row[params[:completed_at].to_i] if row[params[:completed_at].to_i].present?
         todo.save!
         count += 1

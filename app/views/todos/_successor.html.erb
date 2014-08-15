@@ -7,9 +7,9 @@ cache [successor, "successor"] do
     <div id="<%= dom_id(successor, 'successor_line') %>">
       <div class="description<%= staleness_class( successor ) %>" style="margin-left: 20px">
         <span class="todo.descr"><%= h sanitize(successor.description) %></span>
-  
+
         <%= remote_delete_dependency(successor, predecessor) %>
-  
+
         <% unless successor.pending_successors.empty?
           if @rec_depth < 8
             @rec_depth+=1 %>

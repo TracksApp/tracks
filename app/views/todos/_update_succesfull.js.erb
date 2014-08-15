@@ -1,5 +1,5 @@
 animate: function() {
-  <%- 
+  <%-
     animation = []
     animation << "remove_todo" if update_needs_to_remove_todo_from_container
     if replace_with_updated_todo
@@ -106,7 +106,7 @@ regenerate_predecessor_family: function() {
     parents = @todo.predecessors.to_a
     until parents.empty?
       parent = parents.pop
-      parents += parent.predecessors 
+      parents += parent.predecessors
   -%>
       $('#<%= dom_id(parent) %>').html("<%= escape_javascript(render(:partial => parent, :locals => { :settings => {:parent_container_type => parent_container_type }})) %>");
   <%

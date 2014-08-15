@@ -7,16 +7,16 @@
 
   <%= form_for(@prefs) do %>
   <div id="tabs">
-  	<ul>
+    <ul>
       <li><a href="#tabs-1"><%= t('preferences.tabs.profile')%></a></li>
       <li><a href="#tabs-2"><%= t('preferences.tabs.authentication')%></a></li>
       <li><a href="#tabs-3"><%= t('preferences.tabs.date_and_time')%></a></li>
       <li><a href="#tabs-4"><%= t('preferences.tabs.tracks_behavior')%></a></li>
     </ul>
-  	<div id="tabs-1"><%= render :partial => 'profile'%></div>
-  	<div id="tabs-2"><%= render :partial => 'authentication'%></div>
-  	<div id="tabs-3"><%= render :partial => 'date_and_time'%></div>
-  	<div id="tabs-4"><%= render :partial => 'tracks_behavior'%></div>
+    <div id="tabs-1"><%= render :partial => 'profile'%></div>
+    <div id="tabs-2"><%= render :partial => 'authentication'%></div>
+    <div id="tabs-3"><%= render :partial => 'date_and_time'%></div>
+    <div id="tabs-4"><%= render :partial => 'tracks_behavior'%></div>
   </div>
 
   <br/>

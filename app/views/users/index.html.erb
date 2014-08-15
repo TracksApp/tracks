@@ -2,8 +2,8 @@
 
 <p><%= t('users.total_users_count', :count => "<span id=\"user_count\">#{@total_users}</span>").html_safe %></p>
 
-<table class="users_table"> 
-  <tr> 
+<table class="users_table">
+  <tr>
     <th><%= User.human_attribute_name('login') %></th>
     <th><%= User.human_attribute_name('display_name') %></th>
     <th><%= User.human_attribute_name('auth_type') %></th>
@@ -13,7 +13,7 @@
     <th><%= t('users.total_projects') %></th>
     <th><%= t('users.total_notes') %></th>
     <th>&nbsp;</th>
-  </tr> 
+  </tr>
   <% for user in @users %>
     <tr <%= "class=\"highlight\"" if user.is_admin? %> id="user-<%= user.id %>">
       <td><%=h user.login %></td>

@@ -165,7 +165,7 @@ module RecurringTodos
         get_show_from_date(previous) <= self.end_date
       end
     end
-    
+
     private
 
     # Determine start date to calculate next date for recurring todo which
@@ -196,7 +196,7 @@ module RecurringTodos
       else
         return find_xth_day_of_month(x, weekday, month, year)
       end
-    end    
+    end
 
     def find_last_day_x_of_month(weekday, month, year)
       # count backwards. use UTC to avoid strange timezone oddities
@@ -207,7 +207,7 @@ module RecurringTodos
       end
       # convert back to local timezone
       Time.zone.local(last_day.year, last_day.month, last_day.day)
-    end      
+    end
 
     def find_xth_day_of_month(x, weekday, month, year)
       # 1-4th -> count upwards last -> count backwards. use UTC to avoid strange
@@ -224,7 +224,7 @@ module RecurringTodos
       end
       # convert back to local timezone
       Time.zone.local(start.year, start.month, start.day)
-    end      
+    end
 
   end
 end

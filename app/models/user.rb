@@ -4,7 +4,7 @@ require 'bcrypt'
 class User < ActiveRecord::Base
   # Virtual attribute for the unencrypted password
   attr_accessor :password
-  
+
   #for will_paginate plugin
   cattr_accessor :per_page
   @@per_page = 5

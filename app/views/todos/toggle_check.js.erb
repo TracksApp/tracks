@@ -1,11 +1,11 @@
 <% unless @saved -%>
   TracksPages.page_error("<%= t('todos.error_toggle_complete') %>");
-<% else 
-  # create a unique object name to prevent concurrent toggles to overwrite each other functions 
+<% else
+  # create a unique object name to prevent concurrent toggles to overwrite each other functions
   object_name = unique_object_name_for("toggle_check")
 -%>
 var <%= object_name %> = {
-  animate: function() { 
+  animate: function() {
     <% if @wants_redirect_after_complete && @todo.completed? -%>
       <%=object_name%>.redirect_after_complete();
     <% else

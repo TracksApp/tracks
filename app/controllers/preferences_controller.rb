@@ -35,11 +35,11 @@ private
 
   def prefs_params
     params.require(:prefs).permit(
-      :date_format, :week_starts, :show_number_completed, 
-      :show_completed_projects_in_sidebar, :show_hidden_contexts_in_sidebar, 
-      :staleness_starts, :due_style, :locale, :title_date_format, :time_zone, 
-      :show_hidden_projects_in_sidebar, :show_project_on_todo_done, 
-      :review_period, :refresh, :verbose_action_descriptors, 
+      :date_format, :week_starts, :show_number_completed,
+      :show_completed_projects_in_sidebar, :show_hidden_contexts_in_sidebar,
+      :staleness_starts, :due_style, :locale, :title_date_format, :time_zone,
+      :show_hidden_projects_in_sidebar, :show_project_on_todo_done,
+      :review_period, :refresh, :verbose_action_descriptors,
       :mobile_todos_per_page, :sms_email, :sms_context_id)
   end
 
@@ -52,5 +52,5 @@ private
     notify :notice, t('preferences.updated')
     redirect_to :action => 'index'
   end
-  
+
 end

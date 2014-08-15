@@ -1,4 +1,4 @@
-<%- 
+<%-
   object_name = unique_object_name_for("update_project_#{@project.id}")
 -%>
 var <%=object_name%> = {
@@ -9,7 +9,7 @@ var <%=object_name%> = {
     html_for_error_messages: function() {
       return "<%= js_error_messages_for(@project) %>";
     }
-  <%- 
+  <%-
     else
   -%>
     animate: function() {
@@ -46,7 +46,7 @@ var <%=object_name%> = {
     },
     remove_project_edit_form: function() {
       <%-
-          # do not remove() edit form as this will remove the DIV 
+          # do not remove() edit form as this will remove the DIV
           # that is needed to replace with the new form, so only empty the DIV
       -%>
       $('#<%=dom_id(@project, 'edit')%>').hide(500, function() {

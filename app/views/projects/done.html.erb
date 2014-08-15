@@ -1,6 +1,6 @@
 <%
   paginate_options = {
-    :class => :add_note_link, 
+    :class => :add_note_link,
     :previous_label => '&laquo; '+ t('common.previous'),
     :next_label     => t('common.next')+' &raquo;',
     :inner_window   => 2
@@ -10,7 +10,7 @@
   <div id="projects-empty-nd" style="<%= @no_projects ? 'display:block' : 'display:none'%>">
     <div class="message"><p><%= t('projects.no_projects') %></p></div>
   </div>
-  
+
   <div class="project-state-group" id="list-completed-projects-container" <%= " style=\"display:none\"" if @no_projects %>>
     <div class="paginate_header"><%= will_paginate @projects, paginate_options %></div>
     <h2>

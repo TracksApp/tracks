@@ -4,7 +4,7 @@
   selector_project = "div##{dom_id(@project)}"
   selector_project = "div.project-edit-current " + selector_project unless @source_view=="project"
   object_name = unique_object_name_for("edit_project_#{@project.id}")
--%>  
+-%>
 var <%=object_name%> = {
   animate: function() {
     <%=object_name%>.replace_project_with_edit_form();

@@ -10,7 +10,7 @@
       <%= render :partial => "todos/todo", :collection => @done_recently, :locals => { :parent_container_type => "completed", :suppress_context => false, :suppress_project => false } %>
     <% end -%>
   </div>
-  
+
   <div class="container">
     <div class=add_note_link><%= link_to t('common.show_all'), done_projects_path%></div>
     <h2>
@@ -39,5 +39,5 @@
       <%= render :partial => @last_completed_recurring_todos %>
     <% end -%>
   </div>
-  
+
 </div>

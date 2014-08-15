@@ -276,7 +276,7 @@ class ApplicationController < ActionController::Base
 
   def done_todos_for(object)
     object_name = object.class.name.downcase # context or project
-    @source_view = "done" 
+    @source_view = "done"
     eval("@#{object_name} = object")
     @page_title = t("#{object_name.pluralize}.completed_tasks_title", "#{object_name}_name".to_sym => object.name)
 

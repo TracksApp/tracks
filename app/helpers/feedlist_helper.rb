@@ -1,18 +1,18 @@
 module FeedlistHelper
-  
+
   def linkoptions(format, options)
     merge_hashes( {:format => format}, options, user_token_hash)
   end
-  
+
   def rss_formatted_link(options = {})
     image_tag = image_tag("feed-icon.png", :size => "16X16", :border => 0, :class => "rss-icon")
-		link_to(image_tag, linkoptions('rss', options), :title => "RSS feed")
+    link_to(image_tag, linkoptions('rss', options), :title => "RSS feed")
   end
 
   def text_formatted_link(options = {})
     link_to(content_tag(:span, 'TXT', {:class => 'feed', :title => "Plain text feed"}), linkoptions('txt', options))
   end
-  
+
   def ical_formatted_link(options = {})
     link_to(content_tag(:span, 'iCal', {:class=>"feed", :title => "iCal feed"}), linkoptions('ics', options))
   end
@@ -32,7 +32,7 @@ module FeedlistHelper
   end
 
   def all_feed_links_for_project(project)
-    all_feed_links(project, :project_id)  
+    all_feed_links(project, :project_id)
   end
 
   def all_feed_links_for_context(context)
@@ -49,5 +49,5 @@ module FeedlistHelper
     { :token => current_user.token }
   end
 
-    
+
 end

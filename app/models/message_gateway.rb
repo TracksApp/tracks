@@ -1,10 +1,10 @@
 class MessageGateway < ActionMailer::Base
-  
+
   def receive(email)
     user = get_receiving_user_from_email_address(email)
     return false if user.nil?
     return false unless check_sender_is_in_mailmap(user, email)
-    
+
     context = user.prefs.sms_context
     todo_params = get_todo_params(email)
 
@@ -14,12 +14,12 @@ class MessageGateway < ActionMailer::Base
     Rails.logger.info "Saved email as todo for user #{user.login} in context #{context.name}"
     todo
   end
-  
+
   private
-  
+
   def get_todo_params(email)
     params = {}
-    
+
     if email.multipart?
       params[:description] = get_text_or_nil(email.subject)
       params[:notes]       = get_first_text_plain_part(email)
@@ -33,11 +33,11 @@ class MessageGateway < ActionMailer::Base
       end
     end
     params
-  end    
+  end
 
   def get_receiving_user_from_email_address(email)
     SITE_CONFIG['email_dispatch'] == 'single_user' ? get_receiving_user_from_env_setting : get_receiving_user_from_mail_header(email)
-  end  
+  end
 
   def get_receiving_user_from_env_setting
     Rails.logger.info "All received email goes to #{ENV['TRACKS_MAIL_RECEIVER']}"
@@ -45,7 +45,7 @@ class MessageGateway < ActionMailer::Base
     Rails.logger.info "WARNING: Unknown user set for TRACKS_MAIL_RECEIVER (#{ENV['TRACKS_MAIL_RECEIVER']})" if user.nil?
     return user
   end
-  
+
   def get_receiving_user_from_mail_header(email)
     user = get_receiving_user_from_sms_email( get_address(email) )
     Rails.logger.info(user.nil? ? "User unknown": "Email belongs to #{user.login}")
@@ -61,7 +61,7 @@ class MessageGateway < ActionMailer::Base
     user = User.where("preferences.sms_email" => address.strip).includes(:preference).first
     user = User.where("preferences.sms_email" => address.strip[1.100]).includes(:preference).first if user.nil?
     return user
-  end    
+  end
 
   def check_sender_is_in_mailmap(user, email)
     if user.present? and !sender_is_in_mailmap?(user,email)
@@ -69,7 +69,7 @@ class MessageGateway < ActionMailer::Base
       return false
     end
     return true
-  end    
+  end
 
   def sender_is_in_mailmap?(user,email)
     if SITE_CONFIG['mailmap'].is_a? Hash and SITE_CONFIG['email_dispatch'] == 'to'
@@ -89,17 +89,17 @@ class MessageGateway < ActionMailer::Base
   def get_decoded_text_or_nil(text)
     return text ? text.decoded.strip : nil
   end
-  
+
   def get_first_text_plain_part(email)
     # get all parts from multipart/alternative attachments
     parts = get_all_parts(email.parts)
-    
+
     # remove all parts that are not text/plain
     parts.reject{|part| !part.content_type.start_with?("text/plain") }
-    
+
     return parts.count > 0 ? parts[0].decoded.strip : ""
   end
-  
+
   def get_all_parts(parts)
     # return a flattened array of parts. If a multipart attachment is found, recurse over its parts
     all_parts = parts.inject([]) do |set, elem|
@@ -111,5 +111,5 @@ class MessageGateway < ActionMailer::Base
       end
     end
   end
-  
+
 end
