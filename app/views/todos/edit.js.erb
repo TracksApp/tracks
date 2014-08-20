@@ -1,10 +1,10 @@
 <%- object_name = unique_object_name_for("edit_todo_#{@todo.id}") %>
 
 function add_spec(id, spec) {
-  <%- 
-    # do this outside of object_name to fill spec_of_todo in 
-    # global namespace, not in namespace of object. Otherwise 
-    # spec_of_todo is not available for the js attached to the 
+  <%-
+    # do this outside of object_name to fill spec_of_todo in
+    # global namespace, not in namespace of object. Otherwise
+    # spec_of_todo is not available for the js attached to the
     # edit form
   -%>
   spec_of_todo[id] = spec;

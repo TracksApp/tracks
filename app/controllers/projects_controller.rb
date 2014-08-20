@@ -95,7 +95,7 @@ class ProjectsController < ApplicationController
   def set_reviewed
     @project.last_reviewed = Time.zone.now
     @project.save
-    
+
     case @source_view
     when "project"
       redirect_to :action => 'show'
@@ -219,7 +219,7 @@ class ProjectsController < ApplicationController
         update_state_counts
         init_data_for_sidebar
         init_project_hidden_todo_counts(['project'])
-        
+
         template = 'projects/update'
 
       # TODO: are these params ever set? or is this dead code?
@@ -318,7 +318,7 @@ class ProjectsController < ApplicationController
     @show_hidden_projects = @hidden_projects_count > 0
     @show_completed_projects = @completed_projects_count > 0
   end
-  
+
   def set_project_from_params
     @project = current_user.projects.find_by_params(params)
   end

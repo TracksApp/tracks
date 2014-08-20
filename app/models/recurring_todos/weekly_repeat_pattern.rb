@@ -75,12 +75,12 @@ module RecurringTodos
     def find_first_day_in_this_week(start)
       # check if there are any days left this week for the next todo
       start.wday().upto 6 do |i|
-        return start + (i-start.wday()).days if on_xday(i) 
+        return start + (i-start.wday()).days if on_xday(i)
       end
       -1
     end
 
 
   end
-  
+
 end

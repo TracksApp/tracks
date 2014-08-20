@@ -2,7 +2,7 @@
 var <%=object_name%> = {
   animate: function() {
     $('#edit-recurring-todo').html(<%=object_name%>.html_for_edit_form());
-    $('#edit-recurring-todo').dialog( "open" );    
+    $('#edit-recurring-todo').dialog( "open" );
   },
   html_for_edit_form: function() {
     return "<%= js_render('edit_form') %>";

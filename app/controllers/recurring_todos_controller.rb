@@ -63,8 +63,8 @@ class RecurringTodosController < ApplicationController
       @recurring_todo = builder.saved_recurring_todo
       todo_saved = TodoFromRecurringTodo.new(current_user, @recurring_todo).create.nil? == false
 
-      @status_message = 
-        t('todos.recurring_action_saved') + " / " + 
+      @status_message =
+        t('todos.recurring_action_saved') + " / " +
         t("todos.new_related_todo_#{todo_saved ? "" : "not_"}created_short")
 
       @down_count = current_user.recurring_todos.active.count
@@ -144,30 +144,30 @@ class RecurringTodosController < ApplicationController
   def recurring_todo_params
     params.require(:recurring_todo).permit(
       # model attributes
-      :context_id, :project_id, :description, :notes, :state, :start_from, 
-      :ends_on, :end_date, :number_of_occurences, :occurences_count, :target, 
-      :show_from_delta, :recurring_period, :recurrence_selector, :every_other1, 
-      :every_other2, :every_other3, :every_day, :only_work_days, :every_count, 
+      :context_id, :project_id, :description, :notes, :state, :start_from,
+      :ends_on, :end_date, :number_of_occurences, :occurences_count, :target,
+      :show_from_delta, :recurring_period, :recurrence_selector, :every_other1,
+      :every_other2, :every_other3, :every_day, :only_work_days, :every_count,
       :weekday, :show_always, :context_name, :project_name, :tag_list,
       # form attributes
-      :recurring_period, :daily_selector, :monthly_selector, :yearly_selector, 
-      :recurring_target, :daily_every_x_days, :monthly_day_of_week, 
-      :monthly_every_x_day, :monthly_every_x_month2, :monthly_every_x_month, 
-      :monthly_every_xth_day, :recurring_show_days_before, 
+      :recurring_period, :daily_selector, :monthly_selector, :yearly_selector,
+      :recurring_target, :daily_every_x_days, :monthly_day_of_week,
+      :monthly_every_x_day, :monthly_every_x_month2, :monthly_every_x_month,
+      :monthly_every_xth_day, :recurring_show_days_before,
       :recurring_show_always, :weekly_every_x_week, :weekly_return_monday,
-      :yearly_day_of_week, :yearly_every_x_day, :yearly_every_xth_day, 
+      :yearly_day_of_week, :yearly_every_x_day, :yearly_every_xth_day,
       :yearly_month_of_year2, :yearly_month_of_year,
       # derived attribues
-      :weekly_return_monday, :weekly_return_tuesday, :weekly_return_wednesday, 
+      :weekly_return_monday, :weekly_return_tuesday, :weekly_return_wednesday,
       :weekly_return_thursday, :weekly_return_friday, :weekly_return_saturday, :weekly_return_sunday
       )
   end
 
-  def all_recurring_todo_params    
+  def all_recurring_todo_params
     # move context_name, project_name and tag_list into :recurring_todo hash for easier processing
-    { 
-      context_name: :context_name, 
-      project_name: :project_name, 
+    {
+      context_name: :context_name,
+      project_name: :project_name,
       tag_list:     :tag_list
     }.each do |target,source|
       move_into_recurring_todo_param(params, target, source)
@@ -181,15 +181,15 @@ class RecurringTodosController < ApplicationController
     # Same goes for start_from and end_date
     params['recurring_todo']['recurring_period'] = params['recurring_edit_todo']['recurring_period']
 
-    { 
-      context_name: :context_name, 
-      project_name: :project_name, 
+    {
+      context_name: :context_name,
+      project_name: :project_name,
       tag_list:     :edit_recurring_todo_tag_list,
       end_date:     :recurring_todo_edit_end_date,
       start_from:   :recurring_todo_edit_start_from
     }.each do |target,source|
       move_into_recurring_todo_param(params, target, source)
-    end    
+    end
 
     # make sure that we set weekly_return_xxx to empty (space) when they are
     # not checked (and thus not present in params["recurring_todo"])

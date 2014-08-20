@@ -8,7 +8,7 @@
 
   animation = []
   if should_show_new_item
-    if should_add_new_container 
+    if should_add_new_container
       animation << "insert_new_container_with_new_todo";
     else
       animation << "add_todo_to_existing_container";
@@ -41,13 +41,13 @@
       empty_id = '#no_todos_in_view'
       empty_id = '#deferred_pending_container-empty-d' if source_view_is :tickler
     -%>
-    $('<%=empty_id%>').slideUp(100, function() { 
+    $('<%=empty_id%>').slideUp(100, function() {
       $('#display_box').prepend(html_for_new_container());
-      next_steps.go(); 
+      next_steps.go();
     });
   }
 
-  function add_todo_to_existing_container(next_steps) {    
+  function add_todo_to_existing_container(next_steps) {
     $('#<%= empty_container_msg_div_id %>').hide();
     $('#<%= item_container_id(@todo) %>_items').append(html_for_new_todo());
     $('#<%= item_container_id(@todo) %>').slideDown(500, function() {
@@ -71,7 +71,7 @@
   }
 
   function html_for_new_container() {
-    <% 
+    <%
       want_render = @group_view_by == 'project' ? @new_project_created : @new_context_created
       container   = @group_view_by == 'project' ? @todo.project        : @todo.context
     %>
@@ -81,5 +81,5 @@
   function html_for_new_todo() {
     return "<%= @saved ? js_render(@todo, { :parent_container_type => parent_container_type, :source_view => @source_view }) : "" %>";
   }
-  
+
 <% end -%>

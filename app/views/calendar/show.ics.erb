@@ -4,7 +4,7 @@ VERSION:2.0
 CALSCALE:GREGORIAN
 METHOD:PUBLISH
 X-WR-CALNAME:Tracks
-<% for todo in @due_all 
+<% for todo in @due_all
   due_date = todo.due
   overdue_text = ""
   if due_date.at_midnight < Time.zone.now.at_midnight

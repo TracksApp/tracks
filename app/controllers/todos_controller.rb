@@ -49,7 +49,7 @@ class TodosController < ApplicationController
       end
       format.xml do
         @xml_todos = params[:limit_to_active_todos] ? @not_done_todos : @todos
-        render :xml => @xml_todos.to_xml( *todo_xml_params ) 
+        render :xml => @xml_todos.to_xml( *todo_xml_params )
       end
       format.any(:rss, :atom) { @feed_title, @feed_description = 'Tracks Actions', "Actions for #{current_user.display_name}" }
       format.ics
@@ -110,7 +110,7 @@ class TodosController < ApplicationController
 
       respond_to do |format|
         format.html do
-          redirect_to :action => "index" 
+          redirect_to :action => "index"
         end
         format.m do
           @return_path=cookies[:mobile_url] ? cookies[:mobile_url] : mobile_path
@@ -598,7 +598,7 @@ class TodosController < ApplicationController
     get_params_for_tag_view
     @page_title = t('todos.tagged_page_title', :tag_name => @tag_title)
     @source_view = params['_source_view'] || 'tag'
-    
+
     init_data_for_sidebar unless mobile?
 
     todos_with_tag_ids = find_todos_with_tag_expr(@tag_expr)
@@ -751,7 +751,7 @@ class TodosController < ApplicationController
     items.
       includes(:context, :project).
       reorder('description ASC').
-      limit(10) 
+      limit(10)
   end
 
   def auto_complete_for_predecessor
@@ -1195,7 +1195,7 @@ end
 
   def update_date_for_update(key)
     params['todo'][key] = params["todo"].has_key?(key) ? parse_date_for_update(params["todo"][key], t("todos.error.invalid_#{key}_date")) : ""
-  end    
+  end
 
   def update_due_and_show_from_dates
     %w{ due show_from }.each {|date| update_date_for_update(date) }
@@ -1233,7 +1233,7 @@ end
   def update_attributes_of_todo
     # TODO: duplication with todo_create_params_helper
     @todo.attributes = params.require(:todo).permit(
-        :context_id, :project_id, :description, :notes, 
+        :context_id, :project_id, :description, :notes,
         :due, :show_from, :state)
   end
 
@@ -1329,6 +1329,6 @@ end
     else
       redirect_to(uri.path)
     end
-  end 
+  end
 
 end

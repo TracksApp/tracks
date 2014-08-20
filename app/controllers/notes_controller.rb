@@ -56,7 +56,7 @@ class NotesController < ApplicationController
   def destroy
     @note = current_user.notes.find(params['id'])
     @note.destroy
-    
+
     respond_to do |format|
       format.html
       format.js { @down_count = current_user.notes.size }

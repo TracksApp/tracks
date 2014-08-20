@@ -9,8 +9,8 @@ module RecurringTodos
 
     def attributes_to_filter
       %w{
-        monthly_selector       monthly_every_x_day   monthly_every_x_month 
-        monthly_every_x_month2 monthly_every_xth_day monthly_day_of_week    
+        monthly_selector       monthly_every_x_day   monthly_every_x_month
+        monthly_every_x_month2 monthly_every_xth_day monthly_day_of_week
       }
     end
 
@@ -27,7 +27,7 @@ module RecurringTodos
 
     def get_recurrence_selector
       @selector=='monthly_every_x_day' ? 0 : 1
-    end  
+    end
 
     def get_every_other2
       get_recurrence_selector == 0 ? 'monthly_every_x_month' : 'monthly_every_x_month2'

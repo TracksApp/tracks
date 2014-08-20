@@ -1,6 +1,6 @@
 module RecurringTodos
 
-  class AbstractRecurringTodosBuilder 
+  class AbstractRecurringTodosBuilder
 
     attr_reader :mapped_attributes, :pattern
 
@@ -40,7 +40,7 @@ module RecurringTodos
       save_collection(:context, :context_id)
     end
 
-    def saved_recurring_todo      
+    def saved_recurring_todo
       raise(Exception.new, @recurring_todo.valid? ? "Recurring todo was not saved yet" : "Recurring todos was not saved because of validation errors") unless @saved
 
       @recurring_todo
@@ -103,7 +103,7 @@ module RecurringTodos
     # should return period specific selector like yearly_selector or daily_selector
     def selector_key
       raise Exception.new, "selector_key should be overridden in subclass of AbstractRecurringTodosBuilder"
-    end      
+    end
 
     def get_selector(key)
       return nil if key.nil?
@@ -149,4 +149,4 @@ module RecurringTodos
 
   end
 
-end 
+end

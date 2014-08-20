@@ -18,7 +18,7 @@
       <%= render :partial => "todos/todo", :collection => @done, :locals => { :parent_container_type => "completed", :suppress_context => false, :suppress_project => false } %>
     <% end -%>
   </div>
-  
+
   <div class="paginate_footer"><%= will_paginate @done, paginate_options %></div>
-  
+
 </div>

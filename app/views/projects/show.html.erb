@@ -1,8 +1,8 @@
-<% 
+<%
   deferred_pending_options = {:append_descriptor => nil, :parent_container_type => 'project'}
   done_todo_options = {
-    :append_descriptor => t('projects.last_completed_in_project', :number=>prefs.show_number_completed), 
-    :suppress_project => true, 
+    :append_descriptor => t('projects.last_completed_in_project', :number=>prefs.show_number_completed),
+    :suppress_project => true,
     :parent_container_type => 'project'
   }
   if @not_done_todos.count == 0
@@ -22,7 +22,7 @@
   <%= show_deferred_pending_todos(@deferred_todos, @pending_todos, deferred_pending_options) %>
 
   <%= show_done_todos(@done, done_todo_options) unless @done.nil? %>
-  
+
   <div class="container">
     <div id="notes">
       <div class="add_note_link"><%= link_to t('projects.add_note'), '#' %> </div>

@@ -41,7 +41,7 @@ module RecurringTodos
         return start + 2.day if start.wday() == 6 # saturday
         return start + 1.day if start.wday() == 0 # sunday
         return start
-      else 
+      else
         # if there was no previous todo, do not add n: the first todo starts on
         # today or on start_from
         return previous == nil ? start : start+every_x_days.day-1.day

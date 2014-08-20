@@ -37,9 +37,9 @@ module RecurringTodos
         I18n.t("todos.recurrence.pattern.every_year_on", :date => date_as_month_day)
       else
         I18n.t("todos.recurrence.pattern.every_year_on",
-          :date => I18n.t("todos.recurrence.pattern.the_xth_day_of_month", 
-            :x => xth(every_xth_day), 
-            :day => day_of_week_as_text(day_of_week), 
+          :date => I18n.t("todos.recurrence.pattern.the_xth_day_of_month",
+            :x => xth(every_xth_day),
+            :day => day_of_week_as_text(day_of_week),
             :month => month_of_year_as_text(month_of_year)
           ))
       end
@@ -57,7 +57,7 @@ module RecurringTodos
         validate_not_blank(day_of_week, "The day of the week may not be empty for recurrence setting")
       else
         raise "unexpected value of recurrence selector '#{recurrence_selector}'"
-      end      
+      end
     end
 
     def get_next_date(previous)
@@ -105,5 +105,5 @@ module RecurringTodos
       the_next
     end
 
-  end  
+  end
 end

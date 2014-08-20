@@ -2,7 +2,7 @@
   TracksPages.page_error('<%=  t('todos.error_completing_todo', :description => @recurring_todo.description) %>');
 <%- else
   object_name = unique_object_name_for("toggle_check_rec")
--%>  
+-%>
 var <%=object_name%> = {
   animate: function() {
     TracksPages.set_page_badge(<%= @down_count %>);
@@ -16,7 +16,7 @@ var <%=object_name%> = {
     $('#<%=dom_id(@recurring_todo)%>').slideUp(1000, function() {
       $('#<%=dom_id(@recurring_todo)%>').remove();
       <%=object_name%>.show_empty_messages();
-      
+
       <%- if @recurring_todo.completed? -%>
         <%=object_name%>.add_recurring_todo_to_completed_container();
       <%- else -%>

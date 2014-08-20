@@ -1,8 +1,8 @@
-<% 
+<%
   options = {
     :collapsible => false,
     :parent_container_type => 'tag',
-    :title_param => @tag_title    
+    :title_param => @tag_title
   }
   deferred_pending_options=options.clone.merge({:deferred => @deferred_todos, :pending => @pending_todos})
   hidden_options = options.clone

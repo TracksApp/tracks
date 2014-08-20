@@ -7,9 +7,9 @@ module ContextsHelper
       link_to_context( context )
     end
   end
-  
+
   def link_to_delete_context(context, descriptor = sanitize(context.name))
-    link_to_delete(:context, context, descriptor)  
+    link_to_delete(:context, context, descriptor)
   end
 
   def link_to_edit_context (context, descriptor = sanitize(context.name))

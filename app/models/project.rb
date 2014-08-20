@@ -142,7 +142,7 @@ class Project < ActiveRecord::Base
     count = 0
     CSV.foreach(filename, headers: true) do |row|
       unless find_by_name_and_user_id row[params[:name].to_i], user.id
-        project = new 
+        project = new
         project.name = row[params[:name].to_i]
         project.user = user
         project.description = row[params[:description].to_i] if row[params[:description].to_i].present?

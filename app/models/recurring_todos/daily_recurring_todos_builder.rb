@@ -18,7 +18,7 @@ module RecurringTodos
     end
 
     def only_work_days?(daily_selector)
-      { 'daily_every_x_day' => false, 
+      { 'daily_every_x_day' => false,
         'daily_every_work_day' => true}[daily_selector]
     end
 

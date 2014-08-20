@@ -27,9 +27,9 @@ module Todos
         @attributes = todo_params(params)
       end
       @attributes = {} if @attributes.nil?  # make sure there is at least an empty hash
-		end
+    end
 
-		def filter_tags
+    def filter_tags
       if @attributes[:tags]
         # for single tags, @attributed[:tags] returns a hash. For multiple tags,
         # it with return an array of hashes. Make sure it is always an array of hashes
@@ -38,13 +38,13 @@ module Todos
         @attributes[:add_tags] = @attributes[:tags]
         @attributes.delete :tags
       end
-		end
+    end
 
-		def filter_starred
+    def filter_starred
       if @params[:new_todo_starred]
-      	@attributes["starred"] = (@params[:new_todo_starred]||"").include? "true"
+        @attributes["starred"] = (@params[:new_todo_starred]||"").include? "true"
       end
-		end
+    end
 
     def attributes
       @attributes
@@ -121,10 +121,10 @@ module Todos
     private
 
     def todo_params(params)
-      # keep :predecessor_dependencies from being filterd (for XML API). 
+      # keep :predecessor_dependencies from being filterd (for XML API).
       # The permit cannot handle multiple precessors
       if params[:todo][:predecessor_dependencies]
-        deps = params[:todo][:predecessor_dependencies][:predecessor] 
+        deps = params[:todo][:predecessor_dependencies][:predecessor]
       end
 
       # accept empty :todo hash
@@ -133,8 +133,8 @@ module Todos
       end
 
       filtered = params.require(:todo).permit(
-        :context_id, :project_id, :description, :notes, 
-        :due, :show_from, :state, 
+        :context_id, :project_id, :description, :notes,
+        :due, :show_from, :state,
         # XML API
         :tags => [:tag => [:name]],
         :context => [:name],
