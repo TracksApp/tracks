@@ -5,6 +5,7 @@
 WARNING: 2.3devel is a development tree of Tracks and may (will?) contain bugs that might destroy your data! It is not recommended to upgrade to 2.3devel unless you know what you are doing.
 
 That said. To upgrade:
+
 1. Back up your existing database and installation of Tracks
 2. Install Tracks 2.3devel in a new directory. Or you can create a separate installation of 2.3 for testing purposes.
 3. Copy over the configuration from your previous Tracks installation. If using SQLite3, copy the old database into the new Tracks 2.3devel directory.
