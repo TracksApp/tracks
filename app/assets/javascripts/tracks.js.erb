@@ -230,7 +230,7 @@ var TodoItems = {
         return confirm(i18n['contexts.new_context_pre'] + givenContextName + i18n['contexts.new_context_post']);
     },
     generate_predecessor: function(todo_id, todo_spec) {
-        var img = "<img id=\"delete_dep_"+todo_id+"\" class=\"icon_delete_dep\" src=\""+ relative_to_root("<%= asset_path('blank.png') %>") + "\">";
+        var img = "<img id=\"delete_dep_"+todo_id+"\" class=\"icon_delete_dep\" src=\"<%= asset_path('blank.png') %>\">";
         var anchor = "<a class=\"icon_delete_dep\" id=\""+todo_id+"\" href=\"#\">" + img + "</a>";
         var li = "<li style=\"display:none\" id=\"pred_"+todo_id+"\">"+ anchor +" "+ todo_spec + "</li>";
         return li;
