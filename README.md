@@ -11,7 +11,7 @@
 * Version: 2.3devel
 
 [![Build Status](https://travis-ci.org/TracksApp/tracks.png?branch=master)](https://travis-ci.org/TracksApp/tracks)
-[![Code Climate](https://codeclimate.com/github/TracksApp/tracks.png)](https://codeclimate.com/github/TracksApp/tracks)
+[![Code Climate](https://codeclimate.com/github/TracksApp/tracks/badges/gpa.svg)](https://codeclimate.com/github/TracksApp/tracks)
 [![Dependency Status](https://gemnasium.com/TracksApp/tracks.svg)](https://gemnasium.com/TracksApp/tracks)
 
 Full instructions for both new installations and upgrades from older installations of Tracks
