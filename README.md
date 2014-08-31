@@ -9,8 +9,8 @@ of the License, or (at your option) any later version.
 [![Build Status](https://travis-ci.org/TracksApp/tracks.png?branch=2.2_branch)](https://travis-ci.org/TracksApp/tracks)
 [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/TracksApp/tracks)
 
-* Project homepage: http://getontracks.org/
-* Manual: http://getontracks.org/manual/
+* Project homepage: http://www.getontracks.org/
+* Manual: http://www.getontracks.org/manual/
 * Source at GitHub: https://github.com/TracksApp/tracks
 * Bug reports and feature requests: https://github.com/TracksApp/tracks/issues
 * Wiki (community contributed information): https://github.com/TracksApp/tracks/wiki
