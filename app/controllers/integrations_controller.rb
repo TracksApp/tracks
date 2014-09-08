@@ -53,8 +53,22 @@ class IntegrationsController < ApplicationController
 
   def verify_cloudmailin_signature
     provided = request.request_parameters.delete(:signature)
-    signature = Digest::MD5.hexdigest(request.request_parameters.sort{|a,b| a[0].to_s <=> b[0].to_s}.map{|k,v| v}.join + SITE_CONFIG['cloudmailin'])
+    signature = Digest::MD5.hexdigest(flatten_params(request.request_parameters).sort.map{|k,v| v}.join + SITE_CONFIG['cloudmailin'])
     return provided == signature
+  end
+
+  def flatten_params(params, title = nil, result = {})
+    params.each do |key, value|
+      if value.kind_of?(Hash)
+        key_name = title ? "#{title}[#{key}]" : key
+        flatten_params(value, key_name, result)
+      else
+        key_name = title ? "#{title}[#{key}]" : key
+        result[key_name] = value
+      end
+    end
+
+    return result
   end
 
   def get_applescript(partial_name)
