@@ -26,7 +26,7 @@ Rails.application.routes.draw do
 
   get 'integrations' => "integrations#index"
   get 'integrations/rest_api' => "integrations#rest_api", :as => 'rest_api_docs'
-  get 'integrations/cloudmailin' => 'integrations#cloudmailin'
+  post 'integrations/cloudmailin' => 'integrations#cloudmailin'
   get 'integrations/search_plugin' => "integrations#search_plugin", :as => 'search_plugin'
   get 'integrations/google_gadget.xml' => 'integrations#google_gadget', :as => 'google_gadget'
   get 'integrations/get_applescript1.js' => 'integrations#get_applescript1'
