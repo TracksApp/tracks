@@ -2,6 +2,7 @@ class IntegrationsController < ApplicationController
   require 'mail'
 
   skip_before_filter :login_required, :only => [:cloudmailin, :search_plugin, :google_gadget]
+  skip_before_filter :verify_authenticity_token, only: [:cloudmailin]
 
   def index
     @page_title = 'TRACKS::Integrations'
