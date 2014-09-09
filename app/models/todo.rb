@@ -78,7 +78,7 @@ class Todo < ActiveRecord::Base
     transitions :to => :active, :from => [:completed], :guard => :no_uncompleted_predecessors?
     transitions :to => :active, :from => [:pending], :guard => :no_uncompleted_predecessors_or_deferral?
     transitions :to => :pending, :from => [:completed], :guard => :uncompleted_predecessors?
-    transitions :to => :deferred, :from => [:pending], :guard => :guard_for_transition_from_deferred_to_pending
+    transitions :to => :deferred, :from => [:pending], :guard => :guard_for_transition_from_pending_to_deferred
   end
 
   aasm.event :hide do
@@ -142,12 +142,16 @@ class Todo < ActiveRecord::Base
     return !uncompleted_predecessors.all.empty?
   end
 
-  def guard_for_transition_from_deferred_to_pending
+  def guard_for_transition_from_pending_to_deferred
     no_uncompleted_predecessors? && not_part_of_hidden_container?
   end
 
+  def part_of_hidden_container?
+    (self.project && self.project.hidden?) || self.context.hidden?
+  end
+
   def not_part_of_hidden_container?
-    !( (self.project && self.project.hidden?) || self.context.hidden? )
+    !part_of_hidden_container?
   end
 
   # Returns a string with description <context, project>
