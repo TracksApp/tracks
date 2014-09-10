@@ -100,12 +100,10 @@ module TracksStepHelper
   def open_submenu_for(todo)
     wait_for_animations_to_end
 
-    submenu_arrow = "div#line_todo_#{todo.id} img.todo-submenu"
-    expect(page).to have_css(submenu_arrow, :visible=>true)
-    arrow = page.find(submenu_arrow, :match => :first)
-    arrow.click
-    
     submenu_css = "div#line_todo_#{todo.id} ul#ultodo_#{todo.id}"
+
+    execute_javascript "$('#{submenu_css}').parent().showSuperfishUl()"
+
     expect(page).to have_css(submenu_css, visible: true)
     submenu = page.find(submenu_css, visible: true)
 
