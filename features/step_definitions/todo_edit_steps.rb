@@ -138,9 +138,7 @@ When /^I clear the due date of "([^"]*)"$/ do |action_description|
   # de same todo more than once
   within all("div#edit_todo_#{todo.id}")[0] do
     find("a#due_x_todo_#{todo.id}").click
-    wait_until do
-      find("input#due_todo_#{todo.id}").value == ""
-    end
+    expect(page).to have_field("due_todo_#{todo.id}", with: "")
   end
   submit_edit_todo_form(todo)
 end

@@ -85,11 +85,9 @@ Then /^the successors of "(.*)" should include "(.*)"$/ do |parent_name, child_n
   parent = @current_user.todos.where(:description => parent_name).first
   expect(parent).to_not be_nil
 
-  # wait until the successor is added. TODO: make this not loop indefinitly
+  # wait until the successor is added.
   wait_until do
-    found = !parent.pending_successors.where(:description => child_name).first.nil?
-    sleep 0.2 unless found
-    found
+    !parent.pending_successors.where(:description => child_name).first.nil?
   end
 end
 

@@ -1,37 +1,20 @@
 module TracksStepHelper
 
-  def wait_until(timeout = 5)
-    timeout(timeout) { yield }
-  end
-
-  def timeout(seconds = 1, error_message = nil, &block)
-    start_time = Time.now
-
-    result = nil
-
-    until result
-     return result if result = yield
-
-     delay = seconds - (Time.now - start_time)
-     if delay <= 0
-       raise TimeoutError, error_message || "timed out"
-     end
-
-     sleep(0.05)
+  def wait_until(wait_time = Capybara.default_wait_time)
+    Timeout.timeout(wait_time) do
+      loop until yield
     end
   end
 
   def wait_for_animations_to_end
     wait_until do
-      page.evaluate_script('$(":animated").length') == 0
+      page.evaluate_script('$(":animated").length').zero?
     end
   end
   
   def wait_for_ajax
-    start_time = Time.now
-    expect(page.evaluate_script('jQuery.isReady&&jQuery.active==0').class).to_not eql(String)
-    until(page.evaluate_script('jQuery.isReady&&jQuery.active==0') || (start_time + 5.seconds) < Time.now)
-      sleep 0.05
+    wait_until do
+      page.evaluate_script('jQuery.active').zero?
     end
   end
 
@@ -123,8 +106,8 @@ module TracksStepHelper
     arrow.click
     
     submenu_css = "div#line_todo_#{todo.id} ul#ultodo_#{todo.id}"
-    submenu = page.find(submenu_css)
-    wait_until { submenu.visible? }
+    expect(page).to have_css(submenu_css, visible: true)
+    submenu = page.find(submenu_css, visible: true)
 
     within submenu do
       yield

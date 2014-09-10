@@ -7,9 +7,7 @@ When /^I delete project "([^"]*)"$/ do |project_name|
   end
   expect(get_confirm_text).to eq("Are you sure that you want to delete the project '#{project_name}'?")
   
-  wait_until do
-    !page.has_css?("a#delete_project_#{project.id}")
-  end
+  expect(page).to_not have_css("a#delete_project_#{project.id}")
 end
 
 When /^I drag the project "([^"]*)" below "([^"]*)"$/ do |project_drag, project_drop|

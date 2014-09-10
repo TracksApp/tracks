@@ -214,10 +214,7 @@ When /^I add a note "([^"]*)" to the project$/ do |note_body|
   expect(elem).to_not be_nil
   elem.click
 
-  wait_until do
-    !elem.visible?
-  end
-
+  expect(page).to_not have_css(submit_button, visible: true)
 end
 
 When /^I click on the first note icon$/ do
@@ -283,9 +280,7 @@ Then /^I should see the italic text "([^\"]*)" in the project description$/ do |
 end
 
 Then /^the project title should be "(.*)"$/ do |title|
-  wait_until do
-    page.find("h2#project_name_container span#project_name").text == title
-  end
+  expect(page).to have_css("h2#project_name_container span#project_name", text: title, exact: true)
 end
 
 Then /^I should see the project name is "([^"]*)"$/ do |project_name|
