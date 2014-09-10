@@ -103,12 +103,11 @@ module TracksStepHelper
   end
   
   def open_submenu_for(todo)
-    submenu_arrow = "div#line_todo_#{todo.id} img.todo-submenu"
-    page.should have_css(submenu_arrow, :visible=>true)
-    
-    page.find(submenu_arrow).click
-    
-    page.should have_css("div#line_todo_#{todo.id} ul#ultodo_#{todo.id}", :visible => true)
+    submenu_css = "div#line_todo_#{todo.id} ul#ultodo_#{todo.id}"
+
+    execute_javascript "$('#{submenu_css}').parent().showSuperfishUl()"
+
+    page.should have_css(submenu_css, :visible => true)
   end
 
   def context_list_find_index(context_name)
