@@ -1,0 +1,36 @@
+<div id="display_box">
+  <div id="feeds">
+    <div id="feedlegend">
+      <h3>Exportar datos</h3>
+      <p>Puede escoger entre los siguientes formatos:</p>
+      <ul>
+        <li><strong>YAML: </strong>Mejor formato para exportar datos. <br/><i>Por favor tenga en cuenta que la importación de ficheros YAML actualmente esta soportada de forma experimental. No confíe en este formato para hacer copias de seguridad de datos importantes.</i></li>
+        <li><strong>CSV: </strong>Mejor formato para importar en una hoja de cálculo o en programas de análisis de datos.</li>
+        <li><strong>XML: </strong>Mejor formato para transformar los datos a otro formato</li>
+      </ul>
+    </div>
+    <br/><br/>
+    <table class="export_table">
+      <tr>
+        <th>Descripción</th>
+        <th>Enlace de descarga</th>
+      </tr>
+      <tr>
+        <td>Fichero YAML con todas sus acciones, contextos, proyectos, etiquetas y notas</td>
+        <td><%= link_to "Fichero YAML", data_yaml_export_path %></td>
+      </tr>
+      <tr>
+        <td>Fichero CSV con todas sus acciones, con contextos por nombre y proyectos</td>
+        <td><%= link_to "Fichero CSV (acciones, contextos y proyectos)", data_csv_actions_path %></td>
+      </tr>
+      <tr>
+        <td>Fichero CSV con todas sus notas</td>
+        <td><%= link_to "Fichero CSV (sólo notas)", data_csv_notes_path %></td>
+      </tr>
+      <tr>
+        <td>Fichero XML con todas sus acciones, contextos, proyectos, etiquetas y notas</td>
+        <td><%= link_to "Fichero XML", data_xml_export_path %></td>
+      </tr>
+    </table>
+  </div><!-- End of feeds -->
+</div>
