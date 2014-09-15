@@ -212,12 +212,7 @@ class ApplicationController < ActionController::Base
   end
 
   def init_data_for_sidebar
-    @completed_projects = current_user.projects.completed
-    @hidden_projects = current_user.projects.hidden
-    @active_projects = current_user.projects.active
-
-    @active_contexts = current_user.contexts.active
-    @hidden_contexts = current_user.contexts.hidden
+    @sidebar = Sidebar.new(current_user)
 
     init_not_done_counts
     if prefs.show_hidden_projects_in_sidebar
