@@ -6,6 +6,7 @@
 * Bug reports and feature requests: https://github.com/TracksApp/tracks/issues
 * Wiki (community contributed information): https://github.com/TracksApp/tracks/wiki
 * Mailing list: http://groups.google.com/group/TracksApp
+* IRC channel: #tracks on Freenode
 * Original developer: bsag (http://www.rousette.org.uk/)
 * Contributors: https://github.com/TracksApp/tracks/wiki/Contributors
 * Version: 2.3devel
