@@ -48,7 +48,7 @@ group :development do
 
   # tolk is not completly migrated to rails 4 yet, so use master of AlexStein
   # to get a working version 
-  gem 'tolk', github: "AlexStein/tolk" 
+  gem 'tolk', github: 'tolk', ref: '60a207c0de'
 
   gem "bullet"
   gem "rack-mini-profiler"

@@ -1,9 +1,11 @@
 GIT
-  remote: git://github.com/AlexStein/tolk.git
-  revision: 74c0e5d5d64958333821171a613b0c56f4ba5235
+  remote: git://github.com/tolk/tolk.git
+  revision: 60a207c0dee2717a3c9baf752f2044768cc653cc
+  ref: 60a207c0de
   specs:
-    tolk (1.5.1)
-      safe_yaml (>= 0.8)
+    tolk (1.5.2)
+      rails (>= 4.0, < 4.2)
+      safe_yaml (>= 0.8.6)
       will_paginate
 
 GEM
