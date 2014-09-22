@@ -585,7 +585,7 @@ en:
     recurring_todos: Recurring todos
     delete: Delete
     cannot_add_dependency_to_completed_todo: Cannot add this action as a dependency to a completed action!
-    drag_action_title: Drag onto another action to make it depend on that action
+    drag_action_title: Drag onto another action to mark that action as a dependency for this action.
     no_last_completed_actions: No completed actions found
     depends_on: Depends on
     tickler_items_due:
