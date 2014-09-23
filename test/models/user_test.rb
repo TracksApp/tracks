@@ -384,6 +384,31 @@ class UserTest < ActiveSupport::TestCase
     context_counts = u.todos.reload.count_by_group(:context_id)
     assert_equal [8,3,1,3,1,2], context_counts.values
   end
+
+  def test_deleting_user_deletes_all_related_data
+    u = users(:admin_user)
+
+    nr_of_todos = u.todos.count
+    nr_of_projects = u.projects.count
+    nr_of_contexts = u.contexts.count
+    nr_of_rec_todos = u.recurring_todos.count
+    nr_of_notes = u.notes.count
+
+    expect_todos_count = Todo.count - nr_of_todos
+    expect_projects_count = Project.count - nr_of_projects
+    expect_contexts_count = Context.count - nr_of_contexts
+    expect_rec_todos_count = RecurringTodo.count - nr_of_rec_todos
+    expect_notes_count = Note.count - nr_of_notes
+
+    u.destroy
+
+    assert_equal expect_todos_count, Todo.count, "expected #{nr_of_todos} todos to be gone"
+    assert_equal expect_projects_count, Project.count, "expected #{nr_of_projects} projects to be gone"
+    assert_equal expect_contexts_count, Context.count, "expected #{nr_of_contexts} contexts to be gone"
+    assert_equal expect_rec_todos_count, RecurringTodo.count, "expected #{nr_of_rec_todos} repeating todos to be gone"
+    assert_equal expect_notes_count, Note.count, "expected #{nr_of_notes} notes to be gone"
+
+  end
     
   protected
 
