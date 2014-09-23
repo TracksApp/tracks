@@ -393,12 +393,14 @@ class UserTest < ActiveSupport::TestCase
     nr_of_contexts = u.contexts.count
     nr_of_rec_todos = u.recurring_todos.count
     nr_of_notes = u.notes.count
+    nr_of_deps = (Dependency.where(predecessor_id: u.todos.pluck(:id)).pluck(:id) + Dependency.where(successor_id: u.todos.pluck(:id)).pluck(:id)).uniq.count
 
     expect_todos_count = Todo.count - nr_of_todos
     expect_projects_count = Project.count - nr_of_projects
     expect_contexts_count = Context.count - nr_of_contexts
     expect_rec_todos_count = RecurringTodo.count - nr_of_rec_todos
     expect_notes_count = Note.count - nr_of_notes
+    expect_deps_count = Dependency.count - nr_of_deps
 
     u.destroy
 
@@ -407,7 +409,7 @@ class UserTest < ActiveSupport::TestCase
     assert_equal expect_contexts_count, Context.count, "expected #{nr_of_contexts} contexts to be gone"
     assert_equal expect_rec_todos_count, RecurringTodo.count, "expected #{nr_of_rec_todos} repeating todos to be gone"
     assert_equal expect_notes_count, Note.count, "expected #{nr_of_notes} notes to be gone"
-
+    assert_equal expect_deps_count, Dependency.count, "expected #{nr_of_deps} dependencies to be gone"
   end
     
   protected

@@ -108,6 +108,7 @@ class User < ActiveRecord::Base
 
   before_create :crypt_password, :generate_token
   before_update :crypt_password
+  before_destroy :destroy_dependencies, :delete_taggings, prepend: true  # run before deleting todos, projects, contexts, etc.
 
   def validate_auth_type
     unless Tracks::Config.auth_schemes.include?(auth_type)
@@ -218,6 +219,18 @@ protected
 
   def password_required?
     auth_type == 'database' && crypted_password.blank? || password.present?
+  end
+
+  def destroy_dependencies
+    ids = todos.pluck(:id)
+    pred_deps = Dependency.where(predecessor_id: ids).destroy_all
+    succ_deps = Dependency.where(predecessor_id: ids).destroy_all
+  end
+
+  def delete_taggings
+    ids = todos.pluck(:id)
+    taggings = Tagging.where(taggable_id: ids).pluck(:id)
+    Tagging.where(id: taggings).delete_all
   end
 
 end
