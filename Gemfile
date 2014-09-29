@@ -46,9 +46,7 @@ group :development do
   gem "spring-commands-cucumber"
   gem "yard"
 
-  # tolk is not completly migrated to rails 4 yet, so use master of AlexStein
-  # to get a working version 
-  gem 'tolk', github: 'tolk', ref: '60a207c0de'
+  gem 'tolk', '~> 1.6.0'
 
   gem "bullet"
   gem "rack-mini-profiler"
