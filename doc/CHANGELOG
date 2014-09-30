@@ -20,6 +20,10 @@ Under the hood
 * Upgrade to Rails 4.1
 * Several refactorings all over the place for easier maintenance
 
+== Version 2.2.3
+
+* Bug fixes
+
 == Version 2.2.2
 
 * Security fixes
