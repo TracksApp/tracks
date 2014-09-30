@@ -20,4 +20,4 @@ The Czech locale has been renamed from `cz` to `cs` in accordance with ISO stand
 
 ## Upgrading from older versions of Tracks
 
-Upgrade to Tracks 2.2.2 first. Follow the upgrade instructions included in Tracks 2.2.2.
+Upgrade to Tracks 2.2.3 first. Follow the upgrade instructions included in Tracks 2.2.3.
