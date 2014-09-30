@@ -1,24 +1,24 @@
 ## Version 2.3devel
 
 ### New and changed features
+* Numerous bug fixes
 * You can select to group todos on the home page by context or by 
-  project (using the view menu). This also works for tag page, the project page, 
-  the tickler and the context page
+  project (using the view menu). This also works for tag page, the
+  project page, the tickler and the context page
 * You can now change the state of a context to closed
 * Czech locale has been renamed from cz to cs to follow ISO standards
-* Russian locale was updated by Alex Stein
-* The toggle-notes and toggle-collapsed-containers have been moved into the view
-  menu
+* Added Russian locale (@AlexStein)
+* The toggle-notes and toggle-collapsed-containers have been moved into
+  the view menu.
 * The environment must now be specified during asset precompilation.
-* Bugfixes
 * Tracks is tested on Ruby 1.9.3, 2.0.0, and 2.1
 
 ### Removed features
 * Ruby 1.8.x is no longer supported
 
 ### Under the hood
-* Upgrade to Rails 4.1
-* Several refactorings all over the place for easier maintenance
+* Upgraded Rails to 4.1
+* Several refactorings for easier maintenance
 
 ## Version 2.2.3
 
