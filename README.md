@@ -1,5 +1,5 @@
 # Tracks: a GTD(TM) web application, built with Ruby on Rails
-Copyright (C) 2004-2013 rousette.org.uk
+Copyright (C) 2004-2014 rousette.org.uk
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@ of the License, or (at your option) any later version.
 * Mailing list: http://groups.google.com/group/TracksApp
 * Original developer: bsag (http://www.rousette.org.uk/)
 * Contributors: https://github.com/TracksApp/tracks/wiki/Contributors
-* Version: 2.2.2
+* Version: 2.2.3
 
 More documentation for Tracks can be found within the /doc directory. 
 
