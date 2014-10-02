@@ -18,7 +18,9 @@ script: "bin/rake ci"
 
 notifications:
   email: false
-  irc: "chat.freenode.net#tracks"
+  irc:
+    channels: "chat.freenode.net#tracks"
+    skip_join: true
 
 addons:
   code_climate:
