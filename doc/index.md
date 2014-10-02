@@ -1,5 +1,5 @@
-[Installation »](installation.md)
-[Upgrading »](upgrading.md)
+* [Installation »](installation.md)
+* [Upgrading »](upgrading.md)
 
 ## Introduction
 
