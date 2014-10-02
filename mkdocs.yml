@@ -1,2 +1,6 @@
 site_name: Tracks
 docs_dir: doc
+pages:
+- ['index.md', 'Introduction']
+- ['installation.md', 'Installation']
+- ['upgrading.md', 'Upgrading']
