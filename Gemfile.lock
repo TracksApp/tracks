@@ -36,7 +36,7 @@ GEM
     activesupport (3.2.19)
       i18n (~> 0.6, >= 0.6.4)
       multi_json (~> 1.0)
-    acts_as_list (0.4.0)
+    acts_as_list (0.3.0)
       activerecord (>= 3.0)
     arel (3.0.3)
     aruba (0.5.4)
@@ -204,7 +204,7 @@ PLATFORMS
 DEPENDENCIES
   RedCloth (~> 4.2.9)
   aasm (~> 3.0)
-  acts_as_list (~> 0.1)
+  acts_as_list (~> 0.3.0)
   aruba (~> 0.5)
   bcrypt-ruby (~> 3.0)
   bullet (~> 4.3)
