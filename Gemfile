@@ -10,13 +10,14 @@ gem "mysql2", "~>0.3"
 
 gem "RedCloth", "~>4.2.9"
 gem "formatize", "~>1.1"
-gem "sanitize", "~>2.0"
+gem "sanitize", "2.0.3"
+gem "nokogiri", "~>1.5.11"
 gem "will_paginate", "~>3.0"
 gem "acts_as_list", "~>0.3.0"
 gem "aasm", "~>3.0"
 gem "htmlentities", "~>4.3"
 gem "swf_fu", "~>2.0"
-gem "rails_autolink", "~>1.0"
+gem "rails_autolink", "~>1.0.0"
 gem "cache_digests", :path => 'vendor/gems/cache_digests-0.1.0' # vendored for Ruby 1.8.7 compatibility
 gem "rack-mini-profiler", "~>0.1"
 
