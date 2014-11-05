@@ -1,7 +1,8 @@
+<%- i18n_key ||= "actions_midsentence" -%>
 <div class="stats_module">
   <h3><%= t("stats.top10_#{key}") %></h3>
   <% projects.each_with_index do |p, i| -%>
-    <%= i + 1 -%> - <%= link_to p.name, project_path(p) %> (<%=p.send(n)%> <%= t('common.actions_midsentence', :count => p.send(n)) %>) <br/>
+    <%= i + 1 -%> - <%= link_to p.name, project_path(p) %> (<%=p.send(n)%> <%= t("common.#{i18n_key}", :count => p.send(n)) %>) <br/>
   <% end -%>
   <%= render :partial => 'null_list_item', :locals => {:from => projects.size + 1, :to => 10} -%>
 </div>
