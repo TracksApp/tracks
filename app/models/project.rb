@@ -138,6 +138,14 @@ class Project < ActiveRecord::Base
     @age_in_days ||= (Time.current.to_date - created_at.to_date).to_i + 1
   end
 
+  def running_time
+    if completed_at.nil?
+      return age_in_days
+    else
+      return (completed_at.to_date - created_at.to_date).to_i + 1
+    end
+  end
+
   def self.import(filename, params, user)
     count = 0
     CSV.foreach(filename, headers: true) do |row|

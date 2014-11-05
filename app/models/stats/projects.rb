@@ -7,7 +7,7 @@ module Stats
     end
 
     def runtime
-      @runtime ||= user.projects.active.order('created_at ASC').limit(10)
+      @runtime ||= find_top10_longest_running_projects
     end
 
     def actions
@@ -16,6 +16,13 @@ module Stats
 
     def actions_last30days
       @actions_last30days ||= Stats::TopProjectsQuery.new(user, 1.month.ago.beginning_of_day).result
+    end
+
+    private
+
+    def find_top10_longest_running_projects
+      projects = user.projects.order('created_at ASC')
+      projects.sort{|a,b| b.running_time <=> a.running_time}.take(10)
     end
 
   end

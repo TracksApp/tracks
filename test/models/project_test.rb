@@ -2,40 +2,40 @@ require 'test_helper'
 
 class ProjectTest < ActiveSupport::TestCase
   fixtures :projects, :contexts, :todos, :recurring_todos, :users, :preferences
-  
+
   def setup
     @timemachine = projects(:timemachine)
     @moremoney = projects(:moremoney)
   end
-  
+
   # associations
-  
+
   def test_has_default_context
     assert !@timemachine.default_context.nil?
     assert @timemachine.default_context.name == contexts(:lab).name
-    
+
     p = Project.new
     assert_equal '', p.default_context.name
     p.default_context = contexts(:agenda)
     assert_equal 'agenda', p.default_context.name
   end
-  
+
   # validations
-  
+
   def test_validate_presence_of_name
     @timemachine.name = ""
     assert !@timemachine.save
     assert_equal 1, @timemachine.errors.count
     assert_equal "project must have a name", @timemachine.errors[:name][0]
   end
-  
+
   def test_validate_name_is_less_than_256
     @timemachine.name = generate_random_string(256)
     assert !@timemachine.save
     assert_equal 1, @timemachine.errors.count
     assert_equal "project name must be less than 256 characters", @timemachine.errors[:name][0]
   end
-  
+
   def test_validate_name_is_unique
     newproj = Project.new
     newproj.name = projects(:timemachine).name
@@ -44,20 +44,20 @@ class ProjectTest < ActiveSupport::TestCase
     assert_equal 1, newproj.errors.count
     assert_equal "already exists", newproj.errors[:name][0]
   end
-      
+
   # state machine
-  
+
   def test_project_initial_state_is_active
     assert_equal :active, @timemachine.aasm.current_state
     assert @timemachine.active?
   end
-  
+
   def test_hide_project
     @timemachine.hide!
     assert_equal :hidden, @timemachine.aasm.current_state
     assert @timemachine.hidden?
   end
-  
+
   def test_activate_project
     @timemachine.activate!
     assert_equal :active, @timemachine.aasm.current_state
@@ -81,7 +81,7 @@ class ProjectTest < ActiveSupport::TestCase
   end
 
   # other tests
-  
+
   def test_review_project
     assert_nil @timemachine.last_reviewed
     assert @timemachine.needs_review?(users(:admin_user))
@@ -100,7 +100,7 @@ class ProjectTest < ActiveSupport::TestCase
     assert_not_nil @timemachine.completed_at, "completed_at not expected to be nil"
     assert_in_delta Time.now, @timemachine.completed_at, 1
   end
-  
+
   def test_delete_project_deletes_todos_within_it
     assert_equal 3, @timemachine.todos.count
     timemachine_todo_ids = @timemachine.todos.map{ |t| t.id }
@@ -109,7 +109,7 @@ class ProjectTest < ActiveSupport::TestCase
       assert !Todo.exists?(t_id)
     end
   end
-  
+
   def test_deferred_todos
     assert_equal 1, @timemachine.todos.deferred.size
     t = @timemachine.todos.not_completed[0]
@@ -117,7 +117,7 @@ class ProjectTest < ActiveSupport::TestCase
     t.save!
     assert_equal 2, Project.find(@timemachine.id).todos.deferred.size
   end
-    
+
   def test_to_param_returns_id
     assert_equal '1', @timemachine.to_param
   end
@@ -129,29 +129,29 @@ class ProjectTest < ActiveSupport::TestCase
     assert_nil p.id
     assert_equal "", p.name
   end
-  
+
   def test_name_removes_extra_spaces
     newproj = Project.new
     newproj.name = "These   Words    Have   Proximity        Issues   "
     assert newproj.save
     assert_equal 0, newproj.errors.count
     assert_equal "These Words Have Proximity Issues", newproj.name
-    
+
     # and on update...
     @timemachine.name = "   a     time machine    needs lots   of      spaaaaaaace         "
     assert @timemachine.save
     assert_equal "a time machine needs lots of spaaaaaaace", @timemachine.name
   end
-  
+
   def test_deferred_todo_count
     assert_equal 1, @timemachine.todos.deferred.count
     assert_equal 0, @moremoney.todos.deferred.count
-    
+
     first_todo = @moremoney.todos[0]
     first_todo.show_from = Time.zone.now + 1.week
     first_todo.save!
     assert_equal :deferred, @moremoney.todos[0].aasm.current_state
-    
+
     assert_equal 1, @moremoney.todos.deferred.count
   end
 
@@ -233,9 +233,24 @@ class ProjectTest < ActiveSupport::TestCase
     p2 = users(:admin_user).projects.create!(:name => "test7")
     p2.created_at = 1.week.ago
     p2.save!
-  
+
     p2.reload
     assert_equal 8, p2.age_in_days
+  end
+
+  def test_running_time
+    p = users(:admin_user).projects.create!(:name => "test8")
+    p.created_at = 1.week.ago
+    p.save!
+
+    p.reload
+    assert_equal 8, p.running_time
+
+    p.completed_at = 4.days.ago
+    p.save!
+
+    p.reload
+    assert_equal 4, p.running_time
   end
 
 end
