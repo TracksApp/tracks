@@ -562,11 +562,7 @@ class TodosController < ApplicationController
       format.html do
         init_not_done_counts
         init_project_hidden_todo_counts
-        @active_projects = current_user.projects.active
-        @active_contexts = current_user.contexts.active
-        @hidden_projects = current_user.projects.hidden
-        @hidden_contexts = current_user.contexts.hidden
-        @completed_projects = current_user.projects.completed
+        init_data_for_sidebar unless mobile?
       end
       format.m
       format.xml { render :xml => @not_done_todos.to_xml( *todo_xml_params ) }
