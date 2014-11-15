@@ -1,4 +1,7 @@
 ## Version 2.4
+* Removed support for deprecated password-hashing algorithm. This
+  eliminates config.salt. Note the addition of a pre-upgrade step to
+  check for obsolete passwords.
 
 ## Version 2.3
 

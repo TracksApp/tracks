@@ -2,11 +2,6 @@ require 'test_helper'
 
 class PreferencesControllerTest < ActionController::TestCase
 
-  def setup
-    super
-    assert_equal "change-me", Tracks::Config.salt
-  end
-
   test "render_date_format requires login" do
     get :render_date_format
     assert_redirected_to login_path
