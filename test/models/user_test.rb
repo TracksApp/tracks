@@ -4,7 +4,6 @@ class UserTest < ActiveSupport::TestCase
   fixtures :users, :preferences, :projects, :contexts, :todos, :recurring_todos
 
   def setup
-    assert_equal "change-me", Tracks::Config.salt
     @admin_user = User.find(1)
     @other_user = User.find(2)
   end
@@ -287,31 +286,10 @@ class UserTest < ActiveSupport::TestCase
     users(:other_user).forget_me
     assert_nil users(:other_user).remember_token
   end
-  
-  def test_should_discover_using_depracted_password
-    assert_nil @admin_user.uses_deprecated_password?
-    assert_nil @other_user.uses_deprecated_password?
-    assert users(:user_with_sha1_password).uses_deprecated_password?
-  end
-
-  def test_should_not_have_deprecated_password_after_update
-    u = users(:user_with_sha1_password)
-    assert u.uses_deprecated_password?
-    u.change_password("foobar", "foobar")
-    assert_nil u.uses_deprecated_password?
-  end
-
-  def test_should_authenticate_with_deprecated_password
-    assert_nil User.authenticate('mr_deprecated', 'wrong password')
-    assert_equal users(:user_with_sha1_password),
-      User.authenticate('mr_deprecated', 'foobar')
-  end
 
   def test_password_matches
     assert_not_nil User.authenticate(@admin_user.login, "abracadabra")
     assert_nil User.authenticate(@admin_user.login, "incorrect")
-    assert_not_nil User.authenticate(users(:user_with_sha1_password).login, "foobar")
-    assert_nil User.authenticate(users(:user_with_sha1_password).login, "wrong")
   end
 
   def test_update_positions_of_contexts

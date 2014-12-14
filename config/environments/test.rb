@@ -34,8 +34,6 @@ Rails.application.configure do
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
 
-  SITE_CONFIG['salt'] ||= 'change-me'
-  
   config.time_zone = 'UTC'
 
   # Raises error for missing translations

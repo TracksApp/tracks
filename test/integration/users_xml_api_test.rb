@@ -70,7 +70,7 @@ class UsersXmlApiTest < ActionDispatch::IntegrationTest
     get '/users.xml', {}, basic_auth_headers()
     assert_response :success
     assert_tag :tag => "users",
-               :children => { :count => 5, :only => { :tag => "user" } }
+               :children => { :count => 4, :only => { :tag => "user" } }
     assert_no_tag :tag => "password"
   end
 

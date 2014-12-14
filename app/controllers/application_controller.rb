@@ -12,7 +12,6 @@ class ApplicationController < ActionController::Base
   layout proc{ |controller| controller.mobile? ? "mobile" : "application" }
   # exempt_from_layout /\.js\.erb$/
 
-  before_filter :check_for_deprecated_password_hash
   before_filter :set_session_expiration
   before_filter :set_time_zone
   before_filter :set_zindex_counter
@@ -55,15 +54,6 @@ class ApplicationController < ActionController::Base
     else
       # Okay, you get another hour
       session['expiry_time'] = Time.now + (60*60)
-    end
-  end
-
-  # Redirects to change_password_user_path if the current user uses a
-  # deprecated password hashing algorithm.
-  def check_for_deprecated_password_hash
-    if current_user and current_user.uses_deprecated_password?
-      notify :warning, t('users.you_have_to_reset_your_password')
-      redirect_to change_password_user_path current_user
     end
   end
 

@@ -1,10 +1,6 @@
 module Tracks
   
   class Config
-    
-    def self.salt
-       SITE_CONFIG['salt']
-    end
 
     def self.auth_schemes
        SITE_CONFIG['authentication_schemes'] || []

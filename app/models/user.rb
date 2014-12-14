@@ -185,25 +185,8 @@ class User < ActiveRecord::Base
     save
   end
 
-  # Returns true if the user has a password hashed using SHA-1.
-  def uses_deprecated_password?
-    crypted_password =~ /^[a-f0-9]{40}$/i
-  end
-
   def password_matches?(pass)
-    if uses_deprecated_password?
-      crypted_password == sha1(pass)
-    else
-      BCrypt::Password.new(crypted_password) == pass
-    end
-  end
-
-  def salted(s)
-    "#{Tracks::Config.salt}--#{s}--"
-  end
-
-  def sha1(s)
-    Digest::SHA1.hexdigest(salted(s))
+    BCrypt::Password.new(crypted_password) == pass
   end
 
   def create_hash(s)

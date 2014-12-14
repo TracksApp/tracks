@@ -38,7 +38,5 @@ Rails.application.configure do
   # Unique cookies and use cookies for session
   # config.action_controller.session_store :cookie_store, :key => 'TracksCucumber'
 
-  SITE_CONFIG['salt'] ||= 'change-me'
-  
   config.time_zone = 'UTC'
 end

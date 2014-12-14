@@ -6,34 +6,6 @@ Given /^the following user records?$/ do |table|
   end
 end
 
-Given /^the following user records with hash algorithm$/ do |table|
-  User.delete_all
-  table.hashes.each do | hash |
-    password = hash[:password]
-    algorithm = hash[:algorithm]
-    hash.delete("algorithm")
-
-    user = FactoryGirl.create(:user, hash)
-
-    case algorithm
-    when 'bcrypt'
-      user.change_password( password, password )
-      user.reload
-      expect(BCrypt::Password.new(user.crypted_password)).to eq(password)
-    when 'sha1'
-      user.password = user.password_confirmation = nil
-      user.send(:write_attribute, :crypted_password, user.sha1(password))
-      user.save
-      user.reload
-      expect(user.crypted_password).to eq(user.sha1(password))
-    else
-      raise "Unknown hashing algorithm: #{algorithm}"
-    end
-
-    user.create_preference({:locale => 'en'})
-  end
-end
-
 Given("no users exists") do
   User.delete_all
 end
