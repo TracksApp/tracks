@@ -45,7 +45,7 @@ class Todo < ActiveRecord::Base
   # other scopes
   scope :are_due,           -> { where 'NOT (todos.due IS NULL)' }
   scope :due_today,         -> { where("todos.due <= ?", Time.zone.now) }
-  scope :with_tag,          lambda { |tag_id| joins("INNER JOIN taggings ON todos.id = taggings.taggable_id").where("taggings.tag_id = ? ", tag_id) }
+  scope :with_tag,          lambda { |tag_id| joins("INNER JOIN taggings ON todos.id = taggings.taggable_id").where("taggings.tag_id = ? AND taggings.taggable_type='Todo'", tag_id) }
   scope :with_tags,         lambda { |tag_ids| where("EXISTS(SELECT * from taggings t WHERE t.tag_id IN (?) AND t.taggable_id=todos.id AND t.taggable_type='Todo')", tag_ids) }
   scope :completed_after,   lambda { |date| where("todos.completed_at > ?", date) }
   scope :completed_before,  lambda { |date| where("todos.completed_at < ?", date) }

@@ -471,6 +471,19 @@ class TodoTest < ActiveSupport::TestCase
     assert_equal 2, todos_with_aORc_and_b.count
   end
 
+  def test_find_tagged_todos_of_correct_taggable_type
+    recurring = Todo.where(:recurring_todo_id => 1).first.reload
+    recurring.tag_list = "recurring_tag"
+    recurring.save!
+    recurring.recurring_todo.tag_list = "recurring_tag"
+    recurring.recurring_todo.save!
+
+    tag_id = Tag.where(:name => "recurring_tag").first.id
+    tagged_todos = Todo.with_tag(tag_id)
+    assert_equal 1, tagged_todos.count
+    assert_equal recurring.id, tagged_todos.first.id
+  end
+
   # test named_scopes
   def test_find_completed
     # Given 2 completed todos, one completed now and one completed 2 months ago
