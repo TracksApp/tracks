@@ -1,6 +1,8 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 <% 
 
+Time.zone = SITE_CONFIG['time_zone']
+
 def today 
   Time.zone.now.beginning_of_day.to_s(:db)
 end

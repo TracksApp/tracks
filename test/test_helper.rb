@@ -13,7 +13,8 @@ class ActiveSupport::TestCase
   fixtures :all
 
   def setup
-    @today = Time.now.utc
+    Time.zone = SITE_CONFIG['time_zone']
+    @today = Time.zone.now
     @tomorrow = @today + 1.day
     @in_three_days = @today + 3.days
     @in_four_days = @in_three_days + 1.day    # need a day after start_from
