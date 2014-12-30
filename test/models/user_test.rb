@@ -208,7 +208,7 @@ class UserTest < ActiveSupport::TestCase
   def test_find_and_activate_deferred_todos_that_are_ready
     assert_equal 1, @admin_user.deferred_todos.count
     @admin_user.deferred_todos[0].show_from = Time.now.utc - 5.seconds
-    @admin_user.deferred_todos[0].save
+    @admin_user.deferred_todos[0].save(:validate => false)
     @admin_user.deferred_todos.reload
     @admin_user.deferred_todos.find_and_activate_ready
     @admin_user.deferred_todos.reload

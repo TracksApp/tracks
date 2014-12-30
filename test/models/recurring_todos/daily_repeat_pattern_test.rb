@@ -53,7 +53,7 @@ module RecurringTodos
       assert_equal_dmy @today, due_date
 
       # when the last todo was completed today, the next todo is due tomorrow
-      due_date =@every_day.get_due_date(@today)
+      due_date = @every_day.get_due_date(@today)
       assert_equal @tomorrow, due_date
 
       # do something every 14 days
