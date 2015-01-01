@@ -14,7 +14,6 @@ module RecurringTodos
       builder = RecurringTodosBuilder.new(@admin, { 
         'recurring_period'       => 'monthly',
         'description'            => 'a repeating todo',    # generic
-        'recurring_period'       => 'monthly', 
         'recurring_target'       => 'show_from_date',
         'ends_on'                => 'ends_on_end_date',
         'end_date'               => Time.zone.now + 1.week,
@@ -44,7 +43,6 @@ module RecurringTodos
       builder = RecurringTodosBuilder.new(@admin, { 
         'recurring_period'       => 'monthly',
         'description'            => 'a repeating todo',    # generic
-        'recurring_period'       => 'monthly', 
         'recurring_target'       => 'show_from_date',
         'ends_on'                => 'ends_on_end_date',
         'end_date'               => Time.zone.now + 1.week,
@@ -64,7 +62,6 @@ module RecurringTodos
       builder = RecurringTodosBuilder.new(@admin, { 
         'recurring_period'       => 'monthly',
         'description'            => 'a repeating todo',    # generic
-        'recurring_period'       => 'monthly', 
         'recurring_target'       => 'show_from_date',
         'ends_on'                => 'ends_on_end_date',
         'end_date'               => Time.zone.now + 1.week,
