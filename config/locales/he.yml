@@ -257,9 +257,6 @@ he:
   footer:
     send_feedback: "שליחת משוב על גירסא %{version}"
   integrations:
-    applescript_next_action_prompt: "תיאור הפעולות הבאות:"
-    applescript_success_after_id: "נוצר"
-    applescript_success_before_id: "פעולת המשך עם זיהוי"
     gmail_description: "חֲפִיץ להוספת מסלולים ל-Gmail"
     opensearch_description: "חיפוש במסלולים"
   layouts:

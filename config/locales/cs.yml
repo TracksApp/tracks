@@ -308,9 +308,6 @@ cs:
   footer:
     send_feedback: Poslat zpětnou vazbu na %{version}
   integrations:
-    applescript_next_action_prompt: 'Popis úkolu:'
-    applescript_success_after_id: vytvořen
-    applescript_success_before_id: Nový úkol s ID
     gmail_description: Gadget pro Tracks do Gmailu
     opensearch_description: Prohledat Tracks
   layouts:

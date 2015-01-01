@@ -796,10 +796,7 @@ en:
     save_status_message: "Note %{id} was saved"    
   integrations:
     opensearch_description: Search in Tracks
-    applescript_next_action_prompt: "Description of next action:"
     gmail_description: Gadget to add Tracks to Gmail as a gadget
-    applescript_success_after_id: created
-    applescript_success_before_id: New next action with ID
   preferences:
     open_id_url: Your OpenID URL is
     staleness_starts_after: Staleness starts after %{days} days

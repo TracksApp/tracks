@@ -340,9 +340,6 @@ fr:
       submit: Sauvegarder %{model}
       update: Mettre à jour %{model}
   integrations:
-    applescript_next_action_prompt: 'Description de l''action suivante :'
-    applescript_success_after_id: Créé
-    applescript_success_before_id: Nouvelle action suivante avec ID
     gmail_description: Gadget pour ajouter Tracks à Gmail
     opensearch_description: Rechercher dans Tracks
   layouts:

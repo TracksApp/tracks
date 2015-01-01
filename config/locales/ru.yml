@@ -376,9 +376,6 @@ ru:
       submit: "Сохранить %{model}"
       update: "Обновить %{model}"
   integrations:
-    applescript_next_action_prompt: "Описание следующего действия:"
-    applescript_success_after_id: "создано"
-    applescript_success_before_id: "Новое действие с ID"
     gmail_description: "Гаджет для добавления Tracks в Gmail как гаджета боковой панели"
     opensearch_description: "Искать в Tracks"
   layouts:

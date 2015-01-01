@@ -725,23 +725,6 @@ var ContextListPage = {
     }
 };
 
-var IntegrationsPage = {
-    setup_behavior: function() {
-        $(document).on("change",'#applescript1-contexts', function(){
-            IntegrationsPage.get_script_for_context("#applescript1", "get_applescript1", this.value);
-        });
-        $(document).on("change",'#applescript2-contexts', function(){
-            IntegrationsPage.get_script_for_context("#applescript2", "get_applescript2", this.value);
-        });
-        $(document).on("change",'#quicksilver-contexts', function(){
-            IntegrationsPage.get_script_for_context("#quicksilver", "get_quicksilver_applescript", this.value);
-        });
-    },
-    get_script_for_context: function(element, getter, context){
-        generic_get_script_for_list(element, "integrations/"+getter, "context_id="+context);
-    }
-};
-
 var FeedsPage = {
     setup_behavior: function() {
         /* TODO: blocking of dropdown */
@@ -1166,7 +1149,7 @@ $(document).ready(function() {
     TodoItemsContainer.setup_container_toggles();
 
     /* enable page specific behavior */
-    $([ 'PreferencesPage', 'IntegrationsPage', 'NotesPage', 'ProjectListPage', 'ContextListPage',
+    $([ 'PreferencesPage', 'NotesPage', 'ProjectListPage', 'ContextListPage',
         'FeedsPage', 'RecurringTodosPage', 'TodoItems', 'TracksPages',
         'TracksForm', 'SearchPage', 'UsersPage' ]).each(function() {
         eval(this+'.setup_behavior();');
@@ -1175,3 +1158,4 @@ $(document).ready(function() {
     /* Gets called from all AJAX callbacks, too */
     enable_rich_interaction();
 });
+
