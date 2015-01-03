@@ -29,9 +29,6 @@ Rails.application.routes.draw do
   post 'integrations/cloudmailin' => 'integrations#cloudmailin'
   get 'integrations/search_plugin' => "integrations#search_plugin", :as => 'search_plugin'
   get 'integrations/google_gadget.xml' => 'integrations#google_gadget', :as => 'google_gadget'
-  get 'integrations/get_applescript1.js' => 'integrations#get_applescript1'
-  get 'integrations/get_applescript2.js' => 'integrations#get_applescript2'
-  get 'integrations/get_quicksilver_applescript.js' => 'integrations#get_quicksilver_applescript'
 
   get 'preferences' => "preferences#index"
   get 'preferences/render_date_format' => "preferences#render_date_format"

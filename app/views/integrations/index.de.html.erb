@@ -8,9 +8,6 @@
   Weitere Informationen finden Sie in der <%= link_to "Entwickler Documentation der Tracks' REST API", url_for(:action => 'rest_api') %> (englisch).</p>
 <br/><p>Inhalt:</p>
 <ul>
-  <li><a href="#applescript1-section">Eine Aktion mit Applescript hinzuf&uuml;gen</a></li>
-  <li><a href="#applescript2-section">Eine Aktion anhand der aktuell in Mail.app selektierten Nachricht erstellen</a></li>
-  <li><a href="#quicksilver-applescript-section">Aktionen mit Quicksilver und Applescript erstellen</a></li>
   <li><a href="#email-cron-section">Anstehende Aufgaben automatisch sich via E-Mail zusenden lassen</a></li>
   <li><a href="#message_gateway">Tracks mit einem Mail-Server integrieren, um Aufgaben via E-Mail zu erstellen</a></li>
   <li><a href="#google_gadget">Tracks zu Ihrer Google Gmail Seite hinzuf&uuml;gen</a></li>
@@ -19,71 +16,6 @@
   <a href="http://www.getontracks.org/forums/viewforum/10/" title="Tracks | Tips and Tricks">Berichten Sie uns
     in unserem Tipps&amp;Tricks Forum</a>, damit wir es f&uuml;r die n&auml;chsten Versionen ber&uuml;cksichtigen k&ouml;nnen.
 </p>
-
-<a name="applescript1-section"> </a>
-<h2>Eine Aktion mit Applescript hinzuf&uuml;gen</h2>
-<p>Dieses Beispiel-Script zeigt einen Dialog, welcher nach einer Beschreibung fragt und die Aufgabe in einem festen Kontext anlegt.</p>
-
-<% if has_contexts -%>
-  <ol>
-    <li>W&auml;hlen Sie den Kontext, f&uuml;r welchen die Aktion erstellt werden soll: <select name="applescript1-contexts" id="applescript1-contexts"><%= options_from_collection_for_select(current_user.contexts, "id", "name", current_user.contexts.first.id) %></select>
-    </li>
-    <li>Kopieren Sie das AppleScript in die Zwischenablage.<br />
-
-      <textarea id="applescript1" name="applescript1" rows="15"><%= render :partial => 'applescript1', :locals => { :context => current_user.contexts.first } %></textarea>
-    </li>
-    <li>&Ouml;ffnen Sie den Script Editor und f&uuml;gen die Daten in ein neues Script ein.</li>
-    <li>Kompilieren und speichern Sie das Script, um es bei Bedarf einzusetzen.</li>
-  </ol>
-<% else %>
-  <br/><p id="no_context_msg"><i>Sie haben noch keinen Kontext angelegt. Dieses Script ist automatisch verf&uuml;gbar, sobald Sie Ihren ersten Kontext angelegt haben.</i></p>
-<% end %>
-
-<a name="applescript2-section"> </a>
-<h2>Add an Action with Applescript based on the currently selected Email in Mail.app</h2>
-<p>This script takes the sender and subject of the selected email(s) in Mail and creates a new action for each one, with the description, "Email [sender] about [subject]". The description gets truncated to 100 characters (the validation limit for the field) if it is longer than that. It also has Growl notifications if you have Growl installed.</p>
-
-<% if has_contexts -%>
-  <ol>
-    <li>Choose the context you want to add actions to: <select name="applescript2-contexts" id="applescript2-contexts"><%= options_from_collection_for_select(current_user.contexts, "id", "name", current_user.contexts.first.id) %></select>
-    </li>
-    <li>Copy the Applescript below to the clipboard.<br />
-
-      <textarea id="applescript2" name="applescript2" rows="15"><%= render :partial => 'applescript2', :locals => { :context => current_user.contexts.first } %></textarea>
-    </li>
-    <li>Open Script Editor and paste the script into a new document.</li>
-    <li>Compile and save the script to the ~/Library/Scriipts/Mail Scripts directory.</li>
-    <li>For more information on using AppleScript with Mail.app, see <a href="http://www.apple.com/applescript/mail/" title="Scriptable Applications: Mail">this overview</a>.</li>
-  </ol>
-<% else %>
-  <br/><p><i>You do not have any context yet. The script will be available after you add your first context</i></p>
-<% end %>
-
-<a name="quicksilver-applescript-section"></a>
-<h2>Add Actions with Quicksilver and Applescript</h2>
-
-<p>This integration will allow you to add actions to Tracks via <a href="http://quicksilver.blacktree.com/">Quicksilver</a>.</p>
-
-<% if has_contexts -%>
-  <ol>
-    <li>Choose the context you want to add actions to: <select name="quicksilver-contexts" id="quicksilver-contexts"><%= options_from_collection_for_select(current_user.contexts, "id", "name", current_user.contexts.first.id) %></select>
-    </li>
-    <li>Copy the Applescript below to the clipboard.<br />
-
-      <textarea id="quicksilver" name="quicksilver" rows="15"><%= render :partial => 'quicksilver_applescript', :locals => { :context => current_user.contexts.first } %></textarea>
-    </li>
-    <li>Open Script Editor and paste the script into a new document.</li>
-    <li>Compile and save the script as "Add to Tracks.scpt" in ~/Library/Application Support/Quicksilver/Actions/ (you may need to create the Actions directory)</li>
-    <li>Restart Quicksilver</li>
-    <li>Activate Quicksilver (Ctrl+Space by default)</li>
-    <li>Press "." to put quicksilver into text mode</li>
-    <li>Type the description of the next action you want to add</li>
-    <li>Press tab to switch to the action pane.</li>
-    <li>By typing or scrolling, choose the "Add to Tracks" action.</li>
-  </ol>
-<% else %>
-  <br/><p><i>You do not have any context yet. The script will be available after you add your first context</i></p>
-<% end %>
 
 <a name="email-cron-section"> </a>
 <h2>Automatically Email Yourself Upcoming Actions</h2>

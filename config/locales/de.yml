@@ -313,9 +313,6 @@ de:
   footer:
     send_feedback: Senden Sie Feedback zu %{version}
   integrations:
-    applescript_next_action_prompt: 'Beschreibung der nächsten Aufgabe:'
-    applescript_success_after_id: erstellt
-    applescript_success_before_id: Nächste neue Aufgabe mit ID
     gmail_description: Gadget, um Tracks als Gadget zu Googlemail hinzuzufügen
     opensearch_description: In Tracks suchen
   layouts:
