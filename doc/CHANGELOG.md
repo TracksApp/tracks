@@ -2,6 +2,7 @@
 * Removed support for deprecated password-hashing algorithm. This
   eliminates config.salt. Note the addition of a pre-upgrade step to
   check for obsolete passwords.
+* Tracks is tested on Ruby 1.9.3, 2.0.0, 2.1, and 2.2.
 
 ## Version 2.3
 
