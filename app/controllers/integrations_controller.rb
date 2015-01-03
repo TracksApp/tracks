@@ -12,18 +12,6 @@ class IntegrationsController < ApplicationController
     @page_title = 'TRACKS::REST API Documentation'
   end
 
-  def get_quicksilver_applescript
-    get_applescript('quicksilver_applescript')
-  end
-
-  def get_applescript1
-    get_applescript('applescript1')
-  end
-
-  def get_applescript2
-    get_applescript('applescript2')
-  end
-
   def search_plugin
     @icon_data = [File.open(File.join(Rails.root, 'app', 'assets', 'images', 'done.png')).read].
       pack('m').gsub(/\n/, '')
@@ -72,9 +60,5 @@ class IntegrationsController < ApplicationController
     return result
   end
 
-  def get_applescript(partial_name)
-    context = current_user.contexts.find params[:context_id]
-    render :partial => partial_name, :locals => { :context => context }
-  end
-
 end
+

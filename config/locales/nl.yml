@@ -358,9 +358,6 @@ nl:
       submit: Bewaar %{model}
       update: Bijwerken %{model}
   integrations:
-    applescript_next_action_prompt: 'Omschrijving van de actie:'
-    applescript_success_after_id: gemaakt
-    applescript_success_before_id: Nieuwe actie met ID
     gmail_description: Gadget om Tracks toe te voegen aan Gmail als een gadget
     opensearch_description: Zoek in Tracks
   layouts:

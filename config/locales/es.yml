@@ -310,9 +310,6 @@ es:
   footer:
     send_feedback: Envía comentarios sobre el %{version}
   integrations:
-    applescript_next_action_prompt: 'Descripción de la próxima tarea:'
-    applescript_success_after_id: creado
-    applescript_success_before_id: Nueva acción junto con la identificación
     gmail_description: Gadget para añadir pistas a Gmail como un gadget
     opensearch_description: Buscar en las Tracks
   layouts:
