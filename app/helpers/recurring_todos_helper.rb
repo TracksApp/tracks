@@ -32,7 +32,7 @@ module RecurringTodosHelper
   end
 
   def recurring_todo_remote_toggle_checkbox
-    return check_box_tag("check_#{@recurring_todo.id}", toggle_check_recurring_todo_path(@recurring_todo), @recurring_todo.completed?, :class => 'item-checkbox')
+    check_box_tag("check_#{@recurring_todo.id}", toggle_check_recurring_todo_path(@recurring_todo), @recurring_todo.completed?, :class => 'item-checkbox')
   end
 
   private

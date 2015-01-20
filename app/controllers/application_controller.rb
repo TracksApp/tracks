@@ -89,14 +89,14 @@ class ApplicationController < ActionController::Base
   end
 
   def count_deferred_todos(todos_parent)
-    return todos_parent.nil? ? 0 : eval("@#{todos_parent.class.to_s.downcase}_deferred_counts[#{todos_parent.id}]") || 0
+    todos_parent.nil? ? 0 : eval("@#{todos_parent.class.to_s.downcase}_deferred_counts[#{todos_parent.id}]") || 0
   end
 
   # Convert a date object to the format specified in the user's preferences in
   # config/settings.yml
   #
   def format_date(date)
-    return prefs.format_date(date)
+    prefs.format_date(date)
   end
 
   def for_autocomplete(coll, substr)
@@ -128,7 +128,7 @@ class ApplicationController < ActionController::Base
   # during the processing and then setting it to 'text/html' in an
   # 'after_filter' -LKM 2007-04-01
   def mobile?
-    return params[:format] == 'm'
+    params[:format] == 'm'
   end
 
   def enable_mobile_content_negotiation

@@ -89,11 +89,11 @@ module Todos
     end
 
     def sequential?
-      return @params[:todos_sequential].present? && @params[:todos_sequential]=='true'
+      @params[:todos_sequential].present? && @params[:todos_sequential]=='true'
     end
 
     def specified_by_name?(group_type)
-      return send("#{group_type}_specified_by_name?")
+      send("#{group_type}_specified_by_name?")
     end
 
     def specified_by_id?(group_type)

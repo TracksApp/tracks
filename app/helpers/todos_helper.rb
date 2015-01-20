@@ -435,7 +435,7 @@ module TodosHelper
   # === handle CRUD actions for todos
 
   def show_todo_on_current_context_page
-    return @todo.context_id==@default_context.id
+    @todo.context_id==@default_context.id
   end
 
   def todo_should_not_be_hidden_on_context_page
@@ -444,12 +444,11 @@ module TodosHelper
   end
 
   def show_todo_on_current_project_page
-    return @todo.project.id == @default_project.id
+    @todo.project.id == @default_project.id
   end
 
   def todo_should_not_be_hidden_on_project_page
-    return !@todo.hidden? ||
-           (@todo.project_hidden? && @todo.project.hidden?)
+    !@todo.hidden? || (@todo.project_hidden? && @todo.project.hidden?)
   end
 
   def should_show_new_item(todo = @todo)
@@ -465,7 +464,7 @@ module TodosHelper
   end
 
   def should_make_context_visible
-    return @todo.active? && (!@todo.hidden? && !source_view_is(:project) )
+    @todo.active? && (!@todo.hidden? && !source_view_is(:project) )
   end
 
   def should_add_new_container
@@ -584,7 +583,7 @@ module TodosHelper
   end
 
   def context_container_empty_id(todo)
-    return "c#{todo.context_id}-empty-d"
+    "c#{todo.context_id}-empty-d"
   end
 
   def todo_container_empty_id(todo)
