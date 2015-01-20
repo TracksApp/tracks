@@ -30,14 +30,14 @@ module ApplicationHelper
   # a 'traffic light' colour code
   #
   def due_date(due)
-    return DateLabelHelper::DueDateView.new(due, prefs).due_date_html
+    DateLabelHelper::DueDateView.new(due, prefs).due_date_html
   end
 
   # Check due date in comparison to today's date Flag up date appropriately with
   # a 'traffic light' colour code Modified method for mobile screen
   #
   def due_date_mobile(due)
-    return DateLabelHelper::DueDateView.new(due, prefs).due_date_mobile_html
+    DateLabelHelper::DueDateView.new(due, prefs).due_date_mobile_html
   end
 
   # Returns a count of next actions in the given context or project. The result
@@ -88,7 +88,7 @@ module ApplicationHelper
   end
 
   def time_span_text(date, i18n_text)
-    return (date ? "#{i18n_text} #{format_date(date)}" : "").html_safe
+    (date ? "#{i18n_text} #{format_date(date)}" : "").html_safe
   end
 
   def recurrence_time_span(rt)
@@ -130,7 +130,7 @@ module ApplicationHelper
   end
 
   def sidebar_html_for_titled_list (list, title)
-    return content_tag(:h3, title+" (#{list.size})")  + content_tag(:ul, sidebar_html_for_list(list))
+    content_tag(:h3, title+" (#{list.size})")  + content_tag(:ul, sidebar_html_for_list(list))
   end
 
   def link_to_sidebar_item(item)

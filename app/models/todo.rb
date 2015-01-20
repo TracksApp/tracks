@@ -145,15 +145,15 @@ class Todo < ActiveRecord::Base
   end
 
   def no_uncompleted_predecessors?
-    return !uncompleted_predecessors?
+    !uncompleted_predecessors?
   end
 
   def uncompleted_predecessors?
-    return !uncompleted_predecessors.empty?
+    !uncompleted_predecessors.empty?
   end
 
   def should_be_blocked?
-    return !( uncompleted_predecessors.empty? || state == 'project_hidden' )
+    !( uncompleted_predecessors.empty? || state == 'project_hidden' )
   end
 
   def guard_for_transition_from_deferred_to_pending
@@ -200,7 +200,7 @@ class Todo < ActiveRecord::Base
   end
 
   def removed_predecessors
-    return @removed_predecessors
+    @removed_predecessors
   end
 
   # remove predecessor and activate myself if it was the last predecessor
@@ -231,11 +231,11 @@ class Todo < ActiveRecord::Base
   end
 
   def has_pending_successors
-    return !pending_successors.empty?
+    !pending_successors.empty?
   end
 
   def hidden?
-    return self.project_hidden? || ( self.context.hidden? && (self.active? || self.deferred?))
+    self.project_hidden? || ( self.context.hidden? && (self.active? || self.deferred?))
   end
 
   def update_state_from_project
@@ -252,7 +252,7 @@ class Todo < ActiveRecord::Base
   end
 
   def toggle_completion!
-    return completed? ? activate! : complete!
+    completed? ? activate! : complete!
   end
 
   def show_from
@@ -276,7 +276,7 @@ class Todo < ActiveRecord::Base
   end
 
   def starred?
-    return has_tag?(STARRED_TAG_NAME)
+    has_tag?(STARRED_TAG_NAME)
   end
 
   def toggle_star!
@@ -293,7 +293,7 @@ class Todo < ActiveRecord::Base
   end
 
   def from_recurring_todo?
-    return self.recurring_todo_id != nil
+    self.recurring_todo_id != nil
   end
 
   def add_predecessor_list(predecessor_list)

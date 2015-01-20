@@ -83,11 +83,11 @@ class MessageGateway < ActionMailer::Base
   end
 
   def get_text_or_nil(text)
-    return text ? text.strip : nil
+    text ? text.strip : nil
   end
 
   def get_decoded_text_or_nil(text)
-    return text ? text.decoded.strip : nil
+    text ? text.decoded.strip : nil
   end
 
   def get_first_text_plain_part(email)

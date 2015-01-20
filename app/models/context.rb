@@ -50,7 +50,7 @@ class Context < ActiveRecord::Base
   end
 
   def no_active_todos?
-    return todos.active.count == 0
+    todos.active.count == 0
   end
 
 end

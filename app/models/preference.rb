@@ -7,7 +7,7 @@ class Preference < ActiveRecord::Base
   end
 
   def hide_completed_actions?
-    return show_number_completed == 0
+    show_number_completed == 0
   end
 
   def parse_date(s)

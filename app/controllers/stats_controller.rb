@@ -386,19 +386,19 @@ class StatsController < ApplicationController
   end
 
   def convert_to_days_from_today_array(records, array_size, date_method_on_todo)
-    return convert_to_array(records, array_size){ |r| [difference_in_days(@today, r.send(date_method_on_todo))]}
+    convert_to_array(records, array_size){ |r| [difference_in_days(@today, r.send(date_method_on_todo))]}
   end
 
   def convert_to_weeks_from_today_array(records, array_size, date_method_on_todo)
-    return convert_to_array(records, array_size) { |r| [difference_in_weeks(@today, r.send(date_method_on_todo))]}
+    convert_to_array(records, array_size) { |r| [difference_in_weeks(@today, r.send(date_method_on_todo))]}
   end
 
   def convert_to_weeks_running_array(records, array_size)
-    return convert_to_array(records, array_size) { |r| [difference_in_weeks(r.completed_at, r.created_at)]}
+    convert_to_array(records, array_size) { |r| [difference_in_weeks(r.completed_at, r.created_at)]}
   end
 
   def convert_to_weeks_running_from_today_array(records, array_size)
-    return convert_to_array(records, array_size) { |r| week_indexes_of(r) }
+    convert_to_array(records, array_size) { |r| week_indexes_of(r) }
   end
 
   def week_indexes_of(record)
@@ -434,17 +434,17 @@ class StatsController < ApplicationController
   # assumes date1 > date2
   # this results in the number of months before the month of date1, not taking days into account, so diff of 31-dec and 1-jan is 1 month!
   def difference_in_months(date1, date2)
-    return (date1.utc.year - date2.utc.year)*12 + (date1.utc.month - date2.utc.month)
+    (date1.utc.year - date2.utc.year)*12 + (date1.utc.month - date2.utc.month)
   end
 
   # assumes date1 > date2
   def difference_in_days(date1, date2)
-    return ((date1.utc.at_midnight-date2.utc.at_midnight)/SECONDS_PER_DAY).to_i
+    ((date1.utc.at_midnight-date2.utc.at_midnight)/SECONDS_PER_DAY).to_i
   end
 
   # assumes date1 > date2
   def difference_in_weeks(date1, date2)
-    return difference_in_days(date1, date2) / 7
+    difference_in_days(date1, date2) / 7
   end
 
   def three_month_avg(set, i)
