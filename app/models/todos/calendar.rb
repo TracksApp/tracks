@@ -13,23 +13,23 @@ module Todos
     end
 
     def due_today
-      actions.due_today
+      actions.due_today.sorted_by_day
     end
 
     def due_this_week
-      actions.due_between(today, end_of_the_week)
+      actions.due_between(today, end_of_the_week).sorted_by_day
     end
 
     def due_next_week
-      actions.due_between(end_of_the_week, end_of_next_week)
+      actions.due_between(end_of_the_week, end_of_next_week).sorted_by_day
     end
 
     def due_this_month
-      actions.due_between(end_of_next_week, end_of_the_month)
+      actions.due_between(end_of_next_week, end_of_the_month).sorted_by_day
     end
 
     def due_after_this_month
-      actions.due_after(end_of_the_month)
+      actions.due_after(end_of_the_month).sorted_by_day
     end
 
     def today
