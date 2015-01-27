@@ -62,7 +62,7 @@ class Todo < ActiveRecord::Base
   end
 
   def self.sort_by_day
-    are_due.all.sort_by(&lambda{ |m| ((m.show_from - m.due)).to_i })
+    Todo.where('NOT (todos.due IS NULL)').sort_by(&lambda{ |m| ((m.show_from - m.due)).to_i })
   end
 
   STARRED_TAG_NAME = "starred"
