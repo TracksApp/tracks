@@ -13,23 +13,23 @@ module Todos
     end
 
     def due_today
-      actions.due_today.sort_by_day
+      actions.due_today
     end
 
     def due_this_week
-      actions.due_between(today, end_of_the_week).sort_by_day
+      actions.due_between(today, end_of_the_week)
     end
 
     def due_next_week
-      actions.due_between(end_of_the_week, end_of_next_week).sort_by_day
+      actions.due_between(end_of_the_week, end_of_next_week)
     end
 
     def due_this_month
-      actions.due_between(end_of_next_week, end_of_the_month).sort_by_day
+      actions.due_between(end_of_next_week, end_of_the_month)
     end
 
     def due_after_this_month
-      actions.due_after(end_of_the_month).sort_by_day
+      actions.due_after(end_of_the_month)
     end
 
     def today
@@ -51,7 +51,7 @@ module Todos
   private
 
     def actions
-      user.todos.not_completed.includes(included_tables).reorder("due")
+      user.todos.not_completed.includes(included_tables).reorder("show_from - due ASC")
     end
 
   end
