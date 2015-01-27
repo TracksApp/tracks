@@ -133,6 +133,7 @@ module TodosHelper
   end
 
   def todos_calendar_container(period, collection)
+    collection.to_a.sort_by!(&lambda{ |m| ((m.show_from - m.due)).to_i })
     render :partial => 'todos/collection',
       :object => collection,
       :locals => {:settings => {

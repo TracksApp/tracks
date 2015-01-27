@@ -61,10 +61,6 @@ class Todo < ActiveRecord::Base
     where('todos.due > ? AND todos.due <= ?', start_date, end_date)
   end
 
-  def self.sorted_by_day
-    are_due.all.sort_by(&lambda{ |m| ((m.show_from - m.due)).to_i })
-  end
-
   STARRED_TAG_NAME = "starred"
   DEFAULT_INCLUDES = [ :project, :context, :tags, :taggings, :pending_successors, :uncompleted_predecessors, :recurring_todo ]
 
