@@ -9,7 +9,7 @@ Feature: Existing user logging in
       | testuser | secret   | false    | Test       | User      |
       | admin    | secret   | true     | Admin      | User      |
 
-  Scenario Outline: Succesfull and unsuccesfull login
+  Scenario Outline: Successful and unsuccessful login
     When I go to the login page
     And I submit the login form as user "<user>" with password "<password>"
     Then I should be <there>
