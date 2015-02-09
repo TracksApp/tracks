@@ -30,7 +30,7 @@ module RecurringTodos
       assert builder.save, "should save: #{builder.errors.full_messages}"
       rt = builder.saved_recurring_todo
 
-      assert builder.pattern.is_a?(YearlyRepeatPattern), "should be monthly pattern, but is #{builder.pattern.class}"
+      assert builder.pattern.is_a?(YearlyRepeatPattern), "should be yearly pattern, but is #{builder.pattern.class}"
 
       assert_equal rt.recurrence_selector, builder.pattern.recurrence_selector
       assert_equal rt.every_other2,        builder.pattern.month_of_year
