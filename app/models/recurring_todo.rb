@@ -12,7 +12,7 @@ class RecurringTodo < ActiveRecord::Base
 
   include AASM
   aasm :column => :state do
-    state :active, :initial => true, :before_enter => Proc.new { |t| t.occurences_count = 0 }
+    state :active, :initial => true, :before_enter => Proc.new { |t| t.occurrences_count = 0 }
     state :completed, :before_enter => Proc.new { |t| t.completed_at = Time.zone.now }, :before_exit => Proc.new { |t| t.completed_at = nil }
 
     event :complete do
@@ -131,7 +131,7 @@ class RecurringTodo < ActiveRecord::Base
   end
 
   def increment_occurrences
-    self.occurences_count += 1
+    self.occurrences_count += 1
     self.save
   end
 

@@ -151,21 +151,21 @@ class RecurringTodoTest < ActiveSupport::TestCase
     assert @yearly.starred?
   end
 
-  def test_occurence_count
-    @every_day.number_of_occurences = 2
+  def test_occurrence_count
+    @every_day.number_of_occurrences = 2
     assert_equal true, @every_day.continues_recurring?(@in_three_days)
     @every_day.increment_occurrences
     assert_equal true, @every_day.continues_recurring?(@in_three_days)
     @every_day.increment_occurrences
     assert_equal false, @every_day.continues_recurring?(@in_three_days)
 
-    # after completion, when you reactivate the recurring todo, the occurences
+    # after completion, when you reactivate the recurring todo, the occurrences
     # count should be reset
-    assert_equal 2, @every_day.occurences_count
+    assert_equal 2, @every_day.occurrences_count
     assert @every_day.toggle_completion!
     assert @every_day.toggle_completion!
 
     assert_equal true, @every_day.continues_recurring?(@in_three_days)
-    assert_equal 0, @every_day.occurences_count
+    assert_equal 0, @every_day.occurrences_count
   end
 end

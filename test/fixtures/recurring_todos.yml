@@ -36,7 +36,7 @@ call_bill_gates_every_day:
   start_from: <%= way_back %>
   ends_on: no_end_date
   end_date: ~
-  number_of_occurences: ~
+  number_of_occurrences: ~
   target: due_date
   show_from_delta: ~
   recurring_period: daily
@@ -63,7 +63,7 @@ call_bill_gates_every_workday:
   start_from: ~
   ends_on: no_end_date
   end_date: ~
-  number_of_occurences: ~
+  number_of_occurrences: ~
   target: due_date
   show_from_delta: ~
   show_always: false
@@ -90,7 +90,7 @@ call_bill_gates_every_week:
   start_from: <%= way_back %>
   ends_on: no_end_date
   end_date: ~
-  number_of_occurences: ~
+  number_of_occurrences: ~
   target: due_date
   show_from_delta: 5
   recurring_period: weekly
@@ -117,7 +117,7 @@ check_with_bill_every_last_friday_of_month:
   start_from: <%= way_back %>
   ends_on: no_end_date
   end_date: ~
-  number_of_occurences: ~
+  number_of_occurrences: ~
   target: due_date
   show_from_delta: 5
   recurring_period: monthly
@@ -144,7 +144,7 @@ birthday_reinier:
   start_from: <%= way_back %>
   ends_on: no_end_date
   end_date: ~
-  number_of_occurences: ~
+  number_of_occurrences: ~
   target: due_date
   show_from_delta: 5
   show_always: false

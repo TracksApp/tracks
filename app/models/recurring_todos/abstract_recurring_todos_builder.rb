@@ -76,7 +76,7 @@ module RecurringTodos
         start_from:           attributes[:start_from],
         end_date:             attributes[:end_date],
         ends_on:              attributes[:ends_on],
-        number_of_occurences: attributes[:number_of_occurences],
+        number_of_occurrences: attributes[:number_of_occurrences],
         project:              attributes[:project],
         context:              attributes[:context],
         project_id:           attributes[:project_id],
